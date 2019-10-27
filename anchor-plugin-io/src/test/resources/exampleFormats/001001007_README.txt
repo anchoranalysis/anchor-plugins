@@ -1,0 +1,6 @@
+This is an example flex file with 2 chnls and 1 time-frame
+
+Normally, it reports itself via Bioformats as sizeT=2 and sizeC=1 (switched from the reality)
+
+But sometimes (when running on the commandline) it reports itself
+ as sizeT=1 and sizeC=1

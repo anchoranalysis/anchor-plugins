@@ -1,0 +1,110 @@
+package ch.ethz.biol.cell.mpp.nrg.feature.objmask.cachedcalculation;
+
+/*
+ * #%L
+ * anchor-plugin-image
+ * %%
+ * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * %%
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ * 
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ * #L%
+ */
+
+
+import org.anchoranalysis.core.cache.ExecuteException;
+import org.anchoranalysis.feature.cachedcalculation.CachedCalculationCastParams;
+import org.anchoranalysis.feature.cachedcalculation.CachedCalculationMap;
+import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.image.feature.objmask.FeatureObjMaskParams;
+import org.anchoranalysis.image.objmask.ObjMask;
+import org.apache.commons.lang.builder.EqualsBuilder;
+import org.apache.commons.lang.builder.HashCodeBuilder;
+
+public abstract class CalculateObjMask extends CachedCalculationCastParams<ObjMask,FeatureObjMaskParams> {
+
+	private CachedCalculationMap<ObjMask, Integer> map;
+	private int iterations;
+
+	protected CalculateObjMask(
+		int iterations,
+		CachedCalculationMap<ObjMask, Integer> map
+	) {
+		super();
+		this.iterations = iterations;
+		this.map = map;
+	}
+	
+	protected CalculateObjMask( CalculateObjMask src ) {
+		this.iterations = src.iterations;
+		this.map = src.map;
+	}
+
+	@Override
+	protected ObjMask execute( FeatureObjMaskParams params ) throws ExecuteException {
+		
+		if (iterations==0) {
+			return params.getObjMask();
+		}
+		
+		try {
+			ObjMask om = map.getOrCalculate(params, iterations);
+		
+			// DEBUG
+			if (this instanceof CalculateDilation) {
+				assert( om.getBoundingBox().contains( params.getObjMask().getBoundingBox() ));
+			}
+			
+			return om;
+		} catch (FeatureCalcException e) {
+			throw new ExecuteException(e);
+		}
+
+		//return ObjMaskProviderDilate.createDilatedObjMask(om, extnt, do3D, iterations);
+	}
+	
+	
+	@Override
+	public String toString() {
+		return String.format(
+			"%s(iterations=%d,map=%s",
+			super.getClass().getSimpleName(),
+			iterations,
+			map.toString()
+		);
+	}
+	
+	@Override
+	public boolean equals(final Object obj){
+	    if(obj instanceof CalculateObjMask){
+	        final CalculateObjMask other = (CalculateObjMask) obj;
+	        return new EqualsBuilder()
+	            .append(iterations, other.iterations)
+	            .append(map, other.map)
+	            .isEquals();
+	    } else{
+	        return false;
+	    }
+	}
+	
+	@Override
+	public int hashCode() {
+		return new HashCodeBuilder().append(iterations).append(map).toHashCode();
+	}
+		
+}

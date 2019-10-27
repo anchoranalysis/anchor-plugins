@@ -1,0 +1,107 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+        <groupId>org.anchoranalysis.anchor</groupId>
+   	    <artifactId>anchor-parent-plugins</artifactId>
+		<version>0.0.11-SNAPSHOT</version>
+  </parent> 
+  <artifactId>anchor-plugin-points</artifactId>
+  <version>0.0.8-SNAPSHOT</version>
+   <dependencies>
+    <dependency>
+	  <groupId>${project.groupId}</groupId>
+	  <artifactId>anchor-bean</artifactId>
+	  <version>0.0.8-SNAPSHOT</version>
+	</dependency>
+    <dependency>
+	  <groupId>${project.groupId}</groupId>
+	  <artifactId>anchor-core</artifactId>
+	  <version>0.0.8-SNAPSHOT</version>
+	</dependency>
+	<dependency>
+	  <groupId>${project.groupId}</groupId>
+	  <artifactId>anchor-feature</artifactId>
+	  <version>0.0.8-SNAPSHOT</version>
+	</dependency>
+	<dependency>
+	  <groupId>${project.groupId}</groupId>
+	  <artifactId>anchor-image</artifactId>
+	  <version>0.0.8-SNAPSHOT</version>
+	</dependency>
+	<dependency>
+	  <groupId>${project.groupId}</groupId>
+	  <artifactId>anchor-image-bean</artifactId>
+	  <version>0.0.8-SNAPSHOT</version>
+	</dependency>	
+	<dependency>
+	  <groupId>${project.groupId}</groupId>
+	  <artifactId>anchor-image-feature</artifactId>
+	  <version>0.0.8-SNAPSHOT</version>
+	</dependency>	
+	<dependency>
+	  <groupId>${project.groupId}</groupId>
+	  <artifactId>anchor-mpp</artifactId>
+	  <version>0.0.8-SNAPSHOT</version>
+	</dependency>
+		
+	<dependency>
+	  <groupId>${project.groupId}</groupId>
+	  <artifactId>anchor-overlay</artifactId>
+	  <version>0.0.8-SNAPSHOT</version>
+	</dependency>
+	
+	<dependency>
+	  <groupId>${project.groupId}</groupId>
+	  <artifactId>anchor-math</artifactId>
+	  <version>0.0.8-SNAPSHOT</version>
+	</dependency>
+	
+	<dependency>
+	  <groupId>${project.groupId}</groupId>
+	  <artifactId>anchor-plugin-opencv</artifactId>
+	  <version>0.0.1-SNAPSHOT</version>
+	</dependency>
+		
+	<dependency>
+		<groupId>org.georegression</groupId>
+		<artifactId>georegression</artifactId>
+		<version>0.12</version>
+	</dependency>
+	<dependency>
+		<groupId>org.georegression</groupId>
+		<artifactId>experimental</artifactId>
+		<version>0.12</version>
+	</dependency>
+
+	<!--  Needed by the georegression library, but doesnt seem to be a transitive dependency -->	
+	<dependency>
+	  <groupId>org.ejml</groupId>
+	  <artifactId>ejml-all</artifactId>
+	  <version>0.34</version>
+	</dependency>
+	
+	<dependency>
+	  <groupId>commons-lang</groupId>
+	  <artifactId>commons-lang</artifactId>
+	  <version>2.6</version>
+	</dependency>
+	<dependency>
+	  <groupId>colt</groupId>
+	  <artifactId>colt</artifactId>
+	  <version>1.2.0</version>
+	</dependency>	
+	
+	<dependency>
+		<groupId>com.github.quickhull3d</groupId>
+		<artifactId>quickhull3d</artifactId>
+		<version>1.0.0</version>
+	</dependency>
+
+	<dependency>
+		<groupId>ca.umontreal.iro.simul</groupId>
+		<artifactId>ssj</artifactId>
+		<version>${ssj.version}</version>
+	</dependency>
+	
+</dependencies>
+</project>

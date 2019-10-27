@@ -1,0 +1,13 @@
+<config>
+<bean config-class="org.anchoranalysis.feature.bean.list.FeatureListProviderDefine">
+	<list config-class="java.util.List" config-factory="list">
+		<item config-class="org.anchoranalysis.image.feature.bean.objmask.CenterOfGravity" axis="y"/>
+		<item config-class="ch.ethz.biol.cell.mpp.nrg.feature.objmask.BoundingBoxMax" axis="x"/>
+		<item config-class="ch.ethz.biol.cell.mpp.nrg.feature.objmask.BoundingBoxMin" axis="z"/>
+		<item config-class="ch.ethz.biol.cell.mpp.nrg.feature.objmask.IntensityMean" nrgIndex="0"/>
+		<item config-class="ch.ethz.biol.cell.mpp.nrg.feature.objmask.IntensityMeanShell" nrgIndex="1" iterationsDilation="2"/>
+		<item config-class="org.anchoranalysis.image.feature.bean.objmask.NumVoxels"/>
+		<item config-class="ch.ethz.biol.cell.mpp.nrg.feature.objmask.NumBorderVoxels"/>
+	</list>
+</bean>
+</config>

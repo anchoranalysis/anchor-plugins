@@ -1,0 +1,68 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>org.anchoranalysis.anchor</groupId>
+    <artifactId>anchor-parent-plugins</artifactId>
+    <version>0.0.11-SNAPSHOT</version>
+  </parent>
+  <artifactId>anchor-test-image</artifactId>
+  <version>0.0.8-SNAPSHOT</version>
+  <description>Helper methods for testing pertaining to image loading and manipulation</description>
+    <dependencies>
+   
+   	<dependency>
+	  <groupId>${project.groupId}</groupId>
+	  <artifactId>anchor-test</artifactId>
+	  <version>0.0.8-SNAPSHOT</version>
+	</dependency>
+	
+	<dependency>
+	  <groupId>${project.groupId}</groupId>
+	  <artifactId>anchor-io</artifactId>
+	  <version>0.0.8-SNAPSHOT</version>
+	</dependency>
+	
+	<dependency>
+	  <groupId>${project.groupId}</groupId>
+	  <artifactId>anchor-image</artifactId>
+	  <version>0.0.8-SNAPSHOT</version>
+	</dependency>
+	
+	<dependency>
+	  <groupId>${project.groupId}</groupId>
+	  <artifactId>anchor-image-io</artifactId>
+	  <version>0.0.8-SNAPSHOT</version>
+	</dependency>
+	
+	<dependency>
+	  <groupId>${project.groupId}</groupId>
+	  <artifactId>anchor-core</artifactId>
+	  <version>0.0.8-SNAPSHOT</version>
+	</dependency>
+	
+	<dependency>
+	  <groupId>${project.groupId}</groupId>
+	  <artifactId>anchor-plugin-io</artifactId>
+	  <version>0.0.8-SNAPSHOT</version>
+	</dependency>
+	
+	<dependency>
+	  <groupId>${project.groupId}</groupId>
+	  <artifactId>anchor-plugin-image</artifactId>
+	  <version>0.0.8-SNAPSHOT</version>
+	</dependency>
+	
+	<dependency>
+	  <groupId>${project.groupId}</groupId>
+	  <artifactId>anchor-plugin-points</artifactId>
+	  <version>0.0.8-SNAPSHOT</version>
+	</dependency>
+	
+	<dependency>
+	  <groupId>${project.groupId}</groupId>
+	  <artifactId>anchor-plugin-image-feature</artifactId>
+	  <version>0.0.8-SNAPSHOT</version>
+	</dependency>
+	
+	</dependencies>
+</project>

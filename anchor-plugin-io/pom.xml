@@ -1,0 +1,201 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+	<parent>
+        <groupId>org.anchoranalysis.anchor</groupId>
+   	    <artifactId>anchor-parent-plugins</artifactId>
+		<version>0.0.11-SNAPSHOT</version>
+    </parent>
+  <artifactId>anchor-plugin-io</artifactId>
+  <version>0.0.8-SNAPSHOT</version>
+   <licenses>
+    <license>
+      <name>The Apache Software License, Version 2.0</name>
+      <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+      <distribution>repo</distribution>
+    </license>
+  </licenses>
+   <dependencies>
+	    <dependency>
+		  <groupId>${project.groupId}</groupId>
+		  <artifactId>anchor-bean</artifactId>
+		  <version>0.0.8-SNAPSHOT</version>
+		</dependency>
+	    <dependency>
+		  <groupId>${project.groupId}</groupId>
+		  <artifactId>anchor-core</artifactId>
+		  <version>0.0.8-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+		  <groupId>${project.groupId}</groupId>
+		  <artifactId>anchor-image</artifactId>
+		  <version>0.0.8-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+		  <groupId>${project.groupId}</groupId>
+		  <artifactId>anchor-io</artifactId>
+		  <version>0.0.8-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+		  <groupId>${project.groupId}</groupId>
+		  <artifactId>anchor-image-io</artifactId>
+		  <version>0.0.8-SNAPSHOT</version>
+		</dependency>		
+		<dependency>
+		  <groupId>${project.groupId}</groupId>
+		  <artifactId>anchor-experiment</artifactId>
+		  <version>0.0.8-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+		  <groupId>com.owenfeehan.pathpatternfinder</groupId>
+		  <artifactId>path-pattern-finder</artifactId>
+		  <version>1.0</version>
+		</dependency>
+						
+	    <dependency>
+		  <groupId>${project.groupId}</groupId>
+		  <artifactId>anchor-test</artifactId>
+		  <version>0.0.8-SNAPSHOT</version>
+		  <scope>test</scope>
+		</dependency>    
+	
+		<dependency>
+		  <groupId>commons-logging</groupId>
+		  <artifactId>commons-logging</artifactId>
+		  <version>1.1.1</version>
+		</dependency>
+		<dependency>
+		  <groupId>net.imagej</groupId>
+		  <artifactId>ij</artifactId>
+		  <version>${imagej1.version}</version>
+		</dependency>		
+		<dependency>
+		  <groupId>net.imagej</groupId>
+		  <artifactId>imagej</artifactId>
+		  <version>${imagej.version}</version>
+	    <exclusions>
+	    	<!--  A more recent version of the JAR is needed by the georegression library, and there is a version clash, so we ignore this one -->
+	        <exclusion>
+	          <groupId>com.googlecode.efficient-java-matrix-library</groupId>
+	          <artifactId>ejml</artifactId>
+	        </exclusion>
+	      </exclusions> 		  
+		</dependency>
+		<dependency>
+		  <groupId>net.imagej</groupId>
+		  <artifactId>imagej-common</artifactId>
+		  <version>${imagej-common.version}</version>
+		</dependency>	
+		<dependency>
+			<groupId>com.google.guava</groupId>
+			<artifactId>guava</artifactId>
+			<version>19.0</version>
+		</dependency>
+		
+		
+		<!-- license-compatible parts of BIOFORMATS -->
+	    <dependency>
+	      <groupId>ome</groupId>
+	      <artifactId>formats-api</artifactId>
+	      <version>${bio-formats.version}</version>
+	      <exclusions>
+            <exclusion>
+                <groupId>xml-apis</groupId>
+                <artifactId>xml-apis</artifactId>
+            </exclusion>
+        </exclusions>
+	    </dependency>
+	    
+	   	<dependency>
+	      <groupId>ome</groupId>
+	      <artifactId>formats-bsd</artifactId>
+	      <version>${bio-formats.version}</version>
+		  <exclusions>
+            <exclusion>
+                <groupId>xml-apis</groupId>
+                <artifactId>xml-apis</artifactId>
+            </exclusion>
+        </exclusions>	      
+	    </dependency>
+	    
+	    <dependency>
+	      <groupId>org.openmicroscopy</groupId>
+	      <artifactId>ome-common</artifactId>
+	      <version>${ome-common.version}</version>
+	    </dependency>
+	    
+
+	    
+	    <dependency>
+	      <groupId>org.openmicroscopy</groupId>
+	      <artifactId>ome-poi</artifactId>
+	      <version>${ome-poi.version}</version>
+	    </dependency>
+	    
+	    <dependency>
+	      <groupId>org.openmicroscopy</groupId>
+	      <artifactId>ome-xml</artifactId>
+	      <version>${ome-xml.version}</version>
+	    </dependency>
+	    
+	    <dependency>
+		    <groupId>joda-time</groupId>
+		    <artifactId>joda-time</artifactId>
+		    <version>2.3</version>
+		</dependency>
+
+	    
+	    <!--  TODO: CHECK THIS LICENSE -->
+		<dependency>
+	      <groupId>ome</groupId>
+	      <artifactId>mdbtools-java</artifactId>
+	      <version>5.1.1</version>
+	    </dependency>
+		
+		
+	    <!-- STOP: license-compatible parts of bioformats -->
+	  
+	    
+	    <dependency>
+		    <groupId>com.github.jai-imageio</groupId>
+		    <artifactId>jai-imageio-core</artifactId>
+		    <version>1.3.1</version>
+		</dependency>
+	    		
+		<dependency>
+		    <groupId>com.esotericsoftware.kryo</groupId>
+		    <artifactId>kryo</artifactId>
+		    <version>2.24.0</version>
+		</dependency>
+		
+		<dependency>
+		    <groupId>org.scijava</groupId>
+		    <artifactId>native-lib-loader</artifactId>
+		    <version>2.0.3</version>
+		</dependency>
+		
+		<dependency>
+		    <groupId>org.slf4j</groupId>
+		    <artifactId>slf4j-api</artifactId>
+		    <version>1.7.6</version>
+		</dependency>
+
+	</dependencies>
+  
+  <pluginRepositories>
+    <pluginRepository>
+      <id>ome.releases</id>
+      <url>http://artifacts.openmicroscopy.org/artifactory/ome.releases</url>
+    </pluginRepository>
+    <pluginRepository>
+      <id>ome.snapshots</id>
+      <url>http://artifacts.openmicroscopy.org/artifactory/ome.snapshots</url>
+      <snapshots>
+        <enabled>true</enabled>
+      </snapshots>
+    </pluginRepository>
+    <pluginRepository>
+      <id>ome.external</id>
+      <url>http://artifacts.openmicroscopy.org/artifactory/ome.external</url>
+    </pluginRepository>
+  </pluginRepositories>
+</project>

@@ -1,0 +1,183 @@
+package ch.ethz.biol.cell.imageprocessing.chnl.provider;
+
+/*
+ * #%L
+ * anchor-plugin-image
+ * %%
+ * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * %%
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ * 
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ * #L%
+ */
+
+
+import java.nio.ByteBuffer;
+
+import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.core.error.CreateException;
+import org.anchoranalysis.core.geometry.Point3d;
+import org.anchoranalysis.image.bean.provider.ChnlProvider;
+import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
+import org.anchoranalysis.image.bean.threshold.calculatelevel.CalculateLevel;
+import org.anchoranalysis.image.chnl.Chnl;
+import org.anchoranalysis.image.chnl.factory.ChnlFactory;
+import org.anchoranalysis.image.convert.ByteConverter;
+import org.anchoranalysis.image.extent.Extent;
+import org.anchoranalysis.image.objmask.ObjMaskCollection;
+import org.anchoranalysis.image.voxel.box.VoxelBox;
+import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeByte;
+
+import ch.ethz.biol.cell.imageprocessing.chnl.provider.level.LevelResult;
+import ch.ethz.biol.cell.imageprocessing.chnl.provider.level.LevelResultCollection;
+import ch.ethz.biol.cell.imageprocessing.chnl.provider.level.LevelResultCollectionFactory;
+
+public class ChnlProviderConnectedComponentScore extends ChnlProvider {
+	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	
+	// START BEAN PROPERTIES
+	@BeanField
+	private ChnlProvider chnlProvider;
+	
+	@BeanField
+	private ObjMaskProvider objMaskProviderMask;
+	
+	@BeanField
+	private CalculateLevel calculateLevel;
+	
+	@BeanField
+	private int intensityTolerance= 0;
+	// END BEAN PROPERTIES
+
+	private int calcOutValue( int pixelVal, int level ) {
+		
+		if (pixelVal >= level ) {
+			
+			int diff = pixelVal - level;
+			if (diff>intensityTolerance) {
+				return 255;
+			} else {
+				return 128 + divideMultiply(diff,intensityTolerance, 127);
+			}
+		} else {
+			
+			int diff = level - pixelVal;
+			if (diff>intensityTolerance) {
+				return 0;
+			} else {
+				return 128 - divideMultiply(diff,intensityTolerance, 128);
+			}			
+		}
+	}
+	
+	private static int divideMultiply( int numerator, int denominator, int mult ) {
+		double div = ((double) numerator) / denominator;
+		return (int) (div*mult);
+	}
+	
+	private void populateChnl( Chnl regionIn, Chnl regionOut, LevelResultCollection lrc ) {
+		
+		VoxelBox<ByteBuffer> vbIn = regionIn.getVoxelBox().asByte();
+		VoxelBox<ByteBuffer> vbOut = regionOut.getVoxelBox().asByte();
+		
+		assert( vbIn.extnt().equals(vbOut.extnt()) );
+		
+		Extent e = vbIn.extnt();
+		
+		Point3d pnt = new Point3d();
+		
+		for( int z=0; z<e.getZ(); z++) {
+			pnt.setZ(z);
+			
+			ByteBuffer bbIn = vbIn.getPixelsForPlane(z).buffer();
+			ByteBuffer bbOut = vbOut.getPixelsForPlane(z).buffer();
+			
+			int index = 0;
+			for( int y=0; y<e.getY(); y++) {
+				pnt.setY( y );
+				
+				for( int x=0; x<e.getX(); x++) {
+					pnt.setX( x );
+					
+					int val = ByteConverter.unsignedByteToInt( bbIn.get(index) );
+					
+					// Find closest point
+					LevelResult lr = lrc.findClosestResult(pnt);
+					
+					int out = calcOutValue(val, lr.getLevel() );
+					
+					bbOut.put( (byte) out );
+					
+					index++;
+				}
+			}
+		}
+	}
+	
+	
+	@Override
+	public Chnl create() throws CreateException {
+		
+		Chnl chnl = chnlProvider.create();
+		ObjMaskCollection objMasks = objMaskProviderMask.create();
+	
+		LevelResultCollection lrc= LevelResultCollectionFactory.createCollection( chnl, objMasks, calculateLevel, 0, getLogger() );
+		
+		Chnl chnlOut = ChnlFactory.instance().createEmptyInitialised( chnl.getDimensions(), VoxelDataTypeByte.instance );
+		
+		populateChnl( chnl, chnlOut, lrc );
+
+		return chnlOut;
+	}
+
+	public ChnlProvider getChnlProvider() {
+		return chnlProvider;
+	}
+
+	public void setChnlProvider(ChnlProvider chnlProvider) {
+		this.chnlProvider = chnlProvider;
+	}
+
+	public ObjMaskProvider getObjMaskProviderMask() {
+		return objMaskProviderMask;
+	}
+
+	public void setObjMaskProviderMask(ObjMaskProvider objMaskProviderMask) {
+		this.objMaskProviderMask = objMaskProviderMask;
+	}
+
+	public CalculateLevel getCalculateLevel() {
+		return calculateLevel;
+	}
+
+	public void setCalculateLevel(CalculateLevel calculateLevel) {
+		this.calculateLevel = calculateLevel;
+	}
+
+	public int getIntensityTolerance() {
+		return intensityTolerance;
+	}
+
+	public void setIntensityTolerance(int intensityTolerance) {
+		this.intensityTolerance = intensityTolerance;
+	}
+}

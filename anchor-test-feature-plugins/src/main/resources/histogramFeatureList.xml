@@ -1,0 +1,14 @@
+<config>
+<bean config-class="org.anchoranalysis.feature.bean.list.FeatureListProviderDefine">
+	<list config-class="java.util.List" config-factory="list">
+		<item config-class="ch.ethz.biol.cell.mpp.nrg.feature.histogram.NumVoxelsGreaterEqualTo" threshold="20"/>
+		<item config-class="ch.ethz.biol.cell.mpp.nrg.feature.histogram.NumVoxelsGreaterEqualTo" threshold="60"/>
+		<item config-class="ch.ethz.biol.cell.mpp.nrg.feature.histogram.NumVoxelsGreaterEqualTo" threshold="190"/>
+		<item config-class="ch.ethz.biol.cell.mpp.nrg.feature.histogram.Quantile" quantile="0.3"/>
+		<item config-class="ch.ethz.biol.cell.mpp.nrg.feature.histogram.Quantile" quantile="0.7"/>
+		<item config-class="ch.ethz.biol.cell.mpp.nrg.feature.histogram.ConvertToRatioOfHistogramTotalCount">
+			<item config-class="ch.ethz.biol.cell.mpp.nrg.feature.histogram.Quantile" quantile="0.5"/>
+		</item>
+	</list>
+</bean>
+</config>

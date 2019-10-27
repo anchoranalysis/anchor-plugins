@@ -1,0 +1,102 @@
+package ch.ethz.biol.cell.imageprocessing.objmask.provider.smoothspline;
+
+/*
+ * #%L
+ * anchor-mpp
+ * %%
+ * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * %%
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ * 
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ * #L%
+ */
+
+
+import java.util.ArrayList;
+import java.util.Set;
+
+import org.anchoranalysis.core.geometry.Point3f;
+import org.anchoranalysis.image.contour.Contour;
+
+public class ContourList extends ArrayList<Contour> {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 7003021223351541824L;
+
+	public ContourList() {
+		super();
+	}
+	
+	@Override
+	public String toString() {
+		String newLine = System.getProperty("line.separator");
+
+		StringBuffer sb = new StringBuffer();
+		sb.append("--" + newLine);
+		for (int i=0; i<size(); i++) {
+			Contour c = get(i);
+			sb.append( c.summaryStr() + newLine);
+		}
+		
+		sb.append("--" + newLine);
+		return sb.toString();
+	}
+	
+
+	
+	// Create one large contour with all the points
+	public Contour createCombinedContour() {
+		Contour out = new Contour();
+		for( Contour c : this ) {
+			for( Point3f p : c.getPoints() ) {
+				out.getPoints().add(p);
+			}
+		}
+		return out;
+	}
+	
+	public int numberFoundFrom( Set<Contour> set ) {
+		int cnt = 0;
+		for( Contour c : this ) {
+			if (set.contains(c)) {
+				cnt++;
+			}
+		}
+		return cnt;
+	}
+	
+
+	
+	public Contour getFirst() {
+		return get(0);
+	}
+	
+	public Contour getLast() {
+		return get( size() - 1 );
+	}
+	
+	public boolean firstConnectedTo( ContourList other ) {
+		return getFirst().connectedTo( other.getLast() );
+	}
+
+	public boolean lastConnectedTo( ContourList other ) {
+		return getLast().connectedTo( other.getFirst() );
+	}
+}

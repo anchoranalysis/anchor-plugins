@@ -1,0 +1,129 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+   <modelVersion>4.0.0</modelVersion>
+	<parent>
+        <groupId>org.anchoranalysis.anchor</groupId>
+   	    <artifactId>anchor-pom</artifactId>
+		<version>0.0.16-SNAPSHOT</version>
+    </parent> 
+
+    <artifactId>anchor-parent-plugins</artifactId>
+	<version>0.0.11-SNAPSHOT</version>
+    <packaging>pom</packaging>
+	<name>anchor-parent-plugins</name>
+	
+  	<scm>
+		<connection>scm:git:ssh://git@bitbucket.org/anchorimageanalysis/anchor-plugins.git</connection>
+		<developerConnection>scm:git:ssh://git@bitbucket.org/anchorimageanalysis/anchor-plugins.git</developerConnection>
+		<url>https://git@bitbucket.org/anchorimageanalysis/anchor-plugins.git</url>
+	  <tag>HEAD</tag>
+  </scm>
+  
+    <modules>
+        <module>anchor-plugin-eth</module>
+        <module>anchor-plugin-image</module>
+        <module>anchor-plugin-image-feature</module>
+        <module>anchor-plugin-ij</module>
+        <module>anchor-plugin-mpp</module>
+        <module>anchor-plugin-mpp-experiment</module>
+        <module>anchor-plugin-mpp-feature</module>
+	   <module>anchor-plugin-mpp-sgmn</module>
+        <module>anchor-plugin-points</module>
+        <module>anchor-plugin-io</module>
+        <module>anchor-plugin-image-task</module>
+	   <module>anchor-plugin-quick</module>
+	   <module>anchor-plugin-annotation</module>
+	   <module>anchor-plugin-opencv</module>
+	   <module>anchor-plugin-operator-feature</module>
+		
+		<!-- testing routines which we currently store
+		   with the plugins as they depend on them. Perhaps
+		  we move these in the future, or smartly refactor -->
+		<module>anchor-test-experiment</module>
+		<module>anchor-test-image</module>
+		<module>anchor-test-mpp</module>
+		<module>anchor-test-feature-plugins</module>
+    </modules>
+
+
+	<!-- Provides a means of reaching anchor-pom and ImageJ -->
+    <repositories>
+		<repository>
+		  <releases>
+			<enabled>true</enabled>
+			<updatePolicy>never</updatePolicy>
+			<checksumPolicy>warn</checksumPolicy>
+		  </releases>
+		  <snapshots>
+			<enabled>true</enabled>
+			<updatePolicy>always</updatePolicy>
+			<checksumPolicy>warn</checksumPolicy>
+		  </snapshots>
+		  <id>anchor</id>
+		   <name>anchor</name>
+		   <url>http://maven.anchoranalysis.org:8081/repository/anchor</url>
+		  <layout>default</layout>
+		</repository>
+		
+		<repository>
+			<id>imagej</id>
+			<name>ImageJ repository</name>
+			<url>http://maven.imagej.net/content/groups/public</url>
+		</repository>
+		
+   	</repositories>
+	
+	
+    <build>
+		
+        <pluginManagement>
+            <plugins>
+           
+
+								
+            </plugins>
+        </pluginManagement>
+	
+				
+		<!-- Adds license information in each jar -->
+		 <resources>
+		  <resource>
+		    <directory>src/main/resources</directory>
+		  </resource>
+		  
+		  <resource>
+		    <filtering>false</filtering>
+		    <directory>notices</directory>
+		    
+		    <!-- avoid a slash before META-INF as it messes up Linux builds -->
+		    <targetPath>META-INF/notices</targetPath>
+		    <includes>
+		       <include>*</include>
+		    </includes>
+		  </resource>
+			
+		  <resource>
+		    <filtering>false</filtering>
+		    <directory>${project.basedir}</directory>
+		    
+		    <!-- avoid a slash before META-INF as it messes up Linux builds -->
+		    <targetPath>META-INF/</targetPath>
+		    <includes>
+		      <include>LICENSE.txt</include>
+		      <include>NOTICE.txt</include>
+		    </includes>
+		  </resource>
+		  
+		</resources>	
+    </build>
+	
+	 <dependencies>
+        <dependency>
+		  <groupId>junit</groupId>
+		  <artifactId>junit</artifactId>
+		  <version>4.12</version>
+		  <scope>test</scope>
+	      <optional>true</optional>
+		</dependency>
+    </dependencies>
+	
+</project>

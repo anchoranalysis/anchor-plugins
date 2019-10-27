@@ -1,0 +1,28 @@
+/* The authors of this software are Christopher Philip Mauer and Vytas Bindokas.  Copyright (c) 2004.
+Permission to use, copy, modify, and distribute this software for any purpose 
+without fee is hereby granted, provided that this entire notice is included in 
+all copies of any software which is or includes a copy or modification of this 
+software and in all copies of the supporting documentation for such software.
+Any for profit use of this software is expressly forbidden without first
+obtaining the explicit consent of the author. 
+THIS SOFTWARE IS BEING PROVIDED "AS IS", WITHOUT ANY EXPRESS OR IMPLIED WARRANTY. 
+IN PARTICULAR, THE AUTHOR DOES NOT MAKE ANY REPRESENTATION OR WARRANTY 
+OF ANY KIND CONCERNING THE MERCHANTABILITY OF THIS SOFTWARE OR ITS FITNESS FOR ANY 
+PARTICULAR PURPOSE. 
+*/
+/* 
+ This plugin consists of a 3D adaptation of the Hybrid Median Filter intended for XYZ or XYT data,
+ which we are calling a 3d Hybrid Median Filter. In this implementation, the median
+ is calculated from the medians of 1) the 3x3 2d PLUS kernel, 2) the 3x3 2d X kernel,
+ 3) the 3x3 3d PLUS kernel, and four 3x3 2d X kernels through the center pixel along
+ Z-axis: 4) the vertical X, 5) the horizontal X, 6) the X from the upper right to the
+ lower left, and 7) the X from the upper left to the lower right, and optionally 
+ 8) the pixel in question.  The top and bottom edge pixels are reflected outward, and the 
+ side edge pixels are wrapped arpund to complete the edge bound kernels.   
+ The pixels of the first and last slice are reflected outward to simulate data for the N-1
+ and N+1 slices (where N is the number of images in the stack) in order to return an output
+ stack which is the same size as the input stack. The filter may be aborted by hitting the escape key.
+
+					Christopher Philip Mauer  &  Vytas Bindokas
+					cpmauer@northwestern.edu     vytas@drugs.bsd.uchicago.edu
+*/

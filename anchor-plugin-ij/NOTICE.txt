@@ -1,0 +1,18 @@
+This product depends on other libraries. Their attribution and/or original licenses are found in the notices/ sub-folder
+
+This product incorporates code in Hybrid_3D_Median_Filter.java by
+Christopher Philip Mauer and Vytas Bindokas.  Copyright (c) 2004.
+Please see the respective license in the header or in licenses/Hybrid_3D_Median_Filter.txt
+
+ ===================================================================================
+ ==  Notices and attributions required by libraries that the project depends on   ==
+ ===================================================================================
+
+Apache Commons IO
+Copyright 2002-2010 The Apache Software Foundation
+
+This product includes software developed by
+The Apache Software Foundation (http://www.apache.org/).
+
+
+The JUnit depends on Java Hamcrest (http://hamcrest.org/JavaHamcrest/).
