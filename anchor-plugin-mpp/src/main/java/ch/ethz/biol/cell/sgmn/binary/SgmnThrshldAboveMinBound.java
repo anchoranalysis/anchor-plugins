@@ -29,7 +29,7 @@ package ch.ethz.biol.cell.sgmn.binary;
 
 import java.nio.ByteBuffer;
 
-import org.anchoranalysis.anchor.mpp.mark.bounds.MarkBounds;
+import org.anchoranalysis.anchor.mpp.bounds.MarkBounds;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.random.RandomNumberGenerator;
 import org.anchoranalysis.image.bean.sgmn.binary.BinarySgmn;

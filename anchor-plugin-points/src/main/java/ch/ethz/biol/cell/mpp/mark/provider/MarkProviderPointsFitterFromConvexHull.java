@@ -29,6 +29,12 @@ package ch.ethz.biol.cell.mpp.mark.provider;
 
 import java.util.List;
 
+import org.anchoranalysis.anchor.mpp.bean.points.fitter.InsufficientPointsException;
+import org.anchoranalysis.anchor.mpp.bean.points.fitter.PointsFitter;
+import org.anchoranalysis.anchor.mpp.bean.points.fitter.PointsFitterException;
+import org.anchoranalysis.anchor.mpp.bean.provider.MarkProvider;
+import org.anchoranalysis.anchor.mpp.bean.regionmap.RegionMap;
+import org.anchoranalysis.anchor.mpp.bean.regionmap.RegionMembership;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
@@ -41,11 +47,6 @@ import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
 import org.anchoranalysis.image.objmask.ObjMaskCollection;
 
 import ch.ethz.biol.cell.mpp.mark.pointsfitter.ConvexHullUtilities;
-import ch.ethz.biol.cell.mpp.mark.pointsfitter.InsufficientPointsException;
-import ch.ethz.biol.cell.mpp.mark.pointsfitter.PointsFitter;
-import ch.ethz.biol.cell.mpp.mark.pointsfitter.PointsFitterException;
-import ch.ethz.biol.cell.mpp.mark.regionmap.RegionMap;
-import ch.ethz.biol.cell.mpp.mark.regionmap.RegionMembership;
 
 // Applies a points fitter on the convex hull of some objects
 // Only works in 2D for now

@@ -1,5 +1,7 @@
 package org.anchoranalysis.plugin.mpp.sgmn.bean.kernel.independent;
 
+import org.anchoranalysis.anchor.mpp.mark.set.UpdateMarkSetException;
+
 /*-
  * #%L
  * anchor-plugin-mpp-sgmn
@@ -35,7 +37,6 @@ import org.anchoranalysis.mpp.sgmn.kernel.KernelCalcNRGException;
 import org.apache.commons.lang.ArrayUtils;
 
 import ch.ethz.biol.cell.mpp.pair.ListUpdatableMarkSetCollection;
-import ch.ethz.biol.cell.mpp.pair.UpdateMarkSetException;
 
 public abstract class KernelReplace<T> extends KernelPosNeg<T> {
 

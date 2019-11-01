@@ -1,5 +1,9 @@
 package ch.ethz.biol.cell.mpp.probmap.provider;
 
+import org.anchoranalysis.anchor.mpp.bean.provider.ProbMapProvider;
+import org.anchoranalysis.anchor.mpp.probmap.ProbMap;
+import org.anchoranalysis.anchor.mpp.probmap.ProbMapObjMaskCollection;
+
 /*
  * #%L
  * anchor-plugin-mpp
@@ -31,9 +35,6 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.bean.provider.ImageDimProvider;
 import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
-
-import ch.ethz.biol.cell.mpp.probmap.ProbMap;
-import ch.ethz.biol.cell.mpp.probmap.ProbMapObjMaskCollection;
 
 // Always returns a position
 public class ProbMapProviderObjMaskCollection extends ProbMapProvider {

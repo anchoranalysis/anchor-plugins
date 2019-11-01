@@ -1,5 +1,7 @@
 package ch.ethz.biol.cell.mpp.mark.pxllistoperation;
 
+import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
+
 /*
  * #%L
  * anchor-plugin-mpp-feature
@@ -33,7 +35,6 @@ import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.extent.ImageDim;
 
 import ch.ethz.biol.cell.mpp.mark.pixelstatisticsfrommark.PixelStatisticsFromMark;
-import ch.ethz.biol.cell.mpp.mark.pxlmark.memo.PxlMarkMemo;
 
 public class Sum extends PxlListOperationFromMark {
 

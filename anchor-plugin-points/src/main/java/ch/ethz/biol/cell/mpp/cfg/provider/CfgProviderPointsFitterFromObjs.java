@@ -30,6 +30,10 @@ package ch.ethz.biol.cell.mpp.cfg.provider;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.anchoranalysis.anchor.mpp.bean.mark.factory.MarkFactory;
+import org.anchoranalysis.anchor.mpp.bean.points.fitter.InsufficientPointsException;
+import org.anchoranalysis.anchor.mpp.bean.points.fitter.PointsFitter;
+import org.anchoranalysis.anchor.mpp.bean.points.fitter.PointsFitterException;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
@@ -44,11 +48,7 @@ import org.anchoranalysis.image.outline.FindOutline;
 import org.anchoranalysis.image.points.PointsFromBinaryVoxelBox;
 
 import ch.ethz.biol.cell.mpp.cfg.Cfg;
-import ch.ethz.biol.cell.mpp.mark.factory.MarkFactory;
 import ch.ethz.biol.cell.mpp.mark.pointsfitter.ConvexHullUtilities;
-import ch.ethz.biol.cell.mpp.mark.pointsfitter.InsufficientPointsException;
-import ch.ethz.biol.cell.mpp.mark.pointsfitter.PointsFitter;
-import ch.ethz.biol.cell.mpp.mark.pointsfitter.PointsFitterException;
 
 public class CfgProviderPointsFitterFromObjs extends CfgProvider {
 

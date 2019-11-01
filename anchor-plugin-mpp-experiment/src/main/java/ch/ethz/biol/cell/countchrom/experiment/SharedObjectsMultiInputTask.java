@@ -31,6 +31,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.anchoranalysis.anchor.mpp.bean.init.MPPInitParams;
 import org.anchoranalysis.bean.annotation.AllowEmpty;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.define.Define;
@@ -50,8 +51,6 @@ import org.anchoranalysis.image.stack.NamedImgStackCollection;
 import org.anchoranalysis.io.output.OutputWriteFailedException;
 import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
 import org.anchoranalysis.mpp.io.input.MultiInput;
-
-import ch.ethz.biol.cell.beaninitparams.MPPInitParams;
 
 public class SharedObjectsMultiInputTask extends TaskWithoutSharedState<MultiInput> {
 

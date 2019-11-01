@@ -1,5 +1,7 @@
 package ch.ethz.biol.cell.mpp.nrg.feature.objmask;
 
+import org.anchoranalysis.anchor.mpp.bean.points.fitter.InsufficientPointsException;
+
 /*
  * #%L
  * anchor-plugin-points
@@ -38,8 +40,6 @@ import org.anchoranalysis.image.feature.objmask.FeatureObjMaskParams;
 import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.plugin.points.calculate.ellipse.CalculateEllipseLeastSquares;
 import org.anchoranalysis.plugin.points.calculate.ellipse.ObjMaskAndEllipse;
-
-import ch.ethz.biol.cell.mpp.mark.pointsfitter.InsufficientPointsException;
 
 // Calculates the ellipticity of a objMask (on the COG slice if it's a zstack)
 public class Ellipticity extends FeatureObjMask {

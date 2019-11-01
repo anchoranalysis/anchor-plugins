@@ -30,8 +30,11 @@ package org.anchoranalysis.plugin.mpp.sgmn.bean.kernel.independent;
 import java.util.List;
 
 import org.anchoranalysis.anchor.mpp.bean.proposer.MarkProposer;
+import org.anchoranalysis.anchor.mpp.mark.GlobalRegionIdentifiers;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
+import org.anchoranalysis.anchor.mpp.mark.set.UpdateMarkSetException;
 import org.anchoranalysis.anchor.mpp.proposer.ProposerContext;
+import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.Optional;
 import org.anchoranalysis.core.error.OperationFailedException;
@@ -42,12 +45,9 @@ import org.anchoranalysis.mpp.sgmn.kernel.KernelCalcNRGException;
 
 import anchor.provider.bean.ProposalAbnormalFailureException;
 import ch.ethz.biol.cell.mpp.cfg.CfgGen;
-import ch.ethz.biol.cell.mpp.mark.GlobalRegionIdentifiers;
-import ch.ethz.biol.cell.mpp.mark.pxlmark.memo.PxlMarkMemo;
 import ch.ethz.biol.cell.mpp.nrg.CfgNRGPixelized;
 import ch.ethz.biol.cell.mpp.pair.ListUpdatableMarkSetCollection;
 import ch.ethz.biol.cell.mpp.pair.PxlMarkMemoList;
-import ch.ethz.biol.cell.mpp.pair.UpdateMarkSetException;
 
 public class KernelBirthAndKill extends KernelPosNeg<CfgNRGPixelized> {
 	

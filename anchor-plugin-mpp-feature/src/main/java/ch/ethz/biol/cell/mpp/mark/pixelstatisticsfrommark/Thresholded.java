@@ -1,5 +1,7 @@
 package ch.ethz.biol.cell.mpp.mark.pixelstatisticsfrommark;
 
+import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
+
 /*
  * #%L
  * anchor-plugin-mpp-feature
@@ -33,8 +35,6 @@ import org.anchoranalysis.bean.shared.relation.RelationBean;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.voxel.statistics.VoxelStatistics;
-
-import ch.ethz.biol.cell.mpp.mark.pxlmark.memo.PxlMarkMemo;
 
 public class Thresholded extends PixelStatisticsFromMark {
 

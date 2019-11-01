@@ -1,5 +1,9 @@
 package ch.ethz.biol.cell.mpp.mark.pixelstatisticsfrommark;
 
+import org.anchoranalysis.anchor.mpp.mark.GlobalRegionIdentifiers;
+import org.anchoranalysis.anchor.mpp.pxlmark.PxlMark;
+import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
+
 /*
  * #%L
  * anchor-plugin-mpp-feature
@@ -33,10 +37,6 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.voxel.statistics.VoxelStatistics;
-
-import ch.ethz.biol.cell.mpp.mark.GlobalRegionIdentifiers;
-import ch.ethz.biol.cell.mpp.mark.pxlmark.PxlMark;
-import ch.ethz.biol.cell.mpp.mark.pxlmark.memo.PxlMarkMemo;
 
 // Considers the centerSlice +- windowSize
 //  So total size =  2*windowSize + 1 (clipped to the bounding box)

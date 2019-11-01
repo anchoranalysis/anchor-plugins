@@ -29,6 +29,9 @@ package ch.ethz.biol.cell.mpp.bound;
 
 import java.nio.ByteBuffer;
 
+import org.anchoranalysis.anchor.mpp.bean.bounds.BoundCalculator;
+import org.anchoranalysis.anchor.mpp.bounds.BidirectionalBound;
+import org.anchoranalysis.anchor.mpp.bounds.RslvdBound;
 import org.anchoranalysis.anchor.mpp.proposer.error.ErrorNode;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
@@ -40,9 +43,6 @@ import org.anchoranalysis.image.convert.ByteConverter;
 import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.anchoranalysis.math.rotation.RotationMatrix;
-
-import ch.ethz.biol.cell.imageprocessing.bound.BidirectionalBound;
-import ch.ethz.biol.cell.imageprocessing.bound.RslvdBound;
 
 public class LineBoundCalculator extends BoundCalculator {
 

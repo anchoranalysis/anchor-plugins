@@ -1,5 +1,6 @@
 package ch.ethz.biol.cell.mpp.mark.check;
 
+import org.anchoranalysis.anchor.mpp.bean.init.MPPInitParams;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
 
 /*-
@@ -42,7 +43,6 @@ import org.anchoranalysis.feature.init.FeatureInitParams;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 import org.anchoranalysis.feature.shared.SharedFeatureSet;
 
-import ch.ethz.biol.cell.beaninitparams.MPPInitParams;
 import ch.ethz.biol.cell.core.CheckMark;
 import ch.ethz.biol.cell.mpp.nrg.feature.session.FeatureSessionCreateParamsMPP;
 

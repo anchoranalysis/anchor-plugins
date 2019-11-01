@@ -1,5 +1,7 @@
 package org.anchoranalysis.plugin.mpp.sgmn.kernel.updater;
 
+import org.anchoranalysis.anchor.mpp.mark.set.UpdateMarkSetException;
+
 /*-
  * #%L
  * anchor-plugin-mpp-sgmn
@@ -28,8 +30,6 @@ package org.anchoranalysis.plugin.mpp.sgmn.kernel.updater;
 
 import org.anchoranalysis.mpp.sgmn.bean.kernel.Kernel;
 import org.anchoranalysis.plugin.mpp.sgmn.optscheme.TransformationContext;
-
-import ch.ethz.biol.cell.mpp.pair.UpdateMarkSetException;
 
 /**
  * 

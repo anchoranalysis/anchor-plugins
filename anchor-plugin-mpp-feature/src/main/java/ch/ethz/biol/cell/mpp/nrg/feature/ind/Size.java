@@ -1,5 +1,8 @@
 package ch.ethz.biol.cell.mpp.nrg.feature.ind;
 
+import org.anchoranalysis.anchor.mpp.mark.GlobalRegionIdentifiers;
+import org.anchoranalysis.anchor.mpp.pxlmark.PxlMark;
+
 /*
  * #%L
  * anchor-plugin-mpp-feature
@@ -32,8 +35,6 @@ import org.anchoranalysis.core.cache.ExecuteException;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.voxel.statistics.VoxelStatistics;
 
-import ch.ethz.biol.cell.mpp.mark.GlobalRegionIdentifiers;
-import ch.ethz.biol.cell.mpp.mark.pxlmark.PxlMark;
 import ch.ethz.biol.cell.mpp.nrg.NRGElemIndCalcParams;
 
 // Size = Number of voxels

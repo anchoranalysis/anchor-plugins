@@ -33,11 +33,10 @@ import org.anchoranalysis.anchor.mpp.mark.conic.EllipsoidRandomizer;
 import org.anchoranalysis.anchor.mpp.mark.conic.MarkEllipsoid;
 import org.anchoranalysis.anchor.mpp.proposer.ProposerContext;
 import org.anchoranalysis.anchor.mpp.proposer.visualization.ICreateProposalVisualization;
+import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
 import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.core.index.GetOperationFailedException;
 import org.anchoranalysis.image.orientation.Orientation;
-
-import ch.ethz.biol.cell.mpp.mark.pxlmark.memo.PxlMarkMemo;
 
 public class MarkEllipsoidOrientationRadiiProposer extends MarkProposer {
 

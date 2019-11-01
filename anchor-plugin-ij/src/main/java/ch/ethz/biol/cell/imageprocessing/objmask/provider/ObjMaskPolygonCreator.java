@@ -28,13 +28,13 @@ package ch.ethz.biol.cell.imageprocessing.objmask.provider;
 
 import java.util.List;
 
+import org.anchoranalysis.anchor.mpp.regionmap.RegionMapSingleton;
 import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.objmask.ObjMask;
 
 import ch.ethz.biol.cell.mpp.mark.MarkPolygon;
-import ch.ethz.biol.cell.mpp.mark.regionmap.RegionMapSingleton;
 
 public class ObjMaskPolygonCreator {
 

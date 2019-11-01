@@ -1,5 +1,8 @@
 package org.anchoranalysis.plugin.mpp.sgmn;
 
+import org.anchoranalysis.anchor.mpp.bean.init.MPPInitParams;
+import org.anchoranalysis.anchor.mpp.mark.GlobalRegionIdentifiers;
+
 /*
  * #%L
  * anchor-mpp-sgmn
@@ -53,13 +56,11 @@ import org.anchoranalysis.mpp.sgmn.bean.optscheme.OptSchemeInitContext;
 import org.anchoranalysis.mpp.sgmn.bean.optscheme.termination.TriggerTerminationCondition;
 import org.anchoranalysis.mpp.sgmn.optscheme.OptTerminatedEarlyException;
 
-import ch.ethz.biol.cell.beaninitparams.MPPInitParams;
 import ch.ethz.biol.cell.imageprocessing.io.generator.serialized.GroupParamsGenerator;
 import ch.ethz.biol.cell.mpp.DualStack;
 import ch.ethz.biol.cell.mpp.cfg.Cfg;
 import ch.ethz.biol.cell.mpp.cfg.CfgGen;
 import ch.ethz.biol.cell.mpp.feedback.FeedbackReceiverBean;
-import ch.ethz.biol.cell.mpp.mark.GlobalRegionIdentifiers;
 import ch.ethz.biol.cell.mpp.nrg.CfgNRG;
 import ch.ethz.biol.cell.mpp.nrg.CfgNRGPixelized;
 import ch.ethz.biol.cell.mpp.nrg.CfgWithNrgTotal;

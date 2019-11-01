@@ -1,6 +1,8 @@
 package ch.ethz.biol.cell.mpp.mark.proposer.bound;
 
 import org.anchoranalysis.anchor.mpp.bean.proposer.BoundProposer;
+import org.anchoranalysis.anchor.mpp.bounds.BidirectionalBound;
+import org.anchoranalysis.anchor.mpp.bounds.RslvdBound;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.anchor.mpp.proposer.error.ErrorNode;
 
@@ -38,9 +40,6 @@ import org.anchoranalysis.image.bean.unitvalue.distance.UnitValueDistanceVoxels;
 import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.extent.ImageRes;
 import org.anchoranalysis.math.rotation.RotationMatrix;
-
-import ch.ethz.biol.cell.imageprocessing.bound.BidirectionalBound;
-import ch.ethz.biol.cell.imageprocessing.bound.RslvdBound;
 
 public class BoundProposerCloseFit extends BoundProposer {
 

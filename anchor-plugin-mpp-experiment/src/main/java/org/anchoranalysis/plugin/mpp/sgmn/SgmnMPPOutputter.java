@@ -1,5 +1,6 @@
 package org.anchoranalysis.plugin.mpp.sgmn;
 
+import org.anchoranalysis.anchor.mpp.bean.regionmap.RegionMembershipWithFlags;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.anchor.overlay.Overlay;
 
@@ -46,7 +47,6 @@ import ch.ethz.biol.cell.imageprocessing.io.generator.raster.ColoredCfgWithDispl
 import ch.ethz.biol.cell.mpp.DualStack;
 import ch.ethz.biol.cell.mpp.cfg.Cfg;
 import ch.ethz.biol.cell.mpp.gui.videostats.internalframe.markredraw.ColoredCfg;
-import ch.ethz.biol.cell.mpp.mark.regionmap.RegionMembershipWithFlags;
 import ch.ethz.biol.cell.mpp.nrg.CfgNRG;
 import ch.ethz.biol.cell.mpp.nrg.CfgWithNrgTotal;
 

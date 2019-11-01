@@ -1,6 +1,11 @@
 package org.anchoranalysis.plugin.mpp.sgmn;
 
+import org.anchoranalysis.anchor.mpp.bean.init.MPPInitParams;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
+import org.anchoranalysis.anchor.mpp.mark.set.UpdatableMarkSet;
+import org.anchoranalysis.anchor.mpp.pair.Pair;
+import org.anchoranalysis.anchor.mpp.pair.PairCollection;
+import org.anchoranalysis.anchor.mpp.probmap.ProbMap;
 
 /*-
  * #%L
@@ -34,13 +39,8 @@ import org.anchoranalysis.core.index.GetOperationFailedException;
 import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 
-import ch.ethz.biol.cell.beaninitparams.MPPInitParams;
-import ch.ethz.biol.cell.mpp.pair.IUpdatableMarkSet;
 import ch.ethz.biol.cell.mpp.pair.ListUpdatableMarkSetCollection;
-import ch.ethz.biol.cell.mpp.pair.Pair;
-import ch.ethz.biol.cell.mpp.pair.PairCollection;
 import ch.ethz.biol.cell.mpp.pair.PxlMarkMemoList;
-import ch.ethz.biol.cell.mpp.probmap.ProbMap;
 
 class UpdateMarkSet {
 	
@@ -82,7 +82,7 @@ class UpdateMarkSet {
 			for( String key : psoImage.getProbMapSet().keys()  ) {
 				ProbMap probMap = psoImage.getProbMapSet().getException(key);
 				
-				IUpdatableMarkSet updater = probMap.updater(); 
+				UpdatableMarkSet updater = probMap.updater(); 
 				if (updater!=null) { 
 					updater.initUpdatableMarkSet( new PxlMarkMemoList(), nrgStack, logger, psoImage.getFeature().getSharedFeatureSet() );
 					updatableMarkSetCollection.add( updater );

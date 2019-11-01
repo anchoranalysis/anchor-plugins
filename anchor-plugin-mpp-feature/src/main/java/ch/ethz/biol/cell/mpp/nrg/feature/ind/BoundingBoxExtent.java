@@ -1,5 +1,7 @@
 package ch.ethz.biol.cell.mpp.nrg.feature.ind;
 
+import org.anchoranalysis.anchor.mpp.mark.GlobalRegionIdentifiers;
+
 /*
  * #%L
  * anchor-plugin-mpp-feature
@@ -33,7 +35,6 @@ import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.ImageRes;
 import org.anchoranalysis.image.orientation.DirectionVector;
 
-import ch.ethz.biol.cell.mpp.mark.GlobalRegionIdentifiers;
 import ch.ethz.biol.cell.mpp.nrg.NRGElemIndCalcParams;
 
 // TODO we can also create a FeatureMark version 

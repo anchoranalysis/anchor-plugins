@@ -1,8 +1,8 @@
 package ch.ethz.biol.cell.mpp.mark.proposer.radii;
 
 import org.anchoranalysis.anchor.mpp.bean.proposer.radii.RadiiProposer;
+import org.anchoranalysis.anchor.mpp.bounds.MarkBounds;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
-import org.anchoranalysis.anchor.mpp.mark.bounds.MarkBounds;
 import org.anchoranalysis.anchor.mpp.proposer.error.ErrorNode;
 
 /*

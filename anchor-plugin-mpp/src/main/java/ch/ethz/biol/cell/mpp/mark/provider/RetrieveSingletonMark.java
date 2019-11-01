@@ -1,5 +1,6 @@
 package ch.ethz.biol.cell.mpp.mark.provider;
 
+import org.anchoranalysis.anchor.mpp.bean.provider.MarkProvider;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
 
 /*

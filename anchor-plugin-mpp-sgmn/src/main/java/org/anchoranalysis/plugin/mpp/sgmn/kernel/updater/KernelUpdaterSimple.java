@@ -1,5 +1,7 @@
 package org.anchoranalysis.plugin.mpp.sgmn.kernel.updater;
 
+import org.anchoranalysis.anchor.mpp.mark.set.UpdateMarkSetException;
+
 /*-
  * #%L
  * anchor-plugin-mpp-sgmn
@@ -34,7 +36,6 @@ import org.anchoranalysis.mpp.sgmn.kernel.proposer.WeightedKernelList;
 import org.anchoranalysis.plugin.mpp.sgmn.optscheme.TransformationContext;
 
 import ch.ethz.biol.cell.mpp.pair.ListUpdatableMarkSetCollection;
-import ch.ethz.biol.cell.mpp.pair.UpdateMarkSetException;
 
 public class KernelUpdaterSimple<S,T> extends KernelUpdater<S,T> {
 

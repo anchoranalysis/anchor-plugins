@@ -1,5 +1,6 @@
 package ch.ethz.biol.cell.mpp.mark.check;
 
+import org.anchoranalysis.anchor.mpp.bean.regionmap.RegionMap;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.anchor.mpp.mark.conic.MarkEllipse;
 import org.anchoranalysis.core.index.GetOperationFailedException;
@@ -34,7 +35,6 @@ import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 
 
 import ch.ethz.biol.cell.core.CheckMark;
-import ch.ethz.biol.cell.mpp.mark.regionmap.RegionMap;
 
 public class EllipseBoundsCheck extends CheckMark {
 

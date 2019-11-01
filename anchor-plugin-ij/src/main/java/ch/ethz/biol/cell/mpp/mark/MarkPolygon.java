@@ -29,6 +29,8 @@ package ch.ethz.biol.cell.mpp.mark;
 
 import java.util.List;
 
+import org.anchoranalysis.anchor.mpp.bean.regionmap.RegionMembershipUtilities;
+import org.anchoranalysis.anchor.mpp.mark.GlobalRegionIdentifiers;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.anchor.mpp.mark.MarkAbstractPointList;
 import org.anchoranalysis.core.error.OptionalOperationUnsupportedException;
@@ -36,7 +38,6 @@ import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.ImageDim;
 
-import ch.ethz.biol.cell.mpp.mark.regionmap.RegionMembershipUtilities;
 import ij.gui.PolygonRoi;
 import ij.gui.Roi;
 

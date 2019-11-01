@@ -1,5 +1,9 @@
 package ch.ethz.biol.cell.mpp.probmap.provider;
 
+import org.anchoranalysis.anchor.mpp.bean.init.MPPInitParams;
+import org.anchoranalysis.anchor.mpp.bean.provider.ProbMapProvider;
+import org.anchoranalysis.anchor.mpp.probmap.ProbMap;
+
 /*
  * #%L
  * anchor-plugin-mpp
@@ -31,9 +35,6 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.index.GetOperationFailedException;
-
-import ch.ethz.biol.cell.beaninitparams.MPPInitParams;
-import ch.ethz.biol.cell.mpp.probmap.ProbMap;
 
 public class ProbMapProviderReference extends ProbMapProvider {
 

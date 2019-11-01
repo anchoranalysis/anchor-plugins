@@ -29,6 +29,7 @@ package ch.ethz.biol.cell.mpp.mark.pointsfitter;
 
 import java.util.List;
 
+import org.anchoranalysis.anchor.mpp.bean.points.fitter.PointsFitterException;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.core.geometry.Point3f;
 import org.anchoranalysis.image.extent.ImageDim;

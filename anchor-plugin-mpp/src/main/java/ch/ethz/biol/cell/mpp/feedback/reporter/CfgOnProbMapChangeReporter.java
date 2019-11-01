@@ -1,5 +1,6 @@
 package ch.ethz.biol.cell.mpp.feedback.reporter;
 
+import org.anchoranalysis.anchor.mpp.probmap.ProbMap;
 import org.anchoranalysis.anchor.overlay.id.IDGetterOverlayID;
 
 /*
@@ -59,7 +60,6 @@ import ch.ethz.biol.cell.mpp.feedback.ReporterOptimizationStep;
 import ch.ethz.biol.cell.mpp.feedback.ReporterException;
 import ch.ethz.biol.cell.mpp.gui.videostats.internalframe.markredraw.ColoredCfg;
 import ch.ethz.biol.cell.mpp.nrg.CfgNRGPixelized;
-import ch.ethz.biol.cell.mpp.probmap.ProbMap;
 
 
 public class CfgOnProbMapChangeReporter extends ReporterOptimizationStep<CfgNRGPixelized> {

@@ -1,5 +1,9 @@
 package ch.ethz.biol.cell.mpp.mark.pixelstatisticsfrommark;
 
+import org.anchoranalysis.anchor.mpp.mark.GlobalRegionIdentifiers;
+import org.anchoranalysis.anchor.mpp.pxlmark.PxlMark;
+import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
+
 /*
  * #%L
  * anchor-plugin-mpp-feature
@@ -36,10 +40,6 @@ import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.histogram.Histogram;
 import org.anchoranalysis.image.voxel.statistics.VoxelStatistics;
 import org.anchoranalysis.image.voxel.statistics.VoxelStatisticsFromHistogram;
-
-import ch.ethz.biol.cell.mpp.mark.GlobalRegionIdentifiers;
-import ch.ethz.biol.cell.mpp.mark.pxlmark.PxlMark;
-import ch.ethz.biol.cell.mpp.mark.pxlmark.memo.PxlMarkMemo;
 
 // Only takes pixels where indexNonZero has a nonzero pixel 
 // This involves a trick where we count how many pixels exist

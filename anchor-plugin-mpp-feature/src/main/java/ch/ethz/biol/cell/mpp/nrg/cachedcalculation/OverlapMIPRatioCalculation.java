@@ -1,5 +1,10 @@
 package ch.ethz.biol.cell.mpp.nrg.cachedcalculation;
 
+import org.anchoranalysis.anchor.mpp.bean.regionmap.RegionMap;
+import org.anchoranalysis.anchor.mpp.overlap.OverlapUtilities;
+import org.anchoranalysis.anchor.mpp.pxlmark.PxlMark;
+import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
+
 /*
  * #%L
  * anchor-plugin-mpp-feature
@@ -33,10 +38,6 @@ import org.anchoranalysis.feature.cachedcalculation.CachedCalculationCastParams;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
-import ch.ethz.biol.cell.mpp.mark.overlap.OverlapUtilities;
-import ch.ethz.biol.cell.mpp.mark.pxlmark.PxlMark;
-import ch.ethz.biol.cell.mpp.mark.pxlmark.memo.PxlMarkMemo;
-import ch.ethz.biol.cell.mpp.mark.regionmap.RegionMap;
 import ch.ethz.biol.cell.mpp.nrg.NRGElemPairCalcParams;
 
 public class OverlapMIPRatioCalculation extends CachedCalculationCastParams<Double,NRGElemPairCalcParams> {

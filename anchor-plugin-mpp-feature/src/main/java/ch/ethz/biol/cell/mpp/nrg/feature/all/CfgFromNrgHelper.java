@@ -1,5 +1,7 @@
 package ch.ethz.biol.cell.mpp.nrg.feature.all;
 
+import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
+
 /*-
  * #%L
  * anchor-plugin-mpp-feature
@@ -27,7 +29,6 @@ package ch.ethz.biol.cell.mpp.nrg.feature.all;
  */
 
 import ch.ethz.biol.cell.mpp.cfg.Cfg;
-import ch.ethz.biol.cell.mpp.mark.pxlmark.memo.PxlMarkMemo;
 import ch.ethz.biol.cell.mpp.nrg.MemoMarks;
 
 public class CfgFromNrgHelper {

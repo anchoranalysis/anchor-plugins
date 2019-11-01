@@ -1,5 +1,7 @@
 package ch.ethz.biol.cell.mpp.nrg.feature.all;
 
+import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
+
 /*
  * #%L
  * anchor-plugin-mpp-feature
@@ -31,7 +33,6 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 
-import ch.ethz.biol.cell.mpp.mark.pxlmark.memo.PxlMarkMemo;
 import ch.ethz.biol.cell.mpp.nrg.NRGElemAll;
 import ch.ethz.biol.cell.mpp.nrg.NRGElemAllCalcParams;
 import ch.ethz.biol.cell.mpp.nrg.NRGElemIndCalcParams;

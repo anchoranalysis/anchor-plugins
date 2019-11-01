@@ -29,10 +29,10 @@ package ch.ethz.biol.cell.mpp.bound;
 
 import java.util.ArrayList;
 
+import org.anchoranalysis.anchor.mpp.bean.bounds.BoundCalculator;
+import org.anchoranalysis.anchor.mpp.bean.init.MPPInitParams;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.log.LogErrorReporter;
-
-import ch.ethz.biol.cell.beaninitparams.MPPInitParams;
 
 public class ListBoundCalculator extends ArrayList<BoundCalculator> {
 

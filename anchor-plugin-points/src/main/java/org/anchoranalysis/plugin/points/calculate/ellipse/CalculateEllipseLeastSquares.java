@@ -1,5 +1,6 @@
 package org.anchoranalysis.plugin.points.calculate.ellipse;
 
+import org.anchoranalysis.anchor.mpp.bean.points.fitter.InsufficientPointsException;
 import org.anchoranalysis.anchor.mpp.mark.conic.MarkEllipse;
 
 /*
@@ -38,7 +39,6 @@ import org.anchoranalysis.image.feature.objmask.FeatureObjMaskParams;
 import org.anchoranalysis.image.objmask.ObjMask;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
-import ch.ethz.biol.cell.mpp.mark.pointsfitter.InsufficientPointsException;
 import ch.ethz.biol.cell.mpp.mark.pointsfitter.LinearLeastSquaresEllipseFitterGeoRegression;
 
 public class CalculateEllipseLeastSquares extends CachedCalculationCastParams<ObjMaskAndEllipse, FeatureObjMaskParams> {

@@ -1,5 +1,7 @@
 package ch.ethz.biol.cell.mpp.mark.proposer;
 
+import org.anchoranalysis.anchor.mpp.bean.init.MPPInitParams;
+
 /*-
  * #%L
  * anchor-plugin-mpp
@@ -30,6 +32,7 @@ import org.anchoranalysis.anchor.mpp.bean.proposer.MarkProposer;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.anchor.mpp.proposer.ProposerContext;
 import org.anchoranalysis.anchor.mpp.proposer.visualization.ICreateProposalVisualization;
+import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
@@ -40,8 +43,6 @@ import org.anchoranalysis.image.binary.BinaryChnl;
 import org.anchoranalysis.image.chnl.Chnl;
 
 import anchor.provider.bean.ProposalAbnormalFailureException;
-import ch.ethz.biol.cell.beaninitparams.MPPInitParams;
-import ch.ethz.biol.cell.mpp.mark.pxlmark.memo.PxlMarkMemo;
 
 // Rejects a proposal if its centre is not found on a particular prob map
 public class MarkProposerRejectProposalCentreOutside extends MarkProposer {

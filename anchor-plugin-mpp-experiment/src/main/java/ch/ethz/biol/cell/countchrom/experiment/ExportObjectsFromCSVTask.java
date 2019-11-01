@@ -36,6 +36,7 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 
+import org.anchoranalysis.anchor.mpp.bean.init.MPPInitParams;
 import org.anchoranalysis.anchor.overlay.bean.objmask.writer.ObjMaskWriter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.Optional;
@@ -81,7 +82,6 @@ import org.anchoranalysis.io.xml.XmlOutputter;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
-import ch.ethz.biol.cell.beaninitparams.MPPInitParams;
 import ch.ethz.biol.cell.countchrom.experiment.exportobjectsfromcsv.CSVRow;
 import ch.ethz.biol.cell.countchrom.experiment.exportobjectsfromcsv.IndexedCSVRows;
 import ch.ethz.biol.cell.countchrom.experiment.exportobjectsfromcsv.MapGroupToRow;

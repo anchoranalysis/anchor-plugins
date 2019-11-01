@@ -1,5 +1,6 @@
 package ch.ethz.biol.cell.mpp.mark.check;
 
+import org.anchoranalysis.anchor.mpp.bean.regionmap.RegionMap;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
 
 /*-
@@ -39,7 +40,6 @@ import org.anchoranalysis.image.binary.BinaryChnl;
 import org.anchoranalysis.image.extent.BoundingBox;
 
 import ch.ethz.biol.cell.core.CheckMark;
-import ch.ethz.biol.cell.mpp.mark.regionmap.RegionMap;
 
 // The centre ps of at least one slice should be on the stack
 //  Tries overall centre point first, and then projects it onto each slice

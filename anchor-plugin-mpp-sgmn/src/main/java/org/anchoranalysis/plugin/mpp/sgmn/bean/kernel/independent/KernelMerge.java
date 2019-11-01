@@ -1,8 +1,15 @@
 package org.anchoranalysis.plugin.mpp.sgmn.bean.kernel.independent;
 
+import org.anchoranalysis.anchor.mpp.bean.init.MPPInitParams;
 import org.anchoranalysis.anchor.mpp.bean.proposer.MarkMergeProposer;
+import org.anchoranalysis.anchor.mpp.bean.regionmap.RegionMap;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
+import org.anchoranalysis.anchor.mpp.mark.set.UpdateMarkSetException;
+import org.anchoranalysis.anchor.mpp.pair.Pair;
+import org.anchoranalysis.anchor.mpp.pair.PairCollection;
 import org.anchoranalysis.anchor.mpp.proposer.ProposerContext;
+import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
+import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemoFactory;
 
 /*
  * #%L
@@ -42,16 +49,9 @@ import org.anchoranalysis.mpp.sgmn.kernel.KernelCalcContext;
 import org.anchoranalysis.mpp.sgmn.kernel.KernelCalcNRGException;
 
 import anchor.provider.bean.ProposalAbnormalFailureException;
-import ch.ethz.biol.cell.beaninitparams.MPPInitParams;
-import ch.ethz.biol.cell.mpp.mark.pxlmark.memo.PxlMarkMemo;
-import ch.ethz.biol.cell.mpp.mark.pxlmark.memo.PxlMarkMemoFactory;
-import ch.ethz.biol.cell.mpp.mark.regionmap.RegionMap;
 import ch.ethz.biol.cell.mpp.nrg.CfgNRGPixelized;
 import ch.ethz.biol.cell.mpp.pair.ListUpdatableMarkSetCollection;
-import ch.ethz.biol.cell.mpp.pair.Pair;
-import ch.ethz.biol.cell.mpp.pair.PairCollection;
 import ch.ethz.biol.cell.mpp.pair.PxlMarkMemoList;
-import ch.ethz.biol.cell.mpp.pair.UpdateMarkSetException;
 
 public class KernelMerge extends KernelPosNeg<CfgNRGPixelized> {
 

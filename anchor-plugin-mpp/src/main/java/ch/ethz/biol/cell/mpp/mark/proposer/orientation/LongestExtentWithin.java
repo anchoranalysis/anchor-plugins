@@ -29,7 +29,10 @@ package ch.ethz.biol.cell.mpp.mark.proposer.orientation;
 
 import java.util.ArrayList;
 
+import org.anchoranalysis.anchor.mpp.bean.bounds.BoundCalculator;
 import org.anchoranalysis.anchor.mpp.bean.proposer.OrientationProposer;
+import org.anchoranalysis.anchor.mpp.bounds.BidirectionalBound;
+import org.anchoranalysis.anchor.mpp.bounds.RslvdBound;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.anchor.mpp.mark.MarkAbstractPosition;
 import org.anchoranalysis.anchor.mpp.proposer.error.ErrorNode;
@@ -40,10 +43,6 @@ import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.orientation.Orientation;
 import org.anchoranalysis.image.orientation.Orientation2D;
 import org.anchoranalysis.image.orientation.Orientation3DEulerAngles;
-
-import ch.ethz.biol.cell.imageprocessing.bound.BidirectionalBound;
-import ch.ethz.biol.cell.imageprocessing.bound.RslvdBound;
-import ch.ethz.biol.cell.mpp.bound.BoundCalculator;
 
 // Gets the longest extent within a certain ratio between the bounds,
 //   and below the upper maximum

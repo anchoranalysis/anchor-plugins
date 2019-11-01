@@ -1,5 +1,7 @@
 package ch.ethz.biol.cell.mpp.feedback.reporter;
 
+import org.anchoranalysis.anchor.mpp.probmap.ProbMap;
+
 /*
  * #%L
  * anchor-plugin-mpp
@@ -46,7 +48,6 @@ import ch.ethz.biol.cell.mpp.feedback.OptimizationFeedbackInitParams;
 import ch.ethz.biol.cell.mpp.feedback.ReporterOptimizationStep;
 import ch.ethz.biol.cell.mpp.nrg.CfgNRGPixelized;
 import ch.ethz.biol.cell.mpp.feedback.ReporterException;
-import ch.ethz.biol.cell.mpp.probmap.ProbMap;
 
 
 // We index the ProbMap as the state BEFORE a given iteration

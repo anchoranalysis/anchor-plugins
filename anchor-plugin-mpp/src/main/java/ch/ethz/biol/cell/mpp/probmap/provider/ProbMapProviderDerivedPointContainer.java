@@ -1,5 +1,10 @@
 package ch.ethz.biol.cell.mpp.probmap.provider;
 
+import org.anchoranalysis.anchor.mpp.bean.points.updatable.UpdatablePointsContainer;
+import org.anchoranalysis.anchor.mpp.bean.provider.ProbMapProvider;
+import org.anchoranalysis.anchor.mpp.mark.set.UpdatableMarkSet;
+import org.anchoranalysis.anchor.mpp.probmap.ProbMap;
+
 /*-
  * #%L
  * anchor-plugin-mpp
@@ -35,10 +40,6 @@ import org.anchoranalysis.image.bean.provider.BinaryImgChnlProvider;
 import org.anchoranalysis.image.binary.BinaryChnl;
 import org.anchoranalysis.image.extent.ImageDim;
 
-import ch.ethz.biol.cell.mpp.pair.IUpdatableMarkSet;
-import ch.ethz.biol.cell.mpp.probmap.ProbMap;
-import ch.ethz.biol.cell.mpp.probmap.container.UpdatablePoint3dContainer;
-
 public class ProbMapProviderDerivedPointContainer extends ProbMapProvider {
 
 	/**
@@ -51,7 +52,7 @@ public class ProbMapProviderDerivedPointContainer extends ProbMapProvider {
 	private BinaryImgChnlProvider binaryImgChnlProvider;
 	
 	@BeanField
-	private UpdatablePoint3dContainer pointContainer;
+	private UpdatablePointsContainer pointContainer;
 	
 	@BeanField
 	private boolean updatable = true;
@@ -60,11 +61,11 @@ public class ProbMapProviderDerivedPointContainer extends ProbMapProvider {
 	public ProbMapProviderDerivedPointContainer() {
 	}
 
-	public UpdatablePoint3dContainer getPointContainer() {
+	public UpdatablePointsContainer getPointContainer() {
 		return pointContainer;
 	}
 
-	public void setPointContainer(UpdatablePoint3dContainer pointContainer) {
+	public void setPointContainer(UpdatablePointsContainer pointContainer) {
 		this.pointContainer = pointContainer;
 	}
 
@@ -102,12 +103,12 @@ public class ProbMapProviderDerivedPointContainer extends ProbMapProvider {
 	public static class ProbMapDerivedPointContainer extends ProbMap {
 	
 		private BinaryChnl binaryImgChnl;
-		private UpdatablePoint3dContainer pointContainer;
+		private UpdatablePointsContainer pointContainer;
 		private boolean updatable;
 		
 		public ProbMapDerivedPointContainer(boolean updatable,
 				BinaryChnl binaryImgChnl,
-				UpdatablePoint3dContainer pointContainer) {
+				UpdatablePointsContainer pointContainer) {
 			super();
 			this.binaryImgChnl = binaryImgChnl;
 			this.pointContainer = pointContainer;
@@ -126,7 +127,7 @@ public class ProbMapProviderDerivedPointContainer extends ProbMapProvider {
 		}
 		
 		@Override
-		public IUpdatableMarkSet updater() {
+		public UpdatableMarkSet updater() {
 			if (updatable) {
 				return pointContainer;
 			} else {

@@ -1,5 +1,8 @@
 package ch.ethz.biol.cell.imageprocessing.objmask.provider;
 
+import org.anchoranalysis.anchor.mpp.bean.regionmap.RegionMap;
+import org.anchoranalysis.anchor.mpp.regionmap.RegionMapSingleton;
+
 /*
  * #%L
  * anchor-plugin-mpp
@@ -35,8 +38,6 @@ import org.anchoranalysis.image.objmask.ObjMaskCollection;
 
 import ch.ethz.biol.cell.mpp.cfg.Cfg;
 import ch.ethz.biol.cell.mpp.cfg.provider.CfgProvider;
-import ch.ethz.biol.cell.mpp.mark.regionmap.RegionMap;
-import ch.ethz.biol.cell.mpp.mark.regionmap.RegionMapSingleton;
 
 // Creates some object masks from a cfg
 public class ObjMaskProviderCfg extends ObjMaskProviderDimensions {

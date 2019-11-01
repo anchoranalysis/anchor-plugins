@@ -1,5 +1,6 @@
 package ch.ethz.biol.cell.imageprocessing.stack.provider;
 
+import org.anchoranalysis.anchor.mpp.regionmap.RegionMapSingleton;
 import org.anchoranalysis.anchor.overlay.Overlay;
 
 /*
@@ -47,7 +48,6 @@ import ch.ethz.biol.cell.imageprocessing.io.generator.raster.ColoredCfgWithDispl
 import ch.ethz.biol.cell.mpp.cfg.Cfg;
 import ch.ethz.biol.cell.mpp.cfg.provider.CfgProvider;
 import ch.ethz.biol.cell.mpp.gui.videostats.internalframe.markredraw.ColoredCfg;
-import ch.ethz.biol.cell.mpp.mark.regionmap.RegionMapSingleton;
 
 public class StackProviderOutlineFromCfg extends StackProvider {
 

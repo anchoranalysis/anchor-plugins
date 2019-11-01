@@ -1,5 +1,8 @@
 package ch.ethz.biol.cell.mpp.nrg.feature.ind;
 
+import org.anchoranalysis.anchor.mpp.bean.regionmap.RegionMap;
+import org.anchoranalysis.anchor.mpp.regionmap.RegionMapSingleton;
+
 /*
  * #%L
  * anchor-plugin-mpp-feature
@@ -37,8 +40,6 @@ import org.anchoranalysis.image.feature.objmask.FeatureObjMaskParams;
 import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.image.objmask.properties.ObjMaskWithProperties;
 
-import ch.ethz.biol.cell.mpp.mark.regionmap.RegionMap;
-import ch.ethz.biol.cell.mpp.mark.regionmap.RegionMapSingleton;
 import ch.ethz.biol.cell.mpp.nrg.NRGElemIndCalcParams;
 import ch.ethz.biol.cell.mpp.nrg.NRGElemIndCalcParamsDescriptor;
 

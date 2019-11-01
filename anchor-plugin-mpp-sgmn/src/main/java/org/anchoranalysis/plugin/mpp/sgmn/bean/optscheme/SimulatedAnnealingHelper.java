@@ -1,5 +1,7 @@
 package org.anchoranalysis.plugin.mpp.sgmn.bean.optscheme;
 
+import org.anchoranalysis.anchor.mpp.mark.set.UpdateMarkSetException;
+
 /*-
  * #%L
  * anchor-plugin-mpp-sgmn
@@ -53,7 +55,6 @@ import org.apache.commons.lang.time.StopWatch;
 
 import ch.ethz.biol.cell.mpp.anneal.AnnealScheme;
 import ch.ethz.biol.cell.mpp.pair.ListUpdatableMarkSetCollection;
-import ch.ethz.biol.cell.mpp.pair.UpdateMarkSetException;
 
 class SimulatedAnnealingHelper {
 	

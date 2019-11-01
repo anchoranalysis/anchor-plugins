@@ -1,5 +1,7 @@
 package org.anchoranalysis.plugin.mpp.sgmn;
 
+import org.anchoranalysis.anchor.mpp.bean.init.MPPInitParams;
+
 /*-
  * #%L
  * anchor-plugin-mpp-experiment
@@ -49,7 +51,6 @@ import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
 import org.anchoranalysis.mpp.sgmn.bean.kernel.proposer.KernelProposer;
 
-import ch.ethz.biol.cell.beaninitparams.MPPInitParams;
 import ch.ethz.biol.cell.countchrom.experiment.SharedObjectsUtilities;
 import ch.ethz.biol.cell.countchrom.experiment.StackOutputKeys;
 import ch.ethz.biol.cell.mpp.cfg.CfgGen;

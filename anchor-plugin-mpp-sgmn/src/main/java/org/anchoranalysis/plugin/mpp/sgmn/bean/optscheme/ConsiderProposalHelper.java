@@ -1,5 +1,7 @@
 package org.anchoranalysis.plugin.mpp.sgmn.bean.optscheme;
 
+import org.anchoranalysis.anchor.mpp.mark.set.UpdateMarkSetException;
+
 /*-
  * #%L
  * anchor-plugin-mpp-sgmn
@@ -31,8 +33,6 @@ import org.anchoranalysis.mpp.sgmn.optscheme.step.OptimizationStep;
 import org.anchoranalysis.plugin.mpp.sgmn.kernel.updater.KernelUpdater;
 import org.anchoranalysis.plugin.mpp.sgmn.optscheme.AccptProbCalculator;
 import org.anchoranalysis.plugin.mpp.sgmn.optscheme.TransformationContext;
-
-import ch.ethz.biol.cell.mpp.pair.UpdateMarkSetException;
 
 class ConsiderProposalHelper {
 

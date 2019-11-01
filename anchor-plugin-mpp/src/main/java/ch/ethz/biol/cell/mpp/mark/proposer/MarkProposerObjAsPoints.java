@@ -35,6 +35,7 @@ import org.anchoranalysis.anchor.mpp.mark.MarkPointList;
 import org.anchoranalysis.anchor.mpp.mark.MarkPointListFactory;
 import org.anchoranalysis.anchor.mpp.proposer.ProposerContext;
 import org.anchoranalysis.anchor.mpp.proposer.visualization.ICreateProposalVisualization;
+import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OptionalOperationUnsupportedException;
@@ -45,7 +46,6 @@ import org.anchoranalysis.image.objmask.ObjMaskCollection;
 import org.anchoranalysis.image.points.PointsFromObjMask;
 
 import anchor.provider.bean.ProposalAbnormalFailureException;
-import ch.ethz.biol.cell.mpp.mark.pxlmark.memo.PxlMarkMemo;
 
 public class MarkProposerObjAsPoints extends MarkProposer {
 

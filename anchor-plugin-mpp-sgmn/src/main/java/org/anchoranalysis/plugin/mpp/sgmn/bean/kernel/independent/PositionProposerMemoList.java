@@ -29,19 +29,18 @@ package org.anchoranalysis.plugin.mpp.sgmn.bean.kernel.independent;
 
 import java.util.List;
 
+import org.anchoranalysis.anchor.mpp.bean.regionmap.RegionMembership;
+import org.anchoranalysis.anchor.mpp.mark.GlobalRegionIdentifiers;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.anchor.mpp.proposer.PositionProposer;
 import org.anchoranalysis.anchor.mpp.proposer.ProposerContext;
+import org.anchoranalysis.anchor.mpp.pxlmark.PxlMark;
+import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
 import org.anchoranalysis.core.cache.ExecuteException;
 import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.core.random.RandomNumberGenerator;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.Extent;
-
-import ch.ethz.biol.cell.mpp.mark.pxlmark.PxlMark;
-import ch.ethz.biol.cell.mpp.mark.pxlmark.memo.PxlMarkMemo;
-import ch.ethz.biol.cell.mpp.mark.regionmap.RegionMembership;
-import ch.ethz.biol.cell.mpp.mark.GlobalRegionIdentifiers;
 
 
 // Proposes a position from somewhere in a list of Memos, with some extra conditions

@@ -1,5 +1,6 @@
 package ch.ethz.biol.cell.mpp.nrg.feature.session;
 
+import org.anchoranalysis.anchor.mpp.mark.GlobalRegionIdentifiers;
 import org.anchoranalysis.anchor.mpp.mark.conic.MarkEllipsoid;
 
 /*-
@@ -31,8 +32,6 @@ import org.anchoranalysis.anchor.mpp.mark.conic.MarkEllipsoid;
 import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.orientation.Orientation3DEulerAngles;
-
-import ch.ethz.biol.cell.mpp.mark.GlobalRegionIdentifiers;
 
 public class MarkFixture {
 

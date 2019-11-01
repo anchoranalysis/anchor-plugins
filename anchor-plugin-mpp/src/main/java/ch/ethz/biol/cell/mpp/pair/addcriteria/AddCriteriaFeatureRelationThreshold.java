@@ -1,5 +1,9 @@
 package ch.ethz.biol.cell.mpp.pair.addcriteria;
 
+import org.anchoranalysis.anchor.mpp.feature.addcriteria.AddCriteriaPair;
+import org.anchoranalysis.anchor.mpp.feature.addcriteria.IncludeMarksFailureException;
+import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
+
 /*
  * #%L
  * anchor-plugin-mpp
@@ -36,7 +40,6 @@ import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.feature.session.FeatureSessionCreateParamsSubsession;
 
-import ch.ethz.biol.cell.mpp.mark.pxlmark.memo.PxlMarkMemo;
 import ch.ethz.biol.cell.mpp.nrg.feature.session.FeatureSessionCreateParamsMPP;
 
 public class AddCriteriaFeatureRelationThreshold extends AddCriteriaPair {

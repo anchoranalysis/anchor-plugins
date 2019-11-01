@@ -1,6 +1,7 @@
 package org.anchoranalysis.plugin.mpp.sgmn.bean.kernel.independent;
 
 import org.anchoranalysis.anchor.mpp.mark.Mark;
+import org.anchoranalysis.anchor.mpp.mark.set.UpdateMarkSetException;
 
 /*
  * #%L
@@ -39,7 +40,6 @@ import org.anchoranalysis.mpp.sgmn.kernel.KernelCalcNRGException;
 import ch.ethz.biol.cell.mpp.cfg.Cfg;
 import ch.ethz.biol.cell.mpp.cfg.proposer.CfgProposer;
 import ch.ethz.biol.cell.mpp.pair.ListUpdatableMarkSetCollection;
-import ch.ethz.biol.cell.mpp.pair.UpdateMarkSetException;
 
 public class KernelInitialCfg extends KernelIndependent<Cfg> {
 

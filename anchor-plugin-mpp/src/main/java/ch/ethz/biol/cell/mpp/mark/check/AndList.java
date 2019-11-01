@@ -30,6 +30,8 @@ package ch.ethz.biol.cell.mpp.mark.check;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.anchoranalysis.anchor.mpp.bean.regionmap.RegionMap;
+import org.anchoranalysis.anchor.mpp.list.OrderedListUtilities;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
@@ -38,8 +40,6 @@ import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 
 import ch.ethz.biol.cell.core.CheckMark;
-import ch.ethz.biol.cell.mpp.mark.regionmap.RegionMap;
-import ch.ethz.biol.cell.mpp.pair.addcriteria.OrderedListUtilities;
 
 public class AndList extends CheckMark {
 

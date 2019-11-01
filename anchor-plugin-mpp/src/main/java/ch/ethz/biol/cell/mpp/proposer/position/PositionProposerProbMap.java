@@ -1,5 +1,7 @@
 package ch.ethz.biol.cell.mpp.proposer.position;
 
+import org.anchoranalysis.anchor.mpp.bean.init.MPPInitParams;
+
 /*-
  * #%L
  * anchor-plugin-mpp
@@ -27,14 +29,12 @@ package ch.ethz.biol.cell.mpp.proposer.position;
  */
 
 import org.anchoranalysis.anchor.mpp.bean.proposer.PositionProposerBean;
+import org.anchoranalysis.anchor.mpp.probmap.ProbMap;
 import org.anchoranalysis.anchor.mpp.proposer.ProposerContext;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.core.index.GetOperationFailedException;
-
-import ch.ethz.biol.cell.beaninitparams.MPPInitParams;
-import ch.ethz.biol.cell.mpp.probmap.ProbMap;
 
 public class PositionProposerProbMap extends PositionProposerBean {
 

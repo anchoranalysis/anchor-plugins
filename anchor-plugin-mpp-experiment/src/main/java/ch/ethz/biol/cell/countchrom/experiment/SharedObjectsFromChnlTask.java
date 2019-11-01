@@ -1,5 +1,7 @@
 package ch.ethz.biol.cell.countchrom.experiment;
 
+import org.anchoranalysis.anchor.mpp.bean.init.MPPInitParams;
+
 /*
  * #%L
  * anchor-plugin-mpp-experiment
@@ -49,8 +51,6 @@ import org.anchoranalysis.image.io.input.series.NamedChnlCollectionForSeries;
 import org.anchoranalysis.image.stack.wrap.WrapStackAsTimeSequenceStore;
 import org.anchoranalysis.io.output.OutputWriteFailedException;
 import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
-
-import ch.ethz.biol.cell.beaninitparams.MPPInitParams;
 
 public class SharedObjectsFromChnlTask extends RasterTask {
 

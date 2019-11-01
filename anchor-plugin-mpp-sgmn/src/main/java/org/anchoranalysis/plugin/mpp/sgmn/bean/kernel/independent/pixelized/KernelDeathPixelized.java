@@ -1,6 +1,7 @@
 package org.anchoranalysis.plugin.mpp.sgmn.bean.kernel.independent.pixelized;
 
 import org.anchoranalysis.anchor.mpp.mark.Mark;
+import org.anchoranalysis.anchor.mpp.mark.set.UpdateMarkSetException;
 
 /*-
  * #%L
@@ -35,7 +36,6 @@ import org.anchoranalysis.plugin.mpp.sgmn.bean.kernel.independent.KernelDeath;
 
 import ch.ethz.biol.cell.mpp.nrg.CfgNRGPixelized;
 import ch.ethz.biol.cell.mpp.pair.ListUpdatableMarkSetCollection;
-import ch.ethz.biol.cell.mpp.pair.UpdateMarkSetException;
 
 public class KernelDeathPixelized extends KernelDeath<CfgNRGPixelized> {
 

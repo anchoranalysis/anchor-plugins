@@ -1,6 +1,7 @@
 package org.anchoranalysis.plugin.mpp.sgmn.bean.kernel.dependent.mark;
 
 import org.anchoranalysis.anchor.mpp.mark.Mark;
+import org.anchoranalysis.anchor.mpp.mark.set.UpdateMarkSetException;
 
 /*-
  * #%L
@@ -35,7 +36,6 @@ import org.anchoranalysis.plugin.mpp.sgmn.optscheme.CfgFromPartition;
 
 import ch.ethz.biol.cell.mpp.cfg.Cfg;
 import ch.ethz.biol.cell.mpp.pair.ListUpdatableMarkSetCollection;
-import ch.ethz.biol.cell.mpp.pair.UpdateMarkSetException;
 
 public class KernelDeathPartition extends KernelDeath<CfgFromPartition> {
 

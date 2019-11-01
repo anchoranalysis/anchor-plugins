@@ -1,7 +1,10 @@
 package ch.ethz.biol.cell.imageprocessing.objmask.provider;
 
+import org.anchoranalysis.anchor.mpp.bean.regionmap.RegionMap;
+import org.anchoranalysis.anchor.mpp.bean.regionmap.RegionMembershipWithFlags;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.anchor.mpp.mark.conic.MarkEllipsoid;
+import org.anchoranalysis.anchor.mpp.regionmap.RegionMapSingleton;
 
 /*
  * #%L
@@ -45,9 +48,6 @@ import ch.ethz.biol.cell.imageprocessing.objmask.provider.assignobjstocfg.RslvdO
 import ch.ethz.biol.cell.imageprocessing.objmask.provider.assignobjstocfg.RslvdObjMaskList;
 import ch.ethz.biol.cell.mpp.cfg.Cfg;
 import ch.ethz.biol.cell.mpp.cfg.provider.CfgProvider;
-import ch.ethz.biol.cell.mpp.mark.regionmap.RegionMap;
-import ch.ethz.biol.cell.mpp.mark.regionmap.RegionMapSingleton;
-import ch.ethz.biol.cell.mpp.mark.regionmap.RegionMembershipWithFlags;
 
 // Assigns objects into groups, based upon distance to objects in a configuration. One group per object in the configuration
 public class ObjMaskProviderAssignObjsToCfg extends ObjMaskProviderDimensions {

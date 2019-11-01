@@ -1,5 +1,7 @@
 package ch.ethz.biol.cell.mpp.mark.check;
 
+import org.anchoranalysis.anchor.mpp.bean.regionmap.RegionMap;
+import org.anchoranalysis.anchor.mpp.mark.GlobalRegionIdentifiers;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
 
 /*
@@ -37,8 +39,6 @@ import org.anchoranalysis.image.bean.unitvalue.volume.UnitValueVolume;
 import org.anchoranalysis.image.unitvalue.UnitValueException;
 
 import ch.ethz.biol.cell.core.CheckMark;
-import ch.ethz.biol.cell.mpp.mark.GlobalRegionIdentifiers;
-import ch.ethz.biol.cell.mpp.mark.regionmap.RegionMap;
 
 public class VolumeMin extends CheckMark {
 

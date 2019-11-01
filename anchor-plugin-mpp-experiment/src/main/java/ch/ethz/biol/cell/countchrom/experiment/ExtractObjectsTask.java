@@ -32,6 +32,7 @@ import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.anchoranalysis.anchor.mpp.bean.init.MPPInitParams;
 import org.anchoranalysis.bean.NamedBean;
 import org.anchoranalysis.bean.StringSet;
 import org.anchoranalysis.bean.annotation.BeanField;
@@ -82,8 +83,6 @@ import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
 import org.anchoranalysis.io.output.namestyle.IndexableOutputNameStyle;
 import org.anchoranalysis.io.output.namestyle.IntegerPrefixOutputNameStyle;
 import org.anchoranalysis.mpp.io.input.MultiInput;
-
-import ch.ethz.biol.cell.beaninitparams.MPPInitParams;
 
 public class ExtractObjectsTask extends TaskWithoutSharedState<MultiInput> {
 

@@ -1,5 +1,8 @@
 package ch.ethz.biol.cell.mpp.mark.pointsfitter;
 
+import org.anchoranalysis.anchor.mpp.bean.points.fitter.PointsFitter;
+import org.anchoranalysis.anchor.mpp.bean.points.fitter.PointsFitterException;
+
 /*
  * #%L
  * anchor-mpp

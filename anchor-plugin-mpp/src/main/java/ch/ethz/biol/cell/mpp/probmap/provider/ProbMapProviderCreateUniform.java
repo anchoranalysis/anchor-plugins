@@ -1,5 +1,10 @@
 package ch.ethz.biol.cell.mpp.probmap.provider;
 
+import org.anchoranalysis.anchor.mpp.bean.provider.ProbMapProvider;
+import org.anchoranalysis.anchor.mpp.mark.set.UpdatableMarkSet;
+import org.anchoranalysis.anchor.mpp.probmap.ProbMap;
+import org.anchoranalysis.anchor.mpp.probmap.ProbMapUtilities;
+
 /*-
  * #%L
  * anchor-plugin-mpp
@@ -36,10 +41,6 @@ import org.anchoranalysis.image.binary.values.BinaryValues;
 import org.anchoranalysis.image.chnl.Chnl;
 import org.anchoranalysis.image.chnl.factory.ChnlFactoryByte;
 import org.anchoranalysis.image.extent.ImageDim;
-
-import ch.ethz.biol.cell.mpp.pair.IUpdatableMarkSet;
-import ch.ethz.biol.cell.mpp.probmap.ProbMap;
-import ch.ethz.biol.cell.mpp.probmap.ProbMapUtilities;
 
 public class ProbMapProviderCreateUniform extends ProbMapProvider {
 
@@ -97,7 +98,7 @@ public class ProbMapProviderCreateUniform extends ProbMapProvider {
 		}
 
 		@Override
-		public IUpdatableMarkSet updater() {
+		public UpdatableMarkSet updater() {
 			return null;
 		}
 	}
