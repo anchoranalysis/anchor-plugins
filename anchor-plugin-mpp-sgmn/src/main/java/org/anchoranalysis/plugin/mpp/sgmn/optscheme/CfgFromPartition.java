@@ -1,5 +1,7 @@
 package org.anchoranalysis.plugin.mpp.sgmn.optscheme;
 
+import org.anchoranalysis.anchor.mpp.mark.Mark;
+
 /*-
  * #%L
  * anchor-plugin-mpp-sgmn
@@ -27,7 +29,6 @@ package org.anchoranalysis.plugin.mpp.sgmn.optscheme;
  */
 
 import ch.ethz.biol.cell.mpp.cfg.Cfg;
-import ch.ethz.biol.cell.mpp.mark.Mark;
 
 /**
  * A cfg extracted from a Partition of Cfgs

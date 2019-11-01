@@ -31,6 +31,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.anchoranalysis.anchor.mpp.bean.proposer.PointsProposer;
+import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.anchor.mpp.proposer.error.ErrorNode;
 import org.anchoranalysis.anchor.mpp.proposer.visualization.ICreateProposalVisualization;
 import org.anchoranalysis.bean.annotation.BeanField;
@@ -44,8 +45,6 @@ import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.image.objmask.ObjMaskCollection;
 import org.anchoranalysis.image.outline.FindOutline;
 import org.anchoranalysis.image.points.PointsFromBinaryVoxelBox;
-
-import ch.ethz.biol.cell.mpp.mark.Mark;
 
 public class ObjMaskContour extends PointsProposer {
 	

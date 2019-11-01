@@ -1,5 +1,7 @@
 package ch.ethz.biol.cell.mpp.cfg.proposer;
 
+import org.anchoranalysis.anchor.mpp.mark.Mark;
+import org.anchoranalysis.anchor.mpp.mark.conic.MarkEllipsoid;
 import org.anchoranalysis.anchor.mpp.proposer.ProposerContext;
 
 /*
@@ -43,8 +45,6 @@ import anchor.provider.bean.ProposalAbnormalFailureException;
 import ch.ethz.biol.cell.core.CheckMark;
 import ch.ethz.biol.cell.mpp.cfg.Cfg;
 import ch.ethz.biol.cell.mpp.cfg.CfgGen;
-import ch.ethz.biol.cell.mpp.mark.Mark;
-import ch.ethz.biol.cell.mpp.mark.MarkEllipsoid;
 import ch.ethz.biol.cell.mpp.mark.check.CheckException;
 
 public class CfgProposerFromObjMaskCollection extends CfgProposer {

@@ -1,5 +1,7 @@
 package org.anchoranalysis.plugin.mpp.sgmn.bean.kernel.independent.pixelized;
 
+import org.anchoranalysis.anchor.mpp.mark.Mark;
+
 /*-
  * #%L
  * anchor-plugin-mpp-sgmn
@@ -30,7 +32,7 @@ import org.anchoranalysis.anchor.mpp.proposer.ProposerContext;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.mpp.sgmn.kernel.KernelCalcNRGException;
 import org.anchoranalysis.plugin.mpp.sgmn.bean.kernel.independent.KernelDeath;
-import ch.ethz.biol.cell.mpp.mark.Mark;
+
 import ch.ethz.biol.cell.mpp.nrg.CfgNRGPixelized;
 import ch.ethz.biol.cell.mpp.pair.ListUpdatableMarkSetCollection;
 import ch.ethz.biol.cell.mpp.pair.UpdateMarkSetException;

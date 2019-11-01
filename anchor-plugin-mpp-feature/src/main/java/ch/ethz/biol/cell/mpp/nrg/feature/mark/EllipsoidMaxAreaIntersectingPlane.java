@@ -1,5 +1,7 @@
 package ch.ethz.biol.cell.mpp.nrg.feature.mark;
 
+import org.anchoranalysis.anchor.mpp.mark.conic.MarkEllipsoid;
+
 /*-
  * #%L
  * anchor-plugin-mpp-feature
@@ -37,8 +39,6 @@ import org.anchoranalysis.image.bean.orientation.DirectionVectorBean;
 import org.anchoranalysis.image.orientation.DirectionVector;
 import org.anchoranalysis.image.orientation.Orientation;
 import org.anchoranalysis.math.rotation.RotationMatrix;
-
-import ch.ethz.biol.cell.mpp.mark.MarkEllipsoid;
 
 // Computes the axis ratio of the ellipse formed by a plane of an orientation relative to the ellipsoid
 //   intersectiong with the ellipsoid.  This is constant for all parallel planes.

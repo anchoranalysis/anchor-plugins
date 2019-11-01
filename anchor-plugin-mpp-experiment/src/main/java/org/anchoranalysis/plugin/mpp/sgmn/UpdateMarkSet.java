@@ -1,5 +1,7 @@
 package org.anchoranalysis.plugin.mpp.sgmn;
 
+import org.anchoranalysis.anchor.mpp.mark.Mark;
+
 /*-
  * #%L
  * anchor-plugin-mpp-experiment
@@ -33,7 +35,6 @@ import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 
 import ch.ethz.biol.cell.beaninitparams.MPPInitParams;
-import ch.ethz.biol.cell.mpp.mark.Mark;
 import ch.ethz.biol.cell.mpp.pair.IUpdatableMarkSet;
 import ch.ethz.biol.cell.mpp.pair.ListUpdatableMarkSetCollection;
 import ch.ethz.biol.cell.mpp.pair.Pair;

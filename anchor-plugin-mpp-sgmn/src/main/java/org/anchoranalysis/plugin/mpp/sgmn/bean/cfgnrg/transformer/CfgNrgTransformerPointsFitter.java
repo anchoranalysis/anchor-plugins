@@ -1,5 +1,7 @@
 package org.anchoranalysis.plugin.mpp.sgmn.bean.cfgnrg.transformer;
 
+import org.anchoranalysis.anchor.mpp.mark.Mark;
+
 /*-
  * #%L
  * anchor-plugin-mpp-sgmn
@@ -34,8 +36,7 @@ import org.anchoranalysis.plugin.mpp.sgmn.optscheme.CfgNRGPixelizedUtilities;
 import org.anchoranalysis.plugin.mpp.sgmn.optscheme.TransformationContext;
 
 import ch.ethz.biol.cell.mpp.cfg.Cfg;
-import ch.ethz.biol.cell.mpp.mark.Mark;
-import ch.ethz.biol.cell.mpp.mark.createfrompoints.CreateMarkFromPoints;
+import ch.ethz.biol.cell.mpp.mark.points.CreateMarkFromPoints;
 import ch.ethz.biol.cell.mpp.nrg.CfgNRGPixelized;
 
 public class CfgNrgTransformerPointsFitter extends StateTransformerBean<Cfg,CfgNRGPixelized> {

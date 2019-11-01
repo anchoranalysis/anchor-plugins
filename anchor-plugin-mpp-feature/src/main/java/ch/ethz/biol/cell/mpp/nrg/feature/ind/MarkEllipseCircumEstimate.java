@@ -1,5 +1,8 @@
 package ch.ethz.biol.cell.mpp.nrg.feature.ind;
 
+import org.anchoranalysis.anchor.mpp.mark.Mark;
+import org.anchoranalysis.anchor.mpp.mark.conic.MarkEllipse;
+
 /*
  * #%L
  * anchor-plugin-mpp-feature
@@ -31,8 +34,6 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 
 import ch.ethz.biol.cell.mpp.mark.GlobalRegionIdentifiers;
-import ch.ethz.biol.cell.mpp.mark.Mark;
-import ch.ethz.biol.cell.mpp.mark.MarkEllipse;
 import ch.ethz.biol.cell.mpp.nrg.NRGElemInd;
 import ch.ethz.biol.cell.mpp.nrg.NRGElemIndCalcParams;
 

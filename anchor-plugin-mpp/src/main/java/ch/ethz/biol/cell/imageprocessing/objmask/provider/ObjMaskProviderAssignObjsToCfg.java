@@ -1,5 +1,8 @@
 package ch.ethz.biol.cell.imageprocessing.objmask.provider;
 
+import org.anchoranalysis.anchor.mpp.mark.Mark;
+import org.anchoranalysis.anchor.mpp.mark.conic.MarkEllipsoid;
+
 /*
  * #%L
  * anchor-plugin-mpp
@@ -42,8 +45,6 @@ import ch.ethz.biol.cell.imageprocessing.objmask.provider.assignobjstocfg.RslvdO
 import ch.ethz.biol.cell.imageprocessing.objmask.provider.assignobjstocfg.RslvdObjMaskList;
 import ch.ethz.biol.cell.mpp.cfg.Cfg;
 import ch.ethz.biol.cell.mpp.cfg.provider.CfgProvider;
-import ch.ethz.biol.cell.mpp.mark.Mark;
-import ch.ethz.biol.cell.mpp.mark.MarkEllipsoid;
 import ch.ethz.biol.cell.mpp.mark.regionmap.RegionMap;
 import ch.ethz.biol.cell.mpp.mark.regionmap.RegionMapSingleton;
 import ch.ethz.biol.cell.mpp.mark.regionmap.RegionMembershipWithFlags;

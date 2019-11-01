@@ -1,6 +1,7 @@
 package ch.ethz.biol.cell.mpp.mark.proposer.fromcfg;
 
 import org.anchoranalysis.anchor.mpp.bean.proposer.MarkFromCfgProposer;
+import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.anchor.mpp.proposer.ProposerContext;
 
 /*
@@ -32,10 +33,10 @@ import org.anchoranalysis.anchor.mpp.proposer.ProposerContext;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.OperationFailedException;
+
 import anchor.provider.bean.ProposalAbnormalFailureException;
 import ch.ethz.biol.cell.core.CheckMark;
 import ch.ethz.biol.cell.mpp.cfg.Cfg;
-import ch.ethz.biol.cell.mpp.mark.Mark;
 import ch.ethz.biol.cell.mpp.mark.check.CheckException;
 
 public class MarkFromCfgProposerCheck extends MarkFromCfgProposer {

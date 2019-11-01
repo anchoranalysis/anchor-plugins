@@ -1,5 +1,7 @@
 package org.anchoranalysis.plugin.mpp.sgmn.bean.kernel.dependent.mark;
 
+import org.anchoranalysis.anchor.mpp.mark.Mark;
+
 /*-
  * #%L
  * anchor-plugin-mpp-sgmn
@@ -32,7 +34,6 @@ import org.anchoranalysis.plugin.mpp.sgmn.bean.kernel.independent.KernelDeath;
 import org.anchoranalysis.plugin.mpp.sgmn.optscheme.CfgFromPartition;
 
 import ch.ethz.biol.cell.mpp.cfg.Cfg;
-import ch.ethz.biol.cell.mpp.mark.Mark;
 import ch.ethz.biol.cell.mpp.pair.ListUpdatableMarkSetCollection;
 import ch.ethz.biol.cell.mpp.pair.UpdateMarkSetException;
 

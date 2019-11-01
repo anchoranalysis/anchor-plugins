@@ -1,5 +1,7 @@
 package ch.ethz.biol.cell.mpp.mark.provider;
 
+import org.anchoranalysis.anchor.mpp.mark.Mark;
+
 /*
  * #%L
  * anchor-plugin-mpp
@@ -40,7 +42,6 @@ import org.anchoranalysis.feature.session.SimpleSession;
 import org.anchoranalysis.image.bean.provider.ImageDimProvider;
 import org.anchoranalysis.image.extent.ImageRes;
 
-import ch.ethz.biol.cell.mpp.mark.Mark;
 import ch.ethz.biol.cell.mpp.nrg.feature.mark.FeatureMarkParams;
 
 public class MarkProviderRequireFeatureRelationThreshold extends MarkProvider {

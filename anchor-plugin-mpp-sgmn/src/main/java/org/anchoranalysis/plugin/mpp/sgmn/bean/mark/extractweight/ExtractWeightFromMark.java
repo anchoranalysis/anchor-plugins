@@ -1,5 +1,7 @@
 package org.anchoranalysis.plugin.mpp.sgmn.bean.mark.extractweight;
 
+import org.anchoranalysis.anchor.mpp.mark.Mark;
+
 /*-
  * #%L
  * anchor-plugin-mpp-sgmn
@@ -28,7 +30,6 @@ package org.anchoranalysis.plugin.mpp.sgmn.bean.mark.extractweight;
 
 import org.anchoranalysis.bean.AnchorBean;
 
-import ch.ethz.biol.cell.mpp.mark.Mark;
 import ch.ethz.biol.cell.mpp.proposer.ICompatibleWith;
 
 public abstract class ExtractWeightFromMark extends AnchorBean<ExtractWeightFromMark> implements ICompatibleWith {

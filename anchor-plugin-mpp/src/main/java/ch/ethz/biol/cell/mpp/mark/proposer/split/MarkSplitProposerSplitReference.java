@@ -1,6 +1,7 @@
 package ch.ethz.biol.cell.mpp.mark.proposer.split;
 
 import org.anchoranalysis.anchor.mpp.bean.proposer.MarkSplitProposer;
+import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.anchor.mpp.proposer.ProposerContext;
 
 /*
@@ -37,7 +38,6 @@ import org.anchoranalysis.core.index.GetOperationFailedException;
 import anchor.provider.bean.ProposalAbnormalFailureException;
 import ch.ethz.biol.cell.beaninitparams.MPPInitParams;
 import ch.ethz.biol.cell.mpp.cfg.CfgGen;
-import ch.ethz.biol.cell.mpp.mark.Mark;
 import ch.ethz.biol.cell.mpp.mark.pxlmark.memo.PxlMarkMemo;
 import ch.ethz.biol.cell.mpp.pair.PairPxlMarkMemo;
 

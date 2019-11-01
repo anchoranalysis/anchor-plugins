@@ -27,16 +27,16 @@ package ch.ethz.biol.cell.mpp.mark.proposer;
  */
 
 import org.anchoranalysis.anchor.mpp.bean.proposer.MarkProposer;
+import org.anchoranalysis.anchor.mpp.mark.Mark;
+import org.anchoranalysis.anchor.mpp.mark.conic.EllipsoidBounds;
+import org.anchoranalysis.anchor.mpp.mark.conic.EllipsoidRandomizer;
+import org.anchoranalysis.anchor.mpp.mark.conic.MarkEllipsoid;
 import org.anchoranalysis.anchor.mpp.proposer.ProposerContext;
 import org.anchoranalysis.anchor.mpp.proposer.visualization.ICreateProposalVisualization;
 import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.core.index.GetOperationFailedException;
 import org.anchoranalysis.image.orientation.Orientation;
 
-import ch.ethz.biol.cell.mpp.mark.EllipsoidBounds;
-import ch.ethz.biol.cell.mpp.mark.EllipsoidRandomizer;
-import ch.ethz.biol.cell.mpp.mark.Mark;
-import ch.ethz.biol.cell.mpp.mark.MarkEllipsoid;
 import ch.ethz.biol.cell.mpp.mark.pxlmark.memo.PxlMarkMemo;
 
 public class MarkEllipsoidOrientationRadiiProposer extends MarkProposer {

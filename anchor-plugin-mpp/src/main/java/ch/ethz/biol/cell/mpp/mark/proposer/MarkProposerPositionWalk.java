@@ -1,6 +1,8 @@
 package ch.ethz.biol.cell.mpp.mark.proposer;
 
 import org.anchoranalysis.anchor.mpp.bean.proposer.MarkProposer;
+import org.anchoranalysis.anchor.mpp.mark.Mark;
+import org.anchoranalysis.anchor.mpp.mark.conic.MarkEllipse;
 import org.anchoranalysis.anchor.mpp.proposer.ProposerContext;
 import org.anchoranalysis.anchor.mpp.proposer.visualization.ICreateProposalVisualization;
 
@@ -37,8 +39,6 @@ import org.anchoranalysis.image.orientation.Orientation2D;
 
 import ch.ethz.biol.cell.imageprocessing.bound.BidirectionalBound;
 import ch.ethz.biol.cell.mpp.bound.BoundCalculator;
-import ch.ethz.biol.cell.mpp.mark.Mark;
-import ch.ethz.biol.cell.mpp.mark.MarkEllipse;
 import ch.ethz.biol.cell.mpp.mark.pxlmark.memo.PxlMarkMemo;
 
 public class MarkProposerPositionWalk extends MarkProposer {

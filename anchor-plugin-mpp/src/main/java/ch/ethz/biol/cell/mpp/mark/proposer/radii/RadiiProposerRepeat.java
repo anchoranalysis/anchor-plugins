@@ -1,6 +1,8 @@
 package ch.ethz.biol.cell.mpp.mark.proposer.radii;
 
 import org.anchoranalysis.anchor.mpp.bean.proposer.radii.RadiiProposer;
+import org.anchoranalysis.anchor.mpp.mark.Mark;
+import org.anchoranalysis.anchor.mpp.mark.bounds.MarkBounds;
 import org.anchoranalysis.anchor.mpp.proposer.error.ErrorNode;
 
 /*
@@ -35,9 +37,6 @@ import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.core.random.RandomNumberGenerator;
 import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.orientation.Orientation;
-
-import ch.ethz.biol.cell.mpp.mark.Mark;
-import ch.ethz.biol.cell.mpp.mark.MarkBounds;
 
 public class RadiiProposerRepeat extends RadiiProposer {
 

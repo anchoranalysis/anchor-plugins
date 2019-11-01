@@ -1,5 +1,7 @@
 package ch.ethz.biol.cell.mpp.mark.pixelstatisticsfrommark;
 
+import org.anchoranalysis.anchor.mpp.mark.MarkAbstractPosition;
+
 /*
  * #%L
  * anchor-plugin-mpp-feature
@@ -36,7 +38,6 @@ import org.anchoranalysis.image.voxel.statistics.VoxelStatistics;
 import org.anchoranalysis.image.voxel.statistics.VoxelStatisticsCombined;
 
 import ch.ethz.biol.cell.mpp.mark.GlobalRegionIdentifiers;
-import ch.ethz.biol.cell.mpp.mark.MarkAbstractPosition;
 import ch.ethz.biol.cell.mpp.mark.pxlmark.PxlMark;
 import ch.ethz.biol.cell.mpp.mark.pxlmark.memo.PxlMarkMemo;
 

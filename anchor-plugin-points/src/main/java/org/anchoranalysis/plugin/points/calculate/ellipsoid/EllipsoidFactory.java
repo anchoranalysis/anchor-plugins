@@ -30,6 +30,7 @@ package org.anchoranalysis.plugin.points.calculate.ellipsoid;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.anchoranalysis.anchor.mpp.mark.conic.MarkEllipsoid;
 import org.anchoranalysis.core.cache.ExecuteException;
 import org.anchoranalysis.core.cache.Operation;
 import org.anchoranalysis.core.error.CreateException;
@@ -40,7 +41,6 @@ import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.image.points.PointsFromObjMask;
 
-import ch.ethz.biol.cell.mpp.mark.MarkEllipsoid;
 import ch.ethz.biol.cell.mpp.mark.pointsfitter.LinearLeastSquaresEllipsoidFitter;
 import ch.ethz.biol.cell.mpp.mark.pointsfitter.PointsFitterException;
 

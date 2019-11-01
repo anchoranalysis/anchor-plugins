@@ -1,5 +1,7 @@
 package org.anchoranalysis.plugin.mpp.sgmn.bean.kernel.dependent.mark;
 
+import org.anchoranalysis.anchor.mpp.mark.Mark;
+
 /*-
  * #%L
  * anchor-plugin-mpp-sgmn
@@ -30,8 +32,6 @@ import org.anchoranalysis.mpp.sgmn.kernel.KernelCalcContext;
 import org.anchoranalysis.mpp.sgmn.kernel.KernelCalcNRGException;
 import org.anchoranalysis.plugin.mpp.sgmn.bean.kernel.independent.KernelReplace;
 import org.anchoranalysis.plugin.mpp.sgmn.optscheme.CfgFromPartition;
-
-import ch.ethz.biol.cell.mpp.mark.Mark;
 
 public class KernelReplacePartition extends KernelReplace<CfgFromPartition> {
 

@@ -1,6 +1,7 @@
 package ch.ethz.biol.cell.mpp.cfg.proposer;
 
 import org.anchoranalysis.anchor.mpp.bean.proposer.MarkProposer;
+import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.anchor.mpp.proposer.ProposerContext;
 
 /*
@@ -32,11 +33,11 @@ import org.anchoranalysis.anchor.mpp.proposer.ProposerContext;
 
 
 import org.anchoranalysis.bean.annotation.BeanField;
+
 import anchor.provider.bean.ProposalAbnormalFailureException;
 import cern.jet.random.Poisson;
 import ch.ethz.biol.cell.mpp.cfg.Cfg;
 import ch.ethz.biol.cell.mpp.cfg.CfgGen;
-import ch.ethz.biol.cell.mpp.mark.Mark;
 import ch.ethz.biol.cell.mpp.mark.pxlmark.memo.PxlMarkMemo;
 
 public class CfgProposerSimple extends CfgProposer {

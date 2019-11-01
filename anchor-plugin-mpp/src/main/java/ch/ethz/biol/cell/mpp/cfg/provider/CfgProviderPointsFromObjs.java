@@ -1,5 +1,8 @@
 package ch.ethz.biol.cell.mpp.cfg.provider;
 
+import org.anchoranalysis.anchor.mpp.mark.Mark;
+import org.anchoranalysis.anchor.mpp.mark.MarkPointListFactory;
+
 /*-
  * #%L
  * anchor-plugin-mpp
@@ -34,8 +37,6 @@ import org.anchoranalysis.image.objmask.ObjMaskCollection;
 import org.anchoranalysis.image.points.PointsFromObjMask;
 
 import ch.ethz.biol.cell.mpp.cfg.Cfg;
-import ch.ethz.biol.cell.mpp.mark.Mark;
-import ch.ethz.biol.cell.mpp.mark.MarkPointListFactory;
 
 public class CfgProviderPointsFromObjs extends CfgProvider {
 

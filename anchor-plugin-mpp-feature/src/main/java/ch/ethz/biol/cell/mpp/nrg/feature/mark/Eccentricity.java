@@ -1,5 +1,8 @@
 package ch.ethz.biol.cell.mpp.nrg.feature.mark;
 
+import org.anchoranalysis.anchor.mpp.mark.Mark;
+import org.anchoranalysis.anchor.mpp.mark.MarkAbstractRadii;
+
 /*-
  * #%L
  * anchor-plugin-mpp-feature
@@ -27,9 +30,6 @@ package ch.ethz.biol.cell.mpp.nrg.feature.mark;
  */
 
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-
-import ch.ethz.biol.cell.mpp.mark.Mark;
-import ch.ethz.biol.cell.mpp.mark.MarkAbstractRadii;
 
 // Calculates the eccentricity of the ellipse
 // If it's an ellipsoid it calculates the Meridional Eccentricity i.e. the eccentricity

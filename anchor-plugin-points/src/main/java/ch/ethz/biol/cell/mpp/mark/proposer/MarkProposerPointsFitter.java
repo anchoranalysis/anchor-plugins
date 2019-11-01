@@ -32,6 +32,7 @@ import java.util.List;
 
 import org.anchoranalysis.anchor.mpp.bean.proposer.MarkProposer;
 import org.anchoranalysis.anchor.mpp.bean.proposer.PointsProposer;
+import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.anchor.mpp.proposer.ProposerContext;
 import org.anchoranalysis.anchor.mpp.proposer.visualization.ICreateProposalVisualization;
 import org.anchoranalysis.bean.annotation.BeanField;
@@ -42,7 +43,6 @@ import org.anchoranalysis.core.geometry.PointConverter;
 import org.anchoranalysis.core.log.LogErrorReporter;
 
 import ch.ethz.biol.cell.mpp.gui.videostats.internalframe.markredraw.ColoredCfg;
-import ch.ethz.biol.cell.mpp.mark.Mark;
 import ch.ethz.biol.cell.mpp.mark.pointsfitter.InsufficientPointsException;
 import ch.ethz.biol.cell.mpp.mark.pointsfitter.PointsFitter;
 import ch.ethz.biol.cell.mpp.mark.pointsfitter.PointsFitterException;

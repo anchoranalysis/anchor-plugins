@@ -29,6 +29,7 @@ package org.anchoranalysis.plugin.points.calculate.ellipsoid;
 
 import java.util.List;
 
+import org.anchoranalysis.anchor.mpp.mark.conic.MarkEllipsoid;
 import org.anchoranalysis.core.cache.ExecuteException;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.geometry.Point3i;
@@ -40,8 +41,6 @@ import org.anchoranalysis.image.feature.objmask.FeatureObjMaskParams;
 import org.anchoranalysis.plugin.points.calculate.CalculatePntsFromOutline;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
-
-import ch.ethz.biol.cell.mpp.mark.MarkEllipsoid;
 
 public class CalculateEllipsoidLeastSquares extends CachedCalculationCastParams<MarkEllipsoid,FeatureObjMaskParams> {
 

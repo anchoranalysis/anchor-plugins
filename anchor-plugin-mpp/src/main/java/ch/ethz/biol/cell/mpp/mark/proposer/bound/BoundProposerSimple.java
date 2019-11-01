@@ -1,6 +1,7 @@
 package ch.ethz.biol.cell.mpp.mark.proposer.bound;
 
 import org.anchoranalysis.anchor.mpp.bean.proposer.BoundProposer;
+import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.anchor.mpp.proposer.error.ErrorNode;
 
 /*
@@ -38,7 +39,6 @@ import org.anchoranalysis.math.rotation.RotationMatrix;
 import ch.ethz.biol.cell.imageprocessing.bound.BidirectionalBound;
 import ch.ethz.biol.cell.imageprocessing.bound.RslvdBound;
 import ch.ethz.biol.cell.mpp.bound.BoundCalculator;
-import ch.ethz.biol.cell.mpp.mark.Mark;
 
 public class BoundProposerSimple extends BoundProposer {
 

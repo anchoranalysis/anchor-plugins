@@ -1,5 +1,7 @@
 package org.anchoranalysis.plugin.points.calculate.ellipse;
 
+import org.anchoranalysis.anchor.mpp.mark.conic.MarkEllipse;
+
 /*
  * #%L
  * anchor-plugin-points
@@ -36,7 +38,6 @@ import org.anchoranalysis.image.feature.objmask.FeatureObjMaskParams;
 import org.anchoranalysis.image.objmask.ObjMask;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
-import ch.ethz.biol.cell.mpp.mark.MarkEllipse;
 import ch.ethz.biol.cell.mpp.mark.pointsfitter.InsufficientPointsException;
 import ch.ethz.biol.cell.mpp.mark.pointsfitter.LinearLeastSquaresEllipseFitterGeoRegression;
 

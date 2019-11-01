@@ -29,6 +29,7 @@ package ch.ethz.biol.cell.mpp.mark.provider;
 
 import java.util.List;
 
+import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.geometry.Point2i;
@@ -39,7 +40,6 @@ import org.anchoranalysis.image.bean.provider.ImageDimProvider;
 import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
 import org.anchoranalysis.image.objmask.ObjMaskCollection;
 
-import ch.ethz.biol.cell.mpp.mark.Mark;
 import ch.ethz.biol.cell.mpp.mark.pointsfitter.ConvexHullUtilities;
 import ch.ethz.biol.cell.mpp.mark.pointsfitter.InsufficientPointsException;
 import ch.ethz.biol.cell.mpp.mark.pointsfitter.PointsFitter;

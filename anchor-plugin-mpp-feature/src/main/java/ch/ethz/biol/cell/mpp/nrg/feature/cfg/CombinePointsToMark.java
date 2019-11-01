@@ -1,5 +1,8 @@
 package ch.ethz.biol.cell.mpp.nrg.feature.cfg;
 
+import org.anchoranalysis.anchor.mpp.mark.Mark;
+import org.anchoranalysis.anchor.mpp.mark.MarkPointList;
+
 /*-
  * #%L
  * anchor-plugin-mpp-feature
@@ -34,9 +37,7 @@ import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 
 import ch.ethz.biol.cell.imageprocessing.pixellist.factory.PixelPartFactoryHistogram;
-import ch.ethz.biol.cell.mpp.mark.Mark;
-import ch.ethz.biol.cell.mpp.mark.MarkPointList;
-import ch.ethz.biol.cell.mpp.mark.createfrompoints.CreateMarkFromPoints;
+import ch.ethz.biol.cell.mpp.mark.points.CreateMarkFromPoints;
 import ch.ethz.biol.cell.mpp.mark.pxlmark.memo.PxlMarkMemo;
 import ch.ethz.biol.cell.mpp.mark.regionmap.RegionMap;
 import ch.ethz.biol.cell.mpp.nrg.NRGElemAll;

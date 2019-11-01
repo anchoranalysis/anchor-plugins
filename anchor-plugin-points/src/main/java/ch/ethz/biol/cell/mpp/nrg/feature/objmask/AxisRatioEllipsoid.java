@@ -1,5 +1,7 @@
 package ch.ethz.biol.cell.mpp.nrg.feature.objmask;
 
+import org.anchoranalysis.anchor.mpp.mark.conic.MarkEllipsoid;
+
 /*
  * #%L
  * anchor-plugin-points
@@ -38,8 +40,6 @@ import org.anchoranalysis.image.feature.bean.objmask.FeatureObjMask;
 import org.anchoranalysis.image.feature.objmask.FeatureObjMaskParams;
 import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.plugin.points.calculate.ellipsoid.CalculateEllipsoidLeastSquares;
-
-import ch.ethz.biol.cell.mpp.mark.MarkEllipsoid;
 
 // Calculates the ellipticity of a MIP of an objmask
 // Accodrding to the formula on page 27 of Thomas Fuch's thesis

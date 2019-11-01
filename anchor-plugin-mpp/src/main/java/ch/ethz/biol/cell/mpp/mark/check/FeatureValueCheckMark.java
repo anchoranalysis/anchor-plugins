@@ -1,5 +1,7 @@
 package ch.ethz.biol.cell.mpp.mark.check;
 
+import org.anchoranalysis.anchor.mpp.mark.Mark;
+
 /*-
  * #%L
  * anchor-plugin-mpp
@@ -42,7 +44,6 @@ import org.anchoranalysis.feature.shared.SharedFeatureSet;
 
 import ch.ethz.biol.cell.beaninitparams.MPPInitParams;
 import ch.ethz.biol.cell.core.CheckMark;
-import ch.ethz.biol.cell.mpp.mark.Mark;
 import ch.ethz.biol.cell.mpp.nrg.feature.session.FeatureSessionCreateParamsMPP;
 
 public abstract class FeatureValueCheckMark extends CheckMark {

@@ -29,6 +29,7 @@ package ch.ethz.biol.cell.sgmn.binary;
 
 import java.nio.ByteBuffer;
 
+import org.anchoranalysis.anchor.mpp.mark.bounds.MarkBounds;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.random.RandomNumberGenerator;
 import org.anchoranalysis.image.bean.sgmn.binary.BinarySgmn;
@@ -44,8 +45,6 @@ import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.image.sgmn.SgmnFailedException;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.anchoranalysis.image.voxel.box.VoxelBoxWrapper;
-
-import ch.ethz.biol.cell.mpp.mark.MarkBounds;
 
 // Performs a thresholding that accepts only channel values with intensities
 //   greater than the minimum bound

@@ -2,6 +2,7 @@ package org.anchoranalysis.plugin.mpp.sgmn.bean.kernel.independent;
 
 import java.util.Set;
 
+import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.image.extent.ImageDim;
 
@@ -36,8 +37,6 @@ import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.mpp.sgmn.bean.kernel.KernelPosNeg;
 import org.anchoranalysis.mpp.sgmn.kernel.KernelCalcContext;
 import org.anchoranalysis.mpp.sgmn.kernel.KernelCalcNRGException;
-
-import ch.ethz.biol.cell.mpp.mark.Mark;
 
 public abstract class KernelBirth<T> extends KernelPosNeg<T> {
 

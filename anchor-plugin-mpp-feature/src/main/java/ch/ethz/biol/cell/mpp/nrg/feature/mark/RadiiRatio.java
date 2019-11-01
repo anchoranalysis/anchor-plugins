@@ -1,5 +1,7 @@
 package ch.ethz.biol.cell.mpp.nrg.feature.mark;
 
+import org.anchoranalysis.anchor.mpp.mark.MarkAbstractRadii;
+
 /*
  * #%L
  * anchor-plugin-mpp-feature
@@ -30,8 +32,6 @@ package ch.ethz.biol.cell.mpp.nrg.feature.mark;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.extent.ImageRes;
-
-import ch.ethz.biol.cell.mpp.mark.MarkAbstractRadii;
 
 public class RadiiRatio extends FeatureMark {
 

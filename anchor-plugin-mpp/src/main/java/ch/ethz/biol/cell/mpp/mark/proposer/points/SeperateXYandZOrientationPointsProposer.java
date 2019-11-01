@@ -32,6 +32,7 @@ import java.util.List;
 
 import org.anchoranalysis.anchor.mpp.bean.proposer.OrientationProposer;
 import org.anchoranalysis.anchor.mpp.bean.proposer.PointsProposer;
+import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.anchor.mpp.proposer.error.ErrorNode;
 import org.anchoranalysis.anchor.mpp.proposer.visualization.CreateProposeVisualizationList;
 import org.anchoranalysis.anchor.mpp.proposer.visualization.ICreateProposalVisualization;
@@ -48,7 +49,6 @@ import org.anchoranalysis.math.rotation.RotationMatrix2DFromRadianCreator;
 
 import ch.ethz.biol.cell.imageprocessing.bound.BidirectionalBound;
 import ch.ethz.biol.cell.mpp.bound.BoundCalculator;
-import ch.ethz.biol.cell.mpp.mark.Mark;
 import ch.ethz.biol.cell.mpp.mark.ellipsoidfitter.outlinepixelsretriever.TraverseOutlineException;
 import ch.ethz.biol.cell.mpp.mark.proposer.pointsfromorientation.PointsFromOrientationProposer;
 

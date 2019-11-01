@@ -34,6 +34,8 @@ import georegression.struct.shapes.EllipseQuadratic_F64;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.anchoranalysis.anchor.mpp.mark.Mark;
+import org.anchoranalysis.anchor.mpp.mark.conic.MarkEllipse;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.geometry.Point2d;
@@ -44,8 +46,6 @@ import org.anchoranalysis.image.orientation.Orientation2D;
 
 import cern.colt.matrix.DoubleFactory1D;
 import cern.colt.matrix.DoubleMatrix1D;
-import ch.ethz.biol.cell.mpp.mark.Mark;
-import ch.ethz.biol.cell.mpp.mark.MarkEllipse;
 
 //
 // Based upon the approach of Li and Griffiths in 'Least Squares Ellipsoid Specific Fitting' (2004)

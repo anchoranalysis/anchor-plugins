@@ -3,6 +3,8 @@ package ch.ethz.biol.cell.mpp.mark.proposer;
 import org.anchoranalysis.anchor.mpp.bean.proposer.MarkProposer;
 import org.anchoranalysis.anchor.mpp.bean.proposer.OrientationProposer;
 import org.anchoranalysis.anchor.mpp.bean.proposer.radii.RadiiProposer;
+import org.anchoranalysis.anchor.mpp.mark.ISetMarksExplicit;
+import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.anchor.mpp.proposer.ProposerContext;
 import org.anchoranalysis.anchor.mpp.proposer.visualization.ICreateProposalVisualization;
 
@@ -38,8 +40,6 @@ import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.core.index.GetOperationFailedException;
 import org.anchoranalysis.image.orientation.Orientation;
 
-import ch.ethz.biol.cell.mpp.mark.ISetMarksExplicit;
-import ch.ethz.biol.cell.mpp.mark.Mark;
 import ch.ethz.biol.cell.mpp.mark.pxlmark.memo.PxlMarkMemo;
 
 public class MarkRadiiProposer extends MarkProposer {

@@ -30,6 +30,7 @@ package ch.ethz.biol.cell.imageprocessing.objmask.provider.smoothspline;
 import java.util.Iterator;
 import java.util.List;
 
+import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.core.color.ColorIndex;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.idgetter.IDGetterIter;
@@ -53,7 +54,6 @@ import ch.ethz.biol.cell.imageprocessing.io.objmask.ObjMaskWriter;
 import ch.ethz.biol.cell.mpp.cfg.Cfg;
 import ch.ethz.biol.cell.mpp.gui.videostats.internalframe.evaluator.EvaluatorUtilities;
 import ch.ethz.biol.cell.mpp.gui.videostats.internalframe.markredraw.ColoredCfg;
-import ch.ethz.biol.cell.mpp.mark.Mark;
 import ch.ethz.biol.cell.gui.overlay.Overlay;
 
 class ContourListGenerator extends RasterGenerator implements IterableObjectGenerator<List<Contour>, Stack> {

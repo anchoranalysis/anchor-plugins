@@ -1,10 +1,12 @@
 package ch.ethz.biol.cell.mpp.mark.proposer.merge;
 
 import org.anchoranalysis.anchor.mpp.bean.proposer.MarkMergeProposer;
+import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.anchor.mpp.proposer.ProposerContext;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.index.GetOperationFailedException;
+
 import anchor.provider.bean.ProposalAbnormalFailureException;
 
 /*
@@ -35,7 +37,6 @@ import anchor.provider.bean.ProposalAbnormalFailureException;
 
 
 import ch.ethz.biol.cell.beaninitparams.MPPInitParams;
-import ch.ethz.biol.cell.mpp.mark.Mark;
 import ch.ethz.biol.cell.mpp.mark.pxlmark.memo.PxlMarkMemo;
 
 public class MarkMergeProposerReference extends MarkMergeProposer {

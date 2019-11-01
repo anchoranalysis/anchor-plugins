@@ -29,6 +29,8 @@ package ch.ethz.biol.cell.mpp.mark.pointsfitter;
 
 import java.util.List;
 
+import org.anchoranalysis.anchor.mpp.mark.Mark;
+import org.anchoranalysis.anchor.mpp.mark.conic.MarkEllipsoid;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.core.geometry.Point3f;
@@ -45,8 +47,6 @@ import cern.colt.matrix.linalg.Algebra;
 import cern.colt.matrix.linalg.EigenvalueDecomposition;
 import cern.colt.matrix.linalg.SingularValueDecomposition;
 import cern.jet.math.Functions;
-import ch.ethz.biol.cell.mpp.mark.Mark;
-import ch.ethz.biol.cell.mpp.mark.MarkEllipsoid;
 
 //
 // Based upon the approach of Li and Griffiths in 'Least Squares Ellipsoid Specific Fitting' (2004)

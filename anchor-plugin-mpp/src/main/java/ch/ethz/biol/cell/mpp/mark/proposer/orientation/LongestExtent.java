@@ -1,6 +1,8 @@
 package ch.ethz.biol.cell.mpp.mark.proposer.orientation;
 
 import org.anchoranalysis.anchor.mpp.bean.proposer.OrientationProposer;
+import org.anchoranalysis.anchor.mpp.mark.Mark;
+import org.anchoranalysis.anchor.mpp.mark.MarkAbstractPosition;
 import org.anchoranalysis.anchor.mpp.proposer.error.ErrorNode;
 
 /*
@@ -38,8 +40,6 @@ import org.anchoranalysis.image.orientation.Orientation2D;
 
 import ch.ethz.biol.cell.imageprocessing.bound.BidirectionalBound;
 import ch.ethz.biol.cell.mpp.bound.BoundCalculator;
-import ch.ethz.biol.cell.mpp.mark.Mark;
-import ch.ethz.biol.cell.mpp.mark.MarkAbstractPosition;
 
 public class LongestExtent extends OrientationProposer {
 

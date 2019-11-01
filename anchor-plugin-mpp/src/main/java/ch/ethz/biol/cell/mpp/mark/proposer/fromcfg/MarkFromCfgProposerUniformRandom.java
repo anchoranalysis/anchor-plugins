@@ -27,10 +27,10 @@ package ch.ethz.biol.cell.mpp.mark.proposer.fromcfg;
  */
 
 import org.anchoranalysis.anchor.mpp.bean.proposer.MarkFromCfgProposer;
+import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.anchor.mpp.proposer.ProposerContext;
 
 import ch.ethz.biol.cell.mpp.cfg.Cfg;
-import ch.ethz.biol.cell.mpp.mark.Mark;
 
 public class MarkFromCfgProposerUniformRandom extends MarkFromCfgProposer {
 

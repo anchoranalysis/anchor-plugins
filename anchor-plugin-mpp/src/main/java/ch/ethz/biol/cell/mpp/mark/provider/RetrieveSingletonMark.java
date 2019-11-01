@@ -1,5 +1,7 @@
 package ch.ethz.biol.cell.mpp.mark.provider;
 
+import org.anchoranalysis.anchor.mpp.mark.Mark;
+
 /*
  * #%L
  * anchor-plugin-mpp
@@ -32,7 +34,6 @@ import org.anchoranalysis.core.error.CreateException;
 
 import ch.ethz.biol.cell.mpp.cfg.Cfg;
 import ch.ethz.biol.cell.mpp.cfg.provider.CfgProvider;
-import ch.ethz.biol.cell.mpp.mark.Mark;
 
 // Retrieves a mark from a cfg, assuming there is only one mark in a cfg, otherwise throwing an error
 public class RetrieveSingletonMark extends MarkProvider {

@@ -2,6 +2,8 @@ package ch.ethz.biol.cell.mpp.mark.proposer.merge;
 
 import org.anchoranalysis.anchor.mpp.bean.proposer.MarkMergeProposer;
 import org.anchoranalysis.anchor.mpp.bean.proposer.MarkProposer;
+import org.anchoranalysis.anchor.mpp.mark.ISetMarksExplicit;
+import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.anchor.mpp.proposer.ProposerContext;
 
 /*
@@ -38,8 +40,6 @@ import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 import org.anchoranalysis.image.orientation.Orientation2D;
 
 import anchor.provider.bean.ProposalAbnormalFailureException;
-import ch.ethz.biol.cell.mpp.mark.ISetMarksExplicit;
-import ch.ethz.biol.cell.mpp.mark.Mark;
 import ch.ethz.biol.cell.mpp.mark.points.PointClipper;
 import ch.ethz.biol.cell.mpp.mark.pxlmark.memo.PxlMarkMemo;
 

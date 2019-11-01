@@ -1,5 +1,7 @@
 package ch.ethz.biol.cell.mpp.feedback.reporter;
 
+import org.anchoranalysis.anchor.mpp.mark.Mark;
+
 /*
  * #%L
  * anchor-plugin-mpp
@@ -51,7 +53,6 @@ import ch.ethz.biol.cell.mpp.feedback.OptimizationFeedbackInitParams;
 import ch.ethz.biol.cell.mpp.feedback.PeriodicSubfolderReporter;
 import ch.ethz.biol.cell.mpp.feedback.ReporterException;
 import ch.ethz.biol.cell.mpp.gui.videostats.internalframe.markredraw.ColoredCfg;
-import ch.ethz.biol.cell.mpp.mark.Mark;
 import ch.ethz.biol.cell.mpp.nrg.CfgNRG;
 import ch.ethz.biol.cell.mpp.nrg.CfgNRGPixelized;
 import ch.ethz.biol.cell.mpp.nrg.nrgscheme.NRGScheme;

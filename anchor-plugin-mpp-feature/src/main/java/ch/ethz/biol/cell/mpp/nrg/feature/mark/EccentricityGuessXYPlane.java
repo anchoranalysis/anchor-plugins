@@ -1,5 +1,9 @@
 package ch.ethz.biol.cell.mpp.nrg.feature.mark;
 
+import org.anchoranalysis.anchor.mpp.mark.Mark;
+import org.anchoranalysis.anchor.mpp.mark.MarkAbstractRadii;
+import org.anchoranalysis.anchor.mpp.mark.conic.MarkEllipsoid;
+
 /*-
  * #%L
  * anchor-plugin-mpp-feature
@@ -31,10 +35,6 @@ import org.anchoranalysis.core.geometry.Vector3d;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.orientation.Orientation;
 import org.anchoranalysis.math.rotation.RotationMatrix;
-
-import ch.ethz.biol.cell.mpp.mark.Mark;
-import ch.ethz.biol.cell.mpp.mark.MarkAbstractRadii;
-import ch.ethz.biol.cell.mpp.mark.MarkEllipsoid;
 
 // Calculates the eccentricity of the ellipse by considering the two planes which are furtherest way from the Z unit-vector
 // If it's an ellipsoid it calculates the Meridional Eccentricity i.e. the eccentricity

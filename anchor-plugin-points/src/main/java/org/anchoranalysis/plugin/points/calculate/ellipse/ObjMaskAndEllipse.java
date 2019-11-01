@@ -1,5 +1,7 @@
 package org.anchoranalysis.plugin.points.calculate.ellipse;
 
+import org.anchoranalysis.anchor.mpp.mark.conic.MarkEllipse;
+
 /*-
  * #%L
  * anchor-plugin-points
@@ -27,8 +29,6 @@ package org.anchoranalysis.plugin.points.calculate.ellipse;
  */
 
 import org.anchoranalysis.image.objmask.ObjMask;
-
-import ch.ethz.biol.cell.mpp.mark.MarkEllipse;
 
 public class ObjMaskAndEllipse {
 

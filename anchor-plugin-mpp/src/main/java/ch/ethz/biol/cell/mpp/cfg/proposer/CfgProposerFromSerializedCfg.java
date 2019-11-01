@@ -3,6 +3,8 @@ package ch.ethz.biol.cell.mpp.cfg.proposer;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
+import org.anchoranalysis.anchor.mpp.mark.Mark;
+import org.anchoranalysis.anchor.mpp.mark.conic.MarkEllipse;
 import org.anchoranalysis.anchor.mpp.proposer.ProposerContext;
 
 /*
@@ -39,8 +41,6 @@ import org.anchoranalysis.io.deserializer.DeserializationFailedException;
 
 import ch.ethz.biol.cell.mpp.cfg.Cfg;
 import ch.ethz.biol.cell.mpp.cfg.CfgGen;
-import ch.ethz.biol.cell.mpp.mark.Mark;
-import ch.ethz.biol.cell.mpp.mark.MarkEllipse;
 
 public class CfgProposerFromSerializedCfg extends CfgProposer {
 

@@ -104,7 +104,7 @@ public class ExtensionCount extends Summarizer<Path> {
 		Integer cnt = map.get(extension);
 		
 		if (cnt==null) {
-			map.put( extension, new Integer(1) );
+			map.put( extension, Integer.valueOf(1) );
 		} else {
 			cnt++;
 		}

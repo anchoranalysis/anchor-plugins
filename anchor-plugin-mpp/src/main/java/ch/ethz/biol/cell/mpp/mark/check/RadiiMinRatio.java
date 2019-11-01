@@ -1,5 +1,8 @@
 package ch.ethz.biol.cell.mpp.mark.check;
 
+import org.anchoranalysis.anchor.mpp.mark.Mark;
+import org.anchoranalysis.anchor.mpp.mark.MarkAbstractRadii;
+
 /*
  * #%L
  * anchor-plugin-mpp
@@ -33,8 +36,6 @@ import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 
 import ch.ethz.biol.cell.core.CheckMark;
-import ch.ethz.biol.cell.mpp.mark.Mark;
-import ch.ethz.biol.cell.mpp.mark.MarkAbstractRadii;
 import ch.ethz.biol.cell.mpp.mark.regionmap.RegionMap;
 
 public class RadiiMinRatio extends CheckMark {

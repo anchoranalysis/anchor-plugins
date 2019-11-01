@@ -29,6 +29,7 @@ package org.anchoranalysis.plugin.mpp.sgmn.bean.kernel.dependent.mark;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.mpp.sgmn.kernel.KernelCalcContext;
 import org.anchoranalysis.mpp.sgmn.kernel.KernelCalcNRGException;
 import org.anchoranalysis.plugin.mpp.sgmn.bean.kernel.independent.KernelBirth;
@@ -36,7 +37,6 @@ import org.anchoranalysis.plugin.mpp.sgmn.optscheme.CfgFromPartition;
 import org.apache.commons.collections.CollectionUtils;
 
 import ch.ethz.biol.cell.mpp.cfg.Cfg;
-import ch.ethz.biol.cell.mpp.mark.Mark;
 import ch.ethz.biol.cell.mpp.pair.ListUpdatableMarkSetCollection;
 import ch.ethz.biol.cell.mpp.pair.UpdateMarkSetException;
 

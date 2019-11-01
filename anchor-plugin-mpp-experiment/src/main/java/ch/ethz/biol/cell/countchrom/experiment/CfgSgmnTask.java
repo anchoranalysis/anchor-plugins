@@ -1,5 +1,6 @@
 package ch.ethz.biol.cell.countchrom.experiment;
 
+import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.bean.annotation.AllowEmpty;
 
 /*
@@ -64,7 +65,6 @@ import ch.ethz.biol.cell.imageprocessing.io.generator.raster.CfgGenerator;
 import ch.ethz.biol.cell.imageprocessing.io.generator.raster.ColoredCfgWithDisplayStack;
 import ch.ethz.biol.cell.mpp.cfg.Cfg;
 import ch.ethz.biol.cell.mpp.gui.videostats.internalframe.markredraw.ColoredCfg;
-import ch.ethz.biol.cell.mpp.mark.Mark;
 import ch.ethz.biol.cell.sgmn.cfg.CfgSgmn;
 import ch.ethz.biol.cell.sgmn.cfg.ExperimentState;
 
