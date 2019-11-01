@@ -31,6 +31,8 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.anchoranalysis.anchor.mpp.mark.Mark;
+import org.anchoranalysis.anchor.overlay.Overlay;
+import org.anchoranalysis.anchor.overlay.bean.objmask.writer.ObjMaskWriter;
 import org.anchoranalysis.core.color.ColorIndex;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.idgetter.IDGetterIter;
@@ -50,11 +52,9 @@ import org.anchoranalysis.io.output.OutputWriteFailedException;
 
 import ch.ethz.biol.cell.imageprocessing.io.generator.raster.CfgGenerator;
 import ch.ethz.biol.cell.imageprocessing.io.generator.raster.ColoredCfgWithDisplayStack;
-import ch.ethz.biol.cell.imageprocessing.io.objmask.ObjMaskWriter;
 import ch.ethz.biol.cell.mpp.cfg.Cfg;
 import ch.ethz.biol.cell.mpp.gui.videostats.internalframe.evaluator.EvaluatorUtilities;
 import ch.ethz.biol.cell.mpp.gui.videostats.internalframe.markredraw.ColoredCfg;
-import ch.ethz.biol.cell.gui.overlay.Overlay;
 
 class ContourListGenerator extends RasterGenerator implements IterableObjectGenerator<List<Contour>, Stack> {
 

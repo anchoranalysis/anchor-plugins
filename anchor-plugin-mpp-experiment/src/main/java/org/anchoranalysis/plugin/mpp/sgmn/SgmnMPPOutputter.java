@@ -1,6 +1,7 @@
 package org.anchoranalysis.plugin.mpp.sgmn;
 
 import org.anchoranalysis.anchor.mpp.mark.Mark;
+import org.anchoranalysis.anchor.overlay.Overlay;
 
 /*-
  * #%L
@@ -38,7 +39,6 @@ import org.anchoranalysis.io.generator.text.StringGenerator;
 import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
 import org.anchoranalysis.io.output.writer.WriterRouterErrors;
 
-import ch.ethz.biol.cell.gui.overlay.Overlay;
 import ch.ethz.biol.cell.imageprocessing.io.generator.raster.CfgGenerator;
 import ch.ethz.biol.cell.imageprocessing.io.generator.raster.CfgMIPGenerator;
 import ch.ethz.biol.cell.imageprocessing.io.generator.raster.CfgMaskCollectionDifferentValuesGenerator;

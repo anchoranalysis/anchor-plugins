@@ -1,5 +1,7 @@
 package ch.ethz.biol.cell.imageprocessing.stack.provider;
 
+import org.anchoranalysis.anchor.overlay.Overlay;
+
 /*
  * #%L
  * anchor-plugin-mpp
@@ -40,7 +42,6 @@ import org.anchoranalysis.io.bean.color.generator.HSBColorSetGenerator;
 import org.anchoranalysis.io.bean.objmask.writer.RGBOutlineWriter;
 import org.anchoranalysis.io.output.OutputWriteFailedException;
 
-import ch.ethz.biol.cell.gui.overlay.Overlay;
 import ch.ethz.biol.cell.imageprocessing.io.generator.raster.CfgGenerator;
 import ch.ethz.biol.cell.imageprocessing.io.generator.raster.ColoredCfgWithDisplayStack;
 import ch.ethz.biol.cell.mpp.cfg.Cfg;

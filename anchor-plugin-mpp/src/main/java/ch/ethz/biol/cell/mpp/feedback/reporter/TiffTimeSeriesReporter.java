@@ -1,6 +1,7 @@
 package ch.ethz.biol.cell.mpp.feedback.reporter;
 
 import org.anchoranalysis.anchor.mpp.mark.Mark;
+import org.anchoranalysis.anchor.overlay.id.IDGetterOverlayID;
 
 /*
  * #%L
@@ -46,7 +47,6 @@ import org.anchoranalysis.io.generator.combined.IterableCombinedListGenerator;
 import org.anchoranalysis.io.output.OutputWriteFailedException;
 import org.anchoranalysis.mpp.sgmn.optscheme.step.Reporting;
 
-import ch.ethz.biol.cell.gui.overlay.IDGetterOverlayID;
 import ch.ethz.biol.cell.imageprocessing.io.generator.raster.CfgGenerator;
 import ch.ethz.biol.cell.imageprocessing.io.generator.raster.ColoredCfgWithDisplayStack;
 import ch.ethz.biol.cell.mpp.feedback.OptimizationFeedbackInitParams;

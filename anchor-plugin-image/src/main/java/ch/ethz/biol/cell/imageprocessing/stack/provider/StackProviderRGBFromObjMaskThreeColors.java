@@ -1,5 +1,6 @@
 package ch.ethz.biol.cell.imageprocessing.stack.provider;
 
+import org.anchoranalysis.anchor.overlay.bean.objmask.writer.ObjMaskWriter;
 import org.anchoranalysis.bean.BeanInstanceMap;
 
 /*
@@ -44,8 +45,6 @@ import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.io.bean.objmask.writer.RGBOutlineWriter;
 import org.anchoranalysis.io.bean.objmask.writer.RGBSolidWriter;
 import org.anchoranalysis.io.output.OutputWriteFailedException;
-
-import ch.ethz.biol.cell.imageprocessing.io.objmask.ObjMaskWriter;
 
 public class StackProviderRGBFromObjMaskThreeColors extends StackProviderWithBackground {
 

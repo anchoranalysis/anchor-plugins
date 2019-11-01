@@ -1,5 +1,7 @@
 package ch.ethz.biol.cell.mpp.feedback.reporter;
 
+import org.anchoranalysis.anchor.overlay.id.IDGetterOverlayID;
+
 /*
  * #%L
  * anchor-plugin-mpp
@@ -48,7 +50,6 @@ import org.anchoranalysis.io.output.namestyle.IndexableOutputNameStyle;
 import org.anchoranalysis.io.output.namestyle.IntegerSuffixOutputNameStyle;
 import org.anchoranalysis.mpp.sgmn.optscheme.step.Reporting;
 
-import ch.ethz.biol.cell.gui.overlay.IDGetterOverlayID;
 import ch.ethz.biol.cell.imageprocessing.io.generator.raster.CfgGenerator;
 import ch.ethz.biol.cell.imageprocessing.io.generator.raster.ColoredCfgWithDisplayStack;
 import ch.ethz.biol.cell.imageprocessing.io.idgetter.IDGetterMarkID;

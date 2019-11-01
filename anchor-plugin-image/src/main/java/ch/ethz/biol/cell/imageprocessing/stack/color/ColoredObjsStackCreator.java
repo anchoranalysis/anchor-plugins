@@ -1,5 +1,7 @@
 package ch.ethz.biol.cell.imageprocessing.stack.color;
 
+import org.anchoranalysis.anchor.overlay.bean.objmask.writer.ObjMaskWriter;
+
 /*-
  * #%L
  * anchor-plugin-image
@@ -40,8 +42,6 @@ import org.anchoranalysis.io.bean.color.generator.ShuffleColorSetGenerator;
 import org.anchoranalysis.io.bean.objmask.writer.RGBOutlineWriter;
 import org.anchoranalysis.io.bean.objmask.writer.RGBSolidWriter;
 import org.anchoranalysis.io.output.OutputWriteFailedException;
-
-import ch.ethz.biol.cell.imageprocessing.io.objmask.ObjMaskWriter;
 
 public class ColoredObjsStackCreator {
 

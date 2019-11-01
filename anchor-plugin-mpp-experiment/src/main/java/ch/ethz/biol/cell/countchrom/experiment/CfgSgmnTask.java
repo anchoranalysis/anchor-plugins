@@ -1,6 +1,7 @@
 package ch.ethz.biol.cell.countchrom.experiment;
 
 import org.anchoranalysis.anchor.mpp.mark.Mark;
+import org.anchoranalysis.anchor.overlay.Overlay;
 import org.anchoranalysis.bean.annotation.AllowEmpty;
 
 /*
@@ -60,7 +61,6 @@ import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
 import org.anchoranalysis.mpp.io.input.MultiInput;
 import org.anchoranalysis.plugin.mpp.sgmn.BackgroundCreator;
 
-import ch.ethz.biol.cell.gui.overlay.Overlay;
 import ch.ethz.biol.cell.imageprocessing.io.generator.raster.CfgGenerator;
 import ch.ethz.biol.cell.imageprocessing.io.generator.raster.ColoredCfgWithDisplayStack;
 import ch.ethz.biol.cell.mpp.cfg.Cfg;

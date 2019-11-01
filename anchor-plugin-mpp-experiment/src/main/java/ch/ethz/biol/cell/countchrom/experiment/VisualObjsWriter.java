@@ -28,6 +28,7 @@ package ch.ethz.biol.cell.countchrom.experiment;
 
 import java.util.function.Function;
 
+import org.anchoranalysis.anchor.overlay.bean.objmask.writer.ObjMaskWriter;
 import org.anchoranalysis.core.cache.ExecuteException;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
@@ -41,8 +42,6 @@ import org.anchoranalysis.io.generator.IterableGenerator;
 import org.anchoranalysis.io.generator.collection.IterableGeneratorWriter;
 import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
 import org.anchoranalysis.io.output.writer.WriterRouterErrors;
-
-import ch.ethz.biol.cell.imageprocessing.io.objmask.ObjMaskWriter;
 
 /**
  * Outputs a ObjMaskCollection in different ways 
