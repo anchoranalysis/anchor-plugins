@@ -2,6 +2,7 @@ package ch.ethz.biol.cell.mpp.mark.proposer.fromcfg;
 
 import org.anchoranalysis.anchor.mpp.bean.proposer.MarkFromCfgProposer;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
+import org.anchoranalysis.anchor.mpp.proposer.ProposalAbnormalFailureException;
 import org.anchoranalysis.anchor.mpp.proposer.ProposerContext;
 
 /*
@@ -33,7 +34,6 @@ import org.anchoranalysis.anchor.mpp.proposer.ProposerContext;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 
-import anchor.provider.bean.ProposalAbnormalFailureException;
 import ch.ethz.biol.cell.mpp.cfg.Cfg;
 
 public class MarkFromCfgProposerRepeat extends MarkFromCfgProposer {

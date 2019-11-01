@@ -1,5 +1,7 @@
 package org.anchoranalysis.plugin.mpp.sgmn.bean.kernel.independent;
 
+import org.anchoranalysis.anchor.mpp.proposer.ProposalAbnormalFailureException;
+
 /*-
  * #%L
  * anchor-plugin-mpp-sgmn
@@ -30,7 +32,6 @@ import org.anchoranalysis.anchor.mpp.proposer.ProposerContext;
 import org.anchoranalysis.mpp.sgmn.kernel.KernelCalcContext;
 import org.anchoranalysis.mpp.sgmn.kernel.KernelCalcNRGException;
 
-import anchor.provider.bean.ProposalAbnormalFailureException;
 import ch.ethz.biol.cell.mpp.cfg.Cfg;
 import ch.ethz.biol.cell.mpp.cfg.CfgGen;
 import ch.ethz.biol.cell.mpp.cfg.proposer.CfgProposer;

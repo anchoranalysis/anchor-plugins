@@ -30,6 +30,7 @@ import org.anchoranalysis.anchor.mpp.bean.init.MPPInitParams;
 
 import org.anchoranalysis.anchor.mpp.bean.proposer.MarkProposer;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
+import org.anchoranalysis.anchor.mpp.proposer.ProposalAbnormalFailureException;
 import org.anchoranalysis.anchor.mpp.proposer.ProposerContext;
 import org.anchoranalysis.anchor.mpp.proposer.visualization.ICreateProposalVisualization;
 import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
@@ -41,8 +42,6 @@ import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.bean.provider.BinaryImgChnlProvider;
 import org.anchoranalysis.image.binary.BinaryChnl;
 import org.anchoranalysis.image.chnl.Chnl;
-
-import anchor.provider.bean.ProposalAbnormalFailureException;
 
 // Rejects a proposal if its centre is not found on a particular prob map
 public class MarkProposerRejectProposalCentreOutside extends MarkProposer {
