@@ -1,6 +1,6 @@
 # anchor-plugins
 
-plugins that implement functionality for the anchor project
+Plugins that implement specific-functionality for the anchor project
 
 ## Note
 
