@@ -29,6 +29,7 @@ package org.anchoranalysis.plugin.io.bean.summarizer.path;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -82,10 +83,15 @@ public class FilePathPattern extends Summarizer<Path> {
 			throw new OperationFailedException("There are no paths to summarize");
 		}
 		
+		if (paths.size()==1) {
+			// There is no pattern possible, so just return the path as is
+			return paths.get(0).toString();
+		}
+		
 		Pattern pattern = PathPatternFinder.findPatternPath(paths, selectIOCase() );
 		return pattern.describeDetailed();
 	}
-	
+		
 	private IOCase selectIOCase() {
 		return ignoreCase ? IOCase.INSENSITIVE : IOCase.SYSTEM;
 	}
