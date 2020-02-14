@@ -66,7 +66,8 @@ public class FilePathPattern extends Summarizer<Path> {
 	@Override
 	public synchronized void add(Path element) throws OperationFailedException {
 		try {
-			if (!ignoreHidden || !Files.isHidden(element) ) {
+			// Always accept the path if it doesn't exist on the file-system
+			if (!element.toFile().exists() || !ignoreHidden || !Files.isHidden(element) ) {
 				paths.add(element);
 			}
 		} catch (IOException e) {
