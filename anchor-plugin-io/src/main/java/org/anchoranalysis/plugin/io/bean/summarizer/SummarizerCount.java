@@ -53,8 +53,7 @@ public class SummarizerCount<T> extends Summarizer<T> {
 	@Override
 	public synchronized String describe() {
 		return String.format(
-			"Found %d %s.",
-			count,
+			"Found %s.",
 			LanguageUtilities.maybePluralize(count, "input")
 		);
 	}
