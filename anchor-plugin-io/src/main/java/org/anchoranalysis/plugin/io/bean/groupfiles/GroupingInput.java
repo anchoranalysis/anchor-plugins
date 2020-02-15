@@ -40,7 +40,6 @@ import org.anchoranalysis.image.io.input.NamedChnlsInputAsStack;
 import org.anchoranalysis.image.io.input.series.NamedChnlCollectionForSeries;
 import org.anchoranalysis.image.io.input.series.NamedChnlCollectionForSeriesMap;
 import org.anchoranalysis.image.io.rasterreader.OpenedRaster;
-import org.anchoranalysis.io.bean.input.descriptivename.DescriptiveNameFromFile;
 import org.anchoranalysis.plugin.io.multifile.MultiFileReaderOpenedRaster;
 
 
@@ -60,17 +59,12 @@ class GroupingInput extends NamedChnlsInputAsStack {
 
 	// The root object that is used to provide the descriptiveName and pathForBinding
 	//
-	public GroupingInput( Path virtualPath, MultiFileReaderOpenedRaster mfor, ImgChnlMapCreator chnlMapCreator, DescriptiveNameFromFile descriptiveNameFromFile ) {
+	public GroupingInput( Path virtualPath, MultiFileReaderOpenedRaster mfor, ImgChnlMapCreator chnlMapCreator, String descriptiveName ) {
 		super();
 		assert(virtualPath!=null);
 		this.virtualPath = virtualPath;
 		this.openedRaster = mfor;
 		this.chnlMapCreator = chnlMapCreator;
-		this.descriptiveName = descriptiveNameFromFile.createDescriptiveNameOrElse(
-			virtualPath.toFile(),
-			0,
-			"InvalidName"
-		);
 	}
 
 	@Override
