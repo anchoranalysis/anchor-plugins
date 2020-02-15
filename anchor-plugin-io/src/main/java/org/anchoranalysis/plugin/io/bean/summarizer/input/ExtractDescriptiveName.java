@@ -1,10 +1,10 @@
-package org.anchoranalysis.plugin.io.bean.task;
+package org.anchoranalysis.plugin.io.bean.summarizer.input;
 
 /*-
  * #%L
  * anchor-plugin-io
  * %%
- * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -26,19 +26,19 @@ package org.anchoranalysis.plugin.io.bean.task;
  * #L%
  */
 
-import java.nio.file.Path;
-
 import org.anchoranalysis.io.input.InputFromManager;
 
-public class SummarizePathsTask<T extends InputFromManager> extends SummarizeTask<T,Path> {
-	
+public class ExtractDescriptiveName<T extends InputFromManager> extends SummarizerInputFromManager<T, String> {
+
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 
 	@Override
-	protected Path extractObjectForSummary(T input) {
-		return input.pathForBinding();
+	protected String extractFrom(T input) {
+		return input.descriptiveName();
 	}
+
+	
 }
