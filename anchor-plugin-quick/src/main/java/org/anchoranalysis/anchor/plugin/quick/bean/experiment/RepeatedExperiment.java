@@ -43,10 +43,10 @@ import org.apache.commons.configuration.XMLConfiguration;
  * Helper framework for running an experiment repeatedly on different input-managers
  * 
  */
-class RepeatedExperiment<T extends InputFromManager> {
+class RepeatedExperiment<T extends InputFromManager,S> {
 
-	private InputOutputExperiment<T> delegate;
-	private JobProcessor<T> taskProcessor;
+	private InputOutputExperiment<T,S> delegate;
+	private JobProcessor<T,S> taskProcessor;
 	
 	public RepeatedExperiment( ExperimentIdentifier experimentIdentifier ) {
 		delegate = new InputOutputExperiment<>();
@@ -55,7 +55,7 @@ class RepeatedExperiment<T extends InputFromManager> {
 	}
 
 	// Should be called after the constructor, before any other methods
-	public void init(XMLConfiguration xmlConfiguration, JobProcessor<T> taskProcessor) {
+	public void init(XMLConfiguration xmlConfiguration, JobProcessor<T,S> taskProcessor) {
 		assert(delegate.getOutput().getOutputWriteSettings().hasBeenInit());
 		delegate.associateXml(xmlConfiguration);
 		this.taskProcessor = taskProcessor;
