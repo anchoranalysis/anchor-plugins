@@ -31,6 +31,7 @@ import java.nio.file.Path;
 import org.anchoranalysis.image.io.RasterIOException;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.image.stack.TimeSequence;
+import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
 import org.anchoranalysis.plugin.io.multifile.buffer.MultiBufferSized;
 
 // We try to guess these parameters from the fileBag, and if not, from after we add the first image
@@ -38,7 +39,7 @@ class MultiFile {
 	
 	private SizeExtnts size;
 	
-	private DataTypeChecker dataType = new DataTypeChecker();
+	private DataTypeChecker dataTypeChecker = new DataTypeChecker();
 	
 	// What we populate before creating the final stack, buffers is sorted by chnl and then by slice
 	private MultiBufferSized buffers;
@@ -51,7 +52,7 @@ class MultiFile {
 
 	public void add( Stack stackForFile, Integer chnlNum, Integer sliceNum, Integer timeIndex, Path filePath ) throws RasterIOException {
 		
-		dataType.check( stackForFile );
+		dataTypeChecker.check( stackForFile );
 		
 		if( buffers==null) {
 			buffers = new MultiBufferSized( stackForFile, size );
@@ -65,7 +66,7 @@ class MultiFile {
 	}
 	
 	public TimeSequence createSequence() {
-		return buffers.createSequence(dataType.getDataType());
+		return buffers.createSequence(dataTypeChecker.getDataType());
 	}
 		
 	private void checkSliceNum( Stack stackForFile, Integer sliceNum, Path filePath ) throws RasterIOException {
@@ -107,5 +108,13 @@ class MultiFile {
 	
 	public boolean numChnlDefined() {
 		return size.getRangeC().hasSizeDefined();
+	}
+	
+	public boolean dataTypeDefined() {
+		return dataTypeChecker!=null;
+	}
+	
+	public VoxelDataType dataType() {
+		return dataTypeChecker.getDataType();
 	}
 }

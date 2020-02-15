@@ -75,7 +75,7 @@ class GroupingInput extends NamedChnlsInputAsStack {
 
 	@Override
 	public int numSeries() throws RasterIOException {
-		return openedRaster.getNumSeries();
+		return openedRaster.numSeries();
 	}
 
 	@Override
@@ -85,19 +85,9 @@ class GroupingInput extends NamedChnlsInputAsStack {
 	
 	@Override
 	public NamedChnlCollectionForSeries createChnlCollectionForSeries( int seriesNum, ProgressReporter progressReporter ) throws RasterIOException {
-		
-		// Lazy creation
-		if (chnlMap==null) {
-			try {
-				chnlMap = chnlMapCreator.createMap(openedRaster);
-			} catch (CreateException e) {
-				throw new RasterIOException(e);
-			}
-		}
+		ensureChnlMapExists();
 		return new NamedChnlCollectionForSeriesMap( openedRaster, chnlMap, seriesNum);
 	}
-	
-
 	
 	@Override
 	public String descriptiveName() {
@@ -110,11 +100,33 @@ class GroupingInput extends NamedChnlsInputAsStack {
 	}
 
 	@Override
+	public int numChnl() throws RasterIOException {
+		ensureChnlMapExists();
+		return chnlMap.keySet().size();
+	}	
+
+	@Override
 	public void close(ErrorReporter errorReporter) {
 		try {
 			openedRaster.close();
 		} catch (RasterIOException e) {
 			errorReporter.recordError(GroupingInput.class, e);
 		}
+	}
+	
+	private void ensureChnlMapExists() throws RasterIOException {
+		// Lazy creation
+		if (chnlMap==null) {
+			try {
+				chnlMap = chnlMapCreator.createMap(openedRaster);
+			} catch (CreateException e) {
+				throw new RasterIOException(e);
+			}
+		}		
+	}
+
+	@Override
+	public int bitDepth() throws RasterIOException {
+		return openedRaster.bitDepth();
 	}
 }

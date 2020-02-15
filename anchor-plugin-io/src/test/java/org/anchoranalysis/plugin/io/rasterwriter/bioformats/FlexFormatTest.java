@@ -59,9 +59,9 @@ public class FlexFormatTest {
 		BioformatsReader bf = new BioformatsReader();
 		OpenedRaster or = bf.openFile(path);
 		
-		assertTrue( or.getNumChnl()== 1 );
-		assertTrue( or.getNumSeries()== 1 );
-		assertTrue( or.getNumFrames()== 2 );
+		assertTrue( or.numChnl()== 1 );
+		assertTrue( or.numSeries()== 1 );
+		assertTrue( or.numFrames()== 2 );
 	}
 
 }

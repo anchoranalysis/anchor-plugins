@@ -63,7 +63,7 @@ public class MultiFileReaderOpenedRaster extends OpenedRaster {
 	
 	
 	@Override
-	public int getNumSeries() {
+	public int numSeries() {
 		// For now we only support a single series, this could be changed
 		return 1;
 	}
@@ -81,13 +81,13 @@ public class MultiFileReaderOpenedRaster extends OpenedRaster {
 	}
 
 	@Override
-	public List<String> getChannelNames() {
+	public List<String> channelNames() {
 		return null;
 	}
 
 
 	@Override
-	public int getNumChnl() throws RasterIOException {
+	public int numChnl() throws RasterIOException {
 		
 		MultiFile multiFile = createMultiFileMemo( ProgressReporterNull.get() );
 		
@@ -101,7 +101,20 @@ public class MultiFileReaderOpenedRaster extends OpenedRaster {
 	
 
 	@Override
-	public int getNumFrames() throws RasterIOException {
+	public int bitDepth() throws RasterIOException {
+		
+		MultiFile multiFile = createMultiFileMemo( ProgressReporterNull.get() );
+		
+		if (!multiFile.dataTypeDefined()) {
+			throw new RasterIOException("Number of frames is not defined");
+		}
+		
+		return multiFile.dataType().numBits();
+	}
+	
+	
+	@Override
+	public int numFrames() throws RasterIOException {
 		
 		MultiFile multiFile = createMultiFileMemo( ProgressReporterNull.get() );
 		
@@ -146,5 +159,4 @@ public class MultiFileReaderOpenedRaster extends OpenedRaster {
 			}
 		}
 	}
-
 }

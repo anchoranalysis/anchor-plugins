@@ -82,15 +82,15 @@ public class FlattenAsChnl extends RasterReader {
 			super();
 			this.delegate = delegate;
 			
-			numSeries = delegate.getNumSeries();
+			numSeries = delegate.numSeries();
 			
-			expectedNumChnl = delegate.getNumChnl();
+			expectedNumChnl = delegate.numChnl();
 			
-			expectedNumFrames = delegate.getNumFrames();
+			expectedNumFrames = delegate.numFrames();
 		}
 
 		@Override
-		public int getNumSeries() {
+		public int numSeries() {
 			// Always a single series
 			return 1;
 		}
@@ -120,18 +120,23 @@ public class FlattenAsChnl extends RasterReader {
 		}
 				
 		@Override
-		public List<String> getChannelNames() {
+		public List<String> channelNames() {
 			// We do not report channel-names, as we create them from the series
 			return null;
 		}
+		
+		@Override
+		public int bitDepth() throws RasterIOException {
+			return delegate.bitDepth();
+		}
 
 		@Override
-		public int getNumChnl() {
+		public int numChnl() {
 			return expectedNumChnl * numSeries * expectedNumFrames;
 		}
 
 		@Override
-		public int getNumFrames() {
+		public int numFrames() {
 			// We make this assumption, and check each sequence we open
 			return 1;
 		}
