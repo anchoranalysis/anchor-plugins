@@ -239,6 +239,11 @@ public class QuickExperiment extends Experiment {
 		delegate.doExperiment(expArgs);
 	}
 
+	@Override
+	public boolean useDetailedLogging() {
+		return delegate.useDetailedLogging();
+	}
+
 	public String getFileInput() {
 		return fileInput;
 	}

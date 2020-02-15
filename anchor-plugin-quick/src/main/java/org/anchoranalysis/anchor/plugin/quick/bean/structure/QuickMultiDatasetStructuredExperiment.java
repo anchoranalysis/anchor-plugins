@@ -176,6 +176,11 @@ public class QuickMultiDatasetStructuredExperiment<T extends InputFromManager,S>
 		delegate.doExperiment(expArgs);
 	}
 
+	@Override
+	public boolean useDetailedLogging() {
+		return delegate.useDetailedLogging();
+	}
+
 	public String getExperimentType() {
 		return experimentType;
 	}

@@ -376,4 +376,10 @@ public class QuickMultiDatasetExperiment<T extends InputFromManager, S> extends 
 	public void setDebug(String debug) {
 		this.debug = debug;
 	}
+
+	@Override
+	public boolean useDetailedLogging() {
+		// Always use detailed logging
+		return true;
+	}
 }
