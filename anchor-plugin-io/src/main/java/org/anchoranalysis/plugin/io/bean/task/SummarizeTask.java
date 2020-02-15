@@ -4,7 +4,7 @@ package org.anchoranalysis.plugin.io.bean.task;
  * #%L
  * anchor-plugin-io
  * %%
- * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -26,8 +26,6 @@ package org.anchoranalysis.plugin.io.bean.task;
  * #L%
  */
 
-import java.nio.file.Path;
-
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.log.LogReporter;
@@ -37,25 +35,26 @@ import org.anchoranalysis.experiment.JobExecutionException;
 import org.anchoranalysis.experiment.task.ParametersBound;
 import org.anchoranalysis.experiment.task.ParametersExperiment;
 import org.anchoranalysis.experiment.task.Task;
-import org.anchoranalysis.io.input.FileInput;
+import org.anchoranalysis.io.input.InputFromManager;
 import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
 import org.anchoranalysis.plugin.io.bean.summarizer.Summarizer;
 import org.anchoranalysis.plugin.io.bean.summarizer.SummarizerCount;
 
-public class SummarizeFilesTask extends Task<FileInput,Summarizer<Path>> {
-	
+public abstract class SummarizeTask<T extends InputFromManager,S> extends Task<T,Summarizer<S>> {
+
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 	
+	
 	// START BEAN PROPERTIES
 	@BeanField
-	private Summarizer<Path> pathSummarizer = new SummarizerCount<Path>();
+	private Summarizer<S> summarizer = new SummarizerCount<>();
 	// END BEAN PROPERTIES
 	
 	@Override
-	public Summarizer<Path> beforeAnyJobIsExecuted(
+	public Summarizer<S> beforeAnyJobIsExecuted(
 			BoundOutputManagerRouteErrors outputManager, ParametersExperiment params)
 			throws ExperimentExecutionException {
 
@@ -66,13 +65,13 @@ public class SummarizeFilesTask extends Task<FileInput,Summarizer<Path>> {
 			);
 		}
 		
-		return pathSummarizer;
+		return summarizer;
 	}
 	
 	@Override
-	protected void doJobOnInputObject(ParametersBound<FileInput, Summarizer<Path>> params) throws JobExecutionException {
+	protected void doJobOnInputObject(ParametersBound<T, Summarizer<S>> params) throws JobExecutionException {
 		try {
-			params.getSharedState().add( params.getInputObject().pathForBinding() );
+			params.getSharedState().add( extractObjectForSummary(params.getInputObject()) );
 		} catch (OperationFailedException e) {
 			throw new JobExecutionException(
 				String.format("Cannot summarize %s", params.getInputObject().pathForBinding()),
@@ -80,12 +79,28 @@ public class SummarizeFilesTask extends Task<FileInput,Summarizer<Path>> {
 			);
 		}
 	}
-	
+
+	@Override
+	public void afterAllJobsAreExecuted(BoundOutputManagerRouteErrors outputManager, Summarizer<S> sharedState,
+			LogReporter logReporter) throws ExperimentExecutionException {
+		
+		try {
+			logReporter.log(
+				sharedState.describe()
+			);
+		} catch (OperationFailedException e) {
+			throw new ExperimentExecutionException(e);
+		}
+	}
+		
 	@Override
 	public boolean hasVeryQuickPerInputExecution() {
 		return true;
 	}
-	
+		
+	// Extract object for summary
+	protected abstract S extractObjectForSummary( T input );
+		
 	private void summarizeExperimentArguments( LogReporter log, ExperimentExecutionArguments eea ) {
 		
 		if (eea.hasInputDirectory()) {
@@ -97,25 +112,12 @@ public class SummarizeFilesTask extends Task<FileInput,Summarizer<Path>> {
 		}
 	}
 
-	@Override
-	public void afterAllJobsAreExecuted(BoundOutputManagerRouteErrors outputManager, Summarizer<Path> sharedState,
-			LogReporter logReporter) throws ExperimentExecutionException {
-		
-		try {
-			logReporter.log(
-				sharedState.describe()
-			);
-		} catch (OperationFailedException e) {
-			throw new ExperimentExecutionException(e);
-		}
+	public Summarizer<S> getSummarizer() {
+		return summarizer;
 	}
 
-	public Summarizer<Path> getPathSummarizer() {
-		return pathSummarizer;
-	}
-
-	public void setPathSummarizer(Summarizer<Path> pathSummarizer) {
-		this.pathSummarizer = pathSummarizer;
+	public void setSummarizer(Summarizer<S> summarizer) {
+		this.summarizer = summarizer;
 	}
 
 }

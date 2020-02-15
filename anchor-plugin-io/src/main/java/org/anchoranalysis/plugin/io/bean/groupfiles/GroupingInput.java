@@ -32,6 +32,7 @@ import java.nio.file.Path;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
 import org.anchoranalysis.core.progress.ProgressReporter;
+import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.io.RasterIOException;
 import org.anchoranalysis.image.io.bean.chnl.map.ImgChnlMap;
 import org.anchoranalysis.image.io.bean.chnl.map.creator.ImgChnlMapCreator;
@@ -76,6 +77,11 @@ class GroupingInput extends NamedChnlsInputAsStack {
 	public int numSeries() throws RasterIOException {
 		return openedRaster.getNumSeries();
 	}
+
+	@Override
+	public ImageDim dim(int seriesIndex) throws RasterIOException {
+		return openedRaster.dim(seriesIndex);
+	}
 	
 	@Override
 	public NamedChnlCollectionForSeries createChnlCollectionForSeries( int seriesNum, ProgressReporter progressReporter ) throws RasterIOException {
@@ -111,9 +117,4 @@ class GroupingInput extends NamedChnlsInputAsStack {
 			errorReporter.recordError(GroupingInput.class, e);
 		}
 	}
-
-
-
-
-
 }

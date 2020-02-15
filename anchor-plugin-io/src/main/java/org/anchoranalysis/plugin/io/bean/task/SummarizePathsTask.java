@@ -1,6 +1,4 @@
-package org.anchoranalysis.plugin.io.bean.summarizer;
-
-import org.anchoranalysis.core.text.LanguageUtilities;
+package org.anchoranalysis.plugin.io.bean.task;
 
 /*-
  * #%L
@@ -28,33 +26,19 @@ import org.anchoranalysis.core.text.LanguageUtilities;
  * #L%
  */
 
-/**
- * A count of the number of inputs. Thread-safe.
- * 
- * @author Owen Feehan
- *
- * @param <T>
- */
-public class SummarizerCount<T> extends Summarizer<T> {
+import java.nio.file.Path;
 
+import org.anchoranalysis.io.input.InputFromManager;
+
+public class SummarizePathsTask<T extends InputFromManager> extends SummarizeTask<T,Path> {
+	
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	
-	private int count = 0;
-	
+
 	@Override
-	public synchronized void add( T element ) {
-		count++;
-	}
-	
-	// Describes all the extensions found
-	@Override
-	public synchronized String describe() {
-		return String.format(
-			"Found %s.",
-			LanguageUtilities.prefixPluralizeMaybe(count, "input")
-		);
+	protected Path extractObjectForSummary(T input) {
+		return input.pathForBinding();
 	}
 }
