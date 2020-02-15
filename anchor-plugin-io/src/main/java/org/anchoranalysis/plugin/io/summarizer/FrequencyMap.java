@@ -61,7 +61,7 @@ public class FrequencyMap<T> {
 			return "No inputs have been found yet.";
 		} else if (numKeys==1) {
 			return String.format(
-				"All inputs have %s=%s",
+				"All inputs have %s = %s",
 				dscrNoun,
 				map.keySet().iterator().next()
 			);
