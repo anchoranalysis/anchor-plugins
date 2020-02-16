@@ -1,5 +1,7 @@
 package org.anchoranalysis.plugin.io.bean.summarizer.input;
 
+import java.nio.file.Path;
+
 /*-
  * #%L
  * anchor-plugin-io
@@ -26,8 +28,6 @@ package org.anchoranalysis.plugin.io.bean.summarizer.input;
  * #L%
  */
 
-import java.nio.file.Path;
-
 import org.anchoranalysis.io.input.InputFromManager;
 
 public class ExtractPath<T extends InputFromManager> extends SummarizerInputFromManager<T, Path> {
@@ -36,7 +36,7 @@ public class ExtractPath<T extends InputFromManager> extends SummarizerInputFrom
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-
+	
 	@Override
 	protected Path extractFrom(T input) {
 		return input.pathForBinding();
