@@ -80,7 +80,9 @@ public class PatternSpan extends DescriptiveNameFromFile {
 			.map( file ->
 				new DescriptiveFile(
 					file,
-					ExtractVariableSpan.extractVariableSpan(file, pattern, elseName)
+					replaceWhitespaceWithHyphens(
+						ExtractVariableSpan.extractVariableSpan(file, pattern, elseName)
+					)
 				)
 			)
 			.collect( Collectors.toList() );
@@ -110,5 +112,9 @@ public class PatternSpan extends DescriptiveNameFromFile {
 			}
 		}
 		return false;
+	}
+	
+	private static String replaceWhitespaceWithHyphens( String str ) {
+		return str.replace(' ', '-');
 	}
 }
