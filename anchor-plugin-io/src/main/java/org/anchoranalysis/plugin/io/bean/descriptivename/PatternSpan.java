@@ -34,6 +34,7 @@ import java.util.stream.Collectors;
 
 import org.anchoranalysis.io.bean.input.descriptivename.DescriptiveFile;
 import org.anchoranalysis.io.bean.input.descriptivename.DescriptiveNameFromFile;
+import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOCase;
 
 import com.owenfeehan.pathpatternfinder.PathPatternFinder;
@@ -85,13 +86,18 @@ public class PatternSpan extends DescriptiveNameFromFile {
 		
 	private static List<DescriptiveFile> listExtractFileName(Collection<File> files) {
 		return files.stream()
-			.map( file -> new DescriptiveFile(file, file.getName()) )
+			.map( file -> new DescriptiveFile(file, extensionlessNameFromFile(file)) )
 			.collect( Collectors.toList() );
 	}
 	
 	// Convert all Files to Path
 	private static List<Path> listConvertToPath( Collection<File> files ) {
 		 return files.stream().map( file -> file.toPath() ).collect( Collectors.toList() );
+	}
+	
+	// The file-name without an extension
+	private static String extensionlessNameFromFile( File file ) {
+		return FilenameUtils.removeExtension( file.getName() );
 	}
 	
 	
