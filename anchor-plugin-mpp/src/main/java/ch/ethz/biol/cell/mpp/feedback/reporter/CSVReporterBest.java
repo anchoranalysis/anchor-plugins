@@ -29,6 +29,7 @@ package ch.ethz.biol.cell.mpp.feedback.reporter;
 
 import java.io.IOException;
 
+import org.anchoranalysis.io.output.OutputWriteFailedException;
 import org.anchoranalysis.io.output.file.FileOutput;
 import org.anchoranalysis.mpp.sgmn.optscheme.step.Reporting;
 
@@ -76,7 +77,11 @@ public class CSVReporterBest extends ReporterOptimizationStep<CfgNRGPixelized> {
 
 		try {
 			// This can return NULL if the output isn't allowed
-			this.csvOutput = CSVReporterUtilities.createFileOutputFor("csvStatsBest", initParams, "event_aggregate_stats"); 
+			try {
+				this.csvOutput = CSVReporterUtilities.createFileOutputFor("csvStatsBest", initParams, "event_aggregate_stats");
+			} catch (OutputWriteFailedException e) {
+				throw new ReporterException(e);
+			} 
 			
 			if (csvOutput!=null) {
 				this.csvOutput.start();

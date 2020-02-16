@@ -30,12 +30,14 @@ package ch.ethz.biol.cell.mpp.feedback.reporter;
 import java.io.IOException;
 
 import org.anchoranalysis.io.manifest.ManifestDescription;
+import org.anchoranalysis.io.output.OutputWriteFailedException;
 import org.anchoranalysis.io.output.file.FileOutput;
 import org.anchoranalysis.io.output.file.FileOutputFromManager;
 import org.anchoranalysis.mpp.sgmn.optscheme.step.Reporting;
 import org.apache.commons.lang.time.StopWatch;
 
 import ch.ethz.biol.cell.mpp.feedback.Aggregator;
+import ch.ethz.biol.cell.mpp.feedback.AggregatorException;
 import ch.ethz.biol.cell.mpp.feedback.IAggregateReceiver;
 import ch.ethz.biol.cell.mpp.feedback.OptimizationFeedbackEndParams;
 import ch.ethz.biol.cell.mpp.feedback.OptimizationFeedbackInitParams;
@@ -69,13 +71,17 @@ public final class TextFileReporter extends ReporterAgg<CfgNRGPixelized> impleme
 	}
 	
 	@Override
-	public void aggStart( OptimizationFeedbackInitParams<CfgNRGPixelized> initParams, Aggregator agg ) {
-		fileOutput = FileOutputFromManager.create(
-			"txt",
-			new ManifestDescription("text","event_log"),
-			initParams.getInitContext().getOutputManager().getDelegate(),
-			"eventLog"
-		);
+	public void aggStart( OptimizationFeedbackInitParams<CfgNRGPixelized> initParams, Aggregator agg ) throws AggregatorException {
+		try {
+			fileOutput = FileOutputFromManager.create(
+				"txt",
+				new ManifestDescription("text","event_log"),
+				initParams.getInitContext().getOutputManager().getDelegate(),
+				"eventLog"
+			);
+		} catch (OutputWriteFailedException e) {
+			throw new AggregatorException(e);
+		}
 	}
 
 	@Override

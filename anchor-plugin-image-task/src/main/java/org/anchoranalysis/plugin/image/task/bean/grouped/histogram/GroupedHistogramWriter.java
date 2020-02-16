@@ -1,5 +1,9 @@
 package org.anchoranalysis.plugin.image.task.bean.grouped.histogram;
 
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
+
 /*-
  * #%L
  * anchor-plugin-image-task
@@ -39,7 +43,7 @@ class GroupedHistogramWriter {
 
 	private HistogramCSVGenerator generator = new HistogramCSVGenerator();
 	
-	public void writeHistogramToFile( Histogram hist, String outputName, String errorName, BoundOutputManagerRouteErrors outputManager, LogErrorReporter logErrorReporter ) {
+	public void writeHistogramToFile( Histogram hist, String outputName, String errorName, BoundOutputManagerRouteErrors outputManager, LogErrorReporter logErrorReporter ) throws IOException {
 		
 		try {
 			generator.setIterableElement(hist);
@@ -54,12 +58,21 @@ class GroupedHistogramWriter {
 		);
 	}
 	
-	public void writeAllGroupHistograms( GroupMap<?,Histogram> groupMap, BoundOutputManagerRouteErrors outputManager, LogErrorReporter logErrorReporter ) {
+	public void writeAllGroupHistograms( GroupMap<?,Histogram> groupMap, BoundOutputManagerRouteErrors outputManager, LogErrorReporter logErrorReporter ) throws IOException {
+		
+		// We wish to create a new output-manager only once for each primary key, so we store them in a hashmap
+		Map<String, BoundOutputManagerRouteErrors> mapOutputManagers = new HashMap<>();
+		
 		for( CombinedName group : groupMap.keySet() ) {
 		
+			BoundOutputManagerRouteErrors outputManagerGroup = mapOutputManagers.computeIfAbsent(
+				group.getPrimaryName(),
+				primaryName -> outputManager.resolveFolder(primaryName)
+			);
+			
 			Histogram hist = groupMap.get(group);
 			assert( hist!=null);
-			writeHistogramToFileResolve( hist, group, generator, outputManager, logErrorReporter );
+			writeHistogramToFileResolve( hist, group, generator, outputManagerGroup, logErrorReporter );
 		}		
 	}
 
@@ -72,13 +85,10 @@ class GroupedHistogramWriter {
 	}
 		
 	// Resolves a new output folder before writing
-	private void writeHistogramToFileResolve( Histogram hist, CombinedName outputIdentifier, HistogramCSVGenerator generator, BoundOutputManagerRouteErrors outputManager, LogErrorReporter logErrorReporter ) {
-		BoundOutputManagerRouteErrors outputManagerGroup = outputManager.resolveFolder(
-			outputIdentifier.getPrimaryName()
-		);
+	private void writeHistogramToFileResolve( Histogram hist, CombinedName outputIdentifier, HistogramCSVGenerator generator, BoundOutputManagerRouteErrors outputManagerGroup, LogErrorReporter logErrorReporter ) throws IOException {
 		
 		logErrorReporter.getLogReporter().log(
-			String.format("Writing histogram for %s into %s", outputIdentifier.getPrimaryName(), outputManagerGroup.getOutputFolderPath() )
+			String.format("Writing histogram for %s into %s", outputIdentifier.getCombinedName(), outputManagerGroup.getOutputFolderPath() )
 		);
 				
 		writeHistogramToFile(hist, outputIdentifier.getSecondaryName(), outputIdentifier.getCombinedName(), outputManagerGroup, logErrorReporter);

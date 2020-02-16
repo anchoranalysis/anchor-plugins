@@ -1,5 +1,7 @@
 package ch.ethz.biol.cell.imageprocessing.objmask.provider;
 
+import java.io.IOException;
+
 /*-
  * #%L
  * anchor-plugin-ij
@@ -36,7 +38,7 @@ import org.anchoranalysis.plugin.io.outputmanager.TempBoundOutputManager;
 class DebugUtilities {
 
 	// Debug coe for writing the object-mask to the file-system for visual inspection
-	public static void writeObjMask( ObjMask om ) {
+	public static void writeObjMask( ObjMask om ) throws IOException {
 		TempBoundOutputManager outputManager = TempBoundOutputManager.instance();
 		outputManager.getBoundOutputManager().getWriterAlwaysAllowed().write(
 			"om",

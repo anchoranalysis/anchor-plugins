@@ -27,6 +27,7 @@ package ch.ethz.biol.cell.mpp.feedback.reporter;
  */
 
 import org.anchoranalysis.io.manifest.ManifestDescription;
+import org.anchoranalysis.io.output.OutputWriteFailedException;
 import org.anchoranalysis.io.output.file.FileOutput;
 import org.anchoranalysis.io.output.file.FileOutputFromManager;
 
@@ -39,7 +40,7 @@ public class CSVReporterUtilities {
 		String outputName,
 		OptimizationFeedbackInitParams<CfgNRGPixelized> initParams,
 		String manifestDscrFunction
-	) {
+	) throws OutputWriteFailedException {
 		return FileOutputFromManager.create(
 			"csv",
 			new ManifestDescription("csv",manifestDscrFunction),

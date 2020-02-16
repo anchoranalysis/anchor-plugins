@@ -29,6 +29,7 @@ package ch.ethz.biol.cell.mpp.feedback.reporter;
 
 import java.io.IOException;
 
+import org.anchoranalysis.io.output.OutputWriteFailedException;
 import org.anchoranalysis.io.output.file.FileOutput;
 import org.anchoranalysis.mpp.sgmn.optscheme.step.Reporting;
 import org.apache.commons.lang.time.StopWatch;
@@ -78,7 +79,11 @@ public class CSVReporterAgg extends ReporterAgg<CfgNRGPixelized> implements IAgg
 		
 		super.reportBegin( initParams );
 		
-		this.csvOutput = CSVReporterUtilities.createFileOutputFor("csvStatsAgg", initParams, "interval_aggregate_stats");
+		try {
+			this.csvOutput = CSVReporterUtilities.createFileOutputFor("csvStatsAgg", initParams, "interval_aggregate_stats");
+		} catch (OutputWriteFailedException e) {
+			throw new ReporterException(e);
+		}
 		
 		timer = new StopWatch();
 		timer.start();

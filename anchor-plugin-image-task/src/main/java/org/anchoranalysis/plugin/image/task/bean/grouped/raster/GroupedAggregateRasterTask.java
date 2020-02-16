@@ -4,6 +4,8 @@ package org.anchoranalysis.plugin.image.task.bean.grouped.raster;
 
 
 
+
+
 /*
  * #%L
  * anchor-plugin-image-task

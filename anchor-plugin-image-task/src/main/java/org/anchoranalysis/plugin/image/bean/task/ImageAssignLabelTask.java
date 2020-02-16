@@ -1,5 +1,7 @@
 package org.anchoranalysis.plugin.image.bean.task;
 
+
+
 /*-
  * #%L
  * anchor-plugin-image-task

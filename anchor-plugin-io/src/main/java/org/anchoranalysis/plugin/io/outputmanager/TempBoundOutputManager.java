@@ -102,12 +102,10 @@ public class TempBoundOutputManager {
 		outputManager.setFilePathPrefixer( filePathCounter );
 		
 		try {
-			BoundOutputManagerRouteErrors out = new BoundOutputManagerRouteErrors(
+			return new BoundOutputManagerRouteErrors(
 				outputManager.bindRootFolder( "debug", new ManifestRecorder(), false ),
 				errorReporter
 			);
-			outputManager.deleteExstExpQuietly("debug", false);
-			return out;
 		} catch (IOException e) {
 			errorReporter.recordError(TempBoundOutputManager.class, e);
 			return null;
