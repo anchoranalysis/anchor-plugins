@@ -222,7 +222,7 @@ public class QuickExperiment extends Experiment {
 		}
 		
 		// Log Reporter
-		delegate.setLogReporter( new ConsoleLogReporterBean() );
+		delegate.setLogReporterExperiment( new ConsoleLogReporterBean() );
 		
 		
 		// Task

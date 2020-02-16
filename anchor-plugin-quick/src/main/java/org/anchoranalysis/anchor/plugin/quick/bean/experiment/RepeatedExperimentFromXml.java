@@ -69,13 +69,16 @@ class RepeatedExperimentFromXml<T extends InputFromManager,S> {
 	}
 	
 	/** First method called ONCE after the constructor */
-	public void firstLocalise( Path beanLocalPath, String logReporterPathExperiment, String output ) throws BeanMisconfiguredException {
+	public void firstLocalise( Path beanLocalPath, String logReporterPathExperiment, String logReporterPathTask, String output ) throws BeanMisconfiguredException {
 		
 		this.beanLocalPath = beanLocalPath;
 		
 		// We create these other beans, before we check the configuration. This is a bit hacky
-		delegate.setLogReporter(
+		delegate.setLogReporterExperiment(
 			extractLogReporterBean(logReporterPathExperiment)
+		);
+		delegate.setLogReporterTask(
+			extractLogReporterBean(logReporterPathTask)
 		);
 
 		delegate.setOutput(

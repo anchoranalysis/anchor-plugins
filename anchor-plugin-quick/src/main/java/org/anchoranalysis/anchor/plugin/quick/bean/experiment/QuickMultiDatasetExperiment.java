@@ -142,7 +142,7 @@ public class QuickMultiDatasetExperiment<T extends InputFromManager, S> extends 
 	public void localise(Path path) throws BeanMisconfiguredException {
 		super.localise(path);
 		
-		delegate.firstLocalise( getLocalPath(), logReporterExperimentPath, output );
+		delegate.firstLocalise( getLocalPath(), logReporterExperimentPath, logReporterTaskPath, output );
 	}
 
 	@SuppressWarnings("unchecked")
@@ -341,16 +341,8 @@ public class QuickMultiDatasetExperiment<T extends InputFromManager, S> extends 
 		DebugDependentProcessor<T, S> processor = new DebugDependentProcessor<>();
 		processor.setMaxNumProcessors(maxNumProcessors);
 		processor.setSupressExceptions(supressExceptions);
-		processor.setTask( createTask() );
+		processor.setTask( task.duplicateBean() );
 		return processor;
-	}
-	
-	private Task<T,S> createTask() {
-		Task<T,S> taskDup = task.duplicateBean();
-		taskDup.setLogReporter(
-			delegate.extractLogReporterBean(logReporterTaskPath)
-		);
-		return taskDup;
 	}
 
 	public String getLogReporterExperimentPath() {

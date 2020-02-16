@@ -102,11 +102,14 @@ class RepeatedExperiment<T extends InputFromManager,S> {
 		delegate.setOutputNameConfigCopy(outputNameConfigCopy);
 	}
 
-	public void setLogReporter(LogReporterBean logReporter) {
-		delegate.setLogReporter(logReporter);
+	public void setLogReporterExperiment(LogReporterBean logReporter) {
+		delegate.setLogReporterExperiment(logReporter);
 	}
 	
-
+	public void setLogReporterTask(LogReporterBean logReporter) {
+		delegate.setLogReporterTask(logReporter);
+	}
+	
 	public void setOutput(OutputManager output) {
 		delegate.setOutput(output);
 	}
