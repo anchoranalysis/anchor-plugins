@@ -61,6 +61,11 @@ public class SummarizerListMultiline<T> extends Summarizer<T> {
 
 	@Override
 	public synchronized String describe() throws OperationFailedException {
-		return sb.toString();
+		
+		if (sb!=null) {
+			return sb.toString();
+		} else {
+			return "";
+		}
 	}
 }
