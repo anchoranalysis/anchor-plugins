@@ -94,8 +94,12 @@ class ExtractVariableSpan {
 	}
 	
 	private static String trimFromLeft( String strToTrim, PatternElement constantElement ) throws OperationFailedException {
-		String matchText = stringFromConstantPattern(constantElement);
-		int index = strToTrim.indexOf( matchText );
+		
+		// For now, hard-coded case-insensitivity here, and in PatternSpan
+		// TODO consider making it optional in both places
+		String matchText = stringFromConstantPattern(constantElement).toLowerCase();
+		
+		int index = strToTrim.toLowerCase().indexOf( matchText );
 		if(index!=0) {
 			throw new OperationFailedException(
 				String.format("Cannot match %s against %s from left-side", matchText, strToTrim)

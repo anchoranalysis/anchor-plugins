@@ -66,6 +66,8 @@ public class PatternSpan extends DescriptiveNameFromFile {
 			return listExtractFileName(files);
 		}
 		
+		// For now, hard-coded case-insensitivity here, and in ExtractVariableSpan
+		// TODO consider making it optional in both places
 		Pattern pattern = PathPatternFinder.findPatternPath(paths, IOCase.INSENSITIVE );
 		
 		assert hasAtLeastOneVariableElement(pattern);
