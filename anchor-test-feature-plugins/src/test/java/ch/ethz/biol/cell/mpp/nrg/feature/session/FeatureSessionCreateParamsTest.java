@@ -41,9 +41,13 @@ import org.anchoranalysis.image.feature.session.FeatureSessionCreateParams;
 import org.junit.Before;
 import org.junit.Test;
 
+import anchor.test.TestLoader;
+
 import static ch.ethz.biol.cell.mpp.nrg.feature.session.ResultsVectorTestUtilities.*;
 
 public class FeatureSessionCreateParamsTest {
+	
+	private static TestLoader loader = TestLoader.createFromMavenWorkingDirMain();
 	
 	@Before
     public void setUp() {
@@ -66,7 +70,10 @@ public class FeatureSessionCreateParamsTest {
 	@Test
 	public void testHistogram() throws InitException, FeatureCalcException, CreateException {
 		
-		FeatureSessionCreateParams session = createAndStart( FeatureListFixture.histogram(), true );
+		FeatureSessionCreateParams session = createAndStart(
+			FeatureListFixture.histogram(loader),
+			true
+		);
 		
 		assertCalc(
 			session.calc( HistogramFixture.createAscending() ),
@@ -82,9 +89,10 @@ public class FeatureSessionCreateParamsTest {
 	@Test
 	public void testImage() throws InitException, FeatureCalcException, CreateException {
 		
-		
-		
-		FeatureSessionCreateParams session = createAndStart( FeatureListFixture.objMask(), true );
+		FeatureSessionCreateParams session = createAndStart(
+			FeatureListFixture.objMask(loader),
+			true
+		);
 		session.setNrgStack( NRGStackFixture.create() );
 		
 		ObjMaskFixture objMaskFixture = new ObjMaskFixture( session.getNrgStack().getDimensions() );

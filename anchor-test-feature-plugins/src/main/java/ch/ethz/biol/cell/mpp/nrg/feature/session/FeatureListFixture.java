@@ -39,10 +39,24 @@ import org.anchoranalysis.feature.bean.list.FeatureListProvider;
 import anchor.test.TestLoader;
 
 public class FeatureListFixture {
-
-	private static TestLoader loader = TestLoader.createFromMavenWorkingDirMain();
+		
+	/** creates a feature-list associated with the fixture
+	 *  
+	 * @throws CreateException 
+	 * */
+	public static FeatureList histogram( TestLoader loader ) throws CreateException {
+		return createFromFile("histogramFeatureList.xml", loader);
+	}
 	
-	protected static FeatureList createFromFile(String xmlPath, TestLoader loader) throws CreateException {
+	/** creates a feature-list associated with obj-mask
+	 *  
+	 * @throws CreateException 
+	 * */
+	public static FeatureList objMask( TestLoader loader ) throws CreateException {
+		return createFromFile("objMaskFeatureList.xml", loader);
+	}
+	
+	public static FeatureList createFromFile(String xmlPath, TestLoader loader) throws CreateException {
 		Path pathStatic = loader.resolveTestPath(xmlPath);
 		try {
 			FeatureListProvider provider = BeanXmlLoader.loadBean( pathStatic );
@@ -54,20 +68,4 @@ public class FeatureListFixture {
 		}
 		
 	}
-	
-	/** creates a feature-list associated with the fixture
-	 *  
-	 * @throws CreateException 
-	 * */
-	public static FeatureList histogram() throws CreateException {
-		return createFromFile("histogramFeatureList.xml", loader);
-	}
-	
-	/** creates a feature-list associated with obj-mask
-	 *  
-	 * @throws CreateException 
-	 * */
-	public static FeatureList objMask() throws CreateException {
-		return createFromFile("objMaskFeatureList.xml", loader);
-	}	
 }
