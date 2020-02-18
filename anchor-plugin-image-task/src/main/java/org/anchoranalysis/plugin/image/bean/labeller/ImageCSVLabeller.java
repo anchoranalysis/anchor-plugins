@@ -35,7 +35,7 @@ import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.image.experiment.label.FileLabelMap;
-import org.anchoranalysis.image.io.input.StackInput;
+import org.anchoranalysis.image.io.input.ProvidesStackInput;
 import org.anchoranalysis.io.bean.filepath.generator.FilePathGenerator;
 import org.anchoranalysis.plugin.image.labeller.init.ImageCSVLabellerInitParams;
 
@@ -79,7 +79,7 @@ public class ImageCSVLabeller extends ImageLabeller<ImageCSVLabellerInitParams> 
 	}
 
 	@Override
-	public String labelFor(ImageCSVLabellerInitParams initParams, StackInput input, LogErrorReporter logErrorReporter)
+	public String labelFor(ImageCSVLabellerInitParams initParams, ProvidesStackInput input, LogErrorReporter logErrorReporter)
 			throws OperationFailedException {
 		String label = initParams.getLabelMap().get(
 			input.descriptiveName()

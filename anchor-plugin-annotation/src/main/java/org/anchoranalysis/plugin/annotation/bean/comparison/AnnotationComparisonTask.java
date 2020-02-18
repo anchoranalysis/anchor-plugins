@@ -45,7 +45,7 @@ import org.anchoranalysis.experiment.JobExecutionException;
 import org.anchoranalysis.experiment.task.ParametersBound;
 import org.anchoranalysis.experiment.task.ParametersExperiment;
 import org.anchoranalysis.experiment.task.Task;
-import org.anchoranalysis.image.io.input.StackInput;
+import org.anchoranalysis.image.io.input.ProvidesStackInput;
 import org.anchoranalysis.image.stack.DisplayStack;
 import org.anchoranalysis.image.stack.NamedImgStackCollection;
 import org.anchoranalysis.image.stack.wrap.WrapStackAsTimeSequenceStore;
@@ -59,7 +59,7 @@ import org.anchoranalysis.plugin.annotation.comparison.ObjsToCompare;
 
 import ch.ethz.biol.cell.countchrom.experiment.SplitString;
 
-public class AnnotationComparisonTask<T extends Assignment> extends Task<AnnotationComparisonInput<StackInput>,SharedState<T>> {
+public class AnnotationComparisonTask<T extends Assignment> extends Task<AnnotationComparisonInput<ProvidesStackInput>,SharedState<T>> {
 
 	/**
 	 * 
@@ -120,11 +120,11 @@ public class AnnotationComparisonTask<T extends Assignment> extends Task<Annotat
 	
 	@Override
 	protected void doJobOnInputObject(
-		ParametersBound<AnnotationComparisonInput<StackInput>,SharedState<T>> params
+		ParametersBound<AnnotationComparisonInput<ProvidesStackInput>,SharedState<T>> params
 	) throws JobExecutionException {
 
 		LogErrorReporter logErrorReporter = params.getLogErrorReporter();
-		AnnotationComparisonInput<StackInput> input = params.getInputObject();
+		AnnotationComparisonInput<ProvidesStackInput> input = params.getInputObject();
 		
 		// Create the background
 		DisplayStack background = createBackground(input);
@@ -156,7 +156,7 @@ public class AnnotationComparisonTask<T extends Assignment> extends Task<Annotat
 	}
 	
 	private Assignment compareAndUpdate(
-		AnnotationComparisonInput<StackInput> input,
+		AnnotationComparisonInput<ProvidesStackInput> input,
 		DisplayStack background,
 		SplitString descriptiveSplit,
 		boolean debugEnabled,
@@ -196,11 +196,11 @@ public class AnnotationComparisonTask<T extends Assignment> extends Task<Annotat
 	}
 	
 	
-	private SplitString createSplitString( AnnotationComparisonInput<StackInput> input ) {
+	private SplitString createSplitString( AnnotationComparisonInput<ProvidesStackInput> input ) {
 		return hasDescriptiveSplit() ? new SplitString(input.descriptiveName(), splitDescriptiveNameRegex) : null;
 	}
 	
-	private DisplayStack createBackground( AnnotationComparisonInput<StackInput> inputObject ) throws JobExecutionException {
+	private DisplayStack createBackground( AnnotationComparisonInput<ProvidesStackInput> inputObject ) throws JobExecutionException {
 		
 		try {
 			NamedImgStackCollection stackCollection = new NamedImgStackCollection();
@@ -219,7 +219,7 @@ public class AnnotationComparisonTask<T extends Assignment> extends Task<Annotat
 	}
 	
 	private Assignment processAcceptedAnnotation(
-		AnnotationComparisonInput<StackInput> inputObject,
+		AnnotationComparisonInput<ProvidesStackInput> inputObject,
 		DisplayStack background,
 		ObjsToCompare objs,
 		IAddAnnotation<T> addAnnotation,
@@ -267,7 +267,7 @@ public class AnnotationComparisonTask<T extends Assignment> extends Task<Annotat
 	private void writeRGBOutlineStack(
 		String outputName,
 		BoundOutputManagerRouteErrors outputManager,
-		AnnotationComparisonInput<StackInput> inputObject,
+		AnnotationComparisonInput<ProvidesStackInput> inputObject,
 		Assignment assignment,
 		DisplayStack background
 	) throws OperationFailedException {

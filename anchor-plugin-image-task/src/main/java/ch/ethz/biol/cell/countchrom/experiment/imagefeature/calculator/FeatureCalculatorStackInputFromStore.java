@@ -36,7 +36,7 @@ import org.anchoranalysis.feature.list.NamedFeatureStore;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 import org.anchoranalysis.image.bean.provider.stack.StackProvider;
 import org.anchoranalysis.image.init.ImageInitParams;
-import org.anchoranalysis.image.io.input.StackInput;
+import org.anchoranalysis.image.io.input.ProvidesStackInput;
 import org.anchoranalysis.image.io.input.StackInputInitParamsCreator;
 
 /**
@@ -56,7 +56,7 @@ public class FeatureCalculatorStackInputFromStore {
 	private ImageInitParams initParams;
 	private NRGStackWithParams nrgStack;
 		
-	public FeatureCalculatorStackInputFromStore(StackInput stackInput, StackProvider nrgStackProvider,
+	public FeatureCalculatorStackInputFromStore(ProvidesStackInput stackInput, StackProvider nrgStackProvider,
 			NamedFeatureStore featureStore, LogErrorReporter logErrorReporter) throws OperationFailedException {
 		super();
 		

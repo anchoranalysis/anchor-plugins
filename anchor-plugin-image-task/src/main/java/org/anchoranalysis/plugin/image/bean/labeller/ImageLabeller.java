@@ -33,7 +33,7 @@ import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.log.LogErrorReporter;
-import org.anchoranalysis.image.io.input.StackInput;
+import org.anchoranalysis.image.io.input.ProvidesStackInput;
 
 /**
  * 
@@ -63,6 +63,6 @@ public abstract class ImageLabeller<T> extends AnchorBean<ImageLabeller<T>> {
 	 * @param initParams TODO*/
 	public abstract String labelFor(
 		T initParams,
-		StackInput input, LogErrorReporter logErrorReporter
+		ProvidesStackInput input, LogErrorReporter logErrorReporter
 	) throws OperationFailedException;
 }

@@ -34,14 +34,14 @@ import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.calc.ResultsVector;
 import org.anchoranalysis.feature.list.NamedFeatureStore;
 import org.anchoranalysis.image.bean.provider.stack.StackProvider;
-import org.anchoranalysis.image.io.input.StackInput;
+import org.anchoranalysis.image.io.input.ProvidesStackInput;
 import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
 
 import ch.ethz.biol.cell.countchrom.experiment.imagefeature.calculator.FeatureCalculatorStackInputFromStore;
 
 
 /** Calculates a feature on each image **/
-public class ExportFeaturesImageTask extends ExportFeaturesStoreTask<StackInput> {
+public class ExportFeaturesImageTask extends ExportFeaturesStoreTask<ProvidesStackInput> {
 
 	/**
 	 * 
@@ -59,7 +59,7 @@ public class ExportFeaturesImageTask extends ExportFeaturesStoreTask<StackInput>
 	
 	@Override
 	protected ResultsVector calcResultsVectorForInputObject(
-		StackInput inputObject,
+		ProvidesStackInput inputObject,
 		NamedFeatureStore featureStore,
 		BoundOutputManagerRouteErrors outputManager, LogErrorReporter logErrorReporter
 	) throws FeatureCalcException {

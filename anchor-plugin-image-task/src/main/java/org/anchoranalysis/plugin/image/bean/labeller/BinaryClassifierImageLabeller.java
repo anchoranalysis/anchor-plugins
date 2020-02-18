@@ -42,7 +42,7 @@ import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.list.NamedFeatureStore;
 import org.anchoranalysis.feature.list.NamedFeatureStoreFactory;
 import org.anchoranalysis.image.bean.provider.stack.StackProvider;
-import org.anchoranalysis.image.io.input.StackInput;
+import org.anchoranalysis.image.io.input.ProvidesStackInput;
 
 import ch.ethz.biol.cell.countchrom.experiment.imagefeature.calculator.FeatureCalculatorStackInputFromStore;
 
@@ -72,7 +72,7 @@ public class BinaryClassifierImageLabeller extends BinaryOutcomeImageLabeller<Ob
 	@Override
 	public String labelFor(
 		Object initParams,
-		StackInput input, LogErrorReporter logErrorReporter
+		ProvidesStackInput input, LogErrorReporter logErrorReporter
 	) throws OperationFailedException {
 		
 		try {

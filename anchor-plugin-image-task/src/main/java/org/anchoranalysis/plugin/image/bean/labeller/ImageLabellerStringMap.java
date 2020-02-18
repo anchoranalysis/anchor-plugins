@@ -35,7 +35,7 @@ import org.anchoranalysis.bean.shared.StringMap;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.log.LogErrorReporter;
-import org.anchoranalysis.image.io.input.StackInput;
+import org.anchoranalysis.image.io.input.ProvidesStackInput;
 import org.anchoranalysis.plugin.image.labeller.init.ImageLabellerStringMapInitParams;
 
 /**
@@ -76,7 +76,7 @@ public class ImageLabellerStringMap<T> extends ImageLabeller<ImageLabellerString
 	}
 
 	@Override
-	public String labelFor(ImageLabellerStringMapInitParams<T> initParams, StackInput input, LogErrorReporter logErrorReporter)
+	public String labelFor(ImageLabellerStringMapInitParams<T> initParams, ProvidesStackInput input, LogErrorReporter logErrorReporter)
 			throws OperationFailedException {
 		String firstId = filter.labelFor(
 			initParams.getInitParams(),

@@ -31,7 +31,7 @@ import java.nio.file.Path;
 
 import org.anchoranalysis.annotation.io.bean.strategy.AnnotatorStrategy;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.image.io.input.StackInput;
+import org.anchoranalysis.image.io.input.ProvidesStackInput;
 import org.anchoranalysis.io.bean.filepath.generator.FilePathGenerator;
 
 public abstract class SingleFilePathGeneratorStrategy extends AnnotatorStrategy {
@@ -47,7 +47,7 @@ public abstract class SingleFilePathGeneratorStrategy extends AnnotatorStrategy 
 	// END BEAN PROPERTIES
 
 	@Override
-	public Path annotationPathFor(StackInput item) throws IOException {
+	public Path annotationPathFor(ProvidesStackInput item) throws IOException {
 		GenerathorPathRslvr helper = new GenerathorPathRslvr( item.pathForBinding() );
 		return helper.path( annotationFilePathGenerator  );
 	}

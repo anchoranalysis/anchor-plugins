@@ -38,7 +38,7 @@ import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.core.text.TypedValue;
 import org.anchoranalysis.feature.io.csv.FeatureCSVWriter;
 import org.anchoranalysis.feature.name.FeatureNameList;
-import org.anchoranalysis.image.io.input.StackInput;
+import org.anchoranalysis.image.io.input.ProvidesStackInput;
 import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
 import org.anchoranalysis.plugin.image.bean.labeller.ImageLabeller;
 
@@ -102,7 +102,7 @@ public class SharedStateFilteredImageOutput<T> {
 	
 	/** Determines a particular group-identifier for an input */
 	public String labelFor(
-		StackInput input,
+		ProvidesStackInput input,
 		LogErrorReporter logErrorReporter
 	) throws OperationFailedException {
 		
