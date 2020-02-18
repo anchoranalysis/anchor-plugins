@@ -1,8 +1,8 @@
-package ch.ethz.biol.cell.mpp.nrg.feature.session;
+package org.anchoranalysis.test.feature.plugins;
 
 /*-
  * #%L
- * anchor-plugin-mpp-feature
+ * anchor-test-feature-plugins
  * %%
  * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
  * %%
@@ -26,22 +26,33 @@ package ch.ethz.biol.cell.mpp.nrg.feature.session;
  * #L%
  */
 
-import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.feature.bean.list.FeatureList;
-import org.anchoranalysis.test.feature.plugins.FeatureListFixture;
+import org.anchoranalysis.image.histogram.Histogram;
+import org.anchoranalysis.image.histogram.HistogramArray;
 
-import anchor.test.TestLoader;
+class HistogramFixture {
 
-public class FeatureListFixtureMPP {
-
-	private static TestLoader loader = TestLoader.createFromMavenWorkingDir();
+	private static int MAX_VAL = 255;
 	
-	public static FeatureList mark() throws CreateException {
-		return FeatureListFixture.createFromFile("markFeatureList.xml", loader);
+	private static Histogram createEmpty() {
+		return new HistogramArray(MAX_VAL+1);
 	}
 	
-	public static FeatureList cfg() throws CreateException {
-		return FeatureListFixture.createFromFile("cfgFeatureList.xml", loader);
+	/** a histogram from 0 to 255 (inclusive) where each bin is equal to its index  (value 5 has count 5, value 100 has count 100 etc.) */
+	public static Histogram createAscending() {
+		
+		Histogram h = createEmpty();
+		for(int i=0; i<=MAX_VAL; i++) {
+			h.incrValBy(i, i);
+		}
+		return h;
 	}
-
+	
+	public static Histogram createDescending() {
+		
+		Histogram h = createEmpty();
+		for(int i=0; i<=MAX_VAL; i++) {
+			h.incrValBy(i, MAX_VAL - i);
+		}
+		return h;
+	}
 }

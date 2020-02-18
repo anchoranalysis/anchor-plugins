@@ -1,8 +1,8 @@
-package ch.ethz.biol.cell.mpp.nrg.feature.session;
+package org.anchoranalysis.test.feature.plugins;
 
 /*-
  * #%L
- * anchor-plugin-mpp-feature
+ * anchor-test-feature-plugins
  * %%
  * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
  * %%
@@ -26,22 +26,17 @@ package ch.ethz.biol.cell.mpp.nrg.feature.session;
  * #L%
  */
 
-import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.feature.bean.list.FeatureList;
-import org.anchoranalysis.test.feature.plugins.FeatureListFixture;
+import org.anchoranalysis.image.extent.ImageRes;
 
-import anchor.test.TestLoader;
+public class ImageResFixture {
 
-public class FeatureListFixtureMPP {
-
-	private static TestLoader loader = TestLoader.createFromMavenWorkingDir();
+	public static final ImageRes instance = create();
 	
-	public static FeatureList mark() throws CreateException {
-		return FeatureListFixture.createFromFile("markFeatureList.xml", loader);
+	private static ImageRes create() {
+		ImageRes sr = new ImageRes();
+		sr.setX(0.01);
+		sr.setY(0.01);
+		sr.setZ(0.025);
+		return sr;
 	}
-	
-	public static FeatureList cfg() throws CreateException {
-		return FeatureListFixture.createFromFile("cfgFeatureList.xml", loader);
-	}
-
 }

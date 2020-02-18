@@ -50,7 +50,7 @@ public class UnitTestCompareUtilities {
 		String experimentName,
 		String experimentIdentifierOutput
 	) {
-		TestLoader testLoader = TestLoader.createFromMavenWorkingDirTest();
+		TestLoader testLoader = TestLoader.createFromMavenWorkingDir();
 		
 		String pathTestDataFolder = createPathTestDataFolder( experimentName );
 		
@@ -94,7 +94,7 @@ public class UnitTestCompareUtilities {
 		boolean includeShared,
 		TemporaryFolder folderTemp
 	) {
-		TestLoader testLoader = TestLoader.createFromMavenWorkingDirTest();
+		TestLoader testLoader = TestLoader.createFromMavenWorkingDir();
 		
 		String pathTestDataFolder = createPathTestDataFolder( experimentName );
 		

@@ -1,8 +1,8 @@
-package org.anchoranalysis.plugin.io.rasterwriter.bioformats;
+package org.anchoranalysis.test.feature.plugins;
 
 /*-
  * #%L
- * anchor-plugin-io
+ * anchor-test-feature-plugins
  * %%
  * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
  * %%
@@ -26,42 +26,30 @@ package org.anchoranalysis.plugin.io.rasterwriter.bioformats;
  * #L%
  */
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertTrue;
 
 import java.nio.file.Path;
 
-import org.anchoranalysis.image.io.RasterIOException;
-import org.anchoranalysis.image.io.rasterreader.OpenedRaster;
-import org.anchoranalysis.plugin.io.bean.rasterreader.BioformatsReader;
-import org.junit.Test;
+import org.anchoranalysis.bean.xml.BeanXmlLoader;
+import org.anchoranalysis.bean.xml.error.BeanXmlException;
+import org.anchoranalysis.core.error.CreateException;
+import org.anchoranalysis.feature.bean.list.FeatureList;
+import org.anchoranalysis.feature.bean.list.FeatureListProvider;
 
 import anchor.test.TestLoader;
 
-public class FlexFormatTest {
-
-	private TestLoader loader = TestLoader.createFromMavenWorkingDir();
+public class FeatureListFixture {
 	
-	/** Tests the numChnls and numFrames from a known file, as it sometimes incorrectly reports as numChnl==1 and numFrame==1, as opposed
-	 *   to numFrames==2 and numChnls==1 (which is what we expect... but is itself incorrect
-	 *   
-	 *    Note that this test MIGHT only work correctly when NOT run with the GPL bioformats
-	 *     libraries on the class-path.
-	 *     
-	 *    Otherwise the FlexReader will be used, and its exact behaviour has yet to be established.
-	 *    
-	 * @throws RasterIOException 
-	 */
-	@Test
-	public void testSizeCAndT() throws RasterIOException {
-		 
-		Path path = loader.resolveTestPath("exampleFormats/001001007.flex");
+	public static FeatureList createFromFile(String xmlPath, TestLoader loader) throws CreateException {
+		Path pathStatic = loader.resolveTestPath(xmlPath);
+		try {
+			FeatureListProvider provider = BeanXmlLoader.loadBean( pathStatic );
+			FeatureList features = provider.create();
+			assertTrue( features.size() > 0 );	
+			return features;
+		} catch (BeanXmlException e) {
+			throw new CreateException(e);
+		}
 		
-		BioformatsReader bf = new BioformatsReader();
-		OpenedRaster or = bf.openFile(path);
-		
-		assertTrue( or.numChnl()== 1 );
-		assertTrue( or.numSeries()== 1 );
-		assertTrue( or.numFrames()== 2 );
 	}
-
 }

@@ -1,8 +1,8 @@
-package ch.ethz.biol.cell.mpp.nrg.feature.session;
+package org.anchoranalysis.test.feature.plugins.voxelpattern;
 
 /*-
  * #%L
- * anchor-plugin-mpp-feature
+ * anchor-test-feature-plugins
  * %%
  * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
  * %%
@@ -26,22 +26,8 @@ package ch.ethz.biol.cell.mpp.nrg.feature.session;
  * #L%
  */
 
-import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.feature.bean.list.FeatureList;
-import org.anchoranalysis.test.feature.plugins.FeatureListFixture;
-
-import anchor.test.TestLoader;
-
-public class FeatureListFixtureMPP {
-
-	private static TestLoader loader = TestLoader.createFromMavenWorkingDir();
+public abstract class VoxelPattern {
 	
-	public static FeatureList mark() throws CreateException {
-		return FeatureListFixture.createFromFile("markFeatureList.xml", loader);
-	}
+	public abstract boolean isPixelOn( int x, int y, int z );
 	
-	public static FeatureList cfg() throws CreateException {
-		return FeatureListFixture.createFromFile("cfgFeatureList.xml", loader);
-	}
-
 }

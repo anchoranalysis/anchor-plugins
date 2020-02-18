@@ -1,8 +1,8 @@
-package ch.ethz.biol.cell.mpp.nrg.feature.session;
+package org.anchoranalysis.test.feature.plugins.voxelpattern;
 
 /*-
  * #%L
- * anchor-plugin-mpp-feature
+ * anchor-test-feature-plugins
  * %%
  * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
  * %%
@@ -26,22 +26,49 @@ package ch.ethz.biol.cell.mpp.nrg.feature.session;
  * #L%
  */
 
-import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.feature.bean.list.FeatureList;
-import org.anchoranalysis.test.feature.plugins.FeatureListFixture;
+import org.anchoranalysis.image.extent.Extent;
 
-import anchor.test.TestLoader;
-
-public class FeatureListFixtureMPP {
-
-	private static TestLoader loader = TestLoader.createFromMavenWorkingDir();
+/** The bounding box is filled apart from cuboids cut out of the corners */
+public class CutOffCorners extends VoxelPattern {
 	
-	public static FeatureList mark() throws CreateException {
-		return FeatureListFixture.createFromFile("markFeatureList.xml", loader);
-	}
+	private int edgeXY;
+	private int edgeZ;
 	
-	public static FeatureList cfg() throws CreateException {
-		return FeatureListFixture.createFromFile("cfgFeatureList.xml", loader);
+	// The right-most pixels border, before we start chopping off the triangle
+	private Extent rightBorder;
+	
+	public CutOffCorners( int edgeXY, int edgeZ, Extent extnt ) {
+		this.edgeXY = edgeXY;
+		this.edgeZ = edgeZ;
+		
+		this.rightBorder = new Extent(
+			extnt.getX() - edgeXY - 1,
+			extnt.getY() - edgeXY - 1,
+			extnt.getZ() - edgeZ - 1
+		);
 	}
 
+	// Predicate on whether a pixel is included or not - triangle pattern at the edges
+	@Override
+	public boolean isPixelOn( int x, int y, int z ) {
+		if (x<edgeXY) {
+			return false;
+		}
+		if (x>rightBorder.getX()) {
+			return false;
+		}
+		if (y<edgeXY) {
+			return false;
+		}
+		if (y>rightBorder.getY()) {
+			return false;
+		}
+		if (z<edgeZ) {
+			return false;
+		}
+		if (z>rightBorder.getZ()) {
+			return false;
+		}
+		return true;
+	}
 }

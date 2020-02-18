@@ -1,8 +1,8 @@
-package org.anchoranalysis.plugin.io.rasterwriter.bioformats;
+package org.anchoranalysis.test.image.contiguouspath;
 
 /*-
  * #%L
- * anchor-plugin-io
+ * anchor-test-image
  * %%
  * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
  * %%
@@ -28,40 +28,44 @@ package org.anchoranalysis.plugin.io.rasterwriter.bioformats;
 
 import static org.junit.Assert.*;
 
+import java.io.IOException;
 import java.nio.file.Path;
 
-import org.anchoranalysis.image.io.RasterIOException;
-import org.anchoranalysis.image.io.rasterreader.OpenedRaster;
-import org.anchoranalysis.plugin.io.bean.rasterreader.BioformatsReader;
+import org.anchoranalysis.core.geometry.Point3i;
+import org.anchoranalysis.image.outline.traverser.contiguouspath.ContiguousPixelPath;
+import org.anchoranalysis.image.outline.traverser.contiguouspath.PointsListNghbUtilities;
+import org.anchoranalysis.image.outline.traverser.visitedpixels.combine.mergestrategy.MergeCandidate;
 import org.junit.Test;
 
 import anchor.test.TestLoader;
 
-public class FlexFormatTest {
+public class CombineContiguousPixelPathsTest {
 
 	private TestLoader loader = TestLoader.createFromMavenWorkingDir();
 	
-	/** Tests the numChnls and numFrames from a known file, as it sometimes incorrectly reports as numChnl==1 and numFrame==1, as opposed
-	 *   to numFrames==2 and numChnls==1 (which is what we expect... but is itself incorrect
-	 *   
-	 *    Note that this test MIGHT only work correctly when NOT run with the GPL bioformats
-	 *     libraries on the class-path.
-	 *     
-	 *    Otherwise the FlexReader will be used, and its exact behaviour has yet to be established.
-	 *    
-	 * @throws RasterIOException 
-	 */
 	@Test
-	public void testSizeCAndT() throws RasterIOException {
-		 
-		Path path = loader.resolveTestPath("exampleFormats/001001007.flex");
-		
-		BioformatsReader bf = new BioformatsReader();
-		OpenedRaster or = bf.openFile(path);
-		
-		assertTrue( or.numChnl()== 1 );
-		assertTrue( or.numSeries()== 1 );
-		assertTrue( or.numFrames()== 2 );
+	public void test01() throws IOException {
+		doTestForNum("01", new Point3i(548,159,0));
 	}
-
+	
+	@Test
+	public void test02() throws IOException {
+		doTestForNum("02", new Point3i(507,277,0));
+	}
+	
+	private void doTestForNum( String prefix, Point3i mergePnt ) throws IOException {
+		ContiguousPixelPath toKeep = readTestData( prefix + "/toKeep");
+		ContiguousPixelPath toMerge = readTestData( prefix + "/toMerge");
+		
+		new MergeCandidate(toKeep, toMerge, mergePnt, mergePnt).merge();
+		
+		
+		assertTrue( PointsListNghbUtilities.areNghbDistinct(toKeep.points()) );
+		assertTrue( PointsListNghbUtilities.areAllPointsInBigNghb(toKeep.points()) );		
+	}
+	
+	private ContiguousPixelPath readTestData( String id ) throws IOException {
+		Path pathAbs = loader.resolveTestPath("contiguousPixelPaths/" + id + ".csv");
+		return ContiguousPixelPathReader.readFromFile(pathAbs);
+	}
 }

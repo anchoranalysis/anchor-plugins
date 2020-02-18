@@ -1,8 +1,8 @@
-package ch.ethz.biol.cell.mpp.nrg.feature.session;
+package org.anchoranalysis.test.feature.plugins;
 
 /*-
  * #%L
- * anchor-plugin-mpp-feature
+ * anchor-test-feature-plugins
  * %%
  * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
  * %%
@@ -26,22 +26,20 @@ package ch.ethz.biol.cell.mpp.nrg.feature.session;
  * #L%
  */
 
-import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.feature.bean.list.FeatureList;
-import org.anchoranalysis.test.feature.plugins.FeatureListFixture;
+import static org.junit.Assert.assertTrue;
 
-import anchor.test.TestLoader;
+import org.anchoranalysis.feature.calc.ResultsVector;
 
-public class FeatureListFixtureMPP {
+public class ResultsVectorTestUtilities {
 
-	private static TestLoader loader = TestLoader.createFromMavenWorkingDir();
+	private static double eps = 1e-16;
 	
-	public static FeatureList mark() throws CreateException {
-		return FeatureListFixture.createFromFile("markFeatureList.xml", loader);
+	public static void assertCalc( ResultsVector rv, Object... expectedVals  ) {
+		boolean areEquals = rv.equalsPrecision(eps, expectedVals);
+		if (!areEquals) {
+			System.out.println("assertCalc failed");
+			System.out.printf("Results: \t%s%n", rv );
+		}
+		assertTrue( areEquals );
 	}
-	
-	public static FeatureList cfg() throws CreateException {
-		return FeatureListFixture.createFromFile("cfgFeatureList.xml", loader);
-	}
-
 }

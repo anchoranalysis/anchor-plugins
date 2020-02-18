@@ -49,7 +49,7 @@ public class PointsFromContourTraverserTest {
 	private static int MIN_NUM_CONTOUR_PNTS = 30;
 	
 	private TestLoaderImageIO testLoader = new TestLoaderImageIO(
-		TestLoader.createFromMavenWorkingDirTest()
+		TestLoader.createFromMavenWorkingDir()
 	);
 	
 	@Test
