@@ -201,7 +201,11 @@ public class GroupedHistogramExportTask extends GroupedStackTask<Histogram,Histo
 		LogErrorReporter logErrorReporter = new LogErrorReporter(logReporter);
 		
 		try {
-			createWriter().writeAllGroupHistograms( sharedState.getGroupMap(), outputManager, logErrorReporter );
+			createWriter().writeAllGroupHistograms(
+				sharedState.getGroupMap(),
+				outputManager.resolveFolder("grouped"),
+				logErrorReporter
+			);
 		} catch (IOException e) {
 			throw new ExperimentExecutionException(e);
 		}
