@@ -50,7 +50,7 @@ public class ObjMaskCollectionCompressionTest {
 	private static final String PATH_UNCOMPRESSED_OBJS = "objsUncompressed/objs.h5";
 	
 	private TestLoaderImageIO testLoader = new TestLoaderImageIO(
-		TestLoader.createFromMavenWorkingDir()
+		TestLoader.createFromMavenWorkingDirTest()
 	);
 	
 	@Rule

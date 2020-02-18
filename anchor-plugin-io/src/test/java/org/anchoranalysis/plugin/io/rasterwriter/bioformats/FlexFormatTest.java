@@ -39,7 +39,7 @@ import anchor.test.TestLoader;
 
 public class FlexFormatTest {
 
-	private TestLoader loader = TestLoader.createFromMavenWorkingDir();
+	private TestLoader loader = TestLoader.createFromMavenWorkingDirTest();
 	
 	/** Tests the numChnls and numFrames from a known file, as it sometimes incorrectly reports as numChnl==1 and numFrame==1, as opposed
 	 *   to numFrames==2 and numChnls==1 (which is what we expect... but is itself incorrect

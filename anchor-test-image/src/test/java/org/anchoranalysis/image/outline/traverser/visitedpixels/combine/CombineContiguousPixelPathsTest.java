@@ -41,7 +41,7 @@ import anchor.test.TestLoader;
 
 public class CombineContiguousPixelPathsTest {
 
-	private TestLoader loader = TestLoader.createFromMavenWorkingDir();
+	private TestLoader loader = TestLoader.createFromMavenWorkingDirTest();
 	
 	@Test
 	public void test01() throws IOException {

@@ -76,7 +76,7 @@ public class AnchorMetadataXmlTest {
 		
 		Document docFromFileSystem = TestLoader.openXmlAbsoluteFilePath( pathOut );
 		
-		TestLoader loader = TestLoader.createFromMavenWorkingDir();
+		TestLoader loader = TestLoader.createFromMavenWorkingDirTest();
 		Document docGroundTruth = loader.openXmlFromTestPath( pathSerializedMock01 );
 		assertTrue( TestLoader.areXmlEqual(docFromFileSystem, docGroundTruth) );
 	}

@@ -32,7 +32,7 @@ import anchor.test.TestLoader;
 
 public class FeatureListFixtureMPP {
 
-	private static TestLoader loader = TestLoader.createFromMavenWorkingDir();
+	private static TestLoader loader = TestLoader.createFromMavenWorkingDirTest();
 	
 	public static FeatureList mark() throws CreateException {
 		return FeatureListFixture.createFromFile("markFeatureList.xml", loader);

@@ -42,7 +42,7 @@ public class SplitContourSmoothingSplineTest {
 
 		
 	private TestLoaderImageIO testLoader = new TestLoaderImageIO(
-		TestLoader.createFromMavenWorkingDir()
+		TestLoader.createFromMavenWorkingDirTest()
 	);
 	
 	@Test

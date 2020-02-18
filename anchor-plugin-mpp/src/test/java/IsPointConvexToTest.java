@@ -49,7 +49,7 @@ public class IsPointConvexToTest {
 	public void test() throws RasterIOException, CreateException, URISyntaxException {
 		
 		TestLoaderImageIO testLoader = new TestLoaderImageIO(
-			TestLoader.createFromMavenWorkingDir()
+			TestLoader.createFromMavenWorkingDirTest()
 		);
 		
 		String testPath = "testData/binaryImage/000_zstack_nuclei.tif";
