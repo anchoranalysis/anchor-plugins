@@ -179,7 +179,6 @@ public class CfgSgmnTask extends Task<MultiInput,ExperimentState>{
 	@Override
 	public void afterAllJobsAreExecuted(BoundOutputManagerRouteErrors outputManager, ExperimentState sharedState, LogReporter logReporter) throws ExperimentExecutionException {
 		sharedState.outputAfterAllTasksAreExecuted(outputManager);
-		
 	}
 
 	public CfgSgmn getSgmn() {

@@ -1,10 +1,10 @@
-package ch.ethz.biol.cell.mpp.feedback.reporter;
+package org.anchoranalysis.plugin.io.bean.summarizer.image;
 
 /*-
  * #%L
- * anchor-plugin-mpp
+ * anchor-plugin-io
  * %%
- * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -26,27 +26,36 @@ package ch.ethz.biol.cell.mpp.feedback.reporter;
  * #L%
  */
 
-import org.anchoranalysis.io.manifest.ManifestDescription;
-import org.anchoranalysis.io.output.OutputWriteFailedException;
-import org.anchoranalysis.io.output.file.FileOutput;
-import org.anchoranalysis.io.output.file.FileOutputFromManager;
+import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.image.io.input.NamedChnlsInputAsStack;
+import org.anchoranalysis.plugin.io.bean.summarizer.Summarizer;
+import org.anchoranalysis.plugin.io.summarizer.FrequencyMap;
 
-import ch.ethz.biol.cell.mpp.feedback.OptimizationFeedbackInitParams;
-import ch.ethz.biol.cell.mpp.nrg.CfgNRGPixelized;
 
-public class CSVReporterUtilities {
+/**
+ * Summarzes {@link NamedChnlsInputAsStack} in different ways
+ * 
+ * @author owen
+ *
+ * @param <T> type used for summary in frequency-map
+ */
+public abstract class SummarizerNamedChnls<T> extends Summarizer<NamedChnlsInputAsStack> {
 
-	public static FileOutput createFileOutputFor(
-		String outputName,
-		OptimizationFeedbackInitParams<CfgNRGPixelized> initParams,
-		String manifestDscrFunction
-	) throws OutputWriteFailedException {
-		return FileOutputFromManager.create(
-			"csv",
-			new ManifestDescription("csv",manifestDscrFunction),
-			initParams.getInitContext().getOutputManager().getDelegate(),
-			outputName
-		);
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	private FrequencyMap<T> map = new FrequencyMap<>();
+	
+	@Override
+	public String describe() throws OperationFailedException {
+		return map.describe( describeNoun() );
 	}
+	
+	protected abstract String describeNoun();
 
+	protected void incrCount( T key ) {
+		map.incrCount(key);
+	}
 }

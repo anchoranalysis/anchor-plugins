@@ -83,6 +83,14 @@ public class FileSizeStatistics extends Summarizer<Path> {
 			throw new OperationFailedException("There are no paths to summarize");
 		}
 		
+		if (runningSum.getCnt()==1) {
+			// Special case if all files are the same size
+			return String.format(
+				"File-size is %s.",
+				humanReadableSize(min)
+			);
+		}
+		
 		if (min==max) {
 			// Special case if all files are the same size
 			return String.format(

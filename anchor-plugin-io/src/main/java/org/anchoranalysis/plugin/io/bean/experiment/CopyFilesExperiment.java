@@ -101,6 +101,10 @@ public class CopyFilesExperiment extends Experiment {
 		}
 	}
 	
+	@Override
+	public boolean useDetailedLogging() {
+		return true;
+	}
 	
 	private void doCopying( Collection<File> files, Path sourcePath, Path destPath) throws ExperimentExecutionException {
 		
@@ -254,5 +258,4 @@ public class CopyFilesExperiment extends Experiment {
 	public void setDelExistingFolder(boolean delExistingFolder) {
 		this.delExistingFolder = delExistingFolder;
 	}
-
 }

@@ -29,6 +29,13 @@ package org.anchoranalysis.plugin.io.bean.summarizer;
 import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.core.error.OperationFailedException;
 
+/**
+ * Summarizes a set of elements by outputting a descriptive string
+ * 
+ * @author owen
+ *
+ * @param <T> type of element to be summarized
+ */
 public abstract class Summarizer<T> extends AnchorBean<Summarizer<T>> {
 
 	/**

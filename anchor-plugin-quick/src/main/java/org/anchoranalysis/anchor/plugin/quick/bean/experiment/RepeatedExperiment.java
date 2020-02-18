@@ -43,10 +43,10 @@ import org.apache.commons.configuration.XMLConfiguration;
  * Helper framework for running an experiment repeatedly on different input-managers
  * 
  */
-class RepeatedExperiment<T extends InputFromManager> {
+class RepeatedExperiment<T extends InputFromManager,S> {
 
-	private InputOutputExperiment<T> delegate;
-	private JobProcessor<T> taskProcessor;
+	private InputOutputExperiment<T,S> delegate;
+	private JobProcessor<T,S> taskProcessor;
 	
 	public RepeatedExperiment( ExperimentIdentifier experimentIdentifier ) {
 		delegate = new InputOutputExperiment<>();
@@ -55,8 +55,7 @@ class RepeatedExperiment<T extends InputFromManager> {
 	}
 
 	// Should be called after the constructor, before any other methods
-	public void init(XMLConfiguration xmlConfiguration, JobProcessor<T> taskProcessor) {
-		assert(delegate.getOutput().getOutputWriteSettings().hasBeenInit());
+	public void init(XMLConfiguration xmlConfiguration, JobProcessor<T,S> taskProcessor) {
 		delegate.associateXml(xmlConfiguration);
 		this.taskProcessor = taskProcessor;
 	}
@@ -80,7 +79,6 @@ class RepeatedExperiment<T extends InputFromManager> {
 		delegate.setInput(inputManager);
 		delegate.setTaskProcessor(taskProcessor);
 		checkConfiguration(defaultInstances);
-		assert(delegate.getOutput().getOutputWriteSettings().hasBeenInit());
 
 		delegate.doExperiment(expArgs);		
 	}
@@ -102,11 +100,14 @@ class RepeatedExperiment<T extends InputFromManager> {
 		delegate.setOutputNameConfigCopy(outputNameConfigCopy);
 	}
 
-	public void setLogReporter(LogReporterBean logReporter) {
-		delegate.setLogReporter(logReporter);
+	public void setLogReporterExperiment(LogReporterBean logReporter) {
+		delegate.setLogReporterExperiment(logReporter);
 	}
 	
-
+	public void setLogReporterTask(LogReporterBean logReporter) {
+		delegate.setLogReporterTask(logReporter);
+	}
+	
 	public void setOutput(OutputManager output) {
 		delegate.setOutput(output);
 	}

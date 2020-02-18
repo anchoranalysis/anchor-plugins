@@ -1,10 +1,10 @@
-package ch.ethz.biol.cell.mpp.feedback.reporter;
+package org.anchoranalysis.plugin.io.bean.summarizer.path;
 
 /*-
  * #%L
- * anchor-plugin-mpp
+ * anchor-plugin-io
  * %%
- * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -26,27 +26,35 @@ package ch.ethz.biol.cell.mpp.feedback.reporter;
  * #L%
  */
 
-import org.anchoranalysis.io.manifest.ManifestDescription;
-import org.anchoranalysis.io.output.OutputWriteFailedException;
-import org.anchoranalysis.io.output.file.FileOutput;
-import org.anchoranalysis.io.output.file.FileOutputFromManager;
+import static org.junit.Assert.*;
 
-import ch.ethz.biol.cell.mpp.feedback.OptimizationFeedbackInitParams;
-import ch.ethz.biol.cell.mpp.nrg.CfgNRGPixelized;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
-public class CSVReporterUtilities {
+import org.anchoranalysis.core.error.OperationFailedException;
+import org.junit.Test;
 
-	public static FileOutput createFileOutputFor(
-		String outputName,
-		OptimizationFeedbackInitParams<CfgNRGPixelized> initParams,
-		String manifestDscrFunction
-	) throws OutputWriteFailedException {
-		return FileOutputFromManager.create(
-			"csv",
-			new ManifestDescription("csv",manifestDscrFunction),
-			initParams.getInitContext().getOutputManager().getDelegate(),
-			outputName
+public class FilePathPatternTest {
+
+	@Test
+	public void test() throws OperationFailedException {
+		
+		Path path1 = Paths.get("a/b/c");
+		Path path2 = Paths.get("a/b/d");
+		
+		FilePathPattern fpp = new FilePathPattern();
+		fpp.add( path1 );
+		fpp.add( path2 );
+
+		assertEquals(
+			"${0} = \"d\" (1) | \"c\" (1)",
+			secondLineFrom( fpp.describe() )
 		);
+	}
+	
+	private static String secondLineFrom( String multilineStr ) {
+		String[] split = multilineStr.split( System.getProperty("line.separator") );
+		return split[1];
 	}
 
 }

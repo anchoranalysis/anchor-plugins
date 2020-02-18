@@ -62,7 +62,7 @@ import org.apache.commons.lang.StringUtils;
  *
  *	This allows many parameters of QuickMultiDatasetStructuredExperiment to be easily set
  */
-public class QuickMultiDatasetStructuredExperiment<T extends InputFromManager> extends Experiment implements IReplaceInputManager, IReplaceOutputManager {
+public class QuickMultiDatasetStructuredExperiment<T extends InputFromManager,S> extends Experiment implements IReplaceInputManager, IReplaceOutputManager {
 
 	/**
 	 * 
@@ -83,13 +83,13 @@ public class QuickMultiDatasetStructuredExperiment<T extends InputFromManager> e
 	private String experimentType;
 	// END BEAN PROPERTIES
 			
-	private QuickMultiDatasetExperiment<T> delegate;
+	private QuickMultiDatasetExperiment<T,S> delegate;
 	
 	// Have we populated delegate yet?
 	private boolean populatedDelegate = false;
 	
 	public QuickMultiDatasetStructuredExperiment() {
-		delegate = new QuickMultiDatasetExperiment<T>();
+		delegate = new QuickMultiDatasetExperiment<T,S>();
 	}
 
 	@Override
@@ -176,6 +176,11 @@ public class QuickMultiDatasetStructuredExperiment<T extends InputFromManager> e
 		delegate.doExperiment(expArgs);
 	}
 
+	@Override
+	public boolean useDetailedLogging() {
+		return delegate.useDetailedLogging();
+	}
+
 	public String getExperimentType() {
 		return experimentType;
 	}
@@ -232,11 +237,11 @@ public class QuickMultiDatasetStructuredExperiment<T extends InputFromManager> e
 		delegate.setSupressExceptions(supressExceptions);
 	}
 
-	public Task<T, Object> getTask() {
+	public Task<T, S> getTask() {
 		return delegate.getTask();
 	}
 
-	public void setTask(Task<T, Object> task) {
+	public void setTask(Task<T, S> task) {
 		delegate.setTask(task);
 	}
 

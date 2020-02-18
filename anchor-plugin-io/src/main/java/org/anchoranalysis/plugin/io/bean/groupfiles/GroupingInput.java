@@ -32,6 +32,7 @@ import java.nio.file.Path;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
 import org.anchoranalysis.core.progress.ProgressReporter;
+import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.io.RasterIOException;
 import org.anchoranalysis.image.io.bean.chnl.map.ImgChnlMap;
 import org.anchoranalysis.image.io.bean.chnl.map.creator.ImgChnlMapCreator;
@@ -39,7 +40,6 @@ import org.anchoranalysis.image.io.input.NamedChnlsInputAsStack;
 import org.anchoranalysis.image.io.input.series.NamedChnlCollectionForSeries;
 import org.anchoranalysis.image.io.input.series.NamedChnlCollectionForSeriesMap;
 import org.anchoranalysis.image.io.rasterreader.OpenedRaster;
-import org.anchoranalysis.io.bean.input.descriptivename.DescriptiveNameFromFile;
 import org.anchoranalysis.plugin.io.multifile.MultiFileReaderOpenedRaster;
 
 
@@ -59,39 +59,29 @@ class GroupingInput extends NamedChnlsInputAsStack {
 
 	// The root object that is used to provide the descriptiveName and pathForBinding
 	//
-	public GroupingInput( Path virtualPath, MultiFileReaderOpenedRaster mfor, ImgChnlMapCreator chnlMapCreator, DescriptiveNameFromFile descriptiveNameFromFile ) {
+	public GroupingInput( Path virtualPath, MultiFileReaderOpenedRaster mfor, ImgChnlMapCreator chnlMapCreator, String descriptiveName ) {
 		super();
 		assert(virtualPath!=null);
 		this.virtualPath = virtualPath;
 		this.openedRaster = mfor;
 		this.chnlMapCreator = chnlMapCreator;
-		this.descriptiveName = descriptiveNameFromFile.createDescriptiveNameOrElse(
-			virtualPath.toFile(),
-			0,
-			"InvalidName"
-		);
 	}
 
 	@Override
 	public int numSeries() throws RasterIOException {
-		return openedRaster.getNumSeries();
+		return openedRaster.numSeries();
+	}
+
+	@Override
+	public ImageDim dim(int seriesIndex) throws RasterIOException {
+		return openedRaster.dim(seriesIndex);
 	}
 	
 	@Override
 	public NamedChnlCollectionForSeries createChnlCollectionForSeries( int seriesNum, ProgressReporter progressReporter ) throws RasterIOException {
-		
-		// Lazy creation
-		if (chnlMap==null) {
-			try {
-				chnlMap = chnlMapCreator.createMap(openedRaster);
-			} catch (CreateException e) {
-				throw new RasterIOException(e);
-			}
-		}
+		ensureChnlMapExists();
 		return new NamedChnlCollectionForSeriesMap( openedRaster, chnlMap, seriesNum);
 	}
-	
-
 	
 	@Override
 	public String descriptiveName() {
@@ -104,6 +94,12 @@ class GroupingInput extends NamedChnlsInputAsStack {
 	}
 
 	@Override
+	public int numChnl() throws RasterIOException {
+		ensureChnlMapExists();
+		return chnlMap.keySet().size();
+	}	
+
+	@Override
 	public void close(ErrorReporter errorReporter) {
 		try {
 			openedRaster.close();
@@ -111,9 +107,20 @@ class GroupingInput extends NamedChnlsInputAsStack {
 			errorReporter.recordError(GroupingInput.class, e);
 		}
 	}
+	
+	private void ensureChnlMapExists() throws RasterIOException {
+		// Lazy creation
+		if (chnlMap==null) {
+			try {
+				chnlMap = chnlMapCreator.createMap(openedRaster);
+			} catch (CreateException e) {
+				throw new RasterIOException(e);
+			}
+		}		
+	}
 
-
-
-
-
+	@Override
+	public int bitDepth() throws RasterIOException {
+		return openedRaster.bitDepth();
+	}
 }

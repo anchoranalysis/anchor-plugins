@@ -111,22 +111,27 @@ public class BioformatsOpenedRaster extends OpenedRaster {
 	}
 			
 	@Override
-	public int getNumSeries() {
+	public int numSeries() {
 		return reader.getSeriesCount();
 	}
 
 	@Override
-	public int getNumFrames() {
+	public int numFrames() {
 		return sizeT;
 	}
 
 	/** Returns a list of channel-names or NULL if they are not available */
-	public List<String> getChannelNames() {
+	public List<String> channelNames() {
 		return channelNames;
 	}
 	
-	public int getNumChnl() {
+	public int numChnl() {
 		return numChnl;
+	}
+	
+	@Override
+	public int bitDepth() throws RasterIOException {
+		return reader.getBitsPerPixel();
 	}
 
 	@Override
@@ -245,4 +250,5 @@ public class BioformatsOpenedRaster extends OpenedRaster {
 			readOptions
 		);
 	}
+
 }

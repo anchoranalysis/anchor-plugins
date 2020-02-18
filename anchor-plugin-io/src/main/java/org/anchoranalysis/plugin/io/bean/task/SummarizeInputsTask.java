@@ -1,8 +1,10 @@
-package ch.ethz.biol.cell.mpp.feedback.reporter;
+package org.anchoranalysis.plugin.io.bean.task;
+
+
 
 /*-
  * #%L
- * anchor-plugin-mpp
+ * anchor-plugin-io
  * %%
  * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
  * %%
@@ -26,27 +28,18 @@ package ch.ethz.biol.cell.mpp.feedback.reporter;
  * #L%
  */
 
-import org.anchoranalysis.io.manifest.ManifestDescription;
-import org.anchoranalysis.io.output.OutputWriteFailedException;
-import org.anchoranalysis.io.output.file.FileOutput;
-import org.anchoranalysis.io.output.file.FileOutputFromManager;
+import org.anchoranalysis.io.input.InputFromManager;
 
-import ch.ethz.biol.cell.mpp.feedback.OptimizationFeedbackInitParams;
-import ch.ethz.biol.cell.mpp.nrg.CfgNRGPixelized;
+public class SummarizeInputsTask<T extends InputFromManager> extends SummarizeTask<T,T> {
+	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 
-public class CSVReporterUtilities {
-
-	public static FileOutput createFileOutputFor(
-		String outputName,
-		OptimizationFeedbackInitParams<CfgNRGPixelized> initParams,
-		String manifestDscrFunction
-	) throws OutputWriteFailedException {
-		return FileOutputFromManager.create(
-			"csv",
-			new ManifestDescription("csv",manifestDscrFunction),
-			initParams.getInitContext().getOutputManager().getDelegate(),
-			outputName
-		);
+	@Override
+	protected T extractObjectForSummary(T input) {
+		return input;
 	}
 
 }

@@ -53,8 +53,8 @@ class OpenedRasterAlterDimensions extends OpenedRaster {
 	}
 
 	@Override
-	public int getNumSeries() {
-		return delegate.getNumSeries();
+	public int numSeries() {
+		return delegate.numSeries();
 	}
 
 	@Override
@@ -71,19 +71,13 @@ class OpenedRasterAlterDimensions extends OpenedRaster {
 	}
 
 	@Override
-	public List<String> getChannelNames() {
-		return delegate.getChannelNames();
+	public List<String> channelNames() {
+		return delegate.channelNames();
 	}
 
 	@Override
-	public int getNumChnl() throws RasterIOException {
-		return delegate.getNumChnl();
-	}
-
-	@Override
-	public void close() throws RasterIOException {
-		delegate.close();
-		
+	public int numChnl() throws RasterIOException {
+		return delegate.numChnl();
 	}
 
 	@Override
@@ -95,7 +89,18 @@ class OpenedRasterAlterDimensions extends OpenedRaster {
 	}
 
 	@Override
-	public int getNumFrames() throws RasterIOException {
-		return delegate.getNumFrames();
+	public int numFrames() throws RasterIOException {
+		return delegate.numFrames();
+	}
+
+	@Override
+	public int bitDepth() throws RasterIOException {
+		return delegate.bitDepth();
+	}
+
+	@Override
+	public void close() throws RasterIOException {
+		delegate.close();
+		
 	}
 }

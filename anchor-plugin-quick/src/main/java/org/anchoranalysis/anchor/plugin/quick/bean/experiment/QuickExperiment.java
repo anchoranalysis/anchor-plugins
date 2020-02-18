@@ -111,12 +111,12 @@ public class QuickExperiment extends Experiment {
 	// Possible defaultInstances for beans......... saved from checkMisconfigured for delayed checks elsewhere
 	private BeanInstanceMap defaultInstances;
 		
-	private InputOutputExperiment<MultiInput> delegate;
+	private InputOutputExperiment<MultiInput,Object> delegate;
 	
 	private ExperimentIdentifierSimple experimentIdentifier = new ExperimentIdentifierSimple("single", "1.0");
 	
 	public QuickExperiment() {
-		delegate = new InputOutputExperiment<MultiInput>();
+		delegate = new InputOutputExperiment<MultiInput,Object>();
 		delegate.setExperimentIdentifier(experimentIdentifier);		
 	}
 	
@@ -222,7 +222,7 @@ public class QuickExperiment extends Experiment {
 		}
 		
 		// Log Reporter
-		delegate.setLogReporter( new ConsoleLogReporterBean() );
+		delegate.setLogReporterExperiment( new ConsoleLogReporterBean() );
 		
 		
 		// Task
@@ -237,6 +237,11 @@ public class QuickExperiment extends Experiment {
 		}
 		
 		delegate.doExperiment(expArgs);
+	}
+
+	@Override
+	public boolean useDetailedLogging() {
+		return delegate.useDetailedLogging();
 	}
 
 	public String getFileInput() {

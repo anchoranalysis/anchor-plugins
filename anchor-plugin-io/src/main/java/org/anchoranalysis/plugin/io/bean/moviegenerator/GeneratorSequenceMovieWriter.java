@@ -106,8 +106,9 @@ class GeneratorSequenceMovieWriter<GeneratorType> implements IGeneratorSequenceN
 	private static MovieOutputHandle writeMovie( BoundOutputManager outputManager, OutputNameStyle outputNameStyle, ImageDim dim, int numFrames, int numChnl, int framesPerSecond ) throws OutputWriteFailedException {
 		
 		MovieWriter movieWriter = (MovieWriter) outputManager.getOutputWriteSettings().getWriterInstance(MovieWriter.class);
-		Path filePath = outputManager.getWriterCheckIfAllowed().writeGenerateFilename( outputNameStyle.getOutputName(), movieWriter.getDefaultFileExt(), null, "", "", "");
+		
 		try {
+			Path filePath = outputManager.getWriterCheckIfAllowed().writeGenerateFilename( outputNameStyle.getOutputName(), movieWriter.getDefaultFileExt(), null, "", "", "");
 			return movieWriter.writeMovie(filePath, dim, numFrames, numChnl, framesPerSecond );
 		} catch (IOException e) {
 			throw new OutputWriteFailedException(e);

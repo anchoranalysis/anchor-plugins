@@ -27,11 +27,8 @@ package org.anchoranalysis.plugin.io.bean.summarizer.path;
  */
 
 import java.nio.file.Path;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.TreeMap;
-
 import org.anchoranalysis.plugin.io.bean.summarizer.Summarizer;
+import org.anchoranalysis.plugin.io.summarizer.FrequencyMap;
 import org.apache.commons.io.FilenameUtils;
 
 /** Remembers each unique extension, and associated count */
@@ -44,7 +41,7 @@ public class ExtensionCount extends Summarizer<Path> {
 
 	private static String NO_EXTENSION = "NO_EXTENSION";
 	
-	private Map<String,Integer> map = new TreeMap<String,Integer>();
+	private FrequencyMap<String> map = new FrequencyMap<>();
 	
 	@Override
 	public void add( Path fullFilePath ) {
@@ -54,42 +51,17 @@ public class ExtensionCount extends Summarizer<Path> {
 			fullFilePath.toString()
 		);
 		
-		incrCount(
+		map.incrCount(
 			tidyExtension(extension)
 		);
 	}
 	
 	// Describes all the extensions found
 	@Override
-	public synchronized String describe() {
-		
-		int numKeys = map.keySet().size();
-		
-		if (numKeys==0) {
-			return "No inputs have been found yet.";
-		} else if (numKeys==1) {
-			return String.format(
-				"All inputs have extension .%s",
-				map.keySet().iterator().next()
-			);
-		} else {
-			return describeMultipleExtensions();
-		}
+	public String describe() {
+		return map.describe("extension");
 	}
-	
-	private String describeMultipleExtensions() {
-		StringBuilder sb = new StringBuilder();
-		sb.append("Inputs have diverse extensions:");
 		
-		for( Entry<String,Integer> entry : map.entrySet() ) {
-			sb.append(
-				String.format(" .%s(%d inputs)", entry.getKey(), entry.getValue() )
-			);
-		}
-		
-		return sb.toString();
-	}
-	
 	private static String tidyExtension( String extension ) {
 		
 		if (extension.isEmpty()) {
@@ -97,16 +69,5 @@ public class ExtensionCount extends Summarizer<Path> {
 		} else {
 			return extension.toLowerCase();
 		}		
-	}
-	
-	private synchronized void incrCount( String extension ) {
-		
-		Integer cnt = map.get(extension);
-		
-		if (cnt==null) {
-			map.put( extension, Integer.valueOf(1) );
-		} else {
-			cnt++;
-		}
 	}
 }

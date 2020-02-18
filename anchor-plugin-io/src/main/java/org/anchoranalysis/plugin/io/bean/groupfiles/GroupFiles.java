@@ -1,5 +1,7 @@
 package org.anchoranalysis.plugin.io.bean.groupfiles;
 
+import java.io.File;
+
 /*
  * #%L
  * anchor-image-io
@@ -28,13 +30,11 @@ package org.anchoranalysis.plugin.io.bean.groupfiles;
 
 
 import java.io.IOException;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.logging.Logger;
-
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.DefaultInstance;
 import org.anchoranalysis.bean.annotation.Optional;
@@ -46,6 +46,7 @@ import org.anchoranalysis.image.io.bean.rasterreader.RasterReader;
 import org.anchoranalysis.image.io.input.NamedChnlsInputAsStack;
 import org.anchoranalysis.io.bean.input.Files;
 import org.anchoranalysis.io.bean.input.InputManager;
+import org.anchoranalysis.io.bean.input.descriptivename.DescriptiveFile;
 import org.anchoranalysis.io.bean.input.descriptivename.DescriptiveNameFromFile;
 import org.anchoranalysis.io.bean.input.descriptivename.LastFolders;
 import org.anchoranalysis.io.deserializer.DeserializationFailedException;
@@ -120,9 +121,7 @@ public class GroupFiles extends InputManager<NamedChnlsInputAsStack> {
 			throws IOException, DeserializationFailedException {
 		
 		GroupFilesMap map = new GroupFilesMap();
-		
-	 
-
+	
 		// Iterate through each file, match against the reg-exp and populate a hash-map
 		Iterator<FileInput> itrFiles = fileInput.inputObjects(inputContext, progressReporter).iterator();
 		while( itrFiles.hasNext() ) {
@@ -149,8 +148,13 @@ public class GroupFiles extends InputManager<NamedChnlsInputAsStack> {
 			}
 		}
 
+		return listFromMap(map);
+	}
+	
+	private List<NamedChnlsInputAsStack> listFromMap( GroupFilesMap map ) {
 		
-		ArrayList<NamedChnlsInputAsStack> listOut = new ArrayList<>();
+		List<File> files = new ArrayList<>();
+		List<MultiFileReaderOpenedRaster> openedRasters = new ArrayList<>(); 
 		
 		// Process the hash-map by key
 		for( String key : map.keySet() ) {
@@ -165,12 +169,27 @@ public class GroupFiles extends InputManager<NamedChnlsInputAsStack> {
 			}
 						
 			MultiFileReaderOpenedRaster or = new MultiFileReaderOpenedRaster( rasterReader, bag );
-			
-			Path keyPath = Paths.get(key);
-			listOut.add( new GroupingInput(keyPath,or,imgChnlMapCreator, descriptiveNameFromFile) );
+			files.add( Paths.get(key).toFile() );
+			openedRasters.add( or );
 		}
+				
+		List<DescriptiveFile> descriptiveNames = descriptiveNameFromFile.descriptiveNamesFor(files, "InvalidName");
+		return zipIntoGrouping(descriptiveNames, openedRasters);		
+	}
 
-		return listOut;
+	private List<NamedChnlsInputAsStack> zipIntoGrouping(List<DescriptiveFile> df, List<MultiFileReaderOpenedRaster> or) {
+		
+		Iterator<DescriptiveFile> it1 = df.iterator();
+		Iterator<MultiFileReaderOpenedRaster> it2 = or.iterator();
+		
+		List<NamedChnlsInputAsStack> result = new ArrayList<>();
+		while (it1.hasNext() && it2.hasNext()) {
+			DescriptiveFile d = it1.next();
+			result.add(
+					new GroupingInput(d.getFile().toPath(), it2.next(),imgChnlMapCreator, d.getDescriptiveName())
+			);
+		}
+		return result;
 	}
 
 	public FilePathParser getFilePathParser() {

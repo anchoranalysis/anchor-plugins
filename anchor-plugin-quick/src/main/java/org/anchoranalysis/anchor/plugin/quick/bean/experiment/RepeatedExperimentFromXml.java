@@ -51,9 +51,9 @@ import org.apache.commons.configuration.XMLConfiguration;
 /**
  * Helper class for QuickMultiDatasetExperiment
  */
-class RepeatedExperimentFromXml<T extends InputFromManager> {
+class RepeatedExperimentFromXml<T extends InputFromManager,S> {
 
-	private RepeatedExperiment<T> delegate;
+	private RepeatedExperiment<T,S> delegate;
 	
 	private String debugEquals;
 	private String beanExtension;
@@ -69,13 +69,16 @@ class RepeatedExperimentFromXml<T extends InputFromManager> {
 	}
 	
 	/** First method called ONCE after the constructor */
-	public void firstLocalise( Path beanLocalPath, String logReporterPathExperiment, String output ) throws BeanMisconfiguredException {
+	public void firstLocalise( Path beanLocalPath, String logReporterPathExperiment, String logReporterPathTask, String output ) throws BeanMisconfiguredException {
 		
 		this.beanLocalPath = beanLocalPath;
 		
 		// We create these other beans, before we check the configuration. This is a bit hacky
-		delegate.setLogReporter(
+		delegate.setLogReporterExperiment(
 			extractLogReporterBean(logReporterPathExperiment)
+		);
+		delegate.setLogReporterTask(
+			extractLogReporterBean(logReporterPathTask)
 		);
 
 		delegate.setOutput(
@@ -89,7 +92,7 @@ class RepeatedExperimentFromXml<T extends InputFromManager> {
 		String folderDataset,
 		String beanExtension,
 		String debugEquals,
-		JobProcessor<T> taskProcessor
+		JobProcessor<T,S> taskProcessor
 	) {
 		delegate.init(xmlConfiguration, taskProcessor);
 				
@@ -130,10 +133,10 @@ class RepeatedExperimentFromXml<T extends InputFromManager> {
 		return extractBean(relativePath, "LogReporterBean");
 	}
 	
-	private <S> S extractBean(String relativePath, String friendlyName) {
+	private <U> U extractBean(String relativePath, String friendlyName) {
 		Path path = getCombinedPath(relativePath);
 		try {
-			S bean = BeanXmlLoader.loadBean(path);
+			U bean = BeanXmlLoader.loadBean(path);
 			return bean;
 		} catch (BeanXmlException e) {
 			throw new BeanStrangeException(

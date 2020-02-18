@@ -27,6 +27,7 @@ package org.anchoranalysis.plugin.annotation.bean.comparison.assigner;
  */
 
 import org.anchoranalysis.annotation.io.assignment.AssignmentObjMaskFactory;
+
 import org.anchoranalysis.annotation.io.assignment.AssignmentObjMask;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;

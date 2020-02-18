@@ -1,4 +1,4 @@
-package org.anchoranalysis.plugin.io.rasterwriter.bioformats;
+package org.anchoranalysis.plugin.io.bean.summarizer.image;
 
 /*-
  * #%L
@@ -26,42 +26,42 @@ package org.anchoranalysis.plugin.io.rasterwriter.bioformats;
  * #L%
  */
 
-import static org.junit.Assert.*;
-
-import java.nio.file.Path;
-
+import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.io.RasterIOException;
-import org.anchoranalysis.image.io.rasterreader.OpenedRaster;
-import org.anchoranalysis.plugin.io.bean.rasterreader.BioformatsReader;
-import org.junit.Test;
+import org.anchoranalysis.image.io.input.NamedChnlsInputAsStack;
 
-import anchor.test.TestLoader;
+/**
+ * Summarizes the size of images.
+ * 
+ * If there's more than one image in the series, the size of each is considered.
+ * 
+ **/
+public class ImageSize extends SummarizerNamedChnls<WrappedImageDim> {
 
-public class FlexFormatTest {
-
-	private TestLoader loader = TestLoader.createFromMavenWorkingDir();
-	
-	/** Tests the numChnls and numFrames from a known file, as it sometimes incorrectly reports as numChnl==1 and numFrame==1, as opposed
-	 *   to numFrames==2 and numChnls==1 (which is what we expect... but is itself incorrect
-	 *   
-	 *    Note that this test MIGHT only work correctly when NOT run with the GPL bioformats
-	 *     libraries on the class-path.
-	 *     
-	 *    Otherwise the FlexReader will be used, and its exact behaviour has yet to be established.
-	 *    
-	 * @throws RasterIOException 
+	/**
+	 * 
 	 */
-	@Test
-	public void testSizeCAndT() throws RasterIOException {
-		 
-		Path path = loader.resolveTestPath("exampleFormats/001001007.flex");
-		
-		BioformatsReader bf = new BioformatsReader();
-		OpenedRaster or = bf.openFile(path);
-		
-		assertTrue( or.numChnl()== 1 );
-		assertTrue( or.numSeries()== 1 );
-		assertTrue( or.numFrames()== 2 );
-	}
+	private static final long serialVersionUID = 1L;
+	
+	@Override
+	public void add( NamedChnlsInputAsStack img ) throws OperationFailedException {
 
+		try {
+			int numSeries = img.numSeries();
+			for( int i=0; i<numSeries; i++ ) {
+			
+				ImageDim dim = img.dim(0);
+				incrCount( new WrappedImageDim(dim) );
+			}
+			
+		} catch (RasterIOException exc) {
+			throw new OperationFailedException(exc);
+		}
+	}
+	
+	@Override
+	protected String describeNoun() {
+		return "size";
+	}
 }

@@ -57,7 +57,7 @@ class CopyTIFFAndCompress {
 	
 	private static void compressFile( String source, Path destination ) throws OperationFailedException {
 		
-		String d = destination.toString();// + ".ome.tiff";
+		String d = destination.toString();
 		
 		try (TiffReader reader = createReader(source)) {
 			

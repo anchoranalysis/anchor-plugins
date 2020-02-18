@@ -248,7 +248,7 @@ public class ExportObjectsFromCSVTask extends Task<ExportObjectsFromCSVInputObje
 	}
 	
 	private void outputGroup(String label, Collection<CSVRow> rows, ObjMaskCollectionRTree objs, DisplayStack background, BoundOutputManagerRouteErrors outputManager ) throws OutputWriteFailedException {
-			
+		
 		outputManager.getWriterAlwaysAllowed().write(
 			label,
 			() -> {

@@ -66,7 +66,8 @@ public class FilePathPattern extends Summarizer<Path> {
 	@Override
 	public synchronized void add(Path element) throws OperationFailedException {
 		try {
-			if (!ignoreHidden || !Files.isHidden(element) ) {
+			// Always accept the path if it doesn't exist on the file-system
+			if (!element.toFile().exists() || !ignoreHidden || !Files.isHidden(element) ) {
 				paths.add(element);
 			}
 		} catch (IOException e) {
@@ -81,10 +82,15 @@ public class FilePathPattern extends Summarizer<Path> {
 			throw new OperationFailedException("There are no paths to summarize");
 		}
 		
+		if (paths.size()==1) {
+			// There is no pattern possible, so just return the path as is
+			return paths.get(0).toString();
+		}
+		
 		Pattern pattern = PathPatternFinder.findPatternPath(paths, selectIOCase() );
 		return pattern.describeDetailed();
 	}
-	
+		
 	private IOCase selectIOCase() {
 		return ignoreCase ? IOCase.INSENSITIVE : IOCase.SYSTEM;
 	}

@@ -1,10 +1,10 @@
-package ch.ethz.biol.cell.mpp.feedback.reporter;
+package org.anchoranalysis.plugin.io.bean.descriptivename;
 
 /*-
  * #%L
- * anchor-plugin-mpp
+ * anchor-plugin-io
  * %%
- * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -26,27 +26,36 @@ package ch.ethz.biol.cell.mpp.feedback.reporter;
  * #L%
  */
 
-import org.anchoranalysis.io.manifest.ManifestDescription;
-import org.anchoranalysis.io.output.OutputWriteFailedException;
-import org.anchoranalysis.io.output.file.FileOutput;
-import org.anchoranalysis.io.output.file.FileOutputFromManager;
+import static org.junit.Assert.*;
 
-import ch.ethz.biol.cell.mpp.feedback.OptimizationFeedbackInitParams;
-import ch.ethz.biol.cell.mpp.nrg.CfgNRGPixelized;
+import java.io.File;
+import java.util.Arrays;
+import java.util.List;
 
-public class CSVReporterUtilities {
+import org.anchoranalysis.io.bean.input.descriptivename.DescriptiveFile;
+import org.junit.Test;
 
-	public static FileOutput createFileOutputFor(
-		String outputName,
-		OptimizationFeedbackInitParams<CfgNRGPixelized> initParams,
-		String manifestDscrFunction
-	) throws OutputWriteFailedException {
-		return FileOutputFromManager.create(
-			"csv",
-			new ManifestDescription("csv",manifestDscrFunction),
-			initParams.getInitContext().getOutputManager().getDelegate(),
-			outputName
-		);
+public class PatternSpanTest {
+
+	@Test
+	public void test() {
+		PatternSpan ps = new PatternSpan();
+		List<DescriptiveFile> ret = ps.descriptiveNamesFor( createFiles(), "<UNKNOWN>");
+		
+		assertIndexEquals( ret, 0, "b");
+		assertIndexEquals( ret, 1, "d");
+		assertIndexEquals( ret, 2, "e");
 	}
-
+	
+	private List<File> createFiles() {
+		File file1 = new File("/a/b/c");
+		File file2 = new File("/a/d/c");
+		File file3 = new File("/a/e/c");
+		return Arrays.asList(file1, file2, file3);
+	}
+	
+	private void assertIndexEquals( List<DescriptiveFile> ret, int index, String expected ) {
+		String actual = ret.get(index).getDescriptiveName();
+		assertEquals( actual, expected);
+	}
 }

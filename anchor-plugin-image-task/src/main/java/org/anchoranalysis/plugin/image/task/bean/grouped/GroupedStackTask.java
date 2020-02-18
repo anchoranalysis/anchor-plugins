@@ -39,6 +39,7 @@ import org.anchoranalysis.image.io.input.StackInputBase;
 import org.anchoranalysis.image.stack.NamedImgStackCollection;
 import org.anchoranalysis.image.stack.wrap.WrapStackAsTimeSequenceStore;
 import org.anchoranalysis.io.bean.filepath.generator.FilePathGenerator;
+import org.anchoranalysis.io.bean.filepath.generator.FilePathGeneratorConstant;
 import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
 import org.anchoranalysis.plugin.image.task.bean.selectchnls.SelectAll;
 import org.anchoranalysis.plugin.image.task.bean.selectchnls.SelectChnlsFromStacks;
@@ -60,7 +61,7 @@ public abstract class GroupedStackTask<S,T> extends Task<StackInputBase,GroupedS
 	
 	// START BEAN PROPERTIES
 	@BeanField
-	private FilePathGenerator groupGenerator;	// Translates an input file name to it's group
+	private FilePathGenerator groupGenerator = new FilePathGeneratorConstant("all");	// Translates an input file name to it's group
 	
 	@BeanField
 	private SelectChnlsFromStacks selectChnls = new SelectAll();

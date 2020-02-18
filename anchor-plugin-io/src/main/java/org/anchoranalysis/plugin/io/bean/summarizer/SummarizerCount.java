@@ -1,5 +1,7 @@
 package org.anchoranalysis.plugin.io.bean.summarizer;
 
+import org.anchoranalysis.core.text.LanguageUtilities;
+
 /*-
  * #%L
  * anchor-plugin-io
@@ -51,8 +53,8 @@ public class SummarizerCount<T> extends Summarizer<T> {
 	@Override
 	public synchronized String describe() {
 		return String.format(
-			"Found %d inputs.",
-			count
+			"Found %s.",
+			LanguageUtilities.prefixPluralizeMaybe(count, "input")
 		);
 	}
 }

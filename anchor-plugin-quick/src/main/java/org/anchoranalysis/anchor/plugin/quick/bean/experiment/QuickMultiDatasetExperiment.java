@@ -67,8 +67,9 @@ import org.anchoranalysis.io.output.bean.OutputManager;
  *    3. Otherwise throws an error, as it is assumed normal behaviour (all the usual datasets) is not allowed in debug-mode. 
  * 
  * @param <T> InputManagerType
+ * @param <S> shared-state
  */
-public class QuickMultiDatasetExperiment<T extends InputFromManager> extends Experiment implements IReplaceInputManager, IReplaceOutputManager {
+public class QuickMultiDatasetExperiment<T extends InputFromManager, S> extends Experiment implements IReplaceInputManager, IReplaceOutputManager {
 
 	/**
 	 * 
@@ -113,11 +114,11 @@ public class QuickMultiDatasetExperiment<T extends InputFromManager> extends Exp
 	private boolean supressExceptions=false;
 	
 	@BeanField
-	private Task<T,Object> task;
+	private Task<T,S> task;
 	// END BEAN PROPERTIES
 	
 	// Helper for running the experiment repeatedly on different datasets
-	private RepeatedExperimentFromXml<T> delegate;
+	private RepeatedExperimentFromXml<T,S> delegate;
 	
 	private ExperimentIdentifierSimple experimentIdentifier = new ExperimentIdentifierSimple("unnamed", "1.0");
 	
@@ -141,7 +142,7 @@ public class QuickMultiDatasetExperiment<T extends InputFromManager> extends Exp
 	public void localise(Path path) throws BeanMisconfiguredException {
 		super.localise(path);
 		
-		delegate.firstLocalise( getLocalPath(), logReporterExperimentPath, output );
+		delegate.firstLocalise( getLocalPath(), logReporterExperimentPath, logReporterTaskPath, output );
 	}
 
 	@SuppressWarnings("unchecked")
@@ -328,28 +329,20 @@ public class QuickMultiDatasetExperiment<T extends InputFromManager> extends Exp
 		this.supressExceptions = supressExceptions;
 	}
 
-	public Task<T, Object> getTask() {
+	public Task<T, S> getTask() {
 		return task;
 	}
 
-	public void setTask(Task<T, Object> task) {
+	public void setTask(Task<T, S> task) {
 		this.task = task;
 	}
 	
-	private JobProcessor<T> createProcessor() {
-		DebugDependentProcessor<T, Object> processor = new DebugDependentProcessor<>();
+	private JobProcessor<T,S> createProcessor() {
+		DebugDependentProcessor<T, S> processor = new DebugDependentProcessor<>();
 		processor.setMaxNumProcessors(maxNumProcessors);
 		processor.setSupressExceptions(supressExceptions);
-		processor.setTask( createTask() );
+		processor.setTask( task.duplicateBean() );
 		return processor;
-	}
-	
-	private Task<T,Object> createTask() {
-		Task<T,Object> taskDup = task.duplicateBean();
-		taskDup.setLogReporter(
-			delegate.extractLogReporterBean(logReporterTaskPath)
-		);
-		return taskDup;
 	}
 
 	public String getLogReporterExperimentPath() {
@@ -374,5 +367,11 @@ public class QuickMultiDatasetExperiment<T extends InputFromManager> extends Exp
 
 	public void setDebug(String debug) {
 		this.debug = debug;
+	}
+
+	@Override
+	public boolean useDetailedLogging() {
+		// Always use detailed logging
+		return true;
 	}
 }
