@@ -40,7 +40,7 @@ import anchor.test.TestLoader;
 
 public class FeatureListFixture {
 
-	private static TestLoader loader = TestLoader.createFromExecutingJARDirectory(FeatureListFixture.class);
+	private static TestLoader loader = TestLoader.createFromMavenWorkingDir();
 	
 	protected static FeatureList createFromFile(String xmlPath, TestLoader loader) throws CreateException {
 		Path pathStatic = loader.resolveTestPath(xmlPath);
