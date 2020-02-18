@@ -49,7 +49,7 @@ import org.anchoranalysis.image.experiment.bean.task.RasterTask;
 import org.anchoranalysis.image.init.ImageInitParams;
 import org.anchoranalysis.image.interpolator.InterpolatorFactory;
 import org.anchoranalysis.image.io.RasterIOException;
-import org.anchoranalysis.image.io.input.NamedChnlsInputAsStack;
+import org.anchoranalysis.image.io.input.NamedChnlsInput;
 import org.anchoranalysis.image.io.input.series.NamedChnlCollectionForSeries;
 import org.anchoranalysis.image.io.stack.StackCollectionOutputter;
 import org.anchoranalysis.image.stack.NamedImgStackCollection;
@@ -93,7 +93,7 @@ public class ScaleTask extends RasterTask {
 	}
 
 	@Override
-	public void doStack(NamedChnlsInputAsStack inputObject,
+	public void doStack(NamedChnlsInput inputObject,
 			int seriesIndex, BoundOutputManagerRouteErrors outputManager,
 			LogErrorReporter logErrorReporter, String stackDescriptor,
 			ExperimentExecutionArguments expArgs) throws JobExecutionException {

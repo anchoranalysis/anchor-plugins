@@ -35,7 +35,7 @@ import org.anchoranalysis.core.progress.ProgressReporterNull;
 import org.anchoranalysis.experiment.JobExecutionException;
 import org.anchoranalysis.experiment.task.ParametersBound;
 import org.anchoranalysis.experiment.task.Task;
-import org.anchoranalysis.image.io.input.StackInputBase;
+import org.anchoranalysis.image.io.input.StackInput;
 import org.anchoranalysis.image.stack.NamedImgStackCollection;
 import org.anchoranalysis.image.stack.wrap.WrapStackAsTimeSequenceStore;
 import org.anchoranalysis.io.bean.filepath.generator.FilePathGenerator;
@@ -52,7 +52,7 @@ import org.anchoranalysis.plugin.image.task.bean.selectchnls.SelectChnlsFromStac
  * @param <S> individual-type
  * @param <T> aggregate-type
  */
-public abstract class GroupedStackTask<S,T> extends Task<StackInputBase,GroupedSharedState<S,T>> {
+public abstract class GroupedStackTask<S,T> extends Task<StackInput,GroupedSharedState<S,T>> {
 
 	/**
 	 * 
@@ -69,9 +69,9 @@ public abstract class GroupedStackTask<S,T> extends Task<StackInputBase,GroupedS
 
 
 	@Override
-	protected void doJobOnInputObject(	ParametersBound<StackInputBase,GroupedSharedState<S,T>> params) throws JobExecutionException {
+	protected void doJobOnInputObject(	ParametersBound<StackInput,GroupedSharedState<S,T>> params) throws JobExecutionException {
 		
-		StackInputBase inputObject = params.getInputObject();
+		StackInput inputObject = params.getInputObject();
 
 		// Extract a group name
 		String groupName = extractGroupName( inputObject.pathForBinding(), params.getExperimentArguments().isDebugEnabled() );
@@ -106,7 +106,7 @@ public abstract class GroupedStackTask<S,T> extends Task<StackInputBase,GroupedS
 		}
 	}
 		
-	private static NamedImgStackCollection extractInputStacks( StackInputBase inputObject ) throws JobExecutionException {
+	private static NamedImgStackCollection extractInputStacks( StackInput inputObject ) throws JobExecutionException {
 		NamedImgStackCollection stackCollection = new NamedImgStackCollection();
 		try {
 			inputObject.addToStore(

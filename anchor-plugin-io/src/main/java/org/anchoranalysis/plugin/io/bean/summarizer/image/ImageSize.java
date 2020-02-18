@@ -29,7 +29,7 @@ package org.anchoranalysis.plugin.io.bean.summarizer.image;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.io.RasterIOException;
-import org.anchoranalysis.image.io.input.NamedChnlsInputAsStack;
+import org.anchoranalysis.image.io.input.NamedChnlsInput;
 
 /**
  * Summarizes the size of images.
@@ -45,7 +45,7 @@ public class ImageSize extends SummarizerNamedChnls<WrappedImageDim> {
 	private static final long serialVersionUID = 1L;
 	
 	@Override
-	public void add( NamedChnlsInputAsStack img ) throws OperationFailedException {
+	public void add( NamedChnlsInput img ) throws OperationFailedException {
 
 		try {
 			int numSeries = img.numSeries();

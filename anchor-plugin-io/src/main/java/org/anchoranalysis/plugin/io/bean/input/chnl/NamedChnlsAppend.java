@@ -45,8 +45,7 @@ import org.anchoranalysis.core.progress.ProgressReporter;
 import org.anchoranalysis.core.progress.ProgressReporterMultiple;
 import org.anchoranalysis.core.progress.ProgressReporterOneOfMany;
 import org.anchoranalysis.image.io.bean.rasterreader.RasterReader;
-import org.anchoranalysis.image.io.input.NamedChnlsInputAppend;
-import org.anchoranalysis.image.io.input.NamedChnlsInputBase;
+import org.anchoranalysis.image.io.input.NamedChnlsInputPart;
 import org.anchoranalysis.io.bean.filepath.generator.FilePathGenerator;
 import org.anchoranalysis.io.bean.input.InputManager;
 import org.anchoranalysis.io.deserializer.DeserializationFailedException;
@@ -63,7 +62,7 @@ public class NamedChnlsAppend extends NamedChnlsBase {
 	
 	// START BEAN PROPERTIES
 	@BeanField
-	private InputManager<NamedChnlsInputBase> input;
+	private InputManager<NamedChnlsInputPart> input;
 	
 	@BeanField @DefaultInstance
 	private RasterReader rasterReader;
@@ -82,22 +81,22 @@ public class NamedChnlsAppend extends NamedChnlsBase {
 	// END BEAN PROPERTIES
 	
 	@Override
-	public List<NamedChnlsInputBase> inputObjects(InputContextParams inputContext, ProgressReporter progressReporter)
+	public List<NamedChnlsInputPart> inputObjects(InputContextParams inputContext, ProgressReporter progressReporter)
 			throws FileNotFoundException, IOException,
 			DeserializationFailedException {
 
 		try( ProgressReporterMultiple prm = new ProgressReporterMultiple(progressReporter, 2)) {
 			
-			Iterator<NamedChnlsInputBase> itr = input.inputObjects(inputContext, new ProgressReporterOneOfMany(prm)).iterator();
+			Iterator<NamedChnlsInputPart> itr = input.inputObjects(inputContext, new ProgressReporterOneOfMany(prm)).iterator();
 			
 			prm.incrWorker();
 			
-			List<NamedChnlsInputBase> listTemp = new ArrayList<>();
+			List<NamedChnlsInputPart> listTemp = new ArrayList<>();
 			while( itr.hasNext() ) {
 				listTemp.add( itr.next() );
 			}
 			
-			List<NamedChnlsInputBase> outList = createOutList( listTemp, new ProgressReporterOneOfMany(prm), inputContext.isDebugMode() );
+			List<NamedChnlsInputPart> outList = createOutList( listTemp, new ProgressReporterOneOfMany(prm), inputContext.isDebugMode() );
 			
 			prm.incrWorker();
 			
@@ -105,7 +104,7 @@ public class NamedChnlsAppend extends NamedChnlsBase {
 		}
 	}
 	
-	private List<NamedChnlsInputBase> createOutList( List<NamedChnlsInputBase> listTemp, ProgressReporter progressReporter, boolean debugMode ) throws IOException {
+	private List<NamedChnlsInputPart> createOutList( List<NamedChnlsInputPart> listTemp, ProgressReporter progressReporter, boolean debugMode ) throws IOException {
 
 		progressReporter.setMin(0);
 		progressReporter.setMax( listTemp.size() );
@@ -113,10 +112,10 @@ public class NamedChnlsAppend extends NamedChnlsBase {
 		
 		try {
 		
-			List<NamedChnlsInputBase> outList = new ArrayList<>();
+			List<NamedChnlsInputPart> outList = new ArrayList<>();
 			for( int i=0; i<listTemp.size(); i++) {
 				
-				NamedChnlsInputBase ncc = listTemp.get(i);
+				NamedChnlsInputPart ncc = listTemp.get(i);
 				
 				if (ignoreFileNotFoundAppend) {
 					
@@ -141,9 +140,9 @@ public class NamedChnlsAppend extends NamedChnlsBase {
 	}
 	
 	// We assume all the input files are single channel images
-	private NamedChnlsInputBase append( final NamedChnlsInputBase ncc, boolean debugMode ) throws IOException {
+	private NamedChnlsInputPart append( final NamedChnlsInputPart ncc, boolean debugMode ) throws IOException {
 		
-		NamedChnlsInputBase out = ncc; 
+		NamedChnlsInputPart out = ncc; 
 		
 		if (listAppend==null) {
 			return out;
@@ -171,17 +170,17 @@ public class NamedChnlsAppend extends NamedChnlsBase {
 				}
 			}
 			
-			out = new NamedChnlsInputAppend<>(out, ni.getName(), 0, outPath, rasterReader );
+			out = new AppendPart<>(out, ni.getName(), 0, outPath, rasterReader );
 		}
 	
 		return out;
 	}
 
-	public InputManager<NamedChnlsInputBase> getInput() {
+	public InputManager<NamedChnlsInputPart> getInput() {
 		return input;
 	}
 
-	public void setInput(InputManager<NamedChnlsInputBase> input) {
+	public void setInput(InputManager<NamedChnlsInputPart> input) {
 		this.input = input;
 	}
 

@@ -1,10 +1,12 @@
 package org.anchoranalysis.plugin.io.bean.input.chnl;
 
-/*-
+import java.nio.file.Path;
+
+/*
  * #%L
  * anchor-image-io
  * %%
- * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -26,15 +28,42 @@ package org.anchoranalysis.plugin.io.bean.input.chnl;
  * #L%
  */
 
-import org.anchoranalysis.image.io.input.NamedChnlsInputPart;
-import org.anchoranalysis.io.bean.input.InputManager;
 
-/*** Useful parent for all the NamedChnls classes */
-public abstract class NamedChnlsBase extends InputManager<NamedChnlsInputPart> {
+import org.anchoranalysis.core.cache.ExecuteException;
+import org.anchoranalysis.core.cache.Operation;
+import org.anchoranalysis.core.index.GetOperationFailedException;
+import org.anchoranalysis.image.io.bean.chnl.map.ImgChnlMap;
+import org.anchoranalysis.image.io.bean.chnl.map.ImgChnlMapEntry;
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
+class AdditionalChnl {
+	private String chnlName;
+	private int chnlIndex;
+	private Operation<Path> filePath;
+	
+	public AdditionalChnl(String chnlName, int chnlIndex, Operation<Path> filePath) {
+		super();
+		this.chnlName = chnlName;
+		this.chnlIndex = chnlIndex;
+		this.filePath = filePath;
+	}
 
+
+	public Path getFilePath() throws GetOperationFailedException {
+		try {
+			return filePath.doOperation();
+		} catch (ExecuteException e) {
+			throw new GetOperationFailedException(e);
+		}
+	}
+	
+	public ImgChnlMap createChnlMap() {
+		ImgChnlMap map = new ImgChnlMap();
+		map.add( new ImgChnlMapEntry(chnlName, chnlIndex) );
+		return map;
+	}
+
+
+	public String getChnlName() {
+		return chnlName;
+	}
 }

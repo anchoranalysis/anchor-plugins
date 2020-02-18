@@ -40,7 +40,7 @@ import org.anchoranalysis.bean.annotation.Optional;
 import org.anchoranalysis.bean.error.BeanMisconfiguredException;
 import org.anchoranalysis.core.progress.ProgressReporter;
 import org.anchoranalysis.image.io.bean.chnl.map.ImgChnlMapEntry;
-import org.anchoranalysis.image.io.input.StackInputBase;
+import org.anchoranalysis.image.io.input.StackInput;
 import org.anchoranalysis.io.bean.provider.file.FileProviderWithDirectory;
 import org.anchoranalysis.io.deserializer.DeserializationFailedException;
 import org.anchoranalysis.io.bean.descriptivename.DescriptiveNameFromFile;
@@ -159,7 +159,7 @@ public class MultiInputManagerQuick extends MultiInputManagerBase {
 		return inputManager;
 	}
 	
-	private InputManager<? extends StackInputBase> createStacks() throws BeanMisconfiguredException {
+	private InputManager<? extends StackInput> createStacks() throws BeanMisconfiguredException {
 		InputManager<FileInput> files = InputManagerFactory.createFiles(
 			rootName,
 			fileProvider,

@@ -43,7 +43,7 @@ import org.anchoranalysis.image.chnl.factory.ChnlFactorySingleType;
 import org.anchoranalysis.image.chnl.factory.ChnlFactoryByte;
 import org.anchoranalysis.image.io.bean.chnl.map.ImgChnlMapCreator;
 import org.anchoranalysis.image.io.bean.rasterreader.RasterReader;
-import org.anchoranalysis.image.io.input.NamedChnlsInputAsStack;
+import org.anchoranalysis.image.io.input.NamedChnlsInput;
 import org.anchoranalysis.io.bean.descriptivename.DescriptiveNameFromFile;
 import org.anchoranalysis.io.bean.input.InputManager;
 import org.anchoranalysis.io.bean.input.descriptivename.LastFolders;
@@ -78,7 +78,7 @@ import org.anchoranalysis.plugin.io.multifile.ParsedFilePathBag;
  * @author Owen Feehan
  *
  */
-public class GroupFiles extends InputManager<NamedChnlsInputAsStack> {
+public class GroupFiles extends InputManager<NamedChnlsInput> {
 
 	/**
 	 * 
@@ -116,7 +116,7 @@ public class GroupFiles extends InputManager<NamedChnlsInputAsStack> {
 	static ChnlFactorySingleType imgChnlFactoryByte = new ChnlFactoryByte();
 	
 	@Override
-	public List<NamedChnlsInputAsStack> inputObjects(
+	public List<NamedChnlsInput> inputObjects(
 			InputContextParams inputContext, ProgressReporter progressReporter)
 			throws IOException, DeserializationFailedException {
 		
@@ -151,7 +151,7 @@ public class GroupFiles extends InputManager<NamedChnlsInputAsStack> {
 		return listFromMap(map);
 	}
 	
-	private List<NamedChnlsInputAsStack> listFromMap( GroupFilesMap map ) {
+	private List<NamedChnlsInput> listFromMap( GroupFilesMap map ) {
 		
 		List<File> files = new ArrayList<>();
 		List<MultiFileReaderOpenedRaster> openedRasters = new ArrayList<>(); 
@@ -177,12 +177,12 @@ public class GroupFiles extends InputManager<NamedChnlsInputAsStack> {
 		return zipIntoGrouping(descriptiveNames, openedRasters);		
 	}
 
-	private List<NamedChnlsInputAsStack> zipIntoGrouping(List<DescriptiveFile> df, List<MultiFileReaderOpenedRaster> or) {
+	private List<NamedChnlsInput> zipIntoGrouping(List<DescriptiveFile> df, List<MultiFileReaderOpenedRaster> or) {
 		
 		Iterator<DescriptiveFile> it1 = df.iterator();
 		Iterator<MultiFileReaderOpenedRaster> it2 = or.iterator();
 		
-		List<NamedChnlsInputAsStack> result = new ArrayList<>();
+		List<NamedChnlsInput> result = new ArrayList<>();
 		while (it1.hasNext() && it2.hasNext()) {
 			DescriptiveFile d = it1.next();
 			result.add(

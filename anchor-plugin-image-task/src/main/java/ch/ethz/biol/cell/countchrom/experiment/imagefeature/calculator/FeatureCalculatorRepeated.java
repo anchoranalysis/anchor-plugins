@@ -31,13 +31,13 @@ import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 import org.anchoranalysis.image.bean.provider.stack.StackProvider;
 import org.anchoranalysis.image.init.ImageInitParams;
-import org.anchoranalysis.image.io.input.StackInputBase;
-import org.anchoranalysis.image.io.input.StackInputBaseUtilities;
+import org.anchoranalysis.image.io.input.StackInput;
+import org.anchoranalysis.image.io.input.StackInputInitParamsCreator;
 
 public class FeatureCalculatorRepeated {
 	
-	public static NRGStackWithParams extractStack( StackInputBase inputObject, StackProvider nrgStackProvider, LogErrorReporter logErrorReporter ) throws OperationFailedException {
-		ImageInitParams params = StackInputBaseUtilities.createInitParams(inputObject, logErrorReporter);
+	public static NRGStackWithParams extractStack( StackInput inputObject, StackProvider nrgStackProvider, LogErrorReporter logErrorReporter ) throws OperationFailedException {
+		ImageInitParams params = StackInputInitParamsCreator.createInitParams(inputObject, logErrorReporter);
 		return HelperInit.extractStack(params, nrgStackProvider, logErrorReporter);
 	}
 }

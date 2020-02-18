@@ -47,7 +47,7 @@ import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 import org.anchoranalysis.feature.shared.SharedFeatureSet;
 import org.anchoranalysis.image.bean.provider.stack.StackProvider;
 import org.anchoranalysis.image.feature.session.FeatureSessionCreateParamsSingle;
-import org.anchoranalysis.image.io.input.NamedChnlsInputAsStack;
+import org.anchoranalysis.image.io.input.NamedChnlsInput;
 import org.anchoranalysis.image.io.stack.StackCollectionOutputter;
 import org.anchoranalysis.image.stack.NamedImgStackCollection;
 import org.anchoranalysis.image.stack.wrap.WrapStackAsTimeSequenceStore;
@@ -65,7 +65,7 @@ import ch.ethz.biol.cell.countchrom.experiment.imagefeature.sharedstate.SharedSt
  * @author FEEHANO
  *
  */
-public class ExtractSingleSliceTask extends Task<NamedChnlsInputAsStack,SharedStateSelectedSlice> {
+public class ExtractSingleSliceTask extends Task<NamedChnlsInput,SharedStateSelectedSlice> {
 
 	/**
 	 * 
@@ -97,7 +97,7 @@ public class ExtractSingleSliceTask extends Task<NamedChnlsInputAsStack,SharedSt
 	}
 
 	@Override
-	protected void doJobOnInputObject(ParametersBound<NamedChnlsInputAsStack, SharedStateSelectedSlice> params)
+	protected void doJobOnInputObject(ParametersBound<NamedChnlsInput, SharedStateSelectedSlice> params)
 			throws JobExecutionException {
 
 		try {
@@ -150,7 +150,7 @@ public class ExtractSingleSliceTask extends Task<NamedChnlsInputAsStack,SharedSt
 		return optimaSliceIndex;
 	}
 	
-	private void deriveSlicesAndOutput( NamedChnlsInputAsStack inputObject, NRGStackWithParams nrgStack, int optimaSliceIndex, BoundOutputManagerRouteErrors outputManager ) throws OperationFailedException {
+	private void deriveSlicesAndOutput( NamedChnlsInput inputObject, NRGStackWithParams nrgStack, int optimaSliceIndex, BoundOutputManagerRouteErrors outputManager ) throws OperationFailedException {
 		
 		NamedImgStackCollection stackCollection = collectionFromInput(inputObject);
 		
@@ -167,7 +167,7 @@ public class ExtractSingleSliceTask extends Task<NamedChnlsInputAsStack,SharedSt
 		}		
 	}
 	
-	private static NamedImgStackCollection collectionFromInput( NamedChnlsInputAsStack inputObject ) throws OperationFailedException {
+	private static NamedImgStackCollection collectionFromInput( NamedChnlsInput inputObject ) throws OperationFailedException {
 		NamedImgStackCollection stackCollection = new NamedImgStackCollection();
 		inputObject.addToStore( new WrapStackAsTimeSequenceStore(stackCollection), 0, ProgressReporterNull.get() );
 		return stackCollection;

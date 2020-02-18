@@ -1,10 +1,10 @@
-package org.anchoranalysis.plugin.io.bean.summarizer.image;
+package org.anchoranalysis.plugin.io.bean.input.stack;
 
 /*-
  * #%L
- * anchor-plugin-io
+ * anchor-image-io
  * %%
- * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -26,28 +26,19 @@ package org.anchoranalysis.plugin.io.bean.summarizer.image;
  * #L%
  */
 
-import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.progress.OperationWithProgressReporter;
 import org.anchoranalysis.image.io.RasterIOException;
-import org.anchoranalysis.image.io.input.NamedChnlsInput;
+import org.anchoranalysis.image.io.input.StackInput;
+import org.anchoranalysis.image.stack.TimeSequence;
 
 /**
- * A simple summerizer where there's one summary-item per image (series are ignored!)
+ *  Provides a single stack (or a time series of such stacks) as an input
+ *  
+ *  @author Owen Feehan
+ *
  */
-public abstract class SummarizerNamedChnlsSimple<T> extends SummarizerNamedChnls<T> {
+public abstract class StackSequenceInput extends StackInput {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
-	@Override
-	public void add(NamedChnlsInput element) throws OperationFailedException {
-		try {
-			incrCount( extractKey(element) );
-		} catch (RasterIOException e) {
-			throw new OperationFailedException(e);
-		}
-	}
-	
-	protected abstract T extractKey(NamedChnlsInput element) throws RasterIOException;
+	// Creates a TimeSequence of ImgStack for a particular series number
+	public abstract OperationWithProgressReporter<TimeSequence> createStackSequenceForSeries( int seriesNum ) throws RasterIOException;
 }

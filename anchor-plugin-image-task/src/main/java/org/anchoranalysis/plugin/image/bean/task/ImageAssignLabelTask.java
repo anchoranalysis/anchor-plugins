@@ -44,8 +44,8 @@ import org.anchoranalysis.experiment.task.Task;
 import org.anchoranalysis.image.bean.provider.stack.StackProvider;
 import org.anchoranalysis.image.init.ImageInitParams;
 import org.anchoranalysis.image.io.generator.raster.StackGenerator;
-import org.anchoranalysis.image.io.input.StackInputBase;
-import org.anchoranalysis.image.io.input.StackInputBaseUtilities;
+import org.anchoranalysis.image.io.input.StackInput;
+import org.anchoranalysis.image.io.input.StackInputInitParamsCreator;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
 import org.anchoranalysis.plugin.image.bean.labeller.ImageLabeller;
@@ -61,7 +61,7 @@ import ch.ethz.biol.cell.countchrom.experiment.imagefeature.sharedstate.SharedSt
  *
  * @param T type of init-params associated with the filter
  */
-public class ImageAssignLabelTask<T> extends Task<StackInputBase,SharedStateFilteredImageOutput<T>> {
+public class ImageAssignLabelTask<T> extends Task<StackInput,SharedStateFilteredImageOutput<T>> {
 
 	/**
 	 * 
@@ -98,7 +98,7 @@ public class ImageAssignLabelTask<T> extends Task<StackInputBase,SharedStateFilt
 	}
 	
 	@Override
-	protected void doJobOnInputObject(ParametersBound<StackInputBase, SharedStateFilteredImageOutput<T>> params)
+	protected void doJobOnInputObject(ParametersBound<StackInput, SharedStateFilteredImageOutput<T>> params)
 			throws JobExecutionException {
 		
 		try {
@@ -115,7 +115,7 @@ public class ImageAssignLabelTask<T> extends Task<StackInputBase,SharedStateFilt
 			if (outputStackProvider!=null) {
 				outputStack(
 					groupIdentifier,
-					StackInputBaseUtilities.createInitParams(params.getInputObject(), params.getLogErrorReporter()),
+					StackInputInitParamsCreator.createInitParams(params.getInputObject(), params.getLogErrorReporter()),
 					params.getInputObject().descriptiveName(),
 					params.getSharedState(),
 					params.getLogErrorReporter()

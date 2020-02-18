@@ -53,7 +53,7 @@ import org.anchoranalysis.image.io.RasterIOException;
 import org.anchoranalysis.image.io.bean.chnl.ChnlFilter;
 import org.anchoranalysis.image.io.chnl.ChnlGetter;
 import org.anchoranalysis.image.io.generator.raster.StackGenerator;
-import org.anchoranalysis.image.io.input.NamedChnlsInputAsStack;
+import org.anchoranalysis.image.io.input.NamedChnlsInput;
 import org.anchoranalysis.image.io.input.series.NamedChnlCollectionForSeries;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.image.stack.region.chnlconverter.ConversionPolicy;
@@ -176,12 +176,12 @@ public class FormatConverterTask extends RasterTask {
 		}
 	}
 	
-	public NamedChnlCollectionForSeries createChnlCollection(NamedChnlsInputAsStack inputObject, int seriesIndex) throws RasterIOException {
+	public NamedChnlCollectionForSeries createChnlCollection(NamedChnlsInput inputObject, int seriesIndex) throws RasterIOException {
 		 return inputObject.createChnlCollectionForSeries(seriesIndex, new ProgressReporterConsole(1) );
 	}
 	
 	@Override
-	public void doStack( NamedChnlsInputAsStack inputObjectUntyped, int seriesIndex, BoundOutputManagerRouteErrors outputManager, LogErrorReporter logErrorReporter, String stackDescriptor, ExperimentExecutionArguments expArgs ) throws JobExecutionException {
+	public void doStack( NamedChnlsInput inputObjectUntyped, int seriesIndex, BoundOutputManagerRouteErrors outputManager, LogErrorReporter logErrorReporter, String stackDescriptor, ExperimentExecutionArguments expArgs ) throws JobExecutionException {
 		
 		try {
 			NamedChnlCollectionForSeries chnlCollection = createChnlCollection( inputObjectUntyped, seriesIndex );	

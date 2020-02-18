@@ -41,7 +41,7 @@ import org.anchoranalysis.bean.annotation.DefaultInstance;
 import org.anchoranalysis.bean.annotation.Optional;
 import org.anchoranalysis.bean.error.BeanMisconfiguredException;
 import org.anchoranalysis.core.progress.ProgressReporter;
-import org.anchoranalysis.image.io.input.NamedChnlsInputBase;
+import org.anchoranalysis.image.io.input.NamedChnlsInputPart;
 import org.anchoranalysis.io.bean.provider.file.FileProviderWithDirectory;
 import org.anchoranalysis.io.deserializer.DeserializationFailedException;
 import org.anchoranalysis.io.bean.descriptivename.DescriptiveNameFromFile;
@@ -149,7 +149,7 @@ public class NamedChnlsQuick extends NamedChnlsBase {
 	private RasterReader rasterReaderAdjacent;
 	// END BEAN PROPERTIES
 
-	private InputManager<NamedChnlsInputBase> append;
+	private InputManager<NamedChnlsInputPart> append;
 	
 	private BeanInstanceMap defaultInstances;
 	
@@ -179,7 +179,7 @@ public class NamedChnlsQuick extends NamedChnlsBase {
 	}
 	
 	@Override
-	public List<NamedChnlsInputBase> inputObjects(InputContextParams inputContext, ProgressReporter progressReporter) throws IOException, DeserializationFailedException {
+	public List<NamedChnlsInputPart> inputObjects(InputContextParams inputContext, ProgressReporter progressReporter) throws IOException, DeserializationFailedException {
 		createAppendedChnlsIfNecessary();
 		return append.inputObjects(inputContext, progressReporter);
 	}
@@ -195,7 +195,7 @@ public class NamedChnlsQuick extends NamedChnlsBase {
 		}
 	}
 	
-	private InputManager<NamedChnlsInputBase> createAppendedChnls() throws BeanMisconfiguredException {
+	private InputManager<NamedChnlsInputPart> createAppendedChnls() throws BeanMisconfiguredException {
 		
 		InputManager<FileInput> files = InputManagerFactory.createFiles(
 			rootName,
@@ -205,7 +205,7 @@ public class NamedChnlsQuick extends NamedChnlsBase {
 			filterFilesCsv
 		);
 		
-		InputManager<NamedChnlsInputBase> chnls = NamedChnlsCreator.create(
+		InputManager<NamedChnlsInputPart> chnls = NamedChnlsCreator.create(
 			files,
 			mainChnlName,
 			mainChnlIndex,
@@ -229,7 +229,7 @@ public class NamedChnlsQuick extends NamedChnlsBase {
 	}
 	
 	private static NamedChnlsAppend appendChnls(
-		InputManager<NamedChnlsInputBase> input,
+		InputManager<NamedChnlsInputPart> input,
 		List<NamedBean<FilePathGenerator>> filePathGenerators,
 		RasterReader rasterReader
 	) {

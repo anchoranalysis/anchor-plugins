@@ -43,8 +43,7 @@ import org.anchoranalysis.core.progress.ProgressReporterMultiple;
 import org.anchoranalysis.core.progress.ProgressReporterOneOfMany;
 import org.anchoranalysis.image.chnl.Chnl;
 import org.anchoranalysis.image.io.RasterIOException;
-import org.anchoranalysis.image.io.input.NamedChnlsInputAsStack;
-import org.anchoranalysis.image.io.input.StackSequenceInput;
+import org.anchoranalysis.image.io.input.NamedChnlsInput;
 import org.anchoranalysis.image.io.input.series.NamedChnlCollectionForSeries;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.image.stack.TimeSequence;
@@ -67,7 +66,7 @@ public class ConvertNamedChnlsToStack extends InputManager<StackSequenceInput> {
 
 	// START BEAN PROPERTIES
 	@BeanField
-	private InputManager<NamedChnlsInputAsStack> input;
+	private InputManager<NamedChnlsInput> input;
 	
 	@BeanField
 	private String chnlName;
@@ -86,9 +85,9 @@ public class ConvertNamedChnlsToStack extends InputManager<StackSequenceInput> {
 	 */
 	private class ConvertInputObject extends StackSequenceInput {
 
-		private NamedChnlsInputAsStack in;
+		private NamedChnlsInput in;
 				
-		public ConvertInputObject(NamedChnlsInputAsStack in) {
+		public ConvertInputObject(NamedChnlsInput in) {
 			super();
 			this.in = in;
 		}
@@ -145,9 +144,9 @@ public class ConvertNamedChnlsToStack extends InputManager<StackSequenceInput> {
 	private class OperationConvert implements OperationWithProgressReporter<TimeSequence> {
 		
 		private int seriesNum;
-		private NamedChnlsInputAsStack in;
+		private NamedChnlsInput in;
 					
-		public OperationConvert(NamedChnlsInputAsStack in, int seriesNum) {
+		public OperationConvert(NamedChnlsInput in, int seriesNum) {
 			super();
 			this.seriesNum = seriesNum;
 			this.in = in;
@@ -180,7 +179,7 @@ public class ConvertNamedChnlsToStack extends InputManager<StackSequenceInput> {
 		return input.inputObjects(inputContext, progressReporter).stream().map( this::convert ).collect( Collectors.toList() );
 	}
 	
-	private StackSequenceInput convert( NamedChnlsInputAsStack in ) {
+	private StackSequenceInput convert( NamedChnlsInput in ) {
 		return new ConvertInputObject(in);
 	}
 	
@@ -192,11 +191,11 @@ public class ConvertNamedChnlsToStack extends InputManager<StackSequenceInput> {
 		this.chnlName = chnlName;
 	}
 
-	public InputManager<NamedChnlsInputAsStack> getInput() {
+	public InputManager<NamedChnlsInput> getInput() {
 		return input;
 	}
 
-	public void setInput(InputManager<NamedChnlsInputAsStack> input) {
+	public void setInput(InputManager<NamedChnlsInput> input) {
 		this.input = input;
 	}
 

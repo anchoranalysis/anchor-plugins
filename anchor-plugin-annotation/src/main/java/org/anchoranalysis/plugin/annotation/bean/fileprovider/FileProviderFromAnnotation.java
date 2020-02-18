@@ -38,7 +38,7 @@ import org.anchoranalysis.annotation.io.bean.strategy.AnnotatorStrategy;
 import org.anchoranalysis.annotation.io.input.AnnotationWithStrategy;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.progress.ProgressReporter;
-import org.anchoranalysis.image.io.input.NamedChnlsInputBase;
+import org.anchoranalysis.image.io.input.NamedChnlsInputPart;
 import org.anchoranalysis.io.bean.provider.file.FileProvider;
 import org.anchoranalysis.io.deserializer.DeserializationFailedException;
 import org.anchoranalysis.io.params.InputContextParams;
@@ -47,7 +47,7 @@ public class FileProviderFromAnnotation<T extends AnnotatorStrategy> extends Fil
 	
 	// START BEAN PROPERTIES
 	@BeanField
-	private AnnotationInputManager<NamedChnlsInputBase,T> annotationInputManager;
+	private AnnotationInputManager<NamedChnlsInputPart,T> annotationInputManager;
 	// END BEAN PROPERTIES
 	
 	/**
@@ -78,12 +78,12 @@ public class FileProviderFromAnnotation<T extends AnnotatorStrategy> extends Fil
 		return filesOut;
 	}
 		
-	public AnnotationInputManager<NamedChnlsInputBase,T> getAnnotationInputManager() {
+	public AnnotationInputManager<NamedChnlsInputPart,T> getAnnotationInputManager() {
 		return annotationInputManager;
 	}
 
 	public void setAnnotationInputManager(
-			AnnotationInputManager<NamedChnlsInputBase,T> annotationInputManager) {
+			AnnotationInputManager<NamedChnlsInputPart,T> annotationInputManager) {
 		this.annotationInputManager = annotationInputManager;
 	}
 

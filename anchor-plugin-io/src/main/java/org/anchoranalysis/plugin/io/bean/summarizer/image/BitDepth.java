@@ -27,7 +27,7 @@ package org.anchoranalysis.plugin.io.bean.summarizer.image;
  */
 
 import org.anchoranalysis.image.io.RasterIOException;
-import org.anchoranalysis.image.io.input.NamedChnlsInputAsStack;
+import org.anchoranalysis.image.io.input.NamedChnlsInput;
 
 public class BitDepth extends SummarizerNamedChnlsSimple<Integer> {
 
@@ -37,7 +37,7 @@ public class BitDepth extends SummarizerNamedChnlsSimple<Integer> {
 	private static final long serialVersionUID = 1L;
 	
 	@Override
-	protected Integer extractKey(NamedChnlsInputAsStack element) throws RasterIOException {
+	protected Integer extractKey(NamedChnlsInput element) throws RasterIOException {
 		return element.bitDepth();
 	}
 

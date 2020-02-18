@@ -36,14 +36,14 @@ import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.io.RasterIOException;
 import org.anchoranalysis.image.io.bean.chnl.map.ImgChnlMap;
 import org.anchoranalysis.image.io.bean.chnl.map.ImgChnlMapCreator;
-import org.anchoranalysis.image.io.input.NamedChnlsInputAsStack;
+import org.anchoranalysis.image.io.input.NamedChnlsInput;
 import org.anchoranalysis.image.io.input.series.NamedChnlCollectionForSeries;
 import org.anchoranalysis.image.io.input.series.NamedChnlCollectionForSeriesMap;
 import org.anchoranalysis.image.io.rasterreader.OpenedRaster;
 import org.anchoranalysis.plugin.io.multifile.MultiFileReaderOpenedRaster;
 
 
-class GroupingInput extends NamedChnlsInputAsStack {
+class GroupingInput extends NamedChnlsInput {
 
 	// The opened raster with multiple files
 	private OpenedRaster openedRaster = null;

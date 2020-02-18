@@ -46,7 +46,7 @@ import org.anchoranalysis.image.experiment.bean.task.RasterTask;
 import org.anchoranalysis.image.experiment.identifiers.ImgStackIdentifiers;
 import org.anchoranalysis.image.io.RasterIOException;
 import org.anchoranalysis.image.io.generator.raster.ChnlGenerator;
-import org.anchoranalysis.image.io.input.NamedChnlsInputAsStack;
+import org.anchoranalysis.image.io.input.NamedChnlsInput;
 import org.anchoranalysis.image.io.input.series.NamedChnlCollectionForSeries;
 import org.anchoranalysis.image.stack.wrap.WrapStackAsTimeSequenceStore;
 import org.anchoranalysis.io.output.OutputWriteFailedException;
@@ -83,7 +83,7 @@ public class SharedObjectsFromChnlTask extends RasterTask {
 	}
 	
 	@Override
-	public void doStack(NamedChnlsInputAsStack inputObject,
+	public void doStack(NamedChnlsInput inputObject,
 			int seriesIndex, BoundOutputManagerRouteErrors outputManager,
 			LogErrorReporter logErrorReporter, String stackDescriptor, ExperimentExecutionArguments expArgs)
 			throws JobExecutionException {

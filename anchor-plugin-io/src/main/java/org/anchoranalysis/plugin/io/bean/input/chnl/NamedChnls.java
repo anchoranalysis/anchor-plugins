@@ -38,8 +38,7 @@ import org.anchoranalysis.bean.annotation.DefaultInstance;
 import org.anchoranalysis.core.progress.ProgressReporter;
 import org.anchoranalysis.image.io.bean.chnl.map.ImgChnlMapCreator;
 import org.anchoranalysis.image.io.bean.rasterreader.RasterReader;
-import org.anchoranalysis.image.io.input.NamedChnlsInput;
-import org.anchoranalysis.image.io.input.NamedChnlsInputBase;
+import org.anchoranalysis.image.io.input.NamedChnlsInputPart;
 import org.anchoranalysis.io.bean.input.InputManager;
 import org.anchoranalysis.io.deserializer.DeserializationFailedException;
 import org.anchoranalysis.io.input.FileInput;
@@ -69,15 +68,15 @@ public class NamedChnls extends NamedChnlsBase {
 	// END BEANS
 
 	@Override
-	public List<NamedChnlsInputBase> inputObjects(InputContextParams inputContext, ProgressReporter progressReporter)
+	public List<NamedChnlsInputPart> inputObjects(InputContextParams inputContext, ProgressReporter progressReporter)
 			throws FileNotFoundException, IOException {
 		
-		ArrayList<NamedChnlsInputBase> listOut = new ArrayList<>(); 
+		ArrayList<NamedChnlsInputPart> listOut = new ArrayList<>(); 
 		
 		try {
 			Iterator<FileInput> itrFiles = fileInput.inputObjects(inputContext, progressReporter).iterator();
 			while( itrFiles.hasNext() ) {
-				listOut.add( new NamedChnlsInput<>(itrFiles.next(), getRasterReader(), imgChnlMapCreator, useLastSeriesIndexOnly ));
+				listOut.add( new MapPart<>(itrFiles.next(), getRasterReader(), imgChnlMapCreator, useLastSeriesIndexOnly ));
 			}
 		} catch (DeserializationFailedException e) {
 			throw new IOException(e);
