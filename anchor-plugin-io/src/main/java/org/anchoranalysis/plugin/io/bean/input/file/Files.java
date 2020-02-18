@@ -1,4 +1,4 @@
-package org.anchoranalysis.plugin.io.bean.input;
+package org.anchoranalysis.plugin.io.bean.input.file;
 
 /*
  * #%L

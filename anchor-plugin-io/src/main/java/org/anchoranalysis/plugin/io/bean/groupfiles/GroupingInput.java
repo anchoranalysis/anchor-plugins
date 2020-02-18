@@ -35,7 +35,7 @@ import org.anchoranalysis.core.progress.ProgressReporter;
 import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.io.RasterIOException;
 import org.anchoranalysis.image.io.bean.chnl.map.ImgChnlMap;
-import org.anchoranalysis.image.io.bean.chnl.map.creator.ImgChnlMapCreator;
+import org.anchoranalysis.image.io.bean.chnl.map.ImgChnlMapCreator;
 import org.anchoranalysis.image.io.input.NamedChnlsInputAsStack;
 import org.anchoranalysis.image.io.input.series.NamedChnlCollectionForSeries;
 import org.anchoranalysis.image.io.input.series.NamedChnlCollectionForSeriesMap;

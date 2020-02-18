@@ -1,4 +1,4 @@
-package org.anchoranalysis.anchor.plugin.quick.input;
+package org.anchoranalysis.anchor.plugin.quick.bean.input;
 
 /*-
  * #%L
@@ -29,22 +29,19 @@ package org.anchoranalysis.anchor.plugin.quick.input;
 import java.util.List;
 
 import org.anchoranalysis.bean.error.BeanMisconfiguredException;
-import org.anchoranalysis.io.bean.provider.file.FileProvider;
-import org.anchoranalysis.io.bean.provider.file.FileProviderWithDirectory;
-import org.anchoranalysis.io.bean.descriptivename.DescriptiveNameFromFile;
 import org.anchoranalysis.io.bean.input.InputManager;
 import org.anchoranalysis.io.input.FileInput;
-import org.anchoranalysis.plugin.io.bean.input.Files;
-import org.anchoranalysis.plugin.io.bean.provider.file.RootedFileSet;
-import org.anchoranalysis.image.io.bean.input.ImgChnlMapCreatorFactory;
-import org.anchoranalysis.image.io.bean.input.ImgChnlMapEntry;
-import org.anchoranalysis.image.io.bean.input.NamedChnls;
+import org.anchoranalysis.plugin.io.bean.chnl.map.ImgChnlMapDefine;
+import org.anchoranalysis.plugin.io.bean.input.chnl.NamedChnls;
+import org.anchoranalysis.image.io.bean.chnl.map.ImgChnlMap;
+import org.anchoranalysis.image.io.bean.chnl.map.ImgChnlMapCreator;
+import org.anchoranalysis.image.io.bean.chnl.map.ImgChnlMapEntry;
 import org.anchoranalysis.image.io.bean.rasterreader.RasterReader;
 
-/** Helps in creating Beans through code */
-public class BeanCreationUtilities {
+/** Helps in creating NamedChnls */
+class NamedChnlsCreator {
 
-	public static NamedChnls createNamedChnls(
+	public static NamedChnls create(
 			InputManager<FileInput> files,
 			String mainChnlName,
 			int mainChnlIndex,
@@ -53,7 +50,7 @@ public class BeanCreationUtilities {
 	) throws BeanMisconfiguredException {
 		NamedChnls namedChnls = new NamedChnls();
 		namedChnls.setImgChnlMapCreator(
-			ImgChnlMapCreatorFactory.apply(
+			createMapCreator(
 				mainChnlName,
 				mainChnlIndex,
 				additionalChnls
@@ -64,35 +61,31 @@ public class BeanCreationUtilities {
 		return namedChnls;
 	}
 	
-	
-	/**
-	 * Creates a Files
-	 * 
-	 * @param rootName if non-empty a RootedFileProvier is used
-	 * @param fileProvider fileProvider
-	 * @param descriptiveNameFromFile descriptiveName
-	 * @return
-	 */
-	public static InputManager<FileInput> createFiles( String rootName, FileProviderWithDirectory fileProvider, DescriptiveNameFromFile descriptiveNameFromFile ) {
-		Files files = new Files();
-		files.setFileProvider( createMaybeRootedFileProvider(rootName, fileProvider) );
-		files.setDescriptiveNameFromFile(descriptiveNameFromFile);
-		return files;
-	}
-	
-	private static FileProvider createMaybeRootedFileProvider( String rootName, FileProviderWithDirectory fileProvider ) {
-		if (rootName!=null && !rootName.isEmpty()) {
-			return createRootedFileProvider(rootName, fileProvider);
-		} else {
-			return fileProvider;
+	private static ImgChnlMapCreator createMapCreator( String mainChnlName, int mainChnlIndex, List<ImgChnlMapEntry> additionalChnls) throws BeanMisconfiguredException {
+		ImgChnlMapDefine define = new ImgChnlMapDefine();
+		
+		define.setImgChnlMap( new ImgChnlMap() );
+		addChnlEntry(define, mainChnlName, mainChnlIndex);
+		
+		for( ImgChnlMapEntry entry : additionalChnls ) {
+			
+			if (entry.getIndex()==mainChnlIndex) {
+				throw new BeanMisconfiguredException(
+					String.format(
+						"Channel '%s' for index %d is already defined as the main channel. There cannot be an additional channel.",
+						mainChnlName,
+						mainChnlIndex
+					)	
+				);
+			}
+			
+			addChnlEntry(define, entry.getName(), entry.getIndex());	
 		}
+		return define;
 	}
 	
-	private static FileProvider createRootedFileProvider( String rootName, FileProviderWithDirectory fileProvider ) {
-		RootedFileSet fileSet = new RootedFileSet();
-		fileSet.setRootName(rootName);
-		fileSet.setFileSet(fileProvider);
-		fileSet.setDisableDebugMode(true);
-		return fileSet;
+	private static void addChnlEntry( ImgChnlMapDefine define, String name, int index ) {
+		define.getImgChnlMap().add( new ImgChnlMapEntry(name, index) );
 	}
+	
 }

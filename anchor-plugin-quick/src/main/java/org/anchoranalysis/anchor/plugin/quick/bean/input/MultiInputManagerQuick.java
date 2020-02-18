@@ -32,7 +32,6 @@ import java.util.List;
 
 import org.anchoranalysis.anchor.plugin.quick.bean.input.filepathappend.FilePathBaseAppendToManager;
 import org.anchoranalysis.anchor.plugin.quick.bean.input.filepathappend.MatchedAppendCsv;
-import org.anchoranalysis.anchor.plugin.quick.input.BeanCreationUtilities;
 import org.anchoranalysis.bean.BeanInstanceMap;
 import org.anchoranalysis.bean.annotation.AllowEmpty;
 import org.anchoranalysis.bean.annotation.BeanField;
@@ -40,8 +39,7 @@ import org.anchoranalysis.bean.annotation.DefaultInstance;
 import org.anchoranalysis.bean.annotation.Optional;
 import org.anchoranalysis.bean.error.BeanMisconfiguredException;
 import org.anchoranalysis.core.progress.ProgressReporter;
-import org.anchoranalysis.image.io.bean.input.ImgChnlMapEntry;
-import org.anchoranalysis.image.io.bean.input.Stacks;
+import org.anchoranalysis.image.io.bean.chnl.map.ImgChnlMapEntry;
 import org.anchoranalysis.image.io.input.StackInputBase;
 import org.anchoranalysis.io.bean.provider.file.FileProviderWithDirectory;
 import org.anchoranalysis.io.deserializer.DeserializationFailedException;
@@ -53,6 +51,7 @@ import org.anchoranalysis.io.params.InputContextParams;
 import org.anchoranalysis.mpp.io.bean.input.MultiInputManager;
 import org.anchoranalysis.mpp.io.bean.input.MultiInputManagerBase;
 import org.anchoranalysis.mpp.io.input.MultiInput;
+import org.anchoranalysis.plugin.io.bean.input.stack.Stacks;
 import org.anchoranalysis.image.io.bean.rasterreader.RasterReader;
 
 /**
@@ -175,7 +174,7 @@ public class MultiInputManagerQuick extends MultiInputManagerBase {
 			//
 			// Channel 0 always takes the inputName
 			// The other channels are defined by the contents of the ImgChnlMapEntry
-			return BeanCreationUtilities.createNamedChnls(
+			return NamedChnlsCreator.create(
 				files,
 				inputName,
 				chnlIndex,

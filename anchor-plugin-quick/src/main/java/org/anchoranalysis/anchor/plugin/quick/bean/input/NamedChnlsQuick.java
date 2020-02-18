@@ -33,7 +33,6 @@ import java.util.stream.Collectors;
 
 import org.anchoranalysis.anchor.plugin.quick.bean.input.filepathappend.AppendStack;
 import org.anchoranalysis.anchor.plugin.quick.bean.input.filepathappend.MatchedAppendCsv;
-import org.anchoranalysis.anchor.plugin.quick.input.BeanCreationUtilities;
 import org.anchoranalysis.bean.BeanInstanceMap;
 import org.anchoranalysis.bean.NamedBean;
 import org.anchoranalysis.bean.annotation.AllowEmpty;
@@ -52,10 +51,9 @@ import org.anchoranalysis.io.bean.input.InputManager;
 import org.anchoranalysis.io.bean.input.descriptivename.LastFolders;
 import org.anchoranalysis.io.input.FileInput;
 import org.anchoranalysis.io.params.InputContextParams;
-import org.anchoranalysis.image.io.bean.input.AdjacentFile;
-import org.anchoranalysis.image.io.bean.input.ImgChnlMapEntry;
-import org.anchoranalysis.image.io.bean.input.NamedChnlsAppend;
-import org.anchoranalysis.image.io.bean.input.NamedChnlsBase;
+import org.anchoranalysis.plugin.io.bean.input.chnl.NamedChnlsAppend;
+import org.anchoranalysis.plugin.io.bean.input.chnl.NamedChnlsBase;
+import org.anchoranalysis.image.io.bean.chnl.map.ImgChnlMapEntry;
 import org.anchoranalysis.image.io.bean.rasterreader.RasterReader;
 
 /**
@@ -207,7 +205,7 @@ public class NamedChnlsQuick extends NamedChnlsBase {
 			filterFilesCsv
 		);
 		
-		InputManager<NamedChnlsInputBase> chnls = BeanCreationUtilities.createNamedChnls(
+		InputManager<NamedChnlsInputBase> chnls = NamedChnlsCreator.create(
 			files,
 			mainChnlName,
 			mainChnlIndex,
