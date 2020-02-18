@@ -42,11 +42,11 @@ import org.anchoranalysis.core.progress.ProgressReporter;
 import org.anchoranalysis.io.bean.provider.file.FileProvider;
 import org.anchoranalysis.io.deserializer.DeserializationFailedException;
 import org.anchoranalysis.io.bean.input.InputManager;
-import org.anchoranalysis.io.manifest.ManifestCouplingDefinition;
 import org.anchoranalysis.io.manifest.deserializer.CachedManifestDeserializer;
 import org.anchoranalysis.io.manifest.deserializer.ManifestDeserializer;
 import org.anchoranalysis.io.manifest.deserializer.SimpleManifestDeserializer;
 import org.anchoranalysis.io.params.InputContextParams;
+import org.anchoranalysis.plugin.io.manifest.ManifestCouplingDefinition;
 
 public class CoupledManifestsInputManager extends InputManager<ManifestCouplingDefinition> {
 

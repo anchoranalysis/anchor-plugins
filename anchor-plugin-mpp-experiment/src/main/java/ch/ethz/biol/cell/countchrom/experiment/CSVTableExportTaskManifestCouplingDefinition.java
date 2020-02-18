@@ -39,12 +39,12 @@ import org.anchoranalysis.experiment.JobExecutionException;
 import org.anchoranalysis.experiment.bean.task.TaskWithoutSharedState;
 import org.anchoranalysis.experiment.task.ParametersBound;
 import org.anchoranalysis.io.bean.report.feature.ReportFeature;
-import org.anchoranalysis.io.manifest.CoupledManifests;
-import org.anchoranalysis.io.manifest.ManifestCouplingDefinition;
 import org.anchoranalysis.io.manifest.ManifestRecorderFile;
 import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
 import org.anchoranalysis.io.output.csv.CSVWriter;
 import org.anchoranalysis.io.report.feature.ReportFeatureUtilities;
+import org.anchoranalysis.plugin.io.manifest.CoupledManifests;
+import org.anchoranalysis.plugin.io.manifest.ManifestCouplingDefinition;
 
 
 public class CSVTableExportTaskManifestCouplingDefinition extends TaskWithoutSharedState<ManifestCouplingDefinition> {
