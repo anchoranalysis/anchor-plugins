@@ -1,10 +1,10 @@
-package org.anchoranalysis.plugin.io.bean.descriptivename;
+package org.anchoranalysis.io.bean.input.descriptivename;
 
-/*-
+/*
  * #%L
- * anchor-plugin-io
+ * anchor-io
  * %%
- * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -26,36 +26,36 @@ package org.anchoranalysis.plugin.io.bean.descriptivename;
  * #L%
  */
 
-import static org.junit.Assert.*;
 
 import java.io.File;
-import java.util.Arrays;
-import java.util.List;
 
-import org.anchoranalysis.io.input.descriptivename.DescriptiveFile;
-import org.junit.Test;
+import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.io.bean.descriptivename.DescriptiveNameFromFileIndependent;
+import org.anchoranalysis.io.output.namestyle.IndexableOutputNameStyle;
 
-public class PatternSpanTest {
+public class FromOutputName extends DescriptiveNameFromFileIndependent {
 
-	@Test
-	public void test() {
-		PatternSpan ps = new PatternSpan();
-		List<DescriptiveFile> ret = ps.descriptiveNamesFor( createFiles(), "<UNKNOWN>");
-		
-		assertIndexEquals( ret, 0, "b");
-		assertIndexEquals( ret, 1, "d");
-		assertIndexEquals( ret, 2, "e");
-	}
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	
-	private List<File> createFiles() {
-		File file1 = new File("/a/b/c");
-		File file2 = new File("/a/d/c");
-		File file3 = new File("/a/e/c");
-		return Arrays.asList(file1, file2, file3);
-	}
+	// START BEAN PROPERTIES
+	@BeanField
+	private IndexableOutputNameStyle outputNameStyle;
+	// END BEAN PROPERTIES
 	
-	private void assertIndexEquals( List<DescriptiveFile> ret, int index, String expected ) {
-		String actual = ret.get(index).getDescriptiveName();
-		assertEquals( actual, expected);
+	@Override
+	protected String createDescriptiveName(File file, int index) {
+		return outputNameStyle.getPhysicalName(index);
 	}
+
+	public IndexableOutputNameStyle getOutputNameStyle() {
+		return outputNameStyle;
+	}
+
+	public void setOutputNameStyle(IndexableOutputNameStyle outputNameStyle) {
+		this.outputNameStyle = outputNameStyle;
+	}
+
 }

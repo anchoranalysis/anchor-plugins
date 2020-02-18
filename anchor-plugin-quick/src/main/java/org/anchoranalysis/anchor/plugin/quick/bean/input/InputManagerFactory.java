@@ -29,11 +29,11 @@ package org.anchoranalysis.anchor.plugin.quick.bean.input;
 import org.anchoranalysis.anchor.plugin.quick.bean.input.filepathappend.MatchedAppendCsv;
 import org.anchoranalysis.anchor.plugin.quick.input.BeanCreationUtilities;
 import org.anchoranalysis.bean.error.BeanMisconfiguredException;
-import org.anchoranalysis.io.bean.input.FilterCsvColumn;
+import org.anchoranalysis.io.bean.descriptivename.DescriptiveNameFromFile;
 import org.anchoranalysis.io.bean.input.InputManager;
-import org.anchoranalysis.io.bean.input.descriptivename.DescriptiveNameFromFile;
 import org.anchoranalysis.io.bean.provider.file.FileProviderWithDirectory;
 import org.anchoranalysis.io.input.FileInput;
+import org.anchoranalysis.plugin.io.bean.input.FilterCsvColumn;
 
 class InputManagerFactory {
 	

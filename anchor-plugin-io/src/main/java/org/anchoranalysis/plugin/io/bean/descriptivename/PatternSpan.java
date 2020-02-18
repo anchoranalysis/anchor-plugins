@@ -32,8 +32,8 @@ import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.anchoranalysis.io.bean.input.descriptivename.DescriptiveFile;
-import org.anchoranalysis.io.bean.input.descriptivename.DescriptiveNameFromFile;
+import org.anchoranalysis.io.bean.descriptivename.DescriptiveNameFromFile;
+import org.anchoranalysis.io.input.descriptivename.DescriptiveFile;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOCase;
 
