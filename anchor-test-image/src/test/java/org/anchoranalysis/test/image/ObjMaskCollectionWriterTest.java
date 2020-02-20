@@ -57,7 +57,7 @@ public class ObjMaskCollectionWriterTest {
 		
 	@Before
     public void setUp() {
-		RegisterBeanFactories.registerAllPackageBeanFactories(false);
+		RegisterBeanFactories.registerAllPackageBeanFactories();
     }
 	
 	@Test

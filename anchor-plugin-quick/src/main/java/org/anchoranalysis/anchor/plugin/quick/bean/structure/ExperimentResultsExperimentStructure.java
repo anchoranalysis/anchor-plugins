@@ -35,6 +35,7 @@ import org.anchoranalysis.bean.annotation.AllowEmpty;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.error.BeanMisconfiguredException;
 import org.anchoranalysis.core.progress.ProgressReporter;
+import org.anchoranalysis.io.bean.file.matcher.MatchGlob;
 import org.anchoranalysis.io.bean.provider.file.FileProvider;
 import org.anchoranalysis.io.bean.provider.file.FileProviderWithDirectory;
 import org.anchoranalysis.io.bean.provider.file.FileSet;
@@ -133,7 +134,7 @@ public class ExperimentResultsExperimentStructure extends FileProvider {
 	private FileProviderWithDirectory createFiles() {
 		FileSet out = new FileSet();
 		out.setDirectory( new DirectoryCreator().apply() );
-		out.setFileFilter(fileFilter);
+		out.setMatcher( new MatchGlob(fileFilter) );
 		out.setRecursive(recursive);
 		out.setMaxDirectoryDepth(maxDirectoryDepth);
 		return out;
