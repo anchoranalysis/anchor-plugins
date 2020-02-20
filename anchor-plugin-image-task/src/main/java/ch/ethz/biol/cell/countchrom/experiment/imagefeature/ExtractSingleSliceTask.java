@@ -51,8 +51,8 @@ import org.anchoranalysis.image.io.input.NamedChnlsInput;
 import org.anchoranalysis.image.io.stack.StackCollectionOutputter;
 import org.anchoranalysis.image.stack.NamedImgStackCollection;
 import org.anchoranalysis.image.stack.wrap.WrapStackAsTimeSequenceStore;
-import org.anchoranalysis.io.output.OutputWriteFailedException;
 import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
+import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
 import ch.ethz.biol.cell.countchrom.experiment.imagefeature.calculator.FeatureCalculatorRepeated;
 import ch.ethz.biol.cell.countchrom.experiment.imagefeature.sharedstate.SharedStateSelectedSlice;

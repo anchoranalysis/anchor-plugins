@@ -44,7 +44,7 @@ import org.anchoranalysis.io.color.HashedColorSet;
 import org.anchoranalysis.io.generator.IterableGenerator;
 import org.anchoranalysis.io.generator.IterableGeneratorBridge;
 import org.anchoranalysis.io.generator.combined.IterableCombinedListGenerator;
-import org.anchoranalysis.io.output.OutputWriteFailedException;
+import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.mpp.sgmn.optscheme.step.Reporting;
 
 import ch.ethz.biol.cell.imageprocessing.io.generator.raster.CfgGenerator;

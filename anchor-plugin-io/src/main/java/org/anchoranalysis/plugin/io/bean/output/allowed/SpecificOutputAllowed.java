@@ -1,10 +1,12 @@
-package ch.ethz.biol.cell.mpp.feedback.reporter;
+package org.anchoranalysis.plugin.io.bean.output.allowed;
 
-/*-
+import org.anchoranalysis.bean.StringSet;
+
+/*
  * #%L
- * anchor-plugin-mpp
+ * anchor-io
  * %%
- * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -26,27 +28,33 @@ package ch.ethz.biol.cell.mpp.feedback.reporter;
  * #L%
  */
 
-import org.anchoranalysis.io.manifest.ManifestDescription;
-import org.anchoranalysis.io.output.error.OutputWriteFailedException;
-import org.anchoranalysis.io.output.file.FileOutput;
-import org.anchoranalysis.io.output.file.FileOutputFromManager;
 
-import ch.ethz.biol.cell.mpp.feedback.OptimizationFeedbackInitParams;
-import ch.ethz.biol.cell.mpp.nrg.CfgNRGPixelized;
+import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.io.output.bean.allowed.OutputAllowed;
 
-public class CSVReporterUtilities {
+public class SpecificOutputAllowed extends OutputAllowed {
 
-	public static FileOutput createFileOutputFor(
-		String outputName,
-		OptimizationFeedbackInitParams<CfgNRGPixelized> initParams,
-		String manifestDscrFunction
-	) throws OutputWriteFailedException {
-		return FileOutputFromManager.create(
-			"csv",
-			new ManifestDescription("csv",manifestDscrFunction),
-			initParams.getInitContext().getOutputManager().getDelegate(),
-			outputName
-		);
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -7783226379991535090L;
+	
+	// START BEAN PROPERTIES
+	@BeanField
+	private StringSet outputsAllowed;
+	// END BEAN PROPERTIES
+	
+	@Override
+	public boolean isOutputAllowed(String outputName) {
+		return outputsAllowed.contains(outputName);
+	}
+
+	public StringSet getOutputsAllowed() {
+		return outputsAllowed;
+	}
+
+	public void setOutputsAllowed(StringSet outputsAllowed) {
+		this.outputsAllowed = outputsAllowed;
 	}
 
 }

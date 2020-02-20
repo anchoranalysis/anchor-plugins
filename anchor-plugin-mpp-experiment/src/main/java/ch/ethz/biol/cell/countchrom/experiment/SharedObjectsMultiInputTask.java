@@ -48,8 +48,8 @@ import org.anchoranalysis.experiment.task.ParametersBound;
 import org.anchoranalysis.image.init.ImageInitParams;
 import org.anchoranalysis.image.io.bean.output.feature.table.OutputFeatureTable;
 import org.anchoranalysis.image.stack.NamedImgStackCollection;
-import org.anchoranalysis.io.output.OutputWriteFailedException;
 import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
+import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.mpp.io.input.MultiInput;
 
 public class SharedObjectsMultiInputTask extends TaskWithoutSharedState<MultiInput> {

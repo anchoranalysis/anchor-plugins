@@ -32,8 +32,8 @@ import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.io.generator.IterableObjectGenerator;
 import org.anchoranalysis.io.generator.bean.sequence.factory.GeneratorSequenceFactory;
 import org.anchoranalysis.io.generator.sequence.IGeneratorSequenceNonIncremental;
+import org.anchoranalysis.io.namestyle.SimpleOutputNameStyle;
 import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
-import org.anchoranalysis.io.output.namestyle.SimpleOutputNameStyle;
 
 public class MovieGeneratorSequenceFactory extends GeneratorSequenceFactory {
 

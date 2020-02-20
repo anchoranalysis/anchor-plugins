@@ -31,7 +31,7 @@ import java.io.File;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.io.bean.descriptivename.DescriptiveNameFromFileIndependent;
-import org.anchoranalysis.io.output.namestyle.IndexableOutputNameStyle;
+import org.anchoranalysis.io.namestyle.IndexableOutputNameStyle;
 
 public class FromOutputName extends DescriptiveNameFromFileIndependent {
 

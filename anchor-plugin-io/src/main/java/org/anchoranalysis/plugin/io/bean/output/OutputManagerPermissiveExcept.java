@@ -1,8 +1,8 @@
-package ch.ethz.biol.cell.mpp.feedback.reporter;
+package org.anchoranalysis.plugin.io.bean.output;
 
 /*-
  * #%L
- * anchor-plugin-mpp
+ * anchor-io-output
  * %%
  * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
  * %%
@@ -26,27 +26,47 @@ package ch.ethz.biol.cell.mpp.feedback.reporter;
  * #L%
  */
 
-import org.anchoranalysis.io.manifest.ManifestDescription;
-import org.anchoranalysis.io.output.error.OutputWriteFailedException;
-import org.anchoranalysis.io.output.file.FileOutput;
-import org.anchoranalysis.io.output.file.FileOutputFromManager;
+import org.anchoranalysis.bean.StringSet;
+import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.io.output.bean.OutputManagerWithPrefixer;
+import org.anchoranalysis.io.output.bean.allowed.OutputAllowed;
+import org.anchoranalysis.plugin.io.bean.output.allowed.AllOutputAllowed;
 
-import ch.ethz.biol.cell.mpp.feedback.OptimizationFeedbackInitParams;
-import ch.ethz.biol.cell.mpp.nrg.CfgNRGPixelized;
 
-public class CSVReporterUtilities {
+/**
+ * Allows everything to be outputted except a particular list
+ * 
+ * @author Owen Feehan
+ *
+ */
+public class OutputManagerPermissiveExcept extends OutputManagerWithPrefixer {
 
-	public static FileOutput createFileOutputFor(
-		String outputName,
-		OptimizationFeedbackInitParams<CfgNRGPixelized> initParams,
-		String manifestDscrFunction
-	) throws OutputWriteFailedException {
-		return FileOutputFromManager.create(
-			"csv",
-			new ManifestDescription("csv",manifestDscrFunction),
-			initParams.getInitContext().getOutputManager().getDelegate(),
-			outputName
-		);
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	
+	// START BEAN PROPERTIES
+	@BeanField
+	private StringSet except;
+	// END BEAN PROPERTIES
+	
+	@Override
+	public boolean isOutputAllowed(String outputName) {
+		return !except.contains(outputName);
+	}
+
+	@Override
+	public OutputAllowed outputAllowedSecondLevel(String key) {
+		return new AllOutputAllowed();
+	}
+
+	public StringSet getExcept() {
+		return except;
+	}
+
+	public void setExcept(StringSet except) {
+		this.except = except;
 	}
 
 }

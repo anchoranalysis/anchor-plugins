@@ -37,7 +37,7 @@ import org.anchoranalysis.image.stack.rgb.RGBStack;
 import org.anchoranalysis.io.generator.IterableObjectGenerator;
 import org.anchoranalysis.io.generator.ObjectGenerator;
 import org.anchoranalysis.io.manifest.ManifestDescription;
-import org.anchoranalysis.io.output.OutputWriteFailedException;
+import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
 // Converts a RasterGenerator into a ImageStackGenerator
 public class RasterConverterIterableGenerator<IterationType> extends ImageStackGenerator implements IterableObjectGenerator<IterationType, ImageStack> {

@@ -47,15 +47,15 @@ import org.anchoranalysis.experiment.bean.task.HelloWorldTask;
 import org.anchoranalysis.experiment.task.Task;
 import org.anchoranalysis.io.bean.provider.file.FileSet;
 import org.anchoranalysis.io.output.bean.OutputManager;
+import org.anchoranalysis.io.output.bean.OutputWriteSettings;
+import org.anchoranalysis.io.output.bean.allowed.OutputAllowed;
 import org.anchoranalysis.io.bean.input.InputManager;
-import org.anchoranalysis.io.bean.output.OutputWriteSettings;
-import org.anchoranalysis.io.bean.output.allowed.AllOutputAllowed;
-import org.anchoranalysis.io.bean.output.allowed.OutputAllowed;
 import org.anchoranalysis.mpp.io.bean.input.MultiInputManager;
 import org.anchoranalysis.mpp.io.input.MultiInput;
 import org.anchoranalysis.plugin.io.bean.filepath.rslvr.FilePathRslvr;
 import org.anchoranalysis.plugin.io.bean.input.file.Files;
 import org.anchoranalysis.plugin.io.bean.input.stack.Stacks;
+import org.anchoranalysis.plugin.io.bean.output.allowed.AllOutputAllowed;
 import org.anchoranalysis.plugin.mpp.experiment.bean.outputmanager.OutputManagerStack;
 
 /**

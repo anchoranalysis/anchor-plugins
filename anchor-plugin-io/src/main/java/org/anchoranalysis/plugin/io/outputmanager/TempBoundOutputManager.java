@@ -37,12 +37,12 @@ import org.anchoranalysis.bean.xml.RegisterBeanFactories;
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
 import org.anchoranalysis.core.error.reporter.ErrorReporterIntoLog;
 import org.anchoranalysis.experiment.log.ConsoleLogReporter;
-import org.anchoranalysis.io.bean.output.OutputWriteSettings;
 import org.anchoranalysis.io.manifest.ManifestRecorder;
-import org.anchoranalysis.io.output.bean.OutputManagerPermissive;
 import org.anchoranalysis.io.output.bean.OutputManagerWithPrefixer;
+import org.anchoranalysis.io.output.bean.OutputWriteSettings;
 import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
 import org.anchoranalysis.plugin.io.bean.filepath.rslvr.FilePathCounter;
+import org.anchoranalysis.plugin.io.bean.output.OutputManagerPermissive;
 
 public class TempBoundOutputManager {
 

@@ -54,8 +54,8 @@ import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.io.generator.sequence.GeneratorSequenceNonIncrementalRerouterErrors;
 import org.anchoranalysis.io.generator.sequence.GeneratorSequenceNonIncrementalWriter;
 import org.anchoranalysis.io.manifest.sequencetype.SetSequenceType;
+import org.anchoranalysis.io.namestyle.StringSuffixOutputNameStyle;
 import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
-import org.anchoranalysis.io.output.namestyle.StringSuffixOutputNameStyle;
 
 public class AssignResolutionTask extends RasterTask {
 

@@ -36,10 +36,10 @@ import org.anchoranalysis.annotation.io.assignment.ObjMaskCollectionDistanceMatr
 import org.anchoranalysis.core.text.TypedValue;
 import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.image.objmask.ObjMaskCollection;
-import org.anchoranalysis.io.bean.output.OutputWriteSettings;
 import org.anchoranalysis.io.generator.csv.CSVGenerator;
-import org.anchoranalysis.io.output.OutputWriteFailedException;
+import org.anchoranalysis.io.output.bean.OutputWriteSettings;
 import org.anchoranalysis.io.output.csv.CSVWriter;
+import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
 class ObjMaskCollectionDistanceMatrixGenerator extends CSVGenerator {
 
