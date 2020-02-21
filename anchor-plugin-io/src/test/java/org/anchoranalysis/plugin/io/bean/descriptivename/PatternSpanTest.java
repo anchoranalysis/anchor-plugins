@@ -31,6 +31,7 @@ import static org.junit.Assert.*;
 import java.io.File;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.anchoranalysis.io.input.descriptivename.DescriptiveFile;
 import org.junit.Test;
@@ -38,13 +39,27 @@ import org.junit.Test;
 public class PatternSpanTest {
 
 	@Test
-	public void test() {
+	public void testSimple() {
 		PatternSpan ps = new PatternSpan();
 		List<DescriptiveFile> ret = ps.descriptiveNamesFor( createFiles(), "<UNKNOWN>");
 		
 		assertIndexEquals( ret, 0, "b");
 		assertIndexEquals( ret, 1, "d");
 		assertIndexEquals( ret, 2, "e");
+	}
+	
+	@Test
+	public void testPaths() {
+		List<String> strs = Arrays.asList(
+			"D:/Users/owen/Pictures/To Integrate/Feb 2020/P1210940.JPG",
+			"D:/Users/owen/Pictures/To Integrate/Feb 2020/Klosters (Feb 2020)/P1210904.JPG"
+		);
+		List<File> files = strs.stream().map( str -> new File(str) ).collect( Collectors.toList() );
+		
+		PatternSpan ps = new PatternSpan();
+		List<DescriptiveFile> ret = ps.descriptiveNamesFor(files, "unknown");
+		assertIndexEquals( ret, 0, "P1210940");
+		assertIndexEquals( ret, 1, "Klosters-(Feb-2020)/P1210904");
 	}
 	
 	private List<File> createFiles() {
