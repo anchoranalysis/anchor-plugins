@@ -34,7 +34,6 @@ import org.anchoranalysis.core.error.OperationFailedException;
 import org.apache.commons.io.IOCase;
 
 import com.owenfeehan.pathpatternfinder.Pattern;
-import com.owenfeehan.pathpatternfinder.patternelements.PatternElement;
 
 /**
  * Extracts the variable-part of the pattern from the string
@@ -91,44 +90,14 @@ class ExtractVariableSpan {
 		}
 		
 		// Combine all strings to form the name
+		return combineStr(fittedElements);
+	}
+	
+	private static String combineStr( String[] arr ) {
 		StringBuilder sb = new StringBuilder();
-		for( int i=0; i<fittedElements.length; i++) {
-			sb.append( fittedElements[i] );
+		for( int i=0; i<arr.length; i++) {
+			sb.append( arr[i] );
 		}
-		return sb.toString();
-	}
-	
-	
-	private static String trimAllConstantElementsFromLeft( String strToTrim, Pattern pattern ) throws OperationFailedException {
-		// Remove any constants from the left-most side
-		for( PatternElement e : pattern ) {
-			if (!e.hasConstantValue()) {
-				break;
-			}
-			
-			strToTrim = trimFromLeft(strToTrim, e);
-		}
-		
-		return strToTrim;
-	}
-	
-	private static String trimFromLeft( String strToTrim, PatternElement constantElement ) throws OperationFailedException {
-		
-		// For now, hard-coded case-insensitivity here, and in PatternSpan
-		// TODO consider making it optional in both places
-		String matchText = stringFromConstantPattern(constantElement).toLowerCase();
-		
-		int index = strToTrim.toLowerCase().indexOf( matchText );
-		if(index!=0) {
-			throw new OperationFailedException(
-				String.format("Cannot match %s against %s from left-side", matchText, strToTrim)
-			);
-		}
-		return strToTrim.substring( matchText.length() );
-	}
-	
-	// As there's no nicer way via the API, we convert the constant-pattern to a string via describe()
-	private static String stringFromConstantPattern( PatternElement e ) {
-		return e.describe(1000000);
+		return sb.toString();		
 	}
 }
