@@ -31,11 +31,10 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.file.PathUtilities;
+import org.apache.commons.io.IOCase;
 
 import com.owenfeehan.pathpatternfinder.Pattern;
 import com.owenfeehan.pathpatternfinder.patternelements.PatternElement;
-import com.owenfeehan.pathpatternfinder.patternelements.StringUtilities;
 
 /**
  * Extracts the variable-part of the pattern from the string
@@ -59,26 +58,46 @@ class ExtractVariableSpan {
 		
 	private static String extractVariableSpanWithError(File file, Pattern pattern) throws OperationFailedException {
 		String path = file.toPath().toString();
+		return trimConstantElementsFromBothSides( path, pattern, IOCase.INSENSITIVE );
+	}
+	
+	private static String trimConstantElementsFromBothSides( String str, Pattern pattern, IOCase ioCase ) throws OperationFailedException {
+		String[] fittedElements = pattern.fitAgainst(str, ioCase);
 		
-		// Remove any constants from the left-most side
-		path = trimAllConstantElementsFromLeft(path, pattern);
-		
-		// Reverse path and elements
-		path = StringUtilities.reverse(path);
-		pattern.reverse();
-				
-		try {
-			// Remove any constants from the left-most side of the reserved string (i.e. what's really the right)
-			path = trimAllConstantElementsFromLeft(path, pattern);
-		} finally {
-			// Unreverse the patterm
-			pattern.reverse();
+		if (fittedElements==null) {
+			throw new OperationFailedException(
+				String.format("Cannot match pattern %s against %s", pattern, str)
+			);
 		}
 		
-		return PathUtilities.toStringUnixStyle(
-			StringUtilities.reverse(path)
-		);
+		assert( fittedElements.length ==pattern.size() );
+		
+		// Replace any constants from the left-hand-side with empty strings
+		for( int i=0; i<fittedElements.length; i++) {
+			if (pattern.get(i).hasConstantValue()) {
+				fittedElements[i] = "";
+			} else {
+				break;
+			}
+		}
+		
+		// Replace any constants from the right-hand-side with empty strings
+		for( int i=(fittedElements.length-1); i>=0; i--) {
+			if (pattern.get(i).hasConstantValue()) {
+				fittedElements[i] = "";
+			} else {
+				break;
+			}
+		}
+		
+		// Combine all strings to form the name
+		StringBuilder sb = new StringBuilder();
+		for( int i=0; i<fittedElements.length; i++) {
+			sb.append( fittedElements[i] );
+		}
+		return sb.toString();
 	}
+	
 	
 	private static String trimAllConstantElementsFromLeft( String strToTrim, Pattern pattern ) throws OperationFailedException {
 		// Remove any constants from the left-most side

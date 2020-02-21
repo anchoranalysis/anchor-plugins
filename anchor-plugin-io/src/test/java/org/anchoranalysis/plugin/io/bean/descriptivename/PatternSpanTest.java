@@ -59,7 +59,7 @@ public class PatternSpanTest {
 		PatternSpan ps = new PatternSpan();
 		List<DescriptiveFile> ret = ps.descriptiveNamesFor(files, "unknown");
 		assertIndexEquals( ret, 0, "P1210940");
-		assertIndexEquals( ret, 1, "Klosters-(Feb-2020)/P1210904");
+		assertIndexEquals( ret, 1, "Klosters-(Feb-2020)" + File.separator + "P1210904");
 	}
 	
 	private List<File> createFiles() {
@@ -71,6 +71,6 @@ public class PatternSpanTest {
 	
 	private void assertIndexEquals( List<DescriptiveFile> ret, int index, String expected ) {
 		String actual = ret.get(index).getDescriptiveName();
-		assertEquals( actual, expected);
+		assertEquals( expected, actual );
 	}
 }
