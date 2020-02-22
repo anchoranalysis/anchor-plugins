@@ -100,7 +100,7 @@ public class FileSizeStatistics extends Summarizer<Path> {
 		}
 		
 		return String.format(
-			"File-sizes range across [%s to %s] with an average of %s.",
+			"file-sizes range across [%s to %s] with an average of %s.",
 			humanReadableSize(min),
 			humanReadableSize(max),
 			humanReadableSize( (long) runningSum.mean() )

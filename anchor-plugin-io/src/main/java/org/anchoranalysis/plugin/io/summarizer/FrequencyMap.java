@@ -61,7 +61,7 @@ public class FrequencyMap<T> {
 			return "No inputs have been found yet.";
 		} else if (numKeys==1) {
 			return String.format(
-				"All inputs have %s = %s",
+				"with uniform %s = %s",
 				dscrNoun,
 				map.keySet().iterator().next()
 			);
@@ -72,7 +72,7 @@ public class FrequencyMap<T> {
 	
 	private String describeDiverse( String dscrNoun ) {
 		StringBuilder sb = new StringBuilder();
-		sb.append( String.format("Inputs have diverse %s:", LanguageUtilities.pluralize(dscrNoun)) );
+		sb.append( String.format("with diverse %s:", LanguageUtilities.pluralize(dscrNoun)) );
 		
 		for( Entry<T,Integer> entry : map.entrySet() ) {
 			sb.append(
