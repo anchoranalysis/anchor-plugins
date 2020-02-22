@@ -32,11 +32,11 @@ import java.io.IOException;
 import java.nio.file.Path;
 
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
-import org.anchoranalysis.io.bean.input.descriptivename.LastFolders;
 import org.anchoranalysis.io.filepath.prefixer.FilePathDifferenceFromFolderPath;
 import org.anchoranalysis.io.input.InputFromManager;
 import org.anchoranalysis.io.manifest.ManifestRecorder;
 import org.anchoranalysis.io.manifest.ManifestRecorderFile;
+import org.anchoranalysis.plugin.io.bean.descriptivename.LastFolders;
 
 // A file manifest together with the overall manifest for the experiment
 public class CoupledManifests implements InputFromManager {

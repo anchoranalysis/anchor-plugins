@@ -1,4 +1,4 @@
-package org.anchoranalysis.io.bean.input.descriptivename;
+package org.anchoranalysis.plugin.io.bean.descriptivename;
 
 /*
  * #%L

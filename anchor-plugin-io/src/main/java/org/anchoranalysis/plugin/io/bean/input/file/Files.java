@@ -41,6 +41,7 @@ import org.anchoranalysis.io.bean.provider.file.FileProvider;
 import org.anchoranalysis.io.input.FileInput;
 import org.anchoranalysis.io.params.InputContextParams;
 import org.anchoranalysis.plugin.io.bean.descriptivename.PatternSpan;
+import org.anchoranalysis.plugin.io.bean.descriptivename.RemoveExtensions;
 
 
 /**
@@ -61,7 +62,7 @@ public class Files extends InputManager<FileInput> {
 	private FileProvider fileProvider = null;
 	
 	@BeanField
-	private DescriptiveNameFromFile descriptiveNameFromFile = new PatternSpan();
+	private DescriptiveNameFromFile descriptiveNameFromFile = new RemoveExtensions( new PatternSpan() );
 	// END BEAN PROPERTIES
 	
 	public List<FileInput> inputObjects(InputContextParams inputContext, ProgressReporter progressReporter) throws IOException {
@@ -89,6 +90,4 @@ public class Files extends InputManager<FileInput> {
 			DescriptiveNameFromFile descriptiveNameFromFile) {
 		this.descriptiveNameFromFile = descriptiveNameFromFile;
 	}
-
-
 }

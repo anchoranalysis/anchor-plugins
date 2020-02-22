@@ -45,7 +45,4 @@ public class NumberChnls extends SummarizerNamedChnlsSimple<Integer> {
 	protected String describeNoun() {
 		return "channel";
 	}
-
-	
-
 }

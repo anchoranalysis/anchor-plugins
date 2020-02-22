@@ -1,4 +1,4 @@
-package org.anchoranalysis.io.bean.input.descriptivename;
+package org.anchoranalysis.plugin.io.bean.descriptivename;
 
 /*
  * #%L
@@ -28,11 +28,12 @@ package org.anchoranalysis.io.bean.input.descriptivename;
 
 
 import java.io.File;
-import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.bean.shared.regex.RegEx;
-import org.anchoranalysis.io.bean.descriptivename.DescriptiveNameFromFileIndependent;
 
-public class RegExMatcher extends DescriptiveNameFromFileIndependent {
+import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.io.bean.descriptivename.DescriptiveNameFromFileIndependent;
+import org.anchoranalysis.io.namestyle.IndexableOutputNameStyle;
+
+public class FromOutputName extends DescriptiveNameFromFileIndependent {
 
 	/**
 	 * 
@@ -41,41 +42,20 @@ public class RegExMatcher extends DescriptiveNameFromFileIndependent {
 	
 	// START BEAN PROPERTIES
 	@BeanField
-	private RegEx regEx;
+	private IndexableOutputNameStyle outputNameStyle;
 	// END BEAN PROPERTIES
 	
 	@Override
 	protected String createDescriptiveName(File file, int index) {
-		
-		String filePath = file.getPath();
-		filePath = filePath.replace('\\', '/');
-		
-		
-		String[] components = regEx.matchStr(filePath);
-		
-		if (components==null) {
-			return String.format("regEx match failed on %s", filePath);
-		}
-		
-		StringBuilder out = new StringBuilder();
-		for (int i=0; i<components.length; i++) {
-			
-			if (i!=0) {
-				out.append( "/" );
-			}
-			
-			out.append( components[i] );
-		}
-		return out.toString();
+		return outputNameStyle.getPhysicalName(index);
 	}
 
-	public RegEx getRegEx() {
-		return regEx;
+	public IndexableOutputNameStyle getOutputNameStyle() {
+		return outputNameStyle;
 	}
 
-	public void setRegEx(RegEx regEx) {
-		this.regEx = regEx;
+	public void setOutputNameStyle(IndexableOutputNameStyle outputNameStyle) {
+		this.outputNameStyle = outputNameStyle;
 	}
-
 
 }
