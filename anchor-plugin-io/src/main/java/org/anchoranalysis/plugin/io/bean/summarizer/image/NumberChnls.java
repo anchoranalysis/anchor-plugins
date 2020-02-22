@@ -43,7 +43,7 @@ public class NumberChnls extends SummarizerNamedChnlsSimple<Integer> {
 
 	@Override
 	protected String describeNoun() {
-		return "channels";
+		return "channel";
 	}
 
 	
