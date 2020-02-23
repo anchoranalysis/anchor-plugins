@@ -1,4 +1,4 @@
-package org.anchoranalysis.plugin.io.bean.filepath.rslvr;
+package org.anchoranalysis.plugin.io.bean.filepath.prefixer;
 
 /*
  * #%L

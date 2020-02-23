@@ -1,4 +1,4 @@
-package org.anchoranalysis.plugin.io.bean.filepath.rslvr;
+package org.anchoranalysis.plugin.io.bean.filepath.prefixer;
 
 /*
  * #%L
@@ -34,9 +34,17 @@ import org.anchoranalysis.bean.shared.regex.RegEx;
 import org.anchoranalysis.core.file.PathUtilities;
 import org.anchoranalysis.io.filepath.prefixer.FilePathDifferenceFromFolderPath;
 import org.anchoranalysis.io.filepath.prefixer.FilePathPrefix;
+import org.anchoranalysis.io.filepath.prefixer.FilePathPrefixerParams;
+import org.anchoranalysis.io.input.InputFromManager;
 
-/// Matches prefixes against our incoming files, and attaches them to outgoing files 
-public class FilePathRslvrRegEx extends FilePathRslvrBase {
+/// 
+
+/**
+ * Matches a regex against incoming file-paths to form a relative output
+ * @author owen
+ *
+ */
+public class FilePathRslvrRegEx extends FilePathPrefixerAvoidResolve {
 
 	/**
 	 * 
@@ -49,9 +57,9 @@ public class FilePathRslvrRegEx extends FilePathRslvrBase {
 	// END BEAN PROPERTIES
 
 	@Override
-	public FilePathPrefix outFilePrefix(Path pathIn, String experimentIdentifier, boolean debugMode) throws IOException {
+	public FilePathPrefix outFilePrefix(InputFromManager input, String experimentIdentifier, FilePathPrefixerParams context) throws IOException {
 		// we convert the input-path to absolute
-		Path pathInAbsolute = resolvePath( pathIn );
+		Path pathInAbsolute = resolvePath( input.pathForBinding() );
 		Path inPathPrefixAbsolute = resolvePath( getInPathPrefixAsPath() );
 		
 		String[] components = componentsFromPath(
@@ -60,7 +68,7 @@ public class FilePathRslvrRegEx extends FilePathRslvrBase {
 		);
 		
 		return HelperFilePathRslvr.createPrefix(
-			rootFolderPrefix(experimentIdentifier, debugMode).getFolderPath(),
+			rootFolderPrefix(experimentIdentifier, context).getFolderPath(),
 			components,
 			isFileAsFolder()
 		);

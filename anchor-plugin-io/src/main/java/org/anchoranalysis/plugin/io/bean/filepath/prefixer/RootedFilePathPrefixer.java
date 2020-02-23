@@ -1,4 +1,4 @@
-package org.anchoranalysis.plugin.io.bean.filepath.rslvr;
+package org.anchoranalysis.plugin.io.bean.filepath.prefixer;
 
 /*
  * #%L
@@ -34,6 +34,8 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.io.bean.filepath.prefixer.FilePathPrefixer;
 import org.anchoranalysis.io.bean.root.RootPathMap;
 import org.anchoranalysis.io.filepath.prefixer.FilePathPrefix;
+import org.anchoranalysis.io.filepath.prefixer.FilePathPrefixerParams;
+import org.anchoranalysis.io.input.InputFromManager;
 import org.apache.log4j.Logger;
 
 public class RootedFilePathPrefixer extends FilePathPrefixer {
@@ -55,16 +57,16 @@ public class RootedFilePathPrefixer extends FilePathPrefixer {
 	private static Logger logger = Logger.getLogger(RootedFilePathPrefixer.class);
 		
 	@Override
-	public FilePathPrefix outFilePrefix(Path pathIn, String expName, boolean debugMode)
+	public FilePathPrefix outFilePrefix(InputFromManager input, String expName, FilePathPrefixerParams context)
 			throws IOException {
 
-		logger.debug( String.format("pathIn=%s", pathIn) );
+		logger.debug( String.format("pathIn=%s", input) );
 		
-		Path pathInWithoutRoot = RootPathMap.instance().split(pathIn, rootName, debugMode).getPath();
+		Path pathInWithoutRoot = RootPathMap.instance().split(input.pathForBinding(), rootName, context.isDebugMode()).getPath();
 		
 		FilePathPrefix fpp = filePathPrefixer.outFilePrefixAvoidResolve( pathInWithoutRoot, expName);
 		
-		Path pathOut = folderPathOut(fpp.getFolderPath(), debugMode);
+		Path pathOut = folderPathOut(fpp.getFolderPath(), context.isDebugMode());
 		fpp.setFolderPath( pathOut );
 		
 		logger.debug( String.format("prefix=%s", fpp.getFolderPath()) );
@@ -78,11 +80,9 @@ public class RootedFilePathPrefixer extends FilePathPrefixer {
 	}
 
 	@Override
-	public FilePathPrefix rootFolderPrefix(String expName, boolean debugMode) throws IOException {
+	public FilePathPrefix rootFolderPrefix(String expName, FilePathPrefixerParams context) throws IOException {
 		FilePathPrefix fpp = filePathPrefixer.rootFolderPrefixAvoidResolve(expName) ;
-		
-
-		fpp.setFolderPath( folderPathOut( fpp.getFolderPath(), debugMode ) );
+		fpp.setFolderPath( folderPathOut( fpp.getFolderPath(), context.isDebugMode() ) );
 		return fpp;
 	}
 

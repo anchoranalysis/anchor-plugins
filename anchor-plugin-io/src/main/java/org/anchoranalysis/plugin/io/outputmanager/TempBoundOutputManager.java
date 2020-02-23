@@ -37,11 +37,12 @@ import org.anchoranalysis.bean.xml.RegisterBeanFactories;
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
 import org.anchoranalysis.core.error.reporter.ErrorReporterIntoLog;
 import org.anchoranalysis.experiment.log.ConsoleLogReporter;
+import org.anchoranalysis.io.filepath.prefixer.FilePathPrefixerParams;
 import org.anchoranalysis.io.manifest.ManifestRecorder;
 import org.anchoranalysis.io.output.bean.OutputManagerWithPrefixer;
 import org.anchoranalysis.io.output.bean.OutputWriteSettings;
 import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
-import org.anchoranalysis.plugin.io.bean.filepath.rslvr.FilePathCounter;
+import org.anchoranalysis.plugin.io.bean.filepath.prefixer.FilePathCounter;
 import org.anchoranalysis.plugin.io.bean.output.OutputManagerPermissive;
 
 public class TempBoundOutputManager {
@@ -103,7 +104,7 @@ public class TempBoundOutputManager {
 		
 		try {
 			return new BoundOutputManagerRouteErrors(
-				outputManager.bindRootFolder( "debug", new ManifestRecorder(), false ),
+				outputManager.bindRootFolder( "debug", new ManifestRecorder(), new FilePathPrefixerParams(false, null) ),
 				errorReporter
 			);
 		} catch (IOException e) {

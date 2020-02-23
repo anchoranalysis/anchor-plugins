@@ -1,4 +1,4 @@
-package org.anchoranalysis.plugin.io.bean.filepath.rslvr;
+package org.anchoranalysis.plugin.io.bean.filepath.prefixer;
 
 /*
  * #%L
@@ -27,42 +27,62 @@ package org.anchoranalysis.plugin.io.bean.filepath.rslvr;
  */
 
 
-import java.io.IOException;
 import java.nio.file.Path;
-
-import org.anchoranalysis.io.bean.filepath.prefixer.FilePathPrefixer;
+import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.io.filepath.prefixer.FilePathPrefix;
+import org.anchoranalysis.io.input.InputFromManager;
 
-/**
- * A file-path-resolver that will avoid resolving paths (useful for combining with the MultiRootedFilePathPrefixer)
- *   so relative-paths keep the same root, as when passed in
- * 
- * @author Owen Feehan
- *
- */
-public abstract class FilePathPrefixerAvoidResolve extends FilePathPrefixer {
+public class FilePathCounter extends FilePathPrefixerSpecifiedOutPath {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+
+	private int cnt = 0;
+	
+	// START BEAN PROPERTIES
+	@BeanField
+	private int numLeadingZeros = 4;
 	
 	/**
-	 * Provides a prefix which can be prepended to all output files. It avoids resolving relative-paths.
-	 * 
-	 * @param pathIn an input-path to match against
-	 * @param experimentIdentifier an identifier for the experiment
-	 * @return a prefixer
-	 * @throws IOException if something goes wrong
+	 * If true, a subfolder is created for each incremented count. If false, a prefix is used instead
 	 */
-	public abstract FilePathPrefix outFilePrefixAvoidResolve( Path pathIn, String experimentIdentifier ) throws IOException;
+	@BeanField
+	private boolean subfolder = true;
+	// END BEAN PROPERTIES
 	
-	/**
-	 * Provides a prefix that becomes the root-folder.  It avoids resolving relative-paths.
-	 * 
-	 * @param experimentIdentifier an identifier for the experiment
-	 * @return a prefixer
-	 * @throws IOException
-	 */
-	public abstract FilePathPrefix rootFolderPrefixAvoidResolve( String experimentIdentifier ) throws IOException;
+	public FilePathCounter() {
+		// BEAN CONSTRUCTOR
+	}
+	
+	public FilePathCounter( String outPathPrefix ) {
+		super(outPathPrefix);
+	}
+
+	@Override
+	protected FilePathPrefix outFilePrefixFromRoot(InputFromManager input, Path root) {
+		String formatSpecifier = "%0" + numLeadingZeros + "d";
+		String identifier = String.format( formatSpecifier, cnt++ );
+		
+		if (subfolder) {
+			Path combinedDir = root.resolve(identifier);
+			FilePathPrefix fpp = new FilePathPrefix(combinedDir);
+			fpp.setFilenamePrefix("");
+			return fpp;
+		} else {
+			FilePathPrefix fpp = new FilePathPrefix( root );
+			fpp.setFilenamePrefix( identifier + "_" );
+			return fpp;
+		}
+	}
+	
+	public int getNumLeadingZeros() {
+		return numLeadingZeros;
+	}
+
+	public void setNumLeadingZeros(int numLeadingZeros) {
+		this.numLeadingZeros = numLeadingZeros;
+	}
+
 }

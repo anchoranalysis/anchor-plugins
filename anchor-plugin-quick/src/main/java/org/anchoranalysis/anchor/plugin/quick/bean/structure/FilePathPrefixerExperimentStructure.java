@@ -27,16 +27,18 @@ package org.anchoranalysis.anchor.plugin.quick.bean.structure;
  */
 
 import java.io.IOException;
-import java.nio.file.Path;
+
 import org.anchoranalysis.bean.BeanInstanceMap;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.error.BeanMisconfiguredException;
 import org.anchoranalysis.bean.shared.regex.RegEx;
 import org.anchoranalysis.io.bean.filepath.prefixer.FilePathPrefixer;
 import org.anchoranalysis.io.filepath.prefixer.FilePathPrefix;
-import org.anchoranalysis.plugin.io.bean.filepath.rslvr.FilePathPrefixerAvoidResolve;
-import org.anchoranalysis.plugin.io.bean.filepath.rslvr.FilePathRslvrRegEx;
-import org.anchoranalysis.plugin.io.bean.filepath.rslvr.RootedFilePathPrefixer;
+import org.anchoranalysis.io.filepath.prefixer.FilePathPrefixerParams;
+import org.anchoranalysis.io.input.InputFromManager;
+import org.anchoranalysis.plugin.io.bean.filepath.prefixer.FilePathPrefixerAvoidResolve;
+import org.anchoranalysis.plugin.io.bean.filepath.prefixer.FilePathRslvrRegEx;
+import org.anchoranalysis.plugin.io.bean.filepath.prefixer.RootedFilePathPrefixer;
 
 /**
  * A file path prefixer that combines a prefix with an experimentType
@@ -77,20 +79,20 @@ public class FilePathPrefixerExperimentStructure extends FilePathPrefixer {
 	}
 
 	@Override
-	public FilePathPrefix outFilePrefix(Path pathIn, String experimentIdentifier, boolean debugMode)
+	public FilePathPrefix outFilePrefix(InputFromManager input, String experimentIdentifier, FilePathPrefixerParams context)
 			throws IOException {
 
 		createDelegateIfNeeded();
 		
-		return delegate.outFilePrefix(pathIn, experimentIdentifier, debugMode);
+		return delegate.outFilePrefix(input, experimentIdentifier, context);
 	}
 
 	@Override
-	public FilePathPrefix rootFolderPrefix(String experimentIdentifier, boolean debugMode) throws IOException {
+	public FilePathPrefix rootFolderPrefix(String experimentIdentifier, FilePathPrefixerParams context) throws IOException {
 
 		createDelegateIfNeeded();
 		
-		return delegate.rootFolderPrefix(experimentIdentifier, debugMode);
+		return delegate.rootFolderPrefix(experimentIdentifier, context);
 	}
 
 	private void createDelegateIfNeeded() throws IOException {

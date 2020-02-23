@@ -1,4 +1,4 @@
-package org.anchoranalysis.plugin.io.bean.filepath.rslvr;
+package org.anchoranalysis.plugin.io.bean.filepath.prefixer;
 
 /*
  * #%L
@@ -34,10 +34,12 @@ import java.nio.file.Paths;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.io.filepath.prefixer.FilePathDifferenceFromFolderPath;
 import org.anchoranalysis.io.filepath.prefixer.FilePathPrefix;
+import org.anchoranalysis.io.filepath.prefixer.FilePathPrefixerParams;
+import org.anchoranalysis.io.input.InputFromManager;
 import org.apache.commons.io.FilenameUtils;
 
 /// Matches prefixes against our incoming files, and attaches them to outgoing files 
-public class FilePathRslvr extends FilePathRslvrBase {
+public class FilePathRslvr extends FilePathPrefixerAvoidResolve {
 
 	/**
 	 * 
@@ -51,11 +53,11 @@ public class FilePathRslvr extends FilePathRslvrBase {
 
 	
 	@Override
-	public FilePathPrefix outFilePrefix(Path pathIn, String experimentIdentifier, boolean debugMode) throws IOException {
+	public FilePathPrefix outFilePrefix(InputFromManager input, String experimentIdentifier, FilePathPrefixerParams context) throws IOException {
 		return createPrefix(
-			resolvePath( pathIn ),
+			resolvePath( input.pathForBinding() ),
 			resolvePath( getInPathPrefixAsPath() ),
-			rootFolderPrefix(experimentIdentifier, debugMode).getFolderPath(),
+			rootFolderPrefix(experimentIdentifier, context).getFolderPath(),
 			includeFolders,
 			isFileAsFolder()
 		);

@@ -1,4 +1,4 @@
-package org.anchoranalysis.plugin.io.bean.filepath.rslvr;
+package org.anchoranalysis.plugin.io.bean.filepath.prefixer;
 
 /*
  * #%L
@@ -37,6 +37,8 @@ import org.anchoranalysis.bean.error.BeanMisconfiguredException;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.io.bean.filepath.prefixer.FilePathPrefixer;
 import org.anchoranalysis.io.filepath.prefixer.FilePathPrefix;
+import org.anchoranalysis.io.filepath.prefixer.FilePathPrefixerParams;
+import org.anchoranalysis.io.input.InputFromManager;
 
 // 
 public class HomeSubdirectory extends FilePathPrefixer {
@@ -107,24 +109,24 @@ public class HomeSubdirectory extends FilePathPrefixer {
 	}
 	
 	@Override
-	public FilePathPrefix outFilePrefix(Path pathIn, String expName, boolean debugMode)
+	public FilePathPrefix outFilePrefix(InputFromManager input, String expName, FilePathPrefixerParams context)
 			throws IOException {
 		try {
 			initIfPossible();
 		} catch (InitException e) {
 			throw new IOException(e);
 		}
-		return delegate.outFilePrefix(pathIn, expName, debugMode);
+		return delegate.outFilePrefix(input, expName, context);
 	}
 
 	@Override
-	public FilePathPrefix rootFolderPrefix(String expName, boolean debugMode) throws IOException {
+	public FilePathPrefix rootFolderPrefix(String expName, FilePathPrefixerParams context) throws IOException {
 		try {
 			initIfPossible();
 		} catch (InitException e) {
 			throw new IOException(e);
 		}
-		return delegate.rootFolderPrefix(expName, debugMode);
+		return delegate.rootFolderPrefix(expName, context);
 	}
 
 	public String getSubDirectoryName() {
