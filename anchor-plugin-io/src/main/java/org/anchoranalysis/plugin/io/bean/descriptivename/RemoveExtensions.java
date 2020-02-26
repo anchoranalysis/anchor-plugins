@@ -27,8 +27,11 @@ package org.anchoranalysis.plugin.io.bean.descriptivename;
  */
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import org.anchoranalysis.bean.annotation.BeanField;
@@ -39,6 +42,8 @@ import org.apache.commons.io.FilenameUtils;
 
 /**
  * Removes extensions from the descriptive-name (but not from the file)
+ * 
+ * <p>As an exception, the extension can be retained if there is more than one file with the same descriptive-name</p>
  * 
  * @author owen
  *
@@ -53,6 +58,10 @@ public class RemoveExtensions extends DescriptiveNameFromFile {
 	// START BEAN PROPERTIES
 	@BeanField
 	private DescriptiveNameFromFile descriptiveName;
+
+	/** Keeps the extension if the file-name (without the extension) becomes duplicated with another */
+	@BeanField
+	private boolean preserveExtensionIfDuplicate = true;
 	// END BEAN PROPERTIES
 
 	public RemoveExtensions() {
@@ -67,11 +76,61 @@ public class RemoveExtensions extends DescriptiveNameFromFile {
 	public List<DescriptiveFile> descriptiveNamesFor(Collection<File> files, String elseName) {
 		
 		List<DescriptiveFile> df = descriptiveName.descriptiveNamesFor(files, elseName);
-		return df
-			.stream()
-			.map( RemoveExtensions::removeExtension )
-			.collect( Collectors.toList()
+		
+		if (preserveExtensionIfDuplicate) {
+			return considerDuplicates(df);
+		} else {
+			return df;
+		}
+	}
+	
+	
+	private static List<DescriptiveFile> considerDuplicates( List<DescriptiveFile> df ) {
+		List<DescriptiveFile> dfWithoutExt = removeExt(df);
+		
+		// A count for each file, based upon the uniqueness of the description
+		Map<String,Long> countedWithoutExt = dfWithoutExt.stream().collect(
+			Collectors.groupingBy(
+				d -> d.getDescriptiveName(),
+				Collectors.counting()
+			)
 		);
+		
+		return listMaybeWithExtension(df, dfWithoutExt, countedWithoutExt);
+	}
+	
+	
+	/**
+	 * Creates a new list selecting either the version with an extension (if there is more than 1 entry) or without an extension (otherwise)
+	 * 
+	 * @param listWith descriptive-names with the extension
+	 * @param listWithout descriptive-names without the extension (in identical order to listWith)
+	 * @param countWithout a corresponding count for each entry in listWithout
+	 * @return a list in the same order, selecting either the corresponding entry from listWith or listWithout depending on the count value
+	 */
+	private static List<DescriptiveFile> listMaybeWithExtension(  List<DescriptiveFile> listWith,  List<DescriptiveFile> listWithout, Map<String,Long> countWithout) {
+
+		List<DescriptiveFile> out = new ArrayList<>();
+		
+		// Now we iterate through both, and if the count is more than 1, then the extension is kept
+		for( int i=0; i<listWith.size(); i++) {
+			
+			DescriptiveFile without = listWithout.get(i);
+			long count = countWithout.get(without.getDescriptiveName());
+			
+			out.add(
+				count > 1 ? listWith.get(i) : without 
+			);
+			
+		}
+		
+		return out;
+	}
+	
+	private static List<DescriptiveFile> removeExt( List<DescriptiveFile> df ) {
+		return df.stream()
+			.map( RemoveExtensions::removeExtension )
+			.collect( Collectors.toList() );
 	}
 
 	public DescriptiveNameFromFile getDescriptiveName() {
@@ -87,5 +146,13 @@ public class RemoveExtensions extends DescriptiveNameFromFile {
 			df.getFile(),
 			FilenameUtils.removeExtension(df.getDescriptiveName())
 		);
+	}
+
+	public boolean isPreserveExtensionIfDuplicate() {
+		return preserveExtensionIfDuplicate;
+	}
+
+	public void setPreserveExtensionIfDuplicate(boolean preserveExtensionIfDuplicate) {
+		this.preserveExtensionIfDuplicate = preserveExtensionIfDuplicate;
 	}
 }
