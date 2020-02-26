@@ -27,7 +27,6 @@ package org.anchoranalysis.plugin.io.bean.copyfilesmode.naming;
  */
 
 import java.io.File;
-import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -36,6 +35,7 @@ import java.util.List;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.text.TypedValue;
+import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.output.csv.CSVWriter;
 import org.apache.commons.io.FilenameUtils;
 
@@ -99,7 +99,7 @@ public class Anonymize extends CopyFilesNaming {
 	
 
 	@Override
-	public Path destinationPathRelative(Path sourceDir, Path destDir, File file, int iter) throws IOException {
+	public Path destinationPathRelative(Path sourceDir, Path destDir, File file, int iter) throws AnchorIOException {
 		String ext = FilenameUtils.getExtension(file.toString());
 		String fileNameNew = createNumericString(iter) + "." + ext;
 		
@@ -116,7 +116,7 @@ public class Anonymize extends CopyFilesNaming {
 	}
 
 	@Override
-	public void afterCopying(Path destDir, boolean dummyMode) throws IOException {
+	public void afterCopying(Path destDir, boolean dummyMode) throws AnchorIOException {
 
 		if (listMappings!=null && dummyMode==false) {
 			writeOutputCSV(destDir);
@@ -124,7 +124,7 @@ public class Anonymize extends CopyFilesNaming {
 		}
 	}
 	
-	private void writeOutputCSV(Path destDir) throws IOException {
+	private void writeOutputCSV(Path destDir) throws AnchorIOException {
 		
 		Path csvOut = destDir.resolve(OUTPUT_CSV_FILENAME);
 		

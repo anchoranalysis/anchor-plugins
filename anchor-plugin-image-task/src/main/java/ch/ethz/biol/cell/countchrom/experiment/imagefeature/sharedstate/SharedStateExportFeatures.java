@@ -4,7 +4,7 @@ package ch.ethz.biol.cell.countchrom.experiment.imagefeature.sharedstate;
  * #%L
  * anchor-plugin-image-task
  * %%
- * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -26,8 +26,6 @@ package ch.ethz.biol.cell.countchrom.experiment.imagefeature.sharedstate;
  * #L%
  */
 
-import java.io.IOException;
-
 import org.anchoranalysis.core.index.GetOperationFailedException;
 import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.core.name.MultiName;
@@ -35,6 +33,7 @@ import org.anchoranalysis.feature.calc.ResultsVectorCollection;
 import org.anchoranalysis.feature.io.csv.GroupedResultsVectorCollection;
 import org.anchoranalysis.feature.list.NamedFeatureStore;
 import org.anchoranalysis.feature.name.FeatureNameList;
+import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
 
 public abstract class SharedStateExportFeatures {
@@ -56,7 +55,7 @@ public abstract class SharedStateExportFeatures {
 		NamedFeatureStore featuresAggregate,
 		BoundOutputManagerRouteErrors outputManager,
 		LogErrorReporter logErrorReporter
-	) throws IOException {
+	) throws AnchorIOException {
 		results.writeResultsForAllGroups(
 			featureNames(),
 			featuresAggregate,

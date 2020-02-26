@@ -26,7 +26,6 @@ package org.anchoranalysis.anchor.plugin.quick.bean.input;
  * #L%
  */
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -40,10 +39,11 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.DefaultInstance;
 import org.anchoranalysis.bean.annotation.Optional;
 import org.anchoranalysis.bean.error.BeanMisconfiguredException;
+import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.core.progress.ProgressReporter;
 import org.anchoranalysis.image.io.input.NamedChnlsInputPart;
 import org.anchoranalysis.io.bean.provider.file.FileProviderWithDirectory;
-import org.anchoranalysis.io.deserializer.DeserializationFailedException;
+import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.bean.descriptivename.DescriptiveNameFromFile;
 import org.anchoranalysis.io.bean.filepath.generator.FilePathGenerator;
 import org.anchoranalysis.io.bean.filepath.generator.FilePathGeneratorReplace;
@@ -179,18 +179,18 @@ public class NamedChnlsQuick extends NamedChnlsBase {
 	}
 	
 	@Override
-	public List<NamedChnlsInputPart> inputObjects(InputContextParams inputContext, ProgressReporter progressReporter) throws IOException, DeserializationFailedException {
+	public List<NamedChnlsInputPart> inputObjects(InputContextParams inputContext, ProgressReporter progressReporter, LogErrorReporter logger) throws AnchorIOException {
 		createAppendedChnlsIfNecessary();
-		return append.inputObjects(inputContext, progressReporter);
+		return append.inputObjects(inputContext, progressReporter, logger);
 	}
 	
-	private void createAppendedChnlsIfNecessary() throws IOException {
+	private void createAppendedChnlsIfNecessary() throws AnchorIOException {
 		if (this.append==null) {
 			try {
 				this.append = createAppendedChnls();
 				append.checkMisconfigured(defaultInstances);
 			} catch (BeanMisconfiguredException e) {
-				throw new IOException(e);
+				throw new AnchorIOException("defaultInstances bean is misconfigured", e);
 			}
 		}
 	}

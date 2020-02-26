@@ -26,7 +26,6 @@ package ch.ethz.biol.cell.countchrom.experiment.imagefeature.sharedstate;
  * #L%
  */
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,6 +33,7 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.text.TypedValue;
 import org.anchoranalysis.feature.io.csv.FeatureCSVWriter;
 import org.anchoranalysis.feature.name.FeatureNameList;
+import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
 
 public class SharedStateSelectedSlice {
@@ -50,7 +50,7 @@ public class SharedStateSelectedSlice {
 				new String[]{"name"},
 				createFeatureNames()
 			);
-		} catch (IOException e) {
+		} catch (AnchorIOException e) {
 			throw new CreateException(e);
 		}
 	}

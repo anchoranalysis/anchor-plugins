@@ -65,7 +65,7 @@ public class MarkProposerFromSerializedObject extends MarkProposer {
 		ObjectInputStreamDeserializer<Mark> deserializer = new ObjectInputStreamDeserializer<>();
 		try {
 			Path path = Paths.get(filePath);
-			Mark deserializedMark = deserializer.deserialize(path);
+			Mark deserializedMark = deserializer.deserialize(path );
 			
 			inputMark.getMark().assignFrom( deserializedMark );
 			inputMark.reset();

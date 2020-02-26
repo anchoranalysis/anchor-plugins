@@ -26,7 +26,6 @@ package org.anchoranalysis.plugin.image.task.bean.grouped;
  * #L%
  */
 
-import java.io.IOException;
 import java.nio.file.Path;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.OperationFailedException;
@@ -40,6 +39,7 @@ import org.anchoranalysis.image.stack.NamedImgStackCollection;
 import org.anchoranalysis.image.stack.wrap.WrapStackAsTimeSequenceStore;
 import org.anchoranalysis.io.bean.filepath.generator.FilePathGenerator;
 import org.anchoranalysis.io.bean.filepath.generator.FilePathGeneratorConstant;
+import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
 import org.anchoranalysis.plugin.image.task.bean.selectchnls.SelectAll;
 import org.anchoranalysis.plugin.image.task.bean.selectchnls.SelectChnlsFromStacks;
@@ -98,7 +98,7 @@ public abstract class GroupedStackTask<S,T> extends Task<ProvidesStackInput,Grou
 	private String extractGroupName( Path path, boolean debugEnabled ) throws JobExecutionException {
 		try {
 			return groupGenerator.outFilePath( path, debugEnabled ).toString();
-		} catch (IOException e1) {
+		} catch (AnchorIOException e1) {
 			throw new JobExecutionException(
 				String.format("Cannot establish a group-identifier for: %s", path ),
 				e1

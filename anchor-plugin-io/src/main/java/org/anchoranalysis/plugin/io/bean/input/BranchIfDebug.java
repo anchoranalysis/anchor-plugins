@@ -27,16 +27,16 @@ package org.anchoranalysis.plugin.io.bean.input;
  */
 
 
-import java.io.IOException;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.Optional;
+import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.core.progress.ProgressReporter;
 import org.anchoranalysis.io.bean.input.InputManager;
-import org.anchoranalysis.io.deserializer.DeserializationFailedException;
+import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.input.InputFromManager;
 import org.anchoranalysis.io.params.InputContextParams;
 
@@ -65,20 +65,20 @@ public class BranchIfDebug<T extends InputFromManager> extends InputManager<T> {
 	
 	@Override
 	public List<T> inputObjects(InputContextParams inputContext,
-			ProgressReporter progressReporter)
-			throws IOException, DeserializationFailedException {
+			ProgressReporter progressReporter, LogErrorReporter logger)
+			throws AnchorIOException {
 
 		if (inputContext.isDebugMode()) {
 			if (inputDebug==null) {
 				// We pick the first
-				Iterator<T> all = input.inputObjects(inputContext, progressReporter).iterator();
+				Iterator<T> all = input.inputObjects(inputContext, progressReporter, logger).iterator();
 				T firstItem = all.next();
 				return Collections.singletonList(firstItem);
 			}
 			
-			return inputDebug.inputObjects(inputContext, progressReporter);
+			return inputDebug.inputObjects(inputContext, progressReporter, logger);
 		}
-		return input.inputObjects(inputContext, progressReporter);
+		return input.inputObjects(inputContext, progressReporter, logger);
 	}
 
 	public InputManager<T> getInput() {

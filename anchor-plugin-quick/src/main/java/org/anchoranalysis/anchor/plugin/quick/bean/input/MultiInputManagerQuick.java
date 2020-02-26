@@ -26,7 +26,6 @@ package org.anchoranalysis.anchor.plugin.quick.bean.input;
  * #L%
  */
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,11 +37,12 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.DefaultInstance;
 import org.anchoranalysis.bean.annotation.Optional;
 import org.anchoranalysis.bean.error.BeanMisconfiguredException;
+import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.core.progress.ProgressReporter;
 import org.anchoranalysis.image.io.bean.chnl.map.ImgChnlMapEntry;
 import org.anchoranalysis.image.io.input.ProvidesStackInput;
 import org.anchoranalysis.io.bean.provider.file.FileProviderWithDirectory;
-import org.anchoranalysis.io.deserializer.DeserializationFailedException;
+import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.bean.descriptivename.DescriptiveNameFromFile;
 import org.anchoranalysis.io.bean.input.InputManager;
 import org.anchoranalysis.io.input.FileInput;
@@ -192,9 +192,9 @@ public class MultiInputManagerQuick extends MultiInputManagerBase {
 	
 	
 	@Override
-	public List<MultiInput> inputObjects(InputContextParams inputContext, ProgressReporter progressReporter)
-			throws IOException, DeserializationFailedException {
-		return inputManager.inputObjects(inputContext, progressReporter);
+	public List<MultiInput> inputObjects(InputContextParams inputContext, ProgressReporter progressReporter, LogErrorReporter logger)
+			throws AnchorIOException {
+		return inputManager.inputObjects(inputContext, progressReporter, logger);
 	}
 
 	public String getRootName() {

@@ -27,7 +27,6 @@ package org.anchoranalysis.plugin.io.bean.input;
  */
 
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -35,9 +34,10 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.core.progress.ProgressReporter;
 import org.anchoranalysis.io.bean.input.InputManager;
-import org.anchoranalysis.io.deserializer.DeserializationFailedException;
+import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.input.InputFromManager;
 import org.anchoranalysis.io.params.InputContextParams;
 
@@ -62,12 +62,11 @@ public class SortAlphabetically<T extends InputFromManager> extends InputManager
 	
 	@Override
 	public List<T> inputObjects(InputContextParams inputContext,
-			ProgressReporter progressReporter) throws IOException,
-			DeserializationFailedException {
+			ProgressReporter progressReporter, LogErrorReporter logger) throws AnchorIOException {
 		
 		List<T> list = new ArrayList<>();
 		
-		Iterator<T> itr = input.inputObjects(inputContext, progressReporter).iterator();
+		Iterator<T> itr = input.inputObjects(inputContext, progressReporter, logger).iterator();
 		while( itr.hasNext() ) {
 			list.add( itr.next() );
 		}

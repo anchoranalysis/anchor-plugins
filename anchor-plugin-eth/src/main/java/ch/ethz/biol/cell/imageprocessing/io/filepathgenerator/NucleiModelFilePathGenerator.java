@@ -27,7 +27,6 @@ package ch.ethz.biol.cell.imageprocessing.io.filepathgenerator;
  */
 
 
-import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.regex.Matcher;
@@ -35,6 +34,7 @@ import java.util.regex.Matcher;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.io.bean.filepath.generator.FilePathGenerator;
 import org.anchoranalysis.io.bean.filepath.generator.FilePathGeneratorRegEx;
+import org.anchoranalysis.io.error.AnchorIOException;
 
 public class NucleiModelFilePathGenerator extends FilePathGenerator {
 
@@ -47,7 +47,7 @@ public class NucleiModelFilePathGenerator extends FilePathGenerator {
 	// END BEAN PROPERTIES
 	
 	@Override
-	public Path outFilePath(Path pathIn, boolean debugMode) throws IOException {
+	public Path outFilePath(Path pathIn, boolean debugMode) throws AnchorIOException {
 		
 		try {
 			String regEx = "experiments/nuclei/3D/filteredImage/(.*)_1.0/(.*)/stack_nucleiScaled.tif";
@@ -55,7 +55,7 @@ public class NucleiModelFilePathGenerator extends FilePathGenerator {
 			Matcher m = FilePathGeneratorRegEx.match(pathIn, regEx);
 			
 			if (m.groupCount()!=2) {
-				throw new IOException(String.format("Cannot match two groups from %s",pathIn));
+				throw new AnchorIOException(String.format("Cannot match two groups from %s",pathIn));
 			}
 			
 			Path set = Paths.get(m.group(2));
@@ -72,7 +72,7 @@ public class NucleiModelFilePathGenerator extends FilePathGenerator {
 			return Paths.get(sb.toString());
 			
 		} catch (OperationFailedException e) {
-			throw new IOException(e);
+			throw new AnchorIOException("An error occurred matching the regular-expression", e);
 		}
 	}
 	

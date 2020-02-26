@@ -27,11 +27,11 @@ package org.anchoranalysis.plugin.io.bean.filepath.prefixer;
  */
 
 
-import java.io.IOException;
 import java.nio.file.Path;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.shared.regex.RegEx;
 import org.anchoranalysis.core.file.PathUtilities;
+import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.filepath.prefixer.FilePathDifferenceFromFolderPath;
 import org.anchoranalysis.io.filepath.prefixer.FilePathPrefix;
 import org.anchoranalysis.io.filepath.prefixer.FilePathPrefixerParams;
@@ -57,7 +57,7 @@ public class FilePathRslvrRegEx extends FilePathPrefixerAvoidResolve {
 	// END BEAN PROPERTIES
 
 	@Override
-	public FilePathPrefix outFilePrefix(InputFromManager input, String experimentIdentifier, FilePathPrefixerParams context) throws IOException {
+	public FilePathPrefix outFilePrefix(InputFromManager input, String experimentIdentifier, FilePathPrefixerParams context) throws AnchorIOException {
 		// we convert the input-path to absolute
 		Path pathInAbsolute = resolvePath( input.pathForBinding() );
 		Path inPathPrefixAbsolute = resolvePath( getInPathPrefixAsPath() );
@@ -77,7 +77,7 @@ public class FilePathRslvrRegEx extends FilePathPrefixerAvoidResolve {
 	
 	// create out file prefix
 	@Override
-	public FilePathPrefix outFilePrefixAvoidResolve( Path pathIn, String experimentIdentifier ) throws IOException {
+	public FilePathPrefix outFilePrefixAvoidResolve( Path pathIn, String experimentIdentifier ) throws AnchorIOException {
 		String[] components = componentsFromPath(
 			pathIn,
 			getInPathPrefixAsPath()
@@ -93,7 +93,7 @@ public class FilePathRslvrRegEx extends FilePathPrefixerAvoidResolve {
 	}
 	
 	
-	private String[] componentsFromPath( Path pathIn, Path pathInPrefix ) throws IOException {
+	private String[] componentsFromPath( Path pathIn, Path pathInPrefix ) throws AnchorIOException {
 		
 		Path matchIn = matchStringWithoutPrefix(pathIn, pathInPrefix );
 		
@@ -102,13 +102,13 @@ public class FilePathRslvrRegEx extends FilePathPrefixerAvoidResolve {
 		String[] components = regEx.matchStr( matchInReplaced );
 		
 		if (components==null) {
-			throw new IOException( String.format("Cannot match '%s'", matchInReplaced ));
+			throw new AnchorIOException( String.format("Cannot match '%s'", matchInReplaced ));
 		}
 		
 		return components;
 	}
 	
-	private static Path matchStringWithoutPrefix( Path pathIn, Path inPathPrefix ) throws IOException {
+	private static Path matchStringWithoutPrefix( Path pathIn, Path inPathPrefix ) throws AnchorIOException {
 		
 		if (inPathPrefix!=null) {
 			FilePathDifferenceFromFolderPath ff = new FilePathDifferenceFromFolderPath();

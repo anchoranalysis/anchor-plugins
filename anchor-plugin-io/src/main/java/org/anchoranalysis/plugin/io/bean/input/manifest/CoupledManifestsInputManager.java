@@ -28,8 +28,6 @@ package org.anchoranalysis.plugin.io.bean.input.manifest;
 
 
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -38,9 +36,11 @@ import org.anchoranalysis.bean.BeanInstanceMap;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.Optional;
 import org.anchoranalysis.bean.error.BeanMisconfiguredException;
+import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.core.progress.ProgressReporter;
 import org.anchoranalysis.io.bean.provider.file.FileProvider;
 import org.anchoranalysis.io.deserializer.DeserializationFailedException;
+import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.bean.input.InputManager;
 import org.anchoranalysis.io.manifest.deserializer.CachedManifestDeserializer;
 import org.anchoranalysis.io.manifest.deserializer.ManifestDeserializer;
@@ -73,46 +73,46 @@ public class CoupledManifestsInputManager extends InputManager<ManifestCouplingD
 	}
 	
 	@Override
-	public List<ManifestCouplingDefinition> inputObjects(InputContextParams inputContext, ProgressReporter progressReporter)
-			throws FileNotFoundException, IOException {
+	public List<ManifestCouplingDefinition> inputObjects(InputContextParams inputContext, ProgressReporter progressReporter, LogErrorReporter logger)
+			throws AnchorIOException {
 		
 		try {
 			if (mcd==null) {
-				mcd = createDeserializedList(progressReporter, inputContext);
+				mcd = createDeserializedList(progressReporter, inputContext, logger);
 			}
 		} catch (DeserializationFailedException e) {
-			throw new IOException(e);
+			throw new AnchorIOException("Deserialization failed", e);
 		}
 		
 		return Collections.singletonList(mcd);
 	}
 	
-	public ManifestCouplingDefinition manifestCouplingDefinition( ProgressReporter progressReporter, InputContextParams inputContext ) throws DeserializationFailedException {
+	public ManifestCouplingDefinition manifestCouplingDefinition( ProgressReporter progressReporter, InputContextParams inputContext, LogErrorReporter logger ) throws DeserializationFailedException {
 		if (mcd==null) {
-			mcd = createDeserializedList( progressReporter, inputContext );
+			mcd = createDeserializedList( progressReporter, inputContext, logger );
 		}
 		return mcd;
 	}
 	
 	// Runs the experiment on a particular file
-	private ManifestCouplingDefinition createDeserializedList( ProgressReporter progressReporter, InputContextParams inputContext ) throws DeserializationFailedException {
+	private ManifestCouplingDefinition createDeserializedList( ProgressReporter progressReporter, InputContextParams inputContext, LogErrorReporter logger ) throws DeserializationFailedException {
 		
 		try {
 			ManifestCouplingDefinition definition = new ManifestCouplingDefinition();
 			
 			// Uncoupled file manifests
 			if (manifestInputFileSet!=null) {
-				definition.addUncoupledFiles( manifestInputFileSet.matchingFiles(progressReporter, inputContext), manifestDeserializer );
+				definition.addUncoupledFiles( manifestInputFileSet.matchingFiles(progressReporter, inputContext, logger), manifestDeserializer );
 			}
 			
 			if (manifestExperimentInputFileSet!=null) {
-				Collection<File> matchingFiles = manifestExperimentInputFileSet.matchingFiles(progressReporter, inputContext);
+				Collection<File> matchingFiles = manifestExperimentInputFileSet.matchingFiles(progressReporter, inputContext, logger);
 				definition.addManifestExperimentFileSet(  matchingFiles, manifestDeserializer );	
 			}
 	
 			return definition;
-		} catch (IOException e) {
-			throw new DeserializationFailedException(e);
+		} catch (AnchorIOException e) {
+			throw new DeserializationFailedException("Cannot find files to deserialize", e);
 		}
 	}
 

@@ -27,8 +27,9 @@ package org.anchoranalysis.plugin.io.bean.copyfilesmode.naming;
  */
 
 import java.io.File;
-import java.io.IOException;
 import java.nio.file.Path;
+
+import org.anchoranalysis.io.error.AnchorIOException;
 
 public abstract class CopyFilesNaming {
 	
@@ -42,9 +43,9 @@ public abstract class CopyFilesNaming {
 	 * @param file
 	 * @param iter
 	 * @return the absolute-path. if NULL, the file should be skipped.
-	 * @throws IOException
+	 * @throws AnchorIOException TODO
 	 */
-	public Path destinationPath(Path sourceDir, Path destDir, File file, int iter) throws IOException {
+	public Path destinationPath(Path sourceDir, Path destDir, File file, int iter) throws AnchorIOException {
 		
 		Path remainder = destinationPathRelative( sourceDir, destDir, file, iter );
 		
@@ -63,9 +64,9 @@ public abstract class CopyFilesNaming {
 	 * @param file
 	 * @param iter
 	 * @return the relative-path. if NULL, the file should be skipped.
-	 * @throws IOException
+	 * @throws AnchorIOException TODO
 	 */
-	public abstract Path destinationPathRelative(Path sourceDir, Path destDir, File file, int iter) throws IOException;
+	public abstract Path destinationPathRelative(Path sourceDir, Path destDir, File file, int iter) throws AnchorIOException;
 	
-	public abstract void afterCopying(Path destDir, boolean dummyMode) throws IOException;
+	public abstract void afterCopying(Path destDir, boolean dummyMode) throws AnchorIOException;
 }

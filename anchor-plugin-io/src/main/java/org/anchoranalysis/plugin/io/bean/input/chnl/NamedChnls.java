@@ -27,20 +27,19 @@ package org.anchoranalysis.plugin.io.bean.input.chnl;
  */
 
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.DefaultInstance;
+import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.core.progress.ProgressReporter;
 import org.anchoranalysis.image.io.bean.chnl.map.ImgChnlMapCreator;
 import org.anchoranalysis.image.io.bean.rasterreader.RasterReader;
 import org.anchoranalysis.image.io.input.NamedChnlsInputPart;
 import org.anchoranalysis.io.bean.input.InputManager;
-import org.anchoranalysis.io.deserializer.DeserializationFailedException;
+import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.input.FileInput;
 import org.anchoranalysis.io.params.InputContextParams;
 import org.anchoranalysis.plugin.io.bean.chnl.map.ImgChnlMapAutoname;
@@ -68,20 +67,16 @@ public class NamedChnls extends NamedChnlsBase {
 	// END BEANS
 
 	@Override
-	public List<NamedChnlsInputPart> inputObjects(InputContextParams inputContext, ProgressReporter progressReporter)
-			throws FileNotFoundException, IOException {
+	public List<NamedChnlsInputPart> inputObjects(InputContextParams inputContext, ProgressReporter progressReporter, LogErrorReporter logger)
+			throws AnchorIOException {
 		
 		ArrayList<NamedChnlsInputPart> listOut = new ArrayList<>(); 
 		
-		try {
-			Iterator<FileInput> itrFiles = fileInput.inputObjects(inputContext, progressReporter).iterator();
-			while( itrFiles.hasNext() ) {
-				listOut.add( new MapPart<>(itrFiles.next(), getRasterReader(), imgChnlMapCreator, useLastSeriesIndexOnly ));
-			}
-		} catch (DeserializationFailedException e) {
-			throw new IOException(e);
+		Iterator<FileInput> itrFiles = fileInput.inputObjects(inputContext, progressReporter, logger).iterator();
+		while( itrFiles.hasNext() ) {
+			listOut.add( new MapPart<>(itrFiles.next(), getRasterReader(), imgChnlMapCreator, useLastSeriesIndexOnly ));
 		}
-
+	
 		return listOut;
 	}
 

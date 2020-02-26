@@ -32,10 +32,11 @@ import java.util.List;
 import java.util.ListIterator;
 import java.util.Set;
 import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.core.progress.ProgressReporter;
 import org.anchoranalysis.io.bean.filepath.generator.FilePathGenerator;
 import org.anchoranalysis.io.bean.input.InputManager;
-import org.anchoranalysis.io.deserializer.DeserializationFailedException;
+import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.input.InputFromManager;
 import org.anchoranalysis.io.params.InputContextParams;
 
@@ -70,11 +71,11 @@ public class FilterCsvColumn<T extends InputFromManager> extends InputManager<T>
 	// END BEAN PROPERTIES
 	
 	@Override
-	public List<T> inputObjects(InputContextParams inputContext, ProgressReporter progressReporter)
-			throws IOException, DeserializationFailedException {
+	public List<T> inputObjects(InputContextParams inputContext, ProgressReporter progressReporter, LogErrorReporter logger)
+			throws AnchorIOException {
 
 		// Existing collection 
-		List<T> in = input.inputObjects(inputContext, progressReporter);
+		List<T> in = input.inputObjects(inputContext, progressReporter, logger);
 		
 		if (in.size()==0) {
 			return in;
@@ -86,11 +87,15 @@ public class FilterCsvColumn<T extends InputFromManager> extends InputManager<T>
 		return in;
 	}
 	
-	private Set<String> matchingNames( Path pathForGenerator, boolean doDebug, int numRowsExpected ) throws IOException {
+	private Set<String> matchingNames( Path pathForGenerator, boolean doDebug, int numRowsExpected ) throws AnchorIOException {
 		// Read CSV file using the path of the first object
 		Path csvPath = csvFilePath.outFilePath(pathForGenerator, doDebug );
 		
-		return CsvMatcher.rowsFromCsvThatMatch(csvPath, match, numRowsExpected);
+		try {
+			return CsvMatcher.rowsFromCsvThatMatch(csvPath, match, numRowsExpected);
+		} catch (IOException e) {
+			throw new AnchorIOException("Cannot match rows from csv", e);
+		}
 	}
 	
 	// Removes all items from the inputList whose descriptiveName is NOT found in mustContain

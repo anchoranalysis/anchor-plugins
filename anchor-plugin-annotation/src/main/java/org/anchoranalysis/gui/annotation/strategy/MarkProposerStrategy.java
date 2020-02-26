@@ -26,7 +26,6 @@ package org.anchoranalysis.gui.annotation.strategy;
  * #L%
  */
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -128,7 +127,7 @@ public class MarkProposerStrategy extends SingleFilePathGeneratorStrategy {
 		return 1;
 	}
 	@Override
-	public String annotationLabelFor(ProvidesStackInput item) throws IOException {
+	public String annotationLabelFor(ProvidesStackInput item) {
 		return null;
 	}
 }

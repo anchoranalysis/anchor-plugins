@@ -27,7 +27,6 @@ package ch.ethz.biol.cell.countchrom.experiment;
  */
 
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -50,6 +49,7 @@ import org.anchoranalysis.experiment.task.ParametersExperiment;
 import org.anchoranalysis.experiment.task.Task;
 import org.anchoranalysis.image.init.ImageInitParams;
 import org.anchoranalysis.io.bean.report.feature.ReportFeature;
+import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
 import org.anchoranalysis.io.output.csv.CSVWriter;
 import org.anchoranalysis.io.report.feature.ReportFeatureUtilities;
@@ -82,7 +82,7 @@ public class CSVTableExportTaskMultiCollection extends Task<MultiInput,CSVWriter
 		CSVWriter writer;
 		try {
 			writer = CSVWriter.createFromOutputManager("featureReport", outputManager.getDelegate());
-		} catch (IOException e) {
+		} catch (AnchorIOException e) {
 			throw new ExperimentExecutionException(e);
 		}
 				

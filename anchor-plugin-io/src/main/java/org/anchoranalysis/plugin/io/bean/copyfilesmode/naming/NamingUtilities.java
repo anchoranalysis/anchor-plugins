@@ -26,15 +26,15 @@ package org.anchoranalysis.plugin.io.bean.copyfilesmode.naming;
  * #L%
  */
 
-import java.io.IOException;
 import java.nio.file.Path;
 
 import org.anchoranalysis.core.file.PathUtilities;
+import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.filepath.prefixer.FilePathDifferenceFromFolderPath;
 
 class NamingUtilities {
 	
-	public static Path filePathDiff( Path baseFolderPath, Path filePath) throws IOException {
+	public static Path filePathDiff( Path baseFolderPath, Path filePath) throws AnchorIOException {
 		FilePathDifferenceFromFolderPath filePathDiff = new FilePathDifferenceFromFolderPath();
 		filePathDiff.init( baseFolderPath, filePath );
 		return filePathDiff.getRemainderCombined();

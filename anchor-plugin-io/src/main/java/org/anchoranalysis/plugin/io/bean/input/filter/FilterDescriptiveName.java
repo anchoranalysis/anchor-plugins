@@ -26,15 +26,15 @@ package org.anchoranalysis.plugin.io.bean.input.filter;
  * #L%
  */
 
-import java.io.IOException;
 import java.util.Iterator;
 import java.util.List;
 
 import org.anchoranalysis.bean.annotation.AllowEmpty;
 import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.core.progress.ProgressReporter;
 import org.anchoranalysis.io.bean.input.InputManager;
-import org.anchoranalysis.io.deserializer.DeserializationFailedException;
+import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.input.InputFromManager;
 import org.anchoranalysis.io.params.InputContextParams;
 
@@ -64,11 +64,11 @@ public class FilterDescriptiveName<T extends InputFromManager> extends InputMana
 	// END BEAN PROPERTIES
 	
 	@Override
-	public List<T> inputObjects(InputContextParams inputContext, ProgressReporter progressReporter)
-			throws IOException, DeserializationFailedException {
+	public List<T> inputObjects(InputContextParams inputContext, ProgressReporter progressReporter, LogErrorReporter logger)
+			throws AnchorIOException {
 
 		// Existing collection 
-		List<T> in = input.inputObjects(inputContext, progressReporter);
+		List<T> in = input.inputObjects(inputContext, progressReporter, logger);
 		
 		// If no string is specified, just pass pack the entire iterator
 		if (equals.isEmpty()) {

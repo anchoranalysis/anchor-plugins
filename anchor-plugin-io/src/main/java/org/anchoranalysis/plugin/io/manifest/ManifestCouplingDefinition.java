@@ -28,7 +28,6 @@ package org.anchoranalysis.plugin.io.manifest;
 
 
 import java.io.File;
-import java.io.IOException;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -37,6 +36,7 @@ import java.util.List;
 
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
 import org.anchoranalysis.io.deserializer.DeserializationFailedException;
+import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.input.InputFromManager;
 import org.anchoranalysis.io.manifest.ManifestRecorder;
 import org.anchoranalysis.io.manifest.ManifestRecorderFile;
@@ -98,7 +98,7 @@ public class ManifestCouplingDefinition implements InputFromManager {
 				CoupledManifests cm;
 				try {
 					cm = new CoupledManifests(manifestExperimentRecorder, manifestRecorderFile);
-				} catch (IOException e) {
+				} catch (AnchorIOException e) {
 					throw new DeserializationFailedException(e);
 				}
 				listCoupledManifests.add( cm );

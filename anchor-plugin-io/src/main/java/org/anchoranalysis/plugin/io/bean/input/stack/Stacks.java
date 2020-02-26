@@ -27,18 +27,17 @@ package org.anchoranalysis.plugin.io.bean.input.stack;
  */
 
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.DefaultInstance;
+import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.core.progress.ProgressReporter;
 import org.anchoranalysis.image.io.bean.rasterreader.RasterReader;
 import org.anchoranalysis.io.bean.input.InputManager;
-import org.anchoranalysis.io.deserializer.DeserializationFailedException;
+import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.input.FileInput;
 import org.anchoranalysis.io.params.InputContextParams;
 
@@ -77,12 +76,12 @@ public class Stacks extends InputManager<StackSequenceInput> {
 	}
 
 	@Override
-	public List<StackSequenceInput> inputObjects(InputContextParams inputContext, ProgressReporter progressReporter)
-			throws FileNotFoundException, IOException, DeserializationFailedException {
+	public List<StackSequenceInput> inputObjects(InputContextParams inputContext, ProgressReporter progressReporter, LogErrorReporter logger)
+			throws AnchorIOException {
 		
 		ArrayList<StackSequenceInput> listOut = new ArrayList<>(); 
 		
-		Iterator<FileInput> itrFiles = fileInput.inputObjects(inputContext, progressReporter).iterator();
+		Iterator<FileInput> itrFiles = fileInput.inputObjects(inputContext, progressReporter, logger).iterator();
 		while( itrFiles.hasNext() ) {
 			listOut.add( new StackCollectionFromFilesInputObject(itrFiles.next(), getRasterReader(), useLastSeriesIndexOnly ));
 		}

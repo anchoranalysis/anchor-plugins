@@ -27,16 +27,16 @@ package org.anchoranalysis.plugin.io.bean.input;
  */
 
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.core.progress.ProgressReporter;
 import org.anchoranalysis.core.progress.ProgressReporterMultiple;
 import org.anchoranalysis.core.progress.ProgressReporterOneOfMany;
 import org.anchoranalysis.io.bean.input.InputManager;
-import org.anchoranalysis.io.deserializer.DeserializationFailedException;
+import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.input.InputFromManager;
 import org.anchoranalysis.io.params.InputContextParams;
 
@@ -61,8 +61,7 @@ public class Concatenate<T extends InputFromManager> extends InputManager<T> {
 	
 	@Override
 	public List<T> inputObjects(InputContextParams inputContext,
-			ProgressReporter progressReporter) throws IOException,
-			DeserializationFailedException {
+			ProgressReporter progressReporter, LogErrorReporter logger) throws AnchorIOException {
 
 		try( ProgressReporterMultiple prm = new ProgressReporterMultiple(progressReporter, list.size())) {
 		
@@ -70,7 +69,7 @@ public class Concatenate<T extends InputFromManager> extends InputManager<T> {
 			
 			for( InputManager<T> inputManager : list ) {
 				listOut.addAll(
-					inputManager.inputObjects(inputContext, new ProgressReporterOneOfMany(prm))
+					inputManager.inputObjects(inputContext, new ProgressReporterOneOfMany(prm), logger)
 				);
 								
 				prm.incrWorker();

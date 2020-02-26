@@ -28,12 +28,13 @@ package org.anchoranalysis.plugin.io.bean.provider.file;
 
 
 import java.io.File;
-import java.io.IOException;
 import java.nio.file.Path;
 import java.util.Collection;
 import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.core.progress.ProgressReporter;
 import org.anchoranalysis.io.bean.provider.file.FileProviderWithDirectory;
+import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.params.InputContextParams;
 
 public class SortAlphabeticallyWithDirectory extends FileProviderWithDirectory {
@@ -49,8 +50,8 @@ public class SortAlphabeticallyWithDirectory extends FileProviderWithDirectory {
 	// END BEAN PROPERTIES
 	
 	@Override
-	public Collection<File> matchingFiles(ProgressReporter progressReporter, InputContextParams inputContext) throws IOException {
-		return SortUtilities.sortFiles(fileProvider, progressReporter, inputContext);
+	public Collection<File> matchingFiles(ProgressReporter progressReporter, InputContextParams inputContext, LogErrorReporter logger) throws AnchorIOException {
+		return SortUtilities.sortFiles(fileProvider, progressReporter, inputContext, logger);
 	}
 
 	public FileProviderWithDirectory getFileProvider() {

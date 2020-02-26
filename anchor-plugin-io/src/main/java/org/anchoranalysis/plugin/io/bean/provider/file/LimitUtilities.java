@@ -27,19 +27,20 @@ package org.anchoranalysis.plugin.io.bean.provider.file;
  */
 
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.core.progress.ProgressReporter;
 import org.anchoranalysis.io.bean.provider.file.FileProvider;
+import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.params.InputContextParams;
 
 class LimitUtilities {
 
-	public static Collection<File> apply( FileProvider fileProvider, int maxNumItems, ProgressReporter progressReporter, InputContextParams inputContext ) throws IOException {
+	public static Collection<File> apply( FileProvider fileProvider, int maxNumItems, ProgressReporter progressReporter, InputContextParams inputContext, LogErrorReporter logger ) throws AnchorIOException {
 		
-		Collection<File> filesIn = fileProvider.matchingFiles(progressReporter, inputContext);
+		Collection<File> filesIn = fileProvider.matchingFiles(progressReporter, inputContext, logger);
 		
 		ArrayList<File> filesOut = new ArrayList<>();
 		

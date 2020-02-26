@@ -1,6 +1,5 @@
 package ch.ethz.biol.cell.countchrom.experiment;
 
-import java.io.IOException;
 import java.nio.file.Path;
 
 import org.anchoranalysis.bean.annotation.AllowEmpty;
@@ -40,6 +39,7 @@ import org.anchoranalysis.experiment.task.ParametersBound;
 import org.anchoranalysis.experiment.task.ParametersExperiment;
 import org.anchoranalysis.experiment.task.Task;
 import org.anchoranalysis.io.bean.root.RootPathMap;
+import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.generator.text.StringGenerator;
 import org.anchoranalysis.io.input.InputFromManager;
 import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
@@ -77,7 +77,7 @@ public class RecordFilepathsTask<T extends InputFromManager> extends Task<T,Stri
 			try {
 				boolean debugMode = params.getExperimentArguments().isDebugEnabled();
 				path = RootPathMap.instance().split(path, rootName, debugMode).getPath();
-			} catch (IOException e) {
+			} catch (AnchorIOException e) {
 				throw new JobExecutionException(e);
 			}
 		}

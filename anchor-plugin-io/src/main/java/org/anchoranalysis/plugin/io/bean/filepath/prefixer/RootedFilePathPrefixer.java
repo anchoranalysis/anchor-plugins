@@ -27,12 +27,12 @@ package org.anchoranalysis.plugin.io.bean.filepath.prefixer;
  */
 
 
-import java.io.IOException;
 import java.nio.file.Path;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.io.bean.filepath.prefixer.FilePathPrefixer;
 import org.anchoranalysis.io.bean.root.RootPathMap;
+import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.filepath.prefixer.FilePathPrefix;
 import org.anchoranalysis.io.filepath.prefixer.FilePathPrefixerParams;
 import org.anchoranalysis.io.input.InputFromManager;
@@ -58,7 +58,7 @@ public class RootedFilePathPrefixer extends FilePathPrefixer {
 		
 	@Override
 	public FilePathPrefix outFilePrefix(InputFromManager input, String expName, FilePathPrefixerParams context)
-			throws IOException {
+			throws AnchorIOException {
 
 		logger.debug( String.format("pathIn=%s", input) );
 		
@@ -75,12 +75,12 @@ public class RootedFilePathPrefixer extends FilePathPrefixer {
 		return fpp;
 	}
 	
-	private Path folderPathOut( Path pathIn, boolean debugMode ) throws IOException {
+	private Path folderPathOut( Path pathIn, boolean debugMode ) throws AnchorIOException {
 		return RootPathMap.instance().findRoot(rootName, debugMode).asPath().resolve( pathIn );
 	}
 
 	@Override
-	public FilePathPrefix rootFolderPrefix(String expName, FilePathPrefixerParams context) throws IOException {
+	public FilePathPrefix rootFolderPrefix(String expName, FilePathPrefixerParams context) throws AnchorIOException {
 		FilePathPrefix fpp = filePathPrefixer.rootFolderPrefixAvoidResolve(expName) ;
 		fpp.setFolderPath( folderPathOut( fpp.getFolderPath(), context.isDebugMode() ) );
 		return fpp;

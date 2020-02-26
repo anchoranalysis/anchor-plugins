@@ -28,7 +28,6 @@ package org.anchoranalysis.plugin.annotation.bean.fileprovider;
 
 
 import java.io.File;
-import java.io.IOException;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -37,10 +36,11 @@ import java.util.List;
 import org.anchoranalysis.annotation.io.mark.MarkAnnotationReader;
 import org.anchoranalysis.annotation.mark.MarkAnnotation;
 import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.core.progress.ProgressReporter;
 import org.anchoranalysis.io.bean.filepath.generator.FilePathGenerator;
 import org.anchoranalysis.io.bean.provider.file.FileProvider;
-import org.anchoranalysis.io.deserializer.DeserializationFailedException;
+import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.params.InputContextParams;
 
 public class FilterForAcceptedAnnotations extends FileProvider {
@@ -61,22 +61,19 @@ public class FilterForAcceptedAnnotations extends FileProvider {
 	private MarkAnnotationReader annotationReader = new MarkAnnotationReader(false);
 	
 	@Override
-	public Collection<File> matchingFiles(ProgressReporter progressReporter, InputContextParams inputContext)
-			throws IOException {
+	public Collection<File> matchingFiles(ProgressReporter progressReporter, InputContextParams inputContext, LogErrorReporter logger)
+			throws AnchorIOException {
 		
-		Collection<File> filesIn = fileProvider.matchingFiles(progressReporter, inputContext);
+		Collection<File> filesIn = fileProvider.matchingFiles(progressReporter, inputContext, logger);
 		
 		List<File> filesOut = new ArrayList<>();
 		
 		for( File f : filesIn ) {
 			
-			try {
-				if (isFileAccepted(f)) {
-					filesOut.add(f);
-				}
-			} catch (DeserializationFailedException e) {
-				throw new IOException(e);
+			if (isFileAccepted(f)) {
+				filesOut.add(f);
 			}
+			
 		}
 		
 		return filesOut;
@@ -99,7 +96,7 @@ public class FilterForAcceptedAnnotations extends FileProvider {
 		this.fileProvider = fileProvider;
 	}
 
-	private boolean isFileAccepted( File file) throws IOException, DeserializationFailedException {
+	private boolean isFileAccepted( File file) throws AnchorIOException {
 		
 		for( FilePathGenerator fpg : listFilePathGenerator ) {
 			Path annotationPath = fpg.outFilePath( file.toPath(), false );

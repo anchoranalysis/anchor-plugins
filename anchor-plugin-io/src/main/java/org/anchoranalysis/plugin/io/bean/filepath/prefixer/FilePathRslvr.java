@@ -27,11 +27,11 @@ package org.anchoranalysis.plugin.io.bean.filepath.prefixer;
  */
 
 
-import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
 import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.filepath.prefixer.FilePathDifferenceFromFolderPath;
 import org.anchoranalysis.io.filepath.prefixer.FilePathPrefix;
 import org.anchoranalysis.io.filepath.prefixer.FilePathPrefixerParams;
@@ -53,7 +53,7 @@ public class FilePathRslvr extends FilePathPrefixerAvoidResolve {
 
 	
 	@Override
-	public FilePathPrefix outFilePrefix(InputFromManager input, String experimentIdentifier, FilePathPrefixerParams context) throws IOException {
+	public FilePathPrefix outFilePrefix(InputFromManager input, String experimentIdentifier, FilePathPrefixerParams context) throws AnchorIOException {
 		return createPrefix(
 			resolvePath( input.pathForBinding() ),
 			resolvePath( getInPathPrefixAsPath() ),
@@ -66,7 +66,7 @@ public class FilePathRslvr extends FilePathPrefixerAvoidResolve {
 	
 	// create out file prefix
 	@Override
-	public FilePathPrefix outFilePrefixAvoidResolve( Path pathIn, String experimentIdentifier ) throws IOException {
+	public FilePathPrefix outFilePrefixAvoidResolve( Path pathIn, String experimentIdentifier ) throws AnchorIOException {
 		return createPrefix(
 			pathIn,
 			getInPathPrefixAsPath(),
@@ -82,7 +82,7 @@ public class FilePathRslvr extends FilePathPrefixerAvoidResolve {
 		Path rootFolderPrefix,
 		boolean includeFolders,
 		boolean fileAsFolder
-	) throws IOException {
+	) throws AnchorIOException {
 
 		// We strip the incoming path of it's extension
 		Path pathInRemoved = Paths.get( FilenameUtils.removeExtension( pathIn.toString() ) );

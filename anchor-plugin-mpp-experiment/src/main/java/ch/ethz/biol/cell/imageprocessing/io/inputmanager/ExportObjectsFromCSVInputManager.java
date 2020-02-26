@@ -27,17 +27,17 @@ package ch.ethz.biol.cell.imageprocessing.io.inputmanager;
  */
 
 
-import java.io.IOException;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
 import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.core.progress.ProgressReporter;
 import org.anchoranalysis.io.bean.filepath.generator.FilePathGenerator;
 import org.anchoranalysis.io.bean.input.InputManager;
-import org.anchoranalysis.io.deserializer.DeserializationFailedException;
+import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.params.InputContextParams;
 import org.anchoranalysis.mpp.io.bean.input.MultiInputManager;
 import org.anchoranalysis.mpp.io.input.MultiInput;
@@ -62,10 +62,10 @@ public class ExportObjectsFromCSVInputManager extends InputManager<ExportObjects
 
 	@Override
 	public List<ExportObjectsFromCSVInputObject> inputObjects(
-			InputContextParams inputContext, ProgressReporter progressReporter)
-			throws IOException, DeserializationFailedException {
+			InputContextParams inputContext, ProgressReporter progressReporter, LogErrorReporter logger)
+			throws AnchorIOException {
 		
-		Iterator<MultiInput> itr = input.inputObjects(inputContext, progressReporter).iterator();
+		Iterator<MultiInput> itr = input.inputObjects(inputContext, progressReporter, logger).iterator();
 
 		List<ExportObjectsFromCSVInputObject> out = new ArrayList<>();
 		

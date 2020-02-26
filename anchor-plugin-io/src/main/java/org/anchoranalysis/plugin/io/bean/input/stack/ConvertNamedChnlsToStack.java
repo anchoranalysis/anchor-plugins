@@ -27,7 +27,6 @@ package org.anchoranalysis.plugin.io.bean.input.stack;
  */
 
 
-import java.io.IOException;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -36,6 +35,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.cache.ExecuteException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
+import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.core.name.store.NamedProviderStore;
 import org.anchoranalysis.core.progress.OperationWithProgressReporter;
 import org.anchoranalysis.core.progress.ProgressReporter;
@@ -48,7 +48,7 @@ import org.anchoranalysis.image.io.input.series.NamedChnlCollectionForSeries;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.image.stack.TimeSequence;
 import org.anchoranalysis.io.bean.input.InputManager;
-import org.anchoranalysis.io.deserializer.DeserializationFailedException;
+import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.params.InputContextParams;
 
 /**
@@ -174,9 +174,9 @@ public class ConvertNamedChnlsToStack extends InputManager<StackSequenceInput> {
 	
 	@Override
 	public List<StackSequenceInput> inputObjects(InputContextParams inputContext,
-			ProgressReporter progressReporter)
-			throws IOException, DeserializationFailedException {
-		return input.inputObjects(inputContext, progressReporter).stream().map( this::convert ).collect( Collectors.toList() );
+			ProgressReporter progressReporter, LogErrorReporter logger)
+			throws AnchorIOException {
+		return input.inputObjects(inputContext, progressReporter, logger).stream().map( this::convert ).collect( Collectors.toList() );
 	}
 	
 	private StackSequenceInput convert( NamedChnlsInput in ) {

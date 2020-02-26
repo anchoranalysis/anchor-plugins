@@ -27,10 +27,10 @@ package org.anchoranalysis.plugin.io.bean.copyfilesmode.naming;
  */
 
 import java.io.File;
-import java.io.IOException;
 import java.nio.file.Path;
 
 import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.io.error.AnchorIOException;
 
 /**
  * Rejects files that fail to match a particular regular-expression
@@ -58,7 +58,7 @@ public class EnsureRegExMatch extends CopyFilesNaming {
 	}
 
 	@Override
-	public Path destinationPathRelative(Path sourceDir, Path destDir, File file, int iter) throws IOException {
+	public Path destinationPathRelative(Path sourceDir, Path destDir, File file, int iter) throws AnchorIOException {
 		Path path = copyFilesNaming.destinationPathRelative(sourceDir, destDir, file, iter);
 
 		if ( path!=null && acceptPath(path) ) {
@@ -79,7 +79,7 @@ public class EnsureRegExMatch extends CopyFilesNaming {
 	}
 
 	@Override
-	public void afterCopying(Path destDir, boolean dummyMode) throws IOException {
+	public void afterCopying(Path destDir, boolean dummyMode) throws AnchorIOException {
 		copyFilesNaming.afterCopying(destDir, dummyMode);
 	}
 

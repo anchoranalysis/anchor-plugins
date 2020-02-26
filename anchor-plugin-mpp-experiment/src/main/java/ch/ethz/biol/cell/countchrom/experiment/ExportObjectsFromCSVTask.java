@@ -69,6 +69,7 @@ import org.anchoranalysis.image.stack.DisplayStack;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.io.bean.filepath.generator.FilePathGenerator;
 import org.anchoranalysis.io.bean.objmask.writer.RGBOutlineWriter;
+import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.generator.Generator;
 import org.anchoranalysis.io.generator.IterableGenerator;
 import org.anchoranalysis.io.generator.collection.SubfolderGenerator;
@@ -175,7 +176,7 @@ public class ExportObjectsFromCSVTask extends Task<ExportObjectsFromCSVInputObje
 	}
 	
 	
-	private Path idStringForPath( Path path, boolean debugMode ) throws IOException {
+	private Path idStringForPath( Path path, boolean debugMode ) throws AnchorIOException {
 		return idGenerator!=null ? idGenerator.outFilePath(path, debugMode) : path;
 	}
 	
@@ -202,7 +203,7 @@ public class ExportObjectsFromCSVTask extends Task<ExportObjectsFromCSVInputObje
 			
 			processFileWithMap( inputObject, mapGroup, groupedRows.groupNameSet(), outputManager, logErrorReporter );
 			
-		} catch (GetOperationFailedException | OperationFailedException | IOException | OutputWriteFailedException e) {
+		} catch (GetOperationFailedException | OperationFailedException | AnchorIOException | OutputWriteFailedException e) {
 			throw new JobExecutionException(e);
 		}
 	}

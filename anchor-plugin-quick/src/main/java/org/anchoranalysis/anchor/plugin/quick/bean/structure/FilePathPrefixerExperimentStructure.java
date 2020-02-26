@@ -26,13 +26,12 @@ package org.anchoranalysis.anchor.plugin.quick.bean.structure;
  * #L%
  */
 
-import java.io.IOException;
-
 import org.anchoranalysis.bean.BeanInstanceMap;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.error.BeanMisconfiguredException;
 import org.anchoranalysis.bean.shared.regex.RegEx;
 import org.anchoranalysis.io.bean.filepath.prefixer.FilePathPrefixer;
+import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.filepath.prefixer.FilePathPrefix;
 import org.anchoranalysis.io.filepath.prefixer.FilePathPrefixerParams;
 import org.anchoranalysis.io.input.InputFromManager;
@@ -80,7 +79,7 @@ public class FilePathPrefixerExperimentStructure extends FilePathPrefixer {
 
 	@Override
 	public FilePathPrefix outFilePrefix(InputFromManager input, String experimentIdentifier, FilePathPrefixerParams context)
-			throws IOException {
+			throws AnchorIOException {
 
 		createDelegateIfNeeded();
 		
@@ -88,14 +87,14 @@ public class FilePathPrefixerExperimentStructure extends FilePathPrefixer {
 	}
 
 	@Override
-	public FilePathPrefix rootFolderPrefix(String experimentIdentifier, FilePathPrefixerParams context) throws IOException {
+	public FilePathPrefix rootFolderPrefix(String experimentIdentifier, FilePathPrefixerParams context) throws AnchorIOException {
 
 		createDelegateIfNeeded();
 		
 		return delegate.rootFolderPrefix(experimentIdentifier, context);
 	}
 
-	private void createDelegateIfNeeded() throws IOException {
+	private void createDelegateIfNeeded() throws AnchorIOException {
 		
 		if (delegate!=null) {
 			// Nothing to do
@@ -109,7 +108,7 @@ public class FilePathPrefixerExperimentStructure extends FilePathPrefixer {
 		try {
 			this.delegate.checkMisconfigured(defaultInstances);
 		} catch (BeanMisconfiguredException e) {
-			throw new IOException(e);
+			throw new AnchorIOException("Bean is misconfigured", e);
 		}
 	}
 	

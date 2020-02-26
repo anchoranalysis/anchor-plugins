@@ -29,7 +29,6 @@ import java.io.File;
  */
 
 
-import java.io.IOException;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -38,6 +37,7 @@ import java.util.logging.Logger;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.DefaultInstance;
 import org.anchoranalysis.bean.annotation.Optional;
+import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.core.progress.ProgressReporter;
 import org.anchoranalysis.image.chnl.factory.ChnlFactorySingleType;
 import org.anchoranalysis.image.chnl.factory.ChnlFactoryByte;
@@ -46,7 +46,7 @@ import org.anchoranalysis.image.io.bean.rasterreader.RasterReader;
 import org.anchoranalysis.image.io.input.NamedChnlsInput;
 import org.anchoranalysis.io.bean.descriptivename.DescriptiveNameFromFile;
 import org.anchoranalysis.io.bean.input.InputManager;
-import org.anchoranalysis.io.deserializer.DeserializationFailedException;
+import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.input.FileInput;
 import org.anchoranalysis.io.input.descriptivename.DescriptiveFile;
 import org.anchoranalysis.io.params.InputContextParams;
@@ -117,13 +117,13 @@ public class GroupFiles extends InputManager<NamedChnlsInput> {
 	
 	@Override
 	public List<NamedChnlsInput> inputObjects(
-			InputContextParams inputContext, ProgressReporter progressReporter)
-			throws IOException, DeserializationFailedException {
+			InputContextParams inputContext, ProgressReporter progressReporter, LogErrorReporter logger)
+			throws AnchorIOException {
 		
 		GroupFilesMap map = new GroupFilesMap();
 	
 		// Iterate through each file, match against the reg-exp and populate a hash-map
-		Iterator<FileInput> itrFiles = fileInput.inputObjects(inputContext, progressReporter).iterator();
+		Iterator<FileInput> itrFiles = fileInput.inputObjects(inputContext, progressReporter, logger).iterator();
 		while( itrFiles.hasNext() ) {
 			
 			FileInput f = itrFiles.next();
@@ -142,7 +142,7 @@ public class GroupFiles extends InputManager<NamedChnlsInput> {
 				log.finer( String.format("Parse SUCC Input file: %s could be parsed", path) );
 			} else {
 				if (requireAllFilesMatch) {
-					throw new IOException( String.format("File %s did not match parser", path) );
+					throw new AnchorIOException( String.format("File %s did not match parser", path) );
 				}
 				log.finer( String.format("Parse FAIL Input file: %s couldn't be parsed", path) );	
 			}

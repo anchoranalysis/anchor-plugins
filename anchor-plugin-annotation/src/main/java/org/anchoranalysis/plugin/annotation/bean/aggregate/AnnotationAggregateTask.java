@@ -26,7 +26,6 @@ package org.anchoranalysis.plugin.annotation.bean.aggregate;
  * #L%
  */
 
-import java.io.IOException;
 import java.util.List;
 
 import org.anchoranalysis.annotation.io.bean.strategy.AnnotatorStrategy;
@@ -38,6 +37,7 @@ import org.anchoranalysis.experiment.JobExecutionException;
 import org.anchoranalysis.experiment.task.ParametersBound;
 import org.anchoranalysis.experiment.task.ParametersExperiment;
 import org.anchoranalysis.experiment.task.Task;
+import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
 
 /**
@@ -104,7 +104,7 @@ public class AnnotationAggregateTask<S extends AnnotatorStrategy> extends Task<A
 				inputObject.descriptiveName(),
 				label		
 			);
-		} catch (IOException exc) {
+		} catch (AnchorIOException exc) {
 			throw new JobExecutionException(exc);
 		}			
 	}

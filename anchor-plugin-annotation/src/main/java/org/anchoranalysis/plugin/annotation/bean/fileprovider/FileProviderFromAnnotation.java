@@ -28,7 +28,6 @@ package org.anchoranalysis.plugin.annotation.bean.fileprovider;
 
 
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -37,10 +36,11 @@ import org.anchoranalysis.annotation.io.bean.input.AnnotationInputManager;
 import org.anchoranalysis.annotation.io.bean.strategy.AnnotatorStrategy;
 import org.anchoranalysis.annotation.io.input.AnnotationWithStrategy;
 import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.core.progress.ProgressReporter;
 import org.anchoranalysis.image.io.input.NamedChnlsInputPart;
 import org.anchoranalysis.io.bean.provider.file.FileProvider;
-import org.anchoranalysis.io.deserializer.DeserializationFailedException;
+import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.params.InputContextParams;
 
 public class FileProviderFromAnnotation<T extends AnnotatorStrategy> extends FileProvider {
@@ -56,13 +56,13 @@ public class FileProviderFromAnnotation<T extends AnnotatorStrategy> extends Fil
 	private static final long serialVersionUID = 1L;
 
 	@Override
-	public Collection<File> matchingFiles(ProgressReporter progressReporter, InputContextParams inputContext)
-			throws IOException {
+	public Collection<File> matchingFiles(ProgressReporter progressReporter, InputContextParams inputContext, LogErrorReporter logger)
+			throws AnchorIOException {
 
 		List<File> filesOut = new ArrayList<File>();
 		
 		try {
-			List<AnnotationWithStrategy<T>> list = annotationInputManager.inputObjects(inputContext, progressReporter);
+			List<AnnotationWithStrategy<T>> list = annotationInputManager.inputObjects(inputContext, progressReporter, logger);
 			for( AnnotationWithStrategy<T> inp : list ) {
 								
 				filesOut.addAll(
@@ -71,8 +71,8 @@ public class FileProviderFromAnnotation<T extends AnnotatorStrategy> extends Fil
 				
 			}
 			
-		} catch (DeserializationFailedException e) {
-			throw new IOException(e);
+		} catch (AnchorIOException e) {
+			throw new AnchorIOException("Cannot create annotation-input objects", e);
 		}
 		
 		return filesOut;

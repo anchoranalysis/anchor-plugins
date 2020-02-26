@@ -28,12 +28,13 @@ package org.anchoranalysis.plugin.io.bean.provider.file;
 
 
 import java.io.File;
-import java.io.IOException;
 import java.util.Collection;
 
 import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.core.progress.ProgressReporter;
 import org.anchoranalysis.io.bean.provider.file.FileProvider;
+import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.params.InputContextParams;
 
 public class Limit extends FileProvider {
@@ -52,8 +53,8 @@ public class Limit extends FileProvider {
 	// END BEANS
 		
 	@Override
-	public Collection<File> matchingFiles(ProgressReporter progressReporter, InputContextParams inputContext) throws IOException {
-		return LimitUtilities.apply( fileProvider, maxNumItems, progressReporter, inputContext );
+	public Collection<File> matchingFiles(ProgressReporter progressReporter, InputContextParams inputContext, LogErrorReporter logger) throws AnchorIOException {
+		return LimitUtilities.apply( fileProvider, maxNumItems, progressReporter, inputContext, logger );
 	}
 	
 	public FileProvider getFileProvider() {

@@ -28,16 +28,17 @@ package org.anchoranalysis.plugin.io.bean.input.file;
 
 
 import java.io.File;
-import java.io.IOException;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.core.progress.ProgressReporter;
 import org.anchoranalysis.io.bean.descriptivename.DescriptiveNameFromFile;
 import org.anchoranalysis.io.bean.input.InputManager;
 import org.anchoranalysis.io.bean.provider.file.FileProvider;
+import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.input.FileInput;
 import org.anchoranalysis.io.params.InputContextParams;
 import org.anchoranalysis.plugin.io.bean.descriptivename.PatternSpan;
@@ -64,10 +65,11 @@ public class Files extends InputManager<FileInput> {
 	@BeanField
 	private DescriptiveNameFromFile descriptiveNameFromFile = new RemoveExtensions( new PatternSpan() );
 	// END BEAN PROPERTIES
-	
-	public List<FileInput> inputObjects(InputContextParams inputContext, ProgressReporter progressReporter) throws IOException {
+
+	@Override
+	public List<FileInput> inputObjects(InputContextParams inputContext, ProgressReporter progressReporter, LogErrorReporter logger) throws AnchorIOException {
 		
-		Collection<File> files = getFileProvider().matchingFiles(progressReporter, inputContext );
+		Collection<File> files = getFileProvider().matchingFiles(progressReporter, inputContext, logger);
 			
 		return descriptiveNameFromFile.descriptiveNamesFor(files, "<unknown>").stream().map(
 			df -> new FileInput(df)

@@ -27,12 +27,12 @@ package org.anchoranalysis.plugin.annotation.bean.comparison;
  */
 
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.anchoranalysis.annotation.io.assignment.Assignment;
 import org.anchoranalysis.core.text.TypedValue;
+import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.input.InputFromManager;
 import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
 import org.anchoranalysis.io.output.csv.CSVWriter;
@@ -48,7 +48,7 @@ class CSVAssignment {
 	
 	private boolean firstRow = true;
 	
-	public CSVAssignment(BoundOutputManagerRouteErrors outputManager, String outputName, boolean includeDescriptiveSplit, int maxSplitGroups) throws IOException {
+	public CSVAssignment(BoundOutputManagerRouteErrors outputManager, String outputName, boolean includeDescriptiveSplit, int maxSplitGroups) throws AnchorIOException {
 		super();
 		this.includeDescriptiveSplit = includeDescriptiveSplit;
 		this.maxSplitGroups = maxSplitGroups;

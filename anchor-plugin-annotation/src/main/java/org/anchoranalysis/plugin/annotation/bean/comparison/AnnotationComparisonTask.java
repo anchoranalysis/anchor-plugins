@@ -27,8 +27,6 @@ package org.anchoranalysis.plugin.annotation.bean.comparison;
  */
 
 
-import java.io.IOException;
-
 import org.anchoranalysis.annotation.io.assignment.Assignment;
 import org.anchoranalysis.annotation.io.assignment.AssignmentObjMask;
 import org.anchoranalysis.annotation.io.assignment.generator.AssignmentGeneratorFactory;
@@ -51,6 +49,7 @@ import org.anchoranalysis.image.stack.NamedImgStackCollection;
 import org.anchoranalysis.image.stack.wrap.WrapStackAsTimeSequenceStore;
 import org.anchoranalysis.io.bean.color.generator.ColorSetGenerator;
 import org.anchoranalysis.io.bean.color.generator.VeryBrightColorSetGenerator;
+import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
 import org.anchoranalysis.plugin.annotation.bean.comparison.assigner.AnnotationComparisonAssigner;
 import org.anchoranalysis.plugin.annotation.comparison.AnnotationComparisonInput;
@@ -113,7 +112,7 @@ public class AnnotationComparisonTask<T extends Assignment> extends Task<Annotat
 				numLevelsGrouping,
 				key -> assigner.groupForKey(key)
 			);
-		} catch (IOException e) {
+		} catch (AnchorIOException e) {
 			throw new ExperimentExecutionException(e);
 		}
 	}
@@ -310,7 +309,7 @@ public class AnnotationComparisonTask<T extends Assignment> extends Task<Annotat
 		// Write group statistics
 		try {
 			new CSVComparisonGroup<>(sharedStateC.allGroups()).writeGroupStats( outputManager );
-		} catch (IOException e) {
+		} catch (AnchorIOException e) {
 			throw new ExperimentExecutionException(e);
 		}
 	}

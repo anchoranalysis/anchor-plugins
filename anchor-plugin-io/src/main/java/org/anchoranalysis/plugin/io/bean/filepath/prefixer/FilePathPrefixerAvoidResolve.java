@@ -34,6 +34,7 @@ import java.nio.file.Paths;
 import org.anchoranalysis.bean.annotation.AllowEmpty;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.io.bean.filepath.prefixer.FilePathPrefixer;
+import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.filepath.prefixer.FilePathPrefix;
 import org.anchoranalysis.io.filepath.prefixer.FilePathPrefixerParams;
 
@@ -59,7 +60,7 @@ public abstract class FilePathPrefixerAvoidResolve extends FilePathPrefixer {
 	// END BEAN PROPERTIES
 		
 	@Override
-	public FilePathPrefix rootFolderPrefix(String experimentIdentifier, FilePathPrefixerParams context) throws IOException {
+	public FilePathPrefix rootFolderPrefix(String experimentIdentifier, FilePathPrefixerParams context) throws AnchorIOException {
 		String outPathAbsolute = resolvePath(outPathPrefix).toString();
 		return HelperFilePathRslvr.createRootFolderPrefix( outPathAbsolute, experimentIdentifier );
 	}
@@ -86,9 +87,9 @@ public abstract class FilePathPrefixerAvoidResolve extends FilePathPrefixer {
 	 * @param pathIn an input-path to match against
 	 * @param experimentIdentifier an identifier for the experiment
 	 * @return a prefixer
-	 * @throws IOException if something goes wrong
+	 * @throws AnchorIOException TODO
 	 */
-	public abstract FilePathPrefix outFilePrefixAvoidResolve( Path pathIn, String experimentIdentifier ) throws IOException;
+	public abstract FilePathPrefix outFilePrefixAvoidResolve( Path pathIn, String experimentIdentifier ) throws AnchorIOException;
 	
 
 	

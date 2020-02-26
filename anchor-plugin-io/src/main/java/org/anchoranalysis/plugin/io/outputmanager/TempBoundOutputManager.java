@@ -27,7 +27,6 @@ package org.anchoranalysis.plugin.io.outputmanager;
  */
 
 
-import java.io.IOException;
 import java.nio.file.FileSystems;
 import java.nio.file.Path;
 
@@ -37,6 +36,7 @@ import org.anchoranalysis.bean.xml.RegisterBeanFactories;
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
 import org.anchoranalysis.core.error.reporter.ErrorReporterIntoLog;
 import org.anchoranalysis.experiment.log.ConsoleLogReporter;
+import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.filepath.prefixer.FilePathPrefixerParams;
 import org.anchoranalysis.io.manifest.ManifestRecorder;
 import org.anchoranalysis.io.output.bean.OutputManagerWithPrefixer;
@@ -107,7 +107,7 @@ public class TempBoundOutputManager {
 				outputManager.bindRootFolder( "debug", new ManifestRecorder(), new FilePathPrefixerParams(false, null) ),
 				errorReporter
 			);
-		} catch (IOException e) {
+		} catch (AnchorIOException e) {
 			errorReporter.recordError(TempBoundOutputManager.class, e);
 			return null;
 		}		

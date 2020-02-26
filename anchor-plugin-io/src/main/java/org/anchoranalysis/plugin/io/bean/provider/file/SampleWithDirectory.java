@@ -27,15 +27,16 @@ package org.anchoranalysis.plugin.io.bean.provider.file;
  */
 
 import java.io.File;
-import java.io.IOException;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
 import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.core.progress.ProgressReporter;
 import org.anchoranalysis.io.bean.provider.file.FileProviderWithDirectory;
+import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.params.InputContextParams;
 
 public class SampleWithDirectory extends FileProviderWithDirectory {
@@ -65,11 +66,11 @@ public class SampleWithDirectory extends FileProviderWithDirectory {
 	}
 
 	@Override
-	public Collection<File> matchingFiles(ProgressReporter progressReporter, InputContextParams inputContext) throws IOException {
+	public Collection<File> matchingFiles(ProgressReporter progressReporter, InputContextParams inputContext, LogErrorReporter logger) throws AnchorIOException {
 
 		List<File> listSampled = new ArrayList<File>();
 		
-		Collection<File> list = fileProvider.matchingFiles(progressReporter, inputContext);
+		Collection<File> list = fileProvider.matchingFiles(progressReporter, inputContext, logger);
 		
 		int cnt = -1;	// So the first item becomes 0
 		for( File f : list ) {

@@ -1,6 +1,6 @@
 package org.anchoranalysis.plugin.io.manifest;
 
-import java.io.IOException;
+
 
 /*
  * #%L
@@ -32,6 +32,7 @@ import java.io.IOException;
 import java.nio.file.Path;
 
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
+import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.filepath.prefixer.FilePathDifferenceFromFolderPath;
 import org.anchoranalysis.io.input.InputFromManager;
 import org.anchoranalysis.io.manifest.ManifestRecorder;
@@ -47,7 +48,7 @@ public class CoupledManifests implements InputFromManager {
 	
 	public CoupledManifests(
 			ManifestRecorder experimentManifest,
-			ManifestRecorderFile fileManifest) throws IOException {
+			ManifestRecorderFile fileManifest) throws AnchorIOException {
 		super();
 		this.experimentManifest = experimentManifest;
 		this.fileManifest = fileManifest;
@@ -71,7 +72,7 @@ public class CoupledManifests implements InputFromManager {
 		return fileManifest;
 	}
 	
-	private String generateName() throws IOException {
+	private String generateName() throws AnchorIOException {
 			
 		if (experimentManifest==null) {
 			return generateNameFromFolders(0);

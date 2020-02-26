@@ -36,6 +36,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.error.BeanMisconfiguredException;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.io.bean.filepath.prefixer.FilePathPrefixer;
+import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.filepath.prefixer.FilePathPrefix;
 import org.anchoranalysis.io.filepath.prefixer.FilePathPrefixerParams;
 import org.anchoranalysis.io.input.InputFromManager;
@@ -110,21 +111,21 @@ public class HomeSubdirectory extends FilePathPrefixer {
 	
 	@Override
 	public FilePathPrefix outFilePrefix(InputFromManager input, String expName, FilePathPrefixerParams context)
-			throws IOException {
+			throws AnchorIOException {
 		try {
 			initIfPossible();
 		} catch (InitException e) {
-			throw new IOException(e);
+			throw new AnchorIOException("A failure occuring during initialization", e);
 		}
 		return delegate.outFilePrefix(input, expName, context);
 	}
 
 	@Override
-	public FilePathPrefix rootFolderPrefix(String expName, FilePathPrefixerParams context) throws IOException {
+	public FilePathPrefix rootFolderPrefix(String expName, FilePathPrefixerParams context) throws AnchorIOException {
 		try {
 			initIfPossible();
 		} catch (InitException e) {
-			throw new IOException(e);
+			throw new AnchorIOException("A failure occuring during initialization", e);
 		}
 		return delegate.rootFolderPrefix(expName, context);
 	}

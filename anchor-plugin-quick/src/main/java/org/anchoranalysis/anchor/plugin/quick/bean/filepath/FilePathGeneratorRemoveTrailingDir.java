@@ -26,11 +26,11 @@ package org.anchoranalysis.anchor.plugin.quick.bean.filepath;
  * #L%
  */
 
-import java.io.IOException;
 import java.nio.file.Path;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.io.bean.filepath.generator.FilePathGenerator;
+import org.anchoranalysis.io.error.AnchorIOException;
 
 public class FilePathGeneratorRemoveTrailingDir extends FilePathGenerator {
 
@@ -53,7 +53,7 @@ public class FilePathGeneratorRemoveTrailingDir extends FilePathGenerator {
 	// END BEAN PROPERTIES
 
 	@Override
-	public Path outFilePath(Path pathIn, boolean debugMode) throws IOException {
+	public Path outFilePath(Path pathIn, boolean debugMode) throws AnchorIOException {
 		Path path = filePathGenerator.outFilePath(pathIn, debugMode);
 		
 		if (trimTrailingDirectory > 0) {
@@ -63,7 +63,7 @@ public class FilePathGeneratorRemoveTrailingDir extends FilePathGenerator {
 		}
 	}
 	
-	private Path removeNTrailingDirs( Path path, int n, int skipFirstTrim ) throws IOException {
+	private Path removeNTrailingDirs( Path path, int n, int skipFirstTrim ) throws AnchorIOException {
 		PathTwoParts pathDir = new PathTwoParts(path);
 			
 		for( int i=0; i<skipFirstTrim; i++ ) {

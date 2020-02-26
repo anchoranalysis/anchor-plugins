@@ -27,7 +27,6 @@ package org.anchoranalysis.plugin.annotation.bean.comparer;
  */
 
 
-import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
@@ -39,6 +38,7 @@ import org.anchoranalysis.image.io.objs.ObjMaskCollectionReader;
 import org.anchoranalysis.image.objmask.ObjMaskCollection;
 import org.anchoranalysis.io.bean.filepath.generator.FilePathGenerator;
 import org.anchoranalysis.io.deserializer.DeserializationFailedException;
+import org.anchoranalysis.io.error.AnchorIOException;
 
 public class ObjMaskCollectionComparer extends Comparer {
 
@@ -68,7 +68,7 @@ public class ObjMaskCollectionComparer extends Comparer {
 			
 			return ObjMaskCollectionReader.createFromPath(objsPath);
 			
-		} catch (IOException | DeserializationFailedException e) {
+		} catch (AnchorIOException | DeserializationFailedException e) {
 			throw new CreateException(e);
 		}
 	}

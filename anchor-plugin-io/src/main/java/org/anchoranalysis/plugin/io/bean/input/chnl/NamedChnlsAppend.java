@@ -27,8 +27,6 @@ package org.anchoranalysis.plugin.io.bean.input.chnl;
  */
 
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -41,6 +39,7 @@ import org.anchoranalysis.bean.annotation.DefaultInstance;
 import org.anchoranalysis.bean.annotation.Optional;
 import org.anchoranalysis.core.cache.CachedOperation;
 import org.anchoranalysis.core.cache.ExecuteException;
+import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.core.progress.ProgressReporter;
 import org.anchoranalysis.core.progress.ProgressReporterMultiple;
 import org.anchoranalysis.core.progress.ProgressReporterOneOfMany;
@@ -48,7 +47,7 @@ import org.anchoranalysis.image.io.bean.rasterreader.RasterReader;
 import org.anchoranalysis.image.io.input.NamedChnlsInputPart;
 import org.anchoranalysis.io.bean.filepath.generator.FilePathGenerator;
 import org.anchoranalysis.io.bean.input.InputManager;
-import org.anchoranalysis.io.deserializer.DeserializationFailedException;
+import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.input.OperationOutFilePath;
 import org.anchoranalysis.io.params.InputContextParams;
 
@@ -81,13 +80,12 @@ public class NamedChnlsAppend extends NamedChnlsBase {
 	// END BEAN PROPERTIES
 	
 	@Override
-	public List<NamedChnlsInputPart> inputObjects(InputContextParams inputContext, ProgressReporter progressReporter)
-			throws FileNotFoundException, IOException,
-			DeserializationFailedException {
+	public List<NamedChnlsInputPart> inputObjects(InputContextParams inputContext, ProgressReporter progressReporter, LogErrorReporter logger)
+			throws AnchorIOException {
 
 		try( ProgressReporterMultiple prm = new ProgressReporterMultiple(progressReporter, 2)) {
 			
-			Iterator<NamedChnlsInputPart> itr = input.inputObjects(inputContext, new ProgressReporterOneOfMany(prm)).iterator();
+			Iterator<NamedChnlsInputPart> itr = input.inputObjects(inputContext, new ProgressReporterOneOfMany(prm), logger).iterator();
 			
 			prm.incrWorker();
 			
@@ -104,7 +102,7 @@ public class NamedChnlsAppend extends NamedChnlsBase {
 		}
 	}
 	
-	private List<NamedChnlsInputPart> createOutList( List<NamedChnlsInputPart> listTemp, ProgressReporter progressReporter, boolean debugMode ) throws IOException {
+	private List<NamedChnlsInputPart> createOutList( List<NamedChnlsInputPart> listTemp, ProgressReporter progressReporter, boolean debugMode ) throws AnchorIOException {
 
 		progressReporter.setMin(0);
 		progressReporter.setMax( listTemp.size() );
@@ -121,7 +119,7 @@ public class NamedChnlsAppend extends NamedChnlsBase {
 					
 					try {
 						outList.add( append(ncc, debugMode) );		
-					} catch ( IOException e) {
+					} catch ( AnchorIOException e) {
 						
 					}
 					
@@ -140,7 +138,7 @@ public class NamedChnlsAppend extends NamedChnlsBase {
 	}
 	
 	// We assume all the input files are single channel images
-	private NamedChnlsInputPart append( final NamedChnlsInputPart ncc, boolean debugMode ) throws IOException {
+	private NamedChnlsInputPart append( final NamedChnlsInputPart ncc, boolean debugMode ) throws AnchorIOException {
 		
 		NamedChnlsInputPart out = ncc; 
 		
@@ -161,12 +159,12 @@ public class NamedChnlsAppend extends NamedChnlsBase {
 						if (skipMissingChannels) {
 							continue;
 						} else {
-							throw new FileNotFoundException( String.format("Append path: %s does not exist",path) );
+							throw new AnchorIOException( String.format("Append path: %s does not exist",path) );
 						}
 					}
 					
 				} catch (ExecuteException e) {
-					throw new IOException(e.getCause());
+					throw new AnchorIOException("Cannot determine path", e.getCause());
 				}
 			}
 			
