@@ -31,12 +31,10 @@ import java.util.List;
 
 import org.anchoranalysis.bean.annotation.AllowEmpty;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.log.LogErrorReporter;
-import org.anchoranalysis.core.progress.ProgressReporter;
 import org.anchoranalysis.io.bean.input.InputManager;
+import org.anchoranalysis.io.bean.input.InputManagerParams;
 import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.input.InputFromManager;
-import org.anchoranalysis.io.params.InputContextParams;
 
 /**
  * Filters all the input objects so that only those with descriptive-names containing a particular
@@ -64,11 +62,11 @@ public class FilterDescriptiveName<T extends InputFromManager> extends InputMana
 	// END BEAN PROPERTIES
 	
 	@Override
-	public List<T> inputObjects(InputContextParams inputContext, ProgressReporter progressReporter, LogErrorReporter logger)
+	public List<T> inputObjects(InputManagerParams params)
 			throws AnchorIOException {
 
 		// Existing collection 
-		List<T> in = input.inputObjects(inputContext, progressReporter, logger);
+		List<T> in = input.inputObjects(params);
 		
 		// If no string is specified, just pass pack the entire iterator
 		if (equals.isEmpty()) {

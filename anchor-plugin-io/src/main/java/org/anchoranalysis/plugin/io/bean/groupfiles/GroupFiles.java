@@ -37,8 +37,6 @@ import java.util.logging.Logger;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.DefaultInstance;
 import org.anchoranalysis.bean.annotation.Optional;
-import org.anchoranalysis.core.log.LogErrorReporter;
-import org.anchoranalysis.core.progress.ProgressReporter;
 import org.anchoranalysis.image.chnl.factory.ChnlFactorySingleType;
 import org.anchoranalysis.image.chnl.factory.ChnlFactoryByte;
 import org.anchoranalysis.image.io.bean.chnl.map.ImgChnlMapCreator;
@@ -46,10 +44,10 @@ import org.anchoranalysis.image.io.bean.rasterreader.RasterReader;
 import org.anchoranalysis.image.io.input.NamedChnlsInput;
 import org.anchoranalysis.io.bean.descriptivename.DescriptiveNameFromFile;
 import org.anchoranalysis.io.bean.input.InputManager;
+import org.anchoranalysis.io.bean.input.InputManagerParams;
 import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.input.FileInput;
 import org.anchoranalysis.io.input.descriptivename.DescriptiveFile;
-import org.anchoranalysis.io.params.InputContextParams;
 import org.anchoranalysis.plugin.io.bean.descriptivename.LastFolders;
 import org.anchoranalysis.plugin.io.bean.groupfiles.check.CheckParsedFilePathBag;
 import org.anchoranalysis.plugin.io.bean.groupfiles.parser.FilePathParser;
@@ -117,13 +115,13 @@ public class GroupFiles extends InputManager<NamedChnlsInput> {
 	
 	@Override
 	public List<NamedChnlsInput> inputObjects(
-			InputContextParams inputContext, ProgressReporter progressReporter, LogErrorReporter logger)
+			InputManagerParams params)
 			throws AnchorIOException {
 		
 		GroupFilesMap map = new GroupFilesMap();
 	
 		// Iterate through each file, match against the reg-exp and populate a hash-map
-		Iterator<FileInput> itrFiles = fileInput.inputObjects(inputContext, progressReporter, logger).iterator();
+		Iterator<FileInput> itrFiles = fileInput.inputObjects(params).iterator();
 		while( itrFiles.hasNext() ) {
 			
 			FileInput f = itrFiles.next();

@@ -36,8 +36,7 @@ import java.util.List;
 
 import org.anchoranalysis.bean.StringSet;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.log.LogErrorReporter;
-import org.anchoranalysis.core.progress.ProgressReporter;
+import org.anchoranalysis.io.bean.input.InputManagerParams;
 import org.anchoranalysis.io.bean.provider.file.FileProviderWithDirectory;
 import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.params.InputContextParams;
@@ -58,12 +57,12 @@ public class FileSetFromStringSet extends FileProviderWithDirectory {
 	// END BEAN PROPERTIES
 	
 	@Override
-	public Collection<File> matchingFiles(ProgressReporter progressReporter, InputContextParams inputContext, LogErrorReporter logger)
+	public Collection<File> matchingFiles(InputManagerParams params)
 			throws AnchorIOException {
 		
 		List<File> files = new ArrayList<>();
 		
-		Path dir = getDirectoryAsPath(inputContext);
+		Path dir = getDirectoryAsPath(params.getInputContext());
 		
 		for( String s : filePaths ) {
 			Path relPath = Paths.get(s);

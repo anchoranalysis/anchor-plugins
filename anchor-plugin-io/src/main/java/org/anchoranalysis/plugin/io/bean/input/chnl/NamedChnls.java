@@ -33,15 +33,13 @@ import java.util.List;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.DefaultInstance;
-import org.anchoranalysis.core.log.LogErrorReporter;
-import org.anchoranalysis.core.progress.ProgressReporter;
 import org.anchoranalysis.image.io.bean.chnl.map.ImgChnlMapCreator;
 import org.anchoranalysis.image.io.bean.rasterreader.RasterReader;
 import org.anchoranalysis.image.io.input.NamedChnlsInputPart;
 import org.anchoranalysis.io.bean.input.InputManager;
+import org.anchoranalysis.io.bean.input.InputManagerParams;
 import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.input.FileInput;
-import org.anchoranalysis.io.params.InputContextParams;
 import org.anchoranalysis.plugin.io.bean.chnl.map.ImgChnlMapAutoname;
 
 // Provides access to a named set of channels for each input
@@ -67,12 +65,12 @@ public class NamedChnls extends NamedChnlsBase {
 	// END BEANS
 
 	@Override
-	public List<NamedChnlsInputPart> inputObjects(InputContextParams inputContext, ProgressReporter progressReporter, LogErrorReporter logger)
+	public List<NamedChnlsInputPart> inputObjects(InputManagerParams params)
 			throws AnchorIOException {
 		
 		ArrayList<NamedChnlsInputPart> listOut = new ArrayList<>(); 
 		
-		Iterator<FileInput> itrFiles = fileInput.inputObjects(inputContext, progressReporter, logger).iterator();
+		Iterator<FileInput> itrFiles = fileInput.inputObjects(params).iterator();
 		while( itrFiles.hasNext() ) {
 			listOut.add( new MapPart<>(itrFiles.next(), getRasterReader(), imgChnlMapCreator, useLastSeriesIndexOnly ));
 		}

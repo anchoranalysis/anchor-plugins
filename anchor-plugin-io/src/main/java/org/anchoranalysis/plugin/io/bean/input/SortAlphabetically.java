@@ -34,12 +34,10 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.log.LogErrorReporter;
-import org.anchoranalysis.core.progress.ProgressReporter;
 import org.anchoranalysis.io.bean.input.InputManager;
+import org.anchoranalysis.io.bean.input.InputManagerParams;
 import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.input.InputFromManager;
-import org.anchoranalysis.io.params.InputContextParams;
 
 /**
  * Sorts the input-items in alphabetical order of their descriptiveName()
@@ -61,12 +59,11 @@ public class SortAlphabetically<T extends InputFromManager> extends InputManager
 	// END BEAN PROPERITES	
 	
 	@Override
-	public List<T> inputObjects(InputContextParams inputContext,
-			ProgressReporter progressReporter, LogErrorReporter logger) throws AnchorIOException {
+	public List<T> inputObjects(InputManagerParams params) throws AnchorIOException {
 		
 		List<T> list = new ArrayList<>();
 		
-		Iterator<T> itr = input.inputObjects(inputContext, progressReporter, logger).iterator();
+		Iterator<T> itr = input.inputObjects(params).iterator();
 		while( itr.hasNext() ) {
 			list.add( itr.next() );
 		}

@@ -32,13 +32,11 @@ import java.util.List;
 import java.util.ListIterator;
 import java.util.Set;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.log.LogErrorReporter;
-import org.anchoranalysis.core.progress.ProgressReporter;
 import org.anchoranalysis.io.bean.filepath.generator.FilePathGenerator;
 import org.anchoranalysis.io.bean.input.InputManager;
+import org.anchoranalysis.io.bean.input.InputManagerParams;
 import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.input.InputFromManager;
-import org.anchoranalysis.io.params.InputContextParams;
 
 /**
  * Finds a CSV file with the descriptiveNames of an input as the first-column
@@ -71,17 +69,17 @@ public class FilterCsvColumn<T extends InputFromManager> extends InputManager<T>
 	// END BEAN PROPERTIES
 	
 	@Override
-	public List<T> inputObjects(InputContextParams inputContext, ProgressReporter progressReporter, LogErrorReporter logger)
+	public List<T> inputObjects(InputManagerParams params)
 			throws AnchorIOException {
 
 		// Existing collection 
-		List<T> in = input.inputObjects(inputContext, progressReporter, logger);
+		List<T> in = input.inputObjects(params);
 		
 		if (in.size()==0) {
 			return in;
 		}
 		
-		Set<String> matching = matchingNames( in.get(0).pathForBinding(), inputContext.isDebugMode(), in.size() );
+		Set<String> matching = matchingNames( in.get(0).pathForBinding(), params.isDebugMode(), in.size() );
 		applyFilter(in, matching);
 		
 		return in;

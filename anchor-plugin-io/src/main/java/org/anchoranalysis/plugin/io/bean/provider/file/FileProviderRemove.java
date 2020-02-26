@@ -33,12 +33,10 @@ import java.util.Iterator;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.shared.regex.RegEx;
-import org.anchoranalysis.core.log.LogErrorReporter;
-import org.anchoranalysis.core.progress.ProgressReporter;
+import org.anchoranalysis.io.bean.input.InputManagerParams;
 import org.anchoranalysis.io.bean.provider.file.FileProvider;
 import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.filepath.FilePathNormalizer;
-import org.anchoranalysis.io.params.InputContextParams;
 
 // Removes one or more files if they match a regex
 public class FileProviderRemove extends FileProvider {
@@ -58,10 +56,10 @@ public class FileProviderRemove extends FileProvider {
 	// END BEAN PROPERTIES
 	
 	@Override
-	public Collection<File> matchingFiles(ProgressReporter progressReporter, InputContextParams inputContext, LogErrorReporter logger)
+	public Collection<File> matchingFiles(InputManagerParams params)
 			throws AnchorIOException {
 		
-		Collection<File> files = fileProvider.matchingFiles(progressReporter, inputContext, logger);
+		Collection<File> files = fileProvider.matchingFiles(params);
 
 		// Loop through each file and see if it's in our has map
 		Iterator<File> itr = files.iterator();

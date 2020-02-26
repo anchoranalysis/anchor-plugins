@@ -39,7 +39,6 @@ import org.anchoranalysis.bean.annotation.DefaultInstance;
 import org.anchoranalysis.bean.annotation.Optional;
 import org.anchoranalysis.core.cache.CachedOperation;
 import org.anchoranalysis.core.cache.ExecuteException;
-import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.core.progress.ProgressReporter;
 import org.anchoranalysis.core.progress.ProgressReporterMultiple;
 import org.anchoranalysis.core.progress.ProgressReporterOneOfMany;
@@ -47,9 +46,9 @@ import org.anchoranalysis.image.io.bean.rasterreader.RasterReader;
 import org.anchoranalysis.image.io.input.NamedChnlsInputPart;
 import org.anchoranalysis.io.bean.filepath.generator.FilePathGenerator;
 import org.anchoranalysis.io.bean.input.InputManager;
+import org.anchoranalysis.io.bean.input.InputManagerParams;
 import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.input.OperationOutFilePath;
-import org.anchoranalysis.io.params.InputContextParams;
 
 
 public class NamedChnlsAppend extends NamedChnlsBase {
@@ -80,12 +79,12 @@ public class NamedChnlsAppend extends NamedChnlsBase {
 	// END BEAN PROPERTIES
 	
 	@Override
-	public List<NamedChnlsInputPart> inputObjects(InputContextParams inputContext, ProgressReporter progressReporter, LogErrorReporter logger)
+	public List<NamedChnlsInputPart> inputObjects(InputManagerParams params)
 			throws AnchorIOException {
 
-		try( ProgressReporterMultiple prm = new ProgressReporterMultiple(progressReporter, 2)) {
+		try( ProgressReporterMultiple prm = new ProgressReporterMultiple(params.getProgressReporter(), 2)) {
 			
-			Iterator<NamedChnlsInputPart> itr = input.inputObjects(inputContext, new ProgressReporterOneOfMany(prm), logger).iterator();
+			Iterator<NamedChnlsInputPart> itr = input.inputObjects(params).iterator();
 			
 			prm.incrWorker();
 			
@@ -94,7 +93,7 @@ public class NamedChnlsAppend extends NamedChnlsBase {
 				listTemp.add( itr.next() );
 			}
 			
-			List<NamedChnlsInputPart> outList = createOutList( listTemp, new ProgressReporterOneOfMany(prm), inputContext.isDebugMode() );
+			List<NamedChnlsInputPart> outList = createOutList( listTemp, new ProgressReporterOneOfMany(prm), params.isDebugMode() );
 			
 			prm.incrWorker();
 			

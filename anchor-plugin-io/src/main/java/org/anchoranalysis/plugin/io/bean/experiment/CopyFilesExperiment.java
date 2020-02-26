@@ -44,6 +44,7 @@ import org.anchoranalysis.experiment.ExperimentExecutionException;
 import org.anchoranalysis.experiment.bean.Experiment;
 import org.anchoranalysis.experiment.bean.identifier.ExperimentIdentifier;
 import org.anchoranalysis.experiment.log.ConsoleLogReporter;
+import org.anchoranalysis.io.bean.input.InputManagerParams;
 import org.anchoranalysis.io.bean.provider.file.FileProvider;
 import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.plugin.io.bean.copyfilesmode.copymethod.CopyFilesMethod;
@@ -177,10 +178,11 @@ public class CopyFilesExperiment extends Experiment {
 		Collection<File> files;
 		try {
 			files = fileProvider.matchingFiles(
-				new ProgressReporterConsole(5),
-				expArgs.createInputContext(),
-				new LogErrorReporter( new ConsoleLogReporter() )	// Print errors to the screen
-				
+				new InputManagerParams(
+					expArgs.createInputContext(),
+					new ProgressReporterConsole(5),
+					new LogErrorReporter( new ConsoleLogReporter() )	// Print errors to the screen
+				)
 			);
 		} catch (AnchorIOException e) {
 			throw new ExperimentExecutionException("Cannot find input files", e);

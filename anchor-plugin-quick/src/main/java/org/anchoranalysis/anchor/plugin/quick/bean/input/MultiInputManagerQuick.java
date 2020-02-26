@@ -37,16 +37,14 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.DefaultInstance;
 import org.anchoranalysis.bean.annotation.Optional;
 import org.anchoranalysis.bean.error.BeanMisconfiguredException;
-import org.anchoranalysis.core.log.LogErrorReporter;
-import org.anchoranalysis.core.progress.ProgressReporter;
 import org.anchoranalysis.image.io.bean.chnl.map.ImgChnlMapEntry;
 import org.anchoranalysis.image.io.input.ProvidesStackInput;
 import org.anchoranalysis.io.bean.provider.file.FileProviderWithDirectory;
 import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.bean.descriptivename.DescriptiveNameFromFile;
 import org.anchoranalysis.io.bean.input.InputManager;
+import org.anchoranalysis.io.bean.input.InputManagerParams;
 import org.anchoranalysis.io.input.FileInput;
-import org.anchoranalysis.io.params.InputContextParams;
 import org.anchoranalysis.mpp.io.bean.input.MultiInputManager;
 import org.anchoranalysis.mpp.io.bean.input.MultiInputManagerBase;
 import org.anchoranalysis.mpp.io.input.MultiInput;
@@ -192,9 +190,9 @@ public class MultiInputManagerQuick extends MultiInputManagerBase {
 	
 	
 	@Override
-	public List<MultiInput> inputObjects(InputContextParams inputContext, ProgressReporter progressReporter, LogErrorReporter logger)
+	public List<MultiInput> inputObjects(InputManagerParams params)
 			throws AnchorIOException {
-		return inputManager.inputObjects(inputContext, progressReporter, logger);
+		return inputManager.inputObjects(params);
 	}
 
 	public String getRootName() {

@@ -36,12 +36,10 @@ import org.anchoranalysis.annotation.io.bean.input.AnnotationInputManager;
 import org.anchoranalysis.annotation.io.bean.strategy.AnnotatorStrategy;
 import org.anchoranalysis.annotation.io.input.AnnotationWithStrategy;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.log.LogErrorReporter;
-import org.anchoranalysis.core.progress.ProgressReporter;
 import org.anchoranalysis.image.io.input.NamedChnlsInputPart;
+import org.anchoranalysis.io.bean.input.InputManagerParams;
 import org.anchoranalysis.io.bean.provider.file.FileProvider;
 import org.anchoranalysis.io.error.AnchorIOException;
-import org.anchoranalysis.io.params.InputContextParams;
 
 public class FileProviderFromAnnotation<T extends AnnotatorStrategy> extends FileProvider {
 	
@@ -56,13 +54,13 @@ public class FileProviderFromAnnotation<T extends AnnotatorStrategy> extends Fil
 	private static final long serialVersionUID = 1L;
 
 	@Override
-	public Collection<File> matchingFiles(ProgressReporter progressReporter, InputContextParams inputContext, LogErrorReporter logger)
+	public Collection<File> matchingFiles(InputManagerParams params)
 			throws AnchorIOException {
 
 		List<File> filesOut = new ArrayList<File>();
 		
 		try {
-			List<AnnotationWithStrategy<T>> list = annotationInputManager.inputObjects(inputContext, progressReporter, logger);
+			List<AnnotationWithStrategy<T>> list = annotationInputManager.inputObjects(params);
 			for( AnnotationWithStrategy<T> inp : list ) {
 								
 				filesOut.addAll(

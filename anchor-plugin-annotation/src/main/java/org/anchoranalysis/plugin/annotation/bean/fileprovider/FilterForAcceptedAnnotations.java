@@ -36,12 +36,10 @@ import java.util.List;
 import org.anchoranalysis.annotation.io.mark.MarkAnnotationReader;
 import org.anchoranalysis.annotation.mark.MarkAnnotation;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.log.LogErrorReporter;
-import org.anchoranalysis.core.progress.ProgressReporter;
 import org.anchoranalysis.io.bean.filepath.generator.FilePathGenerator;
+import org.anchoranalysis.io.bean.input.InputManagerParams;
 import org.anchoranalysis.io.bean.provider.file.FileProvider;
 import org.anchoranalysis.io.error.AnchorIOException;
-import org.anchoranalysis.io.params.InputContextParams;
 
 public class FilterForAcceptedAnnotations extends FileProvider {
 
@@ -61,10 +59,10 @@ public class FilterForAcceptedAnnotations extends FileProvider {
 	private MarkAnnotationReader annotationReader = new MarkAnnotationReader(false);
 	
 	@Override
-	public Collection<File> matchingFiles(ProgressReporter progressReporter, InputContextParams inputContext, LogErrorReporter logger)
+	public Collection<File> matchingFiles(InputManagerParams params)
 			throws AnchorIOException {
 		
-		Collection<File> filesIn = fileProvider.matchingFiles(progressReporter, inputContext, logger);
+		Collection<File> filesIn = fileProvider.matchingFiles(params);
 		
 		List<File> filesOut = new ArrayList<>();
 		

@@ -32,16 +32,14 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
-import org.anchoranalysis.core.log.LogErrorReporter;
-import org.anchoranalysis.core.progress.ProgressReporter;
+import org.anchoranalysis.io.bean.input.InputManagerParams;
 import org.anchoranalysis.io.bean.provider.file.FileProvider;
 import org.anchoranalysis.io.error.AnchorIOException;
-import org.anchoranalysis.io.params.InputContextParams;
 
 class SortUtilities {
 	
-	public static Collection<File> sortFiles( FileProvider fileProvider, ProgressReporter progressReporter, InputContextParams inputContext, LogErrorReporter logger ) throws AnchorIOException {
-		Collection<File> in = fileProvider.matchingFiles(progressReporter, inputContext, logger);
+	public static Collection<File> sortFiles( FileProvider fileProvider, InputManagerParams params ) throws AnchorIOException {
+		Collection<File> in = fileProvider.matchingFiles(params);
 		
 		List<File> out = new ArrayList<>();
 		out.addAll(in);

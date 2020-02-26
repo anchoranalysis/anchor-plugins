@@ -33,12 +33,10 @@ import java.util.List;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.Optional;
-import org.anchoranalysis.core.log.LogErrorReporter;
-import org.anchoranalysis.core.progress.ProgressReporter;
 import org.anchoranalysis.io.bean.input.InputManager;
+import org.anchoranalysis.io.bean.input.InputManagerParams;
 import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.input.InputFromManager;
-import org.anchoranalysis.io.params.InputContextParams;
 
 /**
  * Uses one input-manager normally, but a different one if in debug mode
@@ -64,21 +62,20 @@ public class BranchIfDebug<T extends InputFromManager> extends InputManager<T> {
 	// END BEAN PROPERTIES
 	
 	@Override
-	public List<T> inputObjects(InputContextParams inputContext,
-			ProgressReporter progressReporter, LogErrorReporter logger)
+	public List<T> inputObjects(InputManagerParams params)
 			throws AnchorIOException {
 
-		if (inputContext.isDebugMode()) {
+		if (params.isDebugMode()) {
 			if (inputDebug==null) {
 				// We pick the first
-				Iterator<T> all = input.inputObjects(inputContext, progressReporter, logger).iterator();
+				Iterator<T> all = input.inputObjects(params).iterator();
 				T firstItem = all.next();
 				return Collections.singletonList(firstItem);
 			}
 			
-			return inputDebug.inputObjects(inputContext, progressReporter, logger);
+			return inputDebug.inputObjects(params);
 		}
-		return input.inputObjects(inputContext, progressReporter, logger);
+		return input.inputObjects(params);
 	}
 
 	public InputManager<T> getInput() {

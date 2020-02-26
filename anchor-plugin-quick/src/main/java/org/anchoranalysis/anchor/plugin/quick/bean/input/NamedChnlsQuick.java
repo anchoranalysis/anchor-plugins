@@ -39,8 +39,6 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.DefaultInstance;
 import org.anchoranalysis.bean.annotation.Optional;
 import org.anchoranalysis.bean.error.BeanMisconfiguredException;
-import org.anchoranalysis.core.log.LogErrorReporter;
-import org.anchoranalysis.core.progress.ProgressReporter;
 import org.anchoranalysis.image.io.input.NamedChnlsInputPart;
 import org.anchoranalysis.io.bean.provider.file.FileProviderWithDirectory;
 import org.anchoranalysis.io.error.AnchorIOException;
@@ -48,8 +46,8 @@ import org.anchoranalysis.io.bean.descriptivename.DescriptiveNameFromFile;
 import org.anchoranalysis.io.bean.filepath.generator.FilePathGenerator;
 import org.anchoranalysis.io.bean.filepath.generator.FilePathGeneratorReplace;
 import org.anchoranalysis.io.bean.input.InputManager;
+import org.anchoranalysis.io.bean.input.InputManagerParams;
 import org.anchoranalysis.io.input.FileInput;
-import org.anchoranalysis.io.params.InputContextParams;
 import org.anchoranalysis.plugin.io.bean.descriptivename.LastFolders;
 import org.anchoranalysis.plugin.io.bean.input.chnl.NamedChnlsAppend;
 import org.anchoranalysis.plugin.io.bean.input.chnl.NamedChnlsBase;
@@ -179,9 +177,9 @@ public class NamedChnlsQuick extends NamedChnlsBase {
 	}
 	
 	@Override
-	public List<NamedChnlsInputPart> inputObjects(InputContextParams inputContext, ProgressReporter progressReporter, LogErrorReporter logger) throws AnchorIOException {
+	public List<NamedChnlsInputPart> inputObjects(InputManagerParams params) throws AnchorIOException {
 		createAppendedChnlsIfNecessary();
-		return append.inputObjects(inputContext, progressReporter, logger);
+		return append.inputObjects(params);
 	}
 	
 	private void createAppendedChnlsIfNecessary() throws AnchorIOException {

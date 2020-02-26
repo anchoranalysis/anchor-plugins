@@ -32,12 +32,10 @@ import java.util.ListIterator;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.shared.regex.RegEx;
-import org.anchoranalysis.core.log.LogErrorReporter;
-import org.anchoranalysis.core.progress.ProgressReporter;
 import org.anchoranalysis.io.bean.input.InputManager;
+import org.anchoranalysis.io.bean.input.InputManagerParams;
 import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.input.InputFromManager;
-import org.anchoranalysis.io.params.InputContextParams;
 
 /**
  * Excludes all inputs that match a regular expression
@@ -62,10 +60,9 @@ public class Exclude<T extends InputFromManager> extends InputManager<T> {
 	// END BEAN PROPERITES	
 	
 	@Override
-	public List<T> inputObjects(InputContextParams inputContext,
-			ProgressReporter progressReporter, LogErrorReporter logger) throws AnchorIOException {
+	public List<T> inputObjects(InputManagerParams params) throws AnchorIOException {
 		
-		List<T> list = input.inputObjects(inputContext, progressReporter, logger);
+		List<T> list = input.inputObjects(params);
 		
 		ListIterator<T> itr = list.listIterator();
 		while( itr.hasNext() ) {

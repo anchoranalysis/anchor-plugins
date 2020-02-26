@@ -33,14 +33,12 @@ import org.anchoranalysis.bean.BeanInstanceMap;
 import org.anchoranalysis.bean.annotation.AllowEmpty;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.error.BeanMisconfiguredException;
-import org.anchoranalysis.core.log.LogErrorReporter;
-import org.anchoranalysis.core.progress.ProgressReporter;
 import org.anchoranalysis.io.bean.file.matcher.MatchGlob;
+import org.anchoranalysis.io.bean.input.InputManagerParams;
 import org.anchoranalysis.io.bean.provider.file.FileProvider;
 import org.anchoranalysis.io.bean.provider.file.FileProviderWithDirectory;
 import org.anchoranalysis.io.bean.provider.file.FileSet;
 import org.anchoranalysis.io.error.AnchorIOException;
-import org.anchoranalysis.io.params.InputContextParams;
 import org.anchoranalysis.plugin.io.bean.provider.file.RootedFileSet;
 
 /**
@@ -189,8 +187,8 @@ public class ExperimentResultsExperimentStructure extends FileProvider {
 	}
 		
 	@Override
-	public Collection<File> matchingFiles(ProgressReporter progressReporter, InputContextParams inputContext, LogErrorReporter logger) throws AnchorIOException {
-		return delegate.matchingFiles(progressReporter, inputContext, logger);
+	public Collection<File> matchingFiles(InputManagerParams params) throws AnchorIOException {
+		return delegate.matchingFiles(params);
 	}
 
 	public String getExperimentType() {

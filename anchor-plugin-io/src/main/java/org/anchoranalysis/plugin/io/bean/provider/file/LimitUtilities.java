@@ -30,17 +30,15 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import org.anchoranalysis.core.log.LogErrorReporter;
-import org.anchoranalysis.core.progress.ProgressReporter;
+import org.anchoranalysis.io.bean.input.InputManagerParams;
 import org.anchoranalysis.io.bean.provider.file.FileProvider;
 import org.anchoranalysis.io.error.AnchorIOException;
-import org.anchoranalysis.io.params.InputContextParams;
 
 class LimitUtilities {
 
-	public static Collection<File> apply( FileProvider fileProvider, int maxNumItems, ProgressReporter progressReporter, InputContextParams inputContext, LogErrorReporter logger ) throws AnchorIOException {
+	public static Collection<File> apply( FileProvider fileProvider, int maxNumItems, InputManagerParams params ) throws AnchorIOException {
 		
-		Collection<File> filesIn = fileProvider.matchingFiles(progressReporter, inputContext, logger);
+		Collection<File> filesIn = fileProvider.matchingFiles(params);
 		
 		ArrayList<File> filesOut = new ArrayList<>();
 		

@@ -32,8 +32,7 @@ import java.nio.file.Path;
 import java.util.Collection;
 
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.log.LogErrorReporter;
-import org.anchoranalysis.core.progress.ProgressReporter;
+import org.anchoranalysis.io.bean.input.InputManagerParams;
 import org.anchoranalysis.io.bean.provider.file.FileProviderWithDirectory;
 import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.params.InputContextParams;
@@ -54,8 +53,8 @@ public class LimitWithDirectory extends FileProviderWithDirectory {
 	// END BEANS
 		
 	@Override
-	public Collection<File> matchingFiles(ProgressReporter progressReporter, InputContextParams inputContext, LogErrorReporter logger) throws AnchorIOException {
-		return LimitUtilities.apply( fileProvider, maxNumItems, progressReporter, inputContext, logger );
+	public Collection<File> matchingFiles(InputManagerParams params) throws AnchorIOException {
+		return LimitUtilities.apply( fileProvider, maxNumItems, params );
 	}
 	
 	@Override

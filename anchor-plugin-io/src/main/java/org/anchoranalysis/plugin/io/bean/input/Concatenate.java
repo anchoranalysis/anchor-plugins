@@ -31,14 +31,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.log.LogErrorReporter;
-import org.anchoranalysis.core.progress.ProgressReporter;
 import org.anchoranalysis.core.progress.ProgressReporterMultiple;
-import org.anchoranalysis.core.progress.ProgressReporterOneOfMany;
 import org.anchoranalysis.io.bean.input.InputManager;
+import org.anchoranalysis.io.bean.input.InputManagerParams;
 import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.input.InputFromManager;
-import org.anchoranalysis.io.params.InputContextParams;
 
 /**
  * Concatenates several input-managers
@@ -60,16 +57,15 @@ public class Concatenate<T extends InputFromManager> extends InputManager<T> {
 	// END BEAN PROPERTIES
 	
 	@Override
-	public List<T> inputObjects(InputContextParams inputContext,
-			ProgressReporter progressReporter, LogErrorReporter logger) throws AnchorIOException {
+	public List<T> inputObjects(InputManagerParams params) throws AnchorIOException {
 
-		try( ProgressReporterMultiple prm = new ProgressReporterMultiple(progressReporter, list.size())) {
+		try( ProgressReporterMultiple prm = new ProgressReporterMultiple(params.getProgressReporter(), list.size())) {
 		
 			ArrayList<T> listOut = new ArrayList<>();
 			
 			for( InputManager<T> inputManager : list ) {
 				listOut.addAll(
-					inputManager.inputObjects(inputContext, new ProgressReporterOneOfMany(prm), logger)
+					inputManager.inputObjects(params)
 				);
 								
 				prm.incrWorker();
