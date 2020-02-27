@@ -27,6 +27,8 @@ package org.anchoranalysis.plugin.io.bean.descriptivename;
  */
 
 import java.io.File;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -34,15 +36,17 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.core.file.PathUtilities;
 import org.anchoranalysis.io.bean.descriptivename.DescriptiveNameFromFile;
 import org.anchoranalysis.io.input.descriptivename.DescriptiveFile;
 import org.apache.commons.io.FilenameUtils;
 
 
 /**
- * Removes extensions from the descriptive-name (but not from the file)
+ * Removes extensions from the descriptive-name (but not from the file) AND only if the extension hasn't already been removed upstream.
  * 
  * <p>As an exception, the extension can be retained if there is more than one file with the same descriptive-name</p>
+ * <p>To check if the extension has already been removed upstream, a check occurs if the path ends with the descriptive-name</p>
  * 
  * @author owen
  *
@@ -128,7 +132,7 @@ public class RemoveExtensions extends DescriptiveNameFromFile {
 	
 	private static List<DescriptiveFile> removeExt( List<DescriptiveFile> df ) {
 		return df.stream()
-			.map( RemoveExtensions::removeExtension )
+			.map( RemoveExtensions::maybeRemoveExtension )
 			.collect( Collectors.toList() );
 	}
 
@@ -140,11 +144,38 @@ public class RemoveExtensions extends DescriptiveNameFromFile {
 		this.descriptiveName = descriptiveName;
 	}
 	
-	private static DescriptiveFile removeExtension( DescriptiveFile df ) {
+	private static DescriptiveFile maybeRemoveExtension( DescriptiveFile df ) {
 		return new DescriptiveFile(
 			df.getFile(),
-			FilenameUtils.removeExtension(df.getDescriptiveName())
+			maybeRemoveExtensionForwardSlashes(df.getDescriptiveName(), df.getPath())
 		);
+	}
+	
+	private static String maybeRemoveExtensionForwardSlashes( String nameLikePath, Path path ) {
+		
+		// If the path doesn't end with descriptiveName, we don't remove any extension
+		//  as it's assumed that this has already occurred, and it could be dangerous
+		//  to remove anything more.
+		String pathForwardSlash = PathUtilities.toStringUnixStyle( path.normalize() );
+		if (!pathForwardSlash.endsWith(nameLikePath)) {
+			// Early exit as the descriptive-name doesn't have the same ending as path
+			return nameLikePath;
+		}
+		
+		return PathUtilities.toStringUnixStyle(
+			removeExtension(nameLikePath)
+		);
+	}
+	
+	private static String removeExtension( String nameLikePath ) {
+		Path path = Paths.get(nameLikePath);
+		Path fileNamePart = path.getFileName();
+		String fileNamePartRemoved = FilenameUtils.removeExtension(fileNamePart.toString());
+		if (path.getParent()!=null) {
+			return path.getParent().resolve(fileNamePartRemoved).toString();
+		} else {
+			return fileNamePartRemoved;
+		}
 	}
 
 	public boolean isPreserveExtensionIfDuplicate() {

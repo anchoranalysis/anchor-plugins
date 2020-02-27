@@ -80,9 +80,7 @@ public class PatternSpan extends DescriptiveNameFromFile {
 			.map( file ->
 				new DescriptiveFile(
 					file,
-					replaceWhitespaceWithHyphens(
-						ExtractVariableSpan.extractVariableSpan(file, pattern, elseName)
-					)
+					ExtractVariableSpan.extractVariableSpan(file, pattern, elseName)
 				)
 			)
 			.collect( Collectors.toList() );
@@ -96,7 +94,10 @@ public class PatternSpan extends DescriptiveNameFromFile {
 	
 	// Convert all Files to Path
 	private static List<Path> listConvertToPath( Collection<File> files ) {
-		 return files.stream().map( file -> file.toPath() ).collect( Collectors.toList() );
+		 return files
+			.stream()
+			.map( file -> file.toPath() )
+			.collect( Collectors.toList() );
 	}
 	
 	// The file-name without an extension
@@ -112,9 +113,5 @@ public class PatternSpan extends DescriptiveNameFromFile {
 			}
 		}
 		return false;
-	}
-	
-	private static String replaceWhitespaceWithHyphens( String str ) {
-		return str.replace(' ', '-');
 	}
 }

@@ -47,6 +47,7 @@ import loci.common.services.ServiceFactory;
 import loci.formats.FormatException;
 import loci.formats.IFormatReader;
 import loci.formats.ImageReader;
+import loci.formats.UnknownFormatException;
 import loci.formats.ome.OMEXMLMetadata;
 import loci.formats.services.OMEXMLService;
 
@@ -88,6 +89,8 @@ public class BioformatsReader extends RasterReader {
 			r.setId( filePath.toString() );
 	
 			return new BioformatsOpenedRaster(r, metadata, options );
+		} catch (UnknownFormatException e) {
+			throw new RasterIOException("An unknown file format was used");
 		} catch (FormatException | IOException | CreateException | ClassNotFoundException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException | SecurityException e) {
 			throw new RasterIOException(e);
 		}

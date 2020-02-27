@@ -31,6 +31,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.file.PathUtilities;
 import org.apache.commons.io.IOCase;
 
 import com.owenfeehan.pathpatternfinder.Pattern;
@@ -47,6 +48,14 @@ class ExtractVariableSpan {
 	private static Logger log = Logger.getLogger(ExtractVariableSpan.class.getName());
 	
 	public static String extractVariableSpan(File file, Pattern pattern, String elseName) {
+		return PathUtilities.toStringUnixStyle(
+			replaceWhitespaceWithHyphens(
+				extractVariableSpanUnnormalized(file, pattern, elseName)
+			)
+		);
+	}
+	
+	public static String extractVariableSpanUnnormalized(File file, Pattern pattern, String elseName) {
 		try {
 			return extractVariableSpanWithError(file, pattern);
 		} catch (OperationFailedException e) {
@@ -99,5 +108,9 @@ class ExtractVariableSpan {
 			sb.append( arr[i] );
 		}
 		return sb.toString();		
+	}
+	
+	private static String replaceWhitespaceWithHyphens( String str ) {
+		return str.replace(' ', '-');
 	}
 }
