@@ -77,6 +77,12 @@ public class SwitchChnlTime extends ReadOptions {
 		// Always return null, as we use the time-series instead
 		return null;
 	}
+	
+	@Override
+	public boolean isRGB(IFormatReader reader) {
+		// Not supported when switching
+		return false;
+	}
 
 	public ReadOptions getOptions() {
 		return options;

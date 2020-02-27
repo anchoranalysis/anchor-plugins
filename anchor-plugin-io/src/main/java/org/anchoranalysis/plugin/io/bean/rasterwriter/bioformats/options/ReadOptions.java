@@ -49,6 +49,9 @@ public abstract class ReadOptions extends AnchorBean<ReadOptions> {
 	
 	public abstract int chnlsPerByteArray(IFormatReader reader);
 	
+	/** Is it an image with three channels (red, green and blue)? */
+	public abstract boolean isRGB(IFormatReader reader);
+	
 	/** Returns a list of channel-names or NULL if they are unavailable */
 	public abstract List<String> determineChannelNames( IFormatReader reader );
 }

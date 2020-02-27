@@ -112,6 +112,11 @@ public class MultiFileReaderOpenedRaster extends OpenedRaster {
 		return multiFile.dataType().numBits();
 	}
 	
+
+	@Override
+	public boolean isRGB() throws RasterIOException {
+		return false;
+	}
 	
 	@Override
 	public int numFrames() throws RasterIOException {

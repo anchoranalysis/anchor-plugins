@@ -36,8 +36,14 @@ import org.anchoranalysis.image.io.bean.chnl.map.ImgChnlMapEntry;
 import org.anchoranalysis.image.io.rasterreader.OpenedRaster;
 
 /**
- * Names of the channels from the metadata if it exists, otherwise names in
- * pattern chnl-%d where %d is the index
+ * Names of the channels from the metadata if it exists, or after RGB, or by index
+ * 
+ * <p>Naming rules - in order of priority:</p>
+ * <ol>
+ * <li>The channel name from the metadata</li>
+ * <li>red, green or blue if it's RGB</li>
+ * <li>chnl-%d where %d is the index of the channel</li>
+ * </ol>
  * 
  * @author owen
  *
@@ -49,6 +55,8 @@ public class ImgChnlMapAutoname extends ImgChnlMapCreator {
 	 */
 	private static final long serialVersionUID = 1L;
 
+	private static String[] RGB_CHNL_NAMES = {"red", "green", "blue" };
+	
 	public ImgChnlMapAutoname() {
 		super();
 	}
@@ -60,17 +68,17 @@ public class ImgChnlMapAutoname extends ImgChnlMapCreator {
 
 		// null indicates that there are no names
 		List<String> names = openedRaster.channelNames();
-
+		
 		try {
+			boolean rgb = openedRaster.isRGB() && openedRaster.numChnl()==3;
+			
 			for (int c = 0; c < openedRaster.numChnl(); c++) {
-
-				String chnlName;
-				if (names != null) {
-					chnlName = names.get(c);
-				} else {
-					chnlName = String.format("chnl-%d", c);
-				}
-				map.add(new ImgChnlMapEntry(chnlName, c));
+				map.add(
+					new ImgChnlMapEntry(
+						nameFor(c, names, rgb),
+						c
+					)
+				);
 			}
 
 		} catch (RasterIOException e) {
@@ -78,5 +86,24 @@ public class ImgChnlMapAutoname extends ImgChnlMapCreator {
 		}
 
 		return map;
+	}
+	
+	private String nameFor( int c, List<String> names, boolean rgb ) {
+		if (names != null) {
+			return names.get(c);
+		} else if (rgb) {
+			return rgbNameFor(c);
+		} else {
+			return String.format("chnl-%d", c);
+		}
+	}
+	
+	private String rgbNameFor( int c ) {
+		if (c<3) {
+			return RGB_CHNL_NAMES[c];
+		} else {
+			assert(false);
+			return "name-should-never-occur";
+		}
 	}
 }

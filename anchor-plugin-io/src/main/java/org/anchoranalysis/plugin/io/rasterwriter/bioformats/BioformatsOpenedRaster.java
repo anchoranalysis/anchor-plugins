@@ -65,6 +65,8 @@ public class BioformatsOpenedRaster extends OpenedRaster {
 	
 	private int numChnl;
 	private int sizeT;
+	private boolean rgb;
+	private int bitsPerPixel;
 	
 	private static Log log = LogFactory.getLog(BioformatsOpenedRaster.class);
 	
@@ -86,6 +88,8 @@ public class BioformatsOpenedRaster extends OpenedRaster {
 		this.readOptions = readOptions;
 		   
 		this.sizeT = readOptions.sizeT(reader);
+		this.rgb = readOptions.isRGB(reader);
+		this.bitsPerPixel = readOptions.effectiveBitsPerPixel(reader);
 		  
 		//log.debug( String.format("Opening Image... (series=%d, slices=%d, chnls=%d, width=%d, height=%d, bytespp=%d, dimorder=%s)", seriesCount, sd.getZ(), numChnl, sd.getX(), sd.getY(), bytesPerPixel, r.getDimensionOrder()) );
 		this.lociMetadata = lociMetadata;
@@ -131,7 +135,13 @@ public class BioformatsOpenedRaster extends OpenedRaster {
 	
 	@Override
 	public int bitDepth() throws RasterIOException {
-		return reader.getBitsPerPixel();
+		return bitsPerPixel;
+	}
+	
+
+	@Override
+	public boolean isRGB() throws RasterIOException {
+		return rgb;
 	}
 
 	@Override

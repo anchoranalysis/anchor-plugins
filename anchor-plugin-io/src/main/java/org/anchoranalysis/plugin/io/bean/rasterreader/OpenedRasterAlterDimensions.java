@@ -92,6 +92,11 @@ class OpenedRasterAlterDimensions extends OpenedRaster {
 	public int numFrames() throws RasterIOException {
 		return delegate.numFrames();
 	}
+	
+	@Override
+	public boolean isRGB() throws RasterIOException {
+		return delegate.isRGB();
+	}
 
 	@Override
 	public int bitDepth() throws RasterIOException {

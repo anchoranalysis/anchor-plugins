@@ -28,6 +28,7 @@ package org.anchoranalysis.plugin.image.task.bean;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
+import org.anchoranalysis.core.index.GetOperationFailedException;
 import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.core.progress.ProgressReporter;
 import org.anchoranalysis.core.progress.ProgressReporterNull;
@@ -156,7 +157,7 @@ public class MovieFromSlicesTask extends RasterTask {
 			}
 			
 			
-		} catch (RasterIOException | IncorrectImageSizeException e) {
+		} catch (RasterIOException | IncorrectImageSizeException | GetOperationFailedException e) {
 			throw new JobExecutionException(e);
 		}
 	}

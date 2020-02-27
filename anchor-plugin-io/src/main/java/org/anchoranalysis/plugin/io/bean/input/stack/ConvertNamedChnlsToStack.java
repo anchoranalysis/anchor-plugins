@@ -35,6 +35,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.cache.ExecuteException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
+import org.anchoranalysis.core.index.GetOperationFailedException;
 import org.anchoranalysis.core.name.store.NamedProviderStore;
 import org.anchoranalysis.core.progress.OperationWithProgressReporter;
 import org.anchoranalysis.core.progress.ProgressReporter;
@@ -165,7 +166,7 @@ public class ConvertNamedChnlsToStack extends InputManager<StackSequenceInput> {
 				TimeSequence ts = new TimeSequence();
 				ts.add( new Stack(chnl) );
 				return ts;
-			} catch (RasterIOException e) {
+			} catch (RasterIOException | GetOperationFailedException e) {
 				throw new ExecuteException(e);
 			}
 		}

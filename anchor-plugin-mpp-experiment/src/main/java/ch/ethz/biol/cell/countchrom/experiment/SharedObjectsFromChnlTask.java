@@ -36,6 +36,7 @@ import org.anchoranalysis.bean.shared.random.RandomNumberGeneratorMersenneConsta
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
+import org.anchoranalysis.core.index.GetOperationFailedException;
 import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.core.name.store.SharedObjects;
 import org.anchoranalysis.core.progress.ProgressReporterNull;
@@ -119,7 +120,7 @@ public class SharedObjectsFromChnlTask extends RasterTask {
 				SharedObjectsUtilities.outputWithException(soMPP, outputManager, suppressSubfolders);
 			}
 			
-		} catch (RasterIOException | OperationFailedException | OutputWriteFailedException | CreateException e) {
+		} catch (GetOperationFailedException | OperationFailedException | OutputWriteFailedException | CreateException e) {
 			throw new JobExecutionException(e);
 		}
 	}

@@ -29,7 +29,6 @@ package org.anchoranalysis.plugin.image.task.bean;
 import org.anchoranalysis.core.index.GetOperationFailedException;
 import org.anchoranalysis.core.progress.ProgressReporter;
 import org.anchoranalysis.image.chnl.Chnl;
-import org.anchoranalysis.image.io.RasterIOException;
 import org.anchoranalysis.image.io.chnl.ChnlGetter;
 import org.anchoranalysis.image.stack.region.chnlconverter.ChnlConverter;
 import org.anchoranalysis.image.stack.region.chnlconverter.ConversionPolicy;
@@ -53,8 +52,7 @@ class ConvertingChnlCollection implements ChnlGetter {
 	}
 
 	@Override
-	public Chnl getChnl(String chnlName, int t, ProgressReporter progressReporter) throws RasterIOException,
-			GetOperationFailedException {
+	public Chnl getChnl(String chnlName, int t, ProgressReporter progressReporter) throws GetOperationFailedException {
 		
 		Chnl chnl = source.getChnl(chnlName, t, progressReporter);
 		return chnlConverter.convert(chnl, conversionPolicy);
