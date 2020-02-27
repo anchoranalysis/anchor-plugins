@@ -171,6 +171,10 @@ public class RemoveExtensions extends DescriptiveNameFromFile {
 		Path path = Paths.get(nameLikePath);
 		Path fileNamePart = path.getFileName();
 		String fileNamePartRemoved = FilenameUtils.removeExtension(fileNamePart.toString());
+		
+		// Trim any white space from either side before resolving
+		fileNamePartRemoved = fileNamePartRemoved.trim();
+		
 		if (path.getParent()!=null) {
 			return path.getParent().resolve(fileNamePartRemoved).toString();
 		} else {

@@ -49,9 +49,7 @@ class ExtractVariableSpan {
 	
 	public static String extractVariableSpan(File file, Pattern pattern, String elseName) {
 		return PathUtilities.toStringUnixStyle(
-			replaceWhitespaceWithHyphens(
-				extractVariableSpanUnnormalized(file, pattern, elseName)
-			)
+			extractVariableSpanUnnormalized(file, pattern, elseName)
 		);
 	}
 	
@@ -108,9 +106,5 @@ class ExtractVariableSpan {
 			sb.append( arr[i] );
 		}
 		return sb.toString();		
-	}
-	
-	private static String replaceWhitespaceWithHyphens( String str ) {
-		return str.replace(' ', '-');
 	}
 }
