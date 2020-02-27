@@ -94,8 +94,8 @@ public class ScaleTask extends RasterTask {
 
 	@Override
 	public void doStack(NamedChnlsInput inputObject,
-			int seriesIndex, BoundOutputManagerRouteErrors outputManager,
-			LogErrorReporter logErrorReporter, String stackDescriptor,
+			int seriesIndex, int numSeries,
+			BoundOutputManagerRouteErrors outputManager, LogErrorReporter logErrorReporter,
 			ExperimentExecutionArguments expArgs) throws JobExecutionException {
 	
 		// Input

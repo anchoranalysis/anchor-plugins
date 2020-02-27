@@ -160,7 +160,7 @@ public class AssignResolutionTask extends RasterTask {
 	}
 	
 	@Override
-	public void doStack( NamedChnlsInput inputObject, int seriesIndex, BoundOutputManagerRouteErrors outputManager, LogErrorReporter logErrorReporter, String stackDescriptor, ExperimentExecutionArguments expArgs ) throws JobExecutionException {
+	public void doStack( NamedChnlsInput inputObject, int seriesIndex, int numSeries, BoundOutputManagerRouteErrors outputManager, LogErrorReporter logErrorReporter, ExperimentExecutionArguments expArgs ) throws JobExecutionException {
 		
 		try {
 			//chromSgmn.setOutputManager( outputManager );

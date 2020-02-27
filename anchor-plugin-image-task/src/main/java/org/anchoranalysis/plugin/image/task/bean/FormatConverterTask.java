@@ -28,7 +28,6 @@ package org.anchoranalysis.plugin.image.task.bean;
 
 
 import java.util.Set;
-import java.util.function.BiConsumer;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.Optional;
 import org.anchoranalysis.core.error.CreateException;
@@ -129,7 +128,7 @@ public class FormatConverterTask extends RasterTask {
 	}
 	
 	@Override
-	public void doStack( NamedChnlsInput inputObjectUntyped, int seriesIndex, BoundOutputManagerRouteErrors outputManager, LogErrorReporter logErrorReporter, String stackDescriptor, ExperimentExecutionArguments expArgs ) throws JobExecutionException {
+	public void doStack( NamedChnlsInput inputObjectUntyped, int seriesIndex, int numSeries, BoundOutputManagerRouteErrors outputManager, LogErrorReporter logErrorReporter, ExperimentExecutionArguments expArgs ) throws JobExecutionException {
 		
 		try {
 			NamedChnlCollectionForSeries chnlCollection = createChnlCollection( inputObjectUntyped, seriesIndex );	
@@ -143,6 +142,7 @@ public class FormatConverterTask extends RasterTask {
 			convertEachTimepoint(
 				seriesIndex,
 				chnlCollection.chnlNames(),
+				numSeries,
 				chnlCollection.sizeT(ProgressReporterNull.get()),
 				chnlGetter,
 				logErrorReporter
@@ -153,25 +153,20 @@ public class FormatConverterTask extends RasterTask {
 		}
 	}
 	
-	private void convertEachTimepoint( int seriesIndex, Set<String> chnlNames, int sizeT, ChnlGetter chnlGetter, LogErrorReporter logErrorReporter ) throws AnchorIOException {
+	private void convertEachTimepoint( int seriesIndex, Set<String> chnlNames, int numSeries, int sizeT, ChnlGetter chnlGetter, LogErrorReporter logErrorReporter ) throws AnchorIOException {
 		
 		for( int t=0; t<sizeT; t++) {
 		
+			CalcOutputName calcOutputName = new CalcOutputName(seriesIndex, numSeries, t, sizeT, suppressSeries);
+			
 			logErrorReporter.getLogReporter().logFormatted("Starting time-point: %d", t);
 			
-			String seriesTimeString = calculateSeriesTimeString(seriesIndex, t, sizeT);
-			
-			BiConsumer<String,Stack> stackAdder = (name,stack) -> {
-				String nameOut = maybePrependTimeSeries(seriesTimeString, name);
-				generatorSeq.add(stack, nameOut);
-			};
-			
 			ChnlGetterForTimepoint getterForTimepoint = new ChnlGetterForTimepoint(chnlGetter, t);
-				
+			
 			chnlConversionStyle.convert(
 				chnlNames,
 				getterForTimepoint,
-				stackAdder,
+				(name,stack) -> addStackToOutput(name, stack, calcOutputName),
 				logErrorReporter
 			);
 			
@@ -180,12 +175,11 @@ public class FormatConverterTask extends RasterTask {
 		
 	}
 	
-	private String maybePrependTimeSeries( String seriesTimeString, String existingName ) {
-		if (!seriesTimeString.isEmpty()) {
-			return String.format("%s_%s", seriesTimeString, existingName );
-		} else {
-			return String.format("%s", existingName );
-		}
+	private void addStackToOutput(String name, Stack stack, CalcOutputName calcOutputName) {
+		generatorSeq.add(
+			stack,
+			calcOutputName.calcOutputName(name)
+		);
 	}
 	
 	private ChnlGetter maybeAddConverter( ChnlGetter chnlGetter ) throws CreateException {
@@ -210,29 +204,7 @@ public class FormatConverterTask extends RasterTask {
 			return chnlCollection;
 		}
 	}
-		
-	private String calculateSeriesTimeStringSupressSeries( int s, int t, int sizeT ) {
-		if (sizeT>1) {
-			return String.format("%05d", t);
-		} else {
-			return "";
-		}
-	}
-		
-	private String calculateSeriesTimeString( int s, int t, int sizeT ) {
-		
-		if (suppressSeries) {
-			return calculateSeriesTimeStringSupressSeries(s, t, sizeT);
-		} else {
-		
-			if (sizeT>1) {
-				return String.format("%03d_%05d", s, t);
-			} else {
-				return String.format("%03d", s );
-			}
-		}
-	}
-	
+
 	@Override
 	public void endSeries(BoundOutputManagerRouteErrors outputManager) throws JobExecutionException {
 		generatorSeq.end();

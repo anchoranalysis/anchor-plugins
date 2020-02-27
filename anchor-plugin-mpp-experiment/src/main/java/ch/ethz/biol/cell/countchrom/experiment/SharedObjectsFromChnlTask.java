@@ -85,8 +85,8 @@ public class SharedObjectsFromChnlTask extends RasterTask {
 	
 	@Override
 	public void doStack(NamedChnlsInput inputObject,
-			int seriesIndex, BoundOutputManagerRouteErrors outputManager,
-			LogErrorReporter logErrorReporter, String stackDescriptor, ExperimentExecutionArguments expArgs)
+			int seriesIndex, int numSeries,
+			BoundOutputManagerRouteErrors outputManager, LogErrorReporter logErrorReporter, ExperimentExecutionArguments expArgs)
 			throws JobExecutionException {
 
 		NamedChnlCollectionForSeries ncc;
