@@ -34,8 +34,6 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.filepath.prefixer.FilePathDifferenceFromFolderPath;
 import org.anchoranalysis.io.filepath.prefixer.FilePathPrefix;
-import org.anchoranalysis.io.filepath.prefixer.FilePathPrefixerParams;
-import org.anchoranalysis.io.input.InputFromManager;
 import org.apache.commons.io.FilenameUtils;
 
 /// Matches prefixes against our incoming files, and attaches them to outgoing files 
@@ -51,67 +49,40 @@ public class FilePathRslvr extends FilePathPrefixerAvoidResolve {
 	private boolean includeFolders = true;
 	// END BEAN PROPERTIES
 
-	
 	@Override
-	public FilePathPrefix outFilePrefix(InputFromManager input, String experimentIdentifier, FilePathPrefixerParams context) throws AnchorIOException {
-		return createPrefix(
-			resolvePath( input.pathForBinding() ),
-			resolvePath( getInPathPrefixAsPath() ),
-			rootFolderPrefix(experimentIdentifier, context).getFolderPath(),
-			includeFolders,
-			isFileAsFolder()
-		);
-	}
-	
-	
-	// create out file prefix
-	@Override
-	public FilePathPrefix outFilePrefixAvoidResolve( Path pathIn, String experimentIdentifier ) throws AnchorIOException {
-		return createPrefix(
-			pathIn,
-			getInPathPrefixAsPath(),
-			rootFolderPrefixAvoidResolve(experimentIdentifier).getFolderPath(),
-			includeFolders,
-			isFileAsFolder()
-		);
-	}
-
-	private static FilePathPrefix createPrefix(
-		Path pathIn,
-		Path inPathPrefix,
-		Path rootFolderPrefix,
-		boolean includeFolders,
-		boolean fileAsFolder
-	) throws AnchorIOException {
-
+	protected FilePathPrefix outFilePrefixFromPath(Path path, Path root) throws AnchorIOException {
 		// We strip the incoming path of it's extension
-		Path pathInRemoved = Paths.get( FilenameUtils.removeExtension( pathIn.toString() ) );
+		Path pathInRemoved = Paths.get( FilenameUtils.removeExtension( path.toString() ) );
 		
-		FilePathDifferenceFromFolderPath ff = new FilePathDifferenceFromFolderPath();
-		ff.init(
-			inPathPrefix,
-			pathInRemoved
-		);
+		FilePathDifferenceFromFolderPath ff = difference(pathInRemoved);
 				
-		Path outFolderPath = rootFolderPrefix;
+		Path outFolderPath = root;
 		
 		if (includeFolders && ff.getFolder()!=null) {
 			outFolderPath = outFolderPath.resolve( ff.getFolder() );
 		}
 		
-		if (fileAsFolder && ff.getFilename()!=null) {
+		if (isFileAsFolder() && ff.getFilename()!=null) {
 			outFolderPath = outFolderPath.resolve( ff.getFilename() );
 		}
 		
 		FilePathPrefix fpp = new FilePathPrefix( outFolderPath );
 		
-		if (!fileAsFolder) {
+		if (!isFileAsFolder()) {
 			fpp.setFilenamePrefix( ff.getFilename() + "_");
 		}
 
-		return fpp;		
+		return fpp;	
 	}
 	
+	private FilePathDifferenceFromFolderPath difference(Path pathInRemoved) throws AnchorIOException {
+		FilePathDifferenceFromFolderPath ff = new FilePathDifferenceFromFolderPath();
+		ff.init(
+			getInPathPrefixAsPath(),
+			pathInRemoved
+		);
+		return ff;
+	}
 
 	public boolean isIncludeFolders() {
 		return includeFolders;

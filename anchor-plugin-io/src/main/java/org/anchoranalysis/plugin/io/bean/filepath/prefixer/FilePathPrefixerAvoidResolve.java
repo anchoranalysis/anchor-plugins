@@ -1,5 +1,7 @@
 package org.anchoranalysis.plugin.io.bean.filepath.prefixer;
 
+import java.io.File;
+
 /*
  * #%L
  * anchor-io
@@ -33,10 +35,9 @@ import java.nio.file.Paths;
 
 import org.anchoranalysis.bean.annotation.AllowEmpty;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.io.bean.filepath.prefixer.FilePathPrefixer;
 import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.filepath.prefixer.FilePathPrefix;
-import org.anchoranalysis.io.filepath.prefixer.FilePathPrefixerParams;
+import org.anchoranalysis.io.input.InputFromManager;
 
 /**
  * A file-path-resolver that adds additional methods that preform the same function but output a relative-path rather than an absolute path after fully resolving paths
@@ -46,40 +47,33 @@ import org.anchoranalysis.io.filepath.prefixer.FilePathPrefixerParams;
  * @author Owen Feehan
  *
  */
-public abstract class FilePathPrefixerAvoidResolve extends FilePathPrefixer {
-
+public abstract class FilePathPrefixerAvoidResolve extends FilePathPrefixerSpecifiedOutPath {
+	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	
 	// START BEAN PROPERTIES
 	@BeanField @AllowEmpty
 	private String inPathPrefix = "";
 	
 	@BeanField
 	private boolean fileAsFolder = true;
-	
-	@BeanField
-	private String outPathPrefix = "";
 	// END BEAN PROPERTIES
-		
-	@Override
-	public FilePathPrefix rootFolderPrefix(String experimentIdentifier, FilePathPrefixerParams context) throws AnchorIOException {
-		String outPathAbsolute = resolvePath(outPathPrefix).toString();
-		return HelperFilePathRslvr.createRootFolderPrefix( outPathAbsolute, experimentIdentifier );
-	}
 	
 	/**
 	 * Provides a prefix that becomes the root-folder.  It avoids resolving relative-paths.
+	 * 
+	 * <p>This is an alternative method to rootFolderPrefix that avoids resolving the out-path prefix against the file system</p>
 	 * 
 	 * @param experimentIdentifier an identifier for the experiment
 	 * @return a prefixer
 	 * @throws IOException
 	 */
 	public FilePathPrefix rootFolderPrefixAvoidResolve( String experimentIdentifier )  {
-		return HelperFilePathRslvr.createRootFolderPrefix( outPathPrefix, experimentIdentifier );
+		return createRootFolderPrefix( getOutPathPrefix(), experimentIdentifier );
 	}
-	
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
 	
 	/**
 	 * Provides a prefix which can be prepended to all output files. It avoids resolving relative-paths.
@@ -89,9 +83,19 @@ public abstract class FilePathPrefixerAvoidResolve extends FilePathPrefixer {
 	 * @return a prefixer
 	 * @throws AnchorIOException TODO
 	 */
-	public abstract FilePathPrefix outFilePrefixAvoidResolve( Path pathIn, String experimentIdentifier ) throws AnchorIOException;
+	public FilePathPrefix outFilePrefixAvoidResolve( Path pathIn, String experimentIdentifier ) throws AnchorIOException {
+		return outFilePrefixFromPath(
+			pathIn,
+			rootFolderPrefixAvoidResolve(experimentIdentifier).getFolderPath()
+		);
+	}
 	
-
+	@Override
+	protected FilePathPrefix outFilePrefixFromRoot( InputFromManager input, Path root ) throws AnchorIOException {
+		return outFilePrefixFromPath(input.pathForBinding(), root);
+	}
+	
+	protected abstract FilePathPrefix outFilePrefixFromPath( Path path, Path root ) throws AnchorIOException;
 	
 	public String getInPathPrefix() {
 		return inPathPrefix;
@@ -111,13 +115,12 @@ public abstract class FilePathPrefixerAvoidResolve extends FilePathPrefixer {
 
 	public void setFileAsFolder(boolean fileAsFolder) {
 		this.fileAsFolder = fileAsFolder;
-	}	
-		
-	public String getOutPathPrefix() {
-		return outPathPrefix;
 	}
-
-	public void setOutPathPrefix(String outPathPrefix) {
-		this.outPathPrefix = outPathPrefix;
+	
+	
+	private static FilePathPrefix createRootFolderPrefix( String path, String experimentIdentifier ) {
+		String folder = new String( path + File.separator + experimentIdentifier + File.separator );
+		return new FilePathPrefix( Paths.get(folder) );
 	}
+	
 }

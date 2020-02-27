@@ -77,7 +77,7 @@ public abstract class FilePathPrefixerSpecifiedOutPath extends FilePathPrefixer 
 		return outFilePrefixFromRoot(input, root);
 	}
 	
-	protected abstract FilePathPrefix outFilePrefixFromRoot( InputFromManager input, Path root );
+	protected abstract FilePathPrefix outFilePrefixFromRoot( InputFromManager input, Path root ) throws AnchorIOException;
 	
 	/** The root of the experiment for outputting files */
 	private Path resolveExperimentAbsoluteRootOut( String expName, FilePathPrefixerParams context ) {
@@ -107,5 +107,13 @@ public abstract class FilePathPrefixerSpecifiedOutPath extends FilePathPrefixer 
 	private static Path tempDir() {
 		String tempDir = System.getProperty("java.io.tmpdir");
 		return Paths.get(tempDir);
+	}
+
+	public String getOutPathPrefix() {
+		return outPathPrefix;
+	}
+
+	public void setOutPathPrefix(String outPathPrefix) {
+		this.outPathPrefix = outPathPrefix;
 	}
 }

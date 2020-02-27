@@ -34,8 +34,6 @@ import org.anchoranalysis.core.file.PathUtilities;
 import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.filepath.prefixer.FilePathDifferenceFromFolderPath;
 import org.anchoranalysis.io.filepath.prefixer.FilePathPrefix;
-import org.anchoranalysis.io.filepath.prefixer.FilePathPrefixerParams;
-import org.anchoranalysis.io.input.InputFromManager;
 
 /// 
 
@@ -57,39 +55,15 @@ public class FilePathRslvrRegEx extends FilePathPrefixerAvoidResolve {
 	// END BEAN PROPERTIES
 
 	@Override
-	public FilePathPrefix outFilePrefix(InputFromManager input, String experimentIdentifier, FilePathPrefixerParams context) throws AnchorIOException {
-		// we convert the input-path to absolute
-		Path pathInAbsolute = resolvePath( input.pathForBinding() );
-		Path inPathPrefixAbsolute = resolvePath( getInPathPrefixAsPath() );
+	protected FilePathPrefix outFilePrefixFromPath(Path path, Path root) throws AnchorIOException {
+
+		String[] components = componentsFromPath(path,	root);
 		
-		String[] components = componentsFromPath(
-			pathInAbsolute,
-			inPathPrefixAbsolute
-		);
-		
-		return HelperFilePathRslvr.createPrefix(
-			rootFolderPrefix(experimentIdentifier, context).getFolderPath(),
+		return createPrefix(
+			root,
 			components,
 			isFileAsFolder()
 		);
-	}
-	
-	
-	// create out file prefix
-	@Override
-	public FilePathPrefix outFilePrefixAvoidResolve( Path pathIn, String experimentIdentifier ) throws AnchorIOException {
-		String[] components = componentsFromPath(
-			pathIn,
-			getInPathPrefixAsPath()
-		);
-		
-		return HelperFilePathRslvr.createPrefix(
-			rootFolderPrefixAvoidResolve(experimentIdentifier).getFolderPath(),
-			components,
-			isFileAsFolder()
-		);
-		
-	
 	}
 	
 	
@@ -119,6 +93,42 @@ public class FilePathRslvrRegEx extends FilePathPrefixerAvoidResolve {
 			return pathIn;
 		}
 	}
+	
+	/**
+	 * Creates a FilePathPrefix based upon an ordered array of string components
+	 * 
+	 * @param outFolderPath the base folder of the prefixer
+	 * @param components ordered array of string components
+	 * @param fileAsFolder if TRUE, creates new sub-folders based upon matching groups. if FALSE, they are appended to the file-name instead
+	 * @return
+	 */
+	private static FilePathPrefix createPrefix( Path outFolderPath, String[] components, boolean fileAsFolder ) {
+		
+		Path prefixPath = outFolderPath;
+		
+		if (fileAsFolder) {
+			for (int g=0; g<components.length; g++) {
+				prefixPath = prefixPath.resolve( components[g] );
+			}
+		}
+		
+		
+		FilePathPrefix fpp = new FilePathPrefix( prefixPath );
+		
+		if (!fileAsFolder) {
+			
+			StringBuilder sb = new StringBuilder();
+			for (int g=0; g<components.length; g++) {
+				sb.append( components[g] );
+				
+				sb.append("_");
+			}
+			
+			fpp.setFilenamePrefix( sb.toString() );
+		}
+
+		return fpp;
+	}
 
 	public RegEx getRegEx() {
 		return regEx;
@@ -127,4 +137,6 @@ public class FilePathRslvrRegEx extends FilePathPrefixerAvoidResolve {
 	public void setRegEx(RegEx regEx) {
 		this.regEx = regEx;
 	}
+
+
 }
