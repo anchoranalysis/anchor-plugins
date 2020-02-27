@@ -30,6 +30,7 @@ package org.anchoranalysis.plugin.io.bean.filepath.prefixer;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
+import org.anchoranalysis.bean.annotation.AllowEmpty;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.filepath.prefixer.FilePathDifferenceFromFolderPath;
@@ -47,6 +48,9 @@ public class FilePathRslvr extends FilePathPrefixerAvoidResolve {
 	// START BEAN PROPERTIES
 	@BeanField
 	private boolean includeFolders = true;
+	
+	@BeanField @AllowEmpty
+	private String inPathPrefix = "";
 	// END BEAN PROPERTIES
 
 	@Override
@@ -78,7 +82,7 @@ public class FilePathRslvr extends FilePathPrefixerAvoidResolve {
 	private FilePathDifferenceFromFolderPath difference(Path pathInRemoved) throws AnchorIOException {
 		FilePathDifferenceFromFolderPath ff = new FilePathDifferenceFromFolderPath();
 		ff.init(
-			getInPathPrefixAsPath(),
+			Paths.get(inPathPrefix),
 			pathInRemoved
 		);
 		return ff;
@@ -90,5 +94,14 @@ public class FilePathRslvr extends FilePathPrefixerAvoidResolve {
 
 	public void setIncludeFolders(boolean includeFolders) {
 		this.includeFolders = includeFolders;
+	}
+	
+	
+	public String getInPathPrefix() {
+		return inPathPrefix;
+	}
+
+	public void setInPathPrefix(String inPathPrefix) {
+		this.inPathPrefix = inPathPrefix;
 	}
 }

@@ -33,14 +33,13 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-import org.anchoranalysis.bean.annotation.AllowEmpty;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.filepath.prefixer.FilePathPrefix;
 import org.anchoranalysis.io.input.InputFromManager;
 
 /**
- * A file-path-resolver that adds additional methods that preform the same function but output a relative-path rather than an absolute path after fully resolving paths
+ * A file-path-resolver that adds additional methods that perform the same function but output a relative-path rather than an absolute path after fully resolving paths
  * 
  * <p>This is useful for combining with the MultiRootedFilePathPrefixer. This results in relative-paths keeping the same root, as when passed in</p>
  * 
@@ -55,13 +54,18 @@ public abstract class FilePathPrefixerAvoidResolve extends FilePathPrefixerSpeci
 	private static final long serialVersionUID = 1L;
 	
 	// START BEAN PROPERTIES
-	@BeanField @AllowEmpty
-	private String inPathPrefix = "";
-	
 	@BeanField
 	private boolean fileAsFolder = true;
 	// END BEAN PROPERTIES
 	
+	public FilePathPrefixerAvoidResolve() {
+		
+	}
+		
+	public FilePathPrefixerAvoidResolve(String outPathPrefix) {
+		super(outPathPrefix);
+	}
+
 	/**
 	 * Provides a prefix that becomes the root-folder.  It avoids resolving relative-paths.
 	 * 
@@ -96,18 +100,6 @@ public abstract class FilePathPrefixerAvoidResolve extends FilePathPrefixerSpeci
 	}
 	
 	protected abstract FilePathPrefix outFilePrefixFromPath( Path path, Path root ) throws AnchorIOException;
-	
-	public String getInPathPrefix() {
-		return inPathPrefix;
-	}
-	
-	public Path getInPathPrefixAsPath() {
-		return Paths.get(inPathPrefix);
-	}
-
-	public void setInPathPrefix(String inPathPrefix) {
-		this.inPathPrefix = inPathPrefix;
-	}
 
 	public boolean isFileAsFolder() {
 		return fileAsFolder;

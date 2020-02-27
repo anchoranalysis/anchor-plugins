@@ -29,10 +29,10 @@ package org.anchoranalysis.plugin.io.bean.filepath.prefixer;
 
 import java.nio.file.Path;
 import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.filepath.prefixer.FilePathPrefix;
-import org.anchoranalysis.io.input.InputFromManager;
 
-public class FilePathCounter extends FilePathPrefixerSpecifiedOutPath {
+public class FilePathCounter extends FilePathPrefixerAvoidResolve {
 
 	/**
 	 * 
@@ -44,12 +44,6 @@ public class FilePathCounter extends FilePathPrefixerSpecifiedOutPath {
 	// START BEAN PROPERTIES
 	@BeanField
 	private int numLeadingZeros = 4;
-	
-	/**
-	 * If true, a subfolder is created for each incremented count. If false, a prefix is used instead
-	 */
-	@BeanField
-	private boolean subfolder = true;
 	// END BEAN PROPERTIES
 	
 	public FilePathCounter() {
@@ -61,11 +55,11 @@ public class FilePathCounter extends FilePathPrefixerSpecifiedOutPath {
 	}
 
 	@Override
-	protected FilePathPrefix outFilePrefixFromRoot(InputFromManager input, Path root) {
+	protected FilePathPrefix outFilePrefixFromPath(Path path, Path root) throws AnchorIOException {
 		String formatSpecifier = "%0" + numLeadingZeros + "d";
 		String identifier = String.format( formatSpecifier, cnt++ );
 		
-		if (subfolder) {
+		if (isFileAsFolder()) {
 			Path combinedDir = root.resolve(identifier);
 			FilePathPrefix fpp = new FilePathPrefix(combinedDir);
 			fpp.setFilenamePrefix("");
@@ -84,5 +78,4 @@ public class FilePathCounter extends FilePathPrefixerSpecifiedOutPath {
 	public void setNumLeadingZeros(int numLeadingZeros) {
 		this.numLeadingZeros = numLeadingZeros;
 	}
-
 }

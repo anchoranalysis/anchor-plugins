@@ -114,7 +114,6 @@ public class FilePathPrefixerExperimentStructure extends FilePathPrefixer {
 	
 	private FilePathPrefixerAvoidResolve createRslvr() {
 		FilePathRslvrRegEx rslvr = new FilePathRslvrRegEx();
-		rslvr.setInPathPrefix("");
 		rslvr.setOutPathPrefix(prefix + experimentType);
 		rslvr.setFileAsFolder(true);
 		rslvr.setRegEx( regEx );
