@@ -27,30 +27,20 @@ package org.anchoranalysis.plugin.image.task.bean;
  */
 
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Set;
-
+import java.util.function.BiConsumer;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.Optional;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
-import org.anchoranalysis.core.index.GetOperationFailedException;
 import org.anchoranalysis.core.log.LogErrorReporter;
-import org.anchoranalysis.core.log.LogReporter;
-import org.anchoranalysis.core.name.value.INameValue;
-import org.anchoranalysis.core.name.value.NameValue;
-import org.anchoranalysis.core.progress.ProgressReporter;
 import org.anchoranalysis.core.progress.ProgressReporterConsole;
 import org.anchoranalysis.core.progress.ProgressReporterNull;
 import org.anchoranalysis.core.random.RandomNumberGeneratorMersenneConstant;
 import org.anchoranalysis.experiment.ExperimentExecutionArguments;
 import org.anchoranalysis.experiment.JobExecutionException;
 import org.anchoranalysis.image.bean.chnl.converter.ChnlConverterBean;
-import org.anchoranalysis.image.chnl.Chnl;
 import org.anchoranalysis.image.experiment.bean.task.RasterTask;
-import org.anchoranalysis.image.extent.IncorrectImageSizeException;
 import org.anchoranalysis.image.io.RasterIOException;
 import org.anchoranalysis.image.io.bean.chnl.ChnlFilter;
 import org.anchoranalysis.image.io.chnl.ChnlGetter;
@@ -59,11 +49,14 @@ import org.anchoranalysis.image.io.input.NamedChnlsInput;
 import org.anchoranalysis.image.io.input.series.NamedChnlCollectionForSeries;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.image.stack.region.chnlconverter.ConversionPolicy;
+import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.generator.sequence.GeneratorSequenceNonIncrementalRerouterErrors;
 import org.anchoranalysis.io.generator.sequence.GeneratorSequenceNonIncrementalWriter;
 import org.anchoranalysis.io.manifest.sequencetype.SetSequenceType;
 import org.anchoranalysis.io.namestyle.StringSuffixOutputNameStyle;
 import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
+import org.anchoranalysis.plugin.image.task.bean.chnl.conversionstyle.ChnlConversionStyle;
+import org.anchoranalysis.plugin.image.task.chnl.convert.ChnlGetterForTimepoint;
 
 /**
  * Converts the input-image to the default output format, optionally changing the bit depth
@@ -81,11 +74,11 @@ public class FormatConverterTask extends RasterTask {
 
 	// START BEAN PROPERTIES
 	
-	/** If an image has exactly 3 channels, or less than 3 channels and one of them is called 'red' or 'blue' or 'green', then it is
-	 *    outputted as a RGB color image, rather than 3 separate channels
+	/** 
+	 * To convert as RGB or independently or in another way
 	 */
 	@BeanField
-	private boolean preferRGB = true;
+	private ChnlConversionStyle chnlConversionStyle = null;
 	
 	@BeanField
 	private boolean suppressSeries = false;
@@ -95,10 +88,6 @@ public class FormatConverterTask extends RasterTask {
 	
 	@BeanField @Optional
 	private ChnlConverterBean chnlConverter = null;
-	
-	/** Iff TRUE and we cannot find a channel in the file, we ignore it and carry on */
-	@BeanField
-	private boolean ignoreMissingChnl = false;
 	// END BEAN PROPERTIES
 
 	private GeneratorSequenceNonIncrementalRerouterErrors<Stack> generatorSeq;
@@ -159,44 +148,44 @@ public class FormatConverterTask extends RasterTask {
 				logErrorReporter
 			);
 						
-		} catch (RasterIOException | CreateException e) {
+		} catch (RasterIOException | CreateException | AnchorIOException e) {
 			throw new JobExecutionException(e);
 		}
 	}
 	
-	private void convertEachTimepoint( int seriesIndex, Set<String> chnlNames, int sizeT, ChnlGetter chnlGetter, LogErrorReporter logErrorReporter ) throws JobExecutionException {
-		ProgressReporter progressReporter = ProgressReporterNull.get();
+	private void convertEachTimepoint( int seriesIndex, Set<String> chnlNames, int sizeT, ChnlGetter chnlGetter, LogErrorReporter logErrorReporter ) throws AnchorIOException {
 		
 		for( int t=0; t<sizeT; t++) {
 		
 			logErrorReporter.getLogReporter().logFormatted("Starting time-point: %d", t);
 			
-			String seriesTimeString = calculateSeriesTimeString(seriesIndex,t, sizeT);
-		
-			if (preferRGB && chnlNamesAreRGB(chnlNames)) {
-				convertRGBChnls(seriesTimeString, chnlGetter, t, logErrorReporter);
-			} else {
-				convertIndependentChnls(chnlNames, seriesTimeString, chnlGetter, t, progressReporter, logErrorReporter);
-			}
+			String seriesTimeString = calculateSeriesTimeString(seriesIndex, t, sizeT);
+			
+			BiConsumer<String,Stack> stackAdder = (name,stack) -> {
+				String nameOut = maybePrependTimeSeries(seriesTimeString, name);
+				generatorSeq.add(stack, nameOut);
+			};
+			
+			ChnlGetterForTimepoint getterForTimepoint = new ChnlGetterForTimepoint(chnlGetter, t);
+				
+			chnlConversionStyle.convert(
+				chnlNames,
+				getterForTimepoint,
+				stackAdder,
+				logErrorReporter
+			);
 			
 			logErrorReporter.getLogReporter().logFormatted("Ending time-point: %d", t);
 		}
 		
 	}
 	
-	private static boolean chnlNamesAreRGB(Set<String> chnlNames) {
-		if (chnlNames.size()>3) {
-			return false;
+	private String maybePrependTimeSeries( String seriesTimeString, String existingName ) {
+		if (!seriesTimeString.isEmpty()) {
+			return String.format("%s_%s", seriesTimeString, existingName );
+		} else {
+			return String.format("%s", existingName );
 		}
-		
-		for( String key : chnlNames) {
-			// If a key doesn't match one of the expected red-green-blue names
-			if (!(key.equals("red") || key.equals("green") || key.equals("blue"))) {
-				return false;
-			}
-		}
-		
-		return true;
 	}
 	
 	private ChnlGetter maybeAddConverter( ChnlGetter chnlGetter ) throws CreateException {
@@ -221,47 +210,7 @@ public class FormatConverterTask extends RasterTask {
 			return chnlCollection;
 		}
 	}
-	
-	private void convertRGBChnls(
-		String seriesTimeString,
-		ChnlGetter chnlAfter,
-		int t,
-		LogErrorReporter logErrorReporter
-	) throws JobExecutionException {
-		try {
-			Stack stack = createRGBStack(chnlAfter, t, logErrorReporter.getLogReporter());
-			generatorSeq.add(stack, seriesTimeString );
-		} catch (CreateException e) {
-			throw new JobExecutionException("Incorrect image size", e);
-		}
-	}
-	
-	private Stack createRGBStack( ChnlGetter chnlCollection, int t, LogReporter logReporter ) throws CreateException  {
 		
-		Stack stackRearranged = new Stack();
-		
-		addChnlOrBlank("red", chnlCollection, t, stackRearranged, logReporter);
-		addChnlOrBlank("green", chnlCollection, t, stackRearranged, logReporter);
-		addChnlOrBlank("blue", chnlCollection, t, stackRearranged, logReporter);
-		
-		return stackRearranged;
-	}
-	
-	private void addChnlOrBlank( String chnlName, ChnlGetter chnlCollection, int t, Stack stackRearranged, LogReporter logReporter ) throws CreateException {
-		try {
-			if (chnlCollection.hasChnl(chnlName)) {
-				stackRearranged.addChnl( chnlCollection.getChnl(chnlName,t, ProgressReporterNull.get()) );
-			} else {
-				logReporter.logFormatted(
-					String.format("Adding a blank channel for %s for t=%d", chnlName, t)
-				);
-				stackRearranged.addBlankChnl();
-			}
-		} catch (IncorrectImageSizeException | OperationFailedException | GetOperationFailedException e) {
-			throw new CreateException(e);
-		}
-	}
-	
 	private String calculateSeriesTimeStringSupressSeries( int s, int t, int sizeT ) {
 		if (sizeT>1) {
 			return String.format("%05d", t);
@@ -284,44 +233,6 @@ public class FormatConverterTask extends RasterTask {
 		}
 	}
 	
-	private void convertIndependentChnls(
-			Set<String> chnlNames,
-			String seriesTimeString,
-			ChnlGetter chnlAfter,
-			int t,
-			ProgressReporter progressReporter,
-			LogErrorReporter logErrorReporter
-		) throws JobExecutionException {
-		
-		List<INameValue<Stack>> stackList = new ArrayList<>(); 
-		for( String key : chnlNames ) {
-			
-			String combined;
-			if (!seriesTimeString.isEmpty()) {
-				combined = String.format("%s_%s", seriesTimeString, key );
-			} else {
-				combined = String.format("%s", key );
-			}
-			
-			try {
-				Chnl chnlConverted = chnlAfter.getChnl(key, t, progressReporter);
-				stackList.add( new NameValue<>(combined, new Stack( chnlConverted )) );
-			} catch (GetOperationFailedException e) {
-				if (ignoreMissingChnl) {
-					logErrorReporter.getLogReporter().logFormatted("Cannot open channel '%s. Ignoring.", key);
-					continue;
-				} else {
-					throw new JobExecutionException( String.format("Cannot open channel '%s'", key), e );
-				}
-			}
-			
-		}
-		
-		for( INameValue<Stack> ni : stackList ) {
-			generatorSeq.add( ni.getValue(), ni.getName() );
-		}
-	}
-
 	@Override
 	public void endSeries(BoundOutputManagerRouteErrors outputManager) throws JobExecutionException {
 		generatorSeq.end();
@@ -351,20 +262,11 @@ public class FormatConverterTask extends RasterTask {
 		this.chnlConverter = chnlConverter;
 	}
 
-	public boolean isIgnoreMissingChnl() {
-		return ignoreMissingChnl;
+	public ChnlConversionStyle getChnlConversionStyle() {
+		return chnlConversionStyle;
 	}
 
-	public void setIgnoreMissingChnl(boolean ignoreMissingChnl) {
-		this.ignoreMissingChnl = ignoreMissingChnl;
+	public void setChnlConversionStyle(ChnlConversionStyle chnlConversionStyle) {
+		this.chnlConversionStyle = chnlConversionStyle;
 	}
-
-	public boolean isPreferRGB() {
-		return preferRGB;
-	}
-
-	public void setPreferRGB(boolean preferRGB) {
-		this.preferRGB = preferRGB;
-	}
-
 }
