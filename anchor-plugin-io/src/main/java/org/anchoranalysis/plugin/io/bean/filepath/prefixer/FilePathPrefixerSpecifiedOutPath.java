@@ -48,7 +48,7 @@ public abstract class FilePathPrefixerSpecifiedOutPath extends FilePathPrefixer 
 	/** 
 	 * A directory in which to output the experiment-directory and files
 	 * 
-	 *  If empty, first the bean will try to use any output-dir set in the input context if it exists, or otherwise use the system temp dir
+	 *  <p>If empty, first the bean will try to use any output-dir set in the input context if it exists, or otherwise use the system temp dir</p>
 	 * */
 	@BeanField @AllowEmpty
 	private String outPathPrefix = "";

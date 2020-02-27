@@ -75,7 +75,7 @@ public class PatternSpan extends DescriptiveNameFromFile {
 		return listExtractVariableSpan(files, pattern, elseName);
 	}
 	
-	private List<DescriptiveFile> listExtractVariableSpan(Collection<File> files, Pattern pattern, String elseName) {
+	private static List<DescriptiveFile> listExtractVariableSpan(Collection<File> files, Pattern pattern, String elseName) {
 		return files.stream()
 			.map( file ->
 				new DescriptiveFile(

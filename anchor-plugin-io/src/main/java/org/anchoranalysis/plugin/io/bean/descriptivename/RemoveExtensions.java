@@ -79,7 +79,7 @@ public class RemoveExtensions extends DescriptiveNameFromFile {
 		if (preserveExtensionIfDuplicate) {
 			return considerDuplicates(df);
 		} else {
-			return df;
+			return removeExt(df);
 		}
 	}
 	

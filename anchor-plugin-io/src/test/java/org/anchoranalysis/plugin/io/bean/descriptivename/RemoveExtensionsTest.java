@@ -32,22 +32,37 @@ import java.io.File;
 import java.util.Arrays;
 import java.util.List;
 
+import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.input.descriptivename.DescriptiveFile;
 import org.junit.Test;
 
 public class RemoveExtensionsTest {
 
 	@Test
-	public void test() {
-		RemoveExtensions re = createRemoveExtensions();
-		
-		List<File> files = listOfFiles();
-		List<DescriptiveFile> df = re.descriptiveNamesFor(files, "<unknown>");
+	public void testPreserveExt() throws AnchorIOException {
+
+		List<DescriptiveFile> df = applyTest(true);
 		
 		assertEquals( "d", nameFor(df,0) );
 		assertEquals( "e.txt", nameFor(df,1) );
 		assertEquals( "e.csv", nameFor(df,2) );
 	}
+	
+	
+	@Test(expected = AnchorIOException.class)
+	public void testNonUnique() throws AnchorIOException {
+		applyTest(false);
+	}
+	
+
+	private List<DescriptiveFile> applyTest( boolean preserveExtension ) throws AnchorIOException {
+		RemoveExtensions re = createRemoveExtensions();
+		re.setPreserveExtensionIfDuplicate(preserveExtension);
+		
+		List<File> files = listOfFiles();
+		return re.descriptiveNamesForCheckUniqueness(files, "<unknown>");
+	}
+
 	
 	private RemoveExtensions createRemoveExtensions() {
 		RemoveExtensions re = new RemoveExtensions();

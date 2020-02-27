@@ -33,13 +33,14 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.input.descriptivename.DescriptiveFile;
 import org.junit.Test;
 
 public class PatternSpanTest {
 
 	@Test
-	public void testSimple() {
+	public void testSimple() throws AnchorIOException {
 		PatternSpan ps = new PatternSpan();
 		List<DescriptiveFile> ret = ps.descriptiveNamesFor( createFiles(), "<UNKNOWN>");
 		
@@ -49,7 +50,7 @@ public class PatternSpanTest {
 	}
 	
 	@Test
-	public void testPaths() {
+	public void testPaths() throws AnchorIOException {
 		List<String> strs = Arrays.asList(
 			"D:/Users/owen/Pictures/To Integrate/Feb 2020/P1210940.JPG",
 			"D:/Users/owen/Pictures/To Integrate/Feb 2020/Klosters (Feb 2020)/P1210904.JPG"

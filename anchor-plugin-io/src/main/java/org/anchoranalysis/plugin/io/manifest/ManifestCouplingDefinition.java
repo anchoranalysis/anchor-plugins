@@ -34,6 +34,7 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
+import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
 import org.anchoranalysis.io.deserializer.DeserializationFailedException;
 import org.anchoranalysis.io.error.AnchorIOException;
@@ -60,7 +61,7 @@ public class ManifestCouplingDefinition implements InputFromManager {
 		return listCoupledManifests.size();
 	}
 	
-	public void addUncoupledFiles( Collection<File> allFiles, ManifestDeserializer manifestDeserializer ) throws DeserializationFailedException {
+	public void addUncoupledFiles( Collection<File> allFiles, ManifestDeserializer manifestDeserializer ) throws OperationFailedException {
 		
 		for( File file : allFiles) {
 			
@@ -70,8 +71,11 @@ public class ManifestCouplingDefinition implements InputFromManager {
 			}
 			
 			ManifestRecorderFile manifestRecorder = new ManifestRecorderFile(file, manifestDeserializer);
-			listCoupledManifests.add( new CoupledManifests(null,manifestRecorder,3) );
-			//mapExperimentalToImages.put(null, manifestRecorder);
+			try {
+				listCoupledManifests.add( new CoupledManifests(null,manifestRecorder,3) );
+			} catch (AnchorIOException e) {
+				throw new OperationFailedException("Cannot add a coupled-manifest due to an error", e);
+			}
 		}	
 	}
 	

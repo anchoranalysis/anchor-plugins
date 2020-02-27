@@ -149,7 +149,7 @@ public class GroupFiles extends InputManager<NamedChnlsInput> {
 		return listFromMap(map);
 	}
 	
-	private List<NamedChnlsInput> listFromMap( GroupFilesMap map ) {
+	private List<NamedChnlsInput> listFromMap( GroupFilesMap map ) throws AnchorIOException {
 		
 		List<File> files = new ArrayList<>();
 		List<MultiFileReaderOpenedRaster> openedRasters = new ArrayList<>(); 
@@ -171,7 +171,7 @@ public class GroupFiles extends InputManager<NamedChnlsInput> {
 			openedRasters.add( or );
 		}
 				
-		List<DescriptiveFile> descriptiveNames = descriptiveNameFromFile.descriptiveNamesFor(files, "InvalidName");
+		List<DescriptiveFile> descriptiveNames = descriptiveNameFromFile.descriptiveNamesForCheckUniqueness(files, "InvalidName");
 		return zipIntoGrouping(descriptiveNames, openedRasters);		
 	}
 

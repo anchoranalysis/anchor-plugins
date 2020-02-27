@@ -57,7 +57,7 @@ public class CoupledManifests implements InputFromManager {
 	}
 	
 	public CoupledManifests(
-			ManifestRecorder experimentManifest, ManifestRecorderFile fileManifest, int numFoldersInDescription ) {
+			ManifestRecorder experimentManifest, ManifestRecorderFile fileManifest, int numFoldersInDescription ) throws AnchorIOException {
 		super();
 		this.experimentManifest = experimentManifest;
 		this.fileManifest = fileManifest;
@@ -87,7 +87,7 @@ public class CoupledManifests implements InputFromManager {
 		return ff.getRemainderCombined().toString();
 	}
 	
-	private String generateNameFromFolders( int numFoldersInDescription ) {
+	private String generateNameFromFolders( int numFoldersInDescription ) throws AnchorIOException {
 		LastFolders dnff = new LastFolders();
 		dnff.setNumFoldersInDescription(numFoldersInDescription);
 		dnff.setRemoveExtensionInDescription(false);

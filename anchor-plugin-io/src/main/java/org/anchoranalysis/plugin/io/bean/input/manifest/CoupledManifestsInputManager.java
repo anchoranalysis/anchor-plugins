@@ -36,6 +36,7 @@ import org.anchoranalysis.bean.BeanInstanceMap;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.Optional;
 import org.anchoranalysis.bean.error.BeanMisconfiguredException;
+import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.io.bean.provider.file.FileProvider;
 import org.anchoranalysis.io.deserializer.DeserializationFailedException;
 import org.anchoranalysis.io.error.AnchorIOException;
@@ -111,6 +112,8 @@ public class CoupledManifestsInputManager extends InputManager<ManifestCouplingD
 			return definition;
 		} catch (AnchorIOException e) {
 			throw new DeserializationFailedException("Cannot find files to deserialize", e);
+		} catch (OperationFailedException e) {
+			throw new DeserializationFailedException("Cannot added uncoupled-files to the manifest", e);
 		}
 	}
 
