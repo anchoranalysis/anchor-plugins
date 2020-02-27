@@ -47,8 +47,7 @@ import org.anchoranalysis.io.bean.filepath.generator.FilePathGenerator;
 import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.input.InputFromManager;
 import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
-
-import ch.ethz.biol.cell.countchrom.experiment.imagefeature.sharedstate.SharedStateExportFeatures;
+import org.anchoranalysis.plugin.image.task.sharedstate.SharedStateExportFeatures;
 
 /**
  * Base class for tasks that calculate features and export them as a CSV

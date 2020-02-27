@@ -69,8 +69,7 @@ import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
 import org.anchoranalysis.mpp.io.input.MultiInput;
 import org.anchoranalysis.plugin.image.task.bean.feature.ExportFeaturesTask;
-
-import ch.ethz.biol.cell.countchrom.experiment.imagefeature.sharedstate.SharedStateExportFeatures;
+import org.anchoranalysis.plugin.image.task.sharedstate.SharedStateExportFeatures;
 
 
 /** Calculates feature on a 'grouped' set of objects

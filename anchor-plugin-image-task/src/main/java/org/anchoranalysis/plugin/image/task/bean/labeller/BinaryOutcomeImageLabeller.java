@@ -1,4 +1,4 @@
-package org.anchoranalysis.plugin.image.task.bean.grouped;
+package org.anchoranalysis.plugin.image.task.bean.labeller;
 
 /*-
  * #%L
@@ -26,41 +26,31 @@ package org.anchoranalysis.plugin.image.task.bean.grouped;
  * #L%
  */
 
-import java.util.function.Function;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
 
-import org.anchoranalysis.plugin.image.task.grouped.ConsistentChnlChecker;
-import org.anchoranalysis.plugin.image.task.grouped.GroupMap;
+public abstract class BinaryOutcomeImageLabeller<T> extends ImageLabeller<T> {
 
-/**
- * Commonality between shared state for gouped export tasks
- * 
- * @author FEEHANO
- *
- * @param <S> individual-type
- * @param <T> aggregate-type
- */
-public class GroupedSharedState<S,T> {
-
-	private ConsistentChnlChecker chnlChecker = new ConsistentChnlChecker();
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	
-	private GroupMap<S,T> groupMap;
-	
-	private Function<ConsistentChnlChecker,GroupMap<S,T>> createGroupMap;
-	
-	public GroupedSharedState( Function<ConsistentChnlChecker,GroupMap<S,T>> createGroupMap ) {
-		this.createGroupMap = createGroupMap;
+	private static final String POSITIVE = "positive";
+	private static final String NEGATIVE = "negative";
+		
+	@Override
+	public Set<String> allLabels(T params) {
+		return Collections.unmodifiableSet(
+			new HashSet<String>(
+				Arrays.asList(POSITIVE, NEGATIVE)
+			)
+		);
 	}
 	
-	public ConsistentChnlChecker getChnlChecker() {
-		return chnlChecker;
-	}
-
-	public GroupMap<S, T> getGroupMap() {
-		
-		if (groupMap==null) {
-			this.groupMap = createGroupMap.apply(chnlChecker);
-		}
-		
-		return groupMap;
+	protected static String classificationString( boolean positive ) {
+		return positive ? POSITIVE : NEGATIVE;
 	}
 }

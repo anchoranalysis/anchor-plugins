@@ -1,10 +1,10 @@
-package org.anchoranalysis.plugin.image.task.bean.grouped;
+package org.anchoranalysis.plugin.io.bean.filepath.prefixer;
 
 /*-
  * #%L
- * anchor-plugin-image-task
+ * anchor-plugin-io
  * %%
- * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -26,41 +26,38 @@ package org.anchoranalysis.plugin.image.task.bean.grouped;
  * #L%
  */
 
-import java.util.function.Function;
-
-import org.anchoranalysis.plugin.image.task.grouped.ConsistentChnlChecker;
-import org.anchoranalysis.plugin.image.task.grouped.GroupMap;
+import org.anchoranalysis.bean.annotation.BeanField;
 
 /**
- * Commonality between shared state for gouped export tasks
- * 
- * @author FEEHANO
+ * A parameter that toggles between using the 'filename' part of the prefix as a folder (directory) or as a prefix on outputted files
+ * @author owen
  *
- * @param <S> individual-type
- * @param <T> aggregate-type
  */
-public class GroupedSharedState<S,T> {
+public abstract class FilePathPrefixerFileAsFolder extends FilePathPrefixerAvoidResolve {
 
-	private ConsistentChnlChecker chnlChecker = new ConsistentChnlChecker();
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+		
+	// START BEAN PROPERTIES
+	@BeanField
+	private boolean fileAsFolder = true;
+	// END BEAN PROPERTIES
 	
-	private GroupMap<S,T> groupMap;
-	
-	private Function<ConsistentChnlChecker,GroupMap<S,T>> createGroupMap;
-	
-	public GroupedSharedState( Function<ConsistentChnlChecker,GroupMap<S,T>> createGroupMap ) {
-		this.createGroupMap = createGroupMap;
+	public FilePathPrefixerFileAsFolder() {
+		
 	}
-	
-	public ConsistentChnlChecker getChnlChecker() {
-		return chnlChecker;
+		
+	public FilePathPrefixerFileAsFolder(String outPathPrefix) {
+		super(outPathPrefix);
 	}
 
-	public GroupMap<S, T> getGroupMap() {
-		
-		if (groupMap==null) {
-			this.groupMap = createGroupMap.apply(chnlChecker);
-		}
-		
-		return groupMap;
+	public boolean isFileAsFolder() {
+		return fileAsFolder;
+	}
+
+	public void setFileAsFolder(boolean fileAsFolder) {
+		this.fileAsFolder = fileAsFolder;
 	}
 }

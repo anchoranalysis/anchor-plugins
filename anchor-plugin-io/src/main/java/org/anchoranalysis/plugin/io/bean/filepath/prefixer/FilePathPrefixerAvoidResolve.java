@@ -33,9 +33,12 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
+import org.anchoranalysis.bean.annotation.AllowEmpty;
 import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.io.bean.filepath.prefixer.FilePathPrefixer;
 import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.filepath.prefixer.FilePathPrefix;
+import org.anchoranalysis.io.filepath.prefixer.FilePathPrefixerParams;
 import org.anchoranalysis.io.input.InputFromManager;
 
 /**
@@ -46,7 +49,7 @@ import org.anchoranalysis.io.input.InputFromManager;
  * @author Owen Feehan
  *
  */
-public abstract class FilePathPrefixerAvoidResolve extends FilePathPrefixerSpecifiedOutPath {
+public abstract class FilePathPrefixerAvoidResolve extends FilePathPrefixer {
 	
 	/**
 	 * 
@@ -54,16 +57,37 @@ public abstract class FilePathPrefixerAvoidResolve extends FilePathPrefixerSpeci
 	private static final long serialVersionUID = 1L;
 	
 	// START BEAN PROPERTIES
-	@BeanField
-	private boolean fileAsFolder = true;
+	/** 
+	 * A directory in which to output the experiment-directory and files
+	 * 
+	 *  <p>If empty, first the bean will try to use any output-dir set in the input context if it exists, or otherwise use the system temp dir</p>
+	 * */
+	@BeanField @AllowEmpty
+	private String outPathPrefix = "";
 	// END BEAN PROPERTIES
 	
+	// Caches the calculation
+	private Path resolvedRoot = null;
+		
 	public FilePathPrefixerAvoidResolve() {
 		
 	}
 		
 	public FilePathPrefixerAvoidResolve(String outPathPrefix) {
-		super(outPathPrefix);
+		this.outPathPrefix = outPathPrefix;
+	}
+	
+	@Override
+	public FilePathPrefix rootFolderPrefix(String expName, FilePathPrefixerParams context) throws AnchorIOException {
+		return new FilePathPrefix( resolveExperimentAbsoluteRootOut(expName, context) );
+	}
+	
+	@Override
+	public FilePathPrefix outFilePrefix(InputFromManager input, String expName, FilePathPrefixerParams context)
+			throws AnchorIOException {
+
+		Path root = resolveExperimentAbsoluteRootOut(expName, context);
+		return outFilePrefixFromPath(input.pathForBinding(), input.descriptiveName(), root);
 	}
 
 	/**
@@ -76,7 +100,8 @@ public abstract class FilePathPrefixerAvoidResolve extends FilePathPrefixerSpeci
 	 * @throws IOException
 	 */
 	public FilePathPrefix rootFolderPrefixAvoidResolve( String experimentIdentifier )  {
-		return createRootFolderPrefix( getOutPathPrefix(), experimentIdentifier );
+		String folder = new String( getOutPathPrefix() + File.separator + experimentIdentifier + File.separator );
+		return new FilePathPrefix( Paths.get(folder) );
 	}
 	
 	/**
@@ -87,32 +112,60 @@ public abstract class FilePathPrefixerAvoidResolve extends FilePathPrefixerSpeci
 	 * @return a prefixer
 	 * @throws AnchorIOException TODO
 	 */
-	public FilePathPrefix outFilePrefixAvoidResolve( Path pathIn, String experimentIdentifier ) throws AnchorIOException {
+	public FilePathPrefix outFilePrefixAvoidResolve( Path pathIn, String descriptiveName, String experimentIdentifier ) throws AnchorIOException {
 		return outFilePrefixFromPath(
 			pathIn,
+			descriptiveName,
 			rootFolderPrefixAvoidResolve(experimentIdentifier).getFolderPath()
 		);
 	}
-	
-	@Override
-	protected FilePathPrefix outFilePrefixFromRoot( InputFromManager input, Path root ) throws AnchorIOException {
-		return outFilePrefixFromPath(input.pathForBinding(), root);
-	}
-	
-	protected abstract FilePathPrefix outFilePrefixFromPath( Path path, Path root ) throws AnchorIOException;
 
-	public boolean isFileAsFolder() {
-		return fileAsFolder;
+	/** 
+	 * Determines the out-file prefix from a path
+	 * 
+	 * @param path path to calculate prefix from
+	 * @param descriptiveName descriptive-name of input
+	 * @param root root of prefix
+	 * @return folder/filename for prefixing
+	 * @throws AnchorIOException
+	 */
+	protected abstract FilePathPrefix outFilePrefixFromPath( Path path, String descriptiveName, Path root ) throws AnchorIOException;
+	
+	/** The root of the experiment for outputting files */
+	private Path resolveExperimentAbsoluteRootOut( String expName, FilePathPrefixerParams context ) {
+		
+		if (resolvedRoot==null) {
+			resolvedRoot = selectResolvedPath(context).resolve(expName);
+		}
+		return resolvedRoot;
+	}
+	
+	private Path selectResolvedPath(FilePathPrefixerParams context) {
+		
+		if (outPathPrefix.isEmpty()) {
+			// If there's an outPathPrefix specified, then use it
+			if (context.getOutputDirectory()!=null) {
+				assert( context.getOutputDirectory().isAbsolute() );
+				return context.getOutputDirectory();
+			} else {
+				// Otherwise use the system temporary directory
+				return tempDir();
+			}
+		}
+		
+		return resolvePath(outPathPrefix);
+	}
+	
+	private static Path tempDir() {
+		String tempDir = System.getProperty("java.io.tmpdir");
+		return Paths.get(tempDir);
 	}
 
-	public void setFileAsFolder(boolean fileAsFolder) {
-		this.fileAsFolder = fileAsFolder;
+	public String getOutPathPrefix() {
+		return outPathPrefix;
 	}
-	
-	
-	private static FilePathPrefix createRootFolderPrefix( String path, String experimentIdentifier ) {
-		String folder = new String( path + File.separator + experimentIdentifier + File.separator );
-		return new FilePathPrefix( Paths.get(folder) );
+
+	public void setOutPathPrefix(String outPathPrefix) {
+		this.outPathPrefix = outPathPrefix;
 	}
-	
 }

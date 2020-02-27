@@ -1,4 +1,4 @@
-package org.anchoranalysis.plugin.image.task.bean.grouped;
+package org.anchoranalysis.plugin.image.task.imagefeature.calculator;
 
 /*-
  * #%L
@@ -26,41 +26,26 @@ package org.anchoranalysis.plugin.image.task.bean.grouped;
  * #L%
  */
 
-import java.util.function.Function;
+import org.anchoranalysis.core.error.CreateException;
+import org.anchoranalysis.core.error.InitException;
+import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.log.LogErrorReporter;
+import org.anchoranalysis.feature.nrg.NRGStackWithParams;
+import org.anchoranalysis.image.bean.provider.stack.StackProvider;
+import org.anchoranalysis.image.init.ImageInitParams;
 
-import org.anchoranalysis.plugin.image.task.grouped.ConsistentChnlChecker;
-import org.anchoranalysis.plugin.image.task.grouped.GroupMap;
-
-/**
- * Commonality between shared state for gouped export tasks
- * 
- * @author FEEHANO
- *
- * @param <S> individual-type
- * @param <T> aggregate-type
- */
-public class GroupedSharedState<S,T> {
-
-	private ConsistentChnlChecker chnlChecker = new ConsistentChnlChecker();
+class HelperInit {
 	
-	private GroupMap<S,T> groupMap;
-	
-	private Function<ConsistentChnlChecker,GroupMap<S,T>> createGroupMap;
-	
-	public GroupedSharedState( Function<ConsistentChnlChecker,GroupMap<S,T>> createGroupMap ) {
-		this.createGroupMap = createGroupMap;
-	}
-	
-	public ConsistentChnlChecker getChnlChecker() {
-		return chnlChecker;
-	}
-
-	public GroupMap<S, T> getGroupMap() {
+	public static NRGStackWithParams extractStack( ImageInitParams soImage, StackProvider nrgStackProvider, LogErrorReporter logErrorReporter ) throws OperationFailedException {
 		
-		if (groupMap==null) {
-			this.groupMap = createGroupMap.apply(chnlChecker);
+		try {
+			// Extract the NRG stack
+			StackProvider nrgStackProviderLoc = nrgStackProvider.duplicateBean();
+			nrgStackProviderLoc.initRecursive(soImage, logErrorReporter);
+			
+			return new NRGStackWithParams(nrgStackProviderLoc.create());
+		} catch (InitException | CreateException e) {
+			throw new OperationFailedException(e);
 		}
-		
-		return groupMap;
 	}
 }

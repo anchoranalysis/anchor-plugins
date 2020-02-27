@@ -51,8 +51,7 @@ import org.anchoranalysis.feature.list.NamedFeatureStore;
 import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.input.InputFromManager;
 import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
-
-import ch.ethz.biol.cell.countchrom.experiment.imagefeature.sharedstate.SharedStateExportFeaturesWithStore;
+import org.anchoranalysis.plugin.image.task.sharedstate.SharedStateExportFeaturesWithStore;
 
 /**
  * Base class for exporting features, where features are calculated per-image

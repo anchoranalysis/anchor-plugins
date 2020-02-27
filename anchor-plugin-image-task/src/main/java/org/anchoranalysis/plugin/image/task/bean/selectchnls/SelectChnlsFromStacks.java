@@ -30,8 +30,8 @@ import java.util.List;
 
 import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.plugin.image.grouped.ChnlSource;
-import org.anchoranalysis.plugin.image.grouped.NamedChnl;
+import org.anchoranalysis.plugin.image.task.grouped.ChnlSource;
+import org.anchoranalysis.plugin.image.task.grouped.NamedChnl;
 
 /**
  * Selects a a subset of channels from a set of stacks

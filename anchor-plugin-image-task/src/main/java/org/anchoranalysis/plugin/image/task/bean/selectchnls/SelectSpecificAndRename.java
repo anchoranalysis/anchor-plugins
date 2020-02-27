@@ -33,8 +33,8 @@ import org.anchoranalysis.bean.NamedBean;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.chnl.Chnl;
-import org.anchoranalysis.plugin.image.grouped.ChnlSource;
-import org.anchoranalysis.plugin.image.grouped.NamedChnl;
+import org.anchoranalysis.plugin.image.task.grouped.ChnlSource;
+import org.anchoranalysis.plugin.image.task.grouped.NamedChnl;
 
 import ch.ethz.biol.cell.imageprocessing.chnl.provider.ChnlProviderStackReference;
 

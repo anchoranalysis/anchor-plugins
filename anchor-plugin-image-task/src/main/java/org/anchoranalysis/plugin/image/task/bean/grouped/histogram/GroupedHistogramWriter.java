@@ -38,7 +38,7 @@ import org.anchoranalysis.core.text.LanguageUtilities;
 import org.anchoranalysis.image.histogram.Histogram;
 import org.anchoranalysis.io.generator.histogram.HistogramCSVGenerator;
 import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
-import org.anchoranalysis.plugin.image.grouped.GroupMap;
+import org.anchoranalysis.plugin.image.task.grouped.GroupMap;
 
 class GroupedHistogramWriter {
 

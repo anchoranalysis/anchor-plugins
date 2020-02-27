@@ -29,8 +29,8 @@ package org.anchoranalysis.plugin.io.bean.filepath.prefixer;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
+import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.filepath.prefixer.FilePathPrefix;
-import org.anchoranalysis.io.input.InputFromManager;
 
 
 /**
@@ -38,7 +38,7 @@ import org.anchoranalysis.io.input.InputFromManager;
  * @author owen
  *
  */
-public class FilePathPrefixerFromDescriptiveName extends FilePathPrefixerSpecifiedOutPath {
+public class FilePathPrefixerFromDescriptiveName extends FilePathPrefixerAvoidResolve {
 
 	/**
 	 * 
@@ -46,8 +46,9 @@ public class FilePathPrefixerFromDescriptiveName extends FilePathPrefixerSpecifi
 	private static final long serialVersionUID = 1L;
 
 	@Override
-	protected FilePathPrefix outFilePrefixFromRoot(InputFromManager input, Path root) {
-		Path combined = root.resolve( Paths.get(input.descriptiveName() ));
+	protected FilePathPrefix outFilePrefixFromPath(Path path, String descriptiveName, Path root)
+			throws AnchorIOException {
+		Path combined = root.resolve( Paths.get(descriptiveName));
 		return new FilePathPrefix(combined);
 	}
 

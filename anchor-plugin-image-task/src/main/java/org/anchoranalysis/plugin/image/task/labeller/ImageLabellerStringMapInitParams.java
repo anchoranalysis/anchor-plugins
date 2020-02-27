@@ -1,4 +1,4 @@
-package org.anchoranalysis.plugin.image.task.bean.grouped;
+package org.anchoranalysis.plugin.image.task.labeller;
 
 /*-
  * #%L
@@ -26,41 +26,31 @@ package org.anchoranalysis.plugin.image.task.bean.grouped;
  * #L%
  */
 
-import java.util.function.Function;
-
-import org.anchoranalysis.plugin.image.task.grouped.ConsistentChnlChecker;
-import org.anchoranalysis.plugin.image.task.grouped.GroupMap;
+import java.util.Map;
 
 /**
- * Commonality between shared state for gouped export tasks
  * 
  * @author FEEHANO
  *
- * @param <S> individual-type
- * @param <T> aggregate-type
+ * @param <T> type of the initParams contained within (delegate
  */
-public class GroupedSharedState<S,T> {
+public class ImageLabellerStringMapInitParams<T> {
 
-	private ConsistentChnlChecker chnlChecker = new ConsistentChnlChecker();
-	
-	private GroupMap<S,T> groupMap;
-	
-	private Function<ConsistentChnlChecker,GroupMap<S,T>> createGroupMap;
-	
-	public GroupedSharedState( Function<ConsistentChnlChecker,GroupMap<S,T>> createGroupMap ) {
-		this.createGroupMap = createGroupMap;
-	}
-	
-	public ConsistentChnlChecker getChnlChecker() {
-		return chnlChecker;
+	private T initParams;
+	private Map<String,String> map;
+
+	public ImageLabellerStringMapInitParams(Map<String, String> map, T initParams) {
+		super();
+		this.map = map;
+		this.initParams = initParams;
 	}
 
-	public GroupMap<S, T> getGroupMap() {
-		
-		if (groupMap==null) {
-			this.groupMap = createGroupMap.apply(chnlChecker);
-		}
-		
-		return groupMap;
+	public Map<String, String> getMap() {
+		return map;
 	}
+
+	public T getInitParams() {
+		return initParams;
+	}
+	
 }

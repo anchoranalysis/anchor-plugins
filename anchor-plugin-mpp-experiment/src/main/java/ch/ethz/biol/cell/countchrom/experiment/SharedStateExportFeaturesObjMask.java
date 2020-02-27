@@ -31,8 +31,7 @@ package ch.ethz.biol.cell.countchrom.experiment;
 import org.anchoranalysis.feature.io.csv.GroupedResultsVectorCollection;
 import org.anchoranalysis.feature.name.FeatureNameList;
 import org.anchoranalysis.image.feature.flexi.FeatureSessionFlexiFeatureTable;
-
-import ch.ethz.biol.cell.countchrom.experiment.imagefeature.sharedstate.SharedStateExportFeatures;
+import org.anchoranalysis.plugin.image.task.sharedstate.SharedStateExportFeatures;
 
 class SharedStateExportFeaturesObjMask extends SharedStateExportFeatures {
 	

@@ -1,4 +1,4 @@
-package org.anchoranalysis.plugin.image.task.bean.grouped;
+package org.anchoranalysis.plugin.image.task.bean;
 
 /*-
  * #%L
@@ -26,41 +26,38 @@ package org.anchoranalysis.plugin.image.task.bean.grouped;
  * #L%
  */
 
-import java.util.function.Function;
+import org.anchoranalysis.core.index.GetOperationFailedException;
+import org.anchoranalysis.core.progress.ProgressReporter;
+import org.anchoranalysis.image.chnl.Chnl;
+import org.anchoranalysis.image.io.RasterIOException;
+import org.anchoranalysis.image.io.chnl.ChnlGetter;
+import org.anchoranalysis.image.stack.region.chnlconverter.ChnlConverter;
+import org.anchoranalysis.image.stack.region.chnlconverter.ConversionPolicy;
 
-import org.anchoranalysis.plugin.image.task.grouped.ConsistentChnlChecker;
-import org.anchoranalysis.plugin.image.task.grouped.GroupMap;
+class ConvertingChnlCollection implements ChnlGetter {
 
-/**
- * Commonality between shared state for gouped export tasks
- * 
- * @author FEEHANO
- *
- * @param <S> individual-type
- * @param <T> aggregate-type
- */
-public class GroupedSharedState<S,T> {
-
-	private ConsistentChnlChecker chnlChecker = new ConsistentChnlChecker();
+	private ChnlGetter source;
+	private ChnlConverter<?> chnlConverter;
+	private ConversionPolicy conversionPolicy;
 	
-	private GroupMap<S,T> groupMap;
-	
-	private Function<ConsistentChnlChecker,GroupMap<S,T>> createGroupMap;
-	
-	public GroupedSharedState( Function<ConsistentChnlChecker,GroupMap<S,T>> createGroupMap ) {
-		this.createGroupMap = createGroupMap;
-	}
-	
-	public ConsistentChnlChecker getChnlChecker() {
-		return chnlChecker;
+	public ConvertingChnlCollection(ChnlGetter source, ChnlConverter<?> chnlConverter, ConversionPolicy changeExisting) {
+		super();
+		this.source = source;
+		this.chnlConverter = chnlConverter;
+		this.conversionPolicy = changeExisting;
 	}
 
-	public GroupMap<S, T> getGroupMap() {
+	@Override
+	public boolean hasChnl(String chnlName) {
+		return source.hasChnl(chnlName);
+	}
+
+	@Override
+	public Chnl getChnl(String chnlName, int t, ProgressReporter progressReporter) throws RasterIOException,
+			GetOperationFailedException {
 		
-		if (groupMap==null) {
-			this.groupMap = createGroupMap.apply(chnlChecker);
-		}
-		
-		return groupMap;
+		Chnl chnl = source.getChnl(chnlName, t, progressReporter);
+		return chnlConverter.convert(chnl, conversionPolicy);
 	}
+
 }

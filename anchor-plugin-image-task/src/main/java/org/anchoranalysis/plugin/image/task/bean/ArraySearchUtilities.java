@@ -1,4 +1,4 @@
-package org.anchoranalysis.plugin.image.task.bean.grouped;
+package org.anchoranalysis.plugin.image.task.bean;
 
 /*-
  * #%L
@@ -26,41 +26,31 @@ package org.anchoranalysis.plugin.image.task.bean.grouped;
  * #L%
  */
 
-import java.util.function.Function;
+class ArraySearchUtilities {
 
-import org.anchoranalysis.plugin.image.task.grouped.ConsistentChnlChecker;
-import org.anchoranalysis.plugin.image.task.grouped.GroupMap;
-
-/**
- * Commonality between shared state for gouped export tasks
- * 
- * @author FEEHANO
- *
- * @param <S> individual-type
- * @param <T> aggregate-type
- */
-public class GroupedSharedState<S,T> {
-
-	private ConsistentChnlChecker chnlChecker = new ConsistentChnlChecker();
-	
-	private GroupMap<S,T> groupMap;
-	
-	private Function<ConsistentChnlChecker,GroupMap<S,T>> createGroupMap;
-	
-	public GroupedSharedState( Function<ConsistentChnlChecker,GroupMap<S,T>> createGroupMap ) {
-		this.createGroupMap = createGroupMap;
-	}
-	
-	public ConsistentChnlChecker getChnlChecker() {
-		return chnlChecker;
-	}
-
-	public GroupMap<S, T> getGroupMap() {
-		
-		if (groupMap==null) {
-			this.groupMap = createGroupMap.apply(chnlChecker);
+	public static int findIndexOfMaximum( double[] arr ) {
+		double max = Double.MIN_VALUE;
+		int maxIndex = -1;
+		for (int i=0; i<arr.length; i++) {
+			double val = arr[i];
+			if (val>max) {
+				maxIndex = i;
+				max = val;
+			}
 		}
-		
-		return groupMap;
+		return maxIndex;
+	}
+	
+	public static int findIndexOfMinimum( double[] arr ) {
+		double min = Double.MAX_VALUE;
+		int minIndex = -1;
+		for (int i=0; i<arr.length; i++) {
+			double val = arr[i];
+			if (val<min) {
+				minIndex = i;
+				min = val;
+			}
+		}
+		return minIndex;
 	}
 }

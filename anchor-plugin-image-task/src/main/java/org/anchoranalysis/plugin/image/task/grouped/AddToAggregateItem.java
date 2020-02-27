@@ -1,4 +1,4 @@
-package org.anchoranalysis.plugin.image.task.bean.grouped;
+package org.anchoranalysis.plugin.image.task.grouped;
 
 /*-
  * #%L
@@ -26,41 +26,18 @@ package org.anchoranalysis.plugin.image.task.bean.grouped;
  * #L%
  */
 
-import java.util.function.Function;
-
-import org.anchoranalysis.plugin.image.task.grouped.ConsistentChnlChecker;
-import org.anchoranalysis.plugin.image.task.grouped.GroupMap;
+import org.anchoranalysis.core.error.OperationFailedException;
 
 /**
- * Commonality between shared state for gouped export tasks
+ * Adds an individual-item to an aggregate-item
  * 
  * @author FEEHANO
  *
- * @param <S> individual-type
- * @param <T> aggregate-type
+ * @param <S> individual-item type
+ * @param <T> aggregate-item type (comines many individual types)
  */
-public class GroupedSharedState<S,T> {
-
-	private ConsistentChnlChecker chnlChecker = new ConsistentChnlChecker();
+@FunctionalInterface
+public interface AddToAggregateItem<S,T> {
 	
-	private GroupMap<S,T> groupMap;
-	
-	private Function<ConsistentChnlChecker,GroupMap<S,T>> createGroupMap;
-	
-	public GroupedSharedState( Function<ConsistentChnlChecker,GroupMap<S,T>> createGroupMap ) {
-		this.createGroupMap = createGroupMap;
-	}
-	
-	public ConsistentChnlChecker getChnlChecker() {
-		return chnlChecker;
-	}
-
-	public GroupMap<S, T> getGroupMap() {
-		
-		if (groupMap==null) {
-			this.groupMap = createGroupMap.apply(chnlChecker);
-		}
-		
-		return groupMap;
-	}
+	void add( S ind, T agg ) throws OperationFailedException;
 }

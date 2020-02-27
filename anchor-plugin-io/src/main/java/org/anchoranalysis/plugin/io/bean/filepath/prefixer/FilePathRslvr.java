@@ -38,7 +38,7 @@ import org.anchoranalysis.io.filepath.prefixer.FilePathPrefix;
 import org.apache.commons.io.FilenameUtils;
 
 /// Matches prefixes against our incoming files, and attaches them to outgoing files 
-public class FilePathRslvr extends FilePathPrefixerAvoidResolve {
+public class FilePathRslvr extends FilePathPrefixerFileAsFolder {
 
 	/**
 	 * 
@@ -54,7 +54,7 @@ public class FilePathRslvr extends FilePathPrefixerAvoidResolve {
 	// END BEAN PROPERTIES
 
 	@Override
-	protected FilePathPrefix outFilePrefixFromPath(Path path, Path root) throws AnchorIOException {
+	protected FilePathPrefix outFilePrefixFromPath(Path path, String descriptiveName, Path root) throws AnchorIOException {
 		// We strip the incoming path of it's extension
 		Path pathInRemoved = Paths.get( FilenameUtils.removeExtension( path.toString() ) );
 		

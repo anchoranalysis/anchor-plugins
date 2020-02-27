@@ -1,4 +1,4 @@
-package org.anchoranalysis.plugin.image.task.bean.grouped;
+package org.anchoranalysis.plugin.image.task.labeller;
 
 /*-
  * #%L
@@ -26,41 +26,19 @@ package org.anchoranalysis.plugin.image.task.bean.grouped;
  * #L%
  */
 
-import java.util.function.Function;
+import org.anchoranalysis.image.experiment.label.FileLabelMap;
 
-import org.anchoranalysis.plugin.image.task.grouped.ConsistentChnlChecker;
-import org.anchoranalysis.plugin.image.task.grouped.GroupMap;
+public class ImageCSVLabellerInitParams {
 
-/**
- * Commonality between shared state for gouped export tasks
- * 
- * @author FEEHANO
- *
- * @param <S> individual-type
- * @param <T> aggregate-type
- */
-public class GroupedSharedState<S,T> {
-
-	private ConsistentChnlChecker chnlChecker = new ConsistentChnlChecker();
+	private FileLabelMap<String> labelMap;
 	
-	private GroupMap<S,T> groupMap;
-	
-	private Function<ConsistentChnlChecker,GroupMap<S,T>> createGroupMap;
-	
-	public GroupedSharedState( Function<ConsistentChnlChecker,GroupMap<S,T>> createGroupMap ) {
-		this.createGroupMap = createGroupMap;
-	}
-	
-	public ConsistentChnlChecker getChnlChecker() {
-		return chnlChecker;
+	public ImageCSVLabellerInitParams(FileLabelMap<String> labelMap) {
+		super();
+		assert(labelMap!=null);
+		this.labelMap = labelMap;
 	}
 
-	public GroupMap<S, T> getGroupMap() {
-		
-		if (groupMap==null) {
-			this.groupMap = createGroupMap.apply(chnlChecker);
-		}
-		
-		return groupMap;
+	public FileLabelMap<String> getLabelMap() {
+		return labelMap;
 	}
 }

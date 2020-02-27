@@ -1,4 +1,4 @@
-package org.anchoranalysis.plugin.image.task.bean.grouped;
+package org.anchoranalysis.plugin.image.task.imagefeature.calculator;
 
 /*-
  * #%L
@@ -26,41 +26,18 @@ package org.anchoranalysis.plugin.image.task.bean.grouped;
  * #L%
  */
 
-import java.util.function.Function;
+import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.log.LogErrorReporter;
+import org.anchoranalysis.feature.nrg.NRGStackWithParams;
+import org.anchoranalysis.image.bean.provider.stack.StackProvider;
+import org.anchoranalysis.image.init.ImageInitParams;
+import org.anchoranalysis.image.io.input.ProvidesStackInput;
+import org.anchoranalysis.image.io.input.StackInputInitParamsCreator;
 
-import org.anchoranalysis.plugin.image.task.grouped.ConsistentChnlChecker;
-import org.anchoranalysis.plugin.image.task.grouped.GroupMap;
-
-/**
- * Commonality between shared state for gouped export tasks
- * 
- * @author FEEHANO
- *
- * @param <S> individual-type
- * @param <T> aggregate-type
- */
-public class GroupedSharedState<S,T> {
-
-	private ConsistentChnlChecker chnlChecker = new ConsistentChnlChecker();
+public class FeatureCalculatorRepeated {
 	
-	private GroupMap<S,T> groupMap;
-	
-	private Function<ConsistentChnlChecker,GroupMap<S,T>> createGroupMap;
-	
-	public GroupedSharedState( Function<ConsistentChnlChecker,GroupMap<S,T>> createGroupMap ) {
-		this.createGroupMap = createGroupMap;
-	}
-	
-	public ConsistentChnlChecker getChnlChecker() {
-		return chnlChecker;
-	}
-
-	public GroupMap<S, T> getGroupMap() {
-		
-		if (groupMap==null) {
-			this.groupMap = createGroupMap.apply(chnlChecker);
-		}
-		
-		return groupMap;
+	public static NRGStackWithParams extractStack( ProvidesStackInput inputObject, StackProvider nrgStackProvider, LogErrorReporter logErrorReporter ) throws OperationFailedException {
+		ImageInitParams params = StackInputInitParamsCreator.createInitParams(inputObject, logErrorReporter);
+		return HelperInit.extractStack(params, nrgStackProvider, logErrorReporter);
 	}
 }

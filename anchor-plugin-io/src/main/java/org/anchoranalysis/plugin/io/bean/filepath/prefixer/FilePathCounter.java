@@ -32,7 +32,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.filepath.prefixer.FilePathPrefix;
 
-public class FilePathCounter extends FilePathPrefixerAvoidResolve {
+public class FilePathCounter extends FilePathPrefixerFileAsFolder {
 
 	/**
 	 * 
@@ -55,7 +55,7 @@ public class FilePathCounter extends FilePathPrefixerAvoidResolve {
 	}
 
 	@Override
-	protected FilePathPrefix outFilePrefixFromPath(Path path, Path root) throws AnchorIOException {
+	protected FilePathPrefix outFilePrefixFromPath(Path path, String descriptiveName, Path root) throws AnchorIOException {
 		String formatSpecifier = "%0" + numLeadingZeros + "d";
 		String identifier = String.format( formatSpecifier, cnt++ );
 		

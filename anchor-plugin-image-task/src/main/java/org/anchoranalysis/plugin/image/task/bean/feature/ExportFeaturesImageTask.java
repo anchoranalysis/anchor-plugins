@@ -36,8 +36,7 @@ import org.anchoranalysis.feature.list.NamedFeatureStore;
 import org.anchoranalysis.image.bean.provider.stack.StackProvider;
 import org.anchoranalysis.image.io.input.ProvidesStackInput;
 import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
-
-import ch.ethz.biol.cell.countchrom.experiment.imagefeature.calculator.FeatureCalculatorStackInputFromStore;
+import org.anchoranalysis.plugin.image.task.imagefeature.calculator.FeatureCalculatorStackInputFromStore;
 
 
 /** Calculates a feature on each image **/

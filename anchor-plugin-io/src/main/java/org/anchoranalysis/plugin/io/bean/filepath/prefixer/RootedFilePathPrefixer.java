@@ -64,7 +64,7 @@ public class RootedFilePathPrefixer extends FilePathPrefixer {
 		
 		Path pathInWithoutRoot = RootPathMap.instance().split(input.pathForBinding(), rootName, context.isDebugMode()).getPath();
 		
-		FilePathPrefix fpp = filePathPrefixer.outFilePrefixAvoidResolve( pathInWithoutRoot, expName);
+		FilePathPrefix fpp = filePathPrefixer.outFilePrefixAvoidResolve( pathInWithoutRoot, input.descriptiveName(), expName);
 		
 		Path pathOut = folderPathOut(fpp.getFolderPath(), context.isDebugMode());
 		fpp.setFolderPath( pathOut );

@@ -1,4 +1,4 @@
-package org.anchoranalysis.plugin.image.task.bean.grouped;
+package org.anchoranalysis.plugin.image.task.sharedstate;
 
 /*-
  * #%L
@@ -26,41 +26,31 @@ package org.anchoranalysis.plugin.image.task.bean.grouped;
  * #L%
  */
 
-import java.util.function.Function;
+import java.util.List;
 
-import org.anchoranalysis.plugin.image.task.grouped.ConsistentChnlChecker;
-import org.anchoranalysis.plugin.image.task.grouped.GroupMap;
+import org.anchoranalysis.bean.NamedBean;
+import org.anchoranalysis.core.error.CreateException;
+import org.anchoranalysis.feature.bean.list.FeatureListProvider;
+import org.anchoranalysis.feature.io.csv.GroupedResultsVectorCollection;
+import org.anchoranalysis.feature.list.NamedFeatureStore;
+import org.anchoranalysis.feature.list.NamedFeatureStoreFactory;
+import org.anchoranalysis.feature.name.FeatureNameList;
 
-/**
- * Commonality between shared state for gouped export tasks
- * 
- * @author FEEHANO
- *
- * @param <S> individual-type
- * @param <T> aggregate-type
- */
-public class GroupedSharedState<S,T> {
-
-	private ConsistentChnlChecker chnlChecker = new ConsistentChnlChecker();
+public class SharedStateExportFeaturesWithStore extends SharedStateExportFeatures {
 	
-	private GroupMap<S,T> groupMap;
+	private NamedFeatureStore featureStore;
 	
-	private Function<ConsistentChnlChecker,GroupMap<S,T>> createGroupMap;
-	
-	public GroupedSharedState( Function<ConsistentChnlChecker,GroupMap<S,T>> createGroupMap ) {
-		this.createGroupMap = createGroupMap;
+	public SharedStateExportFeaturesWithStore(List<NamedBean<FeatureListProvider>> listFeatureListProvider, GroupedResultsVectorCollection groupResults ) throws CreateException {
+		super( groupResults );
+		this.featureStore = NamedFeatureStoreFactory.createNamedFeatureList(listFeatureListProvider);
 	}
 	
-	public ConsistentChnlChecker getChnlChecker() {
-		return chnlChecker;
+	public NamedFeatureStore getFeatureStore() {
+		return featureStore;
 	}
 
-	public GroupMap<S, T> getGroupMap() {
-		
-		if (groupMap==null) {
-			this.groupMap = createGroupMap.apply(chnlChecker);
-		}
-		
-		return groupMap;
+	@Override
+	protected FeatureNameList featureNames() {
+		return featureStore.createFeatureNames();
 	}
 }

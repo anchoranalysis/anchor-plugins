@@ -1,4 +1,4 @@
-package org.anchoranalysis.plugin.image.task.bean.grouped;
+package org.anchoranalysis.plugin.image.task.sharedstate;
 
 /*-
  * #%L
@@ -26,41 +26,32 @@ package org.anchoranalysis.plugin.image.task.bean.grouped;
  * #L%
  */
 
-import java.util.function.Function;
+import java.util.Map;
+import java.util.Set;
+import java.util.TreeMap;
 
-import org.anchoranalysis.plugin.image.task.grouped.ConsistentChnlChecker;
-import org.anchoranalysis.plugin.image.task.grouped.GroupMap;
+import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
 
-/**
- * Commonality between shared state for gouped export tasks
- * 
- * @author FEEHANO
- *
- * @param <S> individual-type
- * @param <T> aggregate-type
- */
-public class GroupedSharedState<S,T> {
+/** A set of output-managers, one for each group */
+class GroupedMultiplexOutputManagers {
 
-	private ConsistentChnlChecker chnlChecker = new ConsistentChnlChecker();
+	private Map<String,BoundOutputManagerRouteErrors> map;
 	
-	private GroupMap<S,T> groupMap;
-	
-	private Function<ConsistentChnlChecker,GroupMap<S,T>> createGroupMap;
-	
-	public GroupedSharedState( Function<ConsistentChnlChecker,GroupMap<S,T>> createGroupMap ) {
-		this.createGroupMap = createGroupMap;
-	}
-	
-	public ConsistentChnlChecker getChnlChecker() {
-		return chnlChecker;
-	}
-
-	public GroupMap<S, T> getGroupMap() {
+	public GroupedMultiplexOutputManagers( BoundOutputManagerRouteErrors baseOutputManager, Set<String> groups ) {
 		
-		if (groupMap==null) {
-			this.groupMap = createGroupMap.apply(chnlChecker);
+		map = new TreeMap<>();
+		
+		for( String key : groups ) {
+			
+			map.put(
+				key,
+				baseOutputManager.resolveFolder(key)
+			);
 		}
-		
-		return groupMap;
+	}
+	
+	// Returns null if no object exists
+	public BoundOutputManagerRouteErrors getOutputManagerFor( String key ) {
+		return map.get(key);
 	}
 }

@@ -32,8 +32,8 @@ import java.util.List;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.index.GetOperationFailedException;
 import org.anchoranalysis.image.stack.Stack;
-import org.anchoranalysis.plugin.image.grouped.ChnlSource;
-import org.anchoranalysis.plugin.image.grouped.NamedChnl;
+import org.anchoranalysis.plugin.image.task.grouped.ChnlSource;
+import org.anchoranalysis.plugin.image.task.grouped.NamedChnl;
 
 /**
  * Selects all possible channels from all possible stacks

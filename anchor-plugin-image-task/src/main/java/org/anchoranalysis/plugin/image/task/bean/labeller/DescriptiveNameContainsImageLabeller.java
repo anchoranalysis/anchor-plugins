@@ -1,4 +1,4 @@
-package org.anchoranalysis.plugin.image.task.bean.grouped;
+package org.anchoranalysis.plugin.image.task.bean.labeller;
 
 /*-
  * #%L
@@ -26,41 +26,43 @@ package org.anchoranalysis.plugin.image.task.bean.grouped;
  * #L%
  */
 
-import java.util.function.Function;
+import java.nio.file.Path;
 
-import org.anchoranalysis.plugin.image.task.grouped.ConsistentChnlChecker;
-import org.anchoranalysis.plugin.image.task.grouped.GroupMap;
+import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.core.error.InitException;
+import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.log.LogErrorReporter;
+import org.anchoranalysis.image.io.input.ProvidesStackInput;
 
-/**
- * Commonality between shared state for gouped export tasks
- * 
- * @author FEEHANO
- *
- * @param <S> individual-type
- * @param <T> aggregate-type
- */
-public class GroupedSharedState<S,T> {
+public class DescriptiveNameContainsImageLabeller extends BinaryOutcomeImageLabeller<Object> {
 
-	private ConsistentChnlChecker chnlChecker = new ConsistentChnlChecker();
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	
-	private GroupMap<S,T> groupMap;
+	// START BEAN PROPERTIES
+	@BeanField
+	private String contains;
+	// END BEAN PROPERTIES
 	
-	private Function<ConsistentChnlChecker,GroupMap<S,T>> createGroupMap;
-	
-	public GroupedSharedState( Function<ConsistentChnlChecker,GroupMap<S,T>> createGroupMap ) {
-		this.createGroupMap = createGroupMap;
+	@Override
+	public Object init( Path pathForBinding ) throws InitException {
+		// DO NOTHING
+		return null;
 	}
 	
-	public ConsistentChnlChecker getChnlChecker() {
-		return chnlChecker;
+	@Override
+	public String labelFor(Object initParams, ProvidesStackInput input, LogErrorReporter logErrorReporter)
+			throws OperationFailedException {
+		return classificationString(input.descriptiveName().contains(contains));
 	}
 
-	public GroupMap<S, T> getGroupMap() {
-		
-		if (groupMap==null) {
-			this.groupMap = createGroupMap.apply(chnlChecker);
-		}
-		
-		return groupMap;
+	public String getContains() {
+		return contains;
+	}
+
+	public void setContains(String contains) {
+		this.contains = contains;
 	}
 }

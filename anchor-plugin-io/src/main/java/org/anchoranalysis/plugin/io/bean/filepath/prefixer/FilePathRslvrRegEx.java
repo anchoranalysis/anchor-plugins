@@ -42,7 +42,7 @@ import org.anchoranalysis.io.filepath.prefixer.FilePathPrefix;
  * @author owen
  *
  */
-public class FilePathRslvrRegEx extends FilePathPrefixerAvoidResolve {
+public class FilePathRslvrRegEx extends FilePathPrefixerFileAsFolder {
 
 	/**
 	 * 
@@ -55,7 +55,7 @@ public class FilePathRslvrRegEx extends FilePathPrefixerAvoidResolve {
 	// END BEAN PROPERTIES
 
 	@Override
-	protected FilePathPrefix outFilePrefixFromPath(Path path, Path root) throws AnchorIOException {
+	protected FilePathPrefix outFilePrefixFromPath(Path path, String descriptiveName, Path root) throws AnchorIOException {
 
 		String[] components = componentsFromPath(path,	root);
 		
