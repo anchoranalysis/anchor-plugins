@@ -41,36 +41,63 @@ public class PatternSpanTest {
 
 	@Test
 	public void testSimple() throws AnchorIOException {
-		PatternSpan ps = new PatternSpan();
-		List<DescriptiveFile> ret = ps.descriptiveNamesFor( createFiles(), "<UNKNOWN>");
 		
-		assertIndexEquals( ret, 0, "b");
-		assertIndexEquals( ret, 1, "d");
-		assertIndexEquals( ret, 2, "e");
+		String inputs[] = {
+			"/a/b/c",
+			"/a/d/c",
+			"/a/e/c"
+		};
+
+		String expected[] = {"b", "d", "e"};
+		applyTest(inputs, expected);
 	}
 	
 	@Test
 	public void testPaths() throws AnchorIOException {
-		List<String> strs = Arrays.asList(
+		String inputs[] = {
 			"D:/Users/owen/Pictures/To Integrate/Feb 2020/P1210940.JPG",
 			"D:/Users/owen/Pictures/To Integrate/Feb 2020/Klosters (Feb 2020)/P1210904.JPG"
-		);
-		List<File> files = strs.stream().map( str -> new File(str) ).collect( Collectors.toList() );
+		};
+		
+		String expected[] = {
+			"P1210940",
+			"Klosters (Feb 2020)/P1210904"
+		};
+
+		applyTest(inputs, expected);
+	}
+	
+	@Test
+	public void testEmptyStr() throws AnchorIOException {
+		String inputs[] = {
+			"D:/Users/owen/Pictures/To Integrate/Feb 2020/P1210940.JPG",
+			"D:/Users/owen/Pictures/To Integrate/Feb 2020/P1210940.JPG.TXT"
+		};
+		
+		String expected[] = {
+			"P1210940.JPG",
+			"P1210940.JPG.TXT"
+		};
+
+		applyTest(inputs, expected);
+	}
+	
+	private static void applyTest( String[] paths, String[] expected ) {
+		List<File> files = filesFromStrs(paths);
 		
 		PatternSpan ps = new PatternSpan();
 		List<DescriptiveFile> ret = ps.descriptiveNamesFor(files, "unknown");
-		assertIndexEquals( ret, 0, "P1210940");
-		assertIndexEquals( ret, 1, "Klosters-(Feb-2020)" + File.separator + "P1210904");
+		
+		for( int i=0; i<expected.length; i++ ) {
+			assertIndexEquals( ret, i, expected[i]);
+		}
 	}
 	
-	private List<File> createFiles() {
-		File file1 = new File("/a/b/c");
-		File file2 = new File("/a/d/c");
-		File file3 = new File("/a/e/c");
-		return Arrays.asList(file1, file2, file3);
+	private static List<File> filesFromStrs( String[] paths ) {
+		return Arrays.stream(paths).map( str -> new File(str) ).collect( Collectors.toList() );
 	}
 	
-	private void assertIndexEquals( List<DescriptiveFile> ret, int index, String expected ) {
+	private static void assertIndexEquals( List<DescriptiveFile> ret, int index, String expected ) {
 		String actual = ret.get(index).getDescriptiveName();
 		assertEquals( expected, actual );
 	}

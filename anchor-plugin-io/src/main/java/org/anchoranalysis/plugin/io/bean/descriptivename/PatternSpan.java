@@ -72,20 +72,18 @@ public class PatternSpan extends DescriptiveNameFromFile {
 		
 		assert hasAtLeastOneVariableElement(pattern);
 		
-		return listExtractVariableSpan(files, pattern, elseName);
+		return ExtractVariableSpanForList.listExtract(files, pattern, elseName);
 	}
 	
-	private static List<DescriptiveFile> listExtractVariableSpan(Collection<File> files, Pattern pattern, String elseName) {
-		return files.stream()
-			.map( file ->
-				new DescriptiveFile(
-					file,
-					ExtractVariableSpan.extractVariableSpan(file, pattern, elseName)
-				)
-			)
-			.collect( Collectors.toList() );
+	private static boolean hasAtLeastOneVariableElement( Pattern pattern ) {
+		for( PatternElement e : pattern ) {
+			if (!e.hasConstantValue()) {
+				return true;
+			}
+		}
+		return false;
 	}
-		
+	
 	private static List<DescriptiveFile> listExtractFileName(Collection<File> files) {
 		return files.stream()
 			.map( file -> new DescriptiveFile(file, extensionlessNameFromFile(file)) )
@@ -103,15 +101,5 @@ public class PatternSpan extends DescriptiveNameFromFile {
 	// The file-name without an extension
 	private static String extensionlessNameFromFile( File file ) {
 		return FilenameUtils.removeExtension( file.getName() );
-	}
-	
-	
-	private static boolean hasAtLeastOneVariableElement( Pattern pattern ) {
-		for( PatternElement e : pattern ) {
-			if (!e.hasConstantValue()) {
-				return true;
-			}
-		}
-		return false;
 	}
 }
