@@ -37,7 +37,7 @@ import org.anchoranalysis.io.bean.file.matcher.MatchGlob;
 import org.anchoranalysis.io.bean.input.InputManagerParams;
 import org.anchoranalysis.io.bean.provider.file.FileProvider;
 import org.anchoranalysis.io.bean.provider.file.FileProviderWithDirectory;
-import org.anchoranalysis.io.bean.provider.file.FileSet;
+import org.anchoranalysis.io.bean.provider.file.SearchDirectory;
 import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.plugin.io.bean.provider.file.RootedFileSet;
 
@@ -131,7 +131,7 @@ public class ExperimentResultsExperimentStructure extends FileProvider {
 	}
 	
 	private FileProviderWithDirectory createFiles() {
-		FileSet out = new FileSet();
+		SearchDirectory out = new SearchDirectory();
 		out.setDirectory( new DirectoryCreator().apply() );
 		out.setMatcher( new MatchGlob(fileFilter) );
 		out.setRecursive(recursive);

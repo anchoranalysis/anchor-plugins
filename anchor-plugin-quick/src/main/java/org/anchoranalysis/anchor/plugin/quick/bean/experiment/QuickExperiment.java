@@ -45,7 +45,7 @@ import org.anchoranalysis.experiment.bean.logreporter.ConsoleLogReporterBean;
 import org.anchoranalysis.experiment.bean.processor.SequentialProcessor;
 import org.anchoranalysis.experiment.bean.task.HelloWorldTask;
 import org.anchoranalysis.experiment.task.Task;
-import org.anchoranalysis.io.bean.provider.file.FileSet;
+import org.anchoranalysis.io.bean.provider.file.SearchDirectory;
 import org.anchoranalysis.io.output.bean.OutputManager;
 import org.anchoranalysis.io.output.bean.OutputWriteSettings;
 import org.anchoranalysis.io.output.bean.allowed.OutputAllowed;
@@ -139,7 +139,7 @@ public class QuickExperiment extends Experiment {
 	}
 	
 	
-	private InputManager<MultiInput> createInputManagerImageFile( FileSet fs ) {
+	private InputManager<MultiInput> createInputManagerImageFile( SearchDirectory fs ) {
 		// Input Manager
 		Files fileInputManager = new Files();
 		
@@ -208,7 +208,7 @@ public class QuickExperiment extends Experiment {
 			
 		} else {
 			// Creates from a file
-			FileSet fs = new FileSet();
+			SearchDirectory fs = new SearchDirectory();
 			fs.setFileFilterAndDirectory(combinedFileFilter);
 			
 			delegate.setInput( createInputManagerImageFile(fs) );
