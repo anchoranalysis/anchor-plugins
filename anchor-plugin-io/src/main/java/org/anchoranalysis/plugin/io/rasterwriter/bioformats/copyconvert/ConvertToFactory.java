@@ -28,21 +28,25 @@ package org.anchoranalysis.plugin.io.rasterwriter.bioformats.copyconvert;
 
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
-import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeByte;
+import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeFloat;
-import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeInt;
-import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeShort;
+import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeSignedShort;
+import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedInt;
+import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedShort;
 import org.anchoranalysis.plugin.io.rasterwriter.bioformats.copyconvert.tobyte.ConvertToByte;
-import org.anchoranalysis.plugin.io.rasterwriter.bioformats.copyconvert.tobyte.ConvertToByte_From16Bit;
+import org.anchoranalysis.plugin.io.rasterwriter.bioformats.copyconvert.tobyte.ConvertToByte_From16BitUnsigned;
 import org.anchoranalysis.plugin.io.rasterwriter.bioformats.copyconvert.tobyte.ConvertToByte_From32BitFloat;
 import org.anchoranalysis.plugin.io.rasterwriter.bioformats.copyconvert.tobyte.ConvertToByte_From32BitUnsignedInt;
-import org.anchoranalysis.plugin.io.rasterwriter.bioformats.copyconvert.tobyte.ConvertToByte_From8Bit_Interleaving;
-import org.anchoranalysis.plugin.io.rasterwriter.bioformats.copyconvert.tobyte.ConvertToByte_From8Bit_NoInterleaving;
+import org.anchoranalysis.plugin.io.rasterwriter.bioformats.copyconvert.tobyte.ConvertToByte_From8BitUnsigned_Interleaving;
+import org.anchoranalysis.plugin.io.rasterwriter.bioformats.copyconvert.tobyte.ConvertToByte_From8BitUnsigned_NoInterleaving;
 import org.anchoranalysis.plugin.io.rasterwriter.bioformats.copyconvert.tofloat.ConvertToFloat;
 import org.anchoranalysis.plugin.io.rasterwriter.bioformats.copyconvert.tofloat.ConvertToFloat_From32BitFloat;
 import org.anchoranalysis.plugin.io.rasterwriter.bioformats.copyconvert.tofloat.ConvertToFloat_From8Bit;
+import org.anchoranalysis.plugin.io.rasterwriter.bioformats.copyconvert.toint.ConvertToInt;
+import org.anchoranalysis.plugin.io.rasterwriter.bioformats.copyconvert.toint.ConvertToInt_FromUnsigned32BitInt;
 import org.anchoranalysis.plugin.io.rasterwriter.bioformats.copyconvert.toshort.ConvertToShort;
-import org.anchoranalysis.plugin.io.rasterwriter.bioformats.copyconvert.toshort.ConvertToShort_FromShort;
+import org.anchoranalysis.plugin.io.rasterwriter.bioformats.copyconvert.toshort.ConvertToShort_FromSignedShort;
+import org.anchoranalysis.plugin.io.rasterwriter.bioformats.copyconvert.toshort.ConvertToShort_FromUnsignedShort;
 
 import loci.formats.FormatTools;
 import loci.formats.IFormatReader;
@@ -52,6 +56,7 @@ public class ConvertToFactory {
 	public static ConvertTo<?> create( IFormatReader reader, VoxelDataType targetDataType, int effectiveBitsPerPixel ) throws CreateException {
 
 		boolean interleaved = reader.isInterleaved();
+		boolean signed = FormatTools.isSigned(reader.getPixelType());
 		int bitsPerPixel = maybeCorrectBitsPerPixel( reader.getBitsPerPixel() );
 		
 		if (interleaved) {
@@ -64,7 +69,8 @@ public class ConvertToFactory {
 				reader,
 				targetDataType,
 				bitsPerPixel,
-				effectiveBitsPerPixel
+				effectiveBitsPerPixel,
+				signed
 			);
 		}
 
@@ -74,8 +80,8 @@ public class ConvertToFactory {
 		VoxelDataType targetDataType,
 		int bitsPerPixel	
 	) throws CreateException {
-		if (targetDataType.equals(VoxelDataTypeByte.instance) && bitsPerPixel==8) {
-			return new ConvertToByte_From8Bit_Interleaving();
+		if (targetDataType.equals(VoxelDataTypeUnsignedByte.instance) && bitsPerPixel==8) {
+			return new ConvertToByte_From8BitUnsigned_Interleaving();
 		} else {
 			throw new CreateException("For interleaved formats only 8-bits are supported");
 		}				
@@ -85,38 +91,37 @@ public class ConvertToFactory {
 		IFormatReader reader,
 		VoxelDataType targetDataType,
 		int bitsPerPixel,
-		int effectiveBitsPerPixel
+		int effectiveBitsPerPixel,
+		boolean signed
 	) throws CreateException {
 		
 		boolean littleEndian = reader.isLittleEndian();
 		boolean floatingPoint = FormatTools.isFloatingPoint( reader.getPixelType() );
 		
-		if (targetDataType.equals(VoxelDataTypeByte.instance)) {
-			return toByte( bitsPerPixel, effectiveBitsPerPixel, littleEndian, floatingPoint );
-		} else if (targetDataType.equals(VoxelDataTypeShort.instance)) {
-			return toShort( bitsPerPixel, littleEndian );
+		if (targetDataType.equals(VoxelDataTypeUnsignedByte.instance)) {
+			return toByte( bitsPerPixel, effectiveBitsPerPixel, littleEndian, floatingPoint, signed );
+		} else if (targetDataType.equals(VoxelDataTypeUnsignedShort.instance) || targetDataType.equals(VoxelDataTypeSignedShort.instance)) {
+			return toShort( bitsPerPixel, littleEndian, signed );
 		} else if (targetDataType.equals(VoxelDataTypeFloat.instance)) {
-			return toFloat( bitsPerPixel, littleEndian );
-		} else if (targetDataType.equals(VoxelDataTypeInt.instance)) {
-			// NO INT supported currently
-			assert(false);
-			return null;
+			return toFloat( bitsPerPixel, littleEndian, signed );
+		} else if (targetDataType.equals(VoxelDataTypeUnsignedInt.instance)) {
+			return toInt( bitsPerPixel, littleEndian, floatingPoint, signed );
 		} else {
 			assert(false);
 			return null;
 		}	
 	}
 		
-	private static ConvertToByte toByte( int bitsPerPixel, int effectiveBitsPerPixel, boolean littleEndian, boolean floatingPoint ) throws CreateException {
+	private static ConvertToByte toByte( int bitsPerPixel, int effectiveBitsPerPixel, boolean littleEndian, boolean floatingPoint, boolean signed ) throws CreateException {
 		
-		if (bitsPerPixel==8) {
+		if (bitsPerPixel==8 && !signed) {
 			assert(effectiveBitsPerPixel==8);
-			return new ConvertToByte_From8Bit_NoInterleaving();
+			return new ConvertToByte_From8BitUnsigned_NoInterleaving();
 			
-		} else if (bitsPerPixel==16) {
-			return new ConvertToByte_From16Bit(littleEndian, effectiveBitsPerPixel);
+		} else if (bitsPerPixel==16 && !signed) {
+			return new ConvertToByte_From16BitUnsigned(littleEndian, effectiveBitsPerPixel);
 			
-		} else if (bitsPerPixel==32) {
+		} else if (bitsPerPixel==32 && !signed) {
 			
 			if (floatingPoint) {
 				return new ConvertToByte_From32BitFloat(littleEndian);
@@ -125,19 +130,47 @@ public class ConvertToFactory {
 			}
 			
 		} else {
-			return throwBitsPerPixelException("byte", "either 8 bits or 12 bits or 16 bits or 32 bits", bitsPerPixel);
+			return throwBitsPerPixelException("byte", "either unsigned 8 bits or 16 bits or 32 bits", bitsPerPixel);
 		}
 	}
 	
-	private static ConvertToFloat toFloat(int bitsPerPixel, boolean littleEndian) throws CreateException {
+	private static ConvertToShort toShort(int bitsPerPixel, boolean littleEndian, boolean signed) throws CreateException {
+
+		if (bitsPerPixel==16) {
+			if (signed) {
+				return new ConvertToShort_FromSignedShort(littleEndian);
+			} else {
+				return new ConvertToShort_FromUnsignedShort(littleEndian);
+			}
+		} else {
+			return throwBitsPerPixelException("float", "16 bits", bitsPerPixel);
+		}
+	}
+	
+	private static ConvertToInt toInt( int bitsPerPixel, boolean littleEndian, boolean floatingPoint, boolean signed ) throws CreateException {
+		
+		if (bitsPerPixel==32 && !signed) {
+			
+			if (floatingPoint) {
+				throw new CreateException("Conversion from floating-point to int not yet supported");
+			} else {
+				return new ConvertToInt_FromUnsigned32BitInt(littleEndian);
+			}
+			
+		} else {
+			return throwBitsPerPixelException("int", "unsigned 32 bits", bitsPerPixel);
+		}
+	}
+	
+	private static ConvertToFloat toFloat(int bitsPerPixel, boolean littleEndian, boolean signed) throws CreateException {
 		assert( bitsPerPixel == 8 || bitsPerPixel == 32 );
 		
-	    if (bitsPerPixel==8) {
+	    if (bitsPerPixel==8 && !signed) {
 	    	return new ConvertToFloat_From8Bit();
-	    } else if (bitsPerPixel==32) {
+	    } else if (bitsPerPixel==32 && !signed) {
 	    	return new ConvertToFloat_From32BitFloat(littleEndian);
 	    } else {
-	    	return throwBitsPerPixelException("float", "either 8 bits or 32 bits", bitsPerPixel);
+	    	return throwBitsPerPixelException("float", "either unsigned 8 bits or 32 bits", bitsPerPixel);
 	    }
 	}
 	
@@ -150,15 +183,6 @@ public class ConvertToFactory {
     			bitsPerPixel
     		)
     	);
-	}
-	
-	private static ConvertToShort toShort(int bitsPerPixel, boolean littleEndian) throws CreateException {
-
-		if (bitsPerPixel==16) {
-			return new ConvertToShort_FromShort(littleEndian);
-		} else {
-			throw new CreateException("Input data has only 8-bits, so it shouldn't be opened as 16-bits (short)");
-		}
 	}
 	
 	private static int maybeCorrectBitsPerPixel( int bitsPerPixel ) {

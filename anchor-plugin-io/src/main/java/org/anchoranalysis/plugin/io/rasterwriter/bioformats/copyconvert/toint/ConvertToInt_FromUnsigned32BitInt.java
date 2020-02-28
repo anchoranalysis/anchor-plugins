@@ -1,4 +1,6 @@
-package org.anchoranalysis.plugin.io.bean.rasterwriter.ij;
+package org.anchoranalysis.plugin.io.rasterwriter.bioformats.copyconvert.toint;
+
+import java.nio.IntBuffer;
 
 /*-
  * #%L
@@ -26,34 +28,46 @@ package org.anchoranalysis.plugin.io.bean.rasterwriter.ij;
  * #L%
  */
 
-import java.nio.ByteBuffer;
-import java.nio.file.Path;
+import java.nio.ShortBuffer;
 
-import org.anchoranalysis.image.extent.IncorrectImageSizeException;
-import org.anchoranalysis.image.io.RasterIOException;
-import org.anchoranalysis.image.io.generator.raster.series.ImgStackSeries;
-import org.anchoranalysis.image.stack.Stack;
+import org.anchoranalysis.image.extent.ImageDim;
+import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
+import org.anchoranalysis.image.voxel.buffer.VoxelBufferInt;
+import org.anchoranalysis.image.voxel.buffer.VoxelBufferShort;
 
-public abstract class IJWriterSupportsStack extends IJWriter {
+import loci.common.DataTools;
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
+public class ConvertToInt_FromUnsigned32BitInt extends ConvertToInt {
 
+	private int bytesPerPixel = 4;
+	private int sizeXY;
+	private int sizeBytes;
+	
+	private boolean littleEndian;
+	
+	public ConvertToInt_FromUnsigned32BitInt(boolean littleEndian) {
+		super();
+		this.littleEndian = littleEndian;
+	}	
 	
 	@Override
-	public void writeTimeSeriesStackByte( ImgStackSeries<ByteBuffer> stackSeries, Path filePath, boolean makeRGB ) throws RasterIOException {
-		
-		try {
-			Stack stack = stackSeries.createSingleImgStack(); 
-			writeStackTime(
-				stack,
-				filePath,
-				makeRGB
-			);
-		} catch (IncorrectImageSizeException e) {
-			throw new RasterIOException(e);
-		}
+	protected void setupBefore(ImageDim sd, int numChnlsPerByteArray) {
+  		sizeXY = sd.getX() * sd.getY();
+  		sizeBytes = sizeXY * bytesPerPixel;
 	}
+
+	@Override
+	protected VoxelBuffer<IntBuffer> convertSingleChnl(byte[] src, int c_rel) {
+
+		int[] crntChnlBytes = new int[sizeXY];
+		
+		int indOut = 0;
+		for(int indIn =0; indIn<sizeBytes; indIn+=bytesPerPixel) {
+			int s = DataTools.bytesToInt( src, indIn, bytesPerPixel, littleEndian);
+			crntChnlBytes[indOut++] = s;
+		}
+		
+		return VoxelBufferInt.wrap(crntChnlBytes);
+	}
+
 }

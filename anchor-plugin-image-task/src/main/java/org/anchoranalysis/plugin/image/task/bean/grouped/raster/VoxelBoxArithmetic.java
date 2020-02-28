@@ -36,16 +36,16 @@ import org.anchoranalysis.image.convert.ByteConverter;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.anchoranalysis.image.voxel.box.VoxelBoxWrapper;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
-import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeByte;
-import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeShort;
+import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
+import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedShort;
 
 class VoxelBoxArithmetic {
 
 	public static void divide( VoxelBox<IntBuffer> vb, int cnt, VoxelBoxWrapper out, VoxelDataType outputType ) throws OperationFailedException {
 		
-		if (outputType.equals(VoxelDataTypeShort.instance)) {
+		if (outputType.equals(VoxelDataTypeUnsignedShort.instance)) {
 			divideValueShort( vb, cnt, out.asShort() );
-		} else if (outputType.equals(VoxelDataTypeByte.instance)) {
+		} else if (outputType.equals(VoxelDataTypeUnsignedByte.instance)) {
 			divideValueByte( vb, cnt, out.asByte() );
 		} else {
 			throwUnsupportedDataTypeException(outputType);
@@ -56,9 +56,9 @@ class VoxelBoxArithmetic {
 		
 	public static void add( VoxelBox<IntBuffer> vb, VoxelBoxWrapper toAdd, VoxelDataType toAddType ) throws OperationFailedException {
 
-		if (toAddType.equals(VoxelDataTypeShort.instance)) {
+		if (toAddType.equals(VoxelDataTypeUnsignedShort.instance)) {
 			addShort(vb, toAdd.asShort() );
-		} else if (toAddType.equals(VoxelDataTypeByte.instance)) {
+		} else if (toAddType.equals(VoxelDataTypeUnsignedByte.instance)) {
 			addByte(vb, toAdd.asByte() );
 		} else {
 			throwUnsupportedDataTypeException(toAddType);

@@ -34,7 +34,7 @@ import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.extent.IncorrectImageSizeException;
 import org.anchoranalysis.image.stack.Stack;
-import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeByte;
+import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
 
 /**
  * Takes three RGB channels and projects them into a canvas of width/height in the form
@@ -130,7 +130,7 @@ class ExtractProjectedStack {
 				eOut,
 				chnl.getDimensions().getRes()
 			),
-			VoxelDataTypeByte.instance
+			VoxelDataTypeUnsignedByte.instance
 		);
 		chnl.getVoxelBox().asByte().copyPixelsTo(bboxSrc, chnlOut.getVoxelBox().asByte(), bboxToProject);
 		return chnlOut;		

@@ -38,7 +38,7 @@ import org.anchoranalysis.image.chnl.Chnl;
 import org.anchoranalysis.image.chnl.factory.ChnlFactory;
 import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
-import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeByte;
+import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
 
 // Ors the receiveProvider onto the binaryImgChnlProvider
 public class BinaryImgChnlProviderRepeatSlice extends BinaryImgChnlProvider {
@@ -70,7 +70,7 @@ public class BinaryImgChnlProviderRepeatSlice extends BinaryImgChnlProvider {
 			throw new CreateException("dims do not match");
 		}
 		
-		Chnl chnlOut = ChnlFactory.instance().createEmptyInitialised(dims, VoxelDataTypeByte.instance);
+		Chnl chnlOut = ChnlFactory.instance().createEmptyInitialised(dims, VoxelDataTypeUnsignedByte.instance);
 		VoxelBox<ByteBuffer> vbOut = chnlOut.getVoxelBox().asByte();
 		
 		for( int z=0; z<chnlOut.getDimensions().getExtnt().getZ(); z++) {

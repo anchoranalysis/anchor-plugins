@@ -41,7 +41,7 @@ import org.anchoranalysis.image.convert.ByteConverter;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.objmask.ObjMaskCollection;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
-import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeByte;
+import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
 
 import ch.ethz.biol.cell.imageprocessing.chnl.provider.level.LevelResult;
 import ch.ethz.biol.cell.imageprocessing.chnl.provider.level.LevelResultCollection;
@@ -142,7 +142,7 @@ public class ChnlProviderConnectedComponentScore extends ChnlProvider {
 	
 		LevelResultCollection lrc= LevelResultCollectionFactory.createCollection( chnl, objMasks, calculateLevel, 0, getLogger() );
 		
-		Chnl chnlOut = ChnlFactory.instance().createEmptyInitialised( chnl.getDimensions(), VoxelDataTypeByte.instance );
+		Chnl chnlOut = ChnlFactory.instance().createEmptyInitialised( chnl.getDimensions(), VoxelDataTypeUnsignedByte.instance );
 		
 		populateChnl( chnl, chnlOut, lrc );
 

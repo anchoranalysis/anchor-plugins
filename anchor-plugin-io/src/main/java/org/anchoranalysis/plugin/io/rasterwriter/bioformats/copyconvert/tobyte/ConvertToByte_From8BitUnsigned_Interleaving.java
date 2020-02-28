@@ -32,26 +32,35 @@ import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 import org.anchoranalysis.image.voxel.buffer.VoxelBufferByte;
 
-public class ConvertToByte_From8Bit_NoInterleaving extends ConvertToByte {
+ 
+public class ConvertToByte_From8BitUnsigned_Interleaving extends ConvertToByte {
 
-	private int bytesPerPixel = 1;
+	private int bytesPerPixel_Out = 1;
 	private int sizeXY;
+	private int numChnlsPerByteArray;
 	
 	@Override
 	protected void setupBefore(ImageDim sd, int numChnlsPerByteArray) {
 		sizeXY = sd.getX() * sd.getY();
+		this.numChnlsPerByteArray = numChnlsPerByteArray;
 	}
 
 	@Override
 	protected VoxelBuffer<ByteBuffer> convertSingleChnl(byte[] src, int c_rel) {
 		ByteBuffer buffer = ByteBuffer.wrap(src);
 		
-		int sizeTotalBytes = sizeXY * bytesPerPixel;
+		int sizeTotalBytes = sizeXY * bytesPerPixel_Out;
 		byte[] crntChnlBytes = new byte[sizeTotalBytes];
 		
-		buffer.position(sizeTotalBytes*c_rel);
-		buffer.get( crntChnlBytes, 0, sizeTotalBytes);
-		return VoxelBufferByte.wrap(crntChnlBytes);
+		// Loop through the relevant positions
+		int totalBytesBuffer = sizeXY * numChnlsPerByteArray;
+		
+		
+		int indOut = 0;
+		for(int indIn =c_rel; indIn<totalBytesBuffer; indIn+=numChnlsPerByteArray) {
+			crntChnlBytes[indOut++] = buffer.get(indIn);
+		}
+		return VoxelBufferByte.wrap( crntChnlBytes );
 	}
 	
 }

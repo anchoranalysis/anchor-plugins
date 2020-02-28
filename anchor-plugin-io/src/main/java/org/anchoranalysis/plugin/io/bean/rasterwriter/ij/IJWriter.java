@@ -58,20 +58,19 @@ public abstract class IJWriter extends RasterWriter {
 
 	@Override
 	public void writeStackByte( Stack stack, Path filePath, boolean makeRGB ) throws RasterIOException {
-		writeStackTimeCheck( stack, 1, filePath, makeRGB );
+		writeStackTimeCheck( stack, filePath, makeRGB );
 	}
 	
 
 	@Override
 	public void writeStackShort(Stack stack, Path filePath, boolean makeRGB) throws RasterIOException {
-		writeStackTimeCheck( stack, 1, filePath, false );
+		writeStackTimeCheck( stack, filePath, false );
 	}
 	
 	protected abstract boolean writeRaster( FileSaver fs, String outPath, boolean asStack ) throws RasterIOException;
 	
 	private void writeStackTimeCheck(
 		Stack stack,
-		int numFrames,
 		Path filePath,
 		boolean makeRGB			
 	) throws RasterIOException {
@@ -84,12 +83,11 @@ public abstract class IJWriter extends RasterWriter {
 			throw new RasterIOException("To make an RGB image, the stack must have exactly 3 channels");
 		}
 		
-		writeStackTime( stack, numFrames, filePath, makeRGB );
+		writeStackTime( stack, filePath, makeRGB );
 	}
 	
 	protected void writeStackTime(
 		Stack stack,
-		int numFrames,
 		Path filePath,
 		boolean makeRGB
 	) throws RasterIOException {
@@ -100,12 +98,12 @@ public abstract class IJWriter extends RasterWriter {
 			
 			ImageDim sd = stack.getChnl(0).getDimensions();
 			
-			ImagePlus imp = IJWrap.createImagePlus(stack, numFrames, makeRGB );
+			ImagePlus imp = IJWrap.createImagePlus(stack, makeRGB );
 			
 			writeImagePlus(
 				imp,
 				filePath,
-				(stack.getChnl(0).getDimensions().getZ() > 1) || numFrames>1
+				(stack.getChnl(0).getDimensions().getZ() > 1)
 			);
 			
 			imp.close();

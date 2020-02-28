@@ -35,8 +35,8 @@ import org.anchoranalysis.image.chnl.Chnl;
 import org.anchoranalysis.image.chnl.factory.ChnlFactory;
 import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
-import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeByte;
-import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeShort;
+import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
+import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedShort;
 
 public class ChnlProviderEmptyFromDimensions extends ChnlProvider {
 	
@@ -59,7 +59,7 @@ public class ChnlProviderEmptyFromDimensions extends ChnlProvider {
 	@Override
 	public Chnl create() throws CreateException {
 		
-		VoxelDataType typeOut = createShort ? VoxelDataTypeShort.instance : VoxelDataTypeByte.instance; 
+		VoxelDataType typeOut = createShort ? VoxelDataTypeUnsignedShort.instance : VoxelDataTypeUnsignedByte.instance; 
 		
 		ImageDim dims = dimProvider.create();
 		Chnl chnlNew = ChnlFactory.instance().createEmptyInitialised(dims, typeOut);

@@ -38,7 +38,7 @@ import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.anchoranalysis.image.voxel.buffer.VoxelBufferByte;
 import org.anchoranalysis.image.voxel.datatype.IncorrectVoxelDataTypeException;
-import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeByte;
+import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
 
 // Takes a 2-dimensional mask and converts into a 3-dimensional mask along the z-stack but discards
 //   empty slices in a binary on the top and bottom
@@ -80,7 +80,7 @@ public class ChnlProviderExpandSliceToMask extends ChnlProvider {
 			throw new CreateException("y dimension is not equal");
 		}
 		
-		Chnl chnlOut = ChnlFactory.instance().createEmptyUninitialised(sdTarget, VoxelDataTypeByte.instance);
+		Chnl chnlOut = ChnlFactory.instance().createEmptyUninitialised(sdTarget, VoxelDataTypeUnsignedByte.instance);
 		VoxelBox<ByteBuffer> vbOut = chnlOut.getVoxelBox().asByte();
 		
 		for( int z=0; z<chnlOut.getDimensions().getZ(); z++) {

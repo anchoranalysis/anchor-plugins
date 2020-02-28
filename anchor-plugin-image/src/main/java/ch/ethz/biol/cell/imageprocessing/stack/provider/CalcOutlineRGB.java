@@ -35,8 +35,8 @@ import org.anchoranalysis.image.objmask.factory.CreateFromEntireChnlFactory;
 import org.anchoranalysis.image.stack.DisplayStack;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
-import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeByte;
-import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeShort;
+import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
+import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedShort;
 
 import ch.ethz.biol.cell.imageprocessing.chnl.provider.ChnlProviderIfPixelZero;
 
@@ -104,7 +104,7 @@ class CalcOutlineRGB {
 			new Chnl[]{ backgroundBlue, backgroundGreen, blueToAssign }
 		);
 
-		VoxelDataType outputType = createShort ? VoxelDataTypeShort.instance : VoxelDataTypeByte.instance;
+		VoxelDataType outputType = createShort ? VoxelDataTypeUnsignedShort.instance : VoxelDataTypeUnsignedByte.instance;
 		
 		Chnl chnlGreen = imposeOutlineOnChnl(outline, backgroundGreen, outputType);
 		Chnl chnlBlue = MaxChnls.apply( backgroundBlue, blueToAssign, outputType );

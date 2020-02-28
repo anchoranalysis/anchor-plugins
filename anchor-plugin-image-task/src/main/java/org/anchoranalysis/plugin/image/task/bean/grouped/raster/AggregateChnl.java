@@ -31,7 +31,7 @@ import org.anchoranalysis.image.chnl.Chnl;
 import org.anchoranalysis.image.chnl.factory.ChnlFactory;
 import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
-import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeInt;
+import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedInt;
 
 /** A channel associated with a count. This is a useful structure for finding the mean of many channels */
 class AggregateChnl {
@@ -85,7 +85,7 @@ class AggregateChnl {
 		if (raster==null) {
 			this.raster = ChnlFactory.instance().createEmptyInitialised(
 				new ImageDim(sd),
-				VoxelDataTypeInt.instance
+				VoxelDataTypeUnsignedInt.instance
 			);	
 		}
 	}

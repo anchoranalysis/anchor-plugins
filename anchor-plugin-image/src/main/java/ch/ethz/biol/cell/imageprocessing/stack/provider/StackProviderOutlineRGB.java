@@ -41,7 +41,7 @@ import org.anchoranalysis.image.chnl.Chnl;
 import org.anchoranalysis.image.chnl.factory.ChnlFactory;
 import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.stack.Stack;
-import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeByte;
+import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
 
 import ch.ethz.biol.cell.imageprocessing.binaryimgchnl.provider.BinaryImgChnlProviderHolder;
 import ch.ethz.biol.cell.imageprocessing.binaryimgchnl.provider.BinaryImgChnlProviderOutline;
@@ -104,7 +104,7 @@ public class StackProviderOutlineRGB extends StackProviderWithBackground {
 		if (chnlProviderBlue!=null) {
 			return chnlProviderBlue.create();
 		} else {
-			return ChnlFactory.instance().createEmptyInitialised(dim, VoxelDataTypeByte.instance);
+			return ChnlFactory.instance().createEmptyInitialised(dim, VoxelDataTypeUnsignedByte.instance);
 		}
 	}
 	

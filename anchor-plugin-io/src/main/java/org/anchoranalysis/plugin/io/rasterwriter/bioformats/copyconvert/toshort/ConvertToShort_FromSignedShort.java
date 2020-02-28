@@ -31,10 +31,11 @@ import java.nio.ShortBuffer;
 import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 import org.anchoranalysis.image.voxel.buffer.VoxelBufferShort;
+import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedShort;
 
 import loci.common.DataTools;
 
-public class ConvertToShort_FromShort extends ConvertToShort {
+public class ConvertToShort_FromSignedShort extends ConvertToShort {
 
 	private int bytesPerPixel = 2;
 	private int sizeXY;
@@ -42,7 +43,7 @@ public class ConvertToShort_FromShort extends ConvertToShort {
 	
 	private boolean littleEndian;
 	
-	public ConvertToShort_FromShort(boolean littleEndian) {
+	public ConvertToShort_FromSignedShort(boolean littleEndian) {
 		super();
 		this.littleEndian = littleEndian;
 	}	
@@ -56,28 +57,15 @@ public class ConvertToShort_FromShort extends ConvertToShort {
 	@Override
 	protected VoxelBuffer<ShortBuffer> convertSingleChnl(byte[] src, int c_rel) {
 
-		short[] crntChnlBytes = new short[sizeXY];
+		short[] crntChnlShorts = new short[sizeXY];
 		
 		int indOut = 0;
 		for(int indIn =0; indIn<sizeBytes; indIn+=bytesPerPixel) {
-			int s = DataTools.bytesToShort( src, indIn, 2, littleEndian);
-			
-			// Make positive
-			if (s<0) {
-				s += 65536;
-			}
-			
-			if (s>65535) {
-				s = 65535;
-			}
-			if (s<0) {
-				s= 0;
-			}
-			
-			crntChnlBytes[indOut++] = (short) s;
+			short s = DataTools.bytesToShort( src, indIn, bytesPerPixel, littleEndian);
+			crntChnlShorts[indOut++] = s;
 		}
 		
-		return VoxelBufferShort.wrap(crntChnlBytes);
+		return VoxelBufferShort.wrap(crntChnlShorts);
 	}
 
 }

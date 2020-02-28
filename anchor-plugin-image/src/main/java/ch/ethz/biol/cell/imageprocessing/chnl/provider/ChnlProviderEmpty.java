@@ -35,7 +35,7 @@ import org.anchoranalysis.image.chnl.factory.ChnlFactory;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.extent.ImageRes;
-import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeByte;
+import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
 
 public class ChnlProviderEmpty extends ChnlProvider {
 
@@ -61,7 +61,7 @@ public class ChnlProviderEmpty extends ChnlProvider {
 			new Extent(sx,sy,sz),
 			new ImageRes()
 		); 
-		return ChnlFactory.instance().createEmptyInitialised( dim, VoxelDataTypeByte.instance );
+		return ChnlFactory.instance().createEmptyInitialised( dim, VoxelDataTypeUnsignedByte.instance );
 	}
 
 	public int getSx() {

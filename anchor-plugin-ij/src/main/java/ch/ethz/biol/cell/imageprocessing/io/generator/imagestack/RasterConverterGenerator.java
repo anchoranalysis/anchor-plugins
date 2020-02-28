@@ -52,7 +52,7 @@ public class RasterConverterGenerator extends ImageStackGenerator {
 		Stack stack = rasterGenerator.generate();
 		
 		try {
-			return IJWrap.createColorProcessorStack( new RGBStack(stack), 1 );
+			return IJWrap.createColorProcessorStack( new RGBStack(stack) );
 		} catch (CreateException e) {
 			throw new OutputWriteFailedException(e);
 		}

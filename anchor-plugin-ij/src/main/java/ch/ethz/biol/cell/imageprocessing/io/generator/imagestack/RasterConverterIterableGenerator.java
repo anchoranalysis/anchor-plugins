@@ -55,7 +55,7 @@ public class RasterConverterIterableGenerator<IterationType> extends ImageStackG
 		Stack stack = rasterGenerator.getGenerator().generate();
 		
 		try {
-			return IJWrap.createColorProcessorStack( new RGBStack(stack), 1 );
+			return IJWrap.createColorProcessorStack( new RGBStack(stack) );
 		} catch (CreateException e) {
 			throw new OutputWriteFailedException(e);
 		}

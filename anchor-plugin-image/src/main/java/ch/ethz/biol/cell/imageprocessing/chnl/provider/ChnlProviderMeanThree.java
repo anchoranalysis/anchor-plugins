@@ -35,7 +35,7 @@ import org.anchoranalysis.image.chnl.factory.ChnlFactory;
 import org.anchoranalysis.image.convert.ByteConverter;
 import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
-import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeByte;
+import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
 
 public class ChnlProviderMeanThree extends ChnlProviderThree {
 
@@ -86,7 +86,7 @@ public class ChnlProviderMeanThree extends ChnlProviderThree {
 		
 		Chnl chnlOut = ChnlFactory.instance().createEmptyInitialised(
 			new ImageDim(chnl1.getDimensions()),
-			VoxelDataTypeByte.instance
+			VoxelDataTypeUnsignedByte.instance
 		);
 		
 		processVoxelBox(

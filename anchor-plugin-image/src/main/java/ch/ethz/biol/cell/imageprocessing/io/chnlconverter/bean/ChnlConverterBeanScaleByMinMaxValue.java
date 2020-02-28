@@ -30,7 +30,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.NonNegative;
 import org.anchoranalysis.image.bean.chnl.converter.ChnlConverterBean;
 import org.anchoranalysis.image.stack.region.chnlconverter.ChnlConverter;
-import org.anchoranalysis.image.stack.region.chnlconverter.ChnlConverterToByteScaleByMinMaxValue;
+import org.anchoranalysis.image.stack.region.chnlconverter.ChnlConverterToUnsignedByteScaleByMinMaxValue;
 
 /**
  * Scales by compressing a certain range of values into the 8-bit signal
@@ -53,7 +53,7 @@ public class ChnlConverterBeanScaleByMinMaxValue extends ChnlConverterBean {
 	
 	@Override
 	public ChnlConverter<?> createConverter() {
-		return new ChnlConverterToByteScaleByMinMaxValue(min,max);
+		return new ChnlConverterToUnsignedByteScaleByMinMaxValue(min,max);
 	}
 
 	public int getMin() {

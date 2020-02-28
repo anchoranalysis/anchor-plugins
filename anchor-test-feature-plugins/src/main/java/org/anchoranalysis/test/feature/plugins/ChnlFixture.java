@@ -34,7 +34,7 @@ import org.anchoranalysis.image.chnl.factory.ChnlFactoryByte;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
-import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeByte;
+import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
 
 public class ChnlFixture {
 
@@ -91,6 +91,6 @@ public class ChnlFixture {
 	
 	// Finds modulus of a number with the maximum byte value (+1)
 	private static int mod( int num ) {
-		return Math.floorMod(num, VoxelDataTypeByte.MAX_VALUE_INT+1);
+		return Math.floorMod(num, VoxelDataTypeUnsignedByte.MAX_VALUE_INT+1);
 	}
 }
