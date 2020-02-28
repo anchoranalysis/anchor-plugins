@@ -1,4 +1,4 @@
-package org.anchoranalysis.plugin.io.bean.descriptivename;
+package org.anchoranalysis.plugin.io.bean.descriptivename.patternspan;
 
 /*-
  * #%L
@@ -72,7 +72,10 @@ public class PatternSpan extends DescriptiveNameFromFile {
 		
 		assert hasAtLeastOneVariableElement(pattern);
 		
-		return ExtractVariableSpanForList.listExtract(files, pattern, elseName);
+		return ExtractVariableSpanForList.listExtract(
+			files,
+			new SelectSpanToExtract(pattern).createExtracter(elseName)
+		);
 	}
 	
 	private static boolean hasAtLeastOneVariableElement( Pattern pattern ) {

@@ -1,4 +1,4 @@
-package org.anchoranalysis.plugin.io.bean.descriptivename;
+package org.anchoranalysis.plugin.io.bean.descriptivename.patternspan;
 
 /*-
  * #%L
@@ -33,8 +33,6 @@ import java.util.stream.Collectors;
 
 import org.anchoranalysis.core.file.PathUtilities;
 import org.anchoranalysis.io.input.descriptivename.DescriptiveFile;
-import com.owenfeehan.pathpatternfinder.Pattern;
-import com.owenfeehan.pathpatternfinder.patternelements.PatternElement;
 
 class ExtractVariableSpanForList {
 
@@ -44,14 +42,14 @@ class ExtractVariableSpanForList {
 	 * <p> If any of descriptive-names are blank, then add on a bit of the constant portion to all names to make it non-blank</p>
 	 * @param files files
 	 * @param pattern extracted-pattern
-	 * @param elseName fallback if it's still emtpy after operation
+	 * @param elseName fallback if it's still empty after operation
 	 * @return
 	 */
-	public static List<DescriptiveFile> listExtract(Collection<File> files, Pattern pattern, String elseName) {
-		List<DescriptiveFile> listMaybeEmpty = listExtractMaybeEmpty(files, pattern, elseName);
+	public static List<DescriptiveFile> listExtract(Collection<File> files, ExtractVariableSpan extractVariableSpan) {
+		List<DescriptiveFile> listMaybeEmpty = listExtractMaybeEmpty(files, extractVariableSpan);
 		
 		if (hasAnyEmptyDescriptiveName(listMaybeEmpty)) {
-			String prependStr = extractPrependString(pattern, elseName);
+			String prependStr = extractLastComponent( extractVariableSpan.extractConstantElementBeforeSpanPortion() );
 			return listPrepend(prependStr, listMaybeEmpty);
 		} else {
 			return listMaybeEmpty;
@@ -67,23 +65,21 @@ class ExtractVariableSpanForList {
 		).collect(Collectors.toList());
 	}
 	
-	private static String extractPrependString( Pattern pattern, String elseName ) {
-		// Find all the constant portions before the empty string
-		// Replace any constants from the left-hand-side with empty strings
-		
-		String lastConstantElement = elseName;
-		
-		for( PatternElement element : pattern) {
-			
-			if (element.hasConstantValue()) {
-				lastConstantElement = element.describe(10000000);
-			} else {
-				break;
-			}
-		}
-
-		return extractLastComponent(lastConstantElement);
+	private static boolean hasAnyEmptyDescriptiveName( List<DescriptiveFile> list ) {
+		return list.stream().filter( df-> df.getDescriptiveName().isEmpty() ).count()>0;
 	}
+	
+	private static List<DescriptiveFile> listExtractMaybeEmpty(Collection<File> files, ExtractVariableSpan extractVariableSpan ) {
+		return files.stream()
+			.map( file ->
+				new DescriptiveFile(
+					file,
+					extractVariableSpan.extractSpanPortionFor(file)
+				)
+			)
+			.collect( Collectors.toList() );
+	}
+	
 	
 	private static String extractLastComponent( String str ) {
 		
@@ -98,20 +94,4 @@ class ExtractVariableSpanForList {
 		int finalIndex = strMinusOne.lastIndexOf("/");
 		return str.substring(finalIndex+1);
 	}
-	
-	private static boolean hasAnyEmptyDescriptiveName( List<DescriptiveFile> list ) {
-		return list.stream().filter( df-> df.getDescriptiveName().isEmpty() ).count()>0;
-	}
-	
-	private static List<DescriptiveFile> listExtractMaybeEmpty(Collection<File> files, Pattern pattern, String elseName) {
-		return files.stream()
-			.map( file ->
-				new DescriptiveFile(
-					file,
-					ExtractVariableSpan.extractVariableSpan(file, pattern, elseName)
-				)
-			)
-			.collect( Collectors.toList() );
-	}
-	
 }

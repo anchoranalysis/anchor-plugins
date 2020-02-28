@@ -39,8 +39,8 @@ import org.anchoranalysis.io.bean.input.InputManagerParams;
 import org.anchoranalysis.io.bean.provider.file.FileProvider;
 import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.input.FileInput;
-import org.anchoranalysis.plugin.io.bean.descriptivename.PatternSpan;
 import org.anchoranalysis.plugin.io.bean.descriptivename.RemoveExtensions;
+import org.anchoranalysis.plugin.io.bean.descriptivename.patternspan.PatternSpan;
 
 
 /**

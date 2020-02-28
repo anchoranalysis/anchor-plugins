@@ -35,6 +35,7 @@ import java.util.stream.Collectors;
 
 import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.input.descriptivename.DescriptiveFile;
+import org.anchoranalysis.plugin.io.bean.descriptivename.patternspan.PatternSpan;
 import org.junit.Test;
 
 public class PatternSpanTest {
@@ -43,9 +44,9 @@ public class PatternSpanTest {
 	public void testSimple() throws AnchorIOException {
 		
 		String inputs[] = {
-			"/a/b/c",
-			"/a/d/c",
-			"/a/e/c"
+			"/a/b/c.txt",
+			"/a/d/c.txt",
+			"/a/e/c.txt"
 		};
 
 		String expected[] = {"b", "d", "e"};
@@ -79,6 +80,20 @@ public class PatternSpanTest {
 			"P1210940.JPG.TXT"
 		};
 
+		applyTest(inputs, expected);
+	}
+	
+	// When there is no extension, the right-side should be kept
+	@Test
+	public void testWithoutExtension() throws AnchorIOException {
+		
+		String inputs[] = {
+			"/a/b/c",
+			"/a/d/c",
+			"/a/e/c"
+		};
+
+		String expected[] = {"b/c", "d/c", "e/c"};
 		applyTest(inputs, expected);
 	}
 	
