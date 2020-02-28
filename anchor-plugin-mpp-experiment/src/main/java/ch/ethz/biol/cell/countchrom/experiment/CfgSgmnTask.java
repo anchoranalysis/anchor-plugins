@@ -90,21 +90,27 @@ public class CfgSgmnTask extends Task<MultiInput,ExperimentState>{
 		assert(logErrorReporter!=null);
 		
 		try {
-			CfgSgmn is = sgmn.duplicateBean();
-			
 			NamedImgStackCollection stackCollection = stacksFromInput(inputObject);
 			
-			Cfg cfg = is.sgmn(
+			NamedProviderStore<ObjMaskCollection> objs = objsFromInput(inputObject, logErrorReporter);
+					
+			KeyValueParams keyValueParams = keyValueParamsFromInput(inputObject, logErrorReporter);
+			
+			Cfg cfg = sgmn.duplicateBean().sgmn(
 				stackCollection,
-				objsFromInput(inputObject, logErrorReporter),
+				objs,
 				params.getExperimentArguments(),
-				keyValueParamsFromInput(inputObject, logErrorReporter),
+				keyValueParams,
 				logErrorReporter,
 				params.getOutputManager()
 			);
 			writeVisualization(cfg, params.getOutputManager(), stackCollection, logErrorReporter);
 			
-		} catch (SgmnFailedException | OperationFailedException | BeanDuplicateException e) {
+		} catch (SgmnFailedException e) {
+			throw new JobExecutionException("An error occurred segmenting a configuration", e);
+		} catch (BeanDuplicateException e) {
+			throw new JobExecutionException("An error occurred duplicating the sgmn bean", e);
+		} catch (OperationFailedException e) {
 			throw new JobExecutionException(e);
 		}
 	}
