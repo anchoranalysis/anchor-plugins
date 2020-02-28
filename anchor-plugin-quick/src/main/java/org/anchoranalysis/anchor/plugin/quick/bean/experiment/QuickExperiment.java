@@ -39,7 +39,7 @@ import org.anchoranalysis.bean.xml.factory.BeanPathUtilities;
 import org.anchoranalysis.experiment.ExperimentExecutionArguments;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
 import org.anchoranalysis.experiment.bean.Experiment;
-import org.anchoranalysis.experiment.bean.identifier.ExperimentIdentifierSimple;
+import org.anchoranalysis.experiment.bean.identifier.ExperimentIdentifierConstant;
 import org.anchoranalysis.experiment.bean.io.InputOutputExperiment;
 import org.anchoranalysis.experiment.bean.logreporter.ConsoleLogReporterBean;
 import org.anchoranalysis.experiment.bean.processor.SequentialProcessor;
@@ -113,7 +113,7 @@ public class QuickExperiment extends Experiment {
 		
 	private InputOutputExperiment<MultiInput,Object> delegate;
 	
-	private ExperimentIdentifierSimple experimentIdentifier = new ExperimentIdentifierSimple("single", "1.0");
+	private ExperimentIdentifierConstant experimentIdentifier = new ExperimentIdentifierConstant("single", "1.0");
 	
 	public QuickExperiment() {
 		delegate = new InputOutputExperiment<MultiInput,Object>();

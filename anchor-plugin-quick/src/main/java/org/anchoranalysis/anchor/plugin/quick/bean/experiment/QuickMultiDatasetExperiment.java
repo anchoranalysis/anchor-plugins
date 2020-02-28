@@ -42,7 +42,7 @@ import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.experiment.ExperimentExecutionArguments;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
 import org.anchoranalysis.experiment.bean.Experiment;
-import org.anchoranalysis.experiment.bean.identifier.ExperimentIdentifierSimple;
+import org.anchoranalysis.experiment.bean.identifier.ExperimentIdentifierConstant;
 import org.anchoranalysis.experiment.bean.processor.DebugDependentProcessor;
 import org.anchoranalysis.experiment.bean.processor.JobProcessor;
 import org.anchoranalysis.experiment.io.IReplaceInputManager;
@@ -120,7 +120,7 @@ public class QuickMultiDatasetExperiment<T extends InputFromManager, S> extends 
 	// Helper for running the experiment repeatedly on different datasets
 	private RepeatedExperimentFromXml<T,S> delegate;
 	
-	private ExperimentIdentifierSimple experimentIdentifier = new ExperimentIdentifierSimple("unnamed", "1.0");
+	private ExperimentIdentifierConstant experimentIdentifier = new ExperimentIdentifierConstant("unnamed", "1.0");
 	
 	// if non-null, then this InputManager is used, and other settings are ignored
 	private InputManager<T> replacementInputManager;
