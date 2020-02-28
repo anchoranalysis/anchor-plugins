@@ -98,7 +98,7 @@ public class CfgSgmnTask extends Task<MultiInput,ExperimentState>{
 				stackCollection,
 				objsFromInput(inputObject, logErrorReporter),
 				params.getExperimentArguments(),
-				paramsFromInput(inputObject, logErrorReporter),
+				keyValueParamsFromInput(inputObject, logErrorReporter),
 				logErrorReporter,
 				params.getOutputManager()
 			);
@@ -117,7 +117,7 @@ public class CfgSgmnTask extends Task<MultiInput,ExperimentState>{
 		return stackCollection;
 	}
 	
-	private KeyValueParams paramsFromInput( MultiInput inputObject, LogErrorReporter logErrorReporter ) throws JobExecutionException {
+	private KeyValueParams keyValueParamsFromInput( MultiInput inputObject, LogErrorReporter logErrorReporter ) throws JobExecutionException {
 		NamedProviderStore<KeyValueParams> paramsCollection = new LazyEvaluationStore<>(logErrorReporter, "keyValueParams"); 
 		try {
 			inputObject.keyValueParams().addToStore(paramsCollection);
