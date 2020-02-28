@@ -28,8 +28,6 @@ import java.nio.IntBuffer;
  * #L%
  */
 
-import java.nio.ShortBuffer;
-
 import org.anchoranalysis.plugin.io.rasterwriter.bioformats.copyconvert.ConvertTo;
 
 public abstract class ConvertToInt extends ConvertTo<IntBuffer> {

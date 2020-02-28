@@ -31,8 +31,6 @@ import java.nio.ShortBuffer;
 import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 import org.anchoranalysis.image.voxel.buffer.VoxelBufferShort;
-import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedShort;
-
 import loci.common.DataTools;
 
 public class ConvertToShort_FromSignedShort extends ConvertToShort {

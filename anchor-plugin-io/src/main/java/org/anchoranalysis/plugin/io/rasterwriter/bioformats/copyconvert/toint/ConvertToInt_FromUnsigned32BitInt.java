@@ -28,13 +28,9 @@ import java.nio.IntBuffer;
  * #L%
  */
 
-import java.nio.ShortBuffer;
-
 import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 import org.anchoranalysis.image.voxel.buffer.VoxelBufferInt;
-import org.anchoranalysis.image.voxel.buffer.VoxelBufferShort;
-
 import loci.common.DataTools;
 
 public class ConvertToInt_FromUnsigned32BitInt extends ConvertToInt {
