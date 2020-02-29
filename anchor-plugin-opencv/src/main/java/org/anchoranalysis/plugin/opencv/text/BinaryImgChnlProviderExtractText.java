@@ -31,8 +31,6 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.bean.provider.BinaryImgChnlProvider;
 import org.anchoranalysis.image.bean.provider.stack.StackProvider;
 import org.anchoranalysis.image.binary.BinaryChnl;
-import org.anchoranalysis.plugin.opencv.MatConverter;
-import org.opencv.core.Mat;
 
 // TODO not implemented yet
 public class BinaryImgChnlProviderExtractText extends BinaryImgChnlProvider {
