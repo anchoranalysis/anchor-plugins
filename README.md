@@ -4,12 +4,16 @@ This is part of the source-distribution for the [Anchor Image Analysis](http://w
 
 It contains **plugins that implement specific-functionality**.
 
+## What is Anchor?
+
 Anchor is a platform for image analysis, developed by Owen Feehan at:
 
 * ETH Zurich
 * University of Zurich
 * Hoffmann la Roche
 * ongoing as a open-source personal/community project
+
+## Documentation
 
 Please consider:
 
