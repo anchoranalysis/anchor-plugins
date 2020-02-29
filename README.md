@@ -2,21 +2,22 @@
 
 This is part of the source-distribution for the [Anchor Image Analysis](http://www.anchoranalysis.org) software.
 
-It contains plugins that implement specific-functionality.
+It contains **plugins that implement specific-functionality**.
 
 Anchor is a platform for image analysis, developed by Owen Feehan at:
 
 * ETH Zurich
 * University of Zurich
 * Hoffmann la Roche
+* ongoing as a open-source personal/community project
 
 Please consider:
+
 * the [user guide](https://www.anchoranalysis.org/user_guide.html)
 * the [developer guide](https://www.anchoranalysis.org/developer_guide.html)
 
+Before reading the source code, please:
 
-## Note
-
-NOTE: Anchor is an open-source project by [Owen Feehan](http://www.owenfeehan.com) for image analysis software whose source is publicly available, but has not yet been publicly released.
-
-Ongoing efforts on documentation, interface, technical debt etc. continue before release.
+* Understand Maven and [multi-module projects](https://www.anchoranalysis.org/developer_guide_building_anchor.html).
+* Consider Anchor's [architecture](https://www.anchoranalysis.org/developer_guide_architecture_overview.html).
+* Consider the role of each of Anchor's [modules](https://www.anchoranalysis.org/developer_guide_architecture_modules.html).
