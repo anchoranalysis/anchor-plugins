@@ -140,6 +140,11 @@ public class FlattenAsChnl extends RasterReader {
 			// We make this assumption, and check each sequence we open
 			return 1;
 		}
+		
+		@Override
+		public boolean isRGB() throws RasterIOException {
+			return false;
+		}
 
 		@Override
 		public void close() throws RasterIOException {

@@ -35,6 +35,7 @@ import java.util.Collection;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.core.progress.ProgressReporter;
 import org.anchoranalysis.core.progress.ProgressReporterConsole;
 import org.anchoranalysis.core.progress.ProgressReporterNull;
@@ -42,7 +43,10 @@ import org.anchoranalysis.experiment.ExperimentExecutionArguments;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
 import org.anchoranalysis.experiment.bean.Experiment;
 import org.anchoranalysis.experiment.bean.identifier.ExperimentIdentifier;
+import org.anchoranalysis.experiment.log.ConsoleLogReporter;
+import org.anchoranalysis.io.bean.input.InputManagerParams;
 import org.anchoranalysis.io.bean.provider.file.FileProvider;
+import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.plugin.io.bean.copyfilesmode.copymethod.CopyFilesMethod;
 import org.anchoranalysis.plugin.io.bean.copyfilesmode.copymethod.SimpleCopy;
 import org.anchoranalysis.plugin.io.bean.copyfilesmode.naming.CopyFilesNaming;
@@ -96,7 +100,7 @@ public class CopyFilesExperiment extends Experiment {
 				destinationFolderPath.path(expArgs.isDebugEnabled())
 			);
 			
-		} catch (IOException e) {
+		} catch (AnchorIOException e) {
 			throw new ExperimentExecutionException(e);
 		}
 	}
@@ -130,7 +134,7 @@ public class CopyFilesExperiment extends Experiment {
 			
 			copyFilesNaming.afterCopying(destPath, dummyMode);
 			
-		} catch (IOException | OperationFailedException e) {
+		} catch (AnchorIOException | OperationFailedException e) {
 			throw new ExperimentExecutionException(e);
 		} finally {
 			progressReporter.close();
@@ -162,7 +166,7 @@ public class CopyFilesExperiment extends Experiment {
 			} else {
 				copyFilesMethod.createDestinationFile(file.toPath(), destination);
 			}
-		} catch (IOException | CreateException e) {
+		} catch (AnchorIOException | CreateException e) {
 			throw new OperationFailedException(e);
 		} finally {
 			progressReporter.update(iter);
@@ -174,11 +178,16 @@ public class CopyFilesExperiment extends Experiment {
 		Collection<File> files;
 		try {
 			files = fileProvider.matchingFiles(
-				new ProgressReporterConsole(5),
-				expArgs.createInputContext()
+				new InputManagerParams(
+					expArgs.createInputContext(),
+					new ProgressReporterConsole(5),
+					new LogErrorReporter( new ConsoleLogReporter() )	// Print errors to the screen
+				)
 			);
+		} catch (AnchorIOException e) {
+			throw new ExperimentExecutionException("Cannot find input files", e);
 		} catch (IOException e) {
-			throw new ExperimentExecutionException(e);
+			throw new ExperimentExecutionException("Cannot create input context", e);
 		}
 		
 		assert(files!=null);

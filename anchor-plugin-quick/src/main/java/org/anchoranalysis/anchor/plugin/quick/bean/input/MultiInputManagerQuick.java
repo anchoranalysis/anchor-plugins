@@ -26,33 +26,30 @@ package org.anchoranalysis.anchor.plugin.quick.bean.input;
  * #L%
  */
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.anchoranalysis.anchor.plugin.quick.bean.input.filepathappend.FilePathBaseAppendToManager;
 import org.anchoranalysis.anchor.plugin.quick.bean.input.filepathappend.MatchedAppendCsv;
-import org.anchoranalysis.anchor.plugin.quick.input.BeanCreationUtilities;
 import org.anchoranalysis.bean.BeanInstanceMap;
 import org.anchoranalysis.bean.annotation.AllowEmpty;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.DefaultInstance;
 import org.anchoranalysis.bean.annotation.Optional;
 import org.anchoranalysis.bean.error.BeanMisconfiguredException;
-import org.anchoranalysis.core.progress.ProgressReporter;
-import org.anchoranalysis.image.io.bean.input.ImgChnlMapEntry;
-import org.anchoranalysis.image.io.bean.input.Stacks;
-import org.anchoranalysis.image.io.input.StackInputBase;
+import org.anchoranalysis.image.io.bean.chnl.map.ImgChnlMapEntry;
+import org.anchoranalysis.image.io.input.ProvidesStackInput;
 import org.anchoranalysis.io.bean.provider.file.FileProviderWithDirectory;
-import org.anchoranalysis.io.deserializer.DeserializationFailedException;
+import org.anchoranalysis.io.error.AnchorIOException;
+import org.anchoranalysis.io.bean.descriptivename.DescriptiveNameFromFile;
 import org.anchoranalysis.io.bean.input.InputManager;
-import org.anchoranalysis.io.bean.input.descriptivename.DescriptiveNameFromFile;
-import org.anchoranalysis.io.bean.input.descriptivename.LastFolders;
+import org.anchoranalysis.io.bean.input.InputManagerParams;
 import org.anchoranalysis.io.input.FileInput;
-import org.anchoranalysis.io.params.InputContextParams;
 import org.anchoranalysis.mpp.io.bean.input.MultiInputManager;
 import org.anchoranalysis.mpp.io.bean.input.MultiInputManagerBase;
 import org.anchoranalysis.mpp.io.input.MultiInput;
+import org.anchoranalysis.plugin.io.bean.descriptivename.LastFolders;
+import org.anchoranalysis.plugin.io.bean.input.stack.Stacks;
 import org.anchoranalysis.image.io.bean.rasterreader.RasterReader;
 
 /**
@@ -160,7 +157,7 @@ public class MultiInputManagerQuick extends MultiInputManagerBase {
 		return inputManager;
 	}
 	
-	private InputManager<? extends StackInputBase> createStacks() throws BeanMisconfiguredException {
+	private InputManager<? extends ProvidesStackInput> createStacks() throws BeanMisconfiguredException {
 		InputManager<FileInput> files = InputManagerFactory.createFiles(
 			rootName,
 			fileProvider,
@@ -175,7 +172,7 @@ public class MultiInputManagerQuick extends MultiInputManagerBase {
 			//
 			// Channel 0 always takes the inputName
 			// The other channels are defined by the contents of the ImgChnlMapEntry
-			return BeanCreationUtilities.createNamedChnls(
+			return NamedChnlsCreator.create(
 				files,
 				inputName,
 				chnlIndex,
@@ -193,9 +190,9 @@ public class MultiInputManagerQuick extends MultiInputManagerBase {
 	
 	
 	@Override
-	public List<MultiInput> inputObjects(InputContextParams inputContext, ProgressReporter progressReporter)
-			throws IOException, DeserializationFailedException {
-		return inputManager.inputObjects(inputContext, progressReporter);
+	public List<MultiInput> inputObjects(InputManagerParams params)
+			throws AnchorIOException {
+		return inputManager.inputObjects(params);
 	}
 
 	public String getRootName() {

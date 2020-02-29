@@ -27,7 +27,6 @@ package org.anchoranalysis.plugin.annotation.bean.comparer;
  */
 
 
-import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
@@ -44,6 +43,7 @@ import org.anchoranalysis.image.io.bean.rasterreader.RasterReaderUtilities;
 import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.image.objmask.ObjMaskCollection;
 import org.anchoranalysis.io.bean.filepath.generator.FilePathGenerator;
+import org.anchoranalysis.io.error.AnchorIOException;
 
 public class BinaryChnlComparer extends Comparer {
 
@@ -85,7 +85,7 @@ public class BinaryChnlComparer extends Comparer {
 			
 			return convertToObjs( chnl );
 			
-		} catch (IOException | RasterIOException e) {
+		} catch (AnchorIOException | RasterIOException e) {
 			throw new CreateException(e);
 		}
 	}

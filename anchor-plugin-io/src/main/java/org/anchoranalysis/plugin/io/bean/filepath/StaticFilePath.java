@@ -30,6 +30,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.io.error.AnchorIOException;
 
 public class StaticFilePath extends FilePath {
 
@@ -44,7 +45,7 @@ public class StaticFilePath extends FilePath {
 	// END BEAN PROPERTIES
 
 	@Override
-	public Path path(boolean debugMode) {
+	public Path path(boolean debugMode) throws AnchorIOException {
 		return Paths.get(path);
 	}
 	

@@ -26,15 +26,15 @@ package org.anchoranalysis.plugin.io.filepath;
  * #L%
  */
 
-import java.io.IOException;
 import java.nio.file.Path;
 
 import org.anchoranalysis.io.bean.root.RootPath;
 import org.anchoranalysis.io.bean.root.RootPathMap;
+import org.anchoranalysis.io.error.AnchorIOException;
 
 public class RootedFilePathUtilities {
 
-	public static Path determineNewPath( Path pathOrig, String rootName, boolean debugMode, boolean disableDebugMode ) throws IOException {
+	public static Path determineNewPath( Path pathOrig, String rootName, boolean debugMode, boolean disableDebugMode ) throws AnchorIOException {
 		
 		// If forceServer is selected, we disable debug-mode
 		boolean effectiveDebugMode = debugMode;

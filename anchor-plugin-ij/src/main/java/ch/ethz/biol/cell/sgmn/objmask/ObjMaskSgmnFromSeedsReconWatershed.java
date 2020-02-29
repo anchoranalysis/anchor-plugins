@@ -50,14 +50,14 @@ import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.image.objmask.ObjMaskCollection;
 import org.anchoranalysis.image.seed.SeedCollection;
 import org.anchoranalysis.image.sgmn.SgmnFailedException;
-import org.anchoranalysis.image.stack.region.chnlconverter.ChnlConverterToByte;
+import org.anchoranalysis.image.stack.region.chnlconverter.ChnlConverterToUnsignedByte;
 import org.anchoranalysis.image.stack.region.chnlconverter.ConversionPolicy;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.anchoranalysis.image.voxel.box.VoxelBoxByte;
 import org.anchoranalysis.image.voxel.box.VoxelBoxFloat;
 import org.anchoranalysis.image.voxel.box.thresholder.VoxelBoxThresholder;
 import org.anchoranalysis.image.voxel.datatype.IncorrectVoxelDataTypeException;
-import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeByte;
+import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeFloat;
 
 import ch.ethz.biol.cell.imageprocessing.voxelbox.pixelsforplane.PixelsFromByteProcessor;
@@ -119,10 +119,10 @@ public class ObjMaskSgmnFromSeedsReconWatershed extends ObjMaskSgmn {
 		
 		MinimaImpositionGrayscaleReconstruction minimaImposition = new MinimaImpositionGrayscaleReconstruction();
 		
-		Chnl edmAsByte = new ChnlConverterToByte().convert(edm, ConversionPolicy.CHANGE_EXISTING_CHANNEL);
+		Chnl edmAsByte = new ChnlConverterToUnsignedByte().convert(edm, ConversionPolicy.CHANGE_EXISTING_CHANNEL);
 		Chnl edmRecon;
 		try {
-			edmRecon = seeds.size()>0 ? minimaImposition.imposeMinima(edmAsByte, seeds, null) : new ChnlConverterToByte().convert(edm,ConversionPolicy.CHANGE_EXISTING_CHANNEL);
+			edmRecon = seeds.size()>0 ? minimaImposition.imposeMinima(edmAsByte, seeds, null) : new ChnlConverterToUnsignedByte().convert(edm,ConversionPolicy.CHANGE_EXISTING_CHANNEL);
 			// Let's impose minima via morphological reconstruction
 		} catch (OperationFailedException e) {
 			throw new SgmnFailedException(e);
@@ -139,7 +139,7 @@ public class ObjMaskSgmnFromSeedsReconWatershed extends ObjMaskSgmn {
 			
 			chnlWorking = ChnlFactory
 					.instance()
-					.get(VoxelDataTypeByte.instance)
+					.get(VoxelDataTypeUnsignedByte.instance)
 					.create(vb, edmRecon.getDimensions().getRes() );
 			
 			// lets do a flood fill on dupp

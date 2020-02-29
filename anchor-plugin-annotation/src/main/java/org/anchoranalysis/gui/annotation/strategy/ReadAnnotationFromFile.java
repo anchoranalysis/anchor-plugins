@@ -26,12 +26,12 @@ package org.anchoranalysis.gui.annotation.strategy;
  * #L%
  */
 
-import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
 import org.anchoranalysis.annotation.io.wholeimage.WholeImageLabelAnnotationReader;
 import org.anchoranalysis.annotation.wholeimage.WholeImageLabelAnnotation;
+import org.anchoranalysis.io.error.AnchorIOException;
 
 public class ReadAnnotationFromFile {
 
@@ -48,7 +48,7 @@ public class ReadAnnotationFromFile {
 		try {
 			WholeImageLabelAnnotationReader reader = new WholeImageLabelAnnotationReader();
 			return reader.read( path );
-		} catch (IOException exc) {
+		} catch (AnchorIOException exc) {
 			// TODO PUT SOME LOGGING HERE
 			return null;
 		}

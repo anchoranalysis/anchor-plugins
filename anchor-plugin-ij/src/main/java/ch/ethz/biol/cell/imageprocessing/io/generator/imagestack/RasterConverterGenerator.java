@@ -35,7 +35,7 @@ import org.anchoranalysis.image.io.generator.raster.RasterGenerator;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.image.stack.rgb.RGBStack;
 import org.anchoranalysis.io.manifest.ManifestDescription;
-import org.anchoranalysis.io.output.OutputWriteFailedException;
+import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
 public class RasterConverterGenerator extends ImageStackGenerator {
 
@@ -52,7 +52,7 @@ public class RasterConverterGenerator extends ImageStackGenerator {
 		Stack stack = rasterGenerator.generate();
 		
 		try {
-			return IJWrap.createColorProcessorStack( new RGBStack(stack), 1 );
+			return IJWrap.createColorProcessorStack( new RGBStack(stack) );
 		} catch (CreateException e) {
 			throw new OutputWriteFailedException(e);
 		}

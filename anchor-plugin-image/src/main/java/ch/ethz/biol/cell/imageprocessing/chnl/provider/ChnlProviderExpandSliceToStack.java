@@ -38,7 +38,7 @@ import org.anchoranalysis.image.chnl.factory.ChnlFactory;
 import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
-import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeByte;
+import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
 
 // Takes a 2-dimensional mask and converts into a 3-dimensional mask by repeating along the z-stack
 public class ChnlProviderExpandSliceToStack extends ChnlProvider {
@@ -72,7 +72,7 @@ public class ChnlProviderExpandSliceToStack extends ChnlProvider {
 			throw new CreateException("y dimension is not equal");
 		}
 		
-		Chnl chnlOut = ChnlFactory.instance().createEmptyUninitialised(sdTarget, VoxelDataTypeByte.instance);
+		Chnl chnlOut = ChnlFactory.instance().createEmptyUninitialised(sdTarget, VoxelDataTypeUnsignedByte.instance);
 		
 		VoxelBox<ByteBuffer> vbSlice = chnl.getVoxelBox().asByte(); 
 		VoxelBox<ByteBuffer> vbOut = chnlOut.getVoxelBox().asByte();

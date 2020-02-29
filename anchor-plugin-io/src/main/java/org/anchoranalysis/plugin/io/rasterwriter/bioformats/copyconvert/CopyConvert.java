@@ -190,6 +190,15 @@ public class CopyConvert {
 					}
 				}
 			}
+		} else if (dimOrder.equalsIgnoreCase("XYTCZ")) {
+			
+			for (int z=0; z<dim.getZ(); z++) {
+				for (int c=0; c<numByteArrays; c++ ) {
+					for( int t=0; t<numFrames; t++) {	
+						chnlIteration.apply(t, z, c, chnlIndex++);
+					}
+				}
+			}			
 		} else {
 			throw new IOException( String.format("dimOrder '%s' not supported", dimOrder) );
 		}

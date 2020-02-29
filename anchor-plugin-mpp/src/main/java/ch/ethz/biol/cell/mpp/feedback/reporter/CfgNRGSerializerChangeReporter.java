@@ -34,10 +34,10 @@ import org.anchoranalysis.io.generator.serialized.BundledObjectOutputStreamGener
 import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.manifest.deserializer.bundle.BundleParameters;
 import org.anchoranalysis.io.manifest.sequencetype.ChangeSequenceType;
-import org.anchoranalysis.io.output.OutputWriteFailedException;
+import org.anchoranalysis.io.namestyle.IndexableOutputNameStyle;
+import org.anchoranalysis.io.namestyle.IntegerSuffixOutputNameStyle;
 import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
-import org.anchoranalysis.io.output.namestyle.IndexableOutputNameStyle;
-import org.anchoranalysis.io.output.namestyle.IntegerSuffixOutputNameStyle;
+import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.mpp.sgmn.optscheme.step.Reporting;
 
 import ch.ethz.biol.cell.mpp.feedback.OptimizationFeedbackEndParams;

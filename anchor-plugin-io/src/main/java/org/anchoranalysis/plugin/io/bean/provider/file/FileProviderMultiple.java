@@ -28,17 +28,16 @@ package org.anchoranalysis.plugin.io.bean.provider.file;
 
 
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.progress.ProgressReporter;
 import org.anchoranalysis.core.progress.ProgressReporterMultiple;
 import org.anchoranalysis.core.progress.ProgressReporterOneOfMany;
+import org.anchoranalysis.io.bean.input.InputManagerParams;
 import org.anchoranalysis.io.bean.provider.file.FileProvider;
-import org.anchoranalysis.io.params.InputContextParams;
+import org.anchoranalysis.io.error.AnchorIOException;
 
 public class FileProviderMultiple extends FileProvider {
 
@@ -53,16 +52,18 @@ public class FileProviderMultiple extends FileProvider {
 	// END BEAN PROPERTIES
 	
 	@Override
-	public Collection<File> matchingFiles(ProgressReporter progressReporter, InputContextParams inputContext) throws IOException {
+	public Collection<File> matchingFiles(InputManagerParams params) throws AnchorIOException {
 
-		try( ProgressReporterMultiple prm = new ProgressReporterMultiple(progressReporter, list.size())) {
+		try( ProgressReporterMultiple prm = new ProgressReporterMultiple(params.getProgressReporter(), list.size())) {
 			
 			List<File> combined = new ArrayList<>();
 			
 			for( FileProvider fp : list ) {
 				
 				ProgressReporterOneOfMany prLocal = new ProgressReporterOneOfMany(prm);
-				combined.addAll( fp.matchingFiles(prLocal, inputContext) );
+				combined.addAll(
+					fp.matchingFiles(params.withProgressReporter(prLocal))
+				);
 				prm.incrWorker();
 			}
 			return combined;

@@ -34,11 +34,13 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.log.LogReporter;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
 import org.anchoranalysis.experiment.JobExecutionException;
+import org.anchoranalysis.experiment.task.InputTypesExpected;
 import org.anchoranalysis.experiment.task.ParametersBound;
 import org.anchoranalysis.experiment.task.ParametersExperiment;
 import org.anchoranalysis.experiment.task.Task;
 import org.anchoranalysis.io.csv.reader.CSVReaderByLine;
 import org.anchoranalysis.io.csv.reader.CSVReaderByLine.ReadByLine;
+import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.input.FileInput;
 import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
 import org.anchoranalysis.io.output.csv.CSVWriter;
@@ -80,7 +82,7 @@ public class CombineCSVTask extends Task<FileInput,CSVWriter> {
 				
 			return writer;
 			
-		} catch (IOException e) {
+		} catch (AnchorIOException e) {
 			throw new ExperimentExecutionException(e);
 		}
 	}
@@ -90,9 +92,13 @@ public class CombineCSVTask extends Task<FileInput,CSVWriter> {
 		return false;
 	}
 	
-	
 	@Override
-	protected void doJobOnInputObject(ParametersBound<FileInput,CSVWriter> params) throws JobExecutionException {
+	public InputTypesExpected inputTypesExpected() {
+		return new InputTypesExpected(FileInput.class);
+	}
+		
+	@Override
+	public void doJobOnInputObject(ParametersBound<FileInput,CSVWriter> params) throws JobExecutionException {
 		
 		FileInput inputObject = params.getInputObject();
 		

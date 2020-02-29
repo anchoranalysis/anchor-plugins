@@ -30,18 +30,18 @@ package org.anchoranalysis.plugin.image.task.bean.feature;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.log.LogErrorReporter;
+import org.anchoranalysis.experiment.task.InputTypesExpected;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.calc.ResultsVector;
 import org.anchoranalysis.feature.list.NamedFeatureStore;
 import org.anchoranalysis.image.bean.provider.stack.StackProvider;
-import org.anchoranalysis.image.io.input.StackInputBase;
+import org.anchoranalysis.image.io.input.ProvidesStackInput;
 import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
-
-import ch.ethz.biol.cell.countchrom.experiment.imagefeature.calculator.FeatureCalculatorStackInputFromStore;
+import org.anchoranalysis.plugin.image.task.imagefeature.calculator.FeatureCalculatorStackInputFromStore;
 
 
 /** Calculates a feature on each image **/
-public class ExportFeaturesImageTask extends ExportFeaturesStoreTask<StackInputBase> {
+public class ExportFeaturesImageTask extends ExportFeaturesStoreTask<ProvidesStackInput> {
 
 	/**
 	 * 
@@ -58,8 +58,13 @@ public class ExportFeaturesImageTask extends ExportFeaturesStoreTask<StackInputB
 	}
 	
 	@Override
+	public InputTypesExpected inputTypesExpected() {
+		return new InputTypesExpected(ProvidesStackInput.class);
+	}
+		
+	@Override
 	protected ResultsVector calcResultsVectorForInputObject(
-		StackInputBase inputObject,
+		ProvidesStackInput inputObject,
 		NamedFeatureStore featureStore,
 		BoundOutputManagerRouteErrors outputManager, LogErrorReporter logErrorReporter
 	) throws FeatureCalcException {

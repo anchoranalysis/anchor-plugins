@@ -30,7 +30,7 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.experiment.JobExecutionException;
 import org.anchoranalysis.image.extent.ImageDim;
-import org.anchoranalysis.image.io.input.StackInputBase;
+import org.anchoranalysis.image.io.input.ProvidesStackInput;
 import org.anchoranalysis.image.objmask.ObjMaskCollection;
 import org.anchoranalysis.plugin.annotation.comparison.AnnotationComparisonInput;
 import org.anchoranalysis.plugin.annotation.comparison.IAddAnnotation;
@@ -43,7 +43,7 @@ class ObjsToCompareFactory {
 	
 	// Returns null if an error occurs
 	public static ObjsToCompare create(
-		AnnotationComparisonInput<StackInputBase> input,
+		AnnotationComparisonInput<ProvidesStackInput> input,
 		IAddAnnotation<?> addAnnotation,
 		LogErrorReporter logErrorReporter,
 		ImageDim dim,
@@ -69,7 +69,7 @@ class ObjsToCompareFactory {
 	private static boolean checkNull(
 		ObjMaskCollection objs,
 		String objName,
-		AnnotationComparisonInput<StackInputBase> input,
+		AnnotationComparisonInput<ProvidesStackInput> input,
 		IAddAnnotation<?> addAnnotation,
 		LogErrorReporter logErrorReporter
 	) {
@@ -88,7 +88,7 @@ class ObjsToCompareFactory {
 
 	private static ObjMaskCollection createObjs(
 		boolean left,
-		AnnotationComparisonInput<StackInputBase> input,
+		AnnotationComparisonInput<ProvidesStackInput> input,
 		ImageDim dim,
 		boolean debugMode
 	) throws JobExecutionException {

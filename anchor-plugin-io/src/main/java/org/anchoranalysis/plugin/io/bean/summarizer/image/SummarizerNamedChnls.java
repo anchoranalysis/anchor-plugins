@@ -27,19 +27,19 @@ package org.anchoranalysis.plugin.io.bean.summarizer.image;
  */
 
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.image.io.input.NamedChnlsInputAsStack;
+import org.anchoranalysis.image.io.input.NamedChnlsInput;
 import org.anchoranalysis.plugin.io.bean.summarizer.Summarizer;
 import org.anchoranalysis.plugin.io.summarizer.FrequencyMap;
 
 
 /**
- * Summarzes {@link NamedChnlsInputAsStack} in different ways
+ * Summarzes {@link NamedChnlsInput} in different ways
  * 
  * @author owen
  *
  * @param <T> type used for summary in frequency-map
  */
-public abstract class SummarizerNamedChnls<T> extends Summarizer<NamedChnlsInputAsStack> {
+public abstract class SummarizerNamedChnls<T> extends Summarizer<NamedChnlsInput> {
 
 	/**
 	 * 

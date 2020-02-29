@@ -28,8 +28,8 @@ package org.anchoranalysis.plugin.image.task.bean.grouped;
 
 import java.util.function.Function;
 
-import org.anchoranalysis.plugin.image.grouped.ConsistentChnlChecker;
-import org.anchoranalysis.plugin.image.grouped.GroupMap;
+import org.anchoranalysis.plugin.image.task.grouped.ConsistentChnlChecker;
+import org.anchoranalysis.plugin.image.task.grouped.GroupMap;
 
 /**
  * Commonality between shared state for gouped export tasks

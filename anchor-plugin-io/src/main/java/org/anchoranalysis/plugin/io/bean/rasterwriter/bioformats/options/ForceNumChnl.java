@@ -72,6 +72,12 @@ public class ForceNumChnl extends ReadOptions {
 	public int chnlsPerByteArray(IFormatReader reader) {
 		return options.chnlsPerByteArray(reader);
 	}
+	
+	@Override
+	public boolean isRGB(IFormatReader reader) {
+		// Not supporte when the numer of channels is being forced
+		return false;
+	}
 
 	@Override
 	public List<String> determineChannelNames(IFormatReader reader) {

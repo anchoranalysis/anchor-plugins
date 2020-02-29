@@ -73,6 +73,15 @@ public class ForceBitsPerPixel extends ReadOptions {
 	public int sizeC(IFormatReader reader) {
 		return options.sizeC(reader);
 	}
+
+	@Override
+	public boolean isRGB(IFormatReader reader) {
+		if (bitsPerPixel==8) {
+			return options.isRGB(reader);
+		} else {
+			return false;
+		}
+	}
 	
 	@Override
 	public int chnlsPerByteArray(IFormatReader reader) {
@@ -94,5 +103,6 @@ public class ForceBitsPerPixel extends ReadOptions {
 	public void setOptions(ReadOptions options) {
 		this.options = options;
 	}
+
 
 }

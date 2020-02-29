@@ -39,23 +39,23 @@ import org.anchoranalysis.bean.xml.factory.BeanPathUtilities;
 import org.anchoranalysis.experiment.ExperimentExecutionArguments;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
 import org.anchoranalysis.experiment.bean.Experiment;
-import org.anchoranalysis.experiment.bean.identifier.ExperimentIdentifierSimple;
+import org.anchoranalysis.experiment.bean.identifier.ExperimentIdentifierConstant;
 import org.anchoranalysis.experiment.bean.io.InputOutputExperiment;
 import org.anchoranalysis.experiment.bean.logreporter.ConsoleLogReporterBean;
 import org.anchoranalysis.experiment.bean.processor.SequentialProcessor;
 import org.anchoranalysis.experiment.bean.task.HelloWorldTask;
 import org.anchoranalysis.experiment.task.Task;
-import org.anchoranalysis.image.io.bean.input.Stacks;
-import org.anchoranalysis.io.bean.provider.file.FileSet;
+import org.anchoranalysis.io.bean.provider.file.SearchDirectory;
 import org.anchoranalysis.io.output.bean.OutputManager;
-import org.anchoranalysis.io.bean.input.Files;
+import org.anchoranalysis.io.output.bean.OutputWriteSettings;
+import org.anchoranalysis.io.output.bean.allowed.OutputAllowed;
 import org.anchoranalysis.io.bean.input.InputManager;
-import org.anchoranalysis.io.bean.output.OutputWriteSettings;
-import org.anchoranalysis.io.bean.output.allowed.AllOutputAllowed;
-import org.anchoranalysis.io.bean.output.allowed.OutputAllowed;
 import org.anchoranalysis.mpp.io.bean.input.MultiInputManager;
 import org.anchoranalysis.mpp.io.input.MultiInput;
-import org.anchoranalysis.plugin.io.bean.filepath.rslvr.FilePathRslvr;
+import org.anchoranalysis.plugin.io.bean.filepath.prefixer.FilePathRslvr;
+import org.anchoranalysis.plugin.io.bean.input.file.Files;
+import org.anchoranalysis.plugin.io.bean.input.stack.Stacks;
+import org.anchoranalysis.plugin.io.bean.output.allowed.AllOutputAllowed;
 import org.anchoranalysis.plugin.mpp.experiment.bean.outputmanager.OutputManagerStack;
 
 /**
@@ -113,7 +113,7 @@ public class QuickExperiment extends Experiment {
 		
 	private InputOutputExperiment<MultiInput,Object> delegate;
 	
-	private ExperimentIdentifierSimple experimentIdentifier = new ExperimentIdentifierSimple("single", "1.0");
+	private ExperimentIdentifierConstant experimentIdentifier = new ExperimentIdentifierConstant("single", "1.0");
 	
 	public QuickExperiment() {
 		delegate = new InputOutputExperiment<MultiInput,Object>();
@@ -139,7 +139,7 @@ public class QuickExperiment extends Experiment {
 	}
 	
 	
-	private InputManager<MultiInput> createInputManagerImageFile( FileSet fs ) {
+	private InputManager<MultiInput> createInputManagerImageFile( SearchDirectory fs ) {
 		// Input Manager
 		Files fileInputManager = new Files();
 		
@@ -208,13 +208,13 @@ public class QuickExperiment extends Experiment {
 			
 		} else {
 			// Creates from a file
-			FileSet fs = new FileSet();
+			SearchDirectory fs = new SearchDirectory();
 			fs.setFileFilterAndDirectory(combinedFileFilter);
 			
 			delegate.setInput( createInputManagerImageFile(fs) );
 			
 			try {
-				delegate.setOutput( createOutputManager(fs.getDirectoryMaybeAbsolute( expArgs.createInputContext() )) );
+				delegate.setOutput( createOutputManager(fs.getDirectoryAsPath( expArgs.createInputContext() )) );
 				
 			} catch (IOException e) {
 				throw new ExperimentExecutionException(e);

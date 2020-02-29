@@ -27,7 +27,6 @@ package ch.ethz.biol.cell.countchrom.experiment;
  */
 
 
-import java.io.IOException;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
@@ -52,6 +51,7 @@ import org.anchoranalysis.core.name.MultiName;
 import org.anchoranalysis.core.name.store.SharedObjects;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
 import org.anchoranalysis.experiment.JobExecutionException;
+import org.anchoranalysis.experiment.task.InputTypesExpected;
 import org.anchoranalysis.experiment.task.ParametersBound;
 import org.anchoranalysis.experiment.task.ParametersExperiment;
 import org.anchoranalysis.feature.bean.list.FeatureListProvider;
@@ -66,11 +66,11 @@ import org.anchoranalysis.image.feature.bean.flexi.Simple;
 import org.anchoranalysis.image.feature.flexi.FeatureSessionFlexiFeatureTable;
 import org.anchoranalysis.image.init.ImageInitParams;
 import org.anchoranalysis.image.objmask.ObjMaskCollection;
+import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
 import org.anchoranalysis.mpp.io.input.MultiInput;
 import org.anchoranalysis.plugin.image.task.bean.feature.ExportFeaturesTask;
-
-import ch.ethz.biol.cell.countchrom.experiment.imagefeature.sharedstate.SharedStateExportFeatures;
+import org.anchoranalysis.plugin.image.task.sharedstate.SharedStateExportFeatures;
 
 
 /** Calculates feature on a 'grouped' set of objects
@@ -151,9 +151,14 @@ public class ExportFeaturesObjMaskTask extends ExportFeaturesTask<MultiInput,Sha
 		}
 		return stack;
 	}
+	
+	@Override
+	public InputTypesExpected inputTypesExpected() {
+		return new InputTypesExpected(MultiInput.class);
+	}
 
 	@Override
-	protected void doJobOnInputObject(	ParametersBound<MultiInput,SharedStateExportFeaturesObjMask> params	) throws JobExecutionException {
+	public void doJobOnInputObject(	ParametersBound<MultiInput,SharedStateExportFeaturesObjMask> params	) throws JobExecutionException {
 		
 		LogErrorReporter logErrorReporter = params.getLogErrorReporter();
 		MultiInput inputObject = params.getInputObject();
@@ -236,7 +241,7 @@ public class ExportFeaturesObjMaskTask extends ExportFeaturesTask<MultiInput,Sha
 					logErrorReporter
 				);
 			}
-		} catch (IOException | GetOperationFailedException e) {
+		} catch (AnchorIOException | GetOperationFailedException e) {
 			throw new OperationFailedException(e);
 		}
 	}

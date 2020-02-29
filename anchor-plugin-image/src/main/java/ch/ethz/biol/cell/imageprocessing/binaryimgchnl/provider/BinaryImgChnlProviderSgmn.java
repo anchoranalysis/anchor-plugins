@@ -43,7 +43,7 @@ import org.anchoranalysis.image.chnl.Chnl;
 import org.anchoranalysis.image.chnl.factory.ChnlFactory;
 import org.anchoranalysis.image.sgmn.SgmnFailedException;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
-import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeByte;
+import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
 
 public class BinaryImgChnlProviderSgmn extends BinaryImgChnlProvider {
 
@@ -73,7 +73,7 @@ public class BinaryImgChnlProviderSgmn extends BinaryImgChnlProvider {
 		return new BinaryChnl(
 			sgmnResult,
 			chnl.getDimensions().getRes(),
-			ChnlFactory.instance().get(VoxelDataTypeByte.instance)
+			ChnlFactory.instance().get(VoxelDataTypeUnsignedByte.instance)
 		);
 	}
 

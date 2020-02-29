@@ -27,9 +27,8 @@ package org.anchoranalysis.plugin.annotation.bean.comparison;
  */
 
 
-import java.io.IOException;
-
 import org.anchoranalysis.annotation.io.assignment.Assignment;
+import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
 import org.anchoranalysis.io.output.csv.CSVWriter;
 import org.anchoranalysis.plugin.annotation.comparison.AnnotationGroup;
@@ -51,7 +50,7 @@ class CSVComparisonGroup<T extends Assignment> {
 		);		
 	}
 	
-	public void writeGroupStats( BoundOutputManagerRouteErrors outputManager ) throws IOException {
+	public void writeGroupStats( BoundOutputManagerRouteErrors outputManager ) throws AnchorIOException {
 		
 		CSVWriter writer = CSVWriter.createFromOutputManager("byGroup", outputManager.getDelegate());
 

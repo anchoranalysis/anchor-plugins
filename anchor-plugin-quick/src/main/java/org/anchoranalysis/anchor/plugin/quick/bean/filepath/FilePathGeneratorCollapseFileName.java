@@ -26,12 +26,12 @@ package org.anchoranalysis.anchor.plugin.quick.bean.filepath;
  * #L%
  */
 
-import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.io.bean.filepath.generator.FilePathGenerator;
+import org.anchoranalysis.io.error.AnchorIOException;
 import org.apache.commons.io.FilenameUtils;
 
 /**
@@ -52,12 +52,12 @@ public class FilePathGeneratorCollapseFileName extends FilePathGenerator {
 	// END BEAN FIELDS
 	
 	@Override
-	public Path outFilePath(Path pathIn, boolean debugMode) throws IOException {
+	public Path outFilePath(Path pathIn, boolean debugMode) throws AnchorIOException {
 		Path path = filePathGenerator.outFilePath(pathIn, debugMode);
 		return collapse(path);
 	}
 	
-	private static Path collapse( Path path ) throws IOException {
+	private static Path collapse( Path path ) throws AnchorIOException {
 		
 		PathTwoParts pathDir = new PathTwoParts(path);
 		

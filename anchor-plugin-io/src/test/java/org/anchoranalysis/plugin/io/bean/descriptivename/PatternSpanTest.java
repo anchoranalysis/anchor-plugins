@@ -31,31 +31,89 @@ import static org.junit.Assert.*;
 import java.io.File;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
-import org.anchoranalysis.io.bean.input.descriptivename.DescriptiveFile;
+import org.anchoranalysis.io.error.AnchorIOException;
+import org.anchoranalysis.io.input.descriptivename.DescriptiveFile;
+import org.anchoranalysis.plugin.io.bean.descriptivename.patternspan.PatternSpan;
 import org.junit.Test;
 
 public class PatternSpanTest {
 
 	@Test
-	public void test() {
-		PatternSpan ps = new PatternSpan();
-		List<DescriptiveFile> ret = ps.descriptiveNamesFor( createFiles(), "<UNKNOWN>");
+	public void testSimple() throws AnchorIOException {
 		
-		assertIndexEquals( ret, 0, "b");
-		assertIndexEquals( ret, 1, "d");
-		assertIndexEquals( ret, 2, "e");
+		String inputs[] = {
+			"/a/b/c.txt",
+			"/a/d/c.txt",
+			"/a/e/c.txt"
+		};
+
+		String expected[] = {"b", "d", "e"};
+		applyTest(inputs, expected);
 	}
 	
-	private List<File> createFiles() {
-		File file1 = new File("/a/b/c");
-		File file2 = new File("/a/d/c");
-		File file3 = new File("/a/e/c");
-		return Arrays.asList(file1, file2, file3);
+	@Test
+	public void testPaths() throws AnchorIOException {
+		String inputs[] = {
+			"D:/Users/owen/Pictures/To Integrate/Feb 2020/P1210940.JPG",
+			"D:/Users/owen/Pictures/To Integrate/Feb 2020/Klosters (Feb 2020)/P1210904.JPG"
+		};
+		
+		String expected[] = {
+			"P1210940",
+			"Klosters (Feb 2020)/P1210904"
+		};
+
+		applyTest(inputs, expected);
 	}
 	
-	private void assertIndexEquals( List<DescriptiveFile> ret, int index, String expected ) {
+	@Test
+	public void testEmptyStr() throws AnchorIOException {
+		String inputs[] = {
+			"D:/Users/owen/Pictures/To Integrate/Feb 2020/P1210940.JPG",
+			"D:/Users/owen/Pictures/To Integrate/Feb 2020/P1210940.JPG.TXT"
+		};
+		
+		String expected[] = {
+			"P1210940.JPG",
+			"P1210940.JPG.TXT"
+		};
+
+		applyTest(inputs, expected);
+	}
+	
+	// When there is no extension, the right-side should be kept
+	@Test
+	public void testWithoutExtension() throws AnchorIOException {
+		
+		String inputs[] = {
+			"/a/b/c",
+			"/a/d/c",
+			"/a/e/c"
+		};
+
+		String expected[] = {"b/c", "d/c", "e/c"};
+		applyTest(inputs, expected);
+	}
+	
+	private static void applyTest( String[] paths, String[] expected ) {
+		List<File> files = filesFromStrs(paths);
+		
+		PatternSpan ps = new PatternSpan();
+		List<DescriptiveFile> ret = ps.descriptiveNamesFor(files, "unknown");
+		
+		for( int i=0; i<expected.length; i++ ) {
+			assertIndexEquals( ret, i, expected[i]);
+		}
+	}
+	
+	private static List<File> filesFromStrs( String[] paths ) {
+		return Arrays.stream(paths).map( str -> new File(str) ).collect( Collectors.toList() );
+	}
+	
+	private static void assertIndexEquals( List<DescriptiveFile> ret, int index, String expected ) {
 		String actual = ret.get(index).getDescriptiveName();
-		assertEquals( actual, expected);
+		assertEquals( expected, actual );
 	}
 }

@@ -2,6 +2,8 @@ package org.anchoranalysis.plugin.io.bean.task;
 
 
 
+import org.anchoranalysis.experiment.task.InputTypesExpected;
+
 /*-
  * #%L
  * anchor-plugin-io
@@ -41,5 +43,9 @@ public class SummarizeInputsTask<T extends InputFromManager> extends SummarizeTa
 	protected T extractObjectForSummary(T input) {
 		return input;
 	}
-
+	
+	@Override
+	public InputTypesExpected inputTypesExpected() {
+		return new InputTypesExpected(InputFromManager.class);
+	}
 }

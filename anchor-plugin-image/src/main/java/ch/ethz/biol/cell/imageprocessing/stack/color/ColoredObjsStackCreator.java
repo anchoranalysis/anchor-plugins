@@ -41,7 +41,7 @@ import org.anchoranalysis.io.bean.color.generator.HSBColorSetGenerator;
 import org.anchoranalysis.io.bean.color.generator.ShuffleColorSetGenerator;
 import org.anchoranalysis.io.bean.objmask.writer.RGBOutlineWriter;
 import org.anchoranalysis.io.bean.objmask.writer.RGBSolidWriter;
-import org.anchoranalysis.io.output.OutputWriteFailedException;
+import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
 public class ColoredObjsStackCreator {
 

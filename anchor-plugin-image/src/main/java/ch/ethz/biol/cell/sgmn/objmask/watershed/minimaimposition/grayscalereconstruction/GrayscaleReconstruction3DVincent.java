@@ -34,7 +34,7 @@ import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.anchoranalysis.image.voxel.box.VoxelBoxWrapper;
 import org.anchoranalysis.image.voxel.box.factory.VoxelBoxFactory;
-import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeByte;
+import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
 
 // Self-made grayscale reconstruction by erosion
 // See
@@ -55,7 +55,7 @@ public class GrayscaleReconstruction3DVincent extends GrayscaleReconstructionByE
 	public VoxelBoxWrapper reconstruction(VoxelBoxWrapper mask,
 			VoxelBoxWrapper marker) throws OperationFailedException {
 
-		if (!marker.getVoxelDataType().equals(VoxelDataTypeByte.instance) || !mask.getVoxelDataType().equals(VoxelDataTypeByte.instance)) {
+		if (!marker.getVoxelDataType().equals(VoxelDataTypeUnsignedByte.instance) || !mask.getVoxelDataType().equals(VoxelDataTypeUnsignedByte.instance)) {
 			throw new OperationFailedException("Only unsigned byte supported for marker image");
 		}
 		

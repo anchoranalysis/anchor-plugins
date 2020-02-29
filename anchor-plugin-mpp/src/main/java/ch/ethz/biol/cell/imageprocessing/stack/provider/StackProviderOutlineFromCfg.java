@@ -41,7 +41,7 @@ import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.io.bean.color.generator.ColorSetGenerator;
 import org.anchoranalysis.io.bean.color.generator.HSBColorSetGenerator;
 import org.anchoranalysis.io.bean.objmask.writer.RGBOutlineWriter;
-import org.anchoranalysis.io.output.OutputWriteFailedException;
+import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
 import ch.ethz.biol.cell.imageprocessing.io.generator.raster.CfgGenerator;
 import ch.ethz.biol.cell.imageprocessing.io.generator.raster.ColoredCfgWithDisplayStack;

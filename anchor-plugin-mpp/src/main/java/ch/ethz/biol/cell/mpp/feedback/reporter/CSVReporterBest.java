@@ -1,10 +1,10 @@
 package ch.ethz.biol.cell.mpp.feedback.reporter;
 
-/*
+/*-
  * #%L
  * anchor-plugin-mpp
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -26,10 +26,8 @@ package ch.ethz.biol.cell.mpp.feedback.reporter;
  * #L%
  */
 
-
-import java.io.IOException;
-
-import org.anchoranalysis.io.output.OutputWriteFailedException;
+import org.anchoranalysis.io.error.AnchorIOException;
+import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.io.output.file.FileOutput;
 import org.anchoranalysis.mpp.sgmn.optscheme.step.Reporting;
 
@@ -90,7 +88,7 @@ public class CSVReporterBest extends ReporterOptimizationStep<CfgNRGPixelized> {
 					this.csvOutput.getWriter().printf("Itr,Size,Best_Nrg%n");
 				}
 			}
-		} catch (IOException e) {
+		} catch (AnchorIOException e) {
 			throw new ReporterException(e);
 		}
 

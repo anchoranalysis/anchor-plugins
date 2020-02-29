@@ -36,13 +36,13 @@ import org.anchoranalysis.image.chnl.Chnl;
 import org.anchoranalysis.image.chnl.factory.ChnlFactory;
 import org.anchoranalysis.image.convert.ImgLib2Wrap;
 import org.anchoranalysis.image.stack.region.chnlconverter.ChnlConverter;
-import org.anchoranalysis.image.stack.region.chnlconverter.ChnlConverterToByte;
-import org.anchoranalysis.image.stack.region.chnlconverter.ChnlConverterToShort;
+import org.anchoranalysis.image.stack.region.chnlconverter.ChnlConverterToUnsignedByte;
+import org.anchoranalysis.image.stack.region.chnlconverter.ChnlConverterToUnsignedShort;
 import org.anchoranalysis.image.stack.region.chnlconverter.ConversionPolicy;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
-import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeByte;
+import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeFloat;
-import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeShort;
+import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedShort;
 
 import net.imglib2.Cursor;
 import net.imglib2.RandomAccess;
@@ -162,10 +162,10 @@ public class ChnlProviderEdgeFilter extends ChnlProvider {
 		
 		NativeImg<FloatType,FloatArray> natOut = ImgLib2Wrap.wrapFloat(vb, true);
 		
-		if (chnlIn.getVoxelDataType().equals(VoxelDataTypeByte.instance)) {
+		if (chnlIn.getVoxelDataType().equals(VoxelDataTypeUnsignedByte.instance)) {
 			NativeImg<UnsignedByteType,ByteArray> natIn = ImgLib2Wrap.wrapByte(chnlIn.getVoxelBox().asByte(), true);
 			process(natIn,natOut, (float) scaleFactor);
-		} else if (chnlIn.getVoxelDataType().equals(VoxelDataTypeShort.instance)) {
+		} else if (chnlIn.getVoxelDataType().equals(VoxelDataTypeUnsignedShort.instance)) {
 			NativeImg<UnsignedShortType,ShortArray> natIn = ImgLib2Wrap.wrapShort(chnlIn.getVoxelBox().asShort(), true );
 			process(natIn,natOut, (float) scaleFactor);
 		} else {
@@ -173,7 +173,7 @@ public class ChnlProviderEdgeFilter extends ChnlProvider {
 		}
 		
 		// convert to our output from the float
-		ChnlConverter<?> converter = outputShort ? new ChnlConverterToShort() : new ChnlConverterToByte();
+		ChnlConverter<?> converter = outputShort ? new ChnlConverterToUnsignedShort() : new ChnlConverterToUnsignedByte();
 		return converter.convert(chnlIntermediate, ConversionPolicy.CHANGE_EXISTING_CHANNEL );
 	}
 

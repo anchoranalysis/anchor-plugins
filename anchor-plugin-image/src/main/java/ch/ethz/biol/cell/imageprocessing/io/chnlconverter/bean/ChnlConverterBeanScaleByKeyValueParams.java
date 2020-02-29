@@ -32,7 +32,7 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.params.KeyValueParams;
 import org.anchoranalysis.image.bean.chnl.converter.ChnlConverterBean;
 import org.anchoranalysis.image.stack.region.chnlconverter.ChnlConverter;
-import org.anchoranalysis.image.stack.region.chnlconverter.ChnlConverterToByteScaleByMinMaxValue;
+import org.anchoranalysis.image.stack.region.chnlconverter.ChnlConverterToUnsignedByteScaleByMinMaxValue;
 
 /**
  * Scales by compressing a certain range of values into the 8-bit signal
@@ -74,7 +74,7 @@ public class ChnlConverterBeanScaleByKeyValueParams extends ChnlConverterBean {
 		
 		getLogger().getLogReporter().logFormatted("ChnlConverter: scale with min=%d max=%d%n", min, max);
 		
-		return new ChnlConverterToByteScaleByMinMaxValue(min, max);
+		return new ChnlConverterToUnsignedByteScaleByMinMaxValue(min, max);
 	}
 	
 	private int getScaled( KeyValueParams kvp, String key, double scale ) throws CreateException {

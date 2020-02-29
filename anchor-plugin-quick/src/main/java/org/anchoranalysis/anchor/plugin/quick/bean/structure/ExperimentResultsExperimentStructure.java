@@ -27,18 +27,18 @@ package org.anchoranalysis.anchor.plugin.quick.bean.structure;
  */
 
 import java.io.File;
-import java.io.IOException;
 import java.util.Collection;
 
 import org.anchoranalysis.bean.BeanInstanceMap;
 import org.anchoranalysis.bean.annotation.AllowEmpty;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.error.BeanMisconfiguredException;
-import org.anchoranalysis.core.progress.ProgressReporter;
+import org.anchoranalysis.io.bean.file.matcher.MatchGlob;
+import org.anchoranalysis.io.bean.input.InputManagerParams;
 import org.anchoranalysis.io.bean.provider.file.FileProvider;
 import org.anchoranalysis.io.bean.provider.file.FileProviderWithDirectory;
-import org.anchoranalysis.io.bean.provider.file.FileSet;
-import org.anchoranalysis.io.params.InputContextParams;
+import org.anchoranalysis.io.bean.provider.file.SearchDirectory;
+import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.plugin.io.bean.provider.file.RootedFileSet;
 
 /**
@@ -131,9 +131,9 @@ public class ExperimentResultsExperimentStructure extends FileProvider {
 	}
 	
 	private FileProviderWithDirectory createFiles() {
-		FileSet out = new FileSet();
+		SearchDirectory out = new SearchDirectory();
 		out.setDirectory( new DirectoryCreator().apply() );
-		out.setFileFilter(fileFilter);
+		out.setMatcher( new MatchGlob(fileFilter) );
 		out.setRecursive(recursive);
 		out.setMaxDirectoryDepth(maxDirectoryDepth);
 		return out;
@@ -187,8 +187,8 @@ public class ExperimentResultsExperimentStructure extends FileProvider {
 	}
 		
 	@Override
-	public Collection<File> matchingFiles(ProgressReporter progressReporter, InputContextParams inputContext) throws IOException {
-		return delegate.matchingFiles(progressReporter, inputContext);
+	public Collection<File> matchingFiles(InputManagerParams params) throws AnchorIOException {
+		return delegate.matchingFiles(params);
 	}
 
 	public String getExperimentType() {

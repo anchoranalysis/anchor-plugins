@@ -1,7 +1,5 @@
 package ch.ethz.biol.cell.countchrom.experiment;
 
-import org.anchoranalysis.anchor.mpp.mark.Mark;
-import org.anchoranalysis.anchor.overlay.Overlay;
 import org.anchoranalysis.bean.annotation.AllowEmpty;
 
 /*
@@ -34,10 +32,8 @@ import org.anchoranalysis.bean.annotation.AllowEmpty;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.error.BeanDuplicateException;
-import org.anchoranalysis.core.color.ColorIndex;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.idgetter.IDGetterIter;
 import org.anchoranalysis.core.index.GetOperationFailedException;
 import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.core.log.LogReporter;
@@ -46,6 +42,7 @@ import org.anchoranalysis.core.name.store.NamedProviderStore;
 import org.anchoranalysis.core.params.KeyValueParams;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
 import org.anchoranalysis.experiment.JobExecutionException;
+import org.anchoranalysis.experiment.task.InputTypesExpected;
 import org.anchoranalysis.experiment.task.ParametersBound;
 import org.anchoranalysis.experiment.task.ParametersExperiment;
 import org.anchoranalysis.experiment.task.Task;
@@ -54,17 +51,12 @@ import org.anchoranalysis.image.sgmn.SgmnFailedException;
 import org.anchoranalysis.image.stack.DisplayStack;
 import org.anchoranalysis.image.stack.NamedImgStackCollection;
 import org.anchoranalysis.image.stack.wrap.WrapStackAsTimeSequenceStore;
-import org.anchoranalysis.io.bean.objmask.writer.RGBOutlineWriter;
-import org.anchoranalysis.io.bean.objmask.writer.RGBSolidWriter;
 import org.anchoranalysis.io.generator.serialized.XStreamGenerator;
 import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
 import org.anchoranalysis.mpp.io.input.MultiInput;
 import org.anchoranalysis.plugin.mpp.sgmn.BackgroundCreator;
 
-import ch.ethz.biol.cell.imageprocessing.io.generator.raster.CfgGenerator;
-import ch.ethz.biol.cell.imageprocessing.io.generator.raster.ColoredCfgWithDisplayStack;
 import ch.ethz.biol.cell.mpp.cfg.Cfg;
-import ch.ethz.biol.cell.mpp.gui.videostats.internalframe.markredraw.ColoredCfg;
 import ch.ethz.biol.cell.sgmn.cfg.CfgSgmn;
 import ch.ethz.biol.cell.sgmn.cfg.ExperimentState;
 
@@ -91,52 +83,90 @@ public class CfgSgmnTask extends Task<MultiInput,ExperimentState>{
 	}
 	
 	@Override
-	protected void doJobOnInputObject(	ParametersBound<MultiInput,ExperimentState> params)	throws JobExecutionException {
+	public void doJobOnInputObject(	ParametersBound<MultiInput,ExperimentState> params)	throws JobExecutionException {
 
 		LogErrorReporter logErrorReporter = params.getLogErrorReporter();
 		MultiInput inputObject = params.getInputObject();
-		BoundOutputManagerRouteErrors outputManager = params.getOutputManager();
 		
 		assert(logErrorReporter!=null);
 		
 		try {
-			CfgSgmn is = sgmn.duplicateBean();
-		
-			//NamedChnlCollectionForSeries ncc = inputObject.createForSeries(0, progressReporter);
+			NamedImgStackCollection stackCollection = stacksFromInput(inputObject);
 			
-			NamedImgStackCollection stackCollection = new NamedImgStackCollection();
-			inputObject.stack().addToStore(
-				new WrapStackAsTimeSequenceStore(stackCollection)
+			NamedProviderStore<ObjMaskCollection> objs = objsFromInput(inputObject, logErrorReporter);
+					
+			KeyValueParams keyValueParams = keyValueParamsFromInput(inputObject, logErrorReporter);
+			
+			Cfg cfg = sgmn.duplicateBean().sgmn(
+				stackCollection,
+				objs,
+				params.getExperimentArguments(),
+				keyValueParams,
+				logErrorReporter,
+				params.getOutputManager()
 			);
+			writeVisualization(cfg, params.getOutputManager(), stackCollection, logErrorReporter);
 			
-			NamedProviderStore<KeyValueParams> paramsCollection = new LazyEvaluationStore<>(logErrorReporter, "keyValueParams"); 
-			inputObject.keyValueParams().addToStore(paramsCollection);
-			
-			// We select a particular key value params to send as output
-			KeyValueParams paramsKeyValue = (!keyValueParamsID.isEmpty()) ? paramsCollection.getException(keyValueParamsID) : null;
-			
-			
-			NamedProviderStore<ObjMaskCollection> objMaskCollectionStore = new LazyEvaluationStore<>(logErrorReporter, "objMaskCollection");
-			inputObject.objs().addToStore(objMaskCollectionStore);
-			
-			Cfg cfg = is.sgmn( stackCollection, objMaskCollectionStore, params.getExperimentArguments(), paramsKeyValue, logErrorReporter, params.getOutputManager() );
-	
-			outputManager.getWriterCheckIfAllowed().write(
-				"cfg",
-				() -> new XStreamGenerator<Object>(cfg, "cfg")
-			);
-
-			
-			{
-				DisplayStack backgroundStack = BackgroundCreator.createBackground(
-					stackCollection,
-					sgmn.getBackgroundStackName()
-				);
-				writeCfgVisualizations(cfg, outputManager, backgroundStack);
-			}
-			
-		} catch (SgmnFailedException | OperationFailedException | GetOperationFailedException | BeanDuplicateException | CreateException e) {
+		} catch (SgmnFailedException e) {
+			throw new JobExecutionException("An error occurred segmenting a configuration", e);
+		} catch (BeanDuplicateException e) {
+			throw new JobExecutionException("An error occurred duplicating the sgmn bean", e);
+		} catch (OperationFailedException e) {
 			throw new JobExecutionException(e);
+		}
+	}
+	
+	@Override
+	public InputTypesExpected inputTypesExpected() {
+		return new InputTypesExpected(MultiInput.class);
+	}
+	
+	private NamedImgStackCollection stacksFromInput( MultiInput inputObject ) throws OperationFailedException {
+		NamedImgStackCollection stackCollection = new NamedImgStackCollection();
+		inputObject.stack().addToStore(
+			new WrapStackAsTimeSequenceStore(stackCollection)
+		);
+		return stackCollection;
+	}
+	
+	private KeyValueParams keyValueParamsFromInput( MultiInput inputObject, LogErrorReporter logErrorReporter ) throws JobExecutionException {
+		NamedProviderStore<KeyValueParams> paramsCollection = new LazyEvaluationStore<>(logErrorReporter, "keyValueParams"); 
+		try {
+			inputObject.keyValueParams().addToStore(paramsCollection);
+		} catch (OperationFailedException e1) {
+			throw new JobExecutionException("Cannot retrieve key-value-params from input-object");
+		}
+		
+		// We select a particular key value params to send as output
+		try {
+			return (!keyValueParamsID.isEmpty()) ? paramsCollection.getException(keyValueParamsID) : null;
+		} catch (GetOperationFailedException e) {
+			throw new JobExecutionException("Cannot retrieve key-values-params", e);
+		}
+	}
+	
+	
+	private NamedProviderStore<ObjMaskCollection> objsFromInput( MultiInput inputObject, LogErrorReporter logErrorReporter ) throws OperationFailedException {
+		NamedProviderStore<ObjMaskCollection> objMaskCollectionStore = new LazyEvaluationStore<>(logErrorReporter, "objMaskCollection");
+		inputObject.objs().addToStore(objMaskCollectionStore);
+		return objMaskCollectionStore;
+	}
+	
+	private void writeVisualization( Cfg cfg, BoundOutputManagerRouteErrors outputManager, NamedImgStackCollection stackCollection, LogErrorReporter logErrorReporter ) {
+		outputManager.getWriterCheckIfAllowed().write(
+			"cfg",
+			() -> new XStreamGenerator<Object>(cfg, "cfg")
+		);
+		
+		try {
+			DisplayStack backgroundStack = BackgroundCreator.createBackground(
+				stackCollection,
+				sgmn.getBackgroundStackName()
+			);
+			
+			CfgVisualization.write(cfg, outputManager, backgroundStack);
+		} catch (OperationFailedException | CreateException e) {
+			logErrorReporter.getErrorReporter().recordError(CfgSgmnTask.class, e);
 		}
 	}
 	
@@ -144,31 +174,7 @@ public class CfgSgmnTask extends Task<MultiInput,ExperimentState>{
 	public boolean hasVeryQuickPerInputExecution() {
 		return false;
 	}
-	
-	private void writeCfgVisualizations( Cfg cfg, BoundOutputManagerRouteErrors outputManager, DisplayStack backgroundStack ) throws OperationFailedException {
-		ColorIndex colorIndex = outputManager.getOutputWriteSettings().genDefaultColorIndex(cfg.size());
 		
-		ColoredCfg coloredCfg = new ColoredCfg(cfg,colorIndex,new IDGetterIter<Mark>());
-		
-		//outputManager.write( "config", new CfgNRGGenerator(cfgNRG, chromSgmn.getNrgScheme(), stackChnlChrom, null, colorIndex, new IDGetterIter<Mark>()) );
-		outputManager.getWriterCheckIfAllowed().write(
-			"solid",
-			() -> new CfgGenerator(
-				new RGBSolidWriter(),
-				new ColoredCfgWithDisplayStack( coloredCfg, backgroundStack),
-				new IDGetterIter<Overlay>()
-			)
-		);
-		outputManager.getWriterCheckIfAllowed().write(
-			"outline",
-			() -> new CfgGenerator(
-				new RGBOutlineWriter(),
-				new ColoredCfgWithDisplayStack( coloredCfg, backgroundStack),
-				new IDGetterIter<Overlay>()
-			)
-		);
-	}
-	
 	@Override
 	public ExperimentState beforeAnyJobIsExecuted(BoundOutputManagerRouteErrors outputManager, ParametersExperiment params) throws ExperimentExecutionException {
 		ExperimentState es = sgmn.createExperimentState();

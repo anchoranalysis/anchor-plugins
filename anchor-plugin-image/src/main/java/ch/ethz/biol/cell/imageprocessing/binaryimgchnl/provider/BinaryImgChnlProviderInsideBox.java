@@ -37,7 +37,7 @@ import org.anchoranalysis.image.chnl.Chnl;
 import org.anchoranalysis.image.chnl.factory.ChnlFactory;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.ImageDim;
-import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeByte;
+import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
 
 /** Creates a binary img-chnl where all pixels are 'on' within a certain x, y, z co-ordinate range
  * 
@@ -85,7 +85,7 @@ public class BinaryImgChnlProviderInsideBox extends BinaryImgChnlProvider {
 		
 		ImageDim dims = dimProvider.create();
 		
-		Chnl chnl = ChnlFactory.instance().createEmptyInitialised(dims, VoxelDataTypeByte.instance );
+		Chnl chnl = ChnlFactory.instance().createEmptyInitialised(dims, VoxelDataTypeUnsignedByte.instance );
 		
 		BoundingBox bbox = createBox(dims);
 		

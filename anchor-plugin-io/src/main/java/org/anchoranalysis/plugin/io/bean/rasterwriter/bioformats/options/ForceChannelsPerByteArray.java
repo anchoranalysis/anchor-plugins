@@ -75,6 +75,11 @@ public class ForceChannelsPerByteArray extends ReadOptions {
 	}
 	
 	@Override
+	public boolean isRGB(IFormatReader reader) {
+		return options.isRGB(reader);
+	}
+	
+	@Override
 	public int effectiveBitsPerPixel(IFormatReader reader) {
 		return options.effectiveBitsPerPixel(reader);
 	}

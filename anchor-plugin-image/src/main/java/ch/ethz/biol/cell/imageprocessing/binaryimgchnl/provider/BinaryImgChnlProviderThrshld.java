@@ -40,7 +40,7 @@ import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
 import org.anchoranalysis.image.chnl.Chnl;
 import org.anchoranalysis.image.chnl.factory.ChnlFactory;
-import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeByte;
+import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
 
 public class BinaryImgChnlProviderThrshld extends BinaryImgChnlProvider {
 
@@ -68,7 +68,7 @@ public class BinaryImgChnlProviderThrshld extends BinaryImgChnlProvider {
 			return new BinaryChnl(
 				bvb,
 				chnl.getDimensions().getRes(),
-				ChnlFactory.instance().get(VoxelDataTypeByte.instance)
+				ChnlFactory.instance().get(VoxelDataTypeUnsignedByte.instance)
 			);
 		} catch (OperationFailedException e) {
 			throw new CreateException(e);

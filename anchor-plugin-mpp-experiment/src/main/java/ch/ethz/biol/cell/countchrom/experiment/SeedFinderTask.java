@@ -38,6 +38,7 @@ import org.anchoranalysis.core.name.store.NamedProviderStore;
 import org.anchoranalysis.core.params.KeyValueParams;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
 import org.anchoranalysis.experiment.JobExecutionException;
+import org.anchoranalysis.experiment.task.InputTypesExpected;
 import org.anchoranalysis.experiment.task.ParametersBound;
 import org.anchoranalysis.experiment.task.ParametersExperiment;
 import org.anchoranalysis.experiment.task.Task;
@@ -103,7 +104,12 @@ public class SeedFinderTask<S> extends Task<MultiInput,S> {
 	}
 	
 	@Override
-	protected void doJobOnInputObject(	ParametersBound<MultiInput,S> params ) throws JobExecutionException {
+	public InputTypesExpected inputTypesExpected() {
+		return new InputTypesExpected(MultiInput.class);
+	}
+		
+	@Override
+	public void doJobOnInputObject(	ParametersBound<MultiInput,S> params ) throws JobExecutionException {
 		
 		LogErrorReporter logErrorReporter = params.getLogErrorReporter();
 		MultiInput inputObject = params.getInputObject();

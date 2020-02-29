@@ -28,6 +28,8 @@ package ch.ethz.biol.cell.mpp.nrg.feature.session;
 
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.feature.bean.list.FeatureList;
+import org.anchoranalysis.test.feature.plugins.FeatureListFixture;
+
 import anchor.test.TestLoader;
 
 public class FeatureListFixtureMPP {

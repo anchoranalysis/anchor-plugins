@@ -60,7 +60,7 @@ public class TestReaderWriterUtilities {
 		
 	private static AnchorDefaultBeanFactory getOrCreateBeanFactory() {
 		if (!RegisterBeanFactories.isCalledRegisterAllPackage()) {
-			return RegisterBeanFactories.registerAllPackageBeanFactories(false);
+			return RegisterBeanFactories.registerAllPackageBeanFactories();
 		} else {
 			return (AnchorDefaultBeanFactory) BeanHelper.getDefaultBeanFactory();
 		}		

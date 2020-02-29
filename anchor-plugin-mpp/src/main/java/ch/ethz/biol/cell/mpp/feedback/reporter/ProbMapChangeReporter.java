@@ -36,10 +36,10 @@ import org.anchoranalysis.io.generator.IterableGenerator;
 import org.anchoranalysis.io.generator.sequence.GeneratorSequenceNonIncrementalWriter;
 import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.manifest.sequencetype.ChangeSequenceType;
-import org.anchoranalysis.io.output.OutputWriteFailedException;
+import org.anchoranalysis.io.namestyle.IndexableOutputNameStyle;
+import org.anchoranalysis.io.namestyle.IntegerSuffixOutputNameStyle;
 import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
-import org.anchoranalysis.io.output.namestyle.IndexableOutputNameStyle;
-import org.anchoranalysis.io.output.namestyle.IntegerSuffixOutputNameStyle;
+import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.mpp.sgmn.optscheme.step.Reporting;
 
 import ch.ethz.biol.cell.imageprocessing.io.generator.raster.ProbMapGenerator;

@@ -28,7 +28,6 @@ package org.anchoranalysis.plugin.annotation.bean.fileprovider;
 
 
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -37,17 +36,16 @@ import org.anchoranalysis.annotation.io.bean.input.AnnotationInputManager;
 import org.anchoranalysis.annotation.io.bean.strategy.AnnotatorStrategy;
 import org.anchoranalysis.annotation.io.input.AnnotationWithStrategy;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.progress.ProgressReporter;
-import org.anchoranalysis.image.io.input.NamedChnlsInputBase;
+import org.anchoranalysis.image.io.input.NamedChnlsInputPart;
+import org.anchoranalysis.io.bean.input.InputManagerParams;
 import org.anchoranalysis.io.bean.provider.file.FileProvider;
-import org.anchoranalysis.io.deserializer.DeserializationFailedException;
-import org.anchoranalysis.io.params.InputContextParams;
+import org.anchoranalysis.io.error.AnchorIOException;
 
 public class FileProviderFromAnnotation<T extends AnnotatorStrategy> extends FileProvider {
 	
 	// START BEAN PROPERTIES
 	@BeanField
-	private AnnotationInputManager<NamedChnlsInputBase,T> annotationInputManager;
+	private AnnotationInputManager<NamedChnlsInputPart,T> annotationInputManager;
 	// END BEAN PROPERTIES
 	
 	/**
@@ -56,13 +54,13 @@ public class FileProviderFromAnnotation<T extends AnnotatorStrategy> extends Fil
 	private static final long serialVersionUID = 1L;
 
 	@Override
-	public Collection<File> matchingFiles(ProgressReporter progressReporter, InputContextParams inputContext)
-			throws IOException {
+	public Collection<File> matchingFiles(InputManagerParams params)
+			throws AnchorIOException {
 
 		List<File> filesOut = new ArrayList<File>();
 		
 		try {
-			List<AnnotationWithStrategy<T>> list = annotationInputManager.inputObjects(inputContext, progressReporter);
+			List<AnnotationWithStrategy<T>> list = annotationInputManager.inputObjects(params);
 			for( AnnotationWithStrategy<T> inp : list ) {
 								
 				filesOut.addAll(
@@ -71,19 +69,19 @@ public class FileProviderFromAnnotation<T extends AnnotatorStrategy> extends Fil
 				
 			}
 			
-		} catch (DeserializationFailedException e) {
-			throw new IOException(e);
+		} catch (AnchorIOException e) {
+			throw new AnchorIOException("Cannot create annotation-input objects", e);
 		}
 		
 		return filesOut;
 	}
 		
-	public AnnotationInputManager<NamedChnlsInputBase,T> getAnnotationInputManager() {
+	public AnnotationInputManager<NamedChnlsInputPart,T> getAnnotationInputManager() {
 		return annotationInputManager;
 	}
 
 	public void setAnnotationInputManager(
-			AnnotationInputManager<NamedChnlsInputBase,T> annotationInputManager) {
+			AnnotationInputManager<NamedChnlsInputPart,T> annotationInputManager) {
 		this.annotationInputManager = annotationInputManager;
 	}
 

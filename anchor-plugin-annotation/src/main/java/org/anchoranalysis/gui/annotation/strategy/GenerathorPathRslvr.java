@@ -26,10 +26,10 @@ package org.anchoranalysis.gui.annotation.strategy;
  * #L%
  */
 
-import java.io.IOException;
 import java.nio.file.Path;
 
 import org.anchoranalysis.io.bean.filepath.generator.FilePathGenerator;
+import org.anchoranalysis.io.error.AnchorIOException;
 
 public class GenerathorPathRslvr {
 
@@ -44,11 +44,11 @@ public class GenerathorPathRslvr {
 		this.pathForBinding = pathForBinding;
 	}	
 	
-	public Path path( FilePathGenerator generator ) throws IOException {
+	public Path path( FilePathGenerator generator ) throws AnchorIOException {
 		return generator.outFilePath( pathForBinding, DEBUG_MODE_NON_INPUT );
 	}
 	
-	public Path pathOrNull( FilePathGenerator generator ) throws IOException {
+	public Path pathOrNull( FilePathGenerator generator ) throws AnchorIOException {
 		if (generator!=null) {
 			return path( generator );
 		} else {

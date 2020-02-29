@@ -4,7 +4,7 @@ package org.anchoranalysis.plugin.io.bean.filepath;
  * #%L
  * anchor-plugin-io
  * %%
- * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -26,10 +26,10 @@ package org.anchoranalysis.plugin.io.bean.filepath;
  * #L%
  */
 
-import java.io.IOException;
 import java.nio.file.Path;
 
 import org.anchoranalysis.bean.AnchorBean;
+import org.anchoranalysis.io.error.AnchorIOException;
 
 public abstract class FilePath extends AnchorBean<FilePath> {
 
@@ -38,5 +38,5 @@ public abstract class FilePath extends AnchorBean<FilePath> {
 	 */
 	private static final long serialVersionUID = 1L;
 
-	public abstract Path path(boolean debugMode) throws IOException;
+	public abstract Path path(boolean debugMode) throws AnchorIOException;
 }

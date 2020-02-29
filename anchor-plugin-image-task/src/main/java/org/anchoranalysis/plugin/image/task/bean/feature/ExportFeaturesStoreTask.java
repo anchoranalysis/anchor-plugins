@@ -26,7 +26,6 @@ package org.anchoranalysis.plugin.image.task.bean.feature;
  * #L%
  */
 
-import java.io.IOException;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
@@ -49,10 +48,10 @@ import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.calc.ResultsVector;
 import org.anchoranalysis.feature.io.csv.GroupedResultsVectorCollection;
 import org.anchoranalysis.feature.list.NamedFeatureStore;
+import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.input.InputFromManager;
 import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
-
-import ch.ethz.biol.cell.countchrom.experiment.imagefeature.sharedstate.SharedStateExportFeaturesWithStore;
+import org.anchoranalysis.plugin.image.task.sharedstate.SharedStateExportFeaturesWithStore;
 
 /**
  * Base class for exporting features, where features are calculated per-image
@@ -99,7 +98,7 @@ public abstract class ExportFeaturesStoreTask<T extends InputFromManager> extend
 	}
 
 	@Override
-	protected void doJobOnInputObject( ParametersBound<T,SharedStateExportFeaturesWithStore> params ) throws JobExecutionException {
+	public void doJobOnInputObject( ParametersBound<T,SharedStateExportFeaturesWithStore> params ) throws JobExecutionException {
 		
 		try {
 			ResultsVector rv = calcResultsVectorForInputObject(
@@ -142,7 +141,7 @@ public abstract class ExportFeaturesStoreTask<T extends InputFromManager> extend
 				extractGroupName(inputPath, false),
 				extractImageIdentifier(inputPath, false)
 			);		
-		} catch (IOException e) {
+		} catch (AnchorIOException e) {
 			throw new OperationFailedException(e);
 		}
 	}

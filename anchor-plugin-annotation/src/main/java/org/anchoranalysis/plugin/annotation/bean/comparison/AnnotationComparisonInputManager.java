@@ -27,8 +27,6 @@ package org.anchoranalysis.plugin.annotation.bean.comparison;
  */
 
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -42,9 +40,9 @@ import org.anchoranalysis.core.progress.ProgressReporterMultiple;
 import org.anchoranalysis.core.progress.ProgressReporterOneOfMany;
 import org.anchoranalysis.image.io.bean.rasterreader.RasterReader;
 import org.anchoranalysis.io.bean.input.InputManager;
-import org.anchoranalysis.io.deserializer.DeserializationFailedException;
+import org.anchoranalysis.io.bean.input.InputManagerParams;
+import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.input.InputFromManager;
-import org.anchoranalysis.io.params.InputContextParams;
 import org.anchoranalysis.plugin.annotation.comparison.AnnotationComparisonInput;
 
 public class AnnotationComparisonInputManager<T extends InputFromManager> extends InputManager<AnnotationComparisonInput<T>> {
@@ -75,13 +73,12 @@ public class AnnotationComparisonInputManager<T extends InputFromManager> extend
 	// END BEAN PROPERTIES
 	
 	@Override
-	public List<AnnotationComparisonInput<T>> inputObjects(InputContextParams inputContext, ProgressReporter progressReporter)
-			throws FileNotFoundException, IOException,
-			DeserializationFailedException {
+	public List<AnnotationComparisonInput<T>> inputObjects(InputManagerParams params)
+			throws AnchorIOException {
 		
-		try( ProgressReporterMultiple prm = new ProgressReporterMultiple(progressReporter, 2)) {
+		try( ProgressReporterMultiple prm = new ProgressReporterMultiple(params.getProgressReporter(), 2)) {
 			
-			Iterator<T> itr = input.inputObjects(inputContext, new ProgressReporterOneOfMany(prm)).iterator();
+			Iterator<T> itr = input.inputObjects(params).iterator();
 		
 			prm.incrWorker();
 			
@@ -96,7 +93,7 @@ public class AnnotationComparisonInputManager<T extends InputFromManager> extend
 			try {
 				outList = createListInputWithAnnotationPath( tempList, new ProgressReporterOneOfMany(prm) );
 			} catch (CreateException e) {
-				throw new IOException(e);
+				throw new AnchorIOException("Cannot create inputs (with annotation path)", e);
 			}
 			prm.incrWorker();
 			

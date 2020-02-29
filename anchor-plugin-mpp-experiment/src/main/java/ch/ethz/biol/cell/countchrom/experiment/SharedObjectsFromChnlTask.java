@@ -36,6 +36,7 @@ import org.anchoranalysis.bean.shared.random.RandomNumberGeneratorMersenneConsta
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
+import org.anchoranalysis.core.index.GetOperationFailedException;
 import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.core.name.store.SharedObjects;
 import org.anchoranalysis.core.progress.ProgressReporterNull;
@@ -46,11 +47,11 @@ import org.anchoranalysis.image.experiment.bean.task.RasterTask;
 import org.anchoranalysis.image.experiment.identifiers.ImgStackIdentifiers;
 import org.anchoranalysis.image.io.RasterIOException;
 import org.anchoranalysis.image.io.generator.raster.ChnlGenerator;
-import org.anchoranalysis.image.io.input.NamedChnlsInputAsStack;
+import org.anchoranalysis.image.io.input.NamedChnlsInput;
 import org.anchoranalysis.image.io.input.series.NamedChnlCollectionForSeries;
 import org.anchoranalysis.image.stack.wrap.WrapStackAsTimeSequenceStore;
-import org.anchoranalysis.io.output.OutputWriteFailedException;
 import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
+import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
 public class SharedObjectsFromChnlTask extends RasterTask {
 
@@ -62,7 +63,7 @@ public class SharedObjectsFromChnlTask extends RasterTask {
 	
 	// START BEAN PROPERTIES
 	@BeanField
-	private Define namedDefinitions;
+	private Define define;
 	
 	@BeanField
 	private String outputNameOriginal = "original";
@@ -83,9 +84,9 @@ public class SharedObjectsFromChnlTask extends RasterTask {
 	}
 	
 	@Override
-	public void doStack(NamedChnlsInputAsStack inputObject,
-			int seriesIndex, BoundOutputManagerRouteErrors outputManager,
-			LogErrorReporter logErrorReporter, String stackDescriptor, ExperimentExecutionArguments expArgs)
+	public void doStack(NamedChnlsInput inputObject,
+			int seriesIndex, int numSeries,
+			BoundOutputManagerRouteErrors outputManager, LogErrorReporter logErrorReporter, ExperimentExecutionArguments expArgs)
 			throws JobExecutionException {
 
 		NamedChnlCollectionForSeries ncc;
@@ -106,9 +107,9 @@ public class SharedObjectsFromChnlTask extends RasterTask {
 			
 		
 			SharedObjects so = new SharedObjects(logErrorReporter);
-			MPPInitParams soMPP = MPPInitParams.create(so,namedDefinitions,logErrorReporter,randomNumberGenerator.create());
+			MPPInitParams soMPP = MPPInitParams.create(so,define,logErrorReporter,randomNumberGenerator.create());
 			
-			ncc.addToStackCollection(
+			ncc.addAsSeparateChnls(
 				new WrapStackAsTimeSequenceStore( soMPP.getImage().getStackCollection() ),
 				0
 			);
@@ -119,7 +120,7 @@ public class SharedObjectsFromChnlTask extends RasterTask {
 				SharedObjectsUtilities.outputWithException(soMPP, outputManager, suppressSubfolders);
 			}
 			
-		} catch (RasterIOException | OperationFailedException | OutputWriteFailedException | CreateException e) {
+		} catch (GetOperationFailedException | OperationFailedException | OutputWriteFailedException | CreateException e) {
 			throw new JobExecutionException(e);
 		}
 	}
@@ -136,15 +137,6 @@ public class SharedObjectsFromChnlTask extends RasterTask {
 	
 	}
 	
-	public Define getNamedDefinitions() {
-		return namedDefinitions;
-	}
-
-
-	public void setNamedDefinitions(Define namedDefinitions) {
-		this.namedDefinitions = namedDefinitions;
-	}
-
 	public RandomNumberGeneratorBean getRandomNumberGenerator() {
 		return randomNumberGenerator;
 	}
@@ -172,5 +164,13 @@ public class SharedObjectsFromChnlTask extends RasterTask {
 
 	public void setSuppressOutputExceptions(boolean suppressOutputExceptions) {
 		this.suppressOutputExceptions = suppressOutputExceptions;
+	}
+
+	public Define getDefine() {
+		return define;
+	}
+
+	public void setDefine(Define define) {
+		this.define = define;
 	}
 }

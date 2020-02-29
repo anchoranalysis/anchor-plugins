@@ -54,6 +54,7 @@ import org.anchoranalysis.core.log.LogReporter;
 import org.anchoranalysis.core.name.store.SharedObjects;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
 import org.anchoranalysis.experiment.JobExecutionException;
+import org.anchoranalysis.experiment.task.InputTypesExpected;
 import org.anchoranalysis.experiment.task.ParametersBound;
 import org.anchoranalysis.experiment.task.ParametersExperiment;
 import org.anchoranalysis.experiment.task.Task;
@@ -69,15 +70,16 @@ import org.anchoranalysis.image.stack.DisplayStack;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.io.bean.filepath.generator.FilePathGenerator;
 import org.anchoranalysis.io.bean.objmask.writer.RGBOutlineWriter;
-import org.anchoranalysis.io.bean.output.OutputWriteSettings;
+import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.generator.Generator;
 import org.anchoranalysis.io.generator.IterableGenerator;
 import org.anchoranalysis.io.generator.collection.SubfolderGenerator;
 import org.anchoranalysis.io.generator.combined.IterableCombinedListGenerator;
 import org.anchoranalysis.io.generator.xml.XMLGenerator;
 import org.anchoranalysis.io.manifest.ManifestDescription;
-import org.anchoranalysis.io.output.OutputWriteFailedException;
+import org.anchoranalysis.io.output.bean.OutputWriteSettings;
 import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
+import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.io.xml.XmlOutputter;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -141,6 +143,11 @@ public class ExportObjectsFromCSVTask extends Task<ExportObjectsFromCSVInputObje
 	private static RGBColor colorSecond = new RGBColor(0,255,0);
 	
 	@Override
+	public InputTypesExpected inputTypesExpected() {
+		return new InputTypesExpected(ExportObjectsFromCSVInputObject.class);
+	}
+		
+	@Override
 	public ExportObjectsFromCSVTaskSharedState beforeAnyJobIsExecuted(
 			BoundOutputManagerRouteErrors outputManager, ParametersExperiment params)
 			throws ExperimentExecutionException {
@@ -175,12 +182,12 @@ public class ExportObjectsFromCSVTask extends Task<ExportObjectsFromCSVInputObje
 	}
 	
 	
-	private Path idStringForPath( Path path, boolean debugMode ) throws IOException {
+	private Path idStringForPath( Path path, boolean debugMode ) throws AnchorIOException {
 		return idGenerator!=null ? idGenerator.outFilePath(path, debugMode) : path;
 	}
 	
 	@Override
-	protected void doJobOnInputObject(	ParametersBound<ExportObjectsFromCSVInputObject,ExportObjectsFromCSVTaskSharedState> params)	throws JobExecutionException {
+	public void doJobOnInputObject(	ParametersBound<ExportObjectsFromCSVInputObject,ExportObjectsFromCSVTaskSharedState> params)	throws JobExecutionException {
 		
 		LogErrorReporter logErrorReporter = params.getLogErrorReporter();
 		ExportObjectsFromCSVInputObject inputObject = params.getInputObject();
@@ -202,7 +209,7 @@ public class ExportObjectsFromCSVTask extends Task<ExportObjectsFromCSVInputObje
 			
 			processFileWithMap( inputObject, mapGroup, groupedRows.groupNameSet(), outputManager, logErrorReporter );
 			
-		} catch (GetOperationFailedException | OperationFailedException | IOException | OutputWriteFailedException e) {
+		} catch (GetOperationFailedException | OperationFailedException | AnchorIOException | OutputWriteFailedException e) {
 			throw new JobExecutionException(e);
 		}
 	}

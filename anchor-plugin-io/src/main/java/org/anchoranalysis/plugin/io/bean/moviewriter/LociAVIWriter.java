@@ -36,7 +36,7 @@ import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.io.bean.moviewriter.MovieWriter;
 import org.anchoranalysis.image.io.movie.MovieOutputHandle;
 import org.anchoranalysis.image.stack.rgb.RGBStack;
-import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeByte;
+import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
 
 import ome.xml.model.enums.DimensionOrder;
 import ome.xml.model.enums.EnumerationException;
@@ -98,7 +98,7 @@ public class LociAVIWriter extends MovieWriter {
 		public void add(RGBStack stack) throws IOException {
 			
 				// We only support unsigned byte stacks for now
-				if (!stack.allChnlsHaveType(VoxelDataTypeByte.instance)) {
+				if (!stack.allChnlsHaveType(VoxelDataTypeUnsignedByte.instance)) {
 					throw new IOException("Only unsigned 8-bit stacks are supported");
 				}
 			

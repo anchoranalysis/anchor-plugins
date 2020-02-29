@@ -77,6 +77,11 @@ public class ForceNumFrame extends ReadOptions {
 	public List<String> determineChannelNames(IFormatReader reader) {
 		return options.determineChannelNames(reader);
 	}
+	
+	@Override
+	public boolean isRGB(IFormatReader reader) {
+		return options.isRGB(reader);
+	}
 
 	public ReadOptions getOptions() {
 		return options;

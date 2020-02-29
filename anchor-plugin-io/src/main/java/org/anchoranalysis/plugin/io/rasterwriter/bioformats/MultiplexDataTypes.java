@@ -33,10 +33,11 @@ import org.anchoranalysis.image.chnl.factory.ChnlFactoryFloat;
 import org.anchoranalysis.image.chnl.factory.ChnlFactoryInt;
 import org.anchoranalysis.image.chnl.factory.ChnlFactoryShort;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
-import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeByte;
+import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeFloat;
-import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeInt;
-import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeShort;
+import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeSignedShort;
+import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedInt;
+import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedShort;
 
 import loci.formats.FormatTools;
 
@@ -45,9 +46,11 @@ class MultiplexDataTypes {
 	public static VoxelDataType multiplexFormat( int pixelType ) throws RasterIOException {
 		switch(pixelType) {
 		case FormatTools.UINT8:
-			return VoxelDataTypeByte.instance;
+			return VoxelDataTypeUnsignedByte.instance;
 		case FormatTools.UINT16:
-			return VoxelDataTypeShort.instance;
+			return VoxelDataTypeUnsignedShort.instance;
+		case FormatTools.INT16:
+			return VoxelDataTypeSignedShort.instance;			
 		case FormatTools.FLOAT:
 			return VoxelDataTypeFloat.instance;
 		default:
@@ -56,14 +59,17 @@ class MultiplexDataTypes {
 	}
 	
 	public static ChnlFactorySingleType multiplexVoxelDataType( VoxelDataType voxelDataType ) {
-		if (voxelDataType.equals(VoxelDataTypeByte.instance)) {
+		if (voxelDataType.equals(VoxelDataTypeUnsignedByte.instance)) {
 			return new ChnlFactoryByte();
-		} else if (voxelDataType.equals(VoxelDataTypeShort.instance)) {
+		} else if (voxelDataType.equals(VoxelDataTypeUnsignedShort.instance)) {
 			return new ChnlFactoryShort();
+		} else if (voxelDataType.equals(VoxelDataTypeSignedShort.instance)) {
+			return new ChnlFactoryShort();			
 		} else if (voxelDataType.equals(VoxelDataTypeFloat.instance)) {
 			return new ChnlFactoryFloat();
-		} else if (voxelDataType.equals(VoxelDataTypeInt.instance)) {
+		} else if (voxelDataType.equals(VoxelDataTypeUnsignedInt.instance)) {
 			return new ChnlFactoryInt();
+		
 		} else {
 			assert(false);
 			return null;

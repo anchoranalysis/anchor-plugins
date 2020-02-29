@@ -27,20 +27,19 @@ package org.anchoranalysis.plugin.io.bean.provider.file;
  */
 
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
-import org.anchoranalysis.core.progress.ProgressReporter;
+import org.anchoranalysis.io.bean.input.InputManagerParams;
 import org.anchoranalysis.io.bean.provider.file.FileProvider;
-import org.anchoranalysis.io.params.InputContextParams;
+import org.anchoranalysis.io.error.AnchorIOException;
 
 class SortUtilities {
 	
-	public static Collection<File> sortFiles( FileProvider fileProvider, ProgressReporter progressReporter, InputContextParams inputContext ) throws IOException {
-		Collection<File> in = fileProvider.matchingFiles(progressReporter, inputContext);
+	public static Collection<File> sortFiles( FileProvider fileProvider, InputManagerParams params ) throws AnchorIOException {
+		Collection<File> in = fileProvider.matchingFiles(params);
 		
 		List<File> out = new ArrayList<>();
 		out.addAll(in);

@@ -32,6 +32,7 @@ import java.nio.ByteBuffer;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
+import org.anchoranalysis.core.index.GetOperationFailedException;
 import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.core.progress.ProgressReporter;
 import org.anchoranalysis.core.progress.ProgressReporterNull;
@@ -42,10 +43,10 @@ import org.anchoranalysis.image.experiment.bean.task.RasterTask;
 import org.anchoranalysis.image.experiment.identifiers.ImgStackIdentifiers;
 import org.anchoranalysis.image.io.RasterIOException;
 import org.anchoranalysis.image.io.generator.raster.ChnlGenerator;
-import org.anchoranalysis.image.io.input.NamedChnlsInputAsStack;
+import org.anchoranalysis.image.io.input.NamedChnlsInput;
 import org.anchoranalysis.image.io.input.series.NamedChnlCollectionForSeries;
 import org.anchoranalysis.image.stack.region.chnlconverter.ChnlConverter;
-import org.anchoranalysis.image.stack.region.chnlconverter.ChnlConverterToByte;
+import org.anchoranalysis.image.stack.region.chnlconverter.ChnlConverterToUnsignedByte;
 import org.anchoranalysis.image.stack.region.chnlconverter.ConversionPolicy;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
@@ -79,9 +80,9 @@ public class BackgroundSubtractShortTask extends RasterTask {
 	}
 
 	@Override
-	public void doStack(NamedChnlsInputAsStack inputObject,
-			int seriesIndex, BoundOutputManagerRouteErrors outputManager,
-			LogErrorReporter logErrorReporter, String stackDescriptor,
+	public void doStack(NamedChnlsInput inputObject,
+			int seriesIndex, int numSeries,
+			BoundOutputManagerRouteErrors outputManager, LogErrorReporter logErrorReporter,
 			ExperimentExecutionArguments expArgs) throws JobExecutionException {
 		
 		ProgressReporter progressReporter = ProgressReporterNull.get();
@@ -103,7 +104,7 @@ public class BackgroundSubtractShortTask extends RasterTask {
 				vbSubOut.multiplyBy(scaleRatio);
 			}
 			
-			ChnlConverter<ByteBuffer> converter = new ChnlConverterToByte();
+			ChnlConverter<ByteBuffer> converter = new ChnlConverterToUnsignedByte();
 			Chnl chnlOut = converter.convert(bgSubOut,ConversionPolicy.CHANGE_EXISTING_CHANNEL);
 			
 			outputManager.getWriterCheckIfAllowed().write(
@@ -111,7 +112,7 @@ public class BackgroundSubtractShortTask extends RasterTask {
 				() -> new ChnlGenerator(chnlOut, "imgChnl")
 			);
 			
-		} catch (RasterIOException | CreateException e) {
+		} catch (RasterIOException | CreateException | GetOperationFailedException e) {
 			throw new JobExecutionException(e);
 		}
 	}

@@ -27,7 +27,7 @@ package org.anchoranalysis.plugin.io.bean.summarizer.image;
  */
 
 import org.anchoranalysis.image.io.RasterIOException;
-import org.anchoranalysis.image.io.input.NamedChnlsInputAsStack;
+import org.anchoranalysis.image.io.input.NamedChnlsInput;
 
 public class NumberChnls extends SummarizerNamedChnlsSimple<Integer> {
 
@@ -37,15 +37,12 @@ public class NumberChnls extends SummarizerNamedChnlsSimple<Integer> {
 	private static final long serialVersionUID = 1L;
 	
 	@Override
-	protected Integer extractKey(NamedChnlsInputAsStack element) throws RasterIOException {
+	protected Integer extractKey(NamedChnlsInput element) throws RasterIOException {
 		return element.numChnl();
 	}
 
 	@Override
 	protected String describeNoun() {
-		return "channels";
+		return "channel";
 	}
-
-	
-
 }

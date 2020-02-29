@@ -34,7 +34,7 @@ import org.anchoranalysis.image.binary.values.BinaryValues;
 import org.anchoranalysis.image.chnl.Chnl;
 import org.anchoranalysis.image.histogram.Histogram;
 import org.anchoranalysis.image.histogram.HistogramFactoryUtilities;
-import org.anchoranalysis.plugin.image.grouped.ChnlSource;
+import org.anchoranalysis.plugin.image.task.grouped.ChnlSource;
 
 /** Extracts a histogram from an image for a given key */
 class HistogramExtracter {

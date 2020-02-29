@@ -42,9 +42,9 @@ import org.anchoranalysis.io.generator.IterableObjectGenerator;
 import org.anchoranalysis.io.generator.sequence.IGeneratorSequenceNonIncremental;
 import org.anchoranalysis.io.manifest.sequencetype.SequenceType;
 import org.anchoranalysis.io.manifest.sequencetype.SequenceTypeException;
-import org.anchoranalysis.io.output.OutputWriteFailedException;
+import org.anchoranalysis.io.namestyle.OutputNameStyle;
 import org.anchoranalysis.io.output.bound.BoundOutputManager;
-import org.anchoranalysis.io.output.namestyle.OutputNameStyle;
+import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
 
 class GeneratorSequenceMovieWriter<GeneratorType> implements IGeneratorSequenceNonIncremental<GeneratorType> {

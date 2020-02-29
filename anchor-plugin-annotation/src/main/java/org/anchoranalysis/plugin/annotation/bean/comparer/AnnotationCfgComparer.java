@@ -27,7 +27,6 @@ package org.anchoranalysis.plugin.annotation.bean.comparer;
  */
 
 
-import java.io.IOException;
 import java.nio.file.Path;
 
 import org.anchoranalysis.annotation.io.bean.comparer.Comparer;
@@ -40,6 +39,7 @@ import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.objmask.ObjMaskCollection;
 import org.anchoranalysis.image.objmask.properties.ObjMaskWithPropertiesCollection;
 import org.anchoranalysis.io.bean.filepath.generator.FilePathGenerator;
+import org.anchoranalysis.io.error.AnchorIOException;
 
 public class AnnotationCfgComparer extends Comparer {
 
@@ -63,7 +63,7 @@ public class AnnotationCfgComparer extends Comparer {
 		Path filePath;
 		try {
 			filePath = filePathGenerator.outFilePath(filePathSource, false);
-		} catch (IOException e1) {
+		} catch (AnchorIOException e1) {
 			throw new CreateException(e1);
 		}
 		
@@ -71,7 +71,7 @@ public class AnnotationCfgComparer extends Comparer {
 		MarkAnnotation annotation;
 		try {
 			annotation = annotationReader.read( filePath );
-		} catch (IOException e) {
+		} catch (AnchorIOException e) {
 			throw new CreateException(e);
 		}
 		

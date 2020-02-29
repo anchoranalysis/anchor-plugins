@@ -26,11 +26,11 @@ package org.anchoranalysis.plugin.io.bean.filepath;
  * #L%
  */
 
-import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
 import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.plugin.io.filepath.RootedFilePathUtilities;
 
 public class RootedFilePath extends FilePath {
@@ -53,7 +53,7 @@ public class RootedFilePath extends FilePath {
 	// END BEAN PROPERTIES
 	
 	@Override
-	public Path path(boolean debugMode) throws IOException {
+	public Path path(boolean debugMode) throws AnchorIOException {
 		return RootedFilePathUtilities.determineNewPath(
 			Paths.get(path),
 			rootName,

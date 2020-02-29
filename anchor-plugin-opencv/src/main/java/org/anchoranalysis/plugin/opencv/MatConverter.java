@@ -35,7 +35,7 @@ import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
-import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeByte;
+import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
 import org.opencv.core.CvType;
 import org.opencv.core.Mat;
 
@@ -84,7 +84,7 @@ public class MatConverter {
 	}
 	
 	private static Mat makeGrayscale( Chnl chnl ) throws CreateException {
-		if (chnl.getVoxelDataType().equals(VoxelDataTypeByte.instance)) {
+		if (chnl.getVoxelDataType().equals(VoxelDataTypeUnsignedByte.instance)) {
 			
 			// DEBUG
 			//System.out.printf("NumPixels>100=%d%n", chnl.getVoxelBox().any().countGreaterThan(100) );

@@ -45,11 +45,11 @@ import org.anchoranalysis.image.io.generator.raster.ChnlGenerator;
 import org.anchoranalysis.image.stack.NamedImgStackCollection;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
 import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
-import org.anchoranalysis.plugin.image.grouped.ChnlSource;
-import org.anchoranalysis.plugin.image.grouped.GroupMap;
-import org.anchoranalysis.plugin.image.grouped.NamedChnl;
 import org.anchoranalysis.plugin.image.task.bean.grouped.GroupedSharedState;
 import org.anchoranalysis.plugin.image.task.bean.grouped.GroupedStackTask;
+import org.anchoranalysis.plugin.image.task.grouped.ChnlSource;
+import org.anchoranalysis.plugin.image.task.grouped.GroupMap;
+import org.anchoranalysis.plugin.image.task.grouped.NamedChnl;
 
 
 /** Calculates feature on a 'grouped' set of images

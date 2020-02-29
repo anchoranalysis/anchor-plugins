@@ -76,6 +76,11 @@ public class ForceTimeSeriesToStack extends ReadOptions {
 		return options.determineChannelNames(reader);
 	}
 	
+	@Override
+	public boolean isRGB(IFormatReader reader) {
+		return options.isRGB(reader);
+	}
+	
 	public ReadOptions getOptions() {
 		return options;
 	}

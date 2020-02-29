@@ -28,17 +28,16 @@ package org.anchoranalysis.plugin.io.bean.provider.file;
 
 
 import java.io.File;
-import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Collection;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.error.BeanDuplicateException;
-import org.anchoranalysis.core.progress.ProgressReporter;
+import org.anchoranalysis.io.bean.input.InputManagerParams;
 import org.anchoranalysis.io.bean.provider.file.FileProvider;
 import org.anchoranalysis.io.bean.provider.file.FileProviderWithDirectory;
-import org.anchoranalysis.io.params.InputContextParams;
+import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.plugin.io.filepath.RootedFilePathUtilities;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -76,28 +75,28 @@ public class RootedFileSet extends FileProvider {
 	private static Log log = LogFactory.getLog(RootedFileSet.class);
 	
 	@Override
-	public Collection<File> matchingFiles(ProgressReporter progressReporter, InputContextParams inputContext) throws IOException {
+	public Collection<File> matchingFiles(InputManagerParams params) throws AnchorIOException {
 		
 		try {
-			log.debug( String.format("matchingFiles() old directory '%s'\n", fileSet.getDirectoryAsPath(inputContext) ));
+			log.debug( String.format("matchingFiles() old directory '%s'\n", fileSet.getDirectoryAsPath(params.getInputContext()) ));
 	
 			// We make a copy of the fileset
 			FileProviderWithDirectory fsCopy = (FileProviderWithDirectory) fileSet.duplicateBean();
 			
-			Path dirOrig = fsCopy.getDirectoryAsPath(inputContext);
+			Path dirOrig = fsCopy.getDirectoryAsPath(params.getInputContext());
 	
-			Path dirNew = RootedFilePathUtilities.determineNewPath( dirOrig, rootName, inputContext.isDebugMode(), disableDebugMode );
+			Path dirNew = RootedFilePathUtilities.determineNewPath( dirOrig, rootName, params.isDebugMode(), disableDebugMode );
 
 			boolean dirNewExists = Files.exists(dirNew); 
 					
 			// As a special behaviour, if the debug folder doesn't exist, we try and again with the non-debug folder
-			if (inputContext.isDebugMode() && !dirNewExists) {
+			if (params.isDebugMode() && !dirNewExists) {
 				dirNew = RootedFilePathUtilities.determineNewPath( dirOrig, rootName, false, disableDebugMode );
 				dirNewExists = Files.exists(dirNew);
 			}
 			
 			if (!dirNewExists) {
-				throw new IOException(
+				throw new AnchorIOException(
 				  String.format("Path %s' does not exist", dirNew)
 				);
 			}
@@ -105,10 +104,10 @@ public class RootedFileSet extends FileProvider {
 			log.debug( String.format("Setting new directory '%s'%n", dirNew) );
 			fsCopy.setDirectory( dirNew );
 			
-			return fsCopy.matchingFiles(progressReporter, inputContext);
+			return fsCopy.matchingFiles(params);
 			
 		} catch (BeanDuplicateException e) {
-			throw new IOException(e);
+			throw new AnchorIOException("Cannot duplicate bean", e);
 		}
 	}
 	

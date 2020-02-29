@@ -4,7 +4,7 @@ package ch.ethz.biol.cell.mpp.feedback.reporter;
  * #%L
  * anchor-plugin-mpp
  * %%
- * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -26,7 +26,7 @@ package ch.ethz.biol.cell.mpp.feedback.reporter;
  * #L%
  */
 
-import org.anchoranalysis.io.output.OutputWriteFailedException;
+import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.mpp.sgmn.optscheme.step.Reporting;
 
 import ch.ethz.biol.cell.imageprocessing.io.generator.text.ObjectAsStringGenerator;

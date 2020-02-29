@@ -46,7 +46,7 @@ import org.anchoranalysis.image.extent.IncorrectImageSizeException;
 import org.anchoranalysis.image.feature.session.FeatureSessionCreateParamsSingle;
 import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.image.objmask.ObjMaskCollection;
-import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeByte;
+import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
 
 public class ChnlProviderObjMaskFeature extends ChnlProvider {
 
@@ -108,7 +108,7 @@ public class ChnlProviderObjMaskFeature extends ChnlProvider {
 			session.setNrgStack(nrgStackParams);
 			session.start( getLogger() );
 			
-			Chnl chnlOut = ChnlFactory.instance().createEmptyInitialised( chnl.getDimensions(), VoxelDataTypeByte.instance );
+			Chnl chnlOut = ChnlFactory.instance().createEmptyInitialised( chnl.getDimensions(), VoxelDataTypeUnsignedByte.instance );
 			chnlOut.getVoxelBox().any().setAllPixelsTo( valueNoObject );
 			for( ObjMask om : objs ) {
 

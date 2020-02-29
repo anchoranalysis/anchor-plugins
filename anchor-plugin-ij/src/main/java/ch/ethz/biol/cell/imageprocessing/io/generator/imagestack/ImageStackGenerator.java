@@ -32,9 +32,9 @@ import ij.ImageStack;
 import java.nio.file.Path;
 
 import org.anchoranalysis.image.io.generator.raster.RasterWriterUtilities;
-import org.anchoranalysis.io.bean.output.OutputWriteSettings;
 import org.anchoranalysis.io.generator.ObjectGenerator;
-import org.anchoranalysis.io.output.OutputWriteFailedException;
+import org.anchoranalysis.io.output.bean.OutputWriteSettings;
+import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
 public abstract class ImageStackGenerator extends ObjectGenerator<ImageStack> {
 	

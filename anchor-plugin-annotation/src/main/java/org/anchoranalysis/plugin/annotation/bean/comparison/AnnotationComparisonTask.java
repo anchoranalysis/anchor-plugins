@@ -27,8 +27,6 @@ package org.anchoranalysis.plugin.annotation.bean.comparison;
  */
 
 
-import java.io.IOException;
-
 import org.anchoranalysis.annotation.io.assignment.Assignment;
 import org.anchoranalysis.annotation.io.assignment.AssignmentObjMask;
 import org.anchoranalysis.annotation.io.assignment.generator.AssignmentGeneratorFactory;
@@ -42,15 +40,17 @@ import org.anchoranalysis.core.log.LogReporter;
 import org.anchoranalysis.core.progress.ProgressReporterNull;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
 import org.anchoranalysis.experiment.JobExecutionException;
+import org.anchoranalysis.experiment.task.InputTypesExpected;
 import org.anchoranalysis.experiment.task.ParametersBound;
 import org.anchoranalysis.experiment.task.ParametersExperiment;
 import org.anchoranalysis.experiment.task.Task;
-import org.anchoranalysis.image.io.input.StackInputBase;
+import org.anchoranalysis.image.io.input.ProvidesStackInput;
 import org.anchoranalysis.image.stack.DisplayStack;
 import org.anchoranalysis.image.stack.NamedImgStackCollection;
 import org.anchoranalysis.image.stack.wrap.WrapStackAsTimeSequenceStore;
 import org.anchoranalysis.io.bean.color.generator.ColorSetGenerator;
 import org.anchoranalysis.io.bean.color.generator.VeryBrightColorSetGenerator;
+import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
 import org.anchoranalysis.plugin.annotation.bean.comparison.assigner.AnnotationComparisonAssigner;
 import org.anchoranalysis.plugin.annotation.comparison.AnnotationComparisonInput;
@@ -59,7 +59,7 @@ import org.anchoranalysis.plugin.annotation.comparison.ObjsToCompare;
 
 import ch.ethz.biol.cell.countchrom.experiment.SplitString;
 
-public class AnnotationComparisonTask<T extends Assignment> extends Task<AnnotationComparisonInput<StackInputBase>,SharedState<T>> {
+public class AnnotationComparisonTask<T extends Assignment> extends Task<AnnotationComparisonInput<ProvidesStackInput>,SharedState<T>> {
 
 	/**
 	 * 
@@ -113,18 +113,18 @@ public class AnnotationComparisonTask<T extends Assignment> extends Task<Annotat
 				numLevelsGrouping,
 				key -> assigner.groupForKey(key)
 			);
-		} catch (IOException e) {
+		} catch (AnchorIOException e) {
 			throw new ExperimentExecutionException(e);
 		}
 	}
 	
 	@Override
-	protected void doJobOnInputObject(
-		ParametersBound<AnnotationComparisonInput<StackInputBase>,SharedState<T>> params
+	public void doJobOnInputObject(
+		ParametersBound<AnnotationComparisonInput<ProvidesStackInput>,SharedState<T>> params
 	) throws JobExecutionException {
 
 		LogErrorReporter logErrorReporter = params.getLogErrorReporter();
-		AnnotationComparisonInput<StackInputBase> input = params.getInputObject();
+		AnnotationComparisonInput<ProvidesStackInput> input = params.getInputObject();
 		
 		// Create the background
 		DisplayStack background = createBackground(input);
@@ -156,7 +156,7 @@ public class AnnotationComparisonTask<T extends Assignment> extends Task<Annotat
 	}
 	
 	private Assignment compareAndUpdate(
-		AnnotationComparisonInput<StackInputBase> input,
+		AnnotationComparisonInput<ProvidesStackInput> input,
 		DisplayStack background,
 		SplitString descriptiveSplit,
 		boolean debugEnabled,
@@ -196,11 +196,11 @@ public class AnnotationComparisonTask<T extends Assignment> extends Task<Annotat
 	}
 	
 	
-	private SplitString createSplitString( AnnotationComparisonInput<StackInputBase> input ) {
+	private SplitString createSplitString( AnnotationComparisonInput<ProvidesStackInput> input ) {
 		return hasDescriptiveSplit() ? new SplitString(input.descriptiveName(), splitDescriptiveNameRegex) : null;
 	}
 	
-	private DisplayStack createBackground( AnnotationComparisonInput<StackInputBase> inputObject ) throws JobExecutionException {
+	private DisplayStack createBackground( AnnotationComparisonInput<ProvidesStackInput> inputObject ) throws JobExecutionException {
 		
 		try {
 			NamedImgStackCollection stackCollection = new NamedImgStackCollection();
@@ -219,7 +219,7 @@ public class AnnotationComparisonTask<T extends Assignment> extends Task<Annotat
 	}
 	
 	private Assignment processAcceptedAnnotation(
-		AnnotationComparisonInput<StackInputBase> inputObject,
+		AnnotationComparisonInput<ProvidesStackInput> inputObject,
 		DisplayStack background,
 		ObjsToCompare objs,
 		IAddAnnotation<T> addAnnotation,
@@ -267,7 +267,7 @@ public class AnnotationComparisonTask<T extends Assignment> extends Task<Annotat
 	private void writeRGBOutlineStack(
 		String outputName,
 		BoundOutputManagerRouteErrors outputManager,
-		AnnotationComparisonInput<StackInputBase> inputObject,
+		AnnotationComparisonInput<ProvidesStackInput> inputObject,
 		Assignment assignment,
 		DisplayStack background
 	) throws OperationFailedException {
@@ -297,6 +297,11 @@ public class AnnotationComparisonTask<T extends Assignment> extends Task<Annotat
 			)
 		);
 	}
+	
+	@Override
+	public InputTypesExpected inputTypesExpected() {
+		return new InputTypesExpected(AnnotationComparisonInput.class);
+	}
 
 	@Override
 	public void afterAllJobsAreExecuted(
@@ -310,7 +315,7 @@ public class AnnotationComparisonTask<T extends Assignment> extends Task<Annotat
 		// Write group statistics
 		try {
 			new CSVComparisonGroup<>(sharedStateC.allGroups()).writeGroupStats( outputManager );
-		} catch (IOException e) {
+		} catch (AnchorIOException e) {
 			throw new ExperimentExecutionException(e);
 		}
 	}

@@ -26,15 +26,16 @@ package org.anchoranalysis.anchor.plugin.quick.bean.filepath;
  * #L%
  */
 
-import java.io.IOException;
 import java.nio.file.Path;
+
+import org.anchoranalysis.io.error.AnchorIOException;
 
 /** Seperates a path into two parts */
 class PathTwoParts {
 	private Path first;
 	private Path second;
 	
-	public PathTwoParts(Path path) throws IOException {
+	public PathTwoParts(Path path) throws AnchorIOException {
 		checkPathHasParent(path);
 		
 		if ( path.endsWith("/") ) {
@@ -62,10 +63,10 @@ class PathTwoParts {
 		return first.resolve(second);
 	}
 			
-	private static void checkPathHasParent( Path path ) throws IOException {
+	private static void checkPathHasParent( Path path ) throws AnchorIOException {
 		
 		if (path.getParent()==null) {
-			throw new IOException( String.format("No parent exists for %s", path ) );
+			throw new AnchorIOException( String.format("No parent exists for %s", path ) );
 		}
 	}
 

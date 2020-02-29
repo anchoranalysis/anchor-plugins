@@ -46,7 +46,7 @@ import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.anchoranalysis.image.voxel.box.VoxelBoxWrapper;
 import org.anchoranalysis.image.voxel.box.factory.VoxelBoxFactory;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
-import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeByte;
+import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
 
 // Performs a threshold on each pixel, by comparing the pixel value to another channel
 //  It sets a pixel as high, if it is greater than or equal to the pixel in the other "Thrshld" channel
@@ -121,7 +121,7 @@ public class SgmnThrshldAgainstChnl extends BinarySgmn {
 	// Otherwise, we create a new binary voxelbox buffer
 	private VoxelBox<ByteBuffer> createOutputChnl( VoxelBoxWrapper voxelBox ) {
 		
-		if (voxelBox.getVoxelDataType().equals( VoxelDataTypeByte.instance )) {
+		if (voxelBox.getVoxelDataType().equals( VoxelDataTypeUnsignedByte.instance )) {
 			return voxelBox.asByte();
 		} else {
 			return VoxelBoxFactory.getByte().create( voxelBox.any().extnt() );

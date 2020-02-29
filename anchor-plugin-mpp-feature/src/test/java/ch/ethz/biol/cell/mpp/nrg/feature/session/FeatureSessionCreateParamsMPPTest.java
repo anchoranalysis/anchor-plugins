@@ -4,7 +4,7 @@ package ch.ethz.biol.cell.mpp.nrg.feature.session;
  * #%L
  * anchor-plugin-mpp-feature
  * %%
- * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -26,7 +26,7 @@ package ch.ethz.biol.cell.mpp.nrg.feature.session;
  * #L%
  */
 
-import static ch.ethz.biol.cell.mpp.nrg.feature.session.ResultsVectorTestUtilities.*;
+import static org.anchoranalysis.test.feature.plugins.ResultsVectorTestUtilities.*;
 
 import org.anchoranalysis.bean.xml.RegisterBeanFactories;
 import org.anchoranalysis.core.error.CreateException;
@@ -38,8 +38,9 @@ import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.calc.ResultsVector;
 import org.anchoranalysis.feature.init.FeatureInitParams;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
-import org.anchoranalysis.feature.session.SimpleFeatureListFixture;
 import org.anchoranalysis.feature.shared.SharedFeatureSet;
+import org.anchoranalysis.test.feature.SimpleFeatureListFixture;
+import org.anchoranalysis.test.feature.plugins.NRGStackFixture;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -49,7 +50,7 @@ public class FeatureSessionCreateParamsMPPTest {
 	
 	@Before
     public void setUp() {
-		RegisterBeanFactories.registerAllPackageBeanFactories(false);
+		RegisterBeanFactories.registerAllPackageBeanFactories();
     }
 	
 	@Test

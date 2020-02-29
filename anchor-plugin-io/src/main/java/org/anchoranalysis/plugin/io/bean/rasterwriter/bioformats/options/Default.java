@@ -58,6 +58,11 @@ public class Default extends ReadOptions {
 	}
 	
 	@Override
+	public boolean isRGB(IFormatReader reader) {
+		return reader.isRGB();
+	}
+	
+	@Override
 	public int effectiveBitsPerPixel(IFormatReader reader) {
 		Object bitDepth = reader.getMetadataValue("Acquisition Bit Depth");
 		if (bitDepth!=null) {

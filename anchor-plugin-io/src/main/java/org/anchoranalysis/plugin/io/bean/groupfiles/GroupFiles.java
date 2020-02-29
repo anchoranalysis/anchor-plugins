@@ -29,7 +29,6 @@ import java.io.File;
  */
 
 
-import java.io.IOException;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -38,22 +37,21 @@ import java.util.logging.Logger;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.DefaultInstance;
 import org.anchoranalysis.bean.annotation.Optional;
-import org.anchoranalysis.core.progress.ProgressReporter;
 import org.anchoranalysis.image.chnl.factory.ChnlFactorySingleType;
 import org.anchoranalysis.image.chnl.factory.ChnlFactoryByte;
-import org.anchoranalysis.image.io.bean.chnl.map.creator.ImgChnlMapCreator;
+import org.anchoranalysis.image.io.bean.chnl.map.ImgChnlMapCreator;
 import org.anchoranalysis.image.io.bean.rasterreader.RasterReader;
-import org.anchoranalysis.image.io.input.NamedChnlsInputAsStack;
-import org.anchoranalysis.io.bean.input.Files;
+import org.anchoranalysis.image.io.input.NamedChnlsInput;
+import org.anchoranalysis.io.bean.descriptivename.DescriptiveNameFromFile;
 import org.anchoranalysis.io.bean.input.InputManager;
-import org.anchoranalysis.io.bean.input.descriptivename.DescriptiveFile;
-import org.anchoranalysis.io.bean.input.descriptivename.DescriptiveNameFromFile;
-import org.anchoranalysis.io.bean.input.descriptivename.LastFolders;
-import org.anchoranalysis.io.deserializer.DeserializationFailedException;
+import org.anchoranalysis.io.bean.input.InputManagerParams;
+import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.input.FileInput;
-import org.anchoranalysis.io.params.InputContextParams;
+import org.anchoranalysis.io.input.descriptivename.DescriptiveFile;
+import org.anchoranalysis.plugin.io.bean.descriptivename.LastFolders;
 import org.anchoranalysis.plugin.io.bean.groupfiles.check.CheckParsedFilePathBag;
 import org.anchoranalysis.plugin.io.bean.groupfiles.parser.FilePathParser;
+import org.anchoranalysis.plugin.io.bean.input.file.Files;
 import org.anchoranalysis.plugin.io.multifile.FileDetails;
 import org.anchoranalysis.plugin.io.multifile.MultiFileReaderOpenedRaster;
 import org.anchoranalysis.plugin.io.multifile.ParsedFilePathBag;
@@ -78,7 +76,7 @@ import org.anchoranalysis.plugin.io.multifile.ParsedFilePathBag;
  * @author Owen Feehan
  *
  */
-public class GroupFiles extends InputManager<NamedChnlsInputAsStack> {
+public class GroupFiles extends InputManager<NamedChnlsInput> {
 
 	/**
 	 * 
@@ -116,14 +114,14 @@ public class GroupFiles extends InputManager<NamedChnlsInputAsStack> {
 	static ChnlFactorySingleType imgChnlFactoryByte = new ChnlFactoryByte();
 	
 	@Override
-	public List<NamedChnlsInputAsStack> inputObjects(
-			InputContextParams inputContext, ProgressReporter progressReporter)
-			throws IOException, DeserializationFailedException {
+	public List<NamedChnlsInput> inputObjects(
+			InputManagerParams params)
+			throws AnchorIOException {
 		
 		GroupFilesMap map = new GroupFilesMap();
 	
 		// Iterate through each file, match against the reg-exp and populate a hash-map
-		Iterator<FileInput> itrFiles = fileInput.inputObjects(inputContext, progressReporter).iterator();
+		Iterator<FileInput> itrFiles = fileInput.inputObjects(params).iterator();
 		while( itrFiles.hasNext() ) {
 			
 			FileInput f = itrFiles.next();
@@ -142,7 +140,7 @@ public class GroupFiles extends InputManager<NamedChnlsInputAsStack> {
 				log.finer( String.format("Parse SUCC Input file: %s could be parsed", path) );
 			} else {
 				if (requireAllFilesMatch) {
-					throw new IOException( String.format("File %s did not match parser", path) );
+					throw new AnchorIOException( String.format("File %s did not match parser", path) );
 				}
 				log.finer( String.format("Parse FAIL Input file: %s couldn't be parsed", path) );	
 			}
@@ -151,7 +149,7 @@ public class GroupFiles extends InputManager<NamedChnlsInputAsStack> {
 		return listFromMap(map);
 	}
 	
-	private List<NamedChnlsInputAsStack> listFromMap( GroupFilesMap map ) {
+	private List<NamedChnlsInput> listFromMap( GroupFilesMap map ) throws AnchorIOException {
 		
 		List<File> files = new ArrayList<>();
 		List<MultiFileReaderOpenedRaster> openedRasters = new ArrayList<>(); 
@@ -173,16 +171,16 @@ public class GroupFiles extends InputManager<NamedChnlsInputAsStack> {
 			openedRasters.add( or );
 		}
 				
-		List<DescriptiveFile> descriptiveNames = descriptiveNameFromFile.descriptiveNamesFor(files, "InvalidName");
+		List<DescriptiveFile> descriptiveNames = descriptiveNameFromFile.descriptiveNamesForCheckUniqueness(files, "InvalidName");
 		return zipIntoGrouping(descriptiveNames, openedRasters);		
 	}
 
-	private List<NamedChnlsInputAsStack> zipIntoGrouping(List<DescriptiveFile> df, List<MultiFileReaderOpenedRaster> or) {
+	private List<NamedChnlsInput> zipIntoGrouping(List<DescriptiveFile> df, List<MultiFileReaderOpenedRaster> or) {
 		
 		Iterator<DescriptiveFile> it1 = df.iterator();
 		Iterator<MultiFileReaderOpenedRaster> it2 = or.iterator();
 		
-		List<NamedChnlsInputAsStack> result = new ArrayList<>();
+		List<NamedChnlsInput> result = new ArrayList<>();
 		while (it1.hasNext() && it2.hasNext()) {
 			DescriptiveFile d = it1.next();
 			result.add(

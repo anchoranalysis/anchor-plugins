@@ -33,10 +33,10 @@ import ij.process.ImageProcessor;
 
 import java.nio.file.Path;
 
-import org.anchoranalysis.io.bean.output.OutputWriteSettings;
 import org.anchoranalysis.io.generator.SingleFileTypeGenerator;
 import org.anchoranalysis.io.manifest.ManifestDescription;
-import org.anchoranalysis.io.output.OutputWriteFailedException;
+import org.anchoranalysis.io.output.bean.OutputWriteSettings;
+import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
 public class ImageProcessorGenerator extends SingleFileTypeGenerator {
 

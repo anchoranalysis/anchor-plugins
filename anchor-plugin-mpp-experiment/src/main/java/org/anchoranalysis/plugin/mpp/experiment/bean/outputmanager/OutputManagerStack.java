@@ -27,10 +27,10 @@ package org.anchoranalysis.plugin.mpp.experiment.bean.outputmanager;
  */
 
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.io.bean.output.allowed.AllOutputAllowed;
-import org.anchoranalysis.io.bean.output.allowed.NoOutputAllowed;
-import org.anchoranalysis.io.bean.output.allowed.OutputAllowed;
 import org.anchoranalysis.io.output.bean.OutputManagerWithPrefixer;
+import org.anchoranalysis.io.output.bean.allowed.OutputAllowed;
+import org.anchoranalysis.plugin.io.bean.output.allowed.AllOutputAllowed;
+import org.anchoranalysis.plugin.io.bean.output.allowed.NoOutputAllowed;
 
 import ch.ethz.biol.cell.countchrom.experiment.StackOutputKeys;
 

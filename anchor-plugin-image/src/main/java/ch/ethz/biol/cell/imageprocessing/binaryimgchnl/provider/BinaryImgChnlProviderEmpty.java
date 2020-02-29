@@ -36,7 +36,7 @@ import org.anchoranalysis.image.binary.values.BinaryValues;
 import org.anchoranalysis.image.chnl.Chnl;
 import org.anchoranalysis.image.chnl.factory.ChnlFactory;
 import org.anchoranalysis.image.extent.ImageDim;
-import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeByte;
+import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
 
 public class BinaryImgChnlProviderEmpty extends BinaryImgChnlProvider {
 
@@ -61,7 +61,7 @@ public class BinaryImgChnlProviderEmpty extends BinaryImgChnlProvider {
 		
 		ImageDim sd = dimProvider.create();
 		
-		Chnl chnl = ChnlFactory.instance().createEmptyInitialised(sd, VoxelDataTypeByte.instance);
+		Chnl chnl = ChnlFactory.instance().createEmptyInitialised(sd, VoxelDataTypeUnsignedByte.instance);
 
 		BinaryValues bvOut = BinaryValues.getDefault();
 		 

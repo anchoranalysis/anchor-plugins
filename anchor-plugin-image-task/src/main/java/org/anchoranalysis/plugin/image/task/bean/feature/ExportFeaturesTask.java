@@ -26,7 +26,6 @@ package org.anchoranalysis.plugin.image.task.bean.feature;
  * #L%
  */
 
-import java.io.IOException;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
@@ -45,10 +44,10 @@ import org.anchoranalysis.feature.bean.list.FeatureListProvider;
 import org.anchoranalysis.feature.list.NamedFeatureStore;
 import org.anchoranalysis.feature.list.NamedFeatureStoreFactory;
 import org.anchoranalysis.io.bean.filepath.generator.FilePathGenerator;
+import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.input.InputFromManager;
 import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
-
-import ch.ethz.biol.cell.countchrom.experiment.imagefeature.sharedstate.SharedStateExportFeatures;
+import org.anchoranalysis.plugin.image.task.sharedstate.SharedStateExportFeatures;
 
 /**
  * Base class for tasks that calculate features and export them as a CSV
@@ -87,12 +86,12 @@ public abstract class ExportFeaturesTask<T extends InputFromManager, S extends S
 	}
 	
 	/** Determines the unique image name from an inputPath */
-	protected String extractImageIdentifier( Path inputPath, boolean debugMode ) throws IOException {
+	protected String extractImageIdentifier( Path inputPath, boolean debugMode ) throws AnchorIOException {
 		return filePathAsIdentifier(idGenerator, inputPath, debugMode, path->path );
 	}
 	
 	/** Determines the group name corresponding to an inputPath */
-	protected String extractGroupName( Path inputPath, boolean debugMode ) throws IOException {
+	protected String extractGroupName( Path inputPath, boolean debugMode ) throws AnchorIOException {
 		return filePathAsIdentifier(groupGenerator, inputPath, debugMode, path->path.getFileName() );
 	}
 	
@@ -118,17 +117,17 @@ public abstract class ExportFeaturesTask<T extends InputFromManager, S extends S
 				outputManager,
 				logErrorReporter
 			);
-		} catch (IOException | CreateException e) {
+		} catch (AnchorIOException | CreateException e) {
 			throw new ExperimentExecutionException(e);
 		}
 	}
 	
-	private static String filePathAsIdentifier( FilePathGenerator generator, Path path, boolean debugMode, Function<Path,Path> alternative ) throws IOException {
+	private static String filePathAsIdentifier( FilePathGenerator generator, Path path, boolean debugMode, Function<Path,Path> alternative ) throws AnchorIOException {
 		Path out = determinePath(generator, path, debugMode, alternative);
 		return PathUtilities.toStringUnixStyle(out);
 	}
 	
-	private static Path determinePath( FilePathGenerator generator, Path path, boolean debugMode, Function<Path,Path> alternative ) throws IOException {
+	private static Path determinePath( FilePathGenerator generator, Path path, boolean debugMode, Function<Path,Path> alternative ) throws AnchorIOException {
 		if (generator!=null) {
 			return generator.outFilePath(path, debugMode );
 		} else {

@@ -27,7 +27,6 @@ package ch.ethz.biol.cell.countchrom.experiment;
  */
 
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -37,14 +36,16 @@ import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.core.text.TypedValue;
 import org.anchoranalysis.experiment.JobExecutionException;
 import org.anchoranalysis.experiment.bean.task.TaskWithoutSharedState;
+import org.anchoranalysis.experiment.task.InputTypesExpected;
 import org.anchoranalysis.experiment.task.ParametersBound;
 import org.anchoranalysis.io.bean.report.feature.ReportFeature;
-import org.anchoranalysis.io.manifest.CoupledManifests;
-import org.anchoranalysis.io.manifest.ManifestCouplingDefinition;
+import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.manifest.ManifestRecorderFile;
 import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
 import org.anchoranalysis.io.output.csv.CSVWriter;
 import org.anchoranalysis.io.report.feature.ReportFeatureUtilities;
+import org.anchoranalysis.plugin.io.manifest.CoupledManifests;
+import org.anchoranalysis.plugin.io.manifest.ManifestCouplingDefinition;
 
 
 public class CSVTableExportTaskManifestCouplingDefinition extends TaskWithoutSharedState<ManifestCouplingDefinition> {
@@ -60,7 +61,12 @@ public class CSVTableExportTaskManifestCouplingDefinition extends TaskWithoutSha
 	// END BEAN PROPERTIES
 
 	@Override
-	protected void doJobOnInputObject(ParametersBound<ManifestCouplingDefinition,Object> params ) throws JobExecutionException {
+	public InputTypesExpected inputTypesExpected() {
+		return new InputTypesExpected(ManifestCouplingDefinition.class);
+	}
+		
+	@Override
+	public void doJobOnInputObject(ParametersBound<ManifestCouplingDefinition,Object> params ) throws JobExecutionException {
 		
 		LogErrorReporter logErrorReporter = params.getLogErrorReporter();
 		ManifestCouplingDefinition input = params.getInputObject();
@@ -69,7 +75,7 @@ public class CSVTableExportTaskManifestCouplingDefinition extends TaskWithoutSha
 		CSVWriter writer;
 		try {
 			writer = CSVWriter.createFromOutputManager("featureReport", outputManager.getDelegate());
-		} catch (IOException e1) {
+		} catch (AnchorIOException e1) {
 			throw new JobExecutionException(e1);
 		}
 		

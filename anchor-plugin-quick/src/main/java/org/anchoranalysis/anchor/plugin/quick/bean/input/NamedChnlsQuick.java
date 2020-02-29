@@ -26,14 +26,12 @@ package org.anchoranalysis.anchor.plugin.quick.bean.input;
  * #L%
  */
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import org.anchoranalysis.anchor.plugin.quick.bean.input.filepathappend.AppendStack;
 import org.anchoranalysis.anchor.plugin.quick.bean.input.filepathappend.MatchedAppendCsv;
-import org.anchoranalysis.anchor.plugin.quick.input.BeanCreationUtilities;
 import org.anchoranalysis.bean.BeanInstanceMap;
 import org.anchoranalysis.bean.NamedBean;
 import org.anchoranalysis.bean.annotation.AllowEmpty;
@@ -41,21 +39,19 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.DefaultInstance;
 import org.anchoranalysis.bean.annotation.Optional;
 import org.anchoranalysis.bean.error.BeanMisconfiguredException;
-import org.anchoranalysis.core.progress.ProgressReporter;
-import org.anchoranalysis.image.io.input.NamedChnlsInputBase;
+import org.anchoranalysis.image.io.input.NamedChnlsInputPart;
 import org.anchoranalysis.io.bean.provider.file.FileProviderWithDirectory;
-import org.anchoranalysis.io.deserializer.DeserializationFailedException;
+import org.anchoranalysis.io.error.AnchorIOException;
+import org.anchoranalysis.io.bean.descriptivename.DescriptiveNameFromFile;
 import org.anchoranalysis.io.bean.filepath.generator.FilePathGenerator;
 import org.anchoranalysis.io.bean.filepath.generator.FilePathGeneratorReplace;
 import org.anchoranalysis.io.bean.input.InputManager;
-import org.anchoranalysis.io.bean.input.descriptivename.DescriptiveNameFromFile;
-import org.anchoranalysis.io.bean.input.descriptivename.LastFolders;
+import org.anchoranalysis.io.bean.input.InputManagerParams;
 import org.anchoranalysis.io.input.FileInput;
-import org.anchoranalysis.io.params.InputContextParams;
-import org.anchoranalysis.image.io.bean.input.AdjacentFile;
-import org.anchoranalysis.image.io.bean.input.ImgChnlMapEntry;
-import org.anchoranalysis.image.io.bean.input.NamedChnlsAppend;
-import org.anchoranalysis.image.io.bean.input.NamedChnlsBase;
+import org.anchoranalysis.plugin.io.bean.descriptivename.LastFolders;
+import org.anchoranalysis.plugin.io.bean.input.chnl.NamedChnlsAppend;
+import org.anchoranalysis.plugin.io.bean.input.chnl.NamedChnlsBase;
+import org.anchoranalysis.image.io.bean.chnl.map.ImgChnlMapEntry;
 import org.anchoranalysis.image.io.bean.rasterreader.RasterReader;
 
 /**
@@ -151,7 +147,7 @@ public class NamedChnlsQuick extends NamedChnlsBase {
 	private RasterReader rasterReaderAdjacent;
 	// END BEAN PROPERTIES
 
-	private InputManager<NamedChnlsInputBase> append;
+	private InputManager<NamedChnlsInputPart> append;
 	
 	private BeanInstanceMap defaultInstances;
 	
@@ -181,23 +177,23 @@ public class NamedChnlsQuick extends NamedChnlsBase {
 	}
 	
 	@Override
-	public List<NamedChnlsInputBase> inputObjects(InputContextParams inputContext, ProgressReporter progressReporter) throws IOException, DeserializationFailedException {
+	public List<NamedChnlsInputPart> inputObjects(InputManagerParams params) throws AnchorIOException {
 		createAppendedChnlsIfNecessary();
-		return append.inputObjects(inputContext, progressReporter);
+		return append.inputObjects(params);
 	}
 	
-	private void createAppendedChnlsIfNecessary() throws IOException {
+	private void createAppendedChnlsIfNecessary() throws AnchorIOException {
 		if (this.append==null) {
 			try {
 				this.append = createAppendedChnls();
 				append.checkMisconfigured(defaultInstances);
 			} catch (BeanMisconfiguredException e) {
-				throw new IOException(e);
+				throw new AnchorIOException("defaultInstances bean is misconfigured", e);
 			}
 		}
 	}
 	
-	private InputManager<NamedChnlsInputBase> createAppendedChnls() throws BeanMisconfiguredException {
+	private InputManager<NamedChnlsInputPart> createAppendedChnls() throws BeanMisconfiguredException {
 		
 		InputManager<FileInput> files = InputManagerFactory.createFiles(
 			rootName,
@@ -207,7 +203,7 @@ public class NamedChnlsQuick extends NamedChnlsBase {
 			filterFilesCsv
 		);
 		
-		InputManager<NamedChnlsInputBase> chnls = BeanCreationUtilities.createNamedChnls(
+		InputManager<NamedChnlsInputPart> chnls = NamedChnlsCreator.create(
 			files,
 			mainChnlName,
 			mainChnlIndex,
@@ -231,7 +227,7 @@ public class NamedChnlsQuick extends NamedChnlsBase {
 	}
 	
 	private static NamedChnlsAppend appendChnls(
-		InputManager<NamedChnlsInputBase> input,
+		InputManager<NamedChnlsInputPart> input,
 		List<NamedBean<FilePathGenerator>> filePathGenerators,
 		RasterReader rasterReader
 	) {

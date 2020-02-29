@@ -26,14 +26,13 @@ package org.anchoranalysis.gui.annotation.strategy;
  * #L%
  */
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.anchoranalysis.annotation.io.bean.comparer.MultipleComparer;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.Optional;
-import org.anchoranalysis.image.io.input.StackInputBase;
+import org.anchoranalysis.image.io.input.ProvidesStackInput;
 import org.anchoranalysis.io.bean.filepath.generator.FilePathGenerator;
 
 /** Annotates each image with a mark */
@@ -128,7 +127,7 @@ public class MarkProposerStrategy extends SingleFilePathGeneratorStrategy {
 		return 1;
 	}
 	@Override
-	public String annotationLabelFor(StackInputBase item) throws IOException {
+	public String annotationLabelFor(ProvidesStackInput item) {
 		return null;
 	}
 }

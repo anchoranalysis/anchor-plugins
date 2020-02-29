@@ -26,20 +26,21 @@ package org.anchoranalysis.plugin.image.task.bean.grouped;
  * #L%
  */
 
-import java.io.IOException;
 import java.nio.file.Path;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.core.progress.ProgressReporterNull;
 import org.anchoranalysis.experiment.JobExecutionException;
+import org.anchoranalysis.experiment.task.InputTypesExpected;
 import org.anchoranalysis.experiment.task.ParametersBound;
 import org.anchoranalysis.experiment.task.Task;
-import org.anchoranalysis.image.io.input.StackInputBase;
+import org.anchoranalysis.image.io.input.ProvidesStackInput;
 import org.anchoranalysis.image.stack.NamedImgStackCollection;
 import org.anchoranalysis.image.stack.wrap.WrapStackAsTimeSequenceStore;
 import org.anchoranalysis.io.bean.filepath.generator.FilePathGenerator;
 import org.anchoranalysis.io.bean.filepath.generator.FilePathGeneratorConstant;
+import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
 import org.anchoranalysis.plugin.image.task.bean.selectchnls.SelectAll;
 import org.anchoranalysis.plugin.image.task.bean.selectchnls.SelectChnlsFromStacks;
@@ -52,7 +53,7 @@ import org.anchoranalysis.plugin.image.task.bean.selectchnls.SelectChnlsFromStac
  * @param <S> individual-type
  * @param <T> aggregate-type
  */
-public abstract class GroupedStackTask<S,T> extends Task<StackInputBase,GroupedSharedState<S,T>> {
+public abstract class GroupedStackTask<S,T> extends Task<ProvidesStackInput,GroupedSharedState<S,T>> {
 
 	/**
 	 * 
@@ -67,11 +68,15 @@ public abstract class GroupedStackTask<S,T> extends Task<StackInputBase,GroupedS
 	private SelectChnlsFromStacks selectChnls = new SelectAll();
 	// END BEAN PROPERTIES
 
-
 	@Override
-	protected void doJobOnInputObject(	ParametersBound<StackInputBase,GroupedSharedState<S,T>> params) throws JobExecutionException {
+	public InputTypesExpected inputTypesExpected() {
+		return new InputTypesExpected(ProvidesStackInput.class);
+	}
+	
+	@Override
+	public void doJobOnInputObject(	ParametersBound<ProvidesStackInput,GroupedSharedState<S,T>> params) throws JobExecutionException {
 		
-		StackInputBase inputObject = params.getInputObject();
+		ProvidesStackInput inputObject = params.getInputObject();
 
 		// Extract a group name
 		String groupName = extractGroupName( inputObject.pathForBinding(), params.getExperimentArguments().isDebugEnabled() );
@@ -98,7 +103,7 @@ public abstract class GroupedStackTask<S,T> extends Task<StackInputBase,GroupedS
 	private String extractGroupName( Path path, boolean debugEnabled ) throws JobExecutionException {
 		try {
 			return groupGenerator.outFilePath( path, debugEnabled ).toString();
-		} catch (IOException e1) {
+		} catch (AnchorIOException e1) {
 			throw new JobExecutionException(
 				String.format("Cannot establish a group-identifier for: %s", path ),
 				e1
@@ -106,7 +111,7 @@ public abstract class GroupedStackTask<S,T> extends Task<StackInputBase,GroupedS
 		}
 	}
 		
-	private static NamedImgStackCollection extractInputStacks( StackInputBase inputObject ) throws JobExecutionException {
+	private static NamedImgStackCollection extractInputStacks( ProvidesStackInput inputObject ) throws JobExecutionException {
 		NamedImgStackCollection stackCollection = new NamedImgStackCollection();
 		try {
 			inputObject.addToStore(
