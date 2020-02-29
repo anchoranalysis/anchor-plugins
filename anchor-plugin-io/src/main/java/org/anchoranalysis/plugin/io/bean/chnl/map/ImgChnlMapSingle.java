@@ -28,9 +28,9 @@ package org.anchoranalysis.plugin.io.bean.chnl.map;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.image.io.bean.chnl.map.ImgChnlMap;
 import org.anchoranalysis.image.io.bean.chnl.map.ImgChnlMapCreator;
 import org.anchoranalysis.image.io.bean.chnl.map.ImgChnlMapEntry;
+import org.anchoranalysis.image.io.chnl.map.ImgChnlMap;
 import org.anchoranalysis.image.io.rasterreader.OpenedRaster;
 
 // For a raster with a single input channel

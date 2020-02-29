@@ -36,6 +36,7 @@ import org.anchoranalysis.core.log.LogReporter;
 import org.anchoranalysis.core.progress.ProgressReporterNull;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
 import org.anchoranalysis.experiment.JobExecutionException;
+import org.anchoranalysis.experiment.task.InputTypesExpected;
 import org.anchoranalysis.experiment.task.ParametersBound;
 import org.anchoranalysis.experiment.task.ParametersExperiment;
 import org.anchoranalysis.experiment.task.Task;
@@ -94,9 +95,14 @@ public class ExtractSingleSliceTask extends Task<NamedChnlsInput,SharedStateSele
 			throw new ExperimentExecutionException(e);
 		}			
 	}
-
+	
 	@Override
-	protected void doJobOnInputObject(ParametersBound<NamedChnlsInput, SharedStateSelectedSlice> params)
+	public InputTypesExpected inputTypesExpected() {
+		return new InputTypesExpected(NamedChnlsInput.class);
+	}
+	
+	@Override
+	public void doJobOnInputObject(ParametersBound<NamedChnlsInput, SharedStateSelectedSlice> params)
 			throws JobExecutionException {
 
 		try {

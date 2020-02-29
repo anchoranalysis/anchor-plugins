@@ -34,6 +34,7 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.log.LogReporter;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
 import org.anchoranalysis.experiment.JobExecutionException;
+import org.anchoranalysis.experiment.task.InputTypesExpected;
 import org.anchoranalysis.experiment.task.ParametersBound;
 import org.anchoranalysis.experiment.task.ParametersExperiment;
 import org.anchoranalysis.experiment.task.Task;
@@ -64,7 +65,7 @@ public class AnnotationAggregateTask<S extends AnnotatorStrategy> extends Task<A
 	}
 	
 	@Override
-	protected void doJobOnInputObject(ParametersBound<AnnotationWithStrategy<S>, AggregateSharedState> params)
+	public void doJobOnInputObject(ParametersBound<AnnotationWithStrategy<S>, AggregateSharedState> params)
 			throws JobExecutionException {
 			
 		ImageAnnotation ann = createFromInputObject( params.getInputObject() );
@@ -112,5 +113,10 @@ public class AnnotationAggregateTask<S extends AnnotatorStrategy> extends Task<A
 	@Override
 	public boolean hasVeryQuickPerInputExecution() {
 		return false;
+	}
+
+	@Override
+	public InputTypesExpected inputTypesExpected() {
+		return new InputTypesExpected(AnnotationWithStrategy.class);
 	}
 }

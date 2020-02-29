@@ -1,5 +1,7 @@
 package org.anchoranalysis.anchor.plugin.quick.bean.input;
 
+import java.util.ArrayList;
+
 /*-
  * #%L
  * anchor-plugin-quick
@@ -33,7 +35,6 @@ import org.anchoranalysis.io.bean.input.InputManager;
 import org.anchoranalysis.io.input.FileInput;
 import org.anchoranalysis.plugin.io.bean.chnl.map.ImgChnlMapDefine;
 import org.anchoranalysis.plugin.io.bean.input.chnl.NamedChnls;
-import org.anchoranalysis.image.io.bean.chnl.map.ImgChnlMap;
 import org.anchoranalysis.image.io.bean.chnl.map.ImgChnlMapCreator;
 import org.anchoranalysis.image.io.bean.chnl.map.ImgChnlMapEntry;
 import org.anchoranalysis.image.io.bean.rasterreader.RasterReader;
@@ -63,9 +64,13 @@ class NamedChnlsCreator {
 	
 	private static ImgChnlMapCreator createMapCreator( String mainChnlName, int mainChnlIndex, List<ImgChnlMapEntry> additionalChnls) throws BeanMisconfiguredException {
 		ImgChnlMapDefine define = new ImgChnlMapDefine();
-		
-		define.setImgChnlMap( new ImgChnlMap() );
-		addChnlEntry(define, mainChnlName, mainChnlIndex);
+		define.setList( listEntries(mainChnlName, mainChnlIndex, additionalChnls) );
+		return define;
+	}
+	
+	private static List<ImgChnlMapEntry> listEntries( String mainChnlName, int mainChnlIndex, List<ImgChnlMapEntry> additionalChnls ) throws BeanMisconfiguredException {
+		List<ImgChnlMapEntry> out = new ArrayList<>();
+		addChnlEntry(out, mainChnlName, mainChnlIndex);
 		
 		for( ImgChnlMapEntry entry : additionalChnls ) {
 			
@@ -79,13 +84,13 @@ class NamedChnlsCreator {
 				);
 			}
 			
-			addChnlEntry(define, entry.getName(), entry.getIndex());	
+			addChnlEntry(out, entry.getName(), entry.getIndex());	
 		}
-		return define;
+		return out;
 	}
 	
-	private static void addChnlEntry( ImgChnlMapDefine define, String name, int index ) {
-		define.getImgChnlMap().add( new ImgChnlMapEntry(name, index) );
+	private static void addChnlEntry( List<ImgChnlMapEntry> list, String name, int index ) {
+		list.add( new ImgChnlMapEntry(name, index) );
 	}
 	
 }

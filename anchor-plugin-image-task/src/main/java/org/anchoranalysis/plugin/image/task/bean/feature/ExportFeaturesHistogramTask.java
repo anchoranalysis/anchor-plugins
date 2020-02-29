@@ -37,6 +37,7 @@ import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.core.name.store.SharedObjects;
+import org.anchoranalysis.experiment.task.InputTypesExpected;
 import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.calc.ResultsVector;
@@ -86,6 +87,11 @@ public class ExportFeaturesHistogramTask extends ExportFeaturesStoreTask<FileInp
 		super("histogram");
 	}
 	
+	@Override
+	public InputTypesExpected inputTypesExpected() {
+		return new InputTypesExpected(FileInput.class);
+	}
+		
 	@Override
 	protected ResultsVector calcResultsVectorForInputObject(
 		FileInput inputObject,

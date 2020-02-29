@@ -36,6 +36,7 @@ import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.core.text.TypedValue;
 import org.anchoranalysis.experiment.JobExecutionException;
 import org.anchoranalysis.experiment.bean.task.TaskWithoutSharedState;
+import org.anchoranalysis.experiment.task.InputTypesExpected;
 import org.anchoranalysis.experiment.task.ParametersBound;
 import org.anchoranalysis.io.bean.report.feature.ReportFeature;
 import org.anchoranalysis.io.error.AnchorIOException;
@@ -60,7 +61,12 @@ public class CSVTableExportTaskManifestCouplingDefinition extends TaskWithoutSha
 	// END BEAN PROPERTIES
 
 	@Override
-	protected void doJobOnInputObject(ParametersBound<ManifestCouplingDefinition,Object> params ) throws JobExecutionException {
+	public InputTypesExpected inputTypesExpected() {
+		return new InputTypesExpected(ManifestCouplingDefinition.class);
+	}
+		
+	@Override
+	public void doJobOnInputObject(ParametersBound<ManifestCouplingDefinition,Object> params ) throws JobExecutionException {
 		
 		LogErrorReporter logErrorReporter = params.getLogErrorReporter();
 		ManifestCouplingDefinition input = params.getInputObject();

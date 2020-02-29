@@ -119,7 +119,7 @@ public class ScaleTask extends RasterTask {
 		
 		try {
 			// We store each channel as a stack in our collection, in case they need to be referenced by the scale calculator
-			nccfs.addToStackCollection(
+			nccfs.addAsSeparateChnls(
 				new WrapStackAsTimeSequenceStore( soImage.getStackCollection() ),
 				0
 			);

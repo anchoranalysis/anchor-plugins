@@ -32,8 +32,8 @@ import java.nio.file.Path;
 import org.anchoranalysis.core.cache.ExecuteException;
 import org.anchoranalysis.core.cache.Operation;
 import org.anchoranalysis.core.index.GetOperationFailedException;
-import org.anchoranalysis.image.io.bean.chnl.map.ImgChnlMap;
 import org.anchoranalysis.image.io.bean.chnl.map.ImgChnlMapEntry;
+import org.anchoranalysis.image.io.chnl.map.ImgChnlMap;
 
 class AdditionalChnl {
 	private String chnlName;

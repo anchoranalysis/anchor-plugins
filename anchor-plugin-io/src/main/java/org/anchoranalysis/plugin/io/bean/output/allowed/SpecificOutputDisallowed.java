@@ -1,7 +1,6 @@
-package org.anchoranalysis.plugin.io.bean.chnl.map;
+package org.anchoranalysis.plugin.io.bean.output.allowed;
 
-import java.util.ArrayList;
-import java.util.List;
+import org.anchoranalysis.bean.StringSet;
 
 /*
  * #%L
@@ -29,43 +28,41 @@ import java.util.List;
  * #L%
  */
 
-import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.image.io.bean.chnl.map.ImgChnlMapCreator;
-import org.anchoranalysis.image.io.bean.chnl.map.ImgChnlMapEntry;
-import org.anchoranalysis.image.io.chnl.map.ImgChnlMap;
-import org.anchoranalysis.image.io.rasterreader.OpenedRaster;
 
-public class ImgChnlMapDefine extends ImgChnlMapCreator {
+import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.io.output.bean.allowed.OutputAllowed;
+
+public class SpecificOutputDisallowed extends OutputAllowed {
 
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 1L;
-
+	private static final long serialVersionUID = -7783226379991535090L;
+	
 	// START BEAN PROPERTIES
 	@BeanField
-	private List<ImgChnlMapEntry> list = new ArrayList<>();
+	private StringSet outputsDisallowed;
 	// END BEAN PROPERTIES
-
-	public ImgChnlMapDefine() {
-		super();
+	
+	public SpecificOutputDisallowed() {
+		
 	}
-
+	
+	public SpecificOutputDisallowed( StringSet outputsDisallowed ) {
+		this.outputsDisallowed = outputsDisallowed;
+	}
+	
 	@Override
-	public ImgChnlMap createMap(OpenedRaster openedRaster) {
-		ImgChnlMap out = new ImgChnlMap();
-		for( ImgChnlMapEntry entry : list) {
-			out.add(entry);
-		}
-		return out;
+	public boolean isOutputAllowed(String outputName) {
+		return !outputsDisallowed.contains(outputName);
 	}
 
-	public List<ImgChnlMapEntry> getList() {
-		return list;
+	public StringSet getOutputsDisallowed() {
+		return outputsDisallowed;
 	}
 
-	public void setList(List<ImgChnlMapEntry> list) {
-		this.list = list;
+	public void setOutputsDisallowed(StringSet outputsDisallowed) {
+		this.outputsDisallowed = outputsDisallowed;
 	}
 
 }

@@ -32,6 +32,7 @@ import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.core.progress.ProgressReporterNull;
 import org.anchoranalysis.experiment.JobExecutionException;
+import org.anchoranalysis.experiment.task.InputTypesExpected;
 import org.anchoranalysis.experiment.task.ParametersBound;
 import org.anchoranalysis.experiment.task.Task;
 import org.anchoranalysis.image.io.input.ProvidesStackInput;
@@ -67,9 +68,13 @@ public abstract class GroupedStackTask<S,T> extends Task<ProvidesStackInput,Grou
 	private SelectChnlsFromStacks selectChnls = new SelectAll();
 	// END BEAN PROPERTIES
 
-
 	@Override
-	protected void doJobOnInputObject(	ParametersBound<ProvidesStackInput,GroupedSharedState<S,T>> params) throws JobExecutionException {
+	public InputTypesExpected inputTypesExpected() {
+		return new InputTypesExpected(ProvidesStackInput.class);
+	}
+	
+	@Override
+	public void doJobOnInputObject(	ParametersBound<ProvidesStackInput,GroupedSharedState<S,T>> params) throws JobExecutionException {
 		
 		ProvidesStackInput inputObject = params.getInputObject();
 

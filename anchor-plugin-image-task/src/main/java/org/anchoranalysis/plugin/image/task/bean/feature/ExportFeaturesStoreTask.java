@@ -98,7 +98,7 @@ public abstract class ExportFeaturesStoreTask<T extends InputFromManager> extend
 	}
 
 	@Override
-	protected void doJobOnInputObject( ParametersBound<T,SharedStateExportFeaturesWithStore> params ) throws JobExecutionException {
+	public void doJobOnInputObject( ParametersBound<T,SharedStateExportFeaturesWithStore> params ) throws JobExecutionException {
 		
 		try {
 			ResultsVector rv = calcResultsVectorForInputObject(

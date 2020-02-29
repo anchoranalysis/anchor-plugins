@@ -69,7 +69,7 @@ public abstract class SummarizeTask<T extends InputFromManager,S> extends Task<T
 	}
 	
 	@Override
-	protected void doJobOnInputObject(ParametersBound<T, Summarizer<S>> params) throws JobExecutionException {
+	public void doJobOnInputObject(ParametersBound<T, Summarizer<S>> params) throws JobExecutionException {
 		try {
 			params.getSharedState().add( extractObjectForSummary(params.getInputObject()) );
 		} catch (OperationFailedException e) {

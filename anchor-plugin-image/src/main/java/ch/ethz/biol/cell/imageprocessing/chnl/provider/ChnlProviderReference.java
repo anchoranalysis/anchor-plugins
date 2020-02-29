@@ -44,7 +44,7 @@ public class ChnlProviderReference extends ChnlProvider {
 	@BeanField
 	private String id = "";
 	
-	/** If true the channel is duplicated after it is retrieved, to prevent overwriting exisiting data
+	/** If true the channel is duplicated after it is retrieved, to prevent overwriting existing data
 	 *  This is a shortcut to avoid embedding beans in a ChnlProviderDuplicate
 	 */
 	@BeanField

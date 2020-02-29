@@ -42,6 +42,7 @@ import org.anchoranalysis.core.name.store.NamedProviderStore;
 import org.anchoranalysis.core.params.KeyValueParams;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
 import org.anchoranalysis.experiment.JobExecutionException;
+import org.anchoranalysis.experiment.task.InputTypesExpected;
 import org.anchoranalysis.experiment.task.ParametersBound;
 import org.anchoranalysis.experiment.task.ParametersExperiment;
 import org.anchoranalysis.experiment.task.Task;
@@ -82,7 +83,7 @@ public class CfgSgmnTask extends Task<MultiInput,ExperimentState>{
 	}
 	
 	@Override
-	protected void doJobOnInputObject(	ParametersBound<MultiInput,ExperimentState> params)	throws JobExecutionException {
+	public void doJobOnInputObject(	ParametersBound<MultiInput,ExperimentState> params)	throws JobExecutionException {
 
 		LogErrorReporter logErrorReporter = params.getLogErrorReporter();
 		MultiInput inputObject = params.getInputObject();
@@ -113,6 +114,11 @@ public class CfgSgmnTask extends Task<MultiInput,ExperimentState>{
 		} catch (OperationFailedException e) {
 			throw new JobExecutionException(e);
 		}
+	}
+	
+	@Override
+	public InputTypesExpected inputTypesExpected() {
+		return new InputTypesExpected(MultiInput.class);
 	}
 	
 	private NamedImgStackCollection stacksFromInput( MultiInput inputObject ) throws OperationFailedException {

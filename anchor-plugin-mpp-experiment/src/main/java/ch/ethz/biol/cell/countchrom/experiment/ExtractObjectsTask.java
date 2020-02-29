@@ -54,6 +54,7 @@ import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.core.name.store.SharedObjects;
 import org.anchoranalysis.experiment.JobExecutionException;
 import org.anchoranalysis.experiment.bean.task.TaskWithoutSharedState;
+import org.anchoranalysis.experiment.task.InputTypesExpected;
 import org.anchoranalysis.experiment.task.ParametersBound;
 import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
 import org.anchoranalysis.image.bean.provider.stack.StackProvider;
@@ -138,6 +139,12 @@ public class ExtractObjectsTask extends TaskWithoutSharedState<MultiInput> {
 	@BeanField
 	private boolean keepEntireImage = false;
 	// END BEAN PROPERTIES
+	
+	@Override
+	public InputTypesExpected inputTypesExpected() {
+		return new InputTypesExpected(MultiInput.class);
+	}
+	
 	
 	@Override
 	public boolean hasVeryQuickPerInputExecution() {
@@ -440,7 +447,7 @@ public class ExtractObjectsTask extends TaskWithoutSharedState<MultiInput> {
 	}
 	
 	@Override
-	protected void doJobOnInputObject(	ParametersBound<MultiInput,Object> params)	throws JobExecutionException {
+	public void doJobOnInputObject(	ParametersBound<MultiInput,Object> params)	throws JobExecutionException {
 		
 		LogErrorReporter logErrorReporter = params.getLogErrorReporter();
 		MultiInput inputObject = params.getInputObject();

@@ -29,9 +29,9 @@ package org.anchoranalysis.plugin.io.bean.chnl.map;
 import java.util.List;
 
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.image.io.bean.chnl.map.ImgChnlMap;
 import org.anchoranalysis.image.io.bean.chnl.map.ImgChnlMapCreator;
 import org.anchoranalysis.image.io.bean.chnl.map.ImgChnlMapEntry;
+import org.anchoranalysis.image.io.chnl.map.ImgChnlMap;
 import org.anchoranalysis.image.io.rasterreader.OpenedRaster;
 
 public class ImgChnlMapFromMetadata extends ImgChnlMapCreator {

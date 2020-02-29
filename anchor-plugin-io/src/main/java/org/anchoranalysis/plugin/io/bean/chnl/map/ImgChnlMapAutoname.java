@@ -30,9 +30,9 @@ import java.util.List;
 
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.io.RasterIOException;
-import org.anchoranalysis.image.io.bean.chnl.map.ImgChnlMap;
 import org.anchoranalysis.image.io.bean.chnl.map.ImgChnlMapCreator;
 import org.anchoranalysis.image.io.bean.chnl.map.ImgChnlMapEntry;
+import org.anchoranalysis.image.io.chnl.map.ImgChnlMap;
 import org.anchoranalysis.image.io.rasterreader.OpenedRaster;
 
 /**
@@ -72,6 +72,7 @@ public class ImgChnlMapAutoname extends ImgChnlMapCreator {
 		try {
 			boolean rgb = openedRaster.isRGB() && openedRaster.numChnl()==3;
 			
+			// The insertion order is critical here to remember R, G, B
 			for (int c = 0; c < openedRaster.numChnl(); c++) {
 				map.add(
 					new ImgChnlMapEntry(

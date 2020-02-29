@@ -44,6 +44,7 @@ import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.core.name.store.SharedObjects;
 import org.anchoranalysis.experiment.JobExecutionException;
 import org.anchoranalysis.experiment.bean.task.TaskWithoutSharedState;
+import org.anchoranalysis.experiment.task.InputTypesExpected;
 import org.anchoranalysis.experiment.task.ParametersBound;
 import org.anchoranalysis.image.init.ImageInitParams;
 import org.anchoranalysis.image.io.bean.output.feature.table.OutputFeatureTable;
@@ -62,7 +63,7 @@ public class SharedObjectsMultiInputTask extends TaskWithoutSharedState<MultiInp
 	
 	// START BEAN PROPERTIES
 	@BeanField
-	private Define namedDefinitions;
+	private Define define;
 	
 	@BeanField
 	private RandomNumberGeneratorBean randomNumberGenerator = new RandomNumberGeneratorMersenneConstantBean();
@@ -85,7 +86,12 @@ public class SharedObjectsMultiInputTask extends TaskWithoutSharedState<MultiInp
 	// END BEAN PROPERTIES
 
 	@Override
-	protected void doJobOnInputObject(	ParametersBound<MultiInput,Object> params)	throws JobExecutionException {
+	public InputTypesExpected inputTypesExpected() {
+		return new InputTypesExpected(MultiInput.class);
+	}
+	
+	@Override
+	public void doJobOnInputObject(	ParametersBound<MultiInput,Object> params)	throws JobExecutionException {
 		
 		LogErrorReporter logErrorReporter = params.getLogErrorReporter();
 		MultiInput inputObject = params.getInputObject();
@@ -95,7 +101,7 @@ public class SharedObjectsMultiInputTask extends TaskWithoutSharedState<MultiInp
 			SharedObjects so = new SharedObjects( logErrorReporter	);
 			MPPInitParams soMPP = MPPInitParams.create(
 				so,
-				namedDefinitions,
+				define,
 				logErrorReporter,
 				randomNumberGenerator.create()
 			);
@@ -184,15 +190,6 @@ public class SharedObjectsMultiInputTask extends TaskWithoutSharedState<MultiInp
 	public void setNrgParamsName(String nrgParamsName) {
 		this.nrgParamsName = nrgParamsName;
 	}
-		
-	public Define getNamedDefinitions() {
-		return namedDefinitions;
-	}
-
-
-	public void setNamedDefinitions(Define namedDefinitions) {
-		this.namedDefinitions = namedDefinitions;
-	}
 
 	public RandomNumberGeneratorBean getRandomNumberGenerator() {
 		return randomNumberGenerator;
@@ -201,6 +198,14 @@ public class SharedObjectsMultiInputTask extends TaskWithoutSharedState<MultiInp
 
 	public void setRandomNumberGenerator(RandomNumberGeneratorBean randomNumberGenerator) {
 		this.randomNumberGenerator = randomNumberGenerator;
+	}
+
+	public Define getDefine() {
+		return define;
+	}
+
+	public void setDefine(Define define) {
+		this.define = define;
 	}	
 	
 }

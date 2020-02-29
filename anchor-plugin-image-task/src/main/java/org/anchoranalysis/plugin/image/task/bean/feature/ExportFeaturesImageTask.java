@@ -30,6 +30,7 @@ package org.anchoranalysis.plugin.image.task.bean.feature;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.log.LogErrorReporter;
+import org.anchoranalysis.experiment.task.InputTypesExpected;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.calc.ResultsVector;
 import org.anchoranalysis.feature.list.NamedFeatureStore;
@@ -56,6 +57,11 @@ public class ExportFeaturesImageTask extends ExportFeaturesStoreTask<ProvidesSta
 		super("image");
 	}
 	
+	@Override
+	public InputTypesExpected inputTypesExpected() {
+		return new InputTypesExpected(ProvidesStackInput.class);
+	}
+		
 	@Override
 	protected ResultsVector calcResultsVectorForInputObject(
 		ProvidesStackInput inputObject,

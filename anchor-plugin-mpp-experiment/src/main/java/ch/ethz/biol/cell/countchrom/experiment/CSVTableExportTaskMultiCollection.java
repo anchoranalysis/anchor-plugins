@@ -44,6 +44,7 @@ import org.anchoranalysis.core.name.store.SharedObjects;
 import org.anchoranalysis.core.text.TypedValue;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
 import org.anchoranalysis.experiment.JobExecutionException;
+import org.anchoranalysis.experiment.task.InputTypesExpected;
 import org.anchoranalysis.experiment.task.ParametersBound;
 import org.anchoranalysis.experiment.task.ParametersExperiment;
 import org.anchoranalysis.experiment.task.Task;
@@ -97,9 +98,14 @@ public class CSVTableExportTaskMultiCollection extends Task<MultiInput,CSVWriter
 
 		return writer;
 	}
-
+	
 	@Override
-	protected void doJobOnInputObject(ParametersBound<MultiInput,CSVWriter> params)	throws JobExecutionException {
+	public InputTypesExpected inputTypesExpected() {
+		return new InputTypesExpected(MultiInput.class);
+	}
+	
+	@Override
+	public void doJobOnInputObject(ParametersBound<MultiInput,CSVWriter> params)	throws JobExecutionException {
 		
 		LogErrorReporter logErrorReporter = params.getLogErrorReporter();
 		MultiInput input = params.getInputObject();

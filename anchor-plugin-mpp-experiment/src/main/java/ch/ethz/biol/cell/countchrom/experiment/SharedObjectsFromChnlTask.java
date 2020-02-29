@@ -63,7 +63,7 @@ public class SharedObjectsFromChnlTask extends RasterTask {
 	
 	// START BEAN PROPERTIES
 	@BeanField
-	private Define namedDefinitions;
+	private Define define;
 	
 	@BeanField
 	private String outputNameOriginal = "original";
@@ -107,9 +107,9 @@ public class SharedObjectsFromChnlTask extends RasterTask {
 			
 		
 			SharedObjects so = new SharedObjects(logErrorReporter);
-			MPPInitParams soMPP = MPPInitParams.create(so,namedDefinitions,logErrorReporter,randomNumberGenerator.create());
+			MPPInitParams soMPP = MPPInitParams.create(so,define,logErrorReporter,randomNumberGenerator.create());
 			
-			ncc.addToStackCollection(
+			ncc.addAsSeparateChnls(
 				new WrapStackAsTimeSequenceStore( soMPP.getImage().getStackCollection() ),
 				0
 			);
@@ -137,15 +137,6 @@ public class SharedObjectsFromChnlTask extends RasterTask {
 	
 	}
 	
-	public Define getNamedDefinitions() {
-		return namedDefinitions;
-	}
-
-
-	public void setNamedDefinitions(Define namedDefinitions) {
-		this.namedDefinitions = namedDefinitions;
-	}
-
 	public RandomNumberGeneratorBean getRandomNumberGenerator() {
 		return randomNumberGenerator;
 	}
@@ -173,5 +164,13 @@ public class SharedObjectsFromChnlTask extends RasterTask {
 
 	public void setSuppressOutputExceptions(boolean suppressOutputExceptions) {
 		this.suppressOutputExceptions = suppressOutputExceptions;
+	}
+
+	public Define getDefine() {
+		return define;
+	}
+
+	public void setDefine(Define define) {
+		this.define = define;
 	}
 }

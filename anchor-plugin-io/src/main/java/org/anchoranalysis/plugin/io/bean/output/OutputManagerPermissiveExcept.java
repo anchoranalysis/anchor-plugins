@@ -1,5 +1,12 @@
 package org.anchoranalysis.plugin.io.bean.output;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.anchoranalysis.bean.NamedBean;
+
 /*-
  * #%L
  * anchor-io-output
@@ -31,6 +38,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.io.output.bean.OutputManagerWithPrefixer;
 import org.anchoranalysis.io.output.bean.allowed.OutputAllowed;
 import org.anchoranalysis.plugin.io.bean.output.allowed.AllOutputAllowed;
+import org.anchoranalysis.plugin.io.bean.output.allowed.SpecificOutputDisallowed;
 
 
 /**
@@ -49,7 +57,14 @@ public class OutputManagerPermissiveExcept extends OutputManagerWithPrefixer {
 	// START BEAN PROPERTIES
 	@BeanField
 	private StringSet except;
+	
+	/** Ignores all these strings in the second-level (for respect keys) */
+	@BeanField
+	private List<NamedBean<StringSet>> exceptSecondLevel = new ArrayList<>();
 	// END BEAN PROPERTIES
+ 
+	// We cache the second-level map here
+	private Map<String,OutputAllowed> mapSecondLevel = null;
 	
 	@Override
 	public boolean isOutputAllowed(String outputName) {
@@ -58,7 +73,25 @@ public class OutputManagerPermissiveExcept extends OutputManagerWithPrefixer {
 
 	@Override
 	public OutputAllowed outputAllowedSecondLevel(String key) {
-		return new AllOutputAllowed();
+		createSecondLevelMapIfNecessary();
+		return mapSecondLevel.getOrDefault(key, new AllOutputAllowed());
+	}
+	
+	private void createSecondLevelMapIfNecessary() {
+		if (mapSecondLevel==null) {
+			mapSecondLevel = createSecondLevelMap();
+		}
+	}
+	
+	private Map<String,OutputAllowed> createSecondLevelMap() {
+		Map<String,OutputAllowed> map = new HashMap<>();
+		for( NamedBean<StringSet> bean : exceptSecondLevel) {
+			map.put(
+				bean.getName(),
+				new SpecificOutputDisallowed(bean.getItem())
+			);
+		}
+		return map;
 	}
 
 	public StringSet getExcept() {
@@ -67,6 +100,14 @@ public class OutputManagerPermissiveExcept extends OutputManagerWithPrefixer {
 
 	public void setExcept(StringSet except) {
 		this.except = except;
+	}
+
+	public List<NamedBean<StringSet>> getExceptSecondLevel() {
+		return exceptSecondLevel;
+	}
+
+	public void setExceptSecondLevel(List<NamedBean<StringSet>> exceptSecondLevel) {
+		this.exceptSecondLevel = exceptSecondLevel;
 	}
 
 }

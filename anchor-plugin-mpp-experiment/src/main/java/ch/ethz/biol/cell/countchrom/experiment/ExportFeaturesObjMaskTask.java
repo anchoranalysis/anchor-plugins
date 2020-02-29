@@ -51,6 +51,7 @@ import org.anchoranalysis.core.name.MultiName;
 import org.anchoranalysis.core.name.store.SharedObjects;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
 import org.anchoranalysis.experiment.JobExecutionException;
+import org.anchoranalysis.experiment.task.InputTypesExpected;
 import org.anchoranalysis.experiment.task.ParametersBound;
 import org.anchoranalysis.experiment.task.ParametersExperiment;
 import org.anchoranalysis.feature.bean.list.FeatureListProvider;
@@ -150,9 +151,14 @@ public class ExportFeaturesObjMaskTask extends ExportFeaturesTask<MultiInput,Sha
 		}
 		return stack;
 	}
+	
+	@Override
+	public InputTypesExpected inputTypesExpected() {
+		return new InputTypesExpected(MultiInput.class);
+	}
 
 	@Override
-	protected void doJobOnInputObject(	ParametersBound<MultiInput,SharedStateExportFeaturesObjMask> params	) throws JobExecutionException {
+	public void doJobOnInputObject(	ParametersBound<MultiInput,SharedStateExportFeaturesObjMask> params	) throws JobExecutionException {
 		
 		LogErrorReporter logErrorReporter = params.getLogErrorReporter();
 		MultiInput inputObject = params.getInputObject();
