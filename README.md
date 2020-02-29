@@ -6,7 +6,7 @@ It contains **plugins that implement specific-functionality**.
 
 ## What is Anchor?
 
-Anchor is a platform for image analysis, developed by Owen Feehan at:
+Anchor is a platform for image analysis, developed by [Owen Feehan](http://www.owenfeehan.com) at:
 
 * ETH Zurich
 * University of Zurich
