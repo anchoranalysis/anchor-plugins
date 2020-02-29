@@ -2,7 +2,7 @@
 
 This is part of the source-distribution for the [Anchor Image Analysis](http://www.anchoranalysis.org) software.
 
-It contains **plugins that implement specific-functionality**.
+It contains **plugins with the MIT license** for the Anchor software, each implements functionality on a specific theme.
 
 ## What is Anchor?
 
