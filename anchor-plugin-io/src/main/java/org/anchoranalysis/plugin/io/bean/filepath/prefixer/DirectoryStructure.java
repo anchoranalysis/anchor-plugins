@@ -37,8 +37,15 @@ import org.anchoranalysis.io.filepath.prefixer.FilePathDifferenceFromFolderPath;
 import org.anchoranalysis.io.filepath.prefixer.FilePathPrefix;
 import org.apache.commons.io.FilenameUtils;
 
-/// Matches prefixes against our incoming files, and attaches them to outgoing files 
-public class FilePathRslvr extends FilePathPrefixerFileAsFolder {
+/**
+ * Reuses the directories between a path and its root to form the output - and also the filename.
+ * 
+ *  <p>e.g. for a path=<pre>/a/b/c/d/e.tif</pre> and root=<pre>/a/b</pre> then the prefix would be <pre>c/d/e/</p>
+ *  
+ * @author owen
+ *
+ */
+public class DirectoryStructure extends FilePathPrefixerAvoidResolve {
 
 	/**
 	 * 
@@ -46,6 +53,7 @@ public class FilePathRslvr extends FilePathPrefixerFileAsFolder {
 	private static final long serialVersionUID = -2568294173350955724L;
 	
 	// START BEAN PROPERTIES
+	/** If false, the folders are ignored, and only the file-name is used in the output */
 	@BeanField
 	private boolean includeFolders = true;
 	
@@ -66,17 +74,11 @@ public class FilePathRslvr extends FilePathPrefixerFileAsFolder {
 			outFolderPath = outFolderPath.resolve( ff.getFolder() );
 		}
 		
-		if (isFileAsFolder() && ff.getFilename()!=null) {
+		if (ff.getFilename()!=null) {
 			outFolderPath = outFolderPath.resolve( ff.getFilename() );
 		}
 		
-		FilePathPrefix fpp = new FilePathPrefix( outFolderPath );
-		
-		if (!isFileAsFolder()) {
-			fpp.setFilenamePrefix( ff.getFilename() + "_");
-		}
-
-		return fpp;	
+		return new FilePathPrefix( outFolderPath );
 	}
 	
 	private FilePathDifferenceFromFolderPath difference(Path pathInRemoved) throws AnchorIOException {

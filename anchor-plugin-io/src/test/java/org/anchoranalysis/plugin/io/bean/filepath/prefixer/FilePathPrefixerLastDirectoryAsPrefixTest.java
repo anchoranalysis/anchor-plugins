@@ -26,38 +26,39 @@ package org.anchoranalysis.plugin.io.bean.filepath.prefixer;
  * #L%
  */
 
-import org.anchoranalysis.bean.annotation.BeanField;
+import static org.junit.Assert.*;
 
-/**
- * A parameter that toggles between using the 'filename' part of the prefix as a folder (directory) or as a prefix on outputted files
- * @author owen
- *
- */
-public abstract class FilePathPrefixerFileAsFolder extends FilePathPrefixerAvoidResolve {
+import org.anchoranalysis.io.error.AnchorIOException;
+import org.anchoranalysis.io.filepath.prefixer.FilePathPrefix;
+import org.junit.Test;
+import static org.mockito.Mockito.*;
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-		
-	// START BEAN PROPERTIES
-	@BeanField
-	private boolean fileAsFolder = true;
-	// END BEAN PROPERTIES
-	
-	public FilePathPrefixerFileAsFolder() {
-		
-	}
-		
-	public FilePathPrefixerFileAsFolder(String outPathPrefix) {
-		super(outPathPrefix);
-	}
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
-	public boolean isFileAsFolder() {
-		return fileAsFolder;
+public class FilePathPrefixerLastDirectoryAsPrefixTest {
+
+	@Test
+	public void test() throws AnchorIOException {
+		
+		Path path = Paths.get("/a/b/c/d/e/somefile.tif");
+		Path root = mock(Path.class);
+		String descriptiveName = "somefile";
+		
+		LastDirectoryAsPrefix fpp = new LastDirectoryAsPrefix();
+		fpp.setFilePathPrefixer( createDelegate(path, descriptiveName, root) );
+				
+		FilePathPrefix out = fpp.outFilePrefixFromPath(path, descriptiveName, root);
+		
+		assertEquals( Paths.get("/g/h"), out.getFolderPath() );
+		assertEquals( "i_outprefix", out.getFilenamePrefix() );
 	}
 
-	public void setFileAsFolder(boolean fileAsFolder) {
-		this.fileAsFolder = fileAsFolder;
+	private FilePathPrefixerAvoidResolve createDelegate(Path path, String descriptiveName, Path root) throws AnchorIOException {
+		FilePathPrefixerAvoidResolve fppSrc = mock(FilePathPrefixerAvoidResolve.class);
+		when(fppSrc.outFilePrefixFromPath(path, descriptiveName, root)).thenReturn(
+			new FilePathPrefix( Paths.get("/g/h/i/"), "outprefix")
+		);
+		return fppSrc;
 	}
 }

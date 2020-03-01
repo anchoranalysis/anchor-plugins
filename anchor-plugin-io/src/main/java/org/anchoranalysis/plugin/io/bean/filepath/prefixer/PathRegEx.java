@@ -38,11 +38,14 @@ import org.anchoranalysis.io.filepath.prefixer.FilePathPrefix;
 /// 
 
 /**
- * Matches a regex against incoming file-paths to form a relative output
+ * Matches a regex against incoming file-paths to form a prefix for output
+ * 
+ * <p>Groups (i.e. parentheses) in the regular expression each form a directory in the output</p>
+ * 
  * @author owen
  *
  */
-public class FilePathRslvrRegEx extends FilePathPrefixerFileAsFolder {
+public class PathRegEx extends FilePathPrefixerAvoidResolve {
 
 	/**
 	 * 
@@ -50,6 +53,7 @@ public class FilePathRslvrRegEx extends FilePathPrefixerFileAsFolder {
 	private static final long serialVersionUID = -2568294173350955724L;
 	
 	// START BEAN PROPERTIES
+	/** Regular expression to use to match path with at least one group in it. */
 	@BeanField
 	private RegEx regEx;
 	// END BEAN PROPERTIES
@@ -59,11 +63,7 @@ public class FilePathRslvrRegEx extends FilePathPrefixerFileAsFolder {
 
 		String[] components = componentsFromPath(path,	root);
 		
-		return createPrefix(
-			root,
-			components,
-			isFileAsFolder()
-		);
+		return createPrefix( root, components );
 	}
 	
 	
@@ -99,35 +99,17 @@ public class FilePathRslvrRegEx extends FilePathPrefixerFileAsFolder {
 	 * 
 	 * @param outFolderPath the base folder of the prefixer
 	 * @param components ordered array of string components
-	 * @param fileAsFolder if TRUE, creates new sub-folders based upon matching groups. if FALSE, they are appended to the file-name instead
-	 * @return
+	 * @return the file-path-prefix
 	 */
-	private static FilePathPrefix createPrefix( Path outFolderPath, String[] components, boolean fileAsFolder ) {
+	private static FilePathPrefix createPrefix( Path outFolderPath, String[] components ) {
 		
-		Path prefixPath = outFolderPath;
-		
-		if (fileAsFolder) {
-			for (int g=0; g<components.length; g++) {
-				prefixPath = prefixPath.resolve( components[g] );
-			}
-		}
-		
-		
-		FilePathPrefix fpp = new FilePathPrefix( prefixPath );
-		
-		if (!fileAsFolder) {
-			
-			StringBuilder sb = new StringBuilder();
-			for (int g=0; g<components.length; g++) {
-				sb.append( components[g] );
-				
-				sb.append("_");
-			}
-			
-			fpp.setFilenamePrefix( sb.toString() );
-		}
+		Path path = outFolderPath;
 
-		return fpp;
+		for (int g=0; g<components.length; g++) {
+			path = path.resolve( components[g] );
+		}
+		
+		return new FilePathPrefix( path );
 	}
 
 	public RegEx getRegEx() {

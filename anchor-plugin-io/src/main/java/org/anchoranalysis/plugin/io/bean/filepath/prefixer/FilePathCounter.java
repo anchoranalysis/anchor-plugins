@@ -32,7 +32,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.filepath.prefixer.FilePathPrefix;
 
-public class FilePathCounter extends FilePathPrefixerFileAsFolder {
+public class FilePathCounter extends FilePathPrefixerAvoidResolve {
 
 	/**
 	 * 
@@ -56,19 +56,13 @@ public class FilePathCounter extends FilePathPrefixerFileAsFolder {
 
 	@Override
 	protected FilePathPrefix outFilePrefixFromPath(Path path, String descriptiveName, Path root) throws AnchorIOException {
+		Path combinedDir = root.resolve( identifier(cnt++) );
+		return new FilePathPrefix(combinedDir);
+	}
+	
+	private String identifier(int index) {
 		String formatSpecifier = "%0" + numLeadingZeros + "d";
-		String identifier = String.format( formatSpecifier, cnt++ );
-		
-		if (isFileAsFolder()) {
-			Path combinedDir = root.resolve(identifier);
-			FilePathPrefix fpp = new FilePathPrefix(combinedDir);
-			fpp.setFilenamePrefix("");
-			return fpp;
-		} else {
-			FilePathPrefix fpp = new FilePathPrefix( root );
-			fpp.setFilenamePrefix( identifier + "_" );
-			return fpp;
-		}
+		return String.format( formatSpecifier, index );
 	}
 	
 	public int getNumLeadingZeros() {
