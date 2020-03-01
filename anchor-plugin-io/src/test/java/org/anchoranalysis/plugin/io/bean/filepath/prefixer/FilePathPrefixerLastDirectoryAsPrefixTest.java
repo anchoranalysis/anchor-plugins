@@ -45,7 +45,7 @@ public class FilePathPrefixerLastDirectoryAsPrefixTest {
 		Path root = mock(Path.class);
 		String descriptiveName = "somefile";
 		
-		FilePathPrefixerLastDirectoryAsPrefix fpp = new FilePathPrefixerLastDirectoryAsPrefix();
+		LastDirectoryAsPrefix fpp = new LastDirectoryAsPrefix();
 		fpp.setFilePathPrefixer( createDelegate(path, descriptiveName, root) );
 				
 		FilePathPrefix out = fpp.outFilePrefixFromPath(path, descriptiveName, root);

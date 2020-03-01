@@ -41,7 +41,7 @@ import org.anchoranalysis.io.filepath.prefixer.FilePathPrefix;
  *  * @author owen
  *
  */
-public class FilePathPrefixerLastDirectoryAsPrefix extends FilePathPrefixerAvoidResolve {
+public class LastDirectoryAsPrefix extends FilePathPrefixerAvoidResolve {
 
 	/**
 	 * 

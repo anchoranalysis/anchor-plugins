@@ -36,8 +36,8 @@ import org.anchoranalysis.io.filepath.prefixer.FilePathPrefix;
 import org.anchoranalysis.io.filepath.prefixer.FilePathPrefixerParams;
 import org.anchoranalysis.io.input.InputFromManager;
 import org.anchoranalysis.plugin.io.bean.filepath.prefixer.FilePathPrefixerAvoidResolve;
-import org.anchoranalysis.plugin.io.bean.filepath.prefixer.FilePathRslvrRegEx;
-import org.anchoranalysis.plugin.io.bean.filepath.prefixer.RootedFilePathPrefixer;
+import org.anchoranalysis.plugin.io.bean.filepath.prefixer.PathRegEx;
+import org.anchoranalysis.plugin.io.bean.filepath.prefixer.Rooted;
 
 /**
  * A file path prefixer that combines a prefix with an experimentType
@@ -113,15 +113,14 @@ public class FilePathPrefixerExperimentStructure extends FilePathPrefixer {
 	}
 	
 	private FilePathPrefixerAvoidResolve createRslvr() {
-		FilePathRslvrRegEx rslvr = new FilePathRslvrRegEx();
+		PathRegEx rslvr = new PathRegEx();
 		rslvr.setOutPathPrefix(prefix + experimentType);
-		rslvr.setFileAsFolder(true);
 		rslvr.setRegEx( regEx );
 		return rslvr;
 	}
 	
-	private RootedFilePathPrefixer wrapWithRoot( FilePathPrefixerAvoidResolve in ) {
-		RootedFilePathPrefixer out = new RootedFilePathPrefixer();
+	private Rooted wrapWithRoot( FilePathPrefixerAvoidResolve in ) {
+		Rooted out = new Rooted();
 		out.setRootName( rootName );
 		out.setFilePathPrefixer(in);
 		return out;

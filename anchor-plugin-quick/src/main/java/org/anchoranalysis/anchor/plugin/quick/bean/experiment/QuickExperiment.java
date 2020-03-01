@@ -52,7 +52,7 @@ import org.anchoranalysis.io.output.bean.allowed.OutputAllowed;
 import org.anchoranalysis.io.bean.input.InputManager;
 import org.anchoranalysis.mpp.io.bean.input.MultiInputManager;
 import org.anchoranalysis.mpp.io.input.MultiInput;
-import org.anchoranalysis.plugin.io.bean.filepath.prefixer.FilePathRslvr;
+import org.anchoranalysis.plugin.io.bean.filepath.prefixer.DirectoryStructure;
 import org.anchoranalysis.plugin.io.bean.input.file.Files;
 import org.anchoranalysis.plugin.io.bean.input.stack.Stacks;
 import org.anchoranalysis.plugin.io.bean.output.allowed.AllOutputAllowed;
@@ -176,10 +176,9 @@ public class QuickExperiment extends Experiment {
 			assert(false);
 		}
 		
-		FilePathRslvr filePathRslvr = new FilePathRslvr();
+		DirectoryStructure filePathRslvr = new DirectoryStructure();
 		filePathRslvr.setInPathPrefix( inPathBaseDir.toString() );
 		filePathRslvr.setOutPathPrefix(pathFolderOut.toString());
-		filePathRslvr.setFileAsFolder(true);
 		try {
 			filePathRslvr.localise(getLocalPath());
 		} catch (BeanMisconfiguredException e) {

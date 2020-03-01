@@ -38,7 +38,15 @@ import org.anchoranalysis.io.filepath.prefixer.FilePathPrefixerParams;
 import org.anchoranalysis.io.input.InputFromManager;
 import org.apache.log4j.Logger;
 
-public class RootedFilePathPrefixer extends FilePathPrefixer {
+/**
+ * Prepend a 'root' before the file-path-prefix obtained from a delegate
+ * 
+ * <p>A root is a path that is mapped via a unique-name in a settings file to a directory</p>
+ *  
+ * @author owen
+ *
+ */
+public class Rooted extends FilePathPrefixer {
 
 	/**
 	 * 
@@ -54,7 +62,7 @@ public class RootedFilePathPrefixer extends FilePathPrefixer {
 	private String rootName;
 	// END BEAN PROPERTIES
 
-	private static Logger logger = Logger.getLogger(RootedFilePathPrefixer.class);
+	private static Logger logger = Logger.getLogger(Rooted.class);
 		
 	@Override
 	public FilePathPrefix outFilePrefix(InputFromManager input, String expName, FilePathPrefixerParams context)
