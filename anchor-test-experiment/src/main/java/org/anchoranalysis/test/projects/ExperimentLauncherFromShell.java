@@ -31,16 +31,15 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
+import org.anchoranalysis.test.TestDataInitException;
+import org.anchoranalysis.test.TestDataLoadException;
+import org.anchoranalysis.test.TestLoader;
 import org.apache.commons.exec.CommandLine;
 import org.apache.commons.exec.DefaultExecuteResultHandler;
 import org.apache.commons.exec.DefaultExecutor;
 import org.apache.commons.exec.PumpStreamHandler;
 import org.apache.commons.lang.SystemUtils;
 import org.junit.rules.TemporaryFolder;
-
-import anchor.test.TestDataInitException;
-import anchor.test.TestDataLoadException;
-import anchor.test.TestLoader;
 
 /**
  * Launches an experiment by calling the application 'anchor' via the shell.

@@ -1,5 +1,8 @@
 package org.anchoranalysis.test.projects;
 
+import org.anchoranalysis.test.TestLoader;
+import org.anchoranalysis.test.image.DualComparer;
+
 /*
  * #%L
  * anchor-test-experiment
@@ -28,9 +31,6 @@ package org.anchoranalysis.test.projects;
 
 
 import org.junit.rules.TemporaryFolder;
-
-import anchor.test.TestLoader;
-import anchor.test.image.DualComparer;
 
 public class UnitTestCompareUtilities {
 

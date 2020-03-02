@@ -30,9 +30,9 @@ package org.anchoranalysis.test.mpp;
 import java.nio.file.Path;
 
 import org.anchoranalysis.io.deserializer.DeserializationFailedException;
+import org.anchoranalysis.test.TestDataLoadException;
+import org.anchoranalysis.test.TestLoader;
 
-import anchor.test.TestDataLoadException;
-import anchor.test.TestLoader;
 import ch.ethz.biol.cell.mpp.cfg.Cfg;
 import ch.ethz.biol.cell.mpp.io.CfgDeserializer;
 

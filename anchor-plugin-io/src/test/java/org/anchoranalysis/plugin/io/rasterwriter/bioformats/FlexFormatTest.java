@@ -32,10 +32,9 @@ import java.nio.file.Path;
 
 import org.anchoranalysis.image.io.RasterIOException;
 import org.anchoranalysis.image.io.rasterreader.OpenedRaster;
-import org.anchoranalysis.plugin.io.bean.rasterreader.BioformatsReader;
+import org.anchoranalysis.io.bioformats.bean.BioformatsReader;
+import org.anchoranalysis.test.TestLoader;
 import org.junit.Test;
-
-import anchor.test.TestLoader;
 
 public class FlexFormatTest {
 

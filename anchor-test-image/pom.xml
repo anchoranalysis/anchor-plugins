@@ -10,59 +10,47 @@
   <description>Helper methods for testing pertaining to image loading and manipulation</description>
     <dependencies>
    
-   	<dependency>
-	  <groupId>${project.groupId}</groupId>
-	  <artifactId>anchor-test</artifactId>
-	  <version>0.0.8-SNAPSHOT</version>
-	</dependency>
-	
-	<dependency>
-	  <groupId>${project.groupId}</groupId>
-	  <artifactId>anchor-io</artifactId>
-	  <version>0.0.8-SNAPSHOT</version>
-	</dependency>
-	
-	<dependency>
-	  <groupId>${project.groupId}</groupId>
-	  <artifactId>anchor-image</artifactId>
-	  <version>0.0.8-SNAPSHOT</version>
-	</dependency>
-	
-	<dependency>
-	  <groupId>${project.groupId}</groupId>
-	  <artifactId>anchor-image-io</artifactId>
-	  <version>0.0.8-SNAPSHOT</version>
-	</dependency>
-	
-	<dependency>
-	  <groupId>${project.groupId}</groupId>
-	  <artifactId>anchor-core</artifactId>
-	  <version>0.0.8-SNAPSHOT</version>
-	</dependency>
-	
-	<dependency>
-	  <groupId>${project.groupId}</groupId>
-	  <artifactId>anchor-plugin-io</artifactId>
-	  <version>0.0.8-SNAPSHOT</version>
-	</dependency>
-	
-	<dependency>
-	  <groupId>${project.groupId}</groupId>
-	  <artifactId>anchor-plugin-image</artifactId>
-	  <version>0.0.8-SNAPSHOT</version>
-	</dependency>
-	
-	<dependency>
-	  <groupId>${project.groupId}</groupId>
-	  <artifactId>anchor-plugin-points</artifactId>
-	  <version>0.0.8-SNAPSHOT</version>
-	</dependency>
-	
-	<dependency>
-	  <groupId>${project.groupId}</groupId>
-	  <artifactId>anchor-plugin-image-feature</artifactId>
-	  <version>0.0.8-SNAPSHOT</version>
-	</dependency>
+	   	<dependency>
+		  <groupId>${project.groupId}</groupId>
+		  <artifactId>anchor-test</artifactId>
+		  <version>0.0.8-SNAPSHOT</version>
+		</dependency>
+		
+		<dependency>
+		  <groupId>${project.groupId}</groupId>
+		  <artifactId>anchor-io</artifactId>
+		  <version>0.0.8-SNAPSHOT</version>
+		</dependency>
+		
+		<dependency>
+		  <groupId>${project.groupId}</groupId>
+		  <artifactId>anchor-image</artifactId>
+		  <version>0.0.8-SNAPSHOT</version>
+		</dependency>
+		
+		<dependency>
+		  <groupId>${project.groupId}</groupId>
+		  <artifactId>anchor-image-io</artifactId>
+		  <version>0.0.8-SNAPSHOT</version>
+		</dependency>
+		
+		<dependency>
+		  <groupId>${project.groupId}</groupId>
+		  <artifactId>anchor-core</artifactId>
+		  <version>0.0.8-SNAPSHOT</version>
+		</dependency>
+		
+		<dependency>
+	      <groupId>${project.groupId}</groupId>
+	      <artifactId>anchor-io-bioformats</artifactId>
+	      <version>0.0.1-SNAPSHOT</version>
+	    </dependency>
+	    
+	    <dependency>
+	      <groupId>${project.groupId}</groupId>
+	      <artifactId>anchor-io-ij</artifactId>
+	      <version>0.0.1-SNAPSHOT</version>
+	    </dependency>
 	
 	</dependencies>
 </project>
