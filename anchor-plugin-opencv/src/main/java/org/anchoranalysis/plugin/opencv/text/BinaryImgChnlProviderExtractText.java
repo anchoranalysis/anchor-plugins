@@ -31,6 +31,8 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.bean.provider.BinaryImgChnlProvider;
 import org.anchoranalysis.image.bean.provider.stack.StackProvider;
 import org.anchoranalysis.image.binary.BinaryChnl;
+import org.opencv.dnn.Dnn;
+import org.opencv.dnn.Net;
 
 // TODO not implemented yet
 public class BinaryImgChnlProviderExtractText extends BinaryImgChnlProvider {
@@ -54,7 +56,8 @@ public class BinaryImgChnlProviderExtractText extends BinaryImgChnlProvider {
 
 		//Mat input = MatConverter.fromStack( stackProvider.create() );
 		
-		//Dnn.readNet(model);
+		@SuppressWarnings("unused")
+		Net net = Dnn.readNetFromTensorflow("C:\\\\Users\\\\owen\\\\Desktop\\frozen_east_test_detection.pb");
 		
 		return null;
 	}
