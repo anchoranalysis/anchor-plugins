@@ -49,8 +49,10 @@ public class SortAlphabeticallyWithDirectory extends FileProviderWithDirectory {
 	// END BEAN PROPERTIES
 	
 	@Override
-	public Collection<File> matchingFiles(InputManagerParams params) throws AnchorIOException {
-		return SortUtilities.sortFiles(fileProvider, params);
+	public Collection<File> matchingFilesForDirectory( Path directory, InputManagerParams params ) throws AnchorIOException {
+		return SortUtilities.sortFiles(
+			fileProvider.matchingFilesForDirectory(directory, params)
+		);
 	}
 
 	public FileProviderWithDirectory getFileProvider() {
@@ -64,10 +66,5 @@ public class SortAlphabeticallyWithDirectory extends FileProviderWithDirectory {
 	@Override
 	public Path getDirectoryAsPath(InputContextParams inputContext) {
 		return fileProvider.getDirectoryAsPath(inputContext);
-	}
-
-	@Override
-	public void setDirectory(Path directory) {
-		fileProvider.setDirectory(directory);
 	}
 }

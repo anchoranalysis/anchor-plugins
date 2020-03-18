@@ -32,7 +32,6 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.shared.regex.RegEx;
 import org.anchoranalysis.core.file.PathUtilities;
 import org.anchoranalysis.io.error.AnchorIOException;
-import org.anchoranalysis.io.filepath.prefixer.FilePathDifferenceFromFolderPath;
 import org.anchoranalysis.io.filepath.prefixer.FilePathPrefix;
 
 /// 
@@ -61,37 +60,23 @@ public class PathRegEx extends FilePathPrefixerAvoidResolve {
 	@Override
 	protected FilePathPrefix outFilePrefixFromPath(Path path, String descriptiveName, Path root) throws AnchorIOException {
 
-		String[] components = componentsFromPath(path,	root);
+		String[] components = componentsFromPath(path);
 		
 		return createPrefix( root, components );
 	}
 	
 	
-	private String[] componentsFromPath( Path pathIn, Path pathInPrefix ) throws AnchorIOException {
+	private String[] componentsFromPath( Path pathIn ) throws AnchorIOException {
 		
-		Path matchIn = matchStringWithoutPrefix(pathIn, pathInPrefix );
+		String pathInForwardSlashes = PathUtilities.toStringUnixStyle( pathIn );
 		
-		String matchInReplaced = PathUtilities.toStringUnixStyle( matchIn );
-		
-		String[] components = regEx.matchStr( matchInReplaced );
+		String[] components = regEx.matchStr( pathInForwardSlashes );
 		
 		if (components==null) {
-			throw new AnchorIOException( String.format("Cannot match '%s'", matchInReplaced ));
+			throw new AnchorIOException( String.format("Cannot match '%s'", pathInForwardSlashes ));
 		}
 		
 		return components;
-	}
-	
-	private static Path matchStringWithoutPrefix( Path pathIn, Path inPathPrefix ) throws AnchorIOException {
-		
-		if (inPathPrefix!=null) {
-			FilePathDifferenceFromFolderPath ff = new FilePathDifferenceFromFolderPath();
-			
-			ff.initDirect(inPathPrefix, pathIn);
-			return ff.getRemainderCombined();
-		} else {
-			return pathIn;
-		}
 	}
 	
 	/**

@@ -213,7 +213,7 @@ public class QuickExperiment extends Experiment {
 			delegate.setInput( createInputManagerImageFile(fs) );
 			
 			try {
-				delegate.setOutput( createOutputManager(fs.getDirectoryAsPath( expArgs.createInputContext() )) );
+				delegate.setOutput( createOutputManager(fs.getDirectoryAsPathEnsureAbsolute( expArgs.createInputContext() )) );
 				
 			} catch (IOException e) {
 				throw new ExperimentExecutionException(e);

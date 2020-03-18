@@ -3,6 +3,7 @@ package org.anchoranalysis.plugin.mpp.sgmn;
 import org.anchoranalysis.anchor.mpp.bean.regionmap.RegionMembershipWithFlags;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.anchor.overlay.Overlay;
+import org.anchoranalysis.anchor.overlay.bean.objmask.writer.ObjMaskWriter;
 
 /*-
  * #%L
@@ -102,7 +103,7 @@ class SgmnMPPOutputter {
 	
 	private static void writeOutline( String outputNamePrefix, ColoredCfgWithDisplayStack coloredCfgDisplayStack, RegionMembershipWithFlags rm, WriterRouterErrors writer, int outlineWidth ) {
 		
-		RGBOutlineWriter outlineWriter = new RGBOutlineWriter(outlineWidth);
+		ObjMaskWriter outlineWriter = new RGBOutlineWriter(outlineWidth);
 		writer.write(
 			outputNamePrefix,
 			() -> new CfgGenerator( outlineWriter, coloredCfgDisplayStack, new IDGetterIter<Overlay>(),  rm)

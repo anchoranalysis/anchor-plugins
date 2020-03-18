@@ -53,18 +53,16 @@ public class LimitWithDirectory extends FileProviderWithDirectory {
 	// END BEANS
 		
 	@Override
-	public Collection<File> matchingFiles(InputManagerParams params) throws AnchorIOException {
-		return LimitUtilities.apply( fileProvider, maxNumItems, params );
+	public Collection<File> matchingFilesForDirectory( Path directory, InputManagerParams params ) throws AnchorIOException {
+		return LimitUtilities.apply(
+			fileProvider.matchingFilesForDirectory(directory, params),
+			maxNumItems
+		);
 	}
 	
 	@Override
 	public Path getDirectoryAsPath(InputContextParams inputContext) {
 		return fileProvider.getDirectoryAsPath(inputContext);
-	}
-
-	@Override
-	public void setDirectory(Path directory) {
-		fileProvider.setDirectory(directory);
 	}
 
 	public FileProviderWithDirectory getFileProvider() {

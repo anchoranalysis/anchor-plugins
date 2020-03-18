@@ -32,7 +32,7 @@ import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.extent.ImageRes;
 
 
-public class ResolvedExtent extends FeatureStackFromDimensions {
+public class ResolutionExtent extends FeatureStackFromDimensions {
 
 	/**
 	 * 

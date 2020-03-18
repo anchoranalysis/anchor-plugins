@@ -60,12 +60,10 @@ public class SampleWithDirectory extends FileProviderWithDirectory {
 	}
 
 	@Override
-	public void setDirectory(Path directory) {
-		fileProvider.setDirectory(directory);
-	}
-
-	@Override
-	public Collection<File> matchingFiles(InputManagerParams params) throws AnchorIOException {
+	public Collection<File> matchingFilesForDirectory(
+		Path directory,
+		InputManagerParams params
+	) throws AnchorIOException {
 
 		List<File> listSampled = new ArrayList<File>();
 		

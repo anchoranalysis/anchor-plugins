@@ -76,13 +76,21 @@ public class StackProviderRGBFromObjMask extends StackProviderWithBackground {
 		ObjMaskCollection objs = objMaskProvider.create();
 		
 		return ColoredObjsStackCreator.create(
-			objs,
+			maybeFlatten(objs),
 			outline,
 			outlineWidth,
 			force2D,
 			backgroundStack(!force2D),
 			colors(objs.size())
 		);
+	}
+	
+	private ObjMaskCollection maybeFlatten( ObjMaskCollection objs ) {
+		if (force2D) {
+			return objs.flattenZ();
+		} else {
+			return objs;
+		}
 	}
 		
 	private ColorList colors( int size ) throws CreateException {

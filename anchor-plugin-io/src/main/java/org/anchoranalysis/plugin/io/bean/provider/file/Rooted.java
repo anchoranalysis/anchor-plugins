@@ -52,7 +52,7 @@ import org.apache.commons.logging.LogFactory;
 //		* If the fileSet directory exists in localWindowsRootPath we use that
 //		* Otherwise 
 //
-public class RootedFileSet extends FileProvider {
+public class Rooted extends FileProvider {
 
 	/**
 	 * 
@@ -61,7 +61,7 @@ public class RootedFileSet extends FileProvider {
 
 	// START BEAN PARAMETERS
 	@BeanField
-	private FileProviderWithDirectory fileSet;
+	private FileProviderWithDirectory fileProvider;
 
 	// The name of the RootPath to associate with this fileset
 	@BeanField
@@ -72,18 +72,15 @@ public class RootedFileSet extends FileProvider {
 	private boolean disableDebugMode = false;
 	// END BEAN PARAMETERS
 	
-	private static Log log = LogFactory.getLog(RootedFileSet.class);
+	private static Log log = LogFactory.getLog(Rooted.class);
 	
 	@Override
 	public Collection<File> matchingFiles(InputManagerParams params) throws AnchorIOException {
 		
 		try {
-			log.debug( String.format("matchingFiles() old directory '%s'\n", fileSet.getDirectoryAsPath(params.getInputContext()) ));
-	
-			// We make a copy of the fileset
-			FileProviderWithDirectory fsCopy = (FileProviderWithDirectory) fileSet.duplicateBean();
+			log.debug( String.format("matchingFiles() old directory '%s'\n", fileProvider.getDirectoryAsPath(params.getInputContext()) ));
 			
-			Path dirOrig = fsCopy.getDirectoryAsPath(params.getInputContext());
+			Path dirOrig = fileProvider.getDirectoryAsPath(params.getInputContext());
 	
 			Path dirNew = RootedFilePathUtilities.determineNewPath( dirOrig, rootName, params.isDebugMode(), disableDebugMode );
 
@@ -102,22 +99,12 @@ public class RootedFileSet extends FileProvider {
 			}
 			
 			log.debug( String.format("Setting new directory '%s'%n", dirNew) );
-			fsCopy.setDirectory( dirNew );
 			
-			return fsCopy.matchingFiles(params);
+			return fileProvider.matchingFilesForDirectory(dirNew, params);
 			
 		} catch (BeanDuplicateException e) {
 			throw new AnchorIOException("Cannot duplicate bean", e);
 		}
-	}
-	
-	public FileProviderWithDirectory getFileSet() {
-		return fileSet;
-	}
-
-
-	public void setFileSet(FileProviderWithDirectory fileSet) {
-		this.fileSet = fileSet;
 	}
 
 	public String getRootName() {
@@ -134,5 +121,13 @@ public class RootedFileSet extends FileProvider {
 
 	public void setDisableDebugMode(boolean disableDebugMode) {
 		this.disableDebugMode = disableDebugMode;
+	}
+
+	public FileProviderWithDirectory getFileProvider() {
+		return fileProvider;
+	}
+
+	public void setFileProvider(FileProviderWithDirectory fileProvider) {
+		this.fileProvider = fileProvider;
 	}
 }
