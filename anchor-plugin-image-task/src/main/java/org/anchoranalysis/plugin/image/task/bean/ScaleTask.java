@@ -115,7 +115,11 @@ public class ScaleTask extends RasterTask {
 		NamedImgStackCollection stackCollectionMIP = new NamedImgStackCollection();
 		
 
-		ImageInitParams soImage = ImageInitParams.create(logErrorReporter, new RandomNumberGeneratorMersenneTime() );
+		ImageInitParams soImage = ImageInitParams.create(
+			logErrorReporter,
+			new RandomNumberGeneratorMersenneTime(),
+			expArgs.getModelDirectory()
+		);
 		
 		try {
 			// We store each channel as a stack in our collection, in case they need to be referenced by the scale calculator

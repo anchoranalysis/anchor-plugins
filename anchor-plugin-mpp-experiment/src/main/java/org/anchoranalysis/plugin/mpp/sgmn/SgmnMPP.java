@@ -1,5 +1,6 @@
 package org.anchoranalysis.plugin.mpp.sgmn;
 
+import org.anchoranalysis.anchor.mpp.bean.init.GeneralInitParams;
 import org.anchoranalysis.anchor.mpp.bean.init.MPPInitParams;
 import org.anchoranalysis.anchor.mpp.mark.GlobalRegionIdentifiers;
 
@@ -136,7 +137,18 @@ public class SgmnMPP extends CfgSgmn {
 		
 		ListUpdatableMarkSetCollection updatableMarkSetCollection = new ListUpdatableMarkSetCollection();
 		
-		DualStack dualStack = initAndPrepareInputStackCollectionForOpt(stackCollection, objMaskCollection, updatableMarkSetCollection, params, logger, outputManager);
+		DualStack dualStack = initAndPrepareInputStackCollectionForOpt(
+			stackCollection,
+			objMaskCollection,
+			updatableMarkSetCollection,
+			params,
+			outputManager,
+			new GeneralInitParams(
+				randomNumberGenerator.create(),
+				expArgs.getModelDirectory(),
+				logger
+			)
+		);
 		
 		// THIS SHOULD BE THE POINT AT WHICH WE LET PsoImage go out of scope, and everything in it, which isn't being used
 		//   can be garbage collected.  This will reduce memory usage for the rest of the algorithm, where hopefully
@@ -171,37 +183,41 @@ public class SgmnMPP extends CfgSgmn {
 		INamedProvider<ObjMaskCollection> objMaskCollection,
 		ListUpdatableMarkSetCollection updatableMarkSetCollection,
 		KeyValueParams params,
-		LogErrorReporter logger,
-		BoundOutputManagerRouteErrors outputManager
+		BoundOutputManagerRouteErrors outputManager,
+		GeneralInitParams paramsGeneral
 	) throws SgmnFailedException {
 		
 		try {
-			MemoryUtilities.logMemoryUsage("Start of SgmnMPP:sgmn", logger.getLogReporter());
+			MemoryUtilities.logMemoryUsage("Start of SgmnMPP:sgmn", paramsGeneral.getLogReporter());
 			
 			MPPInitParams soMPP = SgmnMPPHelper.createParamsMPP(
 				namedDefinitions,
-				randomNumberGenerator,
 				stackCollection,
 				objMaskCollection,
 				params,
-				new SharedObjects( logger ),
-				logger
+				new SharedObjects( paramsGeneral.getLogErrorReporter() ),
+				paramsGeneral
 			);
-			init( soMPP, logger );
+			init( soMPP, paramsGeneral.getLogErrorReporter() );
 			
 			NRGStackWithParams nrgStack = SgmnMPPHelper.createNRGStack( soMPP.getImage().getStackCollection(), params );
-			SgmnMPPHelper.writeStacks( soMPP.getImage(), nrgStack, logger, outputManager );
+			SgmnMPPHelper.writeStacks( soMPP.getImage(), nrgStack, paramsGeneral.getLogErrorReporter(), outputManager );
 			
-			logger.getLogReporter().log("Distinct number of probMap = " + updatableMarkSetCollection.numProbMap() );
+			paramsGeneral.getLogReporter().log("Distinct number of probMap = " + updatableMarkSetCollection.numProbMap() );
 			
 			// We initialise the feedback recev
-			feedbackReceiver.initRecursive(soMPP, logger);
+			feedbackReceiver.initRecursive(soMPP, paramsGeneral.getLogErrorReporter());
 			
-			MemoryUtilities.logMemoryUsage("Before findOpt (before cleanup)", logger.getLogReporter() );
+			MemoryUtilities.logMemoryUsage("Before findOpt (before cleanup)", paramsGeneral.getLogReporter() );
 		
 			// There are two elements of the ProposerSharedObjects that we need to update with changes to the accepted
 			//   configuration
-			new UpdateMarkSet(soMPP, nrgStack, updatableMarkSetCollection, logger).apply();
+			new UpdateMarkSet(
+				soMPP,
+				nrgStack,
+				updatableMarkSetCollection,
+				paramsGeneral.getLogErrorReporter()
+			).apply();
 			
 			return wrapWithBackground(nrgStack, soMPP.getImage().getStackCollection() );
 

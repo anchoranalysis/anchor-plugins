@@ -1,5 +1,6 @@
 package org.anchoranalysis.plugin.mpp.sgmn;
 
+import org.anchoranalysis.anchor.mpp.bean.init.GeneralInitParams;
 import org.anchoranalysis.anchor.mpp.bean.init.MPPInitParams;
 
 /*-
@@ -29,7 +30,6 @@ import org.anchoranalysis.anchor.mpp.bean.init.MPPInitParams;
  */
 
 import org.anchoranalysis.bean.define.Define;
-import org.anchoranalysis.bean.shared.random.RandomNumberGeneratorBean;
 import org.anchoranalysis.core.cache.CacheMonitor;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
@@ -85,19 +85,17 @@ class SgmnMPPHelper {
 	
 	public static MPPInitParams createParamsMPP(
 		Define namedDefinitions,
-		RandomNumberGeneratorBean randomNumberGenerator,
 		NamedImgStackCollection stackCollection,
 		INamedProvider<ObjMaskCollection> objMaskCollection,
 		KeyValueParams params,
 		SharedObjects so,
-		LogErrorReporter logger
+		GeneralInitParams paramsGeneral
 	) throws CreateException {
 		
 		MPPInitParams soMPP = MPPInitParams.create(
 			so,
 			namedDefinitions,
-			logger,
-			randomNumberGenerator.create()
+			paramsGeneral
 		);
 		
 		try {

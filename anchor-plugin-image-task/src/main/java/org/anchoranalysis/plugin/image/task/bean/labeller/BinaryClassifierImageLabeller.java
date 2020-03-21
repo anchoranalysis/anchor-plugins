@@ -71,7 +71,9 @@ public class BinaryClassifierImageLabeller extends BinaryOutcomeImageLabeller<Ob
 	@Override
 	public String labelFor(
 		Object initParams,
-		ProvidesStackInput input, LogErrorReporter logErrorReporter
+		ProvidesStackInput input,
+		Path modelDir,
+		LogErrorReporter logErrorReporter
 	) throws OperationFailedException {
 		
 		try {
@@ -81,6 +83,7 @@ public class BinaryClassifierImageLabeller extends BinaryOutcomeImageLabeller<Ob
 				input,
 				getNrgStackProvider(),
 				featureStore,
+				modelDir,
 				logErrorReporter
 			);
 			

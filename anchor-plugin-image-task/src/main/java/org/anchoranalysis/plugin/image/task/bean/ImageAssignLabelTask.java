@@ -110,6 +110,7 @@ public class ImageAssignLabelTask<T> extends Task<ProvidesStackInput,SharedState
 		try {
 			String groupIdentifier = params.getSharedState().labelFor(
 				params.getInputObject(),
+				params.getExperimentArguments().getModelDirectory(),
 				params.getLogErrorReporter()
 			);
 			
@@ -121,7 +122,11 @@ public class ImageAssignLabelTask<T> extends Task<ProvidesStackInput,SharedState
 			if (outputStackProvider!=null) {
 				outputStack(
 					groupIdentifier,
-					StackInputInitParamsCreator.createInitParams(params.getInputObject(), params.getLogErrorReporter()),
+					StackInputInitParamsCreator.createInitParams(
+						params.getInputObject(),
+						params.getExperimentArguments().getModelDirectory(),
+						params.getLogErrorReporter()
+					),
 					params.getInputObject().descriptiveName(),
 					params.getSharedState(),
 					params.getLogErrorReporter()

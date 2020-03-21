@@ -1,5 +1,7 @@
 package org.anchoranalysis.plugin.image.task.bean.feature;
 
+import java.nio.file.Path;
+
 /*
  * #%L
  * anchor-plugin-image-task
@@ -66,7 +68,9 @@ public class ExportFeaturesImageTask extends ExportFeaturesStoreTask<ProvidesSta
 	protected ResultsVector calcResultsVectorForInputObject(
 		ProvidesStackInput inputObject,
 		NamedFeatureStore featureStore,
-		BoundOutputManagerRouteErrors outputManager, LogErrorReporter logErrorReporter
+		BoundOutputManagerRouteErrors outputManager,
+		Path modelDir,
+		LogErrorReporter logErrorReporter
 	) throws FeatureCalcException {
 
 		try {
@@ -74,6 +78,7 @@ public class ExportFeaturesImageTask extends ExportFeaturesStoreTask<ProvidesSta
 				inputObject,
 				getNrgStackProvider(),
 				featureStore,
+				modelDir,
 				logErrorReporter
 			);
 			

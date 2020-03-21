@@ -1,5 +1,7 @@
 package org.anchoranalysis.plugin.image.task.imagefeature.calculator;
 
+import java.nio.file.Path;
+
 /*-
  * #%L
  * anchor-plugin-image-task
@@ -57,11 +59,15 @@ public class FeatureCalculatorStackInputFromStore {
 	private NRGStackWithParams nrgStack;
 		
 	public FeatureCalculatorStackInputFromStore(ProvidesStackInput stackInput, StackProvider nrgStackProvider,
-			NamedFeatureStore featureStore, LogErrorReporter logErrorReporter) throws OperationFailedException {
+			NamedFeatureStore featureStore, Path modelDir, LogErrorReporter logErrorReporter) throws OperationFailedException {
 		super();
 		
 		helper = new HelperImageFeatureCalculator(logErrorReporter);
-		this.initParams = StackInputInitParamsCreator.createInitParams(stackInput, logErrorReporter);
+		this.initParams = StackInputInitParamsCreator.createInitParams(
+			stackInput,
+			modelDir,
+			logErrorReporter
+		);
 		this.nrgStack = HelperInit.extractStack( initParams, nrgStackProvider, logErrorReporter );
 		
 		this.featureList = extractFeatures(featureStore);

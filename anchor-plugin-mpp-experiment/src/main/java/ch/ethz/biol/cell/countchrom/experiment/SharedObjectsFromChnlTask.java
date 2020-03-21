@@ -1,5 +1,6 @@
 package ch.ethz.biol.cell.countchrom.experiment;
 
+import org.anchoranalysis.anchor.mpp.bean.init.GeneralInitParams;
 import org.anchoranalysis.anchor.mpp.bean.init.MPPInitParams;
 
 /*
@@ -107,7 +108,15 @@ public class SharedObjectsFromChnlTask extends RasterTask {
 			
 		
 			SharedObjects so = new SharedObjects(logErrorReporter);
-			MPPInitParams soMPP = MPPInitParams.create(so,define,logErrorReporter,randomNumberGenerator.create());
+			MPPInitParams soMPP = MPPInitParams.create(
+				so,
+				define,
+				new GeneralInitParams(
+					randomNumberGenerator.create(),
+					expArgs.getModelDirectory(),
+					logErrorReporter
+				)
+			);
 			
 			ncc.addAsSeparateChnls(
 				new WrapStackAsTimeSequenceStore( soMPP.getImage().getStackCollection() ),

@@ -31,6 +31,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.anchoranalysis.anchor.mpp.bean.init.GeneralInitParams;
 import org.anchoranalysis.anchor.mpp.bean.init.MPPInitParams;
 import org.anchoranalysis.bean.annotation.AllowEmpty;
 import org.anchoranalysis.bean.annotation.BeanField;
@@ -102,8 +103,11 @@ public class SharedObjectsMultiInputTask extends TaskWithoutSharedState<MultiInp
 			MPPInitParams soMPP = MPPInitParams.create(
 				so,
 				define,
-				logErrorReporter,
-				randomNumberGenerator.create()
+				new GeneralInitParams(
+					randomNumberGenerator.create(),
+					params.getExperimentArguments().getModelDirectory(),
+					logErrorReporter
+				)
 			);
 			ImageInitParams soImage = soMPP.getImage();
 			

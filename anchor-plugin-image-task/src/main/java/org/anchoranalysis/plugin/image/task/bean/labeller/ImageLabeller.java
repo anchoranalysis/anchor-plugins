@@ -60,9 +60,10 @@ public abstract class ImageLabeller<T> extends AnchorBean<ImageLabeller<T>> {
 	public abstract Set<String> allLabels(T params);
 	
 	/** Determines a particular group-identifier for an input 
-	 * @param initParams TODO*/
+	 * @param initParams TODO
+	 * @param modelDir TODO*/
 	public abstract String labelFor(
 		T initParams,
-		ProvidesStackInput input, LogErrorReporter logErrorReporter
+		ProvidesStackInput input, Path modelDir, LogErrorReporter logErrorReporter
 	) throws OperationFailedException;
 }

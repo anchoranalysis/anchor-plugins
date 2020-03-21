@@ -1,5 +1,7 @@
 package org.anchoranalysis.plugin.image.task.bean;
 
+import java.nio.file.Path;
+
 /*
  * #%L
  * anchor-plugin-image-task
@@ -133,7 +135,11 @@ public class FormatConverterTask extends RasterTask {
 		try {
 			NamedChnlCollectionForSeries chnlCollection = createChnlCollection( inputObjectUntyped, seriesIndex );	
 			
-			ChnlGetter chnlGetter = maybeAddFilter(chnlCollection, logErrorReporter);
+			ChnlGetter chnlGetter = maybeAddFilter(
+				chnlCollection,
+				expArgs.getModelDirectory(),
+				logErrorReporter
+			);
 
 			if (chnlConverter!=null) {
 				chnlGetter = maybeAddConverter(chnlGetter);
@@ -190,12 +196,13 @@ public class FormatConverterTask extends RasterTask {
 		}
 	}
 	
-	private ChnlGetter maybeAddFilter( NamedChnlCollectionForSeries chnlCollection, LogErrorReporter logErrorReporter ) {
+	private ChnlGetter maybeAddFilter( NamedChnlCollectionForSeries chnlCollection, Path modelDir, LogErrorReporter logErrorReporter ) {
 		
 		if (chnlFilter!=null) {
 			
 			chnlFilter.init(
 				(NamedChnlCollectionForSeries) chnlCollection,
+				modelDir,
 				logErrorReporter,
 				new RandomNumberGeneratorMersenneConstant()
 			);

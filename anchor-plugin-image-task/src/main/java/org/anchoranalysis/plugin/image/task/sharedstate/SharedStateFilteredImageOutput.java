@@ -103,6 +103,7 @@ public class SharedStateFilteredImageOutput<T> {
 	/** Determines a particular group-identifier for an input */
 	public String labelFor(
 		ProvidesStackInput input,
+		Path modelDir,
 		LogErrorReporter logErrorReporter
 	) throws OperationFailedException {
 		
@@ -121,6 +122,7 @@ public class SharedStateFilteredImageOutput<T> {
 		return filter.labelFor(
 			filterInitParams,
 			input,
+			modelDir,
 			logErrorReporter
 		);
 	}

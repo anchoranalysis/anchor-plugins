@@ -76,12 +76,12 @@ public class ImageLabellerStringMap<T> extends ImageLabeller<ImageLabellerString
 	}
 
 	@Override
-	public String labelFor(ImageLabellerStringMapInitParams<T> initParams, ProvidesStackInput input, LogErrorReporter logErrorReporter)
+	public String labelFor(ImageLabellerStringMapInitParams<T> initParams, ProvidesStackInput input, Path modelDir, LogErrorReporter logErrorReporter)
 			throws OperationFailedException {
 		String firstId = filter.labelFor(
 			initParams.getInitParams(),
 			input,
-			logErrorReporter
+			modelDir, logErrorReporter
 		);
 		return initParams.getMap().get(firstId);
 	}
