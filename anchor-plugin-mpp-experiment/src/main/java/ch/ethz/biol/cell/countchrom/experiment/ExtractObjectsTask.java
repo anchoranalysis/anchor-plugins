@@ -32,6 +32,7 @@ import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.anchoranalysis.anchor.mpp.bean.init.GeneralInitParams;
 import org.anchoranalysis.anchor.mpp.bean.init.MPPInitParams;
 import org.anchoranalysis.bean.NamedBean;
 import org.anchoranalysis.bean.StringSet;
@@ -455,7 +456,15 @@ public class ExtractObjectsTask extends TaskWithoutSharedState<MultiInput> {
 		
 		try {
 			SharedObjects so = new SharedObjects( logErrorReporter );
-			MPPInitParams soMPP = MPPInitParams.create(so, namedDefinitions, logErrorReporter, randomNumberGenerator.create());
+			MPPInitParams soMPP = MPPInitParams.create(
+				so,
+				namedDefinitions,
+				new GeneralInitParams(
+					randomNumberGenerator.create(),
+					params.getExperimentArguments().getModelDirectory(),
+					logErrorReporter
+				)
+			);
 			ImageInitParams soImage = soMPP.getImage();
 			
 			inputObject.addToSharedObjects( soMPP, soImage );

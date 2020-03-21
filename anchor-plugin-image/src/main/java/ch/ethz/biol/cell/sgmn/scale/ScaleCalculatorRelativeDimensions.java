@@ -35,6 +35,7 @@ import org.anchoranalysis.image.bean.provider.ImageDimProvider;
 import org.anchoranalysis.image.bean.scale.ScaleCalculator;
 import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.scale.ScaleFactor;
+import org.anchoranalysis.image.scale.ScaleFactorUtilities;
 
 public class ScaleCalculatorRelativeDimensions extends ScaleCalculator {
 
@@ -69,20 +70,13 @@ public class ScaleCalculatorRelativeDimensions extends ScaleCalculator {
 		}
 		
 		try {
-			return calc(
+			return ScaleFactorUtilities.calcRelativeScale(
 				sdSource,
 				dimProviderTarget.create()
 			);
 		} catch (CreateException e) {
 			throw new OperationFailedException(e);
 		}
-	}
-	
-	public static ScaleFactor calc( ImageDim sdSource, ImageDim sdTarget ) {
-		return new ScaleFactor(
-			((double) sdTarget.getX()) / sdSource.getX(),
-			((double) sdTarget.getY()) / sdSource.getY()
-		);
 	}
 
 	public ImageDimProvider getDimProviderSource() {

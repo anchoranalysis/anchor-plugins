@@ -115,12 +115,14 @@ public class CSVTableExportTaskMultiCollection extends Task<MultiInput,CSVWriter
 		if (!writer.isOutputEnabled()) {
 			return;
 		}
-
-		
 		
 		try {
 			SharedObjects so = new SharedObjects(logErrorReporter);
-			MPPInitParams soMPP = MPPInitParams.create(so, namedDefinitions, logErrorReporter, randomNumberGenerator.create());
+			MPPInitParams soMPP = MPPInitParams.create(
+				so,
+				namedDefinitions,
+				TaskUtilities.createGeneralParams(randomNumberGenerator.create(), params)
+			);
 			ImageInitParams soImage = soMPP.getImage();
 			
 			input.addToSharedObjects( soMPP, soImage );

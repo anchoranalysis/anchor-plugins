@@ -31,6 +31,7 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.anchoranalysis.anchor.mpp.bean.init.GeneralInitParams;
 import org.anchoranalysis.anchor.mpp.bean.init.MPPInitParams;
 import org.anchoranalysis.bean.NamedBean;
 import org.anchoranalysis.bean.annotation.AllowEmpty;
@@ -168,7 +169,10 @@ public class ExportFeaturesObjMaskTask extends ExportFeaturesTask<MultiInput,Sha
 			//  so they are thread-safe, for parallel execution
 			FeatureSessionFlexiFeatureTable session = params.getSharedState().getSession().duplicateForNewThread();
 						
-			MPPInitParams soMPP = createInitParams( inputObject, logErrorReporter );
+			MPPInitParams soMPP = createInitParams(
+				inputObject,
+				TaskUtilities.createGeneralParams(randomNumberGenerator.create(), params)
+			);
 			
 			NRGStackWithParams nrgStack = createNRGStack(soMPP.getImage(), logErrorReporter );
 			
@@ -191,9 +195,13 @@ public class ExportFeaturesObjMaskTask extends ExportFeaturesTask<MultiInput,Sha
 		}
 	}
 	
-	private MPPInitParams createInitParams( MultiInput inputObject, LogErrorReporter logErrorReporter ) throws CreateException, OperationFailedException {
-		SharedObjects so = new SharedObjects( logErrorReporter	);
-		MPPInitParams soMPP = MPPInitParams.create(so, namedDefinitions, logErrorReporter, randomNumberGenerator.create());
+	private MPPInitParams createInitParams( MultiInput inputObject, GeneralInitParams paramsGeneral ) throws CreateException, OperationFailedException {
+		SharedObjects so = new SharedObjects( paramsGeneral.getLogErrorReporter()	);
+		MPPInitParams soMPP = MPPInitParams.create(
+			so,
+			namedDefinitions,
+			paramsGeneral
+		);
 		inputObject.addToSharedObjects( soMPP, soMPP.getImage() );
 		return soMPP;
 	}

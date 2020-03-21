@@ -110,6 +110,7 @@ public class ExtractSingleSliceTask extends Task<NamedChnlsInput,SharedStateSele
 			NRGStackWithParams nrgStack = FeatureCalculatorRepeated.extractStack(
 				params.getInputObject(),
 				nrgStackProvider,
+				params.getExperimentArguments().getModelDirectory(),
 				params.getLogErrorReporter()
 			);
 			

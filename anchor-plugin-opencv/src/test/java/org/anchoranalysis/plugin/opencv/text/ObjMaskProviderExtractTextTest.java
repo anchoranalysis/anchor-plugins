@@ -1,5 +1,9 @@
 package org.anchoranalysis.plugin.opencv.text;
 
+import static org.mockito.Mockito.mock;
+
+import java.nio.file.Path;
+
 /*-
  * #%L
  * anchor-plugin-opencv
@@ -27,30 +31,53 @@ package org.anchoranalysis.plugin.opencv.text;
  */
 
 import org.anchoranalysis.core.error.CreateException;
+import org.anchoranalysis.core.error.InitException;
+import org.anchoranalysis.core.log.LogErrorReporter;
+import org.anchoranalysis.core.log.LogReporter;
+import org.anchoranalysis.core.random.RandomNumberGeneratorMersenneConstant;
 import org.anchoranalysis.image.bean.provider.stack.StackProviderHolder;
-import org.anchoranalysis.image.binary.BinaryChnl;
+import org.anchoranalysis.image.init.ImageInitParams;
+import org.anchoranalysis.image.objmask.ObjMaskCollection;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.test.TestLoader;
 import org.anchoranalysis.test.image.TestLoaderImageIO;
 import org.junit.Test;
+import static org.junit.Assert.assertTrue;
 
-public class BinaryImgChnlProviderExtractTextTest {
+public class ObjMaskProviderExtractTextTest {
 
 	private TestLoaderImageIO testLoader = new TestLoaderImageIO(
 		TestLoader.createFromMavenWorkingDir()
 	);
 	
 	@Test
-	public void testSimple() throws AnchorIOException, CreateException {
+	public void testSimple() throws AnchorIOException, CreateException, InitException {
 		
-			Stack stack = testLoader.openStackFromTestPath("car.jpg");
+		Stack stack = testLoader.openStackFromTestPath("car.jpg");
 		
-			BinaryImgChnlProviderExtractText provider = new BinaryImgChnlProviderExtractText();
-			provider.setStackProvider( new StackProviderHolder(stack) );
-			
-			@SuppressWarnings("unused")
-			BinaryChnl bc = provider.create();
-			
+		ObjMaskProviderExtractText provider = createInitProvider(
+			testLoader.getTestLoader().getRoot()
+		);
+		provider.setStackProvider( new StackProviderHolder(stack) );
+		
+		ObjMaskCollection objs = provider.create();
+		
+		assertTrue( objs.size()==2 );
+	}
+	
+	private ObjMaskProviderExtractText createInitProvider( Path modelDir ) throws InitException {
+		
+		LogReporter logReporter = mock(LogReporter.class);
+				
+		LogErrorReporter logger = new LogErrorReporter(logReporter);
+		
+		ObjMaskProviderExtractText provider = new ObjMaskProviderExtractText();
+		provider.init( ImageInitParams.create(
+			logger,
+			new RandomNumberGeneratorMersenneConstant(),
+			modelDir
+		), logger);
+		return provider;
 	}
 }

@@ -163,19 +163,6 @@ public class AssignResolutionTask extends RasterTask {
 	public void doStack( NamedChnlsInput inputObject, int seriesIndex, int numSeries, BoundOutputManagerRouteErrors outputManager, LogErrorReporter logErrorReporter, ExperimentExecutionArguments expArgs ) throws JobExecutionException {
 		
 		try {
-			//chromSgmn.setOutputManager( outputManager );
-			
-			// Test that values have opened correctly
-			//ImgChnlFloat chnlChrom = (ImgChnlFloat) stack.getChnl( chnlMap.getException("chrom") );
-			
-			//ImgChnlFloat chnlChrom = (ImgChnlFloat) stack.getChnl( chnlMap.getException("chrom") );
-						
-			// Let's make a new stack, rearranging the channels so that
-			//    FISH channel corresponds to RED
-			//    blank channel corresponds to GREEN
-			//    DAPI channel corresponds to BLUE
-			
-
 			NamedChnlCollectionForSeries chnlCollection = inputObject.createChnlCollectionForSeries(seriesIndex, ProgressReporterNull.get() );	
 			
 			ChnlGetter chnlAfter = chnlCollection;
@@ -183,6 +170,7 @@ public class AssignResolutionTask extends RasterTask {
 			if (chnlFilter!=null) {
 				chnlFilter.init(
 					chnlCollection,
+					expArgs.getModelDirectory(),
 					logErrorReporter,
 					new RandomNumberGeneratorMersenneConstant()
 				);
@@ -206,8 +194,18 @@ public class AssignResolutionTask extends RasterTask {
 						List<NameValue<Stack>> stackList = new ArrayList<>(); 
 						for( String key : chnlCollection.chnlNames() ) {
 							
+							Stack stack = new Stack(
+								chnlAfter.getChnl(
+									key,
+									t,
+									progressReporter
+								)
+							); 
+							
 							String combined = String.format("%s_%s", seriesTimeString, key );
-							stackList.add( new NameValue<>(combined, new Stack( chnlAfter.getChnl(key, t, progressReporter))) );
+							stackList.add(
+								new NameValue<>(combined,stack)
+							);
 							
 						}
 						
@@ -219,9 +217,6 @@ public class AssignResolutionTask extends RasterTask {
 					logErrorReporter.getLogReporter().logFormatted("Filter rejected %s", seriesTimeString);
 					logErrorReporter.getErrorReporter().recordError(AssignResolutionTask.class, e);
 				}
-				
-				//outputManager.write("converted", new StackGenerator(true, "converted", factory) );
-				//outputManager.writeStackAsComposite("converted", stackRearranged);
 			}
 		} catch (RasterIOException | OperationFailedException | IncorrectImageSizeException e) {
 			throw new JobExecutionException(e);

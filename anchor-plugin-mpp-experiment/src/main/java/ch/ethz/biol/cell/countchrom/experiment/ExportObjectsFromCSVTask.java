@@ -187,7 +187,9 @@ public class ExportObjectsFromCSVTask extends Task<ExportObjectsFromCSVInputObje
 	}
 	
 	@Override
-	public void doJobOnInputObject(	ParametersBound<ExportObjectsFromCSVInputObject,ExportObjectsFromCSVTaskSharedState> params)	throws JobExecutionException {
+	public void doJobOnInputObject(
+		ParametersBound<ExportObjectsFromCSVInputObject,ExportObjectsFromCSVTaskSharedState> params
+	) throws JobExecutionException {
 		
 		LogErrorReporter logErrorReporter = params.getLogErrorReporter();
 		ExportObjectsFromCSVInputObject inputObject = params.getInputObject();
@@ -207,7 +209,14 @@ public class ExportObjectsFromCSVTask extends Task<ExportObjectsFromCSVInputObje
 				return;
 			}
 			
-			processFileWithMap( inputObject, mapGroup, groupedRows.groupNameSet(), outputManager, logErrorReporter );
+			processFileWithMap(
+				inputObject,
+				mapGroup,
+				groupedRows.groupNameSet(),
+				outputManager,
+				params.getExperimentArguments().getModelDirectory(),
+				logErrorReporter
+			);
 			
 		} catch (GetOperationFailedException | OperationFailedException | AnchorIOException | OutputWriteFailedException e) {
 			throw new JobExecutionException(e);
@@ -219,6 +228,7 @@ public class ExportObjectsFromCSVTask extends Task<ExportObjectsFromCSVInputObje
 		MapGroupToRow mapGroup,
 		Set<String> groupNameSet,
 		BoundOutputManagerRouteErrors outputManager,
+		Path modelDir,
 		LogErrorReporter logErrorReporter
 	) throws OperationFailedException, OutputWriteFailedException {
 		
@@ -226,7 +236,7 @@ public class ExportObjectsFromCSVTask extends Task<ExportObjectsFromCSVInputObje
 			SharedObjects so = new SharedObjects( logErrorReporter );
 			
 			//SharedObjectsUtilities.createSharedObjectsImage(so);
-			MPPInitParams soMPP = MPPInitParams.create(so);
+			MPPInitParams soMPP = MPPInitParams.create(so, modelDir);
 			ImageInitParams soImage = soMPP.getImage();
 			
 			inputObject.addToSharedObjects( soMPP, soImage );

@@ -38,7 +38,11 @@ import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.objmask.ObjMaskCollection;
 import org.anchoranalysis.image.objmask.ops.BinaryChnlFromObjs;
 
-/** Creates a BinaryImgChannel from a collection of object masks */
+import ch.ethz.biol.cell.imageprocessing.dim.provider.GuessDimFromInputImage;
+
+/** 
+ * Creates a BinaryImgChannel from a collection of object masks
+ **/
 public class BinaryImgChnlProviderFromObjMasks extends BinaryImgChnlProvider {
 
 	/**
@@ -51,7 +55,7 @@ public class BinaryImgChnlProviderFromObjMasks extends BinaryImgChnlProvider {
 	private ObjMaskProvider objMaskProvider;
 	
 	@BeanField
-	private ImageDimProvider dimProvider;
+	private ImageDimProvider dimProvider = new GuessDimFromInputImage();
 	
 	@BeanField
 	private boolean invert = false;

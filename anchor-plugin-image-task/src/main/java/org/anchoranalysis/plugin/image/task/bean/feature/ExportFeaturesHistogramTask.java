@@ -28,6 +28,8 @@ package org.anchoranalysis.plugin.image.task.bean.feature;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Path;
+
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.Optional;
 import org.anchoranalysis.bean.error.BeanDuplicateException;
@@ -97,6 +99,7 @@ public class ExportFeaturesHistogramTask extends ExportFeaturesStoreTask<FileInp
 		FileInput inputObject,
 		NamedFeatureStore featureStore,
 		BoundOutputManagerRouteErrors outputManager,
+		Path modelDir,
 		LogErrorReporter logErrorReporter
 	) throws FeatureCalcException {
 
@@ -105,7 +108,7 @@ public class ExportFeaturesHistogramTask extends ExportFeaturesStoreTask<FileInp
 			Histogram hist = readHistogramFromCsv(inputObject);
 
 			if (histogramProvider!=null) {
-				hist = filterHistogramFromProvider(hist, logErrorReporter );
+				hist = filterHistogramFromProvider(hist, modelDir, logErrorReporter );
 			}
 			
 			ResultsVector rv = calcFeatures(
@@ -129,13 +132,13 @@ public class ExportFeaturesHistogramTask extends ExportFeaturesStoreTask<FileInp
 		}
 	}
 	
-	private Histogram filterHistogramFromProvider( Histogram inputtedHist, LogErrorReporter logErrorReporter ) throws OperationFailedException {
+	private Histogram filterHistogramFromProvider( Histogram inputtedHist, Path modelDir, LogErrorReporter logErrorReporter ) throws OperationFailedException {
 		
 		HistogramProvider histProviderDup = histogramProvider.duplicateBean();
 		
 		try {
 			histProviderDup.initRecursive(
-				createImageInitParmas(inputtedHist, logErrorReporter),
+				createImageInitParmas(inputtedHist, modelDir, logErrorReporter),
 				logErrorReporter
 			);
 			
@@ -145,11 +148,11 @@ public class ExportFeaturesHistogramTask extends ExportFeaturesStoreTask<FileInp
 		}
 	}
 	
-	private ImageInitParams createImageInitParmas( Histogram inputtedHist, LogErrorReporter logErrorReporter ) throws OperationFailedException {
+	private ImageInitParams createImageInitParmas( Histogram inputtedHist, Path modelDir, LogErrorReporter logErrorReporter ) throws OperationFailedException {
 		// Create a shared-objects and initialise
 		SharedObjects so = new SharedObjects( logErrorReporter );
 		
-		ImageInitParams params = ImageInitParams.create(so);
+		ImageInitParams params = ImageInitParams.create(so, modelDir);
 		params.getHistogramCollection().add(HISTOGRAM_INPUT_NAME_IN_PROVIDER, new IdentityOperation<>(inputtedHist) );
 		return params;
 	}

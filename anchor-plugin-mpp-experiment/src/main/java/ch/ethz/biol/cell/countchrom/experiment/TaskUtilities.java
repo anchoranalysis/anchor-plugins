@@ -1,12 +1,10 @@
-package org.anchoranalysis.plugin.image.task.imagefeature.calculator;
-
-import java.nio.file.Path;
+package ch.ethz.biol.cell.countchrom.experiment;
 
 /*-
  * #%L
- * anchor-plugin-image-task
+ * anchor-plugin-mpp-experiment
  * %%
- * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -28,18 +26,21 @@ import java.nio.file.Path;
  * #L%
  */
 
-import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.log.LogErrorReporter;
-import org.anchoranalysis.feature.nrg.NRGStackWithParams;
-import org.anchoranalysis.image.bean.provider.stack.StackProvider;
-import org.anchoranalysis.image.init.ImageInitParams;
-import org.anchoranalysis.image.io.input.ProvidesStackInput;
-import org.anchoranalysis.image.io.input.StackInputInitParamsCreator;
+import org.anchoranalysis.anchor.mpp.bean.init.GeneralInitParams;
+import org.anchoranalysis.core.random.RandomNumberGenerator;
+import org.anchoranalysis.experiment.task.ParametersBound;
 
-public class FeatureCalculatorRepeated {
+public class TaskUtilities {
+
+	private TaskUtilities() {
+		// Static only access
+	}
 	
-	public static NRGStackWithParams extractStack( ProvidesStackInput inputObject, StackProvider nrgStackProvider, Path modelDir, LogErrorReporter logErrorReporter ) throws OperationFailedException {
-		ImageInitParams params = StackInputInitParamsCreator.createInitParams(inputObject, modelDir, logErrorReporter);
-		return HelperInit.extractStack(params, nrgStackProvider, logErrorReporter);
+	public static <T,S> GeneralInitParams createGeneralParams( RandomNumberGenerator re, ParametersBound<T,S> params ) {
+		return new GeneralInitParams(
+			re,
+			params.getExperimentArguments().getModelDirectory(),
+			params.getLogErrorReporter()
+		);
 	}
 }
