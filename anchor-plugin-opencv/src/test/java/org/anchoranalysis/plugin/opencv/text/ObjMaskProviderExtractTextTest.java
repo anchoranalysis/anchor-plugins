@@ -32,10 +32,13 @@ import java.nio.file.Path;
 
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
+import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.core.log.LogReporter;
 import org.anchoranalysis.core.random.RandomNumberGeneratorMersenneConstant;
 import org.anchoranalysis.image.bean.provider.stack.StackProviderHolder;
+import org.anchoranalysis.image.extent.BoundingBox;
+import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.init.ImageInitParams;
 import org.anchoranalysis.image.objmask.ObjMaskCollection;
 import org.anchoranalysis.image.stack.Stack;
@@ -44,7 +47,19 @@ import org.anchoranalysis.test.TestLoader;
 import org.anchoranalysis.test.image.TestLoaderImageIO;
 import org.junit.Test;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertEquals;
 
+
+/**
+ * Tests ObjMaskProviderExtractTest
+ * 
+ * <p>Note that the weights file for the EAST model is duplicated in src/test/resources, as well as its usual location
+ * in the models/ directory of the Anchor distribution. This is as it's difficult to determine a path to the models/
+ * directory at test-time</p>
+ * 
+ * @author owen
+ *
+ */
 public class ObjMaskProviderExtractTextTest {
 
 	private TestLoaderImageIO testLoader = new TestLoaderImageIO(
@@ -52,32 +67,60 @@ public class ObjMaskProviderExtractTextTest {
 	);
 	
 	@Test
-	public void testSimple() throws AnchorIOException, CreateException, InitException {
+	public void testCar() throws AnchorIOException, CreateException, InitException {
 		
-		Stack stack = testLoader.openStackFromTestPath("car.jpg");
-		
-		ObjMaskProviderExtractText provider = createInitProvider(
+		ObjMaskProviderExtractText provider = createAndInitProvider(
+			"car.jpg",
 			testLoader.getTestLoader().getRoot()
 		);
-		provider.setStackProvider( new StackProviderHolder(stack) );
-		
+				
 		ObjMaskCollection objs = provider.create();
 		
 		assertTrue( objs.size()==2 );
+		
+		assertEquals(
+			objs.get(0).getBoundingBox(),
+			boxAt(246, 172, 106, 25)
+		);
+		
+		assertEquals(
+			objs.get(1).getBoundingBox(),
+			boxAt(362, 170, 72, 21)
+		);
 	}
 	
-	private ObjMaskProviderExtractText createInitProvider( Path modelDir ) throws InitException {
-		
-		LogReporter logReporter = mock(LogReporter.class);
-				
-		LogErrorReporter logger = new LogErrorReporter(logReporter);
+	private ObjMaskProviderExtractText createAndInitProvider( String imageFilename, Path modelDir ) throws InitException {
 		
 		ObjMaskProviderExtractText provider = new ObjMaskProviderExtractText();
-		provider.init( ImageInitParams.create(
-			logger,
-			new RandomNumberGeneratorMersenneConstant(),
+		
+		Stack stack = testLoader.openStackFromTestPath(imageFilename);
+		provider.setStackProvider( new StackProviderHolder(stack) );
+		
+		initProvider(
+			provider,
+			new LogErrorReporter( mock(LogReporter.class) ),
 			modelDir
-		), logger);
+		);
+		
 		return provider;
+	}
+	
+	private static void initProvider( ObjMaskProviderExtractText provider, LogErrorReporter logger, Path modelDir ) throws InitException {
+		provider.init(
+			ImageInitParams.create(
+				logger,
+				new RandomNumberGeneratorMersenneConstant(),
+				modelDir
+			),
+			logger
+		);		
+	}
+	
+	/** Bounding box at particular point and coo-rdinates */
+	private static BoundingBox boxAt( int x, int y, int width, int height ) {
+		return new BoundingBox(
+			new Point3i(x, y, 0),
+			new Extent(width, height, 1)
+		);
 	}
 }

@@ -1,10 +1,10 @@
-package ch.ethz.biol.cell.sgmn.scale;
+package org.anchoranalysis.plugin.opencv.text;
 
-/*
+/*-
  * #%L
- * anchor-plugin-image
+ * anchor-plugin-opencv
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -26,36 +26,30 @@ package ch.ethz.biol.cell.sgmn.scale;
  * #L%
  */
 
+public class ScaleFactorInt {
 
-import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.image.bean.scale.ScaleCalculator;
-import org.anchoranalysis.image.extent.ImageDim;
-import org.anchoranalysis.image.scale.ScaleFactor;
-
-public class ScaleCalculatorConstant extends ScaleCalculator {
-
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
+	private int x;
+	private int y;
 	
-	// START BEAN PROPERTIES
-	@BeanField
-	private double value;
-	// END BEAN PROPERTIES
-
-	@Override
-	public ScaleFactor calc(ImageDim srcDim)
-			throws OperationFailedException {
-		return new ScaleFactor(value);
+	public ScaleFactorInt(int x, int y) {
+		super();
+		this.x = x;
+		this.y = y;
+	}
+	
+	public int scaledX( int val ) {
+		return val*x;
+	}
+	
+	public int scaledY( int val ) {
+		return val*y;
 	}
 
-	public double getValue() {
-		return value;
+	public int getX() {
+		return x;
 	}
 
-	public void setValue(double value) {
-		this.value = value;
+	public int getY() {
+		return y;
 	}
 }

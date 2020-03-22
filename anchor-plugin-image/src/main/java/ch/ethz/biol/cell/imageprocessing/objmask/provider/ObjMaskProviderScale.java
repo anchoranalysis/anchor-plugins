@@ -66,7 +66,10 @@ public class ObjMaskProviderScale extends ObjMaskProviderDimensions {
 		
 		ObjMaskCollection objs = objMaskProvider.create();
 		try {
-			objs.scale( sf.getX(), sf.getY(), InterpolatorFactory.getInstance().binaryResizing() );
+			objs.scale(
+				sf,
+				InterpolatorFactory.getInstance().binaryResizing()
+			);
 		} catch (OperationFailedException e) {
 			throw new CreateException(e);
 		}
