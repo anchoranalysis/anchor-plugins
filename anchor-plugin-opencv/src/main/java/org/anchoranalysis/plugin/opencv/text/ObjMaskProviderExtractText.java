@@ -1,7 +1,6 @@
 package org.anchoranalysis.plugin.opencv.text;
 
 import java.nio.file.Path;
-import java.util.ArrayList;
 import java.util.List;
 
 
@@ -34,22 +33,21 @@ import java.util.List;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.core.geometry.Point3i;
+import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
 import org.anchoranalysis.image.bean.provider.stack.StackProvider;
 import org.anchoranalysis.image.extent.BoundingBox;
-import org.anchoranalysis.image.extent.ImageDim;
+import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.image.objmask.ObjMaskCollection;
 import org.anchoranalysis.image.scale.ScaleFactor;
 import org.anchoranalysis.image.scale.ScaleFactorUtilities;
 import org.anchoranalysis.image.stack.Stack;
+import org.anchoranalysis.plugin.opencv.CVInit;
 import org.anchoranalysis.plugin.opencv.MatConverter;
+import org.apache.commons.math3.util.Pair;
 import org.opencv.core.Mat;
-import org.opencv.core.Scalar;
 import org.opencv.core.Size;
-import org.opencv.dnn.Dnn;
-import org.opencv.dnn.Net;
 import org.opencv.imgproc.Imgproc;
 
 
@@ -64,9 +62,8 @@ import org.opencv.imgproc.Imgproc;
  */
 public class ObjMaskProviderExtractText extends ObjMaskProvider {
 
-	// Needs to be executed at least once before the OpenCV library is used
 	static {
-		nu.pattern.OpenCV.loadShared();
+		CVInit.alwaysExecuteBeforeCallingLibrary();
 	}
 	
 	/**
@@ -86,127 +83,99 @@ public class ObjMaskProviderExtractText extends ObjMaskProvider {
 	/** Bounding boxes with IoU scores above this threshold are removed */
 	@BeanField
 	private double suppressIntersectionOverUnionAbove = 0.3;
+	
+	/** Iff TRUE, non-maxima-suppression is applied to filter the proposed bounding boxes */
+	@BeanField
+	private boolean suppressNonMaxima = true;
 	// END BEAN PROPERTIES
 	
-	/** The image is first scaled to this size, which must be a multiple of 80, 80 for EAST */
-	private static final int RESIZE_WIDTH = 320;
-	private static final int RESIZE_HEIGHT = 320;
+	/** Only exact integral multiples of this size in each dimension can be accepted as input */
+	private static final Extent EAST_EXTENT = new Extent(32,32,0);
 	
 	@Override
 	public ObjMaskCollection create() throws CreateException {
 
-		// TODO check that it's a RGB stack
-		Stack stack = stackProvider.create();
+		Stack stack = createInput();
 		
-		Mat input = resizeMatToTarget(
-			MatConverter.fromStack( stack )
-		);
+		Pair<Extent, ScaleFactorInt> pairFirstScale;
+		try {
+			pairFirstScale = FindLargestMultipleWithin.apply(EAST_EXTENT, stack.getDimensions().getExtnt());
+		} catch (OperationFailedException e) {
+			throw new CreateException("Cannot scale input to size needed for EAST", e);
+		}
 		
-		ScaleFactor sf = ScaleFactorUtilities.calcRelativeScale(
-			new ImageDim(input.cols(), input.rows(), 0),
-			stack.getDimensions()
-		);
+		Pair<Mat,ScaleFactor> pair = createScaledInput(stack, pairFirstScale.getFirst());
 		
-				
-		//double rX = ((double) stack.getDimensions().getX()) / input.cols();
-		//double rY = ((double) stack.getDimensions().getY()) / input.rows();
-		
-		List<BoundingBoxWithConfidence> listBoxes = extractBoundingBoxes(input);
-		
-		// Apply non-maxima suppression
-		List<BoundingBoxWithConfidence> listAfterSupression = NonMaximaSuppression.apply(
-			listBoxes,
-			suppressIntersectionOverUnionAbove
+		List<BoundingBoxWithConfidence> listBoxes = EastBoundingBoxExtractor.extractBoundingBoxes(
+			pair.getFirst(),
+			minConfidence,
+			pathToEastModel(),
+			pairFirstScale.getSecond()
 		);
 		
 		// Scale each bounding box back to the original-size, and convert into an object-mask
-		return scaledMasksForEachBox(listAfterSupression, sf);
+		return scaledMasksForEachBox(
+			maybeFilterList(listBoxes),
+			pair.getSecond()
+		);
 	}
 	
-	private List<BoundingBoxWithConfidence> extractBoundingBoxes( Mat input ) {
+	private Stack createInput() throws CreateException {
 		
-		List<BoundingBoxWithConfidence> list = new ArrayList<>();
-		
-		Path pathModel = getSharedObjects().getModelDir().resolve("frozen_east_text_detection.pb");
-		
-		Net net = Dnn.readNetFromTensorflow(pathModel.toAbsolutePath().toString());
-		
-		Scalar meanSubtractionConstants = new Scalar(123.68, 116.78, 103.94);
-		
-		net.setInput(
-			Dnn.blobFromImage(input, 1.0, input.size(), meanSubtractionConstants, true, false )
-		);
+		Stack stack = stackProvider.create();
 
-		
-		// Calculated seperately due to a bug in the OpenCV java library which returns an exception (know further details)
-		//  when they are calculated together. A similar bug looks to be reported here:
-		// https://answers.opencv.org/question/214676/android-java-dnnforward-multiple-output-layers-segmentation-fault/
-		Mat scores = net.forward("feature_fusion/Conv_7/Sigmoid");
-		Mat geometry = net.forward("feature_fusion/concat_3");
-			
-		
-		Mat scores2 = scores.reshape(1, 1);
-		Mat geometry2 = geometry.reshape(1, 5);
-		
-		int rowsByCols = (int) scores2.size().width;
-		
-		float[] scoresData = arrayFromMat(scores2, 0, rowsByCols);
-		
-		float[] xData0 = arrayFromMat(geometry2, 0, rowsByCols);
-		float[] xData1 = arrayFromMat(geometry2, 1, rowsByCols);
-		float[] xData2 = arrayFromMat(geometry2, 2, rowsByCols);
-		float[] xData3 = arrayFromMat(geometry2, 3, rowsByCols);
-		float[] anglesData = arrayFromMat(geometry2, 4, rowsByCols);
-		
-		int numCols = (int) Math.floor( Math.sqrt(rowsByCols) );
-		int numRows = rowsByCols / numCols;
-		
-		int index = 0;
-		for (int y=0; y<numRows; y++) {
-			for (int x=0; x<numCols; x++) {
-				
-				float confidence = scoresData[index]; 
-				if (confidence>=minConfidence) {
-					int offsetX = x * 4;
-					int offsetY = y * 4;
-					
-					// Rotation angle
-					float angle = anglesData[index];
-					double cos = Math.cos(angle);
-					double sin = Math.sin(angle);
-					
-					// Width and height of bounding box
-					float h = xData0[index] + xData2[index];
-					float w = xData1[index] + xData3[index];
-					
-					// Starting and ending coordinates
-					double endX_d = offsetX + (cos * xData1[index]) + (sin * xData2[index]);
-					int endX = (int) endX_d;
-										
-					double endY_d = offsetY - (sin * xData1[index]) + (cos * xData2[index]);
-					int endY = (int) endY_d;
-										
-					int startX = endX - ((int) w) - 1;
-					int startY = endY - ((int) h) - 1;
-					
-					BoundingBox bbox = new BoundingBox(
-						new Point3i(startX, startY, 0),
-						new Point3i(endX, endY, 0)
-					);
-					
-					list.add(
-						new BoundingBoxWithConfidence(bbox, confidence)
-					);
-					
-					// Add the bounding box coordinates and the probability scores to a list
-					
-				}
-				index++;
-			}
-			
+		if (stack.getNumChnl()!=3) {
+			throw new CreateException("Non-RGB stacks are not supported by this algorithm");
 		}
 		
-		return list;
+		if (stack.getDimensions().getZ()>1) {
+			throw new CreateException("z-stacks are not supported by this algorithm");
+		}
+		
+		return stack;
+	}
+
+	/** Maybe apply non-maxima suppression */
+	private List<BoundingBoxWithConfidence> maybeFilterList( List<BoundingBoxWithConfidence> listBoxes ) {
+		if (suppressNonMaxima) {
+			return NonMaximaSuppression.apply(
+				listBoxes,
+				suppressIntersectionOverUnionAbove
+			);
+		} else {
+			return listBoxes;
+		}
+	}
+	
+	/** Returns a scaled-down version of the stack, and a scale-factor that would return it to original size */
+	private Pair<Mat,ScaleFactor> createScaledInput( Stack stack, Extent targetExtent ) throws CreateException {
+		
+		Mat original = MatConverter.makeRGBStack(stack);
+		
+		Mat input = resizeMatToTarget(original, targetExtent);
+		
+		ScaleFactor sf = calcRelativeScale(original, input);
+		
+		return new Pair<>( input, sf );
+	}
+	
+	private static ScaleFactor calcRelativeScale(Mat original, Mat resized) {
+		return ScaleFactorUtilities.calcRelativeScale(
+			extentFromMat(resized),
+			extentFromMat(original)
+		);
+	}
+	
+	private static Extent extentFromMat( Mat mat ) {
+		return new Extent(
+			mat.cols(),
+			mat.rows(),
+			0
+		);
+	}
+	
+	private Path pathToEastModel() {
+		return getSharedObjects().getModelDir().resolve("frozen_east_text_detection.pb");
 	}
 	
 	private ObjMaskCollection scaledMasksForEachBox( List<BoundingBoxWithConfidence> list, ScaleFactor sf ) {
@@ -234,16 +203,10 @@ public class ObjMaskProviderExtractText extends ObjMaskProvider {
 		om.binaryVoxelBox().setAllPixelsToOn();
 		return om;
 	}
-	
-	private static float[] arrayFromMat(Mat mat, int rowIndex, int arrSize) {
-		float arr[] = new float[arrSize];
-		mat.get(rowIndex, 0, arr);
-		return arr;
-	}
 		
-	private Mat resizeMatToTarget( Mat src ) {
+	private Mat resizeMatToTarget( Mat src, Extent targetExtent ) {
 		Mat dst = new Mat();
-		Size sz = new Size(RESIZE_WIDTH,RESIZE_HEIGHT);
+		Size sz = new Size(targetExtent.getX(),targetExtent.getY());
 		Imgproc.resize(src, dst, sz);
 		return dst;
 	}
@@ -270,6 +233,14 @@ public class ObjMaskProviderExtractText extends ObjMaskProvider {
 
 	public void setMinConfidence(double minConfidence) {
 		this.minConfidence = minConfidence;
+	}
+
+	public boolean isSuppressNonMaxima() {
+		return suppressNonMaxima;
+	}
+
+	public void setSuppressNonMaxima(boolean suppressNonMaxima) {
+		this.suppressNonMaxima = suppressNonMaxima;
 	}
 
 }

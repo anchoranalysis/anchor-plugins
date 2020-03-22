@@ -73,7 +73,7 @@ class BoundingBoxWithConfidence implements Comparable<BoundingBoxWithConfidence>
 	}
 
 	public void scaleXYPosAndExtnt( ScaleFactor sf ) {
-		bbox.scaleXYPosAndExtnt( sf.getX(), sf.getY() );
+		bbox.scaleXYPosAndExtnt( sf );
 	}
 
 	@Override

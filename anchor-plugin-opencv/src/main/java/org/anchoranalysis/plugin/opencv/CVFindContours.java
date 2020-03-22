@@ -45,7 +45,7 @@ import org.opencv.imgproc.Imgproc;
 public class CVFindContours {
 
 	static {
-		nu.pattern.OpenCV.loadShared();
+		CVInit.alwaysExecuteBeforeCallingLibrary();
 	}
 	
 	public static List<Contour> contourForObjMask( ObjMask om, int minNumPoints ) throws OperationFailedException {

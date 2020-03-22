@@ -1,10 +1,10 @@
-package ch.ethz.biol.cell.sgmn.scale;
+package org.anchoranalysis.plugin.opencv;
 
-/*
+/*-
  * #%L
- * anchor-plugin-image
+ * anchor-plugin-opencv
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -26,36 +26,14 @@ package ch.ethz.biol.cell.sgmn.scale;
  * #L%
  */
 
+public class CVInit {
 
-import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.image.bean.scale.ScaleCalculator;
-import org.anchoranalysis.image.extent.ImageDim;
-import org.anchoranalysis.image.scale.ScaleFactor;
-
-public class ScaleCalculatorConstant extends ScaleCalculator {
-
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
+	private CVInit() {
+		
+	}
 	
-	// START BEAN PROPERTIES
-	@BeanField
-	private double value;
-	// END BEAN PROPERTIES
-
-	@Override
-	public ScaleFactor calc(ImageDim srcDim)
-			throws OperationFailedException {
-		return new ScaleFactor(value);
-	}
-
-	public double getValue() {
-		return value;
-	}
-
-	public void setValue(double value) {
-		this.value = value;
+	/** This routine must always be executed at least once before calling any routines in the OpenCV library */
+	public static void alwaysExecuteBeforeCallingLibrary() {
+		nu.pattern.OpenCV.loadShared();
 	}
 }
