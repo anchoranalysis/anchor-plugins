@@ -1,4 +1,4 @@
-package org.anchoranalysis.plugin.opencv.text;
+package org.anchoranalysis.plugin.opencv.bean.text;
 
 /*-
  * #%L
@@ -26,30 +26,46 @@ package org.anchoranalysis.plugin.opencv.text;
  * #L%
  */
 
-public class ScaleFactorInt {
+import java.util.List;
 
-	private int x;
-	private int y;
-	
-	public ScaleFactorInt(int x, int y) {
-		super();
-		this.x = x;
-		this.y = y;
-	}
-	
-	public int scaledX( int val ) {
-		return val*x;
-	}
-	
-	public int scaledY( int val ) {
-		return val*y;
-	}
+import org.anchoranalysis.image.extent.BoundingBox;
+import org.anchoranalysis.image.extent.ImageDim;
+import org.anchoranalysis.image.objmask.ObjMask;
+import org.anchoranalysis.image.objmask.ObjMaskCollection;
+import org.anchoranalysis.image.scale.ScaleFactor;
 
-	public int getX() {
-		return x;
-	}
+/**
+ * Scales each bounding-box and converts to an object-mask
+ * 
+ * @author owen
+ *
+ */
+class ScaleConvertToMask {
 
-	public int getY() {
-		return y;
+	public static ObjMaskCollection scaledMasksForEachBox(
+		List<BoundingBoxWithConfidence> list,
+		ScaleFactor sf,
+		ImageDim sceneDim
+	) {
+		
+		ObjMaskCollection objs = new ObjMaskCollection();
+		for (BoundingBoxWithConfidence bbox : list) {
+			
+			bbox.scaleXYPosAndExtnt(sf);
+			
+			assert( sceneDim.contains(bbox.getBBox()) );
+		
+			objs.add(
+				objWithAllPixelsOn(bbox.getBBox())
+			);
+		}
+		
+		return objs;
+	}
+	
+	private static ObjMask objWithAllPixelsOn( BoundingBox bbox ) {
+		ObjMask om = new ObjMask(bbox);
+		om.binaryVoxelBox().setAllPixelsToOn();
+		return om;
 	}
 }
