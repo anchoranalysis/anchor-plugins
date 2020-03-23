@@ -30,7 +30,6 @@ import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.scale.ScaleFactor;
 import org.anchoranalysis.image.scale.ScaleFactorUtilities;
-import org.apache.commons.math3.util.Pair;
 
 /**
  * Finds largest multiple of an Extent without being larger than another extent
@@ -52,10 +51,10 @@ class FindLargestMultipleWithin {
 	 * 
 	 * @param small the extent to scale
 	 * @param stayWithin a maximum size not to scale beyond
-	 * @return the scaled-extent and the factors used to scale it
+	 * @return the scaled-extent to use
 	 * @throws OperationFailedException 
 	 */
-	public static Pair<Extent,ScaleFactorInt> apply( Extent small, Extent stayWithin ) throws OperationFailedException {
+	public static Extent apply( Extent small, Extent stayWithin ) throws OperationFailedException {
 
 		if (small.getX() > stayWithin.getX()) {
 			throw new OperationFailedException("The extent of small in the X direction is already larger than stayWithin. This is not allowed");
@@ -68,10 +67,13 @@ class FindLargestMultipleWithin {
 		// Non-integral scale factors
 		ScaleFactor sf = ScaleFactorUtilities.calcRelativeScale(small, stayWithin);
 		
-		int minFactor = (int) Math.ceil( Math.min(sf.getX(), sf.getY()) ); 
+		int minFactor = (int) Math.floor( Math.min(sf.getX(), sf.getY()) ); 
 		
 		// The integral floor of each
-		ScaleFactorInt sfInt = new ScaleFactorInt(minFactor, minFactor);
+		ScaleFactorInt sfInt = new ScaleFactorInt(
+			minFactor,
+			minFactor
+		);
 
 		// The scaled extent
 		Extent extentScaled = new Extent(
@@ -80,6 +82,6 @@ class FindLargestMultipleWithin {
 			1
 		);
 		
-		return new Pair<>( extentScaled, sfInt );
+		return extentScaled;
 	}
 }

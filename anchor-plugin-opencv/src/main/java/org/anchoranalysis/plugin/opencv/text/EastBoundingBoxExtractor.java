@@ -30,7 +30,6 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.Extent;
 import org.apache.commons.math3.util.Pair;
@@ -46,17 +45,28 @@ class EastBoundingBoxExtractor {
 	private static final String OUTPUT_SCORES = "feature_fusion/Conv_7/Sigmoid";
 	private static final String OUTPUT_GEOMETRY = "feature_fusion/concat_3";
 	
+	private static final ScaleFactorInt SCALE_BY_4 = new ScaleFactorInt(4,4);
+	
+	
+	/**
+	 * Extracts bounding boxes from an image using the EAST model
+	 * 
+	 * @param image an RGB image to extract boxes from
+	 * @param minConfidence filters boxes to have confidence >= minConfidence
+	 * @param pathToModel path to the model-weights
+	 * 
+	 * @return a list of bounding-boxes, each with a confidence value
+	 */
 	public static List<BoundingBoxWithConfidence> extractBoundingBoxes(
-		Mat input,
+		Mat image,
 		double minConfidence,
-		Path model,
-		ScaleFactorInt scaleFactor
+		Path pathToModel
 	) {
 		
-		Net net = Dnn.readNetFromTensorflow(model.toAbsolutePath().toString());
+		Net net = Dnn.readNetFromTensorflow(pathToModel.toAbsolutePath().toString());
 				
 		net.setInput(
-			Dnn.blobFromImage(input, 1.0, input.size(), MEAN_SUBTRACTION_CONSTANTS, true, false )
+			Dnn.blobFromImage(image, 1.0, image.size(), MEAN_SUBTRACTION_CONSTANTS, true, false )
 		);
 		
 		// Calculated separately due to a bug in the OpenCV java library which returns an exception (know further details)
@@ -68,7 +78,7 @@ class EastBoundingBoxExtractor {
 		return extractFromMatrices(
 			scores,
 			geometry,
-			new ScaleFactorInt(4,4),
+			SCALE_BY_4,
 			minConfidence
 		);
 	}
@@ -114,7 +124,7 @@ class EastBoundingBoxExtractor {
 					int offsetX = offsetScale.scaledX(x);
 					int offsetY = offsetScale.scaledY(y);
 					
-					BoundingBox bbox = boxFor(geometryArrs, index, offsetX, offsetY);
+					BoundingBox bbox = BoundingBoxFromArrays.boxFor(geometryArrs, index, offsetX, offsetY);
 					
 					list.add(
 						new BoundingBoxWithConfidence(bbox, confidence)
@@ -176,47 +186,7 @@ class EastBoundingBoxExtractor {
 		}
 		return out;
 	}
-	
-	private static BoundingBox boxFor( float[][] geometryArrs, int index, int offsetX, int offsetY) {
-		return boxFor(
-			geometryArrs[0][index],
-			geometryArrs[1][index],
-			geometryArrs[2][index],
-			geometryArrs[3][index],
-			geometryArrs[4][index],
-			offsetX,
-			offsetY
-		);
-	}
-	
-	private static BoundingBox boxFor( float p0, float p1, float p2, float p3, float angle, int offsetX, int offsetY) {
-		double cos = Math.cos(angle);
-		double sin = Math.sin(angle);
 		
-		// Width and height of bounding box
-		float height = p0 + p2;
-		float width = p1 + p3;
-		
-		// Starting and ending coordinates
-		double endX = offsetX + (cos * p1) + (sin * p2);
-		double endY = offsetY - (sin * p1) + (cos * p2);
-		
-		return boxFor( (int) endX, (int) endY, (int) width, (int) height);
-	}
-	
-	
-	/** Create bounding box from the end-crnr and a width and height */
-	private static BoundingBox boxFor( int endX, int endY, int width, int height) {
-		
-		int startX = endX - width - 1;
-		int startY = endY - height - 1;
-		
-		return new BoundingBox(
-			new Point3i(startX, startY, 0),
-			new Point3i(endX, endY, 0)
-		);
-	}
-	
 	/** Extracts an array of floats from a matrix */
 	private static float[] arrayFromMat(Mat mat, int rowIndex, int arrSize) {
 		float arr[] = new float[arrSize];
