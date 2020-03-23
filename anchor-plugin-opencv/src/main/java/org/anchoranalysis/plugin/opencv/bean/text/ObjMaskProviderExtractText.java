@@ -1,4 +1,4 @@
-package org.anchoranalysis.plugin.opencv.text;
+package org.anchoranalysis.plugin.opencv.bean.text;
 
 import java.nio.file.Path;
 import java.util.List;

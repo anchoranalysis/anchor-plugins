@@ -43,6 +43,7 @@ import org.anchoranalysis.image.init.ImageInitParams;
 import org.anchoranalysis.image.objmask.ObjMaskCollection;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.io.error.AnchorIOException;
+import org.anchoranalysis.plugin.opencv.bean.text.ObjMaskProviderExtractText;
 import org.anchoranalysis.test.TestLoader;
 import org.anchoranalysis.test.image.TestLoaderImageIO;
 import org.junit.Test;
