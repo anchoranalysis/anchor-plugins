@@ -70,7 +70,8 @@ public class ObjMaskProviderExtractTextTest {
 	public void testCar() throws AnchorIOException, CreateException, InitException {
 		
 		ObjMaskProviderExtractText provider = createAndInitProvider(
-			"car.jpg",
+			//"car.jpg",
+			"lebron_james.jpg",
 			testLoader.getTestLoader().getRoot()
 		);
 				

@@ -36,19 +36,13 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
 import org.anchoranalysis.image.bean.provider.stack.StackProvider;
-import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.Extent;
-import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.image.objmask.ObjMaskCollection;
 import org.anchoranalysis.image.scale.ScaleFactor;
-import org.anchoranalysis.image.scale.ScaleFactorUtilities;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.plugin.opencv.CVInit;
-import org.anchoranalysis.plugin.opencv.MatConverter;
 import org.apache.commons.math3.util.Pair;
 import org.opencv.core.Mat;
-import org.opencv.core.Size;
-import org.opencv.imgproc.Imgproc;
 
 
 /**
@@ -97,26 +91,26 @@ public class ObjMaskProviderExtractText extends ObjMaskProvider {
 
 		Stack stack = createInput();
 		
-		Pair<Extent, ScaleFactorInt> pairFirstScale;
+		Extent extent;
 		try {
-			pairFirstScale = FindLargestMultipleWithin.apply(EAST_EXTENT, stack.getDimensions().getExtnt());
+			extent = FindLargestMultipleWithin.apply(EAST_EXTENT, stack.getDimensions().getExtnt());
 		} catch (OperationFailedException e) {
 			throw new CreateException("Cannot scale input to size needed for EAST", e);
 		}
 		
-		Pair<Mat,ScaleFactor> pair = createScaledInput(stack, pairFirstScale.getFirst());
+		Pair<Mat,ScaleFactor> pair = CreateScaledInput.apply(stack, extent);
 		
 		List<BoundingBoxWithConfidence> listBoxes = EastBoundingBoxExtractor.extractBoundingBoxes(
 			pair.getFirst(),
 			minConfidence,
-			pathToEastModel(),
-			pairFirstScale.getSecond()
+			pathToEastModel()
 		);
 		
 		// Scale each bounding box back to the original-size, and convert into an object-mask
-		return scaledMasksForEachBox(
+		return ScaleConvertToMask.scaledMasksForEachBox(
 			maybeFilterList(listBoxes),
-			pair.getSecond()
+			pair.getSecond(),
+			stack.getDimensions()
 		);
 	}
 	
@@ -125,7 +119,12 @@ public class ObjMaskProviderExtractText extends ObjMaskProvider {
 		Stack stack = stackProvider.create();
 
 		if (stack.getNumChnl()!=3) {
-			throw new CreateException("Non-RGB stacks are not supported by this algorithm");
+			throw new CreateException(
+				String.format(
+					"Non-RGB stacks are not supported by this algorithm. This stack has %d channels.",
+					stack.getNumChnl()
+				)
+			);
 		}
 		
 		if (stack.getDimensions().getZ()>1) {
@@ -147,68 +146,8 @@ public class ObjMaskProviderExtractText extends ObjMaskProvider {
 		}
 	}
 	
-	/** Returns a scaled-down version of the stack, and a scale-factor that would return it to original size */
-	private Pair<Mat,ScaleFactor> createScaledInput( Stack stack, Extent targetExtent ) throws CreateException {
-		
-		Mat original = MatConverter.makeRGBStack(stack);
-		
-		Mat input = resizeMatToTarget(original, targetExtent);
-		
-		ScaleFactor sf = calcRelativeScale(original, input);
-		
-		return new Pair<>( input, sf );
-	}
-	
-	private static ScaleFactor calcRelativeScale(Mat original, Mat resized) {
-		return ScaleFactorUtilities.calcRelativeScale(
-			extentFromMat(resized),
-			extentFromMat(original)
-		);
-	}
-	
-	private static Extent extentFromMat( Mat mat ) {
-		return new Extent(
-			mat.cols(),
-			mat.rows(),
-			0
-		);
-	}
-	
 	private Path pathToEastModel() {
 		return getSharedObjects().getModelDir().resolve("frozen_east_text_detection.pb");
-	}
-	
-	private ObjMaskCollection scaledMasksForEachBox( List<BoundingBoxWithConfidence> list, ScaleFactor sf ) {
-		
-		ObjMaskCollection objs = new ObjMaskCollection();
-		for (BoundingBoxWithConfidence bbox : list) {
-			bbox.scaleXYPosAndExtnt(sf);
-			
-			getLogger().getLogReporter().logFormatted(
-				"Bounding box %s with confidence %f",
-				bbox.toString(),
-				bbox.getConfidence()
-			);
-		
-			objs.add(
-				objWithAllPixelsOn(bbox.getBBox())
-			);
-		}
-		
-		return objs;
-	}
-	
-	private static ObjMask objWithAllPixelsOn( BoundingBox bbox ) {
-		ObjMask om = new ObjMask(bbox);
-		om.binaryVoxelBox().setAllPixelsToOn();
-		return om;
-	}
-		
-	private Mat resizeMatToTarget( Mat src, Extent targetExtent ) {
-		Mat dst = new Mat();
-		Size sz = new Size(targetExtent.getX(),targetExtent.getY());
-		Imgproc.resize(src, dst, sz);
-		return dst;
 	}
 
 	public StackProvider getStackProvider() {
