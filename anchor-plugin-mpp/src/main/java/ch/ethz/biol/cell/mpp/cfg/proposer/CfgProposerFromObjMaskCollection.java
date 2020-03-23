@@ -56,7 +56,7 @@ public class CfgProposerFromObjMaskCollection extends CfgProposer {
 	
 	// START BEAN PROPERTIES
 	@BeanField
-	private ObjMaskProvider objMaskProvider;
+	private ObjMaskProvider objs;
 	
 	@BeanField
 	private boolean suppressZCovariance = false;
@@ -82,9 +82,9 @@ public class CfgProposerFromObjMaskCollection extends CfgProposer {
 	public Cfg propose(CfgGen cfgGen, ProposerContext context) throws ProposalAbnormalFailureException {
 
 
-		ObjMaskCollection objs;
+		ObjMaskCollection objsCollection;
 		try {
-			objs = objMaskProvider.create();
+			objsCollection = objs.create();
 		} catch (CreateException e) {
 			throw new ProposalAbnormalFailureException("Failed to create objs", e);
 		}
@@ -100,7 +100,7 @@ public class CfgProposerFromObjMaskCollection extends CfgProposer {
 		}
 
 		try {
-			for( ObjMask om : objs ) {
+			for( ObjMask om : objsCollection ) {
 				Mark mark = createFromObjMask(om, context.getNrgStack());
 				mark.setId( cfgGen.idAndIncrement() );
 				
@@ -134,12 +134,12 @@ public class CfgProposerFromObjMaskCollection extends CfgProposer {
 		this.suppressZCovariance = suppressZCovariance;
 	}
 
-	public ObjMaskProvider getObjMaskProvider() {
-		return objMaskProvider;
+	public ObjMaskProvider getObjs() {
+		return objs;
 	}
 
-	public void setObjMaskProvider(ObjMaskProvider objMaskProvider) {
-		this.objMaskProvider = objMaskProvider;
+	public void setObjs(ObjMaskProvider objs) {
+		this.objs = objs;
 	}
 
 	public double getShellRad() {

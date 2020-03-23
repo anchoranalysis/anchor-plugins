@@ -42,10 +42,10 @@ public class ObjMaskProviderNotIn extends ObjMaskProvider {
 	
 	// START BEAN PROPERTIES
 	@BeanField
-	private ObjMaskProvider objMaskProvider;
+	private ObjMaskProvider objs;
 	
 	@BeanField
-	private ObjMaskProvider objMaskProviderContainer;
+	private ObjMaskProvider objsContainer;
 	// END BEAN PROPERTIES
 	
 	
@@ -64,14 +64,14 @@ public class ObjMaskProviderNotIn extends ObjMaskProvider {
 	@Override
 	public ObjMaskCollection create() throws CreateException {
 		
-		ObjMaskCollection objs = objMaskProvider.create();
-		ObjMaskCollection objsContainer = objMaskProviderContainer.create();
+		ObjMaskCollection objsCollection = objs.create();
+		ObjMaskCollection objsContainerCollection = objsContainer.create();
 		
 		ObjMaskCollection out = new ObjMaskCollection();
 		
-		for( ObjMask om : objs ) {
+		for( ObjMask om : objsCollection ) {
 			
-			if (!isObjIn(om,objsContainer)) {
+			if (!isObjIn(om,objsContainerCollection)) {
 				out.add(om);
 			}
 		}
@@ -79,21 +79,22 @@ public class ObjMaskProviderNotIn extends ObjMaskProvider {
 		return out;
 	}
 
-	public ObjMaskProvider getObjMaskProvider() {
-		return objMaskProvider;
+	public ObjMaskProvider getObjs() {
+		return objs;
 	}
 
-	public void setObjMaskProvider(ObjMaskProvider objMaskProvider) {
-		this.objMaskProvider = objMaskProvider;
+	public void setObjs(ObjMaskProvider objs) {
+		this.objs = objs;
 	}
 
 
-	public ObjMaskProvider getObjMaskProviderContainer() {
-		return objMaskProviderContainer;
+	public ObjMaskProvider getObjsContainer() {
+		return objsContainer;
 	}
 
-	public void setObjMaskProviderContainer(ObjMaskProvider objMaskProviderContainer) {
-		this.objMaskProviderContainer = objMaskProviderContainer;
+
+	public void setObjsContainer(ObjMaskProvider objsContainer) {
+		this.objsContainer = objsContainer;
 	}
 
 }

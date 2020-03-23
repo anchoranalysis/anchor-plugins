@@ -46,10 +46,10 @@ public class ObjMaskFilterGreaterIntersectionWith extends ObjMaskFilterByObject 
 	
 	// START BEAN PROPERTIES
 	@BeanField
-	private ObjMaskProvider objMaskProviderGreater;
+	private ObjMaskProvider objsGreater;
 	
 	@BeanField
-	private ObjMaskProvider objMaskProviderLesser;
+	private ObjMaskProvider objsLesser;
 	// END BEAN PROPERTIES
 	
 	private ObjMaskCollection intersectionSetGreater;
@@ -59,23 +59,20 @@ public class ObjMaskFilterGreaterIntersectionWith extends ObjMaskFilterByObject 
 	protected void start(ImageDim dim) throws OperationFailedException {
 		
 		try {
-			intersectionSetGreater = objMaskProviderGreater.create();
-			intersectionSetLesser = objMaskProviderLesser.create();
+			intersectionSetGreater = objsGreater.create();
+			intersectionSetLesser = objsLesser.create();
 			
 		} catch (CreateException e) {
 			throw new OperationFailedException(e);
 		}
-		
 	}
-
-
 	
 	@Override
 	protected boolean match(ObjMask om, ImageDim dim)
 			throws OperationFailedException {
 
-		int cntGreater =  intersectionSetGreater.countIntersectingPixels(om );
-		int cntLesser =  intersectionSetLesser.countIntersectingPixels(om );
+		int cntGreater =  intersectionSetGreater.countIntersectingPixels(om);
+		int cntLesser =  intersectionSetLesser.countIntersectingPixels(om);
 		
 		return cntGreater >= cntLesser;
 	}
@@ -86,23 +83,19 @@ public class ObjMaskFilterGreaterIntersectionWith extends ObjMaskFilterByObject 
 		intersectionSetLesser = null;
 	}
 
-
-	public ObjMaskProvider getObjMaskProviderGreater() {
-		return objMaskProviderGreater;
+	public ObjMaskProvider getObjsGreater() {
+		return objsGreater;
+	}
+	
+	public void setObjsGreater(ObjMaskProvider objsGreater) {
+		this.objsGreater = objsGreater;
 	}
 
-	public void setObjMaskProviderGreater(ObjMaskProvider objMaskProviderGreater) {
-		this.objMaskProviderGreater = objMaskProviderGreater;
+	public ObjMaskProvider getObjsLesser() {
+		return objsLesser;
 	}
-
-	public ObjMaskProvider getObjMaskProviderLesser() {
-		return objMaskProviderLesser;
+	
+	public void setObjsLesser(ObjMaskProvider objsLesser) {
+		this.objsLesser = objsLesser;
 	}
-
-	public void setObjMaskProviderLesser(ObjMaskProvider objMaskProviderLesser) {
-		this.objMaskProviderLesser = objMaskProviderLesser;
-	}
-
-
-
 }

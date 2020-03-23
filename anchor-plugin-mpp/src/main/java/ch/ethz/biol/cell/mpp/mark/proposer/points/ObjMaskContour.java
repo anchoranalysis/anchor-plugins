@@ -56,7 +56,7 @@ public class ObjMaskContour extends PointsProposer {
 	
 	// START BEAN PROPERTIES
 	@BeanField
-	private ObjMaskProvider objMaskProvider;
+	private ObjMaskProvider objs;
 	// END BEAN PROPERTIES
 	
 	@Override
@@ -68,17 +68,17 @@ public class ObjMaskContour extends PointsProposer {
 	public List<Point3i> propose(Point3d pnt, Mark mark, ImageDim dim,
 			RandomNumberGenerator re, ErrorNode errorNode) {
 
-		ObjMaskCollection objs;
+		ObjMaskCollection objsCollection;
 		try {
-			objs = objMaskProvider.create();
+			objsCollection = objs.create();
 		} catch (CreateException e) {
 			errorNode.add(e);
 			return null;
 		}
 		
-		int index = (int) (re.nextDouble() * objs.size() );
+		int index = (int) (re.nextDouble() * objsCollection.size() );
 		
-		ObjMask om = objs.get(index);
+		ObjMask om = objsCollection.get(index);
 
 		List<Point3i> listPnts = new ArrayList<>();
 		
@@ -101,12 +101,12 @@ public class ObjMaskContour extends PointsProposer {
 	}
 
 
-	public ObjMaskProvider getObjMaskProvider() {
-		return objMaskProvider;
+	public ObjMaskProvider getObjs() {
+		return objs;
 	}
 
 
-	public void setObjMaskProvider(ObjMaskProvider objMaskProvider) {
-		this.objMaskProvider = objMaskProvider;
+	public void setObjs(ObjMaskProvider objs) {
+		this.objs = objs;
 	}
 }

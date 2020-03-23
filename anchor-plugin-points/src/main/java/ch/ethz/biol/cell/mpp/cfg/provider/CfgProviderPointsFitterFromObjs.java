@@ -59,7 +59,7 @@ public class CfgProviderPointsFitterFromObjs extends CfgProvider {
 	
 	/// START BEAN PROPERTIES
 	@BeanField
-	private ObjMaskProvider objMaskProvider;
+	private ObjMaskProvider objs;
 	
 	@BeanField
 	private PointsFitter pointsFitter;
@@ -91,11 +91,11 @@ public class CfgProviderPointsFitterFromObjs extends CfgProvider {
 		
 		ImageDim dim = dimProvider.create();
 
-		ObjMaskCollection objs = objMaskProvider.create();
+		ObjMaskCollection objsCollection = objs.create();
 		
 		Cfg cfgOut = new Cfg();
 		
-		for( ObjMask om : objs ) {
+		for( ObjMask om : objsCollection ) {
 			Mark mark = createMarkFromObj(om,dim);
 			if (mark!=null) {
 				cfgOut.add( mark );
@@ -154,12 +154,12 @@ public class CfgProviderPointsFitterFromObjs extends CfgProvider {
 		return markOut;		
 	}
 
-	public ObjMaskProvider getObjMaskProvider() {
-		return objMaskProvider;
+	public ObjMaskProvider getObjs() {
+		return objs;
 	}
 
-	public void setObjMaskProvider(ObjMaskProvider objMaskProvider) {
-		this.objMaskProvider = objMaskProvider;
+	public void setObjs(ObjMaskProvider objs) {
+		this.objs = objs;
 	}
 
 	public PointsFitter getPointsFitter() {

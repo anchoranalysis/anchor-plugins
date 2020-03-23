@@ -46,7 +46,7 @@ public class ProbMapProviderObjMaskCollection extends ProbMapProvider {
 	
 	// START BEAN PROPERTIES
 	@BeanField
-	private ObjMaskProvider objMaskProvider;
+	private ObjMaskProvider objs;
 	
 	@BeanField
 	private ImageDimProvider dimProvider;
@@ -54,15 +54,15 @@ public class ProbMapProviderObjMaskCollection extends ProbMapProvider {
 
 	@Override
 	public ProbMap create() throws CreateException {
-		return new ProbMapObjMaskCollection( objMaskProvider.create(), dimProvider.create() );
+		return new ProbMapObjMaskCollection( objs.create(), dimProvider.create() );
 	}
 
-	public ObjMaskProvider getObjMaskProvider() {
-		return objMaskProvider;
+	public ObjMaskProvider getObjs() {
+		return objs;
 	}
 
-	public void setObjMaskProvider(ObjMaskProvider objMaskProvider) {
-		this.objMaskProvider = objMaskProvider;
+	public void setObjs(ObjMaskProvider objs) {
+		this.objs = objs;
 	}
 
 	public ImageDimProvider getDimProvider() {

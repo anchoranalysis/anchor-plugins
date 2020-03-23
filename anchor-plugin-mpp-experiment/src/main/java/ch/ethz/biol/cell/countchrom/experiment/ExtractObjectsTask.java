@@ -108,7 +108,7 @@ public class ExtractObjectsTask extends TaskWithoutSharedState<MultiInput> {
 	private boolean suppressOutputExceptions = false;
 	
 	@BeanField
-	private ObjMaskProvider objMaskProvider;		// The masks we want to extract
+	private ObjMaskProvider objs;		// The masks we want to extract
 	
 	@BeanField @Optional
 	private List<NamedBean<StackProvider>> listStackProvider = new ArrayList<>();	// The channels we apply the masks to - all assumed to be of same dimension
@@ -472,7 +472,7 @@ public class ExtractObjectsTask extends TaskWithoutSharedState<MultiInput> {
 			
 			
 			try {
-				objMaskProvider.initRecursive(soImage, logErrorReporter );
+				objs.initRecursive(soImage, logErrorReporter );
 			} catch (InitException e1) {
 				throw new JobExecutionException(e1);
 			}
@@ -492,13 +492,13 @@ public class ExtractObjectsTask extends TaskWithoutSharedState<MultiInput> {
 			GeneratorSequenceIncrementalRerouteErrors<ObjMask> generatorSeq = createGeneratorSequence( generator, outputManager, so, logErrorReporter.getErrorReporter() );
 			
 			generatorSeq.start();
-			ObjMaskCollection objs = objMaskProvider.create();
+			ObjMaskCollection objsCollection = objs.create();
 			
 			if (extendInZ) {
-				objs = extendObjsInZ(objs, dim.getZ());
+				objsCollection = extendObjsInZ(objsCollection, dim.getZ());
 			}
 			
-			for( ObjMask om : objs) {
+			for( ObjMask om : objsCollection) {
 				generatorSeq.add(om);
 			}
 			generatorSeq.end();
@@ -536,13 +536,13 @@ public class ExtractObjectsTask extends TaskWithoutSharedState<MultiInput> {
 	}
 
 
-	public ObjMaskProvider getObjMaskProvider() {
-		return objMaskProvider;
+	public ObjMaskProvider getObjs() {
+		return objs;
 	}
 
 
-	public void setObjMaskProvider(ObjMaskProvider objMaskProvider) {
-		this.objMaskProvider = objMaskProvider;
+	public void setObjs(ObjMaskProvider objs) {
+		this.objs = objs;
 	}
 
 

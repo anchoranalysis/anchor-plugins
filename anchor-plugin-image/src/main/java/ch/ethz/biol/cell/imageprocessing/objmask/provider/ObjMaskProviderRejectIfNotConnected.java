@@ -49,15 +49,15 @@ public class ObjMaskProviderRejectIfNotConnected extends ObjMaskProvider {
 	
 	// START BEAN PROPERTIES
 	@BeanField
-	private ObjMaskProvider objMaskProvider;
+	private ObjMaskProvider objs;
 	// END BEAN PROPERTIES
 
 	@Override
 	public ObjMaskCollection create() throws CreateException {
 
-		ObjMaskCollection objs = objMaskProvider.create();
+		ObjMaskCollection objsCollection = objs.create();
 		
-		for( ObjMask om : objs ) {
+		for( ObjMask om : objsCollection ) {
 			try {
 				if (!om.checkIfConnected()) {
 					throw new CreateException("At least one object is not connected");
@@ -67,15 +67,15 @@ public class ObjMaskProviderRejectIfNotConnected extends ObjMaskProvider {
 			}
 		}
 		
+		return objsCollection;
+	}
+
+	public ObjMaskProvider getObjs() {
 		return objs;
 	}
 
-	public ObjMaskProvider getObjMaskProvider() {
-		return objMaskProvider;
-	}
-
-	public void setObjMaskProvider(ObjMaskProvider objMaskProvider) {
-		this.objMaskProvider = objMaskProvider;
+	public void setObjs(ObjMaskProvider objs) {
+		this.objs = objs;
 	}
 
 }

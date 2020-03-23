@@ -60,10 +60,10 @@ public class ObjMaskProviderSeededObjSgmn extends ObjMaskProvider {
 
 	// START BEAN PROPERTIES
 	@BeanField @Optional
-	private ObjMaskProvider objMaskProviderSourceObjs;
+	private ObjMaskProvider objsSource;
 	
 	@BeanField
-	private ObjMaskProvider objMaskProviderSeeds;
+	private ObjMaskProvider objsSeeds;
 	
 	@BeanField
 	private ChnlProvider chnlProvider;
@@ -165,10 +165,10 @@ public class ObjMaskProviderSeededObjSgmn extends ObjMaskProvider {
 		
 		Chnl chnl = chnlProvider.create();
 		
-		ObjMaskCollection seeds = objMaskProviderSeeds.create();
+		ObjMaskCollection seeds = objsSeeds.create();
 		
-		if (objMaskProviderSourceObjs!=null) {
-			ObjMaskCollection sourceObjs = objMaskProviderSourceObjs.create();
+		if (objsSource!=null) {
+			ObjMaskCollection sourceObjs = objsSource.create();
 			return createWithSourceObjs(
 				chnl,
 				seeds,
@@ -178,23 +178,6 @@ public class ObjMaskProviderSeededObjSgmn extends ObjMaskProvider {
 		} else {
 			return createWithoutSourceObjs( chnl, seeds, sgmn );
 		}
-	}
-
-	public ObjMaskProvider getObjMaskProviderSourceObjs() {
-		return objMaskProviderSourceObjs;
-	}
-
-	public void setObjMaskProviderSourceObjs(
-			ObjMaskProvider objMaskProviderSourceObjs) {
-		this.objMaskProviderSourceObjs = objMaskProviderSourceObjs;
-	}
-
-	public ObjMaskProvider getObjMaskProviderSeeds() {
-		return objMaskProviderSeeds;
-	}
-
-	public void setObjMaskProviderSeeds(ObjMaskProvider objMaskProviderSeeds) {
-		this.objMaskProviderSeeds = objMaskProviderSeeds;
 	}
 
 	public ObjMaskSgmn getSgmn() {
@@ -211,5 +194,24 @@ public class ObjMaskProviderSeededObjSgmn extends ObjMaskProvider {
 
 	public void setChnlProvider(ChnlProvider chnlProvider) {
 		this.chnlProvider = chnlProvider;
+	}
+
+	public ObjMaskProvider getObjsSeeds() {
+		return objsSeeds;
+	}
+
+
+	public void setObjsSeeds(ObjMaskProvider objsSeeds) {
+		this.objsSeeds = objsSeeds;
+	}
+
+
+	public ObjMaskProvider getObjsSource() {
+		return objsSource;
+	}
+
+
+	public void setObjsSource(ObjMaskProvider objsSource) {
+		this.objsSource = objsSource;
 	}
 }

@@ -52,7 +52,7 @@ public class ChnlProviderNormaliseIntensityForObjects extends ChnlProvider {
 	private ChnlProvider chnlProvider;
 	
 	@BeanField
-	private ObjMaskProvider objMaskProvider;
+	private ObjMaskProvider objs;
 	// END BEAN PROPERTIES
 	
 	@Override
@@ -62,9 +62,9 @@ public class ChnlProviderNormaliseIntensityForObjects extends ChnlProvider {
 		
 		VoxelBox<?> vb = chnl.getVoxelBox().any();
 		
-		ObjMaskCollection objs = objMaskProvider.create();
+		ObjMaskCollection objsCollection = objs.create();
 		
-		for( ObjMask om : objs ) {
+		for( ObjMask om : objsCollection ) {
 			
 			try {
 				double meanIntensity = IntensityMean.calcMeanIntensityObjMask(chnl, om);
@@ -95,13 +95,13 @@ public class ChnlProviderNormaliseIntensityForObjects extends ChnlProvider {
 	}
 
 
-	public ObjMaskProvider getObjMaskProvider() {
-		return objMaskProvider;
+	public ObjMaskProvider getObjs() {
+		return objs;
 	}
 
 
-	public void setObjMaskProvider(ObjMaskProvider objMaskProvider) {
-		this.objMaskProvider = objMaskProvider;
+	public void setObjs(ObjMaskProvider objs) {
+		this.objs = objs;
 	}
 
 

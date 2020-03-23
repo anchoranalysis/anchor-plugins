@@ -47,21 +47,21 @@ public class CfgProviderPointsFromObjs extends CfgProvider {
 	
 	// START BEAN PROPERTIES
 	@BeanField
-	private ObjMaskProvider objMaskProvider;
+	private ObjMaskProvider objs;
 	// END BEAN PROPERTIES
 	
 	@Override
 	public Cfg create() throws CreateException {
-		return createMarksFromObjs( objMaskProvider.create() );
+		return createMarksFromObjs( objs.create() );
 	}
 		
-	private static Cfg createMarksFromObjs( ObjMaskCollection objs ) throws CreateException {
+	private static Cfg createMarksFromObjs( ObjMaskCollection objsCollection ) throws CreateException {
 		
 		Cfg out = new Cfg();
 		
-		for( int i=0; i<objs.size(); i++ ) {
+		for( int i=0; i<objsCollection.size(); i++ ) {
 			
-			ObjMask om = objs.get(i);
+			ObjMask om = objsCollection.get(i);
 			
 			Mark m = MarkPointListFactory.create(
 					PointsFromObjMask.pntsFromMaskDouble(om),
@@ -73,11 +73,11 @@ public class CfgProviderPointsFromObjs extends CfgProvider {
 		return out;
 	}
 
-	public ObjMaskProvider getObjMaskProvider() {
-		return objMaskProvider;
+	public ObjMaskProvider getObjs() {
+		return objs;
 	}
 
-	public void setObjMaskProvider(ObjMaskProvider objMaskProvider) {
-		this.objMaskProvider = objMaskProvider;
+	public void setObjs(ObjMaskProvider objs) {
+		this.objs = objs;
 	}
 }

@@ -154,7 +154,7 @@ public class VisualizeOnBackground extends DefineAdderBean {
 		StackProviderRGBFromObjMask provider = new StackProviderRGBFromObjMask();
 		provider.setOutline(true);
 		addBackgroundProvider(provider);
-		provider.setObjMaskProvider( new ObjMaskProviderReference(objMaskProviderID) );
+		provider.setObjs( new ObjMaskProviderReference(objMaskProviderID) );
 		provider.setOutlineWidth(outlineWidth);
 		return provider;
 	}

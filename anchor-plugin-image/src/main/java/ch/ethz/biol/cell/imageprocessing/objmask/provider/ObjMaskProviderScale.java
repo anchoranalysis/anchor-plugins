@@ -49,7 +49,7 @@ public class ObjMaskProviderScale extends ObjMaskProviderDimensions {
 	private ScaleCalculator scaleCalculator;
 	
 	@BeanField
-	private ObjMaskProvider objMaskProvider;
+	private ObjMaskProvider objs;
 	// END BEAN PROPERTIES
 	
 	@Override
@@ -64,16 +64,16 @@ public class ObjMaskProviderScale extends ObjMaskProviderDimensions {
 			throw new CreateException(e);
 		}
 		
-		ObjMaskCollection objs = objMaskProvider.create();
+		ObjMaskCollection objsCollection = objs.create();
 		try {
-			objs.scale(
+			objsCollection.scale(
 				sf,
 				InterpolatorFactory.getInstance().binaryResizing()
 			);
 		} catch (OperationFailedException e) {
 			throw new CreateException(e);
 		}
-		return objs;
+		return objsCollection;
 	}
 	
 	public ScaleCalculator getScaleCalculator() {
@@ -84,11 +84,11 @@ public class ObjMaskProviderScale extends ObjMaskProviderDimensions {
 		this.scaleCalculator = scaleCalculator;
 	}
 
-	public ObjMaskProvider getObjMaskProvider() {
-		return objMaskProvider;
+	public ObjMaskProvider getObjs() {
+		return objs;
 	}
 
-	public void setObjMaskProvider(ObjMaskProvider objMaskProvider) {
-		this.objMaskProvider = objMaskProvider;
+	public void setObjs(ObjMaskProvider objs) {
+		this.objs = objs;
 	}
 }

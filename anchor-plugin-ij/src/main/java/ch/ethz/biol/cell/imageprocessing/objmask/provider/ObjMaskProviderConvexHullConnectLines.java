@@ -61,7 +61,7 @@ public class ObjMaskProviderConvexHullConnectLines extends ObjMaskProvider {
 	
 	// START BEAN PROPERTIES
 	@BeanField
-	private ObjMaskProvider objMaskProvider;
+	private ObjMaskProvider objs;
 	
 	@BeanField
 	private ImageDimProvider dimProvider;
@@ -72,11 +72,11 @@ public class ObjMaskProviderConvexHullConnectLines extends ObjMaskProvider {
 
 		ImageDim sd = dimProvider.create();
 		
-		ObjMaskCollection objs = objMaskProvider.create();
+		ObjMaskCollection objsCollection = objs.create();
 		
 		ObjMaskCollection out = new ObjMaskCollection();
 		
-		for( ObjMask obj : objs ) {
+		for( ObjMask obj : objsCollection ) {
 			ObjMask polygon = transform(obj, sd);
 			out.add(polygon);
 		}
@@ -103,12 +103,12 @@ public class ObjMaskProviderConvexHullConnectLines extends ObjMaskProvider {
 		}
 	}
 
-	public ObjMaskProvider getObjMaskProvider() {
-		return objMaskProvider;
+	public ObjMaskProvider getObjs() {
+		return objs;
 	}
 
-	public void setObjMaskProvider(ObjMaskProvider objMaskProvider) {
-		this.objMaskProvider = objMaskProvider;
+	public void setObjs(ObjMaskProvider objs) {
+		this.objs = objs;
 	}
 
 	public ImageDimProvider getDimProvider() {

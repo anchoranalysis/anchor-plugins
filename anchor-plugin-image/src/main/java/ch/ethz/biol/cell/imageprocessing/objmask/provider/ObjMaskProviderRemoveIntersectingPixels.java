@@ -46,7 +46,7 @@ public class ObjMaskProviderRemoveIntersectingPixels extends ObjMaskProviderDime
 	
 	// START BEAN PROPERTIES
 	@BeanField
-	private ObjMaskProvider objMaskProvider;
+	private ObjMaskProvider objs;
 	
 	/**
 	 * If TRUE, throws an error if there is a disconnected object after the erosion
@@ -105,13 +105,13 @@ public class ObjMaskProviderRemoveIntersectingPixels extends ObjMaskProviderDime
 	@Override
 	public ObjMaskCollection create() throws CreateException {
 
-		ObjMaskCollection objs = objMaskProvider.create();
+		ObjMaskCollection objsCollection = objs.create();
 		
-		ObjMaskCollection objsDup = objs.duplicate();
+		ObjMaskCollection objsDup = objsCollection.duplicate();
 		
 		ImageDim dims = createDims();
 		
-		for( int i=0; i<objs.size(); i++) {
+		for( int i=0; i<objsCollection.size(); i++) {
 			
 			ObjMask omWrite = objsDup.get(i);
 			
@@ -127,7 +127,7 @@ public class ObjMaskProviderRemoveIntersectingPixels extends ObjMaskProviderDime
 				}
 			}
 			
-			for( int j=0; j<objs.size(); j++) {
+			for( int j=0; j<objsCollection.size(); j++) {
 				
 				ObjMask omRead = objsDup.get(j);
 				
@@ -153,12 +153,12 @@ public class ObjMaskProviderRemoveIntersectingPixels extends ObjMaskProviderDime
 		return objsDup;
 	}
 
-	public ObjMaskProvider getObjMaskProvider() {
-		return objMaskProvider;
+	public ObjMaskProvider getObjs() {
+		return objs;
 	}
 
-	public void setObjMaskProvider(ObjMaskProvider objMaskProvider) {
-		this.objMaskProvider = objMaskProvider;
+	public void setObjs(ObjMaskProvider objs) {
+		this.objs = objs;
 	}
 	
 	public boolean isErrorDisconnectedObjects() {
