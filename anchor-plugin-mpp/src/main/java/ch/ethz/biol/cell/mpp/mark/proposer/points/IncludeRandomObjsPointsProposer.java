@@ -60,7 +60,7 @@ public class IncludeRandomObjsPointsProposer extends PointsProposer {
 	
 	// START BEAN PROPERTIES
 	@BeanField
-	private ObjMaskProvider objMaskProvider;
+	private ObjMaskProvider objs;
 	// END BEAN PROPERTIES
 	
 	@Override
@@ -75,9 +75,9 @@ public class IncludeRandomObjsPointsProposer extends PointsProposer {
 		List<Point3i> out = new ArrayList<>();
 		
 		try {
-			ObjMaskCollection objs = objMaskProvider.create();
+			ObjMaskCollection objsCollection = objs.create();
 			
-			for( ObjMask om : objs ) {
+			for( ObjMask om : objsCollection ) {
 				maybeAddToList(om, out, re);
 			}
 						
@@ -102,12 +102,12 @@ public class IncludeRandomObjsPointsProposer extends PointsProposer {
 		return null;
 	}
 
-	public ObjMaskProvider getObjMaskProvider() {
-		return objMaskProvider;
+	public ObjMaskProvider getObjs() {
+		return objs;
 	}
 
 
-	public void setObjMaskProvider(ObjMaskProvider objMaskProvider) {
-		this.objMaskProvider = objMaskProvider;
+	public void setObjs(ObjMaskProvider objs) {
+		this.objs = objs;
 	}
 }

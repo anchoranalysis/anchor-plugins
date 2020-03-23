@@ -48,7 +48,7 @@ public class ObjMaskProviderReferenceElse extends ObjMaskProvider {
 	private String id = "";
 	
 	@BeanField
-	private ObjMaskProvider objMaskProviderElse;
+	private ObjMaskProvider objsElse;
 	// END BEAN PROPERTIES
 	
 	private ObjMaskCollection objs;
@@ -69,7 +69,7 @@ public class ObjMaskProviderReferenceElse extends ObjMaskProvider {
 		if (objs!=null) {
 			return objs;
 		} else {
-			return objMaskProviderElse.create();
+			return objsElse.create();
 		}
 	}
 
@@ -81,13 +81,12 @@ public class ObjMaskProviderReferenceElse extends ObjMaskProvider {
 		this.id = id;
 	}
 
-	public ObjMaskProvider getObjMaskProviderElse() {
-		return objMaskProviderElse;
+	public ObjMaskProvider getObjsElse() {
+		return objsElse;
 	}
 
-	public void setObjMaskProviderElse(ObjMaskProvider objMaskProviderElse) {
-		this.objMaskProviderElse = objMaskProviderElse;
+	public void setObjsElse(ObjMaskProvider objsElse) {
+		this.objsElse = objsElse;
 	}
-
 
 }

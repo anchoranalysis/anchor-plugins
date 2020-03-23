@@ -52,7 +52,7 @@ public class BinaryImgChnlProviderFromObjMasks extends BinaryImgChnlProvider {
 	
 	// START BEAN
 	@BeanField
-	private ObjMaskProvider objMaskProvider;
+	private ObjMaskProvider objs;
 	
 	@BeanField
 	private ImageDimProvider dimProvider = new GuessDimFromInputImage();
@@ -72,20 +72,20 @@ public class BinaryImgChnlProviderFromObjMasks extends BinaryImgChnlProvider {
 	@Override
 	public BinaryChnl create() throws CreateException {
 		
-		ObjMaskCollection objs = objMaskProvider.create();
-		if (objs==null) {
+		ObjMaskCollection objCollection = objs.create();
+		if (objCollection==null) {
 			throw new CreateException("objMaskProvider returned null");
 		}
 		
-		return create( objs, dimProvider.create(), invert );
+		return create( objCollection, dimProvider.create(), invert );
 	}
 
-	public ObjMaskProvider getObjMaskProvider() {
-		return objMaskProvider;
+	public ObjMaskProvider getObjs() {
+		return objs;
 	}
 
-	public void setObjMaskProvider(ObjMaskProvider objMaskProvider) {
-		this.objMaskProvider = objMaskProvider;
+	public void setObjs(ObjMaskProvider objs) {
+		this.objs = objs;
 	}
 
 	public boolean isInvert() {

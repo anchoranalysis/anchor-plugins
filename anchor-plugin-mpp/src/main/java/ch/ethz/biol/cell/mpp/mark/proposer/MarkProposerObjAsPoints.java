@@ -55,7 +55,7 @@ public class MarkProposerObjAsPoints extends MarkProposer {
 	
 	// START BEAN PROPERTIES
 	@BeanField
-	private ObjMaskProvider objMaskProvider;
+	private ObjMaskProvider objs;
 	// END BEAN PROPERTIES
 
 	private List<List<Point3d>> points = null;
@@ -104,8 +104,8 @@ public class MarkProposerObjAsPoints extends MarkProposer {
 		if (points==null) {
 			points = new ArrayList<List<Point3d>>();
 			
-			ObjMaskCollection objs = objMaskProvider.create();
-			for( ObjMask om : objs ) {
+			ObjMaskCollection objsCollection = objs.create();
+			for( ObjMask om : objsCollection ) {
 				points.add(
 					PointsFromObjMask.pntsFromMaskDouble(om)
 				);
@@ -113,12 +113,12 @@ public class MarkProposerObjAsPoints extends MarkProposer {
 		}
 	}
 
-	public ObjMaskProvider getObjMaskProvider() {
-		return objMaskProvider;
+	public ObjMaskProvider getObjs() {
+		return objs;
 	}
 
-	public void setObjMaskProvider(ObjMaskProvider objMaskProvider) {
-		this.objMaskProvider = objMaskProvider;
+	public void setObjs(ObjMaskProvider objs) {
+		this.objs = objs;
 	}
 
 }

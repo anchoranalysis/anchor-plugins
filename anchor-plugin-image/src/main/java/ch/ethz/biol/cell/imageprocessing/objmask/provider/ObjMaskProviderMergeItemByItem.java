@@ -47,27 +47,27 @@ public class ObjMaskProviderMergeItemByItem extends ObjMaskProvider {
 	
 	// START BEAN PROPERTIES
 	@BeanField
-	private ObjMaskProvider objMaskProvider1;
+	private ObjMaskProvider objs1;
 	
 	@BeanField
-	private ObjMaskProvider objMaskProvider2;
+	private ObjMaskProvider objs2;
 	// END BEAN PROPERTIES
 		
 	@Override
 	public ObjMaskCollection create() throws CreateException {
 
-		ObjMaskCollection objs1 = objMaskProvider1.create();
-		ObjMaskCollection objs2 = objMaskProvider2.create();
+		ObjMaskCollection objsCollection1 = objs1.create();
+		ObjMaskCollection objsCollection2 = objs2.create();
 		
-		if (objs1.size()!=objs2.size()) {
-			throw new CreateException( String.format("Both objProviders must have the same number of items, currently %d and %d", objs1.size(), objs2.size() ));
+		if (objsCollection1.size()!=objsCollection2.size()) {
+			throw new CreateException( String.format("Both objProviders must have the same number of items, currently %d and %d", objsCollection1.size(), objsCollection2.size() ));
 		}
 		
 		ObjMaskCollection out = new ObjMaskCollection();
 		
-		for( int i=0; i<objs1.size(); i++) {
-			ObjMask om1 = objs1.get(i);
-			ObjMask om2 = objs2.get(i);
+		for( int i=0; i<objsCollection1.size(); i++) {
+			ObjMask om1 = objsCollection1.get(i);
+			ObjMask om2 = objsCollection2.get(i);
 			
 			out.add( ObjMaskMerger.merge(om1, om2) );
 		}
@@ -75,21 +75,22 @@ public class ObjMaskProviderMergeItemByItem extends ObjMaskProvider {
 		return out;
 	}
 
-	public ObjMaskProvider getObjMaskProvider1() {
-		return objMaskProvider1;
+	public ObjMaskProvider getObjs1() {
+		return objs1;
 	}
 
-	public void setObjMaskProvider1(ObjMaskProvider objMaskProvider1) {
-		this.objMaskProvider1 = objMaskProvider1;
+	public void setObjs1(ObjMaskProvider objs1) {
+		this.objs1 = objs1;
 	}
 
-	public ObjMaskProvider getObjMaskProvider2() {
-		return objMaskProvider2;
+	public ObjMaskProvider getObjs2() {
+		return objs2;
 	}
 
-	public void setObjMaskProvider2(ObjMaskProvider objMaskProvider2) {
-		this.objMaskProvider2 = objMaskProvider2;
+	public void setObjs2(ObjMaskProvider objs2) {
+		this.objs2 = objs2;
 	}
+
 
 
 }

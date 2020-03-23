@@ -118,7 +118,7 @@ public class ExportObjectsFromCSVTask extends Task<ExportObjectsFromCSVInputObje
 	 * The objects that are matched against the points
 	 */
 	@BeanField
-	private ObjMaskProvider objMaskProvider;
+	private ObjMaskProvider objs;
 	
 	/**
 	 * Column definition for the CSVfiles
@@ -176,9 +176,9 @@ public class ExportObjectsFromCSVTask extends Task<ExportObjectsFromCSVInputObje
 	}
 	
 	private ObjMaskCollection createObjs( ImageInitParams so, LogErrorReporter logger ) throws CreateException, InitException {
-		ObjMaskProvider objMaskProviderDup = objMaskProvider.duplicateBean();
-		objMaskProviderDup.initRecursive(so,logger);
-		return objMaskProviderDup.create();
+		ObjMaskProvider objsDup = objs.duplicateBean();
+		objsDup.initRecursive(so,logger);
+		return objsDup.create();
 	}
 	
 	
@@ -450,12 +450,12 @@ public class ExportObjectsFromCSVTask extends Task<ExportObjectsFromCSVInputObje
 		this.stackProvider = stackProvider;
 	}
 
-	public ObjMaskProvider getObjMaskProvider() {
-		return objMaskProvider;
+	public ObjMaskProvider getObjs() {
+		return objs;
 	}
 
-	public void setObjMaskProvider(ObjMaskProvider objMaskProvider) {
-		this.objMaskProvider = objMaskProvider;
+	public void setObjs(ObjMaskProvider objs) {
+		this.objs = objs;
 	}
 
 	public ColumnDefinition getColumnDefinition() {

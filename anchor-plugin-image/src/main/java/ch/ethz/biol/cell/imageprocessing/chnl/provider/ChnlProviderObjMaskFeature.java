@@ -60,7 +60,7 @@ public class ChnlProviderObjMaskFeature extends ChnlProvider {
 	private ChnlProvider chnlProvider;
 	
 	@BeanField
-	private ObjMaskProvider objMaskProvider;
+	private ObjMaskProvider objs;
 	
 	@BeanField
 	private int valueNoObject = 0;
@@ -80,11 +80,7 @@ public class ChnlProviderObjMaskFeature extends ChnlProvider {
 
 		Feature feature = featureProvider.create();
 		
-		ObjMaskCollection objs = objMaskProvider.create();
-		
-//		if (histogramProvider!=null) {
-//			paramsInit.addListHist( histogramProvider.create() );
-//		}
+		ObjMaskCollection objsCollection = objs.create();
 		
 		try {
 			Chnl chnl = chnlProvider.create();
@@ -110,7 +106,7 @@ public class ChnlProviderObjMaskFeature extends ChnlProvider {
 			
 			Chnl chnlOut = ChnlFactory.instance().createEmptyInitialised( chnl.getDimensions(), VoxelDataTypeUnsignedByte.instance );
 			chnlOut.getVoxelBox().any().setAllPixelsTo( valueNoObject );
-			for( ObjMask om : objs ) {
+			for( ObjMask om : objsCollection ) {
 
 				double featVal = session.calc(om);
 				chnlOut.getVoxelBox().any().setPixelsCheckMask(om, (int) (factor*featVal) );
@@ -151,12 +147,12 @@ public class ChnlProviderObjMaskFeature extends ChnlProvider {
 		this.listAdditionalChnlProviders = listAdditionalChnlProviders;
 	}
 
-	public ObjMaskProvider getObjMaskProvider() {
-		return objMaskProvider;
+	public ObjMaskProvider getObjs() {
+		return objs;
 	}
 
-	public void setObjMaskProvider(ObjMaskProvider objMaskProvider) {
-		this.objMaskProvider = objMaskProvider;
+	public void setObjs(ObjMaskProvider objs) {
+		this.objs = objs;
 	}
 
 	public int getValueNoObject() {

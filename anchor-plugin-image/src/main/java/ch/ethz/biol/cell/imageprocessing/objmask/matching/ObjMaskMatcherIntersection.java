@@ -46,27 +46,28 @@ public class ObjMaskMatcherIntersection extends ObjMaskMatcher {
 	
 	// START BEAN PROPERTIES
 	@BeanField
-	private ObjMaskProvider objMaskProvider;
+	private ObjMaskProvider objs;
 	// END BEAN PROPERTIES
 	
 	@Override
 	public List<ObjWithMatches> findMatch(ObjMaskCollection sourceObjs) throws OperationFailedException {
 
 		try {
-			ObjMaskCollection searchObjs = objMaskProvider.create();
-			
-			return ObjMaskMatchUtilities.matchIntersectingObjects(sourceObjs, searchObjs);
+			return ObjMaskMatchUtilities.matchIntersectingObjects(
+				sourceObjs,
+				objs.create()
+			);
 			
 		} catch (CreateException e) {
 			throw new OperationFailedException(e);
 		}
 	}
 	
-	public ObjMaskProvider getObjMaskProvider() {
-		return objMaskProvider;
+	public ObjMaskProvider getObjs() {
+		return objs;
 	}
 
-	public void setObjMaskProvider(ObjMaskProvider objMaskProvider) {
-		this.objMaskProvider = objMaskProvider;
+	public void setObjs(ObjMaskProvider objs) {
+		this.objs = objs;
 	}
 }

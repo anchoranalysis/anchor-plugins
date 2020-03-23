@@ -58,7 +58,7 @@ public class ObjMaskFeatureMean extends FeatureStack {
 	
 	@BeanField
 	@SkipInit
-	private ObjMaskProvider objMaskProvider;
+	private ObjMaskProvider objs;
 	
 	@BeanField
 	private double quantile = 0.5;
@@ -68,14 +68,14 @@ public class ObjMaskFeatureMean extends FeatureStack {
 	public double calcCast(FeatureStackParams params) throws FeatureCalcException {
 
 		try {
-			objMaskProvider.initRecursive(params.getSharedObjs(), getLogger() );
+			objs.initRecursive(params.getSharedObjs(), getLogger() );
 		} catch (InitException e1) {
 			throw new FeatureCalcException(e1);
 		}
 		
-		ObjMaskCollection omc;
+		ObjMaskCollection objsCollection;
 		try {
-			omc = objMaskProvider.create();
+			objsCollection = objs.create();
 		} catch (CreateException e1) {
 			throw new FeatureCalcException(e1);
 		}
@@ -90,7 +90,7 @@ public class ObjMaskFeatureMean extends FeatureStack {
 		DoubleArrayList featureVals = new DoubleArrayList();
 		
 		// Calculate a feature on each obj mask
-		for( ObjMask om : omc ) {
+		for( ObjMask om : objsCollection ) {
 			paramsObj.setObjMask(om);
 			double val = getCacheSession().calc(item, paramsObj);
 			featureVals.add(val);
@@ -108,13 +108,13 @@ public class ObjMaskFeatureMean extends FeatureStack {
 	}
 
 
-	public ObjMaskProvider getObjMaskProvider() {
-		return objMaskProvider;
+	public ObjMaskProvider getObjs() {
+		return objs;
 	}
 
 
-	public void setObjMaskProvider(ObjMaskProvider objMaskProvider) {
-		this.objMaskProvider = objMaskProvider;
+	public void setObjs(ObjMaskProvider objs) {
+		this.objs = objs;
 	}
 
 

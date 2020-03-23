@@ -44,7 +44,7 @@ public class ObjMaskProviderRemoveTouchBorder extends ObjMaskProviderDimensions 
 	
 	// START BEAN PROPERTIES
 	@BeanField
-	private ObjMaskProvider objMaskProvider;
+	private ObjMaskProvider objs;
 	
 	@BeanField
 	private boolean useZ = true;
@@ -53,7 +53,7 @@ public class ObjMaskProviderRemoveTouchBorder extends ObjMaskProviderDimensions 
 	@Override
 	public ObjMaskCollection create() throws CreateException {
 
-		ObjMaskCollection objsIn = objMaskProvider.create();
+		ObjMaskCollection objsIn = objs.create();
 		
 		ObjMaskCollection objsOut = new ObjMaskCollection();
 		
@@ -75,12 +75,12 @@ public class ObjMaskProviderRemoveTouchBorder extends ObjMaskProviderDimensions 
 		return objsOut;
 	}
 
-	public ObjMaskProvider getObjMaskProvider() {
-		return objMaskProvider;
+	public ObjMaskProvider getObjs() {
+		return objs;
 	}
 
-	public void setObjMaskProvider(ObjMaskProvider objMaskProvider) {
-		this.objMaskProvider = objMaskProvider;
+	public void setObjs(ObjMaskProvider objs) {
+		this.objs = objs;
 	}
 
 	public boolean isUseZ() {

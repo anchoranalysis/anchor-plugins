@@ -66,7 +66,7 @@ public class ChnlProviderCalculateLevelOnObjectsMulti extends ChnlProvider {
 	
 	// START BEAN
 	@BeanField @Optional
-	private ObjMaskProvider objMaskProvider;
+	private ObjMaskProvider objs;
 	
 	@BeanField
 	private ChnlProvider chnlProviderOutput;
@@ -212,7 +212,7 @@ public class ChnlProviderCalculateLevelOnObjectsMulti extends ChnlProvider {
 			
 			Chnl chnlOutput = chnlProviderOutput.create();
 			
-			ObjMaskCollection objMasks = objMaskProvider.create();
+			ObjMaskCollection objMasks = objs.create();
 			
 			setAgainstNghb( chnlIntensity, chnlOutput, objMasks, nghbDist );
 			
@@ -223,13 +223,13 @@ public class ChnlProviderCalculateLevelOnObjectsMulti extends ChnlProvider {
 		}
 	}
 		
-	public ObjMaskProvider getObjMaskProvider() {
-		return objMaskProvider;
+	public ObjMaskProvider getObjs() {
+		return objs;
 	}
 
 
-	public void setObjMaskProvider(ObjMaskProvider objMaskProvider) {
-		this.objMaskProvider = objMaskProvider;
+	public void setObjs(ObjMaskProvider objs) {
+		this.objs = objs;
 	}
 
 	public ChnlProvider getChnlProviderOutput() {

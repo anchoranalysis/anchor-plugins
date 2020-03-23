@@ -53,7 +53,7 @@ public class ObjMaskProviderPermute extends ObjMaskProvider {
 
 	// START BEAN PROPERTIES
 	@BeanField
-	private ObjMaskProvider objMaskProvider;
+	private ObjMaskProvider objs;
 	
 	@BeanField
 	private PermuteProperty<?> permuteProperty;
@@ -65,7 +65,7 @@ public class ObjMaskProviderPermute extends ObjMaskProvider {
 		Iterator<?> vals = permuteProperty.propertyValues();	
 		
 		
-		PermutationSetter ps = permuteProperty.createSetter(objMaskProvider);
+		PermutationSetter ps = permuteProperty.createSetter(objs);
 		
 		
 		ObjMaskCollection out = new ObjMaskCollection();
@@ -75,7 +75,7 @@ public class ObjMaskProviderPermute extends ObjMaskProvider {
 				assert(propVal!=null);
 		
 				// We permute a duplicate, so as to keep the original values
-				ObjMaskProvider provider = objMaskProvider.duplicateBean();
+				ObjMaskProvider provider = objs.duplicateBean();
 				
 				ps.setPermutation( provider, propVal);
 
@@ -94,12 +94,12 @@ public class ObjMaskProviderPermute extends ObjMaskProvider {
 		return out;
 	}
 
-	public ObjMaskProvider getObjMaskProvider() {
-		return objMaskProvider;
+	public ObjMaskProvider getObjs() {
+		return objs;
 	}
 
-	public void setObjMaskProvider(ObjMaskProvider objMaskProvider) {
-		this.objMaskProvider = objMaskProvider;
+	public void setObjs(ObjMaskProvider objs) {
+		this.objs = objs;
 	}
 
 	public PermuteProperty<?> getPermuteProperty() {

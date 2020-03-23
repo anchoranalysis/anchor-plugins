@@ -50,7 +50,7 @@ public class ChnlProviderIdentifyObjects extends ChnlProvider {
 	private ChnlProvider chnlProvider;
 	
 	@BeanField
-	private ObjMaskProvider objMaskProvider;
+	private ObjMaskProvider objs;
 	// END BEAN PROPERTIES
 
 	@Override
@@ -58,16 +58,16 @@ public class ChnlProviderIdentifyObjects extends ChnlProvider {
 		Chnl chnl = chnlProvider.create();
 		VoxelBox<?> vb = chnl.getVoxelBox().any();
 		
-		ObjMaskCollection objs = objMaskProvider.create();
+		ObjMaskCollection objsCollection = objs.create();
 		
-		if (objs.size()>255) {
-			throw new CreateException( String.format("A maximum of 255 objs is allowed. There are %d",objs.size()));
+		if (objsCollection.size()>255) {
+			throw new CreateException( String.format("A maximum of 255 objs is allowed. There are %d",objsCollection.size()));
 		}
 		
 		vb.setAllPixelsTo(0);
 		
 		int index = 1;
-		for( ObjMask om : objs ) {
+		for( ObjMask om : objsCollection ) {
 			vb.setPixelsCheckMask(om, index++);
 		}
 		
@@ -82,12 +82,12 @@ public class ChnlProviderIdentifyObjects extends ChnlProvider {
 		this.chnlProvider = chnlProvider;
 	}
 
-	public ObjMaskProvider getObjMaskProvider() {
-		return objMaskProvider;
+	public ObjMaskProvider getObjs() {
+		return objs;
 	}
 
-	public void setObjMaskProvider(ObjMaskProvider objMaskProvider) {
-		this.objMaskProvider = objMaskProvider;
+	public void setObjs(ObjMaskProvider objs) {
+		this.objs = objs;
 	}
 
 

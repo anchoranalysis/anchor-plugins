@@ -48,23 +48,23 @@ public class ObjMaskProviderFilter extends ObjMaskProviderDimensionsOptional {
 	private ObjMaskFilter objMaskFilter;
 	
 	@BeanField
-	private ObjMaskProvider objMaskProvider;
+	private ObjMaskProvider objs;
 	
 	@BeanField @Optional
-	private ObjMaskProvider objMaskProviderRejected;	// The rejected objects are put here (OPTIONAL)
+	private ObjMaskProvider objsRejected;	// The rejected objects are put here (OPTIONAL)
 	// END BEAN PROPERTIES
 	
 	@Override
 	public ObjMaskCollection create() throws CreateException {
 		
-		ObjMaskCollection in = objMaskProvider.create();
+		ObjMaskCollection in = objs.create();
 		
 		ObjMaskCollection out = new ObjMaskCollection();
 		out.addAll( in );
 		try {
 			ImageDim dims = createDims();
 			
-			ObjMaskCollection omcRejected = objMaskProviderRejected!=null ? objMaskProviderRejected.create() : null;
+			ObjMaskCollection omcRejected = objsRejected!=null ? objsRejected.create() : null;
 				
 			objMaskFilter.filter(out, dims, omcRejected);
 			
@@ -83,19 +83,20 @@ public class ObjMaskProviderFilter extends ObjMaskProviderDimensionsOptional {
 		this.objMaskFilter = objMaskFilter;
 	}
 
-	public ObjMaskProvider getObjMaskProvider() {
-		return objMaskProvider;
+	public ObjMaskProvider getObjs() {
+		return objs;
 	}
 
-	public void setObjMaskProvider(ObjMaskProvider objMaskProvider) {
-		this.objMaskProvider = objMaskProvider;
+	public void setObjs(ObjMaskProvider objs) {
+		this.objs = objs;
 	}
 
-	public ObjMaskProvider getObjMaskProviderRejected() {
-		return objMaskProviderRejected;
+	public ObjMaskProvider getObjsRejected() {
+		return objsRejected;
 	}
 
-	public void setObjMaskProviderRejected(ObjMaskProvider objMaskProviderRejected) {
-		this.objMaskProviderRejected = objMaskProviderRejected;
+	public void setObjsRejected(ObjMaskProvider objsRejected) {
+		this.objsRejected = objsRejected;
 	}
+
 }

@@ -54,23 +54,23 @@ public class ObjMaskProviderFilterByGroup extends ObjMaskProviderDimensionsOptio
 	private ObjMaskFilter objMaskFilter;
 	
 	@BeanField
-	private ObjMaskProvider objMaskProvider;
+	private ObjMaskProvider objs;
 	
 	@BeanField
-	private ObjMaskProvider objMaskProviderGrouped;
+	private ObjMaskProvider objsGrouped;
 	
 	@BeanField @Optional
-	private ObjMaskProvider objMaskProviderRejected;	// The rejected objects are put here (OPTIONAL)
+	private ObjMaskProvider objsRejected;	// The rejected objects are put here (OPTIONAL)
 	// END BEAN PROPERTIES
 	
 	@Override
 	public ObjMaskCollection create() throws CreateException {
 		
-		ObjMaskCollection in = objMaskProvider.create();
+		ObjMaskCollection in = objs.create();
 		
-		ObjMaskCollection inGroups = objMaskProviderGrouped.create();
+		ObjMaskCollection inGroups = objsGrouped.create();
 		
-		ObjMaskCollection omcRejected = objMaskProviderRejected!=null ? objMaskProviderRejected.create() : null;
+		ObjMaskCollection omcRejected = objsRejected!=null ? objsRejected.create() : null;
 		
 		List<ObjWithMatches> matchList = ObjMaskMatchUtilities.matchIntersectingObjects( inGroups, in );
 		
@@ -98,27 +98,28 @@ public class ObjMaskProviderFilterByGroup extends ObjMaskProviderDimensionsOptio
 		this.objMaskFilter = objMaskFilter;
 	}
 
-	public ObjMaskProvider getObjMaskProvider() {
-		return objMaskProvider;
+	public ObjMaskProvider getObjs() {
+		return objs;
 	}
 
-	public void setObjMaskProvider(ObjMaskProvider objMaskProvider) {
-		this.objMaskProvider = objMaskProvider;
+	public void setObjs(ObjMaskProvider objs) {
+		this.objs = objs;
 	}
 
-	public ObjMaskProvider getObjMaskProviderRejected() {
-		return objMaskProviderRejected;
+	public ObjMaskProvider getObjsGrouped() {
+		return objsGrouped;
 	}
 
-	public void setObjMaskProviderRejected(ObjMaskProvider objMaskProviderRejected) {
-		this.objMaskProviderRejected = objMaskProviderRejected;
+	public void setObjsGrouped(ObjMaskProvider objsGrouped) {
+		this.objsGrouped = objsGrouped;
 	}
 
-	public ObjMaskProvider getObjMaskProviderGrouped() {
-		return objMaskProviderGrouped;
+	public ObjMaskProvider getObjsRejected() {
+		return objsRejected;
 	}
 
-	public void setObjMaskProviderGrouped(ObjMaskProvider objMaskProviderGrouped) {
-		this.objMaskProviderGrouped = objMaskProviderGrouped;
+	public void setObjsRejected(ObjMaskProvider objsRejected) {
+		this.objsRejected = objsRejected;
 	}
+
 }

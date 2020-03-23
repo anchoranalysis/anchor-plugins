@@ -51,7 +51,7 @@ public class ObjMaskProviderSplitIntoSquares extends ObjMaskProvider {
 	private static final long serialVersionUID = 1L;
 	// START BEAN PROPERTIES
 	@BeanField
-	private ObjMaskProvider objMaskProvider;
+	private ObjMaskProvider objs;
 	
 	@BeanField @Positive
 	private int squareSize = 10;
@@ -63,10 +63,10 @@ public class ObjMaskProviderSplitIntoSquares extends ObjMaskProvider {
 	@Override
 	public ObjMaskCollection create() throws CreateException {
 
-		ObjMaskCollection objs = objMaskProvider.create();
+		ObjMaskCollection objsCollection = objs.create();
 		
 		ObjMaskCollection out = new ObjMaskCollection();
-		for (ObjMask om : objs) {
+		for (ObjMask om : objsCollection) {
 			out.addAll(
 				splitObj(
 					om,
@@ -147,12 +147,12 @@ public class ObjMaskProviderSplitIntoSquares extends ObjMaskProvider {
 		return out;
 	}
 
-	public ObjMaskProvider getObjMaskProvider() {
-		return objMaskProvider;
+	public ObjMaskProvider getObjs() {
+		return objs;
 	}
 
-	public void setObjMaskProvider(ObjMaskProvider objMaskProvider) {
-		this.objMaskProvider = objMaskProvider;
+	public void setObjs(ObjMaskProvider objs) {
+		this.objs = objs;
 	}
 
 	public int getSquareSize() {

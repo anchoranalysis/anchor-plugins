@@ -68,7 +68,7 @@ public abstract class ObjMaskProviderMergeWithFeature extends ObjMaskProviderMer
 	 * Saves all objects that are inputs to the merge, outputs from the merge, or intermediate merges along the way
 	 */
 	@BeanField @Optional
-	private ObjMaskProvider objMaskProviderSaveObjs;
+	private ObjMaskProvider objsSave;
 	// END BEAN PROPERTIES
 	
 	
@@ -85,9 +85,9 @@ public abstract class ObjMaskProviderMergeWithFeature extends ObjMaskProviderMer
 	@Override
 	public ObjMaskCollection create() throws CreateException {
 		
-		ObjMaskCollection objsSource = getObjMaskProvider().create();
+		ObjMaskCollection objsSource = getObjs().create();
 		
-		ObjMaskCollection saveObjs = objMaskProviderSaveObjs!=null ? objMaskProviderSaveObjs.create() : null;
+		ObjMaskCollection saveObjs = objsSave !=null ? objsSave.create() : null;
 		if (saveObjs!=null) {
 			saveObjs.addAll(objsSource);
 		}
@@ -226,11 +226,12 @@ public abstract class ObjMaskProviderMergeWithFeature extends ObjMaskProviderMer
 		this.requireBBoxNeighbours = requireBBoxNeighbours;
 	}
 
-	public ObjMaskProvider getObjMaskProviderSaveObjs() {
-		return objMaskProviderSaveObjs;
+	public ObjMaskProvider getObjsSave() {
+		return objsSave;
 	}
 
-	public void setObjMaskProviderSaveObjs(ObjMaskProvider objMaskProviderSaveObjs) {
-		this.objMaskProviderSaveObjs = objMaskProviderSaveObjs;
+	public void setObjsSave(ObjMaskProvider objsSave) {
+		this.objsSave = objsSave;
 	}
+
 }

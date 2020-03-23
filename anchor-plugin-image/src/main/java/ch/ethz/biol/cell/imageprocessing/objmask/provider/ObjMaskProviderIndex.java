@@ -44,13 +44,13 @@ public class ObjMaskProviderIndex extends ObjMaskProvider {
 	private int index = 0;
 	
 	@BeanField
-	private ObjMaskProvider objMaskProvider;
+	private ObjMaskProvider objs;
 	// END BEAN PROPERTIES
 
 	@Override
 	public ObjMaskCollection create() throws CreateException {
 		
-		ObjMaskCollection objMaskCollection = objMaskProvider.create();
+		ObjMaskCollection objMaskCollection = objs.create();
 		
 		if (index>=objMaskCollection.size()) {
 			throw new CreateException( String.format("Index %d is out of bounds. ObjMaskCollection has %d items", index, objMaskCollection.size()) );
@@ -67,12 +67,12 @@ public class ObjMaskProviderIndex extends ObjMaskProvider {
 		this.index = index;
 	}
 
-	public ObjMaskProvider getObjMaskProvider() {
-		return objMaskProvider;
+	public ObjMaskProvider getObjs() {
+		return objs;
 	}
 
-	public void setObjMaskProvider(ObjMaskProvider objMaskProvider) {
-		this.objMaskProvider = objMaskProvider;
+	public void setObjs(ObjMaskProvider objs) {
+		this.objs = objs;
 	}
 
 }
