@@ -26,7 +26,7 @@ package org.anchoranalysis.image.feature.bean.list;
  * #L%
  */
 
-import org.anchoranalysis.feature.bean.Feature;
+import org.anchoranalysis.feature.bean.operator.FeatureListElem;
 
 import ch.ethz.biol.cell.mpp.nrg.feature.operator.Maximum;
 
@@ -38,12 +38,8 @@ public class FeatureListProviderPairRatioMin extends FeatureListProviderPairRati
 	private static final long serialVersionUID = 1L;
 
 	@Override
-	protected Feature createAggregateFeatureOnRatio(Feature firstToSecond,
-			Feature secondToFirst, Feature featMerged) {
-		Maximum out = new Maximum();
-		out.getList().add(firstToSecond);
-		out.getList().add(secondToFirst);
-		return out;
+	protected FeatureListElem createFeature() {
+		return new Maximum();
 	}
 
 }

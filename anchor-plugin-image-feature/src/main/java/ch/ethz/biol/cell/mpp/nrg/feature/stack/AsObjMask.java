@@ -37,7 +37,6 @@ import org.anchoranalysis.feature.cache.ComplexCacheDefinition;
 import org.anchoranalysis.feature.cache.FeatureCacheDefinition;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.init.FeatureInitParams;
-import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 import org.anchoranalysis.feature.session.cache.FeatureSessionCacheRetriever;
 import org.anchoranalysis.feature.session.cache.NullCacheRetriever;
 import org.anchoranalysis.image.binary.BinaryChnl;
@@ -102,7 +101,7 @@ public class AsObjMask extends FeatureStack {
 		FeatureObjMaskParams paramsObj = new FeatureObjMaskParams();
 		try {
 			ObjMask om = extractObjMask(params);
-			paramsObj.setNrgStack( new NRGStackWithParams(params.getNrgStack()) );
+			paramsObj.setNrgStack( params.getNrgStack() );
 			paramsObj.setObjMask( om );
 		} catch (CreateException e) {
 			throw new FeatureCalcException(e);

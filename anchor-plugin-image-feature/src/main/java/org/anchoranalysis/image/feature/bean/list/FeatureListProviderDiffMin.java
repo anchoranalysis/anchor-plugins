@@ -26,13 +26,10 @@ package org.anchoranalysis.image.feature.bean.list;
  * #L%
  */
 
-import org.anchoranalysis.feature.bean.Feature;
-import org.anchoranalysis.feature.bean.operator.Sum;
-
+import org.anchoranalysis.feature.bean.operator.FeatureListElem;
 import ch.ethz.biol.cell.mpp.nrg.feature.operator.Minimum;
-import ch.ethz.biol.cell.mpp.nrg.feature.operator.MultiplyByConstant;
 
-public class FeatureListProviderDiffMin extends FeatureListProviderAggregate {
+public class FeatureListProviderDiffMin extends FeatureListProviderAggregateDiff {
 
 	/**
 	 * 
@@ -40,14 +37,7 @@ public class FeatureListProviderDiffMin extends FeatureListProviderAggregate {
 	private static final long serialVersionUID = 1L;
 
 	@Override
-	protected Feature createAggregateFeature( Feature featFirst, Feature featSecond, Feature featMerged ) {
-		Minimum featMin = new Minimum();
-		featMin.getList().add(featFirst);
-		featMin.getList().add(featSecond);
-		
-		Sum featSum = new Sum();
-		featSum.getList().add(featMerged);
-		featSum.getList().add( new MultiplyByConstant(featMin,-1) );
-		return featSum;
+	protected FeatureListElem createFeature() {
+		return new Minimum();
 	}
 }
