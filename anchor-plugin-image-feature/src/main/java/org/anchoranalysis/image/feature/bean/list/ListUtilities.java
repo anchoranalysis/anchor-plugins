@@ -4,7 +4,7 @@ package org.anchoranalysis.image.feature.bean.list;
  * #%L
  * anchor-plugin-image-feature
  * %%
- * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -26,19 +26,14 @@ package org.anchoranalysis.image.feature.bean.list;
  * #L%
  */
 
-import org.anchoranalysis.feature.bean.operator.FeatureListElem;
+import java.util.List;
 
-import ch.ethz.biol.cell.mpp.nrg.feature.operator.Maximum;
+import org.anchoranalysis.feature.bean.Feature;
 
-public class FeatureListProviderPairMax extends FeatureListProviderAggregatePair {
+class ListUtilities {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
-	@Override
-	protected FeatureListElem createFeature() {
-		return new Maximum();
+	public static void addFeaturesToList( Feature featFirst, Feature featSecond, List<Feature> list ) {
+		list.add(featFirst);
+		list.add(featSecond);
 	}
 }

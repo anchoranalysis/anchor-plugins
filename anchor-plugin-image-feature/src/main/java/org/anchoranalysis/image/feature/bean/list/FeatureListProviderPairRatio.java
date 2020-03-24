@@ -27,6 +27,7 @@ package org.anchoranalysis.image.feature.bean.list;
  */
 
 import org.anchoranalysis.feature.bean.Feature;
+import org.anchoranalysis.feature.bean.operator.FeatureListElem;
 
 import ch.ethz.biol.cell.mpp.nrg.feature.operator.Divide;
 
@@ -52,5 +53,11 @@ public abstract class FeatureListProviderPairRatio extends FeatureListProviderAg
 		return createAggregateFeatureOnRatio( firstToSecond, secondToFirst, featMerged );
 	}
 	
-	protected abstract Feature createAggregateFeatureOnRatio(  Feature firstToSecond, Feature secondToFirst, Feature featMerged );
+	protected Feature createAggregateFeatureOnRatio( Feature firstToSecond, Feature secondToFirst, Feature featMerged ) {
+		FeatureListElem featWithList = createFeature();
+		ListUtilities.addFeaturesToList( firstToSecond, secondToFirst, featWithList.getList() );
+		return featWithList;
+	}
+	
+	protected abstract FeatureListElem createFeature();
 }

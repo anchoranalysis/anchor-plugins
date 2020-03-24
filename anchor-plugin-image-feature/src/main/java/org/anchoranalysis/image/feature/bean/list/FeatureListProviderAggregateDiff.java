@@ -4,7 +4,7 @@ package org.anchoranalysis.image.feature.bean.list;
  * #%L
  * anchor-plugin-image-feature
  * %%
- * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -26,11 +26,13 @@ package org.anchoranalysis.image.feature.bean.list;
  * #L%
  */
 
+import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.operator.FeatureListElem;
+import org.anchoranalysis.feature.bean.operator.Sum;
 
-import ch.ethz.biol.cell.mpp.nrg.feature.operator.Maximum;
+import ch.ethz.biol.cell.mpp.nrg.feature.operator.MultiplyByConstant;
 
-public class FeatureListProviderPairMax extends FeatureListProviderAggregatePair {
+public abstract class FeatureListProviderAggregateDiff extends FeatureListProviderAggregate {
 
 	/**
 	 * 
@@ -38,7 +40,18 @@ public class FeatureListProviderPairMax extends FeatureListProviderAggregatePair
 	private static final long serialVersionUID = 1L;
 
 	@Override
-	protected FeatureListElem createFeature() {
-		return new Maximum();
+	protected Feature createAggregateFeature( Feature featFirst, Feature featSecond, Feature featMerged ) {
+		FeatureListElem featWithList = createFeature();
+		ListUtilities.addFeaturesToList( featFirst, featSecond, featWithList.getList() );
+		return createSum(featMerged, featWithList);
+	}
+	
+	protected abstract FeatureListElem createFeature();
+	
+	private static Feature createSum( Feature featMerged, Feature featWithList ) {
+		Sum featSum = new Sum();
+		featSum.getList().add(featMerged);
+		featSum.getList().add( new MultiplyByConstant(featWithList,-1) );
+		return featSum;
 	}
 }
