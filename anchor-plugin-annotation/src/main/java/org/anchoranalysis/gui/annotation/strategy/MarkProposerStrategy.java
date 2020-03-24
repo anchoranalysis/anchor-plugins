@@ -32,6 +32,7 @@ import java.util.List;
 import org.anchoranalysis.annotation.io.bean.comparer.MultipleComparer;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.Optional;
+import org.anchoranalysis.gui.bean.mpp.MarkEvaluator;
 import org.anchoranalysis.image.io.input.ProvidesStackInput;
 import org.anchoranalysis.io.bean.filepath.generator.FilePathGenerator;
 
@@ -64,8 +65,29 @@ public class MarkProposerStrategy extends SingleFilePathGeneratorStrategy {
 	
 	@BeanField @Optional
 	private MultipleComparer multipleComparer;
-	// END BEAN PROPERTIES
 	
+	/** If-defined, mark-evaluator that is added to the GUI to support this annotation */
+	@BeanField @Optional
+	private MarkEvaluator markEvaluator;
+	// END BEAN PROPERTIES
+
+	@Override
+	public int weightWidthDescription() {
+		return 1;
+	}
+	
+	@Override
+	public String annotationLabelFor(ProvidesStackInput item) {
+		return null;
+	}
+	
+	public MarkEvaluator getMarkEvaluator() {
+		return markEvaluator;
+	}
+	public void setMarkEvaluator(MarkEvaluator markEvaluator) {
+		this.markEvaluator = markEvaluator;
+	}
+
 	public String getMarkProposerName() {
 		return markProposerName;
 	}
@@ -99,17 +121,14 @@ public class MarkProposerStrategy extends SingleFilePathGeneratorStrategy {
 		return keyValueParamsFilePathGenerator;
 	}
 
-
 	public void setKeyValueParamsFilePathGenerator(
 			FilePathGenerator keyValueParamsFilePathGenerator) {
 		this.keyValueParamsFilePathGenerator = keyValueParamsFilePathGenerator;
 	}
 
-
 	public List<FilePathGenerator> getListDisplayRasters() {
 		return listDisplayRasters;
 	}
-
 
 	public void setListDisplayRasters(List<FilePathGenerator> listDisplayRasters) {
 		this.listDisplayRasters = listDisplayRasters;
@@ -121,13 +140,5 @@ public class MarkProposerStrategy extends SingleFilePathGeneratorStrategy {
 
 	public void setMultipleComparer(MultipleComparer multipleComparer) {
 		this.multipleComparer = multipleComparer;
-	}
-	@Override
-	public int weightWidthDescription() {
-		return 1;
-	}
-	@Override
-	public String annotationLabelFor(ProvidesStackInput item) {
-		return null;
 	}
 }
