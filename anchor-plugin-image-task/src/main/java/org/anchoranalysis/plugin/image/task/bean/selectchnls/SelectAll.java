@@ -30,7 +30,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.index.GetOperationFailedException;
+import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.plugin.image.task.grouped.ChnlSource;
 import org.anchoranalysis.plugin.image.task.grouped.NamedChnl;
@@ -86,8 +86,8 @@ public class SelectAll extends SelectChnlsFromStacks {
 			}
 			return out;
 			
-		} catch ( GetOperationFailedException e) {
-			throw new OperationFailedException("Cannot aggregate stacks", e);
+		} catch ( NamedProviderGetException e) {
+			throw new OperationFailedException(e.summarize());
 		}			
 	}
 

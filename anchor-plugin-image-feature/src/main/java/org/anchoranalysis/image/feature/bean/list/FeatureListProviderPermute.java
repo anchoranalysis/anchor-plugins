@@ -41,7 +41,7 @@ import org.anchoranalysis.bean.permute.property.PermuteProperty;
 import org.anchoranalysis.bean.permute.setter.PermutationSetter;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
-import org.anchoranalysis.core.index.GetOperationFailedException;
+import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.bean.list.FeatureListProvider;
@@ -125,8 +125,9 @@ public class FeatureListProviderPermute<T> extends FeatureListProvider {
 			for( String s : referencesFeatureListCreator.set() ) {
 				try {
 					getSharedObjects().getFeatureListSet().getException(s);
-				} catch (GetOperationFailedException e) {
-					throw new InitException(e);
+					
+				} catch (NamedProviderGetException e) {
+					throw new InitException(e.summarize());
 				}
 			}
 		}

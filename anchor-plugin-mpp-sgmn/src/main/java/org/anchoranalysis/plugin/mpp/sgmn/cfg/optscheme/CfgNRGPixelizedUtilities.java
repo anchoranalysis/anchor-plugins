@@ -55,7 +55,7 @@ public class CfgNRGPixelizedUtilities {
 				context.getNrgScheme().getSharedFeatures()
 			);
 		} catch (FeatureCalcException | InitException e ) {
-			throw new CreateException("Cannot init cfgNRGInit", e);
+			throw new CreateException(e);
 		}
 		return cfgNRGInit;
 	}

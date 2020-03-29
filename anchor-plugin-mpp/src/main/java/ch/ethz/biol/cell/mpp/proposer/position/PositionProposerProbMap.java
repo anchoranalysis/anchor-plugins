@@ -34,7 +34,7 @@ import org.anchoranalysis.anchor.mpp.proposer.ProposerContext;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.geometry.Point3d;
-import org.anchoranalysis.core.index.GetOperationFailedException;
+import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 
 public class PositionProposerProbMap extends PositionProposerBean {
 
@@ -58,8 +58,8 @@ public class PositionProposerProbMap extends PositionProposerBean {
 		super.onInit(pso);
 		try {
 			this.probMap = getSharedObjects().getProbMapSet().getException(probMapID);
-		} catch (GetOperationFailedException e) {
-			throw new InitException(e);
+		} catch (NamedProviderGetException e) {
+			throw new InitException(e.summarize());
 		}
 	}
 	

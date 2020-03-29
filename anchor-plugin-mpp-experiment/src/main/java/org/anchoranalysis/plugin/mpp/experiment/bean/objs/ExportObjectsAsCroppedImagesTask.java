@@ -40,6 +40,7 @@ import org.anchoranalysis.bean.annotation.Optional;
 import org.anchoranalysis.bean.define.Define;
 import org.anchoranalysis.bean.shared.random.RandomNumberGeneratorBean;
 import org.anchoranalysis.bean.shared.random.RandomNumberGeneratorMersenneConstantBean;
+import org.anchoranalysis.core.bridge.BridgeElementException;
 import org.anchoranalysis.core.bridge.IObjectBridge;
 import org.anchoranalysis.core.cache.IdentityOperation;
 import org.anchoranalysis.core.color.ColorIndex;
@@ -49,9 +50,9 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
-import org.anchoranalysis.core.index.GetOperationFailedException;
 import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.core.log.LogReporter;
+import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 import org.anchoranalysis.core.name.store.SharedObjects;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
 import org.anchoranalysis.experiment.JobExecutionException;
@@ -179,7 +180,9 @@ public class ExportObjectsAsCroppedImagesTask extends ExportObjectsBase<MultiInp
 				return;
 			}
 			
-			ImageDim dim = stackCollection.getException( stackCollection.keys().iterator().next() ).getDimensions();
+			ImageDim dim = stackCollection.getException(
+				stackCollection.keys().iterator().next()
+			).getDimensions();
 			
 			ObjMaskCollection objsZ = maybeExtendZObjs(
 				inputObjs(soImage, logErrorReporter),
@@ -201,8 +204,10 @@ public class ExportObjectsAsCroppedImagesTask extends ExportObjectsBase<MultiInp
 				SharedObjectsUtilities.outputWithException(soMPP, outputManager, suppressSubfolders);
 			}
 			
-		} catch (OperationFailedException | OutputWriteFailedException | CreateException | GetOperationFailedException | InitException e) {
+		} catch (OperationFailedException | OutputWriteFailedException | CreateException | InitException e) {
 			throw new JobExecutionException(e);
+		} catch (NamedProviderGetException e) {
+			throw new JobExecutionException(e.summarize());
 		}
 	}
 
@@ -351,8 +356,7 @@ public class ExportObjectsAsCroppedImagesTask extends ExportObjectsBase<MultiInp
 			new IObjectBridge<ObjMask, BoundingBox>() {
 
 				@Override
-				public BoundingBox bridgeElement(ObjMask sourceObject)
-						throws GetOperationFailedException {
+				public BoundingBox bridgeElement(ObjMask sourceObject) {
 					if (mip) {
 						BoundingBox bbox = new BoundingBox( sourceObject.getBoundingBox() );
 						bbox.flattenZ();
@@ -418,7 +422,7 @@ public class ExportObjectsAsCroppedImagesTask extends ExportObjectsBase<MultiInp
 				}			
 			}
 			
-		} catch (GetOperationFailedException e) {
+		} catch (NamedProviderGetException e) {
 			throw new CreateException(e);
 		}
 
@@ -427,8 +431,7 @@ public class ExportObjectsAsCroppedImagesTask extends ExportObjectsBase<MultiInp
 		IObjectBridge<ObjMask, ObjMask> bridgeToMaybePad = new IObjectBridge<ObjMask, ObjMask>() {
 
 			@Override
-			public ObjMask bridgeElement(ObjMask om)
-					throws GetOperationFailedException {
+			public ObjMask bridgeElement(ObjMask om) throws BridgeElementException {
 				try {
 					if (keepEntireImage) {
 						return extractObjMaskKeepEntireImage(om, dim );
@@ -437,7 +440,7 @@ public class ExportObjectsAsCroppedImagesTask extends ExportObjectsBase<MultiInp
 					}
 
 				} catch (OutputWriteFailedException e) {
-					throw new GetOperationFailedException(e);
+					throw new BridgeElementException(e);
 				}
 				
 			}

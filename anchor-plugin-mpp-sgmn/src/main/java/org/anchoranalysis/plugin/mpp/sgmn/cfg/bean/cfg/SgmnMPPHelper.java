@@ -39,9 +39,9 @@ import org.anchoranalysis.core.cache.CacheMonitor;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.index.GetOperationFailedException;
 import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.core.name.provider.INamedProvider;
+import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 import org.anchoranalysis.core.name.store.SharedObjects;
 import org.anchoranalysis.core.params.KeyValueParams;
 import org.anchoranalysis.feature.nrg.NRGStack;
@@ -143,7 +143,7 @@ class SgmnMPPHelper {
 		try {
 			NRGStack nrgStack = new NRGStack( stackCollection.getException(ImgStackIdentifiers.NRG_STACK) );
 			return new NRGStackWithParams( nrgStack, params );
-		} catch (GetOperationFailedException e) {
+		} catch (NamedProviderGetException e) {
 			throw new CreateException(e);
 		}
 	}

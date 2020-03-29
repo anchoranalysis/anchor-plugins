@@ -28,7 +28,7 @@ package ch.ethz.biol.cell.imageprocessing.chnl.provider;
 
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
-import org.anchoranalysis.core.index.GetOperationFailedException;
+import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 import org.anchoranalysis.image.bean.provider.ChnlProvider;
 import org.anchoranalysis.image.chnl.Chnl;
 import org.anchoranalysis.image.experiment.identifiers.ImgStackIdentifiers;
@@ -50,8 +50,8 @@ public class ChnlProviderInput extends ChnlProvider {
 		super.onInit(so);
 		try {
 			inputStack = so.getStackCollection().getException( ImgStackIdentifiers.INPUT_IMAGE );
-		} catch (GetOperationFailedException e) {
-			throw InitException.createOrReuse(e);
+		} catch (NamedProviderGetException e) {
+			throw InitException.createOrReuse(e.summarize());
 		}
 	}
 

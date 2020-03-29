@@ -34,9 +34,9 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
-import org.anchoranalysis.core.index.GetOperationFailedException;
 import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.core.name.provider.INamedProvider;
+import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 import org.anchoranalysis.core.progress.ProgressReporterNull;
 import org.anchoranalysis.core.random.RandomNumberGeneratorMersenneTime;
 import org.anchoranalysis.experiment.ExperimentExecutionArguments;
@@ -201,8 +201,10 @@ public class ScaleTask extends RasterTask {
 				stackCollection.addImageStack(chnlName, new Stack(chnlOut) );
 				stackCollectionMIP.addImageStack(chnlName, new Stack(chnlOut.maxIntensityProj()) );
 				
-			} catch (CreateException | GetOperationFailedException e) {
+			} catch (CreateException e) {
 				throw new JobExecutionException(e);
+			} catch (NamedProviderGetException e) {
+				throw new JobExecutionException(e.summarize());
 			}
 		}
 	}

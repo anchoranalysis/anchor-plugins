@@ -31,7 +31,7 @@ import java.nio.ByteBuffer;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.core.index.GetOperationFailedException;
+import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 import org.anchoranalysis.core.params.KeyValueParams;
 import org.anchoranalysis.image.bean.provider.ChnlProvider;
 import org.anchoranalysis.image.chnl.Chnl;
@@ -63,8 +63,11 @@ public class ChnlProviderAssignFromKeyValueParams extends ChnlProvider {
 		KeyValueParams params;
 		try {
 			params = getSharedObjects().getParams().getNamedKeyValueParamsCollection().getException(keyValueParamsID);
-		} catch (GetOperationFailedException e) {
-			throw new CreateException( String.format("Cannot find KeyValueParams '%s'",keyValueParamsID) );
+		} catch (NamedProviderGetException e) {
+			throw new CreateException(
+				String.format("Cannot find KeyValueParams '%s'",keyValueParamsID),
+				e
+			);
 		}
 		
 		if (!params.containsKey(key)) {

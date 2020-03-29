@@ -37,7 +37,7 @@ import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.anchor.mpp.mark.MarkAbstractPosition;
 import org.anchoranalysis.anchor.mpp.proposer.error.ErrorNode;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.index.GetOperationFailedException;
+import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 import org.anchoranalysis.core.random.RandomNumberGenerator;
 import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.orientation.Orientation;
@@ -201,16 +201,10 @@ public class LongestExtentWithin extends OrientationProposer {
 			OrientationList listOrientations = findAllOrientations( mark, minMaxBound, dim, errorNode);
 			return listOrientations.sample(re);
 			
-		} catch (GetOperationFailedException e) {
-			errorNode.add(e);
+		} catch (NamedProviderGetException e) {
+			errorNode.add(e.toString());
 			return null;
 		}
-		
-		/*if (maxExtent!=-1) {
-			return new Orientation2D( angleAtMax );	
-		} else {
-			return null;
-		}*/
 	}
 
 	public double getIncrementDegrees() {

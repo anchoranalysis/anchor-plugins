@@ -32,7 +32,7 @@ import org.anchoranalysis.anchor.mpp.cfg.Cfg;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.core.index.GetOperationFailedException;
+import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 
 // Returns an empty set if it doesn't exist
 public class CfgProviderReferenceOrEmpty extends CfgProvider {
@@ -58,7 +58,7 @@ public class CfgProviderReferenceOrEmpty extends CfgProvider {
 			}
 			
 			return cfg;
-		} catch (GetOperationFailedException e) {
+		} catch (NamedProviderGetException e) {
 			throw new CreateException(e);
 		}
 	}

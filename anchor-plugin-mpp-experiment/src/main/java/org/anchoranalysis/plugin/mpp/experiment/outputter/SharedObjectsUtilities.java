@@ -28,8 +28,8 @@ import org.anchoranalysis.anchor.mpp.bean.init.MPPInitParams;
  * #L%
  */
 
-import org.anchoranalysis.core.index.GetOperationFailedException;
 import org.anchoranalysis.core.log.LogErrorReporter;
+import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 import org.anchoranalysis.core.params.KeyValueParams;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 import org.anchoranalysis.image.init.CreateCombinedStack;
@@ -62,8 +62,11 @@ public class SharedObjectsUtilities {
 					logErrorReporter
 				);
 			}
-		} catch (GetOperationFailedException e) {
-			logErrorReporter.getErrorReporter().recordError(SharedObjectsUtilities.class, e);
+		} catch (NamedProviderGetException e) {
+			logErrorReporter.getErrorReporter().recordError(
+				SharedObjectsUtilities.class,
+				e.summarize()
+			);
 		}
 	}
 		

@@ -35,9 +35,9 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.error.BeanDuplicateException;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.index.GetOperationFailedException;
 import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.core.log.LogReporter;
+import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 import org.anchoranalysis.core.name.store.LazyEvaluationStore;
 import org.anchoranalysis.core.name.store.NamedProviderStore;
 import org.anchoranalysis.core.params.KeyValueParams;
@@ -139,8 +139,8 @@ public class CfgSgmnTask extends Task<MultiInput,ExperimentState>{
 		// We select a particular key value params to send as output
 		try {
 			return (!keyValueParamsID.isEmpty()) ? paramsCollection.getException(keyValueParamsID) : null;
-		} catch (GetOperationFailedException e) {
-			throw new JobExecutionException("Cannot retrieve key-values-params", e);
+		} catch (NamedProviderGetException e) {
+			throw new JobExecutionException("Cannot retrieve key-values-params", e.summarize());
 		}
 	}
 	

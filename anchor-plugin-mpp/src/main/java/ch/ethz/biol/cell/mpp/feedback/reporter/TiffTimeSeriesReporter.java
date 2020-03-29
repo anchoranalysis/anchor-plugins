@@ -35,11 +35,11 @@ import org.anchoranalysis.anchor.overlay.id.IDGetterOverlayID;
 
 
 import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.core.bridge.BridgeElementException;
 import org.anchoranalysis.core.bridge.IObjectBridge;
 import org.anchoranalysis.core.color.ColorIndex;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.idgetter.IDGetterIter;
-import org.anchoranalysis.core.index.GetOperationFailedException;
 import org.anchoranalysis.image.stack.DisplayStack;
 import org.anchoranalysis.io.bean.color.generator.HSBColorSetGenerator;
 import org.anchoranalysis.io.bean.color.generator.ShuffleColorSetGenerator;
@@ -86,7 +86,7 @@ public class TiffTimeSeriesReporter extends PeriodicSubfolderReporter<CfgNRG> {
 
 		@Override
 		public ColoredCfgWithDisplayStack bridgeElement(CfgNRG sourceObject)
-				throws GetOperationFailedException {
+				throws BridgeElementException {
 			
 			ColoredCfg coloredCfg = new ColoredCfg(sourceObject.getCfg(), colorIndex, new IDGetterIter<Mark>() );
 			return new ColoredCfgWithDisplayStack( coloredCfg, stack );

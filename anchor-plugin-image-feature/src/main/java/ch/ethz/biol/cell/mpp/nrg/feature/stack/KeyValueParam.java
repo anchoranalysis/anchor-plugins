@@ -28,7 +28,7 @@ package ch.ethz.biol.cell.mpp.nrg.feature.stack;
 
 
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.index.GetOperationFailedException;
+import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 import org.anchoranalysis.core.params.KeyValueParams;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.feature.bean.stack.FeatureStack;
@@ -56,8 +56,8 @@ public class KeyValueParam extends FeatureStack {
 			KeyValueParams kpv = params.getSharedObjs().getParams().getNamedKeyValueParamsCollection().getException(collectionID);
 			return kpv.getPropertyAsDouble(key);
 			
-		} catch (GetOperationFailedException e) {
-			throw new FeatureCalcException(e);
+		} catch (NamedProviderGetException e) {
+			throw new FeatureCalcException(e.summarize());
 		}
 	}
 

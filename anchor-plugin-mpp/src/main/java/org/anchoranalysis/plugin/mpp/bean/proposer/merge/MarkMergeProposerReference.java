@@ -34,7 +34,7 @@ import org.anchoranalysis.anchor.mpp.proposer.ProposerContext;
 import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.InitException;
-import org.anchoranalysis.core.index.GetOperationFailedException;
+import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 
 public class MarkMergeProposerReference extends MarkMergeProposer {
 
@@ -55,8 +55,11 @@ public class MarkMergeProposerReference extends MarkMergeProposer {
 		super.onInit(pso);
 		try {
 			delegate = getSharedObjects().getMarkMergeProposerSet().getException(id);
-		} catch (GetOperationFailedException e) {
-			throw new InitException( String.format("Cannot find referenced markSplitProposer '%s'", id) );
+		} catch (NamedProviderGetException e) {
+			throw new InitException(
+				String.format("Cannot find referenced markSplitProposer '%s'", id),
+				e.summarize()
+			);
 		}
 	}
 	

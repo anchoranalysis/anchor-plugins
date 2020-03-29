@@ -44,7 +44,7 @@ import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemoFactory;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.InitException;
-import org.anchoranalysis.core.index.GetOperationFailedException;
+import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 import org.anchoranalysis.image.extent.ImageDim;
@@ -88,8 +88,8 @@ public class KernelMerge extends KernelPosNeg<CfgNRGPixelized> {
 		
 		try {
 			pairCollection = getSharedObjects().getSimplePairCollection().getException(simplePairCollectionID);
-		} catch (GetOperationFailedException e) {
-			throw new InitException(e);
+		} catch (NamedProviderGetException e) {
+			throw new InitException(e.summarize());
 		}
 		
 		if (pairCollection==null) {

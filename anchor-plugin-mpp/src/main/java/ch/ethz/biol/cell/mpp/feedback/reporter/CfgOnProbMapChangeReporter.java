@@ -38,7 +38,7 @@ import org.anchoranalysis.core.color.ColorIndex;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.error.OptionalOperationUnsupportedException;
-import org.anchoranalysis.core.index.GetOperationFailedException;
+import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 import org.anchoranalysis.image.chnl.Chnl;
 import org.anchoranalysis.image.stack.DisplayStack;
 import org.anchoranalysis.io.bean.color.generator.HSBColorSetGenerator;
@@ -170,8 +170,10 @@ public class CfgOnProbMapChangeReporter extends ReporterOptimizationStep<CfgNRGP
 					String.valueOf(reporting.getIter())
 				);
 				
-			} catch (GetOperationFailedException | OutputWriteFailedException | OptionalOperationUnsupportedException | CreateException e) {
+			} catch (OutputWriteFailedException | OptionalOperationUnsupportedException | CreateException e) {
 				throw new ReporterException(e);
+			} catch (NamedProviderGetException e) {
+				throw new ReporterException(e.summarize());
 			}
 		}
 		lastOptimizationStep = reporting;

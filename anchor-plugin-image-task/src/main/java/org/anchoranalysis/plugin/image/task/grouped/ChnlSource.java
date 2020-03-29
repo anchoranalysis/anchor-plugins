@@ -27,8 +27,8 @@ package org.anchoranalysis.plugin.image.task.grouped;
  */
 
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.index.GetOperationFailedException;
 import org.anchoranalysis.core.index.SetOperationFailedException;
+import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 import org.anchoranalysis.image.chnl.Chnl;
 import org.anchoranalysis.image.stack.NamedImgStackCollection;
 import org.anchoranalysis.image.stack.Stack;
@@ -56,10 +56,10 @@ public class ChnlSource {
 			}
 			
 			return extractChnl(stack, checkType, 0 );
-		} catch ( GetOperationFailedException e) {
+		} catch ( NamedProviderGetException e) {
 			throw new OperationFailedException(
 				String.format("Cannot extract a single channel from stack %s", stackName),
-				e
+				e.summarize()
 			);
 		}
 	}
@@ -71,10 +71,10 @@ public class ChnlSource {
 			Stack stack = stackStore.getException(stackName);
 			return extractChnl(stack, checkType, index );
 			
-		} catch ( GetOperationFailedException e) {
+		} catch ( NamedProviderGetException e) {
 			throw new OperationFailedException(
 				String.format("Cannot extract channel %d from stack %s", index, stackName),
-				e
+				e.summarize()
 			);
 		}
 	}

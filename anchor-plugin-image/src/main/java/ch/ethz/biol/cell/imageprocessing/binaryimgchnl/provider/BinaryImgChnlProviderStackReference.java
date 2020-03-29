@@ -30,7 +30,7 @@ package ch.ethz.biol.cell.imageprocessing.binaryimgchnl.provider;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
-import org.anchoranalysis.core.index.GetOperationFailedException;
+import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 import org.anchoranalysis.image.bean.provider.BinaryImgChnlProvider;
 import org.anchoranalysis.image.binary.BinaryChnl;
 import org.anchoranalysis.image.binary.values.BinaryValues;
@@ -60,8 +60,8 @@ public class BinaryImgChnlProviderStackReference extends BinaryImgChnlProvider {
 		super.onInit(so);
 		try {
 			chnl = so.getStackCollection().getException(stackProviderID).getChnl(chnlIndex);
-		} catch (GetOperationFailedException e) {
-			throw InitException.createOrReuse(e);
+		} catch (NamedProviderGetException e) {
+			throw InitException.createOrReuse(e.summarize());
 		}
 	}
 

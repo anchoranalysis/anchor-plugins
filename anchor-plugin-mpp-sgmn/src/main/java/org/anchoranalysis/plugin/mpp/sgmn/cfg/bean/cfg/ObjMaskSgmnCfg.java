@@ -32,9 +32,9 @@ import org.anchoranalysis.anchor.mpp.regionmap.RegionMapSingleton;
 
 
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.index.GetOperationFailedException;
 import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.core.name.provider.INamedProvider;
+import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 import org.anchoranalysis.core.params.KeyValueParams;
 import org.anchoranalysis.core.random.RandomNumberGenerator;
 import org.anchoranalysis.experiment.ExperimentExecutionArguments;
@@ -77,8 +77,8 @@ public class ObjMaskSgmnCfg extends SgmnObjMaskCollection {
 				null
 			).collectionObjMask();
 			
-		} catch (GetOperationFailedException e) {
-			throw new SgmnFailedException(e);
+		} catch (NamedProviderGetException e) {
+			throw new SgmnFailedException(e.summarize());
 		}
 	}
 
