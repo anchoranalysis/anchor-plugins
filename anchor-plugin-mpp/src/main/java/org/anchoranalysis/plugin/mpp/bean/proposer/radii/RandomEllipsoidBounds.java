@@ -35,7 +35,7 @@ import org.anchoranalysis.anchor.mpp.mark.conic.EllipsoidRandomizer;
 import org.anchoranalysis.anchor.mpp.mark.conic.MarkEllipsoid;
 import org.anchoranalysis.anchor.mpp.proposer.error.ErrorNode;
 import org.anchoranalysis.core.geometry.Point3d;
-import org.anchoranalysis.core.index.GetOperationFailedException;
+import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 import org.anchoranalysis.core.random.RandomNumberGenerator;
 import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.orientation.Orientation;
@@ -58,8 +58,8 @@ public class RandomEllipsoidBounds extends RadiiProposer {
 			ErrorNode errorNode) {
 		try {
 			return EllipsoidRandomizer.randomizeRadii( (EllipsoidBounds) getSharedObjects().getMarkBounds(), re, bndScene.getRes() );
-		} catch (GetOperationFailedException e) {
-			errorNode.add(e);
+		} catch (NamedProviderGetException e) {
+			errorNode.add(e.summarize().toString());
 			return null;
 		}
 	}

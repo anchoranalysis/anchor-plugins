@@ -32,7 +32,7 @@ import org.anchoranalysis.anchor.mpp.cfg.Cfg;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.core.index.GetOperationFailedException;
+import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 
 public class CfgProviderReference extends CfgProvider {
 
@@ -59,7 +59,7 @@ public class CfgProviderReference extends CfgProvider {
 	public Cfg create() throws CreateException {
 		try {
 			return getSharedObjects().getCfgCollection().getException(id);
-		} catch (GetOperationFailedException e) {
+		} catch (NamedProviderGetException e) {
 			throw new CreateException(e);
 		}
 	}

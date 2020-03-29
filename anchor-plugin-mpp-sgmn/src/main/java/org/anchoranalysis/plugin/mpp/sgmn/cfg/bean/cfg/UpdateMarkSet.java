@@ -37,8 +37,8 @@ import org.anchoranalysis.anchor.mpp.probmap.ProbMap;
 
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.index.GetOperationFailedException;
 import org.anchoranalysis.core.log.LogErrorReporter;
+import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 
 class UpdateMarkSet {
@@ -70,8 +70,10 @@ class UpdateMarkSet {
 				pair.initUpdatableMarkSet(new PxlMarkMemoList(), nrgStack, logger, psoImage.getFeature().getSharedFeatureSet() );
 				updatableMarkSetCollection.add(pair);
 			}
-		} catch (GetOperationFailedException | InitException e) {
+		} catch (InitException e) {
 			throw new OperationFailedException(e);
+		} catch (NamedProviderGetException e) {
+			throw new OperationFailedException(e.summarize());
 		}
 	}
 			
@@ -87,8 +89,10 @@ class UpdateMarkSet {
 					updatableMarkSetCollection.add( updater );
 				}
 			}
-		} catch (GetOperationFailedException | InitException e) {
+		} catch (InitException e) {
 			throw new OperationFailedException(e);
+		} catch (NamedProviderGetException e) {
+			throw new OperationFailedException(e.summarize());
 		}
 	}	
 }

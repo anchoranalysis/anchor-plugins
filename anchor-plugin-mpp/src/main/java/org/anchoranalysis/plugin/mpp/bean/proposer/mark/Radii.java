@@ -38,7 +38,7 @@ import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.geometry.Point3d;
-import org.anchoranalysis.core.index.GetOperationFailedException;
+import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 import org.anchoranalysis.image.orientation.Orientation;
 
 public class Radii extends MarkProposer {
@@ -104,8 +104,8 @@ public class Radii extends MarkProposer {
 				orientationNew,
 				context.getErrorNode()
 			);
-		} catch (GetOperationFailedException e) {
-			context.getErrorNode().add(e);
+		} catch (NamedProviderGetException e) {
+			context.getErrorNode().add(e.summarize().toString());
 			return false;
 		}
 		

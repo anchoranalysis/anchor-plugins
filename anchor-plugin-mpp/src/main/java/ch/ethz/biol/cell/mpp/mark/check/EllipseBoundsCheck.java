@@ -31,7 +31,7 @@ import org.anchoranalysis.anchor.mpp.feature.bean.mark.CheckMark;
 import org.anchoranalysis.anchor.mpp.feature.error.CheckException;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.anchor.mpp.mark.conic.MarkEllipse;
-import org.anchoranalysis.core.index.GetOperationFailedException;
+import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 
@@ -72,8 +72,8 @@ public class EllipseBoundsCheck extends CheckMark {
 			
 			return true;
 			
-		} catch (GetOperationFailedException e) {
-			throw new CheckException("Cannot establish bounds", e);
+		} catch (NamedProviderGetException e) {
+			throw new CheckException("Cannot establish bounds", e.summarize());
 		}
 	}
 

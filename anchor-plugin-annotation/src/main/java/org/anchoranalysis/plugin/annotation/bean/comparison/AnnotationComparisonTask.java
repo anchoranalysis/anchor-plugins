@@ -34,9 +34,9 @@ import org.anchoranalysis.annotation.io.assignment.generator.ColorPool;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.index.GetOperationFailedException;
 import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.core.log.LogReporter;
+import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 import org.anchoranalysis.core.progress.ProgressReporterNull;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
 import org.anchoranalysis.experiment.JobExecutionException;
@@ -211,8 +211,10 @@ public class AnnotationComparisonTask<T extends Assignment> extends Task<Annotat
 
 			return DisplayStack.create( stackCollection.getException(backgroundChnlName) );
 			
-		} catch (CreateException | GetOperationFailedException | OperationFailedException e) {
+		} catch (CreateException | OperationFailedException e) {
 			throw new JobExecutionException(e);
+		} catch (NamedProviderGetException e) {
+			throw new JobExecutionException(e.summarize());
 		}
 	}
 	

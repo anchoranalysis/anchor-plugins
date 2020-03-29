@@ -31,7 +31,7 @@ import org.anchoranalysis.anchor.mpp.bean.bound.OrientableBounds;
 import org.anchoranalysis.anchor.mpp.bean.proposer.OrientationProposer;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.anchor.mpp.proposer.error.ErrorNode;
-import org.anchoranalysis.core.index.GetOperationFailedException;
+import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 import org.anchoranalysis.core.random.RandomNumberGenerator;
 import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.orientation.Orientation;
@@ -53,8 +53,8 @@ public class Random extends OrientationProposer {
 			}
 			
 			return ((OrientableBounds) getSharedObjects().getMarkBounds()).randomOrientation(re, dim.getRes());
-		} catch (GetOperationFailedException e) {
-			errorNode.add(e);
+		} catch (NamedProviderGetException e) {
+			errorNode.add(e.summarize().toString());
 			return null;
 		}
 	}

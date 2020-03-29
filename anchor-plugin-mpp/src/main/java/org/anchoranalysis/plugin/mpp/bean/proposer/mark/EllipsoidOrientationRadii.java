@@ -35,7 +35,7 @@ import org.anchoranalysis.anchor.mpp.proposer.ProposerContext;
 import org.anchoranalysis.anchor.mpp.proposer.visualization.ICreateProposalVisualization;
 import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
 import org.anchoranalysis.core.geometry.Point3d;
-import org.anchoranalysis.core.index.GetOperationFailedException;
+import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 import org.anchoranalysis.image.orientation.Orientation;
 
 public class EllipsoidOrientationRadii extends MarkProposer {
@@ -56,8 +56,8 @@ public class EllipsoidOrientationRadii extends MarkProposer {
 		EllipsoidBounds markBounds;
 		try {
 			markBounds = (EllipsoidBounds) getSharedObjects().getMarkBounds();
-		} catch (GetOperationFailedException e) {
-			context.getErrorNode().add(e);
+		} catch (NamedProviderGetException e) {
+			context.getErrorNode().add( e.summarize().toString() );
 			return false;
 		}
 				

@@ -33,7 +33,7 @@ import org.anchoranalysis.anchor.mpp.mark.conic.MarkEllipsoid;
  * #L%
  */
 
-import org.anchoranalysis.core.index.GetOperationFailedException;
+import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 
@@ -69,8 +69,8 @@ public class EllipsoidBoundsCheck extends CheckMark {
 				}		
 			}
 			
-		} catch (GetOperationFailedException e) {
-			throw new CheckException("Cannot establish bounds", e);
+		} catch (NamedProviderGetException e) {
+			throw new CheckException("Cannot establish bounds", e.summarize());
 		}
 		
 		return true;

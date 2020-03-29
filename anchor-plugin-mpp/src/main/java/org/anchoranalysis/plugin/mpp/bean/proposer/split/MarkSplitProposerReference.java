@@ -38,7 +38,7 @@ import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.InitException;
-import org.anchoranalysis.core.index.GetOperationFailedException;
+import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 
 public class MarkSplitProposerReference extends MarkSplitProposer {
 
@@ -59,8 +59,8 @@ public class MarkSplitProposerReference extends MarkSplitProposer {
 		super.onInit(pso);
 		try {
 			delegate = getSharedObjects().getMarkSplitProposerSet().getException(id);
-		} catch (GetOperationFailedException e) {
-			throw new InitException(e);
+		} catch (NamedProviderGetException e) {
+			throw new InitException(e.summarize());
 		}
 	}
 

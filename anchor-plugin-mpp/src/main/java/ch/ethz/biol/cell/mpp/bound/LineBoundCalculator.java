@@ -36,7 +36,7 @@ import org.anchoranalysis.anchor.mpp.proposer.error.ErrorNode;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.geometry.Point3d;
-import org.anchoranalysis.core.index.GetOperationFailedException;
+import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 import org.anchoranalysis.image.bean.provider.BinaryImgChnlProvider;
 import org.anchoranalysis.image.chnl.Chnl;
 import org.anchoranalysis.image.convert.ByteConverter;
@@ -117,8 +117,11 @@ public class LineBoundCalculator extends BoundCalculator {
 			proposerFailureDescription.addFormatted("reverse bound: %s", boundRvrs);
 			
 			return bi;
-		} catch( CreateException | GetOperationFailedException e ) {
+		} catch( CreateException e ) {
 			proposerFailureDescription.add(e);
+			return null;
+		} catch (NamedProviderGetException e) {
+			proposerFailureDescription.add(e.summarize().toString());
 			return null;
 		}
 	}

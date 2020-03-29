@@ -27,7 +27,7 @@ package ch.ethz.biol.cell.imageprocessing.stack.provider;
  */
 
 import org.anchoranalysis.core.error.InitException;
-import org.anchoranalysis.core.index.GetOperationFailedException;
+import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 import org.anchoranalysis.image.bean.provider.stack.StackProvider;
 import org.anchoranalysis.image.experiment.identifiers.ImgStackIdentifiers;
 import org.anchoranalysis.image.init.ImageInitParams;
@@ -56,8 +56,8 @@ public class StackProviderInput extends StackProvider {
 		super.onInit(so);
 		try {
 			inputStack = so.getStackCollection().getException( ImgStackIdentifiers.INPUT_IMAGE );
-		} catch (GetOperationFailedException e) {
-			throw new InitException(e);
+		} catch (NamedProviderGetException e) {
+			throw new InitException(e.summarize());
 		}
 	}
 

@@ -30,9 +30,9 @@ package org.anchoranalysis.plugin.mpp.experiment.bean.seed;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.error.BeanDuplicateException;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.index.GetOperationFailedException;
 import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.core.log.LogReporter;
+import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 import org.anchoranalysis.core.name.store.LazyEvaluationStore;
 import org.anchoranalysis.core.name.store.NamedProviderStore;
 import org.anchoranalysis.core.params.KeyValueParams;
@@ -143,8 +143,10 @@ public class SeedFinderTask<S> extends Task<MultiInput,S> {
 			
 			outputter.outputSeedsVisually( seeds );
 			
-		} catch (SeedFinderException | OperationFailedException | GetOperationFailedException | BeanDuplicateException e) {
+		} catch (SeedFinderException | OperationFailedException | BeanDuplicateException e) {
 			throw new JobExecutionException(e);
+		} catch (NamedProviderGetException e) {
+			throw new JobExecutionException(e.summarize());
 		}
 	}
 	
