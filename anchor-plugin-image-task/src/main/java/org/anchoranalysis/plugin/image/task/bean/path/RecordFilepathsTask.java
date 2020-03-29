@@ -1,4 +1,4 @@
-package org.anchoranalysis.plugin.image.task.bean;
+package org.anchoranalysis.plugin.image.task.bean.path;
 
 import java.nio.file.Path;
 
