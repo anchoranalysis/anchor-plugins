@@ -1,5 +1,7 @@
 package ch.ethz.biol.cell.imageprocessing.dim.provider;
 
+import org.anchoranalysis.bean.annotation.AllowEmpty;
+
 /*-
  * #%L
  * anchor-plugin-image
@@ -27,14 +29,21 @@ package ch.ethz.biol.cell.imageprocessing.dim.provider;
  */
 
 import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.bean.annotation.Optional;
 import org.anchoranalysis.core.error.CreateException;
+import org.anchoranalysis.core.error.InitException;
+import org.anchoranalysis.core.index.GetOperationFailedException;
 import org.anchoranalysis.image.bean.provider.ChnlProvider;
 import org.anchoranalysis.image.bean.provider.ImageDimProvider;
+import org.anchoranalysis.image.chnl.Chnl;
 import org.anchoranalysis.image.extent.ImageDim;
+import org.anchoranalysis.image.init.ImageInitParams;
 
 
 /**
  * Creates image-dimensions by referencing them from a ChnlProvider
+ * 
+ * <p>One of either chnlProvider or id must be set, but not both</p>
  */
 public class ImageDimProviderFromChnl extends ImageDimProvider {
 
@@ -44,13 +53,43 @@ public class ImageDimProviderFromChnl extends ImageDimProvider {
 	private static final long serialVersionUID = 1L;
 	
 	// START BEAN PROPERTIES
-	@BeanField
+	@BeanField @AllowEmpty
+	private String id = "";
+	
+	@BeanField @Optional
 	private ChnlProvider chnlProvider;
 	// END BEAN PROPERTIES
-
+	
+	@Override
+	public void onInit(ImageInitParams so) throws InitException {
+		super.onInit(so);
+		if (id.isEmpty() && chnlProvider==null) {
+			throw new InitException("One of either chnlProvider or id must be set");
+		}
+		if (!id.isEmpty() && chnlProvider!=null) {
+			throw new InitException("Only one -not both- of chnlProvider and id should be set");
+		}
+	}
+	
 	@Override
 	public ImageDim create() throws CreateException {
-		return chnlProvider.create().getDimensions();
+		return selectChnl().getDimensions();
+	}
+	
+	private Chnl selectChnl() throws CreateException {
+		
+		if (!id.isEmpty()) {
+			try {
+				return getSharedObjects().getChnlCollection().getException(id);
+			} catch (GetOperationFailedException e) {
+				throw new CreateException(
+					String.format("Failed to retrieve channel `%s`", id),
+					e
+				);
+			}
+		}
+		
+		return chnlProvider.create();
 	}
 
 	public ChnlProvider getChnlProvider() {
@@ -60,4 +99,13 @@ public class ImageDimProviderFromChnl extends ImageDimProvider {
 	public void setChnlProvider(ChnlProvider chnlProvider) {
 		this.chnlProvider = chnlProvider;
 	}
+
+	public String getId() {
+		return id;
+	}
+
+	public void setId(String id) {
+		this.id = id;
+	}
+
 }
