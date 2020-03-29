@@ -71,24 +71,24 @@ public class ObjMaskProviderExtractTextTest {
 	public void testCar() throws AnchorIOException, CreateException, InitException {
 		
 		ObjMaskProviderExtractText provider = createAndInitProvider(
-			//"car.jpg",
-			"lebron_james.jpg",
+			"car.jpg",
 			testLoader.getTestLoader().getRoot()
 		);
 				
 		ObjMaskCollection objs = provider.create();
 		
-		assertTrue( objs.size()==2 );
+		assertTrue( objs.size()==3 );
 		
+		assertBoxAtIndex(objs, 0, boxAt(441, 310, 72, 35) );
+		assertBoxAtIndex(objs, 1, boxAt(310, 318, 108, 34) );
+		assertBoxAtIndex(objs, 2, boxAt(392, 200, 27, 25) );
+	}
+	
+	private void assertBoxAtIndex( ObjMaskCollection objs, int index, BoundingBox box  ) {
 		assertEquals(
-			objs.get(0).getBoundingBox(),
-			boxAt(246, 172, 106, 25)
-		);
-		
-		assertEquals(
-			objs.get(1).getBoundingBox(),
-			boxAt(362, 170, 72, 21)
-		);
+			box,
+			objs.get(index).getBoundingBox()
+		);		
 	}
 	
 	private ObjMaskProviderExtractText createAndInitProvider( String imageFilename, Path modelDir ) throws InitException {
