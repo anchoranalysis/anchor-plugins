@@ -44,6 +44,7 @@ import org.anchoranalysis.image.init.ImageInitParams;
  * Creates image-dimensions by referencing them from a ChnlProvider
  * 
  * <p>One of either chnlProvider or id must be set, but not both</p>
+ * <p>id will look for a Chnl or a Stack in that order</p>
  */
 public class ImageDimProviderFromChnl extends ImageDimProvider {
 
@@ -79,17 +80,34 @@ public class ImageDimProviderFromChnl extends ImageDimProvider {
 	private Chnl selectChnl() throws CreateException {
 		
 		if (!id.isEmpty()) {
-			try {
-				return getSharedObjects().getChnlCollection().getException(id);
-			} catch (GetOperationFailedException e) {
-				throw new CreateException(
-					String.format("Failed to retrieve channel `%s`", id),
-					e
-				);
-			}
+			return selectChnlForId(id);
 		}
 		
 		return chnlProvider.create();
+	}
+	
+	private Chnl selectChnlForId( String id ) throws CreateException {
+		
+		try {
+			Chnl chnl = getSharedObjects().getChnlCollection().getNull(id);
+			
+			if (chnl==null) {
+				chnl = getSharedObjects().getStackCollection().getException(id).getChnl(0);
+			}
+			
+			if (chnl==null) {
+				throw new CreateException(
+					String.format("Failed to find either a channel or stack with id `%s`", id)
+				);
+			}
+			
+			return getSharedObjects().getChnlCollection().getException(id);
+		} catch (GetOperationFailedException e) {
+			throw new CreateException(
+				String.format("A error occurred while retrieing channel `%s`", id),
+				e
+			);
+		}
 	}
 
 	public ChnlProvider getChnlProvider() {

@@ -40,6 +40,8 @@ import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
 
+import ch.ethz.biol.cell.imageprocessing.dim.provider.GuessDimFromInputImage;
+
 // Ors the receiveProvider onto the binaryImgChnlProvider
 public class BinaryImgChnlProviderRepeatSlice extends BinaryImgChnlProvider {
 
@@ -53,7 +55,7 @@ public class BinaryImgChnlProviderRepeatSlice extends BinaryImgChnlProvider {
 	private BinaryImgChnlProvider binaryImgChnlProvider;
 	
 	@BeanField
-	private ImageDimProvider dimProvider;
+	private ImageDimProvider dimProvider = new GuessDimFromInputImage();
 	// END BEAN PROPERTIES
 
 	@Override
