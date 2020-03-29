@@ -1,7 +1,9 @@
 package ch.ethz.biol.cell.mpp.cfg.provider;
 
+import org.anchoranalysis.anchor.mpp.bean.cfg.CfgProvider;
+import org.anchoranalysis.anchor.mpp.cfg.Cfg;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
-import org.anchoranalysis.anchor.mpp.mark.MarkPointListFactory;
+import org.anchoranalysis.anchor.mpp.mark.points.MarkPointListFactory;
 
 /*-
  * #%L
@@ -35,8 +37,6 @@ import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
 import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.image.objmask.ObjMaskCollection;
 import org.anchoranalysis.image.points.PointsFromObjMask;
-
-import ch.ethz.biol.cell.mpp.cfg.Cfg;
 
 public class CfgProviderPointsFromObjs extends CfgProvider {
 

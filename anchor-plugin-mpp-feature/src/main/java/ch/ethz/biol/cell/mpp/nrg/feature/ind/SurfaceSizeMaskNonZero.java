@@ -30,6 +30,8 @@ package ch.ethz.biol.cell.mpp.nrg.feature.ind;
 import java.nio.ByteBuffer;
 
 import org.anchoranalysis.anchor.mpp.bean.regionmap.RegionMap;
+import org.anchoranalysis.anchor.mpp.feature.bean.nrg.elem.NRGElemInd;
+import org.anchoranalysis.anchor.mpp.feature.nrg.elem.NRGElemIndCalcParams;
 import org.anchoranalysis.anchor.mpp.regionmap.RegionMapSingleton;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.cache.ExecuteException;
@@ -43,9 +45,6 @@ import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.anchoranalysis.image.voxel.kernel.ApplyKernel;
 import org.anchoranalysis.image.voxel.kernel.outline.OutlineKernel3;
 import org.anchoranalysis.image.voxel.statistics.VoxelStatistics;
-
-import ch.ethz.biol.cell.mpp.nrg.NRGElemInd;
-import ch.ethz.biol.cell.mpp.nrg.NRGElemIndCalcParams;
 
 public class SurfaceSizeMaskNonZero extends NRGElemInd {
 

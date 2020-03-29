@@ -34,8 +34,6 @@ import org.anchoranalysis.plugin.annotation.comparison.AnnotationGroup;
 import org.anchoranalysis.plugin.annotation.comparison.AnnotationGroupList;
 import org.anchoranalysis.plugin.annotation.comparison.IAddAnnotation;
 
-import ch.ethz.biol.cell.countchrom.experiment.SplitString;
-
 class SharedState<T extends Assignment> {
 	
 	private CSVAssignment assignmentCSV;

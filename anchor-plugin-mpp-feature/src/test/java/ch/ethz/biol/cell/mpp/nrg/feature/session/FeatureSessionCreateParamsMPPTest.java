@@ -28,6 +28,8 @@ package ch.ethz.biol.cell.mpp.nrg.feature.session;
 
 import static org.anchoranalysis.test.feature.plugins.ResultsVectorTestUtilities.*;
 
+import org.anchoranalysis.anchor.mpp.cfg.Cfg;
+import org.anchoranalysis.anchor.mpp.feature.session.FeatureSessionCreateParamsMPP;
 import org.anchoranalysis.bean.xml.RegisterBeanFactories;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
@@ -43,8 +45,6 @@ import org.anchoranalysis.test.feature.SimpleFeatureListFixture;
 import org.anchoranalysis.test.feature.plugins.NRGStackFixture;
 import org.junit.Before;
 import org.junit.Test;
-
-import ch.ethz.biol.cell.mpp.cfg.Cfg;
 
 public class FeatureSessionCreateParamsMPPTest {
 	

@@ -1,5 +1,9 @@
 package ch.ethz.biol.cell.mpp.nrg.feature.ind;
 
+import org.anchoranalysis.anchor.mpp.feature.bean.mark.PxlListOperationFromMark;
+import org.anchoranalysis.anchor.mpp.feature.bean.nrg.elem.NRGElemInd;
+import org.anchoranalysis.anchor.mpp.feature.nrg.elem.NRGElemIndCalcParams;
+
 /*
  * #%L
  * anchor-plugin-mpp-feature
@@ -32,10 +36,6 @@ import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.relation.RelationToValue;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.voxel.VoxelIntensityList;
-
-import ch.ethz.biol.cell.mpp.mark.pxllistoperation.PxlListOperationFromMark;
-import ch.ethz.biol.cell.mpp.nrg.NRGElemInd;
-import ch.ethz.biol.cell.mpp.nrg.NRGElemIndCalcParams;
 
 public class NumberPixels extends NRGElemInd {
 

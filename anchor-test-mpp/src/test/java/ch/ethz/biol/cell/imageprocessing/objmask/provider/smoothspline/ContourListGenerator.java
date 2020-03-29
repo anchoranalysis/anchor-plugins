@@ -30,7 +30,11 @@ package ch.ethz.biol.cell.imageprocessing.objmask.provider.smoothspline;
 import java.util.Iterator;
 import java.util.List;
 
+import org.anchoranalysis.anchor.mpp.cfg.Cfg;
+import org.anchoranalysis.anchor.mpp.cfg.ColoredCfg;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
+import org.anchoranalysis.anchor.mpp.mark.points.MarkPointList;
+import org.anchoranalysis.anchor.mpp.mark.points.MarkPointListFactory;
 import org.anchoranalysis.anchor.overlay.Overlay;
 import org.anchoranalysis.anchor.overlay.bean.objmask.writer.ObjMaskWriter;
 import org.anchoranalysis.core.color.ColorIndex;
@@ -49,12 +53,8 @@ import org.anchoranalysis.io.generator.IterableObjectGenerator;
 import org.anchoranalysis.io.generator.ObjectGenerator;
 import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
-
-import ch.ethz.biol.cell.imageprocessing.io.generator.raster.CfgGenerator;
-import ch.ethz.biol.cell.imageprocessing.io.generator.raster.ColoredCfgWithDisplayStack;
-import ch.ethz.biol.cell.mpp.cfg.Cfg;
-import ch.ethz.biol.cell.mpp.gui.videostats.internalframe.evaluator.EvaluatorUtilities;
-import ch.ethz.biol.cell.mpp.gui.videostats.internalframe.markredraw.ColoredCfg;
+import org.anchoranalysis.mpp.io.cfg.ColoredCfgWithDisplayStack;
+import org.anchoranalysis.mpp.io.cfg.generator.CfgGenerator;
 
 class ContourListGenerator extends RasterGenerator implements IterableObjectGenerator<List<Contour>, Stack> {
 
@@ -104,7 +104,7 @@ class ContourListGenerator extends RasterGenerator implements IterableObjectGene
 		for (Iterator<Contour> itr = contourList.iterator(); itr.hasNext();) {
 			Contour c = itr.next();
 			
-			Mark mark = EvaluatorUtilities.createMarkForContour(c, false);
+			Mark mark = createMarkForContour(c, false);
 			cfg.add(mark);
 		}
 		return cfg;
@@ -153,4 +153,7 @@ class ContourListGenerator extends RasterGenerator implements IterableObjectGene
 		return delegate.getGenerator();
 	}
 	
+	private static MarkPointList createMarkForContour(Contour c, boolean round ) {
+		return MarkPointListFactory.createMarkFromPoints3f( c.getPoints(), round);
+	}
 }

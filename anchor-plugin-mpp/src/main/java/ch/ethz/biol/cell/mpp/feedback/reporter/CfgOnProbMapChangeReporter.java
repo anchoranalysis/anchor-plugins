@@ -1,5 +1,8 @@
 package ch.ethz.biol.cell.mpp.feedback.reporter;
 
+import org.anchoranalysis.anchor.mpp.cfg.ColoredCfg;
+import org.anchoranalysis.anchor.mpp.feature.nrg.cfg.CfgNRGPixelized;
+import org.anchoranalysis.anchor.mpp.mark.IDGetterMarkID;
 import org.anchoranalysis.anchor.mpp.probmap.ProbMap;
 import org.anchoranalysis.anchor.overlay.id.IDGetterOverlayID;
 
@@ -49,17 +52,13 @@ import org.anchoranalysis.io.namestyle.IndexableOutputNameStyle;
 import org.anchoranalysis.io.namestyle.IntegerSuffixOutputNameStyle;
 import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
+import org.anchoranalysis.mpp.io.cfg.ColoredCfgWithDisplayStack;
+import org.anchoranalysis.mpp.io.cfg.generator.CfgGenerator;
+import org.anchoranalysis.mpp.sgmn.bean.optscheme.feedback.ReporterOptimizationStep;
+import org.anchoranalysis.mpp.sgmn.optscheme.feedback.OptimizationFeedbackEndParams;
+import org.anchoranalysis.mpp.sgmn.optscheme.feedback.OptimizationFeedbackInitParams;
+import org.anchoranalysis.mpp.sgmn.optscheme.feedback.ReporterException;
 import org.anchoranalysis.mpp.sgmn.optscheme.step.Reporting;
-
-import ch.ethz.biol.cell.imageprocessing.io.generator.raster.CfgGenerator;
-import ch.ethz.biol.cell.imageprocessing.io.generator.raster.ColoredCfgWithDisplayStack;
-import ch.ethz.biol.cell.imageprocessing.io.idgetter.IDGetterMarkID;
-import ch.ethz.biol.cell.mpp.feedback.OptimizationFeedbackEndParams;
-import ch.ethz.biol.cell.mpp.feedback.OptimizationFeedbackInitParams;
-import ch.ethz.biol.cell.mpp.feedback.ReporterOptimizationStep;
-import ch.ethz.biol.cell.mpp.feedback.ReporterException;
-import ch.ethz.biol.cell.mpp.gui.videostats.internalframe.markredraw.ColoredCfg;
-import ch.ethz.biol.cell.mpp.nrg.CfgNRGPixelized;
 
 
 public class CfgOnProbMapChangeReporter extends ReporterOptimizationStep<CfgNRGPixelized> {

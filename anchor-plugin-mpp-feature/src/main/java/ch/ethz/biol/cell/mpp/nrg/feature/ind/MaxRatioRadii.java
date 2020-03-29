@@ -1,5 +1,8 @@
 package ch.ethz.biol.cell.mpp.nrg.feature.ind;
 
+import org.anchoranalysis.anchor.mpp.feature.bean.nrg.elem.NRGElemInd;
+import org.anchoranalysis.anchor.mpp.feature.nrg.elem.NRGElemIndCalcParams;
+
 /*-
  * #%L
  * anchor-plugin-mpp-feature
@@ -27,9 +30,6 @@ package ch.ethz.biol.cell.mpp.nrg.feature.ind;
  */
 
 import org.anchoranalysis.anchor.mpp.mark.conic.MarkEllipse;
-
-import ch.ethz.biol.cell.mpp.nrg.NRGElemInd;
-import ch.ethz.biol.cell.mpp.nrg.NRGElemIndCalcParams;
 
 public class MaxRatioRadii extends NRGElemInd {
 

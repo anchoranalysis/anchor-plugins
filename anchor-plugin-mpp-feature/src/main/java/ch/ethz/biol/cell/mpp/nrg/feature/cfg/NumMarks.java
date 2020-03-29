@@ -1,5 +1,8 @@
 package ch.ethz.biol.cell.mpp.nrg.feature.cfg;
 
+import org.anchoranalysis.anchor.mpp.feature.bean.cfg.FeatureCfg;
+import org.anchoranalysis.anchor.mpp.feature.bean.cfg.FeatureCfgParams;
+
 /*-
  * #%L
  * anchor-plugin-mpp-feature

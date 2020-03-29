@@ -57,8 +57,6 @@ import org.anchoranalysis.plugin.annotation.comparison.AnnotationComparisonInput
 import org.anchoranalysis.plugin.annotation.comparison.IAddAnnotation;
 import org.anchoranalysis.plugin.annotation.comparison.ObjsToCompare;
 
-import ch.ethz.biol.cell.countchrom.experiment.SplitString;
-
 public class AnnotationComparisonTask<T extends Assignment> extends Task<AnnotationComparisonInput<ProvidesStackInput>,SharedState<T>> {
 
 	/**

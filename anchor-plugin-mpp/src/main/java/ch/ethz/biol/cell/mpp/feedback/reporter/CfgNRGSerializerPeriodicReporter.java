@@ -1,5 +1,8 @@
 package ch.ethz.biol.cell.mpp.feedback.reporter;
 
+import org.anchoranalysis.anchor.mpp.feature.nrg.cfg.CfgNRG;
+import org.anchoranalysis.anchor.mpp.feature.nrg.cfg.CfgNRGPixelized;
+
 /*
  * #%L
  * anchor-plugin-mpp
@@ -29,8 +32,6 @@ package ch.ethz.biol.cell.mpp.feedback.reporter;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.mpp.sgmn.optscheme.step.Reporting;
-import ch.ethz.biol.cell.mpp.nrg.CfgNRG;
-import ch.ethz.biol.cell.mpp.nrg.CfgNRGPixelized;
 
 public class CfgNRGSerializerPeriodicReporter extends ObjectSerializerPeriodicReporter<CfgNRG> {
 

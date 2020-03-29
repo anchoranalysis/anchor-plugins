@@ -1,5 +1,7 @@
 package ch.ethz.biol.cell.mpp.feedback.reporter;
 
+import org.anchoranalysis.anchor.mpp.feature.nrg.cfg.CfgNRGPixelized;
+
 /*
  * #%L
  * anchor-plugin-mpp
@@ -30,14 +32,12 @@ package ch.ethz.biol.cell.mpp.feedback.reporter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.io.generator.serialized.XStreamGenerator;
 import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
+import org.anchoranalysis.mpp.sgmn.bean.optscheme.feedback.ReporterOptimizationStep;
+import org.anchoranalysis.mpp.sgmn.optscheme.feedback.OptimizationFeedbackEndParams;
+import org.anchoranalysis.mpp.sgmn.optscheme.feedback.OptimizationFeedbackInitParams;
+import org.anchoranalysis.mpp.sgmn.optscheme.feedback.ReporterException;
 import org.anchoranalysis.mpp.sgmn.optscheme.step.Reporting;
 import org.apache.commons.lang.time.StopWatch;
-
-import ch.ethz.biol.cell.mpp.feedback.OptimizationFeedbackEndParams;
-import ch.ethz.biol.cell.mpp.feedback.OptimizationFeedbackInitParams;
-import ch.ethz.biol.cell.mpp.feedback.ReporterOptimizationStep;
-import ch.ethz.biol.cell.mpp.nrg.CfgNRGPixelized;
-import ch.ethz.biol.cell.mpp.feedback.ReporterException;
 
 public class MinimalExecutionTimeStatsReporter extends ReporterOptimizationStep<CfgNRGPixelized> {
 

@@ -29,12 +29,11 @@ package org.anchoranalysis.test.mpp;
 
 import java.nio.file.Path;
 
+import org.anchoranalysis.anchor.mpp.cfg.Cfg;
 import org.anchoranalysis.io.deserializer.DeserializationFailedException;
+import org.anchoranalysis.mpp.io.cfg.CfgDeserializer;
 import org.anchoranalysis.test.TestDataLoadException;
 import org.anchoranalysis.test.TestLoader;
-
-import ch.ethz.biol.cell.mpp.cfg.Cfg;
-import ch.ethz.biol.cell.mpp.io.CfgDeserializer;
 
 public class TestLoaderMPP {
 
