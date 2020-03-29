@@ -1,5 +1,8 @@
 package ch.ethz.biol.cell.mpp.nrg.feature.pair;
 
+import org.anchoranalysis.anchor.mpp.feature.bean.nrg.elem.NRGElemPair;
+import org.anchoranalysis.anchor.mpp.feature.nrg.elem.NRGElemPairCalcParams;
+
 /*
  * #%L
  * anchor-plugin-mpp-feature
@@ -31,9 +34,6 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.ImageDim;
-
-import ch.ethz.biol.cell.mpp.nrg.NRGElemPair;
-import ch.ethz.biol.cell.mpp.nrg.NRGElemPairCalcParams;
 
 // Measures the amount of bounding box overlap in the Z dimension
 //  Expresses it as a fraction of the minimum Z-extent

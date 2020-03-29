@@ -1,5 +1,6 @@
 package ch.ethz.biol.cell.mpp.nrg.cachedcalculation;
 
+import org.anchoranalysis.anchor.mpp.feature.nrg.elem.NRGElemPairCalcParams;
 import org.anchoranalysis.anchor.mpp.overlap.OverlapUtilities;
 import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
 
@@ -36,8 +37,6 @@ import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 import org.anchoranalysis.image.chnl.Chnl;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
-
-import ch.ethz.biol.cell.mpp.nrg.NRGElemPairCalcParams;
 
 public class OverlapCalculationMaskGlobal extends CachedCalculationCastParams<Double,NRGElemPairCalcParams> {
 

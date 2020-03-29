@@ -1,17 +1,10 @@
 package ch.ethz.biol.cell.mpp.mark.check;
 
-import org.anchoranalysis.anchor.mpp.bean.regionmap.RegionMap;
-import org.anchoranalysis.anchor.mpp.mark.Mark;
-import org.anchoranalysis.anchor.mpp.mark.conic.MarkEllipse;
-import org.anchoranalysis.core.index.GetOperationFailedException;
-import org.anchoranalysis.feature.bean.list.FeatureList;
-import org.anchoranalysis.feature.nrg.NRGStackWithParams;
-
-/*
+/*-
  * #%L
  * anchor-plugin-mpp
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -33,8 +26,14 @@ import org.anchoranalysis.feature.nrg.NRGStackWithParams;
  * #L%
  */
 
-
-import ch.ethz.biol.cell.core.CheckMark;
+import org.anchoranalysis.anchor.mpp.bean.regionmap.RegionMap;
+import org.anchoranalysis.anchor.mpp.feature.bean.mark.CheckMark;
+import org.anchoranalysis.anchor.mpp.feature.error.CheckException;
+import org.anchoranalysis.anchor.mpp.mark.Mark;
+import org.anchoranalysis.anchor.mpp.mark.conic.MarkEllipse;
+import org.anchoranalysis.core.index.GetOperationFailedException;
+import org.anchoranalysis.feature.bean.list.FeatureList;
+import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 
 public class EllipseBoundsCheck extends CheckMark {
 

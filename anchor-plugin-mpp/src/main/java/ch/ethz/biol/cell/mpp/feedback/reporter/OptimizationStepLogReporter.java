@@ -1,6 +1,13 @@
 package ch.ethz.biol.cell.mpp.feedback.reporter;
 
+import org.anchoranalysis.anchor.mpp.feature.nrg.cfg.CfgNRGPixelized;
 import org.anchoranalysis.core.log.LogReporter;
+import org.anchoranalysis.mpp.sgmn.bean.optscheme.feedback.ReporterAgg;
+import org.anchoranalysis.mpp.sgmn.optscheme.feedback.OptimizationFeedbackEndParams;
+import org.anchoranalysis.mpp.sgmn.optscheme.feedback.OptimizationFeedbackInitParams;
+import org.anchoranalysis.mpp.sgmn.optscheme.feedback.ReporterException;
+import org.anchoranalysis.mpp.sgmn.optscheme.feedback.aggregate.Aggregator;
+import org.anchoranalysis.mpp.sgmn.optscheme.feedback.aggregate.IAggregateReceiver;
 import org.anchoranalysis.mpp.sgmn.optscheme.step.Reporting;
 
 /*
@@ -31,14 +38,6 @@ import org.anchoranalysis.mpp.sgmn.optscheme.step.Reporting;
 
 
 import org.apache.commons.lang.time.StopWatch;
-
-import ch.ethz.biol.cell.mpp.feedback.Aggregator;
-import ch.ethz.biol.cell.mpp.feedback.IAggregateReceiver;
-import ch.ethz.biol.cell.mpp.feedback.OptimizationFeedbackEndParams;
-import ch.ethz.biol.cell.mpp.feedback.OptimizationFeedbackInitParams;
-import ch.ethz.biol.cell.mpp.feedback.ReporterAgg;
-import ch.ethz.biol.cell.mpp.feedback.ReporterException;
-import ch.ethz.biol.cell.mpp.nrg.CfgNRGPixelized;
 
 public final class OptimizationStepLogReporter extends ReporterAgg<CfgNRGPixelized> implements IAggregateReceiver<CfgNRGPixelized> {
 

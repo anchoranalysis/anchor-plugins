@@ -28,6 +28,7 @@ package ch.ethz.biol.cell.mpp.mark.distance;
 
 import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.anchor.mpp.mark.MarkAbstractPosition;
+import org.anchoranalysis.anchor.mpp.mark.MarkDistance;
 import org.anchoranalysis.anchor.mpp.mark.UnsupportedMarkTypeException;
 
 public class MarkDistanceAbstractPosition extends MarkDistance {

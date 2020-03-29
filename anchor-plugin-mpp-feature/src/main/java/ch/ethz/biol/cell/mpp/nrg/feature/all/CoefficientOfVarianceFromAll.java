@@ -1,5 +1,8 @@
 package ch.ethz.biol.cell.mpp.nrg.feature.all;
 
+import org.anchoranalysis.anchor.mpp.feature.bean.nrg.elem.NRGElemAll;
+import org.anchoranalysis.anchor.mpp.feature.nrg.elem.NRGElemAllCalcParams;
+import org.anchoranalysis.anchor.mpp.feature.nrg.elem.NRGElemIndCalcParams;
 import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
 
 /*
@@ -32,10 +35,6 @@ import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-
-import ch.ethz.biol.cell.mpp.nrg.NRGElemAll;
-import ch.ethz.biol.cell.mpp.nrg.NRGElemAllCalcParams;
-import ch.ethz.biol.cell.mpp.nrg.NRGElemIndCalcParams;
 
 public class CoefficientOfVarianceFromAll extends NRGElemAll {
 

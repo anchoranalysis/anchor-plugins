@@ -1,5 +1,7 @@
 package ch.ethz.biol.cell.mpp.nrg.feature.ind;
 
+import org.anchoranalysis.anchor.mpp.feature.bean.nrg.elem.NRGElemInd;
+
 /*
  * #%L
  * anchor-plugin-mpp-feature
@@ -33,8 +35,6 @@ import org.anchoranalysis.core.unit.SpatialConversionUtilities;
 import org.anchoranalysis.image.convert.ImageUnitConverter;
 import org.anchoranalysis.image.extent.ImageRes;
 import org.anchoranalysis.image.orientation.DirectionVector;
-
-import ch.ethz.biol.cell.mpp.nrg.NRGElemInd;
 
 public abstract class NRGElemIndPhysical extends NRGElemInd {
 

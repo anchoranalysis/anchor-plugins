@@ -1,6 +1,8 @@
 package ch.ethz.biol.cell.mpp.nrg.feature.ind;
 
 import org.anchoranalysis.anchor.mpp.bean.regionmap.RegionMap;
+import org.anchoranalysis.anchor.mpp.feature.nrg.elem.NRGElemIndCalcParams;
+import org.anchoranalysis.anchor.mpp.feature.nrg.elem.NRGElemIndCalcParamsDescriptor;
 import org.anchoranalysis.anchor.mpp.regionmap.RegionMapSingleton;
 
 /*
@@ -38,9 +40,6 @@ import org.anchoranalysis.feature.params.FeatureParamsDescriptor;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.feature.objmask.FeatureObjMaskParams;
 import org.anchoranalysis.image.objmask.properties.ObjMaskWithProperties;
-
-import ch.ethz.biol.cell.mpp.nrg.NRGElemIndCalcParams;
-import ch.ethz.biol.cell.mpp.nrg.NRGElemIndCalcParamsDescriptor;
 
 public class AsObjMask extends FeatureSingleElem {
 

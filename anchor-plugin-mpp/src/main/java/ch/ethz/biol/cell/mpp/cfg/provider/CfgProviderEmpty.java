@@ -1,5 +1,8 @@
 package ch.ethz.biol.cell.mpp.cfg.provider;
 
+import org.anchoranalysis.anchor.mpp.bean.cfg.CfgProvider;
+import org.anchoranalysis.anchor.mpp.cfg.Cfg;
+
 /*-
  * #%L
  * anchor-plugin-mpp
@@ -27,8 +30,6 @@ package ch.ethz.biol.cell.mpp.cfg.provider;
  */
 
 import org.anchoranalysis.core.error.CreateException;
-
-import ch.ethz.biol.cell.mpp.cfg.Cfg;
 
 public class CfgProviderEmpty extends CfgProvider {
 

@@ -1,5 +1,9 @@
 package ch.ethz.biol.cell.mpp.nrg.feature.all;
 
+import org.anchoranalysis.anchor.mpp.feature.bean.mark.FeatureMarkParams;
+import org.anchoranalysis.anchor.mpp.feature.mark.MemoMarks;
+import org.anchoranalysis.anchor.mpp.feature.nrg.elem.NRGElemAllCalcParams;
+
 /*-
  * #%L
  * anchor-plugin-mpp-feature
@@ -29,10 +33,6 @@ package ch.ethz.biol.cell.mpp.nrg.feature.all;
 import org.anchoranalysis.feature.bean.operator.FeatureSingleElem;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
-
-import ch.ethz.biol.cell.mpp.nrg.NRGElemAllCalcParams;
-import ch.ethz.biol.cell.mpp.nrg.MemoMarks;
-import ch.ethz.biol.cell.mpp.nrg.feature.mark.FeatureMarkParams;
 
 public class AsSingleMark extends FeatureSingleElem {
 

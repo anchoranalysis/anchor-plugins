@@ -1,8 +1,8 @@
 package ch.ethz.biol.cell.mpp.bound;
 
-import org.anchoranalysis.anchor.mpp.bean.bounds.BoundCalculator;
-import org.anchoranalysis.anchor.mpp.bounds.BidirectionalBound;
-import org.anchoranalysis.anchor.mpp.bounds.RslvdBound;
+import org.anchoranalysis.anchor.mpp.bean.bound.BoundCalculator;
+import org.anchoranalysis.anchor.mpp.bean.bound.RslvdBound;
+import org.anchoranalysis.anchor.mpp.bound.BidirectionalBound;
 import org.anchoranalysis.anchor.mpp.proposer.error.ErrorNode;
 
 /*
