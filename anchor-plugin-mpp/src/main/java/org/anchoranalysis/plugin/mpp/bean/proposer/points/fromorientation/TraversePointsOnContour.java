@@ -83,8 +83,6 @@ public class TraversePointsOnContour extends PointsFromOrientationProposer {
 		
 		this.do3D = do3D;
 		
-		//ArrayList<Point3i> listOut = new ArrayList<>();
-		
 		lastPntsForward.clear();
 		lastPntsReverse.clear();
 		
