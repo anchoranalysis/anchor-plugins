@@ -48,8 +48,8 @@ import org.anchoranalysis.image.experiment.identifiers.ImgStackIdentifiers;
 import org.anchoranalysis.image.experiment.seed.SeedFinderException;
 import org.anchoranalysis.image.io.bean.seed.SeedCollectionOutputter;
 import org.anchoranalysis.image.io.generator.raster.ChnlGenerator;
-import org.anchoranalysis.image.io.generator.raster.objmask.ObjMaskChnlGenerator;
-import org.anchoranalysis.image.io.generator.raster.objmask.ObjMaskGenerator;
+import org.anchoranalysis.image.io.generator.raster.obj.ChnlMaskedWithObjGenerator;
+import org.anchoranalysis.image.io.generator.raster.obj.ObjAsBinaryChnlGenerator;
 import org.anchoranalysis.image.objmask.ObjMaskCollection;
 import org.anchoranalysis.image.seed.SeedCollection;
 import org.anchoranalysis.image.stack.NamedImgStackCollection;
@@ -176,13 +176,13 @@ public class SeedFinderTask<S> extends Task<MultiInput,S> {
 			outputter.writeAsSubfolder(
 				"maskChnl",
 				writer,
-				(c) -> new ObjMaskChnlGenerator(c)
+				(c) -> new ChnlMaskedWithObjGenerator(c)
 			);
 			
 			outputter.writeAsSubfolder(
 				"mask",
 				writer,
-				(c) -> new ObjMaskGenerator(255, c.getDimensions().getRes() )
+				(c) -> new ObjAsBinaryChnlGenerator(255, c.getDimensions().getRes() )
 			);
 			
 			outputter.writeAsImage( "outline", writer, new RGBOutlineWriter() );

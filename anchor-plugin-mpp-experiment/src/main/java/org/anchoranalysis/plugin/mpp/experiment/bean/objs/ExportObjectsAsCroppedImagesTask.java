@@ -64,8 +64,8 @@ import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.init.ImageInitParams;
 import org.anchoranalysis.image.io.generator.raster.bbox.ExtractedBBoxGenerator;
 import org.anchoranalysis.image.io.generator.raster.bbox.ExtractedBBoxOnRGBObjMaskGenerator;
-import org.anchoranalysis.image.io.generator.raster.objmask.ObjMaskWithBoundingBoxGenerator;
-import org.anchoranalysis.image.io.generator.raster.objmask.rgb.RGBObjMaskGenerator;
+import org.anchoranalysis.image.io.generator.raster.obj.ObjWithBoundingBoxGenerator;
+import org.anchoranalysis.image.io.generator.raster.obj.rgb.RGBObjMaskGenerator;
 import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.image.objmask.ObjMaskCollection;
 import org.anchoranalysis.image.stack.NamedImgStackCollection;
@@ -384,7 +384,7 @@ public class ExportObjectsAsCroppedImagesTask extends ExportObjectsBase<MultiInp
 		
 		IterableCombinedListGenerator<ObjMask> out = new IterableCombinedListGenerator<>();
 
-		out.add( "mask", new ObjMaskWithBoundingBoxGenerator(dim.getRes()) );
+		out.add( "mask", new ObjWithBoundingBoxGenerator(dim.getRes()) );
 		
 		try {
 			for( String key : stackCollection.keys() ) {
