@@ -38,6 +38,8 @@ import org.anchoranalysis.image.chnl.factory.ChnlFactory;
 import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
 
+import ch.ethz.biol.cell.imageprocessing.dim.provider.GuessDimFromInputImage;
+
 public class BinaryImgChnlProviderEmpty extends BinaryImgChnlProvider {
 
 	/**
@@ -47,7 +49,7 @@ public class BinaryImgChnlProviderEmpty extends BinaryImgChnlProvider {
 
 	// START BEAN PROPERTIES
 	@BeanField
-	private ImageDimProvider dimProvider;
+	private ImageDimProvider dimProvider = new GuessDimFromInputImage();
 	
 	/**
 	 * If true binary values are set high when created
