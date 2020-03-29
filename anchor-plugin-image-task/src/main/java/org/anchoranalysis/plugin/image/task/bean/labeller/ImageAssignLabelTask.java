@@ -1,4 +1,4 @@
-package org.anchoranalysis.plugin.image.task.bean;
+package org.anchoranalysis.plugin.image.task.bean.labeller;
 
 
 
@@ -49,7 +49,6 @@ import org.anchoranalysis.image.io.input.ProvidesStackInput;
 import org.anchoranalysis.image.io.input.StackInputInitParamsCreator;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
-import org.anchoranalysis.plugin.image.task.bean.labeller.ImageLabeller;
 import org.anchoranalysis.plugin.image.task.sharedstate.SharedStateFilteredImageOutput;
 
 /**
