@@ -127,7 +127,8 @@ class EastBoundingBoxExtractor {
 					BoundingBox bbox = BoundingBoxFromArrays.boxFor(
 						geometryArrs,
 						index,
-						offsetScale.scale(pnt)
+						offsetScale.scale(pnt),
+						extnt
 					);
 					
 					list.add(
