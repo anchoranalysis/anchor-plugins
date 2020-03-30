@@ -30,6 +30,8 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.anchoranalysis.anchor.mpp.mark.GlobalRegionIdentifiers;
+import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.core.geometry.Point2i;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.Extent;
@@ -131,12 +133,13 @@ class EastBoundingBoxExtractor {
 				float confidence = scoresData[index]; 
 				if (confidence>=minConfidence) {
 					
-					BoundingBox bbox = BoundingBoxFromArrays.boxFor(
+					Mark mark = RotatableBoundingBoxFromArrays.markFor(
 						geometryArrs,
 						index,
-						offsetScale.scale(pnt),
-						bndScene
+						offsetScale.scale(pnt)
 					);
+					
+					BoundingBox bbox = mark.bbox(bndScene, GlobalRegionIdentifiers.SUBMARK_INSIDE);
 					
 					list.add(
 						new BoundingBoxWithConfidence(bbox, confidence)
