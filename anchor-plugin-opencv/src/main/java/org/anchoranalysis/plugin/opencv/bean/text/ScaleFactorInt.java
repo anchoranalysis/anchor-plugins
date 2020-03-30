@@ -1,5 +1,8 @@
 package org.anchoranalysis.plugin.opencv.bean.text;
 
+import org.anchoranalysis.core.geometry.Point2i;
+import org.anchoranalysis.image.extent.Extent;
+
 /*-
  * #%L
  * anchor-plugin-opencv
@@ -37,12 +40,19 @@ class ScaleFactorInt {
 		this.y = y;
 	}
 	
-	public int scaledX( int val ) {
-		return val*x;
+	public Point2i scale( Point2i pnt ) {
+		return new Point2i(
+			scaledX( pnt.getX() ),
+			scaledY( pnt.getY() )
+		);
 	}
-	
-	public int scaledY( int val ) {
-		return val*y;
+
+	public Extent scale( Extent extent ) {
+		return new Extent(
+			scaledX(extent.getX()),
+			scaledY(extent.getY()),
+			extent.getZ()
+		);
 	}
 
 	public int getX() {
@@ -51,5 +61,13 @@ class ScaleFactorInt {
 
 	public int getY() {
 		return y;
+	}
+	
+	private int scaledX( int val ) {
+		return val*x;
+	}
+	
+	private int scaledY( int val ) {
+		return val*y;
 	}
 }

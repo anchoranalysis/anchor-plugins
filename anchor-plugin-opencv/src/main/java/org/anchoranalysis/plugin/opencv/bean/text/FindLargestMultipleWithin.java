@@ -75,14 +75,7 @@ class FindLargestMultipleWithin {
 			minFactor
 		);
 
-		// The scaled extent
-		Extent extentScaled = new Extent(
-			sfInt.scaledX(small.getX()),
-			sfInt.scaledY(small.getY()),
-			1
-		);
-		
-		return extentScaled;
+		return sfInt.scale(small);
 	}
 	
 	/** The minimum scale factor from X and Y resolution, clipped at the a maximum of maxScaleFactor */
