@@ -27,7 +27,7 @@ package ch.ethz.biol.cell.mpp.nrg.feature.stack;
  */
 
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.image.feature.bean.stack.FeatureStack;
+import org.anchoranalysis.image.feature.bean.FeatureStack;
 import org.anchoranalysis.image.feature.stack.FeatureStackParams;
 
 public class SceneWidth extends FeatureStack {
