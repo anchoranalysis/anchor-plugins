@@ -31,8 +31,6 @@ import org.anchoranalysis.core.geometry.PointConverter;
  * #L%
  */
 
-import org.anchoranalysis.image.extent.BoundingBox;
-import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.orientation.Orientation2D;
 
 /**
@@ -41,7 +39,7 @@ import org.anchoranalysis.image.orientation.Orientation2D;
  * @author owen
  *
  */
-class BoundingBoxFromArrays {
+class RotatableBoundingBoxFromArrays {
 
 	/**
 	 * Builds a bounding-box from the arrays returned from the EAST algorithm
@@ -53,9 +51,9 @@ class BoundingBoxFromArrays {
 	 * @param index the current index to look in each of the 5 arrays
 	 * @param offset an offset in the scene to add to each generated bounding-box
 	 * @param bndScene the dimensions of the image to which the bounding-box belongs
-	 * @return a bounding-box
+	 * @return a mark encapsulating a rotatable bounding-box
 	 */
-	public static BoundingBox boxFor( float[][] geometryArrs, int index, Point2i offset, ImageDim bndScene) {
+	public static MarkRotatableBoundingBox markFor( float[][] geometryArrs, int index, Point2i offset) {
 		
 		Point2f startUnrotated = new Point2f(
 			geometryArrs[3][index],  // distance to left-boundary of box (x-min)
@@ -73,16 +71,15 @@ class BoundingBoxFromArrays {
 		// Clockwise angle to rotate around the offset
 		float angle = geometryArrs[4][index]; 
 		
-		return boxFor(
+		return markFor(
 			startUnrotated,
 			endUnrotated,
 			angle,
-			offset,
-			bndScene
+			offset
 		);
 	}
 	
-	private static BoundingBox boxFor( Point2f startUnrotated, Point2f endUnrotated, float angle, Point2i offset, ImageDim bndScene) {
+	private static MarkRotatableBoundingBox markFor( Point2f startUnrotated, Point2f endUnrotated, float angle, Point2i offset) {
 		
 		MarkRotatableBoundingBox mark = new MarkRotatableBoundingBox();
 		mark.setPos( PointConverter.doubleFromInt(offset) );
@@ -91,6 +88,6 @@ class BoundingBoxFromArrays {
 			PointConverter.doubleFromFloat(endUnrotated),
 			new Orientation2D(-1 * angle)		// Multiply by -1 to make it clockwise rotation
 		);
-		return mark.bboxAllRegions(bndScene);
+		return mark;
 	}
 }
