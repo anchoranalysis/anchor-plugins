@@ -1,9 +1,9 @@
 package org.anchoranalysis.plugin.opencv.bean.text;
 
-import org.anchoranalysis.core.geometry.Point2d;
+import org.anchoranalysis.anchor.mpp.mark.MarkRotatableBoundingBox;
 import org.anchoranalysis.core.geometry.Point2f;
 import org.anchoranalysis.core.geometry.Point2i;
-import org.anchoranalysis.core.geometry.Point3d;
+import org.anchoranalysis.core.geometry.PointConverter;
 
 /*-
  * #%L
@@ -32,11 +32,11 @@ import org.anchoranalysis.core.geometry.Point3d;
  */
 
 import org.anchoranalysis.image.extent.BoundingBox;
-import org.anchoranalysis.image.extent.Extent;
-import org.anchoranalysis.image.points.BoundingBoxFromPoints;
+import org.anchoranalysis.image.extent.ImageDim;
+import org.anchoranalysis.image.orientation.Orientation2D;
 
 /**
- * Extracts a bounding box from arrays returned by the EAST deep learning model.
+ * Extracts a bounding box from arrays returned by the EAST deep-CNN model.
  * 
  * @author owen
  *
@@ -52,16 +52,17 @@ class BoundingBoxFromArrays {
 	 * @param geometryArrs an array of 5 arrays
 	 * @param index the current index to look in each of the 5 arrays
 	 * @param offset an offset in the scene to add to each generated bounding-box
+	 * @param bndScene the dimensions of the image to which the bounding-box belongs
 	 * @return a bounding-box
 	 */
-	public static BoundingBox boxFor( float[][] geometryArrs, int index, Point2i offset, Extent extnt) {
+	public static BoundingBox boxFor( float[][] geometryArrs, int index, Point2i offset, ImageDim bndScene) {
 		
 		Point2f startUnrotated = new Point2f(
 			geometryArrs[3][index],  // distance to left-boundary of box (x-min)
 			geometryArrs[0][index] 	 // distance to top-boundary of box (y-min)
 		);
 		
-		// To bring to the same relative-direction as endRotated
+		// To bring to the same relative-direction as endUnrotated
 		startUnrotated.scale(-1);
 		
 		Point2f endUnrotated = new Point2f(
@@ -76,55 +77,20 @@ class BoundingBoxFromArrays {
 			startUnrotated,
 			endUnrotated,
 			angle,
-			offset
+			offset,
+			bndScene
 		);
 	}
 	
-	private static BoundingBox boxFor( Point2f startUnrotated, Point2f endUnrotated, float angle, Point2i offset) {
+	private static BoundingBox boxFor( Point2f startUnrotated, Point2f endUnrotated, float angle, Point2i offset, ImageDim bndScene) {
 		
-		Point2d startRotated = rotateClockwiseWithOffset(startUnrotated, angle, offset);
-		
-		Point2d endRotated = rotateClockwiseWithOffset(endUnrotated, angle, offset);
-		
-		return BoundingBoxFromPoints.forTwoPoints(
-			convert3D( startRotated ),				
-			convert3D( endRotated )
+		MarkRotatableBoundingBox mark = new MarkRotatableBoundingBox();
+		mark.setPos( PointConverter.doubleFromInt(offset) );
+		mark.update(
+			PointConverter.doubleFromFloat(startUnrotated),
+			PointConverter.doubleFromFloat(endUnrotated),
+			new Orientation2D(-1 * angle)		// Multiply by -1 to make it clockwise rotation
 		);
-	}
-	
-	private static Point3d convert3D( Point2d pnt ) {
-		return new Point3d(pnt.getX(), pnt.getY(), 0);
-	}
-	
-	/**
-	 * Performs a clockwise rotation of the points about the origin, and then adds an offset
-	 * 
-	 * @param pnt points centered around the origin
-	 * @param angle angle in radians to rotate by
-	 * @param offsetToAdd point to add to the result of the rotation
-	 * @return the rotated point with an offset
-	 */
-	private static Point2d rotateClockwiseWithOffset( Point2f pnt, float angle, Point2i offsetToAdd ) {
-		Point2d rotated = rotateClockwise(pnt, angle);
-		rotated.add(offsetToAdd);
-		return rotated;
-	}
-		
-	/**
-	 * Rotates points clockwise around the origin
-	 * 
-	 * @param pnt points centered-about the origin
-	 * @param angle angle in radians to rotate by
-	 * @return the rotated points
-	 */
-	private static Point2d rotateClockwise( Point2f pnt, float angle ) {
-		
-		double cos = Math.cos(angle);
-		double sin = Math.sin(angle);
-		
-		double xRot = (sin * pnt.getY()) + (cos * pnt.getX());
-		double yRot = (cos * pnt.getY()) - (sin * pnt.getX());
-		
-		return new Point2d(xRot, yRot);
+		return mark.bboxAllRegions(bndScene);
 	}
 }

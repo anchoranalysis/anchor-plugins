@@ -113,7 +113,8 @@ public class ObjMaskProviderExtractText extends ObjMaskProvider {
 		List<BoundingBoxWithConfidence> listBoxes = EastBoundingBoxExtractor.extractBoundingBoxes(
 			pair.getFirst(),
 			minConfidence,
-			pathToEastModel()
+			pathToEastModel(),
+			stack.getDimensions().getRes()
 		);
 		
 		// Scale each bounding box back to the original-size, and convert into an object-mask
