@@ -1,5 +1,9 @@
 package org.anchoranalysis.plugin.opencv.bean.text;
 
+import org.anchoranalysis.core.geometry.Point2d;
+import org.anchoranalysis.core.geometry.Point2f;
+import org.anchoranalysis.core.geometry.Point2i;
+
 /*-
  * #%L
  * anchor-plugin-opencv
@@ -27,6 +31,7 @@ package org.anchoranalysis.plugin.opencv.bean.text;
  */
 
 import org.anchoranalysis.core.geometry.Point3i;
+import org.anchoranalysis.core.geometry.PointConverter;
 import org.anchoranalysis.image.extent.BoundingBox;
 
 /**
@@ -37,35 +42,43 @@ import org.anchoranalysis.image.extent.BoundingBox;
  */
 class BoundingBoxFromArrays {
 
-	public static BoundingBox boxFor( float[][] geometryArrs, int index, int offsetX, int offsetY) {
+	public static BoundingBox boxFor( float[][] geometryArrs, int index, Point2i offset) {
+		
+		Point2f endUnrotated = new Point2f(
+			geometryArrs[1][index],
+			geometryArrs[2][index]
+		);
+		
+		// Clockwise angle
+		float angle = geometryArrs[4][index]; 
+		
 		return boxFor(
 			geometryArrs[0][index],
-			geometryArrs[1][index],
-			geometryArrs[2][index],
+			endUnrotated,
 			geometryArrs[3][index],
-			geometryArrs[4][index],
-			offsetX,
-			offsetY
+			angle,
+			offset
 		);
 	}
 	
-	private static BoundingBox boxFor( float p0, float p1, float p2, float p3, float angle, int offsetX, int offsetY) {
-		double cos = Math.cos(angle);
-		double sin = Math.sin(angle);
+	private static BoundingBox boxFor( float p0, Point2f endUnrotated, float p3, float angle, Point2i offset) {
 		
 		// Width and height of bounding box
-		float height = p0 + p2;
-		float width = p1 + p3;
+		float height = p0 + endUnrotated.getY();
+		float width = endUnrotated.getX() + p3;
 		
-		// Starting and ending coordinates
-		double endX = offsetX + (cos * p1) + (sin * p2);
-		double endY = offsetY - (sin * p1) + (cos * p2);
+		Point2d endRotated = rotateClockwiseAboutAngle(endUnrotated, angle);
+		endRotated.add(offset);
 		
-		return boxFor( (int) endX, (int) endY, (int) width, (int) height);
+		return boxFor(
+			PointConverter.intFromDouble(endRotated),
+			(int) width,
+			(int) height
+		);
 	}
 		
 	/** Create bounding box from the end-crnr and a width and height */
-	private static BoundingBox boxFor( int endX, int endY, int width, int height) {
+	private static BoundingBox boxFor( Point2i end, int width, int height) {
 
 		// Force some width if 0
 		if (width==0) {
@@ -77,15 +90,26 @@ class BoundingBoxFromArrays {
 			height=1;
 		}
 		
-		int startX = endX - width - 1;
-		int startY = endY - height - 1;
+		int startX = end.getX() - width;
+		int startY = end.getY() - height;
 		
 		assert( startX>=0 );
 		assert( startY>=0 );
 		
 		return new BoundingBox(
 			new Point3i(startX, startY, 0),
-			new Point3i(endX, endY, 0)
+			new Point3i(end.getX(), end.getY(), 0)
 		);
+	}
+	
+	private static Point2d rotateClockwiseAboutAngle( Point2f pnt, float angle ) {
+		
+		double cos = Math.cos(angle);
+		double sin = Math.sin(angle);
+		
+		double xRot = + (cos * pnt.getX()) + (sin * pnt.getY());
+		double yRot = - (sin * pnt.getX()) + (cos * pnt.getY());
+		
+		return new Point2d(xRot, yRot);
 	}
 }

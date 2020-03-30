@@ -30,6 +30,7 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.anchoranalysis.core.geometry.Point2i;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.Extent;
 import org.apache.commons.math3.util.Pair;
@@ -115,16 +116,19 @@ class EastBoundingBoxExtractor {
 		float[][] geometryArrs = splitGeometryIntoFiveArrays(geometry, rowsByCols);
 		
 		int index = 0;
-		for (int y=0; y<extnt.getY(); y++) {
-			for (int x=0; x<extnt.getX(); x++) {
+		
+		Point2i pnt = new Point2i(0,0);
+		for (pnt.setY(0); pnt.getY()<extnt.getY(); pnt.incrY()) {
+			for (pnt.setX(0); pnt.getX()<extnt.getX(); pnt.incrX()) {
 				
 				float confidence = scoresData[index]; 
 				if (confidence>=minConfidence) {
 					
-					int offsetX = offsetScale.scaledX(x);
-					int offsetY = offsetScale.scaledY(y);
-					
-					BoundingBox bbox = BoundingBoxFromArrays.boxFor(geometryArrs, index, offsetX, offsetY);
+					BoundingBox bbox = BoundingBoxFromArrays.boxFor(
+						geometryArrs,
+						index,
+						offsetScale.scale(pnt)
+					);
 					
 					list.add(
 						new BoundingBoxWithConfidence(bbox, confidence)
@@ -137,7 +141,7 @@ class EastBoundingBoxExtractor {
 		
 		return list;		
 	}
-
+	
 	
 	/**
 	 * Reshapes the geometry matrix from 4D to 2D
