@@ -202,7 +202,7 @@ public class XYOrientationExtendToZ extends PointsProposer {
 	
 	public static List<Point3i> extendedPoints( List<Point3i> pntsAlongContour, Point3d pntRoot, PointListForConvex pl, int maxZDist, int skipZDist, BinaryChnl chnl, BinaryChnl chnlFilled, ImageDim sceneDim ) throws OperationFailedException, CreateException {
 		
-		BoundingBox bbox = BoundingBoxFromPoints.create(pntsAlongContour);
+		BoundingBox bbox = BoundingBoxFromPoints.forList(pntsAlongContour);
 
 		int zLow = Math.max(0, bbox.getCrnrMin().getZ()-maxZDist );
 		int zHigh = Math.min(sceneDim.getZ(), bbox.getCrnrMin().getZ()+maxZDist );

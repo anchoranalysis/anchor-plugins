@@ -3,6 +3,7 @@ package org.anchoranalysis.plugin.opencv.bean.text;
 import org.anchoranalysis.core.geometry.Point2d;
 import org.anchoranalysis.core.geometry.Point2f;
 import org.anchoranalysis.core.geometry.Point2i;
+import org.anchoranalysis.core.geometry.Point3d;
 
 /*-
  * #%L
@@ -30,12 +31,12 @@ import org.anchoranalysis.core.geometry.Point2i;
  * #L%
  */
 
-import org.anchoranalysis.core.geometry.Point3i;
-import org.anchoranalysis.core.geometry.PointConverter;
 import org.anchoranalysis.image.extent.BoundingBox;
+import org.anchoranalysis.image.extent.Extent;
+import org.anchoranalysis.image.points.BoundingBoxFromPoints;
 
 /**
- * Extracts a bounding box from arrays with different co-oridinates
+ * Extracts a bounding box from arrays returned by the EAST deep learning model.
  * 
  * @author owen
  *
@@ -53,19 +54,22 @@ class BoundingBoxFromArrays {
 	 * @param offset an offset in the scene to add to each generated bounding-box
 	 * @return a bounding-box
 	 */
-	public static BoundingBox boxFor( float[][] geometryArrs, int index, Point2i offset) {
+	public static BoundingBox boxFor( float[][] geometryArrs, int index, Point2i offset, Extent extnt) {
 		
 		Point2f startUnrotated = new Point2f(
-			geometryArrs[3][index],  // left-boundary-rectangle (x-min)
-			geometryArrs[0][index] 	 // top-boundary-rectangle (y-min)
+			geometryArrs[3][index],  // distance to left-boundary of box (x-min)
+			geometryArrs[0][index] 	 // distance to top-boundary of box (y-min)
 		);
+		
+		// To bring to the same relative-direction as endRotated
+		startUnrotated.scale(-1);
 		
 		Point2f endUnrotated = new Point2f(
-			geometryArrs[1][index], // right-boundary-rectangle (x-max)
-			geometryArrs[2][index]  // bottom-boundary-rectangle (y-max)
+			geometryArrs[1][index],  // distance to right-boundary of box (x-max)
+			geometryArrs[2][index]   // distance to bottom-boundary of box (y-max)
 		);
 		
-		// Clockwise angle
+		// Clockwise angle to rotate around the offset
 		float angle = geometryArrs[4][index]; 
 		
 		return boxFor(
@@ -78,52 +82,48 @@ class BoundingBoxFromArrays {
 	
 	private static BoundingBox boxFor( Point2f startUnrotated, Point2f endUnrotated, float angle, Point2i offset) {
 		
-		// Width and height of bounding box
-		float height = startUnrotated.getY() + endUnrotated.getY();
-		float width = endUnrotated.getX() + startUnrotated.getX();
+		Point2d startRotated = rotateClockwiseWithOffset(startUnrotated, angle, offset);
 		
-		Point2d endRotated = rotateClockwiseAboutAngle(endUnrotated, angle);
-		endRotated.add(offset);
+		Point2d endRotated = rotateClockwiseWithOffset(endUnrotated, angle, offset);
 		
-		return boxFor(
-			PointConverter.intFromDouble(endRotated),
-			(int) width,
-			(int) height
-		);
-	}
-		
-	/** Create bounding box from the end-crnr and a width and height */
-	private static BoundingBox boxFor( Point2i end, int width, int height) {
-
-		// Force some width if 0
-		if (width==0) {
-			width=1;
-		}
-		
-		// Force some height if 0
-		if (height==0) {
-			height=1;
-		}
-		
-		int startX = end.getX() - width;
-		int startY = end.getY() - height;
-		
-		assert( startX>=0 );
-		assert( startY>=0 );
-		
-		return new BoundingBox(
-			new Point3i(startX, startY, 0),
-			new Point3i(end.getX(), end.getY(), 0)
+		return BoundingBoxFromPoints.forTwoPoints(
+			convert3D( startRotated ),				
+			convert3D( endRotated )
 		);
 	}
 	
-	private static Point2d rotateClockwiseAboutAngle( Point2f pnt, float angle ) {
+	private static Point3d convert3D( Point2d pnt ) {
+		return new Point3d(pnt.getX(), pnt.getY(), 0);
+	}
+	
+	/**
+	 * Performs a clockwise rotation of the points about the origin, and then adds an offset
+	 * 
+	 * @param pnt points centered around the origin
+	 * @param angle angle in radians to rotate by
+	 * @param offsetToAdd point to add to the result of the rotation
+	 * @return the rotated point with an offset
+	 */
+	private static Point2d rotateClockwiseWithOffset( Point2f pnt, float angle, Point2i offsetToAdd ) {
+		Point2d rotated = rotateClockwise(pnt, angle);
+		rotated.add(offsetToAdd);
+		return rotated;
+	}
+		
+	/**
+	 * Rotates points clockwise around the origin
+	 * 
+	 * @param pnt points centered-about the origin
+	 * @param angle angle in radians to rotate by
+	 * @return the rotated points
+	 */
+	private static Point2d rotateClockwise( Point2f pnt, float angle ) {
 		
 		double cos = Math.cos(angle);
 		double sin = Math.sin(angle);
 		
-		double xRot = + (cos * pnt.getX()) + (sin * pnt.getY());
-		double yRot = - (sin * pnt.getX()) + (cos * pnt.getY());
+		double xRot = (sin * pnt.getY()) + (cos * pnt.getX());
+		double yRot = (cos * pnt.getY()) - (sin * pnt.getX());
 		
 		return new Point2d(xRot, yRot);
 	}

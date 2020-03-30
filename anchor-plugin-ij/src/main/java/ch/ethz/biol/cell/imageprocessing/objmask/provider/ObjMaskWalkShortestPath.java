@@ -80,7 +80,7 @@ class ObjMaskWalkShortestPath {
 				
 		checkCoplanar( pnts );
 		
-		BoundingBox bbox = BoundingBoxFromPoints.create(pnts);
+		BoundingBox bbox = BoundingBoxFromPoints.forList(pnts);
 		
 		ObjMask om = new ObjMask(bbox);
 		
