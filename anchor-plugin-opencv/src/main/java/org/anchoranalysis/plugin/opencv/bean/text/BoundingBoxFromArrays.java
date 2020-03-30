@@ -42,30 +42,45 @@ import org.anchoranalysis.image.extent.BoundingBox;
  */
 class BoundingBoxFromArrays {
 
+	/**
+	 * Builds a bounding-box from the arrays returned from the EAST algorithm
+	 * 
+	 * <p>The bounding-boxes are encoded in RBOX format, see the original EAST paper
+	 * Zhou et al. 2017</p>
+	 * 
+	 * @param geometryArrs an array of 5 arrays
+	 * @param index the current index to look in each of the 5 arrays
+	 * @param offset an offset in the scene to add to each generated bounding-box
+	 * @return a bounding-box
+	 */
 	public static BoundingBox boxFor( float[][] geometryArrs, int index, Point2i offset) {
 		
+		Point2f startUnrotated = new Point2f(
+			geometryArrs[3][index],  // left-boundary-rectangle (x-min)
+			geometryArrs[0][index] 	 // top-boundary-rectangle (y-min)
+		);
+		
 		Point2f endUnrotated = new Point2f(
-			geometryArrs[1][index],
-			geometryArrs[2][index]
+			geometryArrs[1][index], // right-boundary-rectangle (x-max)
+			geometryArrs[2][index]  // bottom-boundary-rectangle (y-max)
 		);
 		
 		// Clockwise angle
 		float angle = geometryArrs[4][index]; 
 		
 		return boxFor(
-			geometryArrs[0][index],
+			startUnrotated,
 			endUnrotated,
-			geometryArrs[3][index],
 			angle,
 			offset
 		);
 	}
 	
-	private static BoundingBox boxFor( float p0, Point2f endUnrotated, float p3, float angle, Point2i offset) {
+	private static BoundingBox boxFor( Point2f startUnrotated, Point2f endUnrotated, float angle, Point2i offset) {
 		
 		// Width and height of bounding box
-		float height = p0 + endUnrotated.getY();
-		float width = endUnrotated.getX() + p3;
+		float height = startUnrotated.getY() + endUnrotated.getY();
+		float width = endUnrotated.getX() + startUnrotated.getX();
 		
 		Point2d endRotated = rotateClockwiseAboutAngle(endUnrotated, angle);
 		endRotated.add(offset);
