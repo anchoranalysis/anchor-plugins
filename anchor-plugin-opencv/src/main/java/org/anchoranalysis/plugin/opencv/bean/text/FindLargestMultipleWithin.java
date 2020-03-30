@@ -54,7 +54,7 @@ class FindLargestMultipleWithin {
 	 * @return the scaled-extent to use
 	 * @throws OperationFailedException 
 	 */
-	public static Extent apply( Extent small, Extent stayWithin ) throws OperationFailedException {
+	public static Extent apply( Extent small, Extent stayWithin, int maxScaleFactor ) throws OperationFailedException {
 
 		if (small.getX() > stayWithin.getX()) {
 			throw new OperationFailedException("The extent of small in the X direction is already larger than stayWithin. This is not allowed");
@@ -67,7 +67,7 @@ class FindLargestMultipleWithin {
 		// Non-integral scale factors
 		ScaleFactor sf = ScaleFactorUtilities.calcRelativeScale(small, stayWithin);
 		
-		int minFactor = (int) Math.floor( Math.min(sf.getX(), sf.getY()) ); 
+		int minFactor = minScaleFactorUnder(sf, maxScaleFactor); 
 		
 		// The integral floor of each
 		ScaleFactorInt sfInt = new ScaleFactorInt(
@@ -83,5 +83,15 @@ class FindLargestMultipleWithin {
 		);
 		
 		return extentScaled;
+	}
+	
+	/** The minimum scale factor from X and Y resolution, clipped at the a maximum of maxScaleFactor */
+	private static int minScaleFactorUnder( ScaleFactor sf, int maxScaleFactor ) {
+		int min = minScaleFactor(sf);
+		return Math.min(min, maxScaleFactor);
+	}
+	
+	private static int minScaleFactor( ScaleFactor sf ) {
+		return (int) Math.floor( Math.min(sf.getX(), sf.getY()) );
 	}
 }
