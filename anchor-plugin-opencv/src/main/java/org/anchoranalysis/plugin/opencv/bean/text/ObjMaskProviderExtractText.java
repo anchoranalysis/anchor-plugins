@@ -86,6 +86,12 @@ public class ObjMaskProviderExtractText extends ObjMaskProvider {
 	/** Only exact integral multiples of this size in each dimension can be accepted as input */
 	private static final Extent EAST_EXTENT = new Extent(32,32,0);
 	
+	/** As the EAST detector was designed to work with originally 1280x720 pixel images approximately
+	 *   we don't allow dramatically higher resolutions that this, so text objects remain roughly
+	 *   in size proportionate to what EAST was trained on.
+	 */
+	private static final int MAX_SCALE_FACTOR = (720/32) + 1;
+	
 	@Override
 	public ObjMaskCollection create() throws CreateException {
 
@@ -93,7 +99,11 @@ public class ObjMaskProviderExtractText extends ObjMaskProvider {
 		
 		Extent extent;
 		try {
-			extent = FindLargestMultipleWithin.apply(EAST_EXTENT, stack.getDimensions().getExtnt());
+			extent = FindLargestMultipleWithin.apply(
+				EAST_EXTENT,
+				stack.getDimensions().getExtnt(),
+				MAX_SCALE_FACTOR
+			);
 		} catch (OperationFailedException e) {
 			throw new CreateException("Cannot scale input to size needed for EAST", e);
 		}

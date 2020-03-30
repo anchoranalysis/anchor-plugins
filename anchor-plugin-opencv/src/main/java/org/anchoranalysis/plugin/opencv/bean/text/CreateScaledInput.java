@@ -49,6 +49,7 @@ class CreateScaledInput {
 	/** Returns a scaled-down version of the stack, and a scale-factor that would return it to original size */
 	public static Pair<Mat,ScaleFactor> apply( Stack stack, Extent targetExtent ) throws CreateException {
 		
+		// TODO Better to scale before openCV conversion, so less bytes to process for RGB conversion
 		Mat original = MatConverter.makeRGBStack(stack);
 		
 		Mat input = resizeMatToTarget(original, targetExtent);
