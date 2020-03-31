@@ -1,4 +1,4 @@
-package ch.ethz.biol.cell.imageprocessing.threshold.calculatelevel;
+package org.anchoranalysis.plugin.image.bean.threshold.calculatelevel;
 
 /*
  * #%L
@@ -28,13 +28,14 @@ package ch.ethz.biol.cell.imageprocessing.threshold.calculatelevel;
 
 
 import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.bean.threshold.calculatelevel.CalculateLevel;
 import org.anchoranalysis.image.histogram.Histogram;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
-public class Quantile extends CalculateLevel {
-	
+public class IfGreaterThan extends CalculateLevel {
+
 	/**
 	 * 
 	 */
@@ -42,40 +43,53 @@ public class Quantile extends CalculateLevel {
 	
 	// START BEAN PROPERTIES
 	@BeanField
-	private double quantile=0.5;
+	private CalculateLevel calculateLevel;		// Prior comes from here always
 	
 	@BeanField
-	private boolean addOne = false;
+	private CalculateLevel calculateLevelElse;
+	
+	@BeanField
+	private int threshold;
 	// END BEAN PROPERTIES
 	
 	@Override
-	public int calculateLevel(Histogram h) {
-		return h.quantile(quantile);
-	}
+	public int calculateLevel(Histogram h) throws OperationFailedException {
 
-	public double getQuantile() {
-		return quantile;
+		int level = calculateLevel.calculateLevel(h);
+		if (level>threshold) {
+			return calculateLevelElse.calculateLevel(h);
+		} else {
+			return level;
+		}
 	}
-
-	public void setQuantile(double quantile) {
-		this.quantile = quantile;
+	
+	public CalculateLevel getCalculateLevel() {
+		return calculateLevel;
 	}
-
-	public boolean isAddOne() {
-		return addOne;
+	public void setCalculateLevel(CalculateLevel calculateLevel) {
+		this.calculateLevel = calculateLevel;
 	}
-
-	public void setAddOne(boolean addOne) {
-		this.addOne = addOne;
+	public CalculateLevel getCalculateLevelElse() {
+		return calculateLevelElse;
+	}
+	public void setCalculateLevelElse(CalculateLevel calculateLevelElse) {
+		this.calculateLevelElse = calculateLevelElse;
+	}
+	public int getThreshold() {
+		return threshold;
+	}
+	public void setThreshold(int threshold) {
+		this.threshold = threshold;
 	}
 	
 	@Override
 	public boolean equals(Object obj) {
-		if(obj instanceof Quantile){
-	    	final Quantile other = (Quantile) obj;
+		if(obj instanceof IfGreaterThan){
+	    	final IfGreaterThan other = (IfGreaterThan) obj;
 	        return new EqualsBuilder()
-	            .append(quantile, other.quantile)
-	            .append(addOne, other.addOne)
+	            .append(calculateLevel, other.calculateLevel)
+	            .append(calculateLevelElse, other.calculateLevelElse)
+	            .append(threshold, other.threshold)
 	            .isEquals();
 	    } else{
 	        return false;
@@ -85,8 +99,9 @@ public class Quantile extends CalculateLevel {
 	@Override
 	public int hashCode() {
 		return new HashCodeBuilder()
-			.append(quantile)
-			.append(addOne)
+			.append(calculateLevel)
+			.append(calculateLevelElse)
+			.append(threshold)
 			.toHashCode();
 	}
 }

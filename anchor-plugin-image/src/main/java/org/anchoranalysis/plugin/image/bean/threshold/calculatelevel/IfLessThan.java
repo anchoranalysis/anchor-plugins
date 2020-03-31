@@ -1,4 +1,4 @@
-package ch.ethz.biol.cell.imageprocessing.threshold.calculatelevel;
+package org.anchoranalysis.plugin.image.bean.threshold.calculatelevel;
 
 /*
  * #%L
@@ -34,7 +34,7 @@ import org.anchoranalysis.image.histogram.Histogram;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
-public class IfGreaterThan extends CalculateLevel {
+public class IfLessThan extends CalculateLevel {
 
 	/**
 	 * 
@@ -43,7 +43,7 @@ public class IfGreaterThan extends CalculateLevel {
 	
 	// START BEAN PROPERTIES
 	@BeanField
-	private CalculateLevel calculateLevel;		// Prior comes from here always
+	private CalculateLevel calculateLevel;
 	
 	@BeanField
 	private CalculateLevel calculateLevelElse;
@@ -56,7 +56,7 @@ public class IfGreaterThan extends CalculateLevel {
 	public int calculateLevel(Histogram h) throws OperationFailedException {
 
 		int level = calculateLevel.calculateLevel(h);
-		if (level>threshold) {
+		if (level<threshold) {
 			return calculateLevelElse.calculateLevel(h);
 		} else {
 			return level;
@@ -66,26 +66,31 @@ public class IfGreaterThan extends CalculateLevel {
 	public CalculateLevel getCalculateLevel() {
 		return calculateLevel;
 	}
+
 	public void setCalculateLevel(CalculateLevel calculateLevel) {
 		this.calculateLevel = calculateLevel;
 	}
+
 	public CalculateLevel getCalculateLevelElse() {
 		return calculateLevelElse;
 	}
+
 	public void setCalculateLevelElse(CalculateLevel calculateLevelElse) {
 		this.calculateLevelElse = calculateLevelElse;
 	}
+
 	public int getThreshold() {
 		return threshold;
 	}
+
 	public void setThreshold(int threshold) {
 		this.threshold = threshold;
 	}
 	
 	@Override
 	public boolean equals(Object obj) {
-		if(obj instanceof IfGreaterThan){
-	    	final IfGreaterThan other = (IfGreaterThan) obj;
+		if(obj instanceof IfLessThan){
+	    	final IfLessThan other = (IfLessThan) obj;
 	        return new EqualsBuilder()
 	            .append(calculateLevel, other.calculateLevel)
 	            .append(calculateLevelElse, other.calculateLevelElse)

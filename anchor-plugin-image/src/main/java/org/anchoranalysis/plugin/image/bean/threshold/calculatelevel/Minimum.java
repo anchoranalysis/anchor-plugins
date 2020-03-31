@@ -1,4 +1,4 @@
-package ch.ethz.biol.cell.imageprocessing.threshold.calculatelevel;
+package org.anchoranalysis.plugin.image.bean.threshold.calculatelevel;
 
 /*
  * #%L
@@ -27,14 +27,16 @@ package ch.ethz.biol.cell.imageprocessing.threshold.calculatelevel;
  */
 
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.bean.threshold.calculatelevel.CalculateLevel;
 import org.anchoranalysis.image.histogram.Histogram;
-import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
-public class IfLessThan extends CalculateLevel {
+public class Minimum extends CalculateLevel {
 
 	/**
 	 * 
@@ -43,70 +45,40 @@ public class IfLessThan extends CalculateLevel {
 	
 	// START BEAN PROPERTIES
 	@BeanField
-	private CalculateLevel calculateLevel;
-	
-	@BeanField
-	private CalculateLevel calculateLevelElse;
-	
-	@BeanField
-	private int threshold;
+	private List<CalculateLevel> list = new ArrayList<>();
 	// END BEAN PROPERTIES
 	
 	@Override
 	public int calculateLevel(Histogram h) throws OperationFailedException {
 
-		int level = calculateLevel.calculateLevel(h);
-		if (level<threshold) {
-			return calculateLevelElse.calculateLevel(h);
-		} else {
-			return level;
+		int min = -1;	// We will always be
+		for( CalculateLevel cl : list) {
+			int level = cl.calculateLevel(h);
+			if (level<min || min==-1) {
+				min = level;
+			}
 		}
-	}
-	
-	public CalculateLevel getCalculateLevel() {
-		return calculateLevel;
+		return min;
 	}
 
-	public void setCalculateLevel(CalculateLevel calculateLevel) {
-		this.calculateLevel = calculateLevel;
+	public List<CalculateLevel> getList() {
+		return list;
 	}
 
-	public CalculateLevel getCalculateLevelElse() {
-		return calculateLevelElse;
-	}
-
-	public void setCalculateLevelElse(CalculateLevel calculateLevelElse) {
-		this.calculateLevelElse = calculateLevelElse;
-	}
-
-	public int getThreshold() {
-		return threshold;
-	}
-
-	public void setThreshold(int threshold) {
-		this.threshold = threshold;
+	public void setList(List<CalculateLevel> list) {
+		this.list = list;
 	}
 	
 	@Override
 	public boolean equals(Object obj) {
-		if(obj instanceof IfLessThan){
-	    	final IfLessThan other = (IfLessThan) obj;
-	        return new EqualsBuilder()
-	            .append(calculateLevel, other.calculateLevel)
-	            .append(calculateLevelElse, other.calculateLevelElse)
-	            .append(threshold, other.threshold)
-	            .isEquals();
-	    } else{
-	        return false;
-	    }
+		assert(false);
+		return false;
 	}
 
 	@Override
 	public int hashCode() {
+		assert(false);
 		return new HashCodeBuilder()
-			.append(calculateLevel)
-			.append(calculateLevelElse)
-			.append(threshold)
 			.toHashCode();
 	}
 }

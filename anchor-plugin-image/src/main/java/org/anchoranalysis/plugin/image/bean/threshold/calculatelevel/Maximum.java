@@ -1,4 +1,4 @@
-package ch.ethz.biol.cell.imageprocessing.threshold.calculatelevel;
+package org.anchoranalysis.plugin.image.bean.threshold.calculatelevel;
 
 /*
  * #%L
@@ -27,87 +27,58 @@ package ch.ethz.biol.cell.imageprocessing.threshold.calculatelevel;
  */
 
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.relation.GreaterThan;
-import org.anchoranalysis.core.relation.RelationToValue;
 import org.anchoranalysis.image.bean.threshold.calculatelevel.CalculateLevel;
 import org.anchoranalysis.image.histogram.Histogram;
-import org.anchoranalysis.image.histogram.HistogramArray;
-import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
-// Clips the histogram to a maximum-value
-public class ClipHistogramMax extends CalculateLevel {
+public class Maximum extends CalculateLevel {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	// START BEAN
+	// START BEAN PROPERTIES
 	@BeanField
-	private CalculateLevel calculateLevel;
-	
-	@BeanField
-	private int max;
-	// END BEAN
-
-	private static RelationToValue relation = new GreaterThan();
-	private static Histogram createClipped( Histogram histIn, int maxVal ) {
-		
-		assert( maxVal<= histIn.getMaxBin() );
-		
-		long numAbove = histIn.countThreshold(relation, maxVal);
-		
-		Histogram out = new HistogramArray(histIn.getMaxBin());
-		for( int i=histIn.getMinBin(); i<=maxVal; i++ ) {
-			out.incrValBy( i, histIn.getCount(i) );
-		}
-		out.incrValBy(maxVal, numAbove);
-		return out;
-	}
+	private List<CalculateLevel> list = new ArrayList<>();
+	// END BEAN PROPERTIES
 	
 	@Override
 	public int calculateLevel(Histogram h) throws OperationFailedException {
-		Histogram hClipped = createClipped(h,max);
-		return calculateLevel.calculateLevel(hClipped);
+
+		int max = -1;	// As level should always be >=0
+		for( CalculateLevel cl : list) {
+			int level = cl.calculateLevel(h);
+			if (level>max) {
+				max = level;
+			}
+		}
+		return max;
+	}
+
+	public List<CalculateLevel> getList() {
+		return list;
+	}
+
+	public void setList(List<CalculateLevel> list) {
+		this.list = list;
 	}
 	
 	@Override
 	public boolean equals(Object obj) {
-		if(obj instanceof ClipHistogramMax){
-	    	final ClipHistogramMax other = (ClipHistogramMax) obj;
-	        return new EqualsBuilder()
-	            .append(calculateLevel, other.calculateLevel)
-	            .append(max, other.max)
-	            .isEquals();
-	    } else{
-	        return false;
-	    }
+		assert(false);
+		return false;
 	}
 
 	@Override
 	public int hashCode() {
+		assert(false);
 		return new HashCodeBuilder()
-			.append(calculateLevel)
-			.append(max)
 			.toHashCode();
-	}
-
-	public int getMax() {
-		return max;
-	}
-
-	public void setMax(int max) {
-		this.max = max;
-	}
-
-	public CalculateLevel getCalculateLevel() {
-		return calculateLevel;
-	}
-
-	public void setCalculateLevel(CalculateLevel calculateLevel) {
-		this.calculateLevel = calculateLevel;
 	}
 }
