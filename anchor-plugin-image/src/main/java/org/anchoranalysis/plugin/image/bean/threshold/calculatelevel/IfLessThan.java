@@ -29,11 +29,18 @@ package org.anchoranalysis.plugin.image.bean.threshold.calculatelevel;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.image.bean.threshold.calculatelevel.CalculateLevel;
+import org.anchoranalysis.image.bean.threshold.CalculateLevel;
 import org.anchoranalysis.image.histogram.Histogram;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
+
+/**
+ * Calculates a level from the first delegate and if less than a threshold, recalculates from a second delegate.
+ * 
+ * @author owen
+ *
+ */
 public class IfLessThan extends CalculateLevel {
 
 	/**
