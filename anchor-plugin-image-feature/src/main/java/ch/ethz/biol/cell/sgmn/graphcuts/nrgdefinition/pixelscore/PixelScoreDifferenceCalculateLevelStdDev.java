@@ -34,7 +34,7 @@ import org.anchoranalysis.core.relation.GreaterThanEqualTo;
 import org.anchoranalysis.core.relation.LessThan;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.session.cache.FeatureSessionCacheRetriever;
-import org.anchoranalysis.image.bean.threshold.calculatelevel.CalculateLevel;
+import org.anchoranalysis.image.bean.threshold.CalculateLevel;
 import org.anchoranalysis.image.feature.bean.pixelwise.score.PixelScore;
 import org.anchoranalysis.image.feature.pixelwise.PixelwiseFeatureInitParams;
 import org.anchoranalysis.image.feature.pixelwise.score.PixelScoreFeatureCalcParams;

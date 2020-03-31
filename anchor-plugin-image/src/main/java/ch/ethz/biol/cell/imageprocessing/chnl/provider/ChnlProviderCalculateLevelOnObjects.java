@@ -34,7 +34,7 @@ import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.image.bean.provider.ChnlProvider;
 import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
-import org.anchoranalysis.image.bean.threshold.calculatelevel.CalculateLevel;
+import org.anchoranalysis.image.bean.threshold.CalculateLevel;
 import org.anchoranalysis.image.chnl.Chnl;
 import org.anchoranalysis.image.histogram.HistogramFactoryUtilities;
 import org.anchoranalysis.image.objmask.ObjMaskCollection;

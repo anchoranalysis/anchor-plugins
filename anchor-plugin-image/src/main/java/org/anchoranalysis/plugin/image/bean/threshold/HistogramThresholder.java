@@ -27,7 +27,7 @@ package org.anchoranalysis.plugin.image.bean.threshold;
  */
 
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.image.bean.threshold.calculatelevel.CalculateLevel;
+import org.anchoranalysis.image.bean.threshold.CalculateLevel;
 import org.anchoranalysis.image.histogram.Histogram;
 
 public class HistogramThresholder {

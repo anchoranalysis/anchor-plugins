@@ -35,9 +35,8 @@ import org.anchoranalysis.core.random.RandomNumberGenerator;
 import org.anchoranalysis.image.bean.sgmn.binary.BinarySgmn;
 import org.anchoranalysis.image.bean.sgmn.binary.BinarySgmnParameters;
 import org.anchoranalysis.image.bean.sgmn.binary.BinarySgmnThrshld;
+import org.anchoranalysis.image.bean.threshold.CalculateLevel;
 import org.anchoranalysis.image.bean.threshold.ThresholderGlobal;
-import org.anchoranalysis.image.bean.threshold.calculatelevel.CalculateLevel;
-import org.anchoranalysis.image.bean.threshold.calculatelevel.Constant;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.extent.ImageRes;
@@ -45,6 +44,7 @@ import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.image.sgmn.SgmnFailedException;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.anchoranalysis.image.voxel.box.VoxelBoxWrapper;
+import org.anchoranalysis.plugin.image.bean.threshold.calculatelevel.Constant;
 
 // Performs a thresholding that accepts only channel values with intensities
 //   greater than the minimum bound

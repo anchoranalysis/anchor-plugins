@@ -28,7 +28,7 @@ package org.anchoranalysis.plugin.image.bean.threshold.calculatelevel;
 
 
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.image.bean.threshold.calculatelevel.CalculateLevel;
+import org.anchoranalysis.image.bean.threshold.CalculateLevel;
 import org.anchoranalysis.image.histogram.Histogram;
 import org.anchoranalysis.math.statistics.VarianceCalculator;
 import org.apache.commons.lang.builder.EqualsBuilder;
