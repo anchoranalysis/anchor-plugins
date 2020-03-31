@@ -1,4 +1,4 @@
-package ch.ethz.biol.cell.imageprocessing.threshold.calculatelevel;
+package org.anchoranalysis.plugin.image.bean.threshold.calculatelevel;
 
 /*
  * #%L
@@ -34,7 +34,21 @@ import org.anchoranalysis.math.statistics.VarianceCalculator;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
-// Similar to Otsu, but weighs the variances differently of background and foreground
+/**
+ * Similar to Otsu, but weighs the variances differently of background and foreground
+ * 
+ * <p>The standard otsu method seeks both foreground and background to have similar variance. But many
+ * for real world cases (e.g. fluorescent microscopy) one expects the background to be have much less variance,
+ * as it is very low-valued.</p>
+ * 
+ * <p>This algorithm allows the foreground and background variance to be non-equally weighted to a priori
+ * account for low-variance backgrounds</p>.
+ * 
+ * @see {#link org.anchoranalysis.image.bean.threshold.calculatelevel.Otsu}
+ * 
+ * @author owen
+ *
+ */
 public class OtsuWeighted extends CalculateLevel {
 
 	/**
@@ -100,9 +114,6 @@ public class OtsuWeighted extends CalculateLevel {
 				bcvMin = bcv;
 				bestThreshold = k;
 			}
-			
-			// DEBUG-CODE
-			//getLogger().getLogReporter().logFormatted("k=%d bcv=%f", k, bcv);
 		}
 		
 		return bestThreshold;
@@ -132,10 +143,6 @@ public class OtsuWeighted extends CalculateLevel {
 		
 		double prob1 = ((double) running.getCount()) / total.getCount();
 		double prob2 = 1 - prob1;
-
-		// DEBUG-CODE
-		//getLogger().getLogReporter().logFormatted("Without weight: %f vs %f = %f (prob1=%f,var1=%f, prob2=%f,var2=%f)", prob1*varBg, prob2*varFg, prob1*varBg+prob2*varFg, prob1,varFg, prob2, varBg );
-		//getLogger().getLogReporter().logFormatted("With weight: %f vs %f =%f", prob1*varBg*weightBackground, prob2*varFg*weightForeground,prob1*varBg*weightBackground+prob2*varFg*weightForeground );
 		
 		return (prob1*varBg*weightBackground + prob2*varFg*weightForeground);
 	}
