@@ -56,7 +56,7 @@ public class ObjMaskProviderMask extends ObjMaskProvider {
 	
 	// START BEAN PROPERTIES
 	@BeanField
-	private ObjMaskProvider objMaskProvider;
+	private ObjMaskProvider objs;
 	
 	@BeanField
 	private BinaryImgChnlProvider maskProvider;
@@ -67,13 +67,13 @@ public class ObjMaskProviderMask extends ObjMaskProvider {
 	
 		BinaryChnl mask = maskProvider.create();
 		
-		ObjMaskCollection objs = objMaskProvider.create();
+		ObjMaskCollection objsIn = objs.create();
 		
-		for( ObjMask om : objs ) {
+		for( ObjMask om : objsIn ) {
 
 			applyMask(om, mask);
 		}
-		return objs;
+		return objsIn;
 	}
 	
 	private static void applyMask( ObjMask om, BinaryChnl mask ) throws CreateException {
@@ -89,13 +89,13 @@ public class ObjMaskProviderMask extends ObjMaskProvider {
 		);		
 	}
 
-	public ObjMaskProvider getObjMaskProvider() {
-		return objMaskProvider;
+	public ObjMaskProvider getObjs() {
+		return objs;
 	}
 
 
-	public void setObjMaskProvider(ObjMaskProvider objMaskProvider) {
-		this.objMaskProvider = objMaskProvider;
+	public void setObjs(ObjMaskProvider objs) {
+		this.objs = objs;
 	}
 
 	public BinaryImgChnlProvider getMaskProvider() {

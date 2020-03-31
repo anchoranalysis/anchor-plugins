@@ -29,7 +29,7 @@ package ch.ethz.biol.cell.imageprocessing.stack.provider;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.core.index.GetOperationFailedException;
+import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 import org.anchoranalysis.image.bean.provider.stack.StackProvider;
 import org.anchoranalysis.image.stack.Stack;
 
@@ -61,7 +61,7 @@ public class StackProviderReference extends StackProvider {
 		if(stack==null) {
 			try {
 				this.stack = getSharedObjects().getStackCollection().getException(id);
-			} catch (GetOperationFailedException e) {
+			} catch (NamedProviderGetException e) {
 				throw new CreateException(e);
 			}		
 		}

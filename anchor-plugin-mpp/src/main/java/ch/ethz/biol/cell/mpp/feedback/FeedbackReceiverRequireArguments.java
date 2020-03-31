@@ -30,6 +30,10 @@ package ch.ethz.biol.cell.mpp.feedback;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.Optional;
 import org.anchoranalysis.experiment.bean.RequireArguments;
+import org.anchoranalysis.mpp.sgmn.bean.optscheme.feedback.FeedbackReceiverBean;
+import org.anchoranalysis.mpp.sgmn.optscheme.feedback.OptimizationFeedbackEndParams;
+import org.anchoranalysis.mpp.sgmn.optscheme.feedback.OptimizationFeedbackInitParams;
+import org.anchoranalysis.mpp.sgmn.optscheme.feedback.ReporterException;
 import org.anchoranalysis.mpp.sgmn.optscheme.step.Reporting;
 
 public class FeedbackReceiverRequireArguments<T> extends FeedbackReceiverBean<T> {

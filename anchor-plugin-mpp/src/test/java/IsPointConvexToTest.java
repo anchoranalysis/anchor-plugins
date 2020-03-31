@@ -37,10 +37,10 @@ import org.anchoranalysis.image.binary.values.BinaryValues;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
 import org.anchoranalysis.image.io.RasterIOException;
 import org.anchoranalysis.image.stack.Stack;
+import org.anchoranalysis.test.TestLoader;
+import org.anchoranalysis.test.image.TestLoaderImageIO;
 import org.junit.Test;
 
-import anchor.test.TestLoader;
-import anchor.test.image.TestLoaderImageIO;
 import ch.ethz.biol.cell.mpp.mark.ellipsoidfitter.outlinepixelsretriever.visitscheduler.VisitSchedulerConvexAboutRoot;
 
 public class IsPointConvexToTest {

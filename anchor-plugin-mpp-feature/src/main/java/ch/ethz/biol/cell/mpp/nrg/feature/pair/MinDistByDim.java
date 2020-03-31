@@ -1,5 +1,8 @@
 package ch.ethz.biol.cell.mpp.nrg.feature.pair;
 
+import org.anchoranalysis.anchor.mpp.feature.bean.nrg.elem.NRGElemPair;
+import org.anchoranalysis.anchor.mpp.feature.nrg.elem.NRGElemPairCalcParams;
+
 /*-
  * #%L
  * anchor-plugin-mpp-feature
@@ -27,9 +30,6 @@ package ch.ethz.biol.cell.mpp.nrg.feature.pair;
  */
 
 import org.anchoranalysis.core.geometry.Point3d;
-
-import ch.ethz.biol.cell.mpp.nrg.NRGElemPair;
-import ch.ethz.biol.cell.mpp.nrg.NRGElemPairCalcParams;
 
 public class MinDistByDim extends NRGElemPair {
 

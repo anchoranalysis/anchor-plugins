@@ -42,13 +42,13 @@ public class ObjMaskProviderFlattenZ extends ObjMaskProvider {
 	
 	// START BEAN PROPERTIES
 	@BeanField
-	private ObjMaskProvider objMaskProvider;
+	private ObjMaskProvider objs;
 	// END BEAN PROPERTIES
 
 	@Override
 	public ObjMaskCollection create() throws CreateException {
 		
-		ObjMaskCollection in = objMaskProvider.create();
+		ObjMaskCollection in = objs.create();
 		
 		ObjMaskCollection out = new ObjMaskCollection();
 		
@@ -59,12 +59,12 @@ public class ObjMaskProviderFlattenZ extends ObjMaskProvider {
 		return out;
 	}
 
-	public ObjMaskProvider getObjMaskProvider() {
-		return objMaskProvider;
+	public ObjMaskProvider getObjs() {
+		return objs;
 	}
 
-	public void setObjMaskProvider(ObjMaskProvider objMaskProvider) {
-		this.objMaskProvider = objMaskProvider;
+	public void setObjs(ObjMaskProvider objs) {
+		this.objs = objs;
 	}
 
 }

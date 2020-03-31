@@ -1,5 +1,7 @@
 package org.anchoranalysis.image.feature.bean.list;
 
+
+
 /*-
  * #%L
  * anchor-plugin-image-feature
@@ -26,13 +28,10 @@ package org.anchoranalysis.image.feature.bean.list;
  * #L%
  */
 
-import org.anchoranalysis.feature.bean.Feature;
-import org.anchoranalysis.feature.bean.operator.Sum;
-
+import org.anchoranalysis.feature.bean.operator.FeatureListElem;
 import ch.ethz.biol.cell.mpp.nrg.feature.operator.Maximum;
-import ch.ethz.biol.cell.mpp.nrg.feature.operator.MultiplyByConstant;
 
-public class FeatureListProviderDiffMax extends FeatureListProviderAggregate {
+public class FeatureListProviderDiffMax extends FeatureListProviderAggregateDiff {
 
 	/**
 	 * 
@@ -40,14 +39,7 @@ public class FeatureListProviderDiffMax extends FeatureListProviderAggregate {
 	private static final long serialVersionUID = 1L;
 
 	@Override
-	protected Feature createAggregateFeature( Feature featFirst, Feature featSecond, Feature featMerged ) {
-		Maximum featMax = new Maximum();
-		featMax.getList().add(featFirst);
-		featMax.getList().add(featSecond);
-		
-		Sum featSum = new Sum();
-		featSum.getList().add(featMerged);
-		featSum.getList().add( new MultiplyByConstant(featMax,-1) );
-		return featSum;
+	protected FeatureListElem createFeature() {
+		return new Maximum();
 	}
 }

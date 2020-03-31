@@ -29,7 +29,7 @@ package ch.ethz.biol.cell.mpp.nrg.feature.histogram;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.image.feature.bean.histogram.FeatureHistogram;
+import org.anchoranalysis.image.feature.bean.FeatureHistogram;
 import org.anchoranalysis.image.feature.histogram.FeatureHistogramParams;
 
 public class Quantile extends FeatureHistogram {

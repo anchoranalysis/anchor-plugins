@@ -48,21 +48,21 @@ public class ColorListProviderFromObjMask extends ColorListProvider {
 	private ColorSetGenerator colorSetGenerator;
 	
 	@BeanField
-	private ObjMaskProvider objMaskProvider;
+	private ObjMaskProvider objs;
 	// END BEAN PROPERTIES
 
 	@Override
 	public ColorList create() throws CreateException {
 
-		ObjMaskCollection objs;
+		ObjMaskCollection objsCollection;
 		try {
-			objs = objMaskProvider.create();
+			objsCollection = objs.create();
 		} catch (CreateException e) {
 			throw new CreateException(e);
 		}
-		//System.out.printf("ColorSetGenerator for %d colors (%d)\n", objs.size(), num_colors);
+		
 		try {
-			return colorSetGenerator.genColors(objs.size());
+			return colorSetGenerator.genColors(objsCollection.size());
 		} catch (OperationFailedException e) {
 			throw new CreateException(e);
 		}
@@ -78,13 +78,13 @@ public class ColorListProviderFromObjMask extends ColorListProvider {
 	}
 
 
-	public ObjMaskProvider getObjMaskProvider() {
-		return objMaskProvider;
+	public ObjMaskProvider getObjs() {
+		return objs;
 	}
 
 
-	public void setObjMaskProvider(ObjMaskProvider objMaskProvider) {
-		this.objMaskProvider = objMaskProvider;
+	public void setObjs(ObjMaskProvider objs) {
+		this.objs = objs;
 	}
 
 

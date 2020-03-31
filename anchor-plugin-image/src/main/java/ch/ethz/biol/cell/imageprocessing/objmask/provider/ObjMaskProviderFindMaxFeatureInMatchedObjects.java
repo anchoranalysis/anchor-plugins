@@ -51,7 +51,7 @@ public class ObjMaskProviderFindMaxFeatureInMatchedObjects extends ObjMaskProvid
 	
 	// START BEAN PROPERTIES
 	@BeanField
-	private ObjMaskProvider objMaskProvider;
+	private ObjMaskProvider objs;
 	
 	@BeanField
 	private ObjMaskMatcher objMaskMatcher;
@@ -80,7 +80,7 @@ public class ObjMaskProviderFindMaxFeatureInMatchedObjects extends ObjMaskProvid
 	@Override
 	public ObjMaskCollection create() throws CreateException {
 		
-		ObjMaskCollection in = objMaskProvider.create();
+		ObjMaskCollection in = objs.create();
 		
 		FeatureSessionCreateParamsSingle session;
 		try {
@@ -110,12 +110,12 @@ public class ObjMaskProviderFindMaxFeatureInMatchedObjects extends ObjMaskProvid
 		return out;
 	}
 	
-	public ObjMaskProvider getObjMaskProvider() {
-		return objMaskProvider;
+	public ObjMaskProvider getObjs() {
+		return objs;
 	}
 
-	public void setObjMaskProvider(ObjMaskProvider objMaskProvider) {
-		this.objMaskProvider = objMaskProvider;
+	public void setObjs(ObjMaskProvider objs) {
+		this.objs = objs;
 	}
 
 	public FeatureEvaluatorNrgStack getFeatureEvaluator() {

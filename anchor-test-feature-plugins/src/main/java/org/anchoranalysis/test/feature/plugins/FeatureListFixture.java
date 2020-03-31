@@ -35,8 +35,7 @@ import org.anchoranalysis.bean.xml.error.BeanXmlException;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.bean.list.FeatureListProvider;
-
-import anchor.test.TestLoader;
+import org.anchoranalysis.test.TestLoader;
 
 public class FeatureListFixture {
 	

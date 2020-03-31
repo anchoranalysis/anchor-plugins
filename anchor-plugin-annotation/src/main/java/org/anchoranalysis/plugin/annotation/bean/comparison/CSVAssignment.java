@@ -37,8 +37,6 @@ import org.anchoranalysis.io.input.InputFromManager;
 import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
 import org.anchoranalysis.io.output.csv.CSVWriter;
 
-import ch.ethz.biol.cell.countchrom.experiment.SplitString;
-
 class CSVAssignment {
 
 	private boolean includeDescriptiveSplit;

@@ -1,5 +1,7 @@
 package ch.ethz.biol.cell.mpp.nrg.feature.ind;
 
+import org.anchoranalysis.anchor.mpp.feature.bean.nrg.elem.NRGElemInd;
+import org.anchoranalysis.anchor.mpp.feature.nrg.elem.NRGElemIndCalcParams;
 import org.anchoranalysis.anchor.mpp.mark.GlobalRegionIdentifiers;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.anchor.mpp.mark.conic.MarkEllipse;
@@ -33,9 +35,6 @@ import org.anchoranalysis.anchor.mpp.mark.conic.MarkEllipse;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-
-import ch.ethz.biol.cell.mpp.nrg.NRGElemInd;
-import ch.ethz.biol.cell.mpp.nrg.NRGElemIndCalcParams;
 
 // Estimates the circumference of an ellipse based upon finding the area of the shell, and dividing
 //  by the ShellRad

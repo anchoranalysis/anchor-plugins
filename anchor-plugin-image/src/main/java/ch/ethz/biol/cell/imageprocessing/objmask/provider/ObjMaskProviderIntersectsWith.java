@@ -49,10 +49,10 @@ public class ObjMaskProviderIntersectsWith extends ObjMaskProvider {
 	
 	// START BEAN PROPERTIES
 	@BeanField
-	private ObjMaskProvider objMaskProvider;
+	private ObjMaskProvider objs;
 	
 	@BeanField
-	private ObjMaskProvider objMaskProviderContainer;
+	private ObjMaskProvider objsContainer;
 	
 	@BeanField
 	private boolean inverse=false;	// If set, we return the objects that DO NOT intersect
@@ -73,14 +73,14 @@ public class ObjMaskProviderIntersectsWith extends ObjMaskProvider {
 	@Override
 	public ObjMaskCollection create() throws CreateException {
 		
-		ObjMaskCollection objs = objMaskProvider.create();
-		ObjMaskCollection objsContainer = objMaskProviderContainer.create();
+		ObjMaskCollection objsCollection = objs.create();
+		ObjMaskCollection objsCollectionContainer = objsContainer.create();
 		
 		ObjMaskCollection out = new ObjMaskCollection();
 		
-		for( ObjMask om : objs ) {
+		for( ObjMask om : objsCollection ) {
 			
-			boolean intersection = doesObjIntersect(om,objsContainer);
+			boolean intersection = doesObjIntersect(om,objsCollectionContainer);
 			
 			if (inverse) {
 				if (!intersection) {
@@ -96,21 +96,12 @@ public class ObjMaskProviderIntersectsWith extends ObjMaskProvider {
 		return out;
 	}
 
-	public ObjMaskProvider getObjMaskProvider() {
-		return objMaskProvider;
+	public ObjMaskProvider getObjs() {
+		return objs;
 	}
 
-	public void setObjMaskProvider(ObjMaskProvider objMaskProvider) {
-		this.objMaskProvider = objMaskProvider;
-	}
-
-
-	public ObjMaskProvider getObjMaskProviderContainer() {
-		return objMaskProviderContainer;
-	}
-
-	public void setObjMaskProviderContainer(ObjMaskProvider objMaskProviderContainer) {
-		this.objMaskProviderContainer = objMaskProviderContainer;
+	public void setObjs(ObjMaskProvider objs) {
+		this.objs = objs;
 	}
 
 	public boolean isInverse() {
@@ -121,4 +112,11 @@ public class ObjMaskProviderIntersectsWith extends ObjMaskProvider {
 		this.inverse = inverse;
 	}
 
+	public ObjMaskProvider getObjsContainer() {
+		return objsContainer;
+	}
+
+	public void setObjsContainer(ObjMaskProvider objsContainer) {
+		this.objsContainer = objsContainer;
+	}
 }

@@ -26,13 +26,10 @@ package org.anchoranalysis.image.feature.bean.list;
  * #L%
  */
 
-import org.anchoranalysis.feature.bean.Feature;
-import org.anchoranalysis.feature.bean.operator.Sum;
-
+import org.anchoranalysis.feature.bean.operator.FeatureListElem;
 import ch.ethz.biol.cell.mpp.nrg.feature.operator.Mean;
-import ch.ethz.biol.cell.mpp.nrg.feature.operator.MultiplyByConstant;
 
-public class FeatureListProviderDiffMean extends FeatureListProviderAggregate {
+public class FeatureListProviderDiffMean extends FeatureListProviderAggregateDiff {
 
 	/**
 	 * 
@@ -40,14 +37,7 @@ public class FeatureListProviderDiffMean extends FeatureListProviderAggregate {
 	private static final long serialVersionUID = 1L;
 
 	@Override
-	protected Feature createAggregateFeature( Feature featFirst, Feature featSecond, Feature featMerged ) {
-		Mean featMax = new Mean();
-		featMax.getList().add(featFirst);
-		featMax.getList().add(featSecond);
-		
-		Sum featSum = new Sum();
-		featSum.getList().add(featMerged);
-		featSum.getList().add( new MultiplyByConstant(featMax,-1) );
-		return featSum;
+	protected FeatureListElem createFeature() {
+		return new Mean();
 	}
 }

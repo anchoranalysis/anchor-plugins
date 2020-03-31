@@ -111,7 +111,7 @@ public class QuickMultiDatasetExperiment<T extends InputFromManager, S> extends 
 	private int maxNumProcessors=100;
 	
 	@BeanField
-	private boolean supressExceptions=false;
+	private boolean supressExceptions=true;
 	
 	@BeanField
 	private Task<T,S> task;

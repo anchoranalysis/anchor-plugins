@@ -1,5 +1,7 @@
 package org.anchoranalysis.plugin.image.task.imagefeature.calculator;
 
+import java.nio.file.Path;
+
 /*-
  * #%L
  * anchor-plugin-image-task
@@ -36,8 +38,8 @@ import org.anchoranalysis.image.io.input.StackInputInitParamsCreator;
 
 public class FeatureCalculatorRepeated {
 	
-	public static NRGStackWithParams extractStack( ProvidesStackInput inputObject, StackProvider nrgStackProvider, LogErrorReporter logErrorReporter ) throws OperationFailedException {
-		ImageInitParams params = StackInputInitParamsCreator.createInitParams(inputObject, logErrorReporter);
+	public static NRGStackWithParams extractStack( ProvidesStackInput inputObject, StackProvider nrgStackProvider, Path modelDir, LogErrorReporter logErrorReporter ) throws OperationFailedException {
+		ImageInitParams params = StackInputInitParamsCreator.createInitParams(inputObject, modelDir, logErrorReporter);
 		return HelperInit.extractStack(params, nrgStackProvider, logErrorReporter);
 	}
 }

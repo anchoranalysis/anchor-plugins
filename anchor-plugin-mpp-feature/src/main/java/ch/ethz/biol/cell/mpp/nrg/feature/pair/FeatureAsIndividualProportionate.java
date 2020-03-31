@@ -1,5 +1,9 @@
 package ch.ethz.biol.cell.mpp.nrg.feature.pair;
 
+import org.anchoranalysis.anchor.mpp.feature.bean.nrg.elem.NRGElemPair;
+import org.anchoranalysis.anchor.mpp.feature.nrg.elem.NRGElemIndCalcParams;
+import org.anchoranalysis.anchor.mpp.feature.nrg.elem.NRGElemPairCalcParams;
+
 /*
  * #%L
  * anchor-plugin-mpp-feature
@@ -30,10 +34,6 @@ package ch.ethz.biol.cell.mpp.nrg.feature.pair;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-
-import ch.ethz.biol.cell.mpp.nrg.NRGElemIndCalcParams;
-import ch.ethz.biol.cell.mpp.nrg.NRGElemPairCalcParams;
-import ch.ethz.biol.cell.mpp.nrg.NRGElemPair;
 
 // Calculates each feature individually, and combines them using the ratios between itemProportionate
 //   as weights

@@ -59,7 +59,7 @@ public class ChnlProviderConnectedComponentScore extends ChnlProvider {
 	private ChnlProvider chnlProvider;
 	
 	@BeanField
-	private ObjMaskProvider objMaskProviderMask;
+	private ObjMaskProvider objsMask;
 	
 	@BeanField
 	private CalculateLevel calculateLevel;
@@ -138,9 +138,9 @@ public class ChnlProviderConnectedComponentScore extends ChnlProvider {
 	public Chnl create() throws CreateException {
 		
 		Chnl chnl = chnlProvider.create();
-		ObjMaskCollection objMasks = objMaskProviderMask.create();
+		ObjMaskCollection objsMaskCollection = objsMask.create();
 	
-		LevelResultCollection lrc= LevelResultCollectionFactory.createCollection( chnl, objMasks, calculateLevel, 0, getLogger() );
+		LevelResultCollection lrc= LevelResultCollectionFactory.createCollection( chnl, objsMaskCollection, calculateLevel, 0, getLogger() );
 		
 		Chnl chnlOut = ChnlFactory.instance().createEmptyInitialised( chnl.getDimensions(), VoxelDataTypeUnsignedByte.instance );
 		
@@ -157,14 +157,6 @@ public class ChnlProviderConnectedComponentScore extends ChnlProvider {
 		this.chnlProvider = chnlProvider;
 	}
 
-	public ObjMaskProvider getObjMaskProviderMask() {
-		return objMaskProviderMask;
-	}
-
-	public void setObjMaskProviderMask(ObjMaskProvider objMaskProviderMask) {
-		this.objMaskProviderMask = objMaskProviderMask;
-	}
-
 	public CalculateLevel getCalculateLevel() {
 		return calculateLevel;
 	}
@@ -179,5 +171,13 @@ public class ChnlProviderConnectedComponentScore extends ChnlProvider {
 
 	public void setIntensityTolerance(int intensityTolerance) {
 		this.intensityTolerance = intensityTolerance;
+	}
+
+	public ObjMaskProvider getObjsMask() {
+		return objsMask;
+	}
+
+	public void setObjsMask(ObjMaskProvider objsMask) {
+		this.objsMask = objsMask;
 	}
 }

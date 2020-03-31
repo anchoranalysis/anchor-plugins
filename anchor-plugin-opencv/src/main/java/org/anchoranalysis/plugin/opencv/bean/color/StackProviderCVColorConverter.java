@@ -31,6 +31,7 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.bean.provider.stack.StackProvider;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.stack.Stack;
+import org.anchoranalysis.plugin.opencv.CVInit;
 import org.anchoranalysis.plugin.opencv.MatConverter;
 import org.opencv.core.CvType;
 import org.opencv.core.Mat;
@@ -58,7 +59,7 @@ public abstract class StackProviderCVColorConverter extends StackProvider {
 	private static final long serialVersionUID = 1L;
 
 	static {
-		nu.pattern.OpenCV.loadShared();
+		CVInit.alwaysExecuteBeforeCallingLibrary();
 	}
 	
 	// START BEAN FIELDS

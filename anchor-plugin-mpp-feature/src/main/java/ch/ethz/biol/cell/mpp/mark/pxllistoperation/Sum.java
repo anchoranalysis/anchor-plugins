@@ -1,5 +1,6 @@
 package ch.ethz.biol.cell.mpp.mark.pxllistoperation;
 
+import org.anchoranalysis.anchor.mpp.feature.bean.mark.PxlListOperationFromMark;
 import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
 
 /*

@@ -29,7 +29,7 @@ package ch.ethz.biol.cell.imageprocessing.objmask.provider;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.core.index.GetOperationFailedException;
+import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
 import org.anchoranalysis.image.objmask.ObjMaskCollection;
 
@@ -61,7 +61,7 @@ public class ObjMaskProviderReference extends ObjMaskProvider {
 		if (objs==null) {
 			try {
 				objs = getSharedObjects().getObjMaskCollection().getException(id);
-			} catch (GetOperationFailedException e) {
+			} catch (NamedProviderGetException e) {
 				throw new CreateException(e);
 			}	
 		}

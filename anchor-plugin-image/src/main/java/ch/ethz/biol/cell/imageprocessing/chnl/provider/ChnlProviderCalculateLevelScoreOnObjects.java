@@ -52,7 +52,7 @@ public class ChnlProviderCalculateLevelScoreOnObjects extends ChnlProvider {
 	
 	// START BEAN
 	@BeanField
-	private ObjMaskProvider objMaskProvider;
+	private ObjMaskProvider objs;
 	
 	@BeanField
 	private ChnlProvider chnlProviderOutput;
@@ -76,11 +76,8 @@ public class ChnlProviderCalculateLevelScoreOnObjects extends ChnlProvider {
 		Chnl chnlLevel = chnlProviderLevel.create();
 		VoxelBox<ByteBuffer> vbLevel = chnlLevel.getVoxelBox().asByte();
 		
-		ObjMaskCollection objMasks = objMaskProvider.create();
-		
-		
-		
-		
+		ObjMaskCollection objMasks = objs.create();
+				
 		for( ObjMask om : objMasks ) {
 			
 			
@@ -170,13 +167,13 @@ public class ChnlProviderCalculateLevelScoreOnObjects extends ChnlProvider {
 		}
 	}
 	
-	public ObjMaskProvider getObjMaskProvider() {
-		return objMaskProvider;
+	public ObjMaskProvider getObjs() {
+		return objs;
 	}
 
 
-	public void setObjMaskProvider(ObjMaskProvider objMaskProvider) {
-		this.objMaskProvider = objMaskProvider;
+	public void setObjs(ObjMaskProvider objs) {
+		this.objs = objs;
 	}
 
 

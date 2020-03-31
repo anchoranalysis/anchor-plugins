@@ -26,11 +26,9 @@ package ch.ethz.biol.cell.mpp.nrg.feature.stack;
  * #L%
  */
 
-import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.image.feature.bean.stack.FeatureStack;
-import org.anchoranalysis.image.feature.stack.FeatureStackParams;
+import org.anchoranalysis.image.extent.ImageDim;
 
-public class DimensionXYArea extends FeatureStack {
+public class DimensionXYArea extends FeatureStackFromDimensions {
 
 	/**
 	 * 
@@ -38,11 +36,8 @@ public class DimensionXYArea extends FeatureStack {
 	private static final long serialVersionUID = 1L;
 
 	@Override
-	public double calcCast(FeatureStackParams params) throws FeatureCalcException {
-		if (params.getNrgStack()==null) {
-			throw new FeatureCalcException("This feature requires an NRGStack for dimensions");
-		}
-		return params.getNrgStack().getDimensions().getVolumeXY();
+	protected double calcFromDims(ImageDim dim) {
+		return dim.getVolumeXY();
 	}
 
 }

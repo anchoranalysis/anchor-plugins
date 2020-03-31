@@ -1,5 +1,8 @@
 package ch.ethz.biol.cell.mpp.nrg.feature.ind;
 
+import org.anchoranalysis.anchor.mpp.feature.bean.nrg.elem.NRGElemInd;
+import org.anchoranalysis.anchor.mpp.feature.nrg.elem.NRGElemIndCalcParams;
+
 /*
  * #%L
  * anchor-plugin-mpp-feature
@@ -32,8 +35,6 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 
 import ch.ethz.biol.cell.mpp.mark.pixelstatisticsfrommark.PixelStatisticsFromMark;
-import ch.ethz.biol.cell.mpp.nrg.NRGElemInd;
-import ch.ethz.biol.cell.mpp.nrg.NRGElemIndCalcParams;
 
 public class Intensity extends NRGElemInd {
 

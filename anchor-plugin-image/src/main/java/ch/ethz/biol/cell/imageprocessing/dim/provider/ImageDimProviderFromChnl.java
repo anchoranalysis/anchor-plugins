@@ -1,5 +1,7 @@
 package ch.ethz.biol.cell.imageprocessing.dim.provider;
 
+import org.anchoranalysis.bean.annotation.AllowEmpty;
+
 /*-
  * #%L
  * anchor-plugin-image
@@ -27,14 +29,22 @@ package ch.ethz.biol.cell.imageprocessing.dim.provider;
  */
 
 import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.bean.annotation.Optional;
 import org.anchoranalysis.core.error.CreateException;
+import org.anchoranalysis.core.error.InitException;
+import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 import org.anchoranalysis.image.bean.provider.ChnlProvider;
 import org.anchoranalysis.image.bean.provider.ImageDimProvider;
+import org.anchoranalysis.image.chnl.Chnl;
 import org.anchoranalysis.image.extent.ImageDim;
+import org.anchoranalysis.image.init.ImageInitParams;
 
 
 /**
  * Creates image-dimensions by referencing them from a ChnlProvider
+ * 
+ * <p>One of either chnlProvider or id must be set, but not both</p>
+ * <p>id will look for a Chnl or a Stack in that order</p>
  */
 public class ImageDimProviderFromChnl extends ImageDimProvider {
 
@@ -44,13 +54,60 @@ public class ImageDimProviderFromChnl extends ImageDimProvider {
 	private static final long serialVersionUID = 1L;
 	
 	// START BEAN PROPERTIES
-	@BeanField
+	@BeanField @AllowEmpty
+	private String id = "";
+	
+	@BeanField @Optional
 	private ChnlProvider chnlProvider;
 	// END BEAN PROPERTIES
-
+	
+	@Override
+	public void onInit(ImageInitParams so) throws InitException {
+		super.onInit(so);
+		if (id.isEmpty() && chnlProvider==null) {
+			throw new InitException("One of either chnlProvider or id must be set");
+		}
+		if (!id.isEmpty() && chnlProvider!=null) {
+			throw new InitException("Only one -not both- of chnlProvider and id should be set");
+		}
+	}
+	
 	@Override
 	public ImageDim create() throws CreateException {
-		return chnlProvider.create().getDimensions();
+		return selectChnl().getDimensions();
+	}
+	
+	private Chnl selectChnl() throws CreateException {
+		
+		if (!id.isEmpty()) {
+			return selectChnlForId(id);
+		}
+		
+		return chnlProvider.create();
+	}
+	
+	private Chnl selectChnlForId( String id ) throws CreateException {
+		
+		try {
+			Chnl chnl = getSharedObjects().getChnlCollection().getNull(id);
+			
+			if (chnl==null) {
+				chnl = getSharedObjects().getStackCollection().getException(id).getChnl(0);
+			}
+			
+			if (chnl==null) {
+				throw new CreateException(
+					String.format("Failed to find either a channel or stack with id `%s`", id)
+				);
+			}
+			
+			return getSharedObjects().getChnlCollection().getException(id);
+		} catch (NamedProviderGetException e) {
+			throw new CreateException(
+				String.format("A error occurred while retrieing channel `%s`", id),
+				e
+			);
+		}
 	}
 
 	public ChnlProvider getChnlProvider() {
@@ -60,4 +117,13 @@ public class ImageDimProviderFromChnl extends ImageDimProvider {
 	public void setChnlProvider(ChnlProvider chnlProvider) {
 		this.chnlProvider = chnlProvider;
 	}
+
+	public String getId() {
+		return id;
+	}
+
+	public void setId(String id) {
+		this.id = id;
+	}
+
 }

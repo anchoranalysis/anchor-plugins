@@ -35,7 +35,7 @@ import org.anchoranalysis.feature.cachedcalculation.CachedCalculation;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.init.FeatureInitParams;
 import org.anchoranalysis.image.bean.threshold.calculatelevel.CalculateLevel;
-import org.anchoranalysis.image.feature.bean.histogram.FeatureHistogram;
+import org.anchoranalysis.image.feature.bean.FeatureHistogram;
 import org.anchoranalysis.image.feature.histogram.FeatureHistogramParams;
 import org.anchoranalysis.image.histogram.Histogram;
 

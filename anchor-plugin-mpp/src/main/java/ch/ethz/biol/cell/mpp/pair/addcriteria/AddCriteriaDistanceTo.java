@@ -2,6 +2,8 @@ package ch.ethz.biol.cell.mpp.pair.addcriteria;
 
 import org.anchoranalysis.anchor.mpp.feature.addcriteria.AddCriteriaPair;
 import org.anchoranalysis.anchor.mpp.feature.addcriteria.IncludeMarksFailureException;
+import org.anchoranalysis.anchor.mpp.feature.session.FeatureSessionCreateParamsMPP;
+import org.anchoranalysis.anchor.mpp.mark.MarkDistance;
 import org.anchoranalysis.anchor.mpp.mark.UnsupportedMarkTypeException;
 import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
 
@@ -36,9 +38,6 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.image.bean.unitvalue.distance.UnitValueDistance;
 import org.anchoranalysis.image.extent.ImageDim;
-
-import ch.ethz.biol.cell.mpp.mark.distance.MarkDistance;
-import ch.ethz.biol.cell.mpp.nrg.feature.session.FeatureSessionCreateParamsMPP;
 
 public class AddCriteriaDistanceTo extends AddCriteriaPair {
 

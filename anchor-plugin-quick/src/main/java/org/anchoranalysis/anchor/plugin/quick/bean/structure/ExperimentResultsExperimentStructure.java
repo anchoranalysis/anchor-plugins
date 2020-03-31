@@ -39,7 +39,7 @@ import org.anchoranalysis.io.bean.provider.file.FileProvider;
 import org.anchoranalysis.io.bean.provider.file.FileProviderWithDirectory;
 import org.anchoranalysis.io.bean.provider.file.SearchDirectory;
 import org.anchoranalysis.io.error.AnchorIOException;
-import org.anchoranalysis.plugin.io.bean.provider.file.RootedFileSet;
+import org.anchoranalysis.plugin.io.bean.provider.file.Rooted;
 
 /**
  * Finds some files produced in a previous experiment assuming a certain structure
@@ -108,7 +108,7 @@ public class ExperimentResultsExperimentStructure extends FileProvider {
 	private int maxDirectoryDepth;
 	// END BEAN PROPERTIES
 
-	private RootedFileSet delegate;
+	private Rooted delegate;
 	
 	@Override
 	public void checkMisconfigured(BeanInstanceMap defaultInstances) throws BeanMisconfiguredException {
@@ -122,11 +122,11 @@ public class ExperimentResultsExperimentStructure extends FileProvider {
 		}
 	}
 	
-	private RootedFileSet createRootedFileSet() {
-		RootedFileSet out = new RootedFileSet();
+	private Rooted createRootedFileSet() {
+		Rooted out = new Rooted();
 		out.setDisableDebugMode(true);
 		out.setRootName(rootName);
-		out.setFileSet( createFiles() );
+		out.setFileProvider( createFiles() );
 		return out;
 	}
 	

@@ -1,5 +1,7 @@
 package ch.ethz.biol.cell.mpp.nrg.feature.pair;
 
+import org.anchoranalysis.anchor.mpp.feature.bean.nrg.elem.NRGElemPair;
+import org.anchoranalysis.anchor.mpp.feature.nrg.elem.NRGElemPairCalcParams;
 import org.anchoranalysis.anchor.mpp.mark.GlobalRegionIdentifiers;
 
 /*
@@ -37,9 +39,7 @@ import org.anchoranalysis.feature.cachedcalculation.CachedCalculation;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.init.FeatureInitParams;
 
-import ch.ethz.biol.cell.mpp.nrg.NRGElemPairCalcParams;
 import ch.ethz.biol.cell.mpp.nrg.cachedcalculation.OverlapCalculation;
-import ch.ethz.biol.cell.mpp.nrg.NRGElemPair;
 
 public class MaxOverlapRatio extends NRGElemPair {
 

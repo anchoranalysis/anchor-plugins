@@ -44,7 +44,7 @@ public class ObjMaskFilterIntersectionWith extends ObjMaskFilterByObject {
 	
 	// START BEAN PROPERTIES
 	@BeanField
-	private ObjMaskProvider objMaskProvider;
+	private ObjMaskProvider objs;
 	// END BEAN PROPERTIES
 	
 	private ObjMaskCollection intersectionSet;
@@ -53,7 +53,7 @@ public class ObjMaskFilterIntersectionWith extends ObjMaskFilterByObject {
 	protected void start(ImageDim dim) throws OperationFailedException {
 		
 		try {
-			intersectionSet = objMaskProvider.create();
+			intersectionSet = objs.create();
 		} catch (CreateException e) {
 			throw new OperationFailedException(e);
 		}
@@ -85,12 +85,12 @@ public class ObjMaskFilterIntersectionWith extends ObjMaskFilterByObject {
 		
 	}
 
-	public ObjMaskProvider getObjMaskProvider() {
-		return objMaskProvider;
+	public ObjMaskProvider getObjs() {
+		return objs;
 	}
 
-	public void setObjMaskProvider(ObjMaskProvider objMaskProvider) {
-		this.objMaskProvider = objMaskProvider;
+	public void setObjs(ObjMaskProvider objs) {
+		this.objs = objs;
 	}
 
 

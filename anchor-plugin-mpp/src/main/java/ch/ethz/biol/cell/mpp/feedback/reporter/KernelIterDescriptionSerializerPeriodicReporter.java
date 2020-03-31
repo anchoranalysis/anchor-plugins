@@ -1,5 +1,7 @@
 package ch.ethz.biol.cell.mpp.feedback.reporter;
 
+import org.anchoranalysis.anchor.mpp.feature.nrg.cfg.CfgNRGPixelized;
+
 /*-
  * #%L
  * anchor-plugin-mpp
@@ -28,8 +30,6 @@ package ch.ethz.biol.cell.mpp.feedback.reporter;
 
 import org.anchoranalysis.mpp.sgmn.kernel.proposer.KernelIterDescription;
 import org.anchoranalysis.mpp.sgmn.optscheme.step.Reporting;
-
-import ch.ethz.biol.cell.mpp.nrg.CfgNRGPixelized;
 
 
 public class KernelIterDescriptionSerializerPeriodicReporter extends ObjectSerializerPeriodicReporter<KernelIterDescription> {

@@ -1,6 +1,8 @@
 package ch.ethz.biol.cell.mpp.mark.provider;
 
+import org.anchoranalysis.anchor.mpp.bean.cfg.CfgProvider;
 import org.anchoranalysis.anchor.mpp.bean.provider.MarkProvider;
+import org.anchoranalysis.anchor.mpp.cfg.Cfg;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
 
 /*
@@ -32,9 +34,6 @@ import org.anchoranalysis.anchor.mpp.mark.Mark;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
-
-import ch.ethz.biol.cell.mpp.cfg.Cfg;
-import ch.ethz.biol.cell.mpp.cfg.provider.CfgProvider;
 
 // Retrieves a mark from a cfg, assuming there is only one mark in a cfg, otherwise throwing an error
 public class RetrieveSingletonMark extends MarkProvider {

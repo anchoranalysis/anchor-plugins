@@ -1,5 +1,7 @@
 package ch.ethz.biol.cell.mpp.feedback.reporter;
 
+import org.anchoranalysis.anchor.mpp.feature.nrg.cfg.CfgNRGPixelized;
+
 /*
  * #%L
  * anchor-plugin-mpp
@@ -30,13 +32,11 @@ package ch.ethz.biol.cell.mpp.feedback.reporter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.log.LogReporter;
 import org.anchoranalysis.core.memory.MemoryUtilities;
+import org.anchoranalysis.mpp.sgmn.bean.optscheme.feedback.ReporterAgg;
+import org.anchoranalysis.mpp.sgmn.optscheme.feedback.OptimizationFeedbackInitParams;
+import org.anchoranalysis.mpp.sgmn.optscheme.feedback.aggregate.Aggregator;
+import org.anchoranalysis.mpp.sgmn.optscheme.feedback.aggregate.IAggregateReceiver;
 import org.anchoranalysis.mpp.sgmn.optscheme.step.Reporting;
-
-import ch.ethz.biol.cell.mpp.feedback.Aggregator;
-import ch.ethz.biol.cell.mpp.feedback.IAggregateReceiver;
-import ch.ethz.biol.cell.mpp.feedback.OptimizationFeedbackInitParams;
-import ch.ethz.biol.cell.mpp.feedback.ReporterAgg;
-import ch.ethz.biol.cell.mpp.nrg.CfgNRGPixelized;
 
 public class MemoryUsageReporter extends ReporterAgg<CfgNRGPixelized> {
 

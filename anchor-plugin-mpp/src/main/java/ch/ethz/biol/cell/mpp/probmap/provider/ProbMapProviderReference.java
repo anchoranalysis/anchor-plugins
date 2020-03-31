@@ -34,7 +34,7 @@ import org.anchoranalysis.anchor.mpp.probmap.ProbMap;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
-import org.anchoranalysis.core.index.GetOperationFailedException;
+import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 
 public class ProbMapProviderReference extends ProbMapProvider {
 
@@ -55,8 +55,8 @@ public class ProbMapProviderReference extends ProbMapProvider {
 		super.onInit(pso);
 		try {
 			probMap = getSharedObjects().getProbMapSet().getException(id);
-		} catch (GetOperationFailedException e) {
-			throw new InitException(e);
+		} catch (NamedProviderGetException e) {
+			throw new InitException(e.summarize());
 		}
 	}
 

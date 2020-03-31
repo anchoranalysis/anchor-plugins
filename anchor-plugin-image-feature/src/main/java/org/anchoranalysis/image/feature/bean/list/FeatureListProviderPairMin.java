@@ -26,11 +26,11 @@ package org.anchoranalysis.image.feature.bean.list;
  * #L%
  */
 
-import org.anchoranalysis.feature.bean.Feature;
+import org.anchoranalysis.feature.bean.operator.FeatureListElem;
 
 import ch.ethz.biol.cell.mpp.nrg.feature.operator.Minimum;
 
-public class FeatureListProviderPairMin extends FeatureListProviderAggregate {
+public class FeatureListProviderPairMin extends FeatureListProviderAggregatePair {
 
 	/**
 	 * 
@@ -38,10 +38,7 @@ public class FeatureListProviderPairMin extends FeatureListProviderAggregate {
 	private static final long serialVersionUID = 1L;
 
 	@Override
-	protected Feature createAggregateFeature( Feature featFirst, Feature featSecond, Feature featMerged ) {
-		Minimum featMin = new Minimum();
-		featMin.getList().add(featFirst);
-		featMin.getList().add(featSecond);
-		return featMin;
+	protected FeatureListElem createFeature() {
+		return new Minimum();
 	}
 }

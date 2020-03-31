@@ -1,5 +1,7 @@
 package ch.ethz.biol.cell.mpp.anneal;
 
+import org.anchoranalysis.anchor.mpp.bean.anneal.AnnealScheme;
+
 /*
  * #%L
  * anchor-plugin-mpp

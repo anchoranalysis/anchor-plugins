@@ -35,12 +35,11 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 import org.anchoranalysis.image.bean.provider.BinaryImgChnlProvider;
 import org.anchoranalysis.image.binary.BinaryChnl;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelBoxByte;
-import org.anchoranalysis.image.feature.bean.stack.FeatureStack;
+import org.anchoranalysis.image.feature.bean.FeatureStack;
 import org.anchoranalysis.image.feature.objmask.FeatureObjMaskParams;
 import org.anchoranalysis.image.feature.stack.FeatureStackParams;
 import org.anchoranalysis.image.objmask.ObjMask;
@@ -92,11 +91,7 @@ public class BinaryImageChnlProviderFeature extends FeatureStack {
 		
 		
 		FeatureObjMaskParams paramsObj = new FeatureObjMaskParams();
-		try {
-			paramsObj.setNrgStack( new NRGStackWithParams(params.getNrgStack()) );
-		} catch (CreateException e) {
-			throw new FeatureCalcException(e);
-		}
+		paramsObj.setNrgStack( params.getNrgStack() );
 		
 		DoubleArrayList featureVals = new DoubleArrayList();
 		

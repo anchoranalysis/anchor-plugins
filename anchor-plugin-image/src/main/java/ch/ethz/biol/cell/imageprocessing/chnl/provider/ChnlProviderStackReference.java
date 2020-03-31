@@ -29,7 +29,7 @@ package ch.ethz.biol.cell.imageprocessing.chnl.provider;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.core.index.GetOperationFailedException;
+import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 import org.anchoranalysis.image.bean.provider.ChnlProvider;
 import org.anchoranalysis.image.chnl.Chnl;
 import org.anchoranalysis.image.stack.Stack;
@@ -63,7 +63,7 @@ public class ChnlProviderStackReference extends ChnlProvider {
 					throw new CreateException( String.format("chnl %d cannot be found", chnlIndex));
 				}
 			}
-		} catch (GetOperationFailedException e) {
+		} catch (NamedProviderGetException e) {
 			throw new CreateException(e);
 		}
 		

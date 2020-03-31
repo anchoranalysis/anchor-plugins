@@ -51,7 +51,7 @@ public class ObjMaskProviderExpandZ extends ObjMaskProviderDimensions {
 	
 	// START BEAN PROPERTIES
 	@BeanField
-	private ObjMaskProvider objMaskProvider;
+	private ObjMaskProvider objs;
 	// END BEAN PROPERTIES
 
 	@Override
@@ -59,7 +59,7 @@ public class ObjMaskProviderExpandZ extends ObjMaskProviderDimensions {
 		
 		ImageDim dims = createDims();
 		
-		ObjMaskCollection in = objMaskProvider.create();
+		ObjMaskCollection in = objs.create();
 		
 		ObjMaskCollection out = new ObjMaskCollection();
 		
@@ -88,11 +88,11 @@ public class ObjMaskProviderExpandZ extends ObjMaskProviderDimensions {
 		return out;
 	}
 
-	public ObjMaskProvider getObjMaskProvider() {
-		return objMaskProvider;
+	public ObjMaskProvider getObjs() {
+		return objs;
 	}
 
-	public void setObjMaskProvider(ObjMaskProvider objMaskProvider) {
-		this.objMaskProvider = objMaskProvider;
+	public void setObjs(ObjMaskProvider objs) {
+		this.objs = objs;
 	}
 }

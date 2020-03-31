@@ -29,7 +29,7 @@ package ch.ethz.biol.cell.mpp.nrg.feature.objmaskpair;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.feature.bean.objmask.pair.FeatureObjMaskPair;
 import org.anchoranalysis.image.feature.objmask.pair.FeatureObjMaskPairParams;
-import org.anchoranalysis.image.objmask.ObjMask;
+import org.anchoranalysis.image.objmask.ObjMaskOverlap;
 
 public class OverlapRelativeToMerged extends FeatureObjMaskPair {
 
@@ -40,23 +40,14 @@ public class OverlapRelativeToMerged extends FeatureObjMaskPair {
 
 	// START BEAN PROPERTIES
 	// END BEAN PROPERTIES
-	
-	static double calcOverlapRatio( ObjMask objA, ObjMask objB, ObjMask objMerged ) {
-		
-		int intersectingPixels = objA.countIntersectingPixels(objB);
-		if (intersectingPixels==0) {
-			return 0;
-		}
-		
-		int vol = objMerged.numPixels();
-		
-		return ((double) intersectingPixels) / vol;
-	}
 
 	@Override
 	public double calcCast(FeatureObjMaskPairParams params)
 			throws FeatureCalcException {
-		
-		return calcOverlapRatio(params.getObjMask1(), params.getObjMask2(), params.getObjMaskMerged() );
+		return ObjMaskOverlap.calcOverlapRatio(
+			params.getObjMask1(),
+			params.getObjMask2(),
+			params.getObjMaskMerged()
+		);
 	}
 }

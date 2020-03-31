@@ -53,10 +53,10 @@ public class ObjMaskProviderSplitByObjCollection extends ObjMaskProviderDimensio
 	
 	// START BEAN PROPERTIES
 	@BeanField
-	private ObjMaskProvider objMaskProvider;
+	private ObjMaskProvider objs;
 	
 	@BeanField
-	private ObjMaskProvider objMaskProviderSplitBy;
+	private ObjMaskProvider objsSplitBy;
 	// END BEAN PROPERTIES
 	
 	private ObjMaskCollection splitObj( ObjMask objToSplit, ObjMaskCollection objsSplitBy, ImageDim dim ) throws OperationFailedException {
@@ -117,17 +117,17 @@ public class ObjMaskProviderSplitByObjCollection extends ObjMaskProviderDimensio
 	@Override
 	public ObjMaskCollection create() throws CreateException {
 		
-		ObjMaskCollection objs = objMaskProvider.create();
-		ObjMaskCollection objsSplitBy = objMaskProviderSplitBy.create();
+		ObjMaskCollection objsCollection = objs.create();
+		ObjMaskCollection objsSplitByCollection = objsSplitBy.create();
 
 		ImageDim dims = createDims();
 		
 		ObjMaskCollection out = new ObjMaskCollection();
 		
-		for( ObjMask om : objs ) {
+		for( ObjMask om : objsCollection ) {
 			
 			// Find all object masks that could potentially intersect with the current oject
-			ObjMaskCollection omcIntersecting = objsSplitBy.findObjsWithIntersectingBBox(om);
+			ObjMaskCollection omcIntersecting = objsSplitByCollection.findObjsWithIntersectingBBox(om);
 			
 			try {
 				out.addAll( splitObj(om, omcIntersecting, dims ) );
@@ -139,19 +139,22 @@ public class ObjMaskProviderSplitByObjCollection extends ObjMaskProviderDimensio
 		return out;
 	}
 
-	public ObjMaskProvider getObjMaskProvider() {
-		return objMaskProvider;
+	public ObjMaskProvider getObjs() {
+		return objs;
 	}
 
-	public void setObjMaskProvider(ObjMaskProvider objMaskProvider) {
-		this.objMaskProvider = objMaskProvider;
+	public void setObjs(ObjMaskProvider objs) {
+		this.objs = objs;
 	}
 
-	public ObjMaskProvider getObjMaskProviderSplitBy() {
-		return objMaskProviderSplitBy;
+
+	public ObjMaskProvider getObjsSplitBy() {
+		return objsSplitBy;
 	}
 
-	public void setObjMaskProviderSplitBy(ObjMaskProvider objMaskProviderSplitBy) {
-		this.objMaskProviderSplitBy = objMaskProviderSplitBy;
+
+	public void setObjsSplitBy(ObjMaskProvider objsSplitBy) {
+		this.objsSplitBy = objsSplitBy;
 	}
+
 }

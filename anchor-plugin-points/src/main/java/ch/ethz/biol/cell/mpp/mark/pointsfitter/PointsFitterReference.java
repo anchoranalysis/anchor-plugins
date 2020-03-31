@@ -37,7 +37,7 @@ import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.geometry.Point3f;
-import org.anchoranalysis.core.index.GetOperationFailedException;
+import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 import org.anchoranalysis.image.extent.ImageDim;
 
 public class PointsFitterReference extends PointsFitter {
@@ -60,8 +60,8 @@ public class PointsFitterReference extends PointsFitter {
 		super.onInit(so);
 		try {
 			this.pointsFitter = getSharedObjects().getPointsFitterSet().getException(id);
-		} catch (GetOperationFailedException e) {
-			throw new InitException(e);
+		} catch (NamedProviderGetException e) {
+			throw new InitException(e.summarize());
 		}
 	}
 

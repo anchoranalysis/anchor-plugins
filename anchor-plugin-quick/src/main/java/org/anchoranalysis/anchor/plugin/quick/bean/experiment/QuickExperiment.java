@@ -30,6 +30,7 @@ import java.io.IOException;
 
 
 import java.nio.file.Path;
+
 import org.anchoranalysis.bean.BeanInstanceMap;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.error.BeanMisconfiguredException;
@@ -213,7 +214,7 @@ public class QuickExperiment extends Experiment {
 			delegate.setInput( createInputManagerImageFile(fs) );
 			
 			try {
-				delegate.setOutput( createOutputManager(fs.getDirectoryAsPath( expArgs.createInputContext() )) );
+				delegate.setOutput( createOutputManager(fs.getDirectoryAsPathEnsureAbsolute( expArgs.createInputContext() )) );
 				
 			} catch (IOException e) {
 				throw new ExperimentExecutionException(e);

@@ -30,10 +30,12 @@ package ch.ethz.biol.cell.mpp.cfg.provider;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.anchoranalysis.anchor.mpp.bean.cfg.CfgProvider;
 import org.anchoranalysis.anchor.mpp.bean.mark.factory.MarkFactory;
 import org.anchoranalysis.anchor.mpp.bean.points.fitter.InsufficientPointsException;
 import org.anchoranalysis.anchor.mpp.bean.points.fitter.PointsFitter;
 import org.anchoranalysis.anchor.mpp.bean.points.fitter.PointsFitterException;
+import org.anchoranalysis.anchor.mpp.cfg.Cfg;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
@@ -47,7 +49,6 @@ import org.anchoranalysis.image.objmask.ObjMaskCollection;
 import org.anchoranalysis.image.outline.FindOutline;
 import org.anchoranalysis.image.points.PointsFromBinaryVoxelBox;
 
-import ch.ethz.biol.cell.mpp.cfg.Cfg;
 import ch.ethz.biol.cell.mpp.mark.pointsfitter.ConvexHullUtilities;
 
 public class CfgProviderPointsFitterFromObjs extends CfgProvider {
@@ -59,7 +60,7 @@ public class CfgProviderPointsFitterFromObjs extends CfgProvider {
 	
 	/// START BEAN PROPERTIES
 	@BeanField
-	private ObjMaskProvider objMaskProvider;
+	private ObjMaskProvider objs;
 	
 	@BeanField
 	private PointsFitter pointsFitter;
@@ -91,11 +92,11 @@ public class CfgProviderPointsFitterFromObjs extends CfgProvider {
 		
 		ImageDim dim = dimProvider.create();
 
-		ObjMaskCollection objs = objMaskProvider.create();
+		ObjMaskCollection objsCollection = objs.create();
 		
 		Cfg cfgOut = new Cfg();
 		
-		for( ObjMask om : objs ) {
+		for( ObjMask om : objsCollection ) {
 			Mark mark = createMarkFromObj(om,dim);
 			if (mark!=null) {
 				cfgOut.add( mark );
@@ -154,12 +155,12 @@ public class CfgProviderPointsFitterFromObjs extends CfgProvider {
 		return markOut;		
 	}
 
-	public ObjMaskProvider getObjMaskProvider() {
-		return objMaskProvider;
+	public ObjMaskProvider getObjs() {
+		return objs;
 	}
 
-	public void setObjMaskProvider(ObjMaskProvider objMaskProvider) {
-		this.objMaskProvider = objMaskProvider;
+	public void setObjs(ObjMaskProvider objs) {
+		this.objs = objs;
 	}
 
 	public PointsFitter getPointsFitter() {

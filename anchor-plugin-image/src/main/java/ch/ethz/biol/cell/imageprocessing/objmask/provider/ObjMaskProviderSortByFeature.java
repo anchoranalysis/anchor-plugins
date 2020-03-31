@@ -50,7 +50,7 @@ public class ObjMaskProviderSortByFeature extends ObjMaskProvider {
 	
 	// START BEAN PROPERTIES
 	@BeanField
-	private ObjMaskProvider objMaskProvider;
+	private ObjMaskProvider objs;
 	
 	@BeanField
 	private FeatureEvaluatorNrgStack featureEvaluator;
@@ -83,13 +83,13 @@ public class ObjMaskProviderSortByFeature extends ObjMaskProvider {
 	@Override
 	public ObjMaskCollection create() throws CreateException {
 
-		ObjMaskCollection objs = objMaskProvider.create();
+		ObjMaskCollection objsCollection = objs.create();
 		
 		try {
 			FeatureSessionCreateParamsSingle featureSession = featureEvaluator.createAndStartSession();
 			
 			List<ObjWithFeatureValue> listToSort = new ArrayList<>();
-			for( ObjMask om : objs ) {
+			for( ObjMask om : objsCollection ) {
 				try {
 					listToSort.add( new ObjWithFeatureValue(om,featureSession) );
 				} catch (FeatureCalcException e) {
@@ -111,13 +111,13 @@ public class ObjMaskProviderSortByFeature extends ObjMaskProvider {
 		}
 	}
 	
-	public ObjMaskProvider getObjMaskProvider() {
-		return objMaskProvider;
+	public ObjMaskProvider getObjs() {
+		return objs;
 	}
 
 
-	public void setObjMaskProvider(ObjMaskProvider objMaskProvider) {
-		this.objMaskProvider = objMaskProvider;
+	public void setObjs(ObjMaskProvider objs) {
+		this.objs = objs;
 	}
 
 

@@ -37,7 +37,7 @@ import org.anchoranalysis.core.color.ColorList;
 import org.anchoranalysis.core.color.RGBColor;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
-import org.anchoranalysis.image.io.generator.raster.objmask.rgb.RGBObjMaskGenerator;
+import org.anchoranalysis.image.io.generator.raster.obj.rgb.RGBObjMaskGenerator;
 import org.anchoranalysis.image.objmask.ObjMaskCollection;
 import org.anchoranalysis.image.objmask.properties.ObjMaskWithPropertiesCollection;
 import org.anchoranalysis.image.stack.DisplayStack;
@@ -56,13 +56,13 @@ public class StackProviderRGBFromObjMaskThreeColors extends StackProviderWithBac
 	
 	// START BEAN PROPERTIES
 	@BeanField @Optional
-	private ObjMaskProvider objMaskProviderRed;
+	private ObjMaskProvider objsRed;
 	
 	@BeanField @Optional
-	private ObjMaskProvider objMaskProviderBlue;
+	private ObjMaskProvider objsBlue;
 	
 	@BeanField @Optional
-	private ObjMaskProvider objMaskProviderGreen;
+	private ObjMaskProvider objsGreen;
 		
 	@BeanField
 	private boolean outline = false;
@@ -78,8 +78,8 @@ public class StackProviderRGBFromObjMaskThreeColors extends StackProviderWithBac
 	public void checkMisconfigured( BeanInstanceMap defaultInstances ) throws BeanMisconfiguredException {
 		super.checkMisconfigured( defaultInstances );
 		
-		if (objMaskProviderRed==null && objMaskProviderBlue==null && objMaskProviderGreen==null) {
-			throw new BeanMisconfiguredException("Either objMaskProviderRed or objMaskProviderBlue or objMaskProviderGreen must be non-null");
+		if (objsRed==null && objsBlue==null && objsGreen==null) {
+			throw new BeanMisconfiguredException("Either objsRed or objsBlue or objsGreen must be non-null");
 		}
 	}
 
@@ -102,9 +102,9 @@ public class StackProviderRGBFromObjMaskThreeColors extends StackProviderWithBac
 		ObjMaskCollection objs = new ObjMaskCollection();
 		ColorList colors = new ColorList();
 		
-		addColor( objMaskProviderRed, new RGBColor(255,0,0), objs, colors );
-		addColor( objMaskProviderGreen, new RGBColor(0,255,0), objs, colors );
-		addColor( objMaskProviderBlue, new RGBColor(0,0,255), objs, colors );
+		addColor( objsRed, new RGBColor(255,0,0), objs, colors );
+		addColor( objsGreen, new RGBColor(0,255,0), objs, colors );
+		addColor( objsBlue, new RGBColor(0,0,255), objs, colors );
 		
 		ObjMaskWriter objMaskWriter = outline ? new RGBOutlineWriter(outlineWidth,force2D) : new RGBSolidWriter();  
 		
@@ -142,29 +142,36 @@ public class StackProviderRGBFromObjMaskThreeColors extends StackProviderWithBac
 		force2D = force2d;
 	}
 
-	public ObjMaskProvider getObjMaskProviderRed() {
-		return objMaskProviderRed;
+
+	public ObjMaskProvider getObjsRed() {
+		return objsRed;
 	}
 
-	public void setObjMaskProviderRed(ObjMaskProvider objMaskProviderRed) {
-		this.objMaskProviderRed = objMaskProviderRed;
+
+	public void setObjsRed(ObjMaskProvider objsRed) {
+		this.objsRed = objsRed;
 	}
 
-	public ObjMaskProvider getObjMaskProviderBlue() {
-		return objMaskProviderBlue;
+
+	public ObjMaskProvider getObjsBlue() {
+		return objsBlue;
 	}
 
-	public void setObjMaskProviderBlue(ObjMaskProvider objMaskProviderBlue) {
-		this.objMaskProviderBlue = objMaskProviderBlue;
+
+	public void setObjsBlue(ObjMaskProvider objsBlue) {
+		this.objsBlue = objsBlue;
 	}
 
-	public ObjMaskProvider getObjMaskProviderGreen() {
-		return objMaskProviderGreen;
+
+	public ObjMaskProvider getObjsGreen() {
+		return objsGreen;
 	}
 
-	public void setObjMaskProviderGreen(ObjMaskProvider objMaskProviderGreen) {
-		this.objMaskProviderGreen = objMaskProviderGreen;
+
+	public void setObjsGreen(ObjMaskProvider objsGreen) {
+		this.objsGreen = objsGreen;
 	}
+
 
 
 }

@@ -34,6 +34,7 @@ import org.anchoranalysis.image.io.RasterIOException;
 import org.anchoranalysis.image.io.bean.rasterwriter.RasterWriter;
 import org.anchoranalysis.image.io.generator.raster.series.ImgStackSeries;
 import org.anchoranalysis.image.stack.Stack;
+import org.anchoranalysis.plugin.opencv.CVInit;
 import org.anchoranalysis.plugin.opencv.MatConverter;
 import org.opencv.imgcodecs.Imgcodecs;
 
@@ -45,7 +46,7 @@ public class OpenCVPngWriter extends RasterWriter {
 	private static final long serialVersionUID = 1L;
 
 	static {
-		nu.pattern.OpenCV.loadShared();
+		CVInit.alwaysExecuteBeforeCallingLibrary();
 	}
 	
 	@Override

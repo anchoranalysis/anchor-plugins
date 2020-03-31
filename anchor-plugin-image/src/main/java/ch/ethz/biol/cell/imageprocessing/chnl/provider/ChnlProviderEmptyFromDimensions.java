@@ -38,6 +38,8 @@ import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedShort;
 
+import ch.ethz.biol.cell.imageprocessing.dim.provider.GuessDimFromInputImage;
+
 public class ChnlProviderEmptyFromDimensions extends ChnlProvider {
 	
 	/**
@@ -47,7 +49,7 @@ public class ChnlProviderEmptyFromDimensions extends ChnlProvider {
 	
 	// START BEAN PROPERTIES
 	@BeanField
-	private ImageDimProvider dimProvider;
+	private ImageDimProvider dimProvider = new GuessDimFromInputImage();
 	
 	@BeanField
 	private int value;

@@ -38,11 +38,10 @@ import org.anchoranalysis.image.contour.Contour;
 import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.image.outline.traverser.contiguouspath.PointsListNghbUtilities;
 import org.anchoranalysis.plugin.opencv.CVFindContours;
-import org.anchoranalysis.test.LoadUtilities;
+import org.anchoranalysis.test.TestLoader;
+import org.anchoranalysis.test.image.TestLoaderImageIO;
+import org.anchoranalysis.test.mpp.LoadUtilities;
 import org.junit.Test;
-
-import anchor.test.TestLoader;
-import anchor.test.image.TestLoaderImageIO;
 
 public class PointsFromContourTraverserTest {
 	

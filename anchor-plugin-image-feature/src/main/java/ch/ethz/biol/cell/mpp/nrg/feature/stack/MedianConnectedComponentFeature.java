@@ -31,10 +31,9 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 import org.anchoranalysis.image.binary.BinaryChnl;
 import org.anchoranalysis.image.binary.values.BinaryValues;
-import org.anchoranalysis.image.feature.bean.stack.FeatureStack;
+import org.anchoranalysis.image.feature.bean.FeatureStack;
 import org.anchoranalysis.image.feature.objmask.FeatureObjMaskParams;
 import org.anchoranalysis.image.feature.stack.FeatureStackParams;
 import org.anchoranalysis.image.objmask.ObjMask;
@@ -79,11 +78,7 @@ public class MedianConnectedComponentFeature extends FeatureStack {
 		
 		
 		FeatureObjMaskParams paramsObj = new FeatureObjMaskParams();
-		try {
-			paramsObj.setNrgStack( new NRGStackWithParams(params.getNrgStack()) );
-		} catch (CreateException e) {
-			throw new FeatureCalcException(e);
-		}
+		paramsObj.setNrgStack( params.getNrgStack() );
 		
 		DoubleArrayList featureVals = new DoubleArrayList();
 		

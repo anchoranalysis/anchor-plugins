@@ -1,5 +1,8 @@
 package ch.ethz.biol.cell.mpp.cfg.provider;
 
+import org.anchoranalysis.anchor.mpp.bean.cfg.CfgProvider;
+import org.anchoranalysis.anchor.mpp.cfg.Cfg;
+
 /*
  * #%L
  * anchor-plugin-mpp
@@ -29,9 +32,7 @@ package ch.ethz.biol.cell.mpp.cfg.provider;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.core.index.GetOperationFailedException;
-
-import ch.ethz.biol.cell.mpp.cfg.Cfg;
+import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 
 public class CfgProviderReference extends CfgProvider {
 
@@ -58,7 +59,7 @@ public class CfgProviderReference extends CfgProvider {
 	public Cfg create() throws CreateException {
 		try {
 			return getSharedObjects().getCfgCollection().getException(id);
-		} catch (GetOperationFailedException e) {
+		} catch (NamedProviderGetException e) {
 			throw new CreateException(e);
 		}
 	}

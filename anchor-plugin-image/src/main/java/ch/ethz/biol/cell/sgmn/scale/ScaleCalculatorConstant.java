@@ -48,7 +48,7 @@ public class ScaleCalculatorConstant extends ScaleCalculator {
 	@Override
 	public ScaleFactor calc(ImageDim srcDim)
 			throws OperationFailedException {
-		return new ScaleFactor(value,value);
+		return new ScaleFactor(value);
 	}
 
 	public double getValue() {

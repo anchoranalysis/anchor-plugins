@@ -1,5 +1,10 @@
 package ch.ethz.biol.cell.mpp.cfg.proposer;
 
+import org.anchoranalysis.anchor.mpp.bean.cfg.CfgGen;
+import org.anchoranalysis.anchor.mpp.bean.proposer.CfgProposer;
+import org.anchoranalysis.anchor.mpp.cfg.Cfg;
+import org.anchoranalysis.anchor.mpp.feature.bean.mark.CheckMark;
+import org.anchoranalysis.anchor.mpp.feature.error.CheckException;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.anchor.mpp.mark.conic.MarkEllipsoid;
 import org.anchoranalysis.anchor.mpp.proposer.ProposalAbnormalFailureException;
@@ -42,11 +47,6 @@ import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.image.objmask.ObjMaskCollection;
 import org.anchoranalysis.plugin.points.calculate.ellipsoid.EllipsoidFactory;
 
-import ch.ethz.biol.cell.core.CheckMark;
-import ch.ethz.biol.cell.mpp.cfg.Cfg;
-import ch.ethz.biol.cell.mpp.cfg.CfgGen;
-import ch.ethz.biol.cell.mpp.mark.check.CheckException;
-
 public class CfgProposerFromObjMaskCollection extends CfgProposer {
 
 	/**
@@ -56,7 +56,7 @@ public class CfgProposerFromObjMaskCollection extends CfgProposer {
 	
 	// START BEAN PROPERTIES
 	@BeanField
-	private ObjMaskProvider objMaskProvider;
+	private ObjMaskProvider objs;
 	
 	@BeanField
 	private boolean suppressZCovariance = false;
@@ -82,9 +82,9 @@ public class CfgProposerFromObjMaskCollection extends CfgProposer {
 	public Cfg propose(CfgGen cfgGen, ProposerContext context) throws ProposalAbnormalFailureException {
 
 
-		ObjMaskCollection objs;
+		ObjMaskCollection objsCollection;
 		try {
-			objs = objMaskProvider.create();
+			objsCollection = objs.create();
 		} catch (CreateException e) {
 			throw new ProposalAbnormalFailureException("Failed to create objs", e);
 		}
@@ -100,7 +100,7 @@ public class CfgProposerFromObjMaskCollection extends CfgProposer {
 		}
 
 		try {
-			for( ObjMask om : objs ) {
+			for( ObjMask om : objsCollection ) {
 				Mark mark = createFromObjMask(om, context.getNrgStack());
 				mark.setId( cfgGen.idAndIncrement() );
 				
@@ -134,12 +134,12 @@ public class CfgProposerFromObjMaskCollection extends CfgProposer {
 		this.suppressZCovariance = suppressZCovariance;
 	}
 
-	public ObjMaskProvider getObjMaskProvider() {
-		return objMaskProvider;
+	public ObjMaskProvider getObjs() {
+		return objs;
 	}
 
-	public void setObjMaskProvider(ObjMaskProvider objMaskProvider) {
-		this.objMaskProvider = objMaskProvider;
+	public void setObjs(ObjMaskProvider objs) {
+		this.objs = objs;
 	}
 
 	public double getShellRad() {

@@ -32,6 +32,8 @@ import org.anchoranalysis.image.bean.provider.ImageDimProvider;
 import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
 import org.anchoranalysis.image.extent.ImageDim;
 
+import ch.ethz.biol.cell.imageprocessing.dim.provider.GuessDimFromInputImage;
+
 public abstract class ObjMaskProviderDimensions extends ObjMaskProvider {
 
 	/**
@@ -41,7 +43,7 @@ public abstract class ObjMaskProviderDimensions extends ObjMaskProvider {
 
 	// START BEAN PROPERTIES
 	@BeanField
-	private ImageDimProvider dimProvider;
+	private ImageDimProvider dimProvider = new GuessDimFromInputImage();
 	// END BEAN PROPERTIES
 	
 	protected ImageDim createDims() throws CreateException {

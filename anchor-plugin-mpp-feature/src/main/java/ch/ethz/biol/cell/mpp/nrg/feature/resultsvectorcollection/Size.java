@@ -1,5 +1,7 @@
 package ch.ethz.biol.cell.mpp.nrg.feature.resultsvectorcollection;
 
+import org.anchoranalysis.anchor.mpp.feature.bean.results.FeatureResultsVectorCollection;
+
 /*-
  * #%L
  * anchor-plugin-mpp-feature
