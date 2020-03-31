@@ -39,7 +39,7 @@ import org.opencv.core.Scalar;
 import org.opencv.dnn.Dnn;
 import org.opencv.dnn.Net;
 
-class EastBoundingBoxExtractor {
+class EastMarkExtractor {
 
 	private static final Scalar MEAN_SUBTRACTION_CONSTANTS = new Scalar(123.68, 116.78, 103.94); 
 	
@@ -50,7 +50,7 @@ class EastBoundingBoxExtractor {
 	
 	
 	/**
-	 * Extracts bounding boxes from an image using the EAST model
+	 * Extracts rotatable bounding boxes (as marks) from an image using the EAST model
 	 * 
 	 * @param image an RGB image to extract boxes from
 	 * @param minConfidence filters boxes to have confidence >= minConfidence

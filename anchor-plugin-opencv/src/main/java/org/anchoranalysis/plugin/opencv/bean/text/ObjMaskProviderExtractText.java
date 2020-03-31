@@ -110,85 +110,45 @@ public class ObjMaskProviderExtractText extends ObjMaskProvider {
 	public ObjMaskCollection create() throws CreateException {
 		
 		Stack stack = createInput();
+				
+		// Scales the input to the largest acceptable-extent
+		Pair<Mat,ScaleFactor> pair = CreateScaledInput.apply(
+			stack,
+			findLargestExtent( stack.getDimensions().getExtnt() )
+		);
 		
-		Extent extent;
+		// Convert marks to object-masks
+		List<WithConfidence<ObjMask>> objsWithConfidence = EastObjsExtractor.apply(
+			pair.getFirst(),
+			stack.getDimensions().getRes(),
+			minConfidence,
+			pathToEastModel()
+		);
+		
+		// Scale each object-mask and extract as an ObjMaskCollection
+		return ScaleExtractObjs.apply(
+			maybeFilterList(objsWithConfidence),
+			pair.getSecond()
+		);
+	}
+	
+	/** 
+	 * Finds largest allowed extent to scale the input image down to
+	 * 
+	 * @param stayWithin an upper bound on what's allowed
+	 * @return the largest extent allowed that is a scale multiple of EAST_EXTENT
+	 * @throws CreateException
+	 */
+	private static Extent findLargestExtent( Extent stayWithin ) throws CreateException {
 		try {
-			extent = FindLargestMultipleWithin.apply(
+			return FindLargestMultipleWithin.apply(
 				EAST_EXTENT,
-				stack.getDimensions().getExtnt(),
+				stayWithin,
 				MAX_SCALE_FACTOR
 			);
 		} catch (OperationFailedException e) {
 			throw new CreateException("Cannot scale input to size needed for EAST", e);
 		}
-		
-		Pair<Mat,ScaleFactor> pair = CreateScaledInput.apply(stack, extent);
-		
-		List<WithConfidence<Mark>> listMarks = EastBoundingBoxExtractor.extractBoundingBoxes(
-			pair.getFirst(),
-			minConfidence,
-			pathToEastModel()
-		);
-		
-		List<WithConfidence<ObjMask>> listBoxes = convertToObjMask(
-			listMarks,
-			dimsForMat(pair.getFirst(), stack.getDimensions().getRes() )
-		);
-		
-		listBoxes = maybeFilterList(listBoxes);
-		
-		// Scale each bounding box back to the original-size, and convert into an object-mask
-		/*return ScaleConvertToMask.scaledMasksForEachBox(
-			maybeFilterList(listBoxes),
-			pair.getSecond(),
-			stack.getDimensions()
-		);*/
-		ObjMaskCollection objs = new ObjMaskCollection(
-			listBoxes.stream().map(wc->wc.getObj()).collect( Collectors.toList() )
-		);
-		try {
-			objs.scale(pair.getSecond(), InterpolatorFactory.getInstance().binaryResizing() );
-		} catch (OperationFailedException e) {
-			assert(false);
-		}
-		
-		return objs;
-	}
-	
-	private ImageDim dimsForMat( Mat mat, ImageRes res ) {
-		
-		int width = (int) mat.size().width;
-		int height = (int) mat.size().height;
-		
-		ImageDim dims = new ImageDim(
-			new Extent(width, height, 1),
-			res
-		);
-		
-		return dims;
-	}
-	
-	private static List<WithConfidence<ObjMask>> convertToObjMask(
-		List<WithConfidence<Mark>> listMarks,
-		ImageDim dim
-	) {
-		return listMarks.stream()
-				.map( wc -> convertToObjMask(wc, dim) )
-				.collect( Collectors.toList() );
-	}
-	
-	private static WithConfidence<ObjMask> convertToObjMask( WithConfidence<Mark> wcMark, ImageDim dim ) {
-
-		
-		ObjMaskWithProperties om = wcMark.getObj().calcMask(
-			dim,
-			RegionMapSingleton.instance().membershipWithFlagsForIndex(GlobalRegionIdentifiers.SUBMARK_INSIDE),
-			BinaryValuesByte.getDefault()
-		);
-		return new WithConfidence<ObjMask>(
-			om.getMask(),
-			wcMark.getConfidence()
-		);
 	}
 	
 	private Stack createInput() throws CreateException {
