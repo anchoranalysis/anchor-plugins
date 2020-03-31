@@ -46,7 +46,7 @@ public class ObjMaskProviderRemoveIntersectingPixels extends ObjMaskProviderDime
 	
 	// START BEAN PROPERTIES
 	@BeanField
-	private ObjMaskProvider objMaskProvider;
+	private ObjMaskProvider objs;
 	
 	/**
 	 * If TRUE, throws an error if there is a disconnected object after the erosion
@@ -105,60 +105,53 @@ public class ObjMaskProviderRemoveIntersectingPixels extends ObjMaskProviderDime
 	@Override
 	public ObjMaskCollection create() throws CreateException {
 
-		ObjMaskCollection objs = objMaskProvider.create();
+		ObjMaskCollection objsCollection = objs.create();
 		
-		ObjMaskCollection objsDup = objs.duplicate();
+		ObjMaskCollection objsDup = objsCollection.duplicate();
 		
 		ImageDim dims = createDims();
 		
-		for( int i=0; i<objs.size(); i++) {
+		for( int i=0; i<objsCollection.size(); i++) {
 			
 			ObjMask omWrite = objsDup.get(i);
 			
-			if (errorDisconnectedObjects) {
-				try {
-					if( !omWrite.checkIfConnected() ) {
-						throw new CreateException(
-							String.format("Obj %s is disconnected before removing intersecting-pixels\n", omWrite )	
-						);
-					}
-				} catch (OperationFailedException e) {
-					throw new CreateException(e);
-				}
-			}
+			maybeErrorDisconnectedObjects( omWrite, "before" );
 			
-			for( int j=0; j<objs.size(); j++) {
+			for( int j=0; j<objsCollection.size(); j++) {
 				
 				ObjMask omRead = objsDup.get(j);
-				
 				
 				if (i<j) {
 					removeIntersectingPixelsIfIntersects( omWrite, omRead, dims );
 				}
 			}
 			
-			if (errorDisconnectedObjects) {
-				try {
-					if( !omWrite.checkIfConnected() ) {
-						throw new CreateException(
-							String.format("Obj %s becomes disconnected after removing intersecting-pixels\n", omWrite )	
-						);
-					}
-				} catch (OperationFailedException e) {
-					throw new CreateException(e);
-				}
-			}
+			maybeErrorDisconnectedObjects( omWrite, "after" );
 		}
 		
 		return objsDup;
 	}
-
-	public ObjMaskProvider getObjMaskProvider() {
-		return objMaskProvider;
+	
+	private void maybeErrorDisconnectedObjects( ObjMask omWrite, String dscr ) throws CreateException {
+		if (errorDisconnectedObjects) {
+			try {
+				if( !omWrite.checkIfConnected() ) {
+					throw new CreateException(
+						String.format("Obj %s becomes disconnected %s removing intersecting-pixels\n", omWrite, dscr )	
+					);
+				}
+			} catch (OperationFailedException e) {
+				throw new CreateException(e);
+			}
+		}		
 	}
 
-	public void setObjMaskProvider(ObjMaskProvider objMaskProvider) {
-		this.objMaskProvider = objMaskProvider;
+	public ObjMaskProvider getObjs() {
+		return objs;
+	}
+
+	public void setObjs(ObjMaskProvider objs) {
+		this.objs = objs;
 	}
 	
 	public boolean isErrorDisconnectedObjects() {

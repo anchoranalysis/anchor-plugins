@@ -99,10 +99,12 @@ class AppendPart<T extends Buffer> extends NamedChnlsInputPart {
 		
 		NamedChnlCollectionForSeriesConcatenate<T> out = new NamedChnlCollectionForSeriesConcatenate<T>();
 		out.add( exst );
-		out.add( new NamedChnlCollectionForSeriesMap(
-			openedRasterMemo,
-			additionalChnl.createChnlMap(),
-			seriesNum )
+		out.add(
+			new NamedChnlCollectionForSeriesMap(
+				openedRasterMemo,
+				additionalChnl.createChnlMap(),
+				seriesNum
+			)
 		);
 		return out;
 	}

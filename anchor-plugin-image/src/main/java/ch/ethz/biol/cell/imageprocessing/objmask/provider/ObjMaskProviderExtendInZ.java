@@ -53,16 +53,16 @@ public class ObjMaskProviderExtendInZ extends ObjMaskProvider {
 	
 	// START BEAN PROPERTIES
 	@BeanField
-	private ObjMaskProvider objMaskProvider;
+	private ObjMaskProvider objs;
 	
 	@BeanField
-	private ObjMaskProvider objMaskProviderContainer;
+	private ObjMaskProvider objsContainer;
 	// END BEAN PROPERTIES
 
 	@Override
 	public ObjMaskCollection create() throws CreateException {
 		
-		ObjMaskCollection objsSource = objMaskProvider.create();
+		ObjMaskCollection objsSource = objs.create();
 		
 		// To avoid changing the original
 		ObjMaskCollection objs = new ObjMaskCollection();
@@ -72,7 +72,7 @@ public class ObjMaskProviderExtendInZ extends ObjMaskProvider {
 		
 		
 			
-		ObjMaskCollection containerObjs = objMaskProviderContainer.create();
+		ObjMaskCollection containerObjs = objsContainer.create();
 			
 		List<ObjWithMatches> matchList = ObjMaskMatchUtilities.matchIntersectingObjects( containerObjs, objs );
 		
@@ -231,21 +231,24 @@ public class ObjMaskProviderExtendInZ extends ObjMaskProvider {
 		return omNew; 
 	}
 
-	public ObjMaskProvider getObjMaskProvider() {
-		return objMaskProvider;
+	public ObjMaskProvider getObjs() {
+		return objs;
 	}
 
-	public void setObjMaskProvider(ObjMaskProvider objMaskProvider) {
-		this.objMaskProvider = objMaskProvider;
+	public void setObjs(ObjMaskProvider objs) {
+		this.objs = objs;
 	}
 
-	public ObjMaskProvider getObjMaskProviderContainer() {
-		return objMaskProviderContainer;
+
+	public ObjMaskProvider getObjsContainer() {
+		return objsContainer;
 	}
 
-	public void setObjMaskProviderContainer(ObjMaskProvider objMaskProviderContainer) {
-		this.objMaskProviderContainer = objMaskProviderContainer;
+
+	public void setObjsContainer(ObjMaskProvider objsContainer) {
+		this.objsContainer = objsContainer;
 	}
+
 
 	// Merges small obj mask provider objets togehter
 }

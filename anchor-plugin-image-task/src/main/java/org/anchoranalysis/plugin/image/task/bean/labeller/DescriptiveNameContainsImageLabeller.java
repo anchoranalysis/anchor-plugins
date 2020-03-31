@@ -53,7 +53,7 @@ public class DescriptiveNameContainsImageLabeller extends BinaryOutcomeImageLabe
 	}
 	
 	@Override
-	public String labelFor(Object initParams, ProvidesStackInput input, LogErrorReporter logErrorReporter)
+	public String labelFor(Object initParams, ProvidesStackInput input, Path modelDir, LogErrorReporter logErrorReporter)
 			throws OperationFailedException {
 		return classificationString(input.descriptiveName().contains(contains));
 	}

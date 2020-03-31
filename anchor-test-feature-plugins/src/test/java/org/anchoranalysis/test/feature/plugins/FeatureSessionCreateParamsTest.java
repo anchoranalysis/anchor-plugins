@@ -39,13 +39,12 @@ import org.anchoranalysis.feature.calc.ResultsVector;
 import org.anchoranalysis.feature.init.FeatureInitParams;
 import org.anchoranalysis.feature.shared.SharedFeatureSet;
 import org.anchoranalysis.image.feature.session.FeatureSessionCreateParams;
+import org.anchoranalysis.test.TestLoader;
 import org.anchoranalysis.test.feature.SimpleFeatureListFixture;
 import org.anchoranalysis.test.feature.plugins.FeatureListFixture;
 import org.anchoranalysis.test.feature.plugins.NRGStackFixture;
 import org.junit.Before;
 import org.junit.Test;
-
-import anchor.test.TestLoader;
 
 public class FeatureSessionCreateParamsTest {
 	

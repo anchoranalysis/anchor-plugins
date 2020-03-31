@@ -56,10 +56,10 @@ public class ChnlProviderAssignFromIntersectingObjects extends ChnlProvider {
 	private ChnlProvider chnlProvider;
 	
 	@BeanField
-	private ObjMaskProvider objMaskProviderSource;
+	private ObjMaskProvider objsSource;
 	
 	@BeanField
-	private ObjMaskProvider objMaskProviderTarget;
+	private ObjMaskProvider objsTarget;
 	// END BEAN PROPERTIES
 	
 	private int getValForMask( Chnl chnl, ObjMask om ) {
@@ -79,10 +79,10 @@ public class ChnlProviderAssignFromIntersectingObjects extends ChnlProvider {
 		
 		VoxelBox<?> vb = chnl.getVoxelBox().any();
 		
-		ObjMaskCollection objsSrc = objMaskProviderSource.create();
-		ObjMaskCollection objsTarget = objMaskProviderTarget.create();
+		ObjMaskCollection objsSrcCollection = objsSource.create();
+		ObjMaskCollection objsTargetCollection = objsTarget.create();
 
-		List<ObjWithMatches> matchList = matchIntersectingObjectsSingle( objsSrc, objsTarget );
+		List<ObjWithMatches> matchList = matchIntersectingObjectsSingle( objsSrcCollection, objsTargetCollection );
 		for( ObjWithMatches own : matchList ) {
 			
 			int level = getValForMask( chnl, own.getSourceObj() );
@@ -106,8 +106,6 @@ public class ChnlProviderAssignFromIntersectingObjects extends ChnlProvider {
 		List<ObjWithMatches> matchList = ObjMaskMatchUtilities.matchIntersectingObjects( objsSrc, objsTarget );
 		
 		for( ObjWithMatches own : matchList ) {
-			
-			//System.out.printf("Number of matches=%d\n", own.getMatches().size() );
 			
 			ObjMask selectedObj = selectBestMatch( own.getSourceObj(), own.getMatches() );
 			
@@ -146,21 +144,22 @@ public class ChnlProviderAssignFromIntersectingObjects extends ChnlProvider {
 		this.chnlProvider = chnlProvider;
 	}
 
-	public ObjMaskProvider getObjMaskProviderSource() {
-		return objMaskProviderSource;
+	public ObjMaskProvider getObjsSource() {
+		return objsSource;
 	}
 
-	public void setObjMaskProviderSource(ObjMaskProvider objMaskProviderSource) {
-		this.objMaskProviderSource = objMaskProviderSource;
+	public void setObjsSource(ObjMaskProvider objsSource) {
+		this.objsSource = objsSource;
 	}
 
-	public ObjMaskProvider getObjMaskProviderTarget() {
-		return objMaskProviderTarget;
+	public ObjMaskProvider getObjsTarget() {
+		return objsTarget;
 	}
 
-	public void setObjMaskProviderTarget(ObjMaskProvider objMaskProviderTarget) {
-		this.objMaskProviderTarget = objMaskProviderTarget;
+	public void setObjsTarget(ObjMaskProvider objsTarget) {
+		this.objsTarget = objsTarget;
 	}
+
 
 	
 	

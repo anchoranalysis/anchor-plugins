@@ -1,7 +1,9 @@
 package ch.ethz.biol.cell.imageprocessing.objmask.provider;
 
+import org.anchoranalysis.anchor.mpp.bean.cfg.CfgProvider;
 import org.anchoranalysis.anchor.mpp.bean.regionmap.RegionMap;
 import org.anchoranalysis.anchor.mpp.bean.regionmap.RegionMembershipWithFlags;
+import org.anchoranalysis.anchor.mpp.cfg.Cfg;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.anchor.mpp.mark.conic.MarkEllipsoid;
 import org.anchoranalysis.anchor.mpp.regionmap.RegionMapSingleton;
@@ -46,8 +48,6 @@ import ch.ethz.biol.cell.imageprocessing.objmask.provider.assignobjstocfg.RslvdE
 import ch.ethz.biol.cell.imageprocessing.objmask.provider.assignobjstocfg.RslvdEllipsoidList;
 import ch.ethz.biol.cell.imageprocessing.objmask.provider.assignobjstocfg.RslvdObjMask;
 import ch.ethz.biol.cell.imageprocessing.objmask.provider.assignobjstocfg.RslvdObjMaskList;
-import ch.ethz.biol.cell.mpp.cfg.Cfg;
-import ch.ethz.biol.cell.mpp.cfg.provider.CfgProvider;
 
 // Assigns objects into groups, based upon distance to objects in a configuration. One group per object in the configuration
 public class ObjMaskProviderAssignObjsToCfg extends ObjMaskProviderDimensions {
@@ -59,7 +59,7 @@ public class ObjMaskProviderAssignObjsToCfg extends ObjMaskProviderDimensions {
 	
 	// START BEAN PROPERTIES
 	@BeanField
-	private ObjMaskProvider objMaskProvider;
+	private ObjMaskProvider objs;
 	
 	@BeanField
 	private CfgProvider cfgProvider;
@@ -77,7 +77,7 @@ public class ObjMaskProviderAssignObjsToCfg extends ObjMaskProviderDimensions {
 	private CfgProvider cfgProviderOutExcluded = null;		// OPTIONAL. Adds all excluded marks
 	
 	@BeanField @Optional
-	private ObjMaskProvider objMaskProviderOutUnassigned = null;	// Optional. All the objects not assigned anywhere at the end
+	private ObjMaskProvider objsOutUnassigned = null;	// Optional. All the objects not assigned anywhere at the end
 	// END BEAN PROPERTIES
 	
 	private RegionMap regionMap = RegionMapSingleton.instance();
@@ -111,21 +111,21 @@ public class ObjMaskProviderAssignObjsToCfg extends ObjMaskProviderDimensions {
 	public ObjMaskCollection create() throws CreateException {
 		
 		Cfg cfg = cfgProvider.create();
-		ObjMaskCollection objs = objMaskProvider.create();
+		ObjMaskCollection objsCollection = objs.create();
 		ImageDim dim = createDims();
 		
 		// EXIT EARLY when there are no ellipsoids
 		if (cfg.size()==0) {
 			// There are no ellipsoids to assign to, exit early making all objs unassigned
-			if (objMaskProviderOutUnassigned!=null) {
-				ObjMaskCollection objsOutUnassigned = objMaskProviderOutUnassigned.create();
-				objsOutUnassigned.addAll(objs);
+			if (objsOutUnassigned!=null) {
+				ObjMaskCollection objsOutUnassignedCollection = objsOutUnassigned.create();
+				objsOutUnassignedCollection.addAll(objsCollection);
 			}
 			return new ObjMaskCollection();
 		}
 		
 		
-		RslvdObjMaskList  listObjs = createRslvdObjMaskList( objs );
+		RslvdObjMaskList  listObjs = createRslvdObjMaskList( objsCollection );
 		RslvdEllipsoidList listEllipsoids = createRslvdEllipsoidList(cfg, dim, regionMap.membershipWithFlagsForIndex(regionID), BinaryValuesByte.getDefault() );
 		
 		
@@ -165,9 +165,9 @@ public class ObjMaskProviderAssignObjsToCfg extends ObjMaskProviderDimensions {
 			listEllipsoids.addExcluded(cfgOutExcluded);
 		}
 		
-		if (objMaskProviderOutUnassigned!=null) {
-			ObjMaskCollection objsOutUnassigned = objMaskProviderOutUnassigned.create();
-			listObjs.addAllTo(objsOutUnassigned);
+		if (objsOutUnassigned!=null) {
+			ObjMaskCollection objsOutUnassignedCollection = objsOutUnassigned.create();
+			listObjs.addAllTo(objsOutUnassignedCollection);
 		}
 		
 		if (getLogger()!=null) {
@@ -179,12 +179,12 @@ public class ObjMaskProviderAssignObjsToCfg extends ObjMaskProviderDimensions {
 		return listEllipsoids.createMergedObjsForIncluded();
 	}
 
-	public ObjMaskProvider getObjMaskProvider() {
-		return objMaskProvider;
+	public ObjMaskProvider getObjs() {
+		return objs;
 	}
 
-	public void setObjMaskProvider(ObjMaskProvider objMaskProvider) {
-		this.objMaskProvider = objMaskProvider;
+	public void setObjs(ObjMaskProvider objs) {
+		this.objs = objs;
 	}
 
 	public CfgProvider getCfgProvider() {
@@ -220,15 +220,6 @@ public class ObjMaskProviderAssignObjsToCfg extends ObjMaskProviderDimensions {
 	}
 
 
-	public ObjMaskProvider getObjMaskProviderOutUnassigned() {
-		return objMaskProviderOutUnassigned;
-	}
-
-
-	public void setObjMaskProviderOutUnassigned(
-			ObjMaskProvider objMaskProviderOutUnassigned) {
-		this.objMaskProviderOutUnassigned = objMaskProviderOutUnassigned;
-	}
 
 
 	public double getMaxDist() {
@@ -238,6 +229,16 @@ public class ObjMaskProviderAssignObjsToCfg extends ObjMaskProviderDimensions {
 
 	public void setMaxDist(double maxDist) {
 		this.maxDist = maxDist;
+	}
+
+
+	public ObjMaskProvider getObjsOutUnassigned() {
+		return objsOutUnassigned;
+	}
+
+
+	public void setObjsOutUnassigned(ObjMaskProvider objsOutUnassigned) {
+		this.objsOutUnassigned = objsOutUnassigned;
 	}
 
 

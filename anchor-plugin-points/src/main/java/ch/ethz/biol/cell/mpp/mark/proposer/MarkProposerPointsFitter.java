@@ -35,6 +35,7 @@ import org.anchoranalysis.anchor.mpp.bean.points.fitter.PointsFitter;
 import org.anchoranalysis.anchor.mpp.bean.points.fitter.PointsFitterException;
 import org.anchoranalysis.anchor.mpp.bean.proposer.MarkProposer;
 import org.anchoranalysis.anchor.mpp.bean.proposer.PointsProposer;
+import org.anchoranalysis.anchor.mpp.cfg.ColoredCfg;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.anchor.mpp.proposer.ProposerContext;
 import org.anchoranalysis.anchor.mpp.proposer.visualization.ICreateProposalVisualization;
@@ -45,8 +46,6 @@ import org.anchoranalysis.core.geometry.Point3f;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.core.geometry.PointConverter;
 import org.anchoranalysis.core.log.LogErrorReporter;
-
-import ch.ethz.biol.cell.mpp.gui.videostats.internalframe.markredraw.ColoredCfg;
 
 public class MarkProposerPointsFitter extends MarkProposer {
 

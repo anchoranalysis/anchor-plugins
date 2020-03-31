@@ -1,12 +1,10 @@
 package ch.ethz.biol.cell.mpp.nrg.feature.all;
 
-import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
-
 /*-
  * #%L
  * anchor-plugin-mpp-feature
  * %%
- * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -28,8 +26,9 @@ import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
  * #L%
  */
 
-import ch.ethz.biol.cell.mpp.cfg.Cfg;
-import ch.ethz.biol.cell.mpp.nrg.MemoMarks;
+import org.anchoranalysis.anchor.mpp.cfg.Cfg;
+import org.anchoranalysis.anchor.mpp.feature.mark.MemoMarks;
+import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
 
 public class CfgFromNrgHelper {
 	

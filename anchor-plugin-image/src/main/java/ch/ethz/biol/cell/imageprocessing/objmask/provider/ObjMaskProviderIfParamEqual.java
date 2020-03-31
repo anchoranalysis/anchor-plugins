@@ -43,10 +43,10 @@ public class ObjMaskProviderIfParamEqual extends ObjMaskProvider {
 	
 	// START BEAN PROPERTIES
 	@BeanField
-	private ObjMaskProvider objMaskProviderEqual;
+	private ObjMaskProvider objsEqual;
 	
 	@BeanField
-	private ObjMaskProvider objMaskProviderNotEqual;
+	private ObjMaskProvider objsNotEqual;
 	
 	@BeanField
 	private KeyValueParamsProvider keyValueParamsProvider;
@@ -74,26 +74,10 @@ public class ObjMaskProviderIfParamEqual extends ObjMaskProvider {
 		}		
 		
 		if( valFromProp.equals(value)) {
-			return objMaskProviderEqual.create();
+			return objsEqual.create();
 		} else {
-			return objMaskProviderNotEqual.create();
+			return objsNotEqual.create();
 		}
-	}
-
-	public ObjMaskProvider getObjMaskProviderEqual() {
-		return objMaskProviderEqual;
-	}
-
-	public void setObjMaskProviderEqual(ObjMaskProvider objMaskProviderEqual) {
-		this.objMaskProviderEqual = objMaskProviderEqual;
-	}
-
-	public ObjMaskProvider getObjMaskProviderNotEqual() {
-		return objMaskProviderNotEqual;
-	}
-
-	public void setObjMaskProviderNotEqual(ObjMaskProvider objMaskProviderNotEqual) {
-		this.objMaskProviderNotEqual = objMaskProviderNotEqual;
 	}
 
 	public KeyValueParamsProvider getKeyValueParamsProvider() {
@@ -119,6 +103,22 @@ public class ObjMaskProviderIfParamEqual extends ObjMaskProvider {
 
 	public void setValue(String value) {
 		this.value = value;
+	}
+
+	public ObjMaskProvider getObjsEqual() {
+		return objsEqual;
+	}
+
+	public void setObjsEqual(ObjMaskProvider objsEqual) {
+		this.objsEqual = objsEqual;
+	}
+
+	public ObjMaskProvider getObjsNotEqual() {
+		return objsNotEqual;
+	}
+
+	public void setObjsNotEqual(ObjMaskProvider objsNotEqual) {
+		this.objsNotEqual = objsNotEqual;
 	}
 
 

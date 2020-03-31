@@ -1,7 +1,9 @@
 package ch.ethz.biol.cell.mpp.cfg.provider;
 
+import org.anchoranalysis.anchor.mpp.bean.cfg.CfgProvider;
+import org.anchoranalysis.anchor.mpp.cfg.Cfg;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
-import org.anchoranalysis.anchor.mpp.mark.MarkPointListFactory;
+import org.anchoranalysis.anchor.mpp.mark.points.MarkPointListFactory;
 
 /*-
  * #%L
@@ -36,8 +38,6 @@ import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.image.objmask.ObjMaskCollection;
 import org.anchoranalysis.image.points.PointsFromObjMask;
 
-import ch.ethz.biol.cell.mpp.cfg.Cfg;
-
 public class CfgProviderPointsFromObjs extends CfgProvider {
 
 	/**
@@ -47,21 +47,21 @@ public class CfgProviderPointsFromObjs extends CfgProvider {
 	
 	// START BEAN PROPERTIES
 	@BeanField
-	private ObjMaskProvider objMaskProvider;
+	private ObjMaskProvider objs;
 	// END BEAN PROPERTIES
 	
 	@Override
 	public Cfg create() throws CreateException {
-		return createMarksFromObjs( objMaskProvider.create() );
+		return createMarksFromObjs( objs.create() );
 	}
 		
-	private static Cfg createMarksFromObjs( ObjMaskCollection objs ) throws CreateException {
+	private static Cfg createMarksFromObjs( ObjMaskCollection objsCollection ) throws CreateException {
 		
 		Cfg out = new Cfg();
 		
-		for( int i=0; i<objs.size(); i++ ) {
+		for( int i=0; i<objsCollection.size(); i++ ) {
 			
-			ObjMask om = objs.get(i);
+			ObjMask om = objsCollection.get(i);
 			
 			Mark m = MarkPointListFactory.create(
 					PointsFromObjMask.pntsFromMaskDouble(om),
@@ -73,11 +73,11 @@ public class CfgProviderPointsFromObjs extends CfgProvider {
 		return out;
 	}
 
-	public ObjMaskProvider getObjMaskProvider() {
-		return objMaskProvider;
+	public ObjMaskProvider getObjs() {
+		return objs;
 	}
 
-	public void setObjMaskProvider(ObjMaskProvider objMaskProvider) {
-		this.objMaskProvider = objMaskProvider;
+	public void setObjs(ObjMaskProvider objs) {
+		this.objs = objs;
 	}
 }

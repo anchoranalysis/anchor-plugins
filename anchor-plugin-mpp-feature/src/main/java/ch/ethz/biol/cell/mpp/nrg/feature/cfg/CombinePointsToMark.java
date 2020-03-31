@@ -2,8 +2,12 @@ package ch.ethz.biol.cell.mpp.nrg.feature.cfg;
 
 import org.anchoranalysis.anchor.mpp.bean.points.CreateMarkFromPoints;
 import org.anchoranalysis.anchor.mpp.bean.regionmap.RegionMap;
+import org.anchoranalysis.anchor.mpp.feature.bean.nrg.elem.NRGElemAll;
+import org.anchoranalysis.anchor.mpp.feature.nrg.elem.NRGElemAllCalcParams;
+import org.anchoranalysis.anchor.mpp.feature.nrg.elem.NRGElemIndCalcParams;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
-import org.anchoranalysis.anchor.mpp.mark.MarkPointList;
+import org.anchoranalysis.anchor.mpp.mark.points.MarkPointList;
+import org.anchoranalysis.anchor.mpp.pixelpart.factory.PixelPartFactoryHistogram;
 import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
 
 /*-
@@ -38,11 +42,6 @@ import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.operator.Constant;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
-
-import ch.ethz.biol.cell.imageprocessing.pixellist.factory.PixelPartFactoryHistogram;
-import ch.ethz.biol.cell.mpp.nrg.NRGElemAll;
-import ch.ethz.biol.cell.mpp.nrg.NRGElemAllCalcParams;
-import ch.ethz.biol.cell.mpp.nrg.NRGElemIndCalcParams;
 
 /**
  * Assumes all marks are {@link MarkPointList} and combines the points from these marks

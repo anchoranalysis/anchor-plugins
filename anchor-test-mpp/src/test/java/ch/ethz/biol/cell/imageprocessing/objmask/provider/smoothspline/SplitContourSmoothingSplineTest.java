@@ -30,11 +30,10 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.index.SetOperationFailedException;
 import org.anchoranalysis.image.objmask.ObjMask;
-import org.anchoranalysis.test.LoadUtilities;
+import org.anchoranalysis.test.TestLoader;
+import org.anchoranalysis.test.image.TestLoaderImageIO;
+import org.anchoranalysis.test.mpp.LoadUtilities;
 import org.junit.Test;
-
-import anchor.test.TestLoader;
-import anchor.test.image.TestLoaderImageIO;
 
 import static org.junit.Assert.assertTrue;
 

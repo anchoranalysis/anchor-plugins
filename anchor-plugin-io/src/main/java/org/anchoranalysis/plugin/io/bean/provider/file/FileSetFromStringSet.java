@@ -37,11 +37,10 @@ import java.util.List;
 import org.anchoranalysis.bean.StringSet;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.io.bean.input.InputManagerParams;
-import org.anchoranalysis.io.bean.provider.file.FileProviderWithDirectory;
+import org.anchoranalysis.io.bean.provider.file.FileProviderWithDirectoryString;
 import org.anchoranalysis.io.error.AnchorIOException;
-import org.anchoranalysis.io.params.InputContextParams;
 
-public class FileSetFromStringSet extends FileProviderWithDirectory {
+public class FileSetFromStringSet extends FileProviderWithDirectoryString {
 
 	/**
 	 * 
@@ -51,22 +50,15 @@ public class FileSetFromStringSet extends FileProviderWithDirectory {
 	// START BEAN PROPERTIES
 	@BeanField
 	private StringSet filePaths;
-	
-	@BeanField
-	private String directory;
 	// END BEAN PROPERTIES
 	
-	@Override
-	public Collection<File> matchingFiles(InputManagerParams params)
-			throws AnchorIOException {
+	public Collection<File> matchingFilesForDirectory( Path directory, InputManagerParams params ) throws AnchorIOException {
 		
 		List<File> files = new ArrayList<>();
 		
-		Path dir = getDirectoryAsPath(params.getInputContext());
-		
 		for( String s : filePaths ) {
 			Path relPath = Paths.get(s);
-			files.add( dir.resolve(relPath).toFile() );
+			files.add( directory.resolve(relPath).toFile() );
 		}
 		
 		return files;
@@ -78,24 +70,5 @@ public class FileSetFromStringSet extends FileProviderWithDirectory {
 
 	public void setFilePaths(StringSet filePaths) {
 		this.filePaths = filePaths;
-	}
-
-	@Override
-	public Path getDirectoryAsPath(InputContextParams inputContext) {
-		return Paths.get(directory);
-	
-	}
-	
-	@Override
-	public void setDirectory(Path directory) {
-		this.directory = directory.toString();
-	}
-
-	public String getDirectory() {
-		return directory;
-	}
-	
-	public void setDirectory(String directory) {
-		this.directory = directory;
 	}
 }

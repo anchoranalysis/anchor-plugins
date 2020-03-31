@@ -105,6 +105,7 @@ public abstract class ExportFeaturesStoreTask<T extends InputFromManager> extend
 				params.getInputObject(),
 				params.getSharedState().getFeatureStore(),
 				params.getOutputManager(),
+				params.getExperimentArguments().getModelDirectory(),
 				params.getLogErrorReporter()
 			);
 			storeResults(params, rv);
@@ -118,7 +119,7 @@ public abstract class ExportFeaturesStoreTask<T extends InputFromManager> extend
 		T inputObject,
 		NamedFeatureStore featureStore,
 		BoundOutputManagerRouteErrors outputManager,
-		LogErrorReporter logErrorReporter
+		Path modelDir, LogErrorReporter logErrorReporter
 	) throws FeatureCalcException;
 
 

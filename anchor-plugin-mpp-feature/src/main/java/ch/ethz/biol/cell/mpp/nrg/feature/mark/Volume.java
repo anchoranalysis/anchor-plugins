@@ -1,5 +1,8 @@
 package ch.ethz.biol.cell.mpp.nrg.feature.mark;
 
+import org.anchoranalysis.anchor.mpp.feature.bean.mark.FeatureMark;
+import org.anchoranalysis.anchor.mpp.feature.bean.mark.FeatureMarkParams;
+
 /*
  * #%L
  * anchor-plugin-mpp-feature

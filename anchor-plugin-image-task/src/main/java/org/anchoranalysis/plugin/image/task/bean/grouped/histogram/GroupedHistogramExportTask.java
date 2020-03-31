@@ -73,7 +73,7 @@ public class GroupedHistogramExportTask extends GroupedStackTask<Histogram,Histo
 	private boolean writeImageHistograms = true;	// If enabled writes a histogram for each image, as well as the group
 	
 	@BeanField @Optional
-	private ObjMaskProvider objMaskProvider;		// Optional
+	private ObjMaskProvider objs;		// Optional
 	
 	/** If defined, this stack is used as a mask over the values which are fed into the histogram */
 	@BeanField @AllowEmpty
@@ -219,13 +219,13 @@ public class GroupedHistogramExportTask extends GroupedStackTask<Histogram,Histo
 		this.writeImageHistograms = writeImageHistograms;
 	}
 
-	public ObjMaskProvider getObjMaskProvider() {
-		return objMaskProvider;
+	public ObjMaskProvider getObjs() {
+		return objs;
 	}
 
 
-	public void setObjMaskProvider(ObjMaskProvider objMaskProvider) {
-		this.objMaskProvider = objMaskProvider;
+	public void setObjs(ObjMaskProvider objs) {
+		this.objs = objs;
 	}
 
 	public String getKeyMask() {

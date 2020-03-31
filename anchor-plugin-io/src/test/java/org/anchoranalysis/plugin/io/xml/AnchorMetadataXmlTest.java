@@ -38,13 +38,12 @@ import javax.xml.parsers.ParserConfigurationException;
 import org.anchoranalysis.image.extent.ImageRes;
 import org.anchoranalysis.image.io.RasterIOException;
 import org.anchoranalysis.plugin.io.xml.AnchorMetadataXml;
+import org.anchoranalysis.test.TestLoader;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
-
-import anchor.test.TestLoader;
 
 public class AnchorMetadataXmlTest {
 

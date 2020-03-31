@@ -49,13 +49,11 @@ public class ObjMaskProviderFill extends ObjMaskProvider {
 	private static final long serialVersionUID = 1L;
 	
 	// START BEAN PROPERTIES
-	// The objects whose holes are filled, current object-masks are overwritten
+	/** The objects whose holes are filled, current object-masks are overwritten */
 	@BeanField
-	private ObjMaskProvider objMaskProvider;
+	private ObjMaskProvider objs;
 	
-	/**
-	 * A mask which restricts where a fill operation can happen
-	 */
+	/** A mask which restricts where a fill operation can happen */
 	@BeanField
 	private BinaryImgChnlProvider maskProvider;
 	// END BEAN PROPERTIES
@@ -63,16 +61,11 @@ public class ObjMaskProviderFill extends ObjMaskProvider {
 	@Override
 	public ObjMaskCollection create() throws CreateException {
 
-		ObjMaskCollection objs = objMaskProvider.create();
+		ObjMaskCollection objsCollection = objs.create();
 		
-		BinaryChnl mask;
-		if (maskProvider!=null) {
-			mask = maskProvider.create();
-		} else {
-			mask = null;
-		}
+		BinaryChnl mask = createMaskOrNull();
 		
-		for( ObjMask om : objs ) {
+		for( ObjMask om : objsCollection ) {
 			BinaryVoxelBox<ByteBuffer> bvb = om.binaryVoxelBox();
 			
 			
@@ -95,19 +88,23 @@ public class ObjMaskProviderFill extends ObjMaskProvider {
 			
 		}
 		
+		return objsCollection;
+	}
+	
+	private BinaryChnl createMaskOrNull() throws CreateException {
 		if (maskProvider!=null) {
-			
+			return maskProvider.create();
+		} else {
+			return null;
 		}
-		
+	}
+
+	public ObjMaskProvider getObjs() {
 		return objs;
 	}
 
-	public ObjMaskProvider getObjMaskProvider() {
-		return objMaskProvider;
-	}
-
-	public void setObjMaskProvider(ObjMaskProvider objMaskProvider) {
-		this.objMaskProvider = objMaskProvider;
+	public void setObjs(ObjMaskProvider objs) {
+		this.objs = objs;
 	}
 
 	public BinaryImgChnlProvider getMaskProvider() {

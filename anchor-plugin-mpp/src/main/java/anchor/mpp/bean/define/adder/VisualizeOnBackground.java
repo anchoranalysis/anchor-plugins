@@ -28,6 +28,7 @@ package anchor.mpp.bean.define.adder;
 
 import java.util.function.Function;
 
+import org.anchoranalysis.anchor.mpp.bean.cfg.CfgProvider;
 import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.bean.NamedBean;
 import org.anchoranalysis.bean.annotation.BeanField;
@@ -49,7 +50,6 @@ import ch.ethz.biol.cell.imageprocessing.stack.provider.StackProviderOutlineRGB;
 import ch.ethz.biol.cell.imageprocessing.stack.provider.StackProviderRGBFromObjMask;
 import ch.ethz.biol.cell.imageprocessing.stack.provider.StackProviderReference;
 import ch.ethz.biol.cell.imageprocessing.stack.provider.StackProviderWithBackground;
-import ch.ethz.biol.cell.mpp.cfg.provider.CfgProvider;
 import ch.ethz.biol.cell.mpp.cfg.provider.CfgProviderReference;
 
 /**
@@ -154,7 +154,7 @@ public class VisualizeOnBackground extends DefineAdderBean {
 		StackProviderRGBFromObjMask provider = new StackProviderRGBFromObjMask();
 		provider.setOutline(true);
 		addBackgroundProvider(provider);
-		provider.setObjMaskProvider( new ObjMaskProviderReference(objMaskProviderID) );
+		provider.setObjs( new ObjMaskProviderReference(objMaskProviderID) );
 		provider.setOutlineWidth(outlineWidth);
 		return provider;
 	}

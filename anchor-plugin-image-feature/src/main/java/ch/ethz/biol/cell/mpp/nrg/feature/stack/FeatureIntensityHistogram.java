@@ -33,7 +33,7 @@ import org.anchoranalysis.feature.cache.CacheSession;
 import org.anchoranalysis.feature.cachedcalculation.CachedCalculation;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.init.FeatureInitParams;
-import org.anchoranalysis.image.feature.bean.stack.FeatureStack;
+import org.anchoranalysis.image.feature.bean.FeatureStack;
 import org.anchoranalysis.image.feature.stack.FeatureStackParams;
 import org.anchoranalysis.image.histogram.Histogram;
 

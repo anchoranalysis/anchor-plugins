@@ -1,5 +1,7 @@
 package ch.ethz.biol.cell.mpp.nrg.feature.session;
 
+import org.anchoranalysis.anchor.mpp.cfg.Cfg;
+
 /*-
  * #%L
  * anchor-plugin-mpp-feature
@@ -27,8 +29,6 @@ package ch.ethz.biol.cell.mpp.nrg.feature.session;
  */
 
 import org.anchoranalysis.image.extent.ImageDim;
-
-import ch.ethz.biol.cell.mpp.cfg.Cfg;
 
 public class CfgFixture {
 

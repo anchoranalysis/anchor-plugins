@@ -56,7 +56,7 @@ public class ObjMaskProviderPairIntersection extends ObjMaskProviderDimensions {
 	
 	// START BEAN PROPERTIES
 	@BeanField
-	private ObjMaskProvider objMaskProvider;
+	private ObjMaskProvider objs;
 	
 	/**
 	 * Number of times each input-object is dilated before intersection
@@ -80,7 +80,7 @@ public class ObjMaskProviderPairIntersection extends ObjMaskProviderDimensions {
 	@Override
 	public ObjMaskCollection create() throws CreateException {
 
-		ObjMaskCollection objPair = objMaskProvider.create();
+		ObjMaskCollection objPair = objs.create();
 		
 		if (objPair.size()!=2) {
 			throw new CreateException(
@@ -111,12 +111,12 @@ public class ObjMaskProviderPairIntersection extends ObjMaskProviderDimensions {
 		}
 	}
 
-	public ObjMaskProvider getObjMaskProvider() {
-		return objMaskProvider;
+	public ObjMaskProvider getObjs() {
+		return objs;
 	}
 
-	public void setObjMaskProvider(ObjMaskProvider objMaskProvider) {
-		this.objMaskProvider = objMaskProvider;
+	public void setObjs(ObjMaskProvider objs) {
+		this.objs = objs;
 	}
 
 	public int getIterationsDilation() {

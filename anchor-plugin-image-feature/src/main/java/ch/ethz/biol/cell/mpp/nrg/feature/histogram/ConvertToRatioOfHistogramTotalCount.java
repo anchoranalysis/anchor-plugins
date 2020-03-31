@@ -31,7 +31,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.calc.params.FeatureCalcParamsDescriptor;
-import org.anchoranalysis.image.feature.bean.histogram.FeatureHistogram;
+import org.anchoranalysis.image.feature.bean.FeatureHistogram;
 import org.anchoranalysis.image.feature.histogram.FeatureHistogramParams;
 
 public class ConvertToRatioOfHistogramTotalCount extends FeatureHistogram {

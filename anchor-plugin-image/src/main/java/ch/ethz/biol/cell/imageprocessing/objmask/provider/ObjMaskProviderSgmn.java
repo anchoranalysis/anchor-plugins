@@ -67,62 +67,69 @@ public class ObjMaskProviderSgmn extends ObjMaskProvider {
 	private ChnlProvider chnlProvider;
 	
 	@BeanField @Optional
-	private ObjMaskProvider objMaskProviderSeeds;
+	private ObjMaskProvider objsSeeds;
 	// END BEAN PROPERTIES
 
 	@Override
 	public ObjMaskCollection create() throws CreateException {
 		
 		if (binaryImgChnlProviderMask!=null) {
-			
-			BinaryChnl mask = binaryImgChnlProviderMask.create();
-		
-			VoxelBox<ByteBuffer> maskVb;
-			try {
-				maskVb = mask.getChnl().getVoxelBox().asByte();
-			} catch (IncorrectVoxelDataTypeException e1) {
-				throw new CreateException("binaryImgChnlProviderMask has incorrect data type", e1);
-			}
-			
-			ObjMask om = new ObjMask( new BinaryVoxelBoxByte(maskVb, mask.getBinaryValues()) );
-			
-			Chnl chnl = chnlProvider.create();
-			
-			SeedCollection seeds = null;
-			if (objMaskProviderSeeds!=null) {
-				ObjMaskCollection seedsObjs = objMaskProviderSeeds.create();
-				ObjMask maskAsObject = CreateFromEntireChnlFactory.createObjMask(mask);
-				seeds = SeedsFactory.createSeedsWithMask(
-					seedsObjs,
-					maskAsObject,
-					new Point3i(0,0,0),
-					chnl.getDimensions()
-				);
-			}
-			
-			try {
-				return sgmn.sgmn(chnl, om, seeds);
-			} catch (SgmnFailedException e) {
-				throw new CreateException(e);
-			}
+			return createWithMask(
+				binaryImgChnlProviderMask.create()
+			);
 		} else {
-
-			Chnl chnl = chnlProvider.create();
-			
-			SeedCollection seeds = null;
-			
-			try {
-				if (objMaskProviderSeeds!=null) {
-					ObjMaskCollection seedsObjs = objMaskProviderSeeds.create();
-					seeds = SeedsFactory.createSeedsWithoutMask(seedsObjs);
-				}			
-				
-				return sgmn.sgmn(chnl, seeds);
-			} catch (SgmnFailedException e) {
-				throw new CreateException(e);
-			}
-
+			return createWithoutMask();
 		}
+	}
+	
+	private ObjMaskCollection createWithMask( BinaryChnl mask ) throws CreateException {
+		
+		VoxelBox<ByteBuffer> maskVb;
+		try {
+			maskVb = mask.getChnl().getVoxelBox().asByte();
+		} catch (IncorrectVoxelDataTypeException e1) {
+			throw new CreateException("binaryImgChnlProviderMask has incorrect data type", e1);
+		}
+		
+		ObjMask om = new ObjMask( new BinaryVoxelBoxByte(maskVb, mask.getBinaryValues()) );
+		
+		Chnl chnl = chnlProvider.create();
+		
+		SeedCollection seeds = null;
+		if (objsSeeds!=null) {
+			ObjMaskCollection seedsObjs = objsSeeds.create();
+			ObjMask maskAsObject = CreateFromEntireChnlFactory.createObjMask(mask);
+			seeds = SeedsFactory.createSeedsWithMask(
+				seedsObjs,
+				maskAsObject,
+				new Point3i(0,0,0),
+				chnl.getDimensions()
+			);
+		}
+		
+		try {
+			return sgmn.sgmn(chnl, om, seeds);
+		} catch (SgmnFailedException e) {
+			throw new CreateException(e);
+		}
+	}
+	
+	private ObjMaskCollection createWithoutMask() throws CreateException {
+		Chnl chnl = chnlProvider.create();
+		
+		SeedCollection seeds = null;
+		
+		try {
+			if (objsSeeds!=null) {
+				ObjMaskCollection seedsObjs = objsSeeds.create();
+				seeds = SeedsFactory.createSeedsWithoutMask(seedsObjs);
+			}			
+			
+			return sgmn.sgmn(chnl, seeds);
+		} catch (SgmnFailedException e) {
+			throw new CreateException(e);
+		}
+		
 	}
 	
 	public ChnlProvider getChnlProvider() {
@@ -132,8 +139,6 @@ public class ObjMaskProviderSgmn extends ObjMaskProvider {
 	public void setChnlProvider(ChnlProvider chnlProvider) {
 		this.chnlProvider = chnlProvider;
 	}
-
-
 
 	public ObjMaskSgmn getSgmn() {
 		return sgmn;
@@ -152,12 +157,13 @@ public class ObjMaskProviderSgmn extends ObjMaskProvider {
 		this.binaryImgChnlProviderMask = binaryImgChnlProviderMask;
 	}
 
-	public ObjMaskProvider getObjMaskProviderSeeds() {
-		return objMaskProviderSeeds;
+	public ObjMaskProvider getObjsSeeds() {
+		return objsSeeds;
 	}
 
-	public void setObjMaskProviderSeeds(ObjMaskProvider objMaskProviderSeeds) {
-		this.objMaskProviderSeeds = objMaskProviderSeeds;
+	public void setObjsSeeds(ObjMaskProvider objsSeeds) {
+		this.objsSeeds = objsSeeds;
 	}
+
 
 }

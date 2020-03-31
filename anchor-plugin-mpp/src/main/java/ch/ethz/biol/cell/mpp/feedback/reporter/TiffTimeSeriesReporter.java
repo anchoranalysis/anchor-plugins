@@ -1,5 +1,9 @@
 package ch.ethz.biol.cell.mpp.feedback.reporter;
 
+import org.anchoranalysis.anchor.mpp.cfg.ColoredCfg;
+import org.anchoranalysis.anchor.mpp.feature.bean.nrgscheme.NRGScheme;
+import org.anchoranalysis.anchor.mpp.feature.nrg.cfg.CfgNRG;
+import org.anchoranalysis.anchor.mpp.feature.nrg.cfg.CfgNRGPixelized;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.anchor.overlay.id.IDGetterOverlayID;
 
@@ -31,11 +35,11 @@ import org.anchoranalysis.anchor.overlay.id.IDGetterOverlayID;
 
 
 import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.core.bridge.BridgeElementException;
 import org.anchoranalysis.core.bridge.IObjectBridge;
 import org.anchoranalysis.core.color.ColorIndex;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.idgetter.IDGetterIter;
-import org.anchoranalysis.core.index.GetOperationFailedException;
 import org.anchoranalysis.image.stack.DisplayStack;
 import org.anchoranalysis.io.bean.color.generator.HSBColorSetGenerator;
 import org.anchoranalysis.io.bean.color.generator.ShuffleColorSetGenerator;
@@ -45,17 +49,12 @@ import org.anchoranalysis.io.generator.IterableGenerator;
 import org.anchoranalysis.io.generator.IterableGeneratorBridge;
 import org.anchoranalysis.io.generator.combined.IterableCombinedListGenerator;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
+import org.anchoranalysis.mpp.io.cfg.ColoredCfgWithDisplayStack;
+import org.anchoranalysis.mpp.io.cfg.generator.CfgGenerator;
+import org.anchoranalysis.mpp.sgmn.bean.optscheme.feedback.PeriodicSubfolderReporter;
+import org.anchoranalysis.mpp.sgmn.optscheme.feedback.OptimizationFeedbackInitParams;
+import org.anchoranalysis.mpp.sgmn.optscheme.feedback.ReporterException;
 import org.anchoranalysis.mpp.sgmn.optscheme.step.Reporting;
-
-import ch.ethz.biol.cell.imageprocessing.io.generator.raster.CfgGenerator;
-import ch.ethz.biol.cell.imageprocessing.io.generator.raster.ColoredCfgWithDisplayStack;
-import ch.ethz.biol.cell.mpp.feedback.OptimizationFeedbackInitParams;
-import ch.ethz.biol.cell.mpp.feedback.PeriodicSubfolderReporter;
-import ch.ethz.biol.cell.mpp.feedback.ReporterException;
-import ch.ethz.biol.cell.mpp.gui.videostats.internalframe.markredraw.ColoredCfg;
-import ch.ethz.biol.cell.mpp.nrg.CfgNRG;
-import ch.ethz.biol.cell.mpp.nrg.CfgNRGPixelized;
-import ch.ethz.biol.cell.mpp.nrg.nrgscheme.NRGScheme;
 
 public class TiffTimeSeriesReporter extends PeriodicSubfolderReporter<CfgNRG> {
 
@@ -87,7 +86,7 @@ public class TiffTimeSeriesReporter extends PeriodicSubfolderReporter<CfgNRG> {
 
 		@Override
 		public ColoredCfgWithDisplayStack bridgeElement(CfgNRG sourceObject)
-				throws GetOperationFailedException {
+				throws BridgeElementException {
 			
 			ColoredCfg coloredCfg = new ColoredCfg(sourceObject.getCfg(), colorIndex, new IDGetterIter<Mark>() );
 			return new ColoredCfgWithDisplayStack( coloredCfg, stack );

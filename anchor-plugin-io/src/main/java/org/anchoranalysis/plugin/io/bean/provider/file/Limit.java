@@ -52,7 +52,10 @@ public class Limit extends FileProvider {
 		
 	@Override
 	public Collection<File> matchingFiles(InputManagerParams params) throws AnchorIOException {
-		return LimitUtilities.apply( fileProvider, maxNumItems, params );
+		return LimitUtilities.apply(
+			fileProvider.matchingFiles(params),
+			maxNumItems
+		);
 	}
 	
 	public FileProvider getFileProvider() {

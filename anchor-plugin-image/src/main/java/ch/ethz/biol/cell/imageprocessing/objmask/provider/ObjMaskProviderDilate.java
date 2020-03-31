@@ -45,7 +45,7 @@ public class ObjMaskProviderDilate extends ObjMaskProviderDimensions {
 	
 	// START BEAN PROPERTIES
 	@BeanField
-	private ObjMaskProvider objMaskProvider;
+	private ObjMaskProvider objs;
 	
 	@BeanField
 	private boolean do3D = false;
@@ -62,11 +62,11 @@ public class ObjMaskProviderDilate extends ObjMaskProviderDimensions {
 	
 		ImageDim dims = createDims();
 		
-		ObjMaskCollection objs = objMaskProvider.create();
+		ObjMaskCollection objsIn = objs.create();
 				
 		ObjMaskCollection objsOut = new ObjMaskCollection();
 		
-		for( ObjMask om : objs ) {
+		for( ObjMask om : objsIn ) {
 
 			ObjMask omGrown = MorphologicalDilation.createDilatedObjMask(
 				om,
@@ -81,13 +81,13 @@ public class ObjMaskProviderDilate extends ObjMaskProviderDimensions {
 		return objsOut;
 	}
 
-	public ObjMaskProvider getObjMaskProvider() {
-		return objMaskProvider;
+	public ObjMaskProvider getObjs() {
+		return objs;
 	}
 
 
-	public void setObjMaskProvider(ObjMaskProvider objMaskProvider) {
-		this.objMaskProvider = objMaskProvider;
+	public void setObjs(ObjMaskProvider objs) {
+		this.objs = objs;
 	}
 
 

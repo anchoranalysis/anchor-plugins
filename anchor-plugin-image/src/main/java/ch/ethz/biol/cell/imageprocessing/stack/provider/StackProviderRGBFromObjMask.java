@@ -51,7 +51,7 @@ public class StackProviderRGBFromObjMask extends StackProviderWithBackground {
 	
 	// START BEAN PROPERTIES
 	@BeanField
-	private ObjMaskProvider objMaskProvider;
+	private ObjMaskProvider objs;
 		
 	@BeanField
 	private boolean outline = false;
@@ -73,16 +73,24 @@ public class StackProviderRGBFromObjMask extends StackProviderWithBackground {
 	@Override
 	public Stack create() throws CreateException {
 				
-		ObjMaskCollection objs = objMaskProvider.create();
+		ObjMaskCollection objsCollection = objs.create();
 		
 		return ColoredObjsStackCreator.create(
-			objs,
+			maybeFlatten(objsCollection),
 			outline,
 			outlineWidth,
 			force2D,
 			backgroundStack(!force2D),
-			colors(objs.size())
+			colors(objsCollection.size())
 		);
+	}
+	
+	private ObjMaskCollection maybeFlatten( ObjMaskCollection objs ) {
+		if (force2D) {
+			return objs.flattenZ();
+		} else {
+			return objs;
+		}
 	}
 		
 	private ColorList colors( int size ) throws CreateException {
@@ -102,12 +110,12 @@ public class StackProviderRGBFromObjMask extends StackProviderWithBackground {
 		return colorList;
 	}
 
-	public ObjMaskProvider getObjMaskProvider() {
-		return objMaskProvider;
+	public ObjMaskProvider getObjs() {
+		return objs;
 	}
 
-	public void setObjMaskProvider(ObjMaskProvider objMaskProvider) {
-		this.objMaskProvider = objMaskProvider;
+	public void setObjs(ObjMaskProvider objs) {
+		this.objs = objs;
 	}
 
 	public boolean isOutline() {

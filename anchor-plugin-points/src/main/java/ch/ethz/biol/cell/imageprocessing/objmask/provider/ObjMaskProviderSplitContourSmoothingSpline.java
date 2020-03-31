@@ -56,7 +56,7 @@ public class ObjMaskProviderSplitContourSmoothingSpline extends ObjMaskProvider 
 	// START BEAN PROPERTIES
 	/** Each contour is represented by an object */
 	@BeanField
-	private ObjMaskProvider objMaskProvider;
+	private ObjMaskProvider objs;
 	
 	@BeanField
 	private double smoothingFactor = 0.001;
@@ -74,7 +74,7 @@ public class ObjMaskProviderSplitContourSmoothingSpline extends ObjMaskProvider 
 
 		ObjMaskCollection out = new ObjMaskCollection();
 		
-		ObjMaskCollection in = objMaskProvider.create();
+		ObjMaskCollection in = objs.create();
 		
 		for( ObjMask om : in ) {
 			splitContoursFromObj(om, out);
@@ -106,12 +106,12 @@ public class ObjMaskProviderSplitContourSmoothingSpline extends ObjMaskProvider 
 		}
 	}
 
-	public ObjMaskProvider getObjMaskProvider() {
-		return objMaskProvider;
+	public ObjMaskProvider getObjs() {
+		return objs;
 	}
 
-	public void setObjMaskProvider(ObjMaskProvider objMaskProvider) {
-		this.objMaskProvider = objMaskProvider;
+	public void setObjs(ObjMaskProvider objs) {
+		this.objs = objs;
 	}
 
 	public double getSmoothingFactor() {

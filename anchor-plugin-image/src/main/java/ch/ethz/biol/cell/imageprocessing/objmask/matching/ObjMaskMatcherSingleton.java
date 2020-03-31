@@ -49,33 +49,28 @@ public class ObjMaskMatcherSingleton extends ObjMaskMatcher {
 	
 	// START BEAN PROPERTIES
 	@BeanField
-	private ObjMaskProvider objMaskProvider;
+	private ObjMaskProvider objs;
 	// END BEAN PROPERTIES
 	
 	@Override
 	public List<ObjWithMatches> findMatch(ObjMaskCollection sourceObjs)
 			throws OperationFailedException {
 
-		ObjMaskCollection omc;
+		ObjMaskCollection objsCollection;
 		try {
-			omc = objMaskProvider.create();
+			objsCollection = objs.create();
 		} catch (CreateException e) {
 			throw new OperationFailedException(e);
 		}
 		
-		if (omc.size()==0) {
+		if (objsCollection.size()==0) {
 			throw new OperationFailedException("No objects provided");
 		}
-		if (omc.size()>1) {
+		if (objsCollection.size()>1) {
 			throw new OperationFailedException("More than one objects provided");
 		}
 		
-		ObjMask omMatch;
-		try {
-			omMatch = objMaskProvider.create().get(0);
-		} catch (CreateException e) {
-			throw new OperationFailedException(e);
-		}
+		ObjMask omMatch = objsCollection.get(0);
 		
 		ArrayList<ObjWithMatches> list = new ArrayList<>();
 		
@@ -88,12 +83,12 @@ public class ObjMaskMatcherSingleton extends ObjMaskMatcher {
 		return list;
 	}
 
-	public ObjMaskProvider getObjMaskProvider() {
-		return objMaskProvider;
+	public ObjMaskProvider getObjs() {
+		return objs;
 	}
 
-	public void setObjMaskProvider(ObjMaskProvider objMaskProvider) {
-		this.objMaskProvider = objMaskProvider;
+	public void setObjs(ObjMaskProvider objs) {
+		this.objs = objs;
 	}
 
 

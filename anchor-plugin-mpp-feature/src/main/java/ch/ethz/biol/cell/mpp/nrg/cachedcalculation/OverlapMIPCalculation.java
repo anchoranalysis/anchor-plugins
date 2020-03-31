@@ -1,7 +1,8 @@
 package ch.ethz.biol.cell.mpp.nrg.cachedcalculation;
 
 import org.anchoranalysis.anchor.mpp.bean.regionmap.RegionMap;
-import org.anchoranalysis.anchor.mpp.overlap.OverlapUtilities;
+import org.anchoranalysis.anchor.mpp.feature.nrg.elem.NRGElemPairCalcParams;
+import org.anchoranalysis.anchor.mpp.overlap.MaxIntensityProjectionPair;
 import org.anchoranalysis.anchor.mpp.pxlmark.PxlMark;
 import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
 
@@ -38,8 +39,6 @@ import org.anchoranalysis.feature.cachedcalculation.CachedCalculationCastParams;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
-import ch.ethz.biol.cell.mpp.nrg.NRGElemPairCalcParams;
-
 public class OverlapMIPCalculation extends CachedCalculationCastParams<Double, NRGElemPairCalcParams> {
 
 	private int regionID;
@@ -69,8 +68,8 @@ public class OverlapMIPCalculation extends CachedCalculationCastParams<Double, N
 			return 0.0;
 		}
 		
-		OverlapUtilities.MaxIntensityProjectionPair mipPair =
-			new OverlapUtilities.MaxIntensityProjectionPair(
+		MaxIntensityProjectionPair mipPair =
+			new MaxIntensityProjectionPair(
 				pm1.getObjMaskMIP().getVoxelBoxBounded(),
 				pm2.getObjMaskMIP().getVoxelBoxBounded(),
 				regionMap1.membershipWithFlagsForIndex(regionID),

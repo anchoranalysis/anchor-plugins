@@ -26,11 +26,11 @@ package org.anchoranalysis.image.feature.bean.list;
  * #L%
  */
 
-import org.anchoranalysis.feature.bean.Feature;
+import org.anchoranalysis.feature.bean.operator.FeatureListElem;
 
 import ch.ethz.biol.cell.mpp.nrg.feature.operator.Maximum;
 
-public class FeatureListProviderPairMax extends FeatureListProviderAggregate {
+public class FeatureListProviderPairMax extends FeatureListProviderAggregatePair {
 
 	/**
 	 * 
@@ -38,10 +38,7 @@ public class FeatureListProviderPairMax extends FeatureListProviderAggregate {
 	private static final long serialVersionUID = 1L;
 
 	@Override
-	protected Feature createAggregateFeature( Feature featFirst, Feature featSecond, Feature featMerged ) {
-		Maximum featMax = new Maximum();
-		featMax.getList().add(featFirst);
-		featMax.getList().add(featSecond);
-		return featMax;
+	protected FeatureListElem createFeature() {
+		return new Maximum();
 	}
 }

@@ -1,5 +1,8 @@
 package ch.ethz.biol.cell.mpp.cfg.provider;
 
+import org.anchoranalysis.anchor.mpp.bean.cfg.CfgProvider;
+import org.anchoranalysis.anchor.mpp.cfg.Cfg;
+
 /*
  * #%L
  * anchor-plugin-mpp
@@ -33,8 +36,6 @@ import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.error.OptionalOperationUnsupportedException;
 import org.anchoranalysis.image.bean.scale.ScaleCalculator;
 import org.anchoranalysis.image.scale.ScaleFactor;
-
-import ch.ethz.biol.cell.mpp.cfg.Cfg;
 
 
 public class CfgProviderScaleXY extends CfgProvider {

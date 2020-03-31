@@ -35,7 +35,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.error.BeanMisconfiguredException;
 import org.anchoranalysis.io.bean.filepath.generator.FilePathGenerator;
 import org.anchoranalysis.io.bean.filepath.generator.FilePathGeneratorRegEx;
-import org.anchoranalysis.io.bean.filepath.generator.RootedFilePathGenerator;
+import org.anchoranalysis.io.bean.filepath.generator.Rooted;
 
 public abstract class FilePathAppendBase extends AnchorBean<FilePathAppendBase> {
 
@@ -161,7 +161,7 @@ public abstract class FilePathAppendBase extends AnchorBean<FilePathAppendBase> 
 	
 	private static FilePathGenerator addRoot( FilePathGenerator fpg, String rootName ) {
 		// Rooted File-Path
-		RootedFilePathGenerator delegate = new RootedFilePathGenerator();
+		Rooted delegate = new Rooted();
 		delegate.setRootName(rootName);
 		delegate.setItem(fpg);
 		return delegate;

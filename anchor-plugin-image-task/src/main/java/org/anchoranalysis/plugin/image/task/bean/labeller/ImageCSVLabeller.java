@@ -80,7 +80,7 @@ public class ImageCSVLabeller extends ImageLabeller<ImageCSVLabellerInitParams> 
 	}
 
 	@Override
-	public String labelFor(ImageCSVLabellerInitParams initParams, ProvidesStackInput input, LogErrorReporter logErrorReporter)
+	public String labelFor(ImageCSVLabellerInitParams initParams, ProvidesStackInput input, Path modelDir, LogErrorReporter logErrorReporter)
 			throws OperationFailedException {
 		String label = initParams.getLabelMap().get(
 			input.descriptiveName()

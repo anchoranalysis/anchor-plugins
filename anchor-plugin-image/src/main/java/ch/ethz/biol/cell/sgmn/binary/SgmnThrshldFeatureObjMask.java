@@ -63,7 +63,7 @@ public class SgmnThrshldFeatureObjMask extends BinarySgmn {
 	private FeatureEvaluatorNrgStack featureEvaluator;
 	
 	@BeanField
-	private ObjMaskProvider objMaskProvider;
+	private ObjMaskProvider objs;
 	// END PARAMETERS
 	
 	private double calculateLevel() throws SgmnFailedException {
@@ -71,7 +71,7 @@ public class SgmnThrshldFeatureObjMask extends BinarySgmn {
 		try {
 			FeatureSessionCreateParamsSingle session = featureEvaluator.createAndStartSession();
 			
-			ObjMaskCollection omc = objMaskProvider.create();
+			ObjMaskCollection omc = objs.create();
 			
 			if (omc.size()==0) {
 				throw new SgmnFailedException("objMaskProvider returned 0 objects. Exactly 1 required");
@@ -149,11 +149,11 @@ public class SgmnThrshldFeatureObjMask extends BinarySgmn {
 		this.featureEvaluator = featureEvaluator;
 	}
 
-	public ObjMaskProvider getObjMaskProvider() {
-		return objMaskProvider;
+	public ObjMaskProvider getObjs() {
+		return objs;
 	}
 
-	public void setObjMaskProvider(ObjMaskProvider objMaskProvider) {
-		this.objMaskProvider = objMaskProvider;
+	public void setObjs(ObjMaskProvider objs) {
+		this.objs = objs;
 	}
 }

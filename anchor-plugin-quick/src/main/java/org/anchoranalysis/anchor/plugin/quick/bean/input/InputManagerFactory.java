@@ -35,7 +35,7 @@ import org.anchoranalysis.io.bean.provider.file.FileProviderWithDirectory;
 import org.anchoranalysis.io.input.FileInput;
 import org.anchoranalysis.plugin.io.bean.input.file.Files;
 import org.anchoranalysis.plugin.io.bean.input.filter.FilterCsvColumn;
-import org.anchoranalysis.plugin.io.bean.provider.file.RootedFileSet;
+import org.anchoranalysis.plugin.io.bean.provider.file.Rooted;
 
 class InputManagerFactory {
 	
@@ -82,9 +82,9 @@ class InputManagerFactory {
 	}
 	
 	private static FileProvider createRootedFileProvider( String rootName, FileProviderWithDirectory fileProvider ) {
-		RootedFileSet fileSet = new RootedFileSet();
+		Rooted fileSet = new Rooted();
 		fileSet.setRootName(rootName);
-		fileSet.setFileSet(fileProvider);
+		fileSet.setFileProvider(fileProvider);
 		fileSet.setDisableDebugMode(true);
 		return fileSet;
 	}

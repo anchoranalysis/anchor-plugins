@@ -1,5 +1,8 @@
 package ch.ethz.biol.cell.imageprocessing.stack.provider;
 
+import org.anchoranalysis.anchor.mpp.bean.cfg.CfgProvider;
+import org.anchoranalysis.anchor.mpp.cfg.Cfg;
+import org.anchoranalysis.anchor.mpp.cfg.ColoredCfg;
 import org.anchoranalysis.anchor.mpp.regionmap.RegionMapSingleton;
 import org.anchoranalysis.anchor.overlay.Overlay;
 
@@ -42,12 +45,8 @@ import org.anchoranalysis.io.bean.color.generator.ColorSetGenerator;
 import org.anchoranalysis.io.bean.color.generator.HSBColorSetGenerator;
 import org.anchoranalysis.io.bean.objmask.writer.RGBOutlineWriter;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
-
-import ch.ethz.biol.cell.imageprocessing.io.generator.raster.CfgGenerator;
-import ch.ethz.biol.cell.imageprocessing.io.generator.raster.ColoredCfgWithDisplayStack;
-import ch.ethz.biol.cell.mpp.cfg.Cfg;
-import ch.ethz.biol.cell.mpp.cfg.provider.CfgProvider;
-import ch.ethz.biol.cell.mpp.gui.videostats.internalframe.markredraw.ColoredCfg;
+import org.anchoranalysis.mpp.io.cfg.ColoredCfgWithDisplayStack;
+import org.anchoranalysis.mpp.io.cfg.generator.CfgGenerator;
 
 public class StackProviderOutlineFromCfg extends StackProvider {
 

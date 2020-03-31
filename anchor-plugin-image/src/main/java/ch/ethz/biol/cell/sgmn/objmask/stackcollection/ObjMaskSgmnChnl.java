@@ -28,9 +28,9 @@ package ch.ethz.biol.cell.sgmn.objmask.stackcollection;
 
 
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.index.GetOperationFailedException;
 import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.core.name.provider.INamedProvider;
+import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 import org.anchoranalysis.core.random.RandomNumberGenerator;
 import org.anchoranalysis.experiment.ExperimentExecutionArguments;
 import org.anchoranalysis.image.bean.sgmn.objmask.ObjMaskSgmn;
@@ -69,8 +69,8 @@ public class ObjMaskSgmnChnl extends SgmnObjMaskCollection {
 			Chnl chnl = stackCollection.getException(inputChnlName).getChnl(chnlIndex);
 			return sgmn.sgmn(chnl, seeds);
 			
-		} catch (GetOperationFailedException e) {
-			throw new SgmnFailedException(e);
+		} catch (NamedProviderGetException e) {
+			throw new SgmnFailedException(e.summarize());
 		}
 	}
 

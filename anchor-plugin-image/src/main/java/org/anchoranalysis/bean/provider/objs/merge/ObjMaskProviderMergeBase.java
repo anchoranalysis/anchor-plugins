@@ -48,10 +48,10 @@ public abstract class ObjMaskProviderMergeBase extends ObjMaskProvider {
 
 	// START BEAN PROPERTIES
 	@BeanField
-	private ObjMaskProvider objMaskProvider;
+	private ObjMaskProvider objs;
 	
 	@BeanField @Optional
-	private ObjMaskProvider objMaskProviderContainer;
+	private ObjMaskProvider objsContainer;
 	// END BEAN PROPERTIES
 
 	@FunctionalInterface
@@ -72,12 +72,12 @@ public abstract class ObjMaskProviderMergeBase extends ObjMaskProvider {
 		// To avoid changing the original
 		ObjMaskCollection objsToMerge = objs.duplicateShallow();
 		
-		if (objMaskProviderContainer==null) {
+		if (objsContainer==null) {
 			return mergeAll(mergeFunc, objsToMerge);
 		} else {
 			try {
 				
-				ObjMaskCollection containerObjs = objMaskProviderContainer.create();
+				ObjMaskCollection containerObjs = objsContainer.create();
 				return mergeInContainer(mergeFunc, objsToMerge, containerObjs);
 				
 			} catch (CreateException e) {
@@ -107,20 +107,20 @@ public abstract class ObjMaskProviderMergeBase extends ObjMaskProvider {
 		}
 		return out;		
 	}
-		
-	public ObjMaskProvider getObjMaskProviderContainer() {
-		return objMaskProviderContainer;
-	}
-
-	public void setObjMaskProviderContainer(ObjMaskProvider objMaskProviderContainer) {
-		this.objMaskProviderContainer = objMaskProviderContainer;
-	}
 	
-	public ObjMaskProvider getObjMaskProvider() {
-		return objMaskProvider;
+	public ObjMaskProvider getObjs() {
+		return objs;
 	}
 
-	public void setObjMaskProvider(ObjMaskProvider objMaskProvider) {
-		this.objMaskProvider = objMaskProvider;
+	public void setObjs(ObjMaskProvider objs) {
+		this.objs = objs;
+	}
+
+	public ObjMaskProvider getObjsContainer() {
+		return objsContainer;
+	}
+
+	public void setObjsContainer(ObjMaskProvider objsContainer) {
+		this.objsContainer = objsContainer;
 	}
 }

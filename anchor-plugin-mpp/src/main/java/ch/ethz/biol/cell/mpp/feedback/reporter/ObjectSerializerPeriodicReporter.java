@@ -29,17 +29,16 @@ package ch.ethz.biol.cell.mpp.feedback.reporter;
 
 import java.io.Serializable;
 
+import org.anchoranalysis.anchor.mpp.feature.nrg.cfg.CfgNRGPixelized;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.io.generator.serialized.BundledObjectOutputStreamGenerator;
 import org.anchoranalysis.io.manifest.deserializer.bundle.BundleParameters;
 import org.anchoranalysis.io.manifest.sequencetype.SequenceType;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
+import org.anchoranalysis.mpp.sgmn.bean.optscheme.feedback.PeriodicSubfolderReporter;
+import org.anchoranalysis.mpp.sgmn.optscheme.feedback.OptimizationFeedbackInitParams;
+import org.anchoranalysis.mpp.sgmn.optscheme.feedback.ReporterException;
 import org.anchoranalysis.mpp.sgmn.optscheme.step.Reporting;
-
-import ch.ethz.biol.cell.mpp.feedback.OptimizationFeedbackInitParams;
-import ch.ethz.biol.cell.mpp.feedback.PeriodicSubfolderReporter;
-import ch.ethz.biol.cell.mpp.feedback.ReporterException;
-import ch.ethz.biol.cell.mpp.nrg.CfgNRGPixelized;
 
 
 public abstract class ObjectSerializerPeriodicReporter<T extends Serializable> extends PeriodicSubfolderReporter<T> {

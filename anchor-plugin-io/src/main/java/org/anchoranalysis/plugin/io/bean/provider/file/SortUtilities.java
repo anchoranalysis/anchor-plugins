@@ -32,17 +32,13 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
-import org.anchoranalysis.io.bean.input.InputManagerParams;
-import org.anchoranalysis.io.bean.provider.file.FileProvider;
 import org.anchoranalysis.io.error.AnchorIOException;
 
 class SortUtilities {
 	
-	public static Collection<File> sortFiles( FileProvider fileProvider, InputManagerParams params ) throws AnchorIOException {
-		Collection<File> in = fileProvider.matchingFiles(params);
-		
+	public static Collection<File> sortFiles( Collection<File> files ) throws AnchorIOException {
 		List<File> out = new ArrayList<>();
-		out.addAll(in);
+		out.addAll(files);
 		Collections.sort(out);
 		return out;		
 	}

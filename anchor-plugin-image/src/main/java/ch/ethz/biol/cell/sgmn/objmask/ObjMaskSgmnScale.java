@@ -82,7 +82,7 @@ public class ObjMaskSgmnScale extends ObjMaskSgmn {
 			
 			ScaleFactor sfInv = sf.invert();
 			
-			objs.scale( sfInv.getX(), sfInv.getY(), createInterpolator() );
+			objs.scale( sfInv, createInterpolator() );
 			
 			return objs;
 		} catch (OperationFailedException e) {
@@ -132,7 +132,7 @@ public class ObjMaskSgmnScale extends ObjMaskSgmn {
 		ScaleFactor sfInv = sf.invert();
 		
 		try {
-			objs.scale( sfInv.getX(), sfInv.getY(), createInterpolator() );
+			objs.scale( sfInv, createInterpolator() );
 		} catch (OperationFailedException e) {
 			throw new SgmnFailedException("Cannot scale objects", e);
 		}

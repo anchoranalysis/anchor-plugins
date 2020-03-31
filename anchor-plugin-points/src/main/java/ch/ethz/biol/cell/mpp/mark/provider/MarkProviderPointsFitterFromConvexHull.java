@@ -62,7 +62,7 @@ public class MarkProviderPointsFitterFromConvexHull extends MarkProvider {
 	private MarkProvider markProvider;
 	
 	@BeanField
-	private ObjMaskProvider objMaskProvider;
+	private ObjMaskProvider objs;
 	
 	@BeanField
 	private PointsFitter pointsFitter;
@@ -88,9 +88,9 @@ public class MarkProviderPointsFitterFromConvexHull extends MarkProvider {
 
 		Mark mark = markProvider.create();
 	
-		ObjMaskCollection objs = objMaskProvider.create();
+		ObjMaskCollection objsCollection = objs.create();
 		
-		List<Point2i> selectedPoints = ConvexHullUtilities.convexHullFromAllOutlines(objs, minNumPnts);
+		List<Point2i> selectedPoints = ConvexHullUtilities.convexHullFromAllOutlines(objsCollection, minNumPnts);
 				
 		List<Point3f> pntsForFitter = PointConverter.convert2i_3f(selectedPoints);
 		
@@ -104,8 +104,6 @@ public class MarkProviderPointsFitterFromConvexHull extends MarkProvider {
 		if (minRatioPntsInsideRegion>0) {
 			// We perform a check that a minimum % of pnts are inside a particular region
 			double ratioInside = ratioPointsInsideRegion( mark, pntsForFitter, regionMap, regionID );
-			
-			//System.out.printf("Ratio pointsInside=%f\n", ratioInside);
 			
 			if (ratioInside<minRatioPntsInsideRegion) {
 				return null;
@@ -144,13 +142,13 @@ public class MarkProviderPointsFitterFromConvexHull extends MarkProvider {
 	}
 
 
-	public ObjMaskProvider getObjMaskProvider() {
-		return objMaskProvider;
+	public ObjMaskProvider getObjs() {
+		return objs;
 	}
 
 
-	public void setObjMaskProvider(ObjMaskProvider objMaskProvider) {
-		this.objMaskProvider = objMaskProvider;
+	public void setObjs(ObjMaskProvider objs) {
+		this.objs = objs;
 	}
 
 

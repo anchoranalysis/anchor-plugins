@@ -46,7 +46,7 @@ public class ObjMaskProviderSgmnByObj extends ObjMaskProvider {
 	
 	// START BEAN PROPERTIES
 	@BeanField
-	private ObjMaskProvider objMaskProvider;
+	private ObjMaskProvider objs;
 	
 	@BeanField
 	private ObjMaskSgmn sgmn;
@@ -60,7 +60,7 @@ public class ObjMaskProviderSgmnByObj extends ObjMaskProvider {
 
 		Chnl chnl = chnlProvider.create();
 		
-		ObjMaskCollection objsSrc = objMaskProvider.create();
+		ObjMaskCollection objsSrc = objs.create();
 		
 		ObjMaskCollection objsOut = new ObjMaskCollection();
 		
@@ -94,12 +94,12 @@ public class ObjMaskProviderSgmnByObj extends ObjMaskProvider {
 		this.sgmn = sgmn;
 	}
 
-	public ObjMaskProvider getObjMaskProvider() {
-		return objMaskProvider;
+	public ObjMaskProvider getObjs() {
+		return objs;
 	}
 
-	public void setObjMaskProvider(ObjMaskProvider objMaskProvider) {
-		this.objMaskProvider = objMaskProvider;
+	public void setObjs(ObjMaskProvider objs) {
+		this.objs = objs;
 	}
 
 

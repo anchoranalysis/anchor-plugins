@@ -54,7 +54,7 @@ public class ChnlProviderCalculateLevelOnObjects extends ChnlProvider {
 	
 	// START BEAN
 	@BeanField @Optional
-	private ObjMaskProvider objMaskProvider;
+	private ObjMaskProvider objs;
 	
 	@BeanField
 	private ChnlProvider chnlProviderOutput;
@@ -105,8 +105,8 @@ public class ChnlProviderCalculateLevelOnObjects extends ChnlProvider {
 			
 			Chnl chnlOutput = chnlProviderOutput.create();
 			
-			if (objMaskProvider!=null) {
-				ObjMaskCollection objMasks = objMaskProvider.create();
+			if (objs!=null) {
+				ObjMaskCollection objMasks = objs.create();
 	
 				setSeperatelyForEachObject(
 					chnlIntensity,
@@ -132,13 +132,13 @@ public class ChnlProviderCalculateLevelOnObjects extends ChnlProvider {
 		}
 	}
 		
-	public ObjMaskProvider getObjMaskProvider() {
-		return objMaskProvider;
+	public ObjMaskProvider getObjs() {
+		return objs;
 	}
 
 
-	public void setObjMaskProvider(ObjMaskProvider objMaskProvider) {
-		this.objMaskProvider = objMaskProvider;
+	public void setObjs(ObjMaskProvider objs) {
+		this.objs = objs;
 	}
 
 	public CalculateLevel getCalculateLevel() {

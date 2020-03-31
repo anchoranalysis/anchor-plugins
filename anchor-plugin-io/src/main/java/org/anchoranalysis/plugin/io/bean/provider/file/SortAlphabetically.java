@@ -48,7 +48,9 @@ public class SortAlphabetically extends FileProvider {
 	
 	@Override
 	public Collection<File> matchingFiles(InputManagerParams params) throws AnchorIOException {
-		return SortUtilities.sortFiles(fileProvider, params);
+		return SortUtilities.sortFiles(
+			fileProvider.matchingFiles(params)
+		);
 	}
 
 	public FileProvider getFileProvider() {

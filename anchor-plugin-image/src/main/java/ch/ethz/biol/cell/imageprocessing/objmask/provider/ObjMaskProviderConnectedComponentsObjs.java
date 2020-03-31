@@ -52,7 +52,7 @@ public class ObjMaskProviderConnectedComponentsObjs extends ObjMaskProvider {
 
 	// START BEAN PROPERTIES
 	@BeanField
-	private ObjMaskProvider objMaskProvider;
+	private ObjMaskProvider objs;
 	
 	/** if TRUE, uses 8 neighbourhood instead of 4, and similarly in 3d */
 	@BeanField
@@ -62,7 +62,7 @@ public class ObjMaskProviderConnectedComponentsObjs extends ObjMaskProvider {
 	@Override
 	public ObjMaskCollection create() throws CreateException {
 		
-		ObjMaskCollection objs = objMaskProvider.create();
+		ObjMaskCollection objsCollection = objs.create();
 		
 		ObjMaskCollection out = new ObjMaskCollection();
 		
@@ -72,7 +72,7 @@ public class ObjMaskProviderConnectedComponentsObjs extends ObjMaskProvider {
 		createObjMasks.setBigNghb(bigNghb);
 		
 		
-		for( ObjMask om : objs ) {
+		for( ObjMask om : objsCollection ) {
 			ObjMaskCollection omConnected = createObjs3D( om, createObjMasks );
 			out.addAll(omConnected);
 		}
@@ -98,12 +98,12 @@ public class ObjMaskProviderConnectedComponentsObjs extends ObjMaskProvider {
 		return createObjMasks.createConnectedComponents(vb );
 	}
 
-	public ObjMaskProvider getObjMaskProvider() {
-		return objMaskProvider;
+	public ObjMaskProvider getObjs() {
+		return objs;
 	}
 
-	public void setObjMaskProvider(ObjMaskProvider objMaskProvider) {
-		this.objMaskProvider = objMaskProvider;
+	public void setObjs(ObjMaskProvider objs) {
+		this.objs = objs;
 	}
 
 	public boolean isBigNghb() {

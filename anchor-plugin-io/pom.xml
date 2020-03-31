@@ -15,6 +15,13 @@
     </license>
   </licenses>
    <dependencies>
+   
+        <dependency>
+          <groupId>${project.groupId}</groupId>
+          <artifactId>anchor-io-bioformats</artifactId>
+          <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+        
 	    <dependency>
 		  <groupId>${project.groupId}</groupId>
 		  <artifactId>anchor-bean</artifactId>
@@ -50,115 +57,19 @@
 		  <artifactId>path-pattern-finder</artifactId>
 		  <version>1.4.3</version>
 		</dependency>
-	    <dependency>
-		  <groupId>${project.groupId}</groupId>
-		  <artifactId>anchor-test</artifactId>
-		  <version>0.0.8-SNAPSHOT</version>
-		  <scope>test</scope>
-		</dependency>
-		<dependency>
-          <groupId>org.mockito</groupId>
-          <artifactId>mockito-core</artifactId>
-          <version>3.3.0</version>
-          <scope>test</scope>
-        </dependency>
 	
 		<dependency>
 		  <groupId>commons-logging</groupId>
 		  <artifactId>commons-logging</artifactId>
 		  <version>1.1.1</version>
 		</dependency>
-		<dependency>
-		  <groupId>net.imagej</groupId>
-		  <artifactId>ij</artifactId>
-		  <version>${imagej1.version}</version>
-		</dependency>		
-		<dependency>
-		  <groupId>net.imagej</groupId>
-		  <artifactId>imagej</artifactId>
-		  <version>${imagej.version}</version>
-	    <exclusions>
-	    	<!--  A more recent version of the JAR is needed by the georegression library, and there is a version clash, so we ignore this one -->
-	        <exclusion>
-	          <groupId>com.googlecode.efficient-java-matrix-library</groupId>
-	          <artifactId>ejml</artifactId>
-	        </exclusion>
-	      </exclusions> 		  
-		</dependency>
-		<dependency>
-		  <groupId>net.imagej</groupId>
-		  <artifactId>imagej-common</artifactId>
-		  <version>${imagej-common.version}</version>
-		</dependency>	
+
 		<dependency>
 			<groupId>com.google.guava</groupId>
 			<artifactId>guava</artifactId>
 			<version>19.0</version>
 		</dependency>
-		
-		
-		<!-- license-compatible parts of BIOFORMATS -->
-	    <dependency>
-	      <groupId>ome</groupId>
-	      <artifactId>formats-api</artifactId>
-	      <version>${bio-formats.version}</version>
-	      <exclusions>
-            <exclusion>
-                <groupId>xml-apis</groupId>
-                <artifactId>xml-apis</artifactId>
-            </exclusion>
-        </exclusions>
-	    </dependency>
-	    
-	   	<dependency>
-	      <groupId>ome</groupId>
-	      <artifactId>formats-bsd</artifactId>
-	      <version>${bio-formats.version}</version>
-		  <exclusions>
-            <exclusion>
-                <groupId>xml-apis</groupId>
-                <artifactId>xml-apis</artifactId>
-            </exclusion>
-        </exclusions>	      
-	    </dependency>
-	    
-	    <dependency>
-	      <groupId>org.openmicroscopy</groupId>
-	      <artifactId>ome-common</artifactId>
-	      <version>${ome-common.version}</version>
-	    </dependency>
-	    
-
-	    
-	    <dependency>
-	      <groupId>org.openmicroscopy</groupId>
-	      <artifactId>ome-poi</artifactId>
-	      <version>${ome-poi.version}</version>
-	    </dependency>
-	    
-	    <dependency>
-	      <groupId>org.openmicroscopy</groupId>
-	      <artifactId>ome-xml</artifactId>
-	      <version>${ome-xml.version}</version>
-	    </dependency>
-	    
-	    <dependency>
-		    <groupId>joda-time</groupId>
-		    <artifactId>joda-time</artifactId>
-		    <version>2.3</version>
-		</dependency>
-
-	    
-	    <!--  TODO: CHECK THIS LICENSE -->
-		<dependency>
-	      <groupId>ome</groupId>
-	      <artifactId>mdbtools-java</artifactId>
-	      <version>5.1.1</version>
-	    </dependency>
-		
-		
-	    <!-- STOP: license-compatible parts of bioformats -->
-	  
+  
 	    
 	    <dependency>
 		    <groupId>com.github.jai-imageio</groupId>
@@ -184,6 +95,29 @@
 		    <version>1.7.6</version>
 		</dependency>
 
+
+        <!-- START: Test dependencies -->
+        <dependency>
+          <groupId>${project.groupId}</groupId>
+          <artifactId>anchor-test</artifactId>
+          <version>0.0.8-SNAPSHOT</version>
+          <scope>test</scope>
+        </dependency>
+        
+        <dependency>
+          <groupId>${project.groupId}</groupId>
+          <artifactId>anchor-test-image</artifactId>
+          <version>0.0.8-SNAPSHOT</version>
+          <scope>test</scope>
+        </dependency>        
+        
+        <dependency>
+          <groupId>org.mockito</groupId>
+          <artifactId>mockito-core</artifactId>
+          <version>${mockito.version}</version>
+          <scope>test</scope>
+        </dependency>
+        <!--  END: Test dependencies -->
 	</dependencies>
   
   <repositories>

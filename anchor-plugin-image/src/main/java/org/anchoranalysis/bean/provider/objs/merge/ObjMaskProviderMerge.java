@@ -52,7 +52,7 @@ public class ObjMaskProviderMerge extends ObjMaskProviderMergeOptionalDistance {
 	@Override
 	public ObjMaskCollection create() throws CreateException {
 		
-		ObjMaskCollection objsSource = getObjMaskProvider().create();
+		ObjMaskCollection objsSource = getObjs().create();
 		
 		try {
 			Merger merger = new Merger(
