@@ -34,6 +34,7 @@ import org.anchoranalysis.image.interpolator.InterpolatorFactory;
 import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.image.objmask.ObjMaskCollection;
 import org.anchoranalysis.image.scale.ScaleFactor;
+import org.anchoranalysis.plugin.opencv.nonmaxima.WithConfidence;
 
 /**
  * Extracts and object-mask from the list and scales

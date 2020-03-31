@@ -1,4 +1,4 @@
-package org.anchoranalysis.plugin.opencv.bean.text;
+package org.anchoranalysis.plugin.opencv.nonmaxima;
 
 /*-
  * #%L
@@ -31,7 +31,8 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.PriorityQueue;
-import java.util.function.BiFunction;
+
+import com.google.common.base.Predicate;
 
 
 /**
@@ -48,19 +49,7 @@ import java.util.function.BiFunction;
  * @author owen
  *
  */
-class NonMaximaSuppression<T> {
-
-	private BiFunction<T,T,Double> funcScore;
-	
-	/**
-	 * Constructor
-	 * 
-	 * @param funcScore measures a similarity (e.g. IntersectionOverUnion between two objects)
-	 */
-	public NonMaximaSuppression(BiFunction<T, T, Double> funcScore) {
-		super();
-		this.funcScore = funcScore;
-	}
+public abstract class NonMaximaSuppression<T> {
 
 	/**
 	 * Reduce a set of bounding-boxes (each with a confidence score) to a set with minimal overlap.
@@ -75,6 +64,8 @@ class NonMaximaSuppression<T> {
 		Collection<WithConfidence<T>> proposals,
 		double overlapThreshold
 	) {
+		init( proposals );
+		
 		PriorityQueue<WithConfidence<T>> pq = new PriorityQueue<>(proposals);
 		
 		List<WithConfidence<T>> out = new ArrayList<>();
@@ -83,7 +74,11 @@ class NonMaximaSuppression<T> {
 			
 			WithConfidence<T> highestConfidence = pq.poll();
 			
-			removeSimilar( highestConfidence, pq, overlapThreshold);
+			removeOverlapAboveScore(
+				highestConfidence,
+				pq,
+				overlapThreshold
+			);
 			
 			out.add(highestConfidence);
 		}
@@ -91,19 +86,34 @@ class NonMaximaSuppression<T> {
 		return out;
 	}
 	
-	private void removeSimilar( WithConfidence<T> proposal, PriorityQueue<WithConfidence<T>> others, double scoreThreshold ) {
+	/** Called before the operation begins with all proposals */
+	protected abstract void init( Collection<WithConfidence<T>> allProposals );
+	
+	/** A score calculating the overlap between two items */
+	protected abstract double overlapScoreFor( T item1, T item2);
+
+	/** Finds possible neighbours for a particular object efficiently */
+	protected abstract Predicate<T> possibleOverlappingObjs( T src, Iterable<WithConfidence<T>> others );
+	
+	
+	private void removeOverlapAboveScore( WithConfidence<T> proposal, PriorityQueue<WithConfidence<T>> others, double scoreThreshold ) {
 		
-		Iterator<WithConfidence<T>> itr = others.iterator();
-		while( itr.hasNext() ) {
+		Predicate<T> pred = possibleOverlappingObjs(proposal.getObj(), others);
+		
+		Iterator<WithConfidence<T>> othersItr = others.iterator();
+		while( othersItr.hasNext() ) {
 			
-			WithConfidence<T> bbox = itr.next();
+			T other = othersItr.next().getObj();
 			
-			double score = funcScore.apply(proposal.getObj(), bbox.getObj());
+			if (pred.apply(other)) {
 			
-			// These objects are deemed highly-similar and removed
-			if (score >= scoreThreshold) {
-				// Remove from the queue if above the threshold
-				itr.remove();
+				double score = overlapScoreFor(proposal.getObj(), other);
+				
+				// These objects are deemed highly-similar and removed
+				if (score >= scoreThreshold) {
+					// Remove from the queue if above the threshold
+					othersItr.remove();
+				}
 			}
 		}
 	}

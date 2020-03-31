@@ -35,13 +35,14 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
 import org.anchoranalysis.image.bean.provider.stack.StackProvider;
-import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.image.objmask.ObjMaskCollection;
 import org.anchoranalysis.image.scale.ScaleFactor;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.plugin.opencv.CVInit;
+import org.anchoranalysis.plugin.opencv.nonmaxima.NonMaximaSuppressionObjs;
+import org.anchoranalysis.plugin.opencv.nonmaxima.WithConfidence;
 import org.apache.commons.math3.util.Pair;
 import org.opencv.core.Mat;
 
@@ -92,10 +93,6 @@ public class ObjMaskProviderExtractText extends ObjMaskProvider {
 	 *   in size proportionate to what EAST was trained on.
 	 */
 	private static final int MAX_SCALE_FACTOR = (720/EAST_EXTENT.getY()) + 1;
-	
-	private NonMaximaSuppression<BoundingBox> nonMaximaSuppression = new NonMaximaSuppression<>(
-		ObjMaskProviderExtractText::intersectionOverUnion
-	);
 	
 	@Override
 	public ObjMaskCollection create() throws CreateException {
@@ -161,80 +158,18 @@ public class ObjMaskProviderExtractText extends ObjMaskProvider {
 		
 		return stack;
 	}
-
-	/** Maybe apply non-maxima suppression */
-	/*private List<WithConfidence<BoundingBox>> maybeFilterList( List<WithConfidence<BoundingBox>> listBoxes ) {
+	
+	private List<WithConfidence<ObjMask>> maybeFilterList( List<WithConfidence<ObjMask>> list ) {
 		if (suppressNonMaxima) {
-			return nonMaximaSuppression.apply(
-				listBoxes,
+			return new NonMaximaSuppressionObjs().apply(
+				list,
 				suppressIntersectionOverUnionAbove
 			);
 		} else {
-			return listBoxes;
-		}
-	}*/
-	
-	private List<WithConfidence<ObjMask>> maybeFilterList( List<WithConfidence<ObjMask>> listBoxes ) {
-		if (suppressNonMaxima) {
-			/*PriorityQueue<WithConfidence<ObjMask>> pq = new PriorityQueue<>(listBoxes);
-			return Arrays.asList( pq.remove() );*/
-			/*return nonMaximaSuppression.apply(
-				listBoxes,
-				suppressIntersectionOverUnionAbove
-			);*/
-			return listBoxes;
-		} else {
-			return listBoxes;
+			return list;
 		}
 	}
-	
-	/**
-	 * The Intersection over Union (IoU) metric for two bounding-boxes.
-	 * 
-	 * @see <a href="https://www.quora.com/How-does-non-maximum-suppression-work-in-object-detection">Intersection-over-Union</a>
-	 * @param second the other bounding-box to consider when calculating the IoU
-	 * @return the IoU score
-	 */
-	private static double intersectionOverUnion(BoundingBox first, BoundingBox second) {
 		
-		BoundingBox intersection = new BoundingBox(first);
-		if (!intersection.intersect(second, true)) {
-			// If there's no intersection then the score is 0
-			return 0.0;
-		}
-		
-		int intersectionArea = intersection.extnt().getVolume();
-		
-		// The total area is equal to the sum of both minus the intersection (which is otherwise counted twice)
-		int total = second.extnt().getVolume() + first.extnt().getVolume() - intersectionArea;
-		
-		return ((double) intersectionArea) / total;
-	}
-	
-	
-	/**
-	 * The Intersection over Union (IoU) metric for two bounding-boxes.
-	 * 
-	 * @see <a href="https://www.quora.com/How-does-non-maximum-suppression-work-in-object-detection">Intersection-over-Union</a>
-	 * @param second the other bounding-box to consider when calculating the IoU
-	 * @return the IoU score
-	 */
-	/*private static double overlapRatio(ObjMaskOverlap first, ObjMaskOverlap second) {
-		
-		BoundingBox intersection = new BoundingBox(first);
-		if (!intersection.intersect(second, true)) {
-			// If there's no intersection then the score is 0
-			return 0.0;
-		}
-		
-		int intersectionArea = intersection.extnt().getVolume();
-		
-		// The total area is equal to the sum of both minus the intersection (which is otherwise counted twice)
-		int total = second.extnt().getVolume() + first.extnt().getVolume() - intersectionArea;
-		
-		return ((double) intersectionArea) / total;
-	}*/
-	
 	private Path pathToEastModel() {
 		return getSharedObjects().getModelDir().resolve("frozen_east_text_detection.pb");
 	}
