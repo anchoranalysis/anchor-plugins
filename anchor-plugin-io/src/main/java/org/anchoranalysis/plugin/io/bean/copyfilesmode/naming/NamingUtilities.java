@@ -28,8 +28,8 @@ package org.anchoranalysis.plugin.io.bean.copyfilesmode.naming;
 
 import java.nio.file.Path;
 
-import org.anchoranalysis.core.file.PathUtilities;
 import org.anchoranalysis.io.error.AnchorIOException;
+import org.anchoranalysis.io.filepath.FilePathToUnixStyleConverter;
 import org.anchoranalysis.io.filepath.prefixer.FilePathDifferenceFromFolderPath;
 
 class NamingUtilities {
@@ -42,6 +42,6 @@ class NamingUtilities {
 	
 	// Converts a path to a string, making sure it's first UNIX style
 	public static String convertToString( Path path ) {
-		return PathUtilities.toStringUnixStyle(path);
+		return FilePathToUnixStyleConverter.toStringUnixStyle(path);
 	}
 }

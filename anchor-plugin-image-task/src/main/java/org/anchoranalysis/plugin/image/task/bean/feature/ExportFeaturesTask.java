@@ -35,7 +35,6 @@ import org.anchoranalysis.bean.NamedBean;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.Optional;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.core.file.PathUtilities;
 import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.core.log.LogReporter;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
@@ -45,6 +44,7 @@ import org.anchoranalysis.feature.list.NamedFeatureStore;
 import org.anchoranalysis.feature.list.NamedFeatureStoreFactory;
 import org.anchoranalysis.io.bean.filepath.generator.FilePathGenerator;
 import org.anchoranalysis.io.error.AnchorIOException;
+import org.anchoranalysis.io.filepath.FilePathToUnixStyleConverter;
 import org.anchoranalysis.io.input.InputFromManager;
 import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
 import org.anchoranalysis.plugin.image.task.sharedstate.SharedStateExportFeatures;
@@ -124,7 +124,7 @@ public abstract class ExportFeaturesTask<T extends InputFromManager, S extends S
 	
 	private static String filePathAsIdentifier( FilePathGenerator generator, Path path, boolean debugMode, Function<Path,Path> alternative ) throws AnchorIOException {
 		Path out = determinePath(generator, path, debugMode, alternative);
-		return PathUtilities.toStringUnixStyle(out);
+		return FilePathToUnixStyleConverter.toStringUnixStyle(out);
 	}
 	
 	private static Path determinePath( FilePathGenerator generator, Path path, boolean debugMode, Function<Path,Path> alternative ) throws AnchorIOException {
