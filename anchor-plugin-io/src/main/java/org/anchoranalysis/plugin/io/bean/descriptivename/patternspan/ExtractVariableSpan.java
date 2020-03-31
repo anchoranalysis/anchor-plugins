@@ -31,7 +31,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.file.PathUtilities;
+import org.anchoranalysis.io.filepath.FilePathToUnixStyleConverter;
 import org.apache.commons.io.IOCase;
 
 import com.owenfeehan.pathpatternfinder.Pattern;
@@ -97,7 +97,7 @@ class ExtractVariableSpan {
 	 * @return
 	 */
 	public String extractSpanPortionFor(File file) {
-		return PathUtilities.toStringUnixStyle(
+		return FilePathToUnixStyleConverter.toStringUnixStyle(
 			extractVariableSpanUnnormalized(file)
 		);
 	}

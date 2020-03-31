@@ -30,8 +30,8 @@ package org.anchoranalysis.plugin.io.bean.filepath.prefixer;
 import java.nio.file.Path;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.shared.regex.RegEx;
-import org.anchoranalysis.core.file.PathUtilities;
 import org.anchoranalysis.io.error.AnchorIOException;
+import org.anchoranalysis.io.filepath.FilePathToUnixStyleConverter;
 import org.anchoranalysis.io.filepath.prefixer.FilePathPrefix;
 
 /// 
@@ -68,7 +68,7 @@ public class PathRegEx extends FilePathPrefixerAvoidResolve {
 	
 	private String[] componentsFromPath( Path pathIn ) throws AnchorIOException {
 		
-		String pathInForwardSlashes = PathUtilities.toStringUnixStyle( pathIn );
+		String pathInForwardSlashes = FilePathToUnixStyleConverter.toStringUnixStyle( pathIn );
 		
 		String[] components = regEx.matchStr( pathInForwardSlashes );
 		

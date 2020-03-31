@@ -36,8 +36,8 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.file.PathUtilities;
 import org.anchoranalysis.io.bean.descriptivename.DescriptiveNameFromFile;
+import org.anchoranalysis.io.filepath.FilePathToUnixStyleConverter;
 import org.anchoranalysis.io.input.descriptivename.DescriptiveFile;
 import org.apache.commons.io.FilenameUtils;
 
@@ -156,13 +156,13 @@ public class RemoveExtensions extends DescriptiveNameFromFile {
 		// If the path doesn't end with descriptiveName, we don't remove any extension
 		//  as it's assumed that this has already occurred, and it could be dangerous
 		//  to remove anything more.
-		String pathForwardSlash = PathUtilities.toStringUnixStyle( path.normalize() );
+		String pathForwardSlash = FilePathToUnixStyleConverter.toStringUnixStyle( path.normalize() );
 		if (!pathForwardSlash.endsWith(nameLikePath)) {
 			// Early exit as the descriptive-name doesn't have the same ending as path
 			return nameLikePath;
 		}
 		
-		return PathUtilities.toStringUnixStyle(
+		return FilePathToUnixStyleConverter.toStringUnixStyle(
 			removeExtension(nameLikePath)
 		);
 	}
