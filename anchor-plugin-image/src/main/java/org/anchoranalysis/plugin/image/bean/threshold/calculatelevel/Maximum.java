@@ -32,10 +32,17 @@ import java.util.List;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.image.bean.threshold.calculatelevel.CalculateLevel;
+import org.anchoranalysis.image.bean.threshold.CalculateLevel;
 import org.anchoranalysis.image.histogram.Histogram;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
+
+/**
+ * The maximum value of one or more {#link org.anchoranalysis.image.bean.threshold.CalculateLevel}
+ * 
+ * @author owen
+ *
+ */
 public class Maximum extends CalculateLevel {
 
 	/**

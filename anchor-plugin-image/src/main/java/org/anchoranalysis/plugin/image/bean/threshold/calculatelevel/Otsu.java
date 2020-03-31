@@ -1,10 +1,12 @@
 package org.anchoranalysis.plugin.image.bean.threshold.calculatelevel;
 
-/*
+import org.anchoranalysis.image.bean.threshold.CalculateLevel;
+
+/*-
  * #%L
- * anchor-plugin-image
+ * anchor-image-bean
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -26,70 +28,64 @@ package org.anchoranalysis.plugin.image.bean.threshold.calculatelevel;
  * #L%
  */
 
-
-import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.image.bean.threshold.CalculateLevel;
 import org.anchoranalysis.image.histogram.Histogram;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
+
 /**
- * Specifies a constant if a histogram is empty, otherwise delegates to another {#link org.anchoranalysis.image.bean.threshold.CalculateLevel}
+ * Performs Otsu auto-thresholding
+ * 
+ * <p>This performs binary thresholding into foreground and background.</p>
+ * 
+ * <p>This minimizes intra-class intensity variance, or equivalently, maximizes inter-class variance.</p>
+ * 
+ * <@see <a href="https://en.wikipedia.org/wiki/Otsu%27s_method>Otsu's method on wikipedia</a>.</p>
+ * 
  * @author owen
  *
  */
-public class EmptyHistogramConstant extends CalculateLevel {
+public class Otsu extends CalculateLevel {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	
-	// START BEAN PROPERTIES
-	@BeanField
-	private CalculateLevel calculateLevel;
-	
-	@BeanField
-	private int value = 0;
-	// END BEAN PROPERTIES
-	
+
 	@Override
-	public int calculateLevel(Histogram h) throws OperationFailedException {
+	public int calculateLevel( Histogram hist ) {
 		
-		if (!h.isEmpty()) {
-			return calculateLevel.calculateLevel(h);
-		} else {
-			return value;
+		long totalSum = hist.calcSum();
+		long totalCount = hist.getTotalCount();
+		
+		long runningSum = 0;
+		long runningCount = hist.getCount(0);
+		
+		double bcvMax=Double.NEGATIVE_INFINITY;
+		int thresholdChosen = 0;
+
+		// Search for max between-class variance
+		int minIntensity = hist.calcMin() + 1;
+		int maxIntensity = hist.calcMax()-1;
+		for (int k=minIntensity; k<=maxIntensity; k++) {	// Avoid min and max
+			runningSum += k * hist.getCount(k);
+			runningCount += hist.getCount(k);
+			
+			double bcv = betweenClassVariance( runningSum, runningCount, totalSum, totalCount );
+
+			if (bcv >= bcvMax && !Double.isNaN(bcv)) {
+				bcvMax = bcv;
+				thresholdChosen = k;
+			}
 		}
-	}
-
-	public CalculateLevel getCalculateLevel() {
-		return calculateLevel;
-	}
-
-
-	public void setCalculateLevel(CalculateLevel calculateLevel) {
-		this.calculateLevel = calculateLevel;
-	}
-
-
-	public int getValue() {
-		return value;
-	}
-
-
-	public void setValue(int value) {
-		this.value = value;
+		
+		return thresholdChosen;
 	}
 	
 	@Override
 	public boolean equals(Object obj) {
-		if(obj instanceof EmptyHistogramConstant){
-	    	final EmptyHistogramConstant other = (EmptyHistogramConstant) obj;
+		if(obj instanceof Otsu){
 	        return new EqualsBuilder()
-	            .append(calculateLevel, other.calculateLevel)
-	            .append(value, other.value)
 	            .isEquals();
 	    } else{
 	        return false;
@@ -99,8 +95,18 @@ public class EmptyHistogramConstant extends CalculateLevel {
 	@Override
 	public int hashCode() {
 		return new HashCodeBuilder()
-			.append(calculateLevel)
-			.append(value)
 			.toHashCode();
+	}
+	
+	private static double betweenClassVariance( long runningSum, long runningCount, long totalSum, long totalCount ) {
+
+		double denom = ((double) runningCount) * (totalCount - runningCount);
+
+		if (denom==0){
+			return Double.NaN;
+		}
+		
+		double num = ((double)runningCount / totalCount ) * totalSum - runningSum;
+		return (num * num) / denom;
 	}
 }

@@ -28,11 +28,19 @@ package org.anchoranalysis.plugin.image.bean.threshold.calculatelevel;
 
 
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.image.bean.threshold.calculatelevel.CalculateLevel;
+import org.anchoranalysis.image.bean.threshold.CalculateLevel;
 import org.anchoranalysis.image.histogram.Histogram;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
+/**
+ * Calculates the threshold value from a quantile of a histogram.
+ * 
+ * <p>By default, it calculates the median i.e. quantile of 0.5</p>
+ * 
+ * @author owen
+ *
+ */
 public class Quantile extends CalculateLevel {
 	
 	/**

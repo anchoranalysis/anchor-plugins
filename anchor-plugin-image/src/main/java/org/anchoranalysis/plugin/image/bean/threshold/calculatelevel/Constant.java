@@ -2,7 +2,7 @@ package org.anchoranalysis.plugin.image.bean.threshold.calculatelevel;
 
 /*
  * #%L
- * anchor-plugin-image
+ * anchor-image-bean
  * %%
  * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
  * %%
@@ -28,65 +28,58 @@ package org.anchoranalysis.plugin.image.bean.threshold.calculatelevel;
 
 
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.relation.GreaterThan;
-import org.anchoranalysis.core.relation.RelationToValue;
+import org.anchoranalysis.bean.annotation.NonNegative;
 import org.anchoranalysis.image.bean.threshold.CalculateLevel;
 import org.anchoranalysis.image.histogram.Histogram;
-import org.anchoranalysis.image.histogram.HistogramArray;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
 
 /**
- * Clips the input-histogram to a certain maximum value, and then delegates the calculate-level.
+ * A constant value for thresholding
  * 
  * @author owen
  *
  */
-public class ClipHistogramMax extends CalculateLevel {
+public class Constant extends CalculateLevel {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	// START BEAN
-	@BeanField
-	private CalculateLevel calculateLevel;
+	// START BEAN PROPERTIES
+	@BeanField @NonNegative
+	private int level = 0;
+	// END BEAN PROPERTIES
 	
-	@BeanField
-	private int max;
-	// END BEAN
-
-	private static RelationToValue relation = new GreaterThan();
-	private static Histogram createClipped( Histogram histIn, int maxVal ) {
+	public Constant() {
 		
-		assert( maxVal<= histIn.getMaxBin() );
-		
-		long numAbove = histIn.countThreshold(relation, maxVal);
-		
-		Histogram out = new HistogramArray(histIn.getMaxBin());
-		for( int i=histIn.getMinBin(); i<=maxVal; i++ ) {
-			out.incrValBy( i, histIn.getCount(i) );
-		}
-		out.incrValBy(maxVal, numAbove);
-		return out;
 	}
 	
+	public Constant( int level ) {
+		this.level = level;
+	}
+	
+	public int getLevel() {
+		return level;
+	}
+
+	public void setLevel(int level) {
+		this.level = level;
+	}
+
 	@Override
-	public int calculateLevel(Histogram h) throws OperationFailedException {
-		Histogram hClipped = createClipped(h,max);
-		return calculateLevel.calculateLevel(hClipped);
+	public int calculateLevel(Histogram h) {
+		return level;
 	}
 	
 	@Override
 	public boolean equals(Object obj) {
-		if(obj instanceof ClipHistogramMax){
-	    	final ClipHistogramMax other = (ClipHistogramMax) obj;
+		if(obj instanceof Constant){
+	    	final Constant other = (Constant) obj;
 	        return new EqualsBuilder()
-	            .append(calculateLevel, other.calculateLevel)
-	            .append(max, other.max)
+	            .append(level, other.level)
 	            .isEquals();
 	    } else{
 	        return false;
@@ -96,24 +89,7 @@ public class ClipHistogramMax extends CalculateLevel {
 	@Override
 	public int hashCode() {
 		return new HashCodeBuilder()
-			.append(calculateLevel)
-			.append(max)
+			.append(level)
 			.toHashCode();
-	}
-
-	public int getMax() {
-		return max;
-	}
-
-	public void setMax(int max) {
-		this.max = max;
-	}
-
-	public CalculateLevel getCalculateLevel() {
-		return calculateLevel;
-	}
-
-	public void setCalculateLevel(CalculateLevel calculateLevel) {
-		this.calculateLevel = calculateLevel;
 	}
 }
