@@ -1,4 +1,4 @@
-package org.anchoranalysis.plugin.opencv.bean.text;
+package org.anchoranalysis.plugin.opencv.nonmaxima;
 
 /*-
  * #%L
@@ -31,7 +31,7 @@ package org.anchoranalysis.plugin.opencv.bean.text;
  * 
  * @param T object to be associated with a confidence score
  * */
-class WithConfidence<T> implements Comparable<WithConfidence<T>> {
+public class WithConfidence<T> implements Comparable<WithConfidence<T>> {
 	
 	private T obj;
 	private double confidence;
