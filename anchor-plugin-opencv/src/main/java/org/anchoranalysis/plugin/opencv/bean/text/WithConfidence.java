@@ -26,58 +26,32 @@ package org.anchoranalysis.plugin.opencv.bean.text;
  * #L%
  */
 
-import org.anchoranalysis.image.extent.BoundingBox;
-import org.anchoranalysis.image.scale.ScaleFactor;
-
-class BoundingBoxWithConfidence implements Comparable<BoundingBoxWithConfidence> {
+/** 
+ * Wraps an object with a confidence-score and imposes an ordering (highest confidence first)
+ * 
+ * @param T object to be associated with a confidence score
+ * */
+class WithConfidence<T> implements Comparable<WithConfidence<T>> {
 	
-	private BoundingBox bbox;
+	private T obj;
 	private double confidence;
 	
-	public BoundingBoxWithConfidence(BoundingBox bbox, double confidence) {
+	public WithConfidence(T obj, double confidence) {
 		super();
-		this.bbox = bbox;
+		this.obj = obj;
 		this.confidence = confidence;
 	}
 
-	public BoundingBox getBBox() {
-		return bbox;
+	public T getObj() {
+		return obj;
 	}
 
 	public double getConfidence() {
 		return confidence;
 	}
-	
-	
-	/**
-	 * The Intersection over Union (IoU) metric for two bounding-boxes.
-	 * 
-	 * @see <a href="https://www.quora.com/How-does-non-maximum-suppression-work-in-object-detection">Intersection-over-Union</a>
-	 * @param othr the other bounding-box to consider when calculating the IoU
-	 * @return the IoU score
-	 */
-	public double intersectionOverUnion(BoundingBox othr) {
-		
-		BoundingBox intersection = new BoundingBox(bbox);
-		if (!intersection.intersect(othr, true)) {
-			// If there's no intersection then the score is 0
-			return 0.0;
-		}
-		
-		int intersectionArea = intersection.extnt().getVolume();
-		
-		// The total area is equal to the sum of both minus the intersection (which is otherwise counted twice)
-		int total = othr.extnt().getVolume() + bbox.extnt().getVolume() - intersectionArea;
-		
-		return ((double) intersectionArea) / total;
-	}
-
-	public void scaleXYPosAndExtnt( ScaleFactor sf ) {
-		bbox.scaleXYPosAndExtnt( sf );
-	}
 
 	@Override
-	public int compareTo(BoundingBoxWithConfidence other) {
+	public int compareTo(WithConfidence<T> other) {
 		return Double.compare(other.confidence, confidence);
 	}
 }

@@ -43,20 +43,22 @@ import org.anchoranalysis.image.scale.ScaleFactor;
 class ScaleConvertToMask {
 
 	public static ObjMaskCollection scaledMasksForEachBox(
-		List<BoundingBoxWithConfidence> list,
+		List<WithConfidence<BoundingBox>> list,
 		ScaleFactor sf,
 		ImageDim sceneDim
 	) {
 		
 		ObjMaskCollection objs = new ObjMaskCollection();
-		for (BoundingBoxWithConfidence bbox : list) {
+		for (WithConfidence<BoundingBox> bboxWithConfidence : list) {
 			
+			BoundingBox bbox = bboxWithConfidence.getObj();
+			assert(bbox.extnt().getZ()>=1);
 			bbox.scaleXYPosAndExtnt(sf);
 			
-			assert( sceneDim.contains(bbox.getBBox()) );
+			assert( sceneDim.contains(bbox) );
 		
 			objs.add(
-				objWithAllPixelsOn(bbox.getBBox())
+				objWithAllPixelsOn(bbox)
 			);
 		}
 		

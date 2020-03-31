@@ -30,13 +30,9 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.anchoranalysis.anchor.mpp.mark.GlobalRegionIdentifiers;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.core.geometry.Point2i;
-import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.Extent;
-import org.anchoranalysis.image.extent.ImageDim;
-import org.anchoranalysis.image.extent.ImageRes;
 import org.apache.commons.math3.util.Pair;
 import org.opencv.core.Mat;
 import org.opencv.core.Scalar;
@@ -63,11 +59,10 @@ class EastBoundingBoxExtractor {
 	 * 
 	 * @return a list of bounding-boxes, each with a confidence value
 	 */
-	public static List<BoundingBoxWithConfidence> extractBoundingBoxes(
+	public static List<WithConfidence<Mark>> extractBoundingBoxes(
 		Mat image,
 		double minConfidence,
-		Path pathToModel,
-		ImageRes res
+		Path pathToModel
 	) {
 		
 		Net net = Dnn.readNetFromTensorflow(pathToModel.toAbsolutePath().toString());
@@ -86,39 +81,36 @@ class EastBoundingBoxExtractor {
 			scores,
 			geometry,
 			SCALE_BY_4,
-			minConfidence,
-			res
+			minConfidence
 		);
 	}
 
-	private static List<BoundingBoxWithConfidence> extractFromMatrices(
+	private static List<WithConfidence<Mark>> extractFromMatrices(
 		Mat scores,
 		Mat geometry,
 		ScaleFactorInt offsetScale,
-		double minConfidence,
-		ImageRes res
+		double minConfidence
 	) {
 		Pair<Mat,Extent> pair = reshapeScores(scores);
 		
 		return extractFromMatricesReshaped(
 			pair.getFirst(),
 			reshapeGeometry(geometry),
-			new ImageDim(pair.getSecond(), res),
+			pair.getSecond(),
 			offsetScale,
 			minConfidence
 		);	
 	}
 	
-	private static List<BoundingBoxWithConfidence> extractFromMatricesReshaped(
+	private static List<WithConfidence<Mark>> extractFromMatricesReshaped(
 		Mat scores,
 		Mat geometry,
-		ImageDim bndScene,
+		Extent extnt,
 		ScaleFactorInt offsetScale,
 		double minConfidence
 	) {
-		List<BoundingBoxWithConfidence> list = new ArrayList<>();
+		List<WithConfidence<Mark>> list = new ArrayList<>();
 		
-		Extent extnt = bndScene.getExtnt();
 		int rowsByCols = extnt.getVolumeXY();
 		
 		float[] scoresData = arrayFromMat(scores, 0, rowsByCols);
@@ -139,10 +131,8 @@ class EastBoundingBoxExtractor {
 						offsetScale.scale(pnt)
 					);
 					
-					BoundingBox bbox = mark.bbox(bndScene, GlobalRegionIdentifiers.SUBMARK_INSIDE);
-					
 					list.add(
-						new BoundingBoxWithConfidence(bbox, confidence)
+						new WithConfidence<>(mark, confidence)
 					);
 				}
 				index++;
