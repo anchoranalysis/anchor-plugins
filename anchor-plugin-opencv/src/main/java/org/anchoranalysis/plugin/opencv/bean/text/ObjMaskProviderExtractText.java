@@ -92,7 +92,7 @@ public class ObjMaskProviderExtractText extends ObjMaskProvider {
 	 *   we don't allow dramatically higher resolutions that this, so text objects remain roughly
 	 *   in size proportionate to what EAST was trained on.
 	 */
-	private static final int MAX_SCALE_FACTOR = (720/EAST_EXTENT.getY()) + 1;
+	private static final int MAX_SCALE_FACTOR = (720/EAST_EXTENT.getY());
 	
 	@Override
 	public ObjMaskCollection create() throws CreateException {
