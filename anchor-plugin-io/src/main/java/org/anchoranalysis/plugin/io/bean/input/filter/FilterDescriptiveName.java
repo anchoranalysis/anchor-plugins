@@ -28,6 +28,7 @@ package org.anchoranalysis.plugin.io.bean.input.filter;
 
 import java.util.Iterator;
 import java.util.List;
+import java.util.function.BiFunction;
 
 import org.anchoranalysis.bean.annotation.AllowEmpty;
 import org.anchoranalysis.bean.annotation.BeanField;
@@ -37,14 +38,13 @@ import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.input.InputFromManager;
 
 /**
- * Filters all the input objects so that only those with descriptive-names containing a particular
- * string are accepted.
+ * Filters all the input objects for only those with certain types of descriptive-names.
  * 
- * If *contains* is empty, all objects match
+ * <p>Either or both <i>equals</i> or <i>contains</i> conditions are possible</p>
  * 
  * @author FEEHANO
  *
- * @param <T>
+ * @param <T> input-manager type
  */
 public class FilterDescriptiveName<T extends InputFromManager> extends InputManager<T> {
 
@@ -57,8 +57,13 @@ public class FilterDescriptiveName<T extends InputFromManager> extends InputMana
 	@BeanField
 	private InputManager<T> input;
 	
+	/** A descriptive-name must be exactly equal to (case-sensitive) this string. If empty, disabled. */
 	@BeanField @AllowEmpty
 	private String equals = "";
+	
+	/** A descriptive-name must contain (case-sensitive) this string. If empty, disabled. */
+	@BeanField @AllowEmpty
+	private String contains = "";
 	// END BEAN PROPERTIES
 	
 	@Override
@@ -68,8 +73,8 @@ public class FilterDescriptiveName<T extends InputFromManager> extends InputMana
 		// Existing collection 
 		List<T> in = input.inputObjects(params);
 		
-		// If no string is specified, just pass pack the entire iterator
-		if (equals.isEmpty()) {
+		// If no condition is applied, just pass pack the entire iterator
+		if (!atLeastOneCondition()) {
 			return in;
 		}
 		
@@ -84,9 +89,33 @@ public class FilterDescriptiveName<T extends InputFromManager> extends InputMana
 		while(itr.hasNext()) {
 			T item = itr.next();
 			
-			if (!item.descriptiveName().equals(equals)) {
+			if (!predicate(item.descriptiveName())) {
 				itr.remove();
 			}
+		}
+	}
+		
+	private boolean atLeastOneCondition() {
+		return !equals.isEmpty() || !contains.isEmpty();
+	}
+	
+	private boolean predicate( String str ) {
+		return nonEmptyAndPredicate(
+			str,
+			equals,
+			(ref, test) -> ref.equals(test)
+		) && nonEmptyAndPredicate(
+			str,
+			contains,
+			(ref, test) -> ref.contains(test)				
+		);
+	}
+	
+	private static boolean nonEmptyAndPredicate( String strToTest, String strReference, BiFunction<String,String,Boolean> func ) {
+		if (!strReference.isEmpty()) {
+			return func.apply(strReference, strToTest);	
+		} else {
+			return true;
 		}
 	}
 
@@ -104,6 +133,14 @@ public class FilterDescriptiveName<T extends InputFromManager> extends InputMana
 
 	public void setEquals(String equals) {
 		this.equals = equals;
+	}
+
+	public String getContains() {
+		return contains;
+	}
+
+	public void setContains(String contains) {
+		this.contains = contains;
 	}
 
 }
