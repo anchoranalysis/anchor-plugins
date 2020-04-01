@@ -69,7 +69,7 @@ public class Files extends InputManager<FileInput> {
 		
 		Collection<File> files = getFileProvider().matchingFiles(params);
 			
-		return descriptiveNameFromFile.descriptiveNamesForCheckUniqueness(files, "<unknown>").stream().map(
+		return descriptiveNameFromFile.descriptiveNamesForCheckUniqueness(files).stream().map(
 			df -> new FileInput(df)
 		).collect( Collectors.toList() );
 	}
