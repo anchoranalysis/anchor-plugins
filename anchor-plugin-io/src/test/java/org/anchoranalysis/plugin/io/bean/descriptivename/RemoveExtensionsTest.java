@@ -72,7 +72,7 @@ public class RemoveExtensionsTest {
 		re.setDescriptiveName( new NormalizedPath() );
 		
 		re.setPreserveExtensionIfDuplicate(preserveExtension);
-		return re.descriptiveNamesForCheckUniqueness(files, "<unknown>");
+		return re.descriptiveNamesForCheckUniqueness(files);
 	}
 	
 	private static List<File> listOfFiles() {
