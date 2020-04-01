@@ -1,10 +1,12 @@
-package org.anchoranalysis.plugin.mpp.experiment.bean.objs;
+package org.anchoranalysis.plugin.io.bean.input.filter;
 
-/*
+import java.util.Arrays;
+
+/*-
  * #%L
- * anchor-mpp-io
+ * anchor-plugin-io
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -26,71 +28,73 @@ package org.anchoranalysis.plugin.mpp.experiment.bean.objs;
  * #L%
  */
 
-
-import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.io.bean.filepath.generator.FilePathGenerator;
 import org.anchoranalysis.io.bean.input.InputManager;
 import org.anchoranalysis.io.bean.input.InputManagerParams;
 import org.anchoranalysis.io.error.AnchorIOException;
-import org.anchoranalysis.mpp.io.bean.input.MultiInputManager;
-import org.anchoranalysis.mpp.io.input.MultiInput;
-import org.anchoranalysis.plugin.mpp.experiment.objs.FromCSVInputObject;
+import org.anchoranalysis.io.input.InputFromManager;
+import org.anchoranalysis.plugin.io.input.filter.FilterDescriptiveNameEqualsContains;
 
-// An input stack
-public class FromCSVInputManager extends InputManager<FromCSVInputObject> {
+/**
+ * Filters a list of inputs when in debug-mode
+ * 
+ * @author owen
+ *
+ * @param <T> input-type
+ */
+public class FilterIfDebug<T extends InputFromManager> extends InputManager<T> {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	
+
 	// START BEAN PROPERTIES
 	@BeanField
-	private MultiInputManager input;
-	
-	@BeanField
-	private FilePathGenerator appendCSV;
+	private InputManager<T> input;
 	// END BEAN PROPERTIES
-
+	
 	@Override
-	public List<FromCSVInputObject> inputObjects(
-			InputManagerParams params)
-			throws AnchorIOException {
-		
-		Iterator<MultiInput> itr = input.inputObjects(params).iterator();
+	public List<T> inputObjects(InputManagerParams params) throws AnchorIOException {
 
-		List<FromCSVInputObject> out = new ArrayList<>();
-		
-		while( itr.hasNext() ) {
-			MultiInput inputObj = itr.next();
-			
-			Path csvFilePathOut = appendCSV.outFilePath(inputObj.pathForBinding(), params.isDebugModeActivated() );
-			out.add( new FromCSVInputObject(inputObj, csvFilePathOut) );
+		List<T> unfiltered = input.inputObjects(params);
+				
+		if (params.isDebugModeActivated()) {
+			return takeFirst(
+				maybeFilteredList(unfiltered, params)
+			);
+		} else {
+			return unfiltered;
 		}
+	}
+	
+	/** Take first item, if there's more than one in a list */
+	private List<T> takeFirst( List<T> list ) {
+		if (list.size()<=1) {
+			// Nothing to do
+			return list;
+		} else {
+			return Arrays.asList( list.get(0) );
+		}
+	}
+	
+	private List<T> maybeFilteredList( List<T> unfiltered, InputManagerParams params ) {
+		FilterDescriptiveNameEqualsContains filter = new FilterDescriptiveNameEqualsContains(
+			"",	// Always disabled
+			params.getDebugModeParams().containsOrEmpty()	
+		);
 		
-		return out;
+		return filter.removeNonMatching(unfiltered);
 	}
 
-	public FilePathGenerator getAppendCSV() {
-		return appendCSV;
-	}
-
-	public void setAppendCSV(FilePathGenerator appendCSV) {
-		this.appendCSV = appendCSV;
-	}
-
-
-	public MultiInputManager getInput() {
+	public InputManager<T> getInput() {
 		return input;
 	}
 
-
-	public void setInput(MultiInputManager input) {
+	public void setInput(InputManager<T> input) {
 		this.input = input;
 	}
+
 }

@@ -2,9 +2,9 @@ package org.anchoranalysis.plugin.io.bean.input.filter;
 
 /*-
  * #%L
- * anchor-io
+ * anchor-plugin-io
  * %%
- * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2010 - 2020 Owen Feehan
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -26,9 +26,7 @@ package org.anchoranalysis.plugin.io.bean.input.filter;
  * #L%
  */
 
-import java.util.Iterator;
 import java.util.List;
-import java.util.function.BiFunction;
 
 import org.anchoranalysis.bean.annotation.AllowEmpty;
 import org.anchoranalysis.bean.annotation.BeanField;
@@ -36,6 +34,7 @@ import org.anchoranalysis.io.bean.input.InputManager;
 import org.anchoranalysis.io.bean.input.InputManagerParams;
 import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.input.InputFromManager;
+import org.anchoranalysis.plugin.io.input.filter.FilterDescriptiveNameEqualsContains;
 
 /**
  * Filters all the input objects for only those with certain types of descriptive-names.
@@ -44,7 +43,7 @@ import org.anchoranalysis.io.input.InputFromManager;
  * 
  * @author FEEHANO
  *
- * @param <T> input-manager type
+ * @param <T> input-type
  */
 public class FilterDescriptiveName<T extends InputFromManager> extends InputManager<T> {
 
@@ -69,56 +68,18 @@ public class FilterDescriptiveName<T extends InputFromManager> extends InputMana
 	@Override
 	public List<T> inputObjects(InputManagerParams params)
 			throws AnchorIOException {
-
-		// Existing collection 
-		List<T> in = input.inputObjects(params);
 		
-		// If no condition is applied, just pass pack the entire iterator
-		if (!atLeastOneCondition()) {
-			return in;
-		}
-		
-		removeNonMatchingFrom(in);
-		
-		return in;
-	}
-	
-	private void removeNonMatchingFrom( List<T> in ) {
-		
-		Iterator<T> itr = in.listIterator();
-		while(itr.hasNext()) {
-			T item = itr.next();
-			
-			if (!predicate(item.descriptiveName())) {
-				itr.remove();
-			}
-		}
-	}
-		
-	private boolean atLeastOneCondition() {
-		return !equals.isEmpty() || !contains.isEmpty();
-	}
-	
-	private boolean predicate( String str ) {
-		return nonEmptyAndPredicate(
-			str,
+		FilterDescriptiveNameEqualsContains filter = new FilterDescriptiveNameEqualsContains(
 			equals,
-			(ref, test) -> ref.equals(test)
-		) && nonEmptyAndPredicate(
-			str,
-			contains,
-			(ref, test) -> ref.contains(test)				
+			contains	
+		);
+		
+		return filter.removeNonMatching(
+			input.inputObjects(params)		// Existing collection
 		);
 	}
 	
-	private static boolean nonEmptyAndPredicate( String strToTest, String strReference, BiFunction<String,String,Boolean> func ) {
-		if (!strReference.isEmpty()) {
-			return func.apply(strReference, strToTest);	
-		} else {
-			return true;
-		}
-	}
-
+	
 	public InputManager<T> getInput() {
 		return input;
 	}

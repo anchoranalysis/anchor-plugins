@@ -82,12 +82,17 @@ public class Rooted extends FileProvider {
 			
 			Path dirOrig = fileProvider.getDirectoryAsPath(params.getInputContext());
 	
-			Path dirNew = RootedFilePathUtilities.determineNewPath( dirOrig, rootName, params.isDebugMode(), disableDebugMode );
+			Path dirNew = RootedFilePathUtilities.determineNewPath(
+				dirOrig,
+				rootName,
+				params.isDebugModeActivated(),
+				disableDebugMode
+			);
 
 			boolean dirNewExists = Files.exists(dirNew); 
 					
 			// As a special behaviour, if the debug folder doesn't exist, we try and again with the non-debug folder
-			if (params.isDebugMode() && !dirNewExists) {
+			if (params.isDebugModeActivated() && !dirNewExists) {
 				dirNew = RootedFilePathUtilities.determineNewPath( dirOrig, rootName, false, disableDebugMode );
 				dirNewExists = Files.exists(dirNew);
 			}
