@@ -1,5 +1,7 @@
 package ch.ethz.biol.cell.imageprocessing.dim.provider;
 
+import java.util.Set;
+
 /*-
  * #%L
  * anchor-plugin-image
@@ -28,17 +30,20 @@ package ch.ethz.biol.cell.imageprocessing.dim.provider;
 
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
-import org.anchoranalysis.image.bean.provider.ChnlProvider;
+import org.anchoranalysis.core.name.provider.NamedProviderGetException;
+import org.anchoranalysis.core.name.store.NamedProviderStore;
 import org.anchoranalysis.image.bean.provider.ImageDimProvider;
+import org.anchoranalysis.image.chnl.Chnl;
 import org.anchoranalysis.image.experiment.identifiers.ImgStackIdentifiers;
 import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.init.ImageInitParams;
-
-import ch.ethz.biol.cell.imageprocessing.chnl.provider.ChnlProviderStackReference;
+import org.anchoranalysis.image.stack.Stack;
 
 
 /**
- * Guesses dimensions from the input-image if it exists
+ * Guesses dimensions from the input-image if it exists.
+ * 
+ * <p>Otherwise throws an exception indicating they should be set explicitly.</p>
  * 
  * @author owen
  *
@@ -50,28 +55,56 @@ public class GuessDimFromInputImage extends ImageDimProvider {
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	private ImageDimProviderFromChnl delegate;
+	private ImageDim dim;
 	
 	public GuessDimFromInputImage() {
-		delegate = new ImageDimProviderFromChnl();
-		delegate.setChnlProvider( createChnlProvider() );
 	}
 	
 	
 	@Override
 	public void onInit(ImageInitParams so) throws InitException {
 		super.onInit(so);
-		delegate.initRecursive(so, getLogger() );
 	}
 
 	@Override
 	public ImageDim create() throws CreateException {
-		return delegate.create();
+
+		if (dim==null) {
+			dim = takeDimFromStackCollection( getSharedObjects().getStackCollection() );
+		}
+		
+		return dim;
 	}
 	
-	private ChnlProvider createChnlProvider() {
-		ChnlProviderStackReference provider = new ChnlProviderStackReference();
-		provider.setStackProviderID( ImgStackIdentifiers.INPUT_IMAGE );
-		return provider;
+	private ImageDim takeDimFromStackCollection( NamedProviderStore<Stack> stackCollection ) throws CreateException {
+		
+		Set<String> keys = stackCollection.keys();
+		
+		if (!keys.contains(ImgStackIdentifiers.INPUT_IMAGE)) {
+			throw new CreateException(
+				String.format(
+					"No input-image (%s) exists, so cannot guess Image Dimensions. Instead they must be explicitly set",
+					ImgStackIdentifiers.INPUT_IMAGE
+				)
+			);
+		}
+		
+		return takeDimFromSpecificStack(stackCollection, ImgStackIdentifiers.INPUT_IMAGE );
+	}
+	
+	/** Takes the ImageDim from a particular stack in the collection */
+	private ImageDim takeDimFromSpecificStack( NamedProviderStore<Stack> stackCollection, String keyThatExists ) throws CreateException {
+		Stack stack;
+		try {
+			stack = getSharedObjects().getStackCollection().getNull(keyThatExists);
+		} catch (NamedProviderGetException e) {
+			throw new CreateException(e);
+		}
+		
+		Chnl chnl = stack.getChnl(0);
+		if (chnl==null) {
+			throw new CreateException( String.format("stack %s has no channels, so dimensions cannot be inferred", keyThatExists));
+		}
+		return chnl.getDimensions();
 	}
 }
