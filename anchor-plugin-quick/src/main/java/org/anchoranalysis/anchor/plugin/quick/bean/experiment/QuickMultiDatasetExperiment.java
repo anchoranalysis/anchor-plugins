@@ -61,10 +61,7 @@ import org.anchoranalysis.io.output.bean.OutputManager;
  *
  * Normally, runs an experiment on all data-sets in *datasets*.
  * 
- * However, in debug-mode either datasetSpecific is used (if non-empty), otherwise the first dataset is used.
- *    1. If datasetSpecific is non-empty, this dataset is used exclusively. Otherwise the first dataset is used.
- *    2. If debug is non-empty, then apply this a filter on the descriptive-name on the input.
- *    3. Otherwise throws an error, as it is assumed normal behaviour (all the usual datasets) is not allowed in debug-mode. 
+ * However, in debug-mode datasetSpecific is used (if non-empty), otherwise the first dataset is used.
  * 
  * @param <T> InputManagerType
  * @param <S> shared-state
@@ -86,9 +83,6 @@ public class QuickMultiDatasetExperiment<T extends InputFromManager, S> extends 
 	// Optionally, can specify a specific dataset for debugging. Overrides default behaviour in debug-mode and uses this instead.
 	@BeanField @AllowEmpty
 	private String datasetSpecific = "";
-	
-	@BeanField @AllowEmpty
-	private String debug = "";
 	
 	@BeanField
 	private String beanExtension = ".xml";
@@ -165,7 +159,6 @@ public class QuickMultiDatasetExperiment<T extends InputFromManager, S> extends 
 			getXMLConfiguration(),
 			folderDataset,
 			beanExtension,
-			debug,
 			createProcessor() 
 		);
 		
@@ -226,10 +219,8 @@ public class QuickMultiDatasetExperiment<T extends InputFromManager, S> extends 
 			// If there's a specific data-set identified
 			if (!datasetSpecific.isEmpty()) {
 				return Collections.singleton(datasetSpecific);
-			} else if (!debug.isEmpty()) {
-				return takeFirstIfExists( datasets.set() );	
 			} else {
-				throw new ExperimentExecutionException("In debug-mode at least one of datasetSpecific or debugContains must be set");
+				return takeFirstIfExists( datasets.set() );	
 			}
 
 		} else {
@@ -359,14 +350,6 @@ public class QuickMultiDatasetExperiment<T extends InputFromManager, S> extends 
 
 	public void setLogReporterTaskPath(String logReporterTaskPath) {
 		this.logReporterTaskPath = logReporterTaskPath;
-	}
-
-	public String getDebug() {
-		return debug;
-	}
-
-	public void setDebug(String debug) {
-		this.debug = debug;
 	}
 
 	@Override
