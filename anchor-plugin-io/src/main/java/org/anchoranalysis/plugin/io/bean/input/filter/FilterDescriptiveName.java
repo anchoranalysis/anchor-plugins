@@ -78,12 +78,12 @@ public class FilterDescriptiveName<T extends InputFromManager> extends InputMana
 			return in;
 		}
 		
-		applyFilter(in);
+		removeNonMatchingFrom(in);
 		
 		return in;
 	}
 	
-	private void applyFilter( List<T> in ) {
+	private void removeNonMatchingFrom( List<T> in ) {
 		
 		Iterator<T> itr = in.listIterator();
 		while(itr.hasNext()) {
