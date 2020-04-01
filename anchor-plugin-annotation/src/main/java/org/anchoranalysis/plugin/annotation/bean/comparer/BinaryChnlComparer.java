@@ -31,6 +31,9 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 
 import org.anchoranalysis.annotation.io.bean.comparer.Comparer;
+import org.anchoranalysis.annotation.io.wholeimage.findable.Findable;
+import org.anchoranalysis.annotation.io.wholeimage.findable.Found;
+import org.anchoranalysis.annotation.io.wholeimage.findable.NotFound;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.DefaultInstance;
 import org.anchoranalysis.core.error.CreateException;
@@ -68,13 +71,13 @@ public class BinaryChnlComparer extends Comparer {
 	}
 	
 	@Override
-	public ObjMaskCollection createObjs(Path filePathSource, ImageDim dim, boolean debugMode) throws CreateException {
+	public Findable<ObjMaskCollection> createObjs(Path filePathSource, ImageDim dim, boolean debugMode) throws CreateException {
 		
 		try {
 			Path maskPath = filePathGenerator.outFilePath(filePathSource, debugMode);
 			
 			if (!Files.exists(maskPath)) {
-				return null;
+				return new NotFound<>(maskPath, "No mask exists");
 			}
 			
 			BinaryChnl chnl = RasterReaderUtilities.openBinaryChnl(
@@ -83,7 +86,9 @@ public class BinaryChnlComparer extends Comparer {
 				createBinaryValues()
 			);
 			
-			return convertToObjs( chnl );
+			return new Found<>(
+				convertToObjs( chnl )
+			);
 			
 		} catch (AnchorIOException | RasterIOException e) {
 			throw new CreateException(e);
