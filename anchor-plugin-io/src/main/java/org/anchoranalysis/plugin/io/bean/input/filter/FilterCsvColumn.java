@@ -79,7 +79,7 @@ public class FilterCsvColumn<T extends InputFromManager> extends InputManager<T>
 			return in;
 		}
 		
-		Set<String> matching = matchingNames( in.get(0).pathForBinding(), params.isDebugMode(), in.size() );
+		Set<String> matching = matchingNames( in.get(0).pathForBinding(), params.isDebugModeActivated(), in.size() );
 		applyFilter(in, matching);
 		
 		return in;
