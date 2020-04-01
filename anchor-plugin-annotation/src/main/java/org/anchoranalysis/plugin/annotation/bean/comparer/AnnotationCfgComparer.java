@@ -31,6 +31,9 @@ import java.nio.file.Path;
 
 import org.anchoranalysis.annotation.io.bean.comparer.Comparer;
 import org.anchoranalysis.annotation.io.mark.MarkAnnotationReader;
+import org.anchoranalysis.annotation.io.wholeimage.findable.Findable;
+import org.anchoranalysis.annotation.io.wholeimage.findable.Found;
+import org.anchoranalysis.annotation.io.wholeimage.findable.NotFound;
 import org.anchoranalysis.annotation.mark.MarkAnnotation;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
@@ -58,7 +61,7 @@ public class AnnotationCfgComparer extends Comparer {
 	}
 	
 	@Override
-	public ObjMaskCollection createObjs(Path filePathSource, ImageDim dim, boolean debugMode) throws CreateException {
+	public Findable<ObjMaskCollection> createObjs(Path filePathSource, ImageDim dim, boolean debugMode) throws CreateException {
 
 		Path filePath;
 		try {
@@ -76,11 +79,11 @@ public class AnnotationCfgComparer extends Comparer {
 		}
 		
 		if (annotation==null) {
-			return null;
+			return new NotFound<>(filePath, "No annotation exists");
 		}
 		
 		if (!annotation.isAccepted()) {
-			return null;
+			return new NotFound<>(filePath, "The annotation is NOT accepted");
 		}
 		
 		ObjMaskWithPropertiesCollection omwp = annotation.getCfg().calcMask(
@@ -89,7 +92,7 @@ public class AnnotationCfgComparer extends Comparer {
 			BinaryValuesByte.getDefault(),
 			null
 		); 
-		return omwp.collectionObjMask();
+		return new Found<>(omwp.collectionObjMask());
 	}
 
 	public FilePathGenerator getFilePathGenerator() {

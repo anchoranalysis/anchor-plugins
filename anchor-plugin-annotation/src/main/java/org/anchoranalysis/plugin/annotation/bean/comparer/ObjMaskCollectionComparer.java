@@ -31,6 +31,9 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 
 import org.anchoranalysis.annotation.io.bean.comparer.Comparer;
+import org.anchoranalysis.annotation.io.wholeimage.findable.Findable;
+import org.anchoranalysis.annotation.io.wholeimage.findable.Found;
+import org.anchoranalysis.annotation.io.wholeimage.findable.NotFound;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.extent.ImageDim;
@@ -40,6 +43,15 @@ import org.anchoranalysis.io.bean.filepath.generator.FilePathGenerator;
 import org.anchoranalysis.io.deserializer.DeserializationFailedException;
 import org.anchoranalysis.io.error.AnchorIOException;
 
+
+/**
+ * An ObjMaskCollection to be used to compare against something
+ * 
+ * <p>If it doesn't exist at the specified path, then it returns null</p>
+ * 
+ * @author owen
+ *
+ */
 public class ObjMaskCollectionComparer extends Comparer {
 
 	/**
@@ -57,16 +69,18 @@ public class ObjMaskCollectionComparer extends Comparer {
 	}
 	
 	@Override
-	public ObjMaskCollection createObjs(Path filePathSource, ImageDim dim, boolean debugMode) throws CreateException {
+	public Findable<ObjMaskCollection> createObjs(Path filePathSource, ImageDim dim, boolean debugMode) throws CreateException {
 		
 		try {
 			Path objsPath = filePathGenerator.outFilePath(filePathSource, debugMode);
 			
 			if (!Files.exists(objsPath)) {
-				return null;
+				return new NotFound<>(objsPath, "No objects exist");
 			}
 			
-			return ObjMaskCollectionReader.createFromPath(objsPath);
+			return new Found<>(
+				ObjMaskCollectionReader.createFromPath(objsPath)
+			);
 			
 		} catch (AnchorIOException | DeserializationFailedException e) {
 			throw new CreateException(e);
