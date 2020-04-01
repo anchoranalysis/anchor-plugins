@@ -83,7 +83,7 @@ public class GuessDimFromInputImage extends ImageDimProvider {
 		if (!keys.contains(ImgStackIdentifiers.INPUT_IMAGE)) {
 			throw new CreateException(
 				String.format(
-					"No input-image (%s) exists, so cannot guess Image Dimensions. Instead they must be explicitly set",
+					"No input-image (%s) exists, so cannot guess Image Dimensions. Please set the dimensions explicitly.",
 					ImgStackIdentifiers.INPUT_IMAGE
 				)
 			);
@@ -103,7 +103,7 @@ public class GuessDimFromInputImage extends ImageDimProvider {
 		
 		Chnl chnl = stack.getChnl(0);
 		if (chnl==null) {
-			throw new CreateException( String.format("stack %s has no channels, so dimensions cannot be inferred", keyThatExists));
+			throw new CreateException( String.format("Stack %s has no channels, so dimensions cannot be inferred.", keyThatExists));
 		}
 		return chnl.getDimensions();
 	}
