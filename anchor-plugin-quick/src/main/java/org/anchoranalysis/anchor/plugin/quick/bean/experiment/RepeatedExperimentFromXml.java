@@ -43,10 +43,9 @@ import org.anchoranalysis.experiment.bean.processor.JobProcessor;
 import org.anchoranalysis.io.bean.input.InputManager;
 import org.anchoranalysis.io.input.InputFromManager;
 import org.anchoranalysis.io.output.bean.OutputManager;
-import org.anchoranalysis.plugin.io.bean.input.filter.FilterDescriptiveName;
+import org.anchoranalysis.plugin.io.bean.input.filter.FilterIfDebug;
 import org.apache.commons.configuration.XMLConfiguration;
 
-// Helper class for RepeatedExperiment
 
 /**
  * Helper class for QuickMultiDatasetExperiment
@@ -55,7 +54,6 @@ class RepeatedExperimentFromXml<T extends InputFromManager,S> {
 
 	private RepeatedExperiment<T,S> delegate;
 	
-	private String debugEquals;
 	private String beanExtension;
 	
 	/** Resolved path to the folder containing datasets */
@@ -91,7 +89,6 @@ class RepeatedExperimentFromXml<T extends InputFromManager,S> {
 		XMLConfiguration xmlConfiguration,
 		String folderDataset,
 		String beanExtension,
-		String debugEquals,
 		JobProcessor<T,S> taskProcessor
 	) {
 		delegate.init(xmlConfiguration, taskProcessor);
@@ -100,7 +97,6 @@ class RepeatedExperimentFromXml<T extends InputFromManager,S> {
 		pathDatasetFolder = getCombinedPath( folderDataset);
 		
 		this.beanExtension = beanExtension;
-		this.debugEquals = debugEquals;
 	}
 	
 	/**
@@ -114,7 +110,11 @@ class RepeatedExperimentFromXml<T extends InputFromManager,S> {
 			BeanInstanceMap defaultInstances) throws ExperimentExecutionException {
 		
 		// Create a bean for the dataset and execute
-		InputManager<T> input = createInputManager(datasetName, pathDatasetFolder, expArgs.isDebugEnabled(), debugEquals, beanExtension);
+		InputManager<T> input = createInputManager(
+			datasetName,
+			pathDatasetFolder,
+			beanExtension
+		);
 		
 		delegate.executeForManager(input, expArgs, defaultInstances );
 	}
@@ -147,20 +147,15 @@ class RepeatedExperimentFromXml<T extends InputFromManager,S> {
 	}
 	
 	/*** Creates an input-manager for a dataset located in BeanXML in a particular folder. Maybe adds a filter in debug-mode */
-	private InputManager<T> createInputManager( String datasetName, Path pathFolder, boolean debugEnabled, String debugContains, String beanExtension ) throws ExperimentExecutionException {
+	private InputManager<T> createInputManager( String datasetName, Path pathFolder, String beanExtension ) throws ExperimentExecutionException {
 		InputManager<T> input = loadInputManagerFromXml(datasetName, pathFolder, beanExtension);
-		
-		if (debugEnabled && !debugContains.isEmpty()) {
-			
-			FilterDescriptiveName<T> filter = new FilterDescriptiveName<>();
-			filter.setEquals(debugContains);
-			filter.setInput(input);
-			return filter;
-			
-		} else {
-			// Normal behaviour
-			return input;	
-		}
+		return filterIfDebug(input);
+	}
+	
+	private InputManager<T> filterIfDebug( InputManager<T> input ) {
+		FilterIfDebug<T> filter = new FilterIfDebug<>();
+		filter.setInput(input);
+		return filter;
 	}
 	
 	/*** Loads a bean from the file-system */ 
