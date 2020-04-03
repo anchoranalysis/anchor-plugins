@@ -1,7 +1,5 @@
 package org.anchoranalysis.plugin.opencv.bean.text;
 
-import static org.mockito.Mockito.mock;
-
 import java.nio.file.Path;
 
 /*-
@@ -34,7 +32,6 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.core.log.LogErrorReporter;
-import org.anchoranalysis.core.log.LogReporter;
 import org.anchoranalysis.core.random.RandomNumberGeneratorMersenneConstant;
 import org.anchoranalysis.image.bean.provider.stack.StackProviderHolder;
 import org.anchoranalysis.image.extent.BoundingBox;
@@ -44,6 +41,7 @@ import org.anchoranalysis.image.objmask.ObjMaskCollection;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.plugin.opencv.bean.text.ObjMaskProviderExtractText;
+import org.anchoranalysis.test.LoggingFixtures;
 import org.anchoranalysis.test.TestLoader;
 import org.anchoranalysis.test.image.TestLoaderImageIO;
 import org.junit.Test;
@@ -100,7 +98,7 @@ public class ObjMaskProviderExtractTextTest {
 		
 		initProvider(
 			provider,
-			new LogErrorReporter( mock(LogReporter.class) ),
+			LoggingFixtures.simpleLogErrorReporter(),
 			modelDir
 		);
 		
