@@ -42,7 +42,7 @@ public class ArcCos extends FeatureSingleElem {
 	protected double calc(CacheableParams<? extends FeatureCalcParams> params)
 			throws FeatureCalcException {
 		
-		double arg = getCacheSession().calc(getItem(), params);
+		double arg = params.calc( getItem() );
 		return Math.acos(arg);
 	}
 

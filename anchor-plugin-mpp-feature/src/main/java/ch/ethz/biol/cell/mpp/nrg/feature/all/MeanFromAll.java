@@ -69,9 +69,10 @@ public class MeanFromAll extends NRGElemAll {
 		for( int i=0; i<params.getPxlPartMemo().size(); i++) {
 			PxlMarkMemo pmm = params.getPxlPartMemo().getMemoForIndex(i);
 			paramsInd.setPxlPartMemo(pmm);
-			sum += getCacheSession().calc(
+			sum += paramsCacheable.calcChangeParams(
 				item,
-				paramsCacheable.changeParams(paramsInd)
+				paramsInd,
+				"obj_" + i
 			);
 		}
 		

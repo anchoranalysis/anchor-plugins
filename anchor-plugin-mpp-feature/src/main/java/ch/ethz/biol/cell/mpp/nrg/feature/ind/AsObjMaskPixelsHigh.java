@@ -37,6 +37,7 @@ import org.anchoranalysis.feature.bean.operator.FeatureSingleElem;
 import org.anchoranalysis.feature.cache.CacheableParams;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
+import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 import org.anchoranalysis.feature.params.FeatureParamsDescriptor;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.feature.objmask.FeatureObjMaskParams;
@@ -68,44 +69,51 @@ public class AsObjMaskPixelsHigh extends FeatureSingleElem {
 	public double calc(CacheableParams<? extends FeatureCalcParams> params) throws FeatureCalcException {
 		
 		if (params.getParams() instanceof NRGElemIndCalcParams) {
-		
-			NRGElemIndCalcParams paramsCast = (NRGElemIndCalcParams) params.getParams(); 
 			
-			 
-			
-			FeatureObjMaskParams paramsNew;
-			ObjMaskWithProperties omWithProps = paramsCast.getPxlPartMemo().getMark().calcMask(
-				paramsCast.getNrgStack().getDimensions(),
-				regionMap.membershipWithFlagsForIndex(index),
-				BinaryValuesByte.getDefault()
-			);
-			
-			ObjMask om = omWithProps.getMask();
-			
-			ObjMask omEqual = paramsCast.getNrgStack().getNrgStack().getChnl(nrgIndex).getVoxelBox().any().equalMask(
-				om.getBoundingBox(),
-				maskValue
-			);
-			
-			ObjMask omIntersect = omEqual.intersect(om, paramsCast.getNrgStack().getDimensions() );
-			
-			paramsNew = new FeatureObjMaskParams(
-				omIntersect
-			);
-			paramsNew.setNrgStack( paramsCast.getNrgStack() );
-			
-			double ret = getCacheSession().calc(
-				getItem(),
+			return calcCast(
 				params.changeParams(
-					paramsNew
+					(NRGElemIndCalcParams) params.getParams()
 				)
 			);
-			
-			return ret;
-			
+		
 		} else {
 			throw new FeatureCalcException("Not supported for this type of params");
 		}
+	}
+	
+	private double calcCast( CacheableParams<? extends NRGElemIndCalcParams> params ) throws FeatureCalcException {
+		
+		ObjMask omIntersect = findIntersection( params.getParams() );
+		
+		return params.calcChangeParams(
+			getItem(),
+			createObjParams(omIntersect, params.getParams().getNrgStack()),
+			"intersection"
+		);
+	}
+	
+	private ObjMask findIntersection( NRGElemIndCalcParams paramsCast ) {
+		
+		ObjMaskWithProperties omWithProps = paramsCast.getPxlPartMemo().getMark().calcMask(
+			paramsCast.getNrgStack().getDimensions(),
+			regionMap.membershipWithFlagsForIndex(index),
+			BinaryValuesByte.getDefault()
+		);
+		
+		ObjMask om = omWithProps.getMask();
+		
+		ObjMask omEqual = paramsCast.getNrgStack().getNrgStack().getChnl(nrgIndex).getVoxelBox().any().equalMask(
+			om.getBoundingBox(),
+			maskValue
+		);
+		
+		return omEqual.intersect(om, paramsCast.getNrgStack().getDimensions() );		
+	}
+	
+	private static FeatureObjMaskParams createObjParams( ObjMask omIntersect, NRGStackWithParams nrgStack ) {
+		FeatureObjMaskParams paramsNew = new FeatureObjMaskParams(omIntersect);
+		paramsNew.setNrgStack( nrgStack );
+		return paramsNew;
 	}
 
 	// We change the default behaviour, as we don't want to give the same paramsFactory

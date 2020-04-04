@@ -89,9 +89,10 @@ public class FeatureFromBinaryImgChnl extends FeatureObjMaskSharedObjects {
 			paramsPairs.setObjMask2( objFromBinary );
 			paramsPairs.setNrgStack( params.getParams().getNrgStack() );
 			
-			return getCacheSession().calc(
+			return params.calcChangeParams(
 				item,
-				params.changeParams(paramsPairs)
+				paramsPairs,
+				"pair"
 			);
 			
 		} catch (CreateException e) {

@@ -41,8 +41,6 @@ import org.anchoranalysis.image.feature.objmask.FeatureObjMaskParams;
 import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.plugin.points.calculate.ellipsoid.CalculateEllipsoidLeastSquares;
 
-// Calculates the ellipticity of a MIP of an objmask
-// Accodrding to the formula on page 27 of Thomas Fuch's thesis
 public class AxisRatioEllipsoid extends FeatureObjMask {
 
 	/**
@@ -54,9 +52,6 @@ public class AxisRatioEllipsoid extends FeatureObjMask {
 	@BeanField
 	private boolean suppressZCovariance = false;		// Supresses covariance in the z-direction.
 	// END BEAN PROPERTIES
-
-//	private static int cnt = 0;
-//	TempBoundOutputManager tempOutput = new TempBoundOutputManager();
 	
 	private CachedCalculation<MarkEllipsoid> cc;
 	

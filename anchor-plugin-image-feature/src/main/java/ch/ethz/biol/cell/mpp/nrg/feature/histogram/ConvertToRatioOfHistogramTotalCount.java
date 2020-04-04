@@ -51,10 +51,7 @@ public class ConvertToRatioOfHistogramTotalCount extends FeatureHistogram {
 	public double calcCast(CacheableParams<FeatureHistogramParams> params)
 			throws FeatureCalcException {
 
-		double val = getCacheSession().calc(
-			item,
-			params
-		);
+		double val = params.calc(item);
 		return val/ params.getParams().getHistogram().getTotalCount();
 	}
 	

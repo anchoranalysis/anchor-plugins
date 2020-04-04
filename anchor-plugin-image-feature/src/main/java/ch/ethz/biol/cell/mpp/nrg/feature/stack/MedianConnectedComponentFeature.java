@@ -84,11 +84,15 @@ public class MedianConnectedComponentFeature extends FeatureStack {
 		DoubleArrayList featureVals = new DoubleArrayList();
 		
 		// Calculate a feature on each obj mask
-		for( ObjMask om : omc ) {
+		for( int i=0; i<omc.size(); i++ ) {
+			
+			ObjMask om = omc.get(i);
+			
 			paramsObj.setObjMask(om);
-			double val = getCacheSession().calc(
+			double val = params.calcChangeParams(
 				item,
-				params.changeParams(paramsObj)
+				paramsObj,
+				"obj-" + i
 			);
 			featureVals.add(val);
 		}

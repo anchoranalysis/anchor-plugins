@@ -31,6 +31,7 @@ import org.anchoranalysis.core.cache.ExecuteException;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.feature.cachedcalculation.CachedCalculation;
 import org.anchoranalysis.feature.cachedcalculation.CachedCalculationCastParams;
+import org.anchoranalysis.feature.session.cache.FeatureSessionCacheRetriever;
 import org.anchoranalysis.feature.session.cache.ICachedCalculationSearch;
 import org.anchoranalysis.feature.session.cache.NullCachedCalculationSearch;
 import org.anchoranalysis.image.feature.objmask.pair.FeatureObjMaskPairParams;
@@ -59,9 +60,9 @@ public class CalculatePairIntersectionCommutative extends CachedCalculationCastP
 	private CachedCalculation<ObjMask> ccSecondToFirst;
 	
 	public static CachedCalculation<ObjMask> createFromCache(
-		ICachedCalculationSearch cache,
-		ICachedCalculationSearch subcache1,
-		ICachedCalculationSearch subcache2,
+		FeatureSessionCacheRetriever cache,
+		FeatureSessionCacheRetriever cacheDilationObj1,
+		FeatureSessionCacheRetriever cacheDilationObj2,
 		int iterationsDilation,
 		int iterationsErosion,
 		boolean do3D
@@ -70,10 +71,10 @@ public class CalculatePairIntersectionCommutative extends CachedCalculationCastP
 		// We use two additional caches, for the calculations involving the single objects, as these can be expensive, and we want
 		//  them also cached
 		CachedCalculation<ObjMask> ccFirstToSecond = CalculatePairIntersection.createFromCache(
-			cache, subcache1, subcache2, iterationsDilation, 0, do3D, iterationsErosion	
+			cache, cacheDilationObj1, cacheDilationObj2, iterationsDilation, 0, do3D, iterationsErosion	
 		);
 		CachedCalculation<ObjMask> ccSecondToFirst = CalculatePairIntersection.createFromCache(
-			cache, subcache1, subcache2, 0, iterationsDilation, do3D, iterationsErosion	
+			cache, cacheDilationObj1, cacheDilationObj2, 0, iterationsDilation, do3D, iterationsErosion	
 		);
 		return cache.search(
 			new CalculatePairIntersectionCommutative(ccFirstToSecond, ccSecondToFirst)

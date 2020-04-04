@@ -28,16 +28,10 @@ package ch.ethz.biol.cell.mpp.nrg.feature.objmaskpairmerged;
 
 
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.bean.annotation.SkipInit;
-import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.cache.CacheableParams;
-import org.anchoranalysis.feature.cache.FeatureCacheDefinition;
-import org.anchoranalysis.feature.cache.PrefixedCacheDefinition;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
-import org.anchoranalysis.feature.init.FeatureInitParams;
-import org.anchoranalysis.feature.session.cache.FeatureSessionCacheRetriever;
 import org.anchoranalysis.image.feature.bean.objmask.pair.merged.FeatureObjMaskPairMerged;
 import org.anchoranalysis.image.feature.objmask.FeatureObjMaskParams;
 import org.anchoranalysis.image.feature.objmask.pair.merged.FeatureObjMaskPairMergedParams;
@@ -59,27 +53,28 @@ public abstract class FromExisting extends FeatureObjMaskPairMerged {
 	
 	
 	// START BEAN PROPERTIES
-	@BeanField @SkipInit
+	@BeanField
 	private Feature item;
 	// END BEAN PROPERTIES
 	
 	protected abstract ObjMask selectObjMask( FeatureObjMaskPairMergedParams params );
 	
+	/** The name of the cache to use for calculation */
+	protected abstract String cacheNameToUse();
+	
 	@Override
 	public double calcCast(CacheableParams<FeatureObjMaskPairMergedParams> params)
 			throws FeatureCalcException {
-
-		FeatureCalcParams paramsNew = transformParams(params.getParams());
 		
-		// We select an appropriate cache for calculating the feature (should be the same as selected in init())
-		return getCacheSession().additional(0).calc(
+		return params.calcChangeParams(
 			item,
-			params.changeParams(paramsNew)
+			transformParams(params.getParams()),
+			cacheNameToUse()
 		);
 	}
 
 
-	public FeatureCalcParams transformParams(FeatureObjMaskPairMergedParams params) {
+	public FeatureObjMaskParams transformParams(FeatureObjMaskPairMergedParams params) {
 
 		assert( params instanceof FeatureObjMaskPairMergedParams);
 		
@@ -105,20 +100,6 @@ public abstract class FromExisting extends FeatureObjMaskPairMerged {
 		}
 	}
 
-	
-	/**
-	 *  Special initialisation with different params for 'item' as it is elsewhere ignored in the initialisation
-	 */
-	@Override
-	public void beforeCalc(CacheableParams<FeatureInitParams> params)
-			throws InitException {
-		super.beforeCalc(params);
-		
-		FeatureSessionCacheRetriever subcache = params.getCacheSession().additional(0);
-
-		params.initThroughSubcache(subcache, params.getParams(), item, getLogger() );
-	}
-	
 	public Feature getItem() {
 		return item;
 	}
@@ -126,15 +107,4 @@ public abstract class FromExisting extends FeatureObjMaskPairMerged {
 	public void setItem(Feature item) {
 		this.item = item;
 	}
-
-	@Override
-	protected FeatureCacheDefinition createCacheDefinition() {
-		return new PrefixedCacheDefinition(
-			this,
-			prefixForAdditionalCachesForChildren()
-		);
-	}
-	
-	protected abstract String prefixForAdditionalCachesForChildren();
-
 }

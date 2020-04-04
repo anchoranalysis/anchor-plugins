@@ -39,7 +39,6 @@ import org.anchoranalysis.feature.cachedcalculation.CachedCalculation;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
 import org.anchoranalysis.feature.init.FeatureInitParams;
-import org.anchoranalysis.feature.session.cache.FeatureSessionCacheRetriever;
 import org.anchoranalysis.image.feature.bean.objmask.pair.FeatureObjMaskPair;
 import org.anchoranalysis.image.feature.objmask.FeatureObjMaskParams;
 import org.anchoranalysis.image.feature.objmask.pair.FeatureObjMaskPairParams;
@@ -81,10 +80,11 @@ public class FeatureObjMaskPairIntersection extends FeatureObjMaskPair {
 	private Feature item;
 	// END BEAN PROPERTIES
 	
-	private CachedCalculation<FeatureSessionCacheRetriever> ccSubsession;
-	
 	private CachedCalculation<ObjMask> cc;
 	
+	private static final String CACHE_INTERSECTION = "intersection_eroded"; // TODO add iterationsErosion to name
+	private static final String CACHE_OBJ1 = "obj1";	// TODO  add iterationsDilation to name
+	private static final String CACHE_OBJ2 = "obj2";
 	
 	@Override
 	public void beforeCalc(CacheableParams<FeatureInitParams> params)
@@ -94,19 +94,12 @@ public class FeatureObjMaskPairIntersection extends FeatureObjMaskPair {
 			assert params.getCacheSession().hasBeenInit();
 			
 			cc = CalculatePairIntersectionCommutative.createFromCache(
-				params.getCacheSession().main(),
-				params.getCacheSession().additional(0),
-				params.getCacheSession().additional(1),
+				params.cacheFor(CACHE_INTERSECTION),
+				params.cacheFor(CACHE_OBJ1),
+				params.cacheFor(CACHE_OBJ2),
 				iterationsDilation,
 				iterationsErosion,
 				do3D
-			);
-			
-			ccSubsession = params.initThroughSubcacheSession(
-				subCacheName(),
-				params.getParams(),
-				item,
-				getLogger()
 			);
 			
 		} catch (CreateException e) {
@@ -126,15 +119,11 @@ public class FeatureObjMaskPairIntersection extends FeatureObjMaskPair {
 				return emptyValue;
 			}
 			
-			FeatureCalcParams paramsNew = createParamsForIntersection(omIntersection,params.getParams());
-			
-			FeatureSessionCacheRetriever subCache = ccSubsession.getOrCalculate(null);
-			assert( subCache.hasBeenInit() );
-			
 			// We select an appropriate cache for calculating the feature (should be the same as selected in init())
-			return subCache.calc(
+			return params.calcChangeParams(
 				item,
-				params.changeParams(paramsNew)
+				createParamsForIntersection(omIntersection,params.getParams()),
+				CACHE_INTERSECTION
 			);
 			
 		} catch (ExecuteException e) {
@@ -166,10 +155,6 @@ public class FeatureObjMaskPairIntersection extends FeatureObjMaskPair {
 		paramsNew.setNrgStack( paramsExst.getNrgStack() );
 		assert( paramsNew instanceof FeatureObjMaskParams);
 		return paramsNew;
-	}
-	
-	private String subCacheName() {
-		return "intersection_" + iterationsDilation + "_" + iterationsErosion + "_" + do3D;
 	}
 
 	public boolean isDo3D() {

@@ -47,7 +47,7 @@ public class SubtractFrom extends FeatureSingleElem {
 	
 	@Override
 	public double calc( CacheableParams<? extends FeatureCalcParams> params ) throws FeatureCalcException {
-		return value - getCacheSession().calc( getItem(), params );
+		return value - params.calc( getItem() );
 	}
 
 

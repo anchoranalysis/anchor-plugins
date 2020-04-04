@@ -36,6 +36,7 @@ import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.cache.CacheableParams;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 import org.anchoranalysis.image.bean.provider.BinaryImgChnlProvider;
 import org.anchoranalysis.image.binary.BinaryChnl;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
@@ -46,9 +47,6 @@ import org.anchoranalysis.image.feature.stack.FeatureStackParams;
 import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.anchoranalysis.image.voxel.datatype.IncorrectVoxelDataTypeException;
-
-import cern.colt.list.DoubleArrayList;
-import cern.jet.stat.Descriptive;
 
 public class BinaryImageChnlProviderFeature extends FeatureStack {
 
@@ -90,26 +88,21 @@ public class BinaryImageChnlProviderFeature extends FeatureStack {
 			throw new FeatureCalcException("binaryImgChnlProvider returned incompatible data type", e1);
 		}
 		
-		
+		BinaryVoxelBox<ByteBuffer> binaryVoxelBox = new BinaryVoxelBoxByte( vb, bic.getBinaryValues() );
+		return calcOnBinaryMask(
+			params,
+			binaryVoxelBox,
+			params.getParams().getNrgStack()
+		);
+	}
+	
+	private double calcOnBinaryMask( CacheableParams<FeatureStackParams> params, BinaryVoxelBox<ByteBuffer> binaryVoxelBox, NRGStackWithParams nrgStack) throws FeatureCalcException {
+
 		FeatureObjMaskParams paramsObj = new FeatureObjMaskParams();
-		paramsObj.setNrgStack( params.getParams().getNrgStack() );
+		paramsObj.setNrgStack(nrgStack);
+		paramsObj.setObjMask( new ObjMask( binaryVoxelBox ) );
 		
-		DoubleArrayList featureVals = new DoubleArrayList();
-		
-		// Calculate a feature on each obj mask
-		{
-			BinaryVoxelBox<ByteBuffer> binaryVoxelBox = new BinaryVoxelBoxByte( vb, bic.getBinaryValues() );
-			
-			paramsObj.setObjMask( new ObjMask( binaryVoxelBox ) );
-			
-			double val = getCacheSession().calc(
-				item,
-				params.changeParams(paramsObj)
-			);
-			featureVals.add(val);
-		}
-		
-		return Descriptive.mean(featureVals);
+		return params.calcChangeParams(item, paramsObj, "binaryMask");
 	}
 
 	public Feature getItem() {

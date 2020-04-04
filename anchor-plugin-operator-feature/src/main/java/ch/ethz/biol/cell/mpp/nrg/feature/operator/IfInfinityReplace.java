@@ -47,7 +47,7 @@ public class IfInfinityReplace extends FeatureSingleElem {
 	
 	@Override
 	public double calc( CacheableParams<? extends FeatureCalcParams> params ) throws FeatureCalcException {
-		double itemValue = getCacheSession().calc( getItem(), params );
+		double itemValue = params.calc( getItem() );
 		
 		if (Double.isInfinite(itemValue)) {
 			return value;

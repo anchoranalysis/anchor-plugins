@@ -69,10 +69,10 @@ public class LinearScore extends FeatureSingleElem {
 	@Override
 	public double calc( CacheableParams<? extends FeatureCalcParams> params ) throws FeatureCalcException {
 		
-		double val = getCacheSession().calc( getItem(), params );
+		double val = params.calc( getItem() );
 		
-		double min = getCacheSession().calc( getItemMin(), params );
-		double max = getCacheSession().calc( getItemMax(), params );
+		double min = params.calc( getItemMin() );
+		double max = params.calc( getItemMax() );
 	
 		if (minValue!=0.0) {
 			// We rescale the minvalue so that our old min value lies at minValue instead of 0.0			

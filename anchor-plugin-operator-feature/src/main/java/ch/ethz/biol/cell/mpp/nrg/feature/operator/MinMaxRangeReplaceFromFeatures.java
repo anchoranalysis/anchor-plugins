@@ -61,9 +61,9 @@ public class MinMaxRangeReplaceFromFeatures extends FeatureSingleElem {
 	@Override
 	public double calc( CacheableParams<? extends FeatureCalcParams> params ) throws FeatureCalcException {
 		
-		double val = getCacheSession().calc( getItem(), params );
-		double valMin = getCacheSession().calc(min, params);
-		double valMax = getCacheSession().calc(max, params);
+		double val = params.calc( getItem() );
+		double valMin = params.calc(min);
+		double valMax = params.calc(max);
 		
 		if (val < valMin) {
 			return belowMinValue;

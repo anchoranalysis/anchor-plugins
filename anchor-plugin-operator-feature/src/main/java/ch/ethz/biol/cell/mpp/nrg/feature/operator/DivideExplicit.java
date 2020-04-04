@@ -53,8 +53,8 @@ public class DivideExplicit extends FeatureDoubleElem {
 	public double calc( CacheableParams<? extends FeatureCalcParams> params ) throws FeatureCalcException {
 		
 		// This feature doesn't need to be init, so we skip this bit
-		double val1 = getCacheSession().calc( getItem1(), params );
-		double val2 = getCacheSession().calc( getItem2(), params );
+		double val1 = params.calc( getItem1() );
+		double val2 = params.calc( getItem2() );
 		
 		//getLogger().getLogReporter().logFormatted("Divide Explicit: %f on %f = %f", val1, val2, val1/val2);
 		

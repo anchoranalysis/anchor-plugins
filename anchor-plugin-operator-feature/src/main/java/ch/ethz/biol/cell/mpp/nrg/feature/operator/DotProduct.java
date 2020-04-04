@@ -61,8 +61,8 @@ public class DotProduct extends Feature {
 	@Override
 	public double calc(CacheableParams<? extends FeatureCalcParams> params) throws FeatureCalcException {
 		
-		Vector3d vec1 = vector1.calc(getCacheSession(), params);
-		Vector3d vec2 = vector2.calc(getCacheSession(), params);
+		Vector3d vec1 = vector1.calc(params);
+		Vector3d vec2 = vector2.calc(params);
 		
 		if (includeOppositeDirection) {
 					

@@ -73,12 +73,8 @@ public class ObjMaskFeatureQuantile extends FeatureStack {
 			throw new FeatureCalcException(e1);
 		}
 		
-		ObjMaskCollection objsCollection;
-		try {
-			objsCollection = objs.create();
-		} catch (CreateException e1) {
-			throw new FeatureCalcException(e1);
-		}
+		ObjMaskCollection objsCollection = createObjs();
+
 		
 		FeatureObjMaskParams paramsObj = new FeatureObjMaskParams();
 		paramsObj.setNrgStack( params.getParams().getNrgStack() );
@@ -86,18 +82,28 @@ public class ObjMaskFeatureQuantile extends FeatureStack {
 		DoubleArrayList featureVals = new DoubleArrayList();
 		
 		// Calculate a feature on each obj mask
-		for( ObjMask om : objsCollection ) {
+		for( int i=0; i<objsCollection.size(); i++) {
+			
+			ObjMask om = objsCollection.get(i);
+			 
 			paramsObj.setObjMask(om);
-			double val = getCacheSession().calc(
-				item,
-				params.changeParams(paramsObj)
+						
+			featureVals.add(
+				params.calcChangeParams(item, paramsObj, "objMasks" + i)
 			);
-			featureVals.add(val);
 		}
 		
 		featureVals.sort();
 		
 		return Descriptive.quantile(featureVals, quantile);
+	}
+	
+	private ObjMaskCollection createObjs() throws FeatureCalcException {
+		try {
+			return objs.create();
+		} catch (CreateException e1) {
+			throw new FeatureCalcException(e1);
+		}
 	}
 
 	public Feature getItem() {

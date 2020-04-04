@@ -61,7 +61,7 @@ public class MinMaxRangeCondition extends FeatureSingleElem {
 	@Override
 	public double calc( CacheableParams<? extends FeatureCalcParams> params ) throws FeatureCalcException {
 		
-		double val = getCacheSession().calc( featureCondition, params );
+		double val = params.calc( featureCondition );
 		
 		if (val < min) {
 			return belowMinValue;
@@ -71,7 +71,7 @@ public class MinMaxRangeCondition extends FeatureSingleElem {
 			return aboveMaxValue;
 		}
 		
-		return getCacheSession().calc( getItem(), params );
+		return params.calc( getItem() );
 	}
 
 	@Override

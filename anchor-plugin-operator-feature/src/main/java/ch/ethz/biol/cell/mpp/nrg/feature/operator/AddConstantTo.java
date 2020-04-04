@@ -47,7 +47,7 @@ public class AddConstantTo extends FeatureSingleElem {
 	
 	@Override
 	public double calc( CacheableParams<? extends FeatureCalcParams> params ) throws FeatureCalcException {
-		return getCacheSession().calc( getItem(), params ) + value;
+		return params.calc( getItem()  ) + value;
 	}
 
 	public double getValue() {

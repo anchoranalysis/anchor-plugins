@@ -79,8 +79,8 @@ public class GaussianScore extends FeatureFirstSecondOrder {
 	@Override
 	public double calc( CacheableParams<? extends FeatureCalcParams> params ) throws FeatureCalcException {
 		
-		double val = getCacheSession().calc( getItem(), params );
-		double mean = getCacheSession().calc( getItemMean(), params );
+		double val = params.calc( getItem() );
+		double mean = params.calc( getItemMean() );
 		
 		if (ignoreHigherSide) {
 			if (val>mean) {
@@ -94,15 +94,7 @@ public class GaussianScore extends FeatureFirstSecondOrder {
 			}
 		}
 		
-		double stdDev = getCacheSession().calc( getItemStdDev(), params );
-		
-		// We normalise
-		
-//		val = val - mean;
-//		mean = 0;
-//		
-//		val = val / stdDev;
-//		stdDev = 1;
+		double stdDev = params.calc( getItemStdDev() );
 		
 		return calc( mean, stdDev, val, rewardHigherSide, rewardLowerSide );
 	}

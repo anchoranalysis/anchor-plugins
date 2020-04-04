@@ -28,17 +28,11 @@ package ch.ethz.biol.cell.mpp.nrg.feature.stack;
 
 
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.bean.annotation.SkipInit;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.cache.CacheableParams;
-import org.anchoranalysis.feature.cache.ComplexCacheDefinition;
-import org.anchoranalysis.feature.cache.FeatureCacheDefinition;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.feature.init.FeatureInitParams;
 import org.anchoranalysis.feature.session.cache.FeatureSessionCacheRetriever;
-import org.anchoranalysis.feature.session.cache.NullCacheRetriever;
 import org.anchoranalysis.image.binary.BinaryChnl;
 import org.anchoranalysis.image.binary.values.BinaryValues;
 import org.anchoranalysis.image.chnl.Chnl;
@@ -48,7 +42,7 @@ import org.anchoranalysis.image.feature.stack.FeatureStackParams;
 import org.anchoranalysis.image.objmask.ObjMask;
 
 /**
- * Treats a channel as an object-mask, assuming binary valus of 0 and 255
+ * Treats a channel as an object-mask, assuming binary values of 0 and 255
  * and calls an object-mask feature
  * 
  * @author FEEHANO
@@ -62,7 +56,7 @@ public class AsObjMask extends FeatureStack {
 	private static final long serialVersionUID = 1L;
 	
 	// START BEAN PROPERTIES
-	@BeanField @SkipInit
+	@BeanField
 	private Feature item;
 	
 	@BeanField
@@ -71,28 +65,6 @@ public class AsObjMask extends FeatureStack {
 	// END BEAN PROPERTIES
 	
 	private FeatureSessionCacheRetriever subcache;
-
-	@Override
-	public FeatureCacheDefinition cacheDefinition() {
-		return new ComplexCacheDefinition(this, new String[]{"additionalCache"} );
-	}
-	
-	
-	/**
-	 *  Special initialisation with different params for 'item' as it is elsewhere ignored in the initialisation
-	 */
-	@Override
-	public void beforeCalc(CacheableParams<FeatureInitParams> params)
-			throws InitException {
-		super.beforeCalc(params);
-
-		
-		// TODO fix
-		//  Work around. Creates a new cache 
-		this.subcache = new NullCacheRetriever( params.getCacheSession().main().getSharedFeatureList() );
-		
-		params.getCacheSession().initThroughSubcache(subcache, params.getParams(), item, getLogger() );
-	}
 	
 	@Override
 	public double calcCast(CacheableParams<FeatureStackParams> params) throws FeatureCalcException {

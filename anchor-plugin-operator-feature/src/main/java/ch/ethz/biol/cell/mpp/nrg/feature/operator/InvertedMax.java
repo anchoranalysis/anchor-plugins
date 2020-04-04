@@ -47,7 +47,10 @@ public class InvertedMax extends FeatureSingleElem {
 	
 	@Override
 	public double calc( CacheableParams<? extends FeatureCalcParams> params ) throws FeatureCalcException {
-		return Math.min( (1/getCacheSession().calc( getItem(), params)), max );
+		return Math.min(
+			(1/ params.calc( getItem() )),
+			max
+		);
 	}
 	
 	@Override

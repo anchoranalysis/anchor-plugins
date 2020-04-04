@@ -46,10 +46,10 @@ public class ZScore extends FeatureFirstSecondOrder {
 	@Override
 	public double calc( CacheableParams<? extends FeatureCalcParams> params ) throws FeatureCalcException {
 		
-		double val = getCacheSession().calc( getItem(), params );
-		double mean = getCacheSession().calc( getItemMean(), params );
+		double val = params.calc( getItem() );
+		double mean = params.calc( getItemMean() );
 
-		double stdDev = getCacheSession().calc( getItemStdDev(), params );
+		double stdDev = params.calc( getItemStdDev() );
 
 		double zScore = FirstSecondOrderStatistic.calcZScore(val, mean, stdDev);
 		assert( !Double.isNaN(zScore) );

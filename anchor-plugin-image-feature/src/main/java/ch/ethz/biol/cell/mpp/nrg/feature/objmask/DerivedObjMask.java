@@ -34,10 +34,7 @@ import org.anchoranalysis.bean.annotation.SkipInit;
 import org.anchoranalysis.core.cache.ExecuteException;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.feature.bean.Feature;
-import org.anchoranalysis.feature.cache.CacheSession;
 import org.anchoranalysis.feature.cache.CacheableParams;
-import org.anchoranalysis.feature.cache.FeatureCacheDefinition;
-import org.anchoranalysis.feature.cache.PrefixedCacheDefinition;
 import org.anchoranalysis.feature.cachedcalculation.CachedCalculation;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
@@ -64,25 +61,17 @@ public abstract class DerivedObjMask extends FeatureObjMask {
 	
 	private CachedCalculation<ObjMask> cc;
 	
-	private CachedCalculation<FeatureSessionCacheRetriever> ccSubsession;
-	
-	
 	@Override
 	public void beforeCalc(CacheableParams<FeatureInitParams> params)
 			throws InitException {
 		super.beforeCalc(params);
 		
-		cc = createCachedCalculation( params.getCacheSession() );
-		
-		ccSubsession = params.initThroughSubcacheSession(
-			cacheDefinition().prefixForAdditionalCachesForChildren(),
-			params.getParams(),
-			item,
-			getLogger()
-		);
+		cc = createCachedCalculation(
+			params.cacheFor(cacheName()
+		));
 	}
 	
-	protected abstract CachedCalculation<ObjMask> createCachedCalculation( CacheSession session );
+	protected abstract CachedCalculation<ObjMask> createCachedCalculation( FeatureSessionCacheRetriever session );
 	
 
 	@Override
@@ -97,13 +86,8 @@ public abstract class DerivedObjMask extends FeatureObjMask {
 			
 			FeatureCalcParams paramsNew = createDerivedParams(omDerived,params.getParams());
 			
-			FeatureSessionCacheRetriever subCache = ccSubsession.getOrCalculate(null);
-			
 			// We select an appropriate cache for calculating the feature (should be the same as selected in init())
-			return subCache.calc(
-				item,
-				params.changeParams(paramsNew)
-			);
+			return params.calcChangeParams(item, paramsNew, cacheName() );
 			
 		} catch (ExecuteException e) {
 			throw new FeatureCalcException(e.getCause());
@@ -135,16 +119,7 @@ public abstract class DerivedObjMask extends FeatureObjMask {
 		return paramsNew;
 	}
 	
-	
-	@Override
-	protected FeatureCacheDefinition createCacheDefinition() {
-		return new PrefixedCacheDefinition(
-			this,
-			prefixForAdditionalCachesForChildren()
-		);
-	}
-	
-	protected abstract String prefixForAdditionalCachesForChildren();
+	protected abstract String cacheName();
 	
 	public double getEmptyValue() {
 		return emptyValue;
@@ -161,5 +136,4 @@ public abstract class DerivedObjMask extends FeatureObjMask {
 	public void setItem(Feature item) {
 		this.item = item;
 	}
-
 }
