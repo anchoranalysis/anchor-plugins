@@ -44,7 +44,7 @@ public class Maximum extends FeatureListElem {
 		
 		double maxValue = Double.NaN;
 		for( Feature f : getList()) {
-			double val = getCacheSession().calc( f, params );
+			double val = params.calc( f );
 			if (Double.isNaN(maxValue) || val > maxValue) {
 				maxValue = val;
 			}

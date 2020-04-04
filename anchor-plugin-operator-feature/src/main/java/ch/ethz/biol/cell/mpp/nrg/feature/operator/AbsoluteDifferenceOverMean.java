@@ -43,8 +43,8 @@ public class AbsoluteDifferenceOverMean extends FeatureDoubleElem {
 	
 	@Override
 	public double calc( CacheableParams<? extends FeatureCalcParams> params ) throws FeatureCalcException {
-		double val1 = getCacheSession().calc( getItem1(), params );
-		double val2 = getCacheSession().calc( getItem2(), params );
+		double val1 = params.calc( getItem1()  );
+		double val2 = params.calc( getItem2() );
 		
 		double absDiff = Math.abs( val1 - val2 ); 
 		double mean = (val1+val2)/2;

@@ -55,10 +55,10 @@ public class Divide extends FeatureListElem {
 		
 		int size = getList().size();
 		
-		double result = getCacheSession().calc( getList().get(0), params );
+		double result = params.calc( getList().get(0) );
 		
 		for (int i=1; i<size; i++) {
-			double div = getCacheSession().calc( getList().get(i), params );
+			double div = params.calc( getList().get(i) );
 			if (div==0.0) {
 				if (avoidDivideByZero) {
 					return divideByZeroValue;

@@ -66,12 +66,11 @@ public class CoefficientOfVarianceFromAll extends NRGElemAll {
 		double vals[] = new double[params.getPxlPartMemo().size()];
 		
 		for( int i=0; i<params.getPxlPartMemo().size(); i++) {
+			
 			PxlMarkMemo pmm = params.getPxlPartMemo().getMemoForIndex(i);
 			paramsInd.setPxlPartMemo(pmm);
-			double v = getCacheSession().calc(
-				item,
-				paramsCacheable.changeParams(paramsInd)
-			);
+			double v = paramsCacheable.calcChangeParams(item, paramsInd, "ind"+i );
+			
 			vals[i] = v;
 			sum+= v;
 		}

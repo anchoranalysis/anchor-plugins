@@ -62,9 +62,6 @@ public class AsCfg extends FeatureSingleElem {
 			params.getParams().getDimensions()
 		);
 			
-		return getCacheSession().calc(
-			getItem(),
-			params.changeParams(paramsNew)
-		);
+		return params.calcChangeParams(getItem(), paramsNew, "cfg");
 	}
 }

@@ -64,32 +64,29 @@ public class AsObjMask extends FeatureSingleElem {
 		
 			NRGElemIndCalcParams paramsCast = (NRGElemIndCalcParams) params.getParams(); 
 			
-			 
-			
-			FeatureObjMaskParams paramsNew;
-			ObjMaskWithProperties om = paramsCast.getPxlPartMemo().getMark().calcMask(
-				paramsCast.getNrgStack().getDimensions(),
-				regionMap.membershipWithFlagsForIndex(index),
-				BinaryValuesByte.getDefault()
+			return calcCast(
+				params.changeParams(paramsCast)
 			);
-			
-			paramsNew = new FeatureObjMaskParams(
-				om.getMask()
-			);
-			paramsNew.setNrgStack( paramsCast.getNrgStack() );
-			
-			double ret = getCacheSession().calc(
-				getItem(),
-				params.changeParams(
-					paramsNew
-				)
-			);
-			
-			return ret;
-			
 		} else {
 			throw new FeatureCalcException("Not supported for this type of params");
 		}
+	}
+	
+	private double calcCast( CacheableParams<NRGElemIndCalcParams> params ) throws FeatureCalcException {
+
+		FeatureObjMaskParams paramsNew;
+		ObjMaskWithProperties om = params.getParams().getPxlPartMemo().getMark().calcMask(
+			params.getParams().getNrgStack().getDimensions(),
+			regionMap.membershipWithFlagsForIndex(index),
+			BinaryValuesByte.getDefault()
+		);
+		
+		paramsNew = new FeatureObjMaskParams(
+			om.getMask()
+		);
+		paramsNew.setNrgStack( params.getParams().getNrgStack() );
+		
+		return params.calcChangeParams( getItem(), paramsNew, "obj");
 	}
 
 	// We change the default behaviour, as we don't want to give the same paramsFactory

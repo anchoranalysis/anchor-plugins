@@ -88,11 +88,15 @@ public class ObjMaskFeatureMean extends FeatureStack {
 		DoubleArrayList featureVals = new DoubleArrayList();
 		
 		// Calculate a feature on each obj mask
-		for( ObjMask om : objsCollection ) {
+		for( int i=0; i<objsCollection.size(); i++) {
+			
+			ObjMask om = objsCollection.get(i);
+			
 			paramsObj.setObjMask(om);
-			double val = getCacheSession().calc(
+			double val = paramsCacheable.calcChangeParams(
 				item,
-				paramsCacheable.changeParams(paramsObj)
+				paramsObj,
+				"objs" + i
 			);
 			featureVals.add(val);
 		}

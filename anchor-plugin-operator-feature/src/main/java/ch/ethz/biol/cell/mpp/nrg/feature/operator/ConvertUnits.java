@@ -74,7 +74,7 @@ public class ConvertUnits extends FeatureSingleElem {
 	@Override
 	protected double calc(CacheableParams<? extends FeatureCalcParams> params) throws FeatureCalcException {
 		
-		double value = getCacheSession().calc( getItem(), params);
+		double value = params.calc( getItem() );
 		
 		SpatialConversionUtilities.UnitSuffix typeFrom = SpatialConversionUtilities.suffixFromMeterString(unitTypeFrom);
 		SpatialConversionUtilities.UnitSuffix typeTo = SpatialConversionUtilities.suffixFromMeterString(unitTypeTo);

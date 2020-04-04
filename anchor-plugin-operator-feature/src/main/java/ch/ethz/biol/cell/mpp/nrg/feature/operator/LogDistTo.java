@@ -51,7 +51,7 @@ public class LogDistTo extends FeatureSingleElem {
 	@Override
 	public double calc( CacheableParams<? extends FeatureCalcParams> params ) throws FeatureCalcException {
 		
-		double diff = Math.abs( getCacheSession().calc(getItem(),params)-value );
+		double diff = Math.abs( params.calc(getItem())-value );
 		
 		if (diff==0) {
 			return 0.0;

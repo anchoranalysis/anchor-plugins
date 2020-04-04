@@ -29,9 +29,9 @@ package ch.ethz.biol.cell.mpp.nrg.feature.objmask.cachedcalculation;
 
 import org.anchoranalysis.core.cache.ExecuteException;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.feature.cache.CacheSession;
 import org.anchoranalysis.feature.cachedcalculation.CachedCalculation;
 import org.anchoranalysis.feature.cachedcalculation.CachedCalculationCastParams;
+import org.anchoranalysis.feature.session.cache.ICachedCalculationSearch;
 import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.feature.objmask.FeatureObjMaskParams;
 import org.anchoranalysis.image.objmask.ObjMask;
@@ -101,7 +101,7 @@ public class CalculateShellObjMask extends CachedCalculationCastParams<ObjMask,F
 	
 	
 	public static CachedCalculation<ObjMask> createFromCache(
-		CacheSession cache,
+		ICachedCalculationSearch cache,
 		int iterationsDilation,
 		int iterationsErosion,
 		int iterationsErosionSecond,

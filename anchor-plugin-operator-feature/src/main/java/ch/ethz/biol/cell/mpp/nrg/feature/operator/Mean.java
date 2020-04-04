@@ -51,7 +51,7 @@ public class Mean extends FeatureListElem {
 		}
 		
 		for (Feature elem : getList()) {
-			result += getCacheSession().calc( elem, params );
+			result += params.calc( elem );
 		}
 		
 		assert(!Double.isNaN(result));

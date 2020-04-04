@@ -56,10 +56,10 @@ public class IfElse extends FeatureSingleElem {
 	public double calc(CacheableParams<? extends FeatureCalcParams> params)
 			throws FeatureCalcException {
 
-		if (getCacheSession().calc(featureCondition,params)==value) {
-			return getCacheSession().calc(super.getItem(),params);
+		if (params.calc(featureCondition)==value) {
+			return params.calc(super.getItem());
 		} else {
-			return getCacheSession().calc(featureElse,params);
+			return params.calc(featureElse);
 		}
 	}
 	

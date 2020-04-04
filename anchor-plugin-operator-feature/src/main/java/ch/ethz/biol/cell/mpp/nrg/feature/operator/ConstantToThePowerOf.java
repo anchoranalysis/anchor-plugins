@@ -47,7 +47,10 @@ public class ConstantToThePowerOf extends FeatureSingleElem {
 	
 	@Override
 	public double calc( CacheableParams<? extends FeatureCalcParams> params ) throws FeatureCalcException {
-		return Math.pow( constant, getCacheSession().calc( getItem(), params ) );
+		return Math.pow(
+			constant,
+			params.calc( getItem() )
+		);
 	}
 
 	@Override

@@ -43,7 +43,7 @@ public class AbsoluteValue extends FeatureSingleElem {
 		
 	@Override
 	public double calc( CacheableParams<? extends FeatureCalcParams> params ) throws FeatureCalcException {
-		return Math.abs( getCacheSession().calc( getItem(), params ) );
+		return Math.abs( params.calc( getItem() ) );
 	}
 
 	@Override

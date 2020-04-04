@@ -54,7 +54,7 @@ public class MaximumIfLessThan extends FeatureListElem {
 		
 		double maxValue = Double.NaN;
 		for( Feature f : getList()) {
-			double val = getCacheSession().calc( f, params );
+			double val = params.calc( f );
 			
 			if (val>=threshold) {
 				continue;

@@ -55,12 +55,7 @@ public class AsMark extends FeatureSingleElem {
 				paramsCast.getDimensions().getRes()
 			);
 			
-			return getCacheSession().calc(
-				getItem(),
-				params.changeParams(
-					paramsNew
-				)
-			);
+			return params.calcChangeParams( getItem(), paramsNew, "mark" );
 			
 		} else {
 			throw new FeatureCalcException("Not supported for this type of params");

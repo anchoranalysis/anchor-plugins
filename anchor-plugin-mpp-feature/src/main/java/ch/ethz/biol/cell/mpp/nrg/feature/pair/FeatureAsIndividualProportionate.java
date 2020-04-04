@@ -66,11 +66,11 @@ public class FeatureAsIndividualProportionate extends NRGElemPair {
 			new NRGElemIndCalcParams( params.getParams().getObj2(), params.getParams().getNrgStack() )
 		);
 		
-		double val1 = getCacheSession().calc( item, params1 );
-		double val2 = getCacheSession().calc( item, params2 );
+		double val1 = params1.calc( item );
+		double val2 = params2.calc( item );
 		
-		double prop1 = getCacheSession().calc( itemProportionate, params1 );
-		double prop2 = getCacheSession().calc( itemProportionate, params2 );
+		double prop1 = params1.calc( itemProportionate );
+		double prop2 = params2.calc( itemProportionate );
 		
 		// Normalise
 		double propSum = prop1 + prop2;

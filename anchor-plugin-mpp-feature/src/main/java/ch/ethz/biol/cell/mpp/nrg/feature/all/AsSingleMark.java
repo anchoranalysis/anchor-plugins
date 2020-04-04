@@ -73,11 +73,6 @@ public class AsSingleMark extends FeatureSingleElem {
 			params.getParams().getDimensions().getRes()
 		);
 			
-		return getCacheSession().calc(
-			getItem(),
-			params.changeParams(
-				paramsNew
-			)
-		);
+		return params.calcChangeParams(getItem(), paramsNew, "mark");
 	}
 }

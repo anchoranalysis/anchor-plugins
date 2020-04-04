@@ -53,7 +53,7 @@ public class MeanGeometric extends FeatureListElem {
 		
 		for (int i=0; i<getList().size(); i++) {
 			Feature elem = getList().get(i);
-			result[i] = getCacheSession().calc( elem, params );
+			result[i] = params.calc(elem);
 		}
 		
 		return meanCalculator.evaluate(result);
