@@ -1,5 +1,7 @@
 package ch.ethz.biol.cell.mpp.nrg.feature.operator;
 
+import org.anchoranalysis.feature.cache.CacheableParams;
+
 /*-
  * #%L
  * anchor-plugin-operator-feature
@@ -42,7 +44,7 @@ public class ZScore extends FeatureFirstSecondOrder {
 	// END BEAN PROPERTIES
 	
 	@Override
-	public double calc( FeatureCalcParams params ) throws FeatureCalcException {
+	public double calc( CacheableParams<? extends FeatureCalcParams> params ) throws FeatureCalcException {
 		
 		double val = getCacheSession().calc( getItem(), params );
 		double mean = getCacheSession().calc( getItemMean(), params );

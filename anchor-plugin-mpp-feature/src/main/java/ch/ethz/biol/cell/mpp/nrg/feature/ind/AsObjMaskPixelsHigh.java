@@ -34,6 +34,7 @@ import org.anchoranalysis.anchor.mpp.regionmap.RegionMapSingleton;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.bean.operator.FeatureSingleElem;
+import org.anchoranalysis.feature.cache.CacheableParams;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
 import org.anchoranalysis.feature.params.FeatureParamsDescriptor;
@@ -64,11 +65,11 @@ public class AsObjMaskPixelsHigh extends FeatureSingleElem {
 	// END BEAN PROPERTIES
 	
 	@Override
-	public double calc(FeatureCalcParams params) throws FeatureCalcException {
+	public double calc(CacheableParams<? extends FeatureCalcParams> params) throws FeatureCalcException {
 		
-		if (params instanceof NRGElemIndCalcParams) {
+		if (params.getParams() instanceof NRGElemIndCalcParams) {
 		
-			NRGElemIndCalcParams paramsCast = (NRGElemIndCalcParams) params; 
+			NRGElemIndCalcParams paramsCast = (NRGElemIndCalcParams) params.getParams(); 
 			
 			 
 			
@@ -93,7 +94,12 @@ public class AsObjMaskPixelsHigh extends FeatureSingleElem {
 			);
 			paramsNew.setNrgStack( paramsCast.getNrgStack() );
 			
-			double ret = getCacheSession().calc( getItem(), paramsNew);
+			double ret = getCacheSession().calc(
+				getItem(),
+				params.changeParams(
+					paramsNew
+				)
+			);
 			
 			return ret;
 			

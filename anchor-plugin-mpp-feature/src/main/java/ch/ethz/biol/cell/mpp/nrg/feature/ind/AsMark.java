@@ -31,6 +31,7 @@ import org.anchoranalysis.anchor.mpp.feature.nrg.elem.NRGElemIndCalcParamsDescri
  */
 
 import org.anchoranalysis.feature.bean.operator.FeatureSingleElem;
+import org.anchoranalysis.feature.cache.CacheableParams;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
 import org.anchoranalysis.feature.params.FeatureParamsDescriptor;
@@ -43,18 +44,23 @@ public class AsMark extends FeatureSingleElem {
 	private static final long serialVersionUID = 1L;
 
 	@Override
-	public double calc(FeatureCalcParams params) throws FeatureCalcException {
+	public double calc(CacheableParams<? extends FeatureCalcParams> params) throws FeatureCalcException {
 		
-		if (params instanceof NRGElemIndCalcParams) {
+		if (params.getParams() instanceof NRGElemIndCalcParams) {
 		
-			NRGElemIndCalcParams paramsCast = (NRGElemIndCalcParams) params; 
+			NRGElemIndCalcParams paramsCast = (NRGElemIndCalcParams) params.getParams(); 
 			
 			FeatureMarkParams paramsNew = new FeatureMarkParams(
 				paramsCast.getPxlPartMemo().getMark(),
 				paramsCast.getDimensions().getRes()
 			);
 			
-			return getCacheSession().calc( getItem(), paramsNew);
+			return getCacheSession().calc(
+				getItem(),
+				params.changeParams(
+					paramsNew
+				)
+			);
 			
 		} else {
 			throw new FeatureCalcException("Not supported for this type of params");

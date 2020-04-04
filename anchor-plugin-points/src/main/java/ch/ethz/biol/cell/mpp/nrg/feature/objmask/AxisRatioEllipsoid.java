@@ -32,7 +32,7 @@ import org.anchoranalysis.anchor.mpp.mark.conic.MarkEllipsoid;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.cache.ExecuteException;
 import org.anchoranalysis.core.error.InitException;
-import org.anchoranalysis.feature.cache.CacheSession;
+import org.anchoranalysis.feature.cache.CacheableParams;
 import org.anchoranalysis.feature.cachedcalculation.CachedCalculation;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.init.FeatureInitParams;
@@ -61,15 +61,17 @@ public class AxisRatioEllipsoid extends FeatureObjMask {
 	private CachedCalculation<MarkEllipsoid> cc;
 	
 	@Override
-	public void beforeCalc(FeatureInitParams params, CacheSession cache)
+	public void beforeCalc(CacheableParams<FeatureInitParams> params)
 			throws InitException {
-		super.beforeCalc(params, cache);
-		cc = CalculateEllipsoidLeastSquares.createFromCache(cache, suppressZCovariance);
+		super.beforeCalc(params);
+		cc = CalculateEllipsoidLeastSquares.createFromCache(params.getCacheSession(), suppressZCovariance);
 	}
 		
 	
 	@Override
-	public double calcCast(FeatureObjMaskParams params) throws FeatureCalcException {
+	public double calcCast(CacheableParams<FeatureObjMaskParams> paramsCacheable) throws FeatureCalcException {
+		
+		FeatureObjMaskParams params = paramsCacheable.getParams();
 		
 		// Max intensity projection of the input mask
 		ObjMask om = params.getObjMask();

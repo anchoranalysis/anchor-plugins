@@ -29,6 +29,7 @@ package org.anchoranalysis.plugin.image.feature.bean.obj.pair.touching;
 
 import org.anchoranalysis.core.cache.ExecuteException;
 import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.feature.cache.CacheableParams;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.feature.objmask.pair.FeatureObjMaskPairParams;
@@ -56,9 +57,11 @@ public class NumTouchingVoxels extends TouchingVoxels {
 	private static final long serialVersionUID = 1L;
 	
 	@Override
-	public double calcCast(FeatureObjMaskPairParams params)
+	public double calcCast(CacheableParams<FeatureObjMaskPairParams> paramsCacheable)
 			throws FeatureCalcException {
 
+		FeatureObjMaskPairParams params = paramsCacheable.getParams();
+		
 		try {
 			ObjMask om1 = params.getObjMask1();
 			ObjMask om2 = params.getObjMask2();

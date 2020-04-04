@@ -35,7 +35,7 @@ import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.cache.ExecuteException;
 import org.anchoranalysis.core.error.InitException;
-import org.anchoranalysis.feature.cache.CacheSession;
+import org.anchoranalysis.feature.cache.CacheableParams;
 import org.anchoranalysis.feature.cachedcalculation.CachedCalculation;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.init.FeatureInitParams;
@@ -70,18 +70,18 @@ public class OverlapRatioThreeRegions extends NRGElemPair {
 	private CachedCalculation<Double> cc3;	
 	
 	@Override
-	public void beforeCalc(FeatureInitParams params, CacheSession cache)
+	public void beforeCalc(CacheableParams<FeatureInitParams> params)
 			throws InitException {
-		super.beforeCalc(params, cache);
+		super.beforeCalc(params);
 		if (mip) {
 			// If we use this we don't need to find the volume ourselves
-			cc1 = cache.search( new OverlapMIPRatioCalculation(regionID1) );
-			cc2 = cache.search( new OverlapMIPRatioCalculation(regionID2) );
-			cc3 = cache.search( new OverlapMIPRatioCalculation(regionID3) );
+			cc1 = params.search( new OverlapMIPRatioCalculation(regionID1) );
+			cc2 = params.search( new OverlapMIPRatioCalculation(regionID2) );
+			cc3 = params.search( new OverlapMIPRatioCalculation(regionID3) );
 		} else {
-			cc1 = cache.search( new OverlapCalculation(regionID1) );
-			cc2 = cache.search( new OverlapCalculation(regionID2) );
-			cc3 = cache.search( new OverlapCalculation(regionID3) );
+			cc1 = params.search( new OverlapCalculation(regionID1) );
+			cc2 = params.search( new OverlapCalculation(regionID2) );
+			cc3 = params.search( new OverlapCalculation(regionID3) );
 		}
 	}
 	
@@ -117,20 +117,30 @@ public class OverlapRatioThreeRegions extends NRGElemPair {
 	}
 	
 	@Override
-	public double calcCast( NRGElemPairCalcParams params ) throws FeatureCalcException {
+	public double calcCast( CacheableParams<NRGElemPairCalcParams> paramsCacheable ) throws FeatureCalcException {
 		
 		// MIP currently not supported
 		if(mip==true) {
 			throw new FeatureCalcException("mip currently not supported");
 		}
 		
+		NRGElemPairCalcParams params = paramsCacheable.getParams();
 		
 		assert( cc1!=null );
 		assert( cc2!=null );
 		assert( cc3!=null );
 		
 		try {
-			return calcOverlapRatioMin( params.getObj1(), params.getObj2(), cc1.getOrCalculate(params), cc2.getOrCalculate(params), cc3.getOrCalculate(params), regionID1, regionID2, regionID3 );
+			return calcOverlapRatioMin(
+				params.getObj1(),
+				params.getObj2(),
+				cc1.getOrCalculate(params),
+				cc2.getOrCalculate(params),
+				cc3.getOrCalculate(params),
+				regionID1,
+				regionID2,
+				regionID3
+			);
 		} catch (ExecuteException e) {
 			throw new FeatureCalcException(e);
 		}							

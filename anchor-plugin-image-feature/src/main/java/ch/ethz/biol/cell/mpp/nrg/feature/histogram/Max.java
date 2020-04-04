@@ -1,5 +1,7 @@
 package ch.ethz.biol.cell.mpp.nrg.feature.histogram;
 
+import org.anchoranalysis.feature.cache.CacheableParams;
+
 /*
  * #%L
  * anchor-plugin-image-feature
@@ -39,8 +41,8 @@ public class Max extends FeatureHistogram {
 	private static final long serialVersionUID = 1L;
 	
 	@Override
-	public double calcCast(FeatureHistogramParams params)
+	public double calcCast(CacheableParams<FeatureHistogramParams> params)
 			throws FeatureCalcException {
-		return params.getHistogram().calcMax();
+		return params.getParams().getHistogram().calcMax();
 	}
 }

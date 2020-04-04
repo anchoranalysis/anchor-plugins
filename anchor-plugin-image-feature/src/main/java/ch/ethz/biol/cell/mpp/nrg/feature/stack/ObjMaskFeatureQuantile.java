@@ -32,6 +32,7 @@ import org.anchoranalysis.bean.annotation.SkipInit;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.feature.bean.Feature;
+import org.anchoranalysis.feature.cache.CacheableParams;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
 import org.anchoranalysis.image.feature.bean.FeatureStack;
@@ -64,10 +65,10 @@ public class ObjMaskFeatureQuantile extends FeatureStack {
 	// END BEAN PROPERTIES
 
 	@Override
-	public double calcCast(FeatureStackParams params) throws FeatureCalcException {
+	public double calcCast(CacheableParams<FeatureStackParams> params) throws FeatureCalcException {
 
 		try {
-			objs.initRecursive(params.getSharedObjs(), getLogger() );
+			objs.initRecursive(params.getParams().getSharedObjs(), getLogger() );
 		} catch (InitException e1) {
 			throw new FeatureCalcException(e1);
 		}
@@ -80,14 +81,17 @@ public class ObjMaskFeatureQuantile extends FeatureStack {
 		}
 		
 		FeatureObjMaskParams paramsObj = new FeatureObjMaskParams();
-		paramsObj.setNrgStack( params.getNrgStack() );
+		paramsObj.setNrgStack( params.getParams().getNrgStack() );
 		
 		DoubleArrayList featureVals = new DoubleArrayList();
 		
 		// Calculate a feature on each obj mask
 		for( ObjMask om : objsCollection ) {
 			paramsObj.setObjMask(om);
-			double val = getCacheSession().calc(item, paramsObj);
+			double val = getCacheSession().calc(
+				item,
+				params.changeParams(paramsObj)
+			);
 			featureVals.add(val);
 		}
 		

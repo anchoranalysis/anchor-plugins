@@ -2,9 +2,12 @@ package org.anchoranalysis.plugin.image.feature.bean.obj.pair.order;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.bean.Feature;
+import org.anchoranalysis.feature.cache.CacheableParams;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.feature.session.cache.FeatureSessionCacheRetriever;
 import org.anchoranalysis.image.feature.bean.objmask.pair.FeatureObjMaskPair;
 import org.anchoranalysis.image.feature.objmask.FeatureObjMaskParams;
+import org.anchoranalysis.image.feature.objmask.pair.FeatureObjMaskPairParams;
 import org.anchoranalysis.image.objmask.ObjMask;
 
 /**
@@ -25,10 +28,21 @@ public abstract class FeatureObjMaskPairOrder extends FeatureObjMaskPair {
 	private Feature feature;
 	// END BEAN PROPERTIES
 		
-	protected double featureValFrom( ObjMask om ) throws FeatureCalcException {
-		FeatureObjMaskParams params = new FeatureObjMaskParams(om);
-		params.setNrgStack( params.getNrgStack() );
-		return getCacheSession().calc( feature, params );
+	protected double valueFromObj1( CacheableParams<FeatureObjMaskPairParams> params ) throws FeatureCalcException {
+		return featureValFrom(params.getParams().getObjMask1(), getCacheSession().additional(0), params );
+	}
+	
+	protected double valueFromObj2( CacheableParams<FeatureObjMaskPairParams> params ) throws FeatureCalcException {
+		return featureValFrom(params.getParams().getObjMask2(), getCacheSession().additional(1), params );
+	}
+	
+	private double featureValFrom( ObjMask om, FeatureSessionCacheRetriever cache, CacheableParams<FeatureObjMaskPairParams> params ) throws FeatureCalcException {
+		FeatureObjMaskParams paramsNew = new FeatureObjMaskParams(om);
+		paramsNew.setNrgStack( params.getParams().getNrgStack() );
+		return cache.calc(
+			feature,
+			params.changeParams(paramsNew)
+		);
 	}
 	
 	public Feature getFeature() {

@@ -30,6 +30,7 @@ package ch.ethz.biol.cell.sgmn.graphcuts.nrgdefinition.pixelscore;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.shared.relation.RelationBean;
 import org.anchoranalysis.core.error.InitException;
+import org.anchoranalysis.feature.cache.CacheableParams;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.session.cache.FeatureSessionCacheRetriever;
 import org.anchoranalysis.image.feature.bean.pixelwise.score.PixelScore;
@@ -66,8 +67,11 @@ public class PixelScoreIdentityImposeValueRelationToHistogram extends PixelScore
 	private int histMax;
 		
 	@Override
-	protected double calcCast(PixelScoreFeatureCalcParams params)
+	protected double calcCast(CacheableParams<PixelScoreFeatureCalcParams> paramsCacheable)
 			throws FeatureCalcException {
+		
+		PixelScoreFeatureCalcParams params = paramsCacheable.getParams();
+		
 		double pxlValue = params.getPxl(nrgChnlIndexCheck);
 		
 		if (relation.create().isRelationToValueTrue(pxlValue, histMax)) {

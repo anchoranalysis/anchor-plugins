@@ -35,7 +35,7 @@ import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.cache.ExecuteException;
 import org.anchoranalysis.core.error.InitException;
-import org.anchoranalysis.feature.cache.CacheSession;
+import org.anchoranalysis.feature.cache.CacheableParams;
 import org.anchoranalysis.feature.cachedcalculation.CachedCalculation;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.init.FeatureInitParams;
@@ -68,14 +68,14 @@ public class OverlapRatio extends NRGElemPair {
 	private CachedCalculation<Double> cc;
 	
 	@Override
-	public void beforeCalc(FeatureInitParams params, CacheSession cache)
+	public void beforeCalc(CacheableParams<FeatureInitParams> params)
 			throws InitException {
-		super.beforeCalc(params, cache);
+		super.beforeCalc(params);
 		if (mip) {
 			// If we use this we don't need to find the volume ourselves
-			cc = cache.search( new OverlapMIPRatioCalculation(regionID) );
+			cc = params.search( new OverlapMIPRatioCalculation(regionID) );
 		} else {
-			cc = cache.search( new OverlapCalculation(regionID) );
+			cc = params.search( new OverlapCalculation(regionID) );
 		}		
 	}
 	
@@ -135,7 +135,9 @@ public class OverlapRatio extends NRGElemPair {
 	}
 	
 	@Override
-	public double calcCast( NRGElemPairCalcParams params ) throws FeatureCalcException {
+	public double calcCast( CacheableParams<NRGElemPairCalcParams> paramsCacheable ) throws FeatureCalcException {
+		
+		NRGElemPairCalcParams params = paramsCacheable.getParams();
 		
 		assert( cc!=null );
 		

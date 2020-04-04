@@ -32,7 +32,7 @@ import org.anchoranalysis.bean.annotation.SkipInit;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.feature.bean.Feature;
-import org.anchoranalysis.feature.cache.CacheSession;
+import org.anchoranalysis.feature.cache.CacheableParams;
 import org.anchoranalysis.feature.cache.ComplexCacheDefinition;
 import org.anchoranalysis.feature.cache.FeatureCacheDefinition;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
@@ -82,32 +82,35 @@ public class AsObjMask extends FeatureStack {
 	 *  Special initialisation with different params for 'item' as it is elsewhere ignored in the initialisation
 	 */
 	@Override
-	public void beforeCalc(FeatureInitParams params,
-			CacheSession cache)
+	public void beforeCalc(CacheableParams<FeatureInitParams> params)
 			throws InitException {
-		super.beforeCalc(params, cache);
+		super.beforeCalc(params);
 
 		
 		// TODO fix
 		//  Work around. Creates a new cache 
-		this.subcache = new NullCacheRetriever( cache.main().getSharedFeatureList() );
+		this.subcache = new NullCacheRetriever( params.getCacheSession().main().getSharedFeatureList() );
 		
-		cache.initThroughSubcache(subcache, params, item, getLogger() );
+		params.getCacheSession().initThroughSubcache(subcache, params.getParams(), item, getLogger() );
 	}
 	
 	@Override
-	public double calcCast(FeatureStackParams params) throws FeatureCalcException {
+	public double calcCast(CacheableParams<FeatureStackParams> params) throws FeatureCalcException {
 				
 		FeatureObjMaskParams paramsObj = new FeatureObjMaskParams();
 		try {
-			ObjMask om = extractObjMask(params);
-			paramsObj.setNrgStack( params.getNrgStack() );
+			ObjMask om = extractObjMask(params.getParams());
+			paramsObj.setNrgStack( params.getParams().getNrgStack() );
 			paramsObj.setObjMask( om );
 		} catch (CreateException e) {
 			throw new FeatureCalcException(e);
 		}
 		
-		return subcache.calc(item, paramsObj);
+		return subcache.calc(item,
+			params.changeParams(
+				paramsObj
+			)
+		);
 	}
 		
 	private ObjMask extractObjMask(FeatureStackParams params) throws CreateException {

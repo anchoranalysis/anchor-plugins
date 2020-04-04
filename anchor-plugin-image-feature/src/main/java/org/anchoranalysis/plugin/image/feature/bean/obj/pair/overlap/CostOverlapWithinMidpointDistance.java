@@ -29,6 +29,7 @@ package org.anchoranalysis.plugin.image.feature.bean.obj.pair.overlap;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.geometry.Point3d;
+import org.anchoranalysis.feature.cache.CacheableParams;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.bean.unitvalue.distance.UnitValueDistance;
 import org.anchoranalysis.image.extent.ImageRes;
@@ -56,9 +57,11 @@ public class CostOverlapWithinMidpointDistance extends FeatureObjMaskPair {
 	// END BEAN PROPERTIES
 	
 	@Override
-	public double calcCast(FeatureObjMaskPairParams params)
+	public double calcCast(CacheableParams<FeatureObjMaskPairParams> paramsCacheable)
 			throws FeatureCalcException {
 
+		FeatureObjMaskPairParams params = paramsCacheable.getParams();
+		
 		if (isDistMoreThanMax(params)) {
 			return 1.0;
 		}

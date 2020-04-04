@@ -31,7 +31,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.params.KeyValueParams;
 import org.anchoranalysis.feature.bean.Feature;
-import org.anchoranalysis.feature.cache.CacheSession;
+import org.anchoranalysis.feature.cache.CacheableParams;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
 import org.anchoranalysis.feature.calc.params.FeatureCalcParamsWithImageParamsDescriptor;
@@ -54,13 +54,13 @@ public class Param extends Feature {
 	private KeyValueParams keyValueParams;
 	
 	@Override
-	public void beforeCalc(FeatureInitParams params, CacheSession cache) throws InitException {
-		super.beforeCalc(params, cache);
-		this.keyValueParams = params.getKeyValueParams();
+	public void beforeCalc(CacheableParams<FeatureInitParams> params) throws InitException {
+		super.beforeCalc(params);
+		this.keyValueParams = params.getParams().getKeyValueParams();
 	}
 	
 	@Override
-	public double calc(FeatureCalcParams params)
+	public double calc(CacheableParams<? extends FeatureCalcParams> params)
 			throws FeatureCalcException {
 
 //		if (keyValueParams instanceof FeatureCalcParamsWithImageParams) {

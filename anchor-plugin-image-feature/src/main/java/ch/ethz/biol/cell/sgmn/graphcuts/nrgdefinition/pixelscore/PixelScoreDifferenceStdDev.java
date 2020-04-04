@@ -29,6 +29,7 @@ package ch.ethz.biol.cell.sgmn.graphcuts.nrgdefinition.pixelscore;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.InitException;
+import org.anchoranalysis.feature.cache.CacheableParams;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.session.cache.FeatureSessionCacheRetriever;
 import org.anchoranalysis.image.feature.bean.pixelwise.score.PixelScore;
@@ -73,7 +74,7 @@ public class PixelScoreDifferenceStdDev extends PixelScore {
 	}
 	
 	@Override
-	public double calcCast(PixelScoreFeatureCalcParams params)
+	public double calcCast(CacheableParams<PixelScoreFeatureCalcParams> params)
 			throws FeatureCalcException {
 		
 		return PixelScoreDifference.calcDiffFromParams(params, nrgChnlIndexFirst, nrgChnlIndexSecond, width*widthFactor, minDifference);

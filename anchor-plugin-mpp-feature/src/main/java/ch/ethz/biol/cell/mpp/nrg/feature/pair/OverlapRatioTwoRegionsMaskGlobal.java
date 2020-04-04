@@ -38,7 +38,7 @@ import org.anchoranalysis.bean.shared.relation.RelationBean;
 import org.anchoranalysis.core.cache.ExecuteException;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.relation.RelationToValue;
-import org.anchoranalysis.feature.cache.CacheSession;
+import org.anchoranalysis.feature.cache.CacheableParams;
 import org.anchoranalysis.feature.cachedcalculation.CachedCalculation;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.init.FeatureInitParams;
@@ -75,12 +75,12 @@ public class OverlapRatioTwoRegionsMaskGlobal extends NRGElemPair {
 	}
 	
 	@Override
-	public void beforeCalc(FeatureInitParams params, CacheSession cache)
+	public void beforeCalc(CacheableParams<FeatureInitParams> params)
 			throws InitException {
-		super.beforeCalc(params, cache);
+		super.beforeCalc(params);
 		
-		cc1 = cache.search( new OverlapCalculationMaskGlobal(regionID1, nrgIndex, (byte) maskValue) );
-		cc2 = cache.search( new OverlapCalculationMaskGlobal(regionID2, nrgIndex, (byte) maskValue) );
+		cc1 = params.search( new OverlapCalculationMaskGlobal(regionID1, nrgIndex, (byte) maskValue) );
+		cc2 = params.search( new OverlapCalculationMaskGlobal(regionID2, nrgIndex, (byte) maskValue) );
 	}
 	
 	private double calcOverlapRatioMin( PxlMarkMemo obj1, PxlMarkMemo obj2, double overlap1, double overlap2, int regionID1, int regionID2 ) throws FeatureCalcException {
@@ -100,13 +100,22 @@ public class OverlapRatioTwoRegionsMaskGlobal extends NRGElemPair {
 
 	
 	@Override
-	public double calcCast( NRGElemPairCalcParams params ) throws FeatureCalcException {
+	public double calcCast( CacheableParams<NRGElemPairCalcParams> paramsCacheable ) throws FeatureCalcException {
 		
 		assert( cc1!=null );
 		assert( cc2!=null );
 		
+		NRGElemPairCalcParams params = paramsCacheable.getParams();
+		
 		try {
-			return calcOverlapRatioMin( params.getObj1(), params.getObj2(), cc1.getOrCalculate(params), cc2.getOrCalculate(params), regionID1, regionID2 );
+			return calcOverlapRatioMin(
+				params.getObj1(),
+				params.getObj2(),
+				cc1.getOrCalculate(params),
+				cc2.getOrCalculate(params),
+				regionID1,
+				regionID2
+			);
 		} catch (ExecuteException e) {
 			throw new FeatureCalcException(e);
 		}							

@@ -34,7 +34,7 @@ import org.anchoranalysis.anchor.mpp.mark.GlobalRegionIdentifiers;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.cache.ExecuteException;
 import org.anchoranalysis.core.error.InitException;
-import org.anchoranalysis.feature.cache.CacheSession;
+import org.anchoranalysis.feature.cache.CacheableParams;
 import org.anchoranalysis.feature.cachedcalculation.CachedCalculation;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.init.FeatureInitParams;
@@ -78,14 +78,15 @@ public class MaxOverlapRatio extends NRGElemPair {
 	private CachedCalculation<Double> cc;
 	
 	@Override
-	public void beforeCalc(FeatureInitParams params, CacheSession cache)
-			throws InitException {
-		super.beforeCalc(params, cache);
-		cc = cache.search( new OverlapCalculation(regionID) );
+	public void beforeCalc(CacheableParams<FeatureInitParams> params) throws InitException {
+		super.beforeCalc(params);
+		cc = params.getCacheSession().search( new OverlapCalculation(regionID) );
 	}
 
 	@Override
-	public double calcCast( NRGElemPairCalcParams params ) throws FeatureCalcException {
+	public double calcCast( CacheableParams<NRGElemPairCalcParams> paramsCacheable ) throws FeatureCalcException {
+		
+		NRGElemPairCalcParams params = paramsCacheable.getParams();
 		
 		//double max_volume = Math.min( obj1.getMark().volume(), obj2.getMark().volume() );
 		//double ratio = overlap / max_volume;

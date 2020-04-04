@@ -30,6 +30,7 @@ package ch.ethz.biol.cell.mpp.nrg.feature.stack;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 import org.anchoranalysis.core.params.KeyValueParams;
+import org.anchoranalysis.feature.cache.CacheableParams;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.feature.bean.FeatureStack;
 import org.anchoranalysis.image.feature.stack.FeatureStackParams;
@@ -50,10 +51,10 @@ public class KeyValueParam extends FeatureStack {
 	// END BEAN PROPERTIES
 
 	@Override
-	public double calcCast(FeatureStackParams params)
+	public double calcCast(CacheableParams<FeatureStackParams> params)
 			throws FeatureCalcException {
 		try {
-			KeyValueParams kpv = params.getSharedObjs().getParams().getNamedKeyValueParamsCollection().getException(collectionID);
+			KeyValueParams kpv = params.getParams().getSharedObjs().getParams().getNamedKeyValueParamsCollection().getException(collectionID);
 			return kpv.getPropertyAsDouble(key);
 			
 		} catch (NamedProviderGetException e) {

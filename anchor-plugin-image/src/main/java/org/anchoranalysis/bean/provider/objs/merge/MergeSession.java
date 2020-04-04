@@ -40,6 +40,7 @@ import org.anchoranalysis.feature.init.FeatureInitParams;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 import org.anchoranalysis.feature.session.FeatureSession;
 import org.anchoranalysis.feature.session.SequentialSession;
+import org.anchoranalysis.feature.session.SessionUtilities;
 import org.anchoranalysis.feature.session.cache.FeatureSessionCache;
 import org.anchoranalysis.feature.shared.SharedFeatureSet;
 import org.anchoranalysis.image.feature.objmask.pair.merged.FeatureObjMaskPairMergedParams;
@@ -79,8 +80,11 @@ class MergeSession extends FeatureSession {
 		map.clear();
 	}
 	
-	
-	private FeatureCalcParams createParams( ObjMask obj1, ObjMask obj2, ObjMask omMerged ) throws CreateException {
+	private FeatureCalcParams createParams(
+		ObjMask obj1,
+		ObjMask obj2,
+		ObjMask omMerged
+	) throws CreateException {
 		FeatureObjMaskPairMergedParams params = new FeatureObjMaskPairMergedParams(obj1, obj2,omMerged);
 		params.setNrgStack( new NRGStackWithParams(paramsInit.getNrgStack(),paramsInit.getKeyValueParams()) );
 		return params;
@@ -136,7 +140,10 @@ class MergeSession extends FeatureSession {
 			// We re-initialize the feature to have our new cached results
 			//feature.initRecursive( this.paramsInit, delegate.getCache().retriever());
 			FeatureCalcParams params = createParams(obj1,obj2,omMerged);
-			double val = delegate.getCache().retriever().calc(feature, params );
+			double val = delegate.getCache().retriever().calc(
+				feature,
+				SessionUtilities.createCacheable(params)
+			);
 						
 			//System.out.printf("Calculating (%s,%s,%s) has sizes (%d,%d,%d) = %f\n", obj1.centerOfGravity(), obj2.centerOfGravity(), omMerged.centerOfGravity(), delegate.getCache().getAdditionalCache(0).currentSize(), delegate.getCache().getAdditionalCache(1).currentSize(), delegate.getCache().getAdditionalCache(2).currentSize(), val );
 			

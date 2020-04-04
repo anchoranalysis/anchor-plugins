@@ -34,7 +34,7 @@ import org.anchoranalysis.bean.annotation.NonNegative;
 import org.anchoranalysis.bean.annotation.Optional;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.geometry.Point3d;
-import org.anchoranalysis.feature.cache.CacheSession;
+import org.anchoranalysis.feature.cache.CacheableParams;
 import org.anchoranalysis.feature.cachedcalculation.CachedCalculation;
 import org.anchoranalysis.feature.init.FeatureInitParams;
 import org.anchoranalysis.image.feature.bean.objmask.FeatureObjMask;
@@ -66,12 +66,13 @@ public abstract class IntensityGradientBase extends FeatureObjMask {
 	private CachedCalculation<List<Point3d>> ccPoints;
 	
 	@Override
-	public void beforeCalc(FeatureInitParams params,
-			CacheSession cache)
+	public void beforeCalc(CacheableParams<FeatureInitParams> params)
 			throws InitException {
-		super.beforeCalc(params, cache);
+		super.beforeCalc(params);
 		
-		ccPoints = cache.search( new CalculateGradientFromMultipleChnls(nrgIndexX,nrgIndexY,nrgIndexZ,subtractConstant) );
+		ccPoints = params.getCacheSession().search(
+			new CalculateGradientFromMultipleChnls(nrgIndexX,nrgIndexY,nrgIndexZ,subtractConstant)
+		);
 		//System.out.printf("ccPoints=%d isDone?=%s Creating from cache %d\n", System.identityHashCode(ccPoints), ccPoints.hasCachedCalculation()?"yes":"no", cache.hashCode() );
 	}
 	

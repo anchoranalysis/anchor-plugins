@@ -33,6 +33,7 @@ import org.anchoranalysis.anchor.mpp.feature.nrg.elem.NRGElemPairCalcParams;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.bean.Feature;
+import org.anchoranalysis.feature.cache.CacheableParams;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 
 public class MinFeatureAsIndividual extends NRGElemPair {
@@ -51,13 +52,21 @@ public class MinFeatureAsIndividual extends NRGElemPair {
 	}
 	
 	@Override
-	public double calcCast( NRGElemPairCalcParams params ) throws FeatureCalcException {
+	public double calcCast( CacheableParams<NRGElemPairCalcParams> paramsCacheable ) throws FeatureCalcException {
+		
+		NRGElemPairCalcParams params = paramsCacheable.getParams();
 		
 		NRGElemIndCalcParams params1 = new NRGElemIndCalcParams( params.getObj1(), params.getNrgStack() );
 		NRGElemIndCalcParams params2 = new NRGElemIndCalcParams( params.getObj2(), params.getNrgStack() );
 		
-		double val1 = getCacheSession().calc( item, params1 );
-		double val2 = getCacheSession().calc( item, params2 );
+		double val1 = getCacheSession().calc(
+			item,
+			paramsCacheable.changeParams(params1)
+		);
+		double val2 = getCacheSession().calc(
+			item,
+			paramsCacheable.changeParams(params2)
+		);
 		return Math.min(val1, val2);
 	}
 

@@ -1,7 +1,6 @@
 package ch.ethz.biol.cell.mpp.nrg.feature.cfg;
 
 import org.anchoranalysis.anchor.mpp.bean.points.CreateMarkFromPoints;
-import org.anchoranalysis.anchor.mpp.bean.regionmap.RegionMap;
 import org.anchoranalysis.anchor.mpp.feature.bean.nrg.elem.NRGElemAll;
 import org.anchoranalysis.anchor.mpp.feature.nrg.elem.NRGElemAllCalcParams;
 import org.anchoranalysis.anchor.mpp.feature.nrg.elem.NRGElemIndCalcParams;
@@ -40,6 +39,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.operator.Constant;
+import org.anchoranalysis.feature.cache.CacheableParams;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 
@@ -70,8 +70,10 @@ public class CombinePointsToMark extends NRGElemAll {
 	// END BEAN PROPERTIES
 	
 	@Override
-	public double calcCast(NRGElemAllCalcParams params) throws FeatureCalcException {
+	public double calcCast(CacheableParams<NRGElemAllCalcParams> paramsCacheable) throws FeatureCalcException {
 
+		NRGElemAllCalcParams params = paramsCacheable.getParams();
+		
 		try {
 			Mark mark = createMark.fitMarkToPointsFromCfg(
 				params.getPxlPartMemo().asCfg(),
@@ -79,9 +81,9 @@ public class CombinePointsToMark extends NRGElemAll {
 			);
 			
 			if (mark!=null) {
-				return calcFeatureOnMarks( mark, params.getNrgStack(), params.getPxlPartMemo().getRegionMap() );
+				return calcFeatureOnMarks(mark, paramsCacheable);
 			} else {
-				return featureElse.calcCheckInit( params );
+				return featureElse.calcCheckInit( paramsCacheable );
 			}
 			
 			
@@ -90,18 +92,22 @@ public class CombinePointsToMark extends NRGElemAll {
 		}
 	}
 		
-	private double calcFeatureOnMarks( Mark mark, NRGStackWithParams nrgStack, RegionMap regionMap ) throws FeatureCalcException {
+	private double calcFeatureOnMarks( Mark mark, CacheableParams<NRGElemAllCalcParams> paramsCacheable ) throws FeatureCalcException {
+
+		NRGStackWithParams nrgStack = paramsCacheable.getParams().getNrgStack();
 		
 		PxlMarkMemo memo = new PxlMarkMemo(
 			mark,
 			nrgStack.getNrgStack(),
-			regionMap,
+			paramsCacheable.getParams().getPxlPartMemo().getRegionMap(),
 			new PixelPartFactoryHistogram()
 		);
 							
 		NRGElemIndCalcParams paramsMark = new NRGElemIndCalcParams(	memo, nrgStack );
 		
-		return item.calcCheckInit(paramsMark);
+		return item.calcCheckInit(
+			paramsCacheable.changeParams(paramsMark)
+		);
 	}
 	
 	public Feature getFeatureElse() {

@@ -30,6 +30,7 @@ package ch.ethz.biol.cell.sgmn.graphcuts.nrgdefinition.pixelscore;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.feature.cache.CacheableParams;
 import org.anchoranalysis.feature.session.cache.FeatureSessionCacheRetriever;
 import org.anchoranalysis.image.bean.threshold.CalculateLevel;
 import org.anchoranalysis.image.feature.bean.pixelwise.score.PixelScore;
@@ -76,25 +77,9 @@ public class PixelScoreMultipleCalculateLevel extends PixelScore {
 	}
 	
 	@Override
-	public double calcCast(PixelScoreFeatureCalcParams params) {
+	public double calcCast(CacheableParams<PixelScoreFeatureCalcParams> paramsCacheable) {
 		
-		
-		
-		// TODO Auto-generated method stub
-		//double pxlEdgeNormalised = pxlEdge;
-		//pxlEdgeNormalised /= edgeNormalization;
-
-		
-		//pxlEdgeNormalised = 1 - pxlEdgeNormalised;
-		//pxlEdgeNormalised *= edgeMultiplier;
-		
-		
-//		if (pxl < level ) {
-//			return 0;
-//		} else {
-//			return 1;
-//		}
-		
+		PixelScoreFeatureCalcParams params = paramsCacheable.getParams();
 		
 		if (params.getPxl(nrgChnlIndex) < level ) {
 			

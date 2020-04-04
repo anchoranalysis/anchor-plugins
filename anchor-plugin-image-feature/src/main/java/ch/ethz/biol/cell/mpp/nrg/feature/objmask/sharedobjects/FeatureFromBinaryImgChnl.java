@@ -30,6 +30,7 @@ package ch.ethz.biol.cell.mpp.nrg.feature.objmask.sharedobjects;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
+import org.anchoranalysis.feature.cache.CacheableParams;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.session.cache.FeatureSessionCacheRetriever;
 import org.anchoranalysis.image.bean.provider.BinaryImgChnlProvider;
@@ -74,7 +75,7 @@ public class FeatureFromBinaryImgChnl extends FeatureObjMaskSharedObjects {
 	}
 	
 	@Override
-	public double calcCast(FeatureObjMaskParams params) throws FeatureCalcException {
+	public double calcCast(CacheableParams<FeatureObjMaskParams> params) throws FeatureCalcException {
 
 		try {
 			// First time it's hit we calculate the bboxRTree
@@ -84,11 +85,14 @@ public class FeatureFromBinaryImgChnl extends FeatureObjMaskSharedObjects {
 			}
 	
 			FeatureObjMaskPairParams paramsPairs = new FeatureObjMaskPairParams();
-			paramsPairs.setObjMask1( params.getObjMask() );
+			paramsPairs.setObjMask1( params.getParams().getObjMask() );
 			paramsPairs.setObjMask2( objFromBinary );
-			paramsPairs.setNrgStack( params.getNrgStack() );
+			paramsPairs.setNrgStack( params.getParams().getNrgStack() );
 			
-			return getCacheSession().calc(item,paramsPairs);
+			return getCacheSession().calc(
+				item,
+				params.changeParams(paramsPairs)
+			);
 			
 		} catch (CreateException e) {
 			throw new FeatureCalcException(e);

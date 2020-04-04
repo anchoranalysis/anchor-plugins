@@ -1,5 +1,7 @@
 package ch.ethz.biol.cell.mpp.nrg.feature.objmask.sharedobjects;
 
+import org.anchoranalysis.feature.cache.CacheableParams;
+
 /*-
  * #%L
  * anchor-plugin-image-feature
@@ -50,7 +52,7 @@ public class MaxFeatureAmongObjMaskCollection extends FeatureAmongObjMaskCollect
 	
 	
 	@Override
-	public double calcCast(FeatureObjMaskParams params) throws FeatureCalcException {
+	public double calcCast(CacheableParams<FeatureObjMaskParams> params) throws FeatureCalcException {
 		
 		assert( getSearchObjs()!=null );
 		if (getSearchObjs().size()==0) {
@@ -59,7 +61,7 @@ public class MaxFeatureAmongObjMaskCollection extends FeatureAmongObjMaskCollect
 		
 		double maxVal = Double.NEGATIVE_INFINITY;
 		
-		ObjMask om = params.getObjMask();
+		ObjMask om = params.getParams().getObjMask();
 		
 		ObjMaskCollection intersecting = bboxRTree().intersectsWith( om );
 		
@@ -69,7 +71,7 @@ public class MaxFeatureAmongObjMaskCollection extends FeatureAmongObjMaskCollect
 		
 		FeatureObjMaskPairParams paramsPairs = new FeatureObjMaskPairParams();
 		paramsPairs.setObjMask1( om );
-		paramsPairs.setNrgStack( params.getNrgStack() );
+		paramsPairs.setNrgStack( params.getParams().getNrgStack() );
 		
 		// NOTE as we are creating a different type of Parameters, we can't use our existing cache
 		//   as it will be incorrect, so we create a new session

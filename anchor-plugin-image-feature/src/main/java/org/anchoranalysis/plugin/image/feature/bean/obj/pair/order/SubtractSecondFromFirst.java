@@ -1,5 +1,7 @@
 package org.anchoranalysis.plugin.image.feature.bean.obj.pair.order;
 
+import org.anchoranalysis.feature.cache.CacheableParams;
+
 /*
  * #%L
  * anchor-plugin-image-feature
@@ -45,9 +47,9 @@ public class SubtractSecondFromFirst extends FeatureObjMaskPairOrder {
 	private static final long serialVersionUID = 1L;
 
 	@Override
-	public double calcCast(FeatureObjMaskPairParams params)
+	public double calcCast(CacheableParams<FeatureObjMaskPairParams> params)
 			throws FeatureCalcException {
-		return featureValFrom(params.getObjMask1()) - featureValFrom(params.getObjMask2()); 
+		return valueFromObj1(params) - valueFromObj2(params); 
 	}
 
 }
