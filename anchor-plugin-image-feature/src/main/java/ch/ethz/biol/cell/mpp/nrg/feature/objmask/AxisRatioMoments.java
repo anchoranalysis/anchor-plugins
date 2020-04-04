@@ -30,7 +30,7 @@ package ch.ethz.biol.cell.mpp.nrg.feature.objmask;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.cache.ExecuteException;
 import org.anchoranalysis.core.error.InitException;
-import org.anchoranalysis.feature.cache.CacheSession;
+import org.anchoranalysis.feature.cache.CacheableParams;
 import org.anchoranalysis.feature.cachedcalculation.CachedCalculation;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.init.FeatureInitParams;
@@ -40,8 +40,6 @@ import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.math.moment.MomentsFromPointsCalculator;
 import org.anchoranalysis.points.moment.CalculateObjMaskPointsSecondMomentMatrix;
 
-// Calculates the ellipticity of a MIP of an objmask
-// Accodrding to the formula on page 27 of Thomas Fuch's thesis
 public class AxisRatioMoments extends FeatureObjMask {
 
 	/**
@@ -54,20 +52,19 @@ public class AxisRatioMoments extends FeatureObjMask {
 	private boolean suppressZCovariance = false;		// Supresses covariance in the z-direction.
 	// END BEAN PROPERTIES
 	
-//	private static int cnt = 0;
-//	TempBoundOutputManager tempOutput = new TempBoundOutputManager();
-	
 	private CachedCalculation<MomentsFromPointsCalculator> cc;
 	
 	@Override
-	public void beforeCalc(FeatureInitParams params, CacheSession session)
+	public void beforeCalc(CacheableParams<FeatureInitParams> params)
 			throws InitException {
-		super.beforeCalc(params, session);
-		cc = session.search( new CalculateObjMaskPointsSecondMomentMatrix(suppressZCovariance) );
+		super.beforeCalc(params);
+		cc = params.search( new CalculateObjMaskPointsSecondMomentMatrix(suppressZCovariance) );
 	}
 	
 	@Override
-	public double calcCast(FeatureObjMaskParams params) throws FeatureCalcException {
+	public double calcCast(CacheableParams<FeatureObjMaskParams> paramsCacheable) throws FeatureCalcException {
+		
+		FeatureObjMaskParams params = paramsCacheable.getParams();
 		
 		// Max intensity projection of the input mask
 		ObjMask om = params.getObjMask();

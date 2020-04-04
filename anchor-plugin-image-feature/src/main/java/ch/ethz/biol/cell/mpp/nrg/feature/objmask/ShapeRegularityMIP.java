@@ -1,5 +1,7 @@
 package ch.ethz.biol.cell.mpp.nrg.feature.objmask;
 
+import org.anchoranalysis.feature.cache.CacheableParams;
+
 /*-
  * #%L
  * anchor-plugin-image-feature
@@ -39,7 +41,9 @@ public class ShapeRegularityMIP extends FeatureObjMask {
 	private static final long serialVersionUID = 1L;
 
 	@Override
-	public double calcCast(FeatureObjMaskParams params) throws FeatureCalcException {
+	public double calcCast(CacheableParams<FeatureObjMaskParams> paramsCacheable) throws FeatureCalcException {
+		
+		FeatureObjMaskParams params = paramsCacheable.getParams();
 		
 		ObjMask om = params.getObjMask().duplicate().flattenZ();
 		

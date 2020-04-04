@@ -27,6 +27,7 @@ package ch.ethz.biol.cell.mpp.nrg.feature.operator;
  */
 
 import org.anchoranalysis.feature.bean.Feature;
+import org.anchoranalysis.feature.cache.CacheableParams;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
 import org.anchoranalysis.feature.calc.params.FeatureCalcParamsWithImageParams;
@@ -40,10 +41,10 @@ public abstract class FeatureWithImageParams extends Feature {
 	private static final long serialVersionUID = 1L;
 
 	@Override
-	public double calc( FeatureCalcParams params ) throws FeatureCalcException {
+	public double calc( CacheableParams<? extends FeatureCalcParams> params ) throws FeatureCalcException {
 		
-		if (params instanceof FeatureCalcParamsWithImageParams) {
-			return calc( (FeatureCalcParamsWithImageParams) params );
+		if (params.getParams() instanceof FeatureCalcParamsWithImageParams) {
+			return calc( (FeatureCalcParamsWithImageParams) params.getParams() );
 		} else {
 			throw new FeatureCalcException("Requires " + FeatureCalcParamsWithImageParams.class.getSimpleName() );
 		}

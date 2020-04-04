@@ -28,6 +28,7 @@ package ch.ethz.biol.cell.mpp.nrg.feature.objmask;
 
 
 import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.feature.cache.CacheableParams;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.chnl.Chnl;
 import org.anchoranalysis.image.feature.bean.objmask.FeatureObjMask;
@@ -52,11 +53,13 @@ public class TextureScore extends FeatureObjMask {
 	// END BEAN PROPERTIES
 	
 	@Override
-	public double calcCast(FeatureObjMaskParams params) throws FeatureCalcException {
+	public double calcCast(CacheableParams<FeatureObjMaskParams> paramsCacheable) throws FeatureCalcException {
+		
+		FeatureObjMaskParams params = paramsCacheable.getParams();
 		
 		Chnl chnl = params.getNrgStack().getNrgStack().getChnl(nrgIndex);
 		
-		double meanIntensity = IntensityMean.calcMeanIntensityObjMask(chnl, params.getObjMask() );;
+		double meanIntensity = IntensityMean.calcMeanIntensityObjMask(chnl, params.getObjMask() );
 		
 		Chnl chnlGradient = params.getNrgStack().getNrgStack().getChnl(nrgIndexGradient);
 		

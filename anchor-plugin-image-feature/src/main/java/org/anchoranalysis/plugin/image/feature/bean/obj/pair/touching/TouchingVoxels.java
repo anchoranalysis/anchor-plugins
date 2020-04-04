@@ -3,7 +3,7 @@ package org.anchoranalysis.plugin.image.feature.bean.obj.pair.touching;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.cache.ExecuteException;
 import org.anchoranalysis.core.error.InitException;
-import org.anchoranalysis.feature.cache.CacheSession;
+import org.anchoranalysis.feature.cache.CacheableParams;
 import org.anchoranalysis.feature.cachedcalculation.CachedCalculation;
 import org.anchoranalysis.feature.init.FeatureInitParams;
 import org.anchoranalysis.image.extent.BoundingBox;
@@ -35,10 +35,9 @@ public abstract class TouchingVoxels extends FeatureObjMaskPair {
 	private CachedCalculation<BoundingBox> cc;
 	
 	@Override
-	public void beforeCalc(FeatureInitParams params,
-			CacheSession cache) throws InitException {
-		super.beforeCalc(params, cache);
-		this.cc = cache.search( new CalculateIntersectionOfDilatedBoundingBox(use3D) );
+	public void beforeCalc(CacheableParams<FeatureInitParams> params) throws InitException {
+		super.beforeCalc(params);
+		this.cc = params.search( new CalculateIntersectionOfDilatedBoundingBox(use3D) );
 	}
 	
 	/** The intersection of the bounding box of one mask with the (dilated by 1 bounding-box) of the other */

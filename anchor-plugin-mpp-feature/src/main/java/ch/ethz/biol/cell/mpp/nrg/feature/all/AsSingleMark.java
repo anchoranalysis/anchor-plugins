@@ -31,6 +31,7 @@ import org.anchoranalysis.anchor.mpp.feature.nrg.elem.NRGElemAllCalcParams;
  */
 
 import org.anchoranalysis.feature.bean.operator.FeatureSingleElem;
+import org.anchoranalysis.feature.cache.CacheableParams;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
 
@@ -42,18 +43,22 @@ public class AsSingleMark extends FeatureSingleElem {
 	private static final long serialVersionUID = 1L;
 
 	@Override
-	public double calc( FeatureCalcParams params ) throws FeatureCalcException {
+	public double calc( CacheableParams<? extends FeatureCalcParams> params ) throws FeatureCalcException {
 		
-		if (params instanceof NRGElemAllCalcParams) {
-			return calcCast( (NRGElemAllCalcParams) params );
+		if (params.getParams() instanceof NRGElemAllCalcParams) {
+			return calcCast(
+				params.changeParams(
+					(NRGElemAllCalcParams) params.getParams()
+				)
+			);
 		} else {
 			throw new FeatureCalcException("Requires NRGElemAllCalcParams");
 		}
 	}
 	
-	private double calcCast(NRGElemAllCalcParams params) throws FeatureCalcException {
+	private double calcCast(CacheableParams<NRGElemAllCalcParams> params) throws FeatureCalcException {
 		
-		MemoMarks list = params.getPxlPartMemo();
+		MemoMarks list = params.getParams().getPxlPartMemo();
 		
 		if (list.size()==0) {
 			throw new FeatureCalcException("No mark exists in the list");
@@ -65,9 +70,14 @@ public class AsSingleMark extends FeatureSingleElem {
 		
 		FeatureMarkParams paramsNew = new FeatureMarkParams(
 			list.getMemoForIndex(0).getMark(),
-			params.getDimensions().getRes()
+			params.getParams().getDimensions().getRes()
 		);
 			
-		return getCacheSession().calc( getItem(), paramsNew );
+		return getCacheSession().calc(
+			getItem(),
+			params.changeParams(
+				paramsNew
+			)
+		);
 	}
 }

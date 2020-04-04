@@ -30,6 +30,7 @@ package ch.ethz.biol.cell.sgmn.graphcuts.nrgdefinition.pixelscore;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.params.KeyValueParams;
+import org.anchoranalysis.feature.cache.CacheableParams;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.session.cache.FeatureSessionCacheRetriever;
 import org.anchoranalysis.image.feature.bean.pixelwise.score.PixelScore;
@@ -60,8 +61,10 @@ public class PixelScoreLinearKeyValueParams extends PixelScore {
 	private double max;
 	
 	@Override
-	protected double calcCast(PixelScoreFeatureCalcParams params)
+	protected double calcCast(CacheableParams<PixelScoreFeatureCalcParams> paramsCacheable)
 			throws FeatureCalcException {
+		
+		PixelScoreFeatureCalcParams params = paramsCacheable.getParams();
 		
 		double val = params.getPxl(nrgChnlIndex);
 		double score = (LinearScore.calc( val, min, max )/2) + 0.5;

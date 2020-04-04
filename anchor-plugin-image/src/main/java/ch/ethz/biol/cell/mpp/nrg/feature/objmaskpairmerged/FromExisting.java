@@ -31,7 +31,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.SkipInit;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.feature.bean.Feature;
-import org.anchoranalysis.feature.cache.CacheSession;
+import org.anchoranalysis.feature.cache.CacheableParams;
 import org.anchoranalysis.feature.cache.FeatureCacheDefinition;
 import org.anchoranalysis.feature.cache.PrefixedCacheDefinition;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
@@ -66,13 +66,16 @@ public abstract class FromExisting extends FeatureObjMaskPairMerged {
 	protected abstract ObjMask selectObjMask( FeatureObjMaskPairMergedParams params );
 	
 	@Override
-	public double calcCast(FeatureObjMaskPairMergedParams params)
+	public double calcCast(CacheableParams<FeatureObjMaskPairMergedParams> params)
 			throws FeatureCalcException {
 
-		FeatureCalcParams paramsNew = transformParams(params);
+		FeatureCalcParams paramsNew = transformParams(params.getParams());
 		
 		// We select an appropriate cache for calculating the feature (should be the same as selected in init())
-		return getCacheSession().additional(0).calc(item, paramsNew );
+		return getCacheSession().additional(0).calc(
+			item,
+			params.changeParams(paramsNew)
+		);
 	}
 
 
@@ -107,14 +110,13 @@ public abstract class FromExisting extends FeatureObjMaskPairMerged {
 	 *  Special initialisation with different params for 'item' as it is elsewhere ignored in the initialisation
 	 */
 	@Override
-	public void beforeCalc(FeatureInitParams params,
-			CacheSession cache)
+	public void beforeCalc(CacheableParams<FeatureInitParams> params)
 			throws InitException {
-		super.beforeCalc(params, cache);
+		super.beforeCalc(params);
 		
-		FeatureSessionCacheRetriever subcache = cache.additional(0);
+		FeatureSessionCacheRetriever subcache = params.getCacheSession().additional(0);
 
-		cache.initThroughSubcache(subcache, params, item, getLogger() );
+		params.initThroughSubcache(subcache, params.getParams(), item, getLogger() );
 	}
 	
 	public Feature getItem() {

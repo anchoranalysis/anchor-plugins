@@ -28,6 +28,7 @@ package ch.ethz.biol.cell.sgmn.graphcuts.nrgdefinition.pixelscore;
 
 
 import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.feature.cache.CacheableParams;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.feature.bean.pixelwise.score.PixelScore;
 import org.anchoranalysis.image.feature.pixelwise.score.PixelScoreFeatureCalcParams;
@@ -48,10 +49,10 @@ public class PixelScoreNormalizeByConstant extends PixelScore {
 	// END BEAN PROPERTIES
 		
 	@Override
-	public double calcCast(PixelScoreFeatureCalcParams params)
+	public double calcCast(CacheableParams<PixelScoreFeatureCalcParams> paramsCacheable)
 			throws FeatureCalcException {
-		double ratioToMax = ((double) params.getPxl(nrgChnlIndex))/value;
-		return ratioToMax;
+		PixelScoreFeatureCalcParams params = paramsCacheable.getParams();
+		return ((double) params.getPxl(nrgChnlIndex))/value;
 	}
 
 	public int getNrgChnlIndex() {

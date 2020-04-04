@@ -2,6 +2,7 @@ package ch.ethz.biol.cell.mpp.nrg.feature.all;
 
 import org.anchoranalysis.anchor.mpp.feature.bean.nrg.elem.NRGElemAll;
 import org.anchoranalysis.anchor.mpp.feature.nrg.elem.NRGElemAllCalcParams;
+import org.anchoranalysis.feature.cache.CacheableParams;
 
 /*-
  * #%L
@@ -39,8 +40,8 @@ public class NumMarks extends NRGElemAll {
 	private static final long serialVersionUID = 1L;
 
 	@Override
-	public double calcCast(NRGElemAllCalcParams params)
+	public double calcCast(CacheableParams<NRGElemAllCalcParams> params)
 			throws FeatureCalcException {
-		return params.getPxlPartMemo().size();
+		return params.getParams().getPxlPartMemo().size();
 	}
 }

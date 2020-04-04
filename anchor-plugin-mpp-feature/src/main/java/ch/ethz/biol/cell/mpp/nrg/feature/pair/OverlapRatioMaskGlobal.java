@@ -38,7 +38,7 @@ import org.anchoranalysis.bean.shared.relation.RelationBean;
 import org.anchoranalysis.core.cache.ExecuteException;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.relation.RelationToValue;
-import org.anchoranalysis.feature.cache.CacheSession;
+import org.anchoranalysis.feature.cache.CacheableParams;
 import org.anchoranalysis.feature.cachedcalculation.CachedCalculation;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.init.FeatureInitParams;
@@ -75,20 +75,27 @@ public class OverlapRatioMaskGlobal extends NRGElemPair {
 	}
 	
 	@Override
-	public void beforeCalc(FeatureInitParams params, CacheSession cache)
-			throws InitException {
-		super.beforeCalc(params, cache);
+	public void beforeCalc(CacheableParams<FeatureInitParams> params) throws InitException {
+		super.beforeCalc(params);
 		
-		cc = cache.search( new OverlapCalculationMaskGlobal(regionID, nrgIndex, (byte) maskValue) );
+		cc = params.search( new OverlapCalculationMaskGlobal(regionID, nrgIndex, (byte) maskValue) );
 	}
 	
 	@Override
-	public double calcCast( NRGElemPairCalcParams params ) throws FeatureCalcException {
+	public double calcCast( CacheableParams<NRGElemPairCalcParams> paramsCacheable ) throws FeatureCalcException {
 		
 		assert( cc!=null );
 		
+		NRGElemPairCalcParams params = paramsCacheable.getParams();
+		
 		try {
-			return calcOverlapRatioMin( params.getObj1(), params.getObj2(), cc.getOrCalculate(params), regionID, false );
+			return calcOverlapRatioMin(
+				params.getObj1(),
+				params.getObj2(),
+				cc.getOrCalculate(params),
+				regionID,
+				false
+			);
 		} catch (ExecuteException e) {
 			throw new FeatureCalcException(e);
 		}							

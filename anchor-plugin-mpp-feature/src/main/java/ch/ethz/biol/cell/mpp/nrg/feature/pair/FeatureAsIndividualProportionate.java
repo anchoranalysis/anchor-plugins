@@ -33,6 +33,7 @@ import org.anchoranalysis.anchor.mpp.feature.nrg.elem.NRGElemPairCalcParams;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.bean.Feature;
+import org.anchoranalysis.feature.cache.CacheableParams;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 
 // Calculates each feature individually, and combines them using the ratios between itemProportionate
@@ -56,10 +57,14 @@ public class FeatureAsIndividualProportionate extends NRGElemPair {
 	}
 
 	@Override
-	public double calcCast( NRGElemPairCalcParams params ) throws FeatureCalcException {
+	public double calcCast( CacheableParams<NRGElemPairCalcParams> params ) throws FeatureCalcException {
 		
-		NRGElemIndCalcParams params1 = new NRGElemIndCalcParams( params.getObj1(), params.getNrgStack() );
-		NRGElemIndCalcParams params2 = new NRGElemIndCalcParams( params.getObj2(), params.getNrgStack() );
+		CacheableParams<NRGElemIndCalcParams> params1 = params.changeParams(
+			new NRGElemIndCalcParams( params.getParams().getObj1(), params.getParams().getNrgStack() )
+		);
+		CacheableParams<NRGElemIndCalcParams> params2 = params.changeParams(
+			new NRGElemIndCalcParams( params.getParams().getObj2(), params.getParams().getNrgStack() )
+		);
 		
 		double val1 = getCacheSession().calc( item, params1 );
 		double val2 = getCacheSession().calc( item, params2 );

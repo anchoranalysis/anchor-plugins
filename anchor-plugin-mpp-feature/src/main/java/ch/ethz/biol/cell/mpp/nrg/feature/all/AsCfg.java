@@ -30,6 +30,7 @@ import org.anchoranalysis.anchor.mpp.feature.nrg.elem.NRGElemAllCalcParams;
  */
 
 import org.anchoranalysis.feature.bean.operator.FeatureSingleElem;
+import org.anchoranalysis.feature.cache.CacheableParams;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
 
@@ -41,22 +42,29 @@ public class AsCfg extends FeatureSingleElem {
 	private static final long serialVersionUID = 1L;
 
 	@Override
-	public double calc( FeatureCalcParams params ) throws FeatureCalcException {
+	public double calc( CacheableParams<? extends FeatureCalcParams> params ) throws FeatureCalcException {
 		
-		if (params instanceof NRGElemAllCalcParams) {
-			return calcCast( (NRGElemAllCalcParams) params );
+		if (params.getParams() instanceof NRGElemAllCalcParams) {
+			return calcCast(
+				params.changeParams(
+					(NRGElemAllCalcParams) params.getParams()
+				)
+			);
 		} else {
 			throw new FeatureCalcException("Requires NRGElemAllCalcParams");
 		}
 	}
 	
-	private double calcCast(NRGElemAllCalcParams params) throws FeatureCalcException {
+	private double calcCast(CacheableParams<NRGElemAllCalcParams> params) throws FeatureCalcException {
 		
 		FeatureCfgParams paramsNew = new FeatureCfgParams(
-			params.getPxlPartMemo().asCfg(),
-			params.getDimensions()
+			params.getParams().getPxlPartMemo().asCfg(),
+			params.getParams().getDimensions()
 		);
 			
-		return getCacheSession().calc( getItem(), paramsNew );
+		return getCacheSession().calc(
+			getItem(),
+			params.changeParams(paramsNew)
+		);
 	}
 }

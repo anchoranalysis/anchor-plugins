@@ -32,7 +32,7 @@ import org.anchoranalysis.bean.annotation.NonNegative;
 import org.anchoranalysis.bean.annotation.Positive;
 import org.anchoranalysis.core.cache.ExecuteException;
 import org.anchoranalysis.core.error.InitException;
-import org.anchoranalysis.feature.cache.CacheSession;
+import org.anchoranalysis.feature.cache.CacheableParams;
 import org.anchoranalysis.feature.cachedcalculation.CachedCalculation;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.init.FeatureInitParams;
@@ -86,20 +86,24 @@ public class IntensityMeanShellTwoStage extends FeatureObjMask {
 
 	
 	@Override
-	public void beforeCalc(FeatureInitParams params,
-			CacheSession cache) throws InitException {
-		super.beforeCalc(params, cache);
-		ccShellTwoStage = CalculateShellTwoStage.createFromCache(cache, iterationsErosion, iterationsFurther, do3D);
+	public void beforeCalc(CacheableParams<FeatureInitParams> params) throws InitException {
+		super.beforeCalc(params);
+		ccShellTwoStage = CalculateShellTwoStage.createFromCache(
+			params.getCacheSession(),
+			iterationsErosion,
+			iterationsFurther,
+			do3D
+		);
 	}
 		
 	@Override
-	public double calcCast(FeatureObjMaskParams params) throws FeatureCalcException {
+	public double calcCast(CacheableParams<FeatureObjMaskParams> params) throws FeatureCalcException {
 		
-		Chnl chnl = params.getNrgStack().getNrgStack().getChnl(nrgIndex);
+		Chnl chnl = params.getParams().getNrgStack().getNrgStack().getChnl(nrgIndex);
 		
 		ObjMask om;
 		try {
-			om = ccShellTwoStage.getOrCalculate(params);
+			om = ccShellTwoStage.getOrCalculate(params.getParams());
 		} catch (ExecuteException e) {
 			throw new FeatureCalcException(e);
 		}

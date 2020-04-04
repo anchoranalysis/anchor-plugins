@@ -1,5 +1,7 @@
 package ch.ethz.biol.cell.mpp.nrg.feature.objmask;
 
+import org.anchoranalysis.feature.cache.CacheableParams;
+
 /*-
  * #%L
  * anchor-plugin-image-feature
@@ -38,7 +40,10 @@ public class BoundingBoxNumVoxels extends FeatureObjMask {
 	private static final long serialVersionUID = 1L;
 
 	@Override
-	public double calcCast(FeatureObjMaskParams params) throws FeatureCalcException {
+	public double calcCast(CacheableParams<FeatureObjMaskParams> paramsCacheable) throws FeatureCalcException {
+		
+		FeatureObjMaskParams params = paramsCacheable.getParams();
+		
 		return params.getObjMask().getBoundingBox().extnt().getVolume();
 	}
 }

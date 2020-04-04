@@ -33,7 +33,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.error.BeanMisconfiguredException;
 import org.anchoranalysis.core.cache.ExecuteException;
 import org.anchoranalysis.core.error.InitException;
-import org.anchoranalysis.feature.cache.CacheSession;
+import org.anchoranalysis.feature.cache.CacheableParams;
 import org.anchoranalysis.feature.cachedcalculation.CachedCalculation;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.init.FeatureInitParams;
@@ -88,11 +88,10 @@ public class IntensityMeanShellHighestNumPixels extends FeatureObjMask {
 	}
 	
 	@Override
-	public void beforeCalc(FeatureInitParams params,
-			CacheSession cache) throws InitException {
-		super.beforeCalc(params, cache);
+	public void beforeCalc(CacheableParams<FeatureInitParams> params) throws InitException {
+		super.beforeCalc(params);
 		ccShellObjMask = CalculateShellObjMask.createFromCache(
-			cache,
+			params.getCacheSession(),
 			iterationsDilation,
 			iterationsErosion,
 			0,
@@ -105,7 +104,9 @@ public class IntensityMeanShellHighestNumPixels extends FeatureObjMask {
 	
 	
 	@Override
-	public double calcCast(FeatureObjMaskParams params) throws FeatureCalcException {
+	public double calcCast(CacheableParams<FeatureObjMaskParams> paramsCacheable) throws FeatureCalcException {
+		
+		FeatureObjMaskParams params = paramsCacheable.getParams();
 		
 		Chnl chnl = params.getNrgStack().getNrgStack().getChnl(nrgIndex);
 		

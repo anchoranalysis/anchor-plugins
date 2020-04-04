@@ -34,6 +34,7 @@ import org.anchoranalysis.bean.annotation.SkipInit;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.feature.bean.Feature;
+import org.anchoranalysis.feature.cache.CacheableParams;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.bean.provider.BinaryImgChnlProvider;
 import org.anchoranalysis.image.binary.BinaryChnl;
@@ -66,10 +67,10 @@ public class BinaryImageChnlProviderFeature extends FeatureStack {
 	// END BEAN PROPERTIES
 	
 	@Override
-	public double calcCast(FeatureStackParams params) throws FeatureCalcException {
+	public double calcCast(CacheableParams<FeatureStackParams> params) throws FeatureCalcException {
 
 		try {
-			binaryImgChnlProvider.initRecursive(params.getSharedObjs(), getLogger() );
+			binaryImgChnlProvider.initRecursive(params.getParams().getSharedObjs(), getLogger() );
 		} catch (InitException e1) {
 			throw new FeatureCalcException(e1);
 		}
@@ -91,7 +92,7 @@ public class BinaryImageChnlProviderFeature extends FeatureStack {
 		
 		
 		FeatureObjMaskParams paramsObj = new FeatureObjMaskParams();
-		paramsObj.setNrgStack( params.getNrgStack() );
+		paramsObj.setNrgStack( params.getParams().getNrgStack() );
 		
 		DoubleArrayList featureVals = new DoubleArrayList();
 		
@@ -101,7 +102,10 @@ public class BinaryImageChnlProviderFeature extends FeatureStack {
 			
 			paramsObj.setObjMask( new ObjMask( binaryVoxelBox ) );
 			
-			double val = getCacheSession().calc(item, paramsObj);
+			double val = getCacheSession().calc(
+				item,
+				params.changeParams(paramsObj)
+			);
 			featureVals.add(val);
 		}
 		

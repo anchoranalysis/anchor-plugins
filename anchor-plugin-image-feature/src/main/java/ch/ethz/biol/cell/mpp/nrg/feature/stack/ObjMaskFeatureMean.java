@@ -32,6 +32,7 @@ import org.anchoranalysis.bean.annotation.SkipInit;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.feature.bean.Feature;
+import org.anchoranalysis.feature.cache.CacheableParams;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
 import org.anchoranalysis.image.feature.bean.FeatureStack;
@@ -64,8 +65,10 @@ public class ObjMaskFeatureMean extends FeatureStack {
 	// END BEAN PROPERTIES
 	
 	@Override
-	public double calcCast(FeatureStackParams params) throws FeatureCalcException {
+	public double calcCast(CacheableParams<FeatureStackParams> paramsCacheable) throws FeatureCalcException {
 
+		FeatureStackParams params = paramsCacheable.getParams();
+		
 		try {
 			objs.initRecursive(params.getSharedObjs(), getLogger() );
 		} catch (InitException e1) {
@@ -87,7 +90,10 @@ public class ObjMaskFeatureMean extends FeatureStack {
 		// Calculate a feature on each obj mask
 		for( ObjMask om : objsCollection ) {
 			paramsObj.setObjMask(om);
-			double val = getCacheSession().calc(item, paramsObj);
+			double val = getCacheSession().calc(
+				item,
+				paramsCacheable.changeParams(paramsObj)
+			);
 			featureVals.add(val);
 		}
 		

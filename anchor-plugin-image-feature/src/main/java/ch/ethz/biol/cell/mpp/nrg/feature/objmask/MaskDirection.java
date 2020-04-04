@@ -28,6 +28,7 @@ package ch.ethz.biol.cell.mpp.nrg.feature.objmask;
 
 
 import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.feature.cache.CacheableParams;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.feature.objmask.FeatureObjMaskParams;
 
@@ -44,8 +45,8 @@ public class MaskDirection extends ObjMaskPointsSpecificEigenvalueBase {
 	// END BEAN PROPERTIES
 
 	@Override
-	public double calcCast(FeatureObjMaskParams params) throws FeatureCalcException {
-		return calcSpecificEigenvector(params).getEigenvector().get(eigenvectorIndex);
+	public double calcCast(CacheableParams<FeatureObjMaskParams> params) throws FeatureCalcException {
+		return calcSpecificEigenvector(params.getParams()).getEigenvector().get(eigenvectorIndex);
 	}
 
 	public int getEigenvectorIndex() {

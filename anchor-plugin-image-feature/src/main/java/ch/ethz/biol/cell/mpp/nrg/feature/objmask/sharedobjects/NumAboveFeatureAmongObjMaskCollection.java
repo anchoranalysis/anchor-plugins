@@ -28,6 +28,7 @@ package ch.ethz.biol.cell.mpp.nrg.feature.objmask.sharedobjects;
 
 
 import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.feature.cache.CacheableParams;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.feature.objmask.FeatureObjMaskParams;
 import org.anchoranalysis.image.feature.objmask.pair.FeatureObjMaskPairParams;
@@ -66,13 +67,13 @@ public class NumAboveFeatureAmongObjMaskCollection extends FeatureAmongObjMaskCo
 	}
 	
 	@Override
-	public double calcCast(FeatureObjMaskParams params) throws FeatureCalcException {
+	public double calcCast(CacheableParams<FeatureObjMaskParams> params) throws FeatureCalcException {
 		
 		if (getSearchObjs().size()==0) {
 			return getValueNoObjects();
 		}
 		
-		ObjMask om = params.getObjMask();
+		ObjMask om = params.getParams().getObjMask();
 		
 		ObjMaskCollection intersecting = bboxRTree().intersectsWith( om );
 		
@@ -82,7 +83,7 @@ public class NumAboveFeatureAmongObjMaskCollection extends FeatureAmongObjMaskCo
 		
 		FeatureObjMaskPairParams paramsPairs = new FeatureObjMaskPairParams();
 		paramsPairs.setObjMask1( om );
-		paramsPairs.setNrgStack( params.getNrgStack() );
+		paramsPairs.setNrgStack( params.getParams().getNrgStack() );
 		
 		int cnt = 0;
 		

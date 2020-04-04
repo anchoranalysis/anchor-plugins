@@ -27,6 +27,7 @@ package ch.ethz.biol.cell.mpp.nrg.feature.operator;
  */
 
 import org.anchoranalysis.feature.bean.operator.FeatureSingleElem;
+import org.anchoranalysis.feature.cache.CacheableParams;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
 
@@ -41,7 +42,7 @@ public class AbsoluteValue extends FeatureSingleElem {
 	// END BEAN PROPERTIES
 		
 	@Override
-	public double calc( FeatureCalcParams params ) throws FeatureCalcException {
+	public double calc( CacheableParams<? extends FeatureCalcParams> params ) throws FeatureCalcException {
 		return Math.abs( getCacheSession().calc( getItem(), params ) );
 	}
 

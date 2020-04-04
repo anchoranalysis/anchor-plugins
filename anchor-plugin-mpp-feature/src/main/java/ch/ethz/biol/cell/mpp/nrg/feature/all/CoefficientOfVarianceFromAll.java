@@ -34,6 +34,7 @@ import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.bean.Feature;
+import org.anchoranalysis.feature.cache.CacheableParams;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 
 public class CoefficientOfVarianceFromAll extends NRGElemAll {
@@ -49,10 +50,12 @@ public class CoefficientOfVarianceFromAll extends NRGElemAll {
 	// END BEAN PROPERTIES
 	
 	@Override
-	public double calcCast(NRGElemAllCalcParams params)
+	public double calcCast(CacheableParams<NRGElemAllCalcParams> paramsCacheable)
 			throws FeatureCalcException {
 		
 		double sum = 0.0;
+		
+		NRGElemAllCalcParams params = paramsCacheable.getParams();
 		
 		NRGElemIndCalcParams paramsInd = new NRGElemIndCalcParams(null,params.getNrgStack());
 		
@@ -65,7 +68,10 @@ public class CoefficientOfVarianceFromAll extends NRGElemAll {
 		for( int i=0; i<params.getPxlPartMemo().size(); i++) {
 			PxlMarkMemo pmm = params.getPxlPartMemo().getMemoForIndex(i);
 			paramsInd.setPxlPartMemo(pmm);
-			double v = getCacheSession().calc( item, paramsInd );
+			double v = getCacheSession().calc(
+				item,
+				paramsCacheable.changeParams(paramsInd)
+			);
 			vals[i] = v;
 			sum+= v;
 		}

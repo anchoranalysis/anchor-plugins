@@ -1,5 +1,7 @@
 package org.anchoranalysis.plugin.image.feature.bean.obj.pair.order;
 
+import org.anchoranalysis.feature.cache.CacheableParams;
+
 /*
  * #%L
  * anchor-plugin-image-feature
@@ -44,8 +46,8 @@ public class SecondOnly extends FeatureObjMaskPairOrder {
 	private static final long serialVersionUID = 1L;
 	
 	@Override
-	public double calcCast(FeatureObjMaskPairParams params)
+	public double calcCast(CacheableParams<FeatureObjMaskPairParams> params)
 			throws FeatureCalcException {
-		return featureValFrom(params.getObjMask2());
+		return valueFromObj2(params);
 	}
 }

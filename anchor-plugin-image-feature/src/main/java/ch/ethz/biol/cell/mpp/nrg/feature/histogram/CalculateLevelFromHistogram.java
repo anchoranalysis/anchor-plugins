@@ -28,6 +28,7 @@ package ch.ethz.biol.cell.mpp.nrg.feature.histogram;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.feature.cache.CacheableParams;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.bean.threshold.CalculateLevel;
 import org.anchoranalysis.image.feature.bean.FeatureHistogram;
@@ -46,10 +47,10 @@ public class CalculateLevelFromHistogram extends FeatureHistogram {
 	// END BEAN PROPERTIES
 	
 	@Override
-	public double calcCast(FeatureHistogramParams params)
+	public double calcCast(CacheableParams<FeatureHistogramParams> params)
 			throws FeatureCalcException {
 		try {
-			return calculateLevel.calculateLevel( params.getHistogram() );
+			return calculateLevel.calculateLevel( params.getParams().getHistogram() );
 		} catch (OperationFailedException e) {
 			throw new FeatureCalcException(e);
 		}

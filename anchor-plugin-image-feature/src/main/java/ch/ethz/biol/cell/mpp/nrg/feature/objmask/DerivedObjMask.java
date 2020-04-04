@@ -35,6 +35,7 @@ import org.anchoranalysis.core.cache.ExecuteException;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.cache.CacheSession;
+import org.anchoranalysis.feature.cache.CacheableParams;
 import org.anchoranalysis.feature.cache.FeatureCacheDefinition;
 import org.anchoranalysis.feature.cache.PrefixedCacheDefinition;
 import org.anchoranalysis.feature.cachedcalculation.CachedCalculation;
@@ -67,15 +68,15 @@ public abstract class DerivedObjMask extends FeatureObjMask {
 	
 	
 	@Override
-	public void beforeCalc(FeatureInitParams params, CacheSession cache)
+	public void beforeCalc(CacheableParams<FeatureInitParams> params)
 			throws InitException {
-		super.beforeCalc(params, cache);
+		super.beforeCalc(params);
 		
-		cc = createCachedCalculation( cache );
+		cc = createCachedCalculation( params.getCacheSession() );
 		
-		ccSubsession = cache.initThroughSubcacheSession(
+		ccSubsession = params.initThroughSubcacheSession(
 			cacheDefinition().prefixForAdditionalCachesForChildren(),
-			params,
+			params.getParams(),
 			item,
 			getLogger()
 		);
@@ -85,21 +86,24 @@ public abstract class DerivedObjMask extends FeatureObjMask {
 	
 
 	@Override
-	public double calcCast(FeatureObjMaskParams params) throws FeatureCalcException {
+	public double calcCast(CacheableParams<FeatureObjMaskParams> params) throws FeatureCalcException {
 
 		try {
-			ObjMask omDerived = cc.getOrCalculate(params);
+			ObjMask omDerived = cc.getOrCalculate(params.getParams());
 			
 			if (omDerived==null || !omDerived.hasPixelsGreaterThan(0)) {
 				return emptyValue;
 			}
 			
-			FeatureCalcParams paramsNew = createDerivedParams(omDerived,params);
+			FeatureCalcParams paramsNew = createDerivedParams(omDerived,params.getParams());
 			
 			FeatureSessionCacheRetriever subCache = ccSubsession.getOrCalculate(null);
 			
 			// We select an appropriate cache for calculating the feature (should be the same as selected in init())
-			return subCache.calc(item, paramsNew );
+			return subCache.calc(
+				item,
+				params.changeParams(paramsNew)
+			);
 			
 		} catch (ExecuteException e) {
 			throw new FeatureCalcException(e.getCause());

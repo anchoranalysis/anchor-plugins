@@ -34,6 +34,7 @@ import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.bean.Feature;
+import org.anchoranalysis.feature.cache.CacheableParams;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 
 public class MeanFromAll extends NRGElemAll {
@@ -49,12 +50,17 @@ public class MeanFromAll extends NRGElemAll {
 	// END BEAN PROPERTIES
 	
 	@Override
-	public double calcCast(NRGElemAllCalcParams params)
+	public double calcCast(CacheableParams<NRGElemAllCalcParams> paramsCacheable)
 			throws FeatureCalcException {
+		
+		NRGElemAllCalcParams params = paramsCacheable.getParams();
 		
 		double sum = 0.0;
 		
-		NRGElemIndCalcParams paramsInd = new NRGElemIndCalcParams(null,params.getNrgStack());
+		NRGElemIndCalcParams paramsInd = new NRGElemIndCalcParams(
+			null,
+			params.getNrgStack()
+		);
 		
 		if (params.getPxlPartMemo().size()==0) {
 			return 0.0;
@@ -63,7 +69,10 @@ public class MeanFromAll extends NRGElemAll {
 		for( int i=0; i<params.getPxlPartMemo().size(); i++) {
 			PxlMarkMemo pmm = params.getPxlPartMemo().getMemoForIndex(i);
 			paramsInd.setPxlPartMemo(pmm);
-			sum += getCacheSession().calc( item, paramsInd );
+			sum += getCacheSession().calc(
+				item,
+				paramsCacheable.changeParams(paramsInd)
+			);
 		}
 		
 		return sum / params.getPxlPartMemo().size();

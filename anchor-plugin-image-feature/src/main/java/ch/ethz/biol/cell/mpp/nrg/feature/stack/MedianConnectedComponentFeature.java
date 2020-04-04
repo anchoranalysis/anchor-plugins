@@ -30,6 +30,7 @@ package ch.ethz.biol.cell.mpp.nrg.feature.stack;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.feature.bean.Feature;
+import org.anchoranalysis.feature.cache.CacheableParams;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.binary.BinaryChnl;
 import org.anchoranalysis.image.binary.values.BinaryValues;
@@ -60,10 +61,10 @@ public class MedianConnectedComponentFeature extends FeatureStack {
 	// END BEAN PROPERTIES
 
 	@Override
-	public double calcCast(FeatureStackParams params) throws FeatureCalcException {
+	public double calcCast(CacheableParams<FeatureStackParams> params) throws FeatureCalcException {
 
 		BinaryChnl binaryImgChnl = new BinaryChnl(
-			params.getNrgStack().getChnl(nrgChnlIndex),
+			params.getParams().getNrgStack().getChnl(nrgChnlIndex),
 			BinaryValues.getDefault()
 		);
 		
@@ -78,14 +79,17 @@ public class MedianConnectedComponentFeature extends FeatureStack {
 		
 		
 		FeatureObjMaskParams paramsObj = new FeatureObjMaskParams();
-		paramsObj.setNrgStack( params.getNrgStack() );
+		paramsObj.setNrgStack( params.getParams().getNrgStack() );
 		
 		DoubleArrayList featureVals = new DoubleArrayList();
 		
 		// Calculate a feature on each obj mask
 		for( ObjMask om : omc ) {
 			paramsObj.setObjMask(om);
-			double val = getCacheSession().calc(item, paramsObj);
+			double val = getCacheSession().calc(
+				item,
+				params.changeParams(paramsObj)
+			);
 			featureVals.add(val);
 		}
 		
