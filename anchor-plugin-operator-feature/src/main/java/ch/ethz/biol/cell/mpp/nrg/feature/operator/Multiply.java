@@ -46,7 +46,7 @@ public class Multiply extends FeatureListElem {
 		double result = 1;
 		
 		for (Feature elem : getList()) {
-			result *= params.getCacheSession().calc( elem, params );
+			result *= params.calc( elem );
 			
 			// Early exit if we start multiplying by 0
 			if (result==0) {

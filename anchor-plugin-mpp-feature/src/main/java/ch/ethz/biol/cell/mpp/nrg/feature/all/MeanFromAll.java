@@ -1,9 +1,10 @@
 package ch.ethz.biol.cell.mpp.nrg.feature.all;
 
 import org.anchoranalysis.anchor.mpp.feature.bean.nrg.elem.NRGElemAll;
+import org.anchoranalysis.anchor.mpp.feature.mark.MemoMarks;
 import org.anchoranalysis.anchor.mpp.feature.nrg.elem.NRGElemAllCalcParams;
 import org.anchoranalysis.anchor.mpp.feature.nrg.elem.NRGElemIndCalcParams;
-import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
+
 
 /*
  * #%L
@@ -53,30 +54,37 @@ public class MeanFromAll extends NRGElemAll {
 	public double calcCast(CacheableParams<NRGElemAllCalcParams> paramsCacheable)
 			throws FeatureCalcException {
 		
-		NRGElemAllCalcParams params = paramsCacheable.getParams();
+		MemoMarks memo = paramsCacheable.getParams().getPxlPartMemo();
 		
-		double sum = 0.0;
-		
-		NRGElemIndCalcParams paramsInd = new NRGElemIndCalcParams(
-			null,
-			params.getNrgStack()
-		);
-		
-		if (params.getPxlPartMemo().size()==0) {
+		if (memo.size()==0) {
 			return 0.0;
 		}
 		
-		for( int i=0; i<params.getPxlPartMemo().size(); i++) {
-			PxlMarkMemo pmm = params.getPxlPartMemo().getMemoForIndex(i);
-			paramsInd.setPxlPartMemo(pmm);
+		double sum = 0.0;
+		
+		for( int i=0; i<memo.size(); i++) {
+
+			final int index = i;
+			
 			sum += paramsCacheable.calcChangeParams(
 				item,
-				paramsInd,
+				p -> paramsForInd(p, index),
 				"obj_" + i
 			);
 		}
 		
-		return sum / params.getPxlPartMemo().size();
+		return sum / memo.size();
+	}
+	
+	private static NRGElemIndCalcParams paramsForInd( NRGElemAllCalcParams params, int index ) {
+		NRGElemIndCalcParams paramsInd = new NRGElemIndCalcParams(
+			null,
+			params.getNrgStack()
+		);
+		paramsInd.setPxlPartMemo(
+			params.getPxlPartMemo().getMemoForIndex(index)
+		);
+		return paramsInd;
 	}
 
 	public Feature getItem() {

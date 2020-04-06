@@ -32,7 +32,7 @@ import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.cache.CacheableParams;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
-import org.anchoranalysis.image.feature.bean.objmask.pair.merged.FeatureObjMaskPairMerged;
+import org.anchoranalysis.image.feature.bean.objmask.pair.FeatureObjMaskPairMerged;
 import org.anchoranalysis.image.feature.objmask.FeatureObjMaskParams;
 import org.anchoranalysis.image.feature.objmask.pair.merged.FeatureObjMaskPairMergedParams;
 import org.anchoranalysis.image.objmask.ObjMask;
@@ -66,31 +66,20 @@ public abstract class FromExisting extends FeatureObjMaskPairMerged {
 
 	@Override
 	public CacheableParams<? extends FeatureCalcParams> transformParams(CacheableParams<? extends FeatureCalcParams> params,
-			Feature dependentFeature) {
-
-		if (params.getParams() instanceof FeatureObjMaskPairMergedParams) {
-			return transformParamsCast(
-				params.changeParams( (FeatureObjMaskPairMergedParams) params.getParams() )
-			);
-		} else {
-			return params;
-		}
+			Feature dependentFeature) throws FeatureCalcException {
+		return params.downcastParams(FeatureObjMaskPairMergedParams.class);
 	}
 	
 	public CacheableParams<FeatureObjMaskParams> transformParamsCast( CacheableParams<FeatureObjMaskPairMergedParams> params ) {
 
 		assert( params.getParams() instanceof FeatureObjMaskPairMergedParams );
-		
-		ObjMask omSelected = selectObjMask(params.getParams());
-		
-		FeatureObjMaskParams paramsNew = new FeatureObjMaskParams( omSelected );
-		paramsNew.setNrgStack( params.getParams().getNrgStack() );
-		
-		assert( paramsNew instanceof FeatureObjMaskParams);
-		
-		return params.changeParams(paramsNew, cacheNameToUse());
+						
+		return params.mapParams(
+			p -> extractObj(p),
+			cacheNameToUse()
+		);
 	}
-
+	
 	protected abstract ObjMask selectObjMask( FeatureObjMaskPairMergedParams params );
 	
 	/** The name of the cache to use for calculation */
@@ -102,5 +91,15 @@ public abstract class FromExisting extends FeatureObjMaskPairMerged {
 
 	public void setItem(Feature item) {
 		this.item = item;
+	}
+	
+	private FeatureObjMaskParams extractObj( FeatureObjMaskPairMergedParams params ) {
+		
+		ObjMask omSelected = selectObjMask(params);
+		
+		FeatureObjMaskParams paramsNew = new FeatureObjMaskParams( omSelected );
+		paramsNew.setNrgStack( params.getNrgStack() );
+		assert( paramsNew instanceof FeatureObjMaskParams);
+		return paramsNew;
 	}
 }

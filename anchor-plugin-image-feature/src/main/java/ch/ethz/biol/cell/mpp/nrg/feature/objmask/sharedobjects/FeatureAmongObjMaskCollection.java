@@ -30,7 +30,7 @@ package ch.ethz.biol.cell.mpp.nrg.feature.objmask.sharedobjects;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.name.provider.NamedProviderGetException;
-import org.anchoranalysis.image.feature.bean.objmask.sharedobjects.FeatureObjMaskSharedObjects;
+import org.anchoranalysis.image.feature.bean.objmask.FeatureObjMaskSharedObjects;
 import org.anchoranalysis.image.feature.init.FeatureInitParamsImageInit;
 import org.anchoranalysis.image.index.rtree.ObjMaskCollectionRTree;
 import org.anchoranalysis.image.objmask.ObjMaskCollection;

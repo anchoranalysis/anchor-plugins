@@ -72,23 +72,26 @@ public class ThresholdHistogram extends FeatureHistogram {
 	public double calcCast(CacheableParams<FeatureHistogramParams> paramsCacheable) throws FeatureCalcException {
 
 		try {
-			FeatureHistogramParams params = paramsCacheable.getParams();
-			
-			Histogram hist = paramsCacheable.calc(
+			Histogram thresholded = paramsCacheable.calc(
 				new CalculateOtsuThresholdedHistogram(calculateLevel, getLogger())	
 			);
 			
-			FeatureHistogramParams paramsChangedHist = new FeatureHistogramParams(
-				hist,
-				params.getRes()
-			);
-			
 			return item.calcCheckInit(
-				paramsCacheable.changeParams(paramsChangedHist)
+				paramsCacheable.mapParams(
+					p -> createHistogramParams(p, thresholded),
+					"thresholdedHist"
+				)
 			);
 		} catch (ExecuteException e) {
 			throw new FeatureCalcException(e);
 		}
+	}
+	
+	private FeatureHistogramParams createHistogramParams(FeatureHistogramParams params, Histogram thresholded) {
+		return new FeatureHistogramParams(
+			thresholded,
+			params.getRes()
+		);
 	}
 
 	public Feature getItem() {

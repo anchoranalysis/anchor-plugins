@@ -97,8 +97,6 @@ public class FeatureObjMaskPairIntersection extends FeatureObjMaskPair {
 	
 	private ObjMask createIntersection( CacheableParams<FeatureObjMaskPairParams> params ) throws FeatureCalcException {
 		
-		assert params.getCacheSession().hasBeenInit();
-		
 		return createCachedCalculation(params);
 	}
 
@@ -118,10 +116,17 @@ public class FeatureObjMaskPairIntersection extends FeatureObjMaskPair {
 		
 	public CacheableParams<FeatureCalcParams> createParamsForIntersection(ObjMask omIntersection, CacheableParams<FeatureObjMaskPairParams> paramsExst) {
 
+		return paramsExst.mapParams(
+			p -> paramsForIntersection(p, omIntersection),
+			CACHE_INTERSECTION
+		);
+	}
+	
+	private static FeatureObjMaskParams paramsForIntersection(FeatureObjMaskPairParams params, ObjMask omIntersection) {
 		FeatureObjMaskParams paramsNew = new FeatureObjMaskParams( omIntersection );
-		paramsNew.setNrgStack( paramsExst.getParams().getNrgStack() );
+		paramsNew.setNrgStack( params.getNrgStack() );
 		assert( paramsNew instanceof FeatureObjMaskParams);
-		return paramsExst.changeParams(paramsNew, CACHE_INTERSECTION);
+		return paramsNew;
 	}
 
 	private ObjMask createCachedCalculation(CacheableParams<FeatureObjMaskPairParams> params) throws FeatureCalcException {

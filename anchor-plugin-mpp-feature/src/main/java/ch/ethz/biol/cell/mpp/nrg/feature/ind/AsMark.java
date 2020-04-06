@@ -45,21 +45,16 @@ public class AsMark extends FeatureSingleElem {
 
 	@Override
 	public double calc(CacheableParams<? extends FeatureCalcParams> params) throws FeatureCalcException {
-		
-		if (params.getParams() instanceof NRGElemIndCalcParams) {
-		
-			NRGElemIndCalcParams paramsCast = (NRGElemIndCalcParams) params.getParams(); 
-			
-			FeatureMarkParams paramsNew = new FeatureMarkParams(
-				paramsCast.getPxlPartMemo().getMark(),
-				paramsCast.getDimensions().getRes()
-			);
-			
-			return params.calcChangeParams( getItem(), paramsNew, "mark" );
-			
-		} else {
-			throw new FeatureCalcException("Not supported for this type of params");
-		}
+		return params
+			.downcastParams(NRGElemIndCalcParams.class)
+			.calcChangeParams( getItem(), AsMark::deriveParams, "mark" );
+	}
+	
+	private static FeatureMarkParams deriveParams( NRGElemIndCalcParams params ) {
+		return new FeatureMarkParams(
+			params.getPxlPartMemo().getMark(),
+			params.getDimensions().getRes()
+		);
 	}
 
 	// We change the default behaviour, as we don't want to give the same paramsFactory

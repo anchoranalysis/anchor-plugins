@@ -32,6 +32,7 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.cache.CacheableParams;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 import org.anchoranalysis.image.binary.BinaryChnl;
 import org.anchoranalysis.image.binary.values.BinaryValues;
 import org.anchoranalysis.image.feature.bean.FeatureStack;
@@ -63,35 +64,20 @@ public class MedianConnectedComponentFeature extends FeatureStack {
 	@Override
 	public double calcCast(CacheableParams<FeatureStackParams> params) throws FeatureCalcException {
 
-		BinaryChnl binaryImgChnl = new BinaryChnl(
-			params.getParams().getNrgStack().getChnl(nrgChnlIndex),
-			BinaryValues.getDefault()
+		ObjMaskCollection omc = createObjs(
+			params.getParams().getNrgStack()
 		);
-		
-		ObjMaskCollection omc;
-		try {
-			CreateFromConnectedComponentsFactory objMaskCreator = new CreateFromConnectedComponentsFactory();
-			objMaskCreator.setMinNumberVoxels(1);
-			omc = objMaskCreator.createConnectedComponents(binaryImgChnl );
-		} catch (CreateException e) {
-			throw new FeatureCalcException(e);
-		}
-		
-		
-		FeatureObjMaskParams paramsObj = new FeatureObjMaskParams();
-		paramsObj.setNrgStack( params.getParams().getNrgStack() );
-		
+				
 		DoubleArrayList featureVals = new DoubleArrayList();
 		
 		// Calculate a feature on each obj mask
 		for( int i=0; i<omc.size(); i++ ) {
 			
 			ObjMask om = omc.get(i);
-			
-			paramsObj.setObjMask(om);
+						
 			double val = params.calcChangeParams(
 				item,
-				paramsObj,
+				p -> extractParams(p, om),
 				"obj-" + i
 			);
 			featureVals.add(val);
@@ -100,6 +86,30 @@ public class MedianConnectedComponentFeature extends FeatureStack {
 		featureVals.sort();
 		
 		return Descriptive.median(featureVals);
+	}
+	
+	private ObjMaskCollection createObjs(NRGStackWithParams nrgStack) throws FeatureCalcException {
+		
+		BinaryChnl binaryImgChnl = new BinaryChnl(
+			nrgStack.getChnl(nrgChnlIndex),
+			BinaryValues.getDefault()
+		);
+		
+		try {
+			CreateFromConnectedComponentsFactory objMaskCreator = new CreateFromConnectedComponentsFactory();
+			objMaskCreator.setMinNumberVoxels(1);
+			return objMaskCreator.createConnectedComponents(binaryImgChnl );
+			
+		} catch (CreateException e) {
+			throw new FeatureCalcException(e);
+		}
+	}
+	
+	private static FeatureObjMaskParams extractParams( FeatureStackParams params, ObjMask om ) {
+		FeatureObjMaskParams paramsObj = new FeatureObjMaskParams();
+		paramsObj.setNrgStack( params.getNrgStack() );
+		paramsObj.setObjMask(om);
+		return paramsObj;
 	}
 
 	public Feature getItem() {

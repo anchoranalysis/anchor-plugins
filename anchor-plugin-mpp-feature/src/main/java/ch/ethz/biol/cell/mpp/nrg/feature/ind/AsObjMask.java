@@ -59,34 +59,28 @@ public class AsObjMask extends FeatureSingleElem {
 	
 	@Override
 	public double calc(CacheableParams<? extends FeatureCalcParams> params) throws FeatureCalcException {
-		
-		if (params.getParams() instanceof NRGElemIndCalcParams) {
-		
-			NRGElemIndCalcParams paramsCast = (NRGElemIndCalcParams) params.getParams(); 
-			
-			return calcCast(
-				params.changeParams(paramsCast)
-			);
-		} else {
-			throw new FeatureCalcException("Not supported for this type of params");
-		}
+		return params
+			.downcastParams(NRGElemIndCalcParams.class)
+			.calcChangeParams(
+				getItem(),
+				p -> deriveParams(p),
+				"obj"
+			);			
 	}
 	
-	private double calcCast( CacheableParams<NRGElemIndCalcParams> params ) throws FeatureCalcException {
-
-		FeatureObjMaskParams paramsNew;
-		ObjMaskWithProperties om = params.getParams().getPxlPartMemo().getMark().calcMask(
-			params.getParams().getNrgStack().getDimensions(),
+	private FeatureObjMaskParams deriveParams(NRGElemIndCalcParams params) {
+		
+		ObjMaskWithProperties om = params.getPxlPartMemo().getMark().calcMask(
+			params.getNrgStack().getDimensions(),
 			regionMap.membershipWithFlagsForIndex(index),
 			BinaryValuesByte.getDefault()
 		);
 		
-		paramsNew = new FeatureObjMaskParams(
+		FeatureObjMaskParams paramsNew = new FeatureObjMaskParams(
 			om.getMask()
 		);
-		paramsNew.setNrgStack( params.getParams().getNrgStack() );
-		
-		return params.calcChangeParams( getItem(), paramsNew, "obj");
+		paramsNew.setNrgStack( params.getNrgStack() );
+		return paramsNew;
 	}
 
 	// We change the default behaviour, as we don't want to give the same paramsFactory

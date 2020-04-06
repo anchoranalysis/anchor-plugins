@@ -3,6 +3,7 @@ package ch.ethz.biol.cell.mpp.nrg.feature.all;
 import org.anchoranalysis.anchor.mpp.feature.bean.mark.FeatureMarkParams;
 import org.anchoranalysis.anchor.mpp.feature.mark.MemoMarks;
 import org.anchoranalysis.anchor.mpp.feature.nrg.elem.NRGElemAllCalcParams;
+import org.anchoranalysis.anchor.mpp.mark.Mark;
 
 /*-
  * #%L
@@ -44,16 +45,9 @@ public class AsSingleMark extends FeatureSingleElem {
 
 	@Override
 	public double calc( CacheableParams<? extends FeatureCalcParams> params ) throws FeatureCalcException {
-		
-		if (params.getParams() instanceof NRGElemAllCalcParams) {
-			return calcCast(
-				params.changeParams(
-					(NRGElemAllCalcParams) params.getParams()
-				)
-			);
-		} else {
-			throw new FeatureCalcException("Requires NRGElemAllCalcParams");
-		}
+		return calcCast(
+			params.downcastParams(NRGElemAllCalcParams.class)
+		);
 	}
 	
 	private double calcCast(CacheableParams<NRGElemAllCalcParams> params) throws FeatureCalcException {
@@ -68,11 +62,19 @@ public class AsSingleMark extends FeatureSingleElem {
 			throw new FeatureCalcException("More than one mark exists in the list");
 		}
 		
-		FeatureMarkParams paramsNew = new FeatureMarkParams(
-			list.getMemoForIndex(0).getMark(),
-			params.getParams().getDimensions().getRes()
+		Mark mark = list.getMemoForIndex(0).getMark();
+		
+		return params.calcChangeParams(
+			getItem(),
+			p -> deriveParams(p, mark),
+			"mark"
 		);
-			
-		return params.calcChangeParams(getItem(), paramsNew, "mark");
+	}
+	
+	private static FeatureMarkParams deriveParams( NRGElemAllCalcParams params, Mark mark ) {
+		return new FeatureMarkParams(
+			mark,
+			params.getDimensions().getRes()
+		);		
 	}
 }

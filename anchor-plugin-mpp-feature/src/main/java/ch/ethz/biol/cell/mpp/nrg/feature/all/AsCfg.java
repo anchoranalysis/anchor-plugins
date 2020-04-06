@@ -3,6 +3,7 @@ package ch.ethz.biol.cell.mpp.nrg.feature.all;
 import org.anchoranalysis.anchor.mpp.feature.bean.cfg.FeatureCfgParams;
 import org.anchoranalysis.anchor.mpp.feature.nrg.elem.NRGElemAllCalcParams;
 
+
 /*-
  * #%L
  * anchor-plugin-mpp-feature
@@ -43,25 +44,15 @@ public class AsCfg extends FeatureSingleElem {
 
 	@Override
 	public double calc( CacheableParams<? extends FeatureCalcParams> params ) throws FeatureCalcException {
-		
-		if (params.getParams() instanceof NRGElemAllCalcParams) {
-			return calcCast(
-				params.changeParams(
-					(NRGElemAllCalcParams) params.getParams()
-				)
-			);
-		} else {
-			throw new FeatureCalcException("Requires NRGElemAllCalcParams");
-		}
+		return params
+			.downcastParams(NRGElemAllCalcParams.class)
+			.calcChangeParams(getItem(), AsCfg::deriveParams, "cfg");
 	}
 	
-	private double calcCast(CacheableParams<NRGElemAllCalcParams> params) throws FeatureCalcException {
-		
-		FeatureCfgParams paramsNew = new FeatureCfgParams(
-			params.getParams().getPxlPartMemo().asCfg(),
-			params.getParams().getDimensions()
+	private static FeatureCfgParams deriveParams( NRGElemAllCalcParams params ) {
+		return new FeatureCfgParams(
+			params.getPxlPartMemo().asCfg(),
+			params.getDimensions()
 		);
-			
-		return params.calcChangeParams(getItem(), paramsNew, "cfg");
 	}
 }

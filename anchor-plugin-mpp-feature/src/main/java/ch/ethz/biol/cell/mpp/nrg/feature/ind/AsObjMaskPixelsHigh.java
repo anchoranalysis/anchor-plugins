@@ -37,7 +37,6 @@ import org.anchoranalysis.feature.bean.operator.FeatureSingleElem;
 import org.anchoranalysis.feature.cache.CacheableParams;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
-import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 import org.anchoranalysis.feature.params.FeatureParamsDescriptor;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.feature.objmask.FeatureObjMaskParams;
@@ -67,29 +66,30 @@ public class AsObjMaskPixelsHigh extends FeatureSingleElem {
 	
 	@Override
 	public double calc(CacheableParams<? extends FeatureCalcParams> params) throws FeatureCalcException {
-		
-		if (params.getParams() instanceof NRGElemIndCalcParams) {
-			
-			return calcCast(
-				params.changeParams(
-					(NRGElemIndCalcParams) params.getParams()
-				)
+		return params
+			.downcastParams(NRGElemIndCalcParams.class)
+			.calcChangeParams(
+				getItem(),
+				p -> createObjParams(p),
+				"intersection"
 			);
-		
-		} else {
-			throw new FeatureCalcException("Not supported for this type of params");
-		}
 	}
 	
-	private double calcCast( CacheableParams<? extends NRGElemIndCalcParams> params ) throws FeatureCalcException {
+	private FeatureObjMaskParams createObjParams( NRGElemIndCalcParams params ) {
 		
-		ObjMask omIntersect = findIntersection( params.getParams() );
-		
-		return params.calcChangeParams(
-			getItem(),
-			createObjParams(omIntersect, params.getParams().getNrgStack()),
-			"intersection"
+		FeatureObjMaskParams paramsNew = new FeatureObjMaskParams(
+			findIntersection(params)
 		);
+		paramsNew.setNrgStack( params.getNrgStack() );
+		return paramsNew;
+	}
+
+	// We change the default behaviour, as we don't want to give the same paramsFactory
+	//   as the item we pass to
+	@Override
+	public FeatureParamsDescriptor paramType()
+			throws FeatureCalcException {
+		return NRGElemIndCalcParamsDescriptor.instance;
 	}
 	
 	private ObjMask findIntersection( NRGElemIndCalcParams paramsCast ) {
@@ -108,20 +108,6 @@ public class AsObjMaskPixelsHigh extends FeatureSingleElem {
 		);
 		
 		return omEqual.intersect(om, paramsCast.getNrgStack().getDimensions() );		
-	}
-	
-	private static FeatureObjMaskParams createObjParams( ObjMask omIntersect, NRGStackWithParams nrgStack ) {
-		FeatureObjMaskParams paramsNew = new FeatureObjMaskParams(omIntersect);
-		paramsNew.setNrgStack( nrgStack );
-		return paramsNew;
-	}
-
-	// We change the default behaviour, as we don't want to give the same paramsFactory
-	//   as the item we pass to
-	@Override
-	public FeatureParamsDescriptor paramType()
-			throws FeatureCalcException {
-		return NRGElemIndCalcParamsDescriptor.instance;
 	}
 
 	@Override

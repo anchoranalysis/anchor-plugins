@@ -38,6 +38,7 @@ import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
 import org.anchoranalysis.image.feature.bean.FeatureStack;
 import org.anchoranalysis.image.feature.objmask.FeatureObjMaskParams;
 import org.anchoranalysis.image.feature.stack.FeatureStackParams;
+import org.anchoranalysis.image.init.ImageInitParams;
 import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.image.objmask.ObjMaskCollection;
 
@@ -66,18 +67,15 @@ public class ObjMaskFeatureQuantile extends FeatureStack {
 
 	@Override
 	public double calcCast(CacheableParams<FeatureStackParams> params) throws FeatureCalcException {
-
-		try {
-			objs.initRecursive(params.getParams().getSharedObjs(), getLogger() );
-		} catch (InitException e1) {
-			throw new FeatureCalcException(e1);
-		}
 		
-		ObjMaskCollection objsCollection = createObjs();
-
+		DoubleArrayList featureVals = calcForEachObj( params );
+		featureVals.sort();
+		return Descriptive.quantile(featureVals, quantile);
+	}
+	
+	private DoubleArrayList calcForEachObj( CacheableParams<FeatureStackParams> params ) throws FeatureCalcException {
 		
-		FeatureObjMaskParams paramsObj = new FeatureObjMaskParams();
-		paramsObj.setNrgStack( params.getParams().getNrgStack() );
+		ObjMaskCollection objsCollection = createObjs( params.getParams().getSharedObjs() );
 		
 		DoubleArrayList featureVals = new DoubleArrayList();
 		
@@ -85,24 +83,33 @@ public class ObjMaskFeatureQuantile extends FeatureStack {
 		for( int i=0; i<objsCollection.size(); i++) {
 			
 			ObjMask om = objsCollection.get(i);
-			 
-			paramsObj.setObjMask(om);
 						
 			featureVals.add(
-				params.calcChangeParams(item, paramsObj, "objMasks" + i)
+				params.calcChangeParams(
+					item,
+					p -> extractParams(p, om),
+					"objMasks" + i
+				)
 			);
 		}
 		
-		featureVals.sort();
-		
-		return Descriptive.quantile(featureVals, quantile);
+		return featureVals;
 	}
 	
-	private ObjMaskCollection createObjs() throws FeatureCalcException {
+	private static FeatureObjMaskParams extractParams( FeatureStackParams params, ObjMask om ) {
+		FeatureObjMaskParams paramsObj = new FeatureObjMaskParams();
+		paramsObj.setNrgStack( params.getNrgStack() );
+		paramsObj.setObjMask( om );
+		return paramsObj;
+	}
+	
+	private ObjMaskCollection createObjs( ImageInitParams params ) throws FeatureCalcException {
+
 		try {
+			objs.initRecursive(params, getLogger() );
 			return objs.create();
-		} catch (CreateException e1) {
-			throw new FeatureCalcException(e1);
+		} catch (CreateException | InitException e) {
+			throw new FeatureCalcException(e);
 		}
 	}
 
@@ -133,7 +140,4 @@ public class ObjMaskFeatureQuantile extends FeatureStack {
 	public void setQuantile(double quantile) {
 		this.quantile = quantile;
 	}
-
-
-
 }

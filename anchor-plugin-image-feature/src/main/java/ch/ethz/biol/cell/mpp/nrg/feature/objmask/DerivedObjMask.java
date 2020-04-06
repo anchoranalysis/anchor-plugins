@@ -67,10 +67,12 @@ public abstract class DerivedObjMask extends FeatureObjMask {
 				return emptyValue;
 			}
 			
-			FeatureCalcParams paramsNew = createDerivedParams(omDerived,params.getParams());
-			
 			// We select an appropriate cache for calculating the feature (should be the same as selected in init())
-			return params.calcChangeParams(item, paramsNew, cacheName() );
+			return params.calcChangeParams(
+				item,
+				p -> createDerivedParams(p, omDerived),
+				cacheName()
+			);
 			
 		} catch (ExecuteException e) {
 			throw new FeatureCalcException(e.getCause());
@@ -83,11 +85,12 @@ public abstract class DerivedObjMask extends FeatureObjMask {
 			ObjMask omDerived = derivedObjMask(params);
 			
 			if (omDerived==null || !omDerived.hasPixelsGreaterThan(0)) {
+				// TODO is this the correct way of handling a null-mask?
 				return params;
 			}
 			
-			return params.changeParams(
-				createDerivedParams( omDerived, params.getParams() ),
+			return params.mapParams(
+				p -> createDerivedParams(p, omDerived ),
 				cacheName()
 			);
 		} catch (ExecuteException e) {
@@ -95,7 +98,7 @@ public abstract class DerivedObjMask extends FeatureObjMask {
 		}			
 	}
 		
-	public FeatureCalcParams createDerivedParams(ObjMask omDerived, FeatureObjMaskParams paramsExst) {
+	public FeatureCalcParams createDerivedParams(FeatureObjMaskParams paramsExst, ObjMask omDerived) {
 
 		FeatureObjMaskParams paramsNew = new FeatureObjMaskParams( omDerived );
 		paramsNew.setNrgStack( paramsExst.getNrgStack() );
