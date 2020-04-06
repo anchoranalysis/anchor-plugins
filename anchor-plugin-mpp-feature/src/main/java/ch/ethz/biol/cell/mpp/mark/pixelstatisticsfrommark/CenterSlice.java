@@ -1,6 +1,5 @@
 package ch.ethz.biol.cell.mpp.mark.pixelstatisticsfrommark;
 
-import org.anchoranalysis.anchor.mpp.mark.MarkAbstractPosition;
 import org.anchoranalysis.anchor.mpp.pxlmark.PxlMark;
 
 
@@ -44,12 +43,12 @@ public class CenterSlice extends CenterSliceBase {
 	private static final long serialVersionUID = -3617915321417174160L;
 	
 	@Override
-	protected VoxelStatistics createStatisticsFor(PxlMark pm, MarkAbstractPosition mark, ImageDim dim, BoundingBox bbox, int zCenter) {
+	protected VoxelStatistics createStatisticsForBBox(PxlMark pm, ImageDim dim, BoundingBox bbox, int zCenter) {
 		
 		if (zCenter<0 || zCenter>=bbox.extnt().getZ()) {
 			return new VoxelStatisticsCombined();
 		}
 
-		return stats(pm, zCenter);
+		return sliceStatisticsForRegion(pm, zCenter);
 	}
 }

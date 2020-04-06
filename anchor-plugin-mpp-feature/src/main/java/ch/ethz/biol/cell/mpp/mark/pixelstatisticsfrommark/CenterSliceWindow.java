@@ -1,6 +1,5 @@
 package ch.ethz.biol.cell.mpp.mark.pixelstatisticsfrommark;
 
-import org.anchoranalysis.anchor.mpp.mark.MarkAbstractPosition;
 import org.anchoranalysis.anchor.mpp.pxlmark.PxlMark;
 
 
@@ -58,7 +57,7 @@ public class CenterSliceWindow extends CenterSliceBase {
 	// END BEAN PROPERTIES
 	
 	@Override
-	protected VoxelStatistics createStatisticsFor(PxlMark pm, MarkAbstractPosition mark, ImageDim dim, BoundingBox bbox, int zCenter) {
+	protected VoxelStatistics createStatisticsForBBox(PxlMark pm, ImageDim dim, BoundingBox bbox, int zCenter) {
 		
 		// If our z-center is off scene we bring it to the closest value, but we guard against the case where the top of the mark is also off scene
 		if (zCenter < 0) {
@@ -73,7 +72,7 @@ public class CenterSliceWindow extends CenterSliceBase {
 		
 		// Early exit if the windowSize is 0
 		if (windowSize==0) {
-			return stats(pm, zCenter);
+			return sliceStatisticsForRegion(pm, zCenter);
 		}
 		
 		int zLow = Math.max( zCenter - windowSize, 0);
@@ -82,7 +81,7 @@ public class CenterSliceWindow extends CenterSliceBase {
 		VoxelStatisticsCombined out = new VoxelStatisticsCombined();
 		for (int z=zLow; z<=zHigh; z++) {
 			out.add(
-				stats(pm, z)
+				sliceStatisticsForRegion(pm, z)
 			);
 		}
 		return out;
