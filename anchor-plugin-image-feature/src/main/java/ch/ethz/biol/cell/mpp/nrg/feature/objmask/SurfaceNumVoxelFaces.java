@@ -29,11 +29,8 @@ package ch.ethz.biol.cell.mpp.nrg.feature.objmask;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.cache.ExecuteException;
-import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.feature.cache.CacheableParams;
-import org.anchoranalysis.feature.cachedcalculation.CachedCalculation;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.feature.init.FeatureInitParams;
 import org.anchoranalysis.image.feature.bean.objmask.FeatureObjMask;
 import org.anchoranalysis.image.feature.objmask.FeatureObjMaskParams;
 
@@ -60,22 +57,12 @@ public class SurfaceNumVoxelFaces extends FeatureObjMask {
 	private boolean suppress3D=false;
 	/// END BEAN PROPERTIES
 	
-	private CachedCalculation<Integer> cc;
-	
-	
-	@Override
-	public void beforeCalc(CacheableParams<FeatureInitParams> params) throws InitException {
-		super.beforeCalc(params);
-		
-		cc = params.getCacheSession().search(
-			new CalculateOutlineNumVoxelFaces(mip, suppress3D)
-		);
-	}
-
 	@Override
 	public double calcCast(CacheableParams<FeatureObjMaskParams> params) throws FeatureCalcException {
 		try {
-			return cc.getOrCalculate(params.getParams());
+			return params.calc(
+				new CalculateOutlineNumVoxelFaces(mip, suppress3D)		
+			);
 		} catch (ExecuteException e) {
 			throw new FeatureCalcException(e.getCause());
 		}

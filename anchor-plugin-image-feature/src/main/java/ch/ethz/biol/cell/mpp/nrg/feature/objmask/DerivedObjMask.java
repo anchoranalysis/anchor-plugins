@@ -32,13 +32,11 @@ package ch.ethz.biol.cell.mpp.nrg.feature.objmask;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.SkipInit;
 import org.anchoranalysis.core.cache.ExecuteException;
-import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.cache.CacheableParams;
 import org.anchoranalysis.feature.cachedcalculation.CachedCalculation;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
-import org.anchoranalysis.feature.init.FeatureInitParams;
 import org.anchoranalysis.feature.session.cache.FeatureSessionCacheRetriever;
 import org.anchoranalysis.image.feature.bean.objmask.FeatureObjMask;
 import org.anchoranalysis.image.feature.objmask.FeatureObjMaskParams;
@@ -58,27 +56,12 @@ public abstract class DerivedObjMask extends FeatureObjMask {
 	@BeanField @SkipInit
 	private Feature item;
 	// END BEAN PROPERTIES
-	
-	private CachedCalculation<ObjMask> cc;
-	
-	@Override
-	public void beforeCalc(CacheableParams<FeatureInitParams> params)
-			throws InitException {
-		super.beforeCalc(params);
-		
-		cc = createCachedCalculation(
-			params.cacheFor(cacheName()
-		));
-	}
-	
-	protected abstract CachedCalculation<ObjMask> createCachedCalculation( FeatureSessionCacheRetriever session );
-	
 
 	@Override
 	public double calcCast(CacheableParams<FeatureObjMaskParams> params) throws FeatureCalcException {
 
 		try {
-			ObjMask omDerived = cc.getOrCalculate(params.getParams());
+			ObjMask omDerived = derivedObjMask(params);
 			
 			if (omDerived==null || !omDerived.hasPixelsGreaterThan(0)) {
 				return emptyValue;
@@ -93,24 +76,25 @@ public abstract class DerivedObjMask extends FeatureObjMask {
 			throw new FeatureCalcException(e.getCause());
 		}
 	}
-
 	
 	@Override
-	public FeatureCalcParams transformParams(FeatureObjMaskParams params,Feature dependentFeature) throws FeatureCalcException {
+	public CacheableParams<? extends FeatureCalcParams> transformParamsCast(CacheableParams<FeatureObjMaskParams> params,Feature dependentFeature) throws FeatureCalcException {
 		try {
-			ObjMask omEroded = cc.getOrCalculate(params);
+			ObjMask omDerived = derivedObjMask(params);
 			
-			if (omEroded==null || !omEroded.hasPixelsGreaterThan(0)) {
+			if (omDerived==null || !omDerived.hasPixelsGreaterThan(0)) {
 				return params;
 			}
 			
-			return createDerivedParams(omEroded,params);
+			return params.changeParams(
+				createDerivedParams( omDerived, params.getParams() ),
+				cacheName()
+			);
 		} catch (ExecuteException e) {
 			throw new FeatureCalcException(e.getCause());
 		}			
 	}
-	
-	
+		
 	public FeatureCalcParams createDerivedParams(ObjMask omDerived, FeatureObjMaskParams paramsExst) {
 
 		FeatureObjMaskParams paramsNew = new FeatureObjMaskParams( omDerived );
@@ -119,7 +103,21 @@ public abstract class DerivedObjMask extends FeatureObjMask {
 		return paramsNew;
 	}
 	
+	protected abstract CachedCalculation<ObjMask> createCachedCalculation( FeatureSessionCacheRetriever session ) throws FeatureCalcException;
+	
+	
 	protected abstract String cacheName();
+
+	private ObjMask derivedObjMask(CacheableParams<FeatureObjMaskParams> params) throws ExecuteException {
+		try {
+			CachedCalculation<ObjMask> cc = createCachedCalculation(
+				params.cacheFor( cacheName() )
+			);
+			return params.calc(cc);
+		} catch (FeatureCalcException e) {
+			throw new ExecuteException(e);
+		}
+	}
 	
 	public double getEmptyValue() {
 		return emptyValue;

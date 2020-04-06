@@ -40,7 +40,7 @@ public class SubtractSecondFromFirstTest {
 		
 		ParamsFixtureHelper.testSimple(
 			OrderHelper.addFeatureToOrder(new SubtractSecondFromFirst()),
-			2821
+			-588
 		);
 	}
 }

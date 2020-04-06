@@ -34,7 +34,6 @@ import org.anchoranalysis.anchor.mpp.mark.conic.MarkEllipsoid;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.geometry.Point3d;
-import org.anchoranalysis.feature.cache.CacheableParams;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.init.FeatureInitParams;
 import org.anchoranalysis.image.bean.orientation.DirectionVectorBean;
@@ -58,7 +57,7 @@ public class DotProductOrientationToVector extends FeatureMark {
 	private DirectionVector dv;
 	
 	@Override
-	public void beforeCalc(CacheableParams<FeatureInitParams> params) throws InitException {
+	public void beforeCalc(FeatureInitParams params) throws InitException {
 		super.beforeCalc(params);
 		dv = directionVector.createVector();
 	}

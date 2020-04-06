@@ -25,8 +25,8 @@ public class ParamsFixtureHelper {
 	 **/
 	public static void testTwoSizesOverlappingDouble(
 		Feature feature,
-		double expectedSameSize,
-		double expectedDifferentSize
+		double expectedDifferentSize,
+		double expectedSameSize
 	) throws FeatureCalcException, InitException {
 		
 		testOverlappingCirclesDoubleSize(feature, expectedSameSize, true);

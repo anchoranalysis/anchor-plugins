@@ -31,7 +31,6 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.feature.cache.CacheableParams;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.feature.session.cache.FeatureSessionCacheRetriever;
 import org.anchoranalysis.image.feature.bean.pixelwise.score.PixelScore;
 import org.anchoranalysis.image.feature.pixelwise.PixelwiseFeatureInitParams;
 import org.anchoranalysis.image.feature.pixelwise.score.PixelScoreFeatureCalcParams;
@@ -61,8 +60,8 @@ public class PixelScoreNormalizeByMax extends PixelScore {
 	}
 
 	@Override
-	public void beforeCalcCast(PixelwiseFeatureInitParams params, FeatureSessionCacheRetriever session) throws InitException {
-		super.beforeCalcCast(params, session);
+	public void beforeCalcCast(PixelwiseFeatureInitParams params) throws InitException {
+		super.beforeCalcCast(params);
 		maxEdge = params.getHist(nrgChnlIndex).calcMax();
 	}
 

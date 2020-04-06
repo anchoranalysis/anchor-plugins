@@ -54,9 +54,9 @@ public class Param extends Feature {
 	private KeyValueParams keyValueParams;
 	
 	@Override
-	public void beforeCalc(CacheableParams<FeatureInitParams> params) throws InitException {
+	public void beforeCalc(FeatureInitParams params) throws InitException {
 		super.beforeCalc(params);
-		this.keyValueParams = params.getParams().getKeyValueParams();
+		this.keyValueParams = params.getKeyValueParams();
 	}
 	
 	@Override

@@ -33,12 +33,8 @@ import org.anchoranalysis.anchor.mpp.mark.GlobalRegionIdentifiers;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.cache.ExecuteException;
-import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.feature.cache.CacheableParams;
-import org.anchoranalysis.feature.cachedcalculation.CachedCalculation;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.feature.init.FeatureInitParams;
-
 import ch.ethz.biol.cell.mpp.nrg.cachedcalculation.OverlapCalculationMaskGlobalMiddleQuantiles;
 
 public class OverlapMaskGlobalMiddleQuantiles extends NRGElemPair {
@@ -68,23 +64,19 @@ public class OverlapMaskGlobalMiddleQuantiles extends NRGElemPair {
 	public OverlapMaskGlobalMiddleQuantiles() {
 	}
 	
-	private CachedCalculation<Double> cc;
-	
-	@Override
-	public void beforeCalc(CacheableParams<FeatureInitParams> params)
-			throws InitException {
-		super.beforeCalc(params);
-		
-		cc = params.search( new OverlapCalculationMaskGlobalMiddleQuantiles(regionID, nrgIndex, (byte) maskValue, quantileLow, quantileHigh) );
-	}
-	
 	@Override
 	public double calcCast( CacheableParams<NRGElemPairCalcParams> params ) throws FeatureCalcException {
 		
-		assert( cc!=null );
-		
 		try {
-			return cc.getOrCalculate(params.getParams());
+			return params.calc(
+				new OverlapCalculationMaskGlobalMiddleQuantiles(
+					regionID,
+					nrgIndex,
+					(byte) maskValue,
+					quantileLow,
+					quantileHigh
+				)
+			);
 		} catch (ExecuteException e) {
 			throw new FeatureCalcException(e);
 		}							

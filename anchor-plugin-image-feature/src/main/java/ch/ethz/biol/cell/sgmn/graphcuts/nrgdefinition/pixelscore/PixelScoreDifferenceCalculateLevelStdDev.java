@@ -34,7 +34,6 @@ import org.anchoranalysis.core.relation.GreaterThanEqualTo;
 import org.anchoranalysis.core.relation.LessThan;
 import org.anchoranalysis.feature.cache.CacheableParams;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.feature.session.cache.FeatureSessionCacheRetriever;
 import org.anchoranalysis.image.bean.threshold.CalculateLevel;
 import org.anchoranalysis.image.feature.bean.pixelwise.score.PixelScore;
 import org.anchoranalysis.image.feature.pixelwise.PixelwiseFeatureInitParams;
@@ -72,8 +71,8 @@ public class PixelScoreDifferenceCalculateLevelStdDev extends PixelScore {
 	private double widthGreaterThan;
 	
 	@Override
-	public void beforeCalcCast(PixelwiseFeatureInitParams params, FeatureSessionCacheRetriever session) throws InitException {
-		super.beforeCalcCast(params, session);
+	public void beforeCalcCast(PixelwiseFeatureInitParams params) throws InitException {
+		super.beforeCalcCast(params);
 		
 		Histogram hist = params.getHist(indexHistogram);
 		

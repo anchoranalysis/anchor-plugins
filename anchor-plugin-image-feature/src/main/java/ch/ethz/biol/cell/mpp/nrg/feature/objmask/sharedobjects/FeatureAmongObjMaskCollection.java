@@ -30,7 +30,6 @@ package ch.ethz.biol.cell.mpp.nrg.feature.objmask.sharedobjects;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.name.provider.NamedProviderGetException;
-import org.anchoranalysis.feature.session.cache.FeatureSessionCacheRetriever;
 import org.anchoranalysis.image.feature.bean.objmask.sharedobjects.FeatureObjMaskSharedObjects;
 import org.anchoranalysis.image.feature.init.FeatureInitParamsImageInit;
 import org.anchoranalysis.image.index.rtree.ObjMaskCollectionRTree;
@@ -59,8 +58,7 @@ public abstract class FeatureAmongObjMaskCollection extends FeatureObjMaskShared
 	private ObjMaskCollectionRTree bboxRTree = null;
 	
 	@Override
-	public void beforeCalcCast(FeatureInitParamsImageInit params, FeatureSessionCacheRetriever session)
-			throws InitException {
+	public void beforeCalcCast(FeatureInitParamsImageInit params) throws InitException {
 	
 		try {
 			this.searchObjs = params.getSharedObjects().getObjMaskCollection().getException(id);

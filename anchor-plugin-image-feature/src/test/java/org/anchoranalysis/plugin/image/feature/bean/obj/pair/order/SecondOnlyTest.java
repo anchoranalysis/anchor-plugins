@@ -40,7 +40,7 @@ public class SecondOnlyTest {
 		
 		ParamsFixtureHelper.testSimple(
 			OrderHelper.addFeatureToOrder(new SecondOnly()),
-			2821
+			3409
 		);
 	}
 }

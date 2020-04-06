@@ -32,13 +32,11 @@ import org.anchoranalysis.bean.annotation.Positive;
 import org.anchoranalysis.bean.annotation.SkipInit;
 import org.anchoranalysis.core.cache.ExecuteException;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.cache.CacheableParams;
 import org.anchoranalysis.feature.cachedcalculation.CachedCalculation;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
-import org.anchoranalysis.feature.init.FeatureInitParams;
 import org.anchoranalysis.image.feature.bean.objmask.pair.FeatureObjMaskPair;
 import org.anchoranalysis.image.feature.objmask.FeatureObjMaskParams;
 import org.anchoranalysis.image.feature.objmask.pair.FeatureObjMaskPairParams;
@@ -80,20 +78,55 @@ public class FeatureObjMaskPairIntersection extends FeatureObjMaskPair {
 	private Feature item;
 	// END BEAN PROPERTIES
 	
-	private CachedCalculation<ObjMask> cc;
-	
 	private static final String CACHE_INTERSECTION = "intersection_eroded"; // TODO add iterationsErosion to name
 	private static final String CACHE_OBJ1 = "obj1";	// TODO  add iterationsDilation to name
 	private static final String CACHE_OBJ2 = "obj2";
+		
+	@Override
+	public double calcCast(CacheableParams<FeatureObjMaskPairParams> params) throws FeatureCalcException {
+		
+		ObjMask omIntersection = createIntersection(params);
+		
+		if (omIntersection==null || !omIntersection.hasPixelsGreaterThan(0)) {
+			return emptyValue;
+		}
+		
+		// We select an appropriate cache for calculating the feature (should be the same as selected in init())
+		return createParamsForIntersection(omIntersection,params).calc(item);
+	}
+	
+	private ObjMask createIntersection( CacheableParams<FeatureObjMaskPairParams> params ) throws FeatureCalcException {
+		
+		assert params.getCacheSession().hasBeenInit();
+		
+		return createCachedCalculation(params);
+	}
+
 	
 	@Override
-	public void beforeCalc(CacheableParams<FeatureInitParams> params)
-			throws InitException {
-		super.beforeCalc(params);
-		try {
-			assert params.getCacheSession().hasBeenInit();
+	public CacheableParams<? extends FeatureCalcParams> transformParamsCast(CacheableParams<FeatureObjMaskPairParams> params,
+			Feature dependentFeature) throws FeatureCalcException {
+
+		ObjMask omIntersection = createCachedCalculation(params);
 			
-			cc = CalculatePairIntersectionCommutative.createFromCache(
+		if (omIntersection==null || !omIntersection.hasPixelsGreaterThan(0)) {
+			return params;
+		}
+		
+		return createParamsForIntersection(omIntersection,params);
+	}
+		
+	public CacheableParams<FeatureCalcParams> createParamsForIntersection(ObjMask omIntersection, CacheableParams<FeatureObjMaskPairParams> paramsExst) {
+
+		FeatureObjMaskParams paramsNew = new FeatureObjMaskParams( omIntersection );
+		paramsNew.setNrgStack( paramsExst.getParams().getNrgStack() );
+		assert( paramsNew instanceof FeatureObjMaskParams);
+		return paramsExst.changeParams(paramsNew, CACHE_INTERSECTION);
+	}
+
+	private ObjMask createCachedCalculation(CacheableParams<FeatureObjMaskPairParams> params) throws FeatureCalcException {
+		try {
+			CachedCalculation<ObjMask> cc = CalculatePairIntersectionCommutative.createFromCache(
 				params.cacheFor(CACHE_INTERSECTION),
 				params.cacheFor(CACHE_OBJ1),
 				params.cacheFor(CACHE_OBJ2),
@@ -101,62 +134,14 @@ public class FeatureObjMaskPairIntersection extends FeatureObjMaskPair {
 				iterationsErosion,
 				do3D
 			);
-			
+			return params.calc(cc);
+		} catch (ExecuteException e) {
+			throw new FeatureCalcException(e.getCause());
 		} catch (CreateException e) {
-			throw new InitException(e);
+			throw new FeatureCalcException(e);
 		}
 	}
 	
-
-	
-	@Override
-	public double calcCast(CacheableParams<FeatureObjMaskPairParams> params) throws FeatureCalcException {
-		
-		try {
-			ObjMask omIntersection = cc.getOrCalculate(params.getParams());
-			
-			if (omIntersection==null || !omIntersection.hasPixelsGreaterThan(0)) {
-				return emptyValue;
-			}
-			
-			// We select an appropriate cache for calculating the feature (should be the same as selected in init())
-			return params.calcChangeParams(
-				item,
-				createParamsForIntersection(omIntersection,params.getParams()),
-				CACHE_INTERSECTION
-			);
-			
-		} catch (ExecuteException e) {
-			throw new FeatureCalcException(e.getCause());
-		}
-	}
-
-	
-	@Override
-	public FeatureCalcParams transformParams(FeatureObjMaskPairParams params,
-			Feature dependentFeature) throws FeatureCalcException {
-		try {
-			ObjMask omIntersection = cc.getOrCalculate(params);
-			
-			if (omIntersection==null || !omIntersection.hasPixelsGreaterThan(0)) {
-				return params;
-			}
-			
-			return createParamsForIntersection(omIntersection,params);
-		} catch (ExecuteException e) {
-			throw new FeatureCalcException(e.getCause());
-		}			
-	}
-	
-	
-	public FeatureCalcParams createParamsForIntersection(ObjMask omIntersection, FeatureObjMaskPairParams paramsExst) {
-
-		FeatureObjMaskParams paramsNew = new FeatureObjMaskParams( omIntersection );
-		paramsNew.setNrgStack( paramsExst.getNrgStack() );
-		assert( paramsNew instanceof FeatureObjMaskParams);
-		return paramsNew;
-	}
-
 	public boolean isDo3D() {
 		return do3D;
 	}

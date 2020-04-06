@@ -2,10 +2,7 @@ package org.anchoranalysis.plugin.image.feature.bean.obj.pair.touching;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.cache.ExecuteException;
-import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.feature.cache.CacheableParams;
-import org.anchoranalysis.feature.cachedcalculation.CachedCalculation;
-import org.anchoranalysis.feature.init.FeatureInitParams;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.feature.bean.objmask.pair.FeatureObjMaskPair;
 import org.anchoranalysis.image.feature.objmask.pair.FeatureObjMaskPairParams;
@@ -32,17 +29,11 @@ public abstract class TouchingVoxels extends FeatureObjMaskPair {
 	private boolean use3D = true;
 	// END BEAN PROPERTIES
 		
-	private CachedCalculation<BoundingBox> cc;
-	
-	@Override
-	public void beforeCalc(CacheableParams<FeatureInitParams> params) throws InitException {
-		super.beforeCalc(params);
-		this.cc = params.search( new CalculateIntersectionOfDilatedBoundingBox(use3D) );
-	}
-	
 	/** The intersection of the bounding box of one mask with the (dilated by 1 bounding-box) of the other */
-	protected BoundingBox bboxIntersectDilated(FeatureObjMaskPairParams params) throws ExecuteException {
-		return cc.getOrCalculate(params);
+	protected BoundingBox bboxIntersectDilated( CacheableParams<FeatureObjMaskPairParams> params) throws ExecuteException {
+		return params.calc(
+			new CalculateIntersectionOfDilatedBoundingBox(use3D)	
+		);
 	}
 	
 	protected CountKernel createCountKernelMask( ObjMask om1, ObjMask om2Rel ) {

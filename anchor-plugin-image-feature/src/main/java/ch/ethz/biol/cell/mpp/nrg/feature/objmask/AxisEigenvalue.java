@@ -43,6 +43,6 @@ public class AxisEigenvalue extends ObjMaskPointsSpecificEigenvalueBase {
 
 	@Override
 	public double calcCast(CacheableParams<FeatureObjMaskParams> params) throws FeatureCalcException {
-		return calcSpecificEigenvector(params.getParams()).getEigenvalue();
+		return calcSpecificEigenvector(params).getEigenvalue();
 	}
 }

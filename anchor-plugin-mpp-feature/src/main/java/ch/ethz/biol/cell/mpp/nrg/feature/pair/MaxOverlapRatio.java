@@ -33,12 +33,8 @@ import org.anchoranalysis.anchor.mpp.mark.GlobalRegionIdentifiers;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.cache.ExecuteException;
-import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.feature.cache.CacheableParams;
-import org.anchoranalysis.feature.cachedcalculation.CachedCalculation;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.feature.init.FeatureInitParams;
-
 import ch.ethz.biol.cell.mpp.nrg.cachedcalculation.OverlapCalculation;
 
 public class MaxOverlapRatio extends NRGElemPair {
@@ -74,34 +70,24 @@ public class MaxOverlapRatio extends NRGElemPair {
 	public String getParamDscr() {
 		return String.format("max=%f", max );
 	}
-	
-	private CachedCalculation<Double> cc;
-	
-	@Override
-	public void beforeCalc(CacheableParams<FeatureInitParams> params) throws InitException {
-		super.beforeCalc(params);
-		cc = params.getCacheSession().search( new OverlapCalculation(regionID) );
-	}
 
 	@Override
 	public double calcCast( CacheableParams<NRGElemPairCalcParams> paramsCacheable ) throws FeatureCalcException {
 		
 		NRGElemPairCalcParams params = paramsCacheable.getParams();
 		
-		//double max_volume = Math.min( obj1.getMark().volume(), obj2.getMark().volume() );
-		//double ratio = overlap / max_volume;
 		try {
-			double ratio = OverlapRatio.calcOverlapRatioMin( params.getObj1(), params.getObj2(), cc.getOrCalculate(params), regionID, false );
+			double ratio = OverlapRatio.calcOverlapRatioMin(
+				params.getObj1(),
+				params.getObj2(),
+				paramsCacheable.calc( new OverlapCalculation(regionID) ),
+				regionID,
+				false
+			);
 			
 			if ( ratio > max ) {
 				return penaltyValue;
 			} else {
-				//return (-0.6 * ratio)  * OverlapRatio.calcMaxVolume(obj1, obj2) ;
-				
-				// Return to -1.5
-				//return (-1.5 * ratio)  * OverlapRatio.calcMaxVolume( params.getObj1(), params.getObj2() ) ;
-				//return 0;
-				//return ratio;
 				return 0;
 			}
 		} catch (ExecuteException e) {

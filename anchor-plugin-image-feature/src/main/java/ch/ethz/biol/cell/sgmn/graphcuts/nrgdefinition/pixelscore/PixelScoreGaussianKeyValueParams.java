@@ -32,7 +32,6 @@ import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.params.KeyValueParams;
 import org.anchoranalysis.feature.cache.CacheableParams;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.feature.session.cache.FeatureSessionCacheRetriever;
 import org.anchoranalysis.image.feature.bean.pixelwise.score.PixelScore;
 import org.anchoranalysis.image.feature.pixelwise.PixelwiseFeatureInitParams;
 import org.anchoranalysis.image.feature.pixelwise.score.PixelScoreFeatureCalcParams;
@@ -84,9 +83,9 @@ public class PixelScoreGaussianKeyValueParams extends PixelScore {
 	}
 
 	@Override
-	public void beforeCalcCast(PixelwiseFeatureInitParams params, FeatureSessionCacheRetriever session) throws InitException {
+	public void beforeCalcCast(PixelwiseFeatureInitParams params) throws InitException {
 		
-		super.beforeCalcCast(params, session);
+		super.beforeCalcCast(params);
 		
 		KeyValueParams kpv = params.getKeyValueParams(); 
 

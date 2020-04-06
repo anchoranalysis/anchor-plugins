@@ -34,12 +34,8 @@ import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.cache.ExecuteException;
-import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.feature.cache.CacheableParams;
-import org.anchoranalysis.feature.cachedcalculation.CachedCalculation;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.feature.init.FeatureInitParams;
-
 import ch.ethz.biol.cell.mpp.nrg.cachedcalculation.OverlapCalculation;
 
 public class OverlapRatioNonModalValuesTwoRegions extends NRGElemPair {
@@ -60,17 +56,29 @@ public class OverlapRatioNonModalValuesTwoRegions extends NRGElemPair {
 	public OverlapRatioNonModalValuesTwoRegions() {
 	}
 	
-	private CachedCalculation<Double> cc1;
-	private CachedCalculation<Double> cc2;
-	
 	@Override
-	public void beforeCalc(CacheableParams<FeatureInitParams> params)
-			throws InitException {
-		super.beforeCalc(params);
-		cc1 = params.search( new OverlapCalculation(regionID1) );
-		cc2 = params.search( new OverlapCalculation(regionID2) );
-		assert( cc1!=null );
-		assert( cc2!=null );
+	public double calcCast( CacheableParams<NRGElemPairCalcParams> paramsCacheable ) throws FeatureCalcException {
+		
+		NRGElemPairCalcParams params = paramsCacheable.getParams();
+		
+		try {
+			return calcOverlapRatioMin(
+				params.getObj1(),
+				params.getObj2(),
+				overlapFor(paramsCacheable, regionID1),
+				overlapFor(paramsCacheable, regionID2),
+				regionID1,
+				regionID2
+			);
+		} catch (ExecuteException e) {
+			throw new FeatureCalcException(e);
+		}							
+	}
+
+	private double overlapFor( CacheableParams<NRGElemPairCalcParams> paramsCacheable, int regionID ) throws ExecuteException {
+		return paramsCacheable.calc(
+			new OverlapCalculation(regionID)	
+		);
 	}
 	
 	private static double calcOverlapRatioMin( PxlMarkMemo obj1, PxlMarkMemo obj2, double overlap1, double overlap2, int regionID1, int regionID2 ) throws FeatureCalcException {
@@ -84,25 +92,6 @@ public class OverlapRatioNonModalValuesTwoRegions extends NRGElemPair {
 		double volume1 = OverlapRatio.calcMinVolume( obj1, obj2, regionID1 );
 		double volume2 = OverlapRatio.calcMinVolume( obj1, obj2, regionID2 );
 		return overlap / (volume1+volume2);
-	}
-	
-	@Override
-	public double calcCast( CacheableParams<NRGElemPairCalcParams> paramsCacheable ) throws FeatureCalcException {
-		
-		NRGElemPairCalcParams params = paramsCacheable.getParams();
-		
-		try {
-			return calcOverlapRatioMin(
-				params.getObj1(),
-				params.getObj2(),
-				cc1.getOrCalculate(params),
-				cc2.getOrCalculate(params),
-				regionID1,
-				regionID2
-			);
-		} catch (ExecuteException e) {
-			throw new FeatureCalcException(e);
-		}							
 	}
 	
 	public int getRegionID1() {

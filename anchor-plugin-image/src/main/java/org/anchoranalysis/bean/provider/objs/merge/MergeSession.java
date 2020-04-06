@@ -31,7 +31,6 @@ import java.util.HashMap;
 
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
-import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
@@ -46,6 +45,7 @@ import org.anchoranalysis.feature.shared.SharedFeatureSet;
 import org.anchoranalysis.image.feature.objmask.pair.merged.FeatureObjMaskPairMergedParams;
 import org.anchoranalysis.image.objmask.ObjMask;
 
+// TODO broken, to be fixed
 class MergeSession extends FeatureSession {
 
 	private SequentialSession delegate;
@@ -57,8 +57,10 @@ class MergeSession extends FeatureSession {
 	private Feature feature;
 	
 	// Only caches calculation results which are positive
+	@SuppressWarnings("unused")
 	private static boolean onlyCacheNonNegativeResults = true;
 	
+	@SuppressWarnings("unused")
 	private LogErrorReporter logger;
 		
 	public MergeSession( Feature feature, FeatureInitParams initParams, boolean recordTimes ) {
@@ -90,21 +92,22 @@ class MergeSession extends FeatureSession {
 		return params;
 	}
 	
-	private void putInMap( String key, ObjMask om ) throws InitException {
+	/*private void putInMap( String key, ObjMask om ) throws InitException {
 		FeatureSessionCache src = delegate.getCache().getAdditionalCache( key );
 		try {
 			FeatureSessionCache cacheNew = src.duplicate();
-			cacheNew.init(paramsInit, logger, false);
+			//cacheNew.init(paramsInit, logger, false);	// We need to init in a different way
 			
 			cacheNew.assignResult( src );
 			map.put(om, cacheNew);
 		} catch (CreateException | OperationFailedException e) {
 			throw new InitException(e);
 		}
-	}
+	}*/
 
 	// We calculate the features without invalidating the cache, instead replacing the existing CachedCacheLists with
 	//  ones we remembered from previous calculations
+	@SuppressWarnings("unused")
 	public double calc( ObjMask obj1, ObjMask obj2, ObjMask omMerged )
 			throws FeatureCalcException {
 		try {
@@ -115,7 +118,7 @@ class MergeSession extends FeatureSession {
 			delegate.getCache().invalidate();
 			
 			// We see if an object-mask already exists in the cache, and if so, we load the cached-calculations from there
-			if (cache0!=null) {
+			/*if (cache0!=null) {
 				FeatureSessionCache cacheAdd = delegate.getCache().getAdditionalCache("first");
 				if (cacheAdd!=null) {
 					cacheAdd.assignResult( cache0 );
@@ -132,7 +135,7 @@ class MergeSession extends FeatureSession {
 				if (cacheAdd!=null) {
 					cacheAdd.assignResult( cache2 );
 				}
-			}
+			}*/
 			
 			
 			
@@ -142,13 +145,13 @@ class MergeSession extends FeatureSession {
 			FeatureCalcParams params = createParams(obj1,obj2,omMerged);
 			double val = delegate.getCache().retriever().calc(
 				feature,
-				SessionUtilities.createCacheable(params)
+				SessionUtilities.createCacheable(params, null)	// TODO broken, to be fixed
 			);
 						
 			//System.out.printf("Calculating (%s,%s,%s) has sizes (%d,%d,%d) = %f\n", obj1.centerOfGravity(), obj2.centerOfGravity(), omMerged.centerOfGravity(), delegate.getCache().getAdditionalCache(0).currentSize(), delegate.getCache().getAdditionalCache(1).currentSize(), delegate.getCache().getAdditionalCache(2).currentSize(), val );
 			
 			// We always cache the single-boejct
-			if (cache0==null) {
+			/*if (cache0==null) {
 				putInMap( "first", obj1 );
 			}
 			
@@ -163,10 +166,10 @@ class MergeSession extends FeatureSession {
 				if (cache2==null) {
 					putInMap( "merged", omMerged );
 				}
-			}
+			}*/
 			
 			return val;
-		} catch (CreateException | OperationFailedException | InitException e) {
+		} catch (CreateException e) {
 			throw new FeatureCalcException(e);
 		}
 	}

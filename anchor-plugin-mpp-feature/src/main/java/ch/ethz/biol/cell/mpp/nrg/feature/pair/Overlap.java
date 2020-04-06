@@ -33,12 +33,9 @@ import org.anchoranalysis.anchor.mpp.mark.GlobalRegionIdentifiers;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.cache.ExecuteException;
-import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.feature.cache.CacheableParams;
 import org.anchoranalysis.feature.cachedcalculation.CachedCalculation;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.feature.init.FeatureInitParams;
-
 import ch.ethz.biol.cell.mpp.nrg.cachedcalculation.OverlapCalculation;
 import ch.ethz.biol.cell.mpp.nrg.cachedcalculation.OverlapMIPCalculation;
 
@@ -57,29 +54,24 @@ public class Overlap extends NRGElemPair {
 	private boolean mip = false;
 	// END BEAN PROPERTIES
 	
-	private CachedCalculation<Double> cc;
-	
 	public Overlap() {
 	}
-	
-	@Override
-	public void beforeCalc(CacheableParams<FeatureInitParams> params) throws InitException {
-		super.beforeCalc(params);
 		
-		if (mip) {
-			cc = params.search( new OverlapMIPCalculation(regionID) );
-		} else {
-			cc = params.search( new OverlapCalculation(regionID) );
-		}
-	}
-	
 	@Override
 	public double calcCast( CacheableParams<NRGElemPairCalcParams> params ) throws FeatureCalcException {
 		try {
-			return cc.getOrCalculate(params.getParams());
+			return params.calc( overlapCalculation() );
 		} catch (ExecuteException e) {
 			throw new FeatureCalcException(e);
 		}							
+	}
+	
+	private CachedCalculation<Double> overlapCalculation() {
+		if (mip) {
+			return new OverlapMIPCalculation(regionID);
+		} else {
+			return new OverlapCalculation(regionID);
+		}
 	}
 	
 	public int getRegionID() {

@@ -31,6 +31,7 @@ import org.anchoranalysis.core.cache.ExecuteException;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.feature.cachedcalculation.CachedCalculation;
 import org.anchoranalysis.feature.cachedcalculation.CachedCalculationCastParams;
+import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.session.cache.ICachedCalculationSearch;
 import org.anchoranalysis.image.feature.objmask.FeatureObjMaskParams;
 import org.anchoranalysis.image.objmask.ObjMask;
@@ -94,7 +95,7 @@ public class CalculateShellTwoStage extends CachedCalculationCastParams<ObjMask,
 		int iterationsErosion,
 		int iterationsFurther,
 		boolean do3D
-	) {
+	) throws FeatureCalcException {
 		
 		if (iterationsErosion==0) {
 			// Special case when iterationsErosion==0, we consider it instead as a ashell
