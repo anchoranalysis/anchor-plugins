@@ -1,10 +1,8 @@
 package ch.ethz.biol.cell.mpp.mark.pixelstatisticsfrommark;
 
-import org.anchoranalysis.anchor.mpp.mark.GlobalRegionIdentifiers;
-import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.anchor.mpp.mark.MarkAbstractPosition;
 import org.anchoranalysis.anchor.mpp.pxlmark.PxlMark;
-import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
+
 
 /*
  * #%L
@@ -34,8 +32,6 @@ import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
 
 
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.cache.ExecuteException;
-import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.voxel.statistics.VoxelStatistics;
@@ -43,7 +39,7 @@ import org.anchoranalysis.image.voxel.statistics.VoxelStatisticsCombined;
 
 // Considers the centerSlice +- windowSize
 //  So total size =  2*windowSize + 1 (clipped to the bounding box)
-public class CenterSliceWindow extends PixelStatisticsFromMark {
+public class CenterSliceWindow extends CenterSliceBase {
 
 	/**
 	 * 
@@ -52,22 +48,13 @@ public class CenterSliceWindow extends PixelStatisticsFromMark {
 	
 	// START BEAN PROPERTIES
 	@BeanField
-	private int index = 0;
-	
-	@BeanField
-	private int regionID = GlobalRegionIdentifiers.SUBMARK_INSIDE;
-	
-	@BeanField
 	private int windowSize = 0;
 	// END BEAN PROPERTIES
 	
-	public static VoxelStatistics createStatisticsFor(PxlMark pm, Mark markUncast, ImageDim dim, int index, int regionID, int windowSize) {
+	@Override
+	protected VoxelStatistics createStatisticsFor(PxlMark pm, MarkAbstractPosition mark, ImageDim dim, BoundingBox bbox) {
 		
-		BoundingBox bbox = pm.getBoundingBox(regionID);
-		
-		MarkAbstractPosition mark = (MarkAbstractPosition) markUncast;
 		int zCenter = (int) Math.round(mark.getPos().getZ()) - bbox.getCrnrMin().getZ();
-		//int zMax = bbox.calcCrnrMax().getZ();
 		
 		// If our z-center is off scene we bring it to the closest value, but we guard against the case where the top of the mark is also off scene
 		if (zCenter < 0) {
@@ -82,7 +69,7 @@ public class CenterSliceWindow extends PixelStatisticsFromMark {
 		
 		// Early exit if the windowSize is 0
 		if (windowSize==0) {
-			return pm.statisticsFor(index, regionID, zCenter);
+			return stats(pm, zCenter);
 		}
 		
 		int zLow = Math.max( zCenter - windowSize, 0);
@@ -90,42 +77,11 @@ public class CenterSliceWindow extends PixelStatisticsFromMark {
 		
 		VoxelStatisticsCombined out = new VoxelStatisticsCombined();
 		for (int z=zLow; z<=zHigh; z++) {
-			out.add( pm.statisticsFor(index, regionID, z) );
+			out.add(
+				stats(pm, z)
+			);
 		}
 		return out;
-	}
-	
-	@Override
-	public VoxelStatistics createStatisticsFor(PxlMarkMemo pmm, ImageDim dim) throws CreateException {
-		
-		PxlMark pm;
-		try {
-			pm = pmm.doOperation();
-		} catch (ExecuteException e) {
-			throw new CreateException(e);
-		}
-		return createStatisticsFor(pm, pmm.getMark(), dim, index, regionID, windowSize);
-	}
-
-	public int getIndex() {
-		return index;
-	}
-
-	public void setIndex(int index) {
-		this.index = index;
-	}
-	
-	@Override
-	public String toString() {
-		return String.format("regionID=%d,index=%d", regionID, index);
-	}
-
-	public int getRegionID() {
-		return regionID;
-	}
-
-	public void setRegionID(int regionID) {
-		this.regionID = regionID;
 	}
 
 	public int getWindowSize() {
@@ -135,4 +91,5 @@ public class CenterSliceWindow extends PixelStatisticsFromMark {
 	public void setWindowSize(int windowSize) {
 		this.windowSize = windowSize;
 	}
+
 }
