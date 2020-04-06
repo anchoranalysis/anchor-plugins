@@ -1,8 +1,8 @@
 package ch.ethz.biol.cell.mpp.mark.pixelstatisticsfrommark;
 
-import org.anchoranalysis.anchor.mpp.mark.GlobalRegionIdentifiers;
+import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.anchor.mpp.pxlmark.PxlMark;
-import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
+
 
 /*
  * #%L
@@ -33,14 +33,13 @@ import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.shared.relation.RelationBean;
-import org.anchoranalysis.core.cache.ExecuteException;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.relation.RelationToValue;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.voxel.statistics.VoxelStatistics;
 
-public class GreatestAreaSlice extends PixelStatisticsFromMark {
+public class GreatestAreaSlice extends IndexedRegionBase {
 
 	/**
 	 * 
@@ -49,29 +48,17 @@ public class GreatestAreaSlice extends PixelStatisticsFromMark {
 	
 	// START BEAN PROPERTIES
 	@BeanField
-	private int index = 0;
-	
-	@BeanField
-	private int regionID = GlobalRegionIdentifiers.SUBMARK_INSIDE;
-	
-	@BeanField
 	private RelationBean relationToThreshold;		// Definies what is INSIDE
 	
 	@BeanField
 	private int threshold;
 	// END BEAN PROPERTIES
 
+
 	@Override
-	public VoxelStatistics createStatisticsFor(PxlMarkMemo pmm, ImageDim dim) throws CreateException {
-		
-		PxlMark pm;
-		try {
-			pm = pmm.doOperation();
-		} catch (ExecuteException e) {
-			throw new CreateException(e);
-		}
-		
-		BoundingBox bbox = pm.getBoundingBox(regionID);
+	protected VoxelStatistics createStatisticsFor(PxlMark pm, Mark mark, ImageDim dim) throws CreateException {
+
+		BoundingBox bbox = boundingBoxForRegion(pm);
 
 		RelationToValue relation = relationToThreshold.create();
 		
@@ -79,9 +66,7 @@ public class GreatestAreaSlice extends PixelStatisticsFromMark {
 		VoxelStatistics psMax = null;
 		for( int z=0; z<bbox.extnt().getZ(); z++) {
 			
-			//int z1 = bbox.getCrnrMin().getZ()+z;
-			
-			VoxelStatistics ps = pm.statisticsFor(index, regionID, z);
+			VoxelStatistics ps = sliceStatisticsForRegion(pm, z);
 			long num = ps.countThreshold(relation, threshold);
 			
 			if (num>maxArea) {
@@ -93,27 +78,6 @@ public class GreatestAreaSlice extends PixelStatisticsFromMark {
 		assert( psMax!=null );
 		
 		return psMax;
-	}
-
-	public int getIndex() {
-		return index;
-	}
-
-	public void setIndex(int index) {
-		this.index = index;
-	}
-	
-	@Override
-	public String toString() {
-		return String.format("regionID=%d,index=%d", regionID, index);
-	}
-
-	public int getRegionID() {
-		return regionID;
-	}
-
-	public void setRegionID(int regionID) {
-		this.regionID = regionID;
 	}
 
 	public RelationBean getRelationToThreshold() {
@@ -131,7 +95,4 @@ public class GreatestAreaSlice extends PixelStatisticsFromMark {
 	public void setThreshold(int threshold) {
 		this.threshold = threshold;
 	}
-
-
-
 }
