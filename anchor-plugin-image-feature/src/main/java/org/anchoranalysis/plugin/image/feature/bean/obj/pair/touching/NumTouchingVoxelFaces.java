@@ -69,7 +69,7 @@ public class NumTouchingVoxelFaces extends TouchingVoxels {
 			ObjMask om1 = params.getObjMask1();
 			ObjMask om2 = params.getObjMask2();
 			
-			BoundingBox bboxIntersect = bboxIntersectDilated(params);
+			BoundingBox bboxIntersect = bboxIntersectDilated(paramsCacheable);
 			
 			if (bboxIntersect==null) {
 				// No intersection so no touching voxel faces

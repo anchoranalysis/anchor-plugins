@@ -29,11 +29,8 @@ package ch.ethz.biol.cell.mpp.nrg.feature.objmask;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.cache.ExecuteException;
-import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.feature.cache.CacheableParams;
-import org.anchoranalysis.feature.cachedcalculation.CachedCalculation;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.feature.init.FeatureInitParams;
 import org.anchoranalysis.image.feature.bean.objmask.FeatureObjMask;
 import org.anchoranalysis.image.feature.objmask.FeatureObjMaskParams;
 import org.anchoranalysis.math.moment.MomentsFromPointsCalculator;
@@ -57,36 +54,30 @@ public class AxisLength extends FeatureObjMask {
 	private int index = 0;
 	// END BEAN PROPERTIES
 	
-	private double calcAxisWidth( CachedCalculation<MomentsFromPointsCalculator> cc, FeatureObjMaskParams params, int index ) throws FeatureCalcException {
+	@Override
+	public double calcCast(CacheableParams<FeatureObjMaskParams> params) throws FeatureCalcException {
+		
+		assert( params.getParams() instanceof FeatureObjMaskParams );
+		return calcAxisLength( params, index);
+	}
+
+	private double calcAxisLength( CacheableParams<FeatureObjMaskParams> params, int index ) throws FeatureCalcException {
 		
 		// TODO THIS CAN BE DONE MORE EFFICIENTLY
-		if (!params.getObjMask().hasPixelsGreaterThan(0)) {
+		if (!params.getParams().getObjMask().hasPixelsGreaterThan(0)) {
 			return Double.NaN;
 		}
 
 		try {
-			return cc.getOrCalculate(params).get( index ).eigenvalueNormalizedAsAxisLength();
+			MomentsFromPointsCalculator moments = params.calc(
+				new CalculateObjMaskPointsSecondMomentMatrix(false)
+			);
+			return moments.get( index ).eigenvalueNormalizedAsAxisLength();
 		} catch (ExecuteException e) {
 			throw new FeatureCalcException(e);
 		}
 	}
 	
-	private CachedCalculation<MomentsFromPointsCalculator> cc;
-	
-	@Override
-	public void beforeCalc(CacheableParams<FeatureInitParams> params)
-			throws InitException {
-		super.beforeCalc(params);
-		cc = params.search( new CalculateObjMaskPointsSecondMomentMatrix(false) );
-	}
-	
-	@Override
-	public double calcCast(CacheableParams<FeatureObjMaskParams> params) throws FeatureCalcException {
-		
-		assert( params.getParams() instanceof FeatureObjMaskParams );
-		return calcAxisWidth( cc, params.getParams(), index);
-	}
-
 	public int getIndex() {
 		return index;
 	}

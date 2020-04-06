@@ -36,13 +36,9 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.shared.relation.EqualToBean;
 import org.anchoranalysis.bean.shared.relation.RelationBean;
 import org.anchoranalysis.core.cache.ExecuteException;
-import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.relation.RelationToValue;
 import org.anchoranalysis.feature.cache.CacheableParams;
-import org.anchoranalysis.feature.cachedcalculation.CachedCalculation;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.feature.init.FeatureInitParams;
-
 import ch.ethz.biol.cell.mpp.nrg.cachedcalculation.OverlapCalculationMaskGlobal;
 
 public class OverlapRatioTwoRegionsMaskGlobal extends NRGElemPair {
@@ -68,21 +64,34 @@ public class OverlapRatioTwoRegionsMaskGlobal extends NRGElemPair {
 	
 	private RelationBean relationToThreshold = new EqualToBean();
 	
-	private CachedCalculation<Double> cc1;
-	private CachedCalculation<Double> cc2;
-	
 	public OverlapRatioTwoRegionsMaskGlobal() {
 	}
 	
 	@Override
-	public void beforeCalc(CacheableParams<FeatureInitParams> params)
-			throws InitException {
-		super.beforeCalc(params);
+	public double calcCast( CacheableParams<NRGElemPairCalcParams> paramsCacheable ) throws FeatureCalcException {
 		
-		cc1 = params.search( new OverlapCalculationMaskGlobal(regionID1, nrgIndex, (byte) maskValue) );
-		cc2 = params.search( new OverlapCalculationMaskGlobal(regionID2, nrgIndex, (byte) maskValue) );
+		NRGElemPairCalcParams params = paramsCacheable.getParams();
+		
+		try {
+			return calcOverlapRatioMin(
+				params.getObj1(),
+				params.getObj2(),
+				overlapForRegion(paramsCacheable, regionID1),
+				overlapForRegion(paramsCacheable, regionID2),
+				regionID1,
+				regionID2
+			);
+		} catch (ExecuteException e) {
+			throw new FeatureCalcException(e);
+		}							
 	}
 	
+	private double overlapForRegion( CacheableParams<NRGElemPairCalcParams> paramsCacheable, int regionID ) throws ExecuteException {
+		return paramsCacheable.calc(
+			new OverlapCalculationMaskGlobal(regionID, nrgIndex, (byte) maskValue)
+		);
+	}
+
 	private double calcOverlapRatioMin( PxlMarkMemo obj1, PxlMarkMemo obj2, double overlap1, double overlap2, int regionID1, int regionID2 ) throws FeatureCalcException {
 
 		double overlap = overlap1 + overlap2;
@@ -98,29 +107,6 @@ public class OverlapRatioTwoRegionsMaskGlobal extends NRGElemPair {
 		return overlap / (volume1+volume2);
 	}
 
-	
-	@Override
-	public double calcCast( CacheableParams<NRGElemPairCalcParams> paramsCacheable ) throws FeatureCalcException {
-		
-		assert( cc1!=null );
-		assert( cc2!=null );
-		
-		NRGElemPairCalcParams params = paramsCacheable.getParams();
-		
-		try {
-			return calcOverlapRatioMin(
-				params.getObj1(),
-				params.getObj2(),
-				cc1.getOrCalculate(params),
-				cc2.getOrCalculate(params),
-				regionID1,
-				regionID2
-			);
-		} catch (ExecuteException e) {
-			throw new FeatureCalcException(e);
-		}							
-	}
-	
 	public int getRegionID1() {
 		return regionID1;
 	}

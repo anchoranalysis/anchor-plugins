@@ -29,11 +29,8 @@ package ch.ethz.biol.cell.mpp.nrg.feature.objmask;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.cache.ExecuteException;
-import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.feature.cache.CacheableParams;
-import org.anchoranalysis.feature.cachedcalculation.CachedCalculation;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.feature.init.FeatureInitParams;
 import org.anchoranalysis.image.feature.bean.objmask.FeatureObjMask;
 import org.anchoranalysis.image.feature.objmask.FeatureObjMaskParams;
 import org.anchoranalysis.image.objmask.ObjMask;
@@ -52,15 +49,6 @@ public class AxisRatioMoments extends FeatureObjMask {
 	private boolean suppressZCovariance = false;		// Supresses covariance in the z-direction.
 	// END BEAN PROPERTIES
 	
-	private CachedCalculation<MomentsFromPointsCalculator> cc;
-	
-	@Override
-	public void beforeCalc(CacheableParams<FeatureInitParams> params)
-			throws InitException {
-		super.beforeCalc(params);
-		cc = params.search( new CalculateObjMaskPointsSecondMomentMatrix(suppressZCovariance) );
-	}
-	
 	@Override
 	public double calcCast(CacheableParams<FeatureObjMaskParams> paramsCacheable) throws FeatureCalcException {
 		
@@ -76,7 +64,9 @@ public class AxisRatioMoments extends FeatureObjMask {
 		
 		MomentsFromPointsCalculator moments;
 		try {
-			moments = cc.getOrCalculate(params);
+			moments = paramsCacheable.calc(
+				new CalculateObjMaskPointsSecondMomentMatrix(suppressZCovariance)	
+			);
 		} catch (ExecuteException e) {
 			throw new FeatureCalcException(e);
 		}
@@ -108,12 +98,4 @@ public class AxisRatioMoments extends FeatureObjMask {
 	public void setSuppressZCovariance(boolean suppressZCovariance) {
 		this.suppressZCovariance = suppressZCovariance;
 	}
-
-
-
-
-
-
-
-
 }

@@ -33,7 +33,6 @@ import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.core.log.NullLogReporter;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.session.SequentialSessionSingleFeature;
-import org.anchoranalysis.feature.session.cache.FeatureSessionCacheRetriever;
 import org.anchoranalysis.feature.shared.SharedFeatureSet;
 import org.anchoranalysis.image.feature.init.FeatureInitParamsImageInit;
 
@@ -55,9 +54,8 @@ public abstract class FeatureAmongObjMaskCollectionSingleElem extends FeatureAmo
 	private SequentialSessionSingleFeature sessionObjs;
 	
 	@Override
-	public void beforeCalcCast(FeatureInitParamsImageInit params,
-			FeatureSessionCacheRetriever session) throws InitException {
-		super.beforeCalcCast(params, session);
+	public void beforeCalcCast(FeatureInitParamsImageInit params) throws InitException {
+		super.beforeCalcCast(params);
 		
 		sessionObjs = new SequentialSessionSingleFeature(item);
 		
@@ -65,7 +63,11 @@ public abstract class FeatureAmongObjMaskCollectionSingleElem extends FeatureAmo
 		SharedFeatureSet sharedFeatures = new SharedFeatureSet();
 		
 		// We don't log these feature calculations 
-		sessionObjs.start(params, sharedFeatures, new LogErrorReporter( new NullLogReporter() ) );
+		sessionObjs.start(
+			params,
+			sharedFeatures,
+			new LogErrorReporter( new NullLogReporter() )
+		);
 	}
 	
 	public Feature getItem() {

@@ -60,10 +60,8 @@ public abstract class FeatureIntensityHistogram extends FeatureStack {
 	private int nrgIndexMask = -1;
 	// END BEAN FIELDS
 	
-	private CachedCalculation<Histogram> ccHistogram;
-	
 	@Override
-	public void beforeCalc(CacheableParams<FeatureInitParams> params)
+	public void beforeCalc(FeatureInitParams params)
 			throws InitException {
 		super.beforeCalc(params);
 		
@@ -72,14 +70,14 @@ public abstract class FeatureIntensityHistogram extends FeatureStack {
 				String.format("nrgIndexMask must be either non-negative or -1 (off), but is: %d", nrgIndexMask)
 			);
 		}
-		
-		ccHistogram = params.search( histogramCalculator() );
 	}
 	
 	@Override
 	public double calcCast(CacheableParams<FeatureStackParams> params) throws FeatureCalcException {
 		try {
-			Histogram h = ccHistogram.getOrCalculate(params.getParams());
+			Histogram h = params.calc(
+				histogramCalculator()		
+			);
 			return calcStatistic(h);
 		} catch (ExecuteException e) {
 			throw new FeatureCalcException(e);

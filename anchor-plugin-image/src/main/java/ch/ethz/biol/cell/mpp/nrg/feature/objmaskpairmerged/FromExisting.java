@@ -57,49 +57,45 @@ public abstract class FromExisting extends FeatureObjMaskPairMerged {
 	private Feature item;
 	// END BEAN PROPERTIES
 	
+	@Override
+	public double calcCast(CacheableParams<FeatureObjMaskPairMergedParams> params)
+			throws FeatureCalcException {
+		
+		return transformParamsCast(params).calc(item);
+	}
+
+	@Override
+	public CacheableParams<? extends FeatureCalcParams> transformParams(CacheableParams<? extends FeatureCalcParams> params,
+			Feature dependentFeature) {
+
+		if (params.getParams() instanceof FeatureObjMaskPairMergedParams) {
+			return transformParamsCast(
+				params.changeParams( (FeatureObjMaskPairMergedParams) params.getParams() )
+			);
+		} else {
+			return params;
+		}
+	}
+	
+	public CacheableParams<FeatureObjMaskParams> transformParamsCast( CacheableParams<FeatureObjMaskPairMergedParams> params ) {
+
+		assert( params.getParams() instanceof FeatureObjMaskPairMergedParams );
+		
+		ObjMask omSelected = selectObjMask(params.getParams());
+		
+		FeatureObjMaskParams paramsNew = new FeatureObjMaskParams( omSelected );
+		paramsNew.setNrgStack( params.getParams().getNrgStack() );
+		
+		assert( paramsNew instanceof FeatureObjMaskParams);
+		
+		return params.changeParams(paramsNew, cacheNameToUse());
+	}
+
 	protected abstract ObjMask selectObjMask( FeatureObjMaskPairMergedParams params );
 	
 	/** The name of the cache to use for calculation */
 	protected abstract String cacheNameToUse();
 	
-	@Override
-	public double calcCast(CacheableParams<FeatureObjMaskPairMergedParams> params)
-			throws FeatureCalcException {
-		
-		return params.calcChangeParams(
-			item,
-			transformParams(params.getParams()),
-			cacheNameToUse()
-		);
-	}
-
-
-	public FeatureObjMaskParams transformParams(FeatureObjMaskPairMergedParams params) {
-
-		assert( params instanceof FeatureObjMaskPairMergedParams);
-		
-		ObjMask omSelected = selectObjMask(params);
-		
-		FeatureObjMaskParams paramsNew = new FeatureObjMaskParams( omSelected );
-		paramsNew.setNrgStack( params.getNrgStack() );
-		
-		assert( paramsNew instanceof FeatureObjMaskParams);
-		
-		return paramsNew;
-	}
-	
-	
-	@Override
-	public FeatureCalcParams transformParams(FeatureCalcParams params,
-			Feature dependentFeature) {
-
-		if (params instanceof FeatureObjMaskPairMergedParams) {
-			return transformParams( (FeatureObjMaskPairMergedParams) params );
-		} else {
-			return params;
-		}
-	}
-
 	public Feature getItem() {
 		return item;
 	}

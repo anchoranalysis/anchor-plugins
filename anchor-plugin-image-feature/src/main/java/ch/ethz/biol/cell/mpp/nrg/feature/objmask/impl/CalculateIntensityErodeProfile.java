@@ -66,7 +66,7 @@ public class CalculateIntensityErodeProfile extends CachedCalculationCastParams<
 		this.calcShell = calcShell;
 	}
 	
-	private static CachedCalculation<ObjMask> createShellCalculator( CacheSession cache, int iterations, boolean do3D ) {
+	private static CachedCalculation<ObjMask> createShellCalculator( CacheSession cache, int iterations, boolean do3D ) throws FeatureCalcException {
 		return CalculateShellTwoStage.createFromCache(
 			cache,
 			iterations,
@@ -82,7 +82,7 @@ public class CalculateIntensityErodeProfile extends CachedCalculationCastParams<
 			int iterationsErosionStart,
 			int iterationsErosionEnd,
 			boolean do3D
-		) {
+		) throws FeatureCalcException {
 			List<CachedCalculation<ObjMask>> listCalcShell = new ArrayList<>();
 			for( int i=iterationsErosionStart; i<=iterationsErosionEnd; i++) {
 				listCalcShell.add( createShellCalculator(cache,i, do3D) );

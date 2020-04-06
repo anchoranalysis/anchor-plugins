@@ -46,7 +46,7 @@ public class MaskDirection extends ObjMaskPointsSpecificEigenvalueBase {
 
 	@Override
 	public double calcCast(CacheableParams<FeatureObjMaskParams> params) throws FeatureCalcException {
-		return calcSpecificEigenvector(params.getParams()).getEigenvector().get(eigenvectorIndex);
+		return calcSpecificEigenvector(params).getEigenvector().get(eigenvectorIndex);
 	}
 
 	public int getEigenvectorIndex() {

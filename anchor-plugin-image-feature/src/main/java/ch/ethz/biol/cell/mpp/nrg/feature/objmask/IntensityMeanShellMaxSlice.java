@@ -33,11 +33,9 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.error.BeanMisconfiguredException;
 import org.anchoranalysis.core.cache.ExecuteException;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.feature.cache.CacheableParams;
 import org.anchoranalysis.feature.cachedcalculation.CachedCalculation;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.feature.init.FeatureInitParams;
 import org.anchoranalysis.feature.nrg.NRGStack;
 import org.anchoranalysis.image.binary.values.BinaryValues;
 import org.anchoranalysis.image.chnl.Chnl;
@@ -88,28 +86,13 @@ public class IntensityMeanShellMaxSlice extends FeatureObjMask {
 	@BeanField
 	private double emptyValue = 255;
 	// END BEAN PROPERTIES
-	
-	private CachedCalculation<ObjMask> ccShellObjMask;
-	
+
 	@Override
 	public void checkMisconfigured( BeanInstanceMap defaultInstances ) throws BeanMisconfiguredException {
 		super.checkMisconfigured( defaultInstances );
 		if( iterationsDilation==0 && iterationsErosion==0 ) {
 			throw new BeanMisconfiguredException("At least one of iterationsDilation and iterationsErosion must be positive");
 		}
-	}
-	
-	@Override
-	public void beforeCalc(CacheableParams<FeatureInitParams> params) throws InitException {
-		super.beforeCalc(params);
-		ccShellObjMask = CalculateShellObjMask.createFromCache(
-			params.getCacheSession(),
-			iterationsDilation,
-			iterationsErosion,
-			iterationsErosionSecond,
-			do3D,
-			inverse	
-		);
 	}
 	
 	@Override
@@ -121,7 +104,15 @@ public class IntensityMeanShellMaxSlice extends FeatureObjMask {
 		
 		ObjMask om;
 		try {
-			om = ccShellObjMask.getOrCalculate(params);
+			CachedCalculation<ObjMask> ccShellObjMask = CalculateShellObjMask.createFromCache(
+				paramsCacheable,
+				iterationsDilation,
+				iterationsErosion,
+				iterationsErosionSecond,
+				do3D,
+				inverse	
+			);
+			om = paramsCacheable.calc(ccShellObjMask);
 		} catch (ExecuteException e1) {
 			throw new FeatureCalcException(e1);
 		}

@@ -31,7 +31,6 @@ import org.anchoranalysis.core.cache.ExecuteException;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.cache.CacheableParams;
-import org.anchoranalysis.feature.cachedcalculation.CachedCalculation;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.init.FeatureInitParams;
 import org.anchoranalysis.image.bean.threshold.CalculateLevel;
@@ -61,17 +60,12 @@ public class ThresholdHistogram extends FeatureHistogram {
 	@BeanField
 	private CalculateLevel calculateLevel;
 	// END BEAN PROPERTIES
-	
-	private CachedCalculation<Histogram> ccHistogram;
 
 	@Override
-	public void beforeCalc(CacheableParams<FeatureInitParams> params)
+	public void beforeCalc(FeatureInitParams params)
 			throws InitException {
 		super.beforeCalc(params);
 		item.beforeCalc(params);
-		ccHistogram = params.search(
-			new CalculateOtsuThresholdedHistogram(calculateLevel, getLogger())
-		);
 	}
 	
 	@Override
@@ -80,7 +74,9 @@ public class ThresholdHistogram extends FeatureHistogram {
 		try {
 			FeatureHistogramParams params = paramsCacheable.getParams();
 			
-			Histogram hist = ccHistogram.getOrCalculate(params);
+			Histogram hist = paramsCacheable.calc(
+				new CalculateOtsuThresholdedHistogram(calculateLevel, getLogger())	
+			);
 			
 			FeatureHistogramParams paramsChangedHist = new FeatureHistogramParams(
 				hist,

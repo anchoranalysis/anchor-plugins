@@ -36,12 +36,9 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.shared.relation.EqualToBean;
 import org.anchoranalysis.bean.shared.relation.RelationBean;
 import org.anchoranalysis.core.cache.ExecuteException;
-import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.relation.RelationToValue;
 import org.anchoranalysis.feature.cache.CacheableParams;
-import org.anchoranalysis.feature.cachedcalculation.CachedCalculation;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.feature.init.FeatureInitParams;
 import org.anchoranalysis.image.voxel.statistics.VoxelStatistics;
 
 import ch.ethz.biol.cell.mpp.nrg.cachedcalculation.OverlapCalculationMaskGlobal;
@@ -69,30 +66,23 @@ public class OverlapRatioMaskGlobal extends NRGElemPair {
 	
 	private RelationBean relationToThreshold = new EqualToBean();
 	
-	private CachedCalculation<Double> cc;
-	
 	public OverlapRatioMaskGlobal() {
-	}
-	
-	@Override
-	public void beforeCalc(CacheableParams<FeatureInitParams> params) throws InitException {
-		super.beforeCalc(params);
-		
-		cc = params.search( new OverlapCalculationMaskGlobal(regionID, nrgIndex, (byte) maskValue) );
 	}
 	
 	@Override
 	public double calcCast( CacheableParams<NRGElemPairCalcParams> paramsCacheable ) throws FeatureCalcException {
 		
-		assert( cc!=null );
-		
 		NRGElemPairCalcParams params = paramsCacheable.getParams();
 		
 		try {
+			double overlap = paramsCacheable.calc(
+				new OverlapCalculationMaskGlobal(regionID, nrgIndex, (byte) maskValue)
+			);
+			
 			return calcOverlapRatioMin(
 				params.getObj1(),
 				params.getObj2(),
-				cc.getOrCalculate(params),
+				overlap,
 				regionID,
 				false
 			);

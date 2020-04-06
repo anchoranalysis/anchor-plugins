@@ -58,8 +58,9 @@ public class IntensityGradientMeanMagnitudeFromMultiple extends IntensityGradien
 		// Calculate the mean
 		double sum = 0.0;
 		try {
-			
-			List<Point3d> pnts = getCachedCalculationPoints().getOrCalculate(params.getParams());
+			List<Point3d> pnts = params.calc(
+				gradientCalculation()
+			);
 			
 			for( Point3d p : pnts ) {
 				// Calculate the norm of the point

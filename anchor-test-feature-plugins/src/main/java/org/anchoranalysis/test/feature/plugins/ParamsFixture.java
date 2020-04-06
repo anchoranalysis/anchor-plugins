@@ -107,9 +107,9 @@ public class ParamsFixture {
 	/** If flag is true, adds extra to the default radius value */
 	private static int radiusMaybeExtra( boolean flag, int extra ) {
 		if (flag) {
-			return DEFAULT_CIRCLE_RADIUS + extra;
-		} else {
 			return DEFAULT_CIRCLE_RADIUS;
+		} else {
+			return DEFAULT_CIRCLE_RADIUS + extra;
 		}
 	}
 }
