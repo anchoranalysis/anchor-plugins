@@ -1,4 +1,4 @@
-package org.anchoranalysis.test.feature.plugins;
+package org.anchoranalysis.image.feature.session;
 
 import static org.anchoranalysis.test.feature.plugins.ResultsVectorTestUtilities.*;
 
@@ -42,10 +42,16 @@ import org.anchoranalysis.image.feature.session.FeatureSessionCreateParams;
 import org.anchoranalysis.test.TestLoader;
 import org.anchoranalysis.test.feature.SimpleFeatureListFixture;
 import org.anchoranalysis.test.feature.plugins.FeatureListFixture;
+import org.anchoranalysis.test.feature.plugins.HistogramFixture;
 import org.anchoranalysis.test.feature.plugins.NRGStackFixture;
 import org.junit.Before;
 import org.junit.Test;
 
+/**
+ * This test is located inm this package, as it uses BeanXML in resources that depends on plugins in this module
+ * @author owen
+ *
+ */
 public class FeatureSessionCreateParamsTest {
 	
 	private static TestLoader loader = TestLoader.createFromMavenWorkingDir();

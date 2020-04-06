@@ -1,4 +1,4 @@
-package org.anchoranalysis.test.feature.plugins;
+package org.anchoranalysis.image.feature.session;
 
 /*-
  * #%L
@@ -37,12 +37,12 @@ import org.anchoranalysis.image.binary.voxel.BinaryVoxelBoxByte;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.extent.ImageDim;
+import org.anchoranalysis.image.feature.session.voxelpattern.CutOffCorners;
+import org.anchoranalysis.image.feature.session.voxelpattern.VoxelPattern;
 import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.anchoranalysis.image.voxel.box.factory.VoxelBoxFactory;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
-import org.anchoranalysis.test.feature.plugins.voxelpattern.CutOffCorners;
-import org.anchoranalysis.test.feature.plugins.voxelpattern.VoxelPattern;
 
 class ObjMaskFixture {
 
