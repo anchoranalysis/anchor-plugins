@@ -36,7 +36,6 @@ import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.cache.CacheableParams;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 import org.anchoranalysis.image.bean.provider.BinaryImgChnlProvider;
 import org.anchoranalysis.image.binary.BinaryChnl;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
@@ -67,20 +66,33 @@ public class BinaryImageChnlProviderFeature extends FeatureStack {
 	@Override
 	public double calcCast(CacheableParams<FeatureStackParams> params) throws FeatureCalcException {
 
+		BinaryChnl bc;
 		try {
 			binaryImgChnlProvider.initRecursive(params.getParams().getSharedObjs(), getLogger() );
-		} catch (InitException e1) {
+			bc = binaryImgChnlProvider.create();
+		} catch (InitException | CreateException e1) {
 			throw new FeatureCalcException(e1);
 		}
 		
-		BinaryChnl bic;
-		try {
-			bic = binaryImgChnlProvider.create();
-		} catch (CreateException e1) {
-			throw new FeatureCalcException(e1);
-		}
+		BinaryVoxelBox<ByteBuffer> bvb = binaryVoxelBox(bc);
 		
-		
+		return params.calcChangeParams(
+			item,
+			p -> deriveParams(p, bvb),
+			"binaryMask"
+		);
+	}
+	
+	private static FeatureObjMaskParams deriveParams(FeatureStackParams params, BinaryVoxelBox<ByteBuffer> bvb ) {
+		FeatureObjMaskParams paramsObj = new FeatureObjMaskParams();
+		paramsObj.setNrgStack( params.getNrgStack() );
+		paramsObj.setObjMask(
+			new ObjMask(bvb)
+		);
+		return paramsObj;
+	}
+	
+	private static BinaryVoxelBox<ByteBuffer> binaryVoxelBox( BinaryChnl bic ) throws FeatureCalcException {
 		VoxelBox<ByteBuffer> vb;
 		try {
 			vb = bic.getChnl().getVoxelBox().asByte();
@@ -88,21 +100,7 @@ public class BinaryImageChnlProviderFeature extends FeatureStack {
 			throw new FeatureCalcException("binaryImgChnlProvider returned incompatible data type", e1);
 		}
 		
-		BinaryVoxelBox<ByteBuffer> binaryVoxelBox = new BinaryVoxelBoxByte( vb, bic.getBinaryValues() );
-		return calcOnBinaryMask(
-			params,
-			binaryVoxelBox,
-			params.getParams().getNrgStack()
-		);
-	}
-	
-	private double calcOnBinaryMask( CacheableParams<FeatureStackParams> params, BinaryVoxelBox<ByteBuffer> binaryVoxelBox, NRGStackWithParams nrgStack) throws FeatureCalcException {
-
-		FeatureObjMaskParams paramsObj = new FeatureObjMaskParams();
-		paramsObj.setNrgStack(nrgStack);
-		paramsObj.setObjMask( new ObjMask( binaryVoxelBox ) );
-		
-		return params.calcChangeParams(item, paramsObj, "binaryMask");
+		return new BinaryVoxelBoxByte( vb, bic.getBinaryValues() );
 	}
 
 	public Feature getItem() {

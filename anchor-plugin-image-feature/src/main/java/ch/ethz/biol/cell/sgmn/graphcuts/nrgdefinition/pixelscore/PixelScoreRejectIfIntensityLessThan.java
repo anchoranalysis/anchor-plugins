@@ -61,7 +61,7 @@ public class PixelScoreRejectIfIntensityLessThan extends PixelScore {
 			return 0;
 		}
 		
-		return params.getCacheSession().calc(item, params);
+		return params.calc(item);
 	}
 
 	public PixelScore getItem() {

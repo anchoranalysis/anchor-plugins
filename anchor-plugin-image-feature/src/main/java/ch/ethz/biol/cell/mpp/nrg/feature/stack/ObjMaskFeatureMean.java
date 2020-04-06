@@ -38,6 +38,7 @@ import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
 import org.anchoranalysis.image.feature.bean.FeatureStack;
 import org.anchoranalysis.image.feature.objmask.FeatureObjMaskParams;
 import org.anchoranalysis.image.feature.stack.FeatureStackParams;
+import org.anchoranalysis.image.init.ImageInitParams;
 import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.image.objmask.ObjMaskCollection;
 
@@ -66,24 +67,10 @@ public class ObjMaskFeatureMean extends FeatureStack {
 	
 	@Override
 	public double calcCast(CacheableParams<FeatureStackParams> paramsCacheable) throws FeatureCalcException {
-
-		FeatureStackParams params = paramsCacheable.getParams();
-		
-		try {
-			objs.initRecursive(params.getSharedObjs(), getLogger() );
-		} catch (InitException e1) {
-			throw new FeatureCalcException(e1);
-		}
-		
-		ObjMaskCollection objsCollection;
-		try {
-			objsCollection = objs.create();
-		} catch (CreateException e1) {
-			throw new FeatureCalcException(e1);
-		}
-		
-		FeatureObjMaskParams paramsObj = new FeatureObjMaskParams();
-		paramsObj.setNrgStack( params.getNrgStack() );
+			
+		ObjMaskCollection objsCollection = createObjs(
+			paramsCacheable.getParams().getSharedObjs()
+		);
 		
 		DoubleArrayList featureVals = new DoubleArrayList();
 		
@@ -91,11 +78,10 @@ public class ObjMaskFeatureMean extends FeatureStack {
 		for( int i=0; i<objsCollection.size(); i++) {
 			
 			ObjMask om = objsCollection.get(i);
-			
-			paramsObj.setObjMask(om);
+
 			double val = paramsCacheable.calcChangeParams(
 				item,
-				paramsObj,
+				p -> deriveParams(p, om),
 				"objs" + i
 			);
 			featureVals.add(val);
@@ -103,6 +89,29 @@ public class ObjMaskFeatureMean extends FeatureStack {
 		
 		return Descriptive.mean(featureVals);
 	}
+	
+	private ObjMaskCollection createObjs( ImageInitParams initParams ) throws FeatureCalcException {
+		
+		try {
+			objs.initRecursive(initParams, getLogger() );
+		} catch (InitException e1) {
+			throw new FeatureCalcException(e1);
+		}
+		
+		try {
+			return objs.create();
+		} catch (CreateException e1) {
+			throw new FeatureCalcException(e1);
+		}
+	}
+	
+	private static FeatureObjMaskParams deriveParams( FeatureStackParams params, ObjMask om ) {
+		FeatureObjMaskParams paramsObj = new FeatureObjMaskParams();
+		paramsObj.setNrgStack( params.getNrgStack() );
+		paramsObj.setObjMask(om);
+		return paramsObj;
+	}
+	
 
 	public Feature getItem() {
 		return item;

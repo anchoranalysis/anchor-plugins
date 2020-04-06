@@ -30,10 +30,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.anchoranalysis.core.cache.ExecuteException;
-import org.anchoranalysis.feature.cache.CacheSession;
 import org.anchoranalysis.feature.cachedcalculation.CachedCalculation;
 import org.anchoranalysis.feature.cachedcalculation.CachedCalculationCastParams;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.feature.session.cache.ICachedCalculationSearch;
 import org.anchoranalysis.image.chnl.Chnl;
 import org.anchoranalysis.image.feature.objmask.FeatureObjMaskParams;
 import org.anchoranalysis.image.objmask.ObjMask;
@@ -66,7 +66,7 @@ public class CalculateIntensityErodeProfile extends CachedCalculationCastParams<
 		this.calcShell = calcShell;
 	}
 	
-	private static CachedCalculation<ObjMask> createShellCalculator( CacheSession cache, int iterations, boolean do3D ) throws FeatureCalcException {
+	private static CachedCalculation<ObjMask> createShellCalculator( ICachedCalculationSearch cache, int iterations, boolean do3D ) throws FeatureCalcException {
 		return CalculateShellTwoStage.createFromCache(
 			cache,
 			iterations,
@@ -77,7 +77,7 @@ public class CalculateIntensityErodeProfile extends CachedCalculationCastParams<
 	
 	
 	public static CachedCalculation<ErodeProfile> createFromCache(
-			CacheSession cache,
+			ICachedCalculationSearch cache,
 			int nrgIndex,
 			int iterationsErosionStart,
 			int iterationsErosionEnd,

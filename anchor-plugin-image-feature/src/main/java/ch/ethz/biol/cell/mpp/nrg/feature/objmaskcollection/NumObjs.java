@@ -27,7 +27,7 @@ package ch.ethz.biol.cell.mpp.nrg.feature.objmaskcollection;
  */
 
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.image.feature.bean.objmask.collection.FeatureObjMaskCollection;
+import org.anchoranalysis.image.feature.bean.objmask.FeatureObjMaskCollection;
 import org.anchoranalysis.image.feature.objmask.collection.FeatureObjMaskCollectionParams;
 
 public class NumObjs extends FeatureObjMaskCollection {

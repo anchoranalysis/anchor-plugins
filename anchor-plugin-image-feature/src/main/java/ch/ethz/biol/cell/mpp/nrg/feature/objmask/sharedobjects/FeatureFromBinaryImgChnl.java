@@ -34,8 +34,8 @@ import org.anchoranalysis.feature.cache.CacheableParams;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.bean.provider.BinaryImgChnlProvider;
 import org.anchoranalysis.image.binary.BinaryChnl;
+import org.anchoranalysis.image.feature.bean.objmask.FeatureObjMaskSharedObjects;
 import org.anchoranalysis.image.feature.bean.objmask.pair.FeatureObjMaskPair;
-import org.anchoranalysis.image.feature.bean.objmask.sharedobjects.FeatureObjMaskSharedObjects;
 import org.anchoranalysis.image.feature.init.FeatureInitParamsImageInit;
 import org.anchoranalysis.image.feature.objmask.FeatureObjMaskParams;
 import org.anchoranalysis.image.feature.objmask.pair.FeatureObjMaskPairParams;
@@ -82,20 +82,23 @@ public class FeatureFromBinaryImgChnl extends FeatureObjMaskSharedObjects {
 				objFromBinary = new ObjMask( bic.binaryVoxelBox() );
 			}
 	
-			FeatureObjMaskPairParams paramsPairs = new FeatureObjMaskPairParams();
-			paramsPairs.setObjMask1( params.getParams().getObjMask() );
-			paramsPairs.setObjMask2( objFromBinary );
-			paramsPairs.setNrgStack( params.getParams().getNrgStack() );
-			
 			return params.calcChangeParams(
 				item,
-				paramsPairs,
+				p -> paramsPairs(p),
 				"pair"
 			);
 			
 		} catch (CreateException e) {
 			throw new FeatureCalcException(e);
 		}
+	}
+	
+	private FeatureObjMaskPairParams paramsPairs( FeatureObjMaskParams params ) {
+		FeatureObjMaskPairParams out = new FeatureObjMaskPairParams();
+		out.setObjMask1( params.getObjMask() );
+		out.setObjMask2( objFromBinary );
+		out.setNrgStack( params.getNrgStack() );
+		return out;
 	}
 
 	public FeatureObjMaskPair getItem() {

@@ -28,7 +28,6 @@ package ch.ethz.biol.cell.mpp.nrg.feature.stack;
 
 
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.cache.CacheableParams;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
@@ -68,24 +67,25 @@ public class AsObjMask extends FeatureStack {
 	
 	@Override
 	public double calcCast(CacheableParams<FeatureStackParams> params) throws FeatureCalcException {
-				
-		FeatureObjMaskParams paramsObj = new FeatureObjMaskParams();
-		try {
-			ObjMask om = extractObjMask(params.getParams());
-			paramsObj.setNrgStack( params.getParams().getNrgStack() );
-			paramsObj.setObjMask( om );
-		} catch (CreateException e) {
-			throw new FeatureCalcException(e);
-		}
 		
 		return subcache.calc(item,
-			params.changeParams(
-				paramsObj
+			params.mapParams(
+				p -> objMaskFromStack(p),
+				"obj"
 			)
 		);
 	}
+	
+	private FeatureObjMaskParams objMaskFromStack( FeatureStackParams p ) {
+		FeatureObjMaskParams paramsObj = new FeatureObjMaskParams();
 		
-	private ObjMask extractObjMask(FeatureStackParams params) throws CreateException {
+		ObjMask om = extractObjMask(p);
+		paramsObj.setNrgStack( p.getNrgStack() );
+		paramsObj.setObjMask( om );
+		return paramsObj;
+	}
+		
+	private ObjMask extractObjMask(FeatureStackParams params) {
 		Chnl chnl = params.getNrgStack().getChnl(nrgIndex);
 		BinaryChnl binary = new BinaryChnl(chnl, BinaryValues.getDefault());
 		

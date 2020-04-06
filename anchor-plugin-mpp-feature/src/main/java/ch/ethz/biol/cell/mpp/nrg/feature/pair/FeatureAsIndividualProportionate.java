@@ -1,8 +1,11 @@
 package ch.ethz.biol.cell.mpp.nrg.feature.pair;
 
+import java.util.function.Function;
+
 import org.anchoranalysis.anchor.mpp.feature.bean.nrg.elem.NRGElemPair;
 import org.anchoranalysis.anchor.mpp.feature.nrg.elem.NRGElemIndCalcParams;
 import org.anchoranalysis.anchor.mpp.feature.nrg.elem.NRGElemPairCalcParams;
+import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
 
 /*
  * #%L
@@ -59,25 +62,46 @@ public class FeatureAsIndividualProportionate extends NRGElemPair {
 	@Override
 	public double calcCast( CacheableParams<NRGElemPairCalcParams> params ) throws FeatureCalcException {
 		
-		CacheableParams<NRGElemIndCalcParams> params1 = params.changeParams(
-			new NRGElemIndCalcParams( params.getParams().getObj1(), params.getParams().getNrgStack() )
+		CacheableParams<NRGElemIndCalcParams> params1 = deriveParams(params, p -> p.getObj1(), "obj1");
+		CacheableParams<NRGElemIndCalcParams> params2 = deriveParams(params, p -> p.getObj2(), "obj2");
+
+		return weightedSum(
+			valueFor(params1),
+			valueFor(params2),
+			weightFor(params1),
+			weightFor(params2)
 		);
-		CacheableParams<NRGElemIndCalcParams> params2 = params.changeParams(
-			new NRGElemIndCalcParams( params.getParams().getObj2(), params.getParams().getNrgStack() )
-		);
-		
-		double val1 = params1.calc( item );
-		double val2 = params2.calc( item );
-		
-		double prop1 = params1.calc( itemProportionate );
-		double prop2 = params2.calc( itemProportionate );
-		
+	}
+	
+	private double valueFor( CacheableParams<NRGElemIndCalcParams> params ) throws FeatureCalcException {
+		return params.calc(item);
+	}
+	
+	private double weightFor( CacheableParams<NRGElemIndCalcParams> params ) throws FeatureCalcException {
+		return params.calc(itemProportionate);
+	}
+	
+	private static double weightedSum( double val1, double val2, double weight1, double weight2) {
 		// Normalise
-		double propSum = prop1 + prop2;
-		prop1 /= propSum;
-		prop2 /= propSum;
+		double weightSum = weight1 + weight2;
+		weight1 /= weightSum;
+		weight2 /= weightSum;
 		
-		return (prop1*val1) + (prop2*val2);
+		return (weight1*val1) + (weight2*val2);		
+	}
+	
+	private static CacheableParams<NRGElemIndCalcParams> deriveParams( CacheableParams<NRGElemPairCalcParams> params, Function<NRGElemPairCalcParams,PxlMarkMemo> extractPmm, String cacheName ) {
+		return params.mapParams(
+			p -> extractInd(p, extractPmm),
+			cacheName
+		);
+	}
+	
+	private static NRGElemIndCalcParams extractInd( NRGElemPairCalcParams p, Function<NRGElemPairCalcParams,PxlMarkMemo> extractPmm ) {
+		return new NRGElemIndCalcParams(
+			extractPmm.apply(p),
+			p.getNrgStack()
+		);
 	}
 
 	public Feature getItem() {

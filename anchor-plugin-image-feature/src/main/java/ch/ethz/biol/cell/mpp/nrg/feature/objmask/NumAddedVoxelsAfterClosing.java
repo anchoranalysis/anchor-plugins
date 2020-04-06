@@ -66,11 +66,7 @@ public class NumAddedVoxelsAfterClosing extends FeatureObjMask {
 	public double calcCast(CacheableParams<FeatureObjMaskParams> params) throws FeatureCalcException {
 		try {
 			ObjMask omClosing = params.calc(
-				CalculateClosing.createFromCache(
-					params.getCacheSession(),
-					iterations,
-					do3D
-				)		
+				CalculateClosing.createFromCache(params, iterations, do3D)		
 			);
 			
 			double numVoxels = params.calc(

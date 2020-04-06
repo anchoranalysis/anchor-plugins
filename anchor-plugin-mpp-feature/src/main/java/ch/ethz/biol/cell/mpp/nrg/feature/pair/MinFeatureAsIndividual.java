@@ -1,5 +1,7 @@
 package ch.ethz.biol.cell.mpp.nrg.feature.pair;
 
+import java.util.function.Function;
+
 import org.anchoranalysis.anchor.mpp.feature.bean.nrg.elem.NRGElemPair;
 import org.anchoranalysis.anchor.mpp.feature.nrg.elem.NRGElemIndCalcParams;
 import org.anchoranalysis.anchor.mpp.feature.nrg.elem.NRGElemPairCalcParams;
@@ -47,31 +49,34 @@ public class MinFeatureAsIndividual extends NRGElemPair {
 	// START BEAN PROPERTIES
 	@BeanField
 	private Feature item;
-	// eND BEAN PROPERTIES
-	
-	public MinFeatureAsIndividual() {
-	}
-	
+	// END BEAN PROPERTIES
+
 	@Override
 	public double calcCast( CacheableParams<NRGElemPairCalcParams> params ) throws FeatureCalcException {
 
 		return Math.min(
-			calcForInd( params.getParams().getObj1(), params, "1" ),
-			calcForInd( params.getParams().getObj2(), params, "2" )
+			calcForInd( params, p->p.getObj1(), "1" ),
+			calcForInd( params, p->p.getObj2(), "2" )
 		);
 	}
 	
-	private double calcForInd( PxlMarkMemo pmm, CacheableParams<NRGElemPairCalcParams> paramsCacheable, String suffix ) throws FeatureCalcException {
-		
-		NRGElemIndCalcParams paramsInd = new NRGElemIndCalcParams(
-			pmm,
-			paramsCacheable.getParams().getNrgStack()
-		);
+	private double calcForInd(
+		CacheableParams<NRGElemPairCalcParams> paramsCacheable,
+		Function<NRGElemPairCalcParams,PxlMarkMemo> pmmFunc,
+		String suffix
+	) throws FeatureCalcException {
 		
 		return paramsCacheable.calcChangeParams(
 			item,
-			paramsInd,
+			p -> deriveParams(p, pmmFunc),
 			"pair_obj" + suffix
+		);
+	}
+	
+	private static NRGElemIndCalcParams deriveParams( NRGElemPairCalcParams params, Function<NRGElemPairCalcParams,PxlMarkMemo> pmmFunc ) {
+		return new NRGElemIndCalcParams(
+			pmmFunc.apply(params),
+			params.getNrgStack()
 		);
 	}
 

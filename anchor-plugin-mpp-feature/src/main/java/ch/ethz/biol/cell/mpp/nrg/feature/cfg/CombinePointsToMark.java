@@ -93,21 +93,27 @@ public class CombinePointsToMark extends NRGElemAll {
 	}
 		
 	private double calcFeatureOnMarks( Mark mark, CacheableParams<NRGElemAllCalcParams> paramsCacheable ) throws FeatureCalcException {
-
-		NRGStackWithParams nrgStack = paramsCacheable.getParams().getNrgStack();
+		
+		return item.calcCheckInit(
+			paramsCacheable.mapParams(
+				p -> deriveIndParams(p, mark),
+				"ind"
+			)
+		);
+	}
+	
+	private static NRGElemIndCalcParams deriveIndParams( NRGElemAllCalcParams params, Mark mark ) {
+		
+		NRGStackWithParams nrgStack = params.getNrgStack();
 		
 		PxlMarkMemo memo = new PxlMarkMemo(
 			mark,
 			nrgStack.getNrgStack(),
-			paramsCacheable.getParams().getPxlPartMemo().getRegionMap(),
+			params.getPxlPartMemo().getRegionMap(),
 			new PixelPartFactoryHistogram()
 		);
 							
-		NRGElemIndCalcParams paramsMark = new NRGElemIndCalcParams(	memo, nrgStack );
-		
-		return item.calcCheckInit(
-			paramsCacheable.changeParams(paramsMark)
-		);
+		return new NRGElemIndCalcParams(	memo, nrgStack );		
 	}
 	
 	public Feature getFeatureElse() {
