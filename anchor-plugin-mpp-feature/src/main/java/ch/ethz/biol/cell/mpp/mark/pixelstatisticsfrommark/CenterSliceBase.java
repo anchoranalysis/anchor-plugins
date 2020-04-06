@@ -36,14 +36,27 @@ public abstract class CenterSliceBase extends PixelStatisticsFromMark {
 		} catch (ExecuteException e) {
 			throw new CreateException(e);
 		}
+		
+		if (!(pmm.getMark() instanceof MarkAbstractPosition)) {
+			throw new CreateException("Only marks that inherit from MarkAbstractPosition are supported");
+		}
+		
+		MarkAbstractPosition mark = (MarkAbstractPosition) pmm.getMark();
+		
+		BoundingBox bbox = pm.getBoundingBox(regionID);
+		
+		int zCenter = (int) Math.round(mark.getPos().getZ()) - bbox.getCrnrMin().getZ();
+		
 		return createStatisticsFor(
 			pm,
-			(MarkAbstractPosition) pmm.getMark(),
-			dim, pm.getBoundingBox(regionID)
+			mark,
+			dim,
+			bbox,
+			zCenter
 		);
 	}
 	
-	protected abstract VoxelStatistics createStatisticsFor(PxlMark pm, MarkAbstractPosition mark, ImageDim dim, BoundingBox bbox);
+	protected abstract VoxelStatistics createStatisticsFor(PxlMark pm, MarkAbstractPosition mark, ImageDim dim, BoundingBox bbox, int zCenter);
 	
 	protected VoxelStatistics stats(PxlMark pm, int z) {
 		return pm.statisticsFor(index, regionID, z);
