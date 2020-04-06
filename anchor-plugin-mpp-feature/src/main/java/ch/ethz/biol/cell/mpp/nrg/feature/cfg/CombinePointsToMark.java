@@ -83,7 +83,7 @@ public class CombinePointsToMark extends NRGElemAll {
 			if (mark!=null) {
 				return calcFeatureOnMarks(mark, paramsCacheable);
 			} else {
-				return featureElse.calcCheckInit( paramsCacheable );
+				return paramsCacheable.calc(featureElse);
 			}
 			
 			
@@ -94,11 +94,10 @@ public class CombinePointsToMark extends NRGElemAll {
 		
 	private double calcFeatureOnMarks( Mark mark, CacheableParams<NRGElemAllCalcParams> paramsCacheable ) throws FeatureCalcException {
 		
-		return item.calcCheckInit(
-			paramsCacheable.mapParams(
-				p -> deriveIndParams(p, mark),
-				"ind"
-			)
+		return paramsCacheable.calcChangeParams(
+			item,
+			p -> deriveIndParams(p, mark),
+			"ind"
 		);
 	}
 	
