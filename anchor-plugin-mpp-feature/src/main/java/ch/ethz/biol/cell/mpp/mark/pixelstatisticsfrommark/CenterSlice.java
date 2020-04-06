@@ -1,9 +1,8 @@
 package ch.ethz.biol.cell.mpp.mark.pixelstatisticsfrommark;
 
-import org.anchoranalysis.anchor.mpp.mark.GlobalRegionIdentifiers;
 import org.anchoranalysis.anchor.mpp.mark.MarkAbstractPosition;
 import org.anchoranalysis.anchor.mpp.pxlmark.PxlMark;
-import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
+
 
 /*
  * #%L
@@ -32,71 +31,27 @@ import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
  */
 
 
-import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.cache.ExecuteException;
-import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.voxel.statistics.VoxelStatistics;
 import org.anchoranalysis.image.voxel.statistics.VoxelStatisticsCombined;
 
-public class CenterSlice extends PixelStatisticsFromMark {
+public class CenterSlice extends CenterSliceBase {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -3617915321417174160L;
 	
-	// START BEAN PROPERTIES
-	@BeanField
-	private int index = 0;
-	
-	@BeanField
-	private int regionID = GlobalRegionIdentifiers.SUBMARK_INSIDE;
-	// END BEAN PROPERTIES
-	
 	@Override
-	public VoxelStatistics createStatisticsFor(PxlMarkMemo pmm, ImageDim dim) throws CreateException {
+	protected VoxelStatistics createStatisticsFor(PxlMark pm, MarkAbstractPosition mark, ImageDim dim, BoundingBox bbox) {
 		
-		PxlMark pm;
-		try {
-			pm = pmm.doOperation();
-		} catch (ExecuteException e) {
-			throw new CreateException(e);
-		}
-		
-		BoundingBox bbox = pm.getBoundingBox(regionID);
-		
-		MarkAbstractPosition mark = (MarkAbstractPosition) pmm.getMark();
 		int z = (int) Math.round(mark.getPos().getZ()) - bbox.getCrnrMin().getZ();
 		
 		if (z<0 || z>=bbox.extnt().getZ()) {
 			return new VoxelStatisticsCombined();
 		}
 
-		return pm.statisticsFor(index, regionID, z);
+		return stats(pm, z);
 	}
-
-	public int getIndex() {
-		return index;
-	}
-
-	public void setIndex(int index) {
-		this.index = index;
-	}
-	
-	@Override
-	public String toString() {
-		return String.format("regionID=%d,index=%d", regionID, index);
-	}
-
-	public int getRegionID() {
-		return regionID;
-	}
-
-	public void setRegionID(int regionID) {
-		this.regionID = regionID;
-	}
-
-
 }
