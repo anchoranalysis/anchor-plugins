@@ -76,11 +76,10 @@ public class ThresholdHistogram extends FeatureHistogram {
 				new CalculateOtsuThresholdedHistogram(calculateLevel, getLogger())	
 			);
 			
-			return item.calcCheckInit(
-				paramsCacheable.mapParams(
-					p -> createHistogramParams(p, thresholded),
-					"thresholdedHist"
-				)
+			return paramsCacheable.calcChangeParams(
+				item,
+				p -> createHistogramParams(p, thresholded),
+				"thresholdedHist"
 			);
 		} catch (ExecuteException e) {
 			throw new FeatureCalcException(e);
