@@ -1,4 +1,4 @@
-package org.anchoranalysis.test.feature.plugins.voxelpattern;
+package org.anchoranalysis.image.feature.session.voxelpattern;
 
 /*-
  * #%L

@@ -29,7 +29,7 @@ package org.anchoranalysis.test.feature.plugins;
 import org.anchoranalysis.image.histogram.Histogram;
 import org.anchoranalysis.image.histogram.HistogramArray;
 
-class HistogramFixture {
+public class HistogramFixture {
 
 	private static int MAX_VAL = 255;
 	
