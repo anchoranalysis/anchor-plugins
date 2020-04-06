@@ -44,14 +44,12 @@ public class CenterSlice extends CenterSliceBase {
 	private static final long serialVersionUID = -3617915321417174160L;
 	
 	@Override
-	protected VoxelStatistics createStatisticsFor(PxlMark pm, MarkAbstractPosition mark, ImageDim dim, BoundingBox bbox) {
+	protected VoxelStatistics createStatisticsFor(PxlMark pm, MarkAbstractPosition mark, ImageDim dim, BoundingBox bbox, int zCenter) {
 		
-		int z = (int) Math.round(mark.getPos().getZ()) - bbox.getCrnrMin().getZ();
-		
-		if (z<0 || z>=bbox.extnt().getZ()) {
+		if (zCenter<0 || zCenter>=bbox.extnt().getZ()) {
 			return new VoxelStatisticsCombined();
 		}
 
-		return stats(pm, z);
+		return stats(pm, zCenter);
 	}
 }

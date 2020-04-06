@@ -37,8 +37,14 @@ import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.voxel.statistics.VoxelStatistics;
 import org.anchoranalysis.image.voxel.statistics.VoxelStatisticsCombined;
 
-// Considers the centerSlice +- windowSize
-//  So total size =  2*windowSize + 1 (clipped to the bounding box)
+/**
+ * Like {#link ch.ethz.biol.cell.mpp.mark.pixelstatisticsfrommark.CenterSlice} but considers more than one slice, specifically centerSlice+- windowSize
+ * 
+ * <p>So total size =  2*windowSize + 1 (clipped to the bounding box)</p>
+ * 
+ * @author owen
+ *
+ */
 public class CenterSliceWindow extends CenterSliceBase {
 
 	/**
@@ -52,9 +58,7 @@ public class CenterSliceWindow extends CenterSliceBase {
 	// END BEAN PROPERTIES
 	
 	@Override
-	protected VoxelStatistics createStatisticsFor(PxlMark pm, MarkAbstractPosition mark, ImageDim dim, BoundingBox bbox) {
-		
-		int zCenter = (int) Math.round(mark.getPos().getZ()) - bbox.getCrnrMin().getZ();
+	protected VoxelStatistics createStatisticsFor(PxlMark pm, MarkAbstractPosition mark, ImageDim dim, BoundingBox bbox, int zCenter) {
 		
 		// If our z-center is off scene we bring it to the closest value, but we guard against the case where the top of the mark is also off scene
 		if (zCenter < 0) {
