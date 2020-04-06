@@ -77,13 +77,14 @@ public class ObjMaskProviderExtractTextTest {
 		
 		assertTrue( objs.size()==3 );
 		
-		assertBoxAtIndex(objs, 0, boxAt(441, 310, 72, 35) );
-		assertBoxAtIndex(objs, 1, boxAt(310, 318, 108, 34) );
-		assertBoxAtIndex(objs, 2, boxAt(392, 200, 27, 25) );
+		assertBoxAtIndex(objs, 0, boxAt(439, 311, 75, 37) );
+		assertBoxAtIndex(objs, 1, boxAt(310, 318, 108, 36) );
+		assertBoxAtIndex(objs, 2, boxAt(392, 199, 29, 26) );
 	}
 	
 	private void assertBoxAtIndex( ObjMaskCollection objs, int index, BoundingBox box  ) {
 		assertEquals(
+			"box at index " + index,
 			box,
 			objs.get(index).getBoundingBox()
 		);		
