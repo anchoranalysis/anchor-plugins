@@ -30,9 +30,11 @@ import org.anchoranalysis.core.index.GetOperationFailedException;
 import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.core.name.MultiName;
 import org.anchoranalysis.feature.calc.ResultsVectorCollection;
+import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
 import org.anchoranalysis.feature.io.csv.GroupedResultsVectorCollection;
 import org.anchoranalysis.feature.list.NamedFeatureStore;
 import org.anchoranalysis.feature.name.FeatureNameList;
+import org.anchoranalysis.feature.resultsvectorcollection.FeatureResultsVectorCollectionParams;
 import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
 
@@ -51,8 +53,8 @@ public abstract class SharedStateExportFeatures {
 		return results.getOrCreateNew(identifier);
 	}
 
-	public void writeFeaturesAsCSVForAllGroups(
-		NamedFeatureStore featuresAggregate,
+	public <T extends FeatureCalcParams> void writeFeaturesAsCSVForAllGroups(
+		NamedFeatureStore<FeatureResultsVectorCollectionParams> featuresAggregate,
 		BoundOutputManagerRouteErrors outputManager,
 		LogErrorReporter logErrorReporter
 	) throws AnchorIOException {
@@ -63,7 +65,4 @@ public abstract class SharedStateExportFeatures {
 			logErrorReporter
 		);
 	}
-	
-	
-	
 }

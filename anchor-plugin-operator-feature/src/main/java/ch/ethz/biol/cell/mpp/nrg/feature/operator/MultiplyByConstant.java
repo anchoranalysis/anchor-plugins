@@ -29,12 +29,13 @@ package ch.ethz.biol.cell.mpp.nrg.feature.operator;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.bean.Feature;
+import org.anchoranalysis.feature.bean.operator.FeatureGenericSingleElem;
 import org.anchoranalysis.feature.bean.operator.FeatureSingleElem;
 import org.anchoranalysis.feature.cache.CacheableParams;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
 
-public class MultiplyByConstant extends FeatureSingleElem {
+public class MultiplyByConstant<T extends FeatureCalcParams> extends FeatureGenericSingleElem<T> {
 
 	/**
 	 * 
@@ -50,13 +51,13 @@ public class MultiplyByConstant extends FeatureSingleElem {
 		
 	}
 	
-	public MultiplyByConstant( Feature feature, double value ) {
+	public MultiplyByConstant( Feature<T> feature, double value ) {
 		setItem(feature);
 		setValue(value);
 	}
 	
 	@Override
-	public double calc( CacheableParams<? extends FeatureCalcParams> params ) throws FeatureCalcException {
+	public double calc( CacheableParams<T> params ) throws FeatureCalcException {
 		return params.calc( getItem() ) * value;
 	}
 

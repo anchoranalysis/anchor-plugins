@@ -34,6 +34,7 @@ import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.bean.list.FeatureListProvider;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.calc.ResultsVector;
+import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
 import org.anchoranalysis.feature.list.NamedFeatureStore;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 import org.anchoranalysis.image.bean.provider.stack.StackProvider;
@@ -50,16 +51,16 @@ import org.anchoranalysis.image.io.input.StackInputInitParamsCreator;
  * @author FEEHANO
  *
  */
-public class FeatureCalculatorStackInputFromStore {
+public class FeatureCalculatorStackInputFromStore<T extends FeatureCalcParams> {
 
-	private FeatureList featureList;
+	private FeatureList<T> featureList;
 	
 	private HelperImageFeatureCalculator helper;
 	private ImageInitParams initParams;
 	private NRGStackWithParams nrgStack;
 		
 	public FeatureCalculatorStackInputFromStore(ProvidesStackInput stackInput, StackProvider nrgStackProvider,
-			NamedFeatureStore featureStore, Path modelDir, LogErrorReporter logErrorReporter) throws OperationFailedException {
+			NamedFeatureStore<T> featureStore, Path modelDir, LogErrorReporter logErrorReporter) throws OperationFailedException {
 		super();
 		
 		helper = new HelperImageFeatureCalculator(logErrorReporter);
@@ -76,7 +77,7 @@ public class FeatureCalculatorStackInputFromStore {
 	/** Calculates a single-feature that comes in a featureProvider 
 	 * @throws FeatureCalcException */
 	public double calcSingleFromProvider(
-			FeatureListProvider featureProvider,
+			FeatureListProvider<T> featureProvider,
 			String featureProviderName
 	) throws FeatureCalcException {
 		return helper.calcSingleIndirectly(
@@ -97,8 +98,8 @@ public class FeatureCalculatorStackInputFromStore {
 		return initParams;
 	}
 	
-	private static FeatureList extractFeatures( NamedFeatureStore featureStore ) {
-		NamedFeatureStore featureStoreForTask = featureStore.deepCopy();
+	private static <T extends FeatureCalcParams> FeatureList<T> extractFeatures( NamedFeatureStore<T> featureStore ) {
+		NamedFeatureStore<T> featureStoreForTask = featureStore.deepCopy();
 		return featureStoreForTask.listFeatures();
 	}
 	

@@ -33,6 +33,7 @@ import org.anchoranalysis.anchor.mpp.regionmap.RegionMapSingleton;
 
 
 import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.feature.bean.operator.FeatureGenericSingleElem;
 import org.anchoranalysis.feature.bean.operator.FeatureSingleElem;
 import org.anchoranalysis.feature.cache.CacheableParams;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
@@ -43,7 +44,7 @@ import org.anchoranalysis.image.feature.objmask.FeatureObjMaskParams;
 import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.image.objmask.properties.ObjMaskWithProperties;
 
-public class AsObjMaskPixelsHigh extends FeatureSingleElem {
+public class AsObjMaskPixelsHigh extends FeatureSingleElem<NRGElemIndCalcParams,FeatureObjMaskParams> {
 
 	/**
 	 * 
@@ -65,7 +66,7 @@ public class AsObjMaskPixelsHigh extends FeatureSingleElem {
 	// END BEAN PROPERTIES
 	
 	@Override
-	public double calc(CacheableParams<? extends FeatureCalcParams> params) throws FeatureCalcException {
+	public double calc(CacheableParams<NRGElemIndCalcParams> params) throws FeatureCalcException {
 		return params
 			.downcastParams(NRGElemIndCalcParams.class)
 			.calcChangeParams(

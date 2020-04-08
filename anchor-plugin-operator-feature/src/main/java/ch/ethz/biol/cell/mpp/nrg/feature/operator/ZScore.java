@@ -33,7 +33,7 @@ import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
 import org.anchoranalysis.math.statistics.FirstSecondOrderStatistic;
 
 // Z-score of a value
-public class ZScore extends FeatureFirstSecondOrder {
+public class ZScore<T extends FeatureCalcParams> extends FeatureFirstSecondOrder<T> {
 
 	/**
 	 * 
@@ -44,7 +44,7 @@ public class ZScore extends FeatureFirstSecondOrder {
 	// END BEAN PROPERTIES
 	
 	@Override
-	public double calc( CacheableParams<? extends FeatureCalcParams> params ) throws FeatureCalcException {
+	public double calc( CacheableParams<T> params ) throws FeatureCalcException {
 		
 		double val = params.calc( getItem() );
 		double mean = params.calc( getItemMean() );

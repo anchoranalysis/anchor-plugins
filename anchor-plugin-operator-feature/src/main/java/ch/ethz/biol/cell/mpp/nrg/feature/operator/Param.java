@@ -39,7 +39,7 @@ import org.anchoranalysis.feature.init.FeatureInitParams;
 import org.anchoranalysis.feature.params.FeatureParamsDescriptor;
 
 // TODO this behaviour is very ill-defined with parameter type. Clarify
-public class Param extends Feature {
+public class Param extends Feature<FeatureCalcParams> {
 
 	/**
 	 * 
@@ -60,7 +60,7 @@ public class Param extends Feature {
 	}
 	
 	@Override
-	public double calc(CacheableParams<? extends FeatureCalcParams> params)
+	public double calc(CacheableParams<FeatureCalcParams> params)
 			throws FeatureCalcException {
 
 //		if (keyValueParams instanceof FeatureCalcParamsWithImageParams) {

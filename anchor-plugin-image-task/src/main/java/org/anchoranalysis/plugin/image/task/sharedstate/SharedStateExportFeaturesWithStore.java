@@ -31,21 +31,25 @@ import java.util.List;
 import org.anchoranalysis.bean.NamedBean;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.feature.bean.list.FeatureListProvider;
+import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
 import org.anchoranalysis.feature.io.csv.GroupedResultsVectorCollection;
 import org.anchoranalysis.feature.list.NamedFeatureStore;
 import org.anchoranalysis.feature.list.NamedFeatureStoreFactory;
 import org.anchoranalysis.feature.name.FeatureNameList;
 
-public class SharedStateExportFeaturesWithStore extends SharedStateExportFeatures {
+public class SharedStateExportFeaturesWithStore<T extends FeatureCalcParams> extends SharedStateExportFeatures {
 	
-	private NamedFeatureStore featureStore;
+	private NamedFeatureStore<T> featureStore;
 	
-	public SharedStateExportFeaturesWithStore(List<NamedBean<FeatureListProvider>> listFeatureListProvider, GroupedResultsVectorCollection groupResults ) throws CreateException {
+	public SharedStateExportFeaturesWithStore(
+		List<NamedBean<FeatureListProvider<T>>> listFeatureListProvider,
+		GroupedResultsVectorCollection groupResults
+	) throws CreateException {
 		super( groupResults );
 		this.featureStore = NamedFeatureStoreFactory.createNamedFeatureList(listFeatureListProvider);
 	}
 	
-	public NamedFeatureStore getFeatureStore() {
+	public NamedFeatureStore<T> getFeatureStore() {
 		return featureStore;
 	}
 

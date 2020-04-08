@@ -35,7 +35,7 @@ import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
 
 
-public class Divide extends FeatureListElem {
+public class Divide<T extends FeatureCalcParams> extends FeatureListElem<T> {
 	
 	/**
 	 * 
@@ -51,7 +51,7 @@ public class Divide extends FeatureListElem {
 	// END BEAN PROPERTIES
 	
 	@Override
-	public double calc( CacheableParams<? extends FeatureCalcParams> params ) throws FeatureCalcException {
+	public double calc( CacheableParams<T> params ) throws FeatureCalcException {
 		
 		int size = getList().size();
 		
@@ -77,7 +77,7 @@ public class Divide extends FeatureListElem {
 		StringBuilder sb = new StringBuilder();
 		
 		boolean first = true;
-		for (Feature elem : getList()) {
+		for (Feature<T> elem : getList()) {
 			
 			if (first==true) {
 				first = false;

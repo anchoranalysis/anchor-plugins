@@ -31,6 +31,7 @@ import java.util.List;
 
 import org.anchoranalysis.bean.NamedBean;
 import org.anchoranalysis.core.error.CreateException;
+import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.core.params.KeyValueParams;
 import org.anchoranalysis.feature.bean.list.FeatureListProvider;
@@ -54,7 +55,7 @@ import org.anchoranalysis.plugin.mpp.experiment.feature.FeatureSessionNamedFeatu
  * @author Owen Feehan
  *
  */
-public class Simple extends FlexiFeatureTable {
+public class Simple extends FlexiFeatureTable<FeatureObjMaskParams> {
 
 	/**
 	 * 
@@ -63,10 +64,11 @@ public class Simple extends FlexiFeatureTable {
 
 	
 	@Override
-	public FeatureSessionFlexiFeatureTable createFeatures(
-			List<NamedBean<FeatureListProvider>> list) throws CreateException {
-		NamedFeatureStore namedFeatures = NamedFeatureStoreFactory.createNamedFeatureList(list);
-		return new FeatureSessionNamedFeatureStore(namedFeatures);
+	public FeatureSessionFlexiFeatureTable<FeatureObjMaskParams> createFeatures(
+			List<NamedBean<FeatureListProvider<FeatureObjMaskParams>>> list
+	) throws CreateException {
+		NamedFeatureStore<FeatureObjMaskParams> namedFeatures = NamedFeatureStoreFactory.createNamedFeatureList(list);
+		return new FeatureSessionNamedFeatureStore<>(namedFeatures);
 	}
 	
 	public static FeatureInitParams createInitParams( ImageInitParams so, NRGStack nrgStack, KeyValueParams keyValueParams ) {
@@ -81,16 +83,11 @@ public class Simple extends FlexiFeatureTable {
 		return params;
 	}
 
-
-
-	
-
-
 	@Override
-	public List<FeatureCalcParams> createListCalcParams(ObjMaskCollection objs,
+	public List<FeatureObjMaskParams> createListCalcParams(ObjMaskCollection objs,
 			NRGStackWithParams nrgStack, LogErrorReporter logErrorReporter) throws CreateException {
 
-		List<FeatureCalcParams> out = new ArrayList<>();
+		List<FeatureObjMaskParams> out = new ArrayList<>();
 		
 		for( ObjMask om : objs ) {
 
@@ -101,7 +98,4 @@ public class Simple extends FlexiFeatureTable {
 		
 		return out;
 	}
-
-
-
 }

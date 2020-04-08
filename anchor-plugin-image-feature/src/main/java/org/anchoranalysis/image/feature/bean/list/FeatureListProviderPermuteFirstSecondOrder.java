@@ -38,13 +38,15 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.bean.list.FeatureListProvider;
+import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
+import org.anchoranalysis.image.feature.stack.nrg.FeatureNRGStackParams;
 
 import ch.ethz.biol.cell.mpp.nrg.feature.objmask.NRGParamThree;
 import ch.ethz.biol.cell.mpp.nrg.feature.operator.FeatureFirstSecondOrder;
 import ch.ethz.biol.cell.mpp.nrg.feature.operator.MinMaxRange;
 import ch.ethz.biol.cell.mpp.nrg.feature.operator.MultiplyByConstant;
 
-public abstract class FeatureListProviderPermuteFirstSecondOrder extends FeatureListProvider {
+public abstract class FeatureListProviderPermuteFirstSecondOrder extends FeatureListProvider<FeatureNRGStackParams> {
 
 
 	/**
@@ -54,7 +56,7 @@ public abstract class FeatureListProviderPermuteFirstSecondOrder extends Feature
 	
 	// START BEAN PROPERTIES
 	@BeanField
-	private Feature feature;
+	private Feature<FeatureNRGStackParams> feature;
 	
 	@BeanField
 	private PermutePropertySequenceInteger permuteProperty;
@@ -72,16 +74,16 @@ public abstract class FeatureListProviderPermuteFirstSecondOrder extends Feature
 	// Possible defaultInstances for beans......... saved from checkMisconfigured for delayed checks elsewhere
 	private BeanInstanceMap defaultInstances;
 	
-	private CreateFirstSecondOrder factory;
+	private CreateFirstSecondOrder<FeatureNRGStackParams> factory;
 	private double minRange;
 	private double maxRange;
 	
 	@FunctionalInterface
-	public static interface CreateFirstSecondOrder {
-		FeatureFirstSecondOrder create();
+	public static interface CreateFirstSecondOrder<T extends FeatureCalcParams> {
+		FeatureFirstSecondOrder<T> create();
 	}
 
-	public FeatureListProviderPermuteFirstSecondOrder(CreateFirstSecondOrder factory, double minRange, double maxRange ) {
+	public FeatureListProviderPermuteFirstSecondOrder(CreateFirstSecondOrder<FeatureNRGStackParams> factory, double minRange, double maxRange ) {
 		super();
 		this.factory = factory;
 		this.minRange = minRange;
@@ -95,15 +97,15 @@ public abstract class FeatureListProviderPermuteFirstSecondOrder extends Feature
 		this.defaultInstances = defaultInstances;
 	}
 
-	private static Feature wrapWithMultiplyByConstant( Feature feature ) {
-		MultiplyByConstant out = new MultiplyByConstant();
+	private static Feature<FeatureNRGStackParams> wrapWithMultiplyByConstant( Feature<FeatureNRGStackParams> feature ) {
+		MultiplyByConstant<FeatureNRGStackParams> out = new MultiplyByConstant<>();
 		out.setItem(feature);
 		out.setValue(1);
 		return out;
 	}
 
-	private Feature wrapWithMinMaxRange( Feature feature ) {
-		MinMaxRange out = new MinMaxRange();
+	private Feature<FeatureNRGStackParams> wrapWithMinMaxRange( Feature<FeatureNRGStackParams> feature ) {
+		MinMaxRange<FeatureNRGStackParams> out = new MinMaxRange<>();
 		out.setItem(feature);
 		out.setMin(minRange);
 		out.setMax(maxRange);
@@ -112,7 +114,7 @@ public abstract class FeatureListProviderPermuteFirstSecondOrder extends Feature
 		return out;
 	}
 	
-	public static Feature createNRGParam(  PermutePropertySequenceInteger permuteProperty, String paramPrefix, String suffix, boolean appendNumber ) {
+	public static Feature<FeatureNRGStackParams> createNRGParam( PermutePropertySequenceInteger permuteProperty, String paramPrefix, String suffix, boolean appendNumber ) {
 		NRGParamThree paramMean = new NRGParamThree();
 		paramMean.setIdLeft(paramPrefix);
 		if (appendNumber) {
@@ -124,11 +126,15 @@ public abstract class FeatureListProviderPermuteFirstSecondOrder extends Feature
 		return paramMean;
 	}
 		
-	private Feature wrapInScore( Feature feature ) {
-		FeatureFirstSecondOrder featureScore = factory.create();
+	private Feature<FeatureNRGStackParams> wrapInScore( Feature<FeatureNRGStackParams> feature ) {
+		FeatureFirstSecondOrder<FeatureNRGStackParams> featureScore = factory.create();
 		featureScore.setItem(feature);
-		featureScore.setItemMean( createNRGParam(permuteProperty,paramPrefix,"_fitted_normal_mean",paramPrefixAppendNumber) );
-		featureScore.setItemStdDev( createNRGParam(permuteProperty,paramPrefix,"_fitted_normal_sd",paramPrefixAppendNumber) );
+		featureScore.setItemMean(
+			createNRGParam(permuteProperty,paramPrefix,"_fitted_normal_mean",paramPrefixAppendNumber)
+		);
+		featureScore.setItemStdDev(
+			createNRGParam(permuteProperty,paramPrefix,"_fitted_normal_sd",paramPrefixAppendNumber)
+		);
 		return featureScore;
 	}
 	
@@ -149,12 +155,12 @@ public abstract class FeatureListProviderPermuteFirstSecondOrder extends Feature
 	}
 	
 	@Override
-	public FeatureList create() throws CreateException {
+	public FeatureList<FeatureNRGStackParams> create() throws CreateException {
 		
-		FeatureListProviderPermute<Integer> delegate = new FeatureListProviderPermute<>();
+		FeatureListProviderPermute<Integer, FeatureNRGStackParams> delegate = new FeatureListProviderPermute<>();
 		
 		// Wrap our feature in a gaussian score
-		Feature featureScore = feature.duplicateBean();
+		Feature<FeatureNRGStackParams> featureScore = feature.duplicateBean();
 		featureScore = wrapInScore(featureScore);
 		featureScore = wrapWithMultiplyByConstant(featureScore);
 		featureScore = wrapWithMinMaxRange(featureScore);
@@ -184,11 +190,11 @@ public abstract class FeatureListProviderPermuteFirstSecondOrder extends Feature
 		this.permuteProperty = permuteProperty;
 	}
 
-	public Feature getFeature() {
+	public Feature<FeatureNRGStackParams> getFeature() {
 		return feature;
 	}
 
-	public void setFeature(Feature feature) {
+	public void setFeature(Feature<FeatureNRGStackParams> feature) {
 		this.feature = feature;
 	}
 

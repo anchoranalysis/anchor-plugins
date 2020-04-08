@@ -37,7 +37,7 @@ import org.apache.commons.math3.stat.descriptive.moment.GeometricMean;
 
 
 // Geometric mean
-public class MeanGeometric extends FeatureListElem {
+public class MeanGeometric<T extends FeatureCalcParams> extends FeatureListElem<T> {
 
 	/**
 	 * 
@@ -47,12 +47,12 @@ public class MeanGeometric extends FeatureListElem {
 	private GeometricMean meanCalculator = new GeometricMean();
 	
 	@Override
-	public double calc( CacheableParams<? extends FeatureCalcParams> params ) throws FeatureCalcException {
+	public double calc( CacheableParams<T> params ) throws FeatureCalcException {
 		
 		double[] result = new double[ getList().size() ];
 		
 		for (int i=0; i<getList().size(); i++) {
-			Feature elem = getList().get(i);
+			Feature<T> elem = getList().get(i);
 			result[i] = params.calc(elem);
 		}
 		
@@ -66,7 +66,7 @@ public class MeanGeometric extends FeatureListElem {
 		sb.append("geo_mean(");
 		
 		boolean first = true;
-		for (Feature elem : getList()) {
+		for (Feature<T> elem : getList()) {
 			
 			if (first==true) {
 				first = false;

@@ -29,12 +29,13 @@ package ch.ethz.biol.cell.mpp.nrg.feature.operator;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.bean.Feature;
+import org.anchoranalysis.feature.bean.operator.FeatureGenericSingleElem;
 import org.anchoranalysis.feature.bean.operator.FeatureSingleElem;
 import org.anchoranalysis.feature.cache.CacheableParams;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
 
-public class IfGreaterThan extends FeatureSingleElem {
+public class IfGreaterThan<T extends FeatureCalcParams> extends FeatureGenericSingleElem<T> {
 
 	/**
 	 * 
@@ -43,17 +44,17 @@ public class IfGreaterThan extends FeatureSingleElem {
 	
 	// START BEAN PROPERTIRES
 	@BeanField
-	private Feature featureCondition;
+	private Feature<T> featureCondition;
 	
 	@BeanField
 	private double value;
 	
 	@BeanField
-	private Feature featureElse;
+	private Feature<T> featureElse;
 	// END BEAN PROPERTIES
 
 	@Override
-	public double calc(CacheableParams<? extends FeatureCalcParams> params)
+	public double calc(CacheableParams<T> params)
 			throws FeatureCalcException {
 
 		if (params.calc(featureCondition)>value) {
@@ -63,10 +64,10 @@ public class IfGreaterThan extends FeatureSingleElem {
 		}
 	}
 	
-	public Feature getFeatureCondition() {
+	public Feature<T> getFeatureCondition() {
 		return featureCondition;
 	}
-	public void setFeatureCondition(Feature featureCondition) {
+	public void setFeatureCondition(Feature<T> featureCondition) {
 		this.featureCondition = featureCondition;
 	}
 	public double getValue() {
@@ -75,10 +76,10 @@ public class IfGreaterThan extends FeatureSingleElem {
 	public void setValue(double value) {
 		this.value = value;
 	}
-	public Feature getFeatureElse() {
+	public Feature<T> getFeatureElse() {
 		return featureElse;
 	}
-	public void setFeatureElse(Feature featureElse) {
+	public void setFeatureElse(Feature<T> featureElse) {
 		this.featureElse = featureElse;
 	}
 

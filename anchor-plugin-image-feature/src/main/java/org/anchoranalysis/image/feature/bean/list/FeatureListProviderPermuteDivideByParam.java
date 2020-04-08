@@ -38,6 +38,8 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.bean.list.FeatureListProvider;
+import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
+import org.anchoranalysis.image.feature.stack.nrg.FeatureNRGStackParams;
 
 import ch.ethz.biol.cell.mpp.nrg.feature.operator.DivideExplicit;
 
@@ -45,9 +47,9 @@ import ch.ethz.biol.cell.mpp.nrg.feature.operator.DivideExplicit;
  * Similar to FeatureListProviderPermute but embeds the feature in a GaussianScore
  * 
  * @author Owen Feehan
- *
+ * @param T feature-calc-params
  */
-public class FeatureListProviderPermuteDivideByParam extends FeatureListProvider {
+public class FeatureListProviderPermuteDivideByParam extends FeatureListProvider<FeatureNRGStackParams> {
 
 	/**
 	 * 
@@ -56,7 +58,7 @@ public class FeatureListProviderPermuteDivideByParam extends FeatureListProvider
 	
 	// START BEAN PROPERTIES
 	@BeanField
-	private Feature feature;
+	private Feature<FeatureNRGStackParams> feature;
 	
 	@BeanField
 	private PermutePropertySequenceInteger permuteProperty;
@@ -80,10 +82,12 @@ public class FeatureListProviderPermuteDivideByParam extends FeatureListProvider
 		this.defaultInstances = defaultInstances;
 	}
 
-	private Feature wrapInDivide( Feature feature ) {
-		DivideExplicit featureScore = new DivideExplicit();
+	private Feature<FeatureNRGStackParams> wrapInDivide( Feature<FeatureNRGStackParams> feature ) {
+		DivideExplicit<FeatureNRGStackParams> featureScore = new DivideExplicit<>();
 		featureScore.setItem1(feature);
-		featureScore.setItem2( FeatureListProviderPermuteGaussianScore.createNRGParam(permuteProperty,paramPrefix,"_median",paramPrefixAppendNumber) );
+		featureScore.setItem2(
+			FeatureListProviderPermuteGaussianScore.createNRGParam(permuteProperty,paramPrefix,"_median",paramPrefixAppendNumber)
+		);
 		return featureScore;
 	}
 	
@@ -103,12 +107,12 @@ public class FeatureListProviderPermuteDivideByParam extends FeatureListProvider
 	}
 	
 	@Override
-	public FeatureList create() throws CreateException {
+	public FeatureList<FeatureNRGStackParams> create() throws CreateException {
 		
-		FeatureListProviderPermute<Integer> delegate = new FeatureListProviderPermute<>();
+		FeatureListProviderPermute<Integer,FeatureNRGStackParams> delegate = new FeatureListProviderPermute<>();
 		
 		// Wrap our feature in a gaussian score
-		Feature featureScore = feature.duplicateBean();
+		Feature<FeatureNRGStackParams> featureScore = feature.duplicateBean();
 		featureScore = wrapInDivide(featureScore);
 		delegate.setFeature(featureScore);
 				
@@ -137,11 +141,11 @@ public class FeatureListProviderPermuteDivideByParam extends FeatureListProvider
 		this.permuteProperty = permuteProperty;
 	}
 
-	public Feature getFeature() {
+	public Feature<FeatureNRGStackParams> getFeature() {
 		return feature;
 	}
 
-	public void setFeature(Feature feature) {
+	public void setFeature(Feature<FeatureNRGStackParams> feature) {
 		this.feature = feature;
 	}
 

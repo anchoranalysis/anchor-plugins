@@ -1,5 +1,7 @@
 package ch.ethz.biol.cell.mpp.nrg.feature.operator;
 
+import org.anchoranalysis.feature.bean.operator.FeatureGenericSingleElem;
+
 /*-
  * #%L
  * anchor-plugin-operator-feature
@@ -31,7 +33,7 @@ import org.anchoranalysis.feature.cache.CacheableParams;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
 
-public class ArcCos extends FeatureSingleElem {
+public class ArcCos<T extends FeatureCalcParams> extends FeatureGenericSingleElem<T> {
 
 	/**
 	 * 
@@ -39,7 +41,7 @@ public class ArcCos extends FeatureSingleElem {
 	private static final long serialVersionUID = 1L;
 	
 	@Override
-	protected double calc(CacheableParams<? extends FeatureCalcParams> params)
+	protected double calc(CacheableParams<T> params)
 			throws FeatureCalcException {
 		
 		double arg = params.calc( getItem() );

@@ -36,7 +36,7 @@ import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
 import org.anchoranalysis.feature.params.FeatureParamsDescriptor;
 
-public class AsMark extends FeatureSingleElem {
+public class AsMark extends FeatureSingleElem<NRGElemIndCalcParams,FeatureMarkParams> {
 
 	/**
 	 * 
@@ -44,7 +44,7 @@ public class AsMark extends FeatureSingleElem {
 	private static final long serialVersionUID = 1L;
 
 	@Override
-	public double calc(CacheableParams<? extends FeatureCalcParams> params) throws FeatureCalcException {
+	public double calc(CacheableParams<NRGElemIndCalcParams> params) throws FeatureCalcException {
 		return params
 			.downcastParams(NRGElemIndCalcParams.class)
 			.calcChangeParams( getItem(), AsMark::deriveParams, "mark" );

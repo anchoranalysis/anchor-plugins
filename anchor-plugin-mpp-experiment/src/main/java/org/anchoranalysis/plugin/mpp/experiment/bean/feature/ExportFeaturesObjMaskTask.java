@@ -62,6 +62,7 @@ import org.anchoranalysis.feature.io.csv.GroupedResultsVectorCollection;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
 import org.anchoranalysis.image.bean.provider.stack.StackProvider;
+import org.anchoranalysis.image.feature.objmask.FeatureObjMaskParams;
 import org.anchoranalysis.image.init.ImageInitParams;
 import org.anchoranalysis.image.objmask.ObjMaskCollection;
 import org.anchoranalysis.io.error.AnchorIOException;
@@ -87,8 +88,10 @@ import org.anchoranalysis.plugin.mpp.experiment.outputter.SharedObjectsUtilities
    csvAgg  		one csv file where each row is a group (with aggregated features of the objects within)
    csvGroup 	a csv file per group, where each row is an object
    
+   @param T the type of feature-calc-params produced by the FlexiFeatureTable
+   
 **/
-public class ExportFeaturesObjMaskTask extends ExportFeaturesTask<MultiInput,SharedStateExportFeaturesObjMask> {
+public class ExportFeaturesObjMaskTask<T extends FeatureCalcParams> extends ExportFeaturesTask<MultiInput,SharedStateExportFeaturesObjMask<T>> {
 
 	/**
 	 * 
@@ -97,7 +100,7 @@ public class ExportFeaturesObjMaskTask extends ExportFeaturesTask<MultiInput,Sha
 	
 	// START BEAN PROPERTIES
 	@BeanField
-	private List<NamedBean<FeatureListProvider>> listFeaturesObjMask = new ArrayList<>();
+	private List<NamedBean<FeatureListProvider<FeatureObjMaskParams>>> listFeaturesObjMask = new ArrayList<>();
 	
 	@BeanField @Optional
 	private Define namedDefinitions;
@@ -115,7 +118,7 @@ public class ExportFeaturesObjMaskTask extends ExportFeaturesTask<MultiInput,Sha
 	private RandomNumberGeneratorBean randomNumberGenerator = new RandomNumberGeneratorMersenneConstantBean();
 	
 	@BeanField
-	private FlexiFeatureTable selectFeaturesObjects = new Simple();
+	private FlexiFeatureTable<T> selectFeaturesObjects;
 	
 	/**
 	 * If non-empty, A keyValueParams is treated as part of the nrgStack 
@@ -125,13 +128,13 @@ public class ExportFeaturesObjMaskTask extends ExportFeaturesTask<MultiInput,Sha
 	// END BEAN PROPERTIES
 	
 	@Override
-	public SharedStateExportFeaturesObjMask beforeAnyJobIsExecuted(
+	public SharedStateExportFeaturesObjMask<T> beforeAnyJobIsExecuted(
 			BoundOutputManagerRouteErrors outputManager,
 			ParametersExperiment params
 	) throws ExperimentExecutionException {
 		
 		try {
-			return new SharedStateExportFeaturesObjMask(
+			return new SharedStateExportFeaturesObjMask<T>(
 				new GroupedResultsVectorCollection("id","group","objSetName"),
 				selectFeaturesObjects.createFeatures(listFeaturesObjMask)
 			);
@@ -161,7 +164,7 @@ public class ExportFeaturesObjMaskTask extends ExportFeaturesTask<MultiInput,Sha
 	}
 
 	@Override
-	public void doJobOnInputObject(	ParametersBound<MultiInput,SharedStateExportFeaturesObjMask> params	) throws JobExecutionException {
+	public void doJobOnInputObject(	ParametersBound<MultiInput,SharedStateExportFeaturesObjMask<T>> params	) throws JobExecutionException {
 		
 		LogErrorReporter logErrorReporter = params.getLogErrorReporter();
 		MultiInput inputObject = params.getInputObject();
@@ -169,7 +172,7 @@ public class ExportFeaturesObjMaskTask extends ExportFeaturesTask<MultiInput,Sha
 		try {
 			// Create a duplicated featureStore for this image, as we want separate features on this thread,
 			//  so they are thread-safe, for parallel execution
-			FeatureSessionFlexiFeatureTable session = params.getSharedState().getSession().duplicateForNewThread();
+			FeatureSessionFlexiFeatureTable<T> session = params.getSharedState().getSession().duplicateForNewThread();
 						
 			MPPInitParams soMPP = createInitParams(
 				inputObject,
@@ -227,7 +230,7 @@ public class ExportFeaturesObjMaskTask extends ExportFeaturesTask<MultiInput,Sha
 	private void processAllProviders(
 		boolean debugMode,
 		Path inputPath,
-		FeatureSessionFlexiFeatureTable session,
+		FeatureSessionFlexiFeatureTable<T> session,
 		ImageInitParams imageInitParams,
 		NRGStackWithParams nrgStack,
 		SharedStateExportFeatures sharedState,
@@ -260,13 +263,13 @@ public class ExportFeaturesObjMaskTask extends ExportFeaturesTask<MultiInput,Sha
 	private void calculateFeaturesForProvider(
 		String id,
 		ObjMaskCollection objs,
-		FeatureSessionFlexiFeatureTable session,
+		FeatureSessionFlexiFeatureTable<T> session,
 		NRGStackWithParams nrgStack,
 		ResultsVectorCollection resultsDestination,
 		LogErrorReporter logErrorReporter
 	) throws OperationFailedException {
 		try {
-			List<FeatureCalcParams> listParams = selectFeaturesObjects.createListCalcParams(
+			List<T> listParams = selectFeaturesObjects.createListCalcParams(
 				objs,
 				nrgStack,
 				logErrorReporter
@@ -315,12 +318,12 @@ public class ExportFeaturesObjMaskTask extends ExportFeaturesTask<MultiInput,Sha
 		this.randomNumberGenerator = randomNumberGenerator;
 	}
 
-	public List<NamedBean<FeatureListProvider>> getListFeaturesObjMask() {
+	public List<NamedBean<FeatureListProvider<FeatureObjMaskParams>>> getListFeaturesObjMask() {
 		return listFeaturesObjMask;
 	}
 
 	public void setListFeaturesObjMask(
-			List<NamedBean<FeatureListProvider>> listFeaturesObjMask) {
+			List<NamedBean<FeatureListProvider<FeatureObjMaskParams>>> listFeaturesObjMask) {
 		this.listFeaturesObjMask = listFeaturesObjMask;
 	}
 
@@ -342,12 +345,12 @@ public class ExportFeaturesObjMaskTask extends ExportFeaturesTask<MultiInput,Sha
 	}
 
 
-	public FlexiFeatureTable getSelectFeaturesObjects() {
+	public FlexiFeatureTable<T> getSelectFeaturesObjects() {
 		return selectFeaturesObjects;
 	}
 
 
-	public void setSelectFeaturesObjects(FlexiFeatureTable selectFeaturesObjects) {
+	public void setSelectFeaturesObjects(FlexiFeatureTable<T> selectFeaturesObjects) {
 		this.selectFeaturesObjects = selectFeaturesObjects;
 	}
 

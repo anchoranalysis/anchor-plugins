@@ -32,7 +32,7 @@ import org.anchoranalysis.feature.cache.CacheableParams;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
 
-public class Maximum extends FeatureListElem {
+public class Maximum<T extends FeatureCalcParams> extends FeatureListElem<T> {
 
 	/**
 	 * 
@@ -40,10 +40,10 @@ public class Maximum extends FeatureListElem {
 	private static final long serialVersionUID = 1L;
 
 	@Override
-	public double calc(CacheableParams<? extends FeatureCalcParams> params) throws FeatureCalcException {
+	public double calc(CacheableParams<T> params) throws FeatureCalcException {
 		
 		double maxValue = Double.NaN;
-		for( Feature f : getList()) {
+		for( Feature<T> f : getList()) {
 			double val = params.calc( f );
 			if (Double.isNaN(maxValue) || val > maxValue) {
 				maxValue = val;

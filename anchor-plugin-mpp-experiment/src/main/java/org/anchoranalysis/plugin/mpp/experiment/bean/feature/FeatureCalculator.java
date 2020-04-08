@@ -49,10 +49,10 @@ class FeatureCalculator {
 	 * @param resultsDestination where the result-calculations are placed
 	 * @throws OperationFailedException
 	 */
-	public static void calculateManyFeaturesInto(
+	public static <T extends FeatureCalcParams> void calculateManyFeaturesInto(
 		String objectId,
-		FeatureSessionFlexiFeatureTable session,
-		List<FeatureCalcParams> listObjParams,
+		FeatureSessionFlexiFeatureTable<T> session,
+		List<T> listObjParams,
 		ResultsVectorCollection resultsDestination,
 		LogErrorReporter logger
 	) throws OperationFailedException {
@@ -62,7 +62,7 @@ class FeatureCalculator {
 			
 			for(int i=0; i<listObjParams.size(); i++ ) {
 				
-				FeatureCalcParams params = listObjParams.get(i);
+				T params = listObjParams.get(i);
 			
 				logger.getLogReporter().logFormatted("Calculating params %d of %d: %s", i+1, listObjParams.size(), params.toString() );
 				
