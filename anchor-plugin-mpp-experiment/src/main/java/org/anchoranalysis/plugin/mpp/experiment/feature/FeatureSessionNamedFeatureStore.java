@@ -42,22 +42,22 @@ import org.anchoranalysis.feature.shared.SharedFeaturesInitParams;
 import org.anchoranalysis.image.init.ImageInitParams;
 import org.anchoranalysis.plugin.mpp.experiment.bean.feature.flexi.Simple;
 
-public class FeatureSessionNamedFeatureStore extends FeatureSessionFlexiFeatureTable {
+public class FeatureSessionNamedFeatureStore<T extends FeatureCalcParams> extends FeatureSessionFlexiFeatureTable<T> {
 
-	private SequentialSession session;
+	private SequentialSession<T> session;
 
-	private NamedFeatureStore namedFeatureStore;
+	private NamedFeatureStore<T> namedFeatureStore;
 	
-	public FeatureSessionNamedFeatureStore(NamedFeatureStore namedFeatureStore) {
+	public FeatureSessionNamedFeatureStore(NamedFeatureStore<T> namedFeatureStore) {
 		this.namedFeatureStore = namedFeatureStore;
-		session = new SequentialSession( namedFeatureStore.listFeatures() );
+		session = new SequentialSession<>( namedFeatureStore.listFeatures() );
 	}
 
 	@Override
 	public void start(ImageInitParams soImage, SharedFeaturesInitParams soFeature, NRGStackWithParams nrgStack, LogErrorReporter logErrorReporter) throws InitException {
 		
 		// TODO temporarily disabled
-		SharedFeatureSet sharedFeatures = createSharedFeatures(soFeature);
+		SharedFeatureSet<T> sharedFeatures = createSharedFeatures(soFeature);
 		//SharedFeatureSet sharedFeatures = new SharedFeatureSet();
 		
 		// Init all the features
@@ -67,12 +67,12 @@ public class FeatureSessionNamedFeatureStore extends FeatureSessionFlexiFeatureT
 	}
 	
 	@Override
-	public FeatureSessionFlexiFeatureTable duplicateForNewThread() {
-		return new FeatureSessionNamedFeatureStore(namedFeatureStore.deepCopy());
+	public FeatureSessionFlexiFeatureTable<T> duplicateForNewThread() {
+		return new FeatureSessionNamedFeatureStore<T>(namedFeatureStore.deepCopy());
 	}
 
 	@Override
-	public ResultsVector calcMaybeSuppressErrors(FeatureCalcParams params, ErrorReporter errorReporter) throws FeatureCalcException {
+	public ResultsVector calcMaybeSuppressErrors(T params, ErrorReporter errorReporter) throws FeatureCalcException {
 		return session.calcSuppressErrors( params, errorReporter );
 	}
 	
@@ -86,9 +86,9 @@ public class FeatureSessionNamedFeatureStore extends FeatureSessionFlexiFeatureT
 		return namedFeatureStore.size();
 	}
 	
-	private SharedFeatureSet createSharedFeatures( SharedFeaturesInitParams soFeature ) {
-		SharedFeatureSet out = new SharedFeatureSet();
-		out.addDuplicate( soFeature.getSharedFeatureSet() );
+	private SharedFeatureSet<T> createSharedFeatures( SharedFeaturesInitParams soFeature ) {
+		SharedFeatureSet<T> out = new SharedFeatureSet<>();
+		out.addDuplicate( soFeature.getSharedFeatureSet().downcast() );
 		namedFeatureStore.copyToDuplicate(out.getSet());
 		return out;
 	}

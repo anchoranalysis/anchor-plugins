@@ -29,6 +29,7 @@ package ch.ethz.biol.cell.mpp.nrg.feature.operator;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.bean.Feature;
+import org.anchoranalysis.feature.bean.operator.FeatureGenericSingleElem;
 import org.anchoranalysis.feature.bean.operator.FeatureSingleElem;
 import org.anchoranalysis.feature.cache.CacheableParams;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
@@ -36,7 +37,7 @@ import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
 
 
 // A score between 0 and 1, based upon the CDF of a guassian. as one approaches the mean, the score approaches 1.0
-public class LinearScore extends FeatureSingleElem {
+public class LinearScore<T extends FeatureCalcParams> extends FeatureGenericSingleElem<T> {
 
 	/**
 	 * 
@@ -45,10 +46,10 @@ public class LinearScore extends FeatureSingleElem {
 
 	// START BEAN PROPERTIES
 	@BeanField
-	private Feature itemMin = null;
+	private Feature<T> itemMin = null;
 	
 	@BeanField
-	private Feature itemMax = null;
+	private Feature<T> itemMax = null;
 	
 	@BeanField
 	private double minValue = 0.0;		// What the minimum value is set to, normally 0
@@ -67,7 +68,7 @@ public class LinearScore extends FeatureSingleElem {
 	
 	
 	@Override
-	public double calc( CacheableParams<? extends FeatureCalcParams> params ) throws FeatureCalcException {
+	public double calc( CacheableParams<T> params ) throws FeatureCalcException {
 		
 		double val = params.calc( getItem() );
 		
@@ -89,19 +90,19 @@ public class LinearScore extends FeatureSingleElem {
 		return String.format("pdf(%s,%s,%s)", getItem().getDscrLong(), getItemMin().getDscrLong(), getItemMax().getDscrLong() );
 	}
 	
-	public Feature getItemMin() {
+	public Feature<T> getItemMin() {
 		return itemMin;
 	}
 
-	public void setItemMin(Feature itemMin) {
+	public void setItemMin(Feature<T> itemMin) {
 		this.itemMin = itemMin;
 	}
 
-	public Feature getItemMax() {
+	public Feature<T> getItemMax() {
 		return itemMax;
 	}
 
-	public void setItemMax(Feature itemMax) {
+	public void setItemMax(Feature<T> itemMax) {
 		this.itemMax = itemMax;
 	}
 

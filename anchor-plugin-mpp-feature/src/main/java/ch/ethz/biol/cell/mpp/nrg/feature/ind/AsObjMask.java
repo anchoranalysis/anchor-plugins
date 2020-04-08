@@ -42,7 +42,7 @@ import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.feature.objmask.FeatureObjMaskParams;
 import org.anchoranalysis.image.objmask.properties.ObjMaskWithProperties;
 
-public class AsObjMask extends FeatureSingleElem {
+public class AsObjMask extends FeatureSingleElem<NRGElemIndCalcParams,FeatureObjMaskParams> {
 
 	/**
 	 * 
@@ -58,7 +58,7 @@ public class AsObjMask extends FeatureSingleElem {
 	// END BEAN PROPERTIES
 	
 	@Override
-	public double calc(CacheableParams<? extends FeatureCalcParams> params) throws FeatureCalcException {
+	public double calc(CacheableParams<NRGElemIndCalcParams> params) throws FeatureCalcException {
 		return params
 			.downcastParams(NRGElemIndCalcParams.class)
 			.calcChangeParams(

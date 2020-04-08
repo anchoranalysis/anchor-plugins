@@ -29,9 +29,11 @@ package ch.ethz.biol.cell.mpp.nrg.feature.operator;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.bean.Feature;
+import org.anchoranalysis.feature.bean.operator.FeatureGenericSingleElem;
 import org.anchoranalysis.feature.bean.operator.FeatureSingleElem;
+import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
 
-public abstract class FeatureFirstSecondOrder extends FeatureSingleElem {
+public abstract class FeatureFirstSecondOrder<T extends FeatureCalcParams> extends FeatureGenericSingleElem<T> {
 
 	/**
 	 * 
@@ -40,28 +42,27 @@ public abstract class FeatureFirstSecondOrder extends FeatureSingleElem {
 
 	// START BEAN PROPERTIES
 	@BeanField
-	private Feature itemMean = null;
+	private Feature<T> itemMean = null;
 	
 	@BeanField
-	private Feature itemStdDev = null;
+	private Feature<T> itemStdDev = null;
 	// END BEAN PROPERTIES
 	
-	public Feature getItemMean() {
+	public Feature<T> getItemMean() {
 		return itemMean;
 	}
 
-	public void setItemMean(Feature itemMean) {
+	public void setItemMean(Feature<T> itemMean) {
 		this.itemMean = itemMean;
 	}
 
-	public Feature getItemStdDev() {
+	public Feature<T> getItemStdDev() {
 		return itemStdDev;
 	}
 
-	public void setItemStdDev(Feature itemStdDev) {
+	public void setItemStdDev(Feature<T> itemStdDev) {
 		this.itemStdDev = itemStdDev;
 	}
-	
 
 	@Override
 	public String getParamDscr() {

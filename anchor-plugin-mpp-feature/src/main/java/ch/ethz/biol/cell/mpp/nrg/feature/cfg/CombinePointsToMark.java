@@ -63,10 +63,10 @@ public class CombinePointsToMark extends NRGElemAll {
 	private CreateMarkFromPoints createMark;
 	
 	@BeanField
-	private Feature item;
+	private Feature<NRGElemIndCalcParams> item;
 	
 	@BeanField
-	private Feature featureElse = new Constant(0);
+	private Feature<NRGElemAllCalcParams> featureElse = new Constant<>(0);
 	// END BEAN PROPERTIES
 	
 	@Override
@@ -115,19 +115,19 @@ public class CombinePointsToMark extends NRGElemAll {
 		return new NRGElemIndCalcParams(	memo, nrgStack );		
 	}
 	
-	public Feature getFeatureElse() {
+	public Feature<NRGElemAllCalcParams> getFeatureElse() {
 		return featureElse;
 	}
 
-	public void setFeatureElse(Feature featureElse) {
+	public void setFeatureElse(Feature<NRGElemAllCalcParams> featureElse) {
 		this.featureElse = featureElse;
 	}
 
-	public Feature getItem() {
+	public Feature<NRGElemIndCalcParams> getItem() {
 		return item;
 	}
 
-	public void setItem(Feature item) {
+	public void setItem(Feature<NRGElemIndCalcParams> item) {
 		this.item = item;
 	}
 

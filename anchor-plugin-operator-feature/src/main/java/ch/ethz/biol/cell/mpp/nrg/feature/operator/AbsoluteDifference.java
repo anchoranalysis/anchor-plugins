@@ -33,7 +33,7 @@ import org.anchoranalysis.feature.cache.CacheableParams;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
 
-public class AbsoluteDifference extends FeatureDoubleElem {
+public class AbsoluteDifference<T extends FeatureCalcParams> extends FeatureDoubleElem<T> {
 
 	/**
 	 * 
@@ -49,7 +49,7 @@ public class AbsoluteDifference extends FeatureDoubleElem {
 	// END BEAN PROPERTIES
 	
 	@Override
-	public double calc( CacheableParams<? extends FeatureCalcParams> params ) throws FeatureCalcException {
+	public double calc( CacheableParams<T> params ) throws FeatureCalcException {
 		
 		double val1 = params.calc( getItem1() );
 		double val2 = params.calc( getItem2() );

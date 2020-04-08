@@ -39,13 +39,14 @@ import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.feature.bean.list.FeatureListProvider;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
 import org.anchoranalysis.feature.list.NamedFeatureStore;
 import org.anchoranalysis.feature.list.NamedFeatureStoreFactory;
 import org.anchoranalysis.image.bean.provider.stack.StackProvider;
 import org.anchoranalysis.image.io.input.ProvidesStackInput;
 import org.anchoranalysis.plugin.image.task.imagefeature.calculator.FeatureCalculatorStackInputFromStore;
 
-public class BinaryClassifierImageLabeller extends BinaryOutcomeImageLabeller<Object> {
+public class BinaryClassifierImageLabeller<T extends FeatureCalcParams> extends BinaryOutcomeImageLabeller<Object> {
 
 	/**
 	 * 
@@ -54,10 +55,10 @@ public class BinaryClassifierImageLabeller extends BinaryOutcomeImageLabeller<Ob
 	
 	// START BEAN PROPERTIES
 	@BeanField @SkipInit
-	private FeatureListProvider classifierProvider;
+	private FeatureListProvider<T> classifierProvider;
 	
 	@BeanField @NonEmpty
-	private List<NamedBean<FeatureListProvider>> listFeatures = new ArrayList<NamedBean<FeatureListProvider>>();
+	private List<NamedBean<FeatureListProvider<T>>> listFeatures = new ArrayList<>();
 	
 	@BeanField
 	private StackProvider nrgStackProvider;
@@ -77,9 +78,11 @@ public class BinaryClassifierImageLabeller extends BinaryOutcomeImageLabeller<Ob
 	) throws OperationFailedException {
 		
 		try {
-			NamedFeatureStore featureStore = NamedFeatureStoreFactory.createNamedFeatureList(listFeatures);
+			NamedFeatureStore<T> featureStore = NamedFeatureStoreFactory.createNamedFeatureList(
+				listFeatures
+			);
 			
-			FeatureCalculatorStackInputFromStore featureCalculator = new FeatureCalculatorStackInputFromStore(
+			FeatureCalculatorStackInputFromStore<T> featureCalculator = new FeatureCalculatorStackInputFromStore<>(
 				input,
 				getNrgStackProvider(),
 				featureStore,
@@ -102,20 +105,20 @@ public class BinaryClassifierImageLabeller extends BinaryOutcomeImageLabeller<Ob
 		}
 	}
 	
-	public FeatureListProvider getClassifierProvider() {
+	public FeatureListProvider<T> getClassifierProvider() {
 		return classifierProvider;
 	}
 
-	public void setClassifierProvider(FeatureListProvider classifierProvider) {
+	public void setClassifierProvider(FeatureListProvider<T> classifierProvider) {
 		this.classifierProvider = classifierProvider;
 	}
 	
-	public List<NamedBean<FeatureListProvider>> getListFeatures() {
+	public List<NamedBean<FeatureListProvider<T>>> getListFeatures() {
 		return listFeatures;
 	}
 
 	public void setListFeatures(
-			List<NamedBean<FeatureListProvider>> listFeatures) {
+			List<NamedBean<FeatureListProvider<T>>> listFeatures) {
 		this.listFeatures = listFeatures;
 	}
 

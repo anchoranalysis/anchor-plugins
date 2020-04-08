@@ -46,7 +46,9 @@ import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
 import org.anchoranalysis.feature.list.NamedFeatureStore;
 import org.anchoranalysis.feature.list.NamedFeatureStoreFactory;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
+import org.anchoranalysis.image.feature.objmask.FeatureObjMaskParams;
 import org.anchoranalysis.image.feature.objmask.pair.merged.FeatureObjMaskPairMergedParams;
+import org.anchoranalysis.image.feature.stack.FeatureStackParams;
 import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.image.objmask.ObjMaskCollection;
 import org.anchoranalysis.image.voxel.nghb.CreateNghbGraph;
@@ -80,7 +82,7 @@ import org.anchoranalysis.plugin.mpp.experiment.feature.FeatureSessionMergedPair
  * @author Owen Feehan
  *
  */
-public class MergedPairs extends FlexiFeatureTable {
+public class MergedPairs extends FlexiFeatureTable<FeatureObjMaskPairMergedParams> {
 
 	/**
 	 * 
@@ -92,13 +94,13 @@ public class MergedPairs extends FlexiFeatureTable {
 	 * Additional features that are processed on the pair of images (i.e. First+Second as a pair)
 	 */
 	@BeanField
-	private List<NamedBean<FeatureListProvider>> listFeaturesPair = new ArrayList<NamedBean<FeatureListProvider>>();
+	private List<NamedBean<FeatureListProvider<FeatureObjMaskPairMergedParams>>> listFeaturesPair = new ArrayList<>();
 	
 	/**
 	 * Additional features that only depend on the image, so do not need to be replicated for every object.
 	 */
 	@BeanField
-	private List<NamedBean<FeatureListProvider>> listFeaturesImage = new ArrayList<NamedBean<FeatureListProvider>>();
+	private List<NamedBean<FeatureListProvider<FeatureStackParams>>> listFeaturesImage = new ArrayList<>();
 	
 	/**
 	 * Include features for the First-object of the pair
@@ -145,49 +147,23 @@ public class MergedPairs extends FlexiFeatureTable {
 	@BeanField
 	private boolean do3D = true;
 	// END BEAN PROPERTIES
-		
-	/**
-	 * Takes some features, and puts a copy in featuresOut, but updating their name with a prefix.  Inits with PAIR params
-	 * 
-	 * @param featuresIn		Where to read features in
-	 * @param prefix			Prefix for feature-names
-	 * @param featuresOut		Where to add the new features to
-	 * @param proxyCreator		Instantiates an empty proxy-feature
-	 * @param paramsInit		Instantiation parameters 
-	 */
-	private static FeatureList copyFeaturesCreateCustomName( NamedFeatureStore features ) throws OperationFailedException {
-		
-		FeatureList out = new FeatureList();
-		try {
-			// First features
-			for( int i=0; i<features.size(); i++ ) {
-				NamedBean<Feature> ni = features.get(i);
-				
-				Feature featureAdd = ni.getValue().duplicateBean();
-				featureAdd.setCustomName( ni.getName() );					
-				out.add(featureAdd);
-			}
-		} catch (BeanDuplicateException e) {
-			throw new OperationFailedException(e);
-		}
-		return out;
-	}
-	
 	
 	@Override
-	public FeatureSessionFlexiFeatureTable createFeatures( List<NamedBean<FeatureListProvider>> list ) throws CreateException {
+	public FeatureSessionFlexiFeatureTable<FeatureObjMaskPairMergedParams> createFeatures(
+			List<NamedBean<FeatureListProvider<FeatureObjMaskParams>>> list
+	) throws CreateException {
 		
 		try {
-			NamedFeatureStore featuresSingle = NamedFeatureStoreFactory.createNamedFeatureList(list);
-			FeatureList listSingle = copyFeaturesCreateCustomName(featuresSingle);
+			NamedFeatureStore<FeatureObjMaskParams> featuresSingle = NamedFeatureStoreFactory.createNamedFeatureList(list);
+			FeatureList<FeatureObjMaskParams> listSingle = copyFeaturesCreateCustomName(featuresSingle);
 			
 			// Image features
-			NamedFeatureStore featuresImage = NamedFeatureStoreFactory.createNamedFeatureList(listFeaturesImage);
-			FeatureList listImage = copyFeaturesCreateCustomName(featuresImage );
+			NamedFeatureStore<FeatureStackParams> featuresImage = NamedFeatureStoreFactory.createNamedFeatureList(listFeaturesImage);
+			FeatureList<FeatureStackParams> listImage = copyFeaturesCreateCustomName(featuresImage );
 									
 			// Pair features
-			NamedFeatureStore featuresPair = NamedFeatureStoreFactory.createNamedFeatureList(listFeaturesPair);
-			FeatureList listPair = copyFeaturesCreateCustomName( featuresPair );
+			NamedFeatureStore<FeatureObjMaskPairMergedParams> featuresPair = NamedFeatureStoreFactory.createNamedFeatureList(listFeaturesPair);
+			FeatureList<FeatureObjMaskPairMergedParams> listPair = copyFeaturesCreateCustomName( featuresPair );
 						
 			return new FeatureSessionMergedPairs(
 				includeFirst,
@@ -208,10 +184,10 @@ public class MergedPairs extends FlexiFeatureTable {
 
 	
 	@Override
-	public List<FeatureCalcParams> createListCalcParams(ObjMaskCollection objs,
+	public List<FeatureObjMaskPairMergedParams> createListCalcParams(ObjMaskCollection objs,
 			NRGStackWithParams nrgStack, LogErrorReporter logErrorReporter) throws CreateException {
 
-		List<FeatureCalcParams> out = new ArrayList<FeatureCalcParams>();
+		List<FeatureObjMaskPairMergedParams> out = new ArrayList<>();
 		
 		// We create a neighbour-graph of our input objects
 		CreateNghbGraph<ObjMask> graphCreator = new CreateNghbGraph<ObjMask>( avoidOverlappingObjects );
@@ -234,6 +210,34 @@ public class MergedPairs extends FlexiFeatureTable {
 		return out;
 	}
 
+	
+	/**
+	 * Takes some features, and puts a copy in featuresOut, but updating their name with a prefix.  Inits with PAIR params
+	 * 
+	 * @param featuresIn		Where to read features in
+	 * @param prefix			Prefix for feature-names
+	 * @param featuresOut		Where to add the new features to
+	 * @param proxyCreator		Instantiates an empty proxy-feature
+	 * @param paramsInit		Instantiation parameters 
+	 */
+	private static <T extends FeatureCalcParams> FeatureList<T> copyFeaturesCreateCustomName( NamedFeatureStore<T> features ) throws OperationFailedException {
+		
+		FeatureList<T> out = new FeatureList<>();
+		try {
+			// First features
+			for( int i=0; i<features.size(); i++ ) {
+				NamedBean<Feature<T>> ni = features.get(i);
+				
+				Feature<T> featureAdd = ni.getValue().duplicateBean();
+				featureAdd.setCustomName( ni.getName() );					
+				out.add(featureAdd);
+			}
+		} catch (BeanDuplicateException e) {
+			throw new OperationFailedException(e);
+		}
+		return out;
+	}
+	
 	public boolean isIncludeFirst() {
 		return includeFirst;
 	}
@@ -259,24 +263,24 @@ public class MergedPairs extends FlexiFeatureTable {
 	}
 
 
-	public List<NamedBean<FeatureListProvider>> getListFeaturesPair() {
+	public List<NamedBean<FeatureListProvider<FeatureObjMaskPairMergedParams>>> getListFeaturesPair() {
 		return listFeaturesPair;
 	}
 
 
 	public void setListFeaturesPair(
-			List<NamedBean<FeatureListProvider>> listFeaturesPair) {
+			List<NamedBean<FeatureListProvider<FeatureObjMaskPairMergedParams>>> listFeaturesPair) {
 		this.listFeaturesPair = listFeaturesPair;
 	}
 
 
-	public List<NamedBean<FeatureListProvider>> getListFeaturesImage() {
+	public List<NamedBean<FeatureListProvider<FeatureStackParams>>> getListFeaturesImage() {
 		return listFeaturesImage;
 	}
 
 
 	public void setListFeaturesImage(
-			List<NamedBean<FeatureListProvider>> listFeaturesImage) {
+			List<NamedBean<FeatureListProvider<FeatureStackParams>>> listFeaturesImage) {
 		this.listFeaturesImage = listFeaturesImage;
 	}
 

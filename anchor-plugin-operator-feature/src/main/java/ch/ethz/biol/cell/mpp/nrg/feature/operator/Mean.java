@@ -34,7 +34,7 @@ import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
 
 
 // Arithmetic mean
-public class Mean extends FeatureListElem {
+public class Mean<T extends FeatureCalcParams> extends FeatureListElem<T> {
 
 	/**
 	 * 
@@ -42,7 +42,7 @@ public class Mean extends FeatureListElem {
 	private static final long serialVersionUID = 1L;
 
 	@Override
-	public double calc( CacheableParams<? extends FeatureCalcParams> params ) throws FeatureCalcException {
+	public double calc( CacheableParams<T> params ) throws FeatureCalcException {
 		
 		double result = 0;
 		
@@ -50,7 +50,7 @@ public class Mean extends FeatureListElem {
 			throw new FeatureCalcException("There are 0 items");
 		}
 		
-		for (Feature elem : getList()) {
+		for (Feature<T> elem : getList()) {
 			result += params.calc( elem );
 		}
 		
@@ -66,7 +66,7 @@ public class Mean extends FeatureListElem {
 		sb.append("(");
 		
 		boolean first = true;
-		for (Feature elem : getList()) {
+		for (Feature<T> elem : getList()) {
 			
 			if (first==true) {
 				first = false;

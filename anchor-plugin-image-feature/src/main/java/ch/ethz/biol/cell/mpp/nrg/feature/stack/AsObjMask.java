@@ -56,23 +56,20 @@ public class AsObjMask extends FeatureStack {
 	
 	// START BEAN PROPERTIES
 	@BeanField
-	private Feature item;
+	private Feature<FeatureObjMaskParams> item;
 	
 	@BeanField
 	/** The channel that that forms the binary mask */
 	private int nrgIndex = 0;
 	// END BEAN PROPERTIES
 	
-	private FeatureSessionCacheRetriever subcache;
-	
 	@Override
 	public double calcCast(CacheableParams<FeatureStackParams> params) throws FeatureCalcException {
 		
-		return subcache.calc(item,
-			params.mapParams(
-				p -> objMaskFromStack(p),
-				"obj"
-			)
+		return params.calcChangeParams(
+			item,
+			p -> objMaskFromStack(p),
+			"obj"
 		);
 	}
 	

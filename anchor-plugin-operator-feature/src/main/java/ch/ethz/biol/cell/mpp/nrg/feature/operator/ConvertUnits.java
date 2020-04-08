@@ -30,13 +30,14 @@ package ch.ethz.biol.cell.mpp.nrg.feature.operator;
 import org.anchoranalysis.bean.annotation.AllowEmpty;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.unit.SpatialConversionUtilities;
+import org.anchoranalysis.feature.bean.operator.FeatureGenericSingleElem;
 import org.anchoranalysis.feature.bean.operator.FeatureSingleElem;
 import org.anchoranalysis.feature.cache.CacheableParams;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
 
 // 
-public class ConvertUnits extends FeatureSingleElem {
+public class ConvertUnits<T extends FeatureCalcParams> extends FeatureGenericSingleElem<T> {
 
 	/**
 	 * 
@@ -72,7 +73,7 @@ public class ConvertUnits extends FeatureSingleElem {
 	}
 
 	@Override
-	protected double calc(CacheableParams<? extends FeatureCalcParams> params) throws FeatureCalcException {
+	protected double calc(CacheableParams<T> params) throws FeatureCalcException {
 		
 		double value = params.calc( getItem() );
 		

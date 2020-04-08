@@ -48,13 +48,13 @@ import org.anchoranalysis.image.objmask.ObjMask;
 // TODO broken, to be fixed
 class MergeSession extends FeatureSession {
 
-	private SequentialSession delegate;
+	private SequentialSession<FeatureObjMaskPairMergedParams> delegate;
 	
 	private FeatureInitParams paramsInit;
 	
-	private HashMap<ObjMask,FeatureSessionCache> map;
+	//private HashMap<ObjMask,FeatureSessionCache> map;
 	
-	private Feature feature;
+	private Feature<FeatureObjMaskPairMergedParams> feature;
 	
 	// Only caches calculation results which are positive
 	@SuppressWarnings("unused")
@@ -63,23 +63,23 @@ class MergeSession extends FeatureSession {
 	@SuppressWarnings("unused")
 	private LogErrorReporter logger;
 		
-	public MergeSession( Feature feature, FeatureInitParams initParams, boolean recordTimes ) {
+	public MergeSession( Feature<FeatureObjMaskPairMergedParams> feature, FeatureInitParams initParams, boolean recordTimes ) {
 		
-		// We duplicate the feature, so it can be inited() again with a new seperate cache
+		// We duplicate the feature, so it can be inited() again with a new separate cache
 		this.feature = feature.duplicateBean();
-		delegate = new SequentialSession( this.feature );
-		this.paramsInit = initParams.duplicate();
+		delegate = new SequentialSession<>( this.feature );
+		//this.paramsInit = initParams.duplicate();
 	
-		map = new HashMap<ObjMask,FeatureSessionCache>();
+		//map = new HashMap<ObjMask,FeatureSessionCache>();
 	}
 	
-	public void start( SharedFeatureSet sharedFeatures, LogErrorReporter logger ) throws InitException {
+	public void start( SharedFeatureSet<FeatureObjMaskPairMergedParams> sharedFeatures, LogErrorReporter logger ) throws InitException {
 		this.logger = logger;
 		delegate.start( paramsInit, sharedFeatures, logger );
 	}
 	
 	public void clearCache() {
-		map.clear();
+		//map.clear();
 	}
 	
 	private FeatureCalcParams createParams(
@@ -111,9 +111,9 @@ class MergeSession extends FeatureSession {
 	public double calc( ObjMask obj1, ObjMask obj2, ObjMask omMerged )
 			throws FeatureCalcException {
 		try {
-			FeatureSessionCache cache0 = map.get(obj1);
+			/*FeatureSessionCache cache0 = map.get(obj1);
 			FeatureSessionCache cache1 = map.get(obj2);
-			FeatureSessionCache cache2 = map.get(omMerged);
+			FeatureSessionCache cache2 = map.get(omMerged);*/
 			
 			delegate.getCache().invalidate();
 			
@@ -143,10 +143,10 @@ class MergeSession extends FeatureSession {
 			// We re-initialize the feature to have our new cached results
 			//feature.initRecursive( this.paramsInit, delegate.getCache().retriever());
 			FeatureCalcParams params = createParams(obj1,obj2,omMerged);
-			double val = delegate.getCache().retriever().calc(
+			/*double val = delegate.getCache().retriever().calc(
 				feature,
 				SessionUtilities.createCacheable(params, null)	// TODO broken, to be fixed
-			);
+			);*/
 						
 			//System.out.printf("Calculating (%s,%s,%s) has sizes (%d,%d,%d) = %f\n", obj1.centerOfGravity(), obj2.centerOfGravity(), omMerged.centerOfGravity(), delegate.getCache().getAdditionalCache(0).currentSize(), delegate.getCache().getAdditionalCache(1).currentSize(), delegate.getCache().getAdditionalCache(2).currentSize(), val );
 			
@@ -168,7 +168,8 @@ class MergeSession extends FeatureSession {
 				}
 			}*/
 			
-			return val;
+			//return val;
+			return -1;// added to compile TODO broken
 		} catch (CreateException e) {
 			throw new FeatureCalcException(e);
 		}

@@ -34,7 +34,7 @@ import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
 
 
-public class DivideExplicit extends FeatureDoubleElem {
+public class DivideExplicit<T extends FeatureCalcParams> extends FeatureDoubleElem<T> {
 	
 	/**
 	 * 
@@ -50,7 +50,7 @@ public class DivideExplicit extends FeatureDoubleElem {
 	// END BEAN PROPERTIES
 	
 	@Override
-	public double calc( CacheableParams<? extends FeatureCalcParams> params ) throws FeatureCalcException {
+	public double calc( CacheableParams<T> params ) throws FeatureCalcException {
 		
 		// This feature doesn't need to be init, so we skip this bit
 		double val1 = params.calc( getItem1() );

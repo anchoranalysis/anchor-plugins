@@ -36,7 +36,7 @@ import cern.jet.random.Normal;
 
 
 // A score between 0 and 1, based upon the CDF of a guassian. as one approaches the mean, the score approaches 1.0
-public class GaussianScore extends FeatureFirstSecondOrder {
+public class GaussianScore<T extends FeatureCalcParams> extends FeatureFirstSecondOrder<T> {
 
 	/**
 	 * 
@@ -77,7 +77,7 @@ public class GaussianScore extends FeatureFirstSecondOrder {
 	}
 	
 	@Override
-	public double calc( CacheableParams<? extends FeatureCalcParams> params ) throws FeatureCalcException {
+	public double calc( CacheableParams<T> params ) throws FeatureCalcException {
 		
 		double val = params.calc( getItem() );
 		double mean = params.calc( getItemMean() );

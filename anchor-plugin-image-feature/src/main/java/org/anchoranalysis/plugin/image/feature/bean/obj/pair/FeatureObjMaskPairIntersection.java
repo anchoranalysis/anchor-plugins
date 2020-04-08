@@ -102,13 +102,16 @@ public class FeatureObjMaskPairIntersection extends FeatureObjMaskPair {
 
 	
 	@Override
-	public CacheableParams<? extends FeatureCalcParams> transformParamsCast(CacheableParams<FeatureObjMaskPairParams> params,
-			Feature dependentFeature) throws FeatureCalcException {
+	public CacheableParams<FeatureCalcParams> transformParams(CacheableParams<FeatureObjMaskPairParams> params,
+			Feature<FeatureCalcParams> dependentFeature) throws FeatureCalcException {
 
 		ObjMask omIntersection = createCachedCalculation(params);
 			
 		if (omIntersection==null || !omIntersection.hasPixelsGreaterThan(0)) {
-			return params;
+			// TODO Fix
+			//return (CacheableParams<FeatureCalcParams>) params;
+			assert(false);
+			return null;
 		}
 		
 		return createParamsForIntersection(omIntersection,params);
@@ -132,9 +135,9 @@ public class FeatureObjMaskPairIntersection extends FeatureObjMaskPair {
 	private ObjMask createCachedCalculation(CacheableParams<FeatureObjMaskPairParams> params) throws FeatureCalcException {
 		try {
 			CachedCalculation<ObjMask> cc = CalculatePairIntersectionCommutative.createFromCache(
-				params.cacheFor(CACHE_INTERSECTION),
-				params.cacheFor(CACHE_OBJ1),
-				params.cacheFor(CACHE_OBJ2),
+				params.cacheFor(CACHE_INTERSECTION, FeatureObjMaskPairParams.class),
+				params.cacheFor(CACHE_OBJ1, FeatureObjMaskPairParams.class),
+				params.cacheFor(CACHE_OBJ2, FeatureObjMaskPairParams.class),
 				iterationsDilation,
 				iterationsErosion,
 				do3D

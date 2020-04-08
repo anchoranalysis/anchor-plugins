@@ -60,9 +60,9 @@ public class CalculatePairIntersectionCommutative extends CachedCalculationCastP
 	private CachedCalculation<ObjMask> ccSecondToFirst;
 	
 	public static CachedCalculation<ObjMask> createFromCache(
-		FeatureSessionCacheRetriever cache,
-		FeatureSessionCacheRetriever cacheDilationObj1,
-		FeatureSessionCacheRetriever cacheDilationObj2,
+		ICachedCalculationSearch cache,
+		ICachedCalculationSearch cacheDilationObj1,
+		ICachedCalculationSearch cacheDilationObj2,
 		int iterationsDilation,
 		int iterationsErosion,
 		boolean do3D

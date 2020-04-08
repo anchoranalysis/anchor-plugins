@@ -54,7 +54,7 @@ public abstract class FromExisting extends FeatureObjMaskPairMerged {
 	
 	// START BEAN PROPERTIES
 	@BeanField
-	private Feature item;
+	private Feature<FeatureObjMaskParams> item;
 	// END BEAN PROPERTIES
 	
 	@Override
@@ -62,12 +62,6 @@ public abstract class FromExisting extends FeatureObjMaskPairMerged {
 			throws FeatureCalcException {
 		
 		return transformParamsCast(params).calc(item);
-	}
-
-	@Override
-	public CacheableParams<? extends FeatureCalcParams> transformParams(CacheableParams<? extends FeatureCalcParams> params,
-			Feature dependentFeature) throws FeatureCalcException {
-		return params.downcastParams(FeatureObjMaskPairMergedParams.class);
 	}
 	
 	public CacheableParams<FeatureObjMaskParams> transformParamsCast( CacheableParams<FeatureObjMaskPairMergedParams> params ) {
@@ -85,11 +79,11 @@ public abstract class FromExisting extends FeatureObjMaskPairMerged {
 	/** The name of the cache to use for calculation */
 	protected abstract String cacheNameToUse();
 	
-	public Feature getItem() {
+	public Feature<FeatureObjMaskParams> getItem() {
 		return item;
 	}
 
-	public void setItem(Feature item) {
+	public void setItem(Feature<FeatureObjMaskParams> item) {
 		this.item = item;
 	}
 	

@@ -36,6 +36,7 @@ import org.anchoranalysis.experiment.log.ConsoleLogReporter;
 import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.calc.ResultsVector;
+import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
 import org.anchoranalysis.feature.init.FeatureInitParams;
 import org.anchoranalysis.feature.shared.SharedFeatureSet;
 import org.anchoranalysis.image.feature.session.FeatureSessionCreateParams;
@@ -61,7 +62,7 @@ public class FeatureSessionCreateParamsTest {
 		RegisterBeanFactories.registerAllPackageBeanFactories();
     }
 	
-	@Test
+	@Test(expected = FeatureCalcException.class)
 	public void testNoParams() throws InitException, FeatureCalcException, CreateException {
 		
 		FeatureSessionCreateParams session = createAndStart(SimpleFeatureListFixture.create(), false);
@@ -123,9 +124,9 @@ public class FeatureSessionCreateParamsTest {
 	
 	
 	
-	private FeatureSessionCreateParams createAndStart( FeatureList features, boolean withNrgStack ) throws InitException, CreateException {
+	private FeatureSessionCreateParams createAndStart( FeatureList<FeatureCalcParams> features, boolean withNrgStack ) throws InitException, CreateException {
 		FeatureSessionCreateParams session = new FeatureSessionCreateParams(features);
-		session.start( new FeatureInitParams(), new SharedFeatureSet(), new LogErrorReporter( new ConsoleLogReporter() ) );
+		session.start( new FeatureInitParams(), new SharedFeatureSet<>(), new LogErrorReporter( new ConsoleLogReporter() ) );
 		
 		if (withNrgStack) {
 			session.setNrgStack( NRGStackFixture.create() );
@@ -139,7 +140,7 @@ public class FeatureSessionCreateParamsTest {
 	 *  
 	 * @throws CreateException 
 	 * */
-	private static FeatureList histogramFeatures( TestLoader loader ) throws CreateException {
+	private static FeatureList<FeatureCalcParams> histogramFeatures( TestLoader loader ) throws CreateException {
 		return FeatureListFixture.createFromFile("histogramFeatureList.xml", loader);
 	}
 	
@@ -147,7 +148,7 @@ public class FeatureSessionCreateParamsTest {
 	 *  
 	 * @throws CreateException 
 	 * */
-	private static FeatureList objMaskFeatures( TestLoader loader ) throws CreateException {
+	private static FeatureList<FeatureCalcParams> objMaskFeatures( TestLoader loader ) throws CreateException {
 		return FeatureListFixture.createFromFile("objMaskFeatureList.xml", loader);
 	}
 }

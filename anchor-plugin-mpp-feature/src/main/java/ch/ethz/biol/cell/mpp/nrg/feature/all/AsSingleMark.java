@@ -4,6 +4,7 @@ import org.anchoranalysis.anchor.mpp.feature.bean.mark.FeatureMarkParams;
 import org.anchoranalysis.anchor.mpp.feature.mark.MemoMarks;
 import org.anchoranalysis.anchor.mpp.feature.nrg.elem.NRGElemAllCalcParams;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
+import org.anchoranalysis.feature.bean.operator.FeatureGenericSingleElem;
 
 /*-
  * #%L
@@ -36,7 +37,7 @@ import org.anchoranalysis.feature.cache.CacheableParams;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
 
-public class AsSingleMark extends FeatureSingleElem {
+public class AsSingleMark extends FeatureSingleElem<NRGElemAllCalcParams,FeatureMarkParams> {
 
 	/**
 	 * 
@@ -44,7 +45,7 @@ public class AsSingleMark extends FeatureSingleElem {
 	private static final long serialVersionUID = 1L;
 
 	@Override
-	public double calc( CacheableParams<? extends FeatureCalcParams> params ) throws FeatureCalcException {
+	public double calc( CacheableParams<NRGElemAllCalcParams> params ) throws FeatureCalcException {
 		return calcCast(
 			params.downcastParams(NRGElemAllCalcParams.class)
 		);

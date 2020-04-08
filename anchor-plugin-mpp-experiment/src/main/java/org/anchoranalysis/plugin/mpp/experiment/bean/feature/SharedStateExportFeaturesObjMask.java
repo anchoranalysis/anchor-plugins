@@ -1,5 +1,7 @@
 package org.anchoranalysis.plugin.mpp.experiment.bean.feature;
 
+import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
+
 /*-
  * #%L
  * anchor-plugin-mpp-experiment
@@ -33,15 +35,15 @@ import org.anchoranalysis.feature.name.FeatureNameList;
 import org.anchoranalysis.plugin.image.task.sharedstate.SharedStateExportFeatures;
 import org.anchoranalysis.plugin.mpp.experiment.feature.FeatureSessionFlexiFeatureTable;
 
-class SharedStateExportFeaturesObjMask extends SharedStateExportFeatures {
+class SharedStateExportFeaturesObjMask<T extends FeatureCalcParams> extends SharedStateExportFeatures {
 	
-	private FeatureSessionFlexiFeatureTable session;
+	private FeatureSessionFlexiFeatureTable<T> session;
 	
-	public SharedStateExportFeaturesObjMask( GroupedResultsVectorCollection groupMap, FeatureSessionFlexiFeatureTable session ) {
+	public SharedStateExportFeaturesObjMask( GroupedResultsVectorCollection groupMap, FeatureSessionFlexiFeatureTable<T> session ) {
 		super( groupMap );
 		this.session = session;
 	}
-	public FeatureSessionFlexiFeatureTable getSession() {
+	public FeatureSessionFlexiFeatureTable<T> getSession() {
 		return session;
 	}
 	

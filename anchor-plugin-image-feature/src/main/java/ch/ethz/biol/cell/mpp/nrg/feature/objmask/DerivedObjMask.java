@@ -54,7 +54,7 @@ public abstract class DerivedObjMask extends FeatureObjMask {
 	private double emptyValue = 255;
 	
 	@BeanField @SkipInit
-	private Feature item;
+	private Feature<FeatureObjMaskParams> item;
 	// END BEAN PROPERTIES
 
 	@Override
@@ -80,13 +80,18 @@ public abstract class DerivedObjMask extends FeatureObjMask {
 	}
 	
 	@Override
-	public CacheableParams<? extends FeatureCalcParams> transformParamsCast(CacheableParams<FeatureObjMaskParams> params,Feature dependentFeature) throws FeatureCalcException {
+	public CacheableParams<FeatureCalcParams> transformParams(
+			CacheableParams<FeatureObjMaskParams> params,
+			Feature<FeatureCalcParams> dependentFeature
+	) throws FeatureCalcException {
 		try {
 			ObjMask omDerived = derivedObjMask(params);
 			
 			if (omDerived==null || !omDerived.hasPixelsGreaterThan(0)) {
 				// TODO is this the correct way of handling a null-mask?
-				return params;
+				assert(false);
+				// Broken, please fix
+				return null;
 			}
 			
 			return params.mapParams(
@@ -98,7 +103,7 @@ public abstract class DerivedObjMask extends FeatureObjMask {
 		}			
 	}
 		
-	public FeatureCalcParams createDerivedParams(FeatureObjMaskParams paramsExst, ObjMask omDerived) {
+	public FeatureObjMaskParams createDerivedParams(FeatureObjMaskParams paramsExst, ObjMask omDerived) {
 
 		FeatureObjMaskParams paramsNew = new FeatureObjMaskParams( omDerived );
 		paramsNew.setNrgStack( paramsExst.getNrgStack() );
@@ -114,7 +119,7 @@ public abstract class DerivedObjMask extends FeatureObjMask {
 	private ObjMask derivedObjMask(CacheableParams<FeatureObjMaskParams> params) throws ExecuteException {
 		try {
 			CachedCalculation<ObjMask> cc = createCachedCalculation(
-				params.cacheFor( cacheName() )
+				params.cacheFor( cacheName(), FeatureObjMaskParams.class )
 			);
 			return params.calc(cc);
 		} catch (FeatureCalcException e) {
@@ -130,11 +135,11 @@ public abstract class DerivedObjMask extends FeatureObjMask {
 		this.emptyValue = emptyValue;
 	}
 
-	public Feature getItem() {
+	public Feature<FeatureObjMaskParams> getItem() {
 		return item;
 	}
 
-	public void setItem(Feature item) {
+	public void setItem(Feature<FeatureObjMaskParams> item) {
 		this.item = item;
 	}
 }

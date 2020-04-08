@@ -35,7 +35,7 @@ import org.anchoranalysis.feature.cache.CacheableParams;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
 
-public class AsCfg extends FeatureSingleElem {
+public class AsCfg extends FeatureSingleElem<NRGElemAllCalcParams,FeatureCfgParams> {
 
 	/**
 	 * 
@@ -43,7 +43,7 @@ public class AsCfg extends FeatureSingleElem {
 	private static final long serialVersionUID = 1L;
 
 	@Override
-	public double calc( CacheableParams<? extends FeatureCalcParams> params ) throws FeatureCalcException {
+	public double calc( CacheableParams<NRGElemAllCalcParams> params ) throws FeatureCalcException {
 		return params
 			.downcastParams(NRGElemAllCalcParams.class)
 			.calcChangeParams(getItem(), AsCfg::deriveParams, "cfg");

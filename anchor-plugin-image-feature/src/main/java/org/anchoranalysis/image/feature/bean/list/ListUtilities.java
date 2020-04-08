@@ -29,10 +29,15 @@ package org.anchoranalysis.image.feature.bean.list;
 import java.util.List;
 
 import org.anchoranalysis.feature.bean.Feature;
+import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
 
 class ListUtilities {
 
-	public static void addFeaturesToList( Feature featFirst, Feature featSecond, List<Feature> list ) {
+	public static <T extends FeatureCalcParams> void addFeaturesToList(
+		Feature<T> featFirst,
+		Feature<T> featSecond,
+		List<Feature<T>> list
+	) {
 		list.add(featFirst);
 		list.add(featSecond);
 	}

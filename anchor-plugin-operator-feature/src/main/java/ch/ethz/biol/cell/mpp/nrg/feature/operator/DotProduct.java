@@ -39,7 +39,7 @@ import org.anchoranalysis.feature.params.FeatureParamsDescriptor;
 import org.anchoranalysis.feature.params.ParamTypeUtilities;
 
 // converts a feature to a physical distance in a XY place that is isometric
-public class DotProduct extends Feature {
+public class DotProduct extends Feature<FeatureCalcParams> {
 
 	/**
 	 * 
@@ -59,7 +59,7 @@ public class DotProduct extends Feature {
 	// END BEAN PROPERTIES
 	
 	@Override
-	public double calc(CacheableParams<? extends FeatureCalcParams> params) throws FeatureCalcException {
+	public double calc(CacheableParams<FeatureCalcParams> params) throws FeatureCalcException {
 		
 		Vector3d vec1 = vector1.calc(params);
 		Vector3d vec2 = vector2.calc(params);

@@ -42,6 +42,7 @@ import org.anchoranalysis.experiment.task.Task;
 import org.anchoranalysis.feature.bean.list.FeatureListProvider;
 import org.anchoranalysis.feature.list.NamedFeatureStore;
 import org.anchoranalysis.feature.list.NamedFeatureStoreFactory;
+import org.anchoranalysis.feature.resultsvectorcollection.FeatureResultsVectorCollectionParams;
 import org.anchoranalysis.io.bean.filepath.generator.FilePathGenerator;
 import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.filepath.FilePathToUnixStyleConverter;
@@ -77,7 +78,7 @@ public abstract class ExportFeaturesTask<T extends InputFromManager, S extends S
 	
 	/** Features applied to each group to aggregate values (takes FeatureResultsVectorCollection) */
 	@BeanField @Optional
-	private List<NamedBean<FeatureListProvider>> listFeaturesAggregate = new ArrayList<>();
+	private List<NamedBean<FeatureListProvider<FeatureResultsVectorCollectionParams>>> listFeaturesAggregate = new ArrayList<>();
 	// END BEAN
 	
 	@Override
@@ -106,7 +107,7 @@ public abstract class ExportFeaturesTask<T extends InputFromManager, S extends S
 		LogErrorReporter logErrorReporter = new LogErrorReporter(logReporter);
 		
 		try {
-			NamedFeatureStore featuresAggregate = null;
+			NamedFeatureStore<FeatureResultsVectorCollectionParams> featuresAggregate = null;
 			
 			if (listFeaturesAggregate!=null) {
 				featuresAggregate = NamedFeatureStoreFactory.createNamedFeatureList(listFeaturesAggregate);
@@ -152,12 +153,12 @@ public abstract class ExportFeaturesTask<T extends InputFromManager, S extends S
 	}
 	
 
-	public List<NamedBean<FeatureListProvider>> getListFeaturesAggregate() {
+	public List<NamedBean<FeatureListProvider<FeatureResultsVectorCollectionParams>>> getListFeaturesAggregate() {
 		return listFeaturesAggregate;
 	}
 
 	public void setListFeaturesAggregate(
-			List<NamedBean<FeatureListProvider>> listFeaturesAggregate) {
+			List<NamedBean<FeatureListProvider<FeatureResultsVectorCollectionParams>>> listFeaturesAggregate) {
 		this.listFeaturesAggregate = listFeaturesAggregate;
 	}
 }

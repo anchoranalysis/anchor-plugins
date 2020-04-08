@@ -28,12 +28,13 @@ package ch.ethz.biol.cell.mpp.nrg.feature.operator;
 
 
 import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.feature.bean.operator.FeatureGenericSingleElem;
 import org.anchoranalysis.feature.bean.operator.FeatureSingleElem;
 import org.anchoranalysis.feature.cache.CacheableParams;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
 
-public class IfInfinityReplace extends FeatureSingleElem {
+public class IfInfinityReplace<T extends FeatureCalcParams> extends FeatureGenericSingleElem<T> {
 
 	/**
 	 * 
@@ -46,8 +47,10 @@ public class IfInfinityReplace extends FeatureSingleElem {
 	// END BEAN PROPERTIES
 	
 	@Override
-	public double calc( CacheableParams<? extends FeatureCalcParams> params ) throws FeatureCalcException {
-		double itemValue = params.calc( getItem() );
+	public double calc( CacheableParams<T> params ) throws FeatureCalcException {
+		double itemValue = params.calc(
+			getItem()
+		);
 		
 		if (Double.isInfinite(itemValue)) {
 			return value;

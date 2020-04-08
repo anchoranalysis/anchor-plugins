@@ -43,7 +43,7 @@ public class FeatureListProviderPermuteZScore extends FeatureListProviderPermute
 	private static final long serialVersionUID = 1L;
 
 	public FeatureListProviderPermuteZScore() {
-		super( ()-> new ZScore(),
+		super( ()-> new ZScore<>(),
 			-1 * Double.MAX_VALUE,
 			Double.MAX_VALUE );
 	}
