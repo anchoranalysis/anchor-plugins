@@ -38,8 +38,14 @@ import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.calc.ResultsVector;
 import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
 import org.anchoranalysis.feature.init.FeatureInitParams;
+import org.anchoranalysis.feature.nrg.NRGStackWithParams;
+import org.anchoranalysis.feature.session.SequentialSession;
 import org.anchoranalysis.feature.shared.SharedFeatureSet;
+import org.anchoranalysis.image.feature.histogram.FeatureHistogramParams;
+import org.anchoranalysis.image.feature.objmask.FeatureObjMaskParams;
 import org.anchoranalysis.image.feature.session.FeatureSessionCreateParams;
+import org.anchoranalysis.image.histogram.Histogram;
+import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.test.TestLoader;
 import org.anchoranalysis.test.feature.SimpleFeatureListFixture;
 import org.anchoranalysis.test.feature.plugins.FeatureListFixture;
@@ -65,12 +71,12 @@ public class FeatureSessionCreateParamsTest {
 	@Test(expected = FeatureCalcException.class)
 	public void testNoParams() throws InitException, FeatureCalcException, CreateException {
 		
-		FeatureSessionCreateParams session = createAndStart(SimpleFeatureListFixture.create(), false);
+		SequentialSession<FeatureCalcParams> session = createAndStart(SimpleFeatureListFixture.create());
 		
-		ResultsVector rv1 = session.calc();
+		ResultsVector rv1 = session.calc( (FeatureCalcParams) null );
 		SimpleFeatureListFixture.checkResultVector(rv1);
 		
-		ResultsVector rv2 = session.calc();
+		ResultsVector rv2 = session.calc( (FeatureCalcParams) null );
 		SimpleFeatureListFixture.checkResultVector(rv2);
 	}
 	
@@ -78,45 +84,50 @@ public class FeatureSessionCreateParamsTest {
 	@Test
 	public void testHistogram() throws InitException, FeatureCalcException, CreateException {
 		
-		FeatureSessionCreateParams session = createAndStart(
-			histogramFeatures(loader),
-			true
+		SequentialSession<FeatureHistogramParams> session = createAndStart(
+			histogramFeatures(loader)
 		);
 		
 		assertCalc(
-			session.calc( HistogramFixture.createAscending() ),
+			session.calc(
+				createParams(HistogramFixture.createAscending())
+			),
 			32450.0, 30870.0, 14685.0, 140.0, 214.0, 0.005545343137254902					
 		);
 		
 		assertCalc(
-			session.calc( HistogramFixture.createDescending() ),
+			session.calc(
+				createParams(HistogramFixture.createDescending())
+			),
 			27730.0, 19110.0, 2145.0, 41.0, 115.0, 0.0022671568627450982					
 		);
 	}
-	
+		
 	@Test
 	public void testImage() throws InitException, FeatureCalcException, CreateException {
 		
-		FeatureSessionCreateParams session = createAndStart(
-			objMaskFeatures(loader),
-			true
-		);
-		session.setNrgStack( NRGStackFixture.create() );
+		SequentialSession<FeatureObjMaskParams> session = createAndStart(objMaskFeatures(loader));
 		
-		ObjMaskFixture objMaskFixture = new ObjMaskFixture( session.getNrgStack().getDimensions() );
+		ObjMaskFixture objMaskFixture = new ObjMaskFixture( NRGStackFixture.create().getDimensions() );
 		
 		assertCalc(
-			session.calc( objMaskFixture.create1() ),
+			session.calc(
+				createParams(objMaskFixture.create1())
+			),
 			31.5, 29.0, 3.0, 59.0, 225.02857142857144, 2744.0, 560.0					
 		);
 		
 		assertCalc(
-			session.calc( objMaskFixture.create2() ),
+			session.calc(
+				createParams(objMaskFixture.create2())
+			),
 			7.5, 21.0, 7.0, 28.5, 195.93956043956044, 108.0, 66.0					
 		);
 		
 		assertCalc(
-			session.calc( objMaskFixture.create3() ),
+			session.calc(
+				createParams(objMaskFixture.create3())
+			),
 			21.5, 35.0, 2.0, 55.5, 159.37306501547988, 612.0, 162.0					
 		);
 	}
@@ -124,14 +135,9 @@ public class FeatureSessionCreateParamsTest {
 	
 	
 	
-	private FeatureSessionCreateParams createAndStart( FeatureList<FeatureCalcParams> features, boolean withNrgStack ) throws InitException, CreateException {
-		FeatureSessionCreateParams session = new FeatureSessionCreateParams(features);
+	private <T extends FeatureCalcParams> SequentialSession<T> createAndStart( FeatureList<T> features ) throws InitException, CreateException {
+		SequentialSession<T> session = new SequentialSession<>(features);
 		session.start( new FeatureInitParams(), new SharedFeatureSet<>(), new LogErrorReporter( new ConsoleLogReporter() ) );
-		
-		if (withNrgStack) {
-			session.setNrgStack( NRGStackFixture.create() );
-		}
-		
 		return session;
 	}
 	
@@ -140,7 +146,7 @@ public class FeatureSessionCreateParamsTest {
 	 *  
 	 * @throws CreateException 
 	 * */
-	private static FeatureList<FeatureCalcParams> histogramFeatures( TestLoader loader ) throws CreateException {
+	private static FeatureList<FeatureHistogramParams> histogramFeatures( TestLoader loader ) throws CreateException {
 		return FeatureListFixture.createFromFile("histogramFeatureList.xml", loader);
 	}
 	
@@ -148,7 +154,22 @@ public class FeatureSessionCreateParamsTest {
 	 *  
 	 * @throws CreateException 
 	 * */
-	private static FeatureList<FeatureCalcParams> objMaskFeatures( TestLoader loader ) throws CreateException {
+	private static FeatureList<FeatureObjMaskParams> objMaskFeatures( TestLoader loader ) throws CreateException {
 		return FeatureListFixture.createFromFile("objMaskFeatureList.xml", loader);
+	}
+
+	private static FeatureHistogramParams createParams( Histogram hist ) throws CreateException {
+		return new FeatureHistogramParams(
+			hist,
+			NRGStackFixture.create().getDimensions().getRes()
+		);
+	}
+	
+	private static FeatureObjMaskParams createParams( ObjMask om ) throws CreateException {
+		FeatureObjMaskParams params = new FeatureObjMaskParams(om);
+		params.setNrgStack(
+			NRGStackFixture.create()		
+		);
+		return params;
 	}
 }

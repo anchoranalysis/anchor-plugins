@@ -33,9 +33,12 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.feature.session.FeatureCalculatorVector;
+import org.anchoranalysis.feature.session.FeatureCalculatorVectorChangeParams;
 import org.anchoranalysis.image.bean.objmask.match.ObjMaskMatcher;
 import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
 import org.anchoranalysis.image.feature.bean.evaluator.FeatureEvaluatorNrgStack;
+import org.anchoranalysis.image.feature.objmask.FeatureObjMaskParams;
 import org.anchoranalysis.image.feature.session.FeatureSessionCreateParamsSingle;
 import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.image.objmask.ObjMaskCollection;
@@ -57,32 +60,15 @@ public class ObjMaskProviderFindMaxFeatureInMatchedObjects extends ObjMaskProvid
 	private ObjMaskMatcher objMaskMatcher;
 	
 	@BeanField
-	private FeatureEvaluatorNrgStack featureEvaluator;
+	private FeatureEvaluatorNrgStack<FeatureObjMaskParams> featureEvaluator;
 	// END BEAN PROPERTIES
-
-	private ObjMask findMax( FeatureSessionCreateParamsSingle session, ObjMaskCollection objs ) throws FeatureCalcException {
-		ObjMask max = null;
-		double maxVal = 0;
-		
-		for( ObjMask om : objs ) {
-			
-			double featureVal = session.calc(om);
-			
-			if (max==null || featureVal>maxVal) {
-				max = om;
-				maxVal = featureVal;
-			}
-		}
-		
-		return max;
-	}
 
 	@Override
 	public ObjMaskCollection create() throws CreateException {
 		
 		ObjMaskCollection in = objs.create();
 		
-		FeatureSessionCreateParamsSingle session;
+		FeatureCalculatorVector<FeatureObjMaskParams> session;
 		try {
 			session = featureEvaluator.createAndStartSession();
 		} catch (OperationFailedException e) {
@@ -96,7 +82,7 @@ public class ObjMaskProviderFindMaxFeatureInMatchedObjects extends ObjMaskProvid
 	
 			for( ObjWithMatches owm : listMatches ) {
 			
-				ObjMask max = findMax(session,owm.getMatches());
+				ObjMask max = findMax( session, owm.getMatches() );
 				if (max!=null) {
 					out.add(max);
 				}
@@ -108,6 +94,25 @@ public class ObjMaskProviderFindMaxFeatureInMatchedObjects extends ObjMaskProvid
 		}
 		
 		return out;
+	}
+	
+	private ObjMask findMax( FeatureCalculatorVector<FeatureObjMaskParams> session, ObjMaskCollection objs ) throws FeatureCalcException {
+		ObjMask max = null;
+		double maxVal = 0;
+		
+		for( ObjMask om : objs ) {
+			
+			double featureVal = session.calc(
+				new FeatureObjMaskParams(om)
+			).get(0);
+			
+			if (max==null || featureVal>maxVal) {
+				max = om;
+				maxVal = featureVal;
+			}
+		}
+		
+		return max;
 	}
 	
 	public ObjMaskProvider getObjs() {

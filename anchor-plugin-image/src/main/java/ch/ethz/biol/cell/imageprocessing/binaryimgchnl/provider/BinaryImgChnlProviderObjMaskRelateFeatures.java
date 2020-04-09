@@ -34,11 +34,13 @@ import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.provider.FeatureProvider;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 import org.anchoranalysis.image.bean.provider.BinaryImgChnlProvider;
 import org.anchoranalysis.image.bean.provider.ChnlProvider;
 import org.anchoranalysis.image.binary.BinaryChnl;
 import org.anchoranalysis.image.chnl.Chnl;
+import org.anchoranalysis.image.feature.objmask.FeatureObjMaskParams;
 import org.anchoranalysis.image.feature.session.FeatureSessionCreateParamsSingle;
 import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.image.objmask.factory.CreateFromEntireChnlFactory;
@@ -62,7 +64,7 @@ public class BinaryImgChnlProviderObjMaskRelateFeatures extends BinaryImgChnlPro
 	private BinaryImgChnlProvider binaryImgChnlProviderElse;
 	
 	@BeanField
-	private FeatureProvider featureProvider;
+	private FeatureProvider<FeatureObjMaskParams> featureProvider;
 	
 	@BeanField
 	private ChnlProvider chnlProvider;
@@ -79,11 +81,11 @@ public class BinaryImgChnlProviderObjMaskRelateFeatures extends BinaryImgChnlPro
 		ObjMask omMain = CreateFromEntireChnlFactory.createObjMask( chnlMain );
 		ObjMask omCompareTo = CreateFromEntireChnlFactory.createObjMask( binaryImgChnlProviderCompareTo.create() );
 		
-		Feature feature = featureProvider.create();
+		Feature<FeatureObjMaskParams> feature = featureProvider.create();
 		
 		FeatureSessionCreateParamsSingle session = new FeatureSessionCreateParamsSingle(
 			feature,
-			getSharedObjects().getFeature().getSharedFeatureSet()
+			getSharedObjects().getFeature().getSharedFeatureSet().downcast()
 		);
 		
 		try {
@@ -139,11 +141,11 @@ public class BinaryImgChnlProviderObjMaskRelateFeatures extends BinaryImgChnlPro
 		this.binaryImgChnlProviderElse = binaryImgChnlProviderElse;
 	}
 
-	public FeatureProvider getFeatureProvider() {
+	public FeatureProvider<FeatureObjMaskParams> getFeatureProvider() {
 		return featureProvider;
 	}
 
-	public void setFeatureProvider(FeatureProvider featureProvider) {
+	public void setFeatureProvider(FeatureProvider<FeatureObjMaskParams> featureProvider) {
 		this.featureProvider = featureProvider;
 	}
 

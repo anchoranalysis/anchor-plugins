@@ -42,6 +42,7 @@ import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 import org.anchoranalysis.image.bean.objmask.filter.ObjMaskFilter;
 import org.anchoranalysis.image.bean.provider.ChnlProvider;
 import org.anchoranalysis.image.extent.ImageDim;
+import org.anchoranalysis.image.feature.objmask.FeatureObjMaskParams;
 import org.anchoranalysis.image.feature.session.FeatureSessionCreateParamsSingle;
 import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.image.objmask.ObjMaskCollection;
@@ -60,7 +61,7 @@ public class ObjMaskFilterFeatureRelationDiscardFeatureRatioLessThan extends Obj
 	
 	// START BEAN PROPERTIES
 	@BeanField
-	private FeatureProvider featureProvider;
+	private FeatureProvider<FeatureObjMaskParams> featureProvider;
 	
 	@BeanField
 	private double factor = 1;
@@ -93,7 +94,7 @@ public class ObjMaskFilterFeatureRelationDiscardFeatureRatioLessThan extends Obj
 		}
 		
 		// Initialization
-		Feature feature;
+		Feature<FeatureObjMaskParams> feature;
 		FeatureSessionCreateParamsSingle session;
 		{
 			try {
@@ -102,7 +103,10 @@ public class ObjMaskFilterFeatureRelationDiscardFeatureRatioLessThan extends Obj
 				throw new OperationFailedException(e);
 			}
 			
-			session = new FeatureSessionCreateParamsSingle( feature, getSharedObjects().getFeature().getSharedFeatureSet() );
+			session = new FeatureSessionCreateParamsSingle(
+				feature,
+				getSharedObjects().getFeature().getSharedFeatureSet().downcast()
+			);
 						
 			try {
 				session.start( getLogger() );
@@ -198,11 +202,11 @@ public class ObjMaskFilterFeatureRelationDiscardFeatureRatioLessThan extends Obj
 		}
 	}
 	
-	public FeatureProvider getFeatureProvider() {
+	public FeatureProvider<FeatureObjMaskParams> getFeatureProvider() {
 		return featureProvider;
 	}
 
-	public void setFeatureProvider(FeatureProvider featureProvider) {
+	public void setFeatureProvider(FeatureProvider<FeatureObjMaskParams> featureProvider) {
 		this.featureProvider = featureProvider;
 	}
 	public ChnlProvider getChnlProvider() {

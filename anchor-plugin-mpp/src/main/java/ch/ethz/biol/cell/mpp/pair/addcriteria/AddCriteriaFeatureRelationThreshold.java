@@ -38,6 +38,7 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
 import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.feature.session.FeatureSessionCreateParamsSubsession;
 
@@ -50,7 +51,7 @@ public class AddCriteriaFeatureRelationThreshold extends AddCriteriaPair {
 	
 	// START BEAN PROPERTIES
 	@BeanField
-	private Feature feature;
+	private Feature<FeatureCalcParams> feature;
 	
 	@BeanField
 	private double threshold;
@@ -74,7 +75,9 @@ public class AddCriteriaFeatureRelationThreshold extends AddCriteriaPair {
 	) throws IncludeMarksFailureException {
 		
 		try {
-			FeatureSessionCreateParamsSubsession subsession = session.createSubsession( session.getParamsFactory().createParams( mark1, mark2, dim )  );
+			FeatureSessionCreateParamsSubsession<FeatureCalcParams> subsession = session.createSubsession(
+				session.getParamsFactory().createParams( mark1, mark2, dim )
+			);
 			double featureVal = subsession.calc( feature);
 			return relation.create().isRelationToValueTrue(featureVal, threshold);
 			
@@ -83,11 +86,11 @@ public class AddCriteriaFeatureRelationThreshold extends AddCriteriaPair {
 		}
 	}
 
-	public Feature getFeature() {
+	public Feature<FeatureCalcParams> getFeature() {
 		return feature;
 	}
 
-	public void setFeature(Feature feature) {
+	public void setFeature(Feature<FeatureCalcParams> feature) {
 		this.feature = feature;
 	}
 
@@ -108,7 +111,7 @@ public class AddCriteriaFeatureRelationThreshold extends AddCriteriaPair {
 	}
 
 	@Override
-	public FeatureList orderedListOfFeatures() {
-		return new FeatureList(feature);
+	public FeatureList<FeatureCalcParams> orderedListOfFeatures() {
+		return new FeatureList<>(feature);
 	}
 }

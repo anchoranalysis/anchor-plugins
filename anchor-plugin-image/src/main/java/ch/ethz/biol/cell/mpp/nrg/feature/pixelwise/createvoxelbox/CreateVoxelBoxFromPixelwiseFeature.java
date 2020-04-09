@@ -41,6 +41,7 @@ import org.anchoranalysis.feature.init.FeatureInitParams;
 import org.anchoranalysis.feature.shared.SharedFeatureSet;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.feature.pixelwise.PixelwiseFeatureInitParams;
+import org.anchoranalysis.image.feature.pixelwise.score.PixelScoreFeatureCalcParams;
 import org.anchoranalysis.image.histogram.Histogram;
 import org.anchoranalysis.image.histogram.HistogramFactoryUtilities;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
@@ -67,7 +68,7 @@ public class CreateVoxelBoxFromPixelwiseFeature {
 	}
 	
 	// objMask can be null
-	public VoxelBox<ByteBuffer> createVoxelBoxFromPixelScore( Feature pixelScore, LogErrorReporter logger ) throws CreateException {
+	public VoxelBox<ByteBuffer> createVoxelBoxFromPixelScore( Feature<PixelScoreFeatureCalcParams> pixelScore, LogErrorReporter logger ) throws CreateException {
 	
 		// Sets up the Feature
 		try {
@@ -100,10 +101,10 @@ public class CreateVoxelBoxFromPixelwiseFeature {
 	}
 	
 	
-	private void setPixels( VoxelBox<ByteBuffer> vbOut, Feature pixelScore, LogErrorReporter logErrorReporter ) throws FeatureCalcException, InitException {
+	private void setPixels( VoxelBox<ByteBuffer> vbOut, Feature<PixelScoreFeatureCalcParams> pixelScore, LogErrorReporter logErrorReporter ) throws FeatureCalcException, InitException {
 		
 		PixelScoreSession session = new PixelScoreSession(pixelScore);
-		session.start( createParamsInit(), new SharedFeatureSet(), logErrorReporter  );
+		session.start( createParamsInit(), new SharedFeatureSet<>(), logErrorReporter  );
 		
 		Extent e = vbOut.extnt();
 		

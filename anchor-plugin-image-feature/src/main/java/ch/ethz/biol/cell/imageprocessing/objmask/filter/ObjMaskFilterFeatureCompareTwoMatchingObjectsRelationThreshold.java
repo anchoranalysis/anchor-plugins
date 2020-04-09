@@ -35,10 +35,16 @@ import org.anchoranalysis.bean.shared.relation.RelationBean;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.relation.RelationToValue;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.feature.nrg.NRGStackWithParams;
+import org.anchoranalysis.feature.session.SequentialSession;
+import org.anchoranalysis.feature.session.FeatureCalculatorVector;
+import org.anchoranalysis.feature.session.FeatureCalculatorVectorChangeParams;
 import org.anchoranalysis.image.bean.objmask.filter.ObjMaskFilter;
 import org.anchoranalysis.image.bean.objmask.match.ObjMaskMatcher;
 import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.feature.bean.evaluator.FeatureEvaluatorNrgStack;
+import org.anchoranalysis.image.feature.objmask.FeatureObjMaskParams;
+import org.anchoranalysis.image.feature.objmask.pair.FeatureObjMaskPairParams;
 import org.anchoranalysis.image.feature.session.FeatureSessionCreateParamsSingle;
 import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.image.objmask.ObjMaskCollection;
@@ -90,7 +96,7 @@ public class ObjMaskFilterFeatureCompareTwoMatchingObjectsRelationThreshold exte
 		List<ObjWithMatches> matchList2 = objMaskMatcher2.findMatch(objs);
 		requireExactlyOneMatch( matchList2, "matchList2" );
 
-		FeatureSessionCreateParamsSingle featureSession = featureEvaluator.createAndStartSession();
+		FeatureCalculatorVector<FeatureObjMaskPairParams> featureSession = featureEvaluator.createAndStartSession();
 		
 		RelationToValue relationToValue = relation.create();
 		
@@ -105,9 +111,11 @@ public class ObjMaskFilterFeatureCompareTwoMatchingObjectsRelationThreshold exte
 				
 				ObjMask match1 = objWithMatches1.getMatches().get(0);
 				ObjMask match2 = matchList2.get(i).getMatches().get(0);
+								
+				double featureVal = featureSession.calc(
+					new FeatureObjMaskPairParams(match1, match2)
+				).get(0);
 				
-				
-				double featureVal = featureSession.calc(match1,match2);	
 				if (!relationToValue.isRelationToValueTrue(featureVal, threshold)) {
 					listToRemove.add(objWithMatches1.getSourceObj());
 					

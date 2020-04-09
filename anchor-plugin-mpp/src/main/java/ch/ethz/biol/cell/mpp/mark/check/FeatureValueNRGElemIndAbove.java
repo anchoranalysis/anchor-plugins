@@ -2,6 +2,7 @@ package ch.ethz.biol.cell.mpp.mark.check;
 
 import org.anchoranalysis.anchor.mpp.bean.regionmap.RegionMap;
 import org.anchoranalysis.anchor.mpp.feature.error.CheckException;
+import org.anchoranalysis.anchor.mpp.feature.nrg.elem.NRGElemIndCalcParams;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
 import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemoFactory;
@@ -36,7 +37,7 @@ import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemoFactory;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 
-public class FeatureValueNRGElemIndAbove extends FeatureValueCheckMark {
+public class FeatureValueNRGElemIndAbove extends FeatureValueCheckMark<NRGElemIndCalcParams> {
 
 	/**
 	 * 
@@ -52,9 +53,10 @@ public class FeatureValueNRGElemIndAbove extends FeatureValueCheckMark {
 		
 		PxlMarkMemo pmm = PxlMarkMemoFactory.create( mark, nrgStack.getNrgStack(), regionMap );
 		try {
-			double nrg = session.calc( pmm ).get(0);
 			
-			//log.info( String.format("%f",nrg.getTotal()));
+			NRGElemIndCalcParams params = new NRGElemIndCalcParams(pmm,	nrgStack);
+			
+			double nrg = session.calc( params ).get(0);
 			
 			if (nrg > minVal) {
 				return true;

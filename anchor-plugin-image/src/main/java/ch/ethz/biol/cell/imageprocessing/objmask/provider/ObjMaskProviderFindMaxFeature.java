@@ -31,8 +31,11 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.feature.session.FeatureCalculatorVector;
+import org.anchoranalysis.feature.session.FeatureCalculatorVectorChangeParams;
 import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
 import org.anchoranalysis.image.feature.bean.evaluator.FeatureEvaluatorNrgStack;
+import org.anchoranalysis.image.feature.objmask.FeatureObjMaskParams;
 import org.anchoranalysis.image.feature.session.FeatureSessionCreateParamsSingle;
 import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.image.objmask.ObjMaskCollection;
@@ -49,7 +52,7 @@ public class ObjMaskProviderFindMaxFeature extends ObjMaskProvider {
 	private ObjMaskProvider objs;
 	
 	@BeanField
-	private FeatureEvaluatorNrgStack featureEvaluator;
+	private FeatureEvaluatorNrgStack<FeatureObjMaskParams> featureEvaluator;
 	// END BEAN PROPERTIES
 
 	@Override
@@ -57,7 +60,7 @@ public class ObjMaskProviderFindMaxFeature extends ObjMaskProvider {
 		
 		ObjMaskCollection in = objs.create();
 		
-		FeatureSessionCreateParamsSingle session;
+		FeatureCalculatorVector<FeatureObjMaskParams> session;
 		try {
 			session = featureEvaluator.createAndStartSession();
 		} catch (OperationFailedException e) {
@@ -73,7 +76,9 @@ public class ObjMaskProviderFindMaxFeature extends ObjMaskProvider {
 			double maxVal = 0;
 			for( ObjMask om : in ) {
 				
-				double featureVal = session.calc(om);
+				double featureVal = session.calc(
+					new FeatureObjMaskParams(om)
+				).get(0);
 				
 				if (max==null || featureVal>maxVal) {
 					max = om;

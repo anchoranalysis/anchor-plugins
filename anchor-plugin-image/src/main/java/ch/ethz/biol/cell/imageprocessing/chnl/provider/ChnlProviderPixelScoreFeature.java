@@ -43,6 +43,7 @@ import org.anchoranalysis.image.bean.provider.HistogramProvider;
 import org.anchoranalysis.image.chnl.Chnl;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.feature.pixelwise.PixelwiseFeatureInitParams;
+import org.anchoranalysis.image.feature.pixelwise.score.PixelScoreFeatureCalcParams;
 import org.anchoranalysis.image.voxel.box.VoxelBoxWrapper;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 
@@ -60,7 +61,7 @@ public class ChnlProviderPixelScoreFeature extends ChnlProvider {
 	private ChnlProvider chnlProvider;
 	
 	@BeanField
-	private FeatureProvider featureProvider;
+	private FeatureProvider<PixelScoreFeatureCalcParams> featureProvider;
 	
 	@BeanField
 	private List<ChnlProvider> listAdditionalChnlProviders = new ArrayList<>();
@@ -72,7 +73,7 @@ public class ChnlProviderPixelScoreFeature extends ChnlProvider {
 	@Override
 	public Chnl create() throws CreateException {
 
-		Feature feature = featureProvider.create();
+		Feature<PixelScoreFeatureCalcParams> feature = featureProvider.create();
 		
 		PixelwiseFeatureInitParams paramsInit = new PixelwiseFeatureInitParams(getSharedObjects().getRandomNumberGenerator() );
 		
@@ -99,7 +100,11 @@ public class ChnlProviderPixelScoreFeature extends ChnlProvider {
 		
 		PixelScoreSession session = new PixelScoreSession(feature);
 		try {
-			session.start(paramsInit, getSharedObjects().getFeature().getSharedFeatureSet(), getLogger() );
+			session.start(
+				paramsInit,
+				getSharedObjects().getFeature().getSharedFeatureSet().downcast(),
+				getLogger()
+			);
 		} catch (InitException e) {
 			throw new CreateException(e);
 		}
@@ -150,11 +155,11 @@ public class ChnlProviderPixelScoreFeature extends ChnlProvider {
 		this.chnlProvider = chnlProvider;
 	}
 
-	public FeatureProvider getFeatureProvider() {
+	public FeatureProvider<PixelScoreFeatureCalcParams> getFeatureProvider() {
 		return featureProvider;
 	}
 
-	public void setFeatureProvider(FeatureProvider featureProvider) {
+	public void setFeatureProvider(FeatureProvider<PixelScoreFeatureCalcParams> featureProvider) {
 		this.featureProvider = featureProvider;
 	}
 

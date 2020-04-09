@@ -38,10 +38,13 @@ import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.provider.FeatureProvider;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.feature.init.FeatureInitParams;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
+import org.anchoranalysis.feature.session.SequentialSession;
 import org.anchoranalysis.image.bean.objmask.filter.ObjMaskFilter;
 import org.anchoranalysis.image.bean.provider.ChnlProvider;
 import org.anchoranalysis.image.extent.ImageDim;
+import org.anchoranalysis.image.feature.objmask.FeatureObjMaskParams;
 import org.anchoranalysis.image.feature.session.FeatureSessionCreateParamsSingle;
 import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.image.objmask.ObjMaskCollection;
@@ -60,7 +63,7 @@ public class ObjMaskFilterFeatureRelationDiscardOutliers extends ObjMaskFilter {
 	
 	// START BEAN PROPERTIES
 	@BeanField
-	private FeatureProvider featureProvider;
+	private FeatureProvider<FeatureObjMaskParams> featureProvider;
 	
 	@BeanField @Optional
 	private ChnlProvider chnlProvider;
@@ -85,8 +88,9 @@ public class ObjMaskFilterFeatureRelationDiscardOutliers extends ObjMaskFilter {
 		}
 		
 		// Initialization
-		FeatureSessionCreateParamsSingle session;
-		Feature feature;
+		SequentialSession<FeatureObjMaskParams> session;
+		Feature<FeatureObjMaskParams> feature;
+		NRGStackWithParams nrgStack = null;
 		{
 			try {
 				feature = featureProvider.create();
@@ -94,18 +98,21 @@ public class ObjMaskFilterFeatureRelationDiscardOutliers extends ObjMaskFilter {
 				throw new OperationFailedException(e);
 			}
 			
-			session = new FeatureSessionCreateParamsSingle( feature,getSharedObjects().getFeature().getSharedFeatureSet() );
+			session = new SequentialSession<FeatureObjMaskParams>(feature);
 			
 			try {
-				session.start( getLogger() );
+				session.start(
+					new FeatureInitParams(),
+					getSharedObjects().getFeature().getSharedFeatureSet().downcast(),
+					getLogger()
+				);
 			} catch (InitException e) {
 				throw new OperationFailedException(e);
 			}
 			
 			if (chnlProvider!=null) {
 				try {
-					NRGStackWithParams nrgStack = new NRGStackWithParams(chnlProvider.create());
-					session.setNrgStack(nrgStack);
+					nrgStack = new NRGStackWithParams(chnlProvider.create());
 				} catch (CreateException e) {
 					throw new OperationFailedException(e);
 				}
@@ -118,7 +125,9 @@ public class ObjMaskFilterFeatureRelationDiscardOutliers extends ObjMaskFilter {
 		for( ObjMask om : objs ) {
 			double featureVal;
 			try {
-				featureVal = session.calc(om);
+				featureVal = session.calc(
+					new FeatureObjMaskParams(om, nrgStack)
+				).get(0);
 			} catch (FeatureCalcException e) {
 				throw new OperationFailedException(e);
 			}
@@ -169,11 +178,11 @@ public class ObjMaskFilterFeatureRelationDiscardOutliers extends ObjMaskFilter {
 		}
 	}
 	
-	public FeatureProvider getFeatureProvider() {
+	public FeatureProvider<FeatureObjMaskParams> getFeatureProvider() {
 		return featureProvider;
 	}
 
-	public void setFeatureProvider(FeatureProvider featureProvider) {
+	public void setFeatureProvider(FeatureProvider<FeatureObjMaskParams> featureProvider) {
 		this.featureProvider = featureProvider;
 	}
 	public ChnlProvider getChnlProvider() {

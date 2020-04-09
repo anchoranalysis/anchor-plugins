@@ -59,7 +59,8 @@ public class ObjMaskProviderMerge extends ObjMaskProviderMergeOptionalDistance {
 				replaceWithMidpoint,
 				maybeDistanceCondition(),
 				new IncreaseFeatureCondition(featureEvaluator),
-				calcRes()
+				calcRes(),
+				getLogger()
 			);
 			
 			return mergeMultiplex(

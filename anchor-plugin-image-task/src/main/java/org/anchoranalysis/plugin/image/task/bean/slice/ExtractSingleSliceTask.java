@@ -44,10 +44,13 @@ import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.bean.list.FeatureListProvider;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.feature.init.FeatureInitParams;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
+import org.anchoranalysis.feature.session.SequentialSession;
 import org.anchoranalysis.feature.shared.SharedFeatureSet;
 import org.anchoranalysis.image.bean.provider.stack.StackProvider;
 import org.anchoranalysis.image.feature.session.FeatureSessionCreateParamsSingle;
+import org.anchoranalysis.image.feature.stack.FeatureStackParams;
 import org.anchoranalysis.image.io.input.NamedChnlsInput;
 import org.anchoranalysis.image.io.stack.StackCollectionOutputter;
 import org.anchoranalysis.image.stack.NamedImgStackCollection;
@@ -196,11 +199,15 @@ public class ExtractSingleSliceTask extends Task<NamedChnlsInput,SharedStateSele
 		}
 	}
 		
-	private double[] calcScoreForEachSlice( Feature scoreFeature, NRGStackWithParams nrgStack, LogErrorReporter logErrorReporter ) throws OperationFailedException {
+	private double[] calcScoreForEachSlice(
+		Feature<FeatureStackParams> scoreFeature,
+		NRGStackWithParams nrgStack,
+		LogErrorReporter logErrorReporter
+	) throws OperationFailedException {
 
 		try {
-			FeatureSessionCreateParamsSingle session = new FeatureSessionCreateParamsSingle(scoreFeature, new SharedFeatureSet() );
-			session.start(logErrorReporter);
+			SequentialSession<FeatureStackParams> session = new SequentialSession<FeatureStackParams>(scoreFeature);
+			session.start(new FeatureInitParams(), new SharedFeatureSet<>(), logErrorReporter );
 			
 			double results[] = new double[nrgStack.getDimensions().getZ()];
 			
@@ -209,7 +216,9 @@ public class ExtractSingleSliceTask extends Task<NamedChnlsInput,SharedStateSele
 				NRGStackWithParams nrgStackSlice = nrgStack.extractSlice(z);
 				
 				// Calculate feature for this slice
-				double featVal = session.calc( nrgStackSlice.getNrgStack() );
+				double featVal = session.calc(
+					new FeatureStackParams(nrgStackSlice.getNrgStack())
+				).get(0);
 				
 				logErrorReporter.getLogReporter().logFormatted("Slice %3d has score %f", z, featVal);
 				

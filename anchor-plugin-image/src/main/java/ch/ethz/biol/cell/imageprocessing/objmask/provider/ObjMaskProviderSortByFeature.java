@@ -35,9 +35,13 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.feature.session.FeatureCalculatorVector;
+import org.anchoranalysis.feature.session.FeatureCalculatorVectorChangeParams;
 import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
 import org.anchoranalysis.image.feature.bean.evaluator.FeatureEvaluatorNrgStack;
+import org.anchoranalysis.image.feature.objmask.FeatureObjMaskParams;
 import org.anchoranalysis.image.feature.session.FeatureSessionCreateParamsSingle;
+import org.anchoranalysis.image.feature.stack.nrg.FeatureNRGStackParams;
 import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.image.objmask.ObjMaskCollection;
 
@@ -61,10 +65,10 @@ public class ObjMaskProviderSortByFeature extends ObjMaskProvider {
 		private ObjMask objMask;
 		private double featureVal;
 		
-		public ObjWithFeatureValue(ObjMask objMask, FeatureSessionCreateParamsSingle featureSession) throws FeatureCalcException {
+		public ObjWithFeatureValue(ObjMask objMask, double featureVal) throws FeatureCalcException {
 			super();
 			this.objMask = objMask;
-			this.featureVal = featureSession.calc(objMask);
+			this.featureVal = featureVal;
 		}
 
 		@Override
@@ -86,12 +90,15 @@ public class ObjMaskProviderSortByFeature extends ObjMaskProvider {
 		ObjMaskCollection objsCollection = objs.create();
 		
 		try {
-			FeatureSessionCreateParamsSingle featureSession = featureEvaluator.createAndStartSession();
+			FeatureCalculatorVector<FeatureNRGStackParams> featureSession = featureEvaluator.createAndStartSession();
 			
 			List<ObjWithFeatureValue> listToSort = new ArrayList<>();
 			for( ObjMask om : objsCollection ) {
 				try {
-					listToSort.add( new ObjWithFeatureValue(om,featureSession) );
+					double featureVal = featureSession.calc(
+						new FeatureObjMaskParams(om)
+					).get(0);
+					listToSort.add( new ObjWithFeatureValue(om,featureVal) );
 				} catch (FeatureCalcException e) {
 					throw new CreateException(e);
 				}

@@ -56,7 +56,7 @@ public class BinaryImageChnlProviderFeature extends FeatureStack {
 	
 	// START BEAN PROPERTIES
 	@BeanField
-	private Feature item;
+	private Feature<FeatureObjMaskParams> item;
 	
 	@BeanField
 	@SkipInit
@@ -103,11 +103,11 @@ public class BinaryImageChnlProviderFeature extends FeatureStack {
 		return new BinaryVoxelBoxByte( vb, bic.getBinaryValues() );
 	}
 
-	public Feature getItem() {
+	public Feature<FeatureObjMaskParams> getItem() {
 		return item;
 	}
 
-	public void setItem(Feature item) {
+	public void setItem(Feature<FeatureObjMaskParams> item) {
 		this.item = item;
 	}
 

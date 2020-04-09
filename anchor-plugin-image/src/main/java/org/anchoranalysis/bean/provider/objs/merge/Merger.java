@@ -36,6 +36,7 @@ import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.core.geometry.Point3i;
+import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.image.binary.values.BinaryValues;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelBoxByte;
@@ -61,6 +62,7 @@ class Merger {
 	private AfterCondition afterCondition;
 	private ImageRes res;
 	private boolean replaceWithMidpoint;
+	private LogErrorReporter logger;
 	
 	private static class MergeParams {
 		private int startSrc;
@@ -81,12 +83,13 @@ class Merger {
 		}
 	}
 	
-	public Merger(boolean replaceWithMidpoint, BeforeCondition beforeCondition, AfterCondition afterCondition, ImageRes res) {
+	public Merger(boolean replaceWithMidpoint, BeforeCondition beforeCondition, AfterCondition afterCondition, ImageRes res, LogErrorReporter logger) {
 		super();
 		this.beforeCondition = beforeCondition;
 		this.afterCondition = afterCondition;
 		this.res = res;
 		this.replaceWithMidpoint = replaceWithMidpoint;
+		this.logger = logger;
 	}
 
 	/**
@@ -121,7 +124,7 @@ class Merger {
 	private void tryMergeOnIndices( ObjMaskCollection objs, MergeParams mergeParams, List<MergeParams> stack ) throws OperationFailedException {
 		
 		try {
-			afterCondition.init();
+			afterCondition.init(logger);
 		} catch (InitException e) {
 			throw new OperationFailedException(e);
 		}
