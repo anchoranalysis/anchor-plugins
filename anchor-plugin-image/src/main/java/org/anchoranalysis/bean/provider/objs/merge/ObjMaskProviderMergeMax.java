@@ -1,5 +1,9 @@
 package org.anchoranalysis.bean.provider.objs.merge;
 
+import org.anchoranalysis.feature.session.SequentialSession;
+import org.anchoranalysis.feature.session.FeatureCalculatorVector;
+import org.anchoranalysis.feature.session.FeatureCalculatorVectorChangeParams;
+
 /*-
  * #%L
  * anchor-plugin-image
@@ -27,7 +31,8 @@ package org.anchoranalysis.bean.provider.objs.merge;
  */
 
 import org.anchoranalysis.image.feature.evaluator.EvaluateSingleObjMask;
-import org.anchoranalysis.image.feature.session.FeatureSessionCreateParamsSingle;
+import org.anchoranalysis.image.feature.objmask.FeatureObjMaskParams;
+import org.anchoranalysis.image.feature.session.FeatureSessionCreateParamsSinglePairMerged;
 
 // Merges with the object that maximises a feature
 public class ObjMaskProviderMergeMax extends ObjMaskProviderMergeWithFeature {
@@ -37,17 +42,17 @@ public class ObjMaskProviderMergeMax extends ObjMaskProviderMergeWithFeature {
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	// START BEAN PROPERTIES
-	
-	// END BEAN PROPERTIES
-	
 	@Override
-	protected EvaluateSingleObjMask featureEvaluator(FeatureSessionCreateParamsSingle featureSession) {
-		return featureSession;
+	protected EvaluateSingleObjMask featureEvaluator(FeatureCalculatorVector<FeatureObjMaskParams> featureSession) {
+		
+		return om -> {
+			FeatureObjMaskParams params = new FeatureObjMaskParams(om);
+			return featureSession.calc(params).get(0);
+		};
 	}
 	
 	@Override
-	protected MergeGraph.AssignPriority assignPriority(FeatureSessionCreateParamsSingle featureSession) {
+	protected MergeGraph.AssignPriority assignPriority() {
 		return new ImprovementPriority();
 	}
 

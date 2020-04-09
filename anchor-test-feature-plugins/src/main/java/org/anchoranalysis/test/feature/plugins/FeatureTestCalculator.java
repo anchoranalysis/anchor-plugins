@@ -19,22 +19,22 @@ public class FeatureTestCalculator {
 		
 	}
 	
-	public static void assertDoubleResult( String message, Feature feature, FeatureCalcParams params, double expectedResult ) throws FeatureCalcException, InitException {
+	public static <T extends FeatureCalcParams> void assertDoubleResult( String message, Feature<T> feature, T params, double expectedResult ) throws FeatureCalcException, InitException {
 		assertResultTolerance(message, feature, params, expectedResult, 1e-4);
 	}
 	
-	public static void assertIntResult( String message, Feature feature, FeatureCalcParams params, int expectedResult ) throws FeatureCalcException, InitException {
+	public static <T extends FeatureCalcParams> void assertIntResult( String message, Feature<T> feature, T params, int expectedResult ) throws FeatureCalcException, InitException {
 		assertResultTolerance(message, feature, params, expectedResult, 1e-20);
 	}
 
-	private static void assertResultTolerance( String message, Feature feature, FeatureCalcParams params, double expectedResult, double delta ) throws FeatureCalcException, InitException {
+	private static <T extends FeatureCalcParams> void assertResultTolerance( String message, Feature<T> feature, T params, double expectedResult, double delta ) throws FeatureCalcException, InitException {
 		double res = FeatureTestCalculator.calcSequentialSession(feature, params);
 		assertEquals(message, expectedResult, res, 1e-20);
 	}
 	
-	private static double calcSequentialSession( Feature feature, FeatureCalcParams params ) throws FeatureCalcException, InitException {
-		SequentialSession session = new SequentialSession(feature);
-		session.start( new FeatureInitParams(), new SharedFeatureSet(), LoggingFixtures.simpleLogErrorReporter() );
+	private static <T extends FeatureCalcParams> double calcSequentialSession( Feature<T> feature, T params ) throws FeatureCalcException, InitException {
+		SequentialSession<T> session = new SequentialSession<>(feature);
+		session.start( new FeatureInitParams(), new SharedFeatureSet<>(), LoggingFixtures.simpleLogErrorReporter() );
 		ResultsVector rv = session.calc(params);
 		return rv.get(0);
 	}

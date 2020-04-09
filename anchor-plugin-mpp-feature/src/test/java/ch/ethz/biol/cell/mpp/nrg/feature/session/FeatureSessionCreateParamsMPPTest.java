@@ -29,7 +29,10 @@ package ch.ethz.biol.cell.mpp.nrg.feature.session;
 import static org.anchoranalysis.test.feature.plugins.ResultsVectorTestUtilities.*;
 
 import org.anchoranalysis.anchor.mpp.cfg.Cfg;
+import org.anchoranalysis.anchor.mpp.feature.bean.cfg.FeatureCfgParams;
+import org.anchoranalysis.anchor.mpp.feature.bean.mark.FeatureMarkParams;
 import org.anchoranalysis.anchor.mpp.feature.session.FeatureSessionCreateParamsMPP;
+import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.bean.xml.RegisterBeanFactories;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
@@ -38,15 +41,26 @@ import org.anchoranalysis.experiment.log.ConsoleLogReporter;
 import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.calc.ResultsVector;
+import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
 import org.anchoranalysis.feature.init.FeatureInitParams;
+import org.anchoranalysis.feature.nrg.NRGStack;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
+import org.anchoranalysis.feature.session.SequentialSession;
 import org.anchoranalysis.feature.shared.SharedFeatureSet;
+import org.anchoranalysis.image.extent.ImageDim;
+import org.anchoranalysis.image.extent.ImageRes;
+import org.anchoranalysis.test.LoggingFixtures;
 import org.anchoranalysis.test.feature.SimpleFeatureListFixture;
+import org.anchoranalysis.test.feature.plugins.ChnlFixture;
 import org.anchoranalysis.test.feature.plugins.NRGStackFixture;
+import org.anchoranalysis.test.feature.plugins.ResultsVectorTestUtilities;
 import org.junit.Before;
 import org.junit.Test;
 
 public class FeatureSessionCreateParamsMPPTest {
+	
+	private static final ImageRes RES = new ImageRes();
+	private static final ImageDim DIM = new ImageDim(ChnlFixture.MEDIUM, RES );
 	
 	@Before
     public void setUp() {
@@ -56,75 +70,86 @@ public class FeatureSessionCreateParamsMPPTest {
 	@Test
 	public void testNoParams() throws InitException, FeatureCalcException, CreateException {
 		
-		FeatureSessionCreateParamsMPP session = createAndStart(SimpleFeatureListFixture.create());
+		SequentialSession<FeatureCalcParams> session = createAndStart(SimpleFeatureListFixture.create());
 		
-		ResultsVector rv1 = session.calc();
+		ResultsVector rv1 = session.calc( (FeatureCalcParams) null );
 		SimpleFeatureListFixture.checkResultVector(rv1);
 		
-		ResultsVector rv2 = session.calc();
+		ResultsVector rv2 = session.calc( (FeatureCalcParams) null );
 		SimpleFeatureListFixture.checkResultVector(rv2);
 	}
 	
 	@Test
 	public void testMark() throws InitException, CreateException, FeatureCalcException {
 		
-		FeatureSessionCreateParamsMPP session = createAndStart( FeatureListFixtureMPP.mark() );
+		SequentialSession<FeatureMarkParams> session = createAndStart( FeatureListFixtureMPP.mark() );
 		
-		MarkFixture markFixture = new MarkFixture( session.getNrgStack().getDimensions() );
+		MarkFixture markFixture = new MarkFixture( DIM );
 		
-		assertCalc(
-			session.calc( markFixture.createEllipsoid1() ),
-			0.8842716428906386, 6.97330619981458, 0.9408494125082603				
+		assertMark(
+			session,
+			markFixture.createEllipsoid1(),
+			0.8842716428906386,
+			6.97330619981458,
+			0.9408494125082603				
 		);
 		
-		assertCalc(
-			session.calc( markFixture.createEllipsoid2() ),
-			0.7605449154770859, 3.48665309990729, 0.9408494125082603				
+		assertMark(
+			session,
+			markFixture.createEllipsoid2(),
+			0.7605449154770859,
+			3.48665309990729,
+			0.9408494125082603				
 		);
 		
-		assertCalc(
-			session.calc( markFixture.createEllipsoid3() ),
-			0.8585645700992556, 1.8226663204715146, 0.22330745949001382				
+		assertMark(
+			session,
+			markFixture.createEllipsoid3(),
+			0.8585645700992556,
+			1.8226663204715146,
+			0.22330745949001382				
 		);
 	}
 	
 	@Test
 	public void testCfg() throws InitException, CreateException, FeatureCalcException {
 		
-		FeatureSessionCreateParamsMPP session = createAndStart( FeatureListFixtureMPP.cfg() );
+		SequentialSession<FeatureCfgParams> session = createAndStart( FeatureListFixtureMPP.cfg() );
 		
-		CfgFixture cfgFixture = new CfgFixture( session.getNrgStack().getDimensions() );
+		CfgFixture cfgFixture = new CfgFixture(DIM);
 		
+		assertCfg(session, cfgFixture.createCfg1(), 2.0);
+		assertCfg(session, cfgFixture.createCfg2(), 3.0);
+		assertCfg(session, cfgFixture.createCfg3(), 2.0);
+		assertCfg(session, cfgFixture.createCfgSingle(), 1.0);
+		assertCfg(session, new Cfg(), 0.0);
+	}
+	
+	private static void assertCfg( SequentialSession<FeatureCfgParams> session, Cfg cfg, double expected ) throws CreateException, FeatureCalcException {
 		assertCalc(
-			session.calc( cfgFixture.createCfg1() ),
-			2.0				
+			session.calc(
+				new FeatureCfgParams(cfg, DIM )
+			),
+			expected
 		);
-		
-		assertCalc(
-			session.calc( cfgFixture.createCfg2() ),
-			3.0				
-		);
-		
-		assertCalc(
-			session.calc( cfgFixture.createCfg3() ),
-			2.0			
-		);
-		
-		assertCalc(
-			session.calc( cfgFixture.createCfgSingle() ),
-			1.0				
-		);
-		
-		assertCalc(
-			session.calc( new Cfg() ),
-			0.0			
+	}
+
+	private static void assertMark( SequentialSession<FeatureMarkParams> session, Mark mark, double expected1, double expected2, double expected3 ) throws CreateException, FeatureCalcException {
+		ResultsVector rv = session.calc(
+			new FeatureMarkParams(mark, RES )
+		); 
+		ResultsVectorTestUtilities.assertCalc(
+			rv,
+			expected1,
+			expected2,
+			expected3
 		);
 	}
 	
-	private FeatureSessionCreateParamsMPP createAndStart( FeatureList features ) throws InitException, CreateException {
-		NRGStackWithParams nrgStack = NRGStackFixture.create();
-		FeatureSessionCreateParamsMPP session = new FeatureSessionCreateParamsMPP(features, nrgStack.getNrgStack(), nrgStack.getParams()  );
-		session.start( new FeatureInitParams(), new SharedFeatureSet(), new LogErrorReporter( new ConsoleLogReporter() ) );
+	private static <T extends FeatureCalcParams> SequentialSession<T> createAndStart( FeatureList<T> features ) throws InitException, CreateException {
+
+		SequentialSession<T> session = new SequentialSession<T>(features);
+		session.start( new FeatureInitParams(), new SharedFeatureSet<>(), LoggingFixtures.simpleLogErrorReporter() );
 		return session;
 	}
 }

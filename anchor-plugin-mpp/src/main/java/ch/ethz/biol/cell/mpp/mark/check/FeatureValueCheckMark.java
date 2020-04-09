@@ -41,11 +41,13 @@ import org.anchoranalysis.core.params.KeyValueParams;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.bean.provider.FeatureProvider;
+import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
 import org.anchoranalysis.feature.init.FeatureInitParams;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
+import org.anchoranalysis.feature.session.SequentialSession;
 import org.anchoranalysis.feature.shared.SharedFeatureSet;
 
-public abstract class FeatureValueCheckMark extends CheckMark {
+public abstract class FeatureValueCheckMark<T extends FeatureCalcParams> extends CheckMark {
 	
 	/**
 	 * 
@@ -54,7 +56,7 @@ public abstract class FeatureValueCheckMark extends CheckMark {
 
 	// START BEANS
 	@BeanField
-	private FeatureProvider featureProvider;
+	private FeatureProvider<T> featureProvider;
 	
 	@BeanField
 	protected double minVal = 0;
@@ -63,19 +65,17 @@ public abstract class FeatureValueCheckMark extends CheckMark {
 	private KeyValueParamsProvider keyValueParamsProvider;
 	// END BEANS
 	
-	private SharedFeatureSet sharedFeatureSet;
+	private SharedFeatureSet<T> sharedFeatureSet;
 	
-	private Feature feature;
+	private Feature<T> feature;
 	
-	protected FeatureSessionCreateParamsMPP session;
+	protected SequentialSession<T> session;
 	
 	@Override
 	public void onInit(MPPInitParams soMPP) throws InitException {
 		super.onInit(soMPP);
-		sharedFeatureSet = soMPP.getFeature().getSharedFeatureSet();
+		sharedFeatureSet = soMPP.getFeature().getSharedFeatureSet().downcast();
 	}
-	
-	
 	
 	@Override
 	public void start(NRGStackWithParams nrgStack) throws OperationFailedException {
@@ -91,7 +91,7 @@ public abstract class FeatureValueCheckMark extends CheckMark {
 				kpv = new KeyValueParams();
 			}			
 				
-			session = new FeatureSessionCreateParamsMPP( orderedListOfFeatures(), nrgStack.getNrgStack(), nrgStack.getParams() );
+			session = new SequentialSession<>( orderedListOfFeatures() );
 			session.start( new FeatureInitParams(kpv), sharedFeatureSet, getLogger() );
 		} catch (InitException | CreateException e) {
 			session = null;
@@ -105,15 +105,14 @@ public abstract class FeatureValueCheckMark extends CheckMark {
 		super.end();
 	}	
 
-
 	@Override
 	public boolean isCompatibleWith(Mark testMark) {
 		return true;
 	}
 
 	@Override
-	public FeatureList orderedListOfFeatures() throws CreateException {
-		return new FeatureList(feature);
+	public FeatureList<T> orderedListOfFeatures() throws CreateException {
+		return new FeatureList<T>(feature);
 	}
 	
 	public double getMinVal() {
@@ -123,21 +122,17 @@ public abstract class FeatureValueCheckMark extends CheckMark {
 	public void setMinVal(double minVal) {
 		this.minVal = minVal;
 	}
-	public FeatureProvider getFeatureProvider() {
+	public FeatureProvider<T> getFeatureProvider() {
 		return featureProvider;
 	}
 
-	public void setFeatureProvider(FeatureProvider featureProvider) {
+	public void setFeatureProvider(FeatureProvider<T> featureProvider) {
 		this.featureProvider = featureProvider;
 	}
-
-
 
 	public KeyValueParamsProvider getKeyValueParamsProvider() {
 		return keyValueParamsProvider;
 	}
-
-
 
 	public void setKeyValueParamsProvider(KeyValueParamsProvider keyValueParamsProvider) {
 		this.keyValueParamsProvider = keyValueParamsProvider;

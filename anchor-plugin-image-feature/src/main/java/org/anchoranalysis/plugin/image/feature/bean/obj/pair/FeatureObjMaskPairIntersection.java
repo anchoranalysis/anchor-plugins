@@ -75,7 +75,7 @@ public class FeatureObjMaskPairIntersection extends FeatureObjMaskPair {
 	private double emptyValue = 255;
 	
 	@BeanField @SkipInit
-	private Feature item;
+	private Feature<FeatureObjMaskParams> item;
 	// END BEAN PROPERTIES
 	
 	private static final String CACHE_INTERSECTION = "intersection_eroded"; // TODO add iterationsErosion to name
@@ -114,10 +114,10 @@ public class FeatureObjMaskPairIntersection extends FeatureObjMaskPair {
 			return null;
 		}
 		
-		return createParamsForIntersection(omIntersection,params);
+		return createParamsForIntersection(omIntersection,params).upcastParams();
 	}
 		
-	public CacheableParams<FeatureCalcParams> createParamsForIntersection(ObjMask omIntersection, CacheableParams<FeatureObjMaskPairParams> paramsExst) {
+	public CacheableParams<FeatureObjMaskParams> createParamsForIntersection(ObjMask omIntersection, CacheableParams<FeatureObjMaskPairParams> paramsExst) {
 
 		return paramsExst.mapParams(
 			p -> paramsForIntersection(p, omIntersection),
@@ -182,11 +182,11 @@ public class FeatureObjMaskPairIntersection extends FeatureObjMaskPair {
 		this.iterationsErosion = iterationsErosion;
 	}
 
-	public Feature getItem() {
+	public Feature<FeatureObjMaskParams> getItem() {
 		return item;
 	}
 
-	public void setItem(Feature item) {
+	public void setItem(Feature<FeatureObjMaskParams> item) {
 		this.item = item;
 	}
 

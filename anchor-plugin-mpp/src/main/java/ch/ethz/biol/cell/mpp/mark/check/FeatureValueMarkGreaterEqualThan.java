@@ -1,6 +1,7 @@
 package ch.ethz.biol.cell.mpp.mark.check;
 
 import org.anchoranalysis.anchor.mpp.bean.regionmap.RegionMap;
+import org.anchoranalysis.anchor.mpp.feature.bean.mark.FeatureMarkParams;
 import org.anchoranalysis.anchor.mpp.feature.error.CheckException;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
 
@@ -34,7 +35,7 @@ import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 
-public class FeatureValueMarkGreaterEqualThan extends FeatureValueCheckMark {
+public class FeatureValueMarkGreaterEqualThan extends FeatureValueCheckMark<FeatureMarkParams> {
 
 	/**
 	 * 
@@ -49,7 +50,9 @@ public class FeatureValueMarkGreaterEqualThan extends FeatureValueCheckMark {
 		}
 		
 		try {
-			double nrg = session.calc( mark ).get(0);
+			double nrg = session.calc(
+				new FeatureMarkParams(mark, nrgStack.getDimensions().getRes())
+			).get(0);
 			
 			if (nrg >= minVal) {
 				return true;

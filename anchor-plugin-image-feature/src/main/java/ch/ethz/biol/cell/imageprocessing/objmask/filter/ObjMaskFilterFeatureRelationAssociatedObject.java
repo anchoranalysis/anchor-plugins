@@ -33,13 +33,18 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.Optional;
 import org.anchoranalysis.bean.shared.relation.RelationBean;
 import org.anchoranalysis.core.cache.CacheMonitor;
+import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.feature.session.SequentialSession;
+import org.anchoranalysis.feature.session.FeatureCalculatorVector;
+import org.anchoranalysis.feature.session.FeatureCalculatorVectorChangeParams;
 import org.anchoranalysis.image.bean.objmask.filter.ObjMaskFilter;
 import org.anchoranalysis.image.bean.objmask.match.ObjMaskMatcher;
 import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.feature.bean.evaluator.FeatureEvaluatorNrgStack;
 import org.anchoranalysis.image.feature.evaluator.FeatureEvaluatorNrgStackCache;
+import org.anchoranalysis.image.feature.objmask.FeatureObjMaskParams;
 import org.anchoranalysis.image.feature.session.FeatureSessionCreateParamsSingle;
 import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.image.objmask.ObjMaskCollection;
@@ -55,10 +60,10 @@ public class ObjMaskFilterFeatureRelationAssociatedObject extends ObjMaskFilter 
 	
 	// START BEAN PROPERTIES
 	@BeanField
-	private FeatureEvaluatorNrgStack featureEvaluator;
+	private FeatureEvaluatorNrgStack<FeatureObjMaskParams> featureEvaluator;
 	
 	@BeanField @Optional
-	private FeatureEvaluatorNrgStack featureEvaluatorMatch;		// Optionally uses a different evaluator for the matched objects
+	private FeatureEvaluatorNrgStack<FeatureObjMaskParams> featureEvaluatorMatch;		// Optionally uses a different evaluator for the matched objects
 	
 	@BeanField
 	private ObjMaskMatcher objMaskMatcher;
@@ -70,21 +75,19 @@ public class ObjMaskFilterFeatureRelationAssociatedObject extends ObjMaskFilter 
 	private int cacheSize = 10;			// Cache uses on featureEvaluatorMatch so we don't have to repeatedly calculate on the same object
 	// END BEAN PROPERTIES
 	
-	private FeatureEvaluatorNrgStackCache evaluatorForMatch;
-	private FeatureSessionCreateParamsSingle featureSession;
+	private FeatureCalculatorVector<FeatureObjMaskParams> evaluatorForMatch;
+	private FeatureCalculatorVector<FeatureObjMaskParams> featureSession;
 		
 	protected void start(ImageDim dim) throws OperationFailedException {
 
 		featureSession = featureEvaluator.createAndStartSession();
 
-		FeatureSessionCreateParamsSingle sessionMatchUncached;
+		// TODO this previously used FeatureEvaluatorNrgStackCache and shoudld be cached. Now it isn't.
 		if (featureEvaluatorMatch!=null) {
-			sessionMatchUncached = featureEvaluatorMatch.createAndStartSession();
+			evaluatorForMatch = featureEvaluatorMatch.createAndStartSession();
 		} else {
-			sessionMatchUncached = featureSession;
+			evaluatorForMatch = featureSession;
 		}
-		
-		evaluatorForMatch = new FeatureEvaluatorNrgStackCache(sessionMatchUncached,10, new CacheMonitor() );
 	}
 	
 	
@@ -92,7 +95,9 @@ public class ObjMaskFilterFeatureRelationAssociatedObject extends ObjMaskFilter 
 		
 		for( ObjMask match : matches ) {
 			
-			double valMatch = evaluatorForMatch.calc(match);
+			double valMatch = evaluatorForMatch.calc(
+				new FeatureObjMaskParams(match)
+			).get(0);
 			
 			//System.out.printf("Matching %f against %f\n", val, valMatch);
 			
@@ -136,11 +141,13 @@ public class ObjMaskFilterFeatureRelationAssociatedObject extends ObjMaskFilter 
 		}
 		
 		// We free up calculations
-		evaluatorForMatch.clear();
+		// TODO previously this is where we cleared the cache
 	}
 	
 	protected boolean match(ObjMask om, ImageDim dim, ObjMaskCollection matches) throws FeatureCalcException {
-		double val = featureSession.calc(om);
+		double val = featureSession.calc(
+			new FeatureObjMaskParams(om)
+		).get(0);
 		return doesMatchAllAssociatedObjects(val,matches);
 	}
 
@@ -168,20 +175,20 @@ public class ObjMaskFilterFeatureRelationAssociatedObject extends ObjMaskFilter 
 		this.cacheSize = cacheSize;
 	}
 
-	public FeatureEvaluatorNrgStack getFeatureEvaluator() {
+	public FeatureEvaluatorNrgStack<FeatureObjMaskParams> getFeatureEvaluator() {
 		return featureEvaluator;
 	}
 
-	public void setFeatureEvaluator(FeatureEvaluatorNrgStack featureEvaluator) {
+	public void setFeatureEvaluator(FeatureEvaluatorNrgStack<FeatureObjMaskParams> featureEvaluator) {
 		this.featureEvaluator = featureEvaluator;
 	}
 
-	public FeatureEvaluatorNrgStack getFeatureEvaluatorMatch() {
+	public FeatureEvaluatorNrgStack<FeatureObjMaskParams> getFeatureEvaluatorMatch() {
 		return featureEvaluatorMatch;
 	}
 
 	public void setFeatureEvaluatorMatch(
-			FeatureEvaluatorNrgStack featureEvaluatorMatch) {
+			FeatureEvaluatorNrgStack<FeatureObjMaskParams> featureEvaluatorMatch) {
 		this.featureEvaluatorMatch = featureEvaluatorMatch;
 	}
 

@@ -1,5 +1,8 @@
 package ch.ethz.biol.cell.mpp.nrg.feature.session;
 
+import org.anchoranalysis.anchor.mpp.feature.bean.cfg.FeatureCfgParams;
+import org.anchoranalysis.anchor.mpp.feature.bean.mark.FeatureMarkParams;
+
 /*-
  * #%L
  * anchor-plugin-mpp-feature
@@ -35,11 +38,11 @@ public class FeatureListFixtureMPP {
 
 	private static TestLoader loader = TestLoader.createFromMavenWorkingDir();
 	
-	public static FeatureList mark() throws CreateException {
+	public static FeatureList<FeatureMarkParams> mark() throws CreateException {
 		return FeatureListFixture.createFromFile("markFeatureList.xml", loader);
 	}
 	
-	public static FeatureList cfg() throws CreateException {
+	public static FeatureList<FeatureCfgParams> cfg() throws CreateException {
 		return FeatureListFixture.createFromFile("cfgFeatureList.xml", loader);
 	}
 

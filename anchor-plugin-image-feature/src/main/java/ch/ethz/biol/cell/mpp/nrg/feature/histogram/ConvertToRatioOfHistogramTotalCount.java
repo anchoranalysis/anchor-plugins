@@ -31,6 +31,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.cache.CacheableParams;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
 import org.anchoranalysis.feature.calc.params.FeatureCalcParamsDescriptor;
 import org.anchoranalysis.image.feature.bean.FeatureHistogram;
 import org.anchoranalysis.image.feature.histogram.FeatureHistogramParams;
@@ -44,7 +45,7 @@ public class ConvertToRatioOfHistogramTotalCount extends FeatureHistogram {
 	
 	// START BEAN PROPERTIES
 	@BeanField
-	private Feature item;
+	private Feature<FeatureHistogramParams> item;
 	// END BEAN PROPERTIES
 	
 	@Override
@@ -60,13 +61,11 @@ public class ConvertToRatioOfHistogramTotalCount extends FeatureHistogram {
 		return String.format("convert_ratio(%s)", getItem().getDscrLong() );
 	}
 
-
-	public Feature getItem() {
+	public Feature<FeatureHistogramParams> getItem() {
 		return item;
 	}
 
-
-	public void setItem(Feature item) {
+	public void setItem(Feature<FeatureHistogramParams> item) {
 		this.item = item;
 	}
 

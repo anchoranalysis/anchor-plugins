@@ -43,13 +43,13 @@ import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 
 public class PixelScoreSession extends FeatureSession {
 
-	private SequentialSession delegate;
+	private SequentialSession<PixelScoreFeatureCalcParams> delegate;
 	
-	public PixelScoreSession( Feature feature ) {
-		delegate = new SequentialSession(feature);
+	public PixelScoreSession( Feature<PixelScoreFeatureCalcParams> feature ) {
+		delegate = new SequentialSession<>(feature);
 	}
 	
-	public void start(FeatureInitParams featureInitParams, SharedFeatureSet sharedFeatures, LogErrorReporter logErrorReporter ) throws InitException {
+	public void start(FeatureInitParams featureInitParams, SharedFeatureSet<PixelScoreFeatureCalcParams> sharedFeatures, LogErrorReporter logErrorReporter ) throws InitException {
 		delegate.start(featureInitParams, sharedFeatures, logErrorReporter);
 	}
 	

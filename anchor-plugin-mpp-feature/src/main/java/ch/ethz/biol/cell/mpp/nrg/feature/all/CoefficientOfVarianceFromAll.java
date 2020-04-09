@@ -37,6 +37,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.cache.CacheableParams;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
 
 public class CoefficientOfVarianceFromAll extends NRGElemAll {
 
@@ -47,7 +48,7 @@ public class CoefficientOfVarianceFromAll extends NRGElemAll {
 
 	// START BEAN PROPERTIES
 	@BeanField
-	private Feature item;
+	private Feature<FeatureCalcParams> item;
 	// END BEAN PROPERTIES
 	
 	@Override
@@ -111,11 +112,11 @@ public class CoefficientOfVarianceFromAll extends NRGElemAll {
 		return Math.sqrt(sumSqDiff);
 	}
 
-	public Feature getItem() {
+	public Feature<FeatureCalcParams> getItem() {
 		return item;
 	}
 
-	public void setItem(Feature item) {
+	public void setItem(Feature<FeatureCalcParams> item) {
 		this.item = item;
 	}
 

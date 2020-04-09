@@ -89,11 +89,11 @@ public class AsObjMask extends FeatureStack {
 		return new ObjMask( binary.binaryVoxelBox() );
 	}
 
-	public Feature getItem() {
+	public Feature<FeatureObjMaskParams> getItem() {
 		return item;
 	}
 
-	public void setItem(Feature item) {
+	public void setItem(Feature<FeatureObjMaskParams> item) {
 		this.item = item;
 	}
 
