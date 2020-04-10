@@ -47,7 +47,7 @@ import org.anchoranalysis.image.feature.session.FeatureSessionCreateParams;
 import org.anchoranalysis.image.histogram.Histogram;
 import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.test.TestLoader;
-import org.anchoranalysis.test.feature.SimpleFeatureListFixture;
+import org.anchoranalysis.test.feature.ConstantsInListFixture;
 import org.anchoranalysis.test.feature.plugins.FeatureListFixture;
 import org.anchoranalysis.test.feature.plugins.HistogramFixture;
 import org.anchoranalysis.test.feature.plugins.NRGStackFixture;
@@ -59,7 +59,7 @@ import org.junit.Test;
  * @author owen
  *
  */
-public class FeatureSessionCreateParamsTest {
+public class FeatureListImageTest {
 	
 	private static TestLoader loader = TestLoader.createFromMavenWorkingDir();
 	
@@ -71,13 +71,13 @@ public class FeatureSessionCreateParamsTest {
 	@Test(expected = FeatureCalcException.class)
 	public void testNoParams() throws InitException, FeatureCalcException, CreateException {
 		
-		SequentialSession<FeatureCalcParams> session = createAndStart(SimpleFeatureListFixture.create());
+		SequentialSession<FeatureCalcParams> session = createAndStart(ConstantsInListFixture.create());
 		
 		ResultsVector rv1 = session.calc( (FeatureCalcParams) null );
-		SimpleFeatureListFixture.checkResultVector(rv1);
+		ConstantsInListFixture.checkResultVector(rv1);
 		
 		ResultsVector rv2 = session.calc( (FeatureCalcParams) null );
-		SimpleFeatureListFixture.checkResultVector(rv2);
+		ConstantsInListFixture.checkResultVector(rv2);
 	}
 	
 	

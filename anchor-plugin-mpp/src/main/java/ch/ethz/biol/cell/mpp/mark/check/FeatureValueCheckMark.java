@@ -2,7 +2,6 @@ package ch.ethz.biol.cell.mpp.mark.check;
 
 import org.anchoranalysis.anchor.mpp.bean.init.MPPInitParams;
 import org.anchoranalysis.anchor.mpp.feature.bean.mark.CheckMark;
-import org.anchoranalysis.anchor.mpp.feature.session.FeatureSessionCreateParamsMPP;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
 
 /*-
