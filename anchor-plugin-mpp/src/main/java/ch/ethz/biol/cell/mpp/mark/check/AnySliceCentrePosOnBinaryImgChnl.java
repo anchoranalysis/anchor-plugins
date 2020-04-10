@@ -120,13 +120,4 @@ public class AnySliceCentrePosOnBinaryImgChnl extends CheckMark {
 	public void setAcceptOutsideScene(boolean acceptOutsideScene) {
 		this.acceptOutsideScene = acceptOutsideScene;
 	}
-
-	@Override
-	public FeatureList orderedListOfFeatures() {
-		return null;
-	}
-
-	
-	
-
 }

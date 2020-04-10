@@ -80,9 +80,4 @@ public class EllipsoidBoundsCheck extends CheckMark {
 	public boolean isCompatibleWith(Mark testMark) {
 		return testMark instanceof MarkEllipsoid;
 	}
-
-	@Override
-	public FeatureList orderedListOfFeatures() {
-		return null;
-	}
 }

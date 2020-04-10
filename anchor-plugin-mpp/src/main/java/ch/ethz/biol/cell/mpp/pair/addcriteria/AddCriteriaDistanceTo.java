@@ -2,6 +2,7 @@ package ch.ethz.biol.cell.mpp.pair.addcriteria;
 
 import org.anchoranalysis.anchor.mpp.feature.addcriteria.AddCriteriaPair;
 import org.anchoranalysis.anchor.mpp.feature.addcriteria.IncludeMarksFailureException;
+import org.anchoranalysis.anchor.mpp.feature.nrg.elem.NRGElemPairCalcParams;
 import org.anchoranalysis.anchor.mpp.feature.session.FeatureSessionCreateParamsMPP;
 import org.anchoranalysis.anchor.mpp.mark.MarkDistance;
 import org.anchoranalysis.anchor.mpp.mark.UnsupportedMarkTypeException;
@@ -36,6 +37,7 @@ import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.bean.list.FeatureList;
+import org.anchoranalysis.feature.session.SequentialSession;
 import org.anchoranalysis.image.bean.unitvalue.distance.UnitValueDistance;
 import org.anchoranalysis.image.extent.ImageDim;
 
@@ -59,7 +61,7 @@ public class AddCriteriaDistanceTo extends AddCriteriaPair {
 	}
 	
 	@Override
-	public boolean includeMarks(PxlMarkMemo mark1, PxlMarkMemo mark2, ImageDim dim, FeatureSessionCreateParamsMPP session, boolean use3D) throws IncludeMarksFailureException {
+	public boolean includeMarks(PxlMarkMemo mark1, PxlMarkMemo mark2, ImageDim dim, SequentialSession<NRGElemPairCalcParams> session, boolean use3D) throws IncludeMarksFailureException {
 		double d;
 		try {
 			d = distance.distance(mark1.getMark(), mark2.getMark());
