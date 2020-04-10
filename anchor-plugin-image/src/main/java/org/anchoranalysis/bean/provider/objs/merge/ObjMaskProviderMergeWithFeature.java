@@ -38,11 +38,11 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.graph.GraphWithEdgeTypes.EdgeTypeWithVertices;
 import org.anchoranalysis.feature.session.SequentialSession;
-import org.anchoranalysis.feature.session.FeatureCalculatorVector;
-import org.anchoranalysis.feature.session.FeatureCalculatorVectorChangeParams;
+import org.anchoranalysis.feature.session.calculator.FeatureCalculatorMultiChangeParams;
+import org.anchoranalysis.feature.session.calculator.FeatureCalculatorSingle;
 import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
 import org.anchoranalysis.image.extent.ImageRes;
-import org.anchoranalysis.image.feature.bean.evaluator.FeatureEvaluatorNrgStack;
+import org.anchoranalysis.image.feature.bean.evaluator.FeatureEvaluator;
 import org.anchoranalysis.image.feature.evaluator.EvaluateSingleObjMask;
 import org.anchoranalysis.image.feature.objmask.FeatureObjMaskParams;
 import org.anchoranalysis.image.feature.session.FeatureSessionCreateParamsSinglePairMerged;
@@ -60,7 +60,7 @@ public abstract class ObjMaskProviderMergeWithFeature extends ObjMaskProviderMer
 
 	// START BEAN PROPERTIES
 	@BeanField
-	private FeatureEvaluatorNrgStack featureEvaluator;
+	private FeatureEvaluator<FeatureObjMaskParams> featureEvaluator;
 	
 	@BeanField
 	private boolean requireBBoxNeighbours = true;	// Requires the bounding boxes to intersect, or touch for any potential merge
@@ -76,7 +76,7 @@ public abstract class ObjMaskProviderMergeWithFeature extends ObjMaskProviderMer
 	// END BEAN PROPERTIES
 	
 	
-	protected abstract EvaluateSingleObjMask featureEvaluator(FeatureCalculatorVector<FeatureObjMaskParams> featureSession);
+	protected abstract EvaluateSingleObjMask featureEvaluator(FeatureCalculatorSingle<FeatureObjMaskParams> featureSession);
 	
 	protected abstract AssignPriority assignPriority(
 	) throws CreateException;
@@ -189,7 +189,7 @@ public abstract class ObjMaskProviderMergeWithFeature extends ObjMaskProviderMer
 	private MergeGraph createGraph(
 		ObjMaskCollection objs,
 		ImageRes res,
-		FeatureCalculatorVector<FeatureObjMaskParams> sessionSingle
+		FeatureCalculatorSingle<FeatureObjMaskParams> sessionSingle
 	) throws CreateException {
 			
 		try {
@@ -221,11 +221,11 @@ public abstract class ObjMaskProviderMergeWithFeature extends ObjMaskProviderMer
 	
 	
 
-	public FeatureEvaluatorNrgStack getFeatureEvaluator() {
+	public FeatureEvaluator<FeatureObjMaskParams> getFeatureEvaluator() {
 		return featureEvaluator;
 	}
 
-	public void setFeatureEvaluator(FeatureEvaluatorNrgStack featureEvaluator) {
+	public void setFeatureEvaluator(FeatureEvaluator<FeatureObjMaskParams> featureEvaluator) {
 		this.featureEvaluator = featureEvaluator;
 	}
 

@@ -31,10 +31,11 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.shared.relation.RelationBean;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.feature.session.FeatureCalculatorVector;
-import org.anchoranalysis.feature.session.FeatureCalculatorVectorChangeParams;
+import org.anchoranalysis.feature.session.calculator.FeatureCalculatorMulti;
+import org.anchoranalysis.feature.session.calculator.FeatureCalculatorMultiChangeParams;
+import org.anchoranalysis.feature.session.calculator.FeatureCalculatorSingle;
 import org.anchoranalysis.image.extent.ImageDim;
-import org.anchoranalysis.image.feature.bean.evaluator.FeatureEvaluatorNrgStack;
+import org.anchoranalysis.image.feature.bean.evaluator.FeatureEvaluator;
 import org.anchoranalysis.image.feature.objmask.FeatureObjMaskParams;
 import org.anchoranalysis.image.feature.session.FeatureSessionCreateParamsSingle;
 import org.anchoranalysis.image.objmask.ObjMask;
@@ -48,7 +49,7 @@ public class ObjMaskFilterFeatureRelationThreshold extends ObjMaskFilterByObject
 	
 	// START BEAN PROPERTIES
 	@BeanField
-	private FeatureEvaluatorNrgStack<FeatureObjMaskParams> featureEvaluator;
+	private FeatureEvaluator<FeatureObjMaskParams> featureEvaluator;
 	
 	@BeanField
 	private double threshold;
@@ -60,7 +61,7 @@ public class ObjMaskFilterFeatureRelationThreshold extends ObjMaskFilterByObject
 	private boolean debug = true;
 	// END BEAN PROPERTIES
 	
-	private FeatureCalculatorVector<FeatureObjMaskParams> featureSession = null;
+	private FeatureCalculatorSingle<FeatureObjMaskParams> featureSession = null;
 		
 	@Override
 	protected void start(ImageDim dim) throws OperationFailedException {
@@ -84,7 +85,7 @@ public class ObjMaskFilterFeatureRelationThreshold extends ObjMaskFilterByObject
 		try {
 			val = featureSession.calc(
 				new FeatureObjMaskParams(om)
-			).get(0);
+			);
 		} catch (FeatureCalcException e) {
 			throw new OperationFailedException(e);
 		}
@@ -125,11 +126,11 @@ public class ObjMaskFilterFeatureRelationThreshold extends ObjMaskFilterByObject
 		this.relation = relation;
 	}
 
-	public FeatureEvaluatorNrgStack<FeatureObjMaskParams> getFeatureEvaluator() {
+	public FeatureEvaluator<FeatureObjMaskParams> getFeatureEvaluator() {
 		return featureEvaluator;
 	}
 
-	public void setFeatureEvaluator(FeatureEvaluatorNrgStack<FeatureObjMaskParams> featureEvaluator) {
+	public void setFeatureEvaluator(FeatureEvaluator<FeatureObjMaskParams> featureEvaluator) {
 		this.featureEvaluator = featureEvaluator;
 	}
 

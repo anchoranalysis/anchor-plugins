@@ -31,10 +31,11 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.feature.session.FeatureCalculatorVector;
-import org.anchoranalysis.feature.session.FeatureCalculatorVectorChangeParams;
+import org.anchoranalysis.feature.session.calculator.FeatureCalculatorMulti;
+import org.anchoranalysis.feature.session.calculator.FeatureCalculatorMultiChangeParams;
+import org.anchoranalysis.feature.session.calculator.FeatureCalculatorSingle;
 import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
-import org.anchoranalysis.image.feature.bean.evaluator.FeatureEvaluatorNrgStack;
+import org.anchoranalysis.image.feature.bean.evaluator.FeatureEvaluator;
 import org.anchoranalysis.image.feature.objmask.FeatureObjMaskParams;
 import org.anchoranalysis.image.feature.session.FeatureSessionCreateParamsSingle;
 import org.anchoranalysis.image.objmask.ObjMask;
@@ -52,7 +53,7 @@ public class ObjMaskProviderFindMaxFeature extends ObjMaskProvider {
 	private ObjMaskProvider objs;
 	
 	@BeanField
-	private FeatureEvaluatorNrgStack<FeatureObjMaskParams> featureEvaluator;
+	private FeatureEvaluator<FeatureObjMaskParams> featureEvaluator;
 	// END BEAN PROPERTIES
 
 	@Override
@@ -60,7 +61,7 @@ public class ObjMaskProviderFindMaxFeature extends ObjMaskProvider {
 		
 		ObjMaskCollection in = objs.create();
 		
-		FeatureCalculatorVector<FeatureObjMaskParams> session;
+		FeatureCalculatorSingle<FeatureObjMaskParams> session;
 		try {
 			session = featureEvaluator.createAndStartSession();
 		} catch (OperationFailedException e) {
@@ -78,7 +79,7 @@ public class ObjMaskProviderFindMaxFeature extends ObjMaskProvider {
 				
 				double featureVal = session.calc(
 					new FeatureObjMaskParams(om)
-				).get(0);
+				);
 				
 				if (max==null || featureVal>maxVal) {
 					max = om;
@@ -105,11 +106,11 @@ public class ObjMaskProviderFindMaxFeature extends ObjMaskProvider {
 		this.objs = objs;
 	}
 
-	public FeatureEvaluatorNrgStack getFeatureEvaluator() {
+	public FeatureEvaluator<FeatureObjMaskParams> getFeatureEvaluator() {
 		return featureEvaluator;
 	}
 
-	public void setFeatureEvaluator(FeatureEvaluatorNrgStack featureEvaluator) {
+	public void setFeatureEvaluator(FeatureEvaluator<FeatureObjMaskParams> featureEvaluator) {
 		this.featureEvaluator = featureEvaluator;
 	}
 

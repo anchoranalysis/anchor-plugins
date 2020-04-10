@@ -41,8 +41,8 @@ import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.calc.params.NullParams;
 import org.anchoranalysis.feature.init.FeatureInitParams;
 import org.anchoranalysis.feature.session.SequentialSession;
-import org.anchoranalysis.feature.session.FeatureCalculatorVector;
-import org.anchoranalysis.feature.session.FeatureCalculatorVectorChangeParams;
+import org.anchoranalysis.feature.session.calculator.FeatureCalculatorMultiChangeParams;
+import org.anchoranalysis.feature.session.calculator.FeatureCalculatorSingle;
 import org.anchoranalysis.feature.shared.SharedFeatureSet;
 import org.anchoranalysis.image.feature.bean.evaluator.FeatureEvaluatorSimple;
 import org.anchoranalysis.image.feature.evaluator.EvaluateSingleObjMask;
@@ -84,7 +84,7 @@ public class ObjMaskProviderMergePair extends ObjMaskProviderMergeWithFeature {
 	// END BEAN PROPERTIES
 
 	@Override
-	protected EvaluateSingleObjMask featureEvaluator(FeatureCalculatorVector<FeatureObjMaskParams> featureSession) {
+	protected EvaluateSingleObjMask featureEvaluator(FeatureCalculatorSingle<FeatureObjMaskParams> featureSession) {
 		// We don't care about evaluating single-features
 		return (ObjMask om) -> 0;
 	}
@@ -94,8 +94,7 @@ public class ObjMaskProviderMergePair extends ObjMaskProviderMergeWithFeature {
 		try {
 			double threshold = featureEvaluatorThreshold
 				.createAndStartSession()
-				.calc( NullParams.instance() )
-				.get(0);
+				.calc( NullParams.instance() );
 			return new PriorityFeatureMergeSession(
 				threshold,relation.create(),
 				getLogger()

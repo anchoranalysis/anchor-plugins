@@ -38,13 +38,14 @@ import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.init.FeatureInitParams;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 import org.anchoranalysis.feature.session.SequentialSession;
-import org.anchoranalysis.feature.session.FeatureCalculatorVector;
-import org.anchoranalysis.feature.session.FeatureCalculatorVectorChangeParams;
+import org.anchoranalysis.feature.session.calculator.FeatureCalculatorMulti;
+import org.anchoranalysis.feature.session.calculator.FeatureCalculatorMultiChangeParams;
+import org.anchoranalysis.feature.session.calculator.FeatureCalculatorSingle;
 import org.anchoranalysis.feature.shared.SharedFeatureSet;
 import org.anchoranalysis.image.bean.objmask.filter.ObjMaskFilter;
 import org.anchoranalysis.image.bean.objmask.match.ObjMaskMatcher;
 import org.anchoranalysis.image.extent.ImageDim;
-import org.anchoranalysis.image.feature.bean.evaluator.FeatureEvaluatorNrgStack;
+import org.anchoranalysis.image.feature.bean.evaluator.FeatureEvaluator;
 import org.anchoranalysis.image.feature.objmask.pair.FeatureObjMaskPairParams;
 import org.anchoranalysis.image.feature.session.FeatureSessionCreateParamsSingle;
 import org.anchoranalysis.image.objmask.ObjMask;
@@ -70,7 +71,7 @@ public class ObjMaskFilterFeatureMatchingObjectsRelationThreshold extends ObjMas
 	private RelationBean relation;
 	
 	@BeanField
-	private FeatureEvaluatorNrgStack<FeatureObjMaskPairParams> featureEvaluator;
+	private FeatureEvaluator<FeatureObjMaskPairParams> featureEvaluator;
 	// END BEAN PROPERTIES
 	
 	@Override
@@ -91,7 +92,7 @@ public class ObjMaskFilterFeatureMatchingObjectsRelationThreshold extends ObjMas
 		RelationToValue r = relation.create();
 	
 		try {
-			FeatureCalculatorVector<FeatureObjMaskPairParams> session = featureEvaluator.createAndStartSession();
+			FeatureCalculatorSingle<FeatureObjMaskPairParams> session = featureEvaluator.createAndStartSession();
 		
 			for( ObjWithMatches owm : matchList ) {
 				
@@ -99,7 +100,7 @@ public class ObjMaskFilterFeatureMatchingObjectsRelationThreshold extends ObjMas
 					
 					double featureVal = session.calc(
 						new FeatureObjMaskPairParams(owm.getSourceObj(), match)
-					).get(0);
+					);
 					
 					if (!r.isRelationToValueTrue(featureVal, threshold)) {
 						objs.remove(owm.getSourceObj());
@@ -141,11 +142,11 @@ public class ObjMaskFilterFeatureMatchingObjectsRelationThreshold extends ObjMas
 		this.objMaskMatcher = objMaskMatcher;
 	}
 
-	public FeatureEvaluatorNrgStack<FeatureObjMaskPairParams> getFeatureEvaluator() {
+	public FeatureEvaluator<FeatureObjMaskPairParams> getFeatureEvaluator() {
 		return featureEvaluator;
 	}
 
-	public void setFeatureEvaluator(FeatureEvaluatorNrgStack<FeatureObjMaskPairParams> featureEvaluator) {
+	public void setFeatureEvaluator(FeatureEvaluator<FeatureObjMaskPairParams> featureEvaluator) {
 		this.featureEvaluator = featureEvaluator;
 	}
 
