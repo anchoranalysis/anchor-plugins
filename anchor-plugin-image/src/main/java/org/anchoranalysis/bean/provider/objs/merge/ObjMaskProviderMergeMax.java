@@ -1,8 +1,8 @@
 package org.anchoranalysis.bean.provider.objs.merge;
 
 import org.anchoranalysis.feature.session.SequentialSession;
-import org.anchoranalysis.feature.session.FeatureCalculatorVector;
-import org.anchoranalysis.feature.session.FeatureCalculatorVectorChangeParams;
+import org.anchoranalysis.feature.session.calculator.FeatureCalculatorMultiChangeParams;
+import org.anchoranalysis.feature.session.calculator.FeatureCalculatorSingle;
 
 /*-
  * #%L
@@ -43,11 +43,11 @@ public class ObjMaskProviderMergeMax extends ObjMaskProviderMergeWithFeature {
 	private static final long serialVersionUID = 1L;
 	
 	@Override
-	protected EvaluateSingleObjMask featureEvaluator(FeatureCalculatorVector<FeatureObjMaskParams> featureSession) {
+	protected EvaluateSingleObjMask featureEvaluator(FeatureCalculatorSingle<FeatureObjMaskParams> featureSession) {
 		
 		return om -> {
 			FeatureObjMaskParams params = new FeatureObjMaskParams(om);
-			return featureSession.calc(params).get(0);
+			return featureSession.calc(params);
 		};
 	}
 	

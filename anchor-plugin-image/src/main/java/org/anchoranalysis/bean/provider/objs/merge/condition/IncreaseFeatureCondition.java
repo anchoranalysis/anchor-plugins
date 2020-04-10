@@ -32,10 +32,11 @@ import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 import org.anchoranalysis.feature.session.SequentialSession;
-import org.anchoranalysis.feature.session.FeatureCalculatorVector;
-import org.anchoranalysis.feature.session.FeatureCalculatorVectorChangeParams;
+import org.anchoranalysis.feature.session.calculator.FeatureCalculatorMulti;
+import org.anchoranalysis.feature.session.calculator.FeatureCalculatorMultiChangeParams;
+import org.anchoranalysis.feature.session.calculator.FeatureCalculatorSingle;
 import org.anchoranalysis.image.extent.ImageRes;
-import org.anchoranalysis.image.feature.bean.evaluator.FeatureEvaluatorNrgStack;
+import org.anchoranalysis.image.feature.bean.evaluator.FeatureEvaluator;
 import org.anchoranalysis.image.feature.objmask.FeatureObjMaskParams;
 import org.anchoranalysis.image.feature.objmask.pair.FeatureObjMaskPairParams;
 import org.anchoranalysis.image.feature.objmask.pair.merged.FeatureObjMaskPairMergedParams;
@@ -44,11 +45,11 @@ import org.anchoranalysis.image.objmask.ObjMask;
 
 public class IncreaseFeatureCondition implements AfterCondition {
 
-	private FeatureEvaluatorNrgStack<FeatureObjMaskParams> featureEvaluator;
+	private FeatureEvaluator<FeatureObjMaskParams> featureEvaluator;
 	
-	private FeatureCalculatorVector<FeatureObjMaskParams> session;
+	private FeatureCalculatorSingle<FeatureObjMaskParams> session;
 	
-	public IncreaseFeatureCondition(FeatureEvaluatorNrgStack<FeatureObjMaskParams> featureEvaluator) {
+	public IncreaseFeatureCondition(FeatureEvaluator<FeatureObjMaskParams> featureEvaluator) {
 		super();
 		this.featureEvaluator = featureEvaluator;
 	}
@@ -97,6 +98,6 @@ public class IncreaseFeatureCondition implements AfterCondition {
 	private double calc(ObjMask om) throws FeatureCalcException {
 		return session.calc(
 			new FeatureObjMaskParams(om)
-		).get(0);
+		);
 	}
 }
