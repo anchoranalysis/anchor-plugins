@@ -2,6 +2,7 @@ package ch.ethz.biol.cell.mpp.pair.addcriteria;
 
 import org.anchoranalysis.anchor.mpp.feature.addcriteria.AddCriteriaPair;
 import org.anchoranalysis.anchor.mpp.feature.addcriteria.IncludeMarksFailureException;
+import org.anchoranalysis.anchor.mpp.feature.nrg.elem.NRGElemPairCalcParams;
 import org.anchoranalysis.anchor.mpp.feature.session.FeatureSessionCreateParamsMPP;
 import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
 
@@ -37,8 +38,11 @@ import org.anchoranalysis.bean.shared.relation.RelationBean;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.list.FeatureList;
+import org.anchoranalysis.feature.cache.CacheableParams;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
+import org.anchoranalysis.feature.nrg.NRGStackWithParams;
+import org.anchoranalysis.feature.session.SequentialSession;
 import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.feature.session.FeatureSessionCreateParamsSubsession;
 
@@ -51,7 +55,7 @@ public class AddCriteriaFeatureRelationThreshold extends AddCriteriaPair {
 	
 	// START BEAN PROPERTIES
 	@BeanField
-	private Feature<FeatureCalcParams> feature;
+	private Feature<NRGElemPairCalcParams> feature;
 	
 	@BeanField
 	private double threshold;
@@ -70,27 +74,31 @@ public class AddCriteriaFeatureRelationThreshold extends AddCriteriaPair {
 		PxlMarkMemo mark1,
 		PxlMarkMemo mark2,
 		ImageDim dim,
-		FeatureSessionCreateParamsMPP session,
+		SequentialSession<NRGElemPairCalcParams> session,
 		boolean use3d
 	) throws IncludeMarksFailureException {
 		
 		try {
-			FeatureSessionCreateParamsSubsession<FeatureCalcParams> subsession = session.createSubsession(
-				session.getParamsFactory().createParams( mark1, mark2, dim )
+			NRGElemPairCalcParams params = new NRGElemPairCalcParams(
+				mark1,
+				mark2,
+				new NRGStackWithParams(dim)
 			);
-			double featureVal = subsession.calc( feature);
+			
+			double featureVal = session.createCacheable(params).calc(feature);
+			
 			return relation.create().isRelationToValueTrue(featureVal, threshold);
 			
-		} catch (FeatureCalcException | CreateException e) {
+		} catch (FeatureCalcException e) {
 			throw new IncludeMarksFailureException(e);
 		}
 	}
 
-	public Feature<FeatureCalcParams> getFeature() {
+	public Feature<NRGElemPairCalcParams> getFeature() {
 		return feature;
 	}
 
-	public void setFeature(Feature<FeatureCalcParams> feature) {
+	public void setFeature(Feature<NRGElemPairCalcParams> feature) {
 		this.feature = feature;
 	}
 
@@ -111,7 +119,7 @@ public class AddCriteriaFeatureRelationThreshold extends AddCriteriaPair {
 	}
 
 	@Override
-	public FeatureList<FeatureCalcParams> orderedListOfFeatures() {
+	public FeatureList<NRGElemPairCalcParams> orderedListOfFeatures() {
 		return new FeatureList<>(feature);
 	}
 }

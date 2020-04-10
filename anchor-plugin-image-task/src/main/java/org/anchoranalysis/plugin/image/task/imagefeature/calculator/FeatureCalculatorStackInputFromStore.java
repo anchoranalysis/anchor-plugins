@@ -38,6 +38,7 @@ import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
 import org.anchoranalysis.feature.list.NamedFeatureStore;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 import org.anchoranalysis.image.bean.provider.stack.StackProvider;
+import org.anchoranalysis.image.feature.stack.FeatureStackParams;
 import org.anchoranalysis.image.init.ImageInitParams;
 import org.anchoranalysis.image.io.input.ProvidesStackInput;
 import org.anchoranalysis.image.io.input.StackInputInitParamsCreator;
@@ -51,16 +52,16 @@ import org.anchoranalysis.image.io.input.StackInputInitParamsCreator;
  * @author FEEHANO
  *
  */
-public class FeatureCalculatorStackInputFromStore<T extends FeatureCalcParams> {
+public class FeatureCalculatorStackInputFromStore {
 
-	private FeatureList<T> featureList;
+	private FeatureList<FeatureStackParams> featureList;
 	
 	private HelperImageFeatureCalculator helper;
 	private ImageInitParams initParams;
 	private NRGStackWithParams nrgStack;
 		
 	public FeatureCalculatorStackInputFromStore(ProvidesStackInput stackInput, StackProvider nrgStackProvider,
-			NamedFeatureStore<T> featureStore, Path modelDir, LogErrorReporter logErrorReporter) throws OperationFailedException {
+			NamedFeatureStore<FeatureStackParams> featureStore, Path modelDir, LogErrorReporter logErrorReporter) throws OperationFailedException {
 		super();
 		
 		helper = new HelperImageFeatureCalculator(logErrorReporter);
@@ -77,7 +78,7 @@ public class FeatureCalculatorStackInputFromStore<T extends FeatureCalcParams> {
 	/** Calculates a single-feature that comes in a featureProvider 
 	 * @throws FeatureCalcException */
 	public double calcSingleFromProvider(
-			FeatureListProvider<T> featureProvider,
+			FeatureListProvider<FeatureStackParams> featureProvider,
 			String featureProviderName
 	) throws FeatureCalcException {
 		return helper.calcSingleIndirectly(

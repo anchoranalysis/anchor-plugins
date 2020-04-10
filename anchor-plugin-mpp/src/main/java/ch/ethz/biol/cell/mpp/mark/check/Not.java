@@ -68,9 +68,5 @@ public class Not extends CheckMark {
 		this.check = check;
 	}
 
-	@Override
-	public FeatureList orderedListOfFeatures() throws CreateException {
-		return check.orderedListOfFeatures();
-	}
 
 }

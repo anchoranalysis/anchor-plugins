@@ -41,6 +41,7 @@ import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.shared.SharedFeatureSet;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.feature.pixelwise.PixelwiseFeatureInitParams;
+import org.anchoranalysis.image.feature.pixelwise.score.PixelScoreFeatureCalcParams;
 import org.anchoranalysis.image.histogram.Histogram;
 import org.anchoranalysis.image.histogram.HistogramFactoryUtilities;
 import org.anchoranalysis.image.objmask.ObjMask;
@@ -70,7 +71,7 @@ public class CreateVoxelBoxFromPixelwiseFeatureWithMask {
 	}
 	
 	// objMask can be null
-	public VoxelBox<ByteBuffer> createVoxelBoxFromPixelScore( Feature pixelScore, ObjMask objMask, LogErrorReporter logger ) throws CreateException {
+	public VoxelBox<ByteBuffer> createVoxelBoxFromPixelScore( Feature<PixelScoreFeatureCalcParams> pixelScore, ObjMask objMask, LogErrorReporter logger ) throws CreateException {
 	
 		// Sets up the Feature
 		try {
@@ -96,7 +97,7 @@ public class CreateVoxelBoxFromPixelwiseFeatureWithMask {
 	
 
 	// Sets up the feature
-	private void init( Feature pixelScore, ObjMask objMask ) throws InitException {
+	private void init( Feature<PixelScoreFeatureCalcParams> pixelScore, ObjMask objMask ) throws InitException {
 		paramsInit = new PixelwiseFeatureInitParams(re);
 		if (keyValueParams!=null) {
 			paramsInit.setKeyValueParams(keyValueParams);
@@ -110,7 +111,7 @@ public class CreateVoxelBoxFromPixelwiseFeatureWithMask {
 		}
 	}
 
-	private void setPixelsWithoutMask( VoxelBox<ByteBuffer> vbOut, Feature pixelScore, LogErrorReporter logger ) throws FeatureCalcException, InitException {
+	private void setPixelsWithoutMask( VoxelBox<ByteBuffer> vbOut, Feature<PixelScoreFeatureCalcParams>pixelScore, LogErrorReporter logger ) throws FeatureCalcException, InitException {
 		
 		PixelScoreSession session = createStartSession(pixelScore, logger);
 		
@@ -133,7 +134,7 @@ public class CreateVoxelBoxFromPixelwiseFeatureWithMask {
 		}
 	}
 
-	private void setPixelsWithMask( VoxelBox<ByteBuffer> vbOut, ObjMask objMask, Feature pixelScore, LogErrorReporter logger ) throws FeatureCalcException, InitException {
+	private void setPixelsWithMask( VoxelBox<ByteBuffer> vbOut, ObjMask objMask, Feature<PixelScoreFeatureCalcParams> pixelScore, LogErrorReporter logger ) throws FeatureCalcException, InitException {
 		
 		PixelScoreSession session = createStartSession(pixelScore, logger);
 		
@@ -170,9 +171,9 @@ public class CreateVoxelBoxFromPixelwiseFeatureWithMask {
 	}
 	
 	
-	private PixelScoreSession createStartSession(Feature pixelScore, LogErrorReporter logger) throws InitException {
+	private PixelScoreSession createStartSession(Feature<PixelScoreFeatureCalcParams> pixelScore, LogErrorReporter logger) throws InitException {
 		PixelScoreSession session = new PixelScoreSession(pixelScore);
-		session.start(paramsInit, new SharedFeatureSet(), logger );
+		session.start(paramsInit, new SharedFeatureSet<>(), logger );
 		return session;
 	}
 

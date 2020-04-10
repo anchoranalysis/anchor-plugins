@@ -81,10 +81,4 @@ public class EllipseBoundsCheck extends CheckMark {
 	public boolean isCompatibleWith(Mark testMark) {
 		return testMark instanceof MarkEllipse;
 	}
-
-	@Override
-	public FeatureList orderedListOfFeatures() {
-		return null;
-	}
-
 }

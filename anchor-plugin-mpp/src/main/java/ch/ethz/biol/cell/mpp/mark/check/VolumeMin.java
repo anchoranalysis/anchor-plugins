@@ -94,10 +94,4 @@ public class VolumeMin extends CheckMark {
 	public void setMinVolume(UnitValueVolume minVolume) {
 		this.minVolume = minVolume;
 	}
-
-	@Override
-	public FeatureList orderedListOfFeatures() throws CreateException {
-		return null;
-	}
-
 }

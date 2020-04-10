@@ -91,7 +91,7 @@ public abstract class FeatureValueCheckMark<T extends FeatureCalcParams> extends
 				kpv = new KeyValueParams();
 			}			
 				
-			session = new SequentialSession<>( orderedListOfFeatures() );
+			session = new SequentialSession<>( feature );
 			session.start( new FeatureInitParams(kpv), sharedFeatureSet, getLogger() );
 		} catch (InitException | CreateException e) {
 			session = null;
@@ -108,11 +108,6 @@ public abstract class FeatureValueCheckMark<T extends FeatureCalcParams> extends
 	@Override
 	public boolean isCompatibleWith(Mark testMark) {
 		return true;
-	}
-
-	@Override
-	public FeatureList<T> orderedListOfFeatures() throws CreateException {
-		return new FeatureList<T>(feature);
 	}
 	
 	public double getMinVal() {

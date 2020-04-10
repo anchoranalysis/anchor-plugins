@@ -83,11 +83,6 @@ public class AndList extends CheckMark {
 	}
 
 	@Override
-	public FeatureList orderedListOfFeatures() throws CreateException {
-		return OrderedListUtilities.combine(list);
-	}
-
-	@Override
 	public void start(NRGStackWithParams nrgStack) throws OperationFailedException {
 		super.start(nrgStack);
 		for (CheckMark item : list) {

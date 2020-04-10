@@ -117,9 +117,4 @@ public class CentrePosOnBinaryImgChnl extends CheckMark {
 	public void setSuppressZ(boolean suppressZ) {
 		this.suppressZ = suppressZ;
 	}
-
-	@Override
-	public FeatureList orderedListOfFeatures() {
-		return null;
-	}
 }

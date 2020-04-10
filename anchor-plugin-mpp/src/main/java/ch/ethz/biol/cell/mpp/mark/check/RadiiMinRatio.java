@@ -81,10 +81,4 @@ public class RadiiMinRatio extends CheckMark {
 	public void setMin(double min) {
 		this.min = min;
 	}
-
-	@Override
-	public FeatureList orderedListOfFeatures() throws CreateException {
-		return null;
-	}
-
 }
