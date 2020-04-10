@@ -3,7 +3,6 @@ package ch.ethz.biol.cell.mpp.pair.addcriteria;
 import org.anchoranalysis.anchor.mpp.feature.addcriteria.AddCriteriaPair;
 import org.anchoranalysis.anchor.mpp.feature.addcriteria.IncludeMarksFailureException;
 import org.anchoranalysis.anchor.mpp.feature.nrg.elem.NRGElemPairCalcParams;
-import org.anchoranalysis.anchor.mpp.feature.session.FeatureSessionCreateParamsMPP;
 import org.anchoranalysis.anchor.mpp.mark.MarkDistance;
 import org.anchoranalysis.anchor.mpp.mark.UnsupportedMarkTypeException;
 import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;

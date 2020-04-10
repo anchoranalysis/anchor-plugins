@@ -37,7 +37,7 @@ import org.anchoranalysis.image.stack.Stack;
 
 public class NRGStackFixture {
 
-	public static NRGStackWithParams create() throws CreateException {
+	public static NRGStackWithParams create() {
 	
 		try {
 			Stack stack = new Stack();

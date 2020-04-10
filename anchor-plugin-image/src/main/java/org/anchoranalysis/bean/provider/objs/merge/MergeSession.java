@@ -114,7 +114,7 @@ class MergeSession extends FeatureSession {
 			FeatureSessionCache cache1 = map.get(obj2);
 			FeatureSessionCache cache2 = map.get(omMerged);*/
 			
-			delegate.getCache().invalidate();
+			//delegate.getCache().invalidate();
 			
 			// We see if an object-mask already exists in the cache, and if so, we load the cached-calculations from there
 			/*if (cache0!=null) {

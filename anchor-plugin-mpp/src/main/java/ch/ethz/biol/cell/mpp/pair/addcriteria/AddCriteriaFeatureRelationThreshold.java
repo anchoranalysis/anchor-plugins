@@ -3,7 +3,6 @@ package ch.ethz.biol.cell.mpp.pair.addcriteria;
 import org.anchoranalysis.anchor.mpp.feature.addcriteria.AddCriteriaPair;
 import org.anchoranalysis.anchor.mpp.feature.addcriteria.IncludeMarksFailureException;
 import org.anchoranalysis.anchor.mpp.feature.nrg.elem.NRGElemPairCalcParams;
-import org.anchoranalysis.anchor.mpp.feature.session.FeatureSessionCreateParamsMPP;
 import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
 
 /*
@@ -44,7 +43,6 @@ import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 import org.anchoranalysis.feature.session.SequentialSession;
 import org.anchoranalysis.image.extent.ImageDim;
-import org.anchoranalysis.image.feature.session.FeatureSessionCreateParamsSubsession;
 
 public class AddCriteriaFeatureRelationThreshold extends AddCriteriaPair {
 	

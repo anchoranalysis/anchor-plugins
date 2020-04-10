@@ -31,7 +31,6 @@ import static org.anchoranalysis.test.feature.plugins.ResultsVectorTestUtilities
 import org.anchoranalysis.anchor.mpp.cfg.Cfg;
 import org.anchoranalysis.anchor.mpp.feature.bean.cfg.FeatureCfgParams;
 import org.anchoranalysis.anchor.mpp.feature.bean.mark.FeatureMarkParams;
-import org.anchoranalysis.anchor.mpp.feature.session.FeatureSessionCreateParamsMPP;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.bean.xml.RegisterBeanFactories;
 import org.anchoranalysis.core.error.CreateException;
@@ -50,35 +49,44 @@ import org.anchoranalysis.feature.shared.SharedFeatureSet;
 import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.extent.ImageRes;
 import org.anchoranalysis.test.LoggingFixtures;
-import org.anchoranalysis.test.feature.SimpleFeatureListFixture;
+import org.anchoranalysis.test.feature.ConstantsInListFixture;
 import org.anchoranalysis.test.feature.plugins.ChnlFixture;
 import org.anchoranalysis.test.feature.plugins.NRGStackFixture;
 import org.anchoranalysis.test.feature.plugins.ResultsVectorTestUtilities;
 import org.junit.Before;
 import org.junit.Test;
 
-public class FeatureSessionCreateParamsMPPTest {
+public class FeatureListMPPTest {
 	
-	private static final ImageRes RES = new ImageRes();
-	private static final ImageDim DIM = new ImageDim(ChnlFixture.MEDIUM, RES );
+	private static final NRGStackWithParams nrgStack = NRGStackFixture.create();
+	private static final ImageRes RES = nrgStack.getDimensions().getRes();
+	private static final ImageDim DIM = nrgStack.getDimensions();
 	
 	@Before
     public void setUp() {
 		RegisterBeanFactories.registerAllPackageBeanFactories();
     }
 	
-	@Test
+	@Test(expected = FeatureCalcException.class)
 	public void testNoParams() throws InitException, FeatureCalcException, CreateException {
 		
-		SequentialSession<FeatureCalcParams> session = createAndStart(SimpleFeatureListFixture.create());
-		
-		ResultsVector rv1 = session.calc( (FeatureCalcParams) null );
-		SimpleFeatureListFixture.checkResultVector(rv1);
-		
-		ResultsVector rv2 = session.calc( (FeatureCalcParams) null );
-		SimpleFeatureListFixture.checkResultVector(rv2);
+		testConstantsInList(
+			(FeatureCalcParams) null,
+			(FeatureCalcParams) null
+		);
 	}
 	
+	@Test
+	public void testArbitraryParams() throws InitException, FeatureCalcException, CreateException {
+		
+		CfgFixture cfgFixture = new CfgFixture(DIM);
+		
+		testConstantsInList(
+			new FeatureCfgParams(cfgFixture.createCfg1(), DIM ),
+			new FeatureCfgParams(cfgFixture.createCfg2(), DIM )
+		);
+	}
+		
 	@Test
 	public void testMark() throws InitException, CreateException, FeatureCalcException {
 		
@@ -151,5 +159,16 @@ public class FeatureSessionCreateParamsMPPTest {
 		SequentialSession<T> session = new SequentialSession<T>(features);
 		session.start( new FeatureInitParams(), new SharedFeatureSet<>(), LoggingFixtures.simpleLogErrorReporter() );
 		return session;
+	}
+	
+	private void testConstantsInList( FeatureCalcParams params1, FeatureCalcParams params2 ) throws FeatureCalcException, CreateException, InitException {
+		
+		SequentialSession<FeatureCalcParams> session = createAndStart(ConstantsInListFixture.create());
+		
+		ResultsVector rv1 = session.calc(params1);
+		ConstantsInListFixture.checkResultVector(rv1);
+		
+		ResultsVector rv2 = session.calc(params2);
+		ConstantsInListFixture.checkResultVector(rv2);
 	}
 }
