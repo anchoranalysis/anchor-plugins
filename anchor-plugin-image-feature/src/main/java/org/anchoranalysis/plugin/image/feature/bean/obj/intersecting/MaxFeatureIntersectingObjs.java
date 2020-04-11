@@ -3,8 +3,6 @@ package org.anchoranalysis.plugin.image.feature.bean.obj.intersecting;
 import java.util.Comparator;
 import java.util.List;
 
-import org.anchoranalysis.feature.calc.FeatureCalcException;
-
 /*-
  * #%L
  * anchor-plugin-image-feature

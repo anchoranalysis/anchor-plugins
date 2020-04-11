@@ -54,7 +54,7 @@ public class ThresholdHistogram extends FeatureHistogram {
 
 	// START BEAN PROPERTIES
 	@BeanField
-	private Feature item;
+	private Feature<FeatureHistogramParams> item;
 	
 	// START BEAN PROPERTIES
 	@BeanField
@@ -93,11 +93,11 @@ public class ThresholdHistogram extends FeatureHistogram {
 		);
 	}
 
-	public Feature getItem() {
+	public Feature<FeatureHistogramParams> getItem() {
 		return item;
 	}
 
-	public void setItem(Feature item) {
+	public void setItem(Feature<FeatureHistogramParams> item) {
 		this.item = item;
 	}
 

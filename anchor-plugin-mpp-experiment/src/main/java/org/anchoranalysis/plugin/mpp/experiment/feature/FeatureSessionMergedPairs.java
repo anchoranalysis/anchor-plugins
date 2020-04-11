@@ -114,7 +114,8 @@ public class FeatureSessionMergedPairs extends FeatureSessionFlexiFeatureTable<F
 	) throws InitException {
 		
 		// We create our SharedFeatures including anything from the NamedDefinitions, and all our additional features
-		SharedFeatureSet<FeatureCalcParams> sharedFeatures = soFeature.getSharedFeatureSet();
+		// TODO fix
+		//SharedFeatureSet<FeatureCalcParams> sharedFeatures = soFeature.getSharedFeatureSet();
 		// sharedFeatures = createSharedFeatures(soFeature,listSingle);
 		//listImage.copyToCustomName(sharedFeatures.getSet(),false);
 		//listSingle.copyToCustomName(sharedFeatures.getSet(),false);
@@ -202,16 +203,16 @@ public class FeatureSessionMergedPairs extends FeatureSessionFlexiFeatureTable<F
 		ObjMask extractObj(FeatureObjMaskPairMergedParams params);
 	}
 	
+	// Create new more specific params
+	private static int calcAndInsert( FeatureObjMaskPairMergedParams params, FeatureSessionMergedPairs.ExtractObj extractObj, ISequentialSessionSingleParams<FeatureObjMaskParams> session, int start, ResultsVector out, ErrorReporter errorReporter, boolean suppressErrors ) throws FeatureCalcException {
+		FeatureObjMaskParams paramsSpecific = createNewSpecificParams(params,extractObj);
+		return calcAndInsert(paramsSpecific, session, start, out, errorReporter, suppressErrors);
+	}
+
 	private static FeatureObjMaskParams createNewSpecificParams( FeatureObjMaskPairMergedParams params, FeatureSessionMergedPairs.ExtractObj extractObj ) {
 		FeatureObjMaskParams paramsOut = new FeatureObjMaskParams( extractObj.extractObj(params) );
 		paramsOut.setNrgStack( params.getNrgStack() );
 		return paramsOut;
-	}
-	
-	// Create new more specific params
-	private static int calcAndInsert( FeatureObjMaskPairMergedParams params, FeatureSessionMergedPairs.ExtractObj extractObj, ISequentialSessionSingleParams session, int start, ResultsVector out, ErrorReporter errorReporter, boolean suppressErrors ) throws FeatureCalcException {
-		FeatureObjMaskParams paramsSpecific = createNewSpecificParams(params,extractObj);
-		return calcAndInsert(paramsSpecific, session, start, out, errorReporter, suppressErrors);
 	}
 	
 	/**
@@ -225,7 +226,7 @@ public class FeatureSessionMergedPairs extends FeatureSessionFlexiFeatureTable<F
 	 * @return length(resultsVector)
 	 * @throws FeatureCalcException
 	 */
-	private static int calcAndInsert( FeatureCalcParams params, ISequentialSessionSingleParams session, int start, ResultsVector out, ErrorReporter errorReporter, boolean suppressErrors ) throws FeatureCalcException {
+	private static <T extends FeatureCalcParams> int calcAndInsert( T params, ISequentialSessionSingleParams<T> session, int start, ResultsVector out, ErrorReporter errorReporter, boolean suppressErrors ) throws FeatureCalcException {
 		ResultsVector rvImage =  suppressErrors ? session.calcOneSuppressErrors( params, errorReporter ) : session.calcOne(params) ;
 		out.set(start, rvImage);
 		return rvImage.length();
@@ -243,7 +244,8 @@ public class FeatureSessionMergedPairs extends FeatureSessionFlexiFeatureTable<F
 		int cnt = 0;
 		
 		// First we calculate the Image features (we can pick any object)
-		cnt += calcAndInsert(paramsCast, (a)->a.getObjMask1(), sessionImage, cnt, out, errorReporter, suppressErrors );
+		// TODO ignoring image features. Fix.
+		//cnt += calcAndInsert(paramsCast, (a)->a.getObjMask1(), sessionImage, cnt, out, errorReporter, suppressErrors );
 		
 		// First features
 		if (includeFirst) {

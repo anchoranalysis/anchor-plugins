@@ -2,7 +2,6 @@ package ch.ethz.biol.cell.mpp.nrg.feature.pair;
 
 import java.util.function.Function;
 
-import org.anchoranalysis.anchor.mpp.feature.bean.nrg.elem.NRGElemPair;
 import org.anchoranalysis.anchor.mpp.feature.nrg.elem.NRGElemIndCalcParams;
 import org.anchoranalysis.anchor.mpp.feature.nrg.elem.NRGElemPairCalcParams;
 import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
@@ -41,7 +40,7 @@ import org.anchoranalysis.feature.calc.FeatureCalcException;
 
 // Calculates each feature individually, and combines them using the ratios between itemProportionate
 //   as weights
-public class FeatureAsIndividualProportionate extends NRGElemPair {
+public class FeatureAsIndividualProportionate extends NRGElemPairWithFeature {
 
 	/**
 	 * 
@@ -50,10 +49,7 @@ public class FeatureAsIndividualProportionate extends NRGElemPair {
 
 	// START BEAN PROPERTIES
 	@BeanField
-	private Feature item;
-	
-	@BeanField
-	private Feature itemProportionate;
+	private Feature<NRGElemIndCalcParams> itemProportionate;
 	// eND BEAN PROPERTIES
 	
 	public FeatureAsIndividualProportionate() {
@@ -74,7 +70,7 @@ public class FeatureAsIndividualProportionate extends NRGElemPair {
 	}
 	
 	private double valueFor( CacheableParams<NRGElemIndCalcParams> params ) throws FeatureCalcException {
-		return params.calc(item);
+		return params.calc( getItem() );
 	}
 	
 	private double weightFor( CacheableParams<NRGElemIndCalcParams> params ) throws FeatureCalcException {
@@ -104,19 +100,11 @@ public class FeatureAsIndividualProportionate extends NRGElemPair {
 		);
 	}
 
-	public Feature getItem() {
-		return item;
-	}
-
-	public void setItem(Feature item) {
-		this.item = item;
-	}
-
-	public Feature getItemProportionate() {
+	public Feature<NRGElemIndCalcParams> getItemProportionate() {
 		return itemProportionate;
 	}
 
-	public void setItemProportionate(Feature itemProportionate) {
+	public void setItemProportionate(Feature<NRGElemIndCalcParams> itemProportionate) {
 		this.itemProportionate = itemProportionate;
 	}
 

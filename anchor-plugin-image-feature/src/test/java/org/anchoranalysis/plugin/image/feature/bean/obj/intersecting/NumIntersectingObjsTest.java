@@ -2,8 +2,7 @@ package org.anchoranalysis.plugin.image.feature.bean.obj.intersecting;
 
 
 
-import java.nio.file.Path;
-import java.util.Optional;
+
 
 /*-
  * #%L

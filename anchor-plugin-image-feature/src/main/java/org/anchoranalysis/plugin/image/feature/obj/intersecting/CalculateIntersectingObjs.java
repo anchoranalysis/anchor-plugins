@@ -1,7 +1,6 @@
 package org.anchoranalysis.plugin.image.feature.obj.intersecting;
 
 import org.anchoranalysis.core.cache.ExecuteException;
-import org.anchoranalysis.core.name.store.NamedProviderStore;
 import org.anchoranalysis.feature.cachedcalculation.CachedCalculation;
 import org.anchoranalysis.feature.cachedcalculation.CachedCalculationCastParams;
 import org.anchoranalysis.image.feature.objmask.FeatureObjMaskParams;

@@ -111,7 +111,7 @@ public abstract class DerivedObjMask extends FeatureObjMask {
 		return paramsNew;
 	}
 	
-	protected abstract CachedCalculation<ObjMask> createCachedCalculation( FeatureSessionCacheRetriever session ) throws FeatureCalcException;
+	protected abstract CachedCalculation<ObjMask> createCachedCalculation( FeatureSessionCacheRetriever<FeatureObjMaskParams> session ) throws FeatureCalcException;
 	
 	
 	protected abstract String cacheName();

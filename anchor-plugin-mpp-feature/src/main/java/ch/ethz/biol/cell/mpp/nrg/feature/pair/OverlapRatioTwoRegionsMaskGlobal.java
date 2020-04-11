@@ -1,6 +1,5 @@
 package ch.ethz.biol.cell.mpp.nrg.feature.pair;
 
-import org.anchoranalysis.anchor.mpp.feature.bean.nrg.elem.NRGElemPair;
 import org.anchoranalysis.anchor.mpp.feature.nrg.elem.NRGElemPairCalcParams;
 import org.anchoranalysis.anchor.mpp.mark.GlobalRegionIdentifiers;
 import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
@@ -39,9 +38,8 @@ import org.anchoranalysis.core.cache.ExecuteException;
 import org.anchoranalysis.core.relation.RelationToValue;
 import org.anchoranalysis.feature.cache.CacheableParams;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import ch.ethz.biol.cell.mpp.nrg.cachedcalculation.OverlapCalculationMaskGlobal;
 
-public class OverlapRatioTwoRegionsMaskGlobal extends NRGElemPair {
+public class OverlapRatioTwoRegionsMaskGlobal extends OverlapMaskBase {
 
 	/**
 	 * 
@@ -54,12 +52,6 @@ public class OverlapRatioTwoRegionsMaskGlobal extends NRGElemPair {
 	
 	@BeanField
 	private int regionID2 = GlobalRegionIdentifiers.SUBMARK_INSIDE;
-	
-	@BeanField
-	private int nrgIndex = 0;
-	
-	@BeanField
-	private int maskValue = 255;
 	// END BEAN PROPERTIES
 	
 	private RelationBean relationToThreshold = new EqualToBean();
@@ -85,12 +77,6 @@ public class OverlapRatioTwoRegionsMaskGlobal extends NRGElemPair {
 			throw new FeatureCalcException(e);
 		}							
 	}
-	
-	private double overlapForRegion( CacheableParams<NRGElemPairCalcParams> paramsCacheable, int regionID ) throws ExecuteException {
-		return paramsCacheable.calc(
-			new OverlapCalculationMaskGlobal(regionID, nrgIndex, (byte) maskValue)
-		);
-	}
 
 	private double calcOverlapRatioMin( PxlMarkMemo obj1, PxlMarkMemo obj2, double overlap1, double overlap2, int regionID1, int regionID2 ) throws FeatureCalcException {
 
@@ -102,8 +88,8 @@ public class OverlapRatioTwoRegionsMaskGlobal extends NRGElemPair {
 		
 		RelationToValue relation = relationToThreshold.create();
 		
-		double volume1 = OverlapRatioMaskGlobal.calcMinVolume( obj1, obj2, regionID1, relation, nrgIndex, maskValue );
-		double volume2 = OverlapRatioMaskGlobal.calcMinVolume( obj1, obj2, regionID2, relation, nrgIndex, maskValue );
+		double volume1 = calcMinVolume( obj1, obj2, regionID1, relation);
+		double volume2 = calcMinVolume( obj1, obj2, regionID2, relation);
 		return overlap / (volume1+volume2);
 	}
 
@@ -122,22 +108,4 @@ public class OverlapRatioTwoRegionsMaskGlobal extends NRGElemPair {
 	public void setRegionID2(int regionID2) {
 		this.regionID2 = regionID2;
 	}
-
-	public int getNrgIndex() {
-		return nrgIndex;
-	}
-
-	public void setNrgIndex(int nrgIndex) {
-		this.nrgIndex = nrgIndex;
-	}
-
-	public int getMaskValue() {
-		return maskValue;
-	}
-
-	public void setMaskValue(int maskValue) {
-		this.maskValue = maskValue;
-	}
-
-
 }

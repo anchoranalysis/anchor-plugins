@@ -1,8 +1,6 @@
 package ch.ethz.biol.cell.mpp.nrg.feature.pair;
 
-import org.anchoranalysis.anchor.mpp.feature.bean.nrg.elem.NRGElemPair;
 import org.anchoranalysis.anchor.mpp.feature.nrg.elem.NRGElemPairCalcParams;
-import org.anchoranalysis.anchor.mpp.mark.GlobalRegionIdentifiers;
 import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
 
 /*
@@ -35,15 +33,11 @@ import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.shared.relation.EqualToBean;
 import org.anchoranalysis.bean.shared.relation.RelationBean;
-import org.anchoranalysis.core.cache.ExecuteException;
 import org.anchoranalysis.core.relation.RelationToValue;
 import org.anchoranalysis.feature.cache.CacheableParams;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.image.voxel.statistics.VoxelStatistics;
 
-import ch.ethz.biol.cell.mpp.nrg.cachedcalculation.OverlapCalculationMaskGlobal;
-
-public class OverlapRatioMaskGlobal extends NRGElemPair {
+public class OverlapRatioMaskGlobal extends OverlapMaskSingleRegion {
 
 	/**
 	 * 
@@ -51,15 +45,6 @@ public class OverlapRatioMaskGlobal extends NRGElemPair {
 	private static final long serialVersionUID = 1L;
 	
 	// START BEAN PROPERTIES
-	@BeanField
-	private int regionID = GlobalRegionIdentifiers.SUBMARK_INSIDE;
-	
-	@BeanField
-	private int nrgIndex = 0;
-	
-	@BeanField
-	private int maskValue = 255;
-	
 	@BeanField
 	private boolean useMax = false;
 	// END BEAN PROPERTIES
@@ -74,64 +59,24 @@ public class OverlapRatioMaskGlobal extends NRGElemPair {
 		
 		NRGElemPairCalcParams params = paramsCacheable.getParams();
 		
-		try {
-			double overlap = paramsCacheable.calc(
-				new OverlapCalculationMaskGlobal(regionID, nrgIndex, (byte) maskValue)
-			);
-			
-			return calcOverlapRatioMin(
-				params.getObj1(),
-				params.getObj2(),
-				overlap,
-				regionID,
-				false
-			);
-		} catch (ExecuteException e) {
-			throw new FeatureCalcException(e);
-		}							
+		double overlap = overlapWithGlobalMask(paramsCacheable);
+		
+		return calcOverlapRatioToggle(
+			params.getObj1(),
+			params.getObj2(),
+			overlap,
+			getRegionID(),
+			false
+		);
 	}
 	
-	public static double calcMinVolume(
+	private double calcOverlapRatioToggle(
 		PxlMarkMemo obj1,
 		PxlMarkMemo obj2,
+		double overlap,
 		int regionID,
-		RelationToValue relationToThreshold,
-		int nrgIndex,
-		int maskValue
+		boolean mip
 	) throws FeatureCalcException {
-		try {
-			VoxelStatistics pxlStats1 =  obj1.doOperation().statisticsForAllSlices(nrgIndex, regionID);
-			VoxelStatistics pxlStats2 =  obj2.doOperation().statisticsForAllSlices(nrgIndex, regionID);
-			
-			long size1 = pxlStats1.countThreshold(relationToThreshold, maskValue);
-			long size2 = pxlStats2.countThreshold(relationToThreshold, maskValue);
-			return Math.min( size1, size2 );
-		} catch (ExecuteException e) {
-			throw new FeatureCalcException(e);
-		}
-	}
-	
-	public static double calcMaxVolume(
-			PxlMarkMemo obj1,
-			PxlMarkMemo obj2,
-			int regionID,
-			RelationToValue relationToThreshold,
-			int nrgIndex,
-			int maskValue
-		) throws FeatureCalcException {
-			try {
-				VoxelStatistics pxlStats1 =  obj1.doOperation().statisticsForAllSlices(nrgIndex, regionID);
-				VoxelStatistics pxlStats2 =  obj2.doOperation().statisticsForAllSlices(nrgIndex, regionID);
-				
-				long size1 = pxlStats1.countThreshold(relationToThreshold, maskValue);
-				long size2 = pxlStats2.countThreshold(relationToThreshold, maskValue);
-				return Math.max( size1, size2 );
-			} catch (ExecuteException e) {
-				throw new FeatureCalcException(e);
-			}
-		}
-	
-	private double calcOverlapRatioMin( PxlMarkMemo obj1, PxlMarkMemo obj2, double overlap, int regionID, boolean mip ) throws FeatureCalcException {
 
 		if (overlap==0.0) {
 			return 0.0;
@@ -139,32 +84,8 @@ public class OverlapRatioMaskGlobal extends NRGElemPair {
 		
 		RelationToValue relation = relationToThreshold.create();
 		
-		double volume = useMax ? calcMaxVolume( obj1, obj2, regionID, relation, nrgIndex, maskValue ) : calcMinVolume( obj1, obj2, regionID, relation, nrgIndex, maskValue );
+		double volume = useMax ? calcMaxVolume( obj1, obj2, regionID, relation ) : calcMinVolume( obj1, obj2, regionID, relation );
 		return overlap / volume;
-	}
-	
-	public int getRegionID() {
-		return regionID;
-	}
-
-	public void setRegionID(int regionID) {
-		this.regionID = regionID;
-	}
-
-	public int getNrgIndex() {
-		return nrgIndex;
-	}
-
-	public void setNrgIndex(int nrgIndex) {
-		this.nrgIndex = nrgIndex;
-	}
-
-	public int getMaskValue() {
-		return maskValue;
-	}
-
-	public void setMaskValue(int maskValue) {
-		this.maskValue = maskValue;
 	}
 
 	public boolean isUseMax() {

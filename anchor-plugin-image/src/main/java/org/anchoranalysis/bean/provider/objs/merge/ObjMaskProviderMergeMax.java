@@ -1,7 +1,5 @@
 package org.anchoranalysis.bean.provider.objs.merge;
 
-import org.anchoranalysis.feature.session.SequentialSession;
-import org.anchoranalysis.feature.session.calculator.FeatureCalculatorMultiChangeParams;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorSingle;
 
 /*-

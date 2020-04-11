@@ -2,8 +2,7 @@ package org.anchoranalysis.plugin.image.feature.bean.obj.intersecting;
 
 
 
-import java.nio.file.Path;
-import java.util.Optional;
+
 
 /*-
  * #%L
@@ -33,13 +32,7 @@ import java.util.Optional;
 
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.image.feature.bean.objmask.NumVoxels;
-import org.anchoranalysis.image.feature.bean.objmask.pair.FeatureObjMaskPair;
-import org.anchoranalysis.image.feature.objmask.FeatureObjMaskParams;
-import org.anchoranalysis.plugin.image.feature.bean.obj.pair.order.FirstOnly;
-import org.anchoranalysis.plugin.image.feature.bean.obj.pair.order.RatioFirstToSecond;
 import org.junit.Test;
 
 public class NumIntersectingObjsAboveThresholdTest {
