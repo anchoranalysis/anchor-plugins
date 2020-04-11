@@ -47,7 +47,6 @@ import org.anchoranalysis.image.bean.objmask.match.ObjMaskMatcher;
 import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.feature.bean.evaluator.FeatureEvaluator;
 import org.anchoranalysis.image.feature.objmask.pair.FeatureObjMaskPairParams;
-import org.anchoranalysis.image.feature.session.FeatureSessionCreateParamsSingle;
 import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.image.objmask.ObjMaskCollection;
 import org.anchoranalysis.image.objmask.match.ObjWithMatches;

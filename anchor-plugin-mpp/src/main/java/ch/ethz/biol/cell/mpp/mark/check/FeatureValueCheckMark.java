@@ -1,8 +1,13 @@
 package ch.ethz.biol.cell.mpp.mark.check;
 
 import org.anchoranalysis.anchor.mpp.bean.init.MPPInitParams;
+import org.anchoranalysis.anchor.mpp.bean.regionmap.RegionMap;
 import org.anchoranalysis.anchor.mpp.feature.bean.mark.CheckMark;
+import org.anchoranalysis.anchor.mpp.feature.error.CheckException;
+import org.anchoranalysis.anchor.mpp.feature.nrg.elem.NRGElemIndCalcParams;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
+import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
+import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemoFactory;
 
 /*-
  * #%L
@@ -38,12 +43,14 @@ import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.params.KeyValueParams;
 import org.anchoranalysis.feature.bean.Feature;
-import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.bean.provider.FeatureProvider;
+import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
 import org.anchoranalysis.feature.init.FeatureInitParams;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
-import org.anchoranalysis.feature.session.SequentialSession;
+import org.anchoranalysis.feature.session.SessionFactory;
+import org.anchoranalysis.feature.session.calculator.FeatureCalculatorSingle;
+import org.anchoranalysis.feature.session.calculator.FeatureCalculatorSingleFromMulti;
 import org.anchoranalysis.feature.shared.SharedFeatureSet;
 
 public abstract class FeatureValueCheckMark<T extends FeatureCalcParams> extends CheckMark {
@@ -68,7 +75,7 @@ public abstract class FeatureValueCheckMark<T extends FeatureCalcParams> extends
 	
 	private Feature<T> feature;
 	
-	protected SequentialSession<T> session;
+	private FeatureCalculatorSingle<T> session;
 	
 	@Override
 	public void onInit(MPPInitParams soMPP) throws InitException {
@@ -83,22 +90,54 @@ public abstract class FeatureValueCheckMark<T extends FeatureCalcParams> extends
 			feature = featureProvider.create();
 			assert(feature!=null);
 			
-			KeyValueParams kpv;
-			if (keyValueParamsProvider!=null) {
-				kpv = keyValueParamsProvider.create();
-			} else {	
-				kpv = new KeyValueParams();
-			}			
-				
-			session = new SequentialSession<>( feature );
-			session.start( new FeatureInitParams(kpv), sharedFeatureSet, getLogger() );
-		} catch (InitException | CreateException e) {
+			KeyValueParams kpv = createKeyValueParams();
+			
+			session = SessionFactory.createAndStart(
+				feature,
+				new FeatureInitParams(kpv),
+				sharedFeatureSet,
+				getLogger()
+			);
+			
+		} catch (CreateException | FeatureCalcException e) {
 			session = null;
 			throw new OperationFailedException(e);
 		}
 		
 	}
+	
+	@Override
+	public boolean check(Mark mark, RegionMap regionMap, NRGStackWithParams nrgStack) throws CheckException {
+		
+		if (session==null) {
+			throw new CheckException("No session initialized");
+		}
+		
+		try {
+			double nrg = session.calcOne(
+				createFeatureCalcParams(mark, regionMap, nrgStack)
+			);
+			
+			return (nrg >= minVal);
+			
+		} catch (FeatureCalcException e) {
+			
+			throw new CheckException(
+				String.format("Error calculating feature", e )
+			);
+		}
+	}
+	
+	protected abstract T createFeatureCalcParams( Mark mark, RegionMap regionMap, NRGStackWithParams nrgStack);
 
+	private KeyValueParams createKeyValueParams() throws CreateException {
+		if (keyValueParamsProvider!=null) {
+			return keyValueParamsProvider.create();
+		} else {	
+			return new KeyValueParams();
+		}	
+	}
+	
 	@Override
 	public void end() {
 		super.end();

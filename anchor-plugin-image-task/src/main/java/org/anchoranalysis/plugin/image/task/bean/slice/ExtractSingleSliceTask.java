@@ -29,7 +29,6 @@ package org.anchoranalysis.plugin.image.task.bean.slice;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.SkipInit;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.core.log.LogReporter;
@@ -44,14 +43,10 @@ import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.bean.list.FeatureListProvider;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.feature.init.FeatureInitParams;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
-import org.anchoranalysis.feature.session.SequentialSession;
+import org.anchoranalysis.feature.session.SessionFactory;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorSingle;
-import org.anchoranalysis.feature.session.calculator.FeatureCalculatorSingleFromMulti;
-import org.anchoranalysis.feature.shared.SharedFeatureSet;
 import org.anchoranalysis.image.bean.provider.stack.StackProvider;
-import org.anchoranalysis.image.feature.session.FeatureSessionCreateParamsSingle;
 import org.anchoranalysis.image.feature.stack.FeatureStackParams;
 import org.anchoranalysis.image.io.input.NamedChnlsInput;
 import org.anchoranalysis.image.io.stack.StackCollectionOutputter;
@@ -208,7 +203,10 @@ public class ExtractSingleSliceTask extends Task<NamedChnlsInput,SharedStateSele
 	) throws OperationFailedException {
 
 		try {
-			FeatureCalculatorSingle<FeatureStackParams> session = createStartSession(scoreFeature, logErrorReporter);
+			FeatureCalculatorSingle<FeatureStackParams> session = SessionFactory.createAndStart(
+				scoreFeature,
+				logErrorReporter
+			);
 			
 			double results[] = new double[nrgStack.getDimensions().getZ()];
 			
@@ -228,19 +226,9 @@ public class ExtractSingleSliceTask extends Task<NamedChnlsInput,SharedStateSele
 			
 			return results;
 			
-		} catch (FeatureCalcException | CreateException e) {
+		} catch (FeatureCalcException e) {
 			throw new OperationFailedException(e);
 		}
-	}
-	
-	private FeatureCalculatorSingle<FeatureStackParams> createStartSession(Feature<FeatureStackParams> scoreFeature, LogErrorReporter logger) throws CreateException {
-		SequentialSession<FeatureStackParams> session = new SequentialSession<FeatureStackParams>(scoreFeature);
-		try {
-			session.start(new FeatureInitParams(), new SharedFeatureSet<>(), logger );
-		} catch (InitException e) {
-			throw new CreateException(e);
-		}
-		return new FeatureCalculatorSingleFromMulti<FeatureStackParams>(session);
 	}
 	
 	private Feature<FeatureStackParams> extractScoreFeature() throws OperationFailedException {

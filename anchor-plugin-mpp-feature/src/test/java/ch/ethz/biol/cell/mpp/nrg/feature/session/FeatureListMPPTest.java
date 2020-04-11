@@ -45,6 +45,8 @@ import org.anchoranalysis.feature.init.FeatureInitParams;
 import org.anchoranalysis.feature.nrg.NRGStack;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 import org.anchoranalysis.feature.session.SequentialSession;
+import org.anchoranalysis.feature.session.SessionFactory;
+import org.anchoranalysis.feature.session.calculator.FeatureCalculatorMulti;
 import org.anchoranalysis.feature.shared.SharedFeatureSet;
 import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.extent.ImageRes;
@@ -90,7 +92,7 @@ public class FeatureListMPPTest {
 	@Test
 	public void testMark() throws InitException, CreateException, FeatureCalcException {
 		
-		SequentialSession<FeatureMarkParams> session = createAndStart( FeatureListFixtureMPP.mark() );
+		FeatureCalculatorMulti<FeatureMarkParams> session = createAndStart( FeatureListFixtureMPP.mark() );
 		
 		MarkFixture markFixture = new MarkFixture( DIM );
 		
@@ -122,7 +124,7 @@ public class FeatureListMPPTest {
 	@Test
 	public void testCfg() throws InitException, CreateException, FeatureCalcException {
 		
-		SequentialSession<FeatureCfgParams> session = createAndStart( FeatureListFixtureMPP.cfg() );
+		FeatureCalculatorMulti<FeatureCfgParams> session = createAndStart( FeatureListFixtureMPP.cfg() );
 		
 		CfgFixture cfgFixture = new CfgFixture(DIM);
 		
@@ -133,7 +135,7 @@ public class FeatureListMPPTest {
 		assertCfg(session, new Cfg(), 0.0);
 	}
 	
-	private static void assertCfg( SequentialSession<FeatureCfgParams> session, Cfg cfg, double expected ) throws CreateException, FeatureCalcException {
+	private static void assertCfg( FeatureCalculatorMulti<FeatureCfgParams> session, Cfg cfg, double expected ) throws CreateException, FeatureCalcException {
 		assertCalc(
 			session.calcOne(
 				new FeatureCfgParams(cfg, DIM )
@@ -142,7 +144,7 @@ public class FeatureListMPPTest {
 		);
 	}
 
-	private static void assertMark( SequentialSession<FeatureMarkParams> session, Mark mark, double expected1, double expected2, double expected3 ) throws CreateException, FeatureCalcException {
+	private static void assertMark( FeatureCalculatorMulti<FeatureMarkParams> session, Mark mark, double expected1, double expected2, double expected3 ) throws CreateException, FeatureCalcException {
 		ResultsVector rv = session.calcOne(
 			new FeatureMarkParams(mark, RES )
 		); 
@@ -154,16 +156,16 @@ public class FeatureListMPPTest {
 		);
 	}
 	
-	private static <T extends FeatureCalcParams> SequentialSession<T> createAndStart( FeatureList<T> features ) throws InitException, CreateException {
-
-		SequentialSession<T> session = new SequentialSession<T>(features);
-		session.start( new FeatureInitParams(), new SharedFeatureSet<>(), LoggingFixtures.simpleLogErrorReporter() );
-		return session;
+	private static <T extends FeatureCalcParams> FeatureCalculatorMulti<T> createAndStart( FeatureList<T> features ) throws FeatureCalcException {
+		return SessionFactory.createAndStart(
+			features,
+			LoggingFixtures.simpleLogErrorReporter()
+		);
 	}
 	
 	private void testConstantsInList( FeatureCalcParams params1, FeatureCalcParams params2 ) throws FeatureCalcException, CreateException, InitException {
 		
-		SequentialSession<FeatureCalcParams> session = createAndStart(ConstantsInListFixture.create());
+		FeatureCalculatorMulti<FeatureCalcParams> session = createAndStart(ConstantsInListFixture.create());
 		
 		ResultsVector rv1 = session.calcOne(params1);
 		ConstantsInListFixture.checkResultVector(rv1);

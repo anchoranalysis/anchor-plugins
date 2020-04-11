@@ -37,6 +37,8 @@ import org.anchoranalysis.feature.list.NamedFeatureStore;
 import org.anchoranalysis.feature.name.FeatureNameList;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 import org.anchoranalysis.feature.session.SequentialSession;
+import org.anchoranalysis.feature.session.SessionFactory;
+import org.anchoranalysis.feature.session.calculator.FeatureCalculatorMulti;
 import org.anchoranalysis.feature.shared.SharedFeatureSet;
 import org.anchoranalysis.feature.shared.SharedFeaturesInitParams;
 import org.anchoranalysis.image.init.ImageInitParams;
@@ -44,13 +46,12 @@ import org.anchoranalysis.plugin.mpp.experiment.bean.feature.flexi.Simple;
 
 public class FeatureSessionNamedFeatureStore<T extends FeatureCalcParams> extends FeatureSessionFlexiFeatureTable<T> {
 
-	private SequentialSession<T> session;
+	private  FeatureCalculatorMulti<T> session;
 
 	private NamedFeatureStore<T> namedFeatureStore;
 	
 	public FeatureSessionNamedFeatureStore(NamedFeatureStore<T> namedFeatureStore) {
 		this.namedFeatureStore = namedFeatureStore;
-		session = new SequentialSession<>( namedFeatureStore.listFeatures() );
 	}
 
 	@Override
@@ -62,8 +63,17 @@ public class FeatureSessionNamedFeatureStore<T extends FeatureCalcParams> extend
 		
 		// Init all the features
 		FeatureInitParams featureInitParams = Simple.createInitParams(soImage,nrgStack.getNrgStack(), nrgStack.getParams());
-		//namedFeatureStore.copyTo(out);
-		session.start(featureInitParams, sharedFeatures, logErrorReporter);
+		
+		try {
+			session = SessionFactory.createAndStart(
+				namedFeatureStore.listFeatures(),
+				featureInitParams,
+				sharedFeatures,
+				logErrorReporter
+			);
+		} catch (FeatureCalcException e) {
+			throw new InitException(e);
+		}
 	}
 	
 	@Override

@@ -40,7 +40,6 @@ import org.anchoranalysis.image.feature.bean.evaluator.FeatureEvaluator;
 import org.anchoranalysis.image.feature.objmask.FeatureObjMaskParams;
 import org.anchoranalysis.image.feature.objmask.pair.FeatureObjMaskPairParams;
 import org.anchoranalysis.image.feature.objmask.pair.merged.FeatureObjMaskPairMergedParams;
-import org.anchoranalysis.image.feature.session.FeatureSessionCreateParamsSingle;
 import org.anchoranalysis.image.objmask.ObjMask;
 
 public class IncreaseFeatureCondition implements AfterCondition {

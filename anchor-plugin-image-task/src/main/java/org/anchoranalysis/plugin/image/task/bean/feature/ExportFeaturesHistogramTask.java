@@ -47,6 +47,8 @@ import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
 import org.anchoranalysis.feature.init.FeatureInitParams;
 import org.anchoranalysis.feature.list.NamedFeatureStore;
 import org.anchoranalysis.feature.session.SequentialSession;
+import org.anchoranalysis.feature.session.SessionFactory;
+import org.anchoranalysis.feature.session.calculator.FeatureCalculatorMulti;
 import org.anchoranalysis.feature.shared.SharedFeaturesInitParams;
 import org.anchoranalysis.image.bean.provider.HistogramProvider;
 import org.anchoranalysis.image.feature.histogram.FeatureHistogramParams;
@@ -161,15 +163,16 @@ public class ExportFeaturesHistogramTask extends ExportFeaturesStoreTask<FileInp
 	private ResultsVector calcFeatures( Histogram hist, FeatureList<FeatureHistogramParams> features, LogErrorReporter logErrorReporter ) throws InitException, FeatureCalcException {
 		SharedFeaturesInitParams initParams = SharedFeaturesInitParams.create( logErrorReporter );
 		
-		SequentialSession<FeatureHistogramParams> session = new SequentialSession<>(features);
-		session.start(
+		 FeatureCalculatorMulti<FeatureHistogramParams> session = SessionFactory.createAndStart(
+			features,
 			new FeatureInitParams(),
 			initParams.getSharedFeatureSet().downcast(),
 			logErrorReporter
 		);
 		
-		FeatureHistogramParams params = new FeatureHistogramParams(hist, null);
-		return session.calcOne(params);
+		return session.calcOne(
+			new FeatureHistogramParams(hist, null)
+		);
 	}
 
 	private static Histogram readHistogramFromCsv( FileInput input ) throws IOException {

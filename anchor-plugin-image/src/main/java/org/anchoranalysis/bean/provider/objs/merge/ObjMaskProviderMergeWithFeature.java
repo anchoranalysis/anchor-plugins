@@ -45,7 +45,6 @@ import org.anchoranalysis.image.extent.ImageRes;
 import org.anchoranalysis.image.feature.bean.evaluator.FeatureEvaluator;
 import org.anchoranalysis.image.feature.evaluator.EvaluateSingleObjMask;
 import org.anchoranalysis.image.feature.objmask.FeatureObjMaskParams;
-import org.anchoranalysis.image.feature.session.FeatureSessionCreateParamsSinglePairMerged;
 import org.anchoranalysis.image.objmask.ObjMaskCollection;
 
 import objmaskwithfeature.ObjMaskWithFeature;

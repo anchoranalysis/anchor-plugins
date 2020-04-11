@@ -37,40 +37,20 @@ import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemoFactory;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 
-public class FeatureValueNRGElemIndAbove extends FeatureValueCheckMark<NRGElemIndCalcParams> {
+public class FeatureValueIndividualEnergyGreaterThan extends FeatureValueCheckMark<NRGElemIndCalcParams> {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1086432241915811567L;
-	
+
 	@Override
-	public boolean check(Mark mark, RegionMap regionMap, NRGStackWithParams nrgStack) throws CheckException {
-		
-		if (session==null) {
-			throw new CheckException("No session initialized");
-		}
-		
+	protected NRGElemIndCalcParams createFeatureCalcParams(Mark mark, RegionMap regionMap, NRGStackWithParams nrgStack) {
 		PxlMarkMemo pmm = PxlMarkMemoFactory.create( mark, nrgStack.getNrgStack(), regionMap );
-		try {
-			
-			NRGElemIndCalcParams params = new NRGElemIndCalcParams(pmm,	nrgStack);
-			
-			double nrg = session.calcOne( params ).get(0);
-			
-			if (nrg > minVal) {
-				return true;
-			} else {
-				return false;
-			}
-			
-		} catch (FeatureCalcException e) {
-			
-			throw new CheckException(
-				String.format("Error calculating feature", e )
-			);
-		}
+		return new NRGElemIndCalcParams(pmm, nrgStack);
 	}
+	
+	
 
 
 

@@ -43,28 +43,7 @@ public class FeatureValueMarkGreaterEqualThan extends FeatureValueCheckMark<Feat
 	private static final long serialVersionUID = 1086432241915811567L;
 	
 	@Override
-	public boolean check(Mark mark, RegionMap regionMap, NRGStackWithParams nrgStack) throws CheckException {
-		
-		if (session==null) {
-			throw new CheckException("No session initialized");
-		}
-		
-		try {
-			double nrg = session.calcOne(
-				new FeatureMarkParams(mark, nrgStack.getDimensions().getRes())
-			).get(0);
-			
-			if (nrg >= minVal) {
-				return true;
-			} else {
-				return false;
-			}
-			
-		} catch (FeatureCalcException e) {
-			throw new CheckException(
-				"Error calculating feature",
-				e
-			);
-		}
+	protected FeatureMarkParams createFeatureCalcParams(Mark mark, RegionMap regionMap, NRGStackWithParams nrgStack) {
+		return new FeatureMarkParams(mark, nrgStack.getDimensions().getRes());
 	}
 }

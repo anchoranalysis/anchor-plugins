@@ -38,6 +38,8 @@ import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
 import org.anchoranalysis.feature.init.FeatureInitParams;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 import org.anchoranalysis.feature.session.SequentialSession;
+import org.anchoranalysis.feature.session.SessionFactory;
+import org.anchoranalysis.feature.session.calculator.FeatureCalculatorMulti;
 import org.anchoranalysis.feature.shared.SharedFeatureSet;
 import org.anchoranalysis.feature.shared.SharedFeaturesInitParams;
 import org.anchoranalysis.image.feature.stack.FeatureStackParams;
@@ -144,15 +146,17 @@ class HelperImageFeatureCalculator {
 			FeatureList<FeatureStackParams> featuresDirectlyCalculate,
 			SharedFeatureSet<FeatureStackParams> sharedFeatures
 		) throws FeatureCalcException {
-		try {
-			SequentialSession<FeatureStackParams> session = new SequentialSession<>(featuresDirectlyCalculate);
-			session.start( new FeatureInitParams(), sharedFeatures, logErrorReporter );
-			
-			FeatureStackParams params = new FeatureStackParams(stack.getNrgStack());
-			return session.calcOne(params);
-		} catch (InitException e) {
-			throw new FeatureCalcException(e);
-		}
+		
+		FeatureCalculatorMulti<FeatureStackParams> session = SessionFactory.createAndStart(
+			featuresDirectlyCalculate,
+			new FeatureInitParams(),
+			sharedFeatures,
+			logErrorReporter
+		);
+		
+		return session.calcOne(
+			new FeatureStackParams(stack.getNrgStack())
+		);
 	}
 
 }

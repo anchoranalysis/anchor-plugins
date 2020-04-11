@@ -46,7 +46,6 @@ import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.feature.bean.evaluator.FeatureEvaluator;
 import org.anchoranalysis.image.feature.objmask.FeatureObjMaskParams;
-import org.anchoranalysis.image.feature.session.FeatureSessionCreateParamsSingle;
 import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.image.objmask.ObjMaskCollection;
 import org.anchoranalysis.image.sgmn.SgmnFailedException;

@@ -38,6 +38,10 @@ import org.anchoranalysis.core.params.KeyValueParams;
 import org.anchoranalysis.core.random.RandomNumberGenerator;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
+import org.anchoranalysis.feature.session.SessionFactory;
+import org.anchoranalysis.feature.session.calculator.FeatureCalculatorSingle;
+import org.anchoranalysis.feature.session.calculator.FeatureCalculatorSingleFromMulti;
 import org.anchoranalysis.feature.shared.SharedFeatureSet;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.feature.pixelwise.PixelwiseFeatureInitParams;
@@ -50,8 +54,6 @@ import org.anchoranalysis.image.voxel.box.VoxelBoxList;
 import org.anchoranalysis.image.voxel.box.VoxelBoxWrapper;
 import org.anchoranalysis.image.voxel.box.factory.VoxelBoxFactory;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
-
-import pixelscore.PixelScoreSession;
 
 public class CreateVoxelBoxFromPixelwiseFeatureWithMask {
 
@@ -113,7 +115,7 @@ public class CreateVoxelBoxFromPixelwiseFeatureWithMask {
 
 	private void setPixelsWithoutMask( VoxelBox<ByteBuffer> vbOut, Feature<PixelScoreFeatureCalcParams>pixelScore, LogErrorReporter logger ) throws FeatureCalcException, InitException {
 		
-		PixelScoreSession session = createStartSession(pixelScore, logger);
+		FeatureCalculatorSingle<PixelScoreFeatureCalcParams> session = createStartSession(pixelScore, logger);
 		
 		Extent e = vbOut.extnt();
 		
@@ -127,7 +129,7 @@ public class CreateVoxelBoxFromPixelwiseFeatureWithMask {
 				for( int x=0; x<e.getX(); x++) {
 					
 					int offset = e.offset(x, y);
-					putScoreForOffset(session, bbList, bbOut, offset);
+					BufferUtilities.putScoreForOffset(session, bbList, bbOut, offset);
 				}
 					
 			}
@@ -136,7 +138,7 @@ public class CreateVoxelBoxFromPixelwiseFeatureWithMask {
 
 	private void setPixelsWithMask( VoxelBox<ByteBuffer> vbOut, ObjMask objMask, Feature<PixelScoreFeatureCalcParams> pixelScore, LogErrorReporter logger ) throws FeatureCalcException, InitException {
 		
-		PixelScoreSession session = createStartSession(pixelScore, logger);
+		FeatureCalculatorSingle<PixelScoreFeatureCalcParams> session = createStartSession(pixelScore, logger);
 		
 		byte maskOn = objMask.getBinaryValuesByte().getOnByte();
 		Extent e = vbOut.extnt();
@@ -162,7 +164,7 @@ public class CreateVoxelBoxFromPixelwiseFeatureWithMask {
 					int offsetMask = eMask.offset(x-crnrMin.getX(),y-crnrMin.getY());
 					
 					if (bbMask.get(offsetMask)==maskOn) {
-						putScoreForOffset(session, bbList, bbOut, offset);
+						BufferUtilities.putScoreForOffset(session, bbList, bbOut, offset);
 					}
 				}
 					
@@ -171,17 +173,14 @@ public class CreateVoxelBoxFromPixelwiseFeatureWithMask {
 	}
 	
 	
-	private PixelScoreSession createStartSession(Feature<PixelScoreFeatureCalcParams> pixelScore, LogErrorReporter logger) throws InitException {
-		PixelScoreSession session = new PixelScoreSession(pixelScore);
-		session.start(paramsInit, new SharedFeatureSet<>(), logger );
-		return session;
+	private <T extends FeatureCalcParams> FeatureCalculatorSingle<T> createStartSession(Feature<T> pixelScore, LogErrorReporter logger) throws FeatureCalcException {
+		return SessionFactory.createAndStart(
+			pixelScore,
+			paramsInit,
+			new SharedFeatureSet<>(),
+			logger
+		);
 	}
 
-	private static void putScoreForOffset(PixelScoreSession session, List<VoxelBuffer<?>> bbList, ByteBuffer bbOut, int offset) throws FeatureCalcException {
-		double score = session.calc( bbList, offset );
-		
-		int scoreInt = (int) Math.round(score * 255);
-		bbOut.put(offset, (byte) scoreInt );
-	}
 
 }

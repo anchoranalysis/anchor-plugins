@@ -37,7 +37,6 @@ import org.anchoranalysis.feature.session.calculator.FeatureCalculatorSingle;
 import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.feature.bean.evaluator.FeatureEvaluator;
 import org.anchoranalysis.image.feature.objmask.FeatureObjMaskParams;
-import org.anchoranalysis.image.feature.session.FeatureSessionCreateParamsSingle;
 import org.anchoranalysis.image.objmask.ObjMask;
 
 public class ObjMaskFilterFeatureRelationThreshold extends ObjMaskFilterByObject {

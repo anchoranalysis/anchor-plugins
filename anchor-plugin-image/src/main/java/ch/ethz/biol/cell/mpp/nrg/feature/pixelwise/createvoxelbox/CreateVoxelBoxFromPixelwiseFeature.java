@@ -38,6 +38,9 @@ import org.anchoranalysis.core.random.RandomNumberGenerator;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.init.FeatureInitParams;
+import org.anchoranalysis.feature.session.SessionFactory;
+import org.anchoranalysis.feature.session.calculator.FeatureCalculatorSingle;
+import org.anchoranalysis.feature.session.calculator.FeatureCalculatorSingleFromMulti;
 import org.anchoranalysis.feature.shared.SharedFeatureSet;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.feature.pixelwise.PixelwiseFeatureInitParams;
@@ -49,8 +52,6 @@ import org.anchoranalysis.image.voxel.box.VoxelBoxList;
 import org.anchoranalysis.image.voxel.box.VoxelBoxWrapper;
 import org.anchoranalysis.image.voxel.box.factory.VoxelBoxFactory;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
-
-import pixelscore.PixelScoreSession;
 
 public class CreateVoxelBoxFromPixelwiseFeature {
 
@@ -103,8 +104,12 @@ public class CreateVoxelBoxFromPixelwiseFeature {
 	
 	private void setPixels( VoxelBox<ByteBuffer> vbOut, Feature<PixelScoreFeatureCalcParams> pixelScore, LogErrorReporter logErrorReporter ) throws FeatureCalcException, InitException {
 		
-		PixelScoreSession session = new PixelScoreSession(pixelScore);
-		session.start( createParamsInit(), new SharedFeatureSet<>(), logErrorReporter  );
+		FeatureCalculatorSingle<PixelScoreFeatureCalcParams> session = SessionFactory.createAndStart(
+			pixelScore,
+			createParamsInit(),
+			new SharedFeatureSet<>(),
+			logErrorReporter
+		);
 		
 		Extent e = vbOut.extnt();
 		
@@ -118,10 +123,8 @@ public class CreateVoxelBoxFromPixelwiseFeature {
 				for( int x=0;x<e.getX(); x++) {
 					
 					int offset = e.offset(x, y);
-					double score = session.calc( bbList, offset );
 					
-					int scoreInt = (int) Math.round(score * 255);
-					bbOut.put(offset, (byte) scoreInt );
+					BufferUtilities.putScoreForOffset(session, bbList, bbOut, offset);
 				}
 					
 			}
