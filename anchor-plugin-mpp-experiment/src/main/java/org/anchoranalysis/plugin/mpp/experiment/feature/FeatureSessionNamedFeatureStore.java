@@ -73,7 +73,7 @@ public class FeatureSessionNamedFeatureStore<T extends FeatureCalcParams> extend
 
 	@Override
 	public ResultsVector calcMaybeSuppressErrors(T params, ErrorReporter errorReporter) throws FeatureCalcException {
-		return session.calcSuppressErrors( params, errorReporter );
+		return session.calcOneSuppressErrors( params, errorReporter );
 	}
 	
 	@Override

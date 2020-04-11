@@ -1,4 +1,6 @@
-package ch.ethz.biol.cell.mpp.nrg.feature.objmask.sharedobjects;
+package org.anchoranalysis.plugin.image.feature.bean.obj.intersecting;
+
+import java.util.List;
 
 /*
  * #%L
@@ -27,14 +29,6 @@ package ch.ethz.biol.cell.mpp.nrg.feature.objmask.sharedobjects;
  */
 
 
-import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.feature.cache.CacheableParams;
-import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.image.feature.objmask.FeatureObjMaskParams;
-import org.anchoranalysis.image.feature.objmask.pair.FeatureObjMaskPairParams;
-import org.anchoranalysis.image.objmask.ObjMask;
-import org.anchoranalysis.image.objmask.ObjMaskCollection;
-
 /**
  * 1. Finds all objs from an ObjMaskCollection whose bounding-boxes intersect with a particular obj.
  * 2. Calculates a pairwise-feature
@@ -43,57 +37,22 @@ import org.anchoranalysis.image.objmask.ObjMaskCollection;
  * @author Owen Feehan
  *
  */
-public class MinFeatureAboveAmongObjMaskCollection extends FeatureAmongObjMaskCollectionSingleElem {
+public class MinFeatureIntersectingObjsAboveThreshold extends FeatureIntersectingObjsThreshold {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-
-	// START BEAN PROPERTIES
-	/**
-	 * Only considers values greater or equal to the threshold
-	 */
-	@BeanField
-	private double threshold = 0.0;
-	// END BEAN PROPERTIES
-	
-	public double getThreshold() {
-		return threshold;
-	}
-
-	public void setThreshold(double threshold) {
-		this.threshold = threshold;
-	}
 	
 	@Override
-	public double calcCast(CacheableParams<FeatureObjMaskParams> params) throws FeatureCalcException {
-		
-		if (getSearchObjs().size()==0) {
-			return getValueNoObjects();
-		}
+	protected double aggregateResults(List<Double> results) {
 		
 		double minVal = Double.POSITIVE_INFINITY;
 		
-		ObjMask om = params.getParams().getObjMask();
-		
-		ObjMaskCollection intersecting = bboxRTree().intersectsWith( om );
-		
-		if (intersecting.size()==0) {
-			return getValueNoObjects();
-		}
-		
-		FeatureObjMaskPairParams paramsPairs = new FeatureObjMaskPairParams();
-		paramsPairs.setObjMask1( om );
-		paramsPairs.setNrgStack( params.getParams().getNrgStack() );
-		
 		// We loop through each intersecting bounding box, and take the one with the highest feature-value
-		for( ObjMask omIntersects : intersecting) {
-			paramsPairs.setObjMask2(omIntersects);
+		for( double val : results) {
 			
-			double val = getSessionObjs().calc(paramsPairs);
-			
-			if (val>=threshold && val<minVal) {
+			if (val>=getThreshold() && val<minVal) {
 				minVal = val;
 			}
 		}
@@ -104,7 +63,4 @@ public class MinFeatureAboveAmongObjMaskCollection extends FeatureAmongObjMaskCo
 		
 		return minVal;
 	}
-
-
-
 }

@@ -38,7 +38,7 @@ public class SecondOnlyTest {
 	@Test
 	public void testOverlapping() throws FeatureCalcException, InitException {
 		
-		ParamsFixtureHelper.testSimple(
+		ParamsFixtureHelper.testSimpleInt(
 			OrderHelper.addFeatureToOrder(new SecondOnly()),
 			3409
 		);

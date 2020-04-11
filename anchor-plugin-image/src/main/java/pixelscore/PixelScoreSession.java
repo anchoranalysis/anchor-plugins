@@ -57,7 +57,7 @@ public class PixelScoreSession extends FeatureSession {
 			throws FeatureCalcException {
 				
 		PixelScoreFeatureCalcParams params = createParams(bbList, offset);
-		return delegate.calc( params ).get(0);
+		return delegate.calcOne( params ).get(0);
 	}
 	
 	private static PixelScoreFeatureCalcParams createParams( List<VoxelBuffer<?>> bbList, int offset ) {
@@ -75,7 +75,7 @@ public class PixelScoreSession extends FeatureSession {
 	public double calc( VoxelBuffer<?> bufferPrimary, ByteBuffer[] buffersAdd, int offset )
 			throws FeatureCalcException {
 		PixelScoreFeatureCalcParams params = createParams(bufferPrimary, buffersAdd, offset);
-		return delegate.calc( params ).get(0);
+		return delegate.calcOne( params ).get(0);
 	}
 	
 	private static PixelScoreFeatureCalcParams createParams( VoxelBuffer<?> bufferPrimary, ByteBuffer[] buffersAdd, int offset ) {

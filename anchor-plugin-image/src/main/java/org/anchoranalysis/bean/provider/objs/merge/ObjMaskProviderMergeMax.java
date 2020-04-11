@@ -47,7 +47,7 @@ public class ObjMaskProviderMergeMax extends ObjMaskProviderMergeWithFeature {
 		
 		return om -> {
 			FeatureObjMaskParams params = new FeatureObjMaskParams(om);
-			return featureSession.calc(params);
+			return featureSession.calcOne(params);
 		};
 	}
 	

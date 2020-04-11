@@ -1,12 +1,15 @@
-package org.anchoranalysis.plugin.image.feature.bean.obj.pair.order;
+package org.anchoranalysis.plugin.image.feature.bean.obj.intersecting;
 
+import java.util.Comparator;
+import java.util.List;
 
+import org.anchoranalysis.feature.calc.FeatureCalcException;
 
 /*-
  * #%L
  * anchor-plugin-image-feature
  * %%
- * Copyright (C) 2010 - 2020 Owen Feehan
+ * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -28,20 +31,24 @@ package org.anchoranalysis.plugin.image.feature.bean.obj.pair.order;
  * #L%
  */
 
-import org.anchoranalysis.core.error.InitException;
-import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.plugin.image.feature.bean.obj.pair.ParamsFixtureHelper;
-import org.junit.Test;
+/**
+ * 1. Finds all objs from an ObjMaskCollection whose bounding-boxes intersect with a particular obj.
+ * 2. Calculates a pairwise-feature
+ * 3. Returns the maximum 
+ * 
+ * @author Owen Feehan
+ *
+ */
+public class MaxFeatureIntersectingObjs extends FeatureIntersectingObjsSingleElem {
 
-public class FirstOnlyTest {
-	
-	@Test
-	public void testOverlapping() throws FeatureCalcException, InitException {
-		
-		ParamsFixtureHelper.testSimpleInt(
-			OrderHelper.addFeatureToOrder(new FirstOnly()),
-			2821
-		);
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	@Override
+	protected double aggregateResults(List<Double> results) {
+		return results.stream().max( Comparator.comparing(Double::valueOf) ).orElse( getValueNoObjects() );
 	}
-}
 
+}

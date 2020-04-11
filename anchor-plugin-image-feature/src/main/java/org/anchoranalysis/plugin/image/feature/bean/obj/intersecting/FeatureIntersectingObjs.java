@@ -1,4 +1,4 @@
-package ch.ethz.biol.cell.mpp.nrg.feature.objmask.sharedobjects;
+package org.anchoranalysis.plugin.image.feature.bean.obj.intersecting;
 
 /*
  * #%L
@@ -28,14 +28,18 @@ package ch.ethz.biol.cell.mpp.nrg.feature.objmask.sharedobjects;
 
 
 import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.core.cache.ExecuteException;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.name.provider.NamedProviderGetException;
+import org.anchoranalysis.feature.cache.CacheableParams;
+import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.feature.bean.objmask.FeatureObjMaskSharedObjects;
 import org.anchoranalysis.image.feature.init.FeatureInitParamsImageInit;
-import org.anchoranalysis.image.index.rtree.ObjMaskCollectionRTree;
+import org.anchoranalysis.image.feature.objmask.FeatureObjMaskParams;
 import org.anchoranalysis.image.objmask.ObjMaskCollection;
+import org.anchoranalysis.plugin.image.feature.obj.intersecting.CalculateIntersectingObjs;
 
-public abstract class FeatureAmongObjMaskCollection extends FeatureObjMaskSharedObjects {
+public abstract class FeatureIntersectingObjs extends FeatureObjMaskSharedObjects {
 
 	
 	/**
@@ -55,7 +59,6 @@ public abstract class FeatureAmongObjMaskCollection extends FeatureObjMaskShared
 	// END BEAN PROPERTIES
 
 	private ObjMaskCollection searchObjs;
-	private ObjMaskCollectionRTree bboxRTree = null;
 	
 	@Override
 	public void beforeCalcCast(FeatureInitParamsImageInit params) throws InitException {
@@ -67,16 +70,27 @@ public abstract class FeatureAmongObjMaskCollection extends FeatureObjMaskShared
 		};
 	}
 	
-	protected ObjMaskCollectionRTree bboxRTree() {
-		
-		// First time it's hit we calculate the bboxRTree
-		if (bboxRTree==null) {
-			this.bboxRTree = new ObjMaskCollectionRTree( searchObjs );
+	@Override
+	public double calcCast(CacheableParams<FeatureObjMaskParams> params)
+			throws FeatureCalcException {
+
+		if (getSearchObjs().size()==0) {
+			return getValueNoObjects();
 		}
-		return bboxRTree;
+		
+		try {
+			ObjMaskCollection intersecting = params.calc(
+				new CalculateIntersectingObjs(id, searchObjs)	
+			);
+			
+			return valueFor(params, intersecting);
+		} catch (ExecuteException e) {
+			throw new FeatureCalcException(e);
+		}
 	}
 	
-
+	protected abstract double valueFor( CacheableParams<FeatureObjMaskParams> params, ObjMaskCollection intersecting ) throws FeatureCalcException;
+	
 	public String getId() {
 		return id;
 	}

@@ -226,7 +226,7 @@ public class FeatureSessionMergedPairs extends FeatureSessionFlexiFeatureTable<F
 	 * @throws FeatureCalcException
 	 */
 	private static int calcAndInsert( FeatureCalcParams params, ISequentialSessionSingleParams session, int start, ResultsVector out, ErrorReporter errorReporter, boolean suppressErrors ) throws FeatureCalcException {
-		ResultsVector rvImage =  suppressErrors ? session.calcSuppressErrors( params, errorReporter ) : session.calc(params) ;
+		ResultsVector rvImage =  suppressErrors ? session.calcOneSuppressErrors( params, errorReporter ) : session.calcOne(params) ;
 		out.set(start, rvImage);
 		return rvImage.length();
 	}

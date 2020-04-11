@@ -27,7 +27,7 @@ package org.anchoranalysis.plugin.image.feature.bean.obj.pair.overlap;
  */
 
 import org.anchoranalysis.image.feature.objmask.pair.FeatureObjMaskPairParams;
-import org.anchoranalysis.plugin.image.feature.objmask.pair.overlap.OverlapRatioUtilities;
+import org.anchoranalysis.plugin.image.feature.obj.pair.overlap.OverlapRatioUtilities;
 
 /**
  * Overlap ratio to the maximum number of pixels

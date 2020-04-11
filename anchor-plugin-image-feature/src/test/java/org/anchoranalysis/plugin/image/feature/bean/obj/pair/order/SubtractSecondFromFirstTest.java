@@ -38,7 +38,7 @@ public class SubtractSecondFromFirstTest {
 	@Test
 	public void testOverlapping() throws FeatureCalcException, InitException {
 		
-		ParamsFixtureHelper.testSimple(
+		ParamsFixtureHelper.testSimpleInt(
 			OrderHelper.addFeatureToOrder(new SubtractSecondFromFirst()),
 			-588
 		);

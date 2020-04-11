@@ -98,7 +98,7 @@ public class ObjMaskFilterFeatureMatchingObjectsRelationThreshold extends ObjMas
 				
 				for (ObjMask match : owm.getMatches()) {
 					
-					double featureVal = session.calc(
+					double featureVal = session.calcOne(
 						new FeatureObjMaskPairParams(owm.getSourceObj(), match)
 					);
 					

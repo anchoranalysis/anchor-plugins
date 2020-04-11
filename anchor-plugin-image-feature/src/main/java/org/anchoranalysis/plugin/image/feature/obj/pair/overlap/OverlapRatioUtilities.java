@@ -1,4 +1,4 @@
-package org.anchoranalysis.plugin.image.feature.objmask.pair.overlap;
+package org.anchoranalysis.plugin.image.feature.obj.pair.overlap;
 
 import java.util.function.Supplier;
 

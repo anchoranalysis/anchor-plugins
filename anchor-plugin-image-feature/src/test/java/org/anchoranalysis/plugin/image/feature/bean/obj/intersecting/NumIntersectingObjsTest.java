@@ -1,6 +1,9 @@
-package org.anchoranalysis.plugin.image.feature.bean.obj.pair.order;
+package org.anchoranalysis.plugin.image.feature.bean.obj.intersecting;
 
 
+
+import java.nio.file.Path;
+import java.util.Optional;
 
 /*-
  * #%L
@@ -29,18 +32,37 @@ package org.anchoranalysis.plugin.image.feature.bean.obj.pair.order;
  */
 
 import org.anchoranalysis.core.error.InitException;
+import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.plugin.image.feature.bean.obj.pair.ParamsFixtureHelper;
 import org.junit.Test;
 
-public class FirstOnlyTest {
+public class NumIntersectingObjsTest {
+	
+	static final int EXPECTED_FIRST = 1;
+	static final int EXPECTED_SECOND = 2;
+	static final int EXPECTED_SECOND_LAST = 1;
+	static final int EXPECTED_LAST = 0;
 	
 	@Test
-	public void testOverlapping() throws FeatureCalcException, InitException {
-		
-		ParamsFixtureHelper.testSimpleInt(
-			OrderHelper.addFeatureToOrder(new FirstOnly()),
-			2821
+	public void testSameSizes() throws FeatureCalcException, InitException, OperationFailedException {
+		testForSpecificExpectedValues("sameSize", true);
+	}
+	
+	@Test
+	public void testDifferentSizes() throws FeatureCalcException, InitException, OperationFailedException {
+		testForSpecificExpectedValues("differentSize", false);
+	}
+	
+	// As expected-values are the same, we have a helper function
+	private void testForSpecificExpectedValues( String messagePrefix, boolean sameSize ) throws OperationFailedException, FeatureCalcException, InitException {
+		InteresectingObjsTestHelper.testPositions(
+			messagePrefix,
+			new NumIntersectingObjs(),
+			sameSize,
+			EXPECTED_FIRST,
+			EXPECTED_SECOND,
+			EXPECTED_SECOND_LAST,
+			EXPECTED_LAST
 		);
 	}
 }

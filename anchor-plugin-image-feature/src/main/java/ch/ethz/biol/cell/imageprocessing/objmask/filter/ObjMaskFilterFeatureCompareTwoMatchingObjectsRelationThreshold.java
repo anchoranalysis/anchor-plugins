@@ -113,7 +113,7 @@ public class ObjMaskFilterFeatureCompareTwoMatchingObjectsRelationThreshold exte
 				ObjMask match1 = objWithMatches1.getMatches().get(0);
 				ObjMask match2 = matchList2.get(i).getMatches().get(0);
 								
-				double featureVal = featureSession.calc(
+				double featureVal = featureSession.calcOne(
 					new FeatureObjMaskPairParams(match1, match2)
 				);
 				

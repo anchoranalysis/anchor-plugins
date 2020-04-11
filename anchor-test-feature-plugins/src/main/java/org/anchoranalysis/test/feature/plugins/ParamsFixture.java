@@ -1,13 +1,6 @@
 package org.anchoranalysis.test.feature.plugins;
 
-import org.anchoranalysis.anchor.mpp.mark.GlobalRegionIdentifiers;
-import org.anchoranalysis.anchor.mpp.mark.conic.MarkCircle;
-import org.anchoranalysis.anchor.mpp.regionmap.RegionMapSingleton;
 import org.anchoranalysis.core.geometry.Point2i;
-import org.anchoranalysis.core.geometry.PointConverter;
-import org.anchoranalysis.feature.nrg.NRGStackWithParams;
-import org.anchoranalysis.image.binary.values.BinaryValuesByte;
-import org.anchoranalysis.image.extent.ImageDim;
 
 /*-
  * #%L
@@ -36,11 +29,8 @@ import org.anchoranalysis.image.extent.ImageDim;
  */
 
 import org.anchoranalysis.image.feature.objmask.pair.FeatureObjMaskPairParams;
-import org.anchoranalysis.image.objmask.ObjMask;
 
 public class ParamsFixture {
-
-	private static ImageDim DIMS = new ImageDim(800, 600, 1);
 	
 	private static final int DEFAULT_CIRCLE_RADIUS = 30;
 	
@@ -59,16 +49,16 @@ public class ParamsFixture {
 	 */
 	public static FeatureObjMaskPairParams twoOverlappingCircles( boolean sameSize ) {
 		FeatureObjMaskPairParams params = new FeatureObjMaskPairParams(
-			circleAt(
+			CircleObjMaskFixture.circleAt(
 				new Point2i( DEFAULT_POS_X, DEFAULT_POS_Y ),
 				DEFAULT_CIRCLE_RADIUS
 			),
-			circleAt(
+			CircleObjMaskFixture.circleAt(
 				new Point2i( DEFAULT_POS_X + 10, DEFAULT_POS_Y ),
 				radiusMaybeExtra(sameSize, 3)
 			)
 		);
-		params.setNrgStack( new NRGStackWithParams(DIMS) );
+		params.setNrgStack( CircleObjMaskFixture.nrgStack() );
 		return params;
 	}
 	
@@ -80,28 +70,17 @@ public class ParamsFixture {
 	 */
 	public static FeatureObjMaskPairParams twoNonOverlappingCircles( boolean sameSize) {
 		FeatureObjMaskPairParams params = new FeatureObjMaskPairParams(
-			circleAt(
+			CircleObjMaskFixture.circleAt(
 				new Point2i( DEFAULT_POS_X, DEFAULT_POS_Y ),
 				DEFAULT_CIRCLE_RADIUS
 			),
-			circleAt(
+			CircleObjMaskFixture.circleAt(
 				new Point2i( DEFAULT_POS_X, DEFAULT_POS_Y + (DEFAULT_CIRCLE_RADIUS*3) ),
 				radiusMaybeExtra(sameSize, -3)
 			)
 		);
-		params.setNrgStack( new NRGStackWithParams(DIMS) );
+		params.setNrgStack( CircleObjMaskFixture.nrgStack() );
 		return params;
-	}
-	
-	private static ObjMask circleAt( Point2i center, double radius ) {
-		MarkCircle mark = new MarkCircle();
-		mark.setPos( PointConverter.doubleFromInt(center) );
-		mark.setRadius(radius);
-		return mark.calcMask(
-			DIMS,
-			RegionMapSingleton.instance().membershipWithFlagsForIndex(GlobalRegionIdentifiers.SUBMARK_INSIDE),
-			BinaryValuesByte.getDefault()
-		).getMask();
 	}
 	
 	/** If flag is true, adds extra to the default radius value */

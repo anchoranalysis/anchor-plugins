@@ -47,6 +47,8 @@ import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.init.FeatureInitParams;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 import org.anchoranalysis.feature.session.SequentialSession;
+import org.anchoranalysis.feature.session.calculator.FeatureCalculatorSingle;
+import org.anchoranalysis.feature.session.calculator.FeatureCalculatorSingleFromMulti;
 import org.anchoranalysis.feature.shared.SharedFeatureSet;
 import org.anchoranalysis.image.bean.provider.stack.StackProvider;
 import org.anchoranalysis.image.feature.session.FeatureSessionCreateParamsSingle;
@@ -79,7 +81,7 @@ public class ExtractSingleSliceTask extends Task<NamedChnlsInput,SharedStateSele
 	
 	// START BEAN PROPERTIES
 	@BeanField @SkipInit
-	private FeatureListProvider scoreProvider;
+	private FeatureListProvider<FeatureStackParams> scoreProvider;
 	
 	@BeanField
 	private StackProvider nrgStackProvider;
@@ -146,7 +148,7 @@ public class ExtractSingleSliceTask extends Task<NamedChnlsInput,SharedStateSele
 	 * @throws OperationFailedException */
 	private int selectSlice( NRGStackWithParams nrgStack, LogErrorReporter logErrorReporter, String imageName, SharedStateSelectedSlice params ) throws OperationFailedException {
 		
-		Feature scoreFeature = extractScoreFeature();
+		Feature<FeatureStackParams> scoreFeature = extractScoreFeature();
 		
 		double[] scores = calcScoreForEachSlice( scoreFeature, nrgStack, logErrorReporter );
 		
@@ -206,8 +208,7 @@ public class ExtractSingleSliceTask extends Task<NamedChnlsInput,SharedStateSele
 	) throws OperationFailedException {
 
 		try {
-			SequentialSession<FeatureStackParams> session = new SequentialSession<FeatureStackParams>(scoreFeature);
-			session.start(new FeatureInitParams(), new SharedFeatureSet<>(), logErrorReporter );
+			FeatureCalculatorSingle<FeatureStackParams> session = createStartSession(scoreFeature, logErrorReporter);
 			
 			double results[] = new double[nrgStack.getDimensions().getZ()];
 			
@@ -216,9 +217,9 @@ public class ExtractSingleSliceTask extends Task<NamedChnlsInput,SharedStateSele
 				NRGStackWithParams nrgStackSlice = nrgStack.extractSlice(z);
 				
 				// Calculate feature for this slice
-				double featVal = session.calc(
+				double featVal = session.calcOne(
 					new FeatureStackParams(nrgStackSlice.getNrgStack())
-				).get(0);
+				);
 				
 				logErrorReporter.getLogReporter().logFormatted("Slice %3d has score %f", z, featVal);
 				
@@ -227,14 +228,24 @@ public class ExtractSingleSliceTask extends Task<NamedChnlsInput,SharedStateSele
 			
 			return results;
 			
-		} catch (InitException | FeatureCalcException e) {
+		} catch (FeatureCalcException | CreateException e) {
 			throw new OperationFailedException(e);
 		}
 	}
 	
-	private Feature extractScoreFeature() throws OperationFailedException {
+	private FeatureCalculatorSingle<FeatureStackParams> createStartSession(Feature<FeatureStackParams> scoreFeature, LogErrorReporter logger) throws CreateException {
+		SequentialSession<FeatureStackParams> session = new SequentialSession<FeatureStackParams>(scoreFeature);
 		try {
-			FeatureList features = scoreProvider.create();
+			session.start(new FeatureInitParams(), new SharedFeatureSet<>(), logger );
+		} catch (InitException e) {
+			throw new CreateException(e);
+		}
+		return new FeatureCalculatorSingleFromMulti<FeatureStackParams>(session);
+	}
+	
+	private Feature<FeatureStackParams> extractScoreFeature() throws OperationFailedException {
+		try {
+			FeatureList<FeatureStackParams> features = scoreProvider.create();
 			if (features.size()!=1) {
 				throw new OperationFailedException(
 					String.format("scoreProvider should return a list with exactly 1 feature, instead it has %d features.", features.size() )
@@ -251,12 +262,11 @@ public class ExtractSingleSliceTask extends Task<NamedChnlsInput,SharedStateSele
 		return false;
 	}
 
-
-	public FeatureListProvider getScoreProvider() {
+	public FeatureListProvider<FeatureStackParams> getScoreProvider() {
 		return scoreProvider;
 	}
 
-	public void setScoreProvider(FeatureListProvider scoreProvider) {
+	public void setScoreProvider(FeatureListProvider<FeatureStackParams> scoreProvider) {
 		this.scoreProvider = scoreProvider;
 	}
 
