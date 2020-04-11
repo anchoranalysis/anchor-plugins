@@ -38,17 +38,21 @@ import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.provider.FeatureProvider;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.feature.init.FeatureInitParams;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
+import org.anchoranalysis.feature.session.SessionFactory;
+import org.anchoranalysis.feature.session.calculator.FeatureCalculatorSingle;
+import org.anchoranalysis.feature.session.calculator.FeatureCalculatorSingleChangeParams;
 import org.anchoranalysis.image.bean.objmask.filter.ObjMaskFilter;
 import org.anchoranalysis.image.bean.provider.ChnlProvider;
 import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.feature.objmask.FeatureObjMaskParams;
-import org.anchoranalysis.image.feature.session.FeatureSessionCreateParamsSingle;
 import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.image.objmask.ObjMaskCollection;
 
 import cern.colt.list.DoubleArrayList;
 import cern.jet.stat.Descriptive;
+import ch.ethz.biol.cell.imageprocessing.binaryimgchnl.provider.NRGStackUtilities;
 
 // Takes features values of all objects, and discards everything outside
 //   median +- (factor * stdDev)
@@ -85,52 +89,49 @@ public class ObjMaskFilterFeatureRelationDiscardFeatureRatioLessThan extends Obj
 	@Override
 	public void filter(ObjMaskCollection objs, ImageDim dim, ObjMaskCollection objsRejected)
 			throws OperationFailedException {
-
-
 		
 		// Nothing to do if we don't have enough options
 		if (objs.size()<minNumObjs) {
 			return;
 		}
 		
-		// Initialization
-		Feature<FeatureObjMaskParams> feature;
-		FeatureSessionCreateParamsSingle session;
-		{
-			try {
-				feature = featureProvider.create();
-			} catch (CreateException e) {
-				throw new OperationFailedException(e);
-			}
-			
-			session = new FeatureSessionCreateParamsSingle(
-				feature,
-				getSharedObjects().getFeature().getSharedFeatureSet().downcast()
-			);
-						
-			try {
-				session.start( getLogger() );
-			} catch (InitException e) {
-				throw new OperationFailedException(e);
-			}
-			
-			if (chnlProvider!=null) {
-				try {
-					NRGStackWithParams nrgStack = new NRGStackWithParams(chnlProvider.create());
-					session.setNrgStack(nrgStack);
-				} catch (CreateException e) {
-					throw new OperationFailedException(e);
-				}
-			}
-		}
+		FeatureCalculatorSingle<FeatureObjMaskParams> session = createSession();
 		
 		// Now we calculate feature values for each object, and a standard deviation
 		DoubleArrayList featureValsSorted = new DoubleArrayList();
 		DoubleArrayList featureValsOriginalOrder = new DoubleArrayList();
+		calculateVals(objs, featureValsOriginalOrder, featureValsSorted, session);
+
+		removeOutliers(objs, objsRejected, featureValsOriginalOrder, featureValsSorted);
+	}
+	
+	private FeatureCalculatorSingle<FeatureObjMaskParams> createSession() throws OperationFailedException {
+		
+		try {
+			Feature<FeatureObjMaskParams> feature = featureProvider.create();
+			
+			FeatureCalculatorSingle<FeatureObjMaskParams> session = SessionFactory.createAndStart(
+				feature,
+				new FeatureInitParams(),
+				getSharedObjects().getFeature().getSharedFeatureSet().downcast(),
+				getLogger()
+			);
+						
+			return NRGStackUtilities.maybeAddNrgStack(session, chnlProvider);
+			
+		} catch (CreateException | FeatureCalcException e) {
+			throw new OperationFailedException(e);
+		}
+	}
+	
+	private void calculateVals( ObjMaskCollection objs, DoubleArrayList featureValsOriginalOrder, DoubleArrayList featureValsSorted, FeatureCalculatorSingle<FeatureObjMaskParams> session ) throws OperationFailedException {
+
 		for( ObjMask om : objs ) {
 			double featureVal;
 			try {
-				featureVal = session.calc(om);
+				featureVal = session.calcOne(
+					new FeatureObjMaskParams(om)
+				);
 			} catch (FeatureCalcException e) {
 				throw new OperationFailedException(e);
 			}
@@ -139,8 +140,11 @@ public class ObjMaskFilterFeatureRelationDiscardFeatureRatioLessThan extends Obj
 		}
 		
 		// For median
-		featureValsSorted.sort();
-		
+		featureValsSorted.sort();		
+	}
+	
+	private void removeOutliers( ObjMaskCollection objs, ObjMaskCollection objsRejected, DoubleArrayList featureValsOriginalOrder, DoubleArrayList featureValsSorted ) {
+				
 		// Calculate standard deviation
 		double sum = Descriptive.sum( featureValsSorted );
 		double mean = sum/featureValsSorted.size();
@@ -160,7 +164,20 @@ public class ObjMaskFilterFeatureRelationDiscardFeatureRatioLessThan extends Obj
 			getLogger().getLogReporter().log("START DiscardOutliers");
 			getLogger().getLogReporter().logFormatted("median=%f   mean=%f  stdDev=%f  lowerLimit=%f  upperLimit=%f", median, mean, stdDev, lowerLimit, upperLimit);
 		}
-			
+		
+		List<ObjMask> listToRemove = listToRemove( objs, objsRejected, featureValsOriginalOrder, lowerLimit, upperLimit );
+	
+		if (getLogger()!=null) {
+			getLogger().getLogReporter().log("END DiscardOutliers");
+		}
+		
+		// NOTE This could be expensive if we have a large amount of items in the list, better to use a sorted indexed approach
+		for( ObjMask om : listToRemove) {
+			objs.remove(om);
+		}		
+	}
+	
+	private List<ObjMask> listToRemove( ObjMaskCollection objs, ObjMaskCollection objsRejected, DoubleArrayList featureValsOriginalOrder, double lowerLimit, double upperLimit ) {
 		List<ObjMask> listToRemove = new ArrayList<>();
 		for(int i=0; i<objs.size(); i++) {
 			double featureVal = featureValsOriginalOrder.get(i);
@@ -191,15 +208,7 @@ public class ObjMaskFilterFeatureRelationDiscardFeatureRatioLessThan extends Obj
 				}
 			}
 		}
-		
-		if (getLogger()!=null) {
-			getLogger().getLogReporter().log("END DiscardOutliers");
-		}
-		
-		// NOTE This could be expensive if we have a large amount of items in the list, better to use a sorted indexed approach
-		for( ObjMask om : listToRemove) {
-			objs.remove(om);
-		}
+		return listToRemove;
 	}
 	
 	public FeatureProvider<FeatureObjMaskParams> getFeatureProvider() {

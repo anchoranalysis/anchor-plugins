@@ -40,12 +40,14 @@ import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
 import org.anchoranalysis.feature.init.FeatureInitParams;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 import org.anchoranalysis.feature.session.SequentialSession;
+import org.anchoranalysis.feature.session.SessionFactory;
+import org.anchoranalysis.feature.session.calculator.FeatureCalculatorMulti;
 import org.anchoranalysis.feature.shared.SharedFeatureSet;
 import org.anchoranalysis.image.feature.histogram.FeatureHistogramParams;
 import org.anchoranalysis.image.feature.objmask.FeatureObjMaskParams;
-import org.anchoranalysis.image.feature.session.FeatureSessionCreateParams;
 import org.anchoranalysis.image.histogram.Histogram;
 import org.anchoranalysis.image.objmask.ObjMask;
+import org.anchoranalysis.test.LoggingFixtures;
 import org.anchoranalysis.test.TestLoader;
 import org.anchoranalysis.test.feature.ConstantsInListFixture;
 import org.anchoranalysis.test.feature.plugins.FeatureListFixture;
@@ -71,7 +73,7 @@ public class FeatureListImageTest {
 	@Test(expected = FeatureCalcException.class)
 	public void testNoParams() throws InitException, FeatureCalcException, CreateException {
 		
-		SequentialSession<FeatureCalcParams> session = createAndStart(ConstantsInListFixture.create());
+		FeatureCalculatorMulti<FeatureCalcParams> session = createAndStart(ConstantsInListFixture.create());
 		
 		ResultsVector rv1 = session.calcOne( (FeatureCalcParams) null );
 		ConstantsInListFixture.checkResultVector(rv1);
@@ -84,7 +86,7 @@ public class FeatureListImageTest {
 	@Test
 	public void testHistogram() throws InitException, FeatureCalcException, CreateException {
 		
-		SequentialSession<FeatureHistogramParams> session = createAndStart(
+		FeatureCalculatorMulti<FeatureHistogramParams> session = createAndStart(
 			histogramFeatures(loader)
 		);
 		
@@ -106,7 +108,9 @@ public class FeatureListImageTest {
 	@Test
 	public void testImage() throws InitException, FeatureCalcException, CreateException {
 		
-		SequentialSession<FeatureObjMaskParams> session = createAndStart(objMaskFeatures(loader));
+		FeatureCalculatorMulti<FeatureObjMaskParams> session = createAndStart(
+			objMaskFeatures(loader)
+		);
 		
 		ObjMaskFixture objMaskFixture = new ObjMaskFixture( NRGStackFixture.create().getDimensions() );
 		
@@ -135,10 +139,11 @@ public class FeatureListImageTest {
 	
 	
 	
-	private <T extends FeatureCalcParams> SequentialSession<T> createAndStart( FeatureList<T> features ) throws InitException, CreateException {
-		SequentialSession<T> session = new SequentialSession<>(features);
-		session.start( new FeatureInitParams(), new SharedFeatureSet<>(), new LogErrorReporter( new ConsoleLogReporter() ) );
-		return session;
+	private <T extends FeatureCalcParams> FeatureCalculatorMulti<T> createAndStart( FeatureList<T> features ) throws FeatureCalcException {
+		return SessionFactory.createAndStart(
+			features,
+			LoggingFixtures.simpleLogErrorReporter()
+		);
 	}
 	
 	

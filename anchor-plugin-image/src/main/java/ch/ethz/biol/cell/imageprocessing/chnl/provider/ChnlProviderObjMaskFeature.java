@@ -37,15 +37,17 @@ import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.provider.FeatureProvider;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
+import org.anchoranalysis.feature.init.FeatureInitParams;
 import org.anchoranalysis.feature.nrg.NRGStack;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
+import org.anchoranalysis.feature.session.SessionFactory;
+import org.anchoranalysis.feature.session.calculator.FeatureCalculatorSingle;
 import org.anchoranalysis.image.bean.provider.ChnlProvider;
 import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
 import org.anchoranalysis.image.chnl.Chnl;
 import org.anchoranalysis.image.chnl.factory.ChnlFactory;
 import org.anchoranalysis.image.extent.IncorrectImageSizeException;
 import org.anchoranalysis.image.feature.objmask.FeatureObjMaskParams;
-import org.anchoranalysis.image.feature.session.FeatureSessionCreateParamsSingle;
 import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.image.objmask.ObjMaskCollection;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
@@ -102,25 +104,27 @@ public class ChnlProviderObjMaskFeature extends ChnlProvider {
 
 			NRGStackWithParams nrgStackParams = new NRGStackWithParams(nrgStack);
 			
-			FeatureSessionCreateParamsSingle session = new FeatureSessionCreateParamsSingle(
+			FeatureCalculatorSingle<FeatureObjMaskParams> session = SessionFactory.createAndStart(
 				feature,
-				getSharedObjects().getFeature().getSharedFeatureSet().downcast()
+				new FeatureInitParams(),
+				getSharedObjects().getFeature().getSharedFeatureSet().downcast(),
+				getLogger()
 			);
-			session.setNrgStack(nrgStackParams);
-			session.start( getLogger() );
 			
 			Chnl chnlOut = ChnlFactory.instance().createEmptyInitialised( chnl.getDimensions(), VoxelDataTypeUnsignedByte.instance );
 			chnlOut.getVoxelBox().any().setAllPixelsTo( valueNoObject );
 			for( ObjMask om : objsCollection ) {
 
-				double featVal = session.calc(om);
+				double featVal = session.calcOne(
+					new FeatureObjMaskParams(om, nrgStackParams)
+				);
 				chnlOut.getVoxelBox().any().setPixelsCheckMask(om, (int) (factor*featVal) );
 			}
 			
 			return chnlOut;
 			
 			
-		} catch (InitException | FeatureCalcException | IncorrectImageSizeException e) {
+		} catch (FeatureCalcException | IncorrectImageSizeException e) {
 			throw new CreateException(e);
 		}
 		

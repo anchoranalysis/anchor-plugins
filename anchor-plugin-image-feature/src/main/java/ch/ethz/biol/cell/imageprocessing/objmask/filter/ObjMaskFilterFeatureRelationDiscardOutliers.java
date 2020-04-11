@@ -41,11 +41,13 @@ import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.init.FeatureInitParams;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 import org.anchoranalysis.feature.session.SequentialSession;
+import org.anchoranalysis.feature.session.SessionFactory;
+import org.anchoranalysis.feature.session.calculator.FeatureCalculatorSingle;
+import org.anchoranalysis.feature.session.calculator.FeatureCalculatorSingleFromMulti;
 import org.anchoranalysis.image.bean.objmask.filter.ObjMaskFilter;
 import org.anchoranalysis.image.bean.provider.ChnlProvider;
 import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.feature.objmask.FeatureObjMaskParams;
-import org.anchoranalysis.image.feature.session.FeatureSessionCreateParamsSingle;
 import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.image.objmask.ObjMaskCollection;
 
@@ -88,7 +90,7 @@ public class ObjMaskFilterFeatureRelationDiscardOutliers extends ObjMaskFilter {
 		}
 		
 		// Initialization
-		SequentialSession<FeatureObjMaskParams> session;
+		FeatureCalculatorSingle<FeatureObjMaskParams> session;
 		Feature<FeatureObjMaskParams> feature;
 		NRGStackWithParams nrgStack = null;
 		{
@@ -98,15 +100,14 @@ public class ObjMaskFilterFeatureRelationDiscardOutliers extends ObjMaskFilter {
 				throw new OperationFailedException(e);
 			}
 			
-			session = new SequentialSession<FeatureObjMaskParams>(feature);
-			
 			try {
-				session.start(
+				session = SessionFactory.createAndStart(
+					feature,
 					new FeatureInitParams(),
 					getSharedObjects().getFeature().getSharedFeatureSet().downcast(),
 					getLogger()
-				);
-			} catch (InitException e) {
+				);				
+			} catch (FeatureCalcException e) {
 				throw new OperationFailedException(e);
 			}
 			
@@ -127,7 +128,7 @@ public class ObjMaskFilterFeatureRelationDiscardOutliers extends ObjMaskFilter {
 			try {
 				featureVal = session.calcOne(
 					new FeatureObjMaskParams(om, nrgStack)
-				).get(0);
+				);
 			} catch (FeatureCalcException e) {
 				throw new OperationFailedException(e);
 			}

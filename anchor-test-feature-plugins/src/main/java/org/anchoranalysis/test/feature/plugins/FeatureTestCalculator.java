@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 
 import java.util.Optional;
 
+import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.name.store.SharedObjects;
 import org.anchoranalysis.feature.bean.Feature;
@@ -12,6 +13,9 @@ import org.anchoranalysis.feature.calc.ResultsVector;
 import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
 import org.anchoranalysis.feature.init.FeatureInitParams;
 import org.anchoranalysis.feature.session.SequentialSession;
+import org.anchoranalysis.feature.session.SessionFactory;
+import org.anchoranalysis.feature.session.calculator.FeatureCalculatorSingle;
+import org.anchoranalysis.feature.session.calculator.FeatureCalculatorSingleFromMulti;
 import org.anchoranalysis.feature.shared.SharedFeatureSet;
 import org.anchoranalysis.image.feature.init.FeatureInitParamsImageInit;
 import org.anchoranalysis.image.init.ImageInitParams;
@@ -32,7 +36,7 @@ public class FeatureTestCalculator {
 		assertIntResult(message, feature, params, Optional.empty(), expectedResult);
 	}
 	
-	public static <T extends FeatureCalcParams> void assertDoubleResult( String message, Feature<T> feature, T params, Optional<ImageInitParams> imageInit, double expectedResult ) throws FeatureCalcException, InitException {
+	public static <T extends FeatureCalcParams> void assertDoubleResult( String message, Feature<T> feature, T params, Optional<ImageInitParams> imageInit, double expectedResult ) throws FeatureCalcException {
 		assertResultTolerance(
 			message,
 			feature,
@@ -43,7 +47,7 @@ public class FeatureTestCalculator {
 		);
 	}
 	
-	public static <T extends FeatureCalcParams> void assertIntResult( String message, Feature<T> feature, T params, Optional<ImageInitParams> imageInit, int expectedResult ) throws FeatureCalcException, InitException {
+	public static <T extends FeatureCalcParams> void assertIntResult( String message, Feature<T> feature, T params, Optional<ImageInitParams> imageInit, int expectedResult ) throws FeatureCalcException {
 		assertResultTolerance(
 			message,
 			feature,
@@ -70,7 +74,7 @@ public class FeatureTestCalculator {
 		FeatureInitParams initParams,
 		double expectedResult,
 		double delta
-	) throws FeatureCalcException, InitException {
+	) throws FeatureCalcException {
 		double res = FeatureTestCalculator.calcSequentialSession(
 			feature,
 			params,
@@ -79,10 +83,15 @@ public class FeatureTestCalculator {
 		assertEquals(message, expectedResult, res, 1e-20);
 	}
 	
-	private static <T extends FeatureCalcParams> double calcSequentialSession( Feature<T> feature, T params, FeatureInitParams initParams ) throws FeatureCalcException, InitException {
-		SequentialSession<T> session = new SequentialSession<>(feature);
-		session.start( initParams, new SharedFeatureSet<>(), LoggingFixtures.simpleLogErrorReporter() );
-		ResultsVector rv = session.calcOne(params);
-		return rv.get(0);
+	private static <T extends FeatureCalcParams> double calcSequentialSession( Feature<T> feature, T params, FeatureInitParams initParams ) throws FeatureCalcException {
+		
+		FeatureCalculatorSingle<T> calculator = SessionFactory.createAndStart(
+			feature,
+			initParams,
+			new SharedFeatureSet<>(),
+			LoggingFixtures.simpleLogErrorReporter()
+		);
+		
+		return calculator.calcOne(params);
 	}
 }

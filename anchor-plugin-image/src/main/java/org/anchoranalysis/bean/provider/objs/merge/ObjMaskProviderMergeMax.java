@@ -32,7 +32,6 @@ import org.anchoranalysis.feature.session.calculator.FeatureCalculatorSingle;
 
 import org.anchoranalysis.image.feature.evaluator.EvaluateSingleObjMask;
 import org.anchoranalysis.image.feature.objmask.FeatureObjMaskParams;
-import org.anchoranalysis.image.feature.session.FeatureSessionCreateParamsSinglePairMerged;
 
 // Merges with the object that maximises a feature
 public class ObjMaskProviderMergeMax extends ObjMaskProviderMergeWithFeature {

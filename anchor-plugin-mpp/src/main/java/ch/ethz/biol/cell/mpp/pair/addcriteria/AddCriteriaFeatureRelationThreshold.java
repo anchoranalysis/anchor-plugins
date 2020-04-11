@@ -41,7 +41,7 @@ import org.anchoranalysis.feature.cache.CacheableParams;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
-import org.anchoranalysis.feature.session.SequentialSession;
+import org.anchoranalysis.feature.session.calculator.FeatureCalculatorMulti;
 import org.anchoranalysis.image.extent.ImageDim;
 
 public class AddCriteriaFeatureRelationThreshold extends AddCriteriaPair {
@@ -61,7 +61,7 @@ public class AddCriteriaFeatureRelationThreshold extends AddCriteriaPair {
 	@BeanField
 	private RelationBean relation;
 	// END BEAN PROPERTIES
-
+	
 	@Override
 	public boolean paramsEquals(Object other) {
 		return false;
@@ -72,7 +72,7 @@ public class AddCriteriaFeatureRelationThreshold extends AddCriteriaPair {
 		PxlMarkMemo mark1,
 		PxlMarkMemo mark2,
 		ImageDim dim,
-		SequentialSession<NRGElemPairCalcParams> session,
+		FeatureCalculatorMulti<NRGElemPairCalcParams> session,
 		boolean use3d
 	) throws IncludeMarksFailureException {
 		
