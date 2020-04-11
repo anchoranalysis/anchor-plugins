@@ -55,7 +55,7 @@ public class MedianConnectedComponentFeature extends FeatureStack {
 	
 	// START BEAN PROPERTIES
 	@BeanField
-	private Feature item;
+	private Feature<FeatureObjMaskParams> item;
 	
 	@BeanField
 	private int nrgChnlIndex = 0;
@@ -112,11 +112,11 @@ public class MedianConnectedComponentFeature extends FeatureStack {
 		return paramsObj;
 	}
 
-	public Feature getItem() {
+	public Feature<FeatureObjMaskParams> getItem() {
 		return item;
 	}
 
-	public void setItem(Feature item) {
+	public void setItem(Feature<FeatureObjMaskParams> item) {
 		this.item = item;
 	}
 

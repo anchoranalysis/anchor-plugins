@@ -33,7 +33,6 @@ import org.anchoranalysis.anchor.mpp.feature.nrg.elem.NRGElemIndCalcParamsDescri
 import org.anchoranalysis.feature.bean.operator.FeatureSingleElem;
 import org.anchoranalysis.feature.cache.CacheableParams;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
 import org.anchoranalysis.feature.params.FeatureParamsDescriptor;
 
 public class AsMark extends FeatureSingleElem<NRGElemIndCalcParams,FeatureMarkParams> {

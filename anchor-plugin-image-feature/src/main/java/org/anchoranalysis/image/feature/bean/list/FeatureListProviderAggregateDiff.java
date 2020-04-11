@@ -29,7 +29,6 @@ package org.anchoranalysis.image.feature.bean.list;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.operator.FeatureListElem;
 import org.anchoranalysis.feature.bean.operator.Sum;
-import org.anchoranalysis.image.feature.objmask.FeatureObjMaskParams;
 import org.anchoranalysis.image.feature.objmask.pair.merged.FeatureObjMaskPairMergedParams;
 
 import ch.ethz.biol.cell.mpp.nrg.feature.operator.MultiplyByConstant;

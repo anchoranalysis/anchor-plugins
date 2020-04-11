@@ -47,7 +47,7 @@ public class MeanFromAll extends NRGElemAll {
 
 	// START BEAN PROPERTIES
 	@BeanField
-	private Feature item;
+	private Feature<NRGElemIndCalcParams> item;
 	// END BEAN PROPERTIES
 	
 	@Override
@@ -87,11 +87,11 @@ public class MeanFromAll extends NRGElemAll {
 		return paramsInd;
 	}
 
-	public Feature getItem() {
+	public Feature<NRGElemIndCalcParams> getItem() {
 		return item;
 	}
 
-	public void setItem(Feature item) {
+	public void setItem(Feature<NRGElemIndCalcParams> item) {
 		this.item = item;
 	}
 }

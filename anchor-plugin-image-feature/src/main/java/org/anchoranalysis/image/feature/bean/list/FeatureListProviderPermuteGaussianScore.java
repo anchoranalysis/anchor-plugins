@@ -1,5 +1,7 @@
 package org.anchoranalysis.image.feature.bean.list;
 
+
+
 /*-
  * #%L
  * anchor-plugin-image-feature
@@ -42,7 +44,7 @@ public class FeatureListProviderPermuteGaussianScore extends FeatureListProvider
 	private static final long serialVersionUID = 1L;
 
 	public FeatureListProviderPermuteGaussianScore() {
-		super( ()-> new GaussianScore(), 0, 1 );
+		super( ()-> new GaussianScore<>(), 0, 1 );
 	}
 
 

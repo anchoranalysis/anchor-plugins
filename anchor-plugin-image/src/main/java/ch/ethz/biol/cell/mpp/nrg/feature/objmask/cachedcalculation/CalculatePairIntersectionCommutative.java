@@ -31,7 +31,6 @@ import org.anchoranalysis.core.cache.ExecuteException;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.feature.cachedcalculation.CachedCalculation;
 import org.anchoranalysis.feature.cachedcalculation.CachedCalculationCastParams;
-import org.anchoranalysis.feature.session.cache.FeatureSessionCacheRetriever;
 import org.anchoranalysis.feature.session.cache.ICachedCalculationSearch;
 import org.anchoranalysis.feature.session.cache.NullCachedCalculationSearch;
 import org.anchoranalysis.image.feature.objmask.pair.FeatureObjMaskPairParams;

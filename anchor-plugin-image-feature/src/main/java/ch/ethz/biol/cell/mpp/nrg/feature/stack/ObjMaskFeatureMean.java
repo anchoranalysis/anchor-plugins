@@ -27,120 +27,19 @@ package ch.ethz.biol.cell.mpp.nrg.feature.stack;
  */
 
 
-import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.bean.annotation.SkipInit;
-import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.core.error.InitException;
-import org.anchoranalysis.feature.bean.Feature;
-import org.anchoranalysis.feature.cache.CacheableParams;
-import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
-import org.anchoranalysis.image.feature.bean.FeatureStack;
-import org.anchoranalysis.image.feature.objmask.FeatureObjMaskParams;
-import org.anchoranalysis.image.feature.stack.FeatureStackParams;
-import org.anchoranalysis.image.init.ImageInitParams;
-import org.anchoranalysis.image.objmask.ObjMask;
-import org.anchoranalysis.image.objmask.ObjMaskCollection;
-
 import cern.colt.list.DoubleArrayList;
 import cern.jet.stat.Descriptive;
 
 // Calculates the mean of a feature applied to each connected component
-public class ObjMaskFeatureMean extends FeatureStack {
+public class ObjMaskFeatureMean extends ObjMaskFeatureFromStack {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	// START BEAN PROPERTIES
-	@BeanField
-	private Feature item;
-	
-	@BeanField
-	@SkipInit
-	private ObjMaskProvider objs;
-	
-	@BeanField
-	private double quantile = 0.5;
-	// END BEAN PROPERTIES
-	
 	@Override
-	public double calcCast(CacheableParams<FeatureStackParams> paramsCacheable) throws FeatureCalcException {
-			
-		ObjMaskCollection objsCollection = createObjs(
-			paramsCacheable.getParams().getSharedObjs()
-		);
-		
-		DoubleArrayList featureVals = new DoubleArrayList();
-		
-		// Calculate a feature on each obj mask
-		for( int i=0; i<objsCollection.size(); i++) {
-			
-			ObjMask om = objsCollection.get(i);
-
-			double val = paramsCacheable.calcChangeParams(
-				item,
-				p -> deriveParams(p, om),
-				"objs" + i
-			);
-			featureVals.add(val);
-		}
-		
+	protected double deriveStatistic(DoubleArrayList featureVals) {
 		return Descriptive.mean(featureVals);
 	}
-	
-	private ObjMaskCollection createObjs( ImageInitParams initParams ) throws FeatureCalcException {
-		
-		try {
-			objs.initRecursive(initParams, getLogger() );
-		} catch (InitException e1) {
-			throw new FeatureCalcException(e1);
-		}
-		
-		try {
-			return objs.create();
-		} catch (CreateException e1) {
-			throw new FeatureCalcException(e1);
-		}
-	}
-	
-	private static FeatureObjMaskParams deriveParams( FeatureStackParams params, ObjMask om ) {
-		FeatureObjMaskParams paramsObj = new FeatureObjMaskParams();
-		paramsObj.setNrgStack( params.getNrgStack() );
-		paramsObj.setObjMask(om);
-		return paramsObj;
-	}
-	
-
-	public Feature getItem() {
-		return item;
-	}
-
-	public void setItem(Feature item) {
-		this.item = item;
-	}
-
-
-	public ObjMaskProvider getObjs() {
-		return objs;
-	}
-
-
-	public void setObjs(ObjMaskProvider objs) {
-		this.objs = objs;
-	}
-
-
-	public double getQuantile() {
-		return quantile;
-	}
-
-
-	public void setQuantile(double quantile) {
-		this.quantile = quantile;
-	}
-
-
-
 }

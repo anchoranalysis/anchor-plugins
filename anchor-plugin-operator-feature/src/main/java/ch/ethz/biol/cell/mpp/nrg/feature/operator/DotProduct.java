@@ -39,7 +39,7 @@ import org.anchoranalysis.feature.params.FeatureParamsDescriptor;
 import org.anchoranalysis.feature.params.ParamTypeUtilities;
 
 // converts a feature to a physical distance in a XY place that is isometric
-public class DotProduct extends Feature<FeatureCalcParams> {
+public class DotProduct<T extends FeatureCalcParams> extends Feature<T> {
 
 	/**
 	 * 
@@ -48,10 +48,10 @@ public class DotProduct extends Feature<FeatureCalcParams> {
 	
 	// START BEAN PROPERTIES
 	@BeanField
-	private VectorFromFeature vector1;
+	private VectorFromFeature<T> vector1;
 	
 	@BeanField
-	private VectorFromFeature vector2;	
+	private VectorFromFeature<T> vector2;	
 	
 	// If TRUE, the opposite direction of the vector is also considered, and the smallest angle is taken
 	@BeanField
@@ -59,7 +59,7 @@ public class DotProduct extends Feature<FeatureCalcParams> {
 	// END BEAN PROPERTIES
 	
 	@Override
-	public double calc(CacheableParams<FeatureCalcParams> params) throws FeatureCalcException {
+	public double calc(CacheableParams<T> params) throws FeatureCalcException {
 		
 		Vector3d vec1 = vector1.calc(params);
 		Vector3d vec2 = vector2.calc(params);
@@ -85,39 +85,44 @@ public class DotProduct extends Feature<FeatureCalcParams> {
 		}
 	}
 
-	public VectorFromFeature getVector1() {
-		return vector1;
-	}
-
-	public void setVector1(VectorFromFeature vector1) {
-		this.vector1 = vector1;
-	}
-
-	public VectorFromFeature getVector2() {
-		return vector2;
-	}
-
-	public void setVector2(VectorFromFeature vector2) {
-		this.vector2 = vector2;
-	}
-
 	@Override
 	public FeatureParamsDescriptor paramType() throws FeatureCalcException {
 		return ParamTypeUtilities.paramTypeForTwo(vector1.paramType(), vector2.paramType());
 	}
 
 	@Override
-	public void addAdditionallyUsedFeatures(FeatureList out) {
+	public void addAdditionallyUsedFeatures(FeatureList<FeatureCalcParams> out) {
 		super.addAdditionallyUsedFeatures(out);
-		out.add( vector1.getX() );
-		out.add( vector1.getY() );
-		out.add( vector1.getZ() );
+		addUpcast( out, vector1.getX() );
+		addUpcast( out, vector1.getY() );
+		addUpcast( out, vector1.getZ() );
 		
-		out.add( vector2.getX() );
-		out.add( vector2.getY() );
-		out.add( vector2.getZ() );
+		addUpcast( out, vector2.getX() );
+		addUpcast( out, vector2.getY() );
+		addUpcast( out, vector2.getZ() );
+	}
+	
+	private void addUpcast( FeatureList<FeatureCalcParams> list, Feature<T> feature ) {
+		list.add( feature.upcast() );
 	}
 
+
+	public VectorFromFeature<T> getVector1() {
+		return vector1;
+	}
+
+	public void setVector1(VectorFromFeature<T> vector1) {
+		this.vector1 = vector1;
+	}
+
+	public VectorFromFeature<T> getVector2() {
+		return vector2;
+	}
+
+	public void setVector2(VectorFromFeature<T> vector2) {
+		this.vector2 = vector2;
+	}
+	
 	public boolean isIncludeOppositeDirection() {
 		return includeOppositeDirection;
 	}

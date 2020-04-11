@@ -28,7 +28,6 @@ import org.anchoranalysis.feature.bean.operator.FeatureGenericSingleElem;
  * #L%
  */
 
-import org.anchoranalysis.feature.bean.operator.FeatureSingleElem;
 import org.anchoranalysis.feature.cache.CacheableParams;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.calc.params.FeatureCalcParams;

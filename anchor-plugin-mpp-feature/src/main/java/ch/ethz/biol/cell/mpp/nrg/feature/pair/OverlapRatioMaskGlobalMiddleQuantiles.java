@@ -1,8 +1,6 @@
 package ch.ethz.biol.cell.mpp.nrg.feature.pair;
 
-import org.anchoranalysis.anchor.mpp.feature.bean.nrg.elem.NRGElemPair;
 import org.anchoranalysis.anchor.mpp.feature.nrg.elem.NRGElemPairCalcParams;
-import org.anchoranalysis.anchor.mpp.mark.GlobalRegionIdentifiers;
 import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
 
 /*
@@ -41,9 +39,7 @@ import org.anchoranalysis.feature.cache.CacheableParams;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.voxel.statistics.VoxelStatistics;
 
-import ch.ethz.biol.cell.mpp.nrg.cachedcalculation.OverlapCalculationMaskGlobalMiddleQuantiles;
-
-public class OverlapRatioMaskGlobalMiddleQuantiles extends NRGElemPair {
+public class OverlapRatioMaskGlobalMiddleQuantiles extends OverlapMaskQuantiles {
 
 	/**
 	 * 
@@ -52,22 +48,7 @@ public class OverlapRatioMaskGlobalMiddleQuantiles extends NRGElemPair {
 	
 	// START BEAN PROPERTIES
 	@BeanField
-	private int regionID = GlobalRegionIdentifiers.SUBMARK_INSIDE;
-	
-	@BeanField
-	private int nrgIndex = 0;
-	
-	@BeanField
-	private int maskValue = 255;
-	
-	@BeanField
 	private boolean useMax = false;
-	
-	@BeanField
-	private double quantileLow = 0.0;
-	
-	@BeanField
-	private double quantileHigh = 1.0;
 	// END BEAN PROPERTIES
 	
 	private RelationBean relationToThreshold = new EqualToBean();
@@ -80,27 +61,15 @@ public class OverlapRatioMaskGlobalMiddleQuantiles extends NRGElemPair {
 		 
 		NRGElemPairCalcParams params = paramsCacheable.getParams();
 		
-		try {
-			double overlap = paramsCacheable.calc(
-				new OverlapCalculationMaskGlobalMiddleQuantiles(
-					regionID,
-					nrgIndex,
-					(byte) maskValue,
-					quantileLow,
-					quantileHigh
-				)		
-			);
-			
-			return calcOverlapRatioMin(
-				params.getObj1(),
-				params.getObj2(),
-				overlap,
-				regionID,
-				false
-			);
-		} catch (ExecuteException e) {
-			throw new FeatureCalcException(e);
-		}							
+		double overlap = overlapWithQuantiles(paramsCacheable);
+		
+		return calcOverlapRatioMin(
+			params.getObj1(),
+			params.getObj2(),
+			overlap,
+			getRegionID(),
+			false
+		);
 	}
 	
 	public static double calcMinVolume(
@@ -151,32 +120,8 @@ public class OverlapRatioMaskGlobalMiddleQuantiles extends NRGElemPair {
 		
 		RelationToValue relation = relationToThreshold.create();
 		
-		double volume = useMax ? calcMaxVolume( obj1, obj2, regionID, relation, nrgIndex, maskValue ) : calcMinVolume( obj1, obj2, regionID, relation, nrgIndex, maskValue );
+		double volume = useMax ? calcMaxVolume( obj1, obj2, regionID, relation ) : calcMinVolume( obj1, obj2, regionID, relation );
 		return overlap / volume;
-	}
-
-	public int getRegionID() {
-		return regionID;
-	}
-
-	public void setRegionID(int regionID) {
-		this.regionID = regionID;
-	}
-
-	public int getNrgIndex() {
-		return nrgIndex;
-	}
-
-	public void setNrgIndex(int nrgIndex) {
-		this.nrgIndex = nrgIndex;
-	}
-
-	public int getMaskValue() {
-		return maskValue;
-	}
-
-	public void setMaskValue(int maskValue) {
-		this.maskValue = maskValue;
 	}
 
 	public boolean isUseMax() {
@@ -186,21 +131,4 @@ public class OverlapRatioMaskGlobalMiddleQuantiles extends NRGElemPair {
 	public void setUseMax(boolean useMax) {
 		this.useMax = useMax;
 	}
-
-	public double getQuantileLow() {
-		return quantileLow;
-	}
-
-	public void setQuantileLow(double quantileLow) {
-		this.quantileLow = quantileLow;
-	}
-
-	public double getQuantileHigh() {
-		return quantileHigh;
-	}
-
-	public void setQuantileHigh(double quantileHigh) {
-		this.quantileHigh = quantileHigh;
-	}
-
 }

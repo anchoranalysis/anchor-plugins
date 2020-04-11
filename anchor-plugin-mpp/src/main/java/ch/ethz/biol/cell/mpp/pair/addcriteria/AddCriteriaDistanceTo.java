@@ -110,8 +110,8 @@ public class AddCriteriaDistanceTo extends AddCriteriaPair {
 	}
 
 	@Override
-	public FeatureList orderedListOfFeatures() {
-		return new FeatureList();
+	public FeatureList<NRGElemPairCalcParams> orderedListOfFeatures() {
+		return new FeatureList<>();
 	}
 
 	

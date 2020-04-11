@@ -32,6 +32,7 @@ package ch.ethz.biol.cell.mpp.nrg.feature.objmask;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.cachedcalculation.CachedCalculation;
 import org.anchoranalysis.feature.session.cache.FeatureSessionCacheRetriever;
+import org.anchoranalysis.image.feature.objmask.FeatureObjMaskParams;
 import org.anchoranalysis.image.objmask.ObjMask;
 
 import ch.ethz.biol.cell.mpp.nrg.feature.objmask.cachedcalculation.CalculateErosion;
@@ -52,7 +53,7 @@ public class Erode extends DerivedObjMask {
 	// END BEAN PROPERTIES
 
 	@Override
-	protected CachedCalculation<ObjMask> createCachedCalculation( FeatureSessionCacheRetriever session ) {
+	protected CachedCalculation<ObjMask> createCachedCalculation( FeatureSessionCacheRetriever<FeatureObjMaskParams> session ) {
 		return CalculateErosion.createFromCache(session, iterations, do3D);
 	}
 	
