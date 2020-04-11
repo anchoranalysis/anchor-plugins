@@ -96,7 +96,7 @@ public class IncreaseFeatureCondition implements AfterCondition {
 	}
 	
 	private double calc(ObjMask om) throws FeatureCalcException {
-		return session.calc(
+		return session.calcOne(
 			new FeatureObjMaskParams(om)
 		);
 	}

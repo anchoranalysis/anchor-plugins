@@ -135,7 +135,7 @@ public class FeatureListMPPTest {
 	
 	private static void assertCfg( SequentialSession<FeatureCfgParams> session, Cfg cfg, double expected ) throws CreateException, FeatureCalcException {
 		assertCalc(
-			session.calc(
+			session.calcOne(
 				new FeatureCfgParams(cfg, DIM )
 			),
 			expected
@@ -143,7 +143,7 @@ public class FeatureListMPPTest {
 	}
 
 	private static void assertMark( SequentialSession<FeatureMarkParams> session, Mark mark, double expected1, double expected2, double expected3 ) throws CreateException, FeatureCalcException {
-		ResultsVector rv = session.calc(
+		ResultsVector rv = session.calcOne(
 			new FeatureMarkParams(mark, RES )
 		); 
 		ResultsVectorTestUtilities.assertCalc(
@@ -165,10 +165,10 @@ public class FeatureListMPPTest {
 		
 		SequentialSession<FeatureCalcParams> session = createAndStart(ConstantsInListFixture.create());
 		
-		ResultsVector rv1 = session.calc(params1);
+		ResultsVector rv1 = session.calcOne(params1);
 		ConstantsInListFixture.checkResultVector(rv1);
 		
-		ResultsVector rv2 = session.calc(params2);
+		ResultsVector rv2 = session.calcOne(params2);
 		ConstantsInListFixture.checkResultVector(rv2);
 	}
 }

@@ -56,7 +56,7 @@ public class FeatureValueNRGElemIndAbove extends FeatureValueCheckMark<NRGElemIn
 			
 			NRGElemIndCalcParams params = new NRGElemIndCalcParams(pmm,	nrgStack);
 			
-			double nrg = session.calc( params ).get(0);
+			double nrg = session.calcOne( params ).get(0);
 			
 			if (nrg > minVal) {
 				return true;

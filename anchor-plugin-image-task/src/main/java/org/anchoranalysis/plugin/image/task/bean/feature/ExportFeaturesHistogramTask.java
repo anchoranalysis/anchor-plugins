@@ -169,7 +169,7 @@ public class ExportFeaturesHistogramTask extends ExportFeaturesStoreTask<FileInp
 		);
 		
 		FeatureHistogramParams params = new FeatureHistogramParams(hist, null);
-		return session.calc(params);
+		return session.calcOne(params);
 	}
 
 	private static Histogram readHistogramFromCsv( FileInput input ) throws IOException {

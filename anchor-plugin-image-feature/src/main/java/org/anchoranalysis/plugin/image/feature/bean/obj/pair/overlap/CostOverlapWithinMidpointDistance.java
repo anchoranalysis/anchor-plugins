@@ -36,7 +36,7 @@ import org.anchoranalysis.image.extent.ImageRes;
 import org.anchoranalysis.image.feature.bean.objmask.pair.FeatureObjMaskPair;
 import org.anchoranalysis.image.feature.objmask.pair.FeatureObjMaskPairParams;
 import org.anchoranalysis.image.orientation.DirectionVector;
-import org.anchoranalysis.plugin.image.feature.objmask.pair.overlap.OverlapRatioUtilities;
+import org.anchoranalysis.plugin.image.feature.obj.pair.overlap.OverlapRatioUtilities;
 
 public class CostOverlapWithinMidpointDistance extends FeatureObjMaskPair {
 

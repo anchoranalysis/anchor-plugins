@@ -1,15 +1,12 @@
-package ch.ethz.biol.cell.mpp.mark.check;
+package org.anchoranalysis.plugin.image.feature.bean.obj.pair.order;
 
-import org.anchoranalysis.anchor.mpp.bean.regionmap.RegionMap;
-import org.anchoranalysis.anchor.mpp.feature.bean.mark.FeatureMarkParams;
-import org.anchoranalysis.anchor.mpp.feature.error.CheckException;
-import org.anchoranalysis.anchor.mpp.mark.Mark;
 
-/*
+
+/*-
  * #%L
- * anchor-plugin-mpp
+ * anchor-plugin-image-feature
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -31,40 +28,20 @@ import org.anchoranalysis.anchor.mpp.mark.Mark;
  * #L%
  */
 
-
+import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.feature.nrg.NRGStackWithParams;
+import org.anchoranalysis.plugin.image.feature.bean.obj.pair.ParamsFixtureHelper;
+import org.junit.Test;
 
-public class FeatureValueMarkGreaterEqualThan extends FeatureValueCheckMark<FeatureMarkParams> {
-
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1086432241915811567L;
+public class RatioFirstToSecondTest {
 	
-	@Override
-	public boolean check(Mark mark, RegionMap regionMap, NRGStackWithParams nrgStack) throws CheckException {
+	@Test
+	public void testOverlapping() throws FeatureCalcException, InitException {
 		
-		if (session==null) {
-			throw new CheckException("No session initialized");
-		}
-		
-		try {
-			double nrg = session.calcOne(
-				new FeatureMarkParams(mark, nrgStack.getDimensions().getRes())
-			).get(0);
-			
-			if (nrg >= minVal) {
-				return true;
-			} else {
-				return false;
-			}
-			
-		} catch (FeatureCalcException e) {
-			throw new CheckException(
-				"Error calculating feature",
-				e
-			);
-		}
+		ParamsFixtureHelper.testSimpleDouble(
+			OrderHelper.addFeatureToOrder(new RatioFirstToSecond()),
+			0.8275154004106776
+		);
 	}
 }
+

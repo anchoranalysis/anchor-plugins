@@ -83,7 +83,7 @@ public class ObjMaskFilterFeatureRelationThreshold extends ObjMaskFilterByObject
 
 		double val;
 		try {
-			val = featureSession.calc(
+			val = featureSession.calcOne(
 				new FeatureObjMaskParams(om)
 			);
 		} catch (FeatureCalcException e) {

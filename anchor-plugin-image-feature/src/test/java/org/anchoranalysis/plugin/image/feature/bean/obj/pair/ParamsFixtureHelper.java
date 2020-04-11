@@ -3,6 +3,7 @@ package org.anchoranalysis.plugin.image.feature.bean.obj.pair;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.image.feature.objmask.pair.FeatureObjMaskPairParams;
 import org.anchoranalysis.test.feature.plugins.FeatureTestCalculator;
 import org.anchoranalysis.test.feature.plugins.FeatureTestCalculatorDuo;
 import org.anchoranalysis.test.feature.plugins.ParamsFixture;
@@ -24,7 +25,7 @@ public class ParamsFixtureHelper {
 	 * <p>Two conditions are tested - when the circles are the same-size, and when not</p>
 	 **/
 	public static void testTwoSizesOverlappingDouble(
-		Feature feature,
+		Feature<FeatureObjMaskPairParams> feature,
 		double expectedDifferentSize,
 		double expectedSameSize
 	) throws FeatureCalcException, InitException {
@@ -39,7 +40,7 @@ public class ParamsFixtureHelper {
 	 * <p>Two conditions are tested - when the circles are the same-size, and when not</p>
 	 */
 	public static void testTwoSizesOverlappingInt(
-		Feature feature,
+		Feature<FeatureObjMaskPairParams> feature,
 		int expectedSameSize,
 		int expectedDifferentSize
 	) throws FeatureCalcException, InitException {
@@ -49,14 +50,15 @@ public class ParamsFixtureHelper {
 	}
 	
 	/**
-	 * Simple test on a feature for an expected value for two-overlapping-circles of different sizes
+	 * Simple test on a feature for an expected value (of type int) for two-overlapping-circles of different sizes
+	 * 
 	 * @param feature
 	 * @param expected
 	 * @throws FeatureCalcException
 	 * @throws InitException
 	 */
-	public static void testSimple(
-		Feature feature,
+	public static void testSimpleInt(
+		Feature<FeatureObjMaskPairParams> feature,
 		int expected
 	) throws FeatureCalcException, InitException {
 		FeatureTestCalculator.assertIntResult(
@@ -67,7 +69,27 @@ public class ParamsFixtureHelper {
 		);
 	}
 	
-	private static void testOverlappingCirclesDoubleSize( Feature feature, double expected, boolean sameSize ) throws FeatureCalcException, InitException {
+	/**
+	 * Simple test on a feature for an expected value (of type double) for two-overlapping-circles of different sizes
+	 * 
+	 * @param feature
+	 * @param expected
+	 * @throws FeatureCalcException
+	 * @throws InitException
+	 */
+	public static void testSimpleDouble(
+		Feature<FeatureObjMaskPairParams> feature,
+		double expected
+	) throws FeatureCalcException, InitException {
+		FeatureTestCalculator.assertDoubleResult(
+			"simple",
+			feature,
+			ParamsFixture.twoOverlappingCircles(false),
+			expected
+		);
+	}
+	
+	private static void testOverlappingCirclesDoubleSize( Feature<FeatureObjMaskPairParams> feature, double expected, boolean sameSize ) throws FeatureCalcException, InitException {
 		FeatureTestCalculatorDuo.assertDoubleResult(
 			message(sameSize),
 			feature,
@@ -78,7 +100,7 @@ public class ParamsFixtureHelper {
 		);
 	}
 	
-	public static void testOverlappingCirclesIntSize( Feature feature, int expected, boolean sameSize ) throws FeatureCalcException, InitException {
+	public static void testOverlappingCirclesIntSize( Feature<FeatureObjMaskPairParams> feature, int expected, boolean sameSize ) throws FeatureCalcException, InitException {
 		FeatureTestCalculatorDuo.assertIntResult(
 			message(sameSize),
 			feature,

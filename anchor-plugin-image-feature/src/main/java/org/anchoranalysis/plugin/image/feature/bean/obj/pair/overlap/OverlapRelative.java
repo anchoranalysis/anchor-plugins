@@ -4,7 +4,7 @@ import org.anchoranalysis.feature.cache.CacheableParams;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.feature.bean.objmask.pair.FeatureObjMaskPair;
 import org.anchoranalysis.image.feature.objmask.pair.FeatureObjMaskPairParams;
-import org.anchoranalysis.plugin.image.feature.objmask.pair.overlap.OverlapRatioUtilities;
+import org.anchoranalysis.plugin.image.feature.obj.pair.overlap.OverlapRatioUtilities;
 
 
 /**

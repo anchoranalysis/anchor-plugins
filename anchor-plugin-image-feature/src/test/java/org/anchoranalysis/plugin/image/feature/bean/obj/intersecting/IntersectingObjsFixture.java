@@ -1,0 +1,67 @@
+package org.anchoranalysis.plugin.image.feature.bean.obj.intersecting;
+
+import org.anchoranalysis.core.geometry.Point2i;
+import org.anchoranalysis.image.objmask.ObjMask;
+import org.anchoranalysis.image.objmask.ObjMaskCollection;
+import org.anchoranalysis.test.feature.plugins.CircleObjMaskFixture;
+
+public class IntersectingObjsFixture {
+
+	private static final int INITIAL_MARGIN = 5;
+	
+	private static final int INITIAL_RADIUS = 5;
+	
+	private static final int RADIUS_INCR = 2;
+	
+	/**
+	 *  Generates a number of circles that intersect and don't intersect
+	 * 
+	 *  @param numIntersecting the number of circles that intersect that should be produced
+	 *  @param numNotIntersecting the number of circles that do not intersect that should be produced
+	 *  @param boolean sameSize iff TRUE all circles have the same radius (INITIAL_RAIDUS), otherwise the radius gradually increments
+	 * */
+	public static ObjMaskCollection generateIntersectingObjs( int numIntersecting, int numNotIntersecting, boolean sameSize ) {
+	
+		int radius = INITIAL_RADIUS;
+		
+		ObjMaskCollection out = new ObjMaskCollection();
+	
+		Point2i center = new Point2i( INITIAL_MARGIN + radius, INITIAL_MARGIN + radius);
+
+		// Keep on generating circles of radius 10 with centers radius*1.5 apart, so that they intersect
+		for( int i=0; i<numIntersecting; i++) {
+			out.add(
+				generateCircleAndShift(center, radius, 1.5)
+			);
+			if (!sameSize) {
+				radius += RADIUS_INCR;
+			}
+		}
+		
+		// Now generate at radius 3 apartment, so that they do not intersect
+		for( int i=0; i<numNotIntersecting; i++) {
+			out.add(
+				generateCircleAndShift(center, radius, 3)
+			);
+			
+			if (!sameSize) {
+				radius += RADIUS_INCR;
+			}
+		}
+		
+		// Make sure we haven't generated so many we've run out of the scene
+		assert( CircleObjMaskFixture.sceneContains(center) );
+		
+		return out;
+	}
+	
+	private static ObjMask generateCircleAndShift(Point2i center, int radius, double factor) {
+		ObjMask om = CircleObjMaskFixture.circleAt(center, radius);
+		
+		int shift = (int) (factor*radius);
+		center.incrX(shift);
+		center.incrY(shift);
+		
+		return om;
+	}
+}

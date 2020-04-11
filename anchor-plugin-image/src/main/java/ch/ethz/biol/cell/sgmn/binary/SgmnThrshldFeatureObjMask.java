@@ -83,7 +83,7 @@ public class SgmnThrshldFeatureObjMask extends BinarySgmn {
 				throw new SgmnFailedException("objMaskProvider returned more than 1 object. Exactly 1 required");
 			}
 		
-			return session.calc(
+			return session.calcOne(
 				new FeatureObjMaskParams(omc.get(0))
 			);
 			

@@ -26,7 +26,7 @@ public abstract class FeatureObjMaskPairOrder extends FeatureObjMaskPair {
 	
 	// START BEAN PROPERTIES
 	@BeanField
-	private Feature feature;
+	private Feature<FeatureObjMaskParams> feature;
 	// END BEAN PROPERTIES
 		
 	protected double valueFromObj1( CacheableParams<FeatureObjMaskPairParams> params ) throws FeatureCalcException {
@@ -62,11 +62,11 @@ public abstract class FeatureObjMaskPairOrder extends FeatureObjMaskPair {
 		return paramsNew;
 	}
 	
-	public Feature getFeature() {
+	public Feature<FeatureObjMaskParams> getFeature() {
 		return feature;
 	}
 
-	public void setFeature(Feature feature) {
+	public void setFeature(Feature<FeatureObjMaskParams> feature) {
 		this.feature = feature;
 	}
 }

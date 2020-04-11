@@ -8,11 +8,11 @@ import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
 /** Tests that consider two possibilities: positive and negative */
 public class FeatureTestCalculatorDuo {
 
-	public static void assertDoubleResult(
+	public static <T extends FeatureCalcParams> void assertDoubleResult(
 		String message,
-		Feature feature,
-		FeatureCalcParams paramsPositive,
-		FeatureCalcParams paramsNegative,
+		Feature<T> feature,
+		T paramsPositive,
+		T paramsNegative,
 		double expectedResultPositive,
 		double expectedResultNegative
 	) throws FeatureCalcException, InitException {
@@ -30,11 +30,11 @@ public class FeatureTestCalculatorDuo {
 		);
 	}
 	
-	public static void assertIntResult(
+	public static <T extends FeatureCalcParams> void assertIntResult(
 		String message,
-		Feature feature,
-		FeatureCalcParams paramsPositive,
-		FeatureCalcParams paramsNegative,
+		Feature<T> feature,
+		T paramsPositive,
+		T paramsNegative,
 		int expectedResultPositive,
 		int expectedResultNegative
 	) throws FeatureCalcException, InitException {

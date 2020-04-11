@@ -149,7 +149,7 @@ class HelperImageFeatureCalculator {
 			session.start( new FeatureInitParams(), sharedFeatures, logErrorReporter );
 			
 			FeatureStackParams params = new FeatureStackParams(stack.getNrgStack());
-			return session.calc(params);
+			return session.calcOne(params);
 		} catch (InitException e) {
 			throw new FeatureCalcException(e);
 		}
