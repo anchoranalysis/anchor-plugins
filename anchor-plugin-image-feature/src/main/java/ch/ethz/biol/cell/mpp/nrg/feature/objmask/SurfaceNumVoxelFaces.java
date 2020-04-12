@@ -58,7 +58,7 @@ public class SurfaceNumVoxelFaces extends FeatureObjMask {
 	/// END BEAN PROPERTIES
 	
 	@Override
-	public double calcCast(CacheableParams<FeatureObjMaskParams> params) throws FeatureCalcException {
+	public double calc(CacheableParams<FeatureObjMaskParams> params) throws FeatureCalcException {
 		try {
 			return params.calc(
 				new CalculateOutlineNumVoxelFaces(mip, suppress3D)		

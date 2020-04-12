@@ -56,7 +56,7 @@ public class FeatureAsIndividualProportionate extends NRGElemPairWithFeature {
 	}
 
 	@Override
-	public double calcCast( CacheableParams<NRGElemPairCalcParams> params ) throws FeatureCalcException {
+	public double calc( CacheableParams<NRGElemPairCalcParams> params ) throws FeatureCalcException {
 		
 		CacheableParams<NRGElemIndCalcParams> params1 = deriveParams(params, p -> p.getObj1(), "obj1");
 		CacheableParams<NRGElemIndCalcParams> params2 = deriveParams(params, p -> p.getObj2(), "obj2");

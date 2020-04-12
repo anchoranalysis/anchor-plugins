@@ -61,7 +61,7 @@ public class IntensityGradientMeanFromMultiple extends IntensityGradientBase {
 	// END BEAN PROPERTIES
 		
 	@Override
-	public double calcCast(CacheableParams<FeatureObjMaskParams> params) throws FeatureCalcException {
+	public double calc(CacheableParams<FeatureObjMaskParams> params) throws FeatureCalcException {
 		
 		AxisType axisType = AxisTypeUtilities.createFromString( axis );
 		

@@ -53,7 +53,7 @@ public class IntensityRange extends FeatureObjMask {
 	// END BEAN PROPERTIES
 	
 	@Override
-	public double calcCast(CacheableParams<FeatureObjMaskParams> paramsCacheable) throws FeatureCalcException {
+	public double calc(CacheableParams<FeatureObjMaskParams> paramsCacheable) throws FeatureCalcException {
 		
 		FeatureObjMaskParams params = paramsCacheable.getParams();
 		

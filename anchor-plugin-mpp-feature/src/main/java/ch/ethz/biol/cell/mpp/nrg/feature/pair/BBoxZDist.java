@@ -53,7 +53,7 @@ public class BBoxZDist extends NRGElemPair {
 	// END BEAN PROPERTIES
 	
 	@Override
-	public double calcCast(CacheableParams<NRGElemPairCalcParams> paramsCacheable)
+	public double calc(CacheableParams<NRGElemPairCalcParams> paramsCacheable)
 			throws FeatureCalcException {
 
 		NRGElemPairCalcParams params = paramsCacheable.getParams();

@@ -58,7 +58,7 @@ public class Overlap extends NRGElemPair {
 	}
 		
 	@Override
-	public double calcCast( CacheableParams<NRGElemPairCalcParams> params ) throws FeatureCalcException {
+	public double calc( CacheableParams<NRGElemPairCalcParams> params ) throws FeatureCalcException {
 		try {
 			return params.calc( overlapCalculation() );
 		} catch (ExecuteException e) {

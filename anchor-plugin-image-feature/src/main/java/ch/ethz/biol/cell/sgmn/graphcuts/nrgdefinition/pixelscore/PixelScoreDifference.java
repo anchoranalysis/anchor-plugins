@@ -93,7 +93,7 @@ public class PixelScoreDifference extends PixelScore {
 	}
 	
 	@Override
-	public double calcCast(CacheableParams<PixelScoreFeatureCalcParams> params)
+	public double calc(CacheableParams<PixelScoreFeatureCalcParams> params)
 			throws FeatureCalcException {
 		return calcDiffFromParams(
 			params,

@@ -47,7 +47,7 @@ public class SubtractSecondFromFirst extends FeatureObjMaskPairOrder {
 	private static final long serialVersionUID = 1L;
 
 	@Override
-	public double calcCast(CacheableParams<FeatureObjMaskPairParams> params)
+	public double calc(CacheableParams<FeatureObjMaskPairParams> params)
 			throws FeatureCalcException {
 		return valueFromObj1(params) - valueFromObj2(params); 
 	}

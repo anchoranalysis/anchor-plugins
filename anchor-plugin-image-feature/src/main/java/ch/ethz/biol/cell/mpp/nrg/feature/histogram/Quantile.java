@@ -46,7 +46,7 @@ public class Quantile extends FeatureHistogram {
 	// END BEAN PROPERTIES
 	
 	@Override
-	public double calcCast(CacheableParams<FeatureHistogramParams> params)
+	public double calc(CacheableParams<FeatureHistogramParams> params)
 			throws FeatureCalcException {
 		return params.getParams().getHistogram().quantile(quantile);
 	}

@@ -40,7 +40,7 @@ public class MinDistByDim extends NRGElemPair {
 	private static final long serialVersionUID = 1L;
 
 	@Override
-	public double calcCast( CacheableParams<NRGElemPairCalcParams> paramsCacheable ) {
+	public double calc( CacheableParams<NRGElemPairCalcParams> paramsCacheable ) {
 		
 		NRGElemPairCalcParams params = paramsCacheable.getParams();
 				

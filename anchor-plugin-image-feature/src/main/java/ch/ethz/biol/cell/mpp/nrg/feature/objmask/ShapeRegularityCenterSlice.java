@@ -42,7 +42,7 @@ public class ShapeRegularityCenterSlice extends FeatureObjMask {
 	private static final long serialVersionUID = 1L;
 
 	@Override
-	public double calcCast(CacheableParams<FeatureObjMaskParams> paramsCacheable) throws FeatureCalcException {
+	public double calc(CacheableParams<FeatureObjMaskParams> paramsCacheable) throws FeatureCalcException {
 				
 		FeatureObjMaskParams params = paramsCacheable.getParams();
 		

@@ -66,7 +66,6 @@ public class AsObjMaskPixelsHigh extends FeatureSingleElem<NRGElemIndCalcParams,
 	@Override
 	public double calc(CacheableParams<NRGElemIndCalcParams> params) throws FeatureCalcException {
 		return params
-			.downcastParams(NRGElemIndCalcParams.class)
 			.calcChangeParams(
 				getItem(),
 				p -> createObjParams(p),

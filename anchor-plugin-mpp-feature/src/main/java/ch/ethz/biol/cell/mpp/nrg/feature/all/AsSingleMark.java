@@ -44,13 +44,7 @@ public class AsSingleMark extends FeatureSingleElem<NRGElemAllCalcParams,Feature
 	private static final long serialVersionUID = 1L;
 
 	@Override
-	public double calc( CacheableParams<NRGElemAllCalcParams> params ) throws FeatureCalcException {
-		return calcCast(
-			params.downcastParams(NRGElemAllCalcParams.class)
-		);
-	}
-	
-	private double calcCast(CacheableParams<NRGElemAllCalcParams> params) throws FeatureCalcException {
+	public double calc(CacheableParams<NRGElemAllCalcParams> params) throws FeatureCalcException {
 		
 		MemoMarks list = params.getParams().getPxlPartMemo();
 		

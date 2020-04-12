@@ -81,7 +81,7 @@ public class IntensityMeanShellTwoStage extends FeatureObjMask {
 	}
 		
 	@Override
-	public double calcCast(CacheableParams<FeatureObjMaskParams> params) throws FeatureCalcException {
+	public double calc(CacheableParams<FeatureObjMaskParams> params) throws FeatureCalcException {
 		
 		Chnl chnl = params.getParams().getNrgStack().getNrgStack().getChnl(nrgIndex);
 		

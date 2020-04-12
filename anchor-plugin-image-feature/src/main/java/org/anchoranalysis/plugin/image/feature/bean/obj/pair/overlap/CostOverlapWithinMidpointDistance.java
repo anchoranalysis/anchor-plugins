@@ -57,7 +57,7 @@ public class CostOverlapWithinMidpointDistance extends FeatureObjMaskPair {
 	// END BEAN PROPERTIES
 	
 	@Override
-	public double calcCast(CacheableParams<FeatureObjMaskPairParams> paramsCacheable)
+	public double calc(CacheableParams<FeatureObjMaskPairParams> paramsCacheable)
 			throws FeatureCalcException {
 
 		FeatureObjMaskPairParams params = paramsCacheable.getParams();

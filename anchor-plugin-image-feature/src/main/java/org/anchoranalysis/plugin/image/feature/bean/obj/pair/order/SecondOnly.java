@@ -46,7 +46,7 @@ public class SecondOnly extends FeatureObjMaskPairOrder {
 	private static final long serialVersionUID = 1L;
 	
 	@Override
-	public double calcCast(CacheableParams<FeatureObjMaskPairParams> params)
+	public double calc(CacheableParams<FeatureObjMaskPairParams> params)
 			throws FeatureCalcException {
 		return valueFromObj2(params);
 	}

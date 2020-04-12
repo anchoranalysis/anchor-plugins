@@ -83,7 +83,7 @@ public class FeatureObjMaskPairIntersection extends FeatureObjMaskPair {
 	private static final String CACHE_OBJ2 = "obj2";
 		
 	@Override
-	public double calcCast(CacheableParams<FeatureObjMaskPairParams> params) throws FeatureCalcException {
+	public double calc(CacheableParams<FeatureObjMaskPairParams> params) throws FeatureCalcException {
 		
 		ObjMask omIntersection = createIntersection(params);
 		

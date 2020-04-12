@@ -69,7 +69,7 @@ public class ThresholdHistogram extends FeatureHistogram {
 	}
 	
 	@Override
-	public double calcCast(CacheableParams<FeatureHistogramParams> paramsCacheable) throws FeatureCalcException {
+	public double calc(CacheableParams<FeatureHistogramParams> paramsCacheable) throws FeatureCalcException {
 
 		try {
 			Histogram thresholded = paramsCacheable.calc(

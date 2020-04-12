@@ -44,7 +44,7 @@ public class MinFeatureAsIndividual extends NRGElemPairWithFeature {
 	private static final long serialVersionUID = 1L;
 
 	@Override
-	public double calcCast( CacheableParams<NRGElemPairCalcParams> params ) throws FeatureCalcException {
+	public double calc( CacheableParams<NRGElemPairCalcParams> params ) throws FeatureCalcException {
 
 		return Math.min(
 			calcForInd( params, p->p.getObj1(), "1" ),

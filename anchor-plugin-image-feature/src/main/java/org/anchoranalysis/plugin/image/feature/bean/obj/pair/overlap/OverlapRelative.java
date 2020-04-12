@@ -21,7 +21,7 @@ public abstract class OverlapRelative extends FeatureObjMaskPair {
 	private static final long serialVersionUID = 1L;
 
 	@Override
-	public double calcCast(CacheableParams<FeatureObjMaskPairParams> paramsCacheable)
+	public double calc(CacheableParams<FeatureObjMaskPairParams> paramsCacheable)
 			throws FeatureCalcException {
 		
 		FeatureObjMaskPairParams params = paramsCacheable.getParams();

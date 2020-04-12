@@ -61,7 +61,7 @@ public class HasTouchingVoxels extends TouchingVoxels {
 	// END BEAN PROPERTIES
 	
 	@Override
-	public double calcCast(CacheableParams<FeatureObjMaskPairParams> paramsCacheable)
+	public double calc(CacheableParams<FeatureObjMaskPairParams> paramsCacheable)
 			throws FeatureCalcException {
 
 		FeatureObjMaskPairParams params = paramsCacheable.getParams();

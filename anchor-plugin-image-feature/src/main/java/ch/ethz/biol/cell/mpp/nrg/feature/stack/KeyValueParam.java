@@ -51,7 +51,7 @@ public class KeyValueParam extends FeatureStack {
 	// END BEAN PROPERTIES
 
 	@Override
-	public double calcCast(CacheableParams<FeatureStackParams> params)
+	public double calc(CacheableParams<FeatureStackParams> params)
 			throws FeatureCalcException {
 		try {
 			KeyValueParams kpv = params.getParams().getSharedObjs().getParams().getNamedKeyValueParamsCollection().getException(collectionID);

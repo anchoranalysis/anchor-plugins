@@ -71,7 +71,7 @@ public abstract class FeatureIntersectingObjs extends FeatureObjMaskSharedObject
 	}
 	
 	@Override
-	public double calcCast(CacheableParams<FeatureObjMaskParams> params)
+	public double calc(CacheableParams<FeatureObjMaskParams> params)
 			throws FeatureCalcException {
 
 		if (getSearchObjs().size()==0) {

@@ -49,7 +49,7 @@ public class PixelScoreNormalizeByConstant extends PixelScore {
 	// END BEAN PROPERTIES
 		
 	@Override
-	public double calcCast(CacheableParams<PixelScoreFeatureCalcParams> paramsCacheable)
+	public double calc(CacheableParams<PixelScoreFeatureCalcParams> paramsCacheable)
 			throws FeatureCalcException {
 		PixelScoreFeatureCalcParams params = paramsCacheable.getParams();
 		return ((double) params.getPxl(nrgChnlIndex))/value;

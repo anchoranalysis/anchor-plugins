@@ -63,7 +63,7 @@ public class AsObjMask extends FeatureStack {
 	// END BEAN PROPERTIES
 	
 	@Override
-	public double calcCast(CacheableParams<FeatureStackParams> params) throws FeatureCalcException {
+	public double calc(CacheableParams<FeatureStackParams> params) throws FeatureCalcException {
 		
 		return params.calcChangeParams(
 			item,

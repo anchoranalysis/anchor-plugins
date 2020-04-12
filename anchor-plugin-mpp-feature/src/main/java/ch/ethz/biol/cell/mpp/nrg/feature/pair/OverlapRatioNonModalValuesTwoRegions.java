@@ -57,7 +57,7 @@ public class OverlapRatioNonModalValuesTwoRegions extends NRGElemPair {
 	}
 	
 	@Override
-	public double calcCast( CacheableParams<NRGElemPairCalcParams> paramsCacheable ) throws FeatureCalcException {
+	public double calc( CacheableParams<NRGElemPairCalcParams> paramsCacheable ) throws FeatureCalcException {
 		
 		NRGElemPairCalcParams params = paramsCacheable.getParams();
 		

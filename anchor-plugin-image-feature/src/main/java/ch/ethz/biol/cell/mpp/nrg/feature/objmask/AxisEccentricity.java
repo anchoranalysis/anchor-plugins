@@ -55,7 +55,7 @@ public class AxisEccentricity extends FeatureObjMask {
 //	TempBoundOutputManager tempOutput = new TempBoundOutputManager();
 	
 	@Override
-	public double calcCast(CacheableParams<FeatureObjMaskParams> paramsCacheable) throws FeatureCalcException {
+	public double calc(CacheableParams<FeatureObjMaskParams> paramsCacheable) throws FeatureCalcException {
 		
 		FeatureObjMaskParams params = paramsCacheable.getParams();
 		

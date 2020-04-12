@@ -80,7 +80,7 @@ public class OverlapRatioThreeRegions extends NRGElemPair {
 	}
 	
 	@Override
-	public double calcCast( CacheableParams<NRGElemPairCalcParams> paramsCacheable ) throws FeatureCalcException {
+	public double calc( CacheableParams<NRGElemPairCalcParams> paramsCacheable ) throws FeatureCalcException {
 		
 		// MIP currently not supported
 		if(mip==true) {
