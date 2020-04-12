@@ -48,28 +48,29 @@ import org.anchoranalysis.feature.shared.SharedFeaturesInitParams;
 import org.anchoranalysis.image.feature.init.FeatureInitParamsImageInit;
 import org.anchoranalysis.image.feature.objmask.FeatureObjMaskParams;
 import org.anchoranalysis.image.feature.objmask.pair.merged.FeatureObjMaskPairMergedParams;
+import org.anchoranalysis.image.feature.stack.FeatureStackParams;
 import org.anchoranalysis.image.init.ImageInitParams;
 import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.plugin.mpp.experiment.bean.feature.flexi.Simple;
 
-public class FeatureSessionMergedPairs extends FeatureSessionFlexiFeatureTable {
+public class FeatureSessionMergedPairs extends FeatureSessionFlexiFeatureTable<FeatureObjMaskPairMergedParams> {
 
 	private boolean includeFirst;
 	private boolean includeSecond;
 	
 	// Our sessions
-	private ISequentialSessionSingleParams sessionImage;
+	private ISequentialSessionSingleParams<FeatureStackParams> sessionImage;
 	
 	// We avoid using seperate sessions for First and Second, as we want them
 	//  to share the same Vertical-Cache for object calculation.
-	private ISequentialSessionSingleParams sessionFirstSecond;
-	private ISequentialSessionSingleParams sessionMerged;
-	private ISequentialSessionSingleParams sessionPair;
+	private ISequentialSessionSingleParams<FeatureObjMaskParams> sessionFirstSecond;
+	private ISequentialSessionSingleParams<FeatureObjMaskParams> sessionMerged;
+	private ISequentialSessionSingleParams<FeatureObjMaskPairMergedParams> sessionPair;
 
 	// The lists we need
-	private FeatureList listImage;
-	private FeatureList listSingle;
-	private FeatureList listPair;
+	private FeatureList<FeatureStackParams> listImage;
+	private FeatureList<FeatureObjMaskParams> listSingle;
+	private FeatureList<FeatureObjMaskPairMergedParams> listPair;
 	private boolean checkInverse = false;
 	private boolean suppressErrors = false;
 	
@@ -79,9 +80,9 @@ public class FeatureSessionMergedPairs extends FeatureSessionFlexiFeatureTable {
 	public FeatureSessionMergedPairs(
 		boolean includeFirst,
 		boolean includeSecond,
-		FeatureList listImage,
-		FeatureList listSingle,
-		FeatureList listPair,
+		FeatureList<FeatureStackParams> listImage,
+		FeatureList<FeatureObjMaskParams> listSingle,
+		FeatureList<FeatureObjMaskPairMergedParams> listPair,
 		Collection<String> ignoreFeaturePrefixes,
 		boolean checkInverse,
 		boolean suppressErrors
@@ -105,10 +106,16 @@ public class FeatureSessionMergedPairs extends FeatureSessionFlexiFeatureTable {
 //	}
 	
 	@Override
-	public void start(ImageInitParams soImage, SharedFeaturesInitParams soFeature, NRGStackWithParams nrgStack, LogErrorReporter logErrorReporter) throws InitException {
+	public void start(
+		ImageInitParams soImage,
+		SharedFeaturesInitParams soFeature,
+		NRGStackWithParams nrgStack,
+		LogErrorReporter logErrorReporter
+	) throws InitException {
 		
 		// We create our SharedFeatures including anything from the NamedDefinitions, and all our additional features
-		SharedFeatureSet sharedFeatures = soFeature.getSharedFeatureSet();
+		// TODO fix
+		//SharedFeatureSet<FeatureCalcParams> sharedFeatures = soFeature.getSharedFeatureSet();
 		// sharedFeatures = createSharedFeatures(soFeature,listSingle);
 		//listImage.copyToCustomName(sharedFeatures.getSet(),false);
 		//listSingle.copyToCustomName(sharedFeatures.getSet(),false);
@@ -127,32 +134,47 @@ public class FeatureSessionMergedPairs extends FeatureSessionFlexiFeatureTable {
 		
 		logErrorReporter.getLogReporter().log("Setting up: Image Features");
 
-		sessionImage = new SequentialSessionRepeatFirst( listImage, ignoreFeaturePrefixes );
-		sessionImage.start(paramsInitImage, sharedFeatures.duplicate(), logErrorReporter);
+		sessionImage = new SequentialSessionRepeatFirst<FeatureStackParams>( listImage, ignoreFeaturePrefixes );
+		
+		// TODO Fix, no shared features any more, previously sharedFeatures.duplicate()
+		sessionImage.start(paramsInitImage, new SharedFeatureSet<>(), logErrorReporter);
 
 		
 		if (includeFirst || includeSecond) {
 			logErrorReporter.getLogReporter().log("Setting up: First/Second Features");
-			sessionFirstSecond = new SequentialSessionVerticallyCached( listSingle, suppressErrors, ignoreFeaturePrefixes );
-			sessionFirstSecond.start(paramsInitFirstSecond, sharedFeatures.duplicate(), logErrorReporter);
+			sessionFirstSecond = new SequentialSessionVerticallyCached<>(
+				listSingle,
+				suppressErrors,
+				ignoreFeaturePrefixes
+			);
+			
+			// TODO Fix, no shared features any more
+			sessionFirstSecond.start(
+				paramsInitFirstSecond,
+				new SharedFeatureSet<>(),
+				logErrorReporter
+			);
 		}
 			
 		
 		logErrorReporter.getLogReporter().log("Setting up: Pair Features");
-		sessionPair = new SequentialSession( listPair, ignoreFeaturePrefixes );
+		sessionPair = new SequentialSession<>( listPair, ignoreFeaturePrefixes );
 		
 		// TODO to make this more efficient, it would be better if we could re-use the cached-operations
 		//  from the calculation of the First and Second individual features, as they appear again
 		//  as additionalCaches of sessionPair
-		sessionPair.start(paramsInitPair, sharedFeatures.duplicate(), logErrorReporter);
+		// TODO fix no shared features anymore, prev sharedFeatures.duplicate()		
+		sessionPair.start(paramsInitPair, new SharedFeatureSet<>(), logErrorReporter);
 			
 		
 		// We keep a seperate session for merges, as there is no need to do caching. But we copy features
 		//  to make sure there's no collision of the caches
 		//System.out.println("SessionMerged");
 		logErrorReporter.getLogReporter().log("Setting up: Merged Features");
-		sessionMerged = new SequentialSession( listSingle.duplicateBean(), ignoreFeaturePrefixes );
-		sessionMerged.start(paramsInitMerged, sharedFeatures.duplicate(), logErrorReporter);
+		sessionMerged = new SequentialSession<>( listSingle.duplicateBean(), ignoreFeaturePrefixes );
+		
+		// TODO fix no shared features anymore, prev sharedFeatures.duplicate()
+		sessionMerged.start(paramsInitMerged, new SharedFeatureSet<>(), logErrorReporter);
 
 		
 //		System.out.printf("Session Image = %d\n", sessionImage );
@@ -163,7 +185,7 @@ public class FeatureSessionMergedPairs extends FeatureSessionFlexiFeatureTable {
 	}
 
 	@Override
-	public FeatureSessionFlexiFeatureTable duplicateForNewThread() {
+	public FeatureSessionFlexiFeatureTable<FeatureObjMaskPairMergedParams> duplicateForNewThread() {
 		return new FeatureSessionMergedPairs(
 			includeFirst,
 			includeSecond,
@@ -181,16 +203,16 @@ public class FeatureSessionMergedPairs extends FeatureSessionFlexiFeatureTable {
 		ObjMask extractObj(FeatureObjMaskPairMergedParams params);
 	}
 	
+	// Create new more specific params
+	private static int calcAndInsert( FeatureObjMaskPairMergedParams params, FeatureSessionMergedPairs.ExtractObj extractObj, ISequentialSessionSingleParams<FeatureObjMaskParams> session, int start, ResultsVector out, ErrorReporter errorReporter, boolean suppressErrors ) throws FeatureCalcException {
+		FeatureObjMaskParams paramsSpecific = createNewSpecificParams(params,extractObj);
+		return calcAndInsert(paramsSpecific, session, start, out, errorReporter, suppressErrors);
+	}
+
 	private static FeatureObjMaskParams createNewSpecificParams( FeatureObjMaskPairMergedParams params, FeatureSessionMergedPairs.ExtractObj extractObj ) {
 		FeatureObjMaskParams paramsOut = new FeatureObjMaskParams( extractObj.extractObj(params) );
 		paramsOut.setNrgStack( params.getNrgStack() );
 		return paramsOut;
-	}
-	
-	// Create new more specific params
-	private static int calcAndInsert( FeatureObjMaskPairMergedParams params, FeatureSessionMergedPairs.ExtractObj extractObj, ISequentialSessionSingleParams session, int start, ResultsVector out, ErrorReporter errorReporter, boolean suppressErrors ) throws FeatureCalcException {
-		FeatureObjMaskParams paramsSpecific = createNewSpecificParams(params,extractObj);
-		return calcAndInsert(paramsSpecific, session, start, out, errorReporter, suppressErrors);
 	}
 	
 	/**
@@ -204,8 +226,8 @@ public class FeatureSessionMergedPairs extends FeatureSessionFlexiFeatureTable {
 	 * @return length(resultsVector)
 	 * @throws FeatureCalcException
 	 */
-	private static int calcAndInsert( FeatureCalcParams params, ISequentialSessionSingleParams session, int start, ResultsVector out, ErrorReporter errorReporter, boolean suppressErrors ) throws FeatureCalcException {
-		ResultsVector rvImage =  suppressErrors ? session.calcSuppressErrors( params, errorReporter ) : session.calc(params) ;
+	private static <T extends FeatureCalcParams> int calcAndInsert( T params, ISequentialSessionSingleParams<T> session, int start, ResultsVector out, ErrorReporter errorReporter, boolean suppressErrors ) throws FeatureCalcException {
+		ResultsVector rvImage =  suppressErrors ? session.calcOneSuppressErrors( params, errorReporter ) : session.calcOne(params) ;
 		out.set(start, rvImage);
 		return rvImage.length();
 	}
@@ -222,7 +244,8 @@ public class FeatureSessionMergedPairs extends FeatureSessionFlexiFeatureTable {
 		int cnt = 0;
 		
 		// First we calculate the Image features (we can pick any object)
-		cnt += calcAndInsert(paramsCast, (a)->a.getObjMask1(), sessionImage, cnt, out, errorReporter, suppressErrors );
+		// TODO ignoring image features. Fix.
+		//cnt += calcAndInsert(paramsCast, (a)->a.getObjMask1(), sessionImage, cnt, out, errorReporter, suppressErrors );
 		
 		// First features
 		if (includeFirst) {
@@ -278,7 +301,7 @@ public class FeatureSessionMergedPairs extends FeatureSessionFlexiFeatureTable {
 	}
 	
 	@Override
-	public ResultsVector calcMaybeSuppressErrors(FeatureCalcParams params, ErrorReporter errorReporter)
+	public ResultsVector calcMaybeSuppressErrors(FeatureObjMaskPairMergedParams params, ErrorReporter errorReporter)
 			throws FeatureCalcException {
 		
 		ResultsVector rv = calcForParams(params,errorReporter);

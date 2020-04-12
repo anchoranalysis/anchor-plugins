@@ -1,8 +1,8 @@
 package ch.ethz.biol.cell.mpp.mark.pixelstatisticsfrommark;
 
-import org.anchoranalysis.anchor.mpp.mark.GlobalRegionIdentifiers;
+import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.anchor.mpp.pxlmark.PxlMark;
-import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
+
 
 /*
  * #%L
@@ -31,8 +31,6 @@ import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
  */
 
 
-import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.cache.ExecuteException;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.relation.GreaterThan;
@@ -41,38 +39,23 @@ import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.histogram.Histogram;
 import org.anchoranalysis.image.voxel.statistics.VoxelStatistics;
 
-public class MaxNonZero extends PixelStatisticsFromMark {
+public class MaxNonZero extends IndexedRegionBase {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -3617915321417174160L;
-	
-	// START BEAN PROPERTIES
-	@BeanField
-	private int index = 0;
-	
-	@BeanField
-	private int regionID = GlobalRegionIdentifiers.SUBMARK_INSIDE;
-	// END BEAN PROPERTIES
-	
+
 	@Override
-	public VoxelStatistics createStatisticsFor(PxlMarkMemo pmm, ImageDim dim) throws CreateException {
-		
-		PxlMark pm;
-		try {
-			pm = pmm.doOperation();
-		} catch (ExecuteException e) {
-			throw new CreateException(e);
-		}
-		
+	protected VoxelStatistics createStatisticsFor(PxlMark pm, Mark mark, ImageDim dim) throws CreateException {
+
 		RelationToValue relation = new GreaterThan();
 		
 		long maxNonZero = -1;
 		VoxelStatistics maxStats = null;
 		
 		for( int z=0; z<pm.getObjMask().getBoundingBox().extnt().getZ(); z++ ) {
-			VoxelStatistics stats = pm.statisticsFor(index, regionID, z);
+			VoxelStatistics stats = sliceStatisticsForRegion(pm, z);
 			
 			Histogram h;
 			try {
@@ -90,28 +73,5 @@ public class MaxNonZero extends PixelStatisticsFromMark {
 		}
 		
 		return maxStats;
-
 	}
-
-	public int getIndex() {
-		return index;
-	}
-
-	public void setIndex(int index) {
-		this.index = index;
-	}
-	
-	@Override
-	public String toString() {
-		return String.format("regionID=%d,index=%d", regionID, index);
-	}
-
-	public int getRegionID() {
-		return regionID;
-	}
-
-	public void setRegionID(int regionID) {
-		this.regionID = regionID;
-	}
-
 }

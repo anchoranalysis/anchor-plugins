@@ -29,11 +29,12 @@ package ch.ethz.biol.cell.mpp.nrg.feature.operator;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.bean.Feature;
-import org.anchoranalysis.feature.bean.operator.FeatureSingleElem;
+import org.anchoranalysis.feature.bean.operator.FeatureGenericSingleElem;
+import org.anchoranalysis.feature.cache.CacheableParams;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
 
-public class MinMaxRangeReplaceFromFeatures extends FeatureSingleElem {
+public class MinMaxRangeReplaceFromFeatures<T extends FeatureCalcParams> extends FeatureGenericSingleElem<T> {
 	
 	/**
 	 * 
@@ -51,18 +52,18 @@ public class MinMaxRangeReplaceFromFeatures extends FeatureSingleElem {
 	private double withinValue = 0;
 	
 	@BeanField
-	private Feature min;
+	private Feature<T> min;
 	
 	@BeanField
-	private Feature max;
+	private Feature<T> max;
 	// END BEAN PROPERTIES
 	
 	@Override
-	public double calc( FeatureCalcParams params ) throws FeatureCalcException {
+	public double calc( CacheableParams<T> params ) throws FeatureCalcException {
 		
-		double val = getCacheSession().calc( getItem(), params );
-		double valMin = getCacheSession().calc(min, params);
-		double valMax = getCacheSession().calc(max, params);
+		double val = params.calc( getItem() );
+		double valMin = params.calc(min);
+		double valMax = params.calc(max);
 		
 		if (val < valMin) {
 			return belowMinValue;
@@ -80,19 +81,19 @@ public class MinMaxRangeReplaceFromFeatures extends FeatureSingleElem {
 		return String.format("min=%s,max=%s,withinValue=%f,belowMinValue=%f,aboveMaxValue=%f", min.getFriendlyName(), max.getFriendlyName(), withinValue, belowMinValue, aboveMaxValue );
 	}
 	
-	public Feature getMin() {
+	public Feature<T> getMin() {
 		return min;
 	}
 
-	public void setMin(Feature min) {
+	public void setMin(Feature<T> min) {
 		this.min = min;
 	}
 
-	public Feature getMax() {
+	public Feature<T> getMax() {
 		return max;
 	}
 
-	public void setMax(Feature max) {
+	public void setMax(Feature<T> max) {
 		this.max = max;
 	}
 

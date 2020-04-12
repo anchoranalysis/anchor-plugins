@@ -252,12 +252,4 @@ public class QuickMultiDatasetStructuredExperiment<T extends InputFromManager,S>
 	public void setDirectoryDistance(int directoryDistance) {
 		this.directoryDistance = directoryDistance;
 	}
-
-	public String getDebug() {
-		return delegate.getDebug();
-	}
-
-	public void setDebug(String debug) {
-		delegate.setDebug(debug);
-	}
 }

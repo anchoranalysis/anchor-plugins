@@ -29,11 +29,8 @@ package ch.ethz.biol.cell.mpp.nrg.feature.objmask;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.cache.ExecuteException;
-import org.anchoranalysis.core.error.InitException;
-import org.anchoranalysis.feature.cache.CacheSession;
-import org.anchoranalysis.feature.cachedcalculation.CachedCalculation;
+import org.anchoranalysis.feature.cache.CacheableParams;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.feature.init.FeatureInitParams;
 import org.anchoranalysis.image.feature.bean.objmask.FeatureObjMask;
 import org.anchoranalysis.image.feature.objmask.CalculateNumVoxels;
 import org.anchoranalysis.image.feature.objmask.FeatureObjMaskParams;
@@ -65,25 +62,18 @@ public class NumAddedVoxelsAfterClosing extends FeatureObjMask {
 	private boolean do3D = true;
 	// END BEAN PROPERTIES
 	
-	private CachedCalculation<ObjMask> ccClosing;
-	private CachedCalculation<Double> ccNumVoxels;
-	
 	@Override
-	public void beforeCalc(FeatureInitParams params, CacheSession session)
-			throws InitException {
-		super.beforeCalc(params, session);
-		ccClosing = CalculateClosing.createFromCache(
-			session,
-			iterations,
-			do3D
-		);
-		ccNumVoxels = session.search( new CalculateNumVoxels(false) );
-	}
-	
-	@Override
-	public double calcCast(FeatureObjMaskParams params) throws FeatureCalcException {
+	public double calc(CacheableParams<FeatureObjMaskParams> params) throws FeatureCalcException {
 		try {
-			return ccClosing.getOrCalculate(params).numPixels() - ccNumVoxels.getOrCalculate(params);
+			ObjMask omClosing = params.calc(
+				CalculateClosing.createFromCache(params, iterations, do3D)		
+			);
+			
+			double numVoxels = params.calc(
+				new CalculateNumVoxels(false)
+			);
+			
+			return omClosing.numPixels() - numVoxels;
 		} catch (ExecuteException e) {
 			throw new FeatureCalcException(e);
 		}

@@ -32,7 +32,6 @@ import org.anchoranalysis.anchor.mpp.feature.error.CheckException;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.anchor.mpp.mark.conic.MarkEllipse;
 import org.anchoranalysis.core.name.provider.NamedProviderGetException;
-import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 
 public class EllipseBoundsCheck extends CheckMark {
@@ -81,10 +80,4 @@ public class EllipseBoundsCheck extends CheckMark {
 	public boolean isCompatibleWith(Mark testMark) {
 		return testMark instanceof MarkEllipse;
 	}
-
-	@Override
-	public FeatureList orderedListOfFeatures() {
-		return null;
-	}
-
 }

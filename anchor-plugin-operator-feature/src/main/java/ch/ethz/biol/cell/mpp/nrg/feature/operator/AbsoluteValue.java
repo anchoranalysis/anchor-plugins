@@ -1,5 +1,7 @@
 package ch.ethz.biol.cell.mpp.nrg.feature.operator;
 
+import org.anchoranalysis.feature.bean.operator.FeatureGenericSingleElem;
+
 /*-
  * #%L
  * anchor-plugin-operator-feature
@@ -26,11 +28,11 @@ package ch.ethz.biol.cell.mpp.nrg.feature.operator;
  * #L%
  */
 
-import org.anchoranalysis.feature.bean.operator.FeatureSingleElem;
+import org.anchoranalysis.feature.cache.CacheableParams;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
 
-public class AbsoluteValue extends FeatureSingleElem {
+public class AbsoluteValue<T extends FeatureCalcParams> extends FeatureGenericSingleElem<T> {
 
 	/**
 	 * 
@@ -41,8 +43,8 @@ public class AbsoluteValue extends FeatureSingleElem {
 	// END BEAN PROPERTIES
 		
 	@Override
-	public double calc( FeatureCalcParams params ) throws FeatureCalcException {
-		return Math.abs( getCacheSession().calc( getItem(), params ) );
+	public double calc( CacheableParams<T> params ) throws FeatureCalcException {
+		return Math.abs( params.calc( getItem() ) );
 	}
 
 	@Override

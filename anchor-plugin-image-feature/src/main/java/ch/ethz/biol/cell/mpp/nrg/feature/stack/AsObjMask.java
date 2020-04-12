@@ -28,17 +28,9 @@ package ch.ethz.biol.cell.mpp.nrg.feature.stack;
 
 
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.bean.annotation.SkipInit;
-import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.feature.bean.Feature;
-import org.anchoranalysis.feature.cache.CacheSession;
-import org.anchoranalysis.feature.cache.ComplexCacheDefinition;
-import org.anchoranalysis.feature.cache.FeatureCacheDefinition;
+import org.anchoranalysis.feature.cache.CacheableParams;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.feature.init.FeatureInitParams;
-import org.anchoranalysis.feature.session.cache.FeatureSessionCacheRetriever;
-import org.anchoranalysis.feature.session.cache.NullCacheRetriever;
 import org.anchoranalysis.image.binary.BinaryChnl;
 import org.anchoranalysis.image.binary.values.BinaryValues;
 import org.anchoranalysis.image.chnl.Chnl;
@@ -48,7 +40,7 @@ import org.anchoranalysis.image.feature.stack.FeatureStackParams;
 import org.anchoranalysis.image.objmask.ObjMask;
 
 /**
- * Treats a channel as an object-mask, assuming binary valus of 0 and 255
+ * Treats a channel as an object-mask, assuming binary values of 0 and 255
  * and calls an object-mask feature
  * 
  * @author FEEHANO
@@ -62,66 +54,45 @@ public class AsObjMask extends FeatureStack {
 	private static final long serialVersionUID = 1L;
 	
 	// START BEAN PROPERTIES
-	@BeanField @SkipInit
-	private Feature item;
+	@BeanField
+	private Feature<FeatureObjMaskParams> item;
 	
 	@BeanField
 	/** The channel that that forms the binary mask */
 	private int nrgIndex = 0;
 	// END BEAN PROPERTIES
 	
-	private FeatureSessionCacheRetriever subcache;
-
 	@Override
-	public FeatureCacheDefinition cacheDefinition() {
-		return new ComplexCacheDefinition(this, new String[]{"additionalCache"} );
+	public double calc(CacheableParams<FeatureStackParams> params) throws FeatureCalcException {
+		
+		return params.calcChangeParams(
+			item,
+			p -> objMaskFromStack(p),
+			"obj"
+		);
 	}
 	
-	
-	/**
-	 *  Special initialisation with different params for 'item' as it is elsewhere ignored in the initialisation
-	 */
-	@Override
-	public void beforeCalc(FeatureInitParams params,
-			CacheSession cache)
-			throws InitException {
-		super.beforeCalc(params, cache);
-
-		
-		// TODO fix
-		//  Work around. Creates a new cache 
-		this.subcache = new NullCacheRetriever( cache.main().getSharedFeatureList() );
-		
-		cache.initThroughSubcache(subcache, params, item, getLogger() );
-	}
-	
-	@Override
-	public double calcCast(FeatureStackParams params) throws FeatureCalcException {
-				
+	private FeatureObjMaskParams objMaskFromStack( FeatureStackParams p ) {
 		FeatureObjMaskParams paramsObj = new FeatureObjMaskParams();
-		try {
-			ObjMask om = extractObjMask(params);
-			paramsObj.setNrgStack( params.getNrgStack() );
-			paramsObj.setObjMask( om );
-		} catch (CreateException e) {
-			throw new FeatureCalcException(e);
-		}
 		
-		return subcache.calc(item, paramsObj);
+		ObjMask om = extractObjMask(p);
+		paramsObj.setNrgStack( p.getNrgStack() );
+		paramsObj.setObjMask( om );
+		return paramsObj;
 	}
 		
-	private ObjMask extractObjMask(FeatureStackParams params) throws CreateException {
+	private ObjMask extractObjMask(FeatureStackParams params) {
 		Chnl chnl = params.getNrgStack().getChnl(nrgIndex);
 		BinaryChnl binary = new BinaryChnl(chnl, BinaryValues.getDefault());
 		
 		return new ObjMask( binary.binaryVoxelBox() );
 	}
 
-	public Feature getItem() {
+	public Feature<FeatureObjMaskParams> getItem() {
 		return item;
 	}
 
-	public void setItem(Feature item) {
+	public void setItem(Feature<FeatureObjMaskParams> item) {
 		this.item = item;
 	}
 

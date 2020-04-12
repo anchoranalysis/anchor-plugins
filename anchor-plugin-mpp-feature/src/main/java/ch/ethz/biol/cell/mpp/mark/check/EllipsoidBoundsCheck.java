@@ -34,7 +34,6 @@ import org.anchoranalysis.anchor.mpp.mark.conic.MarkEllipsoid;
  */
 
 import org.anchoranalysis.core.name.provider.NamedProviderGetException;
-import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 
 public class EllipsoidBoundsCheck extends CheckMark {
@@ -79,10 +78,5 @@ public class EllipsoidBoundsCheck extends CheckMark {
 	@Override
 	public boolean isCompatibleWith(Mark testMark) {
 		return testMark instanceof MarkEllipsoid;
-	}
-
-	@Override
-	public FeatureList orderedListOfFeatures() {
-		return null;
 	}
 }

@@ -34,6 +34,7 @@ import org.anchoranalysis.bean.annotation.SkipInit;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.feature.bean.Feature;
+import org.anchoranalysis.feature.cache.CacheableParams;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.bean.provider.BinaryImgChnlProvider;
 import org.anchoranalysis.image.binary.BinaryChnl;
@@ -46,9 +47,6 @@ import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.anchoranalysis.image.voxel.datatype.IncorrectVoxelDataTypeException;
 
-import cern.colt.list.DoubleArrayList;
-import cern.jet.stat.Descriptive;
-
 public class BinaryImageChnlProviderFeature extends FeatureStack {
 
 	/**
@@ -58,7 +56,7 @@ public class BinaryImageChnlProviderFeature extends FeatureStack {
 	
 	// START BEAN PROPERTIES
 	@BeanField
-	private Feature item;
+	private Feature<FeatureObjMaskParams> item;
 	
 	@BeanField
 	@SkipInit
@@ -66,22 +64,35 @@ public class BinaryImageChnlProviderFeature extends FeatureStack {
 	// END BEAN PROPERTIES
 	
 	@Override
-	public double calcCast(FeatureStackParams params) throws FeatureCalcException {
+	public double calc(CacheableParams<FeatureStackParams> params) throws FeatureCalcException {
 
+		BinaryChnl bc;
 		try {
-			binaryImgChnlProvider.initRecursive(params.getSharedObjs(), getLogger() );
-		} catch (InitException e1) {
+			binaryImgChnlProvider.initRecursive(params.getParams().getSharedObjs(), getLogger() );
+			bc = binaryImgChnlProvider.create();
+		} catch (InitException | CreateException e1) {
 			throw new FeatureCalcException(e1);
 		}
 		
-		BinaryChnl bic;
-		try {
-			bic = binaryImgChnlProvider.create();
-		} catch (CreateException e1) {
-			throw new FeatureCalcException(e1);
-		}
+		BinaryVoxelBox<ByteBuffer> bvb = binaryVoxelBox(bc);
 		
-		
+		return params.calcChangeParams(
+			item,
+			p -> deriveParams(p, bvb),
+			"binaryMask"
+		);
+	}
+	
+	private static FeatureObjMaskParams deriveParams(FeatureStackParams params, BinaryVoxelBox<ByteBuffer> bvb ) {
+		FeatureObjMaskParams paramsObj = new FeatureObjMaskParams();
+		paramsObj.setNrgStack( params.getNrgStack() );
+		paramsObj.setObjMask(
+			new ObjMask(bvb)
+		);
+		return paramsObj;
+	}
+	
+	private static BinaryVoxelBox<ByteBuffer> binaryVoxelBox( BinaryChnl bic ) throws FeatureCalcException {
 		VoxelBox<ByteBuffer> vb;
 		try {
 			vb = bic.getChnl().getVoxelBox().asByte();
@@ -89,30 +100,14 @@ public class BinaryImageChnlProviderFeature extends FeatureStack {
 			throw new FeatureCalcException("binaryImgChnlProvider returned incompatible data type", e1);
 		}
 		
-		
-		FeatureObjMaskParams paramsObj = new FeatureObjMaskParams();
-		paramsObj.setNrgStack( params.getNrgStack() );
-		
-		DoubleArrayList featureVals = new DoubleArrayList();
-		
-		// Calculate a feature on each obj mask
-		{
-			BinaryVoxelBox<ByteBuffer> binaryVoxelBox = new BinaryVoxelBoxByte( vb, bic.getBinaryValues() );
-			
-			paramsObj.setObjMask( new ObjMask( binaryVoxelBox ) );
-			
-			double val = getCacheSession().calc(item, paramsObj);
-			featureVals.add(val);
-		}
-		
-		return Descriptive.mean(featureVals);
+		return new BinaryVoxelBoxByte( vb, bic.getBinaryValues() );
 	}
 
-	public Feature getItem() {
+	public Feature<FeatureObjMaskParams> getItem() {
 		return item;
 	}
 
-	public void setItem(Feature item) {
+	public void setItem(Feature<FeatureObjMaskParams> item) {
 		this.item = item;
 	}
 

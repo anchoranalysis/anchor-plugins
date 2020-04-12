@@ -29,11 +29,8 @@ package ch.ethz.biol.cell.mpp.nrg.feature.objmask;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.cache.ExecuteException;
-import org.anchoranalysis.core.error.InitException;
-import org.anchoranalysis.feature.cache.CacheSession;
-import org.anchoranalysis.feature.cachedcalculation.CachedCalculation;
+import org.anchoranalysis.feature.cache.CacheableParams;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.feature.init.FeatureInitParams;
 import org.anchoranalysis.image.feature.bean.objmask.FeatureObjMask;
 import org.anchoranalysis.image.feature.objmask.FeatureObjMaskParams;
 import org.anchoranalysis.math.moment.MomentsFromPointsCalculator;
@@ -50,37 +47,14 @@ public class AxisLengthMIP extends FeatureObjMask {
 	@BeanField
 	private int index = 0;
 	// END BEAN PROPERTIES
-
-	private double calcAxisWidth( CachedCalculation<MomentsFromPointsCalculator> cc, FeatureObjMaskParams params, int index ) throws FeatureCalcException {
-		
-		// THIS CAN BE DONE MORE EFFICIENTLY
-		if (!params.getObjMask().hasPixelsGreaterThan(0)) {
-			return Double.NaN;
-		}
-		// Justification
-		// http://stackoverflow.com/questions/1711784/computing-object-statistics-from-the-second-central-moments
-		// http://en.wikipedia.org/wiki/Image_moment
-		try {
-			return cc.getOrCalculate(params).get( index ).eigenvalueNormalizedAsAxisLength();
-		} catch (ExecuteException e) {
-			throw new FeatureCalcException(e);
-		}
-	}
-	
-	private CachedCalculation<MomentsFromPointsCalculator> cc;
 	
 	@Override
-	public void beforeCalc(FeatureInitParams params, CacheSession session)
-			throws InitException {
-		super.beforeCalc(params, session);
-		cc = session.search( new CalculateObjMaskSecondMomentMatrixMIP() );
-	}
-	
-	
-	@Override
-	public double calcCast(FeatureObjMaskParams params) throws FeatureCalcException {
+	public double calc(CacheableParams<FeatureObjMaskParams> params) throws FeatureCalcException {
 		
-		return calcAxisWidth(cc, params, index);
+		return calcAxisLengthMIP(
+			params,
+			index
+		);
 	}
 
 	public int getIndex() {
@@ -90,8 +64,23 @@ public class AxisLengthMIP extends FeatureObjMask {
 	public void setIndex(int index) {
 		this.index = index;
 	}
-
-
-
-
+	
+	private double calcAxisLengthMIP( CacheableParams<FeatureObjMaskParams> params, int index ) throws FeatureCalcException {
+		
+		// THIS CAN BE DONE MORE EFFICIENTLY
+		if (!params.getParams().getObjMask().hasPixelsGreaterThan(0)) {
+			return Double.NaN;
+		}
+		// Justification
+		// http://stackoverflow.com/questions/1711784/computing-object-statistics-from-the-second-central-moments
+		// http://en.wikipedia.org/wiki/Image_moment
+		try {
+			MomentsFromPointsCalculator moments = params.calc(
+				new CalculateObjMaskSecondMomentMatrixMIP()
+			); 
+			return moments.get( index ).eigenvalueNormalizedAsAxisLength();
+		} catch (ExecuteException e) {
+			throw new FeatureCalcException(e);
+		}
+	}
 }

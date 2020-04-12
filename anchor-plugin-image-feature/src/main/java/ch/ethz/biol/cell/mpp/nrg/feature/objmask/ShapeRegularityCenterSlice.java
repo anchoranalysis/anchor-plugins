@@ -28,6 +28,7 @@ package ch.ethz.biol.cell.mpp.nrg.feature.objmask;
 
 
 import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.feature.cache.CacheableParams;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.feature.bean.objmask.FeatureObjMask;
 import org.anchoranalysis.image.feature.objmask.FeatureObjMaskParams;
@@ -41,15 +42,11 @@ public class ShapeRegularityCenterSlice extends FeatureObjMask {
 	private static final long serialVersionUID = 1L;
 
 	@Override
-	public double calcCast(FeatureObjMaskParams params) throws FeatureCalcException {
-		
-		
-		//ObjMask om = params.getObjMask().duplicate().flattenZ();
+	public double calc(CacheableParams<FeatureObjMaskParams> paramsCacheable) throws FeatureCalcException {
+				
+		FeatureObjMaskParams params = paramsCacheable.getParams();
 		
 		int zSliceCenter = (int) params.getObjMask().centerOfGravity().getZ();
-
-		// Max intensity projection of the input mask
-//		ObjMask om = params.getObjMask().duplicate().flattenZ();
 		
 		ObjMask om;
 		try {

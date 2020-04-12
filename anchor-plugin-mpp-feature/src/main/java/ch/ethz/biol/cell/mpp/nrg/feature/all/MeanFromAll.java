@@ -1,9 +1,10 @@
 package ch.ethz.biol.cell.mpp.nrg.feature.all;
 
 import org.anchoranalysis.anchor.mpp.feature.bean.nrg.elem.NRGElemAll;
+import org.anchoranalysis.anchor.mpp.feature.mark.MemoMarks;
 import org.anchoranalysis.anchor.mpp.feature.nrg.elem.NRGElemAllCalcParams;
 import org.anchoranalysis.anchor.mpp.feature.nrg.elem.NRGElemIndCalcParams;
-import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
+
 
 /*
  * #%L
@@ -34,6 +35,7 @@ import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.bean.Feature;
+import org.anchoranalysis.feature.cache.CacheableParams;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 
 public class MeanFromAll extends NRGElemAll {
@@ -45,35 +47,51 @@ public class MeanFromAll extends NRGElemAll {
 
 	// START BEAN PROPERTIES
 	@BeanField
-	private Feature item;
+	private Feature<NRGElemIndCalcParams> item;
 	// END BEAN PROPERTIES
 	
 	@Override
-	public double calcCast(NRGElemAllCalcParams params)
+	public double calc(CacheableParams<NRGElemAllCalcParams> paramsCacheable)
 			throws FeatureCalcException {
 		
-		double sum = 0.0;
+		MemoMarks memo = paramsCacheable.getParams().getPxlPartMemo();
 		
-		NRGElemIndCalcParams paramsInd = new NRGElemIndCalcParams(null,params.getNrgStack());
-		
-		if (params.getPxlPartMemo().size()==0) {
+		if (memo.size()==0) {
 			return 0.0;
 		}
 		
-		for( int i=0; i<params.getPxlPartMemo().size(); i++) {
-			PxlMarkMemo pmm = params.getPxlPartMemo().getMemoForIndex(i);
-			paramsInd.setPxlPartMemo(pmm);
-			sum += getCacheSession().calc( item, paramsInd );
+		double sum = 0.0;
+		
+		for( int i=0; i<memo.size(); i++) {
+
+			final int index = i;
+			
+			sum += paramsCacheable.calcChangeParams(
+				item,
+				p -> paramsForInd(p, index),
+				"obj_" + i
+			);
 		}
 		
-		return sum / params.getPxlPartMemo().size();
+		return sum / memo.size();
+	}
+	
+	private static NRGElemIndCalcParams paramsForInd( NRGElemAllCalcParams params, int index ) {
+		NRGElemIndCalcParams paramsInd = new NRGElemIndCalcParams(
+			null,
+			params.getNrgStack()
+		);
+		paramsInd.setPxlPartMemo(
+			params.getPxlPartMemo().getMemoForIndex(index)
+		);
+		return paramsInd;
 	}
 
-	public Feature getItem() {
+	public Feature<NRGElemIndCalcParams> getItem() {
 		return item;
 	}
 
-	public void setItem(Feature item) {
+	public void setItem(Feature<NRGElemIndCalcParams> item) {
 		this.item = item;
 	}
 }

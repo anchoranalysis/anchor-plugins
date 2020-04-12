@@ -30,16 +30,15 @@ package ch.ethz.biol.cell.imageprocessing.binaryimgchnl.provider;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.shared.relation.RelationBean;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.core.error.InitException;
-import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.provider.FeatureProvider;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.feature.nrg.NRGStackWithParams;
+import org.anchoranalysis.feature.init.FeatureInitParams;
+import org.anchoranalysis.feature.session.SessionFactory;
+import org.anchoranalysis.feature.session.calculator.FeatureCalculatorSingle;
 import org.anchoranalysis.image.bean.provider.BinaryImgChnlProvider;
 import org.anchoranalysis.image.bean.provider.ChnlProvider;
 import org.anchoranalysis.image.binary.BinaryChnl;
-import org.anchoranalysis.image.chnl.Chnl;
-import org.anchoranalysis.image.feature.session.FeatureSessionCreateParamsSingle;
+import org.anchoranalysis.image.feature.objmask.FeatureObjMaskParams;
 import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.image.objmask.factory.CreateFromEntireChnlFactory;
 
@@ -62,7 +61,7 @@ public class BinaryImgChnlProviderObjMaskRelateFeatures extends BinaryImgChnlPro
 	private BinaryImgChnlProvider binaryImgChnlProviderElse;
 	
 	@BeanField
-	private FeatureProvider featureProvider;
+	private FeatureProvider<FeatureObjMaskParams> featureProvider;
 	
 	@BeanField
 	private ChnlProvider chnlProvider;
@@ -77,30 +76,41 @@ public class BinaryImgChnlProviderObjMaskRelateFeatures extends BinaryImgChnlPro
 		BinaryChnl chnlMain = binaryImgChnlProviderMain.create();
 		
 		ObjMask omMain = CreateFromEntireChnlFactory.createObjMask( chnlMain );
-		ObjMask omCompareTo = CreateFromEntireChnlFactory.createObjMask( binaryImgChnlProviderCompareTo.create() );
-		
-		Feature feature = featureProvider.create();
-		
-		FeatureSessionCreateParamsSingle session = new FeatureSessionCreateParamsSingle(
-			feature,
-			getSharedObjects().getFeature().getSharedFeatureSet()
+		ObjMask omCompareTo = CreateFromEntireChnlFactory.createObjMask(
+			binaryImgChnlProviderCompareTo.create()
 		);
+			
+		FeatureCalculatorSingle<FeatureObjMaskParams> session = createSession();
 		
+		return calcRelation(
+			omMain,
+			omCompareTo,
+			chnlMain,
+			NRGStackUtilities.maybeAddNrgStack(session, chnlProvider)
+		);
+	}
+	
+	private FeatureCalculatorSingle<FeatureObjMaskParams> createSession() throws CreateException {
 		try {
-			session.start( getLogger() );
-		} catch (InitException e1) {
+			return SessionFactory.createAndStart(
+				featureProvider.create(),
+				new FeatureInitParams(),
+				getSharedObjects().getFeature().getSharedFeatureSet().downcast(),
+				getLogger()
+			);
+		} catch (FeatureCalcException e1) {
 			throw new CreateException(e1);
 		}
-		
-		if (chnlProvider!=null) {
-			Chnl chnl = chnlProvider.create();
-			NRGStackWithParams nrgStack = new NRGStackWithParams(chnl);
-			session.setNrgStack(nrgStack);
-		}
-		
+	}
+	
+	private BinaryChnl calcRelation( ObjMask omMain, ObjMask omCompareTo, BinaryChnl chnlMain, FeatureCalculatorSingle<FeatureObjMaskParams> session ) throws CreateException {
 		try {
-			double valMain = session.calc( omMain );
-			double valCompareTo = session.calc( omCompareTo );
+			double valMain = session.calcOne(
+				new FeatureObjMaskParams(omMain)
+			);
+			double valCompareTo = session.calcOne(
+				new FeatureObjMaskParams(omCompareTo)
+			);
 			
 			if (relation.create().isRelationToValueTrue(valMain, valCompareTo)) {
 				return chnlMain;
@@ -139,11 +149,11 @@ public class BinaryImgChnlProviderObjMaskRelateFeatures extends BinaryImgChnlPro
 		this.binaryImgChnlProviderElse = binaryImgChnlProviderElse;
 	}
 
-	public FeatureProvider getFeatureProvider() {
+	public FeatureProvider<FeatureObjMaskParams> getFeatureProvider() {
 		return featureProvider;
 	}
 
-	public void setFeatureProvider(FeatureProvider featureProvider) {
+	public void setFeatureProvider(FeatureProvider<FeatureObjMaskParams> featureProvider) {
 		this.featureProvider = featureProvider;
 	}
 

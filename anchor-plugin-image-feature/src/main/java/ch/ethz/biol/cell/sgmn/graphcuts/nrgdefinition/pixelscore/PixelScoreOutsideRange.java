@@ -28,6 +28,7 @@ package ch.ethz.biol.cell.sgmn.graphcuts.nrgdefinition.pixelscore;
 
 
 import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.feature.cache.CacheableParams;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.feature.bean.pixelwise.score.PixelScore;
 import org.anchoranalysis.image.feature.pixelwise.score.PixelScoreFeatureCalcParams;
@@ -51,8 +52,10 @@ public class PixelScoreOutsideRange extends PixelScore {
 	// END BEAN PROPERTIES
 
 	@Override
-	protected double calcCast(PixelScoreFeatureCalcParams params)
+	protected double calc(CacheableParams<PixelScoreFeatureCalcParams> paramsCacheable)
 			throws FeatureCalcException {
+		
+		PixelScoreFeatureCalcParams params = paramsCacheable.getParams();
 
 		double val = params.getPxl(nrgIndex);
 		if (val<min) {

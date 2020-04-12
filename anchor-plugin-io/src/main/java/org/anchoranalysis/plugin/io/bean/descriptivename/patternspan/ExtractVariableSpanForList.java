@@ -31,7 +31,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.anchoranalysis.core.file.PathUtilities;
+import org.anchoranalysis.io.filepath.FilePathToUnixStyleConverter;
 import org.anchoranalysis.io.input.descriptivename.DescriptiveFile;
 
 class ExtractVariableSpanForList {
@@ -60,7 +60,7 @@ class ExtractVariableSpanForList {
 		return list.stream().map( df->
 			new DescriptiveFile(
 				df.getFile(),
-				PathUtilities.toStringUnixStyle( prependStr + df.getDescriptiveName() ).trim()
+				FilePathToUnixStyleConverter.toStringUnixStyle( prependStr + df.getDescriptiveName() ).trim()
 			)
 		).collect(Collectors.toList());
 	}
@@ -83,7 +83,7 @@ class ExtractVariableSpanForList {
 	
 	private static String extractLastComponent( String str ) {
 		
-		str = PathUtilities.toStringUnixStyle(str);
+		str = FilePathToUnixStyleConverter.toStringUnixStyle(str);
 		
 		if (str.length()==1) {
 			return str;

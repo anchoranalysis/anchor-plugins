@@ -1,7 +1,7 @@
 package ch.ethz.biol.cell.mpp.mark.check;
 
 import org.anchoranalysis.anchor.mpp.bean.regionmap.RegionMap;
-import org.anchoranalysis.anchor.mpp.feature.error.CheckException;
+import org.anchoranalysis.anchor.mpp.feature.bean.mark.FeatureMarkParams;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
 
 /*
@@ -31,10 +31,9 @@ import org.anchoranalysis.anchor.mpp.mark.Mark;
  */
 
 
-import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 
-public class FeatureValueMarkGreaterEqualThan extends FeatureValueCheckMark {
+public class FeatureValueMarkGreaterEqualThan extends FeatureValueCheckMark<FeatureMarkParams> {
 
 	/**
 	 * 
@@ -42,26 +41,7 @@ public class FeatureValueMarkGreaterEqualThan extends FeatureValueCheckMark {
 	private static final long serialVersionUID = 1086432241915811567L;
 	
 	@Override
-	public boolean check(Mark mark, RegionMap regionMap, NRGStackWithParams nrgStack) throws CheckException {
-		
-		if (session==null) {
-			throw new CheckException("No session initialized");
-		}
-		
-		try {
-			double nrg = session.calc( mark ).get(0);
-			
-			if (nrg >= minVal) {
-				return true;
-			} else {
-				return false;
-			}
-			
-		} catch (FeatureCalcException e) {
-			throw new CheckException(
-				"Error calculating feature",
-				e
-			);
-		}
+	protected FeatureMarkParams createFeatureCalcParams(Mark mark, RegionMap regionMap, NRGStackWithParams nrgStack) {
+		return new FeatureMarkParams(mark, nrgStack.getDimensions().getRes());
 	}
 }

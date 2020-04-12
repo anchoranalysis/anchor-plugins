@@ -31,6 +31,7 @@ import org.anchoranalysis.anchor.mpp.feature.nrg.elem.NRGElemPairCalcParams;
 
 
 import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.feature.cache.CacheableParams;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.ImageDim;
@@ -57,10 +58,11 @@ public class BBoxZOverlapRatio extends NRGElemPair {
 	// END BEAN PROPERTIES
 	
 	@Override
-	public double calcCast(NRGElemPairCalcParams params)
+	public double calc(CacheableParams<NRGElemPairCalcParams> paramsCacheable)
 			throws FeatureCalcException {
 
-	
+		NRGElemPairCalcParams params = paramsCacheable.getParams();
+		
 		ImageDim sd = params.getNrgStack().getDimensions();
 		BoundingBox bbox1 = params.getObj1().getMark().bbox(sd,regionID);
 		BoundingBox bbox2 = params.getObj2().getMark().bbox(sd,regionID);

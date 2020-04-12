@@ -29,9 +29,10 @@ package ch.ethz.biol.cell.mpp.nrg.feature.objmask.cachedcalculation;
 
 import org.anchoranalysis.core.cache.ExecuteException;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.feature.cache.CacheSession;
 import org.anchoranalysis.feature.cachedcalculation.CachedCalculation;
 import org.anchoranalysis.feature.cachedcalculation.CachedCalculationCastParams;
+import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.feature.session.cache.ICachedCalculationSearch;
 import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.feature.objmask.FeatureObjMaskParams;
 import org.anchoranalysis.image.objmask.ObjMask;
@@ -101,35 +102,33 @@ public class CalculateShellObjMask extends CachedCalculationCastParams<ObjMask,F
 	
 	
 	public static CachedCalculation<ObjMask> createFromCache(
-		CacheSession cache,
+		ICachedCalculationSearch params,
 		int iterationsDilation,
 		int iterationsErosion,
 		int iterationsErosionSecond,
 		boolean do3D,
 		boolean inverse
-	) {
+	) throws FeatureCalcException {
 		CachedCalculation<ObjMask> ccDilation = CalculateDilation.createFromCache(
-			cache, iterationsDilation, do3D	
+			params, iterationsDilation, do3D	
 		);
 		assert( ccDilation instanceof CalculateDilation );
 		//System.out.printf("Create from cache dilation (%d): %d\n", iterationsDilation, ccDilation.hashCode() );
 		
 		CachedCalculation<ObjMask> ccErosion = CalculateErosion.createFromCache(
-			cache, iterationsErosion, do3D
+			params, iterationsErosion, do3D
 		);
 		assert( ccErosion instanceof CalculateErosion );
 		
 		//System.out.printf("Create from cache erosion (%d): %d\n", iterationsErosion, ccErosion.hashCode() );
 		
-		return cache.search(
-			new CalculateShellObjMask(
-				ccDilation,
-				ccErosion,
-				iterationsErosionSecond,
-				do3D,
-				inverse
-			)	
-		);
+		return new CalculateShellObjMask(
+			ccDilation,
+			ccErosion,
+			iterationsErosionSecond,
+			do3D,
+			inverse
+		);	
 	}
 
 	@Override

@@ -28,6 +28,7 @@ package ch.ethz.biol.cell.mpp.nrg.feature.objmask;
 
 
 import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.feature.cache.CacheableParams;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.ImageRes;
@@ -49,7 +50,9 @@ public class BoundingBoxMin extends FeatureObjMask {
 
 	
 	@Override
-	public double calcCast( FeatureObjMaskParams params ) throws FeatureCalcException {
+	public double calc( CacheableParams<FeatureObjMaskParams> paramsCacheable ) throws FeatureCalcException {
+		
+		FeatureObjMaskParams params = paramsCacheable.getParams();
 		
 		BoundingBox bbox = params.getObjMask().getBoundingBox();
 		

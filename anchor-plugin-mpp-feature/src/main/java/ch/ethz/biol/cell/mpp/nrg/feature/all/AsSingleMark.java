@@ -3,6 +3,8 @@ package ch.ethz.biol.cell.mpp.nrg.feature.all;
 import org.anchoranalysis.anchor.mpp.feature.bean.mark.FeatureMarkParams;
 import org.anchoranalysis.anchor.mpp.feature.mark.MemoMarks;
 import org.anchoranalysis.anchor.mpp.feature.nrg.elem.NRGElemAllCalcParams;
+import org.anchoranalysis.anchor.mpp.mark.Mark;
+
 
 /*-
  * #%L
@@ -31,10 +33,10 @@ import org.anchoranalysis.anchor.mpp.feature.nrg.elem.NRGElemAllCalcParams;
  */
 
 import org.anchoranalysis.feature.bean.operator.FeatureSingleElem;
+import org.anchoranalysis.feature.cache.CacheableParams;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
 
-public class AsSingleMark extends FeatureSingleElem {
+public class AsSingleMark extends FeatureSingleElem<NRGElemAllCalcParams,FeatureMarkParams> {
 
 	/**
 	 * 
@@ -42,18 +44,9 @@ public class AsSingleMark extends FeatureSingleElem {
 	private static final long serialVersionUID = 1L;
 
 	@Override
-	public double calc( FeatureCalcParams params ) throws FeatureCalcException {
+	public double calc(CacheableParams<NRGElemAllCalcParams> params) throws FeatureCalcException {
 		
-		if (params instanceof NRGElemAllCalcParams) {
-			return calcCast( (NRGElemAllCalcParams) params );
-		} else {
-			throw new FeatureCalcException("Requires NRGElemAllCalcParams");
-		}
-	}
-	
-	private double calcCast(NRGElemAllCalcParams params) throws FeatureCalcException {
-		
-		MemoMarks list = params.getPxlPartMemo();
+		MemoMarks list = params.getParams().getPxlPartMemo();
 		
 		if (list.size()==0) {
 			throw new FeatureCalcException("No mark exists in the list");
@@ -63,11 +56,19 @@ public class AsSingleMark extends FeatureSingleElem {
 			throw new FeatureCalcException("More than one mark exists in the list");
 		}
 		
-		FeatureMarkParams paramsNew = new FeatureMarkParams(
-			list.getMemoForIndex(0).getMark(),
-			params.getDimensions().getRes()
+		Mark mark = list.getMemoForIndex(0).getMark();
+		
+		return params.calcChangeParams(
+			getItem(),
+			p -> deriveParams(p, mark),
+			"mark"
 		);
-			
-		return getCacheSession().calc( getItem(), paramsNew );
+	}
+	
+	private static FeatureMarkParams deriveParams( NRGElemAllCalcParams params, Mark mark ) {
+		return new FeatureMarkParams(
+			mark,
+			params.getDimensions().getRes()
+		);		
 	}
 }

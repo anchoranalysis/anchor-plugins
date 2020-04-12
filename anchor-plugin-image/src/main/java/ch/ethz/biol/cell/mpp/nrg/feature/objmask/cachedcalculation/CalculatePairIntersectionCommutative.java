@@ -60,8 +60,8 @@ public class CalculatePairIntersectionCommutative extends CachedCalculationCastP
 	
 	public static CachedCalculation<ObjMask> createFromCache(
 		ICachedCalculationSearch cache,
-		ICachedCalculationSearch subcache1,
-		ICachedCalculationSearch subcache2,
+		ICachedCalculationSearch cacheDilationObj1,
+		ICachedCalculationSearch cacheDilationObj2,
 		int iterationsDilation,
 		int iterationsErosion,
 		boolean do3D
@@ -70,10 +70,10 @@ public class CalculatePairIntersectionCommutative extends CachedCalculationCastP
 		// We use two additional caches, for the calculations involving the single objects, as these can be expensive, and we want
 		//  them also cached
 		CachedCalculation<ObjMask> ccFirstToSecond = CalculatePairIntersection.createFromCache(
-			cache, subcache1, subcache2, iterationsDilation, 0, do3D, iterationsErosion	
+			cache, cacheDilationObj1, cacheDilationObj2, iterationsDilation, 0, do3D, iterationsErosion	
 		);
 		CachedCalculation<ObjMask> ccSecondToFirst = CalculatePairIntersection.createFromCache(
-			cache, subcache1, subcache2, 0, iterationsDilation, do3D, iterationsErosion	
+			cache, cacheDilationObj1, cacheDilationObj2, 0, iterationsDilation, do3D, iterationsErosion	
 		);
 		return cache.search(
 			new CalculatePairIntersectionCommutative(ccFirstToSecond, ccSecondToFirst)

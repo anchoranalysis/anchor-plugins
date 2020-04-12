@@ -45,6 +45,7 @@ import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.bean.list.FeatureListProvider;
+import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
 import org.anchoranalysis.feature.shared.SharedFeaturesInitParams;
 
 /**
@@ -52,9 +53,10 @@ import org.anchoranalysis.feature.shared.SharedFeaturesInitParams;
  * 
  * @author Owen Feehan
  *
- * @param T permutation type
+ * @param S permutation type
+ * @param T feature-calc-params
  */
-public class FeatureListProviderPermute<T> extends FeatureListProvider {
+public class FeatureListProviderPermute<S, T extends FeatureCalcParams> extends FeatureListProvider<T> {
 
 	/**
 	 * 
@@ -66,43 +68,27 @@ public class FeatureListProviderPermute<T> extends FeatureListProvider {
 	
 	// START BEAN PROPERTIES
 	@BeanField @SkipInit
-	private Feature feature;
+	private Feature<T> feature;
 	
 	@BeanField @Optional
 	private StringSet referencesFeatureListCreator;	// Makes sure a particular feature list creator is evaluated
 	
 	@BeanField @NonEmpty
-	private List<PermuteProperty<T>> listPermuteProperty = new ArrayList<PermuteProperty<T>>();
+	private List<PermuteProperty<S>> listPermuteProperty = new ArrayList<PermuteProperty<S>>();
 	// END BEAN PROPERTIES
-
-	private static FeatureList createInitialList( Feature feature ) throws CreateException {
-		try {
-			FeatureList flInput = new FeatureList();
-			
-			// We add our item to fl as the 'input' item, knowing there's at least one permutation
-			Feature itemDup = feature.duplicateBean();
-			itemDup.setCustomName("");  // Doesn't matter, as will be replaced by next permutation
-			flInput.add(itemDup);
-			
-			return flInput;
-			
-		} catch (BeanDuplicateException e) {
-			throw new CreateException(e);
-		}
-	}
 	
 	@Override
-	public FeatureList create() throws CreateException {
+	public FeatureList<T> create() throws CreateException {
 				
-		FeatureList flInput = createInitialList( feature );
+		FeatureList<T> flInput = createInitialList( feature );
 		
 		// Create many copies of 'item' with properties adjusted
-		List<Feature> fl = flInput;
-		for( PermuteProperty<T> pp : listPermuteProperty ) {
+		List<Feature<T>> fl = flInput;
+		for( PermuteProperty<S> pp : listPermuteProperty ) {
 			
 			PermutationSetter permutationSetter = pp.createSetter(feature);
 			
-			fl = new ApplyPermutations<Feature>(
+			fl = new ApplyPermutations<Feature<T>>(
 				(a) -> a.getCustomName(),
 				(a,s) -> a.setCustomName(s)
 				).applyPermutationsToCreateDuplicates(
@@ -112,10 +98,8 @@ public class FeatureListProviderPermute<T> extends FeatureListProvider {
 			);
 		}
 				
-		return new FeatureList(fl);
+		return new FeatureList<>(fl);
 	}
-
-
 
 	@Override
 	public void onInit(SharedFeaturesInitParams so)
@@ -133,6 +117,22 @@ public class FeatureListProviderPermute<T> extends FeatureListProvider {
 		}
 	}
 
+	private FeatureList<T> createInitialList( Feature<T> feature ) throws CreateException {
+		try {
+			FeatureList<T> flInput = new FeatureList<>();
+			
+			// We add our item to fl as the 'input' item, knowing there's at least one permutation
+			Feature<T> itemDup = feature.duplicateBean();
+			itemDup.setCustomName("");  // Doesn't matter, as will be replaced by next permutation
+			flInput.add(itemDup);
+			
+			return flInput;
+			
+		} catch (BeanDuplicateException e) {
+			throw new CreateException(e);
+		}
+	}
+	
 	public StringSet getReferencesFeatureListCreator() {
 		return referencesFeatureListCreator;
 	}
@@ -142,21 +142,21 @@ public class FeatureListProviderPermute<T> extends FeatureListProvider {
 		this.referencesFeatureListCreator = referencesFeatureListCreator;
 	}
 
-	public List<PermuteProperty<T>> getListPermuteProperty() {
+	public List<PermuteProperty<S>> getListPermuteProperty() {
 		return listPermuteProperty;
 	}
 
-	public void setListPermuteProperty(List<PermuteProperty<T>> listPermuteProperty) {
+	public void setListPermuteProperty(List<PermuteProperty<S>> listPermuteProperty) {
 		this.listPermuteProperty = listPermuteProperty;
 	}
 
 
-	public Feature getFeature() {
+	public Feature<T> getFeature() {
 		return feature;
 	}
 
 
-	public void setFeature(Feature feature) {
+	public void setFeature(Feature<T> feature) {
 		this.feature = feature;
 	}
 

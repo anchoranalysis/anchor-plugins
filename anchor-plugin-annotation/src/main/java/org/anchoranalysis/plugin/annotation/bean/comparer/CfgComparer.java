@@ -35,6 +35,9 @@ import org.anchoranalysis.anchor.mpp.cfg.Cfg;
 import org.anchoranalysis.anchor.mpp.mark.GlobalRegionIdentifiers;
 import org.anchoranalysis.anchor.mpp.regionmap.RegionMapSingleton;
 import org.anchoranalysis.annotation.io.bean.comparer.Comparer;
+import org.anchoranalysis.annotation.io.wholeimage.findable.Findable;
+import org.anchoranalysis.annotation.io.wholeimage.findable.Found;
+import org.anchoranalysis.annotation.io.wholeimage.findable.NotFound;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
@@ -65,7 +68,7 @@ public class CfgComparer extends Comparer {
 	}
 
 	@Override
-	public ObjMaskCollection createObjs(Path filePathSource, ImageDim dim, boolean debugMode) throws CreateException {
+	public Findable<ObjMaskCollection> createObjs(Path filePathSource, ImageDim dim, boolean debugMode) throws CreateException {
 
 		Path filePath;
 		try {
@@ -75,7 +78,7 @@ public class CfgComparer extends Comparer {
 		}
 		
 		if (!Files.exists( filePath )) {
-			return null;	// There's nothing to annotate against
+			return new NotFound<>(filePath, "No cfg exists at path");	// There's nothing to annotate against
 		}
 		
 		CfgDeserializer deserialized = new CfgDeserializer();
@@ -85,12 +88,14 @@ public class CfgComparer extends Comparer {
 		} catch (DeserializationFailedException e) {
 			throw new CreateException(e);
 		}
-		return cfg.calcMask(
+		
+		ObjMaskCollection mask = cfg.calcMask(
 			dim,
 			rm,
 			BinaryValuesByte.getDefault(),
 			null
 		).collectionObjMask();
+		return new Found<>(mask);
 	}
 
 	public FilePathGenerator getFilePathGenerator() {

@@ -30,7 +30,9 @@ package ch.ethz.biol.cell.mpp.nrg.feature.stack;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.feature.bean.Feature;
+import org.anchoranalysis.feature.cache.CacheableParams;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 import org.anchoranalysis.image.binary.BinaryChnl;
 import org.anchoranalysis.image.binary.values.BinaryValues;
 import org.anchoranalysis.image.feature.bean.FeatureStack;
@@ -53,39 +55,31 @@ public class MedianConnectedComponentFeature extends FeatureStack {
 	
 	// START BEAN PROPERTIES
 	@BeanField
-	private Feature item;
+	private Feature<FeatureObjMaskParams> item;
 	
 	@BeanField
 	private int nrgChnlIndex = 0;
 	// END BEAN PROPERTIES
 
 	@Override
-	public double calcCast(FeatureStackParams params) throws FeatureCalcException {
+	public double calc(CacheableParams<FeatureStackParams> params) throws FeatureCalcException {
 
-		BinaryChnl binaryImgChnl = new BinaryChnl(
-			params.getNrgStack().getChnl(nrgChnlIndex),
-			BinaryValues.getDefault()
+		ObjMaskCollection omc = createObjs(
+			params.getParams().getNrgStack()
 		);
-		
-		ObjMaskCollection omc;
-		try {
-			CreateFromConnectedComponentsFactory objMaskCreator = new CreateFromConnectedComponentsFactory();
-			objMaskCreator.setMinNumberVoxels(1);
-			omc = objMaskCreator.createConnectedComponents(binaryImgChnl );
-		} catch (CreateException e) {
-			throw new FeatureCalcException(e);
-		}
-		
-		
-		FeatureObjMaskParams paramsObj = new FeatureObjMaskParams();
-		paramsObj.setNrgStack( params.getNrgStack() );
-		
+				
 		DoubleArrayList featureVals = new DoubleArrayList();
 		
 		// Calculate a feature on each obj mask
-		for( ObjMask om : omc ) {
-			paramsObj.setObjMask(om);
-			double val = getCacheSession().calc(item, paramsObj);
+		for( int i=0; i<omc.size(); i++ ) {
+			
+			ObjMask om = omc.get(i);
+						
+			double val = params.calcChangeParams(
+				item,
+				p -> extractParams(p, om),
+				"obj-" + i
+			);
 			featureVals.add(val);
 		}
 		
@@ -93,12 +87,36 @@ public class MedianConnectedComponentFeature extends FeatureStack {
 		
 		return Descriptive.median(featureVals);
 	}
+	
+	private ObjMaskCollection createObjs(NRGStackWithParams nrgStack) throws FeatureCalcException {
+		
+		BinaryChnl binaryImgChnl = new BinaryChnl(
+			nrgStack.getChnl(nrgChnlIndex),
+			BinaryValues.getDefault()
+		);
+		
+		try {
+			CreateFromConnectedComponentsFactory objMaskCreator = new CreateFromConnectedComponentsFactory();
+			objMaskCreator.setMinNumberVoxels(1);
+			return objMaskCreator.createConnectedComponents(binaryImgChnl );
+			
+		} catch (CreateException e) {
+			throw new FeatureCalcException(e);
+		}
+	}
+	
+	private static FeatureObjMaskParams extractParams( FeatureStackParams params, ObjMask om ) {
+		FeatureObjMaskParams paramsObj = new FeatureObjMaskParams();
+		paramsObj.setNrgStack( params.getNrgStack() );
+		paramsObj.setObjMask(om);
+		return paramsObj;
+	}
 
-	public Feature getItem() {
+	public Feature<FeatureObjMaskParams> getItem() {
 		return item;
 	}
 
-	public void setItem(Feature item) {
+	public void setItem(Feature<FeatureObjMaskParams> item) {
 		this.item = item;
 	}
 

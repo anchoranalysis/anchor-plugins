@@ -31,11 +31,9 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.NonNegative;
 import org.anchoranalysis.bean.annotation.Positive;
 import org.anchoranalysis.core.cache.ExecuteException;
-import org.anchoranalysis.core.error.InitException;
-import org.anchoranalysis.feature.cache.CacheSession;
+import org.anchoranalysis.feature.cache.CacheableParams;
 import org.anchoranalysis.feature.cachedcalculation.CachedCalculation;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.feature.init.FeatureInitParams;
 import org.anchoranalysis.image.chnl.Chnl;
 import org.anchoranalysis.image.feature.bean.objmask.FeatureObjMask;
 import org.anchoranalysis.image.feature.objmask.FeatureObjMaskParams;
@@ -72,8 +70,6 @@ public class IntensityMeanShellTwoStage extends FeatureObjMask {
 	private boolean do3D = true;
 	// END BEAN PROPERTIES
 	
-	private CachedCalculation<ObjMask> ccShellTwoStage;
-
 	@Override
 	public String getParamDscr() {
 		return String.format(
@@ -83,23 +79,22 @@ public class IntensityMeanShellTwoStage extends FeatureObjMask {
 			do3D ? "true" : "false"
 		);
 	}
-
-	
-	@Override
-	public void beforeCalc(FeatureInitParams params,
-			CacheSession cache) throws InitException {
-		super.beforeCalc(params, cache);
-		ccShellTwoStage = CalculateShellTwoStage.createFromCache(cache, iterationsErosion, iterationsFurther, do3D);
-	}
 		
 	@Override
-	public double calcCast(FeatureObjMaskParams params) throws FeatureCalcException {
+	public double calc(CacheableParams<FeatureObjMaskParams> params) throws FeatureCalcException {
 		
-		Chnl chnl = params.getNrgStack().getNrgStack().getChnl(nrgIndex);
+		Chnl chnl = params.getParams().getNrgStack().getNrgStack().getChnl(nrgIndex);
 		
 		ObjMask om;
 		try {
-			om = ccShellTwoStage.getOrCalculate(params);
+			CachedCalculation<ObjMask> ccShellTwoStage = CalculateShellTwoStage.createFromCache(
+				params,
+				iterationsErosion,
+				iterationsFurther,
+				do3D
+			);
+					
+			om = ccShellTwoStage.getOrCalculate(params.getParams());
 		} catch (ExecuteException e) {
 			throw new FeatureCalcException(e);
 		}

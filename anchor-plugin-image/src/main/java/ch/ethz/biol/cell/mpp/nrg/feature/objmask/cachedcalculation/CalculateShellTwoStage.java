@@ -29,9 +29,10 @@ package ch.ethz.biol.cell.mpp.nrg.feature.objmask.cachedcalculation;
 
 import org.anchoranalysis.core.cache.ExecuteException;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.feature.cache.CacheSession;
 import org.anchoranalysis.feature.cachedcalculation.CachedCalculation;
 import org.anchoranalysis.feature.cachedcalculation.CachedCalculationCastParams;
+import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.feature.session.cache.ICachedCalculationSearch;
 import org.anchoranalysis.image.feature.objmask.FeatureObjMaskParams;
 import org.anchoranalysis.image.objmask.ObjMask;
 import org.apache.commons.lang.builder.EqualsBuilder;
@@ -89,16 +90,12 @@ public class CalculateShellTwoStage extends CachedCalculationCastParams<ObjMask,
 		);
 	}
 	
-	
-	
-	
-	
 	public static CachedCalculation<ObjMask> createFromCache(
-		CacheSession cache,
+		ICachedCalculationSearch cache,
 		int iterationsErosion,
 		int iterationsFurther,
 		boolean do3D
-	) {
+	) throws FeatureCalcException {
 		
 		if (iterationsErosion==0) {
 			// Special case when iterationsErosion==0, we consider it instead as a ashell
@@ -163,24 +160,12 @@ public class CalculateShellTwoStage extends CachedCalculationCastParams<ObjMask,
 			throw new CreateException("Object disappears when doing the first erosion");
 		}
 		
-		
 		ObjMask omErodedSecond;
 		try {
 			omErodedSecond = ccFurther.getOrCalculate(params).duplicate();
 		} catch (ExecuteException e) {
 			throw new CreateException(e.getCause());
 		}
-		
-		
-		// Maybe apply a second erosion
-//		ObjMask omErodedSecond = MorphologicalErosion.createErodedObjMask(
-//			omEroded,
-//			null,
-//			do3D,
-//			iterationsFurther,
-//			true,
-//			null
-//		);
 		
 		assert omEroded.getBoundingBox().contains(omErodedSecond.getBoundingBox());
 						

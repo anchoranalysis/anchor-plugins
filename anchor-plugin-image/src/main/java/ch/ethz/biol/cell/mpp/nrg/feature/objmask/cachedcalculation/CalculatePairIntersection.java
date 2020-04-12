@@ -64,8 +64,8 @@ public class CalculatePairIntersection extends CachedCalculationCastParams<ObjMa
 	
 	public static CachedCalculation<ObjMask> createFromCache(
 		ICachedCalculationSearch cache,
-		ICachedCalculationSearch subcache1,
-		ICachedCalculationSearch subcache2,
+		ICachedCalculationSearch cacheDilationObj1,
+		ICachedCalculationSearch cacheDilationObj2,
 		int iterations1,
 		int iterations2,
 		boolean do3D,
@@ -75,10 +75,10 @@ public class CalculatePairIntersection extends CachedCalculationCastParams<ObjMa
 		// We use two additional caches, for the calculations involving the single objects, as these can be expensive, and we want
 		//  them also cached
 		CachedCalculation<ObjMask> ccDilation1 = CalculateDilation.createFromCache(
-			subcache1, iterations1, do3D	
+			cacheDilationObj1, iterations1, do3D	
 		);
 		CachedCalculation<ObjMask> ccDilation2 = CalculateDilation.createFromCache(
-			subcache2, iterations2, do3D	
+			cacheDilationObj2, iterations2, do3D	
 		);
 		return cache.search(
 			new CalculatePairIntersection(do3D, iterationsErosion, ccDilation1, ccDilation2 )

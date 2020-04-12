@@ -32,11 +32,8 @@ import java.util.List;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.NonNegative;
 import org.anchoranalysis.bean.annotation.Optional;
-import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.geometry.Point3d;
-import org.anchoranalysis.feature.cache.CacheSession;
 import org.anchoranalysis.feature.cachedcalculation.CachedCalculation;
-import org.anchoranalysis.feature.init.FeatureInitParams;
 import org.anchoranalysis.image.feature.bean.objmask.FeatureObjMask;
 
 import ch.ethz.biol.cell.mpp.nrg.feature.objmask.cachedcalculation.CalculateGradientFromMultipleChnls;
@@ -63,18 +60,9 @@ public abstract class IntensityGradientBase extends FeatureObjMask {
 	private int subtractConstant = 0;
 	// END BEAN PROPERTIES
 	
-	private CachedCalculation<List<Point3d>> ccPoints;
-	
-	@Override
-	public void beforeCalc(FeatureInitParams params,
-			CacheSession cache)
-			throws InitException {
-		super.beforeCalc(params, cache);
-		
-		ccPoints = cache.search( new CalculateGradientFromMultipleChnls(nrgIndexX,nrgIndexY,nrgIndexZ,subtractConstant) );
-		//System.out.printf("ccPoints=%d isDone?=%s Creating from cache %d\n", System.identityHashCode(ccPoints), ccPoints.hasCachedCalculation()?"yes":"no", cache.hashCode() );
+	protected CachedCalculation<List<Point3d>> gradientCalculation() {
+		return new CalculateGradientFromMultipleChnls(nrgIndexX,nrgIndexY,nrgIndexZ,subtractConstant);
 	}
-	
 	
 	public int getNrgIndexX() {
 		return nrgIndexX;
@@ -107,11 +95,4 @@ public abstract class IntensityGradientBase extends FeatureObjMask {
 	public void setSubtractConstant(int subtractConstant) {
 		this.subtractConstant = subtractConstant;
 	}
-
-
-	protected CachedCalculation<List<Point3d>> getCachedCalculationPoints() {
-		return ccPoints;
-	}
-
-	
 }

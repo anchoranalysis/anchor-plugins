@@ -30,6 +30,7 @@ import org.anchoranalysis.anchor.mpp.feature.nrg.elem.NRGElemPairCalcParams;
  */
 
 import org.anchoranalysis.core.geometry.Point3d;
+import org.anchoranalysis.feature.cache.CacheableParams;
 
 public class MinDistByDim extends NRGElemPair {
 
@@ -39,8 +40,10 @@ public class MinDistByDim extends NRGElemPair {
 	private static final long serialVersionUID = 1L;
 
 	@Override
-	public double calcCast( NRGElemPairCalcParams params ) {
+	public double calc( CacheableParams<NRGElemPairCalcParams> paramsCacheable ) {
 		
+		NRGElemPairCalcParams params = paramsCacheable.getParams();
+				
 		Point3d cp = new Point3d( params.getObj1().getMark().centerPoint() );
 		cp.sub( params.getObj2().getMark().centerPoint() );
 		cp.absolute();

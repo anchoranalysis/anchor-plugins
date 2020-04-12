@@ -30,11 +30,8 @@ import org.anchoranalysis.anchor.mpp.bean.points.fitter.InsufficientPointsExcept
 
 
 import org.anchoranalysis.core.cache.ExecuteException;
-import org.anchoranalysis.core.error.InitException;
-import org.anchoranalysis.feature.cache.CacheSession;
-import org.anchoranalysis.feature.cachedcalculation.CachedCalculation;
+import org.anchoranalysis.feature.cache.CacheableParams;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.feature.init.FeatureInitParams;
 import org.anchoranalysis.image.feature.bean.objmask.FeatureObjMask;
 import org.anchoranalysis.image.feature.objmask.FeatureObjMaskParams;
 import org.anchoranalysis.image.objmask.ObjMask;
@@ -49,22 +46,16 @@ public class Ellipticity extends FeatureObjMask {
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	private CachedCalculation<ObjMaskAndEllipse> cc;
-
 	@Override
-	public void beforeCalc(FeatureInitParams params, CacheSession session)
-			throws InitException {
-		super.beforeCalc(params, session);
-		cc = session.search( new CalculateEllipseLeastSquares() );
-	}
-	
-	@Override
-	public double calcCast(FeatureObjMaskParams params) throws FeatureCalcException {
+	public double calc(CacheableParams<FeatureObjMaskParams> paramsCacheable) throws FeatureCalcException {
 		
-
+		FeatureObjMaskParams params = paramsCacheable.getParams();
+		
 		ObjMaskAndEllipse both;
 		try {
-			both = cc.getOrCalculate(params);
+			both = paramsCacheable.calc(
+				new CalculateEllipseLeastSquares()		
+			);
 		} catch (ExecuteException e) {
 			if (e.getCause() instanceof InsufficientPointsException) {
 				// If we don't have enough points, we return perfectly ellipticity as it's so small

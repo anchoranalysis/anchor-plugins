@@ -38,11 +38,14 @@ import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.core.relation.RelationToValue;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.feature.calc.params.NullParams;
 import org.anchoranalysis.feature.init.FeatureInitParams;
+import org.anchoranalysis.feature.session.calculator.FeatureCalculatorSingle;
 import org.anchoranalysis.feature.shared.SharedFeatureSet;
 import org.anchoranalysis.image.feature.bean.evaluator.FeatureEvaluatorSimple;
 import org.anchoranalysis.image.feature.evaluator.EvaluateSingleObjMask;
-import org.anchoranalysis.image.feature.session.FeatureSessionCreateParamsSingle;
+import org.anchoranalysis.image.feature.objmask.FeatureObjMaskParams;
+import org.anchoranalysis.image.feature.objmask.pair.merged.FeatureObjMaskPairMergedParams;
 import org.anchoranalysis.image.objmask.ObjMask;
 
 import objmaskwithfeature.ObjMaskWithFeature;
@@ -65,26 +68,34 @@ public class ObjMaskProviderMergePair extends ObjMaskProviderMergeWithFeature {
 	 * Allows merge only if the feature-value is greater than or equal to this threshold
 	 */
 	@BeanField
-	private FeatureEvaluatorSimple featureEvaluatorThreshold;
+	private FeatureEvaluatorSimple<NullParams> featureEvaluatorThreshold;
 	
 	/**
 	 * Relation to threshold
 	 */
 	@BeanField
 	private RelationBean relation = new GreaterThanEqualToBean();
+	
+	@BeanField
+	private Feature<FeatureObjMaskPairMergedParams> featureMerge;
 	// END BEAN PROPERTIES
 
 	@Override
-	protected EvaluateSingleObjMask featureEvaluator(FeatureSessionCreateParamsSingle featureSession) {
+	protected EvaluateSingleObjMask featureEvaluator(FeatureCalculatorSingle<FeatureObjMaskParams> featureSession) {
 		// We don't care about evaluating single-features
 		return (ObjMask om) -> 0;
 	}
 	
 	@Override
-	protected AssignPriority assignPriority(FeatureSessionCreateParamsSingle featureSession) throws CreateException {
+	protected AssignPriority assignPriority() throws CreateException {
 		try {
-			double threshold = featureEvaluatorThreshold.createAndStartSession().calc();
-			return new PriorityFeatureMergeSession(threshold,relation.create(), featureSession.getFeature(), featureSession.getParamsInit(), featureSession.getSharedFeatures(), getLogger() );
+			double threshold = featureEvaluatorThreshold
+				.createAndStartSession()
+				.calcOne( NullParams.instance() );
+			return new PriorityFeatureMergeSession(
+				threshold,relation.create(),
+				getLogger()
+			);
 			
 		} catch (FeatureCalcException | OperationFailedException | InitException e) {
 			throw new CreateException(e);
@@ -97,12 +108,18 @@ public class ObjMaskProviderMergePair extends ObjMaskProviderMergeWithFeature {
 		private RelationToValue relation;
 		private MergeSession session;
 				
-		public PriorityFeatureMergeSession(double threshold, RelationToValue relation, Feature feature, FeatureInitParams paramsInit, SharedFeatureSet sharedFeatures, LogErrorReporter logErrorReporter ) throws InitException {
+		public PriorityFeatureMergeSession(
+			double threshold,
+			RelationToValue relation,
+			LogErrorReporter logErrorReporter
+		) throws InitException {
 			super();
 			this.threshold = threshold;
 			this.relation = relation;
-			this.session = new MergeSession( feature, paramsInit, false );
-			this.session.start(sharedFeatures,logErrorReporter);
+			this.session = new MergeSession( featureMerge, new FeatureInitParams(), false );
+			
+			// TODO fixed shared features
+			this.session.start(new SharedFeatureSet<FeatureObjMaskPairMergedParams>(),logErrorReporter);
 		}
 
 		@Override
@@ -136,12 +153,12 @@ public class ObjMaskProviderMergePair extends ObjMaskProviderMergeWithFeature {
 		
 	}
 
-	public FeatureEvaluatorSimple getFeatureEvaluatorThreshold() {
+	public FeatureEvaluatorSimple<NullParams> getFeatureEvaluatorThreshold() {
 		return featureEvaluatorThreshold;
 	}
 
 	public void setFeatureEvaluatorThreshold(
-			FeatureEvaluatorSimple featureEvaluatorThreshold) {
+			FeatureEvaluatorSimple<NullParams> featureEvaluatorThreshold) {
 		this.featureEvaluatorThreshold = featureEvaluatorThreshold;
 	}
 

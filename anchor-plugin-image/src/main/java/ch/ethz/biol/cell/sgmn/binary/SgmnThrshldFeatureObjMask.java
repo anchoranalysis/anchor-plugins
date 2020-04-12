@@ -34,6 +34,7 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.random.RandomNumberGenerator;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.feature.session.calculator.FeatureCalculatorSingle;
 import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
 import org.anchoranalysis.image.bean.sgmn.binary.BinarySgmn;
 import org.anchoranalysis.image.bean.sgmn.binary.BinarySgmnParameters;
@@ -41,8 +42,8 @@ import org.anchoranalysis.image.bean.threshold.ThresholderGlobal;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
 import org.anchoranalysis.image.extent.BoundingBox;
-import org.anchoranalysis.image.feature.bean.evaluator.FeatureEvaluatorNrgStack;
-import org.anchoranalysis.image.feature.session.FeatureSessionCreateParamsSingle;
+import org.anchoranalysis.image.feature.bean.evaluator.FeatureEvaluator;
+import org.anchoranalysis.image.feature.objmask.FeatureObjMaskParams;
 import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.image.objmask.ObjMaskCollection;
 import org.anchoranalysis.image.sgmn.SgmnFailedException;
@@ -60,7 +61,7 @@ public class SgmnThrshldFeatureObjMask extends BinarySgmn {
 	
 	// START PARAMETERS
 	@BeanField
-	private FeatureEvaluatorNrgStack featureEvaluator;
+	private FeatureEvaluator<FeatureObjMaskParams> featureEvaluator;
 	
 	@BeanField
 	private ObjMaskProvider objs;
@@ -69,7 +70,7 @@ public class SgmnThrshldFeatureObjMask extends BinarySgmn {
 	private double calculateLevel() throws SgmnFailedException {
 		
 		try {
-			FeatureSessionCreateParamsSingle session = featureEvaluator.createAndStartSession();
+			FeatureCalculatorSingle<FeatureObjMaskParams> session = featureEvaluator.createAndStartSession();
 			
 			ObjMaskCollection omc = objs.create();
 			
@@ -79,7 +80,10 @@ public class SgmnThrshldFeatureObjMask extends BinarySgmn {
 				throw new SgmnFailedException("objMaskProvider returned more than 1 object. Exactly 1 required");
 			}
 		
-			return session.calc(omc.get(0));
+			return session.calcOne(
+				new FeatureObjMaskParams(omc.get(0))
+			);
+			
 		} catch (FeatureCalcException e) {
 			throw new SgmnFailedException(e);
 		} catch (OperationFailedException e) {
@@ -141,11 +145,11 @@ public class SgmnThrshldFeatureObjMask extends BinarySgmn {
 		return null;
 	}
 
-	public FeatureEvaluatorNrgStack getFeatureEvaluator() {
+	public FeatureEvaluator<FeatureObjMaskParams> getFeatureEvaluator() {
 		return featureEvaluator;
 	}
 
-	public void setFeatureEvaluator(FeatureEvaluatorNrgStack featureEvaluator) {
+	public void setFeatureEvaluator(FeatureEvaluator<FeatureObjMaskParams> featureEvaluator) {
 		this.featureEvaluator = featureEvaluator;
 	}
 

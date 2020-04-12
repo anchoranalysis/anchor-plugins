@@ -31,9 +31,10 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.shared.relation.RelationBean;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.feature.session.calculator.FeatureCalculatorSingle;
 import org.anchoranalysis.image.extent.ImageDim;
-import org.anchoranalysis.image.feature.bean.evaluator.FeatureEvaluatorNrgStack;
-import org.anchoranalysis.image.feature.session.FeatureSessionCreateParamsSingle;
+import org.anchoranalysis.image.feature.bean.evaluator.FeatureEvaluator;
+import org.anchoranalysis.image.feature.objmask.FeatureObjMaskParams;
 import org.anchoranalysis.image.objmask.ObjMask;
 
 public class ObjMaskFilterFeatureRelationThreshold extends ObjMaskFilterByObject {
@@ -45,7 +46,7 @@ public class ObjMaskFilterFeatureRelationThreshold extends ObjMaskFilterByObject
 	
 	// START BEAN PROPERTIES
 	@BeanField
-	private FeatureEvaluatorNrgStack featureEvaluator;
+	private FeatureEvaluator<FeatureObjMaskParams> featureEvaluator;
 	
 	@BeanField
 	private double threshold;
@@ -57,7 +58,7 @@ public class ObjMaskFilterFeatureRelationThreshold extends ObjMaskFilterByObject
 	private boolean debug = true;
 	// END BEAN PROPERTIES
 	
-	private FeatureSessionCreateParamsSingle featureSession = null;
+	private FeatureCalculatorSingle<FeatureObjMaskParams> featureSession = null;
 		
 	@Override
 	protected void start(ImageDim dim) throws OperationFailedException {
@@ -70,7 +71,7 @@ public class ObjMaskFilterFeatureRelationThreshold extends ObjMaskFilterByObject
 		}
 		
 		if (debug) {
-			getLogger().getLogReporter().log( String.format("START Feature Threshold: %s", featureSession.featureName()) );
+			getLogger().getLogReporter().log( String.format("START Feature Threshold") );
 		}
 	}
 
@@ -79,7 +80,9 @@ public class ObjMaskFilterFeatureRelationThreshold extends ObjMaskFilterByObject
 
 		double val;
 		try {
-			val = featureSession.calc(om);
+			val = featureSession.calcOne(
+				new FeatureObjMaskParams(om)
+			);
 		} catch (FeatureCalcException e) {
 			throw new OperationFailedException(e);
 		}
@@ -100,7 +103,7 @@ public class ObjMaskFilterFeatureRelationThreshold extends ObjMaskFilterByObject
 	@Override
 	protected void end() throws OperationFailedException {
 		if (debug) {
-			getLogger().getLogReporter().log( String.format("END Feature Threshold: %s", featureSession.featureName()) );
+			getLogger().getLogReporter().log( String.format("END Feature Threshold") );
 		}
 	}
 
@@ -120,11 +123,11 @@ public class ObjMaskFilterFeatureRelationThreshold extends ObjMaskFilterByObject
 		this.relation = relation;
 	}
 
-	public FeatureEvaluatorNrgStack getFeatureEvaluator() {
+	public FeatureEvaluator<FeatureObjMaskParams> getFeatureEvaluator() {
 		return featureEvaluator;
 	}
 
-	public void setFeatureEvaluator(FeatureEvaluatorNrgStack featureEvaluator) {
+	public void setFeatureEvaluator(FeatureEvaluator<FeatureObjMaskParams> featureEvaluator) {
 		this.featureEvaluator = featureEvaluator;
 	}
 

@@ -1,6 +1,7 @@
 package ch.ethz.biol.cell.mpp.nrg.feature.all;
 
 import org.anchoranalysis.anchor.mpp.feature.bean.nrg.elem.NRGElemAll;
+import org.anchoranalysis.anchor.mpp.feature.mark.MemoMarks;
 import org.anchoranalysis.anchor.mpp.feature.nrg.elem.NRGElemAllCalcParams;
 import org.anchoranalysis.anchor.mpp.feature.nrg.elem.NRGElemIndCalcParams;
 import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
@@ -34,7 +35,9 @@ import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.bean.Feature;
+import org.anchoranalysis.feature.cache.CacheableParams;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
 
 public class CoefficientOfVarianceFromAll extends NRGElemAll {
 
@@ -45,53 +48,75 @@ public class CoefficientOfVarianceFromAll extends NRGElemAll {
 
 	// START BEAN PROPERTIES
 	@BeanField
-	private Feature item;
+	private Feature<FeatureCalcParams> item;
 	// END BEAN PROPERTIES
 	
 	@Override
-	public double calcCast(NRGElemAllCalcParams params)
+	public double calc(CacheableParams<NRGElemAllCalcParams> paramsCacheable)
 			throws FeatureCalcException {
 		
-		double sum = 0.0;
+		MemoMarks memoMarks = paramsCacheable.getParams().getPxlPartMemo();
 		
-		NRGElemIndCalcParams paramsInd = new NRGElemIndCalcParams(null,params.getNrgStack());
-		
-		if (params.getPxlPartMemo().size()==0) {
+		if (memoMarks.size()==0) {
 			return 0.0;
 		}
 		
-		double vals[] = new double[params.getPxlPartMemo().size()];
+		double vals[] = new double[memoMarks.size()];
+		double mean = calcForEachItem(paramsCacheable, memoMarks, vals);
 		
-		for( int i=0; i<params.getPxlPartMemo().size(); i++) {
-			PxlMarkMemo pmm = params.getPxlPartMemo().getMemoForIndex(i);
-			paramsInd.setPxlPartMemo(pmm);
-			double v = getCacheSession().calc( item, paramsInd );
+		if (mean==0.0) {
+			return Double.POSITIVE_INFINITY;
+		}
+		
+		return stdDev(vals, mean) / mean;
+	}
+	
+	/** Calculates the feature on each mark separately, populating vals, and returns the mean */
+	private double calcForEachItem( CacheableParams<NRGElemAllCalcParams> paramsCacheable, MemoMarks memoMarks, double vals[] ) throws FeatureCalcException {
+		
+		double sum = 0.0;		
+		
+		for( int i=0; i<memoMarks.size(); i++) {
+			
+			final int index = i;
+			
+			double v = paramsCacheable.calcChangeParams(
+				item,
+				p -> extractInd(p, index),
+				"mark"+i
+			);
+			
 			vals[i] = v;
 			sum+= v;
 		}
 		
-		double mean = sum / params.getPxlPartMemo().size();
+		return sum / memoMarks.size();
+	}
+	
+	private static NRGElemIndCalcParams extractInd( NRGElemAllCalcParams params, int i ) {
 		
+		PxlMarkMemo pmm = params.getPxlPartMemo().getMemoForIndex(i);
+		
+		NRGElemIndCalcParams paramsInd = new NRGElemIndCalcParams(null,params.getNrgStack());
+		paramsInd.setPxlPartMemo(pmm);
+		return paramsInd;
+	}
+	
+	private static double stdDev( double vals[], double mean ) {
 		double sumSqDiff = 0.0;
 		for( int i=0; i<vals.length; i++) {
 			double diff = vals[i] - mean;
 			sumSqDiff += Math.pow(diff,2.0);
 		}
 		
-		double stdDev = Math.sqrt(sumSqDiff);
-		
-		if (mean==0.0) {
-			return Double.POSITIVE_INFINITY;
-		}
-		
-		return stdDev / mean;
+		return Math.sqrt(sumSqDiff);
 	}
 
-	public Feature getItem() {
+	public Feature<FeatureCalcParams> getItem() {
 		return item;
 	}
 
-	public void setItem(Feature item) {
+	public void setItem(Feature<FeatureCalcParams> item) {
 		this.item = item;
 	}
 

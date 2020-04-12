@@ -1,5 +1,7 @@
 package ch.ethz.biol.cell.mpp.nrg.feature.operator;
 
+import org.anchoranalysis.feature.cache.CacheableParams;
+
 /*-
  * #%L
  * anchor-plugin-operator-feature
@@ -31,7 +33,7 @@ import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
 import org.anchoranalysis.math.statistics.FirstSecondOrderStatistic;
 
 // Z-score of a value
-public class ZScore extends FeatureFirstSecondOrder {
+public class ZScore<T extends FeatureCalcParams> extends FeatureFirstSecondOrder<T> {
 
 	/**
 	 * 
@@ -42,12 +44,12 @@ public class ZScore extends FeatureFirstSecondOrder {
 	// END BEAN PROPERTIES
 	
 	@Override
-	public double calc( FeatureCalcParams params ) throws FeatureCalcException {
+	public double calc( CacheableParams<T> params ) throws FeatureCalcException {
 		
-		double val = getCacheSession().calc( getItem(), params );
-		double mean = getCacheSession().calc( getItemMean(), params );
+		double val = params.calc( getItem() );
+		double mean = params.calc( getItemMean() );
 
-		double stdDev = getCacheSession().calc( getItemStdDev(), params );
+		double stdDev = params.calc( getItemStdDev() );
 
 		double zScore = FirstSecondOrderStatistic.calcZScore(val, mean, stdDev);
 		assert( !Double.isNaN(zScore) );

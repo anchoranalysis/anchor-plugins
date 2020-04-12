@@ -35,6 +35,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.core.geometry.Point3i;
+import org.anchoranalysis.feature.cache.CacheableParams;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.feature.bean.objmask.FeatureObjMask;
 import org.anchoranalysis.image.feature.objmask.FeatureObjMaskParams;
@@ -59,8 +60,10 @@ public class ObjectRadiusStdDev extends FeatureObjMask {
 	// END BEAN PROPERTIES
 	
 	@Override
-	public double calcCast(FeatureObjMaskParams params) throws FeatureCalcException {
+	public double calc(CacheableParams<FeatureObjMaskParams> paramsCacheable) throws FeatureCalcException {
 
+		FeatureObjMaskParams params = paramsCacheable.getParams();
+		
 		ObjMask om = params.getObjMask();
 
 		// Get the cog

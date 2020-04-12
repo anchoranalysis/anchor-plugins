@@ -31,7 +31,8 @@ import org.anchoranalysis.bean.annotation.Optional;
 import org.anchoranalysis.bean.provider.objs.merge.condition.IncreaseFeatureCondition;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.image.feature.bean.evaluator.FeatureEvaluatorNrgStack;
+import org.anchoranalysis.image.feature.bean.evaluator.FeatureEvaluator;
+import org.anchoranalysis.image.feature.objmask.FeatureObjMaskParams;
 import org.anchoranalysis.image.objmask.ObjMaskCollection;
 
 public class ObjMaskProviderMerge extends ObjMaskProviderMergeOptionalDistance {
@@ -46,7 +47,7 @@ public class ObjMaskProviderMerge extends ObjMaskProviderMergeOptionalDistance {
 	private boolean replaceWithMidpoint = false;
 	
 	@BeanField @Optional
-	private FeatureEvaluatorNrgStack featureEvaluator;
+	private FeatureEvaluator<FeatureObjMaskParams> featureEvaluator;
 	// END BEAN PROPERTIES
 
 	@Override
@@ -59,7 +60,8 @@ public class ObjMaskProviderMerge extends ObjMaskProviderMergeOptionalDistance {
 				replaceWithMidpoint,
 				maybeDistanceCondition(),
 				new IncreaseFeatureCondition(featureEvaluator),
-				calcRes()
+				calcRes(),
+				getLogger()
 			);
 			
 			return mergeMultiplex(
@@ -72,11 +74,11 @@ public class ObjMaskProviderMerge extends ObjMaskProviderMergeOptionalDistance {
 		}
 	}
 	
-	public FeatureEvaluatorNrgStack getFeatureEvaluator() {
+	public FeatureEvaluator<FeatureObjMaskParams> getFeatureEvaluator() {
 		return featureEvaluator;
 	}
 
-	public void setFeatureEvaluator(FeatureEvaluatorNrgStack featureEvaluator) {
+	public void setFeatureEvaluator(FeatureEvaluator<FeatureObjMaskParams> featureEvaluator) {
 		this.featureEvaluator = featureEvaluator;
 	}
 

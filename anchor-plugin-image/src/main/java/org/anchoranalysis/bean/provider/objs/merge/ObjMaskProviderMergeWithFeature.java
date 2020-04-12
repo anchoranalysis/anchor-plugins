@@ -37,11 +37,12 @@ import org.anchoranalysis.bean.provider.objs.merge.condition.WrapAsUpdatable;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.graph.GraphWithEdgeTypes.EdgeTypeWithVertices;
+import org.anchoranalysis.feature.session.calculator.FeatureCalculatorSingle;
 import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
 import org.anchoranalysis.image.extent.ImageRes;
-import org.anchoranalysis.image.feature.bean.evaluator.FeatureEvaluatorNrgStack;
+import org.anchoranalysis.image.feature.bean.evaluator.FeatureEvaluator;
 import org.anchoranalysis.image.feature.evaluator.EvaluateSingleObjMask;
-import org.anchoranalysis.image.feature.session.FeatureSessionCreateParamsSingle;
+import org.anchoranalysis.image.feature.objmask.FeatureObjMaskParams;
 import org.anchoranalysis.image.objmask.ObjMaskCollection;
 
 import objmaskwithfeature.ObjMaskWithFeature;
@@ -56,7 +57,7 @@ public abstract class ObjMaskProviderMergeWithFeature extends ObjMaskProviderMer
 
 	// START BEAN PROPERTIES
 	@BeanField
-	private FeatureEvaluatorNrgStack featureEvaluator;
+	private FeatureEvaluator<FeatureObjMaskParams> featureEvaluator;
 	
 	@BeanField
 	private boolean requireBBoxNeighbours = true;	// Requires the bounding boxes to intersect, or touch for any potential merge
@@ -72,9 +73,10 @@ public abstract class ObjMaskProviderMergeWithFeature extends ObjMaskProviderMer
 	// END BEAN PROPERTIES
 	
 	
-	protected abstract EvaluateSingleObjMask featureEvaluator(FeatureSessionCreateParamsSingle featureSession);
+	protected abstract EvaluateSingleObjMask featureEvaluator(FeatureCalculatorSingle<FeatureObjMaskParams> featureSession);
 	
-	protected abstract AssignPriority assignPriority(FeatureSessionCreateParamsSingle featureSession) throws CreateException;
+	protected abstract AssignPriority assignPriority(
+	) throws CreateException;
 
 	/**
 	 * Is the single-feature (the unary feature calculated on each feature) used?
@@ -120,13 +122,15 @@ public abstract class ObjMaskProviderMergeWithFeature extends ObjMaskProviderMer
 	 */
 	private ObjMaskCollection mergeConnectedComponents( ObjMaskCollection objs, ObjMaskCollection saveObjs ) throws OperationFailedException {
 		
-		FeatureSessionCreateParamsSingle session = featureEvaluator.createAndStartSession( false );
-		
 		ImageRes res = calcRes();
 		
 		MergeGraph graph;
 		try {
-			graph = createGraph(objs, res, session);
+			graph = createGraph(
+				objs,
+				res,
+				featureEvaluator.createAndStartSession()
+			);
 		} catch (CreateException e) {
 			throw new OperationFailedException(e);
 		}
@@ -179,14 +183,18 @@ public abstract class ObjMaskProviderMergeWithFeature extends ObjMaskProviderMer
 		return true;
 	}
 	
-	private MergeGraph createGraph( ObjMaskCollection objs, ImageRes res, FeatureSessionCreateParamsSingle featureSession ) throws CreateException {
+	private MergeGraph createGraph(
+		ObjMaskCollection objs,
+		ImageRes res,
+		FeatureCalculatorSingle<FeatureObjMaskParams> sessionSingle
+	) throws CreateException {
 			
 		try {
 			MergeGraph graph = new MergeGraph(
-				featureEvaluator( featureSession ),
+				featureEvaluator( sessionSingle ),
 				beforeConditions(),
 				res,
-				assignPriority(featureSession),
+				assignPriority(),
 				isSingleFeatureUsed()
 			);
 						
@@ -210,11 +218,11 @@ public abstract class ObjMaskProviderMergeWithFeature extends ObjMaskProviderMer
 	
 	
 
-	public FeatureEvaluatorNrgStack getFeatureEvaluator() {
+	public FeatureEvaluator<FeatureObjMaskParams> getFeatureEvaluator() {
 		return featureEvaluator;
 	}
 
-	public void setFeatureEvaluator(FeatureEvaluatorNrgStack featureEvaluator) {
+	public void setFeatureEvaluator(FeatureEvaluator<FeatureObjMaskParams> featureEvaluator) {
 		this.featureEvaluator = featureEvaluator;
 	}
 

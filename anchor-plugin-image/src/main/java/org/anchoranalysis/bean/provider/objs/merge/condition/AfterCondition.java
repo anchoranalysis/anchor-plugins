@@ -28,12 +28,13 @@ package org.anchoranalysis.bean.provider.objs.merge.condition;
 
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.image.extent.ImageRes;
 import org.anchoranalysis.image.objmask.ObjMask;
 
 public interface AfterCondition {
 	
-	void init() throws InitException;
+	void init(LogErrorReporter logger) throws InitException;
 	
 	boolean accept(ObjMask omSrc, ObjMask omDest, ObjMask omMerged, ImageRes res) throws OperationFailedException;
 }

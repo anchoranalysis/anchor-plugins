@@ -69,14 +69,6 @@
 	  <type>jar</type>
       <scope>test</scope>
 	</dependency>
-	
-	<dependency>
-	  <groupId>${project.groupId}</groupId>
-	  <artifactId>anchor-test-feature</artifactId>
-	  <version>0.0.4-SNAPSHOT</version>
-	  <type>jar</type>
-      <scope>test</scope>
-	</dependency>
 		
 	<dependency>
 	  <groupId>colt</groupId>
@@ -88,6 +80,28 @@
 	  <artifactId>commons-lang</artifactId>
 	  <version>2.6</version>
 	</dependency>
-	</dependencies>
-	
+
+    <dependency>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>anchor-test-feature</artifactId>
+      <version>0.0.4-SNAPSHOT</version>
+      <scope>test</scope>
+    </dependency>
+    
+     <dependency>
+       <groupId>${project.groupId}</groupId>
+       <artifactId>anchor-test-feature-plugins</artifactId>
+       <version>0.0.4-SNAPSHOT</version>
+       <scope>test</scope>
+     </dependency>
+        
+    <dependency>
+      <groupId>org.mockito</groupId>
+      <artifactId>mockito-core</artifactId>
+      <version>${mockito.version}</version>
+      <scope>test</scope>
+    </dependency>
+
+    </dependencies>
+    	
 </project>

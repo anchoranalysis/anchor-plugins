@@ -1,8 +1,7 @@
 package ch.ethz.biol.cell.mpp.nrg.feature.pair;
 
-import org.anchoranalysis.anchor.mpp.feature.bean.nrg.elem.NRGElemPair;
 import org.anchoranalysis.anchor.mpp.feature.nrg.elem.NRGElemPairCalcParams;
-import org.anchoranalysis.anchor.mpp.mark.GlobalRegionIdentifiers;
+
 
 /*
  * #%L
@@ -31,17 +30,10 @@ import org.anchoranalysis.anchor.mpp.mark.GlobalRegionIdentifiers;
  */
 
 
-import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.cache.ExecuteException;
-import org.anchoranalysis.core.error.InitException;
-import org.anchoranalysis.feature.cache.CacheSession;
-import org.anchoranalysis.feature.cachedcalculation.CachedCalculation;
+import org.anchoranalysis.feature.cache.CacheableParams;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.feature.init.FeatureInitParams;
 
-import ch.ethz.biol.cell.mpp.nrg.cachedcalculation.OverlapCalculationMaskGlobal;
-
-public class OverlapMaskGlobal extends NRGElemPair {
+public class OverlapMaskGlobal extends OverlapMaskSingleRegion {
 
 	/**
 	 * 
@@ -49,61 +41,12 @@ public class OverlapMaskGlobal extends NRGElemPair {
 	private static final long serialVersionUID = 1L;
 	
 	// START BEAN PROPERTIES
-	@BeanField
-	private int regionID = GlobalRegionIdentifiers.SUBMARK_INSIDE;
-	
-	@BeanField
-	private int nrgIndex = 0;
-	
-	@BeanField
-	private int maskValue = 255;
+
 	// END BEAN PROPERTIES
-	
-	private CachedCalculation<Double> cc;
-	
-	public OverlapMaskGlobal() {
-	}
 		
 	@Override
-	public void beforeCalc(FeatureInitParams params, CacheSession cache)
-			throws InitException {
-		super.beforeCalc(params, cache);
-		
-		cc = cache.search( new OverlapCalculationMaskGlobal(regionID, nrgIndex, (byte) maskValue) );
-	}
-		
-	@Override
-	public double calcCast( NRGElemPairCalcParams params ) throws FeatureCalcException {
-		try {
-			return cc.getOrCalculate(params);
-			
-		} catch (ExecuteException e) {
-			throw new FeatureCalcException(e);
-		}							
-	}
-	
-	public int getRegionID() {
-		return regionID;
-	}
-
-	public void setRegionID(int regionID) {
-		this.regionID = regionID;
-	}
-
-	public int getNrgIndex() {
-		return nrgIndex;
-	}
-
-	public void setNrgIndex(int nrgIndex) {
-		this.nrgIndex = nrgIndex;
-	}
-
-	public int getMaskValue() {
-		return maskValue;
-	}
-
-	public void setMaskValue(int maskValue) {
-		this.maskValue = maskValue;
+	public double calc( CacheableParams<NRGElemPairCalcParams> params ) throws FeatureCalcException {
+		return overlapWithGlobalMask(params);
 	}
 
 }

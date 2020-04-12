@@ -30,8 +30,8 @@ package ch.ethz.biol.cell.sgmn.graphcuts.nrgdefinition.pixelscore;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.shared.relation.RelationBean;
 import org.anchoranalysis.core.error.InitException;
+import org.anchoranalysis.feature.cache.CacheableParams;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.feature.session.cache.FeatureSessionCacheRetriever;
 import org.anchoranalysis.image.feature.bean.pixelwise.score.PixelScore;
 import org.anchoranalysis.image.feature.pixelwise.PixelwiseFeatureInitParams;
 import org.anchoranalysis.image.feature.pixelwise.score.PixelScoreFeatureCalcParams;
@@ -66,8 +66,11 @@ public class PixelScoreIdentityImposeValueRelationToHistogram extends PixelScore
 	private int histMax;
 		
 	@Override
-	protected double calcCast(PixelScoreFeatureCalcParams params)
+	protected double calc(CacheableParams<PixelScoreFeatureCalcParams> paramsCacheable)
 			throws FeatureCalcException {
+		
+		PixelScoreFeatureCalcParams params = paramsCacheable.getParams();
+		
 		double pxlValue = params.getPxl(nrgChnlIndexCheck);
 		
 		if (relation.create().isRelationToValueTrue(pxlValue, histMax)) {
@@ -77,7 +80,7 @@ public class PixelScoreIdentityImposeValueRelationToHistogram extends PixelScore
 	}
 
 	@Override
-	public void beforeCalcCast(PixelwiseFeatureInitParams params, FeatureSessionCacheRetriever session) throws InitException {
+	public void beforeCalcCast(PixelwiseFeatureInitParams params) throws InitException {
 		if (max) {
 			histMax = params.getHist(histIndex).calcMax();
 		} else {

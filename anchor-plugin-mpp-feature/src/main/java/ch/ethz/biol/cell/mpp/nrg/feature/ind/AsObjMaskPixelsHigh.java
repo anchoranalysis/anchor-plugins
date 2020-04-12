@@ -34,15 +34,15 @@ import org.anchoranalysis.anchor.mpp.regionmap.RegionMapSingleton;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.bean.operator.FeatureSingleElem;
+import org.anchoranalysis.feature.cache.CacheableParams;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
 import org.anchoranalysis.feature.params.FeatureParamsDescriptor;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.feature.objmask.FeatureObjMaskParams;
 import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.image.objmask.properties.ObjMaskWithProperties;
 
-public class AsObjMaskPixelsHigh extends FeatureSingleElem {
+public class AsObjMaskPixelsHigh extends FeatureSingleElem<NRGElemIndCalcParams,FeatureObjMaskParams> {
 
 	/**
 	 * 
@@ -64,42 +64,22 @@ public class AsObjMaskPixelsHigh extends FeatureSingleElem {
 	// END BEAN PROPERTIES
 	
 	@Override
-	public double calc(FeatureCalcParams params) throws FeatureCalcException {
+	public double calc(CacheableParams<NRGElemIndCalcParams> params) throws FeatureCalcException {
+		return params
+			.calcChangeParams(
+				getItem(),
+				p -> createObjParams(p),
+				"intersection"
+			);
+	}
+	
+	private FeatureObjMaskParams createObjParams( NRGElemIndCalcParams params ) {
 		
-		if (params instanceof NRGElemIndCalcParams) {
-		
-			NRGElemIndCalcParams paramsCast = (NRGElemIndCalcParams) params; 
-			
-			 
-			
-			FeatureObjMaskParams paramsNew;
-			ObjMaskWithProperties omWithProps = paramsCast.getPxlPartMemo().getMark().calcMask(
-				paramsCast.getNrgStack().getDimensions(),
-				regionMap.membershipWithFlagsForIndex(index),
-				BinaryValuesByte.getDefault()
-			);
-			
-			ObjMask om = omWithProps.getMask();
-			
-			ObjMask omEqual = paramsCast.getNrgStack().getNrgStack().getChnl(nrgIndex).getVoxelBox().any().equalMask(
-				om.getBoundingBox(),
-				maskValue
-			);
-			
-			ObjMask omIntersect = omEqual.intersect(om, paramsCast.getNrgStack().getDimensions() );
-			
-			paramsNew = new FeatureObjMaskParams(
-				omIntersect
-			);
-			paramsNew.setNrgStack( paramsCast.getNrgStack() );
-			
-			double ret = getCacheSession().calc( getItem(), paramsNew);
-			
-			return ret;
-			
-		} else {
-			throw new FeatureCalcException("Not supported for this type of params");
-		}
+		FeatureObjMaskParams paramsNew = new FeatureObjMaskParams(
+			findIntersection(params)
+		);
+		paramsNew.setNrgStack( params.getNrgStack() );
+		return paramsNew;
 	}
 
 	// We change the default behaviour, as we don't want to give the same paramsFactory
@@ -108,6 +88,24 @@ public class AsObjMaskPixelsHigh extends FeatureSingleElem {
 	public FeatureParamsDescriptor paramType()
 			throws FeatureCalcException {
 		return NRGElemIndCalcParamsDescriptor.instance;
+	}
+	
+	private ObjMask findIntersection( NRGElemIndCalcParams paramsCast ) {
+		
+		ObjMaskWithProperties omWithProps = paramsCast.getPxlPartMemo().getMark().calcMask(
+			paramsCast.getNrgStack().getDimensions(),
+			regionMap.membershipWithFlagsForIndex(index),
+			BinaryValuesByte.getDefault()
+		);
+		
+		ObjMask om = omWithProps.getMask();
+		
+		ObjMask omEqual = paramsCast.getNrgStack().getNrgStack().getChnl(nrgIndex).getVoxelBox().any().equalMask(
+			om.getBoundingBox(),
+			maskValue
+		);
+		
+		return omEqual.intersect(om, paramsCast.getNrgStack().getDimensions() );		
 	}
 
 	@Override

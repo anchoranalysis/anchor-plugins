@@ -33,10 +33,11 @@ import org.anchoranalysis.anchor.mpp.mark.conic.MarkEllipsoid;
 import org.anchoranalysis.core.cache.ExecuteException;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.geometry.Point3i;
-import org.anchoranalysis.feature.cache.CacheSession;
+import org.anchoranalysis.feature.cache.CacheableParams;
 import org.anchoranalysis.feature.cachedcalculation.CachedCalculation;
 import org.anchoranalysis.feature.cachedcalculation.CachedCalculationCastParams;
 import org.anchoranalysis.feature.cachedcalculation.CachedCalculationOperation;
+import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.feature.objmask.FeatureObjMaskParams;
 import org.anchoranalysis.plugin.points.calculate.CalculatePntsFromOutline;
 import org.apache.commons.lang.builder.EqualsBuilder;
@@ -54,9 +55,16 @@ public class CalculateEllipsoidLeastSquares extends CachedCalculationCastParams<
 		this.ccPnts = ccPnts;
 	}
 	
-	public static CachedCalculation<MarkEllipsoid> createFromCache( CacheSession cache, boolean suppressZCovariance ) {
-		CachedCalculation<List<Point3i>> ccPnts = cache.search( new CalculatePntsFromOutline() );
-		return cache.search( new CalculateEllipsoidLeastSquares(suppressZCovariance, ccPnts ) );
+	public static MarkEllipsoid createFromCache(CacheableParams<FeatureObjMaskParams> params, boolean suppressZCovariance ) throws FeatureCalcException {
+		CachedCalculation<List<Point3i>> ccPnts = params.search( new CalculatePntsFromOutline() );
+		CachedCalculation<MarkEllipsoid> ccEllipsoid = params.search(
+			new CalculateEllipsoidLeastSquares(suppressZCovariance, ccPnts )
+		);
+		try {
+			return params.calc(ccEllipsoid);
+		} catch (ExecuteException e) {
+			throw new FeatureCalcException(e.getCause());
+		}
 	}
 	
 	@Override

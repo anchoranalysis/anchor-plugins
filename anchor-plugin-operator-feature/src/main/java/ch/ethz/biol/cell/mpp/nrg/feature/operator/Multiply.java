@@ -28,11 +28,12 @@ package ch.ethz.biol.cell.mpp.nrg.feature.operator;
 
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.operator.FeatureListElem;
+import org.anchoranalysis.feature.cache.CacheableParams;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
 
 
-public class Multiply extends FeatureListElem {
+public class Multiply<T extends FeatureCalcParams> extends FeatureListElem<T> {
 	
 	/**
 	 * 
@@ -40,12 +41,12 @@ public class Multiply extends FeatureListElem {
 	private static final long serialVersionUID = 1L;
 
 	@Override
-	public double calc( FeatureCalcParams params ) throws FeatureCalcException {
+	public double calc( CacheableParams<T> params ) throws FeatureCalcException {
 		
 		double result = 1;
 		
-		for (Feature elem : getList()) {
-			result *= getCacheSession().calc( elem, params );
+		for (Feature<T> elem : getList()) {
+			result *= params.calc( elem );
 			
 			// Early exit if we start multiplying by 0
 			if (result==0) {
@@ -62,7 +63,7 @@ public class Multiply extends FeatureListElem {
 		StringBuilder sb = new StringBuilder();
 		
 		boolean first = true;
-		for (Feature elem : getList()) {
+		for (Feature<T> elem : getList()) {
 			
 			if (first==true) {
 				first = false;

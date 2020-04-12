@@ -28,6 +28,7 @@ package ch.ethz.biol.cell.sgmn.graphcuts.nrgdefinition.pixelscore;
 
 
 import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.feature.cache.CacheableParams;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.feature.bean.pixelwise.score.PixelScore;
 import org.anchoranalysis.image.feature.pixelwise.score.PixelScoreFeatureCalcParams;
@@ -76,14 +77,31 @@ public class PixelScoreDifference extends PixelScore {
 		return calcDiffFromValue( valFirst, valSecond, width, width, minDifference );
 	}
 
-	public static double calcDiffFromParams( PixelScoreFeatureCalcParams params, int nrgChnlIndexFirst, int nrgChnlIndexSecond, double width, int minDifference ) {
-		return calcDiffFromValue( params.getPxl(nrgChnlIndexFirst), params.getPxl(nrgChnlIndexSecond), width, minDifference );
+	public static double calcDiffFromParams(
+		CacheableParams<PixelScoreFeatureCalcParams> params,
+		int nrgChnlIndexFirst,
+		int nrgChnlIndexSecond,
+		double width,
+		int minDifference
+	) {
+		return calcDiffFromValue(
+			params.getParams().getPxl(nrgChnlIndexFirst),
+			params.getParams().getPxl(nrgChnlIndexSecond),
+			width,
+			minDifference
+		);
 	}
 	
 	@Override
-	public double calcCast(PixelScoreFeatureCalcParams params)
+	public double calc(CacheableParams<PixelScoreFeatureCalcParams> params)
 			throws FeatureCalcException {
-		return calcDiffFromParams(params, nrgChnlIndexFirst, nrgChnlIndexSecond, width, minDifference);
+		return calcDiffFromParams(
+			params,
+			nrgChnlIndexFirst,
+			nrgChnlIndexSecond,
+			width,
+			minDifference
+		);
 	}
 
 	public double getWidth() {

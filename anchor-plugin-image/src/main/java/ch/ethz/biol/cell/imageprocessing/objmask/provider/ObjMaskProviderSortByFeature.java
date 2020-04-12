@@ -35,9 +35,10 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.feature.session.calculator.FeatureCalculatorSingle;
 import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
-import org.anchoranalysis.image.feature.bean.evaluator.FeatureEvaluatorNrgStack;
-import org.anchoranalysis.image.feature.session.FeatureSessionCreateParamsSingle;
+import org.anchoranalysis.image.feature.bean.evaluator.FeatureEvaluator;
+import org.anchoranalysis.image.feature.objmask.FeatureObjMaskParams;
 import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.image.objmask.ObjMaskCollection;
 
@@ -53,7 +54,7 @@ public class ObjMaskProviderSortByFeature extends ObjMaskProvider {
 	private ObjMaskProvider objs;
 	
 	@BeanField
-	private FeatureEvaluatorNrgStack featureEvaluator;
+	private FeatureEvaluator<FeatureObjMaskParams> featureEvaluator;
 	// END BEAN PROPERTIES
 	
 	private static class ObjWithFeatureValue implements Comparable<ObjWithFeatureValue> {
@@ -61,10 +62,10 @@ public class ObjMaskProviderSortByFeature extends ObjMaskProvider {
 		private ObjMask objMask;
 		private double featureVal;
 		
-		public ObjWithFeatureValue(ObjMask objMask, FeatureSessionCreateParamsSingle featureSession) throws FeatureCalcException {
+		public ObjWithFeatureValue(ObjMask objMask, double featureVal) throws FeatureCalcException {
 			super();
 			this.objMask = objMask;
-			this.featureVal = featureSession.calc(objMask);
+			this.featureVal = featureVal;
 		}
 
 		@Override
@@ -86,12 +87,15 @@ public class ObjMaskProviderSortByFeature extends ObjMaskProvider {
 		ObjMaskCollection objsCollection = objs.create();
 		
 		try {
-			FeatureSessionCreateParamsSingle featureSession = featureEvaluator.createAndStartSession();
+			FeatureCalculatorSingle<FeatureObjMaskParams> featureSession = featureEvaluator.createAndStartSession();
 			
 			List<ObjWithFeatureValue> listToSort = new ArrayList<>();
 			for( ObjMask om : objsCollection ) {
 				try {
-					listToSort.add( new ObjWithFeatureValue(om,featureSession) );
+					double featureVal = featureSession.calcOne(
+						new FeatureObjMaskParams(om)
+					);
+					listToSort.add( new ObjWithFeatureValue(om,featureVal) );
 				} catch (FeatureCalcException e) {
 					throw new CreateException(e);
 				}
@@ -121,12 +125,12 @@ public class ObjMaskProviderSortByFeature extends ObjMaskProvider {
 	}
 
 
-	public FeatureEvaluatorNrgStack getFeatureEvaluator() {
+	public FeatureEvaluator<FeatureObjMaskParams> getFeatureEvaluator() {
 		return featureEvaluator;
 	}
 
 
-	public void setFeatureEvaluator(FeatureEvaluatorNrgStack featureEvaluator) {
+	public void setFeatureEvaluator(FeatureEvaluator<FeatureObjMaskParams> featureEvaluator) {
 		this.featureEvaluator = featureEvaluator;
 	}
 

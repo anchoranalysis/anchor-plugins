@@ -28,17 +28,10 @@ package ch.ethz.biol.cell.mpp.nrg.feature.objmaskpairmerged;
 
 
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.bean.annotation.SkipInit;
-import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.feature.bean.Feature;
-import org.anchoranalysis.feature.cache.CacheSession;
-import org.anchoranalysis.feature.cache.FeatureCacheDefinition;
-import org.anchoranalysis.feature.cache.PrefixedCacheDefinition;
+import org.anchoranalysis.feature.cache.CacheableParams;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
-import org.anchoranalysis.feature.init.FeatureInitParams;
-import org.anchoranalysis.feature.session.cache.FeatureSessionCacheRetriever;
-import org.anchoranalysis.image.feature.bean.objmask.pair.merged.FeatureObjMaskPairMerged;
+import org.anchoranalysis.image.feature.bean.objmask.pair.FeatureObjMaskPairMerged;
 import org.anchoranalysis.image.feature.objmask.FeatureObjMaskParams;
 import org.anchoranalysis.image.feature.objmask.pair.merged.FeatureObjMaskPairMergedParams;
 import org.anchoranalysis.image.objmask.ObjMask;
@@ -59,80 +52,47 @@ public abstract class FromExisting extends FeatureObjMaskPairMerged {
 	
 	
 	// START BEAN PROPERTIES
-	@BeanField @SkipInit
-	private Feature item;
+	@BeanField
+	private Feature<FeatureObjMaskParams> item;
 	// END BEAN PROPERTIES
+	
+	@Override
+	public double calc(CacheableParams<FeatureObjMaskPairMergedParams> params)
+			throws FeatureCalcException {
+		
+		return transformParamsCast(params).calc(item);
+	}
+	
+	public CacheableParams<FeatureObjMaskParams> transformParamsCast( CacheableParams<FeatureObjMaskPairMergedParams> params ) {
+
+		assert( params.getParams() instanceof FeatureObjMaskPairMergedParams );
+						
+		return params.mapParams(
+			p -> extractObj(p),
+			cacheNameToUse()
+		);
+	}
 	
 	protected abstract ObjMask selectObjMask( FeatureObjMaskPairMergedParams params );
 	
-	@Override
-	public double calcCast(FeatureObjMaskPairMergedParams params)
-			throws FeatureCalcException {
-
-		FeatureCalcParams paramsNew = transformParams(params);
-		
-		// We select an appropriate cache for calculating the feature (should be the same as selected in init())
-		return getCacheSession().additional(0).calc(item, paramsNew );
+	/** The name of the cache to use for calculation */
+	protected abstract String cacheNameToUse();
+	
+	public Feature<FeatureObjMaskParams> getItem() {
+		return item;
 	}
 
-
-	public FeatureCalcParams transformParams(FeatureObjMaskPairMergedParams params) {
-
-		assert( params instanceof FeatureObjMaskPairMergedParams);
+	public void setItem(Feature<FeatureObjMaskParams> item) {
+		this.item = item;
+	}
+	
+	private FeatureObjMaskParams extractObj( FeatureObjMaskPairMergedParams params ) {
 		
 		ObjMask omSelected = selectObjMask(params);
 		
 		FeatureObjMaskParams paramsNew = new FeatureObjMaskParams( omSelected );
 		paramsNew.setNrgStack( params.getNrgStack() );
-		
 		assert( paramsNew instanceof FeatureObjMaskParams);
-		
 		return paramsNew;
 	}
-	
-	
-	@Override
-	public FeatureCalcParams transformParams(FeatureCalcParams params,
-			Feature dependentFeature) {
-
-		if (params instanceof FeatureObjMaskPairMergedParams) {
-			return transformParams( (FeatureObjMaskPairMergedParams) params );
-		} else {
-			return params;
-		}
-	}
-
-	
-	/**
-	 *  Special initialisation with different params for 'item' as it is elsewhere ignored in the initialisation
-	 */
-	@Override
-	public void beforeCalc(FeatureInitParams params,
-			CacheSession cache)
-			throws InitException {
-		super.beforeCalc(params, cache);
-		
-		FeatureSessionCacheRetriever subcache = cache.additional(0);
-
-		cache.initThroughSubcache(subcache, params, item, getLogger() );
-	}
-	
-	public Feature getItem() {
-		return item;
-	}
-
-	public void setItem(Feature item) {
-		this.item = item;
-	}
-
-	@Override
-	protected FeatureCacheDefinition createCacheDefinition() {
-		return new PrefixedCacheDefinition(
-			this,
-			prefixForAdditionalCachesForChildren()
-		);
-	}
-	
-	protected abstract String prefixForAdditionalCachesForChildren();
-
 }

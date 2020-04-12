@@ -1,5 +1,7 @@
 package ch.ethz.biol.cell.mpp.nrg.feature.histogram;
 
+import org.anchoranalysis.feature.cache.CacheableParams;
+
 /*
  * #%L
  * anchor-plugin-image-feature
@@ -40,10 +42,10 @@ public class Skewness extends FeatureHistogram {
 	private static final long serialVersionUID = 1L;
 	
 	@Override
-	public double calcCast(FeatureHistogramParams params)
+	public double calc(CacheableParams<FeatureHistogramParams> params)
 			throws FeatureCalcException {
 		
-		Histogram h = params.getHistogram();
+		Histogram h = params.getParams().getHistogram();
 		
 		long count = h.getTotalCount();
 		double mean = h.mean();

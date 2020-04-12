@@ -46,6 +46,7 @@ import org.anchoranalysis.experiment.task.ParametersExperiment;
 import org.anchoranalysis.feature.bean.list.FeatureListProvider;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.calc.ResultsVector;
+import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
 import org.anchoranalysis.feature.io.csv.GroupedResultsVectorCollection;
 import org.anchoranalysis.feature.list.NamedFeatureStore;
 import org.anchoranalysis.io.error.AnchorIOException;
@@ -58,9 +59,12 @@ import org.anchoranalysis.plugin.image.task.sharedstate.SharedStateExportFeature
  *   using a NamedFeatureStore
  *   
  * @author FEEHANO
+ * 
+ * @param T input-manager type
+ * @param S feature-params type
  *
  */
-public abstract class ExportFeaturesStoreTask<T extends InputFromManager> extends ExportFeaturesTask<T,SharedStateExportFeaturesWithStore> {
+public abstract class ExportFeaturesStoreTask<T extends InputFromManager, S extends FeatureCalcParams> extends ExportFeaturesTask<T,SharedStateExportFeaturesWithStore<S>> {
 
 	/**
 	 * 
@@ -69,7 +73,7 @@ public abstract class ExportFeaturesStoreTask<T extends InputFromManager> extend
 
 	// START BEAN PROPERTIES
 	@BeanField @NonEmpty
-	private List<NamedBean<FeatureListProvider>> listFeatures = new ArrayList<NamedBean<FeatureListProvider>>();
+	private List<NamedBean<FeatureListProvider<S>>> listFeatures = new ArrayList<>();
 	// END BEAN PROPERTIES
 	
 	private String firstResultHeader;
@@ -85,10 +89,10 @@ public abstract class ExportFeaturesStoreTask<T extends InputFromManager> extend
 	}	
 
 	@Override
-	public SharedStateExportFeaturesWithStore beforeAnyJobIsExecuted(BoundOutputManagerRouteErrors outputManager, ParametersExperiment params)
+	public SharedStateExportFeaturesWithStore<S> beforeAnyJobIsExecuted(BoundOutputManagerRouteErrors outputManager, ParametersExperiment params)
 			throws ExperimentExecutionException {
 		try {
-			return new SharedStateExportFeaturesWithStore(
+			return new SharedStateExportFeaturesWithStore<>(
 				getListFeatures(),
 				new GroupedResultsVectorCollection(firstResultHeader,"group")
 			);
@@ -98,7 +102,7 @@ public abstract class ExportFeaturesStoreTask<T extends InputFromManager> extend
 	}
 
 	@Override
-	public void doJobOnInputObject( ParametersBound<T,SharedStateExportFeaturesWithStore> params ) throws JobExecutionException {
+	public void doJobOnInputObject( ParametersBound<T,SharedStateExportFeaturesWithStore<S>> params ) throws JobExecutionException {
 		
 		try {
 			ResultsVector rv = calcResultsVectorForInputObject(
@@ -117,13 +121,13 @@ public abstract class ExportFeaturesStoreTask<T extends InputFromManager> extend
 	
 	protected abstract ResultsVector calcResultsVectorForInputObject(
 		T inputObject,
-		NamedFeatureStore featureStore,
+		NamedFeatureStore<S> featureStore,
 		BoundOutputManagerRouteErrors outputManager,
 		Path modelDir, LogErrorReporter logErrorReporter
 	) throws FeatureCalcException;
 
 
-	private void storeResults(ParametersBound<T,SharedStateExportFeaturesWithStore> params, ResultsVector rv) throws OperationFailedException {
+	private void storeResults(ParametersBound<T,SharedStateExportFeaturesWithStore<S>> params, ResultsVector rv) throws OperationFailedException {
 		
 		MultiName identifier = identifierFor( params.getInputObject() );
 		
@@ -147,12 +151,12 @@ public abstract class ExportFeaturesStoreTask<T extends InputFromManager> extend
 		}
 	}
 	
-	public List<NamedBean<FeatureListProvider>> getListFeatures() {
+	public List<NamedBean<FeatureListProvider<S>>> getListFeatures() {
 		return listFeatures;
 	}
 
 	public void setListFeatures(
-			List<NamedBean<FeatureListProvider>> listFeatures) {
+			List<NamedBean<FeatureListProvider<S>>> listFeatures) {
 		this.listFeatures = listFeatures;
 	}
 }

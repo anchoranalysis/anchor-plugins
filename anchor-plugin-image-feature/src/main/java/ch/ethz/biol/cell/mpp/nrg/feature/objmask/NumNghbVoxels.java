@@ -30,6 +30,7 @@ package ch.ethz.biol.cell.mpp.nrg.feature.objmask;
 import java.nio.ByteBuffer;
 
 import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.feature.cache.CacheableParams;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.binary.values.BinaryValues;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
@@ -68,8 +69,10 @@ public class NumNghbVoxels extends FeatureObjMask {
 	}
 	
 	@Override
-	public double calcCast(FeatureObjMaskParams params) throws FeatureCalcException {
+	public double calc(CacheableParams<FeatureObjMaskParams> paramsCacheable) throws FeatureCalcException {
 
+		FeatureObjMaskParams params = paramsCacheable.getParams();
+		
 		ObjMask om = params.getObjMask();
 
 		//OutlineKernel3 kernel = new OutlineKernel3(om.getBinaryValuesByte(), outsideAtThreshold, do3D);

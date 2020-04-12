@@ -32,18 +32,20 @@ import java.util.List;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.provider.FeatureProvider;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.feature.init.FeatureInitParams;
 import org.anchoranalysis.feature.nrg.NRGStack;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
+import org.anchoranalysis.feature.session.SessionFactory;
+import org.anchoranalysis.feature.session.calculator.FeatureCalculatorSingle;
 import org.anchoranalysis.image.bean.provider.ChnlProvider;
 import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
 import org.anchoranalysis.image.chnl.Chnl;
 import org.anchoranalysis.image.chnl.factory.ChnlFactory;
 import org.anchoranalysis.image.extent.IncorrectImageSizeException;
-import org.anchoranalysis.image.feature.session.FeatureSessionCreateParamsSingle;
+import org.anchoranalysis.image.feature.objmask.FeatureObjMaskParams;
 import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.image.objmask.ObjMaskCollection;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
@@ -66,7 +68,7 @@ public class ChnlProviderObjMaskFeature extends ChnlProvider {
 	private int valueNoObject = 0;
 	
 	@BeanField
-	private FeatureProvider featureProvider;
+	private FeatureProvider<FeatureObjMaskParams> featureProvider;
 	
 	@BeanField
 	private List<ChnlProvider> listAdditionalChnlProviders = new ArrayList<>();
@@ -78,7 +80,7 @@ public class ChnlProviderObjMaskFeature extends ChnlProvider {
 	@Override
 	public Chnl create() throws CreateException {
 
-		Feature feature = featureProvider.create();
+		Feature<FeatureObjMaskParams> feature = featureProvider.create();
 		
 		ObjMaskCollection objsCollection = objs.create();
 		
@@ -100,22 +102,27 @@ public class ChnlProviderObjMaskFeature extends ChnlProvider {
 
 			NRGStackWithParams nrgStackParams = new NRGStackWithParams(nrgStack);
 			
-			FeatureSessionCreateParamsSingle session = new FeatureSessionCreateParamsSingle(feature,getSharedObjects().getFeature().getSharedFeatureSet());
-			session.setNrgStack(nrgStackParams);
-			session.start( getLogger() );
+			FeatureCalculatorSingle<FeatureObjMaskParams> session = SessionFactory.createAndStart(
+				feature,
+				new FeatureInitParams(),
+				getSharedObjects().getFeature().getSharedFeatureSet().downcast(),
+				getLogger()
+			);
 			
 			Chnl chnlOut = ChnlFactory.instance().createEmptyInitialised( chnl.getDimensions(), VoxelDataTypeUnsignedByte.instance );
 			chnlOut.getVoxelBox().any().setAllPixelsTo( valueNoObject );
 			for( ObjMask om : objsCollection ) {
 
-				double featVal = session.calc(om);
+				double featVal = session.calcOne(
+					new FeatureObjMaskParams(om, nrgStackParams)
+				);
 				chnlOut.getVoxelBox().any().setPixelsCheckMask(om, (int) (factor*featVal) );
 			}
 			
 			return chnlOut;
 			
 			
-		} catch (InitException | FeatureCalcException | IncorrectImageSizeException e) {
+		} catch (FeatureCalcException | IncorrectImageSizeException e) {
 			throw new CreateException(e);
 		}
 		
@@ -130,11 +137,11 @@ public class ChnlProviderObjMaskFeature extends ChnlProvider {
 		this.chnlProvider = chnlProvider;
 	}
 
-	public FeatureProvider getFeatureProvider() {
+	public FeatureProvider<FeatureObjMaskParams> getFeatureProvider() {
 		return featureProvider;
 	}
 
-	public void setFeatureProvider(FeatureProvider featureProvider) {
+	public void setFeatureProvider(FeatureProvider<FeatureObjMaskParams> featureProvider) {
 		this.featureProvider = featureProvider;
 	}
 

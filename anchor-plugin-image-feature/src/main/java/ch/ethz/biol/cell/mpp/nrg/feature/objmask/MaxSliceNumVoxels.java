@@ -29,6 +29,7 @@ package ch.ethz.biol.cell.mpp.nrg.feature.objmask;
 
 import java.nio.ByteBuffer;
 
+import org.anchoranalysis.feature.cache.CacheableParams;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.feature.bean.objmask.FeatureObjMask;
 import org.anchoranalysis.image.feature.objmask.FeatureObjMaskParams;
@@ -51,7 +52,9 @@ public class MaxSliceNumVoxels extends FeatureObjMask {
 	}
 	
 	@Override
-	public double calcCast(FeatureObjMaskParams params) throws FeatureCalcException {
+	public double calc(CacheableParams<FeatureObjMaskParams> paramsCacheable) throws FeatureCalcException {
+		
+		FeatureObjMaskParams params = paramsCacheable.getParams();
 		
 		int max = 0;
 		

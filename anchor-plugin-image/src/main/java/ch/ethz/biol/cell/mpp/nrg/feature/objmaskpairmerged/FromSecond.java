@@ -48,7 +48,7 @@ public class FromSecond extends FromExisting {
 	}
 
 	@Override
-	public String prefixForAdditionalCachesForChildren() {
+	public String cacheNameToUse() {
 		return "second";
 	}
 }

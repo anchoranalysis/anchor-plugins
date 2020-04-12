@@ -93,7 +93,11 @@ public class NamedChnlsAppend extends NamedChnlsBase {
 				listTemp.add( itr.next() );
 			}
 			
-			List<NamedChnlsInputPart> outList = createOutList( listTemp, new ProgressReporterOneOfMany(prm), params.isDebugMode() );
+			List<NamedChnlsInputPart> outList = createOutList(
+				listTemp,
+				new ProgressReporterOneOfMany(prm),
+				params.isDebugModeActivated()
+			);
 			
 			prm.incrWorker();
 			

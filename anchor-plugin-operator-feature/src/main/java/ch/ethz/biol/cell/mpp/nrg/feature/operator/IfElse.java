@@ -29,11 +29,12 @@ package ch.ethz.biol.cell.mpp.nrg.feature.operator;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.bean.Feature;
-import org.anchoranalysis.feature.bean.operator.FeatureSingleElem;
+import org.anchoranalysis.feature.bean.operator.FeatureGenericSingleElem;
+import org.anchoranalysis.feature.cache.CacheableParams;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
 
-public class IfElse extends FeatureSingleElem {
+public class IfElse<T extends FeatureCalcParams> extends FeatureGenericSingleElem<T> {
 
 	/**
 	 * 
@@ -42,30 +43,30 @@ public class IfElse extends FeatureSingleElem {
 	
 	// START BEAN PROPERTIRES
 	@BeanField
-	private Feature featureCondition;
+	private Feature<T> featureCondition;
 	
 	@BeanField
 	private double value;
 	
 	@BeanField
-	private Feature featureElse;
+	private Feature<T> featureElse;
 	// END BEAN PROPERTIES
 	
 	@Override
-	public double calc(FeatureCalcParams params)
+	public double calc(CacheableParams<T> params)
 			throws FeatureCalcException {
 
-		if (getCacheSession().calc(featureCondition,params)==value) {
-			return getCacheSession().calc(super.getItem(),params);
+		if (params.calc(featureCondition)==value) {
+			return params.calc(super.getItem());
 		} else {
-			return getCacheSession().calc(featureElse,params);
+			return params.calc(featureElse);
 		}
 	}
 	
-	public Feature getFeatureCondition() {
+	public Feature<T> getFeatureCondition() {
 		return featureCondition;
 	}
-	public void setFeatureCondition(Feature featureCondition) {
+	public void setFeatureCondition(Feature<T> featureCondition) {
 		this.featureCondition = featureCondition;
 	}
 	public double getValue() {
@@ -74,10 +75,10 @@ public class IfElse extends FeatureSingleElem {
 	public void setValue(double value) {
 		this.value = value;
 	}
-	public Feature getFeatureElse() {
+	public Feature<T> getFeatureElse() {
 		return featureElse;
 	}
-	public void setFeatureElse(Feature featureElse) {
+	public void setFeatureElse(Feature<T> featureElse) {
 		this.featureElse = featureElse;
 	}
 
