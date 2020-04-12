@@ -1,6 +1,5 @@
 package ch.ethz.biol.cell.mpp.nrg.feature.pair;
 
-import org.anchoranalysis.anchor.mpp.feature.bean.nrg.elem.NRGElemPair;
 import org.anchoranalysis.anchor.mpp.feature.nrg.elem.NRGElemPairCalcParams;
 import org.anchoranalysis.anchor.mpp.mark.GlobalRegionIdentifiers;
 import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
@@ -36,16 +35,11 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.shared.relation.EqualToBean;
 import org.anchoranalysis.bean.shared.relation.RelationBean;
 import org.anchoranalysis.core.cache.ExecuteException;
-import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.relation.RelationToValue;
-import org.anchoranalysis.feature.cache.CacheSession;
-import org.anchoranalysis.feature.cachedcalculation.CachedCalculation;
+import org.anchoranalysis.feature.cache.CacheableParams;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.feature.init.FeatureInitParams;
 
-import ch.ethz.biol.cell.mpp.nrg.cachedcalculation.OverlapCalculationMaskGlobal;
-
-public class OverlapRatioTwoRegionsMaskGlobal extends NRGElemPair {
+public class OverlapRatioTwoRegionsMaskGlobal extends OverlapMaskBase {
 
 	/**
 	 * 
@@ -58,31 +52,32 @@ public class OverlapRatioTwoRegionsMaskGlobal extends NRGElemPair {
 	
 	@BeanField
 	private int regionID2 = GlobalRegionIdentifiers.SUBMARK_INSIDE;
-	
-	@BeanField
-	private int nrgIndex = 0;
-	
-	@BeanField
-	private int maskValue = 255;
 	// END BEAN PROPERTIES
 	
 	private RelationBean relationToThreshold = new EqualToBean();
-	
-	private CachedCalculation<Double> cc1;
-	private CachedCalculation<Double> cc2;
 	
 	public OverlapRatioTwoRegionsMaskGlobal() {
 	}
 	
 	@Override
-	public void beforeCalc(FeatureInitParams params, CacheSession cache)
-			throws InitException {
-		super.beforeCalc(params, cache);
+	public double calc( CacheableParams<NRGElemPairCalcParams> paramsCacheable ) throws FeatureCalcException {
 		
-		cc1 = cache.search( new OverlapCalculationMaskGlobal(regionID1, nrgIndex, (byte) maskValue) );
-		cc2 = cache.search( new OverlapCalculationMaskGlobal(regionID2, nrgIndex, (byte) maskValue) );
+		NRGElemPairCalcParams params = paramsCacheable.getParams();
+		
+		try {
+			return calcOverlapRatioMin(
+				params.getObj1(),
+				params.getObj2(),
+				overlapForRegion(paramsCacheable, regionID1),
+				overlapForRegion(paramsCacheable, regionID2),
+				regionID1,
+				regionID2
+			);
+		} catch (ExecuteException e) {
+			throw new FeatureCalcException(e);
+		}							
 	}
-	
+
 	private double calcOverlapRatioMin( PxlMarkMemo obj1, PxlMarkMemo obj2, double overlap1, double overlap2, int regionID1, int regionID2 ) throws FeatureCalcException {
 
 		double overlap = overlap1 + overlap2;
@@ -93,25 +88,11 @@ public class OverlapRatioTwoRegionsMaskGlobal extends NRGElemPair {
 		
 		RelationToValue relation = relationToThreshold.create();
 		
-		double volume1 = OverlapRatioMaskGlobal.calcMinVolume( obj1, obj2, regionID1, relation, nrgIndex, maskValue );
-		double volume2 = OverlapRatioMaskGlobal.calcMinVolume( obj1, obj2, regionID2, relation, nrgIndex, maskValue );
+		double volume1 = calcMinVolume( obj1, obj2, regionID1, relation);
+		double volume2 = calcMinVolume( obj1, obj2, regionID2, relation);
 		return overlap / (volume1+volume2);
 	}
 
-	
-	@Override
-	public double calcCast( NRGElemPairCalcParams params ) throws FeatureCalcException {
-		
-		assert( cc1!=null );
-		assert( cc2!=null );
-		
-		try {
-			return calcOverlapRatioMin( params.getObj1(), params.getObj2(), cc1.getOrCalculate(params), cc2.getOrCalculate(params), regionID1, regionID2 );
-		} catch (ExecuteException e) {
-			throw new FeatureCalcException(e);
-		}							
-	}
-	
 	public int getRegionID1() {
 		return regionID1;
 	}
@@ -127,22 +108,4 @@ public class OverlapRatioTwoRegionsMaskGlobal extends NRGElemPair {
 	public void setRegionID2(int regionID2) {
 		this.regionID2 = regionID2;
 	}
-
-	public int getNrgIndex() {
-		return nrgIndex;
-	}
-
-	public void setNrgIndex(int nrgIndex) {
-		this.nrgIndex = nrgIndex;
-	}
-
-	public int getMaskValue() {
-		return maskValue;
-	}
-
-	public void setMaskValue(int maskValue) {
-		this.maskValue = maskValue;
-	}
-
-
 }

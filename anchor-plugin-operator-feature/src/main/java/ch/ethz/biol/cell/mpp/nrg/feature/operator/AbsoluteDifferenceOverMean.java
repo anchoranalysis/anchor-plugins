@@ -27,10 +27,11 @@ package ch.ethz.biol.cell.mpp.nrg.feature.operator;
  */
 
 import org.anchoranalysis.feature.bean.operator.FeatureDoubleElem;
+import org.anchoranalysis.feature.cache.CacheableParams;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
 
-public class AbsoluteDifferenceOverMean extends FeatureDoubleElem {
+public class AbsoluteDifferenceOverMean<T extends FeatureCalcParams> extends FeatureDoubleElem<T> {
 
 	/**
 	 * 
@@ -41,9 +42,9 @@ public class AbsoluteDifferenceOverMean extends FeatureDoubleElem {
 	// END BEAN PROPERTIES
 	
 	@Override
-	public double calc( FeatureCalcParams params ) throws FeatureCalcException {
-		double val1 = getCacheSession().calc( getItem1(), params );
-		double val2 = getCacheSession().calc( getItem2(), params );
+	public double calc( CacheableParams<T> params ) throws FeatureCalcException {
+		double val1 = params.calc( getItem1()  );
+		double val2 = params.calc( getItem2() );
 		
 		double absDiff = Math.abs( val1 - val2 ); 
 		double mean = (val1+val2)/2;

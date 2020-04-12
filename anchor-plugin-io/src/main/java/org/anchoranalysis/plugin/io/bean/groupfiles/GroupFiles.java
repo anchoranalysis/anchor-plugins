@@ -171,7 +171,7 @@ public class GroupFiles extends InputManager<NamedChnlsInput> {
 			openedRasters.add( or );
 		}
 				
-		List<DescriptiveFile> descriptiveNames = descriptiveNameFromFile.descriptiveNamesForCheckUniqueness(files, "InvalidName");
+		List<DescriptiveFile> descriptiveNames = descriptiveNameFromFile.descriptiveNamesForCheckUniqueness(files);
 		return zipIntoGrouping(descriptiveNames, openedRasters);		
 	}
 

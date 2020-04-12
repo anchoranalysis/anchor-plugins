@@ -2,9 +2,9 @@ package org.anchoranalysis.plugin.io.bean.input.filter;
 
 /*-
  * #%L
- * anchor-io
+ * anchor-plugin-io
  * %%
- * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2010 - 2020 Owen Feehan
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -26,7 +26,6 @@ package org.anchoranalysis.plugin.io.bean.input.filter;
  * #L%
  */
 
-import java.util.Iterator;
 import java.util.List;
 
 import org.anchoranalysis.bean.annotation.AllowEmpty;
@@ -35,16 +34,16 @@ import org.anchoranalysis.io.bean.input.InputManager;
 import org.anchoranalysis.io.bean.input.InputManagerParams;
 import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.input.InputFromManager;
+import org.anchoranalysis.plugin.io.input.filter.FilterDescriptiveNameEqualsContains;
 
 /**
- * Filters all the input objects so that only those with descriptive-names containing a particular
- * string are accepted.
+ * Filters all the input objects for only those with certain types of descriptive-names.
  * 
- * If *contains* is empty, all objects match
+ * <p>Either or both <i>equals</i> or <i>contains</i> conditions are possible</p>
  * 
  * @author FEEHANO
  *
- * @param <T>
+ * @param <T> input-type
  */
 public class FilterDescriptiveName<T extends InputFromManager> extends InputManager<T> {
 
@@ -57,39 +56,30 @@ public class FilterDescriptiveName<T extends InputFromManager> extends InputMana
 	@BeanField
 	private InputManager<T> input;
 	
+	/** A descriptive-name must be exactly equal to (case-sensitive) this string. If empty, disabled. */
 	@BeanField @AllowEmpty
 	private String equals = "";
+	
+	/** A descriptive-name must contain (case-sensitive) this string. If empty, disabled. */
+	@BeanField @AllowEmpty
+	private String contains = "";
 	// END BEAN PROPERTIES
 	
 	@Override
 	public List<T> inputObjects(InputManagerParams params)
 			throws AnchorIOException {
-
-		// Existing collection 
-		List<T> in = input.inputObjects(params);
 		
-		// If no string is specified, just pass pack the entire iterator
-		if (equals.isEmpty()) {
-			return in;
-		}
+		FilterDescriptiveNameEqualsContains filter = new FilterDescriptiveNameEqualsContains(
+			equals,
+			contains	
+		);
 		
-		applyFilter(in);
-		
-		return in;
+		return filter.removeNonMatching(
+			input.inputObjects(params)		// Existing collection
+		);
 	}
 	
-	private void applyFilter( List<T> in ) {
-		
-		Iterator<T> itr = in.listIterator();
-		while(itr.hasNext()) {
-			T item = itr.next();
-			
-			if (!item.descriptiveName().equals(equals)) {
-				itr.remove();
-			}
-		}
-	}
-
+	
 	public InputManager<T> getInput() {
 		return input;
 	}
@@ -104,6 +94,14 @@ public class FilterDescriptiveName<T extends InputFromManager> extends InputMana
 
 	public void setEquals(String equals) {
 		this.equals = equals;
+	}
+
+	public String getContains() {
+		return contains;
+	}
+
+	public void setContains(String contains) {
+		this.contains = contains;
 	}
 
 }

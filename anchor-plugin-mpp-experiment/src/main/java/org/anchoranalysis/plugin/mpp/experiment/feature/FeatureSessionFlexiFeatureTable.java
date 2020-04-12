@@ -37,7 +37,7 @@ import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 import org.anchoranalysis.feature.shared.SharedFeaturesInitParams;
 import org.anchoranalysis.image.init.ImageInitParams;
 
-public abstract class FeatureSessionFlexiFeatureTable {
+public abstract class FeatureSessionFlexiFeatureTable<T extends FeatureCalcParams> {
 	
 	/**
 	 * Initializes a feature store that has the same structure as that previously created by createFeatures() from the same object
@@ -50,7 +50,7 @@ public abstract class FeatureSessionFlexiFeatureTable {
 	 */
 	public abstract void start( ImageInitParams soImage, SharedFeaturesInitParams soFeature, NRGStackWithParams nrgStack, LogErrorReporter logErrorReporter ) throws InitException;
 
-	public abstract ResultsVector calcMaybeSuppressErrors( FeatureCalcParams params, ErrorReporter errorReporter ) throws FeatureCalcException;
+	public abstract ResultsVector calcMaybeSuppressErrors( T params, ErrorReporter errorReporter ) throws FeatureCalcException;
 
 
 	
@@ -59,7 +59,7 @@ public abstract class FeatureSessionFlexiFeatureTable {
 	 * 
 	 * @return
 	 */
-	public abstract FeatureSessionFlexiFeatureTable duplicateForNewThread();
+	public abstract FeatureSessionFlexiFeatureTable<T> duplicateForNewThread();
 	
 	public abstract FeatureNameList createFeatureNames();
 	

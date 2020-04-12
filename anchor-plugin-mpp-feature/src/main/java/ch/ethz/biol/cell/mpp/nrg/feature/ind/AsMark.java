@@ -31,11 +31,11 @@ import org.anchoranalysis.anchor.mpp.feature.nrg.elem.NRGElemIndCalcParamsDescri
  */
 
 import org.anchoranalysis.feature.bean.operator.FeatureSingleElem;
+import org.anchoranalysis.feature.cache.CacheableParams;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
 import org.anchoranalysis.feature.params.FeatureParamsDescriptor;
 
-public class AsMark extends FeatureSingleElem {
+public class AsMark extends FeatureSingleElem<NRGElemIndCalcParams,FeatureMarkParams> {
 
 	/**
 	 * 
@@ -43,22 +43,16 @@ public class AsMark extends FeatureSingleElem {
 	private static final long serialVersionUID = 1L;
 
 	@Override
-	public double calc(FeatureCalcParams params) throws FeatureCalcException {
-		
-		if (params instanceof NRGElemIndCalcParams) {
-		
-			NRGElemIndCalcParams paramsCast = (NRGElemIndCalcParams) params; 
-			
-			FeatureMarkParams paramsNew = new FeatureMarkParams(
-				paramsCast.getPxlPartMemo().getMark(),
-				paramsCast.getDimensions().getRes()
-			);
-			
-			return getCacheSession().calc( getItem(), paramsNew);
-			
-		} else {
-			throw new FeatureCalcException("Not supported for this type of params");
-		}
+	public double calc(CacheableParams<NRGElemIndCalcParams> params) throws FeatureCalcException {
+		return params
+			.calcChangeParams( getItem(), AsMark::deriveParams, "mark" );
+	}
+	
+	private static FeatureMarkParams deriveParams( NRGElemIndCalcParams params ) {
+		return new FeatureMarkParams(
+			params.getPxlPartMemo().getMark(),
+			params.getDimensions().getRes()
+		);
 	}
 
 	// We change the default behaviour, as we don't want to give the same paramsFactory

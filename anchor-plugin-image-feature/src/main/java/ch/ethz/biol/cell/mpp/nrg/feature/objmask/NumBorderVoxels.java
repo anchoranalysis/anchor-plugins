@@ -28,6 +28,7 @@ package ch.ethz.biol.cell.mpp.nrg.feature.objmask;
 
 
 import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.feature.cache.CacheableParams;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.feature.bean.objmask.FeatureObjMask;
 import org.anchoranalysis.image.feature.objmask.FeatureObjMaskParams;
@@ -54,9 +55,9 @@ public class NumBorderVoxels extends FeatureObjMask {
 	// END BEAN PROPERTIES
 	
 	@Override
-	public double calcCast(FeatureObjMaskParams params) throws FeatureCalcException {
+	public double calc(CacheableParams<FeatureObjMaskParams> params) throws FeatureCalcException {
 
-		ObjMask om = params.getObjMask();
+		ObjMask om = params.getParams().getObjMask();
 		return (double) numBorderPixels(om, ignoreAtThreshold, outsideAtThreshold, do3D);
 	}
 	

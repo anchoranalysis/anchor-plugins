@@ -33,11 +33,9 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.error.BeanMisconfiguredException;
 import org.anchoranalysis.core.cache.ExecuteException;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.core.error.InitException;
-import org.anchoranalysis.feature.cache.CacheSession;
+import org.anchoranalysis.feature.cache.CacheableParams;
 import org.anchoranalysis.feature.cachedcalculation.CachedCalculation;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.feature.init.FeatureInitParams;
 import org.anchoranalysis.feature.nrg.NRGStack;
 import org.anchoranalysis.image.binary.values.BinaryValues;
 import org.anchoranalysis.image.chnl.Chnl;
@@ -88,9 +86,7 @@ public class IntensityMeanShellMaxSlice extends FeatureObjMask {
 	@BeanField
 	private double emptyValue = 255;
 	// END BEAN PROPERTIES
-	
-	private CachedCalculation<ObjMask> ccShellObjMask;
-	
+
 	@Override
 	public void checkMisconfigured( BeanInstanceMap defaultInstances ) throws BeanMisconfiguredException {
 		super.checkMisconfigured( defaultInstances );
@@ -100,27 +96,23 @@ public class IntensityMeanShellMaxSlice extends FeatureObjMask {
 	}
 	
 	@Override
-	public void beforeCalc(FeatureInitParams params,
-			CacheSession cache) throws InitException {
-		super.beforeCalc(params, cache);
-		ccShellObjMask = CalculateShellObjMask.createFromCache(
-			cache,
-			iterationsDilation,
-			iterationsErosion,
-			iterationsErosionSecond,
-			do3D,
-			inverse	
-		);
-	}
-	
-	@Override
-	public double calcCast(FeatureObjMaskParams params) throws FeatureCalcException {
+	public double calc(CacheableParams<FeatureObjMaskParams> paramsCacheable) throws FeatureCalcException {
+		
+		FeatureObjMaskParams params = paramsCacheable.getParams();
 		
 		NRGStack nrgStack = params.getNrgStack().getNrgStack();
 		
 		ObjMask om;
 		try {
-			om = ccShellObjMask.getOrCalculate(params);
+			CachedCalculation<ObjMask> ccShellObjMask = CalculateShellObjMask.createFromCache(
+				paramsCacheable,
+				iterationsDilation,
+				iterationsErosion,
+				iterationsErosionSecond,
+				do3D,
+				inverse	
+			);
+			om = paramsCacheable.calc(ccShellObjMask);
 		} catch (ExecuteException e1) {
 			throw new FeatureCalcException(e1);
 		}

@@ -35,7 +35,6 @@ import org.anchoranalysis.bean.NamedBean;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.Optional;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.core.file.PathUtilities;
 import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.core.log.LogReporter;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
@@ -43,8 +42,10 @@ import org.anchoranalysis.experiment.task.Task;
 import org.anchoranalysis.feature.bean.list.FeatureListProvider;
 import org.anchoranalysis.feature.list.NamedFeatureStore;
 import org.anchoranalysis.feature.list.NamedFeatureStoreFactory;
+import org.anchoranalysis.feature.resultsvectorcollection.FeatureResultsVectorCollectionParams;
 import org.anchoranalysis.io.bean.filepath.generator.FilePathGenerator;
 import org.anchoranalysis.io.error.AnchorIOException;
+import org.anchoranalysis.io.filepath.FilePathToUnixStyleConverter;
 import org.anchoranalysis.io.input.InputFromManager;
 import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
 import org.anchoranalysis.plugin.image.task.sharedstate.SharedStateExportFeatures;
@@ -77,7 +78,7 @@ public abstract class ExportFeaturesTask<T extends InputFromManager, S extends S
 	
 	/** Features applied to each group to aggregate values (takes FeatureResultsVectorCollection) */
 	@BeanField @Optional
-	private List<NamedBean<FeatureListProvider>> listFeaturesAggregate = new ArrayList<>();
+	private List<NamedBean<FeatureListProvider<FeatureResultsVectorCollectionParams>>> listFeaturesAggregate = new ArrayList<>();
 	// END BEAN
 	
 	@Override
@@ -106,7 +107,7 @@ public abstract class ExportFeaturesTask<T extends InputFromManager, S extends S
 		LogErrorReporter logErrorReporter = new LogErrorReporter(logReporter);
 		
 		try {
-			NamedFeatureStore featuresAggregate = null;
+			NamedFeatureStore<FeatureResultsVectorCollectionParams> featuresAggregate = null;
 			
 			if (listFeaturesAggregate!=null) {
 				featuresAggregate = NamedFeatureStoreFactory.createNamedFeatureList(listFeaturesAggregate);
@@ -124,7 +125,7 @@ public abstract class ExportFeaturesTask<T extends InputFromManager, S extends S
 	
 	private static String filePathAsIdentifier( FilePathGenerator generator, Path path, boolean debugMode, Function<Path,Path> alternative ) throws AnchorIOException {
 		Path out = determinePath(generator, path, debugMode, alternative);
-		return PathUtilities.toStringUnixStyle(out);
+		return FilePathToUnixStyleConverter.toStringUnixStyle(out);
 	}
 	
 	private static Path determinePath( FilePathGenerator generator, Path path, boolean debugMode, Function<Path,Path> alternative ) throws AnchorIOException {
@@ -152,12 +153,12 @@ public abstract class ExportFeaturesTask<T extends InputFromManager, S extends S
 	}
 	
 
-	public List<NamedBean<FeatureListProvider>> getListFeaturesAggregate() {
+	public List<NamedBean<FeatureListProvider<FeatureResultsVectorCollectionParams>>> getListFeaturesAggregate() {
 		return listFeaturesAggregate;
 	}
 
 	public void setListFeaturesAggregate(
-			List<NamedBean<FeatureListProvider>> listFeaturesAggregate) {
+			List<NamedBean<FeatureListProvider<FeatureResultsVectorCollectionParams>>> listFeaturesAggregate) {
 		this.listFeaturesAggregate = listFeaturesAggregate;
 	}
 }

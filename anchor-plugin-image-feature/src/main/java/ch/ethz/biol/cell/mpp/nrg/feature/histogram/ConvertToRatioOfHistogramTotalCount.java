@@ -29,6 +29,7 @@ package ch.ethz.biol.cell.mpp.nrg.feature.histogram;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.bean.Feature;
+import org.anchoranalysis.feature.cache.CacheableParams;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.calc.params.FeatureCalcParamsDescriptor;
 import org.anchoranalysis.image.feature.bean.FeatureHistogram;
@@ -43,15 +44,15 @@ public class ConvertToRatioOfHistogramTotalCount extends FeatureHistogram {
 	
 	// START BEAN PROPERTIES
 	@BeanField
-	private Feature item;
+	private Feature<FeatureHistogramParams> item;
 	// END BEAN PROPERTIES
 	
 	@Override
-	public double calcCast(FeatureHistogramParams params)
+	public double calc(CacheableParams<FeatureHistogramParams> params)
 			throws FeatureCalcException {
 
-		double val = getCacheSession().calc( item, params);
-		return val/ params.getHistogram().getTotalCount();
+		double val = params.calc(item);
+		return val/ params.getParams().getHistogram().getTotalCount();
 	}
 	
 	@Override
@@ -59,13 +60,11 @@ public class ConvertToRatioOfHistogramTotalCount extends FeatureHistogram {
 		return String.format("convert_ratio(%s)", getItem().getDscrLong() );
 	}
 
-
-	public Feature getItem() {
+	public Feature<FeatureHistogramParams> getItem() {
 		return item;
 	}
 
-
-	public void setItem(Feature item) {
+	public void setItem(Feature<FeatureHistogramParams> item) {
 		this.item = item;
 	}
 

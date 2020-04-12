@@ -28,23 +28,11 @@ package ch.ethz.biol.cell.mpp.nrg.feature.stack;
 
 
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.bean.annotation.SkipInit;
-import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.core.error.InitException;
-import org.anchoranalysis.feature.bean.Feature;
-import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
-import org.anchoranalysis.image.feature.bean.FeatureStack;
-import org.anchoranalysis.image.feature.objmask.FeatureObjMaskParams;
-import org.anchoranalysis.image.feature.stack.FeatureStackParams;
-import org.anchoranalysis.image.objmask.ObjMask;
-import org.anchoranalysis.image.objmask.ObjMaskCollection;
-
 import cern.colt.list.DoubleArrayList;
 import cern.jet.stat.Descriptive;
 
 // Calculates the quantile of a feature applied to each connected component
-public class ObjMaskFeatureQuantile extends FeatureStack {
+public class ObjMaskFeatureQuantile extends ObjMaskFeatureFromStack {
 
 	/**
 	 * 
@@ -53,67 +41,14 @@ public class ObjMaskFeatureQuantile extends FeatureStack {
 	
 	// START BEAN PROPERTIES
 	@BeanField
-	private Feature item;
-	
-	@BeanField
-	@SkipInit
-	private ObjMaskProvider objs;
-	
-	@BeanField
 	private double quantile = 0.5;
 	// END BEAN PROPERTIES
 
 	@Override
-	public double calcCast(FeatureStackParams params) throws FeatureCalcException {
-
-		try {
-			objs.initRecursive(params.getSharedObjs(), getLogger() );
-		} catch (InitException e1) {
-			throw new FeatureCalcException(e1);
-		}
-		
-		ObjMaskCollection objsCollection;
-		try {
-			objsCollection = objs.create();
-		} catch (CreateException e1) {
-			throw new FeatureCalcException(e1);
-		}
-		
-		FeatureObjMaskParams paramsObj = new FeatureObjMaskParams();
-		paramsObj.setNrgStack( params.getNrgStack() );
-		
-		DoubleArrayList featureVals = new DoubleArrayList();
-		
-		// Calculate a feature on each obj mask
-		for( ObjMask om : objsCollection ) {
-			paramsObj.setObjMask(om);
-			double val = getCacheSession().calc(item, paramsObj);
-			featureVals.add(val);
-		}
-		
+	protected double deriveStatistic(DoubleArrayList featureVals) {
 		featureVals.sort();
-		
 		return Descriptive.quantile(featureVals, quantile);
 	}
-
-	public Feature getItem() {
-		return item;
-	}
-
-	public void setItem(Feature item) {
-		this.item = item;
-	}
-
-
-	public ObjMaskProvider getObjs() {
-		return objs;
-	}
-
-
-	public void setObjs(ObjMaskProvider objs) {
-		this.objs = objs;
-	}
-
 
 	public double getQuantile() {
 		return quantile;
@@ -123,7 +58,4 @@ public class ObjMaskFeatureQuantile extends FeatureStack {
 	public void setQuantile(double quantile) {
 		this.quantile = quantile;
 	}
-
-
-
 }

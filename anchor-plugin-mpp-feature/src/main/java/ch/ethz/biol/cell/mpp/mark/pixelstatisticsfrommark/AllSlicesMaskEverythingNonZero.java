@@ -1,8 +1,7 @@
 package ch.ethz.biol.cell.mpp.mark.pixelstatisticsfrommark;
 
-import org.anchoranalysis.anchor.mpp.mark.GlobalRegionIdentifiers;
 import org.anchoranalysis.anchor.mpp.pxlmark.PxlMark;
-import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
+
 
 /*
  * #%L
@@ -31,103 +30,53 @@ import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
  */
 
 
-import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.cache.ExecuteException;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.relation.GreaterThan;
-import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.histogram.Histogram;
 import org.anchoranalysis.image.voxel.statistics.VoxelStatistics;
 import org.anchoranalysis.image.voxel.statistics.VoxelStatisticsFromHistogram;
 
-// Only takes pixels where indexNonZero has a nonzero pixel 
-// This involves a trick where we count how many pixels exist
-//  in our mask and we take the highest num-pixels to match this
-//  from our initial histogram
-public class AllSlicesMaskEverythingNonZero extends PixelStatisticsFromMark {
+/** 
+ * Only takes pixels where indexNonZero has a nonzero pixel 
+ * 
+ * <p>This involves a trick where we count how many pixels exist in our mask and we take the 
+ * highest num-pixels to match this from our initial histogram</p>
+ */
+public class AllSlicesMaskEverythingNonZero extends AllSlicesBase {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -3617915321417174160L;
 	
-	// START BEAN PROPERTIES
-	@BeanField
-	private int index = 0;
-	
-	@BeanField
-	private int indexNonZero = 0;
-	
-	@BeanField
-	private int regionID = GlobalRegionIdentifiers.SUBMARK_INSIDE;
-	
-	@BeanField
-	private int sliceID = -1;	// -1 indicates that we use all slices
-	// END BEAN PROPERTIES
-	
 	@Override
-	public VoxelStatistics createStatisticsFor(PxlMarkMemo pmm, ImageDim dim) throws CreateException {
+	protected VoxelStatistics extractFromPxlMark(PxlMark pm) throws CreateException {
 		
-		PxlMark pm;
-		try {
-			pm = pmm.doOperation();
-		} catch (ExecuteException e) {
-			throw new CreateException(e);
-		}
+		Histogram histIndex = histogramForAllSlices(pm, false);
+		Histogram histNonZero = histogramForAllSlices(pm, true);
 		
-		Histogram histIndex;
-		Histogram histNonZero;
+		long numNonZero = histNonZero.countThreshold(
+			new GreaterThan(),
+			0
+		);
+
+		return new VoxelStatisticsFromHistogram(
+			histogramExtractedFromRight( histIndex, numNonZero )
+		);
+	}
+	
+	private Histogram histogramForAllSlices(PxlMark pm, boolean useNonZeroIndex) throws CreateException {
 		try {
-			histIndex = pm.statisticsForAllSlicesMaskSlice(index, regionID, indexNonZero).histogram();
-			histNonZero = pm.statisticsForAllSlicesMaskSlice(indexNonZero, regionID, indexNonZero).histogram();
+			return statisticsForAllSlices(pm, useNonZeroIndex).histogram();
 		} catch (OperationFailedException e) {
 			throw new CreateException(e);
 		}
-		
-		
-		long numNonZero = histNonZero.countThreshold( new GreaterThan(), 0 );
-		
-		Histogram hOut = histIndex.duplicate();
-		hOut = hOut.extractPixelsFromRight(numNonZero);
-		return new VoxelStatisticsFromHistogram(hOut);
-	}
-
-	public int getIndex() {
-		return index;
-	}
-
-	public void setIndex(int index) {
-		this.index = index;
 	}
 	
-	@Override
-	public String toString() {
-		return String.format("regionID=%d,index=%d,indexNonZero=%d", regionID, index, indexNonZero);
+	private static Histogram histogramExtractedFromRight( Histogram histIndex, long numNonZero) {
+		Histogram hOut = histIndex.duplicate();
+		hOut = hOut.extractPixelsFromRight(numNonZero);
+		return hOut;
 	}
-
-	public int getRegionID() {
-		return regionID;
-	}
-
-	public void setRegionID(int regionID) {
-		this.regionID = regionID;
-	}
-
-	public int getSliceID() {
-		return sliceID;
-	}
-
-	public void setSliceID(int sliceID) {
-		this.sliceID = sliceID;
-	}
-
-	public int getIndexNonZero() {
-		return indexNonZero;
-	}
-
-	public void setIndexNonZero(int indexNonZero) {
-		this.indexNonZero = indexNonZero;
-	}
-
 }

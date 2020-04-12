@@ -36,44 +36,53 @@ import org.anchoranalysis.feature.init.FeatureInitParams;
 import org.anchoranalysis.feature.list.NamedFeatureStore;
 import org.anchoranalysis.feature.name.FeatureNameList;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
-import org.anchoranalysis.feature.session.SequentialSession;
+import org.anchoranalysis.feature.session.SessionFactory;
+import org.anchoranalysis.feature.session.calculator.FeatureCalculatorMulti;
 import org.anchoranalysis.feature.shared.SharedFeatureSet;
 import org.anchoranalysis.feature.shared.SharedFeaturesInitParams;
 import org.anchoranalysis.image.init.ImageInitParams;
 import org.anchoranalysis.plugin.mpp.experiment.bean.feature.flexi.Simple;
 
-public class FeatureSessionNamedFeatureStore extends FeatureSessionFlexiFeatureTable {
+public class FeatureSessionNamedFeatureStore<T extends FeatureCalcParams> extends FeatureSessionFlexiFeatureTable<T> {
 
-	private SequentialSession session;
+	private  FeatureCalculatorMulti<T> session;
 
-	private NamedFeatureStore namedFeatureStore;
+	private NamedFeatureStore<T> namedFeatureStore;
 	
-	public FeatureSessionNamedFeatureStore(NamedFeatureStore namedFeatureStore) {
+	public FeatureSessionNamedFeatureStore(NamedFeatureStore<T> namedFeatureStore) {
 		this.namedFeatureStore = namedFeatureStore;
-		session = new SequentialSession( namedFeatureStore.listFeatures() );
 	}
 
 	@Override
 	public void start(ImageInitParams soImage, SharedFeaturesInitParams soFeature, NRGStackWithParams nrgStack, LogErrorReporter logErrorReporter) throws InitException {
 		
 		// TODO temporarily disabled
-		SharedFeatureSet sharedFeatures = createSharedFeatures(soFeature);
+		SharedFeatureSet<T> sharedFeatures = createSharedFeatures(soFeature);
 		//SharedFeatureSet sharedFeatures = new SharedFeatureSet();
 		
 		// Init all the features
 		FeatureInitParams featureInitParams = Simple.createInitParams(soImage,nrgStack.getNrgStack(), nrgStack.getParams());
-		//namedFeatureStore.copyTo(out);
-		session.start(featureInitParams, sharedFeatures, logErrorReporter);
+		
+		try {
+			session = SessionFactory.createAndStart(
+				namedFeatureStore.listFeatures(),
+				featureInitParams,
+				sharedFeatures,
+				logErrorReporter
+			);
+		} catch (FeatureCalcException e) {
+			throw new InitException(e);
+		}
 	}
 	
 	@Override
-	public FeatureSessionFlexiFeatureTable duplicateForNewThread() {
-		return new FeatureSessionNamedFeatureStore(namedFeatureStore.deepCopy());
+	public FeatureSessionFlexiFeatureTable<T> duplicateForNewThread() {
+		return new FeatureSessionNamedFeatureStore<T>(namedFeatureStore.deepCopy());
 	}
 
 	@Override
-	public ResultsVector calcMaybeSuppressErrors(FeatureCalcParams params, ErrorReporter errorReporter) throws FeatureCalcException {
-		return session.calcSuppressErrors( params, errorReporter );
+	public ResultsVector calcMaybeSuppressErrors(T params, ErrorReporter errorReporter) throws FeatureCalcException {
+		return session.calcOneSuppressErrors( params, errorReporter );
 	}
 	
 	@Override
@@ -86,9 +95,9 @@ public class FeatureSessionNamedFeatureStore extends FeatureSessionFlexiFeatureT
 		return namedFeatureStore.size();
 	}
 	
-	private SharedFeatureSet createSharedFeatures( SharedFeaturesInitParams soFeature ) {
-		SharedFeatureSet out = new SharedFeatureSet();
-		out.addDuplicate( soFeature.getSharedFeatureSet() );
+	private SharedFeatureSet<T> createSharedFeatures( SharedFeaturesInitParams soFeature ) {
+		SharedFeatureSet<T> out = new SharedFeatureSet<>();
+		out.addDuplicate( soFeature.getSharedFeatureSet().downcast() );
 		namedFeatureStore.copyToDuplicate(out.getSet());
 		return out;
 	}

@@ -33,8 +33,6 @@ import org.anchoranalysis.anchor.mpp.mark.MarkAbstractRadii;
 
 
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 
 public class RadiiMinRatio extends CheckMark {
@@ -81,10 +79,4 @@ public class RadiiMinRatio extends CheckMark {
 	public void setMin(double min) {
 		this.min = min;
 	}
-
-	@Override
-	public FeatureList orderedListOfFeatures() throws CreateException {
-		return null;
-	}
-
 }

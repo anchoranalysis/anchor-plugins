@@ -36,7 +36,8 @@ import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.calc.ResultsVector;
 import org.anchoranalysis.feature.init.FeatureInitParams;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
-import org.anchoranalysis.feature.session.SequentialSession;
+import org.anchoranalysis.feature.session.SessionFactory;
+import org.anchoranalysis.feature.session.calculator.FeatureCalculatorMulti;
 import org.anchoranalysis.feature.shared.SharedFeatureSet;
 import org.anchoranalysis.feature.shared.SharedFeaturesInitParams;
 import org.anchoranalysis.image.feature.stack.FeatureStackParams;
@@ -53,14 +54,14 @@ class HelperImageFeatureCalculator {
 
 	/** Places all image-features in the SharedObjects and calculates them indirectly via another 'gateway' feature which may call them */
 	public double calcSingleIndirectly(
-		FeatureListProvider gatewayFeatureProvider,
+		FeatureListProvider<FeatureStackParams> gatewayFeatureProvider,
 		String gatewayFeatureProviderName,
 		SharedFeaturesInitParams featureInitParams,
 		NRGStackWithParams nrgStack,
-		FeatureList sharedFeatures
+		FeatureList<FeatureStackParams> sharedFeatures
 	) throws FeatureCalcException {
 		
-		Feature feature = singleFeatureFromProvider(
+		Feature<FeatureStackParams> feature = singleFeatureFromProvider(
 			gatewayFeatureProvider,
 			gatewayFeatureProviderName,
 			featureInitParams,
@@ -69,8 +70,8 @@ class HelperImageFeatureCalculator {
 		
 		return calcInternal(
 			nrgStack,
-			new FeatureList(feature),
-			featureInitParams.getSharedFeatureSet()
+			new FeatureList<>(feature),
+			featureInitParams.getSharedFeatureSet().downcast()
 		).get(0);
 	}
 	
@@ -80,12 +81,12 @@ class HelperImageFeatureCalculator {
 	public ResultsVector calcAllDirectly(
 		SharedFeaturesInitParams featureInitParams,
 		NRGStackWithParams nrgStack,
-		FeatureList features
+		FeatureList<FeatureStackParams> features
 	) throws FeatureCalcException {
 		return calcInternal(
 			nrgStack,
 			features,
-			featureInitParams.getSharedFeatureSet()
+			featureInitParams.getSharedFeatureSet().downcast()
 		);
 	}
 	
@@ -97,36 +98,36 @@ class HelperImageFeatureCalculator {
 	 *  also have a list of other features added (as duplicates) 
 	 * @throws InitException */
 	private void initFeatureProviderWithSharedFeatures(
-		FeatureListProvider provider,
+		FeatureListProvider<FeatureStackParams> provider,
 		SharedFeaturesInitParams initParams,
-		FeatureList sharedFeatures
+		FeatureList<FeatureStackParams> sharedFeatures
 	) throws InitException {
 		
 		provider.initRecursive( initParams, logErrorReporter );
 		
 		// Add our image-features to the shared feature set
 		// This must be done before calling create() on classifierProvider
-		initParams.getSharedFeatureSet().addDuplicate(sharedFeatures);
+		initParams.getSharedFeatureSet().addDuplicate(sharedFeatures.downcast());
 	}
 	
 	
 
 	/** Creates and initializes a single-feature that is provided via a featureProvider */
-	private Feature singleFeatureFromProvider(
-		FeatureListProvider featureProvider,
+	private Feature<FeatureStackParams> singleFeatureFromProvider(
+		FeatureListProvider<FeatureStackParams> featureProvider,
 		String featureProviderName,
 		SharedFeaturesInitParams initParams,
-		FeatureList sharedFeatures
+		FeatureList<FeatureStackParams> sharedFeatures
 	) throws FeatureCalcException {
 
 		try {
 			initFeatureProviderWithSharedFeatures(
-					featureProvider,
+				featureProvider,
 				initParams,
 				sharedFeatures
 			);
 
-			FeatureList fl = featureProvider.create();
+			FeatureList<FeatureStackParams> fl = featureProvider.create();
 			if (fl.size()!=1) {
 				throw new FeatureCalcException(
 					String.format("%s must return exactly one feature from its list. It currently returns %d", featureProviderName, fl.size() )
@@ -140,18 +141,20 @@ class HelperImageFeatureCalculator {
 		
 	private ResultsVector calcInternal(
 			NRGStackWithParams stack,
-			FeatureList featuresDirectlyCalculate,
-			SharedFeatureSet sharedFeatures
+			FeatureList<FeatureStackParams> featuresDirectlyCalculate,
+			SharedFeatureSet<FeatureStackParams> sharedFeatures
 		) throws FeatureCalcException {
-		try {
-			SequentialSession session = new SequentialSession(featuresDirectlyCalculate);
-			session.start( new FeatureInitParams(), sharedFeatures, logErrorReporter );
-			
-			FeatureStackParams params = new FeatureStackParams(stack.getNrgStack());
-			return session.calc(params);
-		} catch (InitException e) {
-			throw new FeatureCalcException(e);
-		}
+		
+		FeatureCalculatorMulti<FeatureStackParams> session = SessionFactory.createAndStart(
+			featuresDirectlyCalculate,
+			new FeatureInitParams(),
+			sharedFeatures,
+			logErrorReporter
+		);
+		
+		return session.calcOne(
+			new FeatureStackParams(stack.getNrgStack())
+		);
 	}
 
 }

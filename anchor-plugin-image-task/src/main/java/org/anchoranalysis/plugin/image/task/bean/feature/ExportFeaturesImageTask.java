@@ -37,13 +37,14 @@ import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.calc.ResultsVector;
 import org.anchoranalysis.feature.list.NamedFeatureStore;
 import org.anchoranalysis.image.bean.provider.stack.StackProvider;
+import org.anchoranalysis.image.feature.stack.FeatureStackParams;
 import org.anchoranalysis.image.io.input.ProvidesStackInput;
 import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
 import org.anchoranalysis.plugin.image.task.imagefeature.calculator.FeatureCalculatorStackInputFromStore;
 
 
 /** Calculates a feature on each image **/
-public class ExportFeaturesImageTask extends ExportFeaturesStoreTask<ProvidesStackInput> {
+public class ExportFeaturesImageTask extends ExportFeaturesStoreTask<ProvidesStackInput,FeatureStackParams> {
 
 	/**
 	 * 
@@ -67,7 +68,7 @@ public class ExportFeaturesImageTask extends ExportFeaturesStoreTask<ProvidesSta
 	@Override
 	protected ResultsVector calcResultsVectorForInputObject(
 		ProvidesStackInput inputObject,
-		NamedFeatureStore featureStore,
+		NamedFeatureStore<FeatureStackParams> featureStore,
 		BoundOutputManagerRouteErrors outputManager,
 		Path modelDir,
 		LogErrorReporter logErrorReporter

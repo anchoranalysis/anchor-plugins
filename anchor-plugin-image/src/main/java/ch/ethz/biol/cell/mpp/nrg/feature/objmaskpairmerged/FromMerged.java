@@ -48,7 +48,7 @@ public class FromMerged extends FromExisting {
 	}
 	
 	@Override
-	public String prefixForAdditionalCachesForChildren() {
+	public String cacheNameToUse() {
 		return "merged";
 	}
 }

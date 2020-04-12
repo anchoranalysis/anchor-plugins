@@ -1,8 +1,10 @@
 package ch.ethz.biol.cell.mpp.nrg.feature.pair;
 
-import org.anchoranalysis.anchor.mpp.feature.bean.nrg.elem.NRGElemPair;
+import java.util.function.Function;
+
 import org.anchoranalysis.anchor.mpp.feature.nrg.elem.NRGElemIndCalcParams;
 import org.anchoranalysis.anchor.mpp.feature.nrg.elem.NRGElemPairCalcParams;
+import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
 
 /*
  * #%L
@@ -31,41 +33,42 @@ import org.anchoranalysis.anchor.mpp.feature.nrg.elem.NRGElemPairCalcParams;
  */
 
 
-import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.feature.bean.Feature;
+import org.anchoranalysis.feature.cache.CacheableParams;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 
-public class MinFeatureAsIndividual extends NRGElemPair {
+public class MinFeatureAsIndividual extends NRGElemPairWithFeature {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 
-	// START BEAN PROPERTIES
-	@BeanField
-	private Feature item;
-	// eND BEAN PROPERTIES
-	
-	public MinFeatureAsIndividual() {
-	}
-	
 	@Override
-	public double calcCast( NRGElemPairCalcParams params ) throws FeatureCalcException {
-		
-		NRGElemIndCalcParams params1 = new NRGElemIndCalcParams( params.getObj1(), params.getNrgStack() );
-		NRGElemIndCalcParams params2 = new NRGElemIndCalcParams( params.getObj2(), params.getNrgStack() );
-		
-		double val1 = getCacheSession().calc( item, params1 );
-		double val2 = getCacheSession().calc( item, params2 );
-		return Math.min(val1, val2);
-	}
+	public double calc( CacheableParams<NRGElemPairCalcParams> params ) throws FeatureCalcException {
 
-	public Feature getItem() {
-		return item;
+		return Math.min(
+			calcForInd( params, p->p.getObj1(), "1" ),
+			calcForInd( params, p->p.getObj2(), "2" )
+		);
 	}
-
-	public void setItem(Feature item) {
-		this.item = item;
+	
+	private double calcForInd(
+		CacheableParams<NRGElemPairCalcParams> paramsCacheable,
+		Function<NRGElemPairCalcParams,PxlMarkMemo> pmmFunc,
+		String suffix
+	) throws FeatureCalcException {
+		
+		return paramsCacheable.calcChangeParams(
+			getItem(),
+			p -> deriveParams(p, pmmFunc),
+			"pair_obj" + suffix
+		);
+	}
+	
+	private static NRGElemIndCalcParams deriveParams( NRGElemPairCalcParams params, Function<NRGElemPairCalcParams,PxlMarkMemo> pmmFunc ) {
+		return new NRGElemIndCalcParams(
+			pmmFunc.apply(params),
+			params.getNrgStack()
+		);
 	}
 }

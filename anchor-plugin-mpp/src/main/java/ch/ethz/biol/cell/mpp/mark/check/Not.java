@@ -33,8 +33,6 @@ import org.anchoranalysis.anchor.mpp.mark.Mark;
 
 
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 
 public class Not extends CheckMark {
@@ -68,9 +66,5 @@ public class Not extends CheckMark {
 		this.check = check;
 	}
 
-	@Override
-	public FeatureList orderedListOfFeatures() throws CreateException {
-		return check.orderedListOfFeatures();
-	}
 
 }

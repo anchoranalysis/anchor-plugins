@@ -28,6 +28,7 @@ package ch.ethz.biol.cell.mpp.nrg.feature.operator;
 
 
 import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.feature.cache.CacheableParams;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
 
@@ -35,7 +36,7 @@ import cern.jet.random.Normal;
 
 
 // A score between 0 and 1, based upon the CDF of a guassian. as one approaches the mean, the score approaches 1.0
-public class GaussianScore extends FeatureFirstSecondOrder {
+public class GaussianScore<T extends FeatureCalcParams> extends FeatureFirstSecondOrder<T> {
 
 	/**
 	 * 
@@ -76,10 +77,10 @@ public class GaussianScore extends FeatureFirstSecondOrder {
 	}
 	
 	@Override
-	public double calc( FeatureCalcParams params ) throws FeatureCalcException {
+	public double calc( CacheableParams<T> params ) throws FeatureCalcException {
 		
-		double val = getCacheSession().calc( getItem(), params );
-		double mean = getCacheSession().calc( getItemMean(), params );
+		double val = params.calc( getItem() );
+		double mean = params.calc( getItemMean() );
 		
 		if (ignoreHigherSide) {
 			if (val>mean) {
@@ -93,15 +94,7 @@ public class GaussianScore extends FeatureFirstSecondOrder {
 			}
 		}
 		
-		double stdDev = getCacheSession().calc( getItemStdDev(), params );
-		
-		// We normalise
-		
-//		val = val - mean;
-//		mean = 0;
-//		
-//		val = val / stdDev;
-//		stdDev = 1;
+		double stdDev = params.calc( getItemStdDev() );
 		
 		return calc( mean, stdDev, val, rewardHigherSide, rewardLowerSide );
 	}

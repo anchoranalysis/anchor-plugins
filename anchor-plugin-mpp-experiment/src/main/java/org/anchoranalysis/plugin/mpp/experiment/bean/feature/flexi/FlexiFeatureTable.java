@@ -36,6 +36,7 @@ import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.feature.bean.list.FeatureListProvider;
 import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
+import org.anchoranalysis.image.feature.objmask.FeatureObjMaskParams;
 import org.anchoranalysis.image.objmask.ObjMaskCollection;
 import org.anchoranalysis.plugin.mpp.experiment.feature.FeatureSessionFlexiFeatureTable;
 
@@ -47,9 +48,10 @@ import org.anchoranalysis.plugin.mpp.experiment.feature.FeatureSessionFlexiFeatu
  * List FeatureCalcParams are also created dynamically to be evaluated against those features.
  * 
  * @author Owen Feehan
+ * @param T type of fexture used in the table
  *
  */
-public abstract class FlexiFeatureTable extends AnchorBean<FlexiFeatureTable> {
+public abstract class FlexiFeatureTable<T extends FeatureCalcParams> extends AnchorBean<FlexiFeatureTable<T>> {
 
 	/**
 	 * 
@@ -63,9 +65,9 @@ public abstract class FlexiFeatureTable extends AnchorBean<FlexiFeatureTable> {
 	 * @return
 	 * @throws CreateException
 	 */
-	public abstract FeatureSessionFlexiFeatureTable createFeatures( List<NamedBean<FeatureListProvider>> list ) throws CreateException, InitException;
+	public abstract FeatureSessionFlexiFeatureTable<T> createFeatures( List<NamedBean<FeatureListProvider<FeatureObjMaskParams>>> list ) throws CreateException, InitException;
 	
-	public abstract List<FeatureCalcParams> createListCalcParams(
+	public abstract List<T> createListCalcParams(
 		ObjMaskCollection objs,
 		NRGStackWithParams nrgStack,
 		LogErrorReporter logErrorReporter

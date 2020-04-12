@@ -36,8 +36,8 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.file.PathUtilities;
 import org.anchoranalysis.io.bean.descriptivename.DescriptiveNameFromFile;
+import org.anchoranalysis.io.filepath.FilePathToUnixStyleConverter;
 import org.anchoranalysis.io.input.descriptivename.DescriptiveFile;
 import org.apache.commons.io.FilenameUtils;
 
@@ -81,15 +81,15 @@ public class RemoveExtensions extends DescriptiveNameFromFile {
 		List<DescriptiveFile> df = descriptiveName.descriptiveNamesFor(files, elseName);
 		
 		if (preserveExtensionIfDuplicate) {
-			return considerDuplicates(df);
+			return considerDuplicates(df, elseName);
 		} else {
-			return removeExt(df);
+			return removeExt(df, elseName);
 		}
 	}
 	
 	
-	private static List<DescriptiveFile> considerDuplicates( List<DescriptiveFile> df ) {
-		List<DescriptiveFile> dfWithoutExt = removeExt(df);
+	private static List<DescriptiveFile> considerDuplicates( List<DescriptiveFile> df, String elseName ) {
+		List<DescriptiveFile> dfWithoutExt = removeExt(df, elseName);
 		
 		// A count for each file, based upon the uniqueness of the description
 		Map<String,Long> countedWithoutExt = dfWithoutExt.stream().collect(
@@ -130,9 +130,9 @@ public class RemoveExtensions extends DescriptiveNameFromFile {
 		return out;
 	}
 	
-	private static List<DescriptiveFile> removeExt( List<DescriptiveFile> df ) {
+	private static List<DescriptiveFile> removeExt( List<DescriptiveFile> df, String elseName ) {
 		return df.stream()
-			.map( RemoveExtensions::maybeRemoveExtension )
+			.map( descriptiveName -> maybeRemoveExtension(descriptiveName,elseName) )
 			.collect( Collectors.toList() );
 	}
 
@@ -144,10 +144,14 @@ public class RemoveExtensions extends DescriptiveNameFromFile {
 		this.descriptiveName = descriptiveName;
 	}
 	
-	private static DescriptiveFile maybeRemoveExtension( DescriptiveFile df ) {
+	private static DescriptiveFile maybeRemoveExtension( DescriptiveFile df, String elseName) {
+		String maybeExtRemoved = maybeRemoveExtensionForwardSlashes(df.getDescriptiveName(), df.getPath());
+		if (maybeExtRemoved.isEmpty()) {
+			maybeExtRemoved = elseName;
+		}
 		return new DescriptiveFile(
 			df.getFile(),
-			maybeRemoveExtensionForwardSlashes(df.getDescriptiveName(), df.getPath())
+			maybeExtRemoved
 		);
 	}
 	
@@ -156,13 +160,13 @@ public class RemoveExtensions extends DescriptiveNameFromFile {
 		// If the path doesn't end with descriptiveName, we don't remove any extension
 		//  as it's assumed that this has already occurred, and it could be dangerous
 		//  to remove anything more.
-		String pathForwardSlash = PathUtilities.toStringUnixStyle( path.normalize() );
+		String pathForwardSlash = FilePathToUnixStyleConverter.toStringUnixStyle( path.normalize() );
 		if (!pathForwardSlash.endsWith(nameLikePath)) {
 			// Early exit as the descriptive-name doesn't have the same ending as path
 			return nameLikePath;
 		}
 		
-		return PathUtilities.toStringUnixStyle(
+		return FilePathToUnixStyleConverter.toStringUnixStyle(
 			removeExtension(nameLikePath)
 		);
 	}

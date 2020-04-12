@@ -71,12 +71,7 @@ public class BinaryImgChnlProviderSgmnWithMask extends BinaryImgChnlProvider {
 		
 	public BinaryChnl sgmn( Chnl chnl, BinarySgmnParameters params, BinaryChnl maskChnl ) throws SgmnFailedException {
 		
-		ObjMask omMask;
-		try {
-			omMask = new ObjMask(maskChnl.binaryVoxelBox());
-		} catch (CreateException e) {
-			throw new SgmnFailedException("Cannot create voxel box", e);
-		}
+		ObjMask omMask = new ObjMask(maskChnl.binaryVoxelBox());
 	
 		BinaryVoxelBox<ByteBuffer> sgmnResult = sgmn.sgmn( chnl.getVoxelBox(), params, omMask, getSharedObjects().getRandomNumberGenerator() );
 		chnl.replaceVoxelBox( new VoxelBoxWrapper(sgmnResult.getVoxelBox()) );

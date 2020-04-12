@@ -34,11 +34,8 @@ import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.cache.ExecuteException;
-import org.anchoranalysis.core.error.InitException;
-import org.anchoranalysis.feature.cache.CacheSession;
-import org.anchoranalysis.feature.cachedcalculation.CachedCalculation;
+import org.anchoranalysis.feature.cache.CacheableParams;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.feature.init.FeatureInitParams;
 import org.anchoranalysis.image.voxel.statistics.VoxelStatistics;
 
 import ch.ethz.biol.cell.mpp.nrg.cachedcalculation.OverlapCalculation;
@@ -65,43 +62,9 @@ public class OverlapRatioThreeRegions extends NRGElemPair {
 	private boolean mip = false;
 	// END BEAN PROPERTIES
 	
-	private CachedCalculation<Double> cc1;
-	private CachedCalculation<Double> cc2;
-	private CachedCalculation<Double> cc3;	
-	
-	@Override
-	public void beforeCalc(FeatureInitParams params, CacheSession cache)
-			throws InitException {
-		super.beforeCalc(params, cache);
-		if (mip) {
-			// If we use this we don't need to find the volume ourselves
-			cc1 = cache.search( new OverlapMIPRatioCalculation(regionID1) );
-			cc2 = cache.search( new OverlapMIPRatioCalculation(regionID2) );
-			cc3 = cache.search( new OverlapMIPRatioCalculation(regionID3) );
-		} else {
-			cc1 = cache.search( new OverlapCalculation(regionID1) );
-			cc2 = cache.search( new OverlapCalculation(regionID2) );
-			cc3 = cache.search( new OverlapCalculation(regionID3) );
-		}
-	}
-	
 	public OverlapRatioThreeRegions() {
 	}
 	
-	private static double calcMinVolume( PxlMarkMemo obj1, PxlMarkMemo obj2, int regionID ) throws FeatureCalcException {
-		try {
-			VoxelStatistics pxlStats1 =  obj1.doOperation().statisticsForAllSlices(0, regionID);
-			VoxelStatistics pxlStats2 =  obj2.doOperation().statisticsForAllSlices(0, regionID);
-			
-			long size1 = pxlStats1.size();
-			long size2 = pxlStats2.size();
-			return Math.min( size1, size2 );
-		} catch (ExecuteException e) {
-			throw new FeatureCalcException(e);
-		}
-	}
-	
-
 	public static double calcOverlapRatioMin( PxlMarkMemo obj1, PxlMarkMemo obj2, double overlap1, double overlap2, double overlap3, int regionID1, int regionID2, int regionID3 ) throws FeatureCalcException {
 
 		double overlap = overlap1 + overlap2 + overlap3;
@@ -117,25 +80,53 @@ public class OverlapRatioThreeRegions extends NRGElemPair {
 	}
 	
 	@Override
-	public double calcCast( NRGElemPairCalcParams params ) throws FeatureCalcException {
+	public double calc( CacheableParams<NRGElemPairCalcParams> paramsCacheable ) throws FeatureCalcException {
 		
 		// MIP currently not supported
 		if(mip==true) {
 			throw new FeatureCalcException("mip currently not supported");
 		}
 		
-		
-		assert( cc1!=null );
-		assert( cc2!=null );
-		assert( cc3!=null );
+		NRGElemPairCalcParams params = paramsCacheable.getParams();
 		
 		try {
-			return calcOverlapRatioMin( params.getObj1(), params.getObj2(), cc1.getOrCalculate(params), cc2.getOrCalculate(params), cc3.getOrCalculate(params), regionID1, regionID2, regionID3 );
+			return calcOverlapRatioMin(
+				params.getObj1(),
+				params.getObj2(),
+				overlapForRegion(paramsCacheable, regionID1),
+				overlapForRegion(paramsCacheable, regionID2),
+				overlapForRegion(paramsCacheable, regionID3),
+				regionID1,
+				regionID2,
+				regionID3
+			);
 		} catch (ExecuteException e) {
 			throw new FeatureCalcException(e);
 		}							
 	}
 
+	private double overlapForRegion( CacheableParams<NRGElemPairCalcParams> paramsCacheable, int regionID ) throws ExecuteException {
+		if (mip) {
+			// If we use this we don't need to find the volume ourselves
+			return paramsCacheable.calc( new OverlapMIPRatioCalculation(regionID) );
+		} else {
+			return paramsCacheable.calc( new OverlapCalculation(regionID) );
+		}
+	}
+	
+	private static double calcMinVolume( PxlMarkMemo obj1, PxlMarkMemo obj2, int regionID ) throws FeatureCalcException {
+		try {
+			VoxelStatistics pxlStats1 =  obj1.doOperation().statisticsForAllSlices(0, regionID);
+			VoxelStatistics pxlStats2 =  obj2.doOperation().statisticsForAllSlices(0, regionID);
+			
+			long size1 = pxlStats1.size();
+			long size2 = pxlStats2.size();
+			return Math.min( size1, size2 );
+		} catch (ExecuteException e) {
+			throw new FeatureCalcException(e);
+		}
+	}
+	
 	public boolean isMip() {
 		return mip;
 	}

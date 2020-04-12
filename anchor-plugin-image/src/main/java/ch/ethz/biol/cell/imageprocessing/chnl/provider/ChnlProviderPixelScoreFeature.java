@@ -34,19 +34,20 @@ import java.util.List;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.Optional;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.provider.FeatureProvider;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.feature.session.SessionFactory;
+import org.anchoranalysis.feature.session.calculator.FeatureCalculatorSingle;
 import org.anchoranalysis.image.bean.provider.ChnlProvider;
 import org.anchoranalysis.image.bean.provider.HistogramProvider;
 import org.anchoranalysis.image.chnl.Chnl;
 import org.anchoranalysis.image.extent.Extent;
+import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.feature.pixelwise.PixelwiseFeatureInitParams;
+import org.anchoranalysis.image.feature.pixelwise.score.PixelScoreFeatureCalcParams;
 import org.anchoranalysis.image.voxel.box.VoxelBoxWrapper;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
-
-import pixelscore.PixelScoreSession;
 
 public class ChnlProviderPixelScoreFeature extends ChnlProvider {
 
@@ -60,7 +61,7 @@ public class ChnlProviderPixelScoreFeature extends ChnlProvider {
 	private ChnlProvider chnlProvider;
 	
 	@BeanField
-	private FeatureProvider featureProvider;
+	private FeatureProvider<PixelScoreFeatureCalcParams> featureProvider;
 	
 	@BeanField
 	private List<ChnlProvider> listAdditionalChnlProviders = new ArrayList<>();
@@ -72,39 +73,42 @@ public class ChnlProviderPixelScoreFeature extends ChnlProvider {
 	@Override
 	public Chnl create() throws CreateException {
 
-		Feature feature = featureProvider.create();
+		Feature<PixelScoreFeatureCalcParams> feature = featureProvider.create();
 		
 		PixelwiseFeatureInitParams paramsInit = new PixelwiseFeatureInitParams(getSharedObjects().getRandomNumberGenerator() );
 		
 		if (histogramProvider!=null) {
 			paramsInit.addListHist( histogramProvider.create() );
 		}
-		
-		
-		
+	
 		Chnl chnl = chnlProvider.create();
 		
-		List<Chnl> listAdditional = new ArrayList<>();
-		for( ChnlProvider cp : listAdditionalChnlProviders ) {
-			Chnl chnlAdditional = cp.create();
+		List<Chnl> listAdditional = additionalChnls( chnl.getDimensions() );
+		
+		try {
+			FeatureCalculatorSingle<PixelScoreFeatureCalcParams> calculator = SessionFactory.createAndStart(
+				feature,
+				paramsInit,
+				getSharedObjects().getFeature().getSharedFeatureSet().downcast(),
+				getLogger()
+			);
 			
-			if (!chnlAdditional.getDimensions().equals(chnl.getDimensions())) {
-				throw new CreateException("Dimensions of additional channel are not equal to main channel");
-			}
+			calcScoresIntoVoxelBox( chnl.getVoxelBox(), listAdditional, calculator );
 			
-			listAdditional.add( chnlAdditional);
+		} catch (FeatureCalcException e2) {
+			throw new CreateException(e2);
 		}
+				 
+		return chnl;
+	}
+	
+	private static void calcScoresIntoVoxelBox(
+		VoxelBoxWrapper vb,
+		List<Chnl> listAdditional,
+		FeatureCalculatorSingle<PixelScoreFeatureCalcParams> featureCalculator
+	) throws FeatureCalcException {
 		
 		ByteBuffer[] arrByteBuffer = new ByteBuffer[ listAdditional.size() ];
-		
-		PixelScoreSession session = new PixelScoreSession(feature);
-		try {
-			session.start(paramsInit, getSharedObjects().getFeature().getSharedFeatureSet(), getLogger() );
-		} catch (InitException e) {
-			throw new CreateException(e);
-		}
-		
-		VoxelBoxWrapper vb = chnl.getVoxelBox(); 
 		
 		Extent e = vb.any().extnt();
 		for( int z=0; z<e.getZ(); z++) {
@@ -120,12 +124,9 @@ public class ChnlProviderPixelScoreFeature extends ChnlProvider {
 			for( int y=0; y<e.getY(); y++) {
 				for( int x=0; x<e.getX(); x++) {
 					
-					double result;
-					try {
-						result = session.calc( bb, arrByteBuffer, offset );
-					} catch (FeatureCalcException e1) {
-						throw new CreateException(e1);
-					}
+					double result = featureCalculator.calcOne(
+						createParams(bb, arrByteBuffer, offset)
+					);
 					
 					int valOut = (int) Math.round(result);
 					
@@ -138,10 +139,35 @@ public class ChnlProviderPixelScoreFeature extends ChnlProvider {
 				}
 			}
 		}
+	}
+	
+	private static PixelScoreFeatureCalcParams createParams( VoxelBuffer<?> bufferPrimary, ByteBuffer[] buffersAdd, int offset ) {
+		PixelScoreFeatureCalcParams params = new PixelScoreFeatureCalcParams( 1 + buffersAdd.length );
 		
-		return chnl;
+		int val = bufferPrimary.getInt(offset);
+		params.setPxl(0, val);
+		
+		int i = 1;
+		for( ByteBuffer bbAdd : buffersAdd) {
+			params.setPxl(i++, bbAdd.getInt(offset) );
+		}
+		return params;
 	}
 
+	private List<Chnl> additionalChnls( ImageDim dim ) throws CreateException {
+		List<Chnl> listAdditional = new ArrayList<>();
+		for( ChnlProvider cp : listAdditionalChnlProviders ) {
+			Chnl chnlAdditional = cp.create();
+			
+			if (!chnlAdditional.getDimensions().equals(dim)) {
+				throw new CreateException("Dimensions of additional channel are not equal to main channel");
+			}
+			
+			listAdditional.add( chnlAdditional);
+		}
+		return listAdditional;
+	}
+	
 	public ChnlProvider getChnlProvider() {
 		return chnlProvider;
 	}
@@ -150,11 +176,11 @@ public class ChnlProviderPixelScoreFeature extends ChnlProvider {
 		this.chnlProvider = chnlProvider;
 	}
 
-	public FeatureProvider getFeatureProvider() {
+	public FeatureProvider<PixelScoreFeatureCalcParams> getFeatureProvider() {
 		return featureProvider;
 	}
 
-	public void setFeatureProvider(FeatureProvider featureProvider) {
+	public void setFeatureProvider(FeatureProvider<PixelScoreFeatureCalcParams> featureProvider) {
 		this.featureProvider = featureProvider;
 	}
 

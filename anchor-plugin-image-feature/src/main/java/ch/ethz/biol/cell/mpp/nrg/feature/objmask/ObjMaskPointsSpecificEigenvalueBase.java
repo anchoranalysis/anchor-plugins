@@ -29,11 +29,8 @@ package ch.ethz.biol.cell.mpp.nrg.feature.objmask;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.cache.ExecuteException;
-import org.anchoranalysis.core.error.InitException;
-import org.anchoranalysis.feature.cache.CacheSession;
-import org.anchoranalysis.feature.cachedcalculation.CachedCalculation;
+import org.anchoranalysis.feature.cache.CacheableParams;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.feature.init.FeatureInitParams;
 import org.anchoranalysis.image.feature.bean.objmask.FeatureObjMask;
 import org.anchoranalysis.image.feature.objmask.FeatureObjMaskParams;
 import org.anchoranalysis.math.moment.EigenvalueAndVector;
@@ -51,21 +48,13 @@ public abstract class ObjMaskPointsSpecificEigenvalueBase extends FeatureObjMask
 	@BeanField
 	private int eigenvalueIndex = 0;
 	// END BEAN PROPERTIES
-	
-	
-	private CachedCalculation<MomentsFromPointsCalculator> cc;
-	
-	@Override
-	public void beforeCalc(FeatureInitParams params, CacheSession session)
-			throws InitException {
-		super.beforeCalc(params, session);
-		cc = session.search( new CalculateObjMaskPointsSecondMomentMatrix(false) );
-	}
 		
-	protected EigenvalueAndVector calcSpecificEigenvector( FeatureObjMaskParams params ) throws FeatureCalcException {
+	protected EigenvalueAndVector calcSpecificEigenvector( CacheableParams<FeatureObjMaskParams> params ) throws FeatureCalcException {
 		
 		try {
-			MomentsFromPointsCalculator mm = cc.getOrCalculate(params);
+			MomentsFromPointsCalculator mm = params.calc(
+				new CalculateObjMaskPointsSecondMomentMatrix(false)			
+			);
 			return mm.get(eigenvalueIndex );
 			
 		} catch (ExecuteException e) {

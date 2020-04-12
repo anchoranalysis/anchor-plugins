@@ -47,6 +47,7 @@ import org.anchoranalysis.image.binary.BinaryChnl;
 import org.anchoranalysis.image.chnl.Chnl;
 import org.anchoranalysis.image.chnl.factory.ChnlFactoryByte;
 import org.anchoranalysis.image.extent.BoundingBox;
+import org.anchoranalysis.image.feature.pixelwise.score.PixelScoreFeatureCalcParams;
 import org.anchoranalysis.image.histogram.Histogram;
 import org.anchoranalysis.image.init.ImageInitParams;
 import org.anchoranalysis.image.objmask.ObjMask;
@@ -75,7 +76,7 @@ public class ChnlProviderPixelScore extends ChnlProvider {
 	private BinaryImgChnlProvider maskProvider;
 	
 	@BeanField @SkipInit
-	private Feature pixelScore;
+	private Feature<PixelScoreFeatureCalcParams> pixelScore;
 	
 	@BeanField
 	private List<ChnlProvider> listChnlProviderExtra = new ArrayList<>();
@@ -191,11 +192,11 @@ public class ChnlProviderPixelScore extends ChnlProvider {
 		this.maskProvider = maskProvider;
 	}
 
-	public Feature getPixelScore() {
+	public Feature<PixelScoreFeatureCalcParams> getPixelScore() {
 		return pixelScore;
 	}
 
-	public void setPixelScore(Feature pixelScore) {
+	public void setPixelScore(Feature<PixelScoreFeatureCalcParams> pixelScore) {
 		this.pixelScore = pixelScore;
 	}
 

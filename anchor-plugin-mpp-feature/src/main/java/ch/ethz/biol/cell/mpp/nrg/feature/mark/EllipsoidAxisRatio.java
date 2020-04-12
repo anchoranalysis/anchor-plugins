@@ -35,7 +35,6 @@ import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.core.geometry.Vector3d;
-import org.anchoranalysis.feature.cache.CacheSession;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.init.FeatureInitParams;
 import org.anchoranalysis.image.bean.orientation.DirectionVectorBean;
@@ -66,8 +65,8 @@ public class EllipsoidAxisRatio extends FeatureMark {
 	private DirectionVector dv;
 	
 	@Override
-	public void beforeCalc(FeatureInitParams params, CacheSession cache) throws InitException {
-		super.beforeCalc(params, cache);
+	public void beforeCalc(FeatureInitParams params) throws InitException {
+		super.beforeCalc(params);
 		dv = directionVector.createVector();
 	}
 

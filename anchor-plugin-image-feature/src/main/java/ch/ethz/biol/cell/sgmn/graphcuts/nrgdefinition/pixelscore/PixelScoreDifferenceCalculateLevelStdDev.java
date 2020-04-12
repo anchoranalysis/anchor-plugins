@@ -32,8 +32,8 @@ import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.relation.GreaterThanEqualTo;
 import org.anchoranalysis.core.relation.LessThan;
+import org.anchoranalysis.feature.cache.CacheableParams;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.feature.session.cache.FeatureSessionCacheRetriever;
 import org.anchoranalysis.image.bean.threshold.CalculateLevel;
 import org.anchoranalysis.image.feature.bean.pixelwise.score.PixelScore;
 import org.anchoranalysis.image.feature.pixelwise.PixelwiseFeatureInitParams;
@@ -71,8 +71,8 @@ public class PixelScoreDifferenceCalculateLevelStdDev extends PixelScore {
 	private double widthGreaterThan;
 	
 	@Override
-	public void beforeCalcCast(PixelwiseFeatureInitParams params, FeatureSessionCacheRetriever session) throws InitException {
-		super.beforeCalcCast(params, session);
+	public void beforeCalcCast(PixelwiseFeatureInitParams params) throws InitException {
+		super.beforeCalcCast(params);
 		
 		Histogram hist = params.getHist(indexHistogram);
 		
@@ -91,8 +91,11 @@ public class PixelScoreDifferenceCalculateLevelStdDev extends PixelScore {
 	}
 	
 	@Override
-	public double calcCast(PixelScoreFeatureCalcParams params)
+	public double calc(CacheableParams<PixelScoreFeatureCalcParams> paramsCacheable)
 			throws FeatureCalcException {
+		
+		PixelScoreFeatureCalcParams params = paramsCacheable.getParams();
+		
 		return PixelScoreDifference.calcDiffFromValue(params.getPxl(nrgChnlIndex), level, widthGreaterThan, widthLessThan, minDifference);
 	}
 

@@ -65,7 +65,7 @@ public class BranchIfDebug<T extends InputFromManager> extends InputManager<T> {
 	public List<T> inputObjects(InputManagerParams params)
 			throws AnchorIOException {
 
-		if (params.isDebugMode()) {
+		if (params.isDebugModeActivated()) {
 			if (inputDebug==null) {
 				// We pick the first
 				Iterator<T> all = input.inputObjects(params).iterator();

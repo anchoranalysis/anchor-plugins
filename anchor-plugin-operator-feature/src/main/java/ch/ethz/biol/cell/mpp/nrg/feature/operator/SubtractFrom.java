@@ -28,11 +28,12 @@ package ch.ethz.biol.cell.mpp.nrg.feature.operator;
 
 
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.feature.bean.operator.FeatureSingleElem;
+import org.anchoranalysis.feature.bean.operator.FeatureGenericSingleElem;
+import org.anchoranalysis.feature.cache.CacheableParams;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
 
-public class SubtractFrom extends FeatureSingleElem {
+public class SubtractFrom<T extends FeatureCalcParams> extends FeatureGenericSingleElem<T> {
 
 	/**
 	 * 
@@ -45,8 +46,8 @@ public class SubtractFrom extends FeatureSingleElem {
 	// END BEAN PROPERTIES
 	
 	@Override
-	public double calc( FeatureCalcParams params ) throws FeatureCalcException {
-		return value - getCacheSession().calc( getItem(), params );
+	public double calc( CacheableParams<T> params ) throws FeatureCalcException {
+		return value - params.calc( getItem() );
 	}
 
 

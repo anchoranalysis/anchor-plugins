@@ -63,6 +63,15 @@ public class RemoveExtensionsTest {
 		assertEquals( ".picasaoriginals/2010-01-28 04.41.38.1", nameFor(df,1) );
 	}
 	
+	@Test
+	public void testOneEmpty() throws AnchorIOException {
+
+		List<DescriptiveFile> df = applyTest(true, listOfFilesOneEmpty());
+
+		assertEquals( "unknownName", nameFor(df,0) );
+		assertEquals( "Gray", nameFor(df,1) );
+	}
+	
 	private List<DescriptiveFile> applyTest( boolean preserveExtension, List<File> files ) throws AnchorIOException {
 		RemoveExtensions re = new RemoveExtensions();
 		
@@ -72,7 +81,7 @@ public class RemoveExtensionsTest {
 		re.setDescriptiveName( new NormalizedPath() );
 		
 		re.setPreserveExtensionIfDuplicate(preserveExtension);
-		return re.descriptiveNamesForCheckUniqueness(files, "<unknown>");
+		return re.descriptiveNamesForCheckUniqueness(files);
 	}
 	
 	private static List<File> listOfFiles() {
@@ -86,6 +95,13 @@ public class RemoveExtensionsTest {
 	private static List<File> listOfFilesDoubleExt() {
 		File file1 = new File(".picasaoriginals/2010-01-28 04.41.38.jpg");
 		File file2 = new File(".picasaoriginals/2010-01-28 04.41.38.1.jpg");
+		
+		return Arrays.asList(file1,file2);		
+	}
+	
+	private static List<File> listOfFilesOneEmpty() {
+		File file1 = new File(".jpg");
+		File file2 = new File("Gray.png");
 		
 		return Arrays.asList(file1,file2);		
 	}

@@ -34,11 +34,12 @@ import org.anchoranalysis.bean.shared.relation.RelationBean;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.relation.RelationToValue;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.feature.session.calculator.FeatureCalculatorSingle;
 import org.anchoranalysis.image.bean.objmask.filter.ObjMaskFilter;
 import org.anchoranalysis.image.bean.objmask.match.ObjMaskMatcher;
 import org.anchoranalysis.image.extent.ImageDim;
-import org.anchoranalysis.image.feature.bean.evaluator.FeatureEvaluatorNrgStack;
-import org.anchoranalysis.image.feature.session.FeatureSessionCreateParamsSingle;
+import org.anchoranalysis.image.feature.bean.evaluator.FeatureEvaluator;
+import org.anchoranalysis.image.feature.objmask.pair.FeatureObjMaskPairParams;
 import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.image.objmask.ObjMaskCollection;
 import org.anchoranalysis.image.objmask.match.ObjWithMatches;
@@ -62,7 +63,7 @@ public class ObjMaskFilterFeatureMatchingObjectsRelationThreshold extends ObjMas
 	private RelationBean relation;
 	
 	@BeanField
-	private FeatureEvaluatorNrgStack featureEvaluator;
+	private FeatureEvaluator<FeatureObjMaskPairParams> featureEvaluator;
 	// END BEAN PROPERTIES
 	
 	@Override
@@ -81,16 +82,17 @@ public class ObjMaskFilterFeatureMatchingObjectsRelationThreshold extends ObjMas
 		}
 		
 		RelationToValue r = relation.create();
-
-		FeatureSessionCreateParamsSingle session = featureEvaluator.createAndStartSession();
-		
+	
 		try {
+			FeatureCalculatorSingle<FeatureObjMaskPairParams> session = featureEvaluator.createAndStartSession();
 		
 			for( ObjWithMatches owm : matchList ) {
 				
 				for (ObjMask match : owm.getMatches()) {
 					
-					double featureVal = session.calc( owm.getSourceObj(), match );
+					double featureVal = session.calcOne(
+						new FeatureObjMaskPairParams(owm.getSourceObj(), match)
+					);
 					
 					if (!r.isRelationToValueTrue(featureVal, threshold)) {
 						objs.remove(owm.getSourceObj());
@@ -132,11 +134,11 @@ public class ObjMaskFilterFeatureMatchingObjectsRelationThreshold extends ObjMas
 		this.objMaskMatcher = objMaskMatcher;
 	}
 
-	public FeatureEvaluatorNrgStack getFeatureEvaluator() {
+	public FeatureEvaluator<FeatureObjMaskPairParams> getFeatureEvaluator() {
 		return featureEvaluator;
 	}
 
-	public void setFeatureEvaluator(FeatureEvaluatorNrgStack featureEvaluator) {
+	public void setFeatureEvaluator(FeatureEvaluator<FeatureObjMaskPairParams> featureEvaluator) {
 		this.featureEvaluator = featureEvaluator;
 	}
 

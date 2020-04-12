@@ -32,11 +32,8 @@ import org.anchoranalysis.bean.BeanInstanceMap;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.error.BeanMisconfiguredException;
 import org.anchoranalysis.core.cache.ExecuteException;
-import org.anchoranalysis.core.error.InitException;
-import org.anchoranalysis.feature.cache.CacheSession;
-import org.anchoranalysis.feature.cachedcalculation.CachedCalculation;
+import org.anchoranalysis.feature.cache.CacheableParams;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.feature.init.FeatureInitParams;
 import org.anchoranalysis.image.chnl.Chnl;
 import org.anchoranalysis.image.feature.bean.objmask.FeatureObjMask;
 import org.anchoranalysis.image.feature.objmask.FeatureObjMaskParams;
@@ -78,8 +75,6 @@ public class IntensityMeanShell extends FeatureObjMask {
 	private boolean inverse = false;		// Calculates instead on the inverse of the mask (what's left when the shell is removed)
 	// END BEAN PROPERTIES
 	
-	private CachedCalculation<ObjMask> ccShellObjMask;
-	
 	@Override
 	public void checkMisconfigured( BeanInstanceMap defaultInstances ) throws BeanMisconfiguredException {
 		super.checkMisconfigured( defaultInstances );
@@ -100,40 +95,36 @@ public class IntensityMeanShell extends FeatureObjMask {
 			inverse ? "true" : "false"
 		);
 	}
-
-	
-	@Override
-	public void beforeCalc(FeatureInitParams params,
-			CacheSession cache) throws InitException {
-		super.beforeCalc(params, cache);
-		ccShellObjMask = CalculateShellObjMask.createFromCache(
-			cache,
-			iterationsDilation,
-			iterationsErosion,
-			iterationsErosionSecond,
-			do3D,
-			inverse
-		);
-	}
 		
 	@Override
-	public double calcCast(FeatureObjMaskParams params) throws FeatureCalcException {
+	public double calc(CacheableParams<FeatureObjMaskParams> paramsCacheable) throws FeatureCalcException {
+		
+		FeatureObjMaskParams params = paramsCacheable.getParams();
 		
 		Chnl chnl = params.getNrgStack().getNrgStack().getChnl(nrgIndex);
 		
-		ObjMask om;
 		try {
-			om = ccShellObjMask.getOrCalculate(params);
+			ObjMask om = paramsCacheable.calc(
+				CalculateShellObjMask.createFromCache(
+					paramsCacheable,
+					iterationsDilation,
+					iterationsErosion,
+					iterationsErosionSecond,
+					do3D,
+					inverse
+				)
+			);
+			
+			if (nrgIndexMask!=-1) {
+				ObjMask omMask = new ObjMask( params.getNrgStack().getNrgStack().getChnl(nrgIndexMask).getVoxelBox().asByte() );
+				om = om.intersect(omMask, params.getNrgStack().getNrgStack().getDimensions() );
+			}
+		
+			return IntensityMean.calcMeanIntensityObjMask(chnl, om );
+			
 		} catch (ExecuteException e) {
 			throw new FeatureCalcException(e);
 		}
-		
-		if (nrgIndexMask!=-1) {
-			ObjMask omMask = new ObjMask( params.getNrgStack().getNrgStack().getChnl(nrgIndexMask).getVoxelBox().asByte() );
-			om = om.intersect(omMask, params.getNrgStack().getNrgStack().getDimensions() );
-		}
-	
-		return IntensityMean.calcMeanIntensityObjMask(chnl, om );
 	}
 	
 	public int getNrgIndex() {

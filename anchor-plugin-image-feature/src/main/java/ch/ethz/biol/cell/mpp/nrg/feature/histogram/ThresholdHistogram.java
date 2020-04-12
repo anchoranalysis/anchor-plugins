@@ -30,8 +30,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.cache.ExecuteException;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.feature.bean.Feature;
-import org.anchoranalysis.feature.cache.CacheSession;
-import org.anchoranalysis.feature.cachedcalculation.CachedCalculation;
+import org.anchoranalysis.feature.cache.CacheableParams;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.init.FeatureInitParams;
 import org.anchoranalysis.image.bean.threshold.CalculateLevel;
@@ -55,47 +54,50 @@ public class ThresholdHistogram extends FeatureHistogram {
 
 	// START BEAN PROPERTIES
 	@BeanField
-	private Feature item;
+	private Feature<FeatureHistogramParams> item;
 	
 	// START BEAN PROPERTIES
 	@BeanField
 	private CalculateLevel calculateLevel;
 	// END BEAN PROPERTIES
-	
-	private CachedCalculation<Histogram> ccHistogram;
 
 	@Override
-	public void beforeCalc(FeatureInitParams params, CacheSession session)
+	public void beforeCalc(FeatureInitParams params)
 			throws InitException {
-		super.beforeCalc(params, session);
-		item.beforeCalc(params, session);
-		ccHistogram = session.search(
-			new CalculateOtsuThresholdedHistogram(calculateLevel, getLogger())
-		);
+		super.beforeCalc(params);
+		item.beforeCalc(params);
 	}
 	
 	@Override
-	public double calcCast(FeatureHistogramParams params) throws FeatureCalcException {
+	public double calc(CacheableParams<FeatureHistogramParams> paramsCacheable) throws FeatureCalcException {
 
 		try {
-			Histogram hist = ccHistogram.getOrCalculate(params);
-			
-			FeatureHistogramParams paramsChangedHist = new FeatureHistogramParams(
-				hist,
-				params.getRes()
+			Histogram thresholded = paramsCacheable.calc(
+				new CalculateOtsuThresholdedHistogram(calculateLevel, getLogger())	
 			);
 			
-			return item.calcCheckInit(paramsChangedHist);
+			return paramsCacheable.calcChangeParams(
+				item,
+				p -> createHistogramParams(p, thresholded),
+				"thresholdedHist"
+			);
 		} catch (ExecuteException e) {
 			throw new FeatureCalcException(e);
 		}
 	}
+	
+	private FeatureHistogramParams createHistogramParams(FeatureHistogramParams params, Histogram thresholded) {
+		return new FeatureHistogramParams(
+			thresholded,
+			params.getRes()
+		);
+	}
 
-	public Feature getItem() {
+	public Feature<FeatureHistogramParams> getItem() {
 		return item;
 	}
 
-	public void setItem(Feature item) {
+	public void setItem(Feature<FeatureHistogramParams> item) {
 		this.item = item;
 	}
 

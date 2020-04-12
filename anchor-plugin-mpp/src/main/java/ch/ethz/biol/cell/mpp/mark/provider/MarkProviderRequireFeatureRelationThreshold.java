@@ -35,12 +35,12 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.Optional;
 import org.anchoranalysis.bean.shared.relation.RelationBean;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.provider.FeatureProvider;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.init.FeatureInitParams;
-import org.anchoranalysis.feature.session.SimpleSession;
+import org.anchoranalysis.feature.session.SessionFactory;
+import org.anchoranalysis.feature.session.calculator.FeatureCalculatorSingle;
 import org.anchoranalysis.image.bean.provider.ImageDimProvider;
 import org.anchoranalysis.image.extent.ImageRes;
 
@@ -56,7 +56,7 @@ public class MarkProviderRequireFeatureRelationThreshold extends MarkProvider {
 	private MarkProvider markProvider;
 	
 	@BeanField
-	private FeatureProvider featureProvider;
+	private FeatureProvider<FeatureMarkParams> featureProvider;
 	
 	@BeanField
 	private double threshold;
@@ -77,29 +77,35 @@ public class MarkProviderRequireFeatureRelationThreshold extends MarkProvider {
 			return null;
 		}
 		
-		FeatureInitParams initParams = new FeatureInitParams();
-		
-		Feature feature = featureProvider.create();
+		Feature<FeatureMarkParams> feature = featureProvider.create();
 				
 		ImageRes res = resProvider!=null ? resProvider.create().getRes() : null;
 		
-		FeatureMarkParams markParams = new FeatureMarkParams(mark, res);
-		
-		double featureVal;
-		try {
-			SimpleSession session = new SimpleSession();
-			featureVal = session.calc( feature, initParams, getSharedObjects().getFeature().getSharedFeatureSet(), markParams, getLogger() );
-			
-		} catch (FeatureCalcException | InitException e) {
-			throw new CreateException(e);
-		}
-		
-		//System.out.printf("featureVal=%f\n", featureVal);
+		double featureVal = calculateParams(
+			feature,
+			new FeatureMarkParams(mark, res)
+		);
 		
 		if (relation.create().isRelationToValueTrue(featureVal, threshold)) {
 			return mark;
 		} else {
 			return null;
+		}
+	}
+	
+	private double calculateParams( Feature<FeatureMarkParams> feature, FeatureMarkParams params ) throws CreateException {
+		
+		try {
+			FeatureCalculatorSingle<FeatureMarkParams> session = SessionFactory.createAndStart(
+				feature,
+				new FeatureInitParams(),
+				getSharedObjects().getFeature().getSharedFeatureSet().downcast(),
+				getLogger()
+			);
+			return session.calcOne( params );
+			
+		} catch (FeatureCalcException e) {
+			throw new CreateException(e);
 		}
 	}
 
@@ -113,12 +119,12 @@ public class MarkProviderRequireFeatureRelationThreshold extends MarkProvider {
 	}
 
 
-	public FeatureProvider getFeatureProvider() {
+	public FeatureProvider<FeatureMarkParams> getFeatureProvider() {
 		return featureProvider;
 	}
 
 
-	public void setFeatureProvider(FeatureProvider featureProvider) {
+	public void setFeatureProvider(FeatureProvider<FeatureMarkParams> featureProvider) {
 		this.featureProvider = featureProvider;
 	}
 

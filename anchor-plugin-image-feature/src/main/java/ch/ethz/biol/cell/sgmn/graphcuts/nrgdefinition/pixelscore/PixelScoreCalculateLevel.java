@@ -30,7 +30,7 @@ package ch.ethz.biol.cell.sgmn.graphcuts.nrgdefinition.pixelscore;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.feature.session.cache.FeatureSessionCacheRetriever;
+import org.anchoranalysis.feature.cache.CacheableParams;
 import org.anchoranalysis.image.bean.threshold.CalculateLevel;
 import org.anchoranalysis.image.feature.bean.pixelwise.score.PixelScore;
 import org.anchoranalysis.image.feature.pixelwise.PixelwiseFeatureInitParams;
@@ -61,8 +61,8 @@ public class PixelScoreCalculateLevel extends PixelScore {
 	private double distMaxDivider;
 	
 	@Override
-	public void beforeCalcCast( PixelwiseFeatureInitParams params, FeatureSessionCacheRetriever session ) throws InitException {
-		super.beforeCalcCast(params, session);
+	public void beforeCalcCast( PixelwiseFeatureInitParams params ) throws InitException {
+		super.beforeCalcCast(params);
 		try {
 			level = calculateLevel.calculateLevel( params.getHist(histChnlIndex) );
 		} catch (OperationFailedException e) {
@@ -74,25 +74,9 @@ public class PixelScoreCalculateLevel extends PixelScore {
 	}
 	
 	@Override
-	public double calcCast(PixelScoreFeatureCalcParams params) {
-		
-		
-		
-		// TODO Auto-generated method stub
-		//double pxlEdgeNormalised = pxlEdge;
-		//pxlEdgeNormalised /= edgeNormalization;
+	public double calc(CacheableParams<PixelScoreFeatureCalcParams> paramsCacheable) {
 
-		
-		//pxlEdgeNormalised = 1 - pxlEdgeNormalised;
-		//pxlEdgeNormalised *= edgeMultiplier;
-		
-		
-//		if (pxl < level ) {
-//			return 0;
-//		} else {
-//			return 1;
-//		}
-		
+		PixelScoreFeatureCalcParams params = paramsCacheable.getParams();
 		
 		if (params.getPxl(nrgChnlIndex) < level ) {
 			

@@ -28,7 +28,6 @@ package org.anchoranalysis.test.feature.plugins;
 
 import static org.anchoranalysis.test.feature.plugins.ChnlFixture.MEDIUM;
 
-import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.feature.nrg.NRGStack;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 import org.anchoranalysis.image.extent.IncorrectImageSizeException;
@@ -36,7 +35,7 @@ import org.anchoranalysis.image.stack.Stack;
 
 public class NRGStackFixture {
 
-	public static NRGStackWithParams create() throws CreateException {
+	public static NRGStackWithParams create() {
 	
 		try {
 			Stack stack = new Stack();

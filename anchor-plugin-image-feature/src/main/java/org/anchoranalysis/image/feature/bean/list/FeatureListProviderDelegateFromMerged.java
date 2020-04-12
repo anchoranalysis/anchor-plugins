@@ -34,6 +34,8 @@ import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.bean.list.FeatureListProvider;
 import org.anchoranalysis.feature.bean.list.FeatureListProviderPrependName;
+import org.anchoranalysis.image.feature.objmask.FeatureObjMaskParams;
+import org.anchoranalysis.image.feature.objmask.pair.merged.FeatureObjMaskPairMergedParams;
 
 import ch.ethz.biol.cell.mpp.nrg.feature.objmaskpairmerged.FromExisting;
 import ch.ethz.biol.cell.mpp.nrg.feature.objmaskpairmerged.FromFirst;
@@ -47,7 +49,7 @@ import ch.ethz.biol.cell.mpp.nrg.feature.objmaskpairmerged.FromSecond;
  * @author Owen Feehan
  *
  */
-public class FeatureListProviderDelegateFromMerged extends FeatureListProvider {
+public class FeatureListProviderDelegateFromMerged extends FeatureListProvider<FeatureObjMaskPairMergedParams> {
 
 	/**
 	 * 
@@ -56,7 +58,7 @@ public class FeatureListProviderDelegateFromMerged extends FeatureListProvider {
 	
 	// START BEAN PROPERTIES
 	@BeanField
-	private FeatureListProvider item;
+	private FeatureListProvider<FeatureObjMaskParams> item;
 	
 	@BeanField @AllowEmpty
 	private String prependString = "";
@@ -70,14 +72,14 @@ public class FeatureListProviderDelegateFromMerged extends FeatureListProvider {
 	// END BEAN PROPERTIES
 
 	@Override
-	public FeatureList create() throws CreateException {
+	public FeatureList<FeatureObjMaskPairMergedParams> create() throws CreateException {
 
-		FeatureList in = item.create();
-		FeatureList out = new FeatureList(); 
+		FeatureList<FeatureObjMaskParams> in = item.create();
+		FeatureList<FeatureObjMaskPairMergedParams> out = new FeatureList<>(); 
 		
-		for( Feature featExst : in ) {
+		for( Feature<FeatureObjMaskParams> featExst : in ) {
 			
-			Feature featExstDup = featExst.duplicateBean();
+			Feature<FeatureObjMaskParams> featExstDup = featExst.duplicateBean();
 			
 			FromExisting featDelegate = createNewDelegateFeature();
 			featDelegate.setItem(featExstDup);
@@ -112,11 +114,11 @@ public class FeatureListProviderDelegateFromMerged extends FeatureListProvider {
 		this.prependString = prependString;
 	}
 
-	public FeatureListProvider getItem() {
+	public FeatureListProvider<FeatureObjMaskParams> getItem() {
 		return item;
 	}
 
-	public void setItem(FeatureListProvider item) {
+	public void setItem(FeatureListProvider<FeatureObjMaskParams> item) {
 		this.item = item;
 	}
 

@@ -29,7 +29,6 @@ package org.anchoranalysis.plugin.image.task.bean.slice;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.SkipInit;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.core.log.LogReporter;
@@ -45,9 +44,10 @@ import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.bean.list.FeatureListProvider;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
-import org.anchoranalysis.feature.shared.SharedFeatureSet;
+import org.anchoranalysis.feature.session.SessionFactory;
+import org.anchoranalysis.feature.session.calculator.FeatureCalculatorSingle;
 import org.anchoranalysis.image.bean.provider.stack.StackProvider;
-import org.anchoranalysis.image.feature.session.FeatureSessionCreateParamsSingle;
+import org.anchoranalysis.image.feature.stack.FeatureStackParams;
 import org.anchoranalysis.image.io.input.NamedChnlsInput;
 import org.anchoranalysis.image.io.stack.StackCollectionOutputter;
 import org.anchoranalysis.image.stack.NamedImgStackCollection;
@@ -76,7 +76,7 @@ public class ExtractSingleSliceTask extends Task<NamedChnlsInput,SharedStateSele
 	
 	// START BEAN PROPERTIES
 	@BeanField @SkipInit
-	private FeatureListProvider scoreProvider;
+	private FeatureListProvider<FeatureStackParams> scoreProvider;
 	
 	@BeanField
 	private StackProvider nrgStackProvider;
@@ -143,7 +143,7 @@ public class ExtractSingleSliceTask extends Task<NamedChnlsInput,SharedStateSele
 	 * @throws OperationFailedException */
 	private int selectSlice( NRGStackWithParams nrgStack, LogErrorReporter logErrorReporter, String imageName, SharedStateSelectedSlice params ) throws OperationFailedException {
 		
-		Feature scoreFeature = extractScoreFeature();
+		Feature<FeatureStackParams> scoreFeature = extractScoreFeature();
 		
 		double[] scores = calcScoreForEachSlice( scoreFeature, nrgStack, logErrorReporter );
 		
@@ -196,11 +196,17 @@ public class ExtractSingleSliceTask extends Task<NamedChnlsInput,SharedStateSele
 		}
 	}
 		
-	private double[] calcScoreForEachSlice( Feature scoreFeature, NRGStackWithParams nrgStack, LogErrorReporter logErrorReporter ) throws OperationFailedException {
+	private double[] calcScoreForEachSlice(
+		Feature<FeatureStackParams> scoreFeature,
+		NRGStackWithParams nrgStack,
+		LogErrorReporter logErrorReporter
+	) throws OperationFailedException {
 
 		try {
-			FeatureSessionCreateParamsSingle session = new FeatureSessionCreateParamsSingle(scoreFeature, new SharedFeatureSet() );
-			session.start(logErrorReporter);
+			FeatureCalculatorSingle<FeatureStackParams> session = SessionFactory.createAndStart(
+				scoreFeature,
+				logErrorReporter
+			);
 			
 			double results[] = new double[nrgStack.getDimensions().getZ()];
 			
@@ -209,7 +215,9 @@ public class ExtractSingleSliceTask extends Task<NamedChnlsInput,SharedStateSele
 				NRGStackWithParams nrgStackSlice = nrgStack.extractSlice(z);
 				
 				// Calculate feature for this slice
-				double featVal = session.calc( nrgStackSlice.getNrgStack() );
+				double featVal = session.calcOne(
+					new FeatureStackParams(nrgStackSlice.getNrgStack())
+				);
 				
 				logErrorReporter.getLogReporter().logFormatted("Slice %3d has score %f", z, featVal);
 				
@@ -218,14 +226,14 @@ public class ExtractSingleSliceTask extends Task<NamedChnlsInput,SharedStateSele
 			
 			return results;
 			
-		} catch (InitException | FeatureCalcException e) {
+		} catch (FeatureCalcException e) {
 			throw new OperationFailedException(e);
 		}
 	}
 	
-	private Feature extractScoreFeature() throws OperationFailedException {
+	private Feature<FeatureStackParams> extractScoreFeature() throws OperationFailedException {
 		try {
-			FeatureList features = scoreProvider.create();
+			FeatureList<FeatureStackParams> features = scoreProvider.create();
 			if (features.size()!=1) {
 				throw new OperationFailedException(
 					String.format("scoreProvider should return a list with exactly 1 feature, instead it has %d features.", features.size() )
@@ -242,12 +250,11 @@ public class ExtractSingleSliceTask extends Task<NamedChnlsInput,SharedStateSele
 		return false;
 	}
 
-
-	public FeatureListProvider getScoreProvider() {
+	public FeatureListProvider<FeatureStackParams> getScoreProvider() {
 		return scoreProvider;
 	}
 
-	public void setScoreProvider(FeatureListProvider scoreProvider) {
+	public void setScoreProvider(FeatureListProvider<FeatureStackParams> scoreProvider) {
 		this.scoreProvider = scoreProvider;
 	}
 

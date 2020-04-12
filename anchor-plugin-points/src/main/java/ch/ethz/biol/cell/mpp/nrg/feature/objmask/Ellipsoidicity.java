@@ -30,12 +30,8 @@ import org.anchoranalysis.anchor.mpp.mark.conic.MarkEllipsoid;
 
 
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.cache.ExecuteException;
-import org.anchoranalysis.core.error.InitException;
-import org.anchoranalysis.feature.cache.CacheSession;
-import org.anchoranalysis.feature.cachedcalculation.CachedCalculation;
+import org.anchoranalysis.feature.cache.CacheableParams;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.feature.init.FeatureInitParams;
 import org.anchoranalysis.image.feature.bean.objmask.FeatureObjMask;
 import org.anchoranalysis.image.feature.objmask.FeatureObjMaskParams;
 import org.anchoranalysis.image.objmask.ObjMask;
@@ -53,17 +49,10 @@ public class Ellipsoidicity extends FeatureObjMask {
 	private boolean suppressZCovariance = false;		// Supresses covariance in the z-direction.
 	// END BEAN PROPERTIES
 	
-	private CachedCalculation<MarkEllipsoid> cc;
-	
 	@Override
-	public void beforeCalc(FeatureInitParams params, CacheSession cache)
-			throws InitException {
-		super.beforeCalc(params, cache);
-		cc = CalculateEllipsoidLeastSquares.createFromCache(cache,suppressZCovariance);
-	}
-	
-	@Override
-	public double calcCast(FeatureObjMaskParams params) throws FeatureCalcException {
+	public double calc(CacheableParams<FeatureObjMaskParams> paramsCacheable) throws FeatureCalcException {
+		
+		FeatureObjMaskParams params = paramsCacheable.getParams();
 		
 		// Max intensity projection of the input mask
 		ObjMask om = params.getObjMask();
@@ -73,18 +62,16 @@ public class Ellipsoidicity extends FeatureObjMask {
 			return 1.0;
 		}
 		
-		try {
-			MarkEllipsoid me = cc.getOrCalculate(params);
-					
-			return EllipticityCalculatorHelper.calc(
-				om,
-				me,
-				params.getNrgStack().getDimensions()
-			);
-			
-		} catch (ExecuteException e) {
-			throw new FeatureCalcException(e);
-		}
+		MarkEllipsoid me = CalculateEllipsoidLeastSquares.createFromCache(
+			paramsCacheable,
+			suppressZCovariance
+		);
+				
+		return EllipticityCalculatorHelper.calc(
+			om,
+			me,
+			params.getNrgStack().getDimensions()
+		);
 	}
 
 	public boolean isSuppressZCovariance() {

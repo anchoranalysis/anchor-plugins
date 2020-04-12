@@ -34,11 +34,9 @@ import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.cache.ExecuteException;
-import org.anchoranalysis.core.error.InitException;
-import org.anchoranalysis.feature.cache.CacheSession;
+import org.anchoranalysis.feature.cache.CacheableParams;
 import org.anchoranalysis.feature.cachedcalculation.CachedCalculation;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.feature.init.FeatureInitParams;
 import org.anchoranalysis.image.voxel.statistics.VoxelStatistics;
 
 import ch.ethz.biol.cell.mpp.nrg.cachedcalculation.OverlapCalculation;
@@ -63,20 +61,6 @@ public class OverlapRatio extends NRGElemPair {
 	// END BEAN PROPERTIES
 	
 	public OverlapRatio() {
-	}
-	
-	private CachedCalculation<Double> cc;
-	
-	@Override
-	public void beforeCalc(FeatureInitParams params, CacheSession cache)
-			throws InitException {
-		super.beforeCalc(params, cache);
-		if (mip) {
-			// If we use this we don't need to find the volume ourselves
-			cc = cache.search( new OverlapMIPRatioCalculation(regionID) );
-		} else {
-			cc = cache.search( new OverlapCalculation(regionID) );
-		}		
 	}
 	
 	public static double calcMinVolume( PxlMarkMemo obj1, PxlMarkMemo obj2, int regionID ) throws FeatureCalcException {
@@ -135,19 +119,44 @@ public class OverlapRatio extends NRGElemPair {
 	}
 	
 	@Override
-	public double calcCast( NRGElemPairCalcParams params ) throws FeatureCalcException {
+	public double calc( CacheableParams<NRGElemPairCalcParams> paramsCacheable ) throws FeatureCalcException {
 		
-		assert( cc!=null );
+		NRGElemPairCalcParams params = paramsCacheable.getParams();
 		
 		try {
+			double overlap = paramsCacheable.calc(
+				overlapCalculation()
+			);
+			
 			if (useMax) {
-				return calcOverlapRatioMax( params.getObj1(), params.getObj2(), cc.getOrCalculate(params), regionID, mip );
+				return calcOverlapRatioMax(
+					params.getObj1(),
+					params.getObj2(),
+					overlap,
+					regionID,
+					mip
+				);
 			} else {
-				return calcOverlapRatioMin( params.getObj1(), params.getObj2(), cc.getOrCalculate(params), regionID, mip );
+				return calcOverlapRatioMin(
+					params.getObj1(),
+					params.getObj2(),
+					overlap,
+					regionID,
+					mip
+				);
 			}
 		} catch (ExecuteException e) {
 			throw new FeatureCalcException(e);
 		}							
+	}
+	
+	private CachedCalculation<Double> overlapCalculation() {
+		if (mip) {
+			// If we use this we don't need to find the volume ourselves
+			return new OverlapMIPRatioCalculation(regionID);
+		} else {
+			return new OverlapCalculation(regionID);
+		}	
 	}
 	
 	public int getRegionID() {

@@ -28,25 +28,27 @@ package org.anchoranalysis.bean.provider.objs.merge.condition;
 
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.feature.session.calculator.FeatureCalculatorSingle;
 import org.anchoranalysis.image.extent.ImageRes;
-import org.anchoranalysis.image.feature.bean.evaluator.FeatureEvaluatorNrgStack;
-import org.anchoranalysis.image.feature.session.FeatureSessionCreateParamsSingle;
+import org.anchoranalysis.image.feature.bean.evaluator.FeatureEvaluator;
+import org.anchoranalysis.image.feature.objmask.FeatureObjMaskParams;
 import org.anchoranalysis.image.objmask.ObjMask;
 
 public class IncreaseFeatureCondition implements AfterCondition {
 
-	private FeatureEvaluatorNrgStack featureEvaluator;
+	private FeatureEvaluator<FeatureObjMaskParams> featureEvaluator;
 	
-	private FeatureSessionCreateParamsSingle session;
-			
-	public IncreaseFeatureCondition(FeatureEvaluatorNrgStack featureEvaluator) {
+	private FeatureCalculatorSingle<FeatureObjMaskParams> session;
+	
+	public IncreaseFeatureCondition(FeatureEvaluator<FeatureObjMaskParams> featureEvaluator) {
 		super();
 		this.featureEvaluator = featureEvaluator;
 	}
 
 	@Override
-	public void init() throws InitException {
+	public void init(LogErrorReporter logger) throws InitException {
 		
 		if (featureEvaluator!=null) {
 			try {
@@ -64,19 +66,19 @@ public class IncreaseFeatureCondition implements AfterCondition {
 	public boolean accept(ObjMask omSrc, ObjMask omDest, ObjMask omMerged, ImageRes res) throws OperationFailedException {
 		
 		if (session!=null) {
-			return doesIncreaseFeatureValueForBoth(omSrc, omDest, omMerged, session);
+			return doesIncreaseFeatureValueForBoth(omSrc, omDest, omMerged);
 		} else {
 			return true;
 		}
 	}
 	
-	private boolean doesIncreaseFeatureValueForBoth( ObjMask omSrc, ObjMask omDest, ObjMask omMerge, FeatureSessionCreateParamsSingle session ) throws OperationFailedException {
+	private boolean doesIncreaseFeatureValueForBoth( ObjMask omSrc, ObjMask omDest, ObjMask omMerge ) throws OperationFailedException {
 		
 		// Feature source
 		try {
-			double featureSrc = session.calc(omSrc);
-			double featureDest = session.calc(omDest);
-			double featureMerge = session.calc(omMerge);
+			double featureSrc = calc(omSrc);
+			double featureDest = calc(omDest);
+			double featureMerge = calc(omMerge);
 			
 			// We skip if we don't increase the feature value for both objects
 			return (featureMerge>featureSrc && featureMerge>featureDest);
@@ -84,5 +86,11 @@ public class IncreaseFeatureCondition implements AfterCondition {
 		} catch (FeatureCalcException e) {
 			throw new OperationFailedException(e);
 		}		
+	}
+	
+	private double calc(ObjMask om) throws FeatureCalcException {
+		return session.calcOne(
+			new FeatureObjMaskParams(om)
+		);
 	}
 }

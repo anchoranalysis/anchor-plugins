@@ -34,14 +34,14 @@ import org.anchoranalysis.anchor.mpp.regionmap.RegionMapSingleton;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.bean.operator.FeatureSingleElem;
+import org.anchoranalysis.feature.cache.CacheableParams;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
 import org.anchoranalysis.feature.params.FeatureParamsDescriptor;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.feature.objmask.FeatureObjMaskParams;
 import org.anchoranalysis.image.objmask.properties.ObjMaskWithProperties;
 
-public class AsObjMask extends FeatureSingleElem {
+public class AsObjMask extends FeatureSingleElem<NRGElemIndCalcParams,FeatureObjMaskParams> {
 
 	/**
 	 * 
@@ -57,33 +57,28 @@ public class AsObjMask extends FeatureSingleElem {
 	// END BEAN PROPERTIES
 	
 	@Override
-	public double calc(FeatureCalcParams params) throws FeatureCalcException {
+	public double calc(CacheableParams<NRGElemIndCalcParams> params) throws FeatureCalcException {
+		return params
+			.calcChangeParams(
+				getItem(),
+				p -> deriveParams(p),
+				"obj"
+			);			
+	}
+	
+	private FeatureObjMaskParams deriveParams(NRGElemIndCalcParams params) {
 		
-		if (params instanceof NRGElemIndCalcParams) {
+		ObjMaskWithProperties om = params.getPxlPartMemo().getMark().calcMask(
+			params.getNrgStack().getDimensions(),
+			regionMap.membershipWithFlagsForIndex(index),
+			BinaryValuesByte.getDefault()
+		);
 		
-			NRGElemIndCalcParams paramsCast = (NRGElemIndCalcParams) params; 
-			
-			 
-			
-			FeatureObjMaskParams paramsNew;
-			ObjMaskWithProperties om = paramsCast.getPxlPartMemo().getMark().calcMask(
-				paramsCast.getNrgStack().getDimensions(),
-				regionMap.membershipWithFlagsForIndex(index),
-				BinaryValuesByte.getDefault()
-			);
-			
-			paramsNew = new FeatureObjMaskParams(
-				om.getMask()
-			);
-			paramsNew.setNrgStack( paramsCast.getNrgStack() );
-			
-			double ret = getCacheSession().calc( getItem(), paramsNew);
-			
-			return ret;
-			
-		} else {
-			throw new FeatureCalcException("Not supported for this type of params");
-		}
+		FeatureObjMaskParams paramsNew = new FeatureObjMaskParams(
+			om.getMask()
+		);
+		paramsNew.setNrgStack( params.getNrgStack() );
+		return paramsNew;
 	}
 
 	// We change the default behaviour, as we don't want to give the same paramsFactory

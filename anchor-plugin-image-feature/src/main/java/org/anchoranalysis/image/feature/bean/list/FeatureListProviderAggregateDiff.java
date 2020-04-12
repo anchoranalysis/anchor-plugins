@@ -29,6 +29,7 @@ package org.anchoranalysis.image.feature.bean.list;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.operator.FeatureListElem;
 import org.anchoranalysis.feature.bean.operator.Sum;
+import org.anchoranalysis.image.feature.objmask.pair.merged.FeatureObjMaskPairMergedParams;
 
 import ch.ethz.biol.cell.mpp.nrg.feature.operator.MultiplyByConstant;
 
@@ -40,18 +41,22 @@ public abstract class FeatureListProviderAggregateDiff extends FeatureListProvid
 	private static final long serialVersionUID = 1L;
 
 	@Override
-	protected Feature createAggregateFeature( Feature featFirst, Feature featSecond, Feature featMerged ) {
-		FeatureListElem featWithList = createFeature();
+	protected Feature<FeatureObjMaskPairMergedParams> createAggregateFeature(
+		Feature<FeatureObjMaskPairMergedParams> featFirst,
+		Feature<FeatureObjMaskPairMergedParams> featSecond,
+		Feature<FeatureObjMaskPairMergedParams> featMerged
+	) {
+		FeatureListElem<FeatureObjMaskPairMergedParams> featWithList = createFeature();
 		ListUtilities.addFeaturesToList( featFirst, featSecond, featWithList.getList() );
 		return createSum(featMerged, featWithList);
 	}
 	
-	protected abstract FeatureListElem createFeature();
+	protected abstract FeatureListElem<FeatureObjMaskPairMergedParams> createFeature();
 	
-	private static Feature createSum( Feature featMerged, Feature featWithList ) {
-		Sum featSum = new Sum();
+	private static Feature<FeatureObjMaskPairMergedParams> createSum( Feature<FeatureObjMaskPairMergedParams> featMerged, Feature<FeatureObjMaskPairMergedParams> featWithList ) {
+		Sum<FeatureObjMaskPairMergedParams> featSum = new Sum<>();
 		featSum.getList().add(featMerged);
-		featSum.getList().add( new MultiplyByConstant(featWithList,-1) );
+		featSum.getList().add( new MultiplyByConstant<>(featWithList,-1) );
 		return featSum;
 	}
 }

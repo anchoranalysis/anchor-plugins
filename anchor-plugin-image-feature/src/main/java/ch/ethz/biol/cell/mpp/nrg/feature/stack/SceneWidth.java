@@ -1,5 +1,7 @@
 package ch.ethz.biol.cell.mpp.nrg.feature.stack;
 
+import org.anchoranalysis.feature.cache.CacheableParams;
+
 /*-
  * #%L
  * anchor-plugin-image-feature
@@ -38,8 +40,8 @@ public class SceneWidth extends FeatureStack {
 	private static final long serialVersionUID = 1L;
 
 	@Override
-	public double calcCast(FeatureStackParams params) throws FeatureCalcException {
-		return params.getNrgStack().getDimensions().getX();
+	public double calc(CacheableParams<FeatureStackParams> params) throws FeatureCalcException {
+		return params.getParams().getNrgStack().getDimensions().getX();
 	}
 
 }

@@ -29,11 +29,12 @@ package ch.ethz.biol.cell.mpp.nrg.feature.operator;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.bean.Feature;
-import org.anchoranalysis.feature.bean.operator.FeatureSingleElem;
+import org.anchoranalysis.feature.bean.operator.FeatureGenericSingleElem;
+import org.anchoranalysis.feature.cache.CacheableParams;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
 
-public class MinMaxRangeCondition extends FeatureSingleElem {
+public class MinMaxRangeCondition<T extends FeatureCalcParams> extends FeatureGenericSingleElem<T> {
 	
 	/**
 	 * 
@@ -54,13 +55,13 @@ public class MinMaxRangeCondition extends FeatureSingleElem {
 	private double aboveMaxValue = 0;
 	
 	@BeanField
-	private Feature featureCondition;
+	private Feature<T> featureCondition;
 	// END BEAN PROPERTIES
 	
 	@Override
-	public double calc( FeatureCalcParams params ) throws FeatureCalcException {
+	public double calc( CacheableParams<T> params ) throws FeatureCalcException {
 		
-		double val = getCacheSession().calc( featureCondition, params );
+		double val = params.calc( featureCondition );
 		
 		if (val < min) {
 			return belowMinValue;
@@ -70,7 +71,7 @@ public class MinMaxRangeCondition extends FeatureSingleElem {
 			return aboveMaxValue;
 		}
 		
-		return getCacheSession().calc( getItem(), params );
+		return params.calc( getItem() );
 	}
 
 	@Override
@@ -110,11 +111,11 @@ public class MinMaxRangeCondition extends FeatureSingleElem {
 		this.aboveMaxValue = aboveMaxValue;
 	}
 
-	public Feature getFeatureCondition() {
+	public Feature<T> getFeatureCondition() {
 		return featureCondition;
 	}
 
-	public void setFeatureCondition(Feature featureCondition) {
+	public void setFeatureCondition(Feature<T> featureCondition) {
 		this.featureCondition = featureCondition;
 	}
 

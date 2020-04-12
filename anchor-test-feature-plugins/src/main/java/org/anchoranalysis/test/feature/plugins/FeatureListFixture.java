@@ -35,15 +35,16 @@ import org.anchoranalysis.bean.xml.error.BeanXmlException;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.bean.list.FeatureListProvider;
+import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
 import org.anchoranalysis.test.TestLoader;
 
 public class FeatureListFixture {
 	
-	public static FeatureList createFromFile(String xmlPath, TestLoader loader) throws CreateException {
+	public static <T extends FeatureCalcParams> FeatureList<T> createFromFile(String xmlPath, TestLoader loader) throws CreateException {
 		Path pathStatic = loader.resolveTestPath(xmlPath);
 		try {
-			FeatureListProvider provider = BeanXmlLoader.loadBean( pathStatic );
-			FeatureList features = provider.create();
+			FeatureListProvider<T> provider = BeanXmlLoader.loadBean( pathStatic );
+			FeatureList<T> features = provider.create();
 			assertTrue( features.size() > 0 );	
 			return features;
 		} catch (BeanXmlException e) {
