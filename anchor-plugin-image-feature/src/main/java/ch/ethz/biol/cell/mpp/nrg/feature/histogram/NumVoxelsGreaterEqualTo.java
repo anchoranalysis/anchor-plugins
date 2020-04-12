@@ -47,7 +47,7 @@ public class NumVoxelsGreaterEqualTo extends FeatureHistogram {
 	// END BEAN PROPERTIES
 
 	@Override
-	public double calcCast(CacheableParams<FeatureHistogramParams> params)
+	public double calc(CacheableParams<FeatureHistogramParams> params)
 			throws FeatureCalcException {
 		
 		Histogram h = params.getParams().getHistogram();

@@ -41,7 +41,7 @@ public class Min extends FeatureHistogram {
 	private static final long serialVersionUID = 1L;
 	
 	@Override
-	public double calcCast(CacheableParams<FeatureHistogramParams> params)
+	public double calc(CacheableParams<FeatureHistogramParams> params)
 			throws FeatureCalcException {
 		return params.getParams().getHistogram().calcMin();
 	}

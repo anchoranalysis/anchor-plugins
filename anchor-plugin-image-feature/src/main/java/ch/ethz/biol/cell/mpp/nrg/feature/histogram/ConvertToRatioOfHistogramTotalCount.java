@@ -48,7 +48,7 @@ public class ConvertToRatioOfHistogramTotalCount extends FeatureHistogram {
 	// END BEAN PROPERTIES
 	
 	@Override
-	public double calcCast(CacheableParams<FeatureHistogramParams> params)
+	public double calc(CacheableParams<FeatureHistogramParams> params)
 			throws FeatureCalcException {
 
 		double val = params.calc(item);

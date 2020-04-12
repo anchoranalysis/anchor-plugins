@@ -53,7 +53,7 @@ public class IntensityGradientMeanMagnitudeFromMultiple extends IntensityGradien
 	private static final long serialVersionUID = 1L;
 
 	@Override
-	public double calcCast(CacheableParams<FeatureObjMaskParams> params) throws FeatureCalcException {
+	public double calc(CacheableParams<FeatureObjMaskParams> params) throws FeatureCalcException {
 		
 		// Calculate the mean
 		double sum = 0.0;

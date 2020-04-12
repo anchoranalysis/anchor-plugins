@@ -55,7 +55,7 @@ public class AxisLength extends FeatureObjMask {
 	// END BEAN PROPERTIES
 	
 	@Override
-	public double calcCast(CacheableParams<FeatureObjMaskParams> params) throws FeatureCalcException {
+	public double calc(CacheableParams<FeatureObjMaskParams> params) throws FeatureCalcException {
 		
 		assert( params.getParams() instanceof FeatureObjMaskParams );
 		return calcAxisLength( params, index);

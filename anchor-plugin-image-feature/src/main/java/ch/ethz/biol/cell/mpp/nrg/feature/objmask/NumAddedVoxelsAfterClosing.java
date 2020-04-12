@@ -63,7 +63,7 @@ public class NumAddedVoxelsAfterClosing extends FeatureObjMask {
 	// END BEAN PROPERTIES
 	
 	@Override
-	public double calcCast(CacheableParams<FeatureObjMaskParams> params) throws FeatureCalcException {
+	public double calc(CacheableParams<FeatureObjMaskParams> params) throws FeatureCalcException {
 		try {
 			ObjMask omClosing = params.calc(
 				CalculateClosing.createFromCache(params, iterations, do3D)		

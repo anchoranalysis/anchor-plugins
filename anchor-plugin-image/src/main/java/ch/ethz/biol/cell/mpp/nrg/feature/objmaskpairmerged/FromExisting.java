@@ -57,7 +57,7 @@ public abstract class FromExisting extends FeatureObjMaskPairMerged {
 	// END BEAN PROPERTIES
 	
 	@Override
-	public double calcCast(CacheableParams<FeatureObjMaskPairMergedParams> params)
+	public double calc(CacheableParams<FeatureObjMaskPairMergedParams> params)
 			throws FeatureCalcException {
 		
 		return transformParamsCast(params).calc(item);

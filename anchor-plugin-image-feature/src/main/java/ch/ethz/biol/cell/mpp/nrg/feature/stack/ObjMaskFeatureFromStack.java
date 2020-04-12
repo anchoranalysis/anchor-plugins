@@ -34,7 +34,7 @@ public abstract class ObjMaskFeatureFromStack extends FeatureStack {
 	// END BEAN PROPERTIES
 	
 	@Override
-	public double calcCast(CacheableParams<FeatureStackParams> paramsCacheable) throws FeatureCalcException {
+	public double calc(CacheableParams<FeatureStackParams> paramsCacheable) throws FeatureCalcException {
 			
 		ObjMaskCollection objsCollection = createObjs(
 			paramsCacheable.getParams().getSharedObjs()

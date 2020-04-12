@@ -47,7 +47,7 @@ public class CalculateLevelFromHistogram extends FeatureHistogram {
 	// END BEAN PROPERTIES
 	
 	@Override
-	public double calcCast(CacheableParams<FeatureHistogramParams> params)
+	public double calc(CacheableParams<FeatureHistogramParams> params)
 			throws FeatureCalcException {
 		try {
 			return calculateLevel.calculateLevel( params.getParams().getHistogram() );

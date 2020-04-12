@@ -49,7 +49,7 @@ public class AxisLengthMIP extends FeatureObjMask {
 	// END BEAN PROPERTIES
 	
 	@Override
-	public double calcCast(CacheableParams<FeatureObjMaskParams> params) throws FeatureCalcException {
+	public double calc(CacheableParams<FeatureObjMaskParams> params) throws FeatureCalcException {
 		
 		return calcAxisLengthMIP(
 			params,

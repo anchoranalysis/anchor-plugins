@@ -54,7 +54,7 @@ public final class NoOverlap extends NRGElemPair {
 	}
 	
 	@Override
-	public double calcCast( CacheableParams<NRGElemPairCalcParams> params ) throws FeatureCalcException {
+	public double calc( CacheableParams<NRGElemPairCalcParams> params ) throws FeatureCalcException {
 		
 		try {
 			double overlap = params.calc( new OverlapCalculation(regionID) );

@@ -73,7 +73,7 @@ public class FeatureFromBinaryImgChnl extends FeatureObjMaskSharedObjects {
 	}
 	
 	@Override
-	public double calcCast(CacheableParams<FeatureObjMaskParams> params) throws FeatureCalcException {
+	public double calc(CacheableParams<FeatureObjMaskParams> params) throws FeatureCalcException {
 
 		try {
 			// First time it's hit we calculate the bboxRTree

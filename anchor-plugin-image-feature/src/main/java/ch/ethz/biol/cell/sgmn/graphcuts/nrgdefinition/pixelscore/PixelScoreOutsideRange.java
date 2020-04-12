@@ -52,7 +52,7 @@ public class PixelScoreOutsideRange extends PixelScore {
 	// END BEAN PROPERTIES
 
 	@Override
-	protected double calcCast(CacheableParams<PixelScoreFeatureCalcParams> paramsCacheable)
+	protected double calc(CacheableParams<PixelScoreFeatureCalcParams> paramsCacheable)
 			throws FeatureCalcException {
 		
 		PixelScoreFeatureCalcParams params = paramsCacheable.getParams();

@@ -44,7 +44,7 @@ public class OverlapMaskGlobalMiddleQuantiles extends OverlapMaskQuantiles {
 	}
 	
 	@Override
-	public double calcCast( CacheableParams<NRGElemPairCalcParams> params ) throws FeatureCalcException {
+	public double calc( CacheableParams<NRGElemPairCalcParams> params ) throws FeatureCalcException {
 		return overlapWithQuantiles(params);
 	}
 }

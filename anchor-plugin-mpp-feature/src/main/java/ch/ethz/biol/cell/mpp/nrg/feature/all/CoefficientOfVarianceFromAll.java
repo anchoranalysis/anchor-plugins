@@ -52,7 +52,7 @@ public class CoefficientOfVarianceFromAll extends NRGElemAll {
 	// END BEAN PROPERTIES
 	
 	@Override
-	public double calcCast(CacheableParams<NRGElemAllCalcParams> paramsCacheable)
+	public double calc(CacheableParams<NRGElemAllCalcParams> paramsCacheable)
 			throws FeatureCalcException {
 		
 		MemoMarks memoMarks = paramsCacheable.getParams().getPxlPartMemo();

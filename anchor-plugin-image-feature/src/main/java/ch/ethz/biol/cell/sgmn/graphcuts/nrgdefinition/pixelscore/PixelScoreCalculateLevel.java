@@ -74,7 +74,7 @@ public class PixelScoreCalculateLevel extends PixelScore {
 	}
 	
 	@Override
-	public double calcCast(CacheableParams<PixelScoreFeatureCalcParams> paramsCacheable) {
+	public double calc(CacheableParams<PixelScoreFeatureCalcParams> paramsCacheable) {
 
 		PixelScoreFeatureCalcParams params = paramsCacheable.getParams();
 		

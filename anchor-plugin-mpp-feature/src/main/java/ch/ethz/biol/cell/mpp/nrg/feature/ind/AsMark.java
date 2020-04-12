@@ -45,7 +45,6 @@ public class AsMark extends FeatureSingleElem<NRGElemIndCalcParams,FeatureMarkPa
 	@Override
 	public double calc(CacheableParams<NRGElemIndCalcParams> params) throws FeatureCalcException {
 		return params
-			.downcastParams(NRGElemIndCalcParams.class)
 			.calcChangeParams( getItem(), AsMark::deriveParams, "mark" );
 	}
 	

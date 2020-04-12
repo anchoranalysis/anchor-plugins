@@ -90,7 +90,7 @@ public class IntensitySum extends FeatureObjMask {
 	
 
 	@Override
-	public double calcCast(CacheableParams<FeatureObjMaskParams> paramsCacheable) throws FeatureCalcException {
+	public double calc(CacheableParams<FeatureObjMaskParams> paramsCacheable) throws FeatureCalcException {
 		
 		FeatureObjMaskParams params = paramsCacheable.getParams();
 		

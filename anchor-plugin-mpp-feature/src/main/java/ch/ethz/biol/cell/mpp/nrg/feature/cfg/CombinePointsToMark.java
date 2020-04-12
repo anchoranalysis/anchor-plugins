@@ -70,7 +70,7 @@ public class CombinePointsToMark extends NRGElemAll {
 	// END BEAN PROPERTIES
 	
 	@Override
-	public double calcCast(CacheableParams<NRGElemAllCalcParams> paramsCacheable) throws FeatureCalcException {
+	public double calc(CacheableParams<NRGElemAllCalcParams> paramsCacheable) throws FeatureCalcException {
 
 		NRGElemAllCalcParams params = paramsCacheable.getParams();
 		

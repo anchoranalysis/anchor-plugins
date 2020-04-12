@@ -58,7 +58,7 @@ public abstract class DerivedObjMask extends FeatureObjMask {
 	// END BEAN PROPERTIES
 
 	@Override
-	public double calcCast(CacheableParams<FeatureObjMaskParams> params) throws FeatureCalcException {
+	public double calc(CacheableParams<FeatureObjMaskParams> params) throws FeatureCalcException {
 
 		try {
 			ObjMask omDerived = derivedObjMask(params);

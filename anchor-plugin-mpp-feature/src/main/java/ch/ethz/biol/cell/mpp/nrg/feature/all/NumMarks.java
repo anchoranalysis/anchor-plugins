@@ -40,7 +40,7 @@ public class NumMarks extends NRGElemAll {
 	private static final long serialVersionUID = 1L;
 
 	@Override
-	public double calcCast(CacheableParams<NRGElemAllCalcParams> params)
+	public double calc(CacheableParams<NRGElemAllCalcParams> params)
 			throws FeatureCalcException {
 		return params.getParams().getPxlPartMemo().size();
 	}

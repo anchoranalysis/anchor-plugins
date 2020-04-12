@@ -91,7 +91,7 @@ public class PixelScoreDifferenceCalculateLevelStdDev extends PixelScore {
 	}
 	
 	@Override
-	public double calcCast(CacheableParams<PixelScoreFeatureCalcParams> paramsCacheable)
+	public double calc(CacheableParams<PixelScoreFeatureCalcParams> paramsCacheable)
 			throws FeatureCalcException {
 		
 		PixelScoreFeatureCalcParams params = paramsCacheable.getParams();

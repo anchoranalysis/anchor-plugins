@@ -40,7 +40,7 @@ public class SceneWidth extends FeatureStack {
 	private static final long serialVersionUID = 1L;
 
 	@Override
-	public double calcCast(CacheableParams<FeatureStackParams> params) throws FeatureCalcException {
+	public double calc(CacheableParams<FeatureStackParams> params) throws FeatureCalcException {
 		return params.getParams().getNrgStack().getDimensions().getX();
 	}
 

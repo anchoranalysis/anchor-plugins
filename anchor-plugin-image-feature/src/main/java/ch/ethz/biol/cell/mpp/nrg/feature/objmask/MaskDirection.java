@@ -45,7 +45,7 @@ public class MaskDirection extends ObjMaskPointsSpecificEigenvalueBase {
 	// END BEAN PROPERTIES
 
 	@Override
-	public double calcCast(CacheableParams<FeatureObjMaskParams> params) throws FeatureCalcException {
+	public double calc(CacheableParams<FeatureObjMaskParams> params) throws FeatureCalcException {
 		return calcSpecificEigenvector(params).getEigenvector().get(eigenvectorIndex);
 	}
 

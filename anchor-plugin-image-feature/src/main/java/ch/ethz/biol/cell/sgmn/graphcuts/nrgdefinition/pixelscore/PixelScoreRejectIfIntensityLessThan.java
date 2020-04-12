@@ -52,7 +52,7 @@ public class PixelScoreRejectIfIntensityLessThan extends PixelScore {
 	// END BEAN PROPERTIES
 
 	@Override
-	public double calcCast(CacheableParams<PixelScoreFeatureCalcParams> params)
+	public double calc(CacheableParams<PixelScoreFeatureCalcParams> params)
 			throws FeatureCalcException {
 		
 		int intensity = params.getParams().getPxl(nrgChnlIndex);

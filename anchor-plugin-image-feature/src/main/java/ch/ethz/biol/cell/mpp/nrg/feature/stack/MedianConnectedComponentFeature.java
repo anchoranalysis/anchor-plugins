@@ -62,7 +62,7 @@ public class MedianConnectedComponentFeature extends FeatureStack {
 	// END BEAN PROPERTIES
 
 	@Override
-	public double calcCast(CacheableParams<FeatureStackParams> params) throws FeatureCalcException {
+	public double calc(CacheableParams<FeatureStackParams> params) throws FeatureCalcException {
 
 		ObjMaskCollection omc = createObjs(
 			params.getParams().getNrgStack()

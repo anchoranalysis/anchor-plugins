@@ -45,7 +45,7 @@ public class OverlapMaskGlobal extends OverlapMaskSingleRegion {
 	// END BEAN PROPERTIES
 		
 	@Override
-	public double calcCast( CacheableParams<NRGElemPairCalcParams> params ) throws FeatureCalcException {
+	public double calc( CacheableParams<NRGElemPairCalcParams> params ) throws FeatureCalcException {
 		return overlapWithGlobalMask(params);
 	}
 
