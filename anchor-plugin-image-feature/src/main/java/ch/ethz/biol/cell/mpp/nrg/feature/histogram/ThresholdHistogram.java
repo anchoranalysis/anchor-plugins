@@ -28,11 +28,9 @@ package ch.ethz.biol.cell.mpp.nrg.feature.histogram;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.cache.ExecuteException;
-import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.cache.CacheableParams;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.feature.init.FeatureInitParams;
 import org.anchoranalysis.image.bean.threshold.CalculateLevel;
 import org.anchoranalysis.image.feature.bean.FeatureHistogram;
 import org.anchoranalysis.image.feature.histogram.FeatureHistogramParams;
@@ -60,13 +58,6 @@ public class ThresholdHistogram extends FeatureHistogram {
 	@BeanField
 	private CalculateLevel calculateLevel;
 	// END BEAN PROPERTIES
-
-	@Override
-	public void beforeCalc(FeatureInitParams params)
-			throws InitException {
-		super.beforeCalc(params);
-		item.beforeCalc(params);
-	}
 	
 	@Override
 	public double calc(CacheableParams<FeatureHistogramParams> paramsCacheable) throws FeatureCalcException {
