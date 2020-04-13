@@ -1,7 +1,5 @@
 package ch.ethz.biol.cell.mpp.nrg.feature.mark;
 
-import org.anchoranalysis.anchor.mpp.feature.bean.mark.FeatureMark;
-import org.anchoranalysis.anchor.mpp.feature.bean.mark.FeatureMarkParams;
 import org.anchoranalysis.anchor.mpp.mark.conic.MarkEllipsoid;
 
 /*
@@ -31,55 +29,32 @@ import org.anchoranalysis.anchor.mpp.mark.conic.MarkEllipsoid;
  */
 
 
-import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.geometry.Point3d;
+import org.anchoranalysis.core.geometry.Vector3d;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.feature.init.FeatureInitParams;
-import org.anchoranalysis.image.bean.orientation.DirectionVectorBean;
-import org.anchoranalysis.image.orientation.DirectionVector;
 import org.anchoranalysis.image.orientation.Orientation;
 import org.anchoranalysis.math.rotation.RotationMatrix;
 
 // Considers the 3 directions of an Ellipsoid
-public class DotProductOrientationToVector extends FeatureMark {
+public class DotProductOrientationToVector extends DirectionVectorBase {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 
-	// START BEAN PROPERTIES
-	@BeanField
-	private DirectionVectorBean directionVector;
-	// END BEAN PROPERTIES
-	
-	private DirectionVector dv;
-	
 	@Override
-	public void beforeCalc(FeatureInitParams params) throws InitException {
-		super.beforeCalc(params);
-		dv = directionVector.createVector();
-	}
+	protected double calcForEllipsoid(MarkEllipsoid mark, Orientation orientation, RotationMatrix rotMatrix, Vector3d directionVector)
+			throws FeatureCalcException {
 
-	@Override
-	public double calc(FeatureMarkParams params) throws FeatureCalcException {
-
-		if (!(params.getMark() instanceof MarkEllipsoid)) {
-			throw new FeatureCalcException("Only supports MarkEllipsoids");
-		}
-		
-		MarkEllipsoid mark = (MarkEllipsoid) params.getMark();
-		
-		Orientation orientation = mark.getOrientation();
-		RotationMatrix rotMatrix = orientation.createRotationMatrix();
-		
 		double minDot = Double.POSITIVE_INFINITY;
 		
 		for( int d=0; d<3; d++ ) {
 			Point3d vec = rotMatrix.column(d);
 			
-			double dot = Math.acos(dv.createVector3d().dot(vec));
+			double dot = Math.acos(
+				directionVector.dot(vec)
+			);
 			
 			if (dot<minDot) {
 				minDot = dot;
@@ -88,14 +63,4 @@ public class DotProductOrientationToVector extends FeatureMark {
 		
 		return minDot;
 	}
-
-	public DirectionVectorBean getDirectionVector() {
-		return directionVector;
-	}
-
-
-	public void setDirectionVector(DirectionVectorBean directionVector) {
-		this.directionVector = directionVector;
-	}
-
 }
