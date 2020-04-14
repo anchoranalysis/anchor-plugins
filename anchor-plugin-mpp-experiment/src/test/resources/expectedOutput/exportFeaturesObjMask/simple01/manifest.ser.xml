@@ -62,7 +62,7 @@
             <function>nrgStack</function>
           </fileDescription>
           <sequenceType class="org.anchoranalysis.io.manifest.sequencetype.IncrementalSequenceType">
-            <end>0</end>
+            <end>2</end>
             <start>0</start>
             <incrementSize>1</incrementSize>
           </sequenceType>

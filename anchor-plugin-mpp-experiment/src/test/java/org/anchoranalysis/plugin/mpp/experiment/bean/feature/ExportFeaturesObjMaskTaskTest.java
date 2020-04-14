@@ -2,6 +2,7 @@ package org.anchoranalysis.plugin.mpp.experiment.bean.feature;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import org.anchoranalysis.bean.NamedBean;
 import org.anchoranalysis.bean.xml.RegisterBeanFactories;
 import org.anchoranalysis.core.error.CreateException;
@@ -10,12 +11,15 @@ import org.anchoranalysis.feature.bean.list.FeatureListProvider;
 import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
 import org.anchoranalysis.image.bean.provider.stack.StackProvider;
 import org.anchoranalysis.image.feature.objmask.FeatureObjMaskParams;
+import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.plugin.mpp.experiment.bean.feature.flexi.Simple;
 import org.anchoranalysis.test.TestLoader;
 import org.anchoranalysis.test.feature.plugins.FeaturesFromXmlFixture;
+import org.anchoranalysis.test.feature.plugins.NRGStackFixture;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
+import static org.mockito.Mockito.*;
 
 import ch.ethz.biol.cell.imageprocessing.chnl.provider.ChnlProviderEmpty;
 import ch.ethz.biol.cell.imageprocessing.objmask.provider.ObjMaskProviderReference;
@@ -75,10 +79,16 @@ public class ExportFeaturesObjMaskTaskTest {
 		return list;
 	}
 
-	private static StackProvider nrgStackProvider() {
-		return new StackProviderChnlProvider(
-			new ChnlProviderEmpty()	
-		);
+	private static StackProvider nrgStackProvider() throws CreateException {
+
+		// Create NRG stack 
+		Stack stack = NRGStackFixture.create().getNrgStack().asStack();
+		
+		// Encapsulate in a mock
+		StackProvider stackProvider = mock(StackProvider.class);
+		when(stackProvider.create()).thenReturn(stack);
+		when(stackProvider.duplicateBean()).thenReturn(stackProvider);
+		return stackProvider;
 	}
 	
 	/** creates a feature-list associated with obj-mask
