@@ -1,4 +1,4 @@
-package org.anchoranalysis.gui.annotation.strategy;
+package org.anchoranalysis.plugin.annotation.bean.strategy;
 
 /*-
  * #%L
@@ -48,7 +48,7 @@ public abstract class SingleFilePathGeneratorStrategy extends AnnotatorStrategy 
 
 	@Override
 	public Path annotationPathFor(ProvidesStackInput item) throws AnchorIOException {
-		GenerathorPathRslvr helper = new GenerathorPathRslvr( item.pathForBinding() );
+		GeneratorPathRslvr helper = new GeneratorPathRslvr( item.pathForBinding() );
 		return helper.path( annotationFilePathGenerator  );
 	}
 	

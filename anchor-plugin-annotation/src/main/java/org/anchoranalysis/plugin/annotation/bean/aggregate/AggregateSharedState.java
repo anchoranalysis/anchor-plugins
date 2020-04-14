@@ -36,7 +36,7 @@ class AggregateSharedState {
 	private List<ImageAnnotation> annotations;
 	
 	public AggregateSharedState() throws CreateException {
-		this.annotations = new ArrayList<ImageAnnotation>();
+		this.annotations = new ArrayList<>();
 	}
 
 	public List<ImageAnnotation> getAnnotations() {

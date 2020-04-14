@@ -88,7 +88,6 @@ public class ObjMaskProviderConvexHullConnectLines extends ObjMaskProvider {
 	private ObjMask transform( ObjMask obj, ImageDim sd ) throws CreateException {
 		
 		Optional<List<Point2i>> pntsConvexHull = ConvexHullUtilities.extractPointsFromOutline(obj, 1, true);
-		assert(pntsConvexHull!=null);
 		
 		if (!pntsConvexHull.isPresent() || pntsConvexHull.get().size()<=1) {
 			return obj;

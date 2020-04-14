@@ -1,4 +1,4 @@
-package org.anchoranalysis.gui.annotation.strategy;
+package org.anchoranalysis.plugin.annotation.bean.strategy;
 
 /*-
  * #%L
