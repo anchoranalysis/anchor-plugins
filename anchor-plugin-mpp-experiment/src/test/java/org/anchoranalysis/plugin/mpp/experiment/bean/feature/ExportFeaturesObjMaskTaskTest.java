@@ -21,9 +21,7 @@ import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 import static org.mockito.Mockito.*;
 
-import ch.ethz.biol.cell.imageprocessing.chnl.provider.ChnlProviderEmpty;
 import ch.ethz.biol.cell.imageprocessing.objmask.provider.ObjMaskProviderReference;
-import ch.ethz.biol.cell.imageprocessing.stack.provider.StackProviderChnlProvider;
 
 
 public class ExportFeaturesObjMaskTaskTest {
