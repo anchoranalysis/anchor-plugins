@@ -1,5 +1,6 @@
 package org.anchoranalysis.plugin.mpp.experiment.bean.feature;
 
+import static org.junit.Assert.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyBoolean;
 import static org.mockito.Mockito.mock;
@@ -8,6 +9,9 @@ import static org.mockito.Mockito.when;
 import java.nio.file.Path;
 import java.util.Optional;
 
+import org.anchoranalysis.bean.error.BeanMisconfiguredException;
+import org.anchoranalysis.bean.xml.RegisterBeanFactories;
+import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.experiment.ExperimentExecutionArguments;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
 import org.anchoranalysis.experiment.JobExecutionException;
@@ -33,6 +37,44 @@ class TaskSingleInputHelper {
 	private TaskSingleInputHelper() {
 	}
 
+	
+	/**
+	 * Executes a task on a single-input
+	 * 
+	 * @param <T> input type
+	 * @param <S> shared-state type
+	 * @param <V> task type
+	 * @param input the input for the task
+	 * @param task the task to run
+	 * @param pathDirOutput an absolute path to a directory where outputs of the task will be placed
+	 * @param pathDirSaved a path (relative to the src/test/resources)  to a directory of saved-results to compare with
+	 * @param pathsFileToCompare paths (relative to the src/test/resources) to check that are identical
+	 * @return true if successful, false otherwise
+	 * @throws OperationFailedException if anything goes wrong 
+	 */
+	public static <T extends InputFromManager, S, V extends Task<T, S>> void runTaskAndCompareOutputs(
+		T input,
+		V task,
+		Path pathDirOutput,
+		String pathDirSaved,
+		String[] pathsFileToCompare
+	) throws OperationFailedException {
+		
+		boolean successful = runTaskOnSingleInput(
+			input,
+			task,
+			pathDirOutput
+		);
+		// Successful outcome
+		assertTrue("Sucessful execution of task", successful);
+		
+		CompareHelper.compareOutputWithSaved(
+			pathDirOutput,
+			pathDirSaved,
+			pathsFileToCompare
+		);
+	}
+	
 	/**
 	 * Executes a task on a single-input
 	 * 
@@ -43,43 +85,47 @@ class TaskSingleInputHelper {
 	 * @param task the task to run
 	 * @param pathForOutputs a directory where outputs of the task will be placed
 	 * @return true if successful, false otherwise
-	 * @throws AnchorIOException
-	 * @throws ExperimentExecutionException
-	 * @throws JobExecutionException
+	 * @throws OperationFailedException if anything goes wrong 
 	 */
-	public static <T extends InputFromManager, S, V extends Task<T, S>> boolean runTaskOnSingleInput(
+	private static <T extends InputFromManager, S, V extends Task<T, S>> boolean runTaskOnSingleInput(
 		T input,
 		V task,
 		Path pathForOutputs
-	) throws AnchorIOException, ExperimentExecutionException, JobExecutionException {
-		BoundOutputManagerRouteErrors bom = OutputManagerFixture.outputManagerForRouterErrors(pathForOutputs);
-		
-		StatefulLogReporter logReporter = createStatefulLogReporter();
-		
-		ParametersExperiment paramsExp = createParametersExperiment(
-			pathForOutputs,
-			bom.getDelegate(),
-			logReporter
-		);
-		
-		S sharedState = task.beforeAnyJobIsExecuted(
-			bom,
-			paramsExp
-		);
-		
-		boolean successful = task.executeJob(
-			createParamsUnbound(
-				input,
-				sharedState,
-				paramsExp,
+	) throws OperationFailedException {
+		try {
+			task.checkMisconfigured( RegisterBeanFactories.getDefaultInstances() );
+			
+			BoundOutputManagerRouteErrors bom = OutputManagerFixture.outputManagerForRouterErrors(pathForOutputs);
+			
+			StatefulLogReporter logReporter = createStatefulLogReporter();
+			
+			ParametersExperiment paramsExp = createParametersExperiment(
+				pathForOutputs,
 				bom.getDelegate(),
-				pathForOutputs
-			)
-		);
-		
-		task.afterAllJobsAreExecuted(bom, sharedState, logReporter);
-		
-		return successful;
+				logReporter
+			);
+			
+			S sharedState = task.beforeAnyJobIsExecuted(
+				bom,
+				paramsExp
+			);
+			
+			boolean successful = task.executeJob(
+				createParamsUnbound(
+					input,
+					sharedState,
+					paramsExp,
+					bom.getDelegate(),
+					pathForOutputs
+				)
+			);
+			
+			task.afterAllJobsAreExecuted(bom, sharedState, logReporter);
+			
+			return successful;
+		} catch (AnchorIOException | ExperimentExecutionException | JobExecutionException | BeanMisconfiguredException e) {
+			throw new OperationFailedException(e);
+		}
 	}
 	
 	
