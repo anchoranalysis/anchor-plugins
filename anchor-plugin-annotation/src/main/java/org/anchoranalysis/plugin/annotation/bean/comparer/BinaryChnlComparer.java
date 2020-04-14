@@ -27,7 +27,6 @@ package org.anchoranalysis.plugin.annotation.bean.comparer;
  */
 
 
-import java.nio.file.Files;
 import java.nio.file.Path;
 
 import org.anchoranalysis.annotation.io.bean.comparer.Comparer;
