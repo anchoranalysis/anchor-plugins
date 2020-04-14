@@ -76,7 +76,7 @@ public class BinaryChnlComparer extends Comparer {
 		try {
 			Path maskPath = filePathGenerator.outFilePath(filePathSource, debugMode);
 			
-			if (!Files.exists(maskPath)) {
+			if (!maskPath.toFile().exists()) {
 				return new NotFound<>(maskPath, "No mask exists");
 			}
 			
@@ -103,7 +103,7 @@ public class BinaryChnlComparer extends Comparer {
 		}
 	}
 	
-	private static ObjMaskCollection convertToObjs( BinaryChnl chnl ) throws CreateException {
+	private static ObjMaskCollection convertToObjs( BinaryChnl chnl ) {
 		return new ObjMaskCollection(
 			new ObjMask( chnl.binaryVoxelBox() )
 		);

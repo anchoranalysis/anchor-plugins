@@ -1,4 +1,4 @@
-package org.anchoranalysis.gui.annotation.strategy;
+package org.anchoranalysis.plugin.annotation.bean.strategy;
 
 /*-
  * #%L
@@ -31,15 +31,15 @@ import java.nio.file.Path;
 import org.anchoranalysis.io.bean.filepath.generator.FilePathGenerator;
 import org.anchoranalysis.io.error.AnchorIOException;
 
-public class GenerathorPathRslvr {
+public class GeneratorPathRslvr {
 
-	// The debug-mode for everything that isn't the main input
-	private static boolean DEBUG_MODE_NON_INPUT = false;
+	/** The debug-mode for everything that isn't the main input */
+	private final static boolean DEBUG_MODE_NON_INPUT = false;
 	
 	private Path pathForBinding;
 	
 
-	public GenerathorPathRslvr(Path pathForBinding) {
+	public GeneratorPathRslvr(Path pathForBinding) {
 		super();
 		this.pathForBinding = pathForBinding;
 	}	
