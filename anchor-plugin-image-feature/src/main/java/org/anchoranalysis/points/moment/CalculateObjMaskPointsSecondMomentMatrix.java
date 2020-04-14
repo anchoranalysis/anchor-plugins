@@ -29,13 +29,12 @@ package org.anchoranalysis.points.moment;
 
 import org.anchoranalysis.core.cache.ExecuteException;
 import org.anchoranalysis.feature.cachedcalculation.CachedCalculation;
-import org.anchoranalysis.feature.cachedcalculation.CachedCalculationCastParams;
 import org.anchoranalysis.image.feature.objmask.FeatureObjMaskParams;
 import org.anchoranalysis.math.moment.MomentsFromPointsCalculator;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
-public class CalculateObjMaskPointsSecondMomentMatrix extends CachedCalculationCastParams<MomentsFromPointsCalculator,FeatureObjMaskParams> {
+public class CalculateObjMaskPointsSecondMomentMatrix extends CachedCalculation<MomentsFromPointsCalculator,FeatureObjMaskParams> {
 
 	private boolean suppressZ;
 		
@@ -50,7 +49,7 @@ public class CalculateObjMaskPointsSecondMomentMatrix extends CachedCalculationC
 	}
 
 	@Override
-	public CachedCalculation<MomentsFromPointsCalculator> duplicate() {
+	public CachedCalculation<MomentsFromPointsCalculator,FeatureObjMaskParams> duplicate() {
 		return new CalculateObjMaskPointsSecondMomentMatrix(suppressZ);
 	}
 	

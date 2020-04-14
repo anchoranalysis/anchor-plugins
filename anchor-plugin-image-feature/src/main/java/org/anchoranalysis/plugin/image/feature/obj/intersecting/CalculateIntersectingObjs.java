@@ -28,7 +28,6 @@ package org.anchoranalysis.plugin.image.feature.obj.intersecting;
 
 import org.anchoranalysis.core.cache.ExecuteException;
 import org.anchoranalysis.feature.cachedcalculation.CachedCalculation;
-import org.anchoranalysis.feature.cachedcalculation.CachedCalculationCastParams;
 import org.anchoranalysis.image.feature.objmask.FeatureObjMaskParams;
 import org.anchoranalysis.image.index.rtree.ObjMaskCollectionRTree;
 import org.anchoranalysis.image.objmask.ObjMaskCollection;
@@ -41,7 +40,7 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
  * @author owen
  *
  */
-public class CalculateIntersectingObjs extends CachedCalculationCastParams<ObjMaskCollection, FeatureObjMaskParams> {
+public class CalculateIntersectingObjs extends CachedCalculation<ObjMaskCollection, FeatureObjMaskParams> {
 
 	private String id;
 	private ObjMaskCollection searchObjs;
@@ -85,7 +84,7 @@ public class CalculateIntersectingObjs extends CachedCalculationCastParams<ObjMa
 	}
 
 	@Override
-	public CachedCalculation<ObjMaskCollection> duplicate() {
+	public CachedCalculation<ObjMaskCollection,FeatureObjMaskParams> duplicate() {
 		return new CalculateIntersectingObjs(id, searchObjs);
 	}
 

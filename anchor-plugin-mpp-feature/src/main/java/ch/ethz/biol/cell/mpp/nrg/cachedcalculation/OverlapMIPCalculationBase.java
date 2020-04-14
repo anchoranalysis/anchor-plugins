@@ -6,11 +6,11 @@ import org.anchoranalysis.anchor.mpp.overlap.MaxIntensityProjectionPair;
 import org.anchoranalysis.anchor.mpp.pxlmark.PxlMark;
 import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
 import org.anchoranalysis.core.cache.ExecuteException;
-import org.anchoranalysis.feature.cachedcalculation.CachedCalculationCastParams;
+import org.anchoranalysis.feature.cachedcalculation.CachedCalculation;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
-public abstract class OverlapMIPCalculationBase extends CachedCalculationCastParams<Double, NRGElemPairCalcParams> {
+public abstract class OverlapMIPCalculationBase extends CachedCalculation<Double, NRGElemPairCalcParams> {
 
 	private int regionID;
 

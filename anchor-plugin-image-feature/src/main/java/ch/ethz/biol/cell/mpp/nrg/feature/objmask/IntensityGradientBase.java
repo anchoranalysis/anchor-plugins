@@ -35,6 +35,7 @@ import org.anchoranalysis.bean.annotation.Optional;
 import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.feature.cachedcalculation.CachedCalculation;
 import org.anchoranalysis.image.feature.bean.objmask.FeatureObjMask;
+import org.anchoranalysis.image.feature.objmask.FeatureObjMaskParams;
 
 import ch.ethz.biol.cell.mpp.nrg.feature.objmask.cachedcalculation.CalculateGradientFromMultipleChnls;
 
@@ -60,7 +61,7 @@ public abstract class IntensityGradientBase extends FeatureObjMask {
 	private int subtractConstant = 0;
 	// END BEAN PROPERTIES
 	
-	protected CachedCalculation<List<Point3d>> gradientCalculation() {
+	protected CachedCalculation<List<Point3d>,FeatureObjMaskParams> gradientCalculation() {
 		return new CalculateGradientFromMultipleChnls(nrgIndexX,nrgIndexY,nrgIndexZ,subtractConstant);
 	}
 	

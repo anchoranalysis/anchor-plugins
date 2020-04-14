@@ -104,7 +104,7 @@ public class IntensityMeanShellMaxSlice extends FeatureObjMask {
 		
 		ObjMask om;
 		try {
-			CachedCalculation<ObjMask> ccShellObjMask = CalculateShellObjMask.createFromCache(
+			CachedCalculation<ObjMask,FeatureObjMaskParams> ccShellObjMask = CalculateShellObjMask.createFromCache(
 				paramsCacheable,
 				iterationsDilation,
 				iterationsErosion,

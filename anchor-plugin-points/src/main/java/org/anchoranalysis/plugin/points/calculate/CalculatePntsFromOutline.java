@@ -33,12 +33,11 @@ import org.anchoranalysis.core.cache.ExecuteException;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.feature.cachedcalculation.CachedCalculation;
-import org.anchoranalysis.feature.cachedcalculation.CachedCalculationCastParams;
 import org.anchoranalysis.image.feature.objmask.FeatureObjMaskParams;
 import org.anchoranalysis.image.points.PointsFromObjMask;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
-public class CalculatePntsFromOutline extends CachedCalculationCastParams<List<Point3i>, FeatureObjMaskParams> {
+public class CalculatePntsFromOutline extends CachedCalculation<List<Point3i>, FeatureObjMaskParams> {
 
 	@Override
 	protected List<Point3i> execute(FeatureObjMaskParams params)
@@ -53,7 +52,7 @@ public class CalculatePntsFromOutline extends CachedCalculationCastParams<List<P
 	}
 
 	@Override
-	public CachedCalculation<List<Point3i>> duplicate() {
+	public CachedCalculation<List<Point3i>,FeatureObjMaskParams> duplicate() {
 		return new CalculatePntsFromOutline();
 	}
 	

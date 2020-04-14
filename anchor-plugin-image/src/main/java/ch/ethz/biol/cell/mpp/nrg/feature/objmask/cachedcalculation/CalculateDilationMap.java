@@ -32,6 +32,7 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.feature.cachedcalculation.CachedCalculationMap;
 import org.anchoranalysis.image.extent.Extent;
+import org.anchoranalysis.image.feature.objmask.FeatureObjMaskParams;
 import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.image.objmask.morph.MorphologicalDilation;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
@@ -56,7 +57,7 @@ public class CalculateDilationMap extends CalculateIncrementalOperationMap {
 	}
 
 	@Override
-	public CachedCalculationMap<ObjMask, Integer> duplicate() {
+	public CachedCalculationMap<ObjMask,FeatureObjMaskParams,Integer> duplicate() {
 		return new CalculateDilationMap(this);
 	}
 	

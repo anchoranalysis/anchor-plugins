@@ -66,7 +66,7 @@ public class Overlap extends NRGElemPair {
 		}							
 	}
 	
-	private CachedCalculation<Double> overlapCalculation() {
+	private CachedCalculation<Double,NRGElemPairCalcParams> overlapCalculation() {
 		if (mip) {
 			return new OverlapMIPCalculation(regionID);
 		} else {

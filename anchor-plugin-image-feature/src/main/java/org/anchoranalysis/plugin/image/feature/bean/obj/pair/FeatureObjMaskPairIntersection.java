@@ -134,7 +134,7 @@ public class FeatureObjMaskPairIntersection extends FeatureObjMaskPair {
 
 	private ObjMask createCachedCalculation(CacheableParams<FeatureObjMaskPairParams> params) throws FeatureCalcException {
 		try {
-			CachedCalculation<ObjMask> cc = CalculatePairIntersectionCommutative.createFromCache(
+			CachedCalculation<ObjMask,FeatureObjMaskPairParams> cc = CalculatePairIntersectionCommutative.createFromCache(
 				params.cacheFor(CACHE_INTERSECTION, FeatureObjMaskPairParams.class),
 				params.cacheFor(CACHE_OBJ1, FeatureObjMaskPairParams.class),
 				params.cacheFor(CACHE_OBJ2, FeatureObjMaskPairParams.class),

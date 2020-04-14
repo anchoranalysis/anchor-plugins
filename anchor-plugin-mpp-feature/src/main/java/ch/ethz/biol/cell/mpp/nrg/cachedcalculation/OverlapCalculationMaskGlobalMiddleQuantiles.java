@@ -33,13 +33,12 @@ import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
 
 import org.anchoranalysis.core.cache.ExecuteException;
 import org.anchoranalysis.feature.cachedcalculation.CachedCalculation;
-import org.anchoranalysis.feature.cachedcalculation.CachedCalculationCastParams;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 import org.anchoranalysis.image.chnl.Chnl;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
-public class OverlapCalculationMaskGlobalMiddleQuantiles extends CachedCalculationCastParams<Double,NRGElemPairCalcParams> {
+public class OverlapCalculationMaskGlobalMiddleQuantiles extends CachedCalculation<Double,NRGElemPairCalcParams> {
 
 	private int regionID;
 	private int nrgIndex;
@@ -82,7 +81,7 @@ public class OverlapCalculationMaskGlobalMiddleQuantiles extends CachedCalculati
 	}
 	
 	@Override
-	public CachedCalculation<Double> duplicate() {
+	public CachedCalculation<Double,NRGElemPairCalcParams> duplicate() {
 		return new OverlapCalculationMaskGlobalMiddleQuantiles( regionID, nrgIndex, maskOnValue, quantileLower, quantileHigher );
 	}
 	

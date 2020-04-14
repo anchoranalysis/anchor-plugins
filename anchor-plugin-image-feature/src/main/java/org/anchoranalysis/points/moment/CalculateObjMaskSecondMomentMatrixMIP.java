@@ -29,13 +29,12 @@ package org.anchoranalysis.points.moment;
 
 import org.anchoranalysis.core.cache.ExecuteException;
 import org.anchoranalysis.feature.cachedcalculation.CachedCalculation;
-import org.anchoranalysis.feature.cachedcalculation.CachedCalculationCastParams;
 import org.anchoranalysis.image.feature.objmask.FeatureObjMaskParams;
 import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.math.moment.MomentsFromPointsCalculator;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
-public class CalculateObjMaskSecondMomentMatrixMIP extends CachedCalculationCastParams<MomentsFromPointsCalculator,FeatureObjMaskParams> {
+public class CalculateObjMaskSecondMomentMatrixMIP extends CachedCalculation<MomentsFromPointsCalculator,FeatureObjMaskParams> {
 		
 	public CalculateObjMaskSecondMomentMatrixMIP() {
 		super();
@@ -49,7 +48,7 @@ public class CalculateObjMaskSecondMomentMatrixMIP extends CachedCalculationCast
 	}
 
 	@Override
-	public CachedCalculation<MomentsFromPointsCalculator> duplicate() {
+	public CachedCalculation<MomentsFromPointsCalculator,FeatureObjMaskParams> duplicate() {
 		return new CalculateObjMaskSecondMomentMatrixMIP();
 	}
 

@@ -92,7 +92,7 @@ public class IntensityMeanShellHighestNumPixels extends FeatureObjMask {
 		
 		ObjMask om;
 		try {
-			CachedCalculation<ObjMask> ccShellObjMask = CalculateShellObjMask.createFromCache(
+			CachedCalculation<ObjMask,FeatureObjMaskParams> ccShellObjMask = CalculateShellObjMask.createFromCache(
 				paramsCacheable,
 				iterationsDilation,
 				iterationsErosion,

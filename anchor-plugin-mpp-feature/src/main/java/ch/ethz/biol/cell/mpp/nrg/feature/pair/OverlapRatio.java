@@ -150,7 +150,7 @@ public class OverlapRatio extends NRGElemPair {
 		}							
 	}
 	
-	private CachedCalculation<Double> overlapCalculation() {
+	private CachedCalculation<Double,NRGElemPairCalcParams> overlapCalculation() {
 		if (mip) {
 			// If we use this we don't need to find the volume ourselves
 			return new OverlapMIPRatioCalculation(regionID);

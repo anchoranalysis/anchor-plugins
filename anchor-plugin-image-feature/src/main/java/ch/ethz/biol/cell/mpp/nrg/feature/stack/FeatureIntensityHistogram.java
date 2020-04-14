@@ -102,7 +102,7 @@ public abstract class FeatureIntensityHistogram extends FeatureStack {
 		this.nrgIndexMask = nrgIndexMask;
 	}
 	
-	private CachedCalculation<Histogram> histogramCalculator() {
+	private CachedCalculation<Histogram,FeatureStackParams> histogramCalculator() {
 		if (nrgIndexMask!=-1) {
 			return new CalculateHistogramMasked(nrgIndex, nrgIndexMask);
 		} else {

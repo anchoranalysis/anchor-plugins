@@ -29,7 +29,6 @@ package org.anchoranalysis.plugin.image.feature.bean.obj.pair.touching;
 
 import org.anchoranalysis.core.cache.ExecuteException;
 import org.anchoranalysis.feature.cachedcalculation.CachedCalculation;
-import org.anchoranalysis.feature.cachedcalculation.CachedCalculationCastParams;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.feature.objmask.pair.FeatureObjMaskPairParams;
@@ -37,7 +36,7 @@ import org.anchoranalysis.image.objmask.ObjMask;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
-class CalculateIntersectionOfDilatedBoundingBox extends CachedCalculationCastParams<BoundingBox, FeatureObjMaskPairParams> {
+class CalculateIntersectionOfDilatedBoundingBox extends CachedCalculation<BoundingBox, FeatureObjMaskPairParams> {
 
 	
 	
@@ -83,7 +82,7 @@ class CalculateIntersectionOfDilatedBoundingBox extends CachedCalculationCastPar
 	}
 
 	@Override
-	public CachedCalculation<BoundingBox> duplicate() {
+	public CachedCalculation<BoundingBox,FeatureObjMaskPairParams> duplicate() {
 		return new CalculateIntersectionOfDilatedBoundingBox(use3D);
 	}
 
