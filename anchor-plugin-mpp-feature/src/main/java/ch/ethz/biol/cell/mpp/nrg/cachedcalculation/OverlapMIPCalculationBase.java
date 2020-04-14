@@ -1,6 +1,6 @@
 package ch.ethz.biol.cell.mpp.nrg.cachedcalculation;
 
-import org.anchoranalysis.anchor.mpp.bean.regionmap.RegionMap;
+import org.anchoranalysis.anchor.mpp.bean.regionmap.RegionMembershipWithFlags;
 import org.anchoranalysis.anchor.mpp.feature.nrg.elem.NRGElemPairCalcParams;
 import org.anchoranalysis.anchor.mpp.overlap.MaxIntensityProjectionPair;
 import org.anchoranalysis.anchor.mpp.pxlmark.PxlMark;
@@ -29,9 +29,6 @@ public abstract class OverlapMIPCalculationBase extends CachedCalculationCastPar
 		assert( mark1 != null );
 		assert( mark2 != null );
 		
-		RegionMap regionMap1 = params.getObj1().getRegionMap();
-		RegionMap regionMap2 = params.getObj2().getRegionMap();
-		
 		PxlMark pm1 = mark1.doOperation();
 		PxlMark pm2 = mark2.doOperation();
 		
@@ -43,8 +40,8 @@ public abstract class OverlapMIPCalculationBase extends CachedCalculationCastPar
 			new MaxIntensityProjectionPair(
 				pm1.getObjMaskMIP().getVoxelBoxBounded(),
 				pm2.getObjMaskMIP().getVoxelBoxBounded(),
-				regionMap1.membershipWithFlagsForIndex(regionID),
-				regionMap2.membershipWithFlagsForIndex(regionID)
+				regionMembershipForMark(mark1),
+				regionMembershipForMark(mark2)
 			);
 		
 		double overlap = pair.countIntersectingPixels();
@@ -67,5 +64,9 @@ public abstract class OverlapMIPCalculationBase extends CachedCalculationCastPar
 	
 	protected int getRegionID() {
 		return regionID;
+	}
+		
+	private RegionMembershipWithFlags regionMembershipForMark( PxlMarkMemo mark ) {
+		return mark.getRegionMap().membershipWithFlagsForIndex(regionID);
 	}
 }
