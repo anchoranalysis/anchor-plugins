@@ -55,7 +55,7 @@ public class PixelScoreCalculateLevel extends PixelScoreCalculateLevelBase {
 
 		if (pxlValue < level ) {
 			
-			double diff = level-pxlValue;
+			int diff = level - pxlValue;
 			
 			if (diff>distMax) {
 				return 0;
@@ -64,13 +64,13 @@ public class PixelScoreCalculateLevel extends PixelScoreCalculateLevelBase {
 			double mem = diff/distMaxDivider;
 			return 0.5 - mem;
 		} else {
-			double diff = pxlValue-level;
+			int diff = pxlValue-level;
 			
 			if (diff>distMax) {
 				return 1;
 			}
 
-			double mem = (diff/distMaxDivider);
+			double mem = diff/distMaxDivider;
 			return 0.5 + mem;
 		}
 	}
