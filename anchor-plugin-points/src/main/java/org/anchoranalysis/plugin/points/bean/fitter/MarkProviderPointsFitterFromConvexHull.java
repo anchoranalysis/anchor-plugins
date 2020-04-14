@@ -1,4 +1,4 @@
-package ch.ethz.biol.cell.mpp.mark.provider;
+package org.anchoranalysis.plugin.points.bean.fitter;
 
 /*
  * #%L
@@ -29,22 +29,17 @@ package ch.ethz.biol.cell.mpp.mark.provider;
 
 import java.util.List;
 
-import org.anchoranalysis.anchor.mpp.bean.points.fitter.InsufficientPointsException;
-import org.anchoranalysis.anchor.mpp.bean.points.fitter.PointsFitter;
-import org.anchoranalysis.anchor.mpp.bean.points.fitter.PointsFitterException;
 import org.anchoranalysis.anchor.mpp.bean.provider.MarkProvider;
 import org.anchoranalysis.anchor.mpp.bean.regionmap.RegionMap;
 import org.anchoranalysis.anchor.mpp.bean.regionmap.RegionMembership;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
+import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.geometry.Point2i;
 import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.core.geometry.Point3f;
 import org.anchoranalysis.core.geometry.PointConverter;
-import org.anchoranalysis.image.bean.provider.ImageDimProvider;
-import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
-import org.anchoranalysis.image.objmask.ObjMaskCollection;
 
 import ch.ethz.biol.cell.mpp.mark.pointsfitter.ConvexHullUtilities;
 
@@ -59,47 +54,36 @@ public class MarkProviderPointsFitterFromConvexHull extends MarkProvider {
 	
 	// START BEAN PROPERTIES
 	@BeanField
+	private PointsFitterToMark pointsFitter;
+	
+	@BeanField
 	private MarkProvider markProvider;
-	
-	@BeanField
-	private ObjMaskProvider objs;
-	
-	@BeanField
-	private PointsFitter pointsFitter;
-	
-	@BeanField
-	private ImageDimProvider dimProvider;
-	
-	@BeanField
-	private int minNumPnts;
 	
 	@BeanField
 	private double minRatioPntsInsideRegion;
 	
 	@BeanField
-	private int regionID = 0;
-	
-	@BeanField
 	private RegionMap regionMap;
+		
+	@BeanField
+	private int regionID = 0;
 	// END BEAN PROPERTIES
 	
 	@Override
 	public Mark create() throws CreateException {
 
+		List<Point3f> pntsForFitter = pointsForFitter();
+
 		Mark mark = markProvider.create();
-	
-		ObjMaskCollection objsCollection = objs.create();
-		
-		List<Point2i> selectedPoints = ConvexHullUtilities.convexHullFromAllOutlines(objsCollection, minNumPnts);
-				
-		List<Point3f> pntsForFitter = PointConverter.convert2i_3f(selectedPoints);
-		
 		try {
-			pointsFitter.fit( pntsForFitter, mark, dimProvider.create() );
-		} catch (PointsFitterException | InsufficientPointsException e) {
+			pointsFitter.fitPointsToMark(
+				pntsForFitter,
+				mark,
+				pointsFitter.createDim()
+			);
+		} catch (OperationFailedException | CreateException e) {
 			throw new CreateException(e);
 		}
-		
 		
 		if (minRatioPntsInsideRegion>0) {
 			// We perform a check that a minimum % of pnts are inside a particular region
@@ -112,7 +96,6 @@ public class MarkProviderPointsFitterFromConvexHull extends MarkProvider {
 		
 		return mark;
 	}
-	
 	
 	public static double ratioPointsInsideRegion( Mark m, List<Point3f> pnts, RegionMap regionMap, int regionID ) {
 	
@@ -132,86 +115,53 @@ public class MarkProviderPointsFitterFromConvexHull extends MarkProvider {
 		return ((double) cnt) / pnts.size();
 	}
 	
+	private List<Point3f> pointsForFitter() throws CreateException {
+		
+		List<Point2i> selectedPoints = ConvexHullUtilities.convexHullFromAllOutlines(
+			pointsFitter.createObjs(),
+			pointsFitter.getMinNumPnts()
+		);
+				
+		return PointConverter.convert2i_3f(selectedPoints);
+	}
+	
 	public MarkProvider getMarkProvider() {
 		return markProvider;
 	}
-
 
 	public void setMarkProvider(MarkProvider markProvider) {
 		this.markProvider = markProvider;
 	}
 
-
-	public ObjMaskProvider getObjs() {
-		return objs;
-	}
-
-
-	public void setObjs(ObjMaskProvider objs) {
-		this.objs = objs;
-	}
-
-
-	public PointsFitter getPointsFitter() {
-		return pointsFitter;
-	}
-
-	public void setPointsFitter(PointsFitter pointsFitter) {
-		this.pointsFitter = pointsFitter;
-	}
-
-	public int getMinNumPnts() {
-		return minNumPnts;
-	}
-
-
-	public void setMinNumPnts(int minNumPnts) {
-		this.minNumPnts = minNumPnts;
-	}
-
-
 	public double getMinRatioPntsInsideRegion() {
 		return minRatioPntsInsideRegion;
 	}
-
 
 	public void setMinRatioPntsInsideRegion(double minRatioPntsInsideRegion) {
 		this.minRatioPntsInsideRegion = minRatioPntsInsideRegion;
 	}
 
-
-	public int getRegionID() {
-		return regionID;
-	}
-
-
-	public void setRegionID(int regionID) {
-		this.regionID = regionID;
-	}
-
-
 	public RegionMap getRegionMap() {
 		return regionMap;
 	}
-
 
 	public void setRegionMap(RegionMap regionMap) {
 		this.regionMap = regionMap;
 	}
 
-
-	public ImageDimProvider getDimProvider() {
-		return dimProvider;
+	public PointsFitterToMark getPointsFitter() {
+		return pointsFitter;
 	}
 
-
-	public void setDimProvider(ImageDimProvider dimProvider) {
-		this.dimProvider = dimProvider;
+	public void setPointsFitter(PointsFitterToMark pointsFitter) {
+		this.pointsFitter = pointsFitter;
+	}
+		
+	public int getRegionID() {
+		return regionID;
 	}
 
-
-
-
-
-
+	public void setRegionID(int regionID) {
+		this.regionID = regionID;
+	}
 }
