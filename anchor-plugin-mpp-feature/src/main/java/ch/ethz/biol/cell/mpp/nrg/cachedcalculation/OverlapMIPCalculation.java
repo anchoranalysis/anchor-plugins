@@ -33,7 +33,7 @@ import org.anchoranalysis.anchor.mpp.overlap.MaxIntensityProjectionPair;
 import org.anchoranalysis.feature.cachedcalculation.CachedCalculation;
 
 public class OverlapMIPCalculation extends OverlapMIPCalculationBase {
-	
+
 	// Constructor
 	public OverlapMIPCalculation( int regionID ) {
 		super(regionID);
@@ -54,7 +54,13 @@ public class OverlapMIPCalculation extends OverlapMIPCalculationBase {
 	}
 
 	@Override
+	public int hashCode() {
+		return regionIDHashCode();
+	}
+	
+	@Override
 	protected Double calculateOverlapResult(double overlap, MaxIntensityProjectionPair pair) {
 		return overlap;
 	}
+
 }

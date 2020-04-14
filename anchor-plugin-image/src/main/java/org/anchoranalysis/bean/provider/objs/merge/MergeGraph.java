@@ -37,7 +37,7 @@ import org.anchoranalysis.core.arithmetic.FloatUtilities;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.geometry.Comparator3i;
 import org.anchoranalysis.core.geometry.Point3i;
-import org.anchoranalysis.core.graph.GraphWithEdgeTypes.EdgeTypeWithVertices;
+import org.anchoranalysis.core.graph.EdgeTypeWithVertices;
 import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.extent.ImageRes;

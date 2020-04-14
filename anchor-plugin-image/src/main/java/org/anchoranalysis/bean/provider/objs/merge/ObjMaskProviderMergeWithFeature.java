@@ -36,7 +36,7 @@ import org.anchoranalysis.bean.provider.objs.merge.condition.UpdatableBeforeCond
 import org.anchoranalysis.bean.provider.objs.merge.condition.WrapAsUpdatable;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.graph.GraphWithEdgeTypes.EdgeTypeWithVertices;
+import org.anchoranalysis.core.graph.EdgeTypeWithVertices;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorSingle;
 import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
 import org.anchoranalysis.image.extent.ImageRes;

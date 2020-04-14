@@ -368,7 +368,12 @@ public class XYOrientationExtendToZ extends PointsProposer {
 	}
 	
 	
-	private Point3i calcCOG( List<Point3i> pnts ) {
+	private Point3i calcCOG( List<Point3i> pnts ) throws OperationFailedException {
+		
+		if (pnts.size()==0) {
+			throw new OperationFailedException("There are no points in the list, so now center-of-gravity exists");
+		}
+		
 		double sumX = 0.0;
 		double sumY = 0.0;
 		double sumZ = 0.0;
@@ -387,7 +392,7 @@ public class XYOrientationExtendToZ extends PointsProposer {
 		return new Point3i( cogX, cogY, cogZ  );
 	}
 	
-	private List<Point3i> forceMinimumZSize( List<Point3i> pntsIn, BoundUnitless bound ) {
+	private List<Point3i> forceMinimumZSize( List<Point3i> pntsIn, BoundUnitless bound ) throws OperationFailedException {
 		
 		List<Point3i> pntsOut = new ArrayList<Point3i>();
 		pntsOut.addAll(pntsIn);

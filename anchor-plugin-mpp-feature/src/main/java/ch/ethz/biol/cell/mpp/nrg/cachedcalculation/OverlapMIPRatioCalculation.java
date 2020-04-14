@@ -62,4 +62,9 @@ public class OverlapMIPRatioCalculation extends OverlapMIPCalculationBase {
 	        return false;
 	    }
 	}
+	
+	@Override
+	public int hashCode() {
+		return regionIDHashCode();
+	}
 }

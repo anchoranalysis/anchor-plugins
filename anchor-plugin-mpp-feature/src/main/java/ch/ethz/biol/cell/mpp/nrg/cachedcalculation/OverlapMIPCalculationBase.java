@@ -49,8 +49,7 @@ public abstract class OverlapMIPCalculationBase extends CachedCalculationCastPar
 		return calculateOverlapResult(overlap, pair);
 	}
 		
-	@Override
-	public int hashCode() {
+	protected int regionIDHashCode() {
 		return new HashCodeBuilder().append(regionID).toHashCode();
 	}
 	

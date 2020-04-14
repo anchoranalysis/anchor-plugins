@@ -32,8 +32,8 @@ import java.util.Set;
 
 import org.anchoranalysis.bean.provider.objs.merge.condition.UpdatableBeforeCondition;
 import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.graph.EdgeTypeWithVertices;
 import org.anchoranalysis.core.graph.GraphWithEdgeTypes;
-import org.anchoranalysis.core.graph.GraphWithEdgeTypes.EdgeTypeWithVertices;
 import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.image.extent.ImageRes;
 import org.anchoranalysis.image.objmask.ObjMaskCollection;
