@@ -41,10 +41,10 @@ import org.anchoranalysis.image.feature.histogram.FeatureHistogramParams;
 import org.anchoranalysis.image.feature.objmask.FeatureObjMaskParams;
 import org.anchoranalysis.image.histogram.Histogram;
 import org.anchoranalysis.image.objmask.ObjMask;
-import org.anchoranalysis.test.LoggingFixtures;
+import org.anchoranalysis.test.LoggingFixture;
 import org.anchoranalysis.test.TestLoader;
 import org.anchoranalysis.test.feature.ConstantsInListFixture;
-import org.anchoranalysis.test.feature.plugins.FeatureListFixture;
+import org.anchoranalysis.test.feature.plugins.FeaturesFromXmlFixture;
 import org.anchoranalysis.test.feature.plugins.HistogramFixture;
 import org.anchoranalysis.test.feature.plugins.NRGStackFixture;
 import org.junit.Before;
@@ -136,7 +136,7 @@ public class FeatureListImageTest {
 	private <T extends FeatureCalcParams> FeatureCalculatorMulti<T> createAndStart( FeatureList<T> features ) throws FeatureCalcException {
 		return SessionFactory.createAndStart(
 			features,
-			LoggingFixtures.simpleLogErrorReporter()
+			LoggingFixture.simpleLogErrorReporter()
 		);
 	}
 	
@@ -146,7 +146,7 @@ public class FeatureListImageTest {
 	 * @throws CreateException 
 	 * */
 	private static FeatureList<FeatureHistogramParams> histogramFeatures( TestLoader loader ) throws CreateException {
-		return FeatureListFixture.createFromFile("histogramFeatureList.xml", loader);
+		return FeaturesFromXmlFixture.createFeatureList("histogramFeatureList.xml", loader);
 	}
 	
 	/** creates a feature-list associated with obj-mask
@@ -154,7 +154,7 @@ public class FeatureListImageTest {
 	 * @throws CreateException 
 	 * */
 	private static FeatureList<FeatureObjMaskParams> objMaskFeatures( TestLoader loader ) throws CreateException {
-		return FeatureListFixture.createFromFile("objMaskFeatureList.xml", loader);
+		return FeaturesFromXmlFixture.createFeatureList("objMaskFeatureList.xml", loader);
 	}
 
 	private static FeatureHistogramParams createParams( Histogram hist ) throws CreateException {

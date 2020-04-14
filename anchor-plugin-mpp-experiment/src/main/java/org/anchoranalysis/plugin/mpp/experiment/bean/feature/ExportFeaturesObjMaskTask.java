@@ -57,7 +57,6 @@ import org.anchoranalysis.experiment.task.ParametersBound;
 import org.anchoranalysis.experiment.task.ParametersExperiment;
 import org.anchoranalysis.feature.bean.list.FeatureListProvider;
 import org.anchoranalysis.feature.calc.ResultsVectorCollection;
-import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
 import org.anchoranalysis.feature.io.csv.GroupedResultsVectorCollection;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
@@ -90,7 +89,7 @@ import org.anchoranalysis.plugin.mpp.experiment.outputter.SharedObjectsUtilities
    @param T the type of feature-calc-params produced by the FlexiFeatureTable
    
 **/
-public class ExportFeaturesObjMaskTask<T extends FeatureCalcParams> extends ExportFeaturesTask<MultiInput,SharedStateExportFeaturesObjMask<T>> {
+public class ExportFeaturesObjMaskTask extends ExportFeaturesTask<MultiInput,SharedStateExportFeaturesObjMask<FeatureObjMaskParams>> {
 
 	/**
 	 * 
@@ -117,7 +116,7 @@ public class ExportFeaturesObjMaskTask<T extends FeatureCalcParams> extends Expo
 	private RandomNumberGeneratorBean randomNumberGenerator = new RandomNumberGeneratorMersenneConstantBean();
 	
 	@BeanField
-	private FlexiFeatureTable<T> selectFeaturesObjects;
+	private FlexiFeatureTable<FeatureObjMaskParams> selectFeaturesObjects;
 	
 	/**
 	 * If non-empty, A keyValueParams is treated as part of the nrgStack 
@@ -127,13 +126,13 @@ public class ExportFeaturesObjMaskTask<T extends FeatureCalcParams> extends Expo
 	// END BEAN PROPERTIES
 	
 	@Override
-	public SharedStateExportFeaturesObjMask<T> beforeAnyJobIsExecuted(
+	public SharedStateExportFeaturesObjMask<FeatureObjMaskParams> beforeAnyJobIsExecuted(
 			BoundOutputManagerRouteErrors outputManager,
 			ParametersExperiment params
 	) throws ExperimentExecutionException {
 		
 		try {
-			return new SharedStateExportFeaturesObjMask<T>(
+			return new SharedStateExportFeaturesObjMask<>(
 				new GroupedResultsVectorCollection("id","group","objSetName"),
 				selectFeaturesObjects.createFeatures(listFeaturesObjMask)
 			);
@@ -163,7 +162,7 @@ public class ExportFeaturesObjMaskTask<T extends FeatureCalcParams> extends Expo
 	}
 
 	@Override
-	public void doJobOnInputObject(	ParametersBound<MultiInput,SharedStateExportFeaturesObjMask<T>> params	) throws JobExecutionException {
+	public void doJobOnInputObject(	ParametersBound<MultiInput,SharedStateExportFeaturesObjMask<FeatureObjMaskParams>> params	) throws JobExecutionException {
 		
 		LogErrorReporter logErrorReporter = params.getLogErrorReporter();
 		MultiInput inputObject = params.getInputObject();
@@ -171,7 +170,7 @@ public class ExportFeaturesObjMaskTask<T extends FeatureCalcParams> extends Expo
 		try {
 			// Create a duplicated featureStore for this image, as we want separate features on this thread,
 			//  so they are thread-safe, for parallel execution
-			FeatureSessionFlexiFeatureTable<T> session = params.getSharedState().getSession().duplicateForNewThread();
+			FeatureSessionFlexiFeatureTable<FeatureObjMaskParams> session = params.getSharedState().getSession().duplicateForNewThread();
 						
 			MPPInitParams soMPP = createInitParams(
 				inputObject,
@@ -229,7 +228,7 @@ public class ExportFeaturesObjMaskTask<T extends FeatureCalcParams> extends Expo
 	private void processAllProviders(
 		boolean debugMode,
 		Path inputPath,
-		FeatureSessionFlexiFeatureTable<T> session,
+		FeatureSessionFlexiFeatureTable<FeatureObjMaskParams> session,
 		ImageInitParams imageInitParams,
 		NRGStackWithParams nrgStack,
 		SharedStateExportFeatures sharedState,
@@ -262,13 +261,13 @@ public class ExportFeaturesObjMaskTask<T extends FeatureCalcParams> extends Expo
 	private void calculateFeaturesForProvider(
 		String id,
 		ObjMaskCollection objs,
-		FeatureSessionFlexiFeatureTable<T> session,
+		FeatureSessionFlexiFeatureTable<FeatureObjMaskParams> session,
 		NRGStackWithParams nrgStack,
 		ResultsVectorCollection resultsDestination,
 		LogErrorReporter logErrorReporter
 	) throws OperationFailedException {
 		try {
-			List<T> listParams = selectFeaturesObjects.createListCalcParams(
+			List<FeatureObjMaskParams> listParams = selectFeaturesObjects.createListCalcParams(
 				objs,
 				nrgStack,
 				logErrorReporter
@@ -344,12 +343,12 @@ public class ExportFeaturesObjMaskTask<T extends FeatureCalcParams> extends Expo
 	}
 
 
-	public FlexiFeatureTable<T> getSelectFeaturesObjects() {
+	public FlexiFeatureTable<FeatureObjMaskParams> getSelectFeaturesObjects() {
 		return selectFeaturesObjects;
 	}
 
 
-	public void setSelectFeaturesObjects(FlexiFeatureTable<T> selectFeaturesObjects) {
+	public void setSelectFeaturesObjects(FlexiFeatureTable<FeatureObjMaskParams> selectFeaturesObjects) {
 		this.selectFeaturesObjects = selectFeaturesObjects;
 	}
 

@@ -36,8 +36,10 @@ import org.anchoranalysis.image.io.objs.GeneratorTIFFDirectory;
 import org.anchoranalysis.image.io.objs.ObjMaskCollectionReader;
 import org.anchoranalysis.image.objmask.ObjMaskCollection;
 import org.anchoranalysis.io.deserializer.DeserializationFailedException;
+import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.generator.IterableGenerator;
 import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
+import org.anchoranalysis.test.image.OutputManagerFixture;
 import org.anchoranalysis.test.image.TestReaderWriterUtilities;
 
 class HelperReadWriteObjs {
@@ -52,10 +54,10 @@ class HelperReadWriteObjs {
 		}
 	}
 	
-	public static void writeObjs( ObjMaskCollection objs, Path path, IterableGenerator<ObjMaskCollection> generator ) throws SetOperationFailedException {
+	public static void writeObjs( ObjMaskCollection objs, Path path, IterableGenerator<ObjMaskCollection> generator ) throws SetOperationFailedException, AnchorIOException {
 		generator.setIterableElement(objs);
 		
-		BoundOutputManagerRouteErrors outputManager = OutputManagerFixture.outputManagerFor(path);
+		BoundOutputManagerRouteErrors outputManager = OutputManagerFixture.outputManagerForRouterErrors(path);
 		
 		outputManager.getWriterAlwaysAllowed().write(
 			"objs",

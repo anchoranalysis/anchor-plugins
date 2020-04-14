@@ -32,7 +32,7 @@ import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.feature.objmask.pair.FeatureObjMaskPairParams;
 import org.anchoranalysis.test.feature.plugins.FeatureTestCalculator;
 import org.anchoranalysis.test.feature.plugins.FeatureTestCalculatorDuo;
-import org.anchoranalysis.test.feature.plugins.ParamsFixture;
+import org.anchoranalysis.test.feature.plugins.objs.ParamsOverlappingCircleFixture;
 
 public class ParamsFixtureHelper {
 	
@@ -90,7 +90,7 @@ public class ParamsFixtureHelper {
 		FeatureTestCalculator.assertIntResult(
 			"simple",
 			feature,
-			ParamsFixture.twoOverlappingCircles(false),
+			ParamsOverlappingCircleFixture.twoOverlappingCircles(false),
 			expected
 		);
 	}
@@ -110,7 +110,7 @@ public class ParamsFixtureHelper {
 		FeatureTestCalculator.assertDoubleResult(
 			"simple",
 			feature,
-			ParamsFixture.twoOverlappingCircles(false),
+			ParamsOverlappingCircleFixture.twoOverlappingCircles(false),
 			expected
 		);
 	}
@@ -119,8 +119,8 @@ public class ParamsFixtureHelper {
 		FeatureTestCalculatorDuo.assertDoubleResult(
 			message(sameSize),
 			feature,
-			ParamsFixture.twoOverlappingCircles(sameSize),
-			ParamsFixture.twoNonOverlappingCircles(sameSize),
+			ParamsOverlappingCircleFixture.twoOverlappingCircles(sameSize),
+			ParamsOverlappingCircleFixture.twoNonOverlappingCircles(sameSize),
 			expected,
 			0
 		);
@@ -130,8 +130,8 @@ public class ParamsFixtureHelper {
 		FeatureTestCalculatorDuo.assertIntResult(
 			message(sameSize),
 			feature,
-			ParamsFixture.twoOverlappingCircles(sameSize),
-			ParamsFixture.twoNonOverlappingCircles(sameSize),
+			ParamsOverlappingCircleFixture.twoOverlappingCircles(sameSize),
+			ParamsOverlappingCircleFixture.twoNonOverlappingCircles(sameSize),
 			expected,
 			0
 		);

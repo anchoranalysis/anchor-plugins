@@ -1,0 +1,29 @@
+<config>
+<bean config-class="java.util.List" config-factory="list">
+
+	<item config-class="org.anchoranalysis.bean.NamedBean" name="numVoxels">
+		<item config-class="org.anchoranalysis.feature.bean.list.FeatureListProviderDefineSingle">
+			<item config-class="org.anchoranalysis.image.feature.bean.objmask.NumVoxels"/>
+		</item>
+	</item>
+
+	<item config-class="org.anchoranalysis.bean.NamedBean" name="cogX">
+		<item config-class="org.anchoranalysis.feature.bean.list.FeatureListProviderDefineSingle">
+			<item config-class="org.anchoranalysis.image.feature.bean.objmask.CenterOfGravity" axis="y"/>
+		</item>
+	</item>
+
+	<item config-class="org.anchoranalysis.bean.NamedBean" name="cogY">
+		<item config-class="org.anchoranalysis.feature.bean.list.FeatureListProviderDefineSingle">
+			<item config-class="org.anchoranalysis.image.feature.bean.objmask.CenterOfGravity" axis="y"/>
+		</item>
+	</item>
+
+	<item config-class="org.anchoranalysis.bean.NamedBean" name="numBorderVoxels">
+		<item config-class="org.anchoranalysis.feature.bean.list.FeatureListProviderDefineSingle">
+			<item config-class="ch.ethz.biol.cell.mpp.nrg.feature.objmask.NumBorderVoxels"/>
+		</item>
+	</item>				
+	
+</bean>
+</config>

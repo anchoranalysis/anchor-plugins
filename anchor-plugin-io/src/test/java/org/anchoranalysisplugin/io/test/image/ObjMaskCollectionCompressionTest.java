@@ -34,6 +34,7 @@ import java.nio.file.Path;
 import org.anchoranalysis.core.index.SetOperationFailedException;
 import org.anchoranalysis.image.objmask.ObjMaskCollection;
 import org.anchoranalysis.io.deserializer.DeserializationFailedException;
+import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.test.TestLoader;
 import org.anchoranalysis.test.image.TestLoaderImageIO;
 import org.junit.Rule;
@@ -53,7 +54,7 @@ public class ObjMaskCollectionCompressionTest {
 	public TemporaryFolder folder = new TemporaryFolder();
 	
 	@Test
-	public void testCompression() throws SetOperationFailedException, DeserializationFailedException {
+	public void testCompression() throws SetOperationFailedException, DeserializationFailedException, AnchorIOException {
 		
 		ObjMaskCollectionWithSize uncompressed = calcUncompressed(PATH_UNCOMPRESSED_OBJS);
 		
@@ -83,7 +84,7 @@ public class ObjMaskCollectionCompressionTest {
 	}
 
 	
-	private static ObjMaskCollectionWithSize calcCompressed( ObjMaskCollection objsUncompressed, Path root ) throws SetOperationFailedException, DeserializationFailedException {
+	private static ObjMaskCollectionWithSize calcCompressed( ObjMaskCollection objsUncompressed, Path root ) throws SetOperationFailedException, DeserializationFailedException, AnchorIOException {
 		
 		Path pathOut = root.resolve(TEMPORARY_FOLDER_OUT+".h5");
 		
@@ -94,7 +95,7 @@ public class ObjMaskCollectionCompressionTest {
 		return new ObjMaskCollectionWithSize( objsCompressed, size );
 	}
 	
-	private static ObjMaskCollection writeAndReadAgain( ObjMaskCollection objs, Path pathRoot, Path pathOut ) throws SetOperationFailedException, DeserializationFailedException {
+	private static ObjMaskCollection writeAndReadAgain( ObjMaskCollection objs, Path pathRoot, Path pathOut ) throws SetOperationFailedException, DeserializationFailedException, AnchorIOException {
 		// Write the objs to the file-system and read again
 		writeObjs(objs, pathRoot, generator(true,true) );
 		return readObjs(pathOut);		

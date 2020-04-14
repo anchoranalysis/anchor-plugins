@@ -1,4 +1,4 @@
-package org.anchoranalysis.test.feature.plugins;
+package org.anchoranalysis.test.feature.plugins.objs;
 
 import org.anchoranalysis.core.geometry.Point2i;
 
@@ -30,14 +30,14 @@ import org.anchoranalysis.core.geometry.Point2i;
 
 import org.anchoranalysis.image.feature.objmask.pair.FeatureObjMaskPairParams;
 
-public class ParamsFixture {
+public class ParamsOverlappingCircleFixture {
 	
 	private static final int DEFAULT_CIRCLE_RADIUS = 30;
 	
 	private static final int DEFAULT_POS_X = 50;
 	private static final int DEFAULT_POS_Y = 50;
 	
-	private ParamsFixture() {
+	private ParamsOverlappingCircleFixture() {
 		
 	}
 	

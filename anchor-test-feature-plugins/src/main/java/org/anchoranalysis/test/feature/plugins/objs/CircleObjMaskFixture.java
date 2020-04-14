@@ -1,4 +1,4 @@
-package org.anchoranalysis.test.feature.plugins;
+package org.anchoranalysis.test.feature.plugins.objs;
 
 /*-
  * #%L

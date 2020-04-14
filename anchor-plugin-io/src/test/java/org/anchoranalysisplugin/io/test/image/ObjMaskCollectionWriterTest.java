@@ -36,6 +36,7 @@ import org.anchoranalysis.bean.xml.RegisterBeanFactories;
 import org.anchoranalysis.core.index.SetOperationFailedException;
 import org.anchoranalysis.image.objmask.ObjMaskCollection;
 import org.anchoranalysis.io.deserializer.DeserializationFailedException;
+import org.anchoranalysis.io.error.AnchorIOException;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -61,24 +62,34 @@ public class ObjMaskCollectionWriterTest {
     }
 	
 	@Test
-	public void testHdf5() throws SetOperationFailedException, DeserializationFailedException {
+	public void testHdf5() throws SetOperationFailedException, DeserializationFailedException, AnchorIOException {
 		testWriteRead(true);
 	}
 	
 	@Test
-	public void testTIFFDirectory() throws SetOperationFailedException, DeserializationFailedException {
+	public void testTIFFDirectory() throws SetOperationFailedException, DeserializationFailedException, AnchorIOException {
 		testWriteRead(false);	
 	}
 		
-	private void testWriteRead(boolean hdf5) throws SetOperationFailedException, DeserializationFailedException {
+	private void testWriteRead(boolean hdf5) throws SetOperationFailedException, DeserializationFailedException, AnchorIOException {
 		Path path = folder.getRoot().toPath();
 		
 		ObjMaskCollection objs = fixture.createMockObjs(2, 7);
 		writeObjs(objs, path, generator(hdf5,false) );
 		
-		ObjMaskCollection objsRead = readObjs(path.resolve(TEMPORARY_FOLDER_OUT));
+		ObjMaskCollection objsRead = readObjs(
+			outputPathExpected(hdf5, path)
+		);
 		
 		assertTrue( objs.equalsDeep(objsRead) );
+	}
+	
+	private static Path outputPathExpected(boolean hdf5, Path path) {
+		if (hdf5) {
+			return path.resolve("objs.h5");
+		} else {
+			return path.resolve("objs");
+		}
 	}
 
 }
