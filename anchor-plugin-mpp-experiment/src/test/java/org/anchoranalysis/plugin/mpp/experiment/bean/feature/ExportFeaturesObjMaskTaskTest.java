@@ -1,22 +1,15 @@
 package org.anchoranalysis.plugin.mpp.experiment.bean.feature;
 
-import java.io.IOException;
-import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import org.anchoranalysis.bean.NamedBean;
-import org.anchoranalysis.bean.error.BeanMisconfiguredException;
 import org.anchoranalysis.bean.xml.RegisterBeanFactories;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.core.error.InitException;
-import org.anchoranalysis.experiment.ExperimentExecutionException;
-import org.anchoranalysis.experiment.JobExecutionException;
+import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.feature.bean.list.FeatureListProvider;
-import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
 import org.anchoranalysis.image.bean.provider.stack.StackProvider;
 import org.anchoranalysis.image.feature.objmask.FeatureObjMaskParams;
-import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.plugin.mpp.experiment.bean.feature.flexi.Simple;
 import org.anchoranalysis.test.TestLoader;
 import org.anchoranalysis.test.feature.plugins.FeaturesFromXmlFixture;
@@ -28,47 +21,38 @@ import ch.ethz.biol.cell.imageprocessing.chnl.provider.ChnlProviderEmpty;
 import ch.ethz.biol.cell.imageprocessing.objmask.provider.ObjMaskProviderReference;
 import ch.ethz.biol.cell.imageprocessing.stack.provider.StackProviderChnlProvider;
 
-import static org.junit.Assert.assertTrue;
-
-
 
 public class ExportFeaturesObjMaskTaskTest {
-
-	private static TestLoader loader = TestLoader.createFromMavenWorkingDir();
-	
-	@Rule
-	public TemporaryFolder folder = new TemporaryFolder();
 	
 	static {
 		RegisterBeanFactories.registerAllPackageBeanFactories();
 	}
+	
+	private static TestLoader loader = TestLoader.createFromMavenWorkingDir();
+	
+	private static final String[] OUTPUTS_TO_COMPARE = {
+		"csvAgg.csv",
+		"csvAll.csv",
+		"arbitraryPath/objsTest/csvGroup.csv",
+		"stackCollection/input.tif",
+		"nrgStack/nrgStack_00.tif",
+		"manifest.ser.xml",
+		"nrgStackParams.xml",
+		"arbitraryPath/objsTest/paramsGroupAgg.xml"			
+	};
+	
+	@Rule
+	public TemporaryFolder folder = new TemporaryFolder();
 
 	@Test
-	public void testArbitraryParams() throws InitException, FeatureCalcException, CreateException, BeanMisconfiguredException, JobExecutionException, AnchorIOException, ExperimentExecutionException, IOException {
-		
-		ExportFeaturesObjMaskTask task = createTask();
-		task.checkMisconfigured( RegisterBeanFactories.getDefaultInstances() );
-		
-		Path path = folder.getRoot().toPath();
+	public void testArbitraryParams() throws OperationFailedException, CreateException {
 	
-		boolean successful = TaskSingleInputHelper.runTaskOnSingleInput(
+		TaskSingleInputHelper.runTaskAndCompareOutputs(
 			MultiInputFixture.createInput(),
-			task,
-			path
-		);
-
-		// Successful outcome
-		assertTrue(successful);
-
-		CompareHelper.compareOutputWithSaved(
-			path,
+			createTask(),
+			folder.getRoot().toPath(),
 			"expectedOutput/exportFeaturesObjMask/simple01/",
-			new String[] {
-				"csvAgg.csv",
-				"csvAll.csv",
-				"stackCollection/input.tif",
-				"nrgStack/nrgStack_00.tif"
-			}
+			OUTPUTS_TO_COMPARE
 		);
 	}
 	
