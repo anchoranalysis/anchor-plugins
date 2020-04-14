@@ -111,14 +111,14 @@ public abstract class DerivedObjMask extends FeatureObjMask {
 		return paramsNew;
 	}
 	
-	protected abstract CachedCalculation<ObjMask> createCachedCalculation( FeatureSessionCacheRetriever<FeatureObjMaskParams> session ) throws FeatureCalcException;
+	protected abstract CachedCalculation<ObjMask,FeatureObjMaskParams> createCachedCalculation( FeatureSessionCacheRetriever<FeatureObjMaskParams> session ) throws FeatureCalcException;
 	
 	
 	protected abstract String cacheName();
 
 	private ObjMask derivedObjMask(CacheableParams<FeatureObjMaskParams> params) throws ExecuteException {
 		try {
-			CachedCalculation<ObjMask> cc = createCachedCalculation(
+			CachedCalculation<ObjMask,FeatureObjMaskParams> cc = createCachedCalculation(
 				params.cacheFor( cacheName(), FeatureObjMaskParams.class )
 			);
 			return params.calc(cc);

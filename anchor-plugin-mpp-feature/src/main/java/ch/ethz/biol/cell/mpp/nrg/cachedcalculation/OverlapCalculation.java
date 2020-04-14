@@ -33,11 +33,10 @@ import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
 
 import org.anchoranalysis.core.cache.ExecuteException;
 import org.anchoranalysis.feature.cachedcalculation.CachedCalculation;
-import org.anchoranalysis.feature.cachedcalculation.CachedCalculationCastParams;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
-public class OverlapCalculation extends CachedCalculationCastParams<Double,NRGElemPairCalcParams> {
+public class OverlapCalculation extends CachedCalculation<Double,NRGElemPairCalcParams> {
 
 	private int regionID;
 	
@@ -59,7 +58,7 @@ public class OverlapCalculation extends CachedCalculationCastParams<Double,NRGEl
 	}
 
 	@Override
-	public CachedCalculation<Double> duplicate() {
+	public CachedCalculation<Double,NRGElemPairCalcParams> duplicate() {
 		return new OverlapCalculation( regionID );
 	}
 	

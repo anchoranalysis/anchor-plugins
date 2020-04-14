@@ -30,7 +30,6 @@ package ch.ethz.biol.cell.mpp.nrg.feature.objmask.cachedcalculation;
 import org.anchoranalysis.core.cache.ExecuteException;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.feature.cachedcalculation.CachedCalculation;
-import org.anchoranalysis.feature.cachedcalculation.CachedCalculationCastParams;
 import org.anchoranalysis.feature.cachedcalculation.CachedCalculationMap;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.session.cache.ICachedCalculationSearch;
@@ -40,15 +39,15 @@ import org.anchoranalysis.image.objmask.morph.MorphologicalErosion;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
-public class CalculateClosing extends CachedCalculationCastParams<ObjMask,FeatureObjMaskParams> {
+public class CalculateClosing extends CachedCalculation<ObjMask,FeatureObjMaskParams> {
 
 	private int iterations;
-	private CachedCalculationMap<ObjMask, Integer> mapDilation;
+	private CachedCalculationMap<ObjMask,FeatureObjMaskParams,Integer> mapDilation;
 	private boolean do3D;
 	
 	private CalculateClosing(
 		int iterations,
-		CachedCalculationMap<ObjMask, Integer> mapDilation,
+		CachedCalculationMap<ObjMask,FeatureObjMaskParams,Integer> mapDilation,
 		boolean do3D
 	) {
 		this.iterations = iterations;
@@ -62,12 +61,12 @@ public class CalculateClosing extends CachedCalculationCastParams<ObjMask,Featur
 		this.do3D = src.do3D;
 	}
 	
-	public static CachedCalculation<ObjMask> createFromCache(
-		ICachedCalculationSearch cache,
+	public static CachedCalculation<ObjMask,FeatureObjMaskParams> createFromCache(
+		ICachedCalculationSearch<FeatureObjMaskParams> cache,
 		int iterations,
 		boolean do3D
 	) {
-		CachedCalculationMap<ObjMask, Integer> map = cache.search( new CalculateDilationMap(do3D) );
+		CachedCalculationMap<ObjMask,FeatureObjMaskParams,Integer> map = cache.search( new CalculateDilationMap(do3D) );
 		
 		return cache.search(
 			new CalculateClosing(iterations, map, do3D)

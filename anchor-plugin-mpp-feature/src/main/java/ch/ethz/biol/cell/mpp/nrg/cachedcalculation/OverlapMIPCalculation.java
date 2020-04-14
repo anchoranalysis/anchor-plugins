@@ -1,5 +1,6 @@
 package ch.ethz.biol.cell.mpp.nrg.cachedcalculation;
 
+import org.anchoranalysis.anchor.mpp.feature.nrg.elem.NRGElemPairCalcParams;
 import org.anchoranalysis.anchor.mpp.overlap.MaxIntensityProjectionPair;
 
 
@@ -40,7 +41,7 @@ public class OverlapMIPCalculation extends OverlapMIPCalculationBase {
 	}
 		
 	@Override
-	public CachedCalculation<Double> duplicate() {
+	public CachedCalculation<Double,NRGElemPairCalcParams> duplicate() {
 		return new OverlapMIPCalculation( getRegionID() );
 	}
 	

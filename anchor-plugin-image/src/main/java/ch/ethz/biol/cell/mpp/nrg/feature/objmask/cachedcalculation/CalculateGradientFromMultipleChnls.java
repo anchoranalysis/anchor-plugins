@@ -35,7 +35,6 @@ import org.anchoranalysis.core.cache.ExecuteException;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.feature.cachedcalculation.CachedCalculation;
-import org.anchoranalysis.feature.cachedcalculation.CachedCalculationCastParams;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
 import org.anchoranalysis.image.chnl.Chnl;
@@ -57,7 +56,7 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
  * @author Owen Feehan
  *
  */
-public class CalculateGradientFromMultipleChnls extends CachedCalculationCastParams<List<Point3d>,FeatureObjMaskParams> {
+public class CalculateGradientFromMultipleChnls extends CachedCalculation<List<Point3d>,FeatureObjMaskParams> {
 
 	private int nrgIndexX;
 	
@@ -188,7 +187,7 @@ public class CalculateGradientFromMultipleChnls extends CachedCalculationCastPar
 	}
 
 	@Override
-	public CachedCalculation<List<Point3d>> duplicate() {
+	public CachedCalculation<List<Point3d>,FeatureObjMaskParams> duplicate() {
 		return new CalculateGradientFromMultipleChnls( nrgIndexX, nrgIndexY, nrgIndexZ, subtractConstant );
 	}
 }

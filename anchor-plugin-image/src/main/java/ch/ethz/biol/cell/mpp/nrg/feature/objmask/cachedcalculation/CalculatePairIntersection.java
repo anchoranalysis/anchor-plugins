@@ -30,9 +30,9 @@ package ch.ethz.biol.cell.mpp.nrg.feature.objmask.cachedcalculation;
 import org.anchoranalysis.core.cache.ExecuteException;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.feature.cachedcalculation.CachedCalculation;
-import org.anchoranalysis.feature.cachedcalculation.CachedCalculationCastParams;
 import org.anchoranalysis.feature.session.cache.ICachedCalculationSearch;
 import org.anchoranalysis.image.extent.ImageDim;
+import org.anchoranalysis.image.feature.objmask.FeatureObjMaskParams;
 import org.anchoranalysis.image.feature.objmask.pair.FeatureObjMaskPairParams;
 import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.image.objmask.morph.MorphologicalErosion;
@@ -52,20 +52,20 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
  * @author Owen Feehan
  *
  */
-public class CalculatePairIntersection extends CachedCalculationCastParams<ObjMask,FeatureObjMaskPairParams> {
+public class CalculatePairIntersection extends CachedCalculation<ObjMask,FeatureObjMaskPairParams> {
 
 	private boolean do3D;
 	private int iterationsErosion;
 	
-	private CachedCalculation<ObjMask> ccDilation1;
-	private CachedCalculation<ObjMask> ccDilation2;
+	private CachedCalculation<ObjMask,FeatureObjMaskParams> ccDilation1;
+	private CachedCalculation<ObjMask,FeatureObjMaskParams> ccDilation2;
 	
 	
 	
-	public static CachedCalculation<ObjMask> createFromCache(
-		ICachedCalculationSearch cache,
-		ICachedCalculationSearch cacheDilationObj1,
-		ICachedCalculationSearch cacheDilationObj2,
+	public static CachedCalculation<ObjMask,FeatureObjMaskPairParams> createFromCache(
+		ICachedCalculationSearch<FeatureObjMaskPairParams> cache,
+		ICachedCalculationSearch<FeatureObjMaskParams> cacheDilationObj1,
+		ICachedCalculationSearch<FeatureObjMaskParams> cacheDilationObj2,
 		int iterations1,
 		int iterations2,
 		boolean do3D,
@@ -74,10 +74,10 @@ public class CalculatePairIntersection extends CachedCalculationCastParams<ObjMa
 		
 		// We use two additional caches, for the calculations involving the single objects, as these can be expensive, and we want
 		//  them also cached
-		CachedCalculation<ObjMask> ccDilation1 = CalculateDilation.createFromCache(
+		CachedCalculation<ObjMask,FeatureObjMaskParams> ccDilation1 = CalculateDilation.createFromCache(
 			cacheDilationObj1, iterations1, do3D	
 		);
-		CachedCalculation<ObjMask> ccDilation2 = CalculateDilation.createFromCache(
+		CachedCalculation<ObjMask,FeatureObjMaskParams> ccDilation2 = CalculateDilation.createFromCache(
 			cacheDilationObj2, iterations2, do3D	
 		);
 		return cache.search(
@@ -88,8 +88,8 @@ public class CalculatePairIntersection extends CachedCalculationCastParams<ObjMa
 	private CalculatePairIntersection(
 		boolean do3D,
 		int iterationsErosion,
-		CachedCalculation<ObjMask> ccDilation1,
-		CachedCalculation<ObjMask> ccDilation2
+		CachedCalculation<ObjMask,FeatureObjMaskParams> ccDilation1,
+		CachedCalculation<ObjMask,FeatureObjMaskParams> ccDilation2
 	) {
 		super();
 		this.iterationsErosion = iterationsErosion;
@@ -134,7 +134,7 @@ public class CalculatePairIntersection extends CachedCalculationCastParams<ObjMa
 
 
 	@Override
-	public CachedCalculation<ObjMask> duplicate() {
+	public CachedCalculation<ObjMask,FeatureObjMaskPairParams> duplicate() {
 		return new CalculatePairIntersection(
 			do3D,
 			iterationsErosion,

@@ -87,7 +87,7 @@ public class IntensityMeanShellTwoStage extends FeatureObjMask {
 		
 		ObjMask om;
 		try {
-			CachedCalculation<ObjMask> ccShellTwoStage = CalculateShellTwoStage.createFromCache(
+			CachedCalculation<ObjMask,FeatureObjMaskParams> ccShellTwoStage = CalculateShellTwoStage.createFromCache(
 				params,
 				iterationsErosion,
 				iterationsFurther,

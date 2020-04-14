@@ -36,7 +36,7 @@ import org.anchoranalysis.image.objmask.ObjMask;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
-public abstract class CalculateIncrementalOperationMap extends CachedCalculationMapHash<ObjMask, Integer, FeatureObjMaskParams> {
+public abstract class CalculateIncrementalOperationMap extends CachedCalculationMapHash<ObjMask,FeatureObjMaskParams,Integer> {
 
 	private boolean do3D;
 	

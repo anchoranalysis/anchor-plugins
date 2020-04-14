@@ -32,13 +32,13 @@ import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
 
 
 import org.anchoranalysis.core.cache.ExecuteException;
-import org.anchoranalysis.feature.cachedcalculation.CachedCalculationCastParams;
+import org.anchoranalysis.feature.cachedcalculation.CachedCalculation;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 import org.anchoranalysis.image.chnl.Chnl;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
-public class OverlapCalculationMaskGlobal extends CachedCalculationCastParams<Double,NRGElemPairCalcParams> {
+public class OverlapCalculationMaskGlobal extends CachedCalculation<Double,NRGElemPairCalcParams> {
 
 	private int regionID;
 	private int nrgIndex;

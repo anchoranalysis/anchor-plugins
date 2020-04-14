@@ -97,7 +97,7 @@ public class ObjMaskProviderPairIntersection extends ObjMaskProviderDimensions {
 	private ObjMask calcIntersection( ObjMask om1, ObjMask om2 ) throws CreateException {
 		
 		try {
-			CachedCalculation<ObjMask> op = CalculatePairIntersectionCommutative.createWithoutCache(iterationsDilation, iterationsErosion, do3D);
+			CachedCalculation<ObjMask,FeatureObjMaskPairParams> op = CalculatePairIntersectionCommutative.createWithoutCache(iterationsDilation, iterationsErosion, do3D);
 			
 			FeatureObjMaskPairParams params = new FeatureObjMaskPairParams(om1, om2);
 			params.setNrgStack(

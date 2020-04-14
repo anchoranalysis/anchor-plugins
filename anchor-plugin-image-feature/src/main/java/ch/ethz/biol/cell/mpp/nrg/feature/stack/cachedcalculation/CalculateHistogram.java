@@ -28,14 +28,14 @@ package ch.ethz.biol.cell.mpp.nrg.feature.stack.cachedcalculation;
 
 import org.anchoranalysis.core.cache.ExecuteException;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.feature.cachedcalculation.CachedCalculationCastParams;
+import org.anchoranalysis.feature.cachedcalculation.CachedCalculation;
 import org.anchoranalysis.image.feature.stack.FeatureStackParams;
 import org.anchoranalysis.image.histogram.Histogram;
 import org.anchoranalysis.image.histogram.HistogramFactoryUtilities;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
-public class CalculateHistogram extends CachedCalculationCastParams<Histogram, FeatureStackParams> {
+public class CalculateHistogram extends CachedCalculation<Histogram, FeatureStackParams> {
 
 	private int nrgIndex;
 	
