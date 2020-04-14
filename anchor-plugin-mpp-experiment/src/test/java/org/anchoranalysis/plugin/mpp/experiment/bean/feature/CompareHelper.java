@@ -44,6 +44,8 @@ class CompareHelper {
 			return comparer.compareTwoCsvFiles( relativePath, ",", true, 0, true, false, System.out);
 		} else if (hasExtension(relativePath,".xml")) {
 			return comparer.compareTwoXmlDocuments(relativePath);
+		} else if (hasExtension(relativePath,".h5")) {
+			return comparer.compareTwoObjs(relativePath);			
 		} else {
 			throw new OperationFailedRuntimeException("Extension not supported");
 		}

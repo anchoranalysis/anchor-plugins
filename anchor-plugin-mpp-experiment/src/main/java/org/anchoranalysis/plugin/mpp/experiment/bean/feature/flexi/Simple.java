@@ -39,6 +39,7 @@ import org.anchoranalysis.feature.list.NamedFeatureStore;
 import org.anchoranalysis.feature.list.NamedFeatureStoreFactory;
 import org.anchoranalysis.feature.nrg.NRGStack;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
+import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.feature.init.FeatureInitParamsImageInit;
 import org.anchoranalysis.image.feature.objmask.FeatureObjMaskParams;
 import org.anchoranalysis.image.init.ImageInitParams;
@@ -88,12 +89,25 @@ public class Simple extends FlexiFeatureTable<FeatureObjMaskParams> {
 		List<FeatureObjMaskParams> out = new ArrayList<>();
 		
 		for( ObjMask om : objs ) {
-
+			checkObjInsideScene(om, nrgStack.getDimensions().getExtnt());
+			
 			FeatureObjMaskParams params = new FeatureObjMaskParams(om);
 			params.setNrgStack(nrgStack);
 			out.add(params);
 		}
 		
 		return out;
+	}
+	
+	private static void checkObjInsideScene( ObjMask om, Extent extent) throws CreateException {
+		if (!extent.contains(om.getBoundingBox())) {
+			throw new CreateException(
+				String.format(
+					"Object is not (perhaps fully) contained inside the scene: %s is not in %s",
+					om.getBoundingBox(),
+					extent
+				)
+			);
+		}
 	}
 }

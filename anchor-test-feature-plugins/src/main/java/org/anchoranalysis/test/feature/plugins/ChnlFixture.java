@@ -60,9 +60,12 @@ public class ChnlFixture {
 	// END: IntensityFunction examples
 	
 	// START: image size examples
-	public static final Extent SMALL = new Extent(8,11,4); 
-	public static final Extent MEDIUM = new Extent(69,61,18);
-	public static final Extent LARGE = new Extent(1031,2701,91);
+	public static final Extent SMALL_3D = new Extent(8,11,4);
+	public static final Extent SMALL_2D = SMALL_3D.flatten();
+	public static final Extent MEDIUM_3D = new Extent(69,61,7);
+	public static final Extent MEDIUM_2D = MEDIUM_3D.flatten();
+	public static final Extent LARGE_3D = new Extent(1031,2701,9);
+	public static final Extent LARGE_2D = LARGE_3D.flatten();
 	// END: image size examples
 		
 	public static Chnl createChnl( Extent e, IntensityFunction createIntensity ) {

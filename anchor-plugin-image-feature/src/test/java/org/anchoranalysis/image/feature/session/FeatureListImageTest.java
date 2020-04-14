@@ -106,7 +106,9 @@ public class FeatureListImageTest {
 			objMaskFeatures(loader)
 		);
 		
-		ObjMaskFixture objMaskFixture = new ObjMaskFixture( NRGStackFixture.create().getDimensions() );
+		ObjMaskFixture objMaskFixture = new ObjMaskFixture(
+			NRGStackFixture.create(false).getDimensions()
+		);
 		
 		assertCalc(
 			session.calcOne(
@@ -160,14 +162,14 @@ public class FeatureListImageTest {
 	private static FeatureHistogramParams createParams( Histogram hist ) throws CreateException {
 		return new FeatureHistogramParams(
 			hist,
-			NRGStackFixture.create().getDimensions().getRes()
+			NRGStackFixture.create(false).getDimensions().getRes()
 		);
 	}
 	
 	private static FeatureObjMaskParams createParams( ObjMask om ) throws CreateException {
 		FeatureObjMaskParams params = new FeatureObjMaskParams(om);
 		params.setNrgStack(
-			NRGStackFixture.create()		
+			NRGStackFixture.create(false)		
 		);
 		return params;
 	}
