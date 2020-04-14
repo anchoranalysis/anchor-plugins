@@ -44,7 +44,7 @@ import org.anchoranalysis.test.image.TestReaderWriterUtilities;
 
 class HelperReadWriteObjs {
 
-	public static final String TEMPORARY_FOLDER_OUT = "debug/objs";
+	public static final String TEMPORARY_FOLDER_OUT = "objs";
 		
 	public static IterableGenerator<ObjMaskCollection> generator( boolean hdf5, boolean compression ) {
 		if (hdf5) {
