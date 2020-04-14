@@ -26,22 +26,24 @@ package org.anchoranalysis.test.feature.plugins;
  * #L%
  */
 
-import static org.anchoranalysis.test.feature.plugins.ChnlFixture.MEDIUM;
-
 import org.anchoranalysis.feature.nrg.NRGStack;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
+import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.extent.IncorrectImageSizeException;
 import org.anchoranalysis.image.stack.Stack;
+import org.anchoranalysis.test.feature.plugins.ChnlFixture.IntensityFunction;
 
 public class NRGStackFixture {
 
-	public static NRGStackWithParams create() {
+	public static NRGStackWithParams create( boolean big ) {
 	
+		Extent size = big ? ChnlFixture.LARGE_2D : ChnlFixture.MEDIUM_2D;
+		
 		try {
 			Stack stack = new Stack();
-			stack.addChnl( ChnlFixture.createChnl(MEDIUM, ChnlFixture::sumMod) );
-			stack.addChnl( ChnlFixture.createChnl(MEDIUM, ChnlFixture::diffMod) );
-			stack.addChnl( ChnlFixture.createChnl(MEDIUM, ChnlFixture::multMod) );
+			addChnl(stack, size, ChnlFixture::sumMod);
+			addChnl(stack, size, ChnlFixture::diffMod);
+			addChnl(stack, size, ChnlFixture::multMod);
 			
 			NRGStack nrgStack = new NRGStack(stack);
 			return new NRGStackWithParams(nrgStack);
@@ -50,5 +52,11 @@ public class NRGStackFixture {
 			assert false;
 			return null;
 		}
+	}
+	
+	private static void addChnl( Stack stack, Extent size, IntensityFunction intensityFunction ) throws IncorrectImageSizeException {
+		stack.addChnl(
+			ChnlFixture.createChnl(size, intensityFunction)
+		);
 	}
 }
