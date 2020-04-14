@@ -29,6 +29,7 @@ package ch.ethz.biol.cell.mpp.mark.pointsfitter;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.geometry.Point2i;
@@ -42,16 +43,27 @@ import org.anchoranalysis.image.points.PointsFromBinaryVoxelBox;
 // Strongly influenced by http://rsb.info.nih.gov/ij/macros/ConvexHull.txt
 public class ConvexHullUtilities {
 
-	public static List<Point2i> convexHullFromOutline( ObjMask obj, int minNumPnts ) throws CreateException {
+	/**
+	 * Extract points from the outline and maybe apply a convex-hull to filter them
+	 * 
+	 * @param obj object to extract points from
+	 * @param minNumPnts a minimum of number of points (before ant convex hull filtering) that must be found, otherwise no list is returned at all
+	 * @param applyConvexHull iff TRUE the points are filtered by the convex-hull operation
+	 * @return a list of the points iif the minimum threshold is fulfilled
+	 * @throws CreateException
+	 */
+	public static Optional<List<Point2i>> extractPointsFromOutline( ObjMask obj, int minNumPnts, boolean applyConvexHull ) throws CreateException {
 
 		List<Point2i> pts = new ArrayList<>();
 		addPointsFromObjOutline(obj, pts);
 		
 		if (pts.size()<minNumPnts) {
-			return null;
+			return Optional.empty();
 		}
 		
-		return convexHull2D(pts);		
+		return Optional.of(
+			applyConvexHull ? convexHull2D(pts) : pts
+		);
 	}
 
 	public static List<Point2i> convexHullFromAllOutlines( ObjMaskCollection objs, int minNumPnts ) throws CreateException {
@@ -166,7 +178,7 @@ public class ConvexHullUtilities {
 	}
 	
 	
-	private static void addPointsFromObjOutline( ObjMask obj, List<Point2i> pts) throws CreateException {
+	public static void addPointsFromObjOutline( ObjMask obj, List<Point2i> pts) throws CreateException {
 		ObjMask outline = FindOutline.outline(obj, 1, true, false);
 		PointsFromBinaryVoxelBox.addPointsFromVoxelBox( outline.binaryVoxelBox(), outline.getBoundingBox().getCrnrMin(), pts );
 	}

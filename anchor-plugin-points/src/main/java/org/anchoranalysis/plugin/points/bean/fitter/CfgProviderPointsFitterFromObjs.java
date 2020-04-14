@@ -27,8 +27,8 @@ package org.anchoranalysis.plugin.points.bean.fitter;
  */
 
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.anchoranalysis.anchor.mpp.bean.cfg.CfgProvider;
 import org.anchoranalysis.anchor.mpp.bean.mark.factory.MarkFactory;
@@ -39,12 +39,10 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.geometry.Point2i;
 import org.anchoranalysis.core.geometry.Point3f;
+import org.anchoranalysis.core.geometry.PointConverter;
 import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.image.objmask.ObjMaskCollection;
-import org.anchoranalysis.image.outline.FindOutline;
-import org.anchoranalysis.image.points.PointsFromBinaryVoxelBox;
-
 import ch.ethz.biol.cell.mpp.mark.pointsfitter.ConvexHullUtilities;
 
 public class CfgProviderPointsFitterFromObjs extends CfgProvider {
@@ -61,10 +59,6 @@ public class CfgProviderPointsFitterFromObjs extends CfgProvider {
 	@BeanField
 	private MarkFactory markFactory;
 	
-	/** If true, reduces the set of points by only taking points on the outline of the mask */
-	@BeanField
-	private boolean outline = true;
-	
 	/** If true, Reduces the set of points by applying a convex-hull operation */
 	@BeanField
 	private boolean convexHull = true;
@@ -80,51 +74,31 @@ public class CfgProviderPointsFitterFromObjs extends CfgProvider {
 		Cfg cfgOut = new Cfg();
 		
 		for( ObjMask om : objsCollection ) {
-			Mark mark = createMarkFromObj(om,dim);
-			if (mark!=null) {
-				cfgOut.add( mark );
-			}
+			Optional<Mark> mark = createMarkFromObj(om,dim);
+			mark.ifPresent( m->
+				cfgOut.add( m )
+			);
 		}
 
 		return cfgOut;
 	}
 	
-	private	Mark createMarkFromObj( ObjMask om, ImageDim dim ) throws CreateException {	
+	private	Optional<Mark> createMarkFromObj( ObjMask om, ImageDim dim ) throws CreateException {	
 		
-		List<Point2i> pts = pointsFromObj(om);
-		
-		if (pts.size()<pointsFitter.getMinNumPnts()) {
-			return null;
-		}
-		
-		return fitToMark(
-			convertToFloat3D(pts),
-			dim
+		Optional<List<Point2i>> pts = ConvexHullUtilities.extractPointsFromOutline(
+			om,
+			pointsFitter.getMinNumPnts(),
+			convexHull
 		);
-	}
-	
-	private List<Point2i> pointsFromObj( ObjMask om ) throws CreateException {
-		List<Point2i> pts = new ArrayList<>();
 		
-		if (outline) {
-			om = FindOutline.outline(om, 1, true, false);
+		if (pts.isPresent()) {
+			List<Point3f> ptsConverted = PointConverter.convert2i_3f(pts.get()); 
+			return Optional.of( 
+				fitToMark(ptsConverted, dim)
+			);
+		} else {
+			return Optional.empty();
 		}
-		
-		PointsFromBinaryVoxelBox.addPointsFromVoxelBox( om.binaryVoxelBox(), om.getBoundingBox().getCrnrMin(), pts );
-		
-		if (convexHull) {
-			pts = ConvexHullUtilities.convexHull2D(pts);
-		}
-		
-		return pts;
-	}
-	
-	private static List<Point3f> convertToFloat3D( List<Point2i> selectedPoints ) {
-		List<Point3f> out = new ArrayList<>();
-		for( Point2i pnt : selectedPoints ) {
-			out.add( new Point3f( (float) pnt.getX(), (float) pnt.getY(), 0) );
-		}
-		return out;
 	}
 	
 	private Mark fitToMark( List<Point3f> pntsToFit, ImageDim dim) throws CreateException {
@@ -146,14 +120,6 @@ public class CfgProviderPointsFitterFromObjs extends CfgProvider {
 
 	public void setMarkFactory(MarkFactory markFactory) {
 		this.markFactory = markFactory;
-	}
-
-	public boolean isOutline() {
-		return outline;
-	}
-
-	public void setOutline(boolean outline) {
-		this.outline = outline;
 	}
 
 	public boolean isConvexHull() {
