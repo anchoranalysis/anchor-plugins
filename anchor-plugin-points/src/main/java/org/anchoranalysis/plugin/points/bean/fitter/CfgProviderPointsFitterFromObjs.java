@@ -1,4 +1,4 @@
-package ch.ethz.biol.cell.mpp.cfg.provider;
+package org.anchoranalysis.plugin.points.bean.fitter;
 
 /*
  * #%L
@@ -32,17 +32,13 @@ import java.util.List;
 
 import org.anchoranalysis.anchor.mpp.bean.cfg.CfgProvider;
 import org.anchoranalysis.anchor.mpp.bean.mark.factory.MarkFactory;
-import org.anchoranalysis.anchor.mpp.bean.points.fitter.InsufficientPointsException;
-import org.anchoranalysis.anchor.mpp.bean.points.fitter.PointsFitter;
-import org.anchoranalysis.anchor.mpp.bean.points.fitter.PointsFitterException;
 import org.anchoranalysis.anchor.mpp.cfg.Cfg;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
+import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.geometry.Point2i;
 import org.anchoranalysis.core.geometry.Point3f;
-import org.anchoranalysis.image.bean.provider.ImageDimProvider;
-import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
 import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.image.objmask.ObjMaskCollection;
@@ -60,20 +56,7 @@ public class CfgProviderPointsFitterFromObjs extends CfgProvider {
 	
 	/// START BEAN PROPERTIES
 	@BeanField
-	private ObjMaskProvider objs;
-	
-	@BeanField
-	private PointsFitter pointsFitter;
-	
-	@BeanField
-	private ImageDimProvider dimProvider;
-
-	/** If an object has fewer points than before being fitted, we ignore */
-	@BeanField
-	private int minNumPnts = 0;
-	
-	@BeanField
-	private int regionID = 0;
+	private PointsFitterToMark pointsFitter;
 	
 	@BeanField
 	private MarkFactory markFactory;
@@ -90,9 +73,9 @@ public class CfgProviderPointsFitterFromObjs extends CfgProvider {
 	@Override
 	public Cfg create() throws CreateException {
 		
-		ImageDim dim = dimProvider.create();
+		ImageDim dim = pointsFitter.createDim();
 
-		ObjMaskCollection objsCollection = objs.create();
+		ObjMaskCollection objsCollection = pointsFitter.createObjs();
 		
 		Cfg cfgOut = new Cfg();
 		
@@ -110,7 +93,7 @@ public class CfgProviderPointsFitterFromObjs extends CfgProvider {
 		
 		List<Point2i> pts = pointsFromObj(om);
 		
-		if (pts.size()<minNumPnts) {
+		if (pts.size()<pointsFitter.getMinNumPnts()) {
 			return null;
 		}
 		
@@ -144,47 +127,17 @@ public class CfgProviderPointsFitterFromObjs extends CfgProvider {
 		return out;
 	}
 	
-	private Mark fitToMark( List<Point3f> pntsForFitter, ImageDim dim) throws CreateException {
+	private Mark fitToMark( List<Point3f> pntsToFit, ImageDim dim) throws CreateException {
+
 		Mark markOut = markFactory.create();
+		
 		try {
-			pointsFitter.fit( pntsForFitter, markOut, dim );
-		} catch (PointsFitterException | InsufficientPointsException e) {
+			pointsFitter.fitPointsToMark( pntsToFit, markOut, dim );
+		} catch (OperationFailedException e) {
 			throw new CreateException(e);
 		}
 		
 		return markOut;		
-	}
-
-	public ObjMaskProvider getObjs() {
-		return objs;
-	}
-
-	public void setObjs(ObjMaskProvider objs) {
-		this.objs = objs;
-	}
-
-	public PointsFitter getPointsFitter() {
-		return pointsFitter;
-	}
-
-	public void setPointsFitter(PointsFitter pointsFitter) {
-		this.pointsFitter = pointsFitter;
-	}
-
-	public int getMinNumPnts() {
-		return minNumPnts;
-	}
-
-	public void setMinNumPnts(int minNumPnts) {
-		this.minNumPnts = minNumPnts;
-	}
-	
-	public int getRegionID() {
-		return regionID;
-	}
-
-	public void setRegionID(int regionID) {
-		this.regionID = regionID;
 	}
 
 	public MarkFactory getMarkFactory() {
@@ -211,5 +164,11 @@ public class CfgProviderPointsFitterFromObjs extends CfgProvider {
 		this.convexHull = convexHull;
 	}
 
+	public PointsFitterToMark getPointsFitter() {
+		return pointsFitter;
+	}
 
+	public void setPointsFitter(PointsFitterToMark pointsFitter) {
+		this.pointsFitter = pointsFitter;
+	}
 }
