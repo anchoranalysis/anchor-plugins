@@ -32,7 +32,7 @@ class CompareHelper {
 	
 	private static void assertIdentical(DualComparer comparer, String relativePath) throws IOException {
 		assertTrue(
-			relativePath,
+			relativePath + " is not identical",
 			compareForExtr(comparer, relativePath)
 		);
 	}

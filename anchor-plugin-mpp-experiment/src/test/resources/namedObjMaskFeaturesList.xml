@@ -23,7 +23,14 @@
 		<item config-class="org.anchoranalysis.feature.bean.list.FeatureListProviderDefineSingle">
 			<item config-class="ch.ethz.biol.cell.mpp.nrg.feature.objmask.NumBorderVoxels"/>
 		</item>
-	</item>				
+	</item>
+	
+	<item config-class="org.anchoranalysis.bean.NamedBean" name="meanIntensity">
+		<item config-class="org.anchoranalysis.feature.bean.list.FeatureListProviderDefineSingle">
+			<item config-class="ch.ethz.biol.cell.mpp.nrg.feature.objmask.IntensityMean"/>
+		</item>
+	</item>
+
 	
 </bean>
 </config>

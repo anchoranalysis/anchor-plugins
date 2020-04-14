@@ -59,6 +59,16 @@ public class IntensityMean extends FeatureObjMask {
 	
 	public static double calcMeanIntensityObjMask( Chnl chnl, ObjMask om, boolean excludeZero ) throws FeatureCalcException {
 		
+		if (!chnl.getDimensions().getExtnt().contains(om.getBoundingBox())) {
+			throw new FeatureCalcException(
+				String.format(
+					"The object's bounding-box (%s) is not contained within the dimensions of the channel %s",
+					om.getBoundingBox(),
+					chnl.getDimensions().getExtnt()
+				)
+			);
+		}
+		
 		VoxelBoxWrapper vbIntens = chnl.getVoxelBox();
 		
 		BoundingBox bbox = om.getBoundingBox();
