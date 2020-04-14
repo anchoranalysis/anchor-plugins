@@ -1,6 +1,6 @@
 package org.anchoranalysis.plugin.mpp.experiment.bean.feature;
 
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.anchoranalysis.bean.NamedBean;
@@ -122,11 +122,9 @@ public class ExportFeaturesObjMaskTaskTest {
 	}
 	
 	private static List<NamedBean<ObjMaskProvider>> createObjProviders(String objsName) {
-		List<NamedBean<ObjMaskProvider>> list = new ArrayList<>();
-		list.add(
-			new NamedBean<>(objsName, new ObjMaskProviderReference(objsName))
+		return Arrays.asList(
+			new NamedBean<>(objsName, new ObjMaskProviderReference(objsName))	
 		);
-		return list;
 	}
 
 	private static StackProvider nrgStackProvider(NRGStack nrgStack) throws CreateException {
