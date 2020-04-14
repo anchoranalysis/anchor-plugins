@@ -29,7 +29,9 @@ package org.anchoranalysis.test.feature.plugins;
 import static org.junit.Assert.assertTrue;
 
 import java.nio.file.Path;
+import java.util.List;
 
+import org.anchoranalysis.bean.NamedBean;
 import org.anchoranalysis.bean.xml.BeanXmlLoader;
 import org.anchoranalysis.bean.xml.error.BeanXmlException;
 import org.anchoranalysis.core.error.CreateException;
@@ -38,15 +40,30 @@ import org.anchoranalysis.feature.bean.list.FeatureListProvider;
 import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
 import org.anchoranalysis.test.TestLoader;
 
-public class FeatureListFixture {
+public class FeaturesFromXmlFixture {
 	
-	public static <T extends FeatureCalcParams> FeatureList<T> createFromFile(String xmlPath, TestLoader loader) throws CreateException {
+	private FeaturesFromXmlFixture() {
+	}
+	
+	public static <T extends FeatureCalcParams> FeatureList<T> createFeatureList(String xmlPath, TestLoader loader) throws CreateException {
 		Path pathStatic = loader.resolveTestPath(xmlPath);
 		try {
 			FeatureListProvider<T> provider = BeanXmlLoader.loadBean( pathStatic );
 			FeatureList<T> features = provider.create();
 			assertTrue( features.size() > 0 );	
 			return features;
+		} catch (BeanXmlException e) {
+			throw new CreateException(e);
+		}
+		
+	}
+	
+	public static <T extends FeatureCalcParams> List<NamedBean<FeatureListProvider<T>>> createNamedFeatureProviders(String xmlPath, TestLoader loader) throws CreateException {
+		Path pathStatic = loader.resolveTestPath(xmlPath);
+		try {
+			List<NamedBean<FeatureListProvider<T>>> list = BeanXmlLoader.loadBean( pathStatic );
+			assertTrue( list.size() > 0 );	
+			return list;
 		} catch (BeanXmlException e) {
 			throw new CreateException(e);
 		}

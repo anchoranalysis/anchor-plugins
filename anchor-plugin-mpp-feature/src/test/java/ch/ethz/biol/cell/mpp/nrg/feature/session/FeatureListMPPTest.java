@@ -44,7 +44,7 @@ import org.anchoranalysis.feature.session.SessionFactory;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorMulti;
 import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.extent.ImageRes;
-import org.anchoranalysis.test.LoggingFixtures;
+import org.anchoranalysis.test.LoggingFixture;
 import org.anchoranalysis.test.feature.ConstantsInListFixture;
 import org.anchoranalysis.test.feature.plugins.NRGStackFixture;
 import org.anchoranalysis.test.feature.plugins.ResultsVectorTestUtilities;
@@ -152,7 +152,7 @@ public class FeatureListMPPTest {
 	private static <T extends FeatureCalcParams> FeatureCalculatorMulti<T> createAndStart( FeatureList<T> features ) throws FeatureCalcException {
 		return SessionFactory.createAndStart(
 			features,
-			LoggingFixtures.simpleLogErrorReporter()
+			LoggingFixture.simpleLogErrorReporter()
 		);
 	}
 	

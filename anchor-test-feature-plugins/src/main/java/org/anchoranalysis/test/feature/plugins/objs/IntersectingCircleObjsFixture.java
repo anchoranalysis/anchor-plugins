@@ -1,4 +1,4 @@
-package org.anchoranalysis.plugin.image.feature.bean.obj.intersecting;
+package org.anchoranalysis.test.feature.plugins.objs;
 
 /*-
  * #%L
@@ -29,9 +29,8 @@ package org.anchoranalysis.plugin.image.feature.bean.obj.intersecting;
 import org.anchoranalysis.core.geometry.Point2i;
 import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.image.objmask.ObjMaskCollection;
-import org.anchoranalysis.test.feature.plugins.CircleObjMaskFixture;
 
-public class IntersectingObjsFixture {
+public class IntersectingCircleObjsFixture {
 
 	private static final int INITIAL_MARGIN = 5;
 	
