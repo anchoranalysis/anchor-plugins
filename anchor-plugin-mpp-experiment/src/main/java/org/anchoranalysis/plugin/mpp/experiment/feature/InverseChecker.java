@@ -5,6 +5,7 @@ import java.util.function.Supplier;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.calc.ResultsVector;
 import org.anchoranalysis.feature.name.FeatureNameList;
+import org.anchoranalysis.image.feature.objmask.pair.merged.FeatureObjMaskPairMergedParams;
 
 class InverseChecker {
 
@@ -25,6 +26,15 @@ class InverseChecker {
 	}
 
 
+	public void checkInverseEqual(ResultsVector rv, ResultsVector rvInverse, FeatureObjMaskPairMergedParams params) throws FeatureCalcException {
+		StringBuilder sb = new StringBuilder();
+		if (!isInverseEqual(rv, rvInverse, sb)) {
+			throw new FeatureCalcException(
+				String.format("Feature values are not equal to the inverse for %s:%n%s", params, sb.toString() )
+			);
+		}
+	}
+	
 	/**
 	 * Generates a multi-line string describing which values are different.
 	 * 
@@ -34,7 +44,7 @@ class InverseChecker {
 	 * @return
 	 * @throws FeatureCalcException 
 	 */
-	public boolean isInverseEqual(
+	private boolean isInverseEqual(
 		ResultsVector rv1,
 		ResultsVector rv2,
 		StringBuilder sb
