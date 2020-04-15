@@ -1,5 +1,7 @@
 package ch.ethz.biol.cell.sgmn.graphcuts.nrgdefinition.pixelscore;
 
+
+
 /*
  * #%L
  * anchor-plugin-image-feature
@@ -30,15 +32,9 @@ package ch.ethz.biol.cell.sgmn.graphcuts.nrgdefinition.pixelscore;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.params.KeyValueParams;
-import org.anchoranalysis.feature.cache.CacheableParams;
-import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.image.feature.bean.pixelwise.score.PixelScore;
-import org.anchoranalysis.image.feature.pixelwise.PixelwiseFeatureInitParams;
-import org.anchoranalysis.image.feature.pixelwise.score.PixelScoreFeatureCalcParams;
-
 import ch.ethz.biol.cell.mpp.nrg.feature.operator.GaussianScore;
 
-public class PixelScoreGaussianKeyValueParams extends PixelScore {
+public class PixelScoreGaussianKeyValueParams extends PixelScoreParamsBase {
 
 	/**
 	 * 
@@ -54,53 +50,32 @@ public class PixelScoreGaussianKeyValueParams extends PixelScore {
 	
 	@BeanField
 	private double shift;
-	
-	@BeanField
-	private int nrgChnlIndex = 0;
 	// END BEAN PROPERTIES
 	
 	private double mean;
 	private double stdDev;
+
+	@Override
+	protected void setupParams(KeyValueParams kpv) throws InitException {
+		mean = extractParamsAsDouble(kpv, keyMean);
+		stdDev = extractParamsAsDouble(kpv, keyStdDev);
+	}
 	
 	@Override
-	protected double calc(CacheableParams<PixelScoreFeatureCalcParams> paramsCacheable)
-			throws FeatureCalcException {
-		
-		PixelScoreFeatureCalcParams params = paramsCacheable.getParams();
-		
-		double val = params.getPxl(nrgChnlIndex);
+	protected double deriveScoreFromPixelVal(int pixelVal) {
 		
 		// Values higher than the mean should be included for definite
-		if (val>mean) {
+		if (pixelVal>mean) {
 			return 1.0;
 		}
 		
-		double scoreBeforeShift = GaussianScore.calc(mean, stdDev, val, false, false);
+		double scoreBeforeShift = GaussianScore.calc(mean, stdDev, pixelVal, false, false);
 		
 		double scoreShifted = (scoreBeforeShift - shift) / (1-shift);
 		
 		return (scoreShifted/2) + 0.5;
 	}
-
-	@Override
-	public void beforeCalcCast(PixelwiseFeatureInitParams params) throws InitException {
-		
-		super.beforeCalcCast(params);
-		
-		KeyValueParams kpv = params.getKeyValueParams(); 
-
-		if (!kpv.containsKey(keyMean)) {
-			throw new InitException( String.format("Key '%s' does not exist",keyMean));
-		}
-		
-		if (!kpv.containsKey(keyStdDev)) {
-			throw new InitException( String.format("Key '%s' does not exist",keyMean));
-		}
-		
-		mean = Double.valueOf( kpv.getProperty(keyMean) );
-		stdDev = Double.valueOf( kpv.getProperty(keyStdDev) );
-	}
-
+	
 	public String getKeyMean() {
 		return keyMean;
 	}
@@ -132,13 +107,4 @@ public class PixelScoreGaussianKeyValueParams extends PixelScore {
 	public void setMean(double mean) {
 		this.mean = mean;
 	}
-
-	public int getNrgChnlIndex() {
-		return nrgChnlIndex;
-	}
-
-	public void setNrgChnlIndex(int nrgChnlIndex) {
-		this.nrgChnlIndex = nrgChnlIndex;
-	}
-
 }

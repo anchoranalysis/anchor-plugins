@@ -32,7 +32,7 @@ import org.anchoranalysis.anchor.mpp.mark.Mark;
 
 
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.bean.annotation.Optional;
+import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.bean.shared.relation.RelationBean;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.feature.bean.Feature;
@@ -64,7 +64,7 @@ public class MarkProviderRequireFeatureRelationThreshold extends MarkProvider {
 	@BeanField
 	private RelationBean relation;
 	
-	@BeanField @Optional
+	@BeanField @OptionalBean
 	private ImageDimProvider resProvider;
 	// END BEAN PROPERTIES
 	

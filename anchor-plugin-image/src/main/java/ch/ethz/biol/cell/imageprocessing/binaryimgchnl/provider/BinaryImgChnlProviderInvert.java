@@ -30,7 +30,7 @@ package ch.ethz.biol.cell.imageprocessing.binaryimgchnl.provider;
 import java.nio.ByteBuffer;
 
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.bean.annotation.Optional;
+import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.bean.provider.BinaryImgChnlProvider;
 import org.anchoranalysis.image.binary.BinaryChnl;
@@ -52,7 +52,7 @@ public class BinaryImgChnlProviderInvert extends BinaryImgChnlProvider {
 	@BeanField
 	private BinaryImgChnlProvider binaryImgChnlProvider;
 	
-	@BeanField @Optional
+	@BeanField @OptionalBean
 	private BinaryImgChnlProvider binaryImgChnlProviderMask;
 	
 	@BeanField

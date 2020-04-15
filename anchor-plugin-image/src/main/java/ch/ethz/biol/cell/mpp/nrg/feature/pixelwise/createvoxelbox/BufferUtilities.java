@@ -30,19 +30,18 @@ import java.nio.ByteBuffer;
 import java.util.List;
 
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.feature.session.calculator.FeatureCalculatorSingle;
-import org.anchoranalysis.image.feature.pixelwise.score.PixelScoreFeatureCalcParams;
+import org.anchoranalysis.image.feature.bean.pixelwise.PixelScore;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 
 class BufferUtilities {
 
 	public static void putScoreForOffset(
-		FeatureCalculatorSingle<PixelScoreFeatureCalcParams> session,
+		PixelScore pixelScore,
 		List<VoxelBuffer<?>> bbList,
 		ByteBuffer bbOut,
 		int offset
 	) throws FeatureCalcException {
-		double score = session.calcOne(
+		double score = pixelScore.calc(
 			createParams(bbList, offset)
 		);
 		
@@ -50,15 +49,14 @@ class BufferUtilities {
 		bbOut.put(offset, (byte) scoreInt );
 	}
 	
-	private static PixelScoreFeatureCalcParams createParams( List<VoxelBuffer<?>> bbList, int offset ) {
+	private static int[] createParams( List<VoxelBuffer<?>> bbList, int offset ) {
 		
-		PixelScoreFeatureCalcParams params = new PixelScoreFeatureCalcParams( bbList.size() );
+		int[] vals = new int[bbList.size()];
 		
 		for( int c=0; c<bbList.size(); c++) {
-			int pxl = bbList.get(c).getInt( offset );
-			params.setPxl(c,pxl);
+			vals[c] = bbList.get(c).getInt( offset );
 		}
 		
-		return params;
+		return vals;
 	}
 }

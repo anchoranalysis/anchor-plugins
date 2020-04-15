@@ -28,7 +28,7 @@ package ch.ethz.biol.cell.imageprocessing.chnl.provider;
 
 
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.bean.annotation.Optional;
+import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.bean.chnl.converter.histogram.ChnlConverterHistogramBean;
@@ -53,7 +53,7 @@ public class ChnlProviderConverterHistogram extends ChnlProvider {
 	@BeanField
 	private ChnlProvider chnlProvider;
 	
-	@BeanField @Optional
+	@BeanField @OptionalBean
 	private HistogramProvider histogramProvider;	// If null, the histogram is calculated from the image
 	
 	@BeanField

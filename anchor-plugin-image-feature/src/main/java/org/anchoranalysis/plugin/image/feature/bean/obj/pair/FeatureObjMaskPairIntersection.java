@@ -29,7 +29,6 @@ package org.anchoranalysis.plugin.image.feature.bean.obj.pair;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.Positive;
-import org.anchoranalysis.bean.annotation.SkipInit;
 import org.anchoranalysis.core.cache.ExecuteException;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.feature.bean.Feature;
@@ -74,7 +73,7 @@ public class FeatureObjMaskPairIntersection extends FeatureObjMaskPair {
 	@BeanField
 	private double emptyValue = 255;
 	
-	@BeanField @SkipInit
+	@BeanField
 	private Feature<FeatureObjMaskParams> item;
 	// END BEAN PROPERTIES
 	
@@ -117,7 +116,10 @@ public class FeatureObjMaskPairIntersection extends FeatureObjMaskPair {
 		return createParamsForIntersection(omIntersection,params).upcastParams();
 	}
 		
-	public CacheableParams<FeatureObjMaskParams> createParamsForIntersection(ObjMask omIntersection, CacheableParams<FeatureObjMaskPairParams> paramsExst) {
+	public CacheableParams<FeatureObjMaskParams> createParamsForIntersection(
+		ObjMask omIntersection,
+		CacheableParams<FeatureObjMaskPairParams> paramsExst
+	) {
 
 		return paramsExst.mapParams(
 			p -> paramsForIntersection(p, omIntersection),

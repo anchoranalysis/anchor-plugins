@@ -30,7 +30,6 @@ package ch.ethz.biol.cell.mpp.nrg.feature.objmask;
 
 
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.bean.annotation.SkipInit;
 import org.anchoranalysis.core.cache.ExecuteException;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.cache.CacheableParams;
@@ -53,7 +52,7 @@ public abstract class DerivedObjMask extends FeatureObjMask {
 	@BeanField
 	private double emptyValue = 255;
 	
-	@BeanField @SkipInit
+	@BeanField
 	private Feature<FeatureObjMaskParams> item;
 	// END BEAN PROPERTIES
 

@@ -28,7 +28,7 @@ package ch.ethz.biol.cell.imageprocessing.chnl.provider;
 
 
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.bean.annotation.Optional;
+import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.bean.provider.BinaryImgChnlProvider;
@@ -52,7 +52,7 @@ public class ChnlProviderCalculateLevel extends ChnlProvider {
 	@BeanField
 	private CalculateLevel calculateLevel;
 	
-	@BeanField @Optional
+	@BeanField @OptionalBean
 	private BinaryImgChnlProvider histogramMaskProvider;
 	// END BEAN
 		

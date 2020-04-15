@@ -34,7 +34,7 @@ import org.anchoranalysis.anchor.mpp.mark.Mark;
  */
 
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.bean.annotation.Optional;
+import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.bean.shared.params.keyvalue.KeyValueParamsProvider;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
@@ -64,7 +64,7 @@ public abstract class FeatureValueCheckMark<T extends FeatureCalcParams> extends
 	@BeanField
 	protected double minVal = 0;
 	
-	@BeanField @Optional
+	@BeanField @OptionalBean
 	private KeyValueParamsProvider keyValueParamsProvider;
 	// END BEANS
 	

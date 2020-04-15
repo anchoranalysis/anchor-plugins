@@ -1,5 +1,7 @@
 package ch.ethz.biol.cell.mpp.nrg.feature.stack;
 
+import java.util.Optional;
+
 /*-
  * #%L
  * anchor-plugin-image-feature
@@ -61,11 +63,15 @@ public abstract class ObjMaskFeatureFromStack extends FeatureStack {
 	
 	@Override
 	public double calc(CacheableParams<FeatureStackParams> paramsCacheable) throws FeatureCalcException {
-			
-		ObjMaskCollection objsCollection = createObjs(
-			paramsCacheable.getParams().getSharedObjs()
-		);
 		
+		Optional<ImageInitParams> sharedObjs = paramsCacheable.getParams().getSharedObjs();
+		
+		if (!sharedObjs.isPresent()) {
+			throw new FeatureCalcException("No ImageInitParams are associated with the FeatureStackParams but they are required");
+		}
+		
+		ObjMaskCollection objsCollection = createObjs(sharedObjs.get());
+				
 		DoubleArrayList featureVals = new DoubleArrayList();
 		
 		// Calculate a feature on each obj mask

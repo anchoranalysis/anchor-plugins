@@ -31,7 +31,7 @@ import java.io.IOException;
 import java.nio.file.Path;
 
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.bean.annotation.Optional;
+import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.bean.error.BeanDuplicateException;
 import org.anchoranalysis.core.cache.IdentityOperation;
 import org.anchoranalysis.core.error.CreateException;
@@ -82,7 +82,7 @@ public class ExportFeaturesHistogramTask extends ExportFeaturesStoreTask<FileInp
 	 * 
 	 * In this way histogramProvider can be used as a type of function around the original histogram.
 	 */
-	@BeanField @Optional
+	@BeanField @OptionalBean
 	private HistogramProvider histogramProvider;
 	// END BEAN PROPERTIES
 

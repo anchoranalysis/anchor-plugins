@@ -35,13 +35,13 @@ import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.calc.ResultsVector;
-import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
 import org.anchoranalysis.feature.init.FeatureInitParams;
 import org.anchoranalysis.feature.name.FeatureNameList;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 import org.anchoranalysis.feature.session.SessionFactory;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorCachedResults;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorMulti;
+import org.anchoranalysis.feature.session.calculator.FeatureCalculatorMultiChangeParams;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorMultiReuse;
 import org.anchoranalysis.feature.shared.SharedFeatureSet;
 import org.anchoranalysis.feature.shared.SharedFeaturesInitParams;
@@ -49,6 +49,7 @@ import org.anchoranalysis.image.feature.init.FeatureInitParamsImageInit;
 import org.anchoranalysis.image.feature.objmask.FeatureObjMaskParams;
 import org.anchoranalysis.image.feature.objmask.pair.merged.FeatureObjMaskPairMergedParams;
 import org.anchoranalysis.image.feature.stack.FeatureStackParams;
+import org.anchoranalysis.image.feature.stack.nrg.FeatureNRGStackParams;
 import org.anchoranalysis.image.init.ImageInitParams;
 
 public class FeatureSessionMergedPairs extends FeatureSessionFlexiFeatureTable<FeatureObjMaskPairMergedParams> {
@@ -211,32 +212,28 @@ public class FeatureSessionMergedPairs extends FeatureSessionFlexiFeatureTable<F
 	}
 
 
-	private ResultsVector calcForParams(FeatureCalcParams params, ErrorReporter errorReporter) throws FeatureCalcException {
-		
-		assert(params instanceof FeatureObjMaskPairMergedParams);
-		FeatureObjMaskPairMergedParams paramsCast = (FeatureObjMaskPairMergedParams) params;
+	private ResultsVector calcForParams(FeatureObjMaskPairMergedParams params, ErrorReporter errorReporter) throws FeatureCalcException {
 		
 		ResultsVectorBuilder helper = new ResultsVectorBuilder(size(), suppressErrors, errorReporter);
 		
-		// First we calculate the Image features (we can pick any object)
-		// TODO ignoring image features. Fix.
-		//calcAndInsert(paramsCast, (a)->a.getObjMask1(), sessionImage );
+		// First we calculate the Image features (we rely on the NRG stack being added by the calculator)
+		helper.calcAndInsert(new FeatureStackParams(), sessionImage );
 		
 		// First features
 		if (includeFirst) {
-			helper.calcAndInsert( paramsCast, (a)->a.getObjMask1(), sessionFirstSecond );
+			helper.calcAndInsert( params, FeatureObjMaskPairMergedParams::getObjMask1, sessionFirstSecond );
 		}
 		
 		// Second features
 		if (includeSecond) {
-			helper.calcAndInsert( paramsCast, (a)->a.getObjMask2(), sessionFirstSecond );
+			helper.calcAndInsert( params, FeatureObjMaskPairMergedParams::getObjMask2, sessionFirstSecond );
 		}
 		
 		// Pair features
-		helper.calcAndInsert(paramsCast, sessionPair );
+		helper.calcAndInsert(params, sessionPair );
 		
 		// Merged. Because we know we have FeatureObjMaskPairMergedParams, we don't need to change params
-		helper.calcAndInsert(paramsCast, (a)->a.getObjMaskMerged(), sessionMerged );
+		helper.calcAndInsert(params, FeatureObjMaskPairMergedParams::getObjMaskMerged, sessionMerged );
 		
 		assert(helper.getResultsVector().hasNoNulls());
 		return helper.getResultsVector();
@@ -244,15 +241,19 @@ public class FeatureSessionMergedPairs extends FeatureSessionFlexiFeatureTable<F
 	
 	
 	
-	private <T extends FeatureCalcParams> FeatureCalculatorMulti<T> createCalculator( FeatureList<T> features, ImageInitParams soImage, NRGStackWithParams nrgStack, LogErrorReporter logErrorReporter ) throws InitException {
+	private <T extends FeatureNRGStackParams> FeatureCalculatorMulti<T> createCalculator( FeatureList<T> features, ImageInitParams soImage, NRGStackWithParams nrgStack, LogErrorReporter logErrorReporter ) throws InitException {
 
 		try {
-			return SessionFactory.createAndStart(
+			FeatureCalculatorMulti<T> calculator = SessionFactory.createAndStart(
 				features,
 				createInitParams(soImage, nrgStack),
 				new SharedFeatureSet<>(),
 				logErrorReporter,
 				ignoreFeaturePrefixes
+			);
+			return new FeatureCalculatorMultiChangeParams<T>(
+				calculator,
+				params->params.setNrgStack(nrgStack)
 			);
 			
 		} catch (FeatureCalcException e) {
@@ -308,10 +309,8 @@ public class FeatureSessionMergedPairs extends FeatureSessionFlexiFeatureTable<F
 		
 		// Number of times we use the listSingle
 		int numSingle = 1 + integerFromBoolean(includeFirst) + integerFromBoolean(includeSecond);
-		
-		int cnt = listImage.size() + listPair.size() + (numSingle * listSingle.size());
-		
-		return cnt;
+				
+		return listImage.size() + listPair.size() + (numSingle * listSingle.size());
 	}
 
 	public boolean isCheckInverse() {

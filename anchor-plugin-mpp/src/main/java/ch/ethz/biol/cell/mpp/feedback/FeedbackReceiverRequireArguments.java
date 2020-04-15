@@ -28,7 +28,7 @@ package ch.ethz.biol.cell.mpp.feedback;
 
 
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.bean.annotation.Optional;
+import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.experiment.bean.RequireArguments;
 import org.anchoranalysis.mpp.sgmn.bean.optscheme.feedback.FeedbackReceiverBean;
 import org.anchoranalysis.mpp.sgmn.optscheme.feedback.OptimizationFeedbackEndParams;
@@ -44,7 +44,7 @@ public class FeedbackReceiverRequireArguments<T> extends FeedbackReceiverBean<T>
 	private static final long serialVersionUID = 1L;
 
 	// START BEAN PROPERTIES
-	@BeanField @Optional
+	@BeanField @OptionalBean
 	private FeedbackReceiverBean<T> feedbackReceiver;
 	
 	@BeanField

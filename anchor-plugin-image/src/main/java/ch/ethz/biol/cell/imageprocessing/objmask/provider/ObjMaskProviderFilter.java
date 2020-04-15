@@ -28,7 +28,7 @@ package ch.ethz.biol.cell.imageprocessing.objmask.provider;
 
 
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.bean.annotation.Optional;
+import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.bean.objmask.filter.ObjMaskFilter;
@@ -50,7 +50,7 @@ public class ObjMaskProviderFilter extends ObjMaskProviderDimensionsOptional {
 	@BeanField
 	private ObjMaskProvider objs;
 	
-	@BeanField @Optional
+	@BeanField @OptionalBean
 	private ObjMaskProvider objsRejected;	// The rejected objects are put here (OPTIONAL)
 	// END BEAN PROPERTIES
 	

@@ -28,7 +28,7 @@ package ch.ethz.biol.cell.sgmn.scale;
 
 
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.bean.annotation.Optional;
+import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.bean.provider.ImageDimProvider;
@@ -45,7 +45,7 @@ public class ScaleCalculatorRelativeDimensions extends ScaleCalculator {
 	private static final long serialVersionUID = 1L;
 	
 	// START BEAN PROPERTIES
-	@BeanField @Optional
+	@BeanField @OptionalBean
 	private ImageDimProvider dimProviderSource;
 	
 	@BeanField

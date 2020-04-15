@@ -31,7 +31,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.bean.annotation.Optional;
+import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.feature.bean.Feature;
@@ -64,7 +64,7 @@ public class ObjMaskFilterFeatureRelationDiscardOutliers extends ObjMaskFilter {
 	@BeanField
 	private FeatureProvider<FeatureObjMaskParams> featureProvider;
 	
-	@BeanField @Optional
+	@BeanField @OptionalBean
 	private ChnlProvider chnlProvider;
 	
 	@BeanField

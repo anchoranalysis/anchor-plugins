@@ -31,7 +31,7 @@ import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.anchoranalysis.bean.annotation.Optional;
+import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.core.random.RandomNumberGenerator;
 import org.anchoranalysis.image.bean.sgmn.binary.BinarySgmn;
 import org.anchoranalysis.image.bean.sgmn.binary.BinarySgmnParameters;
@@ -50,7 +50,7 @@ public class SgmnSequence extends BinarySgmn {
 	private static final long serialVersionUID = 1L;
 	
 	// START BEAN PROPERTIES
-	@Optional
+	@OptionalBean
 	private List<BinarySgmn> listSgmn = new ArrayList<>();
 	// END BEAN PROPERTIES
 	

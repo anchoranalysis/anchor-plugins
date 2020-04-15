@@ -1,5 +1,7 @@
 package ch.ethz.biol.cell.sgmn.graphcuts.nrgdefinition.pixelscore;
 
+
+
 /*
  * #%L
  * anchor-plugin-image-feature
@@ -30,15 +32,9 @@ package ch.ethz.biol.cell.sgmn.graphcuts.nrgdefinition.pixelscore;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.params.KeyValueParams;
-import org.anchoranalysis.feature.cache.CacheableParams;
-import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.image.feature.bean.pixelwise.score.PixelScore;
-import org.anchoranalysis.image.feature.pixelwise.PixelwiseFeatureInitParams;
-import org.anchoranalysis.image.feature.pixelwise.score.PixelScoreFeatureCalcParams;
-
 import ch.ethz.biol.cell.mpp.nrg.feature.operator.LinearScore;
 
-public class PixelScoreLinearKeyValueParams extends PixelScore {
+public class PixelScoreLinearKeyValueParams extends PixelScoreParamsBase {
 
 	/**
 	 * 
@@ -51,22 +47,21 @@ public class PixelScoreLinearKeyValueParams extends PixelScore {
 	
 	@BeanField
 	private String keyMax;
-	
-	@BeanField
-	private int nrgChnlIndex = 0;
 	// END BEAN PROPERTIES
 	
 	private double min;
 	private double max;
-	
+
 	@Override
-	protected double calc(CacheableParams<PixelScoreFeatureCalcParams> paramsCacheable)
-			throws FeatureCalcException {
+	protected void setupParams(KeyValueParams keyValueParams) throws InitException {
+		min = extractParamsAsDouble(keyValueParams, keyMin);
+		max = extractParamsAsDouble(keyValueParams, keyMax);
+	}
+
+	@Override
+	protected double deriveScoreFromPixelVal(int pixelVal) {
 		
-		PixelScoreFeatureCalcParams params = paramsCacheable.getParams();
-		
-		double val = params.getPxl(nrgChnlIndex);
-		double score = (LinearScore.calc( val, min, max )/2) + 0.5;
+		double score = (LinearScore.calc( pixelVal, min, max )/2) + 0.5;
 		
 		if (score<0) {
 			score = 0;
@@ -77,33 +72,6 @@ public class PixelScoreLinearKeyValueParams extends PixelScore {
 		}
 		
 		return score;
-	}
-	
-	@Override
-	public void beforeCalcCast(PixelwiseFeatureInitParams params) throws InitException {
-		
-		super.beforeCalcCast(params);
-		
-		KeyValueParams kpv = params.getKeyValueParams(); 
-
-		if (!kpv.containsKey(keyMin)) {
-			throw new InitException( String.format("Key '%s' does not exist",keyMin));
-		}
-		
-		if (!kpv.containsKey(keyMax)) {
-			throw new InitException( String.format("Key '%s' does not exist",keyMax));
-		}
-		
-		min = Double.valueOf( kpv.getProperty(keyMin) );
-		max = Double.valueOf( kpv.getProperty(keyMax) );
-	}
-
-	public int getNrgChnlIndex() {
-		return nrgChnlIndex;
-	}
-
-	public void setNrgChnlIndex(int nrgChnlIndex) {
-		this.nrgChnlIndex = nrgChnlIndex;
 	}
 
 	public String getKeyMin() {

@@ -30,7 +30,7 @@ package ch.ethz.biol.cell.sgmn.binary;
 import java.nio.ByteBuffer;
 
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.bean.annotation.Optional;
+import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.bean.annotation.Positive;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.random.RandomNumberGenerator;
@@ -59,7 +59,7 @@ public class SgmnMinVolume extends BinarySgmn {
 	@BeanField
 	private BinarySgmn sgmn;
 	
-	@BeanField @Optional
+	@BeanField @OptionalBean
 	private BinarySgmn sgmnToBinarize;
 	
 	@BeanField @Positive

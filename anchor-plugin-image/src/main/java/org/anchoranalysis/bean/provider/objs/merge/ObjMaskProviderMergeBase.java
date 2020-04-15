@@ -29,7 +29,7 @@ package org.anchoranalysis.bean.provider.objs.merge;
 import java.util.List;
 
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.bean.annotation.Optional;
+import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
@@ -50,7 +50,7 @@ public abstract class ObjMaskProviderMergeBase extends ObjMaskProvider {
 	@BeanField
 	private ObjMaskProvider objs;
 	
-	@BeanField @Optional
+	@BeanField @OptionalBean
 	private ObjMaskProvider objsContainer;
 	// END BEAN PROPERTIES
 

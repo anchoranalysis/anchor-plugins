@@ -36,7 +36,7 @@ import org.anchoranalysis.anchor.mpp.bean.init.MPPInitParams;
 import org.anchoranalysis.bean.NamedBean;
 import org.anchoranalysis.bean.annotation.AllowEmpty;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.bean.annotation.Optional;
+import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.bean.define.Define;
 import org.anchoranalysis.bean.error.BeanDuplicateException;
 import org.anchoranalysis.bean.shared.params.keyvalue.KeyValueParamsProvider;
@@ -101,7 +101,7 @@ public class ExportFeaturesObjMaskTask<T extends FeatureCalcParams> extends Expo
 	@BeanField
 	private List<NamedBean<FeatureListProvider<FeatureObjMaskParams>>> listFeaturesObjMask = new ArrayList<>();
 	
-	@BeanField @Optional
+	@BeanField @OptionalBean
 	private Define namedDefinitions;
 	
 	@BeanField
@@ -110,7 +110,7 @@ public class ExportFeaturesObjMaskTask<T extends FeatureCalcParams> extends Expo
 	@BeanField
 	private StackProvider nrgStackProvider;
 	
-	@BeanField @Optional
+	@BeanField @OptionalBean
 	private KeyValueParamsProvider nrgParamsProvider;
 	
 	@BeanField

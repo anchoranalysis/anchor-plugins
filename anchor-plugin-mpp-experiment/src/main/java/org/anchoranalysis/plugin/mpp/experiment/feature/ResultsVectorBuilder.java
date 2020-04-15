@@ -1,5 +1,7 @@
 package org.anchoranalysis.plugin.mpp.experiment.feature;
 
+import java.util.function.Function;
+
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.calc.ResultsVector;
@@ -23,15 +25,19 @@ class ResultsVectorBuilder {
 		this.out = new ResultsVector(size);
 		this.cnt = 0;
 	}
-
-	@FunctionalInterface
-	public static interface ExtractObj {
-		ObjMask extractObj(FeatureObjMaskPairMergedParams params);
-	}
 	
-	// Create new more specific params
-	public void calcAndInsert( FeatureObjMaskPairMergedParams params, ExtractObj extractObj, FeatureCalculatorMulti<FeatureObjMaskParams> session ) throws FeatureCalcException {
-		FeatureObjMaskParams paramsSpecific = createNewSpecificParams(params,extractObj);
+	/** 
+	 * Calculates and inserts a derived obj-mask params from a merged.
+	 */
+	public void calcAndInsert(
+		FeatureObjMaskPairMergedParams params,
+		Function<FeatureObjMaskPairMergedParams,ObjMask> extractObj,
+		FeatureCalculatorMulti<FeatureObjMaskParams> session
+	) throws FeatureCalcException {
+		FeatureObjMaskParams paramsSpecific = new FeatureObjMaskParams(
+			extractObj.apply(params)
+		);
+		//paramsSpecific.setNrgStack( params.getNrgStack() );  // This is necessary? Why?
 		calcAndInsert(paramsSpecific, session);
 	}
 	
@@ -50,12 +56,6 @@ class ResultsVectorBuilder {
 		ResultsVector rvImage =  suppressErrors ? session.calcOneSuppressErrors( params, errorReporter ) : session.calcOne(params) ;
 		out.set(cnt, rvImage);
 		cnt += rvImage.length();
-	}
-
-	private static FeatureObjMaskParams createNewSpecificParams( FeatureObjMaskPairMergedParams params, ExtractObj extractObj ) {
-		FeatureObjMaskParams paramsOut = new FeatureObjMaskParams( extractObj.extractObj(params) );
-		paramsOut.setNrgStack( params.getNrgStack() );
-		return paramsOut;
 	}
 
 	public ResultsVector getResultsVector() {

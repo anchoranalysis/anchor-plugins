@@ -33,7 +33,7 @@ import java.util.function.Function;
 
 import org.anchoranalysis.bean.NamedBean;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.bean.annotation.Optional;
+import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.core.log.LogReporter;
@@ -70,14 +70,14 @@ public abstract class ExportFeaturesTask<T extends InputFromManager, S extends S
 	 * If non-null this file-path is used to determine the group of the file
 	 * If null, the filename is used
 	 */
-	@BeanField @Optional
+	@BeanField @OptionalBean
 	private FilePathGenerator groupGenerator;	// Translates an input file name to its group
 		
-	@BeanField @Optional
+	@BeanField @OptionalBean
 	private FilePathGenerator idGenerator;	// Translates an input file name to a unique ID
 	
 	/** Features applied to each group to aggregate values (takes FeatureResultsVectorCollection) */
-	@BeanField @Optional
+	@BeanField @OptionalBean
 	private List<NamedBean<FeatureListProvider<FeatureResultsVectorCollectionParams>>> listFeaturesAggregate = new ArrayList<>();
 	// END BEAN
 	

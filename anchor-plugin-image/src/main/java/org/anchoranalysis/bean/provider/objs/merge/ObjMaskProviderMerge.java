@@ -27,7 +27,7 @@ package org.anchoranalysis.bean.provider.objs.merge;
  */
 
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.bean.annotation.Optional;
+import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.bean.provider.objs.merge.condition.IncreaseFeatureCondition;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
@@ -46,7 +46,7 @@ public class ObjMaskProviderMerge extends ObjMaskProviderMergeOptionalDistance {
 	@BeanField
 	private boolean replaceWithMidpoint = false;
 	
-	@BeanField @Optional
+	@BeanField @OptionalBean
 	private FeatureEvaluator<FeatureObjMaskParams> featureEvaluator;
 	// END BEAN PROPERTIES
 

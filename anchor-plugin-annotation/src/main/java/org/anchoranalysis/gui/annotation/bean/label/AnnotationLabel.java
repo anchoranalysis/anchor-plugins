@@ -29,7 +29,7 @@ package org.anchoranalysis.gui.annotation.bean.label;
 import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.bean.annotation.AllowEmpty;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.bean.annotation.Optional;
+import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.io.bean.color.RGBColorBean;
 
 public class AnnotationLabel extends AnchorBean<AnnotationLabel> {
@@ -48,7 +48,7 @@ public class AnnotationLabel extends AnchorBean<AnnotationLabel> {
 	/** Descriptive user-friendly label displayed via GUI */
 	private String userFriendlyLabel;
 	
-	@BeanField @Optional
+	@BeanField @OptionalBean
 	/** An optional color associated with the label when displayed via GUI */
 	private RGBColorBean color;
 	

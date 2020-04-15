@@ -35,7 +35,7 @@ import org.anchoranalysis.bean.BeanInstanceMap;
 import org.anchoranalysis.bean.annotation.AllowEmpty;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.DefaultInstance;
-import org.anchoranalysis.bean.annotation.Optional;
+import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.bean.error.BeanMisconfiguredException;
 import org.anchoranalysis.image.io.bean.chnl.map.ImgChnlMapEntry;
 import org.anchoranalysis.image.io.input.ProvidesStackInput;
@@ -86,7 +86,7 @@ public class MultiInputManagerQuick extends MultiInputManagerBase {
 	 * The second group should correspond to the unique name of the dataset.
 	 * The third group should correspond to the unique name of the experiment.
 	 * */
-	@BeanField @Optional
+	@BeanField @OptionalBean
 	private String regex;
 	
 	/** Additional channels other than the main one, which are located in the main raster file
@@ -100,7 +100,7 @@ public class MultiInputManagerQuick extends MultiInputManagerBase {
 	/**
 	 * If set, a CSV is read with two columns: the names of images and a
 	 */
-	@BeanField @Optional
+	@BeanField @OptionalBean
 	private MatchedAppendCsv filterFilesCsv;
 	
 	/**
