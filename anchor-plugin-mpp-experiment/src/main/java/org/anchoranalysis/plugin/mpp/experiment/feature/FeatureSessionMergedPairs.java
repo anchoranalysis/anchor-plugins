@@ -191,15 +191,11 @@ public class FeatureSessionMergedPairs extends FeatureSessionFlexiFeatureTable<F
 		ResultsVector rv = calcForParams(params,errorReporter);
 		
 		if (checkInverse) {
-			//DEBUG
-			//System.out.printf("Calculating inverse for %s\n", params ); 
 			
-			FeatureCalcParams paramsInv = params.createInverse();
-			assert( paramsInv!=null );
-			ResultsVector rvInverse = calcForParams(paramsInv,errorReporter);
-			
-			assert(rvInverse!=null);
-			
+			ResultsVector rvInverse = calcForParams(
+				params.createInverse(),
+				errorReporter
+			);
 			
 			InverseChecker checker = new InverseChecker(
 				includeFirst,
@@ -208,13 +204,7 @@ public class FeatureSessionMergedPairs extends FeatureSessionFlexiFeatureTable<F
 				listSingle.size(),
 				() -> createFeatureNames()
 			);
-						
-			StringBuilder sb = new StringBuilder();
-			if (!checker.isInverseEqual(rv, rvInverse, sb)) {
-				throw new FeatureCalcException(
-					String.format("Feature values are not equal to the inverse for %s:%n%s", params, sb.toString() )
-				);
-			}
+			checker.checkInverseEqual(rv, rvInverse, params);
 		}
 		
 		return rv;
