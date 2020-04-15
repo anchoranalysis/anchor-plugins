@@ -95,14 +95,4 @@ public class ObjectAsStringGenerator<T> extends SingleFileTypeGenerator implemen
 	public ManifestDescription createManifestDescription() {
 		return new ManifestDescription("text", "object");
 	}
-	
-	@Override
-	public void start() throws OutputWriteFailedException {
-	}
-
-
-	@Override
-	public void end() throws OutputWriteFailedException {
-	}
-
 }
