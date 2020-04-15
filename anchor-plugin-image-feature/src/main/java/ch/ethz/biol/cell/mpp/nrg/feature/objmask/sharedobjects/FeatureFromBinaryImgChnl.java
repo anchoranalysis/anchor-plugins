@@ -36,7 +36,7 @@ import org.anchoranalysis.image.bean.provider.BinaryImgChnlProvider;
 import org.anchoranalysis.image.binary.BinaryChnl;
 import org.anchoranalysis.image.feature.bean.objmask.FeatureObjMaskSharedObjects;
 import org.anchoranalysis.image.feature.bean.objmask.pair.FeatureObjMaskPair;
-import org.anchoranalysis.image.feature.init.FeatureInitParamsImageInit;
+import org.anchoranalysis.image.feature.init.FeatureInitParamsSharedObjs;
 import org.anchoranalysis.image.feature.objmask.FeatureObjMaskParams;
 import org.anchoranalysis.image.feature.objmask.pair.FeatureObjMaskPairParams;
 import org.anchoranalysis.image.objmask.ObjMask;
@@ -66,7 +66,7 @@ public class FeatureFromBinaryImgChnl extends FeatureObjMaskSharedObjects {
 
 	
 	@Override
-	public void beforeCalcCast(FeatureInitParamsImageInit params) throws InitException {
+	public void beforeCalcCast(FeatureInitParamsSharedObjs params) throws InitException {
 		super.beforeCalcCast(params);
 		assert( getLogger()!=null );
 		binaryImgChnlProvider.initRecursive(params.getSharedObjects(), getLogger() );

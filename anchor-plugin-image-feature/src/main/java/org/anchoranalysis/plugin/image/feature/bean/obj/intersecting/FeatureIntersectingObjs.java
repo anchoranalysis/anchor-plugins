@@ -34,7 +34,7 @@ import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 import org.anchoranalysis.feature.cache.CacheableParams;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.feature.bean.objmask.FeatureObjMaskSharedObjects;
-import org.anchoranalysis.image.feature.init.FeatureInitParamsImageInit;
+import org.anchoranalysis.image.feature.init.FeatureInitParamsSharedObjs;
 import org.anchoranalysis.image.feature.objmask.FeatureObjMaskParams;
 import org.anchoranalysis.image.objmask.ObjMaskCollection;
 import org.anchoranalysis.plugin.image.feature.obj.intersecting.CalculateIntersectingObjs;
@@ -61,7 +61,7 @@ public abstract class FeatureIntersectingObjs extends FeatureObjMaskSharedObject
 	private ObjMaskCollection searchObjs;
 	
 	@Override
-	public void beforeCalcCast(FeatureInitParamsImageInit params) throws InitException {
+	public void beforeCalcCast(FeatureInitParamsSharedObjs params) throws InitException {
 	
 		try {
 			this.searchObjs = params.getSharedObjects().getObjMaskCollection().getException(id);

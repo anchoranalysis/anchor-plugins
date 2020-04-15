@@ -45,7 +45,7 @@ import org.anchoranalysis.feature.session.calculator.FeatureCalculatorMultiChang
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorMultiReuse;
 import org.anchoranalysis.feature.shared.SharedFeatureSet;
 import org.anchoranalysis.feature.shared.SharedFeaturesInitParams;
-import org.anchoranalysis.image.feature.init.FeatureInitParamsImageInit;
+import org.anchoranalysis.image.feature.init.FeatureInitParamsSharedObjs;
 import org.anchoranalysis.image.feature.objmask.FeatureObjMaskParams;
 import org.anchoranalysis.image.feature.objmask.pair.merged.FeatureObjMaskPairMergedParams;
 import org.anchoranalysis.image.feature.stack.FeatureStackParams;
@@ -123,7 +123,7 @@ public class FeatureSessionMergedPairs extends FeatureSessionFlexiFeatureTable<F
 		
 		// We create more caches for the includeFirst and includeSecond Features and merged features.
 		
-		FeatureInitParamsImageInit paramsInitPair = new FeatureInitParamsImageInit( soImage );
+		FeatureInitParamsSharedObjs paramsInitPair = new FeatureInitParamsSharedObjs( soImage );
 		paramsInitPair.setKeyValueParams( nrgStack.getParams() );
 		paramsInitPair.setNrgStack(nrgStack.getNrgStack());
 		
