@@ -38,7 +38,7 @@ import org.anchoranalysis.feature.init.FeatureInitParams;
 import org.anchoranalysis.feature.session.SessionFactory;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorSingle;
 import org.anchoranalysis.feature.shared.SharedFeatureSet;
-import org.anchoranalysis.image.feature.init.FeatureInitParamsImageInit;
+import org.anchoranalysis.image.feature.init.FeatureInitParamsSharedObjs;
 import org.anchoranalysis.image.init.ImageInitParams;
 import org.anchoranalysis.test.LoggingFixture;
 
@@ -81,7 +81,7 @@ public class FeatureTestCalculator {
 	
 	private static FeatureInitParams createInitParams( Optional<ImageInitParams> imageInit ) {
 		Optional<FeatureInitParams> mapped = imageInit.map( params->
-			new FeatureInitParamsImageInit(params)
+			new FeatureInitParamsSharedObjs(params)
 		);
 		return mapped.orElse(
 			new FeatureInitParams()	
