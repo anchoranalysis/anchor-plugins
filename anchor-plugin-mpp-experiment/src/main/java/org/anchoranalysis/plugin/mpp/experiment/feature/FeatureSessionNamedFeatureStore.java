@@ -41,7 +41,6 @@ import org.anchoranalysis.feature.session.calculator.FeatureCalculatorMulti;
 import org.anchoranalysis.feature.shared.SharedFeatureSet;
 import org.anchoranalysis.feature.shared.SharedFeaturesInitParams;
 import org.anchoranalysis.image.init.ImageInitParams;
-import org.anchoranalysis.plugin.mpp.experiment.bean.feature.flexi.Simple;
 
 public class FeatureSessionNamedFeatureStore<T extends FeatureCalcParams> extends FeatureSessionFlexiFeatureTable<T> {
 
@@ -61,7 +60,11 @@ public class FeatureSessionNamedFeatureStore<T extends FeatureCalcParams> extend
 		//SharedFeatureSet sharedFeatures = new SharedFeatureSet();
 		
 		// Init all the features
-		FeatureInitParams featureInitParams = Simple.createInitParams(soImage,nrgStack.getNrgStack(), nrgStack.getParams());
+		FeatureInitParams featureInitParams = InitParamsHelper.createInitParams(
+			soImage,
+			nrgStack.getNrgStack(),
+			nrgStack.getParams()
+		);
 		
 		try {
 			session = SessionFactory.createAndStart(
