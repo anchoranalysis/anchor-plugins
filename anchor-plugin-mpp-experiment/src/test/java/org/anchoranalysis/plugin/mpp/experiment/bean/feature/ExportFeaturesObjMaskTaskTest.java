@@ -116,7 +116,7 @@ public class ExportFeaturesObjMaskTaskTest {
 		String suffixPathDirSaved
 	) throws OperationFailedException, CreateException {
 		
-		NRGStack nrgStack = NRGStackFixture.create(bigSizeNrg).getNrgStack();
+		NRGStack nrgStack = NRGStackFixture.create(bigSizeNrg, false).getNrgStack();
 		
 		TaskSingleInputHelper.runTaskAndCompareOutputs(
 			MultiInputFixture.createInput(nrgStack),

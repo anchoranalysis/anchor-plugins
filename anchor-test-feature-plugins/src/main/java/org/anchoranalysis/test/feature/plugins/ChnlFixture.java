@@ -64,7 +64,7 @@ public class ChnlFixture {
 	public static final Extent SMALL_2D = SMALL_3D.flatten();
 	public static final Extent MEDIUM_3D = new Extent(69,61,7);
 	public static final Extent MEDIUM_2D = MEDIUM_3D.flatten();
-	public static final Extent LARGE_3D = new Extent(1031,2701,9);
+	public static final Extent LARGE_3D = new Extent(1031,2701,19);
 	public static final Extent LARGE_2D = LARGE_3D.flatten();
 	// END: image size examples
 		
