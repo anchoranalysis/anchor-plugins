@@ -30,7 +30,7 @@ package ch.ethz.biol.cell.imageprocessing.objmask.provider;
 import java.nio.ByteBuffer;
 
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.bean.annotation.Optional;
+import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.bean.provider.BinaryImgChnlProvider;
@@ -57,7 +57,7 @@ public class ObjMaskProviderSgmn extends ObjMaskProvider {
 	private static final long serialVersionUID = 1L;
 	
 	// START BEAN PROPERTIES
-	@BeanField @Optional
+	@BeanField @OptionalBean
 	private BinaryImgChnlProvider binaryImgChnlProviderMask;
 	
 	@BeanField
@@ -66,7 +66,7 @@ public class ObjMaskProviderSgmn extends ObjMaskProvider {
 	@BeanField
 	private ChnlProvider chnlProvider;
 	
-	@BeanField @Optional
+	@BeanField @OptionalBean
 	private ObjMaskProvider objsSeeds;
 	// END BEAN PROPERTIES
 

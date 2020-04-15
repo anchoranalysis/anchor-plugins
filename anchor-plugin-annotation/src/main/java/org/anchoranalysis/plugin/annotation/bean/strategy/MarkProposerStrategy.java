@@ -32,7 +32,7 @@ import java.util.List;
 import org.anchoranalysis.anchor.mpp.feature.bean.mark.MarkEvaluator;
 import org.anchoranalysis.annotation.io.bean.comparer.MultipleComparer;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.bean.annotation.Optional;
+import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.image.io.input.ProvidesStackInput;
 import org.anchoranalysis.io.bean.filepath.generator.FilePathGenerator;
 
@@ -54,20 +54,20 @@ public class MarkProposerStrategy extends SingleFilePathGeneratorStrategy {
 	@BeanField
 	private String markEvaluatorName;
 	
-	@BeanField @Optional
+	@BeanField @OptionalBean
 	private FilePathGenerator defaultCfgFilePathGenerator;
 	
-	@BeanField @Optional
+	@BeanField @OptionalBean
 	private FilePathGenerator keyValueParamsFilePathGenerator;
 	
-	@BeanField @Optional
+	@BeanField @OptionalBean
 	private List<FilePathGenerator> listDisplayRasters = new ArrayList<>();
 	
-	@BeanField @Optional
+	@BeanField @OptionalBean
 	private MultipleComparer multipleComparer;
 	
 	/** If-defined, mark-evaluator that is added to the GUI to support this annotation */
-	@BeanField @Optional
+	@BeanField @OptionalBean
 	private MarkEvaluator markEvaluator;
 	// END BEAN PROPERTIES
 

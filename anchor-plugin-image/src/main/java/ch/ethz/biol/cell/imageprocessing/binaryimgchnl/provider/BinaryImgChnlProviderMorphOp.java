@@ -29,7 +29,7 @@ package ch.ethz.biol.cell.imageprocessing.binaryimgchnl.provider;
 import java.nio.ByteBuffer;
 
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.bean.annotation.Optional;
+import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.bean.annotation.Positive;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.bean.provider.BinaryImgChnlProvider;
@@ -52,7 +52,7 @@ public abstract class BinaryImgChnlProviderMorphOp extends BinaryImgChnlProvider
 	@BeanField
 	private BinaryImgChnlProvider binaryImgChnlProvider;
 	
-	@BeanField @Optional
+	@BeanField @OptionalBean
 	private ChnlProvider backgroundChnlProvider;
 	
 	@BeanField @Positive

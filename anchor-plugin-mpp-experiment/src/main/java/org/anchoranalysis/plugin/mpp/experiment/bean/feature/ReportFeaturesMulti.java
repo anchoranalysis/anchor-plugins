@@ -32,7 +32,7 @@ import java.util.List;
 
 import org.anchoranalysis.anchor.mpp.bean.init.MPPInitParams;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.bean.annotation.Optional;
+import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.bean.define.Define;
 import org.anchoranalysis.bean.shared.random.RandomNumberGeneratorBean;
 import org.anchoranalysis.bean.shared.random.RandomNumberGeneratorMersenneConstantBean;
@@ -67,7 +67,7 @@ public class ReportFeaturesMulti extends Task<MultiInput,CSVWriter> {
 	@BeanField
 	private List<ReportFeature<SharedObjects>> listReportFeatures = new ArrayList<>();
 	
-	@BeanField @Optional
+	@BeanField @OptionalBean
 	private Define namedDefinitions;
 	
 	@BeanField

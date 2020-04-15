@@ -36,7 +36,7 @@ import org.anchoranalysis.anchor.mpp.bean.init.MPPInitParams;
 import org.anchoranalysis.bean.NamedBean;
 import org.anchoranalysis.bean.StringSet;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.bean.annotation.Optional;
+import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.bean.define.Define;
 import org.anchoranalysis.bean.shared.random.RandomNumberGeneratorBean;
 import org.anchoranalysis.bean.shared.random.RandomNumberGeneratorMersenneConstantBean;
@@ -114,10 +114,10 @@ public class ExportObjectsAsCroppedImagesTask extends ExportObjectsBase<MultiInp
 	@BeanField
 	private boolean suppressOutputExceptions = false;
 	
-	@BeanField @Optional
+	@BeanField @OptionalBean
 	private List<NamedBean<StackProvider>> listStackProvider = new ArrayList<>();	// The channels we apply the masks to - all assumed to be of same dimension
 	
-	@BeanField @Optional
+	@BeanField @OptionalBean
 	private List<NamedBean<StackProvider>> listStackProviderMIP = new ArrayList<>();	// The channels we apply the masks to - all assumed to be of same dimension
 	
 	@BeanField

@@ -1,5 +1,8 @@
 package ch.ethz.biol.cell.sgmn.graphcuts.nrgdefinition.pixelscore;
 
+import java.util.List;
+import java.util.Optional;
+
 /*
  * #%L
  * anchor-plugin-image-feature
@@ -29,11 +32,9 @@ package ch.ethz.biol.cell.sgmn.graphcuts.nrgdefinition.pixelscore;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.InitException;
-import org.anchoranalysis.feature.cache.CacheableParams;
+import org.anchoranalysis.core.params.KeyValueParams;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.image.feature.bean.pixelwise.score.PixelScore;
-import org.anchoranalysis.image.feature.pixelwise.PixelwiseFeatureInitParams;
-import org.anchoranalysis.image.feature.pixelwise.score.PixelScoreFeatureCalcParams;
+import org.anchoranalysis.image.feature.bean.pixelwise.PixelScore;
 import org.anchoranalysis.image.histogram.Histogram;
 
 // Same as PixelScoreDifference but calculates the width as the std deviation of the histogram
@@ -65,18 +66,21 @@ public class PixelScoreDifferenceStdDev extends PixelScore {
 	private double width;
 	
 	@Override
-	public void beforeCalcCast(PixelwiseFeatureInitParams params) throws InitException {
-		super.beforeCalcCast(params);
+	public void init(List<Histogram> histograms, Optional<KeyValueParams> keyValueParams) throws InitException {
 		
-		Histogram hist = params.getHist(nrgChnlIndexHistogram);
-		width = hist.stdDev();
+		width = histograms.get(nrgChnlIndexHistogram).stdDev();
 	}
 	
 	@Override
-	public double calc(CacheableParams<PixelScoreFeatureCalcParams> params)
-			throws FeatureCalcException {
+	public double calc(int[] pixelVals) throws FeatureCalcException {
 		
-		return PixelScoreDifference.calcDiffFromParams(params, nrgChnlIndexFirst, nrgChnlIndexSecond, width*widthFactor, minDifference);
+		return PixelScoreDifference.calcDiffFromParams(
+			pixelVals,
+			nrgChnlIndexFirst,
+			nrgChnlIndexSecond,
+			width*widthFactor,
+			minDifference
+		);
 	}
 
 	public double getWidth() {

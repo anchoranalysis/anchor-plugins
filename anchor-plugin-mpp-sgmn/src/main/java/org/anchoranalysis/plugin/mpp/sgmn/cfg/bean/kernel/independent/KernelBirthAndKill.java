@@ -41,7 +41,7 @@ import org.anchoranalysis.anchor.mpp.proposer.ProposalAbnormalFailureException;
 import org.anchoranalysis.anchor.mpp.proposer.ProposerContext;
 import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.bean.annotation.Optional;
+import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.mpp.sgmn.bean.kernel.KernelPosNeg;
@@ -63,7 +63,7 @@ public class KernelBirthAndKill extends KernelPosNeg<CfgNRGPixelized> {
 	private MarkProposer markProposer = null;
 	
 	// Optional proposal for doing an additional birth
-	@BeanField @Optional
+	@BeanField @OptionalBean
 	private MarkProposer markProposerAdditionalBirth = null;
 	
 	@BeanField

@@ -36,7 +36,7 @@ import java.util.List;
 import org.anchoranalysis.bean.NamedBean;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.DefaultInstance;
-import org.anchoranalysis.bean.annotation.Optional;
+import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.core.cache.CachedOperation;
 import org.anchoranalysis.core.cache.ExecuteException;
 import org.anchoranalysis.core.progress.ProgressReporter;
@@ -65,7 +65,7 @@ public class NamedChnlsAppend extends NamedChnlsBase {
 	@BeanField @DefaultInstance
 	private RasterReader rasterReader;
 	
-	@BeanField @Optional
+	@BeanField @OptionalBean
 	private List<NamedBean<FilePathGenerator>> listAppend;
 	
 	@BeanField

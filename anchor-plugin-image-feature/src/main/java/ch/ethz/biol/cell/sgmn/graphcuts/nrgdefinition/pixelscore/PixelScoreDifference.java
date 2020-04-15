@@ -28,18 +28,16 @@ package ch.ethz.biol.cell.sgmn.graphcuts.nrgdefinition.pixelscore;
 
 
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.feature.cache.CacheableParams;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.image.feature.bean.pixelwise.score.PixelScore;
-import org.anchoranalysis.image.feature.pixelwise.score.PixelScoreFeatureCalcParams;
+import org.anchoranalysis.image.feature.bean.pixelwise.PixelScore;
 
 public class PixelScoreDifference extends PixelScore {
-
+	
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	
+
 	// START BEAN PROPERTIES
 	@BeanField
 	private int nrgChnlIndexFirst = 0;
@@ -78,25 +76,24 @@ public class PixelScoreDifference extends PixelScore {
 	}
 
 	public static double calcDiffFromParams(
-		CacheableParams<PixelScoreFeatureCalcParams> params,
+		int[] pixelVals,
 		int nrgChnlIndexFirst,
 		int nrgChnlIndexSecond,
 		double width,
 		int minDifference
 	) {
 		return calcDiffFromValue(
-			params.getParams().getPxl(nrgChnlIndexFirst),
-			params.getParams().getPxl(nrgChnlIndexSecond),
+			pixelVals[nrgChnlIndexFirst],
+			pixelVals[nrgChnlIndexSecond],
 			width,
 			minDifference
 		);
 	}
 	
 	@Override
-	public double calc(CacheableParams<PixelScoreFeatureCalcParams> params)
-			throws FeatureCalcException {
+	public double calc(int[] pixelVals)	throws FeatureCalcException {
 		return calcDiffFromParams(
-			params,
+			pixelVals,
 			nrgChnlIndexFirst,
 			nrgChnlIndexSecond,
 			width,

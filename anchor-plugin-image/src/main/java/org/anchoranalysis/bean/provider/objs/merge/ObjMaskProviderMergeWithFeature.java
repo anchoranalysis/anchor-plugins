@@ -28,7 +28,7 @@ package org.anchoranalysis.bean.provider.objs.merge;
 
 
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.bean.annotation.Optional;
+import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.bean.provider.objs.merge.MergeGraph.AssignPriority;
 import org.anchoranalysis.bean.provider.objs.merge.condition.AndCondition;
 import org.anchoranalysis.bean.provider.objs.merge.condition.NeighbourhoodCond;
@@ -68,7 +68,7 @@ public abstract class ObjMaskProviderMergeWithFeature extends ObjMaskProviderMer
 	/**
 	 * Saves all objects that are inputs to the merge, outputs from the merge, or intermediate merges along the way
 	 */
-	@BeanField @Optional
+	@BeanField @OptionalBean
 	private ObjMaskProvider objsSave;
 	// END BEAN PROPERTIES
 	

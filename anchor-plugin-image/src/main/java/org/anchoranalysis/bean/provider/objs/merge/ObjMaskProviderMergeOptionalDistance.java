@@ -27,7 +27,7 @@ package org.anchoranalysis.bean.provider.objs.merge;
  */
 
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.bean.annotation.Optional;
+import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.bean.provider.objs.merge.condition.BeforeCondition;
 import org.anchoranalysis.bean.provider.objs.merge.condition.DistanceCondition;
 import org.anchoranalysis.core.error.OperationFailedException;
@@ -54,10 +54,10 @@ public abstract class ObjMaskProviderMergeOptionalDistance extends ObjMaskProvid
 	@BeanField
 	private boolean suppressZ = false;
 	
-	@BeanField @Optional
+	@BeanField @OptionalBean
 	private ImageDimProvider resProvider;		// optionally provides a resolution
 	
-	@BeanField @Optional
+	@BeanField @OptionalBean
 	private UnitValueDistance maxDist;			// optionally provides a maximum distance
 	// END BEAN FIELDS
 	

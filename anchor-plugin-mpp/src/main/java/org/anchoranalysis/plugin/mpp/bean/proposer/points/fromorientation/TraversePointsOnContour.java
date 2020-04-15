@@ -37,7 +37,7 @@ import org.anchoranalysis.anchor.mpp.mark.conic.MarkConicFactory;
 import org.anchoranalysis.anchor.mpp.mark.points.MarkPointListFactory;
 import org.anchoranalysis.anchor.mpp.proposer.visualization.ICreateProposalVisualization;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.bean.annotation.Optional;
+import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.core.color.RGBColor;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.geometry.Point3d;
@@ -63,7 +63,7 @@ public class TraversePointsOnContour extends PointsFromOrientationProposer {
 	@BeanField
 	private OutlinePixelsRetriever outlinePixelsRetriever;
 	
-	@BeanField @Optional
+	@BeanField @OptionalBean
 	private OutlinePixelsRetriever outlinePixelsRetrieverReverse;
 	// END BEAN PROPERTIES
 	

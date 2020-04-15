@@ -43,7 +43,7 @@ import org.anchoranalysis.anchor.mpp.proposer.error.ErrorNode;
 import org.anchoranalysis.anchor.mpp.proposer.visualization.CreateProposeVisualizationList;
 import org.anchoranalysis.anchor.mpp.proposer.visualization.ICreateProposalVisualization;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.bean.annotation.Optional;
+import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.core.color.RGBColor;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
@@ -87,7 +87,7 @@ public class XYOrientationExtendToZ extends PointsProposer {
 	@BeanField
 	private BinaryImgChnlProvider binaryImgChnlProvider;
 	
-	@BeanField @Optional
+	@BeanField @OptionalBean
 	private BinaryImgChnlProvider binaryImgChnlProviderFilled;
 	
 	@BeanField

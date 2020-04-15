@@ -33,7 +33,7 @@ import java.util.List;
 import org.anchoranalysis.bean.StringSet;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.NonEmpty;
-import org.anchoranalysis.bean.annotation.Optional;
+import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.bean.annotation.SkipInit;
 import org.anchoranalysis.bean.error.BeanDuplicateException;
 import org.anchoranalysis.bean.permute.ApplyPermutations;
@@ -70,7 +70,7 @@ public class FeatureListProviderPermute<S, T extends FeatureCalcParams> extends 
 	@BeanField @SkipInit
 	private Feature<T> feature;
 	
-	@BeanField @Optional
+	@BeanField @OptionalBean
 	private StringSet referencesFeatureListCreator;	// Makes sure a particular feature list creator is evaluated
 	
 	@BeanField @NonEmpty

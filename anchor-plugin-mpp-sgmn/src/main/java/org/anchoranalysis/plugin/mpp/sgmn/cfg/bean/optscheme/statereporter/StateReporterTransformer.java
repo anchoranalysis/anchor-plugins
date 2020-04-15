@@ -27,7 +27,7 @@ package org.anchoranalysis.plugin.mpp.sgmn.cfg.bean.optscheme.statereporter;
  */
 
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.bean.annotation.Optional;
+import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.mpp.sgmn.optscheme.StateReporter;
 import org.anchoranalysis.mpp.sgmn.transformer.StateTransformer;
 import org.anchoranalysis.mpp.sgmn.transformer.StateTransformerBean;
@@ -44,7 +44,7 @@ public class StateReporterTransformer<T,S> extends StateReporter<T, S> {
 	@BeanField
 	private StateTransformerBean<T,S> transformerPrimary;
 	
-	@BeanField @Optional
+	@BeanField @OptionalBean
 	private StateTransformerBean<T,S> transformerSecondary;
 	// END BEAN PROPERTIES
 

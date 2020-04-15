@@ -31,7 +31,7 @@ import java.util.List;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.NonNegative;
-import org.anchoranalysis.bean.annotation.Optional;
+import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.feature.cachedcalculation.CachedCalculation;
 import org.anchoranalysis.image.feature.bean.objmask.FeatureObjMask;
@@ -54,7 +54,7 @@ public abstract class IntensityGradientBase extends FeatureObjMask {
 	@BeanField @NonNegative
 	private int nrgIndexY = -1;
 	
-	@BeanField @Optional
+	@BeanField @OptionalBean
 	private int nrgIndexZ = -1;
 	
 	@BeanField

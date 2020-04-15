@@ -34,7 +34,7 @@ import java.util.List;
 
 import org.anchoranalysis.bean.BeanInstanceMap;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.bean.annotation.Optional;
+import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.bean.error.BeanMisconfiguredException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.io.bean.provider.file.FileProvider;
@@ -55,10 +55,10 @@ public class CoupledManifestsInputManager extends InputManager<ManifestCouplingD
 	private static final long serialVersionUID = 512394797830863641L;
 	
 	// START BEAN PROPERTIES
-	@BeanField @Optional
+	@BeanField @OptionalBean
 	private FileProvider manifestInputFileSet;
 	
-	@BeanField @Optional
+	@BeanField @OptionalBean
 	private FileProvider manifestExperimentInputFileSet;
 	
 	@BeanField

@@ -1,5 +1,7 @@
 package ch.ethz.biol.cell.mpp.nrg.feature.stack;
 
+import java.util.Optional;
+
 /*
  * #%L
  * anchor-plugin-image-feature
@@ -34,6 +36,7 @@ import org.anchoranalysis.feature.cache.CacheableParams;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.feature.bean.FeatureStack;
 import org.anchoranalysis.image.feature.stack.FeatureStackParams;
+import org.anchoranalysis.image.init.ImageInitParams;
 
 public class KeyValueParam extends FeatureStack {
 
@@ -54,7 +57,13 @@ public class KeyValueParam extends FeatureStack {
 	public double calc(CacheableParams<FeatureStackParams> params)
 			throws FeatureCalcException {
 		try {
-			KeyValueParams kpv = params.getParams().getSharedObjs().getParams().getNamedKeyValueParamsCollection().getException(collectionID);
+			Optional<ImageInitParams> initParams = params.getParams().getSharedObjs();
+			
+			if (!initParams.isPresent()) {
+				throw new FeatureCalcException("No ImageInitParams are associated with the FeatureStackParams");
+			}
+			
+			KeyValueParams kpv = initParams.get().getParams().getNamedKeyValueParamsCollection().getException(collectionID);
 			return kpv.getPropertyAsDouble(key);
 			
 		} catch (NamedProviderGetException e) {

@@ -30,7 +30,7 @@ package ch.ethz.biol.cell.mpp.mark.ellipsoidfitter.findoutlinepixelangle;
 import java.nio.ByteBuffer;
 
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.bean.annotation.Optional;
+import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.error.OperationFailedException;
@@ -56,7 +56,7 @@ public class FindOutlinePixelAngleOnImage extends FindOutlinePixelAngle {
 	@BeanField
 	private BinaryImgChnlProvider binaryImgChnlProvider;
 	
-	@BeanField @Optional
+	@BeanField @OptionalBean
 	private UnitValueDistance maxDistance;
 	// END BEANS
 	

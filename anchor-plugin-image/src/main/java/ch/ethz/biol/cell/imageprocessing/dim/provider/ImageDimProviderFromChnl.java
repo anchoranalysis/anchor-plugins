@@ -29,7 +29,7 @@ import org.anchoranalysis.bean.annotation.AllowEmpty;
  */
 
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.bean.annotation.Optional;
+import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.name.provider.NamedProviderGetException;
@@ -57,7 +57,7 @@ public class ImageDimProviderFromChnl extends ImageDimProvider {
 	@BeanField @AllowEmpty
 	private String id = "";
 	
-	@BeanField @Optional
+	@BeanField @OptionalBean
 	private ChnlProvider chnlProvider;
 	// END BEAN PROPERTIES
 	

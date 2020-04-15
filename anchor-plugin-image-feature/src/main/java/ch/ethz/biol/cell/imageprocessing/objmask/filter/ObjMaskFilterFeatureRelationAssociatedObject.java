@@ -30,7 +30,7 @@ package ch.ethz.biol.cell.imageprocessing.objmask.filter;
 import java.util.List;
 
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.bean.annotation.Optional;
+import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.bean.shared.relation.RelationBean;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
@@ -56,7 +56,7 @@ public class ObjMaskFilterFeatureRelationAssociatedObject extends ObjMaskFilter 
 	@BeanField
 	private FeatureEvaluator<FeatureObjMaskParams> featureEvaluator;
 	
-	@BeanField @Optional
+	@BeanField @OptionalBean
 	private FeatureEvaluator<FeatureObjMaskParams> featureEvaluatorMatch;		// Optionally uses a different evaluator for the matched objects
 	
 	@BeanField

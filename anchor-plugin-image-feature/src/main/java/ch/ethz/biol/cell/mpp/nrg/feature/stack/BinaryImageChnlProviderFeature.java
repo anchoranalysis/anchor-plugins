@@ -28,6 +28,7 @@ package ch.ethz.biol.cell.mpp.nrg.feature.stack;
 
 
 import java.nio.ByteBuffer;
+import java.util.Optional;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.SkipInit;
@@ -43,6 +44,7 @@ import org.anchoranalysis.image.binary.voxel.BinaryVoxelBoxByte;
 import org.anchoranalysis.image.feature.bean.FeatureStack;
 import org.anchoranalysis.image.feature.objmask.FeatureObjMaskParams;
 import org.anchoranalysis.image.feature.stack.FeatureStackParams;
+import org.anchoranalysis.image.init.ImageInitParams;
 import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.anchoranalysis.image.voxel.datatype.IncorrectVoxelDataTypeException;
@@ -68,7 +70,11 @@ public class BinaryImageChnlProviderFeature extends FeatureStack {
 
 		BinaryChnl bc;
 		try {
-			binaryImgChnlProvider.initRecursive(params.getParams().getSharedObjs(), getLogger() );
+			Optional<ImageInitParams> sharedObjs = params.getParams().getSharedObjs();
+			if (!sharedObjs.isPresent()) {
+				throw new FeatureCalcException("No ImageInitParams are associated with the FeatureStackParams but they are required");
+			}
+			binaryImgChnlProvider.initRecursive(sharedObjs.get(), getLogger() );
 			bc = binaryImgChnlProvider.create();
 		} catch (InitException | CreateException e1) {
 			throw new FeatureCalcException(e1);

@@ -30,7 +30,7 @@ package ch.ethz.biol.cell.imageprocessing.chnl.provider;
 import java.nio.ByteBuffer;
 
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.bean.annotation.Optional;
+import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.bean.provider.BinaryImgChnlProvider;
@@ -57,10 +57,10 @@ public class ChnlProviderMeanFilter2D extends ChnlProvider {
 	@BeanField
 	private ChnlProvider chnlProvider;
 	
-	@BeanField @Optional
+	@BeanField @OptionalBean
 	private BinaryImgChnlProvider binaryImgChnlProviderMaskInput;		// A mask on which voxels are considered when calculating the filter
 	
-	@BeanField @Optional
+	@BeanField @OptionalBean
 	private BinaryImgChnlProvider binaryImgChnlProviderMaskOutput;		// A mask on which voxels are outputted with a filter value
 	
 	@BeanField

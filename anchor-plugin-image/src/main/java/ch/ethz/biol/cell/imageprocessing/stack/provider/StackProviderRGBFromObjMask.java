@@ -30,7 +30,7 @@ package ch.ethz.biol.cell.imageprocessing.stack.provider;
 
 
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.bean.annotation.Optional;
+import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.core.color.ColorList;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
@@ -56,7 +56,7 @@ public class StackProviderRGBFromObjMask extends StackProviderWithBackground {
 	@BeanField
 	private boolean outline = false;
 	
-	@BeanField @Optional
+	@BeanField @OptionalBean
 	private ColorListProvider colorListProvider;	// If null, uses the colorListGenerator below
 	
 	@BeanField

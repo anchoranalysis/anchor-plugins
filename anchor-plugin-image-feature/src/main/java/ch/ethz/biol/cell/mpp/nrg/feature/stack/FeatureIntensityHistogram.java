@@ -32,7 +32,6 @@ import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.feature.cache.CacheableParams;
 import org.anchoranalysis.feature.cachedcalculation.CachedCalculation;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.feature.init.FeatureInitParams;
 import org.anchoranalysis.image.feature.bean.FeatureStack;
 import org.anchoranalysis.image.feature.stack.FeatureStackParams;
 import org.anchoranalysis.image.histogram.Histogram;
@@ -61,9 +60,9 @@ public abstract class FeatureIntensityHistogram extends FeatureStack {
 	// END BEAN FIELDS
 	
 	@Override
-	public void beforeCalc(FeatureInitParams params)
+	public void beforeCalc()
 			throws InitException {
-		super.beforeCalc(params);
+		super.beforeCalc();
 		
 		if (nrgIndexMask < -1) {
 			throw new InitException(

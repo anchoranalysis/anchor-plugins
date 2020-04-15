@@ -28,12 +28,8 @@ package ch.ethz.biol.cell.sgmn.graphcuts.nrgdefinition.pixelscore;
 
 
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.feature.cache.CacheableParams;
-import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.image.feature.bean.pixelwise.score.PixelScore;
-import org.anchoranalysis.image.feature.pixelwise.score.PixelScoreFeatureCalcParams;
 
-public class PixelScoreNormalizeByConstant extends PixelScore {
+public class PixelScoreNormalizeByConstant extends PixelScoreSingleChnl {
 
 	/**
 	 * 
@@ -42,25 +38,12 @@ public class PixelScoreNormalizeByConstant extends PixelScore {
 	
 	// START BEAN PROPERTIES
 	@BeanField
-	private int nrgChnlIndex = 0;
-	
-	@BeanField
 	private double value = 255;
 	// END BEAN PROPERTIES
-		
+	
 	@Override
-	public double calc(CacheableParams<PixelScoreFeatureCalcParams> paramsCacheable)
-			throws FeatureCalcException {
-		PixelScoreFeatureCalcParams params = paramsCacheable.getParams();
-		return ((double) params.getPxl(nrgChnlIndex))/value;
-	}
-
-	public int getNrgChnlIndex() {
-		return nrgChnlIndex;
-	}
-
-	public void setNrgChnlIndex(int nrgChnlIndex) {
-		this.nrgChnlIndex = nrgChnlIndex;
+	protected double deriveScoreFromPixelVal(int pixelVal) {
+		return pixelVal/value;
 	}
 
 	public double getValue() {
@@ -70,5 +53,4 @@ public class PixelScoreNormalizeByConstant extends PixelScore {
 	public void setValue(double value) {
 		this.value = value;
 	}
-
 }

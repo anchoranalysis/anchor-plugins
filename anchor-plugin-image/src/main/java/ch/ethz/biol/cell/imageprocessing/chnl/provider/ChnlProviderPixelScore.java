@@ -30,16 +30,13 @@ package ch.ethz.biol.cell.imageprocessing.chnl.provider;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.bean.annotation.Optional;
-import org.anchoranalysis.bean.annotation.SkipInit;
+import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.bean.shared.params.keyvalue.KeyValueParamsProvider;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.params.KeyValueParams;
-import org.anchoranalysis.feature.bean.Feature;
-import org.anchoranalysis.feature.init.FeatureInitParams;
 import org.anchoranalysis.image.bean.provider.BinaryImgChnlProvider;
 import org.anchoranalysis.image.bean.provider.ChnlProvider;
 import org.anchoranalysis.image.bean.provider.HistogramProvider;
@@ -47,9 +44,8 @@ import org.anchoranalysis.image.binary.BinaryChnl;
 import org.anchoranalysis.image.chnl.Chnl;
 import org.anchoranalysis.image.chnl.factory.ChnlFactoryByte;
 import org.anchoranalysis.image.extent.BoundingBox;
-import org.anchoranalysis.image.feature.pixelwise.score.PixelScoreFeatureCalcParams;
+import org.anchoranalysis.image.feature.bean.pixelwise.PixelScore;
 import org.anchoranalysis.image.histogram.Histogram;
-import org.anchoranalysis.image.init.ImageInitParams;
 import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.anchoranalysis.image.voxel.box.VoxelBoxList;
@@ -69,14 +65,14 @@ public class ChnlProviderPixelScore extends ChnlProvider {
 	@BeanField
 	private ChnlProvider intensityProvider;
 	
-	@BeanField @Optional
+	@BeanField @OptionalBean
 	private ChnlProvider gradientProvider;
 	
-	@BeanField @Optional
+	@BeanField @OptionalBean
 	private BinaryImgChnlProvider maskProvider;
 	
-	@BeanField @SkipInit
-	private Feature<PixelScoreFeatureCalcParams> pixelScore;
+	@BeanField
+	private PixelScore pixelScore;
 	
 	@BeanField
 	private List<ChnlProvider> listChnlProviderExtra = new ArrayList<>();
@@ -84,7 +80,7 @@ public class ChnlProviderPixelScore extends ChnlProvider {
 	@BeanField
 	private List<HistogramProvider> listHistogramProviderExtra = new ArrayList<>();
 	
-	@BeanField @Optional
+	@BeanField @OptionalBean
 	private KeyValueParamsProvider keyValueParamsProvider;
 	// END BEAN PROPERTIES
 	
@@ -120,13 +116,6 @@ public class ChnlProviderPixelScore extends ChnlProvider {
 		);
 	}
 	
-
-	@Override
-	public void onInit(ImageInitParams so) throws InitException {
-		super.onInit(so);
-		pixelScore.initRecursive( new FeatureInitParams(), getLogger() );
-	}
-	
 	@Override
 	public Chnl create() throws CreateException {
 		
@@ -134,11 +123,12 @@ public class ChnlProviderPixelScore extends ChnlProvider {
 				
 		VoxelBoxList listVb = createVoxelBoxList( chnlIntensity);
 		List<Histogram> listHistExtra = ProviderBeanUtilities.listFromBeans(listHistogramProviderExtra);
-		KeyValueParams kpv;
+		
+		Optional<KeyValueParams> kpv;
 		if (keyValueParamsProvider!=null) {
-			kpv = keyValueParamsProvider.create();
+			kpv = Optional.of(keyValueParamsProvider.create());
 		} else {
-			kpv = new KeyValueParams();
+			kpv = Optional.empty();
 		}
 
 		ObjMask objMask = createMaskOrNull();
@@ -147,17 +137,15 @@ public class ChnlProviderPixelScore extends ChnlProvider {
 		if (objMask!=null) {
 			CreateVoxelBoxFromPixelwiseFeatureWithMask creator = new CreateVoxelBoxFromPixelwiseFeatureWithMask(
 				listVb,
-				getSharedObjects().getRandomNumberGenerator(),
 				kpv,
 				listHistExtra
 			);
 			
-			vbPixelScore = creator.createVoxelBoxFromPixelScore(pixelScore,objMask, getLogger() );
+			vbPixelScore = creator.createVoxelBoxFromPixelScore(pixelScore, objMask);
 			
 		} else {
 			CreateVoxelBoxFromPixelwiseFeature creator = new CreateVoxelBoxFromPixelwiseFeature(
 				listVb,
-				getSharedObjects().getRandomNumberGenerator(),
 				kpv,
 				listHistExtra
 			);
@@ -192,11 +180,11 @@ public class ChnlProviderPixelScore extends ChnlProvider {
 		this.maskProvider = maskProvider;
 	}
 
-	public Feature<PixelScoreFeatureCalcParams> getPixelScore() {
+	public PixelScore getPixelScore() {
 		return pixelScore;
 	}
 
-	public void setPixelScore(Feature<PixelScoreFeatureCalcParams> pixelScore) {
+	public void setPixelScore(PixelScore pixelScore) {
 		this.pixelScore = pixelScore;
 	}
 
