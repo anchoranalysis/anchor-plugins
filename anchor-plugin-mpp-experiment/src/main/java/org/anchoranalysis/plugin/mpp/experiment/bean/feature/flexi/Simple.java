@@ -32,17 +32,12 @@ import java.util.List;
 import org.anchoranalysis.bean.NamedBean;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.log.LogErrorReporter;
-import org.anchoranalysis.core.params.KeyValueParams;
 import org.anchoranalysis.feature.bean.list.FeatureListProvider;
-import org.anchoranalysis.feature.init.FeatureInitParams;
 import org.anchoranalysis.feature.list.NamedFeatureStore;
 import org.anchoranalysis.feature.list.NamedFeatureStoreFactory;
-import org.anchoranalysis.feature.nrg.NRGStack;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 import org.anchoranalysis.image.extent.Extent;
-import org.anchoranalysis.image.feature.init.FeatureInitParamsImageInit;
 import org.anchoranalysis.image.feature.objmask.FeatureObjMaskParams;
-import org.anchoranalysis.image.init.ImageInitParams;
 import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.image.objmask.ObjMaskCollection;
 import org.anchoranalysis.plugin.mpp.experiment.feature.FeatureSessionFlexiFeatureTable;
@@ -68,18 +63,6 @@ public class Simple extends FlexiFeatureTable<FeatureObjMaskParams> {
 	) throws CreateException {
 		NamedFeatureStore<FeatureObjMaskParams> namedFeatures = NamedFeatureStoreFactory.createNamedFeatureList(list);
 		return new FeatureSessionNamedFeatureStore<>(namedFeatures);
-	}
-	
-	public static FeatureInitParams createInitParams( ImageInitParams so, NRGStack nrgStack, KeyValueParams keyValueParams ) {
-		FeatureInitParams params;
-		if (so!=null) {
-			params = new FeatureInitParamsImageInit( so );
-			params.setKeyValueParams(keyValueParams);
-		} else {
-			params = new FeatureInitParams( keyValueParams );
-		}
-		params.setNrgStack(nrgStack);
-		return params;
 	}
 
 	@Override

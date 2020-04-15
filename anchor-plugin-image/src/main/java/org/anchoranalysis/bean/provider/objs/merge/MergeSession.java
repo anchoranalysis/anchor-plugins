@@ -35,14 +35,13 @@ import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
 import org.anchoranalysis.feature.init.FeatureInitParams;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
-import org.anchoranalysis.feature.session.FeatureSession;
 import org.anchoranalysis.feature.session.SequentialSession;
 import org.anchoranalysis.feature.shared.SharedFeatureSet;
 import org.anchoranalysis.image.feature.objmask.pair.merged.FeatureObjMaskPairMergedParams;
 import org.anchoranalysis.image.objmask.ObjMask;
 
 // TODO broken, to be fixed
-class MergeSession extends FeatureSession {
+class MergeSession {
 
 	private SequentialSession<FeatureObjMaskPairMergedParams> delegate;
 	
