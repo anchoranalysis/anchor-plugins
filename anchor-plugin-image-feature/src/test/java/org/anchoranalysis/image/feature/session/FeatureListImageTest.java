@@ -35,6 +35,7 @@ import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.calc.ResultsVector;
 import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
+import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 import org.anchoranalysis.feature.session.SessionFactory;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorMulti;
 import org.anchoranalysis.image.feature.histogram.FeatureHistogramParams;
@@ -58,6 +59,8 @@ import org.junit.Test;
 public class FeatureListImageTest {
 	
 	private static TestLoader loader = TestLoader.createFromMavenWorkingDir();
+	
+	private static NRGStackWithParams NRG_STACK = NRGStackFixture.create(true, true);
 	
 	@Before
     public void setUp() {
@@ -107,7 +110,7 @@ public class FeatureListImageTest {
 		);
 		
 		ObjMaskFixture objMaskFixture = new ObjMaskFixture(
-			NRGStackFixture.create(false).getDimensions()
+			NRG_STACK.getDimensions()
 		);
 		
 		assertCalc(
@@ -162,15 +165,13 @@ public class FeatureListImageTest {
 	private static FeatureHistogramParams createParams( Histogram hist ) throws CreateException {
 		return new FeatureHistogramParams(
 			hist,
-			NRGStackFixture.create(false).getDimensions().getRes()
+			NRG_STACK.getDimensions().getRes()
 		);
 	}
 	
 	private static FeatureObjMaskParams createParams( ObjMask om ) throws CreateException {
 		FeatureObjMaskParams params = new FeatureObjMaskParams(om);
-		params.setNrgStack(
-			NRGStackFixture.create(false)		
-		);
+		params.setNrgStack(NRG_STACK);
 		return params;
 	}
 }

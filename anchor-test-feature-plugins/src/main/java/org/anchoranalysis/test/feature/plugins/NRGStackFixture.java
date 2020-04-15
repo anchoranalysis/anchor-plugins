@@ -35,9 +35,9 @@ import org.anchoranalysis.test.feature.plugins.ChnlFixture.IntensityFunction;
 
 public class NRGStackFixture {
 
-	public static NRGStackWithParams create( boolean big ) {
+	public static NRGStackWithParams create( boolean big, boolean use3d ) {
 	
-		Extent size = big ? ChnlFixture.LARGE_2D : ChnlFixture.MEDIUM_2D;
+		Extent size = muxExtent(big, use3d);
 		
 		try {
 			Stack stack = new Stack();
@@ -51,6 +51,14 @@ public class NRGStackFixture {
 		} catch (IncorrectImageSizeException e) {
 			assert false;
 			return null;
+		}
+	}
+	
+	private static Extent muxExtent( boolean big, boolean use3d ) {
+		if (use3d) {
+			return big ? ChnlFixture.LARGE_3D : ChnlFixture.MEDIUM_3D;
+		} else {
+			return big ? ChnlFixture.LARGE_2D : ChnlFixture.MEDIUM_2D;
 		}
 	}
 	
