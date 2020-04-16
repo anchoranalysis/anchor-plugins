@@ -49,7 +49,7 @@ public class ObjMaskFilterSequence extends ObjMaskFilter {
 	@Override
 	public void filter(ObjMaskCollection objs, ImageDim dim, ObjMaskCollection objsRejected) throws OperationFailedException {
 		
-		for (ObjMaskFilter indFilter : sequence) {
+		for (ObjMaskFilter indFilter : sequence.getList()) {
 			indFilter.filter(objs, dim, objsRejected);
 		}
 
