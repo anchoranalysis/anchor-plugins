@@ -68,7 +68,7 @@ public class ObjMaskProviderSplitByObjCollection extends ObjMaskProviderDimensio
 		// Then we find connected components
 		
 		// Should be set to 0 by default
-		VoxelBox<IntBuffer> vbId = VoxelBoxFactory.getInt().create( objToSplit.getBoundingBox().extnt() );
+		VoxelBox<IntBuffer> vbId = VoxelBoxFactory.instance().getInt().create( objToSplit.getBoundingBox().extnt() );
 		BoundedVoxelBox<IntBuffer> boundedVbId = new BoundedVoxelBox<>( vbId );
 		
 		// Populate boundedVbId with id values

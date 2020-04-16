@@ -175,7 +175,7 @@ public class ChnlProviderMeanFilter2D extends ChnlProvider {
 		BinaryValuesByte bvbIn = vbMaskInput!=null ? vbMaskInput.getBinaryValues().createByte() : null;
 		BinaryValuesByte bvbOut = vbMaskOutput!=null ? vbMaskOutput.getBinaryValues().createByte() : null;
 		
-		VoxelBox<ByteBuffer> vbOut = VoxelBoxFactory.getByte().create(e); 
+		VoxelBox<ByteBuffer> vbOut = VoxelBoxFactory.instance().getByte().create(e); 
 		
 		for (int z=0; z<e.getZ(); z++) {
 		

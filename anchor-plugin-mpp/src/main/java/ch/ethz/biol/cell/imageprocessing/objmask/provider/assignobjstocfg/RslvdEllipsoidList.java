@@ -186,7 +186,7 @@ public class RslvdEllipsoidList implements Iterable<RslvdEllipsoid> {
 					// We add an empty object (just to preserve a 1-1 mapping between the inclthe correct total number)
 					objsOut.add(
 						new ObjMask(
-							VoxelBoxFactory.getByte().create(new Extent(1,1,1)))
+							VoxelBoxFactory.instance().getByte().create(new Extent(1,1,1)))
 						);
 				}
 				
