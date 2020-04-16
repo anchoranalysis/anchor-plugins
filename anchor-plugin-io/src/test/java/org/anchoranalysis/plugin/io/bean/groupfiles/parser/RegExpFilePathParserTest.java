@@ -29,7 +29,6 @@ package org.anchoranalysis.plugin.io.bean.groupfiles.parser;
 
 import static org.junit.Assert.*;
 
-import org.anchoranalysis.plugin.io.bean.groupfiles.parser.RegExpFilePathParser;
 import org.junit.Test;
 
 public class RegExpFilePathParserTest {

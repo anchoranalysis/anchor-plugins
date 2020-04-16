@@ -29,6 +29,7 @@ package ch.ethz.biol.cell.imageprocessing.chnl.provider;
 
 import net.imglib2.algorithm.gauss3.Gauss3;
 import net.imglib2.exception.IncompatibleTypeException;
+import net.imglib2.img.Img;
 import net.imglib2.img.NativeImg;
 import net.imglib2.type.numeric.NumericType;
 import net.imglib2.view.Views;
@@ -67,11 +68,7 @@ public class ChnlProviderGaussianBlur extends ChnlProvider {
 	@BeanField
 	private boolean sigmaInMeters = false;	// Treats sigma if it's microns
 	// END BEAN PROPERTIES
-	
-	private static <T extends NumericType<T>,S> void doBlur( NativeImg<T,S> img, ImageRes sr, double[] sigma ) throws IncompatibleTypeException {
-		Gauss3.gauss(sigma, Views.extendMirrorSingle(img), img );
-	}
-	
+
 	// Assumes XY res are identical
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public static Chnl blur( Chnl chnl, double sigma, boolean do3D ) throws CreateException {
@@ -80,14 +77,14 @@ public class ChnlProviderGaussianBlur extends ChnlProvider {
 		try {
 			if (do3D) {
 				double[] sigmaArr = new double[]{ sigma, sigma, sigma/chnl.getDimensions().getRes().getZRelRes() };
-				NativeImg img = ImgLib2Wrap.wrap( chnl.getVoxelBox(), true );
+				Img img = ImgLib2Wrap.wrap( chnl.getVoxelBox() );
 				doBlur(img,chnl.getDimensions().getRes(),sigmaArr);
 			} else {
 				
 				double[] sigmaArr = new double[]{ sigma, sigma };
 				
 				for( int z=0; z<chnl.getDimensions().getZ(); z++) {
-					NativeImg img = ImgLib2Wrap.wrap( chnl.getVoxelBox().any().getPixelsForPlane(z), e );
+					Img img = ImgLib2Wrap.wrap( chnl.getVoxelBox().any().getPixelsForPlane(z), e );
 					doBlur(img,chnl.getDimensions().getRes(),sigmaArr);
 				}
 			}
@@ -106,6 +103,11 @@ public class ChnlProviderGaussianBlur extends ChnlProvider {
 		
 		return blur( chnl, sigmaToUse, do3D );
 	}
+		
+	private static <T extends NumericType<T>> void doBlur( Img<T> img, ImageRes sr, double[] sigma ) throws IncompatibleTypeException {
+		Gauss3.gauss(sigma, Views.extendMirrorSingle(img), img );
+	}
+	
 	
 	private double calcSigma( ImageDim dim ) throws CreateException {
 		
@@ -149,11 +151,9 @@ public class ChnlProviderGaussianBlur extends ChnlProvider {
 		do3D = do3d;
 	}
 
-
 	public boolean isSigmaInMeters() {
 		return sigmaInMeters;
 	}
-
 
 	public void setSigmaInMeters(boolean sigmaInMeters) {
 		this.sigmaInMeters = sigmaInMeters;

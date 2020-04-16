@@ -43,7 +43,7 @@ import org.anchoranalysis.image.objmask.factory.CreateFromPointsFactory;
 import net.imglib2.Localizable;
 import net.imglib2.algorithm.componenttree.mser.Mser;
 import net.imglib2.algorithm.componenttree.mser.MserTree;
-import net.imglib2.img.NativeImg;
+import net.imglib2.img.Img;
 import net.imglib2.type.Type;
 
 /**
@@ -86,7 +86,7 @@ public class ObjMaskProviderMser extends ObjMaskProvider {
 		Chnl chnl = chnlProvider.create();
 		
 		@SuppressWarnings("rawtypes")
-		NativeImg img = ImgLib2Wrap.wrap( chnl.getVoxelBox(), false );
+		Img img = ImgLib2Wrap.wrap( chnl.getVoxelBox() );
 		
 		final MserTree<?> treeDarkToBright = MserTree.buildMserTree(
 			img,

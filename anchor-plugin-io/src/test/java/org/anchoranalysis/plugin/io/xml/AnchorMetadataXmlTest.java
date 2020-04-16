@@ -37,7 +37,6 @@ import javax.xml.parsers.ParserConfigurationException;
 
 import org.anchoranalysis.image.extent.ImageRes;
 import org.anchoranalysis.image.io.RasterIOException;
-import org.anchoranalysis.plugin.io.xml.AnchorMetadataXml;
 import org.anchoranalysis.test.TestLoader;
 import org.junit.Rule;
 import org.junit.Test;
