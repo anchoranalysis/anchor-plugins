@@ -61,6 +61,8 @@ public class BinaryImgChnlProviderFromObjMasks extends BinaryImgChnlProvider {
 	private boolean invert = false;
 	// END BEAN
 	
+	
+	
 	public static BinaryChnl create(  ObjMaskCollection objs, ImageDim sd, boolean invert ) throws CreateException {
 
 		BinaryValues bv = BinaryValues.getDefault();
