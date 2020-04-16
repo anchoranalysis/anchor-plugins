@@ -90,7 +90,7 @@ public class SgmnSecondary extends BinarySgmn {
 			Extent e = objMask.getBoundingBox().extnt();
 			BoundingBox bboxE = new BoundingBox(e);
 			
-			VoxelBoxFactoryTypeBound<ByteBuffer> factory = VoxelBoxFactory.getByte();
+			VoxelBoxFactoryTypeBound<ByteBuffer> factory = VoxelBoxFactory.instance().getByte();
 			
 			// We create a new image which is the orig (obj Masked) minus the areas which have survived the second segmentation
 			VoxelBox<ByteBuffer> diffBuffer = factory.create( e );

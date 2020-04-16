@@ -115,7 +115,7 @@ public class SgmnThrshldFeatureObjMask extends BinarySgmn {
 		BoundingBox bboxE = new BoundingBox(objMask.getVoxelBox().extnt());
 		
 		// We just want to return the area under the objMask
-		VoxelBox<ByteBuffer> maskDup = VoxelBoxFactory.getByte().create( objMask.getVoxelBox().extnt() );
+		VoxelBox<ByteBuffer> maskDup = VoxelBoxFactory.instance().getByte().create( objMask.getVoxelBox().extnt() );
 		voxelBox.asByte().copyPixelsToCheckMask(
 			objMask.getBoundingBox(),
 			maskDup,

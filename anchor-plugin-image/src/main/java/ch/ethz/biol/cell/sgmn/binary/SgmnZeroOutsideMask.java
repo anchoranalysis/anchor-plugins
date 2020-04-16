@@ -65,7 +65,7 @@ public class SgmnZeroOutsideMask extends BinarySgmn {
 		
 		VoxelBox<ByteBuffer> voxelBoxByte = voxelBox.asByte();
 		
-		VoxelBox<ByteBuffer> destBuffer = VoxelBoxFactory.getByte().create( objMask.getBoundingBox().extnt() ); 
+		VoxelBox<ByteBuffer> destBuffer = VoxelBoxFactory.instance().getByte().create( objMask.getBoundingBox().extnt() ); 
 		BoundingBox fullExtnt = new BoundingBox( new Point3i(0,0,0), objMask.getBoundingBox().extnt() );
 		
 		voxelBoxByte.copyPixelsToCheckMask(

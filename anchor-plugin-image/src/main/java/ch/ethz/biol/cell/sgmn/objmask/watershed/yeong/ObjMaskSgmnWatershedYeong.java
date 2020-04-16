@@ -76,7 +76,7 @@ public class ObjMaskSgmnWatershedYeong extends ObjMaskSgmn {
 	public ObjMaskCollection sgmn(Chnl chnl, SeedCollection seeds)
 			throws SgmnFailedException {
 		
-		VoxelBox<IntBuffer> matSVoxelBox = VoxelBoxFactory.getInt().create( chnl.getDimensions().getExtnt() );
+		VoxelBox<IntBuffer> matSVoxelBox = VoxelBoxFactory.instance().getInt().create( chnl.getDimensions().getExtnt() );
 		
 		EncodedVoxelBox matS = new EncodedVoxelBox(matSVoxelBox );
 		
@@ -115,7 +115,7 @@ public class ObjMaskSgmnWatershedYeong extends ObjMaskSgmn {
 	public ObjMaskCollection sgmn(Chnl chnl, ObjMask objMask,
 			SeedCollection seeds) throws SgmnFailedException {
 		
-		VoxelBox<IntBuffer> matSVoxelBox = VoxelBoxFactory.getInt().create( chnl.getDimensions().getExtnt() );
+		VoxelBox<IntBuffer> matSVoxelBox = VoxelBoxFactory.instance().getInt().create( chnl.getDimensions().getExtnt() );
 
 		EncodedVoxelBox matS = new EncodedVoxelBox(matSVoxelBox );
 		

@@ -41,7 +41,7 @@ class BBoxUtilities {
 
 		assert(maybeBiggerBBox!=null);
 		if (!om.getBoundingBox().equals(maybeBiggerBBox)) {
-			VoxelBox<ByteBuffer> vbLarge = VoxelBoxFactory.getByte().create( maybeBiggerBBox.extnt() );
+			VoxelBox<ByteBuffer> vbLarge = VoxelBoxFactory.instance().getByte().create( maybeBiggerBBox.extnt() );
 			
 			BoundingBox bbLocal = new BoundingBox( om.getBoundingBox() );
 			bbLocal.setCrnrMin( bbLocal.relPosTo(maybeBiggerBBox) );

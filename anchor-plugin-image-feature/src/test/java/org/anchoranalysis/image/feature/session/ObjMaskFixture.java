@@ -75,7 +75,7 @@ class ObjMaskFixture {
 		
 		assertTrue( dim.contains(bbox) );
 		
-		VoxelBox<ByteBuffer> vb = VoxelBoxFactory.getByte().create(extnt);
+		VoxelBox<ByteBuffer> vb = VoxelBoxFactory.instance().getByte().create(extnt);
 		BinaryValues bv =  BinaryValues.getDefault();
 		BinaryValuesByte bvb = bv.createByte();
 

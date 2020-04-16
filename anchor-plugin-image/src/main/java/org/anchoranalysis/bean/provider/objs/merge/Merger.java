@@ -187,7 +187,7 @@ class Merger {
 		
 	private static ObjMask createSinglePixelObjMask( Point3i pnt ) {
 		Extent e = new Extent(1,1,1);
-		VoxelBox<ByteBuffer> vb = VoxelBoxFactory.getByte().create( e );
+		VoxelBox<ByteBuffer> vb = VoxelBoxFactory.instance().getByte().create( e );
 		BinaryVoxelBox<ByteBuffer> bvb = new BinaryVoxelBoxByte(vb, BinaryValues.getDefault() );
 		bvb.setAllPixelsToOn();
 		BoundingBox bbox = new BoundingBox(pnt, e);
