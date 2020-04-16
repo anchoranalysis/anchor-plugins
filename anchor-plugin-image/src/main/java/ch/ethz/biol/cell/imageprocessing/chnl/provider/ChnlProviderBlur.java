@@ -2,7 +2,7 @@ package ch.ethz.biol.cell.imageprocessing.chnl.provider;
 
 /*
  * #%L
- * anchor-plugin-ij
+ * anchor-plugin-image
  * %%
  * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
  * %%
@@ -28,13 +28,22 @@ package ch.ethz.biol.cell.imageprocessing.chnl.provider;
 
 
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.bean.annotation.Positive;
 import org.anchoranalysis.core.error.CreateException;
+import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.bean.provider.ChnlProvider;
 import org.anchoranalysis.image.chnl.Chnl;
-import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
+import org.anchoranalysis.plugin.image.bean.blur.BlurGaussian3d;
+import org.anchoranalysis.plugin.image.bean.blur.BlurStrategy;
 
-public class ChnlProviderIlluminationCorrectSingle extends ChnlProvider {
+/**
+ * Blurs an image
+ * 
+ * <p>This is a mutable operation that alters the current image</p>
+ * 
+ * @author Owen Feehan
+ *
+ */
+public class ChnlProviderBlur extends ChnlProvider {
 
 
 	/**
@@ -46,43 +55,25 @@ public class ChnlProviderIlluminationCorrectSingle extends ChnlProvider {
 	@BeanField
 	private ChnlProvider chnlProvider;
 	
-	@BeanField @Positive
-	private double sigma = 3;
-	
 	@BeanField
-	private boolean do3D = true;
+	private BlurStrategy strategy = new BlurGaussian3d();
 	// END BEAN PROPERTIES
-
+	
 	@Override
 	public Chnl create() throws CreateException {
 		
 		Chnl chnl = chnlProvider.create();
-
-		Chnl chnlBlurred = chnl.duplicate();
-		chnlBlurred = ChnlProviderGaussianBlur.blur(chnlBlurred, sigma, do3D);
 		
-		int maxPixel = chnlBlurred.getVoxelBox().any().ceilOfMaxPixel();
-	
-		for( int z=0; z<chnl.getDimensions().getZ(); z++ ) {
-			
-			VoxelBuffer<?> vb = chnl.getVoxelBox().any().getPixelsForPlane(z);
-			
-			VoxelBuffer<?> vbBlurred = chnlBlurred.getVoxelBox().any().getPixelsForPlane(z);
-			
-			for( int y=0; y<chnl.getDimensions().getY(); y++ ) {
-				for( int x=0; x<chnl.getDimensions().getX(); x++ ) {
-					
-					int offset = chnl.getDimensions().getExtnt().offset(x,y);
-					
-					int valIn = vb.getInt(offset);
-					int div = vbBlurred.getInt(offset);
-					
-					div = Math.max(1, div);
-					int valOut = (int) Math.round( ( (double) valIn / div) * maxPixel );
-					vb.putInt(offset, valOut);
-				}
-			}
+		try {
+			strategy.blur(
+				chnl.getVoxelBox(),
+				chnl.getDimensions(),
+				getLogger().getLogReporter()
+			);
+		} catch (OperationFailedException e) {
+			throw new CreateException(e);
 		}
+		
 		return chnl;
 	}
 
@@ -94,19 +85,11 @@ public class ChnlProviderIlluminationCorrectSingle extends ChnlProvider {
 		this.chnlProvider = chnlProvider;
 	}
 
-	public double getSigma() {
-		return sigma;
+	public BlurStrategy getStrategy() {
+		return strategy;
 	}
 
-	public void setSigma(double sigma) {
-		this.sigma = sigma;
-	}
-
-	public boolean isDo3D() {
-		return do3D;
-	}
-
-	public void setDo3D(boolean do3d) {
-		do3D = do3d;
+	public void setStrategy(BlurStrategy strategy) {
+		this.strategy = strategy;
 	}
 }

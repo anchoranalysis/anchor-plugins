@@ -29,9 +29,9 @@ class GradientCalculator {
 	/** calculate central-difference instead of backward-difference (finite differences) */
 	private boolean centralDiff = false;
 	
+
 	/** iff TRUE, we apply a l2norm to our difference (useful for getting magnitude if working with more than 1 dimension)? */
 	private boolean norm = true;
-		
 	
 	/**
 	 * Constructor
@@ -61,13 +61,30 @@ class GradientCalculator {
 		VoxelBox<FloatBuffer> gradientOut
 	) throws CreateException {
 		
-		Img<?> in = ImgLib2Wrap.wrap(signalIn);
-		
-		Img<FloatType> natOut = ImgLib2Wrap.wrapFloat(gradientOut);
-		
-		process(in,	natOut);
+		calcGradientImgLib2(
+			ImgLib2Wrap.wrap(signalIn),				// Input channel
+			ImgLib2Wrap.wrapFloat(gradientOut)		// Output channel
+		);
 	}
 
+	public boolean isCentralDiff() {
+		return centralDiff;
+	}
+
+
+	public void setCentralDiff(boolean centralDiff) {
+		this.centralDiff = centralDiff;
+	}
+
+
+	public boolean isNorm() {
+		return norm;
+	}
+
+	public void setNorm(boolean norm) {
+		this.norm = norm;
+	}
+	
 
 	/**
 	 * Uses ImgLib2 to calculate gradient
@@ -77,16 +94,12 @@ class GradientCalculator {
 	 * @param input input-image
 	 * @param output output-image
 	 */
-	private <T extends RealType<T>> void process( Img<?> input, Img<FloatType> output ) {
+	private void calcGradientImgLib2( Img<? extends RealType<?>> input, Img<FloatType> output ) {
 		
-		// We need a fixed type for data structures
-		@SuppressWarnings("unchecked")
-		Img<T> inputCast = (Img<T>) input;
-		
-		Cursor<T> in = Views.iterable(inputCast).localizingCursor();
+		Cursor<? extends RealType<?>> in = Views.iterable(input).localizingCursor();
 		RandomAccess<FloatType> oc = output.randomAccess();
 		
-		OutOfBounds<T> ra = Views.extendMirrorDouble(inputCast).randomAccess(); 
+		OutOfBounds<? extends RealType<?>> ra = Views.extendMirrorDouble(input).randomAccess(); 
 		
  		while (in.hasNext()) {
 			in.fwd();
@@ -112,7 +125,7 @@ class GradientCalculator {
 
 	}
 	
-	private <T extends RealType<T>> double processDimensions(OutOfBounds<T> ra, int numDims, float central) {
+	private double processDimensions(OutOfBounds<? extends RealType<?>> ra, int numDims, float central) {
 		
 		double diffSum = 0.0;
 		
