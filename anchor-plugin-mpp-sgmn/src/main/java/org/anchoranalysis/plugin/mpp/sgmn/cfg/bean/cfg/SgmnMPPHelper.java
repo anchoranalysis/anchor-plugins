@@ -35,7 +35,6 @@ import org.anchoranalysis.anchor.mpp.feature.nrg.scheme.NRGSchemeWithSharedFeatu
  */
 
 import org.anchoranalysis.bean.define.Define;
-import org.anchoranalysis.core.cache.CacheMonitor;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.error.OperationFailedException;
@@ -129,7 +128,6 @@ class SgmnMPPHelper {
 				nrgScheme,
 				featureInit.getSharedFeatureSet(),
 				nrgSchemeIndCacheSize,
-				new CacheMonitor(),
 				logger
 			);
 			
