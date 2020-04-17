@@ -28,6 +28,7 @@ package ch.ethz.biol.cell.mpp.nrg.feature.objmask.sharedobjects;
 
 
 import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.bean.annotation.SkipInit;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.feature.cache.CacheableParams;
@@ -58,12 +59,13 @@ public class FeatureFromBinaryImgChnl extends FeatureObjMaskSharedObjects {
 	@BeanField
 	private FeatureObjMaskPair item;
 	
-	@BeanField
+	// This cannot be initialized in the normal way, as Feature isn't contained in a Shared-Objects
+	// container. So instead it's initialized at a later point.
+	@BeanField @SkipInit
 	private BinaryImgChnlProvider binaryImgChnlProvider;
 	// END BEAN PROPERTIES
 
 	private ObjMask objFromBinary = null;
-
 	
 	@Override
 	public void beforeCalcCast(FeatureInitParamsSharedObjs params) throws InitException {
@@ -105,7 +107,6 @@ public class FeatureFromBinaryImgChnl extends FeatureObjMaskSharedObjects {
 		return item;
 	}
 
-
 	public void setItem(FeatureObjMaskPair item) {
 		this.item = item;
 	}
@@ -119,14 +120,4 @@ public class FeatureFromBinaryImgChnl extends FeatureObjMaskSharedObjects {
 	public void setBinaryImgChnlProvider(BinaryImgChnlProvider binaryImgChnlProvider) {
 		this.binaryImgChnlProvider = binaryImgChnlProvider;
 	}
-
-
-
-
-
-
-
-
-
-
 }
