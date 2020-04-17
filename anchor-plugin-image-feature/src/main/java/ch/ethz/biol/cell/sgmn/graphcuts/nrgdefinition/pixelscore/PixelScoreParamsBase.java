@@ -43,7 +43,7 @@ public abstract class PixelScoreParamsBase extends PixelScoreSingleChnl {
 	@Override
 	public void init(List<Histogram> histograms, Optional<KeyValueParams> keyValueParams) throws InitException {
 		
-		if (keyValueParams.isPresent()) {
+		if (!keyValueParams.isPresent()) {
 			throw new InitException("This pixel-score required key-value-params to be present, but they are not");
 		}
 		
