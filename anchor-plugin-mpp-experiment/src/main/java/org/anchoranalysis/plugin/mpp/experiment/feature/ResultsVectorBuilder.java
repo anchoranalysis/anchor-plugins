@@ -79,7 +79,7 @@ class ResultsVectorBuilder {
 	 * @throws FeatureCalcException
 	 */
 	public <T extends FeatureCalcParams> void calcAndInsert( T params, FeatureCalculatorMulti<T> session ) throws FeatureCalcException {
-		ResultsVector rvImage =  suppressErrors ? session.calcOneSuppressErrors( params, errorReporter ) : session.calcOne(params) ;
+		ResultsVector rvImage =  suppressErrors ? session.calcSuppressErrors( params, errorReporter ) : session.calc(params) ;
 		out.set(cnt, rvImage);
 		cnt += rvImage.length();
 	}

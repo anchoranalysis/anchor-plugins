@@ -28,6 +28,7 @@ package ch.ethz.biol.cell.imageprocessing.objmask.provider;
 
 
 import java.nio.IntBuffer;
+import java.util.Optional;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
@@ -75,12 +76,20 @@ public class ObjMaskProviderSplitByObjCollection extends ObjMaskProviderDimensio
 		int cnt = 1;
 		for( ObjMask omLocal : objsSplitBy ) {
 		
-			ObjMask intersect = objToSplit.intersect(omLocal, dim);
-			//ObjMask intersect = objToSplit.duplicate();
-			intersect.getBoundingBox().getCrnrMin().sub(objToSplit.getBoundingBox().getCrnrMin());
+			Optional<ObjMask> intersect = objToSplit.intersect(
+				omLocal,
+				dim
+			);
+			
+			// If there's no intersection, there's nothing to do
+			if (!intersect.isPresent()) {
+				continue;
+			}
+			
+			intersect.get().getBoundingBox().getCrnrMin().sub(objToSplit.getBoundingBox().getCrnrMin());
 			
 			// We make the intersection relative to objToSplit
-			boundedVbId.getVoxelBox().setPixelsCheckMask( intersect, cnt++);
+			boundedVbId.getVoxelBox().setPixelsCheckMask( intersect.get(), cnt++);
 		}
 		
 		//TempBoundOutputManager temp = new TempBoundOutputManager();

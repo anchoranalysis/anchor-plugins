@@ -1,5 +1,7 @@
 package ch.ethz.biol.cell.mpp.nrg.feature.objmask;
 
+import java.util.Optional;
+
 import org.anchoranalysis.bean.BeanInstanceMap;
 
 /*
@@ -117,7 +119,13 @@ public class IntensityMeanShell extends FeatureObjMask {
 			
 			if (nrgIndexMask!=-1) {
 				ObjMask omMask = new ObjMask( params.getNrgStack().getNrgStack().getChnl(nrgIndexMask).getVoxelBox().asByte() );
-				om = om.intersect(omMask, params.getNrgStack().getNrgStack().getDimensions() );
+				Optional<ObjMask> omIntersected = om.intersect(omMask, params.getNrgStack().getNrgStack().getDimensions() );
+				
+				if (omIntersected.isPresent()) {
+					om = omIntersected.get();
+				} else {
+					throw new FeatureCalcException("There are 0 intersecting pixels in the object-mask");
+				}
 			}
 		
 			return IntensityMean.calcMeanIntensityObjMask(chnl, om );

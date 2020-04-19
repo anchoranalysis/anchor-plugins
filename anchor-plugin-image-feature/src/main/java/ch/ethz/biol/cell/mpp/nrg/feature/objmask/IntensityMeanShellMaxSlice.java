@@ -1,5 +1,7 @@
 package ch.ethz.biol.cell.mpp.nrg.feature.objmask;
 
+import java.util.Optional;
+
 import org.anchoranalysis.bean.BeanInstanceMap;
 
 /*
@@ -118,10 +120,16 @@ public class IntensityMeanShellMaxSlice extends FeatureObjMask {
 		}
 		
 		if (nrgIndexMask!=-1) {
-			om = om.intersect(
+			Optional<ObjMask> omIntersected = om.intersect(
 				createNrgMask(nrgStack),
 				nrgStack.getDimensions()
 			);
+			
+			if (omIntersected.isPresent()) {
+				om = omIntersected.get();
+			} else {
+				return emptyValue;
+			}
 		}
 				
 		Chnl chnl = nrgStack.getChnl(nrgIndex);

@@ -1,5 +1,7 @@
 package ch.ethz.biol.cell.mpp.nrg.feature.objmask.cachedcalculation;
 
+import java.util.Optional;
+
 /*
  * #%L
  * anchor-plugin-image
@@ -38,6 +40,7 @@ import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.image.objmask.morph.MorphologicalErosion;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
+
 
 public class CalculateShellObjMask extends CachedCalculation<ObjMask,FeatureObjMaskParams> {
 
@@ -141,9 +144,12 @@ public class CalculateShellObjMask extends CachedCalculation<ObjMask,FeatureObjM
 			if (inverse) {
 				ObjMask omDup = om.duplicate();
 				
-				omShell = omShell.intersect( omDup, sd );
-				
-				omDup.binaryVoxelBox().setPixelsCheckMaskOff( omShell.relMaskTo(omDup.getBoundingBox()) );
+				Optional<ObjMask> omShellIntersected = omShell.intersect( omDup, sd );
+				omShellIntersected.ifPresent( shellIntersected ->
+					omDup.binaryVoxelBox().setPixelsCheckMaskOff(
+						shellIntersected.relMaskTo(omDup.getBoundingBox())
+					)
+				);
 				return omDup;
 				
 			} else {

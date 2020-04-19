@@ -1,5 +1,7 @@
 package ch.ethz.biol.cell.imageprocessing.objmask.provider;
 
+import java.util.Optional;
+
 /*
  * #%L
  * anchor-plugin-image
@@ -41,6 +43,8 @@ import ch.ethz.biol.cell.mpp.nrg.feature.objmask.cachedcalculation.CalculatePair
 
 /**
  * Accepts two objects. Finds their intersection (after optional dilation, and optional erosion at the end)
+ * 
+ * <p>If there is no intersection, then no object is returned</p>
  * 
  * See {@link CalculatePairIntersectionCommutative} 
  * 
@@ -90,25 +94,36 @@ public class ObjMaskProviderPairIntersection extends ObjMaskProviderDimensions {
 		
 		ObjMask om1 = objPair.get(0);
 		ObjMask om2 = objPair.get(1);
-				
-		return new ObjMaskCollection( calcIntersection(om1,om2) );
+		
+		Optional<ObjMask> omIntersection = calcIntersection(om1,om2);
+		if (omIntersection.isPresent()) {
+			return new ObjMaskCollection(omIntersection.get());
+		} else {
+			return new ObjMaskCollection();
+		}
 	}
 	
-	private ObjMask calcIntersection( ObjMask om1, ObjMask om2 ) throws CreateException {
+	private Optional<ObjMask> calcIntersection( ObjMask om1, ObjMask om2 ) throws CreateException {
 		
 		try {
-			CachedCalculation<ObjMask,FeatureObjMaskPairParams> op = CalculatePairIntersectionCommutative.createWithoutCache(iterationsDilation, iterationsErosion, do3D);
+			FeatureObjMaskPairParams params = createParams(om1, om2);
 			
-			FeatureObjMaskPairParams params = new FeatureObjMaskPairParams(om1, om2);
-			params.setNrgStack(
-				new NRGStackWithParams(
-					createDims()
-				)
-			);
+			CachedCalculation<Optional<ObjMask>,FeatureObjMaskPairParams> op = CalculatePairIntersectionCommutative
+					.createWithoutCache(iterationsDilation, iterationsErosion, do3D);
 			return op.getOrCalculate( params );
 		} catch (ExecuteException e) {
 			throw new CreateException(e.getCause());
 		}
+	}
+	
+	private FeatureObjMaskPairParams createParams( ObjMask om1, ObjMask om2 ) throws CreateException {
+		FeatureObjMaskPairParams params = new FeatureObjMaskPairParams(om1, om2);
+		params.setNrgStack(
+			new NRGStackWithParams(
+				createDims()
+			)
+		);
+		return params;
 	}
 
 	public ObjMaskProvider getObjs() {

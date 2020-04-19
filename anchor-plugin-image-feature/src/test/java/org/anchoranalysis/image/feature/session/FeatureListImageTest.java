@@ -72,10 +72,10 @@ public class FeatureListImageTest {
 		
 		FeatureCalculatorMulti<FeatureCalcParams> session = createAndStart(ConstantsInListFixture.create());
 		
-		ResultsVector rv1 = session.calcOne( (FeatureCalcParams) null );
+		ResultsVector rv1 = session.calc( (FeatureCalcParams) null );
 		ConstantsInListFixture.checkResultVector(rv1);
 		
-		ResultsVector rv2 = session.calcOne( (FeatureCalcParams) null );
+		ResultsVector rv2 = session.calc( (FeatureCalcParams) null );
 		ConstantsInListFixture.checkResultVector(rv2);
 	}
 	
@@ -88,14 +88,14 @@ public class FeatureListImageTest {
 		);
 		
 		assertCalc(
-			session.calcOne(
+			session.calc(
 				createParams(HistogramFixture.createAscending())
 			),
 			32450.0, 30870.0, 14685.0, 140.0, 214.0, 0.005545343137254902					
 		);
 		
 		assertCalc(
-			session.calcOne(
+			session.calc(
 				createParams(HistogramFixture.createDescending())
 			),
 			27730.0, 19110.0, 2145.0, 41.0, 115.0, 0.0022671568627450982					
@@ -114,21 +114,21 @@ public class FeatureListImageTest {
 		);
 		
 		assertCalc(
-			session.calcOne(
+			session.calc(
 				createParams(objMaskFixture.create1())
 			),
 			31.5, 29.0, 3.0, 59.0, 225.02857142857144, 2744.0, 560.0					
 		);
 		
 		assertCalc(
-			session.calcOne(
+			session.calc(
 				createParams(objMaskFixture.create2())
 			),
 			7.5, 21.0, 7.0, 28.5, 195.93956043956044, 108.0, 66.0					
 		);
 		
 		assertCalc(
-			session.calcOne(
+			session.calc(
 				createParams(objMaskFixture.create3())
 			),
 			21.5, 35.0, 2.0, 55.5, 159.37306501547988, 612.0, 162.0					

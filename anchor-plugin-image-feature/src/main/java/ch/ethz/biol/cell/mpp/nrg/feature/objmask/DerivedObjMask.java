@@ -2,6 +2,8 @@ package ch.ethz.biol.cell.mpp.nrg.feature.objmask;
 
 
 
+import java.util.Optional;
+
 /*
  * #%L
  * anchor-plugin-image-feature
@@ -60,16 +62,24 @@ public abstract class DerivedObjMask extends FeatureObjMask {
 	public double calc(CacheableParams<FeatureObjMaskParams> params) throws FeatureCalcException {
 
 		try {
-			ObjMask omDerived = derivedObjMask(params);
+			CachedCalculation<Optional<FeatureObjMaskParams>, FeatureObjMaskParams>  ccDerived =
+				CalculateParamsForDerived.createFromCache(
+					params,
+					createCachedCalculationForDerived(
+						params.cacheFor( cacheName(), FeatureObjMaskParams.class )
+					)	
+				);
+		
+			Optional<FeatureObjMaskParams> paramsDerived = params.calc(ccDerived);
 			
-			if (omDerived==null || !omDerived.hasPixelsGreaterThan(0)) {
+			if (!paramsDerived.isPresent()) {
 				return emptyValue;
 			}
 			
 			// We select an appropriate cache for calculating the feature (should be the same as selected in init())
 			return params.calcChangeParams(
 				item,
-				p -> createDerivedParams(p, omDerived),
+				p -> paramsDerived.get(),
 				cacheName()
 			);
 			
@@ -83,8 +93,8 @@ public abstract class DerivedObjMask extends FeatureObjMask {
 			CacheableParams<FeatureObjMaskParams> params,
 			Feature<FeatureCalcParams> dependentFeature
 	) throws FeatureCalcException {
-		try {
-			ObjMask omDerived = derivedObjMask(params);
+		//try {
+			/*ObjMask omDerived = derivedObjMask(params);
 			
 			if (omDerived==null || !omDerived.hasPixelsGreaterThan(0)) {
 				// TODO is this the correct way of handling a null-mask?
@@ -96,35 +106,24 @@ public abstract class DerivedObjMask extends FeatureObjMask {
 			return params.mapParams(
 				p -> createDerivedParams(p, omDerived ),
 				cacheName()
-			);
-		} catch (ExecuteException e) {
+			);*/
+			// TODO broken fix
+			return null;
+		/*} catch (ExecuteException e) {
 			throw new FeatureCalcException(e.getCause());
-		}			
+		}*/			
 	}
 		
 	public FeatureObjMaskParams createDerivedParams(FeatureObjMaskParams paramsExst, ObjMask omDerived) {
-
-		FeatureObjMaskParams paramsNew = new FeatureObjMaskParams( omDerived );
-		paramsNew.setNrgStack( paramsExst.getNrgStack() );
-		assert( paramsNew instanceof FeatureObjMaskParams);
-		return paramsNew;
+		return new FeatureObjMaskParams( omDerived, paramsExst.getNrgStack() );
 	}
 	
-	protected abstract CachedCalculation<ObjMask,FeatureObjMaskParams> createCachedCalculation( FeatureSessionCacheRetriever<FeatureObjMaskParams> session ) throws FeatureCalcException;
+	protected abstract CachedCalculation<ObjMask,FeatureObjMaskParams> createCachedCalculationForDerived( FeatureSessionCacheRetriever<FeatureObjMaskParams> session ) throws FeatureCalcException;
 	
 	
 	protected abstract String cacheName();
 
-	private ObjMask derivedObjMask(CacheableParams<FeatureObjMaskParams> params) throws ExecuteException {
-		try {
-			CachedCalculation<ObjMask,FeatureObjMaskParams> cc = createCachedCalculation(
-				params.cacheFor( cacheName(), FeatureObjMaskParams.class )
-			);
-			return params.calc(cc);
-		} catch (FeatureCalcException e) {
-			throw new ExecuteException(e);
-		}
-	}
+
 	
 	public double getEmptyValue() {
 		return emptyValue;

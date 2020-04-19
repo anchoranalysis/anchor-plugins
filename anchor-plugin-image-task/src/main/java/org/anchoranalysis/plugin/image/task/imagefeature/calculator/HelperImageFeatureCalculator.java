@@ -152,7 +152,7 @@ class HelperImageFeatureCalculator {
 			logErrorReporter
 		);
 		
-		return session.calcOne(
+		return session.calc(
 			new FeatureStackParams(stack.getNrgStack())
 		);
 	}

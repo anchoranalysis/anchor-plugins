@@ -1,5 +1,7 @@
 package ch.ethz.biol.cell.mpp.nrg.feature.ind;
 
+import java.util.Optional;
+
 import org.anchoranalysis.anchor.mpp.bean.regionmap.RegionMap;
 import org.anchoranalysis.anchor.mpp.feature.nrg.elem.NRGElemIndCalcParams;
 import org.anchoranalysis.anchor.mpp.feature.nrg.elem.NRGElemIndCalcParamsDescriptor;
@@ -74,12 +76,10 @@ public class AsObjMaskPixelsHigh extends FeatureSingleElem<NRGElemIndCalcParams,
 	}
 	
 	private FeatureObjMaskParams createObjParams( NRGElemIndCalcParams params ) {
-		
-		FeatureObjMaskParams paramsNew = new FeatureObjMaskParams(
-			findIntersection(params)
+		return new FeatureObjMaskParams(
+			findIntersection(params).get(),	// TODO fix, this is always assuming an intersection
+			params.getNrgStack()
 		);
-		paramsNew.setNrgStack( params.getNrgStack() );
-		return paramsNew;
 	}
 
 	// We change the default behaviour, as we don't want to give the same paramsFactory
@@ -90,7 +90,7 @@ public class AsObjMaskPixelsHigh extends FeatureSingleElem<NRGElemIndCalcParams,
 		return NRGElemIndCalcParamsDescriptor.instance;
 	}
 	
-	private ObjMask findIntersection( NRGElemIndCalcParams paramsCast ) {
+	private Optional<ObjMask> findIntersection( NRGElemIndCalcParams paramsCast ) {
 		
 		ObjMaskWithProperties omWithProps = paramsCast.getPxlPartMemo().getMark().calcMask(
 			paramsCast.getNrgStack().getDimensions(),
