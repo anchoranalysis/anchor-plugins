@@ -53,7 +53,7 @@ public class Erode extends DerivedObjMask {
 	// END BEAN PROPERTIES
 
 	@Override
-	protected CachedCalculation<ObjMask,FeatureObjMaskParams> createCachedCalculation( FeatureSessionCacheRetriever<FeatureObjMaskParams> session ) {
+	protected CachedCalculation<ObjMask,FeatureObjMaskParams> createCachedCalculationForDerived( FeatureSessionCacheRetriever<FeatureObjMaskParams> session ) {
 		return CalculateErosion.createFromCache(session, iterations, do3D);
 	}
 	

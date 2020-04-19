@@ -80,7 +80,10 @@ public class AddCriteriaFeatureRelationThreshold extends AddCriteriaPair {
 				new NRGStackWithParams(dim)
 			);
 			
-			double featureVal = session.createCacheable(params).calc(feature);
+			double featureVal = session.calc(
+				params,
+				new FeatureList<>(feature)
+			).get(0);
 			
 			return relation.create().isRelationToValueTrue(featureVal, threshold);
 			

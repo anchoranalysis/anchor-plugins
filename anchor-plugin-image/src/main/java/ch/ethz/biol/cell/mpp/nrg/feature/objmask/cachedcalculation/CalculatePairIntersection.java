@@ -1,5 +1,7 @@
 package ch.ethz.biol.cell.mpp.nrg.feature.objmask.cachedcalculation;
 
+import java.util.Optional;
+
 /*
  * #%L
  * anchor-plugin-image
@@ -52,17 +54,15 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
  * @author Owen Feehan
  *
  */
-public class CalculatePairIntersection extends CachedCalculation<ObjMask,FeatureObjMaskPairParams> {
+public class CalculatePairIntersection extends CachedCalculation<Optional<ObjMask>,FeatureObjMaskPairParams> {
 
 	private boolean do3D;
 	private int iterationsErosion;
 	
 	private CachedCalculation<ObjMask,FeatureObjMaskParams> ccDilation1;
 	private CachedCalculation<ObjMask,FeatureObjMaskParams> ccDilation2;
-	
-	
-	
-	public static CachedCalculation<ObjMask,FeatureObjMaskPairParams> createFromCache(
+		
+	public static CachedCalculation<Optional<ObjMask>,FeatureObjMaskPairParams> createFromCache(
 		ICachedCalculationSearch<FeatureObjMaskPairParams> cache,
 		ICachedCalculationSearch<FeatureObjMaskParams> cacheDilationObj1,
 		ICachedCalculationSearch<FeatureObjMaskParams> cacheDilationObj2,
@@ -99,42 +99,35 @@ public class CalculatePairIntersection extends CachedCalculation<ObjMask,Feature
 	}
 
 	@Override
-	protected ObjMask execute( FeatureObjMaskPairParams params ) throws ExecuteException {
+	protected Optional<ObjMask> execute( FeatureObjMaskPairParams params ) throws ExecuteException {
 	
 		ImageDim dim = params.getNrgStack().getDimensions();
 		
 		ObjMask om1Dilated = ccDilation1.getOrCalculate( params.params1() );
 		ObjMask om2Dilated = ccDilation2.getOrCalculate( params.params2() );
 		
-		ObjMask omIntersection  = om1Dilated.intersect(om2Dilated, dim );
-		if (omIntersection==null) {
-			return null;
+		Optional<ObjMask> omIntersection  = om1Dilated.intersect(om2Dilated, dim );
+				
+		if (!omIntersection.isPresent()) {
+			return Optional.empty();
 		}
 		
-		ObjMask omMerged = params.getObjMaskMerged();
+		assert( omIntersection.get().hasPixelsGreaterThan(0) );
 		
 		try {
 			if (iterationsErosion>0) {
-				// We merge the two masks, and then erode it, and use this as a mask on the input object
-				if (omMerged==null) {
-					omMerged = ObjMaskMerger.merge( params.getObjMask1(), params.getObjMask2() );
-				}
-				
-				ObjMask omMergedEroded = MorphologicalErosion.createErodedObjMask(omMerged, dim.getExtnt(), do3D, iterationsErosion, true, null);
-				
-				omIntersection = omIntersection.intersect(omMergedEroded, dim);
+				return erode(params, omIntersection.get(), dim);
+			} else {
+				return omIntersection;
 			}
-			
-			return omIntersection;
 			
 		} catch (CreateException e) {
 			throw new ExecuteException(e);
 		}
 	}
 
-
 	@Override
-	public CachedCalculation<ObjMask,FeatureObjMaskPairParams> duplicate() {
+	public CachedCalculation<Optional<ObjMask>,FeatureObjMaskPairParams> duplicate() {
 		return new CalculatePairIntersection(
 			do3D,
 			iterationsErosion,
@@ -162,5 +155,28 @@ public class CalculatePairIntersection extends CachedCalculation<ObjMask,Feature
 	@Override
 	public int hashCode() {
 		return new HashCodeBuilder().append(iterationsErosion).append(do3D).append( ccDilation1 ).append( ccDilation2 ).toHashCode();
+	}
+	
+	private Optional<ObjMask> erode( FeatureObjMaskPairParams params, ObjMask omIntersection, ImageDim dim ) throws CreateException {
+
+		ObjMask omMerged = params.getObjMaskMerged();
+		
+		// We merge the two masks, and then erode it, and use this as a mask on the input object
+		if (omMerged==null) {
+			omMerged = ObjMaskMerger.merge( params.getObjMask1(), params.getObjMask2() );
+		}
+		
+		ObjMask omMergedEroded = MorphologicalErosion.createErodedObjMask(
+			omMerged,
+			dim.getExtnt(),
+			do3D,
+			iterationsErosion,
+			true,
+			null
+		);
+		
+		Optional<ObjMask> omIntersect = omIntersection.intersect(omMergedEroded, dim);
+		omIntersect.ifPresent( om-> { assert( om.hasPixelsGreaterThan(0) ); });
+		return omIntersect;
 	}
 }

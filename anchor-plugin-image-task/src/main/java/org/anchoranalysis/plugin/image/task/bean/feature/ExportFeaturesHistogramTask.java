@@ -168,7 +168,7 @@ public class ExportFeaturesHistogramTask extends ExportFeaturesStoreTask<FileInp
 			logErrorReporter
 		);
 		
-		return session.calcOne(
+		return session.calc(
 			new FeatureHistogramParams(hist, null)
 		);
 	}

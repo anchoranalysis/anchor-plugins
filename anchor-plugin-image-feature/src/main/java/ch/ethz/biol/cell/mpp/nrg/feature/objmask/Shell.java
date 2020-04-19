@@ -55,7 +55,7 @@ public class Shell extends DerivedObjMask {
 	// END BEAN PROPERTIES
 	
 	@Override
-	protected CachedCalculation<ObjMask,FeatureObjMaskParams> createCachedCalculation(
+	protected CachedCalculation<ObjMask,FeatureObjMaskParams> createCachedCalculationForDerived(
 			FeatureSessionCacheRetriever<FeatureObjMaskParams> session) throws FeatureCalcException {
 		return CalculateShellObjMask.createFromCache(
 			session,
