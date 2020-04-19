@@ -83,9 +83,4 @@ public class CalculateIntersectingObjs extends CachedCalculation<ObjMaskCollecti
 			.toHashCode();
 	}
 
-	@Override
-	public CachedCalculation<ObjMaskCollection,FeatureObjMaskParams> duplicate() {
-		return new CalculateIntersectingObjs(id, searchObjs);
-	}
-
 }

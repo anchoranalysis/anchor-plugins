@@ -79,11 +79,6 @@ public class CalculateEllipseLeastSquares extends CachedCalculation<ObjMaskAndEl
 			throw new ExecuteException(e);
 		}
 	}
-
-	@Override
-	public CalculateEllipseLeastSquares duplicate() {
-		return new CalculateEllipseLeastSquares();
-	}
 	
 	@Override
 	public boolean equals(final Object obj){

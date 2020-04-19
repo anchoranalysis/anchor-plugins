@@ -3,15 +3,14 @@ package ch.ethz.biol.cell.mpp.nrg.feature.objmask;
 import java.util.Optional;
 
 import org.anchoranalysis.feature.cachedcalculation.CachedCalculation;
+import org.anchoranalysis.feature.cachedcalculation.RslvdCachedCalculation;
 import org.anchoranalysis.feature.session.cache.ICachedCalculationSearch;
 import org.anchoranalysis.image.feature.objmask.FeatureObjMaskParams;
 import org.anchoranalysis.image.objmask.ObjMask;
-import org.anchoranalysis.plugin.image.feature.obj.pair.CalculateParamsForIntersection;
-import org.anchoranalysis.plugin.image.feature.obj.pair.CalculateParamsFromDelegate;
-import org.apache.commons.lang.builder.HashCodeBuilder;
+import org.anchoranalysis.plugin.image.feature.obj.pair.CalculateParamsFromDelegateOption;
 
-public class CalculateParamsForDerived extends CalculateParamsFromDelegate<
-	Optional<FeatureObjMaskParams>,
+public class CalculateParamsForDerived extends CalculateParamsFromDelegateOption<
+	FeatureObjMaskParams,
 	FeatureObjMaskParams,
 	ObjMask
 > {
@@ -24,8 +23,8 @@ public class CalculateParamsForDerived extends CalculateParamsFromDelegate<
 		);
 	}
 	
-	private CalculateParamsForDerived(CachedCalculation<ObjMask, FeatureObjMaskParams> ccDerived) {
-		super(ccDerived);
+	private CalculateParamsForDerived(RslvdCachedCalculation<ObjMask, FeatureObjMaskParams> ccDerived) {
+		super(ccDerived, CalculateParamsForDerived.class);
 	}
 
 	@Override
@@ -38,24 +37,5 @@ public class CalculateParamsForDerived extends CalculateParamsFromDelegate<
 		return Optional.of(
 			new FeatureObjMaskParams( delegate, params.getNrgStack() )
 		);
-	}
-
-	@Override
-	public boolean equals(Object other) {
-	    if(other instanceof CalculateParamsForIntersection){
-	        return true;
-	    } else{
-	        return false;
-	    }
-	}
-
-	@Override
-	public int hashCode() {
-		return new HashCodeBuilder().toHashCode();
-	}
-
-	@Override
-	public CachedCalculation<Optional<FeatureObjMaskParams>, FeatureObjMaskParams> duplicate() {
-		return new CalculateParamsForDerived(duplicateDelegate());
 	}
 }

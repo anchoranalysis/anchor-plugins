@@ -36,6 +36,7 @@ import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.feature.cache.CacheableParams;
 import org.anchoranalysis.feature.cachedcalculation.CachedCalculation;
 import org.anchoranalysis.feature.cachedcalculation.CachedCalculationOperation;
+import org.anchoranalysis.feature.cachedcalculation.RslvdCachedCalculation;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.feature.objmask.FeatureObjMaskParams;
 import org.anchoranalysis.plugin.points.calculate.CalculatePntsFromOutline;
@@ -46,9 +47,9 @@ public class CalculateEllipsoidLeastSquares extends CachedCalculation<MarkEllips
 
 	private boolean suppressZCovariance;
 	
-	private transient CachedCalculation<List<Point3i>,FeatureObjMaskParams> ccPnts;
+	private transient RslvdCachedCalculation<List<Point3i>,FeatureObjMaskParams> ccPnts;
 		
-	private CalculateEllipsoidLeastSquares(boolean suppressZCovariance, CachedCalculation<List<Point3i>,FeatureObjMaskParams> ccPnts) {
+	private CalculateEllipsoidLeastSquares(boolean suppressZCovariance, RslvdCachedCalculation<List<Point3i>,FeatureObjMaskParams> ccPnts) {
 		super();
 		this.suppressZCovariance = suppressZCovariance;
 		this.ccPnts = ccPnts;
@@ -56,13 +57,13 @@ public class CalculateEllipsoidLeastSquares extends CachedCalculation<MarkEllips
 	
 	public static MarkEllipsoid createFromCache(CacheableParams<FeatureObjMaskParams> params, boolean suppressZCovariance ) throws FeatureCalcException {
 		
-		CachedCalculation<List<Point3i>,FeatureObjMaskParams> ccPnts = params.search( new CalculatePntsFromOutline() );
+		RslvdCachedCalculation<List<Point3i>,FeatureObjMaskParams> ccPnts = params.search( new CalculatePntsFromOutline() );
 		
-		CachedCalculation<MarkEllipsoid,FeatureObjMaskParams> ccEllipsoid = params.search(
+		RslvdCachedCalculation<MarkEllipsoid,FeatureObjMaskParams> ccEllipsoid = params.search(
 			new CalculateEllipsoidLeastSquares(suppressZCovariance, ccPnts )
 		);
 		try {
-			return params.calc(ccEllipsoid);
+			return ccEllipsoid.getOrCalculate(params.getParams());
 		} catch (ExecuteException e) {
 			throw new FeatureCalcException(e.getCause());
 		}
@@ -84,14 +85,6 @@ public class CalculateEllipsoidLeastSquares extends CachedCalculation<MarkEllips
 		}
 	}
 
-	
-	@Override
-	public CalculateEllipsoidLeastSquares duplicate() {
-		return new CalculateEllipsoidLeastSquares(suppressZCovariance,ccPnts.duplicate());
-	}
-	
-	
-	
 	@Override
 	public boolean equals(final Object obj){
 	    if(obj instanceof CalculateEllipsoidLeastSquares){

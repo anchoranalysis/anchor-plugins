@@ -97,11 +97,6 @@ public class CalculateOutlineNumVoxels extends CachedCalculation<Integer,Feature
 	}
 
 	@Override
-	public CachedCalculation<Integer,FeatureObjMaskParams> duplicate() {
-		return new CalculateOutlineNumVoxels(mip,suppress3D);
-	}
-
-	@Override
 	public int hashCode() {
 		return new HashCodeBuilder().append(mip).append(suppress3D).toHashCode();
 	}

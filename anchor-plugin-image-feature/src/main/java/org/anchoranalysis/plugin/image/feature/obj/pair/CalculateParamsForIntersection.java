@@ -3,14 +3,14 @@ package org.anchoranalysis.plugin.image.feature.obj.pair;
 import java.util.Optional;
 
 import org.anchoranalysis.feature.cachedcalculation.CachedCalculation;
+import org.anchoranalysis.feature.cachedcalculation.RslvdCachedCalculation;
 import org.anchoranalysis.feature.session.cache.ICachedCalculationSearch;
 import org.anchoranalysis.image.feature.objmask.FeatureObjMaskParams;
 import org.anchoranalysis.image.feature.objmask.pair.FeatureObjMaskPairParams;
 import org.anchoranalysis.image.objmask.ObjMask;
-import org.apache.commons.lang.builder.HashCodeBuilder;
 
-public class CalculateParamsForIntersection extends CalculateParamsFromDelegate<
-	Optional<FeatureObjMaskParams>,
+public class CalculateParamsForIntersection extends CalculateParamsFromDelegateOption<
+	FeatureObjMaskParams,
 	FeatureObjMaskPairParams,
 	Optional<ObjMask>
 > {
@@ -24,8 +24,8 @@ public class CalculateParamsForIntersection extends CalculateParamsFromDelegate<
 		);
 	}
 		
-	private CalculateParamsForIntersection(CachedCalculation<Optional<ObjMask>, FeatureObjMaskPairParams> ccIntersection) {
-		super(ccIntersection);
+	private CalculateParamsForIntersection(RslvdCachedCalculation<Optional<ObjMask>, FeatureObjMaskPairParams> ccIntersection) {
+		super(ccIntersection, CalculateParamsForIntersection.class);
 	}
 
 	@Override
@@ -45,24 +45,4 @@ public class CalculateParamsForIntersection extends CalculateParamsFromDelegate<
 			new FeatureObjMaskParams( delegate.get(), params.getNrgStack() )		
 		);
 	}
-	
-	@Override
-	public boolean equals(final Object obj){
-	    if(obj instanceof CalculateParamsForIntersection){
-	        return true;
-	    } else{
-	        return false;
-	    }
-	}
-
-	@Override
-	public int hashCode() {
-		return new HashCodeBuilder().toHashCode();
-	}
-
-	@Override
-	public CachedCalculation<Optional<FeatureObjMaskParams>, FeatureObjMaskPairParams> duplicate() {
-		return new CalculateParamsForIntersection(duplicateDelegate());
-	}
-
 }

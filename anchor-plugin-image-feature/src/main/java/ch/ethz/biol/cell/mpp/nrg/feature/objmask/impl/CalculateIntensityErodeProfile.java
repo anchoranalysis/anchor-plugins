@@ -31,6 +31,7 @@ import java.util.List;
 
 import org.anchoranalysis.core.cache.ExecuteException;
 import org.anchoranalysis.feature.cachedcalculation.CachedCalculation;
+import org.anchoranalysis.feature.cachedcalculation.RslvdCachedCalculation;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.session.cache.ICachedCalculationSearch;
 import org.anchoranalysis.image.chnl.Chnl;
@@ -53,10 +54,10 @@ public class CalculateIntensityErodeProfile extends CachedCalculation<ErodeProfi
 	private boolean do3D = true;
 	
 	// List of cached calculations for creating the object for a given iteration
-	private List<CachedCalculation<ObjMask,FeatureObjMaskParams>> calcShell;
+	private List<RslvdCachedCalculation<ObjMask,FeatureObjMaskParams>> calcShell;
 
 	private CalculateIntensityErodeProfile(int nrgIndex, int iterationsErosionStart, int iterationsErosionEnd,
-			boolean do3D, List<CachedCalculation<ObjMask,FeatureObjMaskParams>> calcShell) {
+			boolean do3D, List<RslvdCachedCalculation<ObjMask,FeatureObjMaskParams>> calcShell) {
 		super();
 		this.nrgIndex = nrgIndex;
 		this.iterationsErosionStart = iterationsErosionStart;
@@ -65,7 +66,7 @@ public class CalculateIntensityErodeProfile extends CachedCalculation<ErodeProfi
 		this.calcShell = calcShell;
 	}
 	
-	private static CachedCalculation<ObjMask,FeatureObjMaskParams> createShellCalculator( ICachedCalculationSearch<FeatureObjMaskParams> cache, int iterations, boolean do3D ) throws FeatureCalcException {
+	private static RslvdCachedCalculation<ObjMask,FeatureObjMaskParams> createShellCalculator( ICachedCalculationSearch<FeatureObjMaskParams> cache, int iterations, boolean do3D ) throws FeatureCalcException {
 		return CalculateShellTwoStage.createFromCache(
 			cache,
 			iterations,
@@ -75,14 +76,14 @@ public class CalculateIntensityErodeProfile extends CachedCalculation<ErodeProfi
 	}
 	
 	
-	public static CachedCalculation<ErodeProfile,FeatureObjMaskParams> createFromCache(
+	public static RslvdCachedCalculation<ErodeProfile,FeatureObjMaskParams> createFromCache(
 			ICachedCalculationSearch<FeatureObjMaskParams> cache,
 			int nrgIndex,
 			int iterationsErosionStart,
 			int iterationsErosionEnd,
 			boolean do3D
 		) throws FeatureCalcException {
-			List<CachedCalculation<ObjMask,FeatureObjMaskParams>> listCalcShell = new ArrayList<>();
+			List<RslvdCachedCalculation<ObjMask,FeatureObjMaskParams>> listCalcShell = new ArrayList<>();
 			for( int i=iterationsErosionStart; i<=iterationsErosionEnd; i++) {
 				listCalcShell.add( createShellCalculator(cache,i, do3D) );
 			}
@@ -142,11 +143,4 @@ public class CalculateIntensityErodeProfile extends CachedCalculation<ErodeProfi
 	public int hashCode() {
 		return new HashCodeBuilder().append(nrgIndex).append(iterationsErosionStart).append(iterationsErosionEnd).append(do3D).toHashCode();
 	}
-
-	@Override
-	public CalculateIntensityErodeProfile duplicate() {
-		return new CalculateIntensityErodeProfile( nrgIndex, iterationsErosionStart, iterationsErosionEnd, do3D, calcShell );
-	}
-
-
 }

@@ -30,6 +30,7 @@ package ch.ethz.biol.cell.mpp.nrg.feature.objmask.cachedcalculation;
 import org.anchoranalysis.core.cache.ExecuteException;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.feature.cachedcalculation.CachedCalculation;
+import org.anchoranalysis.feature.cachedcalculation.RslvdCachedCalculation;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.session.cache.ICachedCalculationSearch;
 import org.anchoranalysis.image.feature.objmask.FeatureObjMaskParams;
@@ -47,12 +48,12 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
  */
 public class CalculateShellTwoStage extends CachedCalculation<ObjMask,FeatureObjMaskParams> {
 
-	private CachedCalculation<ObjMask,FeatureObjMaskParams> ccErosion;
-	private CachedCalculation<ObjMask,FeatureObjMaskParams> ccFurther;
+	private RslvdCachedCalculation<ObjMask,FeatureObjMaskParams> ccErosion;
+	private RslvdCachedCalculation<ObjMask,FeatureObjMaskParams> ccFurther;
 			
 	private CalculateShellTwoStage(
-		CachedCalculation<ObjMask,FeatureObjMaskParams> ccErosion,
-		CachedCalculation<ObjMask,FeatureObjMaskParams> ccFurther
+		RslvdCachedCalculation<ObjMask,FeatureObjMaskParams> ccErosion,
+		RslvdCachedCalculation<ObjMask,FeatureObjMaskParams> ccFurther
 	) {
 		super();
 		this.ccErosion = ccErosion;
@@ -89,7 +90,7 @@ public class CalculateShellTwoStage extends CachedCalculation<ObjMask,FeatureObj
 		);
 	}
 	
-	public static CachedCalculation<ObjMask,FeatureObjMaskParams> createFromCache(
+	public static RslvdCachedCalculation<ObjMask,FeatureObjMaskParams> createFromCache(
 		ICachedCalculationSearch<FeatureObjMaskParams> cache,
 		int iterationsErosion,
 		int iterationsFurther,
@@ -98,27 +99,25 @@ public class CalculateShellTwoStage extends CachedCalculation<ObjMask,FeatureObj
 		
 		if (iterationsErosion==0) {
 			// Special case when iterationsErosion==0, we consider it instead as a ashell
-			return CalculateShellObjMask.createFromCache(
-				cache,
-				0,
-				iterationsFurther,
-				0,
-				do3D,
-				false
+			return cache.search(
+				CalculateShellObjMask.createFromCache(
+					cache,
+					0,
+					iterationsFurther,
+					0,
+					do3D,
+					false
+				)
 			);
 		}
 		
-		
-		CachedCalculation<ObjMask,FeatureObjMaskParams> ccErosion = CalculateErosion.createFromCache(
+		RslvdCachedCalculation<ObjMask,FeatureObjMaskParams> ccErosion = CalculateErosion.createFromCacheRslvd(
 			cache, iterationsErosion, do3D
 		);
-		assert ccErosion instanceof CalculateErosion;
 
-
-		CachedCalculation<ObjMask,FeatureObjMaskParams> ccFurther = CalculateErosion.createFromCache(
+		RslvdCachedCalculation<ObjMask,FeatureObjMaskParams> ccFurther = CalculateErosion.createFromCacheRslvd(
 			cache, iterationsErosion + iterationsFurther, do3D
 		);
-		assert ccErosion instanceof CalculateErosion;
 		
 		return cache.search(
 			new CalculateShellTwoStage(
@@ -142,8 +141,8 @@ public class CalculateShellTwoStage extends CachedCalculation<ObjMask,FeatureObj
 	private static ObjMask createShellObjMask(
 		FeatureObjMaskParams params,
 		ObjMask om,
-		CachedCalculation<ObjMask,FeatureObjMaskParams> ccErosion,
-		CachedCalculation<ObjMask,FeatureObjMaskParams> ccFurther
+		RslvdCachedCalculation<ObjMask,FeatureObjMaskParams> ccErosion,
+		RslvdCachedCalculation<ObjMask,FeatureObjMaskParams> ccFurther
 	) throws CreateException {
 		
 		// We duplicate as we don't want to mess up the existing cache entry
@@ -173,14 +172,5 @@ public class CalculateShellTwoStage extends CachedCalculation<ObjMask,FeatureObj
 		omEroded.binaryVoxelBox().setPixelsCheckMaskOff( relMask );
 	
 		return omEroded;
-	}
-
-
-	@Override
-	public CachedCalculation<ObjMask,FeatureObjMaskParams> duplicate() {
-		return new CalculateShellTwoStage(
-			ccErosion.duplicate(),
-			ccFurther.duplicate()
-		);
 	}
 }

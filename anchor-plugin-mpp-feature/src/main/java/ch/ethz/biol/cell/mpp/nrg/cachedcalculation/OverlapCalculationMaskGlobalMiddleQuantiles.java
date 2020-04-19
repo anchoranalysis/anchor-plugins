@@ -81,11 +81,6 @@ public class OverlapCalculationMaskGlobalMiddleQuantiles extends CachedCalculati
 	}
 	
 	@Override
-	public CachedCalculation<Double,NRGElemPairCalcParams> duplicate() {
-		return new OverlapCalculationMaskGlobalMiddleQuantiles( regionID, nrgIndex, maskOnValue, quantileLower, quantileHigher );
-	}
-	
-	@Override
 	public boolean equals(final Object obj){
 	    if(obj instanceof OverlapCalculationMaskGlobalMiddleQuantiles){
 	        final OverlapCalculationMaskGlobalMiddleQuantiles other = (OverlapCalculationMaskGlobalMiddleQuantiles) obj;

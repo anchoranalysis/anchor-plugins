@@ -185,9 +185,4 @@ public class CalculateGradientFromMultipleChnls extends CachedCalculation<List<P
 	public int hashCode() {
 		return new HashCodeBuilder().append(nrgIndexX).append(nrgIndexY).append(nrgIndexZ).append(subtractConstant).toHashCode();
 	}
-
-	@Override
-	public CachedCalculation<List<Point3d>,FeatureObjMaskParams> duplicate() {
-		return new CalculateGradientFromMultipleChnls( nrgIndexX, nrgIndexY, nrgIndexZ, subtractConstant );
-	}
 }

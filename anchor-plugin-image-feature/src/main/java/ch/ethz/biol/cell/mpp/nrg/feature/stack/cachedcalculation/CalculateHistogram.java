@@ -53,11 +53,6 @@ public class CalculateHistogram extends CachedCalculation<Histogram, FeatureStac
 			throw new ExecuteException(e);
 		}
 	}
-
-	@Override
-	public CalculateHistogram duplicate() {
-		return new CalculateHistogram(nrgIndex);
-	}
 	
 	@Override
 	public boolean equals(final Object obj){

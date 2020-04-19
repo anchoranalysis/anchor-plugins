@@ -73,11 +73,6 @@ public class CalculateHistogramMasked extends CachedCalculation<Histogram, Featu
 	}
 	
 	@Override
-	public CalculateHistogramMasked duplicate() {
-		return new CalculateHistogramMasked(nrgIndexSignal, nrgIndexMask);
-	}
-	
-	@Override
 	public boolean equals(final Object obj){
 	    if(obj instanceof CalculateHistogramMasked){
 	    	final CalculateHistogramMasked other = (CalculateHistogramMasked) obj;

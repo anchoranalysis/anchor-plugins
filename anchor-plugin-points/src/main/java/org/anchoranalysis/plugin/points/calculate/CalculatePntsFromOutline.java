@@ -50,11 +50,6 @@ public class CalculatePntsFromOutline extends CachedCalculation<List<Point3i>, F
 			throw new ExecuteException(e);
 		}
 	}
-
-	@Override
-	public CachedCalculation<List<Point3i>,FeatureObjMaskParams> duplicate() {
-		return new CalculatePntsFromOutline();
-	}
 	
 	@Override
 	public int hashCode() {
