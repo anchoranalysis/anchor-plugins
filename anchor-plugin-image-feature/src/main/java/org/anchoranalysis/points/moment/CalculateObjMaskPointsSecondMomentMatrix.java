@@ -47,11 +47,6 @@ public class CalculateObjMaskPointsSecondMomentMatrix extends CachedCalculation<
 	protected MomentsFromPointsCalculator execute( FeatureObjMaskParams params ) throws ExecuteException {
 		return MomentsFromObjMask.apply(params.getObjMask(),suppressZ);
 	}
-
-	@Override
-	public CachedCalculation<MomentsFromPointsCalculator,FeatureObjMaskParams> duplicate() {
-		return new CalculateObjMaskPointsSecondMomentMatrix(suppressZ);
-	}
 	
 	@Override
 	public int hashCode() {

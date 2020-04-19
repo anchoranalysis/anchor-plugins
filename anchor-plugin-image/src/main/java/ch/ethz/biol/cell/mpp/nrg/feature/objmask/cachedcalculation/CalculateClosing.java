@@ -31,6 +31,7 @@ import org.anchoranalysis.core.cache.ExecuteException;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.feature.cachedcalculation.CachedCalculation;
 import org.anchoranalysis.feature.cachedcalculation.CachedCalculationMap;
+import org.anchoranalysis.feature.cachedcalculation.RslvdCachedCalculation;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.session.cache.ICachedCalculationSearch;
 import org.anchoranalysis.image.feature.objmask.FeatureObjMaskParams;
@@ -61,7 +62,7 @@ public class CalculateClosing extends CachedCalculation<ObjMask,FeatureObjMaskPa
 		this.do3D = src.do3D;
 	}
 	
-	public static CachedCalculation<ObjMask,FeatureObjMaskParams> createFromCache(
+	public static RslvdCachedCalculation<ObjMask,FeatureObjMaskParams> createFromCache(
 		ICachedCalculationSearch<FeatureObjMaskParams> cache,
 		int iterations,
 		boolean do3D
@@ -71,11 +72,6 @@ public class CalculateClosing extends CachedCalculation<ObjMask,FeatureObjMaskPa
 		return cache.search(
 			new CalculateClosing(iterations, map, do3D)
 		);
-	}
-
-	@Override
-	public CalculateClosing duplicate() {
-		return new CalculateClosing( this );
 	}
 
 	@Override

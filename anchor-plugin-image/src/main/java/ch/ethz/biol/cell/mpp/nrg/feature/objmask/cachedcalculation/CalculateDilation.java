@@ -26,8 +26,8 @@ package ch.ethz.biol.cell.mpp.nrg.feature.objmask.cachedcalculation;
  * #L%
  */
 
-import org.anchoranalysis.feature.cachedcalculation.CachedCalculation;
 import org.anchoranalysis.feature.cachedcalculation.CachedCalculationMap;
+import org.anchoranalysis.feature.cachedcalculation.RslvdCachedCalculation;
 import org.anchoranalysis.feature.session.cache.ICachedCalculationSearch;
 import org.anchoranalysis.image.feature.objmask.FeatureObjMaskParams;
 import org.anchoranalysis.image.objmask.ObjMask;
@@ -46,7 +46,7 @@ public class CalculateDilation extends CalculateObjMask {
 		super(src);
 	}
 	
-	public static CachedCalculation<ObjMask,FeatureObjMaskParams> createFromCache(
+	public static RslvdCachedCalculation<ObjMask,FeatureObjMaskParams> createFromCache(
 		ICachedCalculationSearch<FeatureObjMaskParams> cache,
 		int iterations,
 		boolean do3D
@@ -57,13 +57,6 @@ public class CalculateDilation extends CalculateObjMask {
 			new CalculateDilation(iterations, map)
 		);
 	}
-
-	@Override
-	public CalculateDilation duplicate() {
-		return new CalculateDilation( this );
-	}
-	
-	
 
 	@Override
 	public boolean equals(final Object obj){

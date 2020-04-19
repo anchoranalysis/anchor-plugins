@@ -74,8 +74,6 @@ public abstract class CalculateObjMask extends CachedCalculation<ObjMask,Feature
 		} catch (FeatureCalcException e) {
 			throw new ExecuteException(e);
 		}
-
-		//return ObjMaskProviderDilate.createDilatedObjMask(om, extnt, do3D, iterations);
 	}
 	
 	

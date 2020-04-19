@@ -82,11 +82,6 @@ class CalculateIntersectionOfDilatedBoundingBox extends CachedCalculation<Boundi
 	}
 
 	@Override
-	public CachedCalculation<BoundingBox,FeatureObjMaskPairParams> duplicate() {
-		return new CalculateIntersectionOfDilatedBoundingBox(use3D);
-	}
-
-	@Override
 	public int hashCode() {
 		return new HashCodeBuilder().append(use3D).toHashCode();
 	}

@@ -2,6 +2,7 @@ package org.anchoranalysis.plugin.image.feature.obj.pair;
 
 import org.anchoranalysis.core.cache.ExecuteException;
 import org.anchoranalysis.feature.cachedcalculation.CachedCalculation;
+import org.anchoranalysis.feature.cachedcalculation.RslvdCachedCalculation;
 import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
 
 /**
@@ -24,9 +25,9 @@ import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
  */
 public abstract class CalculateParamsFromDelegate<S, T extends FeatureCalcParams, U> extends CachedCalculation<S, T> {
 
-	private CachedCalculation<U, T> ccDelegate;
+	private RslvdCachedCalculation<U, T> ccDelegate;
 
-	protected CalculateParamsFromDelegate(CachedCalculation<U, T> ccDelegate) {
+	protected CalculateParamsFromDelegate(RslvdCachedCalculation<U, T> ccDelegate) {
 		super();
 		this.ccDelegate = ccDelegate;
 	}
@@ -39,8 +40,4 @@ public abstract class CalculateParamsFromDelegate<S, T extends FeatureCalcParams
 	}
 	
 	protected abstract S deriveFromDelegate( T params, U delegate);
-	
-	protected CachedCalculation<U, T> duplicateDelegate() {
-		return ccDelegate.duplicate();
-	}
 }

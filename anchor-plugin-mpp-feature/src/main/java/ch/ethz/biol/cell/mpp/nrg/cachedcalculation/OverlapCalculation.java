@@ -56,11 +56,6 @@ public class OverlapCalculation extends CachedCalculation<Double,NRGElemPairCalc
 		
 		return OverlapUtilities.overlapWith(mark1,mark2,regionID);
 	}
-
-	@Override
-	public CachedCalculation<Double,NRGElemPairCalcParams> duplicate() {
-		return new OverlapCalculation( regionID );
-	}
 	
 	@Override
 	public int hashCode() {

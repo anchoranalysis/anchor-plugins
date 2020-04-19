@@ -138,14 +138,14 @@ public class FeatureObjMaskPairIntersection extends FeatureObjMaskPair {
 	}
 
 	private CachedCalculation<Optional<ObjMask>,FeatureObjMaskPairParams> createCCIntersection(CacheableParams<FeatureObjMaskPairParams> params) throws CreateException {
-			return CalculatePairIntersectionCommutative.createFromCache(
-				params,
-				params.cacheFor(CACHE_OBJ1, FeatureObjMaskPairParams.class),
-				params.cacheFor(CACHE_OBJ2, FeatureObjMaskPairParams.class),
-				iterationsDilation,
-				iterationsErosion,
-				do3D
-			);
+		return CalculatePairIntersectionCommutative.createFromCache(
+			params,
+			params.cacheFor(CACHE_OBJ1, FeatureObjMaskPairParams.class),
+			params.cacheFor(CACHE_OBJ2, FeatureObjMaskPairParams.class),
+			iterationsDilation,
+			iterationsErosion,
+			do3D
+		);
 	}
 	
 	public boolean isDo3D() {

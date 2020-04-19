@@ -84,10 +84,4 @@ class CalculateOtsuThresholdedHistogram extends CachedCalculation<Histogram, Fea
 			.append(calculateLevel)
 			.toHashCode();
 	}
-
-	@Override
-	public CachedCalculation<Histogram, FeatureHistogramParams> duplicate() {
-		return new CalculateOtsuThresholdedHistogram(calculateLevel.duplicateBean(), logger);
-	}
-
 }

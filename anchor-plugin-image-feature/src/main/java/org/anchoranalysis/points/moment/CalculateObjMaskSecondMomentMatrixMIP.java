@@ -48,11 +48,6 @@ public class CalculateObjMaskSecondMomentMatrixMIP extends CachedCalculation<Mom
 	}
 
 	@Override
-	public CachedCalculation<MomentsFromPointsCalculator,FeatureObjMaskParams> duplicate() {
-		return new CalculateObjMaskSecondMomentMatrixMIP();
-	}
-
-	@Override
 	public int hashCode() {
 		return new HashCodeBuilder().toHashCode();
 	}

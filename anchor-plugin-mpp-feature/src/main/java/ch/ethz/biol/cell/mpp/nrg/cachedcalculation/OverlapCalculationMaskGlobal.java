@@ -74,11 +74,6 @@ public class OverlapCalculationMaskGlobal extends CachedCalculation<Double,NRGEl
 	}
 	
 	@Override
-	public OverlapCalculationMaskGlobal duplicate() {
-		return new OverlapCalculationMaskGlobal(regionID,nrgIndex,maskOnValue);
-	}
-	
-	@Override
 	public boolean equals(final Object obj){
 	    if(obj instanceof OverlapCalculationMaskGlobal){
 	        final OverlapCalculationMaskGlobal other = (OverlapCalculationMaskGlobal) obj;
