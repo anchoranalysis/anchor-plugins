@@ -27,8 +27,8 @@ package ch.ethz.biol.cell.mpp.nrg.feature.objmask.cachedcalculation;
  */
 
 import org.anchoranalysis.feature.cachedcalculation.CachedCalculation;
-import org.anchoranalysis.feature.cachedcalculation.CachedCalculationMap;
 import org.anchoranalysis.feature.cachedcalculation.RslvdCachedCalculation;
+import org.anchoranalysis.feature.cachedcalculation.RslvdCachedCalculationMap;
 import org.anchoranalysis.feature.session.cache.ICachedCalculationSearch;
 import org.anchoranalysis.image.feature.objmask.FeatureObjMaskParams;
 import org.anchoranalysis.image.objmask.ObjMask;
@@ -38,7 +38,7 @@ public class CalculateErosion extends CalculateObjMask {
 
 	private CalculateErosion(
 		int iterations,
-		CachedCalculationMap<ObjMask,FeatureObjMaskParams,Integer> map
+		RslvdCachedCalculationMap<ObjMask,FeatureObjMaskParams,Integer> map
 	) {
 		super(iterations,map);
 	}
@@ -52,7 +52,7 @@ public class CalculateErosion extends CalculateObjMask {
 		int iterations,
 		boolean do3D
 	) {
-		CachedCalculationMap<ObjMask,FeatureObjMaskParams,Integer> map = cache.search(
+		RslvdCachedCalculationMap<ObjMask,FeatureObjMaskParams,Integer> map = cache.search(
 			new CalculateErosionMap(do3D)
 		);
 		

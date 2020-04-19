@@ -63,11 +63,12 @@ public abstract class DerivedObjMask extends FeatureObjMask {
 
 		try {
 			CachedCalculation<Optional<FeatureObjMaskParams>, FeatureObjMaskParams>  ccDerived =
-				CalculateParamsForDerived.createFromCache(
-					params,
-					createCachedCalculationForDerived(
-						params.cacheFor( cacheName(), FeatureObjMaskParams.class )
-					)	
+				new CalculateParamsForDerived(
+					params.search(
+						createCachedCalculationForDerived(
+							params.cacheFor( cacheName(), FeatureObjMaskParams.class )
+						)
+					)
 				);
 		
 			Optional<FeatureObjMaskParams> paramsDerived = params.calc(ccDerived);

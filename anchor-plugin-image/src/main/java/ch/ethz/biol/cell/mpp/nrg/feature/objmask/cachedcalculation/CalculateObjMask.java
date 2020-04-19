@@ -29,7 +29,7 @@ package ch.ethz.biol.cell.mpp.nrg.feature.objmask.cachedcalculation;
 
 import org.anchoranalysis.core.cache.ExecuteException;
 import org.anchoranalysis.feature.cachedcalculation.CachedCalculation;
-import org.anchoranalysis.feature.cachedcalculation.CachedCalculationMap;
+import org.anchoranalysis.feature.cachedcalculation.RslvdCachedCalculationMap;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.feature.objmask.FeatureObjMaskParams;
 import org.anchoranalysis.image.objmask.ObjMask;
@@ -38,12 +38,12 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
 
 public abstract class CalculateObjMask extends CachedCalculation<ObjMask,FeatureObjMaskParams> {
 
-	private CachedCalculationMap<ObjMask,FeatureObjMaskParams,Integer> map;
+	private RslvdCachedCalculationMap<ObjMask,FeatureObjMaskParams,Integer> map;
 	private int iterations;
 
 	protected CalculateObjMask(
 		int iterations,
-		CachedCalculationMap<ObjMask,FeatureObjMaskParams,Integer> map
+		RslvdCachedCalculationMap<ObjMask,FeatureObjMaskParams,Integer> map
 	) {
 		super();
 		this.iterations = iterations;

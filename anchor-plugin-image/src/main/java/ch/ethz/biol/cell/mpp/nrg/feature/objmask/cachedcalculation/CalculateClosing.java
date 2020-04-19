@@ -30,8 +30,8 @@ package ch.ethz.biol.cell.mpp.nrg.feature.objmask.cachedcalculation;
 import org.anchoranalysis.core.cache.ExecuteException;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.feature.cachedcalculation.CachedCalculation;
-import org.anchoranalysis.feature.cachedcalculation.CachedCalculationMap;
 import org.anchoranalysis.feature.cachedcalculation.RslvdCachedCalculation;
+import org.anchoranalysis.feature.cachedcalculation.RslvdCachedCalculationMap;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.session.cache.ICachedCalculationSearch;
 import org.anchoranalysis.image.feature.objmask.FeatureObjMaskParams;
@@ -43,12 +43,12 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
 public class CalculateClosing extends CachedCalculation<ObjMask,FeatureObjMaskParams> {
 
 	private int iterations;
-	private CachedCalculationMap<ObjMask,FeatureObjMaskParams,Integer> mapDilation;
+	private RslvdCachedCalculationMap<ObjMask,FeatureObjMaskParams,Integer> mapDilation;
 	private boolean do3D;
 	
 	private CalculateClosing(
 		int iterations,
-		CachedCalculationMap<ObjMask,FeatureObjMaskParams,Integer> mapDilation,
+		RslvdCachedCalculationMap<ObjMask,FeatureObjMaskParams,Integer> mapDilation,
 		boolean do3D
 	) {
 		this.iterations = iterations;
@@ -67,7 +67,9 @@ public class CalculateClosing extends CachedCalculation<ObjMask,FeatureObjMaskPa
 		int iterations,
 		boolean do3D
 	) {
-		CachedCalculationMap<ObjMask,FeatureObjMaskParams,Integer> map = cache.search( new CalculateDilationMap(do3D) );
+		RslvdCachedCalculationMap<ObjMask,FeatureObjMaskParams,Integer> map = cache.search(
+			new CalculateDilationMap(do3D)
+		);
 		
 		return cache.search(
 			new CalculateClosing(iterations, map, do3D)
