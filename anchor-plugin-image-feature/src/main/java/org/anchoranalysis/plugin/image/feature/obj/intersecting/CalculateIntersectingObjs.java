@@ -28,7 +28,7 @@ package org.anchoranalysis.plugin.image.feature.obj.intersecting;
 
 import org.anchoranalysis.core.cache.ExecuteException;
 import org.anchoranalysis.feature.cache.calculation.CachedCalculation;
-import org.anchoranalysis.image.feature.objmask.FeatureObjMaskParams;
+import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
 import org.anchoranalysis.image.index.rtree.ObjMaskCollectionRTree;
 import org.anchoranalysis.image.objmask.ObjMaskCollection;
 import org.apache.commons.lang.builder.EqualsBuilder;
@@ -40,7 +40,7 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
  * @author owen
  *
  */
-public class CalculateIntersectingObjs extends CachedCalculation<ObjMaskCollection, FeatureObjMaskParams> {
+public class CalculateIntersectingObjs extends CachedCalculation<ObjMaskCollection, FeatureInputSingleObj> {
 
 	private String id;
 	private ObjMaskCollection searchObjs;
@@ -58,7 +58,7 @@ public class CalculateIntersectingObjs extends CachedCalculation<ObjMaskCollecti
 	}
 
 	@Override
-	protected ObjMaskCollection execute(FeatureObjMaskParams params) throws ExecuteException {
+	protected ObjMaskCollection execute(FeatureInputSingleObj params) throws ExecuteException {
 
 		ObjMaskCollectionRTree bboxRTree = new ObjMaskCollectionRTree( searchObjs );
 		return bboxRTree.intersectsWith( params.getObjMask() );

@@ -31,9 +31,9 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.bean.operator.FeatureGenericSingleElem;
 import org.anchoranalysis.feature.cache.CacheableParams;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
+import org.anchoranalysis.feature.calc.params.FeatureInput;
 
-public class DivideByConstant<T extends FeatureCalcParams> extends FeatureGenericSingleElem<T> {
+public class DivideByConstant<T extends FeatureInput> extends FeatureGenericSingleElem<T> {
 
 	/**
 	 * 

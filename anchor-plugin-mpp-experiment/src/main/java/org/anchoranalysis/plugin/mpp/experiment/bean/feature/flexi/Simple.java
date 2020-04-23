@@ -37,7 +37,7 @@ import org.anchoranalysis.feature.list.NamedFeatureStore;
 import org.anchoranalysis.feature.list.NamedFeatureStoreFactory;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 import org.anchoranalysis.image.extent.Extent;
-import org.anchoranalysis.image.feature.objmask.FeatureObjMaskParams;
+import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
 import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.image.objmask.ObjMaskCollection;
 import org.anchoranalysis.plugin.mpp.experiment.feature.FeatureSessionFlexiFeatureTable;
@@ -49,7 +49,7 @@ import org.anchoranalysis.plugin.mpp.experiment.feature.FeatureSessionNamedFeatu
  * @author Owen Feehan
  *
  */
-public class Simple extends FlexiFeatureTable<FeatureObjMaskParams> {
+public class Simple extends FlexiFeatureTable<FeatureInputSingleObj> {
 
 	/**
 	 * 
@@ -58,23 +58,23 @@ public class Simple extends FlexiFeatureTable<FeatureObjMaskParams> {
 
 	
 	@Override
-	public FeatureSessionFlexiFeatureTable<FeatureObjMaskParams> createFeatures(
-			List<NamedBean<FeatureListProvider<FeatureObjMaskParams>>> list
+	public FeatureSessionFlexiFeatureTable<FeatureInputSingleObj> createFeatures(
+			List<NamedBean<FeatureListProvider<FeatureInputSingleObj>>> list
 	) throws CreateException {
-		NamedFeatureStore<FeatureObjMaskParams> namedFeatures = NamedFeatureStoreFactory.createNamedFeatureList(list);
+		NamedFeatureStore<FeatureInputSingleObj> namedFeatures = NamedFeatureStoreFactory.createNamedFeatureList(list);
 		return new FeatureSessionNamedFeatureStore<>(namedFeatures);
 	}
 
 	@Override
-	public List<FeatureObjMaskParams> createListCalcParams(ObjMaskCollection objs,
+	public List<FeatureInputSingleObj> createListCalcParams(ObjMaskCollection objs,
 			NRGStackWithParams nrgStack, LogErrorReporter logErrorReporter) throws CreateException {
 
-		List<FeatureObjMaskParams> out = new ArrayList<>();
+		List<FeatureInputSingleObj> out = new ArrayList<>();
 		
 		for( ObjMask om : objs ) {
 			checkObjInsideScene(om, nrgStack.getDimensions().getExtnt());
 			
-			FeatureObjMaskParams params = new FeatureObjMaskParams(om);
+			FeatureInputSingleObj params = new FeatureInputSingleObj(om);
 			params.setNrgStack(nrgStack);
 			out.add(params);
 		}

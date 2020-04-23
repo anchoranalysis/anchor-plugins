@@ -30,10 +30,10 @@ import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.operator.FeatureListElem;
 import org.anchoranalysis.feature.cache.CacheableParams;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
+import org.anchoranalysis.feature.calc.params.FeatureInput;
 
 
-public class Multiply<T extends FeatureCalcParams> extends FeatureListElem<T> {
+public class Multiply<T extends FeatureInput> extends FeatureListElem<T> {
 	
 	/**
 	 * 

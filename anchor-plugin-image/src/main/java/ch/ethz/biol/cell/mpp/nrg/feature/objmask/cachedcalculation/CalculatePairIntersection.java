@@ -35,8 +35,8 @@ import org.anchoranalysis.feature.cache.calculation.CachedCalculation;
 import org.anchoranalysis.feature.cache.calculation.RslvdCachedCalculation;
 import org.anchoranalysis.feature.session.cache.ICachedCalculationSearch;
 import org.anchoranalysis.image.extent.ImageDim;
-import org.anchoranalysis.image.feature.objmask.FeatureObjMaskParams;
-import org.anchoranalysis.image.feature.objmask.pair.FeatureObjMaskPairParams;
+import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
+import org.anchoranalysis.image.feature.objmask.pair.FeatureInputPairObjs;
 import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.image.objmask.morph.MorphologicalErosion;
 import org.anchoranalysis.image.objmask.ops.ObjMaskMerger;
@@ -55,18 +55,18 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
  * @author Owen Feehan
  *
  */
-public class CalculatePairIntersection extends CachedCalculation<Optional<ObjMask>,FeatureObjMaskPairParams> {
+public class CalculatePairIntersection extends CachedCalculation<Optional<ObjMask>,FeatureInputPairObjs> {
 
 	private boolean do3D;
 	private int iterationsErosion;
 	
-	private RslvdCachedCalculation<ObjMask,FeatureObjMaskParams> ccDilation1;
-	private RslvdCachedCalculation<ObjMask,FeatureObjMaskParams> ccDilation2;
+	private RslvdCachedCalculation<ObjMask,FeatureInputSingleObj> ccDilation1;
+	private RslvdCachedCalculation<ObjMask,FeatureInputSingleObj> ccDilation2;
 		
-	public static RslvdCachedCalculation<Optional<ObjMask>,FeatureObjMaskPairParams> createFromCache(
-		ICachedCalculationSearch<FeatureObjMaskPairParams> cache,
-		ICachedCalculationSearch<FeatureObjMaskParams> cacheDilationObj1,
-		ICachedCalculationSearch<FeatureObjMaskParams> cacheDilationObj2,
+	public static RslvdCachedCalculation<Optional<ObjMask>,FeatureInputPairObjs> createFromCache(
+		ICachedCalculationSearch<FeatureInputPairObjs> cache,
+		ICachedCalculationSearch<FeatureInputSingleObj> cacheDilationObj1,
+		ICachedCalculationSearch<FeatureInputSingleObj> cacheDilationObj2,
 		int iterations1,
 		int iterations2,
 		boolean do3D,
@@ -75,10 +75,10 @@ public class CalculatePairIntersection extends CachedCalculation<Optional<ObjMas
 		
 		// We use two additional caches, for the calculations involving the single objects, as these can be expensive, and we want
 		//  them also cached
-		RslvdCachedCalculation<ObjMask,FeatureObjMaskParams> ccDilation1 = CalculateDilation.createFromCache(
+		RslvdCachedCalculation<ObjMask,FeatureInputSingleObj> ccDilation1 = CalculateDilation.createFromCache(
 			cacheDilationObj1, iterations1, do3D	
 		);
-		RslvdCachedCalculation<ObjMask,FeatureObjMaskParams> ccDilation2 = CalculateDilation.createFromCache(
+		RslvdCachedCalculation<ObjMask,FeatureInputSingleObj> ccDilation2 = CalculateDilation.createFromCache(
 			cacheDilationObj2, iterations2, do3D	
 		);
 		return cache.search(
@@ -89,8 +89,8 @@ public class CalculatePairIntersection extends CachedCalculation<Optional<ObjMas
 	private CalculatePairIntersection(
 		boolean do3D,
 		int iterationsErosion,
-		RslvdCachedCalculation<ObjMask,FeatureObjMaskParams> ccDilation1,
-		RslvdCachedCalculation<ObjMask,FeatureObjMaskParams> ccDilation2
+		RslvdCachedCalculation<ObjMask,FeatureInputSingleObj> ccDilation1,
+		RslvdCachedCalculation<ObjMask,FeatureInputSingleObj> ccDilation2
 	) {
 		super();
 		this.iterationsErosion = iterationsErosion;
@@ -100,7 +100,7 @@ public class CalculatePairIntersection extends CachedCalculation<Optional<ObjMas
 	}
 
 	@Override
-	protected Optional<ObjMask> execute( FeatureObjMaskPairParams params ) throws ExecuteException {
+	protected Optional<ObjMask> execute( FeatureInputPairObjs params ) throws ExecuteException {
 	
 		ImageDim dim = params.getNrgStack().getDimensions();
 		
@@ -147,7 +147,7 @@ public class CalculatePairIntersection extends CachedCalculation<Optional<ObjMas
 		return new HashCodeBuilder().append(iterationsErosion).append(do3D).append( ccDilation1 ).append( ccDilation2 ).toHashCode();
 	}
 	
-	private Optional<ObjMask> erode( FeatureObjMaskPairParams params, ObjMask omIntersection, ImageDim dim ) throws CreateException {
+	private Optional<ObjMask> erode( FeatureInputPairObjs params, ObjMask omIntersection, ImageDim dim ) throws CreateException {
 
 		ObjMask omMerged = params.getObjMaskMerged();
 		

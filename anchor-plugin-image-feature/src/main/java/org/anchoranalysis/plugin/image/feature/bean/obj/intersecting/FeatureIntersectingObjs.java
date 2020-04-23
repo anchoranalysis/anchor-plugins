@@ -35,7 +35,7 @@ import org.anchoranalysis.feature.cache.calculation.RslvdCachedCalculation;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.feature.bean.objmask.FeatureObjMaskSharedObjects;
 import org.anchoranalysis.image.feature.init.FeatureInitParamsSharedObjs;
-import org.anchoranalysis.image.feature.objmask.FeatureObjMaskParams;
+import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
 import org.anchoranalysis.image.objmask.ObjMaskCollection;
 import org.anchoranalysis.plugin.image.feature.obj.intersecting.CalculateIntersectingObjs;
 
@@ -71,7 +71,7 @@ public abstract class FeatureIntersectingObjs extends FeatureObjMaskSharedObject
 	}
 	
 	@Override
-	public double calc(CacheableParams<FeatureObjMaskParams> params)
+	public double calc(CacheableParams<FeatureInputSingleObj> params)
 			throws FeatureCalcException {
 
 		if (getSearchObjs().size()==0) {
@@ -87,8 +87,8 @@ public abstract class FeatureIntersectingObjs extends FeatureObjMaskSharedObject
 	}
 	
 	protected abstract double valueFor(
-		CacheableParams<FeatureObjMaskParams> params,
-		RslvdCachedCalculation<ObjMaskCollection, FeatureObjMaskParams> intersecting
+		CacheableParams<FeatureInputSingleObj> params,
+		RslvdCachedCalculation<ObjMaskCollection, FeatureInputSingleObj> intersecting
 	) throws FeatureCalcException;
 	
 	public String getId() {

@@ -39,7 +39,7 @@ import org.anchoranalysis.image.bean.objmask.filter.ObjMaskFilter;
 import org.anchoranalysis.image.bean.objmask.match.ObjMaskMatcher;
 import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.feature.bean.evaluator.FeatureEvaluator;
-import org.anchoranalysis.image.feature.objmask.FeatureObjMaskParams;
+import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
 import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.image.objmask.ObjMaskCollection;
 import org.anchoranalysis.image.objmask.match.ObjWithMatches;
@@ -54,10 +54,10 @@ public class ObjMaskFilterFeatureRelationAssociatedObject extends ObjMaskFilter 
 	
 	// START BEAN PROPERTIES
 	@BeanField
-	private FeatureEvaluator<FeatureObjMaskParams> featureEvaluator;
+	private FeatureEvaluator<FeatureInputSingleObj> featureEvaluator;
 	
 	@BeanField @OptionalBean
-	private FeatureEvaluator<FeatureObjMaskParams> featureEvaluatorMatch;		// Optionally uses a different evaluator for the matched objects
+	private FeatureEvaluator<FeatureInputSingleObj> featureEvaluatorMatch;		// Optionally uses a different evaluator for the matched objects
 	
 	@BeanField
 	private ObjMaskMatcher objMaskMatcher;
@@ -69,8 +69,8 @@ public class ObjMaskFilterFeatureRelationAssociatedObject extends ObjMaskFilter 
 	private int cacheSize = 10;			// Cache uses on featureEvaluatorMatch so we don't have to repeatedly calculate on the same object
 	// END BEAN PROPERTIES
 	
-	private FeatureCalculatorSingle<FeatureObjMaskParams> evaluatorForMatch;
-	private FeatureCalculatorSingle<FeatureObjMaskParams> featureSession;
+	private FeatureCalculatorSingle<FeatureInputSingleObj> evaluatorForMatch;
+	private FeatureCalculatorSingle<FeatureInputSingleObj> featureSession;
 		
 	protected void start(ImageDim dim) throws OperationFailedException {
 
@@ -90,7 +90,7 @@ public class ObjMaskFilterFeatureRelationAssociatedObject extends ObjMaskFilter 
 		for( ObjMask match : matches ) {
 			
 			double valMatch = evaluatorForMatch.calcOne(
-				new FeatureObjMaskParams(match)
+				new FeatureInputSingleObj(match)
 			);
 			
 			//System.out.printf("Matching %f against %f\n", val, valMatch);
@@ -140,7 +140,7 @@ public class ObjMaskFilterFeatureRelationAssociatedObject extends ObjMaskFilter 
 	
 	protected boolean match(ObjMask om, ImageDim dim, ObjMaskCollection matches) throws FeatureCalcException {
 		double val = featureSession.calcOne(
-			new FeatureObjMaskParams(om)
+			new FeatureInputSingleObj(om)
 		);
 		return doesMatchAllAssociatedObjects(val,matches);
 	}
@@ -169,20 +169,20 @@ public class ObjMaskFilterFeatureRelationAssociatedObject extends ObjMaskFilter 
 		this.cacheSize = cacheSize;
 	}
 
-	public FeatureEvaluator<FeatureObjMaskParams> getFeatureEvaluator() {
+	public FeatureEvaluator<FeatureInputSingleObj> getFeatureEvaluator() {
 		return featureEvaluator;
 	}
 
-	public void setFeatureEvaluator(FeatureEvaluator<FeatureObjMaskParams> featureEvaluator) {
+	public void setFeatureEvaluator(FeatureEvaluator<FeatureInputSingleObj> featureEvaluator) {
 		this.featureEvaluator = featureEvaluator;
 	}
 
-	public FeatureEvaluator<FeatureObjMaskParams> getFeatureEvaluatorMatch() {
+	public FeatureEvaluator<FeatureInputSingleObj> getFeatureEvaluatorMatch() {
 		return featureEvaluatorMatch;
 	}
 
 	public void setFeatureEvaluatorMatch(
-			FeatureEvaluator<FeatureObjMaskParams> featureEvaluatorMatch) {
+			FeatureEvaluator<FeatureInputSingleObj> featureEvaluatorMatch) {
 		this.featureEvaluatorMatch = featureEvaluatorMatch;
 	}
 

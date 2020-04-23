@@ -35,8 +35,8 @@ import org.anchoranalysis.feature.cache.CacheableParams;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.bean.provider.BinaryImgChnlProvider;
 import org.anchoranalysis.image.feature.init.FeatureInitParamsSharedObjs;
-import org.anchoranalysis.image.feature.objmask.FeatureObjMaskParams;
-import org.anchoranalysis.image.feature.stack.FeatureStackParams;
+import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
+import org.anchoranalysis.image.feature.stack.FeatureInputStack;
 import org.anchoranalysis.image.init.ImageInitParams;
 
 public class BinaryImageChnlProviderFeature extends FeatureStackSharedObjects {
@@ -48,7 +48,7 @@ public class BinaryImageChnlProviderFeature extends FeatureStackSharedObjects {
 	
 	// START BEAN PROPERTIES
 	@BeanField
-	private Feature<FeatureObjMaskParams> item;
+	private Feature<FeatureInputSingleObj> item;
 	
 	@BeanField
 	@SkipInit
@@ -64,7 +64,7 @@ public class BinaryImageChnlProviderFeature extends FeatureStackSharedObjects {
 	}
 		
 	@Override
-	public double calc(CacheableParams<FeatureStackParams> params) throws FeatureCalcException {
+	public double calc(CacheableParams<FeatureInputStack> params) throws FeatureCalcException {
 
 		return params.calcChangeParamsDirect(
 			item,
@@ -73,11 +73,11 @@ public class BinaryImageChnlProviderFeature extends FeatureStackSharedObjects {
 		);
 	}
 
-	public Feature<FeatureObjMaskParams> getItem() {
+	public Feature<FeatureInputSingleObj> getItem() {
 		return item;
 	}
 
-	public void setItem(Feature<FeatureObjMaskParams> item) {
+	public void setItem(Feature<FeatureInputSingleObj> item) {
 		this.item = item;
 	}
 

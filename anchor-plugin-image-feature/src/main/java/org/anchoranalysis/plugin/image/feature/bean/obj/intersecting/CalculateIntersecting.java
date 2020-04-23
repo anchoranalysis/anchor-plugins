@@ -1,25 +1,25 @@
 package org.anchoranalysis.plugin.image.feature.bean.obj.intersecting;
 
 import org.anchoranalysis.feature.cache.calculation.RslvdCachedCalculation;
-import org.anchoranalysis.image.feature.objmask.FeatureObjMaskParams;
-import org.anchoranalysis.image.feature.objmask.pair.FeatureObjMaskPairParams;
+import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
+import org.anchoranalysis.image.feature.objmask.pair.FeatureInputPairObjs;
 import org.anchoranalysis.image.objmask.ObjMaskCollection;
 import org.anchoranalysis.plugin.image.feature.obj.pair.CalculateParamsFromDelegate;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
-public class CalculateIntersecting extends CalculateParamsFromDelegate<FeatureObjMaskPairParams, FeatureObjMaskParams, ObjMaskCollection> {
+public class CalculateIntersecting extends CalculateParamsFromDelegate<FeatureInputPairObjs, FeatureInputSingleObj, ObjMaskCollection> {
 
 	private int index;
 	
-	public CalculateIntersecting(RslvdCachedCalculation<ObjMaskCollection, FeatureObjMaskParams> intersecting, int index) {
+	public CalculateIntersecting(RslvdCachedCalculation<ObjMaskCollection, FeatureInputSingleObj> intersecting, int index) {
 		super(intersecting);
 		this.index = index;
 	}
 	
 	@Override
-	protected FeatureObjMaskPairParams deriveFromDelegate(FeatureObjMaskParams params, ObjMaskCollection delegate) {
-		return new FeatureObjMaskPairParams(
+	protected FeatureInputPairObjs deriveFromDelegate(FeatureInputSingleObj params, ObjMaskCollection delegate) {
+		return new FeatureInputPairObjs(
 			params.getObjMask(),
 			delegate.get(index),
 			params.getNrgStack()

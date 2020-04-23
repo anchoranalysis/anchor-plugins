@@ -37,7 +37,7 @@ import org.anchoranalysis.feature.cache.CacheableParams;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.chnl.Chnl;
 import org.anchoranalysis.image.feature.bean.objmask.FeatureObjMask;
-import org.anchoranalysis.image.feature.objmask.FeatureObjMaskParams;
+import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
 import org.anchoranalysis.image.objmask.ObjMask;
 
 import ch.ethz.biol.cell.mpp.nrg.feature.objmask.cachedcalculation.CalculateShellObjMask;
@@ -98,9 +98,9 @@ public class IntensityMeanShell extends FeatureObjMask {
 	}
 		
 	@Override
-	public double calc(CacheableParams<FeatureObjMaskParams> paramsCacheable) throws FeatureCalcException {
+	public double calc(CacheableParams<FeatureInputSingleObj> paramsCacheable) throws FeatureCalcException {
 		
-		FeatureObjMaskParams params = paramsCacheable.getParams();
+		FeatureInputSingleObj params = paramsCacheable.getParams();
 		
 		Chnl chnl = params.getNrgStack().getNrgStack().getChnl(nrgIndex);
 		

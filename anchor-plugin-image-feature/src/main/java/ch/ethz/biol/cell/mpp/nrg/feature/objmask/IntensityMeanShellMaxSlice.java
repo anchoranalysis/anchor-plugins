@@ -42,7 +42,7 @@ import org.anchoranalysis.image.binary.values.BinaryValues;
 import org.anchoranalysis.image.chnl.Chnl;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.feature.bean.objmask.FeatureObjMask;
-import org.anchoranalysis.image.feature.objmask.FeatureObjMaskParams;
+import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
 import org.anchoranalysis.image.objmask.ObjMask;
 
 import ch.ethz.biol.cell.mpp.nrg.feature.objmask.IntensityMeanMaxSlice.ValueAndIndex;
@@ -97,13 +97,13 @@ public class IntensityMeanShellMaxSlice extends FeatureObjMask {
 	}
 	
 	@Override
-	public double calc(CacheableParams<FeatureObjMaskParams> paramsCacheable) throws FeatureCalcException {
+	public double calc(CacheableParams<FeatureInputSingleObj> paramsCacheable) throws FeatureCalcException {
 		
-		FeatureObjMaskParams params = paramsCacheable.getParams();
+		FeatureInputSingleObj params = paramsCacheable.getParams();
 		
 		NRGStack nrgStack = params.getNrgStack().getNrgStack();
 		
-		CachedCalculation<ObjMask,FeatureObjMaskParams> ccShellObjMask = CalculateShellObjMask.createFromCache(
+		CachedCalculation<ObjMask,FeatureInputSingleObj> ccShellObjMask = CalculateShellObjMask.createFromCache(
 			paramsCacheable,
 			iterationsDilation,
 			iterationsErosion,

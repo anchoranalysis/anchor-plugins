@@ -31,10 +31,10 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.bean.operator.FeatureDoubleElem;
 import org.anchoranalysis.feature.cache.CacheableParams;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
+import org.anchoranalysis.feature.calc.params.FeatureInput;
 
 
-public class DivideExplicit<T extends FeatureCalcParams> extends FeatureDoubleElem<T> {
+public class DivideExplicit<T extends FeatureInput> extends FeatureDoubleElem<T> {
 	
 	/**
 	 * 

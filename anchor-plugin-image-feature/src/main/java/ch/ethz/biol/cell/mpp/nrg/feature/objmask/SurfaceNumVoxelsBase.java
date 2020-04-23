@@ -31,7 +31,7 @@ import org.anchoranalysis.feature.cache.CacheableParams;
 import org.anchoranalysis.feature.cache.calculation.CachedCalculation;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.feature.bean.objmask.FeatureObjMask;
-import org.anchoranalysis.image.feature.objmask.FeatureObjMaskParams;
+import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
 
 public abstract class SurfaceNumVoxelsBase extends FeatureObjMask {
 
@@ -49,13 +49,13 @@ public abstract class SurfaceNumVoxelsBase extends FeatureObjMask {
 	/// END BEAN PROPERTIES
 	
 	@Override
-	public double calc(CacheableParams<FeatureObjMaskParams> params) throws FeatureCalcException {
+	public double calc(CacheableParams<FeatureInputSingleObj> params) throws FeatureCalcException {
 		return params.calc(
 			createParams(mip, suppress3D)		
 		);
 	}
 	
-	protected abstract CachedCalculation<Integer,FeatureObjMaskParams> createParams(boolean mip, boolean suppress3d);
+	protected abstract CachedCalculation<Integer,FeatureInputSingleObj> createParams(boolean mip, boolean suppress3d);
 
 	public boolean isMip() {
 		return mip;

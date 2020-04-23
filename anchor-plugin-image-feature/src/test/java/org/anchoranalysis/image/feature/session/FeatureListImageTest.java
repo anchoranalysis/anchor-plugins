@@ -34,12 +34,12 @@ import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.calc.ResultsVector;
-import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
+import org.anchoranalysis.feature.calc.params.FeatureInput;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
-import org.anchoranalysis.feature.session.SessionFactory;
+import org.anchoranalysis.feature.session.FeatureSession;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorMulti;
-import org.anchoranalysis.image.feature.histogram.FeatureHistogramParams;
-import org.anchoranalysis.image.feature.objmask.FeatureObjMaskParams;
+import org.anchoranalysis.image.feature.histogram.FeatureInputHistogram;
+import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
 import org.anchoranalysis.image.histogram.Histogram;
 import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.test.LoggingFixture;
@@ -70,12 +70,12 @@ public class FeatureListImageTest {
 	@Test(expected = FeatureCalcException.class)
 	public void testNoParams() throws InitException, FeatureCalcException, CreateException {
 		
-		FeatureCalculatorMulti<FeatureCalcParams> session = createAndStart(ConstantsInListFixture.create());
+		FeatureCalculatorMulti<FeatureInput> session = createAndStart(ConstantsInListFixture.create());
 		
-		ResultsVector rv1 = session.calc( (FeatureCalcParams) null );
+		ResultsVector rv1 = session.calc( (FeatureInput) null );
 		ConstantsInListFixture.checkResultVector(rv1);
 		
-		ResultsVector rv2 = session.calc( (FeatureCalcParams) null );
+		ResultsVector rv2 = session.calc( (FeatureInput) null );
 		ConstantsInListFixture.checkResultVector(rv2);
 	}
 	
@@ -83,7 +83,7 @@ public class FeatureListImageTest {
 	@Test
 	public void testHistogram() throws InitException, FeatureCalcException, CreateException {
 		
-		FeatureCalculatorMulti<FeatureHistogramParams> session = createAndStart(
+		FeatureCalculatorMulti<FeatureInputHistogram> session = createAndStart(
 			histogramFeatures(loader)
 		);
 		
@@ -105,7 +105,7 @@ public class FeatureListImageTest {
 	@Test
 	public void testImage() throws InitException, FeatureCalcException, CreateException {
 		
-		FeatureCalculatorMulti<FeatureObjMaskParams> session = createAndStart(
+		FeatureCalculatorMulti<FeatureInputSingleObj> session = createAndStart(
 			objMaskFeatures(loader)
 		);
 		
@@ -138,8 +138,8 @@ public class FeatureListImageTest {
 	
 	
 	
-	private <T extends FeatureCalcParams> FeatureCalculatorMulti<T> createAndStart( FeatureList<T> features ) throws FeatureCalcException {
-		return SessionFactory.createAndStart(
+	private <T extends FeatureInput> FeatureCalculatorMulti<T> createAndStart( FeatureList<T> features ) throws FeatureCalcException {
+		return FeatureSession.with(
 			features,
 			LoggingFixture.simpleLogErrorReporter()
 		);
@@ -150,7 +150,7 @@ public class FeatureListImageTest {
 	 *  
 	 * @throws CreateException 
 	 * */
-	private static FeatureList<FeatureHistogramParams> histogramFeatures( TestLoader loader ) throws CreateException {
+	private static FeatureList<FeatureInputHistogram> histogramFeatures( TestLoader loader ) throws CreateException {
 		return FeaturesFromXmlFixture.createFeatureList("histogramFeatureList.xml", loader);
 	}
 	
@@ -158,19 +158,19 @@ public class FeatureListImageTest {
 	 *  
 	 * @throws CreateException 
 	 * */
-	private static FeatureList<FeatureObjMaskParams> objMaskFeatures( TestLoader loader ) throws CreateException {
+	private static FeatureList<FeatureInputSingleObj> objMaskFeatures( TestLoader loader ) throws CreateException {
 		return FeaturesFromXmlFixture.createFeatureList("objMaskFeatureList.xml", loader);
 	}
 
-	private static FeatureHistogramParams createParams( Histogram hist ) throws CreateException {
-		return new FeatureHistogramParams(
+	private static FeatureInputHistogram createParams( Histogram hist ) throws CreateException {
+		return new FeatureInputHistogram(
 			hist,
 			NRG_STACK.getDimensions().getRes()
 		);
 	}
 	
-	private static FeatureObjMaskParams createParams( ObjMask om ) throws CreateException {
-		FeatureObjMaskParams params = new FeatureObjMaskParams(om);
+	private static FeatureInputSingleObj createParams( ObjMask om ) throws CreateException {
+		FeatureInputSingleObj params = new FeatureInputSingleObj(om);
 		params.setNrgStack(NRG_STACK);
 		return params;
 	}

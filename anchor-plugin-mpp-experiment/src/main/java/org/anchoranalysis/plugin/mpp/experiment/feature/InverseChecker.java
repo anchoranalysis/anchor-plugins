@@ -31,7 +31,7 @@ import java.util.function.Supplier;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.calc.ResultsVector;
 import org.anchoranalysis.feature.name.FeatureNameList;
-import org.anchoranalysis.image.feature.objmask.pair.merged.FeatureObjMaskPairMergedParams;
+import org.anchoranalysis.image.feature.objmask.pair.merged.FeatureInputPairObjsMerged;
 
 class InverseChecker {
 
@@ -52,7 +52,7 @@ class InverseChecker {
 	}
 
 
-	public void checkInverseEqual(ResultsVector rv, ResultsVector rvInverse, FeatureObjMaskPairMergedParams params) throws FeatureCalcException {
+	public void checkInverseEqual(ResultsVector rv, ResultsVector rvInverse, FeatureInputPairObjsMerged params) throws FeatureCalcException {
 		StringBuilder sb = new StringBuilder();
 		if (!isInverseEqual(rv, rvInverse, sb)) {
 			throw new FeatureCalcException(

@@ -26,7 +26,7 @@ package ch.ethz.biol.cell.mpp.nrg.feature.objmaskpairmerged;
  * #L%
  */
 
-import org.anchoranalysis.image.feature.objmask.pair.merged.FeatureObjMaskPairMergedParams;
+import org.anchoranalysis.image.feature.objmask.pair.merged.FeatureInputPairObjsMerged;
 import org.anchoranalysis.image.objmask.ObjMask;
 
 /**
@@ -43,7 +43,7 @@ public class FromSecond extends FromExisting {
 	private static final long serialVersionUID = 1L;
 
 	@Override
-	protected ObjMask selectObjMask(FeatureObjMaskPairMergedParams params) {
+	protected ObjMask selectObjMask(FeatureInputPairObjsMerged params) {
 		return params.getObjMask2();
 	}
 

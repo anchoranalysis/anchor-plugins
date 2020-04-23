@@ -1,9 +1,9 @@
 package ch.ethz.biol.cell.mpp.nrg.feature.all;
 
 import org.anchoranalysis.anchor.mpp.feature.bean.nrg.elem.NRGElemAll;
-import org.anchoranalysis.anchor.mpp.feature.mark.MemoMarks;
-import org.anchoranalysis.anchor.mpp.feature.nrg.elem.NRGElemAllCalcParams;
-import org.anchoranalysis.anchor.mpp.feature.nrg.elem.NRGElemIndCalcParams;
+import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputAllMemo;
+import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputSingleMemo;
+import org.anchoranalysis.anchor.mpp.feature.mark.MemoCollection;
 import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
 
 /*
@@ -37,7 +37,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.cache.CacheableParams;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
+import org.anchoranalysis.feature.calc.params.FeatureInput;
 
 public class CoefficientOfVarianceFromAll extends NRGElemAll {
 
@@ -48,14 +48,14 @@ public class CoefficientOfVarianceFromAll extends NRGElemAll {
 
 	// START BEAN PROPERTIES
 	@BeanField
-	private Feature<FeatureCalcParams> item;
+	private Feature<FeatureInput> item;
 	// END BEAN PROPERTIES
 	
 	@Override
-	public double calc(CacheableParams<NRGElemAllCalcParams> paramsCacheable)
+	public double calc(CacheableParams<FeatureInputAllMemo> paramsCacheable)
 			throws FeatureCalcException {
 		
-		MemoMarks memoMarks = paramsCacheable.getParams().getPxlPartMemo();
+		MemoCollection memoMarks = paramsCacheable.getParams().getPxlPartMemo();
 		
 		if (memoMarks.size()==0) {
 			return 0.0;
@@ -72,7 +72,7 @@ public class CoefficientOfVarianceFromAll extends NRGElemAll {
 	}
 	
 	/** Calculates the feature on each mark separately, populating vals, and returns the mean */
-	private double calcForEachItem( CacheableParams<NRGElemAllCalcParams> paramsCacheable, MemoMarks memoMarks, double vals[] ) throws FeatureCalcException {
+	private double calcForEachItem( CacheableParams<FeatureInputAllMemo> paramsCacheable, MemoCollection memoMarks, double vals[] ) throws FeatureCalcException {
 		
 		double sum = 0.0;		
 		
@@ -93,11 +93,11 @@ public class CoefficientOfVarianceFromAll extends NRGElemAll {
 		return sum / memoMarks.size();
 	}
 	
-	private static NRGElemIndCalcParams extractInd( NRGElemAllCalcParams params, int i ) {
+	private static FeatureInputSingleMemo extractInd( FeatureInputAllMemo params, int i ) {
 		
 		PxlMarkMemo pmm = params.getPxlPartMemo().getMemoForIndex(i);
 		
-		NRGElemIndCalcParams paramsInd = new NRGElemIndCalcParams(null,params.getNrgStack());
+		FeatureInputSingleMemo paramsInd = new FeatureInputSingleMemo(null,params.getNrgStack());
 		paramsInd.setPxlPartMemo(pmm);
 		return paramsInd;
 	}
@@ -112,11 +112,11 @@ public class CoefficientOfVarianceFromAll extends NRGElemAll {
 		return Math.sqrt(sumSqDiff);
 	}
 
-	public Feature<FeatureCalcParams> getItem() {
+	public Feature<FeatureInput> getItem() {
 		return item;
 	}
 
-	public void setItem(Feature<FeatureCalcParams> item) {
+	public void setItem(Feature<FeatureInput> item) {
 		this.item = item;
 	}
 

@@ -31,19 +31,19 @@ import org.anchoranalysis.core.cache.ExecuteException;
 import org.anchoranalysis.feature.cache.calculation.CachedCalculation;
 import org.anchoranalysis.feature.cache.calculation.map.RslvdCachedCalculationMap;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.image.feature.objmask.FeatureObjMaskParams;
+import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
 import org.anchoranalysis.image.objmask.ObjMask;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
-public abstract class CalculateObjMask extends CachedCalculation<ObjMask,FeatureObjMaskParams> {
+public abstract class CalculateObjMask extends CachedCalculation<ObjMask,FeatureInputSingleObj> {
 
-	private RslvdCachedCalculationMap<ObjMask,FeatureObjMaskParams,Integer> map;
+	private RslvdCachedCalculationMap<ObjMask,FeatureInputSingleObj,Integer> map;
 	private int iterations;
 
 	protected CalculateObjMask(
 		int iterations,
-		RslvdCachedCalculationMap<ObjMask,FeatureObjMaskParams,Integer> map
+		RslvdCachedCalculationMap<ObjMask,FeatureInputSingleObj,Integer> map
 	) {
 		super();
 		this.iterations = iterations;
@@ -56,7 +56,7 @@ public abstract class CalculateObjMask extends CachedCalculation<ObjMask,Feature
 	}
 
 	@Override
-	protected ObjMask execute( FeatureObjMaskParams params ) throws ExecuteException {
+	protected ObjMask execute( FeatureInputSingleObj params ) throws ExecuteException {
 		
 		if (iterations==0) {
 			return params.getObjMask();

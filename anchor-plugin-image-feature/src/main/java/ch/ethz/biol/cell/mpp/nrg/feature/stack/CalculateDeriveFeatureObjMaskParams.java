@@ -5,13 +5,13 @@ import org.anchoranalysis.feature.cache.calculation.CachedCalculation;
 import org.anchoranalysis.image.binary.BinaryChnl;
 import org.anchoranalysis.image.binary.values.BinaryValues;
 import org.anchoranalysis.image.chnl.Chnl;
-import org.anchoranalysis.image.feature.objmask.FeatureObjMaskParams;
-import org.anchoranalysis.image.feature.stack.FeatureStackParams;
+import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
+import org.anchoranalysis.image.feature.stack.FeatureInputStack;
 import org.anchoranalysis.image.objmask.ObjMask;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
-public class CalculateDeriveFeatureObjMaskParams extends CachedCalculation<FeatureObjMaskParams, FeatureStackParams> {
+public class CalculateDeriveFeatureObjMaskParams extends CachedCalculation<FeatureInputSingleObj, FeatureInputStack> {
 
 	private int nrgIndex;
 		
@@ -21,8 +21,8 @@ public class CalculateDeriveFeatureObjMaskParams extends CachedCalculation<Featu
 	}
 
 	@Override
-	protected FeatureObjMaskParams execute(FeatureStackParams params) throws ExecuteException {
-		FeatureObjMaskParams paramsObj = new FeatureObjMaskParams();
+	protected FeatureInputSingleObj execute(FeatureInputStack params) throws ExecuteException {
+		FeatureInputSingleObj paramsObj = new FeatureInputSingleObj();
 		
 		ObjMask om = extractObjMask(params);
 		paramsObj.setNrgStack( params.getNrgStack() );
@@ -30,7 +30,7 @@ public class CalculateDeriveFeatureObjMaskParams extends CachedCalculation<Featu
 		return paramsObj;
 	}
 	
-	private ObjMask extractObjMask(FeatureStackParams params) {
+	private ObjMask extractObjMask(FeatureInputStack params) {
 		Chnl chnl = params.getNrgStack().getChnl(nrgIndex);
 		BinaryChnl binary = new BinaryChnl(chnl, BinaryValues.getDefault());
 		

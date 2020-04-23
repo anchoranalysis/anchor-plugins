@@ -31,8 +31,8 @@ import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.cache.CacheableParams;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.feature.bean.objmask.pair.FeatureObjMaskPair;
-import org.anchoranalysis.image.feature.objmask.FeatureObjMaskParams;
-import org.anchoranalysis.image.feature.objmask.pair.FeatureObjMaskPairParams;
+import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
+import org.anchoranalysis.image.feature.objmask.pair.FeatureInputPairObjs;
 
 /**
  * Base class for evaluating FeatureObjMaskPair in terms of the order of the elements (first object, second order etc.)
@@ -49,10 +49,10 @@ public abstract class FeatureObjMaskPairOrder extends FeatureObjMaskPair {
 	
 	// START BEAN PROPERTIES
 	@BeanField
-	private Feature<FeatureObjMaskParams> feature;
+	private Feature<FeatureInputSingleObj> feature;
 	// END BEAN PROPERTIES
 		
-	protected double valueFromObj1( CacheableParams<FeatureObjMaskPairParams> params ) throws FeatureCalcException {
+	protected double valueFromObj1( CacheableParams<FeatureInputPairObjs> params ) throws FeatureCalcException {
 		return featureValFrom(
 			params,
 			true,
@@ -60,7 +60,7 @@ public abstract class FeatureObjMaskPairOrder extends FeatureObjMaskPair {
 		);
 	}
 	
-	protected double valueFromObj2( CacheableParams<FeatureObjMaskPairParams> params ) throws FeatureCalcException {
+	protected double valueFromObj2( CacheableParams<FeatureInputPairObjs> params ) throws FeatureCalcException {
 		return featureValFrom(
 			params,
 			false,
@@ -68,7 +68,7 @@ public abstract class FeatureObjMaskPairOrder extends FeatureObjMaskPair {
 		);
 	}
 	
-	private double featureValFrom( CacheableParams<FeatureObjMaskPairParams> params, boolean first, String sessionName ) throws FeatureCalcException {
+	private double featureValFrom( CacheableParams<FeatureInputPairObjs> params, boolean first, String sessionName ) throws FeatureCalcException {
 	
 		return params.calcChangeParamsDirect(
 			feature,
@@ -77,11 +77,11 @@ public abstract class FeatureObjMaskPairOrder extends FeatureObjMaskPair {
 		);
 	}
 	
-	public Feature<FeatureObjMaskParams> getFeature() {
+	public Feature<FeatureInputSingleObj> getFeature() {
 		return feature;
 	}
 
-	public void setFeature(Feature<FeatureObjMaskParams> feature) {
+	public void setFeature(Feature<FeatureInputSingleObj> feature) {
 		this.feature = feature;
 	}
 }

@@ -37,8 +37,8 @@ import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.cache.CacheableParams;
 import org.anchoranalysis.feature.cache.calculation.RslvdCachedCalculation;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.image.feature.objmask.FeatureObjMaskParams;
-import org.anchoranalysis.image.feature.objmask.pair.FeatureObjMaskPairParams;
+import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
+import org.anchoranalysis.image.feature.objmask.pair.FeatureInputPairObjs;
 import org.anchoranalysis.image.objmask.ObjMaskCollection;
 
 public abstract class FeatureIntersectingObjsSingleElem extends FeatureIntersectingObjs {
@@ -52,11 +52,11 @@ public abstract class FeatureIntersectingObjsSingleElem extends FeatureIntersect
 
 	// START BEAN PROPERTIES
 	@BeanField
-	private Feature<FeatureObjMaskPairParams> item;
+	private Feature<FeatureInputPairObjs> item;
 	// END BEAN PROPERTIES
 	
 	@Override
-	protected double valueFor(CacheableParams<FeatureObjMaskParams> params, RslvdCachedCalculation<ObjMaskCollection, FeatureObjMaskParams> intersecting)
+	protected double valueFor(CacheableParams<FeatureInputSingleObj> params, RslvdCachedCalculation<ObjMaskCollection, FeatureInputSingleObj> intersecting)
 			throws FeatureCalcException {
 
 		try {
@@ -70,7 +70,7 @@ public abstract class FeatureIntersectingObjsSingleElem extends FeatureIntersect
 	
 	protected abstract double aggregateResults( List<Double> results );
 	
-	private List<Double> calcResults( CacheableParams<FeatureObjMaskParams> paramsExst, RslvdCachedCalculation<ObjMaskCollection, FeatureObjMaskParams> ccIntersecting ) throws FeatureCalcException, ExecuteException {
+	private List<Double> calcResults( CacheableParams<FeatureInputSingleObj> paramsExst, RslvdCachedCalculation<ObjMaskCollection, FeatureInputSingleObj> ccIntersecting ) throws FeatureCalcException, ExecuteException {
 		
 		int size = ccIntersecting.getOrCalculate(paramsExst.getParams()).size();
 		
@@ -89,11 +89,11 @@ public abstract class FeatureIntersectingObjsSingleElem extends FeatureIntersect
 		return results;
 	}
 	
-	public Feature<FeatureObjMaskPairParams> getItem() {
+	public Feature<FeatureInputPairObjs> getItem() {
 		return item;
 	}
 
-	public void setItem(Feature<FeatureObjMaskPairParams> item) {
+	public void setItem(Feature<FeatureInputPairObjs> item) {
 		this.item = item;
 	}
 

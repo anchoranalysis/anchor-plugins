@@ -29,7 +29,7 @@ import org.anchoranalysis.feature.cache.CacheableParams;
  */
 
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.image.feature.objmask.FeatureObjMaskParams;
+import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
 
 public class AxisEigenvalue extends ObjMaskPointsSpecificEigenvalueBase {
 
@@ -42,7 +42,7 @@ public class AxisEigenvalue extends ObjMaskPointsSpecificEigenvalueBase {
 	// END BEAN PROPERTIES
 
 	@Override
-	public double calc(CacheableParams<FeatureObjMaskParams> params) throws FeatureCalcException {
+	public double calc(CacheableParams<FeatureInputSingleObj> params) throws FeatureCalcException {
 		return calcSpecificEigenvector(params).getEigenvalue();
 	}
 }

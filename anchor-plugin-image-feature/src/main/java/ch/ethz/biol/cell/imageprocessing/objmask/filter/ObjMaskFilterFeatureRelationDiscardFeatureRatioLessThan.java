@@ -38,12 +38,12 @@ import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.provider.FeatureProvider;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.init.FeatureInitParams;
-import org.anchoranalysis.feature.session.SessionFactory;
+import org.anchoranalysis.feature.session.FeatureSession;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorSingle;
 import org.anchoranalysis.image.bean.objmask.filter.ObjMaskFilter;
 import org.anchoranalysis.image.bean.provider.ChnlProvider;
 import org.anchoranalysis.image.extent.ImageDim;
-import org.anchoranalysis.image.feature.objmask.FeatureObjMaskParams;
+import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
 import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.image.objmask.ObjMaskCollection;
 
@@ -62,7 +62,7 @@ public class ObjMaskFilterFeatureRelationDiscardFeatureRatioLessThan extends Obj
 	
 	// START BEAN PROPERTIES
 	@BeanField
-	private FeatureProvider<FeatureObjMaskParams> featureProvider;
+	private FeatureProvider<FeatureInputSingleObj> featureProvider;
 	
 	@BeanField
 	private double factor = 1;
@@ -92,7 +92,7 @@ public class ObjMaskFilterFeatureRelationDiscardFeatureRatioLessThan extends Obj
 			return;
 		}
 		
-		FeatureCalculatorSingle<FeatureObjMaskParams> session = createSession();
+		FeatureCalculatorSingle<FeatureInputSingleObj> session = createSession();
 		
 		// Now we calculate feature values for each object, and a standard deviation
 		DoubleArrayList featureValsSorted = new DoubleArrayList();
@@ -102,12 +102,12 @@ public class ObjMaskFilterFeatureRelationDiscardFeatureRatioLessThan extends Obj
 		removeOutliers(objs, objsRejected, featureValsOriginalOrder, featureValsSorted);
 	}
 	
-	private FeatureCalculatorSingle<FeatureObjMaskParams> createSession() throws OperationFailedException {
+	private FeatureCalculatorSingle<FeatureInputSingleObj> createSession() throws OperationFailedException {
 		
 		try {
-			Feature<FeatureObjMaskParams> feature = featureProvider.create();
+			Feature<FeatureInputSingleObj> feature = featureProvider.create();
 			
-			FeatureCalculatorSingle<FeatureObjMaskParams> session = SessionFactory.createAndStart(
+			FeatureCalculatorSingle<FeatureInputSingleObj> session = FeatureSession.with(
 				feature,
 				new FeatureInitParams(),
 				getSharedObjects().getFeature().getSharedFeatureSet().downcast(),
@@ -121,13 +121,13 @@ public class ObjMaskFilterFeatureRelationDiscardFeatureRatioLessThan extends Obj
 		}
 	}
 	
-	private void calculateVals( ObjMaskCollection objs, DoubleArrayList featureValsOriginalOrder, DoubleArrayList featureValsSorted, FeatureCalculatorSingle<FeatureObjMaskParams> session ) throws OperationFailedException {
+	private void calculateVals( ObjMaskCollection objs, DoubleArrayList featureValsOriginalOrder, DoubleArrayList featureValsSorted, FeatureCalculatorSingle<FeatureInputSingleObj> session ) throws OperationFailedException {
 
 		for( ObjMask om : objs ) {
 			double featureVal;
 			try {
 				featureVal = session.calcOne(
-					new FeatureObjMaskParams(om)
+					new FeatureInputSingleObj(om)
 				);
 			} catch (FeatureCalcException e) {
 				throw new OperationFailedException(e);
@@ -208,11 +208,11 @@ public class ObjMaskFilterFeatureRelationDiscardFeatureRatioLessThan extends Obj
 		return listToRemove;
 	}
 	
-	public FeatureProvider<FeatureObjMaskParams> getFeatureProvider() {
+	public FeatureProvider<FeatureInputSingleObj> getFeatureProvider() {
 		return featureProvider;
 	}
 
-	public void setFeatureProvider(FeatureProvider<FeatureObjMaskParams> featureProvider) {
+	public void setFeatureProvider(FeatureProvider<FeatureInputSingleObj> featureProvider) {
 		this.featureProvider = featureProvider;
 	}
 	public ChnlProvider getChnlProvider() {

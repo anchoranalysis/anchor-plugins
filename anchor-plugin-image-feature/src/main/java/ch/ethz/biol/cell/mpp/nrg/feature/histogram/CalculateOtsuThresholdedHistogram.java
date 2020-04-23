@@ -33,13 +33,13 @@ import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.feature.cache.calculation.CachedCalculation;
 import org.anchoranalysis.image.bean.threshold.CalculateLevel;
-import org.anchoranalysis.image.feature.histogram.FeatureHistogramParams;
+import org.anchoranalysis.image.feature.histogram.FeatureInputHistogram;
 import org.anchoranalysis.image.histogram.Histogram;
 import org.anchoranalysis.plugin.image.bean.threshold.HistogramThresholder;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
-class CalculateOtsuThresholdedHistogram extends CachedCalculation<Histogram, FeatureHistogramParams> {
+class CalculateOtsuThresholdedHistogram extends CachedCalculation<Histogram, FeatureInputHistogram> {
 
 	private CalculateLevel calculateLevel;
 	
@@ -52,7 +52,7 @@ class CalculateOtsuThresholdedHistogram extends CachedCalculation<Histogram, Fea
 	}
 
 	@Override
-	protected Histogram execute(FeatureHistogramParams params) throws ExecuteException {
+	protected Histogram execute(FeatureInputHistogram params) throws ExecuteException {
 		try {
 			if (!calculateLevel.isHasBeenInit()) {
 				calculateLevel.init( NullInitParams.instance(), logger);

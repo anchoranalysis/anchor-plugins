@@ -1,7 +1,7 @@
 package ch.ethz.biol.cell.mpp.nrg.feature.objmask;
 
 import org.anchoranalysis.feature.cache.calculation.CachedCalculation;
-import org.anchoranalysis.image.feature.objmask.FeatureObjMaskParams;
+import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
 
 import ch.ethz.biol.cell.mpp.nrg.feature.objmask.cachedcalculation.CalculateOutlineNumVoxels;
 
@@ -19,7 +19,7 @@ public class SurfaceNumVoxels extends SurfaceNumVoxelsBase {
 	private static final long serialVersionUID = 1L;
 
 	@Override
-	protected CachedCalculation<Integer, FeatureObjMaskParams> createParams(boolean mip, boolean suppress3d) {
+	protected CachedCalculation<Integer, FeatureInputSingleObj> createParams(boolean mip, boolean suppress3d) {
 		return new CalculateOutlineNumVoxels(mip, suppress3d);
 	}
 }

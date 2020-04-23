@@ -34,11 +34,11 @@ import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.bean.list.FeatureListProvider;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.calc.ResultsVector;
-import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
+import org.anchoranalysis.feature.calc.params.FeatureInput;
 import org.anchoranalysis.feature.list.NamedFeatureStore;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 import org.anchoranalysis.image.bean.provider.stack.StackProvider;
-import org.anchoranalysis.image.feature.stack.FeatureStackParams;
+import org.anchoranalysis.image.feature.stack.FeatureInputStack;
 import org.anchoranalysis.image.init.ImageInitParams;
 import org.anchoranalysis.image.io.input.ProvidesStackInput;
 import org.anchoranalysis.image.io.input.StackInputInitParamsCreator;
@@ -54,14 +54,14 @@ import org.anchoranalysis.image.io.input.StackInputInitParamsCreator;
  */
 public class FeatureCalculatorStackInputFromStore {
 
-	private FeatureList<FeatureStackParams> featureList;
+	private FeatureList<FeatureInputStack> featureList;
 	
 	private HelperImageFeatureCalculator helper;
 	private ImageInitParams initParams;
 	private NRGStackWithParams nrgStack;
 		
 	public FeatureCalculatorStackInputFromStore(ProvidesStackInput stackInput, StackProvider nrgStackProvider,
-			NamedFeatureStore<FeatureStackParams> featureStore, Path modelDir, LogErrorReporter logErrorReporter) throws OperationFailedException {
+			NamedFeatureStore<FeatureInputStack> featureStore, Path modelDir, LogErrorReporter logErrorReporter) throws OperationFailedException {
 		super();
 		
 		helper = new HelperImageFeatureCalculator(logErrorReporter);
@@ -78,7 +78,7 @@ public class FeatureCalculatorStackInputFromStore {
 	/** Calculates a single-feature that comes in a featureProvider 
 	 * @throws FeatureCalcException */
 	public double calcSingleFromProvider(
-			FeatureListProvider<FeatureStackParams> featureProvider,
+			FeatureListProvider<FeatureInputStack> featureProvider,
 			String featureProviderName
 	) throws FeatureCalcException {
 		return helper.calcSingleIndirectly(
@@ -99,7 +99,7 @@ public class FeatureCalculatorStackInputFromStore {
 		return initParams;
 	}
 	
-	private static <T extends FeatureCalcParams> FeatureList<T> extractFeatures( NamedFeatureStore<T> featureStore ) {
+	private static <T extends FeatureInput> FeatureList<T> extractFeatures( NamedFeatureStore<T> featureStore ) {
 		NamedFeatureStore<T> featureStoreForTask = featureStore.deepCopy();
 		return featureStoreForTask.listFeatures();
 	}

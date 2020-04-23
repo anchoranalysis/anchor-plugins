@@ -32,12 +32,12 @@ import org.anchoranalysis.feature.session.calculator.FeatureCalculatorSingle;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorSingleChangeParams;
 import org.anchoranalysis.image.bean.provider.ChnlProvider;
 import org.anchoranalysis.image.chnl.Chnl;
-import org.anchoranalysis.image.feature.objmask.FeatureObjMaskParams;
+import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
 
 public class NRGStackUtilities {
 
-	public static FeatureCalculatorSingle<FeatureObjMaskParams> maybeAddNrgStack(
-		FeatureCalculatorSingle<FeatureObjMaskParams> session,
+	public static FeatureCalculatorSingle<FeatureInputSingleObj> maybeAddNrgStack(
+		FeatureCalculatorSingle<FeatureInputSingleObj> session,
 		ChnlProvider chnlProvider
 	) throws CreateException {
 		

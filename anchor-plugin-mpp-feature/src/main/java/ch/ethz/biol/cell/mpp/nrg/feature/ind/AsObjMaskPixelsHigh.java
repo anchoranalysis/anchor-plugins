@@ -3,8 +3,8 @@ package ch.ethz.biol.cell.mpp.nrg.feature.ind;
 import java.util.Optional;
 
 import org.anchoranalysis.anchor.mpp.bean.regionmap.RegionMap;
-import org.anchoranalysis.anchor.mpp.feature.nrg.elem.NRGElemIndCalcParams;
-import org.anchoranalysis.anchor.mpp.feature.nrg.elem.NRGElemIndCalcParamsDescriptor;
+import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputSingleMemo;
+import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputSingleMemoDescriptor;
 import org.anchoranalysis.anchor.mpp.regionmap.RegionMapSingleton;
 
 /*
@@ -38,13 +38,13 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.bean.operator.FeatureSingleElem;
 import org.anchoranalysis.feature.cache.CacheableParams;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.feature.params.FeatureParamsDescriptor;
+import org.anchoranalysis.feature.params.FeatureInputDescriptor;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
-import org.anchoranalysis.image.feature.objmask.FeatureObjMaskParams;
+import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
 import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.image.objmask.properties.ObjMaskWithProperties;
 
-public class AsObjMaskPixelsHigh extends FeatureSingleElem<NRGElemIndCalcParams,FeatureObjMaskParams> {
+public class AsObjMaskPixelsHigh extends FeatureSingleElem<FeatureInputSingleMemo,FeatureInputSingleObj> {
 
 	/**
 	 * 
@@ -66,7 +66,7 @@ public class AsObjMaskPixelsHigh extends FeatureSingleElem<NRGElemIndCalcParams,
 	// END BEAN PROPERTIES
 	
 	@Override
-	public double calc(CacheableParams<NRGElemIndCalcParams> params) throws FeatureCalcException {
+	public double calc(CacheableParams<FeatureInputSingleMemo> params) throws FeatureCalcException {
 		return params
 			.calcChangeParams(
 				getItem(),
@@ -75,8 +75,8 @@ public class AsObjMaskPixelsHigh extends FeatureSingleElem<NRGElemIndCalcParams,
 			);
 	}
 	
-	private FeatureObjMaskParams createObjParams( NRGElemIndCalcParams params ) {
-		return new FeatureObjMaskParams(
+	private FeatureInputSingleObj createObjParams( FeatureInputSingleMemo params ) {
+		return new FeatureInputSingleObj(
 			findIntersection(params).get(),	// TODO fix, this is always assuming an intersection
 			params.getNrgStack()
 		);
@@ -85,12 +85,12 @@ public class AsObjMaskPixelsHigh extends FeatureSingleElem<NRGElemIndCalcParams,
 	// We change the default behaviour, as we don't want to give the same paramsFactory
 	//   as the item we pass to
 	@Override
-	public FeatureParamsDescriptor paramType()
+	public FeatureInputDescriptor paramType()
 			throws FeatureCalcException {
-		return NRGElemIndCalcParamsDescriptor.instance;
+		return FeatureInputSingleMemoDescriptor.instance;
 	}
 	
-	private Optional<ObjMask> findIntersection( NRGElemIndCalcParams paramsCast ) {
+	private Optional<ObjMask> findIntersection( FeatureInputSingleMemo paramsCast ) {
 		
 		ObjMaskWithProperties omWithProps = paramsCast.getPxlPartMemo().getMark().calcMask(
 			paramsCast.getNrgStack().getDimensions(),

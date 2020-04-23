@@ -32,8 +32,8 @@ import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.cache.CacheableParams;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.feature.bean.FeatureStack;
-import org.anchoranalysis.image.feature.objmask.FeatureObjMaskParams;
-import org.anchoranalysis.image.feature.stack.FeatureStackParams;
+import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
+import org.anchoranalysis.image.feature.stack.FeatureInputStack;
 
 /**
  * Treats a channel as an object-mask, assuming binary values of 0 and 255
@@ -51,7 +51,7 @@ public class AsObjMask extends FeatureStack {
 	
 	// START BEAN PROPERTIES
 	@BeanField
-	private Feature<FeatureObjMaskParams> item;
+	private Feature<FeatureInputSingleObj> item;
 	
 	@BeanField
 	/** The channel that that forms the binary mask */
@@ -59,7 +59,7 @@ public class AsObjMask extends FeatureStack {
 	// END BEAN PROPERTIES
 	
 	@Override
-	public double calc(CacheableParams<FeatureStackParams> params) throws FeatureCalcException {
+	public double calc(CacheableParams<FeatureInputStack> params) throws FeatureCalcException {
 		
 		return params.calcChangeParamsDirect(
 			item,
@@ -68,11 +68,11 @@ public class AsObjMask extends FeatureStack {
 		);
 	}
 
-	public Feature<FeatureObjMaskParams> getItem() {
+	public Feature<FeatureInputSingleObj> getItem() {
 		return item;
 	}
 
-	public void setItem(Feature<FeatureObjMaskParams> item) {
+	public void setItem(Feature<FeatureInputSingleObj> item) {
 		this.item = item;
 	}
 

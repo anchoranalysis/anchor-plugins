@@ -30,8 +30,8 @@ package ch.ethz.biol.cell.mpp.nrg.feature.objmask;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.params.KeyValueParams;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.feature.calc.params.FeatureInputNRGStack;
 import org.anchoranalysis.image.feature.bean.FeatureNRGStack;
-import org.anchoranalysis.image.feature.stack.nrg.FeatureNRGStackParams;
 
 public class NRGParam extends FeatureNRGStack {
 
@@ -45,7 +45,7 @@ public class NRGParam extends FeatureNRGStack {
 	private String id;
 	// END BEAN PROPERTIES
 	
-	static double calcForPropertyID( FeatureNRGStackParams params, String id ) throws FeatureCalcException {
+	static double calcForPropertyID( FeatureInputNRGStack params, String id ) throws FeatureCalcException {
 		
 		double val = calcWithMaybeNaN(params, id);
 		
@@ -59,12 +59,12 @@ public class NRGParam extends FeatureNRGStack {
 	}
 	
 	@Override
-	public double calcCast(FeatureNRGStackParams params)
+	public double calcCast(FeatureInputNRGStack params)
 			throws FeatureCalcException {
 		return calcForPropertyID( params, id );
 	}
 	
-	private static double calcWithMaybeNaN( FeatureNRGStackParams params, String id ) throws FeatureCalcException {
+	private static double calcWithMaybeNaN( FeatureInputNRGStack params, String id ) throws FeatureCalcException {
 		KeyValueParams kpv = params.getNrgStack().getParams();
 		
 		if (kpv==null) {

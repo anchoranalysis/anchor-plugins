@@ -32,9 +32,9 @@ import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.operator.FeatureGenericSingleElem;
 import org.anchoranalysis.feature.cache.CacheableParams;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
+import org.anchoranalysis.feature.calc.params.FeatureInput;
 
-public class IfElse<T extends FeatureCalcParams> extends FeatureGenericSingleElem<T> {
+public class IfElse<T extends FeatureInput> extends FeatureGenericSingleElem<T> {
 
 	/**
 	 * 

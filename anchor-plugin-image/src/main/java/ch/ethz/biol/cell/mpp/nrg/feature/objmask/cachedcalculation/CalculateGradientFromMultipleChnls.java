@@ -40,7 +40,7 @@ import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
 import org.anchoranalysis.image.chnl.Chnl;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.Extent;
-import org.anchoranalysis.image.feature.objmask.FeatureObjMaskParams;
+import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
 import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
@@ -56,7 +56,7 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
  * @author Owen Feehan
  *
  */
-public class CalculateGradientFromMultipleChnls extends CachedCalculation<List<Point3d>,FeatureObjMaskParams> {
+public class CalculateGradientFromMultipleChnls extends CachedCalculation<List<Point3d>,FeatureInputSingleObj> {
 
 	private int nrgIndexX;
 	
@@ -146,7 +146,7 @@ public class CalculateGradientFromMultipleChnls extends CachedCalculation<List<P
 	}
 
 	@Override
-	protected List<Point3d> execute(FeatureObjMaskParams params)
+	protected List<Point3d> execute(FeatureInputSingleObj params)
 			throws ExecuteException {
 
 		if (nrgIndexX==-1 || nrgIndexY==-1) {

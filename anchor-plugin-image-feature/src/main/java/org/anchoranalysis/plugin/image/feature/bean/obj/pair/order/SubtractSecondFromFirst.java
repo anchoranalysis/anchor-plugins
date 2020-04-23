@@ -30,7 +30,7 @@ import org.anchoranalysis.feature.cache.CacheableParams;
 
 
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.image.feature.objmask.pair.FeatureObjMaskPairParams;
+import org.anchoranalysis.image.feature.objmask.pair.FeatureInputPairObjs;
 
 
 /**
@@ -47,7 +47,7 @@ public class SubtractSecondFromFirst extends FeatureObjMaskPairOrder {
 	private static final long serialVersionUID = 1L;
 
 	@Override
-	public double calc(CacheableParams<FeatureObjMaskPairParams> params)
+	public double calc(CacheableParams<FeatureInputPairObjs> params)
 			throws FeatureCalcException {
 		return valueFromObj1(params) - valueFromObj2(params); 
 	}

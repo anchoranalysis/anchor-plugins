@@ -43,7 +43,7 @@ import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.feature.bean.evaluator.FeatureEvaluator;
-import org.anchoranalysis.image.feature.objmask.FeatureObjMaskParams;
+import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
 import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.image.objmask.ObjMaskCollection;
 import org.anchoranalysis.image.sgmn.SgmnFailedException;
@@ -61,7 +61,7 @@ public class SgmnThrshldFeatureObjMask extends BinarySgmn {
 	
 	// START PARAMETERS
 	@BeanField
-	private FeatureEvaluator<FeatureObjMaskParams> featureEvaluator;
+	private FeatureEvaluator<FeatureInputSingleObj> featureEvaluator;
 	
 	@BeanField
 	private ObjMaskProvider objs;
@@ -70,7 +70,7 @@ public class SgmnThrshldFeatureObjMask extends BinarySgmn {
 	private double calculateLevel() throws SgmnFailedException {
 		
 		try {
-			FeatureCalculatorSingle<FeatureObjMaskParams> session = featureEvaluator.createAndStartSession();
+			FeatureCalculatorSingle<FeatureInputSingleObj> session = featureEvaluator.createAndStartSession();
 			
 			ObjMaskCollection omc = objs.create();
 			
@@ -81,7 +81,7 @@ public class SgmnThrshldFeatureObjMask extends BinarySgmn {
 			}
 		
 			return session.calcOne(
-				new FeatureObjMaskParams(omc.get(0))
+				new FeatureInputSingleObj(omc.get(0))
 			);
 			
 		} catch (FeatureCalcException e) {
@@ -145,11 +145,11 @@ public class SgmnThrshldFeatureObjMask extends BinarySgmn {
 		return null;
 	}
 
-	public FeatureEvaluator<FeatureObjMaskParams> getFeatureEvaluator() {
+	public FeatureEvaluator<FeatureInputSingleObj> getFeatureEvaluator() {
 		return featureEvaluator;
 	}
 
-	public void setFeatureEvaluator(FeatureEvaluator<FeatureObjMaskParams> featureEvaluator) {
+	public void setFeatureEvaluator(FeatureEvaluator<FeatureInputSingleObj> featureEvaluator) {
 		this.featureEvaluator = featureEvaluator;
 	}
 

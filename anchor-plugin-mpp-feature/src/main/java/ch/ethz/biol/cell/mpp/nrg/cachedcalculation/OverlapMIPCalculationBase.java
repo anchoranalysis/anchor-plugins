@@ -27,7 +27,7 @@ package ch.ethz.biol.cell.mpp.nrg.cachedcalculation;
  */
 
 import org.anchoranalysis.anchor.mpp.bean.regionmap.RegionMembershipWithFlags;
-import org.anchoranalysis.anchor.mpp.feature.nrg.elem.NRGElemPairCalcParams;
+import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputPairMemo;
 import org.anchoranalysis.anchor.mpp.overlap.MaxIntensityProjectionPair;
 import org.anchoranalysis.anchor.mpp.pxlmark.PxlMark;
 import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
@@ -36,7 +36,7 @@ import org.anchoranalysis.feature.cache.calculation.CachedCalculation;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
-public abstract class OverlapMIPCalculationBase extends CachedCalculation<Double, NRGElemPairCalcParams> {
+public abstract class OverlapMIPCalculationBase extends CachedCalculation<Double, FeatureInputPairMemo> {
 
 	private int regionID;
 
@@ -47,7 +47,7 @@ public abstract class OverlapMIPCalculationBase extends CachedCalculation<Double
 	}
 
 	@Override
-	protected Double execute( NRGElemPairCalcParams params ) throws ExecuteException {
+	protected Double execute( FeatureInputPairMemo params ) throws ExecuteException {
 		
 		PxlMarkMemo mark1 = params.getObj1();
 		PxlMarkMemo mark2 = params.getObj2();

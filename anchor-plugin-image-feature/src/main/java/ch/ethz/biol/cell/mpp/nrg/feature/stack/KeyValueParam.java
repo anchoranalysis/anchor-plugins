@@ -35,7 +35,7 @@ import org.anchoranalysis.core.params.KeyValueParams;
 import org.anchoranalysis.feature.cache.CacheableParams;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.feature.bean.FeatureStack;
-import org.anchoranalysis.image.feature.stack.FeatureStackParams;
+import org.anchoranalysis.image.feature.stack.FeatureInputStack;
 import org.anchoranalysis.image.init.ImageInitParams;
 
 public class KeyValueParam extends FeatureStack {
@@ -54,7 +54,7 @@ public class KeyValueParam extends FeatureStack {
 	// END BEAN PROPERTIES
 
 	@Override
-	public double calc(CacheableParams<FeatureStackParams> params)
+	public double calc(CacheableParams<FeatureInputStack> params)
 			throws FeatureCalcException {
 		try {
 			Optional<ImageInitParams> initParams = params.getParams().getSharedObjs();

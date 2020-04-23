@@ -31,12 +31,12 @@ import org.anchoranalysis.core.cache.ExecuteException;
 import org.anchoranalysis.feature.cache.calculation.CachedCalculation;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.Extent;
-import org.anchoranalysis.image.feature.objmask.pair.FeatureObjMaskPairParams;
+import org.anchoranalysis.image.feature.objmask.pair.FeatureInputPairObjs;
 import org.anchoranalysis.image.objmask.ObjMask;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
-class CalculateIntersectionOfDilatedBoundingBox extends CachedCalculation<BoundingBox, FeatureObjMaskPairParams> {
+class CalculateIntersectionOfDilatedBoundingBox extends CachedCalculation<BoundingBox, FeatureInputPairObjs> {
 
 	
 	
@@ -60,7 +60,7 @@ class CalculateIntersectionOfDilatedBoundingBox extends CachedCalculation<Boundi
 
 
 	@Override
-	protected BoundingBox execute(FeatureObjMaskPairParams params)
+	protected BoundingBox execute(FeatureInputPairObjs params)
 			throws ExecuteException {
 		return findIntersectionOfDilatedBoundingBox(
 			params.getObjMask1(),

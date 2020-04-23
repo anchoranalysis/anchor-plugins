@@ -1,7 +1,7 @@
 package ch.ethz.biol.cell.mpp.nrg.feature.pair;
 
 import org.anchoranalysis.anchor.mpp.feature.bean.nrg.elem.NRGElemPair;
-import org.anchoranalysis.anchor.mpp.feature.nrg.elem.NRGElemPairCalcParams;
+import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputPairMemo;
 import org.anchoranalysis.anchor.mpp.mark.GlobalRegionIdentifiers;
 import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
 
@@ -80,14 +80,14 @@ public class OverlapRatioThreeRegions extends NRGElemPair {
 	}
 	
 	@Override
-	public double calc( CacheableParams<NRGElemPairCalcParams> paramsCacheable ) throws FeatureCalcException {
+	public double calc( CacheableParams<FeatureInputPairMemo> paramsCacheable ) throws FeatureCalcException {
 		
 		// MIP currently not supported
 		if(mip==true) {
 			throw new FeatureCalcException("mip currently not supported");
 		}
 		
-		NRGElemPairCalcParams params = paramsCacheable.getParams();
+		FeatureInputPairMemo params = paramsCacheable.getParams();
 		
 		return calcOverlapRatioMin(
 			params.getObj1(),
@@ -101,7 +101,7 @@ public class OverlapRatioThreeRegions extends NRGElemPair {
 		);
 	}
 
-	private double overlapForRegion( CacheableParams<NRGElemPairCalcParams> paramsCacheable, int regionID ) throws FeatureCalcException {
+	private double overlapForRegion( CacheableParams<FeatureInputPairMemo> paramsCacheable, int regionID ) throws FeatureCalcException {
 		if (mip) {
 			// If we use this we don't need to find the volume ourselves
 			return paramsCacheable.calc( new OverlapMIPRatioCalculation(regionID) );

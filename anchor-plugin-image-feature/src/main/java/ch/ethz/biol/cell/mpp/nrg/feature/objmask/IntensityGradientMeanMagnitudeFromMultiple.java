@@ -32,7 +32,7 @@ import java.util.List;
 import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.feature.cache.CacheableParams;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.image.feature.objmask.FeatureObjMaskParams;
+import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
 
 /**
  * Calculates the mean of the intensity-gradient defined by multiple NRG channels in a particular direction
@@ -52,7 +52,7 @@ public class IntensityGradientMeanMagnitudeFromMultiple extends IntensityGradien
 	private static final long serialVersionUID = 1L;
 
 	@Override
-	public double calc(CacheableParams<FeatureObjMaskParams> params) throws FeatureCalcException {
+	public double calc(CacheableParams<FeatureInputSingleObj> params) throws FeatureCalcException {
 		
 		// Calculate the mean
 		double sum = 0.0;

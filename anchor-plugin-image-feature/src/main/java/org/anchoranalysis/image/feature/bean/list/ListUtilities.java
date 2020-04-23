@@ -29,11 +29,11 @@ package org.anchoranalysis.image.feature.bean.list;
 import java.util.List;
 
 import org.anchoranalysis.feature.bean.Feature;
-import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
+import org.anchoranalysis.feature.calc.params.FeatureInput;
 
 class ListUtilities {
 
-	public static <T extends FeatureCalcParams> void addFeaturesToList(
+	public static <T extends FeatureInput> void addFeaturesToList(
 		Feature<T> featFirst,
 		Feature<T> featSecond,
 		List<Feature<T>> list

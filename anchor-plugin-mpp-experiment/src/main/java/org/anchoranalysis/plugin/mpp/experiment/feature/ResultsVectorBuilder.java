@@ -31,10 +31,10 @@ import java.util.function.Function;
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.calc.ResultsVector;
-import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
+import org.anchoranalysis.feature.calc.params.FeatureInput;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorMulti;
-import org.anchoranalysis.image.feature.objmask.FeatureObjMaskParams;
-import org.anchoranalysis.image.feature.objmask.pair.merged.FeatureObjMaskPairMergedParams;
+import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
+import org.anchoranalysis.image.feature.objmask.pair.merged.FeatureInputPairObjsMerged;
 import org.anchoranalysis.image.objmask.ObjMask;
 
 class ResultsVectorBuilder {
@@ -56,11 +56,11 @@ class ResultsVectorBuilder {
 	 * Calculates and inserts a derived obj-mask params from a merged.
 	 */
 	public void calcAndInsert(
-		FeatureObjMaskPairMergedParams params,
-		Function<FeatureObjMaskPairMergedParams,ObjMask> extractObj,
-		FeatureCalculatorMulti<FeatureObjMaskParams> session
+		FeatureInputPairObjsMerged params,
+		Function<FeatureInputPairObjsMerged,ObjMask> extractObj,
+		FeatureCalculatorMulti<FeatureInputSingleObj> session
 	) throws FeatureCalcException {
-		FeatureObjMaskParams paramsSpecific = new FeatureObjMaskParams(
+		FeatureInputSingleObj paramsSpecific = new FeatureInputSingleObj(
 			extractObj.apply(params)
 		);
 		//paramsSpecific.setNrgStack( params.getNrgStack() );  // This is necessary? Why?
@@ -78,7 +78,7 @@ class ResultsVectorBuilder {
 	 * @return length(resultsVector)
 	 * @throws FeatureCalcException
 	 */
-	public <T extends FeatureCalcParams> void calcAndInsert( T params, FeatureCalculatorMulti<T> session ) throws FeatureCalcException {
+	public <T extends FeatureInput> void calcAndInsert( T params, FeatureCalculatorMulti<T> session ) throws FeatureCalcException {
 		ResultsVector rvImage =  suppressErrors ? session.calcSuppressErrors( params, errorReporter ) : session.calc(params) ;
 		out.set(cnt, rvImage);
 		cnt += rvImage.length();

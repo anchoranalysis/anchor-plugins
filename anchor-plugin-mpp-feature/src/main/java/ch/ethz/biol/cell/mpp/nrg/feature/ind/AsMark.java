@@ -1,8 +1,8 @@
 package ch.ethz.biol.cell.mpp.nrg.feature.ind;
 
-import org.anchoranalysis.anchor.mpp.feature.bean.mark.FeatureMarkParams;
-import org.anchoranalysis.anchor.mpp.feature.nrg.elem.NRGElemIndCalcParams;
-import org.anchoranalysis.anchor.mpp.feature.nrg.elem.NRGElemIndCalcParamsDescriptor;
+import org.anchoranalysis.anchor.mpp.feature.bean.mark.FeatureInputMark;
+import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputSingleMemo;
+import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputSingleMemoDescriptor;
 
 /*-
  * #%L
@@ -33,9 +33,9 @@ import org.anchoranalysis.anchor.mpp.feature.nrg.elem.NRGElemIndCalcParamsDescri
 import org.anchoranalysis.feature.bean.operator.FeatureSingleElem;
 import org.anchoranalysis.feature.cache.CacheableParams;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.feature.params.FeatureParamsDescriptor;
+import org.anchoranalysis.feature.params.FeatureInputDescriptor;
 
-public class AsMark extends FeatureSingleElem<NRGElemIndCalcParams,FeatureMarkParams> {
+public class AsMark extends FeatureSingleElem<FeatureInputSingleMemo,FeatureInputMark> {
 
 	/**
 	 * 
@@ -43,13 +43,13 @@ public class AsMark extends FeatureSingleElem<NRGElemIndCalcParams,FeatureMarkPa
 	private static final long serialVersionUID = 1L;
 
 	@Override
-	public double calc(CacheableParams<NRGElemIndCalcParams> params) throws FeatureCalcException {
+	public double calc(CacheableParams<FeatureInputSingleMemo> params) throws FeatureCalcException {
 		return params
 			.calcChangeParams( getItem(), AsMark::deriveParams, "mark" );
 	}
 	
-	private static FeatureMarkParams deriveParams( NRGElemIndCalcParams params ) {
-		return new FeatureMarkParams(
+	private static FeatureInputMark deriveParams( FeatureInputSingleMemo params ) {
+		return new FeatureInputMark(
 			params.getPxlPartMemo().getMark(),
 			params.getDimensions().getRes()
 		);
@@ -58,9 +58,9 @@ public class AsMark extends FeatureSingleElem<NRGElemIndCalcParams,FeatureMarkPa
 	// We change the default behaviour, as we don't want to give the same paramsFactory
 	//   as the item we pass to
 	@Override
-	public FeatureParamsDescriptor paramType()
+	public FeatureInputDescriptor paramType()
 			throws FeatureCalcException {
-		return NRGElemIndCalcParamsDescriptor.instance;
+		return FeatureInputSingleMemoDescriptor.instance;
 	}
 
 	@Override

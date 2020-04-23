@@ -42,13 +42,13 @@ import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.bean.list.FeatureListProvider;
-import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
+import org.anchoranalysis.feature.calc.params.FeatureInput;
 import org.anchoranalysis.feature.list.NamedFeatureStore;
 import org.anchoranalysis.feature.list.NamedFeatureStoreFactory;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
-import org.anchoranalysis.image.feature.objmask.FeatureObjMaskParams;
-import org.anchoranalysis.image.feature.objmask.pair.merged.FeatureObjMaskPairMergedParams;
-import org.anchoranalysis.image.feature.stack.FeatureStackParams;
+import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
+import org.anchoranalysis.image.feature.objmask.pair.merged.FeatureInputPairObjsMerged;
+import org.anchoranalysis.image.feature.stack.FeatureInputStack;
 import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.image.objmask.ObjMaskCollection;
 import org.anchoranalysis.image.voxel.nghb.CreateNghbGraph;
@@ -82,7 +82,7 @@ import org.anchoranalysis.plugin.mpp.experiment.feature.FeatureSessionMergedPair
  * @author Owen Feehan
  *
  */
-public class MergedPairs extends FlexiFeatureTable<FeatureObjMaskPairMergedParams> {
+public class MergedPairs extends FlexiFeatureTable<FeatureInputPairObjsMerged> {
 
 	/**
 	 * 
@@ -94,13 +94,13 @@ public class MergedPairs extends FlexiFeatureTable<FeatureObjMaskPairMergedParam
 	 * Additional features that are processed on the pair of images (i.e. First+Second as a pair)
 	 */
 	@BeanField
-	private List<NamedBean<FeatureListProvider<FeatureObjMaskPairMergedParams>>> listFeaturesPair = new ArrayList<>();
+	private List<NamedBean<FeatureListProvider<FeatureInputPairObjsMerged>>> listFeaturesPair = new ArrayList<>();
 	
 	/**
 	 * Additional features that only depend on the image, so do not need to be replicated for every object.
 	 */
 	@BeanField
-	private List<NamedBean<FeatureListProvider<FeatureStackParams>>> listFeaturesImage = new ArrayList<>();
+	private List<NamedBean<FeatureListProvider<FeatureInputStack>>> listFeaturesImage = new ArrayList<>();
 	
 	/**
 	 * Include features for the First-object of the pair
@@ -149,21 +149,21 @@ public class MergedPairs extends FlexiFeatureTable<FeatureObjMaskPairMergedParam
 	// END BEAN PROPERTIES
 	
 	@Override
-	public FeatureSessionFlexiFeatureTable<FeatureObjMaskPairMergedParams> createFeatures(
-			List<NamedBean<FeatureListProvider<FeatureObjMaskParams>>> list
+	public FeatureSessionFlexiFeatureTable<FeatureInputPairObjsMerged> createFeatures(
+			List<NamedBean<FeatureListProvider<FeatureInputSingleObj>>> list
 	) throws CreateException {
 		
 		try {
-			NamedFeatureStore<FeatureObjMaskParams> featuresSingle = NamedFeatureStoreFactory.createNamedFeatureList(list);
-			FeatureList<FeatureObjMaskParams> listSingle = copyFeaturesCreateCustomName(featuresSingle);
+			NamedFeatureStore<FeatureInputSingleObj> featuresSingle = NamedFeatureStoreFactory.createNamedFeatureList(list);
+			FeatureList<FeatureInputSingleObj> listSingle = copyFeaturesCreateCustomName(featuresSingle);
 			
 			// Image features
-			NamedFeatureStore<FeatureStackParams> featuresImage = NamedFeatureStoreFactory.createNamedFeatureList(listFeaturesImage);
-			FeatureList<FeatureStackParams> listImage = copyFeaturesCreateCustomName(featuresImage );
+			NamedFeatureStore<FeatureInputStack> featuresImage = NamedFeatureStoreFactory.createNamedFeatureList(listFeaturesImage);
+			FeatureList<FeatureInputStack> listImage = copyFeaturesCreateCustomName(featuresImage );
 									
 			// Pair features
-			NamedFeatureStore<FeatureObjMaskPairMergedParams> featuresPair = NamedFeatureStoreFactory.createNamedFeatureList(listFeaturesPair);
-			FeatureList<FeatureObjMaskPairMergedParams> listPair = copyFeaturesCreateCustomName( featuresPair );
+			NamedFeatureStore<FeatureInputPairObjsMerged> featuresPair = NamedFeatureStoreFactory.createNamedFeatureList(listFeaturesPair);
+			FeatureList<FeatureInputPairObjsMerged> listPair = copyFeaturesCreateCustomName( featuresPair );
 						
 			return new FeatureSessionMergedPairs(
 				includeFirst,
@@ -184,10 +184,10 @@ public class MergedPairs extends FlexiFeatureTable<FeatureObjMaskPairMergedParam
 
 	
 	@Override
-	public List<FeatureObjMaskPairMergedParams> createListCalcParams(ObjMaskCollection objs,
+	public List<FeatureInputPairObjsMerged> createListCalcParams(ObjMaskCollection objs,
 			NRGStackWithParams nrgStack, LogErrorReporter logErrorReporter) throws CreateException {
 
-		List<FeatureObjMaskPairMergedParams> out = new ArrayList<>();
+		List<FeatureInputPairObjsMerged> out = new ArrayList<>();
 		
 		// We create a neighbour-graph of our input objects
 		CreateNghbGraph<ObjMask> graphCreator = new CreateNghbGraph<ObjMask>( avoidOverlappingObjects );
@@ -202,7 +202,7 @@ public class MergedPairs extends FlexiFeatureTable<FeatureObjMaskPairMergedParam
 		Collection<EdgeTypeWithVertices<ObjMask,Integer>> edges = graphNghb.edgeSetUnique();
 		for( EdgeTypeWithVertices<ObjMask,Integer> e : edges ) {
 			
-			FeatureObjMaskPairMergedParams params = new FeatureObjMaskPairMergedParams( e.getNode1(), e.getNode2() );
+			FeatureInputPairObjsMerged params = new FeatureInputPairObjsMerged( e.getNode1(), e.getNode2() );
 			params.setNrgStack(nrgStack);
 			out.add(params);
 		}
@@ -220,7 +220,7 @@ public class MergedPairs extends FlexiFeatureTable<FeatureObjMaskPairMergedParam
 	 * @param proxyCreator		Instantiates an empty proxy-feature
 	 * @param paramsInit		Instantiation parameters 
 	 */
-	private static <T extends FeatureCalcParams> FeatureList<T> copyFeaturesCreateCustomName( NamedFeatureStore<T> features ) throws OperationFailedException {
+	private static <T extends FeatureInput> FeatureList<T> copyFeaturesCreateCustomName( NamedFeatureStore<T> features ) throws OperationFailedException {
 		
 		FeatureList<T> out = new FeatureList<>();
 		try {
@@ -263,24 +263,24 @@ public class MergedPairs extends FlexiFeatureTable<FeatureObjMaskPairMergedParam
 	}
 
 
-	public List<NamedBean<FeatureListProvider<FeatureObjMaskPairMergedParams>>> getListFeaturesPair() {
+	public List<NamedBean<FeatureListProvider<FeatureInputPairObjsMerged>>> getListFeaturesPair() {
 		return listFeaturesPair;
 	}
 
 
 	public void setListFeaturesPair(
-			List<NamedBean<FeatureListProvider<FeatureObjMaskPairMergedParams>>> listFeaturesPair) {
+			List<NamedBean<FeatureListProvider<FeatureInputPairObjsMerged>>> listFeaturesPair) {
 		this.listFeaturesPair = listFeaturesPair;
 	}
 
 
-	public List<NamedBean<FeatureListProvider<FeatureStackParams>>> getListFeaturesImage() {
+	public List<NamedBean<FeatureListProvider<FeatureInputStack>>> getListFeaturesImage() {
 		return listFeaturesImage;
 	}
 
 
 	public void setListFeaturesImage(
-			List<NamedBean<FeatureListProvider<FeatureStackParams>>> listFeaturesImage) {
+			List<NamedBean<FeatureListProvider<FeatureInputStack>>> listFeaturesImage) {
 		this.listFeaturesImage = listFeaturesImage;
 	}
 

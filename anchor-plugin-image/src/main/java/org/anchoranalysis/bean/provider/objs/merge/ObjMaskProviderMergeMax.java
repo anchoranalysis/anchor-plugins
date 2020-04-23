@@ -29,7 +29,7 @@ import org.anchoranalysis.feature.session.calculator.FeatureCalculatorSingle;
  */
 
 import org.anchoranalysis.image.feature.evaluator.EvaluateSingleObjMask;
-import org.anchoranalysis.image.feature.objmask.FeatureObjMaskParams;
+import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
 
 // Merges with the object that maximises a feature
 public class ObjMaskProviderMergeMax extends ObjMaskProviderMergeWithFeature {
@@ -40,10 +40,10 @@ public class ObjMaskProviderMergeMax extends ObjMaskProviderMergeWithFeature {
 	private static final long serialVersionUID = 1L;
 	
 	@Override
-	protected EvaluateSingleObjMask featureEvaluator(FeatureCalculatorSingle<FeatureObjMaskParams> featureSession) {
+	protected EvaluateSingleObjMask featureEvaluator(FeatureCalculatorSingle<FeatureInputSingleObj> featureSession) {
 		
 		return om -> {
-			FeatureObjMaskParams params = new FeatureObjMaskParams(om);
+			FeatureInputSingleObj params = new FeatureInputSingleObj(om);
 			return featureSession.calcOne(params);
 		};
 	}

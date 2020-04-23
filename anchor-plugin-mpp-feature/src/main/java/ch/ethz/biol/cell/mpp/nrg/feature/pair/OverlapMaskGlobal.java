@@ -1,7 +1,6 @@
 package ch.ethz.biol.cell.mpp.nrg.feature.pair;
 
-import org.anchoranalysis.anchor.mpp.feature.nrg.elem.NRGElemPairCalcParams;
-
+import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputPairMemo;
 
 /*
  * #%L
@@ -45,7 +44,7 @@ public class OverlapMaskGlobal extends OverlapMaskSingleRegion {
 	// END BEAN PROPERTIES
 		
 	@Override
-	public double calc( CacheableParams<NRGElemPairCalcParams> params ) throws FeatureCalcException {
+	public double calc( CacheableParams<FeatureInputPairMemo> params ) throws FeatureCalcException {
 		return overlapWithGlobalMask(params);
 	}
 

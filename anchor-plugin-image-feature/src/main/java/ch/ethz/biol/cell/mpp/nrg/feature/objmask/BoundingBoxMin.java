@@ -33,7 +33,7 @@ import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.ImageRes;
 import org.anchoranalysis.image.feature.bean.objmask.FeatureObjMask;
-import org.anchoranalysis.image.feature.objmask.FeatureObjMaskParams;
+import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
 
 
 public class BoundingBoxMin extends FeatureObjMask {
@@ -50,9 +50,9 @@ public class BoundingBoxMin extends FeatureObjMask {
 
 	
 	@Override
-	public double calc( CacheableParams<FeatureObjMaskParams> paramsCacheable ) throws FeatureCalcException {
+	public double calc( CacheableParams<FeatureInputSingleObj> paramsCacheable ) throws FeatureCalcException {
 		
-		FeatureObjMaskParams params = paramsCacheable.getParams();
+		FeatureInputSingleObj params = paramsCacheable.getParams();
 		
 		BoundingBox bbox = params.getObjMask().getBoundingBox();
 		

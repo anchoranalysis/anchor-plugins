@@ -27,7 +27,7 @@ package ch.ethz.biol.cell.mpp.nrg.feature.pair;
  */
 
 import org.anchoranalysis.anchor.mpp.feature.bean.nrg.elem.NRGElemPair;
-import org.anchoranalysis.anchor.mpp.feature.nrg.elem.NRGElemPairCalcParams;
+import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputPairMemo;
 import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.cache.ExecuteException;
@@ -53,7 +53,7 @@ public abstract class OverlapMaskBase extends NRGElemPair {
 	private int nrgIndex = 0;
 	// END BEAN PROPERTIES
 		
-	protected double overlapForRegion( CacheableParams<NRGElemPairCalcParams> paramsCacheable, int regionID ) throws FeatureCalcException {
+	protected double overlapForRegion( CacheableParams<FeatureInputPairMemo> paramsCacheable, int regionID ) throws FeatureCalcException {
 		return paramsCacheable.calc(
 			new OverlapCalculationMaskGlobal(regionID, nrgIndex, (byte) maskValue)
 		);

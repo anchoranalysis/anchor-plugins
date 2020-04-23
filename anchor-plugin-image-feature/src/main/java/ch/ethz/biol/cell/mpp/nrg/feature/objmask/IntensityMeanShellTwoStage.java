@@ -36,7 +36,7 @@ import org.anchoranalysis.feature.cache.calculation.RslvdCachedCalculation;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.chnl.Chnl;
 import org.anchoranalysis.image.feature.bean.objmask.FeatureObjMask;
-import org.anchoranalysis.image.feature.objmask.FeatureObjMaskParams;
+import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
 import org.anchoranalysis.image.objmask.ObjMask;
 
 import ch.ethz.biol.cell.mpp.nrg.feature.objmask.cachedcalculation.CalculateShellTwoStage;
@@ -81,13 +81,13 @@ public class IntensityMeanShellTwoStage extends FeatureObjMask {
 	}
 		
 	@Override
-	public double calc(CacheableParams<FeatureObjMaskParams> params) throws FeatureCalcException {
+	public double calc(CacheableParams<FeatureInputSingleObj> params) throws FeatureCalcException {
 		
 		Chnl chnl = params.getParams().getNrgStack().getNrgStack().getChnl(nrgIndex);
 		
 		ObjMask om;
 		try {
-			RslvdCachedCalculation<ObjMask,FeatureObjMaskParams> ccShellTwoStage = CalculateShellTwoStage.createFromCache(
+			RslvdCachedCalculation<ObjMask,FeatureInputSingleObj> ccShellTwoStage = CalculateShellTwoStage.createFromCache(
 				params,
 				iterationsErosion,
 				iterationsFurther,

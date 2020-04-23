@@ -43,14 +43,14 @@ import org.anchoranalysis.core.params.KeyValueParams;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.provider.FeatureProvider;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
+import org.anchoranalysis.feature.calc.params.FeatureInput;
 import org.anchoranalysis.feature.init.FeatureInitParams;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
-import org.anchoranalysis.feature.session.SessionFactory;
+import org.anchoranalysis.feature.session.FeatureSession;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorSingle;
 import org.anchoranalysis.feature.shared.SharedFeatureSet;
 
-public abstract class FeatureValueCheckMark<T extends FeatureCalcParams> extends CheckMark {
+public abstract class FeatureValueCheckMark<T extends FeatureInput> extends CheckMark {
 	
 	/**
 	 * 
@@ -89,7 +89,7 @@ public abstract class FeatureValueCheckMark<T extends FeatureCalcParams> extends
 			
 			KeyValueParams kpv = createKeyValueParams();
 			
-			session = SessionFactory.createAndStart(
+			session = FeatureSession.with(
 				feature,
 				new FeatureInitParams(kpv),
 				sharedFeatureSet,

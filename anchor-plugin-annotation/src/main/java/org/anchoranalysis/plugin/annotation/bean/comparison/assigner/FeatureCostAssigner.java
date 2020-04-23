@@ -37,7 +37,7 @@ import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.shared.SharedFeaturesInitParams;
 import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.feature.bean.evaluator.FeatureEvaluatorSimple;
-import org.anchoranalysis.image.feature.objmask.pair.FeatureObjMaskPairParams;
+import org.anchoranalysis.image.feature.objmask.pair.FeatureInputPairObjs;
 import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
 import org.anchoranalysis.plugin.annotation.comparison.AnnotationGroup;
 import org.anchoranalysis.plugin.annotation.comparison.AnnotationGroupObjMask;
@@ -52,7 +52,7 @@ public class FeatureCostAssigner extends AnnotationComparisonAssigner<Assignment
 
 	// START BEAN PROPERTIES
 	@BeanField
-	private FeatureEvaluatorSimple<FeatureObjMaskPairParams> featureEvaluator;
+	private FeatureEvaluatorSimple<FeatureInputPairObjs> featureEvaluator;
 		
 	@BeanField
 	private double maxCost = 1.0;
@@ -104,11 +104,11 @@ public class FeatureCostAssigner extends AnnotationComparisonAssigner<Assignment
 		}
 	}
 
-	public FeatureEvaluatorSimple<FeatureObjMaskPairParams> getFeatureEvaluator() {
+	public FeatureEvaluatorSimple<FeatureInputPairObjs> getFeatureEvaluator() {
 		return featureEvaluator;
 	}
 
-	public void setFeatureEvaluator(FeatureEvaluatorSimple<FeatureObjMaskPairParams> featureEvaluator) {
+	public void setFeatureEvaluator(FeatureEvaluatorSimple<FeatureInputPairObjs> featureEvaluator) {
 		this.featureEvaluator = featureEvaluator;
 	}
 

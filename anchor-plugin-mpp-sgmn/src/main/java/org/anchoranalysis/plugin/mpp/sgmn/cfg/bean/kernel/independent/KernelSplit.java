@@ -3,7 +3,7 @@ package org.anchoranalysis.plugin.mpp.sgmn.cfg.bean.kernel.independent;
 import org.anchoranalysis.anchor.mpp.bean.proposer.MarkFromCfgProposer;
 import org.anchoranalysis.anchor.mpp.bean.proposer.MarkSplitProposer;
 import org.anchoranalysis.anchor.mpp.feature.mark.ListUpdatableMarkSetCollection;
-import org.anchoranalysis.anchor.mpp.feature.mark.PxlMarkMemoList;
+import org.anchoranalysis.anchor.mpp.feature.mark.MemoList;
 import org.anchoranalysis.anchor.mpp.feature.nrg.cfg.CfgNRGPixelized;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.anchor.mpp.mark.set.UpdateMarkSetException;
@@ -180,7 +180,7 @@ public class KernelSplit extends KernelPosNeg<CfgNRGPixelized> {
 	public void updateAfterAccpt(ListUpdatableMarkSetCollection updatableMarkSetCollection,
 			CfgNRGPixelized exst, CfgNRGPixelized accptd) throws UpdateMarkSetException {
 		
-		PxlMarkMemoList memoList = exst.createDuplicatePxlMarkMemoList();
+		MemoList memoList = exst.createDuplicatePxlMarkMemoList();
 		
 		PxlMarkMemo memoExst = exst.getMemoForMark( this.markExst );
 		

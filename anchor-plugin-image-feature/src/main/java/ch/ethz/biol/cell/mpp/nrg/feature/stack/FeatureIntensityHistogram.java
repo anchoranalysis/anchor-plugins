@@ -32,7 +32,7 @@ import org.anchoranalysis.feature.cache.CacheableParams;
 import org.anchoranalysis.feature.cache.calculation.CachedCalculation;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.feature.bean.FeatureStack;
-import org.anchoranalysis.image.feature.stack.FeatureStackParams;
+import org.anchoranalysis.image.feature.stack.FeatureInputStack;
 import org.anchoranalysis.image.histogram.Histogram;
 
 import ch.ethz.biol.cell.mpp.nrg.feature.stack.cachedcalculation.CalculateHistogram;
@@ -71,7 +71,7 @@ public abstract class FeatureIntensityHistogram extends FeatureStack {
 	}
 	
 	@Override
-	public double calc(CacheableParams<FeatureStackParams> params) throws FeatureCalcException {
+	public double calc(CacheableParams<FeatureInputStack> params) throws FeatureCalcException {
 		Histogram h = params.calc(
 			histogramCalculator()		
 		);
@@ -96,7 +96,7 @@ public abstract class FeatureIntensityHistogram extends FeatureStack {
 		this.nrgIndexMask = nrgIndexMask;
 	}
 	
-	private CachedCalculation<Histogram,FeatureStackParams> histogramCalculator() {
+	private CachedCalculation<Histogram,FeatureInputStack> histogramCalculator() {
 		if (nrgIndexMask!=-1) {
 			return new CalculateHistogramMasked(nrgIndex, nrgIndexMask);
 		} else {

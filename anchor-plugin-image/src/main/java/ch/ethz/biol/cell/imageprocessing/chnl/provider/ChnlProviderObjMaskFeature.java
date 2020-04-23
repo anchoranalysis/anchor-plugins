@@ -38,14 +38,14 @@ import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.init.FeatureInitParams;
 import org.anchoranalysis.feature.nrg.NRGStack;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
-import org.anchoranalysis.feature.session.SessionFactory;
+import org.anchoranalysis.feature.session.FeatureSession;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorSingle;
 import org.anchoranalysis.image.bean.provider.ChnlProvider;
 import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
 import org.anchoranalysis.image.chnl.Chnl;
 import org.anchoranalysis.image.chnl.factory.ChnlFactory;
 import org.anchoranalysis.image.extent.IncorrectImageSizeException;
-import org.anchoranalysis.image.feature.objmask.FeatureObjMaskParams;
+import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
 import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.image.objmask.ObjMaskCollection;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
@@ -68,7 +68,7 @@ public class ChnlProviderObjMaskFeature extends ChnlProvider {
 	private int valueNoObject = 0;
 	
 	@BeanField
-	private FeatureProvider<FeatureObjMaskParams> featureProvider;
+	private FeatureProvider<FeatureInputSingleObj> featureProvider;
 	
 	@BeanField
 	private List<ChnlProvider> listAdditionalChnlProviders = new ArrayList<>();
@@ -80,7 +80,7 @@ public class ChnlProviderObjMaskFeature extends ChnlProvider {
 	@Override
 	public Chnl create() throws CreateException {
 
-		Feature<FeatureObjMaskParams> feature = featureProvider.create();
+		Feature<FeatureInputSingleObj> feature = featureProvider.create();
 		
 		ObjMaskCollection objsCollection = objs.create();
 		
@@ -102,7 +102,7 @@ public class ChnlProviderObjMaskFeature extends ChnlProvider {
 
 			NRGStackWithParams nrgStackParams = new NRGStackWithParams(nrgStack);
 			
-			FeatureCalculatorSingle<FeatureObjMaskParams> session = SessionFactory.createAndStart(
+			FeatureCalculatorSingle<FeatureInputSingleObj> session = FeatureSession.with(
 				feature,
 				new FeatureInitParams(),
 				getSharedObjects().getFeature().getSharedFeatureSet().downcast(),
@@ -114,7 +114,7 @@ public class ChnlProviderObjMaskFeature extends ChnlProvider {
 			for( ObjMask om : objsCollection ) {
 
 				double featVal = session.calcOne(
-					new FeatureObjMaskParams(om, nrgStackParams)
+					new FeatureInputSingleObj(om, nrgStackParams)
 				);
 				chnlOut.getVoxelBox().any().setPixelsCheckMask(om, (int) (factor*featVal) );
 			}
@@ -137,11 +137,11 @@ public class ChnlProviderObjMaskFeature extends ChnlProvider {
 		this.chnlProvider = chnlProvider;
 	}
 
-	public FeatureProvider<FeatureObjMaskParams> getFeatureProvider() {
+	public FeatureProvider<FeatureInputSingleObj> getFeatureProvider() {
 		return featureProvider;
 	}
 
-	public void setFeatureProvider(FeatureProvider<FeatureObjMaskParams> featureProvider) {
+	public void setFeatureProvider(FeatureProvider<FeatureInputSingleObj> featureProvider) {
 		this.featureProvider = featureProvider;
 	}
 

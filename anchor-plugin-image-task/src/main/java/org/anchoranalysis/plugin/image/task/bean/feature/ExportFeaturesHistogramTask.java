@@ -45,11 +45,11 @@ import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.calc.ResultsVector;
 import org.anchoranalysis.feature.init.FeatureInitParams;
 import org.anchoranalysis.feature.list.NamedFeatureStore;
-import org.anchoranalysis.feature.session.SessionFactory;
+import org.anchoranalysis.feature.session.FeatureSession;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorMulti;
 import org.anchoranalysis.feature.shared.SharedFeaturesInitParams;
 import org.anchoranalysis.image.bean.provider.HistogramProvider;
-import org.anchoranalysis.image.feature.histogram.FeatureHistogramParams;
+import org.anchoranalysis.image.feature.histogram.FeatureInputHistogram;
 import org.anchoranalysis.image.histogram.Histogram;
 import org.anchoranalysis.image.init.ImageInitParams;
 import org.anchoranalysis.image.io.histogram.HistogramCSVReader;
@@ -64,7 +64,7 @@ import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
  * @author FEEHANO
  *
  */
-public class ExportFeaturesHistogramTask extends ExportFeaturesStoreTask<FileInput,FeatureHistogramParams> {
+public class ExportFeaturesHistogramTask extends ExportFeaturesStoreTask<FileInput,FeatureInputHistogram> {
 
 	/**
 	 * 
@@ -98,7 +98,7 @@ public class ExportFeaturesHistogramTask extends ExportFeaturesStoreTask<FileInp
 	@Override
 	protected ResultsVector calcResultsVectorForInputObject(
 		FileInput inputObject,
-		NamedFeatureStore<FeatureHistogramParams> featureStore,
+		NamedFeatureStore<FeatureInputHistogram> featureStore,
 		BoundOutputManagerRouteErrors outputManager,
 		Path modelDir,
 		LogErrorReporter logErrorReporter
@@ -158,10 +158,10 @@ public class ExportFeaturesHistogramTask extends ExportFeaturesStoreTask<FileInp
 		return params;
 	}
 
-	private ResultsVector calcFeatures( Histogram hist, FeatureList<FeatureHistogramParams> features, LogErrorReporter logErrorReporter ) throws InitException, FeatureCalcException {
+	private ResultsVector calcFeatures( Histogram hist, FeatureList<FeatureInputHistogram> features, LogErrorReporter logErrorReporter ) throws InitException, FeatureCalcException {
 		SharedFeaturesInitParams initParams = SharedFeaturesInitParams.create( logErrorReporter );
 		
-		 FeatureCalculatorMulti<FeatureHistogramParams> session = SessionFactory.createAndStart(
+		 FeatureCalculatorMulti<FeatureInputHistogram> session = FeatureSession.with(
 			features,
 			new FeatureInitParams(),
 			initParams.getSharedFeatureSet().downcast(),
@@ -169,7 +169,7 @@ public class ExportFeaturesHistogramTask extends ExportFeaturesStoreTask<FileInp
 		);
 		
 		return session.calc(
-			new FeatureHistogramParams(hist, null)
+			new FeatureInputHistogram(hist, null)
 		);
 	}
 

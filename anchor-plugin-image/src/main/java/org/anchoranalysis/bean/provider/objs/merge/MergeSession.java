@@ -32,24 +32,24 @@ import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
+import org.anchoranalysis.feature.calc.params.FeatureInput;
 import org.anchoranalysis.feature.init.FeatureInitParams;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 import org.anchoranalysis.feature.session.SequentialSession;
 import org.anchoranalysis.feature.shared.SharedFeatureSet;
-import org.anchoranalysis.image.feature.objmask.pair.merged.FeatureObjMaskPairMergedParams;
+import org.anchoranalysis.image.feature.objmask.pair.merged.FeatureInputPairObjsMerged;
 import org.anchoranalysis.image.objmask.ObjMask;
 
 // TODO broken, to be fixed
 class MergeSession {
 
-	private SequentialSession<FeatureObjMaskPairMergedParams> delegate;
+	private SequentialSession<FeatureInputPairObjsMerged> delegate;
 	
 	private FeatureInitParams paramsInit;
 	
 	//private HashMap<ObjMask,FeatureSessionCache> map;
 	
-	private Feature<FeatureObjMaskPairMergedParams> feature;
+	private Feature<FeatureInputPairObjsMerged> feature;
 	
 	// Only caches calculation results which are positive
 	@SuppressWarnings("unused")
@@ -58,7 +58,7 @@ class MergeSession {
 	@SuppressWarnings("unused")
 	private LogErrorReporter logger;
 		
-	public MergeSession( Feature<FeatureObjMaskPairMergedParams> feature, FeatureInitParams initParams, boolean recordTimes ) {
+	public MergeSession( Feature<FeatureInputPairObjsMerged> feature, FeatureInitParams initParams, boolean recordTimes ) {
 		
 		// We duplicate the feature, so it can be inited() again with a new separate cache
 		this.feature = feature.duplicateBean();
@@ -68,7 +68,7 @@ class MergeSession {
 		//map = new HashMap<ObjMask,FeatureSessionCache>();
 	}
 	
-	public void start( SharedFeatureSet<FeatureObjMaskPairMergedParams> sharedFeatures, LogErrorReporter logger ) throws InitException {
+	public void start( SharedFeatureSet<FeatureInputPairObjsMerged> sharedFeatures, LogErrorReporter logger ) throws InitException {
 		this.logger = logger;
 		delegate.start( paramsInit, sharedFeatures, logger );
 	}
@@ -77,12 +77,12 @@ class MergeSession {
 		//map.clear();
 	}
 	
-	private FeatureCalcParams createParams(
+	private FeatureInput createParams(
 		ObjMask obj1,
 		ObjMask obj2,
 		ObjMask omMerged
 	) throws CreateException {
-		FeatureObjMaskPairMergedParams params = new FeatureObjMaskPairMergedParams(obj1, obj2,omMerged);
+		FeatureInputPairObjsMerged params = new FeatureInputPairObjsMerged(obj1, obj2,omMerged);
 		params.setNrgStack( new NRGStackWithParams(paramsInit.getNrgStack(),paramsInit.getKeyValueParams()) );
 		return params;
 	}
@@ -137,7 +137,7 @@ class MergeSession {
 			
 			// We re-initialize the feature to have our new cached results
 			//feature.initRecursive( this.paramsInit, delegate.getCache().retriever());
-			FeatureCalcParams params = createParams(obj1,obj2,omMerged);
+			FeatureInput params = createParams(obj1,obj2,omMerged);
 			/*double val = delegate.getCache().retriever().calc(
 				feature,
 				SessionUtilities.createCacheable(params, null)	// TODO broken, to be fixed

@@ -30,7 +30,7 @@ import org.anchoranalysis.feature.cache.CacheableParams;
 
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.feature.bean.FeatureStack;
-import org.anchoranalysis.image.feature.stack.FeatureStackParams;
+import org.anchoranalysis.image.feature.stack.FeatureInputStack;
 
 public class SceneWidth extends FeatureStack {
 
@@ -40,7 +40,7 @@ public class SceneWidth extends FeatureStack {
 	private static final long serialVersionUID = 1L;
 
 	@Override
-	public double calc(CacheableParams<FeatureStackParams> params) throws FeatureCalcException {
+	public double calc(CacheableParams<FeatureInputStack> params) throws FeatureCalcException {
 		return params.getParams().getNrgStack().getDimensions().getX();
 	}
 

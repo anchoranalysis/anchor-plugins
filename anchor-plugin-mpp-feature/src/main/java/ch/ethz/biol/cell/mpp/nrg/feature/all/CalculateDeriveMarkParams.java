@@ -1,20 +1,20 @@
 package ch.ethz.biol.cell.mpp.nrg.feature.all;
 
-import org.anchoranalysis.anchor.mpp.feature.bean.mark.FeatureMarkParams;
-import org.anchoranalysis.anchor.mpp.feature.mark.MemoMarks;
-import org.anchoranalysis.anchor.mpp.feature.nrg.elem.NRGElemAllCalcParams;
+import org.anchoranalysis.anchor.mpp.feature.bean.mark.FeatureInputMark;
+import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputAllMemo;
+import org.anchoranalysis.anchor.mpp.feature.mark.MemoCollection;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.core.cache.ExecuteException;
 import org.anchoranalysis.feature.cache.calculation.CachedCalculation;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
-public class CalculateDeriveMarkParams extends CachedCalculation<FeatureMarkParams, NRGElemAllCalcParams> {
+public class CalculateDeriveMarkParams extends CachedCalculation<FeatureInputMark, FeatureInputAllMemo> {
 
 	@Override
-	protected FeatureMarkParams execute(NRGElemAllCalcParams params) throws ExecuteException {
+	protected FeatureInputMark execute(FeatureInputAllMemo params) throws ExecuteException {
 		
-		MemoMarks list = params.getPxlPartMemo();
+		MemoCollection list = params.getPxlPartMemo();
 		
 		if (list.size()==0) {
 			throw new ExecuteException(
@@ -30,7 +30,7 @@ public class CalculateDeriveMarkParams extends CachedCalculation<FeatureMarkPara
 		
 		Mark mark = list.getMemoForIndex(0).getMark();
 		
-		return new FeatureMarkParams(
+		return new FeatureInputMark(
 			mark,
 			params.getDimensions().getRes()
 		);	

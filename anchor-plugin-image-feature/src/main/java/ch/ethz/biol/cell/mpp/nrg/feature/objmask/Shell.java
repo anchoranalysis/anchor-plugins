@@ -31,7 +31,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.cache.calculation.CachedCalculation;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.session.cache.FeatureSessionCacheCalculator;
-import org.anchoranalysis.image.feature.objmask.FeatureObjMaskParams;
+import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
 import org.anchoranalysis.image.objmask.ObjMask;
 
 import ch.ethz.biol.cell.mpp.nrg.feature.objmask.cachedcalculation.CalculateShellObjMask;
@@ -55,8 +55,8 @@ public class Shell extends DerivedObjMask {
 	// END BEAN PROPERTIES
 	
 	@Override
-	protected CachedCalculation<ObjMask,FeatureObjMaskParams> createCachedCalculationForDerived(
-			FeatureSessionCacheCalculator<FeatureObjMaskParams> session) throws FeatureCalcException {
+	protected CachedCalculation<ObjMask,FeatureInputSingleObj> createCachedCalculationForDerived(
+			FeatureSessionCacheCalculator<FeatureInputSingleObj> session) throws FeatureCalcException {
 		return CalculateShellObjMask.createFromCache(
 			session,
 			iterationsDilation,

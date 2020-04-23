@@ -32,7 +32,7 @@ import org.anchoranalysis.feature.cache.CacheableParams;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.bean.threshold.CalculateLevel;
 import org.anchoranalysis.image.feature.bean.FeatureHistogram;
-import org.anchoranalysis.image.feature.histogram.FeatureHistogramParams;
+import org.anchoranalysis.image.feature.histogram.FeatureInputHistogram;
 import org.anchoranalysis.image.histogram.Histogram;
 
 /**
@@ -51,7 +51,7 @@ public class ThresholdHistogram extends FeatureHistogram {
 
 	// START BEAN PROPERTIES
 	@BeanField
-	private Feature<FeatureHistogramParams> item;
+	private Feature<FeatureInputHistogram> item;
 	
 	// START BEAN PROPERTIES
 	@BeanField
@@ -59,7 +59,7 @@ public class ThresholdHistogram extends FeatureHistogram {
 	// END BEAN PROPERTIES
 	
 	@Override
-	public double calc(CacheableParams<FeatureHistogramParams> paramsCacheable) throws FeatureCalcException {
+	public double calc(CacheableParams<FeatureInputHistogram> paramsCacheable) throws FeatureCalcException {
 
 		Histogram thresholded = paramsCacheable.calc(
 			new CalculateOtsuThresholdedHistogram(calculateLevel, getLogger())	
@@ -72,18 +72,18 @@ public class ThresholdHistogram extends FeatureHistogram {
 		);
 	}
 	
-	private FeatureHistogramParams createHistogramParams(FeatureHistogramParams params, Histogram thresholded) {
-		return new FeatureHistogramParams(
+	private FeatureInputHistogram createHistogramParams(FeatureInputHistogram params, Histogram thresholded) {
+		return new FeatureInputHistogram(
 			thresholded,
 			params.getRes()
 		);
 	}
 
-	public Feature<FeatureHistogramParams> getItem() {
+	public Feature<FeatureInputHistogram> getItem() {
 		return item;
 	}
 
-	public void setItem(Feature<FeatureHistogramParams> item) {
+	public void setItem(Feature<FeatureInputHistogram> item) {
 		this.item = item;
 	}
 

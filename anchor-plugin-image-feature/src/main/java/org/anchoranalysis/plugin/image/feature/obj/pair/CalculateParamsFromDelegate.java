@@ -3,7 +3,7 @@ package org.anchoranalysis.plugin.image.feature.obj.pair;
 import org.anchoranalysis.core.cache.ExecuteException;
 import org.anchoranalysis.feature.cache.calculation.CachedCalculation;
 import org.anchoranalysis.feature.cache.calculation.RslvdCachedCalculation;
-import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
+import org.anchoranalysis.feature.calc.params.FeatureInput;
 
 /**
  * A base class for Cached-Calculations that generate a Params for feature-calculation using an existing "delegate" calculation
@@ -23,7 +23,7 @@ import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
  * @param <U> delegate-type of CachedCalculation
  * 
  */
-public abstract class CalculateParamsFromDelegate<S, T extends FeatureCalcParams, U> extends CachedCalculation<S, T> {
+public abstract class CalculateParamsFromDelegate<S, T extends FeatureInput, U> extends CachedCalculation<S, T> {
 
 	private RslvdCachedCalculation<U, T> ccDelegate;
 

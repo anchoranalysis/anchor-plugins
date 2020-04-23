@@ -1,9 +1,7 @@
 package ch.ethz.biol.cell.mpp.nrg.feature.all;
 
-import org.anchoranalysis.anchor.mpp.feature.bean.mark.FeatureMarkParams;
-import org.anchoranalysis.anchor.mpp.feature.nrg.elem.NRGElemAllCalcParams;
-
-
+import org.anchoranalysis.anchor.mpp.feature.bean.mark.FeatureInputMark;
+import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputAllMemo;
 
 /*-
  * #%L
@@ -35,7 +33,7 @@ import org.anchoranalysis.feature.bean.operator.FeatureSingleElem;
 import org.anchoranalysis.feature.cache.CacheableParams;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 
-public class AsSingleMark extends FeatureSingleElem<NRGElemAllCalcParams,FeatureMarkParams> {
+public class AsSingleMark extends FeatureSingleElem<FeatureInputAllMemo,FeatureInputMark> {
 
 	/**
 	 * 
@@ -43,7 +41,7 @@ public class AsSingleMark extends FeatureSingleElem<NRGElemAllCalcParams,Feature
 	private static final long serialVersionUID = 1L;
 
 	@Override
-	public double calc(CacheableParams<NRGElemAllCalcParams> params) throws FeatureCalcException {
+	public double calc(CacheableParams<FeatureInputAllMemo> params) throws FeatureCalcException {
 		
 		return params.calcChangeParamsDirect(
 			getItem(),

@@ -2,7 +2,7 @@ package ch.ethz.biol.cell.mpp.pair.addcriteria;
 
 import org.anchoranalysis.anchor.mpp.feature.addcriteria.AddCriteriaPair;
 import org.anchoranalysis.anchor.mpp.feature.addcriteria.IncludeMarksFailureException;
-import org.anchoranalysis.anchor.mpp.feature.nrg.elem.NRGElemPairCalcParams;
+import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputPairMemo;
 import org.anchoranalysis.anchor.mpp.mark.MarkDistance;
 import org.anchoranalysis.anchor.mpp.mark.UnsupportedMarkTypeException;
 import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
@@ -60,7 +60,7 @@ public class AddCriteriaDistanceTo extends AddCriteriaPair {
 	}
 	
 	@Override
-	public boolean includeMarks(PxlMarkMemo mark1, PxlMarkMemo mark2, ImageDim dim, FeatureCalculatorMulti<NRGElemPairCalcParams> session, boolean use3D) throws IncludeMarksFailureException {
+	public boolean includeMarks(PxlMarkMemo mark1, PxlMarkMemo mark2, ImageDim dim, FeatureCalculatorMulti<FeatureInputPairMemo> session, boolean use3D) throws IncludeMarksFailureException {
 		double d;
 		try {
 			d = distance.distance(mark1.getMark(), mark2.getMark());
@@ -110,7 +110,7 @@ public class AddCriteriaDistanceTo extends AddCriteriaPair {
 	}
 
 	@Override
-	public FeatureList<NRGElemPairCalcParams> orderedListOfFeatures() {
+	public FeatureList<FeatureInputPairMemo> orderedListOfFeatures() {
 		return new FeatureList<>();
 	}
 

@@ -42,7 +42,7 @@ import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
 import org.anchoranalysis.image.extent.ImageRes;
 import org.anchoranalysis.image.feature.bean.evaluator.FeatureEvaluator;
 import org.anchoranalysis.image.feature.evaluator.EvaluateSingleObjMask;
-import org.anchoranalysis.image.feature.objmask.FeatureObjMaskParams;
+import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
 import org.anchoranalysis.image.objmask.ObjMaskCollection;
 
 import objmaskwithfeature.ObjMaskWithFeature;
@@ -57,7 +57,7 @@ public abstract class ObjMaskProviderMergeWithFeature extends ObjMaskProviderMer
 
 	// START BEAN PROPERTIES
 	@BeanField
-	private FeatureEvaluator<FeatureObjMaskParams> featureEvaluator;
+	private FeatureEvaluator<FeatureInputSingleObj> featureEvaluator;
 	
 	@BeanField
 	private boolean requireBBoxNeighbours = true;	// Requires the bounding boxes to intersect, or touch for any potential merge
@@ -73,7 +73,7 @@ public abstract class ObjMaskProviderMergeWithFeature extends ObjMaskProviderMer
 	// END BEAN PROPERTIES
 	
 	
-	protected abstract EvaluateSingleObjMask featureEvaluator(FeatureCalculatorSingle<FeatureObjMaskParams> featureSession);
+	protected abstract EvaluateSingleObjMask featureEvaluator(FeatureCalculatorSingle<FeatureInputSingleObj> featureSession);
 	
 	protected abstract AssignPriority assignPriority(
 	) throws CreateException;
@@ -186,7 +186,7 @@ public abstract class ObjMaskProviderMergeWithFeature extends ObjMaskProviderMer
 	private MergeGraph createGraph(
 		ObjMaskCollection objs,
 		ImageRes res,
-		FeatureCalculatorSingle<FeatureObjMaskParams> sessionSingle
+		FeatureCalculatorSingle<FeatureInputSingleObj> sessionSingle
 	) throws CreateException {
 			
 		try {
@@ -218,11 +218,11 @@ public abstract class ObjMaskProviderMergeWithFeature extends ObjMaskProviderMer
 	
 	
 
-	public FeatureEvaluator<FeatureObjMaskParams> getFeatureEvaluator() {
+	public FeatureEvaluator<FeatureInputSingleObj> getFeatureEvaluator() {
 		return featureEvaluator;
 	}
 
-	public void setFeatureEvaluator(FeatureEvaluator<FeatureObjMaskParams> featureEvaluator) {
+	public void setFeatureEvaluator(FeatureEvaluator<FeatureInputSingleObj> featureEvaluator) {
 		this.featureEvaluator = featureEvaluator;
 	}
 

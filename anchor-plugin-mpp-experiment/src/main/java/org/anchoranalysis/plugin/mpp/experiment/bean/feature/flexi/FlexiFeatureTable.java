@@ -34,9 +34,9 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.feature.bean.list.FeatureListProvider;
-import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
+import org.anchoranalysis.feature.calc.params.FeatureInput;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
-import org.anchoranalysis.image.feature.objmask.FeatureObjMaskParams;
+import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
 import org.anchoranalysis.image.objmask.ObjMaskCollection;
 import org.anchoranalysis.plugin.mpp.experiment.feature.FeatureSessionFlexiFeatureTable;
 
@@ -51,7 +51,7 @@ import org.anchoranalysis.plugin.mpp.experiment.feature.FeatureSessionFlexiFeatu
  * @param T type of fexture used in the table
  *
  */
-public abstract class FlexiFeatureTable<T extends FeatureCalcParams> extends AnchorBean<FlexiFeatureTable<T>> {
+public abstract class FlexiFeatureTable<T extends FeatureInput> extends AnchorBean<FlexiFeatureTable<T>> {
 
 	/**
 	 * 
@@ -65,7 +65,7 @@ public abstract class FlexiFeatureTable<T extends FeatureCalcParams> extends Anc
 	 * @return
 	 * @throws CreateException
 	 */
-	public abstract FeatureSessionFlexiFeatureTable<T> createFeatures( List<NamedBean<FeatureListProvider<FeatureObjMaskParams>>> list ) throws CreateException, InitException;
+	public abstract FeatureSessionFlexiFeatureTable<T> createFeatures( List<NamedBean<FeatureListProvider<FeatureInputSingleObj>>> list ) throws CreateException, InitException;
 	
 	public abstract List<T> createListCalcParams(
 		ObjMaskCollection objs,

@@ -32,8 +32,8 @@ import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.cache.CacheableParams;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.feature.bean.objmask.pair.FeatureObjMaskPairMerged;
-import org.anchoranalysis.image.feature.objmask.FeatureObjMaskParams;
-import org.anchoranalysis.image.feature.objmask.pair.merged.FeatureObjMaskPairMergedParams;
+import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
+import org.anchoranalysis.image.feature.objmask.pair.merged.FeatureInputPairObjsMerged;
 import org.anchoranalysis.image.objmask.ObjMask;
 
 /**
@@ -53,11 +53,11 @@ public abstract class FromExisting extends FeatureObjMaskPairMerged {
 	
 	// START BEAN PROPERTIES
 	@BeanField
-	private Feature<FeatureObjMaskParams> item;
+	private Feature<FeatureInputSingleObj> item;
 	// END BEAN PROPERTIES
 	
 	@Override
-	public double calc(CacheableParams<FeatureObjMaskPairMergedParams> params)
+	public double calc(CacheableParams<FeatureInputPairObjsMerged> params)
 			throws FeatureCalcException {
 		
 		String cacheName = cacheNameToUse();
@@ -71,21 +71,21 @@ public abstract class FromExisting extends FeatureObjMaskPairMerged {
 		);
 	}
 	
-	public CacheableParams<FeatureObjMaskParams> transformParamsCast( CacheableParams<FeatureObjMaskPairMergedParams> params ) {
+	public CacheableParams<FeatureInputSingleObj> transformParamsCast( CacheableParams<FeatureInputPairObjsMerged> params ) {
 		return null; // DISABLED
 		//assert( params.getParams() instanceof FeatureObjMaskPairMergedParams );
 	}
 	
-	protected abstract ObjMask selectObjMask( FeatureObjMaskPairMergedParams params );
+	protected abstract ObjMask selectObjMask( FeatureInputPairObjsMerged params );
 	
 	/** The name of the cache to use for calculation */
 	protected abstract String cacheNameToUse();
 	
-	public Feature<FeatureObjMaskParams> getItem() {
+	public Feature<FeatureInputSingleObj> getItem() {
 		return item;
 	}
 
-	public void setItem(Feature<FeatureObjMaskParams> item) {
+	public void setItem(Feature<FeatureInputSingleObj> item) {
 		this.item = item;
 	}
 }

@@ -1,7 +1,7 @@
 package ch.ethz.biol.cell.mpp.nrg.feature.mark;
 
 import org.anchoranalysis.anchor.mpp.feature.bean.mark.FeatureMark;
-import org.anchoranalysis.anchor.mpp.feature.bean.mark.FeatureMarkParams;
+import org.anchoranalysis.anchor.mpp.feature.bean.mark.FeatureInputMark;
 
 /*
  * #%L
@@ -47,7 +47,7 @@ public class KeyValueParam extends FeatureMark {
 	// END BEAN PROPERTIES
 
 	@Override
-	public double calc(FeatureMarkParams params)
+	public double calc(FeatureInputMark params)
 			throws FeatureCalcException {
 		
 		if (params.getKeyValueParams()==null) {

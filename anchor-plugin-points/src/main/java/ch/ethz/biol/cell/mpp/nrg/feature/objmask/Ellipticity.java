@@ -32,7 +32,7 @@ import org.anchoranalysis.anchor.mpp.bean.points.fitter.InsufficientPointsExcept
 import org.anchoranalysis.feature.cache.CacheableParams;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.feature.bean.objmask.FeatureObjMask;
-import org.anchoranalysis.image.feature.objmask.FeatureObjMaskParams;
+import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
 import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.plugin.points.calculate.ellipse.CalculateEllipseLeastSquares;
 import org.anchoranalysis.plugin.points.calculate.ellipse.ObjMaskAndEllipse;
@@ -46,9 +46,9 @@ public class Ellipticity extends FeatureObjMask {
 	private static final long serialVersionUID = 1L;
 	
 	@Override
-	public double calc(CacheableParams<FeatureObjMaskParams> paramsCacheable) throws FeatureCalcException {
+	public double calc(CacheableParams<FeatureInputSingleObj> paramsCacheable) throws FeatureCalcException {
 		
-		FeatureObjMaskParams params = paramsCacheable.getParams();
+		FeatureInputSingleObj params = paramsCacheable.getParams();
 		
 		ObjMaskAndEllipse both;
 		try {

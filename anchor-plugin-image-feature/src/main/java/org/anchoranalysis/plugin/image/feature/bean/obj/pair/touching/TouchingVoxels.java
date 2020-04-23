@@ -31,7 +31,7 @@ import org.anchoranalysis.feature.cache.CacheableParams;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.feature.bean.objmask.pair.FeatureObjMaskPair;
-import org.anchoranalysis.image.feature.objmask.pair.FeatureObjMaskPairParams;
+import org.anchoranalysis.image.feature.objmask.pair.FeatureInputPairObjs;
 import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.image.voxel.kernel.count.CountKernel;
 import org.anchoranalysis.image.voxel.kernel.count.CountKernelNghbMask;
@@ -56,7 +56,7 @@ public abstract class TouchingVoxels extends FeatureObjMaskPair {
 	// END BEAN PROPERTIES
 		
 	/** The intersection of the bounding box of one mask with the (dilated by 1 bounding-box) of the other */
-	protected BoundingBox bboxIntersectDilated( CacheableParams<FeatureObjMaskPairParams> params) throws FeatureCalcException {
+	protected BoundingBox bboxIntersectDilated( CacheableParams<FeatureInputPairObjs> params) throws FeatureCalcException {
 		return params.calc(
 			new CalculateIntersectionOfDilatedBoundingBox(use3D)	
 		);
