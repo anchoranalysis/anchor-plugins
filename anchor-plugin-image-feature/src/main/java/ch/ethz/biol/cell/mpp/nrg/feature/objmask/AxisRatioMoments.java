@@ -28,7 +28,6 @@ package ch.ethz.biol.cell.mpp.nrg.feature.objmask;
 
 
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.cache.ExecuteException;
 import org.anchoranalysis.feature.cache.CacheableParams;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.feature.bean.objmask.FeatureObjMask;
@@ -61,15 +60,10 @@ public class AxisRatioMoments extends FeatureObjMask {
 		if (om.numPixelsLessThan(12)) {
 			return 1.0;
 		}
-		
-		MomentsFromPointsCalculator moments;
-		try {
-			moments = paramsCacheable.calc(
-				new CalculateObjMaskPointsSecondMomentMatrix(suppressZCovariance)	
-			);
-		} catch (ExecuteException e) {
-			throw new FeatureCalcException(e);
-		}
+
+		MomentsFromPointsCalculator moments = paramsCacheable.calc(
+			new CalculateObjMaskPointsSecondMomentMatrix(suppressZCovariance)	
+		);
 		
 		moments = moments.duplicate();
 		moments.removeClosestToUnitZ();

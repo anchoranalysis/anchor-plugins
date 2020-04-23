@@ -28,7 +28,6 @@ package ch.ethz.biol.cell.mpp.nrg.feature.objmask;
 
 
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.cache.ExecuteException;
 import org.anchoranalysis.feature.cache.CacheableParams;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.feature.bean.objmask.FeatureObjMask;
@@ -74,13 +73,9 @@ public class AxisLengthMIP extends FeatureObjMask {
 		// Justification
 		// http://stackoverflow.com/questions/1711784/computing-object-statistics-from-the-second-central-moments
 		// http://en.wikipedia.org/wiki/Image_moment
-		try {
-			MomentsFromPointsCalculator moments = params.calc(
-				new CalculateObjMaskSecondMomentMatrixMIP()
-			); 
-			return moments.get( index ).eigenvalueNormalizedAsAxisLength();
-		} catch (ExecuteException e) {
-			throw new FeatureCalcException(e);
-		}
+		MomentsFromPointsCalculator moments = params.calc(
+			new CalculateObjMaskSecondMomentMatrixMIP()
+		); 
+		return moments.get( index ).eigenvalueNormalizedAsAxisLength();
 	}
 }

@@ -2,6 +2,7 @@ package org.anchoranalysis.plugin.image.feature.bean.obj.pair;
 
 import java.util.Optional;
 
+
 /*
  * #%L
  * anchor-plugin-image-feature
@@ -31,11 +32,10 @@ import java.util.Optional;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.Positive;
-import org.anchoranalysis.core.cache.ExecuteException;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.cache.CacheableParams;
-import org.anchoranalysis.feature.cachedcalculation.CachedCalculation;
+import org.anchoranalysis.feature.cache.calculation.CachedCalculation;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
 import org.anchoranalysis.image.feature.bean.objmask.pair.FeatureObjMaskPair;
@@ -43,6 +43,7 @@ import org.anchoranalysis.image.feature.objmask.FeatureObjMaskParams;
 import org.anchoranalysis.image.feature.objmask.pair.FeatureObjMaskPairParams;
 import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.plugin.image.feature.obj.pair.CalculateParamsForIntersection;
+import org.anchoranalysis.plugin.image.feature.obj.pair.CalculateParamsFromDelegateOption;
 
 import ch.ethz.biol.cell.mpp.nrg.feature.objmask.cachedcalculation.CalculatePairIntersectionCommutative;
 
@@ -80,33 +81,20 @@ public class FeatureObjMaskPairIntersection extends FeatureObjMaskPair {
 	private Feature<FeatureObjMaskParams> item;
 	// END BEAN PROPERTIES
 	
-	private static final String CACHE_INTERSECTION = "intersection_eroded"; // TODO add iterationsErosion to name
-	private static final String CACHE_OBJ1 = "obj1";	// TODO  add iterationsDilation to name
+	private static final String CACHE_INTERSECTION = "intersection_eroded";
+	private static final String CACHE_OBJ1 = "obj1";
 	private static final String CACHE_OBJ2 = "obj2";
 		
 	@Override
 	public double calc(CacheableParams<FeatureObjMaskPairParams> params) throws FeatureCalcException {
-		
-		CachedCalculation<Optional<FeatureObjMaskParams>,FeatureObjMaskPairParams> ccParamsDerived
-			= createParamsForIntersection(params);
-		
-		try {
-			Optional<FeatureObjMaskParams> paramsDerived = params.calc(ccParamsDerived);
-			
-			if (!paramsDerived.isPresent()) {
-				return emptyValue;
-			}
-			
-			// We select an appropriate cache for calculating the feature (should be the same as selected in init())
-			return params.calcChangeParams(
-				item,
-				p -> paramsDerived.get(),
-				CACHE_INTERSECTION
-			);
-			
-		} catch (ExecuteException e) {
-			throw new FeatureCalcException(e.getCause());
-		}
+		return CalculateParamsFromDelegateOption.calc(
+			params,
+			createCCIntersection(params),
+			delegate -> new CalculateParamsForIntersection(delegate),
+			item,
+			cacheIntersectionName(),
+			emptyValue
+		);
 	}
 	
 	@Override
@@ -121,31 +109,31 @@ public class FeatureObjMaskPairIntersection extends FeatureObjMaskPair {
 		);*/
 		return null;
 	}
-		
-	public CachedCalculation<Optional<FeatureObjMaskParams>,FeatureObjMaskPairParams> createParamsForIntersection(
-		CacheableParams<FeatureObjMaskPairParams> paramsExst
-	) throws FeatureCalcException {
-		
+	
+	/** A unique cache-name for the parameterization of how we find a parameterization */
+	private String cacheIntersectionName() {
+		return String.format(
+			"%s_%d_%d_%d",
+			CACHE_INTERSECTION,
+			iterationsDilation,
+			iterationsErosion,
+			do3D ? 1 : 0
+		);
+	}
+
+	private CachedCalculation<Optional<ObjMask>,FeatureObjMaskPairParams> createCCIntersection(CacheableParams<FeatureObjMaskPairParams> params) throws FeatureCalcException {
 		try {
-			return CalculateParamsForIntersection.createFromCache(
-				paramsExst,
-				createCCIntersection(paramsExst)
+			return CalculatePairIntersectionCommutative.createFromCache(
+				params,
+				params.cacheFor(CACHE_OBJ1, FeatureObjMaskPairParams.class),
+				params.cacheFor(CACHE_OBJ2, FeatureObjMaskPairParams.class),
+				iterationsDilation,
+				iterationsErosion,
+				do3D
 			);
-		
 		} catch (CreateException e) {
 			throw new FeatureCalcException(e);
 		}
-	}
-
-	private CachedCalculation<Optional<ObjMask>,FeatureObjMaskPairParams> createCCIntersection(CacheableParams<FeatureObjMaskPairParams> params) throws CreateException {
-		return CalculatePairIntersectionCommutative.createFromCache(
-			params,
-			params.cacheFor(CACHE_OBJ1, FeatureObjMaskPairParams.class),
-			params.cacheFor(CACHE_OBJ2, FeatureObjMaskPairParams.class),
-			iterationsDilation,
-			iterationsErosion,
-			do3D
-		);
 	}
 	
 	public boolean isDo3D() {

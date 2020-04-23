@@ -35,7 +35,7 @@ import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.cache.ExecuteException;
 import org.anchoranalysis.feature.cache.CacheableParams;
-import org.anchoranalysis.feature.cachedcalculation.CachedCalculation;
+import org.anchoranalysis.feature.cache.calculation.CachedCalculation;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.voxel.statistics.VoxelStatistics;
 
@@ -123,31 +123,27 @@ public class OverlapRatio extends NRGElemPair {
 		
 		NRGElemPairCalcParams params = paramsCacheable.getParams();
 		
-		try {
-			double overlap = paramsCacheable.calc(
-				overlapCalculation()
+		double overlap = paramsCacheable.calc(
+			overlapCalculation()
+		);
+		
+		if (useMax) {
+			return calcOverlapRatioMax(
+				params.getObj1(),
+				params.getObj2(),
+				overlap,
+				regionID,
+				mip
 			);
-			
-			if (useMax) {
-				return calcOverlapRatioMax(
-					params.getObj1(),
-					params.getObj2(),
-					overlap,
-					regionID,
-					mip
-				);
-			} else {
-				return calcOverlapRatioMin(
-					params.getObj1(),
-					params.getObj2(),
-					overlap,
-					regionID,
-					mip
-				);
-			}
-		} catch (ExecuteException e) {
-			throw new FeatureCalcException(e);
-		}							
+		} else {
+			return calcOverlapRatioMin(
+				params.getObj1(),
+				params.getObj2(),
+				overlap,
+				regionID,
+				mip
+			);
+		}
 	}
 	
 	private CachedCalculation<Double,NRGElemPairCalcParams> overlapCalculation() {

@@ -32,7 +32,7 @@ import java.util.Optional;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.cache.ExecuteException;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.feature.cachedcalculation.RslvdCachedCalculation;
+import org.anchoranalysis.feature.cache.calculation.RslvdCachedCalculation;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
 import org.anchoranalysis.image.feature.objmask.pair.FeatureObjMaskPairParams;
@@ -109,7 +109,11 @@ public class ObjMaskProviderPairIntersection extends ObjMaskProviderDimensions {
 			FeatureObjMaskPairParams params = createParams(om1, om2);
 			
 			RslvdCachedCalculation<Optional<ObjMask>,FeatureObjMaskPairParams> op = CalculatePairIntersectionCommutative
-					.createWithoutCache(iterationsDilation, iterationsErosion, do3D);
+					.createWithoutCache(
+						iterationsDilation,
+						iterationsErosion,
+						do3D
+					);
 			return op.getOrCalculate( params );
 		} catch (ExecuteException e) {
 			throw new CreateException(e.getCause());

@@ -33,7 +33,6 @@ import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
 
 
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.cache.ExecuteException;
 import org.anchoranalysis.feature.cache.CacheableParams;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import ch.ethz.biol.cell.mpp.nrg.cachedcalculation.OverlapCalculation;
@@ -67,18 +66,14 @@ public class OverlapRatioTwoRegions extends NRGElemPair {
 		
 		NRGElemPairCalcParams params = paramsCacheable.getParams();
 		
-		try {
-			return calcOverlapRatioMin(
-				params.getObj1(),
-				params.getObj2(),
-				overlapForRegion(paramsCacheable, regionID1),
-				overlapForRegion(paramsCacheable, regionID2),
-				regionID1,
-				regionID2
-			);
-		} catch (ExecuteException e) {
-			throw new FeatureCalcException(e);
-		}							
+		return calcOverlapRatioMin(
+			params.getObj1(),
+			params.getObj2(),
+			overlapForRegion(paramsCacheable, regionID1),
+			overlapForRegion(paramsCacheable, regionID2),
+			regionID1,
+			regionID2
+		);
 	}
 	
 	private static double calcOverlapRatioMin( PxlMarkMemo obj1, PxlMarkMemo obj2, double overlap1, double overlap2, int regionID1, int regionID2 ) throws FeatureCalcException {
@@ -94,7 +89,7 @@ public class OverlapRatioTwoRegions extends NRGElemPair {
 		return overlap / (volume1+volume2);
 	}
 	
-	private double overlapForRegion( CacheableParams<NRGElemPairCalcParams> paramsCacheable, int regionID ) throws ExecuteException {
+	private double overlapForRegion( CacheableParams<NRGElemPairCalcParams> paramsCacheable, int regionID ) throws FeatureCalcException {
 		return paramsCacheable.calc(
 			new OverlapCalculation(regionID)
 		);

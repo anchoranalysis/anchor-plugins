@@ -44,13 +44,10 @@ public class AsCfg extends FeatureSingleElem<NRGElemAllCalcParams,FeatureCfgPara
 	@Override
 	public double calc( CacheableParams<NRGElemAllCalcParams> params ) throws FeatureCalcException {
 		return params
-			.calcChangeParams(getItem(), AsCfg::deriveParams, "cfg");
-	}
-	
-	private static FeatureCfgParams deriveParams( NRGElemAllCalcParams params ) {
-		return new FeatureCfgParams(
-			params.getPxlPartMemo().asCfg(),
-			params.getDimensions()
-		);
+			.calcChangeParamsDirect(
+				getItem(),
+				new CalculateDeriveCfgParams(),
+				"cfg"
+			);
 	}
 }

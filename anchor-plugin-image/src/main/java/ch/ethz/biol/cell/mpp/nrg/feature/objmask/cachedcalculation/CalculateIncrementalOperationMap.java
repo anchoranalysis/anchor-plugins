@@ -28,7 +28,7 @@ package ch.ethz.biol.cell.mpp.nrg.feature.objmask.cachedcalculation;
 
 
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.feature.cachedcalculation.CachedCalculationMapHash;
+import org.anchoranalysis.feature.cache.calculation.map.CachedCalculationMapHash;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.feature.objmask.FeatureObjMaskParams;

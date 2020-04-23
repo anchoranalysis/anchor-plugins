@@ -28,7 +28,6 @@ package ch.ethz.biol.cell.mpp.nrg.feature.pair;
 
 import org.anchoranalysis.anchor.mpp.feature.nrg.elem.NRGElemPairCalcParams;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.cache.ExecuteException;
 import org.anchoranalysis.feature.cache.CacheableParams;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 
@@ -51,19 +50,15 @@ public abstract class OverlapMaskQuantiles extends OverlapMaskSingleRegion {
 
 	protected double overlapWithQuantiles( CacheableParams<NRGElemPairCalcParams> params ) throws FeatureCalcException {
 		
-		try {
-			return params.calc(
-				new OverlapCalculationMaskGlobalMiddleQuantiles(
-					getRegionID(),
-					getNrgIndex(),
-					(byte) getMaskValue(),
-					quantileLow,
-					quantileHigh
-				)
-			);
-		} catch (ExecuteException e) {
-			throw new FeatureCalcException(e);
-		}							
+		return params.calc(
+			new OverlapCalculationMaskGlobalMiddleQuantiles(
+				getRegionID(),
+				getNrgIndex(),
+				(byte) getMaskValue(),
+				quantileLow,
+				quantileHigh
+			)
+		);
 	}
 
 	public double getQuantileLow() {

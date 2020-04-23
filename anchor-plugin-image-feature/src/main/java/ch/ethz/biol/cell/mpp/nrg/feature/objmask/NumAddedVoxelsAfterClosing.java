@@ -28,7 +28,6 @@ package ch.ethz.biol.cell.mpp.nrg.feature.objmask;
 
 
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.cache.ExecuteException;
 import org.anchoranalysis.feature.cache.CacheableParams;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.feature.bean.objmask.FeatureObjMask;
@@ -64,19 +63,16 @@ public class NumAddedVoxelsAfterClosing extends FeatureObjMask {
 	
 	@Override
 	public double calc(CacheableParams<FeatureObjMaskParams> params) throws FeatureCalcException {
-		try {
-			ObjMask omClosing = params.calc(
-				CalculateClosing.createFromCache(params, iterations, do3D)		
-			);
-			
-			double numVoxels = params.calc(
-				new CalculateNumVoxels(false)
-			);
-			
-			return omClosing.numPixels() - numVoxels;
-		} catch (ExecuteException e) {
-			throw new FeatureCalcException(e);
-		}
+
+		ObjMask omClosing = params.calc(
+			CalculateClosing.createFromCache(params, iterations, do3D)		
+		);
+		
+		double numVoxels = params.calc(
+			new CalculateNumVoxels(false)
+		);
+		
+		return omClosing.numPixels() - numVoxels;
 	}
 
 	public int getIterations() {
