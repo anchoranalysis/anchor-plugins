@@ -29,7 +29,7 @@ package ch.ethz.biol.cell.mpp.nrg.feature.objmaskpairmerged;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.bean.Feature;
-import org.anchoranalysis.feature.cache.CacheableParams;
+import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.feature.bean.objmask.pair.FeatureObjMaskPairMerged;
 import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
@@ -57,11 +57,11 @@ public abstract class FromExisting extends FeatureObjMaskPairMerged {
 	// END BEAN PROPERTIES
 	
 	@Override
-	public double calc(CacheableParams<FeatureInputPairObjsMerged> params)
+	public double calc(SessionInput<FeatureInputPairObjsMerged> input)
 			throws FeatureCalcException {
 		
 		String cacheName = cacheNameToUse();
-		return params.calcChangeParamsDirect(
+		return input.calcChangeParamsDirect(
 			item,
 			new CalculateObjMaskParamsFromMerged(
 				p -> selectObjMask(p),
@@ -71,7 +71,7 @@ public abstract class FromExisting extends FeatureObjMaskPairMerged {
 		);
 	}
 	
-	public CacheableParams<FeatureInputSingleObj> transformParamsCast( CacheableParams<FeatureInputPairObjsMerged> params ) {
+	public SessionInput<FeatureInputSingleObj> transformParamsCast( SessionInput<FeatureInputPairObjsMerged> params ) {
 		return null; // DISABLED
 		//assert( params.getParams() instanceof FeatureObjMaskPairMergedParams );
 	}

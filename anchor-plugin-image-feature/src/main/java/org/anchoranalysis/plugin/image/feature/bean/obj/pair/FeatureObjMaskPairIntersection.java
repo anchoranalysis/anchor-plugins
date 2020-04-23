@@ -34,7 +34,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.Positive;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.feature.bean.Feature;
-import org.anchoranalysis.feature.cache.CacheableParams;
+import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.cache.calculation.CachedCalculation;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.calc.params.FeatureInput;
@@ -86,10 +86,10 @@ public class FeatureObjMaskPairIntersection extends FeatureObjMaskPair {
 	private static final String CACHE_OBJ2 = "obj2";
 		
 	@Override
-	public double calc(CacheableParams<FeatureInputPairObjs> params) throws FeatureCalcException {
+	public double calc(SessionInput<FeatureInputPairObjs> input) throws FeatureCalcException {
 		return CalculateParamsFromDelegateOption.calc(
-			params,
-			createCCIntersection(params),
+			input,
+			createCCIntersection(input),
 			delegate -> new CalculateParamsForIntersection(delegate),
 			item,
 			cacheIntersectionName(),
@@ -98,7 +98,7 @@ public class FeatureObjMaskPairIntersection extends FeatureObjMaskPair {
 	}
 	
 	@Override
-	public CacheableParams<FeatureInput> transformParams(CacheableParams<FeatureInputPairObjs> params,
+	public SessionInput<FeatureInput> transformInput(SessionInput<FeatureInputPairObjs> params,
 			Feature<FeatureInput> dependentFeature) throws FeatureCalcException {
 		
 		//Optional<FeatureObjMaskParams> paramsDerived = createParamsForIntersection(params);
@@ -121,12 +121,12 @@ public class FeatureObjMaskPairIntersection extends FeatureObjMaskPair {
 		);
 	}
 
-	private CachedCalculation<Optional<ObjMask>,FeatureInputPairObjs> createCCIntersection(CacheableParams<FeatureInputPairObjs> params) throws FeatureCalcException {
+	private CachedCalculation<Optional<ObjMask>,FeatureInputPairObjs> createCCIntersection(SessionInput<FeatureInputPairObjs> input) throws FeatureCalcException {
 		try {
 			return CalculatePairIntersectionCommutative.createFromCache(
-				params,
-				params.cacheFor(CACHE_OBJ1, FeatureInputPairObjs.class),
-				params.cacheFor(CACHE_OBJ2, FeatureInputPairObjs.class),
+				input,
+				input.cacheFor(CACHE_OBJ1, FeatureInputPairObjs.class),
+				input.cacheFor(CACHE_OBJ2, FeatureInputPairObjs.class),
 				iterationsDilation,
 				iterationsErosion,
 				do3D

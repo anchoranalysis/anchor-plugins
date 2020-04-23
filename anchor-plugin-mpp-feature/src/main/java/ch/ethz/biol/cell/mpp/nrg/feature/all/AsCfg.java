@@ -30,7 +30,7 @@ import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputAllMemo;
  */
 
 import org.anchoranalysis.feature.bean.operator.FeatureSingleElem;
-import org.anchoranalysis.feature.cache.CacheableParams;
+import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 
 public class AsCfg extends FeatureSingleElem<FeatureInputAllMemo,FeatureInputCfg> {
@@ -41,8 +41,8 @@ public class AsCfg extends FeatureSingleElem<FeatureInputAllMemo,FeatureInputCfg
 	private static final long serialVersionUID = 1L;
 
 	@Override
-	public double calc( CacheableParams<FeatureInputAllMemo> params ) throws FeatureCalcException {
-		return params
+	public double calc( SessionInput<FeatureInputAllMemo> input ) throws FeatureCalcException {
+		return input
 			.calcChangeParamsDirect(
 				getItem(),
 				new CalculateDeriveCfgParams(),

@@ -1,6 +1,6 @@
 package ch.ethz.biol.cell.mpp.nrg.feature.ind;
 
-import org.anchoranalysis.anchor.mpp.feature.bean.nrg.elem.NRGElemInd;
+import org.anchoranalysis.anchor.mpp.feature.bean.nrg.elem.FeatureSingleMemo;
 
 /*
  * #%L
@@ -36,7 +36,7 @@ import org.anchoranalysis.image.convert.ImageUnitConverter;
 import org.anchoranalysis.image.extent.ImageRes;
 import org.anchoranalysis.image.orientation.DirectionVector;
 
-public abstract class NRGElemIndPhysical extends NRGElemInd {
+public abstract class NRGElemIndPhysical extends FeatureSingleMemo {
 
 	/**
 	 * 

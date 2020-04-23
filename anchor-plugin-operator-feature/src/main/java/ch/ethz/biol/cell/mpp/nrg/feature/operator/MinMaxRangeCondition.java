@@ -30,7 +30,7 @@ package ch.ethz.biol.cell.mpp.nrg.feature.operator;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.operator.FeatureGenericSingleElem;
-import org.anchoranalysis.feature.cache.CacheableParams;
+import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.calc.params.FeatureInput;
 
@@ -59,9 +59,9 @@ public class MinMaxRangeCondition<T extends FeatureInput> extends FeatureGeneric
 	// END BEAN PROPERTIES
 	
 	@Override
-	public double calc( CacheableParams<T> params ) throws FeatureCalcException {
+	public double calc( SessionInput<T> input ) throws FeatureCalcException {
 		
-		double val = params.calc( featureCondition );
+		double val = input.calc( featureCondition );
 		
 		if (val < min) {
 			return belowMinValue;
@@ -71,7 +71,7 @@ public class MinMaxRangeCondition<T extends FeatureInput> extends FeatureGeneric
 			return aboveMaxValue;
 		}
 		
-		return params.calc( getItem() );
+		return input.calc( getItem() );
 	}
 
 	@Override

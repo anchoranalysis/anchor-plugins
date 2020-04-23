@@ -28,7 +28,7 @@ package ch.ethz.biol.cell.mpp.nrg.feature.objmask;
 
 
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.feature.cache.CacheableParams;
+import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.feature.bean.objmask.FeatureObjMask;
 import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
@@ -48,7 +48,7 @@ public abstract class ObjMaskPointsSpecificEigenvalueBase extends FeatureObjMask
 	private int eigenvalueIndex = 0;
 	// END BEAN PROPERTIES
 		
-	protected EigenvalueAndVector calcSpecificEigenvector( CacheableParams<FeatureInputSingleObj> params ) throws FeatureCalcException {
+	protected EigenvalueAndVector calcSpecificEigenvector( SessionInput<FeatureInputSingleObj> params ) throws FeatureCalcException {
 		
 		MomentsFromPointsCalculator mm = params.calc(
 			new CalculateObjMaskPointsSecondMomentMatrix(false)			

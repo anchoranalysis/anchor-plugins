@@ -32,7 +32,7 @@ import java.util.Optional;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 import org.anchoranalysis.core.params.KeyValueParams;
-import org.anchoranalysis.feature.cache.CacheableParams;
+import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.feature.bean.FeatureStack;
 import org.anchoranalysis.image.feature.stack.FeatureInputStack;
@@ -54,10 +54,10 @@ public class KeyValueParam extends FeatureStack {
 	// END BEAN PROPERTIES
 
 	@Override
-	public double calc(CacheableParams<FeatureInputStack> params)
+	public double calc(SessionInput<FeatureInputStack> input)
 			throws FeatureCalcException {
 		try {
-			Optional<ImageInitParams> initParams = params.getParams().getSharedObjs();
+			Optional<ImageInitParams> initParams = input.getParams().getSharedObjs();
 			
 			if (!initParams.isPresent()) {
 				throw new FeatureCalcException("No ImageInitParams are associated with the FeatureStackParams");

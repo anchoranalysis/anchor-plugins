@@ -2,7 +2,7 @@ package ch.ethz.biol.cell.mpp.nrg.feature.pair;
 
 import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputPairMemo;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.feature.cache.CacheableParams;
+import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 
 import ch.ethz.biol.cell.mpp.nrg.cachedcalculation.OverlapCalculationMaskGlobalMiddleQuantiles;
@@ -22,7 +22,7 @@ public abstract class OverlapMaskQuantiles extends OverlapMaskSingleRegion {
 	private double quantileHigh = 1;
 	// END BEAN PROPERTIES
 
-	protected double overlapWithQuantiles( CacheableParams<FeatureInputPairMemo> params ) throws FeatureCalcException {
+	protected double overlapWithQuantiles( SessionInput<FeatureInputPairMemo> params ) throws FeatureCalcException {
 		
 		return params.calc(
 			new OverlapCalculationMaskGlobalMiddleQuantiles(

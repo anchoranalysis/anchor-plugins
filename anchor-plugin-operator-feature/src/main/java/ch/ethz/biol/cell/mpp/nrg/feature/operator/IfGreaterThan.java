@@ -30,7 +30,7 @@ package ch.ethz.biol.cell.mpp.nrg.feature.operator;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.operator.FeatureGenericSingleElem;
-import org.anchoranalysis.feature.cache.CacheableParams;
+import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.calc.params.FeatureInput;
 
@@ -53,13 +53,13 @@ public class IfGreaterThan<T extends FeatureInput> extends FeatureGenericSingleE
 	// END BEAN PROPERTIES
 
 	@Override
-	public double calc(CacheableParams<T> params)
+	public double calc(SessionInput<T> input)
 			throws FeatureCalcException {
 
-		if (params.calc(featureCondition)>value) {
-			return params.calc(super.getItem());
+		if (input.calc(featureCondition)>value) {
+			return input.calc(super.getItem());
 		} else {
-			return params.calc(featureElse);
+			return input.calc(featureElse);
 		}
 	}
 	

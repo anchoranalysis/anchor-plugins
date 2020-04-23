@@ -28,7 +28,7 @@ package org.anchoranalysis.plugin.image.feature.bean.obj.pair.order;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.bean.Feature;
-import org.anchoranalysis.feature.cache.CacheableParams;
+import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.feature.bean.objmask.pair.FeatureObjMaskPair;
 import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
@@ -52,7 +52,7 @@ public abstract class FeatureObjMaskPairOrder extends FeatureObjMaskPair {
 	private Feature<FeatureInputSingleObj> feature;
 	// END BEAN PROPERTIES
 		
-	protected double valueFromObj1( CacheableParams<FeatureInputPairObjs> params ) throws FeatureCalcException {
+	protected double valueFromObj1( SessionInput<FeatureInputPairObjs> params ) throws FeatureCalcException {
 		return featureValFrom(
 			params,
 			true,
@@ -60,7 +60,7 @@ public abstract class FeatureObjMaskPairOrder extends FeatureObjMaskPair {
 		);
 	}
 	
-	protected double valueFromObj2( CacheableParams<FeatureInputPairObjs> params ) throws FeatureCalcException {
+	protected double valueFromObj2( SessionInput<FeatureInputPairObjs> params ) throws FeatureCalcException {
 		return featureValFrom(
 			params,
 			false,
@@ -68,7 +68,7 @@ public abstract class FeatureObjMaskPairOrder extends FeatureObjMaskPair {
 		);
 	}
 	
-	private double featureValFrom( CacheableParams<FeatureInputPairObjs> params, boolean first, String sessionName ) throws FeatureCalcException {
+	private double featureValFrom( SessionInput<FeatureInputPairObjs> params, boolean first, String sessionName ) throws FeatureCalcException {
 	
 		return params.calcChangeParamsDirect(
 			feature,

@@ -1,6 +1,6 @@
 package ch.ethz.biol.cell.mpp.nrg.feature.ind;
 
-import org.anchoranalysis.anchor.mpp.feature.bean.nrg.elem.NRGElemInd;
+import org.anchoranalysis.anchor.mpp.feature.bean.nrg.elem.FeatureSingleMemo;
 import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputSingleMemo;
 import org.anchoranalysis.anchor.mpp.mark.GlobalRegionIdentifiers;
 import org.anchoranalysis.anchor.mpp.mark.MarkAbstractRadii;
@@ -34,7 +34,7 @@ import org.anchoranalysis.anchor.mpp.mark.MarkAbstractRadii;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.extent.BoundingBox;
 
-public class BBoxRatio extends NRGElemInd {
+public class BBoxRatio extends FeatureSingleMemo {
 
 	/**
 	 * 

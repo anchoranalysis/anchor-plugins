@@ -30,7 +30,7 @@ package ch.ethz.biol.cell.mpp.nrg.feature.operator;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.params.KeyValueParams;
 import org.anchoranalysis.feature.bean.Feature;
-import org.anchoranalysis.feature.cache.CacheableParams;
+import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.calc.params.FeatureInputParams;
 import org.anchoranalysis.feature.calc.params.FeatureInputParamsDescriptor;
@@ -50,10 +50,10 @@ public class Param<T extends FeatureInputParams> extends Feature<T> {
 	// END BEAN PROPERTIES
 	
 	@Override
-	public double calc(CacheableParams<T> params)
+	public double calc(SessionInput<T> input)
 			throws FeatureCalcException {
 		
-		KeyValueParams keyValueParams = params.getParams().getKeyValueParams();
+		KeyValueParams keyValueParams = input.getParams().getKeyValueParams();
 		
 		if (keyValueParams==null) {
 			throw new FeatureCalcException("No KeyValueParams is passed");

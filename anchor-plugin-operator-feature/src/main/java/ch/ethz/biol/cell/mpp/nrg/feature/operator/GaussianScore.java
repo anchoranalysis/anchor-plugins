@@ -28,7 +28,7 @@ package ch.ethz.biol.cell.mpp.nrg.feature.operator;
 
 
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.feature.cache.CacheableParams;
+import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.calc.params.FeatureInput;
 
@@ -77,10 +77,10 @@ public class GaussianScore<T extends FeatureInput> extends FeatureFirstSecondOrd
 	}
 	
 	@Override
-	public double calc( CacheableParams<T> params ) throws FeatureCalcException {
+	public double calc( SessionInput<T> input ) throws FeatureCalcException {
 		
-		double val = params.calc( getItem() );
-		double mean = params.calc( getItemMean() );
+		double val = input.calc( getItem() );
+		double mean = input.calc( getItemMean() );
 		
 		if (ignoreHigherSide) {
 			if (val>mean) {
@@ -94,7 +94,7 @@ public class GaussianScore<T extends FeatureInput> extends FeatureFirstSecondOrd
 			}
 		}
 		
-		double stdDev = params.calc( getItemStdDev() );
+		double stdDev = input.calc( getItemStdDev() );
 		
 		return calc( mean, stdDev, val, rewardHigherSide, rewardLowerSide );
 	}

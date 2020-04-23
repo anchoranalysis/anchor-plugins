@@ -30,7 +30,7 @@ import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputAllMemo;
  */
 
 import org.anchoranalysis.feature.bean.operator.FeatureSingleElem;
-import org.anchoranalysis.feature.cache.CacheableParams;
+import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 
 public class AsSingleMark extends FeatureSingleElem<FeatureInputAllMemo,FeatureInputMark> {
@@ -41,9 +41,9 @@ public class AsSingleMark extends FeatureSingleElem<FeatureInputAllMemo,FeatureI
 	private static final long serialVersionUID = 1L;
 
 	@Override
-	public double calc(CacheableParams<FeatureInputAllMemo> params) throws FeatureCalcException {
+	public double calc(SessionInput<FeatureInputAllMemo> input) throws FeatureCalcException {
 		
-		return params.calcChangeParamsDirect(
+		return input.calcChangeParamsDirect(
 			getItem(),
 			new CalculateDeriveMarkParams(),
 			"mark"

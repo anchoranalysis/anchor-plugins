@@ -33,7 +33,7 @@ package ch.ethz.biol.cell.mpp.nrg.feature.objmask;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.bean.Feature;
-import org.anchoranalysis.feature.cache.CacheableParams;
+import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.cache.calculation.CachedCalculation;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.calc.params.FeatureInput;
@@ -59,12 +59,12 @@ public abstract class DerivedObjMask extends FeatureObjMask {
 	// END BEAN PROPERTIES
 
 	@Override
-	public double calc(CacheableParams<FeatureInputSingleObj> params) throws FeatureCalcException {
+	public double calc(SessionInput<FeatureInputSingleObj> input) throws FeatureCalcException {
 
 		return CalculateParamsFromDelegateOption.calc(
-			params,
+			input,
 			createCachedCalculationForDerived(
-				params.cacheFor( cacheName(), FeatureInputSingleObj.class )		
+				input.cacheFor( cacheName(), FeatureInputSingleObj.class )		
 			),
 			delegate -> new CalculateParamsForDerived(delegate),
 			item,
@@ -74,8 +74,8 @@ public abstract class DerivedObjMask extends FeatureObjMask {
 	}
 	
 	@Override
-	public CacheableParams<FeatureInput> transformParams(
-			CacheableParams<FeatureInputSingleObj> params,
+	public SessionInput<FeatureInput> transformInput(
+			SessionInput<FeatureInputSingleObj> params,
 			Feature<FeatureInput> dependentFeature
 	) throws FeatureCalcException {
 		//try {

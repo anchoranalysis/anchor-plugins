@@ -33,7 +33,7 @@ import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
  */
 
 
-import org.anchoranalysis.feature.cache.CacheableParams;
+import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 
 public class MinFeatureAsIndividual extends NRGElemPairWithFeature {
@@ -44,7 +44,7 @@ public class MinFeatureAsIndividual extends NRGElemPairWithFeature {
 	private static final long serialVersionUID = 1L;
 
 	@Override
-	public double calc( CacheableParams<FeatureInputPairMemo> params ) throws FeatureCalcException {
+	public double calc( SessionInput<FeatureInputPairMemo> params ) throws FeatureCalcException {
 
 		return Math.min(
 			calcForInd( params, p->p.getObj1(), "1" ),
@@ -53,7 +53,7 @@ public class MinFeatureAsIndividual extends NRGElemPairWithFeature {
 	}
 	
 	private double calcForInd(
-		CacheableParams<FeatureInputPairMemo> paramsCacheable,
+		SessionInput<FeatureInputPairMemo> paramsCacheable,
 		Function<FeatureInputPairMemo,PxlMarkMemo> pmmFunc,
 		String suffix
 	) throws FeatureCalcException {

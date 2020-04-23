@@ -26,19 +26,19 @@ package ch.ethz.biol.cell.mpp.nrg.feature.pair;
  * #L%
  */
 
-import org.anchoranalysis.anchor.mpp.feature.bean.nrg.elem.NRGElemPair;
+import org.anchoranalysis.anchor.mpp.feature.bean.nrg.elem.FeaturePairMemo;
 import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputPairMemo;
 import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.cache.ExecuteException;
 import org.anchoranalysis.core.relation.RelationToValue;
-import org.anchoranalysis.feature.cache.CacheableParams;
+import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.voxel.statistics.VoxelStatistics;
 
 import ch.ethz.biol.cell.mpp.nrg.cachedcalculation.OverlapCalculationMaskGlobal;
 
-public abstract class OverlapMaskBase extends NRGElemPair {
+public abstract class OverlapMaskBase extends FeaturePairMemo {
 
 	/**
 	 * 
@@ -53,7 +53,7 @@ public abstract class OverlapMaskBase extends NRGElemPair {
 	private int nrgIndex = 0;
 	// END BEAN PROPERTIES
 		
-	protected double overlapForRegion( CacheableParams<FeatureInputPairMemo> paramsCacheable, int regionID ) throws FeatureCalcException {
+	protected double overlapForRegion( SessionInput<FeatureInputPairMemo> paramsCacheable, int regionID ) throws FeatureCalcException {
 		return paramsCacheable.calc(
 			new OverlapCalculationMaskGlobal(regionID, nrgIndex, (byte) maskValue)
 		);

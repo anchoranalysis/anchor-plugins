@@ -28,7 +28,7 @@ package ch.ethz.biol.cell.mpp.nrg.feature.operator;
 
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.operator.FeatureListElem;
-import org.anchoranalysis.feature.cache.CacheableParams;
+import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.calc.params.FeatureInput;
 
@@ -40,11 +40,11 @@ public class Maximum<T extends FeatureInput> extends FeatureListElem<T> {
 	private static final long serialVersionUID = 1L;
 
 	@Override
-	public double calc(CacheableParams<T> params) throws FeatureCalcException {
+	public double calc(SessionInput<T> input) throws FeatureCalcException {
 		
 		double maxValue = Double.NaN;
 		for( Feature<T> f : getList()) {
-			double val = params.calc( f );
+			double val = input.calc( f );
 			if (Double.isNaN(maxValue) || val > maxValue) {
 				maxValue = val;
 			}

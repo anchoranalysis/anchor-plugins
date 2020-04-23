@@ -29,7 +29,7 @@ import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputPairMemo;
  */
 
 
-import org.anchoranalysis.feature.cache.CacheableParams;
+import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 
 public class OverlapMaskGlobal extends OverlapMaskSingleRegion {
@@ -44,7 +44,7 @@ public class OverlapMaskGlobal extends OverlapMaskSingleRegion {
 	// END BEAN PROPERTIES
 		
 	@Override
-	public double calc( CacheableParams<FeatureInputPairMemo> params ) throws FeatureCalcException {
+	public double calc( SessionInput<FeatureInputPairMemo> params ) throws FeatureCalcException {
 		return overlapWithGlobalMask(params);
 	}
 

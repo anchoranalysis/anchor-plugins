@@ -27,7 +27,7 @@ package ch.ethz.biol.cell.mpp.nrg.feature.operator;
  */
 
 import org.anchoranalysis.feature.bean.Feature;
-import org.anchoranalysis.feature.cache.CacheableParams;
+import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.calc.params.FeatureInputParams;
 import org.anchoranalysis.feature.params.FeatureInputDescriptor;
@@ -40,8 +40,8 @@ public abstract class FeatureWithImageParams extends Feature<FeatureInputParams>
 	private static final long serialVersionUID = 1L;
 
 	@Override
-	public double calc( CacheableParams<FeatureInputParams> params ) throws FeatureCalcException {
-		return calc( params.getParams() );
+	public double calc( SessionInput<FeatureInputParams> input ) throws FeatureCalcException {
+		return calc( input.getParams() );
 	}
 	
 	// Calculates an NRG element for a set of pixels

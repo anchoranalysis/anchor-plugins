@@ -34,7 +34,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.shared.relation.EqualToBean;
 import org.anchoranalysis.bean.shared.relation.RelationBean;
 import org.anchoranalysis.core.relation.RelationToValue;
-import org.anchoranalysis.feature.cache.CacheableParams;
+import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 
 public class OverlapRatioMaskGlobal extends OverlapMaskSingleRegion {
@@ -55,7 +55,7 @@ public class OverlapRatioMaskGlobal extends OverlapMaskSingleRegion {
 	}
 	
 	@Override
-	public double calc( CacheableParams<FeatureInputPairMemo> paramsCacheable ) throws FeatureCalcException {
+	public double calc( SessionInput<FeatureInputPairMemo> paramsCacheable ) throws FeatureCalcException {
 		
 		FeatureInputPairMemo params = paramsCacheable.getParams();
 		

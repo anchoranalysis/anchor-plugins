@@ -28,7 +28,7 @@ package ch.ethz.biol.cell.mpp.nrg.feature.histogram;
 
 
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.feature.cache.CacheableParams;
+import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.feature.bean.FeatureHistogram;
 import org.anchoranalysis.image.feature.histogram.FeatureInputHistogram;
@@ -46,9 +46,9 @@ public class Quantile extends FeatureHistogram {
 	// END BEAN PROPERTIES
 	
 	@Override
-	public double calc(CacheableParams<FeatureInputHistogram> params)
+	public double calc(SessionInput<FeatureInputHistogram> input)
 			throws FeatureCalcException {
-		return params.getParams().getHistogram().quantile(quantile);
+		return input.getParams().getHistogram().quantile(quantile);
 	}
 	
 	public double getQuantile() {

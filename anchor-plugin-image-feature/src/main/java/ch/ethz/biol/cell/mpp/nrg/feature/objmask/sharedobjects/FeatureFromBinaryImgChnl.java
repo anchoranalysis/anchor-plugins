@@ -30,7 +30,7 @@ package ch.ethz.biol.cell.mpp.nrg.feature.objmask.sharedobjects;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.SkipInit;
 import org.anchoranalysis.core.error.InitException;
-import org.anchoranalysis.feature.cache.CacheableParams;
+import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.bean.provider.BinaryImgChnlProvider;
 import org.anchoranalysis.image.feature.bean.objmask.FeatureObjMaskSharedObjects;
@@ -69,8 +69,8 @@ public class FeatureFromBinaryImgChnl extends FeatureObjMaskSharedObjects {
 	}
 	
 	@Override
-	public double calc(CacheableParams<FeatureInputSingleObj> params) throws FeatureCalcException {
-		return params.calcChangeParamsDirect(
+	public double calc(SessionInput<FeatureInputSingleObj> input) throws FeatureCalcException {
+		return input.calcChangeParamsDirect(
 			item,
 			new CalculatePairParams(binaryImgChnlProvider),
 			"pair"

@@ -30,7 +30,7 @@ package ch.ethz.biol.cell.mpp.nrg.feature.stack;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.feature.bean.Feature;
-import org.anchoranalysis.feature.cache.CacheableParams;
+import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 import org.anchoranalysis.image.binary.BinaryChnl;
@@ -62,10 +62,10 @@ public class MedianConnectedComponentFeature extends FeatureStack {
 	// END BEAN PROPERTIES
 
 	@Override
-	public double calc(CacheableParams<FeatureInputStack> params) throws FeatureCalcException {
+	public double calc(SessionInput<FeatureInputStack> input) throws FeatureCalcException {
 
 		ObjMaskCollection omc = createObjs(
-			params.getParams().getNrgStack()
+			input.getParams().getNrgStack()
 		);
 				
 		DoubleArrayList featureVals = new DoubleArrayList();
@@ -75,7 +75,7 @@ public class MedianConnectedComponentFeature extends FeatureStack {
 			
 			ObjMask om = omc.get(i);
 						
-			double val = params.calcChangeParams(
+			double val = input.calcChangeParams(
 				item,
 				p -> extractParams(p, om),
 				"obj-" + i
