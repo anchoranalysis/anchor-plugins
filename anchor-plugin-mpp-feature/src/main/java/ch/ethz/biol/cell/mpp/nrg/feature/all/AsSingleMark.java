@@ -1,9 +1,8 @@
 package ch.ethz.biol.cell.mpp.nrg.feature.all;
 
 import org.anchoranalysis.anchor.mpp.feature.bean.mark.FeatureMarkParams;
-import org.anchoranalysis.anchor.mpp.feature.mark.MemoMarks;
 import org.anchoranalysis.anchor.mpp.feature.nrg.elem.NRGElemAllCalcParams;
-import org.anchoranalysis.anchor.mpp.mark.Mark;
+
 
 
 /*-
@@ -46,29 +45,10 @@ public class AsSingleMark extends FeatureSingleElem<NRGElemAllCalcParams,Feature
 	@Override
 	public double calc(CacheableParams<NRGElemAllCalcParams> params) throws FeatureCalcException {
 		
-		MemoMarks list = params.getParams().getPxlPartMemo();
-		
-		if (list.size()==0) {
-			throw new FeatureCalcException("No mark exists in the list");
-		}
-		
-		if (list.size()>1) {
-			throw new FeatureCalcException("More than one mark exists in the list");
-		}
-		
-		Mark mark = list.getMemoForIndex(0).getMark();
-		
-		return params.calcChangeParams(
+		return params.calcChangeParamsDirect(
 			getItem(),
-			p -> deriveParams(p, mark),
+			new CalculateDeriveMarkParams(),
 			"mark"
 		);
-	}
-	
-	private static FeatureMarkParams deriveParams( NRGElemAllCalcParams params, Mark mark ) {
-		return new FeatureMarkParams(
-			mark,
-			params.getDimensions().getRes()
-		);		
 	}
 }

@@ -28,7 +28,7 @@ package ch.ethz.biol.cell.mpp.nrg.feature.stack.cachedcalculation;
 
 import org.anchoranalysis.core.cache.ExecuteException;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.feature.cachedcalculation.CachedCalculation;
+import org.anchoranalysis.feature.cache.calculation.CachedCalculation;
 import org.anchoranalysis.image.feature.stack.FeatureStackParams;
 import org.anchoranalysis.image.histogram.Histogram;
 import org.anchoranalysis.image.histogram.HistogramFactoryUtilities;

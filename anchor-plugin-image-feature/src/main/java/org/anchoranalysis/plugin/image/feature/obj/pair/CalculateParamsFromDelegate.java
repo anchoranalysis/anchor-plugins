@@ -1,8 +1,8 @@
 package org.anchoranalysis.plugin.image.feature.obj.pair;
 
 import org.anchoranalysis.core.cache.ExecuteException;
-import org.anchoranalysis.feature.cachedcalculation.CachedCalculation;
-import org.anchoranalysis.feature.cachedcalculation.RslvdCachedCalculation;
+import org.anchoranalysis.feature.cache.calculation.CachedCalculation;
+import org.anchoranalysis.feature.cache.calculation.RslvdCachedCalculation;
 import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
 
 /**
@@ -40,4 +40,8 @@ public abstract class CalculateParamsFromDelegate<S, T extends FeatureCalcParams
 	}
 	
 	protected abstract S deriveFromDelegate( T params, U delegate);
+
+	protected RslvdCachedCalculation<U, T> getDelegate() {
+		return ccDelegate;
+	}
 }

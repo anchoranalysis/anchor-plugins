@@ -60,17 +60,20 @@ public abstract class FromExisting extends FeatureObjMaskPairMerged {
 	public double calc(CacheableParams<FeatureObjMaskPairMergedParams> params)
 			throws FeatureCalcException {
 		
-		return transformParamsCast(params).calc(item);
+		String cacheName = cacheNameToUse();
+		return params.calcChangeParamsDirect(
+			item,
+			new CalculateObjMaskParamsFromMerged(
+				p -> selectObjMask(p),
+				cacheName	
+			),
+			cacheName
+		);
 	}
 	
 	public CacheableParams<FeatureObjMaskParams> transformParamsCast( CacheableParams<FeatureObjMaskPairMergedParams> params ) {
-
-		assert( params.getParams() instanceof FeatureObjMaskPairMergedParams );
-						
-		return params.mapParams(
-			p -> extractObj(p),
-			cacheNameToUse()
-		);
+		return null; // DISABLED
+		//assert( params.getParams() instanceof FeatureObjMaskPairMergedParams );
 	}
 	
 	protected abstract ObjMask selectObjMask( FeatureObjMaskPairMergedParams params );
@@ -84,15 +87,5 @@ public abstract class FromExisting extends FeatureObjMaskPairMerged {
 
 	public void setItem(Feature<FeatureObjMaskParams> item) {
 		this.item = item;
-	}
-	
-	private FeatureObjMaskParams extractObj( FeatureObjMaskPairMergedParams params ) {
-		
-		ObjMask omSelected = selectObjMask(params);
-		
-		FeatureObjMaskParams paramsNew = new FeatureObjMaskParams( omSelected );
-		paramsNew.setNrgStack( params.getNrgStack() );
-		assert( paramsNew instanceof FeatureObjMaskParams);
-		return paramsNew;
 	}
 }

@@ -31,7 +31,7 @@ import java.nio.ByteBuffer;
 
 import org.anchoranalysis.core.cache.ExecuteException;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.feature.cachedcalculation.CachedCalculation;
+import org.anchoranalysis.feature.cache.calculation.CachedCalculation;
 import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.feature.objmask.FeatureObjMaskParams;
 import org.anchoranalysis.image.objmask.ObjMask;

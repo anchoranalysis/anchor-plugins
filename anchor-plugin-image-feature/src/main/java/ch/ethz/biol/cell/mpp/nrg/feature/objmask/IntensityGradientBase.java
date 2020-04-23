@@ -33,7 +33,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.NonNegative;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.core.geometry.Point3d;
-import org.anchoranalysis.feature.cachedcalculation.CachedCalculation;
+import org.anchoranalysis.feature.cache.calculation.CachedCalculation;
 import org.anchoranalysis.image.feature.bean.objmask.FeatureObjMask;
 import org.anchoranalysis.image.feature.objmask.FeatureObjMaskParams;
 

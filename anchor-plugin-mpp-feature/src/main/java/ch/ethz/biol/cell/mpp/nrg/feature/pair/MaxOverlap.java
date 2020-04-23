@@ -32,7 +32,6 @@ import org.anchoranalysis.anchor.mpp.mark.GlobalRegionIdentifiers;
 
 
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.cache.ExecuteException;
 import org.anchoranalysis.feature.cache.CacheableParams;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import ch.ethz.biol.cell.mpp.nrg.cachedcalculation.OverlapCalculation;
@@ -68,16 +67,12 @@ public class MaxOverlap extends NRGElemPair {
 	@Override
 	public double calc( CacheableParams<NRGElemPairCalcParams> params ) throws FeatureCalcException {
 		
-		try {
-			double overlap = params.calc(new OverlapCalculation(regionID)); 
-			if (overlap>maxOverlap) {
-				return -10;
-			} else {
-				return 0;
-			}
-		} catch (ExecuteException e) {
-			throw new FeatureCalcException(e);
-		}							
+		double overlap = params.calc(new OverlapCalculation(regionID)); 
+		if (overlap>maxOverlap) {
+			return -10;
+		} else {
+			return 0;
+		}
 	}
 
 	public double getMaxOverlap() {

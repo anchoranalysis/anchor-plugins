@@ -32,7 +32,6 @@ import java.util.List;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.axis.AxisType;
 import org.anchoranalysis.core.axis.AxisTypeUtilities;
-import org.anchoranalysis.core.cache.ExecuteException;
 import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.feature.cache.CacheableParams;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
@@ -67,20 +66,16 @@ public class IntensityGradientMeanFromMultiple extends IntensityGradientBase {
 		
 		// Calculate the mean
 		double sum = 0.0;
-		try {
-			List<Point3d> pnts = params.calc(
-				gradientCalculation()
-			);
-			
-			for( Point3d p : pnts ) {
-				sum += p.get(axisType);
-			}
-			
-			return sum/pnts.size();
-			
-		} catch (ExecuteException e) {
-			throw new FeatureCalcException( e.getCause() );
+
+		List<Point3d> pnts = params.calc(
+			gradientCalculation()
+		);
+		
+		for( Point3d p : pnts ) {
+			sum += p.get(axisType);
 		}
+		
+		return sum/pnts.size();
 	}
 
 	public String getAxis() {

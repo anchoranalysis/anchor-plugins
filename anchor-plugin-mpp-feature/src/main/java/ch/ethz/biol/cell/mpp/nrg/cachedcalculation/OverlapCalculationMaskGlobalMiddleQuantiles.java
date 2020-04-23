@@ -32,7 +32,7 @@ import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
 
 
 import org.anchoranalysis.core.cache.ExecuteException;
-import org.anchoranalysis.feature.cachedcalculation.CachedCalculation;
+import org.anchoranalysis.feature.cache.calculation.CachedCalculation;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 import org.anchoranalysis.image.chnl.Chnl;
 import org.apache.commons.lang.builder.EqualsBuilder;

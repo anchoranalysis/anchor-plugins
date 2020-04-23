@@ -27,8 +27,8 @@ package org.anchoranalysis.plugin.image.feature.bean.obj.pair.touching;
  */
 
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.cache.ExecuteException;
 import org.anchoranalysis.feature.cache.CacheableParams;
+import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.feature.bean.objmask.pair.FeatureObjMaskPair;
 import org.anchoranalysis.image.feature.objmask.pair.FeatureObjMaskPairParams;
@@ -56,7 +56,7 @@ public abstract class TouchingVoxels extends FeatureObjMaskPair {
 	// END BEAN PROPERTIES
 		
 	/** The intersection of the bounding box of one mask with the (dilated by 1 bounding-box) of the other */
-	protected BoundingBox bboxIntersectDilated( CacheableParams<FeatureObjMaskPairParams> params) throws ExecuteException {
+	protected BoundingBox bboxIntersectDilated( CacheableParams<FeatureObjMaskPairParams> params) throws FeatureCalcException {
 		return params.calc(
 			new CalculateIntersectionOfDilatedBoundingBox(use3D)	
 		);

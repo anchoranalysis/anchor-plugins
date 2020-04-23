@@ -70,11 +70,15 @@ public class FeatureAsIndividualProportionate extends NRGElemPairWithFeature {
 	}
 	
 	private double valueFor( CacheableParams<NRGElemIndCalcParams> params ) throws FeatureCalcException {
-		return params.calc( getItem() );
+		return calcFeatureFor(getItem(), params);
 	}
 	
 	private double weightFor( CacheableParams<NRGElemIndCalcParams> params ) throws FeatureCalcException {
-		return params.calc(itemProportionate);
+		return calcFeatureFor(itemProportionate, params);
+	}
+	
+	private double calcFeatureFor( Feature<NRGElemIndCalcParams> feature, CacheableParams<NRGElemIndCalcParams> params ) throws FeatureCalcException {
+		return params.calc(feature);
 	}
 	
 	private static double weightedSum( double val1, double val2, double weight1, double weight2) {

@@ -40,7 +40,6 @@ import org.anchoranalysis.image.feature.bean.FeatureStack;
 import org.anchoranalysis.image.feature.objmask.FeatureObjMaskParams;
 import org.anchoranalysis.image.feature.stack.FeatureStackParams;
 import org.anchoranalysis.image.init.ImageInitParams;
-import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.image.objmask.ObjMaskCollection;
 
 import cern.colt.list.DoubleArrayList;
@@ -61,6 +60,9 @@ public abstract class ObjMaskFeatureFromStack extends FeatureStack {
 	private ObjMaskProvider objs;
 	// END BEAN PROPERTIES
 	
+	// We cache the objsCollection as it's not dependent on individual parameters
+	private ObjMaskCollection objsCollection;
+	
 	@Override
 	public double calc(CacheableParams<FeatureStackParams> paramsCacheable) throws FeatureCalcException {
 		
@@ -70,19 +72,20 @@ public abstract class ObjMaskFeatureFromStack extends FeatureStack {
 			throw new FeatureCalcException("No ImageInitParams are associated with the FeatureStackParams but they are required");
 		}
 		
-		ObjMaskCollection objsCollection = createObjs(sharedObjs.get());
+		if (objsCollection==null) {
+			objsCollection = createObjs(sharedObjs.get());
+		}
+
 				
 		DoubleArrayList featureVals = new DoubleArrayList();
 		
 		// Calculate a feature on each obj mask
 		for( int i=0; i<objsCollection.size(); i++) {
-			
-			ObjMask om = objsCollection.get(i);
 
-			double val = paramsCacheable.calcChangeParams(
+			double val = paramsCacheable.calcChangeParamsDirect(
 				item,
-				p -> deriveParams(p, om),
-				"objs" + i
+				new CalculateObjMaskParamsFromStack(objsCollection, i),
+				"objs_from_stack" + i
 			);
 			featureVals.add(val);
 		}
@@ -91,13 +94,6 @@ public abstract class ObjMaskFeatureFromStack extends FeatureStack {
 	}
 	
 	protected abstract double deriveStatistic( DoubleArrayList featureVals );
-	
-	private static FeatureObjMaskParams deriveParams( FeatureStackParams params, ObjMask om ) {
-		FeatureObjMaskParams paramsObj = new FeatureObjMaskParams();
-		paramsObj.setNrgStack( params.getNrgStack() );
-		paramsObj.setObjMask(om);
-		return paramsObj;
-	}
 		
 	private ObjMaskCollection createObjs( ImageInitParams params ) throws FeatureCalcException {
 

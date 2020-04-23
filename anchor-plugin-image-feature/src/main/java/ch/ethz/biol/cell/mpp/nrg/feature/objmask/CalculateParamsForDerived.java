@@ -2,7 +2,7 @@ package ch.ethz.biol.cell.mpp.nrg.feature.objmask;
 
 import java.util.Optional;
 
-import org.anchoranalysis.feature.cachedcalculation.RslvdCachedCalculation;
+import org.anchoranalysis.feature.cache.calculation.RslvdCachedCalculation;
 import org.anchoranalysis.image.feature.objmask.FeatureObjMaskParams;
 import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.plugin.image.feature.obj.pair.CalculateParamsFromDelegateOption;
@@ -13,7 +13,7 @@ public class CalculateParamsForDerived extends CalculateParamsFromDelegateOption
 	ObjMask
 > {
 	public CalculateParamsForDerived(RslvdCachedCalculation<ObjMask, FeatureObjMaskParams> ccDerived) {
-		super(ccDerived, CalculateParamsForDerived.class);
+		super(ccDerived);
 	}
 
 	@Override

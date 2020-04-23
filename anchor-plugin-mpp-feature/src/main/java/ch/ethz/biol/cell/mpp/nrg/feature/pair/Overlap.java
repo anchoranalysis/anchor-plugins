@@ -32,9 +32,8 @@ import org.anchoranalysis.anchor.mpp.mark.GlobalRegionIdentifiers;
 
 
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.cache.ExecuteException;
 import org.anchoranalysis.feature.cache.CacheableParams;
-import org.anchoranalysis.feature.cachedcalculation.CachedCalculation;
+import org.anchoranalysis.feature.cache.calculation.CachedCalculation;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import ch.ethz.biol.cell.mpp.nrg.cachedcalculation.OverlapCalculation;
 import ch.ethz.biol.cell.mpp.nrg.cachedcalculation.OverlapMIPCalculation;
@@ -59,11 +58,7 @@ public class Overlap extends NRGElemPair {
 		
 	@Override
 	public double calc( CacheableParams<NRGElemPairCalcParams> params ) throws FeatureCalcException {
-		try {
-			return params.calc( overlapCalculation() );
-		} catch (ExecuteException e) {
-			throw new FeatureCalcException(e);
-		}							
+		return params.calc( overlapCalculation() );
 	}
 	
 	private CachedCalculation<Double,NRGElemPairCalcParams> overlapCalculation() {

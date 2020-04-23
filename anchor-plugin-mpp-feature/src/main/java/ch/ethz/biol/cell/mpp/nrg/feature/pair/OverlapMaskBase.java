@@ -53,7 +53,7 @@ public abstract class OverlapMaskBase extends NRGElemPair {
 	private int nrgIndex = 0;
 	// END BEAN PROPERTIES
 		
-	protected double overlapForRegion( CacheableParams<NRGElemPairCalcParams> paramsCacheable, int regionID ) throws ExecuteException {
+	protected double overlapForRegion( CacheableParams<NRGElemPairCalcParams> paramsCacheable, int regionID ) throws FeatureCalcException {
 		return paramsCacheable.calc(
 			new OverlapCalculationMaskGlobal(regionID, nrgIndex, (byte) maskValue)
 		);

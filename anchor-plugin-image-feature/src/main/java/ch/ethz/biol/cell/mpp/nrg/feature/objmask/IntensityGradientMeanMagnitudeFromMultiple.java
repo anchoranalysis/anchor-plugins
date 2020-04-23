@@ -29,7 +29,6 @@ package ch.ethz.biol.cell.mpp.nrg.feature.objmask;
 
 import java.util.List;
 
-import org.anchoranalysis.core.cache.ExecuteException;
 import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.feature.cache.CacheableParams;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
@@ -57,25 +56,21 @@ public class IntensityGradientMeanMagnitudeFromMultiple extends IntensityGradien
 		
 		// Calculate the mean
 		double sum = 0.0;
-		try {
-			List<Point3d> pnts = params.calc(
-				gradientCalculation()
-			);
-			
-			for( Point3d p : pnts ) {
-				// Calculate the norm of the point
-				sum += p.l2norm();
-			}
-			
-			double res = sum/pnts.size();
-			
-			//System.out.printf("IntensityGradientMean cc=%d res=%f\n", getCachedCalculationPoints().hashCode(), res );
-			
-			return res;
-			
-		} catch (ExecuteException e) {
-			throw new FeatureCalcException( e.getCause() );
+
+		List<Point3d> pnts = params.calc(
+			gradientCalculation()
+		);
+		
+		for( Point3d p : pnts ) {
+			// Calculate the norm of the point
+			sum += p.l2norm();
 		}
+		
+		double res = sum/pnts.size();
+		
+		//System.out.printf("IntensityGradientMean cc=%d res=%f\n", getCachedCalculationPoints().hashCode(), res );
+		
+		return res;
 	}
 
 }

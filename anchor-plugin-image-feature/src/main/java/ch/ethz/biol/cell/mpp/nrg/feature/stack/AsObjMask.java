@@ -31,13 +31,9 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.cache.CacheableParams;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.image.binary.BinaryChnl;
-import org.anchoranalysis.image.binary.values.BinaryValues;
-import org.anchoranalysis.image.chnl.Chnl;
 import org.anchoranalysis.image.feature.bean.FeatureStack;
 import org.anchoranalysis.image.feature.objmask.FeatureObjMaskParams;
 import org.anchoranalysis.image.feature.stack.FeatureStackParams;
-import org.anchoranalysis.image.objmask.ObjMask;
 
 /**
  * Treats a channel as an object-mask, assuming binary values of 0 and 255
@@ -65,27 +61,11 @@ public class AsObjMask extends FeatureStack {
 	@Override
 	public double calc(CacheableParams<FeatureStackParams> params) throws FeatureCalcException {
 		
-		return params.calcChangeParams(
+		return params.calcChangeParamsDirect(
 			item,
-			p -> objMaskFromStack(p),
+			new CalculateDeriveFeatureObjMaskParams(nrgIndex),
 			"obj"
 		);
-	}
-	
-	private FeatureObjMaskParams objMaskFromStack( FeatureStackParams p ) {
-		FeatureObjMaskParams paramsObj = new FeatureObjMaskParams();
-		
-		ObjMask om = extractObjMask(p);
-		paramsObj.setNrgStack( p.getNrgStack() );
-		paramsObj.setObjMask( om );
-		return paramsObj;
-	}
-		
-	private ObjMask extractObjMask(FeatureStackParams params) {
-		Chnl chnl = params.getNrgStack().getChnl(nrgIndex);
-		BinaryChnl binary = new BinaryChnl(chnl, BinaryValues.getDefault());
-		
-		return new ObjMask( binary.binaryVoxelBox() );
 	}
 
 	public Feature<FeatureObjMaskParams> getItem() {

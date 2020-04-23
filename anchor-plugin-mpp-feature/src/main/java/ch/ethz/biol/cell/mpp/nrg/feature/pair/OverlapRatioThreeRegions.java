@@ -89,23 +89,19 @@ public class OverlapRatioThreeRegions extends NRGElemPair {
 		
 		NRGElemPairCalcParams params = paramsCacheable.getParams();
 		
-		try {
-			return calcOverlapRatioMin(
-				params.getObj1(),
-				params.getObj2(),
-				overlapForRegion(paramsCacheable, regionID1),
-				overlapForRegion(paramsCacheable, regionID2),
-				overlapForRegion(paramsCacheable, regionID3),
-				regionID1,
-				regionID2,
-				regionID3
-			);
-		} catch (ExecuteException e) {
-			throw new FeatureCalcException(e);
-		}							
+		return calcOverlapRatioMin(
+			params.getObj1(),
+			params.getObj2(),
+			overlapForRegion(paramsCacheable, regionID1),
+			overlapForRegion(paramsCacheable, regionID2),
+			overlapForRegion(paramsCacheable, regionID3),
+			regionID1,
+			regionID2,
+			regionID3
+		);
 	}
 
-	private double overlapForRegion( CacheableParams<NRGElemPairCalcParams> paramsCacheable, int regionID ) throws ExecuteException {
+	private double overlapForRegion( CacheableParams<NRGElemPairCalcParams> paramsCacheable, int regionID ) throws FeatureCalcException {
 		if (mip) {
 			// If we use this we don't need to find the volume ourselves
 			return paramsCacheable.calc( new OverlapMIPRatioCalculation(regionID) );

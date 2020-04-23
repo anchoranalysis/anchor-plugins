@@ -27,7 +27,6 @@ package ch.ethz.biol.cell.mpp.nrg.feature.histogram;
  */
 
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.cache.ExecuteException;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.cache.CacheableParams;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
@@ -62,19 +61,15 @@ public class ThresholdHistogram extends FeatureHistogram {
 	@Override
 	public double calc(CacheableParams<FeatureHistogramParams> paramsCacheable) throws FeatureCalcException {
 
-		try {
-			Histogram thresholded = paramsCacheable.calc(
-				new CalculateOtsuThresholdedHistogram(calculateLevel, getLogger())	
-			);
-			
-			return paramsCacheable.calcChangeParams(
-				item,
-				p -> createHistogramParams(p, thresholded),
-				"thresholdedHist"
-			);
-		} catch (ExecuteException e) {
-			throw new FeatureCalcException(e);
-		}
+		Histogram thresholded = paramsCacheable.calc(
+			new CalculateOtsuThresholdedHistogram(calculateLevel, getLogger())	
+		);
+		
+		return paramsCacheable.calcChangeParams(
+			item,
+			p -> createHistogramParams(p, thresholded),
+			"thresholdedHist"
+		);
 	}
 	
 	private FeatureHistogramParams createHistogramParams(FeatureHistogramParams params, Histogram thresholded) {

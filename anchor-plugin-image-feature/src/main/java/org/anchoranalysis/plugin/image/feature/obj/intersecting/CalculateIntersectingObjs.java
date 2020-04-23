@@ -27,7 +27,7 @@ package org.anchoranalysis.plugin.image.feature.obj.intersecting;
  */
 
 import org.anchoranalysis.core.cache.ExecuteException;
-import org.anchoranalysis.feature.cachedcalculation.CachedCalculation;
+import org.anchoranalysis.feature.cache.calculation.CachedCalculation;
 import org.anchoranalysis.image.feature.objmask.FeatureObjMaskParams;
 import org.anchoranalysis.image.index.rtree.ObjMaskCollectionRTree;
 import org.anchoranalysis.image.objmask.ObjMaskCollection;

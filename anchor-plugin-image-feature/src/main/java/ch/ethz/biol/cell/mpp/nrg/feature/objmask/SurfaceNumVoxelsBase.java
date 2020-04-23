@@ -27,9 +27,8 @@ package ch.ethz.biol.cell.mpp.nrg.feature.objmask;
  */
 
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.cache.ExecuteException;
 import org.anchoranalysis.feature.cache.CacheableParams;
-import org.anchoranalysis.feature.cachedcalculation.CachedCalculation;
+import org.anchoranalysis.feature.cache.calculation.CachedCalculation;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.feature.bean.objmask.FeatureObjMask;
 import org.anchoranalysis.image.feature.objmask.FeatureObjMaskParams;
@@ -51,13 +50,9 @@ public abstract class SurfaceNumVoxelsBase extends FeatureObjMask {
 	
 	@Override
 	public double calc(CacheableParams<FeatureObjMaskParams> params) throws FeatureCalcException {
-		try {
-			return params.calc(
-				createParams(mip, suppress3D)		
-			);
-		} catch (ExecuteException e) {
-			throw new FeatureCalcException(e.getCause());
-		}
+		return params.calc(
+			createParams(mip, suppress3D)		
+		);
 	}
 	
 	protected abstract CachedCalculation<Integer,FeatureObjMaskParams> createParams(boolean mip, boolean suppress3d);

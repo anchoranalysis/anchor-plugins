@@ -29,9 +29,9 @@ package ch.ethz.biol.cell.mpp.nrg.feature.objmask.cachedcalculation;
 
 import org.anchoranalysis.core.cache.ExecuteException;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.feature.cachedcalculation.CachedCalculation;
-import org.anchoranalysis.feature.cachedcalculation.RslvdCachedCalculation;
-import org.anchoranalysis.feature.cachedcalculation.RslvdCachedCalculationMap;
+import org.anchoranalysis.feature.cache.calculation.CachedCalculation;
+import org.anchoranalysis.feature.cache.calculation.RslvdCachedCalculation;
+import org.anchoranalysis.feature.cache.calculation.map.RslvdCachedCalculationMap;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.session.cache.ICachedCalculationSearch;
 import org.anchoranalysis.image.feature.objmask.FeatureObjMaskParams;

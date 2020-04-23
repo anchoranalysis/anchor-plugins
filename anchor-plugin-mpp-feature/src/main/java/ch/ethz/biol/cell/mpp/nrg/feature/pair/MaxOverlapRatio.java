@@ -32,7 +32,6 @@ import org.anchoranalysis.anchor.mpp.mark.GlobalRegionIdentifiers;
 
 
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.cache.ExecuteException;
 import org.anchoranalysis.feature.cache.CacheableParams;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import ch.ethz.biol.cell.mpp.nrg.cachedcalculation.OverlapCalculation;
@@ -76,23 +75,19 @@ public class MaxOverlapRatio extends NRGElemPair {
 		
 		NRGElemPairCalcParams params = paramsCacheable.getParams();
 		
-		try {
-			double ratio = OverlapRatio.calcOverlapRatioMin(
-				params.getObj1(),
-				params.getObj2(),
-				paramsCacheable.calc( new OverlapCalculation(regionID) ),
-				regionID,
-				false
-			);
-			
-			if ( ratio > max ) {
-				return penaltyValue;
-			} else {
-				return 0;
-			}
-		} catch (ExecuteException e) {
-			throw new FeatureCalcException(e);
-		}							
+		double ratio = OverlapRatio.calcOverlapRatioMin(
+			params.getObj1(),
+			params.getObj2(),
+			paramsCacheable.calc( new OverlapCalculation(regionID) ),
+			regionID,
+			false
+		);
+		
+		if ( ratio > max ) {
+			return penaltyValue;
+		} else {
+			return 0;
+		}
 	}
 
 	public double getMax() {

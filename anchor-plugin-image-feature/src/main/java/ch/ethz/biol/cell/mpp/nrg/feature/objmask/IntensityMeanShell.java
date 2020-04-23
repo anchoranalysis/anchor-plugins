@@ -33,7 +33,6 @@ import org.anchoranalysis.bean.BeanInstanceMap;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.error.BeanMisconfiguredException;
-import org.anchoranalysis.core.cache.ExecuteException;
 import org.anchoranalysis.feature.cache.CacheableParams;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.chnl.Chnl;
@@ -105,34 +104,29 @@ public class IntensityMeanShell extends FeatureObjMask {
 		
 		Chnl chnl = params.getNrgStack().getNrgStack().getChnl(nrgIndex);
 		
-		try {
-			ObjMask om = paramsCacheable.calc(
-				CalculateShellObjMask.createFromCache(
-					paramsCacheable,
-					iterationsDilation,
-					iterationsErosion,
-					iterationsErosionSecond,
-					do3D,
-					inverse
-				)
-			);
-			
-			if (nrgIndexMask!=-1) {
-				ObjMask omMask = new ObjMask( params.getNrgStack().getNrgStack().getChnl(nrgIndexMask).getVoxelBox().asByte() );
-				Optional<ObjMask> omIntersected = om.intersect(omMask, params.getNrgStack().getNrgStack().getDimensions() );
-				
-				if (omIntersected.isPresent()) {
-					om = omIntersected.get();
-				} else {
-					throw new FeatureCalcException("There are 0 intersecting pixels in the object-mask");
-				}
-			}
+		ObjMask om = paramsCacheable.calc(
+			CalculateShellObjMask.createFromCache(
+				paramsCacheable,
+				iterationsDilation,
+				iterationsErosion,
+				iterationsErosionSecond,
+				do3D,
+				inverse
+			)
+		);
 		
-			return IntensityMean.calcMeanIntensityObjMask(chnl, om );
+		if (nrgIndexMask!=-1) {
+			ObjMask omMask = new ObjMask( params.getNrgStack().getNrgStack().getChnl(nrgIndexMask).getVoxelBox().asByte() );
+			Optional<ObjMask> omIntersected = om.intersect(omMask, params.getNrgStack().getNrgStack().getDimensions() );
 			
-		} catch (ExecuteException e) {
-			throw new FeatureCalcException(e);
+			if (omIntersected.isPresent()) {
+				om = omIntersected.get();
+			} else {
+				throw new FeatureCalcException("There are 0 intersecting pixels in the object-mask");
+			}
 		}
+	
+		return IntensityMean.calcMeanIntensityObjMask(chnl, om );
 	}
 	
 	public int getNrgIndex() {

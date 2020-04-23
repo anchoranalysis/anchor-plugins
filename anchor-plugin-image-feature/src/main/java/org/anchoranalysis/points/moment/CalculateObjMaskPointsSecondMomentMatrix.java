@@ -28,7 +28,7 @@ package org.anchoranalysis.points.moment;
 
 
 import org.anchoranalysis.core.cache.ExecuteException;
-import org.anchoranalysis.feature.cachedcalculation.CachedCalculation;
+import org.anchoranalysis.feature.cache.calculation.CachedCalculation;
 import org.anchoranalysis.image.feature.objmask.FeatureObjMaskParams;
 import org.anchoranalysis.math.moment.MomentsFromPointsCalculator;
 import org.apache.commons.lang.builder.EqualsBuilder;

@@ -27,7 +27,6 @@ package org.anchoranalysis.plugin.image.feature.bean.obj.pair.touching;
  */
 
 
-import org.anchoranalysis.core.cache.ExecuteException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.feature.cache.CacheableParams;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
@@ -78,8 +77,6 @@ public class NumTouchingVoxels extends TouchingVoxels {
 			
 		} catch (OperationFailedException e) {
 			throw new FeatureCalcException(e);
-		} catch (ExecuteException e) {
-			throw new FeatureCalcException(e.getCause());
 		}
 	}
 	

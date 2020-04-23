@@ -28,7 +28,6 @@ package ch.ethz.biol.cell.mpp.nrg.feature.objmask;
 
 
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.cache.ExecuteException;
 import org.anchoranalysis.feature.cache.CacheableParams;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.feature.bean.objmask.FeatureObjMask;
@@ -68,14 +67,10 @@ public class AxisLength extends FeatureObjMask {
 			return Double.NaN;
 		}
 
-		try {
-			MomentsFromPointsCalculator moments = params.calc(
-				new CalculateObjMaskPointsSecondMomentMatrix(false)
-			);
-			return moments.get( index ).eigenvalueNormalizedAsAxisLength();
-		} catch (ExecuteException e) {
-			throw new FeatureCalcException(e);
-		}
+		MomentsFromPointsCalculator moments = params.calc(
+			new CalculateObjMaskPointsSecondMomentMatrix(false)
+		);
+		return moments.get( index ).eigenvalueNormalizedAsAxisLength();
 	}
 	
 	public int getIndex() {

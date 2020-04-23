@@ -2,7 +2,7 @@ package ch.ethz.biol.cell.mpp.nrg.feature.objmask;
 
 
 
-import java.util.Optional;
+
 
 /*
  * #%L
@@ -32,16 +32,16 @@ import java.util.Optional;
 
 
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.cache.ExecuteException;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.cache.CacheableParams;
-import org.anchoranalysis.feature.cachedcalculation.CachedCalculation;
+import org.anchoranalysis.feature.cache.calculation.CachedCalculation;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
-import org.anchoranalysis.feature.session.cache.FeatureSessionCacheRetriever;
+import org.anchoranalysis.feature.session.cache.FeatureSessionCacheCalculator;
 import org.anchoranalysis.image.feature.bean.objmask.FeatureObjMask;
 import org.anchoranalysis.image.feature.objmask.FeatureObjMaskParams;
 import org.anchoranalysis.image.objmask.ObjMask;
+import org.anchoranalysis.plugin.image.feature.obj.pair.CalculateParamsFromDelegateOption;
 
 public abstract class DerivedObjMask extends FeatureObjMask {
 
@@ -61,32 +61,16 @@ public abstract class DerivedObjMask extends FeatureObjMask {
 	@Override
 	public double calc(CacheableParams<FeatureObjMaskParams> params) throws FeatureCalcException {
 
-		try {
-			CachedCalculation<Optional<FeatureObjMaskParams>, FeatureObjMaskParams>  ccDerived =
-				new CalculateParamsForDerived(
-					params.search(
-						createCachedCalculationForDerived(
-							params.cacheFor( cacheName(), FeatureObjMaskParams.class )
-						)
-					)
-				);
-		
-			Optional<FeatureObjMaskParams> paramsDerived = params.calc(ccDerived);
-			
-			if (!paramsDerived.isPresent()) {
-				return emptyValue;
-			}
-			
-			// We select an appropriate cache for calculating the feature (should be the same as selected in init())
-			return params.calcChangeParams(
-				item,
-				p -> paramsDerived.get(),
-				cacheName()
-			);
-			
-		} catch (ExecuteException e) {
-			throw new FeatureCalcException(e.getCause());
-		}
+		return CalculateParamsFromDelegateOption.calc(
+			params,
+			createCachedCalculationForDerived(
+				params.cacheFor( cacheName(), FeatureObjMaskParams.class )		
+			),
+			delegate -> new CalculateParamsForDerived(delegate),
+			item,
+			cacheName(),
+			emptyValue
+		);
 	}
 	
 	@Override
@@ -114,17 +98,10 @@ public abstract class DerivedObjMask extends FeatureObjMask {
 			throw new FeatureCalcException(e.getCause());
 		}*/			
 	}
-		
-	public FeatureObjMaskParams createDerivedParams(FeatureObjMaskParams paramsExst, ObjMask omDerived) {
-		return new FeatureObjMaskParams( omDerived, paramsExst.getNrgStack() );
-	}
 	
-	protected abstract CachedCalculation<ObjMask,FeatureObjMaskParams> createCachedCalculationForDerived( FeatureSessionCacheRetriever<FeatureObjMaskParams> session ) throws FeatureCalcException;
-	
+	protected abstract CachedCalculation<ObjMask,FeatureObjMaskParams> createCachedCalculationForDerived( FeatureSessionCacheCalculator<FeatureObjMaskParams> session ) throws FeatureCalcException;
 	
 	protected abstract String cacheName();
-
-
 	
 	public double getEmptyValue() {
 		return emptyValue;

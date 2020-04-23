@@ -27,10 +27,9 @@ package ch.ethz.biol.cell.mpp.nrg.feature.stack;
  */
 
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.cache.ExecuteException;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.feature.cache.CacheableParams;
-import org.anchoranalysis.feature.cachedcalculation.CachedCalculation;
+import org.anchoranalysis.feature.cache.calculation.CachedCalculation;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.feature.bean.FeatureStack;
 import org.anchoranalysis.image.feature.stack.FeatureStackParams;
@@ -73,14 +72,10 @@ public abstract class FeatureIntensityHistogram extends FeatureStack {
 	
 	@Override
 	public double calc(CacheableParams<FeatureStackParams> params) throws FeatureCalcException {
-		try {
-			Histogram h = params.calc(
-				histogramCalculator()		
-			);
-			return calcStatistic(h);
-		} catch (ExecuteException e) {
-			throw new FeatureCalcException(e);
-		}
+		Histogram h = params.calc(
+			histogramCalculator()		
+		);
+		return calcStatistic(h);
 	}
 	
 	protected abstract double calcStatistic( Histogram h );

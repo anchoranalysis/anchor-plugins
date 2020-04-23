@@ -1,6 +1,7 @@
 package org.anchoranalysis.plugin.image.feature.bean.obj.intersecting;
 
 import org.anchoranalysis.feature.cache.CacheableParams;
+import org.anchoranalysis.feature.cache.calculation.RslvdCachedCalculation;
 
 /*-
  * #%L
@@ -43,9 +44,9 @@ public class NumIntersectingObjs extends FeatureIntersectingObjs {
 	// END BEAN PROPERTIES
 
 	@Override
-	protected double valueFor(CacheableParams<FeatureObjMaskParams> params, ObjMaskCollection intersecting)
+	protected double valueFor(CacheableParams<FeatureObjMaskParams> params, RslvdCachedCalculation<ObjMaskCollection, FeatureObjMaskParams> intersecting)
 			throws FeatureCalcException {
-		return intersecting.size();
+		return params.calc(intersecting).size();
 	}
 
 }

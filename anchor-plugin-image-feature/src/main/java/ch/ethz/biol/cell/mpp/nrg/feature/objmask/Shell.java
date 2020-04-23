@@ -28,9 +28,9 @@ package ch.ethz.biol.cell.mpp.nrg.feature.objmask;
 
 
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.feature.cachedcalculation.CachedCalculation;
+import org.anchoranalysis.feature.cache.calculation.CachedCalculation;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.feature.session.cache.FeatureSessionCacheRetriever;
+import org.anchoranalysis.feature.session.cache.FeatureSessionCacheCalculator;
 import org.anchoranalysis.image.feature.objmask.FeatureObjMaskParams;
 import org.anchoranalysis.image.objmask.ObjMask;
 
@@ -56,7 +56,7 @@ public class Shell extends DerivedObjMask {
 	
 	@Override
 	protected CachedCalculation<ObjMask,FeatureObjMaskParams> createCachedCalculationForDerived(
-			FeatureSessionCacheRetriever<FeatureObjMaskParams> session) throws FeatureCalcException {
+			FeatureSessionCacheCalculator<FeatureObjMaskParams> session) throws FeatureCalcException {
 		return CalculateShellObjMask.createFromCache(
 			session,
 			iterationsDilation,

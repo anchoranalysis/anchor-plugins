@@ -28,7 +28,7 @@ package org.anchoranalysis.plugin.image.feature.bean.obj.pair.touching;
 
 
 import org.anchoranalysis.core.cache.ExecuteException;
-import org.anchoranalysis.feature.cachedcalculation.CachedCalculation;
+import org.anchoranalysis.feature.cache.calculation.CachedCalculation;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.feature.objmask.pair.FeatureObjMaskPairParams;
