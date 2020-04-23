@@ -5,14 +5,14 @@ import java.util.Optional;
 import org.anchoranalysis.feature.cache.calculation.RslvdCachedCalculation;
 import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
 import org.anchoranalysis.image.objmask.ObjMask;
-import org.anchoranalysis.plugin.image.feature.obj.pair.CalculateParamsFromDelegateOption;
+import org.anchoranalysis.plugin.image.feature.obj.pair.CalculateInputFromDelegateOption;
 
-public class CalculateParamsForDerived extends CalculateParamsFromDelegateOption<
+public class CalculateObjForDerived extends CalculateInputFromDelegateOption<
 	FeatureInputSingleObj,
 	FeatureInputSingleObj,
 	ObjMask
 > {
-	public CalculateParamsForDerived(RslvdCachedCalculation<ObjMask, FeatureInputSingleObj> ccDerived) {
+	public CalculateObjForDerived(RslvdCachedCalculation<ObjMask, FeatureInputSingleObj> ccDerived) {
 		super(ccDerived);
 	}
 

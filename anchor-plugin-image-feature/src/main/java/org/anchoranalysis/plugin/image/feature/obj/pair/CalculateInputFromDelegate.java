@@ -4,6 +4,7 @@ import org.anchoranalysis.core.cache.ExecuteException;
 import org.anchoranalysis.feature.cache.calculation.CachedCalculation;
 import org.anchoranalysis.feature.cache.calculation.RslvdCachedCalculation;
 import org.anchoranalysis.feature.calc.params.FeatureInput;
+import org.anchoranalysis.feature.session.cache.ICachedCalculationSearch;
 
 /**
  * A base class for Cached-Calculations that generate a Params for feature-calculation using an existing "delegate" calculation
@@ -23,13 +24,18 @@ import org.anchoranalysis.feature.calc.params.FeatureInput;
  * @param <U> delegate-type of CachedCalculation
  * 
  */
-public abstract class CalculateParamsFromDelegate<S, T extends FeatureInput, U> extends CachedCalculation<S, T> {
+public abstract class CalculateInputFromDelegate<S, T extends FeatureInput, U> extends CachedCalculation<S, T> {
 
 	private RslvdCachedCalculation<U, T> ccDelegate;
 
-	protected CalculateParamsFromDelegate(RslvdCachedCalculation<U, T> ccDelegate) {
+	protected CalculateInputFromDelegate(RslvdCachedCalculation<U, T> ccDelegate) {
 		super();
 		this.ccDelegate = ccDelegate;
+	}
+	
+	protected CalculateInputFromDelegate(CachedCalculation<U, T> ccDelegate, ICachedCalculationSearch<T> cache) {
+		super();
+		this.ccDelegate = cache.search(ccDelegate);
 	}
 
 	@Override

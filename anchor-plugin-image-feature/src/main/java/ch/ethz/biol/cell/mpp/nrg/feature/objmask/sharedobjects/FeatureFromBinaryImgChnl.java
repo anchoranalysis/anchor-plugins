@@ -70,7 +70,7 @@ public class FeatureFromBinaryImgChnl extends FeatureObjMaskSharedObjects {
 	
 	@Override
 	public double calc(SessionInput<FeatureInputSingleObj> input) throws FeatureCalcException {
-		return input.calcChangeParamsDirect(
+		return input.calcChild(
 			item,
 			new CalculatePairParams(binaryImgChnlProvider),
 			"pair"

@@ -43,7 +43,7 @@ import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
 import org.anchoranalysis.image.feature.objmask.pair.FeatureInputPairObjs;
 import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.plugin.image.feature.obj.pair.CalculateParamsForIntersection;
-import org.anchoranalysis.plugin.image.feature.obj.pair.CalculateParamsFromDelegateOption;
+import org.anchoranalysis.plugin.image.feature.obj.pair.CalculateInputFromDelegateOption;
 
 import ch.ethz.biol.cell.mpp.nrg.feature.objmask.cachedcalculation.CalculatePairIntersectionCommutative;
 
@@ -87,7 +87,7 @@ public class FeatureObjMaskPairIntersection extends FeatureObjMaskPair {
 		
 	@Override
 	public double calc(SessionInput<FeatureInputPairObjs> input) throws FeatureCalcException {
-		return CalculateParamsFromDelegateOption.calc(
+		return CalculateInputFromDelegateOption.calc(
 			input,
 			createCCIntersection(input),
 			delegate -> new CalculateParamsForIntersection(delegate),

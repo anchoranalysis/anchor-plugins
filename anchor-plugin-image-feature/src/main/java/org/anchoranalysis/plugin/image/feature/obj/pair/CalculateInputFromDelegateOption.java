@@ -21,14 +21,14 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
  * @param <T> feature input-type as input to cached-calculations
  * @param <U> delegate-type of CachedCalculation
  */
-public abstract class CalculateParamsFromDelegateOption<S extends FeatureInput, T extends FeatureInput, U> extends CalculateParamsFromDelegate<Optional<S>, T, U> {
+public abstract class CalculateInputFromDelegateOption<S extends FeatureInput, T extends FeatureInput, U> extends CalculateInputFromDelegate<Optional<S>, T, U> {
 	
 	/**
 	 * The constructor
 	 * 
 	 * @param ccDelegate the calculated-calculation for the delegate
 	 */
-	protected CalculateParamsFromDelegateOption(RslvdCachedCalculation<U, T> ccDelegate) {
+	protected CalculateInputFromDelegateOption(RslvdCachedCalculation<U, T> ccDelegate) {
 		super(ccDelegate);
 	}
 	
@@ -50,7 +50,7 @@ public abstract class CalculateParamsFromDelegateOption<S extends FeatureInput, 
 	public static <S extends FeatureInput, T extends FeatureInput, U> double calc(
 		SessionInput<T> input,
 		CachedCalculation<U,T> delegate,
-		Function<RslvdCachedCalculation<U,T>,CalculateParamsFromDelegateOption<S,T,U>> funcCreateFromDelegate,
+		Function<RslvdCachedCalculation<U,T>,CalculateInputFromDelegateOption<S,T,U>> funcCreateFromDelegate,
 		Feature<S> feature,
 		String cacheName,
 		double emptyValue
@@ -68,7 +68,7 @@ public abstract class CalculateParamsFromDelegateOption<S extends FeatureInput, 
 		}
 		
 		// We select an appropriate cache for calculating the feature (should be the same as selected in init())
-		return input.calcChangeParamsDirect(
+		return input.calcChild(
 			feature,
 			paramsDerived.get(),
 			cacheName
@@ -94,7 +94,7 @@ public abstract class CalculateParamsFromDelegateOption<S extends FeatureInput, 
 		if (obj.getClass() != getClass()) {
 			return false;
 		}
-		CalculateParamsFromDelegateOption<S,T,U> rhs = (CalculateParamsFromDelegateOption<S,T,U>) obj;
+		CalculateInputFromDelegateOption<S,T,U> rhs = (CalculateInputFromDelegateOption<S,T,U>) obj;
 		return new EqualsBuilder()
              .append(getDelegate(), rhs.getDelegate())
              .isEquals();

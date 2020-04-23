@@ -1,31 +1,31 @@
-package org.anchoranalysis.plugin.image.feature.bean.obj.intersecting;
+package ch.ethz.biol.cell.mpp.nrg.feature.stack;
 
 import org.anchoranalysis.feature.cache.calculation.RslvdCachedCalculation;
 import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
-import org.anchoranalysis.image.feature.objmask.pair.FeatureInputPairObjs;
+import org.anchoranalysis.image.feature.stack.FeatureInputStack;
 import org.anchoranalysis.image.objmask.ObjMaskCollection;
 import org.anchoranalysis.plugin.image.feature.obj.pair.CalculateInputFromDelegate;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
-public class CalculateIntersecting extends CalculateInputFromDelegate<FeatureInputPairObjs, FeatureInputSingleObj, ObjMaskCollection> {
+public class CalculateDeriveObjFromCollection extends CalculateInputFromDelegate<FeatureInputSingleObj, FeatureInputStack, ObjMaskCollection> {
 
 	private int index;
-	
-	public CalculateIntersecting(RslvdCachedCalculation<ObjMaskCollection, FeatureInputSingleObj> intersecting, int index) {
-		super(intersecting);
+
+	public CalculateDeriveObjFromCollection(RslvdCachedCalculation<ObjMaskCollection, FeatureInputStack> ccDelegate,
+			int index) {
+		super(ccDelegate);
 		this.index = index;
 	}
-	
+
 	@Override
-	protected FeatureInputPairObjs deriveFromDelegate(FeatureInputSingleObj params, ObjMaskCollection delegate) {
-		return new FeatureInputPairObjs(
-			params.getObjMask(),
-			delegate.get(index),
-			params.getNrgStack()
-		);
+	protected FeatureInputSingleObj deriveFromDelegate(FeatureInputStack params, ObjMaskCollection delegate) {
+		FeatureInputSingleObj paramsObj = new FeatureInputSingleObj();
+		paramsObj.setNrgStack( params.getNrgStack() );
+		paramsObj.setObjMask( delegate.get(index) );
+		return paramsObj;
 	}
-	
+
 	@Override
 	public boolean equals(Object obj) {
 		if (obj == null) { return false; }
@@ -33,10 +33,9 @@ public class CalculateIntersecting extends CalculateInputFromDelegate<FeatureInp
 		if (obj.getClass() != getClass()) {
 			return false;
 		}
-		CalculateIntersecting rhs = (CalculateIntersecting) obj;
+		CalculateDeriveObjFromCollection rhs = (CalculateDeriveObjFromCollection) obj;
 		return new EqualsBuilder()
              .append(index, rhs.index)
-             .append(getDelegate(), rhs.getDelegate())
              .isEquals();
 	}
 
@@ -44,7 +43,7 @@ public class CalculateIntersecting extends CalculateInputFromDelegate<FeatureInp
 	public int hashCode() {
 		return new HashCodeBuilder()
 			.append(index)
-			.append(getDelegate().hashCode())
 			.toHashCode();
 	}
+
 }

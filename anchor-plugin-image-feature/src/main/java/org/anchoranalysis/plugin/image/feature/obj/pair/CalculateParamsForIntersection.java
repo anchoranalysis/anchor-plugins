@@ -7,7 +7,7 @@ import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
 import org.anchoranalysis.image.feature.objmask.pair.FeatureInputPairObjs;
 import org.anchoranalysis.image.objmask.ObjMask;
 
-public class CalculateParamsForIntersection extends CalculateParamsFromDelegateOption<
+public class CalculateParamsForIntersection extends CalculateInputFromDelegateOption<
 	FeatureInputSingleObj,
 	FeatureInputPairObjs,
 	Optional<ObjMask>

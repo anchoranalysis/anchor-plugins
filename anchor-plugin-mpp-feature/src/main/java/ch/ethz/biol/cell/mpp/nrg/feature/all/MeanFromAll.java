@@ -50,10 +50,10 @@ public class MeanFromAll extends FeatureAllMemo {
 	// END BEAN PROPERTIES
 	
 	@Override
-	public double calc(SessionInput<FeatureInputAllMemo> paramsCacheable)
+	public double calc(SessionInput<FeatureInputAllMemo> input)
 			throws FeatureCalcException {
 		
-		MemoCollection memo = paramsCacheable.getParams().getPxlPartMemo();
+		MemoCollection memo = input.getParams().getPxlPartMemo();
 		
 		if (memo.size()==0) {
 			return 0.0;
@@ -62,28 +62,15 @@ public class MeanFromAll extends FeatureAllMemo {
 		double sum = 0.0;
 		
 		for( int i=0; i<memo.size(); i++) {
-
-			final int index = i;
 			
-			sum += paramsCacheable.calcChangeParams(
+			sum += input.calcChild(
 				item,
-				p -> paramsForInd(p, index),
+				new CalculateDeriveSingleMemoInput(i),
 				"obj_" + i
 			);
 		}
 		
 		return sum / memo.size();
-	}
-	
-	private static FeatureInputSingleMemo paramsForInd( FeatureInputAllMemo params, int index ) {
-		FeatureInputSingleMemo paramsInd = new FeatureInputSingleMemo(
-			null,
-			params.getNrgStack()
-		);
-		paramsInd.setPxlPartMemo(
-			params.getPxlPartMemo().getMemoForIndex(index)
-		);
-		return paramsInd;
 	}
 
 	public Feature<FeatureInputSingleMemo> getItem() {

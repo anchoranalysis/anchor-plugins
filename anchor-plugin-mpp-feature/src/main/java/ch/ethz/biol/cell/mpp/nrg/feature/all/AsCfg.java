@@ -43,9 +43,9 @@ public class AsCfg extends FeatureSingleElem<FeatureInputAllMemo,FeatureInputCfg
 	@Override
 	public double calc( SessionInput<FeatureInputAllMemo> input ) throws FeatureCalcException {
 		return input
-			.calcChangeParamsDirect(
+			.calcChild(
 				getItem(),
-				new CalculateDeriveCfgParams(),
+				new CalculateDeriveCfgInput(),
 				"cfg"
 			);
 	}
