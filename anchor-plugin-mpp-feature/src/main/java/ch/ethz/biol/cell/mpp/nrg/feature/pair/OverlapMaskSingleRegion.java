@@ -3,7 +3,7 @@ package ch.ethz.biol.cell.mpp.nrg.feature.pair;
 import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputPairMemo;
 import org.anchoranalysis.anchor.mpp.mark.GlobalRegionIdentifiers;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.feature.cache.CacheableParams;
+import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import ch.ethz.biol.cell.mpp.nrg.cachedcalculation.OverlapCalculationMaskGlobal;
 
@@ -19,7 +19,7 @@ public abstract class OverlapMaskSingleRegion extends OverlapMaskBase {
 	private int regionID = GlobalRegionIdentifiers.SUBMARK_INSIDE;
 	// END BEAN PROPERTIES
 		
-	protected double overlapWithGlobalMask( CacheableParams<FeatureInputPairMemo> params ) throws FeatureCalcException {
+	protected double overlapWithGlobalMask( SessionInput<FeatureInputPairMemo> params ) throws FeatureCalcException {
 		return params.calc(
 			new OverlapCalculationMaskGlobal(regionID, getNrgIndex(), (byte) getMaskValue())
 		);

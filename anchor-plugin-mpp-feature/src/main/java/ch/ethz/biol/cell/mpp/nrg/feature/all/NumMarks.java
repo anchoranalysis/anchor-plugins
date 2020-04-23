@@ -1,8 +1,8 @@
 package ch.ethz.biol.cell.mpp.nrg.feature.all;
 
-import org.anchoranalysis.anchor.mpp.feature.bean.nrg.elem.NRGElemAll;
+import org.anchoranalysis.anchor.mpp.feature.bean.nrg.elem.FeatureAllMemo;
 import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputAllMemo;
-import org.anchoranalysis.feature.cache.CacheableParams;
+import org.anchoranalysis.feature.cache.SessionInput;
 
 /*-
  * #%L
@@ -32,7 +32,7 @@ import org.anchoranalysis.feature.cache.CacheableParams;
 
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 
-public class NumMarks extends NRGElemAll {
+public class NumMarks extends FeatureAllMemo {
 
 	/**
 	 * 
@@ -40,7 +40,7 @@ public class NumMarks extends NRGElemAll {
 	private static final long serialVersionUID = 1L;
 
 	@Override
-	public double calc(CacheableParams<FeatureInputAllMemo> params)
+	public double calc(SessionInput<FeatureInputAllMemo> params)
 			throws FeatureCalcException {
 		return params.getParams().getPxlPartMemo().size();
 	}

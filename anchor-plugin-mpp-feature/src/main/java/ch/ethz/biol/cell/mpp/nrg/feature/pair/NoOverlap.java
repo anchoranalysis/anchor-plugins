@@ -1,6 +1,6 @@
 package ch.ethz.biol.cell.mpp.nrg.feature.pair;
 
-import org.anchoranalysis.anchor.mpp.feature.bean.nrg.elem.NRGElemPair;
+import org.anchoranalysis.anchor.mpp.feature.bean.nrg.elem.FeaturePairMemo;
 import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputPairMemo;
 import org.anchoranalysis.anchor.mpp.mark.GlobalRegionIdentifiers;
 
@@ -32,11 +32,11 @@ import org.anchoranalysis.anchor.mpp.mark.GlobalRegionIdentifiers;
 
 
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.feature.cache.CacheableParams;
+import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import ch.ethz.biol.cell.mpp.nrg.cachedcalculation.OverlapCalculation;
 
-public final class NoOverlap extends NRGElemPair {
+public final class NoOverlap extends FeaturePairMemo {
 
 	/**
 	 * 
@@ -53,7 +53,7 @@ public final class NoOverlap extends NRGElemPair {
 	}
 	
 	@Override
-	public double calc( CacheableParams<FeatureInputPairMemo> params ) throws FeatureCalcException {
+	public double calc( SessionInput<FeatureInputPairMemo> params ) throws FeatureCalcException {
 		
 		double overlap = params.calc( new OverlapCalculation(regionID) );
 		if (overlap>0) {

@@ -29,7 +29,7 @@ package ch.ethz.biol.cell.mpp.nrg.feature.operator;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.bean.operator.FeatureDoubleElem;
-import org.anchoranalysis.feature.cache.CacheableParams;
+import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.calc.params.FeatureInput;
 
@@ -50,11 +50,11 @@ public class DivideExplicit<T extends FeatureInput> extends FeatureDoubleElem<T>
 	// END BEAN PROPERTIES
 	
 	@Override
-	public double calc( CacheableParams<T> params ) throws FeatureCalcException {
+	public double calc( SessionInput<T> input ) throws FeatureCalcException {
 		
 		// This feature doesn't need to be init, so we skip this bit
-		double val1 = params.calc( getItem1() );
-		double val2 = params.calc( getItem2() );
+		double val1 = input.calc( getItem1() );
+		double val2 = input.calc( getItem2() );
 		
 		//getLogger().getLogReporter().logFormatted("Divide Explicit: %f on %f = %f", val1, val2, val1/val2);
 		

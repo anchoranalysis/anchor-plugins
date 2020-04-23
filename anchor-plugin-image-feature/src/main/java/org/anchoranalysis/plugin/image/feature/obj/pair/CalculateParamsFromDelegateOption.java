@@ -4,7 +4,7 @@ import java.util.Optional;
 import java.util.function.Function;
 
 import org.anchoranalysis.feature.bean.Feature;
-import org.anchoranalysis.feature.cache.CacheableParams;
+import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.cache.calculation.CachedCalculation;
 import org.anchoranalysis.feature.cache.calculation.RslvdCachedCalculation;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
@@ -18,7 +18,7 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
  * @author Owen Feehan
  *
  * @param <S> optional final-type of CachedCalculation
- * @param <T> params-type as input to cached-calculations
+ * @param <T> feature input-type as input to cached-calculations
  * @param <U> delegate-type of CachedCalculation
  */
 public abstract class CalculateParamsFromDelegateOption<S extends FeatureInput, T extends FeatureInput, U> extends CalculateParamsFromDelegate<Optional<S>, T, U> {
@@ -38,7 +38,7 @@ public abstract class CalculateParamsFromDelegateOption<S extends FeatureInput, 
 	 * @param <S> optional final params-type for calculation
 	 * @param <T> input params-type for calculation
 	 * @param <U> delegate-type of CachedCalculation
-	 * @param params input params
+	 * @param input feature-input
 	 * @param delegate the Cached-Calculation delegate used
 	 * @param funcCreateFromDelegate creates output-params from the delegates
 	 * @param feature feature to use to calculate the output result
@@ -48,7 +48,7 @@ public abstract class CalculateParamsFromDelegateOption<S extends FeatureInput, 
 	 * @throws FeatureCalcException
 	 */
 	public static <S extends FeatureInput, T extends FeatureInput, U> double calc(
-		CacheableParams<T> params,
+		SessionInput<T> input,
 		CachedCalculation<U,T> delegate,
 		Function<RslvdCachedCalculation<U,T>,CalculateParamsFromDelegateOption<S,T,U>> funcCreateFromDelegate,
 		Feature<S> feature,
@@ -58,17 +58,17 @@ public abstract class CalculateParamsFromDelegateOption<S extends FeatureInput, 
 
 		CachedCalculation<Optional<S>,T> ccParamsDerived =
 			funcCreateFromDelegate.apply(
-				params.search(delegate)
+				input.search(delegate)
 			);
 		
-		Optional<S> paramsDerived = params.calc(ccParamsDerived);
+		Optional<S> paramsDerived = input.calc(ccParamsDerived);
 		
 		if (!paramsDerived.isPresent()) {
 			return emptyValue;
 		}
 		
 		// We select an appropriate cache for calculating the feature (should be the same as selected in init())
-		return params.calcChangeParamsDirect(
+		return input.calcChangeParamsDirect(
 			feature,
 			paramsDerived.get(),
 			cacheName

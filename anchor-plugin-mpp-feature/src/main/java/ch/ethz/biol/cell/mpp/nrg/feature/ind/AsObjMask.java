@@ -34,7 +34,7 @@ import org.anchoranalysis.anchor.mpp.regionmap.RegionMapSingleton;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.bean.operator.FeatureSingleElem;
-import org.anchoranalysis.feature.cache.CacheableParams;
+import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.params.FeatureInputDescriptor;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
@@ -57,8 +57,8 @@ public class AsObjMask extends FeatureSingleElem<FeatureInputSingleMemo,FeatureI
 	// END BEAN PROPERTIES
 	
 	@Override
-	public double calc(CacheableParams<FeatureInputSingleMemo> params) throws FeatureCalcException {
-		return params
+	public double calc(SessionInput<FeatureInputSingleMemo> input) throws FeatureCalcException {
+		return input
 			.calcChangeParams(
 				getItem(),
 				p -> deriveParams(p),

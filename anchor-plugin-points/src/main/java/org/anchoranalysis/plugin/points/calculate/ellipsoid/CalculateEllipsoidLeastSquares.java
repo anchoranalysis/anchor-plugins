@@ -33,7 +33,7 @@ import org.anchoranalysis.anchor.mpp.mark.conic.MarkEllipsoid;
 import org.anchoranalysis.core.cache.ExecuteException;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.geometry.Point3i;
-import org.anchoranalysis.feature.cache.CacheableParams;
+import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.cache.calculation.CachedCalculation;
 import org.anchoranalysis.feature.cache.calculation.CachedCalculationOperation;
 import org.anchoranalysis.feature.cache.calculation.RslvdCachedCalculation;
@@ -55,7 +55,7 @@ public class CalculateEllipsoidLeastSquares extends CachedCalculation<MarkEllips
 		this.ccPnts = ccPnts;
 	}
 	
-	public static MarkEllipsoid createFromCache(CacheableParams<FeatureInputSingleObj> params, boolean suppressZCovariance ) throws FeatureCalcException {
+	public static MarkEllipsoid createFromCache(SessionInput<FeatureInputSingleObj> params, boolean suppressZCovariance ) throws FeatureCalcException {
 		
 		RslvdCachedCalculation<List<Point3i>,FeatureInputSingleObj> ccPnts = params.search( new CalculatePntsFromOutline() );
 		

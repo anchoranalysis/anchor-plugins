@@ -31,7 +31,7 @@ import org.anchoranalysis.bean.annotation.AllowEmpty;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.unit.SpatialConversionUtilities;
 import org.anchoranalysis.feature.bean.operator.FeatureGenericSingleElem;
-import org.anchoranalysis.feature.cache.CacheableParams;
+import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.calc.params.FeatureInput;
 
@@ -72,9 +72,9 @@ public class ConvertUnits<T extends FeatureInput> extends FeatureGenericSingleEl
 	}
 
 	@Override
-	protected double calc(CacheableParams<T> params) throws FeatureCalcException {
+	protected double calc(SessionInput<T> input) throws FeatureCalcException {
 		
-		double value = params.calc( getItem() );
+		double value = input.calc( getItem() );
 		
 		SpatialConversionUtilities.UnitSuffix typeFrom = SpatialConversionUtilities.suffixFromMeterString(unitTypeFrom);
 		SpatialConversionUtilities.UnitSuffix typeTo = SpatialConversionUtilities.suffixFromMeterString(unitTypeTo);

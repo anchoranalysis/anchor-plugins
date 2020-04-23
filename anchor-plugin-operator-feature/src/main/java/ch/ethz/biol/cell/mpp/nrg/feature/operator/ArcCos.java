@@ -28,7 +28,7 @@ import org.anchoranalysis.feature.bean.operator.FeatureGenericSingleElem;
  * #L%
  */
 
-import org.anchoranalysis.feature.cache.CacheableParams;
+import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.calc.params.FeatureInput;
 
@@ -40,10 +40,10 @@ public class ArcCos<T extends FeatureInput> extends FeatureGenericSingleElem<T> 
 	private static final long serialVersionUID = 1L;
 	
 	@Override
-	protected double calc(CacheableParams<T> params)
+	protected double calc(SessionInput<T> input)
 			throws FeatureCalcException {
 		
-		double arg = params.calc( getItem() );
+		double arg = input.calc( getItem() );
 		return Math.acos(arg);
 	}
 

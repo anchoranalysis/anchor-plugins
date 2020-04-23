@@ -1,6 +1,6 @@
 package ch.ethz.biol.cell.mpp.nrg.feature.ind;
 
-import org.anchoranalysis.anchor.mpp.feature.bean.nrg.elem.NRGElemInd;
+import org.anchoranalysis.anchor.mpp.feature.bean.nrg.elem.FeatureSingleMemo;
 import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputSingleMemo;
 
 /*
@@ -36,7 +36,7 @@ import org.anchoranalysis.feature.calc.FeatureCalcException;
 
 import ch.ethz.biol.cell.mpp.mark.pixelstatisticsfrommark.PixelStatisticsFromMark;
 
-public class Intensity extends NRGElemInd {
+public class Intensity extends FeatureSingleMemo {
 
 	/**
 	 * 

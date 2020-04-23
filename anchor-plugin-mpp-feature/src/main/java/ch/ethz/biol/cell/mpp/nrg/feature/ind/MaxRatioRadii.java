@@ -1,6 +1,6 @@
 package ch.ethz.biol.cell.mpp.nrg.feature.ind;
 
-import org.anchoranalysis.anchor.mpp.feature.bean.nrg.elem.NRGElemInd;
+import org.anchoranalysis.anchor.mpp.feature.bean.nrg.elem.FeatureSingleMemo;
 import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputSingleMemo;
 
 /*-
@@ -31,7 +31,7 @@ import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputSingleMemo;
 
 import org.anchoranalysis.anchor.mpp.mark.conic.MarkEllipse;
 
-public class MaxRatioRadii extends NRGElemInd {
+public class MaxRatioRadii extends FeatureSingleMemo {
 
 	// START BEAN PROPERTIES
 	// END BEAN PROPERTIES

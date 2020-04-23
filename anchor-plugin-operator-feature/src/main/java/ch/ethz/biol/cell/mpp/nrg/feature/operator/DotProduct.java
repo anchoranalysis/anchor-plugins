@@ -32,7 +32,7 @@ import org.anchoranalysis.core.geometry.Vector3d;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.bean.operator.VectorFromFeature;
-import org.anchoranalysis.feature.cache.CacheableParams;
+import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.calc.params.FeatureInput;
 import org.anchoranalysis.feature.params.FeatureInputDescriptor;
@@ -59,10 +59,10 @@ public class DotProduct<T extends FeatureInput> extends Feature<T> {
 	// END BEAN PROPERTIES
 	
 	@Override
-	public double calc(CacheableParams<T> params) throws FeatureCalcException {
+	public double calc(SessionInput<T> input) throws FeatureCalcException {
 		
-		Vector3d vec1 = vector1.calc(params);
-		Vector3d vec2 = vector2.calc(params);
+		Vector3d vec1 = vector1.calc(input);
+		Vector3d vec2 = vector2.calc(input);
 		
 		if (includeOppositeDirection) {
 					

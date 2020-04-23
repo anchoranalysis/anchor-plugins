@@ -1,6 +1,6 @@
 package ch.ethz.biol.cell.mpp.nrg.feature.all;
 
-import org.anchoranalysis.anchor.mpp.feature.bean.nrg.elem.NRGElemAll;
+import org.anchoranalysis.anchor.mpp.feature.bean.nrg.elem.FeatureAllMemo;
 import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputAllMemo;
 import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputSingleMemo;
 import org.anchoranalysis.anchor.mpp.feature.mark.MemoCollection;
@@ -35,11 +35,11 @@ import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.bean.Feature;
-import org.anchoranalysis.feature.cache.CacheableParams;
+import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.calc.params.FeatureInput;
 
-public class CoefficientOfVarianceFromAll extends NRGElemAll {
+public class CoefficientOfVarianceFromAll extends FeatureAllMemo {
 
 	/**
 	 * 
@@ -52,7 +52,7 @@ public class CoefficientOfVarianceFromAll extends NRGElemAll {
 	// END BEAN PROPERTIES
 	
 	@Override
-	public double calc(CacheableParams<FeatureInputAllMemo> paramsCacheable)
+	public double calc(SessionInput<FeatureInputAllMemo> paramsCacheable)
 			throws FeatureCalcException {
 		
 		MemoCollection memoMarks = paramsCacheable.getParams().getPxlPartMemo();
@@ -72,7 +72,7 @@ public class CoefficientOfVarianceFromAll extends NRGElemAll {
 	}
 	
 	/** Calculates the feature on each mark separately, populating vals, and returns the mean */
-	private double calcForEachItem( CacheableParams<FeatureInputAllMemo> paramsCacheable, MemoCollection memoMarks, double vals[] ) throws FeatureCalcException {
+	private double calcForEachItem( SessionInput<FeatureInputAllMemo> paramsCacheable, MemoCollection memoMarks, double vals[] ) throws FeatureCalcException {
 		
 		double sum = 0.0;		
 		

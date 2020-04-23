@@ -19,7 +19,7 @@ import org.anchoranalysis.feature.calc.params.FeatureInput;
  * @author Owen Feehan
  *
  * @param <S> final-type of CachedCalculation
- * @param <T> params-type as input to cached-calculations
+ * @param <T> feature input-type as input to cached-calculations
  * @param <U> delegate-type of CachedCalculation
  * 
  */

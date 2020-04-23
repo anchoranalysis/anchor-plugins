@@ -1,6 +1,6 @@
 package ch.ethz.biol.cell.mpp.nrg.feature.objmask;
 
-import org.anchoranalysis.feature.cache.CacheableParams;
+import org.anchoranalysis.feature.cache.SessionInput;
 
 /*-
  * #%L
@@ -42,7 +42,7 @@ public class AxisEigenvalue extends ObjMaskPointsSpecificEigenvalueBase {
 	// END BEAN PROPERTIES
 
 	@Override
-	public double calc(CacheableParams<FeatureInputSingleObj> params) throws FeatureCalcException {
-		return calcSpecificEigenvector(params).getEigenvalue();
+	public double calc(SessionInput<FeatureInputSingleObj> input) throws FeatureCalcException {
+		return calcSpecificEigenvector(input).getEigenvalue();
 	}
 }

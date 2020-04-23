@@ -31,7 +31,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.SkipInit;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.feature.bean.Feature;
-import org.anchoranalysis.feature.cache.CacheableParams;
+import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.bean.provider.BinaryImgChnlProvider;
 import org.anchoranalysis.image.feature.init.FeatureInitParamsSharedObjs;
@@ -64,9 +64,9 @@ public class BinaryImageChnlProviderFeature extends FeatureStackSharedObjects {
 	}
 		
 	@Override
-	public double calc(CacheableParams<FeatureInputStack> params) throws FeatureCalcException {
+	public double calc(SessionInput<FeatureInputStack> input) throws FeatureCalcException {
 
-		return params.calcChangeParamsDirect(
+		return input.calcChangeParamsDirect(
 			item,
 			new CalculateBinaryChnlParams(binaryImgChnlProvider),
 			"binaryMask"

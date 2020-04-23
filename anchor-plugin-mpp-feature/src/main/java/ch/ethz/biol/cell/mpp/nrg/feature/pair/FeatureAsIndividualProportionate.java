@@ -1,10 +1,9 @@
 package ch.ethz.biol.cell.mpp.nrg.feature.pair;
 
-import java.util.function.Function;
-
+import org.anchoranalysis.anchor.mpp.feature.bean.nrg.elem.CalculateSingleMemoFromPair;
 import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputPairMemo;
 import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputSingleMemo;
-import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
+
 
 /*
  * #%L
@@ -35,7 +34,8 @@ import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.bean.Feature;
-import org.anchoranalysis.feature.cache.CacheableParams;
+import org.anchoranalysis.feature.cache.SessionInput;
+import org.anchoranalysis.feature.cache.calculation.CachedCalculation;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 
 // Calculates each feature individually, and combines them using the ratios between itemProportionate
@@ -51,34 +51,51 @@ public class FeatureAsIndividualProportionate extends NRGElemPairWithFeature {
 	@BeanField
 	private Feature<FeatureInputSingleMemo> itemProportionate;
 	// eND BEAN PROPERTIES
-	
-	public FeatureAsIndividualProportionate() {
-	}
 
-	@Override
-	public double calc( CacheableParams<FeatureInputPairMemo> params ) throws FeatureCalcException {
+	/** Calculates values/weights for one of the objects */
+	private class CalcHelper {
 		
-		CacheableParams<FeatureInputSingleMemo> params1 = deriveParams(params, p -> p.getObj1(), "obj1");
-		CacheableParams<FeatureInputSingleMemo> params2 = deriveParams(params, p -> p.getObj2(), "obj2");
+		private CachedCalculation<FeatureInputSingleMemo,FeatureInputPairMemo> ccExtract;
+		private String childCacheName;
+				
+		public CalcHelper(CachedCalculation<FeatureInputSingleMemo, FeatureInputPairMemo> ccExtract,
+				String childCacheName) {
+			super();
+			this.ccExtract = ccExtract;
+			this.childCacheName = childCacheName;
+		}
 
-		return weightedSum(
-			valueFor(params1),
-			valueFor(params2),
-			weightFor(params1),
-			weightFor(params2)
+		public double valueFor( SessionInput<FeatureInputPairMemo> params ) throws FeatureCalcException {
+			return calcFeatureFor(getItem(), params);
+		}
+		
+		public double weightFor( SessionInput<FeatureInputPairMemo> params ) throws FeatureCalcException {
+			return calcFeatureFor(itemProportionate, params);
+		}
+		
+		private double calcFeatureFor( Feature<FeatureInputSingleMemo> feature,	SessionInput<FeatureInputPairMemo> params ) throws FeatureCalcException {
+			return params.calcChangeParamsDirect(feature, ccExtract, childCacheName);
+		}
+	}
+	
+	@Override
+	public double calc( SessionInput<FeatureInputPairMemo> input ) throws FeatureCalcException {
+
+		CalcHelper first = new CalcHelper(
+			new CalculateSingleMemoFromPair(true),
+			"obj1"
 		);
-	}
-	
-	private double valueFor( CacheableParams<FeatureInputSingleMemo> params ) throws FeatureCalcException {
-		return calcFeatureFor(getItem(), params);
-	}
-	
-	private double weightFor( CacheableParams<FeatureInputSingleMemo> params ) throws FeatureCalcException {
-		return calcFeatureFor(itemProportionate, params);
-	}
-	
-	private double calcFeatureFor( Feature<FeatureInputSingleMemo> feature, CacheableParams<FeatureInputSingleMemo> params ) throws FeatureCalcException {
-		return params.calc(feature);
+		CalcHelper second = new CalcHelper(
+			new CalculateSingleMemoFromPair(false),
+			"obj2"
+		);
+		
+		return weightedSum(
+			first.valueFor(input),
+			second.valueFor(input),
+			first.weightFor(input),
+			second.weightFor(input)
+		);
 	}
 	
 	private static double weightedSum( double val1, double val2, double weight1, double weight2) {
@@ -88,20 +105,6 @@ public class FeatureAsIndividualProportionate extends NRGElemPairWithFeature {
 		weight2 /= weightSum;
 		
 		return (weight1*val1) + (weight2*val2);		
-	}
-	
-	private static CacheableParams<FeatureInputSingleMemo> deriveParams( CacheableParams<FeatureInputPairMemo> params, Function<FeatureInputPairMemo,PxlMarkMemo> extractPmm, String cacheName ) {
-		return params.mapParams(
-			p -> extractInd(p, extractPmm),
-			cacheName
-		);
-	}
-	
-	private static FeatureInputSingleMemo extractInd( FeatureInputPairMemo p, Function<FeatureInputPairMemo,PxlMarkMemo> extractPmm ) {
-		return new FeatureInputSingleMemo(
-			extractPmm.apply(p),
-			p.getNrgStack()
-		);
 	}
 
 	public Feature<FeatureInputSingleMemo> getItemProportionate() {

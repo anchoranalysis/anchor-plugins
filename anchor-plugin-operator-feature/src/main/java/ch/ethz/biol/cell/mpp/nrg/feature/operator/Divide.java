@@ -30,7 +30,7 @@ package ch.ethz.biol.cell.mpp.nrg.feature.operator;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.operator.FeatureListElem;
-import org.anchoranalysis.feature.cache.CacheableParams;
+import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.calc.params.FeatureInput;
 
@@ -51,14 +51,14 @@ public class Divide<T extends FeatureInput> extends FeatureListElem<T> {
 	// END BEAN PROPERTIES
 	
 	@Override
-	public double calc( CacheableParams<T> params ) throws FeatureCalcException {
+	public double calc( SessionInput<T> input ) throws FeatureCalcException {
 		
 		int size = getList().size();
 		
-		double result = params.calc( getList().get(0) );
+		double result = input.calc( getList().get(0) );
 		
 		for (int i=1; i<size; i++) {
-			double div = params.calc( getList().get(i) );
+			double div = input.calc( getList().get(i) );
 			if (div==0.0) {
 				if (avoidDivideByZero) {
 					return divideByZeroValue;

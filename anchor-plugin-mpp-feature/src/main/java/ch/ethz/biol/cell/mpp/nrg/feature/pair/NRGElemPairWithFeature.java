@@ -26,12 +26,12 @@ package ch.ethz.biol.cell.mpp.nrg.feature.pair;
  * #L%
  */
 
-import org.anchoranalysis.anchor.mpp.feature.bean.nrg.elem.NRGElemPair;
+import org.anchoranalysis.anchor.mpp.feature.bean.nrg.elem.FeaturePairMemo;
 import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputSingleMemo;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.bean.Feature;
 
-public abstract class NRGElemPairWithFeature extends NRGElemPair {
+public abstract class NRGElemPairWithFeature extends FeaturePairMemo {
 
 	/**
 	 * 

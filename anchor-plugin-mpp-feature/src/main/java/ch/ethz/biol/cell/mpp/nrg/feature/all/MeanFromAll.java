@@ -1,6 +1,6 @@
 package ch.ethz.biol.cell.mpp.nrg.feature.all;
 
-import org.anchoranalysis.anchor.mpp.feature.bean.nrg.elem.NRGElemAll;
+import org.anchoranalysis.anchor.mpp.feature.bean.nrg.elem.FeatureAllMemo;
 import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputAllMemo;
 import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputSingleMemo;
 import org.anchoranalysis.anchor.mpp.feature.mark.MemoCollection;
@@ -34,10 +34,10 @@ import org.anchoranalysis.anchor.mpp.feature.mark.MemoCollection;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.bean.Feature;
-import org.anchoranalysis.feature.cache.CacheableParams;
+import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 
-public class MeanFromAll extends NRGElemAll {
+public class MeanFromAll extends FeatureAllMemo {
 
 	/**
 	 * 
@@ -50,7 +50,7 @@ public class MeanFromAll extends NRGElemAll {
 	// END BEAN PROPERTIES
 	
 	@Override
-	public double calc(CacheableParams<FeatureInputAllMemo> paramsCacheable)
+	public double calc(SessionInput<FeatureInputAllMemo> paramsCacheable)
 			throws FeatureCalcException {
 		
 		MemoCollection memo = paramsCacheable.getParams().getPxlPartMemo();

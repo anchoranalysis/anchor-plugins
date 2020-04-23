@@ -1,6 +1,6 @@
 package ch.ethz.biol.cell.mpp.nrg.feature.pair;
 
-import org.anchoranalysis.anchor.mpp.feature.bean.nrg.elem.NRGElemPair;
+import org.anchoranalysis.anchor.mpp.feature.bean.nrg.elem.FeaturePairMemo;
 import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputPairMemo;
 
 /*-
@@ -30,9 +30,9 @@ import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputPairMemo;
  */
 
 import org.anchoranalysis.core.geometry.Point3d;
-import org.anchoranalysis.feature.cache.CacheableParams;
+import org.anchoranalysis.feature.cache.SessionInput;
 
-public class MinDistByDim extends NRGElemPair {
+public class MinDistByDim extends FeaturePairMemo {
 
 	/**
 	 * 
@@ -40,7 +40,7 @@ public class MinDistByDim extends NRGElemPair {
 	private static final long serialVersionUID = 1L;
 
 	@Override
-	public double calc( CacheableParams<FeatureInputPairMemo> paramsCacheable ) {
+	public double calc( SessionInput<FeatureInputPairMemo> paramsCacheable ) {
 		
 		FeatureInputPairMemo params = paramsCacheable.getParams();
 				

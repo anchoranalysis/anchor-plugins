@@ -30,7 +30,7 @@ package org.anchoranalysis.plugin.image.feature.bean.obj.intersecting;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.name.provider.NamedProviderGetException;
-import org.anchoranalysis.feature.cache.CacheableParams;
+import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.cache.calculation.RslvdCachedCalculation;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.feature.bean.objmask.FeatureObjMaskSharedObjects;
@@ -71,7 +71,7 @@ public abstract class FeatureIntersectingObjs extends FeatureObjMaskSharedObject
 	}
 	
 	@Override
-	public double calc(CacheableParams<FeatureInputSingleObj> params)
+	public double calc(SessionInput<FeatureInputSingleObj> input)
 			throws FeatureCalcException {
 
 		if (getSearchObjs().size()==0) {
@@ -79,15 +79,15 @@ public abstract class FeatureIntersectingObjs extends FeatureObjMaskSharedObject
 		}
 		
 		return valueFor(
-			params,
-			params.search(
+			input,
+			input.search(
 				new CalculateIntersectingObjs(id, searchObjs)
 			)
 		);
 	}
 	
 	protected abstract double valueFor(
-		CacheableParams<FeatureInputSingleObj> params,
+		SessionInput<FeatureInputSingleObj> params,
 		RslvdCachedCalculation<ObjMaskCollection, FeatureInputSingleObj> intersecting
 	) throws FeatureCalcException;
 	

@@ -29,7 +29,7 @@ package ch.ethz.biol.cell.mpp.nrg.feature.operator;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.bean.operator.FeatureGenericSingleElem;
-import org.anchoranalysis.feature.cache.CacheableParams;
+import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.calc.params.FeatureInput;
 
@@ -46,8 +46,8 @@ public class IfNaNReplace<T extends FeatureInput> extends FeatureGenericSingleEl
 	// END BEAN PROPERTIES
 	
 	@Override
-	public double calc( CacheableParams<T> params ) throws FeatureCalcException {
-		double itemValue = params.calc( getItem() );
+	public double calc( SessionInput<T> input ) throws FeatureCalcException {
+		double itemValue = input.calc( getItem() );
 		
 		if (Double.isNaN(itemValue)) {
 			return value;

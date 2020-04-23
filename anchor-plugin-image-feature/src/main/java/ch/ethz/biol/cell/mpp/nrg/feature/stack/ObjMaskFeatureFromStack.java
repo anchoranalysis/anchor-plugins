@@ -33,7 +33,7 @@ import org.anchoranalysis.bean.annotation.SkipInit;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.feature.bean.Feature;
-import org.anchoranalysis.feature.cache.CacheableParams;
+import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
 import org.anchoranalysis.image.feature.bean.FeatureStack;
@@ -64,7 +64,7 @@ public abstract class ObjMaskFeatureFromStack extends FeatureStack {
 	private ObjMaskCollection objsCollection;
 	
 	@Override
-	public double calc(CacheableParams<FeatureInputStack> paramsCacheable) throws FeatureCalcException {
+	public double calc(SessionInput<FeatureInputStack> paramsCacheable) throws FeatureCalcException {
 		
 		Optional<ImageInitParams> sharedObjs = paramsCacheable.getParams().getSharedObjs();
 		

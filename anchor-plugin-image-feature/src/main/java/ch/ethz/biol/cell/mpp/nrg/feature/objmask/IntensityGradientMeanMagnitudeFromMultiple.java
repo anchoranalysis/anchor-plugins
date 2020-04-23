@@ -30,7 +30,7 @@ package ch.ethz.biol.cell.mpp.nrg.feature.objmask;
 import java.util.List;
 
 import org.anchoranalysis.core.geometry.Point3d;
-import org.anchoranalysis.feature.cache.CacheableParams;
+import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
 
@@ -52,12 +52,12 @@ public class IntensityGradientMeanMagnitudeFromMultiple extends IntensityGradien
 	private static final long serialVersionUID = 1L;
 
 	@Override
-	public double calc(CacheableParams<FeatureInputSingleObj> params) throws FeatureCalcException {
+	public double calc(SessionInput<FeatureInputSingleObj> input) throws FeatureCalcException {
 		
 		// Calculate the mean
 		double sum = 0.0;
 
-		List<Point3d> pnts = params.calc(
+		List<Point3d> pnts = input.calc(
 			gradientCalculation()
 		);
 		
@@ -66,11 +66,7 @@ public class IntensityGradientMeanMagnitudeFromMultiple extends IntensityGradien
 			sum += p.l2norm();
 		}
 		
-		double res = sum/pnts.size();
-		
-		//System.out.printf("IntensityGradientMean cc=%d res=%f\n", getCachedCalculationPoints().hashCode(), res );
-		
-		return res;
+		return sum/pnts.size();
 	}
 
 }

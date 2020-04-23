@@ -1,7 +1,7 @@
 package ch.ethz.biol.cell.mpp.nrg.feature.cfg;
 
 import org.anchoranalysis.anchor.mpp.bean.points.CreateMarkFromPoints;
-import org.anchoranalysis.anchor.mpp.feature.bean.nrg.elem.NRGElemAll;
+import org.anchoranalysis.anchor.mpp.feature.bean.nrg.elem.FeatureAllMemo;
 import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputAllMemo;
 import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputSingleMemo;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
@@ -39,7 +39,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.operator.Constant;
-import org.anchoranalysis.feature.cache.CacheableParams;
+import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 
@@ -51,7 +51,7 @@ import org.anchoranalysis.feature.nrg.NRGStackWithParams;
  * @author FEEHANO
  *
  */
-public class CombinePointsToMark extends NRGElemAll {
+public class CombinePointsToMark extends FeatureAllMemo {
 
 	/**
 	 * 
@@ -70,7 +70,7 @@ public class CombinePointsToMark extends NRGElemAll {
 	// END BEAN PROPERTIES
 	
 	@Override
-	public double calc(CacheableParams<FeatureInputAllMemo> paramsCacheable) throws FeatureCalcException {
+	public double calc(SessionInput<FeatureInputAllMemo> paramsCacheable) throws FeatureCalcException {
 
 		FeatureInputAllMemo params = paramsCacheable.getParams();
 		
@@ -92,7 +92,7 @@ public class CombinePointsToMark extends NRGElemAll {
 		}
 	}
 		
-	private double calcFeatureOnMarks( Mark mark, CacheableParams<FeatureInputAllMemo> paramsCacheable ) throws FeatureCalcException {
+	private double calcFeatureOnMarks( Mark mark, SessionInput<FeatureInputAllMemo> paramsCacheable ) throws FeatureCalcException {
 		
 		return paramsCacheable.calcChangeParams(
 			item,

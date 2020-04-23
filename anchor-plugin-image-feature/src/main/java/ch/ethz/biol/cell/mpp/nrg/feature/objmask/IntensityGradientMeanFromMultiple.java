@@ -33,7 +33,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.axis.AxisType;
 import org.anchoranalysis.core.axis.AxisTypeUtilities;
 import org.anchoranalysis.core.geometry.Point3d;
-import org.anchoranalysis.feature.cache.CacheableParams;
+import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
 
@@ -60,14 +60,14 @@ public class IntensityGradientMeanFromMultiple extends IntensityGradientBase {
 	// END BEAN PROPERTIES
 		
 	@Override
-	public double calc(CacheableParams<FeatureInputSingleObj> params) throws FeatureCalcException {
+	public double calc(SessionInput<FeatureInputSingleObj> input) throws FeatureCalcException {
 		
 		AxisType axisType = AxisTypeUtilities.createFromString( axis );
 		
 		// Calculate the mean
 		double sum = 0.0;
 
-		List<Point3d> pnts = params.calc(
+		List<Point3d> pnts = input.calc(
 			gradientCalculation()
 		);
 		

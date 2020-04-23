@@ -30,7 +30,7 @@ package ch.ethz.biol.cell.mpp.nrg.feature.operator;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.operator.FeatureGenericSingleElem;
-import org.anchoranalysis.feature.cache.CacheableParams;
+import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.calc.params.FeatureInput;
 
@@ -67,12 +67,12 @@ public class LinearScore<T extends FeatureInput> extends FeatureGenericSingleEle
 	
 	
 	@Override
-	public double calc( CacheableParams<T> params ) throws FeatureCalcException {
+	public double calc( SessionInput<T> input ) throws FeatureCalcException {
 		
-		double val = params.calc( getItem() );
+		double val = input.calc( getItem() );
 		
-		double min = params.calc( getItemMin() );
-		double max = params.calc( getItemMax() );
+		double min = input.calc( getItemMin() );
+		double max = input.calc( getItemMax() );
 	
 		if (minValue!=0.0) {
 			// We rescale the minvalue so that our old min value lies at minValue instead of 0.0			

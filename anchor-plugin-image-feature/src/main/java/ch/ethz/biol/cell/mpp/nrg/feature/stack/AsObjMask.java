@@ -29,7 +29,7 @@ package ch.ethz.biol.cell.mpp.nrg.feature.stack;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.bean.Feature;
-import org.anchoranalysis.feature.cache.CacheableParams;
+import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.feature.bean.FeatureStack;
 import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
@@ -59,9 +59,9 @@ public class AsObjMask extends FeatureStack {
 	// END BEAN PROPERTIES
 	
 	@Override
-	public double calc(CacheableParams<FeatureInputStack> params) throws FeatureCalcException {
+	public double calc(SessionInput<FeatureInputStack> input) throws FeatureCalcException {
 		
-		return params.calcChangeParamsDirect(
+		return input.calcChangeParamsDirect(
 			item,
 			new CalculateDeriveFeatureObjMaskParams(nrgIndex),
 			"obj"

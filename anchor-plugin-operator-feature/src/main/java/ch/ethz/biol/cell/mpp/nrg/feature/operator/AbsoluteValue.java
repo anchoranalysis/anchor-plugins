@@ -28,7 +28,7 @@ import org.anchoranalysis.feature.bean.operator.FeatureGenericSingleElem;
  * #L%
  */
 
-import org.anchoranalysis.feature.cache.CacheableParams;
+import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.calc.params.FeatureInput;
 
@@ -43,8 +43,8 @@ public class AbsoluteValue<T extends FeatureInput> extends FeatureGenericSingleE
 	// END BEAN PROPERTIES
 		
 	@Override
-	public double calc( CacheableParams<T> params ) throws FeatureCalcException {
-		return Math.abs( params.calc( getItem() ) );
+	public double calc( SessionInput<T> input ) throws FeatureCalcException {
+		return Math.abs( input.calc( getItem() ) );
 	}
 
 	@Override
