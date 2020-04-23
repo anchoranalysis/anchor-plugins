@@ -37,9 +37,7 @@ import org.anchoranalysis.feature.bean.operator.FeatureSingleElem;
 import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.params.FeatureInputDescriptor;
-import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
-import org.anchoranalysis.image.objmask.properties.ObjMaskWithProperties;
 
 public class AsObjMask extends FeatureSingleElem<FeatureInputSingleMemo,FeatureInputSingleObj> {
 
@@ -59,26 +57,11 @@ public class AsObjMask extends FeatureSingleElem<FeatureInputSingleMemo,FeatureI
 	@Override
 	public double calc(SessionInput<FeatureInputSingleMemo> input) throws FeatureCalcException {
 		return input
-			.calcChangeParams(
+			.calcChild(
 				getItem(),
-				p -> deriveParams(p),
+				new CalculateSingleObjFromMemo(regionMap,index),
 				"obj"
 			);			
-	}
-	
-	private FeatureInputSingleObj deriveParams(FeatureInputSingleMemo params) {
-		
-		ObjMaskWithProperties om = params.getPxlPartMemo().getMark().calcMask(
-			params.getNrgStack().getDimensions(),
-			regionMap.membershipWithFlagsForIndex(index),
-			BinaryValuesByte.getDefault()
-		);
-		
-		FeatureInputSingleObj paramsNew = new FeatureInputSingleObj(
-			om.getMask()
-		);
-		paramsNew.setNrgStack( params.getNrgStack() );
-		return paramsNew;
 	}
 
 	// We change the default behaviour, as we don't want to give the same paramsFactory

@@ -82,7 +82,7 @@ public abstract class ObjMaskFeatureFromStack extends FeatureStack {
 		// Calculate a feature on each obj mask
 		for( int i=0; i<objsCollection.size(); i++) {
 
-			double val = paramsCacheable.calcChangeParamsDirect(
+			double val = paramsCacheable.calcChild(
 				item,
 				new CalculateObjMaskParamsFromStack(objsCollection, i),
 				"objs_from_stack" + i

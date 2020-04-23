@@ -1,6 +1,6 @@
 package ch.ethz.biol.cell.mpp.nrg.feature.pair;
 
-import org.anchoranalysis.anchor.mpp.feature.bean.nrg.elem.CalculateSingleMemoFromPair;
+import org.anchoranalysis.anchor.mpp.feature.bean.nrg.elem.CalculateDeriveSingleMemoFromPair;
 import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputPairMemo;
 import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputSingleMemo;
 
@@ -74,7 +74,7 @@ public class FeatureAsIndividualProportionate extends NRGElemPairWithFeature {
 		}
 		
 		private double calcFeatureFor( Feature<FeatureInputSingleMemo> feature,	SessionInput<FeatureInputPairMemo> params ) throws FeatureCalcException {
-			return params.calcChangeParamsDirect(feature, ccExtract, childCacheName);
+			return params.calcChild(feature, ccExtract, childCacheName);
 		}
 	}
 	
@@ -82,11 +82,11 @@ public class FeatureAsIndividualProportionate extends NRGElemPairWithFeature {
 	public double calc( SessionInput<FeatureInputPairMemo> input ) throws FeatureCalcException {
 
 		CalcHelper first = new CalcHelper(
-			new CalculateSingleMemoFromPair(true),
+			new CalculateDeriveSingleMemoFromPair(true),
 			"obj1"
 		);
 		CalcHelper second = new CalcHelper(
-			new CalculateSingleMemoFromPair(false),
+			new CalculateDeriveSingleMemoFromPair(false),
 			"obj2"
 		);
 		

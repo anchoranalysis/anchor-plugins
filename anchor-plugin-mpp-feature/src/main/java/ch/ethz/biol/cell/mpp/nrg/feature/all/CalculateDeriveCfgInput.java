@@ -6,7 +6,7 @@ import org.anchoranalysis.core.cache.ExecuteException;
 import org.anchoranalysis.feature.cache.calculation.CachedCalculation;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
-public class CalculateDeriveCfgParams extends CachedCalculation<FeatureInputCfg, FeatureInputAllMemo> {
+public class CalculateDeriveCfgInput extends CachedCalculation<FeatureInputCfg, FeatureInputAllMemo> {
 
 	@Override
 	protected FeatureInputCfg execute(FeatureInputAllMemo params) throws ExecuteException {
@@ -18,7 +18,7 @@ public class CalculateDeriveCfgParams extends CachedCalculation<FeatureInputCfg,
 	
 	@Override
 	public boolean equals(Object other) {
-		return (other instanceof CalculateDeriveCfgParams);
+		return (other instanceof CalculateDeriveCfgInput);
 	}
 
 	@Override

@@ -9,7 +9,7 @@ import org.anchoranalysis.feature.cache.calculation.CachedCalculation;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
-public class CalculateDeriveMarkParams extends CachedCalculation<FeatureInputMark, FeatureInputAllMemo> {
+public class CalculateDeriveMarkInput extends CachedCalculation<FeatureInputMark, FeatureInputAllMemo> {
 
 	@Override
 	protected FeatureInputMark execute(FeatureInputAllMemo params) throws ExecuteException {
@@ -38,7 +38,7 @@ public class CalculateDeriveMarkParams extends CachedCalculation<FeatureInputMar
 	
 	@Override
 	public boolean equals(Object other) {
-		return (other instanceof CalculateDeriveMarkParams);
+		return (other instanceof CalculateDeriveMarkInput);
 	}
 
 	@Override

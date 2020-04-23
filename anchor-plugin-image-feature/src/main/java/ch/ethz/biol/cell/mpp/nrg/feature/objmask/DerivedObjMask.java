@@ -41,7 +41,7 @@ import org.anchoranalysis.feature.session.cache.FeatureSessionCacheCalculator;
 import org.anchoranalysis.image.feature.bean.objmask.FeatureObjMask;
 import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
 import org.anchoranalysis.image.objmask.ObjMask;
-import org.anchoranalysis.plugin.image.feature.obj.pair.CalculateParamsFromDelegateOption;
+import org.anchoranalysis.plugin.image.feature.obj.pair.CalculateInputFromDelegateOption;
 
 public abstract class DerivedObjMask extends FeatureObjMask {
 
@@ -61,12 +61,12 @@ public abstract class DerivedObjMask extends FeatureObjMask {
 	@Override
 	public double calc(SessionInput<FeatureInputSingleObj> input) throws FeatureCalcException {
 
-		return CalculateParamsFromDelegateOption.calc(
+		return CalculateInputFromDelegateOption.calc(
 			input,
 			createCachedCalculationForDerived(
 				input.cacheFor( cacheName(), FeatureInputSingleObj.class )		
 			),
-			delegate -> new CalculateParamsForDerived(delegate),
+			delegate -> new CalculateObjForDerived(delegate),
 			item,
 			cacheName(),
 			emptyValue

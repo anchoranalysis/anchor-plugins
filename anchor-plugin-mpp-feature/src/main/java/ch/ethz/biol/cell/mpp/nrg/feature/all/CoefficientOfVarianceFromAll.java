@@ -4,7 +4,7 @@ import org.anchoranalysis.anchor.mpp.feature.bean.nrg.elem.FeatureAllMemo;
 import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputAllMemo;
 import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputSingleMemo;
 import org.anchoranalysis.anchor.mpp.feature.mark.MemoCollection;
-import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
+
 
 /*
  * #%L
@@ -37,7 +37,6 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.feature.calc.params.FeatureInput;
 
 public class CoefficientOfVarianceFromAll extends FeatureAllMemo {
 
@@ -48,7 +47,7 @@ public class CoefficientOfVarianceFromAll extends FeatureAllMemo {
 
 	// START BEAN PROPERTIES
 	@BeanField
-	private Feature<FeatureInput> item;
+	private Feature<FeatureInputSingleMemo> item;
 	// END BEAN PROPERTIES
 	
 	@Override
@@ -80,9 +79,9 @@ public class CoefficientOfVarianceFromAll extends FeatureAllMemo {
 			
 			final int index = i;
 			
-			double v = paramsCacheable.calcChangeParams(
+			double v = paramsCacheable.calcChild(
 				item,
-				p -> extractInd(p, index),
+				new CalculateDeriveSingleMemoInput(index),
 				"mark"+i
 			);
 			
@@ -91,15 +90,6 @@ public class CoefficientOfVarianceFromAll extends FeatureAllMemo {
 		}
 		
 		return sum / memoMarks.size();
-	}
-	
-	private static FeatureInputSingleMemo extractInd( FeatureInputAllMemo params, int i ) {
-		
-		PxlMarkMemo pmm = params.getPxlPartMemo().getMemoForIndex(i);
-		
-		FeatureInputSingleMemo paramsInd = new FeatureInputSingleMemo(null,params.getNrgStack());
-		paramsInd.setPxlPartMemo(pmm);
-		return paramsInd;
 	}
 	
 	private static double stdDev( double vals[], double mean ) {
@@ -112,11 +102,11 @@ public class CoefficientOfVarianceFromAll extends FeatureAllMemo {
 		return Math.sqrt(sumSqDiff);
 	}
 
-	public Feature<FeatureInput> getItem() {
+	public Feature<FeatureInputSingleMemo> getItem() {
 		return item;
 	}
 
-	public void setItem(Feature<FeatureInput> item) {
+	public void setItem(Feature<FeatureInputSingleMemo> item) {
 		this.item = item;
 	}
 

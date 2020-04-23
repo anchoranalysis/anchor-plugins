@@ -70,7 +70,7 @@ public abstract class FeatureObjMaskPairOrder extends FeatureObjMaskPair {
 	
 	private double featureValFrom( SessionInput<FeatureInputPairObjs> params, boolean first, String sessionName ) throws FeatureCalcException {
 	
-		return params.calcChangeParamsDirect(
+		return params.calcChild(
 			feature,
 			new CalculateParamsFromPair(first),
 			sessionName

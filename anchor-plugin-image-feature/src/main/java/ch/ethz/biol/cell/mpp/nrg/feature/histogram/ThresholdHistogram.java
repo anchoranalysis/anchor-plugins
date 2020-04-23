@@ -33,7 +33,6 @@ import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.bean.threshold.CalculateLevel;
 import org.anchoranalysis.image.feature.bean.FeatureHistogram;
 import org.anchoranalysis.image.feature.histogram.FeatureInputHistogram;
-import org.anchoranalysis.image.histogram.Histogram;
 
 /**
  * Thresholds the histogram (using a weightedOtsu) and then applies
@@ -59,23 +58,15 @@ public class ThresholdHistogram extends FeatureHistogram {
 	// END BEAN PROPERTIES
 	
 	@Override
-	public double calc(SessionInput<FeatureInputHistogram> paramsCacheable) throws FeatureCalcException {
-
-		Histogram thresholded = paramsCacheable.calc(
-			new CalculateOtsuThresholdedHistogram(calculateLevel, getLogger())	
-		);
+	public double calc(SessionInput<FeatureInputHistogram> input) throws FeatureCalcException {
 		
-		return paramsCacheable.calcChangeParams(
+		return input.calcChild(
 			item,
-			p -> createHistogramParams(p, thresholded),
+			new CalculateHistogramInputFromHistogram(
+				new CalculateOtsuThresholdedHistogram(calculateLevel, getLogger()),
+				input
+			),
 			"thresholdedHist"
-		);
-	}
-	
-	private FeatureInputHistogram createHistogramParams(FeatureInputHistogram params, Histogram thresholded) {
-		return new FeatureInputHistogram(
-			thresholded,
-			params.getRes()
 		);
 	}
 
@@ -94,5 +85,4 @@ public class ThresholdHistogram extends FeatureHistogram {
 	public void setCalculateLevel(CalculateLevel calculateLevel) {
 		this.calculateLevel = calculateLevel;
 	}
-
 }

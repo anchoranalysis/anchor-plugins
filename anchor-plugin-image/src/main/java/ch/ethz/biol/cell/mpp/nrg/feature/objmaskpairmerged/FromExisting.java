@@ -61,9 +61,9 @@ public abstract class FromExisting extends FeatureObjMaskPairMerged {
 			throws FeatureCalcException {
 		
 		String cacheName = cacheNameToUse();
-		return input.calcChangeParamsDirect(
+		return input.calcChild(
 			item,
-			new CalculateObjMaskParamsFromMerged(
+			new CalculateDeriveSingleObjFromMerged(
 				p -> selectObjMask(p),
 				cacheName	
 			),

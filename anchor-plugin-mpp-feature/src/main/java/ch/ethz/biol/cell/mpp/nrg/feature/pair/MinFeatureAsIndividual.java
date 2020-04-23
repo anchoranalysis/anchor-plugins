@@ -1,10 +1,7 @@
 package ch.ethz.biol.cell.mpp.nrg.feature.pair;
 
-import java.util.function.Function;
-
 import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputPairMemo;
-import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputSingleMemo;
-import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
+
 
 /*
  * #%L
@@ -44,31 +41,23 @@ public class MinFeatureAsIndividual extends NRGElemPairWithFeature {
 	private static final long serialVersionUID = 1L;
 
 	@Override
-	public double calc( SessionInput<FeatureInputPairMemo> params ) throws FeatureCalcException {
+	public double calc( SessionInput<FeatureInputPairMemo> input ) throws FeatureCalcException {
 
 		return Math.min(
-			calcForInd( params, p->p.getObj1(), "1" ),
-			calcForInd( params, p->p.getObj2(), "2" )
+			calcForInd( input, true ),
+			calcForInd( input, false )
 		);
 	}
 	
 	private double calcForInd(
-		SessionInput<FeatureInputPairMemo> paramsCacheable,
-		Function<FeatureInputPairMemo,PxlMarkMemo> pmmFunc,
-		String suffix
+		SessionInput<FeatureInputPairMemo> input,
+		boolean first
 	) throws FeatureCalcException {
 		
-		return paramsCacheable.calcChangeParams(
+		return input.calcChild(
 			getItem(),
-			p -> deriveParams(p, pmmFunc),
-			"pair_obj" + suffix
-		);
-	}
-	
-	private static FeatureInputSingleMemo deriveParams( FeatureInputPairMemo params, Function<FeatureInputPairMemo,PxlMarkMemo> pmmFunc ) {
-		return new FeatureInputSingleMemo(
-			pmmFunc.apply(params),
-			params.getNrgStack()
+			new CalculateDeriveSingleInputFromPair(first),
+			first ? "first" : "second"
 		);
 	}
 }

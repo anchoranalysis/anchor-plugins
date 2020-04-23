@@ -45,14 +45,11 @@ public class AsMark extends FeatureSingleElem<FeatureInputSingleMemo,FeatureInpu
 	@Override
 	public double calc(SessionInput<FeatureInputSingleMemo> input) throws FeatureCalcException {
 		return input
-			.calcChangeParams( getItem(), AsMark::deriveParams, "mark" );
-	}
-	
-	private static FeatureInputMark deriveParams( FeatureInputSingleMemo params ) {
-		return new FeatureInputMark(
-			params.getPxlPartMemo().getMark(),
-			params.getDimensions().getRes()
-		);
+			.calcChild(
+				getItem(),
+				new CalculateDeriveMarkFromMemo(),
+				"mark"
+			);
 	}
 
 	// We change the default behaviour, as we don't want to give the same paramsFactory

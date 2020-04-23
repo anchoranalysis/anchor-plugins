@@ -79,7 +79,7 @@ public abstract class FeatureIntersectingObjsSingleElem extends FeatureIntersect
 			
 			final int index = i;
 			
-			double res = paramsExst.calcChangeParamsDirect(
+			double res = paramsExst.calcChild(
 				item,
 				new CalculateIntersecting(ccIntersecting, index),
 				"intersecting_obj_" + i
