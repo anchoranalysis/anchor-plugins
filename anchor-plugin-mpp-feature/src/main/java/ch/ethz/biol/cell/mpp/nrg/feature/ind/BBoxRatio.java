@@ -1,7 +1,7 @@
 package ch.ethz.biol.cell.mpp.nrg.feature.ind;
 
 import org.anchoranalysis.anchor.mpp.feature.bean.nrg.elem.NRGElemInd;
-import org.anchoranalysis.anchor.mpp.feature.nrg.elem.NRGElemIndCalcParams;
+import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputSingleMemo;
 import org.anchoranalysis.anchor.mpp.mark.GlobalRegionIdentifiers;
 import org.anchoranalysis.anchor.mpp.mark.MarkAbstractRadii;
 
@@ -42,7 +42,7 @@ public class BBoxRatio extends NRGElemInd {
 	private static final long serialVersionUID = -4380227015245049115L;
 
 	@Override
-	public double calcCast(NRGElemIndCalcParams params) throws FeatureCalcException {
+	public double calcCast(FeatureInputSingleMemo params) throws FeatureCalcException {
 		
 		MarkAbstractRadii markCast = (MarkAbstractRadii) params.getPxlPartMemo().getMark();
 		

@@ -1,7 +1,7 @@
 package ch.ethz.biol.cell.mpp.nrg.feature.pair;
 
 import org.anchoranalysis.anchor.mpp.feature.bean.nrg.elem.NRGElemPair;
-import org.anchoranalysis.anchor.mpp.feature.nrg.elem.NRGElemPairCalcParams;
+import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputPairMemo;
 import org.anchoranalysis.anchor.mpp.mark.GlobalRegionIdentifiers;
 import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
 
@@ -56,9 +56,9 @@ public class OverlapRatioNonModalValuesTwoRegions extends NRGElemPair {
 	}
 	
 	@Override
-	public double calc( CacheableParams<NRGElemPairCalcParams> paramsCacheable ) throws FeatureCalcException {
+	public double calc( CacheableParams<FeatureInputPairMemo> paramsCacheable ) throws FeatureCalcException {
 		
-		NRGElemPairCalcParams params = paramsCacheable.getParams();
+		FeatureInputPairMemo params = paramsCacheable.getParams();
 		
 		return calcOverlapRatioMin(
 			params.getObj1(),
@@ -70,7 +70,7 @@ public class OverlapRatioNonModalValuesTwoRegions extends NRGElemPair {
 		);
 	}
 
-	private double overlapFor( CacheableParams<NRGElemPairCalcParams> paramsCacheable, int regionID ) throws FeatureCalcException {
+	private double overlapFor( CacheableParams<FeatureInputPairMemo> paramsCacheable, int regionID ) throws FeatureCalcException {
 		return paramsCacheable.calc(
 			new OverlapCalculation(regionID)	
 		);

@@ -4,7 +4,7 @@ import org.anchoranalysis.anchor.mpp.bean.init.MPPInitParams;
 import org.anchoranalysis.anchor.mpp.bean.proposer.MarkMergeProposer;
 import org.anchoranalysis.anchor.mpp.bean.regionmap.RegionMap;
 import org.anchoranalysis.anchor.mpp.feature.mark.ListUpdatableMarkSetCollection;
-import org.anchoranalysis.anchor.mpp.feature.mark.PxlMarkMemoList;
+import org.anchoranalysis.anchor.mpp.feature.mark.MemoList;
 import org.anchoranalysis.anchor.mpp.feature.nrg.cfg.CfgNRGPixelized;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.anchor.mpp.mark.set.UpdateMarkSetException;
@@ -193,7 +193,7 @@ public class KernelMerge extends KernelPosNeg<CfgNRGPixelized> {
 	@Override
 	public void updateAfterAccpt( ListUpdatableMarkSetCollection updatableMarkSetCollection, CfgNRGPixelized exst, CfgNRGPixelized accptd ) throws UpdateMarkSetException {
 		
-		PxlMarkMemoList memoList = exst.createDuplicatePxlMarkMemoList();
+		MemoList memoList = exst.createDuplicatePxlMarkMemoList();
 		
 		int rmvIndex1 = exst.getCfg().indexOf( pair.getSource() );
 		int rmvIndex2 = exst.getCfg().indexOf( pair.getDestination() );

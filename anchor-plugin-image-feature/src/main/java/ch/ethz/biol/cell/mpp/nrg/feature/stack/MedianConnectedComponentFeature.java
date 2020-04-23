@@ -36,8 +36,8 @@ import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 import org.anchoranalysis.image.binary.BinaryChnl;
 import org.anchoranalysis.image.binary.values.BinaryValues;
 import org.anchoranalysis.image.feature.bean.FeatureStack;
-import org.anchoranalysis.image.feature.objmask.FeatureObjMaskParams;
-import org.anchoranalysis.image.feature.stack.FeatureStackParams;
+import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
+import org.anchoranalysis.image.feature.stack.FeatureInputStack;
 import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.image.objmask.ObjMaskCollection;
 import org.anchoranalysis.image.objmask.factory.CreateFromConnectedComponentsFactory;
@@ -55,14 +55,14 @@ public class MedianConnectedComponentFeature extends FeatureStack {
 	
 	// START BEAN PROPERTIES
 	@BeanField
-	private Feature<FeatureObjMaskParams> item;
+	private Feature<FeatureInputSingleObj> item;
 	
 	@BeanField
 	private int nrgChnlIndex = 0;
 	// END BEAN PROPERTIES
 
 	@Override
-	public double calc(CacheableParams<FeatureStackParams> params) throws FeatureCalcException {
+	public double calc(CacheableParams<FeatureInputStack> params) throws FeatureCalcException {
 
 		ObjMaskCollection omc = createObjs(
 			params.getParams().getNrgStack()
@@ -105,18 +105,18 @@ public class MedianConnectedComponentFeature extends FeatureStack {
 		}
 	}
 	
-	private static FeatureObjMaskParams extractParams( FeatureStackParams params, ObjMask om ) {
-		FeatureObjMaskParams paramsObj = new FeatureObjMaskParams();
+	private static FeatureInputSingleObj extractParams( FeatureInputStack params, ObjMask om ) {
+		FeatureInputSingleObj paramsObj = new FeatureInputSingleObj();
 		paramsObj.setNrgStack( params.getNrgStack() );
 		paramsObj.setObjMask(om);
 		return paramsObj;
 	}
 
-	public Feature<FeatureObjMaskParams> getItem() {
+	public Feature<FeatureInputSingleObj> getItem() {
 		return item;
 	}
 
-	public void setItem(Feature<FeatureObjMaskParams> item) {
+	public void setItem(Feature<FeatureInputSingleObj> item) {
 		this.item = item;
 	}
 

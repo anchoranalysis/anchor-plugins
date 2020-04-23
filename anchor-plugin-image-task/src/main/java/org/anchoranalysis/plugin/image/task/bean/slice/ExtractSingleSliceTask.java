@@ -44,10 +44,10 @@ import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.bean.list.FeatureListProvider;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
-import org.anchoranalysis.feature.session.SessionFactory;
+import org.anchoranalysis.feature.session.FeatureSession;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorSingle;
 import org.anchoranalysis.image.bean.provider.stack.StackProvider;
-import org.anchoranalysis.image.feature.stack.FeatureStackParams;
+import org.anchoranalysis.image.feature.stack.FeatureInputStack;
 import org.anchoranalysis.image.io.input.NamedChnlsInput;
 import org.anchoranalysis.image.io.stack.StackCollectionOutputter;
 import org.anchoranalysis.image.stack.NamedImgStackCollection;
@@ -76,7 +76,7 @@ public class ExtractSingleSliceTask extends Task<NamedChnlsInput,SharedStateSele
 	
 	// START BEAN PROPERTIES
 	@BeanField @SkipInit
-	private FeatureListProvider<FeatureStackParams> scoreProvider;
+	private FeatureListProvider<FeatureInputStack> scoreProvider;
 	
 	@BeanField
 	private StackProvider nrgStackProvider;
@@ -143,7 +143,7 @@ public class ExtractSingleSliceTask extends Task<NamedChnlsInput,SharedStateSele
 	 * @throws OperationFailedException */
 	private int selectSlice( NRGStackWithParams nrgStack, LogErrorReporter logErrorReporter, String imageName, SharedStateSelectedSlice params ) throws OperationFailedException {
 		
-		Feature<FeatureStackParams> scoreFeature = extractScoreFeature();
+		Feature<FeatureInputStack> scoreFeature = extractScoreFeature();
 		
 		double[] scores = calcScoreForEachSlice( scoreFeature, nrgStack, logErrorReporter );
 		
@@ -197,13 +197,13 @@ public class ExtractSingleSliceTask extends Task<NamedChnlsInput,SharedStateSele
 	}
 		
 	private double[] calcScoreForEachSlice(
-		Feature<FeatureStackParams> scoreFeature,
+		Feature<FeatureInputStack> scoreFeature,
 		NRGStackWithParams nrgStack,
 		LogErrorReporter logErrorReporter
 	) throws OperationFailedException {
 
 		try {
-			FeatureCalculatorSingle<FeatureStackParams> session = SessionFactory.createAndStart(
+			FeatureCalculatorSingle<FeatureInputStack> session = FeatureSession.with(
 				scoreFeature,
 				logErrorReporter
 			);
@@ -216,7 +216,7 @@ public class ExtractSingleSliceTask extends Task<NamedChnlsInput,SharedStateSele
 				
 				// Calculate feature for this slice
 				double featVal = session.calcOne(
-					new FeatureStackParams(nrgStackSlice.getNrgStack())
+					new FeatureInputStack(nrgStackSlice.getNrgStack())
 				);
 				
 				logErrorReporter.getLogReporter().logFormatted("Slice %3d has score %f", z, featVal);
@@ -231,9 +231,9 @@ public class ExtractSingleSliceTask extends Task<NamedChnlsInput,SharedStateSele
 		}
 	}
 	
-	private Feature<FeatureStackParams> extractScoreFeature() throws OperationFailedException {
+	private Feature<FeatureInputStack> extractScoreFeature() throws OperationFailedException {
 		try {
-			FeatureList<FeatureStackParams> features = scoreProvider.create();
+			FeatureList<FeatureInputStack> features = scoreProvider.create();
 			if (features.size()!=1) {
 				throw new OperationFailedException(
 					String.format("scoreProvider should return a list with exactly 1 feature, instead it has %d features.", features.size() )
@@ -250,11 +250,11 @@ public class ExtractSingleSliceTask extends Task<NamedChnlsInput,SharedStateSele
 		return false;
 	}
 
-	public FeatureListProvider<FeatureStackParams> getScoreProvider() {
+	public FeatureListProvider<FeatureInputStack> getScoreProvider() {
 		return scoreProvider;
 	}
 
-	public void setScoreProvider(FeatureListProvider<FeatureStackParams> scoreProvider) {
+	public void setScoreProvider(FeatureListProvider<FeatureInputStack> scoreProvider) {
 		this.scoreProvider = scoreProvider;
 	}
 

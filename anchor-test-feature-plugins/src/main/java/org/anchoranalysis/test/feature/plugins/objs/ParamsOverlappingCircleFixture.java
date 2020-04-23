@@ -28,7 +28,7 @@ import org.anchoranalysis.core.geometry.Point2i;
  * #L%
  */
 
-import org.anchoranalysis.image.feature.objmask.pair.FeatureObjMaskPairParams;
+import org.anchoranalysis.image.feature.objmask.pair.FeatureInputPairObjs;
 
 public class ParamsOverlappingCircleFixture {
 	
@@ -47,8 +47,8 @@ public class ParamsOverlappingCircleFixture {
 	 * @param sameSize iff TRUE the object-masks are the same size, otherwise not
 	 * @return the params populated with the two masks
 	 */
-	public static FeatureObjMaskPairParams twoOverlappingCircles( boolean sameSize ) {
-		FeatureObjMaskPairParams params = new FeatureObjMaskPairParams(
+	public static FeatureInputPairObjs twoOverlappingCircles( boolean sameSize ) {
+		FeatureInputPairObjs params = new FeatureInputPairObjs(
 			CircleObjMaskFixture.circleAt(
 				new Point2i( DEFAULT_POS_X, DEFAULT_POS_Y ),
 				DEFAULT_CIRCLE_RADIUS
@@ -68,8 +68,8 @@ public class ParamsOverlappingCircleFixture {
 	 * @param sameSize iff TRUE the object-masks are the same size, otherwise not
 	 * @return the params populated with the two masks
 	 */
-	public static FeatureObjMaskPairParams twoNonOverlappingCircles( boolean sameSize) {
-		FeatureObjMaskPairParams params = new FeatureObjMaskPairParams(
+	public static FeatureInputPairObjs twoNonOverlappingCircles( boolean sameSize) {
+		FeatureInputPairObjs params = new FeatureInputPairObjs(
 			CircleObjMaskFixture.circleAt(
 				new Point2i( DEFAULT_POS_X, DEFAULT_POS_Y ),
 				DEFAULT_CIRCLE_RADIUS

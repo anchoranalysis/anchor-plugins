@@ -39,12 +39,12 @@ import org.anchoranalysis.feature.bean.provider.FeatureProvider;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.init.FeatureInitParams;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
-import org.anchoranalysis.feature.session.SessionFactory;
+import org.anchoranalysis.feature.session.FeatureSession;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorSingle;
 import org.anchoranalysis.image.bean.objmask.filter.ObjMaskFilter;
 import org.anchoranalysis.image.bean.provider.ChnlProvider;
 import org.anchoranalysis.image.extent.ImageDim;
-import org.anchoranalysis.image.feature.objmask.FeatureObjMaskParams;
+import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
 import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.image.objmask.ObjMaskCollection;
 
@@ -62,7 +62,7 @@ public class ObjMaskFilterFeatureRelationDiscardOutliers extends ObjMaskFilter {
 	
 	// START BEAN PROPERTIES
 	@BeanField
-	private FeatureProvider<FeatureObjMaskParams> featureProvider;
+	private FeatureProvider<FeatureInputSingleObj> featureProvider;
 	
 	@BeanField @OptionalBean
 	private ChnlProvider chnlProvider;
@@ -87,8 +87,8 @@ public class ObjMaskFilterFeatureRelationDiscardOutliers extends ObjMaskFilter {
 		}
 		
 		// Initialization
-		FeatureCalculatorSingle<FeatureObjMaskParams> session;
-		Feature<FeatureObjMaskParams> feature;
+		FeatureCalculatorSingle<FeatureInputSingleObj> session;
+		Feature<FeatureInputSingleObj> feature;
 		NRGStackWithParams nrgStack = null;
 		{
 			try {
@@ -98,7 +98,7 @@ public class ObjMaskFilterFeatureRelationDiscardOutliers extends ObjMaskFilter {
 			}
 			
 			try {
-				session = SessionFactory.createAndStart(
+				session = FeatureSession.with(
 					feature,
 					new FeatureInitParams(),
 					getSharedObjects().getFeature().getSharedFeatureSet().downcast(),
@@ -124,7 +124,7 @@ public class ObjMaskFilterFeatureRelationDiscardOutliers extends ObjMaskFilter {
 			double featureVal;
 			try {
 				featureVal = session.calcOne(
-					new FeatureObjMaskParams(om, nrgStack)
+					new FeatureInputSingleObj(om, nrgStack)
 				);
 			} catch (FeatureCalcException e) {
 				throw new OperationFailedException(e);
@@ -176,11 +176,11 @@ public class ObjMaskFilterFeatureRelationDiscardOutliers extends ObjMaskFilter {
 		}
 	}
 	
-	public FeatureProvider<FeatureObjMaskParams> getFeatureProvider() {
+	public FeatureProvider<FeatureInputSingleObj> getFeatureProvider() {
 		return featureProvider;
 	}
 
-	public void setFeatureProvider(FeatureProvider<FeatureObjMaskParams> featureProvider) {
+	public void setFeatureProvider(FeatureProvider<FeatureInputSingleObj> featureProvider) {
 		this.featureProvider = featureProvider;
 	}
 	public ChnlProvider getChnlProvider() {

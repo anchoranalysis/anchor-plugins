@@ -1,6 +1,6 @@
 package ch.ethz.biol.cell.mpp.nrg.feature.resultsvectorcollection;
 
-import org.anchoranalysis.anchor.mpp.feature.bean.results.FeatureResultsVectorCollection;
+import org.anchoranalysis.anchor.mpp.feature.bean.results.FeatureResults;
 
 /*-
  * #%L
@@ -29,9 +29,9 @@ import org.anchoranalysis.anchor.mpp.feature.bean.results.FeatureResultsVectorCo
  */
 
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.feature.resultsvectorcollection.FeatureResultsVectorCollectionParams;
+import org.anchoranalysis.feature.resultsvectorcollection.FeatureInputResults;
 
-public class Size extends FeatureResultsVectorCollection {
+public class Size extends FeatureResults {
 
 	/**
 	 * 
@@ -39,7 +39,7 @@ public class Size extends FeatureResultsVectorCollection {
 	private static final long serialVersionUID = 1L;
 
 	@Override
-	public double calc(FeatureResultsVectorCollectionParams params)
+	public double calc(FeatureInputResults params)
 			throws FeatureCalcException {
 		return params.getResultsVectorCollection().size();
 	}

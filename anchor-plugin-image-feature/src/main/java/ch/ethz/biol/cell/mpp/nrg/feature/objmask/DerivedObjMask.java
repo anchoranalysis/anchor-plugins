@@ -36,10 +36,10 @@ import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.cache.CacheableParams;
 import org.anchoranalysis.feature.cache.calculation.CachedCalculation;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
+import org.anchoranalysis.feature.calc.params.FeatureInput;
 import org.anchoranalysis.feature.session.cache.FeatureSessionCacheCalculator;
 import org.anchoranalysis.image.feature.bean.objmask.FeatureObjMask;
-import org.anchoranalysis.image.feature.objmask.FeatureObjMaskParams;
+import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
 import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.plugin.image.feature.obj.pair.CalculateParamsFromDelegateOption;
 
@@ -55,16 +55,16 @@ public abstract class DerivedObjMask extends FeatureObjMask {
 	private double emptyValue = 255;
 	
 	@BeanField
-	private Feature<FeatureObjMaskParams> item;
+	private Feature<FeatureInputSingleObj> item;
 	// END BEAN PROPERTIES
 
 	@Override
-	public double calc(CacheableParams<FeatureObjMaskParams> params) throws FeatureCalcException {
+	public double calc(CacheableParams<FeatureInputSingleObj> params) throws FeatureCalcException {
 
 		return CalculateParamsFromDelegateOption.calc(
 			params,
 			createCachedCalculationForDerived(
-				params.cacheFor( cacheName(), FeatureObjMaskParams.class )		
+				params.cacheFor( cacheName(), FeatureInputSingleObj.class )		
 			),
 			delegate -> new CalculateParamsForDerived(delegate),
 			item,
@@ -74,9 +74,9 @@ public abstract class DerivedObjMask extends FeatureObjMask {
 	}
 	
 	@Override
-	public CacheableParams<FeatureCalcParams> transformParams(
-			CacheableParams<FeatureObjMaskParams> params,
-			Feature<FeatureCalcParams> dependentFeature
+	public CacheableParams<FeatureInput> transformParams(
+			CacheableParams<FeatureInputSingleObj> params,
+			Feature<FeatureInput> dependentFeature
 	) throws FeatureCalcException {
 		//try {
 			/*ObjMask omDerived = derivedObjMask(params);
@@ -99,7 +99,7 @@ public abstract class DerivedObjMask extends FeatureObjMask {
 		}*/			
 	}
 	
-	protected abstract CachedCalculation<ObjMask,FeatureObjMaskParams> createCachedCalculationForDerived( FeatureSessionCacheCalculator<FeatureObjMaskParams> session ) throws FeatureCalcException;
+	protected abstract CachedCalculation<ObjMask,FeatureInputSingleObj> createCachedCalculationForDerived( FeatureSessionCacheCalculator<FeatureInputSingleObj> session ) throws FeatureCalcException;
 	
 	protected abstract String cacheName();
 	
@@ -111,11 +111,11 @@ public abstract class DerivedObjMask extends FeatureObjMask {
 		this.emptyValue = emptyValue;
 	}
 
-	public Feature<FeatureObjMaskParams> getItem() {
+	public Feature<FeatureInputSingleObj> getItem() {
 		return item;
 	}
 
-	public void setItem(Feature<FeatureObjMaskParams> item) {
+	public void setItem(Feature<FeatureInputSingleObj> item) {
 		this.item = item;
 	}
 }

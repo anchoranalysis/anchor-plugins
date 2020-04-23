@@ -1,7 +1,7 @@
 package ch.ethz.biol.cell.mpp.nrg.feature.mark;
 
 import org.anchoranalysis.anchor.mpp.feature.bean.mark.FeatureMark;
-import org.anchoranalysis.anchor.mpp.feature.bean.mark.FeatureMarkParams;
+import org.anchoranalysis.anchor.mpp.feature.bean.mark.FeatureInputMark;
 import org.anchoranalysis.anchor.mpp.mark.MarkAbstractRadii;
 
 /*
@@ -53,7 +53,7 @@ public class RadiiRatio extends FeatureMark {
 	private ImageRes uniformRes = new ImageRes();
 
 	@Override
-	public double calc(FeatureMarkParams params) throws FeatureCalcException {
+	public double calc(FeatureInputMark params) throws FeatureCalcException {
 		
 		
 		MarkAbstractRadii markCast = (MarkAbstractRadii) params.getMark();

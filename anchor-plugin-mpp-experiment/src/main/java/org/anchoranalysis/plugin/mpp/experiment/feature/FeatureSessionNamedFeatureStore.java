@@ -31,18 +31,18 @@ import org.anchoranalysis.core.error.reporter.ErrorReporter;
 import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.calc.ResultsVector;
-import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
+import org.anchoranalysis.feature.calc.params.FeatureInput;
 import org.anchoranalysis.feature.init.FeatureInitParams;
 import org.anchoranalysis.feature.list.NamedFeatureStore;
 import org.anchoranalysis.feature.name.FeatureNameList;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
-import org.anchoranalysis.feature.session.SessionFactory;
+import org.anchoranalysis.feature.session.FeatureSession;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorMulti;
 import org.anchoranalysis.feature.shared.SharedFeatureSet;
 import org.anchoranalysis.feature.shared.SharedFeaturesInitParams;
 import org.anchoranalysis.image.init.ImageInitParams;
 
-public class FeatureSessionNamedFeatureStore<T extends FeatureCalcParams> extends FeatureSessionFlexiFeatureTable<T> {
+public class FeatureSessionNamedFeatureStore<T extends FeatureInput> extends FeatureSessionFlexiFeatureTable<T> {
 
 	private  FeatureCalculatorMulti<T> session;
 
@@ -67,7 +67,7 @@ public class FeatureSessionNamedFeatureStore<T extends FeatureCalcParams> extend
 		);
 		
 		try {
-			session = SessionFactory.createAndStart(
+			session = FeatureSession.with(
 				namedFeatureStore.listFeatures(),
 				featureInitParams,
 				sharedFeatures,

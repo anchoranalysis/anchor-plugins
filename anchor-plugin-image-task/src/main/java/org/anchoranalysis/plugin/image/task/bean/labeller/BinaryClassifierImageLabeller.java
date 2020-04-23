@@ -42,7 +42,7 @@ import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.list.NamedFeatureStore;
 import org.anchoranalysis.feature.list.NamedFeatureStoreFactory;
 import org.anchoranalysis.image.bean.provider.stack.StackProvider;
-import org.anchoranalysis.image.feature.stack.FeatureStackParams;
+import org.anchoranalysis.image.feature.stack.FeatureInputStack;
 import org.anchoranalysis.image.io.input.ProvidesStackInput;
 import org.anchoranalysis.plugin.image.task.imagefeature.calculator.FeatureCalculatorStackInputFromStore;
 
@@ -55,10 +55,10 @@ public class BinaryClassifierImageLabeller extends BinaryOutcomeImageLabeller<Ob
 	
 	// START BEAN PROPERTIES
 	@BeanField @SkipInit
-	private FeatureListProvider<FeatureStackParams> classifierProvider;
+	private FeatureListProvider<FeatureInputStack> classifierProvider;
 	
 	@BeanField @NonEmpty
-	private List<NamedBean<FeatureListProvider<FeatureStackParams>>> listFeatures = new ArrayList<>();
+	private List<NamedBean<FeatureListProvider<FeatureInputStack>>> listFeatures = new ArrayList<>();
 	
 	@BeanField
 	private StackProvider nrgStackProvider;
@@ -78,7 +78,7 @@ public class BinaryClassifierImageLabeller extends BinaryOutcomeImageLabeller<Ob
 	) throws OperationFailedException {
 		
 		try {
-			NamedFeatureStore<FeatureStackParams> featureStore = NamedFeatureStoreFactory.createNamedFeatureList(
+			NamedFeatureStore<FeatureInputStack> featureStore = NamedFeatureStoreFactory.createNamedFeatureList(
 				listFeatures
 			);
 			
@@ -105,20 +105,20 @@ public class BinaryClassifierImageLabeller extends BinaryOutcomeImageLabeller<Ob
 		}
 	}
 	
-	public FeatureListProvider<FeatureStackParams> getClassifierProvider() {
+	public FeatureListProvider<FeatureInputStack> getClassifierProvider() {
 		return classifierProvider;
 	}
 
-	public void setClassifierProvider(FeatureListProvider<FeatureStackParams> classifierProvider) {
+	public void setClassifierProvider(FeatureListProvider<FeatureInputStack> classifierProvider) {
 		this.classifierProvider = classifierProvider;
 	}
 	
-	public List<NamedBean<FeatureListProvider<FeatureStackParams>>> getListFeatures() {
+	public List<NamedBean<FeatureListProvider<FeatureInputStack>>> getListFeatures() {
 		return listFeatures;
 	}
 
 	public void setListFeatures(
-			List<NamedBean<FeatureListProvider<FeatureStackParams>>> listFeatures) {
+			List<NamedBean<FeatureListProvider<FeatureInputStack>>> listFeatures) {
 		this.listFeatures = listFeatures;
 	}
 

@@ -4,15 +4,15 @@ import java.util.function.Function;
 
 import org.anchoranalysis.core.cache.ExecuteException;
 import org.anchoranalysis.feature.cache.calculation.CachedCalculation;
-import org.anchoranalysis.image.feature.objmask.FeatureObjMaskParams;
-import org.anchoranalysis.image.feature.objmask.pair.merged.FeatureObjMaskPairMergedParams;
+import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
+import org.anchoranalysis.image.feature.objmask.pair.merged.FeatureInputPairObjsMerged;
 import org.anchoranalysis.image.objmask.ObjMask;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
-class CalculateObjMaskParamsFromMerged extends CachedCalculation<FeatureObjMaskParams, FeatureObjMaskPairMergedParams> {
+class CalculateObjMaskParamsFromMerged extends CachedCalculation<FeatureInputSingleObj, FeatureInputPairObjsMerged> {
 
-	private Function<FeatureObjMaskPairMergedParams, ObjMask> extractObjFunc;
+	private Function<FeatureInputPairObjsMerged, ObjMask> extractObjFunc;
 	private String uniqueIDForFunction;
 	
 	
@@ -24,7 +24,7 @@ class CalculateObjMaskParamsFromMerged extends CachedCalculation<FeatureObjMaskP
 	 * @param extractObjFunc this function is used for extracting a particular object from the FeatureObjMaskPairMergedParams
 	 * @param uniqueIDForFunction so as to avoid relying on hashCode() and equals() on extractObjFunc, this field is used as a unique ID instead for each type of lambda
 	 */
-	public CalculateObjMaskParamsFromMerged(Function<FeatureObjMaskPairMergedParams, ObjMask> extractObjFunc,
+	public CalculateObjMaskParamsFromMerged(Function<FeatureInputPairObjsMerged, ObjMask> extractObjFunc,
 			String uniqueIDForFunction) {
 		super();
 		this.extractObjFunc = extractObjFunc;
@@ -32,13 +32,13 @@ class CalculateObjMaskParamsFromMerged extends CachedCalculation<FeatureObjMaskP
 	}
 
 	@Override
-	protected FeatureObjMaskParams execute(FeatureObjMaskPairMergedParams params) throws ExecuteException {
+	protected FeatureInputSingleObj execute(FeatureInputPairObjsMerged params) throws ExecuteException {
 		
 		ObjMask omSelected = extractObjFunc.apply(params);
 		
-		FeatureObjMaskParams paramsNew = new FeatureObjMaskParams( omSelected );
+		FeatureInputSingleObj paramsNew = new FeatureInputSingleObj( omSelected );
 		paramsNew.setNrgStack( params.getNrgStack() );
-		assert( paramsNew instanceof FeatureObjMaskParams);
+		assert( paramsNew instanceof FeatureInputSingleObj);
 		return paramsNew;
 	}
 

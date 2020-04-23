@@ -37,7 +37,7 @@ import org.anchoranalysis.feature.session.calculator.FeatureCalculatorSingle;
 import org.anchoranalysis.image.bean.objmask.match.ObjMaskMatcher;
 import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
 import org.anchoranalysis.image.feature.bean.evaluator.FeatureEvaluator;
-import org.anchoranalysis.image.feature.objmask.FeatureObjMaskParams;
+import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
 import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.image.objmask.ObjMaskCollection;
 import org.anchoranalysis.image.objmask.match.ObjWithMatches;
@@ -58,7 +58,7 @@ public class ObjMaskProviderFindMaxFeatureInMatchedObjects extends ObjMaskProvid
 	private ObjMaskMatcher objMaskMatcher;
 	
 	@BeanField
-	private FeatureEvaluator<FeatureObjMaskParams> featureEvaluator;
+	private FeatureEvaluator<FeatureInputSingleObj> featureEvaluator;
 	// END BEAN PROPERTIES
 
 	@Override
@@ -66,7 +66,7 @@ public class ObjMaskProviderFindMaxFeatureInMatchedObjects extends ObjMaskProvid
 		
 		ObjMaskCollection in = objs.create();
 		
-		FeatureCalculatorSingle<FeatureObjMaskParams> session;
+		FeatureCalculatorSingle<FeatureInputSingleObj> session;
 		try {
 			session = featureEvaluator.createAndStartSession();
 		} catch (OperationFailedException e) {
@@ -94,14 +94,14 @@ public class ObjMaskProviderFindMaxFeatureInMatchedObjects extends ObjMaskProvid
 		return out;
 	}
 	
-	private ObjMask findMax( FeatureCalculatorSingle<FeatureObjMaskParams> session, ObjMaskCollection objs ) throws FeatureCalcException {
+	private ObjMask findMax( FeatureCalculatorSingle<FeatureInputSingleObj> session, ObjMaskCollection objs ) throws FeatureCalcException {
 		ObjMask max = null;
 		double maxVal = 0;
 		
 		for( ObjMask om : objs ) {
 			
 			double featureVal = session.calcOne(
-				new FeatureObjMaskParams(om)
+				new FeatureInputSingleObj(om)
 			);
 			
 			if (max==null || featureVal>maxVal) {
@@ -121,11 +121,11 @@ public class ObjMaskProviderFindMaxFeatureInMatchedObjects extends ObjMaskProvid
 		this.objs = objs;
 	}
 
-	public FeatureEvaluator<FeatureObjMaskParams> getFeatureEvaluator() {
+	public FeatureEvaluator<FeatureInputSingleObj> getFeatureEvaluator() {
 		return featureEvaluator;
 	}
 
-	public void setFeatureEvaluator(FeatureEvaluator<FeatureObjMaskParams> featureEvaluator) {
+	public void setFeatureEvaluator(FeatureEvaluator<FeatureInputSingleObj> featureEvaluator) {
 		this.featureEvaluator = featureEvaluator;
 	}
 

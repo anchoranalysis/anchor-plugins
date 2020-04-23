@@ -4,7 +4,7 @@ import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.operator.FeatureListElem;
 import org.anchoranalysis.feature.cache.CacheableParams;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
+import org.anchoranalysis.feature.calc.params.FeatureInput;
 
 /*
  * #%L
@@ -37,7 +37,7 @@ import org.apache.commons.math3.stat.descriptive.moment.GeometricMean;
 
 
 // Geometric mean
-public class MeanGeometric<T extends FeatureCalcParams> extends FeatureListElem<T> {
+public class MeanGeometric<T extends FeatureInput> extends FeatureListElem<T> {
 
 	/**
 	 * 

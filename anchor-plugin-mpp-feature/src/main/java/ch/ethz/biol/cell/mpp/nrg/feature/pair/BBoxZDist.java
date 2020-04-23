@@ -1,7 +1,7 @@
 package ch.ethz.biol.cell.mpp.nrg.feature.pair;
 
 import org.anchoranalysis.anchor.mpp.feature.bean.nrg.elem.NRGElemPair;
-import org.anchoranalysis.anchor.mpp.feature.nrg.elem.NRGElemPairCalcParams;
+import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputPairMemo;
 
 /*
  * #%L
@@ -53,10 +53,10 @@ public class BBoxZDist extends NRGElemPair {
 	// END BEAN PROPERTIES
 	
 	@Override
-	public double calc(CacheableParams<NRGElemPairCalcParams> paramsCacheable)
+	public double calc(CacheableParams<FeatureInputPairMemo> paramsCacheable)
 			throws FeatureCalcException {
 
-		NRGElemPairCalcParams params = paramsCacheable.getParams();
+		FeatureInputPairMemo params = paramsCacheable.getParams();
 		
 		ImageDim sd = params.getNrgStack().getDimensions();
 		BoundingBox bbox1 = params.getObj1().getMark().bbox(sd,regionID);

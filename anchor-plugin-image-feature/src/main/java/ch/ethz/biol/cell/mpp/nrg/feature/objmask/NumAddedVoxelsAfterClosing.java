@@ -32,7 +32,7 @@ import org.anchoranalysis.feature.cache.CacheableParams;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.feature.bean.objmask.FeatureObjMask;
 import org.anchoranalysis.image.feature.objmask.CalculateNumVoxels;
-import org.anchoranalysis.image.feature.objmask.FeatureObjMaskParams;
+import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
 import org.anchoranalysis.image.objmask.ObjMask;
 
 import ch.ethz.biol.cell.mpp.nrg.feature.objmask.cachedcalculation.CalculateClosing;
@@ -62,7 +62,7 @@ public class NumAddedVoxelsAfterClosing extends FeatureObjMask {
 	// END BEAN PROPERTIES
 	
 	@Override
-	public double calc(CacheableParams<FeatureObjMaskParams> params) throws FeatureCalcException {
+	public double calc(CacheableParams<FeatureInputSingleObj> params) throws FeatureCalcException {
 
 		ObjMask omClosing = params.calc(
 			CalculateClosing.createFromCache(params, iterations, do3D)		

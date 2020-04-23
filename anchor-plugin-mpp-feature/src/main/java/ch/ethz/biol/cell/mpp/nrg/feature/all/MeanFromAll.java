@@ -1,10 +1,9 @@
 package ch.ethz.biol.cell.mpp.nrg.feature.all;
 
 import org.anchoranalysis.anchor.mpp.feature.bean.nrg.elem.NRGElemAll;
-import org.anchoranalysis.anchor.mpp.feature.mark.MemoMarks;
-import org.anchoranalysis.anchor.mpp.feature.nrg.elem.NRGElemAllCalcParams;
-import org.anchoranalysis.anchor.mpp.feature.nrg.elem.NRGElemIndCalcParams;
-
+import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputAllMemo;
+import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputSingleMemo;
+import org.anchoranalysis.anchor.mpp.feature.mark.MemoCollection;
 
 /*
  * #%L
@@ -47,14 +46,14 @@ public class MeanFromAll extends NRGElemAll {
 
 	// START BEAN PROPERTIES
 	@BeanField
-	private Feature<NRGElemIndCalcParams> item;
+	private Feature<FeatureInputSingleMemo> item;
 	// END BEAN PROPERTIES
 	
 	@Override
-	public double calc(CacheableParams<NRGElemAllCalcParams> paramsCacheable)
+	public double calc(CacheableParams<FeatureInputAllMemo> paramsCacheable)
 			throws FeatureCalcException {
 		
-		MemoMarks memo = paramsCacheable.getParams().getPxlPartMemo();
+		MemoCollection memo = paramsCacheable.getParams().getPxlPartMemo();
 		
 		if (memo.size()==0) {
 			return 0.0;
@@ -76,8 +75,8 @@ public class MeanFromAll extends NRGElemAll {
 		return sum / memo.size();
 	}
 	
-	private static NRGElemIndCalcParams paramsForInd( NRGElemAllCalcParams params, int index ) {
-		NRGElemIndCalcParams paramsInd = new NRGElemIndCalcParams(
+	private static FeatureInputSingleMemo paramsForInd( FeatureInputAllMemo params, int index ) {
+		FeatureInputSingleMemo paramsInd = new FeatureInputSingleMemo(
 			null,
 			params.getNrgStack()
 		);
@@ -87,11 +86,11 @@ public class MeanFromAll extends NRGElemAll {
 		return paramsInd;
 	}
 
-	public Feature<NRGElemIndCalcParams> getItem() {
+	public Feature<FeatureInputSingleMemo> getItem() {
 		return item;
 	}
 
-	public void setItem(Feature<NRGElemIndCalcParams> item) {
+	public void setItem(Feature<FeatureInputSingleMemo> item) {
 		this.item = item;
 	}
 }

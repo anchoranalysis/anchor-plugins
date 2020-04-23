@@ -34,7 +34,7 @@ import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.bean.unitvalue.distance.UnitValueDistance;
 import org.anchoranalysis.image.extent.ImageRes;
 import org.anchoranalysis.image.feature.bean.objmask.pair.FeatureObjMaskPair;
-import org.anchoranalysis.image.feature.objmask.pair.FeatureObjMaskPairParams;
+import org.anchoranalysis.image.feature.objmask.pair.FeatureInputPairObjs;
 import org.anchoranalysis.image.orientation.DirectionVector;
 import org.anchoranalysis.plugin.image.feature.obj.pair.overlap.OverlapRatioUtilities;
 
@@ -57,10 +57,10 @@ public class CostOverlapWithinMidpointDistance extends FeatureObjMaskPair {
 	// END BEAN PROPERTIES
 	
 	@Override
-	public double calc(CacheableParams<FeatureObjMaskPairParams> paramsCacheable)
+	public double calc(CacheableParams<FeatureInputPairObjs> paramsCacheable)
 			throws FeatureCalcException {
 
-		FeatureObjMaskPairParams params = paramsCacheable.getParams();
+		FeatureInputPairObjs params = paramsCacheable.getParams();
 		
 		if (isDistMoreThanMax(params)) {
 			return 1.0;
@@ -75,7 +75,7 @@ public class CostOverlapWithinMidpointDistance extends FeatureObjMaskPair {
 		}
 	}
 	
-	private boolean isDistMoreThanMax( FeatureObjMaskPairParams params ) {
+	private boolean isDistMoreThanMax( FeatureInputPairObjs params ) {
 		
 		Point3d cog1 = params.getObjMask1().centerOfGravity();
 		Point3d cog2 = params.getObjMask2().centerOfGravity();

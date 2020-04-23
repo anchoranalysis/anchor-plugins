@@ -29,8 +29,8 @@ package ch.ethz.biol.cell.mpp.nrg.feature.session;
 import static org.anchoranalysis.test.feature.plugins.ResultsVectorTestUtilities.*;
 
 import org.anchoranalysis.anchor.mpp.cfg.Cfg;
-import org.anchoranalysis.anchor.mpp.feature.bean.cfg.FeatureCfgParams;
-import org.anchoranalysis.anchor.mpp.feature.bean.mark.FeatureMarkParams;
+import org.anchoranalysis.anchor.mpp.feature.bean.cfg.FeatureInputCfg;
+import org.anchoranalysis.anchor.mpp.feature.bean.mark.FeatureInputMark;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.bean.xml.RegisterBeanFactories;
 import org.anchoranalysis.core.error.CreateException;
@@ -38,9 +38,9 @@ import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.calc.ResultsVector;
-import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
+import org.anchoranalysis.feature.calc.params.FeatureInput;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
-import org.anchoranalysis.feature.session.SessionFactory;
+import org.anchoranalysis.feature.session.FeatureSession;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorMulti;
 import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.extent.ImageRes;
@@ -66,8 +66,8 @@ public class FeatureListMPPTest {
 	public void testNoParams() throws InitException, FeatureCalcException, CreateException {
 		
 		testConstantsInList(
-			(FeatureCalcParams) null,
-			(FeatureCalcParams) null
+			(FeatureInput) null,
+			(FeatureInput) null
 		);
 	}
 	
@@ -77,15 +77,15 @@ public class FeatureListMPPTest {
 		CfgFixture cfgFixture = new CfgFixture(DIM);
 		
 		testConstantsInList(
-			new FeatureCfgParams(cfgFixture.createCfg1(), DIM ),
-			new FeatureCfgParams(cfgFixture.createCfg2(), DIM )
+			new FeatureInputCfg(cfgFixture.createCfg1(), DIM ),
+			new FeatureInputCfg(cfgFixture.createCfg2(), DIM )
 		);
 	}
 		
 	@Test
 	public void testMark() throws InitException, CreateException, FeatureCalcException {
 		
-		FeatureCalculatorMulti<FeatureMarkParams> session = createAndStart( FeatureListFixtureMPP.mark() );
+		FeatureCalculatorMulti<FeatureInputMark> session = createAndStart( FeatureListFixtureMPP.mark() );
 		
 		MarkFixture markFixture = new MarkFixture( DIM );
 		
@@ -117,7 +117,7 @@ public class FeatureListMPPTest {
 	@Test
 	public void testCfg() throws InitException, CreateException, FeatureCalcException {
 		
-		FeatureCalculatorMulti<FeatureCfgParams> session = createAndStart( FeatureListFixtureMPP.cfg() );
+		FeatureCalculatorMulti<FeatureInputCfg> session = createAndStart( FeatureListFixtureMPP.cfg() );
 		
 		CfgFixture cfgFixture = new CfgFixture(DIM);
 		
@@ -128,18 +128,18 @@ public class FeatureListMPPTest {
 		assertCfg(session, new Cfg(), 0.0);
 	}
 	
-	private static void assertCfg( FeatureCalculatorMulti<FeatureCfgParams> session, Cfg cfg, double expected ) throws CreateException, FeatureCalcException {
+	private static void assertCfg( FeatureCalculatorMulti<FeatureInputCfg> session, Cfg cfg, double expected ) throws CreateException, FeatureCalcException {
 		assertCalc(
 			session.calc(
-				new FeatureCfgParams(cfg, DIM )
+				new FeatureInputCfg(cfg, DIM )
 			),
 			expected
 		);
 	}
 
-	private static void assertMark( FeatureCalculatorMulti<FeatureMarkParams> session, Mark mark, double expected1, double expected2, double expected3 ) throws CreateException, FeatureCalcException {
+	private static void assertMark( FeatureCalculatorMulti<FeatureInputMark> session, Mark mark, double expected1, double expected2, double expected3 ) throws CreateException, FeatureCalcException {
 		ResultsVector rv = session.calc(
-			new FeatureMarkParams(mark, RES )
+			new FeatureInputMark(mark, RES )
 		); 
 		ResultsVectorTestUtilities.assertCalc(
 			rv,
@@ -149,16 +149,16 @@ public class FeatureListMPPTest {
 		);
 	}
 	
-	private static <T extends FeatureCalcParams> FeatureCalculatorMulti<T> createAndStart( FeatureList<T> features ) throws FeatureCalcException {
-		return SessionFactory.createAndStart(
+	private static <T extends FeatureInput> FeatureCalculatorMulti<T> createAndStart( FeatureList<T> features ) throws FeatureCalcException {
+		return FeatureSession.with(
 			features,
 			LoggingFixture.simpleLogErrorReporter()
 		);
 	}
 	
-	private void testConstantsInList( FeatureCalcParams params1, FeatureCalcParams params2 ) throws FeatureCalcException, CreateException, InitException {
+	private void testConstantsInList( FeatureInput params1, FeatureInput params2 ) throws FeatureCalcException, CreateException, InitException {
 		
-		FeatureCalculatorMulti<FeatureCalcParams> session = createAndStart(ConstantsInListFixture.create());
+		FeatureCalculatorMulti<FeatureInput> session = createAndStart(ConstantsInListFixture.create());
 		
 		ResultsVector rv1 = session.calc(params1);
 		ConstantsInListFixture.checkResultVector(rv1);

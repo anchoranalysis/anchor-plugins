@@ -31,13 +31,13 @@ import java.util.List;
 import org.anchoranalysis.bean.NamedBean;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.feature.bean.list.FeatureListProvider;
-import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
+import org.anchoranalysis.feature.calc.params.FeatureInput;
 import org.anchoranalysis.feature.io.csv.GroupedResultsVectorCollection;
 import org.anchoranalysis.feature.list.NamedFeatureStore;
 import org.anchoranalysis.feature.list.NamedFeatureStoreFactory;
 import org.anchoranalysis.feature.name.FeatureNameList;
 
-public class SharedStateExportFeaturesWithStore<T extends FeatureCalcParams> extends SharedStateExportFeatures {
+public class SharedStateExportFeaturesWithStore<T extends FeatureInput> extends SharedStateExportFeatures {
 	
 	private NamedFeatureStore<T> featureStore;
 	

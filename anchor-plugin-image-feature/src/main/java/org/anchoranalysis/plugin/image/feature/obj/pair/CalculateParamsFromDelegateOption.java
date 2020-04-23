@@ -8,7 +8,7 @@ import org.anchoranalysis.feature.cache.CacheableParams;
 import org.anchoranalysis.feature.cache.calculation.CachedCalculation;
 import org.anchoranalysis.feature.cache.calculation.RslvdCachedCalculation;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
+import org.anchoranalysis.feature.calc.params.FeatureInput;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
@@ -21,7 +21,7 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
  * @param <T> params-type as input to cached-calculations
  * @param <U> delegate-type of CachedCalculation
  */
-public abstract class CalculateParamsFromDelegateOption<S extends FeatureCalcParams, T extends FeatureCalcParams, U> extends CalculateParamsFromDelegate<Optional<S>, T, U> {
+public abstract class CalculateParamsFromDelegateOption<S extends FeatureInput, T extends FeatureInput, U> extends CalculateParamsFromDelegate<Optional<S>, T, U> {
 	
 	/**
 	 * The constructor
@@ -47,7 +47,7 @@ public abstract class CalculateParamsFromDelegateOption<S extends FeatureCalcPar
 	 * @return the result of the feature calculation
 	 * @throws FeatureCalcException
 	 */
-	public static <S extends FeatureCalcParams, T extends FeatureCalcParams, U> double calc(
+	public static <S extends FeatureInput, T extends FeatureInput, U> double calc(
 		CacheableParams<T> params,
 		CachedCalculation<U,T> delegate,
 		Function<RslvdCachedCalculation<U,T>,CalculateParamsFromDelegateOption<S,T,U>> funcCreateFromDelegate,

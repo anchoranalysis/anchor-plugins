@@ -36,7 +36,7 @@ import org.anchoranalysis.image.bean.provider.BinaryImgChnlProvider;
 import org.anchoranalysis.image.feature.bean.objmask.FeatureObjMaskSharedObjects;
 import org.anchoranalysis.image.feature.bean.objmask.pair.FeatureObjMaskPair;
 import org.anchoranalysis.image.feature.init.FeatureInitParamsSharedObjs;
-import org.anchoranalysis.image.feature.objmask.FeatureObjMaskParams;
+import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
 
 /**
  * Creates an object from the binary-mask from a binaryImgChnlProvider and evaluates a feature
@@ -69,7 +69,7 @@ public class FeatureFromBinaryImgChnl extends FeatureObjMaskSharedObjects {
 	}
 	
 	@Override
-	public double calc(CacheableParams<FeatureObjMaskParams> params) throws FeatureCalcException {
+	public double calc(CacheableParams<FeatureInputSingleObj> params) throws FeatureCalcException {
 		return params.calcChangeParamsDirect(
 			item,
 			new CalculatePairParams(binaryImgChnlProvider),

@@ -31,7 +31,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.cache.CacheableParams;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.feature.bean.objmask.FeatureObjMask;
-import org.anchoranalysis.image.feature.objmask.FeatureObjMaskParams;
+import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
 import org.anchoranalysis.math.moment.MomentsFromPointsCalculator;
 import org.anchoranalysis.points.moment.CalculateObjMaskPointsSecondMomentMatrix;
 
@@ -54,13 +54,13 @@ public class AxisLength extends FeatureObjMask {
 	// END BEAN PROPERTIES
 	
 	@Override
-	public double calc(CacheableParams<FeatureObjMaskParams> params) throws FeatureCalcException {
+	public double calc(CacheableParams<FeatureInputSingleObj> params) throws FeatureCalcException {
 		
-		assert( params.getParams() instanceof FeatureObjMaskParams );
+		assert( params.getParams() instanceof FeatureInputSingleObj );
 		return calcAxisLength( params, index);
 	}
 
-	private double calcAxisLength( CacheableParams<FeatureObjMaskParams> params, int index ) throws FeatureCalcException {
+	private double calcAxisLength( CacheableParams<FeatureInputSingleObj> params, int index ) throws FeatureCalcException {
 		
 		// TODO THIS CAN BE DONE MORE EFFICIENTLY
 		if (!params.getParams().getObjMask().hasPixelsGreaterThan(0)) {

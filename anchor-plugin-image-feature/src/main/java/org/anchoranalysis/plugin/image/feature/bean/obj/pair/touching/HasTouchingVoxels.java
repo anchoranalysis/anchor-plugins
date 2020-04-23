@@ -32,7 +32,7 @@ import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.feature.cache.CacheableParams;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.extent.BoundingBox;
-import org.anchoranalysis.image.feature.objmask.pair.FeatureObjMaskPairParams;
+import org.anchoranalysis.image.feature.objmask.pair.FeatureInputPairObjs;
 import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.image.voxel.kernel.ApplyKernel;
 import org.anchoranalysis.image.voxel.kernel.count.CountKernel;
@@ -60,10 +60,10 @@ public class HasTouchingVoxels extends TouchingVoxels {
 	// END BEAN PROPERTIES
 	
 	@Override
-	public double calc(CacheableParams<FeatureObjMaskPairParams> paramsCacheable)
+	public double calc(CacheableParams<FeatureInputPairObjs> paramsCacheable)
 			throws FeatureCalcException {
 
-		FeatureObjMaskPairParams params = paramsCacheable.getParams();
+		FeatureInputPairObjs params = paramsCacheable.getParams();
 		
 		try {
 			ObjMask om1 = params.getObjMask1();

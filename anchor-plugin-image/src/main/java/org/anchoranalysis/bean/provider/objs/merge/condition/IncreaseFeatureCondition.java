@@ -33,16 +33,16 @@ import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorSingle;
 import org.anchoranalysis.image.extent.ImageRes;
 import org.anchoranalysis.image.feature.bean.evaluator.FeatureEvaluator;
-import org.anchoranalysis.image.feature.objmask.FeatureObjMaskParams;
+import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
 import org.anchoranalysis.image.objmask.ObjMask;
 
 public class IncreaseFeatureCondition implements AfterCondition {
 
-	private FeatureEvaluator<FeatureObjMaskParams> featureEvaluator;
+	private FeatureEvaluator<FeatureInputSingleObj> featureEvaluator;
 	
-	private FeatureCalculatorSingle<FeatureObjMaskParams> session;
+	private FeatureCalculatorSingle<FeatureInputSingleObj> session;
 	
-	public IncreaseFeatureCondition(FeatureEvaluator<FeatureObjMaskParams> featureEvaluator) {
+	public IncreaseFeatureCondition(FeatureEvaluator<FeatureInputSingleObj> featureEvaluator) {
 		super();
 		this.featureEvaluator = featureEvaluator;
 	}
@@ -90,7 +90,7 @@ public class IncreaseFeatureCondition implements AfterCondition {
 	
 	private double calc(ObjMask om) throws FeatureCalcException {
 		return session.calcOne(
-			new FeatureObjMaskParams(om)
+			new FeatureInputSingleObj(om)
 		);
 	}
 }

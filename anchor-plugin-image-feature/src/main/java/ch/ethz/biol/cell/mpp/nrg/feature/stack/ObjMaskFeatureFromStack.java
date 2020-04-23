@@ -37,8 +37,8 @@ import org.anchoranalysis.feature.cache.CacheableParams;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
 import org.anchoranalysis.image.feature.bean.FeatureStack;
-import org.anchoranalysis.image.feature.objmask.FeatureObjMaskParams;
-import org.anchoranalysis.image.feature.stack.FeatureStackParams;
+import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
+import org.anchoranalysis.image.feature.stack.FeatureInputStack;
 import org.anchoranalysis.image.init.ImageInitParams;
 import org.anchoranalysis.image.objmask.ObjMaskCollection;
 
@@ -53,7 +53,7 @@ public abstract class ObjMaskFeatureFromStack extends FeatureStack {
 	
 	// START BEAN PROPERTIES
 	@BeanField
-	private Feature<FeatureObjMaskParams> item;
+	private Feature<FeatureInputSingleObj> item;
 	
 	@BeanField
 	@SkipInit
@@ -64,7 +64,7 @@ public abstract class ObjMaskFeatureFromStack extends FeatureStack {
 	private ObjMaskCollection objsCollection;
 	
 	@Override
-	public double calc(CacheableParams<FeatureStackParams> paramsCacheable) throws FeatureCalcException {
+	public double calc(CacheableParams<FeatureInputStack> paramsCacheable) throws FeatureCalcException {
 		
 		Optional<ImageInitParams> sharedObjs = paramsCacheable.getParams().getSharedObjs();
 		
@@ -105,11 +105,11 @@ public abstract class ObjMaskFeatureFromStack extends FeatureStack {
 		}
 	}
 	
-	public Feature<FeatureObjMaskParams> getItem() {
+	public Feature<FeatureInputSingleObj> getItem() {
 		return item;
 	}
 
-	public void setItem(Feature<FeatureObjMaskParams> item) {
+	public void setItem(Feature<FeatureInputSingleObj> item) {
 		this.item = item;
 	}
 

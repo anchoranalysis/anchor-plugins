@@ -1,7 +1,7 @@
 package ch.ethz.biol.cell.mpp.nrg.feature.mark;
 
 import org.anchoranalysis.anchor.mpp.feature.bean.mark.FeatureMark;
-import org.anchoranalysis.anchor.mpp.feature.bean.mark.FeatureMarkParams;
+import org.anchoranalysis.anchor.mpp.feature.bean.mark.FeatureInputMark;
 import org.anchoranalysis.anchor.mpp.mark.MarkAbstractRadii;
 
 /*
@@ -47,7 +47,7 @@ public class OrderedRadius extends FeatureMark {
 	// END BEAN PROPERTIES
 	
 	@Override
-	public double calc(FeatureMarkParams params) throws FeatureCalcException {
+	public double calc(FeatureInputMark params) throws FeatureCalcException {
 
 		if (params.getMark() instanceof MarkAbstractRadii) {
 			

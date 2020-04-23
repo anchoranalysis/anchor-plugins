@@ -1,12 +1,12 @@
 package ch.ethz.biol.cell.mpp.nrg.feature.stack;
 
-import org.anchoranalysis.feature.bean.FeatureSharedObjs;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.feature.params.FeatureParamsDescriptor;
-import org.anchoranalysis.image.feature.stack.FeatureStackParams;
-import org.anchoranalysis.image.feature.stack.FeatureStackParamsDescriptor;
+import org.anchoranalysis.feature.params.FeatureInputDescriptor;
+import org.anchoranalysis.image.feature.bean.FeatureSharedObjs;
+import org.anchoranalysis.image.feature.stack.FeatureInputStack;
+import org.anchoranalysis.image.feature.stack.FeatureInputStackDescriptor;
 
-public abstract class FeatureStackSharedObjects extends FeatureSharedObjs<FeatureStackParams> {
+public abstract class FeatureStackSharedObjects extends FeatureSharedObjs<FeatureInputStack> {
 
 	/**
 	 * 
@@ -14,7 +14,7 @@ public abstract class FeatureStackSharedObjects extends FeatureSharedObjs<Featur
 	private static final long serialVersionUID = 1L;
 
 	@Override
-	public FeatureParamsDescriptor paramType() throws FeatureCalcException {
-		return FeatureStackParamsDescriptor.instance;
+	public FeatureInputDescriptor paramType() throws FeatureCalcException {
+		return FeatureInputStackDescriptor.instance;
 	}
 }

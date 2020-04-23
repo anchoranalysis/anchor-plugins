@@ -5,12 +5,12 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.feature.cache.calculation.CachedCalculation;
 import org.anchoranalysis.image.bean.provider.BinaryImgChnlProvider;
 import org.anchoranalysis.image.binary.BinaryChnl;
-import org.anchoranalysis.image.feature.objmask.FeatureObjMaskParams;
-import org.anchoranalysis.image.feature.objmask.pair.FeatureObjMaskPairParams;
+import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
+import org.anchoranalysis.image.feature.objmask.pair.FeatureInputPairObjs;
 import org.anchoranalysis.image.objmask.ObjMask;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
-public class CalculatePairParams extends CachedCalculation<FeatureObjMaskPairParams, FeatureObjMaskParams> {
+public class CalculatePairParams extends CachedCalculation<FeatureInputPairObjs, FeatureInputSingleObj> {
 
 	private BinaryImgChnlProvider binaryImgChnlProvider;
 		
@@ -20,7 +20,7 @@ public class CalculatePairParams extends CachedCalculation<FeatureObjMaskPairPar
 	}
 
 	@Override
-	protected FeatureObjMaskPairParams execute(FeatureObjMaskParams params) throws ExecuteException {
+	protected FeatureInputPairObjs execute(FeatureInputSingleObj params) throws ExecuteException {
 
 		try {
 			BinaryChnl bic = binaryImgChnlProvider.create();
@@ -32,8 +32,8 @@ public class CalculatePairParams extends CachedCalculation<FeatureObjMaskPairPar
 		}
 	}
 		
-	private FeatureObjMaskPairParams paramsPairs( FeatureObjMaskParams params, ObjMask objFromBinary ) {
-		FeatureObjMaskPairParams out = new FeatureObjMaskPairParams();
+	private FeatureInputPairObjs paramsPairs( FeatureInputSingleObj params, ObjMask objFromBinary ) {
+		FeatureInputPairObjs out = new FeatureInputPairObjs();
 		out.setObjMask1( params.getObjMask() );
 		out.setObjMask2( objFromBinary );
 		out.setNrgStack( params.getNrgStack() );

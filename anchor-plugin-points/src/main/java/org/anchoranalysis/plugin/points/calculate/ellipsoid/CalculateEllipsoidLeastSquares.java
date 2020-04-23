@@ -38,28 +38,28 @@ import org.anchoranalysis.feature.cache.calculation.CachedCalculation;
 import org.anchoranalysis.feature.cache.calculation.CachedCalculationOperation;
 import org.anchoranalysis.feature.cache.calculation.RslvdCachedCalculation;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.image.feature.objmask.FeatureObjMaskParams;
+import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
 import org.anchoranalysis.plugin.points.calculate.CalculatePntsFromOutline;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
-public class CalculateEllipsoidLeastSquares extends CachedCalculation<MarkEllipsoid,FeatureObjMaskParams> {
+public class CalculateEllipsoidLeastSquares extends CachedCalculation<MarkEllipsoid,FeatureInputSingleObj> {
 
 	private boolean suppressZCovariance;
 	
-	private transient RslvdCachedCalculation<List<Point3i>,FeatureObjMaskParams> ccPnts;
+	private transient RslvdCachedCalculation<List<Point3i>,FeatureInputSingleObj> ccPnts;
 		
-	private CalculateEllipsoidLeastSquares(boolean suppressZCovariance, RslvdCachedCalculation<List<Point3i>,FeatureObjMaskParams> ccPnts) {
+	private CalculateEllipsoidLeastSquares(boolean suppressZCovariance, RslvdCachedCalculation<List<Point3i>,FeatureInputSingleObj> ccPnts) {
 		super();
 		this.suppressZCovariance = suppressZCovariance;
 		this.ccPnts = ccPnts;
 	}
 	
-	public static MarkEllipsoid createFromCache(CacheableParams<FeatureObjMaskParams> params, boolean suppressZCovariance ) throws FeatureCalcException {
+	public static MarkEllipsoid createFromCache(CacheableParams<FeatureInputSingleObj> params, boolean suppressZCovariance ) throws FeatureCalcException {
 		
-		RslvdCachedCalculation<List<Point3i>,FeatureObjMaskParams> ccPnts = params.search( new CalculatePntsFromOutline() );
+		RslvdCachedCalculation<List<Point3i>,FeatureInputSingleObj> ccPnts = params.search( new CalculatePntsFromOutline() );
 		
-		RslvdCachedCalculation<MarkEllipsoid,FeatureObjMaskParams> ccEllipsoid = params.search(
+		RslvdCachedCalculation<MarkEllipsoid,FeatureInputSingleObj> ccEllipsoid = params.search(
 			new CalculateEllipsoidLeastSquares(suppressZCovariance, ccPnts )
 		);
 		try {
@@ -70,7 +70,7 @@ public class CalculateEllipsoidLeastSquares extends CachedCalculation<MarkEllips
 	}
 	
 	@Override
-	protected MarkEllipsoid execute( FeatureObjMaskParams params ) throws ExecuteException {
+	protected MarkEllipsoid execute( FeatureInputSingleObj params ) throws ExecuteException {
 		
 		try {
 			// Shell Rad is arbitrary here for now

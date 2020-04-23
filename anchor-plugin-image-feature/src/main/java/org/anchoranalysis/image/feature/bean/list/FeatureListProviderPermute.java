@@ -45,7 +45,7 @@ import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.bean.list.FeatureListProvider;
-import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
+import org.anchoranalysis.feature.calc.params.FeatureInput;
 import org.anchoranalysis.feature.shared.SharedFeaturesInitParams;
 
 /**
@@ -54,9 +54,9 @@ import org.anchoranalysis.feature.shared.SharedFeaturesInitParams;
  * @author Owen Feehan
  *
  * @param S permutation type
- * @param T feature-calc-params
+ * @param T feature-input
  */
-public class FeatureListProviderPermute<S, T extends FeatureCalcParams> extends FeatureListProvider<T> {
+public class FeatureListProviderPermute<S, T extends FeatureInput> extends FeatureListProvider<T> {
 
 	/**
 	 * 

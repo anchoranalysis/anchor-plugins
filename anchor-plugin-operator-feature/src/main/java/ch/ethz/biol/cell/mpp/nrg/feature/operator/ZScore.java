@@ -29,11 +29,11 @@ import org.anchoranalysis.feature.cache.CacheableParams;
  */
 
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
+import org.anchoranalysis.feature.calc.params.FeatureInput;
 import org.anchoranalysis.math.statistics.FirstSecondOrderStatistic;
 
 // Z-score of a value
-public class ZScore<T extends FeatureCalcParams> extends FeatureFirstSecondOrder<T> {
+public class ZScore<T extends FeatureInput> extends FeatureFirstSecondOrder<T> {
 
 	/**
 	 * 

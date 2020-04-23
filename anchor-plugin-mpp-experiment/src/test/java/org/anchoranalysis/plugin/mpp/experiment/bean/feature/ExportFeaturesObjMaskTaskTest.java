@@ -34,11 +34,11 @@ import org.anchoranalysis.bean.xml.RegisterBeanFactories;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.feature.bean.list.FeatureListProvider;
-import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
+import org.anchoranalysis.feature.calc.params.FeatureInput;
 import org.anchoranalysis.feature.nrg.NRGStack;
 import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
 import org.anchoranalysis.image.bean.provider.stack.StackProvider;
-import org.anchoranalysis.image.feature.objmask.FeatureObjMaskParams;
+import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.plugin.mpp.experiment.bean.feature.flexi.FlexiFeatureTable;
 import org.anchoranalysis.plugin.mpp.experiment.bean.feature.flexi.MergedPairs;
@@ -110,7 +110,7 @@ public class ExportFeaturesObjMaskTaskTest {
 		testOnTask( new MergedPairs(), true, "mergedPairs01/" );
 	}
 	
-	private <T extends FeatureCalcParams> void testOnTask(
+	private <T extends FeatureInput> void testOnTask(
 		FlexiFeatureTable<T> selectFeaturesObjects,
 		boolean bigSizeNrg,
 		String suffixPathDirSaved
@@ -127,7 +127,7 @@ public class ExportFeaturesObjMaskTaskTest {
 		);	
 	}
 	
-	private static <T extends FeatureCalcParams> ExportFeaturesObjMaskTask<T> createTask(
+	private static <T extends FeatureInput> ExportFeaturesObjMaskTask<T> createTask(
 		FlexiFeatureTable<T> selectFeaturesObjects,
 		NRGStack nrgStack
 	) throws CreateException {
@@ -169,7 +169,7 @@ public class ExportFeaturesObjMaskTaskTest {
 	 *  
 	 * @throws CreateException 
 	 * */
-	private static List<NamedBean<FeatureListProvider<FeatureObjMaskParams>>> objMaskFeatures( TestLoader loader ) throws CreateException {
+	private static List<NamedBean<FeatureListProvider<FeatureInputSingleObj>>> objMaskFeatures( TestLoader loader ) throws CreateException {
 		return FeaturesFromXmlFixture.createNamedFeatureProviders("namedObjMaskFeaturesList.xml", loader);
 	}
 }

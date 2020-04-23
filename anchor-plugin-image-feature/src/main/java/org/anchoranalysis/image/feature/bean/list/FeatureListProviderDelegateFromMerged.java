@@ -34,8 +34,8 @@ import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.bean.list.FeatureListProvider;
 import org.anchoranalysis.feature.bean.list.FeatureListProviderPrependName;
-import org.anchoranalysis.image.feature.objmask.FeatureObjMaskParams;
-import org.anchoranalysis.image.feature.objmask.pair.merged.FeatureObjMaskPairMergedParams;
+import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
+import org.anchoranalysis.image.feature.objmask.pair.merged.FeatureInputPairObjsMerged;
 
 import ch.ethz.biol.cell.mpp.nrg.feature.objmaskpairmerged.FromExisting;
 import ch.ethz.biol.cell.mpp.nrg.feature.objmaskpairmerged.FromFirst;
@@ -49,7 +49,7 @@ import ch.ethz.biol.cell.mpp.nrg.feature.objmaskpairmerged.FromSecond;
  * @author Owen Feehan
  *
  */
-public class FeatureListProviderDelegateFromMerged extends FeatureListProvider<FeatureObjMaskPairMergedParams> {
+public class FeatureListProviderDelegateFromMerged extends FeatureListProvider<FeatureInputPairObjsMerged> {
 
 	/**
 	 * 
@@ -58,7 +58,7 @@ public class FeatureListProviderDelegateFromMerged extends FeatureListProvider<F
 	
 	// START BEAN PROPERTIES
 	@BeanField
-	private FeatureListProvider<FeatureObjMaskParams> item;
+	private FeatureListProvider<FeatureInputSingleObj> item;
 	
 	@BeanField @AllowEmpty
 	private String prependString = "";
@@ -72,14 +72,14 @@ public class FeatureListProviderDelegateFromMerged extends FeatureListProvider<F
 	// END BEAN PROPERTIES
 
 	@Override
-	public FeatureList<FeatureObjMaskPairMergedParams> create() throws CreateException {
+	public FeatureList<FeatureInputPairObjsMerged> create() throws CreateException {
 
-		FeatureList<FeatureObjMaskParams> in = item.create();
-		FeatureList<FeatureObjMaskPairMergedParams> out = new FeatureList<>(); 
+		FeatureList<FeatureInputSingleObj> in = item.create();
+		FeatureList<FeatureInputPairObjsMerged> out = new FeatureList<>(); 
 		
-		for( Feature<FeatureObjMaskParams> featExst : in ) {
+		for( Feature<FeatureInputSingleObj> featExst : in ) {
 			
-			Feature<FeatureObjMaskParams> featExstDup = featExst.duplicateBean();
+			Feature<FeatureInputSingleObj> featExstDup = featExst.duplicateBean();
 			
 			FromExisting featDelegate = createNewDelegateFeature();
 			featDelegate.setItem(featExstDup);
@@ -114,11 +114,11 @@ public class FeatureListProviderDelegateFromMerged extends FeatureListProvider<F
 		this.prependString = prependString;
 	}
 
-	public FeatureListProvider<FeatureObjMaskParams> getItem() {
+	public FeatureListProvider<FeatureInputSingleObj> getItem() {
 		return item;
 	}
 
-	public void setItem(FeatureListProvider<FeatureObjMaskParams> item) {
+	public void setItem(FeatureListProvider<FeatureInputSingleObj> item) {
 		this.item = item;
 	}
 

@@ -46,7 +46,7 @@ import org.anchoranalysis.experiment.task.ParametersExperiment;
 import org.anchoranalysis.feature.bean.list.FeatureListProvider;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.calc.ResultsVector;
-import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
+import org.anchoranalysis.feature.calc.params.FeatureInput;
 import org.anchoranalysis.feature.io.csv.GroupedResultsVectorCollection;
 import org.anchoranalysis.feature.list.NamedFeatureStore;
 import org.anchoranalysis.io.error.AnchorIOException;
@@ -64,7 +64,7 @@ import org.anchoranalysis.plugin.image.task.sharedstate.SharedStateExportFeature
  * @param S feature-params type
  *
  */
-public abstract class ExportFeaturesStoreTask<T extends InputFromManager, S extends FeatureCalcParams> extends ExportFeaturesTask<T,SharedStateExportFeaturesWithStore<S>> {
+public abstract class ExportFeaturesStoreTask<T extends InputFromManager, S extends FeatureInput> extends ExportFeaturesTask<T,SharedStateExportFeaturesWithStore<S>> {
 
 	/**
 	 * 

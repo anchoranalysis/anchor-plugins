@@ -36,7 +36,7 @@ import org.anchoranalysis.image.binary.values.BinaryValues;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelBoxByte;
 import org.anchoranalysis.image.feature.bean.objmask.FeatureObjMask;
-import org.anchoranalysis.image.feature.objmask.FeatureObjMaskParams;
+import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
 import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.anchoranalysis.image.voxel.datatype.IncorrectVoxelDataTypeException;
@@ -69,9 +69,9 @@ public class NumNghbVoxels extends FeatureObjMask {
 	}
 	
 	@Override
-	public double calc(CacheableParams<FeatureObjMaskParams> paramsCacheable) throws FeatureCalcException {
+	public double calc(CacheableParams<FeatureInputSingleObj> paramsCacheable) throws FeatureCalcException {
 
-		FeatureObjMaskParams params = paramsCacheable.getParams();
+		FeatureInputSingleObj params = paramsCacheable.getParams();
 		
 		ObjMask om = params.getObjMask();
 

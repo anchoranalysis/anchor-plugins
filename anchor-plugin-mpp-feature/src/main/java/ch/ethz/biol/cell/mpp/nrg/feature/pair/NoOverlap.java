@@ -1,7 +1,7 @@
 package ch.ethz.biol.cell.mpp.nrg.feature.pair;
 
 import org.anchoranalysis.anchor.mpp.feature.bean.nrg.elem.NRGElemPair;
-import org.anchoranalysis.anchor.mpp.feature.nrg.elem.NRGElemPairCalcParams;
+import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputPairMemo;
 import org.anchoranalysis.anchor.mpp.mark.GlobalRegionIdentifiers;
 
 /*
@@ -53,7 +53,7 @@ public final class NoOverlap extends NRGElemPair {
 	}
 	
 	@Override
-	public double calc( CacheableParams<NRGElemPairCalcParams> params ) throws FeatureCalcException {
+	public double calc( CacheableParams<FeatureInputPairMemo> params ) throws FeatureCalcException {
 		
 		double overlap = params.calc( new OverlapCalculation(regionID) );
 		if (overlap>0) {

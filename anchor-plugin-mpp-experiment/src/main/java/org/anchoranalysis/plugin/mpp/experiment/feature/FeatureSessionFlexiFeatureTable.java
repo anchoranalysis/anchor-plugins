@@ -31,13 +31,13 @@ import org.anchoranalysis.core.error.reporter.ErrorReporter;
 import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.calc.ResultsVector;
-import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
+import org.anchoranalysis.feature.calc.params.FeatureInput;
 import org.anchoranalysis.feature.name.FeatureNameList;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 import org.anchoranalysis.feature.shared.SharedFeaturesInitParams;
 import org.anchoranalysis.image.init.ImageInitParams;
 
-public abstract class FeatureSessionFlexiFeatureTable<T extends FeatureCalcParams> {
+public abstract class FeatureSessionFlexiFeatureTable<T extends FeatureInput> {
 	
 	/**
 	 * Initializes a feature store that has the same structure as that previously created by createFeatures() from the same object

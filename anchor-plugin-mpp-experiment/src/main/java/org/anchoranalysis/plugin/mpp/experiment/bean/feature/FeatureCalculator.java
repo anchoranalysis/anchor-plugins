@@ -33,7 +33,7 @@ import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.calc.ResultsVector;
 import org.anchoranalysis.feature.calc.ResultsVectorCollection;
-import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
+import org.anchoranalysis.feature.calc.params.FeatureInput;
 import org.anchoranalysis.plugin.mpp.experiment.feature.FeatureSessionFlexiFeatureTable;
 
 class FeatureCalculator {
@@ -49,7 +49,7 @@ class FeatureCalculator {
 	 * @param resultsDestination where the result-calculations are placed
 	 * @throws OperationFailedException
 	 */
-	public static <T extends FeatureCalcParams> void calculateManyFeaturesInto(
+	public static <T extends FeatureInput> void calculateManyFeaturesInto(
 		String objectId,
 		FeatureSessionFlexiFeatureTable<T> session,
 		List<T> listObjParams,

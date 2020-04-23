@@ -30,8 +30,8 @@ package ch.ethz.biol.cell.mpp.nrg.feature.objmask;
 import org.anchoranalysis.bean.annotation.AllowEmpty;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.feature.calc.params.FeatureInputNRGStack;
 import org.anchoranalysis.image.feature.bean.FeatureNRGStack;
-import org.anchoranalysis.image.feature.stack.nrg.FeatureNRGStackParams;
 
 /**
  * Same behaviour as NRGParam, except uses an id composed of three parts that are concatenated
@@ -66,7 +66,7 @@ public class NRGParamThree extends FeatureNRGStack {
 	}
 	
 	@Override
-	public double calcCast(FeatureNRGStackParams params)
+	public double calcCast(FeatureInputNRGStack params)
 			throws FeatureCalcException {
 		
 		String id = createID();

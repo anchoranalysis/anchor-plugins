@@ -2,8 +2,8 @@ package ch.ethz.biol.cell.mpp.nrg.feature.cfg;
 
 import org.anchoranalysis.anchor.mpp.bean.points.CreateMarkFromPoints;
 import org.anchoranalysis.anchor.mpp.feature.bean.nrg.elem.NRGElemAll;
-import org.anchoranalysis.anchor.mpp.feature.nrg.elem.NRGElemAllCalcParams;
-import org.anchoranalysis.anchor.mpp.feature.nrg.elem.NRGElemIndCalcParams;
+import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputAllMemo;
+import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputSingleMemo;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.anchor.mpp.mark.points.MarkPointList;
 import org.anchoranalysis.anchor.mpp.pixelpart.factory.PixelPartFactoryHistogram;
@@ -63,16 +63,16 @@ public class CombinePointsToMark extends NRGElemAll {
 	private CreateMarkFromPoints createMark;
 	
 	@BeanField
-	private Feature<NRGElemIndCalcParams> item;
+	private Feature<FeatureInputSingleMemo> item;
 	
 	@BeanField
-	private Feature<NRGElemAllCalcParams> featureElse = new Constant<>(0);
+	private Feature<FeatureInputAllMemo> featureElse = new Constant<>(0);
 	// END BEAN PROPERTIES
 	
 	@Override
-	public double calc(CacheableParams<NRGElemAllCalcParams> paramsCacheable) throws FeatureCalcException {
+	public double calc(CacheableParams<FeatureInputAllMemo> paramsCacheable) throws FeatureCalcException {
 
-		NRGElemAllCalcParams params = paramsCacheable.getParams();
+		FeatureInputAllMemo params = paramsCacheable.getParams();
 		
 		try {
 			Mark mark = createMark.fitMarkToPointsFromCfg(
@@ -92,7 +92,7 @@ public class CombinePointsToMark extends NRGElemAll {
 		}
 	}
 		
-	private double calcFeatureOnMarks( Mark mark, CacheableParams<NRGElemAllCalcParams> paramsCacheable ) throws FeatureCalcException {
+	private double calcFeatureOnMarks( Mark mark, CacheableParams<FeatureInputAllMemo> paramsCacheable ) throws FeatureCalcException {
 		
 		return paramsCacheable.calcChangeParams(
 			item,
@@ -101,7 +101,7 @@ public class CombinePointsToMark extends NRGElemAll {
 		);
 	}
 	
-	private static NRGElemIndCalcParams deriveIndParams( NRGElemAllCalcParams params, Mark mark ) {
+	private static FeatureInputSingleMemo deriveIndParams( FeatureInputAllMemo params, Mark mark ) {
 		
 		NRGStackWithParams nrgStack = params.getNrgStack();
 		
@@ -112,22 +112,22 @@ public class CombinePointsToMark extends NRGElemAll {
 			new PixelPartFactoryHistogram()
 		);
 							
-		return new NRGElemIndCalcParams(	memo, nrgStack );		
+		return new FeatureInputSingleMemo(	memo, nrgStack );		
 	}
 	
-	public Feature<NRGElemAllCalcParams> getFeatureElse() {
+	public Feature<FeatureInputAllMemo> getFeatureElse() {
 		return featureElse;
 	}
 
-	public void setFeatureElse(Feature<NRGElemAllCalcParams> featureElse) {
+	public void setFeatureElse(Feature<FeatureInputAllMemo> featureElse) {
 		this.featureElse = featureElse;
 	}
 
-	public Feature<NRGElemIndCalcParams> getItem() {
+	public Feature<FeatureInputSingleMemo> getItem() {
 		return item;
 	}
 
-	public void setItem(Feature<NRGElemIndCalcParams> item) {
+	public void setItem(Feature<FeatureInputSingleMemo> item) {
 		this.item = item;
 	}
 

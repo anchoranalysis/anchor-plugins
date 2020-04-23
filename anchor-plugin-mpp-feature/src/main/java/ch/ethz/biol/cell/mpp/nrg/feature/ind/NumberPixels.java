@@ -2,7 +2,7 @@ package ch.ethz.biol.cell.mpp.nrg.feature.ind;
 
 import org.anchoranalysis.anchor.mpp.feature.bean.mark.PxlListOperationFromMark;
 import org.anchoranalysis.anchor.mpp.feature.bean.nrg.elem.NRGElemInd;
-import org.anchoranalysis.anchor.mpp.feature.nrg.elem.NRGElemIndCalcParams;
+import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputSingleMemo;
 
 /*
  * #%L
@@ -63,7 +63,7 @@ public class NumberPixels extends NRGElemInd {
 	}
 	
 	@Override
-	public double calcCast( NRGElemIndCalcParams params ) throws FeatureCalcException {
+	public double calcCast( FeatureInputSingleMemo params ) throws FeatureCalcException {
 
 		try {
 			return pixelList.doOperation( params.getPxlPartMemo(), params.getDimensions() );

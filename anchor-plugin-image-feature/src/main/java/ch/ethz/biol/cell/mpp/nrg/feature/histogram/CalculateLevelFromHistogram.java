@@ -32,7 +32,7 @@ import org.anchoranalysis.feature.cache.CacheableParams;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.bean.threshold.CalculateLevel;
 import org.anchoranalysis.image.feature.bean.FeatureHistogram;
-import org.anchoranalysis.image.feature.histogram.FeatureHistogramParams;
+import org.anchoranalysis.image.feature.histogram.FeatureInputHistogram;
 
 public class CalculateLevelFromHistogram extends FeatureHistogram {
 
@@ -47,7 +47,7 @@ public class CalculateLevelFromHistogram extends FeatureHistogram {
 	// END BEAN PROPERTIES
 	
 	@Override
-	public double calc(CacheableParams<FeatureHistogramParams> params)
+	public double calc(CacheableParams<FeatureInputHistogram> params)
 			throws FeatureCalcException {
 		try {
 			return calculateLevel.calculateLevel( params.getParams().getHistogram() );

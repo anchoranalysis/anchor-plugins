@@ -37,7 +37,7 @@ import org.anchoranalysis.bean.xml.error.BeanXmlException;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.bean.list.FeatureListProvider;
-import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
+import org.anchoranalysis.feature.calc.params.FeatureInput;
 import org.anchoranalysis.test.TestLoader;
 
 public class FeaturesFromXmlFixture {
@@ -45,7 +45,7 @@ public class FeaturesFromXmlFixture {
 	private FeaturesFromXmlFixture() {
 	}
 	
-	public static <T extends FeatureCalcParams> FeatureList<T> createFeatureList(String xmlPath, TestLoader loader) throws CreateException {
+	public static <T extends FeatureInput> FeatureList<T> createFeatureList(String xmlPath, TestLoader loader) throws CreateException {
 		Path pathStatic = loader.resolveTestPath(xmlPath);
 		try {
 			FeatureListProvider<T> provider = BeanXmlLoader.loadBean( pathStatic );
@@ -58,7 +58,7 @@ public class FeaturesFromXmlFixture {
 		
 	}
 	
-	public static <T extends FeatureCalcParams> List<NamedBean<FeatureListProvider<T>>> createNamedFeatureProviders(String xmlPath, TestLoader loader) throws CreateException {
+	public static <T extends FeatureInput> List<NamedBean<FeatureListProvider<T>>> createNamedFeatureProviders(String xmlPath, TestLoader loader) throws CreateException {
 		Path pathStatic = loader.resolveTestPath(xmlPath);
 		try {
 			List<NamedBean<FeatureListProvider<T>>> list = BeanXmlLoader.loadBean( pathStatic );

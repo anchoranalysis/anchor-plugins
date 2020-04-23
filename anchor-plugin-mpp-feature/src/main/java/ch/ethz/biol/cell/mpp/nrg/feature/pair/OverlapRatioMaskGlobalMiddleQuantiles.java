@@ -1,6 +1,6 @@
 package ch.ethz.biol.cell.mpp.nrg.feature.pair;
 
-import org.anchoranalysis.anchor.mpp.feature.nrg.elem.NRGElemPairCalcParams;
+import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputPairMemo;
 import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
 
 /*
@@ -57,9 +57,9 @@ public class OverlapRatioMaskGlobalMiddleQuantiles extends OverlapMaskQuantiles 
 	}
 		
 	@Override
-	public double calc( CacheableParams<NRGElemPairCalcParams> paramsCacheable ) throws FeatureCalcException {
+	public double calc( CacheableParams<FeatureInputPairMemo> paramsCacheable ) throws FeatureCalcException {
 		 
-		NRGElemPairCalcParams params = paramsCacheable.getParams();
+		FeatureInputPairMemo params = paramsCacheable.getParams();
 		
 		double overlap = overlapWithQuantiles(paramsCacheable);
 		

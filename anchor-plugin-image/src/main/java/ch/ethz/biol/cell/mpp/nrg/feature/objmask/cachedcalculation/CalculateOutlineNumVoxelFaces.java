@@ -33,7 +33,7 @@ import org.anchoranalysis.core.cache.ExecuteException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.feature.cache.calculation.CachedCalculation;
 import org.anchoranalysis.image.extent.ImageDim;
-import org.anchoranalysis.image.feature.objmask.FeatureObjMaskParams;
+import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
 import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.anchoranalysis.image.voxel.kernel.ApplyKernel;
@@ -42,7 +42,7 @@ import org.anchoranalysis.image.voxel.kernel.count.CountKernelNghbIgnoreOutsideS
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
-public class CalculateOutlineNumVoxelFaces extends CachedCalculation<Integer,FeatureObjMaskParams> {
+public class CalculateOutlineNumVoxelFaces extends CachedCalculation<Integer,FeatureInputSingleObj> {
 
 	/**
 	 * Whether to calculate the outline on a MIP
@@ -79,7 +79,7 @@ public class CalculateOutlineNumVoxelFaces extends CachedCalculation<Integer,Fea
 	
 
 	@Override
-	protected Integer execute(FeatureObjMaskParams params)
+	protected Integer execute(FeatureInputSingleObj params)
 			throws ExecuteException {
 		try {
 			return calcSurfaceSize(params.getObjMask(), params.getNrgStack().getDimensions(), mip, suppress3D);

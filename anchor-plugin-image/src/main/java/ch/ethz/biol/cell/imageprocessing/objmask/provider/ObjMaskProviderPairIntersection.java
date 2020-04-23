@@ -35,7 +35,7 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.feature.cache.calculation.RslvdCachedCalculation;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
-import org.anchoranalysis.image.feature.objmask.pair.FeatureObjMaskPairParams;
+import org.anchoranalysis.image.feature.objmask.pair.FeatureInputPairObjs;
 import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.image.objmask.ObjMaskCollection;
 
@@ -106,9 +106,9 @@ public class ObjMaskProviderPairIntersection extends ObjMaskProviderDimensions {
 	private Optional<ObjMask> calcIntersection( ObjMask om1, ObjMask om2 ) throws CreateException {
 		
 		try {
-			FeatureObjMaskPairParams params = createParams(om1, om2);
+			FeatureInputPairObjs params = createParams(om1, om2);
 			
-			RslvdCachedCalculation<Optional<ObjMask>,FeatureObjMaskPairParams> op = CalculatePairIntersectionCommutative
+			RslvdCachedCalculation<Optional<ObjMask>,FeatureInputPairObjs> op = CalculatePairIntersectionCommutative
 					.createWithoutCache(
 						iterationsDilation,
 						iterationsErosion,
@@ -120,8 +120,8 @@ public class ObjMaskProviderPairIntersection extends ObjMaskProviderDimensions {
 		}
 	}
 	
-	private FeatureObjMaskPairParams createParams( ObjMask om1, ObjMask om2 ) throws CreateException {
-		FeatureObjMaskPairParams params = new FeatureObjMaskPairParams(om1, om2);
+	private FeatureInputPairObjs createParams( ObjMask om1, ObjMask om2 ) throws CreateException {
+		FeatureInputPairObjs params = new FeatureInputPairObjs(om1, om2);
 		params.setNrgStack(
 			new NRGStackWithParams(
 				createDims()

@@ -29,9 +29,9 @@ package ch.ethz.biol.cell.mpp.nrg.feature.operator;
 import org.anchoranalysis.feature.bean.operator.FeatureDoubleElem;
 import org.anchoranalysis.feature.cache.CacheableParams;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
+import org.anchoranalysis.feature.calc.params.FeatureInput;
 
-public class AbsoluteDifferenceOverMean<T extends FeatureCalcParams> extends FeatureDoubleElem<T> {
+public class AbsoluteDifferenceOverMean<T extends FeatureInput> extends FeatureDoubleElem<T> {
 
 	/**
 	 * 

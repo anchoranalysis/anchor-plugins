@@ -1,7 +1,7 @@
 package ch.ethz.biol.cell.mpp.mark.provider;
 
 import org.anchoranalysis.anchor.mpp.bean.provider.MarkProvider;
-import org.anchoranalysis.anchor.mpp.feature.bean.mark.FeatureMarkParams;
+import org.anchoranalysis.anchor.mpp.feature.bean.mark.FeatureInputMark;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
 
 /*
@@ -39,7 +39,7 @@ import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.provider.FeatureProvider;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.init.FeatureInitParams;
-import org.anchoranalysis.feature.session.SessionFactory;
+import org.anchoranalysis.feature.session.FeatureSession;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorSingle;
 import org.anchoranalysis.image.bean.provider.ImageDimProvider;
 import org.anchoranalysis.image.extent.ImageRes;
@@ -56,7 +56,7 @@ public class MarkProviderRequireFeatureRelationThreshold extends MarkProvider {
 	private MarkProvider markProvider;
 	
 	@BeanField
-	private FeatureProvider<FeatureMarkParams> featureProvider;
+	private FeatureProvider<FeatureInputMark> featureProvider;
 	
 	@BeanField
 	private double threshold;
@@ -77,13 +77,13 @@ public class MarkProviderRequireFeatureRelationThreshold extends MarkProvider {
 			return null;
 		}
 		
-		Feature<FeatureMarkParams> feature = featureProvider.create();
+		Feature<FeatureInputMark> feature = featureProvider.create();
 				
 		ImageRes res = resProvider!=null ? resProvider.create().getRes() : null;
 		
 		double featureVal = calculateParams(
 			feature,
-			new FeatureMarkParams(mark, res)
+			new FeatureInputMark(mark, res)
 		);
 		
 		if (relation.create().isRelationToValueTrue(featureVal, threshold)) {
@@ -93,10 +93,10 @@ public class MarkProviderRequireFeatureRelationThreshold extends MarkProvider {
 		}
 	}
 	
-	private double calculateParams( Feature<FeatureMarkParams> feature, FeatureMarkParams params ) throws CreateException {
+	private double calculateParams( Feature<FeatureInputMark> feature, FeatureInputMark params ) throws CreateException {
 		
 		try {
-			FeatureCalculatorSingle<FeatureMarkParams> session = SessionFactory.createAndStart(
+			FeatureCalculatorSingle<FeatureInputMark> session = FeatureSession.with(
 				feature,
 				new FeatureInitParams(),
 				getSharedObjects().getFeature().getSharedFeatureSet().downcast(),
@@ -119,12 +119,12 @@ public class MarkProviderRequireFeatureRelationThreshold extends MarkProvider {
 	}
 
 
-	public FeatureProvider<FeatureMarkParams> getFeatureProvider() {
+	public FeatureProvider<FeatureInputMark> getFeatureProvider() {
 		return featureProvider;
 	}
 
 
-	public void setFeatureProvider(FeatureProvider<FeatureMarkParams> featureProvider) {
+	public void setFeatureProvider(FeatureProvider<FeatureInputMark> featureProvider) {
 		this.featureProvider = featureProvider;
 	}
 

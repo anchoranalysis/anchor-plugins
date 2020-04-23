@@ -1,6 +1,6 @@
 package ch.ethz.biol.cell.mpp.nrg.feature.ind;
 
-import org.anchoranalysis.anchor.mpp.feature.nrg.elem.NRGElemIndCalcParams;
+import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputSingleMemo;
 import org.anchoranalysis.anchor.mpp.mark.GlobalRegionIdentifiers;
 
 /*
@@ -53,7 +53,7 @@ public class BoundingBoxExtent extends NRGElemIndPhysical {
 	// END BEAN PARAMETERS
 	
 	@Override
-	public double calcCast( NRGElemIndCalcParams params ) throws FeatureCalcException {
+	public double calcCast( FeatureInputSingleMemo params ) throws FeatureCalcException {
 		
 		BoundingBox bbox = params.getPxlPartMemo().getMark().bbox(params.getDimensions(), regionID);
 		

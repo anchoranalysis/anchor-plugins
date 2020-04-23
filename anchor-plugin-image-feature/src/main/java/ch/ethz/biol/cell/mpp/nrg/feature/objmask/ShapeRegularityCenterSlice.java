@@ -31,7 +31,7 @@ import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.feature.cache.CacheableParams;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.feature.bean.objmask.FeatureObjMask;
-import org.anchoranalysis.image.feature.objmask.FeatureObjMaskParams;
+import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
 import org.anchoranalysis.image.objmask.ObjMask;
 
 public class ShapeRegularityCenterSlice extends FeatureObjMask {
@@ -42,9 +42,9 @@ public class ShapeRegularityCenterSlice extends FeatureObjMask {
 	private static final long serialVersionUID = 1L;
 
 	@Override
-	public double calc(CacheableParams<FeatureObjMaskParams> paramsCacheable) throws FeatureCalcException {
+	public double calc(CacheableParams<FeatureInputSingleObj> paramsCacheable) throws FeatureCalcException {
 				
-		FeatureObjMaskParams params = paramsCacheable.getParams();
+		FeatureInputSingleObj params = paramsCacheable.getParams();
 		
 		int zSliceCenter = (int) params.getObjMask().centerOfGravity().getZ();
 		

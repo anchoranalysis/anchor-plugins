@@ -4,7 +4,7 @@ import org.anchoranalysis.feature.cache.calculation.CachedCalculation;
 import org.anchoranalysis.feature.cache.calculation.RslvdCachedCalculation;
 import org.anchoranalysis.feature.cache.calculation.map.RslvdCachedCalculationMap;
 import org.anchoranalysis.feature.session.cache.ICachedCalculationSearch;
-import org.anchoranalysis.image.feature.objmask.FeatureObjMaskParams;
+import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
 import org.anchoranalysis.image.objmask.ObjMask;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
@@ -12,7 +12,7 @@ public class CalculateErosion extends CalculateObjMask {
 
 	private CalculateErosion(
 		int iterations,
-		RslvdCachedCalculationMap<ObjMask,FeatureObjMaskParams,Integer> map
+		RslvdCachedCalculationMap<ObjMask,FeatureInputSingleObj,Integer> map
 	) {
 		super(iterations,map);
 	}
@@ -21,20 +21,20 @@ public class CalculateErosion extends CalculateObjMask {
 		super(src);
 	}
 	
-	public static CachedCalculation<ObjMask,FeatureObjMaskParams> create(
-		ICachedCalculationSearch<FeatureObjMaskParams> cache,
+	public static CachedCalculation<ObjMask,FeatureInputSingleObj> create(
+		ICachedCalculationSearch<FeatureInputSingleObj> cache,
 		int iterations,
 		boolean do3D
 	) {
-		RslvdCachedCalculationMap<ObjMask,FeatureObjMaskParams,Integer> map = cache.search(
+		RslvdCachedCalculationMap<ObjMask,FeatureInputSingleObj,Integer> map = cache.search(
 			new CalculateErosionMap(do3D)
 		);
 		
 		return new CalculateErosion(iterations, map);
 	}
 	
-	public static RslvdCachedCalculation<ObjMask,FeatureObjMaskParams> createFromCacheRslvd(
-		ICachedCalculationSearch<FeatureObjMaskParams> cache,
+	public static RslvdCachedCalculation<ObjMask,FeatureInputSingleObj> createFromCacheRslvd(
+		ICachedCalculationSearch<FeatureInputSingleObj> cache,
 		int iterations,
 		boolean do3D
 	) {

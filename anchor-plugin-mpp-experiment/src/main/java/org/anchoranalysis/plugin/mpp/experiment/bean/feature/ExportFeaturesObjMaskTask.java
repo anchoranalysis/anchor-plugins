@@ -57,12 +57,12 @@ import org.anchoranalysis.experiment.task.ParametersBound;
 import org.anchoranalysis.experiment.task.ParametersExperiment;
 import org.anchoranalysis.feature.bean.list.FeatureListProvider;
 import org.anchoranalysis.feature.calc.ResultsVectorCollection;
-import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
+import org.anchoranalysis.feature.calc.params.FeatureInput;
 import org.anchoranalysis.feature.io.csv.GroupedResultsVectorCollection;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
 import org.anchoranalysis.image.bean.provider.stack.StackProvider;
-import org.anchoranalysis.image.feature.objmask.FeatureObjMaskParams;
+import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
 import org.anchoranalysis.image.init.ImageInitParams;
 import org.anchoranalysis.image.objmask.ObjMaskCollection;
 import org.anchoranalysis.io.error.AnchorIOException;
@@ -87,10 +87,10 @@ import org.anchoranalysis.plugin.mpp.experiment.outputter.SharedObjectsUtilities
    csvAgg  		one csv file where each row is a group (with aggregated features of the objects within)
    csvGroup 	a csv file per group, where each row is an object
    
-   @param T the type of feature-calc-params produced by the FlexiFeatureTable
+   @param T the feature input-type supported by the FlexiFeatureTable
    
 **/
-public class ExportFeaturesObjMaskTask<T extends FeatureCalcParams> extends ExportFeaturesTask<MultiInput,SharedStateExportFeaturesObjMask<T>> {
+public class ExportFeaturesObjMaskTask<T extends FeatureInput> extends ExportFeaturesTask<MultiInput,SharedStateExportFeaturesObjMask<T>> {
 
 	/**
 	 * 
@@ -99,7 +99,7 @@ public class ExportFeaturesObjMaskTask<T extends FeatureCalcParams> extends Expo
 	
 	// START BEAN PROPERTIES
 	@BeanField
-	private List<NamedBean<FeatureListProvider<FeatureObjMaskParams>>> listFeaturesObjMask = new ArrayList<>();
+	private List<NamedBean<FeatureListProvider<FeatureInputSingleObj>>> listFeaturesObjMask = new ArrayList<>();
 	
 	@BeanField @OptionalBean
 	private Define namedDefinitions;
@@ -317,12 +317,12 @@ public class ExportFeaturesObjMaskTask<T extends FeatureCalcParams> extends Expo
 		this.randomNumberGenerator = randomNumberGenerator;
 	}
 
-	public List<NamedBean<FeatureListProvider<FeatureObjMaskParams>>> getListFeaturesObjMask() {
+	public List<NamedBean<FeatureListProvider<FeatureInputSingleObj>>> getListFeaturesObjMask() {
 		return listFeaturesObjMask;
 	}
 
 	public void setListFeaturesObjMask(
-			List<NamedBean<FeatureListProvider<FeatureObjMaskParams>>> listFeaturesObjMask) {
+			List<NamedBean<FeatureListProvider<FeatureInputSingleObj>>> listFeaturesObjMask) {
 		this.listFeaturesObjMask = listFeaturesObjMask;
 	}
 

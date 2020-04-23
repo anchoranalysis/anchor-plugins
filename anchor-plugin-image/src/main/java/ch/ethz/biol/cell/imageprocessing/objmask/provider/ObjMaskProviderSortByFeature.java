@@ -38,7 +38,7 @@ import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorSingle;
 import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
 import org.anchoranalysis.image.feature.bean.evaluator.FeatureEvaluator;
-import org.anchoranalysis.image.feature.objmask.FeatureObjMaskParams;
+import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
 import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.image.objmask.ObjMaskCollection;
 
@@ -54,7 +54,7 @@ public class ObjMaskProviderSortByFeature extends ObjMaskProvider {
 	private ObjMaskProvider objs;
 	
 	@BeanField
-	private FeatureEvaluator<FeatureObjMaskParams> featureEvaluator;
+	private FeatureEvaluator<FeatureInputSingleObj> featureEvaluator;
 	// END BEAN PROPERTIES
 	
 	private static class ObjWithFeatureValue implements Comparable<ObjWithFeatureValue> {
@@ -87,13 +87,13 @@ public class ObjMaskProviderSortByFeature extends ObjMaskProvider {
 		ObjMaskCollection objsCollection = objs.create();
 		
 		try {
-			FeatureCalculatorSingle<FeatureObjMaskParams> featureSession = featureEvaluator.createAndStartSession();
+			FeatureCalculatorSingle<FeatureInputSingleObj> featureSession = featureEvaluator.createAndStartSession();
 			
 			List<ObjWithFeatureValue> listToSort = new ArrayList<>();
 			for( ObjMask om : objsCollection ) {
 				try {
 					double featureVal = featureSession.calcOne(
-						new FeatureObjMaskParams(om)
+						new FeatureInputSingleObj(om)
 					);
 					listToSort.add( new ObjWithFeatureValue(om,featureVal) );
 				} catch (FeatureCalcException e) {
@@ -125,12 +125,12 @@ public class ObjMaskProviderSortByFeature extends ObjMaskProvider {
 	}
 
 
-	public FeatureEvaluator<FeatureObjMaskParams> getFeatureEvaluator() {
+	public FeatureEvaluator<FeatureInputSingleObj> getFeatureEvaluator() {
 		return featureEvaluator;
 	}
 
 
-	public void setFeatureEvaluator(FeatureEvaluator<FeatureObjMaskParams> featureEvaluator) {
+	public void setFeatureEvaluator(FeatureEvaluator<FeatureInputSingleObj> featureEvaluator) {
 		this.featureEvaluator = featureEvaluator;
 	}
 

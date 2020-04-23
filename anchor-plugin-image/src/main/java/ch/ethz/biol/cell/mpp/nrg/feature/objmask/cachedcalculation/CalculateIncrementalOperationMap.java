@@ -31,12 +31,12 @@ import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.feature.cache.calculation.map.CachedCalculationMapHash;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.extent.Extent;
-import org.anchoranalysis.image.feature.objmask.FeatureObjMaskParams;
+import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
 import org.anchoranalysis.image.objmask.ObjMask;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
-public abstract class CalculateIncrementalOperationMap extends CachedCalculationMapHash<ObjMask,FeatureObjMaskParams,Integer> {
+public abstract class CalculateIncrementalOperationMap extends CachedCalculationMapHash<ObjMask,FeatureInputSingleObj,Integer> {
 
 	private boolean do3D;
 	
@@ -52,7 +52,7 @@ public abstract class CalculateIncrementalOperationMap extends CachedCalculation
 	
 
 	@Override
-	protected ObjMask execute(FeatureObjMaskParams params, Integer key)
+	protected ObjMask execute(FeatureInputSingleObj params, Integer key)
 			throws FeatureCalcException {
 		Extent extnt = params.getNrgStack().getDimensions().getExtnt();
 

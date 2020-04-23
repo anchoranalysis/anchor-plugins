@@ -31,9 +31,9 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.cache.CacheableParams;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.feature.calc.params.FeatureCalcParamsDescriptor;
+import org.anchoranalysis.feature.calc.params.FeatureInputGenericDescriptor;
 import org.anchoranalysis.image.feature.bean.FeatureHistogram;
-import org.anchoranalysis.image.feature.histogram.FeatureHistogramParams;
+import org.anchoranalysis.image.feature.histogram.FeatureInputHistogram;
 
 public class ConvertToRatioOfHistogramTotalCount extends FeatureHistogram {
 
@@ -44,11 +44,11 @@ public class ConvertToRatioOfHistogramTotalCount extends FeatureHistogram {
 	
 	// START BEAN PROPERTIES
 	@BeanField
-	private Feature<FeatureHistogramParams> item;
+	private Feature<FeatureInputHistogram> item;
 	// END BEAN PROPERTIES
 	
 	@Override
-	public double calc(CacheableParams<FeatureHistogramParams> params)
+	public double calc(CacheableParams<FeatureInputHistogram> params)
 			throws FeatureCalcException {
 
 		double val = params.calc(item);
@@ -60,17 +60,17 @@ public class ConvertToRatioOfHistogramTotalCount extends FeatureHistogram {
 		return String.format("convert_ratio(%s)", getItem().getDscrLong() );
 	}
 
-	public Feature<FeatureHistogramParams> getItem() {
+	public Feature<FeatureInputHistogram> getItem() {
 		return item;
 	}
 
-	public void setItem(Feature<FeatureHistogramParams> item) {
+	public void setItem(Feature<FeatureInputHistogram> item) {
 		this.item = item;
 	}
 
 	@Override
-	public FeatureCalcParamsDescriptor paramType()
+	public FeatureInputGenericDescriptor paramType()
 			throws FeatureCalcException {
-		return FeatureCalcParamsDescriptor.instance;
+		return FeatureInputGenericDescriptor.instance;
 	}
 }

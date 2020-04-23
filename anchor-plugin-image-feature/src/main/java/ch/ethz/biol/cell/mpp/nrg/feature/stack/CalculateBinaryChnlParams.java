@@ -9,14 +9,14 @@ import org.anchoranalysis.image.bean.provider.BinaryImgChnlProvider;
 import org.anchoranalysis.image.binary.BinaryChnl;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelBoxByte;
-import org.anchoranalysis.image.feature.objmask.FeatureObjMaskParams;
-import org.anchoranalysis.image.feature.stack.FeatureStackParams;
+import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
+import org.anchoranalysis.image.feature.stack.FeatureInputStack;
 import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.anchoranalysis.image.voxel.datatype.IncorrectVoxelDataTypeException;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
-public class CalculateBinaryChnlParams extends CachedCalculation<FeatureObjMaskParams, FeatureStackParams> {
+public class CalculateBinaryChnlParams extends CachedCalculation<FeatureInputSingleObj, FeatureInputStack> {
 
 	// None of the following are considered in hash-coding, as considered always singular for all caculations in the same session
 	private BinaryImgChnlProvider binaryImgChnlProvider;
@@ -27,7 +27,7 @@ public class CalculateBinaryChnlParams extends CachedCalculation<FeatureObjMaskP
 	}
 
 	@Override
-	protected FeatureObjMaskParams execute(FeatureStackParams params) throws ExecuteException {
+	protected FeatureInputSingleObj execute(FeatureInputStack params) throws ExecuteException {
 
 		try {
 			BinaryChnl bc = binaryImgChnlProvider.create();
@@ -40,8 +40,8 @@ public class CalculateBinaryChnlParams extends CachedCalculation<FeatureObjMaskP
 		}
 	}
 	
-	private static FeatureObjMaskParams deriveParams(FeatureStackParams params, BinaryVoxelBox<ByteBuffer> bvb ) {
-		FeatureObjMaskParams paramsObj = new FeatureObjMaskParams();
+	private static FeatureInputSingleObj deriveParams(FeatureInputStack params, BinaryVoxelBox<ByteBuffer> bvb ) {
+		FeatureInputSingleObj paramsObj = new FeatureInputSingleObj();
 		paramsObj.setNrgStack( params.getNrgStack() );
 		paramsObj.setObjMask(
 			new ObjMask(bvb)

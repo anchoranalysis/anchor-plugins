@@ -27,7 +27,7 @@ package ch.ethz.biol.cell.mpp.nrg.feature.pair;
  */
 
 import org.anchoranalysis.anchor.mpp.feature.bean.nrg.elem.NRGElemPair;
-import org.anchoranalysis.anchor.mpp.feature.nrg.elem.NRGElemIndCalcParams;
+import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputSingleMemo;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.bean.Feature;
 
@@ -40,14 +40,14 @@ public abstract class NRGElemPairWithFeature extends NRGElemPair {
 
 	// START BEAN PROPERTIES
 	@BeanField
-	private Feature<NRGElemIndCalcParams> item;
+	private Feature<FeatureInputSingleMemo> item;
 	// END BEAN PROPERTIES
 	
-	public Feature<NRGElemIndCalcParams> getItem() {
+	public Feature<FeatureInputSingleMemo> getItem() {
 		return item;
 	}
 
-	public void setItem(Feature<NRGElemIndCalcParams> item) {
+	public void setItem(Feature<FeatureInputSingleMemo> item) {
 		this.item = item;
 	}
 }

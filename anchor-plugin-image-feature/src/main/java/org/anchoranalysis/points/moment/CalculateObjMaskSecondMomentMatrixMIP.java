@@ -29,19 +29,19 @@ package org.anchoranalysis.points.moment;
 
 import org.anchoranalysis.core.cache.ExecuteException;
 import org.anchoranalysis.feature.cache.calculation.CachedCalculation;
-import org.anchoranalysis.image.feature.objmask.FeatureObjMaskParams;
+import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
 import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.math.moment.MomentsFromPointsCalculator;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
-public class CalculateObjMaskSecondMomentMatrixMIP extends CachedCalculation<MomentsFromPointsCalculator,FeatureObjMaskParams> {
+public class CalculateObjMaskSecondMomentMatrixMIP extends CachedCalculation<MomentsFromPointsCalculator,FeatureInputSingleObj> {
 		
 	public CalculateObjMaskSecondMomentMatrixMIP() {
 		super();
 	}
 
 	@Override
-	protected MomentsFromPointsCalculator execute( FeatureObjMaskParams params ) throws ExecuteException {
+	protected MomentsFromPointsCalculator execute( FeatureInputSingleObj params ) throws ExecuteException {
 		ObjMask om = params.getObjMask();
 		
 		return MomentsFromObjMask.apply(om.flattenZ(), false);

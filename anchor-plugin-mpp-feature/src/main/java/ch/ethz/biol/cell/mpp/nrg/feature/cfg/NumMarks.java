@@ -1,7 +1,7 @@
 package ch.ethz.biol.cell.mpp.nrg.feature.cfg;
 
 import org.anchoranalysis.anchor.mpp.feature.bean.cfg.FeatureCfg;
-import org.anchoranalysis.anchor.mpp.feature.bean.cfg.FeatureCfgParams;
+import org.anchoranalysis.anchor.mpp.feature.bean.cfg.FeatureInputCfg;
 
 /*-
  * #%L
@@ -39,7 +39,7 @@ public class NumMarks extends FeatureCfg {
 	private static final long serialVersionUID = 1L;
 
 	@Override
-	public double calc(FeatureCfgParams params) throws FeatureCalcException {
+	public double calc(FeatureInputCfg params) throws FeatureCalcException {
 		return params.getCfg().size();
 	}
 }

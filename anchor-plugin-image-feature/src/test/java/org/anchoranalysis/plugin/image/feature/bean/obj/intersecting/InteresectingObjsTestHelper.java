@@ -33,7 +33,7 @@ import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.name.store.SharedObjects;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.image.feature.objmask.FeatureObjMaskParams;
+import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
 import org.anchoranalysis.image.init.ImageInitParams;
 import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.image.objmask.ObjMaskCollection;
@@ -150,7 +150,7 @@ class InteresectingObjsTestHelper {
 		FeatureTestCalculator.assertIntResult(
 			message,
 			addId(feature),
-			new FeatureObjMaskParams(om, CircleObjMaskFixture.nrgStack()),
+			new FeatureInputSingleObj(om, CircleObjMaskFixture.nrgStack()),
 			Optional.of(createInitParams(others)),
 			expectedResult
 		);		

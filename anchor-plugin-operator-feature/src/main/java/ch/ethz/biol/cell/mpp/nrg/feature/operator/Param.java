@@ -32,12 +32,12 @@ import org.anchoranalysis.core.params.KeyValueParams;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.cache.CacheableParams;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.feature.calc.params.FeatureCalcParamsWithImageParams;
-import org.anchoranalysis.feature.calc.params.FeatureCalcParamsWithImageParamsDescriptor;
-import org.anchoranalysis.feature.params.FeatureParamsDescriptor;
+import org.anchoranalysis.feature.calc.params.FeatureInputParams;
+import org.anchoranalysis.feature.calc.params.FeatureInputParamsDescriptor;
+import org.anchoranalysis.feature.params.FeatureInputDescriptor;
 
 // TODO this behaviour is very ill-defined with parameter type. Clarify
-public class Param<T extends FeatureCalcParamsWithImageParams> extends Feature<T> {
+public class Param<T extends FeatureInputParams> extends Feature<T> {
 
 	/**
 	 * 
@@ -76,8 +76,8 @@ public class Param<T extends FeatureCalcParamsWithImageParams> extends Feature<T
 		this.id = id;
 	}
 	@Override
-	public FeatureParamsDescriptor paramType()
+	public FeatureInputDescriptor paramType()
 			throws FeatureCalcException {
-		return FeatureCalcParamsWithImageParamsDescriptor.instance;
+		return FeatureInputParamsDescriptor.instance;
 	}
 }

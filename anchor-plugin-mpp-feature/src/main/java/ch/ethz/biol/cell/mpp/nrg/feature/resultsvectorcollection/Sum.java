@@ -1,6 +1,6 @@
 package ch.ethz.biol.cell.mpp.nrg.feature.resultsvectorcollection;
 
-import org.anchoranalysis.anchor.mpp.feature.bean.results.FeatureResultsVectorCollection;
+import org.anchoranalysis.anchor.mpp.feature.bean.results.FeatureResults;
 
 /*
  * #%L
@@ -33,12 +33,12 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.index.GetOperationFailedException;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.calc.ResultsVectorCollection;
-import org.anchoranalysis.feature.resultsvectorcollection.FeatureResultsVectorCollectionParams;
+import org.anchoranalysis.feature.resultsvectorcollection.FeatureInputResults;
 
 import cern.colt.list.DoubleArrayList;
 import cern.jet.stat.Descriptive;
 
-public class Sum extends FeatureResultsVectorCollection {
+public class Sum extends FeatureResults {
 
 	/**
 	 * 
@@ -51,7 +51,7 @@ public class Sum extends FeatureResultsVectorCollection {
 	// END BEAN PROPERTIES
 	
 	@Override
-	public double calc(FeatureResultsVectorCollectionParams params)
+	public double calc(FeatureInputResults params)
 			throws FeatureCalcException {
 
 		try {

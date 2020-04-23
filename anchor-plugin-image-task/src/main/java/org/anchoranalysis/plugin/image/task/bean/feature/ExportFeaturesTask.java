@@ -42,7 +42,7 @@ import org.anchoranalysis.experiment.task.Task;
 import org.anchoranalysis.feature.bean.list.FeatureListProvider;
 import org.anchoranalysis.feature.list.NamedFeatureStore;
 import org.anchoranalysis.feature.list.NamedFeatureStoreFactory;
-import org.anchoranalysis.feature.resultsvectorcollection.FeatureResultsVectorCollectionParams;
+import org.anchoranalysis.feature.resultsvectorcollection.FeatureInputResults;
 import org.anchoranalysis.io.bean.filepath.generator.FilePathGenerator;
 import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.filepath.FilePathToUnixStyleConverter;
@@ -78,7 +78,7 @@ public abstract class ExportFeaturesTask<T extends InputFromManager, S extends S
 	
 	/** Features applied to each group to aggregate values (takes FeatureResultsVectorCollection) */
 	@BeanField @OptionalBean
-	private List<NamedBean<FeatureListProvider<FeatureResultsVectorCollectionParams>>> listFeaturesAggregate = new ArrayList<>();
+	private List<NamedBean<FeatureListProvider<FeatureInputResults>>> listFeaturesAggregate = new ArrayList<>();
 	// END BEAN
 	
 	@Override
@@ -107,7 +107,7 @@ public abstract class ExportFeaturesTask<T extends InputFromManager, S extends S
 		LogErrorReporter logErrorReporter = new LogErrorReporter(logReporter);
 		
 		try {
-			NamedFeatureStore<FeatureResultsVectorCollectionParams> featuresAggregate = null;
+			NamedFeatureStore<FeatureInputResults> featuresAggregate = null;
 			
 			if (listFeaturesAggregate!=null) {
 				featuresAggregate = NamedFeatureStoreFactory.createNamedFeatureList(listFeaturesAggregate);
@@ -153,12 +153,12 @@ public abstract class ExportFeaturesTask<T extends InputFromManager, S extends S
 	}
 	
 
-	public List<NamedBean<FeatureListProvider<FeatureResultsVectorCollectionParams>>> getListFeaturesAggregate() {
+	public List<NamedBean<FeatureListProvider<FeatureInputResults>>> getListFeaturesAggregate() {
 		return listFeaturesAggregate;
 	}
 
 	public void setListFeaturesAggregate(
-			List<NamedBean<FeatureListProvider<FeatureResultsVectorCollectionParams>>> listFeaturesAggregate) {
+			List<NamedBean<FeatureListProvider<FeatureInputResults>>> listFeaturesAggregate) {
 		this.listFeaturesAggregate = listFeaturesAggregate;
 	}
 }

@@ -33,10 +33,10 @@ import org.anchoranalysis.core.unit.SpatialConversionUtilities;
 import org.anchoranalysis.feature.bean.operator.FeatureGenericSingleElem;
 import org.anchoranalysis.feature.cache.CacheableParams;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
+import org.anchoranalysis.feature.calc.params.FeatureInput;
 
 // 
-public class ConvertUnits<T extends FeatureCalcParams> extends FeatureGenericSingleElem<T> {
+public class ConvertUnits<T extends FeatureInput> extends FeatureGenericSingleElem<T> {
 
 	/**
 	 * 

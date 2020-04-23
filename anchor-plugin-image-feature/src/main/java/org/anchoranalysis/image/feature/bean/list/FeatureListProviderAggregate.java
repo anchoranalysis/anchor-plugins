@@ -33,8 +33,8 @@ import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.bean.list.FeatureListProvider;
 import org.anchoranalysis.feature.bean.list.FeatureListProviderPrependName;
-import org.anchoranalysis.image.feature.objmask.FeatureObjMaskParams;
-import org.anchoranalysis.image.feature.objmask.pair.merged.FeatureObjMaskPairMergedParams;
+import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
+import org.anchoranalysis.image.feature.objmask.pair.merged.FeatureInputPairObjsMerged;
 
 import ch.ethz.biol.cell.mpp.nrg.feature.objmaskpairmerged.FromFirst;
 import ch.ethz.biol.cell.mpp.nrg.feature.objmaskpairmerged.FromMerged;
@@ -46,10 +46,10 @@ import ch.ethz.biol.cell.mpp.nrg.feature.objmaskpairmerged.FromSecond;
  * 
  * @author Owen Feehan
  * 
- * @param T feature-calc-params type
+ * @param T feature-inout
  *
  */
-public abstract class FeatureListProviderAggregate extends FeatureListProvider<FeatureObjMaskPairMergedParams> {
+public abstract class FeatureListProviderAggregate extends FeatureListProvider<FeatureInputPairObjsMerged> {
 
 	/**
 	 * 
@@ -58,19 +58,19 @@ public abstract class FeatureListProviderAggregate extends FeatureListProvider<F
 	
 	// START BEAN PROPERTIES
 	@BeanField
-	private FeatureListProvider<FeatureObjMaskParams> item;
+	private FeatureListProvider<FeatureInputSingleObj> item;
 	
 	@BeanField
 	private String prependString;
 	// END BEAN PROPERTIES
 	
 	@Override
-	public FeatureList<FeatureObjMaskPairMergedParams> create() throws CreateException {
+	public FeatureList<FeatureInputPairObjsMerged> create() throws CreateException {
 
-		FeatureList<FeatureObjMaskParams> in = item.create();
-		FeatureList<FeatureObjMaskPairMergedParams> out = new FeatureList<>(); 
+		FeatureList<FeatureInputSingleObj> in = item.create();
+		FeatureList<FeatureInputPairObjsMerged> out = new FeatureList<>(); 
 		
-		for( Feature<FeatureObjMaskParams> featExst : in ) {
+		for( Feature<FeatureInputSingleObj> featExst : in ) {
 			
 			FromFirst featFirst = new FromFirst();
 			featFirst.setItem( featExst.duplicateBean() );
@@ -81,7 +81,7 @@ public abstract class FeatureListProviderAggregate extends FeatureListProvider<F
 			FromMerged featMerged = new FromMerged();
 			featMerged.setItem( featExst.duplicateBean() );
 			
-			Feature<FeatureObjMaskPairMergedParams> featOut = createAggregateFeature(featFirst, featSecond, featMerged);
+			Feature<FeatureInputPairObjsMerged> featOut = createAggregateFeature(featFirst, featSecond, featMerged);
 			
 			FeatureListProviderPrependName.setNewNameOnFeature(featOut, featExst.getFriendlyName(), prependString);
 			
@@ -91,10 +91,10 @@ public abstract class FeatureListProviderAggregate extends FeatureListProvider<F
 		return out;
 	}
 	
-	protected abstract Feature<FeatureObjMaskPairMergedParams> createAggregateFeature(
-		Feature<FeatureObjMaskPairMergedParams> featFirst,
-		Feature<FeatureObjMaskPairMergedParams> featSecond,
-		Feature<FeatureObjMaskPairMergedParams> featMerged
+	protected abstract Feature<FeatureInputPairObjsMerged> createAggregateFeature(
+		Feature<FeatureInputPairObjsMerged> featFirst,
+		Feature<FeatureInputPairObjsMerged> featSecond,
+		Feature<FeatureInputPairObjsMerged> featMerged
 	);
 	
 
@@ -107,11 +107,11 @@ public abstract class FeatureListProviderAggregate extends FeatureListProvider<F
 		this.prependString = prependString;
 	}
 
-	public FeatureListProvider<FeatureObjMaskParams> getItem() {
+	public FeatureListProvider<FeatureInputSingleObj> getItem() {
 		return item;
 	}
 
-	public void setItem(FeatureListProvider<FeatureObjMaskParams> item) {
+	public void setItem(FeatureListProvider<FeatureInputSingleObj> item) {
 		this.item = item;
 	}
 

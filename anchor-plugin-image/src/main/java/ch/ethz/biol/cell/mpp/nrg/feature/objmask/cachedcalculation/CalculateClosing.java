@@ -34,21 +34,21 @@ import org.anchoranalysis.feature.cache.calculation.RslvdCachedCalculation;
 import org.anchoranalysis.feature.cache.calculation.map.RslvdCachedCalculationMap;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.session.cache.ICachedCalculationSearch;
-import org.anchoranalysis.image.feature.objmask.FeatureObjMaskParams;
+import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
 import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.image.objmask.morph.MorphologicalErosion;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
-public class CalculateClosing extends CachedCalculation<ObjMask,FeatureObjMaskParams> {
+public class CalculateClosing extends CachedCalculation<ObjMask,FeatureInputSingleObj> {
 
 	private int iterations;
-	private RslvdCachedCalculationMap<ObjMask,FeatureObjMaskParams,Integer> mapDilation;
+	private RslvdCachedCalculationMap<ObjMask,FeatureInputSingleObj,Integer> mapDilation;
 	private boolean do3D;
 	
 	private CalculateClosing(
 		int iterations,
-		RslvdCachedCalculationMap<ObjMask,FeatureObjMaskParams,Integer> mapDilation,
+		RslvdCachedCalculationMap<ObjMask,FeatureInputSingleObj,Integer> mapDilation,
 		boolean do3D
 	) {
 		this.iterations = iterations;
@@ -62,12 +62,12 @@ public class CalculateClosing extends CachedCalculation<ObjMask,FeatureObjMaskPa
 		this.do3D = src.do3D;
 	}
 	
-	public static RslvdCachedCalculation<ObjMask,FeatureObjMaskParams> createFromCache(
-		ICachedCalculationSearch<FeatureObjMaskParams> cache,
+	public static RslvdCachedCalculation<ObjMask,FeatureInputSingleObj> createFromCache(
+		ICachedCalculationSearch<FeatureInputSingleObj> cache,
 		int iterations,
 		boolean do3D
 	) {
-		RslvdCachedCalculationMap<ObjMask,FeatureObjMaskParams,Integer> map = cache.search(
+		RslvdCachedCalculationMap<ObjMask,FeatureInputSingleObj,Integer> map = cache.search(
 			new CalculateDilationMap(do3D)
 		);
 		
@@ -77,7 +77,7 @@ public class CalculateClosing extends CachedCalculation<ObjMask,FeatureObjMaskPa
 	}
 
 	@Override
-	protected ObjMask execute(FeatureObjMaskParams params) throws ExecuteException {
+	protected ObjMask execute(FeatureInputSingleObj params) throws ExecuteException {
 		
 		try {
 			ObjMask omDilated = mapDilation.getOrCalculate(params, iterations);

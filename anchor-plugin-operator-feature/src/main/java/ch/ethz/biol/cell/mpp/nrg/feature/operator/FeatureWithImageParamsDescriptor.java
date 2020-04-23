@@ -26,9 +26,9 @@ package ch.ethz.biol.cell.mpp.nrg.feature.operator;
  * #L%
  */
 
-import org.anchoranalysis.feature.params.FeatureParamsDescriptor;
+import org.anchoranalysis.feature.params.FeatureInputDescriptor;
 
-public class FeatureWithImageParamsDescriptor extends FeatureParamsDescriptor {
+public class FeatureWithImageParamsDescriptor extends FeatureInputDescriptor {
 
 	public static final FeatureWithImageParamsDescriptor instance = new FeatureWithImageParamsDescriptor();
 	

@@ -32,14 +32,14 @@ import org.anchoranalysis.feature.cache.calculation.CachedCalculation;
 import org.anchoranalysis.image.binary.BinaryChnl;
 import org.anchoranalysis.image.binary.values.BinaryValues;
 import org.anchoranalysis.image.chnl.Chnl;
-import org.anchoranalysis.image.feature.stack.FeatureStackParams;
+import org.anchoranalysis.image.feature.stack.FeatureInputStack;
 import org.anchoranalysis.image.histogram.Histogram;
 import org.anchoranalysis.image.histogram.HistogramFactoryUtilities;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
 /** Calculated a histogram for a specific region on a channel, as identified by a mask in another channel */
-public class CalculateHistogramMasked extends CachedCalculation<Histogram, FeatureStackParams> {
+public class CalculateHistogramMasked extends CachedCalculation<Histogram, FeatureInputStack> {
 
 	private int nrgIndexSignal;
 	private int nrgIndexMask;
@@ -57,7 +57,7 @@ public class CalculateHistogramMasked extends CachedCalculation<Histogram, Featu
 	}
 
 	@Override
-	protected Histogram execute( FeatureStackParams params ) throws ExecuteException {
+	protected Histogram execute( FeatureInputStack params ) throws ExecuteException {
 
 		try {
 			Chnl chnl = extractChnl(params);
@@ -93,11 +93,11 @@ public class CalculateHistogramMasked extends CachedCalculation<Histogram, Featu
 				.toHashCode();
 	}
 	
-	private Chnl extractChnl( FeatureStackParams params ) {
+	private Chnl extractChnl( FeatureInputStack params ) {
 		return params.getNrgStack().getChnl(nrgIndexSignal);
 	}
 	
-	private BinaryChnl extractMask( FeatureStackParams params ) {
+	private BinaryChnl extractMask( FeatureInputStack params ) {
 		Chnl chnl = params.getNrgStack().getChnl(nrgIndexMask);
 		return new BinaryChnl(chnl, BinaryValues.getDefault() );
 	}
