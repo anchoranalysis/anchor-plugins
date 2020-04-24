@@ -35,8 +35,6 @@ import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.chnl.Chnl;
 import org.anchoranalysis.image.objmask.ObjMask;
 
-import ch.ethz.biol.cell.mpp.nrg.feature.objmask.IntensityMean;
-
 /**
  * Constructs a 'shell' around an object by a number of dilation/erosion operations (not including the original object mask)
  *  and measures the mean intensity of this shell
@@ -50,7 +48,7 @@ public class IntensityMeanShell extends IntensityMeanShellBaseStandard {
 
 	@Override
 	protected double calcForShell(ObjMask om, Chnl chnl) throws FeatureCalcException {
-		return IntensityMean.calcMeanIntensityObjMask(chnl, om );
+		return IntensityMeanCalculator.calcMeanIntensityObjMask(chnl, om );
 	}
 
 }

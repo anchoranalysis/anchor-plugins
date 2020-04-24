@@ -36,8 +36,7 @@ import org.anchoranalysis.image.chnl.Chnl;
 import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.image.objmask.ObjMaskCollection;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
-
-import ch.ethz.biol.cell.mpp.nrg.feature.objmask.IntensityMean;
+import org.anchoranalysis.plugin.image.feature.bean.obj.single.intensity.IntensityMeanCalculator;
 
 // Rewrites the intensity for each ObjMask (assume no overlap) so that its mean is 128
 public class ChnlProviderNormaliseIntensityForObjects extends ChnlProvider {
@@ -67,7 +66,7 @@ public class ChnlProviderNormaliseIntensityForObjects extends ChnlProvider {
 		for( ObjMask om : objsCollection ) {
 			
 			try {
-				double meanIntensity = IntensityMean.calcMeanIntensityObjMask(chnl, om);
+				double meanIntensity = IntensityMeanCalculator.calcMeanIntensityObjMask(chnl, om);
 				
 				if (meanIntensity==0.0) {
 					// Special case. The mean can only be 0.0, if all pixels are 0

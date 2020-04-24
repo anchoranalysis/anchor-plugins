@@ -2,7 +2,7 @@ package org.anchoranalysis.plugin.image.feature.bean.obj.single.intensity;
 
 /*
  * #%L
- * anchor-plugin-image-feature
+ * anchor-plugin-image
  * %%
  * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
  * %%
@@ -27,55 +27,19 @@ package org.anchoranalysis.plugin.image.feature.bean.obj.single.intensity;
  */
 
 
-import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.chnl.Chnl;
-import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
 import org.anchoranalysis.image.objmask.ObjMask;
 
-
-/**
- * From Page 727 from Lin et al (A Multi-Model Approach to Simultaneous Segmentation and Classification of Heterogeneous Populations of Cell Nuclei
- * 
- * @author Owen Feehan
- *
- */
-public class TextureScore extends FeatureNrgChnl {
+public class IntensityMean extends IntensityMeanFromObj {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 
-	// START BEAN PROPERTIES
-	@BeanField
-	private int nrgIndexGradient = 1;
-	// END BEAN PROPERTIES
-
 	@Override
-	protected double calcForChnl(SessionInput<FeatureInputSingleObj> input, Chnl chnl) throws FeatureCalcException {
-
-		ObjMask om = input.get().getObjMask();
-		Chnl chnlGradient = input.get().getNrgStack().getNrgStack().getChnl(nrgIndexGradient);
-		
-		return scoreFromMeans(
-			IntensityMeanCalculator.calcMeanIntensityObjMask(chnl, om),
-			IntensityMeanCalculator.calcMeanIntensityObjMask(chnlGradient, om)
-		);
-	}
-	
-	private static double scoreFromMeans(double meanIntensity, double meanGradientIntensity) {
-		double scaleFactor = 128 / meanIntensity;
-		
-		return (scaleFactor*meanGradientIntensity)/meanIntensity;
-	}
-
-	public int getNrgIndexGradient() {
-		return nrgIndexGradient;
-	}
-
-	public void setNrgIndexGradient(int nrgIndexGradient) {
-		this.nrgIndexGradient = nrgIndexGradient;
+	protected double calcForMaskedChnl(Chnl chnl, ObjMask mask) throws FeatureCalcException {
+		return IntensityMeanCalculator.calcMeanIntensityObjMask(chnl, mask);
 	}
 }
