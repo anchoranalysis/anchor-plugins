@@ -34,9 +34,9 @@ import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.bean.operator.VectorFromFeature;
 import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.feature.calc.params.FeatureInput;
-import org.anchoranalysis.feature.params.FeatureInputDescriptor;
-import org.anchoranalysis.feature.params.ParamTypeUtilities;
+import org.anchoranalysis.feature.input.FeatureInput;
+import org.anchoranalysis.feature.input.descriptor.FeatureInputDescriptor;
+import org.anchoranalysis.feature.input.descriptor.FeatureInputDescriptorUtilities;
 
 // converts a feature to a physical distance in a XY place that is isometric
 public class DotProduct<T extends FeatureInput> extends Feature<T> {
@@ -87,7 +87,7 @@ public class DotProduct<T extends FeatureInput> extends Feature<T> {
 
 	@Override
 	public FeatureInputDescriptor paramType() throws FeatureCalcException {
-		return ParamTypeUtilities.paramTypeForTwo(vector1.paramType(), vector2.paramType());
+		return FeatureInputDescriptorUtilities.paramTypeForTwo(vector1.paramType(), vector2.paramType());
 	}
 
 	@Override

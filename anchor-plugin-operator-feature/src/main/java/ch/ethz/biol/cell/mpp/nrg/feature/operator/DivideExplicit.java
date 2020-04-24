@@ -31,7 +31,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.bean.operator.FeatureDoubleElem;
 import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.feature.calc.params.FeatureInput;
+import org.anchoranalysis.feature.input.FeatureInput;
 
 
 public class DivideExplicit<T extends FeatureInput> extends FeatureDoubleElem<T> {

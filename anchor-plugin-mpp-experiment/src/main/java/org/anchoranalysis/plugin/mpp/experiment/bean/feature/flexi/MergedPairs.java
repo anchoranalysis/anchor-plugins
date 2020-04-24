@@ -42,7 +42,7 @@ import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.bean.list.FeatureListProvider;
-import org.anchoranalysis.feature.calc.params.FeatureInput;
+import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.list.NamedFeatureStore;
 import org.anchoranalysis.feature.list.NamedFeatureStoreFactory;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;

@@ -34,7 +34,7 @@ import org.anchoranalysis.core.cache.ExecuteException;
 import org.anchoranalysis.core.index.GetOperationFailedException;
 import org.anchoranalysis.feature.cache.calculation.CacheableCalculationMap;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.feature.calc.params.FeatureInput;
+import org.anchoranalysis.feature.input.FeatureInput;
 
 /**
  * Implementation of a CachedCalculationMap using a Hash-Map

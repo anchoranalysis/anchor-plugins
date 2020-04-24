@@ -31,7 +31,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.feature.calc.params.FeatureInputGenericDescriptor;
+import org.anchoranalysis.feature.input.descriptor.FeatureInputGenericDescriptor;
 import org.anchoranalysis.image.feature.bean.FeatureHistogram;
 import org.anchoranalysis.image.feature.histogram.FeatureInputHistogram;
 

@@ -29,7 +29,7 @@ import org.anchoranalysis.feature.cache.SessionInput;
  */
 
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.feature.calc.params.FeatureInput;
+import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.math.statistics.FirstSecondOrderStatistic;
 
 // Z-score of a value

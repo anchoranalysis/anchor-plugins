@@ -32,7 +32,7 @@ import org.anchoranalysis.anchor.mpp.feature.bean.results.FeatureResults;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.index.GetOperationFailedException;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.feature.calc.ResultsVectorCollection;
+import org.anchoranalysis.feature.calc.results.ResultsVectorCollection;
 import org.anchoranalysis.feature.resultsvectorcollection.FeatureInputResults;
 
 import cern.colt.list.DoubleArrayList;

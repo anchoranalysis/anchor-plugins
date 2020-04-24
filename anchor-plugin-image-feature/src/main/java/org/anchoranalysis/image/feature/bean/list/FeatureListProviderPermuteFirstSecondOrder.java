@@ -38,8 +38,8 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.bean.list.FeatureListProvider;
-import org.anchoranalysis.feature.calc.params.FeatureInput;
-import org.anchoranalysis.feature.calc.params.FeatureInputNRGStack;
+import org.anchoranalysis.feature.input.FeatureInput;
+import org.anchoranalysis.feature.input.FeatureInputNRGStack;
 
 import ch.ethz.biol.cell.mpp.nrg.feature.objmask.NRGParamThree;
 import ch.ethz.biol.cell.mpp.nrg.feature.operator.FeatureFirstSecondOrder;

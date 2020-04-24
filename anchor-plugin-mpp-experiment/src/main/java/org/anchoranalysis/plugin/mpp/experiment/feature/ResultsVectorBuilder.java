@@ -30,8 +30,8 @@ import java.util.function.Function;
 
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.feature.calc.ResultsVector;
-import org.anchoranalysis.feature.calc.params.FeatureInput;
+import org.anchoranalysis.feature.calc.results.ResultsVector;
+import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorMulti;
 import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
 import org.anchoranalysis.image.feature.objmask.pair.merged.FeatureInputPairObjsMerged;

@@ -37,7 +37,7 @@ import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.cache.calculation.CacheableCalculation;
 import org.anchoranalysis.feature.cache.calculation.CalculationResolver;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.feature.calc.params.FeatureInput;
+import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.image.feature.bean.objmask.FeatureObjMask;
 import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
 import org.anchoranalysis.image.objmask.ObjMask;

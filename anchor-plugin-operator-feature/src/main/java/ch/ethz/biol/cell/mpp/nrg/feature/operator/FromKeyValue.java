@@ -30,9 +30,9 @@ package ch.ethz.biol.cell.mpp.nrg.feature.operator;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.params.KeyValueParams;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.feature.calc.params.FeatureInputGenericDescriptor;
-import org.anchoranalysis.feature.calc.params.FeatureInputParams;
-import org.anchoranalysis.feature.params.FeatureInputDescriptor;
+import org.anchoranalysis.feature.input.FeatureInputParams;
+import org.anchoranalysis.feature.input.descriptor.FeatureInputDescriptor;
+import org.anchoranalysis.feature.input.descriptor.FeatureInputGenericDescriptor;
 
 public class FromKeyValue extends FeatureWithImageParams {
 

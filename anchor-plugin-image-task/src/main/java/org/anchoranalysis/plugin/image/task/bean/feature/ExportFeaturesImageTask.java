@@ -34,7 +34,7 @@ import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.experiment.task.InputTypesExpected;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.feature.calc.ResultsVector;
+import org.anchoranalysis.feature.calc.results.ResultsVector;
 import org.anchoranalysis.feature.list.NamedFeatureStore;
 import org.anchoranalysis.image.bean.provider.stack.StackProvider;
 import org.anchoranalysis.image.feature.stack.FeatureInputStack;
