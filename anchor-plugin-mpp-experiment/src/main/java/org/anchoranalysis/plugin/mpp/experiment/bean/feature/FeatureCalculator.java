@@ -64,7 +64,7 @@ class FeatureCalculator {
 				
 				T params = listObjParams.get(i);
 			
-				logger.getLogReporter().logFormatted("Calculating params %d of %d: %s", i+1, listObjParams.size(), params.toString() );
+				logger.getLogReporter().logFormatted("Calculating input %d of %d: %s", i+1, listObjParams.size(), params.toString() );
 				
 				ResultsVector rv = session.calcMaybeSuppressErrors(params, logger.getErrorReporter());
 				rv.setIdentifier(objectId);

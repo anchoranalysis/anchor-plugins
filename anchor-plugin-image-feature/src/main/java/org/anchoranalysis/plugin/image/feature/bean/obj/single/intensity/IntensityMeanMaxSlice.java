@@ -28,13 +28,13 @@ package org.anchoranalysis.plugin.image.feature.bean.obj.single.intensity;
 
 
 import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.chnl.Chnl;
-import org.anchoranalysis.image.objmask.ObjMask;
-
+import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
 import ch.ethz.biol.cell.mpp.nrg.feature.objmask.ValueAndIndex;
 
-public class IntensityMeanMaxSlice extends IntensityMeanFromObj {
+public class IntensityMeanMaxSlice extends FeatureNrgChnl {
 
 	/**
 	 * 
@@ -48,10 +48,15 @@ public class IntensityMeanMaxSlice extends IntensityMeanFromObj {
 	@BeanField
 	private int emptyValue = 0;
 	// END BEAN PROPERTIES
-		
+	
 	@Override
-	protected double calcForMaskedChnl(Chnl chnl, ObjMask mask) throws FeatureCalcException {
-		ValueAndIndex vai = StatsHelper.calcMaxSliceMean(chnl, mask, excludeZero );
+	protected double calcForChnl(SessionInput<FeatureInputSingleObj> input, Chnl chnl) throws FeatureCalcException {
+
+		ValueAndIndex vai = StatsHelper.calcMaxSliceMean(
+			chnl,
+			input.get().getObjMask(),
+			excludeZero
+		);
 		
 		if (vai.getIndex()==-1) {
 			return emptyValue;
@@ -78,4 +83,6 @@ public class IntensityMeanMaxSlice extends IntensityMeanFromObj {
 	public void setEmptyValue(int emptyValue) {
 		this.emptyValue = emptyValue;
 	}
+
+
 }

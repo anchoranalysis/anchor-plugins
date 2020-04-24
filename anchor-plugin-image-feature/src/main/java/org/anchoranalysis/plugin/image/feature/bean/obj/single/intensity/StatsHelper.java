@@ -1,18 +1,13 @@
 package org.anchoranalysis.plugin.image.feature.bean.obj.single.intensity;
 
-import java.nio.ByteBuffer;
+import java.util.function.Function;
 
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.chnl.Chnl;
-import org.anchoranalysis.image.convert.ByteConverter;
-import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.histogram.Histogram;
 import org.anchoranalysis.image.histogram.HistogramFactoryUtilities;
 import org.anchoranalysis.image.objmask.ObjMask;
-import org.anchoranalysis.image.voxel.VoxelIntensityList;
-import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.anchoranalysis.image.voxel.statistics.VoxelStatisticsFromHistogram;
 
 import ch.ethz.biol.cell.mpp.nrg.feature.objmask.ValueAndIndex;
@@ -81,56 +76,21 @@ class StatsHelper {
 	}
 
 	
-	public static double calcStdDev( Chnl chnl, ObjMask objMask, boolean ignoreZero, double emptyValue ) {
+	public static double calcStatistic(
+		Chnl chnl,
+		ObjMask objMask,
+		boolean ignoreZero,
+		double emptyValue,
+		Function<VoxelStatisticsFromHistogram,Double> funcExtractStatistic
+	) {
 		Histogram hist = HistogramFactoryUtilities.createHistogramIgnoreZero(chnl,objMask,ignoreZero);
 		
 		if (hist.getTotalCount()==0) {
 			return emptyValue;
 		}
 		
-		return new VoxelStatisticsFromHistogram(hist).stdDev();
-	}
-		
-	public static double calcQuantileIntensityObjMask( Chnl chnl, ObjMask om, double quantile ) {
-		
-		Histogram h = HistogramFactoryUtilities.create(chnl, om);
-		return h.quantile(quantile);
-	}
-	
-	
-	public static double calcVarianceObjMask( Chnl chnl, ObjMask om ) {
-		
-		VoxelBox<ByteBuffer> vbIntens = chnl.getVoxelBox().asByte();
-		
-		BoundingBox bbox = om.getBoundingBox();
-		
-		Point3i crnrMin = bbox.getCrnrMin();
-		Point3i crnrMax = bbox.calcCrnrMax();
-		
-		VoxelIntensityList list = new VoxelIntensityList();
-		
-		for( int z=crnrMin.getZ(); z<=crnrMax.getZ(); z++) {
-			
-			ByteBuffer bbIntens = vbIntens.getPixelsForPlane( z ).buffer();
-			ByteBuffer bbMask = om.getVoxelBox().getPixelsForPlane( z - crnrMin.getZ() ).buffer();
-			
-			int offsetMask = 0;
-			for( int y=crnrMin.getY(); y<=crnrMax.getY(); y++) {
-				for( int x=crnrMin.getX(); x<=crnrMax.getX(); x++) {
-				
-					if (bbMask.get(offsetMask)==om.getBinaryValuesByte().getOnByte()) {
-						int offsetIntens = vbIntens.extnt().offset(x, y);
-						
-						list.add(
-							ByteConverter.unsignedByteToInt( bbIntens.get(offsetIntens) )
-						);
-					}
-							
-					offsetMask++;
-				}
-			}
-		}
-		
-		return list.variance( list.mean() );
+		return funcExtractStatistic.apply(
+			new VoxelStatisticsFromHistogram(hist)
+		);
 	}
 }
