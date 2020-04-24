@@ -3,7 +3,7 @@ package ch.ethz.biol.cell.mpp.nrg.feature.objmask;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.NonNegative;
 
-public abstract class IntensityMeanShellBase extends IntensityMeanBase {
+public abstract class IntensityMeanShellBase extends FeatureNrgChnl {
 
 	/**
 	 * 

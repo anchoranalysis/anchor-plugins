@@ -29,31 +29,32 @@ package ch.ethz.biol.cell.mpp.nrg.feature.objmask;
 
 import java.nio.ByteBuffer;
 
-import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.chnl.Chnl;
 import org.anchoranalysis.image.extent.BoundingBox;
-import org.anchoranalysis.image.feature.bean.objmask.FeatureObjMask;
 import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
 import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 
-public class IntensitySum extends FeatureObjMask {
+public class IntensitySum extends FeatureNrgChnl {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-
-	// START BEAN PROPERTIES
-	@BeanField
-	private int nrgIndex = 0;
-	// END BEAN PROPERTIES
 	
-	public static double calcSumIntensityObjMask( Chnl chnl, ObjMask om ) {
+	@Override
+	protected double calcForChnl(SessionInput<FeatureInputSingleObj> input, Chnl chnl) throws FeatureCalcException {
+		return calcSumIntensityObjMask(
+			chnl,
+			input.get().getObjMask()
+		);
+	}
+	
+	private static double calcSumIntensityObjMask( Chnl chnl, ObjMask om ) {
 		
 		VoxelBox<?> vbIntens = chnl.getVoxelBox().any();
 		
@@ -87,23 +88,4 @@ public class IntensitySum extends FeatureObjMask {
 		}
 		return sum;
 	}
-	
-
-	@Override
-	public double calc(SessionInput<FeatureInputSingleObj> paramsCacheable) throws FeatureCalcException {
-		
-		FeatureInputSingleObj params = paramsCacheable.get();
-		
-		Chnl chnl = params.getNrgStack().getNrgStack().getChnl(nrgIndex);
-		return calcSumIntensityObjMask(chnl, params.getObjMask() );
-	}
-
-	public int getNrgIndex() {
-		return nrgIndex;
-	}
-
-	public void setNrgIndex(int nrgIndex) {
-		this.nrgIndex = nrgIndex;
-	}
-
 }

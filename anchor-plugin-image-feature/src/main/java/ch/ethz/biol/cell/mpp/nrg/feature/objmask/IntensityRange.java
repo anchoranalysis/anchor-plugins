@@ -31,10 +31,10 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.chnl.Chnl;
-import org.anchoranalysis.image.feature.bean.objmask.FeatureObjMask;
 import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
+import org.anchoranalysis.image.objmask.ObjMask;
 
-public class IntensityRange extends FeatureObjMask {
+public class IntensityRange extends FeatureNrgChnl {
 
 	/**
 	 * 
@@ -43,9 +43,6 @@ public class IntensityRange extends FeatureObjMask {
 
 	// START BEAN PROPERTIES
 	@BeanField
-	private int nrgIndex = 0;
-	
-	@BeanField
 	private double quantileLow = 0;
 	
 	@BeanField
@@ -53,22 +50,13 @@ public class IntensityRange extends FeatureObjMask {
 	// END BEAN PROPERTIES
 	
 	@Override
-	public double calc(SessionInput<FeatureInputSingleObj> paramsCacheable) throws FeatureCalcException {
+	protected double calcForChnl(SessionInput<FeatureInputSingleObj> input, Chnl chnl) throws FeatureCalcException {
+
+		ObjMask om = input.get().getObjMask();
 		
-		FeatureInputSingleObj params = paramsCacheable.get();
-		
-		Chnl chnl = params.getNrgStack().getNrgStack().getChnl(nrgIndex);
-		double high = IntensityQuantile.calcQuantileIntensityObjMask(chnl, params.getObjMask(), quantileHigh );
-		double low = IntensityQuantile.calcQuantileIntensityObjMask(chnl, params.getObjMask(), quantileLow );
+		double high = QuantileHelper.calcQuantileIntensityObjMask(chnl, om, quantileHigh );
+		double low = QuantileHelper.calcQuantileIntensityObjMask(chnl, om, quantileLow );
 		return high-low;
-	}
-
-	public int getNrgIndex() {
-		return nrgIndex;
-	}
-
-	public void setNrgIndex(int nrgIndex) {
-		this.nrgIndex = nrgIndex;
 	}
 
 	public double getQuantileLow() {
@@ -86,6 +74,4 @@ public class IntensityRange extends FeatureObjMask {
 	public void setQuantileHigh(double quantileHigh) {
 		this.quantileHigh = quantileHigh;
 	}
-
-
 }

@@ -32,11 +32,10 @@ import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.chnl.Chnl;
-import org.anchoranalysis.image.feature.bean.objmask.FeatureObjMask;
 import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
 import org.anchoranalysis.image.objmask.ObjMask;
 
-public class IntensityStdDevMaxSlice extends FeatureObjMask {
+public class IntensityStdDevMaxSlice extends FeatureNrgChnl {
 
 	/**
 	 * 
@@ -45,14 +44,25 @@ public class IntensityStdDevMaxSlice extends FeatureObjMask {
 
 	// START BEAN PROPERTIES
 	@BeanField
-	private int nrgIndex = 0;
-	
-	@BeanField
 	private boolean excludeZero = false;
 	
 	@BeanField
 	private double emptyValue = 0;
 	// END BEAN PROPERTIES
+	
+	@Override
+	protected double calcForChnl(SessionInput<FeatureInputSingleObj> input, Chnl chnl) throws FeatureCalcException {
+
+		ObjMask om = input.get().getObjMask();
+		
+		ValueAndIndex vai = IntensityStatsHelper.calcMaxSliceMean(chnl, om, excludeZero );
+		
+		if (vai.getIndex()==-1) {
+			return emptyValue;
+		}
+		
+		return calcStdDev( chnl, om, excludeZero, vai.getIndex(), emptyValue );
+	}
 	
 	private static double calcStdDev( Chnl chnl, ObjMask om, boolean excludeZero, int z, double emptyValue ) throws FeatureCalcException {
 			
@@ -67,56 +77,27 @@ public class IntensityStdDevMaxSlice extends FeatureObjMask {
 		int oldZ = omSlice.getBoundingBox().getCrnrMin().getZ();
 		omSlice.getBoundingBox().getCrnrMin().setZ( oldZ + om.getBoundingBox().getCrnrMin().getZ() );
 		
-		return IntensityStdDev.calcStdDev(omSlice, chnl, excludeZero, emptyValue);
+		return IntensityStatsHelper.calcStdDev(
+			chnl,
+			omSlice,
+			excludeZero,
+			emptyValue
+		);
 	}
 	
-
-	@Override
-	public double calc(SessionInput<FeatureInputSingleObj> paramsCacheable) throws FeatureCalcException {
-		
-		FeatureInputSingleObj params = paramsCacheable.get();
-		
-		Chnl chnl = params.getNrgStack().getNrgStack().getChnl(nrgIndex);
-		
-		ValueAndIndex vai = IntensityMeanHelper.calcMaxSliceMean(chnl, params.getObjMask(), excludeZero );
-		
-		if (vai.getIndex()==-1) {
-			return emptyValue;
-		}
-		
-		double sd = calcStdDev( chnl, params.getObjMask(), excludeZero, vai.getIndex(), emptyValue );
-		
-		return sd;
-	}
-
-	public int getNrgIndex() {
-		return nrgIndex;
-	}
-
-	public void setNrgIndex(int nrgIndex) {
-		this.nrgIndex = nrgIndex;
-	}
-
-
 	public boolean isExcludeZero() {
 		return excludeZero;
 	}
-
 
 	public void setExcludeZero(boolean excludeZero) {
 		this.excludeZero = excludeZero;
 	}
 
-
-
 	public double getEmptyValue() {
 		return emptyValue;
 	}
 
-
-
 	public void setEmptyValue(double emptyValue) {
 		this.emptyValue = emptyValue;
 	}
-
 }

@@ -6,8 +6,9 @@ import org.anchoranalysis.image.chnl.Chnl;
 import org.anchoranalysis.image.histogram.Histogram;
 import org.anchoranalysis.image.histogram.HistogramFactoryUtilities;
 import org.anchoranalysis.image.objmask.ObjMask;
+import org.anchoranalysis.image.voxel.statistics.VoxelStatisticsFromHistogram;
 
-class IntensityMeanHelper {
+class IntensityStatsHelper {
 
 	/**
 	 * Calculates the mean-intensity of a masked-part of each slice, and returns the maximum value across all sices
@@ -70,4 +71,14 @@ class IntensityMeanHelper {
 		return hCut.mean();
 	}
 
+	
+	public static double calcStdDev( Chnl chnl, ObjMask objMask, boolean ignoreZero, double emptyValue ) {
+		Histogram hist = HistogramFactoryUtilities.createHistogramIgnoreZero(chnl,objMask,ignoreZero);
+		
+		if (hist.getTotalCount()==0) {
+			return emptyValue;
+		}
+		
+		return new VoxelStatisticsFromHistogram(hist).stdDev();
+	}
 }

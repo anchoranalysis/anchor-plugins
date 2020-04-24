@@ -52,7 +52,7 @@ public class IntensityMeanShellHighestNumPixels extends IntensityMeanShellBaseSt
 	
 	@Override
 	protected double calcForShell(ObjMask shell, Chnl chnl) throws FeatureCalcException {
-		return IntensityMeanHelper.calcMeanNumPixels(chnl, shell, numPixels, true );
+		return IntensityStatsHelper.calcMeanNumPixels(chnl, shell, numPixels, true );
 	}
 
 	public int getNumPixels() {

@@ -50,7 +50,7 @@ public class IntensityMeanNumPixels extends IntensityMeanFromObj {
 
 	@Override
 	protected double calcForMaskedChnl(Chnl chnl, ObjMask mask) throws FeatureCalcException {
-		return IntensityMeanHelper.calcMeanNumPixels(chnl, mask, numPixels, highest );
+		return IntensityStatsHelper.calcMeanNumPixels(chnl, mask, numPixels, highest );
 	}
 	
 	public int getNumPixels() {
