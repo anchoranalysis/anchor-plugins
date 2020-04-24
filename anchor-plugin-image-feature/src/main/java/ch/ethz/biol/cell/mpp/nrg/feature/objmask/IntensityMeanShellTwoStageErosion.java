@@ -28,16 +28,26 @@ package ch.ethz.biol.cell.mpp.nrg.feature.objmask;
 
 
 import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.bean.annotation.Positive;
+import org.anchoranalysis.core.cache.ExecuteException;
 import org.anchoranalysis.feature.cache.SessionInput;
+import org.anchoranalysis.feature.cache.calculation.ResolvedCalculation;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.chnl.Chnl;
-import org.anchoranalysis.image.feature.bean.objmask.FeatureObjMask;
 import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
-import org.anchoranalysis.image.histogram.Histogram;
-import org.anchoranalysis.image.histogram.HistogramFactoryUtilities;
 import org.anchoranalysis.image.objmask.ObjMask;
 
-public class IntensityMeanHighestNumPixels extends FeatureObjMask {
+import ch.ethz.biol.cell.mpp.nrg.feature.objmask.cachedcalculation.CalculateShellTwoStage;
+
+/**
+ * 1. Constructs a 'shell' around an object by eroding iterationsErosion times
+ * 2. Erodes the result a further iterationsErosionSecond times
+ * 3. Measures the mean intensity of (Region 1. less Region 2.)
+ * 
+ * @author Owen Feehan
+ *
+ */
+public class IntensityMeanShellTwoStageErosion extends IntensityMeanShellBase {
 
 	/**
 	 * 
@@ -45,46 +55,43 @@ public class IntensityMeanHighestNumPixels extends FeatureObjMask {
 	private static final long serialVersionUID = 1L;
 
 	// START BEAN PROPERTIES
-	@BeanField
-	private int nrgIndex = 0;
-	
-	@BeanField
-	private int numPixels = 10;
+	@BeanField @Positive
+	private int iterationsFurther = 0;
 	// END BEAN PROPERTIES
 	
-	public static double calcMeanHighestNumPixels( Chnl chnl, ObjMask om, int numPixels ) {
-		Histogram h = HistogramFactoryUtilities.create(chnl, om);
-		
-		Histogram hCut = h.extractPixelsFromRight(numPixels);
-		
-		return hCut.mean();
+	@Override
+	public String getParamDscr() {
+		return String.format(
+			"%s,iterationsFurther=%d",
+			iterationsFurther
+		);
 	}
-	
 
 	@Override
-	public double calc(SessionInput<FeatureInputSingleObj> paramsCacheable) throws FeatureCalcException {
+	protected double calcForChnl(SessionInput<FeatureInputSingleObj> input, Chnl chnl) throws FeatureCalcException {
 		
-		FeatureInputSingleObj params = paramsCacheable.get();
+		ObjMask om;
+		try {
+			ResolvedCalculation<ObjMask,FeatureInputSingleObj> ccShellTwoStage = CalculateShellTwoStage.createFromCache(
+				input.resolver(),
+				getIterationsErosion(),
+				iterationsFurther,
+				isDo3D()
+			);
+					
+			om = ccShellTwoStage.getOrCalculate(input.get());
+		} catch (ExecuteException e) {
+			throw new FeatureCalcException(e);
+		}
 		
-		Chnl chnl = params.getNrgStack().getNrgStack().getChnl(nrgIndex);
-		return calcMeanHighestNumPixels(chnl, params.getObjMask(), numPixels );
+		return IntensityMean.calcMeanIntensityObjMask(chnl, om );
+	}
+	
+	public int getIterationsFurther() {
+		return iterationsFurther;
 	}
 
-	public int getNrgIndex() {
-		return nrgIndex;
+	public void setIterationsFurther(int iterationsFurther) {
+		this.iterationsFurther = iterationsFurther;
 	}
-
-	public void setNrgIndex(int nrgIndex) {
-		this.nrgIndex = nrgIndex;
-	}
-
-	public int getNumPixels() {
-		return numPixels;
-	}
-
-	public void setNumPixels(int numPixels) {
-		this.numPixels = numPixels;
-	}
-
-
 }

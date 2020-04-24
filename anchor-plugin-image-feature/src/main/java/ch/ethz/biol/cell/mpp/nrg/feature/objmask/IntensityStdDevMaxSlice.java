@@ -36,8 +36,6 @@ import org.anchoranalysis.image.feature.bean.objmask.FeatureObjMask;
 import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
 import org.anchoranalysis.image.objmask.ObjMask;
 
-import ch.ethz.biol.cell.mpp.nrg.feature.objmask.IntensityMeanMaxSlice.ValueAndIndex;
-
 public class IntensityStdDevMaxSlice extends FeatureObjMask {
 
 	/**
@@ -80,7 +78,7 @@ public class IntensityStdDevMaxSlice extends FeatureObjMask {
 		
 		Chnl chnl = params.getNrgStack().getNrgStack().getChnl(nrgIndex);
 		
-		ValueAndIndex vai = IntensityMeanMaxSlice.calcMeanIntensityObjMask(chnl, params.getObjMask(), excludeZero );
+		ValueAndIndex vai = IntensityMeanHelper.calcMaxSliceMean(chnl, params.getObjMask(), excludeZero );
 		
 		if (vai.getIndex()==-1) {
 			return emptyValue;

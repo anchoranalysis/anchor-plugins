@@ -28,16 +28,11 @@ package ch.ethz.biol.cell.mpp.nrg.feature.objmask;
 
 
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.chnl.Chnl;
-import org.anchoranalysis.image.feature.bean.objmask.FeatureObjMask;
-import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
-import org.anchoranalysis.image.histogram.Histogram;
-import org.anchoranalysis.image.histogram.HistogramFactoryUtilities;
 import org.anchoranalysis.image.objmask.ObjMask;
 
-public class IntensityMeanLowestNumPixels extends FeatureObjMask {
+public class IntensityMeanNumPixels extends IntensityMeanFromObj {
 
 	/**
 	 * 
@@ -46,38 +41,18 @@ public class IntensityMeanLowestNumPixels extends FeatureObjMask {
 
 	// START BEAN PROPERTIES
 	@BeanField
-	private int nrgIndex = 0;
-	
-	@BeanField
 	private int numPixels = 10;
+	
+	/** Iff true the highest-intensity pixels are used within the mask, otherwise the lowest-intensity pixels */
+	@BeanField
+	private boolean highest = true;
 	// END BEAN PROPERTIES
-	
-	public static double calcMeanLowestNumPixels( Chnl chnl, ObjMask om, int numPixels ) {
-		
-		Histogram h = HistogramFactoryUtilities.create(chnl, om);
-		
-		Histogram hCut = h.extractPixelsFromLeft(numPixels);
-	
-		return hCut.mean();
-	}
 
 	@Override
-	public double calc(SessionInput<FeatureInputSingleObj> paramsCacheable) throws FeatureCalcException {
-		
-		FeatureInputSingleObj params = paramsCacheable.get();
-		
-		Chnl chnl = params.getNrgStack().getNrgStack().getChnl(nrgIndex);
-		return calcMeanLowestNumPixels(chnl, params.getObjMask(), numPixels );
+	protected double calcForMaskedChnl(Chnl chnl, ObjMask mask) throws FeatureCalcException {
+		return IntensityMeanHelper.calcMeanNumPixels(chnl, mask, numPixels, highest );
 	}
-
-	public int getNrgIndex() {
-		return nrgIndex;
-	}
-
-	public void setNrgIndex(int nrgIndex) {
-		this.nrgIndex = nrgIndex;
-	}
-
+	
 	public int getNumPixels() {
 		return numPixels;
 	}
@@ -86,5 +61,11 @@ public class IntensityMeanLowestNumPixels extends FeatureObjMask {
 		this.numPixels = numPixels;
 	}
 
+	public boolean isHighest() {
+		return highest;
+	}
 
+	public void setHighest(boolean highest) {
+		this.highest = highest;
+	}
 }

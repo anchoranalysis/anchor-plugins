@@ -28,15 +28,11 @@ package ch.ethz.biol.cell.mpp.nrg.feature.objmask;
 
 
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.chnl.Chnl;
-import org.anchoranalysis.image.feature.bean.objmask.FeatureObjMask;
-import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
 import org.anchoranalysis.image.objmask.ObjMask;
 
-public class IntensityMeanMaxSlice extends FeatureObjMask {
+public class IntensityMeanMaxSlice extends IntensityMeanFromObj {
 
 	/**
 	 * 
@@ -45,84 +41,15 @@ public class IntensityMeanMaxSlice extends FeatureObjMask {
 
 	// START BEAN PROPERTIES
 	@BeanField
-	private int nrgIndex = 0;
-	
-	@BeanField
 	private boolean excludeZero = false;
 	
 	@BeanField
 	private int emptyValue = 0;
 	// END BEAN PROPERTIES
-	
-	public static class ValueAndIndex {
-		private double value;
-		private int index;
 		
-		public ValueAndIndex(double value, int index) {
-			super();
-			this.value = value;
-			this.index = index;
-		}
-
-		public double getValue() {
-			return value;
-		}
-
-		public void setValue(double value) {
-			this.value = value;
-		}
-
-		public int getIndex() {
-			return index;
-		}
-
-		public void setIndex(int index) {
-			this.index = index;
-		}
-		
-		
-	}
-	
-	public static ValueAndIndex calcMeanIntensityObjMask( Chnl chnl, ObjMask om, boolean excludeZero ) throws FeatureCalcException {
-		
-		double max = Double.NEGATIVE_INFINITY;
-		int index = -1;
-		
-		for( int z=0; z<om.getBoundingBox().extnt().getZ(); z++ ) {
-			
-			ObjMask omSlice;
-			try {
-				omSlice = om.extractSlice(z, true);
-			} catch (OperationFailedException e) {
-				throw new FeatureCalcException(e);
-			}
-			
-			// We adjust the z coordiante to point to the channel
-			int oldZ = omSlice.getBoundingBox().getCrnrMin().getZ();
-			omSlice.getBoundingBox().getCrnrMin().setZ( oldZ + om.getBoundingBox().getCrnrMin().getZ() );
-			
-			if (omSlice.hasPixelsGreaterThan(0)) {
-				double mean = IntensityMean.calcMeanIntensityObjMask(chnl, omSlice, excludeZero);
-				
-				if (mean>max) {
-					index = z;
-					max = mean;
-				}
-			}
-		}
-		
-		return new ValueAndIndex(max,index);
-	}
-	
-
 	@Override
-	public double calc(SessionInput<FeatureInputSingleObj> paramsCacheable) throws FeatureCalcException {
-		
-		FeatureInputSingleObj params = paramsCacheable.get();
-		
-		Chnl chnl = params.getNrgStack().getNrgStack().getChnl(nrgIndex);
-		
-		ValueAndIndex vai = calcMeanIntensityObjMask(chnl, params.getObjMask(), excludeZero );
+	protected double calcForMaskedChnl(Chnl chnl, ObjMask mask) throws FeatureCalcException {
+		ValueAndIndex vai = IntensityMeanHelper.calcMaxSliceMean(chnl, mask, excludeZero );
 		
 		if (vai.getIndex()==-1) {
 			return emptyValue;
@@ -130,15 +57,6 @@ public class IntensityMeanMaxSlice extends FeatureObjMask {
 		
 		return vai.getValue();
 	}
-
-	public int getNrgIndex() {
-		return nrgIndex;
-	}
-
-	public void setNrgIndex(int nrgIndex) {
-		this.nrgIndex = nrgIndex;
-	}
-
 
 	public boolean isExcludeZero() {
 		return excludeZero;
@@ -158,5 +76,4 @@ public class IntensityMeanMaxSlice extends FeatureObjMask {
 	public void setEmptyValue(int emptyValue) {
 		this.emptyValue = emptyValue;
 	}
-
 }
