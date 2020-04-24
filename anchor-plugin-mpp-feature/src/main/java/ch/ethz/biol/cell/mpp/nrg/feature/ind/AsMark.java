@@ -33,7 +33,7 @@ import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputSingleMemoDe
 import org.anchoranalysis.feature.bean.operator.FeatureSingleElem;
 import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.feature.params.FeatureInputDescriptor;
+import org.anchoranalysis.feature.input.descriptor.FeatureInputDescriptor;
 
 public class AsMark extends FeatureSingleElem<FeatureInputSingleMemo,FeatureInputMark> {
 

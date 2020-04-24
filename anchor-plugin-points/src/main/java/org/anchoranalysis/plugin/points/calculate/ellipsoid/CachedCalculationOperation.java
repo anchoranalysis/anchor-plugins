@@ -30,7 +30,7 @@ package org.anchoranalysis.plugin.points.calculate.ellipsoid;
 import org.anchoranalysis.core.cache.ExecuteException;
 import org.anchoranalysis.core.cache.Operation;
 import org.anchoranalysis.feature.cache.calculation.ResolvedCalculation;
-import org.anchoranalysis.feature.calc.params.FeatureInput;
+import org.anchoranalysis.feature.input.FeatureInput;
 
 /**
  * Binds params with a CachedCalculation and exposes it as the {@link org.anchoranalysis.core.cache.Operation} interface

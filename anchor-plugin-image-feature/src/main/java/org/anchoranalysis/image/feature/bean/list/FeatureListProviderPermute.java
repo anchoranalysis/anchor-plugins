@@ -45,7 +45,7 @@ import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.bean.list.FeatureListProvider;
-import org.anchoranalysis.feature.calc.params.FeatureInput;
+import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.shared.SharedFeaturesInitParams;
 
 /**

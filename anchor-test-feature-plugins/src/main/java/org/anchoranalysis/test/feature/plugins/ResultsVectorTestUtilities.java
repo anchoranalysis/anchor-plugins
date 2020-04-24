@@ -28,7 +28,7 @@ package org.anchoranalysis.test.feature.plugins;
 
 import static org.junit.Assert.assertTrue;
 
-import org.anchoranalysis.feature.calc.ResultsVector;
+import org.anchoranalysis.feature.calc.results.ResultsVector;
 
 public class ResultsVectorTestUtilities {
 

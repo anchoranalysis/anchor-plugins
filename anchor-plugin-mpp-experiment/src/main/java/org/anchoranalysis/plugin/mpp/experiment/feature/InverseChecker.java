@@ -29,7 +29,7 @@ package org.anchoranalysis.plugin.mpp.experiment.feature;
 import java.util.function.Supplier;
 
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.feature.calc.ResultsVector;
+import org.anchoranalysis.feature.calc.results.ResultsVector;
 import org.anchoranalysis.feature.name.FeatureNameList;
 import org.anchoranalysis.image.feature.objmask.pair.merged.FeatureInputPairObjsMerged;
 

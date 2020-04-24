@@ -29,7 +29,7 @@ package org.anchoranalysis.image.feature.bean.list;
 import java.util.List;
 
 import org.anchoranalysis.feature.bean.Feature;
-import org.anchoranalysis.feature.calc.params.FeatureInput;
+import org.anchoranalysis.feature.input.FeatureInput;
 
 class ListUtilities {
 

@@ -29,7 +29,7 @@ package org.anchoranalysis.test.feature.plugins;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.feature.calc.params.FeatureInput;
+import org.anchoranalysis.feature.input.FeatureInput;
 
 /** Tests that consider two possibilities: positive and negative */
 public class FeatureTestCalculatorDuo {

@@ -1,7 +1,7 @@
 package ch.ethz.biol.cell.mpp.nrg.feature.stack;
 
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.feature.params.FeatureInputDescriptor;
+import org.anchoranalysis.feature.input.descriptor.FeatureInputDescriptor;
 import org.anchoranalysis.image.feature.bean.FeatureSharedObjs;
 import org.anchoranalysis.image.feature.stack.FeatureInputStack;
 import org.anchoranalysis.image.feature.stack.FeatureInputStackDescriptor;

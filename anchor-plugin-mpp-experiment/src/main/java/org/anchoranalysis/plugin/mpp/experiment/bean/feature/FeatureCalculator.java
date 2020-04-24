@@ -31,9 +31,9 @@ import java.util.List;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.feature.calc.ResultsVector;
-import org.anchoranalysis.feature.calc.ResultsVectorCollection;
-import org.anchoranalysis.feature.calc.params.FeatureInput;
+import org.anchoranalysis.feature.calc.results.ResultsVector;
+import org.anchoranalysis.feature.calc.results.ResultsVectorCollection;
+import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.plugin.mpp.experiment.feature.FeatureSessionFlexiFeatureTable;
 
 class FeatureCalculator {

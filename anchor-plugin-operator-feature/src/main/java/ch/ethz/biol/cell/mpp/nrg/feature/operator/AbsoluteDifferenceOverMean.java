@@ -29,7 +29,7 @@ package ch.ethz.biol.cell.mpp.nrg.feature.operator;
 import org.anchoranalysis.feature.bean.operator.FeatureDoubleElem;
 import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.feature.calc.params.FeatureInput;
+import org.anchoranalysis.feature.input.FeatureInput;
 
 public class AbsoluteDifferenceOverMean<T extends FeatureInput> extends FeatureDoubleElem<T> {
 

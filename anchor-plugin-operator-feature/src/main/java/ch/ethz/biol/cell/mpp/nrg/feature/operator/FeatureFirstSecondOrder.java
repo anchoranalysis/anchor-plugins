@@ -30,7 +30,7 @@ package ch.ethz.biol.cell.mpp.nrg.feature.operator;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.operator.FeatureGenericSingleElem;
-import org.anchoranalysis.feature.calc.params.FeatureInput;
+import org.anchoranalysis.feature.input.FeatureInput;
 
 public abstract class FeatureFirstSecondOrder<T extends FeatureInput> extends FeatureGenericSingleElem<T> {
 

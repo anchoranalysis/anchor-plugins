@@ -33,7 +33,7 @@ import org.anchoranalysis.core.unit.SpatialConversionUtilities;
 import org.anchoranalysis.feature.bean.operator.FeatureGenericSingleElem;
 import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.feature.calc.params.FeatureInput;
+import org.anchoranalysis.feature.input.FeatureInput;
 
 // 
 public class ConvertUnits<T extends FeatureInput> extends FeatureGenericSingleElem<T> {

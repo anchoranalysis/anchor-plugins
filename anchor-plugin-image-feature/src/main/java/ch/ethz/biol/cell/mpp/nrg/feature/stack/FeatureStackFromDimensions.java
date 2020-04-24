@@ -27,7 +27,7 @@ package ch.ethz.biol.cell.mpp.nrg.feature.stack;
  */
 
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.feature.calc.params.FeatureInputNRGStack;
+import org.anchoranalysis.feature.input.FeatureInputNRGStack;
 import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.feature.bean.FeatureNRGStack;
 

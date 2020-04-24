@@ -1,6 +1,6 @@
 package org.anchoranalysis.plugin.mpp.experiment.bean.feature;
 
-import org.anchoranalysis.feature.calc.params.FeatureInput;
+import org.anchoranalysis.feature.input.FeatureInput;
 
 /*-
  * #%L

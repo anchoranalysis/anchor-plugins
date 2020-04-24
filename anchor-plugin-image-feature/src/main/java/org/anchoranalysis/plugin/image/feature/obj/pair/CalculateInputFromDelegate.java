@@ -4,7 +4,7 @@ import org.anchoranalysis.core.cache.ExecuteException;
 import org.anchoranalysis.feature.cache.calculation.CacheableCalculation;
 import org.anchoranalysis.feature.cache.calculation.CalculationResolver;
 import org.anchoranalysis.feature.cache.calculation.ResolvedCalculation;
-import org.anchoranalysis.feature.calc.params.FeatureInput;
+import org.anchoranalysis.feature.input.FeatureInput;
 
 /**
  * A base class for Cached-Calculations that generate a Params for feature-calculation using an existing "delegate" calculation

@@ -29,8 +29,8 @@ package ch.ethz.biol.cell.mpp.nrg.feature.operator;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.feature.calc.params.FeatureInputParams;
-import org.anchoranalysis.feature.params.FeatureInputDescriptor;
+import org.anchoranalysis.feature.input.FeatureInputParams;
+import org.anchoranalysis.feature.input.descriptor.FeatureInputDescriptor;
 
 public abstract class FeatureWithImageParams extends Feature<FeatureInputParams> {
 
