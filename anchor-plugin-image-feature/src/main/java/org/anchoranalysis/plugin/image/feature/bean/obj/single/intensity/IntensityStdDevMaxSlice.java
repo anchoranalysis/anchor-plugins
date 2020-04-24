@@ -34,9 +34,17 @@ import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.chnl.Chnl;
 import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
 import org.anchoranalysis.image.objmask.ObjMask;
+import org.anchoranalysis.image.voxel.statistics.VoxelStatisticsFromHistogram;
 
 import ch.ethz.biol.cell.mpp.nrg.feature.objmask.ValueAndIndex;
 
+
+/**
+ * The std-deviation corresponding to the slice with maximum-intensity
+ * 
+ * @author Owen Feehan
+ *
+ */
 public class IntensityStdDevMaxSlice extends FeatureNrgChnl {
 
 	/**
@@ -57,16 +65,17 @@ public class IntensityStdDevMaxSlice extends FeatureNrgChnl {
 
 		ObjMask om = input.get().getObjMask();
 		
+		// TODO this calculation should be in a cached-calculation
 		ValueAndIndex vai = StatsHelper.calcMaxSliceMean(chnl, om, excludeZero );
 		
 		if (vai.getIndex()==-1) {
 			return emptyValue;
 		}
 		
-		return calcStdDev( chnl, om, excludeZero, vai.getIndex(), emptyValue );
+		return calcStdDevForSlice( chnl, om, excludeZero, vai.getIndex(), emptyValue );
 	}
 	
-	private static double calcStdDev( Chnl chnl, ObjMask om, boolean excludeZero, int z, double emptyValue ) throws FeatureCalcException {
+	private static double calcStdDevForSlice( Chnl chnl, ObjMask om, boolean excludeZero, int z, double emptyValue ) throws FeatureCalcException {
 			
 		ObjMask omSlice;
 		try {
@@ -79,11 +88,12 @@ public class IntensityStdDevMaxSlice extends FeatureNrgChnl {
 		int oldZ = omSlice.getBoundingBox().getCrnrMin().getZ();
 		omSlice.getBoundingBox().getCrnrMin().setZ( oldZ + om.getBoundingBox().getCrnrMin().getZ() );
 		
-		return StatsHelper.calcStdDev(
+		return StatsHelper.calcStatistic(
 			chnl,
 			omSlice,
 			excludeZero,
-			emptyValue
+			emptyValue,
+			VoxelStatisticsFromHistogram::stdDev
 		);
 	}
 	
