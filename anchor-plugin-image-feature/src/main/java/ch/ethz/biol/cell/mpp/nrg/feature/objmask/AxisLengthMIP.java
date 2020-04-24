@@ -27,55 +27,23 @@ package ch.ethz.biol.cell.mpp.nrg.feature.objmask;
  */
 
 
-import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.feature.cache.SessionInput;
-import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.image.feature.bean.objmask.FeatureObjMask;
+import org.anchoranalysis.feature.cache.calculation.CacheableCalculation;
 import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
 import org.anchoranalysis.math.moment.MomentsFromPointsCalculator;
 import org.anchoranalysis.points.moment.CalculateObjMaskSecondMomentMatrixMIP;
 
-public class AxisLengthMIP extends FeatureObjMask {
-
+public class AxisLengthMIP extends AxisLengthBase {
+	
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	
-	// START BEAN PROPERTIES
-	@BeanField
-	private int index = 0;
-	// END BEAN PROPERTIES
-	
+
 	@Override
-	public double calc(SessionInput<FeatureInputSingleObj> input) throws FeatureCalcException {
-		
-		return calcAxisLengthMIP(
-			input,
-			index
-		);
-	}
-
-	public int getIndex() {
-		return index;
-	}
-
-	public void setIndex(int index) {
-		this.index = index;
-	}
-	
-	private double calcAxisLengthMIP( SessionInput<FeatureInputSingleObj> params, int index ) throws FeatureCalcException {
-		
-		// THIS CAN BE DONE MORE EFFICIENTLY
-		if (!params.get().getObjMask().hasPixelsGreaterThan(0)) {
-			return Double.NaN;
-		}
+	protected CacheableCalculation<MomentsFromPointsCalculator, FeatureInputSingleObj> momentsCalculator() {
 		// Justification
 		// http://stackoverflow.com/questions/1711784/computing-object-statistics-from-the-second-central-moments
 		// http://en.wikipedia.org/wiki/Image_moment
-		MomentsFromPointsCalculator moments = params.calc(
-			new CalculateObjMaskSecondMomentMatrixMIP()
-		); 
-		return moments.get( index ).eigenvalueNormalizedAsAxisLength();
+		return new CalculateObjMaskSecondMomentMatrixMIP();
 	}
 }

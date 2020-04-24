@@ -1,6 +1,6 @@
 package ch.ethz.biol.cell.mpp.nrg.feature.objmask;
 
-import org.anchoranalysis.bean.BeanInstanceMap;
+
 
 /*
  * #%L
@@ -30,24 +30,15 @@ import org.anchoranalysis.bean.BeanInstanceMap;
 
 
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.bean.error.BeanMisconfiguredException;
-import org.anchoranalysis.feature.cache.SessionInput;
-import org.anchoranalysis.feature.cache.calculation.CacheableCalculation;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.chnl.Chnl;
-import org.anchoranalysis.image.feature.bean.objmask.FeatureObjMask;
-import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
-import org.anchoranalysis.image.histogram.Histogram;
-import org.anchoranalysis.image.histogram.HistogramFactoryUtilities;
 import org.anchoranalysis.image.objmask.ObjMask;
 
-import ch.ethz.biol.cell.mpp.nrg.feature.objmask.cachedcalculation.CalculateShellObjMask;
-
-//
-// Constructs a 'shell' around an object by a number of dilation/erosion operations (not including the original object mask)
-//  and measures the mean intensity of this shell
-//
-public class IntensityMeanShellHighestNumPixels extends FeatureObjMask {
+/**
+ * Constructs a 'shell' around an object by a number of dilation/erosion operations (not including the original object mask)
+ *  and measures the mean intensity of this shell
+ */
+public class IntensityMeanShellHighestNumPixels extends IntensityMeanShellBaseStandard {
 
 	/**
 	 * 
@@ -56,93 +47,12 @@ public class IntensityMeanShellHighestNumPixels extends FeatureObjMask {
 
 	// START BEAN PROPERTIES
 	@BeanField
-	private int nrgIndex = 0;
-	
-	@BeanField
-	private int iterationsDilation = 0;
-	
-	@BeanField
-	private int iterationsErosion = 0;
-	
-	@BeanField
-	private boolean do3D = true;
-	
-	@BeanField
-	private boolean inverse = false;		// Calculates instead on the inverse of the mask (what's left when the shell is removed)
-	
-	@BeanField
 	private int numPixels = 10;
 	// END BEAN PROPERTIES
 	
 	@Override
-	public void checkMisconfigured( BeanInstanceMap defaultInstances ) throws BeanMisconfiguredException {
-		super.checkMisconfigured( defaultInstances );
-		if( iterationsDilation==0 && iterationsErosion==0 ) {
-			throw new BeanMisconfiguredException("At least one of iterationsDilation and iterationsErosion must be positive");
-		}
-	}
-		
-	@Override
-	public double calc(SessionInput<FeatureInputSingleObj> input) throws FeatureCalcException {
-		
-		Chnl chnl = input.get().getNrgStack().getNrgStack().getChnl(nrgIndex);
-		
-		CacheableCalculation<ObjMask,FeatureInputSingleObj> ccShellObjMask = CalculateShellObjMask.createFromCache(
-			input.resolver(),
-			iterationsDilation,
-			iterationsErosion,
-			0,
-			do3D,
-			inverse	
-		);
-							
-		ObjMask om = input.calc(ccShellObjMask);
-		
-		Histogram h = HistogramFactoryUtilities.create(chnl, om);
-		
-		h = h.extractPixelsFromRight(numPixels);
-		
-		return h.mean();
-	}
-	
-	public int getNrgIndex() {
-		return nrgIndex;
-	}
-
-	public void setNrgIndex(int nrgIndex) {
-		this.nrgIndex = nrgIndex;
-	}
-
-	public boolean isDo3D() {
-		return do3D;
-	}
-
-	public void setDo3D(boolean do3d) {
-		do3D = do3d;
-	}
-
-	public int getIterationsDilation() {
-		return iterationsDilation;
-	}
-
-	public void setIterationsDilation(int iterationsDilation) {
-		this.iterationsDilation = iterationsDilation;
-	}
-
-	public int getIterationsErosion() {
-		return iterationsErosion;
-	}
-
-	public void setIterationsErosion(int iterationsErosion) {
-		this.iterationsErosion = iterationsErosion;
-	}
-
-	public boolean isInverse() {
-		return inverse;
-	}
-
-	public void setInverse(boolean inverse) {
-		this.inverse = inverse;
+	protected double calcForShell(ObjMask shell, Chnl chnl) throws FeatureCalcException {
+		return IntensityMeanHelper.calcMeanNumPixels(chnl, shell, numPixels, true );
 	}
 
 	public int getNumPixels() {
@@ -152,7 +62,4 @@ public class IntensityMeanShellHighestNumPixels extends FeatureObjMask {
 	public void setNumPixels(int numPixels) {
 		this.numPixels = numPixels;
 	}
-
-
-
 }
