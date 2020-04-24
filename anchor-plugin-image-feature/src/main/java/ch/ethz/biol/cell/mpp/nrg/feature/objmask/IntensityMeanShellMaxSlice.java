@@ -35,7 +35,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.error.BeanMisconfiguredException;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.feature.cache.SessionInput;
-import org.anchoranalysis.feature.cache.calculation.CachedCalculation;
+import org.anchoranalysis.feature.cache.calculation.CacheableCalculation;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.nrg.NRGStack;
 import org.anchoranalysis.image.binary.values.BinaryValues;
@@ -97,21 +97,19 @@ public class IntensityMeanShellMaxSlice extends FeatureObjMask {
 	}
 	
 	@Override
-	public double calc(SessionInput<FeatureInputSingleObj> paramsCacheable) throws FeatureCalcException {
+	public double calc(SessionInput<FeatureInputSingleObj> input) throws FeatureCalcException {
 		
-		FeatureInputSingleObj params = paramsCacheable.getParams();
+		NRGStack nrgStack = input.get().getNrgStack().getNrgStack();
 		
-		NRGStack nrgStack = params.getNrgStack().getNrgStack();
-		
-		CachedCalculation<ObjMask,FeatureInputSingleObj> ccShellObjMask = CalculateShellObjMask.createFromCache(
-			paramsCacheable,
+		CacheableCalculation<ObjMask,FeatureInputSingleObj> ccShellObjMask = CalculateShellObjMask.createFromCache(
+			input.resolver(),
 			iterationsDilation,
 			iterationsErosion,
 			iterationsErosionSecond,
 			do3D,
 			inverse	
 		);
-		ObjMask om = paramsCacheable.calc(ccShellObjMask);
+		ObjMask om = input.calc(ccShellObjMask);
 
 		
 		if (nrgIndexMask!=-1) {

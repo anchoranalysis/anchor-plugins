@@ -33,7 +33,7 @@ import org.anchoranalysis.anchor.mpp.mark.conic.MarkEllipse;
 import org.anchoranalysis.core.cache.ExecuteException;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.feature.cache.calculation.CachedCalculation;
+import org.anchoranalysis.feature.cache.calculation.CacheableCalculation;
 import org.anchoranalysis.feature.nrg.NRGStack;
 import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
 import org.anchoranalysis.image.objmask.ObjMask;
@@ -41,7 +41,7 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
 
 import ch.ethz.biol.cell.mpp.mark.pointsfitter.LinearLeastSquaresEllipseFitterGeoRegression;
 
-public class CalculateEllipseLeastSquares extends CachedCalculation<ObjMaskAndEllipse, FeatureInputSingleObj> {
+public class CalculateEllipseLeastSquares extends CacheableCalculation<ObjMaskAndEllipse, FeatureInputSingleObj> {
 
 	private EllipseFactory factory;
 	

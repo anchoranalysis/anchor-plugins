@@ -31,7 +31,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 import org.anchoranalysis.feature.cache.SessionInput;
-import org.anchoranalysis.feature.cache.calculation.RslvdCachedCalculation;
+import org.anchoranalysis.feature.cache.calculation.ResolvedCalculation;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.feature.bean.objmask.FeatureObjMaskSharedObjects;
 import org.anchoranalysis.image.feature.init.FeatureInitParamsSharedObjs;
@@ -80,7 +80,7 @@ public abstract class FeatureIntersectingObjs extends FeatureObjMaskSharedObject
 		
 		return valueFor(
 			input,
-			input.search(
+			input.resolver().search(
 				new CalculateIntersectingObjs(id, searchObjs)
 			)
 		);
@@ -88,7 +88,7 @@ public abstract class FeatureIntersectingObjs extends FeatureObjMaskSharedObject
 	
 	protected abstract double valueFor(
 		SessionInput<FeatureInputSingleObj> params,
-		RslvdCachedCalculation<ObjMaskCollection, FeatureInputSingleObj> intersecting
+		ResolvedCalculation<ObjMaskCollection, FeatureInputSingleObj> intersecting
 	) throws FeatureCalcException;
 	
 	public String getId() {

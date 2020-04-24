@@ -50,7 +50,7 @@ public class CalculateLevelFromHistogram extends FeatureHistogram {
 	public double calc(SessionInput<FeatureInputHistogram> input)
 			throws FeatureCalcException {
 		try {
-			return calculateLevel.calculateLevel( input.getParams().getHistogram() );
+			return calculateLevel.calculateLevel( input.get().getHistogram() );
 		} catch (OperationFailedException e) {
 			throw new FeatureCalcException(e);
 		}

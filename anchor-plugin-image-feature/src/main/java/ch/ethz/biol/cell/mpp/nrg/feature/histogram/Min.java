@@ -43,6 +43,6 @@ public class Min extends FeatureHistogram {
 	@Override
 	public double calc(SessionInput<FeatureInputHistogram> input)
 			throws FeatureCalcException {
-		return input.getParams().getHistogram().calcMin();
+		return input.get().getHistogram().calcMin();
 	}
 }

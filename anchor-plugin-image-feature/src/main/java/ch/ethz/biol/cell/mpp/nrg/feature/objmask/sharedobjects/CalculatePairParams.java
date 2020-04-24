@@ -2,7 +2,7 @@ package ch.ethz.biol.cell.mpp.nrg.feature.objmask.sharedobjects;
 
 import org.anchoranalysis.core.cache.ExecuteException;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.feature.cache.calculation.CachedCalculation;
+import org.anchoranalysis.feature.cache.calculation.CacheableCalculation;
 import org.anchoranalysis.image.bean.provider.BinaryImgChnlProvider;
 import org.anchoranalysis.image.binary.BinaryChnl;
 import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
@@ -10,7 +10,7 @@ import org.anchoranalysis.image.feature.objmask.pair.FeatureInputPairObjs;
 import org.anchoranalysis.image.objmask.ObjMask;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
-public class CalculatePairParams extends CachedCalculation<FeatureInputPairObjs, FeatureInputSingleObj> {
+public class CalculatePairParams extends CacheableCalculation<FeatureInputPairObjs, FeatureInputSingleObj> {
 
 	private BinaryImgChnlProvider binaryImgChnlProvider;
 		

@@ -39,18 +39,19 @@ public class AtBorderXY extends FeatureObjMask {
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	// START BEAN PROPERTIES
-	// END BEAN PROPERTIES
-	
 	@Override
-	public double calc(SessionInput<FeatureInputSingleObj> paramsCacheable) throws FeatureCalcException {
+	public double calc(SessionInput<FeatureInputSingleObj> input) throws FeatureCalcException {
 		
-		FeatureInputSingleObj params = paramsCacheable.getParams();
-		
-		if (params.getObjMask().getBoundingBox().atBorderXY(params.getNrgStack().getDimensions())) {
+		if (atBorder(input.get())) {
 			return 1.0;
 		} else {
 			return 0.0;
 		}
+	}
+	
+	private static boolean atBorder( FeatureInputSingleObj input ) {
+		return input.getObjMask().getBoundingBox().atBorderXY(
+			input.getNrgStack().getDimensions()
+		);
 	}
 }

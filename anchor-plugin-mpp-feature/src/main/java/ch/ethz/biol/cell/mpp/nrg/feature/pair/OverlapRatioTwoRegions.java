@@ -64,7 +64,7 @@ public class OverlapRatioTwoRegions extends FeaturePairMemo {
 	@Override
 	public double calc( SessionInput<FeatureInputPairMemo> paramsCacheable ) throws FeatureCalcException {
 		
-		FeatureInputPairMemo params = paramsCacheable.getParams();
+		FeatureInputPairMemo params = paramsCacheable.get();
 		
 		return calcOverlapRatioMin(
 			params.getObj1(),

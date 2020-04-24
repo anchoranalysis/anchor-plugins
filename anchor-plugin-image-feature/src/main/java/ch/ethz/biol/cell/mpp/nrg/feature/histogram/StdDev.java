@@ -43,6 +43,6 @@ public class StdDev extends FeatureHistogram {
 	@Override
 	public double calc(SessionInput<FeatureInputHistogram> input)
 			throws FeatureCalcException {
-		return input.getParams().getHistogram().stdDev();
+		return input.get().getHistogram().stdDev();
 	}
 }

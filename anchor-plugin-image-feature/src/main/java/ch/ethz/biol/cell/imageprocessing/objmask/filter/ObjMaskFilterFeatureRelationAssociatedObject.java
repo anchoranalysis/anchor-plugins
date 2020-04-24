@@ -89,7 +89,7 @@ public class ObjMaskFilterFeatureRelationAssociatedObject extends ObjMaskFilter 
 		
 		for( ObjMask match : matches ) {
 			
-			double valMatch = evaluatorForMatch.calcOne(
+			double valMatch = evaluatorForMatch.calc(
 				new FeatureInputSingleObj(match)
 			);
 			
@@ -139,7 +139,7 @@ public class ObjMaskFilterFeatureRelationAssociatedObject extends ObjMaskFilter 
 	}
 	
 	protected boolean match(ObjMask om, ImageDim dim, ObjMaskCollection matches) throws FeatureCalcException {
-		double val = featureSession.calcOne(
+		double val = featureSession.calc(
 			new FeatureInputSingleObj(om)
 		);
 		return doesMatchAllAssociatedObjects(val,matches);

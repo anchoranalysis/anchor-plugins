@@ -67,7 +67,7 @@ public class AxisLengthMIP extends FeatureObjMask {
 	private double calcAxisLengthMIP( SessionInput<FeatureInputSingleObj> params, int index ) throws FeatureCalcException {
 		
 		// THIS CAN BE DONE MORE EFFICIENTLY
-		if (!params.getParams().getObjMask().hasPixelsGreaterThan(0)) {
+		if (!params.get().getObjMask().hasPixelsGreaterThan(0)) {
 			return Double.NaN;
 		}
 		// Justification

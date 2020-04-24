@@ -61,7 +61,7 @@ public class OverlapRatioTwoRegionsMaskGlobal extends OverlapMaskBase {
 	@Override
 	public double calc( SessionInput<FeatureInputPairMemo> paramsCacheable ) throws FeatureCalcException {
 		
-		FeatureInputPairMemo params = paramsCacheable.getParams();
+		FeatureInputPairMemo params = paramsCacheable.get();
 		
 		return calcOverlapRatioMin(
 			params.getObj1(),

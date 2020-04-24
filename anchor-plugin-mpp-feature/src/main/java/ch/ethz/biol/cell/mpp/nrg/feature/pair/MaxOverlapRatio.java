@@ -73,7 +73,7 @@ public class MaxOverlapRatio extends FeaturePairMemo {
 	@Override
 	public double calc( SessionInput<FeatureInputPairMemo> paramsCacheable ) throws FeatureCalcException {
 		
-		FeatureInputPairMemo params = paramsCacheable.getParams();
+		FeatureInputPairMemo params = paramsCacheable.get();
 		
 		double ratio = OverlapRatio.calcOverlapRatioMin(
 			params.getObj1(),

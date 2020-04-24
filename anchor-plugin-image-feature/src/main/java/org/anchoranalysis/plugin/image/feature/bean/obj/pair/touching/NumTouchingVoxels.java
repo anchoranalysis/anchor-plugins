@@ -59,7 +59,7 @@ public class NumTouchingVoxels extends TouchingVoxels {
 	public double calc(SessionInput<FeatureInputPairObjs> paramsCacheable)
 			throws FeatureCalcException {
 
-		FeatureInputPairObjs params = paramsCacheable.getParams();
+		FeatureInputPairObjs params = paramsCacheable.get();
 		
 		try {
 			ObjMask om1 = params.getObjMask1();

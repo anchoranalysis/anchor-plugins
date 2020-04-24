@@ -31,9 +31,9 @@ import java.util.Optional;
 
 import org.anchoranalysis.core.cache.ExecuteException;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.feature.cache.calculation.CachedCalculation;
-import org.anchoranalysis.feature.cache.calculation.RslvdCachedCalculation;
-import org.anchoranalysis.feature.session.cache.ICachedCalculationSearch;
+import org.anchoranalysis.feature.cache.calculation.CacheableCalculation;
+import org.anchoranalysis.feature.cache.calculation.CalculationResolver;
+import org.anchoranalysis.feature.cache.calculation.ResolvedCalculation;
 import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
 import org.anchoranalysis.image.feature.objmask.pair.FeatureInputPairObjs;
@@ -55,18 +55,18 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
  * @author Owen Feehan
  *
  */
-public class CalculatePairIntersection extends CachedCalculation<Optional<ObjMask>,FeatureInputPairObjs> {
+public class CalculatePairIntersection extends CacheableCalculation<Optional<ObjMask>,FeatureInputPairObjs> {
 
 	private boolean do3D;
 	private int iterationsErosion;
 	
-	private RslvdCachedCalculation<ObjMask,FeatureInputSingleObj> ccDilation1;
-	private RslvdCachedCalculation<ObjMask,FeatureInputSingleObj> ccDilation2;
+	private ResolvedCalculation<ObjMask,FeatureInputSingleObj> ccDilation1;
+	private ResolvedCalculation<ObjMask,FeatureInputSingleObj> ccDilation2;
 		
-	public static RslvdCachedCalculation<Optional<ObjMask>,FeatureInputPairObjs> createFromCache(
-		ICachedCalculationSearch<FeatureInputPairObjs> cache,
-		ICachedCalculationSearch<FeatureInputSingleObj> cacheDilationObj1,
-		ICachedCalculationSearch<FeatureInputSingleObj> cacheDilationObj2,
+	public static ResolvedCalculation<Optional<ObjMask>,FeatureInputPairObjs> createFromCache(
+		CalculationResolver<FeatureInputPairObjs> cache,
+		CalculationResolver<FeatureInputSingleObj> cacheDilationObj1,
+		CalculationResolver<FeatureInputSingleObj> cacheDilationObj2,
 		int iterations1,
 		int iterations2,
 		boolean do3D,
@@ -75,10 +75,10 @@ public class CalculatePairIntersection extends CachedCalculation<Optional<ObjMas
 		
 		// We use two additional caches, for the calculations involving the single objects, as these can be expensive, and we want
 		//  them also cached
-		RslvdCachedCalculation<ObjMask,FeatureInputSingleObj> ccDilation1 = CalculateDilation.createFromCache(
+		ResolvedCalculation<ObjMask,FeatureInputSingleObj> ccDilation1 = CalculateDilation.createFromCache(
 			cacheDilationObj1, iterations1, do3D	
 		);
-		RslvdCachedCalculation<ObjMask,FeatureInputSingleObj> ccDilation2 = CalculateDilation.createFromCache(
+		ResolvedCalculation<ObjMask,FeatureInputSingleObj> ccDilation2 = CalculateDilation.createFromCache(
 			cacheDilationObj2, iterations2, do3D	
 		);
 		return cache.search(
@@ -89,8 +89,8 @@ public class CalculatePairIntersection extends CachedCalculation<Optional<ObjMas
 	private CalculatePairIntersection(
 		boolean do3D,
 		int iterationsErosion,
-		RslvdCachedCalculation<ObjMask,FeatureInputSingleObj> ccDilation1,
-		RslvdCachedCalculation<ObjMask,FeatureInputSingleObj> ccDilation2
+		ResolvedCalculation<ObjMask,FeatureInputSingleObj> ccDilation1,
+		ResolvedCalculation<ObjMask,FeatureInputSingleObj> ccDilation2
 	) {
 		super();
 		this.iterationsErosion = iterationsErosion;

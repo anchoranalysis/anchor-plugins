@@ -33,7 +33,7 @@ import org.anchoranalysis.anchor.mpp.mark.GlobalRegionIdentifiers;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.cache.SessionInput;
-import org.anchoranalysis.feature.cache.calculation.CachedCalculation;
+import org.anchoranalysis.feature.cache.calculation.CacheableCalculation;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import ch.ethz.biol.cell.mpp.nrg.cachedcalculation.OverlapCalculation;
 import ch.ethz.biol.cell.mpp.nrg.cachedcalculation.OverlapMIPCalculation;
@@ -61,7 +61,7 @@ public class Overlap extends FeaturePairMemo {
 		return params.calc( overlapCalculation() );
 	}
 	
-	private CachedCalculation<Double,FeatureInputPairMemo> overlapCalculation() {
+	private CacheableCalculation<Double,FeatureInputPairMemo> overlapCalculation() {
 		if (mip) {
 			return new OverlapMIPCalculation(regionID);
 		} else {

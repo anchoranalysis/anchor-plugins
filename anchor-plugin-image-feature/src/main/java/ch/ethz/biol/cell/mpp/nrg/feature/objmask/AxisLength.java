@@ -56,14 +56,14 @@ public class AxisLength extends FeatureObjMask {
 	@Override
 	public double calc(SessionInput<FeatureInputSingleObj> input) throws FeatureCalcException {
 		
-		assert( input.getParams() instanceof FeatureInputSingleObj );
+		assert( input.get() instanceof FeatureInputSingleObj );
 		return calcAxisLength( input, index);
 	}
 
 	private double calcAxisLength( SessionInput<FeatureInputSingleObj> params, int index ) throws FeatureCalcException {
 		
 		// TODO THIS CAN BE DONE MORE EFFICIENTLY
-		if (!params.getParams().getObjMask().hasPixelsGreaterThan(0)) {
+		if (!params.get().getObjMask().hasPixelsGreaterThan(0)) {
 			return Double.NaN;
 		}
 

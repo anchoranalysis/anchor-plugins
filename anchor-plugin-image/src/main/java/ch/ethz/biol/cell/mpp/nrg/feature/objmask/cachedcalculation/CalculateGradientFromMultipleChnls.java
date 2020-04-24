@@ -34,7 +34,7 @@ import java.util.List;
 import org.anchoranalysis.core.cache.ExecuteException;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.geometry.Point3d;
-import org.anchoranalysis.feature.cache.calculation.CachedCalculation;
+import org.anchoranalysis.feature.cache.calculation.CacheableCalculation;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
 import org.anchoranalysis.image.chnl.Chnl;
@@ -56,7 +56,7 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
  * @author Owen Feehan
  *
  */
-public class CalculateGradientFromMultipleChnls extends CachedCalculation<List<Point3d>,FeatureInputSingleObj> {
+public class CalculateGradientFromMultipleChnls extends CacheableCalculation<List<Point3d>,FeatureInputSingleObj> {
 
 	private int nrgIndexX;
 	

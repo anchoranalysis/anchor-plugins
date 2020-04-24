@@ -74,7 +74,7 @@ public class ObjMaskProviderFindMaxFeature extends ObjMaskProvider {
 			double maxVal = 0;
 			for( ObjMask om : in ) {
 				
-				double featureVal = session.calcOne(
+				double featureVal = session.calc(
 					new FeatureInputSingleObj(om)
 				);
 				

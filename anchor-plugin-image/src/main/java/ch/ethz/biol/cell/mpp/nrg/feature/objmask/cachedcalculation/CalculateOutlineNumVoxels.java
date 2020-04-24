@@ -30,7 +30,7 @@ package ch.ethz.biol.cell.mpp.nrg.feature.objmask.cachedcalculation;
 import java.nio.ByteBuffer;
 
 import org.anchoranalysis.core.cache.ExecuteException;
-import org.anchoranalysis.feature.cache.calculation.CachedCalculation;
+import org.anchoranalysis.feature.cache.calculation.CacheableCalculation;
 import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
 import org.anchoranalysis.image.objmask.ObjMask;
@@ -40,7 +40,7 @@ import org.anchoranalysis.image.voxel.kernel.outline.OutlineKernel3;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
-public class CalculateOutlineNumVoxels extends CachedCalculation<Integer,FeatureInputSingleObj> {
+public class CalculateOutlineNumVoxels extends CacheableCalculation<Integer,FeatureInputSingleObj> {
 
 	/**
 	 * Whether to calculate the outline on a MIP

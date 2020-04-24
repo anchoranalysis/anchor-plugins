@@ -5,11 +5,11 @@ import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputAllMemo;
 import org.anchoranalysis.anchor.mpp.feature.mark.MemoCollection;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.core.cache.ExecuteException;
-import org.anchoranalysis.feature.cache.calculation.CachedCalculation;
+import org.anchoranalysis.feature.cache.calculation.CacheableCalculation;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
-public class CalculateDeriveMarkInput extends CachedCalculation<FeatureInputMark, FeatureInputAllMemo> {
+public class CalculateDeriveMarkInput extends CacheableCalculation<FeatureInputMark, FeatureInputAllMemo> {
 
 	@Override
 	protected FeatureInputMark execute(FeatureInputAllMemo params) throws ExecuteException {

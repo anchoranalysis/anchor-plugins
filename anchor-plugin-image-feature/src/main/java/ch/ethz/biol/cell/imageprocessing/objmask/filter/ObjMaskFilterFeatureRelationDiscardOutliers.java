@@ -123,7 +123,7 @@ public class ObjMaskFilterFeatureRelationDiscardOutliers extends ObjMaskFilter {
 		for( ObjMask om : objs ) {
 			double featureVal;
 			try {
-				featureVal = session.calcOne(
+				featureVal = session.calc(
 					new FeatureInputSingleObj(om, nrgStack)
 				);
 			} catch (FeatureCalcException e) {

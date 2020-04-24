@@ -31,10 +31,10 @@ import java.util.Optional;
 
 import org.anchoranalysis.core.cache.ExecuteException;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.feature.cache.calculation.CachedCalculation;
-import org.anchoranalysis.feature.cache.calculation.RslvdCachedCalculation;
+import org.anchoranalysis.feature.cache.calculation.CacheableCalculation;
+import org.anchoranalysis.feature.cache.calculation.CalculationResolver;
+import org.anchoranalysis.feature.cache.calculation.ResolvedCalculation;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.feature.session.cache.ICachedCalculationSearch;
 import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
 import org.anchoranalysis.image.objmask.ObjMask;
@@ -43,18 +43,18 @@ import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
 
-public class CalculateShellObjMask extends CachedCalculation<ObjMask,FeatureInputSingleObj> {
+public class CalculateShellObjMask extends CacheableCalculation<ObjMask,FeatureInputSingleObj> {
 
 	private int iterationsErosionSecond;
 	private boolean do3D;
 	private boolean inverse;
 
-	private RslvdCachedCalculation<ObjMask,FeatureInputSingleObj> ccDilation;
-	private RslvdCachedCalculation<ObjMask,FeatureInputSingleObj> ccErosion;
+	private ResolvedCalculation<ObjMask,FeatureInputSingleObj> ccDilation;
+	private ResolvedCalculation<ObjMask,FeatureInputSingleObj> ccErosion;
 			
 	private CalculateShellObjMask(
-		RslvdCachedCalculation<ObjMask,FeatureInputSingleObj> ccDilation,
-		RslvdCachedCalculation<ObjMask,FeatureInputSingleObj> ccErosion,
+		ResolvedCalculation<ObjMask,FeatureInputSingleObj> ccDilation,
+		ResolvedCalculation<ObjMask,FeatureInputSingleObj> ccErosion,
 		int iterationsErosionSecond,
 		boolean do3D,
 		boolean inverse
@@ -104,18 +104,18 @@ public class CalculateShellObjMask extends CachedCalculation<ObjMask,FeatureInpu
 	}
 	
 	
-	public static CachedCalculation<ObjMask,FeatureInputSingleObj> createFromCache(
-		ICachedCalculationSearch<FeatureInputSingleObj> params,
+	public static CacheableCalculation<ObjMask,FeatureInputSingleObj> createFromCache(
+		CalculationResolver<FeatureInputSingleObj> params,
 		int iterationsDilation,
 		int iterationsErosion,
 		int iterationsErosionSecond,
 		boolean do3D,
 		boolean inverse
 	) throws FeatureCalcException {
-		RslvdCachedCalculation<ObjMask,FeatureInputSingleObj> ccDilation = CalculateDilation.createFromCache(
+		ResolvedCalculation<ObjMask,FeatureInputSingleObj> ccDilation = CalculateDilation.createFromCache(
 			params, iterationsDilation, do3D	
 		);
-		RslvdCachedCalculation<ObjMask,FeatureInputSingleObj> ccErosion = CalculateErosion.createFromCacheRslvd(
+		ResolvedCalculation<ObjMask,FeatureInputSingleObj> ccErosion = CalculateErosion.createFromCacheRslvd(
 			params, iterationsErosion, do3D
 		);
 	
@@ -159,8 +159,8 @@ public class CalculateShellObjMask extends CachedCalculation<ObjMask,FeatureInpu
 	private static ObjMask createShellObjMask(
 		FeatureInputSingleObj params,
 		ObjMask om,
-		RslvdCachedCalculation<ObjMask,FeatureInputSingleObj> ccDilation,
-		RslvdCachedCalculation<ObjMask,FeatureInputSingleObj> ccErosion,
+		ResolvedCalculation<ObjMask,FeatureInputSingleObj> ccDilation,
+		ResolvedCalculation<ObjMask,FeatureInputSingleObj> ccErosion,
 		int iterationsErosionSecond,
 		boolean do3D
 	) throws CreateException, ExecuteException {

@@ -44,7 +44,7 @@ public class ShapeRegularityCenterSlice extends FeatureObjMask {
 	@Override
 	public double calc(SessionInput<FeatureInputSingleObj> paramsCacheable) throws FeatureCalcException {
 				
-		FeatureInputSingleObj params = paramsCacheable.getParams();
+		FeatureInputSingleObj params = paramsCacheable.get();
 		
 		int zSliceCenter = (int) params.getObjMask().centerOfGravity().getZ();
 		

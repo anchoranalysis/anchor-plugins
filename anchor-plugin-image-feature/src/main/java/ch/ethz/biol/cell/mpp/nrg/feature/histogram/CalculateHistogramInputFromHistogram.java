@@ -1,8 +1,8 @@
 package ch.ethz.biol.cell.mpp.nrg.feature.histogram;
 
-import org.anchoranalysis.feature.cache.calculation.CachedCalculation;
-import org.anchoranalysis.feature.cache.calculation.RslvdCachedCalculation;
-import org.anchoranalysis.feature.session.cache.ICachedCalculationSearch;
+import org.anchoranalysis.feature.cache.calculation.CacheableCalculation;
+import org.anchoranalysis.feature.cache.calculation.CalculationResolver;
+import org.anchoranalysis.feature.cache.calculation.ResolvedCalculation;
 import org.anchoranalysis.image.feature.histogram.FeatureInputHistogram;
 import org.anchoranalysis.image.histogram.Histogram;
 import org.anchoranalysis.plugin.image.feature.obj.pair.CalculateInputFromDelegate;
@@ -12,12 +12,12 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 public class CalculateHistogramInputFromHistogram extends CalculateInputFromDelegate<FeatureInputHistogram, FeatureInputHistogram, Histogram> {
 	
 	public CalculateHistogramInputFromHistogram(
-			RslvdCachedCalculation<Histogram, FeatureInputHistogram> ccDelegate) {
+			ResolvedCalculation<Histogram, FeatureInputHistogram> ccDelegate) {
 		super(ccDelegate);
 	}
 	
-	public CalculateHistogramInputFromHistogram(CachedCalculation<Histogram, FeatureInputHistogram> ccDelegate,
-			ICachedCalculationSearch<FeatureInputHistogram> cache) {
+	public CalculateHistogramInputFromHistogram(CacheableCalculation<Histogram, FeatureInputHistogram> ccDelegate,
+			CalculationResolver<FeatureInputHistogram> cache) {
 		super(ccDelegate, cache);
 	}
 

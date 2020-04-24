@@ -48,7 +48,7 @@ public class Ellipticity extends FeatureObjMask {
 	@Override
 	public double calc(SessionInput<FeatureInputSingleObj> paramsCacheable) throws FeatureCalcException {
 		
-		FeatureInputSingleObj params = paramsCacheable.getParams();
+		FeatureInputSingleObj params = paramsCacheable.get();
 		
 		ObjMaskAndEllipse both;
 		try {

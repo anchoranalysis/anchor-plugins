@@ -28,7 +28,7 @@ package ch.ethz.biol.cell.mpp.nrg.feature.objmask;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.cache.SessionInput;
-import org.anchoranalysis.feature.cache.calculation.CachedCalculation;
+import org.anchoranalysis.feature.cache.calculation.CacheableCalculation;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.feature.bean.objmask.FeatureObjMask;
 import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
@@ -55,7 +55,7 @@ public abstract class SurfaceNumVoxelsBase extends FeatureObjMask {
 		);
 	}
 	
-	protected abstract CachedCalculation<Integer,FeatureInputSingleObj> createParams(boolean mip, boolean suppress3d);
+	protected abstract CacheableCalculation<Integer,FeatureInputSingleObj> createParams(boolean mip, boolean suppress3d);
 
 	public boolean isMip() {
 		return mip;

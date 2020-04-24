@@ -43,6 +43,6 @@ public class Variance extends FeatureHistogram {
 	@Override
 	public double calc(SessionInput<FeatureInputHistogram> input)
 			throws FeatureCalcException {
-		return input.getParams().getHistogram().variance();
+		return input.get().getHistogram().variance();
 	}
 }

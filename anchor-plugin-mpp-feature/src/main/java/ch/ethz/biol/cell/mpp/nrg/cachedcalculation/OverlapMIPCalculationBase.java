@@ -32,11 +32,11 @@ import org.anchoranalysis.anchor.mpp.overlap.MaxIntensityProjectionPair;
 import org.anchoranalysis.anchor.mpp.pxlmark.PxlMark;
 import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
 import org.anchoranalysis.core.cache.ExecuteException;
-import org.anchoranalysis.feature.cache.calculation.CachedCalculation;
+import org.anchoranalysis.feature.cache.calculation.CacheableCalculation;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
-public abstract class OverlapMIPCalculationBase extends CachedCalculation<Double, FeatureInputPairMemo> {
+public abstract class OverlapMIPCalculationBase extends CacheableCalculation<Double, FeatureInputPairMemo> {
 
 	private int regionID;
 

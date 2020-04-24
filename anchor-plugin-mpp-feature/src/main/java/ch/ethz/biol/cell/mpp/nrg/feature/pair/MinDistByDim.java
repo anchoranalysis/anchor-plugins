@@ -42,7 +42,7 @@ public class MinDistByDim extends FeaturePairMemo {
 	@Override
 	public double calc( SessionInput<FeatureInputPairMemo> paramsCacheable ) {
 		
-		FeatureInputPairMemo params = paramsCacheable.getParams();
+		FeatureInputPairMemo params = paramsCacheable.get();
 				
 		Point3d cp = new Point3d( params.getObj1().getMark().centerPoint() );
 		cp.sub( params.getObj2().getMark().centerPoint() );

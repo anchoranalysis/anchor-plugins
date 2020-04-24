@@ -3,11 +3,11 @@ package ch.ethz.biol.cell.mpp.nrg.feature.all;
 import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputAllMemo;
 import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputSingleMemo;
 import org.anchoranalysis.core.cache.ExecuteException;
-import org.anchoranalysis.feature.cache.calculation.CachedCalculation;
+import org.anchoranalysis.feature.cache.calculation.CacheableCalculation;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
-class CalculateDeriveSingleMemoInput extends CachedCalculation<FeatureInputSingleMemo, FeatureInputAllMemo> {
+class CalculateDeriveSingleMemoInput extends CacheableCalculation<FeatureInputSingleMemo, FeatureInputAllMemo> {
 
 	private int index;
 		

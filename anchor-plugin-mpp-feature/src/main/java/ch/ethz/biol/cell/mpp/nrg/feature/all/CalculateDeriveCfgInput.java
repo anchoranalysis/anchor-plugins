@@ -3,10 +3,10 @@ package ch.ethz.biol.cell.mpp.nrg.feature.all;
 import org.anchoranalysis.anchor.mpp.feature.bean.cfg.FeatureInputCfg;
 import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputAllMemo;
 import org.anchoranalysis.core.cache.ExecuteException;
-import org.anchoranalysis.feature.cache.calculation.CachedCalculation;
+import org.anchoranalysis.feature.cache.calculation.CacheableCalculation;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
-public class CalculateDeriveCfgInput extends CachedCalculation<FeatureInputCfg, FeatureInputAllMemo> {
+public class CalculateDeriveCfgInput extends CacheableCalculation<FeatureInputCfg, FeatureInputAllMemo> {
 
 	@Override
 	protected FeatureInputCfg execute(FeatureInputAllMemo params) throws ExecuteException {

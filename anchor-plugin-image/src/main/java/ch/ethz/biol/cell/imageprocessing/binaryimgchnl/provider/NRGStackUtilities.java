@@ -29,7 +29,7 @@ package ch.ethz.biol.cell.imageprocessing.binaryimgchnl.provider;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorSingle;
-import org.anchoranalysis.feature.session.calculator.FeatureCalculatorSingleChangeParams;
+import org.anchoranalysis.feature.session.calculator.FeatureCalculatorSingleChangeInput;
 import org.anchoranalysis.image.bean.provider.ChnlProvider;
 import org.anchoranalysis.image.chnl.Chnl;
 import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
@@ -46,7 +46,7 @@ public class NRGStackUtilities {
 		
 			// Make sure an NRG stack is added to each params that are called
 			NRGStackWithParams nrgStack = new NRGStackWithParams(chnl); 
-			return new FeatureCalculatorSingleChangeParams<>(
+			return new FeatureCalculatorSingleChangeInput<>(
 				session,
 				params -> params.setNrgStack(nrgStack)
 			);

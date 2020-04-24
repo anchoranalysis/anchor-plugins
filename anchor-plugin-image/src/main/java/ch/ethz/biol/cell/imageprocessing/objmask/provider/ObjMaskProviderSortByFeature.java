@@ -92,7 +92,7 @@ public class ObjMaskProviderSortByFeature extends ObjMaskProvider {
 			List<ObjWithFeatureValue> listToSort = new ArrayList<>();
 			for( ObjMask om : objsCollection ) {
 				try {
-					double featureVal = featureSession.calcOne(
+					double featureVal = featureSession.calc(
 						new FeatureInputSingleObj(om)
 					);
 					listToSort.add( new ObjWithFeatureValue(om,featureVal) );

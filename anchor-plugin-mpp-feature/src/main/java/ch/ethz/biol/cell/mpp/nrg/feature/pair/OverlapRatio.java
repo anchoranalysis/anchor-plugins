@@ -35,7 +35,7 @@ import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.cache.ExecuteException;
 import org.anchoranalysis.feature.cache.SessionInput;
-import org.anchoranalysis.feature.cache.calculation.CachedCalculation;
+import org.anchoranalysis.feature.cache.calculation.CacheableCalculation;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.voxel.statistics.VoxelStatistics;
 
@@ -121,7 +121,7 @@ public class OverlapRatio extends FeaturePairMemo {
 	@Override
 	public double calc( SessionInput<FeatureInputPairMemo> paramsCacheable ) throws FeatureCalcException {
 		
-		FeatureInputPairMemo params = paramsCacheable.getParams();
+		FeatureInputPairMemo params = paramsCacheable.get();
 		
 		double overlap = paramsCacheable.calc(
 			overlapCalculation()
@@ -146,7 +146,7 @@ public class OverlapRatio extends FeaturePairMemo {
 		}
 	}
 	
-	private CachedCalculation<Double,FeatureInputPairMemo> overlapCalculation() {
+	private CacheableCalculation<Double,FeatureInputPairMemo> overlapCalculation() {
 		if (mip) {
 			// If we use this we don't need to find the volume ourselves
 			return new OverlapMIPRatioCalculation(regionID);

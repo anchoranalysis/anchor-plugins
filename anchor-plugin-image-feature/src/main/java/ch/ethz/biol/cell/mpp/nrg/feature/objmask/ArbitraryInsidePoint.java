@@ -73,13 +73,13 @@ public class ArbitraryInsidePoint extends FeatureObjMask {
 	}
 	
 	@Override
-	public double calc(SessionInput<FeatureInputSingleObj> paramsCacheable) throws FeatureCalcException {
-		
-		FeatureInputSingleObj params = paramsCacheable.getParams();
-		
+	public double calc(SessionInput<FeatureInputSingleObj> input) throws FeatureCalcException {
+				
 		AxisType axisType = AxisTypeUtilities.createFromString(axis);
 		
-		Point3i arbPoint = calcArbitraryPointWithinMask(params.getObjMask());
+		Point3i arbPoint = calcArbitraryPointWithinMask(
+			input.get().getObjMask()
+		);
 	
 		if (arbPoint==null) {
 			return emptyValue;

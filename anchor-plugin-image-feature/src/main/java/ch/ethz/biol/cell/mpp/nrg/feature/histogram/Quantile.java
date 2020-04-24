@@ -48,7 +48,7 @@ public class Quantile extends FeatureHistogram {
 	@Override
 	public double calc(SessionInput<FeatureInputHistogram> input)
 			throws FeatureCalcException {
-		return input.getParams().getHistogram().quantile(quantile);
+		return input.get().getHistogram().quantile(quantile);
 	}
 	
 	public double getQuantile() {

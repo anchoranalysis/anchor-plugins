@@ -91,7 +91,7 @@ public class ObjMaskProviderMergePair extends ObjMaskProviderMergeWithFeature {
 		try {
 			double threshold = featureEvaluatorThreshold
 				.createAndStartSession()
-				.calcOne( FeatureInputNull.instance() );
+				.calc( FeatureInputNull.instance() );
 			return new PriorityFeatureMergeSession(
 				threshold,relation.create(),
 				getLogger()

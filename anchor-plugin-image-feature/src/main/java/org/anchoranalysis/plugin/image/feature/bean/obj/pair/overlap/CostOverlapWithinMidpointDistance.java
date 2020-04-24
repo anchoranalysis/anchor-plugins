@@ -60,7 +60,7 @@ public class CostOverlapWithinMidpointDistance extends FeatureObjMaskPair {
 	public double calc(SessionInput<FeatureInputPairObjs> paramsCacheable)
 			throws FeatureCalcException {
 
-		FeatureInputPairObjs params = paramsCacheable.getParams();
+		FeatureInputPairObjs params = paramsCacheable.get();
 		
 		if (isDistMoreThanMax(params)) {
 			return 1.0;

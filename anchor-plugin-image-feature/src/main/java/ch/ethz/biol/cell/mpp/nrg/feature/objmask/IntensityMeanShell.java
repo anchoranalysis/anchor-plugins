@@ -98,15 +98,15 @@ public class IntensityMeanShell extends FeatureObjMask {
 	}
 		
 	@Override
-	public double calc(SessionInput<FeatureInputSingleObj> paramsCacheable) throws FeatureCalcException {
+	public double calc(SessionInput<FeatureInputSingleObj> input) throws FeatureCalcException {
 		
-		FeatureInputSingleObj params = paramsCacheable.getParams();
+		FeatureInputSingleObj params = input.get();
 		
 		Chnl chnl = params.getNrgStack().getNrgStack().getChnl(nrgIndex);
 		
-		ObjMask om = paramsCacheable.calc(
+		ObjMask om = input.calc(
 			CalculateShellObjMask.createFromCache(
-				paramsCacheable,
+				input.resolver(),
 				iterationsDilation,
 				iterationsErosion,
 				iterationsErosionSecond,

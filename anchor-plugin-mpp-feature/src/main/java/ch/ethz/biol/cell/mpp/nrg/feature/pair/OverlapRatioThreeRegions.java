@@ -87,7 +87,7 @@ public class OverlapRatioThreeRegions extends FeaturePairMemo {
 			throw new FeatureCalcException("mip currently not supported");
 		}
 		
-		FeatureInputPairMemo params = paramsCacheable.getParams();
+		FeatureInputPairMemo params = paramsCacheable.get();
 		
 		return calcOverlapRatioMin(
 			params.getObj1(),

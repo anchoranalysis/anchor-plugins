@@ -52,7 +52,7 @@ public class ConvertToRatioOfHistogramTotalCount extends FeatureHistogram {
 			throws FeatureCalcException {
 
 		double val = input.calc(item);
-		return val/ input.getParams().getHistogram().getTotalCount();
+		return val/ input.get().getHistogram().getTotalCount();
 	}
 	
 	@Override

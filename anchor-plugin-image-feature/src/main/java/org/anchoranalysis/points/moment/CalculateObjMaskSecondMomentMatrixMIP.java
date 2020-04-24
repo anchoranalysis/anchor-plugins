@@ -28,13 +28,13 @@ package org.anchoranalysis.points.moment;
 
 
 import org.anchoranalysis.core.cache.ExecuteException;
-import org.anchoranalysis.feature.cache.calculation.CachedCalculation;
+import org.anchoranalysis.feature.cache.calculation.CacheableCalculation;
 import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
 import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.math.moment.MomentsFromPointsCalculator;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
-public class CalculateObjMaskSecondMomentMatrixMIP extends CachedCalculation<MomentsFromPointsCalculator,FeatureInputSingleObj> {
+public class CalculateObjMaskSecondMomentMatrixMIP extends CacheableCalculation<MomentsFromPointsCalculator,FeatureInputSingleObj> {
 		
 	public CalculateObjMaskSecondMomentMatrixMIP() {
 		super();

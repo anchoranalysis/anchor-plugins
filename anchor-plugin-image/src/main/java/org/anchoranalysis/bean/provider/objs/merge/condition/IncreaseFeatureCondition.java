@@ -89,7 +89,7 @@ public class IncreaseFeatureCondition implements AfterCondition {
 	}
 	
 	private double calc(ObjMask om) throws FeatureCalcException {
-		return session.calcOne(
+		return session.calc(
 			new FeatureInputSingleObj(om)
 		);
 	}

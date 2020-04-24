@@ -54,7 +54,7 @@ public class CoefficientOfVarianceFromAll extends FeatureAllMemo {
 	public double calc(SessionInput<FeatureInputAllMemo> paramsCacheable)
 			throws FeatureCalcException {
 		
-		MemoCollection memoMarks = paramsCacheable.getParams().getPxlPartMemo();
+		MemoCollection memoMarks = paramsCacheable.get().getPxlPartMemo();
 		
 		if (memoMarks.size()==0) {
 			return 0.0;

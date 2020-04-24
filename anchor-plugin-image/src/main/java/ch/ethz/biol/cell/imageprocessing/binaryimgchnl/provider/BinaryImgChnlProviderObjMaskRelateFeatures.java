@@ -105,10 +105,10 @@ public class BinaryImgChnlProviderObjMaskRelateFeatures extends BinaryImgChnlPro
 	
 	private BinaryChnl calcRelation( ObjMask omMain, ObjMask omCompareTo, BinaryChnl chnlMain, FeatureCalculatorSingle<FeatureInputSingleObj> session ) throws CreateException {
 		try {
-			double valMain = session.calcOne(
+			double valMain = session.calc(
 				new FeatureInputSingleObj(omMain)
 			);
-			double valCompareTo = session.calcOne(
+			double valCompareTo = session.calc(
 				new FeatureInputSingleObj(omCompareTo)
 			);
 			

@@ -1,10 +1,8 @@
-package ch.ethz.biol.cell.mpp.nrg.feature.histogram;
-
-import org.anchoranalysis.feature.cache.SessionInput;
+package org.anchoranalysis.plugin.points.calculate.ellipsoid;
 
 /*
  * #%L
- * anchor-plugin-image-feature
+ * anchor-feature
  * %%
  * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
  * %%
@@ -29,20 +27,34 @@ import org.anchoranalysis.feature.cache.SessionInput;
  */
 
 
-import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.image.feature.bean.FeatureHistogram;
-import org.anchoranalysis.image.feature.histogram.FeatureInputHistogram;
+import org.anchoranalysis.core.cache.ExecuteException;
+import org.anchoranalysis.core.cache.Operation;
+import org.anchoranalysis.feature.cache.calculation.ResolvedCalculation;
+import org.anchoranalysis.feature.calc.params.FeatureInput;
 
-public class Mean extends FeatureHistogram {
+/**
+ * Binds params with a CachedCalculation and exposes it as the {@link org.anchoranalysis.core.cache.Operation} interface
+ * 
+ * (reverse-currying)
+ * 
+ * @author Owen Feehan
+ *
+ * @param <S> result-type
+ * @param <T> params-type
+ */
+class CachedCalculationOperation<S, T extends FeatureInput> implements Operation<S> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
+	private ResolvedCalculation<S,T> cachedCalculation;
+	private T params;
+		
+	public CachedCalculationOperation(ResolvedCalculation<S,T> cachedCalculation, T params) {
+		super();
+		this.cachedCalculation = cachedCalculation;
+		this.params = params;
+	}
 	
 	@Override
-	public double calc(SessionInput<FeatureInputHistogram> input)
-			throws FeatureCalcException {
-		return input.get().getHistogram().mean();
+	public S doOperation() throws ExecuteException {
+		return cachedCalculation.getOrCalculate(params);
 	}
 }

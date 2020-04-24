@@ -43,6 +43,6 @@ public class Max extends FeatureHistogram {
 	@Override
 	public double calc(SessionInput<FeatureInputHistogram> input)
 			throws FeatureCalcException {
-		return input.getParams().getHistogram().calcMax();
+		return input.get().getHistogram().calcMax();
 	}
 }

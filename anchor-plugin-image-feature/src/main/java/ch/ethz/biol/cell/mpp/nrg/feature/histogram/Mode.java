@@ -43,6 +43,6 @@ public class Mode extends FeatureHistogram {
 	@Override
 	public double calc(SessionInput<FeatureInputHistogram> input)
 			throws FeatureCalcException {
-		return input.getParams().getHistogram().calcMode();
+		return input.get().getHistogram().calcMode();
 	}
 }

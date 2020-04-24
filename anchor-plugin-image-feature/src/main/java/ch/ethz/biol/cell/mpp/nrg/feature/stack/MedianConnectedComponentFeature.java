@@ -30,7 +30,7 @@ package ch.ethz.biol.cell.mpp.nrg.feature.stack;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.cache.SessionInput;
-import org.anchoranalysis.feature.cache.calculation.RslvdCachedCalculation;
+import org.anchoranalysis.feature.cache.calculation.ResolvedCalculation;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.feature.bean.FeatureStack;
 import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
@@ -58,7 +58,7 @@ public class MedianConnectedComponentFeature extends FeatureStack {
 	@Override
 	public double calc(SessionInput<FeatureInputStack> input) throws FeatureCalcException {
 
-		RslvdCachedCalculation<ObjMaskCollection, FeatureInputStack> ccObjs = input.search(
+		ResolvedCalculation<ObjMaskCollection, FeatureInputStack> ccObjs = input.resolver().search(
 			new CalculateConnectedComponents(nrgChnlIndex)
 		);
 		

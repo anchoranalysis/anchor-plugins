@@ -42,6 +42,6 @@ public class NumMarks extends FeatureAllMemo {
 	@Override
 	public double calc(SessionInput<FeatureInputAllMemo> params)
 			throws FeatureCalcException {
-		return params.getParams().getPxlPartMemo().size();
+		return params.get().getPxlPartMemo().size();
 	}
 }

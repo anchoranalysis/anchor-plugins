@@ -31,7 +31,7 @@ import java.nio.ByteBuffer;
 
 import org.anchoranalysis.core.cache.ExecuteException;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.feature.cache.calculation.CachedCalculation;
+import org.anchoranalysis.feature.cache.calculation.CacheableCalculation;
 import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
 import org.anchoranalysis.image.objmask.ObjMask;
@@ -42,7 +42,7 @@ import org.anchoranalysis.image.voxel.kernel.count.CountKernelNghbIgnoreOutsideS
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
-public class CalculateOutlineNumVoxelFaces extends CachedCalculation<Integer,FeatureInputSingleObj> {
+public class CalculateOutlineNumVoxelFaces extends CacheableCalculation<Integer,FeatureInputSingleObj> {
 
 	/**
 	 * Whether to calculate the outline on a MIP

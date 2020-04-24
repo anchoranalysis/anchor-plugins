@@ -5,15 +5,15 @@ import java.util.function.Function;
 
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.cache.SessionInput;
-import org.anchoranalysis.feature.cache.calculation.CachedCalculation;
-import org.anchoranalysis.feature.cache.calculation.RslvdCachedCalculation;
+import org.anchoranalysis.feature.cache.calculation.CacheableCalculation;
+import org.anchoranalysis.feature.cache.calculation.ResolvedCalculation;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.calc.params.FeatureInput;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
 /**
- * Like {@link #CalculateParamsFromDelegateOption(CachedCalculation) except assumes optional return value and no parameters
+ * Like {@link #CalculateParamsFromDelegateOption(CacheableCalculation) except assumes optional return value and no parameters
  * 
  * @author Owen Feehan
  *
@@ -28,7 +28,7 @@ public abstract class CalculateInputFromDelegateOption<S extends FeatureInput, T
 	 * 
 	 * @param ccDelegate the calculated-calculation for the delegate
 	 */
-	protected CalculateInputFromDelegateOption(RslvdCachedCalculation<U, T> ccDelegate) {
+	protected CalculateInputFromDelegateOption(ResolvedCalculation<U, T> ccDelegate) {
 		super(ccDelegate);
 	}
 	
@@ -49,16 +49,16 @@ public abstract class CalculateInputFromDelegateOption<S extends FeatureInput, T
 	 */
 	public static <S extends FeatureInput, T extends FeatureInput, U> double calc(
 		SessionInput<T> input,
-		CachedCalculation<U,T> delegate,
-		Function<RslvdCachedCalculation<U,T>,CalculateInputFromDelegateOption<S,T,U>> funcCreateFromDelegate,
+		CacheableCalculation<U,T> delegate,
+		Function<ResolvedCalculation<U,T>,CalculateInputFromDelegateOption<S,T,U>> funcCreateFromDelegate,
 		Feature<S> feature,
 		String cacheName,
 		double emptyValue
 	) throws FeatureCalcException {
 
-		CachedCalculation<Optional<S>,T> ccParamsDerived =
+		CacheableCalculation<Optional<S>,T> ccParamsDerived =
 			funcCreateFromDelegate.apply(
-				input.search(delegate)
+				input.resolver().search(delegate)
 			);
 		
 		Optional<S> paramsDerived = input.calc(ccParamsDerived);

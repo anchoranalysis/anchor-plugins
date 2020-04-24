@@ -41,7 +41,7 @@ public abstract class FeatureWithImageParams extends Feature<FeatureInputParams>
 
 	@Override
 	public double calc( SessionInput<FeatureInputParams> input ) throws FeatureCalcException {
-		return calc( input.getParams() );
+		return calc( input.get() );
 	}
 	
 	// Calculates an NRG element for a set of pixels

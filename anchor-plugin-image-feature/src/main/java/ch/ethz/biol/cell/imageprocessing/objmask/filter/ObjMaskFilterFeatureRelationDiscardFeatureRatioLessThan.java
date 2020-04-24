@@ -126,7 +126,7 @@ public class ObjMaskFilterFeatureRelationDiscardFeatureRatioLessThan extends Obj
 		for( ObjMask om : objs ) {
 			double featureVal;
 			try {
-				featureVal = session.calcOne(
+				featureVal = session.calc(
 					new FeatureInputSingleObj(om)
 				);
 			} catch (FeatureCalcException e) {
