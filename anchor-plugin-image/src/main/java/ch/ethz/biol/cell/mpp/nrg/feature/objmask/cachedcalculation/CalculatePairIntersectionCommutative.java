@@ -34,7 +34,6 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.feature.cache.calculation.CacheableCalculation;
 import org.anchoranalysis.feature.cache.calculation.CalculationResolver;
 import org.anchoranalysis.feature.cache.calculation.ResolvedCalculation;
-import org.anchoranalysis.feature.session.cache.NullCachedCalculationSearch;
 import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
 import org.anchoranalysis.image.feature.objmask.pair.FeatureInputPairObjs;
 import org.anchoranalysis.image.objmask.ObjMask;
@@ -81,27 +80,6 @@ public class CalculatePairIntersectionCommutative extends CacheableCalculation<O
 		return new CalculatePairIntersectionCommutative(ccFirstToSecond, ccSecondToFirst);
 	}
 	
-	public static ResolvedCalculation<Optional<ObjMask>,FeatureInputPairObjs> createWithoutCache(
-		int iterationsDilation,
-		int iterationsErosion,
-		boolean do3D	
-	) throws CreateException {
-		CalculationResolver<FeatureInputPairObjs> cacheNullPair = NullCachedCalculationSearch.getInstance();
-		CalculationResolver<FeatureInputSingleObj> cacheNullSingle = NullCachedCalculationSearch.getInstance();
-
-		// We use two additional caches, for the calculations involving the single objects, as these can be expensive, and we want
-		//  them also cached
-		ResolvedCalculation<Optional<ObjMask>,FeatureInputPairObjs> ccFirstToSecond = CalculatePairIntersection.createFromCache(
-			cacheNullPair, cacheNullSingle, cacheNullSingle, iterationsDilation, 0, do3D, iterationsErosion	
-		);
-		ResolvedCalculation<Optional<ObjMask>,FeatureInputPairObjs> ccSecondToFirst = CalculatePairIntersection.createFromCache(
-			cacheNullPair, cacheNullSingle, cacheNullSingle, 0, iterationsDilation, do3D, iterationsErosion	
-		);
-		return cacheNullPair.search(
-			new CalculatePairIntersectionCommutative(ccFirstToSecond, ccSecondToFirst)
-		);
-	}
-	
 	private CalculatePairIntersectionCommutative(
 		ResolvedCalculation<Optional<ObjMask>,FeatureInputPairObjs> ccFirstToSecond,
 		ResolvedCalculation<Optional<ObjMask>,FeatureInputPairObjs> ccSecondToFirst
@@ -131,9 +109,7 @@ public class CalculatePairIntersectionCommutative extends CacheableCalculation<O
 		
 		ObjMask merged = ObjMaskMerger.merge( omIntersection1.get(), omIntersection2.get() );
 		assert(merged.hasPixelsGreaterThan(0));
-		return Optional.of(
-			merged
-		);
+		return Optional.of(merged);
 	}
 
 	@Override
