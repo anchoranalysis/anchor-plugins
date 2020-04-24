@@ -1,4 +1,8 @@
-package ch.ethz.biol.cell.mpp.nrg.feature.objmask;
+package org.anchoranalysis.plugin.image.feature.bean.obj.single.intensity;
+
+
+
+
 
 /*
  * #%L
@@ -27,24 +31,17 @@ package ch.ethz.biol.cell.mpp.nrg.feature.objmask;
  */
 
 
-import java.util.List;
-
-import org.anchoranalysis.core.geometry.Point3d;
-import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
+import org.anchoranalysis.image.chnl.Chnl;
+import org.anchoranalysis.image.objmask.ObjMask;
+
+import ch.ethz.biol.cell.mpp.nrg.feature.objmask.IntensityMean;
 
 /**
- * Calculates the mean of the intensity-gradient defined by multiple NRG channels in a particular direction
- * 
- * An NRG channel is present for X, Y and optionally Z intensity-gradients.
- * 
- * A constant is subtracted from the NRG channel (all positive) to centre around 0
- * 
- * @author Owen Feehan
- *
+ * Constructs a 'shell' around an object by a number of dilation/erosion operations (not including the original object mask)
+ *  and measures the mean intensity of this shell
  */
-public class IntensityGradientMeanMagnitudeFromMultiple extends IntensityGradientBase {
+public class IntensityMeanShell extends IntensityMeanShellBaseStandard {
 
 	/**
 	 * 
@@ -52,21 +49,8 @@ public class IntensityGradientMeanMagnitudeFromMultiple extends IntensityGradien
 	private static final long serialVersionUID = 1L;
 
 	@Override
-	public double calc(SessionInput<FeatureInputSingleObj> input) throws FeatureCalcException {
-		
-		// Calculate the mean
-		double sum = 0.0;
-
-		List<Point3d> pnts = input.calc(
-			gradientCalculation()
-		);
-		
-		for( Point3d p : pnts ) {
-			// Calculate the norm of the point
-			sum += p.l2norm();
-		}
-		
-		return sum/pnts.size();
+	protected double calcForShell(ObjMask om, Chnl chnl) throws FeatureCalcException {
+		return IntensityMean.calcMeanIntensityObjMask(chnl, om );
 	}
 
 }

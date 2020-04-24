@@ -1,4 +1,4 @@
-package ch.ethz.biol.cell.mpp.nrg.feature.objmask;
+package org.anchoranalysis.plugin.image.feature.bean.obj.single.intensity;
 
 /*
  * #%L
@@ -27,37 +27,57 @@ package ch.ethz.biol.cell.mpp.nrg.feature.objmask;
  */
 
 
+import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.chnl.Chnl;
 import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
-import org.anchoranalysis.image.histogram.Histogram;
-import org.anchoranalysis.image.histogram.HistogramFactoryUtilities;
-import org.anchoranalysis.image.voxel.statistics.VoxelStatisticsFromHistogram;
+import org.anchoranalysis.image.objmask.ObjMask;
 
-public class IntensityCoefficientOfVariation extends FeatureNrgChnl {
+import ch.ethz.biol.cell.mpp.nrg.feature.objmask.IntensityMean;
+
+
+/**
+ * From Page 727 from Lin et al (A Multi-Model Approach to Simultaneous Segmentation and Classification of Heterogeneous Populations of Cell Nuclei
+ * 
+ * @author Owen Feehan
+ *
+ */
+public class TextureScore extends FeatureNrgChnl {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 
+	// START BEAN PROPERTIES
+	@BeanField
+	private int nrgIndexGradient = 1;
+	// END BEAN PROPERTIES
+
 	@Override
 	protected double calcForChnl(SessionInput<FeatureInputSingleObj> input, Chnl chnl) throws FeatureCalcException {
 
-		Histogram hist = HistogramFactoryUtilities.create(
-			chnl,
-			input.get().getObjMask()
+		ObjMask om = input.get().getObjMask();
+		Chnl chnlGradient = input.get().getNrgStack().getNrgStack().getChnl(nrgIndexGradient);
+		
+		return scoreFromMeans(
+			IntensityMean.calcMeanIntensityObjMask(chnl, om),
+			IntensityMean.calcMeanIntensityObjMask(chnlGradient, om)
 		);
+	}
+	
+	private static double scoreFromMeans(double meanIntensity, double meanGradientIntensity) {
+		double scaleFactor = 128 / meanIntensity;
 		
-		VoxelStatisticsFromHistogram stats = new VoxelStatisticsFromHistogram(hist); 
-		
-		double mean = stats.mean();
-		
-		if (mean==0) {
-			return Double.NaN;
-		}
-		
-		return stats.stdDev() / mean;
+		return (scaleFactor*meanGradientIntensity)/meanIntensity;
+	}
+
+	public int getNrgIndexGradient() {
+		return nrgIndexGradient;
+	}
+
+	public void setNrgIndexGradient(int nrgIndexGradient) {
+		this.nrgIndexGradient = nrgIndexGradient;
 	}
 }

@@ -1,6 +1,4 @@
-package ch.ethz.biol.cell.mpp.nrg.feature.objmask;
-
-
+package org.anchoranalysis.plugin.image.feature.bean.obj.single.intensity;
 
 /*
  * #%L
@@ -34,11 +32,7 @@ import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.chnl.Chnl;
 import org.anchoranalysis.image.objmask.ObjMask;
 
-/**
- * Constructs a 'shell' around an object by a number of dilation/erosion operations (not including the original object mask)
- *  and measures the mean intensity of this shell
- */
-public class IntensityMeanShellHighestNumPixels extends IntensityMeanShellBaseStandard {
+public class IntensityMeanNumPixels extends IntensityMeanFromObj {
 
 	/**
 	 * 
@@ -48,18 +42,30 @@ public class IntensityMeanShellHighestNumPixels extends IntensityMeanShellBaseSt
 	// START BEAN PROPERTIES
 	@BeanField
 	private int numPixels = 10;
-	// END BEAN PROPERTIES
 	
-	@Override
-	protected double calcForShell(ObjMask shell, Chnl chnl) throws FeatureCalcException {
-		return IntensityStatsHelper.calcMeanNumPixels(chnl, shell, numPixels, true );
-	}
+	/** Iff true the highest-intensity pixels are used within the mask, otherwise the lowest-intensity pixels */
+	@BeanField
+	private boolean highest = true;
+	// END BEAN PROPERTIES
 
+	@Override
+	protected double calcForMaskedChnl(Chnl chnl, ObjMask mask) throws FeatureCalcException {
+		return StatsHelper.calcMeanNumPixels(chnl, mask, numPixels, highest );
+	}
+	
 	public int getNumPixels() {
 		return numPixels;
 	}
 
 	public void setNumPixels(int numPixels) {
 		this.numPixels = numPixels;
+	}
+
+	public boolean isHighest() {
+		return highest;
+	}
+
+	public void setHighest(boolean highest) {
+		this.highest = highest;
 	}
 }

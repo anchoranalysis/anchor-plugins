@@ -1,8 +1,4 @@
-package ch.ethz.biol.cell.mpp.nrg.feature.objmask;
-
-
-
-
+package org.anchoranalysis.plugin.image.feature.bean.obj.single.intensity;
 
 /*
  * #%L
@@ -31,24 +27,34 @@ package ch.ethz.biol.cell.mpp.nrg.feature.objmask;
  */
 
 
+import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.chnl.Chnl;
-import org.anchoranalysis.image.objmask.ObjMask;
+import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
 
-/**
- * Constructs a 'shell' around an object by a number of dilation/erosion operations (not including the original object mask)
- *  and measures the mean intensity of this shell
- */
-public class IntensityMeanShell extends IntensityMeanShellBaseStandard {
+public class IntensityQuantile extends FeatureNrgChnl {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 
+	// START BEAN PROPERTIES
+	@BeanField
+	private double quantile = 0;
+	// END BEAN PROPERTIES
+
 	@Override
-	protected double calcForShell(ObjMask om, Chnl chnl) throws FeatureCalcException {
-		return IntensityMean.calcMeanIntensityObjMask(chnl, om );
+	protected double calcForChnl(SessionInput<FeatureInputSingleObj> input, Chnl chnl) throws FeatureCalcException {
+		return StatsHelper.calcQuantileIntensityObjMask(chnl, input.get().getObjMask(), quantile );
 	}
 
+	public double getQuantile() {
+		return quantile;
+	}
+
+	public void setQuantile(double quantile) {
+		this.quantile = quantile;
+	}
 }

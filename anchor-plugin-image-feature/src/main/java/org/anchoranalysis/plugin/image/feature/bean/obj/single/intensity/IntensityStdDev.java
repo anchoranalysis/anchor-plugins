@@ -1,4 +1,4 @@
-package ch.ethz.biol.cell.mpp.nrg.feature.objmask;
+package org.anchoranalysis.plugin.image.feature.bean.obj.single.intensity;
 
 /*
  * #%L
@@ -28,44 +28,49 @@ package ch.ethz.biol.cell.mpp.nrg.feature.objmask;
 
 
 import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.chnl.Chnl;
-import org.anchoranalysis.image.objmask.ObjMask;
+import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
 
-public class IntensityMeanNumPixels extends IntensityMeanFromObj {
+public class IntensityStdDev extends FeatureNrgChnl {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-
+	
 	// START BEAN PROPERTIES
 	@BeanField
-	private int numPixels = 10;
+	private boolean excludeZero = false;
 	
-	/** Iff true the highest-intensity pixels are used within the mask, otherwise the lowest-intensity pixels */
 	@BeanField
-	private boolean highest = true;
+	private double emptyValue = Double.NaN;
 	// END BEAN PROPERTIES
-
+	
 	@Override
-	protected double calcForMaskedChnl(Chnl chnl, ObjMask mask) throws FeatureCalcException {
-		return IntensityStatsHelper.calcMeanNumPixels(chnl, mask, numPixels, highest );
+	protected double calcForChnl(SessionInput<FeatureInputSingleObj> input, Chnl chnl) throws FeatureCalcException {
+		return StatsHelper.calcStdDev(
+			chnl,
+			input.get().getObjMask(),
+			excludeZero,
+			emptyValue
+		);
 	}
 	
-	public int getNumPixels() {
-		return numPixels;
+	public boolean isExcludeZero() {
+		return excludeZero;
 	}
 
-	public void setNumPixels(int numPixels) {
-		this.numPixels = numPixels;
+	public void setExcludeZero(boolean excludeZero) {
+		this.excludeZero = excludeZero;
 	}
 
-	public boolean isHighest() {
-		return highest;
+	public double getEmptyValue() {
+		return emptyValue;
 	}
 
-	public void setHighest(boolean highest) {
-		this.highest = highest;
+	public void setEmptyValue(double emptyValue) {
+		this.emptyValue = emptyValue;
 	}
 }

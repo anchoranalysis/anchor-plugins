@@ -1,4 +1,4 @@
-package ch.ethz.biol.cell.mpp.nrg.feature.objmask;
+package org.anchoranalysis.plugin.image.feature.bean.obj.single.intensity;
 
 /*
  * #%L
@@ -27,66 +27,79 @@ package ch.ethz.biol.cell.mpp.nrg.feature.objmask;
  */
 
 
-import java.nio.ByteBuffer;
-
-import org.anchoranalysis.core.geometry.Point3i;
+import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.chnl.Chnl;
-import org.anchoranalysis.image.convert.ByteConverter;
-import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
 import org.anchoranalysis.image.objmask.ObjMask;
-import org.anchoranalysis.image.voxel.box.VoxelBox;
 
-public class IntensityMin extends FeatureNrgChnl {
+import ch.ethz.biol.cell.mpp.nrg.feature.objmask.ValueAndIndex;
+
+public class IntensityStdDevMaxSlice extends FeatureNrgChnl {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+
+	// START BEAN PROPERTIES
+	@BeanField
+	private boolean excludeZero = false;
+	
+	@BeanField
+	private double emptyValue = 0;
+	// END BEAN PROPERTIES
 	
 	@Override
 	protected double calcForChnl(SessionInput<FeatureInputSingleObj> input, Chnl chnl) throws FeatureCalcException {
-		return calcMinIntensityObjMask(chnl, input.get().getObjMask() );
+
+		ObjMask om = input.get().getObjMask();
+		
+		ValueAndIndex vai = StatsHelper.calcMaxSliceMean(chnl, om, excludeZero );
+		
+		if (vai.getIndex()==-1) {
+			return emptyValue;
+		}
+		
+		return calcStdDev( chnl, om, excludeZero, vai.getIndex(), emptyValue );
 	}
 	
-	private static double calcMinIntensityObjMask( Chnl chnl, ObjMask om ) {
-		
-		VoxelBox<ByteBuffer> vbIntens = chnl.getVoxelBox().asByte();
-		
-		BoundingBox bbox = om.getBoundingBox();
-		
-		Point3i crnrMin = bbox.getCrnrMin();
-		Point3i crnrMax = bbox.calcCrnrMax();
-
-		// Set to 
-		double min = Double.MAX_VALUE;
-
-		
-		for( int z=crnrMin.getZ(); z<=crnrMax.getZ(); z++) {
+	private static double calcStdDev( Chnl chnl, ObjMask om, boolean excludeZero, int z, double emptyValue ) throws FeatureCalcException {
 			
-			ByteBuffer bbIntens = vbIntens.getPixelsForPlane( z ).buffer();
-			ByteBuffer bbMask = om.getVoxelBox().getPixelsForPlane( z - crnrMin.getZ() ).buffer();
-			
-			int offsetMask = 0;
-			for( int y=crnrMin.getY(); y<=crnrMax.getY(); y++) {
-				for( int x=crnrMin.getX(); x<=crnrMax.getX(); x++) {
-				
-					if (bbMask.get(offsetMask)==om.getBinaryValuesByte().getOnByte()) {
-						int offsetIntens = vbIntens.extnt().offset(x, y);
-						
-						int val = ByteConverter.unsignedByteToInt( bbIntens.get(offsetIntens) );
-						
-						if (val<min) {
-							min = val;
-						}
-					}
-							
-					offsetMask++;
-				}
-			}
+		ObjMask omSlice;
+		try {
+			omSlice = om.extractSlice(z, true);
+		} catch (OperationFailedException e) {
+			throw new FeatureCalcException(e);
 		}
-		return min;
+		
+		// We adjust the z coordinate to point to the channel
+		int oldZ = omSlice.getBoundingBox().getCrnrMin().getZ();
+		omSlice.getBoundingBox().getCrnrMin().setZ( oldZ + om.getBoundingBox().getCrnrMin().getZ() );
+		
+		return StatsHelper.calcStdDev(
+			chnl,
+			omSlice,
+			excludeZero,
+			emptyValue
+		);
+	}
+	
+	public boolean isExcludeZero() {
+		return excludeZero;
+	}
+
+	public void setExcludeZero(boolean excludeZero) {
+		this.excludeZero = excludeZero;
+	}
+
+	public double getEmptyValue() {
+		return emptyValue;
+	}
+
+	public void setEmptyValue(double emptyValue) {
+		this.emptyValue = emptyValue;
 	}
 }

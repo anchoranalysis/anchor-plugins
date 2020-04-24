@@ -1,4 +1,4 @@
-package ch.ethz.biol.cell.mpp.nrg.feature.objmask;
+package org.anchoranalysis.plugin.image.feature.bean.obj.single.intensity;
 
 /*
  * #%L
@@ -27,50 +27,20 @@ package ch.ethz.biol.cell.mpp.nrg.feature.objmask;
  */
 
 
-import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.chnl.Chnl;
 import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
 
-public class IntensityStdDev extends FeatureNrgChnl {
+public class IntensityVariance extends FeatureNrgChnl {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	// START BEAN PROPERTIES
-	@BeanField
-	private boolean excludeZero = false;
-	
-	@BeanField
-	private double emptyValue = Double.NaN;
-	// END BEAN PROPERTIES
-	
 	@Override
 	protected double calcForChnl(SessionInput<FeatureInputSingleObj> input, Chnl chnl) throws FeatureCalcException {
-		return IntensityStatsHelper.calcStdDev(
-			chnl,
-			input.get().getObjMask(),
-			excludeZero,
-			emptyValue
-		);
-	}
-	
-	public boolean isExcludeZero() {
-		return excludeZero;
-	}
-
-	public void setExcludeZero(boolean excludeZero) {
-		this.excludeZero = excludeZero;
-	}
-
-	public double getEmptyValue() {
-		return emptyValue;
-	}
-
-	public void setEmptyValue(double emptyValue) {
-		this.emptyValue = emptyValue;
+		return StatsHelper.calcVarianceObjMask(chnl, input.get().getObjMask() );
 	}
 }

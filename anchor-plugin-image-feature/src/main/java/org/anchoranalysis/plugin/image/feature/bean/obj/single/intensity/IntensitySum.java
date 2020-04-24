@@ -1,4 +1,4 @@
-package ch.ethz.biol.cell.mpp.nrg.feature.objmask;
+package org.anchoranalysis.plugin.image.feature.bean.obj.single.intensity;
 
 /*
  * #%L
@@ -33,14 +33,13 @@ import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.chnl.Chnl;
-import org.anchoranalysis.image.convert.ByteConverter;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
 import org.anchoranalysis.image.objmask.ObjMask;
-import org.anchoranalysis.image.voxel.VoxelIntensityList;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
+import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 
-public class IntensityVariance extends FeatureNrgChnl {
+public class IntensitySum extends FeatureNrgChnl {
 
 	/**
 	 * 
@@ -49,23 +48,26 @@ public class IntensityVariance extends FeatureNrgChnl {
 	
 	@Override
 	protected double calcForChnl(SessionInput<FeatureInputSingleObj> input, Chnl chnl) throws FeatureCalcException {
-		return calcVarianceObjMask(chnl, input.get().getObjMask() );
+		return calcSumIntensityObjMask(
+			chnl,
+			input.get().getObjMask()
+		);
 	}
 	
-	public static double calcVarianceObjMask( Chnl chnl, ObjMask om ) {
+	private static double calcSumIntensityObjMask( Chnl chnl, ObjMask om ) {
 		
-		VoxelBox<ByteBuffer> vbIntens = chnl.getVoxelBox().asByte();
+		VoxelBox<?> vbIntens = chnl.getVoxelBox().any();
 		
 		BoundingBox bbox = om.getBoundingBox();
 		
 		Point3i crnrMin = bbox.getCrnrMin();
 		Point3i crnrMax = bbox.calcCrnrMax();
 		
-		VoxelIntensityList list = new VoxelIntensityList();
+		double sum = 0.0;
 		
 		for( int z=crnrMin.getZ(); z<=crnrMax.getZ(); z++) {
 			
-			ByteBuffer bbIntens = vbIntens.getPixelsForPlane( z ).buffer();
+			VoxelBuffer<?> bbIntens = vbIntens.getPixelsForPlane( z );
 			ByteBuffer bbMask = om.getVoxelBox().getPixelsForPlane( z - crnrMin.getZ() ).buffer();
 			
 			int offsetMask = 0;
@@ -75,16 +77,15 @@ public class IntensityVariance extends FeatureNrgChnl {
 					if (bbMask.get(offsetMask)==om.getBinaryValuesByte().getOnByte()) {
 						int offsetIntens = vbIntens.extnt().offset(x, y);
 						
-						list.add(
-							ByteConverter.unsignedByteToInt( bbIntens.get(offsetIntens) )
-						);
+						int val = bbIntens.getInt(offsetIntens);
+						
+						sum += val;
 					}
 							
 					offsetMask++;
 				}
 			}
 		}
-		
-		return list.variance( list.mean() );
+		return sum;
 	}
 }
