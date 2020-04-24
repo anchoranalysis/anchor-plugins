@@ -50,15 +50,15 @@ public class BoundingBoxMin extends FeatureObjMask {
 
 	
 	@Override
-	public double calc( SessionInput<FeatureInputSingleObj> paramsCacheable ) throws FeatureCalcException {
+	public double calc( SessionInput<FeatureInputSingleObj> input ) throws FeatureCalcException {
 		
-		FeatureInputSingleObj params = paramsCacheable.getParams();
+		FeatureInputSingleObj inputSessionless = input.get();
 		
-		BoundingBox bbox = params.getObjMask().getBoundingBox();
+		BoundingBox bbox = inputSessionless.getObjMask().getBoundingBox();
 		
 		String axisLowerCase = axis.toLowerCase();
 		
-		return calcAxisValue(axisLowerCase, bbox, params.getRes() );
+		return calcAxisValue(axisLowerCase, bbox, inputSessionless.getRes() );
 	}
 	
 	

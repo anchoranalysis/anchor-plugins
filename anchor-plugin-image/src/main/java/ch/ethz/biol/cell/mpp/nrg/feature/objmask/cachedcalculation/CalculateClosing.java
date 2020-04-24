@@ -29,26 +29,26 @@ package ch.ethz.biol.cell.mpp.nrg.feature.objmask.cachedcalculation;
 
 import org.anchoranalysis.core.cache.ExecuteException;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.feature.cache.calculation.CachedCalculation;
-import org.anchoranalysis.feature.cache.calculation.RslvdCachedCalculation;
-import org.anchoranalysis.feature.cache.calculation.map.RslvdCachedCalculationMap;
+import org.anchoranalysis.feature.cache.calculation.CacheableCalculation;
+import org.anchoranalysis.feature.cache.calculation.CalculationResolver;
+import org.anchoranalysis.feature.cache.calculation.ResolvedCalculation;
+import org.anchoranalysis.feature.cache.calculation.ResolvedCalculationMap;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.feature.session.cache.ICachedCalculationSearch;
 import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
 import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.image.objmask.morph.MorphologicalErosion;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
-public class CalculateClosing extends CachedCalculation<ObjMask,FeatureInputSingleObj> {
+public class CalculateClosing extends CacheableCalculation<ObjMask,FeatureInputSingleObj> {
 
 	private int iterations;
-	private RslvdCachedCalculationMap<ObjMask,FeatureInputSingleObj,Integer> mapDilation;
+	private ResolvedCalculationMap<ObjMask,FeatureInputSingleObj,Integer> mapDilation;
 	private boolean do3D;
 	
 	private CalculateClosing(
 		int iterations,
-		RslvdCachedCalculationMap<ObjMask,FeatureInputSingleObj,Integer> mapDilation,
+		ResolvedCalculationMap<ObjMask,FeatureInputSingleObj,Integer> mapDilation,
 		boolean do3D
 	) {
 		this.iterations = iterations;
@@ -62,12 +62,12 @@ public class CalculateClosing extends CachedCalculation<ObjMask,FeatureInputSing
 		this.do3D = src.do3D;
 	}
 	
-	public static RslvdCachedCalculation<ObjMask,FeatureInputSingleObj> createFromCache(
-		ICachedCalculationSearch<FeatureInputSingleObj> cache,
+	public static ResolvedCalculation<ObjMask,FeatureInputSingleObj> createFromCache(
+		CalculationResolver<FeatureInputSingleObj> cache,
 		int iterations,
 		boolean do3D
 	) {
-		RslvdCachedCalculationMap<ObjMask,FeatureInputSingleObj,Integer> map = cache.search(
+		ResolvedCalculationMap<ObjMask,FeatureInputSingleObj,Integer> map = cache.search(
 			new CalculateDilationMap(do3D)
 		);
 		

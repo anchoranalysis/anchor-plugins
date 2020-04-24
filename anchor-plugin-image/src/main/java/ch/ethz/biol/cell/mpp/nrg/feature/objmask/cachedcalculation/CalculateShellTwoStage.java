@@ -29,10 +29,10 @@ package ch.ethz.biol.cell.mpp.nrg.feature.objmask.cachedcalculation;
 
 import org.anchoranalysis.core.cache.ExecuteException;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.feature.cache.calculation.CachedCalculation;
-import org.anchoranalysis.feature.cache.calculation.RslvdCachedCalculation;
+import org.anchoranalysis.feature.cache.calculation.CacheableCalculation;
+import org.anchoranalysis.feature.cache.calculation.CalculationResolver;
+import org.anchoranalysis.feature.cache.calculation.ResolvedCalculation;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.feature.session.cache.ICachedCalculationSearch;
 import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
 import org.anchoranalysis.image.objmask.ObjMask;
 import org.apache.commons.lang.builder.EqualsBuilder;
@@ -46,14 +46,14 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
  * @author Owen Feehan
  *
  */
-public class CalculateShellTwoStage extends CachedCalculation<ObjMask,FeatureInputSingleObj> {
+public class CalculateShellTwoStage extends CacheableCalculation<ObjMask,FeatureInputSingleObj> {
 
-	private RslvdCachedCalculation<ObjMask,FeatureInputSingleObj> ccErosion;
-	private RslvdCachedCalculation<ObjMask,FeatureInputSingleObj> ccFurther;
+	private ResolvedCalculation<ObjMask,FeatureInputSingleObj> ccErosion;
+	private ResolvedCalculation<ObjMask,FeatureInputSingleObj> ccFurther;
 			
 	private CalculateShellTwoStage(
-		RslvdCachedCalculation<ObjMask,FeatureInputSingleObj> ccErosion,
-		RslvdCachedCalculation<ObjMask,FeatureInputSingleObj> ccFurther
+		ResolvedCalculation<ObjMask,FeatureInputSingleObj> ccErosion,
+		ResolvedCalculation<ObjMask,FeatureInputSingleObj> ccFurther
 	) {
 		super();
 		this.ccErosion = ccErosion;
@@ -90,8 +90,8 @@ public class CalculateShellTwoStage extends CachedCalculation<ObjMask,FeatureInp
 		);
 	}
 	
-	public static RslvdCachedCalculation<ObjMask,FeatureInputSingleObj> createFromCache(
-		ICachedCalculationSearch<FeatureInputSingleObj> cache,
+	public static ResolvedCalculation<ObjMask,FeatureInputSingleObj> createFromCache(
+		CalculationResolver<FeatureInputSingleObj> cache,
 		int iterationsErosion,
 		int iterationsFurther,
 		boolean do3D
@@ -111,11 +111,11 @@ public class CalculateShellTwoStage extends CachedCalculation<ObjMask,FeatureInp
 			);
 		}
 		
-		RslvdCachedCalculation<ObjMask,FeatureInputSingleObj> ccErosion = CalculateErosion.createFromCacheRslvd(
+		ResolvedCalculation<ObjMask,FeatureInputSingleObj> ccErosion = CalculateErosion.createFromCacheRslvd(
 			cache, iterationsErosion, do3D
 		);
 
-		RslvdCachedCalculation<ObjMask,FeatureInputSingleObj> ccFurther = CalculateErosion.createFromCacheRslvd(
+		ResolvedCalculation<ObjMask,FeatureInputSingleObj> ccFurther = CalculateErosion.createFromCacheRslvd(
 			cache, iterationsErosion + iterationsFurther, do3D
 		);
 		
@@ -141,8 +141,8 @@ public class CalculateShellTwoStage extends CachedCalculation<ObjMask,FeatureInp
 	private static ObjMask createShellObjMask(
 		FeatureInputSingleObj params,
 		ObjMask om,
-		RslvdCachedCalculation<ObjMask,FeatureInputSingleObj> ccErosion,
-		RslvdCachedCalculation<ObjMask,FeatureInputSingleObj> ccFurther
+		ResolvedCalculation<ObjMask,FeatureInputSingleObj> ccErosion,
+		ResolvedCalculation<ObjMask,FeatureInputSingleObj> ccFurther
 	) throws CreateException {
 		
 		// We duplicate as we don't want to mess up the existing cache entry

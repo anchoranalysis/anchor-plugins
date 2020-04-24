@@ -59,7 +59,7 @@ public class OverlapRatioMaskGlobalMiddleQuantiles extends OverlapMaskQuantiles 
 	@Override
 	public double calc( SessionInput<FeatureInputPairMemo> paramsCacheable ) throws FeatureCalcException {
 		 
-		FeatureInputPairMemo params = paramsCacheable.getParams();
+		FeatureInputPairMemo params = paramsCacheable.get();
 		
 		double overlap = overlapWithQuantiles(paramsCacheable);
 		

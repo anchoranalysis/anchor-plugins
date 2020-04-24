@@ -32,12 +32,12 @@ import java.util.List;
 import org.anchoranalysis.core.cache.ExecuteException;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.geometry.Point3i;
-import org.anchoranalysis.feature.cache.calculation.CachedCalculation;
+import org.anchoranalysis.feature.cache.calculation.CacheableCalculation;
 import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
 import org.anchoranalysis.image.points.PointsFromObjMask;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
-public class CalculatePntsFromOutline extends CachedCalculation<List<Point3i>, FeatureInputSingleObj> {
+public class CalculatePntsFromOutline extends CacheableCalculation<List<Point3i>, FeatureInputSingleObj> {
 
 	@Override
 	protected List<Point3i> execute(FeatureInputSingleObj params)

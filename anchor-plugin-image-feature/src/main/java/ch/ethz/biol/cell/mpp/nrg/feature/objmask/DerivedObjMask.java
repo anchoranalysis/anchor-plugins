@@ -34,10 +34,10 @@ package ch.ethz.biol.cell.mpp.nrg.feature.objmask;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.cache.SessionInput;
-import org.anchoranalysis.feature.cache.calculation.CachedCalculation;
+import org.anchoranalysis.feature.cache.calculation.CacheableCalculation;
+import org.anchoranalysis.feature.cache.calculation.CalculationResolver;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.calc.params.FeatureInput;
-import org.anchoranalysis.feature.session.cache.FeatureSessionCacheCalculator;
 import org.anchoranalysis.image.feature.bean.objmask.FeatureObjMask;
 import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
 import org.anchoranalysis.image.objmask.ObjMask;
@@ -64,7 +64,7 @@ public abstract class DerivedObjMask extends FeatureObjMask {
 		return CalculateInputFromDelegateOption.calc(
 			input,
 			createCachedCalculationForDerived(
-				input.cacheFor( cacheName(), FeatureInputSingleObj.class )		
+				input.resolverForChild( cacheName(), FeatureInputSingleObj.class )		
 			),
 			delegate -> new CalculateObjForDerived(delegate),
 			item,
@@ -99,7 +99,7 @@ public abstract class DerivedObjMask extends FeatureObjMask {
 		}*/			
 	}
 	
-	protected abstract CachedCalculation<ObjMask,FeatureInputSingleObj> createCachedCalculationForDerived( FeatureSessionCacheCalculator<FeatureInputSingleObj> session ) throws FeatureCalcException;
+	protected abstract CacheableCalculation<ObjMask,FeatureInputSingleObj> createCachedCalculationForDerived( CalculationResolver<FeatureInputSingleObj> session ) throws FeatureCalcException;
 	
 	protected abstract String cacheName();
 	

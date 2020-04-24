@@ -42,7 +42,7 @@ import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 import org.anchoranalysis.feature.session.FeatureSession;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorCachedResults;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorMulti;
-import org.anchoranalysis.feature.session.calculator.FeatureCalculatorMultiChangeParams;
+import org.anchoranalysis.feature.session.calculator.FeatureCalculatorMultiChangeInput;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorMultiReuse;
 import org.anchoranalysis.feature.shared.SharedFeatureSet;
 import org.anchoranalysis.feature.shared.SharedFeaturesInitParams;
@@ -251,7 +251,7 @@ public class FeatureSessionMergedPairs extends FeatureSessionFlexiFeatureTable<F
 				logErrorReporter,
 				ignoreFeaturePrefixes
 			);
-			return new FeatureCalculatorMultiChangeParams<T>(
+			return new FeatureCalculatorMultiChangeInput<T>(
 				calculator,
 				params->params.setNrgStack(nrgStack)
 			);

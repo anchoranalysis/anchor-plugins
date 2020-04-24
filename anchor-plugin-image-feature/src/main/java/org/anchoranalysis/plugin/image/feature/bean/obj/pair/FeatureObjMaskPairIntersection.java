@@ -35,7 +35,7 @@ import org.anchoranalysis.bean.annotation.Positive;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.cache.SessionInput;
-import org.anchoranalysis.feature.cache.calculation.CachedCalculation;
+import org.anchoranalysis.feature.cache.calculation.CacheableCalculation;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.calc.params.FeatureInput;
 import org.anchoranalysis.image.feature.bean.objmask.pair.FeatureObjMaskPair;
@@ -121,12 +121,12 @@ public class FeatureObjMaskPairIntersection extends FeatureObjMaskPair {
 		);
 	}
 
-	private CachedCalculation<Optional<ObjMask>,FeatureInputPairObjs> createCCIntersection(SessionInput<FeatureInputPairObjs> input) throws FeatureCalcException {
+	private CacheableCalculation<Optional<ObjMask>,FeatureInputPairObjs> createCCIntersection(SessionInput<FeatureInputPairObjs> input) throws FeatureCalcException {
 		try {
 			return CalculatePairIntersectionCommutative.createFromCache(
-				input,
-				input.cacheFor(CACHE_OBJ1, FeatureInputPairObjs.class),
-				input.cacheFor(CACHE_OBJ2, FeatureInputPairObjs.class),
+				input.resolver(),
+				input.resolverForChild(CACHE_OBJ1, FeatureInputPairObjs.class),
+				input.resolverForChild(CACHE_OBJ2, FeatureInputPairObjs.class),
 				iterationsDilation,
 				iterationsErosion,
 				do3D

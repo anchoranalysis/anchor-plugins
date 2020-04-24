@@ -65,7 +65,11 @@ public class NumAddedVoxelsAfterClosing extends FeatureObjMask {
 	public double calc(SessionInput<FeatureInputSingleObj> input) throws FeatureCalcException {
 
 		ObjMask omClosing = input.calc(
-			CalculateClosing.createFromCache(input, iterations, do3D)		
+			CalculateClosing.createFromCache(
+				input.resolver(),
+				iterations,
+				do3D
+			)		
 		);
 		
 		double numVoxels = input.calc(

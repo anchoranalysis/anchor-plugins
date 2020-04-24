@@ -29,7 +29,7 @@ package ch.ethz.biol.cell.mpp.nrg.feature.stack;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.feature.cache.SessionInput;
-import org.anchoranalysis.feature.cache.calculation.CachedCalculation;
+import org.anchoranalysis.feature.cache.calculation.CacheableCalculation;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.feature.bean.FeatureStack;
 import org.anchoranalysis.image.feature.stack.FeatureInputStack;
@@ -96,7 +96,7 @@ public abstract class FeatureIntensityHistogram extends FeatureStack {
 		this.nrgIndexMask = nrgIndexMask;
 	}
 	
-	private CachedCalculation<Histogram,FeatureInputStack> histogramCalculator() {
+	private CacheableCalculation<Histogram,FeatureInputStack> histogramCalculator() {
 		if (nrgIndexMask!=-1) {
 			return new CalculateHistogramMasked(nrgIndex, nrgIndexMask);
 		} else {

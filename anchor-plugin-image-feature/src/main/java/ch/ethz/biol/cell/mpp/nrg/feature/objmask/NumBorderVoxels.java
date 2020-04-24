@@ -57,7 +57,7 @@ public class NumBorderVoxels extends FeatureObjMask {
 	@Override
 	public double calc(SessionInput<FeatureInputSingleObj> input) throws FeatureCalcException {
 
-		ObjMask om = input.getParams().getObjMask();
+		ObjMask om = input.get().getObjMask();
 		return (double) numBorderPixels(om, ignoreAtThreshold, outsideAtThreshold, do3D);
 	}
 	

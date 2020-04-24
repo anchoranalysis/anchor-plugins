@@ -28,7 +28,7 @@ package ch.ethz.biol.cell.mpp.nrg.feature.stack.cachedcalculation;
 
 import org.anchoranalysis.core.cache.ExecuteException;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.feature.cache.calculation.CachedCalculation;
+import org.anchoranalysis.feature.cache.calculation.CacheableCalculation;
 import org.anchoranalysis.image.binary.BinaryChnl;
 import org.anchoranalysis.image.binary.values.BinaryValues;
 import org.anchoranalysis.image.chnl.Chnl;
@@ -39,7 +39,7 @@ import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
 /** Calculated a histogram for a specific region on a channel, as identified by a mask in another channel */
-public class CalculateHistogramMasked extends CachedCalculation<Histogram, FeatureInputStack> {
+public class CalculateHistogramMasked extends CacheableCalculation<Histogram, FeatureInputStack> {
 
 	private int nrgIndexSignal;
 	private int nrgIndexMask;

@@ -40,10 +40,13 @@ public class BoundingBoxNumVoxels extends FeatureObjMask {
 	private static final long serialVersionUID = 1L;
 
 	@Override
-	public double calc(SessionInput<FeatureInputSingleObj> paramsCacheable) throws FeatureCalcException {
-		
-		FeatureInputSingleObj params = paramsCacheable.getParams();
-		
-		return params.getObjMask().getBoundingBox().extnt().getVolume();
+	public double calc(SessionInput<FeatureInputSingleObj> input) throws FeatureCalcException {
+				
+		return input
+				.get()
+				.getObjMask()
+				.getBoundingBox()
+				.extnt()
+				.getVolume();
 	}
 }

@@ -113,6 +113,6 @@ public class FeatureTestCalculator {
 			LoggingFixture.simpleLogErrorReporter()
 		);
 		
-		return calculator.calcOne(params);
+		return calculator.calc(params);
 	}
 }

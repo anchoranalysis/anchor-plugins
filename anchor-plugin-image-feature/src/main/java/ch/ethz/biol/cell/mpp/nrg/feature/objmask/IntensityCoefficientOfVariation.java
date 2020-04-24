@@ -53,7 +53,7 @@ public class IntensityCoefficientOfVariation extends FeatureObjMask {
 	@Override
 	public double calc(SessionInput<FeatureInputSingleObj> paramsCacheable) throws FeatureCalcException {
 
-		FeatureInputSingleObj params = paramsCacheable.getParams();
+		FeatureInputSingleObj params = paramsCacheable.get();
 		
 		if (params.getNrgStack()==null) {
 			throw new FeatureCalcException("NrgStack required");

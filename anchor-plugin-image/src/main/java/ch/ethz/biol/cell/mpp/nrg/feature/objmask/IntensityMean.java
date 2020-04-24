@@ -116,12 +116,12 @@ public class IntensityMean extends FeatureObjMask {
 	
 
 	@Override
-	public double calc(SessionInput<FeatureInputSingleObj> paramsCacheable) throws FeatureCalcException {
+	public double calc(SessionInput<FeatureInputSingleObj> input) throws FeatureCalcException {
 		
-		FeatureInputSingleObj params = paramsCacheable.getParams();
+		FeatureInputSingleObj inputSessionless = input.get();
 		
-		Chnl chnl = params.getNrgStack().getNrgStack().getChnl(nrgIndex);
-		return calcMeanIntensityObjMask(chnl, params.getObjMask() );
+		Chnl chnl = inputSessionless.getNrgStack().getNrgStack().getChnl(nrgIndex);
+		return calcMeanIntensityObjMask(chnl, inputSessionless.getObjMask() );
 	}
 
 	public int getNrgIndex() {

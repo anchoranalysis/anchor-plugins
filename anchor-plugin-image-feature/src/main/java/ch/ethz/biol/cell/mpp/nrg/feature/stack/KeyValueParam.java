@@ -57,7 +57,7 @@ public class KeyValueParam extends FeatureStack {
 	public double calc(SessionInput<FeatureInputStack> input)
 			throws FeatureCalcException {
 		try {
-			Optional<ImageInitParams> initParams = input.getParams().getSharedObjs();
+			Optional<ImageInitParams> initParams = input.get().getSharedObjs();
 			
 			if (!initParams.isPresent()) {
 				throw new FeatureCalcException("No ImageInitParams are associated with the FeatureStackParams");

@@ -27,7 +27,7 @@ package org.anchoranalysis.plugin.image.feature.obj.intersecting;
  */
 
 import org.anchoranalysis.core.cache.ExecuteException;
-import org.anchoranalysis.feature.cache.calculation.CachedCalculation;
+import org.anchoranalysis.feature.cache.calculation.CacheableCalculation;
 import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
 import org.anchoranalysis.image.index.rtree.ObjMaskCollectionRTree;
 import org.anchoranalysis.image.objmask.ObjMaskCollection;
@@ -40,7 +40,7 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
  * @author owen
  *
  */
-public class CalculateIntersectingObjs extends CachedCalculation<ObjMaskCollection, FeatureInputSingleObj> {
+public class CalculateIntersectingObjs extends CacheableCalculation<ObjMaskCollection, FeatureInputSingleObj> {
 
 	private String id;
 	private ObjMaskCollection searchObjs;

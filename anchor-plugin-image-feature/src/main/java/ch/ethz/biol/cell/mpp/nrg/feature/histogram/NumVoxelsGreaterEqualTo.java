@@ -50,7 +50,7 @@ public class NumVoxelsGreaterEqualTo extends FeatureHistogram {
 	public double calc(SessionInput<FeatureInputHistogram> input)
 			throws FeatureCalcException {
 		
-		Histogram h = input.getParams().getHistogram();
+		Histogram h = input.get().getHistogram();
 		
 		double sum = 0.0;
 		for( int i=threshold; i<=h.getMaxBin(); i++) {

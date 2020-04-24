@@ -30,10 +30,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.anchoranalysis.core.cache.ExecuteException;
-import org.anchoranalysis.feature.cache.calculation.CachedCalculation;
-import org.anchoranalysis.feature.cache.calculation.RslvdCachedCalculation;
+import org.anchoranalysis.feature.cache.calculation.CacheableCalculation;
+import org.anchoranalysis.feature.cache.calculation.CalculationResolver;
+import org.anchoranalysis.feature.cache.calculation.ResolvedCalculation;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.feature.session.cache.ICachedCalculationSearch;
 import org.anchoranalysis.image.chnl.Chnl;
 import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
 import org.anchoranalysis.image.objmask.ObjMask;
@@ -43,7 +43,7 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
 import ch.ethz.biol.cell.mpp.nrg.feature.objmask.IntensityMean;
 import ch.ethz.biol.cell.mpp.nrg.feature.objmask.cachedcalculation.CalculateShellTwoStage;
 
-public class CalculateIntensityErodeProfile extends CachedCalculation<ErodeProfile,FeatureInputSingleObj> {
+public class CalculateIntensityErodeProfile extends CacheableCalculation<ErodeProfile,FeatureInputSingleObj> {
 
 	private int nrgIndex = 0;
 	
@@ -54,10 +54,10 @@ public class CalculateIntensityErodeProfile extends CachedCalculation<ErodeProfi
 	private boolean do3D = true;
 	
 	// List of cached calculations for creating the object for a given iteration
-	private List<RslvdCachedCalculation<ObjMask,FeatureInputSingleObj>> calcShell;
+	private List<ResolvedCalculation<ObjMask,FeatureInputSingleObj>> calcShell;
 
 	private CalculateIntensityErodeProfile(int nrgIndex, int iterationsErosionStart, int iterationsErosionEnd,
-			boolean do3D, List<RslvdCachedCalculation<ObjMask,FeatureInputSingleObj>> calcShell) {
+			boolean do3D, List<ResolvedCalculation<ObjMask,FeatureInputSingleObj>> calcShell) {
 		super();
 		this.nrgIndex = nrgIndex;
 		this.iterationsErosionStart = iterationsErosionStart;
@@ -66,7 +66,7 @@ public class CalculateIntensityErodeProfile extends CachedCalculation<ErodeProfi
 		this.calcShell = calcShell;
 	}
 	
-	private static RslvdCachedCalculation<ObjMask,FeatureInputSingleObj> createShellCalculator( ICachedCalculationSearch<FeatureInputSingleObj> cache, int iterations, boolean do3D ) throws FeatureCalcException {
+	private static ResolvedCalculation<ObjMask,FeatureInputSingleObj> createShellCalculator( CalculationResolver<FeatureInputSingleObj> cache, int iterations, boolean do3D ) throws FeatureCalcException {
 		return CalculateShellTwoStage.createFromCache(
 			cache,
 			iterations,
@@ -76,14 +76,14 @@ public class CalculateIntensityErodeProfile extends CachedCalculation<ErodeProfi
 	}
 	
 	
-	public static RslvdCachedCalculation<ErodeProfile,FeatureInputSingleObj> createFromCache(
-			ICachedCalculationSearch<FeatureInputSingleObj> cache,
+	public static ResolvedCalculation<ErodeProfile,FeatureInputSingleObj> createFromCache(
+			CalculationResolver<FeatureInputSingleObj> cache,
 			int nrgIndex,
 			int iterationsErosionStart,
 			int iterationsErosionEnd,
 			boolean do3D
 		) throws FeatureCalcException {
-			List<RslvdCachedCalculation<ObjMask,FeatureInputSingleObj>> listCalcShell = new ArrayList<>();
+			List<ResolvedCalculation<ObjMask,FeatureInputSingleObj>> listCalcShell = new ArrayList<>();
 			for( int i=iterationsErosionStart; i<=iterationsErosionEnd; i++) {
 				listCalcShell.add( createShellCalculator(cache,i, do3D) );
 			}

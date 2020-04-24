@@ -2,7 +2,7 @@ package org.anchoranalysis.plugin.image.feature.obj.pair;
 
 import java.util.Optional;
 
-import org.anchoranalysis.feature.cache.calculation.RslvdCachedCalculation;
+import org.anchoranalysis.feature.cache.calculation.ResolvedCalculation;
 import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
 import org.anchoranalysis.image.feature.objmask.pair.FeatureInputPairObjs;
 import org.anchoranalysis.image.objmask.ObjMask;
@@ -12,7 +12,7 @@ public class CalculateParamsForIntersection extends CalculateInputFromDelegateOp
 	FeatureInputPairObjs,
 	Optional<ObjMask>
 > {
-	public CalculateParamsForIntersection(RslvdCachedCalculation<Optional<ObjMask>, FeatureInputPairObjs> ccIntersection) {
+	public CalculateParamsForIntersection(ResolvedCalculation<Optional<ObjMask>, FeatureInputPairObjs> ccIntersection) {
 		super(ccIntersection);
 	}
 

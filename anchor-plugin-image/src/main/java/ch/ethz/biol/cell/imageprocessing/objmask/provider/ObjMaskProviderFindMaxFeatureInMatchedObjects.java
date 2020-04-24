@@ -100,7 +100,7 @@ public class ObjMaskProviderFindMaxFeatureInMatchedObjects extends ObjMaskProvid
 		
 		for( ObjMask om : objs ) {
 			
-			double featureVal = session.calcOne(
+			double featureVal = session.calc(
 				new FeatureInputSingleObj(om)
 			);
 			

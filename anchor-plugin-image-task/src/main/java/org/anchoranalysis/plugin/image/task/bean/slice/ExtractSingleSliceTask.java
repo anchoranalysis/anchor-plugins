@@ -215,7 +215,7 @@ public class ExtractSingleSliceTask extends Task<NamedChnlsInput,SharedStateSele
 				NRGStackWithParams nrgStackSlice = nrgStack.extractSlice(z);
 				
 				// Calculate feature for this slice
-				double featVal = session.calcOne(
+				double featVal = session.calc(
 					new FeatureInputStack(nrgStackSlice.getNrgStack())
 				);
 				

@@ -96,7 +96,7 @@ public class IntensityVariance extends FeatureObjMask {
 	@Override
 	public double calc(SessionInput<FeatureInputSingleObj> paramsCacheable) throws FeatureCalcException {
 		
-		FeatureInputSingleObj params = paramsCacheable.getParams();
+		FeatureInputSingleObj params = paramsCacheable.get();
 		
 		Chnl chnl = params.getNrgStack().getNrgStack().getChnl(nrgIndex);
 		return calcVarianceObjMask(chnl, params.getObjMask() );

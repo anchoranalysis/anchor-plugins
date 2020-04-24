@@ -1,10 +1,10 @@
 package org.anchoranalysis.plugin.image.feature.obj.pair;
 
 import org.anchoranalysis.core.cache.ExecuteException;
-import org.anchoranalysis.feature.cache.calculation.CachedCalculation;
-import org.anchoranalysis.feature.cache.calculation.RslvdCachedCalculation;
+import org.anchoranalysis.feature.cache.calculation.CacheableCalculation;
+import org.anchoranalysis.feature.cache.calculation.CalculationResolver;
+import org.anchoranalysis.feature.cache.calculation.ResolvedCalculation;
 import org.anchoranalysis.feature.calc.params.FeatureInput;
-import org.anchoranalysis.feature.session.cache.ICachedCalculationSearch;
 
 /**
  * A base class for Cached-Calculations that generate a Params for feature-calculation using an existing "delegate" calculation
@@ -24,16 +24,16 @@ import org.anchoranalysis.feature.session.cache.ICachedCalculationSearch;
  * @param <U> delegate-type of CachedCalculation
  * 
  */
-public abstract class CalculateInputFromDelegate<S, T extends FeatureInput, U> extends CachedCalculation<S, T> {
+public abstract class CalculateInputFromDelegate<S, T extends FeatureInput, U> extends CacheableCalculation<S, T> {
 
-	private RslvdCachedCalculation<U, T> ccDelegate;
+	private ResolvedCalculation<U, T> ccDelegate;
 
-	protected CalculateInputFromDelegate(RslvdCachedCalculation<U, T> ccDelegate) {
+	protected CalculateInputFromDelegate(ResolvedCalculation<U, T> ccDelegate) {
 		super();
 		this.ccDelegate = ccDelegate;
 	}
 	
-	protected CalculateInputFromDelegate(CachedCalculation<U, T> ccDelegate, ICachedCalculationSearch<T> cache) {
+	protected CalculateInputFromDelegate(CacheableCalculation<U, T> ccDelegate, CalculationResolver<T> cache) {
 		super();
 		this.ccDelegate = cache.search(ccDelegate);
 	}
@@ -47,7 +47,7 @@ public abstract class CalculateInputFromDelegate<S, T extends FeatureInput, U> e
 	
 	protected abstract S deriveFromDelegate( T params, U delegate);
 
-	protected RslvdCachedCalculation<U, T> getDelegate() {
+	protected ResolvedCalculation<U, T> getDelegate() {
 		return ccDelegate;
 	}
 }

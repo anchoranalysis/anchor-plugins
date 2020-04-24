@@ -53,7 +53,7 @@ public class Param<T extends FeatureInputParams> extends Feature<T> {
 	public double calc(SessionInput<T> input)
 			throws FeatureCalcException {
 		
-		KeyValueParams keyValueParams = input.getParams().getKeyValueParams();
+		KeyValueParams keyValueParams = input.get().getKeyValueParams();
 		
 		if (keyValueParams==null) {
 			throw new FeatureCalcException("No KeyValueParams is passed");

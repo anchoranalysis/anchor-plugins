@@ -52,7 +52,7 @@ public class BoundingBoxExtent extends FeatureObjMask {
 	@Override
 	public double calc( SessionInput<FeatureInputSingleObj> paramsCacheable ) throws FeatureCalcException {
 		
-		FeatureInputSingleObj params = paramsCacheable.getParams();
+		FeatureInputSingleObj params = paramsCacheable.get();
 		
 		BoundingBox bbox = params.getObjMask().getBoundingBox();
 		

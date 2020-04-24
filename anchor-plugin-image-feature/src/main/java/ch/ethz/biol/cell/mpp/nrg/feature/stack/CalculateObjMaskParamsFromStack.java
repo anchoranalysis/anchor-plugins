@@ -1,14 +1,14 @@
 package ch.ethz.biol.cell.mpp.nrg.feature.stack;
 
 import org.anchoranalysis.core.cache.ExecuteException;
-import org.anchoranalysis.feature.cache.calculation.CachedCalculation;
+import org.anchoranalysis.feature.cache.calculation.CacheableCalculation;
 import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
 import org.anchoranalysis.image.feature.stack.FeatureInputStack;
 import org.anchoranalysis.image.objmask.ObjMaskCollection;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
-class CalculateObjMaskParamsFromStack extends CachedCalculation<FeatureInputSingleObj, FeatureInputStack> {
+class CalculateObjMaskParamsFromStack extends CacheableCalculation<FeatureInputSingleObj, FeatureInputStack> {
 
 	private ObjMaskCollection objs;
 	private int index;

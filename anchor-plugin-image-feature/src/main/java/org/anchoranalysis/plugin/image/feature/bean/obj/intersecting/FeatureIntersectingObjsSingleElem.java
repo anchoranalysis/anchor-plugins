@@ -35,7 +35,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.cache.ExecuteException;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.cache.SessionInput;
-import org.anchoranalysis.feature.cache.calculation.RslvdCachedCalculation;
+import org.anchoranalysis.feature.cache.calculation.ResolvedCalculation;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
 import org.anchoranalysis.image.feature.objmask.pair.FeatureInputPairObjs;
@@ -56,7 +56,7 @@ public abstract class FeatureIntersectingObjsSingleElem extends FeatureIntersect
 	// END BEAN PROPERTIES
 	
 	@Override
-	protected double valueFor(SessionInput<FeatureInputSingleObj> params, RslvdCachedCalculation<ObjMaskCollection, FeatureInputSingleObj> intersecting)
+	protected double valueFor(SessionInput<FeatureInputSingleObj> params, ResolvedCalculation<ObjMaskCollection, FeatureInputSingleObj> intersecting)
 			throws FeatureCalcException {
 
 		try {
@@ -70,9 +70,9 @@ public abstract class FeatureIntersectingObjsSingleElem extends FeatureIntersect
 	
 	protected abstract double aggregateResults( List<Double> results );
 	
-	private List<Double> calcResults( SessionInput<FeatureInputSingleObj> paramsExst, RslvdCachedCalculation<ObjMaskCollection, FeatureInputSingleObj> ccIntersecting ) throws FeatureCalcException, ExecuteException {
+	private List<Double> calcResults( SessionInput<FeatureInputSingleObj> paramsExst, ResolvedCalculation<ObjMaskCollection, FeatureInputSingleObj> ccIntersecting ) throws FeatureCalcException, ExecuteException {
 		
-		int size = ccIntersecting.getOrCalculate(paramsExst.getParams()).size();
+		int size = ccIntersecting.getOrCalculate(paramsExst.get()).size();
 		
 		List<Double> results = new ArrayList<>();
 		for( int i=0; i<size; i++) {

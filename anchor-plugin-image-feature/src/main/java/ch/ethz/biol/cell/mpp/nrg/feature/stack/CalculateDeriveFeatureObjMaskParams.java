@@ -1,7 +1,7 @@
 package ch.ethz.biol.cell.mpp.nrg.feature.stack;
 
 import org.anchoranalysis.core.cache.ExecuteException;
-import org.anchoranalysis.feature.cache.calculation.CachedCalculation;
+import org.anchoranalysis.feature.cache.calculation.CacheableCalculation;
 import org.anchoranalysis.image.binary.BinaryChnl;
 import org.anchoranalysis.image.binary.values.BinaryValues;
 import org.anchoranalysis.image.chnl.Chnl;
@@ -11,7 +11,7 @@ import org.anchoranalysis.image.objmask.ObjMask;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
-public class CalculateDeriveFeatureObjMaskParams extends CachedCalculation<FeatureInputSingleObj, FeatureInputStack> {
+public class CalculateDeriveFeatureObjMaskParams extends CacheableCalculation<FeatureInputSingleObj, FeatureInputStack> {
 
 	private int nrgIndex;
 		

@@ -45,7 +45,7 @@ public class AtBorderZ extends FeatureObjMask {
 	@Override
 	public double calc(SessionInput<FeatureInputSingleObj> paramsCacheable) throws FeatureCalcException {
 		
-		FeatureInputSingleObj params = paramsCacheable.getParams();
+		FeatureInputSingleObj params = paramsCacheable.get();
 		
 		if (params.getObjMask().getBoundingBox().atBorderZ(params.getNrgStack().getDimensions())) {
 			return 1.0;

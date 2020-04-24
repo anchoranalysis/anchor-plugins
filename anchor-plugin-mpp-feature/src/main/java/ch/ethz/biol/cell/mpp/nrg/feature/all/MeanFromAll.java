@@ -53,7 +53,7 @@ public class MeanFromAll extends FeatureAllMemo {
 	public double calc(SessionInput<FeatureInputAllMemo> input)
 			throws FeatureCalcException {
 		
-		MemoCollection memo = input.getParams().getPxlPartMemo();
+		MemoCollection memo = input.get().getPxlPartMemo();
 		
 		if (memo.size()==0) {
 			return 0.0;

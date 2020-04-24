@@ -34,36 +34,35 @@ import org.anchoranalysis.core.cache.ExecuteException;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.feature.cache.SessionInput;
-import org.anchoranalysis.feature.cache.calculation.CachedCalculation;
-import org.anchoranalysis.feature.cache.calculation.CachedCalculationOperation;
-import org.anchoranalysis.feature.cache.calculation.RslvdCachedCalculation;
+import org.anchoranalysis.feature.cache.calculation.CacheableCalculation;
+import org.anchoranalysis.feature.cache.calculation.ResolvedCalculation;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
 import org.anchoranalysis.plugin.points.calculate.CalculatePntsFromOutline;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
-public class CalculateEllipsoidLeastSquares extends CachedCalculation<MarkEllipsoid,FeatureInputSingleObj> {
+public class CalculateEllipsoidLeastSquares extends CacheableCalculation<MarkEllipsoid,FeatureInputSingleObj> {
 
 	private boolean suppressZCovariance;
 	
-	private transient RslvdCachedCalculation<List<Point3i>,FeatureInputSingleObj> ccPnts;
+	private transient ResolvedCalculation<List<Point3i>,FeatureInputSingleObj> ccPnts;
 		
-	private CalculateEllipsoidLeastSquares(boolean suppressZCovariance, RslvdCachedCalculation<List<Point3i>,FeatureInputSingleObj> ccPnts) {
+	private CalculateEllipsoidLeastSquares(boolean suppressZCovariance, ResolvedCalculation<List<Point3i>,FeatureInputSingleObj> ccPnts) {
 		super();
 		this.suppressZCovariance = suppressZCovariance;
 		this.ccPnts = ccPnts;
 	}
 	
-	public static MarkEllipsoid createFromCache(SessionInput<FeatureInputSingleObj> params, boolean suppressZCovariance ) throws FeatureCalcException {
+	public static MarkEllipsoid createFromCache(SessionInput<FeatureInputSingleObj> input, boolean suppressZCovariance ) throws FeatureCalcException {
 		
-		RslvdCachedCalculation<List<Point3i>,FeatureInputSingleObj> ccPnts = params.search( new CalculatePntsFromOutline() );
+		ResolvedCalculation<List<Point3i>,FeatureInputSingleObj> ccPnts = input.resolver().search( new CalculatePntsFromOutline() );
 		
-		RslvdCachedCalculation<MarkEllipsoid,FeatureInputSingleObj> ccEllipsoid = params.search(
+		ResolvedCalculation<MarkEllipsoid,FeatureInputSingleObj> ccEllipsoid = input.resolver().search(
 			new CalculateEllipsoidLeastSquares(suppressZCovariance, ccPnts )
 		);
 		try {
-			return ccEllipsoid.getOrCalculate(params.getParams());
+			return ccEllipsoid.getOrCalculate(input.get());
 		} catch (ExecuteException e) {
 			throw new FeatureCalcException(e.getCause());
 		}

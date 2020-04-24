@@ -56,7 +56,7 @@ public class BBoxZDist extends FeaturePairMemo {
 	public double calc(SessionInput<FeatureInputPairMemo> paramsCacheable)
 			throws FeatureCalcException {
 
-		FeatureInputPairMemo params = paramsCacheable.getParams();
+		FeatureInputPairMemo params = paramsCacheable.get();
 		
 		ImageDim sd = params.getNrgStack().getDimensions();
 		BoundingBox bbox1 = params.getObj1().getMark().bbox(sd,regionID);

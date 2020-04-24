@@ -113,7 +113,7 @@ public class ChnlProviderObjMaskFeature extends ChnlProvider {
 			chnlOut.getVoxelBox().any().setAllPixelsTo( valueNoObject );
 			for( ObjMask om : objsCollection ) {
 
-				double featVal = session.calcOne(
+				double featVal = session.calc(
 					new FeatureInputSingleObj(om, nrgStackParams)
 				);
 				chnlOut.getVoxelBox().any().setPixelsCheckMask(om, (int) (factor*featVal) );

@@ -64,7 +64,7 @@ public class ThresholdHistogram extends FeatureHistogram {
 			item,
 			new CalculateHistogramInputFromHistogram(
 				new CalculateOtsuThresholdedHistogram(calculateLevel, getLogger()),
-				input
+				input.resolver()
 			),
 			"thresholdedHist"
 		);

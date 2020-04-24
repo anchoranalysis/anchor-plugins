@@ -66,7 +66,7 @@ public abstract class ObjMaskFeatureFromStack extends FeatureStack {
 	@Override
 	public double calc(SessionInput<FeatureInputStack> paramsCacheable) throws FeatureCalcException {
 		
-		Optional<ImageInitParams> sharedObjs = paramsCacheable.getParams().getSharedObjs();
+		Optional<ImageInitParams> sharedObjs = paramsCacheable.get().getSharedObjs();
 		
 		if (!sharedObjs.isPresent()) {
 			throw new FeatureCalcException("No ImageInitParams are associated with the FeatureStackParams but they are required");

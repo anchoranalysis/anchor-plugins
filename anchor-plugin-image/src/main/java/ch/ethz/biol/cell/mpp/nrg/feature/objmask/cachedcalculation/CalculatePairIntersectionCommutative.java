@@ -31,9 +31,9 @@ import java.util.Optional;
 
 import org.anchoranalysis.core.cache.ExecuteException;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.feature.cache.calculation.CachedCalculation;
-import org.anchoranalysis.feature.cache.calculation.RslvdCachedCalculation;
-import org.anchoranalysis.feature.session.cache.ICachedCalculationSearch;
+import org.anchoranalysis.feature.cache.calculation.CacheableCalculation;
+import org.anchoranalysis.feature.cache.calculation.CalculationResolver;
+import org.anchoranalysis.feature.cache.calculation.ResolvedCalculation;
 import org.anchoranalysis.feature.session.cache.NullCachedCalculationSearch;
 import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
 import org.anchoranalysis.image.feature.objmask.pair.FeatureInputPairObjs;
@@ -56,15 +56,15 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
  * @author Owen Feehan
  *
  */
-public class CalculatePairIntersectionCommutative extends CachedCalculation<Optional<ObjMask>,FeatureInputPairObjs> {
+public class CalculatePairIntersectionCommutative extends CacheableCalculation<Optional<ObjMask>,FeatureInputPairObjs> {
 
-	private RslvdCachedCalculation<Optional<ObjMask>,FeatureInputPairObjs> ccFirstToSecond;
-	private RslvdCachedCalculation<Optional<ObjMask>,FeatureInputPairObjs> ccSecondToFirst;
+	private ResolvedCalculation<Optional<ObjMask>,FeatureInputPairObjs> ccFirstToSecond;
+	private ResolvedCalculation<Optional<ObjMask>,FeatureInputPairObjs> ccSecondToFirst;
 	
-	public static CachedCalculation<Optional<ObjMask>,FeatureInputPairObjs> createFromCache(
-		ICachedCalculationSearch<FeatureInputPairObjs> cache,
-		ICachedCalculationSearch<FeatureInputSingleObj> cacheDilationObj1,
-		ICachedCalculationSearch<FeatureInputSingleObj> cacheDilationObj2,
+	public static CacheableCalculation<Optional<ObjMask>,FeatureInputPairObjs> createFromCache(
+		CalculationResolver<FeatureInputPairObjs> cache,
+		CalculationResolver<FeatureInputSingleObj> cacheDilationObj1,
+		CalculationResolver<FeatureInputSingleObj> cacheDilationObj2,
 		int iterationsDilation,
 		int iterationsErosion,
 		boolean do3D
@@ -72,29 +72,29 @@ public class CalculatePairIntersectionCommutative extends CachedCalculation<Opti
 		
 		// We use two additional caches, for the calculations involving the single objects, as these can be expensive, and we want
 		//  them also cached
-		RslvdCachedCalculation<Optional<ObjMask>,FeatureInputPairObjs> ccFirstToSecond = CalculatePairIntersection.createFromCache(
+		ResolvedCalculation<Optional<ObjMask>,FeatureInputPairObjs> ccFirstToSecond = CalculatePairIntersection.createFromCache(
 			cache, cacheDilationObj1, cacheDilationObj2, iterationsDilation, 0, do3D, iterationsErosion	
 		);
-		RslvdCachedCalculation<Optional<ObjMask>,FeatureInputPairObjs> ccSecondToFirst = CalculatePairIntersection.createFromCache(
+		ResolvedCalculation<Optional<ObjMask>,FeatureInputPairObjs> ccSecondToFirst = CalculatePairIntersection.createFromCache(
 			cache, cacheDilationObj1, cacheDilationObj2, 0, iterationsDilation, do3D, iterationsErosion	
 		);
 		return new CalculatePairIntersectionCommutative(ccFirstToSecond, ccSecondToFirst);
 	}
 	
-	public static RslvdCachedCalculation<Optional<ObjMask>,FeatureInputPairObjs> createWithoutCache(
+	public static ResolvedCalculation<Optional<ObjMask>,FeatureInputPairObjs> createWithoutCache(
 		int iterationsDilation,
 		int iterationsErosion,
 		boolean do3D	
 	) throws CreateException {
-		ICachedCalculationSearch<FeatureInputPairObjs> cacheNullPair = NullCachedCalculationSearch.getInstance();
-		ICachedCalculationSearch<FeatureInputSingleObj> cacheNullSingle = NullCachedCalculationSearch.getInstance();
+		CalculationResolver<FeatureInputPairObjs> cacheNullPair = NullCachedCalculationSearch.getInstance();
+		CalculationResolver<FeatureInputSingleObj> cacheNullSingle = NullCachedCalculationSearch.getInstance();
 
 		// We use two additional caches, for the calculations involving the single objects, as these can be expensive, and we want
 		//  them also cached
-		RslvdCachedCalculation<Optional<ObjMask>,FeatureInputPairObjs> ccFirstToSecond = CalculatePairIntersection.createFromCache(
+		ResolvedCalculation<Optional<ObjMask>,FeatureInputPairObjs> ccFirstToSecond = CalculatePairIntersection.createFromCache(
 			cacheNullPair, cacheNullSingle, cacheNullSingle, iterationsDilation, 0, do3D, iterationsErosion	
 		);
-		RslvdCachedCalculation<Optional<ObjMask>,FeatureInputPairObjs> ccSecondToFirst = CalculatePairIntersection.createFromCache(
+		ResolvedCalculation<Optional<ObjMask>,FeatureInputPairObjs> ccSecondToFirst = CalculatePairIntersection.createFromCache(
 			cacheNullPair, cacheNullSingle, cacheNullSingle, 0, iterationsDilation, do3D, iterationsErosion	
 		);
 		return cacheNullPair.search(
@@ -103,8 +103,8 @@ public class CalculatePairIntersectionCommutative extends CachedCalculation<Opti
 	}
 	
 	private CalculatePairIntersectionCommutative(
-		RslvdCachedCalculation<Optional<ObjMask>,FeatureInputPairObjs> ccFirstToSecond,
-		RslvdCachedCalculation<Optional<ObjMask>,FeatureInputPairObjs> ccSecondToFirst
+		ResolvedCalculation<Optional<ObjMask>,FeatureInputPairObjs> ccFirstToSecond,
+		ResolvedCalculation<Optional<ObjMask>,FeatureInputPairObjs> ccSecondToFirst
 	) {
 		super();
 		this.ccFirstToSecond = ccFirstToSecond;

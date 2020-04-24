@@ -45,7 +45,7 @@ public class Skewness extends FeatureHistogram {
 	public double calc(SessionInput<FeatureInputHistogram> input)
 			throws FeatureCalcException {
 		
-		Histogram h = input.getParams().getHistogram();
+		Histogram h = input.get().getHistogram();
 		
 		long count = h.getTotalCount();
 		double mean = h.mean();

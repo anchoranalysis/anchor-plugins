@@ -52,7 +52,7 @@ public class Ellipsoidicity extends FeatureObjMask {
 	@Override
 	public double calc(SessionInput<FeatureInputSingleObj> paramsCacheable) throws FeatureCalcException {
 		
-		FeatureInputSingleObj params = paramsCacheable.getParams();
+		FeatureInputSingleObj params = paramsCacheable.get();
 		
 		// Max intensity projection of the input mask
 		ObjMask om = params.getObjMask();

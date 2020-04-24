@@ -1,6 +1,6 @@
 package ch.ethz.biol.cell.mpp.nrg.feature.stack;
 
-import org.anchoranalysis.feature.cache.calculation.RslvdCachedCalculation;
+import org.anchoranalysis.feature.cache.calculation.ResolvedCalculation;
 import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
 import org.anchoranalysis.image.feature.stack.FeatureInputStack;
 import org.anchoranalysis.image.objmask.ObjMaskCollection;
@@ -12,7 +12,7 @@ public class CalculateDeriveObjFromCollection extends CalculateInputFromDelegate
 
 	private int index;
 
-	public CalculateDeriveObjFromCollection(RslvdCachedCalculation<ObjMaskCollection, FeatureInputStack> ccDelegate,
+	public CalculateDeriveObjFromCollection(ResolvedCalculation<ObjMaskCollection, FeatureInputStack> ccDelegate,
 			int index) {
 		super(ccDelegate);
 		this.index = index;

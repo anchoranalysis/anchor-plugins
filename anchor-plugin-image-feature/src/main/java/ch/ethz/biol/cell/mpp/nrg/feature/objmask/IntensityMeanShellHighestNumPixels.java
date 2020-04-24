@@ -32,7 +32,7 @@ import org.anchoranalysis.bean.BeanInstanceMap;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.error.BeanMisconfiguredException;
 import org.anchoranalysis.feature.cache.SessionInput;
-import org.anchoranalysis.feature.cache.calculation.CachedCalculation;
+import org.anchoranalysis.feature.cache.calculation.CacheableCalculation;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.chnl.Chnl;
 import org.anchoranalysis.image.feature.bean.objmask.FeatureObjMask;
@@ -83,14 +83,12 @@ public class IntensityMeanShellHighestNumPixels extends FeatureObjMask {
 	}
 		
 	@Override
-	public double calc(SessionInput<FeatureInputSingleObj> paramsCacheable) throws FeatureCalcException {
+	public double calc(SessionInput<FeatureInputSingleObj> input) throws FeatureCalcException {
 		
-		FeatureInputSingleObj params = paramsCacheable.getParams();
+		Chnl chnl = input.get().getNrgStack().getNrgStack().getChnl(nrgIndex);
 		
-		Chnl chnl = params.getNrgStack().getNrgStack().getChnl(nrgIndex);
-		
-		CachedCalculation<ObjMask,FeatureInputSingleObj> ccShellObjMask = CalculateShellObjMask.createFromCache(
-			paramsCacheable,
+		CacheableCalculation<ObjMask,FeatureInputSingleObj> ccShellObjMask = CalculateShellObjMask.createFromCache(
+			input.resolver(),
 			iterationsDilation,
 			iterationsErosion,
 			0,
@@ -98,7 +96,7 @@ public class IntensityMeanShellHighestNumPixels extends FeatureObjMask {
 			inverse	
 		);
 							
-		ObjMask om = paramsCacheable.calc(ccShellObjMask);
+		ObjMask om = input.calc(ccShellObjMask);
 		
 		Histogram h = HistogramFactoryUtilities.create(chnl, om);
 		

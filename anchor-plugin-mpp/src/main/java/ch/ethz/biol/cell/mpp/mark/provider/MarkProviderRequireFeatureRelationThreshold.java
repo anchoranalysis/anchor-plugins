@@ -102,7 +102,7 @@ public class MarkProviderRequireFeatureRelationThreshold extends MarkProvider {
 				getSharedObjects().getFeature().getSharedFeatureSet().downcast(),
 				getLogger()
 			);
-			return session.calcOne( params );
+			return session.calc( params );
 			
 		} catch (FeatureCalcException e) {
 			throw new CreateException(e);

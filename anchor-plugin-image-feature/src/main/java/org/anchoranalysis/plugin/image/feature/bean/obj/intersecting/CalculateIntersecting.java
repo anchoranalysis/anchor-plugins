@@ -1,6 +1,6 @@
 package org.anchoranalysis.plugin.image.feature.bean.obj.intersecting;
 
-import org.anchoranalysis.feature.cache.calculation.RslvdCachedCalculation;
+import org.anchoranalysis.feature.cache.calculation.ResolvedCalculation;
 import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
 import org.anchoranalysis.image.feature.objmask.pair.FeatureInputPairObjs;
 import org.anchoranalysis.image.objmask.ObjMaskCollection;
@@ -12,7 +12,7 @@ public class CalculateIntersecting extends CalculateInputFromDelegate<FeatureInp
 
 	private int index;
 	
-	public CalculateIntersecting(RslvdCachedCalculation<ObjMaskCollection, FeatureInputSingleObj> intersecting, int index) {
+	public CalculateIntersecting(ResolvedCalculation<ObjMaskCollection, FeatureInputSingleObj> intersecting, int index) {
 		super(intersecting);
 		this.index = index;
 	}

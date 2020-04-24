@@ -3,7 +3,7 @@ package ch.ethz.biol.cell.mpp.nrg.feature.ind;
 import org.anchoranalysis.anchor.mpp.bean.regionmap.RegionMap;
 import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputSingleMemo;
 import org.anchoranalysis.core.cache.ExecuteException;
-import org.anchoranalysis.feature.cache.calculation.CachedCalculation;
+import org.anchoranalysis.feature.cache.calculation.CacheableCalculation;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
 import org.anchoranalysis.image.objmask.ObjMask;
@@ -11,7 +11,7 @@ import org.anchoranalysis.image.objmask.properties.ObjMaskWithProperties;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
-class CalculateSingleObjFromMemo extends CachedCalculation<FeatureInputSingleObj, FeatureInputSingleMemo> {
+class CalculateSingleObjFromMemo extends CacheableCalculation<FeatureInputSingleObj, FeatureInputSingleMemo> {
 
 	private RegionMap regionMap;
 	private int index;

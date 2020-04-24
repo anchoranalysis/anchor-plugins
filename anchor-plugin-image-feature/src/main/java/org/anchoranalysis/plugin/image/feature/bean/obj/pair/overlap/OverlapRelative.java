@@ -50,7 +50,7 @@ public abstract class OverlapRelative extends FeatureObjMaskPair {
 	public double calc(SessionInput<FeatureInputPairObjs> paramsCacheable)
 			throws FeatureCalcException {
 		
-		FeatureInputPairObjs params = paramsCacheable.getParams();
+		FeatureInputPairObjs params = paramsCacheable.get();
 
 		return OverlapRatioUtilities.overlapRatioTo(
 			params,

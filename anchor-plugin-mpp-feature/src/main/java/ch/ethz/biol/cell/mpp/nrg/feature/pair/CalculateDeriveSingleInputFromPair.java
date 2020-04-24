@@ -3,11 +3,11 @@ package ch.ethz.biol.cell.mpp.nrg.feature.pair;
 import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputPairMemo;
 import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputSingleMemo;
 import org.anchoranalysis.core.cache.ExecuteException;
-import org.anchoranalysis.feature.cache.calculation.CachedCalculation;
+import org.anchoranalysis.feature.cache.calculation.CacheableCalculation;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
-class CalculateDeriveSingleInputFromPair extends CachedCalculation<FeatureInputSingleMemo, FeatureInputPairMemo> {
+class CalculateDeriveSingleInputFromPair extends CacheableCalculation<FeatureInputSingleMemo, FeatureInputPairMemo> {
 
 	/** Iff TRUE, then the first object from the pair is used, otherwise the second is */
 	private boolean first;
