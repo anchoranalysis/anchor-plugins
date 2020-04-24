@@ -37,10 +37,10 @@ import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.chnl.Chnl;
 import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
 import org.anchoranalysis.image.objmask.ObjMask;
+import org.anchoranalysis.plugin.image.feature.bean.obj.single.intensity.IntensityMeanCalculator;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
-import ch.ethz.biol.cell.mpp.nrg.feature.objmask.IntensityMean;
 import ch.ethz.biol.cell.mpp.nrg.feature.objmask.cachedcalculation.CalculateShellTwoStage;
 
 public class CalculateIntensityErodeProfile extends CacheableCalculation<ErodeProfile,FeatureInputSingleObj> {
@@ -113,7 +113,7 @@ public class CalculateIntensityErodeProfile extends CacheableCalculation<ErodePr
 			
 			double featVal;
 			try {
-				featVal = IntensityMean.calcMeanIntensityObjMask(chnl, om );
+				featVal = IntensityMeanCalculator.calcMeanIntensityObjMask(chnl, om );
 			} catch (FeatureCalcException e) {
 				throw new ExecuteException(e);
 			}

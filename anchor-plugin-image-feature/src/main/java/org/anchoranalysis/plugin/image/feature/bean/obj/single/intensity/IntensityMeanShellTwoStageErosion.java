@@ -37,7 +37,6 @@ import org.anchoranalysis.image.chnl.Chnl;
 import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
 import org.anchoranalysis.image.objmask.ObjMask;
 
-import ch.ethz.biol.cell.mpp.nrg.feature.objmask.IntensityMean;
 import ch.ethz.biol.cell.mpp.nrg.feature.objmask.cachedcalculation.CalculateShellTwoStage;
 
 /**
@@ -85,7 +84,7 @@ public class IntensityMeanShellTwoStageErosion extends IntensityMeanShellBase {
 			throw new FeatureCalcException(e);
 		}
 		
-		return IntensityMean.calcMeanIntensityObjMask(chnl, om );
+		return IntensityMeanCalculator.calcMeanIntensityObjMask(chnl, om );
 	}
 	
 	public int getIterationsFurther() {

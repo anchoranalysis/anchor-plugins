@@ -15,7 +15,6 @@ import org.anchoranalysis.image.voxel.VoxelIntensityList;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.anchoranalysis.image.voxel.statistics.VoxelStatisticsFromHistogram;
 
-import ch.ethz.biol.cell.mpp.nrg.feature.objmask.IntensityMean;
 import ch.ethz.biol.cell.mpp.nrg.feature.objmask.ValueAndIndex;
 
 class StatsHelper {
@@ -48,7 +47,7 @@ class StatsHelper {
 			omSlice.getBoundingBox().getCrnrMin().setZ( oldZ + om.getBoundingBox().getCrnrMin().getZ() );
 			
 			if (omSlice.hasPixelsGreaterThan(0)) {
-				double mean = IntensityMean.calcMeanIntensityObjMask(chnl, omSlice, excludeZero);
+				double mean = IntensityMeanCalculator.calcMeanIntensityObjMask(chnl, omSlice, excludeZero);
 				
 				if (mean>max) {
 					index = z;
