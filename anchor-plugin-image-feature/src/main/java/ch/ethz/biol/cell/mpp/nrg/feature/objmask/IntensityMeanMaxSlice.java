@@ -49,7 +49,7 @@ public class IntensityMeanMaxSlice extends IntensityMeanFromObj {
 		
 	@Override
 	protected double calcForMaskedChnl(Chnl chnl, ObjMask mask) throws FeatureCalcException {
-		ValueAndIndex vai = IntensityMeanHelper.calcMaxSliceMean(chnl, mask, excludeZero );
+		ValueAndIndex vai = IntensityStatsHelper.calcMaxSliceMean(chnl, mask, excludeZero );
 		
 		if (vai.getIndex()==-1) {
 			return emptyValue;

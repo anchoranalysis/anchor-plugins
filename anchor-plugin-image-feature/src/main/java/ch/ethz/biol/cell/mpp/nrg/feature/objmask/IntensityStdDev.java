@@ -31,14 +31,9 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.chnl.Chnl;
-import org.anchoranalysis.image.feature.bean.objmask.FeatureObjMask;
 import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
-import org.anchoranalysis.image.histogram.Histogram;
-import org.anchoranalysis.image.histogram.HistogramFactoryUtilities;
-import org.anchoranalysis.image.objmask.ObjMask;
-import org.anchoranalysis.image.voxel.statistics.VoxelStatisticsFromHistogram;
 
-public class IntensityStdDev extends FeatureObjMask {
+public class IntensityStdDev extends FeatureNrgChnl {
 
 	/**
 	 * 
@@ -47,47 +42,22 @@ public class IntensityStdDev extends FeatureObjMask {
 	
 	// START BEAN PROPERTIES
 	@BeanField
-	private int nrgIndex = 0;
-	
-	@BeanField
 	private boolean excludeZero = false;
 	
 	@BeanField
 	private double emptyValue = Double.NaN;
 	// END BEAN PROPERTIES
 	
-	public static double calcStdDev( ObjMask objMask, Chnl chnl, boolean ignoreZero, double emptyValue ) {
-		Histogram hist = HistogramFactoryUtilities.createHistogramIgnoreZero(chnl,objMask,ignoreZero);
-		
-		if (hist.getTotalCount()==0) {
-			return emptyValue;
-		}
-		
-		return new VoxelStatisticsFromHistogram(hist).stdDev();
-	}
-	
 	@Override
-	public double calc(SessionInput<FeatureInputSingleObj> paramsCacheable) throws FeatureCalcException {
-		
-		FeatureInputSingleObj params = paramsCacheable.get();
-		
-		if (params.getNrgStack()==null) {
-			throw new FeatureCalcException("NrgStack required");
-		}
-		
-		Chnl chnl = params.getNrgStack().getNrgStack().getChnl(nrgIndex);
-		
-		return calcStdDev( params.getObjMask(), chnl, excludeZero, emptyValue );
+	protected double calcForChnl(SessionInput<FeatureInputSingleObj> input, Chnl chnl) throws FeatureCalcException {
+		return IntensityStatsHelper.calcStdDev(
+			chnl,
+			input.get().getObjMask(),
+			excludeZero,
+			emptyValue
+		);
 	}
 	
-	public int getNrgIndex() {
-		return nrgIndex;
-	}
-
-	public void setNrgIndex(int nrgIndex) {
-		this.nrgIndex = nrgIndex;
-	}
-
 	public boolean isExcludeZero() {
 		return excludeZero;
 	}
@@ -103,7 +73,4 @@ public class IntensityStdDev extends FeatureObjMask {
 	public void setEmptyValue(double emptyValue) {
 		this.emptyValue = emptyValue;
 	}
-
-	
-
 }

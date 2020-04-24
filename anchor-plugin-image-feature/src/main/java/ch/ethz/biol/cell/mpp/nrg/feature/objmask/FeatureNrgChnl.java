@@ -7,7 +7,13 @@ import org.anchoranalysis.image.chnl.Chnl;
 import org.anchoranalysis.image.feature.bean.objmask.FeatureObjMask;
 import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
 
-public abstract class IntensityMeanBase extends FeatureObjMask {
+/**
+ * A feature that uses a channel from the NRG-stack as identified by an index
+ * 
+ * @author Owen Feehan
+ *
+ */
+public abstract class FeatureNrgChnl extends FeatureObjMask {
 
 	/**
 	 * 
@@ -24,10 +30,12 @@ public abstract class IntensityMeanBase extends FeatureObjMask {
 		
 		FeatureInputSingleObj inputSessionless = input.get();
 
-		return calcForChnl(
-			input,
-			inputSessionless.getNrgStack().getNrgStack().getChnl(nrgIndex)
-		);
+		if (inputSessionless.getNrgStack()==null) {
+			throw new FeatureCalcException("A NRG-Stack required for this feature");
+		}
+		
+		Chnl chnl = inputSessionless.getNrgStack().getNrgStack().getChnl(nrgIndex);
+		return calcForChnl(input, chnl);
 	}
 	
 	protected abstract double calcForChnl( SessionInput<FeatureInputSingleObj> input, Chnl chnl ) throws FeatureCalcException;

@@ -27,41 +27,28 @@ package ch.ethz.biol.cell.mpp.nrg.feature.objmask;
  */
 
 
-import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.chnl.Chnl;
-import org.anchoranalysis.image.feature.bean.objmask.FeatureObjMask;
 import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
 import org.anchoranalysis.image.histogram.Histogram;
 import org.anchoranalysis.image.histogram.HistogramFactoryUtilities;
 import org.anchoranalysis.image.voxel.statistics.VoxelStatisticsFromHistogram;
 
-public class IntensityCoefficientOfVariation extends FeatureObjMask {
+public class IntensityCoefficientOfVariation extends FeatureNrgChnl {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	
-	// START BEAN PROPERTIES
-	@BeanField
-	private int nrgIndex = 0;
-	// END BEAN PROPERTIES
-	
 
 	@Override
-	public double calc(SessionInput<FeatureInputSingleObj> paramsCacheable) throws FeatureCalcException {
+	protected double calcForChnl(SessionInput<FeatureInputSingleObj> input, Chnl chnl) throws FeatureCalcException {
 
-		FeatureInputSingleObj params = paramsCacheable.get();
-		
-		if (params.getNrgStack()==null) {
-			throw new FeatureCalcException("NrgStack required");
-		}
-		
-		Chnl chnl = params.getNrgStack().getNrgStack().getChnl(nrgIndex);
-
-		Histogram hist = HistogramFactoryUtilities.create(chnl,params.getObjMask());
+		Histogram hist = HistogramFactoryUtilities.create(
+			chnl,
+			input.get().getObjMask()
+		);
 		
 		VoxelStatisticsFromHistogram stats = new VoxelStatisticsFromHistogram(hist); 
 		
@@ -73,14 +60,4 @@ public class IntensityCoefficientOfVariation extends FeatureObjMask {
 		
 		return stats.stdDev() / mean;
 	}
-
-	public int getNrgIndex() {
-		return nrgIndex;
-	}
-
-	public void setNrgIndex(int nrgIndex) {
-		this.nrgIndex = nrgIndex;
-	}
-
-
 }

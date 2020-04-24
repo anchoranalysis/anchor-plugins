@@ -49,7 +49,7 @@ public class IntensityMeanShellMaxSlice extends IntensityMeanShellBaseStandard {
 	@Override
 	protected double calcForShell(ObjMask om, Chnl chnl) throws FeatureCalcException {
 				
-		ValueAndIndex vai = IntensityMeanHelper.calcMaxSliceMean(chnl, om, false );
+		ValueAndIndex vai = IntensityStatsHelper.calcMaxSliceMean(chnl, om, false );
 		
 		if (vai.getIndex()==-1) {
 			return getEmptyValue();

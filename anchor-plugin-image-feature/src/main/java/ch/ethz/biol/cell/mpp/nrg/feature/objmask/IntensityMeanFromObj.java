@@ -6,7 +6,7 @@ import org.anchoranalysis.image.chnl.Chnl;
 import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
 import org.anchoranalysis.image.objmask.ObjMask;
 
-public abstract class IntensityMeanFromObj extends IntensityMeanBase {
+public abstract class IntensityMeanFromObj extends FeatureNrgChnl {
 
 	/**
 	 * 

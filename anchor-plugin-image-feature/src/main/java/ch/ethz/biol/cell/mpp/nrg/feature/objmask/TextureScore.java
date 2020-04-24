@@ -31,13 +31,17 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.chnl.Chnl;
-import org.anchoranalysis.image.feature.bean.objmask.FeatureObjMask;
 import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
+import org.anchoranalysis.image.objmask.ObjMask;
 
 
-// From Page 727 from Lin et al (A Multi-Model Approach to Simultaneous Segmentation and Classification of Heterogeneous Populations of Cell Nuclei
-//   in 3D Confocal Microscope Images, 2004)
-public class TextureScore extends FeatureObjMask {
+/**
+ * From Page 727 from Lin et al (A Multi-Model Approach to Simultaneous Segmentation and Classification of Heterogeneous Populations of Cell Nuclei
+ * 
+ * @author Owen Feehan
+ *
+ */
+public class TextureScore extends FeatureNrgChnl {
 
 	/**
 	 * 
@@ -46,40 +50,25 @@ public class TextureScore extends FeatureObjMask {
 
 	// START BEAN PROPERTIES
 	@BeanField
-	private int nrgIndex = 0;
-	
-	@BeanField
 	private int nrgIndexGradient = 1;
 	// END BEAN PROPERTIES
-	
+
 	@Override
-	public double calc(SessionInput<FeatureInputSingleObj> paramsCacheable) throws FeatureCalcException {
+	protected double calcForChnl(SessionInput<FeatureInputSingleObj> input, Chnl chnl) throws FeatureCalcException {
+
+		ObjMask om = input.get().getObjMask();
+		Chnl chnlGradient = input.get().getNrgStack().getNrgStack().getChnl(nrgIndexGradient);
 		
-		FeatureInputSingleObj params = paramsCacheable.get();
-		
-		Chnl chnl = params.getNrgStack().getNrgStack().getChnl(nrgIndex);
-		
-		double meanIntensity = IntensityMean.calcMeanIntensityObjMask(chnl, params.getObjMask() );
-		
-		Chnl chnlGradient = params.getNrgStack().getNrgStack().getChnl(nrgIndexGradient);
-		
-		
-		double meanGradientIntensity = IntensityMean.calcMeanIntensityObjMask(chnlGradient, params.getObjMask() );
-		
+		return scoreFromMeans(
+			IntensityMean.calcMeanIntensityObjMask(chnl, om),
+			IntensityMean.calcMeanIntensityObjMask(chnlGradient, om)
+		);
+	}
+	
+	private static double scoreFromMeans(double meanIntensity, double meanGradientIntensity) {
 		double scaleFactor = 128 / meanIntensity;
-		//double scaleFactor = 1;
-		
-		
 		
 		return (scaleFactor*meanGradientIntensity)/meanIntensity;
-	}
-
-	public int getNrgIndex() {
-		return nrgIndex;
-	}
-
-	public void setNrgIndex(int nrgIndex) {
-		this.nrgIndex = nrgIndex;
 	}
 
 	public int getNrgIndexGradient() {
@@ -89,5 +78,4 @@ public class TextureScore extends FeatureObjMask {
 	public void setNrgIndexGradient(int nrgIndexGradient) {
 		this.nrgIndexGradient = nrgIndexGradient;
 	}
-
 }
