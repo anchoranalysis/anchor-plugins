@@ -1,4 +1,4 @@
-package ch.ethz.biol.cell.mpp.nrg.feature.objmask;
+package org.anchoranalysis.plugin.image.feature.bean.obj.single.intensity;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.cache.SessionInput;

@@ -1,4 +1,4 @@
-package ch.ethz.biol.cell.mpp.nrg.feature.objmask;
+package org.anchoranalysis.plugin.image.feature.bean.obj.single.intensity;
 
 /*
  * #%L

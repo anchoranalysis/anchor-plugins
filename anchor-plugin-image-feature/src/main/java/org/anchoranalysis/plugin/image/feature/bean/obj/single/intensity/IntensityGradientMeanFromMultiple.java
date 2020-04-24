@@ -1,4 +1,4 @@
-package ch.ethz.biol.cell.mpp.nrg.feature.objmask;
+package org.anchoranalysis.plugin.image.feature.bean.obj.single.intensity;
 
 /*
  * #%L
@@ -27,13 +27,27 @@ package ch.ethz.biol.cell.mpp.nrg.feature.objmask;
  */
 
 
+import java.util.List;
+
 import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.core.axis.AxisType;
+import org.anchoranalysis.core.axis.AxisTypeUtilities;
+import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.image.chnl.Chnl;
 import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
 
-public class IntensityQuantile extends FeatureNrgChnl {
+/**
+ * Calculates the mean of the intensity-gradient defined by multiple NRG channels in a particular direction
+ * 
+ * An NRG channel is present for X, Y and optionally Z intensity-gradients.
+ * 
+ * A constant is subtracted from the NRG channel (all positive) to centre around 0
+ * 
+ * @author Owen Feehan
+ *
+ */
+public class IntensityGradientMeanFromMultiple extends IntensityGradientBase {
 
 	/**
 	 * 
@@ -42,19 +56,36 @@ public class IntensityQuantile extends FeatureNrgChnl {
 
 	// START BEAN PROPERTIES
 	@BeanField
-	private double quantile = 0;
+	private String axis="";
 	// END BEAN PROPERTIES
-
+		
 	@Override
-	protected double calcForChnl(SessionInput<FeatureInputSingleObj> input, Chnl chnl) throws FeatureCalcException {
-		return QuantileHelper.calcQuantileIntensityObjMask(chnl, input.get().getObjMask(), quantile );
+	public double calc(SessionInput<FeatureInputSingleObj> input) throws FeatureCalcException {
+		
+		AxisType axisType = AxisTypeUtilities.createFromString( axis );
+		
+		// Calculate the mean
+		double sum = 0.0;
+
+		List<Point3d> pnts = input.calc(
+			gradientCalculation()
+		);
+		
+		for( Point3d p : pnts ) {
+			sum += p.get(axisType);
+		}
+		
+		return sum/pnts.size();
 	}
 
-	public double getQuantile() {
-		return quantile;
+	public String getAxis() {
+		return axis;
 	}
 
-	public void setQuantile(double quantile) {
-		this.quantile = quantile;
+
+	public void setAxis(String axis) {
+		this.axis = axis;
 	}
+
+
 }

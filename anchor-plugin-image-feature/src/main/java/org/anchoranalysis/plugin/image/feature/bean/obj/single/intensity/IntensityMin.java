@@ -1,4 +1,4 @@
-package ch.ethz.biol.cell.mpp.nrg.feature.objmask;
+package org.anchoranalysis.plugin.image.feature.bean.obj.single.intensity;
 
 /*
  * #%L
@@ -27,55 +27,66 @@ package ch.ethz.biol.cell.mpp.nrg.feature.objmask;
  */
 
 
-import org.anchoranalysis.bean.annotation.BeanField;
+import java.nio.ByteBuffer;
+
+import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.chnl.Chnl;
+import org.anchoranalysis.image.convert.ByteConverter;
+import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
 import org.anchoranalysis.image.objmask.ObjMask;
+import org.anchoranalysis.image.voxel.box.VoxelBox;
 
-
-/**
- * From Page 727 from Lin et al (A Multi-Model Approach to Simultaneous Segmentation and Classification of Heterogeneous Populations of Cell Nuclei
- * 
- * @author Owen Feehan
- *
- */
-public class TextureScore extends FeatureNrgChnl {
+public class IntensityMin extends FeatureNrgChnl {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-
-	// START BEAN PROPERTIES
-	@BeanField
-	private int nrgIndexGradient = 1;
-	// END BEAN PROPERTIES
-
+	
 	@Override
 	protected double calcForChnl(SessionInput<FeatureInputSingleObj> input, Chnl chnl) throws FeatureCalcException {
-
-		ObjMask om = input.get().getObjMask();
-		Chnl chnlGradient = input.get().getNrgStack().getNrgStack().getChnl(nrgIndexGradient);
-		
-		return scoreFromMeans(
-			IntensityMean.calcMeanIntensityObjMask(chnl, om),
-			IntensityMean.calcMeanIntensityObjMask(chnlGradient, om)
-		);
+		return calcMinIntensityObjMask(chnl, input.get().getObjMask() );
 	}
 	
-	private static double scoreFromMeans(double meanIntensity, double meanGradientIntensity) {
-		double scaleFactor = 128 / meanIntensity;
+	private static double calcMinIntensityObjMask( Chnl chnl, ObjMask om ) {
 		
-		return (scaleFactor*meanGradientIntensity)/meanIntensity;
-	}
+		VoxelBox<ByteBuffer> vbIntens = chnl.getVoxelBox().asByte();
+		
+		BoundingBox bbox = om.getBoundingBox();
+		
+		Point3i crnrMin = bbox.getCrnrMin();
+		Point3i crnrMax = bbox.calcCrnrMax();
 
-	public int getNrgIndexGradient() {
-		return nrgIndexGradient;
-	}
+		// Set to 
+		double min = Double.MAX_VALUE;
 
-	public void setNrgIndexGradient(int nrgIndexGradient) {
-		this.nrgIndexGradient = nrgIndexGradient;
+		
+		for( int z=crnrMin.getZ(); z<=crnrMax.getZ(); z++) {
+			
+			ByteBuffer bbIntens = vbIntens.getPixelsForPlane( z ).buffer();
+			ByteBuffer bbMask = om.getVoxelBox().getPixelsForPlane( z - crnrMin.getZ() ).buffer();
+			
+			int offsetMask = 0;
+			for( int y=crnrMin.getY(); y<=crnrMax.getY(); y++) {
+				for( int x=crnrMin.getX(); x<=crnrMax.getX(); x++) {
+				
+					if (bbMask.get(offsetMask)==om.getBinaryValuesByte().getOnByte()) {
+						int offsetIntens = vbIntens.extnt().offset(x, y);
+						
+						int val = ByteConverter.unsignedByteToInt( bbIntens.get(offsetIntens) );
+						
+						if (val<min) {
+							min = val;
+						}
+					}
+							
+					offsetMask++;
+				}
+			}
+		}
+		return min;
 	}
 }

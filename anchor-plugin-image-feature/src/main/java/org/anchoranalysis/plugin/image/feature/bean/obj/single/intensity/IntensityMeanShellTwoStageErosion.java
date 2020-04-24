@@ -1,4 +1,4 @@
-package ch.ethz.biol.cell.mpp.nrg.feature.objmask;
+package org.anchoranalysis.plugin.image.feature.bean.obj.single.intensity;
 
 /*
  * #%L
@@ -28,14 +28,27 @@ package ch.ethz.biol.cell.mpp.nrg.feature.objmask;
 
 
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.bean.annotation.Positive;
+import org.anchoranalysis.core.cache.ExecuteException;
 import org.anchoranalysis.feature.cache.SessionInput;
+import org.anchoranalysis.feature.cache.calculation.ResolvedCalculation;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.chnl.Chnl;
 import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
 import org.anchoranalysis.image.objmask.ObjMask;
 
-public class IntensityStdDevMaxSlice extends FeatureNrgChnl {
+import ch.ethz.biol.cell.mpp.nrg.feature.objmask.IntensityMean;
+import ch.ethz.biol.cell.mpp.nrg.feature.objmask.cachedcalculation.CalculateShellTwoStage;
+
+/**
+ * 1. Constructs a 'shell' around an object by eroding iterationsErosion times
+ * 2. Erodes the result a further iterationsErosionSecond times
+ * 3. Measures the mean intensity of (Region 1. less Region 2.)
+ * 
+ * @author Owen Feehan
+ *
+ */
+public class IntensityMeanShellTwoStageErosion extends IntensityMeanShellBase {
 
 	/**
 	 * 
@@ -43,61 +56,43 @@ public class IntensityStdDevMaxSlice extends FeatureNrgChnl {
 	private static final long serialVersionUID = 1L;
 
 	// START BEAN PROPERTIES
-	@BeanField
-	private boolean excludeZero = false;
-	
-	@BeanField
-	private double emptyValue = 0;
+	@BeanField @Positive
+	private int iterationsFurther = 0;
 	// END BEAN PROPERTIES
 	
 	@Override
-	protected double calcForChnl(SessionInput<FeatureInputSingleObj> input, Chnl chnl) throws FeatureCalcException {
-
-		ObjMask om = input.get().getObjMask();
-		
-		ValueAndIndex vai = IntensityStatsHelper.calcMaxSliceMean(chnl, om, excludeZero );
-		
-		if (vai.getIndex()==-1) {
-			return emptyValue;
-		}
-		
-		return calcStdDev( chnl, om, excludeZero, vai.getIndex(), emptyValue );
+	public String getParamDscr() {
+		return String.format(
+			"%s,iterationsFurther=%d",
+			iterationsFurther
+		);
 	}
-	
-	private static double calcStdDev( Chnl chnl, ObjMask om, boolean excludeZero, int z, double emptyValue ) throws FeatureCalcException {
-			
-		ObjMask omSlice;
+
+	@Override
+	protected double calcForChnl(SessionInput<FeatureInputSingleObj> input, Chnl chnl) throws FeatureCalcException {
+		
+		ObjMask om;
 		try {
-			omSlice = om.extractSlice(z, true);
-		} catch (OperationFailedException e) {
+			ResolvedCalculation<ObjMask,FeatureInputSingleObj> ccShellTwoStage = CalculateShellTwoStage.createFromCache(
+				input.resolver(),
+				getIterationsErosion(),
+				iterationsFurther,
+				isDo3D()
+			);
+					
+			om = ccShellTwoStage.getOrCalculate(input.get());
+		} catch (ExecuteException e) {
 			throw new FeatureCalcException(e);
 		}
 		
-		// We adjust the z coordiante to point to the channel
-		int oldZ = omSlice.getBoundingBox().getCrnrMin().getZ();
-		omSlice.getBoundingBox().getCrnrMin().setZ( oldZ + om.getBoundingBox().getCrnrMin().getZ() );
-		
-		return IntensityStatsHelper.calcStdDev(
-			chnl,
-			omSlice,
-			excludeZero,
-			emptyValue
-		);
+		return IntensityMean.calcMeanIntensityObjMask(chnl, om );
 	}
 	
-	public boolean isExcludeZero() {
-		return excludeZero;
+	public int getIterationsFurther() {
+		return iterationsFurther;
 	}
 
-	public void setExcludeZero(boolean excludeZero) {
-		this.excludeZero = excludeZero;
-	}
-
-	public double getEmptyValue() {
-		return emptyValue;
-	}
-
-	public void setEmptyValue(double emptyValue) {
-		this.emptyValue = emptyValue;
+	public void setIterationsFurther(int iterationsFurther) {
+		this.iterationsFurther = iterationsFurther;
 	}
 }

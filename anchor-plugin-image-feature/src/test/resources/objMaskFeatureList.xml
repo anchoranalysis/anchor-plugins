@@ -4,8 +4,8 @@
 		<item config-class="org.anchoranalysis.image.feature.bean.objmask.CenterOfGravity" axis="y"/>
 		<item config-class="ch.ethz.biol.cell.mpp.nrg.feature.objmask.BoundingBoxMax" axis="x"/>
 		<item config-class="ch.ethz.biol.cell.mpp.nrg.feature.objmask.BoundingBoxMin" axis="z"/>
-		<item config-class="ch.ethz.biol.cell.mpp.nrg.feature.objmask.IntensityMean" nrgIndex="0"/>
-		<item config-class="ch.ethz.biol.cell.mpp.nrg.feature.objmask.IntensityMeanShell" nrgIndex="1" iterationsDilation="2"/>
+		<item config-class="org.anchoranalysis.plugin.image.feature.bean.obj.single.intensity.IntensityMean" nrgIndex="0"/>
+		<item config-class="org.anchoranalysis.plugin.image.feature.bean.obj.single.intensity.IntensityMeanShell" nrgIndex="1" iterationsDilation="2"/>
 		<item config-class="org.anchoranalysis.image.feature.bean.objmask.NumVoxels"/>
 		<item config-class="ch.ethz.biol.cell.mpp.nrg.feature.objmask.NumBorderVoxels"/>
 	</list>

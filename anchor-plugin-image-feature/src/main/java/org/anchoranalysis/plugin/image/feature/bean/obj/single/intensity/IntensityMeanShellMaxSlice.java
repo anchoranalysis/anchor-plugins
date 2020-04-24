@@ -1,4 +1,8 @@
-package ch.ethz.biol.cell.mpp.nrg.feature.objmask;
+package org.anchoranalysis.plugin.image.feature.bean.obj.single.intensity;
+
+
+
+
 
 /*
  * #%L
@@ -27,51 +31,32 @@ package ch.ethz.biol.cell.mpp.nrg.feature.objmask;
  */
 
 
-import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.chnl.Chnl;
-import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
 import org.anchoranalysis.image.objmask.ObjMask;
 
-public class IntensityRange extends FeatureNrgChnl {
+import ch.ethz.biol.cell.mpp.nrg.feature.objmask.ValueAndIndex;
+
+/**
+ * Constructs a 'shell' around an object by a number of dilation/erosion operations (not including the original object mask)
+ *  and measures the mean intensity of this shell
+ */
+public class IntensityMeanShellMaxSlice extends IntensityMeanShellBaseStandard {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-
-	// START BEAN PROPERTIES
-	@BeanField
-	private double quantileLow = 0;
-	
-	@BeanField
-	private double quantileHigh = 1.0;
-	// END BEAN PROPERTIES
 	
 	@Override
-	protected double calcForChnl(SessionInput<FeatureInputSingleObj> input, Chnl chnl) throws FeatureCalcException {
-
-		ObjMask om = input.get().getObjMask();
+	protected double calcForShell(ObjMask om, Chnl chnl) throws FeatureCalcException {
+				
+		ValueAndIndex vai = StatsHelper.calcMaxSliceMean(chnl, om, false );
 		
-		double high = QuantileHelper.calcQuantileIntensityObjMask(chnl, om, quantileHigh );
-		double low = QuantileHelper.calcQuantileIntensityObjMask(chnl, om, quantileLow );
-		return high-low;
-	}
-
-	public double getQuantileLow() {
-		return quantileLow;
-	}
-
-	public void setQuantileLow(double quantileLow) {
-		this.quantileLow = quantileLow;
-	}
-
-	public double getQuantileHigh() {
-		return quantileHigh;
-	}
-
-	public void setQuantileHigh(double quantileHigh) {
-		this.quantileHigh = quantileHigh;
+		if (vai.getIndex()==-1) {
+			return getEmptyValue();
+		}
+	
+		return vai.getValue();
 	}
 }

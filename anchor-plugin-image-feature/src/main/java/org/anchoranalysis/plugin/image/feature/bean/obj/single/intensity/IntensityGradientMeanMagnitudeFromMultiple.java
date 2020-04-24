@@ -1,4 +1,4 @@
-package ch.ethz.biol.cell.mpp.nrg.feature.objmask;
+package org.anchoranalysis.plugin.image.feature.bean.obj.single.intensity;
 
 /*
  * #%L
@@ -27,65 +27,46 @@ package ch.ethz.biol.cell.mpp.nrg.feature.objmask;
  */
 
 
-import java.nio.ByteBuffer;
+import java.util.List;
 
-import org.anchoranalysis.core.geometry.Point3i;
+import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.image.chnl.Chnl;
-import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
-import org.anchoranalysis.image.objmask.ObjMask;
-import org.anchoranalysis.image.voxel.box.VoxelBox;
-import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 
-public class IntensitySum extends FeatureNrgChnl {
+/**
+ * Calculates the mean of the intensity-gradient defined by multiple NRG channels in a particular direction
+ * 
+ * An NRG channel is present for X, Y and optionally Z intensity-gradients.
+ * 
+ * A constant is subtracted from the NRG channel (all positive) to centre around 0
+ * 
+ * @author Owen Feehan
+ *
+ */
+public class IntensityGradientMeanMagnitudeFromMultiple extends IntensityGradientBase {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	
+
 	@Override
-	protected double calcForChnl(SessionInput<FeatureInputSingleObj> input, Chnl chnl) throws FeatureCalcException {
-		return calcSumIntensityObjMask(
-			chnl,
-			input.get().getObjMask()
-		);
-	}
-	
-	private static double calcSumIntensityObjMask( Chnl chnl, ObjMask om ) {
+	public double calc(SessionInput<FeatureInputSingleObj> input) throws FeatureCalcException {
 		
-		VoxelBox<?> vbIntens = chnl.getVoxelBox().any();
-		
-		BoundingBox bbox = om.getBoundingBox();
-		
-		Point3i crnrMin = bbox.getCrnrMin();
-		Point3i crnrMax = bbox.calcCrnrMax();
-		
+		// Calculate the mean
 		double sum = 0.0;
+
+		List<Point3d> pnts = input.calc(
+			gradientCalculation()
+		);
 		
-		for( int z=crnrMin.getZ(); z<=crnrMax.getZ(); z++) {
-			
-			VoxelBuffer<?> bbIntens = vbIntens.getPixelsForPlane( z );
-			ByteBuffer bbMask = om.getVoxelBox().getPixelsForPlane( z - crnrMin.getZ() ).buffer();
-			
-			int offsetMask = 0;
-			for( int y=crnrMin.getY(); y<=crnrMax.getY(); y++) {
-				for( int x=crnrMin.getX(); x<=crnrMax.getX(); x++) {
-				
-					if (bbMask.get(offsetMask)==om.getBinaryValuesByte().getOnByte()) {
-						int offsetIntens = vbIntens.extnt().offset(x, y);
-						
-						int val = bbIntens.getInt(offsetIntens);
-						
-						sum += val;
-					}
-							
-					offsetMask++;
-				}
-			}
+		for( Point3d p : pnts ) {
+			// Calculate the norm of the point
+			sum += p.l2norm();
 		}
-		return sum;
+		
+		return sum/pnts.size();
 	}
+
 }

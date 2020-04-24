@@ -1,4 +1,4 @@
-package ch.ethz.biol.cell.mpp.nrg.feature.objmask;
+package org.anchoranalysis.plugin.image.feature.bean.obj.single.intensity;
 
 /*
  * #%L
@@ -27,71 +27,37 @@ package ch.ethz.biol.cell.mpp.nrg.feature.objmask;
  */
 
 
-import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.bean.annotation.Positive;
-import org.anchoranalysis.core.cache.ExecuteException;
 import org.anchoranalysis.feature.cache.SessionInput;
-import org.anchoranalysis.feature.cache.calculation.ResolvedCalculation;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.chnl.Chnl;
 import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
-import org.anchoranalysis.image.objmask.ObjMask;
+import org.anchoranalysis.image.histogram.Histogram;
+import org.anchoranalysis.image.histogram.HistogramFactoryUtilities;
+import org.anchoranalysis.image.voxel.statistics.VoxelStatisticsFromHistogram;
 
-import ch.ethz.biol.cell.mpp.nrg.feature.objmask.cachedcalculation.CalculateShellTwoStage;
-
-/**
- * 1. Constructs a 'shell' around an object by eroding iterationsErosion times
- * 2. Erodes the result a further iterationsErosionSecond times
- * 3. Measures the mean intensity of (Region 1. less Region 2.)
- * 
- * @author Owen Feehan
- *
- */
-public class IntensityMeanShellTwoStageErosion extends IntensityMeanShellBase {
+public class IntensityCoefficientOfVariation extends FeatureNrgChnl {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 
-	// START BEAN PROPERTIES
-	@BeanField @Positive
-	private int iterationsFurther = 0;
-	// END BEAN PROPERTIES
-	
-	@Override
-	public String getParamDscr() {
-		return String.format(
-			"%s,iterationsFurther=%d",
-			iterationsFurther
-		);
-	}
-
 	@Override
 	protected double calcForChnl(SessionInput<FeatureInputSingleObj> input, Chnl chnl) throws FeatureCalcException {
+
+		Histogram hist = HistogramFactoryUtilities.create(
+			chnl,
+			input.get().getObjMask()
+		);
 		
-		ObjMask om;
-		try {
-			ResolvedCalculation<ObjMask,FeatureInputSingleObj> ccShellTwoStage = CalculateShellTwoStage.createFromCache(
-				input.resolver(),
-				getIterationsErosion(),
-				iterationsFurther,
-				isDo3D()
-			);
-					
-			om = ccShellTwoStage.getOrCalculate(input.get());
-		} catch (ExecuteException e) {
-			throw new FeatureCalcException(e);
+		VoxelStatisticsFromHistogram stats = new VoxelStatisticsFromHistogram(hist); 
+		
+		double mean = stats.mean();
+		
+		if (mean==0) {
+			return Double.NaN;
 		}
 		
-		return IntensityMean.calcMeanIntensityObjMask(chnl, om );
-	}
-	
-	public int getIterationsFurther() {
-		return iterationsFurther;
-	}
-
-	public void setIterationsFurther(int iterationsFurther) {
-		this.iterationsFurther = iterationsFurther;
+		return stats.stdDev() / mean;
 	}
 }

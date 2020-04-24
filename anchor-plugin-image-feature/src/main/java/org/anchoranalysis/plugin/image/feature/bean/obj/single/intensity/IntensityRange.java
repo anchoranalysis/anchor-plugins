@@ -1,8 +1,4 @@
-package ch.ethz.biol.cell.mpp.nrg.feature.objmask;
-
-
-
-
+package org.anchoranalysis.plugin.image.feature.bean.obj.single.intensity;
 
 /*
  * #%L
@@ -31,30 +27,51 @@ package ch.ethz.biol.cell.mpp.nrg.feature.objmask;
  */
 
 
+import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.chnl.Chnl;
+import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
 import org.anchoranalysis.image.objmask.ObjMask;
 
-/**
- * Constructs a 'shell' around an object by a number of dilation/erosion operations (not including the original object mask)
- *  and measures the mean intensity of this shell
- */
-public class IntensityMeanShellMaxSlice extends IntensityMeanShellBaseStandard {
+public class IntensityRange extends FeatureNrgChnl {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+
+	// START BEAN PROPERTIES
+	@BeanField
+	private double quantileLow = 0;
+	
+	@BeanField
+	private double quantileHigh = 1.0;
+	// END BEAN PROPERTIES
 	
 	@Override
-	protected double calcForShell(ObjMask om, Chnl chnl) throws FeatureCalcException {
-				
-		ValueAndIndex vai = IntensityStatsHelper.calcMaxSliceMean(chnl, om, false );
+	protected double calcForChnl(SessionInput<FeatureInputSingleObj> input, Chnl chnl) throws FeatureCalcException {
+
+		ObjMask om = input.get().getObjMask();
 		
-		if (vai.getIndex()==-1) {
-			return getEmptyValue();
-		}
-	
-		return vai.getValue();
+		double high = StatsHelper.calcQuantileIntensityObjMask(chnl, om, quantileHigh );
+		double low = StatsHelper.calcQuantileIntensityObjMask(chnl, om, quantileLow );
+		return high-low;
+	}
+
+	public double getQuantileLow() {
+		return quantileLow;
+	}
+
+	public void setQuantileLow(double quantileLow) {
+		this.quantileLow = quantileLow;
+	}
+
+	public double getQuantileHigh() {
+		return quantileHigh;
+	}
+
+	public void setQuantileHigh(double quantileHigh) {
+		this.quantileHigh = quantileHigh;
 	}
 }
