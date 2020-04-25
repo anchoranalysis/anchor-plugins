@@ -1,4 +1,4 @@
-package ch.ethz.biol.cell.mpp.nrg.feature.objmask.cachedcalculation;
+package org.anchoranalysis.plugin.image.calculation;
 
 import java.util.Optional;
 
@@ -131,8 +131,9 @@ public class CalculateShellObjMask extends CacheableCalculation<ObjMask,FeatureI
 	@Override
 	protected ObjMask execute( FeatureInputSingleObj params ) throws ExecuteException {
 		
-		ImageDim sd = params.getNrgStack().getNrgStack().getDimensions();
 		try {
+			ImageDim sd = params.getDimensionsRequired();
+			
 			ObjMask om = params.getObjMask();
 			ObjMask omShell = createShellObjMask( params, om, ccDilation, ccErosion, iterationsErosionSecond, do3D );
 			
@@ -151,7 +152,7 @@ public class CalculateShellObjMask extends CacheableCalculation<ObjMask,FeatureI
 				return omShell;
 			}
 		
-		} catch (CreateException e) {
+		} catch (CreateException | FeatureCalcException e) {
 			throw new ExecuteException(e);
 		}	
 	}

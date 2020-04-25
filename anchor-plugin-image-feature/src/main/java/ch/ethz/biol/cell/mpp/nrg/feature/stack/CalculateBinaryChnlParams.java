@@ -40,13 +40,11 @@ public class CalculateBinaryChnlParams extends CacheableCalculation<FeatureInput
 		}
 	}
 	
-	private static FeatureInputSingleObj deriveParams(FeatureInputStack params, BinaryVoxelBox<ByteBuffer> bvb ) {
-		FeatureInputSingleObj paramsObj = new FeatureInputSingleObj();
-		paramsObj.setNrgStack( params.getNrgStack() );
-		paramsObj.setObjMask(
-			new ObjMask(bvb)
+	private static FeatureInputSingleObj deriveParams(FeatureInputStack input, BinaryVoxelBox<ByteBuffer> bvb ) {
+		return new FeatureInputSingleObj(
+			new ObjMask(bvb),
+			input.getNrgStackOptional()
 		);
-		return paramsObj;
 	}
 	
 	private static BinaryVoxelBox<ByteBuffer> binaryVoxelBox( BinaryChnl bic ) throws FeatureCalcException {

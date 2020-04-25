@@ -28,6 +28,8 @@ package ch.ethz.biol.cell.mpp.nrg.feature.session;
 
 import static org.anchoranalysis.test.feature.plugins.ResultsVectorTestUtilities.*;
 
+import java.util.Optional;
+
 import org.anchoranalysis.anchor.mpp.cfg.Cfg;
 import org.anchoranalysis.anchor.mpp.feature.bean.cfg.FeatureInputCfg;
 import org.anchoranalysis.anchor.mpp.feature.bean.mark.FeatureInputMark;
@@ -46,8 +48,8 @@ import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.extent.ImageRes;
 import org.anchoranalysis.test.LoggingFixture;
 import org.anchoranalysis.test.feature.ConstantsInListFixture;
-import org.anchoranalysis.test.feature.plugins.NRGStackFixture;
 import org.anchoranalysis.test.feature.plugins.ResultsVectorTestUtilities;
+import org.anchoranalysis.test.image.NRGStackFixture;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -77,8 +79,8 @@ public class FeatureListMPPTest {
 		CfgFixture cfgFixture = new CfgFixture(DIM);
 		
 		testConstantsInList(
-			new FeatureInputCfg(cfgFixture.createCfg1(), DIM ),
-			new FeatureInputCfg(cfgFixture.createCfg2(), DIM )
+			new FeatureInputCfg(cfgFixture.createCfg1(), Optional.of(DIM) ),
+			new FeatureInputCfg(cfgFixture.createCfg2(), Optional.of(DIM) )
 		);
 	}
 		
@@ -131,7 +133,7 @@ public class FeatureListMPPTest {
 	private static void assertCfg( FeatureCalculatorMulti<FeatureInputCfg> session, Cfg cfg, double expected ) throws CreateException, FeatureCalcException {
 		assertCalc(
 			session.calc(
-				new FeatureInputCfg(cfg, DIM )
+				new FeatureInputCfg(cfg, Optional.of(DIM) )
 			),
 			expected
 		);

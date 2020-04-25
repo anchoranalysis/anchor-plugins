@@ -50,11 +50,10 @@ public class KeyValueParam extends FeatureMark {
 	public double calc(FeatureInputMark params)
 			throws FeatureCalcException {
 		
-		if (params.getKeyValueParams()==null) {
-			throw new FeatureCalcException("features has no keyParamValues attached");
-		}
+		KeyValueParams kpv = params.getParamsOptional().orElseThrow(
+			() -> new FeatureCalcException("features has no keyParamValues attached") 	
+		);
 		
-		KeyValueParams kpv = params.getKeyValueParams();
 		String str = kpv.getProperty(key);
 		if (str==null) {
 			throw new FeatureCalcException( String.format("Does not have keyParamValue '%s'",key) );

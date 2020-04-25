@@ -63,10 +63,13 @@ public class NumberPixels extends FeatureSingleMemo {
 	}
 	
 	@Override
-	public double calcCast( FeatureInputSingleMemo params ) throws FeatureCalcException {
+	public double calcCast( FeatureInputSingleMemo input ) throws FeatureCalcException {
 
 		try {
-			return pixelList.doOperation( params.getPxlPartMemo(), params.getDimensions() );
+			return pixelList.doOperation(
+				input.getPxlPartMemo(),
+				input.getDimensionsRequired()
+			);
 		} catch (OperationFailedException e) {
 			throw new FeatureCalcException(e);
 		}							

@@ -1,5 +1,7 @@
 package ch.ethz.biol.cell.mpp.mark.check;
 
+import java.util.Optional;
+
 import org.anchoranalysis.anchor.mpp.bean.regionmap.RegionMap;
 import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputSingleMemo;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
@@ -45,7 +47,10 @@ public class FeatureValueIndividualEnergyGreaterThan extends FeatureValueCheckMa
 	@Override
 	protected FeatureInputSingleMemo createFeatureCalcParams(Mark mark, RegionMap regionMap, NRGStackWithParams nrgStack) {
 		PxlMarkMemo pmm = PxlMarkMemoFactory.create( mark, nrgStack.getNrgStack(), regionMap );
-		return new FeatureInputSingleMemo(pmm, nrgStack);
+		return new FeatureInputSingleMemo(
+			pmm,
+			Optional.of(nrgStack)
+		);
 	}
 	
 	

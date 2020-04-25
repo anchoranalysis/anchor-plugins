@@ -32,12 +32,12 @@ class CalculateDeriveSingleObjFromMerged extends CacheableCalculation<FeatureInp
 	}
 
 	@Override
-	protected FeatureInputSingleObj execute(FeatureInputPairObjsMerged params) throws ExecuteException {
+	protected FeatureInputSingleObj execute(FeatureInputPairObjsMerged input) throws ExecuteException {
 		
-		ObjMask omSelected = extractObjFunc.apply(params);
+		ObjMask omSelected = extractObjFunc.apply(input);
 		
 		FeatureInputSingleObj paramsNew = new FeatureInputSingleObj( omSelected );
-		paramsNew.setNrgStack( params.getNrgStack() );
+		paramsNew.setNrgStack( input.getNrgStackOptional() );
 		assert( paramsNew instanceof FeatureInputSingleObj);
 		return paramsNew;
 	}

@@ -75,13 +75,21 @@ public class CostOverlapWithinMidpointDistance extends FeatureObjMaskPair {
 		}
 	}
 	
-	private boolean isDistMoreThanMax( FeatureInputPairObjs params ) {
+	private boolean isDistMoreThanMax( FeatureInputPairObjs params ) throws FeatureCalcException {
+		
+		if (!params.getResOptional().isPresent()) {
+			throw new FeatureCalcException("This feature requires an Image-Res in the input");
+		}
 		
 		Point3d cog1 = params.getObjMask1().centerOfGravity();
 		Point3d cog2 = params.getObjMask2().centerOfGravity();
 		
 		double dist = calcDist(cog1, cog2);
-		double maxDist = calcMaxDist(cog1, cog2, params.getRes());
+		double maxDist = calcMaxDist(
+			cog1,
+			cog2,
+			params.getResOptional().get()
+		);
 		
 		return dist > maxDist;
 	}
@@ -97,7 +105,7 @@ public class CostOverlapWithinMidpointDistance extends FeatureObjMaskPair {
 	// We measure the euclidian distance between centre-points
 	private double calcMaxDist( Point3d cog1, Point3d cog2, ImageRes res ) {
 		DirectionVector vec = DirectionVector.createBetweenTwoPoints( cog1, cog2 );
-		 return maxDistance.rslv(res, vec );
+		 return maxDistance.rslv(res, vec);
 	}
 
 	public UnitValueDistance getMaxDistance() {

@@ -4,6 +4,7 @@ import org.anchoranalysis.anchor.mpp.bean.regionmap.RegionMap;
 import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputSingleMemo;
 import org.anchoranalysis.core.cache.ExecuteException;
 import org.anchoranalysis.feature.cache.calculation.CacheableCalculation;
+import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
 import org.anchoranalysis.image.objmask.ObjMask;
@@ -24,15 +25,19 @@ class CalculateSingleObjFromMemo extends CacheableCalculation<FeatureInputSingle
 
 	@Override
 	protected FeatureInputSingleObj execute(FeatureInputSingleMemo input) throws ExecuteException {
-		return new FeatureInputSingleObj(
-			calcMask(input),
-			input.getNrgStack()
-		);
+		try {
+			return new FeatureInputSingleObj(
+				calcMask(input),
+				input.getNrgStackOptional()
+			);
+		} catch (FeatureCalcException e) {
+			throw new ExecuteException(e);
+		}
 	}
 	
-	private ObjMask calcMask(FeatureInputSingleMemo params) {
+	private ObjMask calcMask(FeatureInputSingleMemo params) throws FeatureCalcException {
 		ObjMaskWithProperties om = params.getPxlPartMemo().getMark().calcMask(
-			params.getNrgStack().getDimensions(),
+			params.getDimensionsRequired(),
 			regionMap.membershipWithFlagsForIndex(index),
 			BinaryValuesByte.getDefault()
 		);

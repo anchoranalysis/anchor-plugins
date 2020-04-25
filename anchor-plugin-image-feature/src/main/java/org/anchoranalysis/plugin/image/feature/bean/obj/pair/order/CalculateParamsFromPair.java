@@ -24,11 +24,11 @@ class CalculateParamsFromPair extends CacheableCalculation<FeatureInputSingleObj
 	}
 
 	@Override
-	protected FeatureInputSingleObj execute(FeatureInputPairObjs params) throws ExecuteException {
+	protected FeatureInputSingleObj execute(FeatureInputPairObjs input) throws ExecuteException {
 		FeatureInputSingleObj paramsNew = new FeatureInputSingleObj(
-			extractObj(params)
+			extractObj(input)
 		);
-		paramsNew.setNrgStack( params.getNrgStack() );
+		paramsNew.setNrgStack( input.getNrgStackOptional() );
 		return paramsNew;
 	}
 	

@@ -50,14 +50,17 @@ public final class Size extends NRGElemIndPhysical {
 	// END BEAN PROPERTIES
 	
 	@Override
-	public double calcCast( FeatureInputSingleMemo params ) throws FeatureCalcException {
+	public double calcCast( FeatureInputSingleMemo input ) throws FeatureCalcException {
 		
 		try {
-			PxlMark pm = params.getPxlPartMemo().doOperation();
+			PxlMark pm = input.getPxlPartMemo().doOperation();
 			
 			VoxelStatistics pxlStats = pm.statisticsForAllSlices(0, regionID);
 					
-			return rslvVolume( (double) pxlStats.size(), params.getDimensions().getRes() );
+			return rslvVolume(
+				(double) pxlStats.size(),
+				input.getResRequired()
+			);
 		} catch (ExecuteException e) {
 			throw new FeatureCalcException(e);
 		}

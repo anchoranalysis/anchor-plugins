@@ -2,7 +2,7 @@ package ch.ethz.biol.cell.mpp.nrg.cachedcalculation;
 
 import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputPairMemo;
 import org.anchoranalysis.anchor.mpp.overlap.OverlapUtilities;
-import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
+
 
 /*
  * #%L
@@ -33,7 +33,7 @@ import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
 
 import org.anchoranalysis.core.cache.ExecuteException;
 import org.anchoranalysis.feature.cache.calculation.CacheableCalculation;
-import org.anchoranalysis.feature.nrg.NRGStackWithParams;
+import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.chnl.Chnl;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
@@ -58,26 +58,23 @@ public class OverlapCalculationMaskGlobalMiddleQuantiles extends CacheableCalcul
 	}
 
 	@Override
-	protected Double execute( FeatureInputPairMemo params ) throws ExecuteException {
+	protected Double execute( FeatureInputPairMemo input ) throws ExecuteException {
 		
-		PxlMarkMemo mark1 = params.getObj1();
-		PxlMarkMemo mark2 = params.getObj2();
-		
-		assert( mark1 != null );
-		assert( mark2 != null );
-		
-		NRGStackWithParams nrgStack = params.getNrgStack();
-		Chnl chnl = nrgStack.getNrgStack().getChnl(nrgIndex);
-		
-		return OverlapUtilities.overlapWithMaskGlobalMiddleRange(
-			mark1,
-			mark2,
-			regionID,
-			chnl.getVoxelBox().asByte(),
-			maskOnValue,
-			quantileLower,
-			quantileHigher
-		);
+		try {
+			Chnl chnl = input.getNrgStackRequired().getNrgStack().getChnl(nrgIndex);
+			
+			return OverlapUtilities.overlapWithMaskGlobalMiddleRange(
+				input.getObj1(),
+				input.getObj2(),
+				regionID,
+				chnl.getVoxelBox().asByte(),
+				maskOnValue,
+				quantileLower,
+				quantileHigher
+			);
+		} catch (FeatureCalcException e) {
+			throw new ExecuteException(e);
+		}
 	}
 	
 	@Override

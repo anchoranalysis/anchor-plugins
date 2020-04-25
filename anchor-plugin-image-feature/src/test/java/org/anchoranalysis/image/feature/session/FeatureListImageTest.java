@@ -2,6 +2,8 @@ package org.anchoranalysis.image.feature.session;
 
 import static org.anchoranalysis.test.feature.plugins.ResultsVectorTestUtilities.*;
 
+import java.util.Optional;
+
 /*-
  * #%L
  * anchor-test-feature-plugins
@@ -47,7 +49,8 @@ import org.anchoranalysis.test.TestLoader;
 import org.anchoranalysis.test.feature.ConstantsInListFixture;
 import org.anchoranalysis.test.feature.plugins.FeaturesFromXmlFixture;
 import org.anchoranalysis.test.feature.plugins.HistogramFixture;
-import org.anchoranalysis.test.feature.plugins.NRGStackFixture;
+import org.anchoranalysis.test.image.NRGStackFixture;
+import org.anchoranalysis.test.image.obj.ObjMaskFixture;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -165,7 +168,9 @@ public class FeatureListImageTest {
 	private static FeatureInputHistogram createParams( Histogram hist ) throws CreateException {
 		return new FeatureInputHistogram(
 			hist,
-			NRG_STACK.getDimensions().getRes()
+			Optional.of(
+				NRG_STACK.getDimensions().getRes()
+			)
 		);
 	}
 	

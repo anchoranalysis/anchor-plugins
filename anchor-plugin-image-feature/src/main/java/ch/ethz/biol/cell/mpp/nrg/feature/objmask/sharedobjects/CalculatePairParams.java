@@ -20,23 +20,25 @@ public class CalculatePairParams extends CacheableCalculation<FeatureInputPairOb
 	}
 
 	@Override
-	protected FeatureInputPairObjs execute(FeatureInputSingleObj params) throws ExecuteException {
+	protected FeatureInputPairObjs execute(FeatureInputSingleObj input) throws ExecuteException {
 
 		try {
 			BinaryChnl bic = binaryImgChnlProvider.create();
-			ObjMask objFromBinary = new ObjMask( bic.binaryVoxelBox() );
-			return paramsPairs(params, objFromBinary);
+			return paramsPairs(
+				input,
+				new ObjMask( bic.binaryVoxelBox() )
+			);
 			
 		} catch (CreateException e) {
 			throw new ExecuteException(e);
 		}
 	}
 		
-	private FeatureInputPairObjs paramsPairs( FeatureInputSingleObj params, ObjMask objFromBinary ) {
+	private FeatureInputPairObjs paramsPairs( FeatureInputSingleObj input, ObjMask objFromBinary ) {
 		FeatureInputPairObjs out = new FeatureInputPairObjs();
-		out.setObjMask1( params.getObjMask() );
+		out.setObjMask1( input.getObjMask() );
 		out.setObjMask2( objFromBinary );
-		out.setNrgStack( params.getNrgStack() );
+		out.setNrgStack( input.getNrgStackOptional() );
 		return out;
 	}
 	

@@ -80,16 +80,9 @@ public class SurfaceSizeMaskNonZero extends FeatureSingleMemo {
 	public double calcCast(FeatureInputSingleMemo params)
 			throws FeatureCalcException {
 
-//		ObjMask om;
-//		try {
-//			om = params.getPxlPartMemo().doOperation().getObjMask();
-//		} catch (ExecuteException e) {
-//			throw new FeatureCalcException(e);
-//		}
-//		params.getPxlPartMemo().
 		
 		ObjMaskWithProperties omWithProps = params.getPxlPartMemo().getMark().calcMask(
-			params.getNrgStack().getDimensions(),
+			params.getDimensionsRequired(),
 			regionMap.membershipWithFlagsForIndex(regionID),
 			BinaryValuesByte.getDefault()
 		);

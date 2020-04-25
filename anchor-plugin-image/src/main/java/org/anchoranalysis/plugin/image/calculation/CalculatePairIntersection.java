@@ -1,4 +1,4 @@
-package ch.ethz.biol.cell.mpp.nrg.feature.objmask.cachedcalculation;
+package org.anchoranalysis.plugin.image.calculation;
 
 import java.util.Optional;
 
@@ -34,6 +34,7 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.feature.cache.calculation.CacheableCalculation;
 import org.anchoranalysis.feature.cache.calculation.CalculationResolver;
 import org.anchoranalysis.feature.cache.calculation.ResolvedCalculation;
+import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
 import org.anchoranalysis.image.feature.objmask.pair.FeatureInputPairObjs;
@@ -102,7 +103,12 @@ public class CalculatePairIntersection extends CacheableCalculation<Optional<Obj
 	@Override
 	protected Optional<ObjMask> execute( FeatureInputPairObjs params ) throws ExecuteException {
 	
-		ImageDim dim = params.getNrgStack().getDimensions();
+		ImageDim dim;
+		try {
+			dim = params.getDimensionsRequired();
+		} catch (FeatureCalcException e1) {
+			throw new ExecuteException(e1);
+		}
 		
 		ObjMask om1Dilated = ccDilation1.getOrCalculate( params.params1() );
 		ObjMask om2Dilated = ccDilation2.getOrCalculate( params.params2() );

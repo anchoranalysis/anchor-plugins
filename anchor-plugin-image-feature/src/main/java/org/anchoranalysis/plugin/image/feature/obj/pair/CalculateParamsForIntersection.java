@@ -18,7 +18,7 @@ public class CalculateParamsForIntersection extends CalculateInputFromDelegateOp
 
 	@Override
 	protected Optional<FeatureInputSingleObj> deriveFromDelegate(
-		FeatureInputPairObjs params,
+		FeatureInputPairObjs input,
 		Optional<ObjMask> delegate
 	) {
 		if (!delegate.isPresent()) {
@@ -29,7 +29,7 @@ public class CalculateParamsForIntersection extends CalculateInputFromDelegateOp
 		assert(delegate.get()!=null);
 		
 		return Optional.of( 
-			new FeatureInputSingleObj( delegate.get(), params.getNrgStack() )		
+			new FeatureInputSingleObj( delegate.get(), input.getNrgStackOptional() )		
 		);
 	}
 }

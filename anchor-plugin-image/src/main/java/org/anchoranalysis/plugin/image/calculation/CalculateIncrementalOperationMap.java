@@ -1,4 +1,4 @@
-package ch.ethz.biol.cell.mpp.nrg.feature.objmask.cachedcalculation;
+package org.anchoranalysis.plugin.image.calculation;
 
 /*
  * #%L
@@ -35,7 +35,7 @@ import org.anchoranalysis.image.objmask.ObjMask;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
-public abstract class CalculateIncrementalOperationMap extends CachedCalculationMapHash<ObjMask,FeatureInputSingleObj,Integer> {
+public abstract class CalculateIncrementalOperationMap extends CacheableCalculationMapHash<ObjMask,FeatureInputSingleObj,Integer> {
 
 	private boolean do3D;
 	
@@ -53,7 +53,7 @@ public abstract class CalculateIncrementalOperationMap extends CachedCalculation
 	@Override
 	protected ObjMask execute(FeatureInputSingleObj params, Integer key)
 			throws FeatureCalcException {
-		Extent extnt = params.getNrgStack().getDimensions().getExtnt();
+		Extent extnt = params.getDimensionsRequired().getExtnt();
 
 		if (key==0) {
 			throw new FeatureCalcException("Key must be > 0");
@@ -64,26 +64,17 @@ public abstract class CalculateIncrementalOperationMap extends CachedCalculation
 		
 		ObjMask omIn = lowestExistingKey!=0 ? getOrNull(lowestExistingKey) : params.getObjMask();
 		
-		
-		//System.out.printf("Foung existing key: %d. Loading %s \n", lowestExistingKey, omIn);
-		
 		try {
 			for( int i=(lowestExistingKey+1); i<=key; i++ ) {
 				ObjMask omNext = applyOperation( omIn, extnt, do3D );
 				
 				// save in cache, as long as it's not the final one, as this will save after the function executes
 				if (i!=key) {
-					//System.out.printf("Saving key: %d (%s)\n", i, omNext);
 					this.put(i, omNext);
 				}
 				
 				omIn = omNext;
 			}
-			
-			//System.out.printf("Eroded by %d reduces %d to %d pixels\n", key, params.getObjMask().numPixels(), omIn.numPixels() );
-			
-			//System.out.printf("Finally calculated: %d (%s)\n", key, omIn);
-			
 			return omIn;
 			
 		} catch (OperationFailedException e) {

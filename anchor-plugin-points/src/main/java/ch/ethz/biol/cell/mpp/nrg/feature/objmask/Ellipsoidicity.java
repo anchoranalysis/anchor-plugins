@@ -50,12 +50,12 @@ public class Ellipsoidicity extends FeatureObjMask {
 	// END BEAN PROPERTIES
 	
 	@Override
-	public double calc(SessionInput<FeatureInputSingleObj> paramsCacheable) throws FeatureCalcException {
+	public double calc(SessionInput<FeatureInputSingleObj> input) throws FeatureCalcException {
 		
-		FeatureInputSingleObj params = paramsCacheable.get();
+		FeatureInputSingleObj inputSessionless = input.get();
 		
 		// Max intensity projection of the input mask
-		ObjMask om = params.getObjMask();
+		ObjMask om = inputSessionless.getObjMask();
 		
 		// If we have these few pixels, assume we are perfectly ellipsoid
 		if (om.numPixelsLessThan(12)) {
@@ -63,14 +63,14 @@ public class Ellipsoidicity extends FeatureObjMask {
 		}
 		
 		MarkEllipsoid me = CalculateEllipsoidLeastSquares.createFromCache(
-			paramsCacheable,
+			input,
 			suppressZCovariance
 		);
 				
 		return EllipticityCalculatorHelper.calc(
 			om,
 			me,
-			params.getNrgStack().getDimensions()
+			inputSessionless.getDimensionsRequired()
 		);
 	}
 

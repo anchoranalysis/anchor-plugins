@@ -34,6 +34,7 @@ import org.anchoranalysis.core.cache.ExecuteException;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.feature.cache.calculation.CacheableCalculation;
+import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.nrg.NRGStack;
 import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
 import org.anchoranalysis.image.objmask.ObjMask;
@@ -64,18 +65,18 @@ public class CalculateEllipseLeastSquares extends CacheableCalculation<ObjMaskAn
 	
 
 	@Override
-	protected ObjMaskAndEllipse execute( FeatureInputSingleObj params ) throws ExecuteException {
+	protected ObjMaskAndEllipse execute( FeatureInputSingleObj input ) throws ExecuteException {
 		
 		try {
-			NRGStack nrgStack = params.getNrgStack().getNrgStack();
+			NRGStack nrgStack = input.getNrgStackRequired().getNrgStack();
 			
-			ObjMask om = extractEllipseSlice( params.getObjMask() );
+			ObjMask om = extractEllipseSlice( input.getObjMask() );
 			
 			// Shell Rad is arbitrary here for now
 			MarkEllipse mark = factory.create(om,nrgStack.getDimensions(), 0.2, nrgStack.getChnl(0) );
 
 			return new ObjMaskAndEllipse(om,mark);
-		} catch (CreateException | InsufficientPointsException e) {
+		} catch (CreateException | InsufficientPointsException | FeatureCalcException e) {
 			throw new ExecuteException(e);
 		}
 	}

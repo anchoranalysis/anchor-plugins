@@ -51,12 +51,12 @@ public class CountEqual extends FeatureObjMask {
 	// END BEAN PROPERTIES
 	
 	@Override
-	public double calc(SessionInput<FeatureInputSingleObj> paramsCacheable) throws FeatureCalcException {
+	public double calc(SessionInput<FeatureInputSingleObj> input) throws FeatureCalcException {
 		
-		FeatureInputSingleObj params = paramsCacheable.get();
+		FeatureInputSingleObj inputSessionless = input.get();
 		
-		Chnl chnl = params.getNrgStack().getNrgStack().getChnl(nrgIndex);
-		return chnl.getVoxelBox().any().countEqualMask(value, params.getObjMask());
+		Chnl chnl = inputSessionless.getNrgStackRequired().getChnl(nrgIndex);
+		return chnl.getVoxelBox().any().countEqualMask(value, inputSessionless.getObjMask());
 
 	}
 

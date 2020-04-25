@@ -58,14 +58,14 @@ public class BBoxZOverlapRatio extends FeaturePairMemo {
 	// END BEAN PROPERTIES
 	
 	@Override
-	public double calc(SessionInput<FeatureInputPairMemo> paramsCacheable)
+	public double calc(SessionInput<FeatureInputPairMemo> input)
 			throws FeatureCalcException {
 
-		FeatureInputPairMemo params = paramsCacheable.get();
+		FeatureInputPairMemo inputSessionless = input.get();
 		
-		ImageDim sd = params.getNrgStack().getDimensions();
-		BoundingBox bbox1 = params.getObj1().getMark().bbox(sd,regionID);
-		BoundingBox bbox2 = params.getObj2().getMark().bbox(sd,regionID);
+		ImageDim sd = inputSessionless.getDimensionsRequired();
+		BoundingBox bbox1 = inputSessionless.getObj1().getMark().bbox(sd,regionID);
+		BoundingBox bbox2 = inputSessionless.getObj2().getMark().bbox(sd,regionID);
 		
 		// Check the bounding boxes intersect in general (including XY)
 		if (!bbox1.hasIntersection(bbox2)) {

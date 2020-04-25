@@ -29,6 +29,8 @@ package ch.ethz.biol.cell.mpp.nrg.feature.stack.cachedcalculation;
 import org.anchoranalysis.core.cache.ExecuteException;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.feature.cache.calculation.CacheableCalculation;
+import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.feature.nrg.NRGStack;
 import org.anchoranalysis.image.binary.BinaryChnl;
 import org.anchoranalysis.image.binary.values.BinaryValues;
 import org.anchoranalysis.image.chnl.Chnl;
@@ -57,17 +59,18 @@ public class CalculateHistogramMasked extends CacheableCalculation<Histogram, Fe
 	}
 
 	@Override
-	protected Histogram execute( FeatureInputStack params ) throws ExecuteException {
+	protected Histogram execute( FeatureInputStack input ) throws ExecuteException {
 
 		try {
-			Chnl chnl = extractChnl(params);
+			NRGStack nrgStack = input.getNrgStackRequired().getNrgStack();
+			Chnl chnl = extractChnl(nrgStack);
 			
 			return HistogramFactoryUtilities.create(
 				chnl,
-				extractMask(params)
+				extractMask(nrgStack)
 			);
 			
-		} catch (CreateException e) {
+		} catch (CreateException | FeatureCalcException e) {
 			throw new ExecuteException(e);
 		}
 	}
@@ -93,12 +96,12 @@ public class CalculateHistogramMasked extends CacheableCalculation<Histogram, Fe
 				.toHashCode();
 	}
 	
-	private Chnl extractChnl( FeatureInputStack params ) {
-		return params.getNrgStack().getChnl(nrgIndexSignal);
+	private Chnl extractChnl( NRGStack nrgStack ) throws FeatureCalcException {
+		return nrgStack.getChnl(nrgIndexSignal);
 	}
 	
-	private BinaryChnl extractMask( FeatureInputStack params ) {
-		Chnl chnl = params.getNrgStack().getChnl(nrgIndexMask);
+	private BinaryChnl extractMask( NRGStack nrgStack ) {
+		Chnl chnl = nrgStack.getChnl(nrgIndexMask);
 		return new BinaryChnl(chnl, BinaryValues.getDefault() );
 	}
 }

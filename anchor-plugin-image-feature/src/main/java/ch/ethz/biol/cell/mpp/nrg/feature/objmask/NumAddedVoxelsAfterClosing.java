@@ -34,8 +34,7 @@ import org.anchoranalysis.image.feature.bean.objmask.FeatureObjMask;
 import org.anchoranalysis.image.feature.objmask.CalculateNumVoxels;
 import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
 import org.anchoranalysis.image.objmask.ObjMask;
-
-import ch.ethz.biol.cell.mpp.nrg.feature.objmask.cachedcalculation.CalculateClosing;
+import org.anchoranalysis.plugin.image.calculation.CalculateClosing;
 
 /**
  * Performs a morphological opening operation on the object-mask. Then calculates the ratio of:

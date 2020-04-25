@@ -41,7 +41,7 @@ class CalculateHistogramForNrgChnl extends CacheableCalculation<FeatureInputHist
 		
 		return new FeatureInputHistogram(
 			hist,
-			params.getRes()
+			params.getResOptional()
 		);
 	}
 

@@ -16,8 +16,7 @@ import org.anchoranalysis.image.chnl.Chnl;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
 import org.anchoranalysis.image.objmask.ObjMask;
-
-import ch.ethz.biol.cell.mpp.nrg.feature.objmask.cachedcalculation.CalculateShellObjMask;
+import org.anchoranalysis.plugin.image.calculation.CalculateShellObjMask;
 
 /**
  * Constructs a shell around an object-mask using a standard dilation and erosion process
@@ -75,7 +74,7 @@ public abstract class IntensityMeanShellBase extends FeatureNrgChnl {
 			// If an NRG mask is defined...
 			Optional<ObjMask> omIntersected = intersectWithNRGMask(
 				om,
-				input.get().getNrgStack().getNrgStack()
+				input.get().getNrgStackRequired().getNrgStack()
 			);
 			
 			if (omIntersected.isPresent()) {

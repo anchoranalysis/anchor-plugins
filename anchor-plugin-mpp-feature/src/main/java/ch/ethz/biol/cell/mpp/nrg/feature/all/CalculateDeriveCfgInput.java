@@ -9,10 +9,10 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 public class CalculateDeriveCfgInput extends CacheableCalculation<FeatureInputCfg, FeatureInputAllMemo> {
 
 	@Override
-	protected FeatureInputCfg execute(FeatureInputAllMemo params) throws ExecuteException {
+	protected FeatureInputCfg execute(FeatureInputAllMemo input) throws ExecuteException {
 		return new FeatureInputCfg(
-			params.getPxlPartMemo().asCfg(),
-			params.getDimensions()
+			input.getPxlPartMemo().asCfg(),
+			input.getDimensionsOptional()
 		);
 	}
 	

@@ -33,6 +33,7 @@ import org.anchoranalysis.anchor.mpp.mark.MarkAbstractRadii;
 
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.extent.BoundingBox;
+import org.anchoranalysis.image.extent.ImageDim;
 
 public class BBoxRatio extends FeatureSingleMemo {
 
@@ -42,12 +43,14 @@ public class BBoxRatio extends FeatureSingleMemo {
 	private static final long serialVersionUID = -4380227015245049115L;
 
 	@Override
-	public double calcCast(FeatureInputSingleMemo params) throws FeatureCalcException {
+	public double calcCast(FeatureInputSingleMemo input) throws FeatureCalcException {
 		
-		MarkAbstractRadii markCast = (MarkAbstractRadii) params.getPxlPartMemo().getMark();
+		MarkAbstractRadii markCast = (MarkAbstractRadii) input.getPxlPartMemo().getMark();
 		
-		BoundingBox bb = markCast.bbox( params.getNrgStack().getDimensions(), GlobalRegionIdentifiers.SUBMARK_INSIDE );
-		bb.extnt().setZ( (int) (bb.extnt().getZ() * params.getNrgStack().getDimensions().getRes().getZRelRes()) );
+		ImageDim dim = input.getDimensionsRequired();
+		
+		BoundingBox bb = markCast.bbox(dim, GlobalRegionIdentifiers.SUBMARK_INSIDE );
+		bb.extnt().setZ( (int) (bb.extnt().getZ() * dim.getRes().getZRelRes()) );
 		
 		int[] extnt = bb.extnt().createOrderedArray();
 		

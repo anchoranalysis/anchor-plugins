@@ -1,4 +1,4 @@
-package ch.ethz.biol.cell.mpp.nrg.feature.objmask.cachedcalculation;
+package org.anchoranalysis.plugin.image.calculation;
 
 /*
  * #%L
@@ -84,7 +84,7 @@ public class CalculateClosing extends CacheableCalculation<ObjMask,FeatureInputS
 			
 			ObjMask omEroded = MorphologicalErosion.createErodedObjMask(
 				omDilated,
-				params.getNrgStack().getDimensions().getExtnt(),
+				params.getDimensionsRequired().getExtnt(),
 				do3D,
 				iterations,
 				false,

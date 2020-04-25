@@ -11,7 +11,7 @@ class CalculateDeriveMarkFromMemo extends CacheableCalculation<FeatureInputMark,
 	protected FeatureInputMark execute(FeatureInputSingleMemo input) throws ExecuteException {
 		return new FeatureInputMark(
 			input.getPxlPartMemo().getMark(),
-			input.getDimensions().getRes()
+			input.getResOptional()
 		);
 	}
 

@@ -33,8 +33,7 @@ import org.anchoranalysis.feature.cache.calculation.CalculationResolver;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
 import org.anchoranalysis.image.objmask.ObjMask;
-
-import ch.ethz.biol.cell.mpp.nrg.feature.objmask.cachedcalculation.CalculateShellObjMask;
+import org.anchoranalysis.plugin.image.calculation.CalculateShellObjMask;
 
 public class Shell extends DerivedObjMask {
 

@@ -38,7 +38,7 @@ import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
 import org.anchoranalysis.image.io.RasterIOException;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.test.TestLoader;
-import org.anchoranalysis.test.image.TestLoaderImageIO;
+import org.anchoranalysis.test.image.io.TestLoaderImageIO;
 import org.junit.Test;
 
 import ch.ethz.biol.cell.mpp.mark.ellipsoidfitter.outlinepixelsretriever.visitscheduler.VisitSchedulerConvexAboutRoot;

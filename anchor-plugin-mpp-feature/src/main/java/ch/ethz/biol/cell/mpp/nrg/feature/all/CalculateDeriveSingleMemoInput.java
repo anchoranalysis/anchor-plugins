@@ -17,13 +17,13 @@ class CalculateDeriveSingleMemoInput extends CacheableCalculation<FeatureInputSi
 	}
 
 	@Override
-	protected FeatureInputSingleMemo execute(FeatureInputAllMemo params) throws ExecuteException {
+	protected FeatureInputSingleMemo execute(FeatureInputAllMemo input) throws ExecuteException {
 		FeatureInputSingleMemo paramsInd = new FeatureInputSingleMemo(
 			null,
-			params.getNrgStack()
+			input.getNrgStackOptional()
 		);
 		paramsInd.setPxlPartMemo(
-			params.getPxlPartMemo().getMemoForIndex(index)
+			input.getPxlPartMemo().getMemoForIndex(index)
 		);
 		return paramsInd;
 	}

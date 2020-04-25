@@ -24,10 +24,10 @@ public abstract class AtBorderBase extends FeatureObjMask {
 		}
 	}
 	
-	private boolean isInputAtBorder( FeatureInputSingleObj input ) {
+	private boolean isInputAtBorder( FeatureInputSingleObj input ) throws FeatureCalcException {
 		return isBoundingBoxAtBorder(
 			input.getObjMask().getBoundingBox(),
-			input.getNrgStack().getDimensions()
+			input.getDimensionsRequired()
 		);
 	}
 	

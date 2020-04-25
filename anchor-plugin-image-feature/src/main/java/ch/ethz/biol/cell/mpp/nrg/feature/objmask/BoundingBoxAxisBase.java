@@ -5,7 +5,6 @@ import org.anchoranalysis.core.geometry.Tuple3i;
 import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.extent.BoundingBox;
-import org.anchoranalysis.image.extent.ImageRes;
 import org.anchoranalysis.image.feature.bean.objmask.FeatureObjMask;
 import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
 
@@ -32,14 +31,13 @@ public abstract class BoundingBoxAxisBase extends FeatureObjMask {
 		
 		return calcAxisValue(
 			axis.toLowerCase(),
-			pnt,
-			inputSessionless.getRes()
+			pnt
 		);
 	}
 	
 	protected abstract Tuple3i extractTupleForBoundingBox( BoundingBox bbox );
 	
-	private double calcAxisValue( String axisLowerCase, Tuple3i pnt, ImageRes res) {
+	private double calcAxisValue( String axisLowerCase, Tuple3i pnt) {
 		
 		if (axisLowerCase.equals("x")) {
 			return pnt.getX();

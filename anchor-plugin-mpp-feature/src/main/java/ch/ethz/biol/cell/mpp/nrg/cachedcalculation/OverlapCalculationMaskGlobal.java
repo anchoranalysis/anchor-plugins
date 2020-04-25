@@ -33,7 +33,7 @@ import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
 
 import org.anchoranalysis.core.cache.ExecuteException;
 import org.anchoranalysis.feature.cache.calculation.CacheableCalculation;
-import org.anchoranalysis.feature.nrg.NRGStackWithParams;
+import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.chnl.Chnl;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
@@ -53,24 +53,27 @@ public class OverlapCalculationMaskGlobal extends CacheableCalculation<Double,Fe
 	}
 
 	@Override
-	protected Double execute( FeatureInputPairMemo params ) throws ExecuteException {
+	protected Double execute( FeatureInputPairMemo input ) throws ExecuteException {
 		
-		PxlMarkMemo mark1 = params.getObj1();
-		PxlMarkMemo mark2 = params.getObj2();
+		PxlMarkMemo mark1 = input.getObj1();
+		PxlMarkMemo mark2 = input.getObj2();
 		
 		assert( mark1 != null );
 		assert( mark2 != null );
 		
-		NRGStackWithParams nrgStack = params.getNrgStack();
-		Chnl chnl = nrgStack.getNrgStack().getChnl(nrgIndex);
-		
-		return OverlapUtilities.overlapWithMaskGlobal(
-			mark1,
-			mark2,
-			regionID,
-			chnl.getVoxelBox().asByte(),
-			maskOnValue
-		);
+		try {
+			Chnl chnl = input.getNrgStackRequired().getNrgStack().getChnl(nrgIndex);
+			
+			return OverlapUtilities.overlapWithMaskGlobal(
+				mark1,
+				mark2,
+				regionID,
+				chnl.getVoxelBox().asByte(),
+				maskOnValue
+			);
+		} catch (FeatureCalcException e) {
+			throw new ExecuteException(e);
+		}
 	}
 	
 	@Override
@@ -89,6 +92,10 @@ public class OverlapCalculationMaskGlobal extends CacheableCalculation<Double,Fe
 	
 	@Override
 	public int hashCode() {
-		return new HashCodeBuilder().append(regionID).append(nrgIndex).append(maskOnValue).toHashCode();
+		return new HashCodeBuilder()
+			.append(regionID)
+			.append(nrgIndex)
+			.append(maskOnValue)
+			.toHashCode();
 	}
 }

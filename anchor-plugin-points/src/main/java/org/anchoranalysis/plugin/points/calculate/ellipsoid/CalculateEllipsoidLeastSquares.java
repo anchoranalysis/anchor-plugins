@@ -75,11 +75,11 @@ public class CalculateEllipsoidLeastSquares extends CacheableCalculation<MarkEll
 			// Shell Rad is arbitrary here for now
 			return EllipsoidFactory.createMarkEllipsoidLeastSquares(
 				new CachedCalculationOperation<>(ccPnts,params),
-				params.getNrgStack().getDimensions(),
+				params.getDimensionsRequired(),
 				suppressZCovariance,
 				0.2
 			);
-		} catch (CreateException e) {
+		} catch (CreateException | FeatureCalcException e) {
 			throw new ExecuteException(e);
 		}
 	}

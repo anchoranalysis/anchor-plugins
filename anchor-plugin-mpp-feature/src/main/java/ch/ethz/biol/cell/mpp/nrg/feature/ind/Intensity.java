@@ -49,10 +49,13 @@ public class Intensity extends FeatureSingleMemo {
 	// END BEAN
 			
 	@Override
-	public double calcCast( FeatureInputSingleMemo params ) throws FeatureCalcException {
+	public double calcCast( FeatureInputSingleMemo input ) throws FeatureCalcException {
 
 		try {
-			return pixelList.createStatisticsFor(params.getPxlPartMemo(), params.getDimensions() ).sum();
+			return pixelList.createStatisticsFor(
+				input.getPxlPartMemo(),
+				input.getDimensionsRequired()
+			).sum();
 		} catch (CreateException e) {
 			throw new FeatureCalcException(e);
 		}							

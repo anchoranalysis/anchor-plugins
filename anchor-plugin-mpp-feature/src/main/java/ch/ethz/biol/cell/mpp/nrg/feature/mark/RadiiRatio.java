@@ -58,7 +58,7 @@ public class RadiiRatio extends FeatureMark {
 		
 		MarkAbstractRadii markCast = (MarkAbstractRadii) params.getMark();
 		
-		ImageRes sr = suppressRes ? uniformRes : params.getRes(); 
+		ImageRes sr = suppressRes ? uniformRes : params.getResRequired(); 
 		double[] radiiOrdered = markCast.radiiOrderedRslvd( sr );
 		
 		int len = radiiOrdered.length;
@@ -72,7 +72,6 @@ public class RadiiRatio extends FeatureMark {
 			} else {
 				return radiiOrdered[2] / radiiOrdered[0];
 			}
-			//return Math.max( radiiOrdered[2] / radiiOrdered[1],  radiiOrdered[1] / radiiOrdered[0] );
 		}
 	}
 

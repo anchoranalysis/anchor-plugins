@@ -1,4 +1,4 @@
-package ch.ethz.biol.cell.mpp.nrg.feature.objmask.cachedcalculation;
+package org.anchoranalysis.plugin.image.calculation;
 
 /*
  * #%L
@@ -32,6 +32,7 @@ import java.nio.ByteBuffer;
 import org.anchoranalysis.core.cache.ExecuteException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.feature.cache.calculation.CacheableCalculation;
+import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
 import org.anchoranalysis.image.objmask.ObjMask;
@@ -82,8 +83,8 @@ public class CalculateOutlineNumVoxelFaces extends CacheableCalculation<Integer,
 	protected Integer execute(FeatureInputSingleObj params)
 			throws ExecuteException {
 		try {
-			return calcSurfaceSize(params.getObjMask(), params.getNrgStack().getDimensions(), mip, suppress3D);
-		} catch (OperationFailedException e) {
+			return calcSurfaceSize(params.getObjMask(), params.getDimensionsRequired(), mip, suppress3D);
+		} catch (OperationFailedException | FeatureCalcException e) {
 			throw new ExecuteException(e);
 		}
 	}

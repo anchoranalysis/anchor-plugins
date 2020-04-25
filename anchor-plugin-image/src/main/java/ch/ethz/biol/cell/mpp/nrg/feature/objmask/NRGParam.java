@@ -28,7 +28,6 @@ package ch.ethz.biol.cell.mpp.nrg.feature.objmask;
 
 
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.params.KeyValueParams;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.input.FeatureInputNRGStack;
 import org.anchoranalysis.image.feature.bean.FeatureNRGStack;
@@ -64,14 +63,8 @@ public class NRGParam extends FeatureNRGStack {
 		return calcForPropertyID( params, id );
 	}
 	
-	private static double calcWithMaybeNaN( FeatureInputNRGStack params, String id ) throws FeatureCalcException {
-		KeyValueParams kpv = params.getNrgStack().getParams();
-		
-		if (kpv==null) {
-			throw new FeatureCalcException("NrgStack is missing params");
-		}
-		
-		return kpv.getPropertyAsDouble(id);
+	private static double calcWithMaybeNaN( FeatureInputNRGStack input, String id ) throws FeatureCalcException {
+		return input.getParamsRequired().getPropertyAsDouble(id);
 	}
 
 	public String getId() {
