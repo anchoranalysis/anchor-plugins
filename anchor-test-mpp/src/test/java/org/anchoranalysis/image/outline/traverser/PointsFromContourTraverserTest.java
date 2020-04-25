@@ -39,7 +39,7 @@ import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.image.outline.traverser.contiguouspath.PointsListNghbUtilities;
 import org.anchoranalysis.plugin.opencv.CVFindContours;
 import org.anchoranalysis.test.TestLoader;
-import org.anchoranalysis.test.image.TestLoaderImageIO;
+import org.anchoranalysis.test.image.io.TestLoaderImageIO;
 import org.anchoranalysis.test.mpp.LoadUtilities;
 import org.junit.Test;
 

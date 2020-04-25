@@ -46,13 +46,13 @@ public class Ellipticity extends FeatureObjMask {
 	private static final long serialVersionUID = 1L;
 	
 	@Override
-	public double calc(SessionInput<FeatureInputSingleObj> paramsCacheable) throws FeatureCalcException {
+	public double calc(SessionInput<FeatureInputSingleObj> input) throws FeatureCalcException {
 		
-		FeatureInputSingleObj params = paramsCacheable.get();
+		FeatureInputSingleObj inputSessionless = input.get();
 		
 		ObjMaskAndEllipse both;
 		try {
-			both = paramsCacheable.calc(
+			both = input.calc(
 				new CalculateEllipseLeastSquares()		
 			);
 		} catch (FeatureCalcException e) {
@@ -74,7 +74,7 @@ public class Ellipticity extends FeatureObjMask {
 		return EllipticityCalculatorHelper.calc(
 			om,
 			both.getMark(),
-			params.getNrgStack().getDimensions()
+			inputSessionless.getDimensionsRequired()
 		);
 	}
 }

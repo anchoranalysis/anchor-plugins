@@ -19,11 +19,11 @@ public class CalculateDeriveObjFromCollection extends CalculateInputFromDelegate
 	}
 
 	@Override
-	protected FeatureInputSingleObj deriveFromDelegate(FeatureInputStack params, ObjMaskCollection delegate) {
-		FeatureInputSingleObj paramsObj = new FeatureInputSingleObj();
-		paramsObj.setNrgStack( params.getNrgStack() );
-		paramsObj.setObjMask( delegate.get(index) );
-		return paramsObj;
+	protected FeatureInputSingleObj deriveFromDelegate(FeatureInputStack input, ObjMaskCollection delegate) {
+		return new FeatureInputSingleObj(
+			delegate.get(index),
+			input.getNrgStackOptional()
+		);
 	}
 
 	@Override

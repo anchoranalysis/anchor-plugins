@@ -38,7 +38,7 @@ public class Intensity extends FeatureNrgChnl {
 		return input.calcChild(
 			item,
 			new CalculateHistogramForNrgChnl(excludeZero, getNrgIndex(), chnl),
-			"intensityHistogram"
+			"intensityHistogram_"	// TODO cache needs to be unique for different features
 		);
 	}
 

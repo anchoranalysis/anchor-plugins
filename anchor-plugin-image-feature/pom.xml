@@ -94,6 +94,13 @@
        <version>0.0.4-SNAPSHOT</version>
        <scope>test</scope>
      </dependency>
+     
+     <dependency>
+       <groupId>${project.groupId}</groupId>
+       <artifactId>anchor-test-image</artifactId>
+       <version>0.0.8-SNAPSHOT</version>
+       <scope>test</scope>
+     </dependency>
         
     <dependency>
       <groupId>org.mockito</groupId>

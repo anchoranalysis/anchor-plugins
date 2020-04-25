@@ -45,7 +45,7 @@ import org.anchoranalysis.plugin.mpp.experiment.bean.feature.flexi.MergedPairs;
 import org.anchoranalysis.plugin.mpp.experiment.bean.feature.flexi.Simple;
 import org.anchoranalysis.test.TestLoader;
 import org.anchoranalysis.test.feature.plugins.FeaturesFromXmlFixture;
-import org.anchoranalysis.test.feature.plugins.NRGStackFixture;
+import org.anchoranalysis.test.image.NRGStackFixture;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;

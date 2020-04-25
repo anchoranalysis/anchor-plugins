@@ -69,18 +69,18 @@ public class NumNghbVoxels extends FeatureObjMask {
 	}
 	
 	@Override
-	public double calc(SessionInput<FeatureInputSingleObj> paramsCacheable) throws FeatureCalcException {
+	public double calc(SessionInput<FeatureInputSingleObj> input) throws FeatureCalcException {
 
-		FeatureInputSingleObj params = paramsCacheable.get();
+		FeatureInputSingleObj inputSessionless = input.get();
 		
-		ObjMask om = params.getObjMask();
-
-		//OutlineKernel3 kernel = new OutlineKernel3(om.getBinaryValuesByte(), outsideAtThreshold, do3D);
-		//int numBorderPixelsA = ApplyBinaryKernel.applyForCount(kernel, om.getVoxelBox());
+		ObjMask om = inputSessionless.getObjMask();
 		
 		VoxelBox<ByteBuffer> vb;
 		try {
-			vb = params.getNrgStack().getNrgStack().getChnl(nrgIndex).getVoxelBox().asByte();
+			vb = inputSessionless
+				.getNrgStackRequired()
+				.getChnl(nrgIndex).getVoxelBox().asByte();
+			
 		} catch (IncorrectVoxelDataTypeException e) {
 			throw new FeatureCalcException( String.format("nrgStack channel %d has incorrect data type",nrgIndex), e);
 		}
@@ -89,13 +89,7 @@ public class NumNghbVoxels extends FeatureObjMask {
 				
 		OutlineKernel3NghbMatchValue kernelMatch = new OutlineKernel3NghbMatchValue(outsideAtThreshold, do3D, om, bvbNotObject);
 		kernelMatch.setIgnoreAtThreshold(ignoreAtThreshold);
-		int cnt = ApplyKernel.applyForCount(kernelMatch, om.getVoxelBox());
-		
-		//double ratio = ((double) cnt) / numBorderPixelsA;
-		//System.out.printf("ObjMask at centre %s\n", om.centerOfGravity().toString() );
-		//System.out.printf("NumNghbVoxel=%d  NumBorderPixels=%d   ratio=%f\n", cnt, numBorderPixelsA, ratio);
-		
-		return cnt;
+		return ApplyKernel.applyForCount(kernelMatch, om.getVoxelBox());
 	}
 
 	public boolean isOutsideAtThreshold() {

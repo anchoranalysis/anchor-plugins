@@ -58,11 +58,14 @@ public class RatioThreshold extends FeatureSingleMemo {
 	// END BEAN PROPERTIES
 	
 	@Override
-	public double calcCast( FeatureInputSingleMemo params ) throws FeatureCalcException {
+	public double calcCast( FeatureInputSingleMemo input ) throws FeatureCalcException {
 
 		VoxelStatistics stats;
 		try {
-			stats = pixelList.createStatisticsFor(params.getPxlPartMemo(), params.getDimensions() );
+			stats = pixelList.createStatisticsFor(
+				input.getPxlPartMemo(),
+				input.getDimensionsRequired()
+			);
 		} catch (CreateException e) {
 			throw new FeatureCalcException(e);
 		}

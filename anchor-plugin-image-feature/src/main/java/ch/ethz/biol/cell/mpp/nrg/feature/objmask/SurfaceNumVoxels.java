@@ -2,8 +2,7 @@ package ch.ethz.biol.cell.mpp.nrg.feature.objmask;
 
 import org.anchoranalysis.feature.cache.calculation.CacheableCalculation;
 import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
-
-import ch.ethz.biol.cell.mpp.nrg.feature.objmask.cachedcalculation.CalculateOutlineNumVoxels;
+import org.anchoranalysis.plugin.image.calculation.CalculateOutlineNumVoxels;
 
 /**
  * The number of voxels on the surface (all voxels on the exterior of the object)

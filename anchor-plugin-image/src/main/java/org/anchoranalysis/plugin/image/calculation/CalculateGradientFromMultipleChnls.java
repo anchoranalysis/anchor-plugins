@@ -1,4 +1,4 @@
-package ch.ethz.biol.cell.mpp.nrg.feature.objmask.cachedcalculation;
+package org.anchoranalysis.plugin.image.calculation;
 
 /*
  * #%L
@@ -35,6 +35,8 @@ import org.anchoranalysis.core.cache.ExecuteException;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.feature.cache.calculation.CacheableCalculation;
+import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.feature.nrg.NRGStack;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
 import org.anchoranalysis.image.chnl.Chnl;
@@ -146,7 +148,7 @@ public class CalculateGradientFromMultipleChnls extends CacheableCalculation<Lis
 	}
 
 	@Override
-	protected List<Point3d> execute(FeatureInputSingleObj params)
+	protected List<Point3d> execute(FeatureInputSingleObj input)
 			throws ExecuteException {
 
 		if (nrgIndexX==-1 || nrgIndexY==-1) {
@@ -156,11 +158,18 @@ public class CalculateGradientFromMultipleChnls extends CacheableCalculation<Lis
 		// create a list of points
 		List<Point3d> out = new ArrayList<>();
 		
-		putGradientValue( params.getObjMask(), out, 0, params.getNrgStack().getNrgStack().getChnl(nrgIndexX) );
-		putGradientValue( params.getObjMask(), out, 1, params.getNrgStack().getNrgStack().getChnl(nrgIndexY) );
+		NRGStack nrgStack;
+		try {
+			nrgStack = input.getNrgStackRequired().getNrgStack();
+		} catch (FeatureCalcException e) {
+			throw new ExecuteException(e);
+		}
+		
+		putGradientValue( input.getObjMask(), out, 0, nrgStack.getChnl(nrgIndexX) );
+		putGradientValue( input.getObjMask(), out, 1, nrgStack.getChnl(nrgIndexY) );
 		
 		if (nrgIndexZ!=-1) {
-			putGradientValue( params.getObjMask(), out, 2, params.getNrgStack().getNrgStack().getChnl(nrgIndexZ) );
+			putGradientValue( input.getObjMask(), out, 2, nrgStack.getChnl(nrgIndexZ) );
 		}
 		
 		return out;

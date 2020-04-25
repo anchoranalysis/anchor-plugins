@@ -1,4 +1,4 @@
-package ch.ethz.biol.cell.mpp.nrg.feature.objmask.cachedcalculation;
+package org.anchoranalysis.plugin.image.calculation;
 
 /*
  * #%L
@@ -42,7 +42,7 @@ import org.anchoranalysis.feature.input.FeatureInput;
  * @author Owen Feehan
  *
  */
-public abstract class CachedCalculationMapHash<S,T extends FeatureInput,U> extends CacheableCalculationMap<S,T,U> {
+public abstract class CacheableCalculationMapHash<S,T extends FeatureInput,U> extends CacheableCalculationMap<S,T,U> {
 
 	/**
 	 * Caches our results for different Keys
@@ -54,10 +54,10 @@ public abstract class CachedCalculationMapHash<S,T extends FeatureInput,U> exten
 	 * Creates the class
 	 * @param cacheSize cache-size to use for the keys
 	 */
-	public CachedCalculationMapHash( int cacheSize ) {
+	public CacheableCalculationMapHash( int cacheSize ) {
 		cache = new HashMap<U,S>();
 	}
-	
+
 	/**
 	 * Executes the operation and returns a result, either by doing the calculation, or retrieving
 	 *   a cached-result from previously.
@@ -67,20 +67,46 @@ public abstract class CachedCalculationMapHash<S,T extends FeatureInput,U> exten
 	 * @throws ExecuteException if the calculation cannot finish, for whatever reason
 	 */
 	@Override
-	public S getOrCalculate( T params, U key ) throws FeatureCalcException {
+	public S getOrCalculate( T input, U key ) throws FeatureCalcException {
 		
 		S obj = cache.get(key);
 		if (obj==null) {
-			obj = execute( params, key );
+			obj = execute( input, key );
 			put( key, obj );
 		}
 		return obj;
 	}
 	
-	protected abstract S execute( T params, U key ) throws FeatureCalcException;
+	/** Number of items currently stored in cache */
+	public int numItemsCurrentlyStored() {
+		return cache.size();
+	}
+	
+	/**
+	 * Invalidates the cache, removing any items already stored.
+	 */
+	@Override
+	public void invalidate() {
+		cache.clear();	
 
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public void assignResult( Object savedResult) {
+		
+		invalidate();
+		
+		CacheableCalculationMapHash<S,T,U> savedResultCached = (CacheableCalculationMapHash<S,T,U>) savedResult;
+		for( U key : savedResultCached.cache.keySet() ) {
+			S val = savedResultCached.cache.get(key);
+			cache.put( key, val );
+		}
+	}
+	
 	/**
 	 *  Gets an existing result for the current params from the cache.
+	 *  
 	 * @param key
 	 * @return a cached-result, or NULL if it doesn't exist
 	 * @throws FeatureCalcException 
@@ -98,27 +124,6 @@ public abstract class CachedCalculationMapHash<S,T extends FeatureInput,U> exten
 		cache.put(index, item);
 	}
 
-	
-	/**
-	 * 
-	 */
-	@Override
-	public void invalidate() {
-		cache.clear();	
-
-	}
-	
-	@SuppressWarnings("unchecked")
-	@Override
-	public void assignResult( Object savedResult) {
-		
-		cache.clear();
-		
-		CachedCalculationMapHash<S,T,U> savedResultCached = (CachedCalculationMapHash<S,T,U>) savedResult;
-		for( U key : savedResultCached.cache.keySet() ) {
-			S val = savedResultCached.cache.get(key);
-			cache.put( key, val );
-		}
-	}
+	protected abstract S execute( T input, U key ) throws FeatureCalcException;
 }
 

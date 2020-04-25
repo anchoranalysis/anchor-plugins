@@ -36,7 +36,7 @@ import org.anchoranalysis.image.objmask.ObjMaskCollection;
 import org.anchoranalysis.io.deserializer.DeserializationFailedException;
 import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.test.TestLoader;
-import org.anchoranalysis.test.image.TestLoaderImageIO;
+import org.anchoranalysis.test.image.io.TestLoaderImageIO;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;

@@ -28,13 +28,7 @@ public abstract class FeatureNrgChnl extends FeatureObjMask {
 	@Override
 	public double calc(SessionInput<FeatureInputSingleObj> input) throws FeatureCalcException {
 		
-		FeatureInputSingleObj inputSessionless = input.get();
-
-		if (inputSessionless.getNrgStack()==null) {
-			throw new FeatureCalcException("A NRG-Stack required for this feature");
-		}
-		
-		Chnl chnl = inputSessionless.getNrgStack().getNrgStack().getChnl(nrgIndex);
+		Chnl chnl = input.get().getNrgStackRequired().getChnl(nrgIndex);
 		return calcForChnl(input, chnl);
 	}
 	

@@ -41,7 +41,7 @@ public class SceneWidth extends FeatureStack {
 
 	@Override
 	public double calc(SessionInput<FeatureInputStack> input) throws FeatureCalcException {
-		return input.get().getNrgStack().getDimensions().getX();
+		return input.get().getDimensionsRequired().getX();
 	}
 
 }

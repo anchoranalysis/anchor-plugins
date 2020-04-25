@@ -26,17 +26,13 @@ class CalculateObjMaskParamsFromStack extends CacheableCalculation<FeatureInputS
 		this.index = index;
 	}
 
-
 	@Override
-	protected FeatureInputSingleObj execute(FeatureInputStack params) throws ExecuteException {
-		FeatureInputSingleObj paramsObj = new FeatureInputSingleObj();
-		paramsObj.setNrgStack( params.getNrgStack() );
-		paramsObj.setObjMask(
-			objs.get(index)
+	protected FeatureInputSingleObj execute(FeatureInputStack input) throws ExecuteException {
+		return new FeatureInputSingleObj(
+			objs.get(index),
+			input.getNrgStackOptional()
 		);
-		return paramsObj;
 	}
-	
 
 	@Override
 	public boolean equals(Object obj) {

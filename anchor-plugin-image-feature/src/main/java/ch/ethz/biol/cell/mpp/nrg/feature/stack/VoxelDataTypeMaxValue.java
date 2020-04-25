@@ -40,6 +40,6 @@ public class VoxelDataTypeMaxValue extends FeatureNRGStack {
 	@Override
 	public double calcCast(FeatureInputNRGStack params)
 			throws FeatureCalcException {
-		return (double) params.getNrgStack().getChnl(0).getVoxelDataType().maxValue();
+		return (double) params.getNrgStackRequired().getChnl(0).getVoxelDataType().maxValue();
 	}
 }

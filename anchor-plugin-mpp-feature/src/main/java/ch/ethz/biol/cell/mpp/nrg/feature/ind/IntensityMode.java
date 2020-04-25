@@ -55,10 +55,13 @@ public class IntensityMode extends FeatureSingleMemo {
 	// END BEAN
 	
 	@Override
-	public double calcCast( FeatureInputSingleMemo params ) throws FeatureCalcException {
+	public double calcCast( FeatureInputSingleMemo input ) throws FeatureCalcException {
 
 		try {
-			VoxelStatistics stats = pixelList.createStatisticsFor(params.getPxlPartMemo(), params.getDimensions() );
+			VoxelStatistics stats = pixelList.createStatisticsFor(
+				input.getPxlPartMemo(),
+				input.getDimensionsRequired()
+			);
 			
 			// TODO, we should replace this with a feature that makes the problem go away in a more controlled way
 			// If the list is empty, we return 0, rather than generating a NaN even though it is strictly undefined

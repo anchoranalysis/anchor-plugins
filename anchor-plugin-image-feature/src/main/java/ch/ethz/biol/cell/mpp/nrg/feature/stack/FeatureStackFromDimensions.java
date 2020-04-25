@@ -41,12 +41,8 @@ public abstract class FeatureStackFromDimensions extends FeatureNRGStack {
 	@Override
 	public final double calcCast( FeatureInputNRGStack params ) throws FeatureCalcException {
 		
-		if (params.getNrgStack()==null) {
-			throw new FeatureCalcException("This feature requires an NRGStack for dimensions");
-		}
-		
 		return calcFromDims(
-			params.getNrgStack().getDimensions()
+			params.getDimensionsRequired()
 		);
 	}
 	

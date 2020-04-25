@@ -25,7 +25,7 @@ public class CalculateHistogramInputFromHistogram extends CalculateInputFromDele
 	protected FeatureInputHistogram deriveFromDelegate(FeatureInputHistogram params, Histogram delegate) {
 		return new FeatureInputHistogram(
 			delegate,
-			params.getRes()
+			params.getResOptional()
 		);
 	}
 

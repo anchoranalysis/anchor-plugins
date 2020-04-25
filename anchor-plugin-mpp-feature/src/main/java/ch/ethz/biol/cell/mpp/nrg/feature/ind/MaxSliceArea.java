@@ -66,14 +66,17 @@ public final class MaxSliceArea extends NRGElemIndPhysical {
 	}
 	
 	@Override
-	public double calcCast( FeatureInputSingleMemo params ) throws FeatureCalcException {
+	public double calcCast( FeatureInputSingleMemo input ) throws FeatureCalcException {
 		
 		try {
-			PxlMark pm = params.getPxlPartMemo().doOperation();
+			PxlMark pm = input.getPxlPartMemo().doOperation();
 			
 			double maxSliceSizeVoxels = calcMaxSliceSize(pm);
 			
-			double retVal = rslvArea( maxSliceSizeVoxels, params.getDimensions().getRes() );
+			double retVal = rslvArea(
+				maxSliceSizeVoxels,
+				input.getResRequired()
+			);
 			
 			getLogger().getLogReporter().logFormatted("MaxSliceArea = %f\n", retVal);
 			return retVal;

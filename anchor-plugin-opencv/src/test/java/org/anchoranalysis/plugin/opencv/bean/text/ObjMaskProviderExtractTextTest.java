@@ -42,7 +42,7 @@ import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.test.LoggingFixture;
 import org.anchoranalysis.test.TestLoader;
-import org.anchoranalysis.test.image.TestLoaderImageIO;
+import org.anchoranalysis.test.image.io.TestLoaderImageIO;
 import org.junit.Test;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertEquals;

@@ -52,10 +52,10 @@ public class FromKeyValue extends FeatureWithImageParams {
 	 *   at the time the feature is initialized
 	 */
 	@Override
-	public double calc(FeatureInputParams params)
-			throws FeatureCalcException {
+	public double calc(FeatureInputParams input) throws FeatureCalcException {
 		
-		KeyValueParams kpv = params.getKeyValueParams(); 
+		KeyValueParams kpv = input.getParamsRequired();
+		
 		if (kpv.containsKey(key)) {
 			return Double.valueOf( kpv.getProperty(key) );	
 		} else {

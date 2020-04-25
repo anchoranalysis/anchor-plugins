@@ -17,14 +17,14 @@ public class CalculateObjForDerived extends CalculateInputFromDelegateOption<
 	}
 
 	@Override
-	protected Optional<FeatureInputSingleObj> deriveFromDelegate(FeatureInputSingleObj params, ObjMask delegate) {
+	protected Optional<FeatureInputSingleObj> deriveFromDelegate(FeatureInputSingleObj input, ObjMask delegate) {
 		
 		if (delegate==null || !delegate.hasPixelsGreaterThan(0)) {
 			return Optional.empty();
 		}
 		
 		return Optional.of(
-			new FeatureInputSingleObj( delegate, params.getNrgStack() )
+			new FeatureInputSingleObj( delegate, input.getNrgStackOptional() )
 		);
 	}
 }

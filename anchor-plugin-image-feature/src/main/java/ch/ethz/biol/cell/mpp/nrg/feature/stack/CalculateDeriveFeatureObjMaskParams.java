@@ -2,6 +2,8 @@ package ch.ethz.biol.cell.mpp.nrg.feature.stack;
 
 import org.anchoranalysis.core.cache.ExecuteException;
 import org.anchoranalysis.feature.cache.calculation.CacheableCalculation;
+import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 import org.anchoranalysis.image.binary.BinaryChnl;
 import org.anchoranalysis.image.binary.values.BinaryValues;
 import org.anchoranalysis.image.chnl.Chnl;
@@ -21,17 +23,22 @@ public class CalculateDeriveFeatureObjMaskParams extends CacheableCalculation<Fe
 	}
 
 	@Override
-	protected FeatureInputSingleObj execute(FeatureInputStack params) throws ExecuteException {
-		FeatureInputSingleObj paramsObj = new FeatureInputSingleObj();
-		
-		ObjMask om = extractObjMask(params);
-		paramsObj.setNrgStack( params.getNrgStack() );
-		paramsObj.setObjMask( om );
-		return paramsObj;
+	protected FeatureInputSingleObj execute(FeatureInputStack input) throws ExecuteException {
+		try {
+			return new FeatureInputSingleObj(
+				extractObjMask(input),
+				input.getNrgStackOptional()
+			);
+		} catch (FeatureCalcException e) {
+			throw new ExecuteException(e);
+		}
 	}
 	
-	private ObjMask extractObjMask(FeatureInputStack params) {
-		Chnl chnl = params.getNrgStack().getChnl(nrgIndex);
+	private ObjMask extractObjMask(FeatureInputStack input) throws FeatureCalcException {
+		
+		NRGStackWithParams nrgStack = input.getNrgStackRequired();
+		
+		Chnl chnl = nrgStack.getChnl(nrgIndex);
 		BinaryChnl binary = new BinaryChnl(chnl, BinaryValues.getDefault());
 		
 		return new ObjMask( binary.binaryVoxelBox() );

@@ -33,6 +33,7 @@ import org.anchoranalysis.anchor.mpp.mark.GlobalRegionIdentifiers;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.extent.BoundingBox;
+import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.extent.ImageRes;
 import org.anchoranalysis.image.orientation.DirectionVector;
 
@@ -53,13 +54,15 @@ public class BoundingBoxExtent extends NRGElemIndPhysical {
 	// END BEAN PARAMETERS
 	
 	@Override
-	public double calcCast( FeatureInputSingleMemo params ) throws FeatureCalcException {
+	public double calcCast( FeatureInputSingleMemo input ) throws FeatureCalcException {
 		
-		BoundingBox bbox = params.getPxlPartMemo().getMark().bbox(params.getDimensions(), regionID);
+		ImageDim dim = input.getDimensionsRequired();
+		
+		BoundingBox bbox = input.getPxlPartMemo().getMark().bbox(dim, regionID);
 		
 		String axisLowerCase = axis.toLowerCase();
 		
-		return calcAxisValue(axisLowerCase, bbox, params.getDimensions().getRes() );
+		return calcAxisValue(axisLowerCase, bbox, dim.getRes() );
 	}
 	
 	
@@ -103,9 +106,7 @@ public class BoundingBoxExtent extends NRGElemIndPhysical {
 		return regionID;
 	}
 
-
 	public void setRegionID(int regionID) {
 		this.regionID = regionID;
 	}
-
 }

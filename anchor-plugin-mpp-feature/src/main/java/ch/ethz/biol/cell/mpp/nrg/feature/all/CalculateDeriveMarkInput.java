@@ -32,7 +32,7 @@ public class CalculateDeriveMarkInput extends CacheableCalculation<FeatureInputM
 		
 		return new FeatureInputMark(
 			mark,
-			params.getDimensions().getRes()
+			params.getResOptional()
 		);	
 	}
 	

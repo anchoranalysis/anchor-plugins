@@ -52,10 +52,13 @@ public class NumberUniquePixelValues extends FeatureSingleMemo {
 	// END BEAN
 	
 	@Override
-	public double calcCast( FeatureInputSingleMemo params ) throws FeatureCalcException {
+	public double calcCast( FeatureInputSingleMemo input ) throws FeatureCalcException {
 
 		try {
-			VoxelStatistics stats = pixelList.createStatisticsFor(params.getPxlPartMemo(), params.getDimensions() );
+			VoxelStatistics stats = pixelList.createStatisticsFor(
+				input.getPxlPartMemo(),
+				input.getDimensionsRequired()
+			);
 			
 			EqualTo relation = new EqualTo();
 			

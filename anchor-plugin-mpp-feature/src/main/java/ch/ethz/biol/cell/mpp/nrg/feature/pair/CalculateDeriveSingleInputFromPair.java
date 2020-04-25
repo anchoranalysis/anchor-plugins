@@ -18,10 +18,10 @@ class CalculateDeriveSingleInputFromPair extends CacheableCalculation<FeatureInp
 	}
 
 	@Override
-	protected FeatureInputSingleMemo execute(FeatureInputPairMemo params) throws ExecuteException {
+	protected FeatureInputSingleMemo execute(FeatureInputPairMemo input) throws ExecuteException {
 		return new FeatureInputSingleMemo(
-			first ? params.getObj1() : params.getObj2(),
-			params.getNrgStack()
+			first ? input.getObj1() : input.getObj2(),
+			input.getNrgStackOptional()
 		);
 	}
 	

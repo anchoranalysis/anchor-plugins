@@ -36,8 +36,7 @@ import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.feature.cache.calculation.CacheableCalculation;
 import org.anchoranalysis.image.feature.bean.objmask.FeatureObjMask;
 import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
-
-import ch.ethz.biol.cell.mpp.nrg.feature.objmask.cachedcalculation.CalculateGradientFromMultipleChnls;
+import org.anchoranalysis.plugin.image.calculation.CalculateGradientFromMultipleChnls;
 
 public abstract class IntensityGradientBase extends FeatureObjMask {
 

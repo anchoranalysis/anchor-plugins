@@ -29,6 +29,7 @@ package org.anchoranalysis.plugin.image.feature.bean.obj.pair.touching;
 
 import org.anchoranalysis.core.cache.ExecuteException;
 import org.anchoranalysis.feature.cache.calculation.CacheableCalculation;
+import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.feature.objmask.pair.FeatureInputPairObjs;
@@ -62,11 +63,15 @@ class CalculateIntersectionOfDilatedBoundingBox extends CacheableCalculation<Bou
 	@Override
 	protected BoundingBox execute(FeatureInputPairObjs params)
 			throws ExecuteException {
-		return findIntersectionOfDilatedBoundingBox(
-			params.getObjMask1(),
-			params.getObjMask2(),
-			params.getNrgStack().getDimensions().getExtnt()
-		);
+		try {
+			return findIntersectionOfDilatedBoundingBox(
+				params.getObjMask1(),
+				params.getObjMask2(),
+				params.getDimensionsRequired().getExtnt()
+			);
+		} catch (FeatureCalcException e) {
+			throw new ExecuteException(e);
+		}
 	}
 	
 	@Override

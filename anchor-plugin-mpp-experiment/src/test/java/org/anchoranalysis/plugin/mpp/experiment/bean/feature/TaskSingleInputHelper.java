@@ -50,7 +50,7 @@ import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.input.InputFromManager;
 import org.anchoranalysis.io.output.bound.BoundOutputManager;
 import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
-import org.anchoranalysis.test.image.OutputManagerFixture;
+import org.anchoranalysis.test.image.io.OutputManagerFixture;
 
 /**
  * Executes a task on a single-input outputting into a specific directory
