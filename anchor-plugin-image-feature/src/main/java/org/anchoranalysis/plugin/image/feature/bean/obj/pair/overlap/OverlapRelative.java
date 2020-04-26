@@ -47,14 +47,14 @@ public abstract class OverlapRelative extends FeatureObjMaskPair {
 	private static final long serialVersionUID = 1L;
 
 	@Override
-	public double calc(SessionInput<FeatureInputPairObjs> paramsCacheable)
+	public double calc(SessionInput<FeatureInputPairObjs> input)
 			throws FeatureCalcException {
 		
-		FeatureInputPairObjs params = paramsCacheable.get();
+		FeatureInputPairObjs inputSessionless = input.get();
 
 		return OverlapRatioUtilities.overlapRatioTo(
-			params,
-			() -> calcDenominator(params)
+			inputSessionless,
+			() -> calcDenominator(inputSessionless)
 		);
 	}
 	

@@ -42,32 +42,25 @@ public class ShapeRegularityCenterSlice extends FeatureObjMask {
 	private static final long serialVersionUID = 1L;
 
 	@Override
-	public double calc(SessionInput<FeatureInputSingleObj> paramsCacheable) throws FeatureCalcException {
+	public double calc(SessionInput<FeatureInputSingleObj> input) throws FeatureCalcException {
 				
-		FeatureInputSingleObj params = paramsCacheable.get();
-		
-		int zSliceCenter = (int) params.getObjMask().centerOfGravity().getZ();
-		
-		ObjMask om;
 		try {
-			om = params.getObjMask().extractSlice(zSliceCenter - params.getObjMask().getBoundingBox().getCrnrMin().getZ(), false);
+			ObjMask omSlice = centerSlice(
+				input.get().getObjMask()
+			);
+			
+			return ShapeRegularityCalculator.calcShapeRegularity(omSlice);
+			
 		} catch (OperationFailedException e1) {
 			throw new FeatureCalcException(e1);
 		}
-		
-		
-		
-		double area = om.numPixels();
-		
-		int perim = NumBorderVoxels.numBorderPixels(om, false, false, false);
-
-		if (perim==0) {
-			return 0.0;
-		}
-		
-		double val = ((2 * Math.PI) * Math.sqrt(area/Math.PI)) / perim;
-		assert( !Double.isNaN(val) );
-		return val;
 	}
-
+	
+	private ObjMask centerSlice( ObjMask om ) throws OperationFailedException {
+		int zSliceCenter = (int) om.centerOfGravity().getZ();
+		return  om.extractSlice(
+			zSliceCenter - om.getBoundingBox().getCrnrMin().getZ(),
+			false
+		);
+	}
 }
