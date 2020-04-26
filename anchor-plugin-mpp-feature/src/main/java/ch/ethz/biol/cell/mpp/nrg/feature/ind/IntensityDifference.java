@@ -33,7 +33,6 @@ import org.anchoranalysis.anchor.mpp.pxlmark.PxlMark;
 
 
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.cache.ExecuteException;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 
 public class IntensityDifference extends FeatureSingleMemo {
@@ -60,31 +59,13 @@ public class IntensityDifference extends FeatureSingleMemo {
 		
 	@Override
 	public double calcCast( FeatureInputSingleMemo params ) throws FeatureCalcException {
-		
-		try {
-			PxlMark pm = params.getPxlPartMemo().doOperation();
-			
-			double mean_in = pm.statisticsForAllSlices(0,GlobalRegionIdentifiers.SUBMARK_INSIDE).mean();
-			double mean_shell = pm.statisticsForAllSlices(0,GlobalRegionIdentifiers.SUBMARK_SHELL).mean();
 
-			//double var_in = inside.variance( mean_in );
-			
-			/*if (mean_in < minIntns) {
-				return -1;
-			}*/
-			
-			//double nrg = ( (mean_in-minIntns) / 255) * (inside.size()) / 10000;
-			
-			double nrg = ( ((mean_in-mean_shell) - minDiff) / 255 );
-			
-			//if (nrg<0) {
-			//	nrg = -1e-25;
-			//}
-			
-			return nrg;
-		} catch (ExecuteException e) {
-			throw new FeatureCalcException(e);
-		}							
+		PxlMark pm = params.getPxlPartMemo().doOperation();
+		
+		double mean_in = pm.statisticsForAllSlices(0,GlobalRegionIdentifiers.SUBMARK_INSIDE).mean();
+		double mean_shell = pm.statisticsForAllSlices(0,GlobalRegionIdentifiers.SUBMARK_SHELL).mean();
+		
+		return ((mean_in-mean_shell) - minDiff) / 255;
 	}
 
 	@Override

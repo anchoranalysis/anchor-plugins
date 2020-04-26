@@ -31,12 +31,11 @@ import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputPairMemo;
 import org.anchoranalysis.anchor.mpp.overlap.MaxIntensityProjectionPair;
 import org.anchoranalysis.anchor.mpp.pxlmark.PxlMark;
 import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
-import org.anchoranalysis.core.cache.ExecuteException;
-import org.anchoranalysis.feature.cache.calculation.CacheableCalculation;
+import org.anchoranalysis.feature.cache.calculation.FeatureCalculation;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
-public abstract class OverlapMIPCalculationBase extends CacheableCalculation<Double, FeatureInputPairMemo> {
+public abstract class OverlapMIPCalculationBase extends FeatureCalculation<Double, FeatureInputPairMemo> {
 
 	private int regionID;
 
@@ -47,7 +46,7 @@ public abstract class OverlapMIPCalculationBase extends CacheableCalculation<Dou
 	}
 
 	@Override
-	protected Double execute( FeatureInputPairMemo params ) throws ExecuteException {
+	protected Double execute( FeatureInputPairMemo params ) {
 		
 		PxlMarkMemo mark1 = params.getObj1();
 		PxlMarkMemo mark2 = params.getObj2();

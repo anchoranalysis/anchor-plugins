@@ -2,12 +2,11 @@ package ch.ethz.biol.cell.mpp.nrg.feature.pair;
 
 import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputPairMemo;
 import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputSingleMemo;
-import org.anchoranalysis.core.cache.ExecuteException;
-import org.anchoranalysis.feature.cache.calculation.CacheableCalculation;
+import org.anchoranalysis.feature.cache.calculation.FeatureCalculation;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
-class CalculateDeriveSingleInputFromPair extends CacheableCalculation<FeatureInputSingleMemo, FeatureInputPairMemo> {
+class CalculateDeriveSingleInputFromPair extends FeatureCalculation<FeatureInputSingleMemo, FeatureInputPairMemo> {
 
 	/** Iff TRUE, then the first object from the pair is used, otherwise the second is */
 	private boolean first;
@@ -18,7 +17,7 @@ class CalculateDeriveSingleInputFromPair extends CacheableCalculation<FeatureInp
 	}
 
 	@Override
-	protected FeatureInputSingleMemo execute(FeatureInputPairMemo input) throws ExecuteException {
+	protected FeatureInputSingleMemo execute(FeatureInputPairMemo input) {
 		return new FeatureInputSingleMemo(
 			first ? input.getObj1() : input.getObj2(),
 			input.getNrgStackOptional()

@@ -32,7 +32,6 @@ import org.anchoranalysis.anchor.mpp.pxlmark.PxlMark;
 
 
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.cache.ExecuteException;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.voxel.statistics.VoxelStatistics;
 
@@ -52,19 +51,14 @@ public final class Size extends NRGElemIndPhysical {
 	@Override
 	public double calcCast( FeatureInputSingleMemo input ) throws FeatureCalcException {
 		
-		try {
-			PxlMark pm = input.getPxlPartMemo().doOperation();
-			
-			VoxelStatistics pxlStats = pm.statisticsForAllSlices(0, regionID);
-					
-			return rslvVolume(
-				(double) pxlStats.size(),
-				input.getResRequired()
-			);
-		} catch (ExecuteException e) {
-			throw new FeatureCalcException(e);
-		}
+		PxlMark pm = input.getPxlPartMemo().doOperation();
 		
+		VoxelStatistics pxlStats = pm.statisticsForAllSlices(0, regionID);
+				
+		return rslvVolume(
+			(double) pxlStats.size(),
+			input.getResRequired()
+		);
 	}
 
 	public int getRegionID() {

@@ -1,7 +1,6 @@
 package org.anchoranalysis.plugin.image.feature.bean.obj.single.intensity;
 
-import org.anchoranalysis.core.cache.ExecuteException;
-import org.anchoranalysis.feature.cache.calculation.CacheableCalculation;
+import org.anchoranalysis.feature.cache.calculation.FeatureCalculation;
 import org.anchoranalysis.image.chnl.Chnl;
 import org.anchoranalysis.image.feature.histogram.FeatureInputHistogram;
 import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
@@ -10,7 +9,7 @@ import org.anchoranalysis.image.histogram.HistogramFactoryUtilities;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
-class CalculateHistogramForNrgChnl extends CacheableCalculation<FeatureInputHistogram, FeatureInputSingleObj> {
+class CalculateHistogramForNrgChnl extends FeatureCalculation<FeatureInputHistogram, FeatureInputSingleObj> {
 
 	private boolean excludeZero = false;
 	private int nrgIndex;
@@ -31,7 +30,7 @@ class CalculateHistogramForNrgChnl extends CacheableCalculation<FeatureInputHist
 	}
 	
 	@Override
-	protected FeatureInputHistogram execute(FeatureInputSingleObj params) throws ExecuteException {
+	protected FeatureInputHistogram execute(FeatureInputSingleObj params) {
 
 		Histogram hist = HistogramFactoryUtilities.createHistogramIgnoreZero(
 			chnl,

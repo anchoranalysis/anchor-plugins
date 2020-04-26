@@ -34,7 +34,6 @@ import org.anchoranalysis.anchor.mpp.pxlmark.PxlMark;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.NonNegative;
-import org.anchoranalysis.core.cache.ExecuteException;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.voxel.statistics.VoxelStatistics;
 
@@ -62,33 +61,19 @@ public class IntensityDifferenceSize extends FeatureSingleMemo {
 	
 	@Override
 	public double calcCast( FeatureInputSingleMemo params ) throws FeatureCalcException {
+
+		PxlMark pm = params.getPxlPartMemo().doOperation();
 		
-		try {
-			PxlMark pm = params.getPxlPartMemo().doOperation();
-			
-			VoxelStatistics statsInside = pm.statisticsForAllSlices(0, GlobalRegionIdentifiers.SUBMARK_INSIDE);
-			VoxelStatistics statsOutside = pm.statisticsForAllSlices(0, GlobalRegionIdentifiers.SUBMARK_SHELL);
-			
-			double mean_in = statsInside.mean();
-			double mean_shell = statsOutside.mean();
-			
-			//double mean_in = pm.getPartitionList().get(0).getPxlListForAllSlicesRO(GlobalRegionIdentifiers.SUBMARK_INSIDE).mean();
-			//double mean_shell = pm.getPartitionList().get(0).getPxlListForAllSlicesRO(GlobalRegionIdentifiers.SUBMARK_SHELL).mean();
-			//double var_in = inside.variance( mean_in );
-			
-			/*if (mean_in < minIntns) {
-				return -1;
-			}*/
-			
-			//double nrg = ( (mean_in-minIntns) / 255) * (inside.size()) / 10000;
-			
-			double diff = ( ((mean_in-mean_shell) - minDiff) / 255 );
-			long size = statsInside.size();
-			
-			return (diff * size) * 1e-3;
-		} catch (ExecuteException e) {
-			throw new FeatureCalcException(e);
-		}							
+		VoxelStatistics statsInside = pm.statisticsForAllSlices(0, GlobalRegionIdentifiers.SUBMARK_INSIDE);
+		VoxelStatistics statsOutside = pm.statisticsForAllSlices(0, GlobalRegionIdentifiers.SUBMARK_SHELL);
+		
+		double mean_in = statsInside.mean();
+		double mean_shell = statsOutside.mean();
+		
+		double diff = ( ((mean_in-mean_shell) - minDiff) / 255 );
+		long size = statsInside.size();
+		
+		return (diff * size) * 1e-3;
 	}
 
 	@Override

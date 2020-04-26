@@ -31,14 +31,13 @@ import org.anchoranalysis.anchor.mpp.overlap.OverlapUtilities;
  */
 
 
-import org.anchoranalysis.core.cache.ExecuteException;
-import org.anchoranalysis.feature.cache.calculation.CacheableCalculation;
+import org.anchoranalysis.feature.cache.calculation.FeatureCalculation;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.chnl.Chnl;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
-public class OverlapCalculationMaskGlobalMiddleQuantiles extends CacheableCalculation<Double,FeatureInputPairMemo> {
+public class OverlapCalculationMaskGlobalMiddleQuantiles extends FeatureCalculation<Double,FeatureInputPairMemo> {
 
 	private int regionID;
 	private int nrgIndex;
@@ -58,23 +57,19 @@ public class OverlapCalculationMaskGlobalMiddleQuantiles extends CacheableCalcul
 	}
 
 	@Override
-	protected Double execute( FeatureInputPairMemo input ) throws ExecuteException {
+	protected Double execute( FeatureInputPairMemo input ) throws FeatureCalcException {
 		
-		try {
-			Chnl chnl = input.getNrgStackRequired().getNrgStack().getChnl(nrgIndex);
-			
-			return OverlapUtilities.overlapWithMaskGlobalMiddleRange(
-				input.getObj1(),
-				input.getObj2(),
-				regionID,
-				chnl.getVoxelBox().asByte(),
-				maskOnValue,
-				quantileLower,
-				quantileHigher
-			);
-		} catch (FeatureCalcException e) {
-			throw new ExecuteException(e);
-		}
+		Chnl chnl = input.getNrgStackRequired().getNrgStack().getChnl(nrgIndex);
+		
+		return OverlapUtilities.overlapWithMaskGlobalMiddleRange(
+			input.getObj1(),
+			input.getObj2(),
+			regionID,
+			chnl.getVoxelBox().asByte(),
+			maskOnValue,
+			quantileLower,
+			quantileHigher
+		);
 	}
 	
 	@Override

@@ -1,7 +1,6 @@
 package org.anchoranalysis.plugin.image.feature.bean.obj.pair.order;
 
-import org.anchoranalysis.core.cache.ExecuteException;
-import org.anchoranalysis.feature.cache.calculation.CacheableCalculation;
+import org.anchoranalysis.feature.cache.calculation.FeatureCalculation;
 import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
 import org.anchoranalysis.image.feature.objmask.pair.FeatureInputPairObjs;
 import org.anchoranalysis.image.objmask.ObjMask;
@@ -9,7 +8,7 @@ import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 
-class CalculateParamsFromPair extends CacheableCalculation<FeatureInputSingleObj, FeatureInputPairObjs> {
+class CalculateParamsFromPair extends FeatureCalculation<FeatureInputSingleObj, FeatureInputPairObjs> {
 
 	private boolean first;
 	
@@ -24,7 +23,7 @@ class CalculateParamsFromPair extends CacheableCalculation<FeatureInputSingleObj
 	}
 
 	@Override
-	protected FeatureInputSingleObj execute(FeatureInputPairObjs input) throws ExecuteException {
+	protected FeatureInputSingleObj execute(FeatureInputPairObjs input) {
 		FeatureInputSingleObj paramsNew = new FeatureInputSingleObj(
 			extractObj(input)
 		);

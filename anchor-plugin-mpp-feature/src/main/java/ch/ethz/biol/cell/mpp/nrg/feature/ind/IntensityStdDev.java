@@ -33,7 +33,6 @@ import org.anchoranalysis.anchor.mpp.pxlmark.PxlMark;
 
 
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.cache.ExecuteException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.histogram.Histogram;
@@ -92,7 +91,7 @@ public class IntensityStdDev extends FeatureSingleMemo {
 				
 				return stats.stdDev();
 			}
-		} catch (ExecuteException | OperationFailedException e) {
+		} catch (OperationFailedException e) {
 			throw new FeatureCalcException(e);
 		}							
 	}

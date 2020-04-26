@@ -33,7 +33,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.NonNegative;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.core.geometry.Point3d;
-import org.anchoranalysis.feature.cache.calculation.CacheableCalculation;
+import org.anchoranalysis.feature.cache.calculation.FeatureCalculation;
 import org.anchoranalysis.image.feature.bean.objmask.FeatureObjMask;
 import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
 import org.anchoranalysis.plugin.image.calculation.CalculateGradientFromMultipleChnls;
@@ -60,7 +60,7 @@ public abstract class IntensityGradientBase extends FeatureObjMask {
 	private int subtractConstant = 0;
 	// END BEAN PROPERTIES
 	
-	protected CacheableCalculation<List<Point3d>,FeatureInputSingleObj> gradientCalculation() {
+	protected FeatureCalculation<List<Point3d>,FeatureInputSingleObj> gradientCalculation() {
 		return new CalculateGradientFromMultipleChnls(nrgIndexX,nrgIndexY,nrgIndexZ,subtractConstant);
 	}
 	

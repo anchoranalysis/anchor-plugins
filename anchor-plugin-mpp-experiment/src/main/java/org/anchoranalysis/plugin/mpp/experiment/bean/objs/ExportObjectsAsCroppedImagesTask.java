@@ -40,12 +40,12 @@ import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.bean.define.Define;
 import org.anchoranalysis.bean.shared.random.RandomNumberGeneratorBean;
 import org.anchoranalysis.bean.shared.random.RandomNumberGeneratorMersenneConstantBean;
-import org.anchoranalysis.core.bridge.BridgeElementException;
 import org.anchoranalysis.core.bridge.IObjectBridge;
 import org.anchoranalysis.core.cache.IdentityOperation;
 import org.anchoranalysis.core.color.ColorIndex;
 import org.anchoranalysis.core.color.ColorList;
 import org.anchoranalysis.core.color.RGBColor;
+import org.anchoranalysis.core.error.AnchorNeverOccursException;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.error.OperationFailedException;
@@ -353,7 +353,7 @@ public class ExportObjectsAsCroppedImagesTask extends ExportObjectsBase<MultiInp
 	private IterableGenerator<ObjMask> wrapBBoxGenerator( IterableGenerator<BoundingBox> generator, final boolean mip ) {
 		return new IterableGeneratorBridge<>(
 			generator,
-			new IObjectBridge<ObjMask, BoundingBox>() {
+			new IObjectBridge<ObjMask, BoundingBox, AnchorNeverOccursException>() {
 
 				@Override
 				public BoundingBox bridgeElement(ObjMask sourceObject) {
@@ -428,21 +428,11 @@ public class ExportObjectsAsCroppedImagesTask extends ExportObjectsBase<MultiInp
 
 		
 		// Maybe we need to change the objectMask to a padded version
-		IObjectBridge<ObjMask, ObjMask> bridgeToMaybePad = new IObjectBridge<ObjMask, ObjMask>() {
-
-			@Override
-			public ObjMask bridgeElement(ObjMask om) throws BridgeElementException {
-				try {
-					if (keepEntireImage) {
-						return extractObjMaskKeepEntireImage(om, dim );
-					} else {
-						return maybePadObjMask(om, dim );
-					}
-
-				} catch (OutputWriteFailedException e) {
-					throw new BridgeElementException(e);
-				}
-				
+		IObjectBridge<ObjMask,ObjMask,OutputWriteFailedException> bridgeToMaybePad = om -> {
+			if (keepEntireImage) {
+				return extractObjMaskKeepEntireImage(om, dim );
+			} else {
+				return maybePadObjMask(om, dim );
 			}
 		};
 

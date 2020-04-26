@@ -1,5 +1,7 @@
 package org.anchoranalysis.io.manifest.reportfeature;
 
+import java.io.IOException;
+
 /*-
  * #%L
  * anchor-mpp-io
@@ -27,10 +29,8 @@ package org.anchoranalysis.io.manifest.reportfeature;
  */
 
 import org.anchoranalysis.anchor.mpp.cfg.Cfg;
-import org.anchoranalysis.core.cache.ExecuteException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.error.reporter.ErrorReporterIntoLog;
-import org.anchoranalysis.core.index.GetOperationFailedException;
 import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.experiment.log.ConsoleLogReporter;
 import org.anchoranalysis.io.manifest.ManifestRecorder;
@@ -49,22 +49,22 @@ public class CfgSizeFromManifest extends ReportFeatureForManifest {
 	public String genFeatureStrFor(ManifestRecorderFile obj, LogErrorReporter logger)
 			throws OperationFailedException {
 
-		FinderSerializedObject<Cfg> finder = new FinderSerializedObject<Cfg>("cfg", new ErrorReporterIntoLog(new ConsoleLogReporter()));
+		FinderSerializedObject<Cfg> finder = new FinderSerializedObject<Cfg>(
+			"cfg",
+			new ErrorReporterIntoLog(new ConsoleLogReporter())
+		);
 		
-		ManifestRecorder manifest;
-		try {
-			manifest = obj.doOperation();
-		} catch (ExecuteException e) {
-			throw new OperationFailedException(e);
-		}
+		ManifestRecorder manifest = obj.doOperation();
 		
 		if (!finder.doFind( manifest )) {
 			throw new OperationFailedException( String.format("Cannot find cfg in manifest") );
 		}
 		
 		try {
-			return Integer.toString(finder.get().size());
-		} catch (GetOperationFailedException e) {
+			return Integer.toString(
+				finder.get().size()
+			);
+		} catch (IOException e) {
 			throw new OperationFailedException(e);
 		}
 	}
@@ -78,5 +78,4 @@ public class CfgSizeFromManifest extends ReportFeatureForManifest {
 	public String genTitleStr() throws OperationFailedException {
 		return "cfgSize";
 	}
-
 }

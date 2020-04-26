@@ -35,7 +35,7 @@ import org.anchoranalysis.bean.annotation.Positive;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.cache.SessionInput;
-import org.anchoranalysis.feature.cache.calculation.CacheableCalculation;
+import org.anchoranalysis.feature.cache.calculation.FeatureCalculation;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.image.feature.bean.objmask.pair.FeatureObjMaskPair;
@@ -88,7 +88,7 @@ public class FeatureObjMaskPairIntersection extends FeatureObjMaskPair {
 	public double calc(SessionInput<FeatureInputPairObjs> input) throws FeatureCalcException {
 		return CalculateInputFromDelegateOption.calc(
 			input,
-			createCCIntersection(input),
+			createCalculation(input),
 			delegate -> new CalculateParamsForIntersection(delegate),
 			item,
 			cacheIntersectionName(),
@@ -120,7 +120,7 @@ public class FeatureObjMaskPairIntersection extends FeatureObjMaskPair {
 		);
 	}
 
-	private CacheableCalculation<Optional<ObjMask>,FeatureInputPairObjs> createCCIntersection(SessionInput<FeatureInputPairObjs> input) throws FeatureCalcException {
+	private FeatureCalculation<Optional<ObjMask>,FeatureInputPairObjs> createCalculation(SessionInput<FeatureInputPairObjs> input) throws FeatureCalcException {
 		try {
 			return CalculatePairIntersectionCommutative.createFromCache(
 				input.resolver(),

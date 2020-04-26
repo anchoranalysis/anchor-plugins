@@ -8,7 +8,7 @@ import org.anchoranalysis.bean.annotation.NonNegative;
 import org.anchoranalysis.bean.error.BeanMisconfiguredException;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.feature.cache.SessionInput;
-import org.anchoranalysis.feature.cache.calculation.CacheableCalculation;
+import org.anchoranalysis.feature.cache.calculation.FeatureCalculation;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.nrg.NRGStack;
 import org.anchoranalysis.image.binary.values.BinaryValues;
@@ -88,7 +88,7 @@ public abstract class IntensityMeanShellBase extends FeatureNrgChnl {
 	}
 	
 	private ObjMask createShell( SessionInput<FeatureInputSingleObj> input ) throws FeatureCalcException {
-		CacheableCalculation<ObjMask,FeatureInputSingleObj> ccShellObjMask = CalculateShellObjMask.createFromCache(
+		FeatureCalculation<ObjMask,FeatureInputSingleObj> ccShellObjMask = CalculateShellObjMask.createFromCache(
 			input.resolver(),
 			iterationsDilation,
 			getIterationsErosion(),

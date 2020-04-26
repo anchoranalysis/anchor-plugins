@@ -29,7 +29,6 @@ package org.anchoranalysis.plugin.mpp.experiment.bean.seed;
 import java.util.function.Function;
 
 import org.anchoranalysis.anchor.overlay.bean.objmask.writer.ObjMaskWriter;
-import org.anchoranalysis.core.cache.ExecuteException;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.chnl.Chnl;
@@ -41,6 +40,7 @@ import org.anchoranalysis.image.stack.DisplayStack;
 import org.anchoranalysis.io.generator.IterableGenerator;
 import org.anchoranalysis.io.generator.collection.IterableGeneratorWriter;
 import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
+import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.io.output.writer.WriterRouterErrors;
 
 /**
@@ -79,7 +79,7 @@ class VisualObjsWriter {
 		);
 	}
 
-	private RGBObjMaskGenerator maskGenerator(ObjMaskWriter objMaskWriter) throws ExecuteException {
+	private RGBObjMaskGenerator maskGenerator(ObjMaskWriter objMaskWriter) throws OutputWriteFailedException {
 		try {
 			return new RGBObjMaskGenerator(
 				objMaskWriter,
@@ -88,7 +88,7 @@ class VisualObjsWriter {
 				outputManager.getOutputWriteSettings().genDefaultColorIndex(objs.size())
 			);
 		} catch (OperationFailedException | CreateException e) {
-			throw new ExecuteException(e);
+			throw new OutputWriteFailedException(e);
 		}			
 	}
 }

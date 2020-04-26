@@ -30,10 +30,9 @@ import org.anchoranalysis.anchor.mpp.mark.conic.MarkEllipse;
  */
 
 
-import org.anchoranalysis.core.cache.ExecuteException;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.feature.cache.calculation.CacheableCalculation;
+import org.anchoranalysis.feature.cache.calculation.FeatureCalculation;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.nrg.NRGStack;
 import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
@@ -42,7 +41,7 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
 
 import ch.ethz.biol.cell.mpp.mark.pointsfitter.LinearLeastSquaresEllipseFitterGeoRegression;
 
-public class CalculateEllipseLeastSquares extends CacheableCalculation<ObjMaskAndEllipse, FeatureInputSingleObj> {
+public class CalculateEllipseLeastSquares extends FeatureCalculation<ObjMaskAndEllipse, FeatureInputSingleObj> {
 
 	private EllipseFactory factory;
 	
@@ -65,7 +64,7 @@ public class CalculateEllipseLeastSquares extends CacheableCalculation<ObjMaskAn
 	
 
 	@Override
-	protected ObjMaskAndEllipse execute( FeatureInputSingleObj input ) throws ExecuteException {
+	protected ObjMaskAndEllipse execute( FeatureInputSingleObj input ) throws FeatureCalcException {
 		
 		try {
 			NRGStack nrgStack = input.getNrgStackRequired().getNrgStack();
@@ -76,8 +75,8 @@ public class CalculateEllipseLeastSquares extends CacheableCalculation<ObjMaskAn
 			MarkEllipse mark = factory.create(om,nrgStack.getDimensions(), 0.2, nrgStack.getChnl(0) );
 
 			return new ObjMaskAndEllipse(om,mark);
-		} catch (CreateException | InsufficientPointsException | FeatureCalcException e) {
-			throw new ExecuteException(e);
+		} catch (CreateException | InsufficientPointsException e) {
+			throw new FeatureCalcException(e);
 		}
 	}
 	

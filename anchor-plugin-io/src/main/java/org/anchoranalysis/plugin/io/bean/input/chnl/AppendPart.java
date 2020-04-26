@@ -44,6 +44,7 @@ import org.anchoranalysis.image.io.input.series.NamedChnlCollectionForSeries;
 import org.anchoranalysis.image.io.input.series.NamedChnlCollectionForSeriesConcatenate;
 import org.anchoranalysis.image.io.input.series.NamedChnlCollectionForSeriesMap;
 import org.anchoranalysis.image.io.rasterreader.OpenedRaster;
+import org.anchoranalysis.io.error.AnchorIOException;
 
 /**
  * Appends another channel to an existing NamedChnlInputBase
@@ -62,7 +63,7 @@ class AppendPart<T extends Buffer> extends NamedChnlsInputPart {
 	
 	public AppendPart(
 			NamedChnlsInputPart delegate,
-			String chnlName, int chnlIndex, Operation<Path> filePath, RasterReader rasterReader ) {
+			String chnlName, int chnlIndex, Operation<Path,AnchorIOException> filePath, RasterReader rasterReader ) {
 		super();
 		this.delegate = delegate;
 		this.additionalChnl = new AdditionalChnl(chnlName, chnlIndex, filePath);
@@ -117,7 +118,7 @@ class AppendPart<T extends Buffer> extends NamedChnlsInputPart {
 				openedRasterMemo = rasterReader.openFile( filePathAdditional );
 			}
 			
-		} catch (GetOperationFailedException e) {
+		} catch (AnchorIOException e) {
 			throw new RasterIOException(e);
 		}
 	}
@@ -129,10 +130,14 @@ class AppendPart<T extends Buffer> extends NamedChnlsInputPart {
 	
 	@Override
 	public List<Path> pathForBindingForAllChannels() throws GetOperationFailedException {
-		
-		List<Path> list = delegate.pathForBindingForAllChannels();
-		list.add( additionalChnl.getFilePath() );
-		return list;
+		try {
+			List<Path> list = delegate.pathForBindingForAllChannels();
+			list.add( additionalChnl.getFilePath() );
+			return list;
+			
+		} catch (AnchorIOException e) {
+			throw new GetOperationFailedException(e);
+		}
 	}
 
 	@Override

@@ -1,8 +1,8 @@
 package ch.ethz.biol.cell.mpp.nrg.feature.objmask.sharedobjects;
 
-import org.anchoranalysis.core.cache.ExecuteException;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.feature.cache.calculation.CacheableCalculation;
+import org.anchoranalysis.feature.cache.calculation.FeatureCalculation;
+import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.bean.provider.BinaryImgChnlProvider;
 import org.anchoranalysis.image.binary.BinaryChnl;
 import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
@@ -10,7 +10,7 @@ import org.anchoranalysis.image.feature.objmask.pair.FeatureInputPairObjs;
 import org.anchoranalysis.image.objmask.ObjMask;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
-public class CalculatePairParams extends CacheableCalculation<FeatureInputPairObjs, FeatureInputSingleObj> {
+public class CalculatePairParams extends FeatureCalculation<FeatureInputPairObjs, FeatureInputSingleObj> {
 
 	private BinaryImgChnlProvider binaryImgChnlProvider;
 		
@@ -20,7 +20,7 @@ public class CalculatePairParams extends CacheableCalculation<FeatureInputPairOb
 	}
 
 	@Override
-	protected FeatureInputPairObjs execute(FeatureInputSingleObj input) throws ExecuteException {
+	protected FeatureInputPairObjs execute(FeatureInputSingleObj input) throws FeatureCalcException {
 
 		try {
 			BinaryChnl bic = binaryImgChnlProvider.create();
@@ -30,7 +30,7 @@ public class CalculatePairParams extends CacheableCalculation<FeatureInputPairOb
 			);
 			
 		} catch (CreateException e) {
-			throw new ExecuteException(e);
+			throw new FeatureCalcException(e);
 		}
 	}
 		

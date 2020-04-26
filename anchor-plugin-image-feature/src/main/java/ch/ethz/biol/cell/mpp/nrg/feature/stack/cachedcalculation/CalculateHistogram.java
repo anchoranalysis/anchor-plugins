@@ -26,9 +26,8 @@ package ch.ethz.biol.cell.mpp.nrg.feature.stack.cachedcalculation;
  * #L%
  */
 
-import org.anchoranalysis.core.cache.ExecuteException;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.feature.cache.calculation.CacheableCalculation;
+import org.anchoranalysis.feature.cache.calculation.FeatureCalculation;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.feature.stack.FeatureInputStack;
 import org.anchoranalysis.image.histogram.Histogram;
@@ -36,7 +35,7 @@ import org.anchoranalysis.image.histogram.HistogramFactoryUtilities;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
-public class CalculateHistogram extends CacheableCalculation<Histogram, FeatureInputStack> {
+public class CalculateHistogram extends FeatureCalculation<Histogram, FeatureInputStack> {
 
 	private int nrgIndex;
 	
@@ -46,14 +45,14 @@ public class CalculateHistogram extends CacheableCalculation<Histogram, FeatureI
 	}
 
 	@Override
-	protected Histogram execute( FeatureInputStack input ) throws ExecuteException {
+	protected Histogram execute( FeatureInputStack input ) throws FeatureCalcException {
 
 		try {
 			return HistogramFactoryUtilities.create(
 				input.getNrgStackRequired().getChnl(nrgIndex)
 			);
-		} catch (CreateException | FeatureCalcException e) {
-			throw new ExecuteException(e);
+		} catch (CreateException e) {
+			throw new FeatureCalcException(e);
 		}
 	}
 	

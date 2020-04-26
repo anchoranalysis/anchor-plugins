@@ -1,7 +1,7 @@
 package ch.ethz.biol.cell.mpp.nrg.feature.histogram;
 
-import org.anchoranalysis.feature.cache.calculation.CacheableCalculation;
 import org.anchoranalysis.feature.cache.calculation.CalculationResolver;
+import org.anchoranalysis.feature.cache.calculation.FeatureCalculation;
 import org.anchoranalysis.feature.cache.calculation.ResolvedCalculation;
 import org.anchoranalysis.image.feature.histogram.FeatureInputHistogram;
 import org.anchoranalysis.image.histogram.Histogram;
@@ -16,7 +16,7 @@ public class CalculateHistogramInputFromHistogram extends CalculateInputFromDele
 		super(ccDelegate);
 	}
 	
-	public CalculateHistogramInputFromHistogram(CacheableCalculation<Histogram, FeatureInputHistogram> ccDelegate,
+	public CalculateHistogramInputFromHistogram(FeatureCalculation<Histogram, FeatureInputHistogram> ccDelegate,
 			CalculationResolver<FeatureInputHistogram> cache) {
 		super(ccDelegate, cache);
 	}

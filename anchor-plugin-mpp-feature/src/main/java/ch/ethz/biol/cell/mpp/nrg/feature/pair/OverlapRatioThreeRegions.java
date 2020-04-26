@@ -33,7 +33,6 @@ import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
 
 
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.cache.ExecuteException;
 import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.voxel.statistics.VoxelStatistics;
@@ -111,16 +110,12 @@ public class OverlapRatioThreeRegions extends FeaturePairMemo {
 	}
 	
 	private static double calcMinVolume( PxlMarkMemo obj1, PxlMarkMemo obj2, int regionID ) throws FeatureCalcException {
-		try {
-			VoxelStatistics pxlStats1 =  obj1.doOperation().statisticsForAllSlices(0, regionID);
-			VoxelStatistics pxlStats2 =  obj2.doOperation().statisticsForAllSlices(0, regionID);
-			
-			long size1 = pxlStats1.size();
-			long size2 = pxlStats2.size();
-			return Math.min( size1, size2 );
-		} catch (ExecuteException e) {
-			throw new FeatureCalcException(e);
-		}
+		VoxelStatistics pxlStats1 =  obj1.doOperation().statisticsForAllSlices(0, regionID);
+		VoxelStatistics pxlStats2 =  obj2.doOperation().statisticsForAllSlices(0, regionID);
+		
+		long size1 = pxlStats1.size();
+		long size2 = pxlStats2.size();
+		return Math.min( size1, size2 );
 	}
 	
 	public boolean isMip() {

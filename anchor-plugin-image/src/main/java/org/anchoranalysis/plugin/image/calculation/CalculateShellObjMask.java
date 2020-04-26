@@ -29,10 +29,9 @@ import java.util.Optional;
  */
 
 
-import org.anchoranalysis.core.cache.ExecuteException;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.feature.cache.calculation.CacheableCalculation;
 import org.anchoranalysis.feature.cache.calculation.CalculationResolver;
+import org.anchoranalysis.feature.cache.calculation.FeatureCalculation;
 import org.anchoranalysis.feature.cache.calculation.ResolvedCalculation;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.extent.ImageDim;
@@ -43,7 +42,7 @@ import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
 
-public class CalculateShellObjMask extends CacheableCalculation<ObjMask,FeatureInputSingleObj> {
+public class CalculateShellObjMask extends FeatureCalculation<ObjMask,FeatureInputSingleObj> {
 
 	private int iterationsErosionSecond;
 	private boolean do3D;
@@ -104,7 +103,7 @@ public class CalculateShellObjMask extends CacheableCalculation<ObjMask,FeatureI
 	}
 	
 	
-	public static CacheableCalculation<ObjMask,FeatureInputSingleObj> createFromCache(
+	public static FeatureCalculation<ObjMask,FeatureInputSingleObj> createFromCache(
 		CalculationResolver<FeatureInputSingleObj> params,
 		int iterationsDilation,
 		int iterationsErosion,
@@ -129,32 +128,27 @@ public class CalculateShellObjMask extends CacheableCalculation<ObjMask,FeatureI
 	}
 
 	@Override
-	protected ObjMask execute( FeatureInputSingleObj params ) throws ExecuteException {
+	protected ObjMask execute( FeatureInputSingleObj params ) throws FeatureCalcException {
+	
+		ImageDim sd = params.getDimensionsRequired();
 		
-		try {
-			ImageDim sd = params.getDimensionsRequired();
-			
-			ObjMask om = params.getObjMask();
-			ObjMask omShell = createShellObjMask( params, om, ccDilation, ccErosion, iterationsErosionSecond, do3D );
-			
-			if (inverse) {
-				ObjMask omDup = om.duplicate();
-				
-				Optional<ObjMask> omShellIntersected = omShell.intersect( omDup, sd );
-				omShellIntersected.ifPresent( shellIntersected ->
-					omDup.binaryVoxelBox().setPixelsCheckMaskOff(
-						shellIntersected.relMaskTo(omDup.getBoundingBox())
-					)
-				);
-				return omDup;
-				
-			} else {
-				return omShell;
-			}
+		ObjMask om = params.getObjMask();
+		ObjMask omShell = createShellObjMask( params, om, ccDilation, ccErosion, iterationsErosionSecond, do3D );
 		
-		} catch (CreateException | FeatureCalcException e) {
-			throw new ExecuteException(e);
-		}	
+		if (inverse) {
+			ObjMask omDup = om.duplicate();
+			
+			Optional<ObjMask> omShellIntersected = omShell.intersect( omDup, sd );
+			omShellIntersected.ifPresent( shellIntersected ->
+				omDup.binaryVoxelBox().setPixelsCheckMaskOff(
+					shellIntersected.relMaskTo(omDup.getBoundingBox())
+				)
+			);
+			return omDup;
+			
+		} else {
+			return omShell;
+		}
 	}
 	
 	private static ObjMask createShellObjMask(
@@ -164,7 +158,7 @@ public class CalculateShellObjMask extends CacheableCalculation<ObjMask,FeatureI
 		ResolvedCalculation<ObjMask,FeatureInputSingleObj> ccErosion,
 		int iterationsErosionSecond,
 		boolean do3D
-	) throws CreateException, ExecuteException {
+	) throws FeatureCalcException {
 
 		ObjMask omDilated = ccDilation.getOrCalculate(params).duplicate();
 		
@@ -176,14 +170,18 @@ public class CalculateShellObjMask extends CacheableCalculation<ObjMask,FeatureI
 		assert( omEroded!=null);
 		
 		// Maybe apply a second erosion
-		omDilated = iterationsErosionSecond>0 ? MorphologicalErosion.createErodedObjMask(
-			omDilated,
-			null,
-			do3D,
-			iterationsErosionSecond,
-			true,
-			null
-		) : omDilated;
+		try {
+			omDilated = iterationsErosionSecond>0 ? MorphologicalErosion.createErodedObjMask(
+				omDilated,
+				null,
+				do3D,
+				iterationsErosionSecond,
+				true,
+				null
+			) : omDilated;
+		} catch (CreateException e) {
+			throw new FeatureCalcException(e);
+		}
 		
 		ObjMask relMask = omEroded.relMaskTo( omDilated.getBoundingBox() );
 		

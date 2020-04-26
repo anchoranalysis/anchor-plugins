@@ -27,10 +27,9 @@ package org.anchoranalysis.plugin.image.calculation;
  */
 
 
-import org.anchoranalysis.core.cache.ExecuteException;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.feature.cache.calculation.CacheableCalculation;
 import org.anchoranalysis.feature.cache.calculation.CalculationResolver;
+import org.anchoranalysis.feature.cache.calculation.FeatureCalculation;
 import org.anchoranalysis.feature.cache.calculation.ResolvedCalculation;
 import org.anchoranalysis.feature.cache.calculation.ResolvedCalculationMap;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
@@ -40,7 +39,7 @@ import org.anchoranalysis.image.objmask.morph.MorphologicalErosion;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
-public class CalculateClosing extends CacheableCalculation<ObjMask,FeatureInputSingleObj> {
+public class CalculateClosing extends FeatureCalculation<ObjMask,FeatureInputSingleObj> {
 
 	private int iterations;
 	private ResolvedCalculationMap<ObjMask,FeatureInputSingleObj,Integer> mapDilation;
@@ -77,7 +76,7 @@ public class CalculateClosing extends CacheableCalculation<ObjMask,FeatureInputS
 	}
 
 	@Override
-	protected ObjMask execute(FeatureInputSingleObj params) throws ExecuteException {
+	protected ObjMask execute(FeatureInputSingleObj params) throws FeatureCalcException {
 		
 		try {
 			ObjMask omDilated = mapDilation.getOrCalculate(params, iterations);
@@ -92,8 +91,8 @@ public class CalculateClosing extends CacheableCalculation<ObjMask,FeatureInputS
 			);
 			return omEroded;
 			
-		} catch (CreateException | FeatureCalcException e) {
-			throw new ExecuteException(e);
+		} catch (CreateException e) {
+			throw new FeatureCalcException(e);
 		}
 	}
 

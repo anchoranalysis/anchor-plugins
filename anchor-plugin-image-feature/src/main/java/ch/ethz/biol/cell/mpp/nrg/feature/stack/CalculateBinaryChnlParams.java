@@ -1,9 +1,8 @@
 package ch.ethz.biol.cell.mpp.nrg.feature.stack;
 
 import java.nio.ByteBuffer;
-import org.anchoranalysis.core.cache.ExecuteException;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.feature.cache.calculation.CacheableCalculation;
+import org.anchoranalysis.feature.cache.calculation.FeatureCalculation;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.bean.provider.BinaryImgChnlProvider;
 import org.anchoranalysis.image.binary.BinaryChnl;
@@ -16,7 +15,7 @@ import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.anchoranalysis.image.voxel.datatype.IncorrectVoxelDataTypeException;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
-public class CalculateBinaryChnlParams extends CacheableCalculation<FeatureInputSingleObj, FeatureInputStack> {
+public class CalculateBinaryChnlParams extends FeatureCalculation<FeatureInputSingleObj, FeatureInputStack> {
 
 	// None of the following are considered in hash-coding, as considered always singular for all caculations in the same session
 	private BinaryImgChnlProvider binaryImgChnlProvider;
@@ -27,7 +26,7 @@ public class CalculateBinaryChnlParams extends CacheableCalculation<FeatureInput
 	}
 
 	@Override
-	protected FeatureInputSingleObj execute(FeatureInputStack params) throws ExecuteException {
+	protected FeatureInputSingleObj execute(FeatureInputStack params) throws FeatureCalcException {
 
 		try {
 			BinaryChnl bc = binaryImgChnlProvider.create();
@@ -35,8 +34,8 @@ public class CalculateBinaryChnlParams extends CacheableCalculation<FeatureInput
 				params,
 				binaryVoxelBox(bc)
 			);
-		} catch (FeatureCalcException | CreateException e) {
-			throw new ExecuteException(e);
+		} catch (CreateException e) {
+			throw new FeatureCalcException(e);
 		}
 	}
 	

@@ -6,6 +6,7 @@ import java.util.function.Function;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.cache.calculation.CacheableCalculation;
+import org.anchoranalysis.feature.cache.calculation.FeatureCalculation;
 import org.anchoranalysis.feature.cache.calculation.ResolvedCalculation;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.input.FeatureInput;
@@ -49,14 +50,14 @@ public abstract class CalculateInputFromDelegateOption<S extends FeatureInput, T
 	 */
 	public static <S extends FeatureInput, T extends FeatureInput, U> double calc(
 		SessionInput<T> input,
-		CacheableCalculation<U,T> delegate,
+		FeatureCalculation<U,T> delegate,
 		Function<ResolvedCalculation<U,T>,CalculateInputFromDelegateOption<S,T,U>> funcCreateFromDelegate,
 		Feature<S> feature,
 		String cacheName,
 		double emptyValue
 	) throws FeatureCalcException {
 
-		CacheableCalculation<Optional<S>,T> ccParamsDerived =
+		FeatureCalculation<Optional<S>,T> ccParamsDerived =
 			funcCreateFromDelegate.apply(
 				input.resolver().search(delegate)
 			);

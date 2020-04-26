@@ -36,7 +36,6 @@ import org.anchoranalysis.anchor.mpp.proposer.PositionProposer;
 import org.anchoranalysis.anchor.mpp.proposer.ProposerContext;
 import org.anchoranalysis.anchor.mpp.pxlmark.PxlMark;
 import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
-import org.anchoranalysis.core.cache.ExecuteException;
 import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.core.random.RandomNumberGenerator;
 import org.anchoranalysis.image.extent.BoundingBox;
@@ -78,58 +77,54 @@ class PositionProposerMemoList implements PositionProposer {
 		
 		byte flags = rm.flags();
 		
-		try {
-			if (listPxlMarkMemo.size()==0) {
+		if (listPxlMarkMemo.size()==0) {
+			return null;
+		}
+		
+		// ASSUMES a single channel
+		
+		int numTries = 20;
+
+		Point3d pnt;
+		
+		int i = 0;
+		while(true) {
+		
+			if (i++==numTries) {
 				return null;
 			}
 			
-			// ASSUMES a single channel
+			// We keep randomly picking a memo from the list 
+			// And randomly taking positions until we find a position that matches
+			int pmmIndex = (int) (context.getRe().nextDouble() * listPxlMarkMemo.size());
+			PxlMarkMemo pmm = listPxlMarkMemo.get(pmmIndex);
+			PxlMark pm = pmm.doOperation();
 			
-			int numTries = 20;
-	
-			Point3d pnt;
+			BoundingBox bbox = pm.getBoundingBox(regionID);
+			pnt = randomPosition(bbox, context.getRe());
 			
-			int i = 0;
-			while(true) {
+			int relX = (int) pnt.getX() - bbox.getCrnrMin().getX();
+			int relY = (int) pnt.getY() - bbox.getCrnrMin().getY();
+			int relZ = (int) pnt.getZ() - bbox.getCrnrMin().getZ();
 			
-				if (i++==numTries) {
-					return null;
-				}
-				
-				// We keep randomly picking a memo from the list 
-				// And randomly taking positions until we find a position that matches
-				int pmmIndex = (int) (context.getRe().nextDouble() * listPxlMarkMemo.size());
-				PxlMarkMemo pmm = listPxlMarkMemo.get(pmmIndex);
-				PxlMark pm = pmm.doOperation();
-				
-				BoundingBox bbox = pm.getBoundingBox(regionID);
-				pnt = randomPosition(bbox, context.getRe());
-				
-				int relX = (int) pnt.getX() - bbox.getCrnrMin().getX();
-				int relY = (int) pnt.getY() - bbox.getCrnrMin().getY();
-				int relZ = (int) pnt.getZ() - bbox.getCrnrMin().getZ();
-				
-				byte membershipExst = pm.getVoxelBox().getPixelsForPlane(relZ).get( bbox.extnt().offset(relX, relY) );
-				
-				// If it's not inside our mark, then we don't consider it
-				if (!rm.isMemberFlag(membershipExst, flags)) {
-					continue;
-				}
-				
-				byte membership = markBlock.evalPntInside(pnt);
-				
-				// If it's inside our block mark, then we don't consider it
-				if (rm.isMemberFlag(membership, flags)) {
-					continue;
-				}
-				
-				break;
+			byte membershipExst = pm.getVoxelBox().getPixelsForPlane(relZ).get( bbox.extnt().offset(relX, relY) );
+			
+			// If it's not inside our mark, then we don't consider it
+			if (!rm.isMemberFlag(membershipExst, flags)) {
+				continue;
 			}
-	
-			return pnt;
-		} catch (ExecuteException e) {
-			context.getErrorNode().add(e);
-			return null;
-		}							
+			
+			byte membership = markBlock.evalPntInside(pnt);
+			
+			// If it's inside our block mark, then we don't consider it
+			if (rm.isMemberFlag(membership, flags)) {
+				continue;
+			}
+			
+			break;
+		}
+
+		return pnt;
+							
 	}
 }
