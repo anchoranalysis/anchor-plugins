@@ -37,9 +37,6 @@ public class AxisEigenvalue extends ObjMaskPointsSpecificEigenvalueBase {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	
-	// START BEAN PROPERTIES
-	// END BEAN PROPERTIES
 
 	@Override
 	public double calc(SessionInput<FeatureInputSingleObj> input) throws FeatureCalcException {
