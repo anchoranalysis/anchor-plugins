@@ -40,9 +40,9 @@ public class MinDistByDim extends FeaturePairMemo {
 	private static final long serialVersionUID = 1L;
 
 	@Override
-	public double calc( SessionInput<FeatureInputPairMemo> paramsCacheable ) {
+	public double calc( SessionInput<FeatureInputPairMemo> input ) {
 		
-		FeatureInputPairMemo params = paramsCacheable.get();
+		FeatureInputPairMemo params = input.get();
 				
 		Point3d cp = new Point3d( params.getObj1().getMark().centerPoint() );
 		cp.sub( params.getObj2().getMark().centerPoint() );

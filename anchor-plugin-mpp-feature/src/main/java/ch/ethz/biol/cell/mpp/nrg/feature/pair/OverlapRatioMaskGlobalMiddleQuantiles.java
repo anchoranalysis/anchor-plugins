@@ -52,19 +52,16 @@ public class OverlapRatioMaskGlobalMiddleQuantiles extends OverlapMaskQuantiles 
 	
 	private RelationBean relationToThreshold = new EqualToBean();
 	
-	public OverlapRatioMaskGlobalMiddleQuantiles() {
-	}
-		
 	@Override
-	public double calc( SessionInput<FeatureInputPairMemo> paramsCacheable ) throws FeatureCalcException {
+	public double calc( SessionInput<FeatureInputPairMemo> input ) throws FeatureCalcException {
 		 
-		FeatureInputPairMemo params = paramsCacheable.get();
+		FeatureInputPairMemo inputSessionless = input.get();
 		
-		double overlap = overlapWithQuantiles(paramsCacheable);
+		double overlap = overlapWithQuantiles(input);
 		
 		return calcOverlapRatioMin(
-			params.getObj1(),
-			params.getObj2(),
+			inputSessionless.getObj1(),
+			inputSessionless.getObj2(),
 			overlap,
 			getRegionID(),
 			false

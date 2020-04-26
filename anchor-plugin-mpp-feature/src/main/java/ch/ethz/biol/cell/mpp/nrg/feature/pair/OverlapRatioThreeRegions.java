@@ -79,33 +79,33 @@ public class OverlapRatioThreeRegions extends FeaturePairMemo {
 	}
 	
 	@Override
-	public double calc( SessionInput<FeatureInputPairMemo> paramsCacheable ) throws FeatureCalcException {
+	public double calc( SessionInput<FeatureInputPairMemo> input ) throws FeatureCalcException {
 		
 		// MIP currently not supported
 		if(mip==true) {
 			throw new FeatureCalcException("mip currently not supported");
 		}
 		
-		FeatureInputPairMemo params = paramsCacheable.get();
+		FeatureInputPairMemo inputSessionless = input.get();
 		
 		return calcOverlapRatioMin(
-			params.getObj1(),
-			params.getObj2(),
-			overlapForRegion(paramsCacheable, regionID1),
-			overlapForRegion(paramsCacheable, regionID2),
-			overlapForRegion(paramsCacheable, regionID3),
+			inputSessionless.getObj1(),
+			inputSessionless.getObj2(),
+			overlapForRegion(input, regionID1),
+			overlapForRegion(input, regionID2),
+			overlapForRegion(input, regionID3),
 			regionID1,
 			regionID2,
 			regionID3
 		);
 	}
 
-	private double overlapForRegion( SessionInput<FeatureInputPairMemo> paramsCacheable, int regionID ) throws FeatureCalcException {
+	private double overlapForRegion( SessionInput<FeatureInputPairMemo> input, int regionID ) throws FeatureCalcException {
 		if (mip) {
 			// If we use this we don't need to find the volume ourselves
-			return paramsCacheable.calc( new OverlapMIPRatioCalculation(regionID) );
+			return input.calc( new OverlapMIPRatioCalculation(regionID) );
 		} else {
-			return paramsCacheable.calc( new OverlapCalculation(regionID) );
+			return input.calc( new OverlapCalculation(regionID) );
 		}
 	}
 	

@@ -51,17 +51,22 @@ public class CoefficientOfVarianceFromAll extends FeatureAllMemo {
 	// END BEAN PROPERTIES
 	
 	@Override
-	public double calc(SessionInput<FeatureInputAllMemo> paramsCacheable)
-			throws FeatureCalcException {
+	public double calc(SessionInput<FeatureInputAllMemo> input)	throws FeatureCalcException {
 		
-		MemoCollection memoMarks = paramsCacheable.get().getPxlPartMemo();
+		MemoCollection memoMarks = input.get().getPxlPartMemo();
 		
 		if (memoMarks.size()==0) {
 			return 0.0;
 		}
 		
+		return calcStatistic(input, memoMarks);
+	}
+	
+	private double calcStatistic( SessionInput<FeatureInputAllMemo> input, MemoCollection memoMarks ) throws FeatureCalcException {
+		
 		double vals[] = new double[memoMarks.size()];
-		double mean = calcForEachItem(paramsCacheable, memoMarks, vals);
+				
+		double mean = calcForEachItem(input, memoMarks, vals);
 		
 		if (mean==0.0) {
 			return Double.POSITIVE_INFINITY;
@@ -71,7 +76,7 @@ public class CoefficientOfVarianceFromAll extends FeatureAllMemo {
 	}
 	
 	/** Calculates the feature on each mark separately, populating vals, and returns the mean */
-	private double calcForEachItem( SessionInput<FeatureInputAllMemo> paramsCacheable, MemoCollection memoMarks, double vals[] ) throws FeatureCalcException {
+	private double calcForEachItem( SessionInput<FeatureInputAllMemo> input, MemoCollection memoMarks, double vals[] ) throws FeatureCalcException {
 		
 		double sum = 0.0;		
 		
@@ -79,7 +84,7 @@ public class CoefficientOfVarianceFromAll extends FeatureAllMemo {
 			
 			final int index = i;
 			
-			double v = paramsCacheable.calcChild(
+			double v = input.calcChild(
 				item,
 				new CalculateDeriveSingleMemoInput(index),
 				"mark"+i
@@ -109,6 +114,4 @@ public class CoefficientOfVarianceFromAll extends FeatureAllMemo {
 	public void setItem(Feature<FeatureInputSingleMemo> item) {
 		this.item = item;
 	}
-
-
 }

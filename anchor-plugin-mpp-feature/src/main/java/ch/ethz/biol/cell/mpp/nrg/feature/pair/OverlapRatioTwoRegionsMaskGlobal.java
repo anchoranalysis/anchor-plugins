@@ -59,15 +59,15 @@ public class OverlapRatioTwoRegionsMaskGlobal extends OverlapMaskBase {
 	}
 	
 	@Override
-	public double calc( SessionInput<FeatureInputPairMemo> paramsCacheable ) throws FeatureCalcException {
+	public double calc( SessionInput<FeatureInputPairMemo> input ) throws FeatureCalcException {
 		
-		FeatureInputPairMemo params = paramsCacheable.get();
+		FeatureInputPairMemo inputSessionless = input.get();
 		
 		return calcOverlapRatioMin(
-			params.getObj1(),
-			params.getObj2(),
-			overlapForRegion(paramsCacheable, regionID1),
-			overlapForRegion(paramsCacheable, regionID2),
+			inputSessionless.getObj1(),
+			inputSessionless.getObj2(),
+			overlapForRegion(input, regionID1),
+			overlapForRegion(input, regionID2),
 			regionID1,
 			regionID2
 		);

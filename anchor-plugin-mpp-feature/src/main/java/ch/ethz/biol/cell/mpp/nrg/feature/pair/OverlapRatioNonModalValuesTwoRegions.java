@@ -52,26 +52,23 @@ public class OverlapRatioNonModalValuesTwoRegions extends FeaturePairMemo {
 	private int regionID2 = GlobalRegionIdentifiers.SUBMARK_INSIDE;
 	// END BEAN PROPERTIES
 	
-	public OverlapRatioNonModalValuesTwoRegions() {
-	}
-	
 	@Override
-	public double calc( SessionInput<FeatureInputPairMemo> paramsCacheable ) throws FeatureCalcException {
+	public double calc( SessionInput<FeatureInputPairMemo> input ) throws FeatureCalcException {
 		
-		FeatureInputPairMemo params = paramsCacheable.get();
+		FeatureInputPairMemo inputSessionless = input.get();
 		
 		return calcOverlapRatioMin(
-			params.getObj1(),
-			params.getObj2(),
-			overlapFor(paramsCacheable, regionID1),
-			overlapFor(paramsCacheable, regionID2),
+			inputSessionless.getObj1(),
+			inputSessionless.getObj2(),
+			overlapFor(input, regionID1),
+			overlapFor(input, regionID2),
 			regionID1,
 			regionID2
 		);
 	}
 
-	private double overlapFor( SessionInput<FeatureInputPairMemo> paramsCacheable, int regionID ) throws FeatureCalcException {
-		return paramsCacheable.calc(
+	private double overlapFor( SessionInput<FeatureInputPairMemo> input, int regionID ) throws FeatureCalcException {
+		return input.calc(
 			new OverlapCalculation(regionID)	
 		);
 	}
