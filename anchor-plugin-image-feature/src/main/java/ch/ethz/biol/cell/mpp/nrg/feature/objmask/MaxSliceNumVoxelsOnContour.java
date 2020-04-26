@@ -76,10 +76,10 @@ public class MaxSliceNumVoxelsOnContour extends FeatureObjMask {
 	}
 	
 	@Override
-	public double calc(SessionInput<FeatureInputSingleObj> paramsCacheable) throws FeatureCalcException {
+	public double calc(SessionInput<FeatureInputSingleObj> input) throws FeatureCalcException {
 				
 		try {
-			FeatureInputSingleObj params = paramsCacheable.get();
+			FeatureInputSingleObj params = input.get();
 			
 			int z = sliceWithMaxNumVoxels( params.getObjMask() );
 			

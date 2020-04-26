@@ -27,53 +27,24 @@ package ch.ethz.biol.cell.mpp.nrg.feature.objmask;
  */
 
 
-import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.image.feature.bean.objmask.FeatureObjMask;
-import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
-import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.math.moment.MomentsFromPointsCalculator;
-import org.anchoranalysis.points.moment.CalculateObjMaskPointsSecondMomentMatrix;
 
-// Calculates the eccentricity ala
-//  https://en.wikipedia.org/wiki/Image_moment
-public class AxisEccentricity extends FeatureObjMask {
-
+/**
+ * Calculates the eccentricity ala <a href="https://en.wikipedia.org/wiki/Image_moment">Image moment on Wikipedia</a>
+ * 
+ * @author Owen Feehan
+ *
+ */
+public class AxisEccentricity extends AxisMomentsBase {
+	
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-
-	// START BEAN PROPERTIES
-	@BeanField
-	private boolean suppressZCovariance = false;		// Supresses covariance in the z-direction.
-	// END BEAN PROPERTIES
-	
-//	private static int cnt = 0;
-//	TempBoundOutputManager tempOutput = new TempBoundOutputManager();
 	
 	@Override
-	public double calc(SessionInput<FeatureInputSingleObj> paramsCacheable) throws FeatureCalcException {
-		
-		FeatureInputSingleObj params = paramsCacheable.get();
-		
-		// Max intensity projection of the input mask
-		ObjMask om = params.getObjMask();
-
-		// If we have these few pixels, assume we are perfectly ellipsoid
-		if (om.numPixelsLessThan(12)) {
-			return 1.0;
-		}
-		
-		MomentsFromPointsCalculator moments = paramsCacheable.calc(
-			new CalculateObjMaskPointsSecondMomentMatrix(suppressZCovariance)	
-		);
-		
-		moments = moments.duplicate();
-		moments.removeClosestToUnitZ();
-		// Disconsider the z moment
-
+	protected double calcFromMoments( MomentsFromPointsCalculator moments ) throws FeatureCalcException {
 		double moments0 = moments.get(0).getEigenvalue();
 		double moments1 = moments.get(1).getEigenvalue();
 		
@@ -93,20 +64,4 @@ public class AxisEccentricity extends FeatureObjMask {
 	public static double calcEccentricity( double eigenvalSmaller, double eigenvalLarger ) {
 		return Math.sqrt( 1.0 - eigenvalSmaller/eigenvalLarger);
 	}
-
-	public boolean isSuppressZCovariance() {
-		return suppressZCovariance;
-	}
-
-	public void setSuppressZCovariance(boolean suppressZCovariance) {
-		this.suppressZCovariance = suppressZCovariance;
-	}
-
-
-
-
-
-
-
-
 }
