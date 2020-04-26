@@ -28,10 +28,8 @@ package org.anchoranalysis.plugin.image.feature.bean.obj.pair.touching;
 
 
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.extent.BoundingBox;
-import org.anchoranalysis.image.feature.objmask.pair.FeatureInputPairObjs;
 import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.image.voxel.kernel.ApplyKernel;
 
@@ -59,35 +57,17 @@ public class NumTouchingVoxelFaces extends TouchingVoxels {
 	private static final long serialVersionUID = 1L;
 	
 	@Override
-	public double calc(SessionInput<FeatureInputPairObjs> paramsCacheable)
+	protected double calcWithIntersection(ObjMask om1, ObjMask om2, BoundingBox bboxIntersect)
 			throws FeatureCalcException {
-
-		FeatureInputPairObjs params = paramsCacheable.get();
+		
+		ObjMask om2Rel = RelativeUtilities.createRelMask( om2, om1 );
 		
 		try {
-			ObjMask om1 = params.getObjMask1();
-			ObjMask om2 = params.getObjMask2();
-			
-			BoundingBox bboxIntersect = bboxIntersectDilated(paramsCacheable);
-			
-			if (bboxIntersect==null) {
-				// No intersection so no touching voxel faces
-				return 0;
-			}
-			
-			BoundingBox bboxIntersectRel = RelativeUtilities.createRelBBox(
-				bboxIntersect,
-				om1
-			);
-			
-			ObjMask om2Rel = RelativeUtilities.createRelMask( om1, om2 );
-			
 			return ApplyKernel.applyForCount(
 				createCountKernelMask(om1, om2Rel),
 				om1.getVoxelBox(),
-				bboxIntersectRel
+				RelativeUtilities.createRelBBox(bboxIntersect, om1)
 			);
-			
 		} catch (OperationFailedException e) {
 			throw new FeatureCalcException(e);
 		}

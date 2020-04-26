@@ -27,12 +27,9 @@ package org.anchoranalysis.plugin.image.feature.bean.obj.pair.touching;
  */
 
 
-import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.extent.BoundingBox;
-import org.anchoranalysis.image.feature.objmask.pair.FeatureInputPairObjs;
 import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.image.voxel.kernel.ApplyKernel;
 import org.anchoranalysis.image.voxel.kernel.count.CountKernel;
@@ -53,46 +50,26 @@ public class HasTouchingVoxels extends TouchingVoxels {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-
-	// START BEAN PROPERTIES
-	@BeanField
-	private boolean use3D = true;
-	// END BEAN PROPERTIES
 	
 	@Override
-	public double calc(SessionInput<FeatureInputPairObjs> paramsCacheable)
+	protected double calcWithIntersection(ObjMask om1, ObjMask om2, BoundingBox bboxIntersect)
 			throws FeatureCalcException {
+		return convertToInt(
+			calculateHasTouchingRelative(
+				om1,
+				RelativeUtilities.createRelMask( om2, om1 ),
+				RelativeUtilities.createRelBBox(bboxIntersect, om1)
+			)
+		);
+	}
 
-		FeatureInputPairObjs params = paramsCacheable.get();
-		
+	private boolean calculateHasTouchingRelative(ObjMask om1, ObjMask om2Rel, BoundingBox bboxIntersectRel) throws FeatureCalcException {
+		CountKernel kernelMatch = createCountKernelMask(om1, om2Rel);
 		try {
-			ObjMask om1 = params.getObjMask1();
-			ObjMask om2 = params.getObjMask2();
-			
-			// This is relative to Om1
-			BoundingBox bboxIntersect = bboxIntersectDilated(paramsCacheable);
-			
-			if (bboxIntersect==null) {
-				// No intersection, therefore no touching.
-				return 0;
-			}
-						
-			BoundingBox bboxIntersectRel = RelativeUtilities.createRelBBox(bboxIntersect, om1);
-			
-			ObjMask om2Rel = RelativeUtilities.createRelMask( om1, om2 );
-
-			return convertToInt(
-				calculateHasTouching(om1, om2Rel, bboxIntersectRel)
-			);
-			
+			return ApplyKernel.applyUntilPositive(kernelMatch, om1.getVoxelBox(), bboxIntersectRel );
 		} catch (OperationFailedException e) {
 			throw new FeatureCalcException(e);
 		}
-	}
-
-	private boolean calculateHasTouching(ObjMask om1, ObjMask om2Rel, BoundingBox bboxIntersectRel) throws OperationFailedException {
-		CountKernel kernelMatch = createCountKernelMask(om1, om2Rel);
-		return ApplyKernel.applyUntilPositive(kernelMatch, om1.getVoxelBox(), bboxIntersectRel );
 	}
 
 	private static int convertToInt( boolean b) {

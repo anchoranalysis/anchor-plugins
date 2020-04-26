@@ -57,16 +57,15 @@ public class CostOverlapWithinMidpointDistance extends FeatureObjMaskPair {
 	// END BEAN PROPERTIES
 	
 	@Override
-	public double calc(SessionInput<FeatureInputPairObjs> paramsCacheable)
-			throws FeatureCalcException {
+	public double calc(SessionInput<FeatureInputPairObjs> input) throws FeatureCalcException {
 
-		FeatureInputPairObjs params = paramsCacheable.get();
+		FeatureInputPairObjs inputSessionless = input.get();
 		
-		if (isDistMoreThanMax(params)) {
+		if (isDistMoreThanMax(inputSessionless)) {
 			return 1.0;
 		}
 				
-		double overlapRatio = OverlapRatioUtilities.overlapRatioToMaxVolume(params);
+		double overlapRatio = OverlapRatioUtilities.overlapRatioToMaxVolume(inputSessionless);
 		
 		if (overlapRatio>minOverlap) {
 			return 1.0 - overlapRatio;

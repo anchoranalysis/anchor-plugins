@@ -28,10 +28,8 @@ package org.anchoranalysis.plugin.image.feature.bean.obj.pair.touching;
 
 
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.extent.BoundingBox;
-import org.anchoranalysis.image.feature.objmask.pair.FeatureInputPairObjs;
 import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.image.voxel.kernel.ApplyKernel;
 import org.anchoranalysis.image.voxel.kernel.count.CountKernelNghbMask;
@@ -54,38 +52,21 @@ public class NumTouchingVoxels extends TouchingVoxels {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	
-	@Override
-	public double calc(SessionInput<FeatureInputPairObjs> paramsCacheable)
-			throws FeatureCalcException {
 
-		FeatureInputPairObjs params = paramsCacheable.get();
-		
+	@Override
+	protected double calcWithIntersection(ObjMask om1, ObjMask om2, BoundingBox bboxIntersect)
+			throws FeatureCalcException {
+		// As this means of measuring the touching pixels can differ slightly depending on om1->om2 or om2->om1, it's done in both directions.
 		try {
-			ObjMask om1 = params.getObjMask1();
-			ObjMask om2 = params.getObjMask2();
-			
-			// This is relative to Om1
-			BoundingBox bboxIntersect = bboxIntersectDilated(paramsCacheable);
-			
-			if (bboxIntersect==null) {
-				// No intersection so no touching voxels
-				return 0;
-			}
-		
-			return numTouchingMean(om1, om2, bboxIntersect);
+			int numTouching_1to2 = numTouchingFrom(om1, om2, bboxIntersect);
+			int numTouching_2to1 = numTouchingFrom(om2, om1, bboxIntersect);
+			return Math.max(numTouching_1to2, numTouching_2to1);
 			
 		} catch (OperationFailedException e) {
 			throw new FeatureCalcException(e);
 		}
 	}
 	
-	/** As this means of measuring the touching pixels can differ slightly depending on om1->om2 or om2->om1 */
-	private int numTouchingMean( ObjMask om1, ObjMask om2, BoundingBox bboxIntersect ) throws OperationFailedException {
-		int numTouching_1to2 = numTouchingFrom(om1, om2, bboxIntersect);
-		int numTouching_2to1 = numTouchingFrom(om2, om1, bboxIntersect);
-		return Math.max(numTouching_1to2, numTouching_2to1);
-	}
 
 	private int numTouchingFrom( ObjMask omSrc, ObjMask omDest, BoundingBox bboxIntersect ) throws OperationFailedException {
 		BoundingBox bboxIntersectRel = RelativeUtilities.createRelBBox(bboxIntersect, omSrc);
@@ -94,7 +75,7 @@ public class NumTouchingVoxels extends TouchingVoxels {
 		
 	private int calcNghbTouchingPixels( ObjMask omSrc, ObjMask omDest, BoundingBox bboxIntersectRel ) throws OperationFailedException {
 		
-		ObjMask omOtherDest = RelativeUtilities.createRelMask( omSrc, omDest );
+		ObjMask omOtherDest = RelativeUtilities.createRelMask( omDest, omSrc );
 		
 		CountKernelNghbMask kernelMatch = new CountKernelNghbMask(
 			isUse3D(),
@@ -104,4 +85,6 @@ public class NumTouchingVoxels extends TouchingVoxels {
 		);
 		return ApplyKernel.applyForCount(kernelMatch, omSrc.getVoxelBox(), bboxIntersectRel );		
 	}
+
+
 }

@@ -36,15 +36,34 @@ import org.anchoranalysis.image.objmask.ObjMask;
  *
  */
 class RelativeUtilities {
+	
+	private RelativeUtilities() {}
 
-	public static BoundingBox createRelBBox( BoundingBox bboxIntersect, ObjMask om1 ) {
-		BoundingBox bboxIntersectRel = new BoundingBox( bboxIntersect.relPosTo(om1.getBoundingBox()), bboxIntersect.extnt() );
-		bboxIntersectRel.clipTo( om1.getBoundingBox().extnt() );
+	/**
+	 * Changes (immutably) the coordinates of a bounding-box to make them relative to another object
+	 * 
+	 * @param box a bounding-box
+	 * @param omRelativeBase object to make the bounding-box relative to
+	 * @return a new bounding box with relative co-ordinates
+	 */
+	public static BoundingBox createRelBBox( BoundingBox box, ObjMask omRelativeBase ) {
+		BoundingBox bboxIntersectRel = new BoundingBox(
+			box.relPosTo(omRelativeBase.getBoundingBox()),
+			box.extnt()
+		);
+		bboxIntersectRel.clipTo( omRelativeBase.getBoundingBox().extnt() );
 		return bboxIntersectRel;
 	}
 	
-	public static ObjMask createRelMask( ObjMask om1, ObjMask om2 ) {
-		ObjMask om2Rel = om2.relMaskTo(om1.getBoundingBox());
+	/**
+	 * Changes the coordinates of an object to make them relative to another object
+	 * 
+	 * @param om the object 
+	 * @param omRelativeBase the other object to use as a base to make om relative to
+	 * @return a new object with new bounding-box (but with identical memory used for the mask)
+	 */
+	public static ObjMask createRelMask( ObjMask om, ObjMask omRelativeBase ) {
+		ObjMask om2Rel = om.relMaskTo(omRelativeBase.getBoundingBox());
 		om2Rel.getBoundingBox().getCrnrMin().scale(-1);
 		return om2Rel;
 	}

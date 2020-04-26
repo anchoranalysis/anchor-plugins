@@ -54,9 +54,30 @@ public abstract class TouchingVoxels extends FeatureObjMaskPair {
 	@BeanField
 	private boolean use3D = true;
 	// END BEAN PROPERTIES
+	
+	@Override
+	public double calc(SessionInput<FeatureInputPairObjs> input) throws FeatureCalcException {
+
+		FeatureInputPairObjs inputSessionless = input.get();
 		
+		BoundingBox bboxIntersect = bboxIntersectDilated(input);
+		
+		if (bboxIntersect==null) {
+			// No intersection, so therefore return 0
+			return 0;
+		}
+		
+		return calcWithIntersection(
+			inputSessionless.getObjMask1(),
+			inputSessionless.getObjMask2(),
+			bboxIntersect
+		);
+	}
+	
+	protected abstract double calcWithIntersection(ObjMask om1, ObjMask om2, BoundingBox bboxIntersect) throws FeatureCalcException;
+	
 	/** The intersection of the bounding box of one mask with the (dilated by 1 bounding-box) of the other */
-	protected BoundingBox bboxIntersectDilated(SessionInput<FeatureInputPairObjs> input) throws FeatureCalcException {
+	private BoundingBox bboxIntersectDilated(SessionInput<FeatureInputPairObjs> input) throws FeatureCalcException {
 		return input.calc(
 			new CalculateIntersectionOfDilatedBoundingBox(use3D)	
 		);

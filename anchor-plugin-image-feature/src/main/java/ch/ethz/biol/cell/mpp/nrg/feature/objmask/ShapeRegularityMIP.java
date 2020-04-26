@@ -41,16 +41,11 @@ public class ShapeRegularityMIP extends FeatureObjMask {
 	private static final long serialVersionUID = 1L;
 
 	@Override
-	public double calc(SessionInput<FeatureInputSingleObj> paramsCacheable) throws FeatureCalcException {
+	public double calc(SessionInput<FeatureInputSingleObj> input) throws FeatureCalcException {
 		
-		FeatureInputSingleObj params = paramsCacheable.get();
+		// Maximum-intensity projection of the mask
+		ObjMask om = input.get().getObjMask().duplicate().flattenZ();
 		
-		ObjMask om = params.getObjMask().duplicate().flattenZ();
-		
-		double area = om.numPixels();
-		
-		int perim = NumBorderVoxels.numBorderPixels(om, false, false, false);
-
-		return ((2 * Math.PI) * Math.sqrt(area/Math.PI)) / perim;
+		return ShapeRegularityCalculator.calcShapeRegularity(om);
 	}
 }

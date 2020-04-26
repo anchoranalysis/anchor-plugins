@@ -64,9 +64,9 @@ public abstract class ObjMaskFeatureFromStack extends FeatureStack {
 	private ObjMaskCollection objsCollection;
 	
 	@Override
-	public double calc(SessionInput<FeatureInputStack> paramsCacheable) throws FeatureCalcException {
+	public double calc(SessionInput<FeatureInputStack> input) throws FeatureCalcException {
 		
-		Optional<ImageInitParams> sharedObjs = paramsCacheable.get().getSharedObjs();
+		Optional<ImageInitParams> sharedObjs = input.get().getSharedObjs();
 		
 		if (!sharedObjs.isPresent()) {
 			throw new FeatureCalcException("No ImageInitParams are associated with the FeatureStackParams but they are required");
@@ -75,22 +75,10 @@ public abstract class ObjMaskFeatureFromStack extends FeatureStack {
 		if (objsCollection==null) {
 			objsCollection = createObjs(sharedObjs.get());
 		}
-
-				
-		DoubleArrayList featureVals = new DoubleArrayList();
-		
-		// Calculate a feature on each obj mask
-		for( int i=0; i<objsCollection.size(); i++) {
-
-			double val = paramsCacheable.calcChild(
-				item,
-				new CalculateObjMaskParamsFromStack(objsCollection, i),
-				"objs_from_stack" + i
-			);
-			featureVals.add(val);
-		}
-		
-		return deriveStatistic(featureVals);
+	
+		return deriveStatistic(
+			featureValsForObjs(item, input, objsCollection)
+		);
 	}
 	
 	protected abstract double deriveStatistic( DoubleArrayList featureVals );
@@ -103,6 +91,26 @@ public abstract class ObjMaskFeatureFromStack extends FeatureStack {
 		} catch (CreateException | InitException e) {
 			throw new FeatureCalcException(e);
 		}
+	}
+
+	private static DoubleArrayList featureValsForObjs(
+		Feature<FeatureInputSingleObj> feature,
+		SessionInput<FeatureInputStack> input,
+		ObjMaskCollection objsCollection
+	) throws FeatureCalcException {
+		DoubleArrayList featureVals = new DoubleArrayList();
+		
+		// Calculate a feature on each obj mask
+		for( int i=0; i<objsCollection.size(); i++) {
+
+			double val = input.calcChild(
+				feature,
+				new CalculateObjMaskParamsFromStack(objsCollection, i),
+				"objs_from_stack" + i
+			);
+			featureVals.add(val);
+		}
+		return featureVals;
 	}
 	
 	public Feature<FeatureInputSingleObj> getItem() {
