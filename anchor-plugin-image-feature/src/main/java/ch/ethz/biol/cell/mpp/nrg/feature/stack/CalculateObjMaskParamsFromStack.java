@@ -1,14 +1,13 @@
 package ch.ethz.biol.cell.mpp.nrg.feature.stack;
 
-import org.anchoranalysis.core.cache.ExecuteException;
-import org.anchoranalysis.feature.cache.calculation.CacheableCalculation;
+import org.anchoranalysis.feature.cache.calculation.FeatureCalculation;
 import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
 import org.anchoranalysis.image.feature.stack.FeatureInputStack;
 import org.anchoranalysis.image.objmask.ObjMaskCollection;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
-class CalculateObjMaskParamsFromStack extends CacheableCalculation<FeatureInputSingleObj, FeatureInputStack> {
+class CalculateObjMaskParamsFromStack extends FeatureCalculation<FeatureInputSingleObj, FeatureInputStack> {
 
 	private ObjMaskCollection objs;
 	private int index;
@@ -27,7 +26,7 @@ class CalculateObjMaskParamsFromStack extends CacheableCalculation<FeatureInputS
 	}
 
 	@Override
-	protected FeatureInputSingleObj execute(FeatureInputStack input) throws ExecuteException {
+	protected FeatureInputSingleObj execute(FeatureInputStack input) {
 		return new FeatureInputSingleObj(
 			objs.get(index),
 			input.getNrgStackOptional()

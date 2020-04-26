@@ -26,9 +26,8 @@ package ch.ethz.biol.cell.mpp.nrg.feature.stack.cachedcalculation;
  * #L%
  */
 
-import org.anchoranalysis.core.cache.ExecuteException;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.feature.cache.calculation.CacheableCalculation;
+import org.anchoranalysis.feature.cache.calculation.FeatureCalculation;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.nrg.NRGStack;
 import org.anchoranalysis.image.binary.BinaryChnl;
@@ -41,7 +40,7 @@ import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
 /** Calculated a histogram for a specific region on a channel, as identified by a mask in another channel */
-public class CalculateHistogramMasked extends CacheableCalculation<Histogram, FeatureInputStack> {
+public class CalculateHistogramMasked extends FeatureCalculation<Histogram, FeatureInputStack> {
 
 	private int nrgIndexSignal;
 	private int nrgIndexMask;
@@ -59,7 +58,7 @@ public class CalculateHistogramMasked extends CacheableCalculation<Histogram, Fe
 	}
 
 	@Override
-	protected Histogram execute( FeatureInputStack input ) throws ExecuteException {
+	protected Histogram execute( FeatureInputStack input ) throws FeatureCalcException {
 
 		try {
 			NRGStack nrgStack = input.getNrgStackRequired().getNrgStack();
@@ -70,8 +69,8 @@ public class CalculateHistogramMasked extends CacheableCalculation<Histogram, Fe
 				extractMask(nrgStack)
 			);
 			
-		} catch (CreateException | FeatureCalcException e) {
-			throw new ExecuteException(e);
+		} catch (CreateException e) {
+			throw new FeatureCalcException(e);
 		}
 	}
 	

@@ -2,8 +2,7 @@ package ch.ethz.biol.cell.mpp.nrg.feature.ind;
 
 import org.anchoranalysis.anchor.mpp.bean.regionmap.RegionMap;
 import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputSingleMemo;
-import org.anchoranalysis.core.cache.ExecuteException;
-import org.anchoranalysis.feature.cache.calculation.CacheableCalculation;
+import org.anchoranalysis.feature.cache.calculation.FeatureCalculation;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
@@ -12,7 +11,7 @@ import org.anchoranalysis.image.objmask.properties.ObjMaskWithProperties;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
-class CalculateSingleObjFromMemo extends CacheableCalculation<FeatureInputSingleObj, FeatureInputSingleMemo> {
+class CalculateSingleObjFromMemo extends FeatureCalculation<FeatureInputSingleObj, FeatureInputSingleMemo> {
 
 	private RegionMap regionMap;
 	private int index;
@@ -24,15 +23,11 @@ class CalculateSingleObjFromMemo extends CacheableCalculation<FeatureInputSingle
 	}
 
 	@Override
-	protected FeatureInputSingleObj execute(FeatureInputSingleMemo input) throws ExecuteException {
-		try {
-			return new FeatureInputSingleObj(
-				calcMask(input),
-				input.getNrgStackOptional()
-			);
-		} catch (FeatureCalcException e) {
-			throw new ExecuteException(e);
-		}
+	protected FeatureInputSingleObj execute(FeatureInputSingleMemo input) throws FeatureCalcException {
+		return new FeatureInputSingleObj(
+			calcMask(input),
+			input.getNrgStackOptional()
+		);
 	}
 	
 	private ObjMask calcMask(FeatureInputSingleMemo params) throws FeatureCalcException {

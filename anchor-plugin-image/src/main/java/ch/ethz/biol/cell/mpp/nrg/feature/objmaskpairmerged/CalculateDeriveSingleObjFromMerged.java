@@ -2,15 +2,14 @@ package ch.ethz.biol.cell.mpp.nrg.feature.objmaskpairmerged;
 
 import java.util.function.Function;
 
-import org.anchoranalysis.core.cache.ExecuteException;
-import org.anchoranalysis.feature.cache.calculation.CacheableCalculation;
+import org.anchoranalysis.feature.cache.calculation.FeatureCalculation;
 import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
 import org.anchoranalysis.image.feature.objmask.pair.merged.FeatureInputPairObjsMerged;
 import org.anchoranalysis.image.objmask.ObjMask;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
-class CalculateDeriveSingleObjFromMerged extends CacheableCalculation<FeatureInputSingleObj, FeatureInputPairObjsMerged> {
+class CalculateDeriveSingleObjFromMerged extends FeatureCalculation<FeatureInputSingleObj, FeatureInputPairObjsMerged> {
 
 	private Function<FeatureInputPairObjsMerged, ObjMask> extractObjFunc;
 	private String uniqueIDForFunction;
@@ -32,7 +31,7 @@ class CalculateDeriveSingleObjFromMerged extends CacheableCalculation<FeatureInp
 	}
 
 	@Override
-	protected FeatureInputSingleObj execute(FeatureInputPairObjsMerged input) throws ExecuteException {
+	protected FeatureInputSingleObj execute(FeatureInputPairObjsMerged input) {
 		
 		ObjMask omSelected = extractObjFunc.apply(input);
 		

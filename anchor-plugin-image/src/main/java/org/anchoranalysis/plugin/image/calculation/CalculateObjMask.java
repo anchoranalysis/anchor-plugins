@@ -27,8 +27,7 @@ package org.anchoranalysis.plugin.image.calculation;
  */
 
 
-import org.anchoranalysis.core.cache.ExecuteException;
-import org.anchoranalysis.feature.cache.calculation.CacheableCalculation;
+import org.anchoranalysis.feature.cache.calculation.FeatureCalculation;
 import org.anchoranalysis.feature.cache.calculation.ResolvedCalculationMap;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
@@ -36,7 +35,7 @@ import org.anchoranalysis.image.objmask.ObjMask;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
-public abstract class CalculateObjMask extends CacheableCalculation<ObjMask,FeatureInputSingleObj> {
+public abstract class CalculateObjMask extends FeatureCalculation<ObjMask,FeatureInputSingleObj> {
 
 	private ResolvedCalculationMap<ObjMask,FeatureInputSingleObj,Integer> map;
 	private int iterations;
@@ -56,24 +55,13 @@ public abstract class CalculateObjMask extends CacheableCalculation<ObjMask,Feat
 	}
 
 	@Override
-	protected ObjMask execute( FeatureInputSingleObj params ) throws ExecuteException {
+	protected ObjMask execute( FeatureInputSingleObj params ) throws FeatureCalcException {
 		
 		if (iterations==0) {
 			return params.getObjMask();
 		}
 		
-		try {
-			ObjMask om = map.getOrCalculate(params, iterations);
-		
-			// DEBUG
-			if (this instanceof CalculateDilation) {
-				assert( om.getBoundingBox().contains( params.getObjMask().getBoundingBox() ));
-			}
-			
-			return om;
-		} catch (FeatureCalcException e) {
-			throw new ExecuteException(e);
-		}
+		return map.getOrCalculate(params, iterations);
 	}
 	
 	

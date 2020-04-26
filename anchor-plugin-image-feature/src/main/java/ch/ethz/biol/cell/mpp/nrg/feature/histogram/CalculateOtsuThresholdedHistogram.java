@@ -27,11 +27,11 @@ package ch.ethz.biol.cell.mpp.nrg.feature.histogram;
  */
 
 import org.anchoranalysis.bean.init.params.NullInitParams;
-import org.anchoranalysis.core.cache.ExecuteException;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.log.LogErrorReporter;
-import org.anchoranalysis.feature.cache.calculation.CacheableCalculation;
+import org.anchoranalysis.feature.cache.calculation.FeatureCalculation;
+import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.bean.threshold.CalculateLevel;
 import org.anchoranalysis.image.feature.histogram.FeatureInputHistogram;
 import org.anchoranalysis.image.histogram.Histogram;
@@ -39,7 +39,7 @@ import org.anchoranalysis.plugin.image.bean.threshold.HistogramThresholder;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
-class CalculateOtsuThresholdedHistogram extends CacheableCalculation<Histogram, FeatureInputHistogram> {
+class CalculateOtsuThresholdedHistogram extends FeatureCalculation<Histogram, FeatureInputHistogram> {
 
 	private CalculateLevel calculateLevel;
 	
@@ -52,7 +52,7 @@ class CalculateOtsuThresholdedHistogram extends CacheableCalculation<Histogram, 
 	}
 
 	@Override
-	protected Histogram execute(FeatureInputHistogram params) throws ExecuteException {
+	protected Histogram execute(FeatureInputHistogram params) throws FeatureCalcException {
 		try {
 			if (!calculateLevel.isHasBeenInit()) {
 				calculateLevel.init( NullInitParams.instance(), logger);
@@ -62,7 +62,7 @@ class CalculateOtsuThresholdedHistogram extends CacheableCalculation<Histogram, 
 				calculateLevel
 			) ;
 		} catch (OperationFailedException | InitException e) {
-			throw new ExecuteException(e);
+			throw new FeatureCalcException(e);
 		}
 	}
 

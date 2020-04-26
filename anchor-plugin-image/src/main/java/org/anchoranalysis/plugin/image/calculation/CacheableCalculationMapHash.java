@@ -30,7 +30,6 @@ package org.anchoranalysis.plugin.image.calculation;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.anchoranalysis.core.cache.ExecuteException;
 import org.anchoranalysis.core.index.GetOperationFailedException;
 import org.anchoranalysis.feature.cache.calculation.CacheableCalculationMap;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
@@ -41,8 +40,14 @@ import org.anchoranalysis.feature.input.FeatureInput;
  * 
  * @author Owen Feehan
  *
+ * @param <E> an exception thrown if something goes wrong during the calculation
  */
-public abstract class CacheableCalculationMapHash<S,T extends FeatureInput,U> extends CacheableCalculationMap<S,T,U> {
+public abstract class CacheableCalculationMapHash<
+	S,
+	T extends FeatureInput,
+	U,
+	E extends Throwable
+> extends CacheableCalculationMap<S,T,U,E> {
 
 	/**
 	 * Caches our results for different Keys
@@ -67,7 +72,7 @@ public abstract class CacheableCalculationMapHash<S,T extends FeatureInput,U> ex
 	 * @throws ExecuteException if the calculation cannot finish, for whatever reason
 	 */
 	@Override
-	public S getOrCalculate( T input, U key ) throws FeatureCalcException {
+	public S getOrCalculate( T input, U key ) throws E {
 		
 		S obj = cache.get(key);
 		if (obj==null) {
@@ -91,19 +96,6 @@ public abstract class CacheableCalculationMapHash<S,T extends FeatureInput,U> ex
 
 	}
 	
-	@SuppressWarnings("unchecked")
-	@Override
-	public void assignResult( Object savedResult) {
-		
-		invalidate();
-		
-		CacheableCalculationMapHash<S,T,U> savedResultCached = (CacheableCalculationMapHash<S,T,U>) savedResult;
-		for( U key : savedResultCached.cache.keySet() ) {
-			S val = savedResultCached.cache.get(key);
-			cache.put( key, val );
-		}
-	}
-	
 	/**
 	 *  Gets an existing result for the current params from the cache.
 	 *  
@@ -112,7 +104,7 @@ public abstract class CacheableCalculationMapHash<S,T extends FeatureInput,U> ex
 	 * @throws FeatureCalcException 
 	 * @throws GetOperationFailedException 
 	 */
-	protected S getOrNull( U key ) throws FeatureCalcException {
+	protected S getOrNull( U key ) throws E {
 		return cache.get(key);
 	}
 	
@@ -124,6 +116,6 @@ public abstract class CacheableCalculationMapHash<S,T extends FeatureInput,U> ex
 		cache.put(index, item);
 	}
 
-	protected abstract S execute( T input, U key ) throws FeatureCalcException;
+	protected abstract S execute( T input, U key ) throws E;
 }
 

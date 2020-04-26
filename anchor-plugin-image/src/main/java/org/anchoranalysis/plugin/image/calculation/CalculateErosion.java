@@ -1,7 +1,7 @@
 package org.anchoranalysis.plugin.image.calculation;
 
-import org.anchoranalysis.feature.cache.calculation.CacheableCalculation;
 import org.anchoranalysis.feature.cache.calculation.CalculationResolver;
+import org.anchoranalysis.feature.cache.calculation.FeatureCalculation;
 import org.anchoranalysis.feature.cache.calculation.ResolvedCalculation;
 import org.anchoranalysis.feature.cache.calculation.ResolvedCalculationMap;
 import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
@@ -21,7 +21,7 @@ public class CalculateErosion extends CalculateObjMask {
 		super(src);
 	}
 	
-	public static CacheableCalculation<ObjMask,FeatureInputSingleObj> create(
+	public static FeatureCalculation<ObjMask,FeatureInputSingleObj> create(
 		CalculationResolver<FeatureInputSingleObj> cache,
 		int iterations,
 		boolean do3D

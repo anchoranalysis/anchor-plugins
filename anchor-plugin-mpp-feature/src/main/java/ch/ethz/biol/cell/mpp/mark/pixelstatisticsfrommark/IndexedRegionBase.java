@@ -31,7 +31,6 @@ import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.anchor.mpp.pxlmark.PxlMark;
 import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.cache.ExecuteException;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.ImageDim;
@@ -65,14 +64,7 @@ public abstract class IndexedRegionBase extends PixelStatisticsFromMark {
 	
 	@Override
 	public VoxelStatistics createStatisticsFor(PxlMarkMemo pmm, ImageDim dim) throws CreateException {
-		
-		PxlMark pm;
-		try {
-			pm = pmm.doOperation();
-		} catch (ExecuteException e) {
-			throw new CreateException(e);
-		}
-		
+		PxlMark pm = pmm.doOperation();
 		return createStatisticsFor(pm, pmm.getMark(), dim);
 	}
 	

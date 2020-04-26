@@ -35,7 +35,7 @@ import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputSingleMemo;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.cache.SessionInput;
-import org.anchoranalysis.feature.cache.calculation.CacheableCalculation;
+import org.anchoranalysis.feature.cache.calculation.FeatureCalculation;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 
 // Calculates each feature individually, and combines them using the ratios between itemProportionate
@@ -55,10 +55,10 @@ public class FeatureAsIndividualProportionate extends NRGElemPairWithFeature {
 	/** Calculates values/weights for one of the objects */
 	private class CalcHelper {
 		
-		private CacheableCalculation<FeatureInputSingleMemo,FeatureInputPairMemo> ccExtract;
+		private FeatureCalculation<FeatureInputSingleMemo,FeatureInputPairMemo> ccExtract;
 		private String childCacheName;
 				
-		public CalcHelper(CacheableCalculation<FeatureInputSingleMemo, FeatureInputPairMemo> ccExtract,
+		public CalcHelper(FeatureCalculation<FeatureInputSingleMemo, FeatureInputPairMemo> ccExtract,
 				String childCacheName) {
 			super();
 			this.ccExtract = ccExtract;

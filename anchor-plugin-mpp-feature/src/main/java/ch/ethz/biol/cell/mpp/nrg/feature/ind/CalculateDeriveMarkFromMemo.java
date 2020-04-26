@@ -2,13 +2,12 @@ package ch.ethz.biol.cell.mpp.nrg.feature.ind;
 
 import org.anchoranalysis.anchor.mpp.feature.bean.mark.FeatureInputMark;
 import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputSingleMemo;
-import org.anchoranalysis.core.cache.ExecuteException;
-import org.anchoranalysis.feature.cache.calculation.CacheableCalculation;
+import org.anchoranalysis.feature.cache.calculation.FeatureCalculation;
 
-class CalculateDeriveMarkFromMemo extends CacheableCalculation<FeatureInputMark, FeatureInputSingleMemo> {
+class CalculateDeriveMarkFromMemo extends FeatureCalculation<FeatureInputMark, FeatureInputSingleMemo> {
 
 	@Override
-	protected FeatureInputMark execute(FeatureInputSingleMemo input) throws ExecuteException {
+	protected FeatureInputMark execute(FeatureInputSingleMemo input) {
 		return new FeatureInputMark(
 			input.getPxlPartMemo().getMark(),
 			input.getResOptional()

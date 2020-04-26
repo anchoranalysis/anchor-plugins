@@ -2,7 +2,7 @@ package ch.ethz.biol.cell.mpp.nrg.feature.objmask;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.cache.SessionInput;
-import org.anchoranalysis.feature.cache.calculation.CacheableCalculation;
+import org.anchoranalysis.feature.cache.calculation.FeatureCalculation;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.feature.bean.objmask.FeatureObjMask;
 import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
@@ -27,7 +27,7 @@ public abstract class AxisLengthBase extends FeatureObjMask {
 		return calcAxisLength( input, index);
 	}
 
-	protected abstract CacheableCalculation<MomentsFromPointsCalculator,FeatureInputSingleObj> momentsCalculator();
+	protected abstract FeatureCalculation<MomentsFromPointsCalculator,FeatureInputSingleObj> momentsCalculator();
 	
 	private double calcAxisLength( SessionInput<FeatureInputSingleObj> input, int index ) throws FeatureCalcException {
 		

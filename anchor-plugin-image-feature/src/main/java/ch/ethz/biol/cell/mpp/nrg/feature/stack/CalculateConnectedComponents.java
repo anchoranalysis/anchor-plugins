@@ -1,8 +1,7 @@
 package ch.ethz.biol.cell.mpp.nrg.feature.stack;
 
-import org.anchoranalysis.core.cache.ExecuteException;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.feature.cache.calculation.CacheableCalculation;
+import org.anchoranalysis.feature.cache.calculation.FeatureCalculation;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.binary.BinaryChnl;
 import org.anchoranalysis.image.binary.values.BinaryValues;
@@ -13,7 +12,7 @@ import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
 
-public class CalculateConnectedComponents extends CacheableCalculation<ObjMaskCollection, FeatureInputStack> {
+public class CalculateConnectedComponents extends FeatureCalculation<ObjMaskCollection, FeatureInputStack> {
 
 	private int nrgChnlIndex;
 		
@@ -23,7 +22,7 @@ public class CalculateConnectedComponents extends CacheableCalculation<ObjMaskCo
 	}
 
 	@Override
-	protected ObjMaskCollection execute(FeatureInputStack input) throws ExecuteException {
+	protected ObjMaskCollection execute(FeatureInputStack input) throws FeatureCalcException {
 		
 		try {
 			BinaryChnl binaryImgChnl = new BinaryChnl(
@@ -35,8 +34,8 @@ public class CalculateConnectedComponents extends CacheableCalculation<ObjMaskCo
 			objMaskCreator.setMinNumberVoxels(1);
 			return objMaskCreator.createConnectedComponents(binaryImgChnl );
 			
-		} catch (CreateException | FeatureCalcException e) {
-			throw new ExecuteException(e);
+		} catch (CreateException e) {
+			throw new FeatureCalcException(e);
 		}
 	}
 

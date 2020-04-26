@@ -31,10 +31,9 @@ import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.anchoranalysis.core.cache.ExecuteException;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.geometry.Point3d;
-import org.anchoranalysis.feature.cache.calculation.CacheableCalculation;
+import org.anchoranalysis.feature.cache.calculation.FeatureCalculation;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.nrg.NRGStack;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
@@ -58,7 +57,7 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
  * @author Owen Feehan
  *
  */
-public class CalculateGradientFromMultipleChnls extends CacheableCalculation<List<Point3d>,FeatureInputSingleObj> {
+public class CalculateGradientFromMultipleChnls extends FeatureCalculation<List<Point3d>,FeatureInputSingleObj> {
 
 	private int nrgIndexX;
 	
@@ -148,22 +147,16 @@ public class CalculateGradientFromMultipleChnls extends CacheableCalculation<Lis
 	}
 
 	@Override
-	protected List<Point3d> execute(FeatureInputSingleObj input)
-			throws ExecuteException {
+	protected List<Point3d> execute(FeatureInputSingleObj input) throws FeatureCalcException {
 
 		if (nrgIndexX==-1 || nrgIndexY==-1) {
-			throw new ExecuteException( new CreateException("nrgIndexX and nrgIndexY must both be nonZero") );
+			throw new FeatureCalcException( new CreateException("nrgIndexX and nrgIndexY must both be nonZero") );
 		}
 		
 		// create a list of points
 		List<Point3d> out = new ArrayList<>();
 		
-		NRGStack nrgStack;
-		try {
-			nrgStack = input.getNrgStackRequired().getNrgStack();
-		} catch (FeatureCalcException e) {
-			throw new ExecuteException(e);
-		}
+		NRGStack nrgStack = input.getNrgStackRequired().getNrgStack();
 		
 		putGradientValue( input.getObjMask(), out, 0, nrgStack.getChnl(nrgIndexX) );
 		putGradientValue( input.getObjMask(), out, 1, nrgStack.getChnl(nrgIndexY) );

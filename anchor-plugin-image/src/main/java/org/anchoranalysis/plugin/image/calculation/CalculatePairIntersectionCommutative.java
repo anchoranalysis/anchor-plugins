@@ -29,11 +29,11 @@ import java.util.Optional;
  */
 
 
-import org.anchoranalysis.core.cache.ExecuteException;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.feature.cache.calculation.CacheableCalculation;
 import org.anchoranalysis.feature.cache.calculation.CalculationResolver;
+import org.anchoranalysis.feature.cache.calculation.FeatureCalculation;
 import org.anchoranalysis.feature.cache.calculation.ResolvedCalculation;
+import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
 import org.anchoranalysis.image.feature.objmask.pair.FeatureInputPairObjs;
 import org.anchoranalysis.image.objmask.ObjMask;
@@ -55,12 +55,12 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
  * @author Owen Feehan
  *
  */
-public class CalculatePairIntersectionCommutative extends CacheableCalculation<Optional<ObjMask>,FeatureInputPairObjs> {
+public class CalculatePairIntersectionCommutative extends FeatureCalculation<Optional<ObjMask>,FeatureInputPairObjs> {
 
 	private ResolvedCalculation<Optional<ObjMask>,FeatureInputPairObjs> ccFirstToSecond;
 	private ResolvedCalculation<Optional<ObjMask>,FeatureInputPairObjs> ccSecondToFirst;
 	
-	public static CacheableCalculation<Optional<ObjMask>,FeatureInputPairObjs> createFromCache(
+	public static FeatureCalculation<Optional<ObjMask>,FeatureInputPairObjs> createFromCache(
 		CalculationResolver<FeatureInputPairObjs> cache,
 		CalculationResolver<FeatureInputSingleObj> cacheDilationObj1,
 		CalculationResolver<FeatureInputSingleObj> cacheDilationObj2,
@@ -90,8 +90,7 @@ public class CalculatePairIntersectionCommutative extends CacheableCalculation<O
 	}
 
 	@Override
-	protected Optional<ObjMask> execute(FeatureInputPairObjs params)
-			throws ExecuteException {
+	protected Optional<ObjMask> execute(FeatureInputPairObjs params) throws FeatureCalcException {
 		
 		Optional<ObjMask> omIntersection1 = ccFirstToSecond.getOrCalculate(params);
 		Optional<ObjMask> omIntersection2 = ccSecondToFirst.getOrCalculate(params);

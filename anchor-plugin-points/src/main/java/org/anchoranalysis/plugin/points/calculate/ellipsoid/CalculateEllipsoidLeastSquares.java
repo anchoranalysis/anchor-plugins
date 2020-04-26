@@ -30,11 +30,10 @@ package org.anchoranalysis.plugin.points.calculate.ellipsoid;
 import java.util.List;
 
 import org.anchoranalysis.anchor.mpp.mark.conic.MarkEllipsoid;
-import org.anchoranalysis.core.cache.ExecuteException;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.feature.cache.SessionInput;
-import org.anchoranalysis.feature.cache.calculation.CacheableCalculation;
+import org.anchoranalysis.feature.cache.calculation.FeatureCalculation;
 import org.anchoranalysis.feature.cache.calculation.ResolvedCalculation;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
@@ -42,7 +41,7 @@ import org.anchoranalysis.plugin.points.calculate.CalculatePntsFromOutline;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
-public class CalculateEllipsoidLeastSquares extends CacheableCalculation<MarkEllipsoid,FeatureInputSingleObj> {
+public class CalculateEllipsoidLeastSquares extends FeatureCalculation<MarkEllipsoid,FeatureInputSingleObj> {
 
 	private boolean suppressZCovariance;
 	
@@ -61,26 +60,22 @@ public class CalculateEllipsoidLeastSquares extends CacheableCalculation<MarkEll
 		ResolvedCalculation<MarkEllipsoid,FeatureInputSingleObj> ccEllipsoid = input.resolver().search(
 			new CalculateEllipsoidLeastSquares(suppressZCovariance, ccPnts )
 		);
-		try {
-			return ccEllipsoid.getOrCalculate(input.get());
-		} catch (ExecuteException e) {
-			throw new FeatureCalcException(e.getCause());
-		}
+		return ccEllipsoid.getOrCalculate(input.get());
 	}
 	
 	@Override
-	protected MarkEllipsoid execute( FeatureInputSingleObj params ) throws ExecuteException {
+	protected MarkEllipsoid execute( FeatureInputSingleObj input ) throws FeatureCalcException {
 		
 		try {
 			// Shell Rad is arbitrary here for now
 			return EllipsoidFactory.createMarkEllipsoidLeastSquares(
-				new CachedCalculationOperation<>(ccPnts,params),
-				params.getDimensionsRequired(),
+				new CachedCalculationOperation<>(ccPnts,input),
+				input.getDimensionsRequired(),
 				suppressZCovariance,
 				0.2
 			);
-		} catch (CreateException | FeatureCalcException e) {
-			throw new ExecuteException(e);
+		} catch (CreateException e) {
+			throw new FeatureCalcException(e);
 		}
 	}
 

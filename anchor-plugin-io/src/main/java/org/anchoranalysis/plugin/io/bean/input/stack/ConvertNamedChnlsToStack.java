@@ -32,7 +32,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.cache.ExecuteException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
 import org.anchoranalysis.core.index.GetOperationFailedException;
@@ -108,23 +107,28 @@ public class ConvertNamedChnlsToStack extends InputManager<StackSequenceInput> {
 		}
 
 		@Override
-		public OperationWithProgressReporter<TimeSequence> createStackSequenceForSeries(
+		public OperationWithProgressReporter<TimeSequence,OperationFailedException> createStackSequenceForSeries(
 				int seriesNum) throws RasterIOException {
 			return new OperationConvert(in, seriesNum);			
 		}
 				
 
 		@Override
-		public void addToStore(NamedProviderStore<TimeSequence> stackCollection,
-				int seriesNum, ProgressReporter progressReporter)
-				throws OperationFailedException {
+		public void addToStore(
+			NamedProviderStore<TimeSequence> stackCollection,
+			int seriesNum,
+			ProgressReporter progressReporter
+		) throws OperationFailedException {
 			in.addToStore(stackCollection, seriesNum, progressReporter);
 		}
 
 		@Override
-		public void addToStoreWithName(String name,
-				NamedProviderStore<TimeSequence> stackCollection, int seriesNum, ProgressReporter progressReporter)
-				throws OperationFailedException {
+		public void addToStoreWithName(
+			String name,
+			NamedProviderStore<TimeSequence> stackCollection,
+			int seriesNum,
+			ProgressReporter progressReporter
+		) throws OperationFailedException {
 			in.addToStoreWithName(name, stackCollection, seriesNum, progressReporter);
 		}
 
@@ -141,7 +145,7 @@ public class ConvertNamedChnlsToStack extends InputManager<StackSequenceInput> {
 	 * @author Owen Feehan
 	 *
 	 */
-	private class OperationConvert implements OperationWithProgressReporter<TimeSequence> {
+	private class OperationConvert implements OperationWithProgressReporter<TimeSequence,OperationFailedException> {
 		
 		private int seriesNum;
 		private NamedChnlsInput in;
@@ -153,9 +157,7 @@ public class ConvertNamedChnlsToStack extends InputManager<StackSequenceInput> {
 		}
 
 		@Override
-		public TimeSequence doOperation(
-				ProgressReporter progressReporter)
-				throws ExecuteException {
+		public TimeSequence doOperation(ProgressReporter progressReporter) throws OperationFailedException {
 			
 			try (ProgressReporterMultiple prm = new ProgressReporterMultiple(progressReporter, 2)) {
 			
@@ -167,7 +169,7 @@ public class ConvertNamedChnlsToStack extends InputManager<StackSequenceInput> {
 				ts.add( new Stack(chnl) );
 				return ts;
 			} catch (RasterIOException | GetOperationFailedException e) {
-				throw new ExecuteException(e);
+				throw new OperationFailedException(e);
 			}
 		}
 	}

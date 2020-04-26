@@ -1,7 +1,6 @@
 package ch.ethz.biol.cell.mpp.nrg.feature.stack;
 
-import org.anchoranalysis.core.cache.ExecuteException;
-import org.anchoranalysis.feature.cache.calculation.CacheableCalculation;
+import org.anchoranalysis.feature.cache.calculation.FeatureCalculation;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 import org.anchoranalysis.image.binary.BinaryChnl;
@@ -13,7 +12,7 @@ import org.anchoranalysis.image.objmask.ObjMask;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
-public class CalculateDeriveFeatureObjMaskParams extends CacheableCalculation<FeatureInputSingleObj, FeatureInputStack> {
+public class CalculateDeriveFeatureObjMaskParams extends FeatureCalculation<FeatureInputSingleObj, FeatureInputStack> {
 
 	private int nrgIndex;
 		
@@ -23,15 +22,11 @@ public class CalculateDeriveFeatureObjMaskParams extends CacheableCalculation<Fe
 	}
 
 	@Override
-	protected FeatureInputSingleObj execute(FeatureInputStack input) throws ExecuteException {
-		try {
-			return new FeatureInputSingleObj(
-				extractObjMask(input),
-				input.getNrgStackOptional()
-			);
-		} catch (FeatureCalcException e) {
-			throw new ExecuteException(e);
-		}
+	protected FeatureInputSingleObj execute(FeatureInputStack input) throws FeatureCalcException {
+		return new FeatureInputSingleObj(
+			extractObjMask(input),
+			input.getNrgStackOptional()
+		);
 	}
 	
 	private ObjMask extractObjMask(FeatureInputStack input) throws FeatureCalcException {

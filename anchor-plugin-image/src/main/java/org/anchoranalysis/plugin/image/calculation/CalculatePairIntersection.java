@@ -29,10 +29,9 @@ import java.util.Optional;
  */
 
 
-import org.anchoranalysis.core.cache.ExecuteException;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.feature.cache.calculation.CacheableCalculation;
 import org.anchoranalysis.feature.cache.calculation.CalculationResolver;
+import org.anchoranalysis.feature.cache.calculation.FeatureCalculation;
 import org.anchoranalysis.feature.cache.calculation.ResolvedCalculation;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.extent.ImageDim;
@@ -56,7 +55,7 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
  * @author Owen Feehan
  *
  */
-public class CalculatePairIntersection extends CacheableCalculation<Optional<ObjMask>,FeatureInputPairObjs> {
+public class CalculatePairIntersection extends FeatureCalculation<Optional<ObjMask>,FeatureInputPairObjs> {
 
 	private boolean do3D;
 	private int iterationsErosion;
@@ -101,15 +100,10 @@ public class CalculatePairIntersection extends CacheableCalculation<Optional<Obj
 	}
 
 	@Override
-	protected Optional<ObjMask> execute( FeatureInputPairObjs params ) throws ExecuteException {
+	protected Optional<ObjMask> execute( FeatureInputPairObjs params ) throws FeatureCalcException {
 	
-		ImageDim dim;
-		try {
-			dim = params.getDimensionsRequired();
-		} catch (FeatureCalcException e1) {
-			throw new ExecuteException(e1);
-		}
-		
+		ImageDim dim = params.getDimensionsRequired();
+				
 		ObjMask om1Dilated = ccDilation1.getOrCalculate( params.params1() );
 		ObjMask om2Dilated = ccDilation2.getOrCalculate( params.params2() );
 		
@@ -129,7 +123,7 @@ public class CalculatePairIntersection extends CacheableCalculation<Optional<Obj
 			}
 			
 		} catch (CreateException e) {
-			throw new ExecuteException(e);
+			throw new FeatureCalcException(e);
 		}
 	}
 

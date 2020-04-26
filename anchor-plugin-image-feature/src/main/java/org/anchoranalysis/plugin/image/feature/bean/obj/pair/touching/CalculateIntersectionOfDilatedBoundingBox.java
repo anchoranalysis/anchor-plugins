@@ -27,8 +27,7 @@ package org.anchoranalysis.plugin.image.feature.bean.obj.pair.touching;
  */
 
 
-import org.anchoranalysis.core.cache.ExecuteException;
-import org.anchoranalysis.feature.cache.calculation.CacheableCalculation;
+import org.anchoranalysis.feature.cache.calculation.FeatureCalculation;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.Extent;
@@ -37,7 +36,7 @@ import org.anchoranalysis.image.objmask.ObjMask;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
-class CalculateIntersectionOfDilatedBoundingBox extends CacheableCalculation<BoundingBox, FeatureInputPairObjs> {
+class CalculateIntersectionOfDilatedBoundingBox extends FeatureCalculation<BoundingBox, FeatureInputPairObjs> {
 
 	
 	
@@ -51,27 +50,20 @@ class CalculateIntersectionOfDilatedBoundingBox extends CacheableCalculation<Bou
 	private BoundingBox findIntersectionOfDilatedBoundingBox( ObjMask om1, ObjMask om2, Extent e ) {
 	
 		// Grow each bounding box
-		BoundingBox bbox1 = om1.getVoxelBoxBounded().dilate( use3D, e );
-		BoundingBox bbox2 = om2.getVoxelBoxBounded().dilate( use3D, e );
+		BoundingBox bbox1 = dilatedBoundingBoxFor(om1, e);
+		BoundingBox bbox2 = dilatedBoundingBoxFor(om2, e);
 		
 		// Find the intersection
 		return bbox1.intersectCreateNew(bbox2, e );
 	}
-	
-
 
 	@Override
-	protected BoundingBox execute(FeatureInputPairObjs params)
-			throws ExecuteException {
-		try {
-			return findIntersectionOfDilatedBoundingBox(
-				params.getObjMask1(),
-				params.getObjMask2(),
-				params.getDimensionsRequired().getExtnt()
-			);
-		} catch (FeatureCalcException e) {
-			throw new ExecuteException(e);
-		}
+	protected BoundingBox execute(FeatureInputPairObjs input) throws FeatureCalcException {
+		return findIntersectionOfDilatedBoundingBox(
+			input.getObjMask1(),
+			input.getObjMask2(),
+			input.getDimensionsRequired().getExtnt()
+		);
 	}
 	
 	@Override
@@ -91,4 +83,7 @@ class CalculateIntersectionOfDilatedBoundingBox extends CacheableCalculation<Bou
 		return new HashCodeBuilder().append(use3D).toHashCode();
 	}
 
+	private BoundingBox dilatedBoundingBoxFor( ObjMask om, Extent e ) {
+		return om.getVoxelBoxBounded().dilate( use3D, e );
+	}
 }

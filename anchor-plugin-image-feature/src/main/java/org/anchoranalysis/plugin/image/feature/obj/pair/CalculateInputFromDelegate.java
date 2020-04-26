@@ -1,9 +1,9 @@
 package org.anchoranalysis.plugin.image.feature.obj.pair;
 
-import org.anchoranalysis.core.cache.ExecuteException;
-import org.anchoranalysis.feature.cache.calculation.CacheableCalculation;
 import org.anchoranalysis.feature.cache.calculation.CalculationResolver;
+import org.anchoranalysis.feature.cache.calculation.FeatureCalculation;
 import org.anchoranalysis.feature.cache.calculation.ResolvedCalculation;
+import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.input.FeatureInput;
 
 /**
@@ -24,7 +24,7 @@ import org.anchoranalysis.feature.input.FeatureInput;
  * @param <U> delegate-type of CachedCalculation
  * 
  */
-public abstract class CalculateInputFromDelegate<S, T extends FeatureInput, U> extends CacheableCalculation<S, T> {
+public abstract class CalculateInputFromDelegate<S, T extends FeatureInput, U> extends FeatureCalculation<S, T> {
 
 	private ResolvedCalculation<U, T> ccDelegate;
 
@@ -33,13 +33,13 @@ public abstract class CalculateInputFromDelegate<S, T extends FeatureInput, U> e
 		this.ccDelegate = ccDelegate;
 	}
 	
-	protected CalculateInputFromDelegate(CacheableCalculation<U, T> ccDelegate, CalculationResolver<T> cache) {
+	protected CalculateInputFromDelegate(FeatureCalculation<U, T> ccDelegate, CalculationResolver<T> cache) {
 		super();
 		this.ccDelegate = cache.search(ccDelegate);
 	}
 
 	@Override
-	public S execute(T params) throws ExecuteException {
+	public S execute(T params) throws FeatureCalcException {
 		
 		U delegate = ccDelegate.getOrCalculate(params);
 		return deriveFromDelegate(params, delegate);

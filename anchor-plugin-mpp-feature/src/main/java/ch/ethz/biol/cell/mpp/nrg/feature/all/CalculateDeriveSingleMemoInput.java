@@ -2,12 +2,11 @@ package ch.ethz.biol.cell.mpp.nrg.feature.all;
 
 import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputAllMemo;
 import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputSingleMemo;
-import org.anchoranalysis.core.cache.ExecuteException;
-import org.anchoranalysis.feature.cache.calculation.CacheableCalculation;
+import org.anchoranalysis.feature.cache.calculation.FeatureCalculation;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
-class CalculateDeriveSingleMemoInput extends CacheableCalculation<FeatureInputSingleMemo, FeatureInputAllMemo> {
+class CalculateDeriveSingleMemoInput extends FeatureCalculation<FeatureInputSingleMemo, FeatureInputAllMemo> {
 
 	private int index;
 		
@@ -17,7 +16,7 @@ class CalculateDeriveSingleMemoInput extends CacheableCalculation<FeatureInputSi
 	}
 
 	@Override
-	protected FeatureInputSingleMemo execute(FeatureInputAllMemo input) throws ExecuteException {
+	protected FeatureInputSingleMemo execute(FeatureInputAllMemo input) {
 		FeatureInputSingleMemo paramsInd = new FeatureInputSingleMemo(
 			null,
 			input.getNrgStackOptional()

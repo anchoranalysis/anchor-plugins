@@ -26,7 +26,6 @@ package org.anchoranalysis.io.manifest.reportfeature;
  * #L%
  */
 
-import org.anchoranalysis.core.cache.ExecuteException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.index.GetOperationFailedException;
 import org.anchoranalysis.core.log.LogErrorReporter;
@@ -47,12 +46,7 @@ public class TextFileAsIntegerFromManifest extends ReportFeatureForManifestFileB
 
 		FinderFileAsText finder = new FinderFileAsText( getFileName(),null);
 		
-		ManifestRecorder manifest;
-		try {
-			manifest = obj.doOperation();
-		} catch (ExecuteException e) {
-			throw new OperationFailedException(e);
-		}
+		ManifestRecorder manifest = obj.doOperation();
 		
 		if (!finder.doFind( manifest )) {
 			throw new OperationFailedException( String.format("Cannot find '%s' in manifest",getFileName()) );

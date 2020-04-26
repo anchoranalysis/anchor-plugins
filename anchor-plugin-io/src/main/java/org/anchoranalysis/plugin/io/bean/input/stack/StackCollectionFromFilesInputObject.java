@@ -30,8 +30,6 @@ package org.anchoranalysis.plugin.io.bean.input.stack;
 import java.io.File;
 import java.nio.file.Path;
 
-import org.anchoranalysis.core.cache.ExecuteException;
-import org.anchoranalysis.core.cache.Operation;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
 import org.anchoranalysis.core.name.store.NamedProviderStore;
@@ -84,7 +82,7 @@ class StackCollectionFromFilesInputObject extends StackSequenceInput {
 	}
 	
 	
-	public OperationWithProgressReporter<TimeSequence> createStackSequenceForSeries( int seriesNum ) throws RasterIOException {
+	public OperationWithProgressReporter<TimeSequence,OperationFailedException> createStackSequenceForSeries( int seriesNum ) throws RasterIOException {
 		
 		// We always use the last one
 		if (useLastSeriesIndexOnly) {
@@ -103,33 +101,33 @@ class StackCollectionFromFilesInputObject extends StackSequenceInput {
 	
 
 	@Override
-	public void addToStoreWithName(String name,
-			NamedProviderStore<TimeSequence> stackCollection, int seriesNum, ProgressReporter progressReporter) throws OperationFailedException {
-	
-		Operation<TimeSequence> opGetTimeSpecificStack = () -> {
-			try {
-				return createStackSequenceForSeries(seriesNum).doOperation(progressReporter);
-			} catch (RasterIOException e) {
-				throw new ExecuteException(e);
+	public void addToStoreWithName(
+		String name,
+		NamedProviderStore<TimeSequence> stackCollection,
+		int seriesNum,
+		ProgressReporter progressReporter
+	) throws OperationFailedException {
+
+		stackCollection.add(
+			name,
+			() -> {
+				try {
+					return createStackSequenceForSeries(seriesNum).doOperation(progressReporter);
+				} catch (RasterIOException e) {
+					throw new OperationFailedException(e);
+				}
 			}
-		};
-		stackCollection.add(name, opGetTimeSpecificStack);
+		);
 	}
 
 	
-	private static OperationWithProgressReporter<TimeSequence> openRasterAsOperation( final OpenedRaster openedRaster, final int seriesNum ) {
-		
-		return new OperationWithProgressReporter<TimeSequence>() {
-
-			@Override
-			public TimeSequence doOperation( ProgressReporter progressReporter ) throws ExecuteException {
-				try {
-					return openedRaster.open(seriesNum, progressReporter );
-				} catch (RasterIOException e) {
-					throw new ExecuteException(e);
-				}
+	private static OperationWithProgressReporter<TimeSequence,OperationFailedException> openRasterAsOperation( final OpenedRaster openedRaster, final int seriesNum ) {
+		return pr -> {
+			try {
+				return openedRaster.open(seriesNum, pr);
+			} catch (RasterIOException e) {
+				throw new OperationFailedException(e);
 			}
-				
 		};
 	}
 

@@ -32,7 +32,6 @@ import java.util.List;
 
 
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.cache.ExecuteException;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.cache.calculation.ResolvedCalculation;
@@ -59,18 +58,14 @@ public abstract class FeatureIntersectingObjsSingleElem extends FeatureIntersect
 	protected double valueFor(SessionInput<FeatureInputSingleObj> params, ResolvedCalculation<ObjMaskCollection, FeatureInputSingleObj> intersecting)
 			throws FeatureCalcException {
 
-		try {
-			return aggregateResults(
-				calcResults(params, intersecting)
-			);
-		} catch (ExecuteException e) {
-			throw new FeatureCalcException(e);
-		}
+		return aggregateResults(
+			calcResults(params, intersecting)
+		);
 	}
 	
 	protected abstract double aggregateResults( List<Double> results );
 	
-	private List<Double> calcResults( SessionInput<FeatureInputSingleObj> paramsExst, ResolvedCalculation<ObjMaskCollection, FeatureInputSingleObj> ccIntersecting ) throws FeatureCalcException, ExecuteException {
+	private List<Double> calcResults( SessionInput<FeatureInputSingleObj> paramsExst, ResolvedCalculation<ObjMaskCollection, FeatureInputSingleObj> ccIntersecting ) throws FeatureCalcException {
 		
 		int size = ccIntersecting.getOrCalculate(paramsExst.get()).size();
 		

@@ -30,7 +30,6 @@ import org.anchoranalysis.anchor.mpp.feature.bean.nrg.elem.FeaturePairMemo;
 import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputPairMemo;
 import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.cache.ExecuteException;
 import org.anchoranalysis.core.relation.RelationToValue;
 import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
@@ -65,16 +64,13 @@ public abstract class OverlapMaskBase extends FeaturePairMemo {
 		int regionID,
 		RelationToValue relationToThreshold
 	) throws FeatureCalcException {
-		try {
-			VoxelStatistics pxlStats1 =  obj1.doOperation().statisticsForAllSlices(nrgIndex, regionID);
-			VoxelStatistics pxlStats2 =  obj2.doOperation().statisticsForAllSlices(nrgIndex, regionID);
-			
-			long size1 = pxlStats1.countThreshold(relationToThreshold, maskValue);
-			long size2 = pxlStats2.countThreshold(relationToThreshold, maskValue);
-			return Math.min( size1, size2 );
-		} catch (ExecuteException e) {
-			throw new FeatureCalcException(e);
-		}
+
+		VoxelStatistics pxlStats1 =  obj1.doOperation().statisticsForAllSlices(nrgIndex, regionID);
+		VoxelStatistics pxlStats2 =  obj2.doOperation().statisticsForAllSlices(nrgIndex, regionID);
+		
+		long size1 = pxlStats1.countThreshold(relationToThreshold, maskValue);
+		long size2 = pxlStats2.countThreshold(relationToThreshold, maskValue);
+		return Math.min( size1, size2 );
 	}
 	
 	protected double calcMaxVolume(
@@ -83,16 +79,13 @@ public abstract class OverlapMaskBase extends FeaturePairMemo {
 		int regionID,
 		RelationToValue relationToThreshold
 	) throws FeatureCalcException {
-		try {
-			VoxelStatistics pxlStats1 =  obj1.doOperation().statisticsForAllSlices(nrgIndex, regionID);
-			VoxelStatistics pxlStats2 =  obj2.doOperation().statisticsForAllSlices(nrgIndex, regionID);
-			
-			long size1 = pxlStats1.countThreshold(relationToThreshold, maskValue);
-			long size2 = pxlStats2.countThreshold(relationToThreshold, maskValue);
-			return Math.max( size1, size2 );
-		} catch (ExecuteException e) {
-			throw new FeatureCalcException(e);
-		}
+
+		VoxelStatistics pxlStats1 =  obj1.doOperation().statisticsForAllSlices(nrgIndex, regionID);
+		VoxelStatistics pxlStats2 =  obj2.doOperation().statisticsForAllSlices(nrgIndex, regionID);
+		
+		long size1 = pxlStats1.countThreshold(relationToThreshold, maskValue);
+		long size2 = pxlStats2.countThreshold(relationToThreshold, maskValue);
+		return Math.max( size1, size2 );
 	}
 	
 	public int getNrgIndex() {

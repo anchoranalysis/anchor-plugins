@@ -34,7 +34,6 @@ import org.anchoranalysis.anchor.mpp.feature.bean.nrg.elem.FeatureSingleMemo;
 import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputSingleMemo;
 import org.anchoranalysis.anchor.mpp.regionmap.RegionMapSingleton;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.cache.ExecuteException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
@@ -103,7 +102,7 @@ public class SurfaceSizeMaskNonZero extends FeatureSingleMemo {
 					size += vbOutline.extractSlice(z).countEqual( om.getBinaryValues().getOnInt() );
 				}
 			}
-		} catch (ExecuteException | OperationFailedException e) {
+		} catch (OperationFailedException e) {
 			throw new FeatureCalcException(e);
 		}
 		
