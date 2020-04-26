@@ -112,26 +112,26 @@ public class OverlapRatio extends FeaturePairMemo {
 	}
 	
 	@Override
-	public double calc( SessionInput<FeatureInputPairMemo> paramsCacheable ) throws FeatureCalcException {
+	public double calc( SessionInput<FeatureInputPairMemo> input ) throws FeatureCalcException {
 		
-		FeatureInputPairMemo params = paramsCacheable.get();
+		FeatureInputPairMemo inputSessionless = input.get();
 		
-		double overlap = paramsCacheable.calc(
+		double overlap = input.calc(
 			overlapCalculation()
 		);
 		
 		if (useMax) {
 			return calcOverlapRatioMax(
-				params.getObj1(),
-				params.getObj2(),
+				inputSessionless.getObj1(),
+				inputSessionless.getObj2(),
 				overlap,
 				regionID,
 				mip
 			);
 		} else {
 			return calcOverlapRatioMin(
-				params.getObj1(),
-				params.getObj2(),
+				inputSessionless.getObj1(),
+				inputSessionless.getObj2(),
 				overlap,
 				regionID,
 				mip

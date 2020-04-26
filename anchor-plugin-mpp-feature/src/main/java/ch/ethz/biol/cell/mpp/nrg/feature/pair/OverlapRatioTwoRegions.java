@@ -62,15 +62,15 @@ public class OverlapRatioTwoRegions extends FeaturePairMemo {
 	}
 	
 	@Override
-	public double calc( SessionInput<FeatureInputPairMemo> paramsCacheable ) throws FeatureCalcException {
+	public double calc( SessionInput<FeatureInputPairMemo> input ) throws FeatureCalcException {
 		
-		FeatureInputPairMemo params = paramsCacheable.get();
+		FeatureInputPairMemo inputSessionless = input.get();
 		
 		return calcOverlapRatioMin(
-			params.getObj1(),
-			params.getObj2(),
-			overlapForRegion(paramsCacheable, regionID1),
-			overlapForRegion(paramsCacheable, regionID2),
+			inputSessionless.getObj1(),
+			inputSessionless.getObj2(),
+			overlapForRegion(input, regionID1),
+			overlapForRegion(input, regionID2),
 			regionID1,
 			regionID2
 		);
@@ -89,8 +89,8 @@ public class OverlapRatioTwoRegions extends FeaturePairMemo {
 		return overlap / (volume1+volume2);
 	}
 	
-	private double overlapForRegion( SessionInput<FeatureInputPairMemo> paramsCacheable, int regionID ) throws FeatureCalcException {
-		return paramsCacheable.calc(
+	private double overlapForRegion( SessionInput<FeatureInputPairMemo> input, int regionID ) throws FeatureCalcException {
+		return input.calc(
 			new OverlapCalculation(regionID)
 		);
 	}

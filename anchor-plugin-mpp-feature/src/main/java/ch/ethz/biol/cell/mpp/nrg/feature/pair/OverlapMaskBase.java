@@ -1,5 +1,7 @@
 package ch.ethz.biol.cell.mpp.nrg.feature.pair;
 
+import java.util.function.BiFunction;
+
 /*-
  * #%L
  * anchor-plugin-mpp-feature
@@ -52,40 +54,59 @@ public abstract class OverlapMaskBase extends FeaturePairMemo {
 	private int nrgIndex = 0;
 	// END BEAN PROPERTIES
 		
-	protected double overlapForRegion( SessionInput<FeatureInputPairMemo> paramsCacheable, int regionID ) throws FeatureCalcException {
-		return paramsCacheable.calc(
+	protected double overlapForRegion( SessionInput<FeatureInputPairMemo> input, int regionID ) throws FeatureCalcException {
+		return input.calc(
 			new OverlapCalculationMaskGlobal(regionID, nrgIndex, (byte) maskValue)
 		);
 	}
-	
+
 	protected double calcMinVolume(
 		PxlMarkMemo obj1,
 		PxlMarkMemo obj2,
 		int regionID,
 		RelationToValue relationToThreshold
 	) throws FeatureCalcException {
-
-		VoxelStatistics pxlStats1 =  obj1.doOperation().statisticsForAllSlices(nrgIndex, regionID);
-		VoxelStatistics pxlStats2 =  obj2.doOperation().statisticsForAllSlices(nrgIndex, regionID);
-		
-		long size1 = pxlStats1.countThreshold(relationToThreshold, maskValue);
-		long size2 = pxlStats2.countThreshold(relationToThreshold, maskValue);
-		return Math.min( size1, size2 );
+		return calcVolumeStat(
+			obj1,
+			obj2,
+			regionID,
+			relationToThreshold,
+			Math::min
+		);
 	}
-	
+
 	protected double calcMaxVolume(
 		PxlMarkMemo obj1,
 		PxlMarkMemo obj2,
 		int regionID,
 		RelationToValue relationToThreshold
 	) throws FeatureCalcException {
-
-		VoxelStatistics pxlStats1 =  obj1.doOperation().statisticsForAllSlices(nrgIndex, regionID);
-		VoxelStatistics pxlStats2 =  obj2.doOperation().statisticsForAllSlices(nrgIndex, regionID);
 		
-		long size1 = pxlStats1.countThreshold(relationToThreshold, maskValue);
-		long size2 = pxlStats2.countThreshold(relationToThreshold, maskValue);
-		return Math.max( size1, size2 );
+		return calcVolumeStat(
+			obj1,
+			obj2,
+			regionID,
+			relationToThreshold,
+			Math::max
+		);
+	}
+	
+	protected double calcVolumeStat(
+		PxlMarkMemo obj1,
+		PxlMarkMemo obj2,
+		int regionID,
+		RelationToValue relationToThreshold,
+		BiFunction<Long,Long,Long> statFunc
+	) throws FeatureCalcException {
+		
+		long size1 = sizeForObj(obj1, regionID, relationToThreshold);
+		long size2 = sizeForObj(obj2, regionID, relationToThreshold);
+		return statFunc.apply(size1, size2);
+	}
+	
+	private long sizeForObj( PxlMarkMemo obj, int regionID, RelationToValue relationToThreshold) {
+		VoxelStatistics pxlStats =  obj.doOperation().statisticsForAllSlices(nrgIndex, regionID);
+		return pxlStats.countThreshold(relationToThreshold, maskValue);
 	}
 	
 	public int getNrgIndex() {

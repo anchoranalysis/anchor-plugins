@@ -29,54 +29,21 @@ import org.anchoranalysis.anchor.mpp.mark.conic.MarkEllipsoid;
  */
 
 
-import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.image.feature.bean.objmask.FeatureObjMask;
 import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
-import org.anchoranalysis.image.objmask.ObjMask;
-import org.anchoranalysis.plugin.points.calculate.ellipsoid.CalculateEllipsoidLeastSquares;
 
-public class AxisRatioEllipsoid extends FeatureObjMask {
+public class AxisRatioEllipsoid extends EllipsoidBase {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 
-	// START BEAN PROPERTIES
-	@BeanField
-	private boolean suppressZCovariance = false;		// Supresses covariance in the z-direction.
-	// END BEAN PROPERTIES
-	
 	@Override
-	public double calc(SessionInput<FeatureInputSingleObj> paramsCacheable) throws FeatureCalcException {
-		
-		FeatureInputSingleObj params = paramsCacheable.get();
-		
-		// Max intensity projection of the input mask
-		ObjMask om = params.getObjMask();
-		
-		// If we have these few pixels, assume we are perfectly ellipsoid
-		if (om.numPixelsLessThan(12)) {
-			return 1.0;
-		}
-		
-		MarkEllipsoid me = CalculateEllipsoidLeastSquares.createFromCache(
-			paramsCacheable,
-			suppressZCovariance
-		);
+	protected double calc(FeatureInputSingleObj input, MarkEllipsoid me) throws FeatureCalcException {
 		
 		double[] radii = me.radiiOrdered();
 		
 		return radii[0]/radii[1];
-	}
-
-	public boolean isSuppressZCovariance() {
-		return suppressZCovariance;
-	}
-
-	public void setSuppressZCovariance(boolean suppressZCovariance) {
-		this.suppressZCovariance = suppressZCovariance;
 	}
 }
