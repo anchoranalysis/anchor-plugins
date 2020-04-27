@@ -75,7 +75,7 @@ public class ExportFeaturesObjMaskTaskTest {
 	}
 	
 	@Before
-	public void setupTest() {
+	public void setupTest() throws CreateException {
 		taskFixture = new ExportFeaturesObjMaskTaskFixture(loader);
 	}
 	
@@ -107,6 +107,21 @@ public class ExportFeaturesObjMaskTaskTest {
 	
 	@Test
 	public void testMergedLargeWithPairs() throws OperationFailedException, CreateException {
+		taskFixture.includeAdditionalShellFeature();
+		taskFixture.changeToMergedPairs(true);
+		testOnTask("mergedPairs02/");
+	}
+	
+	/**
+	 *  Tests when a particular FeatureCalculation is called by a feature in both the Single and Pair part of merged-pairs.
+	 *  
+	 *  <p>To be efficient, this calculation should only occur once, as the caches should be linked</p>.
+	 * 
+	 * @throws OperationFailedException
+	 * @throws CreateException
+	 */
+	@Test
+	public void testRepeatedCalculationInSingleAndPair() throws OperationFailedException, CreateException {
 		taskFixture.includeAdditionalShellFeature();
 		taskFixture.changeToMergedPairs(true);
 		testOnTask("mergedPairs02/");
