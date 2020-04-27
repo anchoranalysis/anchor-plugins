@@ -7,16 +7,17 @@ import java.util.Arrays;
 import java.util.List;
 import org.anchoranalysis.bean.NamedBean;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.feature.bean.list.FeatureListProvider;
+import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.nrg.NRGStack;
 import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
 import org.anchoranalysis.image.bean.provider.stack.StackProvider;
+import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
+import org.anchoranalysis.image.feature.objmask.pair.merged.FeatureInputPairObjsMerged;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.plugin.mpp.experiment.bean.feature.flexi.FlexiFeatureTable;
 import org.anchoranalysis.plugin.mpp.experiment.bean.feature.flexi.MergedPairs;
 import org.anchoranalysis.test.TestLoader;
-import org.anchoranalysis.test.feature.plugins.FeaturesFromXmlFixture;
 import org.anchoranalysis.test.image.NRGStackFixture;
 import org.anchoranalysis.plugin.mpp.experiment.bean.feature.flexi.Simple;
 
@@ -24,14 +25,16 @@ import ch.ethz.biol.cell.imageprocessing.objmask.provider.ObjMaskProviderReferen
 
 class ExportFeaturesObjMaskTaskFixture {
 
-	private static final String PATH_FEATURES = "singleFeatures.xml";
-	private static final String PATH_FEATURES_SHELL = "singleFeaturesWithShell.xml";
-	private static final String PATH_FEATURES_PAIR = "pairFeatures.xml";
+	private static final String PATH_FEATURES_SINGLE_DEFAULT = "singleFeatures.xml";
+	private static final String PATH_FEATURES_SINGLE_WITH_SHELL = "singleFeaturesWithShell.xml";
+	private static final String PATH_FEATURES_PAIR_DEFAULT = "pairFeatures.xml";
 	
-	private TestLoader loader;
 	private NRGStack nrgStack = createNRGStack(true);
-	private String pathFeatures = PATH_FEATURES;
 	private FlexiFeatureTable<?> flexiFeatureTable = new Simple();
+	
+	/** The "single" and "pair" features in use.*/
+	private FeatureListProviderFixture<FeatureInputSingleObj> singleFeatures;
+	private FeatureListProviderFixture<FeatureInputPairObjsMerged> pairFeatures;
 	
 	/**
 	 * Constructor
@@ -41,20 +44,36 @@ class ExportFeaturesObjMaskTaskFixture {
 	 * <p>By default, use Simple feature-mode. It can be changed to Merged-Pairs.</p>
 	 * 
 	 * @param loader
+	 * @throws CreateException 
 	 */
-	public ExportFeaturesObjMaskTaskFixture(TestLoader loader) {
-		this.loader = loader;
+	public ExportFeaturesObjMaskTaskFixture(TestLoader loader) throws CreateException {
 		this.nrgStack = createNRGStack(true);
+		this.singleFeatures = new FeatureListProviderFixture<>(loader, PATH_FEATURES_SINGLE_DEFAULT);
+		this.pairFeatures = new FeatureListProviderFixture<>(loader, PATH_FEATURES_PAIR_DEFAULT);
 	}
 	
-	/** Change to using a small nrg-stack that causes some features to throw errors */
+	/** 
+	 * Change to using a small nrg-stack that causes some features to throw errors
+	 * */
 	public void useSmallNRGInstead() {
 		this.nrgStack = createNRGStack(false);
 	}
 	
-	/** Additionally include a shell feature in the "single" features */
-	public void includeAdditionalShellFeature() {
-		this.pathFeatures = PATH_FEATURES_SHELL;
+	/** 
+	 * Additionally include a shell feature in the "single" features
+	 *  
+	 * @throws CreateException */
+	public void includeAdditionalShellFeature() throws CreateException {
+		singleFeatures.useAlternativeXMLList(PATH_FEATURES_SINGLE_WITH_SHELL);
+	}
+	
+	/** 
+	 * Uses this feature instead of whatever list has been loaded for the single-features
+	 * 
+	 * <p>It does not initialize the feature.</p>
+	 * */
+	public void useInsteadAsSingleFeature( Feature<FeatureInputSingleObj> feature ) {
+		singleFeatures.useSingleFeature(feature);
 	}
 	
 	/** 
@@ -67,17 +86,6 @@ class ExportFeaturesObjMaskTaskFixture {
 		flexiFeatureTable = createMergedPairs(includeFeaturesInPair);
 	}
 	
-	private MergedPairs createMergedPairs(boolean includeFeaturesInPair) throws CreateException {
-		MergedPairs mergedPairs = new MergedPairs();
-		mergedPairs.setSuppressErrors(true);
-		if (includeFeaturesInPair) {
-			mergedPairs.setListFeaturesPair(
-				loadFeatures(loader, PATH_FEATURES_PAIR)
-			);
-		}
-		return mergedPairs;
-	}
-	
 	public NRGStack getNrgStack() {
 		return nrgStack;
 	}
@@ -86,9 +94,8 @@ class ExportFeaturesObjMaskTaskFixture {
 	public <T extends FeatureInput> ExportFeaturesObjMaskTask<T> createTask() throws CreateException {
 				
 		ExportFeaturesObjMaskTask<T> task = new ExportFeaturesObjMaskTask<>();
-
 		task.setListFeaturesObjMask(
-			loadFeatures(loader, pathFeatures)
+			singleFeatures.asListNamedBeansProvider()
 		);
 		task.setNrgStackProvider(
 			nrgStackProvider(nrgStack)
@@ -118,16 +125,19 @@ class ExportFeaturesObjMaskTaskFixture {
 		when(stackProvider.duplicateBean()).thenReturn(stackProvider);
 		return stackProvider;
 	}
+
+	private MergedPairs createMergedPairs(boolean includeFeaturesInPair) throws CreateException {
+		MergedPairs mergedPairs = new MergedPairs();
+		mergedPairs.setSuppressErrors(true);
+		if (includeFeaturesInPair) {
+			mergedPairs.setListFeaturesPair(
+				pairFeatures.asListNamedBeansProvider()
+			);
+		}
+		return mergedPairs;
+	}
 	
 	private NRGStack createNRGStack( boolean bigSizeNrg ) {
 		return NRGStackFixture.create(bigSizeNrg, false).getNrgStack();
-	}
-	
-	/** creates a feature-list associated with obj-mask
-	 *  
-	 * @throws CreateException 
-	 * */
-	private static <T extends FeatureInput> List<NamedBean<FeatureListProvider<T>>> loadFeatures( TestLoader loader, String pathFeatureList ) throws CreateException {
-		return FeaturesFromXmlFixture.createNamedFeatureProviders(pathFeatureList, loader);
 	}
 }
