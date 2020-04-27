@@ -28,6 +28,7 @@ package org.anchoranalysis.plugin.image.bean.threshold.calculatelevel;
 
 
 import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.bean.threshold.CalculateLevel;
 import org.anchoranalysis.image.histogram.Histogram;
 import org.anchoranalysis.math.statistics.VarianceCalculator;
@@ -75,7 +76,7 @@ public class OtsuWeighted extends CalculateLevel {
 	}
 	
 	@Override
-	public int calculateLevel(Histogram hist) {
+	public int calculateLevel(Histogram hist) throws OperationFailedException {
 
 		getLogger().getLogReporter().logFormatted("weightForeground=%f weightBackground=%f", weightForeground, weightBackground);
 		

@@ -31,6 +31,7 @@ import java.util.Optional;
 
 
 import org.anchoranalysis.core.error.InitException;
+import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.params.KeyValueParams;
 import org.anchoranalysis.image.histogram.Histogram;
 
@@ -51,7 +52,11 @@ public class PixelScoreNormalizeByMax extends PixelScoreSingleChnl {
 
 	@Override
 	public void init(List<Histogram> histograms, Optional<KeyValueParams> keyValueParams) throws InitException {
-		maxEdge = histograms.get( getNrgChnlIndex() ).calcMax();
+		try {
+			maxEdge = histograms.get( getNrgChnlIndex() ).calcMax();
+		} catch (OperationFailedException e) {
+			throw new InitException(e);
+		}
 	}
 
 	@Override

@@ -1,10 +1,7 @@
 package ch.ethz.biol.cell.mpp.nrg.feature.histogram;
 
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.feature.cache.SessionInput;
-import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.image.feature.bean.FeatureHistogram;
-import org.anchoranalysis.image.feature.histogram.FeatureInputHistogram;
+import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.histogram.Histogram;
 
 /**
@@ -13,7 +10,7 @@ import org.anchoranalysis.image.histogram.Histogram;
  * @author Owen Feehan
  *
  */
-public class Range extends FeatureHistogram {
+public class Range extends FeatureHistogramStatistic {
 
 	/**
 	 * 
@@ -29,12 +26,10 @@ public class Range extends FeatureHistogram {
 	// END BEAN PROPERTIES
 
 	@Override
-	protected double calc(SessionInput<FeatureInputHistogram> input) throws FeatureCalcException {
+	protected double calcStatisticFrom(Histogram histogram) throws OperationFailedException {
 
-		Histogram hist = input.get().getHistogram();
-		
-		double high = hist.quantile(quantileHigh);
-		double low = hist.quantile(quantileLow);
+		double high = histogram.quantile(quantileHigh);
+		double low = histogram.quantile(quantileLow);
 		return high-low;
 	}
 	
@@ -53,5 +48,4 @@ public class Range extends FeatureHistogram {
 	public void setQuantileHigh(double quantileHigh) {
 		this.quantileHigh = quantileHigh;
 	}
-
 }

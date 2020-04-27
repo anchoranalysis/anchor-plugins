@@ -1,6 +1,7 @@
 package ch.ethz.biol.cell.mpp.nrg.feature.histogram;
 
-import org.anchoranalysis.feature.cache.SessionInput;
+import org.anchoranalysis.core.error.OperationFailedException;
+
 
 /*
  * #%L
@@ -29,12 +30,10 @@ import org.anchoranalysis.feature.cache.SessionInput;
  */
 
 
-import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.image.feature.bean.FeatureHistogram;
-import org.anchoranalysis.image.feature.histogram.FeatureInputHistogram;
 import org.anchoranalysis.image.histogram.Histogram;
+import org.anchoranalysis.image.histogram.HistogramStatistics;
 
-public class Skewness extends FeatureHistogram {
+public class Skewness extends FeatureHistogramStatistic {
 
 	/**
 	 * 
@@ -42,22 +41,7 @@ public class Skewness extends FeatureHistogram {
 	private static final long serialVersionUID = 1L;
 	
 	@Override
-	public double calc(SessionInput<FeatureInputHistogram> input)
-			throws FeatureCalcException {
-		
-		Histogram h = input.get().getHistogram();
-		
-		long count = h.getTotalCount();
-		double mean = h.mean();
-		double sd = h.stdDev();
-		
-		// Calculated using formula in https://en.wikipedia.org/wiki/Skewness
-		long firstTerm = h.calcSumCubes() / count;
-		double secondTerm = -3.0 * mean * sd * sd;
-		double thirdTerm = mean * mean * mean;
-		
-		double dem = sd * sd * sd;
-		
-		return (((double) firstTerm) + secondTerm + thirdTerm) / dem; 
+	protected double calcStatisticFrom(Histogram histogram) throws OperationFailedException {
+		return HistogramStatistics.skewness(histogram);
 	}
 }

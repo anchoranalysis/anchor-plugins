@@ -31,6 +31,7 @@ import java.nio.ByteBuffer;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
+import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.bean.provider.BinaryImgChnlProvider;
 import org.anchoranalysis.image.bean.provider.ChnlProvider;
 import org.anchoranalysis.image.binary.BinaryChnl;
@@ -67,14 +68,25 @@ public class ChnlProviderSuppressAbove extends ChnlProvider {
 		BinaryChnl binaryImg = binaryImgChnlProviderMask.create();
 		
 		Histogram hist = HistogramFactoryUtilities.create(chnl, binaryImg );
-		double intensityThrshldDbl = hist.quantile(quantile);
 		
-		//System.out.printf("Mean Intensity Dbl for quantile %f is %f\n", quantile, meanIntensityDbl);
-		
-		int meanIntensity = (int) Math.ceil(intensityThrshldDbl);
-		byte meanIntensityByte = (byte) meanIntensity;
+		try {
+			double intensityThrshldDbl = hist.quantile(quantile);
+	
+			replacePixelsAbove(
+				(int) Math.ceil(intensityThrshldDbl),
+				chnl.getVoxelBox().asByte()
+			);
+		} catch (OperationFailedException e) {
+			throw new CreateException("An error occurred computing a quantile", e);
+		}
+			
+		return chnl;
+	}
+	
+	/** Replaces any pixels with value > threshold, with the threshold value */
+	private static void replacePixelsAbove( int threshold, VoxelBox<ByteBuffer> vb ) {
+		byte meanIntensityByte = (byte) threshold;
 
-		VoxelBox<ByteBuffer> vb = chnl.getVoxelBox().asByte();
 		Extent e = vb.extnt();
 		
 		for( int z=0; z<e.getZ(); z++) {
@@ -86,17 +98,14 @@ public class ChnlProviderSuppressAbove extends ChnlProvider {
 				for( int x=0; x<e.getX(); x++) {
 			
 					int val = ByteConverter.unsignedByteToInt(bb.get(offset));
-					if (val>meanIntensity) {
+					if (val>threshold) {
 						bb.put(offset, meanIntensityByte );
 					}
 					
 					offset++;
 				}
 			}
-			
 		}
-			
-		return chnl;
 	}
 
 	public ChnlProvider getChnlProvider() {
@@ -115,19 +124,12 @@ public class ChnlProviderSuppressAbove extends ChnlProvider {
 		this.quantile = quantile;
 	}
 
-
 	public BinaryImgChnlProvider getBinaryImgChnlProviderMask() {
 		return binaryImgChnlProviderMask;
 	}
-
 
 	public void setBinaryImgChnlProviderMask(
 			BinaryImgChnlProvider binaryImgChnlProviderMask) {
 		this.binaryImgChnlProviderMask = binaryImgChnlProviderMask;
 	}
-
-
-
-
-
 }

@@ -1,5 +1,6 @@
 package org.anchoranalysis.plugin.image.bean.threshold.calculatelevel;
 
+import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.bean.threshold.CalculateLevel;
 
 /*-
@@ -53,7 +54,7 @@ public class Otsu extends CalculateLevel {
 	private static final long serialVersionUID = 1L;
 
 	@Override
-	public int calculateLevel( Histogram hist ) {
+	public int calculateLevel( Histogram hist ) throws OperationFailedException {
 		
 		long totalSum = hist.calcSum();
 		long totalCount = hist.getTotalCount();

@@ -84,9 +84,7 @@ public class IntensityQuantile extends FeatureSingleMemo {
 			} else {
 				return h.quantile(quantile);
 			}
-		} catch (IndexOutOfBoundsException e) {
-			throw new FeatureCalcException(e);
-		} catch (CreateException e) {
+		} catch (IndexOutOfBoundsException | OperationFailedException | CreateException e) {
 			throw new FeatureCalcException(e);
 		}
 	}

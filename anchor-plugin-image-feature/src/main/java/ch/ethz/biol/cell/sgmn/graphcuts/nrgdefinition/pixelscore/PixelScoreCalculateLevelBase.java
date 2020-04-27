@@ -74,7 +74,7 @@ public abstract class PixelScoreCalculateLevelBase extends PixelScoreSingleChnl 
 		);
 	}
 
-	protected abstract void beforeCalcSetup( Histogram hist, int level );	
+	protected abstract void beforeCalcSetup( Histogram hist, int level ) throws OperationFailedException;	
 	
 	protected abstract double calcForPixel( int pxlValue, int level );
 	

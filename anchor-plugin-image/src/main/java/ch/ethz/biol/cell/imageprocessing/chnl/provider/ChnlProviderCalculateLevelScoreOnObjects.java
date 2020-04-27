@@ -31,6 +31,7 @@ import java.nio.ByteBuffer;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
+import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.bean.provider.ChnlProvider;
 import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
@@ -119,10 +120,14 @@ public class ChnlProviderCalculateLevelScoreOnObjects extends ChnlProvider {
 										vbLevel.getPixelsForPlane(z1).buffer().get(offsetGlob)
 								);
 								
-								int low = level - h.calcMin();
-								int high = h.calcMax() - level + 1;
-								
-								dist = Math.min(low, high);
+								try {
+									int low = level - h.calcMin();
+									int high = h.calcMax() - level + 1;
+									
+									dist = Math.min(low, high);
+								} catch (OperationFailedException e1) {
+									throw new CreateException("An occurred calculating the min or max of a histogram", e1);
+								}
 							}
 							
 							// Calculate the score based upon dist

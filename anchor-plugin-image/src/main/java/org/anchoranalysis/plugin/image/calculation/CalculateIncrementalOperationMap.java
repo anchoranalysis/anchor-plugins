@@ -69,6 +69,11 @@ public abstract class CalculateIncrementalOperationMap extends CacheableCalculat
 		
 		try {
 			for( int i=(lowestExistingKey+1); i<=key; i++ ) {
+				
+				if (omIn.getBoundingBox().extnt().equals(new Extent(64,55,4))) {
+					System.out.printf("Apply incremental operation for key %d%n", i);					
+				}
+				
 				ObjMask omNext = applyOperation( omIn, extnt, do3D );
 				
 				// save in cache, as long as it's not the final one, as this will save after the function executes

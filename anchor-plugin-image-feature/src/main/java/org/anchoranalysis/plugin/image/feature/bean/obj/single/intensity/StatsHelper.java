@@ -65,8 +65,9 @@ class StatsHelper {
 	 * @param numPixels the number of pixels to be considered (either the highest-intensity pixels, or lowest-intensity pixel)
 	 * @param highest iff TRUE the highest-intensity pixels are used in the mask, otherwise the lowest-intensity pixels are used
 	 * @return
+	 * @throws OperationFailedException 
 	 */
-	public static double calcMeanNumPixels( Chnl chnl, ObjMask om, int numPixels, boolean highest ) {
+	public static double calcMeanNumPixels( Chnl chnl, ObjMask om, int numPixels, boolean highest ) throws OperationFailedException {
 		
 		Histogram h = HistogramFactoryUtilities.create(chnl, om);
 		

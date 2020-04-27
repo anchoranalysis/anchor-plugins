@@ -1,11 +1,9 @@
 package ch.ethz.biol.cell.mpp.nrg.feature.histogram;
 
-import org.anchoranalysis.feature.cache.SessionInput;
-import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.image.feature.bean.FeatureHistogram;
-import org.anchoranalysis.image.feature.histogram.FeatureInputHistogram;
+import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.image.histogram.Histogram;
 
-public class Median extends FeatureHistogram {
+public class Median extends FeatureHistogramStatistic {
 
 	/**
 	 * 
@@ -13,7 +11,7 @@ public class Median extends FeatureHistogram {
 	private static final long serialVersionUID = 1L;
 
 	@Override
-	protected double calc(SessionInput<FeatureInputHistogram> input) throws FeatureCalcException {
-		return input.get().getHistogram().quantile(0.5);
+	protected double calcStatisticFrom(Histogram histogram) throws OperationFailedException {
+		return histogram.quantile(0.5);
 	}
 }

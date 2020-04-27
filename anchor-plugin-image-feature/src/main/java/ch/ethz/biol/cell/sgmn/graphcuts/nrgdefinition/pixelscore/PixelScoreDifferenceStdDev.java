@@ -32,6 +32,7 @@ import java.util.Optional;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.InitException;
+import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.params.KeyValueParams;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.feature.bean.pixelwise.PixelScore;
@@ -67,8 +68,11 @@ public class PixelScoreDifferenceStdDev extends PixelScore {
 	
 	@Override
 	public void init(List<Histogram> histograms, Optional<KeyValueParams> keyValueParams) throws InitException {
-		
-		width = histograms.get(nrgChnlIndexHistogram).stdDev();
+		try {
+			width = histograms.get(nrgChnlIndexHistogram).stdDev();
+		} catch (OperationFailedException e) {
+			throw new InitException(e);
+		}
 	}
 	
 	@Override

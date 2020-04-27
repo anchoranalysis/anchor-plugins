@@ -31,6 +31,7 @@ import java.nio.ByteBuffer;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
+import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.bean.provider.ChnlProvider;
 import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
@@ -77,14 +78,19 @@ public class ChnlProviderAdjustDifferenceToMedian extends ChnlProvider {
 		
 		ObjMaskCollection objsCollection = objs.create();
 		
-		for( ObjMask om : objsCollection ) {
-			Histogram h = HistogramFactoryUtilities.createWithMask(chnlLookup.getVoxelBox().any(), om);
-			int objMedian = (int) Math.round(h.mean());
-			adjustObj(om, chnl, chnlLookup, objMedian );
-
+		try {
+			for( ObjMask om : objsCollection ) {
+				Histogram h = HistogramFactoryUtilities.createWithMask(chnlLookup.getVoxelBox().any(), om);
+				int objMedian = (int) Math.round(h.mean());
+				adjustObj(om, chnl, chnlLookup, objMedian );
+	
+			}
+			
+			return chnl;
+			
+		} catch (OperationFailedException e) {
+			throw new CreateException("An error occurred calculating the mean", e);
 		}
-		
-		return chnl;
 	}
 	
 	private void adjustObj( ObjMask om, Chnl chnl, Chnl chnlLookup, int objMedian ) {
