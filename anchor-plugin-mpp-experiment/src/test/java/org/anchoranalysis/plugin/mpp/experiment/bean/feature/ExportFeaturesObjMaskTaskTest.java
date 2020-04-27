@@ -57,6 +57,15 @@ public class ExportFeaturesObjMaskTaskTest {
 		
 	private static final String RELATIVE_PATH_SAVED_RESULTS = "expectedOutput/exportFeaturesObjMask/";
 	
+	// Saved output locations for particular tests
+	private static final String OUTPUT_DIR_SIMPLE_1 = "simple01/";
+	private static final String OUTPUT_DIR_MERGED_1 = "mergedPairs01/";
+	private static final String OUTPUT_DIR_MERGED_2 = "mergedPairs02/";
+	
+	// Used for tests where we expect an exception to be thrown, and thus never to actually be compared
+	// It doesn't physically exist
+	private static final String OUTPUT_DIR_IRRELEVANT = "irrelevant/";
+	
 	private static final String[] OUTPUTS_TO_COMPARE = {
 		"csvAgg.csv",
 		"csvAll.csv",
@@ -87,12 +96,12 @@ public class ExportFeaturesObjMaskTaskTest {
 	public void testSimpleSmall() throws OperationFailedException {
 		// The saved directory is irrelevant because an exception is thrown
 		taskFixture.useSmallNRGInstead();
-		testOnTask("irrelevant");
+		testOnTask(OUTPUT_DIR_IRRELEVANT);
 	}
 	
 	@Test
 	public void testSimpleLarge() throws OperationFailedException {
-		testOnTask("simple01/");
+		testOnTask(OUTPUT_DIR_SIMPLE_1);
 	}
 	
 	@Test(expected=OperationFailedException.class)
@@ -100,20 +109,20 @@ public class ExportFeaturesObjMaskTaskTest {
 		// The saved directory is irrelevant because an exception is thrown
 		taskFixture.useSmallNRGInstead();
 		taskFixture.changeToMergedPairs(false);
-		testOnTask("irrelevant");
+		testOnTask(OUTPUT_DIR_IRRELEVANT);
 	}
 	
 	@Test
 	public void testMergedLarge() throws OperationFailedException, CreateException {
 		taskFixture.changeToMergedPairs(false);
-		testOnTask("mergedPairs01/");
+		testOnTask(OUTPUT_DIR_MERGED_1);
 	}
 	
 	@Test
 	public void testMergedLargeWithPairs() throws OperationFailedException, CreateException {
 		taskFixture.includeAdditionalShellFeature();
 		taskFixture.changeToMergedPairs(true);
-		testOnTask("mergedPairs02/");
+		testOnTask(OUTPUT_DIR_MERGED_2);
 	}
 	
 	/**
@@ -154,7 +163,7 @@ public class ExportFeaturesObjMaskTaskTest {
 		taskFixture.changeToMergedPairs(true);
 		
 		FeatureCalculationFixture.executeAndAssertCnt(
-			12,
+			MultiInputFixture.NUM_PAIRS_INTERSECTING * 4,
 			() -> testOnTask("repeatedInSingleAndPair/")
 		);
 	}
