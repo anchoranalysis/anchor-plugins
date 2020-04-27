@@ -26,33 +26,15 @@ package org.anchoranalysis.plugin.mpp.experiment.bean.feature;
  * #L%
  */
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
-
-import org.anchoranalysis.bean.NamedBean;
 import org.anchoranalysis.bean.xml.RegisterBeanFactories;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.feature.bean.list.FeatureListProvider;
-import org.anchoranalysis.feature.input.FeatureInput;
-import org.anchoranalysis.feature.nrg.NRGStack;
-import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
-import org.anchoranalysis.image.bean.provider.stack.StackProvider;
-import org.anchoranalysis.image.stack.Stack;
-import org.anchoranalysis.plugin.mpp.experiment.bean.feature.flexi.FlexiFeatureTable;
-import org.anchoranalysis.plugin.mpp.experiment.bean.feature.flexi.MergedPairs;
-import org.anchoranalysis.plugin.mpp.experiment.bean.feature.flexi.Simple;
 import org.anchoranalysis.test.TestLoader;
-import org.anchoranalysis.test.feature.plugins.FeaturesFromXmlFixture;
-import org.anchoranalysis.test.image.NRGStackFixture;
+import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
-import static org.mockito.Mockito.*;
-
-import ch.ethz.biol.cell.imageprocessing.objmask.provider.ObjMaskProviderReference;
 
 
 /**
@@ -66,12 +48,9 @@ import ch.ethz.biol.cell.imageprocessing.objmask.provider.ObjMaskProviderReferen
  */
 public class ExportFeaturesObjMaskTaskTest {
 	
-	private static ExportFeaturesObjMaskTaskFixture taskFixture;
-
-	private static final String PATH_FEATURES = "singleFeatures.xml";
-	private static final String PATH_FEATURES_SHELL = "singleFeaturesWithShell.xml";
-	private static final String PATH_FEATURES_PAIR = "pairFeatures.xml";
-	
+	private static TestLoader loader;
+	private ExportFeaturesObjMaskTaskFixture taskFixture;
+		
 	private static final String RELATIVE_PATH_SAVED_RESULTS = "expectedOutput/exportFeaturesObjMask/";
 	
 	private static final String[] OUTPUTS_TO_COMPARE = {
@@ -92,125 +71,59 @@ public class ExportFeaturesObjMaskTaskTest {
 	@BeforeClass
 	public static void setup() {
 		RegisterBeanFactories.registerAllPackageBeanFactories();
-		TestLoader loader = TestLoader.createFromMavenWorkingDir();
+		loader = TestLoader.createFromMavenWorkingDir();
+	}
+	
+	@Before
+	public void setupTest() {
 		taskFixture = new ExportFeaturesObjMaskTaskFixture(loader);
 	}
 	
 	@Test(expected=OperationFailedException.class)
 	public void testSimpleSmall() throws OperationFailedException, CreateException {
 		// The saved directory is irrelevant because an exception is thrown
-		testOnTask(
-			false,
-			false,
-			false,
-			false,
-			"irrelevant"
-		);
+		taskFixture.useSmallNRGInstead();
+		testOnTask("irrelevant");
 	}
 	
 	@Test
 	public void testSimpleLarge() throws OperationFailedException, CreateException {
-		testOnTask(
-			false,
-			false,
-			false,
-			true,
-			"simple01/"
-		);
+		testOnTask("simple01/");
 	}
 	
 	@Test(expected=OperationFailedException.class)
 	public void testMergedSmall() throws OperationFailedException, CreateException {
 		// The saved directory is irrelevant because an exception is thrown
-		testOnTask(
-			false,
-			true,
-			false,
-			false,
-			"irrelevant"
-		);
+		taskFixture.useSmallNRGInstead();
+		taskFixture.changeToMergedPairs(false);
+		testOnTask("irrelevant");
 	}
 	
 	@Test
 	public void testMergedLarge() throws OperationFailedException, CreateException {
-		testOnTask(
-			false,
-			true,
-			false,
-			true,
-			"mergedPairs01/"
-		);
+		taskFixture.changeToMergedPairs(false);
+		testOnTask("mergedPairs01/");
 	}
 	
 	@Test
 	public void testMergedLargeWithPairs() throws OperationFailedException, CreateException {
-		testOnTask(
-			true,
-			true,
-			true,
-			true,
-			"mergedPairs02/"
-		);
+		taskFixture.includeAdditionalShellFeature();
+		taskFixture.changeToMergedPairs(true);
+		testOnTask("mergedPairs02/");
 	}
 	
 	/**
 	 * Runs a test to check if the results of ExportFeaturesObjMaskTask correspond to saved-values
-	 * 
-	 * @param singleIncludeShell iff TRUE additional an additional "shell" feature is included in the basic features, alongside the existing ones
-	 * @param mergedPairs iff TRUE a merged-pairs table is created instead of a simple one
-	 * @param includeFeaturesInPair iff TRUE pair-type features are included in the merged-pairs (only meaningful if mergedPairs==TRUE)
-	 * @param bigSizeNrg iff TRUE a bigger NRG size is used, otherwise a small NRG size is used which deliberately causes various errors
+	 *
 	 * @param suffixPathDirSaved a suffix to identify where to find the saved-output to compare against
 	 * @throws OperationFailedException
 	 * @throws CreateException
 	 */
-	private void testOnTask(
-		boolean singleIncludeShell,
-		boolean mergedPairs,
-		boolean includeFeaturesInPair,	// Only meaningful when mergePairs==true
-		boolean bigSizeNrg,
-		String suffixPathDirSaved
-	) throws OperationFailedException, CreateException {
-		
-		String pathFeatures = singleIncludeShell ? PATH_FEATURES_SHELL : PATH_FEATURES; 
-		
-		NRGStack nrgStack = NRGStackFixture.create(bigSizeNrg, false).getNrgStack();
-		
-		testOnTask(
-			pathFeatures,
-			createFlexiFeature(mergedPairs, includeFeaturesInPair),
-			nrgStack,
-			suffixPathDirSaved
-		);
-	}
-	
-	private FlexiFeatureTable<?> createFlexiFeature(
-		boolean mergedPairs,
-		boolean includeFeaturesInPair	// Only meaningful when mergePairs==true
-	) throws CreateException {
-		if (mergedPairs) {
-			return taskFixture.createMergedPairs(
-				includeFeaturesInPair ? Optional.of(PATH_FEATURES_PAIR) : Optional.empty()
-			); 
-		} else {
-			return new Simple();
-		}
-	}
-	
-	private void testOnTask(
-		String pathFeatures,
-		FlexiFeatureTable<?> selectFeaturesObjects,
-		NRGStack nrgStack,
-		String suffixPathDirSaved
-	) throws OperationFailedException, CreateException {
+	private void testOnTask(String suffixPathDirSaved) throws OperationFailedException, CreateException {
 		
 		TaskSingleInputHelper.runTaskAndCompareOutputs(
-			MultiInputFixture.createInput(nrgStack),
-			taskFixture.createTask(
-				pathFeatures,
-				selectFeaturesObjects,
-				nrgStack
-			),
+			MultiInputFixture.createInput( taskFixture.getNrgStack() ),
+			taskFixture.createTask(),
 			folder.getRoot().toPath(),
 			RELATIVE_PATH_SAVED_RESULTS + suffixPathDirSaved,
 			OUTPUTS_TO_COMPARE
