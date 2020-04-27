@@ -34,6 +34,15 @@ class MultiInputFixture {
 
 	public static final String OBJS_NAME = "objsTest";
 	
+	/**
+	 * This creates a MultiInput with an object-collection OBJS_NAME
+	 * 
+	 * <p>It contains 6 unique objects, 4 of whom intersect, and 2 who don't intersect at all.</p>
+	 * <p>Among the four who intersect, there are 3 intersections.</p>
+	 * 
+	 * @param nrgStack
+	 * @return
+	 */
 	public static MultiInput createInput( NRGStack nrgStack) {
 		MultiInput input = new MultiInput(
 			"input",

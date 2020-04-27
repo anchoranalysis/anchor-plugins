@@ -52,7 +52,7 @@ public class MaxFeatureIntersectingObjsTest {
 			true,
 			FeatureHelper.EXPECTED_NUM_PIXELS_FIRST_CIRCLE,
 			FeatureHelper.EXPECTED_NUM_PIXELS_FIRST_CIRCLE,
-			FeatureHelper.EXPECTED_NUM_PIXELS_FIRST_CIRCLE,
+			FeatureHelper.VALUE_NO_OBJECTS,
 			FeatureHelper.VALUE_NO_OBJECTS
 		);
 	}
@@ -72,7 +72,7 @@ public class MaxFeatureIntersectingObjsTest {
 			false,
 			FeatureHelper.EXPECTED_NUM_PIXELS_FIRST_CIRCLE,
 			FeatureHelper.EXPECTED_NUM_PIXELS_SECOND_CIRCLE,
-			FeatureHelper.EXPECTED_NUM_PIXELS_SECOND_LAST_CIRCLE,
+			FeatureHelper.VALUE_NO_OBJECTS,
 			FeatureHelper.VALUE_NO_OBJECTS
 		);
 	}
