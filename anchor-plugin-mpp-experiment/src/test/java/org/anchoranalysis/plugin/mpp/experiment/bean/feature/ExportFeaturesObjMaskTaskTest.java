@@ -28,6 +28,7 @@ package org.anchoranalysis.plugin.mpp.experiment.bean.feature;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 import org.anchoranalysis.bean.NamedBean;
 import org.anchoranalysis.bean.xml.RegisterBeanFactories;
@@ -38,7 +39,6 @@ import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.nrg.NRGStack;
 import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
 import org.anchoranalysis.image.bean.provider.stack.StackProvider;
-import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.plugin.mpp.experiment.bean.feature.flexi.FlexiFeatureTable;
 import org.anchoranalysis.plugin.mpp.experiment.bean.feature.flexi.MergedPairs;
@@ -71,6 +71,10 @@ public class ExportFeaturesObjMaskTaskTest {
 	
 	private static TestLoader loader = TestLoader.createFromMavenWorkingDir();
 	
+	private static final String PATH_FEATURES = "singleFeatures.xml";
+	private static final String PATH_FEATURES_SHELL = "singleFeaturesWithShell.xml";
+	private static final String PATH_FEATURES_PAIR = "pairFeatures.xml";
+	
 	private static final String RELATIVE_PATH_SAVED_RESULTS = "expectedOutput/exportFeaturesObjMask/";
 	
 	private static final String[] OUTPUTS_TO_COMPARE = {
@@ -91,26 +95,70 @@ public class ExportFeaturesObjMaskTaskTest {
 	@Test(expected=OperationFailedException.class)
 	public void testSimpleSmall() throws OperationFailedException, CreateException {
 		// The saved directory is irrelevant because an exception is thrown
-		testOnTask( new Simple(), false, "irrelevant" );
+		testOnTask(
+			PATH_FEATURES,
+			new Simple(),
+			false,
+			"irrelevant"
+		);
 	}
 	
 	@Test
 	public void testSimpleLarge() throws OperationFailedException, CreateException {
-		testOnTask( new Simple(), true, "simple01/" );
+		testOnTask(
+			PATH_FEATURES,				
+			new Simple(),
+			true,
+			"simple01/"
+		);
 	}
 	
 	@Test(expected=OperationFailedException.class)
 	public void testMergedSmall() throws OperationFailedException, CreateException {
 		// The saved directory is irrelevant because an exception is thrown
-		testOnTask( new MergedPairs(), false, "irrelevant" );
+		testOnTask(
+			PATH_FEATURES,
+			createMergedPairs(Optional.empty()),
+			false,
+			"irrelevant"
+		);
 	}
 	
 	@Test
 	public void testMergedLarge() throws OperationFailedException, CreateException {
-		testOnTask( new MergedPairs(), true, "mergedPairs01/" );
+		testOnTask(
+			PATH_FEATURES,
+			createMergedPairs(Optional.empty()),
+			true,
+			"mergedPairs01/"
+		);
+	}
+	
+	@Test
+	public void testMergedLargeWithPairs() throws OperationFailedException, CreateException {
+		testOnTask(
+			PATH_FEATURES_SHELL,
+			createMergedPairs(
+				Optional.of(PATH_FEATURES_PAIR)
+			),
+			true,
+			"mergedPairs02/"
+		);
+	}
+	
+	private MergedPairs createMergedPairs( Optional<String> pathPairFeatures ) throws CreateException {
+		MergedPairs mergedPairs = new MergedPairs();
+		mergedPairs.setSuppressErrors(true);
+		if (pathPairFeatures.isPresent()) {
+			mergedPairs.setListFeaturesPair(
+				loadFeatures(loader, pathPairFeatures.get())
+			);
+		}
+		return mergedPairs;
 	}
 	
 	private <T extends FeatureInput> void testOnTask(
+		String pathFeatures,
 		FlexiFeatureTable<T> selectFeaturesObjects,
 		boolean bigSizeNrg,
 		String suffixPathDirSaved
@@ -120,7 +168,11 @@ public class ExportFeaturesObjMaskTaskTest {
 		
 		TaskSingleInputHelper.runTaskAndCompareOutputs(
 			MultiInputFixture.createInput(nrgStack),
-			createTask( selectFeaturesObjects, nrgStack ),
+			createTask(
+				pathFeatures,
+				selectFeaturesObjects,
+				nrgStack
+			),
 			folder.getRoot().toPath(),
 			RELATIVE_PATH_SAVED_RESULTS + suffixPathDirSaved,
 			OUTPUTS_TO_COMPARE
@@ -128,12 +180,15 @@ public class ExportFeaturesObjMaskTaskTest {
 	}
 	
 	private static <T extends FeatureInput> ExportFeaturesObjMaskTask<T> createTask(
+		String pathFeatures,
 		FlexiFeatureTable<T> selectFeaturesObjects,
 		NRGStack nrgStack
 	) throws CreateException {
+				
 		ExportFeaturesObjMaskTask<T> task = new ExportFeaturesObjMaskTask<>();
+
 		task.setListFeaturesObjMask(
-			objMaskFeatures(loader)
+			loadFeatures(loader, pathFeatures)
 		);
 		task.setNrgStackProvider(
 			nrgStackProvider(nrgStack)
@@ -169,7 +224,7 @@ public class ExportFeaturesObjMaskTaskTest {
 	 *  
 	 * @throws CreateException 
 	 * */
-	private static List<NamedBean<FeatureListProvider<FeatureInputSingleObj>>> objMaskFeatures( TestLoader loader ) throws CreateException {
-		return FeaturesFromXmlFixture.createNamedFeatureProviders("namedObjMaskFeaturesList.xml", loader);
+	private static <T extends FeatureInput> List<NamedBean<FeatureListProvider<T>>> loadFeatures( TestLoader loader, String pathFeatureList ) throws CreateException {
+		return FeaturesFromXmlFixture.createNamedFeatureProviders(pathFeatureList, loader);
 	}
 }

@@ -28,6 +28,7 @@ package ch.ethz.biol.cell.sgmn.graphcuts.nrgdefinition.pixelscore;
 
 
 import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.relation.GreaterThanEqualTo;
 import org.anchoranalysis.core.relation.LessThan;
 import org.anchoranalysis.image.histogram.Histogram;
@@ -53,7 +54,7 @@ public class PixelScoreDifferenceCalculateLevelStdDev extends PixelScoreCalculat
 	private double widthGreaterThan;
 	
 	@Override
-	protected void beforeCalcSetup(Histogram hist, int level) {
+	protected void beforeCalcSetup(Histogram hist, int level) throws OperationFailedException {
 			
 		Histogram lessThan = hist.threshold( new LessThan(), level );
 		Histogram greaterThan = hist.threshold( new GreaterThanEqualTo(), level );

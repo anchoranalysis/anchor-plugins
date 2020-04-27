@@ -72,7 +72,7 @@ class FeatureCalculator {
 			}
 			
 		} catch (FeatureCalcException e) {
-			logger.getErrorReporter().recordError(ExportFeaturesObjMaskTask.class, e);
+			throw new OperationFailedException("An error occurred calculating a feature (which on suppressErrors for this to be automatically converted into a NaN)", e);
 		}
 	}
 }

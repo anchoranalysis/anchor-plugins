@@ -33,6 +33,7 @@ import java.util.Optional;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.shared.relation.RelationBean;
 import org.anchoranalysis.core.error.InitException;
+import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.params.KeyValueParams;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.feature.bean.pixelwise.PixelScore;
@@ -80,10 +81,14 @@ public class PixelScoreIdentityImposeValueRelationToHistogram extends PixelScore
 
 	@Override
 	public void init(List<Histogram> histograms, Optional<KeyValueParams> keyValueParams) throws InitException {
-		if (max) {
-			histMax = histograms.get(histIndex).calcMax();
-		} else {
-			histMax = histograms.get(histIndex).calcMin();
+		try {
+			if (max) {
+				histMax = histograms.get(histIndex).calcMax();
+			} else {
+				histMax = histograms.get(histIndex).calcMin();
+			}
+		} catch (OperationFailedException e) {
+			throw new InitException(e);
 		}
 	}
 

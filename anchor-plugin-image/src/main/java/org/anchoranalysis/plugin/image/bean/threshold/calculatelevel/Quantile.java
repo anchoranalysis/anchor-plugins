@@ -28,6 +28,7 @@ package org.anchoranalysis.plugin.image.bean.threshold.calculatelevel;
 
 
 import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.bean.threshold.CalculateLevel;
 import org.anchoranalysis.image.histogram.Histogram;
 import org.apache.commons.lang.builder.EqualsBuilder;
@@ -57,7 +58,7 @@ public class Quantile extends CalculateLevel {
 	// END BEAN PROPERTIES
 	
 	@Override
-	public int calculateLevel(Histogram h) {
+	public int calculateLevel(Histogram h) throws OperationFailedException {
 		return h.quantile(quantile);
 	}
 
