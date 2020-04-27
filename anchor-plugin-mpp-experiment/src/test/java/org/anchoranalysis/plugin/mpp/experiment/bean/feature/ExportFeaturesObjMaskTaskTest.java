@@ -118,18 +118,18 @@ public class ExportFeaturesObjMaskTaskTest {
 	
 	/**
 	 *  Tests when a particular FeatureCalculation is called by a feature in both the Single and Pair part of merged-pairs.
-	 *  
-	 *  <p>To be efficient, this calculation should only occur once, as the caches should be linked</p>.
 	 * 
 	 *  <div>
-	 *  There are 4 unique objects and 3 pairs of neighbours, The feature is calculated on:
+	 *  There are 4 unique objects and 3 pairs of neighbors. For each pair, the feature is calculated on:
 	 *  <ol>
-	 *  <li>the left-object of each pair</li>
-	 *  <li>the right-object of each pair</li>
-	 *  <li>the left-object of each pair (embedded in a FromFirst)</li>
-	 *  <li>merged-object</li>
+	 *  <li>the left-object of the pair</li>
+	 *  <li>the right-object of the pair</li>
+	 *  <li>again the left-object of the pair (embedded in a FromFirst)</li>
+	 *  <li>the merged-object</li>
 	 *  </ol>
 	 *  </div>
+	 *  
+	 *  <p>So the outputting feature table is 3 rows x 4 (result) columns.</p>
 	 *  
 	 *  <p>In a maximally-INEFFICIENT implementation (no caching),
 	 *         the calculation would occur 12 times (3 pairs x 4 calculations each time)</p>
