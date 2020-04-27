@@ -52,7 +52,26 @@ import org.anchoranalysis.image.feature.objmask.pair.merged.FeatureInputPairObjs
 import org.anchoranalysis.image.feature.stack.FeatureInputStack;
 import org.anchoranalysis.image.init.ImageInitParams;
 
-public class FeatureSessionMergedPairs extends FeatureSessionFlexiFeatureTable<FeatureInputPairObjsMerged> {
+
+/**
+ * A particular type of feature-session where successive pairs of objects are evaluated by features in five different ways:
+ * 
+ * <div>
+ * <ul>
+ * the image in which the object exists (on {@link #listImage}) i.e. the nrg-stack.
+ * the left-object in the pair (on {@link #listSingle})
+ * the right-object in the pair (on {@link #listSingle})
+ * the pair (on {@link #listPair})
+ * both objects merged together (on {@link #listSingle}}
+ * </ul>
+ * </div>
+ * 
+ * <p>Due to the predictable pattern, feature-calculations can be cached predictably and appropriately to avoid redundancies</p>.
+ * 
+ * @author Owen Feehan
+ *
+ */
+public class MergedPairsSession extends FeatureSessionFlexiFeatureTable<FeatureInputPairObjsMerged> {
 
 	private boolean includeFirst;
 	private boolean includeSecond;
@@ -67,30 +86,24 @@ public class FeatureSessionMergedPairs extends FeatureSessionFlexiFeatureTable<F
 	private FeatureCalculatorMulti<FeatureInputPairObjsMerged> sessionPair;
 
 	// The lists we need
-	private FeatureList<FeatureInputStack> listImage;
-	private FeatureList<FeatureInputSingleObj> listSingle;
-	private FeatureList<FeatureInputPairObjsMerged> listPair;
+	private MergedPairsFeatures features;
 	private boolean checkInverse = false;
 	private boolean suppressErrors = false;
 	
 	// Prefixes that are ignored
 	private Collection<String> ignoreFeaturePrefixes;
 	
-	public FeatureSessionMergedPairs(
+	public MergedPairsSession(
 		boolean includeFirst,
 		boolean includeSecond,
-		FeatureList<FeatureInputStack> listImage,
-		FeatureList<FeatureInputSingleObj> listSingle,
-		FeatureList<FeatureInputPairObjsMerged> listPair,
+		MergedPairsFeatures features,
 		Collection<String> ignoreFeaturePrefixes,
 		boolean checkInverse,
 		boolean suppressErrors
 	) {
 		this.includeFirst = includeFirst;
 		this.includeSecond = includeSecond;
-		this.listImage = listImage;
-		this.listSingle = listSingle;
-		this.listPair = listPair;
+		this.features = features;
 		this.checkInverse = checkInverse;
 		this.suppressErrors = suppressErrors;
 		this.ignoreFeaturePrefixes = ignoreFeaturePrefixes;
@@ -131,13 +144,13 @@ public class FeatureSessionMergedPairs extends FeatureSessionFlexiFeatureTable<F
 
 		
 		sessionImage = new FeatureCalculatorMultiReuse<FeatureInputStack>( 
-			createCalculator(listImage, soImage, nrgStack, logErrorReporter)	
+			createCalculator(features.getImage(), soImage, nrgStack, logErrorReporter)	
 		);
 		
 		if (includeFirst || includeSecond) {
 			logErrorReporter.getLogReporter().log("Setting up: First/Second Features");
 			sessionFirstSecond = new FeatureCalculatorCachedResults<>(
-				createCalculator(listSingle, soImage, nrgStack, logErrorReporter),
+				createCalculator(features.getSingle(), soImage, nrgStack, logErrorReporter),
 				suppressErrors
 			);
 
@@ -150,7 +163,7 @@ public class FeatureSessionMergedPairs extends FeatureSessionFlexiFeatureTable<F
 		//  from the calculation of the First and Second individual features, as they appear again
 		//  as additionalCaches of sessionPair
 		// TODO fix no shared features anymore, prev sharedFeatures.duplicate()		
-		sessionPair = createCalculator(listPair, soImage, nrgStack, logErrorReporter);
+		sessionPair = createCalculator(features.getPair(), soImage, nrgStack, logErrorReporter);
 		
 
 			
@@ -159,7 +172,7 @@ public class FeatureSessionMergedPairs extends FeatureSessionFlexiFeatureTable<F
 		//  to make sure there's no collision of the caches
 		//System.out.println("SessionMerged");
 		logErrorReporter.getLogReporter().log("Setting up: Merged Features");
-		sessionMerged =  createCalculator(listSingle.duplicateBean(), soImage, nrgStack, logErrorReporter );
+		sessionMerged =  createCalculator(features.getSingle().duplicateBean(), soImage, nrgStack, logErrorReporter );
 		
 		// TODO fix no shared features anymore, prev sharedFeatures.duplicate()
 
@@ -173,12 +186,10 @@ public class FeatureSessionMergedPairs extends FeatureSessionFlexiFeatureTable<F
 
 	@Override
 	public FeatureSessionFlexiFeatureTable<FeatureInputPairObjsMerged> duplicateForNewThread() {
-		return new FeatureSessionMergedPairs(
+		return new MergedPairsSession(
 			includeFirst,
 			includeSecond,
-			listImage.duplicateBean(),
-			listSingle.duplicateBean(),
-			listPair.duplicateBean(),
+			features.duplicate(),
 			ignoreFeaturePrefixes,	// NOT DUPLICATED
 			checkInverse,
 			suppressErrors
@@ -201,8 +212,8 @@ public class FeatureSessionMergedPairs extends FeatureSessionFlexiFeatureTable<F
 			InverseChecker checker = new InverseChecker(
 				includeFirst,
 				includeSecond,
-				listImage.size(),
-				listSingle.size(),
+				features.numImageFeatures(),
+				features.numSingleFeatures(),
 				() -> createFeatureNames()
 			);
 			checker.checkInverseEqual(rv, rvInverse, params);
@@ -276,19 +287,19 @@ public class FeatureSessionMergedPairs extends FeatureSessionFlexiFeatureTable<F
 	public FeatureNameList createFeatureNames() {
 		FeatureNameList out = new FeatureNameList();
 		
-		out.addCustomNamesWithPrefix( "image.", listImage );
+		out.addCustomNamesWithPrefix( "image.", features.getImage() );
 		
 		if (includeFirst) {
-			out.addCustomNamesWithPrefix( "first.", listSingle );
+			out.addCustomNamesWithPrefix( "first.", features.getSingle() );
 		}
 		
 		if (includeSecond) {
-			out.addCustomNamesWithPrefix( "second.", listSingle );
+			out.addCustomNamesWithPrefix( "second.", features.getSingle() );
 		}
 		
-		out.addCustomNamesWithPrefix( "pair.", listPair );
+		out.addCustomNamesWithPrefix( "pair.", features.getPair() );
 		
-		out.addCustomNamesWithPrefix( "merged.", listSingle );
+		out.addCustomNamesWithPrefix( "merged.", features.getSingle() );
 		return out;
 	}
 
@@ -310,7 +321,9 @@ public class FeatureSessionMergedPairs extends FeatureSessionFlexiFeatureTable<F
 		// Number of times we use the listSingle
 		int numSingle = 1 + integerFromBoolean(includeFirst) + integerFromBoolean(includeSecond);
 				
-		return listImage.size() + listPair.size() + (numSingle * listSingle.size());
+		return features.numImageFeatures()
+			+ features.numPairFeatures()
+			+ (numSingle * features.numSingleFeatures());
 	}
 
 	public boolean isCheckInverse() {
