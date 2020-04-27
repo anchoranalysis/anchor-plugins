@@ -53,7 +53,7 @@ public class IntersectingCircleObjsFixture {
 	
 		Point2i center = new Point2i( INITIAL_MARGIN + radius, INITIAL_MARGIN + radius);
 
-		// Keep on generating circles of radius 10 with centers radius*1.5 apart, so that they intersect
+		// Keep on generating circles of centers radius*1.5 apart, so that they intersect
 		for( int i=0; i<numIntersecting; i++) {
 			out.add(
 				generateCircleAndShift(center, radius, 1.5)
@@ -62,6 +62,9 @@ public class IntersectingCircleObjsFixture {
 				radius += RADIUS_INCR;
 			}
 		}
+		
+		// Shift another 1.5 to make sure there's no intersection between first set and second
+		shift(center, radius, 1.5);
 		
 		// Now generate at radius 3 apartment, so that they do not intersect
 		for( int i=0; i<numNotIntersecting; i++) {
@@ -82,11 +85,14 @@ public class IntersectingCircleObjsFixture {
 	
 	private static ObjMask generateCircleAndShift(Point2i center, int radius, double factor) {
 		ObjMask om = CircleObjMaskFixture.circleAt(center, radius);
-		
+		shift(center, radius, factor);
+		return om;
+	}
+	
+	private static void shift(Point2i center, int radius, double factor) {
 		int shift = (int) (factor*radius);
 		center.incrX(shift);
 		center.incrY(shift);
-		
-		return om;
 	}
+	
 }

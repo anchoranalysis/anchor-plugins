@@ -29,12 +29,16 @@ package org.anchoranalysis.plugin.mpp.experiment.bean.feature;
 import org.anchoranalysis.bean.xml.RegisterBeanFactories;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.feature.bean.Feature;
+import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
 import org.anchoranalysis.test.TestLoader;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
+
+import ch.ethz.biol.cell.mpp.nrg.feature.objmaskpairmerged.FromFirst;
 
 
 /**
@@ -80,14 +84,14 @@ public class ExportFeaturesObjMaskTaskTest {
 	}
 	
 	@Test(expected=OperationFailedException.class)
-	public void testSimpleSmall() throws OperationFailedException, CreateException {
+	public void testSimpleSmall() throws OperationFailedException {
 		// The saved directory is irrelevant because an exception is thrown
 		taskFixture.useSmallNRGInstead();
 		testOnTask("irrelevant");
 	}
 	
 	@Test
-	public void testSimpleLarge() throws OperationFailedException, CreateException {
+	public void testSimpleLarge() throws OperationFailedException {
 		testOnTask("simple01/");
 	}
 	
@@ -117,14 +121,42 @@ public class ExportFeaturesObjMaskTaskTest {
 	 *  
 	 *  <p>To be efficient, this calculation should only occur once, as the caches should be linked</p>.
 	 * 
+	 *  <div>
+	 *  There are 4 unique objects and 3 pairs of neighbours, The feature is calculated on:
+	 *  <ol>
+	 *  <li>the left-object of each pair</li>
+	 *  <li>the right-object of each pair</li>
+	 *  <li>the left-object of each pair (embedded in a FromFirst)</li>
+	 *  <li>merged-object</li>
+	 *  </ol>
+	 *  </div>
+	 *  
+	 *  <p>In a maximally-INEFFICIENT implementation (no caching),
+	 *         the calculation would occur 12 times (3 pairs x 4 calculations each time)</p>
+	 *  <p>In a maximally-EFFICIENT implementation (caching everything possible),
+	 *         the calculation would occur only 4 times (once for each object)</p>.
+	 * 
 	 * @throws OperationFailedException
 	 * @throws CreateException
 	 */
 	@Test
 	public void testRepeatedCalculationInSingleAndPair() throws OperationFailedException, CreateException {
-		taskFixture.includeAdditionalShellFeature();
+		
+		Feature<FeatureInputSingleObj> feature = new FeatureCalculationFixture.MockFeatureWithCalculation();
+		
+		taskFixture.useInsteadAsSingleFeature(feature);
+		taskFixture.useInsteadAsPairFeature(
+			// This produces the same result as the feature calculated on the left-object
+			new FromFirst(
+				feature
+			)	
+		);
 		taskFixture.changeToMergedPairs(true);
-		testOnTask("mergedPairs02/");
+		
+		FeatureCalculationFixture.executeAndAssertCnt(
+			12,
+			() -> testOnTask("repeatedInSingleAndPair/")
+		);
 	}
 	
 	/**
@@ -134,14 +166,18 @@ public class ExportFeaturesObjMaskTaskTest {
 	 * @throws OperationFailedException
 	 * @throws CreateException
 	 */
-	private void testOnTask(String suffixPathDirSaved) throws OperationFailedException, CreateException {
+	private void testOnTask(String suffixPathDirSaved) throws OperationFailedException {
 		
-		TaskSingleInputHelper.runTaskAndCompareOutputs(
-			MultiInputFixture.createInput( taskFixture.getNrgStack() ),
-			taskFixture.createTask(),
-			folder.getRoot().toPath(),
-			RELATIVE_PATH_SAVED_RESULTS + suffixPathDirSaved,
-			OUTPUTS_TO_COMPARE
-		);	
+		try {
+			TaskSingleInputHelper.runTaskAndCompareOutputs(
+				MultiInputFixture.createInput( taskFixture.getNrgStack() ),
+				taskFixture.createTask(),
+				folder.getRoot().toPath(),
+				RELATIVE_PATH_SAVED_RESULTS + suffixPathDirSaved,
+				OUTPUTS_TO_COMPARE
+			);
+		} catch (CreateException e) {
+			throw new OperationFailedException(e);
+		}	
 	}
 }

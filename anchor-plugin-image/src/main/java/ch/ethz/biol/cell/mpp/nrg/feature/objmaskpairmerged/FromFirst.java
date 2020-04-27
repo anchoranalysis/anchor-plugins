@@ -1,5 +1,8 @@
 package ch.ethz.biol.cell.mpp.nrg.feature.objmaskpairmerged;
 
+import org.anchoranalysis.feature.bean.Feature;
+import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
+
 /*-
  * #%L
  * anchor-plugin-image
@@ -42,6 +45,14 @@ public class FromFirst extends FromExisting {
 	 */
 	private static final long serialVersionUID = 1L;
 
+	public FromFirst() {
+		// NOTHING TO DO
+	}
+	
+	public FromFirst(Feature<FeatureInputSingleObj> item) {
+		super(item);
+	}
+	
 	@Override
 	protected ObjMask selectObjMask(FeatureInputPairObjsMerged params) {
 		return params.getObjMask1();

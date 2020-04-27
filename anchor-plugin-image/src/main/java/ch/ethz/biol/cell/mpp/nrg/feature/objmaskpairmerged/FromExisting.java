@@ -56,6 +56,14 @@ public abstract class FromExisting extends FeatureObjMaskPairMerged {
 	private Feature<FeatureInputSingleObj> item;
 	// END BEAN PROPERTIES
 	
+	protected FromExisting() {
+		// NOTHING TO DO
+	}
+	
+	protected FromExisting(Feature<FeatureInputSingleObj> item) {
+		this.item = item;
+	}
+	
 	@Override
 	public double calc(SessionInput<FeatureInputPairObjsMerged> input)
 			throws FeatureCalcException {

@@ -75,6 +75,15 @@ class ExportFeaturesObjMaskTaskFixture {
 	public void useInsteadAsSingleFeature( Feature<FeatureInputSingleObj> feature ) {
 		singleFeatures.useSingleFeature(feature);
 	}
+
+	/** 
+	 * Uses this feature instead of whatever list has been loaded for the pair-features
+	 * 
+	 * <p>It does not initialize the feature.</p>
+	 * */
+	public void useInsteadAsPairFeature( Feature<FeatureInputPairObjsMerged> feature ) {
+		pairFeatures.useSingleFeature(feature);
+	}
 	
 	/** 
 	 * Change to use Merged-Pairs mode rather than Simple mode
