@@ -39,12 +39,7 @@ import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.graph.EdgeTypeWithVertices;
 import org.anchoranalysis.core.graph.GraphWithEdgeTypes;
 import org.anchoranalysis.core.log.LogErrorReporter;
-import org.anchoranalysis.feature.bean.Feature;
-import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.bean.list.FeatureListProvider;
-import org.anchoranalysis.feature.input.FeatureInput;
-import org.anchoranalysis.feature.list.NamedFeatureStore;
-import org.anchoranalysis.feature.list.NamedFeatureStoreFactory;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
 import org.anchoranalysis.image.feature.objmask.pair.merged.FeatureInputPairObjsMerged;
@@ -53,7 +48,8 @@ import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.image.objmask.ObjMaskCollection;
 import org.anchoranalysis.image.voxel.nghb.CreateNghbGraph;
 import org.anchoranalysis.plugin.mpp.experiment.feature.FeatureSessionFlexiFeatureTable;
-import org.anchoranalysis.plugin.mpp.experiment.feature.FeatureSessionMergedPairs;
+import org.anchoranalysis.plugin.mpp.experiment.feature.MergedPairsFeatures;
+import org.anchoranalysis.plugin.mpp.experiment.feature.MergedPairsSession;
 
 /**
  * Creates a set of features, that creates pairs of neighbouring-objects and applies a mixture of single-object features
@@ -154,23 +150,16 @@ public class MergedPairs extends FlexiFeatureTable<FeatureInputPairObjsMerged> {
 	) throws CreateException {
 		
 		try {
-			NamedFeatureStore<FeatureInputSingleObj> featuresSingle = NamedFeatureStoreFactory.createNamedFeatureList(list);
-			FeatureList<FeatureInputSingleObj> listSingle = copyFeaturesCreateCustomName(featuresSingle);
+			MergedPairsFeatures features = new MergedPairsFeatures(
+				FeatureListCustomNameHelper.copyFeaturesCreateCustomName(listFeaturesImage),
+				FeatureListCustomNameHelper.copyFeaturesCreateCustomName(list),
+				FeatureListCustomNameHelper.copyFeaturesCreateCustomName(listFeaturesPair)
+			);
 			
-			// Image features
-			NamedFeatureStore<FeatureInputStack> featuresImage = NamedFeatureStoreFactory.createNamedFeatureList(listFeaturesImage);
-			FeatureList<FeatureInputStack> listImage = copyFeaturesCreateCustomName(featuresImage );
-									
-			// Pair features
-			NamedFeatureStore<FeatureInputPairObjsMerged> featuresPair = NamedFeatureStoreFactory.createNamedFeatureList(listFeaturesPair);
-			FeatureList<FeatureInputPairObjsMerged> listPair = copyFeaturesCreateCustomName( featuresPair );
-						
-			return new FeatureSessionMergedPairs(
+			return new MergedPairsSession(
 				includeFirst,
 				includeSecond,
-				listImage,
-				listSingle,
-				listPair,
+				features,
 				ignoreFeaturePrefixes.set(),
 				checkInverse,
 				suppressErrors
@@ -211,32 +200,6 @@ public class MergedPairs extends FlexiFeatureTable<FeatureInputPairObjsMerged> {
 	}
 
 	
-	/**
-	 * Takes some features, and puts a copy in featuresOut, but updating their name with a prefix.  Inits with PAIR params
-	 * 
-	 * @param featuresIn		Where to read features in
-	 * @param prefix			Prefix for feature-names
-	 * @param featuresOut		Where to add the new features to
-	 * @param proxyCreator		Instantiates an empty proxy-feature
-	 * @param paramsInit		Instantiation parameters 
-	 */
-	private static <T extends FeatureInput> FeatureList<T> copyFeaturesCreateCustomName( NamedFeatureStore<T> features ) throws OperationFailedException {
-		
-		FeatureList<T> out = new FeatureList<>();
-		try {
-			// First features
-			for( int i=0; i<features.size(); i++ ) {
-				NamedBean<Feature<T>> ni = features.get(i);
-				
-				Feature<T> featureAdd = ni.getValue().duplicateBean();
-				featureAdd.setCustomName( ni.getName() );					
-				out.add(featureAdd);
-			}
-		} catch (BeanDuplicateException e) {
-			throw new OperationFailedException(e);
-		}
-		return out;
-	}
 	
 	public boolean isIncludeFirst() {
 		return includeFirst;
