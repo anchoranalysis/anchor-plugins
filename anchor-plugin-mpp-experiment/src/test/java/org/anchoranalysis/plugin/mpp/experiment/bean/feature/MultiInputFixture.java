@@ -34,11 +34,21 @@ class MultiInputFixture {
 
 	public static final String OBJS_NAME = "objsTest";
 	
+	public static final int NUM_INTERSECTING_OBJECTS = 4;
+	public static final int NUM_NOT_INTERSECTING_OBJECTS = 2;
+	
+	/** A number of unique pairs of intersecting objects
+	 *  (known from the output of {@link IntersectingCircleObjsFixture.generateIntersectingObjs} with the parameterization above.
+	 */
+	public static final int NUM_PAIRS_INTERSECTING = 3;
+	
 	/**
 	 * This creates a MultiInput with an object-collection OBJS_NAME
 	 * 
 	 * <p>It contains 6 unique objects, 4 of whom intersect, and 2 who don't intersect at all.</p>
 	 * <p>Among the four who intersect, there are 3 intersections.</p>
+	 * 
+	 * <p>See the constants in the fixture to represent these numbers</p>.
 	 * 
 	 * @param nrgStack
 	 * @return
@@ -53,7 +63,11 @@ class MultiInputFixture {
 		);
 		input.objs().add(
 			OBJS_NAME,
-			() -> IntersectingCircleObjsFixture.generateIntersectingObjs(4, 2, false)
+			() -> IntersectingCircleObjsFixture.generateIntersectingObjs(
+				NUM_INTERSECTING_OBJECTS,
+				NUM_NOT_INTERSECTING_OBJECTS,
+				false
+			)
 		);
 		
 		return input;
