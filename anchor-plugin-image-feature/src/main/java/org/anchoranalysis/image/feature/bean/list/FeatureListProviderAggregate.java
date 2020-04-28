@@ -35,9 +35,9 @@ import org.anchoranalysis.feature.bean.list.FeatureListProvider;
 import org.anchoranalysis.feature.bean.list.FeatureListProviderPrependName;
 import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
 import org.anchoranalysis.image.feature.objmask.pair.FeatureInputPairObjs;
-import ch.ethz.biol.cell.mpp.nrg.feature.objmaskpairmerged.FromFirst;
-import ch.ethz.biol.cell.mpp.nrg.feature.objmaskpairmerged.FromMerged;
-import ch.ethz.biol.cell.mpp.nrg.feature.objmaskpairmerged.FromSecond;
+import org.anchoranalysis.plugin.image.feature.bean.obj.pair.order.First;
+import org.anchoranalysis.plugin.image.feature.bean.obj.pair.order.Merged;
+import org.anchoranalysis.plugin.image.feature.bean.obj.pair.order.Second;
 
 /**
  * Takes a list of features, and creates a new list of features, where each
@@ -71,16 +71,11 @@ public abstract class FeatureListProviderAggregate extends FeatureListProvider<F
 		
 		for( Feature<FeatureInputSingleObj> featExst : in ) {
 			
-			FromFirst featFirst = new FromFirst();
-			featFirst.setItem( featExst.duplicateBean() );
-			
-			FromSecond featSecond = new FromSecond();
-			featSecond.setItem( featExst.duplicateBean() );
-			
-			FromMerged featMerged = new FromMerged();
-			featMerged.setItem( featExst.duplicateBean() );
-			
-			Feature<FeatureInputPairObjs> featOut = createAggregateFeature(featFirst, featSecond, featMerged);
+			Feature<FeatureInputPairObjs> featOut = createAggregateFeature(
+				new First( featExst.duplicateBean() ),
+				new Second( featExst.duplicateBean() ),
+				new Merged( featExst.duplicateBean() )
+			);
 			
 			FeatureListProviderPrependName.setNewNameOnFeature(featOut, featExst.getFriendlyName(), prependString);
 			

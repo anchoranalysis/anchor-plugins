@@ -1,5 +1,6 @@
 package org.anchoranalysis.plugin.image.feature.bean.obj.pair.order;
 
+import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.cache.SessionInput;
 
 /*
@@ -30,6 +31,7 @@ import org.anchoranalysis.feature.cache.SessionInput;
 
 
 import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
 import org.anchoranalysis.image.feature.objmask.pair.FeatureInputPairObjs;
 
 /**
@@ -38,16 +40,24 @@ import org.anchoranalysis.image.feature.objmask.pair.FeatureInputPairObjs;
  * @author owen
  *
  */
-public class FirstOnly extends FeatureObjMaskPairOrder {
+public class Second extends FeatureDeriveFromPair {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 	
+	public Second() {
+		// BEAN Constructor
+	}
+	
+	public Second(Feature<FeatureInputSingleObj> item) {
+		super(item);
+	}
+	
 	@Override
 	public double calc(SessionInput<FeatureInputPairObjs> params)
 			throws FeatureCalcException {
-		return valueFromObj1(params);
+		return valueFromSecond(params);
 	}
 }

@@ -68,8 +68,8 @@ public abstract class TouchingVoxels extends FeatureObjMaskPair {
 		}
 		
 		return calcWithIntersection(
-			inputSessionless.getLeft(),
-			inputSessionless.getRight(),
+			inputSessionless.getFirst(),
+			inputSessionless.getSecond(),
 			bboxIntersect
 		);
 	}

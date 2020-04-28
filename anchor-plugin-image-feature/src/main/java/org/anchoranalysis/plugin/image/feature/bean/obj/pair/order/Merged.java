@@ -1,5 +1,6 @@
 package org.anchoranalysis.plugin.image.feature.bean.obj.pair.order;
 
+import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.cache.SessionInput;
 
 /*
@@ -30,25 +31,33 @@ import org.anchoranalysis.feature.cache.SessionInput;
 
 
 import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
 import org.anchoranalysis.image.feature.objmask.pair.FeatureInputPairObjs;
 
-
 /**
- * Ratio of first-object to second-object in a pair
+ * Evaluates the first-object in a pair only
  * 
  * @author owen
  *
  */
-public class RatioFirstToSecond extends FeatureDeriveFromPair {
+public class Merged extends FeatureDeriveFromPair {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 	
+	public Merged() {
+		// BEAN Constructor
+	}
+	
+	public Merged(Feature<FeatureInputSingleObj> item) {
+		super(item);
+	}
+	
 	@Override
 	public double calc(SessionInput<FeatureInputPairObjs> params)
 			throws FeatureCalcException {
-		return valueFromFirst(params) / valueFromSecond(params);
+		return valueFromMerged(params);
 	}
 }

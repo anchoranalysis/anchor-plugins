@@ -38,6 +38,14 @@ import org.anchoranalysis.image.feature.objmask.pair.FeatureInputPairObjs;
 import org.anchoranalysis.image.orientation.DirectionVector;
 import org.anchoranalysis.plugin.image.feature.obj.pair.overlap.OverlapRatioUtilities;
 
+
+/**
+ * 
+ * TODO the center-of-gravity calculation can be turned into a FeatureCalculate
+ * 
+ * @author Owen Feehan
+ *
+ */
 public class CostOverlapWithinMidpointDistance extends FeatureObjMaskPair {
 
 	/**
@@ -80,8 +88,8 @@ public class CostOverlapWithinMidpointDistance extends FeatureObjMaskPair {
 			throw new FeatureCalcException("This feature requires an Image-Res in the input");
 		}
 		
-		Point3d cog1 = params.getLeft().centerOfGravity();
-		Point3d cog2 = params.getRight().centerOfGravity();
+		Point3d cog1 = params.getFirst().centerOfGravity();
+		Point3d cog2 = params.getSecond().centerOfGravity();
 		
 		double dist = calcDist(cog1, cog2);
 		double maxDist = calcMaxDist(

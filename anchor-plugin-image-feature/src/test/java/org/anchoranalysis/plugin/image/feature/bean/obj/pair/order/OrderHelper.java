@@ -34,9 +34,9 @@ class OrderHelper {
 		
 	}
 		
-	public static FeatureObjMaskPairOrder addFeatureToOrder( FeatureObjMaskPairOrder feature ) {
+	public static FeatureDeriveFromPair addFeatureToOrder( FeatureDeriveFromPair feature ) {
 		// Need an object-mask feature
-		feature.setFeature( new NumVoxels() );
+		feature.setItem( new NumVoxels() );
 		return feature;
 	}
 }

@@ -36,10 +36,10 @@ import org.anchoranalysis.feature.bean.list.FeatureListProvider;
 import org.anchoranalysis.feature.bean.list.FeatureListProviderPrependName;
 import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
 import org.anchoranalysis.image.feature.objmask.pair.FeatureInputPairObjs;
-import ch.ethz.biol.cell.mpp.nrg.feature.objmaskpairmerged.FromExisting;
-import ch.ethz.biol.cell.mpp.nrg.feature.objmaskpairmerged.FromFirst;
-import ch.ethz.biol.cell.mpp.nrg.feature.objmaskpairmerged.FromMerged;
-import ch.ethz.biol.cell.mpp.nrg.feature.objmaskpairmerged.FromSecond;
+import org.anchoranalysis.plugin.image.feature.bean.obj.pair.order.First;
+import org.anchoranalysis.plugin.image.feature.bean.obj.pair.order.Merged;
+import org.anchoranalysis.plugin.image.feature.bean.obj.pair.order.FeatureDeriveFromPair;
+import org.anchoranalysis.plugin.image.feature.bean.obj.pair.order.Second;
 
 /**
  * Takes a list of features, and creates a new list of features, where each
@@ -80,7 +80,7 @@ public class FeatureListProviderDelegateFromMerged extends FeatureListProvider<F
 			
 			Feature<FeatureInputSingleObj> featExstDup = featExst.duplicateBean();
 			
-			FromExisting featDelegate = createNewDelegateFeature();
+			FeatureDeriveFromPair featDelegate = createNewDelegateFeature();
 			featDelegate.setItem(featExstDup);
 			
 			FeatureListProviderPrependName.setNewNameOnFeature(featDelegate, featExstDup.getFriendlyName(), prependString);
@@ -92,13 +92,13 @@ public class FeatureListProviderDelegateFromMerged extends FeatureListProvider<F
 	}
 	
 
-	private FromExisting createNewDelegateFeature() throws CreateException {
+	private FeatureDeriveFromPair createNewDelegateFeature() throws CreateException {
 		if (select.equalsIgnoreCase("first")) {
-			return new FromFirst();
+			return new First();
 		} else if (select.equalsIgnoreCase("second")) {
-			return new FromSecond();
+			return new Second();
 		} else if (select.equalsIgnoreCase("merged")) {
-			return new FromMerged();
+			return new Merged();
 		} else {
 			throw new CreateException("An invalid input existings for 'select'. Select one of 'first', 'second' or 'merged'");
 		}
