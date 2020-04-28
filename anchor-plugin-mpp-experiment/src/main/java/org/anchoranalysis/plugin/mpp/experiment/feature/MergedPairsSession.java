@@ -135,11 +135,7 @@ public class MergedPairsSession extends FeatureSessionFlexiFeatureTable<FeatureI
 		
 		logErrorReporter.getLogReporter().log("Setting up: Image Features");
 
-		CreateCalculatorHelper cc = new CreateCalculatorHelper(
-			ignoreFeaturePrefixes,
-			nrgStack,
-			logErrorReporter
-		);
+		CreateCalculatorHelper cc = new CreateCalculatorHelper(ignoreFeaturePrefixes, nrgStack,	logErrorReporter);
 		
 		sessionImage = new FeatureCalculatorMultiReuse<FeatureInputStack>( 
 			cc.create(features.getImage(), soImage)
@@ -162,20 +158,8 @@ public class MergedPairsSession extends FeatureSessionFlexiFeatureTable<FeatureI
 		// TODO fix no shared features anymore, prev sharedFeatures.duplicate()		
 		sessionPair = cc.create(features.getPair(), soImage);
 				
-		// We keep a seperate session for merges, as there is no need to do caching. But we copy features
-		//  to make sure there's no collision of the caches
-		//System.out.println("SessionMerged");
-		logErrorReporter.getLogReporter().log("Setting up: Merged Features");
-		sessionMerged =  cc.create(features.getSingle().duplicateBean(), soImage);
-		
-		// TODO fix no shared features anymore, prev sharedFeatures.duplicate()
-
-		
-//		System.out.printf("Session Image = %d\n", sessionImage );
-//		System.out.printf("Session First = %d\n", sessionFirst );
-//		System.out.printf("Session Second = %d\n", sessionSecond);
-//		System.out.printf("Session Image = %d\n", sessionImage);
-//		System.out.printf("Session Merged = %d\n", sessionMerged);
+		// We keep a separate session for merges, there's no caches here that can be reused 
+		sessionMerged =  cc.create(features.getSingle(), soImage);
 	}
 
 	@Override
