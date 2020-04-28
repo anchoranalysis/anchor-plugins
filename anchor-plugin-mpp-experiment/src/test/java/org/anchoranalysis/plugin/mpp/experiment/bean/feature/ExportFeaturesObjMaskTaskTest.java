@@ -163,7 +163,7 @@ public class ExportFeaturesObjMaskTaskTest {
 		taskFixture.changeToMergedPairs(true);
 		
 		FeatureCalculationFixture.executeAndAssertCnt(
-			MultiInputFixture.NUM_PAIRS_INTERSECTING * 4,
+			(MultiInputFixture.NUM_PAIRS_INTERSECTING * 4) - 2,	// 2 are the repeated cache calls on the single objs
 			() -> testOnTask("repeatedInSingleAndPair/")
 		);
 	}

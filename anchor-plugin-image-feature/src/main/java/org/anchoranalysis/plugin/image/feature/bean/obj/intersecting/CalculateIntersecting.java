@@ -44,7 +44,7 @@ public class CalculateIntersecting extends CalculateInputFromDelegate<FeatureInp
 	public int hashCode() {
 		return new HashCodeBuilder()
 			.append(index)
-			.append(getDelegate().hashCode())
+			.append(getDelegate())
 			.toHashCode();
 	}
 }

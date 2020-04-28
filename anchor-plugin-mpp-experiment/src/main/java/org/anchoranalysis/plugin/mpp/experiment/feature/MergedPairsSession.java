@@ -144,18 +144,19 @@ public class MergedPairsSession extends FeatureSessionFlexiFeatureTable<FeatureI
 
 		
 		sessionImage = new FeatureCalculatorMultiReuse<FeatureInputStack>( 
-			createCalculator(features.getImage(), soImage, nrgStack, logErrorReporter)	
+			createCalculatorWrapped(features.getImage(), soImage, nrgStack, logErrorReporter)
 		);
 		
 		if (includeFirst || includeSecond) {
 			logErrorReporter.getLogReporter().log("Setting up: First/Second Features");
-			sessionFirstSecond = new FeatureCalculatorCachedResults<>(
-				createCalculator(features.getSingle(), soImage, nrgStack, logErrorReporter),
-				suppressErrors
+			sessionFirstSecond = wrapNRGStack( 
+				new FeatureCalculatorCachedResults<>(
+					createCalculator(features.getSingle(), soImage, nrgStack, logErrorReporter),
+					suppressErrors
+				),
+				nrgStack
 			);
-
 		}
-			
 		
 		logErrorReporter.getLogReporter().log("Setting up: Pair Features");
 		
@@ -163,16 +164,13 @@ public class MergedPairsSession extends FeatureSessionFlexiFeatureTable<FeatureI
 		//  from the calculation of the First and Second individual features, as they appear again
 		//  as additionalCaches of sessionPair
 		// TODO fix no shared features anymore, prev sharedFeatures.duplicate()		
-		sessionPair = createCalculator(features.getPair(), soImage, nrgStack, logErrorReporter);
-		
-
-			
-		
+		sessionPair = createCalculatorWrapped(features.getPair(), soImage, nrgStack, logErrorReporter);
+				
 		// We keep a seperate session for merges, as there is no need to do caching. But we copy features
 		//  to make sure there's no collision of the caches
 		//System.out.println("SessionMerged");
 		logErrorReporter.getLogReporter().log("Setting up: Merged Features");
-		sessionMerged =  createCalculator(features.getSingle().duplicateBean(), soImage, nrgStack, logErrorReporter );
+		sessionMerged =  createCalculatorWrapped(features.getSingle().duplicateBean(), soImage, nrgStack, logErrorReporter );
 		
 		// TODO fix no shared features anymore, prev sharedFeatures.duplicate()
 
@@ -250,21 +248,22 @@ public class MergedPairsSession extends FeatureSessionFlexiFeatureTable<FeatureI
 		return helper.getResultsVector();
 	}
 	
-	
+	private <T extends FeatureInputNRGStack> FeatureCalculatorMulti<T> createCalculatorWrapped( FeatureList<T> features, ImageInitParams soImage, NRGStackWithParams nrgStack, LogErrorReporter logErrorReporter ) throws InitException {
+		return wrapNRGStack(
+			createCalculator(features, soImage, nrgStack, logErrorReporter),
+			nrgStack
+		);		
+	}
 	
 	private <T extends FeatureInputNRGStack> FeatureCalculatorMulti<T> createCalculator( FeatureList<T> features, ImageInitParams soImage, NRGStackWithParams nrgStack, LogErrorReporter logErrorReporter ) throws InitException {
 
 		try {
-			FeatureCalculatorMulti<T> calculator = FeatureSession.with(
+			return FeatureSession.with(
 				features,
 				createInitParams(soImage, nrgStack),
 				new SharedFeatureSet<>(),
 				logErrorReporter,
 				ignoreFeaturePrefixes
-			);
-			return new FeatureCalculatorMultiChangeInput<T>(
-				calculator,
-				params->params.setNrgStack(nrgStack)
 			);
 			
 		} catch (FeatureCalcException e) {
@@ -272,7 +271,12 @@ public class MergedPairsSession extends FeatureSessionFlexiFeatureTable<FeatureI
 		}
 	}
 	
-	
+	private static <T extends FeatureInputNRGStack> FeatureCalculatorMulti<T> wrapNRGStack( FeatureCalculatorMulti<T> calculator, NRGStackWithParams nrgStack ) {
+		return new FeatureCalculatorMultiChangeInput<T>(
+			calculator,
+			params->params.setNrgStack(nrgStack)
+		);
+	}
 	
 	private static FeatureInitParams createInitParams(ImageInitParams soImage, NRGStackWithParams nrgStack) {
 		return InitParamsHelper.createInitParams(
