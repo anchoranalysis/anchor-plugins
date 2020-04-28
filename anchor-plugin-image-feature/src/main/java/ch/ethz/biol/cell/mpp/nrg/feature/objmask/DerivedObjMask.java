@@ -33,6 +33,7 @@ package ch.ethz.biol.cell.mpp.nrg.feature.objmask;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.bean.Feature;
+import org.anchoranalysis.feature.cache.ChildCacheName;
 import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.cache.calculation.CalculationResolver;
 import org.anchoranalysis.feature.cache.calculation.FeatureCalculation;
@@ -61,14 +62,19 @@ public abstract class DerivedObjMask extends FeatureObjMask {
 	@Override
 	public double calc(SessionInput<FeatureInputSingleObj> input) throws FeatureCalcException {
 
+		ChildCacheName cacheName = cacheName();
+		
 		return CalculateInputFromDelegateOption.calc(
 			input,
 			createCachedCalculationForDerived(
-				input.resolverForChild( cacheName(), FeatureInputSingleObj.class )		
+				input.resolverForChild(
+					cacheName,
+					FeatureInputSingleObj.class
+				)		
 			),
 			delegate -> new CalculateObjForDerived(delegate),
 			item,
-			cacheName(),
+			cacheName,
 			emptyValue
 		);
 	}
@@ -101,7 +107,7 @@ public abstract class DerivedObjMask extends FeatureObjMask {
 	
 	protected abstract FeatureCalculation<ObjMask,FeatureInputSingleObj> createCachedCalculationForDerived( CalculationResolver<FeatureInputSingleObj> session ) throws FeatureCalcException;
 	
-	protected abstract String cacheName();
+	protected abstract ChildCacheName cacheName();
 	
 	public double getEmptyValue() {
 		return emptyValue;

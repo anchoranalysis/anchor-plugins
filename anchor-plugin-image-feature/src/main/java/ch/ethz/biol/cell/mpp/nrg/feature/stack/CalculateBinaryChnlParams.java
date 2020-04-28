@@ -1,10 +1,9 @@
 package ch.ethz.biol.cell.mpp.nrg.feature.stack;
 
 import java.nio.ByteBuffer;
-import org.anchoranalysis.core.error.CreateException;
+
 import org.anchoranalysis.feature.cache.calculation.FeatureCalculation;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.image.bean.provider.BinaryImgChnlProvider;
 import org.anchoranalysis.image.binary.BinaryChnl;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelBoxByte;
@@ -13,33 +12,23 @@ import org.anchoranalysis.image.feature.stack.FeatureInputStack;
 import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.anchoranalysis.image.voxel.datatype.IncorrectVoxelDataTypeException;
+import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 public class CalculateBinaryChnlParams extends FeatureCalculation<FeatureInputSingleObj, FeatureInputStack> {
 
-	// None of the following are considered in hash-coding, as considered always singular for all caculations in the same session
-	private BinaryImgChnlProvider binaryImgChnlProvider;
+	private BinaryChnl chnl;
 		
-	public CalculateBinaryChnlParams(BinaryImgChnlProvider binaryImgChnlProvider) {
+	public CalculateBinaryChnlParams(BinaryChnl chnl) {
 		super();
-		this.binaryImgChnlProvider = binaryImgChnlProvider;
+		this.chnl = chnl;
 	}
 
 	@Override
-	protected FeatureInputSingleObj execute(FeatureInputStack params) throws FeatureCalcException {
-
-		try {
-			BinaryChnl bc = binaryImgChnlProvider.create();
-			return deriveParams(
-				params,
-				binaryVoxelBox(bc)
-			);
-		} catch (CreateException e) {
-			throw new FeatureCalcException(e);
-		}
-	}
-	
-	private static FeatureInputSingleObj deriveParams(FeatureInputStack input, BinaryVoxelBox<ByteBuffer> bvb ) {
+	protected FeatureInputSingleObj execute(FeatureInputStack input) throws FeatureCalcException {
+		
+		BinaryVoxelBox<ByteBuffer> bvb = binaryVoxelBox(chnl);
+		
 		return new FeatureInputSingleObj(
 			new ObjMask(bvb),
 			input.getNrgStackOptional()
@@ -56,14 +45,23 @@ public class CalculateBinaryChnlParams extends FeatureCalculation<FeatureInputSi
 		
 		return new BinaryVoxelBoxByte( vb, bic.getBinaryValues() );
 	}
-	
+
 	@Override
-	public boolean equals(Object other) {
-		return other instanceof CalculateBinaryChnlParams;
+	public boolean equals(Object obj) {
+		 if(obj instanceof CalculateBinaryChnlParams){
+			 final CalculateBinaryChnlParams other = (CalculateBinaryChnlParams) obj;
+		        return new EqualsBuilder()
+		            .append(chnl, other.chnl)
+		            .isEquals();
+	    } else{
+	        return false;
+	    }
 	}
 
 	@Override
 	public int hashCode() {
-		return new HashCodeBuilder().toHashCode();
+		return new HashCodeBuilder()
+			.append(chnl)
+			.toHashCode();
 	}
 }

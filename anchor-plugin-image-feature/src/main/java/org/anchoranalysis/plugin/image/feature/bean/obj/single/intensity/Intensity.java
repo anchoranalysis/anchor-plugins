@@ -2,6 +2,7 @@ package org.anchoranalysis.plugin.image.feature.bean.obj.single.intensity;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.bean.Feature;
+import org.anchoranalysis.feature.cache.ChildCacheName;
 import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.chnl.Chnl;
@@ -32,13 +33,20 @@ public class Intensity extends FeatureNrgChnl {
 	@BeanField
 	private boolean excludeZero = false;
 	// END BEAN PROEPRTIES
-
+	
 	@Override
 	protected double calcForChnl(SessionInput<FeatureInputSingleObj> input, Chnl chnl) throws FeatureCalcException {
 		return input.calcChild(
 			item,
 			new CalculateHistogramForNrgChnl(excludeZero, getNrgIndex(), chnl),
-			"intensityHistogram_"	// TODO cache needs to be unique for different features
+			cacheName()
+		);
+	}
+	
+	private ChildCacheName cacheName() {
+		return new ChildCacheName(
+			Intensity.class,
+			String.valueOf(excludeZero) + "_" + String.valueOf(getNrgIndex())
 		);
 	}
 

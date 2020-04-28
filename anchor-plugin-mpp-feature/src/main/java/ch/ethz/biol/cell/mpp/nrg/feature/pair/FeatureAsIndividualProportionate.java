@@ -34,12 +34,12 @@ import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputSingleMemo;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.bean.Feature;
+import org.anchoranalysis.feature.cache.ChildCacheName;
 import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.cache.calculation.FeatureCalculation;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 
-// Calculates each feature individually, and combines them using the ratios between itemProportionate
-//   as weights
+/** Calculates each feature individually, and combines them using the ratios between itemProportionate as weights */
 public class FeatureAsIndividualProportionate extends NRGElemPairWithFeature {
 
 	/**
@@ -52,14 +52,17 @@ public class FeatureAsIndividualProportionate extends NRGElemPairWithFeature {
 	private Feature<FeatureInputSingleMemo> itemProportionate;
 	// eND BEAN PROPERTIES
 
+	private static final ChildCacheName CACHE_NAME_FIRST = new ChildCacheName(FeatureAsIndividualProportionate.class, "first");
+	private static final ChildCacheName CACHE_NAME_SECOND = new ChildCacheName(FeatureAsIndividualProportionate.class, "second");
+	
 	/** Calculates values/weights for one of the objects */
 	private class CalcHelper {
 		
 		private FeatureCalculation<FeatureInputSingleMemo,FeatureInputPairMemo> ccExtract;
-		private String childCacheName;
+		private ChildCacheName childCacheName;
 				
 		public CalcHelper(FeatureCalculation<FeatureInputSingleMemo, FeatureInputPairMemo> ccExtract,
-				String childCacheName) {
+				ChildCacheName childCacheName) {
 			super();
 			this.ccExtract = ccExtract;
 			this.childCacheName = childCacheName;
@@ -83,11 +86,11 @@ public class FeatureAsIndividualProportionate extends NRGElemPairWithFeature {
 
 		CalcHelper first = new CalcHelper(
 			new CalculateDeriveSingleMemoFromPair(true),
-			"obj1"
+			CACHE_NAME_FIRST
 		);
 		CalcHelper second = new CalcHelper(
 			new CalculateDeriveSingleMemoFromPair(false),
-			"obj2"
+			CACHE_NAME_SECOND
 		);
 		
 		return weightedSum(

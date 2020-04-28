@@ -33,6 +33,7 @@ import java.util.List;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.bean.Feature;
+import org.anchoranalysis.feature.cache.ChildCacheName;
 import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.cache.calculation.ResolvedCalculation;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
@@ -77,7 +78,7 @@ public abstract class FeatureIntersectingObjsSingleElem extends FeatureIntersect
 			double res = paramsExst.calcChild(
 				item,
 				new CalculateIntersecting(ccIntersecting, index),
-				"intersecting_obj_" + i
+				new ChildCacheName(FeatureIntersectingObjsSingleElem.class,i)
 			);
 			results.add(res);
 		}

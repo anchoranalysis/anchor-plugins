@@ -34,6 +34,7 @@ import org.anchoranalysis.anchor.mpp.feature.mark.MemoCollection;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.bean.Feature;
+import org.anchoranalysis.feature.cache.ChildCacheName;
 import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 
@@ -66,7 +67,7 @@ public class MeanFromAll extends FeatureAllMemo {
 			sum += input.calcChild(
 				item,
 				new CalculateDeriveSingleMemoInput(i),
-				"obj_" + i
+				new ChildCacheName(MeanFromAll.class,i)
 			);
 		}
 		

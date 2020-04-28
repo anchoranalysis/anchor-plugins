@@ -1,9 +1,7 @@
 package ch.ethz.biol.cell.mpp.nrg.feature.objmask.sharedobjects;
 
-import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.feature.cache.calculation.FeatureCalculation;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.image.bean.provider.BinaryImgChnlProvider;
 import org.anchoranalysis.image.binary.BinaryChnl;
 import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
 import org.anchoranalysis.image.feature.objmask.pair.FeatureInputPairObjs;
@@ -12,29 +10,20 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 public class CalculatePairParams extends FeatureCalculation<FeatureInputPairObjs, FeatureInputSingleObj> {
 
-	private BinaryImgChnlProvider binaryImgChnlProvider;
+	private BinaryChnl chnl;
 		
-	public CalculatePairParams(BinaryImgChnlProvider binaryImgChnlProvider) {
+	public CalculatePairParams(BinaryChnl chnl) {
 		super();
-		this.binaryImgChnlProvider = binaryImgChnlProvider;
+		this.chnl = chnl;
 	}
 
 	@Override
 	protected FeatureInputPairObjs execute(FeatureInputSingleObj input) throws FeatureCalcException {
 
-		try {
-			BinaryChnl bic = binaryImgChnlProvider.create();
-			return paramsPairs(
-				input,
-				new ObjMask( bic.binaryVoxelBox() )
-			);
-			
-		} catch (CreateException e) {
-			throw new FeatureCalcException(e);
-		}
-	}
+		ObjMask objFromBinary = new ObjMask(
+			chnl.binaryVoxelBox()
+		);
 		
-	private FeatureInputPairObjs paramsPairs( FeatureInputSingleObj input, ObjMask objFromBinary ) {
 		FeatureInputPairObjs out = new FeatureInputPairObjs();
 		out.setObjMask1( input.getObjMask() );
 		out.setObjMask2( objFromBinary );

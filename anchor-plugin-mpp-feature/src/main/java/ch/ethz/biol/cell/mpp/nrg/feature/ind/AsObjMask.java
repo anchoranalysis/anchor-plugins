@@ -34,6 +34,7 @@ import org.anchoranalysis.anchor.mpp.regionmap.RegionMapSingleton;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.bean.operator.FeatureSingleElem;
+import org.anchoranalysis.feature.cache.ChildCacheName;
 import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.input.descriptor.FeatureInputDescriptor;
@@ -60,7 +61,7 @@ public class AsObjMask extends FeatureSingleElem<FeatureInputSingleMemo,FeatureI
 			.calcChild(
 				getItem(),
 				new CalculateSingleObjFromMemo(regionMap,index),
-				"obj"
+				new ChildCacheName(AsObjMask.class, index)
 			);			
 	}
 

@@ -28,6 +28,7 @@ package ch.ethz.biol.cell.mpp.nrg.feature.objmask;
 
 
 import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.feature.cache.ChildCacheName;
 import org.anchoranalysis.feature.cache.calculation.CalculationResolver;
 import org.anchoranalysis.feature.cache.calculation.FeatureCalculation;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
@@ -66,8 +67,11 @@ public class Shell extends DerivedObjMask {
 	}
 	
 	@Override
-	public String cacheName() {
-		return "shell" + iterationsDilation + "_" + iterationsErosion + "_" + do3D;
+	public ChildCacheName cacheName() {
+		return new ChildCacheName(
+			Shell.class,
+			iterationsDilation + "_" + iterationsErosion + "_" + do3D
+		);
 	}
 
 	public int getIterationsDilation() {

@@ -29,10 +29,13 @@ package ch.ethz.biol.cell.mpp.nrg.feature.objmask.sharedobjects;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.SkipInit;
+import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
+import org.anchoranalysis.feature.cache.ChildCacheName;
 import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.bean.provider.BinaryImgChnlProvider;
+import org.anchoranalysis.image.binary.BinaryChnl;
 import org.anchoranalysis.image.feature.bean.objmask.FeatureObjMaskSharedObjects;
 import org.anchoranalysis.image.feature.bean.objmask.pair.FeatureObjMaskPair;
 import org.anchoranalysis.image.feature.init.FeatureInitParamsSharedObjs;
@@ -61,19 +64,27 @@ public class FeatureFromBinaryImgChnl extends FeatureObjMaskSharedObjects {
 	private BinaryImgChnlProvider binaryImgChnlProvider;
 	// END BEAN PROPERTIES
 	
+	private BinaryChnl chnl;
+	
 	@Override
 	public void beforeCalcCast(FeatureInitParamsSharedObjs params) throws InitException {
 		super.beforeCalcCast(params);
 		assert( getLogger()!=null );
 		binaryImgChnlProvider.initRecursive(params.getSharedObjects(), getLogger() );
+		
+		try {
+			chnl = binaryImgChnlProvider.create();
+		} catch (CreateException e) {
+			throw new InitException(e);
+		}
 	}
 	
 	@Override
 	public double calc(SessionInput<FeatureInputSingleObj> input) throws FeatureCalcException {
 		return input.calcChild(
 			item,
-			new CalculatePairParams(binaryImgChnlProvider),
-			"pair"
+			new CalculatePairParams(chnl),
+			new ChildCacheName(FeatureFromBinaryImgChnl.class, chnl.hashCode())
 		);
 	}
 

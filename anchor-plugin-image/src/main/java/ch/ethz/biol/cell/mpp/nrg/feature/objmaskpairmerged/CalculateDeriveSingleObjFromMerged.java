@@ -2,6 +2,7 @@ package ch.ethz.biol.cell.mpp.nrg.feature.objmaskpairmerged;
 
 import java.util.function.Function;
 
+import org.anchoranalysis.feature.cache.ChildCacheName;
 import org.anchoranalysis.feature.cache.calculation.FeatureCalculation;
 import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
 import org.anchoranalysis.image.feature.objmask.pair.merged.FeatureInputPairObjsMerged;
@@ -12,7 +13,7 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 class CalculateDeriveSingleObjFromMerged extends FeatureCalculation<FeatureInputSingleObj, FeatureInputPairObjsMerged> {
 
 	private Function<FeatureInputPairObjsMerged, ObjMask> extractObjFunc;
-	private String uniqueIDForFunction;
+	private ChildCacheName uniqueIDForFunction;
 	
 	
 	/**
@@ -24,7 +25,7 @@ class CalculateDeriveSingleObjFromMerged extends FeatureCalculation<FeatureInput
 	 * @param uniqueIDForFunction so as to avoid relying on hashCode() and equals() on extractObjFunc, this field is used as a unique ID instead for each type of lambda
 	 */
 	public CalculateDeriveSingleObjFromMerged(Function<FeatureInputPairObjsMerged, ObjMask> extractObjFunc,
-			String uniqueIDForFunction) {
+			ChildCacheName uniqueIDForFunction) {
 		super();
 		this.extractObjFunc = extractObjFunc;
 		this.uniqueIDForFunction = uniqueIDForFunction;

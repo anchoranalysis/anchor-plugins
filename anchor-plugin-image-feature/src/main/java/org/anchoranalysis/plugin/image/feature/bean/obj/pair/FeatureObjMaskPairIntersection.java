@@ -34,6 +34,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.Positive;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.feature.bean.Feature;
+import org.anchoranalysis.feature.cache.ChildCacheName;
 import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.cache.calculation.FeatureCalculation;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
@@ -44,13 +45,14 @@ import org.anchoranalysis.image.feature.objmask.pair.FeatureInputPairObjs;
 import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.plugin.image.feature.obj.pair.CalculateParamsForIntersection;
 import org.anchoranalysis.plugin.image.calculation.CalculatePairIntersectionCommutative;
+import org.anchoranalysis.plugin.image.feature.bean.obj.pair.order.FeatureObjMaskPairOrder;
 import org.anchoranalysis.plugin.image.feature.obj.pair.CalculateInputFromDelegateOption;
 
 /**
  * Finds the intersection of two objects and calculates a feature on it
  * 
  * <p>TODO: CALCULATE HISTOGRAMS in the calculatePairIntersection rather than just object masks. This will save us some computation</p>
- * <p>TODO: test properly due to weird use of cache</p>
+ * <p>TODO: test properly due to complex use of cache</p>
  * 
  *  
  * @author Owen Feehan
@@ -80,9 +82,8 @@ public class FeatureObjMaskPairIntersection extends FeatureObjMaskPair {
 	private Feature<FeatureInputSingleObj> item;
 	// END BEAN PROPERTIES
 	
-	private static final String CACHE_INTERSECTION = "intersection_eroded";
-	private static final String CACHE_OBJ1 = "obj1";
-	private static final String CACHE_OBJ2 = "obj2";
+	private static final ChildCacheName CACHE_NAME_FIRST = new ChildCacheName(FeatureObjMaskPairOrder.class, "first");
+	private static final ChildCacheName CACHE_NAME_SECOND = new ChildCacheName(FeatureObjMaskPairOrder.class, "second");
 		
 	@Override
 	public double calc(SessionInput<FeatureInputPairObjs> input) throws FeatureCalcException {
@@ -109,23 +110,23 @@ public class FeatureObjMaskPairIntersection extends FeatureObjMaskPair {
 		return null;
 	}
 	
-	/** A unique cache-name for the parameterization of how we find a parameterization */
-	private String cacheIntersectionName() {
-		return String.format(
-			"%s_%d_%d_%d",
-			CACHE_INTERSECTION,
+	/** A unique cache-name for the intersection of how we find a parameterization */
+	private ChildCacheName cacheIntersectionName() {
+		String id = String.format(
+			"intersection_%d_%d_%d",
 			iterationsDilation,
 			iterationsErosion,
 			do3D ? 1 : 0
 		);
+		return new ChildCacheName(FeatureObjMaskPairIntersection.class, id);
 	}
 
 	private FeatureCalculation<Optional<ObjMask>,FeatureInputPairObjs> createCalculation(SessionInput<FeatureInputPairObjs> input) throws FeatureCalcException {
 		try {
 			return CalculatePairIntersectionCommutative.createFromCache(
 				input.resolver(),
-				input.resolverForChild(CACHE_OBJ1, FeatureInputPairObjs.class),
-				input.resolverForChild(CACHE_OBJ2, FeatureInputPairObjs.class),
+				input.resolverForChild(CACHE_NAME_FIRST, FeatureInputPairObjs.class),
+				input.resolverForChild(CACHE_NAME_SECOND, FeatureInputPairObjs.class),
 				iterationsDilation,
 				iterationsErosion,
 				do3D
