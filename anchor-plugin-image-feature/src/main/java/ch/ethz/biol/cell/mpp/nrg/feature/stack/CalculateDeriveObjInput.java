@@ -12,11 +12,11 @@ import org.anchoranalysis.image.objmask.ObjMask;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
-public class CalculateDeriveFeatureObjMaskParams extends FeatureCalculation<FeatureInputSingleObj, FeatureInputStack> {
+public class CalculateDeriveObjInput extends FeatureCalculation<FeatureInputSingleObj, FeatureInputStack> {
 
 	private int nrgIndex;
 		
-	public CalculateDeriveFeatureObjMaskParams(int nrgIndex) {
+	public CalculateDeriveObjInput(int nrgIndex) {
 		super();
 		this.nrgIndex = nrgIndex;
 	}
@@ -46,7 +46,7 @@ public class CalculateDeriveFeatureObjMaskParams extends FeatureCalculation<Feat
 		if (obj.getClass() != getClass()) {
 			return false;
 		}
-		CalculateDeriveFeatureObjMaskParams rhs = (CalculateDeriveFeatureObjMaskParams) obj;
+		CalculateDeriveObjInput rhs = (CalculateDeriveObjInput) obj;
 		return new EqualsBuilder()
              .append(nrgIndex, rhs.nrgIndex)
              .isEquals();

@@ -32,9 +32,9 @@ import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.cache.ChildCacheName;
 import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.image.feature.bean.objmask.pair.FeatureObjMaskPairMerged;
+import org.anchoranalysis.image.feature.bean.objmask.pair.FeatureObjMaskPair;
 import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
-import org.anchoranalysis.image.feature.objmask.pair.merged.FeatureInputPairObjsMerged;
+import org.anchoranalysis.image.feature.objmask.pair.FeatureInputPairObjs;
 import org.anchoranalysis.image.objmask.ObjMask;
 
 /**
@@ -43,7 +43,7 @@ import org.anchoranalysis.image.objmask.ObjMask;
  * @author Owen Feehan
  *
  */
-public abstract class FromExisting extends FeatureObjMaskPairMerged {
+public abstract class FromExisting extends FeatureObjMaskPair {
 
 	
 	/**
@@ -66,8 +66,7 @@ public abstract class FromExisting extends FeatureObjMaskPairMerged {
 	}
 	
 	@Override
-	public double calc(SessionInput<FeatureInputPairObjsMerged> input)
-			throws FeatureCalcException {
+	public double calc(SessionInput<FeatureInputPairObjs> input) throws FeatureCalcException {
 		
 		ChildCacheName cacheName = cacheNameToUse();
 		return input.calcChild(
@@ -80,12 +79,12 @@ public abstract class FromExisting extends FeatureObjMaskPairMerged {
 		);
 	}
 	
-	public SessionInput<FeatureInputSingleObj> transformParamsCast( SessionInput<FeatureInputPairObjsMerged> params ) {
+	public SessionInput<FeatureInputSingleObj> transformParamsCast( SessionInput<FeatureInputPairObjs> params ) {
 		return null; // DISABLED
 		//assert( params.getParams() instanceof FeatureObjMaskPairMergedParams );
 	}
 	
-	protected abstract ObjMask selectObjMask( FeatureInputPairObjsMerged params );
+	protected abstract ObjMask selectObjMask( FeatureInputPairObjs params );
 	
 	/** The name of the cache to use for calculation */
 	protected abstract ChildCacheName cacheNameToUse();

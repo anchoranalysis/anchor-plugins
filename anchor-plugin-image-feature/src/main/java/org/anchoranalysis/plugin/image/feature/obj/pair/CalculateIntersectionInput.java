@@ -7,12 +7,12 @@ import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
 import org.anchoranalysis.image.feature.objmask.pair.FeatureInputPairObjs;
 import org.anchoranalysis.image.objmask.ObjMask;
 
-public class CalculateParamsForIntersection extends CalculateInputFromDelegateOption<
+public class CalculateIntersectionInput extends CalculateInputFromDelegateOption<
 	FeatureInputSingleObj,
 	FeatureInputPairObjs,
 	Optional<ObjMask>
 > {
-	public CalculateParamsForIntersection(ResolvedCalculation<Optional<ObjMask>, FeatureInputPairObjs> ccIntersection) {
+	public CalculateIntersectionInput(ResolvedCalculation<Optional<ObjMask>, FeatureInputPairObjs> ccIntersection) {
 		super(ccIntersection);
 	}
 

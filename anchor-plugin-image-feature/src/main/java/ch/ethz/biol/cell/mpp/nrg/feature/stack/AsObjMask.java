@@ -64,7 +64,7 @@ public class AsObjMask extends FeatureStack {
 		
 		return input.calcChild(
 			item,
-			new CalculateDeriveFeatureObjMaskParams(nrgIndex),
+			new CalculateDeriveObjInput(nrgIndex),
 			new ChildCacheName(AsObjMask.class, nrgIndex)
 		);
 	}

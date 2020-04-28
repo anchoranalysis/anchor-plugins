@@ -13,7 +13,7 @@ import org.anchoranalysis.feature.nrg.NRGStack;
 import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
 import org.anchoranalysis.image.bean.provider.stack.StackProvider;
 import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
-import org.anchoranalysis.image.feature.objmask.pair.merged.FeatureInputPairObjsMerged;
+import org.anchoranalysis.image.feature.objmask.pair.FeatureInputPairObjs;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.plugin.mpp.experiment.bean.feature.flexi.FlexiFeatureTable;
 import org.anchoranalysis.plugin.mpp.experiment.bean.feature.flexi.MergedPairs;
@@ -34,7 +34,7 @@ class ExportFeaturesObjMaskTaskFixture {
 	
 	/** The "single" and "pair" features in use.*/
 	private FeatureListProviderFixture<FeatureInputSingleObj> singleFeatures;
-	private FeatureListProviderFixture<FeatureInputPairObjsMerged> pairFeatures;
+	private FeatureListProviderFixture<FeatureInputPairObjs> pairFeatures;
 	
 	/**
 	 * Constructor
@@ -81,7 +81,7 @@ class ExportFeaturesObjMaskTaskFixture {
 	 * 
 	 * <p>It does not initialize the feature.</p>
 	 * */
-	public void useInsteadAsPairFeature( Feature<FeatureInputPairObjsMerged> feature ) {
+	public void useInsteadAsPairFeature( Feature<FeatureInputPairObjs> feature ) {
 		pairFeatures.useSingleFeature(feature);
 	}
 	

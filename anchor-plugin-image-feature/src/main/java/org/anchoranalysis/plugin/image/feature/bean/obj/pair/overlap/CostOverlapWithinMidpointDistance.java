@@ -80,8 +80,8 @@ public class CostOverlapWithinMidpointDistance extends FeatureObjMaskPair {
 			throw new FeatureCalcException("This feature requires an Image-Res in the input");
 		}
 		
-		Point3d cog1 = params.getObjMask1().centerOfGravity();
-		Point3d cog2 = params.getObjMask2().centerOfGravity();
+		Point3d cog1 = params.getLeft().centerOfGravity();
+		Point3d cog2 = params.getRight().centerOfGravity();
 		
 		double dist = calcDist(cog1, cog2);
 		double maxDist = calcMaxDist(

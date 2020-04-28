@@ -106,7 +106,7 @@ public abstract class ObjMaskFeatureFromStack extends FeatureStack {
 
 			double val = input.calcChild(
 				feature,
-				new CalculateObjMaskParamsFromStack(objsCollection, i),
+				new CalculateInputFromStack(objsCollection, i),
 				cacheName(i)
 			);
 			featureVals.add(val);

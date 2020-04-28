@@ -8,11 +8,11 @@ import org.anchoranalysis.image.feature.objmask.pair.FeatureInputPairObjs;
 import org.anchoranalysis.image.objmask.ObjMask;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
-public class CalculatePairParams extends FeatureCalculation<FeatureInputPairObjs, FeatureInputSingleObj> {
+public class CalculatePairInput extends FeatureCalculation<FeatureInputPairObjs, FeatureInputSingleObj> {
 
 	private BinaryChnl chnl;
 		
-	public CalculatePairParams(BinaryChnl chnl) {
+	public CalculatePairInput(BinaryChnl chnl) {
 		super();
 		this.chnl = chnl;
 	}
@@ -24,16 +24,16 @@ public class CalculatePairParams extends FeatureCalculation<FeatureInputPairObjs
 			chnl.binaryVoxelBox()
 		);
 		
-		FeatureInputPairObjs out = new FeatureInputPairObjs();
-		out.setObjMask1( input.getObjMask() );
-		out.setObjMask2( objFromBinary );
-		out.setNrgStack( input.getNrgStackOptional() );
-		return out;
+		return new FeatureInputPairObjs(
+			input.getObjMask(),
+			objFromBinary,
+			input.getNrgStackOptional()
+		);
 	}
 	
 	@Override
 	public boolean equals(Object other) {
-		return other instanceof CalculatePairParams;
+		return other instanceof CalculatePairInput;
 	}
 
 	@Override

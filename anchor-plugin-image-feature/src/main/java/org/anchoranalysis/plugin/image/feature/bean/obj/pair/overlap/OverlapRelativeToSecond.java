@@ -37,6 +37,6 @@ public class OverlapRelativeToSecond extends OverlapRelative {
 	
 	@Override
 	protected int calcDenominator(FeatureInputPairObjs params) {
-		return params.getObjMask2().numPixels();
+		return params.getRight().numPixels();
 	}
 }

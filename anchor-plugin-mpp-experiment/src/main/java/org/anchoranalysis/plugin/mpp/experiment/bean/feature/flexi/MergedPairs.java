@@ -29,6 +29,7 @@ package org.anchoranalysis.plugin.mpp.experiment.bean.feature.flexi;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 
 import org.anchoranalysis.bean.NamedBean;
 import org.anchoranalysis.bean.StringSet;
@@ -42,7 +43,7 @@ import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.feature.bean.list.FeatureListProvider;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
-import org.anchoranalysis.image.feature.objmask.pair.merged.FeatureInputPairObjsMerged;
+import org.anchoranalysis.image.feature.objmask.pair.FeatureInputPairObjs;
 import org.anchoranalysis.image.feature.stack.FeatureInputStack;
 import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.image.objmask.ObjMaskCollection;
@@ -78,7 +79,7 @@ import org.anchoranalysis.plugin.mpp.experiment.feature.MergedPairsSession;
  * @author Owen Feehan
  *
  */
-public class MergedPairs extends FlexiFeatureTable<FeatureInputPairObjsMerged> {
+public class MergedPairs extends FlexiFeatureTable<FeatureInputPairObjs> {
 
 	/**
 	 * 
@@ -90,7 +91,7 @@ public class MergedPairs extends FlexiFeatureTable<FeatureInputPairObjsMerged> {
 	 * Additional features that are processed on the pair of images (i.e. First+Second as a pair)
 	 */
 	@BeanField
-	private List<NamedBean<FeatureListProvider<FeatureInputPairObjsMerged>>> listFeaturesPair = new ArrayList<>();
+	private List<NamedBean<FeatureListProvider<FeatureInputPairObjs>>> listFeaturesPair = new ArrayList<>();
 	
 	/**
 	 * Additional features that only depend on the image, so do not need to be replicated for every object.
@@ -145,7 +146,7 @@ public class MergedPairs extends FlexiFeatureTable<FeatureInputPairObjsMerged> {
 	// END BEAN PROPERTIES
 	
 	@Override
-	public FeatureSessionFlexiFeatureTable<FeatureInputPairObjsMerged> createFeatures(
+	public FeatureSessionFlexiFeatureTable<FeatureInputPairObjs> createFeatures(
 			List<NamedBean<FeatureListProvider<FeatureInputSingleObj>>> list
 	) throws CreateException {
 		
@@ -173,10 +174,10 @@ public class MergedPairs extends FlexiFeatureTable<FeatureInputPairObjsMerged> {
 
 	
 	@Override
-	public List<FeatureInputPairObjsMerged> createListCalcParams(ObjMaskCollection objs,
+	public List<FeatureInputPairObjs> createListCalcParams(ObjMaskCollection objs,
 			NRGStackWithParams nrgStack, LogErrorReporter logErrorReporter) throws CreateException {
 
-		List<FeatureInputPairObjsMerged> out = new ArrayList<>();
+		List<FeatureInputPairObjs> out = new ArrayList<>();
 		
 		// We create a neighbour-graph of our input objects
 		CreateNghbGraph<ObjMask> graphCreator = new CreateNghbGraph<ObjMask>( avoidOverlappingObjects );
@@ -191,9 +192,13 @@ public class MergedPairs extends FlexiFeatureTable<FeatureInputPairObjsMerged> {
 		Collection<EdgeTypeWithVertices<ObjMask,Integer>> edges = graphNghb.edgeSetUnique();
 		for( EdgeTypeWithVertices<ObjMask,Integer> e : edges ) {
 			
-			FeatureInputPairObjsMerged params = new FeatureInputPairObjsMerged( e.getNode1(), e.getNode2() );
-			params.setNrgStack(nrgStack);
-			out.add(params);
+			out.add(
+				new FeatureInputPairObjs(
+					e.getNode1(),
+					e.getNode2(),
+					Optional.of(nrgStack)
+				)
+			);
 		}
 		
 		return out;
@@ -226,13 +231,13 @@ public class MergedPairs extends FlexiFeatureTable<FeatureInputPairObjsMerged> {
 	}
 
 
-	public List<NamedBean<FeatureListProvider<FeatureInputPairObjsMerged>>> getListFeaturesPair() {
+	public List<NamedBean<FeatureListProvider<FeatureInputPairObjs>>> getListFeaturesPair() {
 		return listFeaturesPair;
 	}
 
 
 	public void setListFeaturesPair(
-			List<NamedBean<FeatureListProvider<FeatureInputPairObjsMerged>>> listFeaturesPair) {
+			List<NamedBean<FeatureListProvider<FeatureInputPairObjs>>> listFeaturesPair) {
 		this.listFeaturesPair = listFeaturesPair;
 	}
 

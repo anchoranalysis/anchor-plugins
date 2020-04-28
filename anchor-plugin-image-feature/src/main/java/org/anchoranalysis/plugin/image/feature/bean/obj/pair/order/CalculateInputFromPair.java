@@ -8,7 +8,7 @@ import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 
-class CalculateParamsFromPair extends FeatureCalculation<FeatureInputSingleObj, FeatureInputPairObjs> {
+public class CalculateInputFromPair extends FeatureCalculation<FeatureInputSingleObj, FeatureInputPairObjs> {
 
 	private boolean first;
 	
@@ -17,7 +17,7 @@ class CalculateParamsFromPair extends FeatureCalculation<FeatureInputSingleObj, 
 	 * 
 	 * @param first iff-true the first object of the pair is used for creating params, otherwise the second object 
 	 */
-	public CalculateParamsFromPair(boolean first) {
+	public CalculateInputFromPair(boolean first) {
 		super();
 		this.first = first;
 	}
@@ -31,8 +31,8 @@ class CalculateParamsFromPair extends FeatureCalculation<FeatureInputSingleObj, 
 		return paramsNew;
 	}
 	
-	private ObjMask extractObj(FeatureInputPairObjs params) {
-		return first ? params.getObjMask1() : params.getObjMask2();
+	private ObjMask extractObj(FeatureInputPairObjs input) {
+		return first ? input.getLeft() : input.getRight();
 	}
 
 	@Override
@@ -42,7 +42,7 @@ class CalculateParamsFromPair extends FeatureCalculation<FeatureInputSingleObj, 
 		if (obj.getClass() != getClass()) {
 			return false;
 		}
-		CalculateParamsFromPair rhs = (CalculateParamsFromPair) obj;
+		CalculateInputFromPair rhs = (CalculateInputFromPair) obj;
 		return new EqualsBuilder()
              .append(first, rhs.first)
              .isEquals();

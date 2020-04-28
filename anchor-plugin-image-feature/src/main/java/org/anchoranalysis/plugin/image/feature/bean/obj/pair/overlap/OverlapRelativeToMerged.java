@@ -37,6 +37,6 @@ public class OverlapRelativeToMerged extends OverlapRelative {
 	
 	@Override
 	protected int calcDenominator(FeatureInputPairObjs params) {
-		return params.getObjMaskMerged().numPixels();
+		return params.getMerged().numPixels();
 	}
 }

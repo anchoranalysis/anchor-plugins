@@ -45,7 +45,7 @@ import org.anchoranalysis.feature.shared.SharedFeatureSet;
 import org.anchoranalysis.image.feature.bean.evaluator.FeatureEvaluatorSimple;
 import org.anchoranalysis.image.feature.evaluator.EvaluateSingleObjMask;
 import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
-import org.anchoranalysis.image.feature.objmask.pair.merged.FeatureInputPairObjsMerged;
+import org.anchoranalysis.image.feature.objmask.pair.FeatureInputPairObjs;
 import org.anchoranalysis.image.objmask.ObjMask;
 
 import objmaskwithfeature.ObjMaskWithFeature;
@@ -77,7 +77,7 @@ public class ObjMaskProviderMergePair extends ObjMaskProviderMergeWithFeature {
 	private RelationBean relation = new GreaterThanEqualToBean();
 	
 	@BeanField
-	private Feature<FeatureInputPairObjsMerged> featureMerge;
+	private Feature<FeatureInputPairObjs> featureMerge;
 	// END BEAN PROPERTIES
 
 	@Override
@@ -119,7 +119,10 @@ public class ObjMaskProviderMergePair extends ObjMaskProviderMergeWithFeature {
 			this.session = new MergeSession( featureMerge, new FeatureInitParams(), false );
 			
 			// TODO fixed shared features
-			this.session.start(new SharedFeatureSet<FeatureInputPairObjsMerged>(),logErrorReporter);
+			this.session.start(
+				new SharedFeatureSet<FeatureInputPairObjs>(),
+				logErrorReporter
+			);
 		}
 
 		@Override
