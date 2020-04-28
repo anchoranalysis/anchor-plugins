@@ -7,7 +7,7 @@ import org.anchoranalysis.image.objmask.ObjMaskCollection;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
-class CalculateObjMaskParamsFromStack extends FeatureCalculation<FeatureInputSingleObj, FeatureInputStack> {
+class CalculateInputFromStack extends FeatureCalculation<FeatureInputSingleObj, FeatureInputStack> {
 
 	private ObjMaskCollection objs;
 	private int index;
@@ -19,7 +19,7 @@ class CalculateObjMaskParamsFromStack extends FeatureCalculation<FeatureInputSin
 	 * @param objs the object-mask collection to calculate from (ignored in hash-coding and equality as assumed to be singular)
 	 * @param index index of particular object in objs to derive parameters for
 	 */
-	public CalculateObjMaskParamsFromStack(ObjMaskCollection objs, int index) {
+	public CalculateInputFromStack(ObjMaskCollection objs, int index) {
 		super();
 		this.objs = objs;
 		this.index = index;
@@ -40,7 +40,7 @@ class CalculateObjMaskParamsFromStack extends FeatureCalculation<FeatureInputSin
 		if (obj.getClass() != getClass()) {
 			return false;
 		}
-		CalculateObjMaskParamsFromStack rhs = (CalculateObjMaskParamsFromStack) obj;
+		CalculateInputFromStack rhs = (CalculateInputFromStack) obj;
 		return new EqualsBuilder()
              .append(index, rhs.index)
              .isEquals();

@@ -76,7 +76,7 @@ public abstract class FeatureObjMaskPairOrder extends FeatureObjMaskPair {
 	
 		return params.calcChild(
 			feature,
-			new CalculateParamsFromPair(first),
+			new CalculateInputFromPair(first),
 			cacheName
 		);
 	}

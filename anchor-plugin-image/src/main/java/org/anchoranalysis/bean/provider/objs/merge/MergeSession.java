@@ -1,5 +1,7 @@
 package org.anchoranalysis.bean.provider.objs.merge;
 
+import java.util.Optional;
+
 /*
  * #%L
  * anchor-plugin-image
@@ -37,19 +39,19 @@ import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 import org.anchoranalysis.feature.session.SequentialSession;
 import org.anchoranalysis.feature.shared.SharedFeatureSet;
-import org.anchoranalysis.image.feature.objmask.pair.merged.FeatureInputPairObjsMerged;
+import org.anchoranalysis.image.feature.objmask.pair.FeatureInputPairObjs;
 import org.anchoranalysis.image.objmask.ObjMask;
 
 // TODO broken, to be fixed
 class MergeSession {
 
-	private SequentialSession<FeatureInputPairObjsMerged> delegate;
+	private SequentialSession<FeatureInputPairObjs> delegate;
 	
 	private FeatureInitParams paramsInit;
 	
 	//private HashMap<ObjMask,FeatureSessionCache> map;
 	
-	private Feature<FeatureInputPairObjsMerged> feature;
+	private Feature<FeatureInputPairObjs> feature;
 	
 	// Only caches calculation results which are positive
 	@SuppressWarnings("unused")
@@ -58,7 +60,7 @@ class MergeSession {
 	@SuppressWarnings("unused")
 	private LogErrorReporter logger;
 		
-	public MergeSession( Feature<FeatureInputPairObjsMerged> feature, FeatureInitParams initParams, boolean recordTimes ) {
+	public MergeSession( Feature<FeatureInputPairObjs> feature, FeatureInitParams initParams, boolean recordTimes ) {
 		
 		// We duplicate the feature, so it can be inited() again with a new separate cache
 		this.feature = feature.duplicateBean();
@@ -68,7 +70,7 @@ class MergeSession {
 		//map = new HashMap<ObjMask,FeatureSessionCache>();
 	}
 	
-	public void start( SharedFeatureSet<FeatureInputPairObjsMerged> sharedFeatures, LogErrorReporter logger ) throws InitException {
+	public void start( SharedFeatureSet<FeatureInputPairObjs> sharedFeatures, LogErrorReporter logger ) throws InitException {
 		this.logger = logger;
 		delegate.start( paramsInit, sharedFeatures, logger );
 	}
@@ -77,14 +79,21 @@ class MergeSession {
 		//map.clear();
 	}
 	
-	private FeatureInput createParams(
+	private FeatureInput createInput(
 		ObjMask obj1,
 		ObjMask obj2,
 		ObjMask omMerged
 	) throws CreateException {
-		FeatureInputPairObjsMerged params = new FeatureInputPairObjsMerged(obj1, obj2,omMerged);
-		params.setNrgStack( new NRGStackWithParams(paramsInit.getNrgStack(),paramsInit.getKeyValueParams()) );
-		return params;
+		NRGStackWithParams nrgStack = new NRGStackWithParams(
+			paramsInit.getNrgStack(),
+			paramsInit.getKeyValueParams()
+		);
+		return new FeatureInputPairObjs(
+			obj1,
+			obj2,
+			Optional.of(nrgStack),
+			Optional.of(omMerged)
+		);
 	}
 	
 	/*private void putInMap( String key, ObjMask om ) throws InitException {
@@ -137,7 +146,7 @@ class MergeSession {
 			
 			// We re-initialize the feature to have our new cached results
 			//feature.initRecursive( this.paramsInit, delegate.getCache().retriever());
-			FeatureInput params = createParams(obj1,obj2,omMerged);
+			FeatureInput params = createInput(obj1,obj2,omMerged);
 			/*double val = delegate.getCache().retriever().calc(
 				feature,
 				SessionUtilities.createCacheable(params, null)	// TODO broken, to be fixed

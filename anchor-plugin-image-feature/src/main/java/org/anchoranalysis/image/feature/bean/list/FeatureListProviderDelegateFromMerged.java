@@ -35,8 +35,7 @@ import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.bean.list.FeatureListProvider;
 import org.anchoranalysis.feature.bean.list.FeatureListProviderPrependName;
 import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
-import org.anchoranalysis.image.feature.objmask.pair.merged.FeatureInputPairObjsMerged;
-
+import org.anchoranalysis.image.feature.objmask.pair.FeatureInputPairObjs;
 import ch.ethz.biol.cell.mpp.nrg.feature.objmaskpairmerged.FromExisting;
 import ch.ethz.biol.cell.mpp.nrg.feature.objmaskpairmerged.FromFirst;
 import ch.ethz.biol.cell.mpp.nrg.feature.objmaskpairmerged.FromMerged;
@@ -49,7 +48,7 @@ import ch.ethz.biol.cell.mpp.nrg.feature.objmaskpairmerged.FromSecond;
  * @author Owen Feehan
  *
  */
-public class FeatureListProviderDelegateFromMerged extends FeatureListProvider<FeatureInputPairObjsMerged> {
+public class FeatureListProviderDelegateFromMerged extends FeatureListProvider<FeatureInputPairObjs> {
 
 	/**
 	 * 
@@ -72,10 +71,10 @@ public class FeatureListProviderDelegateFromMerged extends FeatureListProvider<F
 	// END BEAN PROPERTIES
 
 	@Override
-	public FeatureList<FeatureInputPairObjsMerged> create() throws CreateException {
+	public FeatureList<FeatureInputPairObjs> create() throws CreateException {
 
 		FeatureList<FeatureInputSingleObj> in = item.create();
-		FeatureList<FeatureInputPairObjsMerged> out = new FeatureList<>(); 
+		FeatureList<FeatureInputPairObjs> out = new FeatureList<>(); 
 		
 		for( Feature<FeatureInputSingleObj> featExst : in ) {
 			

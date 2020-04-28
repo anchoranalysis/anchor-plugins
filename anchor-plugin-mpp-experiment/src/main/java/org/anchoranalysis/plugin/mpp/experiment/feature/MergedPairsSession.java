@@ -41,7 +41,7 @@ import org.anchoranalysis.feature.session.calculator.FeatureCalculatorMultiReuse
 import org.anchoranalysis.feature.shared.SharedFeaturesInitParams;
 import org.anchoranalysis.image.feature.init.FeatureInitParamsSharedObjs;
 import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
-import org.anchoranalysis.image.feature.objmask.pair.merged.FeatureInputPairObjsMerged;
+import org.anchoranalysis.image.feature.objmask.pair.FeatureInputPairObjs;
 import org.anchoranalysis.image.feature.stack.FeatureInputStack;
 import org.anchoranalysis.image.init.ImageInitParams;
 
@@ -64,7 +64,7 @@ import org.anchoranalysis.image.init.ImageInitParams;
  * @author Owen Feehan
  *
  */
-public class MergedPairsSession extends FeatureSessionFlexiFeatureTable<FeatureInputPairObjsMerged> {
+public class MergedPairsSession extends FeatureSessionFlexiFeatureTable<FeatureInputPairObjs> {
 
 	private boolean includeFirst;
 	private boolean includeSecond;
@@ -76,7 +76,7 @@ public class MergedPairsSession extends FeatureSessionFlexiFeatureTable<FeatureI
 	//  to share the same Vertical-Cache for object calculation.
 	private FeatureCalculatorMulti<FeatureInputSingleObj> sessionFirstSecond;
 	private FeatureCalculatorMulti<FeatureInputSingleObj> sessionMerged;
-	private FeatureCalculatorMulti<FeatureInputPairObjsMerged> sessionPair;
+	private FeatureCalculatorMulti<FeatureInputPairObjs> sessionPair;
 
 	// The lists we need
 	private MergedPairsFeatures features;
@@ -163,7 +163,7 @@ public class MergedPairsSession extends FeatureSessionFlexiFeatureTable<FeatureI
 	}
 
 	@Override
-	public FeatureSessionFlexiFeatureTable<FeatureInputPairObjsMerged> duplicateForNewThread() {
+	public FeatureSessionFlexiFeatureTable<FeatureInputPairObjs> duplicateForNewThread() {
 		return new MergedPairsSession(
 			includeFirst,
 			includeSecond,
@@ -175,14 +175,14 @@ public class MergedPairsSession extends FeatureSessionFlexiFeatureTable<FeatureI
 	}
 
 	@Override
-	public ResultsVector calcMaybeSuppressErrors(FeatureInputPairObjsMerged params, ErrorReporter errorReporter)
+	public ResultsVector calcMaybeSuppressErrors(FeatureInputPairObjs params, ErrorReporter errorReporter)
 			throws FeatureCalcException {
 		
-		ResultsVector rv = calcForParams(params,errorReporter);
+		ResultsVector rv = calcForInput(params,errorReporter);
 		
 		if (checkInverse) {
 			
-			ResultsVector rvInverse = calcForParams(
+			ResultsVector rvInverse = calcForInput(
 				params.createInverse(),
 				errorReporter
 			);
@@ -249,7 +249,7 @@ public class MergedPairsSession extends FeatureSessionFlexiFeatureTable<FeatureI
 		this.suppressErrors = suppressErrors;
 	}
 
-	private ResultsVector calcForParams(FeatureInputPairObjsMerged params, ErrorReporter errorReporter) throws FeatureCalcException {
+	private ResultsVector calcForInput(FeatureInputPairObjs input, ErrorReporter errorReporter) throws FeatureCalcException {
 		
 		ResultsVectorBuilder helper = new ResultsVectorBuilder(size(), suppressErrors, errorReporter);
 		
@@ -258,19 +258,19 @@ public class MergedPairsSession extends FeatureSessionFlexiFeatureTable<FeatureI
 		
 		// First features
 		if (includeFirst) {
-			helper.calcAndInsert( params, FeatureInputPairObjsMerged::getObjMask1, sessionFirstSecond );
+			helper.calcAndInsert( input, FeatureInputPairObjs::getLeft, sessionFirstSecond );
 		}
 		
 		// Second features
 		if (includeSecond) {
-			helper.calcAndInsert( params, FeatureInputPairObjsMerged::getObjMask2, sessionFirstSecond );
+			helper.calcAndInsert( input, FeatureInputPairObjs::getRight, sessionFirstSecond );
 		}
 		
 		// Pair features
-		helper.calcAndInsert(params, sessionPair );
+		helper.calcAndInsert(input, sessionPair );
 		
 		// Merged. Because we know we have FeatureObjMaskPairMergedParams, we don't need to change params
-		helper.calcAndInsert(params, FeatureInputPairObjsMerged::getObjMaskMerged, sessionMerged );
+		helper.calcAndInsert(input, FeatureInputPairObjs::getMerged, sessionMerged );
 		
 		assert(helper.getResultsVector().hasNoNulls());
 		return helper.getResultsVector();

@@ -28,8 +28,7 @@ package org.anchoranalysis.image.feature.bean.list;
 
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.operator.FeatureListElem;
-import org.anchoranalysis.image.feature.objmask.pair.merged.FeatureInputPairObjsMerged;
-
+import org.anchoranalysis.image.feature.objmask.pair.FeatureInputPairObjs;
 import ch.ethz.biol.cell.mpp.nrg.feature.operator.Divide;
 
 public abstract class FeatureListProviderPairRatio extends FeatureListProviderAggregate {
@@ -39,11 +38,11 @@ public abstract class FeatureListProviderPairRatio extends FeatureListProviderAg
 	 */
 	private static final long serialVersionUID = 1L;
 
-	private static Feature<FeatureInputPairObjsMerged> ratioTwoFeatures(
-		Feature<FeatureInputPairObjsMerged> featFirst,
-		Feature<FeatureInputPairObjsMerged> featSecond
+	private static Feature<FeatureInputPairObjs> ratioTwoFeatures(
+		Feature<FeatureInputPairObjs> featFirst,
+		Feature<FeatureInputPairObjs> featSecond
 	) {
-		Divide<FeatureInputPairObjsMerged> out = new Divide<>();
+		Divide<FeatureInputPairObjs> out = new Divide<>();
 		out.setAvoidDivideByZero(true);
 		out.getList().add(featFirst);
 		out.getList().add(featSecond);
@@ -51,25 +50,25 @@ public abstract class FeatureListProviderPairRatio extends FeatureListProviderAg
 	}
 	
 	@Override
-	protected Feature<FeatureInputPairObjsMerged> createAggregateFeature(
-		Feature<FeatureInputPairObjsMerged> featFirst,
-		Feature<FeatureInputPairObjsMerged> featSecond,
-		Feature<FeatureInputPairObjsMerged> featMerged
+	protected Feature<FeatureInputPairObjs> createAggregateFeature(
+		Feature<FeatureInputPairObjs> featFirst,
+		Feature<FeatureInputPairObjs> featSecond,
+		Feature<FeatureInputPairObjs> featMerged
 	) {
-		Feature<FeatureInputPairObjsMerged> firstToSecond = ratioTwoFeatures(featFirst, featSecond);
-		Feature<FeatureInputPairObjsMerged> secondToFirst = ratioTwoFeatures(featSecond, featFirst);
+		Feature<FeatureInputPairObjs> firstToSecond = ratioTwoFeatures(featFirst, featSecond);
+		Feature<FeatureInputPairObjs> secondToFirst = ratioTwoFeatures(featSecond, featFirst);
 		return createAggregateFeatureOnRatio( firstToSecond, secondToFirst, featMerged );
 	}
 	
-	protected Feature<FeatureInputPairObjsMerged> createAggregateFeatureOnRatio(
-		Feature<FeatureInputPairObjsMerged> firstToSecond,
-		Feature<FeatureInputPairObjsMerged> secondToFirst,
-		Feature<FeatureInputPairObjsMerged> featMerged
+	protected Feature<FeatureInputPairObjs> createAggregateFeatureOnRatio(
+		Feature<FeatureInputPairObjs> firstToSecond,
+		Feature<FeatureInputPairObjs> secondToFirst,
+		Feature<FeatureInputPairObjs> featMerged
 	) {
-		FeatureListElem<FeatureInputPairObjsMerged> featWithList = createFeature();
+		FeatureListElem<FeatureInputPairObjs> featWithList = createFeature();
 		ListUtilities.addFeaturesToList( firstToSecond, secondToFirst, featWithList.getList() );
 		return featWithList;
 	}
 	
-	protected abstract FeatureListElem<FeatureInputPairObjsMerged> createFeature();
+	protected abstract FeatureListElem<FeatureInputPairObjs> createFeature();
 }

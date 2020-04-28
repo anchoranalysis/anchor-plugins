@@ -1,5 +1,7 @@
 package org.anchoranalysis.test.feature.plugins.objs;
 
+import java.util.Optional;
+
 import org.anchoranalysis.core.geometry.Point2i;
 
 /*-
@@ -37,9 +39,7 @@ public class ParamsOverlappingCircleFixture {
 	private static final int DEFAULT_POS_X = 50;
 	private static final int DEFAULT_POS_Y = 50;
 	
-	private ParamsOverlappingCircleFixture() {
-		
-	}
+	private ParamsOverlappingCircleFixture() {}
 	
 	/**
 	 * Two object-masks of circles in different locations WITH some overlap
@@ -48,18 +48,12 @@ public class ParamsOverlappingCircleFixture {
 	 * @return the params populated with the two masks
 	 */
 	public static FeatureInputPairObjs twoOverlappingCircles( boolean sameSize ) {
-		FeatureInputPairObjs params = new FeatureInputPairObjs(
-			CircleObjMaskFixture.circleAt(
-				new Point2i( DEFAULT_POS_X, DEFAULT_POS_Y ),
-				DEFAULT_CIRCLE_RADIUS
-			),
-			CircleObjMaskFixture.circleAt(
-				new Point2i( DEFAULT_POS_X + 10, DEFAULT_POS_Y ),
-				radiusMaybeExtra(sameSize, 3)
-			)
+		return twoCircles(
+			10,
+			0,
+			sameSize,			
+			3
 		);
-		params.setNrgStack( CircleObjMaskFixture.nrgStack() );
-		return params;
 	}
 	
 	/**
@@ -69,18 +63,41 @@ public class ParamsOverlappingCircleFixture {
 	 * @return the params populated with the two masks
 	 */
 	public static FeatureInputPairObjs twoNonOverlappingCircles( boolean sameSize) {
-		FeatureInputPairObjs params = new FeatureInputPairObjs(
+		return twoCircles(
+			0,
+			(DEFAULT_CIRCLE_RADIUS*3),
+			sameSize,
+			-3
+		);
+	}
+	
+	
+	private static FeatureInputPairObjs twoCircles(
+		int shiftPositionX,
+		int shiftPositionY,
+		boolean sameSize,
+		int extraRadius
+	) {
+		return new FeatureInputPairObjs(
 			CircleObjMaskFixture.circleAt(
-				new Point2i( DEFAULT_POS_X, DEFAULT_POS_Y ),
+				position(0,0),
 				DEFAULT_CIRCLE_RADIUS
 			),
 			CircleObjMaskFixture.circleAt(
-				new Point2i( DEFAULT_POS_X, DEFAULT_POS_Y + (DEFAULT_CIRCLE_RADIUS*3) ),
-				radiusMaybeExtra(sameSize, -3)
+				position(shiftPositionX,shiftPositionY),
+				radiusMaybeExtra(sameSize, extraRadius)
+			),
+			Optional.of(
+				CircleObjMaskFixture.nrgStack()
 			)
 		);
-		params.setNrgStack( CircleObjMaskFixture.nrgStack() );
-		return params;
+	}
+	
+	private static Point2i position( int shiftPositionX, int shiftPositionY ) {
+		return new Point2i(
+			DEFAULT_POS_X + shiftPositionX,
+			DEFAULT_POS_Y + shiftPositionY
+		);
 	}
 	
 	/** If flag is true, adds extra to the default radius value */

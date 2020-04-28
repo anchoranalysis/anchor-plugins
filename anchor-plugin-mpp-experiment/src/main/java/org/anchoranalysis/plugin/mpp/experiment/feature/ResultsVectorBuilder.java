@@ -34,7 +34,7 @@ import org.anchoranalysis.feature.calc.results.ResultsVector;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorMulti;
 import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
-import org.anchoranalysis.image.feature.objmask.pair.merged.FeatureInputPairObjsMerged;
+import org.anchoranalysis.image.feature.objmask.pair.FeatureInputPairObjs;
 import org.anchoranalysis.image.objmask.ObjMask;
 
 class ResultsVectorBuilder {
@@ -56,30 +56,25 @@ class ResultsVectorBuilder {
 	 * Calculates and inserts a derived obj-mask params from a merged.
 	 */
 	public void calcAndInsert(
-		FeatureInputPairObjsMerged params,
-		Function<FeatureInputPairObjsMerged,ObjMask> extractObj,
-		FeatureCalculatorMulti<FeatureInputSingleObj> session
+		FeatureInputPairObjs inputPair,
+		Function<FeatureInputPairObjs,ObjMask> extractObj,
+		FeatureCalculatorMulti<FeatureInputSingleObj> calc
 	) throws FeatureCalcException {
-		FeatureInputSingleObj paramsSpecific = new FeatureInputSingleObj(
-			extractObj.apply(params)
+		FeatureInputSingleObj inputSingle = new FeatureInputSingleObj(
+			extractObj.apply(inputPair)
 		);
-		//paramsSpecific.setNrgStack( params.getNrgStack() );  // This is necessary? Why?
-		calcAndInsert(paramsSpecific, session);
+		calcAndInsert(inputSingle, calc);
 	}
 	
 	/**
 	 * Calculates the parameters belong to a particular session and inserts into a ResultsVector
 	 * 
-	 * @param params
-	 * @param session
-	 * @param start
-	 * @param out
-	 * @param errorReporter
-	 * @return length(resultsVector)
+	 * @param input
+	 * @param calc
 	 * @throws FeatureCalcException
 	 */
-	public <T extends FeatureInput> void calcAndInsert( T params, FeatureCalculatorMulti<T> session ) throws FeatureCalcException {
-		ResultsVector rvImage =  suppressErrors ? session.calcSuppressErrors( params, errorReporter ) : session.calc(params) ;
+	public <T extends FeatureInput> void calcAndInsert( T input, FeatureCalculatorMulti<T> calc ) throws FeatureCalcException {
+		ResultsVector rvImage =  suppressErrors ? calc.calcSuppressErrors( input, errorReporter ) : calc.calc(input) ;
 		out.set(cnt, rvImage);
 		cnt += rvImage.length();
 	}

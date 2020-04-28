@@ -79,7 +79,7 @@ public class BinaryImageChnlProviderFeature extends FeatureStackSharedObjects {
 
 		return input.calcChild(
 			item,
-			new CalculateBinaryChnlParams(chnl),
+			new CalculateBinaryChnlInput(chnl),
 			new ChildCacheName(BinaryImageChnlProviderFeature.class, chnl.hashCode())
 		);
 	}

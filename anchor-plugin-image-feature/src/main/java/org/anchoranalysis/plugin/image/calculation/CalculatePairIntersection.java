@@ -40,6 +40,7 @@ import org.anchoranalysis.image.feature.objmask.pair.FeatureInputPairObjs;
 import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.image.objmask.morph.MorphologicalErosion;
 import org.anchoranalysis.image.objmask.ops.ObjMaskMerger;
+import org.anchoranalysis.plugin.image.feature.bean.obj.pair.order.CalculateInputFromPair;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
@@ -60,9 +61,11 @@ public class CalculatePairIntersection extends FeatureCalculation<Optional<ObjMa
 	private boolean do3D;
 	private int iterationsErosion;
 	
-	private ResolvedCalculation<ObjMask,FeatureInputSingleObj> ccDilation1;
-	private ResolvedCalculation<ObjMask,FeatureInputSingleObj> ccDilation2;
-		
+	private ResolvedCalculation<ObjMask,FeatureInputSingleObj> calcDilation1;
+	private ResolvedCalculation<ObjMask,FeatureInputSingleObj> calcDilation2;
+	private ResolvedCalculation<FeatureInputSingleObj, FeatureInputPairObjs> calcLeft;
+	private ResolvedCalculation<FeatureInputSingleObj, FeatureInputPairObjs> calcRight;
+	
 	public static ResolvedCalculation<Optional<ObjMask>,FeatureInputPairObjs> createFromCache(
 		CalculationResolver<FeatureInputPairObjs> cache,
 		CalculationResolver<FeatureInputSingleObj> cacheDilationObj1,
@@ -82,30 +85,41 @@ public class CalculatePairIntersection extends FeatureCalculation<Optional<ObjMa
 			cacheDilationObj2, iterations2, do3D	
 		);
 		return cache.search(
-			new CalculatePairIntersection(do3D, iterationsErosion, ccDilation1, ccDilation2 )
+			new CalculatePairIntersection(
+				do3D,
+				iterationsErosion,
+				cache.search( new CalculateInputFromPair(true) ),
+				cache.search( new CalculateInputFromPair(false) ),
+				ccDilation1,
+				ccDilation2
+			)
 		);
 	}
 		
 	private CalculatePairIntersection(
 		boolean do3D,
 		int iterationsErosion,
-		ResolvedCalculation<ObjMask,FeatureInputSingleObj> ccDilation1,
-		ResolvedCalculation<ObjMask,FeatureInputSingleObj> ccDilation2
+		ResolvedCalculation<FeatureInputSingleObj, FeatureInputPairObjs> calcLeft,
+		ResolvedCalculation<FeatureInputSingleObj, FeatureInputPairObjs> calcRight,
+		ResolvedCalculation<ObjMask,FeatureInputSingleObj> calcDilationLeft,
+		ResolvedCalculation<ObjMask,FeatureInputSingleObj> calcDilationRight
 	) {
 		super();
 		this.iterationsErosion = iterationsErosion;
 		this.do3D = do3D;
-		this.ccDilation1 = ccDilation1;
-		this.ccDilation2 = ccDilation2;
+		this.calcDilation1 = calcDilationLeft;
+		this.calcDilation2 = calcDilationRight;
+		this.calcLeft = calcLeft;
+		this.calcRight = calcRight;
 	}
 
 	@Override
-	protected Optional<ObjMask> execute( FeatureInputPairObjs params ) throws FeatureCalcException {
+	protected Optional<ObjMask> execute( FeatureInputPairObjs input ) throws FeatureCalcException {
 	
-		ImageDim dim = params.getDimensionsRequired();
+		ImageDim dim = input.getDimensionsRequired();
 				
-		ObjMask om1Dilated = ccDilation1.getOrCalculate( params.params1() );
-		ObjMask om2Dilated = ccDilation2.getOrCalculate( params.params2() );
+		ObjMask om1Dilated = dilatedObjMask(input, calcLeft, calcDilation1);
+		ObjMask om2Dilated = dilatedObjMask(input, calcRight, calcDilation2);
 		
 		Optional<ObjMask> omIntersection  = om1Dilated.intersect(om2Dilated, dim );
 				
@@ -117,7 +131,7 @@ public class CalculatePairIntersection extends FeatureCalculation<Optional<ObjMa
 		
 		try {
 			if (iterationsErosion>0) {
-				return erode(params, omIntersection.get(), dim);
+				return erode(input, omIntersection.get(), dim);
 			} else {
 				return omIntersection;
 			}
@@ -134,8 +148,8 @@ public class CalculatePairIntersection extends FeatureCalculation<Optional<ObjMa
 	        return new EqualsBuilder()
 	            .append(iterationsErosion, other.iterationsErosion)
 	            .append(do3D, other.do3D)
-	            .append(ccDilation1, other.ccDilation1)
-	            .append(ccDilation2, other.ccDilation2)
+	            .append(calcDilation1, other.calcDilation1)
+	            .append(calcDilation2, other.calcDilation2)
 	            .isEquals();
 	    } else{
 	        return false;
@@ -144,16 +158,21 @@ public class CalculatePairIntersection extends FeatureCalculation<Optional<ObjMa
 	
 	@Override
 	public int hashCode() {
-		return new HashCodeBuilder().append(iterationsErosion).append(do3D).append( ccDilation1 ).append( ccDilation2 ).toHashCode();
+		return new HashCodeBuilder()
+			.append(iterationsErosion)
+			.append(do3D)
+			.append( calcDilation1 )
+			.append( calcDilation2 )
+			.toHashCode();
 	}
 	
 	private Optional<ObjMask> erode( FeatureInputPairObjs params, ObjMask omIntersection, ImageDim dim ) throws CreateException {
 
-		ObjMask omMerged = params.getObjMaskMerged();
+		ObjMask omMerged = params.getMerged();
 		
 		// We merge the two masks, and then erode it, and use this as a mask on the input object
 		if (omMerged==null) {
-			omMerged = ObjMaskMerger.merge( params.getObjMask1(), params.getObjMask2() );
+			omMerged = ObjMaskMerger.merge( params.getLeft(), params.getRight() );
 		}
 		
 		ObjMask omMergedEroded = MorphologicalErosion.createErodedObjMask(
@@ -168,5 +187,15 @@ public class CalculatePairIntersection extends FeatureCalculation<Optional<ObjMa
 		Optional<ObjMask> omIntersect = omIntersection.intersect(omMergedEroded, dim);
 		omIntersect.ifPresent( om-> { assert( om.hasPixelsGreaterThan(0) ); });
 		return omIntersect;
+	}
+	
+	private static ObjMask dilatedObjMask(
+		FeatureInputPairObjs input,
+		ResolvedCalculation<FeatureInputSingleObj, FeatureInputPairObjs> calcSingle,
+		ResolvedCalculation<ObjMask,FeatureInputSingleObj> calcDilation
+	) throws FeatureCalcException {
+		return calcDilation.getOrCalculate(
+			calcSingle.getOrCalculate(input)
+		);
 	}
 }

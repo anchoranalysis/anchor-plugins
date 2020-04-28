@@ -15,11 +15,11 @@ import org.anchoranalysis.image.voxel.datatype.IncorrectVoxelDataTypeException;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
-public class CalculateBinaryChnlParams extends FeatureCalculation<FeatureInputSingleObj, FeatureInputStack> {
+public class CalculateBinaryChnlInput extends FeatureCalculation<FeatureInputSingleObj, FeatureInputStack> {
 
 	private BinaryChnl chnl;
 		
-	public CalculateBinaryChnlParams(BinaryChnl chnl) {
+	public CalculateBinaryChnlInput(BinaryChnl chnl) {
 		super();
 		this.chnl = chnl;
 	}
@@ -48,8 +48,8 @@ public class CalculateBinaryChnlParams extends FeatureCalculation<FeatureInputSi
 
 	@Override
 	public boolean equals(Object obj) {
-		 if(obj instanceof CalculateBinaryChnlParams){
-			 final CalculateBinaryChnlParams other = (CalculateBinaryChnlParams) obj;
+		 if(obj instanceof CalculateBinaryChnlInput){
+			 final CalculateBinaryChnlInput other = (CalculateBinaryChnlInput) obj;
 		        return new EqualsBuilder()
 		            .append(chnl, other.chnl)
 		            .isEquals();

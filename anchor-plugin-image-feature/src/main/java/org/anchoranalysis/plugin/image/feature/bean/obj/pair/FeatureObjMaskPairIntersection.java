@@ -43,7 +43,7 @@ import org.anchoranalysis.image.feature.bean.objmask.pair.FeatureObjMaskPair;
 import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
 import org.anchoranalysis.image.feature.objmask.pair.FeatureInputPairObjs;
 import org.anchoranalysis.image.objmask.ObjMask;
-import org.anchoranalysis.plugin.image.feature.obj.pair.CalculateParamsForIntersection;
+import org.anchoranalysis.plugin.image.feature.obj.pair.CalculateIntersectionInput;
 import org.anchoranalysis.plugin.image.calculation.CalculatePairIntersectionCommutative;
 import org.anchoranalysis.plugin.image.feature.bean.obj.pair.order.FeatureObjMaskPairOrder;
 import org.anchoranalysis.plugin.image.feature.obj.pair.CalculateInputFromDelegateOption;
@@ -90,7 +90,7 @@ public class FeatureObjMaskPairIntersection extends FeatureObjMaskPair {
 		return CalculateInputFromDelegateOption.calc(
 			input,
 			createCalculation(input),
-			delegate -> new CalculateParamsForIntersection(delegate),
+			delegate -> new CalculateIntersectionInput(delegate),
 			item,
 			cacheIntersectionName(),
 			emptyValue

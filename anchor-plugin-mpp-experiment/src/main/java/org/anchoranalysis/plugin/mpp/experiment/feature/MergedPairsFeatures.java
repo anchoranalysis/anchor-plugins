@@ -2,7 +2,7 @@ package org.anchoranalysis.plugin.mpp.experiment.feature;
 
 import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
-import org.anchoranalysis.image.feature.objmask.pair.merged.FeatureInputPairObjsMerged;
+import org.anchoranalysis.image.feature.objmask.pair.FeatureInputPairObjs;
 import org.anchoranalysis.image.feature.stack.FeatureInputStack;
 
 /**
@@ -16,7 +16,7 @@ public class MergedPairsFeatures {
 	private FeatureList<FeatureInputStack> listImage;
 
 	private FeatureList<FeatureInputSingleObj> listSingle;
-	private FeatureList<FeatureInputPairObjsMerged> listPair;
+	private FeatureList<FeatureInputPairObjs> listPair;
 
 	/**
 	 * Constructor
@@ -26,7 +26,7 @@ public class MergedPairsFeatures {
 	 * @param listPair features for a pair of objects
 	 */
 	public MergedPairsFeatures(FeatureList<FeatureInputStack> listImage, FeatureList<FeatureInputSingleObj> listSingle,
-			FeatureList<FeatureInputPairObjsMerged> listPair) {
+			FeatureList<FeatureInputPairObjs> listPair) {
 		super();
 		this.listImage = listImage;
 		this.listSingle = listSingle;
@@ -39,7 +39,7 @@ public class MergedPairsFeatures {
 	public FeatureList<FeatureInputSingleObj> getSingle() {
 		return listSingle;
 	}
-	public FeatureList<FeatureInputPairObjsMerged> getPair() {
+	public FeatureList<FeatureInputPairObjs> getPair() {
 		return listPair;
 	}
 	

@@ -34,8 +34,7 @@ import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.bean.list.FeatureListProvider;
 import org.anchoranalysis.feature.bean.list.FeatureListProviderPrependName;
 import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
-import org.anchoranalysis.image.feature.objmask.pair.merged.FeatureInputPairObjsMerged;
-
+import org.anchoranalysis.image.feature.objmask.pair.FeatureInputPairObjs;
 import ch.ethz.biol.cell.mpp.nrg.feature.objmaskpairmerged.FromFirst;
 import ch.ethz.biol.cell.mpp.nrg.feature.objmaskpairmerged.FromMerged;
 import ch.ethz.biol.cell.mpp.nrg.feature.objmaskpairmerged.FromSecond;
@@ -49,7 +48,7 @@ import ch.ethz.biol.cell.mpp.nrg.feature.objmaskpairmerged.FromSecond;
  * @param T feature-inout
  *
  */
-public abstract class FeatureListProviderAggregate extends FeatureListProvider<FeatureInputPairObjsMerged> {
+public abstract class FeatureListProviderAggregate extends FeatureListProvider<FeatureInputPairObjs> {
 
 	/**
 	 * 
@@ -65,10 +64,10 @@ public abstract class FeatureListProviderAggregate extends FeatureListProvider<F
 	// END BEAN PROPERTIES
 	
 	@Override
-	public FeatureList<FeatureInputPairObjsMerged> create() throws CreateException {
+	public FeatureList<FeatureInputPairObjs> create() throws CreateException {
 
 		FeatureList<FeatureInputSingleObj> in = item.create();
-		FeatureList<FeatureInputPairObjsMerged> out = new FeatureList<>(); 
+		FeatureList<FeatureInputPairObjs> out = new FeatureList<>(); 
 		
 		for( Feature<FeatureInputSingleObj> featExst : in ) {
 			
@@ -81,7 +80,7 @@ public abstract class FeatureListProviderAggregate extends FeatureListProvider<F
 			FromMerged featMerged = new FromMerged();
 			featMerged.setItem( featExst.duplicateBean() );
 			
-			Feature<FeatureInputPairObjsMerged> featOut = createAggregateFeature(featFirst, featSecond, featMerged);
+			Feature<FeatureInputPairObjs> featOut = createAggregateFeature(featFirst, featSecond, featMerged);
 			
 			FeatureListProviderPrependName.setNewNameOnFeature(featOut, featExst.getFriendlyName(), prependString);
 			
@@ -91,10 +90,10 @@ public abstract class FeatureListProviderAggregate extends FeatureListProvider<F
 		return out;
 	}
 	
-	protected abstract Feature<FeatureInputPairObjsMerged> createAggregateFeature(
-		Feature<FeatureInputPairObjsMerged> featFirst,
-		Feature<FeatureInputPairObjsMerged> featSecond,
-		Feature<FeatureInputPairObjsMerged> featMerged
+	protected abstract Feature<FeatureInputPairObjs> createAggregateFeature(
+		Feature<FeatureInputPairObjs> featFirst,
+		Feature<FeatureInputPairObjs> featSecond,
+		Feature<FeatureInputPairObjs> featMerged
 	);
 	
 
