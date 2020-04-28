@@ -28,6 +28,7 @@ package ch.ethz.biol.cell.mpp.nrg.feature.histogram;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.bean.Feature;
+import org.anchoranalysis.feature.cache.ChildCacheName;
 import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.bean.threshold.CalculateLevel;
@@ -66,7 +67,7 @@ public class ThresholdHistogram extends FeatureHistogram {
 				new CalculateOtsuThresholdedHistogram(calculateLevel, getLogger()),
 				input.resolver()
 			),
-			"thresholdedHist"
+			new ChildCacheName(ThresholdHistogram.class, calculateLevel.hashCode())
 		);
 	}
 

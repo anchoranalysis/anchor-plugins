@@ -30,6 +30,7 @@ package ch.ethz.biol.cell.mpp.nrg.feature.objmask;
 
 
 import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.feature.cache.ChildCacheName;
 import org.anchoranalysis.feature.cache.calculation.CalculationResolver;
 import org.anchoranalysis.feature.cache.calculation.FeatureCalculation;
 import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
@@ -57,8 +58,11 @@ public class Erode extends DerivedObjMask {
 	}
 	
 	@Override
-	public String cacheName() {
-		return "erode" + iterations + "_" + do3D;
+	public ChildCacheName cacheName() {
+		return new ChildCacheName(
+			Erode.class,
+			iterations + "_" + do3D
+		);
 	}
 
 	public int getIterations() {

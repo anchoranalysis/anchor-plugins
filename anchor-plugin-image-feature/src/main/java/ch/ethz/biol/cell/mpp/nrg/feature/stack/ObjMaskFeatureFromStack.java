@@ -33,6 +33,7 @@ import org.anchoranalysis.bean.annotation.SkipInit;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.feature.bean.Feature;
+import org.anchoranalysis.feature.cache.ChildCacheName;
 import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
@@ -93,7 +94,7 @@ public abstract class ObjMaskFeatureFromStack extends FeatureStack {
 		}
 	}
 
-	private static DoubleArrayList featureValsForObjs(
+	private DoubleArrayList featureValsForObjs(
 		Feature<FeatureInputSingleObj> feature,
 		SessionInput<FeatureInputStack> input,
 		ObjMaskCollection objsCollection
@@ -106,11 +107,18 @@ public abstract class ObjMaskFeatureFromStack extends FeatureStack {
 			double val = input.calcChild(
 				feature,
 				new CalculateObjMaskParamsFromStack(objsCollection, i),
-				"objs_from_stack" + i
+				cacheName(i)
 			);
 			featureVals.add(val);
 		}
 		return featureVals;
+	}
+	
+	private ChildCacheName cacheName(int index) {
+		return new ChildCacheName(
+			ObjMaskFeatureFromStack.class,
+			index + "_" + objsCollection.hashCode()
+		);
 	}
 	
 	public Feature<FeatureInputSingleObj> getItem() {

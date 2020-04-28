@@ -1,6 +1,7 @@
 package ch.ethz.biol.cell.mpp.nrg.feature.objmaskpairmerged;
 
 import org.anchoranalysis.feature.bean.Feature;
+import org.anchoranalysis.feature.cache.ChildCacheName;
 import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
 
 /*-
@@ -45,6 +46,8 @@ public class FromMerged extends FromExisting {
 	 */
 	private static final long serialVersionUID = 1L;
 	
+	private static final ChildCacheName CACHE_NAME = new ChildCacheName(FromMerged.class);
+	
 	public FromMerged() {
 		// NOTHING TO DO
 	}
@@ -59,7 +62,7 @@ public class FromMerged extends FromExisting {
 	}
 	
 	@Override
-	public String cacheNameToUse() {
-		return "merged";
+	public ChildCacheName cacheNameToUse() {
+		return CACHE_NAME;
 	}
 }

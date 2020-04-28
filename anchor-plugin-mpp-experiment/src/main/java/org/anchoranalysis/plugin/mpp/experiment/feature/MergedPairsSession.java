@@ -200,37 +200,6 @@ public class MergedPairsSession extends FeatureSessionFlexiFeatureTable<FeatureI
 		return rv;
 	}
 
-
-	private ResultsVector calcForParams(FeatureInputPairObjsMerged params, ErrorReporter errorReporter) throws FeatureCalcException {
-		
-		ResultsVectorBuilder helper = new ResultsVectorBuilder(size(), suppressErrors, errorReporter);
-		
-		// First we calculate the Image features (we rely on the NRG stack being added by the calculator)
-		helper.calcAndInsert(new FeatureInputStack(), sessionImage );
-		
-		// First features
-		if (includeFirst) {
-			helper.calcAndInsert( params, FeatureInputPairObjsMerged::getObjMask1, sessionFirstSecond );
-		}
-		
-		// Second features
-		if (includeSecond) {
-			helper.calcAndInsert( params, FeatureInputPairObjsMerged::getObjMask2, sessionFirstSecond );
-		}
-		
-		// Pair features
-		helper.calcAndInsert(params, sessionPair );
-		
-		// Merged. Because we know we have FeatureObjMaskPairMergedParams, we don't need to change params
-		helper.calcAndInsert(params, FeatureInputPairObjsMerged::getObjMaskMerged, sessionMerged );
-		
-		assert(helper.getResultsVector().hasNoNulls());
-		return helper.getResultsVector();
-	}
-	
-
-	
-
 	@Override
 	public FeatureNameList createFeatureNames() {
 		FeatureNameList out = new FeatureNameList();
@@ -250,18 +219,6 @@ public class MergedPairsSession extends FeatureSessionFlexiFeatureTable<FeatureI
 		out.addCustomNamesWithPrefix( "merged.", features.getSingle() );
 		return out;
 	}
-
-	
-	/**
-	 * Integer value from boolean
-	 * 
-	 * @param b
-	 * @return 0 for FALSE, 1 for TRUE
-	 */
-	private static int integerFromBoolean( boolean b ) {
-		return b ? 1 : 0;
-	}
-	
 	
 	@Override
 	public int size() {
@@ -292,4 +249,40 @@ public class MergedPairsSession extends FeatureSessionFlexiFeatureTable<FeatureI
 		this.suppressErrors = suppressErrors;
 	}
 
+	private ResultsVector calcForParams(FeatureInputPairObjsMerged params, ErrorReporter errorReporter) throws FeatureCalcException {
+		
+		ResultsVectorBuilder helper = new ResultsVectorBuilder(size(), suppressErrors, errorReporter);
+		
+		// First we calculate the Image features (we rely on the NRG stack being added by the calculator)
+		helper.calcAndInsert(new FeatureInputStack(), sessionImage );
+		
+		// First features
+		if (includeFirst) {
+			helper.calcAndInsert( params, FeatureInputPairObjsMerged::getObjMask1, sessionFirstSecond );
+		}
+		
+		// Second features
+		if (includeSecond) {
+			helper.calcAndInsert( params, FeatureInputPairObjsMerged::getObjMask2, sessionFirstSecond );
+		}
+		
+		// Pair features
+		helper.calcAndInsert(params, sessionPair );
+		
+		// Merged. Because we know we have FeatureObjMaskPairMergedParams, we don't need to change params
+		helper.calcAndInsert(params, FeatureInputPairObjsMerged::getObjMaskMerged, sessionMerged );
+		
+		assert(helper.getResultsVector().hasNoNulls());
+		return helper.getResultsVector();
+	}
+	
+	/**
+	 * Integer value from boolean
+	 * 
+	 * @param b
+	 * @return 0 for FALSE, 1 for TRUE
+	 */
+	private static int integerFromBoolean( boolean b ) {
+		return b ? 1 : 0;
+	}
 }

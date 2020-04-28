@@ -29,6 +29,7 @@ package ch.ethz.biol.cell.mpp.nrg.feature.stack;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.bean.Feature;
+import org.anchoranalysis.feature.cache.ChildCacheName;
 import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.cache.calculation.ResolvedCalculation;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
@@ -72,7 +73,7 @@ public class MedianConnectedComponentFeature extends FeatureStack {
 			double val = input.calcChild(
 				item,
 				new CalculateDeriveObjFromCollection(ccObjs, i),
-				"obj-" + i
+				cacheName(i)
 			);
 			featureVals.add(val);
 		}
@@ -80,6 +81,13 @@ public class MedianConnectedComponentFeature extends FeatureStack {
 		featureVals.sort();
 		
 		return Descriptive.median(featureVals);
+	}
+	
+	private ChildCacheName cacheName( int index ) {
+		return new ChildCacheName(
+			MedianConnectedComponentFeature.class,
+			nrgChnlIndex + "_" + index
+		);
 	}
 
 	public Feature<FeatureInputSingleObj> getItem() {

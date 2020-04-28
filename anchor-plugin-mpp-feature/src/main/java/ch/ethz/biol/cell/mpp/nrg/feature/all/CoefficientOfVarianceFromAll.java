@@ -35,6 +35,7 @@ import org.anchoranalysis.anchor.mpp.feature.mark.MemoCollection;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.bean.Feature;
+import org.anchoranalysis.feature.cache.ChildCacheName;
 import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 
@@ -49,7 +50,7 @@ public class CoefficientOfVarianceFromAll extends FeatureAllMemo {
 	@BeanField
 	private Feature<FeatureInputSingleMemo> item;
 	// END BEAN PROPERTIES
-	
+		
 	@Override
 	public double calc(SessionInput<FeatureInputAllMemo> input)	throws FeatureCalcException {
 		
@@ -87,7 +88,7 @@ public class CoefficientOfVarianceFromAll extends FeatureAllMemo {
 			double v = input.calcChild(
 				item,
 				new CalculateDeriveSingleMemoInput(index),
-				"mark"+i
+				new ChildCacheName(CoefficientOfVarianceFromAll.class, i)
 			);
 			
 			vals[i] = v;

@@ -4,6 +4,7 @@ import java.util.Optional;
 import java.util.function.Function;
 
 import org.anchoranalysis.feature.bean.Feature;
+import org.anchoranalysis.feature.cache.ChildCacheName;
 import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.cache.calculation.CacheableCalculation;
 import org.anchoranalysis.feature.cache.calculation.FeatureCalculation;
@@ -53,7 +54,7 @@ public abstract class CalculateInputFromDelegateOption<S extends FeatureInput, T
 		FeatureCalculation<U,T> delegate,
 		Function<ResolvedCalculation<U,T>,CalculateInputFromDelegateOption<S,T,U>> funcCreateFromDelegate,
 		Feature<S> feature,
-		String cacheName,
+		ChildCacheName cacheName,
 		double emptyValue
 	) throws FeatureCalcException {
 
@@ -75,17 +76,6 @@ public abstract class CalculateInputFromDelegateOption<S extends FeatureInput, T
 			cacheName
 		);
 	}
-	
-	/*@Override
-	public boolean equals(Object other) {
-	    return (clssCalculateParams.isAssignableFrom(other.getClass()));
-	}*/
-
-	/*@Override
-	public int hashCode() {
-		return new HashCodeBuilder().toHashCode();
-	}*/
-	
 	
 	@SuppressWarnings("unchecked")
 	@Override

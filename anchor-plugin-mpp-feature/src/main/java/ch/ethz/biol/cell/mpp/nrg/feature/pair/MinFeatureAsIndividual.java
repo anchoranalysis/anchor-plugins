@@ -1,7 +1,7 @@
 package ch.ethz.biol.cell.mpp.nrg.feature.pair;
 
 import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputPairMemo;
-
+import org.anchoranalysis.feature.cache.ChildCacheName;
 
 /*
  * #%L
@@ -40,6 +40,9 @@ public class MinFeatureAsIndividual extends NRGElemPairWithFeature {
 	 */
 	private static final long serialVersionUID = 1L;
 
+	private static final ChildCacheName CACHE_NAME_FIRST = new ChildCacheName(MinFeatureAsIndividual.class, "first");
+	private static final ChildCacheName CACHE_NAME_SECOND = new ChildCacheName(MinFeatureAsIndividual.class, "second");
+	
 	@Override
 	public double calc( SessionInput<FeatureInputPairMemo> input ) throws FeatureCalcException {
 
@@ -57,7 +60,7 @@ public class MinFeatureAsIndividual extends NRGElemPairWithFeature {
 		return input.calcChild(
 			getItem(),
 			new CalculateDeriveSingleInputFromPair(first),
-			first ? "first" : "second"
+			first ? CACHE_NAME_FIRST : CACHE_NAME_SECOND
 		);
 	}
 }

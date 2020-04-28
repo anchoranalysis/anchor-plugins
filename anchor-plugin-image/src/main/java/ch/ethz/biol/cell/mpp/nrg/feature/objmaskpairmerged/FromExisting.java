@@ -29,6 +29,7 @@ package ch.ethz.biol.cell.mpp.nrg.feature.objmaskpairmerged;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.bean.Feature;
+import org.anchoranalysis.feature.cache.ChildCacheName;
 import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.feature.bean.objmask.pair.FeatureObjMaskPairMerged;
@@ -68,7 +69,7 @@ public abstract class FromExisting extends FeatureObjMaskPairMerged {
 	public double calc(SessionInput<FeatureInputPairObjsMerged> input)
 			throws FeatureCalcException {
 		
-		String cacheName = cacheNameToUse();
+		ChildCacheName cacheName = cacheNameToUse();
 		return input.calcChild(
 			item,
 			new CalculateDeriveSingleObjFromMerged(
@@ -87,7 +88,7 @@ public abstract class FromExisting extends FeatureObjMaskPairMerged {
 	protected abstract ObjMask selectObjMask( FeatureInputPairObjsMerged params );
 	
 	/** The name of the cache to use for calculation */
-	protected abstract String cacheNameToUse();
+	protected abstract ChildCacheName cacheNameToUse();
 	
 	public Feature<FeatureInputSingleObj> getItem() {
 		return item;

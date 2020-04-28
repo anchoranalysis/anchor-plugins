@@ -2,6 +2,7 @@ package ch.ethz.biol.cell.mpp.nrg.feature.stack;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.bean.Feature;
+import org.anchoranalysis.feature.cache.ChildCacheName;
 import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.cache.calculation.FeatureCalculation;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
@@ -52,7 +53,7 @@ public class Intensity extends FeatureStack {
 				histogramCalculator(),
 				input.resolver()
 			),
-			"intensityHistogram"
+			new ChildCacheName(Intensity.class, nrgIndex + "_" + nrgIndexMask)
 		);
 	}
 

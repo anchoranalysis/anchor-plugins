@@ -28,6 +28,7 @@ package org.anchoranalysis.plugin.image.feature.bean.obj.pair.order;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.bean.Feature;
+import org.anchoranalysis.feature.cache.ChildCacheName;
 import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.feature.bean.objmask.pair.FeatureObjMaskPair;
@@ -51,12 +52,15 @@ public abstract class FeatureObjMaskPairOrder extends FeatureObjMaskPair {
 	@BeanField
 	private Feature<FeatureInputSingleObj> feature;
 	// END BEAN PROPERTIES
-		
+	
+	private static final ChildCacheName CACHE_NAME_FIRST = new ChildCacheName(FeatureObjMaskPairOrder.class, "first");
+	private static final ChildCacheName CACHE_NAME_SECOND = new ChildCacheName(FeatureObjMaskPairOrder.class, "second");
+	
 	protected double valueFromObj1( SessionInput<FeatureInputPairObjs> params ) throws FeatureCalcException {
 		return featureValFrom(
 			params,
 			true,
-			"firstFromPair"
+			CACHE_NAME_FIRST
 		);
 	}
 	
@@ -64,16 +68,16 @@ public abstract class FeatureObjMaskPairOrder extends FeatureObjMaskPair {
 		return featureValFrom(
 			params,
 			false,
-			"secondFromPair"
+			CACHE_NAME_SECOND
 		);
 	}
 	
-	private double featureValFrom( SessionInput<FeatureInputPairObjs> params, boolean first, String sessionName ) throws FeatureCalcException {
+	private double featureValFrom( SessionInput<FeatureInputPairObjs> params, boolean first, ChildCacheName cacheName ) throws FeatureCalcException {
 	
 		return params.calcChild(
 			feature,
 			new CalculateParamsFromPair(first),
-			sessionName
+			cacheName
 		);
 	}
 	
