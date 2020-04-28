@@ -60,8 +60,8 @@ class CalculateIntersectionOfDilatedBoundingBox extends FeatureCalculation<Bound
 	@Override
 	protected BoundingBox execute(FeatureInputPairObjs input) throws FeatureCalcException {
 		return findIntersectionOfDilatedBoundingBox(
-			input.getLeft(),
-			input.getRight(),
+			input.getFirst(),
+			input.getSecond(),
 			input.getDimensionsRequired().getExtnt()
 		);
 	}

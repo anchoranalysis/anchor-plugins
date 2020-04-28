@@ -39,13 +39,11 @@ import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.cache.calculation.FeatureCalculation;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.input.FeatureInput;
-import org.anchoranalysis.image.feature.bean.objmask.pair.FeatureObjMaskPair;
-import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
 import org.anchoranalysis.image.feature.objmask.pair.FeatureInputPairObjs;
 import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.plugin.image.feature.obj.pair.CalculateIntersectionInput;
 import org.anchoranalysis.plugin.image.calculation.CalculatePairIntersectionCommutative;
-import org.anchoranalysis.plugin.image.feature.bean.obj.pair.order.FeatureObjMaskPairOrder;
+import org.anchoranalysis.plugin.image.feature.bean.obj.pair.order.FeatureDeriveFromPair;
 import org.anchoranalysis.plugin.image.feature.obj.pair.CalculateInputFromDelegateOption;
 
 /**
@@ -58,7 +56,7 @@ import org.anchoranalysis.plugin.image.feature.obj.pair.CalculateInputFromDelega
  * @author Owen Feehan
  *
  */
-public class FeatureObjMaskPairIntersection extends FeatureObjMaskPair {
+public class Intersection extends FeatureDeriveFromPair {
 
 	/**
 	 * 
@@ -77,13 +75,7 @@ public class FeatureObjMaskPairIntersection extends FeatureObjMaskPair {
 	
 	@BeanField
 	private double emptyValue = 255;
-	
-	@BeanField
-	private Feature<FeatureInputSingleObj> item;
 	// END BEAN PROPERTIES
-	
-	private static final ChildCacheName CACHE_NAME_FIRST = new ChildCacheName(FeatureObjMaskPairOrder.class, "first");
-	private static final ChildCacheName CACHE_NAME_SECOND = new ChildCacheName(FeatureObjMaskPairOrder.class, "second");
 		
 	@Override
 	public double calc(SessionInput<FeatureInputPairObjs> input) throws FeatureCalcException {
@@ -91,7 +83,7 @@ public class FeatureObjMaskPairIntersection extends FeatureObjMaskPair {
 			input,
 			createCalculation(input),
 			delegate -> new CalculateIntersectionInput(delegate),
-			item,
+			getItem(),
 			cacheIntersectionName(),
 			emptyValue
 		);
@@ -118,7 +110,7 @@ public class FeatureObjMaskPairIntersection extends FeatureObjMaskPair {
 			iterationsErosion,
 			do3D ? 1 : 0
 		);
-		return new ChildCacheName(FeatureObjMaskPairIntersection.class, id);
+		return new ChildCacheName(Intersection.class, id);
 	}
 
 	private FeatureCalculation<Optional<ObjMask>,FeatureInputPairObjs> createCalculation(SessionInput<FeatureInputPairObjs> input) throws FeatureCalcException {
@@ -167,13 +159,4 @@ public class FeatureObjMaskPairIntersection extends FeatureObjMaskPair {
 	public void setIterationsErosion(int iterationsErosion) {
 		this.iterationsErosion = iterationsErosion;
 	}
-
-	public Feature<FeatureInputSingleObj> getItem() {
-		return item;
-	}
-
-	public void setItem(Feature<FeatureInputSingleObj> item) {
-		this.item = item;
-	}
-
 }

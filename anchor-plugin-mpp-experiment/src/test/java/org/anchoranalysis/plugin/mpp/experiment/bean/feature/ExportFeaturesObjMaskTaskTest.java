@@ -31,15 +31,13 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
+import org.anchoranalysis.plugin.image.feature.bean.obj.pair.order.First;
 import org.anchoranalysis.test.TestLoader;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
-
-import ch.ethz.biol.cell.mpp.nrg.feature.objmaskpairmerged.FromFirst;
-
 
 /**
  * Tests running {#link ExportFeaturesObjMaskTask} on a single input
@@ -156,9 +154,7 @@ public class ExportFeaturesObjMaskTaskTest {
 		taskFixture.useInsteadAsSingleFeature(feature);
 		taskFixture.useInsteadAsPairFeature(
 			// This produces the same result as the feature calculated on the left-object
-			new FromFirst(
-				feature
-			)	
+			new First(feature)	
 		);
 		taskFixture.changeToMergedPairs(true);
 		

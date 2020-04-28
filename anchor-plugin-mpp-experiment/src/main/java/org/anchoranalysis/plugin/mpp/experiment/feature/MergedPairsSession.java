@@ -258,12 +258,12 @@ public class MergedPairsSession extends FeatureSessionFlexiFeatureTable<FeatureI
 		
 		// First features
 		if (includeFirst) {
-			helper.calcAndInsert( input, FeatureInputPairObjs::getLeft, sessionFirstSecond );
+			helper.calcAndInsert( input, FeatureInputPairObjs::getFirst, sessionFirstSecond );
 		}
 		
 		// Second features
 		if (includeSecond) {
-			helper.calcAndInsert( input, FeatureInputPairObjs::getRight, sessionFirstSecond );
+			helper.calcAndInsert( input, FeatureInputPairObjs::getSecond, sessionFirstSecond );
 		}
 		
 		// Pair features

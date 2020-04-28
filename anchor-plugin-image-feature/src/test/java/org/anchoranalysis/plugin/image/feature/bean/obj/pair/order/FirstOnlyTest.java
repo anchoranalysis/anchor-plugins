@@ -39,7 +39,7 @@ public class FirstOnlyTest {
 	public void testOverlapping() throws FeatureCalcException, InitException {
 		
 		ParamsFixtureHelper.testSimpleInt(
-			OrderHelper.addFeatureToOrder(new FirstOnly()),
+			OrderHelper.addFeatureToOrder(new First()),
 			2821
 		);
 	}

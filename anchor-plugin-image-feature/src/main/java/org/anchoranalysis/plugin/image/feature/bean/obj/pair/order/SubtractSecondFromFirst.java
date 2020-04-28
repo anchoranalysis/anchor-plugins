@@ -39,7 +39,7 @@ import org.anchoranalysis.image.feature.objmask.pair.FeatureInputPairObjs;
  * @author owen
  *
  */
-public class SubtractSecondFromFirst extends FeatureObjMaskPairOrder {
+public class SubtractSecondFromFirst extends FeatureDeriveFromPair {
 	
 	/**
 	 * 
@@ -49,7 +49,7 @@ public class SubtractSecondFromFirst extends FeatureObjMaskPairOrder {
 	@Override
 	public double calc(SessionInput<FeatureInputPairObjs> params)
 			throws FeatureCalcException {
-		return valueFromObj1(params) - valueFromObj2(params); 
+		return valueFromFirst(params) - valueFromSecond(params); 
 	}
 
 }

@@ -10,7 +10,7 @@ import org.anchoranalysis.image.objmask.ObjMask;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
-class CalculateDeriveSingleObjFromMerged extends FeatureCalculation<FeatureInputSingleObj, FeatureInputPairObjs> {
+class CalculateSingleInputFromMerged extends FeatureCalculation<FeatureInputSingleObj, FeatureInputPairObjs> {
 
 	private Function<FeatureInputPairObjs, ObjMask> extractObjFunc;
 	private ChildCacheName uniqueIDForFunction;
@@ -24,7 +24,7 @@ class CalculateDeriveSingleObjFromMerged extends FeatureCalculation<FeatureInput
 	 * @param extractObjFunc this function is used for extracting a particular object from the FeatureObjMaskPairMergedParams
 	 * @param uniqueIDForFunction so as to avoid relying on hashCode() and equals() on extractObjFunc, this field is used as a unique ID instead for each type of lambda
 	 */
-	public CalculateDeriveSingleObjFromMerged(Function<FeatureInputPairObjs, ObjMask> extractObjFunc,
+	public CalculateSingleInputFromMerged(Function<FeatureInputPairObjs, ObjMask> extractObjFunc,
 			ChildCacheName uniqueIDForFunction) {
 		super();
 		this.extractObjFunc = extractObjFunc;
@@ -49,7 +49,7 @@ class CalculateDeriveSingleObjFromMerged extends FeatureCalculation<FeatureInput
 		if (obj.getClass() != getClass()) {
 			return false;
 		}
-		CalculateDeriveSingleObjFromMerged rhs = (CalculateDeriveSingleObjFromMerged) obj;
+		CalculateSingleInputFromMerged rhs = (CalculateSingleInputFromMerged) obj;
 		return new EqualsBuilder()
              .append(uniqueIDForFunction, rhs.uniqueIDForFunction)
              .isEquals();
