@@ -77,7 +77,7 @@ public class BinaryImageChnlProviderFeature extends FeatureStackSharedObjects {
 	@Override
 	public double calc(SessionInput<FeatureInputStack> input) throws FeatureCalcException {
 
-		return input.calcChild(
+		return input.forChild().calc(
 			item,
 			new CalculateBinaryChnlInput(chnl),
 			new ChildCacheName(BinaryImageChnlProviderFeature.class, chnl.hashCode())

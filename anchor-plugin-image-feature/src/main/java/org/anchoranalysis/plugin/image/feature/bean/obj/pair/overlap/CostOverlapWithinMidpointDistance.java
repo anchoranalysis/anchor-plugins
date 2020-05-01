@@ -41,7 +41,7 @@ import org.anchoranalysis.plugin.image.feature.obj.pair.overlap.OverlapRatioUtil
 
 /**
  * 
- * TODO the center-of-gravity calculation can be turned into a FeatureCalculate
+ * TODO the center-of-gravity calculation can be turned into a FeatureCalculation which is cacheable
  * 
  * @author Owen Feehan
  *

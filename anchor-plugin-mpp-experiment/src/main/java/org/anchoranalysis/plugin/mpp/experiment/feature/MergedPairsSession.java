@@ -37,9 +37,9 @@ import org.anchoranalysis.feature.calc.results.ResultsVector;
 import org.anchoranalysis.feature.name.FeatureNameList;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorMulti;
-import org.anchoranalysis.feature.session.calculator.FeatureCalculatorMultiReuse;
+import org.anchoranalysis.feature.session.strategy.replace.CacheAndReuseStrategy;
+import org.anchoranalysis.feature.session.strategy.replace.bind.BoundReplaceStrategy;
 import org.anchoranalysis.feature.shared.SharedFeaturesInitParams;
-import org.anchoranalysis.image.feature.init.FeatureInitParamsSharedObjs;
 import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
 import org.anchoranalysis.image.feature.objmask.pair.FeatureInputPairObjs;
 import org.anchoranalysis.image.feature.stack.FeatureInputStack;
@@ -129,38 +129,26 @@ public class MergedPairsSession extends FeatureSessionFlexiFeatureTable<FeatureI
 		
 		// We create more caches for the includeFirst and includeSecond Features and merged features.
 		
-		FeatureInitParamsSharedObjs paramsInitPair = new FeatureInitParamsSharedObjs( soImage );
-		paramsInitPair.setKeyValueParams( nrgStack.getParams() );
-		paramsInitPair.setNrgStack(nrgStack.getNrgStack());
-		
-		logErrorReporter.getLogReporter().log("Setting up: Image Features");
-
 		CreateCalculatorHelper cc = new CreateCalculatorHelper(ignoreFeaturePrefixes, nrgStack,	logErrorReporter);
 		
-		sessionImage = new FeatureCalculatorMultiReuse<FeatureInputStack>( 
-			cc.create(features.getImage(), soImage)
-		);
+		sessionImage = features.createImageSession(cc, soImage, MergedPairsCachingStrategies.noCache());
+		
+		BoundReplaceStrategy<FeatureInputSingleObj,CacheAndReuseStrategy<FeatureInputSingleObj>> cachingStrategyFirstSecond
+			= MergedPairsCachingStrategies.cacheAndReuse();
 		
 		if (includeFirst || includeSecond) {
-			logErrorReporter.getLogReporter().log("Setting up: First/Second Features");
-			sessionFirstSecond = cc.createCached(
-				features.getSingle(),
-				soImage,
-				suppressErrors
-			);
+			sessionFirstSecond = features.createSingleSession(cc, soImage, cachingStrategyFirstSecond, suppressErrors);
 		}
 		
-		logErrorReporter.getLogReporter().log("Setting up: Pair Features");
-		
-		// TODO to make this more efficient, it would be better if we could re-use the cached-operations
-		//  from the calculation of the First and Second individual features, as they appear again
-		//  as additionalCaches of sessionPair
-		// TODO fix no shared features anymore, prev sharedFeatures.duplicate()		
-		sessionPair = cc.create(features.getPair(), soImage);
+		BoundReplaceStrategy<FeatureInputSingleObj,CacheAndReuseStrategy<FeatureInputSingleObj>> cachingStrategyMerged
+			= MergedPairsCachingStrategies.cacheAndReuse();
+		sessionMerged = features.createSingleSession(cc, soImage, cachingStrategyMerged, suppressErrors);
 				
-		// We keep a separate session for merges, there's no caches here that can be reused 
-		sessionMerged =  cc.create(features.getSingle(), soImage);
+		sessionPair = features.createPairSession(cc, soImage, cachingStrategyFirstSecond, cachingStrategyMerged);
 	}
+
+	
+	
 
 	@Override
 	public FeatureSessionFlexiFeatureTable<FeatureInputPairObjs> duplicateForNewThread() {
@@ -213,10 +201,11 @@ public class MergedPairsSession extends FeatureSessionFlexiFeatureTable<FeatureI
 		if (includeSecond) {
 			out.addCustomNamesWithPrefix( "second.", features.getSingle() );
 		}
+				
+		out.addCustomNamesWithPrefix( "merged.", features.getSingle() );
 		
 		out.addCustomNamesWithPrefix( "pair.", features.getPair() );
 		
-		out.addCustomNamesWithPrefix( "merged.", features.getSingle() );
 		return out;
 	}
 	
@@ -231,29 +220,13 @@ public class MergedPairsSession extends FeatureSessionFlexiFeatureTable<FeatureI
 			+ (numSingle * features.numSingleFeatures());
 	}
 
-	public boolean isCheckInverse() {
-		return checkInverse;
-	}
-
-	public void setCheckInverse(boolean checkInverse) {
-		this.checkInverse = checkInverse;
-	}
-
-
-	public boolean isSuppressErrors() {
-		return suppressErrors;
-	}
-
-
-	public void setSuppressErrors(boolean suppressErrors) {
-		this.suppressErrors = suppressErrors;
-	}
-
 	private ResultsVector calcForInput(FeatureInputPairObjs input, ErrorReporter errorReporter) throws FeatureCalcException {
 		
 		ResultsVectorBuilder helper = new ResultsVectorBuilder(size(), suppressErrors, errorReporter);
 		
 		// First we calculate the Image features (we rely on the NRG stack being added by the calculator)
+		
+		// TODO these are identical and do not need to be repeatedly calculated
 		helper.calcAndInsert(new FeatureInputStack(), sessionImage );
 		
 		// First features
@@ -266,11 +239,11 @@ public class MergedPairsSession extends FeatureSessionFlexiFeatureTable<FeatureI
 			helper.calcAndInsert( input, FeatureInputPairObjs::getSecond, sessionFirstSecond );
 		}
 		
-		// Pair features
-		helper.calcAndInsert(input, sessionPair );
-		
 		// Merged. Because we know we have FeatureObjMaskPairMergedParams, we don't need to change params
 		helper.calcAndInsert(input, FeatureInputPairObjs::getMerged, sessionMerged );
+
+		// Pair features
+		helper.calcAndInsert(input, sessionPair );
 		
 		assert(helper.getResultsVector().hasNoNulls());
 		return helper.getResultsVector();

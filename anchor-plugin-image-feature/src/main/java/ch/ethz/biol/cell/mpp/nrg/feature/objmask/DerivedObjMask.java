@@ -67,10 +67,7 @@ public abstract class DerivedObjMask extends FeatureObjMask {
 		return CalculateInputFromDelegateOption.calc(
 			input,
 			createCachedCalculationForDerived(
-				input.resolverForChild(
-					cacheName,
-					FeatureInputSingleObj.class
-				)		
+				input.resolver()
 			),
 			delegate -> new CalculateObjForDerived(delegate),
 			item,

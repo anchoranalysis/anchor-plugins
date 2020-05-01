@@ -58,7 +58,8 @@ public class AsObjMask extends FeatureSingleElem<FeatureInputSingleMemo,FeatureI
 	@Override
 	public double calc(SessionInput<FeatureInputSingleMemo> input) throws FeatureCalcException {
 		return input
-			.calcChild(
+			.forChild()
+			.calc(
 				getItem(),
 				new CalculateSingleObjFromMemo(regionMap,index),
 				new ChildCacheName(AsObjMask.class, index)

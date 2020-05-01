@@ -79,6 +79,7 @@ public class Intersection extends FeatureDeriveFromPair {
 		
 	@Override
 	public double calc(SessionInput<FeatureInputPairObjs> input) throws FeatureCalcException {
+		
 		return CalculateInputFromDelegateOption.calc(
 			input,
 			createCalculation(input),
@@ -116,9 +117,9 @@ public class Intersection extends FeatureDeriveFromPair {
 	private FeatureCalculation<Optional<ObjMask>,FeatureInputPairObjs> createCalculation(SessionInput<FeatureInputPairObjs> input) throws FeatureCalcException {
 		try {
 			return CalculatePairIntersectionCommutative.createFromCache(
-				input.resolver(),
-				input.resolverForChild(CACHE_NAME_FIRST, FeatureInputPairObjs.class),
-				input.resolverForChild(CACHE_NAME_SECOND, FeatureInputPairObjs.class),
+				input,
+				CACHE_NAME_FIRST,
+				CACHE_NAME_SECOND,
 				iterationsDilation,
 				iterationsErosion,
 				do3D

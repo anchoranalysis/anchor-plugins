@@ -70,7 +70,7 @@ public class MedianConnectedComponentFeature extends FeatureStack {
 		// Calculate a feature on each obj mask
 		for( int i=0; i<size; i++ ) {
 						
-			double val = input.calcChild(
+			double val = input.forChild().calc(
 				item,
 				new CalculateDeriveObjFromCollection(ccObjs, i),
 				cacheName(i)

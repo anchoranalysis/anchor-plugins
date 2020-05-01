@@ -57,7 +57,7 @@ public class MinFeatureAsIndividual extends NRGElemPairWithFeature {
 		boolean first
 	) throws FeatureCalcException {
 		
-		return input.calcChild(
+		return input.forChild().calc(
 			getItem(),
 			new CalculateDeriveSingleInputFromPair(first),
 			first ? CACHE_NAME_FIRST : CACHE_NAME_SECOND

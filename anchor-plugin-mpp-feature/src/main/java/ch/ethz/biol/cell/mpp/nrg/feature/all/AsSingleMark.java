@@ -46,7 +46,7 @@ public class AsSingleMark extends FeatureSingleElem<FeatureInputAllMemo,FeatureI
 	@Override
 	public double calc(SessionInput<FeatureInputAllMemo> input) throws FeatureCalcException {
 		
-		return input.calcChild(
+		return input.forChild().calc(
 			getItem(),
 			new CalculateDeriveMarkInput(),
 			CACHE_NAME
