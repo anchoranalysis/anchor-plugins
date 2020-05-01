@@ -116,6 +116,15 @@ class ExportFeaturesObjMaskTaskFixture {
 	}
 	
 	/** 
+	 * Uses this feature instead of whatever list has been loaded for the pair-features
+	 * 
+	 * <p>It does not initialize the feature.</p>
+	 * */
+	public void useInsteadAsImageFeature( Feature<FeatureInputStack> feature ) {
+		imageFeatures.useSingleFeature(feature);
+	}
+	
+	/** 
 	 * Change to use Merged-Pairs mode rather than Simple mode
 	 *
 	 * @param includeFeaturesInPair iff TRUE "pair" features are populated in merged-pair mode

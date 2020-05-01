@@ -61,6 +61,9 @@ import org.anchoranalysis.image.init.ImageInitParams;
  * 
  * <p>Due to the predictable pattern, feature-calculations can be cached predictably and appropriately to avoid redundancies</p>.
  * 
+ * <div>
+ * Two types of caching are applied to avoid redundant 
+ * 
  * @author Owen Feehan
  *
  */
@@ -131,7 +134,7 @@ public class MergedPairsSession extends FeatureSessionFlexiFeatureTable<FeatureI
 		
 		CreateCalculatorHelper cc = new CreateCalculatorHelper(ignoreFeaturePrefixes, nrgStack,	logErrorReporter);
 		
-		sessionImage = features.createImageSession(cc, soImage, MergedPairsCachingStrategies.noCache());
+		sessionImage = features.createImageSession(cc, soImage, MergedPairsCachingStrategies.noCache(), suppressErrors);
 		
 		BoundReplaceStrategy<FeatureInputSingleObj,CacheAndReuseStrategy<FeatureInputSingleObj>> cachingStrategyFirstSecond
 			= MergedPairsCachingStrategies.cacheAndReuse();
