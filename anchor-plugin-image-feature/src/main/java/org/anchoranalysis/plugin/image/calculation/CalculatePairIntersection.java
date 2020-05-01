@@ -30,17 +30,16 @@ import java.util.Optional;
 
 
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.feature.cache.calculation.CalculationResolver;
+import org.anchoranalysis.feature.cache.ChildCacheName;
+import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.cache.calculation.FeatureCalculation;
 import org.anchoranalysis.feature.cache.calculation.ResolvedCalculation;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.extent.ImageDim;
-import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
 import org.anchoranalysis.image.feature.objmask.pair.FeatureInputPairObjs;
 import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.image.objmask.morph.MorphologicalErosion;
 import org.anchoranalysis.image.objmask.ops.ObjMaskMerger;
-import org.anchoranalysis.plugin.image.feature.bean.obj.pair.order.CalculateInputFromPair;
 import org.anchoranalysis.plugin.image.feature.bean.obj.pair.order.CalculateInputFromPair.Extract;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
@@ -62,15 +61,13 @@ public class CalculatePairIntersection extends FeatureCalculation<Optional<ObjMa
 	private boolean do3D;
 	private int iterationsErosion;
 	
-	private ResolvedCalculation<ObjMask,FeatureInputSingleObj> calcDilation1;
-	private ResolvedCalculation<ObjMask,FeatureInputSingleObj> calcDilation2;
-	private ResolvedCalculation<FeatureInputSingleObj, FeatureInputPairObjs> calcLeft;
-	private ResolvedCalculation<FeatureInputSingleObj, FeatureInputPairObjs> calcRight;
+	private ResolvedCalculation<ObjMask,FeatureInputPairObjs> left;
+	private ResolvedCalculation<ObjMask,FeatureInputPairObjs> right;
 	
 	public static ResolvedCalculation<Optional<ObjMask>,FeatureInputPairObjs> createFromCache(
-		CalculationResolver<FeatureInputPairObjs> cache,
-		CalculationResolver<FeatureInputSingleObj> cacheDilationObj1,
-		CalculationResolver<FeatureInputSingleObj> cacheDilationObj2,
+		SessionInput<FeatureInputPairObjs> cache,
+		ChildCacheName cacheChildName1,
+		ChildCacheName cacheChildName2,
 		int iterations1,
 		int iterations2,
 		boolean do3D,
@@ -79,20 +76,30 @@ public class CalculatePairIntersection extends FeatureCalculation<Optional<ObjMa
 		
 		// We use two additional caches, for the calculations involving the single objects, as these can be expensive, and we want
 		//  them also cached
-		ResolvedCalculation<ObjMask,FeatureInputSingleObj> ccDilation1 = CalculateDilation.createFromCache(
-			cacheDilationObj1, iterations1, do3D	
-		);
-		ResolvedCalculation<ObjMask,FeatureInputSingleObj> ccDilation2 = CalculateDilation.createFromCache(
-			cacheDilationObj2, iterations2, do3D	
-		);
-		return cache.search(
+		return cache.resolver().search(
 			new CalculatePairIntersection(
 				do3D,
 				iterationsErosion,
-				cache.search( new CalculateInputFromPair(Extract.FIRST) ),
-				cache.search( new CalculateInputFromPair(Extract.SECOND) ),
-				ccDilation1,
-				ccDilation2
+				cache.resolver().search(
+					new CalculateDilatedFromPair(
+						cache.resolver(),
+						cache.forChild(),
+						Extract.FIRST,
+						cacheChildName1,
+						iterations1,
+						do3D
+					)
+				),
+				cache.resolver().search(
+					new CalculateDilatedFromPair(
+						cache.resolver(),
+						cache.forChild(),
+						Extract.SECOND,
+						cacheChildName2,
+						iterations2,
+						do3D
+					)
+				)
 			)
 		);
 	}
@@ -100,18 +107,14 @@ public class CalculatePairIntersection extends FeatureCalculation<Optional<ObjMa
 	private CalculatePairIntersection(
 		boolean do3D,
 		int iterationsErosion,
-		ResolvedCalculation<FeatureInputSingleObj, FeatureInputPairObjs> calcLeft,
-		ResolvedCalculation<FeatureInputSingleObj, FeatureInputPairObjs> calcRight,
-		ResolvedCalculation<ObjMask,FeatureInputSingleObj> calcDilationLeft,
-		ResolvedCalculation<ObjMask,FeatureInputSingleObj> calcDilationRight
+		ResolvedCalculation<ObjMask,FeatureInputPairObjs> left,
+		ResolvedCalculation<ObjMask,FeatureInputPairObjs> right
 	) {
 		super();
 		this.iterationsErosion = iterationsErosion;
 		this.do3D = do3D;
-		this.calcDilation1 = calcDilationLeft;
-		this.calcDilation2 = calcDilationRight;
-		this.calcLeft = calcLeft;
-		this.calcRight = calcRight;
+		this.left = left;
+		this.right = right;
 	}
 
 	@Override
@@ -119,10 +122,10 @@ public class CalculatePairIntersection extends FeatureCalculation<Optional<ObjMa
 	
 		ImageDim dim = input.getDimensionsRequired();
 				
-		ObjMask om1Dilated = dilatedObjMask(input, calcLeft, calcDilation1);
-		ObjMask om2Dilated = dilatedObjMask(input, calcRight, calcDilation2);
+		ObjMask om1Dilated = left.getOrCalculate(input);
+		ObjMask om2Dilated = right.getOrCalculate(input);
 		
-		Optional<ObjMask> omIntersection  = om1Dilated.intersect(om2Dilated, dim );
+		Optional<ObjMask> omIntersection = om1Dilated.intersect(om2Dilated, dim );
 				
 		if (!omIntersection.isPresent()) {
 			return Optional.empty();
@@ -141,7 +144,7 @@ public class CalculatePairIntersection extends FeatureCalculation<Optional<ObjMa
 			throw new FeatureCalcException(e);
 		}
 	}
-
+	
 	@Override
 	public boolean equals(final Object obj){
 	    if(obj instanceof CalculatePairIntersection){
@@ -149,8 +152,8 @@ public class CalculatePairIntersection extends FeatureCalculation<Optional<ObjMa
 	        return new EqualsBuilder()
 	            .append(iterationsErosion, other.iterationsErosion)
 	            .append(do3D, other.do3D)
-	            .append(calcDilation1, other.calcDilation1)
-	            .append(calcDilation2, other.calcDilation2)
+	            .append(left, other.left)
+	            .append(right, other.right)
 	            .isEquals();
 	    } else{
 	        return false;
@@ -162,8 +165,8 @@ public class CalculatePairIntersection extends FeatureCalculation<Optional<ObjMa
 		return new HashCodeBuilder()
 			.append(iterationsErosion)
 			.append(do3D)
-			.append( calcDilation1 )
-			.append( calcDilation2 )
+			.append(left)
+			.append(right)
 			.toHashCode();
 	}
 	
@@ -189,14 +192,6 @@ public class CalculatePairIntersection extends FeatureCalculation<Optional<ObjMa
 		omIntersect.ifPresent( om-> { assert( om.hasPixelsGreaterThan(0) ); });
 		return omIntersect;
 	}
-	
-	private static ObjMask dilatedObjMask(
-		FeatureInputPairObjs input,
-		ResolvedCalculation<FeatureInputSingleObj, FeatureInputPairObjs> calcSingle,
-		ResolvedCalculation<ObjMask,FeatureInputSingleObj> calcDilation
-	) throws FeatureCalcException {
-		return calcDilation.getOrCalculate(
-			calcSingle.getOrCalculate(input)
-		);
-	}
+
+
 }

@@ -48,7 +48,8 @@ public class AsMark extends FeatureSingleElem<FeatureInputSingleMemo,FeatureInpu
 	@Override
 	public double calc(SessionInput<FeatureInputSingleMemo> input) throws FeatureCalcException {
 		return input
-			.calcChild(
+			.forChild()
+			.calc(
 				getItem(),
 				new CalculateDeriveMarkFromMemo(),
 				CACHE_NAME

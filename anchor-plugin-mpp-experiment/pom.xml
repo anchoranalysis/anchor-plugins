@@ -49,6 +49,7 @@
 	  <artifactId>anchor-image-feature</artifactId>
 	  <version>0.0.8-SNAPSHOT</version>
 	</dependency>	
+
 	<dependency>
 	  <groupId>${project.groupId}</groupId>
 	  <artifactId>anchor-mpp</artifactId>
@@ -108,12 +109,19 @@
 	  <artifactId>anchor-plugin-image-task</artifactId>
 	  <version>0.0.8-SNAPSHOT</version>
 	</dependency>
-	
+
+	<dependency>
+	  <groupId>${project.groupId}</groupId>	
+	  <artifactId>anchor-plugin-image-feature</artifactId>
+	  <version>0.0.8-SNAPSHOT</version>
+  	</dependency>
+
 
 	<dependency>
 	  <groupId>${project.groupId}</groupId>	
 	  <artifactId>anchor-test-image</artifactId>
   	  <version>0.0.8-SNAPSHOT</version>
+  	  <scope>test</scope>
   	</dependency>
 	
 	
@@ -121,17 +129,13 @@
 	  <groupId>${project.groupId}</groupId>
 	  <artifactId>anchor-test-feature-plugins</artifactId>
 	  <version>0.0.4-SNAPSHOT</version>
-	</dependency>
-		
-	
-	<!-- For the features used in tests -->
-	<dependency>
-	  <groupId>${project.groupId}</groupId>
-	  <artifactId>anchor-plugin-image-feature</artifactId>
-	  <version>0.0.8-SNAPSHOT</version>
 	  <scope>test</scope>
 	</dependency>
 	
+	
+		
+	
+	<!-- For the features used in tests -->
 	<dependency>
       <groupId>org.mockito</groupId>
       <artifactId>mockito-core</artifactId>

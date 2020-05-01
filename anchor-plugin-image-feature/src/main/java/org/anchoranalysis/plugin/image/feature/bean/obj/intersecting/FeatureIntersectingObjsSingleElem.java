@@ -68,14 +68,14 @@ public abstract class FeatureIntersectingObjsSingleElem extends FeatureIntersect
 	
 	private List<Double> calcResults( SessionInput<FeatureInputSingleObj> paramsExst, ResolvedCalculation<ObjMaskCollection, FeatureInputSingleObj> ccIntersecting ) throws FeatureCalcException {
 		
-		int size = ccIntersecting.getOrCalculate(paramsExst.get()).size();
+		int size = paramsExst.calc(ccIntersecting).size();
 		
 		List<Double> results = new ArrayList<>();
 		for( int i=0; i<size; i++) {
 			
 			final int index = i;
 			
-			double res = paramsExst.calcChild(
+			double res = paramsExst.forChild().calc(
 				item,
 				new CalculateIntersecting(ccIntersecting, index),
 				new ChildCacheName(FeatureIntersectingObjsSingleElem.class,i)

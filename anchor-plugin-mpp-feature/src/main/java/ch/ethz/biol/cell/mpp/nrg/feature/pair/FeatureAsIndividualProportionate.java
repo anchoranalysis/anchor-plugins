@@ -77,7 +77,7 @@ public class FeatureAsIndividualProportionate extends NRGElemPairWithFeature {
 		}
 		
 		private double calcFeatureFor( Feature<FeatureInputSingleMemo> feature,	SessionInput<FeatureInputPairMemo> params ) throws FeatureCalcException {
-			return params.calcChild(feature, ccExtract, childCacheName);
+			return params.forChild().calc(feature, ccExtract, childCacheName);
 		}
 	}
 	

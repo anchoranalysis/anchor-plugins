@@ -60,7 +60,7 @@ public class CalculateEllipsoidLeastSquares extends FeatureCalculation<MarkEllip
 		ResolvedCalculation<MarkEllipsoid,FeatureInputSingleObj> ccEllipsoid = input.resolver().search(
 			new CalculateEllipsoidLeastSquares(suppressZCovariance, ccPnts )
 		);
-		return ccEllipsoid.getOrCalculate(input.get());
+		return input.calc(ccEllipsoid);
 	}
 	
 	@Override

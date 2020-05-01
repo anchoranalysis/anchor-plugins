@@ -30,11 +30,11 @@ import java.util.Optional;
 
 
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.feature.cache.calculation.CalculationResolver;
+import org.anchoranalysis.feature.cache.ChildCacheName;
+import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.cache.calculation.FeatureCalculation;
 import org.anchoranalysis.feature.cache.calculation.ResolvedCalculation;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
 import org.anchoranalysis.image.feature.objmask.pair.FeatureInputPairObjs;
 import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.image.objmask.ops.ObjMaskMerger;
@@ -61,9 +61,9 @@ public class CalculatePairIntersectionCommutative extends FeatureCalculation<Opt
 	private ResolvedCalculation<Optional<ObjMask>,FeatureInputPairObjs> ccSecondToFirst;
 	
 	public static FeatureCalculation<Optional<ObjMask>,FeatureInputPairObjs> createFromCache(
-		CalculationResolver<FeatureInputPairObjs> cache,
-		CalculationResolver<FeatureInputSingleObj> cacheDilationObj1,
-		CalculationResolver<FeatureInputSingleObj> cacheDilationObj2,
+		SessionInput<FeatureInputPairObjs> cache,
+		ChildCacheName childDilation1,
+		ChildCacheName childDilation2,
 		int iterationsDilation,
 		int iterationsErosion,
 		boolean do3D
@@ -72,10 +72,10 @@ public class CalculatePairIntersectionCommutative extends FeatureCalculation<Opt
 		// We use two additional caches, for the calculations involving the single objects, as these can be expensive, and we want
 		//  them also cached
 		ResolvedCalculation<Optional<ObjMask>,FeatureInputPairObjs> ccFirstToSecond = CalculatePairIntersection.createFromCache(
-			cache, cacheDilationObj1, cacheDilationObj2, iterationsDilation, 0, do3D, iterationsErosion	
+			cache, childDilation1, childDilation2, iterationsDilation, 0, do3D, iterationsErosion	
 		);
 		ResolvedCalculation<Optional<ObjMask>,FeatureInputPairObjs> ccSecondToFirst = CalculatePairIntersection.createFromCache(
-			cache, cacheDilationObj1, cacheDilationObj2, 0, iterationsDilation, do3D, iterationsErosion	
+			cache, childDilation1, childDilation2, 0, iterationsDilation, do3D, iterationsErosion	
 		);
 		return new CalculatePairIntersectionCommutative(ccFirstToSecond, ccSecondToFirst);
 	}
@@ -90,10 +90,10 @@ public class CalculatePairIntersectionCommutative extends FeatureCalculation<Opt
 	}
 
 	@Override
-	protected Optional<ObjMask> execute(FeatureInputPairObjs params) throws FeatureCalcException {
+	protected Optional<ObjMask> execute(FeatureInputPairObjs input) throws FeatureCalcException {
 		
-		Optional<ObjMask> omIntersection1 = ccFirstToSecond.getOrCalculate(params);
-		Optional<ObjMask> omIntersection2 = ccSecondToFirst.getOrCalculate(params);
+		Optional<ObjMask> omIntersection1 = ccFirstToSecond.getOrCalculate(input);
+		Optional<ObjMask> omIntersection2 = ccSecondToFirst.getOrCalculate(input);
 		
 		if (!omIntersection1.isPresent()) {
 			return omIntersection2;
@@ -107,6 +107,7 @@ public class CalculatePairIntersectionCommutative extends FeatureCalculation<Opt
 		assert(omIntersection2.get().hasPixelsGreaterThan(0));
 		
 		ObjMask merged = ObjMaskMerger.merge( omIntersection1.get(), omIntersection2.get() );
+		
 		assert(merged.hasPixelsGreaterThan(0));
 		return Optional.of(merged);
 	}

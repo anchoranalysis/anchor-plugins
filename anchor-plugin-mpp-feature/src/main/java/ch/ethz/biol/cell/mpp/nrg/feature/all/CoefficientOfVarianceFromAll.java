@@ -85,7 +85,7 @@ public class CoefficientOfVarianceFromAll extends FeatureAllMemo {
 			
 			final int index = i;
 			
-			double v = input.calcChild(
+			double v = input.forChild().calc(
 				item,
 				new CalculateDeriveSingleMemoInput(index),
 				new ChildCacheName(CoefficientOfVarianceFromAll.class, i)

@@ -104,7 +104,7 @@ public abstract class ObjMaskFeatureFromStack extends FeatureStack {
 		// Calculate a feature on each obj mask
 		for( int i=0; i<objsCollection.size(); i++) {
 
-			double val = input.calcChild(
+			double val = input.forChild().calc(
 				feature,
 				new CalculateInputFromStack(objsCollection, i),
 				cacheName(i)

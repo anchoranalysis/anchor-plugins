@@ -128,12 +128,12 @@ public class CalculateShellObjMask extends FeatureCalculation<ObjMask,FeatureInp
 	}
 
 	@Override
-	protected ObjMask execute( FeatureInputSingleObj params ) throws FeatureCalcException {
+	protected ObjMask execute( FeatureInputSingleObj input ) throws FeatureCalcException {
 	
-		ImageDim sd = params.getDimensionsRequired();
+		ImageDim sd = input.getDimensionsRequired();
 		
-		ObjMask om = params.getObjMask();
-		ObjMask omShell = createShellObjMask( params, om, ccDilation, ccErosion, iterationsErosionSecond, do3D );
+		ObjMask om = input.getObjMask();
+		ObjMask omShell = createShellObjMask( input, om, ccDilation, ccErosion, iterationsErosionSecond, do3D );
 		
 		if (inverse) {
 			ObjMask omDup = om.duplicate();
@@ -152,7 +152,7 @@ public class CalculateShellObjMask extends FeatureCalculation<ObjMask,FeatureInp
 	}
 	
 	private static ObjMask createShellObjMask(
-		FeatureInputSingleObj params,
+		FeatureInputSingleObj input,
 		ObjMask om,
 		ResolvedCalculation<ObjMask,FeatureInputSingleObj> ccDilation,
 		ResolvedCalculation<ObjMask,FeatureInputSingleObj> ccErosion,
@@ -160,9 +160,9 @@ public class CalculateShellObjMask extends FeatureCalculation<ObjMask,FeatureInp
 		boolean do3D
 	) throws FeatureCalcException {
 
-		ObjMask omDilated = ccDilation.getOrCalculate(params).duplicate();
+		ObjMask omDilated = ccDilation.getOrCalculate(input).duplicate();
 		
-		ObjMask omEroded = ccErosion.getOrCalculate(params);
+		ObjMask omEroded = ccErosion.getOrCalculate(input);
 		
 		assert( omDilated.getBoundingBox().contains(omEroded.getBoundingBox()) );
 		

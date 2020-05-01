@@ -62,7 +62,7 @@ public class AsObjMask extends FeatureStack {
 	@Override
 	public double calc(SessionInput<FeatureInputStack> input) throws FeatureCalcException {
 		
-		return input.calcChild(
+		return input.forChild().calc(
 			item,
 			new CalculateDeriveObjInput(nrgIndex),
 			new ChildCacheName(AsObjMask.class, nrgIndex)

@@ -61,7 +61,7 @@ public class ThresholdHistogram extends FeatureHistogram {
 	@Override
 	public double calc(SessionInput<FeatureInputHistogram> input) throws FeatureCalcException {
 		
-		return input.calcChild(
+		return input.forChild().calc(
 			item,
 			new CalculateHistogramInputFromHistogram(
 				new CalculateOtsuThresholdedHistogram(calculateLevel, getLogger()),

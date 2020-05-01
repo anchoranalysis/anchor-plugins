@@ -64,7 +64,7 @@ public class MeanFromAll extends FeatureAllMemo {
 		
 		for( int i=0; i<memo.size(); i++) {
 			
-			sum += input.calcChild(
+			sum += input.forChild().calc(
 				item,
 				new CalculateDeriveSingleMemoInput(i),
 				new ChildCacheName(MeanFromAll.class,i)
