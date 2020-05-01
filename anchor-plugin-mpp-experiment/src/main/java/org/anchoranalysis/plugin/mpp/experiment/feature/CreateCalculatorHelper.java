@@ -46,7 +46,6 @@ import org.anchoranalysis.feature.session.calculator.FeatureCalculatorCachedResu
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorMulti;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorMultiChangeInput;
 import org.anchoranalysis.feature.session.strategy.child.CheckCacheForSpecificChildren;
-import org.anchoranalysis.feature.session.strategy.replace.CacheAndReuseStrategy;
 import org.anchoranalysis.feature.session.strategy.replace.ReplaceStrategy;
 import org.anchoranalysis.feature.session.strategy.replace.ReuseSingletonStrategy;
 import org.anchoranalysis.feature.session.strategy.replace.bind.BoundReplaceStrategy;
@@ -76,7 +75,7 @@ class CreateCalculatorHelper {
 	public <T extends FeatureInputNRGStack> FeatureCalculatorMulti<T> createCached(
 		FeatureList<T> features,
 		ImageInitParams soImage,
-		BoundReplaceStrategy<T,CacheAndReuseStrategy<T>> replacePolicyFactory,
+		BoundReplaceStrategy<T,? extends ReplaceStrategy<T>> replacePolicyFactory,
 		boolean suppressErrors
 	) throws InitException {
 		

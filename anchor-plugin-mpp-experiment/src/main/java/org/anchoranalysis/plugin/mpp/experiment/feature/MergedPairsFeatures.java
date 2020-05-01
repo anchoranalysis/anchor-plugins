@@ -101,12 +101,14 @@ public class MergedPairsFeatures {
 	public FeatureCalculatorMulti<FeatureInputStack> createImageSession(
 		CreateCalculatorHelper cc,
 		ImageInitParams soImage,
-		BoundReplaceStrategy<FeatureInputStack,? extends ReplaceStrategy<FeatureInputStack>> cachingStrategy
+		BoundReplaceStrategy<FeatureInputStack,? extends ReplaceStrategy<FeatureInputStack>> cachingStrategy,
+		boolean suppressErrors
 	) throws InitException {
-		return cc.create(
+		return cc.createCached(
 			getImage(),
 			soImage,
-			cachingStrategy
+			cachingStrategy,
+			suppressErrors
 		);
 	}
 	

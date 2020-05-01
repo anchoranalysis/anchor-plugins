@@ -30,6 +30,7 @@ import org.anchoranalysis.bean.xml.RegisterBeanFactories;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.feature.bean.Feature;
+import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
 import org.anchoranalysis.plugin.image.feature.bean.obj.pair.order.First;
 import org.anchoranalysis.test.TestLoader;
@@ -38,6 +39,9 @@ import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
+import static org.mockito.Mockito.*;
+
+import ch.ethz.biol.cell.mpp.nrg.feature.stack.SceneWidth;
 
 /**
  * Tests running {#link ExportFeaturesObjMaskTask} on a single input
@@ -60,6 +64,7 @@ public class ExportFeaturesObjMaskTaskTest {
 	private static final String OUTPUT_DIR_MERGED_1 = "mergedPairs01/";
 	private static final String OUTPUT_DIR_MERGED_2 = "mergedPairs02/";
 	private static final String OUTPUT_DIR_MERGED_3 = "mergedPairs03/";
+	private static final String OUTPUT_DIR_IMAGE_CACHE = "imageCache/";
 	
 	// Used for tests where we expect an exception to be thrown, and thus never to actually be compared
 	// It doesn't physically exist
@@ -130,6 +135,31 @@ public class ExportFeaturesObjMaskTaskTest {
 		testOnTask(OUTPUT_DIR_MERGED_3);
 	}
 	
+	
+	/**
+	 * Tests that the image-features are cached, and not repeatedly-calculated for the same image.
+	 * 
+	 * @throws OperationFailedException
+	 * @throws CreateException
+	 * @throws FeatureCalcException 
+	 */
+	@Test
+	public void testCachingImageFeatures() throws OperationFailedException, CreateException, FeatureCalcException {
+		
+		SceneWidth feature = spy(SceneWidth.class);
+		
+		// To make sure we keep on using the spy, even after an expected duplication()
+		when(feature.duplicateBean()).thenReturn(feature);
+		
+		taskFixture.useInsteadAsImageFeature(feature);
+		taskFixture.changeToMergedPairs(false, true);
+		
+		testOnTask(OUTPUT_DIR_IMAGE_CACHE);
+		
+		// If caching is working, then the feature should be calculated exactly once
+		verify(feature, times(1)).calc(any());
+	}
+	
 	/**
 	 *  Tests when a particular FeatureCalculation is called by a feature in both the Single and Pair part of merged-pairs.
 	 * 
@@ -148,7 +178,7 @@ public class ExportFeaturesObjMaskTaskTest {
 	 *  <p>In a maximally-INEFFICIENT implementation (no caching),
 	 *         the calculation would occur 12 times (3 pairs x 4 calculations each time)</p>
 	 *  <p>In a maximally-EFFICIENT implementation (caching everything possible),
-	 *         the calculation would occur only 4 times (once for each object)</p>.
+	 *         the calculation would occur only 7 times (once for each single-object and once for each merged object)</p>.
 	 * 
 	 * @throws OperationFailedException
 	 * @throws CreateException
