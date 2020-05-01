@@ -40,6 +40,7 @@ import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
 import org.anchoranalysis.image.bean.provider.stack.StackProvider;
 import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
 import org.anchoranalysis.image.feature.objmask.pair.FeatureInputPairObjs;
+import org.anchoranalysis.image.feature.stack.FeatureInputStack;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.plugin.mpp.experiment.bean.feature.flexi.FlexiFeatureTable;
 import org.anchoranalysis.plugin.mpp.experiment.bean.feature.flexi.MergedPairs;
@@ -54,6 +55,7 @@ class ExportFeaturesObjMaskTaskFixture {
 	private static final String PATH_FEATURES_SINGLE_DEFAULT = "singleFeatures.xml";
 	private static final String PATH_FEATURES_SINGLE_WITH_SHELL = "singleFeaturesWithShell.xml";
 	private static final String PATH_FEATURES_PAIR_DEFAULT = "pairFeatures.xml";
+	private static final String PATH_FEATURES_IMAGE_DEFAULT = "imageFeatures.xml";
 	
 	private NRGStack nrgStack = createNRGStack(true);
 	private FlexiFeatureTable<?> flexiFeatureTable = new Simple();
@@ -61,6 +63,7 @@ class ExportFeaturesObjMaskTaskFixture {
 	/** The "single" and "pair" features in use.*/
 	private FeatureListProviderFixture<FeatureInputSingleObj> singleFeatures;
 	private FeatureListProviderFixture<FeatureInputPairObjs> pairFeatures;
+	private FeatureListProviderFixture<FeatureInputStack> imageFeatures;
 	
 	/**
 	 * Constructor
@@ -76,6 +79,7 @@ class ExportFeaturesObjMaskTaskFixture {
 		this.nrgStack = createNRGStack(true);
 		this.singleFeatures = new FeatureListProviderFixture<>(loader, PATH_FEATURES_SINGLE_DEFAULT);
 		this.pairFeatures = new FeatureListProviderFixture<>(loader, PATH_FEATURES_PAIR_DEFAULT);
+		this.imageFeatures = new FeatureListProviderFixture<>(loader, PATH_FEATURES_IMAGE_DEFAULT);
 	}
 	
 	/** 
@@ -117,8 +121,8 @@ class ExportFeaturesObjMaskTaskFixture {
 	 * @param includeFeaturesInPair iff TRUE "pair" features are populated in merged-pair mode
 	 * @throws CreateException 
 	 **/
-	public void changeToMergedPairs(boolean includeFeaturesInPair) throws CreateException {
-		flexiFeatureTable = createMergedPairs(includeFeaturesInPair);
+	public void changeToMergedPairs(boolean includeFeaturesInPair, boolean includeImageFeatures) throws CreateException {
+		flexiFeatureTable = createMergedPairs(includeFeaturesInPair, includeImageFeatures);
 	}
 	
 	public NRGStack getNrgStack() {
@@ -161,7 +165,7 @@ class ExportFeaturesObjMaskTaskFixture {
 		return stackProvider;
 	}
 
-	private MergedPairs createMergedPairs(boolean includeFeaturesInPair) throws CreateException {
+	private MergedPairs createMergedPairs(boolean includeFeaturesInPair, boolean includeImageFeatures) throws CreateException {
 		MergedPairs mergedPairs = new MergedPairs();
 		mergedPairs.setSuppressErrors(true);
 		if (includeFeaturesInPair) {
@@ -169,6 +173,12 @@ class ExportFeaturesObjMaskTaskFixture {
 				pairFeatures.asListNamedBeansProvider()
 			);
 		}
+		if (includeImageFeatures) {
+			mergedPairs.setListFeaturesImage(
+				imageFeatures.asListNamedBeansProvider()
+			);
+		}
+		
 		return mergedPairs;
 	}
 	
