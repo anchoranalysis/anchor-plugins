@@ -59,6 +59,7 @@ public class ExportFeaturesObjMaskTaskTest {
 	private static final String OUTPUT_DIR_SIMPLE_1 = "simple01/";
 	private static final String OUTPUT_DIR_MERGED_1 = "mergedPairs01/";
 	private static final String OUTPUT_DIR_MERGED_2 = "mergedPairs02/";
+	private static final String OUTPUT_DIR_MERGED_3 = "mergedPairs03/";
 	
 	// Used for tests where we expect an exception to be thrown, and thus never to actually be compared
 	// It doesn't physically exist
@@ -106,21 +107,27 @@ public class ExportFeaturesObjMaskTaskTest {
 	public void testMergedSmall() throws OperationFailedException, CreateException {
 		// The saved directory is irrelevant because an exception is thrown
 		taskFixture.useSmallNRGInstead();
-		taskFixture.changeToMergedPairs(false);
+		taskFixture.changeToMergedPairs(false, false);
 		testOnTask(OUTPUT_DIR_IRRELEVANT);
 	}
 	
 	@Test
 	public void testMergedLarge() throws OperationFailedException, CreateException {
-		taskFixture.changeToMergedPairs(false);
+		taskFixture.changeToMergedPairs(false, false);
 		testOnTask(OUTPUT_DIR_MERGED_1);
 	}
 	
 	@Test
 	public void testMergedLargeWithPairs() throws OperationFailedException, CreateException {
 		taskFixture.includeAdditionalShellFeature();
-		taskFixture.changeToMergedPairs(true);
+		taskFixture.changeToMergedPairs(true, false);
 		testOnTask(OUTPUT_DIR_MERGED_2);
+	}
+	
+	@Test
+	public void testMergedLargeWithImage() throws OperationFailedException, CreateException {
+		taskFixture.changeToMergedPairs(false, true);
+		testOnTask(OUTPUT_DIR_MERGED_3);
 	}
 	
 	/**
@@ -156,7 +163,7 @@ public class ExportFeaturesObjMaskTaskTest {
 			// This produces the same result as the feature calculated on the left-object
 			new First(feature)	
 		);
-		taskFixture.changeToMergedPairs(true);
+		taskFixture.changeToMergedPairs(true, false);
 		
 		FeatureCalculationFixture.executeAndAssertCnt(
 			 // a calculation for each single object, and a calculation for each merged object
