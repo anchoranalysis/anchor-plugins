@@ -34,6 +34,7 @@ import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
 import org.anchoranalysis.plugin.image.feature.bean.obj.pair.order.First;
 import org.anchoranalysis.test.TestLoader;
+import org.anchoranalysis.test.feature.plugins.MockFeatureWithCalculationFixture;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Rule;
@@ -186,7 +187,7 @@ public class ExportFeaturesObjMaskTaskTest {
 	@Test
 	public void testRepeatedCalculationInSingleAndPair() throws OperationFailedException, CreateException {
 		
-		Feature<FeatureInputSingleObj> feature = new FeatureCalculationFixture.MockFeatureWithCalculation();
+		Feature<FeatureInputSingleObj> feature = new MockFeatureWithCalculationFixture.MockFeatureWithCalculation();
 		
 		taskFixture.useInsteadAsSingleFeature(feature);
 		taskFixture.useInsteadAsPairFeature(
@@ -195,7 +196,7 @@ public class ExportFeaturesObjMaskTaskTest {
 		);
 		taskFixture.changeToMergedPairs(true, false);
 		
-		FeatureCalculationFixture.executeAndAssertCnt(
+		MockFeatureWithCalculationFixture.executeAndAssertCnt(
 			 // a calculation for each single object, and a calculation for each merged object
 			(MultiInputFixture.NUM_PAIRS_INTERSECTING + MultiInputFixture.NUM_INTERSECTING_OBJECTS),
 			() -> testOnTask("repeatedInSingleAndPair/")

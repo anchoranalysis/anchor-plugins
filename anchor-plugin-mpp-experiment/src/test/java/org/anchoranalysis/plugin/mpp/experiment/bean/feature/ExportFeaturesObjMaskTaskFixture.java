@@ -61,9 +61,9 @@ class ExportFeaturesObjMaskTaskFixture {
 	private FlexiFeatureTable<?> flexiFeatureTable = new Simple();
 	
 	/** The "single" and "pair" features in use.*/
-	private FeatureListProviderFixture<FeatureInputSingleObj> singleFeatures;
-	private FeatureListProviderFixture<FeatureInputPairObjs> pairFeatures;
-	private FeatureListProviderFixture<FeatureInputStack> imageFeatures;
+	private LoadFeatureListProviderFixture<FeatureInputSingleObj> singleFeatures;
+	private LoadFeatureListProviderFixture<FeatureInputPairObjs> pairFeatures;
+	private LoadFeatureListProviderFixture<FeatureInputStack> imageFeatures;
 	
 	/**
 	 * Constructor
@@ -77,9 +77,9 @@ class ExportFeaturesObjMaskTaskFixture {
 	 */
 	public ExportFeaturesObjMaskTaskFixture(TestLoader loader) throws CreateException {
 		this.nrgStack = createNRGStack(true);
-		this.singleFeatures = new FeatureListProviderFixture<>(loader, PATH_FEATURES_SINGLE_DEFAULT);
-		this.pairFeatures = new FeatureListProviderFixture<>(loader, PATH_FEATURES_PAIR_DEFAULT);
-		this.imageFeatures = new FeatureListProviderFixture<>(loader, PATH_FEATURES_IMAGE_DEFAULT);
+		this.singleFeatures = new LoadFeatureListProviderFixture<>(loader, PATH_FEATURES_SINGLE_DEFAULT);
+		this.pairFeatures = new LoadFeatureListProviderFixture<>(loader, PATH_FEATURES_PAIR_DEFAULT);
+		this.imageFeatures = new LoadFeatureListProviderFixture<>(loader, PATH_FEATURES_IMAGE_DEFAULT);
 	}
 	
 	/** 
@@ -176,7 +176,6 @@ class ExportFeaturesObjMaskTaskFixture {
 
 	private MergedPairs createMergedPairs(boolean includeFeaturesInPair, boolean includeImageFeatures) throws CreateException {
 		MergedPairs mergedPairs = new MergedPairs();
-		mergedPairs.setSuppressErrors(true);
 		if (includeFeaturesInPair) {
 			mergedPairs.setListFeaturesPair(
 				pairFeatures.asListNamedBeansProvider()

@@ -30,6 +30,7 @@ package org.anchoranalysis.plugin.mpp.experiment.bean.feature;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.anchoranalysis.anchor.mpp.bean.init.GeneralInitParams;
 import org.anchoranalysis.anchor.mpp.bean.init.MPPInitParams;
@@ -63,6 +64,7 @@ import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
 import org.anchoranalysis.image.bean.provider.stack.StackProvider;
 import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
+import org.anchoranalysis.image.feature.session.FeatureTableSession;
 import org.anchoranalysis.image.init.ImageInitParams;
 import org.anchoranalysis.image.objmask.ObjMaskCollection;
 import org.anchoranalysis.io.error.AnchorIOException;
@@ -72,7 +74,6 @@ import org.anchoranalysis.mpp.io.output.NRGStackWriter;
 import org.anchoranalysis.plugin.image.task.bean.feature.ExportFeaturesTask;
 import org.anchoranalysis.plugin.image.task.sharedstate.SharedStateExportFeatures;
 import org.anchoranalysis.plugin.mpp.experiment.bean.feature.flexi.FlexiFeatureTable;
-import org.anchoranalysis.plugin.mpp.experiment.feature.FeatureSessionFlexiFeatureTable;
 import org.anchoranalysis.plugin.mpp.experiment.outputter.SharedObjectsUtilities;
 
 
@@ -124,6 +125,12 @@ public class ExportFeaturesObjMaskTask<T extends FeatureInput> extends ExportFea
 	 */
 	@BeanField @AllowEmpty
 	private String nrgParamsName = "";
+	
+	// START BEAN PROPERTIES
+	@BeanField
+	private boolean suppressErrors = false;
+	//END BEAN PROPERTIES
+
 	// END BEAN PROPERTIES
 	
 	@Override
@@ -135,7 +142,7 @@ public class ExportFeaturesObjMaskTask<T extends FeatureInput> extends ExportFea
 		try {
 			return new SharedStateExportFeaturesObjMask<>(
 				new GroupedResultsVectorCollection("id","group","objSetName"),
-				selectFeaturesObjects.createFeatures(listFeaturesObjMask)
+				selectFeaturesObjects.createFeatures(listFeaturesObjMask, suppressErrors)
 			);
 			
 		} catch (CreateException | InitException e) {
@@ -165,24 +172,28 @@ public class ExportFeaturesObjMaskTask<T extends FeatureInput> extends ExportFea
 	@Override
 	public void doJobOnInputObject(	ParametersBound<MultiInput,SharedStateExportFeaturesObjMask<T>> params	) throws JobExecutionException {
 		
-		LogErrorReporter logErrorReporter = params.getLogErrorReporter();
+		LogErrorReporter logger = params.getLogErrorReporter();
 		MultiInput inputObject = params.getInputObject();
 		
 		try {
-			// Create a duplicated featureStore for this image, as we want separate features on this thread,
-			//  so they are thread-safe, for parallel execution
-			FeatureSessionFlexiFeatureTable<T> session = params.getSharedState().getSession().duplicateForNewThread();
-						
 			MPPInitParams soMPP = createInitParams(
 				inputObject,
 				ParamsHelper.createGeneralParams(randomNumberGenerator.create(), params)
 			);
 			
-			NRGStackWithParams nrgStack = createNRGStack(soMPP.getImage(), logErrorReporter );
+			NRGStackWithParams nrgStack = createNRGStack(soMPP.getImage(), logger );
+
+			// Create a duplicated featureStore for this image, as we want separate features on this thread,
+			//  so they are thread-safe, for parallel execution
+			FeatureTableSession<T> session = params.getSharedState().getSession().duplicateForNewThread();
+			session.start(
+				soMPP.getImage(),
+				soMPP.getFeature(),
+				Optional.of(nrgStack),
+				logger
+			);
 			
-			session.start( soMPP.getImage(), soMPP.getFeature(), nrgStack, logErrorReporter );
-			
-			outputSharedObjs( soMPP, nrgStack, params.getOutputManager(), logErrorReporter );
+			outputSharedObjs( soMPP, nrgStack, params.getOutputManager(), logger );
 			
 			processAllProviders(
 				params.getExperimentArguments().isDebugEnabled(),
@@ -191,7 +202,7 @@ public class ExportFeaturesObjMaskTask<T extends FeatureInput> extends ExportFea
 				soMPP.getImage(),
 				nrgStack,
 				params.getSharedState(),
-				logErrorReporter
+				logger
 			);
 						
 		} catch (OperationFailedException | CreateException | InitException | BeanDuplicateException e) {
@@ -229,7 +240,7 @@ public class ExportFeaturesObjMaskTask<T extends FeatureInput> extends ExportFea
 	private void processAllProviders(
 		boolean debugMode,
 		Path inputPath,
-		FeatureSessionFlexiFeatureTable<T> session,
+		FeatureTableSession<T> session,
 		ImageInitParams imageInitParams,
 		NRGStackWithParams nrgStack,
 		SharedStateExportFeatures sharedState,
@@ -262,7 +273,7 @@ public class ExportFeaturesObjMaskTask<T extends FeatureInput> extends ExportFea
 	private void calculateFeaturesForProvider(
 		String id,
 		ObjMaskCollection objs,
-		FeatureSessionFlexiFeatureTable<T> session,
+		FeatureTableSession<T> session,
 		NRGStackWithParams nrgStack,
 		ResultsVectorCollection resultsDestination,
 		LogErrorReporter logErrorReporter
@@ -279,6 +290,7 @@ public class ExportFeaturesObjMaskTask<T extends FeatureInput> extends ExportFea
 				session,
 				listParams,
 				resultsDestination,
+				suppressErrors,
 				logErrorReporter
 			);
 		} catch (CreateException | OperationFailedException e) {
@@ -367,5 +379,13 @@ public class ExportFeaturesObjMaskTask<T extends FeatureInput> extends ExportFea
 
 	public void setNrgParamsName(String nrgParamsName) {
 		this.nrgParamsName = nrgParamsName;
+	}
+
+	public boolean isSuppressErrors() {
+		return suppressErrors;
+	}
+
+	public void setSuppressErrors(boolean suppressErrors) {
+		this.suppressErrors = suppressErrors;
 	}
 }

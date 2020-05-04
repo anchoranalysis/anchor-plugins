@@ -41,7 +41,7 @@ import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.image.objmask.ObjMaskCollection;
 import org.anchoranalysis.image.objmask.match.ObjWithMatches;
-import org.anchoranalysis.plugin.image.feature.bean.obj.single.intensity.IntensityMeanCalculator;
+import org.anchoranalysis.plugin.image.intensity.IntensityMeanCalculator;
 
 // Insists that the ratio of holes in this object is less than a certain %
 // Holes are provided by a series of 'filled in' objects, which are considered

@@ -37,10 +37,10 @@ import org.anchoranalysis.feature.cache.calculation.ResolvedCalculation;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.feature.objmask.pair.FeatureInputPairObjs;
+import org.anchoranalysis.image.feature.objmask.pair.CalculateInputFromPair.Extract;
 import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.image.objmask.morph.MorphologicalErosion;
 import org.anchoranalysis.image.objmask.ops.ObjMaskMerger;
-import org.anchoranalysis.plugin.image.feature.bean.obj.pair.order.CalculateInputFromPair.Extract;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 

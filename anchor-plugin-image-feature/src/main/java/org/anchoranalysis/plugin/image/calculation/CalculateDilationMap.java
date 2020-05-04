@@ -1,5 +1,7 @@
 package org.anchoranalysis.plugin.image.calculation;
 
+import java.util.Optional;
+
 import org.anchoranalysis.core.error.CreateException;
 
 /*
@@ -48,7 +50,13 @@ public class CalculateDilationMap extends CalculateIncrementalOperationMap {
 	@Override
 	protected ObjMask applyOperation( ObjMask om, Extent extnt, boolean do3D ) throws OperationFailedException {
 		try {
-			return MorphologicalDilation.createDilatedObjMask( om, extnt, do3D, 1, false);
+			return MorphologicalDilation.createDilatedObjMask(
+				om,
+				Optional.of(extnt),
+				do3D,
+				1,
+				false
+			);
 		} catch (CreateException e) {
 			throw new OperationFailedException(e);
 		}

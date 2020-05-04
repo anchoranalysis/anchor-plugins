@@ -38,10 +38,10 @@ import org.anchoranalysis.feature.list.NamedFeatureStoreFactory;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
+import org.anchoranalysis.image.feature.session.FeatureTableSession;
+import org.anchoranalysis.image.feature.session.NamedFeatureStoreSession;
 import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.image.objmask.ObjMaskCollection;
-import org.anchoranalysis.plugin.mpp.experiment.feature.FeatureSessionFlexiFeatureTable;
-import org.anchoranalysis.plugin.mpp.experiment.feature.FeatureSessionNamedFeatureStore;
 
 /**
  * Simply selects features directly from the list, and objects directly from the list passed.
@@ -58,11 +58,11 @@ public class Simple extends FlexiFeatureTable<FeatureInputSingleObj> {
 
 	
 	@Override
-	public FeatureSessionFlexiFeatureTable<FeatureInputSingleObj> createFeatures(
-			List<NamedBean<FeatureListProvider<FeatureInputSingleObj>>> list
+	public FeatureTableSession<FeatureInputSingleObj> createFeatures(
+			List<NamedBean<FeatureListProvider<FeatureInputSingleObj>>> list, boolean suppressErrors
 	) throws CreateException {
 		NamedFeatureStore<FeatureInputSingleObj> namedFeatures = NamedFeatureStoreFactory.createNamedFeatureList(list);
-		return new FeatureSessionNamedFeatureStore<>(namedFeatures);
+		return new NamedFeatureStoreSession<>(namedFeatures);
 	}
 
 	@Override

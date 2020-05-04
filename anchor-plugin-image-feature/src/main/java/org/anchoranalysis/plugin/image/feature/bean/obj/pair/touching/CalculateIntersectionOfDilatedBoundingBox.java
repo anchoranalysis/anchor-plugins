@@ -1,5 +1,7 @@
 package org.anchoranalysis.plugin.image.feature.bean.obj.pair.touching;
 
+import java.util.Optional;
+
 /*
  * #%L
  * anchor-plugin-image-feature
@@ -83,7 +85,10 @@ class CalculateIntersectionOfDilatedBoundingBox extends FeatureCalculation<Bound
 		return new HashCodeBuilder().append(use3D).toHashCode();
 	}
 
-	private BoundingBox dilatedBoundingBoxFor( ObjMask om, Extent e ) {
-		return om.getVoxelBoxBounded().dilate( use3D, e );
+	private BoundingBox dilatedBoundingBoxFor( ObjMask om, Extent extent ) {
+		return om.getVoxelBoxBounded().dilate(
+			use3D,
+			Optional.of(extent)
+		);
 	}
 }

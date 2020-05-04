@@ -35,10 +35,10 @@ import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.bean.list.FeatureListProvider;
 import org.anchoranalysis.feature.bean.list.FeatureListProviderPrependName;
 import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
+import org.anchoranalysis.image.feature.objmask.pair.FeatureDeriveFromPair;
 import org.anchoranalysis.image.feature.objmask.pair.FeatureInputPairObjs;
 import org.anchoranalysis.plugin.image.feature.bean.obj.pair.order.First;
 import org.anchoranalysis.plugin.image.feature.bean.obj.pair.order.Merged;
-import org.anchoranalysis.plugin.image.feature.bean.obj.pair.order.FeatureDeriveFromPair;
 import org.anchoranalysis.plugin.image.feature.bean.obj.pair.order.Second;
 
 /**

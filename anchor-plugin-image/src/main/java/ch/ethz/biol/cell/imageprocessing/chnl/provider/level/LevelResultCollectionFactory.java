@@ -1,5 +1,7 @@
 package ch.ethz.biol.cell.imageprocessing.chnl.provider.level;
 
+import java.util.Optional;
+
 import org.anchoranalysis.core.error.CreateException;
 
 /*
@@ -57,7 +59,15 @@ public class LevelResultCollectionFactory {
 			
 			// Optional dilation
 			if (numDilations!=0) {
-				omForCalculateLevel = MorphologicalDilation.createDilatedObjMask( om, chnl.getDimensions().getExtnt(), chnl.getDimensions().getZ()>1, numDilations, false );
+				omForCalculateLevel = MorphologicalDilation.createDilatedObjMask(
+					om,
+					Optional.of(
+						chnl.getDimensions().getExtnt()
+					),
+					chnl.getDimensions().getZ()>1,
+					numDilations,
+					false
+				);
 			} else {
 				omForCalculateLevel = om;
 			}
