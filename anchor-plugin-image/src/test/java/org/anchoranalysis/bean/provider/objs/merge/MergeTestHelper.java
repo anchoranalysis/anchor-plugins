@@ -18,7 +18,7 @@ class MergeTestHelper {
 	public static final int EXPECTED_LINEAR_RESULT_ALL_INTERSECTING_MERGED = NUM_LINEAR_NOT_INTERSECTING + 1;
 	public static final int EXPECTED_LINEAR_RESULT_FIRST_THREE_NOT_MERGING = NUM_LINEAR_NOT_INTERSECTING + 3 + 1;
 	
-	/** Linear intersection (intersects with left and right neighbour) among the first 8 objects, and then 3 more than don't intersect
+	/** Linear intersection (intersects with left and right neighbor) among the first 8 objects, and then 3 more than don't intersect
 	 * 
 	 * <pre>i.e. a pattern     a--b--c--d--e--f--g--h i j k   where  --  represents a neighbour hood relation</pre>
 	 * 

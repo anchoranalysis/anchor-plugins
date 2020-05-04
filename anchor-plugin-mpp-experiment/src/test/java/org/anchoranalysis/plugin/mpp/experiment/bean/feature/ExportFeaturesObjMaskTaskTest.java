@@ -187,7 +187,7 @@ public class ExportFeaturesObjMaskTaskTest {
 	@Test
 	public void testRepeatedCalculationInSingleAndPair() throws OperationFailedException, CreateException {
 		
-		Feature<FeatureInputSingleObj> feature = new MockFeatureWithCalculationFixture.MockFeatureWithCalculation();
+		Feature<FeatureInputSingleObj> feature = MockFeatureWithCalculationFixture.createMockFeatureWithCalculation();
 		
 		taskFixture.useInsteadAsSingleFeature(feature);
 		taskFixture.useInsteadAsPairFeature(
