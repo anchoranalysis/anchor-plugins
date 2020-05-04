@@ -28,12 +28,15 @@ package org.anchoranalysis.test.feature.plugins;
 
 import static org.junit.Assert.assertEquals;
 
+import java.util.function.Function;
+
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.cache.calculation.FeatureCalculation;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.feature.bean.objmask.FeatureObjMask;
 import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
+import org.anchoranalysis.image.objmask.ObjMask;
 
 public class MockFeatureWithCalculationFixture {
 
@@ -50,17 +53,27 @@ public class MockFeatureWithCalculationFixture {
 	 * @throws OperationFailedException
 	 */
 	public static void executeAndAssertCnt(
+		int expectedCntCalc,
 		int expectedCntExecute,
 		RunnableWithException<OperationFailedException> operation
 	) throws OperationFailedException {
 		// We rely on static variables in the class, so no concurrency allowed
 		synchronized(MockFeatureWithCalculationFixture.MockCalculation.class) {
 			
-			int before = MockCalculation.cntExecuteCalled;
-			operation.run();
-			int diff = MockCalculation.cntExecuteCalled - before;
+			int beforeExecute = MockCalculation.cntExecuteCalled;
+			int beforeCalc = MockFeatureWithCalculation.cntCalcCalled;
 			
-			assertEquals(expectedCntExecute, diff);
+			operation.run();
+			
+			assertEquals(
+				expectedCntExecute,
+				MockCalculation.cntExecuteCalled - beforeExecute
+			);
+			
+			assertEquals(
+				expectedCntCalc,
+				MockFeatureWithCalculation.cntCalcCalled - beforeCalc
+			);
 		}
 	}
 	
@@ -77,8 +90,13 @@ public class MockFeatureWithCalculationFixture {
 		 */
 		private static final long serialVersionUID = 1L;
 
+		
+		// Incremented every calc executed is called
+		public static int cntCalcCalled = 0;
+		
 		@Override
 		protected double calc(SessionInput<FeatureInputSingleObj> input) throws FeatureCalcException {
+			cntCalcCalled++;
 			return input.calc( new MockCalculation() );
 		}
 	}
@@ -89,10 +107,13 @@ public class MockFeatureWithCalculationFixture {
 		// Incremented every time executed is called
 		public static int cntExecuteCalled = 0;
 		
+		/** Can be changed from the default implementation as desired */
+		public static Function<FeatureInputSingleObj,Double> funcCalculation = input -> (double) input.getObjMask().numPixels();
+		
 		@Override
 		protected Double execute(FeatureInputSingleObj input) throws FeatureCalcException {
 			cntExecuteCalled++;
-			return (double) input.getObjMask().numPixels();
+			return funcCalculation.apply(input);
 		}
 
 		@Override
