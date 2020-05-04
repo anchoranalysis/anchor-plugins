@@ -47,7 +47,7 @@ import org.anchoranalysis.image.sgmn.SgmnFailedException;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.anchoranalysis.image.voxel.box.VoxelBoxWrapper;
 import org.anchoranalysis.image.voxel.box.factory.VoxelBoxFactory;
-import org.anchoranalysis.plugin.image.bean.threshold.calculatelevel.Constant;
+import org.anchoranalysis.plugin.image.bean.histogram.threshold.Constant;
 
 public class SgmnThrshldKeyValuesParam extends BinarySgmn {
 

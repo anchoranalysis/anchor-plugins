@@ -37,8 +37,8 @@ import org.anchoranalysis.feature.bean.list.FeatureListProvider;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
+import org.anchoranalysis.image.feature.session.FeatureTableSession;
 import org.anchoranalysis.image.objmask.ObjMaskCollection;
-import org.anchoranalysis.plugin.mpp.experiment.feature.FeatureSessionFlexiFeatureTable;
 
 /**
  * A flexible feature-table.
@@ -57,15 +57,16 @@ public abstract class FlexiFeatureTable<T extends FeatureInput> extends AnchorBe
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-
+	
 	/**
 	 * Creates features that will be applied on the objMasks. Features should always be duplicated from the input list.
 	 * 
 	 * @param list
+	 * @param suppressErrors TODO
 	 * @return
 	 * @throws CreateException
 	 */
-	public abstract FeatureSessionFlexiFeatureTable<T> createFeatures( List<NamedBean<FeatureListProvider<FeatureInputSingleObj>>> list ) throws CreateException, InitException;
+	public abstract FeatureTableSession<T> createFeatures( List<NamedBean<FeatureListProvider<FeatureInputSingleObj>>> list, boolean suppressErrors ) throws CreateException, InitException;
 	
 	public abstract List<T> createListCalcParams(
 		ObjMaskCollection objs,

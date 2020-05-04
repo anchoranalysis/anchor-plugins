@@ -34,6 +34,7 @@ package org.anchoranalysis.plugin.image.feature.bean.obj.single.intensity;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.chnl.Chnl;
 import org.anchoranalysis.image.objmask.ObjMask;
+import org.anchoranalysis.plugin.image.intensity.IntensityMeanCalculator;
 
 /**
  * Constructs a 'shell' around an object by a number of dilation/erosion operations (not including the original object mask)

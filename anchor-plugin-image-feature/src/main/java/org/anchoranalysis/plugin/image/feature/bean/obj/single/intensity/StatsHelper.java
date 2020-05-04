@@ -35,6 +35,7 @@ import org.anchoranalysis.image.histogram.Histogram;
 import org.anchoranalysis.image.histogram.HistogramFactoryUtilities;
 import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.image.voxel.statistics.VoxelStatisticsFromHistogram;
+import org.anchoranalysis.plugin.image.intensity.IntensityMeanCalculator;
 
 import ch.ethz.biol.cell.mpp.nrg.feature.objmask.ValueAndIndex;
 

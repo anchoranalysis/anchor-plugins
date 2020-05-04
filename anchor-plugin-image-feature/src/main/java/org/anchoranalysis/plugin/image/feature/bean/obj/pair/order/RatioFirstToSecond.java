@@ -30,6 +30,7 @@ import org.anchoranalysis.feature.cache.SessionInput;
 
 
 import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.image.feature.objmask.pair.FeatureDeriveFromPair;
 import org.anchoranalysis.image.feature.objmask.pair.FeatureInputPairObjs;
 
 

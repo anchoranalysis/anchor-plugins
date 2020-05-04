@@ -27,6 +27,7 @@ package org.anchoranalysis.plugin.image.feature.bean.obj.pair.order;
  */
 
 import org.anchoranalysis.image.feature.bean.objmask.NumVoxels;
+import org.anchoranalysis.image.feature.objmask.pair.FeatureDeriveFromPair;
 
 class OrderHelper {
 

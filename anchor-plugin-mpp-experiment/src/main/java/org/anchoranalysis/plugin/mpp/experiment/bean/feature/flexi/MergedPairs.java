@@ -44,13 +44,13 @@ import org.anchoranalysis.feature.bean.list.FeatureListProvider;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
 import org.anchoranalysis.image.feature.objmask.pair.FeatureInputPairObjs;
+import org.anchoranalysis.image.feature.session.FeatureTableSession;
+import org.anchoranalysis.image.feature.session.MergedPairsFeatures;
+import org.anchoranalysis.image.feature.session.MergedPairsSession;
 import org.anchoranalysis.image.feature.stack.FeatureInputStack;
 import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.image.objmask.ObjMaskCollection;
 import org.anchoranalysis.image.voxel.nghb.CreateNghbGraph;
-import org.anchoranalysis.plugin.mpp.experiment.feature.FeatureSessionFlexiFeatureTable;
-import org.anchoranalysis.plugin.mpp.experiment.feature.MergedPairsFeatures;
-import org.anchoranalysis.plugin.mpp.experiment.feature.MergedPairsSession;
 
 /**
  * Creates a set of features, that creates pairs of neighbouring-objects and applies a mixture of single-object features
@@ -139,15 +139,13 @@ public class MergedPairs extends FlexiFeatureTable<FeatureInputPairObjs> {
 	private boolean checkInverse = false;
 	
 	@BeanField
-	private boolean suppressErrors = false;
-	
-	@BeanField
 	private boolean do3D = true;
 	// END BEAN PROPERTIES
 	
 	@Override
-	public FeatureSessionFlexiFeatureTable<FeatureInputPairObjs> createFeatures(
-			List<NamedBean<FeatureListProvider<FeatureInputSingleObj>>> list
+	public FeatureTableSession<FeatureInputPairObjs> createFeatures(
+		List<NamedBean<FeatureListProvider<FeatureInputSingleObj>>> list,
+		boolean suppressErrors
 	) throws CreateException {
 		
 		try {
@@ -270,16 +268,6 @@ public class MergedPairs extends FlexiFeatureTable<FeatureInputPairObjs> {
 
 	public void setCheckInverse(boolean checkInverse) {
 		this.checkInverse = checkInverse;
-	}
-
-
-	public boolean isSuppressErrors() {
-		return suppressErrors;
-	}
-
-
-	public void setSuppressErrors(boolean suppressErrors) {
-		this.suppressErrors = suppressErrors;
 	}
 
 

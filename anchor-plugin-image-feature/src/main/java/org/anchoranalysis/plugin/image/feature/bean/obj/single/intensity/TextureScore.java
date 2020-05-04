@@ -33,6 +33,7 @@ import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.chnl.Chnl;
 import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
 import org.anchoranalysis.image.objmask.ObjMask;
+import org.anchoranalysis.plugin.image.intensity.IntensityMeanCalculator;
 
 
 /**
