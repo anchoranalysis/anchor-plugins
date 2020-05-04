@@ -36,10 +36,12 @@ import org.anchoranalysis.feature.cache.calculation.FeatureCalculation;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.feature.bean.objmask.FeatureObjMask;
 import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
-import org.anchoranalysis.image.objmask.ObjMask;
+
 
 public class MockFeatureWithCalculationFixture {
 
+	public final static Function<FeatureInputSingleObj,Double> DEFAULT_FUNC_NUM_PIXELS = input -> (double) input.getObjMask().numPixels();
+	
 	@FunctionalInterface
 	public interface RunnableWithException<E extends Throwable> {
 	    public void run() throws E;
@@ -77,13 +79,35 @@ public class MockFeatureWithCalculationFixture {
 		}
 	}
 	
+		
+	/**
+	 * Creates a mock-feature (using a mock-FeatureCalculation under the hood) which counts the number of pixels in an object 
+	 * @return the mock-feature
+	 */
+	public static FeatureObjMask createMockFeatureWithCalculation() {
+		return createMockFeatureWithCalculation(DEFAULT_FUNC_NUM_PIXELS);
+	}
+	
+	/** 
+	 * Creates a mock-feature (using a mock-FeatureCalculation under the hood) with a result calculated using a lambda
+	 *  
+	 * @param funcCalculation lambda that provides the result of the mock-calculation (and this mock-feature)
+	 * @return the feature
+	 */
+	public static FeatureObjMask createMockFeatureWithCalculation(  Function<FeatureInputSingleObj,Double> funcCalculation ) {
+		synchronized(MockFeatureWithCalculationFixture.MockCalculation.class) {
+			MockCalculation.funcCalculation = funcCalculation;
+			return new MockFeatureWithCalculation();
+		}
+	}
+	
 	/**
 	 * A feature that returns the number-of-voxels in an object by using a {@link MockCalculation} internally
 	 * 
 	 * @author Owen Feehan
 	 *
 	 */
-	public static class MockFeatureWithCalculation extends FeatureObjMask {
+	private static class MockFeatureWithCalculation extends FeatureObjMask {
 		
 		/**
 		 * 
