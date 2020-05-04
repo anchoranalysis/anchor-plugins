@@ -197,6 +197,8 @@ public class ExportFeaturesObjMaskTaskTest {
 		taskFixture.changeToMergedPairs(true, false);
 		
 		MockFeatureWithCalculationFixture.executeAndAssertCnt(
+			// Each "single" input calculated once (as the results are cached), and twice for each pair (for pair and merged)
+			MultiInputFixture.NUM_INTERSECTING_OBJECTS + (2 * MultiInputFixture.NUM_PAIRS_INTERSECTING),
 			 // a calculation for each single object, and a calculation for each merged object
 			(MultiInputFixture.NUM_PAIRS_INTERSECTING + MultiInputFixture.NUM_INTERSECTING_OBJECTS),
 			() -> testOnTask("repeatedInSingleAndPair/")
