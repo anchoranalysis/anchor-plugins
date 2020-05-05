@@ -12,7 +12,7 @@ import org.anchoranalysis.feature.input.descriptor.FeatureInputDescriptor;
  * @author Owen Feehan
  *
  */
-class MockFeatureWithCalculation extends Feature<FeatureInput> {
+public class MockFeatureWithCalculation extends Feature<FeatureInput> {
 	
 	/**
 	 * 
