@@ -1,5 +1,7 @@
 package org.anchoranalysis.plugin.mpp.bean.proposer.orientation;
 
+import java.util.Optional;
+
 import org.anchoranalysis.anchor.mpp.bean.proposer.OrientationProposer;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.anchor.mpp.mark.conic.MarkEllipse;
@@ -51,13 +53,15 @@ public class AngleRotation extends OrientationProposer {
 	// END BEAN PROPERTIES
 
 	@Override
-	public Orientation propose(Mark mark, ImageDim dim, RandomNumberGenerator re, ErrorNode proposerFailureDescription ) {
+	public Optional<Orientation> propose(Mark mark, ImageDim dim, RandomNumberGenerator re, ErrorNode proposerFailureDescription ) {
 		MarkEllipse markC = (MarkEllipse) mark;
 		
 		Orientation2D exstOrientation = (Orientation2D) markC.getOrientation();
 		
 		double angleRadians = (angleDegrees / 180) * Math.PI;
-		return new Orientation2D( exstOrientation.getAngleRadians() + angleRadians );
+		return Optional.of(
+			new Orientation2D( exstOrientation.getAngleRadians() + angleRadians )
+		);
 	}
 
 	public double getAngleDegrees() {

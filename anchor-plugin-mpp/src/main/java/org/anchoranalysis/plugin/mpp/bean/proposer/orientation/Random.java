@@ -1,5 +1,7 @@
 package org.anchoranalysis.plugin.mpp.bean.proposer.orientation;
 
+import java.util.Optional;
+
 import org.anchoranalysis.anchor.mpp.bean.bound.OrientableBounds;
 
 /*-
@@ -44,7 +46,7 @@ public class Random extends OrientationProposer {
 	private static final long serialVersionUID = -6739151761002161746L;
 	
 	@Override
-	public Orientation propose(Mark mark,	ImageDim dim, RandomNumberGenerator re, ErrorNode errorNode) {
+	public Optional<Orientation> propose(Mark mark,	ImageDim dim, RandomNumberGenerator re, ErrorNode errorNode) {
 		
 		try {
 			if (getSharedObjects().getMarkBounds()==null || !(getSharedObjects().getMarkBounds() instanceof OrientableBounds) ) {
@@ -52,10 +54,12 @@ public class Random extends OrientationProposer {
 				return null;
 			}
 			
-			return ((OrientableBounds) getSharedObjects().getMarkBounds()).randomOrientation(re, dim.getRes());
+			return Optional.of(
+				((OrientableBounds) getSharedObjects().getMarkBounds()).randomOrientation(re, dim.getRes())
+			);
 		} catch (NamedProviderGetException e) {
 			errorNode.add(e.summarize().toString());
-			return null;
+			return Optional.empty();
 		}
 	}
 
