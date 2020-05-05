@@ -72,8 +72,8 @@ public class MockFeatureWithCalculationFixture {
 		// We rely on static variables in the class, so no concurrency allowed
 		synchronized(MockCalculation.class) {
 			
-			int beforeExecute = MockCalculation.cntExecuteCalled;
-			int beforeCalc = MockFeatureWithCalculation.cntCalcCalled;
+			long beforeExecute = MockCalculation.cntExecuteCalled;
+			long beforeCalc = MockFeatureWithCalculation.cntCalcCalled;
 			
 			operation.run();
 			
