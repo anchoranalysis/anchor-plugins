@@ -43,7 +43,7 @@ class ProviderFixture {
 		public T create( LogErrorReporter logger ) throws CreateException;
 	}
 	
-	public static <T extends ImageBean<?>> T createInitMergePair( CreateProvider<T> funcCreate ) throws CreateException {
+	public static <T extends ImageBean<T>> T createInitMergePair( CreateProvider<T> funcCreate ) throws CreateException {
 		
 		LogErrorReporter logger = LoggingFixture.simpleLogErrorReporter();
 		
@@ -52,7 +52,7 @@ class ProviderFixture {
 		return provider;
 	}
 	
-	public static <T> void initProvider( ImageBean<T> provider, LogErrorReporter logger) throws CreateException {
+	public static <T extends ImageBean<T>> void initProvider( ImageBean<T> provider, LogErrorReporter logger) throws CreateException {
 		try {
 			provider.checkMisconfigured( RegisterBeanFactories.getDefaultInstances() );
 			
