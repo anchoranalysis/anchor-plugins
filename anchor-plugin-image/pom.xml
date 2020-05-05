@@ -124,7 +124,7 @@
 	  <artifactId>anchor-test-feature-plugins</artifactId>
 	  <version>0.0.4-SNAPSHOT</version>
 	  <scope>test</scope>
-	</dependency>
+	 </dependency>
 	
   </dependencies>   
 </project>

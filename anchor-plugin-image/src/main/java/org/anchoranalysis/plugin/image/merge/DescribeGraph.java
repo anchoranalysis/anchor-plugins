@@ -78,20 +78,20 @@ public class DescribeGraph {
 	public String describeEdge( ObjVertex src, ObjVertex dest, ObjVertex merged, double priority, boolean doMerge ) {
 		if (includePayload) {
 			return String.format("Merge? %s (%f)\t+%s (%f)\t= %s (%f)\t%e  %s",
-				src.getObjMask().centerOfGravity(),
+				src.getObjMask(),
 				src.getPayload(),
-				dest.getObjMask().centerOfGravity(),
+				dest.getObjMask(),
 				dest.getPayload(),
-				merged.getObjMask().centerOfGravity(),
+				merged.getObjMask(),
 				merged.getPayload(),
 				priority,
 				doMerge ? "Yes!" : "No!"
 			);
 		} else {
 			return String.format("Merge? %s\t+%s\t= %s\t%e  %s",
-				src.getObjMask().centerOfGravity(),
-				dest.getObjMask().centerOfGravity(),
-				merged.getObjMask().centerOfGravity(),
+				src.getObjMask(),
+				dest.getObjMask(),
+				merged.getObjMask(),
 				priority,
 				doMerge ? "Yes!" : "No!"
 			);
@@ -103,7 +103,7 @@ public class DescribeGraph {
 		EdgeTypeWithVertices<ObjVertex,PrioritisedVertex> bestImprovement
 	) {
 		if (includePayload) {
-			return String.format("Merging %s and %s to %s (%f,%f->%f). Num edges/verices=%d,%d.",
+			return String.format("Merging %s and %s to %s (%f,%f->%f). Num vertices/edges=%d,%d.",
 				bestImprovement.getNode1().getObjMask().centerOfGravity(),
 				bestImprovement.getNode2().getObjMask().centerOfGravity(),
 				omMerged.getObjMask().centerOfGravity(),
@@ -114,7 +114,7 @@ public class DescribeGraph {
 				graph.numEdges()
 			);
 		} else {
-			return String.format("Merging %s and %s to %s. Num edges/verices=%d,%d.",
+			return String.format("Merging %s and %s to %s. Num vertices/edges=%d,%d.",
 				bestImprovement.getNode1().getObjMask().centerOfGravity(),
 				bestImprovement.getNode2().getObjMask().centerOfGravity(),
 				omMerged.getObjMask().centerOfGravity(),

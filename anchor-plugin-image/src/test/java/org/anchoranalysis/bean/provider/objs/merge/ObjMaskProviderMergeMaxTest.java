@@ -6,12 +6,13 @@ import org.anchoranalysis.bean.error.BeanMisconfiguredException;
 import org.anchoranalysis.bean.xml.RegisterBeanFactories;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
+import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
 import org.anchoranalysis.image.objmask.ObjMaskCollection;
 import org.anchoranalysis.plugin.image.bean.merge.ObjMaskProviderMergeMax;
 import org.anchoranalysis.test.LoggingFixture;
-import org.anchoranalysis.test.feature.plugins.MockFeatureWithCalculationFixture;
+import org.anchoranalysis.test.feature.plugins.mockfeature.MockFeatureWithCalculationFixture;
 import org.junit.Test;
 
 public class ObjMaskProviderMergeMaxTest {
@@ -20,30 +21,39 @@ public class ObjMaskProviderMergeMaxTest {
 		RegisterBeanFactories.registerAllPackageBeanFactories();
 	}
 
-	/** This test will merge so long as the total number of pixels increases (so every possible neighbor will eventually merge!) */
+	/** This test will merge so long as the total number of pixels increases (so every possible neighbor will eventually merge!) 
+	 * @throws OperationFailedException 
+	 * @throws CreateException */
 	@Test
-	public void testMaximalNumPixels() throws BeanMisconfiguredException, CreateException, InitException {
+	public void testMaximalNumPixels() throws BeanMisconfiguredException, InitException, OperationFailedException, CreateException {
 		testLinear(
-			MergeTestHelper.EXPECTED_LINEAR_RESULT_ALL_INTERSECTING_MERGED,
+			MergeTestHelper.EXPECTED_RESULT_ALL_INTERSECTING_MERGED,
+			24,
 			MockFeatureWithCalculationFixture.DEFAULT_FUNC_NUM_PIXELS
 		);
 	}
 	
-	/** This tests will merge if it brings the total number of pixels closer to 500, but not merge otherwise.
+	/** 
+	 * This tests will merge if it brings the total number of pixels closer to 500, but not merge otherwise.
 	 * 
 	 * <p>Therefore some neighboring objects will merge and others will not</p>
+	 * @throws OperationFailedException 
+	 * @throws CreateException 
 	 */
 	@Test
-	public void testNumPixelsTarget() throws BeanMisconfiguredException, CreateException, InitException {
+	public void testConvergeNumPixels() throws BeanMisconfiguredException, InitException, OperationFailedException, CreateException {
 		testLinear(
 			8,
+			23,
 			ObjMaskProviderMergeMaxTest::convergeTo900
 		);
 	}
 	
-	private void testLinear( int expectedCntMerged, Function<FeatureInputSingleObj,Double> calculationFunc ) throws CreateException {
+	private void testLinear( int expectedCntMerged, int expectedFeatureCalcCount, Function<FeatureInputSingleObj,Double> calculationFunc ) throws OperationFailedException, CreateException {
 		MergeTestHelper.testProviderOn(
 			expectedCntMerged,
+			expectedFeatureCalcCount,
+			expectedFeatureCalcCount,	// Same as the feature-count as it should always be a new unique object
 			createMergeMax(MergeTestHelper.OBJS_LINEAR_INTERSECTING, calculationFunc)
 		);
 	}

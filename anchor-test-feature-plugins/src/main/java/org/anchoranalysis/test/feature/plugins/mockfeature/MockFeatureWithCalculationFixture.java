@@ -1,4 +1,4 @@
-package org.anchoranalysis.test.feature.plugins;
+package org.anchoranalysis.test.feature.plugins.mockfeature;
 
 /*-
  * #%L
@@ -31,13 +31,22 @@ import static org.junit.Assert.assertEquals;
 import java.util.function.Function;
 
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.feature.cache.SessionInput;
-import org.anchoranalysis.feature.cache.calculation.FeatureCalculation;
-import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.image.feature.bean.objmask.FeatureObjMask;
+import org.anchoranalysis.feature.bean.Feature;
+import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
 
 
+/**
+ * Creates a mock-feature which used a mock {@link org.anchoranalysis.feature.cache.calculation.FeatureCalculation} under the hood
+ * 
+ * <p>Tests can be executed so as to count the number of times the calculation and feature's {@link MockFeatureWithCalculationFixture#calc) method are called.</p>
+ * 
+ * <p>This is implemented using (ugly) static methods and some reflection, as Feature's must remain valid Anchor-bean's
+ * and thus cannot be inner-classes or rely on parameterization in the constructor.</p>
+ * 
+ * @author Owen Feehan
+ *
+ */
 public class MockFeatureWithCalculationFixture {
 
 	public final static Function<FeatureInputSingleObj,Double> DEFAULT_FUNC_NUM_PIXELS = input -> (double) input.getObjMask().numPixels();
@@ -50,6 +59,7 @@ public class MockFeatureWithCalculationFixture {
 	/**
 	 * Executes an operation, and afterwards asserts an expected number of times the {@link MockCalculation.execute()} method was called.
 	 * 
+	 * @param expectedCntCalc the expected number of calls to {@link Feature.calc()}
 	 * @param expectedCntExecute the expected number of calls to {@link MockCalculation.execute()}
 	 * @param operation an operation, typically involving {@link MockCalculation}
 	 * @throws OperationFailedException
@@ -60,7 +70,7 @@ public class MockFeatureWithCalculationFixture {
 		RunnableWithException<OperationFailedException> operation
 	) throws OperationFailedException {
 		// We rely on static variables in the class, so no concurrency allowed
-		synchronized(MockFeatureWithCalculationFixture.MockCalculation.class) {
+		synchronized(MockCalculation.class) {
 			
 			int beforeExecute = MockCalculation.cntExecuteCalled;
 			int beforeCalc = MockFeatureWithCalculation.cntCalcCalled;
@@ -68,11 +78,13 @@ public class MockFeatureWithCalculationFixture {
 			operation.run();
 			
 			assertEquals(
+				"count of times execute() called on MockCalculation",
 				expectedCntExecute,
 				MockCalculation.cntExecuteCalled - beforeExecute
 			);
 			
 			assertEquals(
+				"count of times calc() called on MockFeature",
 				expectedCntCalc,
 				MockFeatureWithCalculation.cntCalcCalled - beforeCalc
 			);
@@ -84,7 +96,7 @@ public class MockFeatureWithCalculationFixture {
 	 * Creates a mock-feature (using a mock-FeatureCalculation under the hood) which counts the number of pixels in an object 
 	 * @return the mock-feature
 	 */
-	public static FeatureObjMask createMockFeatureWithCalculation() {
+	public static Feature<FeatureInputSingleObj> createMockFeatureWithCalculation() {
 		return createMockFeatureWithCalculation(DEFAULT_FUNC_NUM_PIXELS);
 	}
 	
@@ -92,62 +104,14 @@ public class MockFeatureWithCalculationFixture {
 	 * Creates a mock-feature (using a mock-FeatureCalculation under the hood) with a result calculated using a lambda
 	 *  
 	 * @param funcCalculation lambda that provides the result of the mock-calculation (and this mock-feature)
+	 * @param childCache If set, a child-cache is used for the calculation. If not set, the main cache is used.
 	 * @return the feature
 	 */
-	public static FeatureObjMask createMockFeatureWithCalculation(  Function<FeatureInputSingleObj,Double> funcCalculation ) {
-		synchronized(MockFeatureWithCalculationFixture.MockCalculation.class) {
-			MockCalculation.funcCalculation = funcCalculation;
-			return new MockFeatureWithCalculation();
-		}
-	}
-	
-	/**
-	 * A feature that returns the number-of-voxels in an object by using a {@link MockCalculation} internally
-	 * 
-	 * @author Owen Feehan
-	 *
-	 */
-	private static class MockFeatureWithCalculation extends FeatureObjMask {
-		
-		/**
-		 * 
-		 */
-		private static final long serialVersionUID = 1L;
-
-		
-		// Incremented every calc executed is called
-		public static int cntCalcCalled = 0;
-		
-		@Override
-		protected double calc(SessionInput<FeatureInputSingleObj> input) throws FeatureCalcException {
-			cntCalcCalled++;
-			return input.calc( new MockCalculation() );
-		}
-	}
-	
-	/** Counts the number of pixels in the object, but uses a static variable to record the number of times executed is called */
-	private static class MockCalculation extends FeatureCalculation<Double,FeatureInputSingleObj> {
-
-		// Incremented every time executed is called
-		public static int cntExecuteCalled = 0;
-		
-		/** Can be changed from the default implementation as desired */
-		public static Function<FeatureInputSingleObj,Double> funcCalculation = input -> (double) input.getObjMask().numPixels();
-		
-		@Override
-		protected Double execute(FeatureInputSingleObj input) throws FeatureCalcException {
-			cntExecuteCalled++;
-			return funcCalculation.apply(input);
-		}
-
-		@Override
-		public boolean equals(Object other) {
-			return other instanceof MockFeatureWithCalculationFixture.MockCalculation;
-		}
-
-		@Override
-		public int hashCode() {
-			return 7;
+	@SuppressWarnings("unchecked")
+	public static <T extends FeatureInput> Feature<T> createMockFeatureWithCalculation(Function<T,Double> funcCalculation) {
+		synchronized(MockCalculation.class) {
+			MockCalculation.funcCalculation = (Function<FeatureInput,Double>) funcCalculation;
+			return (Feature<T>) new MockFeatureWithCalculation();
 		}
 	}
 }

@@ -29,10 +29,10 @@
 				<item1 config-class="org.anchoranalysis.plugin.image.feature.bean.obj.pair.touching.NumTouchingVoxelFaces"/>
 				<item2 config-class="ch.ethz.biol.cell.mpp.nrg.feature.operator.Mean">
 					<list config-class="java.util.List" config-factory="list">
-						<item config-class="org.anchoranalysis.plugin.image.feature.bean.obj.pair.order.First">
+						<item config-class="org.anchoranalysis.image.feature.objmask.pair.impl.First">
 							<item config-class="ch.ethz.biol.cell.mpp.nrg.feature.objmask.SurfaceNumVoxelFaces"/>
 						</item>
-						<item config-class="org.anchoranalysis.plugin.image.feature.bean.obj.pair.order.Second">
+						<item config-class="org.anchoranalysis.image.feature.objmask.pair.impl.Second">
 							<item config-class="ch.ethz.biol.cell.mpp.nrg.feature.objmask.SurfaceNumVoxelFaces"/>
 						</item>
 					</list>
@@ -48,10 +48,10 @@
 				<item1 config-class="org.anchoranalysis.plugin.image.feature.bean.obj.pair.touching.NumTouchingVoxelFaces"/>
 				<item2 config-class="ch.ethz.biol.cell.mpp.nrg.feature.operator.Maximum">
 					<list config-class="java.util.List" config-factory="list">
-						<item config-class="org.anchoranalysis.plugin.image.feature.bean.obj.pair.order.First">
+						<item config-class="org.anchoranalysis.image.feature.objmask.pair.impl.First">
 							<item config-class="ch.ethz.biol.cell.mpp.nrg.feature.objmask.SurfaceNumVoxelFaces"/>
 						</item>
-						<item config-class="org.anchoranalysis.plugin.image.feature.bean.obj.pair.order.Second">
+						<item config-class="org.anchoranalysis.image.feature.objmask.pair.impl.Second">
 							<item config-class="ch.ethz.biol.cell.mpp.nrg.feature.objmask.SurfaceNumVoxelFaces"/>
 						</item>
 					</list>
@@ -66,10 +66,10 @@
 				<item1 config-class="org.anchoranalysis.plugin.image.feature.bean.obj.pair.touching.NumTouchingVoxelFaces"/>
 				<item2 config-class="ch.ethz.biol.cell.mpp.nrg.feature.operator.Minimum">
 					<list config-class="java.util.List" config-factory="list">
-						<item config-class="org.anchoranalysis.plugin.image.feature.bean.obj.pair.order.First">
+						<item config-class="org.anchoranalysis.image.feature.objmask.pair.impl.First">
 							<item config-class="ch.ethz.biol.cell.mpp.nrg.feature.objmask.SurfaceNumVoxelFaces"/>
 						</item>
-						<item config-class="org.anchoranalysis.plugin.image.feature.bean.obj.pair.order.Second">
+						<item config-class="org.anchoranalysis.image.feature.objmask.pair.impl.Second">
 							<item config-class="ch.ethz.biol.cell.mpp.nrg.feature.objmask.SurfaceNumVoxelFaces"/>
 						</item>
 					</list>
@@ -121,7 +121,7 @@
 				<item1 customName="objectEdgeIntersectionIntensity" config-class="org.anchoranalysis.plugin.image.feature.bean.obj.pair.Intersection" iterationsDilation="2" iterationsErosion="2" emptyValue="5000" do3D="false">
 					<item config-class="org.anchoranalysis.plugin.image.feature.bean.obj.single.intensity.IntensityGradientMeanMagnitudeFromMultiple" nrgIndexX="0" nrgIndexY="1" nrgIndexZ="2" subtractConstant="32768"/>
 				</item1>
-				<item2 customName="edgeIntensityInner" config-class="org.anchoranalysis.plugin.image.feature.bean.obj.pair.order.Merged">
+				<item2 customName="edgeIntensityInner" config-class="org.anchoranalysis.image.feature.objmask.pair.impl.Merged">
 					<item config-class="ch.ethz.biol.cell.mpp.nrg.feature.objmask.Erode" iterations="2" do3D="true" emptyValue="-5000">
 						<item config-class="org.anchoranalysis.plugin.image.feature.bean.obj.single.intensity.IntensityGradientMeanMagnitudeFromMultiple" nrgIndexX="0" nrgIndexY="1" nrgIndexZ="2" subtractConstant="32768"/>
 					</item>				
@@ -141,7 +141,7 @@
 				<item1 customName="objectEdgeIntersectionIntensity" config-class="org.anchoranalysis.plugin.image.feature.bean.obj.pair.Intersection" iterationsDilation="2" iterationsErosion="2" emptyValue="5000" do3D="false">
 					<item config-class="org.anchoranalysis.plugin.image.feature.bean.obj.single.intensity.IntensityGradientMeanMagnitudeFromMultiple" nrgIndexX="0" nrgIndexY="1" nrgIndexZ="2" subtractConstant="32768"/>
 				</item1>
-				<item2 customName="edgeIntensityShell" config-class="org.anchoranalysis.plugin.image.feature.bean.obj.pair.order.Merged">
+				<item2 customName="edgeIntensityShell" config-class="org.anchoranalysis.image.feature.objmask.pair.impl.Merged">
 					<item config-class="ch.ethz.biol.cell.mpp.nrg.feature.objmask.Shell" iterationsDilation="2" iterationsErosion="2" do3D="true" emptyValue="-5000">
 						<item config-class="org.anchoranalysis.plugin.image.feature.bean.obj.single.intensity.IntensityGradientMeanMagnitudeFromMultiple" nrgIndexX="0" nrgIndexY="1" nrgIndexZ="2" subtractConstant="32768"/>
 					</item>				

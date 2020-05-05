@@ -31,15 +31,16 @@ import org.anchoranalysis.bean.shared.relation.GreaterThanBean;
 import org.anchoranalysis.bean.xml.RegisterBeanFactories;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
+import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.log.LogErrorReporter;
+import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.operator.Constant;
-import org.anchoranalysis.feature.cache.SessionInput;
-import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.image.feature.bean.objmask.pair.FeatureObjMaskPair;
 import org.anchoranalysis.image.feature.objmask.pair.FeatureInputPairObjs;
+import org.anchoranalysis.image.feature.objmask.pair.impl.Minimum;
 import org.anchoranalysis.image.objmask.ObjMaskCollection;
 import org.anchoranalysis.plugin.image.bean.merge.ObjMaskProviderMergePair;
 import org.anchoranalysis.test.LoggingFixture;
+import org.anchoranalysis.test.feature.plugins.mockfeature.MockFeatureWithCalculationFixture;
 import org.junit.Test;
 import static org.anchoranalysis.bean.provider.objs.merge.MergeTestHelper.*;
 
@@ -48,51 +49,39 @@ public class ObjMaskProviderMergePairTest {
 	static {
 		RegisterBeanFactories.registerAllPackageBeanFactories();
 	}
-
-	/** Counts the number of pixels in the merge of the pair */
-	public static class MockFeature extends FeatureObjMaskPair {
-
-		/**
-		 * 
-		 */
-		private static final long serialVersionUID = 1L;
-
-		@Override
-		protected double calc(SessionInput<FeatureInputPairObjs> input) throws FeatureCalcException {
-			int pixelsObj1 = input.get().getFirst().numPixels();
-			int pixelsObj2 = input.get().getSecond().numPixels();
-			return Math.min(pixelsObj1, pixelsObj2);
-		}
-		
+	
+	/** Threshold chosen so all objects merge 
+	 * @throws OperationFailedException */
+	@Test
+	public void testAllMerge() throws BeanMisconfiguredException, CreateException, InitException, OperationFailedException {
+		testLinear(EXPECTED_RESULT_ALL_INTERSECTING_MERGED, 26, 14, 1);
 	}
 	
+	/** Threshold chosen so the first three objects are too small to merge 
+	 * @throws OperationFailedException */
 	@Test
-	public void testAllMerge() throws BeanMisconfiguredException, CreateException, InitException {
-		
-		MergeTestHelper.testProviderOn(
-			EXPECTED_LINEAR_RESULT_ALL_INTERSECTING_MERGED,
-			createMergePair(OBJS_LINEAR_INTERSECTING, 1)
-		);
-	}
-	
-	
-	@Test
-	public void testSomeMerge() throws BeanMisconfiguredException, CreateException, InitException {
-		
-		// Threshold chosen so the first three objects are too small to merge
-		MergeTestHelper.testProviderOn(
-			EXPECTED_LINEAR_RESULT_FIRST_THREE_NOT_MERGING,
-			createMergePair(OBJS_LINEAR_INTERSECTING, 300)
-		);
+	public void testSomeMerge() throws BeanMisconfiguredException, CreateException, InitException, OperationFailedException {
+		testLinear(EXPECTED_RESULT_FIRST_THREE_NOT_MERGING, 22, 12, 300);
 	}	
 	
-	
+	private void testLinear( int expectedCntMerged, int expectedFeatureCalcCount, int expectedCalculationCount, int threshold) throws OperationFailedException, CreateException {
+		MergeTestHelper.testProviderOn(
+			expectedCntMerged,
+			expectedFeatureCalcCount,
+			expectedCalculationCount,
+			createMergePair(OBJS_LINEAR_INTERSECTING, threshold)
+		);
+	}
 	
 	private static ObjMaskProviderMergePair createMergePair( ObjMaskCollection objs, int threshold) throws CreateException {
 		
 		LogErrorReporter logger = LoggingFixture.simpleLogErrorReporter();
 		
 		ObjMaskProviderMergePair provider = new ObjMaskProviderMergePair();
+		
+		Feature<FeatureInputPairObjs> feature = new Minimum(
+			MockFeatureWithCalculationFixture.createMockFeatureWithCalculation()
+		); 
 		
 		provider.setObjs(
 			ProviderFixture.providerFor(objs)
@@ -101,7 +90,7 @@ public class ObjMaskProviderMergePairTest {
 			FeatureEvaluatorFixture.createNrg( new Constant<>(threshold), logger )
 		);
 		provider.setFeatureEvaluatorMerge(
-			FeatureEvaluatorFixture.createNrg( new MockFeature(), logger )
+			FeatureEvaluatorFixture.createNrg(feature, logger)
 		);
 		provider.setRelation(
 			new GreaterThanBean()

@@ -37,9 +37,9 @@ import org.anchoranalysis.feature.bean.list.FeatureListProviderPrependName;
 import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
 import org.anchoranalysis.image.feature.objmask.pair.FeatureDeriveFromPair;
 import org.anchoranalysis.image.feature.objmask.pair.FeatureInputPairObjs;
-import org.anchoranalysis.plugin.image.feature.bean.obj.pair.order.First;
-import org.anchoranalysis.plugin.image.feature.bean.obj.pair.order.Merged;
-import org.anchoranalysis.plugin.image.feature.bean.obj.pair.order.Second;
+import org.anchoranalysis.image.feature.objmask.pair.impl.First;
+import org.anchoranalysis.image.feature.objmask.pair.impl.Merged;
+import org.anchoranalysis.image.feature.objmask.pair.impl.Second;
 
 /**
  * Takes a list of features, and creates a new list of features, where each
