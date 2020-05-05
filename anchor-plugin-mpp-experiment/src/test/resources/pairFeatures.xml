@@ -86,7 +86,9 @@
 				<item nrgIndex="2" config-class="org.anchoranalysis.plugin.image.feature.bean.obj.single.intensity.IntensityMeanMaxSlice"/>
 			</feature>
 			<listPermuteProperty config-class="java.util.List" config-factory="list">
-				<item config-class="org.anchoranalysis.bean.permute.property.PermutePropertySequenceInteger" propertyPath="iterationsDilation" start="1" end="6" increment="1"/>
+				<item config-class="org.anchoranalysis.bean.permute.property.PermutePropertySequenceInteger" propertyPath="iterationsDilation">
+					<sequence start="1" end="6" increment="1" config-class="org.anchoranalysis.bean.sequence.SequenceInteger"/>
+				</item>
 			</listPermuteProperty>
 		</item>
 	</item>	
@@ -97,7 +99,9 @@
 				<item config-class="org.anchoranalysis.plugin.image.feature.bean.obj.single.intensity.Intensity" nrgIndex="2"/>
 			</feature>
 			<listPermuteProperty config-class="java.util.List" config-factory="list">
-				<item config-class="org.anchoranalysis.bean.permute.property.PermutePropertySequenceInteger" propertyPath="iterationsDilation" start="1" end="6" increment="1"/>
+				<item config-class="org.anchoranalysis.bean.permute.property.PermutePropertySequenceInteger" propertyPath="iterationsDilation">
+					<sequence start="1" end="6" increment="1" config-class="org.anchoranalysis.bean.sequence.SequenceInteger"/>
+				</item>
 			</listPermuteProperty>
 		</item>
 	</item>
@@ -108,8 +112,12 @@
 				<item config-class="org.anchoranalysis.plugin.image.feature.bean.obj.single.intensity.IntensityGradientMeanMagnitudeFromMultiple" nrgIndexX="0" nrgIndexY="1" nrgIndexZ="2" subtractConstant="32768"/>
 			</feature>
 			<listPermuteProperty config-class="java.util.List" config-factory="list">
-				<item config-class="org.anchoranalysis.bean.permute.property.PermutePropertySequenceInteger" propertyPath="iterationsDilation" start="1" end="6" increment="1"/>
-				<item config-class="org.anchoranalysis.bean.permute.property.PermutePropertySequenceInteger" propertyPath="iterationsErosion" start="0" end="3" increment="1"/>
+				<item config-class="org.anchoranalysis.bean.permute.property.PermutePropertySequenceInteger" propertyPath="iterationsDilation">
+					<sequence start="1" end="6" increment="1" config-class="org.anchoranalysis.bean.sequence.SequenceInteger"/>
+				</item>
+				<item config-class="org.anchoranalysis.bean.permute.property.PermutePropertySequenceInteger" propertyPath="iterationsErosion">
+					<sequence start="0" end="3" increment="1" config-class="org.anchoranalysis.bean.sequence.SequenceInteger"/>
+				</item>
 			</listPermuteProperty>
 		</item>
 	</item>
@@ -128,8 +136,12 @@
 				</item2>
 			</feature>
 			<listPermuteProperty config-class="java.util.List" config-factory="list">
-				<item config-class="org.anchoranalysis.bean.permute.property.PermutePropertySequenceInteger" propertyPath="item1.iterationsDilation" start="1" end="6" increment="1"/>
-				<item config-class="org.anchoranalysis.bean.permute.property.PermutePropertySequenceInteger" propertyPath="item1.iterationsErosion" start="0" end="3" increment="1"/>
+				<item config-class="org.anchoranalysis.bean.permute.property.PermutePropertySequenceInteger" propertyPath="item1.iterationsDilation">
+					<sequence start="1" end="6" increment="1" config-class="org.anchoranalysis.bean.sequence.SequenceInteger"/>
+				</item>
+				<item config-class="org.anchoranalysis.bean.permute.property.PermutePropertySequenceInteger" propertyPath="item1.iterationsErosion">
+					<sequence start="0" end="3" increment="1" config-class="org.anchoranalysis.bean.sequence.SequenceInteger"/>
+				</item>
 			</listPermuteProperty>
 		</item>
 	</item>
@@ -148,8 +160,12 @@
 				</item2>
 			</feature>
 			<listPermuteProperty config-class="java.util.List" config-factory="list">
-				<item config-class="org.anchoranalysis.bean.permute.property.PermutePropertySequenceInteger" propertyPath="item1.iterationsDilation" start="1" end="6" increment="1"/>
-				<item config-class="org.anchoranalysis.bean.permute.property.PermutePropertySequenceInteger" propertyPath="item1.iterationsErosion" start="0" end="3" increment="1"/>
+				<item config-class="org.anchoranalysis.bean.permute.property.PermutePropertySequenceInteger" propertyPath="item1.iterationsDilation">
+					<sequence start="1" end="6" increment="1" config-class="org.anchoranalysis.bean.sequence.SequenceInteger"/>
+				</item>
+				<item config-class="org.anchoranalysis.bean.permute.property.PermutePropertySequenceInteger" propertyPath="item1.iterationsErosion">
+					<sequence start="0" end="3" increment="1" config-class="org.anchoranalysis.bean.sequence.SequenceInteger"/>
+				</item>
 			</listPermuteProperty>
 		</item>
 	</item>
@@ -164,7 +180,9 @@
 				</item>
 			</feature>
 			<listPermuteProperty config-class="java.util.List" config-factory="list">
-				<item config-class="org.anchoranalysis.bean.permute.property.PermutePropertySequenceInteger" propertyPath="iterationsDilation" start="1" end="6" increment="1"/>
+				<item config-class="org.anchoranalysis.bean.permute.property.PermutePropertySequenceInteger" propertyPath="iterationsDilation">
+					<sequence start="1" end="6" increment="1" config-class="org.anchoranalysis.bean.sequence.SequenceInteger"/>
+				</item>
 			</listPermuteProperty>
 		</item>
 	</item>
@@ -175,7 +193,9 @@
 				<item nrgIndex="2" config-class="org.anchoranalysis.plugin.image.feature.bean.obj.single.intensity.IntensityMeanMaxSlice"/>
 			</feature>
 			<listPermuteProperty config-class="java.util.List" config-factory="list">
-				<item config-class="org.anchoranalysis.bean.permute.property.PermutePropertySequenceInteger" propertyPath="iterationsDilation" start="1" end="6" increment="1"/>
+				<item config-class="org.anchoranalysis.bean.permute.property.PermutePropertySequenceInteger" propertyPath="iterationsDilation">
+					<sequence start="1" end="6" increment="1" config-class="org.anchoranalysis.bean.sequence.SequenceInteger"/>
+				</item>
 			</listPermuteProperty>
 		</item>
 	</item>	
@@ -187,7 +207,9 @@
 				<item config-class="org.anchoranalysis.plugin.image.feature.bean.obj.single.intensity.Intensity" nrgIndex="2"/>
 			</feature>
 			<listPermuteProperty config-class="java.util.List" config-factory="list">
-				<item config-class="org.anchoranalysis.bean.permute.property.PermutePropertySequenceInteger" propertyPath="iterationsDilation" start="1" end="6" increment="1"/>
+				<item config-class="org.anchoranalysis.bean.permute.property.PermutePropertySequenceInteger" propertyPath="iterationsDilation">
+					<sequence start="1" end="6" increment="1" config-class="org.anchoranalysis.bean.sequence.SequenceInteger"/>
+				</item>
 			</listPermuteProperty>
 		</item>
 	</item>

@@ -118,7 +118,7 @@ public abstract class FeatureListProviderPermuteFirstSecondOrder extends Feature
 		NRGParamThree paramMean = new NRGParamThree();
 		paramMean.setIdLeft(paramPrefix);
 		if (appendNumber) {
-			paramMean.setIdMiddle( Integer.toString(permuteProperty.getStart()) );
+			paramMean.setIdMiddle( Integer.toString(permuteProperty.getSequence().getStart()) );
 		} else {
 			paramMean.setIdMiddle("");
 		}
