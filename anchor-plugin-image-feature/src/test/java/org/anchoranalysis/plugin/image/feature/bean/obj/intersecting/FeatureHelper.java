@@ -28,7 +28,7 @@ package org.anchoranalysis.plugin.image.feature.bean.obj.intersecting;
 
 import org.anchoranalysis.image.feature.bean.objmask.NumVoxels;
 import org.anchoranalysis.image.feature.bean.objmask.pair.FeatureObjMaskPair;
-import org.anchoranalysis.plugin.image.feature.bean.obj.pair.order.First;
+import org.anchoranalysis.image.feature.objmask.pair.impl.First;
 
 class FeatureHelper {
 

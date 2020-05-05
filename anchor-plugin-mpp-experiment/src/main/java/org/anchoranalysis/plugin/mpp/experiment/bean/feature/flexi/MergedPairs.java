@@ -158,6 +158,7 @@ public class MergedPairs extends FlexiFeatureTable<FeatureInputPairObjs> {
 			return new MergedPairsSession(
 				includeFirst,
 				includeSecond,
+				includeMerged,
 				features,
 				ignoreFeaturePrefixes.set(),
 				checkInverse,
