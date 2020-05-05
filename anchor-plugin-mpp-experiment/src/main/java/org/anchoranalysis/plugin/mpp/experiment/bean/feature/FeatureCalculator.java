@@ -73,11 +73,7 @@ class FeatureCalculator {
 			}
 			
 		} catch (FeatureCalcException e) {
-			if (suppressErrors) {
-				throw new OperationFailedException("An error occurred calculating a feature (which on suppressErrors for this to be automatically converted into a NaN)", e);
-			} else {
-				throw new OperationFailedException(e);
-			}
+			throw new OperationFailedException(e);
 		}
 	}
 }
