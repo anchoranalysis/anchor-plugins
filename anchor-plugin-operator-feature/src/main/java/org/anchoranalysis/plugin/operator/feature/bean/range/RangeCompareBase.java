@@ -1,4 +1,4 @@
-package org.anchoranalysis.plugin.operator.feature.bean.order.range;
+package org.anchoranalysis.plugin.operator.feature.bean.range;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.bean.Feature;

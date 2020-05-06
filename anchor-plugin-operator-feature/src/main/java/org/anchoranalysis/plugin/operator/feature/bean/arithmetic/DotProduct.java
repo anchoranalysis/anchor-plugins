@@ -1,4 +1,4 @@
-package ch.ethz.biol.cell.mpp.nrg.feature.operator;
+package org.anchoranalysis.plugin.operator.feature.bean.arithmetic;
 
 /*
  * #%L
@@ -38,7 +38,7 @@ import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.input.descriptor.FeatureInputDescriptor;
 import org.anchoranalysis.feature.input.descriptor.FeatureInputDescriptorUtilities;
 
-// converts a feature to a physical distance in a XY place that is isometric
+ 
 public class DotProduct<T extends FeatureInput> extends Feature<T> {
 
 	/**

@@ -1,4 +1,4 @@
-package ch.ethz.biol.cell.mpp.nrg.feature.operator;
+package org.anchoranalysis.plugin.operator.feature.bean.list;
 
 /*-
  * #%L
@@ -27,12 +27,12 @@ package ch.ethz.biol.cell.mpp.nrg.feature.operator;
  */
 
 import org.anchoranalysis.feature.bean.Feature;
+import org.anchoranalysis.feature.bean.operator.FeatureListElem;
 import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.feature.input.FeatureInputParams;
-import org.anchoranalysis.feature.input.descriptor.FeatureInputDescriptor;
+import org.anchoranalysis.feature.input.FeatureInput;
 
-public abstract class FeatureWithImageParams extends Feature<FeatureInputParams> {
+public class Maximum<T extends FeatureInput> extends FeatureListElem<T> {
 
 	/**
 	 * 
@@ -40,16 +40,17 @@ public abstract class FeatureWithImageParams extends Feature<FeatureInputParams>
 	private static final long serialVersionUID = 1L;
 
 	@Override
-	public double calc( SessionInput<FeatureInputParams> input ) throws FeatureCalcException {
-		return calc( input.get() );
-	}
-	
-	// Calculates an NRG element for a set of pixels
-	public abstract double calc( FeatureInputParams params ) throws FeatureCalcException;
-
-	@Override
-	public FeatureInputDescriptor paramType()
-			throws FeatureCalcException {
-		return FeatureWithImageParamsDescriptor.instance;
+	public double calc(SessionInput<T> input) throws FeatureCalcException {
+		
+		ListChecker.checkNonEmpty(getList());
+		
+		double maxValue = Double.NaN;
+		for( Feature<T> f : getList()) {
+			double val = input.calc( f );
+			if (Double.isNaN(maxValue) || val > maxValue) {
+				maxValue = val;
+			}
+		}
+		return maxValue;
 	}
 }

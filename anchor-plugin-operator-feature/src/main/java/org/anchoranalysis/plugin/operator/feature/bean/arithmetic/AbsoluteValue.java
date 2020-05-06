@@ -1,4 +1,4 @@
-package ch.ethz.biol.cell.mpp.nrg.feature.operator;
+package org.anchoranalysis.plugin.operator.feature.bean.arithmetic;
 
 import org.anchoranalysis.feature.bean.operator.FeatureGenericSingleElem;
 

@@ -1,4 +1,6 @@
-package ch.ethz.biol.cell.mpp.nrg.feature.operator;
+package org.anchoranalysis.plugin.operator.feature.bean.score;
+
+
 
 /*
  * #%L
@@ -27,59 +29,76 @@ package ch.ethz.biol.cell.mpp.nrg.feature.operator;
  */
 
 
-import org.anchoranalysis.bean.annotation.AllowEmpty;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.unit.SpatialConversionUtilities;
+import org.anchoranalysis.core.cache.Operation;
+import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.operator.FeatureGenericSingleElem;
 import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.input.FeatureInput;
 
-// 
-public class ConvertUnits<T extends FeatureInput> extends FeatureGenericSingleElem<T> {
+
+/**
+ * Calculates a score based upon the statistical mean and std-deviation
+ * 
+ * @author Owen Feehan
+ *
+ * @param <T> feature input-type
+ */
+public abstract class FeatureStatScore<T extends FeatureInput> extends FeatureGenericSingleElem<T> {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	
+
 	// START BEAN PROPERTIES
-	@BeanField @AllowEmpty
-	private String unitTypeFrom = "";
+	@BeanField
+	private Feature<T> itemMean = null;
 	
-	@BeanField @AllowEmpty
-	private String unitTypeTo = "";
+	@BeanField
+	private Feature<T> itemStdDev = null;
 	// END BEAN PROPERTIES
-
-	public ConvertUnits() {
+	
+	@Override
+	public double calc( SessionInput<T> input ) throws FeatureCalcException {
 		
+		return deriveScore(
+			input.calc( getItem() ),
+			input.calc( itemMean ),
+			() -> input.calc( itemStdDev )
+		);
+	}
+	
+	/**
+	 * Derive scores given the value, mean and standard-deviation
+	 * 
+	 * @param featureValue the feature-value calculated from getItem()
+	 * @param mean the mean
+	 * @param stdDev a means to get the std-deviation (if needed)
+	 * @return
+	 * @throws FeatureCalcException
+	 */
+	protected abstract double deriveScore(double featureValue, double mean, Operation<Double,FeatureCalcException> stdDev) throws FeatureCalcException;
+	
+	public Feature<T> getItemMean() {
+		return itemMean;
 	}
 
-	public String getUnitTypeTo() {
-		return unitTypeTo;
+	public void setItemMean(Feature<T> itemMean) {
+		this.itemMean = itemMean;
 	}
 
-	public void setUnitTypeTo(String unitTypeTo) {
-		this.unitTypeTo = unitTypeTo;
+	public Feature<T> getItemStdDev() {
+		return itemStdDev;
 	}
 
-	public String getUnitTypeFrom() {
-		return unitTypeFrom;
-	}
-
-	public void setUnitTypeFrom(String unitTypeFrom) {
-		this.unitTypeFrom = unitTypeFrom;
+	public void setItemStdDev(Feature<T> itemStdDev) {
+		this.itemStdDev = itemStdDev;
 	}
 
 	@Override
-	protected double calc(SessionInput<T> input) throws FeatureCalcException {
-		
-		double value = input.calc( getItem() );
-		
-		SpatialConversionUtilities.UnitSuffix typeFrom = SpatialConversionUtilities.suffixFromMeterString(unitTypeFrom);
-		SpatialConversionUtilities.UnitSuffix typeTo = SpatialConversionUtilities.suffixFromMeterString(unitTypeTo);
-		
-		double valueBaseUnits = SpatialConversionUtilities.convertFromUnits( value, typeFrom );
-		return SpatialConversionUtilities.convertToUnits( valueBaseUnits, typeTo );
+	public String getParamDscr() {
+		return String.format("%s,%s,%s", getItem().getDscrLong(), getItemMean().getDscrLong(), getItemStdDev().getDscrLong() );
 	}
 }

@@ -32,7 +32,7 @@ package ch.ethz.biol.cell.sgmn.graphcuts.nrgdefinition.pixelscore;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.params.KeyValueParams;
-import ch.ethz.biol.cell.mpp.nrg.feature.operator.GaussianScore;
+import org.anchoranalysis.plugin.operator.feature.score.GaussianScoreCalculator;
 
 public class PixelScoreGaussianKeyValueParams extends PixelScoreParamsBase {
 
@@ -69,7 +69,7 @@ public class PixelScoreGaussianKeyValueParams extends PixelScoreParamsBase {
 			return 1.0;
 		}
 		
-		double scoreBeforeShift = GaussianScore.calc(mean, stdDev, pixelVal, false, false);
+		double scoreBeforeShift = GaussianScoreCalculator.calc(mean, stdDev, pixelVal, false, false);
 		
 		double scoreShifted = (scoreBeforeShift - shift) / (1-shift);
 		

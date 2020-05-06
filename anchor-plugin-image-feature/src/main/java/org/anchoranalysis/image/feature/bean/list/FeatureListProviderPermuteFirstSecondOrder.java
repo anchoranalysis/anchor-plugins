@@ -41,10 +41,10 @@ import org.anchoranalysis.feature.bean.list.FeatureListProvider;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.input.FeatureInputNRGStack;
 import org.anchoranalysis.plugin.operator.feature.bean.arithmetic.MultiplyByConstant;
-import org.anchoranalysis.plugin.operator.feature.bean.order.range.IfOutsideRange;
+import org.anchoranalysis.plugin.operator.feature.bean.range.IfOutsideRange;
+import org.anchoranalysis.plugin.operator.feature.bean.score.FeatureStatScore;
 
 import ch.ethz.biol.cell.mpp.nrg.feature.objmask.NRGParamThree;
-import ch.ethz.biol.cell.mpp.nrg.feature.operator.FeatureFirstSecondOrder;
 
 public abstract class FeatureListProviderPermuteFirstSecondOrder extends FeatureListProvider<FeatureInputNRGStack> {
 
@@ -80,7 +80,7 @@ public abstract class FeatureListProviderPermuteFirstSecondOrder extends Feature
 	
 	@FunctionalInterface
 	public static interface CreateFirstSecondOrder<T extends FeatureInput> {
-		FeatureFirstSecondOrder<T> create();
+		FeatureStatScore<T> create();
 	}
 
 	public FeatureListProviderPermuteFirstSecondOrder(CreateFirstSecondOrder<FeatureInputNRGStack> factory, double minRange, double maxRange ) {
@@ -127,7 +127,7 @@ public abstract class FeatureListProviderPermuteFirstSecondOrder extends Feature
 	}
 		
 	private Feature<FeatureInputNRGStack> wrapInScore( Feature<FeatureInputNRGStack> feature ) {
-		FeatureFirstSecondOrder<FeatureInputNRGStack> featureScore = factory.create();
+		FeatureStatScore<FeatureInputNRGStack> featureScore = factory.create();
 		featureScore.setItem(feature);
 		featureScore.setItemMean(
 			createNRGParam(permuteProperty,paramPrefix,"_fitted_normal_mean",paramPrefixAppendNumber)

@@ -1,10 +1,12 @@
-package ch.ethz.biol.cell.mpp.nrg.feature.operator;
+package org.anchoranalysis.plugin.operator.feature.bean.range;
 
-/*-
+import org.anchoranalysis.feature.bean.Feature;
+
+/*
  * #%L
- * anchor-plugin-operator-feature
+ * anchor-feature
  * %%
- * Copyright (C) 2010 - 2020 Owen Feehan
+ * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -26,20 +28,32 @@ package ch.ethz.biol.cell.mpp.nrg.feature.operator;
  * #L%
  */
 
-import org.anchoranalysis.feature.input.descriptor.FeatureInputDescriptor;
 
-public class FeatureWithImageParamsDescriptor extends FeatureInputDescriptor {
+import org.anchoranalysis.feature.cache.SessionInput;
+import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.feature.input.FeatureInput;
 
-	public static final FeatureWithImageParamsDescriptor instance = new FeatureWithImageParamsDescriptor();
+/**
+ * Clips a value if it lies outside the range - instead returning particular constants if below or above an acceptable range
+ * 
+ * @author Owen Feehan
+ *
+ * @param <T>
+ */
+public class IfOutsideRange<T extends FeatureInput> extends RangeCompareFromScalars<T> {
 	
-	private FeatureWithImageParamsDescriptor() {
-		
-	}
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -8939465493485894918L;
 	
 	@Override
-	public boolean isCompatibleWithEverything() {
-		return false;
+	protected Feature<T> featureToCalcInputVal() {
+		return getItem();
 	}
 
-
+	@Override
+	protected double withinRangeValue(double valWithinRange, SessionInput<T> input) throws FeatureCalcException {
+		return valWithinRange;
+	}
 }
