@@ -85,8 +85,8 @@ public class CfgNRGSerializerChangeReporter extends ReporterOptimizationStep<Cfg
 	}
 	
 	// We generate an OutputName class from the outputName string
-	private  IndexableOutputNameStyle generateOutputNameStyle() {
-		return new IntegerSuffixOutputNameStyle(outputName,"_%010d");
+	private IndexableOutputNameStyle generateOutputNameStyle() {
+		return new IntegerSuffixOutputNameStyle(outputName,10);
 	}
 	
 	@Override
