@@ -31,8 +31,7 @@ import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputSingleMemo;
 
 
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.bean.annotation.NonNegative;
-import org.anchoranalysis.bean.shared.relation.RelationBean;
+import org.anchoranalysis.bean.shared.relation.threshold.RelationToThreshold;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.voxel.statistics.VoxelStatistics;
@@ -47,14 +46,11 @@ public class RatioThreshold extends FeatureSingleMemo {
 	private static final long serialVersionUID = 1L;
 
 	// START BEAN PROPERTIES
-	@BeanField @NonNegative
-	private double threshold = -1;
+	@BeanField
+	private RelationToThreshold threshold;
 	
 	@BeanField
 	private PixelStatisticsFromMark pixelList;
-	
-	@BeanField
-	private RelationBean relationToThreshold;
 	// END BEAN PROPERTIES
 	
 	@Override
@@ -77,24 +73,13 @@ public class RatioThreshold extends FeatureSingleMemo {
 		
 		assert( stats.size() > 0 );
 		
-		long count = stats.countThreshold(relationToThreshold.create(), threshold);
-		
+		long count = stats.countThreshold(threshold);
 		return (((double) count) / stats.size());
 	}
 	
 	@Override
 	public String getParamDscr() {
-		return String.format("%f", threshold);
-	}
-
-
-	public double getThreshold() {
-		return threshold;
-	}
-
-
-	public void setThreshold(double threshold) {
-		this.threshold = threshold;
+		return threshold.toString();
 	}
 
 	public PixelStatisticsFromMark getPixelList() {
@@ -105,11 +90,11 @@ public class RatioThreshold extends FeatureSingleMemo {
 		this.pixelList = pixelList;
 	}
 
-	public RelationBean getRelationToThreshold() {
-		return relationToThreshold;
+	public RelationToThreshold getThreshold() {
+		return threshold;
 	}
 
-	public void setRelationToThreshold(RelationBean relationToThreshold) {
-		this.relationToThreshold = relationToThreshold;
+	public void setThreshold(RelationToThreshold threshold) {
+		this.threshold = threshold;
 	}
 }

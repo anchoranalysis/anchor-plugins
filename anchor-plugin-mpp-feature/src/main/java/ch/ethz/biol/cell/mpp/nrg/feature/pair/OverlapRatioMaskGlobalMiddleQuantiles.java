@@ -33,7 +33,7 @@ import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.shared.relation.EqualToBean;
 import org.anchoranalysis.bean.shared.relation.RelationBean;
-import org.anchoranalysis.core.relation.RelationToValue;
+import org.anchoranalysis.bean.shared.relation.threshold.RelationToConstant;
 import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.voxel.statistics.VoxelStatistics;
@@ -72,7 +72,7 @@ public class OverlapRatioMaskGlobalMiddleQuantiles extends OverlapMaskQuantiles 
 		PxlMarkMemo obj1,
 		PxlMarkMemo obj2,
 		int regionID,
-		RelationToValue relationToThreshold,
+		RelationBean relation,
 		int nrgIndex,
 		int maskValue
 	) throws FeatureCalcException {
@@ -80,8 +80,10 @@ public class OverlapRatioMaskGlobalMiddleQuantiles extends OverlapMaskQuantiles 
 		VoxelStatistics pxlStats1 =  obj1.doOperation().statisticsForAllSlices(nrgIndex, regionID);
 		VoxelStatistics pxlStats2 =  obj2.doOperation().statisticsForAllSlices(nrgIndex, regionID);
 		
-		long size1 = pxlStats1.countThreshold(relationToThreshold, maskValue);
-		long size2 = pxlStats2.countThreshold(relationToThreshold, maskValue);
+		RelationToConstant relationToThreshold = new RelationToConstant(relation, maskValue);
+		
+		long size1 = pxlStats1.countThreshold(relationToThreshold);
+		long size2 = pxlStats2.countThreshold(relationToThreshold);
 		return Math.min( size1, size2 );
 	}
 	
@@ -89,7 +91,7 @@ public class OverlapRatioMaskGlobalMiddleQuantiles extends OverlapMaskQuantiles 
 		PxlMarkMemo obj1,
 		PxlMarkMemo obj2,
 		int regionID,
-		RelationToValue relationToThreshold,
+		RelationBean relation,
 		int nrgIndex,
 		int maskValue
 	) throws FeatureCalcException {
@@ -97,8 +99,10 @@ public class OverlapRatioMaskGlobalMiddleQuantiles extends OverlapMaskQuantiles 
 		VoxelStatistics pxlStats1 =  obj1.doOperation().statisticsForAllSlices(nrgIndex, regionID);
 		VoxelStatistics pxlStats2 =  obj2.doOperation().statisticsForAllSlices(nrgIndex, regionID);
 		
-		long size1 = pxlStats1.countThreshold(relationToThreshold, maskValue);
-		long size2 = pxlStats2.countThreshold(relationToThreshold, maskValue);
+		RelationToConstant relationToThreshold = new RelationToConstant(relation, maskValue);
+		
+		long size1 = pxlStats1.countThreshold(relationToThreshold);
+		long size2 = pxlStats2.countThreshold(relationToThreshold);
 		return Math.max( size1, size2 );
 	}
 	
@@ -108,9 +112,7 @@ public class OverlapRatioMaskGlobalMiddleQuantiles extends OverlapMaskQuantiles 
 			return 0.0;
 		}
 		
-		RelationToValue relation = relationToThreshold.create();
-		
-		double volume = useMax ? calcMaxVolume( obj1, obj2, regionID, relation ) : calcMinVolume( obj1, obj2, regionID, relation );
+		double volume = useMax ? calcMaxVolume( obj1, obj2, regionID, relationToThreshold ) : calcMinVolume( obj1, obj2, regionID, relationToThreshold );
 		return overlap / volume;
 	}
 

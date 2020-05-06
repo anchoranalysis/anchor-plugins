@@ -31,7 +31,8 @@ import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputSingleMemo;
 
 
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.bean.shared.relation.RelationBean;
+import org.anchoranalysis.bean.annotation.OptionalBean;
+import org.anchoranalysis.bean.shared.relation.threshold.RelationToThreshold;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.relation.RelationToValue;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
@@ -48,14 +49,11 @@ public class NumberPixelsRelToThreshold extends FeatureSingleMemo {
 	private static final long serialVersionUID = 1L;
 	
 	// START BEAN PROPERTIES
-	@BeanField
-	private double threshold = -1;
+	@BeanField @OptionalBean
+	private RelationToThreshold threshold;
 	
 	@BeanField
 	private PixelStatisticsFromMark pixelList;
-	
-	@BeanField
-	private RelationBean relationToThreshold;
 	// END BEAN PROPERTIES
 		
 	public static int countFromPxlList( VoxelIntensityList list, RelationToValue relationToThreshold, double threshold ) {
@@ -85,13 +83,11 @@ public class NumberPixelsRelToThreshold extends FeatureSingleMemo {
 			}
 			//assert( list.size() > 0 );
 			
-			if (relationToThreshold==null) {
+			if (threshold==null) {
 				return stats.size();
 			}
 			
-			RelationToValue relation = relationToThreshold.create();
-			
-			return stats.countThreshold(relation, threshold);
+			return stats.countThreshold(threshold);
 
 		} catch (CreateException e) {
 			throw new FeatureCalcException(e);
@@ -100,17 +96,7 @@ public class NumberPixelsRelToThreshold extends FeatureSingleMemo {
 	
 	@Override
 	public String getParamDscr() {
-		return String.format("%f,pixelList=%s,relationToThreshold=%s", threshold, pixelList.toString(), relationToThreshold.toString() );
-	}
-
-
-	public double getThreshold() {
-		return threshold;
-	}
-
-
-	public void setThreshold(double threshold) {
-		this.threshold = threshold;
+		return String.format("%f,pixelList=%s,threshold=%s", threshold, pixelList.toString(), threshold.toString() );
 	}
 
 	public PixelStatisticsFromMark getPixelList() {
@@ -121,11 +107,11 @@ public class NumberPixelsRelToThreshold extends FeatureSingleMemo {
 		this.pixelList = pixelList;
 	}
 
-	public RelationBean getRelationToThreshold() {
-		return relationToThreshold;
+	public RelationToThreshold getThreshold() {
+		return threshold;
 	}
 
-	public void setRelationToThreshold(RelationBean relationToThreshold) {
-		this.relationToThreshold = relationToThreshold;
+	public void setThreshold(RelationToThreshold threshold) {
+		this.threshold = threshold;
 	}
 }

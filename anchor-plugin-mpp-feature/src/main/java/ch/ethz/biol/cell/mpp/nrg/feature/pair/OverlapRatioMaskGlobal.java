@@ -33,7 +33,6 @@ import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.shared.relation.EqualToBean;
 import org.anchoranalysis.bean.shared.relation.RelationBean;
-import org.anchoranalysis.core.relation.RelationToValue;
 import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 
@@ -82,9 +81,7 @@ public class OverlapRatioMaskGlobal extends OverlapMaskSingleRegion {
 			return 0.0;
 		}
 		
-		RelationToValue relation = relationToThreshold.create();
-		
-		double volume = useMax ? calcMaxVolume( obj1, obj2, regionID, relation ) : calcMinVolume( obj1, obj2, regionID, relation );
+		double volume = useMax ? calcMaxVolume( obj1, obj2, regionID, relationToThreshold ) : calcMinVolume( obj1, obj2, regionID, relationToThreshold );
 		return overlap / volume;
 	}
 

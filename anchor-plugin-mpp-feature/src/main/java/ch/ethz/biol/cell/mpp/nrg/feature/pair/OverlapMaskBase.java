@@ -32,7 +32,8 @@ import org.anchoranalysis.anchor.mpp.feature.bean.nrg.elem.FeaturePairMemo;
 import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputPairMemo;
 import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.relation.RelationToValue;
+import org.anchoranalysis.bean.shared.relation.RelationBean;
+import org.anchoranalysis.bean.shared.relation.threshold.RelationToConstant;
 import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.voxel.statistics.VoxelStatistics;
@@ -64,7 +65,7 @@ public abstract class OverlapMaskBase extends FeaturePairMemo {
 		PxlMarkMemo obj1,
 		PxlMarkMemo obj2,
 		int regionID,
-		RelationToValue relationToThreshold
+		RelationBean relationToThreshold
 	) throws FeatureCalcException {
 		return calcVolumeStat(
 			obj1,
@@ -79,7 +80,7 @@ public abstract class OverlapMaskBase extends FeaturePairMemo {
 		PxlMarkMemo obj1,
 		PxlMarkMemo obj2,
 		int regionID,
-		RelationToValue relationToThreshold
+		RelationBean relationToThreshold
 	) throws FeatureCalcException {
 		
 		return calcVolumeStat(
@@ -95,7 +96,7 @@ public abstract class OverlapMaskBase extends FeaturePairMemo {
 		PxlMarkMemo obj1,
 		PxlMarkMemo obj2,
 		int regionID,
-		RelationToValue relationToThreshold,
+		RelationBean relationToThreshold,
 		BiFunction<Long,Long,Long> statFunc
 	) throws FeatureCalcException {
 		
@@ -104,9 +105,14 @@ public abstract class OverlapMaskBase extends FeaturePairMemo {
 		return statFunc.apply(size1, size2);
 	}
 	
-	private long sizeForObj( PxlMarkMemo obj, int regionID, RelationToValue relationToThreshold) {
+	private long sizeForObj( PxlMarkMemo obj, int regionID, RelationBean relationToThreshold) {
 		VoxelStatistics pxlStats =  obj.doOperation().statisticsForAllSlices(nrgIndex, regionID);
-		return pxlStats.countThreshold(relationToThreshold, maskValue);
+		return pxlStats.countThreshold(
+			new RelationToConstant(
+				relationToThreshold,
+				maskValue
+			)
+		);
 	}
 	
 	public int getNrgIndex() {

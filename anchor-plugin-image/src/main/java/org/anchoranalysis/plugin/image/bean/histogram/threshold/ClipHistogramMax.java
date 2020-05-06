@@ -28,9 +28,9 @@ package org.anchoranalysis.plugin.image.bean.histogram.threshold;
 
 
 import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.bean.shared.relation.GreaterThanBean;
+import org.anchoranalysis.bean.shared.relation.threshold.RelationToConstant;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.relation.GreaterThan;
-import org.anchoranalysis.core.relation.RelationToValue;
 import org.anchoranalysis.image.bean.threshold.CalculateLevel;
 import org.anchoranalysis.image.histogram.Histogram;
 import org.anchoranalysis.image.histogram.HistogramArray;
@@ -59,12 +59,16 @@ public class ClipHistogramMax extends CalculateLevel {
 	private int max;
 	// END BEAN
 
-	private static RelationToValue relation = new GreaterThan();
 	private static Histogram createClipped( Histogram histIn, int maxVal ) {
 		
 		assert( maxVal<= histIn.getMaxBin() );
 		
-		long numAbove = histIn.countThreshold(relation, maxVal);
+		long numAbove = histIn.countThreshold(
+			new RelationToConstant(
+				new GreaterThanBean(),
+				maxVal
+			)
+		);
 		
 		Histogram out = new HistogramArray(histIn.getMaxBin());
 		for( int i=histIn.getMinBin(); i<=maxVal; i++ ) {
