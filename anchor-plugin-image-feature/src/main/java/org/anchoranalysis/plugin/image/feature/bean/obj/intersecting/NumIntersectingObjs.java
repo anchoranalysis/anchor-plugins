@@ -1,6 +1,7 @@
 package org.anchoranalysis.plugin.image.feature.bean.obj.intersecting;
 
-import org.anchoranalysis.feature.cache.CacheableParams;
+import org.anchoranalysis.feature.cache.SessionInput;
+import org.anchoranalysis.feature.cache.calculation.ResolvedCalculation;
 
 /*-
  * #%L
@@ -29,7 +30,7 @@ import org.anchoranalysis.feature.cache.CacheableParams;
  */
 
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.image.feature.objmask.FeatureObjMaskParams;
+import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
 import org.anchoranalysis.image.objmask.ObjMaskCollection;
 
 public class NumIntersectingObjs extends FeatureIntersectingObjs {
@@ -43,9 +44,9 @@ public class NumIntersectingObjs extends FeatureIntersectingObjs {
 	// END BEAN PROPERTIES
 
 	@Override
-	protected double valueFor(CacheableParams<FeatureObjMaskParams> params, ObjMaskCollection intersecting)
+	protected double valueFor(SessionInput<FeatureInputSingleObj> params, ResolvedCalculation<ObjMaskCollection, FeatureInputSingleObj> intersecting)
 			throws FeatureCalcException {
-		return intersecting.size();
+		return params.calc(intersecting).size();
 	}
 
 }

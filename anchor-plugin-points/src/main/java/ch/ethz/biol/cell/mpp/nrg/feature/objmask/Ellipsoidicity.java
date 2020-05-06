@@ -29,56 +29,23 @@ import org.anchoranalysis.anchor.mpp.mark.conic.MarkEllipsoid;
  */
 
 
-import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.feature.cache.CacheableParams;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.image.feature.bean.objmask.FeatureObjMask;
-import org.anchoranalysis.image.feature.objmask.FeatureObjMaskParams;
-import org.anchoranalysis.image.objmask.ObjMask;
-import org.anchoranalysis.plugin.points.calculate.ellipsoid.CalculateEllipsoidLeastSquares;
+import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
 
-public class Ellipsoidicity extends FeatureObjMask {
+public class Ellipsoidicity extends EllipsoidBase {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 
-	// START BEAN PROPERTIES
-	@BeanField
-	private boolean suppressZCovariance = false;		// Supresses covariance in the z-direction.
-	// END BEAN PROPERTIES
-	
 	@Override
-	public double calc(CacheableParams<FeatureObjMaskParams> paramsCacheable) throws FeatureCalcException {
+	protected double calc(FeatureInputSingleObj input, MarkEllipsoid me) throws FeatureCalcException {
 		
-		FeatureObjMaskParams params = paramsCacheable.getParams();
-		
-		// Max intensity projection of the input mask
-		ObjMask om = params.getObjMask();
-		
-		// If we have these few pixels, assume we are perfectly ellipsoid
-		if (om.numPixelsLessThan(12)) {
-			return 1.0;
-		}
-		
-		MarkEllipsoid me = CalculateEllipsoidLeastSquares.createFromCache(
-			paramsCacheable,
-			suppressZCovariance
-		);
-				
 		return EllipticityCalculatorHelper.calc(
-			om,
+			input.getObjMask(),
 			me,
-			params.getNrgStack().getDimensions()
+			input.getDimensionsRequired()
 		);
-	}
-
-	public boolean isSuppressZCovariance() {
-		return suppressZCovariance;
-	}
-
-	public void setSuppressZCovariance(boolean suppressZCovariance) {
-		this.suppressZCovariance = suppressZCovariance;
 	}
 }

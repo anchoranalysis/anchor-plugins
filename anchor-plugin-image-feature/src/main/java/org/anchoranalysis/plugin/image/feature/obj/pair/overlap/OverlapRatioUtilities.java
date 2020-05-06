@@ -28,7 +28,7 @@ package org.anchoranalysis.plugin.image.feature.obj.pair.overlap;
 
 import java.util.function.Supplier;
 
-import org.anchoranalysis.image.feature.objmask.pair.FeatureObjMaskPairParams;
+import org.anchoranalysis.image.feature.objmask.pair.FeatureInputPairObjs;
 
 /**
  * Calculates overlap-ratios or the denominator used for that ratio
@@ -38,7 +38,7 @@ import org.anchoranalysis.image.feature.objmask.pair.FeatureObjMaskPairParams;
 public class OverlapRatioUtilities {
 
 	/** Calculates the overlap of two objects relative to the maximum-volume denominator */
-	public static double overlapRatioToMaxVolume(FeatureObjMaskPairParams params) {
+	public static double overlapRatioToMaxVolume(FeatureInputPairObjs params) {
 		return overlapRatioTo(
 			params,
 			() -> OverlapRatioUtilities.denominatorMaxVolume(params)
@@ -47,11 +47,11 @@ public class OverlapRatioUtilities {
 	
 	/** Calculates the overlap of two objects relative to a denominator expressed as a function */
 	public static double overlapRatioTo(
-		FeatureObjMaskPairParams params,
+		FeatureInputPairObjs params,
 		Supplier<Integer> denominatorFunc
 	) {
-		int intersectingPixels = params.getObjMask1().countIntersectingPixels(
-			params.getObjMask2()
+		int intersectingPixels = params.getFirst().countIntersectingPixels(
+			params.getSecond()
 		);
 		
 		if (intersectingPixels==0) {
@@ -62,10 +62,10 @@ public class OverlapRatioUtilities {
 	}
 	
 	/** A denominator that is the maximum-volume of the two objects */
-	public static int denominatorMaxVolume(FeatureObjMaskPairParams params) {
+	public static int denominatorMaxVolume(FeatureInputPairObjs params) {
 		return Math.max(
-			params.getObjMask1().numPixels(),
-			params.getObjMask2().numPixels()
+			params.getFirst().numPixels(),
+			params.getSecond().numPixels()
 		);
 	}
 }

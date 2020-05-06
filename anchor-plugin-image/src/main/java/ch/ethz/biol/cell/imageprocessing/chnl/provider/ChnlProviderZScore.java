@@ -31,6 +31,7 @@ import java.nio.ByteBuffer;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
+import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.bean.provider.ChnlProvider;
 import org.anchoranalysis.image.bean.provider.HistogramProvider;
 import org.anchoranalysis.image.chnl.Chnl;
@@ -70,12 +71,30 @@ public class ChnlProviderZScore extends ChnlProvider {
 		Histogram hist = histogramProvider.create();
 		
 		VoxelBox<ByteBuffer> out = chnl.getVoxelBox().asByteOrCreateEmpty(alwaysDuplicate);
+
+		try {
+			transformBufferToZScore(
+				hist.mean(),
+				hist.stdDev(),
+				chnl,
+				out
+			);
+		} catch (OperationFailedException e) {
+			throw new CreateException("An occurred calculating the mean or std-dev of a channel's histogram");
+		}
+		
+		return ChnlFactory.instance().create(out, chnl.getDimensions().getRes());
+	}
+	
+	private void transformBufferToZScore(
+		double histMean,
+		double histStdDev,
+		Chnl chnl,
+		VoxelBox<ByteBuffer> out
+	) {
 		
 		// We loop through each item
 		Extent e = chnl.getDimensions().getExtnt();
-		
-		double histMean = hist.mean();
-		double histStdDev = hist.stdDev();
 		
 		for( int z=0; z<e.getZ(); z++ ) {
 			
@@ -102,9 +121,6 @@ public class ChnlProviderZScore extends ChnlProvider {
 				vbOut.putInt(offset, valOut);
 			}
 		}
-		
-		
-		return ChnlFactory.instance().create(out, chnl.getDimensions().getRes());
 	}
 	
 	public ChnlProvider getChnlProvider() {

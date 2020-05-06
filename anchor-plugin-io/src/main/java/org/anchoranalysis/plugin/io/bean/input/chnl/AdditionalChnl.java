@@ -29,31 +29,25 @@ import java.nio.file.Path;
  */
 
 
-import org.anchoranalysis.core.cache.ExecuteException;
 import org.anchoranalysis.core.cache.Operation;
-import org.anchoranalysis.core.index.GetOperationFailedException;
 import org.anchoranalysis.image.io.bean.chnl.map.ImgChnlMapEntry;
 import org.anchoranalysis.image.io.chnl.map.ImgChnlMap;
+import org.anchoranalysis.io.error.AnchorIOException;
 
 class AdditionalChnl {
 	private String chnlName;
 	private int chnlIndex;
-	private Operation<Path> filePath;
+	private Operation<Path,AnchorIOException> filePath;
 	
-	public AdditionalChnl(String chnlName, int chnlIndex, Operation<Path> filePath) {
+	public AdditionalChnl(String chnlName, int chnlIndex, Operation<Path,AnchorIOException> filePath) {
 		super();
 		this.chnlName = chnlName;
 		this.chnlIndex = chnlIndex;
 		this.filePath = filePath;
 	}
 
-
-	public Path getFilePath() throws GetOperationFailedException {
-		try {
-			return filePath.doOperation();
-		} catch (ExecuteException e) {
-			throw new GetOperationFailedException(e);
-		}
+	public Path getFilePath() throws AnchorIOException {
+		return filePath.doOperation();
 	}
 	
 	public ImgChnlMap createChnlMap() {
@@ -61,7 +55,6 @@ class AdditionalChnl {
 		map.add( new ImgChnlMapEntry(chnlName, chnlIndex) );
 		return map;
 	}
-
 
 	public String getChnlName() {
 		return chnlName;

@@ -32,7 +32,7 @@ import java.util.List;
 import org.anchoranalysis.anchor.mpp.bean.cfg.CfgGen;
 import org.anchoranalysis.anchor.mpp.bean.proposer.MarkProposer;
 import org.anchoranalysis.anchor.mpp.feature.mark.ListUpdatableMarkSetCollection;
-import org.anchoranalysis.anchor.mpp.feature.mark.PxlMarkMemoList;
+import org.anchoranalysis.anchor.mpp.feature.mark.MemoList;
 import org.anchoranalysis.anchor.mpp.feature.nrg.cfg.CfgNRGPixelized;
 import org.anchoranalysis.anchor.mpp.mark.GlobalRegionIdentifiers;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
@@ -41,7 +41,7 @@ import org.anchoranalysis.anchor.mpp.proposer.ProposalAbnormalFailureException;
 import org.anchoranalysis.anchor.mpp.proposer.ProposerContext;
 import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.bean.annotation.Optional;
+import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.mpp.sgmn.bean.kernel.KernelPosNeg;
@@ -63,7 +63,7 @@ public class KernelBirthAndKill extends KernelPosNeg<CfgNRGPixelized> {
 	private MarkProposer markProposer = null;
 	
 	// Optional proposal for doing an additional birth
-	@BeanField @Optional
+	@BeanField @OptionalBean
 	private MarkProposer markProposerAdditionalBirth = null;
 	
 	@BeanField
@@ -176,7 +176,7 @@ public class KernelBirthAndKill extends KernelPosNeg<CfgNRGPixelized> {
 	public void updateAfterAccpt(
 			ListUpdatableMarkSetCollection updatableMarkSetCollection, CfgNRGPixelized exst, CfgNRGPixelized accptd) throws UpdateMarkSetException {
 		
-		PxlMarkMemoList memoList = exst.createDuplicatePxlMarkMemoList(); 
+		MemoList memoList = exst.createDuplicatePxlMarkMemoList(); 
 		
 		addNewMark( this.markNew, updatableMarkSetCollection, exst, accptd, memoList );
 		
@@ -187,14 +187,14 @@ public class KernelBirthAndKill extends KernelPosNeg<CfgNRGPixelized> {
 		}
 	}
 	
-	private static void addNewMark( Mark mark, ListUpdatableMarkSetCollection updatableMarkSetCollection, CfgNRGPixelized exst, CfgNRGPixelized accptd, PxlMarkMemoList memoList ) throws UpdateMarkSetException {
+	private static void addNewMark( Mark mark, ListUpdatableMarkSetCollection updatableMarkSetCollection, CfgNRGPixelized exst, CfgNRGPixelized accptd, MemoList memoList ) throws UpdateMarkSetException {
 		PxlMarkMemo memo = accptd.getMemoForMark( mark );
 		
 		exst.addToUpdatablePairList( updatableMarkSetCollection, memo );
 		memoList.add(memo);		
 	}
 		
-	private static void removeMarks( List<PxlMarkMemo> marks, ListUpdatableMarkSetCollection updatableMarkSetCollection, PxlMarkMemoList memoList ) throws UpdateMarkSetException {
+	private static void removeMarks( List<PxlMarkMemo> marks, ListUpdatableMarkSetCollection updatableMarkSetCollection, MemoList memoList ) throws UpdateMarkSetException {
 		for( PxlMarkMemo memoRmv : marks) {
 			updatableMarkSetCollection.rmv(memoList, memoRmv);
 			memoList.remove(memoRmv);
@@ -203,7 +203,7 @@ public class KernelBirthAndKill extends KernelPosNeg<CfgNRGPixelized> {
 		
 	}
 	
-	private static void addAdditionalMark(Mark markAdditional, ListUpdatableMarkSetCollection updatableMarkSetCollection, PxlMarkMemoList memoList, CfgNRGPixelized accptd) throws UpdateMarkSetException {
+	private static void addAdditionalMark(Mark markAdditional, ListUpdatableMarkSetCollection updatableMarkSetCollection, MemoList memoList, CfgNRGPixelized accptd) throws UpdateMarkSetException {
 		PxlMarkMemo memoNewAdditional = accptd.getMemoForMark( markAdditional );
 		updatableMarkSetCollection.add(memoList, memoNewAdditional );
 		memoList.add(memoNewAdditional);		

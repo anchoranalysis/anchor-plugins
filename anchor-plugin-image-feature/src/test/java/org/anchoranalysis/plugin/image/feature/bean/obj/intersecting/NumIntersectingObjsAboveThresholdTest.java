@@ -51,8 +51,8 @@ public class NumIntersectingObjsAboveThresholdTest {
 			true,
 			EXPECTED_REJECTED_UNDER_THRESHOLD,
 			EXPECTED_REJECTED_UNDER_THRESHOLD,
-			EXPECTED_REJECTED_UNDER_THRESHOLD,
-			NumIntersectingObjsTest.EXPECTED_LAST
+			NumIntersectingObjsTest.EXPECTED_NO_INTERSECTION,
+			NumIntersectingObjsTest.EXPECTED_NO_INTERSECTION
 		);
 	}
 	
@@ -64,8 +64,8 @@ public class NumIntersectingObjsAboveThresholdTest {
 			false,
 			EXPECTED_REJECTED_UNDER_THRESHOLD,
 			NumIntersectingObjsTest.EXPECTED_SECOND,
-			NumIntersectingObjsTest.EXPECTED_SECOND_LAST,
-			NumIntersectingObjsTest.EXPECTED_LAST
+			NumIntersectingObjsTest.EXPECTED_NO_INTERSECTION,
+			NumIntersectingObjsTest.EXPECTED_NO_INTERSECTION
 		);
 	}
 

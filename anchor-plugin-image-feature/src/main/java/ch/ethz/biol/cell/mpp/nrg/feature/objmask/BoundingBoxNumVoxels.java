@@ -1,6 +1,6 @@
 package ch.ethz.biol.cell.mpp.nrg.feature.objmask;
 
-import org.anchoranalysis.feature.cache.CacheableParams;
+import org.anchoranalysis.feature.cache.SessionInput;
 
 /*-
  * #%L
@@ -30,7 +30,7 @@ import org.anchoranalysis.feature.cache.CacheableParams;
 
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.feature.bean.objmask.FeatureObjMask;
-import org.anchoranalysis.image.feature.objmask.FeatureObjMaskParams;
+import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
 
 public class BoundingBoxNumVoxels extends FeatureObjMask {
 
@@ -40,10 +40,13 @@ public class BoundingBoxNumVoxels extends FeatureObjMask {
 	private static final long serialVersionUID = 1L;
 
 	@Override
-	public double calc(CacheableParams<FeatureObjMaskParams> paramsCacheable) throws FeatureCalcException {
-		
-		FeatureObjMaskParams params = paramsCacheable.getParams();
-		
-		return params.getObjMask().getBoundingBox().extnt().getVolume();
+	public double calc(SessionInput<FeatureInputSingleObj> input) throws FeatureCalcException {
+				
+		return input
+				.get()
+				.getObjMask()
+				.getBoundingBox()
+				.extnt()
+				.getVolume();
 	}
 }

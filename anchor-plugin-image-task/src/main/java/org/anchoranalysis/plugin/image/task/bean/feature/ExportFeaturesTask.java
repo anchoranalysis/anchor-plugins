@@ -33,7 +33,7 @@ import java.util.function.Function;
 
 import org.anchoranalysis.bean.NamedBean;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.bean.annotation.Optional;
+import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.core.log.LogReporter;
@@ -42,7 +42,7 @@ import org.anchoranalysis.experiment.task.Task;
 import org.anchoranalysis.feature.bean.list.FeatureListProvider;
 import org.anchoranalysis.feature.list.NamedFeatureStore;
 import org.anchoranalysis.feature.list.NamedFeatureStoreFactory;
-import org.anchoranalysis.feature.resultsvectorcollection.FeatureResultsVectorCollectionParams;
+import org.anchoranalysis.feature.resultsvectorcollection.FeatureInputResults;
 import org.anchoranalysis.io.bean.filepath.generator.FilePathGenerator;
 import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.filepath.FilePathToUnixStyleConverter;
@@ -70,15 +70,15 @@ public abstract class ExportFeaturesTask<T extends InputFromManager, S extends S
 	 * If non-null this file-path is used to determine the group of the file
 	 * If null, the filename is used
 	 */
-	@BeanField @Optional
+	@BeanField @OptionalBean
 	private FilePathGenerator groupGenerator;	// Translates an input file name to its group
 		
-	@BeanField @Optional
+	@BeanField @OptionalBean
 	private FilePathGenerator idGenerator;	// Translates an input file name to a unique ID
 	
 	/** Features applied to each group to aggregate values (takes FeatureResultsVectorCollection) */
-	@BeanField @Optional
-	private List<NamedBean<FeatureListProvider<FeatureResultsVectorCollectionParams>>> listFeaturesAggregate = new ArrayList<>();
+	@BeanField @OptionalBean
+	private List<NamedBean<FeatureListProvider<FeatureInputResults>>> listFeaturesAggregate = new ArrayList<>();
 	// END BEAN
 	
 	@Override
@@ -107,7 +107,7 @@ public abstract class ExportFeaturesTask<T extends InputFromManager, S extends S
 		LogErrorReporter logErrorReporter = new LogErrorReporter(logReporter);
 		
 		try {
-			NamedFeatureStore<FeatureResultsVectorCollectionParams> featuresAggregate = null;
+			NamedFeatureStore<FeatureInputResults> featuresAggregate = null;
 			
 			if (listFeaturesAggregate!=null) {
 				featuresAggregate = NamedFeatureStoreFactory.createNamedFeatureList(listFeaturesAggregate);
@@ -153,12 +153,12 @@ public abstract class ExportFeaturesTask<T extends InputFromManager, S extends S
 	}
 	
 
-	public List<NamedBean<FeatureListProvider<FeatureResultsVectorCollectionParams>>> getListFeaturesAggregate() {
+	public List<NamedBean<FeatureListProvider<FeatureInputResults>>> getListFeaturesAggregate() {
 		return listFeaturesAggregate;
 	}
 
 	public void setListFeaturesAggregate(
-			List<NamedBean<FeatureListProvider<FeatureResultsVectorCollectionParams>>> listFeaturesAggregate) {
+			List<NamedBean<FeatureListProvider<FeatureInputResults>>> listFeaturesAggregate) {
 		this.listFeaturesAggregate = listFeaturesAggregate;
 	}
 }

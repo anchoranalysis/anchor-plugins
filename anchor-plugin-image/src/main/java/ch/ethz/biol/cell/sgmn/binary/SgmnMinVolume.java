@@ -30,7 +30,7 @@ package ch.ethz.biol.cell.sgmn.binary;
 import java.nio.ByteBuffer;
 
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.bean.annotation.Optional;
+import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.bean.annotation.Positive;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.random.RandomNumberGenerator;
@@ -59,7 +59,7 @@ public class SgmnMinVolume extends BinarySgmn {
 	@BeanField
 	private BinarySgmn sgmn;
 	
-	@BeanField @Optional
+	@BeanField @OptionalBean
 	private BinarySgmn sgmnToBinarize;
 	
 	@BeanField @Positive
@@ -108,7 +108,7 @@ public class SgmnMinVolume extends BinarySgmn {
 	private BinaryVoxelBox<ByteBuffer> checkVolume( VoxelBox<ByteBuffer> orig, BinaryVoxelBox<ByteBuffer> sgmnBuffer, RandomNumberGenerator re, ImageRes res ) throws SgmnFailedException {
 		
 		BinaryVoxelBox<ByteBuffer> out = new BinaryVoxelBoxByte(
-			VoxelBoxFactory.getByte().create(
+			VoxelBoxFactory.instance().getByte().create(
 				sgmnBuffer.extnt()
 			)
 		);
@@ -142,7 +142,7 @@ public class SgmnMinVolume extends BinarySgmn {
 		}
 
 		// Copy objMask into voxelBox
-		VoxelBox<ByteBuffer> voxelBoxBox = VoxelBoxFactory.getByte().create( objMaskBuffer.getBoundingBox().extnt() );
+		VoxelBox<ByteBuffer> voxelBoxBox = VoxelBoxFactory.instance().getByte().create( objMaskBuffer.getBoundingBox().extnt() );
 		voxelBox.asByte().copyPixelsToCheckMask(
 			objMask.getBoundingBox(),
 			voxelBoxBox,

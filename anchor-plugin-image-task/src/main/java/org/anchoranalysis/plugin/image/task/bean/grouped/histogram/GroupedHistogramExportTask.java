@@ -33,7 +33,7 @@ import java.io.IOException;
 
 import org.anchoranalysis.bean.annotation.AllowEmpty;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.bean.annotation.Optional;
+import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.core.log.LogReporter;
@@ -72,7 +72,7 @@ public class GroupedHistogramExportTask extends GroupedStackTask<Histogram,Histo
 	@BeanField
 	private boolean writeImageHistograms = true;	// If enabled writes a histogram for each image, as well as the group
 	
-	@BeanField @Optional
+	@BeanField @OptionalBean
 	private ObjMaskProvider objs;		// Optional
 	
 	/** If defined, this stack is used as a mask over the values which are fed into the histogram */

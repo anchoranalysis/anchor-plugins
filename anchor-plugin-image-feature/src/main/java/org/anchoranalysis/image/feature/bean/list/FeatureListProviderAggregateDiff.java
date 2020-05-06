@@ -29,9 +29,8 @@ package org.anchoranalysis.image.feature.bean.list;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.operator.FeatureListElem;
 import org.anchoranalysis.feature.bean.operator.Sum;
-import org.anchoranalysis.image.feature.objmask.pair.merged.FeatureObjMaskPairMergedParams;
-
-import ch.ethz.biol.cell.mpp.nrg.feature.operator.MultiplyByConstant;
+import org.anchoranalysis.image.feature.objmask.pair.FeatureInputPairObjs;
+import org.anchoranalysis.plugin.operator.feature.bean.arithmetic.MultiplyByConstant;
 
 public abstract class FeatureListProviderAggregateDiff extends FeatureListProviderAggregate {
 
@@ -41,20 +40,20 @@ public abstract class FeatureListProviderAggregateDiff extends FeatureListProvid
 	private static final long serialVersionUID = 1L;
 
 	@Override
-	protected Feature<FeatureObjMaskPairMergedParams> createAggregateFeature(
-		Feature<FeatureObjMaskPairMergedParams> featFirst,
-		Feature<FeatureObjMaskPairMergedParams> featSecond,
-		Feature<FeatureObjMaskPairMergedParams> featMerged
+	protected Feature<FeatureInputPairObjs> createAggregateFeature(
+		Feature<FeatureInputPairObjs> featFirst,
+		Feature<FeatureInputPairObjs> featSecond,
+		Feature<FeatureInputPairObjs> featMerged
 	) {
-		FeatureListElem<FeatureObjMaskPairMergedParams> featWithList = createFeature();
+		FeatureListElem<FeatureInputPairObjs> featWithList = createFeature();
 		ListUtilities.addFeaturesToList( featFirst, featSecond, featWithList.getList() );
 		return createSum(featMerged, featWithList);
 	}
 	
-	protected abstract FeatureListElem<FeatureObjMaskPairMergedParams> createFeature();
+	protected abstract FeatureListElem<FeatureInputPairObjs> createFeature();
 	
-	private static Feature<FeatureObjMaskPairMergedParams> createSum( Feature<FeatureObjMaskPairMergedParams> featMerged, Feature<FeatureObjMaskPairMergedParams> featWithList ) {
-		Sum<FeatureObjMaskPairMergedParams> featSum = new Sum<>();
+	private static Feature<FeatureInputPairObjs> createSum( Feature<FeatureInputPairObjs> featMerged, Feature<FeatureInputPairObjs> featWithList ) {
+		Sum<FeatureInputPairObjs> featSum = new Sum<>();
 		featSum.getList().add(featMerged);
 		featSum.getList().add( new MultiplyByConstant<>(featWithList,-1) );
 		return featSum;

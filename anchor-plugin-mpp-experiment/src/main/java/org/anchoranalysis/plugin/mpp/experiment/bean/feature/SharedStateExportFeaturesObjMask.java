@@ -1,6 +1,6 @@
 package org.anchoranalysis.plugin.mpp.experiment.bean.feature;
 
-import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
+import org.anchoranalysis.feature.input.FeatureInput;
 
 /*-
  * #%L
@@ -32,18 +32,18 @@ import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
 
 import org.anchoranalysis.feature.io.csv.GroupedResultsVectorCollection;
 import org.anchoranalysis.feature.name.FeatureNameList;
+import org.anchoranalysis.image.feature.session.FeatureTableSession;
 import org.anchoranalysis.plugin.image.task.sharedstate.SharedStateExportFeatures;
-import org.anchoranalysis.plugin.mpp.experiment.feature.FeatureSessionFlexiFeatureTable;
 
-class SharedStateExportFeaturesObjMask<T extends FeatureCalcParams> extends SharedStateExportFeatures {
+class SharedStateExportFeaturesObjMask<T extends FeatureInput> extends SharedStateExportFeatures {
 	
-	private FeatureSessionFlexiFeatureTable<T> session;
+	private FeatureTableSession<T> session;
 	
-	public SharedStateExportFeaturesObjMask( GroupedResultsVectorCollection groupMap, FeatureSessionFlexiFeatureTable<T> session ) {
+	public SharedStateExportFeaturesObjMask( GroupedResultsVectorCollection groupMap, FeatureTableSession<T> session ) {
 		super( groupMap );
 		this.session = session;
 	}
-	public FeatureSessionFlexiFeatureTable<T> getSession() {
+	public FeatureTableSession<T> getSession() {
 		return session;
 	}
 	

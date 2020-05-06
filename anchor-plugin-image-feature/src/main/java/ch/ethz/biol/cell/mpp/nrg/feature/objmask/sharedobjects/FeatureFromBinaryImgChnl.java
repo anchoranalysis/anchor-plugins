@@ -28,18 +28,18 @@ package ch.ethz.biol.cell.mpp.nrg.feature.objmask.sharedobjects;
 
 
 import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.bean.annotation.SkipInit;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
-import org.anchoranalysis.feature.cache.CacheableParams;
+import org.anchoranalysis.feature.cache.ChildCacheName;
+import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.bean.provider.BinaryImgChnlProvider;
 import org.anchoranalysis.image.binary.BinaryChnl;
 import org.anchoranalysis.image.feature.bean.objmask.FeatureObjMaskSharedObjects;
 import org.anchoranalysis.image.feature.bean.objmask.pair.FeatureObjMaskPair;
-import org.anchoranalysis.image.feature.init.FeatureInitParamsImageInit;
-import org.anchoranalysis.image.feature.objmask.FeatureObjMaskParams;
-import org.anchoranalysis.image.feature.objmask.pair.FeatureObjMaskPairParams;
-import org.anchoranalysis.image.objmask.ObjMask;
+import org.anchoranalysis.image.feature.init.FeatureInitParamsSharedObjs;
+import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
 
 /**
  * Creates an object from the binary-mask from a binaryImgChnlProvider and evaluates a feature
@@ -58,75 +58,49 @@ public class FeatureFromBinaryImgChnl extends FeatureObjMaskSharedObjects {
 	@BeanField
 	private FeatureObjMaskPair item;
 	
-	@BeanField
+	// This cannot be initialized in the normal way, as Feature isn't contained in a Shared-Objects
+	// container. So instead it's initialized at a later point.
+	@BeanField @SkipInit
 	private BinaryImgChnlProvider binaryImgChnlProvider;
 	// END BEAN PROPERTIES
-
-	private ObjMask objFromBinary = null;
-
+	
+	private BinaryChnl chnl;
 	
 	@Override
-	public void beforeCalcCast(FeatureInitParamsImageInit params) throws InitException {
+	public void beforeCalcCast(FeatureInitParamsSharedObjs params) throws InitException {
 		super.beforeCalcCast(params);
 		assert( getLogger()!=null );
 		binaryImgChnlProvider.initRecursive(params.getSharedObjects(), getLogger() );
-	}
-	
-	@Override
-	public double calc(CacheableParams<FeatureObjMaskParams> params) throws FeatureCalcException {
-
+		
 		try {
-			// First time it's hit we calculate the bboxRTree
-			if (objFromBinary==null) {
-				BinaryChnl bic = binaryImgChnlProvider.create();
-				objFromBinary = new ObjMask( bic.binaryVoxelBox() );
-			}
-	
-			return params.calcChangeParams(
-				item,
-				p -> paramsPairs(p),
-				"pair"
-			);
-			
+			chnl = binaryImgChnlProvider.create();
 		} catch (CreateException e) {
-			throw new FeatureCalcException(e);
+			throw new InitException(e);
 		}
 	}
 	
-	private FeatureObjMaskPairParams paramsPairs( FeatureObjMaskParams params ) {
-		FeatureObjMaskPairParams out = new FeatureObjMaskPairParams();
-		out.setObjMask1( params.getObjMask() );
-		out.setObjMask2( objFromBinary );
-		out.setNrgStack( params.getNrgStack() );
-		return out;
+	@Override
+	public double calc(SessionInput<FeatureInputSingleObj> input) throws FeatureCalcException {
+		return input.forChild().calc(
+			item,
+			new CalculatePairInput(chnl),
+			new ChildCacheName(FeatureFromBinaryImgChnl.class, chnl.hashCode())
+		);
 	}
 
 	public FeatureObjMaskPair getItem() {
 		return item;
 	}
 
-
 	public void setItem(FeatureObjMaskPair item) {
 		this.item = item;
 	}
-
 
 	public BinaryImgChnlProvider getBinaryImgChnlProvider() {
 		return binaryImgChnlProvider;
 	}
 
-
 	public void setBinaryImgChnlProvider(BinaryImgChnlProvider binaryImgChnlProvider) {
 		this.binaryImgChnlProvider = binaryImgChnlProvider;
 	}
-
-
-
-
-
-
-
-
-
-
 }

@@ -30,12 +30,12 @@ package ch.ethz.biol.cell.mpp.nrg.feature.objmask;
 
 
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.feature.cachedcalculation.CachedCalculation;
-import org.anchoranalysis.feature.session.cache.FeatureSessionCacheRetriever;
-import org.anchoranalysis.image.feature.objmask.FeatureObjMaskParams;
+import org.anchoranalysis.feature.cache.ChildCacheName;
+import org.anchoranalysis.feature.cache.calculation.CalculationResolver;
+import org.anchoranalysis.feature.cache.calculation.FeatureCalculation;
+import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
 import org.anchoranalysis.image.objmask.ObjMask;
-
-import ch.ethz.biol.cell.mpp.nrg.feature.objmask.cachedcalculation.CalculateErosion;
+import org.anchoranalysis.plugin.image.calculation.CalculateErosion;
 
 public class Erode extends DerivedObjMask {
 	
@@ -53,13 +53,16 @@ public class Erode extends DerivedObjMask {
 	// END BEAN PROPERTIES
 
 	@Override
-	protected CachedCalculation<ObjMask> createCachedCalculation( FeatureSessionCacheRetriever<FeatureObjMaskParams> session ) {
-		return CalculateErosion.createFromCache(session, iterations, do3D);
+	protected FeatureCalculation<ObjMask,FeatureInputSingleObj> createCachedCalculationForDerived( CalculationResolver<FeatureInputSingleObj> session ) {
+		return CalculateErosion.create(session, iterations, do3D);
 	}
 	
 	@Override
-	public String cacheName() {
-		return "erode" + iterations + "_" + do3D;
+	public ChildCacheName cacheName() {
+		return new ChildCacheName(
+			Erode.class,
+			iterations + "_" + do3D
+		);
 	}
 
 	public int getIterations() {

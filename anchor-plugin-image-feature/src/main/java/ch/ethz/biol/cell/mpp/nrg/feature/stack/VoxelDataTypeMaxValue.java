@@ -27,8 +27,8 @@ package ch.ethz.biol.cell.mpp.nrg.feature.stack;
  */
 
 import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.feature.input.FeatureInputNRGStack;
 import org.anchoranalysis.image.feature.bean.FeatureNRGStack;
-import org.anchoranalysis.image.feature.stack.nrg.FeatureNRGStackParams;
 
 public class VoxelDataTypeMaxValue extends FeatureNRGStack {
 
@@ -38,8 +38,8 @@ public class VoxelDataTypeMaxValue extends FeatureNRGStack {
 	private static final long serialVersionUID = 1L;
 
 	@Override
-	public double calcCast(FeatureNRGStackParams params)
+	public double calcCast(FeatureInputNRGStack params)
 			throws FeatureCalcException {
-		return (double) params.getNrgStack().getChnl(0).getVoxelDataType().maxValue();
+		return (double) params.getNrgStackRequired().getChnl(0).getVoxelDataType().maxValue();
 	}
 }

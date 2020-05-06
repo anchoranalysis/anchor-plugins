@@ -28,6 +28,7 @@ package org.anchoranalysis.plugin.mpp.bean.proposer.points;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.anchoranalysis.anchor.mpp.bean.proposer.PointsProposer;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
@@ -69,8 +70,7 @@ public class IncludeRandomObjs extends PointsProposer {
 	}
 
 	@Override
-	public List<Point3i> propose(Point3d pnt, Mark mark, ImageDim dim, RandomNumberGenerator re,
-			ErrorNode errorNode) {
+	public Optional<List<Point3i>> propose(Point3d pnt, Mark mark, ImageDim dim, RandomNumberGenerator re, ErrorNode errorNode) {
 
 		List<Point3i> out = new ArrayList<>();
 		
@@ -83,20 +83,12 @@ public class IncludeRandomObjs extends PointsProposer {
 						
 		} catch (CreateException e) {
 			errorNode.add(e);
+			return Optional.empty();
 		}
 		
-		return out;
+		return Optional.of(out);
 	}
 	
-	private static void maybeAddToList( ObjMask om, List<Point3i> out, RandomNumberGenerator re ) throws CreateException {
-		if (re.nextDouble() > 0.5) {
-			out.addAll(
-				PointsFromObjMask.pntsFromMask(om)
-			);
-		}
-	}
-	
-
 	@Override
 	public ICreateProposalVisualization proposalVisualization(boolean detailed) {
 		return null;
@@ -106,8 +98,15 @@ public class IncludeRandomObjs extends PointsProposer {
 		return objs;
 	}
 
-
 	public void setObjs(ObjMaskProvider objs) {
 		this.objs = objs;
+	}
+	
+	private static void maybeAddToList( ObjMask om, List<Point3i> out, RandomNumberGenerator re ) throws CreateException {
+		if (re.nextDouble() > 0.5) {
+			out.addAll(
+				PointsFromObjMask.pntsFromMask(om)
+			);
+		}
 	}
 }

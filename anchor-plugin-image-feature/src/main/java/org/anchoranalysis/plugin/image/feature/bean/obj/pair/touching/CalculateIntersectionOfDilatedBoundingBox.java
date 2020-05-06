@@ -1,5 +1,7 @@
 package org.anchoranalysis.plugin.image.feature.bean.obj.pair.touching;
 
+import java.util.Optional;
+
 /*
  * #%L
  * anchor-plugin-image-feature
@@ -27,17 +29,16 @@ package org.anchoranalysis.plugin.image.feature.bean.obj.pair.touching;
  */
 
 
-import org.anchoranalysis.core.cache.ExecuteException;
-import org.anchoranalysis.feature.cachedcalculation.CachedCalculation;
-import org.anchoranalysis.feature.cachedcalculation.CachedCalculationCastParams;
+import org.anchoranalysis.feature.cache.calculation.FeatureCalculation;
+import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.Extent;
-import org.anchoranalysis.image.feature.objmask.pair.FeatureObjMaskPairParams;
+import org.anchoranalysis.image.feature.objmask.pair.FeatureInputPairObjs;
 import org.anchoranalysis.image.objmask.ObjMask;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
-class CalculateIntersectionOfDilatedBoundingBox extends CachedCalculationCastParams<BoundingBox, FeatureObjMaskPairParams> {
+class CalculateIntersectionOfDilatedBoundingBox extends FeatureCalculation<BoundingBox, FeatureInputPairObjs> {
 
 	
 	
@@ -51,22 +52,19 @@ class CalculateIntersectionOfDilatedBoundingBox extends CachedCalculationCastPar
 	private BoundingBox findIntersectionOfDilatedBoundingBox( ObjMask om1, ObjMask om2, Extent e ) {
 	
 		// Grow each bounding box
-		BoundingBox bbox1 = om1.getVoxelBoxBounded().dilate( use3D, e );
-		BoundingBox bbox2 = om2.getVoxelBoxBounded().dilate( use3D, e );
+		BoundingBox bbox1 = dilatedBoundingBoxFor(om1, e);
+		BoundingBox bbox2 = dilatedBoundingBoxFor(om2, e);
 		
 		// Find the intersection
 		return bbox1.intersectCreateNew(bbox2, e );
 	}
-	
-
 
 	@Override
-	protected BoundingBox execute(FeatureObjMaskPairParams params)
-			throws ExecuteException {
+	protected BoundingBox execute(FeatureInputPairObjs input) throws FeatureCalcException {
 		return findIntersectionOfDilatedBoundingBox(
-			params.getObjMask1(),
-			params.getObjMask2(),
-			params.getNrgStack().getDimensions().getExtnt()
+			input.getFirst(),
+			input.getSecond(),
+			input.getDimensionsRequired().getExtnt()
 		);
 	}
 	
@@ -83,13 +81,14 @@ class CalculateIntersectionOfDilatedBoundingBox extends CachedCalculationCastPar
 	}
 
 	@Override
-	public CachedCalculation<BoundingBox> duplicate() {
-		return new CalculateIntersectionOfDilatedBoundingBox(use3D);
-	}
-
-	@Override
 	public int hashCode() {
 		return new HashCodeBuilder().append(use3D).toHashCode();
 	}
 
+	private BoundingBox dilatedBoundingBoxFor( ObjMask om, Extent extent ) {
+		return om.getVoxelBoxBounded().dilate(
+			use3D,
+			Optional.of(extent)
+		);
+	}
 }

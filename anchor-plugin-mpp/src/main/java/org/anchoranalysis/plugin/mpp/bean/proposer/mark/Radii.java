@@ -1,5 +1,7 @@
 package org.anchoranalysis.plugin.mpp.bean.proposer.mark;
 
+import java.util.Optional;
+
 import org.anchoranalysis.anchor.mpp.bean.proposer.MarkProposer;
 import org.anchoranalysis.anchor.mpp.bean.proposer.OrientationProposer;
 import org.anchoranalysis.anchor.mpp.bean.proposer.radii.RadiiProposer;
@@ -77,14 +79,14 @@ public class Radii extends MarkProposer {
 		
 		ISetMarksExplicit mark = (ISetMarksExplicit) inputMark.getMark();
 		
-		Orientation orientationNew = orientationProposer.propose(
+		Optional<Orientation> orientationNew = orientationProposer.propose(
 			inputMark.getMark(),
 			context.getDimensions(),
 			context.getRe(),
 			context.getErrorNode()
 		);
 
-		if (orientationNew==null) {
+		if (!orientationNew.isPresent()) {
 			context.getErrorNode().add("orientationProposer returned null");
 			return false;
 		}
@@ -101,7 +103,7 @@ public class Radii extends MarkProposer {
 				getSharedObjects().getMarkBounds(),
 				context.getRe(),
 				context.getDimensions(),
-				orientationNew,
+				orientationNew.get(),
 				context.getErrorNode()
 			);
 		} catch (NamedProviderGetException e) {
@@ -114,7 +116,7 @@ public class Radii extends MarkProposer {
 			return false;
 		}
 
-		mark.setMarksExplicit( inputMark.getMark().centerPoint(), orientationNew, rad);
+		mark.setMarksExplicit( inputMark.getMark().centerPoint(), orientationNew.get(), rad);
 		inputMark.reset();
 		return true;
 	}

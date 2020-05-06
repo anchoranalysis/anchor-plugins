@@ -32,7 +32,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.bean.annotation.Optional;
+import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.io.bean.input.InputManager;
 import org.anchoranalysis.io.bean.input.InputManagerParams;
 import org.anchoranalysis.io.error.AnchorIOException;
@@ -57,7 +57,7 @@ public class BranchIfDebug<T extends InputFromManager> extends InputManager<T> {
 	private InputManager<T> input;
 	
 	// If set to null and we are in debug mode, we take the first item from the normal input
-	@BeanField @Optional
+	@BeanField @OptionalBean
 	private InputManager<T> inputDebug;
 	// END BEAN PROPERTIES
 	

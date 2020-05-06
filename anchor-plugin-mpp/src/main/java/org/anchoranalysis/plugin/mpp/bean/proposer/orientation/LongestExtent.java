@@ -1,5 +1,7 @@
 package org.anchoranalysis.plugin.mpp.bean.proposer.orientation;
 
+import java.util.Optional;
+
 import org.anchoranalysis.anchor.mpp.bean.bound.BoundCalculator;
 import org.anchoranalysis.anchor.mpp.bean.proposer.OrientationProposer;
 import org.anchoranalysis.anchor.mpp.bound.BidirectionalBound;
@@ -56,7 +58,7 @@ public class LongestExtent extends OrientationProposer {
 	// END BEAN
 	
 	@Override
-	public Orientation propose(Mark mark, ImageDim dim, RandomNumberGenerator re, ErrorNode proposerFailureDescription ) {
+	public Optional<Orientation> propose(Mark mark, ImageDim dim, RandomNumberGenerator re, ErrorNode proposerFailureDescription ) {
 		
 		MarkAbstractPosition markC = (MarkAbstractPosition) mark;
 		
@@ -77,7 +79,9 @@ public class LongestExtent extends OrientationProposer {
 			}
 		}
 		
-		return new Orientation2D( angleAtMax );
+		return Optional.of(
+			new Orientation2D( angleAtMax )
+		);
 	}
 
 	public double getIncrementDegrees() {

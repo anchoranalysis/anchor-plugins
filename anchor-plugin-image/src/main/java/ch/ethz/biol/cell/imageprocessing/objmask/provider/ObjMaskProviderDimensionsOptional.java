@@ -27,7 +27,7 @@ package ch.ethz.biol.cell.imageprocessing.objmask.provider;
  */
 
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.bean.annotation.Optional;
+import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.bean.provider.ImageDimProvider;
 import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
@@ -41,7 +41,7 @@ public abstract class ObjMaskProviderDimensionsOptional extends ObjMaskProvider 
 	private static final long serialVersionUID = 1L;
 
 	// START BEAN PROPERTIES
-	@BeanField @Optional
+	@BeanField @OptionalBean
 	private ImageDimProvider dimProvider;
 	// END BEAN PROPERTIES
 	

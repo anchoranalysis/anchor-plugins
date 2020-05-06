@@ -62,14 +62,6 @@ class CSVRowXMLGenerator extends XMLGenerator implements IterableGenerator<CSVRo
 	}
 
 	@Override
-	public void start() throws OutputWriteFailedException {
-	}
-
-	@Override
-	public void end() throws OutputWriteFailedException {
-	}
-
-	@Override
 	public Generator getGenerator() {
 		return this;
 	}

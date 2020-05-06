@@ -73,12 +73,12 @@
 	<dependency>
 	  <groupId>colt</groupId>
 	  <artifactId>colt</artifactId>
-	  <version>1.2.0</version>
+	  <version>${colt.version}</version>
 	</dependency>
 	<dependency>
 	  <groupId>commons-lang</groupId>
 	  <artifactId>commons-lang</artifactId>
-	  <version>2.6</version>
+	  <version>${commons-lang.version}</version>
 	</dependency>
 
     <dependency>
@@ -92,6 +92,13 @@
        <groupId>${project.groupId}</groupId>
        <artifactId>anchor-test-feature-plugins</artifactId>
        <version>0.0.4-SNAPSHOT</version>
+       <scope>test</scope>
+     </dependency>
+     
+     <dependency>
+       <groupId>${project.groupId}</groupId>
+       <artifactId>anchor-test-image</artifactId>
+       <version>0.0.8-SNAPSHOT</version>
        <scope>test</scope>
      </dependency>
         

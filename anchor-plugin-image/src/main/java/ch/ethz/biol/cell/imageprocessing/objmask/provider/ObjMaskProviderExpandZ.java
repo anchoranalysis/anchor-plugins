@@ -76,7 +76,7 @@ public class ObjMaskProviderExpandZ extends ObjMaskProviderDimensions {
 			
 			VoxelBuffer<ByteBuffer> pixels = om.getVoxelBox().getPixelsForPlane(0);
 			
-			VoxelBox<ByteBuffer> vbNew = VoxelBoxFactory.getByte().create(eNew);
+			VoxelBox<ByteBuffer> vbNew = VoxelBoxFactory.instance().getByte().create(eNew);
 			for( int z=0; z<eNew.getZ(); z++) {
 				vbNew.setPixelsForPlane(z, pixels);
 			}

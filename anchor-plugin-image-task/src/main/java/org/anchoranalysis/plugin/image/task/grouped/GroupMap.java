@@ -43,11 +43,11 @@ import org.anchoranalysis.experiment.JobExecutionException;
  * @author FEEHANO
  *
  * @param <S> individual-item type
- * @param <T> aggregate-item type (comines many individual types)
+ * @param <T> aggregate-item type (combines many individual types)
  */
 public class GroupMap<S,T> {
 
-	private TreeMapCreate<CombinedName,T> groupMap;
+	private TreeMapCreate<CombinedName,T,GetOperationFailedException> groupMap;
 	private String nounT;
 	private AddToAggregateItem<S, T> addTo;
 
@@ -56,9 +56,9 @@ public class GroupMap<S,T> {
 	 * @param nounT a word to describe a single instance of T in user error messages
 	 * @param createEmpty
 	 */
-	public GroupMap(String nounT, Operation<T> createEmpty, AddToAggregateItem<S, T> addTo ) {
+	public GroupMap(String nounT, Operation<T,GetOperationFailedException> createEmpty, AddToAggregateItem<S,T> addTo ) {
 		super();
-		this.groupMap = new TreeMapCreate<CombinedName,T>( createEmpty );
+		this.groupMap = new TreeMapCreate<>( createEmpty );
 		this.nounT = nounT;
 		this.addTo = addTo;
 	}

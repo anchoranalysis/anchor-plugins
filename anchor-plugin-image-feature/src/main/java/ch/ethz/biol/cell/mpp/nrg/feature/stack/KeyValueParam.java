@@ -1,5 +1,7 @@
 package ch.ethz.biol.cell.mpp.nrg.feature.stack;
 
+import java.util.Optional;
+
 /*
  * #%L
  * anchor-plugin-image-feature
@@ -30,10 +32,11 @@ package ch.ethz.biol.cell.mpp.nrg.feature.stack;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 import org.anchoranalysis.core.params.KeyValueParams;
-import org.anchoranalysis.feature.cache.CacheableParams;
+import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.feature.bean.FeatureStack;
-import org.anchoranalysis.image.feature.stack.FeatureStackParams;
+import org.anchoranalysis.image.feature.stack.FeatureInputStack;
+import org.anchoranalysis.image.init.ImageInitParams;
 
 public class KeyValueParam extends FeatureStack {
 
@@ -51,10 +54,16 @@ public class KeyValueParam extends FeatureStack {
 	// END BEAN PROPERTIES
 
 	@Override
-	public double calc(CacheableParams<FeatureStackParams> params)
+	public double calc(SessionInput<FeatureInputStack> input)
 			throws FeatureCalcException {
 		try {
-			KeyValueParams kpv = params.getParams().getSharedObjs().getParams().getNamedKeyValueParamsCollection().getException(collectionID);
+			Optional<ImageInitParams> initParams = input.get().getSharedObjs();
+			
+			if (!initParams.isPresent()) {
+				throw new FeatureCalcException("No ImageInitParams are associated with the FeatureStackParams");
+			}
+			
+			KeyValueParams kpv = initParams.get().getParams().getNamedKeyValueParamsCollection().getException(collectionID);
 			return kpv.getPropertyAsDouble(key);
 			
 		} catch (NamedProviderGetException e) {

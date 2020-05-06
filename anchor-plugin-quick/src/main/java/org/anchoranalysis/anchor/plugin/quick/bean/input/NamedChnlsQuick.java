@@ -37,7 +37,7 @@ import org.anchoranalysis.bean.NamedBean;
 import org.anchoranalysis.bean.annotation.AllowEmpty;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.DefaultInstance;
-import org.anchoranalysis.bean.annotation.Optional;
+import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.bean.error.BeanMisconfiguredException;
 import org.anchoranalysis.image.io.input.NamedChnlsInputPart;
 import org.anchoranalysis.io.bean.provider.file.FileProviderWithDirectory;
@@ -125,7 +125,7 @@ public class NamedChnlsQuick extends NamedChnlsBase {
 	/**
 	 * If set, a CSV is read with two columns: the names of images and a
 	 */
-	@BeanField @Optional
+	@BeanField @OptionalBean
 	private MatchedAppendCsv filterFilesCsv;
 	
 	/**

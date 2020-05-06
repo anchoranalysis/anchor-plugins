@@ -30,18 +30,18 @@ import org.anchoranalysis.anchor.mpp.mark.conic.MarkEllipse;
  */
 
 
-import org.anchoranalysis.core.cache.ExecuteException;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.feature.cachedcalculation.CachedCalculationCastParams;
+import org.anchoranalysis.feature.cache.calculation.FeatureCalculation;
+import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.nrg.NRGStack;
-import org.anchoranalysis.image.feature.objmask.FeatureObjMaskParams;
+import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
 import org.anchoranalysis.image.objmask.ObjMask;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
 import ch.ethz.biol.cell.mpp.mark.pointsfitter.LinearLeastSquaresEllipseFitterGeoRegression;
 
-public class CalculateEllipseLeastSquares extends CachedCalculationCastParams<ObjMaskAndEllipse, FeatureObjMaskParams> {
+public class CalculateEllipseLeastSquares extends FeatureCalculation<ObjMaskAndEllipse, FeatureInputSingleObj> {
 
 	private EllipseFactory factory;
 	
@@ -64,25 +64,20 @@ public class CalculateEllipseLeastSquares extends CachedCalculationCastParams<Ob
 	
 
 	@Override
-	protected ObjMaskAndEllipse execute( FeatureObjMaskParams params ) throws ExecuteException {
+	protected ObjMaskAndEllipse execute( FeatureInputSingleObj input ) throws FeatureCalcException {
 		
 		try {
-			NRGStack nrgStack = params.getNrgStack().getNrgStack();
+			NRGStack nrgStack = input.getNrgStackRequired().getNrgStack();
 			
-			ObjMask om = extractEllipseSlice( params.getObjMask() );
+			ObjMask om = extractEllipseSlice( input.getObjMask() );
 			
 			// Shell Rad is arbitrary here for now
 			MarkEllipse mark = factory.create(om,nrgStack.getDimensions(), 0.2, nrgStack.getChnl(0) );
 
 			return new ObjMaskAndEllipse(om,mark);
 		} catch (CreateException | InsufficientPointsException e) {
-			throw new ExecuteException(e);
+			throw new FeatureCalcException(e);
 		}
-	}
-
-	@Override
-	public CalculateEllipseLeastSquares duplicate() {
-		return new CalculateEllipseLeastSquares();
 	}
 	
 	@Override

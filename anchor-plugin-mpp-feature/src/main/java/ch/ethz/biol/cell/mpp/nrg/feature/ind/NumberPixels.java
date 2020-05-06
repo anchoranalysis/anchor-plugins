@@ -1,8 +1,8 @@
 package ch.ethz.biol.cell.mpp.nrg.feature.ind;
 
 import org.anchoranalysis.anchor.mpp.feature.bean.mark.PxlListOperationFromMark;
-import org.anchoranalysis.anchor.mpp.feature.bean.nrg.elem.NRGElemInd;
-import org.anchoranalysis.anchor.mpp.feature.nrg.elem.NRGElemIndCalcParams;
+import org.anchoranalysis.anchor.mpp.feature.bean.nrg.elem.FeatureSingleMemo;
+import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputSingleMemo;
 
 /*
  * #%L
@@ -37,7 +37,7 @@ import org.anchoranalysis.core.relation.RelationToValue;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.voxel.VoxelIntensityList;
 
-public class NumberPixels extends NRGElemInd {
+public class NumberPixels extends FeatureSingleMemo {
 
 	/**
 	 * 
@@ -63,10 +63,13 @@ public class NumberPixels extends NRGElemInd {
 	}
 	
 	@Override
-	public double calcCast( NRGElemIndCalcParams params ) throws FeatureCalcException {
+	public double calcCast( FeatureInputSingleMemo input ) throws FeatureCalcException {
 
 		try {
-			return pixelList.doOperation( params.getPxlPartMemo(), params.getDimensions() );
+			return pixelList.doOperation(
+				input.getPxlPartMemo(),
+				input.getDimensionsRequired()
+			);
 		} catch (OperationFailedException e) {
 			throw new FeatureCalcException(e);
 		}							

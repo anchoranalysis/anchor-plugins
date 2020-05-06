@@ -1,7 +1,7 @@
 package ch.ethz.biol.cell.mpp.nrg.feature.ind;
 
-import org.anchoranalysis.anchor.mpp.feature.bean.nrg.elem.NRGElemInd;
-import org.anchoranalysis.anchor.mpp.feature.nrg.elem.NRGElemIndCalcParams;
+import org.anchoranalysis.anchor.mpp.feature.bean.nrg.elem.FeatureSingleMemo;
+import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputSingleMemo;
 
 /*
  * #%L
@@ -39,7 +39,7 @@ import org.anchoranalysis.image.voxel.statistics.VoxelStatistics;
 
 import ch.ethz.biol.cell.mpp.mark.pixelstatisticsfrommark.PixelStatisticsFromMark;
 
-public class IntensityMean extends NRGElemInd {
+public class IntensityMean extends FeatureSingleMemo {
 
 	/**
 	 * 
@@ -58,10 +58,13 @@ public class IntensityMean extends NRGElemInd {
 	// END BEAN
 	
 	@Override
-	public double calcCast( NRGElemIndCalcParams params ) throws FeatureCalcException {
+	public double calcCast( FeatureInputSingleMemo input ) throws FeatureCalcException {
 
 		try {
-			VoxelStatistics stats = pixelList.createStatisticsFor(params.getPxlPartMemo(), params.getDimensions() );
+			VoxelStatistics stats = pixelList.createStatisticsFor(
+				input.getPxlPartMemo(),
+				input.getDimensionsRequired()
+			);
 			
 			if (stats.size()==0) {
 				return emptyValue;

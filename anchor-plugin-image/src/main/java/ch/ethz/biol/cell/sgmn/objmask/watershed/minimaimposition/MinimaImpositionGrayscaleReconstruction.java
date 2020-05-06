@@ -65,7 +65,7 @@ public class MinimaImpositionGrayscaleReconstruction extends MinimaImposition {
 			BinaryValuesByte maskBV,
 			VoxelBoxWrapper gradientImage) {
 		
-		VoxelBoxWrapper out = VoxelBoxFactory.create( gradientImage.any().extnt(), gradientImage.getVoxelDataType() );
+		VoxelBoxWrapper out = VoxelBoxFactory.instance().create( gradientImage.any().extnt(), gradientImage.getVoxelDataType() );
 		out.any().setAllPixelsTo( (int) gradientImage.getVoxelDataType().maxValue() );
 		
 		BoundingBox all = new BoundingBox(markerMaskVb.extnt());

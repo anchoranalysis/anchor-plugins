@@ -27,15 +27,13 @@ package org.anchoranalysis.points.moment;
  */
 
 
-import org.anchoranalysis.core.cache.ExecuteException;
-import org.anchoranalysis.feature.cachedcalculation.CachedCalculation;
-import org.anchoranalysis.feature.cachedcalculation.CachedCalculationCastParams;
-import org.anchoranalysis.image.feature.objmask.FeatureObjMaskParams;
+import org.anchoranalysis.feature.cache.calculation.FeatureCalculation;
+import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
 import org.anchoranalysis.math.moment.MomentsFromPointsCalculator;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
-public class CalculateObjMaskPointsSecondMomentMatrix extends CachedCalculationCastParams<MomentsFromPointsCalculator,FeatureObjMaskParams> {
+public class CalculateObjMaskPointsSecondMomentMatrix extends FeatureCalculation<MomentsFromPointsCalculator,FeatureInputSingleObj> {
 
 	private boolean suppressZ;
 		
@@ -45,13 +43,8 @@ public class CalculateObjMaskPointsSecondMomentMatrix extends CachedCalculationC
 	}
 
 	@Override
-	protected MomentsFromPointsCalculator execute( FeatureObjMaskParams params ) throws ExecuteException {
+	protected MomentsFromPointsCalculator execute( FeatureInputSingleObj params ) {
 		return MomentsFromObjMask.apply(params.getObjMask(),suppressZ);
-	}
-
-	@Override
-	public CachedCalculation<MomentsFromPointsCalculator> duplicate() {
-		return new CalculateObjMaskPointsSecondMomentMatrix(suppressZ);
 	}
 	
 	@Override

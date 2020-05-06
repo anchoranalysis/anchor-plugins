@@ -1,10 +1,10 @@
 package ch.ethz.biol.cell.mpp.nrg.feature.objmask;
 
-/*
+/*-
  * #%L
  * anchor-plugin-image-feature
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -26,15 +26,9 @@ package ch.ethz.biol.cell.mpp.nrg.feature.objmask;
  * #L%
  */
 
-
-import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.cache.ExecuteException;
-import org.anchoranalysis.feature.cache.CacheableParams;
-import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.image.feature.bean.objmask.FeatureObjMask;
-import org.anchoranalysis.image.feature.objmask.FeatureObjMaskParams;
-
-import ch.ethz.biol.cell.mpp.nrg.feature.objmask.cachedcalculation.CalculateOutlineNumVoxelFaces;
+import org.anchoranalysis.feature.cache.calculation.FeatureCalculation;
+import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
+import org.anchoranalysis.plugin.image.calculation.CalculateOutlineNumVoxelFaces;
 
 /**
  * The number of voxel-faces along the surface (the faces of each voxel that touch outside)
@@ -42,48 +36,15 @@ import ch.ethz.biol.cell.mpp.nrg.feature.objmask.cachedcalculation.CalculateOutl
  * @author Owen Feehan
  *
  */
-public class SurfaceNumVoxelFaces extends FeatureObjMask {
+public class SurfaceNumVoxelFaces extends SurfaceNumVoxelsBase {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 
-	// START BEAN PROPERTIES
-	@BeanField
-	private boolean mip=false;
-	
-	@BeanField
-	private boolean suppress3D=false;
-	/// END BEAN PROPERTIES
-	
 	@Override
-	public double calc(CacheableParams<FeatureObjMaskParams> params) throws FeatureCalcException {
-		try {
-			return params.calc(
-				new CalculateOutlineNumVoxelFaces(mip, suppress3D)		
-			);
-		} catch (ExecuteException e) {
-			throw new FeatureCalcException(e.getCause());
-		}
+	protected FeatureCalculation<Integer, FeatureInputSingleObj> createParams(boolean mip, boolean suppress3d) {
+		return new CalculateOutlineNumVoxelFaces(mip, suppress3d);
 	}
-
-	public boolean isMip() {
-		return mip;
-	}
-
-	public void setMip(boolean mip) {
-		this.mip = mip;
-	}
-
-	public boolean isSuppress3D() {
-		return suppress3D;
-	}
-
-	public void setSuppress3D(boolean suppress3d) {
-		suppress3D = suppress3d;
-	}
-
-
-
 }

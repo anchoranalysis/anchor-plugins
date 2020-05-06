@@ -27,27 +27,22 @@ package ch.ethz.biol.cell.mpp.nrg.feature.stack;
  */
 
 
-import java.nio.ByteBuffer;
-
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.SkipInit;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.feature.bean.Feature;
-import org.anchoranalysis.feature.cache.CacheableParams;
+import org.anchoranalysis.feature.cache.ChildCacheName;
+import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.bean.provider.BinaryImgChnlProvider;
 import org.anchoranalysis.image.binary.BinaryChnl;
-import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
-import org.anchoranalysis.image.binary.voxel.BinaryVoxelBoxByte;
-import org.anchoranalysis.image.feature.bean.FeatureStack;
-import org.anchoranalysis.image.feature.objmask.FeatureObjMaskParams;
-import org.anchoranalysis.image.feature.stack.FeatureStackParams;
-import org.anchoranalysis.image.objmask.ObjMask;
-import org.anchoranalysis.image.voxel.box.VoxelBox;
-import org.anchoranalysis.image.voxel.datatype.IncorrectVoxelDataTypeException;
+import org.anchoranalysis.image.feature.init.FeatureInitParamsSharedObjs;
+import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
+import org.anchoranalysis.image.feature.stack.FeatureInputStack;
+import org.anchoranalysis.image.init.ImageInitParams;
 
-public class BinaryImageChnlProviderFeature extends FeatureStack {
+public class BinaryImageChnlProviderFeature extends FeatureStackSharedObjects {
 
 	/**
 	 * 
@@ -56,66 +51,50 @@ public class BinaryImageChnlProviderFeature extends FeatureStack {
 	
 	// START BEAN PROPERTIES
 	@BeanField
-	private Feature<FeatureObjMaskParams> item;
+	private Feature<FeatureInputSingleObj> item;
 	
 	@BeanField
 	@SkipInit
 	private BinaryImgChnlProvider binaryImgChnlProvider;
 	// END BEAN PROPERTIES
 	
+	private BinaryChnl chnl;
+	
 	@Override
-	public double calc(CacheableParams<FeatureStackParams> params) throws FeatureCalcException {
-
-		BinaryChnl bc;
+	public void beforeCalcCast(FeatureInitParamsSharedObjs params) throws InitException {
+		super.beforeCalcCast(params);
+		
+		ImageInitParams sharedObjs = params.getSharedObjects();
+		binaryImgChnlProvider.initRecursive(sharedObjs, getLogger());
+		
 		try {
-			binaryImgChnlProvider.initRecursive(params.getParams().getSharedObjs(), getLogger() );
-			bc = binaryImgChnlProvider.create();
-		} catch (InitException | CreateException e1) {
-			throw new FeatureCalcException(e1);
+			chnl = binaryImgChnlProvider.create();
+		} catch (CreateException e) {
+			throw new InitException(e);
 		}
+	}
 		
-		BinaryVoxelBox<ByteBuffer> bvb = binaryVoxelBox(bc);
-		
-		return params.calcChangeParams(
+	@Override
+	public double calc(SessionInput<FeatureInputStack> input) throws FeatureCalcException {
+
+		return input.forChild().calc(
 			item,
-			p -> deriveParams(p, bvb),
-			"binaryMask"
+			new CalculateBinaryChnlInput(chnl),
+			new ChildCacheName(BinaryImageChnlProviderFeature.class, chnl.hashCode())
 		);
-	}
-	
-	private static FeatureObjMaskParams deriveParams(FeatureStackParams params, BinaryVoxelBox<ByteBuffer> bvb ) {
-		FeatureObjMaskParams paramsObj = new FeatureObjMaskParams();
-		paramsObj.setNrgStack( params.getNrgStack() );
-		paramsObj.setObjMask(
-			new ObjMask(bvb)
-		);
-		return paramsObj;
-	}
-	
-	private static BinaryVoxelBox<ByteBuffer> binaryVoxelBox( BinaryChnl bic ) throws FeatureCalcException {
-		VoxelBox<ByteBuffer> vb;
-		try {
-			vb = bic.getChnl().getVoxelBox().asByte();
-		} catch (IncorrectVoxelDataTypeException e1) {
-			throw new FeatureCalcException("binaryImgChnlProvider returned incompatible data type", e1);
-		}
-		
-		return new BinaryVoxelBoxByte( vb, bic.getBinaryValues() );
 	}
 
-	public Feature<FeatureObjMaskParams> getItem() {
+	public Feature<FeatureInputSingleObj> getItem() {
 		return item;
 	}
 
-	public void setItem(Feature<FeatureObjMaskParams> item) {
+	public void setItem(Feature<FeatureInputSingleObj> item) {
 		this.item = item;
 	}
-
 
 	public BinaryImgChnlProvider getBinaryImgChnlProvider() {
 		return binaryImgChnlProvider;
 	}
-
 
 	public void setBinaryImgChnlProvider(BinaryImgChnlProvider binaryImgChnlProvider) {
 		this.binaryImgChnlProvider = binaryImgChnlProvider;

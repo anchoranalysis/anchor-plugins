@@ -28,10 +28,8 @@ package ch.ethz.biol.cell.sgmn.graphcuts.nrgdefinition.pixelscore;
 
 
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.feature.cache.CacheableParams;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.image.feature.bean.pixelwise.score.PixelScore;
-import org.anchoranalysis.image.feature.pixelwise.score.PixelScoreFeatureCalcParams;
+import org.anchoranalysis.image.feature.bean.pixelwise.PixelScore;
 
 public class PixelScoreRejectIfIntensityLessThan extends PixelScore {
 
@@ -52,16 +50,15 @@ public class PixelScoreRejectIfIntensityLessThan extends PixelScore {
 	// END BEAN PROPERTIES
 
 	@Override
-	public double calc(CacheableParams<PixelScoreFeatureCalcParams> params)
-			throws FeatureCalcException {
+	public double calc(int[] pixelVals)	throws FeatureCalcException {
 		
-		int intensity = params.getParams().getPxl(nrgChnlIndex);
+		int intensity = pixelVals[nrgChnlIndex];
 		
 		if (intensity < minIntensity) {
 			return 0;
 		}
 		
-		return params.calc(item);
+		return item.calc(pixelVals);
 	}
 
 	public PixelScore getItem() {

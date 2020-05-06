@@ -28,24 +28,19 @@ package ch.ethz.biol.cell.mpp.nrg.feature.stack;
 
 
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.feature.bean.Feature;
-import org.anchoranalysis.feature.cache.CacheableParams;
+import org.anchoranalysis.feature.cache.ChildCacheName;
+import org.anchoranalysis.feature.cache.SessionInput;
+import org.anchoranalysis.feature.cache.calculation.ResolvedCalculation;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.feature.nrg.NRGStackWithParams;
-import org.anchoranalysis.image.binary.BinaryChnl;
-import org.anchoranalysis.image.binary.values.BinaryValues;
 import org.anchoranalysis.image.feature.bean.FeatureStack;
-import org.anchoranalysis.image.feature.objmask.FeatureObjMaskParams;
-import org.anchoranalysis.image.feature.stack.FeatureStackParams;
-import org.anchoranalysis.image.objmask.ObjMask;
+import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
+import org.anchoranalysis.image.feature.stack.FeatureInputStack;
 import org.anchoranalysis.image.objmask.ObjMaskCollection;
-import org.anchoranalysis.image.objmask.factory.CreateFromConnectedComponentsFactory;
-
 import cern.colt.list.DoubleArrayList;
 import cern.jet.stat.Descriptive;
 
-// Calculates the median of a feature applied to each connected component
+/** Calculates the median of a feature applied to each connected component */
 public class MedianConnectedComponentFeature extends FeatureStack {
 
 	/**
@@ -55,30 +50,30 @@ public class MedianConnectedComponentFeature extends FeatureStack {
 	
 	// START BEAN PROPERTIES
 	@BeanField
-	private Feature<FeatureObjMaskParams> item;
+	private Feature<FeatureInputSingleObj> item;
 	
 	@BeanField
 	private int nrgChnlIndex = 0;
 	// END BEAN PROPERTIES
 
 	@Override
-	public double calc(CacheableParams<FeatureStackParams> params) throws FeatureCalcException {
+	public double calc(SessionInput<FeatureInputStack> input) throws FeatureCalcException {
 
-		ObjMaskCollection omc = createObjs(
-			params.getParams().getNrgStack()
+		ResolvedCalculation<ObjMaskCollection, FeatureInputStack> ccObjs = input.resolver().search(
+			new CalculateConnectedComponents(nrgChnlIndex)
 		);
-				
+		
+		int size = input.calc(ccObjs).size();
+						
 		DoubleArrayList featureVals = new DoubleArrayList();
 		
 		// Calculate a feature on each obj mask
-		for( int i=0; i<omc.size(); i++ ) {
-			
-			ObjMask om = omc.get(i);
+		for( int i=0; i<size; i++ ) {
 						
-			double val = params.calcChangeParams(
+			double val = input.forChild().calc(
 				item,
-				p -> extractParams(p, om),
-				"obj-" + i
+				new CalculateDeriveObjFromCollection(ccObjs, i),
+				cacheName(i)
 			);
 			featureVals.add(val);
 		}
@@ -88,35 +83,18 @@ public class MedianConnectedComponentFeature extends FeatureStack {
 		return Descriptive.median(featureVals);
 	}
 	
-	private ObjMaskCollection createObjs(NRGStackWithParams nrgStack) throws FeatureCalcException {
-		
-		BinaryChnl binaryImgChnl = new BinaryChnl(
-			nrgStack.getChnl(nrgChnlIndex),
-			BinaryValues.getDefault()
+	private ChildCacheName cacheName( int index ) {
+		return new ChildCacheName(
+			MedianConnectedComponentFeature.class,
+			nrgChnlIndex + "_" + index
 		);
-		
-		try {
-			CreateFromConnectedComponentsFactory objMaskCreator = new CreateFromConnectedComponentsFactory();
-			objMaskCreator.setMinNumberVoxels(1);
-			return objMaskCreator.createConnectedComponents(binaryImgChnl );
-			
-		} catch (CreateException e) {
-			throw new FeatureCalcException(e);
-		}
-	}
-	
-	private static FeatureObjMaskParams extractParams( FeatureStackParams params, ObjMask om ) {
-		FeatureObjMaskParams paramsObj = new FeatureObjMaskParams();
-		paramsObj.setNrgStack( params.getNrgStack() );
-		paramsObj.setObjMask(om);
-		return paramsObj;
 	}
 
-	public Feature<FeatureObjMaskParams> getItem() {
+	public Feature<FeatureInputSingleObj> getItem() {
 		return item;
 	}
 
-	public void setItem(Feature<FeatureObjMaskParams> item) {
+	public void setItem(Feature<FeatureInputSingleObj> item) {
 		this.item = item;
 	}
 
@@ -127,6 +105,4 @@ public class MedianConnectedComponentFeature extends FeatureStack {
 	public void setNrgChnlIndex(int nrgChnlIndex) {
 		this.nrgChnlIndex = nrgChnlIndex;
 	}
-
-
 }

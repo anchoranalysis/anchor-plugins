@@ -26,16 +26,16 @@ package ch.ethz.biol.cell.mpp.nrg.feature.stack.cachedcalculation;
  * #L%
  */
 
-import org.anchoranalysis.core.cache.ExecuteException;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.feature.cachedcalculation.CachedCalculationCastParams;
-import org.anchoranalysis.image.feature.stack.FeatureStackParams;
+import org.anchoranalysis.feature.cache.calculation.FeatureCalculation;
+import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.image.feature.stack.FeatureInputStack;
 import org.anchoranalysis.image.histogram.Histogram;
 import org.anchoranalysis.image.histogram.HistogramFactoryUtilities;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
-public class CalculateHistogram extends CachedCalculationCastParams<Histogram, FeatureStackParams> {
+public class CalculateHistogram extends FeatureCalculation<Histogram, FeatureInputStack> {
 
 	private int nrgIndex;
 	
@@ -45,18 +45,15 @@ public class CalculateHistogram extends CachedCalculationCastParams<Histogram, F
 	}
 
 	@Override
-	protected Histogram execute( FeatureStackParams params ) throws ExecuteException {
+	protected Histogram execute( FeatureInputStack input ) throws FeatureCalcException {
 
 		try {
-			return HistogramFactoryUtilities.create( params.getNrgStack().getChnl(nrgIndex) );
+			return HistogramFactoryUtilities.create(
+				input.getNrgStackRequired().getChnl(nrgIndex)
+			);
 		} catch (CreateException e) {
-			throw new ExecuteException(e);
+			throw new FeatureCalcException(e);
 		}
-	}
-
-	@Override
-	public CalculateHistogram duplicate() {
-		return new CalculateHistogram(nrgIndex);
 	}
 	
 	@Override

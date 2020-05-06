@@ -27,11 +27,11 @@ package org.anchoranalysis.plugin.image.feature.bean.obj.pair.touching;
  */
 
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.cache.ExecuteException;
-import org.anchoranalysis.feature.cache.CacheableParams;
+import org.anchoranalysis.feature.cache.SessionInput;
+import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.feature.bean.objmask.pair.FeatureObjMaskPair;
-import org.anchoranalysis.image.feature.objmask.pair.FeatureObjMaskPairParams;
+import org.anchoranalysis.image.feature.objmask.pair.FeatureInputPairObjs;
 import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.image.voxel.kernel.count.CountKernel;
 import org.anchoranalysis.image.voxel.kernel.count.CountKernelNghbMask;
@@ -54,10 +54,31 @@ public abstract class TouchingVoxels extends FeatureObjMaskPair {
 	@BeanField
 	private boolean use3D = true;
 	// END BEAN PROPERTIES
+	
+	@Override
+	public double calc(SessionInput<FeatureInputPairObjs> input) throws FeatureCalcException {
+
+		FeatureInputPairObjs inputSessionless = input.get();
 		
+		BoundingBox bboxIntersect = bboxIntersectDilated(input);
+		
+		if (bboxIntersect==null) {
+			// No intersection, so therefore return 0
+			return 0;
+		}
+		
+		return calcWithIntersection(
+			inputSessionless.getFirst(),
+			inputSessionless.getSecond(),
+			bboxIntersect
+		);
+	}
+	
+	protected abstract double calcWithIntersection(ObjMask om1, ObjMask om2, BoundingBox bboxIntersect) throws FeatureCalcException;
+	
 	/** The intersection of the bounding box of one mask with the (dilated by 1 bounding-box) of the other */
-	protected BoundingBox bboxIntersectDilated( CacheableParams<FeatureObjMaskPairParams> params) throws ExecuteException {
-		return params.calc(
+	private BoundingBox bboxIntersectDilated(SessionInput<FeatureInputPairObjs> input) throws FeatureCalcException {
+		return input.calc(
 			new CalculateIntersectionOfDilatedBoundingBox(use3D)	
 		);
 	}

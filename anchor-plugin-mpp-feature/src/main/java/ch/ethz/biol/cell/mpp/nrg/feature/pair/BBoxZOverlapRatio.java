@@ -1,7 +1,7 @@
 package ch.ethz.biol.cell.mpp.nrg.feature.pair;
 
-import org.anchoranalysis.anchor.mpp.feature.bean.nrg.elem.NRGElemPair;
-import org.anchoranalysis.anchor.mpp.feature.nrg.elem.NRGElemPairCalcParams;
+import org.anchoranalysis.anchor.mpp.feature.bean.nrg.elem.FeaturePairMemo;
+import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputPairMemo;
 
 /*
  * #%L
@@ -31,7 +31,7 @@ import org.anchoranalysis.anchor.mpp.feature.nrg.elem.NRGElemPairCalcParams;
 
 
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.feature.cache.CacheableParams;
+import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.ImageDim;
@@ -42,7 +42,7 @@ import org.anchoranalysis.image.extent.ImageDim;
 // This is useful for measuring how much two objects overlap in Z
 //
 // It is only calculated if there is overlap of the bounding boxes in XYZ, else 0 is returned
-public class BBoxZOverlapRatio extends NRGElemPair {
+public class BBoxZOverlapRatio extends FeaturePairMemo {
 
 	/**
 	 * 
@@ -58,14 +58,14 @@ public class BBoxZOverlapRatio extends NRGElemPair {
 	// END BEAN PROPERTIES
 	
 	@Override
-	public double calc(CacheableParams<NRGElemPairCalcParams> paramsCacheable)
+	public double calc(SessionInput<FeatureInputPairMemo> input)
 			throws FeatureCalcException {
 
-		NRGElemPairCalcParams params = paramsCacheable.getParams();
+		FeatureInputPairMemo inputSessionless = input.get();
 		
-		ImageDim sd = params.getNrgStack().getDimensions();
-		BoundingBox bbox1 = params.getObj1().getMark().bbox(sd,regionID);
-		BoundingBox bbox2 = params.getObj2().getMark().bbox(sd,regionID);
+		ImageDim sd = inputSessionless.getDimensionsRequired();
+		BoundingBox bbox1 = inputSessionless.getObj1().getMark().bbox(sd,regionID);
+		BoundingBox bbox2 = inputSessionless.getObj2().getMark().bbox(sd,regionID);
 		
 		// Check the bounding boxes intersect in general (including XY)
 		if (!bbox1.hasIntersection(bbox2)) {

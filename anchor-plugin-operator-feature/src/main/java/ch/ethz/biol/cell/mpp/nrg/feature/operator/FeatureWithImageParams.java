@@ -27,12 +27,12 @@ package ch.ethz.biol.cell.mpp.nrg.feature.operator;
  */
 
 import org.anchoranalysis.feature.bean.Feature;
-import org.anchoranalysis.feature.cache.CacheableParams;
+import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.feature.calc.params.FeatureCalcParamsWithImageParams;
-import org.anchoranalysis.feature.params.FeatureParamsDescriptor;
+import org.anchoranalysis.feature.input.FeatureInputParams;
+import org.anchoranalysis.feature.input.descriptor.FeatureInputDescriptor;
 
-public abstract class FeatureWithImageParams extends Feature<FeatureCalcParamsWithImageParams> {
+public abstract class FeatureWithImageParams extends Feature<FeatureInputParams> {
 
 	/**
 	 * 
@@ -40,15 +40,15 @@ public abstract class FeatureWithImageParams extends Feature<FeatureCalcParamsWi
 	private static final long serialVersionUID = 1L;
 
 	@Override
-	public double calc( CacheableParams<FeatureCalcParamsWithImageParams> params ) throws FeatureCalcException {
-		return calc( params.getParams() );
+	public double calc( SessionInput<FeatureInputParams> input ) throws FeatureCalcException {
+		return calc( input.get() );
 	}
 	
 	// Calculates an NRG element for a set of pixels
-	public abstract double calc( FeatureCalcParamsWithImageParams params ) throws FeatureCalcException;
+	public abstract double calc( FeatureInputParams params ) throws FeatureCalcException;
 
 	@Override
-	public FeatureParamsDescriptor paramType()
+	public FeatureInputDescriptor paramType()
 			throws FeatureCalcException {
 		return FeatureWithImageParamsDescriptor.instance;
 	}

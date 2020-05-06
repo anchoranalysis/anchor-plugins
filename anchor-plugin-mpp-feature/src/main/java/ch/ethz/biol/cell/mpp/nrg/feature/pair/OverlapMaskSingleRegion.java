@@ -26,11 +26,10 @@ package ch.ethz.biol.cell.mpp.nrg.feature.pair;
  * #L%
  */
 
-import org.anchoranalysis.anchor.mpp.feature.nrg.elem.NRGElemPairCalcParams;
+import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputPairMemo;
 import org.anchoranalysis.anchor.mpp.mark.GlobalRegionIdentifiers;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.cache.ExecuteException;
-import org.anchoranalysis.feature.cache.CacheableParams;
+import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import ch.ethz.biol.cell.mpp.nrg.cachedcalculation.OverlapCalculationMaskGlobal;
 
@@ -46,15 +45,10 @@ public abstract class OverlapMaskSingleRegion extends OverlapMaskBase {
 	private int regionID = GlobalRegionIdentifiers.SUBMARK_INSIDE;
 	// END BEAN PROPERTIES
 		
-	protected double overlapWithGlobalMask( CacheableParams<NRGElemPairCalcParams> params ) throws FeatureCalcException {
-		try {
-			return params.calc(
-				new OverlapCalculationMaskGlobal(regionID, getNrgIndex(), (byte) getMaskValue())
-			);
-			
-		} catch (ExecuteException e) {
-			throw new FeatureCalcException(e);
-		}							
+	protected double overlapWithGlobalMask( SessionInput<FeatureInputPairMemo> params ) throws FeatureCalcException {
+		return params.calc(
+			new OverlapCalculationMaskGlobal(regionID, getNrgIndex(), (byte) getMaskValue())
+		);
 	}
 	
 	public int getRegionID() {

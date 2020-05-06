@@ -28,7 +28,7 @@ package org.anchoranalysis.image.feature.bean.list;
 
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.operator.FeatureListElem;
-import org.anchoranalysis.image.feature.objmask.pair.merged.FeatureObjMaskPairMergedParams;
+import org.anchoranalysis.image.feature.objmask.pair.FeatureInputPairObjs;
 
 public abstract class FeatureListProviderAggregatePair extends FeatureListProviderAggregate {
 
@@ -38,15 +38,15 @@ public abstract class FeatureListProviderAggregatePair extends FeatureListProvid
 	private static final long serialVersionUID = 1L;
 
 	@Override
-	protected Feature<FeatureObjMaskPairMergedParams> createAggregateFeature(
-		Feature<FeatureObjMaskPairMergedParams> featFirst,
-		Feature<FeatureObjMaskPairMergedParams> featSecond,
-		Feature<FeatureObjMaskPairMergedParams> featMerged
+	protected Feature<FeatureInputPairObjs> createAggregateFeature(
+		Feature<FeatureInputPairObjs> featFirst,
+		Feature<FeatureInputPairObjs> featSecond,
+		Feature<FeatureInputPairObjs> featMerged
 	) {
-		FeatureListElem<FeatureObjMaskPairMergedParams> featWithList = createFeature();
+		FeatureListElem<FeatureInputPairObjs> featWithList = createFeature();
 		ListUtilities.addFeaturesToList( featFirst, featSecond, featWithList.getList() );
 		return featWithList;
 	}
 	
-	protected abstract FeatureListElem<FeatureObjMaskPairMergedParams> createFeature();
+	protected abstract FeatureListElem<FeatureInputPairObjs> createFeature();
 }

@@ -32,13 +32,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.anchoranalysis.anchor.graph.GraphInstance;
-import org.anchoranalysis.anchor.graph.HistogramItem;
-import org.anchoranalysis.anchor.graph.bean.GraphDefinitionBarHistogram;
 import org.anchoranalysis.anchor.graph.io.GraphOutputter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.Positive;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.bean.provider.HistogramProvider;
 import org.anchoranalysis.image.bean.provider.stack.StackProvider;
@@ -72,19 +69,17 @@ public class StackProviderHistogram extends StackProvider {
 	public Stack create() throws CreateException {
 		
 		try { 
-			GraphDefinitionBarHistogram gd = new GraphDefinitionBarHistogram();
-
 			List<HistogramItem> listHI = histogramList(
 				histogramProvider.create()
 			);
 						
-			GraphInstance gi = gd.create(listHI.iterator(), null, null);
+			GraphInstance gi = HistogramPlot.create(listHI.iterator(), null, null);
 			
 			BufferedImage bi = GraphOutputter.createBufferedImage(gi, width, height);
 			
 			return CreateStackFromBufferedImage.create(bi);
 			
-		} catch (InitException | OperationFailedException e) {
+		} catch (OperationFailedException e) {
 			throw new CreateException(e);
 		}
 	}

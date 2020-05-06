@@ -1,5 +1,8 @@
 package ch.ethz.biol.cell.sgmn.graphcuts.nrgdefinition.pixelscore;
 
+import java.util.List;
+import java.util.Optional;
+
 /*
  * #%L
  * anchor-plugin-image-feature
@@ -27,50 +30,39 @@ package ch.ethz.biol.cell.sgmn.graphcuts.nrgdefinition.pixelscore;
  */
 
 
-import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.InitException;
-import org.anchoranalysis.feature.cache.CacheableParams;
-import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.image.feature.bean.pixelwise.score.PixelScore;
-import org.anchoranalysis.image.feature.pixelwise.PixelwiseFeatureInitParams;
-import org.anchoranalysis.image.feature.pixelwise.score.PixelScoreFeatureCalcParams;
+import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.params.KeyValueParams;
+import org.anchoranalysis.image.histogram.Histogram;
 
-public class PixelScoreNormalizeByMax extends PixelScore {
+/**
+ * This assumes the histograms correspond to the nrg channels exactly (in terms of indexing)
+ * 
+ * @author owen
+ *
+ */
+public class PixelScoreNormalizeByMax extends PixelScoreSingleChnl {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	// START BEAN PROPERTIES
-	@BeanField
-	private int nrgChnlIndex = 0;
-	// END BEAN PROPERTIES
-	
 	private double maxEdge;
-	
-	@Override
-	public double calc(CacheableParams<PixelScoreFeatureCalcParams> paramsCacheable)
-			throws FeatureCalcException {
-		
-		PixelScoreFeatureCalcParams params = paramsCacheable.getParams();
-		
-		double ratioToMax = params.getPxl(nrgChnlIndex)/maxEdge;
-		return ratioToMax;
-	}
 
 	@Override
-	public void beforeCalcCast(PixelwiseFeatureInitParams params) throws InitException {
-		super.beforeCalcCast(params);
-		maxEdge = params.getHist(nrgChnlIndex).calcMax();
+	public void init(List<Histogram> histograms, Optional<KeyValueParams> keyValueParams) throws InitException {
+		try {
+			maxEdge = histograms.get( getNrgChnlIndex() ).calcMax();
+		} catch (OperationFailedException e) {
+			throw new InitException(e);
+		}
 	}
 
-	public int getNrgChnlIndex() {
-		return nrgChnlIndex;
+	@Override
+	protected double deriveScoreFromPixelVal(int pixelVal) {
+		return pixelVal/maxEdge;
 	}
 
-	public void setNrgChnlIndex(int nrgChnlIndex) {
-		this.nrgChnlIndex = nrgChnlIndex;
-	}
 
 }

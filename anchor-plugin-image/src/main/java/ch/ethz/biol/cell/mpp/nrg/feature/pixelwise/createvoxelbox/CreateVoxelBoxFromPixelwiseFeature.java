@@ -28,22 +28,17 @@ package ch.ethz.biol.cell.mpp.nrg.feature.pixelwise.createvoxelbox;
 
 
 import java.nio.ByteBuffer;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.core.params.KeyValueParams;
-import org.anchoranalysis.core.random.RandomNumberGenerator;
-import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.feature.init.FeatureInitParams;
-import org.anchoranalysis.feature.session.SessionFactory;
-import org.anchoranalysis.feature.session.calculator.FeatureCalculatorSingle;
-import org.anchoranalysis.feature.shared.SharedFeatureSet;
 import org.anchoranalysis.image.extent.Extent;
-import org.anchoranalysis.image.feature.pixelwise.PixelwiseFeatureInitParams;
-import org.anchoranalysis.image.feature.pixelwise.score.PixelScoreFeatureCalcParams;
+import org.anchoranalysis.image.feature.bean.pixelwise.PixelScore;
 import org.anchoranalysis.image.histogram.Histogram;
 import org.anchoranalysis.image.histogram.HistogramFactoryUtilities;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
@@ -55,12 +50,11 @@ import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 public class CreateVoxelBoxFromPixelwiseFeature {
 
 	private VoxelBoxList listVoxelBox;
-	private KeyValueParams keyValueParams;
-	private RandomNumberGenerator re;
+	private Optional<KeyValueParams> keyValueParams;
 	private List<Histogram> listAdditionalHistograms;
 
 	// Constructor
-	public CreateVoxelBoxFromPixelwiseFeature(VoxelBoxList listVoxelBox, RandomNumberGenerator re, KeyValueParams keyValueParams, List<Histogram> listAdditionalHistograms ) {
+	public CreateVoxelBoxFromPixelwiseFeature(VoxelBoxList listVoxelBox, Optional<KeyValueParams> keyValueParams, List<Histogram> listAdditionalHistograms ) {
 		super();
 		this.listVoxelBox = listVoxelBox;
 		this.keyValueParams = keyValueParams;
@@ -68,14 +62,14 @@ public class CreateVoxelBoxFromPixelwiseFeature {
 	}
 	
 	// objMask can be null
-	public VoxelBox<ByteBuffer> createVoxelBoxFromPixelScore( Feature<PixelScoreFeatureCalcParams> pixelScore, LogErrorReporter logger ) throws CreateException {
+	public VoxelBox<ByteBuffer> createVoxelBoxFromPixelScore( PixelScore pixelScore, LogErrorReporter logger ) throws CreateException {
 	
 		// Sets up the Feature
 		try {
 			Extent e = listVoxelBox.getFirstExtnt();
 			
 			// We make our index buffer
-			VoxelBox<ByteBuffer> vbOut = VoxelBoxFactory.getByte().create(e);
+			VoxelBox<ByteBuffer> vbOut = VoxelBoxFactory.instance().getByte().create(e);
 			setPixels( vbOut, pixelScore, logger );
 			return vbOut;
 			
@@ -83,32 +77,14 @@ public class CreateVoxelBoxFromPixelwiseFeature {
 			throw new CreateException(e);
 		}
 	}
-		
-	private FeatureInitParams createParamsInit() {
-		PixelwiseFeatureInitParams paramsInit = new PixelwiseFeatureInitParams(	re );
-		if (keyValueParams!=null) {
-			paramsInit.setKeyValueParams(keyValueParams);
-		}
-		for( VoxelBoxWrapper voxelBox : listVoxelBox) {
-			paramsInit.addListHist( HistogramFactoryUtilities.create(voxelBox) );
-		}
-		
-		for( Histogram hist : listAdditionalHistograms ) {
-			paramsInit.addListHist( hist );
-		}
-		
-		return paramsInit;		
-	}
 	
-	
-	private void setPixels( VoxelBox<ByteBuffer> vbOut, Feature<PixelScoreFeatureCalcParams> pixelScore, LogErrorReporter logErrorReporter ) throws FeatureCalcException, InitException {
+	private void setPixels( VoxelBox<ByteBuffer> vbOut, PixelScore pixelScore, LogErrorReporter logErrorReporter ) throws FeatureCalcException, InitException {
 		
-		FeatureCalculatorSingle<PixelScoreFeatureCalcParams> session = SessionFactory.createAndStart(
-			pixelScore,
-			createParamsInit(),
-			new SharedFeatureSet<>(),
-			logErrorReporter
+		pixelScore.init(
+			createHistograms(),
+			keyValueParams
 		);
+		
 		
 		Extent e = vbOut.extnt();
 		
@@ -123,10 +99,24 @@ public class CreateVoxelBoxFromPixelwiseFeature {
 					
 					int offset = e.offset(x, y);
 					
-					BufferUtilities.putScoreForOffset(session, bbList, bbOut, offset);
+					BufferUtilities.putScoreForOffset(pixelScore, bbList, bbOut, offset);
 				}
 					
 			}
 		}
+	}
+	
+	private List<Histogram> createHistograms() {
+		List<Histogram> out = new ArrayList<>();
+
+		for( VoxelBoxWrapper voxelBox : listVoxelBox) {
+			out.add( HistogramFactoryUtilities.create(voxelBox) );
+		}
+		
+		for( Histogram hist : listAdditionalHistograms ) {
+			out.add( hist );
+		}
+		
+		return out;		
 	}
 }

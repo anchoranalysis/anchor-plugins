@@ -28,7 +28,7 @@ package ch.ethz.biol.cell.imageprocessing.stack.provider;
 
 import org.anchoranalysis.bean.BeanInstanceMap;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.bean.annotation.Optional;
+import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.bean.error.BeanMisconfiguredException;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.bean.provider.ChnlProvider;
@@ -47,13 +47,13 @@ public abstract class StackProviderWithBackground extends StackProvider {
 	
 	// Either chnlProviderBackground or stackProviderBackground should be non-null
 	//  but not both
-	@BeanField @Optional
+	@BeanField @OptionalBean
 	private ChnlProvider chnlProviderBackground;
 	
-	@BeanField @Optional
+	@BeanField @OptionalBean
 	private StackProvider stackProviderBackground;
 	
-	@BeanField @Optional
+	@BeanField @OptionalBean
 	private ChnlProvider chnlProviderBackgroundMIP;
 	// END BEAN PROPERTIES
 	

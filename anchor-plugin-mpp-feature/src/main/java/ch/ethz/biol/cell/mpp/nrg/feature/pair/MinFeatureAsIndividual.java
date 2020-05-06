@@ -1,10 +1,7 @@
 package ch.ethz.biol.cell.mpp.nrg.feature.pair;
 
-import java.util.function.Function;
-
-import org.anchoranalysis.anchor.mpp.feature.nrg.elem.NRGElemIndCalcParams;
-import org.anchoranalysis.anchor.mpp.feature.nrg.elem.NRGElemPairCalcParams;
-import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
+import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputPairMemo;
+import org.anchoranalysis.feature.cache.ChildCacheName;
 
 /*
  * #%L
@@ -33,7 +30,7 @@ import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
  */
 
 
-import org.anchoranalysis.feature.cache.CacheableParams;
+import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 
 public class MinFeatureAsIndividual extends NRGElemPairWithFeature {
@@ -43,32 +40,27 @@ public class MinFeatureAsIndividual extends NRGElemPairWithFeature {
 	 */
 	private static final long serialVersionUID = 1L;
 
+	private static final ChildCacheName CACHE_NAME_FIRST = new ChildCacheName(MinFeatureAsIndividual.class, "first");
+	private static final ChildCacheName CACHE_NAME_SECOND = new ChildCacheName(MinFeatureAsIndividual.class, "second");
+	
 	@Override
-	public double calc( CacheableParams<NRGElemPairCalcParams> params ) throws FeatureCalcException {
+	public double calc( SessionInput<FeatureInputPairMemo> input ) throws FeatureCalcException {
 
 		return Math.min(
-			calcForInd( params, p->p.getObj1(), "1" ),
-			calcForInd( params, p->p.getObj2(), "2" )
+			calcForInd( input, true ),
+			calcForInd( input, false )
 		);
 	}
 	
 	private double calcForInd(
-		CacheableParams<NRGElemPairCalcParams> paramsCacheable,
-		Function<NRGElemPairCalcParams,PxlMarkMemo> pmmFunc,
-		String suffix
+		SessionInput<FeatureInputPairMemo> input,
+		boolean first
 	) throws FeatureCalcException {
 		
-		return paramsCacheable.calcChangeParams(
+		return input.forChild().calc(
 			getItem(),
-			p -> deriveParams(p, pmmFunc),
-			"pair_obj" + suffix
-		);
-	}
-	
-	private static NRGElemIndCalcParams deriveParams( NRGElemPairCalcParams params, Function<NRGElemPairCalcParams,PxlMarkMemo> pmmFunc ) {
-		return new NRGElemIndCalcParams(
-			pmmFunc.apply(params),
-			params.getNrgStack()
+			new CalculateDeriveSingleInputFromPair(first),
+			first ? CACHE_NAME_FIRST : CACHE_NAME_SECOND
 		);
 	}
 }

@@ -28,11 +28,10 @@ package ch.ethz.biol.cell.mpp.nrg.feature.objmask;
 
 
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.cache.ExecuteException;
-import org.anchoranalysis.feature.cache.CacheableParams;
+import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.feature.bean.objmask.FeatureObjMask;
-import org.anchoranalysis.image.feature.objmask.FeatureObjMaskParams;
+import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
 import org.anchoranalysis.math.moment.EigenvalueAndVector;
 import org.anchoranalysis.math.moment.MomentsFromPointsCalculator;
 import org.anchoranalysis.points.moment.CalculateObjMaskPointsSecondMomentMatrix;
@@ -49,17 +48,12 @@ public abstract class ObjMaskPointsSpecificEigenvalueBase extends FeatureObjMask
 	private int eigenvalueIndex = 0;
 	// END BEAN PROPERTIES
 		
-	protected EigenvalueAndVector calcSpecificEigenvector( CacheableParams<FeatureObjMaskParams> params ) throws FeatureCalcException {
+	protected EigenvalueAndVector calcSpecificEigenvector( SessionInput<FeatureInputSingleObj> params ) throws FeatureCalcException {
 		
-		try {
-			MomentsFromPointsCalculator mm = params.calc(
-				new CalculateObjMaskPointsSecondMomentMatrix(false)			
-			);
-			return mm.get(eigenvalueIndex );
-			
-		} catch (ExecuteException e) {
-			throw new FeatureCalcException( e.getCause() );
-		}
+		MomentsFromPointsCalculator mm = params.calc(
+			new CalculateObjMaskPointsSecondMomentMatrix(false)			
+		);
+		return mm.get(eigenvalueIndex );
 	}
 	
 	public int getEigenvalueIndex() {

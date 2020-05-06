@@ -1,10 +1,7 @@
 package ch.ethz.biol.cell.mpp.nrg.feature.all;
 
-import org.anchoranalysis.anchor.mpp.feature.bean.mark.FeatureMarkParams;
-import org.anchoranalysis.anchor.mpp.feature.mark.MemoMarks;
-import org.anchoranalysis.anchor.mpp.feature.nrg.elem.NRGElemAllCalcParams;
-import org.anchoranalysis.anchor.mpp.mark.Mark;
-
+import org.anchoranalysis.anchor.mpp.feature.bean.mark.FeatureInputMark;
+import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputAllMemo;
 
 /*-
  * #%L
@@ -33,42 +30,26 @@ import org.anchoranalysis.anchor.mpp.mark.Mark;
  */
 
 import org.anchoranalysis.feature.bean.operator.FeatureSingleElem;
-import org.anchoranalysis.feature.cache.CacheableParams;
+import org.anchoranalysis.feature.cache.ChildCacheName;
+import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 
-public class AsSingleMark extends FeatureSingleElem<NRGElemAllCalcParams,FeatureMarkParams> {
+public class AsSingleMark extends FeatureSingleElem<FeatureInputAllMemo,FeatureInputMark> {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 
-	@Override
-	public double calc(CacheableParams<NRGElemAllCalcParams> params) throws FeatureCalcException {
-		
-		MemoMarks list = params.getParams().getPxlPartMemo();
-		
-		if (list.size()==0) {
-			throw new FeatureCalcException("No mark exists in the list");
-		}
-		
-		if (list.size()>1) {
-			throw new FeatureCalcException("More than one mark exists in the list");
-		}
-		
-		Mark mark = list.getMemoForIndex(0).getMark();
-		
-		return params.calcChangeParams(
-			getItem(),
-			p -> deriveParams(p, mark),
-			"mark"
-		);
-	}
+	private static final ChildCacheName CACHE_NAME = new ChildCacheName(AsSingleMark.class);
 	
-	private static FeatureMarkParams deriveParams( NRGElemAllCalcParams params, Mark mark ) {
-		return new FeatureMarkParams(
-			mark,
-			params.getDimensions().getRes()
-		);		
+	@Override
+	public double calc(SessionInput<FeatureInputAllMemo> input) throws FeatureCalcException {
+		
+		return input.forChild().calc(
+			getItem(),
+			new CalculateDeriveMarkInput(),
+			CACHE_NAME
+		);
 	}
 }

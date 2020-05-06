@@ -34,10 +34,10 @@ import org.anchoranalysis.core.axis.AxisType;
 import org.anchoranalysis.core.axis.AxisTypeUtilities;
 import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.core.geometry.Point3i;
-import org.anchoranalysis.feature.cache.CacheableParams;
+import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.feature.bean.objmask.FeatureObjMask;
-import org.anchoranalysis.image.feature.objmask.FeatureObjMaskParams;
+import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
 import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 
@@ -73,13 +73,13 @@ public class ArbitraryInsidePoint extends FeatureObjMask {
 	}
 	
 	@Override
-	public double calc(CacheableParams<FeatureObjMaskParams> paramsCacheable) throws FeatureCalcException {
-		
-		FeatureObjMaskParams params = paramsCacheable.getParams();
-		
+	public double calc(SessionInput<FeatureInputSingleObj> input) throws FeatureCalcException {
+				
 		AxisType axisType = AxisTypeUtilities.createFromString(axis);
 		
-		Point3i arbPoint = calcArbitraryPointWithinMask(params.getObjMask());
+		Point3i arbPoint = calcArbitraryPointWithinMask(
+			input.get().getObjMask()
+		);
 	
 		if (arbPoint==null) {
 			return emptyValue;

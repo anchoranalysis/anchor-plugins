@@ -1,5 +1,7 @@
 package org.anchoranalysis.plugin.io.bean.input.stack;
 
+import org.anchoranalysis.core.error.OperationFailedException;
+
 /*-
  * #%L
  * anchor-image-io
@@ -40,5 +42,5 @@ import org.anchoranalysis.image.stack.TimeSequence;
 public abstract class StackSequenceInput extends ProvidesStackInput {
 
 	// Creates a TimeSequence of ImgStack for a particular series number
-	public abstract OperationWithProgressReporter<TimeSequence> createStackSequenceForSeries( int seriesNum ) throws RasterIOException;
+	public abstract OperationWithProgressReporter<TimeSequence,OperationFailedException> createStackSequenceForSeries( int seriesNum ) throws RasterIOException;
 }

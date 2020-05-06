@@ -1,6 +1,6 @@
 package ch.ethz.biol.cell.mpp.nrg.feature.pair;
 
-import org.anchoranalysis.anchor.mpp.feature.nrg.elem.NRGElemPairCalcParams;
+import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputPairMemo;
 import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
 
 /*
@@ -33,9 +33,8 @@ import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.shared.relation.EqualToBean;
 import org.anchoranalysis.bean.shared.relation.RelationBean;
-import org.anchoranalysis.core.cache.ExecuteException;
 import org.anchoranalysis.core.relation.RelationToValue;
-import org.anchoranalysis.feature.cache.CacheableParams;
+import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.voxel.statistics.VoxelStatistics;
 
@@ -53,19 +52,16 @@ public class OverlapRatioMaskGlobalMiddleQuantiles extends OverlapMaskQuantiles 
 	
 	private RelationBean relationToThreshold = new EqualToBean();
 	
-	public OverlapRatioMaskGlobalMiddleQuantiles() {
-	}
-		
 	@Override
-	public double calc( CacheableParams<NRGElemPairCalcParams> paramsCacheable ) throws FeatureCalcException {
+	public double calc( SessionInput<FeatureInputPairMemo> input ) throws FeatureCalcException {
 		 
-		NRGElemPairCalcParams params = paramsCacheable.getParams();
+		FeatureInputPairMemo inputSessionless = input.get();
 		
-		double overlap = overlapWithQuantiles(paramsCacheable);
+		double overlap = overlapWithQuantiles(input);
 		
 		return calcOverlapRatioMin(
-			params.getObj1(),
-			params.getObj2(),
+			inputSessionless.getObj1(),
+			inputSessionless.getObj2(),
 			overlap,
 			getRegionID(),
 			false
@@ -80,37 +76,31 @@ public class OverlapRatioMaskGlobalMiddleQuantiles extends OverlapMaskQuantiles 
 		int nrgIndex,
 		int maskValue
 	) throws FeatureCalcException {
-		try {
-			VoxelStatistics pxlStats1 =  obj1.doOperation().statisticsForAllSlices(nrgIndex, regionID);
-			VoxelStatistics pxlStats2 =  obj2.doOperation().statisticsForAllSlices(nrgIndex, regionID);
-			
-			long size1 = pxlStats1.countThreshold(relationToThreshold, maskValue);
-			long size2 = pxlStats2.countThreshold(relationToThreshold, maskValue);
-			return Math.min( size1, size2 );
-		} catch (ExecuteException e) {
-			throw new FeatureCalcException(e);
-		}
+
+		VoxelStatistics pxlStats1 =  obj1.doOperation().statisticsForAllSlices(nrgIndex, regionID);
+		VoxelStatistics pxlStats2 =  obj2.doOperation().statisticsForAllSlices(nrgIndex, regionID);
+		
+		long size1 = pxlStats1.countThreshold(relationToThreshold, maskValue);
+		long size2 = pxlStats2.countThreshold(relationToThreshold, maskValue);
+		return Math.min( size1, size2 );
 	}
 	
 	public static double calcMaxVolume(
-			PxlMarkMemo obj1,
-			PxlMarkMemo obj2,
-			int regionID,
-			RelationToValue relationToThreshold,
-			int nrgIndex,
-			int maskValue
-		) throws FeatureCalcException {
-			try {
-				VoxelStatistics pxlStats1 =  obj1.doOperation().statisticsForAllSlices(nrgIndex, regionID);
-				VoxelStatistics pxlStats2 =  obj2.doOperation().statisticsForAllSlices(nrgIndex, regionID);
-				
-				long size1 = pxlStats1.countThreshold(relationToThreshold, maskValue);
-				long size2 = pxlStats2.countThreshold(relationToThreshold, maskValue);
-				return Math.max( size1, size2 );
-			} catch (ExecuteException e) {
-				throw new FeatureCalcException(e);
-			}
-		}
+		PxlMarkMemo obj1,
+		PxlMarkMemo obj2,
+		int regionID,
+		RelationToValue relationToThreshold,
+		int nrgIndex,
+		int maskValue
+	) throws FeatureCalcException {
+
+		VoxelStatistics pxlStats1 =  obj1.doOperation().statisticsForAllSlices(nrgIndex, regionID);
+		VoxelStatistics pxlStats2 =  obj2.doOperation().statisticsForAllSlices(nrgIndex, regionID);
+		
+		long size1 = pxlStats1.countThreshold(relationToThreshold, maskValue);
+		long size2 = pxlStats2.countThreshold(relationToThreshold, maskValue);
+		return Math.max( size1, size2 );
+	}
 	
 	private double calcOverlapRatioMin( PxlMarkMemo obj1, PxlMarkMemo obj2, double overlap, int regionID, boolean mip ) throws FeatureCalcException {
 

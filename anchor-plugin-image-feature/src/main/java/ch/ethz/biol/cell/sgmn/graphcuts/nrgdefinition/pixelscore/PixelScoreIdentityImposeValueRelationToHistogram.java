@@ -1,5 +1,8 @@
 package ch.ethz.biol.cell.sgmn.graphcuts.nrgdefinition.pixelscore;
 
+import java.util.List;
+import java.util.Optional;
+
 /*
  * #%L
  * anchor-plugin-image-feature
@@ -30,11 +33,11 @@ package ch.ethz.biol.cell.sgmn.graphcuts.nrgdefinition.pixelscore;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.shared.relation.RelationBean;
 import org.anchoranalysis.core.error.InitException;
-import org.anchoranalysis.feature.cache.CacheableParams;
+import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.params.KeyValueParams;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.image.feature.bean.pixelwise.score.PixelScore;
-import org.anchoranalysis.image.feature.pixelwise.PixelwiseFeatureInitParams;
-import org.anchoranalysis.image.feature.pixelwise.score.PixelScoreFeatureCalcParams;
+import org.anchoranalysis.image.feature.bean.pixelwise.PixelScore;
+import org.anchoranalysis.image.histogram.Histogram;
 
 public class PixelScoreIdentityImposeValueRelationToHistogram extends PixelScore {
 
@@ -66,25 +69,26 @@ public class PixelScoreIdentityImposeValueRelationToHistogram extends PixelScore
 	private int histMax;
 		
 	@Override
-	protected double calc(CacheableParams<PixelScoreFeatureCalcParams> paramsCacheable)
-			throws FeatureCalcException {
+	public double calc(int[] pixelVals) throws FeatureCalcException {
 		
-		PixelScoreFeatureCalcParams params = paramsCacheable.getParams();
-		
-		double pxlValue = params.getPxl(nrgChnlIndexCheck);
+		double pxlValue = pixelVals[nrgChnlIndexCheck];
 		
 		if (relation.create().isRelationToValueTrue(pxlValue, histMax)) {
 			return value;
 		}
-		return params.getPxl(nrgChnlIndexFail);
+		return pixelVals[nrgChnlIndexFail];
 	}
 
 	@Override
-	public void beforeCalcCast(PixelwiseFeatureInitParams params) throws InitException {
-		if (max) {
-			histMax = params.getHist(histIndex).calcMax();
-		} else {
-			histMax = params.getHist(histIndex).calcMin();
+	public void init(List<Histogram> histograms, Optional<KeyValueParams> keyValueParams) throws InitException {
+		try {
+			if (max) {
+				histMax = histograms.get(histIndex).calcMax();
+			} else {
+				histMax = histograms.get(histIndex).calcMin();
+			}
+		} catch (OperationFailedException e) {
+			throw new InitException(e);
 		}
 	}
 

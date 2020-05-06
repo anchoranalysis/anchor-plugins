@@ -2,7 +2,7 @@ package org.anchoranalysis.plugin.image.feature.bean.obj.intersecting;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
+
 
 /*
  * #%L
@@ -33,12 +33,12 @@ import java.util.stream.Collectors;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.bean.Feature;
-import org.anchoranalysis.feature.cache.CacheableParams;
+import org.anchoranalysis.feature.cache.ChildCacheName;
+import org.anchoranalysis.feature.cache.SessionInput;
+import org.anchoranalysis.feature.cache.calculation.ResolvedCalculation;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.feature.nrg.NRGStackWithParams;
-import org.anchoranalysis.image.feature.objmask.FeatureObjMaskParams;
-import org.anchoranalysis.image.feature.objmask.pair.FeatureObjMaskPairParams;
-import org.anchoranalysis.image.objmask.ObjMask;
+import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
+import org.anchoranalysis.image.feature.objmask.pair.FeatureInputPairObjs;
 import org.anchoranalysis.image.objmask.ObjMaskCollection;
 
 public abstract class FeatureIntersectingObjsSingleElem extends FeatureIntersectingObjs {
@@ -52,58 +52,44 @@ public abstract class FeatureIntersectingObjsSingleElem extends FeatureIntersect
 
 	// START BEAN PROPERTIES
 	@BeanField
-	private Feature<FeatureObjMaskPairParams> item;
+	private Feature<FeatureInputPairObjs> item;
 	// END BEAN PROPERTIES
 	
 	@Override
-	protected double valueFor(CacheableParams<FeatureObjMaskParams> params, ObjMaskCollection intersecting)
+	protected double valueFor(SessionInput<FeatureInputSingleObj> params, ResolvedCalculation<ObjMaskCollection, FeatureInputSingleObj> intersecting)
 			throws FeatureCalcException {
 
-		ObjMask om = params.getParams().getObjMask();
-		NRGStackWithParams nrgStack = params.getParams().getNrgStack();
-		
-		// Create parameters
-		List<FeatureObjMaskPairParams> listParams = deriveListParams(intersecting, om, nrgStack);
-
 		return aggregateResults(
-			calcResults(params, listParams)
+			calcResults(params, intersecting)
 		);
 	}
 	
 	protected abstract double aggregateResults( List<Double> results );
 	
-	private List<Double> calcResults( CacheableParams<FeatureObjMaskParams> paramsExst, List<FeatureObjMaskPairParams> paramsToCalc ) throws FeatureCalcException {
+	private List<Double> calcResults( SessionInput<FeatureInputSingleObj> paramsExst, ResolvedCalculation<ObjMaskCollection, FeatureInputSingleObj> ccIntersecting ) throws FeatureCalcException {
+		
+		int size = paramsExst.calc(ccIntersecting).size();
 		
 		List<Double> results = new ArrayList<>();
-		for( int i=0; i<paramsToCalc.size(); i++) {
+		for( int i=0; i<size; i++) {
 			
 			final int index = i;
 			
-			double res = paramsExst.calcChangeParams(
+			double res = paramsExst.forChild().calc(
 				item,
-				p -> paramsToCalc.get(index),
-				"obj" + i
+				new CalculateIntersecting(ccIntersecting, index),
+				new ChildCacheName(FeatureIntersectingObjsSingleElem.class,i)
 			);
 			results.add(res);
 		}
 		return results;
 	}
 	
-	private static List<FeatureObjMaskPairParams> deriveListParams( ObjMaskCollection intersecting, ObjMask om, NRGStackWithParams nrgStack) {
-		return intersecting.asList().stream().map(
-				omIntersects -> createParams(om, omIntersects, nrgStack)
-		).collect( Collectors.toList() );
-	}
-	
-	private static FeatureObjMaskPairParams createParams( ObjMask obj1, ObjMask obj2, NRGStackWithParams nrgStack) {
-		return new FeatureObjMaskPairParams( obj1, obj2, nrgStack );
-	}
-	
-	public Feature<FeatureObjMaskPairParams> getItem() {
+	public Feature<FeatureInputPairObjs> getItem() {
 		return item;
 	}
 
-	public void setItem(Feature<FeatureObjMaskPairParams> item) {
+	public void setItem(Feature<FeatureInputPairObjs> item) {
 		this.item = item;
 	}
 

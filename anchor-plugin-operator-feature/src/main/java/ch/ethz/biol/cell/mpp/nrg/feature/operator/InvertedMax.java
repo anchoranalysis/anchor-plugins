@@ -29,11 +29,11 @@ package ch.ethz.biol.cell.mpp.nrg.feature.operator;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.bean.operator.FeatureGenericSingleElem;
-import org.anchoranalysis.feature.cache.CacheableParams;
+import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
+import org.anchoranalysis.feature.input.FeatureInput;
 
-public class InvertedMax<T extends FeatureCalcParams> extends FeatureGenericSingleElem<T> {
+public class InvertedMax<T extends FeatureInput> extends FeatureGenericSingleElem<T> {
 
 	/**
 	 * 
@@ -46,9 +46,9 @@ public class InvertedMax<T extends FeatureCalcParams> extends FeatureGenericSing
 	// END BEAN PARAMETERS
 	
 	@Override
-	public double calc( CacheableParams<T> params ) throws FeatureCalcException {
+	public double calc( SessionInput<T> input ) throws FeatureCalcException {
 		return Math.min(
-			(1/ params.calc( getItem() )),
+			(1/ input.calc( getItem() )),
 			max
 		);
 	}

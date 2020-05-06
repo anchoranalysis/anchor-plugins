@@ -28,7 +28,7 @@ package ch.ethz.biol.cell.mpp.nrg.feature.objmaskcollection;
 
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.feature.bean.objmask.FeatureObjMaskCollection;
-import org.anchoranalysis.image.feature.objmask.collection.FeatureObjMaskCollectionParams;
+import org.anchoranalysis.image.feature.objmask.collection.FeatureInputObjs;
 
 public class NumObjs extends FeatureObjMaskCollection {
 
@@ -38,7 +38,7 @@ public class NumObjs extends FeatureObjMaskCollection {
 	private static final long serialVersionUID = 1L;
 
 	@Override
-	public double calc(FeatureObjMaskCollectionParams params)
+	public double calc(FeatureInputObjs params)
 			throws FeatureCalcException {
 		return params.getObjMaskCollection().size();
 	}

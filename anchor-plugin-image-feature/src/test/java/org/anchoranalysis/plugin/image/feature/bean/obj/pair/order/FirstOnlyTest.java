@@ -30,6 +30,7 @@ package org.anchoranalysis.plugin.image.feature.bean.obj.pair.order;
 
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.image.feature.objmask.pair.impl.First;
 import org.anchoranalysis.plugin.image.feature.bean.obj.pair.ParamsFixtureHelper;
 import org.junit.Test;
 
@@ -39,7 +40,7 @@ public class FirstOnlyTest {
 	public void testOverlapping() throws FeatureCalcException, InitException {
 		
 		ParamsFixtureHelper.testSimpleInt(
-			OrderHelper.addFeatureToOrder(new FirstOnly()),
+			OrderHelper.addFeatureToOrder(new First()),
 			2821
 		);
 	}

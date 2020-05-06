@@ -1,6 +1,6 @@
 package ch.ethz.biol.cell.mpp.nrg.feature.pair;
 
-import org.anchoranalysis.anchor.mpp.feature.nrg.elem.NRGElemPairCalcParams;
+import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputPairMemo;
 import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
 
 /*
@@ -34,7 +34,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.shared.relation.EqualToBean;
 import org.anchoranalysis.bean.shared.relation.RelationBean;
 import org.anchoranalysis.core.relation.RelationToValue;
-import org.anchoranalysis.feature.cache.CacheableParams;
+import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 
 public class OverlapRatioMaskGlobal extends OverlapMaskSingleRegion {
@@ -55,15 +55,15 @@ public class OverlapRatioMaskGlobal extends OverlapMaskSingleRegion {
 	}
 	
 	@Override
-	public double calc( CacheableParams<NRGElemPairCalcParams> paramsCacheable ) throws FeatureCalcException {
+	public double calc( SessionInput<FeatureInputPairMemo> input ) throws FeatureCalcException {
 		
-		NRGElemPairCalcParams params = paramsCacheable.getParams();
+		FeatureInputPairMemo inputSessionless = input.get();
 		
-		double overlap = overlapWithGlobalMask(paramsCacheable);
+		double overlap = overlapWithGlobalMask(input);
 		
 		return calcOverlapRatioToggle(
-			params.getObj1(),
-			params.getObj2(),
+			inputSessionless.getObj1(),
+			inputSessionless.getObj2(),
 			overlap,
 			getRegionID(),
 			false

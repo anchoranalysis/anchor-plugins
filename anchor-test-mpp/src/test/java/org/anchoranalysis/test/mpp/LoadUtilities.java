@@ -33,7 +33,7 @@ import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.image.objmask.ObjMaskCollection;
 import org.anchoranalysis.image.objmask.factory.CreateFromConnectedComponentsFactory;
 import org.anchoranalysis.image.stack.Stack;
-import org.anchoranalysis.test.image.TestLoaderImageIO;
+import org.anchoranalysis.test.image.io.TestLoaderImageIO;
 
 public class LoadUtilities {
 

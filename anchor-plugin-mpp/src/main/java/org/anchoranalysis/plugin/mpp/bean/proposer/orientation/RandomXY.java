@@ -1,5 +1,7 @@
 package org.anchoranalysis.plugin.mpp.bean.proposer.orientation;
 
+import java.util.Optional;
+
 /*-
  * #%L
  * anchor-plugin-mpp
@@ -43,11 +45,11 @@ public class RandomXY extends OrientationProposer {
 	private static final long serialVersionUID = -6739151761002161746L;
 	
 	@Override
-	public Orientation propose(Mark mark,	ImageDim dim, RandomNumberGenerator re, ErrorNode proposerFailureDescription) {
+	public Optional<Orientation> propose(Mark mark,	ImageDim dim, RandomNumberGenerator re, ErrorNode proposerFailureDescription) {
 		OrientationAxisAngle orientation = new OrientationAxisAngle();
 		orientation.setAxis( new Vector3d(0,0,1) );
 		orientation.setAngle( re.nextDouble() * Math.PI * 2 );
-		return orientation;
+		return Optional.of(orientation);
 	}
 
 	@Override

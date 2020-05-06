@@ -33,13 +33,14 @@ import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.name.store.SharedObjects;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.image.feature.objmask.FeatureObjMaskParams;
+import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
 import org.anchoranalysis.image.init.ImageInitParams;
 import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.image.objmask.ObjMaskCollection;
-import org.anchoranalysis.test.LoggingFixtures;
-import org.anchoranalysis.test.feature.plugins.CircleObjMaskFixture;
+import org.anchoranalysis.test.LoggingFixture;
 import org.anchoranalysis.test.feature.plugins.FeatureTestCalculator;
+import org.anchoranalysis.test.feature.plugins.objs.CircleObjMaskFixture;
+import org.anchoranalysis.test.feature.plugins.objs.IntersectingCircleObjsFixture;
 import org.mockito.Mockito;
 
 class InteresectingObjsTestHelper {
@@ -74,7 +75,7 @@ class InteresectingObjsTestHelper {
 		int expectedLast
 	) throws OperationFailedException, FeatureCalcException, InitException {
 		
-		ObjMaskCollection objs = IntersectingObjsFixture.generateIntersectingObjs(
+		ObjMaskCollection objs = IntersectingCircleObjsFixture.generateIntersectingObjs(
 			numInteresecting,
 			numNotIteresecting,
 			sameSize
@@ -149,7 +150,7 @@ class InteresectingObjsTestHelper {
 		FeatureTestCalculator.assertIntResult(
 			message,
 			addId(feature),
-			new FeatureObjMaskParams(om, CircleObjMaskFixture.nrgStack()),
+			new FeatureInputSingleObj(om, CircleObjMaskFixture.nrgStack()),
 			Optional.of(createInitParams(others)),
 			expectedResult
 		);		
@@ -165,7 +166,7 @@ class InteresectingObjsTestHelper {
 	private static ImageInitParams createInitParams( ObjMaskCollection others ) throws OperationFailedException {
 		
 		SharedObjects so = new SharedObjects(
-			LoggingFixtures.simpleLogErrorReporter()
+			LoggingFixture.simpleLogErrorReporter()
 		);
 		
 		so.getOrCreate(ObjMaskCollection.class).add(ID, ()->others);

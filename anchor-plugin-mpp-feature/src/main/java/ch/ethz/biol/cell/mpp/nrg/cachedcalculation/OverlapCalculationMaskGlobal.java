@@ -1,6 +1,6 @@
 package ch.ethz.biol.cell.mpp.nrg.cachedcalculation;
 
-import org.anchoranalysis.anchor.mpp.feature.nrg.elem.NRGElemPairCalcParams;
+import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputPairMemo;
 import org.anchoranalysis.anchor.mpp.overlap.OverlapUtilities;
 import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
 
@@ -31,14 +31,13 @@ import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
  */
 
 
-import org.anchoranalysis.core.cache.ExecuteException;
-import org.anchoranalysis.feature.cachedcalculation.CachedCalculationCastParams;
-import org.anchoranalysis.feature.nrg.NRGStackWithParams;
+import org.anchoranalysis.feature.cache.calculation.FeatureCalculation;
+import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.chnl.Chnl;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
-public class OverlapCalculationMaskGlobal extends CachedCalculationCastParams<Double,NRGElemPairCalcParams> {
+public class OverlapCalculationMaskGlobal extends FeatureCalculation<Double,FeatureInputPairMemo> {
 
 	private int regionID;
 	private int nrgIndex;
@@ -53,16 +52,15 @@ public class OverlapCalculationMaskGlobal extends CachedCalculationCastParams<Do
 	}
 
 	@Override
-	protected Double execute( NRGElemPairCalcParams params ) throws ExecuteException {
+	protected Double execute( FeatureInputPairMemo input ) throws FeatureCalcException {
 		
-		PxlMarkMemo mark1 = params.getObj1();
-		PxlMarkMemo mark2 = params.getObj2();
+		PxlMarkMemo mark1 = input.getObj1();
+		PxlMarkMemo mark2 = input.getObj2();
 		
 		assert( mark1 != null );
 		assert( mark2 != null );
 		
-		NRGStackWithParams nrgStack = params.getNrgStack();
-		Chnl chnl = nrgStack.getNrgStack().getChnl(nrgIndex);
+		Chnl chnl = input.getNrgStackRequired().getNrgStack().getChnl(nrgIndex);
 		
 		return OverlapUtilities.overlapWithMaskGlobal(
 			mark1,
@@ -71,11 +69,6 @@ public class OverlapCalculationMaskGlobal extends CachedCalculationCastParams<Do
 			chnl.getVoxelBox().asByte(),
 			maskOnValue
 		);
-	}
-	
-	@Override
-	public OverlapCalculationMaskGlobal duplicate() {
-		return new OverlapCalculationMaskGlobal(regionID,nrgIndex,maskOnValue);
 	}
 	
 	@Override
@@ -94,6 +87,10 @@ public class OverlapCalculationMaskGlobal extends CachedCalculationCastParams<Do
 	
 	@Override
 	public int hashCode() {
-		return new HashCodeBuilder().append(regionID).append(nrgIndex).append(maskOnValue).toHashCode();
+		return new HashCodeBuilder()
+			.append(regionID)
+			.append(nrgIndex)
+			.append(maskOnValue)
+			.toHashCode();
 	}
 }

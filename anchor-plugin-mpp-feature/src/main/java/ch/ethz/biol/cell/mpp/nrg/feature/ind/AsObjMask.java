@@ -1,8 +1,8 @@
 package ch.ethz.biol.cell.mpp.nrg.feature.ind;
 
 import org.anchoranalysis.anchor.mpp.bean.regionmap.RegionMap;
-import org.anchoranalysis.anchor.mpp.feature.nrg.elem.NRGElemIndCalcParams;
-import org.anchoranalysis.anchor.mpp.feature.nrg.elem.NRGElemIndCalcParamsDescriptor;
+import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputSingleMemo;
+import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputSingleMemoDescriptor;
 import org.anchoranalysis.anchor.mpp.regionmap.RegionMapSingleton;
 
 /*
@@ -34,14 +34,13 @@ import org.anchoranalysis.anchor.mpp.regionmap.RegionMapSingleton;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.bean.operator.FeatureSingleElem;
-import org.anchoranalysis.feature.cache.CacheableParams;
+import org.anchoranalysis.feature.cache.ChildCacheName;
+import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.feature.params.FeatureParamsDescriptor;
-import org.anchoranalysis.image.binary.values.BinaryValuesByte;
-import org.anchoranalysis.image.feature.objmask.FeatureObjMaskParams;
-import org.anchoranalysis.image.objmask.properties.ObjMaskWithProperties;
+import org.anchoranalysis.feature.input.descriptor.FeatureInputDescriptor;
+import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
 
-public class AsObjMask extends FeatureSingleElem<NRGElemIndCalcParams,FeatureObjMaskParams> {
+public class AsObjMask extends FeatureSingleElem<FeatureInputSingleMemo,FeatureInputSingleObj> {
 
 	/**
 	 * 
@@ -57,36 +56,22 @@ public class AsObjMask extends FeatureSingleElem<NRGElemIndCalcParams,FeatureObj
 	// END BEAN PROPERTIES
 	
 	@Override
-	public double calc(CacheableParams<NRGElemIndCalcParams> params) throws FeatureCalcException {
-		return params
-			.calcChangeParams(
+	public double calc(SessionInput<FeatureInputSingleMemo> input) throws FeatureCalcException {
+		return input
+			.forChild()
+			.calc(
 				getItem(),
-				p -> deriveParams(p),
-				"obj"
+				new CalculateSingleObjFromMemo(regionMap,index),
+				new ChildCacheName(AsObjMask.class, index)
 			);			
-	}
-	
-	private FeatureObjMaskParams deriveParams(NRGElemIndCalcParams params) {
-		
-		ObjMaskWithProperties om = params.getPxlPartMemo().getMark().calcMask(
-			params.getNrgStack().getDimensions(),
-			regionMap.membershipWithFlagsForIndex(index),
-			BinaryValuesByte.getDefault()
-		);
-		
-		FeatureObjMaskParams paramsNew = new FeatureObjMaskParams(
-			om.getMask()
-		);
-		paramsNew.setNrgStack( params.getNrgStack() );
-		return paramsNew;
 	}
 
 	// We change the default behaviour, as we don't want to give the same paramsFactory
 	//   as the item we pass to
 	@Override
-	public FeatureParamsDescriptor paramType()
+	public FeatureInputDescriptor paramType()
 			throws FeatureCalcException {
-		return NRGElemIndCalcParamsDescriptor.instance;
+		return FeatureInputSingleMemoDescriptor.instance;
 	}
 
 	@Override

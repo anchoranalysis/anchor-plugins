@@ -1,7 +1,7 @@
 package ch.ethz.biol.cell.mpp.nrg.feature.ind;
 
-import org.anchoranalysis.anchor.mpp.feature.bean.nrg.elem.NRGElemInd;
-import org.anchoranalysis.anchor.mpp.feature.nrg.elem.NRGElemIndCalcParams;
+import org.anchoranalysis.anchor.mpp.feature.bean.nrg.elem.FeatureSingleMemo;
+import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputSingleMemo;
 import org.anchoranalysis.anchor.mpp.mark.GlobalRegionIdentifiers;
 import org.anchoranalysis.anchor.mpp.pxlmark.PxlMark;
 
@@ -33,10 +33,9 @@ import org.anchoranalysis.anchor.mpp.pxlmark.PxlMark;
 
 
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.cache.ExecuteException;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 
-public class IntensityDifference extends NRGElemInd {
+public class IntensityDifference extends FeatureSingleMemo {
 
 	/**
 	 * 
@@ -59,32 +58,14 @@ public class IntensityDifference extends NRGElemInd {
 	}
 		
 	@Override
-	public double calcCast( NRGElemIndCalcParams params ) throws FeatureCalcException {
-		
-		try {
-			PxlMark pm = params.getPxlPartMemo().doOperation();
-			
-			double mean_in = pm.statisticsForAllSlices(0,GlobalRegionIdentifiers.SUBMARK_INSIDE).mean();
-			double mean_shell = pm.statisticsForAllSlices(0,GlobalRegionIdentifiers.SUBMARK_SHELL).mean();
+	public double calcCast( FeatureInputSingleMemo params ) throws FeatureCalcException {
 
-			//double var_in = inside.variance( mean_in );
-			
-			/*if (mean_in < minIntns) {
-				return -1;
-			}*/
-			
-			//double nrg = ( (mean_in-minIntns) / 255) * (inside.size()) / 10000;
-			
-			double nrg = ( ((mean_in-mean_shell) - minDiff) / 255 );
-			
-			//if (nrg<0) {
-			//	nrg = -1e-25;
-			//}
-			
-			return nrg;
-		} catch (ExecuteException e) {
-			throw new FeatureCalcException(e);
-		}							
+		PxlMark pm = params.getPxlPartMemo().doOperation();
+		
+		double mean_in = pm.statisticsForAllSlices(0,GlobalRegionIdentifiers.SUBMARK_INSIDE).mean();
+		double mean_shell = pm.statisticsForAllSlices(0,GlobalRegionIdentifiers.SUBMARK_SHELL).mean();
+		
+		return ((mean_in-mean_shell) - minDiff) / 255;
 	}
 
 	@Override

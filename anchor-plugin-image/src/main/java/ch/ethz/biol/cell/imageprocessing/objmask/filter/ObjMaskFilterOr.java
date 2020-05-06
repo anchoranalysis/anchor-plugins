@@ -30,32 +30,25 @@ package ch.ethz.biol.cell.imageprocessing.objmask.filter;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.bean.objmask.filter.ObjMaskFilter;
-import org.anchoranalysis.image.bean.objmask.filter.ObjMaskFilterList;
 import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.image.objmask.ObjMaskCollection;
 
-public class ObjMaskFilterOr extends ObjMaskFilter {
+public class ObjMaskFilterOr extends ObjMaskFilterDelegate {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1049151951022876436L;
 	
-	// START BEAN PROPERTIES
-	@BeanField
-	private ObjMaskFilterList list = null;
-	// END BEAN PROPERTIES
-	
 	@Override
 	public void filter(ObjMaskCollection objs, ImageDim dim, ObjMaskCollection objsRejected) throws OperationFailedException {
 		
 		Set<ObjMask> set = new HashSet<ObjMask>();
 		
-		for (ObjMaskFilter indFilter : list) {
+		for (ObjMaskFilter indFilter : delegate().getList()) {
 			ObjMaskCollection objsDup = objs.duplicate();
 			indFilter.filter(objsDup, dim, objsRejected);
 			set.addAll(objsDup.asList());
@@ -64,14 +57,4 @@ public class ObjMaskFilterOr extends ObjMaskFilter {
 		objs.clear();
 		objs.addAll(set);
 	}
-
-	public ObjMaskFilterList getList() {
-		return list;
-	}
-
-	public void setList(ObjMaskFilterList list) {
-		this.list = list;
-	}
-
-
 }

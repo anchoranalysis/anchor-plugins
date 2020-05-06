@@ -28,23 +28,17 @@ package ch.ethz.biol.cell.mpp.nrg.feature.pixelwise.createvoxelbox;
 
 
 import java.nio.ByteBuffer;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.geometry.Point3i;
-import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.core.params.KeyValueParams;
-import org.anchoranalysis.core.random.RandomNumberGenerator;
-import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
-import org.anchoranalysis.feature.session.SessionFactory;
-import org.anchoranalysis.feature.session.calculator.FeatureCalculatorSingle;
-import org.anchoranalysis.feature.shared.SharedFeatureSet;
 import org.anchoranalysis.image.extent.Extent;
-import org.anchoranalysis.image.feature.pixelwise.PixelwiseFeatureInitParams;
-import org.anchoranalysis.image.feature.pixelwise.score.PixelScoreFeatureCalcParams;
+import org.anchoranalysis.image.feature.bean.pixelwise.PixelScore;
 import org.anchoranalysis.image.histogram.Histogram;
 import org.anchoranalysis.image.histogram.HistogramFactoryUtilities;
 import org.anchoranalysis.image.objmask.ObjMask;
@@ -57,14 +51,11 @@ import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 public class CreateVoxelBoxFromPixelwiseFeatureWithMask {
 
 	private VoxelBoxList listVoxelBox;
-	private KeyValueParams keyValueParams;
-	private RandomNumberGenerator re;
+	private Optional<KeyValueParams> keyValueParams;
 	private List<Histogram> listAdditionalHistograms;
-
-	private PixelwiseFeatureInitParams paramsInit;
 	
 	// Constructor
-	public CreateVoxelBoxFromPixelwiseFeatureWithMask(VoxelBoxList listVoxelBox, RandomNumberGenerator re, KeyValueParams keyValueParams, List<Histogram> listAdditionalHistograms ) {
+	public CreateVoxelBoxFromPixelwiseFeatureWithMask(VoxelBoxList listVoxelBox, Optional<KeyValueParams> keyValueParams, List<Histogram> listAdditionalHistograms ) {
 		super();
 		this.listVoxelBox = listVoxelBox;
 		this.keyValueParams = keyValueParams;
@@ -72,7 +63,7 @@ public class CreateVoxelBoxFromPixelwiseFeatureWithMask {
 	}
 	
 	// objMask can be null
-	public VoxelBox<ByteBuffer> createVoxelBoxFromPixelScore( Feature<PixelScoreFeatureCalcParams> pixelScore, ObjMask objMask, LogErrorReporter logger ) throws CreateException {
+	public VoxelBox<ByteBuffer> createVoxelBoxFromPixelScore( PixelScore pixelScore, ObjMask objMask ) throws CreateException {
 	
 		// Sets up the Feature
 		try {
@@ -81,12 +72,12 @@ public class CreateVoxelBoxFromPixelwiseFeatureWithMask {
 			Extent e = listVoxelBox.getFirstExtnt();
 			
 			// We make our index buffer
-			VoxelBox<ByteBuffer> vbOut = VoxelBoxFactory.getByte().create(e);
+			VoxelBox<ByteBuffer> vbOut = VoxelBoxFactory.instance().getByte().create(e);
 			
 			if (objMask!=null) {
-				setPixelsWithMask( vbOut, objMask, pixelScore, logger  );
+				setPixelsWithMask( vbOut, objMask, pixelScore );
 			} else {
-				setPixelsWithoutMask( vbOut, pixelScore, logger  );
+				setPixelsWithoutMask( vbOut, pixelScore );
 			}
 			return vbOut;
 			
@@ -95,26 +86,30 @@ public class CreateVoxelBoxFromPixelwiseFeatureWithMask {
 		}
 	}
 	
-	
+	/** Initializes the pixel-score */
+	private void init( PixelScore pixelScore, ObjMask objMask ) throws InitException {
 
-	// Sets up the feature
-	private void init( Feature<PixelScoreFeatureCalcParams> pixelScore, ObjMask objMask ) throws InitException {
-		paramsInit = new PixelwiseFeatureInitParams(re);
-		if (keyValueParams!=null) {
-			paramsInit.setKeyValueParams(keyValueParams);
-		}
+		pixelScore.init(
+			createHistograms(objMask),
+			keyValueParams
+		);
+	}
+	
+	private List<Histogram> createHistograms(ObjMask objMask) {
+		List<Histogram> out = new ArrayList<>();
+
 		for( VoxelBoxWrapper voxelBox : listVoxelBox) {
-			paramsInit.addListHist( HistogramFactoryUtilities.createWithMask(voxelBox.any(), objMask) );
+			out.add( HistogramFactoryUtilities.createWithMask(voxelBox.any(), objMask) );
 		}
 		
 		for( Histogram hist : listAdditionalHistograms ) {
-			paramsInit.addListHist( hist );
+			out.add( hist );
 		}
+		
+		return out;		
 	}
 
-	private void setPixelsWithoutMask( VoxelBox<ByteBuffer> vbOut, Feature<PixelScoreFeatureCalcParams>pixelScore, LogErrorReporter logger ) throws FeatureCalcException, InitException {
-		
-		FeatureCalculatorSingle<PixelScoreFeatureCalcParams> session = createStartSession(pixelScore, logger);
+	private void setPixelsWithoutMask( VoxelBox<ByteBuffer> vbOut, PixelScore pixelScore ) throws FeatureCalcException, InitException {
 		
 		Extent e = vbOut.extnt();
 		
@@ -128,16 +123,14 @@ public class CreateVoxelBoxFromPixelwiseFeatureWithMask {
 				for( int x=0; x<e.getX(); x++) {
 					
 					int offset = e.offset(x, y);
-					BufferUtilities.putScoreForOffset(session, bbList, bbOut, offset);
+					BufferUtilities.putScoreForOffset(pixelScore, bbList, bbOut, offset);
 				}
 					
 			}
 		}
 	}
 
-	private void setPixelsWithMask( VoxelBox<ByteBuffer> vbOut, ObjMask objMask, Feature<PixelScoreFeatureCalcParams> pixelScore, LogErrorReporter logger ) throws FeatureCalcException, InitException {
-		
-		FeatureCalculatorSingle<PixelScoreFeatureCalcParams> session = createStartSession(pixelScore, logger);
+	private void setPixelsWithMask( VoxelBox<ByteBuffer> vbOut, ObjMask objMask, PixelScore pixelScore ) throws FeatureCalcException, InitException {
 		
 		byte maskOn = objMask.getBinaryValuesByte().getOnByte();
 		Extent e = vbOut.extnt();
@@ -163,23 +156,11 @@ public class CreateVoxelBoxFromPixelwiseFeatureWithMask {
 					int offsetMask = eMask.offset(x-crnrMin.getX(),y-crnrMin.getY());
 					
 					if (bbMask.get(offsetMask)==maskOn) {
-						BufferUtilities.putScoreForOffset(session, bbList, bbOut, offset);
+						BufferUtilities.putScoreForOffset(pixelScore, bbList, bbOut, offset);
 					}
 				}
 					
 			}
 		}
 	}
-	
-	
-	private <T extends FeatureCalcParams> FeatureCalculatorSingle<T> createStartSession(Feature<T> pixelScore, LogErrorReporter logger) throws FeatureCalcException {
-		return SessionFactory.createAndStart(
-			pixelScore,
-			paramsInit,
-			new SharedFeatureSet<>(),
-			logger
-		);
-	}
-
-
 }

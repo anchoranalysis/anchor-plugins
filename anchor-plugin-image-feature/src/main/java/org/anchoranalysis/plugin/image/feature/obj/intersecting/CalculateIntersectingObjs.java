@@ -26,10 +26,8 @@ package org.anchoranalysis.plugin.image.feature.obj.intersecting;
  * #L%
  */
 
-import org.anchoranalysis.core.cache.ExecuteException;
-import org.anchoranalysis.feature.cachedcalculation.CachedCalculation;
-import org.anchoranalysis.feature.cachedcalculation.CachedCalculationCastParams;
-import org.anchoranalysis.image.feature.objmask.FeatureObjMaskParams;
+import org.anchoranalysis.feature.cache.calculation.FeatureCalculation;
+import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
 import org.anchoranalysis.image.index.rtree.ObjMaskCollectionRTree;
 import org.anchoranalysis.image.objmask.ObjMaskCollection;
 import org.apache.commons.lang.builder.EqualsBuilder;
@@ -41,7 +39,7 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
  * @author owen
  *
  */
-public class CalculateIntersectingObjs extends CachedCalculationCastParams<ObjMaskCollection, FeatureObjMaskParams> {
+public class CalculateIntersectingObjs extends FeatureCalculation<ObjMaskCollection, FeatureInputSingleObj> {
 
 	private String id;
 	private ObjMaskCollection searchObjs;
@@ -59,7 +57,7 @@ public class CalculateIntersectingObjs extends CachedCalculationCastParams<ObjMa
 	}
 
 	@Override
-	protected ObjMaskCollection execute(FeatureObjMaskParams params) throws ExecuteException {
+	protected ObjMaskCollection execute(FeatureInputSingleObj params) {
 
 		ObjMaskCollectionRTree bboxRTree = new ObjMaskCollectionRTree( searchObjs );
 		return bboxRTree.intersectsWith( params.getObjMask() );
@@ -82,11 +80,6 @@ public class CalculateIntersectingObjs extends CachedCalculationCastParams<ObjMa
 		return new HashCodeBuilder()
 			.append(id)
 			.toHashCode();
-	}
-
-	@Override
-	public CachedCalculation<ObjMaskCollection> duplicate() {
-		return new CalculateIntersectingObjs(id, searchObjs);
 	}
 
 }

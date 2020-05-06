@@ -27,54 +27,19 @@ package ch.ethz.biol.cell.mpp.nrg.feature.objmask;
  */
 
 
-import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.cache.ExecuteException;
-import org.anchoranalysis.feature.cache.CacheableParams;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.image.feature.bean.objmask.FeatureObjMask;
-import org.anchoranalysis.image.feature.objmask.FeatureObjMaskParams;
-import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.math.moment.MomentsFromPointsCalculator;
-import org.anchoranalysis.points.moment.CalculateObjMaskPointsSecondMomentMatrix;
 
-public class AxisRatioMoments extends FeatureObjMask {
-
+public class AxisRatioMoments extends AxisMomentsBase {
+	
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 
-	// START BEAN PROPERTIES
-	@BeanField
-	private boolean suppressZCovariance = false;		// Supresses covariance in the z-direction.
-	// END BEAN PROPERTIES
-	
 	@Override
-	public double calc(CacheableParams<FeatureObjMaskParams> paramsCacheable) throws FeatureCalcException {
+	protected double calcFromMoments(MomentsFromPointsCalculator moments) throws FeatureCalcException {
 		
-		FeatureObjMaskParams params = paramsCacheable.getParams();
-		
-		// Max intensity projection of the input mask
-		ObjMask om = params.getObjMask();
-
-		// If we have these few pixels, assume we are perfectly ellipsoid
-		if (om.numPixelsLessThan(12)) {
-			return 1.0;
-		}
-		
-		MomentsFromPointsCalculator moments;
-		try {
-			moments = paramsCacheable.calc(
-				new CalculateObjMaskPointsSecondMomentMatrix(suppressZCovariance)	
-			);
-		} catch (ExecuteException e) {
-			throw new FeatureCalcException(e);
-		}
-		
-		moments = moments.duplicate();
-		moments.removeClosestToUnitZ();
-		// Disconsider the z moment
-
 		double moments0 = moments.get(0).eigenvalueNormalizedAsAxisLength();
 		double moments1 = moments.get(1).eigenvalueNormalizedAsAxisLength();
 		
@@ -86,16 +51,6 @@ public class AxisRatioMoments extends FeatureObjMask {
 			throw new FeatureCalcException("All moments are 0");
 		}
 		
-		double ratio = moments0/moments1;
-		//assert( !Double.isNaN(ratio) );
-		return ratio;
-	}
-
-	public boolean isSuppressZCovariance() {
-		return suppressZCovariance;
-	}
-
-	public void setSuppressZCovariance(boolean suppressZCovariance) {
-		this.suppressZCovariance = suppressZCovariance;
+		return moments0/moments1;
 	}
 }

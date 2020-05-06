@@ -28,15 +28,13 @@ package ch.ethz.biol.cell.mpp.nrg.feature.objmask;
 
 
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.cache.ExecuteException;
-import org.anchoranalysis.feature.cache.CacheableParams;
+import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.feature.bean.objmask.FeatureObjMask;
 import org.anchoranalysis.image.feature.objmask.CalculateNumVoxels;
-import org.anchoranalysis.image.feature.objmask.FeatureObjMaskParams;
+import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
 import org.anchoranalysis.image.objmask.ObjMask;
-
-import ch.ethz.biol.cell.mpp.nrg.feature.objmask.cachedcalculation.CalculateClosing;
+import org.anchoranalysis.plugin.image.calculation.CalculateClosing;
 
 /**
  * Performs a morphological opening operation on the object-mask. Then calculates the ratio of:
@@ -63,20 +61,21 @@ public class NumAddedVoxelsAfterClosing extends FeatureObjMask {
 	// END BEAN PROPERTIES
 	
 	@Override
-	public double calc(CacheableParams<FeatureObjMaskParams> params) throws FeatureCalcException {
-		try {
-			ObjMask omClosing = params.calc(
-				CalculateClosing.createFromCache(params, iterations, do3D)		
-			);
-			
-			double numVoxels = params.calc(
-				new CalculateNumVoxels(false)
-			);
-			
-			return omClosing.numPixels() - numVoxels;
-		} catch (ExecuteException e) {
-			throw new FeatureCalcException(e);
-		}
+	public double calc(SessionInput<FeatureInputSingleObj> input) throws FeatureCalcException {
+
+		ObjMask omClosing = input.calc(
+			CalculateClosing.createFromCache(
+				input.resolver(),
+				iterations,
+				do3D
+			)		
+		);
+		
+		double numVoxels = input.calc(
+			new CalculateNumVoxels(false)
+		);
+		
+		return omClosing.numPixels() - numVoxels;
 	}
 
 	public int getIterations() {

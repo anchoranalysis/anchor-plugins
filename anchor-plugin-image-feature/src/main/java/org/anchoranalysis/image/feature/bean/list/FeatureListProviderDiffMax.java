@@ -29,9 +29,8 @@ package org.anchoranalysis.image.feature.bean.list;
  */
 
 import org.anchoranalysis.feature.bean.operator.FeatureListElem;
-import org.anchoranalysis.image.feature.objmask.pair.merged.FeatureObjMaskPairMergedParams;
-
-import ch.ethz.biol.cell.mpp.nrg.feature.operator.Maximum;
+import org.anchoranalysis.image.feature.objmask.pair.FeatureInputPairObjs;
+import org.anchoranalysis.plugin.operator.feature.bean.order.Maximum;
 
 public class FeatureListProviderDiffMax extends FeatureListProviderAggregateDiff {
 
@@ -41,7 +40,7 @@ public class FeatureListProviderDiffMax extends FeatureListProviderAggregateDiff
 	private static final long serialVersionUID = 1L;
 
 	@Override
-	protected FeatureListElem<FeatureObjMaskPairMergedParams> createFeature() {
+	protected FeatureListElem<FeatureInputPairObjs> createFeature() {
 		return new Maximum<>();
 	}
 }

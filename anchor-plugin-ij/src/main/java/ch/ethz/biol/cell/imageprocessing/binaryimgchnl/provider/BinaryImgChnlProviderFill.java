@@ -28,7 +28,7 @@ package ch.ethz.biol.cell.imageprocessing.binaryimgchnl.provider;
 
 
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.bean.annotation.Optional;
+import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.bean.provider.BinaryImgChnlProvider;
@@ -55,7 +55,7 @@ public class BinaryImgChnlProviderFill extends BinaryImgChnlProvider {
 	@BeanField
 	private BinaryImgChnlProvider binaryImgChnlProvider;
 	
-	@BeanField @Optional
+	@BeanField @OptionalBean
 	private UnitValueAreaOrVolume maxVolume = null;
 	
 	/** If true we do not fill any objects that touch the border */

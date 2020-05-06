@@ -32,7 +32,6 @@ import java.util.List;
 
 import org.anchoranalysis.anchor.mpp.bean.points.fitter.PointsFitterException;
 import org.anchoranalysis.anchor.mpp.mark.conic.MarkEllipsoid;
-import org.anchoranalysis.core.cache.ExecuteException;
 import org.anchoranalysis.core.cache.Operation;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.geometry.Point3f;
@@ -57,23 +56,27 @@ public class EllipsoidFactory {
 	 * @throws CreateException
 	 */
 	public static MarkEllipsoid createMarkEllipsoidLeastSquares( ObjMask om, ImageDim dim, boolean suppressZCovariance, double shellRad ) throws CreateException {
-		Operation<List<Point3i>> opPnts = ()->pntsFromMaskOutlineWrapped(om);
-		return createMarkEllipsoidLeastSquares( opPnts, dim, suppressZCovariance, shellRad );
+
+		return createMarkEllipsoidLeastSquares(
+			()->pntsFromMaskOutlineWrapped(om),
+			dim,
+			suppressZCovariance,
+			shellRad
+		);
 	}
-	
-	
-	public static MarkEllipsoid createMarkEllipsoidLeastSquares( Operation<List<Point3i>> opPnts, ImageDim dim, boolean suppressZCovariance, double shellRad ) throws CreateException {
+		
+	public static MarkEllipsoid createMarkEllipsoidLeastSquares(
+		Operation<List<Point3i>,CreateException> opPnts,
+		ImageDim dim,
+		boolean suppressZCovariance,
+		double shellRad
+	) throws CreateException {
 	
 		LinearLeastSquaresEllipsoidFitter pointsFitter = new LinearLeastSquaresEllipsoidFitter();
 		pointsFitter.setShellRad(shellRad);
 		pointsFitter.setSuppressZCovariance(suppressZCovariance);
 		
-		List<Point3i> pts;
-		try {
-			pts = opPnts.doOperation();
-		} catch (ExecuteException e1) {
-			throw new CreateException(e1);
-		}
+		List<Point3i> pts = opPnts.doOperation();
 				
 		// Now get all the points on the outline 
 		MarkEllipsoid mark = new MarkEllipsoid();
@@ -94,12 +97,8 @@ public class EllipsoidFactory {
 		return mark;
 	}
 	
-	private static List<Point3i> pntsFromMaskOutlineWrapped( ObjMask om ) throws ExecuteException {
-		try {
-			return PointsFromObjMask.pntsFromMaskOutline(om);
-		} catch (CreateException e) {
-			throw new ExecuteException(e);
-		}
+	private static List<Point3i> pntsFromMaskOutlineWrapped( ObjMask om ) throws CreateException {
+		return PointsFromObjMask.pntsFromMaskOutline(om);
 	}
 	
 }

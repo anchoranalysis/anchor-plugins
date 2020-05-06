@@ -1,7 +1,7 @@
 package ch.ethz.biol.cell.mpp.nrg.feature.ind;
 
-import org.anchoranalysis.anchor.mpp.feature.bean.nrg.elem.NRGElemInd;
-import org.anchoranalysis.anchor.mpp.feature.nrg.elem.NRGElemIndCalcParams;
+import org.anchoranalysis.anchor.mpp.feature.bean.nrg.elem.FeatureSingleMemo;
+import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputSingleMemo;
 
 /*
  * #%L
@@ -39,7 +39,7 @@ import org.anchoranalysis.image.voxel.statistics.VoxelStatistics;
 
 import ch.ethz.biol.cell.mpp.mark.pixelstatisticsfrommark.PixelStatisticsFromMark;
 
-public class IntensityQuantile extends NRGElemInd {
+public class IntensityQuantile extends FeatureSingleMemo {
 
 	/**
 	 * 
@@ -58,10 +58,13 @@ public class IntensityQuantile extends NRGElemInd {
 	// END BEAN
 		
 	@Override
-	public double calcCast( NRGElemIndCalcParams params ) throws FeatureCalcException {
+	public double calcCast( FeatureInputSingleMemo input ) throws FeatureCalcException {
 
 		try {
-			VoxelStatistics stats = pixelList.createStatisticsFor(params.getPxlPartMemo(), params.getDimensions() );
+			VoxelStatistics stats = pixelList.createStatisticsFor(
+				input.getPxlPartMemo(),
+				input.getDimensionsRequired()
+			);
 			
 			// TODO, we should replace this with a feature that makes the problem go away in a more controlled way
 			// If the list is empty, we return 0, rather than generating a NaN even though it is strictly undefined
@@ -81,9 +84,7 @@ public class IntensityQuantile extends NRGElemInd {
 			} else {
 				return h.quantile(quantile);
 			}
-		} catch (IndexOutOfBoundsException e) {
-			throw new FeatureCalcException(e);
-		} catch (CreateException e) {
+		} catch (IndexOutOfBoundsException | OperationFailedException | CreateException e) {
 			throw new FeatureCalcException(e);
 		}
 	}

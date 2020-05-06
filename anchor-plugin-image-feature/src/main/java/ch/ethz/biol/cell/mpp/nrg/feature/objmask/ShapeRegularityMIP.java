@@ -1,6 +1,6 @@
 package ch.ethz.biol.cell.mpp.nrg.feature.objmask;
 
-import org.anchoranalysis.feature.cache.CacheableParams;
+import org.anchoranalysis.feature.cache.SessionInput;
 
 /*-
  * #%L
@@ -30,7 +30,7 @@ import org.anchoranalysis.feature.cache.CacheableParams;
 
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.feature.bean.objmask.FeatureObjMask;
-import org.anchoranalysis.image.feature.objmask.FeatureObjMaskParams;
+import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
 import org.anchoranalysis.image.objmask.ObjMask;
 
 public class ShapeRegularityMIP extends FeatureObjMask {
@@ -41,16 +41,11 @@ public class ShapeRegularityMIP extends FeatureObjMask {
 	private static final long serialVersionUID = 1L;
 
 	@Override
-	public double calc(CacheableParams<FeatureObjMaskParams> paramsCacheable) throws FeatureCalcException {
+	public double calc(SessionInput<FeatureInputSingleObj> input) throws FeatureCalcException {
 		
-		FeatureObjMaskParams params = paramsCacheable.getParams();
+		// Maximum-intensity projection of the mask
+		ObjMask om = input.get().getObjMask().duplicate().flattenZ();
 		
-		ObjMask om = params.getObjMask().duplicate().flattenZ();
-		
-		double area = om.numPixels();
-		
-		int perim = NumBorderVoxels.numBorderPixels(om, false, false, false);
-
-		return ((2 * Math.PI) * Math.sqrt(area/Math.PI)) / perim;
+		return ShapeRegularityCalculator.calcShapeRegularity(om);
 	}
 }

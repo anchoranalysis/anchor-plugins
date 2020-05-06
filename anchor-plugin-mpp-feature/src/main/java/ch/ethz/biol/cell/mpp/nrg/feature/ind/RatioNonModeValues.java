@@ -1,7 +1,7 @@
 package ch.ethz.biol.cell.mpp.nrg.feature.ind;
 
-import org.anchoranalysis.anchor.mpp.feature.bean.nrg.elem.NRGElemInd;
-import org.anchoranalysis.anchor.mpp.feature.nrg.elem.NRGElemIndCalcParams;
+import org.anchoranalysis.anchor.mpp.feature.bean.nrg.elem.FeatureSingleMemo;
+import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputSingleMemo;
 
 /*
  * #%L
@@ -42,7 +42,7 @@ import ch.ethz.biol.cell.mpp.mark.pixelstatisticsfrommark.PixelStatisticsFromMar
 //
 // Ratio of number of non-mode pixels to number of pixels
 //
-public class RatioNonModeValues extends NRGElemInd {
+public class RatioNonModeValues extends FeatureSingleMemo {
 
 	/**
 	 * 
@@ -78,10 +78,13 @@ public class RatioNonModeValues extends NRGElemInd {
 	}
 	
 	@Override
-	public double calcCast( NRGElemIndCalcParams params ) throws FeatureCalcException {
+	public double calcCast( FeatureInputSingleMemo input ) throws FeatureCalcException {
 
 		try {
-			VoxelStatistics stats = pixelList.createStatisticsFor(params.getPxlPartMemo(), params.getDimensions() );
+			VoxelStatistics stats = pixelList.createStatisticsFor(
+				input.getPxlPartMemo(),
+				input.getDimensionsRequired()
+			);
 			
 			int startV = ignoreZero ? 1 : 0;
 			

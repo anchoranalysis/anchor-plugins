@@ -32,13 +32,13 @@ import org.anchoranalysis.bean.shared.relation.RelationBean;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.feature.bean.provider.FeatureProvider;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.feature.init.FeatureInitParams;
-import org.anchoranalysis.feature.session.SessionFactory;
+import org.anchoranalysis.feature.calc.FeatureInitParams;
+import org.anchoranalysis.feature.session.FeatureSession;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorSingle;
 import org.anchoranalysis.image.bean.provider.BinaryImgChnlProvider;
 import org.anchoranalysis.image.bean.provider.ChnlProvider;
 import org.anchoranalysis.image.binary.BinaryChnl;
-import org.anchoranalysis.image.feature.objmask.FeatureObjMaskParams;
+import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
 import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.image.objmask.factory.CreateFromEntireChnlFactory;
 
@@ -61,7 +61,7 @@ public class BinaryImgChnlProviderObjMaskRelateFeatures extends BinaryImgChnlPro
 	private BinaryImgChnlProvider binaryImgChnlProviderElse;
 	
 	@BeanField
-	private FeatureProvider<FeatureObjMaskParams> featureProvider;
+	private FeatureProvider<FeatureInputSingleObj> featureProvider;
 	
 	@BeanField
 	private ChnlProvider chnlProvider;
@@ -80,7 +80,7 @@ public class BinaryImgChnlProviderObjMaskRelateFeatures extends BinaryImgChnlPro
 			binaryImgChnlProviderCompareTo.create()
 		);
 			
-		FeatureCalculatorSingle<FeatureObjMaskParams> session = createSession();
+		FeatureCalculatorSingle<FeatureInputSingleObj> session = createSession();
 		
 		return calcRelation(
 			omMain,
@@ -90,9 +90,9 @@ public class BinaryImgChnlProviderObjMaskRelateFeatures extends BinaryImgChnlPro
 		);
 	}
 	
-	private FeatureCalculatorSingle<FeatureObjMaskParams> createSession() throws CreateException {
+	private FeatureCalculatorSingle<FeatureInputSingleObj> createSession() throws CreateException {
 		try {
-			return SessionFactory.createAndStart(
+			return FeatureSession.with(
 				featureProvider.create(),
 				new FeatureInitParams(),
 				getSharedObjects().getFeature().getSharedFeatureSet().downcast(),
@@ -103,13 +103,13 @@ public class BinaryImgChnlProviderObjMaskRelateFeatures extends BinaryImgChnlPro
 		}
 	}
 	
-	private BinaryChnl calcRelation( ObjMask omMain, ObjMask omCompareTo, BinaryChnl chnlMain, FeatureCalculatorSingle<FeatureObjMaskParams> session ) throws CreateException {
+	private BinaryChnl calcRelation( ObjMask omMain, ObjMask omCompareTo, BinaryChnl chnlMain, FeatureCalculatorSingle<FeatureInputSingleObj> session ) throws CreateException {
 		try {
-			double valMain = session.calcOne(
-				new FeatureObjMaskParams(omMain)
+			double valMain = session.calc(
+				new FeatureInputSingleObj(omMain)
 			);
-			double valCompareTo = session.calcOne(
-				new FeatureObjMaskParams(omCompareTo)
+			double valCompareTo = session.calc(
+				new FeatureInputSingleObj(omCompareTo)
 			);
 			
 			if (relation.create().isRelationToValueTrue(valMain, valCompareTo)) {
@@ -149,11 +149,11 @@ public class BinaryImgChnlProviderObjMaskRelateFeatures extends BinaryImgChnlPro
 		this.binaryImgChnlProviderElse = binaryImgChnlProviderElse;
 	}
 
-	public FeatureProvider<FeatureObjMaskParams> getFeatureProvider() {
+	public FeatureProvider<FeatureInputSingleObj> getFeatureProvider() {
 		return featureProvider;
 	}
 
-	public void setFeatureProvider(FeatureProvider<FeatureObjMaskParams> featureProvider) {
+	public void setFeatureProvider(FeatureProvider<FeatureInputSingleObj> featureProvider) {
 		this.featureProvider = featureProvider;
 	}
 
