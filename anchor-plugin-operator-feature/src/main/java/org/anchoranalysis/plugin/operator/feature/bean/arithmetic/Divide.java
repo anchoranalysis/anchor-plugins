@@ -1,4 +1,4 @@
-package ch.ethz.biol.cell.mpp.nrg.feature.operator;
+package org.anchoranalysis.plugin.operator.feature.bean.arithmetic;
 
 /*
  * #%L
@@ -28,13 +28,14 @@ package ch.ethz.biol.cell.mpp.nrg.feature.operator;
 
 
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.feature.bean.operator.FeatureDoubleElem;
+import org.anchoranalysis.feature.bean.Feature;
+import org.anchoranalysis.feature.bean.operator.FeatureListElem;
 import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.input.FeatureInput;
 
 
-public class DivideExplicit<T extends FeatureInput> extends FeatureDoubleElem<T> {
+public class Divide<T extends FeatureInput> extends FeatureListElem<T> {
 	
 	/**
 	 * 
@@ -52,22 +53,42 @@ public class DivideExplicit<T extends FeatureInput> extends FeatureDoubleElem<T>
 	@Override
 	public double calc( SessionInput<T> input ) throws FeatureCalcException {
 		
-		// This feature doesn't need to be init, so we skip this bit
-		double val1 = input.calc( getItem1() );
-		double val2 = input.calc( getItem2() );
+		int size = getList().size();
 		
-		//getLogger().getLogReporter().logFormatted("Divide Explicit: %f on %f = %f", val1, val2, val1/val2);
+		double result = input.calc( getList().get(0) );
 		
-		if (avoidDivideByZero && val2==0.0) {
-			return divideByZeroValue;
+		for (int i=1; i<size; i++) {
+			double div = input.calc( getList().get(i) );
+			if (div==0.0) {
+				if (avoidDivideByZero) {
+					return divideByZeroValue;
+				} else {
+					throw new FeatureCalcException( String.format("Divide by zero from feature %s", getList().get(i).getFriendlyName() ) );
+				}
+			}
+			result /= div;
 		}
-		
-		return val1/val2;
+		return result;
 	}
 	
 	@Override
 	public String getDscrLong() {
-		return String.format("%s/%s", getItem1().getDscrLong(), getItem2().getDscrLong());
+		
+		StringBuilder sb = new StringBuilder();
+		
+		boolean first = true;
+		for (Feature<T> elem : getList()) {
+			
+			if (first==true) {
+				first = false;
+			} else {
+				sb.append("/");
+			}
+		
+			sb.append(elem.getDscrLong());
+		}
+				
+		return sb.toString();
 	}
 	
 	public boolean isAvoidDivideByZero() {
