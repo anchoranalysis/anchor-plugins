@@ -101,7 +101,7 @@ public class CfgOnProbMapChangeReporter extends ReporterOptimizationStep<CfgNRGP
 	
 	// We generate an OutputName class from the outputName string
 	private IndexableOutputNameStyle generateOutputNameStyle() {
-		return new IntegerSuffixOutputNameStyle(outputName,"_%010d");
+		return new IntegerSuffixOutputNameStyle(outputName,10);
 	}
 	
 	@Override
