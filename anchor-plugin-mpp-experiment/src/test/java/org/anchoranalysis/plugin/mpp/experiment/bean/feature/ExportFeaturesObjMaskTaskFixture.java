@@ -42,11 +42,11 @@ import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
 import org.anchoranalysis.image.feature.objmask.pair.FeatureInputPairObjs;
 import org.anchoranalysis.image.feature.stack.FeatureInputStack;
 import org.anchoranalysis.image.stack.Stack;
-import org.anchoranalysis.plugin.mpp.experiment.bean.feature.flexi.FlexiFeatureTable;
-import org.anchoranalysis.plugin.mpp.experiment.bean.feature.flexi.MergedPairs;
+import org.anchoranalysis.plugin.image.feature.bean.obj.table.FeatureTableObjs;
+import org.anchoranalysis.plugin.image.feature.bean.obj.table.MergedPairs;
+import org.anchoranalysis.plugin.image.feature.bean.obj.table.Simple;
 import org.anchoranalysis.test.TestLoader;
 import org.anchoranalysis.test.image.NRGStackFixture;
-import org.anchoranalysis.plugin.mpp.experiment.bean.feature.flexi.Simple;
 
 import ch.ethz.biol.cell.imageprocessing.objmask.provider.ObjMaskProviderReference;
 
@@ -58,7 +58,7 @@ class ExportFeaturesObjMaskTaskFixture {
 	private static final String PATH_FEATURES_IMAGE_DEFAULT = "imageFeatures.xml";
 	
 	private NRGStack nrgStack = createNRGStack(true);
-	private FlexiFeatureTable<?> flexiFeatureTable = new Simple();
+	private FeatureTableObjs<?> flexiFeatureTable = new Simple();
 	
 	/** The "single" and "pair" features in use.*/
 	private LoadFeatureListProviderFixture<FeatureInputSingleObj> singleFeatures;
@@ -149,7 +149,7 @@ class ExportFeaturesObjMaskTaskFixture {
 			nrgStackProvider(nrgStack)
 		);
 		
-		task.setSelectFeaturesObjects( (FlexiFeatureTable<T>) flexiFeatureTable);
+		task.setSelectFeaturesObjects( (FeatureTableObjs<T>) flexiFeatureTable);
 		task.setListObjMaskProvider(
 			createObjProviders(MultiInputFixture.OBJS_NAME)
 		);

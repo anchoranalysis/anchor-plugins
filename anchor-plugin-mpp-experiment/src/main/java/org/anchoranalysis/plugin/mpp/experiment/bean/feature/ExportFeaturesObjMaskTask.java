@@ -71,9 +71,9 @@ import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
 import org.anchoranalysis.mpp.io.input.MultiInput;
 import org.anchoranalysis.mpp.io.output.NRGStackWriter;
+import org.anchoranalysis.plugin.image.feature.bean.obj.table.FeatureTableObjs;
 import org.anchoranalysis.plugin.image.task.bean.feature.ExportFeaturesTask;
 import org.anchoranalysis.plugin.image.task.sharedstate.SharedStateExportFeatures;
-import org.anchoranalysis.plugin.mpp.experiment.bean.feature.flexi.FlexiFeatureTable;
 import org.anchoranalysis.plugin.mpp.experiment.outputter.SharedObjectsUtilities;
 
 
@@ -89,6 +89,8 @@ import org.anchoranalysis.plugin.mpp.experiment.outputter.SharedObjectsUtilities
    csvGroup 	a csv file per group, where each row is an object
    
    @param T the feature input-type supported by the FlexiFeatureTable
+   
+   TODO does this need to be a MultiInput and dependent on MPP? Can it be moved to anchor-plugin-image-task??
    
 **/
 public class ExportFeaturesObjMaskTask<T extends FeatureInput> extends ExportFeaturesTask<MultiInput,SharedStateExportFeaturesObjMask<T>> {
@@ -118,7 +120,7 @@ public class ExportFeaturesObjMaskTask<T extends FeatureInput> extends ExportFea
 	private RandomNumberGeneratorBean randomNumberGenerator = new RandomNumberGeneratorMersenneConstantBean();
 	
 	@BeanField
-	private FlexiFeatureTable<T> selectFeaturesObjects;
+	private FeatureTableObjs<T> selectFeaturesObjects;
 	
 	/**
 	 * If non-empty, A keyValueParams is treated as part of the nrgStack 
@@ -279,7 +281,7 @@ public class ExportFeaturesObjMaskTask<T extends FeatureInput> extends ExportFea
 		LogErrorReporter logErrorReporter
 	) throws OperationFailedException {
 		try {
-			List<T> listParams = selectFeaturesObjects.createListCalcParams(
+			List<T> listParams = selectFeaturesObjects.createListInputs(
 				objs,
 				nrgStack,
 				logErrorReporter
@@ -356,12 +358,12 @@ public class ExportFeaturesObjMaskTask<T extends FeatureInput> extends ExportFea
 	}
 
 
-	public FlexiFeatureTable<T> getSelectFeaturesObjects() {
+	public FeatureTableObjs<T> getSelectFeaturesObjects() {
 		return selectFeaturesObjects;
 	}
 
 
-	public void setSelectFeaturesObjects(FlexiFeatureTable<T> selectFeaturesObjects) {
+	public void setSelectFeaturesObjects(FeatureTableObjs<T> selectFeaturesObjects) {
 		this.selectFeaturesObjects = selectFeaturesObjects;
 	}
 
