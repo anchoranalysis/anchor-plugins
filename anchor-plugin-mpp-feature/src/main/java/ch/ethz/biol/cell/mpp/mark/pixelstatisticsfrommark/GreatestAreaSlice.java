@@ -32,9 +32,8 @@ import org.anchoranalysis.anchor.mpp.pxlmark.PxlMark;
 
 
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.bean.shared.relation.RelationBean;
+import org.anchoranalysis.bean.shared.relation.threshold.RelationToThreshold;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.core.relation.RelationToValue;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.voxel.statistics.VoxelStatistics;
@@ -48,26 +47,20 @@ public class GreatestAreaSlice extends IndexedRegionBase {
 	
 	// START BEAN PROPERTIES
 	@BeanField
-	private RelationBean relationToThreshold;		// Definies what is INSIDE
-	
-	@BeanField
-	private int threshold;
+	private RelationToThreshold threshold;
 	// END BEAN PROPERTIES
-
 
 	@Override
 	protected VoxelStatistics createStatisticsFor(PxlMark pm, Mark mark, ImageDim dim) throws CreateException {
 
 		BoundingBox bbox = boundingBoxForRegion(pm);
-
-		RelationToValue relation = relationToThreshold.create();
 		
 		long maxArea = -1;
 		VoxelStatistics psMax = null;
 		for( int z=0; z<bbox.extnt().getZ(); z++) {
 			
 			VoxelStatistics ps = sliceStatisticsForRegion(pm, z);
-			long num = ps.countThreshold(relation, threshold);
+			long num = ps.countThreshold(threshold);
 			
 			if (num>maxArea) {
 				psMax = ps;
@@ -80,19 +73,12 @@ public class GreatestAreaSlice extends IndexedRegionBase {
 		return psMax;
 	}
 
-	public RelationBean getRelationToThreshold() {
-		return relationToThreshold;
-	}
-
-	public void setRelationToThreshold(RelationBean relationToThreshold) {
-		this.relationToThreshold = relationToThreshold;
-	}
-
-	public int getThreshold() {
+	public RelationToThreshold getThreshold() {
 		return threshold;
 	}
 
-	public void setThreshold(int threshold) {
+	public void setThreshold(RelationToThreshold threshold) {
 		this.threshold = threshold;
 	}
+
 }

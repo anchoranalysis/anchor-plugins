@@ -32,8 +32,9 @@ import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputSingleMemo;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.shared.relation.EqualToBean;
+import org.anchoranalysis.bean.shared.relation.threshold.RelationToConstant;
+import org.anchoranalysis.bean.shared.relation.threshold.RelationToThreshold;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.core.relation.RelationToValue;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.voxel.statistics.VoxelStatistics;
 
@@ -57,17 +58,20 @@ public class RatioNonModeValues extends FeatureSingleMemo {
 	private boolean ignoreZero = false;
 	// END BEAN
 	
-	private static EqualToBean relation = new EqualToBean();
-	
 	private int findMode( VoxelStatistics stats, int startV ) {
 		
-		RelationToValue relationToValue = relation.create();
 		
 		// Find mode
 		int maxIndex = -1;
 		long maxValue = -1;
 		for( int v=startV; v<255; v++) {
-			long cnt = stats.countThreshold(relationToValue, v);
+			
+			RelationToThreshold relation = new RelationToConstant(
+				new EqualToBean(),
+				v
+			);
+
+			long cnt = stats.countThreshold(relation);
 			
 			if (cnt>maxValue) {
 				maxValue = cnt;
@@ -93,12 +97,15 @@ public class RatioNonModeValues extends FeatureSingleMemo {
 			// Calculate number of non-modal
 			int totalCnt = 0;
 			int nonModalCnt = 0;
-
-			RelationToValue relationToValue = relation.create();
 			
 			for( int v=startV; v<255; v++) {
 				
-				long cnt = stats.countThreshold(relationToValue, v);
+				RelationToThreshold relation = new RelationToConstant(
+					new EqualToBean(),
+					v
+				);
+				
+				long cnt = stats.countThreshold(relation);
 				
 				if (cnt!=0) {
 					if (v!=mode) {

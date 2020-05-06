@@ -28,9 +28,10 @@ package ch.ethz.biol.cell.sgmn.graphcuts.nrgdefinition.pixelscore;
 
 
 import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.bean.shared.relation.GreaterThanEqualToBean;
+import org.anchoranalysis.bean.shared.relation.LessThanBean;
+import org.anchoranalysis.bean.shared.relation.threshold.RelationToConstant;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.relation.GreaterThanEqualTo;
-import org.anchoranalysis.core.relation.LessThan;
 import org.anchoranalysis.image.histogram.Histogram;
 
 // Same as PixelScoreDifference but calculates the width as the std deviation of the histogram
@@ -56,8 +57,18 @@ public class PixelScoreDifferenceCalculateLevelStdDev extends PixelScoreCalculat
 	@Override
 	protected void beforeCalcSetup(Histogram hist, int level) throws OperationFailedException {
 			
-		Histogram lessThan = hist.threshold( new LessThan(), level );
-		Histogram greaterThan = hist.threshold( new GreaterThanEqualTo(), level );
+		Histogram lessThan = hist.threshold(
+			new RelationToConstant(
+				new LessThanBean(),
+				level
+			)
+		);
+		Histogram greaterThan = hist.threshold(
+			new RelationToConstant(
+				new GreaterThanEqualToBean(),
+				level
+			)
+		);
 		
 		this.widthLessThan = lessThan.stdDev() * widthFactor;
 		this.widthGreaterThan = greaterThan.stdDev() * widthFactor;

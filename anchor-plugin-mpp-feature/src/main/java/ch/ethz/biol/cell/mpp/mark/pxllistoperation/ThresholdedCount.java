@@ -31,8 +31,7 @@ import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
 
 
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.bean.annotation.NonNegative;
-import org.anchoranalysis.bean.shared.relation.RelationBean;
+import org.anchoranalysis.bean.shared.relation.threshold.RelationToThreshold;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.extent.ImageDim;
@@ -51,11 +50,8 @@ public class ThresholdedCount extends PxlListOperationFromMark {
 	@BeanField
 	private PixelStatisticsFromMark pixelList;
 	
-	@BeanField @NonNegative
-	private double threshold = -1;
-	
 	@BeanField
-	private RelationBean relationToThreshold;
+	private RelationToThreshold threshold;
 	// END BEAN PROPERTIES
 	
 	@Override
@@ -67,7 +63,7 @@ public class ThresholdedCount extends PxlListOperationFromMark {
 			throw new OperationFailedException(e);
 		}
 		
-		return stats.countThreshold(relationToThreshold.create(), threshold);
+		return stats.countThreshold(threshold);
 	}
 
 	public PixelStatisticsFromMark getPixelList() {
@@ -78,20 +74,11 @@ public class ThresholdedCount extends PxlListOperationFromMark {
 		this.pixelList = pixelList;
 	}
 
-	public double getThreshold() {
+	public RelationToThreshold getThreshold() {
 		return threshold;
 	}
 
-	public void setThreshold(double threshold) {
+	public void setThreshold(RelationToThreshold threshold) {
 		this.threshold = threshold;
 	}
-
-	public RelationBean getRelationToThreshold() {
-		return relationToThreshold;
-	}
-
-	public void setRelationToThreshold(RelationBean relationToThreshold) {
-		this.relationToThreshold = relationToThreshold;
-	}
-
 }

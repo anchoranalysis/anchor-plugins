@@ -2,7 +2,9 @@ package ch.ethz.biol.cell.mpp.mark.pixelstatisticsfrommark;
 
 import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.anchor.mpp.pxlmark.PxlMark;
-
+import org.anchoranalysis.bean.shared.relation.GreaterThanBean;
+import org.anchoranalysis.bean.shared.relation.threshold.RelationToConstant;
+import org.anchoranalysis.bean.shared.relation.threshold.RelationToThreshold;
 
 /*
  * #%L
@@ -33,8 +35,6 @@ import org.anchoranalysis.anchor.mpp.pxlmark.PxlMark;
 
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.relation.GreaterThan;
-import org.anchoranalysis.core.relation.RelationToValue;
 import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.histogram.Histogram;
 import org.anchoranalysis.image.voxel.statistics.VoxelStatistics;
@@ -49,7 +49,10 @@ public class MaxNonZero extends IndexedRegionBase {
 	@Override
 	protected VoxelStatistics createStatisticsFor(PxlMark pm, Mark mark, ImageDim dim) throws CreateException {
 
-		RelationToValue relation = new GreaterThan();
+		RelationToThreshold nonZero = new RelationToConstant(
+			new GreaterThanBean(),
+			0
+		);
 		
 		long maxNonZero = -1;
 		VoxelStatistics maxStats = null;
@@ -64,7 +67,7 @@ public class MaxNonZero extends IndexedRegionBase {
 				throw new CreateException(e);
 			}
 			
-			long num = h.countThreshold( relation, 0 );
+			long num = h.countThreshold(nonZero);
 			
 			if (num>maxNonZero) {
 				maxNonZero = num;

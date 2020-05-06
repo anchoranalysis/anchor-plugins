@@ -31,8 +31,9 @@ import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputSingleMemo;
 
 
 import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.bean.shared.relation.EqualToBean;
+import org.anchoranalysis.bean.shared.relation.threshold.RelationToConstant;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.core.relation.EqualTo;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.voxel.statistics.VoxelStatistics;
 
@@ -60,12 +61,15 @@ public class NumberUniquePixelValues extends FeatureSingleMemo {
 				input.getDimensionsRequired()
 			);
 			
-			EqualTo relation = new EqualTo();
-			
 			int numUniqueValues = 0;
-			
+				
 			for( int v=0; v<255; v++) {
-				long cnt = stats.countThreshold(relation, v);
+				long cnt = stats.countThreshold(
+					new RelationToConstant(
+						new EqualToBean(),
+						v
+					)
+				);
 				
 				if (cnt!=0) {
 					numUniqueValues++;

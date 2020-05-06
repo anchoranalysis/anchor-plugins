@@ -1,6 +1,8 @@
 package ch.ethz.biol.cell.mpp.mark.pixelstatisticsfrommark;
 
 import org.anchoranalysis.anchor.mpp.pxlmark.PxlMark;
+import org.anchoranalysis.bean.shared.relation.GreaterThanBean;
+import org.anchoranalysis.bean.shared.relation.threshold.RelationToConstant;
 
 
 /*
@@ -32,7 +34,6 @@ import org.anchoranalysis.anchor.mpp.pxlmark.PxlMark;
 
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.relation.GreaterThan;
 import org.anchoranalysis.image.histogram.Histogram;
 import org.anchoranalysis.image.voxel.statistics.VoxelStatistics;
 import org.anchoranalysis.image.voxel.statistics.VoxelStatisticsFromHistogram;
@@ -57,8 +58,10 @@ public class AllSlicesMaskEverythingNonZero extends AllSlicesBase {
 		Histogram histNonZero = histogramForAllSlices(pm, true);
 		
 		long numNonZero = histNonZero.countThreshold(
-			new GreaterThan(),
-			0
+			new RelationToConstant(
+				new GreaterThanBean(),
+				0
+			)
 		);
 
 		return new VoxelStatisticsFromHistogram(
