@@ -28,8 +28,9 @@ package org.anchoranalysis.plugin.operator.feature.bean.arithmetic;
 
 
 import org.anchoranalysis.feature.input.FeatureInput;
+import org.anchoranalysis.plugin.operator.feature.bean.FeatureGenericWithValue;
 
-public class ConstantToThePowerOf<T extends FeatureInput> extends ConstantValueFeatureGeneric<T> {
+public class ConstantToThePowerOf<T extends FeatureInput> extends FeatureGenericWithValue<T> {
 
 	/**
 	 * 

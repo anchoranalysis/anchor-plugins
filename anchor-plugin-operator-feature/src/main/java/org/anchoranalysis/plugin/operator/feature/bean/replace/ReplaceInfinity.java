@@ -1,4 +1,4 @@
-package ch.ethz.biol.cell.mpp.nrg.feature.operator;
+package org.anchoranalysis.plugin.operator.feature.bean.replace;
 
 /*
  * #%L
@@ -27,60 +27,17 @@ package ch.ethz.biol.cell.mpp.nrg.feature.operator;
  */
 
 
-import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.feature.bean.Feature;
-import org.anchoranalysis.feature.bean.operator.FeatureGenericSingleElem;
-import org.anchoranalysis.feature.cache.SessionInput;
-import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.input.FeatureInput;
 
-public class IfElse<T extends FeatureInput> extends FeatureGenericSingleElem<T> {
+public class ReplaceInfinity<T extends FeatureInput> extends ReplaceUnusualValue<T> {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	// START BEAN PROPERTIRES
-	@BeanField
-	private Feature<T> featureCondition;
-	
-	@BeanField
-	private double value;
-	
-	@BeanField
-	private Feature<T> featureElse;
-	// END BEAN PROPERTIES
-	
 	@Override
-	public double calc(SessionInput<T> input)
-			throws FeatureCalcException {
-
-		if (input.calc(featureCondition)==value) {
-			return input.calc(super.getItem());
-		} else {
-			return input.calc(featureElse);
-		}
+	protected boolean isResultUnusual(double featureResult) {
+		return Double.isInfinite(featureResult);
 	}
-	
-	public Feature<T> getFeatureCondition() {
-		return featureCondition;
-	}
-	public void setFeatureCondition(Feature<T> featureCondition) {
-		this.featureCondition = featureCondition;
-	}
-	public double getValue() {
-		return value;
-	}
-	public void setValue(double value) {
-		this.value = value;
-	}
-	public Feature<T> getFeatureElse() {
-		return featureElse;
-	}
-	public void setFeatureElse(Feature<T> featureElse) {
-		this.featureElse = featureElse;
-	}
-
-
 }
