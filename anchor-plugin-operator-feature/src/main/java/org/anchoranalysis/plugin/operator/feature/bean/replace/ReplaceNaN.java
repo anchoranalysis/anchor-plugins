@@ -1,4 +1,4 @@
-package ch.ethz.biol.cell.mpp.nrg.feature.operator;
+package org.anchoranalysis.plugin.operator.feature.bean.replace;
 
 /*
  * #%L
@@ -27,44 +27,17 @@ package ch.ethz.biol.cell.mpp.nrg.feature.operator;
  */
 
 
-import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.feature.bean.operator.FeatureGenericSingleElem;
-import org.anchoranalysis.feature.cache.SessionInput;
-import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.input.FeatureInput;
 
-public class IfNaNReplace<T extends FeatureInput> extends FeatureGenericSingleElem<T> {
+public class ReplaceNaN<T extends FeatureInput> extends ReplaceUnusualValue<T> {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 
-	// START BEAN PROPERTIES
-	@BeanField
-	private double value = 0;
-	// END BEAN PROPERTIES
-	
 	@Override
-	public double calc( SessionInput<T> input ) throws FeatureCalcException {
-		double itemValue = input.calc( getItem() );
-		
-		if (Double.isNaN(itemValue)) {
-			return value;
-		}
-		return itemValue;
-	}
-
-	public double getValue() {
-		return value;
-	}
-
-	public void setValue(double value) {
-		this.value = value;
-	}
-
-	@Override
-	public String getDscrLong() {
-		return String.format("%f + %s", value, getItem().getDscrLong() );
+	protected boolean isResultUnusual(double featureResult) {
+		return Double.isNaN(featureResult);
 	}
 }

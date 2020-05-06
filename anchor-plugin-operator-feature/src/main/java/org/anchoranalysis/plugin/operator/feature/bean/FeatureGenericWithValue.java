@@ -1,4 +1,4 @@
-package org.anchoranalysis.plugin.operator.feature.bean.arithmetic;
+package org.anchoranalysis.plugin.operator.feature.bean;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.bean.operator.FeatureGenericSingleElem;
@@ -13,7 +13,7 @@ import org.anchoranalysis.feature.input.FeatureInput;
  *
  * @param <T>
  */
-public abstract class ConstantValueFeatureGeneric<T extends FeatureInput> extends FeatureGenericSingleElem<T> {
+public abstract class FeatureGenericWithValue<T extends FeatureInput> extends FeatureGenericSingleElem<T> {
 
 	/**
 	 * 
