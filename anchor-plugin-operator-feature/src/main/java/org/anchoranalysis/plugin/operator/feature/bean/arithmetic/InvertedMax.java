@@ -1,4 +1,4 @@
-package ch.ethz.biol.cell.mpp.nrg.feature.operator;
+package org.anchoranalysis.plugin.operator.feature.bean.arithmetic;
 
 /*
  * #%L
@@ -28,56 +28,54 @@ package ch.ethz.biol.cell.mpp.nrg.feature.operator;
 
 
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.feature.bean.Feature;
-import org.anchoranalysis.feature.bean.operator.FeatureListElem;
+import org.anchoranalysis.feature.bean.operator.FeatureGenericSingleElem;
 import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.input.FeatureInput;
 
-public class MaximumIfLessThan<T extends FeatureInput> extends FeatureListElem<T> {
+
+/**
+ * Finds the repciprocal (multiplicate inverse), but imposes a maximum ceiling via a constant.
+ * 
+ * @author Owen Feehan
+ *
+ * @param <T> feature input-type
+ */
+public class InvertedMax<T extends FeatureInput> extends FeatureGenericSingleElem<T> {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	// START BEAN PROPERTIES
-	// An item is only considered if it's less than this threshold
+	// START BEAN PARAMETERS
 	@BeanField
-	private int threshold = Integer.MAX_VALUE;
-	// END BEAN PROPERTIES
-
-	
+	private double max = 100;
+	// END BEAN PARAMETERS
 	
 	@Override
-	public double calc(SessionInput<T> input) throws FeatureCalcException {
-		
-		double maxValue = Double.NaN;
-		for( Feature<T> f : getList()) {
-			double val = input.calc( f );
-			
-			if (val>=threshold) {
-				continue;
-			}
-			
-			if (Double.isNaN(maxValue) || val > maxValue) {
-				maxValue = val;
-			}
-		}
-		return maxValue;
+	public double calc( SessionInput<T> input ) throws FeatureCalcException {
+		return Math.min(
+			(1/ input.calc( getItem() )),
+			max
+		);
+	}
+	
+	@Override
+	public String getParamDscr() {
+		return String.format("inverted_max=%f", max);
+	}
+	
+	@Override
+	public String getDscrLong() {
+		return "(1/" + getItem().getBeanName() + ")[max=" + max + "]";
 	}
 
-
-
-	public int getThreshold() {
-		return threshold;
+	public double getMax() {
+		return max;
 	}
 
-
-
-	public void setThreshold(int threshold) {
-		this.threshold = threshold;
+	public void setMax(double max) {
+		this.max = max;
 	}
-
-
 }
