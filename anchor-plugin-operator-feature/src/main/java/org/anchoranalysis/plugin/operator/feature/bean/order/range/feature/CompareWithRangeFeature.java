@@ -1,4 +1,4 @@
-package org.anchoranalysis.plugin.operator.feature.bean.order.range;
+package org.anchoranalysis.plugin.operator.feature.bean.order.range.feature;
 
 /*
  * #%L
@@ -32,6 +32,8 @@ import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.input.FeatureInput;
+import org.anchoranalysis.plugin.operator.feature.bean.order.range.CompareWithRange;
+import org.anchoranalysis.plugin.operator.feature.bean.order.range.RangeCompareBase;
 
 /**
  * Like {@link CompareWithRange} but uses features to calculate boundary values
@@ -40,7 +42,7 @@ import org.anchoranalysis.feature.input.FeatureInput;
  *
  * @param <T> feature-input type
  */
-public class CompareWithRangeFeatures<T extends FeatureInput> extends RangeCompareBase<T> {
+public class CompareWithRangeFeature<T extends FeatureInput> extends RangeCompareBase<T> {
 	
 	/**
 	 * 
