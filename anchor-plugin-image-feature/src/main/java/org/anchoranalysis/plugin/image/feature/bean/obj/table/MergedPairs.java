@@ -1,4 +1,4 @@
-package org.anchoranalysis.plugin.mpp.experiment.bean.feature.flexi;
+package org.anchoranalysis.plugin.image.feature.bean.obj.table;
 
 /*-
  * #%L
@@ -79,7 +79,7 @@ import org.anchoranalysis.image.voxel.nghb.CreateNghbGraph;
  * @author Owen Feehan
  *
  */
-public class MergedPairs extends FlexiFeatureTable<FeatureInputPairObjs> {
+public class MergedPairs extends FeatureTableObjs<FeatureInputPairObjs> {
 
 	/**
 	 * 
@@ -173,7 +173,7 @@ public class MergedPairs extends FlexiFeatureTable<FeatureInputPairObjs> {
 
 	
 	@Override
-	public List<FeatureInputPairObjs> createListCalcParams(ObjMaskCollection objs,
+	public List<FeatureInputPairObjs> createListInputs(ObjMaskCollection objs,
 			NRGStackWithParams nrgStack, LogErrorReporter logErrorReporter) throws CreateException {
 
 		List<FeatureInputPairObjs> out = new ArrayList<>();

@@ -1,4 +1,4 @@
-package org.anchoranalysis.plugin.mpp.experiment.bean.feature.flexi;
+package org.anchoranalysis.plugin.image.feature.bean.obj.table;
 
 /*-
  * #%L
@@ -49,7 +49,7 @@ import org.anchoranalysis.image.objmask.ObjMaskCollection;
  * @author Owen Feehan
  *
  */
-public class Simple extends FlexiFeatureTable<FeatureInputSingleObj> {
+public class Simple extends FeatureTableObjs<FeatureInputSingleObj> {
 
 	/**
 	 * 
@@ -66,7 +66,7 @@ public class Simple extends FlexiFeatureTable<FeatureInputSingleObj> {
 	}
 
 	@Override
-	public List<FeatureInputSingleObj> createListCalcParams(ObjMaskCollection objs,
+	public List<FeatureInputSingleObj> createListInputs(ObjMaskCollection objs,
 			NRGStackWithParams nrgStack, LogErrorReporter logErrorReporter) throws CreateException {
 
 		List<FeatureInputSingleObj> out = new ArrayList<>();

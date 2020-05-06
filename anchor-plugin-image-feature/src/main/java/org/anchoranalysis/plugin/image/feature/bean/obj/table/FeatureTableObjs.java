@@ -1,4 +1,4 @@
-package org.anchoranalysis.plugin.mpp.experiment.bean.feature.flexi;
+package org.anchoranalysis.plugin.image.feature.bean.obj.table;
 
 /*-
  * #%L
@@ -41,17 +41,15 @@ import org.anchoranalysis.image.feature.session.FeatureTableSession;
 import org.anchoranalysis.image.objmask.ObjMaskCollection;
 
 /**
- * A flexible feature-table.
+ * A feature-table describing objects defined by columns (features) and rows (inputs).
  * 
- * A list of features is created dynamically according to certain rules.
- * 
- * List FeatureCalcParams are also created dynamically to be evaluated against those features.
+ * <p>A row may represent a single object, or a pair of objects, or any other derived inputs from an object-collection</p>.
  * 
  * @author Owen Feehan
  * @param T type of fexture used in the table
  *
  */
-public abstract class FlexiFeatureTable<T extends FeatureInput> extends AnchorBean<FlexiFeatureTable<T>> {
+public abstract class FeatureTableObjs<T extends FeatureInput> extends AnchorBean<FeatureTableObjs<T>> {
 
 	/**
 	 * 
@@ -68,7 +66,7 @@ public abstract class FlexiFeatureTable<T extends FeatureInput> extends AnchorBe
 	 */
 	public abstract FeatureTableSession<T> createFeatures( List<NamedBean<FeatureListProvider<FeatureInputSingleObj>>> list, boolean suppressErrors ) throws CreateException, InitException;
 	
-	public abstract List<T> createListCalcParams(
+	public abstract List<T> createListInputs(
 		ObjMaskCollection objs,
 		NRGStackWithParams nrgStack,
 		LogErrorReporter logErrorReporter

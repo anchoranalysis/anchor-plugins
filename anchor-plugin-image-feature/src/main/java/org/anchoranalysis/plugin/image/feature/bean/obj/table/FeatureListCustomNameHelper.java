@@ -1,4 +1,4 @@
-package org.anchoranalysis.plugin.mpp.experiment.bean.feature.flexi;
+package org.anchoranalysis.plugin.image.feature.bean.obj.table;
 
 /*-
  * #%L
