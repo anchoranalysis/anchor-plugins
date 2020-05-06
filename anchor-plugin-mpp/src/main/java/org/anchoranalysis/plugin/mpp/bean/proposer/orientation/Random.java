@@ -51,7 +51,7 @@ public class Random extends OrientationProposer {
 		try {
 			if (getSharedObjects().getMarkBounds()==null || !(getSharedObjects().getMarkBounds() instanceof OrientableBounds) ) {
 				errorNode.add("markBounds must be non-null and of type OrientableBounds");
-				return null;
+				return Optional.empty();
 			}
 			
 			return Optional.of(
