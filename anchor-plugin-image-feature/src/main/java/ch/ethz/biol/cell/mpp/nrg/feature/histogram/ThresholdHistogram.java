@@ -27,16 +27,13 @@ package ch.ethz.biol.cell.mpp.nrg.feature.histogram;
  */
 
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.cache.ExecuteException;
-import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.feature.bean.Feature;
-import org.anchoranalysis.feature.cache.CacheableParams;
+import org.anchoranalysis.feature.cache.ChildCacheName;
+import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.feature.init.FeatureInitParams;
 import org.anchoranalysis.image.bean.threshold.CalculateLevel;
 import org.anchoranalysis.image.feature.bean.FeatureHistogram;
-import org.anchoranalysis.image.feature.histogram.FeatureHistogramParams;
-import org.anchoranalysis.image.histogram.Histogram;
+import org.anchoranalysis.image.feature.histogram.FeatureInputHistogram;
 
 /**
  * Thresholds the histogram (using a weightedOtsu) and then applies
@@ -54,50 +51,31 @@ public class ThresholdHistogram extends FeatureHistogram {
 
 	// START BEAN PROPERTIES
 	@BeanField
-	private Feature<FeatureHistogramParams> item;
+	private Feature<FeatureInputHistogram> item;
 	
 	// START BEAN PROPERTIES
 	@BeanField
 	private CalculateLevel calculateLevel;
 	// END BEAN PROPERTIES
-
-	@Override
-	public void beforeCalc(FeatureInitParams params)
-			throws InitException {
-		super.beforeCalc(params);
-		item.beforeCalc(params);
-	}
 	
 	@Override
-	public double calc(CacheableParams<FeatureHistogramParams> paramsCacheable) throws FeatureCalcException {
-
-		try {
-			Histogram thresholded = paramsCacheable.calc(
-				new CalculateOtsuThresholdedHistogram(calculateLevel, getLogger())	
-			);
-			
-			return paramsCacheable.calcChangeParams(
-				item,
-				p -> createHistogramParams(p, thresholded),
-				"thresholdedHist"
-			);
-		} catch (ExecuteException e) {
-			throw new FeatureCalcException(e);
-		}
-	}
-	
-	private FeatureHistogramParams createHistogramParams(FeatureHistogramParams params, Histogram thresholded) {
-		return new FeatureHistogramParams(
-			thresholded,
-			params.getRes()
+	public double calc(SessionInput<FeatureInputHistogram> input) throws FeatureCalcException {
+		
+		return input.forChild().calc(
+			item,
+			new CalculateHistogramInputFromHistogram(
+				new CalculateOtsuThresholdedHistogram(calculateLevel, getLogger()),
+				input.resolver()
+			),
+			new ChildCacheName(ThresholdHistogram.class, calculateLevel.hashCode())
 		);
 	}
 
-	public Feature<FeatureHistogramParams> getItem() {
+	public Feature<FeatureInputHistogram> getItem() {
 		return item;
 	}
 
-	public void setItem(Feature<FeatureHistogramParams> item) {
+	public void setItem(Feature<FeatureInputHistogram> item) {
 		this.item = item;
 	}
 
@@ -108,5 +86,4 @@ public class ThresholdHistogram extends FeatureHistogram {
 	public void setCalculateLevel(CalculateLevel calculateLevel) {
 		this.calculateLevel = calculateLevel;
 	}
-
 }

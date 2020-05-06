@@ -29,15 +29,23 @@ package org.anchoranalysis.plugin.image.feature.bean.obj.pair.overlap;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.geometry.Point3d;
-import org.anchoranalysis.feature.cache.CacheableParams;
+import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.bean.unitvalue.distance.UnitValueDistance;
 import org.anchoranalysis.image.extent.ImageRes;
 import org.anchoranalysis.image.feature.bean.objmask.pair.FeatureObjMaskPair;
-import org.anchoranalysis.image.feature.objmask.pair.FeatureObjMaskPairParams;
+import org.anchoranalysis.image.feature.objmask.pair.FeatureInputPairObjs;
 import org.anchoranalysis.image.orientation.DirectionVector;
 import org.anchoranalysis.plugin.image.feature.obj.pair.overlap.OverlapRatioUtilities;
 
+
+/**
+ * 
+ * TODO the center-of-gravity calculation can be turned into a FeatureCalculation which is cacheable
+ * 
+ * @author Owen Feehan
+ *
+ */
 public class CostOverlapWithinMidpointDistance extends FeatureObjMaskPair {
 
 	/**
@@ -57,16 +65,15 @@ public class CostOverlapWithinMidpointDistance extends FeatureObjMaskPair {
 	// END BEAN PROPERTIES
 	
 	@Override
-	public double calc(CacheableParams<FeatureObjMaskPairParams> paramsCacheable)
-			throws FeatureCalcException {
+	public double calc(SessionInput<FeatureInputPairObjs> input) throws FeatureCalcException {
 
-		FeatureObjMaskPairParams params = paramsCacheable.getParams();
+		FeatureInputPairObjs inputSessionless = input.get();
 		
-		if (isDistMoreThanMax(params)) {
+		if (isDistMoreThanMax(inputSessionless)) {
 			return 1.0;
 		}
 				
-		double overlapRatio = OverlapRatioUtilities.overlapRatioToMaxVolume(params);
+		double overlapRatio = OverlapRatioUtilities.overlapRatioToMaxVolume(inputSessionless);
 		
 		if (overlapRatio>minOverlap) {
 			return 1.0 - overlapRatio;
@@ -75,13 +82,21 @@ public class CostOverlapWithinMidpointDistance extends FeatureObjMaskPair {
 		}
 	}
 	
-	private boolean isDistMoreThanMax( FeatureObjMaskPairParams params ) {
+	private boolean isDistMoreThanMax( FeatureInputPairObjs params ) throws FeatureCalcException {
 		
-		Point3d cog1 = params.getObjMask1().centerOfGravity();
-		Point3d cog2 = params.getObjMask2().centerOfGravity();
+		if (!params.getResOptional().isPresent()) {
+			throw new FeatureCalcException("This feature requires an Image-Res in the input");
+		}
+		
+		Point3d cog1 = params.getFirst().centerOfGravity();
+		Point3d cog2 = params.getSecond().centerOfGravity();
 		
 		double dist = calcDist(cog1, cog2);
-		double maxDist = calcMaxDist(cog1, cog2, params.getRes());
+		double maxDist = calcMaxDist(
+			cog1,
+			cog2,
+			params.getResOptional().get()
+		);
 		
 		return dist > maxDist;
 	}
@@ -97,7 +112,7 @@ public class CostOverlapWithinMidpointDistance extends FeatureObjMaskPair {
 	// We measure the euclidian distance between centre-points
 	private double calcMaxDist( Point3d cog1, Point3d cog2, ImageRes res ) {
 		DirectionVector vec = DirectionVector.createBetweenTwoPoints( cog1, cog2 );
-		 return maxDistance.rslv(res, vec );
+		 return maxDistance.rslv(res, vec);
 	}
 
 	public UnitValueDistance getMaxDistance() {

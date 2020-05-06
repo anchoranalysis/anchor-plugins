@@ -28,7 +28,7 @@ package ch.ethz.biol.cell.imageprocessing.histogram.provider;
 
 
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.bean.annotation.Optional;
+import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.bean.provider.BinaryImgChnlProvider;
 import org.anchoranalysis.image.bean.provider.ChnlProvider;
@@ -49,7 +49,7 @@ public class HistogramProviderChnl extends HistogramProvider {
 	@BeanField
 	private ChnlProvider chnlProvider;
 	
-	@BeanField @Optional
+	@BeanField @OptionalBean
 	private BinaryImgChnlProvider maskProvider;
 	// END BEAN PROPERTIES
 	

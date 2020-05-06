@@ -1,7 +1,7 @@
 package ch.ethz.biol.cell.mpp.nrg.feature.ind;
 
-import org.anchoranalysis.anchor.mpp.feature.bean.nrg.elem.NRGElemInd;
-import org.anchoranalysis.anchor.mpp.feature.nrg.elem.NRGElemIndCalcParams;
+import org.anchoranalysis.anchor.mpp.feature.bean.nrg.elem.FeatureSingleMemo;
+import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputSingleMemo;
 import org.anchoranalysis.anchor.mpp.mark.GlobalRegionIdentifiers;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.anchor.mpp.mark.conic.MarkEllipse;
@@ -38,7 +38,7 @@ import org.anchoranalysis.feature.calc.FeatureCalcException;
 
 // Estimates the circumference of an ellipse based upon finding the area of the shell, and dividing
 //  by the ShellRad
-public class MarkEllipseCircumEstimate extends NRGElemInd {
+public class MarkEllipseCircumEstimate extends FeatureSingleMemo {
 
 	
 	/**
@@ -52,7 +52,7 @@ public class MarkEllipseCircumEstimate extends NRGElemInd {
 	// END BEAN PROPERTIES
 	
 	@Override
-	public double calcCast(NRGElemIndCalcParams params) throws FeatureCalcException {
+	public double calcCast(FeatureInputSingleMemo params) throws FeatureCalcException {
 		
 		Mark m = params.getPxlPartMemo().getMark();
 		

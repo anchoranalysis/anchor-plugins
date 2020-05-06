@@ -111,7 +111,6 @@ public class SharedObjectsMultiInputTask extends TaskWithoutSharedState<MultiInp
 				)
 			);
 			ImageInitParams soImage = soMPP.getImage();
-			
 			inputObject.addToSharedObjects( soMPP, soImage );
 			
 			if (suppressOutputExceptions) {

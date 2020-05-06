@@ -65,7 +65,7 @@ public class GrayscaleReconstruction3DVincent extends GrayscaleReconstructionByE
 		//int i= 0;
 		do {
 			//System.out.printf("Iter %d\n",i++);
-			VoxelBox<ByteBuffer> vbOut = VoxelBoxFactory.getByte().create( maskCast.extnt() );
+			VoxelBox<ByteBuffer> vbOut = VoxelBoxFactory.instance().getByte().create( maskCast.extnt() );
 			
 			// Erode
 			if (!GrayscaleErosion.grayscaleErosion( in, vbOut )) {

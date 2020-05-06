@@ -2,7 +2,7 @@ package ch.ethz.biol.cell.mpp.pair.addcriteria;
 
 import org.anchoranalysis.anchor.mpp.feature.addcriteria.AddCriteriaPair;
 import org.anchoranalysis.anchor.mpp.feature.addcriteria.IncludeMarksFailureException;
-import org.anchoranalysis.anchor.mpp.feature.nrg.elem.NRGElemPairCalcParams;
+import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputPairMemo;
 import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
 
 /*
@@ -50,7 +50,7 @@ public class AddCriteriaFeatureRelationThreshold extends AddCriteriaPair {
 	
 	// START BEAN PROPERTIES
 	@BeanField
-	private Feature<NRGElemPairCalcParams> feature;
+	private Feature<FeatureInputPairMemo> feature;
 	
 	@BeanField
 	private double threshold;
@@ -69,18 +69,21 @@ public class AddCriteriaFeatureRelationThreshold extends AddCriteriaPair {
 		PxlMarkMemo mark1,
 		PxlMarkMemo mark2,
 		ImageDim dim,
-		FeatureCalculatorMulti<NRGElemPairCalcParams> session,
+		FeatureCalculatorMulti<FeatureInputPairMemo> session,
 		boolean use3d
 	) throws IncludeMarksFailureException {
 		
 		try {
-			NRGElemPairCalcParams params = new NRGElemPairCalcParams(
+			FeatureInputPairMemo params = new FeatureInputPairMemo(
 				mark1,
 				mark2,
 				new NRGStackWithParams(dim)
 			);
 			
-			double featureVal = session.createCacheable(params).calc(feature);
+			double featureVal = session.calc(
+				params,
+				new FeatureList<>(feature)
+			).get(0);
 			
 			return relation.create().isRelationToValueTrue(featureVal, threshold);
 			
@@ -89,11 +92,11 @@ public class AddCriteriaFeatureRelationThreshold extends AddCriteriaPair {
 		}
 	}
 
-	public Feature<NRGElemPairCalcParams> getFeature() {
+	public Feature<FeatureInputPairMemo> getFeature() {
 		return feature;
 	}
 
-	public void setFeature(Feature<NRGElemPairCalcParams> feature) {
+	public void setFeature(Feature<FeatureInputPairMemo> feature) {
 		this.feature = feature;
 	}
 
@@ -114,7 +117,7 @@ public class AddCriteriaFeatureRelationThreshold extends AddCriteriaPair {
 	}
 
 	@Override
-	public FeatureList<NRGElemPairCalcParams> orderedListOfFeatures() {
+	public FeatureList<FeatureInputPairMemo> orderedListOfFeatures() {
 		return new FeatureList<>(feature);
 	}
 }

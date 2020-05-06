@@ -2,9 +2,9 @@ package ch.ethz.biol.cell.mpp.nrg.feature.operator;
 
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.operator.FeatureListElem;
-import org.anchoranalysis.feature.cache.CacheableParams;
+import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
+import org.anchoranalysis.feature.input.FeatureInput;
 
 /*
  * #%L
@@ -37,7 +37,7 @@ import org.apache.commons.math3.stat.descriptive.moment.GeometricMean;
 
 
 // Geometric mean
-public class MeanGeometric<T extends FeatureCalcParams> extends FeatureListElem<T> {
+public class MeanGeometric<T extends FeatureInput> extends FeatureListElem<T> {
 
 	/**
 	 * 
@@ -47,13 +47,13 @@ public class MeanGeometric<T extends FeatureCalcParams> extends FeatureListElem<
 	private GeometricMean meanCalculator = new GeometricMean();
 	
 	@Override
-	public double calc( CacheableParams<T> params ) throws FeatureCalcException {
+	public double calc( SessionInput<T> input ) throws FeatureCalcException {
 		
 		double[] result = new double[ getList().size() ];
 		
 		for (int i=0; i<getList().size(); i++) {
 			Feature<T> elem = getList().get(i);
-			result[i] = params.calc(elem);
+			result[i] = input.calc(elem);
 		}
 		
 		return meanCalculator.evaluate(result);

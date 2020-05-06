@@ -29,7 +29,7 @@ package org.anchoranalysis.plugin.image.task.bean.labeller;
  */
 
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.bean.annotation.Optional;
+import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.bean.annotation.SkipInit;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
@@ -75,7 +75,7 @@ public class ImageAssignLabelTask<T> extends Task<ProvidesStackInput,SharedState
 	/**
 	 * If it's set, a stack is generated that is outputted into sub-directory corresponding to the groupIdentifier.
 	 */
-	@BeanField @Optional @SkipInit
+	@BeanField @OptionalBean @SkipInit
 	private StackProvider outputStackProvider;
 	// END BEAN PROPERTIES
 	

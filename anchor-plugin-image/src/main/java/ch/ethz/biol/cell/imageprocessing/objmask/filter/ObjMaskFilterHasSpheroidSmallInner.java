@@ -41,8 +41,7 @@ import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.image.objmask.ObjMaskCollection;
 import org.anchoranalysis.image.objmask.match.ObjWithMatches;
-
-import ch.ethz.biol.cell.mpp.nrg.feature.objmask.IntensityMean;
+import org.anchoranalysis.plugin.image.intensity.IntensityMeanCalculator;
 
 // Insists that the ratio of holes in this object is less than a certain %
 // Holes are provided by a series of 'filled in' objects, which are considered
@@ -92,8 +91,8 @@ public class ObjMaskFilterHasSpheroidSmallInner extends ObjMaskFilter {
 		// Intensity check
 		try {
 			// Calculate intensity of object
-			double intensitySmall = IntensityMean.calcMeanIntensityObjMask(chnlIntensity, om);
-			double intensityContainer = IntensityMean.calcMeanIntensityObjMask(chnlIntensity, omInverse);
+			double intensitySmall = IntensityMeanCalculator.calcMeanIntensityObjMask(chnlIntensity, om);
+			double intensityContainer = IntensityMeanCalculator.calcMeanIntensityObjMask(chnlIntensity, omInverse);
 			
 			double intensityDiff = intensitySmall - intensityContainer;
 			
@@ -127,8 +126,8 @@ public class ObjMaskFilterHasSpheroidSmallInner extends ObjMaskFilter {
 		// Distance check
 		try{
 			// Calculate intensity of object
-			double distanceObj = IntensityMean.calcMeanIntensityObjMask(chnlDistance, om);
-			double distanceInverse= IntensityMean.calcMeanIntensityObjMask(chnlDistance, omInverse)  + minDistance;
+			double distanceObj = IntensityMeanCalculator.calcMeanIntensityObjMask(chnlDistance, om);
+			double distanceInverse= IntensityMeanCalculator.calcMeanIntensityObjMask(chnlDistance, omInverse)  + minDistance;
 
 			//System.out.printf("Distance:  Obj=%f   Inverse=%f\n", distanceObj, distanceInverse);
 			

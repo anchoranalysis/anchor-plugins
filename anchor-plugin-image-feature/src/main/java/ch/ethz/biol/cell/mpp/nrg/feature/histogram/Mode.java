@@ -1,6 +1,7 @@
 package ch.ethz.biol.cell.mpp.nrg.feature.histogram;
 
-import org.anchoranalysis.feature.cache.CacheableParams;
+import org.anchoranalysis.core.error.OperationFailedException;
+
 
 /*
  * #%L
@@ -29,11 +30,9 @@ import org.anchoranalysis.feature.cache.CacheableParams;
  */
 
 
-import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.image.feature.bean.FeatureHistogram;
-import org.anchoranalysis.image.feature.histogram.FeatureHistogramParams;
+import org.anchoranalysis.image.histogram.Histogram;
 
-public class Mode extends FeatureHistogram {
+public class Mode extends FeatureHistogramStatistic {
 
 	/**
 	 * 
@@ -41,8 +40,7 @@ public class Mode extends FeatureHistogram {
 	private static final long serialVersionUID = 1L;
 	
 	@Override
-	public double calc(CacheableParams<FeatureHistogramParams> params)
-			throws FeatureCalcException {
-		return params.getParams().getHistogram().calcMode();
+	protected double calcStatisticFrom(Histogram histogram) throws OperationFailedException {
+		return histogram.calcMode();
 	}
 }

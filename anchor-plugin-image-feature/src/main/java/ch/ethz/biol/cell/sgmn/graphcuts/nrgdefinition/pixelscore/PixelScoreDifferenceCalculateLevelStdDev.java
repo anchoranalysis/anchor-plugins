@@ -28,21 +28,14 @@ package ch.ethz.biol.cell.sgmn.graphcuts.nrgdefinition.pixelscore;
 
 
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.relation.GreaterThanEqualTo;
 import org.anchoranalysis.core.relation.LessThan;
-import org.anchoranalysis.feature.cache.CacheableParams;
-import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.image.bean.threshold.CalculateLevel;
-import org.anchoranalysis.image.feature.bean.pixelwise.score.PixelScore;
-import org.anchoranalysis.image.feature.pixelwise.PixelwiseFeatureInitParams;
-import org.anchoranalysis.image.feature.pixelwise.score.PixelScoreFeatureCalcParams;
 import org.anchoranalysis.image.histogram.Histogram;
 
 // Same as PixelScoreDifference but calculates the width as the std deviation of the histogram
 //  associated with the init params, and the level is calculated from the histogram
-public class PixelScoreDifferenceCalculateLevelStdDev extends PixelScore {
+public class PixelScoreDifferenceCalculateLevelStdDev extends PixelScoreCalculateLevelBase {
 
 	/**
 	 * 
@@ -51,52 +44,34 @@ public class PixelScoreDifferenceCalculateLevelStdDev extends PixelScore {
 	
 	// START BEAN PROPERTIES
 	@BeanField
-	private int nrgChnlIndex = 0;
-	
-	@BeanField
-	private int indexHistogram = 0;
-
-	@BeanField
 	private int minDifference = 0;
-	
-	@BeanField
-	private CalculateLevel calculateLevel;
 	
 	@BeanField
 	private double widthFactor = 1.0;
 	// END BEAN PROPERTIES
 
-	private int level;
 	private double widthLessThan;
 	private double widthGreaterThan;
 	
 	@Override
-	public void beforeCalcCast(PixelwiseFeatureInitParams params) throws InitException {
-		super.beforeCalcCast(params);
-		
-		Histogram hist = params.getHist(indexHistogram);
-		
-		
-		try {
-			this.level = calculateLevel.calculateLevel(hist);
-		} catch (OperationFailedException e) {
-			throw new InitException(e);
-		}
-		
+	protected void beforeCalcSetup(Histogram hist, int level) throws OperationFailedException {
+			
 		Histogram lessThan = hist.threshold( new LessThan(), level );
 		Histogram greaterThan = hist.threshold( new GreaterThanEqualTo(), level );
 		
 		this.widthLessThan = lessThan.stdDev() * widthFactor;
 		this.widthGreaterThan = greaterThan.stdDev() * widthFactor;
 	}
-	
+
 	@Override
-	public double calc(CacheableParams<PixelScoreFeatureCalcParams> paramsCacheable)
-			throws FeatureCalcException {
-		
-		PixelScoreFeatureCalcParams params = paramsCacheable.getParams();
-		
-		return PixelScoreDifference.calcDiffFromValue(params.getPxl(nrgChnlIndex), level, widthGreaterThan, widthLessThan, minDifference);
+	protected double calcForPixel(int pxlValue, int level) {
+		return PixelScoreDifference.calcDiffFromValue(
+			pxlValue,
+			level,
+			widthGreaterThan,
+			widthLessThan,
+			minDifference
+		);
 	}
 
 	public int getMinDifference() {
@@ -107,30 +82,6 @@ public class PixelScoreDifferenceCalculateLevelStdDev extends PixelScore {
 		this.minDifference = minDifference;
 	}
 
-	public int getNrgChnlIndex() {
-		return nrgChnlIndex;
-	}
-
-	public void setNrgChnlIndex(int nrgChnlIndex) {
-		this.nrgChnlIndex = nrgChnlIndex;
-	}
-
-	public int getIndexHistogram() {
-		return indexHistogram;
-	}
-
-	public void setIndexHistogram(int indexHistogram) {
-		this.indexHistogram = indexHistogram;
-	}
-
-	public CalculateLevel getCalculateLevel() {
-		return calculateLevel;
-	}
-
-	public void setCalculateLevel(CalculateLevel calculateLevel) {
-		this.calculateLevel = calculateLevel;
-	}
-
 	public double getWidthFactor() {
 		return widthFactor;
 	}
@@ -138,6 +89,4 @@ public class PixelScoreDifferenceCalculateLevelStdDev extends PixelScore {
 	public void setWidthFactor(double widthFactor) {
 		this.widthFactor = widthFactor;
 	}
-	
-	
 }

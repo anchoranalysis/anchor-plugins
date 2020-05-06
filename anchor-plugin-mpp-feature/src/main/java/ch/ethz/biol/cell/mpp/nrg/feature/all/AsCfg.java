@@ -1,8 +1,7 @@
 package ch.ethz.biol.cell.mpp.nrg.feature.all;
 
-import org.anchoranalysis.anchor.mpp.feature.bean.cfg.FeatureCfgParams;
-import org.anchoranalysis.anchor.mpp.feature.nrg.elem.NRGElemAllCalcParams;
-
+import org.anchoranalysis.anchor.mpp.feature.bean.cfg.FeatureInputCfg;
+import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputAllMemo;
 
 /*-
  * #%L
@@ -31,26 +30,27 @@ import org.anchoranalysis.anchor.mpp.feature.nrg.elem.NRGElemAllCalcParams;
  */
 
 import org.anchoranalysis.feature.bean.operator.FeatureSingleElem;
-import org.anchoranalysis.feature.cache.CacheableParams;
+import org.anchoranalysis.feature.cache.ChildCacheName;
+import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 
-public class AsCfg extends FeatureSingleElem<NRGElemAllCalcParams,FeatureCfgParams> {
+public class AsCfg extends FeatureSingleElem<FeatureInputAllMemo,FeatureInputCfg> {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 
-	@Override
-	public double calc( CacheableParams<NRGElemAllCalcParams> params ) throws FeatureCalcException {
-		return params
-			.calcChangeParams(getItem(), AsCfg::deriveParams, "cfg");
-	}
+	private static final ChildCacheName CACHE_NAME = new ChildCacheName(AsCfg.class);
 	
-	private static FeatureCfgParams deriveParams( NRGElemAllCalcParams params ) {
-		return new FeatureCfgParams(
-			params.getPxlPartMemo().asCfg(),
-			params.getDimensions()
-		);
+	@Override
+	public double calc( SessionInput<FeatureInputAllMemo> input ) throws FeatureCalcException {
+		return input
+			.forChild()
+			.calc(
+				getItem(),
+				new CalculateDeriveCfgInput(),
+				CACHE_NAME
+			);
 	}
 }

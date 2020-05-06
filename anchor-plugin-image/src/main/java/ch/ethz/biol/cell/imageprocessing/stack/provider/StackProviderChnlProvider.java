@@ -30,7 +30,7 @@ import org.anchoranalysis.bean.BeanInstanceMap;
 
 
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.bean.annotation.Optional;
+import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.bean.error.BeanMisconfiguredException;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.bean.provider.BinaryImgChnlProvider;
@@ -46,10 +46,10 @@ public class StackProviderChnlProvider extends StackProvider {
 	private static final long serialVersionUID = 6951065129825367326L;
 	
 	// START BEAN PROPERTIES
-	@BeanField @Optional
+	@BeanField @OptionalBean
 	private ChnlProvider chnlProvider;
 	
-	@BeanField @Optional
+	@BeanField @OptionalBean
 	private BinaryImgChnlProvider binaryImgChnlProvider;
 	// END BEAN PROPERTIES
 

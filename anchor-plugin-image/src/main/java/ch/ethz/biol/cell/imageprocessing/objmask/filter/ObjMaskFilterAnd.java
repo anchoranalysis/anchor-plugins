@@ -26,40 +26,23 @@ package ch.ethz.biol.cell.imageprocessing.objmask.filter;
  * #L%
  */
 
-import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.bean.objmask.filter.ObjMaskFilter;
-import org.anchoranalysis.image.bean.objmask.filter.ObjMaskFilterList;
 import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.objmask.ObjMaskCollection;
 
-public class ObjMaskFilterAnd extends ObjMaskFilter {
+public class ObjMaskFilterAnd extends ObjMaskFilterDelegate {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1049151951022876436L;
 	
-	// START BEAN PROPERTIES
-	@BeanField
-	private ObjMaskFilterList list = null;
-	// END BEAN PROPERTIES
-	
 	@Override
 	public void filter(ObjMaskCollection objs, ImageDim dim, ObjMaskCollection objsRejected) throws OperationFailedException {
 		
-		for (ObjMaskFilter indFilter : list) {
+		for (ObjMaskFilter indFilter : delegate().getList()) {
 			indFilter.filter(objs, dim, objsRejected);
 		}
 	}
-
-	public ObjMaskFilterList getList() {
-		return list;
-	}
-
-	public void setList(ObjMaskFilterList list) {
-		this.list = list;
-	}
-
-
 }

@@ -30,13 +30,13 @@ package ch.ethz.biol.cell.mpp.nrg.feature.objmask;
 import java.nio.ByteBuffer;
 
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.feature.cache.CacheableParams;
+import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.binary.values.BinaryValues;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelBoxByte;
 import org.anchoranalysis.image.feature.bean.objmask.FeatureObjMask;
-import org.anchoranalysis.image.feature.objmask.FeatureObjMaskParams;
+import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
 import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.anchoranalysis.image.voxel.datatype.IncorrectVoxelDataTypeException;
@@ -69,18 +69,18 @@ public class NumNghbVoxels extends FeatureObjMask {
 	}
 	
 	@Override
-	public double calc(CacheableParams<FeatureObjMaskParams> paramsCacheable) throws FeatureCalcException {
+	public double calc(SessionInput<FeatureInputSingleObj> input) throws FeatureCalcException {
 
-		FeatureObjMaskParams params = paramsCacheable.getParams();
+		FeatureInputSingleObj inputSessionless = input.get();
 		
-		ObjMask om = params.getObjMask();
-
-		//OutlineKernel3 kernel = new OutlineKernel3(om.getBinaryValuesByte(), outsideAtThreshold, do3D);
-		//int numBorderPixelsA = ApplyBinaryKernel.applyForCount(kernel, om.getVoxelBox());
+		ObjMask om = inputSessionless.getObjMask();
 		
 		VoxelBox<ByteBuffer> vb;
 		try {
-			vb = params.getNrgStack().getNrgStack().getChnl(nrgIndex).getVoxelBox().asByte();
+			vb = inputSessionless
+				.getNrgStackRequired()
+				.getChnl(nrgIndex).getVoxelBox().asByte();
+			
 		} catch (IncorrectVoxelDataTypeException e) {
 			throw new FeatureCalcException( String.format("nrgStack channel %d has incorrect data type",nrgIndex), e);
 		}
@@ -89,13 +89,7 @@ public class NumNghbVoxels extends FeatureObjMask {
 				
 		OutlineKernel3NghbMatchValue kernelMatch = new OutlineKernel3NghbMatchValue(outsideAtThreshold, do3D, om, bvbNotObject);
 		kernelMatch.setIgnoreAtThreshold(ignoreAtThreshold);
-		int cnt = ApplyKernel.applyForCount(kernelMatch, om.getVoxelBox());
-		
-		//double ratio = ((double) cnt) / numBorderPixelsA;
-		//System.out.printf("ObjMask at centre %s\n", om.centerOfGravity().toString() );
-		//System.out.printf("NumNghbVoxel=%d  NumBorderPixels=%d   ratio=%f\n", cnt, numBorderPixelsA, ratio);
-		
-		return cnt;
+		return ApplyKernel.applyForCount(kernelMatch, om.getVoxelBox());
 	}
 
 	public boolean isOutsideAtThreshold() {

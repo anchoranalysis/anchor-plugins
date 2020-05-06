@@ -28,10 +28,10 @@ package ch.ethz.biol.cell.mpp.nrg.feature.objmask;
 
 
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.feature.cache.CacheableParams;
+import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.feature.bean.objmask.FeatureObjMask;
-import org.anchoranalysis.image.feature.objmask.FeatureObjMaskParams;
+import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
 import org.anchoranalysis.image.objmask.ObjMask;
 
 public class ShapeRegularityCenterSlice extends FeatureObjMask {
@@ -42,32 +42,25 @@ public class ShapeRegularityCenterSlice extends FeatureObjMask {
 	private static final long serialVersionUID = 1L;
 
 	@Override
-	public double calc(CacheableParams<FeatureObjMaskParams> paramsCacheable) throws FeatureCalcException {
+	public double calc(SessionInput<FeatureInputSingleObj> input) throws FeatureCalcException {
 				
-		FeatureObjMaskParams params = paramsCacheable.getParams();
-		
-		int zSliceCenter = (int) params.getObjMask().centerOfGravity().getZ();
-		
-		ObjMask om;
 		try {
-			om = params.getObjMask().extractSlice(zSliceCenter - params.getObjMask().getBoundingBox().getCrnrMin().getZ(), false);
+			ObjMask omSlice = centerSlice(
+				input.get().getObjMask()
+			);
+			
+			return ShapeRegularityCalculator.calcShapeRegularity(omSlice);
+			
 		} catch (OperationFailedException e1) {
 			throw new FeatureCalcException(e1);
 		}
-		
-		
-		
-		double area = om.numPixels();
-		
-		int perim = NumBorderVoxels.numBorderPixels(om, false, false, false);
-
-		if (perim==0) {
-			return 0.0;
-		}
-		
-		double val = ((2 * Math.PI) * Math.sqrt(area/Math.PI)) / perim;
-		assert( !Double.isNaN(val) );
-		return val;
 	}
-
+	
+	private ObjMask centerSlice( ObjMask om ) throws OperationFailedException {
+		int zSliceCenter = (int) om.centerOfGravity().getZ();
+		return  om.extractSlice(
+			zSliceCenter - om.getBoundingBox().getCrnrMin().getZ(),
+			false
+		);
+	}
 }

@@ -28,10 +28,10 @@ package ch.ethz.biol.cell.mpp.nrg.feature.histogram;
 
 
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.feature.cache.CacheableParams;
+import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.feature.bean.FeatureHistogram;
-import org.anchoranalysis.image.feature.histogram.FeatureHistogramParams;
+import org.anchoranalysis.image.feature.histogram.FeatureInputHistogram;
 import org.anchoranalysis.image.histogram.Histogram;
 
 public class NumVoxelsGreaterEqualTo extends FeatureHistogram {
@@ -47,10 +47,10 @@ public class NumVoxelsGreaterEqualTo extends FeatureHistogram {
 	// END BEAN PROPERTIES
 
 	@Override
-	public double calc(CacheableParams<FeatureHistogramParams> params)
+	public double calc(SessionInput<FeatureInputHistogram> input)
 			throws FeatureCalcException {
 		
-		Histogram h = params.getParams().getHistogram();
+		Histogram h = input.get().getHistogram();
 		
 		double sum = 0.0;
 		for( int i=threshold; i<=h.getMaxBin(); i++) {

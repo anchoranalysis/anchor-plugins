@@ -1,7 +1,7 @@
 package ch.ethz.biol.cell.mpp.nrg.feature.ind;
 
-import org.anchoranalysis.anchor.mpp.feature.bean.nrg.elem.NRGElemInd;
-import org.anchoranalysis.anchor.mpp.feature.nrg.elem.NRGElemIndCalcParams;
+import org.anchoranalysis.anchor.mpp.feature.bean.nrg.elem.FeatureSingleMemo;
+import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputSingleMemo;
 import org.anchoranalysis.anchor.mpp.mark.GlobalRegionIdentifiers;
 import org.anchoranalysis.anchor.mpp.pxlmark.PxlMark;
 
@@ -33,14 +33,13 @@ import org.anchoranalysis.anchor.mpp.pxlmark.PxlMark;
 
 
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.cache.ExecuteException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.histogram.Histogram;
 import org.anchoranalysis.image.voxel.statistics.VoxelStatistics;
 import org.anchoranalysis.image.voxel.statistics.VoxelStatisticsFromHistogram;
 
-public class IntensityStdDev extends NRGElemInd {
+public class IntensityStdDev extends FeatureSingleMemo {
 
 	/**
 	 * 
@@ -62,7 +61,7 @@ public class IntensityStdDev extends NRGElemInd {
 	// END BEAN PROPERTIES
 	
 	@Override
-	public double calcCast( NRGElemIndCalcParams params ) throws FeatureCalcException {
+	public double calcCast( FeatureInputSingleMemo params ) throws FeatureCalcException {
 
 		try {
 			PxlMark pm = params.getPxlPartMemo().doOperation();
@@ -92,7 +91,7 @@ public class IntensityStdDev extends NRGElemInd {
 				
 				return stats.stdDev();
 			}
-		} catch (ExecuteException | OperationFailedException e) {
+		} catch (OperationFailedException e) {
 			throw new FeatureCalcException(e);
 		}							
 	}

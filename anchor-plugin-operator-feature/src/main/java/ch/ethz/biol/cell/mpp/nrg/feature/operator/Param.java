@@ -28,18 +28,16 @@ package ch.ethz.biol.cell.mpp.nrg.feature.operator;
 
 
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.params.KeyValueParams;
 import org.anchoranalysis.feature.bean.Feature;
-import org.anchoranalysis.feature.cache.CacheableParams;
+import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
-import org.anchoranalysis.feature.calc.params.FeatureCalcParamsWithImageParamsDescriptor;
-import org.anchoranalysis.feature.init.FeatureInitParams;
-import org.anchoranalysis.feature.params.FeatureParamsDescriptor;
+import org.anchoranalysis.feature.input.FeatureInputParams;
+import org.anchoranalysis.feature.input.descriptor.FeatureInputDescriptor;
+import org.anchoranalysis.feature.input.descriptor.FeatureInputParamsDescriptor;
 
 // TODO this behaviour is very ill-defined with parameter type. Clarify
-public class Param extends Feature<FeatureCalcParams> {
+public class Param<T extends FeatureInputParams> extends Feature<T> {
 
 	/**
 	 * 
@@ -51,34 +49,11 @@ public class Param extends Feature<FeatureCalcParams> {
 	private String id;
 	// END BEAN PROPERTIES
 	
-	private KeyValueParams keyValueParams;
-	
 	@Override
-	public void beforeCalc(FeatureInitParams params) throws InitException {
-		super.beforeCalc(params);
-		this.keyValueParams = params.getKeyValueParams();
-	}
-	
-	@Override
-	public double calc(CacheableParams<FeatureCalcParams> params)
+	public double calc(SessionInput<T> input)
 			throws FeatureCalcException {
-
-//		if (keyValueParams instanceof FeatureCalcParamsWithImageParams) {
-//			
-//			FeatureCalcParamsWithImageParams paramsCast = (FeatureCalcParamsWithImageParams) params;
-//			
-//			NRGElemParamsFromImage imageParams = paramsCast.getParamsImage();
-//			if (imageParams.containsKey(id)) {
-//				return imageParams.get(id);
-//			} else {
-//				return Double.NaN;
-//			}
-//			
-//		}
 		
-		if (keyValueParams==null) {
-			throw new FeatureCalcException("No KeyValueParams is passed");
-		}
+		KeyValueParams keyValueParams = input.get().getParamsRequired();
 		
 		if (keyValueParams.containsKey(id)) {
 			return Double.parseDouble( keyValueParams.getProperty(id) );
@@ -87,8 +62,6 @@ public class Param extends Feature<FeatureCalcParams> {
 				String.format("Param '%s' is missing", id)	
 			);
 		}
-		
-		
 	}
 
 	public String getId() {
@@ -99,8 +72,8 @@ public class Param extends Feature<FeatureCalcParams> {
 		this.id = id;
 	}
 	@Override
-	public FeatureParamsDescriptor paramType()
+	public FeatureInputDescriptor paramType()
 			throws FeatureCalcException {
-		return FeatureCalcParamsWithImageParamsDescriptor.instance;
+		return FeatureInputParamsDescriptor.instance;
 	}
 }

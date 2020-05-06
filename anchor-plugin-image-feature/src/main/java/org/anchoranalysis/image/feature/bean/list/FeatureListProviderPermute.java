@@ -33,7 +33,7 @@ import java.util.List;
 import org.anchoranalysis.bean.StringSet;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.NonEmpty;
-import org.anchoranalysis.bean.annotation.Optional;
+import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.bean.annotation.SkipInit;
 import org.anchoranalysis.bean.error.BeanDuplicateException;
 import org.anchoranalysis.bean.permute.ApplyPermutations;
@@ -45,7 +45,7 @@ import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.bean.list.FeatureListProvider;
-import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
+import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.shared.SharedFeaturesInitParams;
 
 /**
@@ -54,9 +54,9 @@ import org.anchoranalysis.feature.shared.SharedFeaturesInitParams;
  * @author Owen Feehan
  *
  * @param S permutation type
- * @param T feature-calc-params
+ * @param T feature-input
  */
-public class FeatureListProviderPermute<S, T extends FeatureCalcParams> extends FeatureListProvider<T> {
+public class FeatureListProviderPermute<S, T extends FeatureInput> extends FeatureListProvider<T> {
 
 	/**
 	 * 
@@ -70,7 +70,7 @@ public class FeatureListProviderPermute<S, T extends FeatureCalcParams> extends 
 	@BeanField @SkipInit
 	private Feature<T> feature;
 	
-	@BeanField @Optional
+	@BeanField @OptionalBean
 	private StringSet referencesFeatureListCreator;	// Makes sure a particular feature list creator is evaluated
 	
 	@BeanField @NonEmpty

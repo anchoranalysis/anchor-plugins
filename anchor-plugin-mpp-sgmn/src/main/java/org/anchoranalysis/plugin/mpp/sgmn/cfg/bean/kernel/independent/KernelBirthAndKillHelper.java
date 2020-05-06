@@ -38,7 +38,6 @@ import org.anchoranalysis.anchor.mpp.overlap.OverlapUtilities;
 import org.anchoranalysis.anchor.mpp.proposer.ProposalAbnormalFailureException;
 import org.anchoranalysis.anchor.mpp.proposer.ProposerContext;
 import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
-import org.anchoranalysis.core.cache.ExecuteException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
@@ -95,29 +94,14 @@ class KernelBirthAndKillHelper {
 		List<PxlMarkMemo> outList = new ArrayList<PxlMarkMemo>();
 		
 		// We always measure overlap in terms of the object being added
-		long numPixelsNew;
-		try {
-			numPixelsNew = memoNew.doOperation().statisticsForAllSlices(0, regionID).size();
-		} catch (ExecuteException e) {
-			throw new OperationFailedException( "Failed to calculate memoNew", e.getCause() );
-		}
+		long numPixelsNew = memoNew.doOperation().statisticsForAllSlices(0, regionID).size();
 		
 		for( int i=0; i<exst.getCfg().size(); i++) {
 			PxlMarkMemo memoExst = exst.getMemoForIndex(i);
 			
-			long numPixelsExst;
-			try {
-				numPixelsExst = memoExst.doOperation().statisticsForAllSlices(0, regionID).size();
-			} catch (ExecuteException e) {
-				throw new OperationFailedException( "Failed to calculate memoExst", e.getCause() );
-			}
+			long numPixelsExst = memoExst.doOperation().statisticsForAllSlices(0, regionID).size();
 			
-			double overlap;
-			try {
-				overlap = OverlapUtilities.overlapWith(memoExst, memoNew,regionID);
-			} catch (ExecuteException e) {
-				throw new OperationFailedException( "Cannot calculate overlap", e.getCause() );
-			} 
+			double overlap = OverlapUtilities.overlapWith(memoExst, memoNew,regionID);
 			
 			if (numPixelsNew==0) {
 				outList.add( memoExst );

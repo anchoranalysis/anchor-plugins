@@ -1,7 +1,7 @@
 package ch.ethz.biol.cell.mpp.nrg.feature.pair;
 
-import org.anchoranalysis.anchor.mpp.feature.bean.nrg.elem.NRGElemPair;
-import org.anchoranalysis.anchor.mpp.feature.nrg.elem.NRGElemPairCalcParams;
+import org.anchoranalysis.anchor.mpp.feature.bean.nrg.elem.FeaturePairMemo;
+import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputPairMemo;
 import org.anchoranalysis.anchor.mpp.mark.GlobalRegionIdentifiers;
 
 /*
@@ -32,14 +32,13 @@ import org.anchoranalysis.anchor.mpp.mark.GlobalRegionIdentifiers;
 
 
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.cache.ExecuteException;
-import org.anchoranalysis.feature.cache.CacheableParams;
-import org.anchoranalysis.feature.cachedcalculation.CachedCalculation;
+import org.anchoranalysis.feature.cache.SessionInput;
+import org.anchoranalysis.feature.cache.calculation.FeatureCalculation;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import ch.ethz.biol.cell.mpp.nrg.cachedcalculation.OverlapCalculation;
 import ch.ethz.biol.cell.mpp.nrg.cachedcalculation.OverlapMIPCalculation;
 
-public class Overlap extends NRGElemPair {
+public class Overlap extends FeaturePairMemo {
 
 	/**
 	 * 
@@ -58,15 +57,11 @@ public class Overlap extends NRGElemPair {
 	}
 		
 	@Override
-	public double calc( CacheableParams<NRGElemPairCalcParams> params ) throws FeatureCalcException {
-		try {
-			return params.calc( overlapCalculation() );
-		} catch (ExecuteException e) {
-			throw new FeatureCalcException(e);
-		}							
+	public double calc( SessionInput<FeatureInputPairMemo> params ) throws FeatureCalcException {
+		return params.calc( overlapCalculation() );
 	}
 	
-	private CachedCalculation<Double> overlapCalculation() {
+	private FeatureCalculation<Double,FeatureInputPairMemo> overlapCalculation() {
 		if (mip) {
 			return new OverlapMIPCalculation(regionID);
 		} else {

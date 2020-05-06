@@ -31,7 +31,7 @@ import org.anchoranalysis.bean.BeanInstanceMap;
 
 
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.bean.annotation.Optional;
+import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.bean.error.BeanMisconfiguredException;
 import org.anchoranalysis.core.color.ColorList;
 import org.anchoranalysis.core.color.RGBColor;
@@ -55,13 +55,13 @@ public class StackProviderRGBFromObjMaskThreeColors extends StackProviderWithBac
 	
 	
 	// START BEAN PROPERTIES
-	@BeanField @Optional
+	@BeanField @OptionalBean
 	private ObjMaskProvider objsRed;
 	
-	@BeanField @Optional
+	@BeanField @OptionalBean
 	private ObjMaskProvider objsBlue;
 	
-	@BeanField @Optional
+	@BeanField @OptionalBean
 	private ObjMaskProvider objsGreen;
 		
 	@BeanField

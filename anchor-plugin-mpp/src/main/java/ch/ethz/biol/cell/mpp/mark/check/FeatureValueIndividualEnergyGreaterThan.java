@@ -1,7 +1,9 @@
 package ch.ethz.biol.cell.mpp.mark.check;
 
+import java.util.Optional;
+
 import org.anchoranalysis.anchor.mpp.bean.regionmap.RegionMap;
-import org.anchoranalysis.anchor.mpp.feature.nrg.elem.NRGElemIndCalcParams;
+import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputSingleMemo;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
 import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemoFactory;
@@ -35,7 +37,7 @@ import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemoFactory;
 
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 
-public class FeatureValueIndividualEnergyGreaterThan extends FeatureValueCheckMark<NRGElemIndCalcParams> {
+public class FeatureValueIndividualEnergyGreaterThan extends FeatureValueCheckMark<FeatureInputSingleMemo> {
 
 	/**
 	 * 
@@ -43,9 +45,12 @@ public class FeatureValueIndividualEnergyGreaterThan extends FeatureValueCheckMa
 	private static final long serialVersionUID = 1086432241915811567L;
 
 	@Override
-	protected NRGElemIndCalcParams createFeatureCalcParams(Mark mark, RegionMap regionMap, NRGStackWithParams nrgStack) {
+	protected FeatureInputSingleMemo createFeatureCalcParams(Mark mark, RegionMap regionMap, NRGStackWithParams nrgStack) {
 		PxlMarkMemo pmm = PxlMarkMemoFactory.create( mark, nrgStack.getNrgStack(), regionMap );
-		return new NRGElemIndCalcParams(pmm, nrgStack);
+		return new FeatureInputSingleMemo(
+			pmm,
+			Optional.of(nrgStack)
+		);
 	}
 	
 	

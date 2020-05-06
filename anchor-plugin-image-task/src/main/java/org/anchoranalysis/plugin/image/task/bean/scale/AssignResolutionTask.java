@@ -31,7 +31,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.bean.annotation.Optional;
+import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
 import org.anchoranalysis.core.index.GetOperationFailedException;
@@ -71,7 +71,7 @@ public class AssignResolutionTask extends RasterTask {
 	@BeanField
 	private boolean supressSeries = false;
 	
-	@BeanField @Optional
+	@BeanField @OptionalBean
 	private ChnlFilter chnlFilter = null;
 	// END BEAN PROPERTIES
 

@@ -1,10 +1,10 @@
 package ch.ethz.biol.cell.mpp.nrg.feature.all;
 
-import org.anchoranalysis.anchor.mpp.feature.bean.nrg.elem.NRGElemAll;
-import org.anchoranalysis.anchor.mpp.feature.mark.MemoMarks;
-import org.anchoranalysis.anchor.mpp.feature.nrg.elem.NRGElemAllCalcParams;
-import org.anchoranalysis.anchor.mpp.feature.nrg.elem.NRGElemIndCalcParams;
-import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
+import org.anchoranalysis.anchor.mpp.feature.bean.nrg.elem.FeatureAllMemo;
+import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputAllMemo;
+import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputSingleMemo;
+import org.anchoranalysis.anchor.mpp.feature.mark.MemoCollection;
+
 
 /*
  * #%L
@@ -35,11 +35,11 @@ import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.bean.Feature;
-import org.anchoranalysis.feature.cache.CacheableParams;
+import org.anchoranalysis.feature.cache.ChildCacheName;
+import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
 
-public class CoefficientOfVarianceFromAll extends NRGElemAll {
+public class CoefficientOfVarianceFromAll extends FeatureAllMemo {
 
 	/**
 	 * 
@@ -48,21 +48,26 @@ public class CoefficientOfVarianceFromAll extends NRGElemAll {
 
 	// START BEAN PROPERTIES
 	@BeanField
-	private Feature<FeatureCalcParams> item;
+	private Feature<FeatureInputSingleMemo> item;
 	// END BEAN PROPERTIES
-	
-	@Override
-	public double calc(CacheableParams<NRGElemAllCalcParams> paramsCacheable)
-			throws FeatureCalcException {
 		
-		MemoMarks memoMarks = paramsCacheable.getParams().getPxlPartMemo();
+	@Override
+	public double calc(SessionInput<FeatureInputAllMemo> input)	throws FeatureCalcException {
+		
+		MemoCollection memoMarks = input.get().getPxlPartMemo();
 		
 		if (memoMarks.size()==0) {
 			return 0.0;
 		}
 		
+		return calcStatistic(input, memoMarks);
+	}
+	
+	private double calcStatistic( SessionInput<FeatureInputAllMemo> input, MemoCollection memoMarks ) throws FeatureCalcException {
+		
 		double vals[] = new double[memoMarks.size()];
-		double mean = calcForEachItem(paramsCacheable, memoMarks, vals);
+				
+		double mean = calcForEachItem(input, memoMarks, vals);
 		
 		if (mean==0.0) {
 			return Double.POSITIVE_INFINITY;
@@ -72,7 +77,7 @@ public class CoefficientOfVarianceFromAll extends NRGElemAll {
 	}
 	
 	/** Calculates the feature on each mark separately, populating vals, and returns the mean */
-	private double calcForEachItem( CacheableParams<NRGElemAllCalcParams> paramsCacheable, MemoMarks memoMarks, double vals[] ) throws FeatureCalcException {
+	private double calcForEachItem( SessionInput<FeatureInputAllMemo> input, MemoCollection memoMarks, double vals[] ) throws FeatureCalcException {
 		
 		double sum = 0.0;		
 		
@@ -80,10 +85,10 @@ public class CoefficientOfVarianceFromAll extends NRGElemAll {
 			
 			final int index = i;
 			
-			double v = paramsCacheable.calcChangeParams(
+			double v = input.forChild().calc(
 				item,
-				p -> extractInd(p, index),
-				"mark"+i
+				new CalculateDeriveSingleMemoInput(index),
+				new ChildCacheName(CoefficientOfVarianceFromAll.class, i)
 			);
 			
 			vals[i] = v;
@@ -91,15 +96,6 @@ public class CoefficientOfVarianceFromAll extends NRGElemAll {
 		}
 		
 		return sum / memoMarks.size();
-	}
-	
-	private static NRGElemIndCalcParams extractInd( NRGElemAllCalcParams params, int i ) {
-		
-		PxlMarkMemo pmm = params.getPxlPartMemo().getMemoForIndex(i);
-		
-		NRGElemIndCalcParams paramsInd = new NRGElemIndCalcParams(null,params.getNrgStack());
-		paramsInd.setPxlPartMemo(pmm);
-		return paramsInd;
 	}
 	
 	private static double stdDev( double vals[], double mean ) {
@@ -112,13 +108,11 @@ public class CoefficientOfVarianceFromAll extends NRGElemAll {
 		return Math.sqrt(sumSqDiff);
 	}
 
-	public Feature<FeatureCalcParams> getItem() {
+	public Feature<FeatureInputSingleMemo> getItem() {
 		return item;
 	}
 
-	public void setItem(Feature<FeatureCalcParams> item) {
+	public void setItem(Feature<FeatureInputSingleMemo> item) {
 		this.item = item;
 	}
-
-
 }

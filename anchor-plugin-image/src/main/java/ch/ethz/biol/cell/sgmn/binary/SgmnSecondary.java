@@ -30,7 +30,7 @@ package ch.ethz.biol.cell.sgmn.binary;
 import java.nio.ByteBuffer;
 
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.bean.annotation.Optional;
+import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.core.random.RandomNumberGenerator;
 import org.anchoranalysis.image.bean.sgmn.binary.BinarySgmn;
 import org.anchoranalysis.image.bean.sgmn.binary.BinarySgmnParameters;
@@ -59,7 +59,7 @@ public class SgmnSecondary extends BinarySgmn {
 	@BeanField
 	private BinarySgmn sgmn;
 	
-	@BeanField @Optional
+	@BeanField @OptionalBean
 	private BinarySgmn sgmnSecondary;	// Applied on pixels rejected from the first segmentation
 	
 	@BeanField
@@ -90,7 +90,7 @@ public class SgmnSecondary extends BinarySgmn {
 			Extent e = objMask.getBoundingBox().extnt();
 			BoundingBox bboxE = new BoundingBox(e);
 			
-			VoxelBoxFactoryTypeBound<ByteBuffer> factory = VoxelBoxFactory.getByte();
+			VoxelBoxFactoryTypeBound<ByteBuffer> factory = VoxelBoxFactory.instance().getByte();
 			
 			// We create a new image which is the orig (obj Masked) minus the areas which have survived the second segmentation
 			VoxelBox<ByteBuffer> diffBuffer = factory.create( e );

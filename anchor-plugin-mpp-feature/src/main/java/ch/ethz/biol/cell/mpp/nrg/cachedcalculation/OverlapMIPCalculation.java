@@ -1,10 +1,7 @@
 package ch.ethz.biol.cell.mpp.nrg.cachedcalculation;
 
-import org.anchoranalysis.anchor.mpp.bean.regionmap.RegionMap;
-import org.anchoranalysis.anchor.mpp.feature.nrg.elem.NRGElemPairCalcParams;
 import org.anchoranalysis.anchor.mpp.overlap.MaxIntensityProjectionPair;
-import org.anchoranalysis.anchor.mpp.pxlmark.PxlMark;
-import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
+
 
 /*
  * #%L
@@ -32,73 +29,30 @@ import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
  * #L%
  */
 
+public class OverlapMIPCalculation extends OverlapMIPCalculationBase {
 
-import org.anchoranalysis.core.cache.ExecuteException;
-import org.anchoranalysis.feature.cachedcalculation.CachedCalculation;
-import org.anchoranalysis.feature.cachedcalculation.CachedCalculationCastParams;
-import org.apache.commons.lang.builder.EqualsBuilder;
-import org.apache.commons.lang.builder.HashCodeBuilder;
-
-public class OverlapMIPCalculation extends CachedCalculationCastParams<Double, NRGElemPairCalcParams> {
-
-	private int regionID;
-	
 	// Constructor
 	public OverlapMIPCalculation( int regionID ) {
-		super();
-		this.regionID = regionID;
-	}
-	
-	@Override
-	protected Double execute( NRGElemPairCalcParams params ) throws ExecuteException {
-		
-		PxlMarkMemo mark1 = params.getObj1();
-		PxlMarkMemo mark2 = params.getObj2();
-		
-		assert( mark1 != null );
-		assert( mark2 != null );
-		
-		RegionMap regionMap1 = params.getObj1().getRegionMap();
-		RegionMap regionMap2 = params.getObj2().getRegionMap();
-				
-		PxlMark pm1 = mark1.doOperation();
-		PxlMark pm2 = mark2.doOperation();
-		
-		if (!pm1.getBoundingBoxMIP(regionID).hasIntersection(pm2.getBoundingBoxMIP(regionID))) {
-			return 0.0;
-		}
-		
-		MaxIntensityProjectionPair mipPair =
-			new MaxIntensityProjectionPair(
-				pm1.getObjMaskMIP().getVoxelBoxBounded(),
-				pm2.getObjMaskMIP().getVoxelBoxBounded(),
-				regionMap1.membershipWithFlagsForIndex(regionID),
-				regionMap2.membershipWithFlagsForIndex(regionID)
-			);
-		int overlap = mipPair.countIntersectingPixels();
-
-		return (double) overlap;
-	}
-	
-	@Override
-	public CachedCalculation<Double> duplicate() {
-		return new OverlapMIPCalculation( regionID );
-	}
-	
-	@Override
-	public int hashCode() {
-		return new HashCodeBuilder().append(regionID).toHashCode();
+		super(regionID);
 	}
 	
 	@Override
 	public boolean equals(final Object obj){
 	    if(obj instanceof OverlapMIPCalculation){
-	        final OverlapMIPCalculation other = (OverlapMIPCalculation) obj;
-	        return new EqualsBuilder()
-	            .append(regionID, other.regionID)
-	            .isEquals();
+	        return isRegionIDEqual( (OverlapMIPCalculation) obj );
 	    } else{
 	        return false;
 	    }
 	}
+
+	@Override
+	public int hashCode() {
+		return regionIDHashCode();
+	}
+	
+	@Override
+	protected Double calculateOverlapResult(double overlap, MaxIntensityProjectionPair pair) {
+		return overlap;
+	}
+
 }

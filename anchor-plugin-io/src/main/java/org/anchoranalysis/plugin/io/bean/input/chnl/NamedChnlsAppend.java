@@ -36,9 +36,8 @@ import java.util.List;
 import org.anchoranalysis.bean.NamedBean;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.DefaultInstance;
-import org.anchoranalysis.bean.annotation.Optional;
+import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.core.cache.CachedOperation;
-import org.anchoranalysis.core.cache.ExecuteException;
 import org.anchoranalysis.core.progress.ProgressReporter;
 import org.anchoranalysis.core.progress.ProgressReporterMultiple;
 import org.anchoranalysis.core.progress.ProgressReporterOneOfMany;
@@ -65,7 +64,7 @@ public class NamedChnlsAppend extends NamedChnlsBase {
 	@BeanField @DefaultInstance
 	private RasterReader rasterReader;
 	
-	@BeanField @Optional
+	@BeanField @OptionalBean
 	private List<NamedBean<FilePathGenerator>> listAppend;
 	
 	@BeanField
@@ -152,26 +151,31 @@ public class NamedChnlsAppend extends NamedChnlsBase {
 		for( final NamedBean<FilePathGenerator> ni : listAppend) {
 			
 			// Delayed-calculation of the appending path as it can be a bit expensive when multiplied by so many items
-			CachedOperation<Path> outPath = new OperationOutFilePath(ni, ()->ncc.pathForBinding(), debugMode);
+			CachedOperation<Path,AnchorIOException> outPath = new OperationOutFilePath(
+				ni,
+				()->ncc.pathForBinding(),
+				debugMode
+			);
 			
 			if (forceEagerEvaluation) {
-				try {
-					Path path = outPath.doOperation();
-					if (!Files.exists(path)) {
-						
-						if (skipMissingChannels) {
-							continue;
-						} else {
-							throw new AnchorIOException( String.format("Append path: %s does not exist",path) );
-						}
-					}
+				Path path = outPath.doOperation();
+				if (!Files.exists(path)) {
 					
-				} catch (ExecuteException e) {
-					throw new AnchorIOException("Cannot determine path", e.getCause());
+					if (skipMissingChannels) {
+						continue;
+					} else {
+						throw new AnchorIOException( String.format("Append path: %s does not exist",path) );
+					}
 				}
 			}
 			
-			out = new AppendPart<>(out, ni.getName(), 0, outPath, rasterReader );
+			out = new AppendPart<>(
+				out,
+				ni.getName(),
+				0,
+				outPath,
+				rasterReader
+			);
 		}
 	
 		return out;
@@ -224,7 +228,4 @@ public class NamedChnlsAppend extends NamedChnlsBase {
 	public void setRasterReader(RasterReader rasterReader) {
 		this.rasterReader = rasterReader;
 	}
-
-
-
 }

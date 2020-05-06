@@ -32,14 +32,14 @@ import org.anchoranalysis.core.geometry.Vector3d;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.bean.operator.VectorFromFeature;
-import org.anchoranalysis.feature.cache.CacheableParams;
+import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
-import org.anchoranalysis.feature.params.FeatureParamsDescriptor;
-import org.anchoranalysis.feature.params.ParamTypeUtilities;
+import org.anchoranalysis.feature.input.FeatureInput;
+import org.anchoranalysis.feature.input.descriptor.FeatureInputDescriptor;
+import org.anchoranalysis.feature.input.descriptor.FeatureInputDescriptorUtilities;
 
 // converts a feature to a physical distance in a XY place that is isometric
-public class DotProduct<T extends FeatureCalcParams> extends Feature<T> {
+public class DotProduct<T extends FeatureInput> extends Feature<T> {
 
 	/**
 	 * 
@@ -59,10 +59,10 @@ public class DotProduct<T extends FeatureCalcParams> extends Feature<T> {
 	// END BEAN PROPERTIES
 	
 	@Override
-	public double calc(CacheableParams<T> params) throws FeatureCalcException {
+	public double calc(SessionInput<T> input) throws FeatureCalcException {
 		
-		Vector3d vec1 = vector1.calc(params);
-		Vector3d vec2 = vector2.calc(params);
+		Vector3d vec1 = vector1.calc(input);
+		Vector3d vec2 = vector2.calc(input);
 		
 		if (includeOppositeDirection) {
 					
@@ -86,12 +86,12 @@ public class DotProduct<T extends FeatureCalcParams> extends Feature<T> {
 	}
 
 	@Override
-	public FeatureParamsDescriptor paramType() throws FeatureCalcException {
-		return ParamTypeUtilities.paramTypeForTwo(vector1.paramType(), vector2.paramType());
+	public FeatureInputDescriptor paramType() throws FeatureCalcException {
+		return FeatureInputDescriptorUtilities.paramTypeForTwo(vector1.paramType(), vector2.paramType());
 	}
 
 	@Override
-	public void addAdditionallyUsedFeatures(FeatureList<FeatureCalcParams> out) {
+	public void addAdditionallyUsedFeatures(FeatureList<FeatureInput> out) {
 		super.addAdditionallyUsedFeatures(out);
 		addUpcast( out, vector1.getX() );
 		addUpcast( out, vector1.getY() );
@@ -102,7 +102,7 @@ public class DotProduct<T extends FeatureCalcParams> extends Feature<T> {
 		addUpcast( out, vector2.getZ() );
 	}
 	
-	private void addUpcast( FeatureList<FeatureCalcParams> list, Feature<T> feature ) {
+	private void addUpcast( FeatureList<FeatureInput> list, Feature<T> feature ) {
 		list.add( feature.upcast() );
 	}
 

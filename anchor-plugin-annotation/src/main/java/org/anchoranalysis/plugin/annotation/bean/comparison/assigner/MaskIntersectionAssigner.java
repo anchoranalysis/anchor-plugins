@@ -71,7 +71,7 @@ public class MaskIntersectionAssigner extends AnnotationComparisonAssigner<Assig
 
 	@Override
 	public AnnotationGroup<AssignmentMaskIntersection> groupForKey(String key) {
-		return new AnnotationGroup<AssignmentMaskIntersection>(key);
+		return new AnnotationGroup<>(key);
 	}
 
 	@Override

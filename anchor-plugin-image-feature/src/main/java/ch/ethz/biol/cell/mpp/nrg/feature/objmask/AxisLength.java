@@ -27,12 +27,8 @@ package ch.ethz.biol.cell.mpp.nrg.feature.objmask;
  */
 
 
-import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.cache.ExecuteException;
-import org.anchoranalysis.feature.cache.CacheableParams;
-import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.image.feature.bean.objmask.FeatureObjMask;
-import org.anchoranalysis.image.feature.objmask.FeatureObjMaskParams;
+import org.anchoranalysis.feature.cache.calculation.FeatureCalculation;
+import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
 import org.anchoranalysis.math.moment.MomentsFromPointsCalculator;
 import org.anchoranalysis.points.moment.CalculateObjMaskPointsSecondMomentMatrix;
 
@@ -42,51 +38,16 @@ import org.anchoranalysis.points.moment.CalculateObjMaskPointsSecondMomentMatrix
  * @author Owen Feehan
  *
  */
-public class AxisLength extends FeatureObjMask {
+public class AxisLength extends AxisLengthBase {
+	
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	
-	// START BEAN PROPERTIES
-	@BeanField
-	private int index = 0;
-	// END BEAN PROPERTIES
-	
+
 	@Override
-	public double calc(CacheableParams<FeatureObjMaskParams> params) throws FeatureCalcException {
-		
-		assert( params.getParams() instanceof FeatureObjMaskParams );
-		return calcAxisLength( params, index);
+	protected FeatureCalculation<MomentsFromPointsCalculator, FeatureInputSingleObj> momentsCalculator() {
+		return new CalculateObjMaskPointsSecondMomentMatrix(false);
 	}
-
-	private double calcAxisLength( CacheableParams<FeatureObjMaskParams> params, int index ) throws FeatureCalcException {
-		
-		// TODO THIS CAN BE DONE MORE EFFICIENTLY
-		if (!params.getParams().getObjMask().hasPixelsGreaterThan(0)) {
-			return Double.NaN;
-		}
-
-		try {
-			MomentsFromPointsCalculator moments = params.calc(
-				new CalculateObjMaskPointsSecondMomentMatrix(false)
-			);
-			return moments.get( index ).eigenvalueNormalizedAsAxisLength();
-		} catch (ExecuteException e) {
-			throw new FeatureCalcException(e);
-		}
-	}
-	
-	public int getIndex() {
-		return index;
-	}
-
-	public void setIndex(int index) {
-		this.index = index;
-	}
-
-
-
-
 }

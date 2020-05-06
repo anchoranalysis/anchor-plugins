@@ -1,6 +1,6 @@
 package ch.ethz.biol.cell.mpp.nrg.feature.ind;
 
-import org.anchoranalysis.anchor.mpp.feature.nrg.elem.NRGElemIndCalcParams;
+import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputSingleMemo;
 import org.anchoranalysis.anchor.mpp.mark.GlobalRegionIdentifiers;
 import org.anchoranalysis.anchor.mpp.pxlmark.PxlMark;
 
@@ -32,7 +32,6 @@ import org.anchoranalysis.anchor.mpp.pxlmark.PxlMark;
 
 
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.cache.ExecuteException;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.voxel.statistics.VoxelStatistics;
 
@@ -66,21 +65,19 @@ public final class MaxSliceArea extends NRGElemIndPhysical {
 	}
 	
 	@Override
-	public double calcCast( NRGElemIndCalcParams params ) throws FeatureCalcException {
+	public double calcCast( FeatureInputSingleMemo input ) throws FeatureCalcException {
+
+		PxlMark pm = input.getPxlPartMemo().doOperation();
 		
-		try {
-			PxlMark pm = params.getPxlPartMemo().doOperation();
-			
-			double maxSliceSizeVoxels = calcMaxSliceSize(pm);
-			
-			double retVal = rslvArea( maxSliceSizeVoxels, params.getDimensions().getRes() );
-			
-			getLogger().getLogReporter().logFormatted("MaxSliceArea = %f\n", retVal);
-			return retVal;
-		} catch (ExecuteException e) {
-			throw new FeatureCalcException(e);
-		} 
+		double maxSliceSizeVoxels = calcMaxSliceSize(pm);
 		
+		double retVal = rslvArea(
+			maxSliceSizeVoxels,
+			input.getResRequired()
+		);
+		
+		getLogger().getLogReporter().logFormatted("MaxSliceArea = %f\n", retVal);
+		return retVal;
 	}
 
 	public int getRegionID() {

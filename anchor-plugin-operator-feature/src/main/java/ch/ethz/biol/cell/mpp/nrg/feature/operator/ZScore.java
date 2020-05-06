@@ -1,6 +1,6 @@
 package ch.ethz.biol.cell.mpp.nrg.feature.operator;
 
-import org.anchoranalysis.feature.cache.CacheableParams;
+import org.anchoranalysis.feature.cache.SessionInput;
 
 /*-
  * #%L
@@ -29,11 +29,11 @@ import org.anchoranalysis.feature.cache.CacheableParams;
  */
 
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
+import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.math.statistics.FirstSecondOrderStatistic;
 
 // Z-score of a value
-public class ZScore<T extends FeatureCalcParams> extends FeatureFirstSecondOrder<T> {
+public class ZScore<T extends FeatureInput> extends FeatureFirstSecondOrder<T> {
 
 	/**
 	 * 
@@ -44,12 +44,12 @@ public class ZScore<T extends FeatureCalcParams> extends FeatureFirstSecondOrder
 	// END BEAN PROPERTIES
 	
 	@Override
-	public double calc( CacheableParams<T> params ) throws FeatureCalcException {
+	public double calc( SessionInput<T> input ) throws FeatureCalcException {
 		
-		double val = params.calc( getItem() );
-		double mean = params.calc( getItemMean() );
+		double val = input.calc( getItem() );
+		double mean = input.calc( getItemMean() );
 
-		double stdDev = params.calc( getItemStdDev() );
+		double stdDev = input.calc( getItemStdDev() );
 
 		double zScore = FirstSecondOrderStatistic.calcZScore(val, mean, stdDev);
 		assert( !Double.isNaN(zScore) );

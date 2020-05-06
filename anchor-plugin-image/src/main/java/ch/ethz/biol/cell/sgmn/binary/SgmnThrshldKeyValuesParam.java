@@ -47,7 +47,7 @@ import org.anchoranalysis.image.sgmn.SgmnFailedException;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.anchoranalysis.image.voxel.box.VoxelBoxWrapper;
 import org.anchoranalysis.image.voxel.box.factory.VoxelBoxFactory;
-import org.anchoranalysis.plugin.image.bean.threshold.calculatelevel.Constant;
+import org.anchoranalysis.plugin.image.bean.histogram.threshold.Constant;
 
 public class SgmnThrshldKeyValuesParam extends BinarySgmn {
 
@@ -110,7 +110,7 @@ public class SgmnThrshldKeyValuesParam extends BinarySgmn {
 		BoundingBox bboxE = new BoundingBox(objMask.getVoxelBox().extnt());
 		
 		// We just want to return the area under the objMask
-		VoxelBox<ByteBuffer> maskDup = VoxelBoxFactory.getByte().create( objMask.getVoxelBox().extnt() );
+		VoxelBox<ByteBuffer> maskDup = VoxelBoxFactory.instance().getByte().create( objMask.getVoxelBox().extnt() );
 		voxelBoxByte.copyPixelsToCheckMask(
 			objMask.getBoundingBox(),
 			maskDup,

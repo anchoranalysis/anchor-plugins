@@ -27,65 +27,19 @@ package ch.ethz.biol.cell.mpp.nrg.feature.objmask;
  */
 
 
-import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.feature.cache.CacheableParams;
-import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.core.geometry.Tuple3i;
 import org.anchoranalysis.image.extent.BoundingBox;
-import org.anchoranalysis.image.extent.ImageRes;
-import org.anchoranalysis.image.feature.bean.objmask.FeatureObjMask;
-import org.anchoranalysis.image.feature.objmask.FeatureObjMaskParams;
 
 
-public class BoundingBoxExtent extends FeatureObjMask {
+public class BoundingBoxExtent extends BoundingBoxAxisBase {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 
-	// START BEAN PARAMETERS
-	@BeanField
-	private String axis = "x";
-	// END BEAN PARAMETERS
-
-	
 	@Override
-	public double calc( CacheableParams<FeatureObjMaskParams> paramsCacheable ) throws FeatureCalcException {
-		
-		FeatureObjMaskParams params = paramsCacheable.getParams();
-		
-		BoundingBox bbox = params.getObjMask().getBoundingBox();
-		
-		String axisLowerCase = axis.toLowerCase();
-		
-		return calcAxisValue(axisLowerCase, bbox, params.getRes() );
-	}
-	
-	
-	private double calcAxisValue( String axisLowerCase, BoundingBox bbox, ImageRes res) {
-		
-		if (axisLowerCase.equals("x")) {
-			return bbox.extnt().getX();
-		} else if (axisLowerCase.equals("y")) {
-			return bbox.extnt().getY();
-		} else if (axisLowerCase.equals("z")) {
-			return bbox.extnt().getZ();
-		} else {
-			assert false;
-			return -1;
-		}
-	}
-	
-	@Override
-	public String getParamDscr() {
-		return String.format("%s", axis);
-	}
-
-	public String getAxis() {
-		return axis;
-	}
-
-	public void setAxis(String axis) {
-		this.axis = axis;
+	protected Tuple3i extractTupleForBoundingBox(BoundingBox bbox) {
+		return bbox.extnt().asTuple();
 	}
 }

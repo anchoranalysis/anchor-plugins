@@ -31,7 +31,7 @@ import java.nio.file.Path;
 
 import java.util.Set;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.bean.annotation.Optional;
+import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
 import org.anchoranalysis.core.log.LogErrorReporter;
@@ -84,10 +84,10 @@ public class FormatConverterTask extends RasterTask {
 	@BeanField
 	private boolean suppressSeries = false;
 	
-	@BeanField @Optional
+	@BeanField @OptionalBean
 	private ChnlFilter chnlFilter = null;
 	
-	@BeanField @Optional
+	@BeanField @OptionalBean
 	private ChnlConverterBean chnlConverter = null;
 	// END BEAN PROPERTIES
 

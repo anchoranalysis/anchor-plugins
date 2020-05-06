@@ -27,8 +27,7 @@ package org.anchoranalysis.image.feature.bean.list;
  */
 
 import org.anchoranalysis.feature.bean.operator.FeatureListElem;
-import org.anchoranalysis.image.feature.objmask.pair.merged.FeatureObjMaskPairMergedParams;
-
+import org.anchoranalysis.image.feature.objmask.pair.FeatureInputPairObjs;
 import ch.ethz.biol.cell.mpp.nrg.feature.operator.Mean;
 
 public class FeatureListProviderPairMean extends FeatureListProviderAggregatePair {
@@ -39,7 +38,7 @@ public class FeatureListProviderPairMean extends FeatureListProviderAggregatePai
 	private static final long serialVersionUID = 1L;
 
 	@Override
-	protected FeatureListElem<FeatureObjMaskPairMergedParams> createFeature() {
+	protected FeatureListElem<FeatureInputPairObjs> createFeature() {
 		return new Mean<>();
 	}
 }

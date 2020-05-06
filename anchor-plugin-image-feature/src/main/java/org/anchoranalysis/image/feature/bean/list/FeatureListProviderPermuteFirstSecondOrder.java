@@ -38,15 +38,15 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.bean.list.FeatureListProvider;
-import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
-import org.anchoranalysis.image.feature.stack.nrg.FeatureNRGStackParams;
+import org.anchoranalysis.feature.input.FeatureInput;
+import org.anchoranalysis.feature.input.FeatureInputNRGStack;
+import org.anchoranalysis.plugin.operator.feature.bean.arithmetic.MultiplyByConstant;
+import org.anchoranalysis.plugin.operator.feature.bean.order.range.IfOutsideRange;
 
 import ch.ethz.biol.cell.mpp.nrg.feature.objmask.NRGParamThree;
 import ch.ethz.biol.cell.mpp.nrg.feature.operator.FeatureFirstSecondOrder;
-import ch.ethz.biol.cell.mpp.nrg.feature.operator.MinMaxRange;
-import ch.ethz.biol.cell.mpp.nrg.feature.operator.MultiplyByConstant;
 
-public abstract class FeatureListProviderPermuteFirstSecondOrder extends FeatureListProvider<FeatureNRGStackParams> {
+public abstract class FeatureListProviderPermuteFirstSecondOrder extends FeatureListProvider<FeatureInputNRGStack> {
 
 
 	/**
@@ -56,7 +56,7 @@ public abstract class FeatureListProviderPermuteFirstSecondOrder extends Feature
 	
 	// START BEAN PROPERTIES
 	@BeanField
-	private Feature<FeatureNRGStackParams> feature;
+	private Feature<FeatureInputNRGStack> feature;
 	
 	@BeanField
 	private PermutePropertySequenceInteger permuteProperty;
@@ -74,16 +74,16 @@ public abstract class FeatureListProviderPermuteFirstSecondOrder extends Feature
 	// Possible defaultInstances for beans......... saved from checkMisconfigured for delayed checks elsewhere
 	private BeanInstanceMap defaultInstances;
 	
-	private CreateFirstSecondOrder<FeatureNRGStackParams> factory;
+	private CreateFirstSecondOrder<FeatureInputNRGStack> factory;
 	private double minRange;
 	private double maxRange;
 	
 	@FunctionalInterface
-	public static interface CreateFirstSecondOrder<T extends FeatureCalcParams> {
+	public static interface CreateFirstSecondOrder<T extends FeatureInput> {
 		FeatureFirstSecondOrder<T> create();
 	}
 
-	public FeatureListProviderPermuteFirstSecondOrder(CreateFirstSecondOrder<FeatureNRGStackParams> factory, double minRange, double maxRange ) {
+	public FeatureListProviderPermuteFirstSecondOrder(CreateFirstSecondOrder<FeatureInputNRGStack> factory, double minRange, double maxRange ) {
 		super();
 		this.factory = factory;
 		this.minRange = minRange;
@@ -97,15 +97,15 @@ public abstract class FeatureListProviderPermuteFirstSecondOrder extends Feature
 		this.defaultInstances = defaultInstances;
 	}
 
-	private static Feature<FeatureNRGStackParams> wrapWithMultiplyByConstant( Feature<FeatureNRGStackParams> feature ) {
-		MultiplyByConstant<FeatureNRGStackParams> out = new MultiplyByConstant<>();
+	private static Feature<FeatureInputNRGStack> wrapWithMultiplyByConstant( Feature<FeatureInputNRGStack> feature ) {
+		MultiplyByConstant<FeatureInputNRGStack> out = new MultiplyByConstant<>();
 		out.setItem(feature);
 		out.setValue(1);
 		return out;
 	}
 
-	private Feature<FeatureNRGStackParams> wrapWithMinMaxRange( Feature<FeatureNRGStackParams> feature ) {
-		MinMaxRange<FeatureNRGStackParams> out = new MinMaxRange<>();
+	private Feature<FeatureInputNRGStack> wrapWithMinMaxRange( Feature<FeatureInputNRGStack> feature ) {
+		IfOutsideRange<FeatureInputNRGStack> out = new IfOutsideRange<>();
 		out.setItem(feature);
 		out.setMin(minRange);
 		out.setMax(maxRange);
@@ -114,11 +114,11 @@ public abstract class FeatureListProviderPermuteFirstSecondOrder extends Feature
 		return out;
 	}
 	
-	public static Feature<FeatureNRGStackParams> createNRGParam( PermutePropertySequenceInteger permuteProperty, String paramPrefix, String suffix, boolean appendNumber ) {
+	public static Feature<FeatureInputNRGStack> createNRGParam( PermutePropertySequenceInteger permuteProperty, String paramPrefix, String suffix, boolean appendNumber ) {
 		NRGParamThree paramMean = new NRGParamThree();
 		paramMean.setIdLeft(paramPrefix);
 		if (appendNumber) {
-			paramMean.setIdMiddle( Integer.toString(permuteProperty.getStart()) );
+			paramMean.setIdMiddle( Integer.toString(permuteProperty.getSequence().getStart()) );
 		} else {
 			paramMean.setIdMiddle("");
 		}
@@ -126,8 +126,8 @@ public abstract class FeatureListProviderPermuteFirstSecondOrder extends Feature
 		return paramMean;
 	}
 		
-	private Feature<FeatureNRGStackParams> wrapInScore( Feature<FeatureNRGStackParams> feature ) {
-		FeatureFirstSecondOrder<FeatureNRGStackParams> featureScore = factory.create();
+	private Feature<FeatureInputNRGStack> wrapInScore( Feature<FeatureInputNRGStack> feature ) {
+		FeatureFirstSecondOrder<FeatureInputNRGStack> featureScore = factory.create();
 		featureScore.setItem(feature);
 		featureScore.setItemMean(
 			createNRGParam(permuteProperty,paramPrefix,"_fitted_normal_mean",paramPrefixAppendNumber)
@@ -155,12 +155,12 @@ public abstract class FeatureListProviderPermuteFirstSecondOrder extends Feature
 	}
 	
 	@Override
-	public FeatureList<FeatureNRGStackParams> create() throws CreateException {
+	public FeatureList<FeatureInputNRGStack> create() throws CreateException {
 		
-		FeatureListProviderPermute<Integer, FeatureNRGStackParams> delegate = new FeatureListProviderPermute<>();
+		FeatureListProviderPermute<Integer, FeatureInputNRGStack> delegate = new FeatureListProviderPermute<>();
 		
 		// Wrap our feature in a gaussian score
-		Feature<FeatureNRGStackParams> featureScore = feature.duplicateBean();
+		Feature<FeatureInputNRGStack> featureScore = feature.duplicateBean();
 		featureScore = wrapInScore(featureScore);
 		featureScore = wrapWithMultiplyByConstant(featureScore);
 		featureScore = wrapWithMinMaxRange(featureScore);
@@ -190,11 +190,11 @@ public abstract class FeatureListProviderPermuteFirstSecondOrder extends Feature
 		this.permuteProperty = permuteProperty;
 	}
 
-	public Feature<FeatureNRGStackParams> getFeature() {
+	public Feature<FeatureInputNRGStack> getFeature() {
 		return feature;
 	}
 
-	public void setFeature(Feature<FeatureNRGStackParams> feature) {
+	public void setFeature(Feature<FeatureInputNRGStack> feature) {
 		this.feature = feature;
 	}
 

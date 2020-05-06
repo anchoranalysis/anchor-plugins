@@ -40,7 +40,7 @@ public class NumIntersectingObjsTest {
 	static final int EXPECTED_FIRST = 1;
 	static final int EXPECTED_SECOND = 2;
 	static final int EXPECTED_SECOND_LAST = 1;
-	static final int EXPECTED_LAST = 0;
+	static final int EXPECTED_NO_INTERSECTION = 0;
 	
 	@Test
 	public void testSameSizes() throws FeatureCalcException, InitException, OperationFailedException {
@@ -60,8 +60,8 @@ public class NumIntersectingObjsTest {
 			sameSize,
 			EXPECTED_FIRST,
 			EXPECTED_SECOND,
-			EXPECTED_SECOND_LAST,
-			EXPECTED_LAST
+			EXPECTED_NO_INTERSECTION,
+			EXPECTED_NO_INTERSECTION
 		);
 	}
 }

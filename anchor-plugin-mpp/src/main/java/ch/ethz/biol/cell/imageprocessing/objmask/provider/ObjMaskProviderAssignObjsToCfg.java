@@ -36,7 +36,7 @@ import org.anchoranalysis.anchor.mpp.regionmap.RegionMapSingleton;
 
 
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.bean.annotation.Optional;
+import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
@@ -70,13 +70,13 @@ public class ObjMaskProviderAssignObjsToCfg extends ObjMaskProviderDimensions {
 	@BeanField
 	private double maxDist = 0.0;		// A value <0 is OFF.  Imposes a maximum distance constraint on objs. Value in metres.
 	
-	@BeanField @Optional
+	@BeanField @OptionalBean
 	private CfgProvider cfgProviderOutIncluded = null;		// OPTIONAL. Adds all included marks
 	
-	@BeanField @Optional
+	@BeanField @OptionalBean
 	private CfgProvider cfgProviderOutExcluded = null;		// OPTIONAL. Adds all excluded marks
 	
-	@BeanField @Optional
+	@BeanField @OptionalBean
 	private ObjMaskProvider objsOutUnassigned = null;	// Optional. All the objects not assigned anywhere at the end
 	// END BEAN PROPERTIES
 	

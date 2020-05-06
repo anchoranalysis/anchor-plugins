@@ -27,9 +27,8 @@ package org.anchoranalysis.image.feature.bean.list;
  */
 
 import org.anchoranalysis.feature.bean.operator.FeatureListElem;
-import org.anchoranalysis.image.feature.objmask.pair.merged.FeatureObjMaskPairMergedParams;
-
-import ch.ethz.biol.cell.mpp.nrg.feature.operator.Minimum;
+import org.anchoranalysis.image.feature.objmask.pair.FeatureInputPairObjs;
+import org.anchoranalysis.plugin.operator.feature.bean.order.Minimum;
 
 public class FeatureListProviderPairRatioMax extends FeatureListProviderPairRatio {
 
@@ -39,7 +38,7 @@ public class FeatureListProviderPairRatioMax extends FeatureListProviderPairRati
 	private static final long serialVersionUID = 1L;
 
 	@Override
-	protected FeatureListElem<FeatureObjMaskPairMergedParams> createFeature() {
+	protected FeatureListElem<FeatureInputPairObjs> createFeature() {
 		return new Minimum<>();
 	}
 

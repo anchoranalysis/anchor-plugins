@@ -1,5 +1,7 @@
 package ch.ethz.biol.cell.imageprocessing.objmask.provider;
 
+import java.util.Optional;
+
 /*
  * #%L
  * anchor-plugin-image
@@ -70,7 +72,9 @@ public class ObjMaskProviderDilate extends ObjMaskProviderDimensions {
 
 			ObjMask omGrown = MorphologicalDilation.createDilatedObjMask(
 				om,
-				dims.getExtnt(),
+				Optional.of(
+					dims.getExtnt()
+				),
 				do3D,
 				iterations,
 				bigNghb

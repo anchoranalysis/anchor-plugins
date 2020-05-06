@@ -30,67 +30,55 @@ package org.anchoranalysis.plugin.points.calculate.ellipsoid;
 import java.util.List;
 
 import org.anchoranalysis.anchor.mpp.mark.conic.MarkEllipsoid;
-import org.anchoranalysis.core.cache.ExecuteException;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.geometry.Point3i;
-import org.anchoranalysis.feature.cache.CacheableParams;
-import org.anchoranalysis.feature.cachedcalculation.CachedCalculation;
-import org.anchoranalysis.feature.cachedcalculation.CachedCalculationCastParams;
-import org.anchoranalysis.feature.cachedcalculation.CachedCalculationOperation;
+import org.anchoranalysis.feature.cache.SessionInput;
+import org.anchoranalysis.feature.cache.calculation.FeatureCalculation;
+import org.anchoranalysis.feature.cache.calculation.ResolvedCalculation;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.image.feature.objmask.FeatureObjMaskParams;
+import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
 import org.anchoranalysis.plugin.points.calculate.CalculatePntsFromOutline;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
-public class CalculateEllipsoidLeastSquares extends CachedCalculationCastParams<MarkEllipsoid,FeatureObjMaskParams> {
+public class CalculateEllipsoidLeastSquares extends FeatureCalculation<MarkEllipsoid,FeatureInputSingleObj> {
 
 	private boolean suppressZCovariance;
 	
-	private transient CachedCalculation<List<Point3i>> ccPnts;
+	private transient ResolvedCalculation<List<Point3i>,FeatureInputSingleObj> ccPnts;
 		
-	private CalculateEllipsoidLeastSquares(boolean suppressZCovariance, CachedCalculation<List<Point3i>> ccPnts) {
+	private CalculateEllipsoidLeastSquares(boolean suppressZCovariance, ResolvedCalculation<List<Point3i>,FeatureInputSingleObj> ccPnts) {
 		super();
 		this.suppressZCovariance = suppressZCovariance;
 		this.ccPnts = ccPnts;
 	}
 	
-	public static MarkEllipsoid createFromCache(CacheableParams<FeatureObjMaskParams> params, boolean suppressZCovariance ) throws FeatureCalcException {
-		CachedCalculation<List<Point3i>> ccPnts = params.search( new CalculatePntsFromOutline() );
-		CachedCalculation<MarkEllipsoid> ccEllipsoid = params.search(
+	public static MarkEllipsoid createFromCache(SessionInput<FeatureInputSingleObj> input, boolean suppressZCovariance ) throws FeatureCalcException {
+		
+		ResolvedCalculation<List<Point3i>,FeatureInputSingleObj> ccPnts = input.resolver().search( new CalculatePntsFromOutline() );
+		
+		ResolvedCalculation<MarkEllipsoid,FeatureInputSingleObj> ccEllipsoid = input.resolver().search(
 			new CalculateEllipsoidLeastSquares(suppressZCovariance, ccPnts )
 		);
-		try {
-			return params.calc(ccEllipsoid);
-		} catch (ExecuteException e) {
-			throw new FeatureCalcException(e.getCause());
-		}
+		return input.calc(ccEllipsoid);
 	}
 	
 	@Override
-	protected MarkEllipsoid execute( FeatureObjMaskParams params ) throws ExecuteException {
+	protected MarkEllipsoid execute( FeatureInputSingleObj input ) throws FeatureCalcException {
 		
 		try {
 			// Shell Rad is arbitrary here for now
 			return EllipsoidFactory.createMarkEllipsoidLeastSquares(
-				new CachedCalculationOperation<List<Point3i>>(ccPnts,params),
-				params.getNrgStack().getDimensions(),
+				new CachedCalculationOperation<>(ccPnts,input),
+				input.getDimensionsRequired(),
 				suppressZCovariance,
 				0.2
 			);
 		} catch (CreateException e) {
-			throw new ExecuteException(e);
+			throw new FeatureCalcException(e);
 		}
 	}
 
-	
-	@Override
-	public CalculateEllipsoidLeastSquares duplicate() {
-		return new CalculateEllipsoidLeastSquares(suppressZCovariance,ccPnts.duplicate());
-	}
-	
-	
-	
 	@Override
 	public boolean equals(final Object obj){
 	    if(obj instanceof CalculateEllipsoidLeastSquares){

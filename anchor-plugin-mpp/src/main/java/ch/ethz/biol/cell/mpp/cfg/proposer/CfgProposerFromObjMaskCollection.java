@@ -38,7 +38,7 @@ import org.anchoranalysis.anchor.mpp.proposer.ProposerContext;
 
 
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.bean.annotation.Optional;
+import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
@@ -64,7 +64,7 @@ public class CfgProposerFromObjMaskCollection extends CfgProposer {
 	@BeanField
 	private double shellRad = 0.2;
 	
-	@BeanField @Optional
+	@BeanField @OptionalBean
 	private CheckMark checkMark = null;
 	// END BEAN PROPERTIES
 	

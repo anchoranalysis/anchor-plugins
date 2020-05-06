@@ -26,7 +26,7 @@ package org.anchoranalysis.plugin.image.feature.bean.obj.pair.overlap;
  * #L%
  */
 
-import org.anchoranalysis.image.feature.objmask.pair.FeatureObjMaskPairParams;
+import org.anchoranalysis.image.feature.objmask.pair.FeatureInputPairObjs;
 
 public class OverlapRelativeToSecond extends OverlapRelative {
 
@@ -36,7 +36,7 @@ public class OverlapRelativeToSecond extends OverlapRelative {
 	private static final long serialVersionUID = 1L;
 	
 	@Override
-	protected int calcDenominator(FeatureObjMaskPairParams params) {
-		return params.getObjMask2().numPixels();
+	protected int calcDenominator(FeatureInputPairObjs params) {
+		return params.getSecond().numPixels();
 	}
 }

@@ -30,11 +30,10 @@ package ch.ethz.biol.cell.mpp.nrg.feature.ind;
 import java.nio.ByteBuffer;
 
 import org.anchoranalysis.anchor.mpp.bean.regionmap.RegionMap;
-import org.anchoranalysis.anchor.mpp.feature.bean.nrg.elem.NRGElemInd;
-import org.anchoranalysis.anchor.mpp.feature.nrg.elem.NRGElemIndCalcParams;
+import org.anchoranalysis.anchor.mpp.feature.bean.nrg.elem.FeatureSingleMemo;
+import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputSingleMemo;
 import org.anchoranalysis.anchor.mpp.regionmap.RegionMapSingleton;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.cache.ExecuteException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
@@ -46,7 +45,7 @@ import org.anchoranalysis.image.voxel.kernel.ApplyKernel;
 import org.anchoranalysis.image.voxel.kernel.outline.OutlineKernel3;
 import org.anchoranalysis.image.voxel.statistics.VoxelStatistics;
 
-public class SurfaceSizeMaskNonZero extends NRGElemInd {
+public class SurfaceSizeMaskNonZero extends FeatureSingleMemo {
 
 	/**
 	 * 
@@ -77,19 +76,12 @@ public class SurfaceSizeMaskNonZero extends NRGElemInd {
 	}
 
 	@Override
-	public double calcCast(NRGElemIndCalcParams params)
+	public double calcCast(FeatureInputSingleMemo params)
 			throws FeatureCalcException {
 
-//		ObjMask om;
-//		try {
-//			om = params.getPxlPartMemo().doOperation().getObjMask();
-//		} catch (ExecuteException e) {
-//			throw new FeatureCalcException(e);
-//		}
-//		params.getPxlPartMemo().
 		
 		ObjMaskWithProperties omWithProps = params.getPxlPartMemo().getMark().calcMask(
-			params.getNrgStack().getDimensions(),
+			params.getDimensionsRequired(),
 			regionMap.membershipWithFlagsForIndex(regionID),
 			BinaryValuesByte.getDefault()
 		);
@@ -110,7 +102,7 @@ public class SurfaceSizeMaskNonZero extends NRGElemInd {
 					size += vbOutline.extractSlice(z).countEqual( om.getBinaryValues().getOnInt() );
 				}
 			}
-		} catch (ExecuteException | OperationFailedException e) {
+		} catch (OperationFailedException e) {
 			throw new FeatureCalcException(e);
 		}
 		

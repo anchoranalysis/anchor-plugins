@@ -1,6 +1,6 @@
 package ch.ethz.biol.cell.mpp.nrg.feature.objmask;
 
-import org.anchoranalysis.feature.cache.CacheableParams;
+
 
 /*-
  * #%L
@@ -28,29 +28,18 @@ import org.anchoranalysis.feature.cache.CacheableParams;
  * #L%
  */
 
-import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.image.feature.bean.objmask.FeatureObjMask;
-import org.anchoranalysis.image.feature.objmask.FeatureObjMaskParams;
+import org.anchoranalysis.image.extent.BoundingBox;
+import org.anchoranalysis.image.extent.ImageDim;
 
-public class AtBorderXY extends FeatureObjMask {
+public class AtBorderXY extends AtBorderBase {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	
-	// START BEAN PROPERTIES
-	// END BEAN PROPERTIES
-	
+
 	@Override
-	public double calc(CacheableParams<FeatureObjMaskParams> paramsCacheable) throws FeatureCalcException {
-		
-		FeatureObjMaskParams params = paramsCacheable.getParams();
-		
-		if (params.getObjMask().getBoundingBox().atBorderXY(params.getNrgStack().getDimensions())) {
-			return 1.0;
-		} else {
-			return 0.0;
-		}
+	protected boolean isBoundingBoxAtBorder(BoundingBox boundingBox, ImageDim dim) {
+		return boundingBox.atBorderXY(dim);
 	}
 }

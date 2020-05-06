@@ -1,7 +1,7 @@
 package ch.ethz.biol.cell.mpp.nrg.feature.session;
 
-import org.anchoranalysis.anchor.mpp.feature.bean.cfg.FeatureCfgParams;
-import org.anchoranalysis.anchor.mpp.feature.bean.mark.FeatureMarkParams;
+import org.anchoranalysis.anchor.mpp.feature.bean.cfg.FeatureInputCfg;
+import org.anchoranalysis.anchor.mpp.feature.bean.mark.FeatureInputMark;
 
 /*-
  * #%L
@@ -32,18 +32,18 @@ import org.anchoranalysis.anchor.mpp.feature.bean.mark.FeatureMarkParams;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.test.TestLoader;
-import org.anchoranalysis.test.feature.plugins.FeatureListFixture;
+import org.anchoranalysis.test.feature.plugins.FeaturesFromXmlFixture;
 
 public class FeatureListFixtureMPP {
 
 	private static TestLoader loader = TestLoader.createFromMavenWorkingDir();
 	
-	public static FeatureList<FeatureMarkParams> mark() throws CreateException {
-		return FeatureListFixture.createFromFile("markFeatureList.xml", loader);
+	public static FeatureList<FeatureInputMark> mark() throws CreateException {
+		return FeaturesFromXmlFixture.createFeatureList("markFeatureList.xml", loader);
 	}
 	
-	public static FeatureList<FeatureCfgParams> cfg() throws CreateException {
-		return FeatureListFixture.createFromFile("cfgFeatureList.xml", loader);
+	public static FeatureList<FeatureInputCfg> cfg() throws CreateException {
+		return FeaturesFromXmlFixture.createFeatureList("cfgFeatureList.xml", loader);
 	}
 
 }

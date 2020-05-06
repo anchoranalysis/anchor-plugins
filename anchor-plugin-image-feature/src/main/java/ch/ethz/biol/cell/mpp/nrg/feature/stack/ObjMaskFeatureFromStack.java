@@ -1,5 +1,7 @@
 package ch.ethz.biol.cell.mpp.nrg.feature.stack;
 
+import java.util.Optional;
+
 /*-
  * #%L
  * anchor-plugin-image-feature
@@ -31,14 +33,14 @@ import org.anchoranalysis.bean.annotation.SkipInit;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.feature.bean.Feature;
-import org.anchoranalysis.feature.cache.CacheableParams;
+import org.anchoranalysis.feature.cache.ChildCacheName;
+import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
 import org.anchoranalysis.image.feature.bean.FeatureStack;
-import org.anchoranalysis.image.feature.objmask.FeatureObjMaskParams;
-import org.anchoranalysis.image.feature.stack.FeatureStackParams;
+import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
+import org.anchoranalysis.image.feature.stack.FeatureInputStack;
 import org.anchoranalysis.image.init.ImageInitParams;
-import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.image.objmask.ObjMaskCollection;
 
 import cern.colt.list.DoubleArrayList;
@@ -52,46 +54,35 @@ public abstract class ObjMaskFeatureFromStack extends FeatureStack {
 	
 	// START BEAN PROPERTIES
 	@BeanField
-	private Feature<FeatureObjMaskParams> item;
+	private Feature<FeatureInputSingleObj> item;
 	
 	@BeanField
 	@SkipInit
 	private ObjMaskProvider objs;
 	// END BEAN PROPERTIES
 	
+	// We cache the objsCollection as it's not dependent on individual parameters
+	private ObjMaskCollection objsCollection;
+	
 	@Override
-	public double calc(CacheableParams<FeatureStackParams> paramsCacheable) throws FeatureCalcException {
-			
-		ObjMaskCollection objsCollection = createObjs(
-			paramsCacheable.getParams().getSharedObjs()
-		);
+	public double calc(SessionInput<FeatureInputStack> input) throws FeatureCalcException {
 		
-		DoubleArrayList featureVals = new DoubleArrayList();
+		Optional<ImageInitParams> sharedObjs = input.get().getSharedObjs();
 		
-		// Calculate a feature on each obj mask
-		for( int i=0; i<objsCollection.size(); i++) {
-			
-			ObjMask om = objsCollection.get(i);
-
-			double val = paramsCacheable.calcChangeParams(
-				item,
-				p -> deriveParams(p, om),
-				"objs" + i
-			);
-			featureVals.add(val);
+		if (!sharedObjs.isPresent()) {
+			throw new FeatureCalcException("No ImageInitParams are associated with the FeatureStackParams but they are required");
 		}
 		
-		return deriveStatistic(featureVals);
+		if (objsCollection==null) {
+			objsCollection = createObjs(sharedObjs.get());
+		}
+	
+		return deriveStatistic(
+			featureValsForObjs(item, input, objsCollection)
+		);
 	}
 	
 	protected abstract double deriveStatistic( DoubleArrayList featureVals );
-	
-	private static FeatureObjMaskParams deriveParams( FeatureStackParams params, ObjMask om ) {
-		FeatureObjMaskParams paramsObj = new FeatureObjMaskParams();
-		paramsObj.setNrgStack( params.getNrgStack() );
-		paramsObj.setObjMask(om);
-		return paramsObj;
-	}
 		
 	private ObjMaskCollection createObjs( ImageInitParams params ) throws FeatureCalcException {
 
@@ -102,12 +93,39 @@ public abstract class ObjMaskFeatureFromStack extends FeatureStack {
 			throw new FeatureCalcException(e);
 		}
 	}
+
+	private DoubleArrayList featureValsForObjs(
+		Feature<FeatureInputSingleObj> feature,
+		SessionInput<FeatureInputStack> input,
+		ObjMaskCollection objsCollection
+	) throws FeatureCalcException {
+		DoubleArrayList featureVals = new DoubleArrayList();
+		
+		// Calculate a feature on each obj mask
+		for( int i=0; i<objsCollection.size(); i++) {
+
+			double val = input.forChild().calc(
+				feature,
+				new CalculateInputFromStack(objsCollection, i),
+				cacheName(i)
+			);
+			featureVals.add(val);
+		}
+		return featureVals;
+	}
 	
-	public Feature<FeatureObjMaskParams> getItem() {
+	private ChildCacheName cacheName(int index) {
+		return new ChildCacheName(
+			ObjMaskFeatureFromStack.class,
+			index + "_" + objsCollection.hashCode()
+		);
+	}
+	
+	public Feature<FeatureInputSingleObj> getItem() {
 		return item;
 	}
 
-	public void setItem(Feature<FeatureObjMaskParams> item) {
+	public void setItem(Feature<FeatureInputSingleObj> item) {
 		this.item = item;
 	}
 

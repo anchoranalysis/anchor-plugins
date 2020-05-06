@@ -1,6 +1,6 @@
 package ch.ethz.biol.cell.mpp.nrg.feature.stack;
 
-import org.anchoranalysis.feature.cache.CacheableParams;
+import org.anchoranalysis.feature.cache.SessionInput;
 
 /*-
  * #%L
@@ -30,7 +30,7 @@ import org.anchoranalysis.feature.cache.CacheableParams;
 
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.feature.bean.FeatureStack;
-import org.anchoranalysis.image.feature.stack.FeatureStackParams;
+import org.anchoranalysis.image.feature.stack.FeatureInputStack;
 
 public class SceneWidth extends FeatureStack {
 
@@ -40,8 +40,8 @@ public class SceneWidth extends FeatureStack {
 	private static final long serialVersionUID = 1L;
 
 	@Override
-	public double calc(CacheableParams<FeatureStackParams> params) throws FeatureCalcException {
-		return params.getParams().getNrgStack().getDimensions().getX();
+	public double calc(SessionInput<FeatureInputStack> input) throws FeatureCalcException {
+		return input.get().getDimensionsRequired().getX();
 	}
 
 }

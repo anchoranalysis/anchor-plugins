@@ -29,7 +29,7 @@ import org.anchoranalysis.anchor.mpp.feature.nrg.cfg.CfgNRGPixelized;
  */
 
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.bean.annotation.Optional;
+import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.mpp.sgmn.optscheme.StateReporter;
 import org.anchoranalysis.mpp.sgmn.transformer.Compose;
 import org.anchoranalysis.mpp.sgmn.transformer.StateTransformer;
@@ -55,7 +55,7 @@ public class StateReporterToPixelized<T> extends StateReporter<ToPixelized<T>, C
 	private static final long serialVersionUID = 1L;
 
 	// START BEAN PROPERTIES
-	@BeanField @Optional
+	@BeanField @OptionalBean
 	private StateTransformerBean<T,CfgNRGPixelized> secondary;
 	// END BEAN PROPERTIES
 	

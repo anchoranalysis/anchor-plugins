@@ -26,20 +26,21 @@ package ch.ethz.biol.cell.mpp.nrg.feature.stack.cachedcalculation;
  * #L%
  */
 
-import org.anchoranalysis.core.cache.ExecuteException;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.feature.cachedcalculation.CachedCalculationCastParams;
+import org.anchoranalysis.feature.cache.calculation.FeatureCalculation;
+import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.feature.nrg.NRGStack;
 import org.anchoranalysis.image.binary.BinaryChnl;
 import org.anchoranalysis.image.binary.values.BinaryValues;
 import org.anchoranalysis.image.chnl.Chnl;
-import org.anchoranalysis.image.feature.stack.FeatureStackParams;
+import org.anchoranalysis.image.feature.stack.FeatureInputStack;
 import org.anchoranalysis.image.histogram.Histogram;
 import org.anchoranalysis.image.histogram.HistogramFactoryUtilities;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
 /** Calculated a histogram for a specific region on a channel, as identified by a mask in another channel */
-public class CalculateHistogramMasked extends CachedCalculationCastParams<Histogram, FeatureStackParams> {
+public class CalculateHistogramMasked extends FeatureCalculation<Histogram, FeatureInputStack> {
 
 	private int nrgIndexSignal;
 	private int nrgIndexMask;
@@ -57,24 +58,20 @@ public class CalculateHistogramMasked extends CachedCalculationCastParams<Histog
 	}
 
 	@Override
-	protected Histogram execute( FeatureStackParams params ) throws ExecuteException {
+	protected Histogram execute( FeatureInputStack input ) throws FeatureCalcException {
 
 		try {
-			Chnl chnl = extractChnl(params);
+			NRGStack nrgStack = input.getNrgStackRequired().getNrgStack();
+			Chnl chnl = extractChnl(nrgStack);
 			
 			return HistogramFactoryUtilities.create(
 				chnl,
-				extractMask(params)
+				extractMask(nrgStack)
 			);
 			
 		} catch (CreateException e) {
-			throw new ExecuteException(e);
+			throw new FeatureCalcException(e);
 		}
-	}
-	
-	@Override
-	public CalculateHistogramMasked duplicate() {
-		return new CalculateHistogramMasked(nrgIndexSignal, nrgIndexMask);
 	}
 	
 	@Override
@@ -98,12 +95,12 @@ public class CalculateHistogramMasked extends CachedCalculationCastParams<Histog
 				.toHashCode();
 	}
 	
-	private Chnl extractChnl( FeatureStackParams params ) {
-		return params.getNrgStack().getChnl(nrgIndexSignal);
+	private Chnl extractChnl( NRGStack nrgStack ) throws FeatureCalcException {
+		return nrgStack.getChnl(nrgIndexSignal);
 	}
 	
-	private BinaryChnl extractMask( FeatureStackParams params ) {
-		Chnl chnl = params.getNrgStack().getChnl(nrgIndexMask);
+	private BinaryChnl extractMask( NRGStack nrgStack ) {
+		Chnl chnl = nrgStack.getChnl(nrgIndexMask);
 		return new BinaryChnl(chnl, BinaryValues.getDefault() );
 	}
 }

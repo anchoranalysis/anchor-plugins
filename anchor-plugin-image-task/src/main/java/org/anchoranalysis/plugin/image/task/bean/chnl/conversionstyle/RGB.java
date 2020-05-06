@@ -30,7 +30,7 @@ import java.util.Set;
 import java.util.function.BiConsumer;
 
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.bean.annotation.Optional;
+import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.index.GetOperationFailedException;
@@ -54,7 +54,7 @@ public class RGB extends ChnlConversionStyle {
 	 * 
 	 *  <p>If unset, an error is instead thrown in this circumstances</p>
 	 **/
-	@BeanField @Optional
+	@BeanField @OptionalBean
 	private ChnlConversionStyle fallback;
 	// END BEAN PROPERTIES
 	

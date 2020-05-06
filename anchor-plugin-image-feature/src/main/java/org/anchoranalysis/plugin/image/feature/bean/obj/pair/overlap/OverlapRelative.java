@@ -26,10 +26,10 @@ package org.anchoranalysis.plugin.image.feature.bean.obj.pair.overlap;
  * #L%
  */
 
-import org.anchoranalysis.feature.cache.CacheableParams;
+import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.feature.bean.objmask.pair.FeatureObjMaskPair;
-import org.anchoranalysis.image.feature.objmask.pair.FeatureObjMaskPairParams;
+import org.anchoranalysis.image.feature.objmask.pair.FeatureInputPairObjs;
 import org.anchoranalysis.plugin.image.feature.obj.pair.overlap.OverlapRatioUtilities;
 
 
@@ -47,16 +47,16 @@ public abstract class OverlapRelative extends FeatureObjMaskPair {
 	private static final long serialVersionUID = 1L;
 
 	@Override
-	public double calc(CacheableParams<FeatureObjMaskPairParams> paramsCacheable)
+	public double calc(SessionInput<FeatureInputPairObjs> input)
 			throws FeatureCalcException {
 		
-		FeatureObjMaskPairParams params = paramsCacheable.getParams();
+		FeatureInputPairObjs inputSessionless = input.get();
 
 		return OverlapRatioUtilities.overlapRatioTo(
-			params,
-			() -> calcDenominator(params)
+			inputSessionless,
+			() -> calcDenominator(inputSessionless)
 		);
 	}
 	
-	protected abstract int calcDenominator( FeatureObjMaskPairParams params );
+	protected abstract int calcDenominator( FeatureInputPairObjs params );
 }

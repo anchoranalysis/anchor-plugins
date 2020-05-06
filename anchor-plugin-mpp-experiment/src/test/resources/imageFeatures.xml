@@ -1,0 +1,60 @@
+<config>
+<bean config-class="java.util.List" config-factory="list">
+
+	<item config-class="org.anchoranalysis.bean.NamedBean" name="voxelDataTypeMaxValue">
+		<item config-class="org.anchoranalysis.feature.bean.list.FeatureListProviderDefineSingle">
+			<item config-class="ch.ethz.biol.cell.mpp.nrg.feature.stack.VoxelDataTypeMaxValue"/>
+		</item>			
+	</item>
+
+
+	<item config-class="org.anchoranalysis.bean.NamedBean" name="sceneExtntX_Pixels">
+		<item config-class="org.anchoranalysis.feature.bean.list.FeatureListProviderDefineSingle">
+			<item config-class="ch.ethz.biol.cell.mpp.nrg.feature.stack.DimensionExtent" axis="x"/>
+		</item>			
+	</item>
+
+	<item config-class="org.anchoranalysis.bean.NamedBean" name="sceneExtntY_Pixels">
+		<item config-class="org.anchoranalysis.feature.bean.list.FeatureListProviderDefineSingle">
+			<item config-class="ch.ethz.biol.cell.mpp.nrg.feature.stack.DimensionExtent" axis="y"/>
+		</item>			
+	</item>
+	
+	<item config-class="org.anchoranalysis.bean.NamedBean" name="sceneExtntZ_Pixels">
+		<item config-class="org.anchoranalysis.feature.bean.list.FeatureListProviderDefineSingle">
+			<item config-class="ch.ethz.biol.cell.mpp.nrg.feature.stack.DimensionExtent" axis="z"/>
+		</item>			
+	</item>
+	
+	
+	
+	<item config-class="org.anchoranalysis.bean.NamedBean" name="sceneExtntX">
+		<item config-class="org.anchoranalysis.feature.bean.list.FeatureListProviderDefineSingle">
+			<item unitType="µm" config-class="org.anchoranalysis.image.feature.bean.physical.convert.ConvertToPhysicalDistance">
+				<item config-class="ch.ethz.biol.cell.mpp.nrg.feature.stack.DimensionExtent" axis="x"/>
+				<directionVector x="1" y="0" z="0" config-class="org.anchoranalysis.image.bean.orientation.DirectionVectorBean"/>
+			</item>
+		</item>
+	</item>
+	
+	<item config-class="org.anchoranalysis.bean.NamedBean" name="sceneExtntY">
+		<item config-class="org.anchoranalysis.feature.bean.list.FeatureListProviderDefineSingle">
+			<item unitType="µm" config-class="org.anchoranalysis.image.feature.bean.physical.convert.ConvertToPhysicalDistance">
+				<item config-class="ch.ethz.biol.cell.mpp.nrg.feature.stack.DimensionExtent" axis="y"/>
+				<directionVector x="0" y="1" z="0" config-class="org.anchoranalysis.image.bean.orientation.DirectionVectorBean"/>
+			</item>
+		</item>
+	</item>
+	
+	<item config-class="org.anchoranalysis.bean.NamedBean" name="sceneExtntZ">
+		<item config-class="org.anchoranalysis.feature.bean.list.FeatureListProviderDefineSingle">
+			<item unitType="µm" config-class="org.anchoranalysis.image.feature.bean.physical.convert.ConvertToPhysicalDistance">
+				<item config-class="ch.ethz.biol.cell.mpp.nrg.feature.stack.DimensionExtent" axis="z"/>
+				<directionVector x="0" y="0" z="1" config-class="org.anchoranalysis.image.bean.orientation.DirectionVectorBean"/>
+			</item>
+		</item>
+	</item>
+	
+	
+</bean>
+</config>

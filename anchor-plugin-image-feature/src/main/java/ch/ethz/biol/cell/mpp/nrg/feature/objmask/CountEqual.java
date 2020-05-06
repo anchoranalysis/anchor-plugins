@@ -28,12 +28,12 @@ package ch.ethz.biol.cell.mpp.nrg.feature.objmask;
 
 
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.feature.cache.CacheableParams;
+import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.binary.values.BinaryValues;
 import org.anchoranalysis.image.chnl.Chnl;
 import org.anchoranalysis.image.feature.bean.objmask.FeatureObjMask;
-import org.anchoranalysis.image.feature.objmask.FeatureObjMaskParams;
+import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
 
 public class CountEqual extends FeatureObjMask {
 
@@ -51,12 +51,12 @@ public class CountEqual extends FeatureObjMask {
 	// END BEAN PROPERTIES
 	
 	@Override
-	public double calc(CacheableParams<FeatureObjMaskParams> paramsCacheable) throws FeatureCalcException {
+	public double calc(SessionInput<FeatureInputSingleObj> input) throws FeatureCalcException {
 		
-		FeatureObjMaskParams params = paramsCacheable.getParams();
+		FeatureInputSingleObj inputSessionless = input.get();
 		
-		Chnl chnl = params.getNrgStack().getNrgStack().getChnl(nrgIndex);
-		return chnl.getVoxelBox().any().countEqualMask(value, params.getObjMask());
+		Chnl chnl = inputSessionless.getNrgStackRequired().getChnl(nrgIndex);
+		return chnl.getVoxelBox().any().countEqualMask(value, inputSessionless.getObjMask());
 
 	}
 

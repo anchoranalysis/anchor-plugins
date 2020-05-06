@@ -1,7 +1,7 @@
 package ch.ethz.biol.cell.mpp.nrg.feature.ind;
 
-import org.anchoranalysis.anchor.mpp.feature.bean.nrg.elem.NRGElemInd;
-import org.anchoranalysis.anchor.mpp.feature.nrg.elem.NRGElemIndCalcParams;
+import org.anchoranalysis.anchor.mpp.feature.bean.nrg.elem.FeatureSingleMemo;
+import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputSingleMemo;
 import org.anchoranalysis.anchor.mpp.mark.GlobalRegionIdentifiers;
 import org.anchoranalysis.anchor.mpp.mark.MarkAbstractRadii;
 
@@ -33,8 +33,9 @@ import org.anchoranalysis.anchor.mpp.mark.MarkAbstractRadii;
 
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.extent.BoundingBox;
+import org.anchoranalysis.image.extent.ImageDim;
 
-public class BBoxRatio extends NRGElemInd {
+public class BBoxRatio extends FeatureSingleMemo {
 
 	/**
 	 * 
@@ -42,12 +43,14 @@ public class BBoxRatio extends NRGElemInd {
 	private static final long serialVersionUID = -4380227015245049115L;
 
 	@Override
-	public double calcCast(NRGElemIndCalcParams params) throws FeatureCalcException {
+	public double calcCast(FeatureInputSingleMemo input) throws FeatureCalcException {
 		
-		MarkAbstractRadii markCast = (MarkAbstractRadii) params.getPxlPartMemo().getMark();
+		MarkAbstractRadii markCast = (MarkAbstractRadii) input.getPxlPartMemo().getMark();
 		
-		BoundingBox bb = markCast.bbox( params.getNrgStack().getDimensions(), GlobalRegionIdentifiers.SUBMARK_INSIDE );
-		bb.extnt().setZ( (int) (bb.extnt().getZ() * params.getNrgStack().getDimensions().getRes().getZRelRes()) );
+		ImageDim dim = input.getDimensionsRequired();
+		
+		BoundingBox bb = markCast.bbox(dim, GlobalRegionIdentifiers.SUBMARK_INSIDE );
+		bb.extnt().setZ( (int) (bb.extnt().getZ() * dim.getRes().getZRelRes()) );
 		
 		int[] extnt = bb.extnt().createOrderedArray();
 		

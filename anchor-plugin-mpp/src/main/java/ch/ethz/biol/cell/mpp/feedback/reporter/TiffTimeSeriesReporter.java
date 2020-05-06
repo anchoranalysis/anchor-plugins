@@ -35,7 +35,6 @@ import org.anchoranalysis.anchor.overlay.id.IDGetterOverlayID;
 
 
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.bridge.BridgeElementException;
 import org.anchoranalysis.core.bridge.IObjectBridge;
 import org.anchoranalysis.core.color.ColorIndex;
 import org.anchoranalysis.core.error.OperationFailedException;
@@ -73,7 +72,7 @@ public class TiffTimeSeriesReporter extends PeriodicSubfolderReporter<CfgNRG> {
 	
 	private ColorIndex colorIndex;
 	
-	private static class CfgNRGToCfgBridge implements IObjectBridge<CfgNRG, ColoredCfgWithDisplayStack> {
+	private static class CfgNRGToCfgBridge implements IObjectBridge<CfgNRG, ColoredCfgWithDisplayStack,Exception> {
 
 		private DisplayStack stack;
 		private ColorIndex colorIndex;
@@ -85,8 +84,7 @@ public class TiffTimeSeriesReporter extends PeriodicSubfolderReporter<CfgNRG> {
 		}
 
 		@Override
-		public ColoredCfgWithDisplayStack bridgeElement(CfgNRG sourceObject)
-				throws BridgeElementException {
+		public ColoredCfgWithDisplayStack bridgeElement(CfgNRG sourceObject) {
 			
 			ColoredCfg coloredCfg = new ColoredCfg(sourceObject.getCfg(), colorIndex, new IDGetterIter<Mark>() );
 			return new ColoredCfgWithDisplayStack( coloredCfg, stack );

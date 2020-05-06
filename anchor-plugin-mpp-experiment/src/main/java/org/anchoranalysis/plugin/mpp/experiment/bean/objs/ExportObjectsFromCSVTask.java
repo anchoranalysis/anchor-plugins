@@ -33,8 +33,7 @@ import java.util.Set;
 import org.anchoranalysis.anchor.mpp.bean.init.MPPInitParams;
 import org.anchoranalysis.anchor.overlay.bean.objmask.writer.ObjMaskWriter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.bean.annotation.Optional;
-import org.anchoranalysis.core.cache.ExecuteException;
+import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.core.color.ColorList;
 import org.anchoranalysis.core.color.RGBColor;
 import org.anchoranalysis.core.error.CreateException;
@@ -92,7 +91,7 @@ public class ExportObjectsFromCSVTask extends ExportObjectsBase<FromCSVInputObje
 	private static final long serialVersionUID = 1L;
 
 	// START BEAN PROPERTIES
-	@BeanField @Optional
+	@BeanField @OptionalBean
 	private FilePathGenerator idGenerator;	// Translates an input file name to a unique ID
 	
 	/**
@@ -237,7 +236,7 @@ public class ExportObjectsFromCSVTask extends ExportObjectsBase<FromCSVInputObje
 				try {
 					return createGenerator(label, rows, objs, background);
 				} catch (SetOperationFailedException e) {
-					throw new ExecuteException(e);
+					throw new OutputWriteFailedException(e);
 				}
 			}
 		);

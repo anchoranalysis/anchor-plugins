@@ -36,7 +36,8 @@ import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
 import ch.ethz.biol.cell.mpp.mark.ellipsoidfitter.outlinepixelsretriever.visitscheduler.VisitSchedulerConvexAboutRoot;
 
 class PointListForConvex {
-	private List<Point3i> list = new ArrayList<Point3i>();
+	
+	private List<Point3i> list = new ArrayList<>();
 
 	public boolean add(Point3i e) {
 		return list.add(e);

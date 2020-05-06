@@ -121,7 +121,7 @@ public class ObjMaskProviderSplitIntoSquares extends ObjMaskProvider {
 				Extent extntNew = new Extent(extntX,extntY,om.getVoxelBox().extnt().getZ());
 				BoundingBox srcBox = new BoundingBox(new Point3i(startX,startY,0), extntNew);
 				
-				VoxelBox<ByteBuffer> vbNew = VoxelBoxFactory.getByte().create(extntNew);
+				VoxelBox<ByteBuffer> vbNew = VoxelBoxFactory.instance().getByte().create(extntNew);
 				
 				om.getVoxelBox().copyPixelsTo(srcBox, vbNew, new BoundingBox(extntNew));
 				

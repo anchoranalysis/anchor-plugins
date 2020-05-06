@@ -27,6 +27,7 @@ package org.anchoranalysis.plugin.image.feature.bean.obj.pair.order;
  */
 
 import org.anchoranalysis.image.feature.bean.objmask.NumVoxels;
+import org.anchoranalysis.image.feature.objmask.pair.FeatureDeriveFromPair;
 
 class OrderHelper {
 
@@ -34,9 +35,9 @@ class OrderHelper {
 		
 	}
 		
-	public static FeatureObjMaskPairOrder addFeatureToOrder( FeatureObjMaskPairOrder feature ) {
+	public static FeatureDeriveFromPair addFeatureToOrder( FeatureDeriveFromPair feature ) {
 		// Need an object-mask feature
-		feature.setFeature( new NumVoxels() );
+		feature.setItem( new NumVoxels() );
 		return feature;
 	}
 }

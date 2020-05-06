@@ -29,6 +29,7 @@ package ch.ethz.biol.cell.mpp.mark.proposer;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.anchoranalysis.anchor.mpp.bean.points.fitter.InsufficientPointsException;
 import org.anchoranalysis.anchor.mpp.bean.points.fitter.PointsFitter;
@@ -81,7 +82,7 @@ public class MarkProposerPointsFitter extends MarkProposer {
 		Point3d pnt = inputMark.getMark().centerPoint();
 		
 		try {
-			List<Point3i> pnts = pointsProposer.propose(
+			Optional<List<Point3i>> pnts = pointsProposer.propose(
 				pnt,
 				inputMark.getMark(),
 				context.getDimensions(),
@@ -89,13 +90,13 @@ public class MarkProposerPointsFitter extends MarkProposer {
 				context.getErrorNode().add("pointsProposer")
 			);
 			
-			if (pnts==null) {
+			if (!pnts.isPresent()) {
 				return false;	
 			}
 			
 			// Now we create a list of point2d, and run the ellipse fitter on these
 			ArrayList<Point3f> fitList = new ArrayList<>();
-			for( Point3i p : pnts) {
+			for( Point3i p : pnts.get()) {
 				fitList.add(
 					PointConverter.floatFromInt(p)
 				);
@@ -106,9 +107,7 @@ public class MarkProposerPointsFitter extends MarkProposer {
 		} catch (PointsFitterException | InsufficientPointsException e) {
 			
 			if (reportFitterErrors) {
-				// TEMPORARY FIX
-				System.out.println(e.toString());
-				//logErrorReporter.getErrorReporter().recordError(MarkProposerPointsFitter.class, e);
+				getLogger().getErrorReporter().recordError(MarkProposerPointsFitter.class, e);
 			}
 			context.getErrorNode().add( e.toString() );
 			return false;

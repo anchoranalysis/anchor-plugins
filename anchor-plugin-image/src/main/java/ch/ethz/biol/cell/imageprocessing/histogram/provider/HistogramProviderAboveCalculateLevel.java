@@ -32,7 +32,7 @@ import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.bean.provider.HistogramProvider;
 import org.anchoranalysis.image.bean.threshold.CalculateLevel;
 import org.anchoranalysis.image.histogram.Histogram;
-import org.anchoranalysis.plugin.image.bean.threshold.HistogramThresholder;
+import org.anchoranalysis.plugin.image.intensity.HistogramThresholder;
 
 /**
  * Thresholds a histogram using a CalculateLevel keeping only the values greater equal than the therhsold

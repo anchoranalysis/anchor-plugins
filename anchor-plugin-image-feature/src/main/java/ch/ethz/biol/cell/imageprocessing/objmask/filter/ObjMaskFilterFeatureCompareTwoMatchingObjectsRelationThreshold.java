@@ -40,7 +40,7 @@ import org.anchoranalysis.image.bean.objmask.filter.ObjMaskFilter;
 import org.anchoranalysis.image.bean.objmask.match.ObjMaskMatcher;
 import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.feature.bean.evaluator.FeatureEvaluator;
-import org.anchoranalysis.image.feature.objmask.pair.FeatureObjMaskPairParams;
+import org.anchoranalysis.image.feature.objmask.pair.FeatureInputPairObjs;
 import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.image.objmask.ObjMaskCollection;
 import org.anchoranalysis.image.objmask.match.ObjWithMatches;
@@ -67,7 +67,7 @@ public class ObjMaskFilterFeatureCompareTwoMatchingObjectsRelationThreshold exte
 	private RelationBean relation;
 	
 	@BeanField
-	private FeatureEvaluator<FeatureObjMaskPairParams> featureEvaluator;
+	private FeatureEvaluator<FeatureInputPairObjs> featureEvaluator;
 	// END BEAN PROPERTIES
 	
 	private void requireExactlyOneMatch( List<ObjWithMatches> matchList, String matchListName ) throws OperationFailedException {
@@ -91,7 +91,7 @@ public class ObjMaskFilterFeatureCompareTwoMatchingObjectsRelationThreshold exte
 		List<ObjWithMatches> matchList2 = objMaskMatcher2.findMatch(objs);
 		requireExactlyOneMatch( matchList2, "matchList2" );
 
-		FeatureCalculatorSingle<FeatureObjMaskPairParams> featureSession = featureEvaluator.createAndStartSession();
+		FeatureCalculatorSingle<FeatureInputPairObjs> featureSession = featureEvaluator.createAndStartSession();
 		
 		RelationToValue relationToValue = relation.create();
 		
@@ -107,8 +107,8 @@ public class ObjMaskFilterFeatureCompareTwoMatchingObjectsRelationThreshold exte
 				ObjMask match1 = objWithMatches1.getMatches().get(0);
 				ObjMask match2 = matchList2.get(i).getMatches().get(0);
 								
-				double featureVal = featureSession.calcOne(
-					new FeatureObjMaskPairParams(match1, match2)
+				double featureVal = featureSession.calc(
+					new FeatureInputPairObjs(match1, match2)
 				);
 				
 				if (!relationToValue.isRelationToValueTrue(featureVal, threshold)) {
@@ -163,11 +163,11 @@ public class ObjMaskFilterFeatureCompareTwoMatchingObjectsRelationThreshold exte
 		this.objMaskMatcher2 = objMaskMatcher2;
 	}
 
-	public FeatureEvaluator<FeatureObjMaskPairParams> getFeatureEvaluator() {
+	public FeatureEvaluator<FeatureInputPairObjs> getFeatureEvaluator() {
 		return featureEvaluator;
 	}
 
-	public void setFeatureEvaluator(FeatureEvaluator<FeatureObjMaskPairParams> featureEvaluator) {
+	public void setFeatureEvaluator(FeatureEvaluator<FeatureInputPairObjs> featureEvaluator) {
 		this.featureEvaluator = featureEvaluator;
 	}
 }

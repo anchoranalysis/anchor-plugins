@@ -28,14 +28,14 @@ package org.anchoranalysis.plugin.image.feature.bean.obj.intersecting;
 
 
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.cache.ExecuteException;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.name.provider.NamedProviderGetException;
-import org.anchoranalysis.feature.cache.CacheableParams;
+import org.anchoranalysis.feature.cache.SessionInput;
+import org.anchoranalysis.feature.cache.calculation.ResolvedCalculation;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.feature.bean.objmask.FeatureObjMaskSharedObjects;
-import org.anchoranalysis.image.feature.init.FeatureInitParamsImageInit;
-import org.anchoranalysis.image.feature.objmask.FeatureObjMaskParams;
+import org.anchoranalysis.image.feature.init.FeatureInitParamsSharedObjs;
+import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
 import org.anchoranalysis.image.objmask.ObjMaskCollection;
 import org.anchoranalysis.plugin.image.feature.obj.intersecting.CalculateIntersectingObjs;
 
@@ -61,7 +61,7 @@ public abstract class FeatureIntersectingObjs extends FeatureObjMaskSharedObject
 	private ObjMaskCollection searchObjs;
 	
 	@Override
-	public void beforeCalcCast(FeatureInitParamsImageInit params) throws InitException {
+	public void beforeCalcCast(FeatureInitParamsSharedObjs params) throws InitException {
 	
 		try {
 			this.searchObjs = params.getSharedObjects().getObjMaskCollection().getException(id);
@@ -71,25 +71,25 @@ public abstract class FeatureIntersectingObjs extends FeatureObjMaskSharedObject
 	}
 	
 	@Override
-	public double calc(CacheableParams<FeatureObjMaskParams> params)
+	public double calc(SessionInput<FeatureInputSingleObj> input)
 			throws FeatureCalcException {
 
 		if (getSearchObjs().size()==0) {
 			return getValueNoObjects();
 		}
 		
-		try {
-			ObjMaskCollection intersecting = params.calc(
-				new CalculateIntersectingObjs(id, searchObjs)	
-			);
-			
-			return valueFor(params, intersecting);
-		} catch (ExecuteException e) {
-			throw new FeatureCalcException(e);
-		}
+		return valueFor(
+			input,
+			input.resolver().search(
+				new CalculateIntersectingObjs(id, searchObjs)
+			)
+		);
 	}
 	
-	protected abstract double valueFor( CacheableParams<FeatureObjMaskParams> params, ObjMaskCollection intersecting ) throws FeatureCalcException;
+	protected abstract double valueFor(
+		SessionInput<FeatureInputSingleObj> params,
+		ResolvedCalculation<ObjMaskCollection, FeatureInputSingleObj> intersecting
+	) throws FeatureCalcException;
 	
 	public String getId() {
 		return id;

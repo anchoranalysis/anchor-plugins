@@ -36,7 +36,7 @@ import java.util.List;
 import java.util.logging.Logger;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.DefaultInstance;
-import org.anchoranalysis.bean.annotation.Optional;
+import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.image.chnl.factory.ChnlFactorySingleType;
 import org.anchoranalysis.image.chnl.factory.ChnlFactoryByte;
 import org.anchoranalysis.image.io.bean.chnl.map.ImgChnlMapCreator;
@@ -105,7 +105,7 @@ public class GroupFiles extends InputManager<NamedChnlsInput> {
 	/**
 	 * Imposes a condition on each parsedFilePathBag which must be-fulfilled if a file is to be included
 	 */
-	@BeanField @Optional
+	@BeanField @OptionalBean
 	private CheckParsedFilePathBag checkParsedFilePathBag;
 	// END BEANS
 	

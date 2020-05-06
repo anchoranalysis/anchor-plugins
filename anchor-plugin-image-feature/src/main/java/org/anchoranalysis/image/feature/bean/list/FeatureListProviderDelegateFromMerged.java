@@ -34,13 +34,12 @@ import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.bean.list.FeatureListProvider;
 import org.anchoranalysis.feature.bean.list.FeatureListProviderPrependName;
-import org.anchoranalysis.image.feature.objmask.FeatureObjMaskParams;
-import org.anchoranalysis.image.feature.objmask.pair.merged.FeatureObjMaskPairMergedParams;
-
-import ch.ethz.biol.cell.mpp.nrg.feature.objmaskpairmerged.FromExisting;
-import ch.ethz.biol.cell.mpp.nrg.feature.objmaskpairmerged.FromFirst;
-import ch.ethz.biol.cell.mpp.nrg.feature.objmaskpairmerged.FromMerged;
-import ch.ethz.biol.cell.mpp.nrg.feature.objmaskpairmerged.FromSecond;
+import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
+import org.anchoranalysis.image.feature.objmask.pair.FeatureDeriveFromPair;
+import org.anchoranalysis.image.feature.objmask.pair.FeatureInputPairObjs;
+import org.anchoranalysis.image.feature.objmask.pair.impl.First;
+import org.anchoranalysis.image.feature.objmask.pair.impl.Merged;
+import org.anchoranalysis.image.feature.objmask.pair.impl.Second;
 
 /**
  * Takes a list of features, and creates a new list of features, where each
@@ -49,7 +48,7 @@ import ch.ethz.biol.cell.mpp.nrg.feature.objmaskpairmerged.FromSecond;
  * @author Owen Feehan
  *
  */
-public class FeatureListProviderDelegateFromMerged extends FeatureListProvider<FeatureObjMaskPairMergedParams> {
+public class FeatureListProviderDelegateFromMerged extends FeatureListProvider<FeatureInputPairObjs> {
 
 	/**
 	 * 
@@ -58,7 +57,7 @@ public class FeatureListProviderDelegateFromMerged extends FeatureListProvider<F
 	
 	// START BEAN PROPERTIES
 	@BeanField
-	private FeatureListProvider<FeatureObjMaskParams> item;
+	private FeatureListProvider<FeatureInputSingleObj> item;
 	
 	@BeanField @AllowEmpty
 	private String prependString = "";
@@ -72,16 +71,16 @@ public class FeatureListProviderDelegateFromMerged extends FeatureListProvider<F
 	// END BEAN PROPERTIES
 
 	@Override
-	public FeatureList<FeatureObjMaskPairMergedParams> create() throws CreateException {
+	public FeatureList<FeatureInputPairObjs> create() throws CreateException {
 
-		FeatureList<FeatureObjMaskParams> in = item.create();
-		FeatureList<FeatureObjMaskPairMergedParams> out = new FeatureList<>(); 
+		FeatureList<FeatureInputSingleObj> in = item.create();
+		FeatureList<FeatureInputPairObjs> out = new FeatureList<>(); 
 		
-		for( Feature<FeatureObjMaskParams> featExst : in ) {
+		for( Feature<FeatureInputSingleObj> featExst : in ) {
 			
-			Feature<FeatureObjMaskParams> featExstDup = featExst.duplicateBean();
+			Feature<FeatureInputSingleObj> featExstDup = featExst.duplicateBean();
 			
-			FromExisting featDelegate = createNewDelegateFeature();
+			FeatureDeriveFromPair featDelegate = createNewDelegateFeature();
 			featDelegate.setItem(featExstDup);
 			
 			FeatureListProviderPrependName.setNewNameOnFeature(featDelegate, featExstDup.getFriendlyName(), prependString);
@@ -93,13 +92,13 @@ public class FeatureListProviderDelegateFromMerged extends FeatureListProvider<F
 	}
 	
 
-	private FromExisting createNewDelegateFeature() throws CreateException {
+	private FeatureDeriveFromPair createNewDelegateFeature() throws CreateException {
 		if (select.equalsIgnoreCase("first")) {
-			return new FromFirst();
+			return new First();
 		} else if (select.equalsIgnoreCase("second")) {
-			return new FromSecond();
+			return new Second();
 		} else if (select.equalsIgnoreCase("merged")) {
-			return new FromMerged();
+			return new Merged();
 		} else {
 			throw new CreateException("An invalid input existings for 'select'. Select one of 'first', 'second' or 'merged'");
 		}
@@ -114,11 +113,11 @@ public class FeatureListProviderDelegateFromMerged extends FeatureListProvider<F
 		this.prependString = prependString;
 	}
 
-	public FeatureListProvider<FeatureObjMaskParams> getItem() {
+	public FeatureListProvider<FeatureInputSingleObj> getItem() {
 		return item;
 	}
 
-	public void setItem(FeatureListProvider<FeatureObjMaskParams> item) {
+	public void setItem(FeatureListProvider<FeatureInputSingleObj> item) {
 		this.item = item;
 	}
 

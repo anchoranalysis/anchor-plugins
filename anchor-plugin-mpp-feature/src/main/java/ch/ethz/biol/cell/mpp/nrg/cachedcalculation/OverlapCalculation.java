@@ -1,6 +1,6 @@
 package ch.ethz.biol.cell.mpp.nrg.cachedcalculation;
 
-import org.anchoranalysis.anchor.mpp.feature.nrg.elem.NRGElemPairCalcParams;
+import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputPairMemo;
 import org.anchoranalysis.anchor.mpp.overlap.OverlapUtilities;
 import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
 
@@ -31,13 +31,11 @@ import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
  */
 
 
-import org.anchoranalysis.core.cache.ExecuteException;
-import org.anchoranalysis.feature.cachedcalculation.CachedCalculation;
-import org.anchoranalysis.feature.cachedcalculation.CachedCalculationCastParams;
+import org.anchoranalysis.feature.cache.calculation.FeatureCalculation;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
-public class OverlapCalculation extends CachedCalculationCastParams<Double,NRGElemPairCalcParams> {
+public class OverlapCalculation extends FeatureCalculation<Double,FeatureInputPairMemo> {
 
 	private int regionID;
 	
@@ -48,7 +46,7 @@ public class OverlapCalculation extends CachedCalculationCastParams<Double,NRGEl
 	}
 
 	@Override
-	protected Double execute( NRGElemPairCalcParams params ) throws ExecuteException {
+	protected Double execute( FeatureInputPairMemo params ) {
 		PxlMarkMemo mark1 = params.getObj1();
 		PxlMarkMemo mark2 = params.getObj2();
 		
@@ -56,11 +54,6 @@ public class OverlapCalculation extends CachedCalculationCastParams<Double,NRGEl
 		assert( mark2 != null );
 		
 		return OverlapUtilities.overlapWith(mark1,mark2,regionID);
-	}
-
-	@Override
-	public CachedCalculation<Double> duplicate() {
-		return new OverlapCalculation( regionID );
 	}
 	
 	@Override

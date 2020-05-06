@@ -26,7 +26,6 @@ package org.anchoranalysis.plugin.image.task.bean.obj;
  * #L%
  */
 
-import org.anchoranalysis.core.cache.ExecuteException;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.chnl.Chnl;
@@ -40,6 +39,7 @@ import org.anchoranalysis.image.stack.DisplayStack;
 import org.anchoranalysis.io.bean.objmask.writer.RGBOutlineWriter;
 import org.anchoranalysis.io.generator.collection.IterableGeneratorWriter;
 import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
+import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
 class ObjMaskSgmnTaskOutputter {
 	
@@ -96,7 +96,7 @@ class ObjMaskSgmnTaskOutputter {
 						outputManager.getOutputWriteSettings().genDefaultColorIndex(objs.size())
 					);
 				} catch (CreateException | OperationFailedException e) {
-					throw new ExecuteException(e);
+					throw new OutputWriteFailedException(e);
 				}
 			}
 		);

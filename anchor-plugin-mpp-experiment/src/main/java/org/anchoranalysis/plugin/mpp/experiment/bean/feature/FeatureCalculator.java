@@ -31,10 +31,10 @@ import java.util.List;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.feature.calc.ResultsVector;
-import org.anchoranalysis.feature.calc.ResultsVectorCollection;
-import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
-import org.anchoranalysis.plugin.mpp.experiment.feature.FeatureSessionFlexiFeatureTable;
+import org.anchoranalysis.feature.calc.results.ResultsVector;
+import org.anchoranalysis.feature.calc.results.ResultsVectorCollection;
+import org.anchoranalysis.feature.input.FeatureInput;
+import org.anchoranalysis.image.feature.session.FeatureTableSession;
 
 class FeatureCalculator {
 	
@@ -45,34 +45,35 @@ class FeatureCalculator {
 	 * 
 	 * @param groupId  		group-identifier
 	 * @param objectId  	identifier of object (guaranteed to be unique)
-	 * @param listObjParams 	a list of parameters. Each parameters creates a new result (e.g. a new row in a feature-table)
+	 * @param listInputs 	a list of parameters. Each parameters creates a new result (e.g. a new row in a feature-table)
 	 * @param resultsDestination where the result-calculations are placed
 	 * @throws OperationFailedException
 	 */
-	public static <T extends FeatureCalcParams> void calculateManyFeaturesInto(
+	public static <T extends FeatureInput> void calculateManyFeaturesInto(
 		String objectId,
-		FeatureSessionFlexiFeatureTable<T> session,
-		List<T> listObjParams,
+		FeatureTableSession<T> session,
+		List<T> listInputs,
 		ResultsVectorCollection resultsDestination,
+		boolean suppressErrors,
 		LogErrorReporter logger
 	) throws OperationFailedException {
 
 		try {
 			assert(resultsDestination!=null);
 			
-			for(int i=0; i<listObjParams.size(); i++ ) {
+			for(int i=0; i<listInputs.size(); i++ ) {
 				
-				T params = listObjParams.get(i);
+				T input = listInputs.get(i);
 			
-				logger.getLogReporter().logFormatted("Calculating params %d of %d: %s", i+1, listObjParams.size(), params.toString() );
+				logger.getLogReporter().logFormatted("Calculating input %d of %d: %s", i+1, listInputs.size(), input.toString() );
 				
-				ResultsVector rv = session.calcMaybeSuppressErrors(params, logger.getErrorReporter());
+				ResultsVector rv = suppressErrors ? session.calcSuppressErrors(input, logger.getErrorReporter()) : session.calc(input);
 				rv.setIdentifier(objectId);
 				resultsDestination.add( rv );
 			}
 			
 		} catch (FeatureCalcException e) {
-			logger.getErrorReporter().recordError(ExportFeaturesObjMaskTask.class, e);
+			throw new OperationFailedException(e);
 		}
 	}
 }
