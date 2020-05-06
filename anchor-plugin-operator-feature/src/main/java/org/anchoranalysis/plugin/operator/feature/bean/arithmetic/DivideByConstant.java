@@ -1,4 +1,4 @@
-package ch.ethz.biol.cell.mpp.nrg.feature.operator;
+package org.anchoranalysis.plugin.operator.feature.bean.arithmetic;
 
 /*
  * #%L
@@ -28,96 +28,39 @@ package ch.ethz.biol.cell.mpp.nrg.feature.operator;
 
 
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.operator.FeatureGenericSingleElem;
 import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.input.FeatureInput;
 
-public class MinMaxRangeReplaceFromFeatures<T extends FeatureInput> extends FeatureGenericSingleElem<T> {
-	
+public class DivideByConstant<T extends FeatureInput> extends FeatureGenericSingleElem<T> {
+
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = -8939465493485894918L;
-	
+	private static final long serialVersionUID = 1L;
+
 	// START BEAN PROPERTIES
 	@BeanField
-	private double belowMinValue = 0;
-	
-	@BeanField
-	private double aboveMaxValue = 0;
-	
-	@BeanField
-	private double withinValue = 0;
-	
-	@BeanField
-	private Feature<T> min;
-	
-	@BeanField
-	private Feature<T> max;
+	private double value = 10;
 	// END BEAN PROPERTIES
 	
 	@Override
 	public double calc( SessionInput<T> input ) throws FeatureCalcException {
-		
-		double val = input.calc( getItem() );
-		double valMin = input.calc(min);
-		double valMax = input.calc(max);
-		
-		if (val < valMin) {
-			return belowMinValue;
-		}
-		
-		if (val > valMax) {
-			return aboveMaxValue;
-		}
-		
-		return withinValue;
+		return input.calc( getItem() ) / value;
+	}
+
+	public double getValue() {
+		return value;
+	}
+
+	public void setValue(double value) {
+		this.value = value;
 	}
 
 	@Override
-	public String getParamDscr() {
-		return String.format("min=%s,max=%s,withinValue=%f,belowMinValue=%f,aboveMaxValue=%f", min.getFriendlyName(), max.getFriendlyName(), withinValue, belowMinValue, aboveMaxValue );
-	}
-	
-	public Feature<T> getMin() {
-		return min;
+	public String getDscrLong() {
+		return String.format("%f / %s", value, getItem().getDscrLong() );
 	}
 
-	public void setMin(Feature<T> min) {
-		this.min = min;
-	}
-
-	public Feature<T> getMax() {
-		return max;
-	}
-
-	public void setMax(Feature<T> max) {
-		this.max = max;
-	}
-
-	public double getBelowMinValue() {
-		return belowMinValue;
-	}
-
-	public void setBelowMinValue(double belowMinValue) {
-		this.belowMinValue = belowMinValue;
-	}
-
-	public double getAboveMaxValue() {
-		return aboveMaxValue;
-	}
-
-	public void setAboveMaxValue(double aboveMaxValue) {
-		this.aboveMaxValue = aboveMaxValue;
-	}
-
-	public double getWithinValue() {
-		return withinValue;
-	}
-
-	public void setWithinValue(double withinValue) {
-		this.withinValue = withinValue;
-	}
 }

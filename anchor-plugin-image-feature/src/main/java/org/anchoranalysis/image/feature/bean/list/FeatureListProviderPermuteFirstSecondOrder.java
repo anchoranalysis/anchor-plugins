@@ -40,11 +40,11 @@ import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.bean.list.FeatureListProvider;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.input.FeatureInputNRGStack;
+import org.anchoranalysis.plugin.operator.feature.bean.arithmetic.MultiplyByConstant;
+import org.anchoranalysis.plugin.operator.feature.bean.order.range.IfOutsideRange;
 
 import ch.ethz.biol.cell.mpp.nrg.feature.objmask.NRGParamThree;
 import ch.ethz.biol.cell.mpp.nrg.feature.operator.FeatureFirstSecondOrder;
-import ch.ethz.biol.cell.mpp.nrg.feature.operator.MinMaxRange;
-import ch.ethz.biol.cell.mpp.nrg.feature.operator.MultiplyByConstant;
 
 public abstract class FeatureListProviderPermuteFirstSecondOrder extends FeatureListProvider<FeatureInputNRGStack> {
 
@@ -105,7 +105,7 @@ public abstract class FeatureListProviderPermuteFirstSecondOrder extends Feature
 	}
 
 	private Feature<FeatureInputNRGStack> wrapWithMinMaxRange( Feature<FeatureInputNRGStack> feature ) {
-		MinMaxRange<FeatureInputNRGStack> out = new MinMaxRange<>();
+		IfOutsideRange<FeatureInputNRGStack> out = new IfOutsideRange<>();
 		out.setItem(feature);
 		out.setMin(minRange);
 		out.setMax(maxRange);

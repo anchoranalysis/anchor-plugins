@@ -1,4 +1,4 @@
-package ch.ethz.biol.cell.mpp.nrg.feature.operator;
+package org.anchoranalysis.plugin.operator.feature.bean.order;
 
 /*-
  * #%L
@@ -32,49 +32,23 @@ import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.input.FeatureInput;
 
+public class Maximum<T extends FeatureInput> extends FeatureListElem<T> {
 
-public class Multiply<T extends FeatureInput> extends FeatureListElem<T> {
-	
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 
 	@Override
-	public double calc( SessionInput<T> input ) throws FeatureCalcException {
+	public double calc(SessionInput<T> input) throws FeatureCalcException {
 		
-		double result = 1;
-		
-		for (Feature<T> elem : getList()) {
-			result *= input.calc( elem );
-			
-			// Early exit if we start multiplying by 0
-			if (result==0) {
-				return result;
+		double maxValue = Double.NaN;
+		for( Feature<T> f : getList()) {
+			double val = input.calc( f );
+			if (Double.isNaN(maxValue) || val > maxValue) {
+				maxValue = val;
 			}
 		}
-		
-		return result;
+		return maxValue;
 	}
-
-	@Override
-	public String getDscrLong() {
-		
-		StringBuilder sb = new StringBuilder();
-		
-		boolean first = true;
-		for (Feature<T> elem : getList()) {
-			
-			if (first==true) {
-				first = false;
-			} else {
-				sb.append("*");
-			}
-		
-			sb.append(elem.getDscrLong());
-		}
-				
-		return sb.toString();
-	}
-
 }

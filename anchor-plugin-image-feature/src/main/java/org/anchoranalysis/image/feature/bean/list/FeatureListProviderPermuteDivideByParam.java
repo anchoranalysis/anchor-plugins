@@ -28,6 +28,7 @@ package org.anchoranalysis.image.feature.bean.list;
 
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import org.anchoranalysis.bean.BeanInstanceMap;
 import org.anchoranalysis.bean.StringSet;
@@ -39,7 +40,7 @@ import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.bean.list.FeatureListProvider;
 import org.anchoranalysis.feature.input.FeatureInputNRGStack;
-import org.anchoranalysis.plugin.operator.feature.bean.arithmetic.DivideExplicit;
+import org.anchoranalysis.plugin.operator.feature.bean.arithmetic.Divide;
 
 /**
  * Similar to FeatureListProviderPermute but embeds the feature in a GaussianScore
@@ -81,10 +82,17 @@ public class FeatureListProviderPermuteDivideByParam extends FeatureListProvider
 	}
 
 	private Feature<FeatureInputNRGStack> wrapInDivide( Feature<FeatureInputNRGStack> feature ) {
-		DivideExplicit<FeatureInputNRGStack> featureScore = new DivideExplicit<>();
-		featureScore.setItem1(feature);
-		featureScore.setItem2(
-			FeatureListProviderPermuteGaussianScore.createNRGParam(permuteProperty,paramPrefix,"_median",paramPrefixAppendNumber)
+		Divide<FeatureInputNRGStack> featureScore = new Divide<>();
+		featureScore.setList(
+			Arrays.asList(
+				feature,
+				FeatureListProviderPermuteGaussianScore.createNRGParam(
+					permuteProperty,
+					paramPrefix,
+					"_median",
+					paramPrefixAppendNumber
+				)	
+			)
 		);
 		return featureScore;
 	}

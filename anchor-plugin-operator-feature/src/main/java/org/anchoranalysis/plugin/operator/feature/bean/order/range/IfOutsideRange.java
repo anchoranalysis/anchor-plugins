@@ -1,4 +1,6 @@
-package ch.ethz.biol.cell.mpp.nrg.feature.operator;
+package org.anchoranalysis.plugin.operator.feature.bean.order.range;
+
+import org.anchoranalysis.feature.bean.Feature;
 
 /*
  * #%L
@@ -27,84 +29,31 @@ package ch.ethz.biol.cell.mpp.nrg.feature.operator;
  */
 
 
-import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.feature.bean.operator.FeatureGenericSingleElem;
 import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.input.FeatureInput;
 
-public class MinMaxRange<T extends FeatureInput> extends FeatureGenericSingleElem<T> {
+/**
+ * Clips a value if it lies outside the range - instead returning particular constants if below or above an acceptable range
+ * 
+ * @author Owen Feehan
+ *
+ * @param <T>
+ */
+public class IfOutsideRange<T extends FeatureInput> extends RangeCompareFromScalars<T> {
 	
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -8939465493485894918L;
 	
-	// START BEAN PROPERTIES
-	@BeanField
-	private double min = Double.NEGATIVE_INFINITY;
-	
-	@BeanField
-	private double max = Double.POSITIVE_INFINITY;
-	
-	@BeanField
-	private double belowMinValue = 0;
-	
-	@BeanField
-	private double aboveMaxValue = 0;
-	// END BEAN PROPERTIES
-	
-	
 	@Override
-	public double calc( SessionInput<T> input ) throws FeatureCalcException {
-		
-		double val = input.calc( getItem() );
-		
-		if (val < min) {
-			return belowMinValue;
-		}
-		
-		if (val > max) {
-			return aboveMaxValue;
-		}
-		
-		return val;
+	protected Feature<T> featureToCalcInputVal() {
+		return getItem();
 	}
 
 	@Override
-	public String getParamDscr() {
-		return String.format("min=%f,max=%f,belowMinValue=%f,aboveMaxValue=%f", min, max, belowMinValue, aboveMaxValue );
-	}
-	
-	public double getMin() {
-		return min;
-	}
-
-	public void setMin(double min) {
-		this.min = min;
-	}
-
-	public double getMax() {
-		return max;
-	}
-
-	public void setMax(double max) {
-		this.max = max;
-	}
-
-	public double getBelowMinValue() {
-		return belowMinValue;
-	}
-
-	public void setBelowMinValue(double belowMinValue) {
-		this.belowMinValue = belowMinValue;
-	}
-
-	public double getAboveMaxValue() {
-		return aboveMaxValue;
-	}
-
-	public void setAboveMaxValue(double aboveMaxValue) {
-		this.aboveMaxValue = aboveMaxValue;
+	protected double withinRangeValue(double valWithinRange, SessionInput<T> input) throws FeatureCalcException {
+		return valWithinRange;
 	}
 }

@@ -1,4 +1,4 @@
-package ch.ethz.biol.cell.mpp.nrg.feature.operator;
+package org.anchoranalysis.plugin.operator.feature.bean.order.range;
 
 /*
  * #%L
@@ -28,48 +28,50 @@ package ch.ethz.biol.cell.mpp.nrg.feature.operator;
 
 
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.feature.bean.operator.FeatureGenericSingleElem;
+import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.input.FeatureInput;
 
-public class ToThePowerOfConstant<T extends FeatureInput> extends FeatureGenericSingleElem<T> {
 
+/**
+ * Calculates a value if a condition lies within a certain range, otherwise returns constants
+ * 
+ * @author Owen Feehan
+ *
+ * @param <T> feature input type
+ */
+public class IfConditionWithinRange<T extends FeatureInput> extends RangeCompareFromScalars<T> {
+	
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = -8939465493485894918L;
 	
-	// START BEAN PARAMETERS
+	// START BEAN PROPERTIES
+	/** Calculates value for the condition - which is checked if it lies within a certain range */
 	@BeanField
-	private double constant = 0.5;
-	// END BEAN PARAMETERS
+	private Feature<T> featureCondition;
+	// END BEAN PROPERTIES
 	
 	@Override
-	public double calc( SessionInput<T> input ) throws FeatureCalcException {
-		double ret = Math.pow(
-			input.calc( getItem() ),
-			constant
+	protected Feature<T> featureToCalcInputVal() {
+		return featureCondition;
+	}
+
+	@Override
+	protected double withinRangeValue(double valWithinRange, SessionInput<T> input) throws FeatureCalcException {
+		// If the condition lies within the range, then we calculate the derived feature as intended
+		return input.calc(
+			getItem()
 		);
-		//assert( !Double.isNaN(ret) );
-		return ret;
 	}
 	
-	@Override
-	public String getParamDscr() {
-		return String.format("%f", constant);
-	}
-	
-	@Override
-	public String getDscrLong() {
-		return String.format("%s^%f)", getItem().getDscrLong(), constant );
+	public Feature<T> getFeatureCondition() {
+		return featureCondition;
 	}
 
-	public double getConstant() {
-		return constant;
-	}
-
-	public void setConstant(double constant) {
-		this.constant = constant;
+	public void setFeatureCondition(Feature<T> featureCondition) {
+		this.featureCondition = featureCondition;
 	}
 }
