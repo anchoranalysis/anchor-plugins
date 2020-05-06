@@ -1,4 +1,4 @@
-package ch.ethz.biol.cell.mpp.nrg.feature.operator;
+package org.anchoranalysis.plugin.operator.feature.bean.list;
 
 /*-
  * #%L
@@ -32,9 +32,7 @@ import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.input.FeatureInput;
 
-
-// Arithmetic mean
-public class Mean<T extends FeatureInput> extends FeatureListElem<T> {
+public class Minimum<T extends FeatureInput> extends FeatureListElem<T> {
 
 	/**
 	 * 
@@ -42,43 +40,17 @@ public class Mean<T extends FeatureInput> extends FeatureListElem<T> {
 	private static final long serialVersionUID = 1L;
 
 	@Override
-	public double calc( SessionInput<T> input ) throws FeatureCalcException {
+	public double calc(SessionInput<T> input) throws FeatureCalcException {
 		
-		double result = 0;
+		ListChecker.checkNonEmpty(getList());
 		
-		if (getList().size()==0) {
-			throw new FeatureCalcException("There are 0 items");
-		}
-		
-		for (Feature<T> elem : getList()) {
-			result += input.calc( elem );
-		}
-		
-		assert(!Double.isNaN(result));
-		
-		return result/getList().size();
-	}
-	
-	@Override
-	public String getDscrLong() {
-		
-		StringBuilder sb = new StringBuilder();
-		sb.append("(");
-		
-		boolean first = true;
-		for (Feature<T> elem : getList()) {
-			
-			if (first==true) {
-				first = false;
-			} else {
-				sb.append("+");
+		double maxValue = Double.NaN;
+		for( Feature<T> f : getList()) {
+			double val = input.calc( f );
+			if (Double.isNaN(maxValue) || val < maxValue) {
+				maxValue = val;
 			}
-		
-			sb.append(elem.getDscrLong());
 		}
-		sb.append(")/");
-		sb.append( getList().size() );
-				
-		return sb.toString();
+		return maxValue;
 	}
 }

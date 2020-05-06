@@ -28,7 +28,7 @@ package org.anchoranalysis.image.feature.bean.list;
 
 import org.anchoranalysis.feature.bean.operator.FeatureListElem;
 import org.anchoranalysis.image.feature.objmask.pair.FeatureInputPairObjs;
-import ch.ethz.biol.cell.mpp.nrg.feature.operator.Mean;
+import org.anchoranalysis.plugin.operator.feature.bean.list.Mean;
 
 public class FeatureListProviderPairMean extends FeatureListProviderAggregatePair {
 

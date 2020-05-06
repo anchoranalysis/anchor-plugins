@@ -1,4 +1,4 @@
-package org.anchoranalysis.plugin.operator.feature.bean.order.range;
+package org.anchoranalysis.plugin.operator.feature.physical;
 
 /*
  * #%L
@@ -27,51 +27,59 @@ package org.anchoranalysis.plugin.operator.feature.bean.order.range;
  */
 
 
+import org.anchoranalysis.bean.annotation.AllowEmpty;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.feature.bean.Feature;
+import org.anchoranalysis.core.unit.SpatialConversionUtilities;
+import org.anchoranalysis.feature.bean.operator.FeatureGenericSingleElem;
 import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.input.FeatureInput;
 
+// 
+public class ConvertUnits<T extends FeatureInput> extends FeatureGenericSingleElem<T> {
 
-/**
- * Calculates a value if a condition lies within a certain range, otherwise returns constants
- * 
- * @author Owen Feehan
- *
- * @param <T> feature input type
- */
-public class IfConditionWithinRange<T extends FeatureInput> extends RangeCompareFromScalars<T> {
-	
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = -8939465493485894918L;
+	private static final long serialVersionUID = 1L;
 	
 	// START BEAN PROPERTIES
-	/** Calculates value for the condition - which is checked if it lies within a certain range */
-	@BeanField
-	private Feature<T> featureCondition;
+	@BeanField @AllowEmpty
+	private String unitTypeFrom = "";
+	
+	@BeanField @AllowEmpty
+	private String unitTypeTo = "";
 	// END BEAN PROPERTIES
-	
-	@Override
-	protected Feature<T> featureToCalcInputVal() {
-		return featureCondition;
+
+	public ConvertUnits() {
+		
+	}
+
+	public String getUnitTypeTo() {
+		return unitTypeTo;
+	}
+
+	public void setUnitTypeTo(String unitTypeTo) {
+		this.unitTypeTo = unitTypeTo;
+	}
+
+	public String getUnitTypeFrom() {
+		return unitTypeFrom;
+	}
+
+	public void setUnitTypeFrom(String unitTypeFrom) {
+		this.unitTypeFrom = unitTypeFrom;
 	}
 
 	@Override
-	protected double withinRangeValue(double valWithinRange, SessionInput<T> input) throws FeatureCalcException {
-		// If the condition lies within the range, then we calculate the derived feature as intended
-		return input.calc(
-			getItem()
-		);
-	}
-	
-	public Feature<T> getFeatureCondition() {
-		return featureCondition;
-	}
-
-	public void setFeatureCondition(Feature<T> featureCondition) {
-		this.featureCondition = featureCondition;
+	protected double calc(SessionInput<T> input) throws FeatureCalcException {
+		
+		double value = input.calc( getItem() );
+		
+		SpatialConversionUtilities.UnitSuffix typeFrom = SpatialConversionUtilities.suffixFromMeterString(unitTypeFrom);
+		SpatialConversionUtilities.UnitSuffix typeTo = SpatialConversionUtilities.suffixFromMeterString(unitTypeTo);
+		
+		double valueBaseUnits = SpatialConversionUtilities.convertFromUnits( value, typeFrom );
+		return SpatialConversionUtilities.convertToUnits( valueBaseUnits, typeTo );
 	}
 }

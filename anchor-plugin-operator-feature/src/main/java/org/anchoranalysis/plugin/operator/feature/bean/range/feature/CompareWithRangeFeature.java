@@ -1,4 +1,4 @@
-package org.anchoranalysis.plugin.operator.feature.bean.order.range;
+package org.anchoranalysis.plugin.operator.feature.bean.range.feature;
 
 /*
  * #%L
@@ -32,16 +32,17 @@ import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.input.FeatureInput;
-
+import org.anchoranalysis.plugin.operator.feature.bean.range.CompareWithRange;
+import org.anchoranalysis.plugin.operator.feature.bean.range.RangeCompareBase;
 
 /**
- * Compares a value with a range, returning specified constants if its inside the range, below it or above it
+ * Like {@link CompareWithRange} but uses features to calculate boundary values
  * 
  * @author Owen Feehan
  *
- * @param <T> feature-input-type
+ * @param <T> feature-input type
  */
-public class CompareWithRange<T extends FeatureInput> extends RangeCompareFromScalars<T> {
+public class CompareWithRangeFeature<T extends FeatureInput> extends RangeCompareBase<T> {
 	
 	/**
 	 * 
@@ -52,11 +53,29 @@ public class CompareWithRange<T extends FeatureInput> extends RangeCompareFromSc
 	/** Constant to return if value lies within the range */
 	@BeanField
 	private double withinValue = 0;
-	// END BEAN PROPERTIES
 	
+	/** Calculates minimally-allowed range boundary */
+	@BeanField
+	private Feature<T> min;
+
+	/** Calculates maximally-allowed range boundary */
+	@BeanField
+	private Feature<T> max;
+	// END BEAN PROPERTIES
+
 	@Override
 	protected Feature<T> featureToCalcInputVal() {
 		return getItem();
+	}
+	
+	@Override
+	protected double boundaryMin(SessionInput<T> input) throws FeatureCalcException {
+		return input.calc(min);
+	}
+
+	@Override
+	protected double boundaryMax(SessionInput<T> input) throws FeatureCalcException {
+		return input.calc(max);
 	}
 
 	@Override
@@ -67,10 +86,28 @@ public class CompareWithRange<T extends FeatureInput> extends RangeCompareFromSc
 	@Override
 	public String getParamDscr() {
 		return String.format(
-			"%s,withinValue=%f",
-			super.getParamDscr(),
-			withinValue
+			"min=%s,max=%s,withinValue=%f,%s",
+			min.getFriendlyName(),
+			max.getFriendlyName(),
+			withinValue,
+			super.getParamDscr()
 		);
+	}
+	
+	public Feature<T> getMin() {
+		return min;
+	}
+
+	public void setMin(Feature<T> min) {
+		this.min = min;
+	}
+
+	public Feature<T> getMax() {
+		return max;
+	}
+
+	public void setMax(Feature<T> max) {
+		this.max = max;
 	}
 
 	public double getWithinValue() {
@@ -80,4 +117,5 @@ public class CompareWithRange<T extends FeatureInput> extends RangeCompareFromSc
 	public void setWithinValue(double withinValue) {
 		this.withinValue = withinValue;
 	}
+
 }

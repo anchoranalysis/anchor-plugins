@@ -1,4 +1,4 @@
-package ch.ethz.biol.cell.mpp.nrg.feature.operator;
+package org.anchoranalysis.plugin.operator.feature.bean.score;
 
 /*
  * #%L
@@ -28,15 +28,14 @@ package ch.ethz.biol.cell.mpp.nrg.feature.operator;
 
 
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.feature.cache.SessionInput;
+import org.anchoranalysis.core.cache.Operation;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.input.FeatureInput;
-
-import cern.jet.random.Normal;
+import org.anchoranalysis.plugin.operator.feature.score.GaussianScoreCalculator;
 
 
 // A score between 0 and 1, based upon the CDF of a guassian. as one approaches the mean, the score approaches 1.0
-public class GaussianScore<T extends FeatureInput> extends FeatureFirstSecondOrder<T> {
+public class GaussianScore<T extends FeatureInput> extends FeatureStatScore<T> {
 
 	/**
 	 * 
@@ -56,47 +55,29 @@ public class GaussianScore<T extends FeatureInput> extends FeatureFirstSecondOrd
 	@BeanField
 	private boolean rewardLowerSide = false;	// Treat the lower side as if it's 1 - the fill cdf
 	// END BEAN PROPERTIES
-		
-	public static double calc( double mean, double stdDev, double val, boolean rewardHigherSide, boolean rewardLowerSide ) {
-		Normal normal = new Normal(mean, stdDev, null );
-		double cdf = normal.cdf(val);
-		
-		if (rewardHigherSide) {
-			return cdf;
-		}
-		
-		if (rewardLowerSide) {
-			return (1-cdf);
-		}
-		
-		if (val>mean) {
-			return (1-cdf)*2;
-		} else {
-			return cdf*2;
-		}
-	}
 	
 	@Override
-	public double calc( SessionInput<T> input ) throws FeatureCalcException {
-		
-		double val = input.calc( getItem() );
-		double mean = input.calc( getItemMean() );
+	protected double deriveScore(double featureValue, double mean, Operation<Double,FeatureCalcException> stdDev) throws FeatureCalcException {
 		
 		if (ignoreHigherSide) {
-			if (val>mean) {
+			if (featureValue>mean) {
 				return 1.0;
 			}
 		}
 		
 		if (ignoreLowerSide) {
-			if (val<mean) {
+			if (featureValue<mean) {
 				return 1.0;
 			}
 		}
 		
-		double stdDev = input.calc( getItemStdDev() );
-		
-		return calc( mean, stdDev, val, rewardHigherSide, rewardLowerSide );
+		return GaussianScoreCalculator.calc(
+			mean,
+			stdDev.doOperation(),
+			featureValue,
+			rewardHigherSide,
+			rewardLowerSide
+		);
 	}
 	
 	public boolean isIgnoreHigherSide() {
@@ -130,7 +111,4 @@ public class GaussianScore<T extends FeatureInput> extends FeatureFirstSecondOrd
 	public void setRewardLowerSide(boolean rewardLowerSide) {
 		this.rewardLowerSide = rewardLowerSide;
 	}
-
-
-
 }

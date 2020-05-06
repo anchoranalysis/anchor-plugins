@@ -1,10 +1,13 @@
-package ch.ethz.biol.cell.mpp.nrg.feature.operator;
+package org.anchoranalysis.plugin.operator.feature.bean.score;
 
-/*
+import org.anchoranalysis.core.cache.Operation;
+
+
+/*-
  * #%L
- * anchor-feature
+ * anchor-plugin-operator-feature
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -26,45 +29,27 @@ package ch.ethz.biol.cell.mpp.nrg.feature.operator;
  * #L%
  */
 
-
-import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.feature.bean.Feature;
-import org.anchoranalysis.feature.bean.operator.FeatureGenericSingleElem;
+import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.input.FeatureInput;
+import org.anchoranalysis.math.statistics.FirstSecondOrderStatistic;
 
-public abstract class FeatureFirstSecondOrder<T extends FeatureInput> extends FeatureGenericSingleElem<T> {
+// Z-score of a value
+public class ZScore<T extends FeatureInput> extends FeatureStatScore<T> {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 
-	// START BEAN PROPERTIES
-	@BeanField
-	private Feature<T> itemMean = null;
-	
-	@BeanField
-	private Feature<T> itemStdDev = null;
-	// END BEAN PROPERTIES
-	
-	public Feature<T> getItemMean() {
-		return itemMean;
-	}
-
-	public void setItemMean(Feature<T> itemMean) {
-		this.itemMean = itemMean;
-	}
-
-	public Feature<T> getItemStdDev() {
-		return itemStdDev;
-	}
-
-	public void setItemStdDev(Feature<T> itemStdDev) {
-		this.itemStdDev = itemStdDev;
-	}
-
 	@Override
-	public String getParamDscr() {
-		return String.format("%s,%s,%s", getItem().getDscrLong(), getItemMean().getDscrLong(), getItemStdDev().getDscrLong() );
+	protected double deriveScore(double featureValue, double mean, Operation<Double,FeatureCalcException> stdDev) throws FeatureCalcException {
+
+		double zScore = FirstSecondOrderStatistic.calcZScore(
+			featureValue,
+			mean,
+			stdDev.doOperation()
+		);
+		assert( !Double.isNaN(zScore) );
+		return zScore;
 	}
 }

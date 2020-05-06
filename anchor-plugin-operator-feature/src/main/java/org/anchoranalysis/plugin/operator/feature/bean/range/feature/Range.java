@@ -1,4 +1,4 @@
-package org.anchoranalysis.plugin.operator.feature.bean.order.range.feature;
+package org.anchoranalysis.plugin.operator.feature.bean.range.feature;
 
 /*
  * #%L

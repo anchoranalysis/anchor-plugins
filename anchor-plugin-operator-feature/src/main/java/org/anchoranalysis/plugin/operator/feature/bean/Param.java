@@ -1,10 +1,10 @@
-package org.anchoranalysis.plugin.operator.feature.bean.order;
+package org.anchoranalysis.plugin.operator.feature.bean;
 
-/*-
+/*
  * #%L
- * anchor-plugin-operator-feature
+ * anchor-feature
  * %%
- * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -26,29 +26,61 @@ package org.anchoranalysis.plugin.operator.feature.bean.order;
  * #L%
  */
 
+
+import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.core.params.KeyValueParams;
 import org.anchoranalysis.feature.bean.Feature;
-import org.anchoranalysis.feature.bean.operator.FeatureListElem;
 import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.feature.input.FeatureInput;
+import org.anchoranalysis.feature.input.FeatureInputParams;
+import org.anchoranalysis.feature.input.descriptor.FeatureInputDescriptor;
+import org.anchoranalysis.feature.input.descriptor.FeatureInputParamsDescriptor;
 
-public class Minimum<T extends FeatureInput> extends FeatureListElem<T> {
+/**
+ * Extracts a key-value-param as a double
+ * 
+ * @author Owen Feehan
+ *
+ * @param <T> feature input type
+ */
+public class Param<T extends FeatureInputParams> extends Feature<T> {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	
+	// START BEAN PROPERTIES
+	@BeanField
+	private String key;
+	// END BEAN PROPERTIES
+	
+	@Override
+	public double calc(SessionInput<T> input)
+			throws FeatureCalcException {
+		
+		KeyValueParams kvp = input.get().getParamsRequired();
+		
+		if (kvp.containsKey(key)) {
+			return Double.parseDouble( kvp.getProperty(key) );
+		} else {
+			throw new FeatureCalcException(
+				String.format("Param '%s' is missing", key)	
+			);
+		}
+	}
 
 	@Override
-	public double calc(SessionInput<T> input) throws FeatureCalcException {
-		
-		double maxValue = Double.NaN;
-		for( Feature<T> f : getList()) {
-			double val = input.calc( f );
-			if (Double.isNaN(maxValue) || val < maxValue) {
-				maxValue = val;
-			}
-		}
-		return maxValue;
+	public FeatureInputDescriptor paramType()
+			throws FeatureCalcException {
+		return FeatureInputParamsDescriptor.instance;
+	}
+
+	public String getKey() {
+		return key;
+	}
+
+	public void setKey(String key) {
+		this.key = key;
 	}
 }
