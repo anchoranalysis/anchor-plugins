@@ -144,10 +144,10 @@
 				</list>
 			</feature>
 			<listPermuteProperty config-class="java.util.List" config-factory="list">
-				<item config-class="org.anchoranalysis.bean.permute.property.PermutePropertySequenceInteger" propertyPath="item1.iterationsDilation">
+				<item config-class="org.anchoranalysis.bean.permute.property.PermutePropertySequenceInteger" propertyPath="list.iterationsDilation">
 					<sequence start="1" end="6" increment="1" config-class="org.anchoranalysis.bean.sequence.SequenceInteger"/>
 				</item>
-				<item config-class="org.anchoranalysis.bean.permute.property.PermutePropertySequenceInteger" propertyPath="item1.iterationsErosion">
+				<item config-class="org.anchoranalysis.bean.permute.property.PermutePropertySequenceInteger" propertyPath="list.iterationsErosion">
 					<sequence start="0" end="3" increment="1" config-class="org.anchoranalysis.bean.sequence.SequenceInteger"/>
 				</item>
 			</listPermuteProperty>
@@ -170,10 +170,10 @@
 				</list>
 			</feature>
 			<listPermuteProperty config-class="java.util.List" config-factory="list">
-				<item config-class="org.anchoranalysis.bean.permute.property.PermutePropertySequenceInteger" propertyPath="item1.iterationsDilation">
+				<item config-class="org.anchoranalysis.bean.permute.property.PermutePropertySequenceInteger" propertyPath="list.iterationsDilation">
 					<sequence start="1" end="6" increment="1" config-class="org.anchoranalysis.bean.sequence.SequenceInteger"/>
 				</item>
-				<item config-class="org.anchoranalysis.bean.permute.property.PermutePropertySequenceInteger" propertyPath="item1.iterationsErosion">
+				<item config-class="org.anchoranalysis.bean.permute.property.PermutePropertySequenceInteger" propertyPath="list.iterationsErosion">
 					<sequence start="0" end="3" increment="1" config-class="org.anchoranalysis.bean.sequence.SequenceInteger"/>
 				</item>
 			</listPermuteProperty>
