@@ -1,4 +1,4 @@
-package ch.ethz.biol.cell.mpp.nrg.feature.operator;
+package org.anchoranalysis.plugin.operator.feature.bean.arithmetic;
 
 /*
  * #%L
@@ -28,12 +28,13 @@ package ch.ethz.biol.cell.mpp.nrg.feature.operator;
 
 
 import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.operator.FeatureGenericSingleElem;
 import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.input.FeatureInput;
 
-public class AddConstantTo<T extends FeatureInput> extends FeatureGenericSingleElem<T> {
+public class MultiplyByConstant<T extends FeatureInput> extends FeatureGenericSingleElem<T> {
 
 	/**
 	 * 
@@ -42,12 +43,21 @@ public class AddConstantTo<T extends FeatureInput> extends FeatureGenericSingleE
 
 	// START BEAN PROPERTIES
 	@BeanField
-	private double value = 0;
+	private double value = 10;
 	// END BEAN PROPERTIES
+	
+	public MultiplyByConstant() {
+		
+	}
+	
+	public MultiplyByConstant( Feature<T> feature, double value ) {
+		setItem(feature);
+		setValue(value);
+	}
 	
 	@Override
 	public double calc( SessionInput<T> input ) throws FeatureCalcException {
-		return input.calc( getItem()  ) + value;
+		return input.calc( getItem() ) * value;
 	}
 
 	public double getValue() {
@@ -60,6 +70,12 @@ public class AddConstantTo<T extends FeatureInput> extends FeatureGenericSingleE
 
 	@Override
 	public String getDscrLong() {
-		return String.format("%f + %s", value, getItem().getDscrLong() );
+		return String.format("%s * %s", getParamDscr(), getItem().getDscrLong() );
 	}
+
+	@Override
+	public String getParamDscr() {
+		return String.format("value=%f", value);
+	}
+
 }

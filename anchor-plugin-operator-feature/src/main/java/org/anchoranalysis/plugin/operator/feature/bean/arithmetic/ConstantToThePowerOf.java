@@ -1,10 +1,10 @@
-package ch.ethz.biol.cell.mpp.nrg.feature.operator;
+package org.anchoranalysis.plugin.operator.feature.bean.arithmetic;
 
-/*-
+/*
  * #%L
- * anchor-plugin-operator-feature
+ * anchor-feature
  * %%
- * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -26,29 +26,43 @@ package ch.ethz.biol.cell.mpp.nrg.feature.operator;
  * #L%
  */
 
-import org.anchoranalysis.feature.bean.Feature;
-import org.anchoranalysis.feature.bean.operator.FeatureListElem;
+
+import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.feature.bean.operator.FeatureGenericSingleElem;
 import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.input.FeatureInput;
 
-public class Maximum<T extends FeatureInput> extends FeatureListElem<T> {
+public class ConstantToThePowerOf<T extends FeatureInput> extends FeatureGenericSingleElem<T> {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	
+	// START BEAN PARAMETERS
+	@BeanField
+	private double constant = 0.5;
+	// END BEAN PARAMETERS
+	
+	@Override
+	public double calc( SessionInput<T> input ) throws FeatureCalcException {
+		return Math.pow(
+			constant,
+			input.calc( getItem() )
+		);
+	}
 
 	@Override
-	public double calc(SessionInput<T> input) throws FeatureCalcException {
-		
-		double maxValue = Double.NaN;
-		for( Feature<T> f : getList()) {
-			double val = input.calc( f );
-			if (Double.isNaN(maxValue) || val > maxValue) {
-				maxValue = val;
-			}
-		}
-		return maxValue;
+	public String getParamDscr() {
+		return String.format("%f", constant );
+	}
+	
+	public double getConstant() {
+		return constant;
+	}
+
+	public void setConstant(double constant) {
+		this.constant = constant;
 	}
 }

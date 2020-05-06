@@ -1,4 +1,4 @@
-package ch.ethz.biol.cell.mpp.nrg.feature.operator;
+package org.anchoranalysis.plugin.operator.feature.bean.order.range;
 
 /*
  * #%L
@@ -29,12 +29,19 @@ package ch.ethz.biol.cell.mpp.nrg.feature.operator;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.bean.Feature;
-import org.anchoranalysis.feature.bean.operator.FeatureGenericSingleElem;
 import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.input.FeatureInput;
 
-public class MinMaxRangeCondition<T extends FeatureInput> extends FeatureGenericSingleElem<T> {
+
+/**
+ * Compares a value with a range, returning specified constants if its inside the range, below it or above it
+ * 
+ * @author Owen Feehan
+ *
+ * @param <T> feature-input-type
+ */
+public class CompareWithRange<T extends FeatureInput> extends RangeCompareFromScalars<T> {
 	
 	/**
 	 * 
@@ -42,81 +49,35 @@ public class MinMaxRangeCondition<T extends FeatureInput> extends FeatureGeneric
 	private static final long serialVersionUID = -8939465493485894918L;
 	
 	// START BEAN PROPERTIES
+	/** Constant to return if value lies within the range */
 	@BeanField
-	private double min = Double.NEGATIVE_INFINITY;
-	
-	@BeanField
-	private double max = Double.POSITIVE_INFINITY;
-	
-	@BeanField
-	private double belowMinValue = 0;
-	
-	@BeanField
-	private double aboveMaxValue = 0;
-	
-	@BeanField
-	private Feature<T> featureCondition;
+	private double withinValue = 0;
 	// END BEAN PROPERTIES
 	
 	@Override
-	public double calc( SessionInput<T> input ) throws FeatureCalcException {
-		
-		double val = input.calc( featureCondition );
-		
-		if (val < min) {
-			return belowMinValue;
-		}
-		
-		if (val > max) {
-			return aboveMaxValue;
-		}
-		
-		return input.calc( getItem() );
+	protected Feature<T> featureToCalcInputVal() {
+		return getItem();
+	}
+
+	@Override
+	protected double withinRangeValue(double valWithinRange, SessionInput<T> input) throws FeatureCalcException {
+		return withinValue;
 	}
 
 	@Override
 	public String getParamDscr() {
-		return String.format("min=%f,max=%f,belowMinValue=%f,aboveMaxValue=%f", min, max, belowMinValue, aboveMaxValue );
-	}
-	
-	public double getMin() {
-		return min;
-	}
-
-	public void setMin(double min) {
-		this.min = min;
+		return String.format(
+			"%s,withinValue=%f",
+			super.getParamDscr(),
+			withinValue
+		);
 	}
 
-	public double getMax() {
-		return max;
+	public double getWithinValue() {
+		return withinValue;
 	}
 
-	public void setMax(double max) {
-		this.max = max;
+	public void setWithinValue(double withinValue) {
+		this.withinValue = withinValue;
 	}
-
-	public double getBelowMinValue() {
-		return belowMinValue;
-	}
-
-	public void setBelowMinValue(double belowMinValue) {
-		this.belowMinValue = belowMinValue;
-	}
-
-	public double getAboveMaxValue() {
-		return aboveMaxValue;
-	}
-
-	public void setAboveMaxValue(double aboveMaxValue) {
-		this.aboveMaxValue = aboveMaxValue;
-	}
-
-	public Feature<T> getFeatureCondition() {
-		return featureCondition;
-	}
-
-	public void setFeatureCondition(Feature<T> featureCondition) {
-		this.featureCondition = featureCondition;
-	}
-
 }

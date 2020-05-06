@@ -30,7 +30,7 @@ import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.operator.FeatureListElem;
 import org.anchoranalysis.feature.bean.operator.Sum;
 import org.anchoranalysis.image.feature.objmask.pair.FeatureInputPairObjs;
-import ch.ethz.biol.cell.mpp.nrg.feature.operator.MultiplyByConstant;
+import org.anchoranalysis.plugin.operator.feature.bean.arithmetic.MultiplyByConstant;
 
 public abstract class FeatureListProviderAggregateDiff extends FeatureListProviderAggregate {
 

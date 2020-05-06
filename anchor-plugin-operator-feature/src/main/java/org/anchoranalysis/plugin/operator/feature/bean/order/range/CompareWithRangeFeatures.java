@@ -1,4 +1,4 @@
-package ch.ethz.biol.cell.mpp.nrg.feature.operator;
+package org.anchoranalysis.plugin.operator.feature.bean.order.range;
 
 /*
  * #%L
@@ -28,12 +28,19 @@ package ch.ethz.biol.cell.mpp.nrg.feature.operator;
 
 
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.feature.bean.operator.FeatureGenericSingleElem;
+import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.input.FeatureInput;
 
-public class MinMaxRangeReplace<T extends FeatureInput> extends FeatureGenericSingleElem<T> {
+/**
+ * Like {@link CompareWithRange} but uses features to calculate boundary values
+ * 
+ * @author Owen Feehan
+ *
+ * @param <T> feature-input type
+ */
+public class CompareWithRangeFeatures<T extends FeatureInput> extends RangeCompareBase<T> {
 	
 	/**
 	 * 
@@ -41,73 +48,64 @@ public class MinMaxRangeReplace<T extends FeatureInput> extends FeatureGenericSi
 	private static final long serialVersionUID = -8939465493485894918L;
 	
 	// START BEAN PROPERTIES
-	@BeanField
-	private double min = Double.NEGATIVE_INFINITY;
-	
-	@BeanField
-	private double max = Double.POSITIVE_INFINITY;
-	
-	@BeanField
-	private double belowMinValue = 0;
-	
-	@BeanField
-	private double aboveMaxValue = 0;
-	
+	/** Constant to return if value lies within the range */
 	@BeanField
 	private double withinValue = 0;
+	
+	/** Calculates minimally-allowed range boundary */
+	@BeanField
+	private Feature<T> min;
+
+	/** Calculates maximally-allowed range boundary */
+	@BeanField
+	private Feature<T> max;
 	// END BEAN PROPERTIES
+
+	@Override
+	protected Feature<T> featureToCalcInputVal() {
+		return getItem();
+	}
 	
 	@Override
-	public double calc( SessionInput<T> input ) throws FeatureCalcException {
-		
-		double val = input.calc( getItem() );
-		
-		if (val < min) {
-			return belowMinValue;
-		}
-		
-		if (val > max) {
-			return aboveMaxValue;
-		}
-		
+	protected double boundaryMin(SessionInput<T> input) throws FeatureCalcException {
+		return input.calc(min);
+	}
+
+	@Override
+	protected double boundaryMax(SessionInput<T> input) throws FeatureCalcException {
+		return input.calc(max);
+	}
+
+	@Override
+	protected double withinRangeValue(double valWithinRange, SessionInput<T> input) throws FeatureCalcException {
 		return withinValue;
 	}
 
 	@Override
 	public String getParamDscr() {
-		return String.format("min=%f,max=%f,withinValue=%f,belowMinValue=%f,aboveMaxValue=%f", min, max, withinValue, belowMinValue, aboveMaxValue );
+		return String.format(
+			"min=%s,max=%s,withinValue=%f,%s",
+			min.getFriendlyName(),
+			max.getFriendlyName(),
+			withinValue,
+			super.getParamDscr()
+		);
 	}
 	
-	public double getMin() {
+	public Feature<T> getMin() {
 		return min;
 	}
 
-	public void setMin(double min) {
+	public void setMin(Feature<T> min) {
 		this.min = min;
 	}
 
-	public double getMax() {
+	public Feature<T> getMax() {
 		return max;
 	}
 
-	public void setMax(double max) {
+	public void setMax(Feature<T> max) {
 		this.max = max;
-	}
-
-	public double getBelowMinValue() {
-		return belowMinValue;
-	}
-
-	public void setBelowMinValue(double belowMinValue) {
-		this.belowMinValue = belowMinValue;
-	}
-
-	public double getAboveMaxValue() {
-		return aboveMaxValue;
-	}
-
-	public void setAboveMaxValue(double aboveMaxValue) {
-		this.aboveMaxValue = aboveMaxValue;
 	}
 
 	public double getWithinValue() {
@@ -117,4 +115,5 @@ public class MinMaxRangeReplace<T extends FeatureInput> extends FeatureGenericSi
 	public void setWithinValue(double withinValue) {
 		this.withinValue = withinValue;
 	}
+
 }

@@ -16,7 +16,7 @@
 	
 	<item config-class="org.anchoranalysis.bean.NamedBean" name="areTouching">
 		<item config-class="org.anchoranalysis.feature.bean.list.FeatureListProviderDefineSingle">
-			<item config-class="ch.ethz.biol.cell.mpp.nrg.feature.operator.MinMaxRangeReplace" min="0.5" max="0.5" belowMinValue="0" aboveMaxValue="1">
+			<item config-class="org.anchoranalysis.plugin.operator.feature.bean.order.range.CompareWithRange" min="0.5" max="0.5" belowMinValue="0" aboveMaxValue="1">
 				<item config-class="org.anchoranalysis.plugin.image.feature.bean.obj.pair.touching.NumTouchingVoxels"/>
 			</item>
 		</item>			
@@ -49,7 +49,7 @@
 			<item avoidDivideByZero="true" config-class="org.anchoranalysis.plugin.operator.feature.bean.arithmetic.Divide">
 				<list config-class="java.util.List" config-factory="list">
 					<item config-class="org.anchoranalysis.plugin.image.feature.bean.obj.pair.touching.NumTouchingVoxelFaces"/>
-					<item config-class="ch.ethz.biol.cell.mpp.nrg.feature.operator.Maximum">
+					<item config-class="org.anchoranalysis.plugin.operator.feature.bean.order.Maximum">
 						<list config-class="java.util.List" config-factory="list">
 							<item config-class="org.anchoranalysis.image.feature.objmask.pair.impl.First">
 								<item config-class="ch.ethz.biol.cell.mpp.nrg.feature.objmask.SurfaceNumVoxelFaces"/>
@@ -69,7 +69,7 @@
 			<item avoidDivideByZero="true" config-class="org.anchoranalysis.plugin.operator.feature.bean.arithmetic.Divide">
 				<list config-class="java.util.List" config-factory="list">
 					<item config-class="org.anchoranalysis.plugin.image.feature.bean.obj.pair.touching.NumTouchingVoxelFaces"/>
-					<item config-class="ch.ethz.biol.cell.mpp.nrg.feature.operator.Minimum">
+					<item config-class="org.anchoranalysis.plugin.operator.feature.bean.order.Minimum">
 						<list config-class="java.util.List" config-factory="list">
 							<item config-class="org.anchoranalysis.image.feature.objmask.pair.impl.First">
 								<item config-class="ch.ethz.biol.cell.mpp.nrg.feature.objmask.SurfaceNumVoxelFaces"/>

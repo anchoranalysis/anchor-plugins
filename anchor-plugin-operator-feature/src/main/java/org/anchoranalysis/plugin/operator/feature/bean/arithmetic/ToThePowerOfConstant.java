@@ -1,10 +1,8 @@
-package ch.ethz.biol.cell.sgmn.graphcuts.nrgdefinition.pixelscore;
-
-
+package org.anchoranalysis.plugin.operator.feature.bean.arithmetic;
 
 /*
  * #%L
- * anchor-plugin-image-feature
+ * anchor-feature
  * %%
  * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
  * %%
@@ -30,64 +28,48 @@ package ch.ethz.biol.cell.sgmn.graphcuts.nrgdefinition.pixelscore;
 
 
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.error.InitException;
-import org.anchoranalysis.core.params.KeyValueParams;
-import ch.ethz.biol.cell.mpp.nrg.feature.operator.LinearScore;
+import org.anchoranalysis.feature.bean.operator.FeatureGenericSingleElem;
+import org.anchoranalysis.feature.cache.SessionInput;
+import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.feature.input.FeatureInput;
 
-public class PixelScoreLinearKeyValueParams extends PixelScoreParamsBase {
+public class ToThePowerOfConstant<T extends FeatureInput> extends FeatureGenericSingleElem<T> {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	// START BEAN PROPERTIES
+	// START BEAN PARAMETERS
 	@BeanField
-	private String keyMin;
+	private double constant = 0.5;
+	// END BEAN PARAMETERS
 	
-	@BeanField
-	private String keyMax;
-	// END BEAN PROPERTIES
+	@Override
+	public double calc( SessionInput<T> input ) throws FeatureCalcException {
+		double ret = Math.pow(
+			input.calc( getItem() ),
+			constant
+		);
+		//assert( !Double.isNaN(ret) );
+		return ret;
+	}
 	
-	private double min;
-	private double max;
-
 	@Override
-	protected void setupParams(KeyValueParams keyValueParams) throws InitException {
-		min = extractParamsAsDouble(keyValueParams, keyMin);
-		max = extractParamsAsDouble(keyValueParams, keyMax);
+	public String getParamDscr() {
+		return String.format("%f", constant);
 	}
-
+	
 	@Override
-	protected double deriveScoreFromPixelVal(int pixelVal) {
-		
-		double score = (LinearScore.calc( pixelVal, min, max )/2) + 0.5;
-		
-		if (score<0) {
-			score = 0;
-		}
-		
-		if (score>1) {
-			score = 1;
-		}
-		
-		return score;
+	public String getDscrLong() {
+		return String.format("%s^%f)", getItem().getDscrLong(), constant );
 	}
 
-	public String getKeyMin() {
-		return keyMin;
+	public double getConstant() {
+		return constant;
 	}
 
-	public void setKeyMin(String keyMin) {
-		this.keyMin = keyMin;
+	public void setConstant(double constant) {
+		this.constant = constant;
 	}
-
-	public String getKeyMax() {
-		return keyMax;
-	}
-
-	public void setKeyMax(String keyMax) {
-		this.keyMax = keyMax;
-	}
-
 }
