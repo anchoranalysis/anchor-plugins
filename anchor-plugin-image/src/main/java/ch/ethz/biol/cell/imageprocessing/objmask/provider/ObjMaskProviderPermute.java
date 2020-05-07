@@ -61,8 +61,7 @@ public class ObjMaskProviderPermute extends ObjMaskProvider {
 
 	@Override
 	public ObjMaskCollection create() throws CreateException {
-		
-		
+				
 		try {
 			PermutationSetter ps = permuteProperty.createSetter(objs);
 			
@@ -84,15 +83,14 @@ public class ObjMaskProviderPermute extends ObjMaskProvider {
 		
 				// We permute a duplicate, so as to keep the original values
 				ObjMaskProvider provider = objs.duplicateBean();
-				
-				setter.setPermutation( provider, propVal);
+				setter.setPermutation(provider, propVal);
 
 				// We init after the permutation, as we might be changing a reference
 				provider.initRecursive( getSharedObjects(), getLogger() );
-				
-				// Now we do what we want
-				ObjMaskCollection om = provider.create();
-				out.addAll(om);
+
+				out.addAll(
+					provider.create()
+				);
 			}
 			
 		} catch (PermutationSetterException e) {
