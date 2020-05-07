@@ -52,7 +52,7 @@ import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
 import org.anchoranalysis.experiment.JobExecutionException;
 import org.anchoranalysis.experiment.task.InputTypesExpected;
-import org.anchoranalysis.experiment.task.ParametersBound;
+import org.anchoranalysis.experiment.task.InputBound;
 import org.anchoranalysis.experiment.task.ParametersExperiment;
 import org.anchoranalysis.image.bean.provider.stack.StackProvider;
 import org.anchoranalysis.image.extent.BoundingBox;
@@ -145,7 +145,7 @@ public class ExportObjectsAsCroppedImagesTask extends ExportObjectsBase<MultiInp
 	}
 	
 	@Override
-	public void doJobOnInputObject(	ParametersBound<MultiInput,Object> params)	throws JobExecutionException {
+	public void doJobOnInputObject(	InputBound<MultiInput,Object> params)	throws JobExecutionException {
 		
 		BoundIOContext context = params.context();
 		LogErrorReporter logger = context.getLogger();

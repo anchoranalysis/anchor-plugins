@@ -32,7 +32,7 @@ import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.progress.ProgressReporterNull;
 import org.anchoranalysis.experiment.JobExecutionException;
 import org.anchoranalysis.experiment.task.InputTypesExpected;
-import org.anchoranalysis.experiment.task.ParametersBound;
+import org.anchoranalysis.experiment.task.InputBound;
 import org.anchoranalysis.experiment.task.Task;
 import org.anchoranalysis.image.io.input.ProvidesStackInput;
 import org.anchoranalysis.image.stack.NamedImgStackCollection;
@@ -73,7 +73,7 @@ public abstract class GroupedStackTask<S,T> extends Task<ProvidesStackInput,Grou
 	}
 	
 	@Override
-	public void doJobOnInputObject(	ParametersBound<ProvidesStackInput,GroupedSharedState<S,T>> params) throws JobExecutionException {
+	public void doJobOnInputObject(	InputBound<ProvidesStackInput,GroupedSharedState<S,T>> params) throws JobExecutionException {
 		
 		ProvidesStackInput inputObject = params.getInputObject();
 		BoundIOContext context = params.context();

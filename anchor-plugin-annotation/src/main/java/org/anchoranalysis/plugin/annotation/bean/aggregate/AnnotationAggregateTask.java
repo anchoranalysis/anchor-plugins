@@ -34,7 +34,7 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
 import org.anchoranalysis.experiment.JobExecutionException;
 import org.anchoranalysis.experiment.task.InputTypesExpected;
-import org.anchoranalysis.experiment.task.ParametersBound;
+import org.anchoranalysis.experiment.task.InputBound;
 import org.anchoranalysis.experiment.task.ParametersExperiment;
 import org.anchoranalysis.experiment.task.Task;
 import org.anchoranalysis.io.error.AnchorIOException;
@@ -65,7 +65,7 @@ public class AnnotationAggregateTask<S extends AnnotatorStrategy> extends Task<A
 	}
 	
 	@Override
-	public void doJobOnInputObject(ParametersBound<AnnotationWithStrategy<S>, AggregateSharedState> params)
+	public void doJobOnInputObject(InputBound<AnnotationWithStrategy<S>, AggregateSharedState> params)
 			throws JobExecutionException {
 			
 		ImageAnnotation ann = createFromInputObject( params.getInputObject() );

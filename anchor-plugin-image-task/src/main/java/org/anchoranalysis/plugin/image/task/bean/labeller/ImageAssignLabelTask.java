@@ -38,7 +38,7 @@ import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
 import org.anchoranalysis.experiment.JobExecutionException;
 import org.anchoranalysis.experiment.task.InputTypesExpected;
-import org.anchoranalysis.experiment.task.ParametersBound;
+import org.anchoranalysis.experiment.task.InputBound;
 import org.anchoranalysis.experiment.task.ParametersExperiment;
 import org.anchoranalysis.experiment.task.Task;
 import org.anchoranalysis.image.bean.provider.stack.StackProvider;
@@ -103,7 +103,7 @@ public class ImageAssignLabelTask<T> extends Task<ProvidesStackInput,SharedState
 	
 	
 	@Override
-	public void doJobOnInputObject(ParametersBound<ProvidesStackInput, SharedStateFilteredImageOutput<T>> params)
+	public void doJobOnInputObject(InputBound<ProvidesStackInput, SharedStateFilteredImageOutput<T>> params)
 			throws JobExecutionException {
 		
 		try {

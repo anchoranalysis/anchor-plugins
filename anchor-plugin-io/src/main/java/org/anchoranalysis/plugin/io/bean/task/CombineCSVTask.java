@@ -34,7 +34,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
 import org.anchoranalysis.experiment.JobExecutionException;
 import org.anchoranalysis.experiment.task.InputTypesExpected;
-import org.anchoranalysis.experiment.task.ParametersBound;
+import org.anchoranalysis.experiment.task.InputBound;
 import org.anchoranalysis.experiment.task.ParametersExperiment;
 import org.anchoranalysis.experiment.task.Task;
 import org.anchoranalysis.io.csv.reader.CSVReaderByLine;
@@ -98,7 +98,7 @@ public class CombineCSVTask extends Task<FileInput,CSVWriter> {
 	}
 		
 	@Override
-	public void doJobOnInputObject(ParametersBound<FileInput,CSVWriter> params) throws JobExecutionException {
+	public void doJobOnInputObject(InputBound<FileInput,CSVWriter> params) throws JobExecutionException {
 		
 		FileInput inputObject = params.getInputObject();
 		

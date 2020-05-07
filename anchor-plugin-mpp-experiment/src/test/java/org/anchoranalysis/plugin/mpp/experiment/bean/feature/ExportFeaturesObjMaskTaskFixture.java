@@ -145,7 +145,7 @@ class ExportFeaturesObjMaskTaskFixture {
 		task.setListFeaturesObjMask(
 			singleFeatures.asListNamedBeansProvider()
 		);
-		task.setNrgStackProvider(
+		task.getDefine().setNrgStackProvider(
 			nrgStackProvider(nrgStack)
 		);
 		
