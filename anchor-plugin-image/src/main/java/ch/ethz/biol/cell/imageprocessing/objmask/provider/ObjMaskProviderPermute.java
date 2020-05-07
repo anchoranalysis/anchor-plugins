@@ -39,7 +39,7 @@ import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
 import org.anchoranalysis.image.objmask.ObjMaskCollection;
 
 /**
- * Permutes some changes over an ObjMaskProvier, and collects all the results in an ObjMaskCollection
+ * Permutes some changes over an {@link ObjMaskProvider} and collects all the results in an {@link ObjMaskCollection}
  * 
  * @author Owen Feehan
  *
@@ -62,17 +62,20 @@ public class ObjMaskProviderPermute extends ObjMaskProvider {
 	@Override
 	public ObjMaskCollection create() throws CreateException {
 		
-		Iterator<?> vals = permuteProperty.propertyValues();	
 		
-		
-		PermutationSetter ps;
 		try {
-			ps = permuteProperty.createSetter(objs);
+			PermutationSetter ps = permuteProperty.createSetter(objs);
+			
+			return createPermutedObjs(
+				ps,
+				permuteProperty.propertyValues()	
+			);
 		} catch (PermutationSetterException e1) {
 			throw new CreateException("Cannot create a permutation setter", e1);
 		}
-		
-		
+	}
+	
+	private ObjMaskCollection createPermutedObjs( PermutationSetter setter, Iterator<?> vals ) throws CreateException {
 		ObjMaskCollection out = new ObjMaskCollection();
 		try {
 			while( vals.hasNext() ) {
@@ -82,7 +85,7 @@ public class ObjMaskProviderPermute extends ObjMaskProvider {
 				// We permute a duplicate, so as to keep the original values
 				ObjMaskProvider provider = objs.duplicateBean();
 				
-				ps.setPermutation( provider, propVal);
+				setter.setPermutation( provider, propVal);
 
 				// We init after the permutation, as we might be changing a reference
 				provider.initRecursive( getSharedObjects(), getLogger() );
@@ -92,7 +95,9 @@ public class ObjMaskProviderPermute extends ObjMaskProvider {
 				out.addAll(om);
 			}
 			
-		} catch (InitException | PermutationSetterException e) {
+		} catch (PermutationSetterException e) {
+			throw new CreateException("Cannot set permutation on an object-mask-provider", e);
+		} catch (InitException e) {
 			throw new CreateException(e);
 		}
 		
