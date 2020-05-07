@@ -31,7 +31,6 @@ import java.util.List;
 import org.anchoranalysis.annotation.io.bean.strategy.AnnotatorStrategy;
 import org.anchoranalysis.annotation.io.input.AnnotationWithStrategy;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.core.log.LogReporter;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
 import org.anchoranalysis.experiment.JobExecutionException;
 import org.anchoranalysis.experiment.task.InputTypesExpected;
@@ -39,6 +38,7 @@ import org.anchoranalysis.experiment.task.ParametersBound;
 import org.anchoranalysis.experiment.task.ParametersExperiment;
 import org.anchoranalysis.experiment.task.Task;
 import org.anchoranalysis.io.error.AnchorIOException;
+import org.anchoranalysis.io.output.bound.BoundIOContext;
 import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
 
 /**
@@ -76,10 +76,9 @@ public class AnnotationAggregateTask<S extends AnnotatorStrategy> extends Task<A
 	}
 	
 	@Override
-	public void afterAllJobsAreExecuted(BoundOutputManagerRouteErrors outputManager, AggregateSharedState sharedState,
-			LogReporter logReporter) throws ExperimentExecutionException {
+	public void afterAllJobsAreExecuted(AggregateSharedState sharedState, BoundIOContext context) throws ExperimentExecutionException {
 
-		outputManager.getWriterCheckIfAllowed().write(
+		context.getOutputManager().getWriterCheckIfAllowed().write(
 			"annotationsAgg",
 			() -> createGenerator( sharedState.getAnnotations() )
 		);

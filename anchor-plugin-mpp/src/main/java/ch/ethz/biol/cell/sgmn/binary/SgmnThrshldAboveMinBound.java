@@ -31,7 +31,6 @@ import java.nio.ByteBuffer;
 
 import org.anchoranalysis.anchor.mpp.bean.bound.MarkBounds;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.random.RandomNumberGenerator;
 import org.anchoranalysis.image.bean.sgmn.binary.BinarySgmn;
 import org.anchoranalysis.image.bean.sgmn.binary.BinarySgmnParameters;
 import org.anchoranalysis.image.bean.sgmn.binary.BinarySgmnThrshld;
@@ -79,16 +78,16 @@ public class SgmnThrshldAboveMinBound extends BinarySgmn {
 	}
 	
 	@Override
-	public BinaryVoxelBox<ByteBuffer> sgmn(VoxelBoxWrapper voxelBox, BinarySgmnParameters params, RandomNumberGenerator re)
+	public BinaryVoxelBox<ByteBuffer> sgmn(VoxelBoxWrapper voxelBox, BinarySgmnParameters params)
 			throws SgmnFailedException {
 		setUpDelegate( voxelBox.any().extnt(), params.getRes() );
-		return delegate.sgmn(voxelBox, params, re);
+		return delegate.sgmn(voxelBox, params);
 	}
 
 	@Override
 	public BinaryVoxelBox<ByteBuffer> sgmn(VoxelBoxWrapper voxelBox,
-			BinarySgmnParameters params, ObjMask objMask, RandomNumberGenerator re) throws SgmnFailedException {
-		return delegate.sgmn(voxelBox, params, objMask, re);
+			BinarySgmnParameters params, ObjMask objMask) throws SgmnFailedException {
+		return delegate.sgmn(voxelBox, params, objMask);
 	}
 
 	@Override

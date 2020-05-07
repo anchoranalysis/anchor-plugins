@@ -36,7 +36,6 @@ import org.anchoranalysis.bean.annotation.SkipInit;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.feature.bean.list.FeatureListProvider;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.list.NamedFeatureStore;
@@ -44,6 +43,7 @@ import org.anchoranalysis.feature.list.NamedFeatureStoreFactory;
 import org.anchoranalysis.image.bean.provider.stack.StackProvider;
 import org.anchoranalysis.image.feature.stack.FeatureInputStack;
 import org.anchoranalysis.image.io.input.ProvidesStackInput;
+import org.anchoranalysis.io.output.bound.BoundIOContext;
 import org.anchoranalysis.plugin.image.task.imagefeature.calculator.FeatureCalculatorStackInputFromStore;
 
 public class BinaryClassifierImageLabeller extends BinaryOutcomeImageLabeller<Object> {
@@ -73,8 +73,7 @@ public class BinaryClassifierImageLabeller extends BinaryOutcomeImageLabeller<Ob
 	public String labelFor(
 		Object initParams,
 		ProvidesStackInput input,
-		Path modelDir,
-		LogErrorReporter logErrorReporter
+		BoundIOContext context
 	) throws OperationFailedException {
 		
 		try {
@@ -86,13 +85,12 @@ public class BinaryClassifierImageLabeller extends BinaryOutcomeImageLabeller<Ob
 				input,
 				getNrgStackProvider(),
 				featureStore,
-				modelDir,
-				logErrorReporter
+				context
 			);
 			
 			double classificationVal = featureCalculator.calcSingleFromProvider(classifierProvider,"classifierProvider");
 	
-			logErrorReporter.getLogReporter().logFormatted("Classification value = %f", classificationVal);
+			context.getLogReporter().logFormatted("Classification value = %f", classificationVal);
 					
 			// If classification val is >= 0, then it is POSITIVE
 			// If classification val is < 0, then it is NEGATIVE

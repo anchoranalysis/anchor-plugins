@@ -32,7 +32,6 @@ import java.nio.ByteBuffer;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.Positive;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.core.random.RandomNumberGenerator;
 import org.anchoranalysis.image.bean.sgmn.binary.BinarySgmn;
 import org.anchoranalysis.image.bean.sgmn.binary.BinarySgmnParameters;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
@@ -93,13 +92,13 @@ public class SgmnObject extends BinarySgmn {
 
 	
 	@Override
-	public BinaryVoxelBox<ByteBuffer> sgmn(VoxelBoxWrapper voxelBoxIn, BinarySgmnParameters params, RandomNumberGenerator re) throws SgmnFailedException {
+	public BinaryVoxelBox<ByteBuffer> sgmn(VoxelBoxWrapper voxelBoxIn, BinarySgmnParameters params) throws SgmnFailedException {
 		
 		
 		
 		VoxelBox<?> orig = voxelBoxIn.any().duplicate();
 		
-		imageSgmn.sgmn( voxelBoxIn, params, re );
+		imageSgmn.sgmn( voxelBoxIn, params );
 
 		VoxelBox<ByteBuffer> voxelBoxInByte = voxelBoxIn.asByte();
 		BinaryVoxelBox<ByteBuffer> voxelBox = new BinaryVoxelBoxByte(voxelBoxInByte);
@@ -116,7 +115,7 @@ public class SgmnObject extends BinarySgmn {
 			
 			if (!objMask.numPixelsLessThan(minNumPixelsImageSgmn)) {
 				
-				BinaryVoxelBox<ByteBuffer> out = objectSgmn.sgmn(new VoxelBoxWrapper(orig), params, objMask, re);
+				BinaryVoxelBox<ByteBuffer> out = objectSgmn.sgmn(new VoxelBoxWrapper(orig), params, objMask);
 				if (out==null) {
 					continue;
 				}
@@ -144,7 +143,7 @@ public class SgmnObject extends BinarySgmn {
 	}
 
 	@Override
-	public BinaryVoxelBox<ByteBuffer> sgmn(VoxelBoxWrapper voxelBox, BinarySgmnParameters params, ObjMask objMask, RandomNumberGenerator re) {
+	public BinaryVoxelBox<ByteBuffer> sgmn(VoxelBoxWrapper voxelBox, BinarySgmnParameters params, ObjMask objMask) {
 		throw new IllegalArgumentException("Method not supported");
 	}
 

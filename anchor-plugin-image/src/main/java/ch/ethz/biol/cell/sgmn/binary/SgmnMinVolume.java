@@ -33,7 +33,6 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.bean.annotation.Positive;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.core.random.RandomNumberGenerator;
 import org.anchoranalysis.image.bean.sgmn.binary.BinarySgmn;
 import org.anchoranalysis.image.bean.sgmn.binary.BinarySgmnParameters;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
@@ -66,64 +65,9 @@ public class SgmnMinVolume extends BinarySgmn {
 	private int minNumVoxels;
 	// END BEAN PROPERTIES
 	
-	private boolean checkVolume( 
-		VoxelBox<ByteBuffer> orig,
-		BinaryVoxelBox<ByteBuffer> sgmnBuffer,
-		BinaryVoxelBox<ByteBuffer> out,
-		RandomNumberGenerator re,
-		ImageRes res
-	) throws SgmnFailedException {
-		
-		boolean writtenSomething = false;
-		
-		ObjMaskCollection omcSecond;
-		try {
-			omcSecond = SgmnObject.createObjMaskCollectionFromVoxelBox(	sgmnBuffer );
-		} catch (CreateException e) {
-			throw new SgmnFailedException(e);
-		}
-		
-		for( ObjMask objMaskSecond : omcSecond) {
-			
-			if (!objMaskSecond.numPixelsLessThan(minNumVoxels)) {
-				
-				BinarySgmnParameters params = new BinarySgmnParameters();
-				params.setRes(res);
-				
-				BinaryVoxelBox<ByteBuffer> sgmnOut = sgmn.sgmn( new VoxelBoxWrapper(orig), params, objMaskSecond, re);
-				
-				if (sgmnOut==null) {
-					continue;
-				}
-				
-				ObjMask omNew = new ObjMask(objMaskSecond.getBoundingBox(), sgmnOut);
-				out.setPixelsCheckMaskOn( omNew );
-				writtenSomething = true;
-			}
-		}
-		return writtenSomething;
-	}
-	
-	
-	private BinaryVoxelBox<ByteBuffer> checkVolume( VoxelBox<ByteBuffer> orig, BinaryVoxelBox<ByteBuffer> sgmnBuffer, RandomNumberGenerator re, ImageRes res ) throws SgmnFailedException {
-		
-		BinaryVoxelBox<ByteBuffer> out = new BinaryVoxelBoxByte(
-			VoxelBoxFactory.instance().getByte().create(
-				sgmnBuffer.extnt()
-			)
-		);
-
-		if(!checkVolume(orig, sgmnBuffer,out, re, res)) {
-			return null;
-		}
-		
-		return out;
-	}
-	
-	
 	@Override
 	public BinaryVoxelBox<ByteBuffer> sgmn(
-			VoxelBoxWrapper voxelBox, BinarySgmnParameters params, ObjMask objMask, RandomNumberGenerator re) throws SgmnFailedException {
+			VoxelBoxWrapper voxelBox, BinarySgmnParameters params, ObjMask objMask) throws SgmnFailedException {
 		
 		if (minNumVoxels==1) {
 			return null;
@@ -132,7 +76,7 @@ public class SgmnMinVolume extends BinarySgmn {
 		ObjMask objMaskBuffer = objMask;
 		
 		if (sgmnToBinarize!=null) {
-			BinaryVoxelBox<ByteBuffer> bufferMask = sgmnToBinarize.sgmn( voxelBox, params, objMask, re );
+			BinaryVoxelBox<ByteBuffer> bufferMask = sgmnToBinarize.sgmn( voxelBox, params, objMask );
 			
 			if (bufferMask==null) {
 				return null;
@@ -151,7 +95,7 @@ public class SgmnMinVolume extends BinarySgmn {
 			objMask.getBinaryValuesByte()
 		);
 		
-		BinaryVoxelBox<ByteBuffer> out = checkVolume( voxelBoxBox, objMaskBuffer.binaryVoxelBox(), re, params.getRes() );
+		BinaryVoxelBox<ByteBuffer> out = checkVolume( voxelBoxBox, objMaskBuffer.binaryVoxelBox(), params.getRes() );
 		
 		if (out==null) {
 			return null;
@@ -162,7 +106,7 @@ public class SgmnMinVolume extends BinarySgmn {
 
 	// Assumes default Binary Values
 	@Override
-	public BinaryVoxelBox<ByteBuffer> sgmn(VoxelBoxWrapper voxelBox, BinarySgmnParameters params, RandomNumberGenerator re) throws SgmnFailedException {
+	public BinaryVoxelBox<ByteBuffer> sgmn(VoxelBoxWrapper voxelBox, BinarySgmnParameters params) throws SgmnFailedException {
 		
 		VoxelBox<ByteBuffer> voxelBoxByte = voxelBox.asByte();
 		
@@ -170,7 +114,7 @@ public class SgmnMinVolume extends BinarySgmn {
 			
 			VoxelBox<ByteBuffer> orig = voxelBoxByte.duplicate();
 			
-			BinaryVoxelBox<ByteBuffer> voxelBoxBinary = sgmnToBinarize.sgmn( voxelBox, params, re ); 
+			BinaryVoxelBox<ByteBuffer> voxelBoxBinary = sgmnToBinarize.sgmn( voxelBox, params ); 
 			if (voxelBoxBinary==null) {
 				return null;
 			}
@@ -178,7 +122,7 @@ public class SgmnMinVolume extends BinarySgmn {
 			BoundingBox bboxE = new BoundingBox(voxelBoxByte.extnt());
 			
 			
-			BinaryVoxelBox<ByteBuffer> out = checkVolume( orig, voxelBoxBinary, re, params.getRes() );
+			BinaryVoxelBox<ByteBuffer> out = checkVolume( orig, voxelBoxBinary, params.getRes() );
 			
 			if (out==null) {
 				// We copy orig back onto the voxelBox
@@ -200,6 +144,58 @@ public class SgmnMinVolume extends BinarySgmn {
 		
 	}
 
+	
+	private boolean checkVolume( 
+			VoxelBox<ByteBuffer> orig,
+			BinaryVoxelBox<ByteBuffer> sgmnBuffer,
+			BinaryVoxelBox<ByteBuffer> out,
+			ImageRes res
+		) throws SgmnFailedException {
+			
+			boolean writtenSomething = false;
+			
+			ObjMaskCollection omcSecond;
+			try {
+				omcSecond = SgmnObject.createObjMaskCollectionFromVoxelBox(	sgmnBuffer );
+			} catch (CreateException e) {
+				throw new SgmnFailedException(e);
+			}
+			
+			for( ObjMask objMaskSecond : omcSecond) {
+				
+				if (!objMaskSecond.numPixelsLessThan(minNumVoxels)) {
+					
+					BinarySgmnParameters params = new BinarySgmnParameters();
+					params.setRes(res);
+					
+					BinaryVoxelBox<ByteBuffer> sgmnOut = sgmn.sgmn( new VoxelBoxWrapper(orig), params, objMaskSecond);
+					
+					if (sgmnOut==null) {
+						continue;
+					}
+					
+					ObjMask omNew = new ObjMask(objMaskSecond.getBoundingBox(), sgmnOut);
+					out.setPixelsCheckMaskOn( omNew );
+					writtenSomething = true;
+				}
+			}
+			return writtenSomething;
+		}
+				
+		private BinaryVoxelBox<ByteBuffer> checkVolume( VoxelBox<ByteBuffer> orig, BinaryVoxelBox<ByteBuffer> sgmnBuffer, ImageRes res ) throws SgmnFailedException {
+			
+			BinaryVoxelBox<ByteBuffer> out = new BinaryVoxelBoxByte(
+				VoxelBoxFactory.instance().getByte().create(
+					sgmnBuffer.extnt()
+				)
+			);
+
+			if(!checkVolume(orig, sgmnBuffer,out, res)) {
+				return null;
+			}
+			
+			return out;
+		}
 
 	public BinarySgmn getSgmn() {
 		return sgmn;

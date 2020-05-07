@@ -31,8 +31,8 @@ import java.nio.file.Path;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.image.io.input.ProvidesStackInput;
+import org.anchoranalysis.io.output.bound.BoundIOContext;
 
 public class DescriptiveNameContainsImageLabeller extends BinaryOutcomeImageLabeller<Object> {
 
@@ -53,8 +53,7 @@ public class DescriptiveNameContainsImageLabeller extends BinaryOutcomeImageLabe
 	}
 	
 	@Override
-	public String labelFor(Object initParams, ProvidesStackInput input, Path modelDir, LogErrorReporter logErrorReporter)
-			throws OperationFailedException {
+	public String labelFor(Object initParams, ProvidesStackInput input, BoundIOContext context) throws OperationFailedException {
 		return classificationString(input.descriptiveName().contains(contains));
 	}
 

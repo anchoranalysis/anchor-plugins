@@ -29,10 +29,8 @@ package org.anchoranalysis.plugin.image.task.bean.slice;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
 import org.anchoranalysis.core.index.GetOperationFailedException;
-import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.core.progress.ProgressReporter;
 import org.anchoranalysis.core.progress.ProgressReporterNull;
-import org.anchoranalysis.experiment.ExperimentExecutionArguments;
 import org.anchoranalysis.experiment.JobExecutionException;
 import org.anchoranalysis.image.chnl.Chnl;
 import org.anchoranalysis.image.experiment.bean.task.RasterTask;
@@ -47,6 +45,7 @@ import org.anchoranalysis.io.generator.sequence.GeneratorSequenceNonIncrementalW
 import org.anchoranalysis.io.manifest.sequencetype.SetSequenceType;
 import org.anchoranalysis.io.namestyle.StringSuffixOutputNameStyle;
 import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
+import org.anchoranalysis.io.output.bound.BoundIOContext;
 
 public class MovieFromSlicesTask extends RasterTask {
 
@@ -118,7 +117,7 @@ public class MovieFromSlicesTask extends RasterTask {
 	}
 	
 	@Override
-	public void doStack( NamedChnlsInput inputObject, int seriesIndex, int numSeries, BoundOutputManagerRouteErrors outputManager, LogErrorReporter logErrorReporter, ExperimentExecutionArguments expArgs ) throws JobExecutionException {
+	public void doStack( NamedChnlsInput inputObject, int seriesIndex, int numSeries, BoundIOContext context ) throws JobExecutionException {
 		
 		try {
 			NamedChnlCollectionForSeries ncc = inputObject.createChnlCollectionForSeries(0, ProgressReporterNull.get() );

@@ -91,7 +91,7 @@ public class ObjMaskSgmnBinarySgmn extends ObjMaskSgmn {
 		BinarySgmnParameters params = new BinarySgmnParameters();
 		params.setRes(chnl.getDimensions().getRes());
 		
-		BinaryVoxelBox<ByteBuffer> bvb = sgmn.sgmn(chnl.getVoxelBox(), params, getSharedObjects().getRandomNumberGenerator() );
+		BinaryVoxelBox<ByteBuffer> bvb = sgmn.sgmn(chnl.getVoxelBox(), params );
 		return createFromBinaryVoxelBox(bvb,chnl.getDimensions().getRes(), null);
 	}
 
@@ -102,7 +102,7 @@ public class ObjMaskSgmnBinarySgmn extends ObjMaskSgmn {
 		BinarySgmnParameters params = new BinarySgmnParameters();
 		params.setRes(chnl.getDimensions().getRes());
 		
-		BinaryVoxelBox<ByteBuffer> bvb = sgmn.sgmn(chnl.getVoxelBox(), params, objMask, getSharedObjects().getRandomNumberGenerator() );
+		BinaryVoxelBox<ByteBuffer> bvb = sgmn.sgmn(chnl.getVoxelBox(), params, objMask );
 		return createFromBinaryVoxelBox(bvb,chnl.getDimensions().getRes(), objMask);
 	}
 

@@ -91,7 +91,7 @@ public class ObjMaskSgmnFromSeedsReconWatershed extends ObjMaskSgmn {
 		
 		
 		Chnl chnlNucWorking = chnl;
-		sgmnBinary.sgmn( chnlNucWorking.getVoxelBox(), params, getSharedObjects().getRandomNumberGenerator() );
+		sgmnBinary.sgmn( chnlNucWorking.getVoxelBox(), params );
 	
 
 		

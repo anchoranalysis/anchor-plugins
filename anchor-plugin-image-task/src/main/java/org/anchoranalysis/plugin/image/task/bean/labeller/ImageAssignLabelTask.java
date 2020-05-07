@@ -35,7 +35,6 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.log.LogErrorReporter;
-import org.anchoranalysis.core.log.LogReporter;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
 import org.anchoranalysis.experiment.JobExecutionException;
 import org.anchoranalysis.experiment.task.InputTypesExpected;
@@ -48,6 +47,7 @@ import org.anchoranalysis.image.io.generator.raster.StackGenerator;
 import org.anchoranalysis.image.io.input.ProvidesStackInput;
 import org.anchoranalysis.image.io.input.StackInputInitParamsCreator;
 import org.anchoranalysis.image.stack.Stack;
+import org.anchoranalysis.io.output.bound.BoundIOContext;
 import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
 import org.anchoranalysis.plugin.image.task.sharedstate.SharedStateFilteredImageOutput;
 
@@ -109,8 +109,7 @@ public class ImageAssignLabelTask<T> extends Task<ProvidesStackInput,SharedState
 		try {
 			String groupIdentifier = params.getSharedState().labelFor(
 				params.getInputObject(),
-				params.getExperimentArguments().getModelDirectory(),
-				params.getLogErrorReporter()
+				params.context()
 			);
 			
 			params.getSharedState().writeRow(
@@ -123,12 +122,11 @@ public class ImageAssignLabelTask<T> extends Task<ProvidesStackInput,SharedState
 					groupIdentifier,
 					StackInputInitParamsCreator.createInitParams(
 						params.getInputObject(),
-						params.getExperimentArguments().getModelDirectory(),
-						params.getLogErrorReporter()
+						params.context()
 					),
 					params.getInputObject().descriptiveName(),
 					params.getSharedState(),
-					params.getLogErrorReporter()
+					params.getLogger()
 				);
 			}
 		} catch (OperationFailedException e) {
@@ -142,8 +140,7 @@ public class ImageAssignLabelTask<T> extends Task<ProvidesStackInput,SharedState
 	}
 
 	@Override
-	public void afterAllJobsAreExecuted(BoundOutputManagerRouteErrors outputManager, SharedStateFilteredImageOutput<T> sharedState,
-			LogReporter logReporter) throws ExperimentExecutionException {
+	public void afterAllJobsAreExecuted(SharedStateFilteredImageOutput<T> sharedState, BoundIOContext context) throws ExperimentExecutionException {
 		sharedState.close();
 	}
 	

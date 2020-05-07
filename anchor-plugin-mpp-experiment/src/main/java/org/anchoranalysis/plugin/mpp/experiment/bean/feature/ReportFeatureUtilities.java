@@ -37,7 +37,7 @@ import org.anchoranalysis.io.bean.report.feature.ReportFeature;
 
 class ReportFeatureUtilities {
 
-	public static <T> List<String> genHeaderNames( List<ReportFeature<T>> list, LogErrorReporter logger )	{
+	public static <T> List<String> genHeaderNames( List<? extends ReportFeature<T>> list, LogErrorReporter logger )	{
 		
 		// Create a list of headers
 		List<String> headerNames = new ArrayList<>();
@@ -54,7 +54,7 @@ class ReportFeatureUtilities {
 		return headerNames;
 	}
 	
-	public static <T> List<TypedValue> genElementList( List<ReportFeature<T>> list, T obj, LogErrorReporter logger ) {
+	public static <T> List<TypedValue> genElementList( List<? extends ReportFeature<T>> list, T obj, LogErrorReporter logger ) {
 		
 		List<TypedValue> rowElements = new ArrayList<>();
 		

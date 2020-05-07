@@ -34,9 +34,10 @@ import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
 import org.anchoranalysis.image.init.ImageInitParams;
 import org.anchoranalysis.io.input.InputFromManager;
+import org.anchoranalysis.mpp.io.input.InputForMPPBean;
 import org.anchoranalysis.mpp.io.input.MultiInput;
 
-public class FromCSVInputObject implements InputFromManager {
+public class FromCSVInputObject implements InputFromManager, InputForMPPBean {
 
 	private MultiInput input;
 	private Path csvFilePath;
@@ -66,8 +67,8 @@ public class FromCSVInputObject implements InputFromManager {
 		return csvFilePath;
 	}
 
-	public void addToSharedObjects( MPPInitParams soMPP, ImageInitParams soImage )
-			throws OperationFailedException {
+	@Override
+	public void addToSharedObjects( MPPInitParams soMPP, ImageInitParams soImage )	throws OperationFailedException {
 		input.addToSharedObjects( soMPP, soImage );
 	}
 }

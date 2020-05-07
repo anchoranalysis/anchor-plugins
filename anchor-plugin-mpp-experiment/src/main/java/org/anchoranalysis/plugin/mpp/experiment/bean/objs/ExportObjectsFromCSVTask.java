@@ -42,8 +42,6 @@ import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.index.GetOperationFailedException;
 import org.anchoranalysis.core.index.SetOperationFailedException;
 import org.anchoranalysis.core.log.LogErrorReporter;
-import org.anchoranalysis.core.log.LogReporter;
-import org.anchoranalysis.core.name.store.SharedObjects;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
 import org.anchoranalysis.experiment.JobExecutionException;
 import org.anchoranalysis.experiment.task.InputTypesExpected;
@@ -66,7 +64,9 @@ import org.anchoranalysis.io.generator.collection.SubfolderGenerator;
 import org.anchoranalysis.io.generator.combined.IterableCombinedListGenerator;
 import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
+import org.anchoranalysis.io.output.bound.BoundIOContext;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
+import org.anchoranalysis.mpp.io.input.MPPInitParamsFactory;
 import org.anchoranalysis.plugin.mpp.experiment.bean.objs.columndefinition.ColumnDefinition;
 import org.anchoranalysis.plugin.mpp.experiment.objs.FromCSVInputObject;
 import org.anchoranalysis.plugin.mpp.experiment.objs.FromCSVSharedState;
@@ -121,13 +121,6 @@ public class ExportObjectsFromCSVTask extends ExportObjectsBase<FromCSVInputObje
 			throws ExperimentExecutionException {
 		return new FromCSVSharedState();
 	}
-
-	@Override
-	public void afterAllJobsAreExecuted(
-			BoundOutputManagerRouteErrors outputManager, FromCSVSharedState sharedState, LogReporter logReporter)
-			throws ExperimentExecutionException {
-	
-	}
 	
 	@Override
 	public boolean hasVeryQuickPerInputExecution() {
@@ -152,76 +145,74 @@ public class ExportObjectsFromCSVTask extends ExportObjectsBase<FromCSVInputObje
 		ParametersBound<FromCSVInputObject,FromCSVSharedState> params
 	) throws JobExecutionException {
 		
-		LogErrorReporter logErrorReporter = params.getLogErrorReporter();
 		FromCSVInputObject inputObject = params.getInputObject();
-		BoundOutputManagerRouteErrors outputManager = params.getOutputManager();
+		BoundIOContext context = params.context();
 		
 		try {
 			FromCSVSharedState ss = params.getSharedState();
 			
 			// TODO maybe move IndexedCSVRows shared-state inside input-object?
 			IndexedCSVRows groupedRows = ss.getIndexedRowsOrCreate( inputObject.getCsvFilePath(), columnDefinition );
-
 			
 			// We look for rows that match our File ID
-			String fileID = idStringForPath( inputObject.pathForBinding(), params.getExperimentArguments().isDebugEnabled() ).toString();
+			String fileID = idStringForPath(
+				inputObject.pathForBinding(),
+				context.isDebugEnabled()
+			).toString();
 			MapGroupToRow mapGroup = groupedRows.get(fileID);
 			
 			if (mapGroup==null) {
-				logErrorReporter.getLogReporter().logFormatted("No matching rows in CSV file for id '%s' from '%s'", fileID, inputObject.pathForBinding());
+				context.getLogReporter().logFormatted("No matching rows in CSV file for id '%s' from '%s'", fileID, inputObject.pathForBinding());
 				return;
 			}
 			
 			processFileWithMap(
-				inputObject,
+				MPPInitParamsFactory.createFromInput(params, null),
 				mapGroup,
 				groupedRows.groupNameSet(),
-				outputManager,
-				params.getExperimentArguments().getModelDirectory(),
-				logErrorReporter
+				context
 			);
 			
-		} catch (GetOperationFailedException | OperationFailedException | AnchorIOException | OutputWriteFailedException e) {
+		} catch (GetOperationFailedException | OperationFailedException | AnchorIOException | OutputWriteFailedException | CreateException e) {
 			throw new JobExecutionException(e);
 		}
 	}
 	
+	@Override
+	public void afterAllJobsAreExecuted(FromCSVSharedState sharedState, BoundIOContext context) throws ExperimentExecutionException {
+		// NOTHING TO DO
+	}
+	
 	private void processFileWithMap(
-		FromCSVInputObject inputObject,
+		MPPInitParams soMPP,
 		MapGroupToRow mapGroup,
 		Set<String> groupNameSet,
-		BoundOutputManagerRouteErrors outputManager,
-		Path modelDir,
-		LogErrorReporter logErrorReporter
+		BoundIOContext context
 	) throws OperationFailedException, OutputWriteFailedException {
 		
 		try {
-			SharedObjects so = new SharedObjects( logErrorReporter );
-			
-			MPPInitParams soMPP = MPPInitParams.create(so, modelDir);
-			ImageInitParams soImage = soMPP.getImage();
-			
-			inputObject.addToSharedObjects( soMPP, soImage );
-			
-			DisplayStack background = createBackgroundStack(soImage, logErrorReporter);
+			DisplayStack background = createBackgroundStack(soMPP.getImage(), context.getLogger() );
 			
 			ObjMaskCollectionRTree objs = new ObjMaskCollectionRTree(
-				inputObjs(soImage,logErrorReporter)
+				inputObjs(
+					soMPP.getImage(),
+					context.getLogger()
+				)
 			);
 			
 			// Loop through each group, and output a series of TIFFs, where set of objects is shown on a successive image, cropped appropriately
 			for( String groupName : groupNameSet ) {
-				logErrorReporter.getLogReporter().logFormatted("Processing group '%s'", groupName);
+				context.getLogReporter().logFormatted("Processing group '%s'", groupName);
 				
 				Collection<CSVRow> rows = mapGroup.get(groupName);
 				
 				if (rows==null || rows.size()==0) {
-					logErrorReporter.getLogReporter().logFormatted("No matching rows for group '%s'", groupName);
+					context.getLogReporter().logFormatted("No matching rows for group '%s'", groupName);
 					continue;
 				}
 	
 				//outputManager.resolveFolder(groupName, new FolderWritePhysical()) 
-				outputGroup( String.format("group_%s",groupName), rows, objs, background, outputManager);
+				outputGroup( String.format("group_%s",groupName), rows, objs, background, context.getOutputManager() );
 			}
 		} catch (CreateException | InitException e) {
 			throw new OperationFailedException(e);
@@ -356,4 +347,5 @@ public class ExportObjectsFromCSVTask extends ExportObjectsBase<FromCSVInputObje
 			ColumnDefinition columnDefinition) {
 		this.columnDefinition = columnDefinition;
 	}
+
 }

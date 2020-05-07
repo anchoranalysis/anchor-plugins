@@ -37,7 +37,6 @@ import org.anchoranalysis.bean.error.BeanDuplicateException;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.index.GetOperationFailedException;
-import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.core.name.MultiName;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
 import org.anchoranalysis.experiment.JobExecutionException;
@@ -52,6 +51,7 @@ import org.anchoranalysis.feature.list.NamedFeatureStore;
 import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.input.InputFromManager;
 import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
+import org.anchoranalysis.io.output.bound.BoundIOContext;
 import org.anchoranalysis.plugin.image.task.sharedstate.SharedStateExportFeaturesWithStore;
 
 /**
@@ -108,9 +108,7 @@ public abstract class ExportFeaturesStoreTask<T extends InputFromManager, S exte
 			ResultsVector rv = calcResultsVectorForInputObject(
 				params.getInputObject(),
 				params.getSharedState().getFeatureStore(),
-				params.getOutputManager(),
-				params.getExperimentArguments().getModelDirectory(),
-				params.getLogErrorReporter()
+				params.context()
 			);
 			storeResults(params, rv);
 			
@@ -122,8 +120,7 @@ public abstract class ExportFeaturesStoreTask<T extends InputFromManager, S exte
 	protected abstract ResultsVector calcResultsVectorForInputObject(
 		T inputObject,
 		NamedFeatureStore<S> featureStore,
-		BoundOutputManagerRouteErrors outputManager,
-		Path modelDir, LogErrorReporter logErrorReporter
+		BoundIOContext context
 	) throws FeatureCalcException;
 
 

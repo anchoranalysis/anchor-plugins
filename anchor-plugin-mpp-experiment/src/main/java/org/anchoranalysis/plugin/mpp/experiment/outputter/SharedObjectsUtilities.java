@@ -1,6 +1,7 @@
 package org.anchoranalysis.plugin.mpp.experiment.outputter;
 
 import org.anchoranalysis.anchor.mpp.bean.init.MPPInitParams;
+import org.anchoranalysis.core.error.reporter.ErrorReporter;
 
 /*-
  * #%L
@@ -28,13 +29,13 @@ import org.anchoranalysis.anchor.mpp.bean.init.MPPInitParams;
  * #L%
  */
 
-import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 import org.anchoranalysis.core.params.KeyValueParams;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 import org.anchoranalysis.image.init.CreateCombinedStack;
 import org.anchoranalysis.image.init.ImageInitParams;
 import org.anchoranalysis.image.io.stack.StackCollectionOutputter;
+import org.anchoranalysis.io.output.bound.BoundIOContext;
 import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.mpp.io.output.NRGStackWriter;
@@ -44,7 +45,7 @@ public class SharedObjectsUtilities {
 	
 	// TODO make this more elegant in the design
 	// We make a special exception for writing our nrgStacks
-	public static void writeNRGStackParams( ImageInitParams soImage, String nrgParamsName, BoundOutputManagerRouteErrors outputManager, LogErrorReporter logErrorReporter ) {
+	public static void writeNRGStackParams( ImageInitParams soImage, String nrgParamsName, BoundIOContext context ) {
 		
 		try {
 			if (soImage.getStackCollection().keys().contains("nrgStack")) {
@@ -58,12 +59,11 @@ public class SharedObjectsUtilities {
 						soImage.getStackCollection().getException("nrgStack"),
 						params
 					),
-					outputManager,
-					logErrorReporter
+					context
 				);
 			}
 		} catch (NamedProviderGetException e) {
-			logErrorReporter.getErrorReporter().recordError(
+			context.getLogger().getErrorReporter().recordError(
 				SharedObjectsUtilities.class,
 				e.summarize()
 			);
@@ -72,22 +72,24 @@ public class SharedObjectsUtilities {
 		
 	public static void output(
 		MPPInitParams soMPP,
-		BoundOutputManagerRouteErrors outputManager,
-		LogErrorReporter logErrorReporter,
-		boolean suppressSubfolders
+		boolean suppressSubfolders,
+		BoundIOContext context
 	) {
+		ErrorReporter errorReporter = context.getErrorReporter();
+		BoundOutputManagerRouteErrors outputManager = context.getOutputManager();
+		
 		StackCollectionOutputter.outputSubset(
 			CreateCombinedStack.apply(soMPP.getImage() ),
 			outputManager,
 			StackOutputKeys.STACK,
 			suppressSubfolders,
-			logErrorReporter.getErrorReporter()
+			errorReporter
 		);
 		
 		SubsetOutputterFactory factory = new SubsetOutputterFactory(soMPP, outputManager, suppressSubfolders);
-		factory.cfg().outputSubset(logErrorReporter.getErrorReporter());
-		factory.histogram().outputSubset(logErrorReporter.getErrorReporter());
-		factory.objMask().outputSubset(logErrorReporter.getErrorReporter());
+		factory.cfg().outputSubset(errorReporter);
+		factory.histogram().outputSubset(errorReporter);
+		factory.objMask().outputSubset(errorReporter);
 	}
 	
 	public static void outputWithException(

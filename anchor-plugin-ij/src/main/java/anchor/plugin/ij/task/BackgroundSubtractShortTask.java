@@ -33,10 +33,8 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
 import org.anchoranalysis.core.index.GetOperationFailedException;
-import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.core.progress.ProgressReporter;
 import org.anchoranalysis.core.progress.ProgressReporterNull;
-import org.anchoranalysis.experiment.ExperimentExecutionArguments;
 import org.anchoranalysis.experiment.JobExecutionException;
 import org.anchoranalysis.image.chnl.Chnl;
 import org.anchoranalysis.image.experiment.bean.task.RasterTask;
@@ -50,6 +48,7 @@ import org.anchoranalysis.image.stack.region.chnlconverter.ChnlConverterToUnsign
 import org.anchoranalysis.image.stack.region.chnlconverter.ConversionPolicy;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
+import org.anchoranalysis.io.output.bound.BoundIOContext;
 
 import ch.ethz.biol.cell.imageprocessing.chnl.provider.ChnlProviderIJBackgroundSubtractor;
 
@@ -82,8 +81,7 @@ public class BackgroundSubtractShortTask extends RasterTask {
 	@Override
 	public void doStack(NamedChnlsInput inputObject,
 			int seriesIndex, int numSeries,
-			BoundOutputManagerRouteErrors outputManager, LogErrorReporter logErrorReporter,
-			ExperimentExecutionArguments expArgs) throws JobExecutionException {
+			BoundIOContext context) throws JobExecutionException {
 		
 		ProgressReporter progressReporter = ProgressReporterNull.get();
 		
@@ -107,7 +105,7 @@ public class BackgroundSubtractShortTask extends RasterTask {
 			ChnlConverter<ByteBuffer> converter = new ChnlConverterToUnsignedByte();
 			Chnl chnlOut = converter.convert(bgSubOut,ConversionPolicy.CHANGE_EXISTING_CHANNEL);
 			
-			outputManager.getWriterCheckIfAllowed().write(
+			context.getOutputManager().getWriterCheckIfAllowed().write(
 				"bgsub",
 				() -> new ChnlGenerator(chnlOut, "imgChnl")
 			);

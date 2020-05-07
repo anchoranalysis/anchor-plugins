@@ -31,7 +31,6 @@ import java.nio.ByteBuffer;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
-import org.anchoranalysis.core.random.RandomNumberGenerator;
 import org.anchoranalysis.image.bean.sgmn.binary.BinarySgmn;
 import org.anchoranalysis.image.bean.sgmn.binary.BinarySgmnParameters;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
@@ -67,17 +66,17 @@ public class SgmnSecondary extends BinarySgmn {
 	// END BEAN PROPERTIES
 	
 	@Override
-	public BinaryVoxelBox<ByteBuffer> sgmn(VoxelBoxWrapper voxelBox, BinarySgmnParameters params, RandomNumberGenerator re) {
+	public BinaryVoxelBox<ByteBuffer> sgmn(VoxelBoxWrapper voxelBox, BinarySgmnParameters params) {
 		throw new IllegalArgumentException("Method not supported yet");
 	}
 
 	@Override
 	public BinaryVoxelBox<ByteBuffer> sgmn(VoxelBoxWrapper voxelBox,
-			BinarySgmnParameters params, ObjMask objMask, RandomNumberGenerator re) throws SgmnFailedException {
+			BinarySgmnParameters params, ObjMask objMask) throws SgmnFailedException {
 
 		VoxelBox<ByteBuffer> voxelBoxByte = voxelBox.asByte();
 		
-		BinaryVoxelBox<ByteBuffer> out = sgmn.sgmn( voxelBox, params, objMask, re );
+		BinaryVoxelBox<ByteBuffer> out = sgmn.sgmn( voxelBox, params, objMask );
 		
 		if (out==null) {
 			return null;
@@ -110,7 +109,7 @@ public class SgmnSecondary extends BinarySgmn {
 			if (diffBuffer.hasGreaterThan(0)) {
 			
 				ObjMask diffOM = new ObjMask(bboxE,diffBufferMask);
-				BinaryVoxelBox<ByteBuffer> outSecondary = sgmnSecondary.sgmn( new VoxelBoxWrapper(diffBuffer), params, diffOM, re );
+				BinaryVoxelBox<ByteBuffer> outSecondary = sgmnSecondary.sgmn( new VoxelBoxWrapper(diffBuffer), params, diffOM );
 				if (outSecondary!=null) {
 					System.out.println("Rescuing lost item");
 					outSecondary.copyPixelsToCheckMask(bboxE, out.getVoxelBox(), bboxE, diffBufferMask, diffOM.getBinaryValuesByte() );

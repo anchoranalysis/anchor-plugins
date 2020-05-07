@@ -31,7 +31,6 @@ import java.io.IOException;
 import java.nio.file.Path;
 
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.log.LogReporter;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
 import org.anchoranalysis.experiment.JobExecutionException;
 import org.anchoranalysis.experiment.task.InputTypesExpected;
@@ -42,6 +41,7 @@ import org.anchoranalysis.io.csv.reader.CSVReaderByLine;
 import org.anchoranalysis.io.csv.reader.CSVReaderByLine.ReadByLine;
 import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.input.FileInput;
+import org.anchoranalysis.io.output.bound.BoundIOContext;
 import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
 import org.anchoranalysis.io.output.csv.CSVWriter;
 
@@ -127,7 +127,7 @@ public class CombineCSVTask extends Task<FileInput,CSVWriter> {
 	}
 
 	@Override
-	public void afterAllJobsAreExecuted( BoundOutputManagerRouteErrors outputManager, CSVWriter writer, LogReporter logReporter )
+	public void afterAllJobsAreExecuted( CSVWriter writer, BoundIOContext context )
 			throws ExperimentExecutionException {
 		
 		if (writer!=null) {

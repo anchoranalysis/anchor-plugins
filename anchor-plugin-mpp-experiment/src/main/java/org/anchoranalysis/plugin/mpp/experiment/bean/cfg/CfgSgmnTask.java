@@ -1,5 +1,7 @@
 package org.anchoranalysis.plugin.mpp.experiment.bean.cfg;
 
+import java.util.Optional;
+
 import org.anchoranalysis.anchor.mpp.cfg.Cfg;
 import org.anchoranalysis.bean.annotation.AllowEmpty;
 
@@ -36,7 +38,6 @@ import org.anchoranalysis.bean.error.BeanDuplicateException;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.log.LogErrorReporter;
-import org.anchoranalysis.core.log.LogReporter;
 import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 import org.anchoranalysis.core.name.store.LazyEvaluationStore;
 import org.anchoranalysis.core.name.store.NamedProviderStore;
@@ -53,6 +54,7 @@ import org.anchoranalysis.image.stack.DisplayStack;
 import org.anchoranalysis.image.stack.NamedImgStackCollection;
 import org.anchoranalysis.image.stack.wrap.WrapStackAsTimeSequenceStore;
 import org.anchoranalysis.io.generator.serialized.XStreamGenerator;
+import org.anchoranalysis.io.output.bound.BoundIOContext;
 import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
 import org.anchoranalysis.mpp.io.input.MultiInput;
 import org.anchoranalysis.mpp.io.output.BackgroundCreator;
@@ -84,7 +86,7 @@ public class CfgSgmnTask extends Task<MultiInput,ExperimentState>{
 	@Override
 	public void doJobOnInputObject(	ParametersBound<MultiInput,ExperimentState> params)	throws JobExecutionException {
 
-		LogErrorReporter logErrorReporter = params.getLogErrorReporter();
+		LogErrorReporter logErrorReporter = params.getLogger();
 		MultiInput inputObject = params.getInputObject();
 		
 		assert(logErrorReporter!=null);
@@ -94,15 +96,13 @@ public class CfgSgmnTask extends Task<MultiInput,ExperimentState>{
 			
 			NamedProviderStore<ObjMaskCollection> objs = objsFromInput(inputObject, logErrorReporter);
 					
-			KeyValueParams keyValueParams = keyValueParamsFromInput(inputObject, logErrorReporter);
+			Optional<KeyValueParams> keyValueParams = keyValueParamsFromInput(inputObject, logErrorReporter);
 			
 			Cfg cfg = sgmn.duplicateBean().sgmn(
 				stackCollection,
 				objs,
-				params.getExperimentArguments(),
 				keyValueParams,
-				logErrorReporter,
-				params.getOutputManager()
+				params.context()
 			);
 			writeVisualization(cfg, params.getOutputManager(), stackCollection, logErrorReporter);
 			
@@ -128,7 +128,7 @@ public class CfgSgmnTask extends Task<MultiInput,ExperimentState>{
 		return stackCollection;
 	}
 	
-	private KeyValueParams keyValueParamsFromInput( MultiInput inputObject, LogErrorReporter logErrorReporter ) throws JobExecutionException {
+	private Optional<KeyValueParams> keyValueParamsFromInput( MultiInput inputObject, LogErrorReporter logErrorReporter ) throws JobExecutionException {
 		NamedProviderStore<KeyValueParams> paramsCollection = new LazyEvaluationStore<>(logErrorReporter, "keyValueParams"); 
 		try {
 			inputObject.keyValueParams().addToStore(paramsCollection);
@@ -138,7 +138,14 @@ public class CfgSgmnTask extends Task<MultiInput,ExperimentState>{
 		
 		// We select a particular key value params to send as output
 		try {
-			return (!keyValueParamsID.isEmpty()) ? paramsCollection.getException(keyValueParamsID) : null;
+			if (!keyValueParamsID.isEmpty()) {
+				return Optional.of(
+					paramsCollection.getException(keyValueParamsID)
+				);
+			} else {
+				return Optional.empty();
+			}
+			
 		} catch (NamedProviderGetException e) {
 			throw new JobExecutionException("Cannot retrieve key-values-params", e.summarize());
 		}
@@ -182,8 +189,10 @@ public class CfgSgmnTask extends Task<MultiInput,ExperimentState>{
 	}
 
 	@Override
-	public void afterAllJobsAreExecuted(BoundOutputManagerRouteErrors outputManager, ExperimentState sharedState, LogReporter logReporter) throws ExperimentExecutionException {
-		sharedState.outputAfterAllTasksAreExecuted(outputManager);
+	public void afterAllJobsAreExecuted(ExperimentState sharedState, BoundIOContext context) throws ExperimentExecutionException {
+		sharedState.outputAfterAllTasksAreExecuted(
+			context.getOutputManager()
+		);
 	}
 
 	public CfgSgmn getSgmn() {

@@ -69,7 +69,7 @@ public class BinaryImgChnlProviderSgmn extends BinaryImgChnlProvider {
 	public BinaryChnl sgmn( Chnl chnl, BinarySgmnParameters params ) throws SgmnFailedException {
 		
 
-		BinaryVoxelBox<ByteBuffer> sgmnResult = sgmn.sgmn( chnl.getVoxelBox(), params, getSharedObjects().getRandomNumberGenerator() );
+		BinaryVoxelBox<ByteBuffer> sgmnResult = sgmn.sgmn( chnl.getVoxelBox(), params );
 		return new BinaryChnl(
 			sgmnResult,
 			chnl.getDimensions().getRes(),

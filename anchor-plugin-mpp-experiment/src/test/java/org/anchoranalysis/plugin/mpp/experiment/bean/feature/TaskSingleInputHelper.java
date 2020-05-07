@@ -38,6 +38,7 @@ import java.util.Optional;
 import org.anchoranalysis.bean.error.BeanMisconfiguredException;
 import org.anchoranalysis.bean.xml.RegisterBeanFactories;
 import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.error.reporter.ErrorReporterIntoLog;
 import org.anchoranalysis.experiment.ExperimentExecutionArguments;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
 import org.anchoranalysis.experiment.JobExecutionException;
@@ -146,7 +147,7 @@ class TaskSingleInputHelper {
 				)
 			);
 			
-			task.afterAllJobsAreExecuted(bom, sharedState, logReporter);
+			task.afterAllJobsAreExecuted(sharedState, paramsExp.context());
 			
 			return successful;
 		} catch (AnchorIOException | ExperimentExecutionException | JobExecutionException | BeanMisconfiguredException e) {
@@ -181,6 +182,7 @@ class TaskSingleInputHelper {
 			Optional.empty(),
 			outputManager,
 			logReporter,
+			new ErrorReporterIntoLog(logReporter),
 			false
 		);
 		params.setLogReporterTaskCreator(

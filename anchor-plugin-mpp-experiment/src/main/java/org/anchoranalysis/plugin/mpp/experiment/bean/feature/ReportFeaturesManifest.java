@@ -67,7 +67,7 @@ public class ReportFeaturesManifest extends TaskWithoutSharedState<ManifestCoupl
 	@Override
 	public void doJobOnInputObject(ParametersBound<ManifestCouplingDefinition,Object> params ) throws JobExecutionException {
 		
-		LogErrorReporter logErrorReporter = params.getLogErrorReporter();
+		LogErrorReporter logErrorReporter = params.getLogger();
 		ManifestCouplingDefinition input = params.getInputObject();
 		BoundOutputManagerRouteErrors outputManager = params.getOutputManager();
 		
