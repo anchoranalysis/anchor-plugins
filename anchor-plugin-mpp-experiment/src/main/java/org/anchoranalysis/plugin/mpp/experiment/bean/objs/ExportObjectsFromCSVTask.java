@@ -28,9 +28,9 @@ package org.anchoranalysis.plugin.mpp.experiment.bean.objs;
 
 import java.nio.file.Path;
 import java.util.Collection;
+import java.util.Optional;
 import java.util.Set;
 
-import org.anchoranalysis.anchor.mpp.bean.init.MPPInitParams;
 import org.anchoranalysis.anchor.overlay.bean.objmask.writer.ObjMaskWriter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
@@ -45,7 +45,7 @@ import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
 import org.anchoranalysis.experiment.JobExecutionException;
 import org.anchoranalysis.experiment.task.InputTypesExpected;
-import org.anchoranalysis.experiment.task.ParametersBound;
+import org.anchoranalysis.experiment.task.InputBound;
 import org.anchoranalysis.experiment.task.ParametersExperiment;
 import org.anchoranalysis.image.bean.provider.stack.StackProvider;
 import org.anchoranalysis.image.index.rtree.ObjMaskCollectionRTree;
@@ -142,7 +142,7 @@ public class ExportObjectsFromCSVTask extends ExportObjectsBase<FromCSVInputObje
 	
 	@Override
 	public void doJobOnInputObject(
-		ParametersBound<FromCSVInputObject,FromCSVSharedState> params
+		InputBound<FromCSVInputObject,FromCSVSharedState> params
 	) throws JobExecutionException {
 		
 		FromCSVInputObject inputObject = params.getInputObject();
@@ -167,7 +167,7 @@ public class ExportObjectsFromCSVTask extends ExportObjectsBase<FromCSVInputObje
 			}
 			
 			processFileWithMap(
-				MPPInitParamsFactory.createFromInput(params, null),
+				MPPInitParamsFactory.createFromInputAsImage(params, Optional.empty()),
 				mapGroup,
 				groupedRows.groupNameSet(),
 				context
@@ -184,18 +184,18 @@ public class ExportObjectsFromCSVTask extends ExportObjectsBase<FromCSVInputObje
 	}
 	
 	private void processFileWithMap(
-		MPPInitParams soMPP,
+		ImageInitParams imageInit,
 		MapGroupToRow mapGroup,
 		Set<String> groupNameSet,
 		BoundIOContext context
 	) throws OperationFailedException, OutputWriteFailedException {
 		
 		try {
-			DisplayStack background = createBackgroundStack(soMPP.getImage(), context.getLogger() );
+			DisplayStack background = createBackgroundStack(imageInit, context.getLogger() );
 			
 			ObjMaskCollectionRTree objs = new ObjMaskCollectionRTree(
 				inputObjs(
-					soMPP.getImage(),
+					imageInit,
 					context.getLogger()
 				)
 			);

@@ -78,18 +78,25 @@ public class SharedObjectsUtilities {
 		ErrorReporter errorReporter = context.getErrorReporter();
 		BoundOutputManagerRouteErrors outputManager = context.getOutputManager();
 		
-		StackCollectionOutputter.outputSubset(
-			CreateCombinedStack.apply(soMPP.getImage() ),
-			outputManager,
-			StackOutputKeys.STACK,
-			suppressSubfolders,
-			errorReporter
-		);
+		output(soMPP.getImage(), suppressSubfolders, context);
 		
 		SubsetOutputterFactory factory = new SubsetOutputterFactory(soMPP, outputManager, suppressSubfolders);
 		factory.cfg().outputSubset(errorReporter);
 		factory.histogram().outputSubset(errorReporter);
 		factory.objMask().outputSubset(errorReporter);
+	}
+	
+	public static void output(
+		ImageInitParams imageInit,
+		boolean suppressSubfolders,
+		BoundIOContext context
+	) {
+		StackCollectionOutputter.outputSubset(
+			CreateCombinedStack.apply(imageInit),
+			StackOutputKeys.STACK,
+			suppressSubfolders,
+			context
+		);
 	}
 	
 	public static void outputWithException(

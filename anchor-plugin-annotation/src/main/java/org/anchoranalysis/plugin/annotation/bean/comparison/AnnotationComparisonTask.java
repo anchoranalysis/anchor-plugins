@@ -40,7 +40,7 @@ import org.anchoranalysis.core.progress.ProgressReporterNull;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
 import org.anchoranalysis.experiment.JobExecutionException;
 import org.anchoranalysis.experiment.task.InputTypesExpected;
-import org.anchoranalysis.experiment.task.ParametersBound;
+import org.anchoranalysis.experiment.task.InputBound;
 import org.anchoranalysis.experiment.task.ParametersExperiment;
 import org.anchoranalysis.experiment.task.Task;
 import org.anchoranalysis.image.io.input.ProvidesStackInput;
@@ -118,7 +118,7 @@ public class AnnotationComparisonTask<T extends Assignment> extends Task<Annotat
 	
 	@Override
 	public void doJobOnInputObject(
-		ParametersBound<AnnotationComparisonInput<ProvidesStackInput>,SharedState<T>> params
+		InputBound<AnnotationComparisonInput<ProvidesStackInput>,SharedState<T>> params
 	) throws JobExecutionException {
 
 		LogErrorReporter logErrorReporter = params.getLogger();

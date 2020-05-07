@@ -41,7 +41,7 @@ import org.anchoranalysis.core.text.TypedValue;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
 import org.anchoranalysis.experiment.JobExecutionException;
 import org.anchoranalysis.experiment.task.InputTypesExpected;
-import org.anchoranalysis.experiment.task.ParametersBound;
+import org.anchoranalysis.experiment.task.InputBound;
 import org.anchoranalysis.experiment.task.ParametersExperiment;
 import org.anchoranalysis.experiment.task.Task;
 import org.anchoranalysis.io.error.AnchorIOException;
@@ -98,7 +98,7 @@ public class ReportFeaturesMulti extends Task<MultiInput,CSVWriter> {
 	}
 	
 	@Override
-	public void doJobOnInputObject(ParametersBound<MultiInput,CSVWriter> params)	throws JobExecutionException {
+	public void doJobOnInputObject(InputBound<MultiInput,CSVWriter> params)	throws JobExecutionException {
 		
 		LogErrorReporter logErrorReporter = params.getLogger();
 		MultiInput input = params.getInputObject();

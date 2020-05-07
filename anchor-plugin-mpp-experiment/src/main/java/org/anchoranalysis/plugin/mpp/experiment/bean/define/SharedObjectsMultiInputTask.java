@@ -41,7 +41,7 @@ import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.experiment.JobExecutionException;
 import org.anchoranalysis.experiment.bean.task.TaskWithoutSharedState;
 import org.anchoranalysis.experiment.task.InputTypesExpected;
-import org.anchoranalysis.experiment.task.ParametersBound;
+import org.anchoranalysis.experiment.task.InputBound;
 import org.anchoranalysis.image.init.ImageInitParams;
 import org.anchoranalysis.image.io.bean.feature.OutputFeatureTable;
 import org.anchoranalysis.image.stack.NamedImgStackCollection;
@@ -87,7 +87,7 @@ public class SharedObjectsMultiInputTask extends TaskWithoutSharedState<MultiInp
 	}
 	
 	@Override
-	public void doJobOnInputObject(	ParametersBound<MultiInput,Object> params)	throws JobExecutionException {
+	public void doJobOnInputObject(	InputBound<MultiInput,Object> params)	throws JobExecutionException {
 		
 		BoundOutputManagerRouteErrors outputManager = params.getOutputManager();
 		

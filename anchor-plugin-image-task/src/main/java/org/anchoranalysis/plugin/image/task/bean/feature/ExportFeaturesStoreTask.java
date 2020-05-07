@@ -40,7 +40,7 @@ import org.anchoranalysis.core.index.GetOperationFailedException;
 import org.anchoranalysis.core.name.MultiName;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
 import org.anchoranalysis.experiment.JobExecutionException;
-import org.anchoranalysis.experiment.task.ParametersBound;
+import org.anchoranalysis.experiment.task.InputBound;
 import org.anchoranalysis.experiment.task.ParametersExperiment;
 import org.anchoranalysis.feature.bean.list.FeatureListProvider;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
@@ -102,7 +102,7 @@ public abstract class ExportFeaturesStoreTask<T extends InputFromManager, S exte
 	}
 
 	@Override
-	public void doJobOnInputObject( ParametersBound<T,SharedStateExportFeaturesWithStore<S>> params ) throws JobExecutionException {
+	public void doJobOnInputObject( InputBound<T,SharedStateExportFeaturesWithStore<S>> params ) throws JobExecutionException {
 		
 		try {
 			ResultsVector rv = calcResultsVectorForInputObject(
@@ -124,7 +124,7 @@ public abstract class ExportFeaturesStoreTask<T extends InputFromManager, S exte
 	) throws FeatureCalcException;
 
 
-	private void storeResults(ParametersBound<T,SharedStateExportFeaturesWithStore<S>> params, ResultsVector rv) throws OperationFailedException {
+	private void storeResults(InputBound<T,SharedStateExportFeaturesWithStore<S>> params, ResultsVector rv) throws OperationFailedException {
 		
 		MultiName identifier = identifierFor( params.getInputObject() );
 		
