@@ -39,6 +39,7 @@ import org.anchoranalysis.bean.error.BeanDuplicateException;
 import org.anchoranalysis.bean.permute.ApplyPermutations;
 import org.anchoranalysis.bean.permute.property.PermuteProperty;
 import org.anchoranalysis.bean.permute.setter.PermutationSetter;
+import org.anchoranalysis.bean.permute.setter.PermutationSetterException;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.name.provider.NamedProviderGetException;
@@ -80,22 +81,29 @@ public class FeatureListProviderPermute<S, T extends FeatureInput> extends Featu
 	@Override
 	public FeatureList<T> create() throws CreateException {
 				
-		FeatureList<T> flInput = createInitialList( feature );
+		FeatureList<T> flInput = createInitialList(feature);
 		
 		// Create many copies of 'item' with properties adjusted
 		List<Feature<T>> fl = flInput;
 		for( PermuteProperty<S> pp : listPermuteProperty ) {
 			
-			PermutationSetter permutationSetter = pp.createSetter(feature);
-			
-			fl = new ApplyPermutations<Feature<T>>(
-				(a) -> a.getCustomName(),
-				(a,s) -> a.setCustomName(s)
-				).applyPermutationsToCreateDuplicates(
-				fl,
-				pp,
-				permutationSetter
-			);
+			try {
+				PermutationSetter permutationSetter = pp.createSetter(feature);
+				
+				fl = new ApplyPermutations<Feature<T>>(
+					(a) -> a.getCustomName(),
+					(a,s) -> a.setCustomName(s)
+					).applyPermutationsToCreateDuplicates(
+					fl,
+					pp,
+					permutationSetter
+				);
+			} catch (PermutationSetterException e) {
+				throw new CreateException(
+					String.format("Cannot create a permutation-setter for %s",pp),
+					e
+				);
+			}
 		}
 				
 		return new FeatureList<>(fl);

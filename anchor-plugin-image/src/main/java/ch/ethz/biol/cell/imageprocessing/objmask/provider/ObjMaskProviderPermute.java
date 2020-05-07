@@ -32,9 +32,9 @@ import java.util.Iterator;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.permute.property.PermuteProperty;
 import org.anchoranalysis.bean.permute.setter.PermutationSetter;
+import org.anchoranalysis.bean.permute.setter.PermutationSetterException;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
-import org.anchoranalysis.core.index.SetOperationFailedException;
 import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
 import org.anchoranalysis.image.objmask.ObjMaskCollection;
 
@@ -65,7 +65,12 @@ public class ObjMaskProviderPermute extends ObjMaskProvider {
 		Iterator<?> vals = permuteProperty.propertyValues();	
 		
 		
-		PermutationSetter ps = permuteProperty.createSetter(objs);
+		PermutationSetter ps;
+		try {
+			ps = permuteProperty.createSetter(objs);
+		} catch (PermutationSetterException e1) {
+			throw new CreateException("Cannot create a permutation setter", e1);
+		}
 		
 		
 		ObjMaskCollection out = new ObjMaskCollection();
@@ -87,7 +92,7 @@ public class ObjMaskProviderPermute extends ObjMaskProvider {
 				out.addAll(om);
 			}
 			
-		} catch (SetOperationFailedException | InitException e) {
+		} catch (InitException | PermutationSetterException e) {
 			throw new CreateException(e);
 		}
 		
