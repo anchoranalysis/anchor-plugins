@@ -29,18 +29,14 @@ package org.anchoranalysis.plugin.mpp.experiment.bean.feature;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.anchoranalysis.anchor.mpp.bean.init.MPPInitParams;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.bean.define.Define;
-import org.anchoranalysis.bean.shared.random.RandomNumberGeneratorBean;
-import org.anchoranalysis.bean.shared.random.RandomNumberGeneratorMersenneConstantBean;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.log.LogErrorReporter;
-import org.anchoranalysis.core.log.LogReporter;
-import org.anchoranalysis.core.name.store.SharedObjects;
 import org.anchoranalysis.core.text.TypedValue;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
 import org.anchoranalysis.experiment.JobExecutionException;
@@ -48,12 +44,13 @@ import org.anchoranalysis.experiment.task.InputTypesExpected;
 import org.anchoranalysis.experiment.task.ParametersBound;
 import org.anchoranalysis.experiment.task.ParametersExperiment;
 import org.anchoranalysis.experiment.task.Task;
-import org.anchoranalysis.image.init.ImageInitParams;
-import org.anchoranalysis.io.bean.report.feature.ReportFeature;
 import org.anchoranalysis.io.error.AnchorIOException;
+import org.anchoranalysis.io.output.bound.BoundIOContext;
 import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
 import org.anchoranalysis.io.output.csv.CSVWriter;
+import org.anchoranalysis.mpp.io.bean.report.feature.ReportFeatureForSharedObjects;
 import org.anchoranalysis.mpp.io.input.MultiInput;
+import org.anchoranalysis.mpp.io.input.MPPInitParamsFactory;
 
 
 public class ReportFeaturesMulti extends Task<MultiInput,CSVWriter> {
@@ -65,13 +62,10 @@ public class ReportFeaturesMulti extends Task<MultiInput,CSVWriter> {
 	
 	// START BEAN PROPERTIES
 	@BeanField
-	private List<ReportFeature<SharedObjects>> listReportFeatures = new ArrayList<>();
+	private List<ReportFeatureForSharedObjects> listReportFeatures = new ArrayList<>();
 	
 	@BeanField @OptionalBean
-	private Define namedDefinitions;
-	
-	@BeanField
-	private RandomNumberGeneratorBean randomNumberGenerator = new RandomNumberGeneratorMersenneConstantBean();	
+	private Define define;
 	// END BEAN PROPERTIES
 	
 	@Override
@@ -106,7 +100,7 @@ public class ReportFeaturesMulti extends Task<MultiInput,CSVWriter> {
 	@Override
 	public void doJobOnInputObject(ParametersBound<MultiInput,CSVWriter> params)	throws JobExecutionException {
 		
-		LogErrorReporter logErrorReporter = params.getLogErrorReporter();
+		LogErrorReporter logErrorReporter = params.getLogger();
 		MultiInput input = params.getInputObject();
 
 		CSVWriter writer = (CSVWriter) params.getSharedState();
@@ -116,19 +110,14 @@ public class ReportFeaturesMulti extends Task<MultiInput,CSVWriter> {
 		}
 		
 		try {
-			SharedObjects so = new SharedObjects(logErrorReporter);
-			MPPInitParams soMPP = MPPInitParams.create(
-				so,
-				namedDefinitions,
-				ParamsHelper.createGeneralParams(randomNumberGenerator.create(), params)
+			MPPInitParams soMPP = MPPInitParamsFactory.createFromInput(
+				params,
+				Optional.ofNullable(define)
 			);
-			ImageInitParams soImage = soMPP.getImage();
-			
-			input.addToSharedObjects( soMPP, soImage );
 			
 			List<TypedValue> rowElements = ReportFeatureUtilities.genElementList(
 				listReportFeatures,
-				so,
+				soMPP,
 				logErrorReporter
 			);
 			
@@ -136,14 +125,14 @@ public class ReportFeaturesMulti extends Task<MultiInput,CSVWriter> {
 			
 			writer.writeRow( rowElements );
 			
-		} catch (CreateException | OperationFailedException e) {
+		} catch (CreateException e) {
 			throw new JobExecutionException(e);
 		}
 	}
 
 	@Override
 	public void afterAllJobsAreExecuted(
-			BoundOutputManagerRouteErrors outputManager, CSVWriter writer, LogReporter logReporter)
+			CSVWriter writer, BoundIOContext context)
 			throws ExperimentExecutionException {
 		writer.close();
 	}
@@ -153,28 +142,20 @@ public class ReportFeaturesMulti extends Task<MultiInput,CSVWriter> {
 		return false;
 	}
 
-	public List<ReportFeature<SharedObjects>> getListReportFeatures() {
+	public List<ReportFeatureForSharedObjects> getListReportFeatures() {
 		return listReportFeatures;
 	}
 
-	public void setListReportFeatures(
-			List<ReportFeature<SharedObjects>> listReportFeatures) {
+	public void setListReportFeatures(List<ReportFeatureForSharedObjects> listReportFeatures) {
 		this.listReportFeatures = listReportFeatures;
 	}
 
-	public Define getNamedDefinitions() {
-		return namedDefinitions;
+	public Define getDefine() {
+		return define;
 	}
 
-	public void setNamedDefinitions(Define namedDefinitions) {
-		this.namedDefinitions = namedDefinitions;
+	public void setDefine(Define define) {
+		this.define = define;
 	}
 
-	public RandomNumberGeneratorBean getRandomNumberGenerator() {
-		return randomNumberGenerator;
-	}
-
-	public void setRandomNumberGenerator(RandomNumberGeneratorBean randomNumberGenerator) {
-		this.randomNumberGenerator = randomNumberGenerator;
-	}
 }

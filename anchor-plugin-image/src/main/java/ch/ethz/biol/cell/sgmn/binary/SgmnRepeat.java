@@ -31,7 +31,6 @@ import java.nio.ByteBuffer;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.Positive;
-import org.anchoranalysis.core.random.RandomNumberGenerator;
 import org.anchoranalysis.image.bean.sgmn.binary.BinarySgmn;
 import org.anchoranalysis.image.bean.sgmn.binary.BinarySgmnParameters;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
@@ -57,20 +56,20 @@ public class SgmnRepeat extends BinarySgmn {
 	// END BEAN PROPERTIES
 	
 	@Override
-	public BinaryVoxelBox<ByteBuffer> sgmn(VoxelBoxWrapper voxelBox, BinarySgmnParameters params, RandomNumberGenerator re) {
+	public BinaryVoxelBox<ByteBuffer> sgmn(VoxelBoxWrapper voxelBox, BinarySgmnParameters params) {
 		throw new IllegalArgumentException("Invalid method");
 	}
 
 	@Override
 	public BinaryVoxelBox<ByteBuffer> sgmn(VoxelBoxWrapper voxelBox,
-			BinarySgmnParameters params, ObjMask objMask, RandomNumberGenerator re) throws SgmnFailedException {
+			BinarySgmnParameters params, ObjMask objMask) throws SgmnFailedException {
 		
 		BinaryVoxelBox<ByteBuffer> outOld = null;
 		BoundingBox BoundingBox = new BoundingBox( objMask.getBoundingBox() );
 		
 		int cnt = 0;
 		while (cnt++<maxIter) {
-			BinaryVoxelBox<ByteBuffer> outNew = sgmn.sgmn(voxelBox, params, objMask, re);
+			BinaryVoxelBox<ByteBuffer> outNew = sgmn.sgmn(voxelBox, params, objMask);
 			
 			if (outNew==null) {
 				return outOld;

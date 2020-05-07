@@ -29,6 +29,7 @@ package org.anchoranalysis.plugin.image.task.bean.scale;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
@@ -39,8 +40,6 @@ import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.core.name.value.NameValue;
 import org.anchoranalysis.core.progress.ProgressReporter;
 import org.anchoranalysis.core.progress.ProgressReporterNull;
-import org.anchoranalysis.core.random.RandomNumberGeneratorMersenneConstant;
-import org.anchoranalysis.experiment.ExperimentExecutionArguments;
 import org.anchoranalysis.experiment.JobExecutionException;
 import org.anchoranalysis.image.experiment.bean.task.RasterTask;
 import org.anchoranalysis.image.extent.IncorrectImageSizeException;
@@ -56,6 +55,7 @@ import org.anchoranalysis.io.generator.sequence.GeneratorSequenceNonIncrementalW
 import org.anchoranalysis.io.manifest.sequencetype.SetSequenceType;
 import org.anchoranalysis.io.namestyle.StringSuffixOutputNameStyle;
 import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
+import org.anchoranalysis.io.output.bound.BoundIOContext;
 
 public class AssignResolutionTask extends RasterTask {
 
@@ -105,8 +105,97 @@ public class AssignResolutionTask extends RasterTask {
 	}
 	
 	@Override
+	public void doStack( NamedChnlsInput inputObject, int seriesIndex, int numSeries, BoundIOContext context) throws JobExecutionException {
+		
+		try {
+			NamedChnlCollectionForSeries chnlCollection = inputObject.createChnlCollectionForSeries(seriesIndex, ProgressReporterNull.get() );	
+			
+			ChnlGetter chnlGetter = maybeAddFilter(chnlCollection, context);
+
+			Set<String> chnlNames = chnlCollection.chnlNames();
+			
+			ProgressReporter progressReporter = ProgressReporterNull.get();
+			for( int t=0; t<chnlCollection.sizeT(progressReporter); t++) {
+			
+				addToGeneratorSeq(
+					t,
+					calculateSeriesTimeString(
+						seriesIndex,
+						t,
+						chnlCollection.sizeT(progressReporter)
+					),
+					chnlGetter,
+					chnlNames,
+					context.getLogger()
+				);
+			}
+		} catch (RasterIOException | OperationFailedException e) {
+			throw new JobExecutionException(e);
+		}
+	}
+
+	@Override
+	public void endSeries(BoundOutputManagerRouteErrors outputManager) throws JobExecutionException {
+		generatorSeq.end();
+	}
+	
+	@Override
 	public boolean hasVeryQuickPerInputExecution() {
 		return false;
+	}
+		
+	private void addToGeneratorSeq(
+		int t,
+		String seriesTimeString,
+		ChnlGetter chnlAfter,
+		Set<String> chnlNames,
+		LogErrorReporter logger
+	) throws OperationFailedException {
+		ProgressReporter progressReporter = ProgressReporterNull.get();
+		
+		try {
+			if (rgb) {
+				Stack stack = createRGBStack(chnlAfter,t);
+				generatorSeq.add(stack, seriesTimeString );
+			} else {
+
+				List<NameValue<Stack>> stackList = new ArrayList<>(); 
+				for( String key : chnlNames ) {
+					
+					Stack stack = new Stack(
+						chnlAfter.getChnl(
+							key,
+							t,
+							progressReporter
+						)
+					); 
+					
+					String combined = String.format("%s_%s", seriesTimeString, key );
+					stackList.add(
+						new NameValue<>(combined,stack)
+					);
+					
+				}
+				
+				for( NameValue<Stack> ni : stackList ) {
+					generatorSeq.add( ni.getValue(), ni.getName() );
+				}
+			}
+		} catch (GetOperationFailedException e) {
+			logger.getLogReporter().logFormatted("Filter rejected %s", seriesTimeString);
+			logger.getErrorReporter().recordError(AssignResolutionTask.class, e);
+		} catch (RasterIOException | IncorrectImageSizeException e) {
+			throw new OperationFailedException(e);
+		}
+	}
+
+	private ChnlGetter maybeAddFilter( ChnlGetter getter, BoundIOContext context) {
+		if (chnlFilter!=null) {
+			chnlFilter.init(getter,	context);
+			return chnlFilter;
+		} else {
+			return getter;
+		}
 	}
 	
 	private Stack createRGBStack( ChnlGetter chnlCollection, int t ) throws IncorrectImageSizeException, RasterIOException, OperationFailedException, GetOperationFailedException {
@@ -159,75 +248,6 @@ public class AssignResolutionTask extends RasterTask {
 		}
 	}
 	
-	@Override
-	public void doStack( NamedChnlsInput inputObject, int seriesIndex, int numSeries, BoundOutputManagerRouteErrors outputManager, LogErrorReporter logErrorReporter, ExperimentExecutionArguments expArgs ) throws JobExecutionException {
-		
-		try {
-			NamedChnlCollectionForSeries chnlCollection = inputObject.createChnlCollectionForSeries(seriesIndex, ProgressReporterNull.get() );	
-			
-			ChnlGetter chnlAfter = chnlCollection;
-			
-			if (chnlFilter!=null) {
-				chnlFilter.init(
-					chnlCollection,
-					expArgs.getModelDirectory(),
-					logErrorReporter,
-					new RandomNumberGeneratorMersenneConstant()
-				);
-				chnlAfter = chnlFilter;
-			}
-			
-			// We add a filter if we have one
-						
-			ProgressReporter progressReporter = ProgressReporterNull.get();
-			
-			for( int t=0; t<chnlCollection.sizeT(progressReporter); t++) {
-			
-				String seriesTimeString = calculateSeriesTimeString(seriesIndex,t, chnlCollection.sizeT(progressReporter));
-			
-				try {
-					if (rgb) {
-						Stack stack = createRGBStack(chnlAfter,t);
-						generatorSeq.add(stack, seriesTimeString );
-					} else {
-	
-						List<NameValue<Stack>> stackList = new ArrayList<>(); 
-						for( String key : chnlCollection.chnlNames() ) {
-							
-							Stack stack = new Stack(
-								chnlAfter.getChnl(
-									key,
-									t,
-									progressReporter
-								)
-							); 
-							
-							String combined = String.format("%s_%s", seriesTimeString, key );
-							stackList.add(
-								new NameValue<>(combined,stack)
-							);
-							
-						}
-						
-						for( NameValue<Stack> ni : stackList ) {
-							generatorSeq.add( ni.getValue(), ni.getName() );
-						}
-					}
-				} catch (GetOperationFailedException e) {
-					logErrorReporter.getLogReporter().logFormatted("Filter rejected %s", seriesTimeString);
-					logErrorReporter.getErrorReporter().recordError(AssignResolutionTask.class, e);
-				}
-			}
-		} catch (RasterIOException | OperationFailedException | IncorrectImageSizeException e) {
-			throw new JobExecutionException(e);
-		}
-	}
-
-	@Override
-	public void endSeries(BoundOutputManagerRouteErrors outputManager) throws JobExecutionException {
-		generatorSeq.end();
-	}
-
 	public boolean isRgb() {
 		return rgb;
 	}

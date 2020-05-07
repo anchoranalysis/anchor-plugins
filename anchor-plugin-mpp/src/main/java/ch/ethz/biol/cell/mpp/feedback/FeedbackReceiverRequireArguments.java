@@ -29,7 +29,7 @@ package ch.ethz.biol.cell.mpp.feedback;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
-import org.anchoranalysis.experiment.bean.RequireArguments;
+import org.anchoranalysis.experiment.bean.require.RequireArguments;
 import org.anchoranalysis.mpp.sgmn.bean.optscheme.feedback.FeedbackReceiverBean;
 import org.anchoranalysis.mpp.sgmn.optscheme.feedback.OptimizationFeedbackEndParams;
 import org.anchoranalysis.mpp.sgmn.optscheme.feedback.OptimizationFeedbackInitParams;
@@ -58,7 +58,7 @@ public class FeedbackReceiverRequireArguments<T> extends FeedbackReceiverBean<T>
 			throws ReporterException {
 		
 		doFeedback = requireArguments.hasAllRequiredArguments(
-			optInit.getInitContext().getExperimentArguments()
+			optInit.getInitContext().isDebugEnabled()
 		);
 		
 		if (!doFeedback) {

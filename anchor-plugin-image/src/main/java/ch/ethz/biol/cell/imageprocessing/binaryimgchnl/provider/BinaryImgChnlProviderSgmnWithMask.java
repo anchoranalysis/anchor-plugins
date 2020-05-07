@@ -73,7 +73,7 @@ public class BinaryImgChnlProviderSgmnWithMask extends BinaryImgChnlProvider {
 		
 		ObjMask omMask = new ObjMask(maskChnl.binaryVoxelBox());
 	
-		BinaryVoxelBox<ByteBuffer> sgmnResult = sgmn.sgmn( chnl.getVoxelBox(), params, omMask, getSharedObjects().getRandomNumberGenerator() );
+		BinaryVoxelBox<ByteBuffer> sgmnResult = sgmn.sgmn( chnl.getVoxelBox(), params, omMask );
 		chnl.replaceVoxelBox( new VoxelBoxWrapper(sgmnResult.getVoxelBox()) );
 		return new BinaryChnl( chnl, sgmnResult.getBinaryValues() );
 	}

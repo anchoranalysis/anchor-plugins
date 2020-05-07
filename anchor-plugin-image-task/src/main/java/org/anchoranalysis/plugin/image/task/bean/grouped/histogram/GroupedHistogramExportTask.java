@@ -35,8 +35,6 @@ import org.anchoranalysis.bean.annotation.AllowEmpty;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.log.LogErrorReporter;
-import org.anchoranalysis.core.log.LogReporter;
 import org.anchoranalysis.core.name.CombinedName;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
 import org.anchoranalysis.experiment.JobExecutionException;
@@ -45,7 +43,9 @@ import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
 import org.anchoranalysis.image.histogram.Histogram;
 import org.anchoranalysis.image.histogram.HistogramArray;
 import org.anchoranalysis.image.stack.NamedImgStackCollection;
+import org.anchoranalysis.io.output.bound.BoundIOContext;
 import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
+import org.anchoranalysis.plugin.image.task.bean.grouped.BoundContextIntoSubfolder;
 import org.anchoranalysis.plugin.image.task.bean.grouped.GroupedSharedState;
 import org.anchoranalysis.plugin.image.task.bean.grouped.GroupedStackTask;
 import org.anchoranalysis.plugin.image.task.grouped.ChnlSource;
@@ -121,8 +121,7 @@ public class GroupedHistogramExportTask extends GroupedStackTask<Histogram,Histo
 		NamedImgStackCollection store,
 		String groupName,
 		GroupedSharedState<Histogram,Histogram> sharedState,
-		BoundOutputManagerRouteErrors outputManager,
-		LogErrorReporter logErrorReporter
+		BoundIOContext context
 	) throws JobExecutionException {
 		
 		ChnlSource source = new ChnlSource( store, sharedState.getChnlChecker() );
@@ -141,8 +140,7 @@ public class GroupedHistogramExportTask extends GroupedStackTask<Histogram,Histo
 					histogramExtracter,
 					groupName,
 					sharedState.getGroupMap(),
-					outputManager,
-					logErrorReporter
+					context
 				);
 			}
 			
@@ -156,8 +154,7 @@ public class GroupedHistogramExportTask extends GroupedStackTask<Histogram,Histo
 		HistogramExtracter histogramExtracter,
 		String groupName,
 		GroupMap<Histogram,Histogram> groupMap,
-		BoundOutputManagerRouteErrors outputManager,
-		LogErrorReporter logErrorReporter
+		BoundIOContext context
 	) throws JobExecutionException {
 		
 		Histogram hist = histogramExtracter.extractFrom(chnl.getChnl());
@@ -169,8 +166,7 @@ public class GroupedHistogramExportTask extends GroupedStackTask<Histogram,Histo
 					hist,
 					chnl.getName(),
 					chnl.getName(),
-					outputManager,
-					logErrorReporter
+					context
 				);
 			} catch (IOException e) {
 				throw new JobExecutionException(e);
@@ -192,19 +188,14 @@ public class GroupedHistogramExportTask extends GroupedStackTask<Histogram,Histo
 		
 	@Override
 	public void afterAllJobsAreExecuted(
-		BoundOutputManagerRouteErrors outputManager,
 		GroupedSharedState<Histogram,Histogram> sharedState,
-		LogReporter logReporter
+		BoundIOContext context
 	) throws ExperimentExecutionException {
-		
-		assert(logReporter!=null);
-		LogErrorReporter logErrorReporter = new LogErrorReporter(logReporter);
 		
 		try {
 			createWriter().writeAllGroupHistograms(
 				sharedState.getGroupMap(),
-				outputManager.resolveFolder("grouped"),
-				logErrorReporter
+				new BoundContextIntoSubfolder(context, "grouped")
 			);
 		} catch (IOException e) {
 			throw new ExperimentExecutionException(e);

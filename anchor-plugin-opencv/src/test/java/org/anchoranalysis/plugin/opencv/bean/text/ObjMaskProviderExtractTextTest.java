@@ -1,6 +1,6 @@
 package org.anchoranalysis.plugin.opencv.bean.text;
 
-import java.nio.file.Path;
+
 
 /*-
  * #%L
@@ -31,16 +31,14 @@ import java.nio.file.Path;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.geometry.Point3i;
-import org.anchoranalysis.core.log.LogErrorReporter;
-import org.anchoranalysis.core.random.RandomNumberGeneratorMersenneConstant;
 import org.anchoranalysis.image.bean.provider.stack.StackProviderHolder;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.Extent;
-import org.anchoranalysis.image.init.ImageInitParams;
+import org.anchoranalysis.image.io.input.ImageInitParamsFactory;
 import org.anchoranalysis.image.objmask.ObjMaskCollection;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.io.error.AnchorIOException;
-import org.anchoranalysis.test.LoggingFixture;
+import org.anchoranalysis.io.output.bound.BoundIOContext;
 import org.anchoranalysis.test.TestLoader;
 import org.anchoranalysis.test.image.io.TestLoaderImageIO;
 import org.junit.Test;
@@ -67,10 +65,7 @@ public class ObjMaskProviderExtractTextTest {
 	@Test
 	public void testCar() throws AnchorIOException, CreateException, InitException {
 		
-		ObjMaskProviderExtractText provider = createAndInitProvider(
-			"car.jpg",
-			testLoader.getTestLoader().getRoot()
-		);
+		ObjMaskProviderExtractText provider = createAndInitProvider("car.jpg");
 				
 		ObjMaskCollection objs = provider.create();
 		
@@ -89,7 +84,7 @@ public class ObjMaskProviderExtractTextTest {
 		);		
 	}
 	
-	private ObjMaskProviderExtractText createAndInitProvider( String imageFilename, Path modelDir ) throws InitException {
+	private ObjMaskProviderExtractText createAndInitProvider( String imageFilename ) throws InitException {
 		
 		ObjMaskProviderExtractText provider = new ObjMaskProviderExtractText();
 		
@@ -98,25 +93,20 @@ public class ObjMaskProviderExtractTextTest {
 		
 		initProvider(
 			provider,
-			LoggingFixture.simpleLogErrorReporter(),
-			modelDir
+			BoundContextFixture.withSimpleLogger()
 		);
 		
 		return provider;
 	}
 	
-	private static void initProvider( ObjMaskProviderExtractText provider, LogErrorReporter logger, Path modelDir ) throws InitException {
+	private static void initProvider( ObjMaskProviderExtractText provider, BoundIOContext context ) throws InitException {
 		provider.init(
-			ImageInitParams.create(
-				logger,
-				new RandomNumberGeneratorMersenneConstant(),
-				modelDir
-			),
-			logger
+			ImageInitParamsFactory.create(context),
+			context.getLogger()
 		);		
 	}
 	
-	/** Bounding box at particular point and coo-rdinates */
+	/** Bounding box at particular point and coordinates */
 	private static BoundingBox boxAt( int x, int y, int width, int height ) {
 		return new BoundingBox(
 			new Point3i(x, y, 0),

@@ -32,7 +32,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import org.anchoranalysis.anchor.mpp.bean.init.GeneralInitParams;
 import org.anchoranalysis.anchor.mpp.bean.init.MPPInitParams;
 import org.anchoranalysis.bean.NamedBean;
 import org.anchoranalysis.bean.annotation.AllowEmpty;
@@ -41,8 +40,6 @@ import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.bean.define.Define;
 import org.anchoranalysis.bean.error.BeanDuplicateException;
 import org.anchoranalysis.bean.shared.params.keyvalue.KeyValueParamsProvider;
-import org.anchoranalysis.bean.shared.random.RandomNumberGeneratorBean;
-import org.anchoranalysis.bean.shared.random.RandomNumberGeneratorMersenneConstantBean;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.error.OperationFailedException;
@@ -50,7 +47,6 @@ import org.anchoranalysis.core.index.GetOperationFailedException;
 import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.core.name.CombinedName;
 import org.anchoranalysis.core.name.MultiName;
-import org.anchoranalysis.core.name.store.SharedObjects;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
 import org.anchoranalysis.experiment.JobExecutionException;
 import org.anchoranalysis.experiment.task.InputTypesExpected;
@@ -68,8 +64,10 @@ import org.anchoranalysis.image.feature.session.FeatureTableSession;
 import org.anchoranalysis.image.init.ImageInitParams;
 import org.anchoranalysis.image.objmask.ObjMaskCollection;
 import org.anchoranalysis.io.error.AnchorIOException;
+import org.anchoranalysis.io.output.bound.BoundIOContext;
 import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
 import org.anchoranalysis.mpp.io.input.MultiInput;
+import org.anchoranalysis.mpp.io.input.MPPInitParamsFactory;
 import org.anchoranalysis.mpp.io.output.NRGStackWriter;
 import org.anchoranalysis.plugin.image.feature.bean.obj.table.FeatureTableObjs;
 import org.anchoranalysis.plugin.image.task.bean.feature.ExportFeaturesTask;
@@ -105,7 +103,7 @@ public class ExportFeaturesObjMaskTask<T extends FeatureInput> extends ExportFea
 	private List<NamedBean<FeatureListProvider<FeatureInputSingleObj>>> listFeaturesObjMask = new ArrayList<>();
 	
 	@BeanField @OptionalBean
-	private Define namedDefinitions;
+	private Define define;
 	
 	@BeanField
 	private List<NamedBean<ObjMaskProvider>> listObjMaskProvider = new ArrayList<>();
@@ -115,9 +113,6 @@ public class ExportFeaturesObjMaskTask<T extends FeatureInput> extends ExportFea
 	
 	@BeanField @OptionalBean
 	private KeyValueParamsProvider nrgParamsProvider;
-	
-	@BeanField
-	private RandomNumberGeneratorBean randomNumberGenerator = new RandomNumberGeneratorMersenneConstantBean();
 	
 	@BeanField
 	private FeatureTableObjs<T> selectFeaturesObjects;
@@ -174,16 +169,16 @@ public class ExportFeaturesObjMaskTask<T extends FeatureInput> extends ExportFea
 	@Override
 	public void doJobOnInputObject(	ParametersBound<MultiInput,SharedStateExportFeaturesObjMask<T>> params	) throws JobExecutionException {
 		
-		LogErrorReporter logger = params.getLogErrorReporter();
+		BoundIOContext context = params.context();
 		MultiInput inputObject = params.getInputObject();
 		
 		try {
-			MPPInitParams soMPP = createInitParams(
-				inputObject,
-				ParamsHelper.createGeneralParams(randomNumberGenerator.create(), params)
+			MPPInitParams soMPP = MPPInitParamsFactory.createFromInput(
+				params,
+				Optional.ofNullable(define)
 			);
 			
-			NRGStackWithParams nrgStack = createNRGStack(soMPP.getImage(), logger );
+			NRGStackWithParams nrgStack = createNRGStack(soMPP.getImage(), context.getLogger());
 
 			// Create a duplicated featureStore for this image, as we want separate features on this thread,
 			//  so they are thread-safe, for parallel execution
@@ -192,19 +187,18 @@ public class ExportFeaturesObjMaskTask<T extends FeatureInput> extends ExportFea
 				soMPP.getImage(),
 				soMPP.getFeature(),
 				Optional.of(nrgStack),
-				logger
+				context.getLogger()
 			);
 			
-			outputSharedObjs( soMPP, nrgStack, params.getOutputManager(), logger );
+			outputSharedObjs( soMPP, nrgStack, context );
 			
 			processAllProviders(
-				params.getExperimentArguments().isDebugEnabled(),
 				inputObject.pathForBinding(),
 				session,
 				soMPP.getImage(),
 				nrgStack,
 				params.getSharedState(),
-				logger
+				context
 			);
 						
 		} catch (OperationFailedException | CreateException | InitException | BeanDuplicateException e) {
@@ -212,58 +206,44 @@ public class ExportFeaturesObjMaskTask<T extends FeatureInput> extends ExportFea
 		}
 	}
 	
-	private MPPInitParams createInitParams( MultiInput inputObject, GeneralInitParams paramsGeneral ) throws CreateException, OperationFailedException {
-		SharedObjects so = new SharedObjects( paramsGeneral.getLogErrorReporter()	);
-		MPPInitParams soMPP = MPPInitParams.create(
-			so,
-			namedDefinitions,
-			paramsGeneral
-		);
-		inputObject.addToSharedObjects( soMPP, soMPP.getImage() );
-		return soMPP;
-	}
-	
 	// General objects can be outputted
 	private void outputSharedObjs(
 		MPPInitParams soMPP,
 		NRGStackWithParams nrgStack,
-		BoundOutputManagerRouteErrors outputManager,
-		LogErrorReporter logErrorReporter
+		BoundIOContext context
 	) {
-		SharedObjectsUtilities.output(soMPP, outputManager, logErrorReporter, false);
+		SharedObjectsUtilities.output(soMPP, false, context);
 		
 		NRGStackWriter.writeNRGStack(
 			nrgStack,
-			outputManager,
-			logErrorReporter
+			context
 		);
 	}
 	
 	private void processAllProviders(
-		boolean debugMode,
 		Path inputPath,
 		FeatureTableSession<T> session,
 		ImageInitParams imageInitParams,
 		NRGStackWithParams nrgStack,
 		SharedStateExportFeatures sharedState,
-		LogErrorReporter logErrorReporter		
+		BoundIOContext context		
 	) throws OperationFailedException {
 		try {
-			String id = extractImageIdentifier(inputPath, debugMode);
+			String id = extractImageIdentifier(inputPath, context.isDebugEnabled());
 			
 			// Extract a group name
-			String groupName = extractGroupName(inputPath, debugMode);
+			String groupName = extractGroupName(inputPath, context.isDebugEnabled());
 									
 			// For every objMaskCollection provider
 			for( NamedBean<ObjMaskProvider> ni : listObjMaskProvider) {
 				MultiName rowName = new CombinedName( groupName, ni.getName() ); 
 				calculateFeaturesForProvider(
 					id,
-					objsFromProvider(ni.getValue(), imageInitParams, logErrorReporter),
+					objsFromProvider(ni.getValue(), imageInitParams, context.getLogger()),
 					session,
 					nrgStack,
 					sharedState.resultsVectorForIdentifier(rowName),
-					logErrorReporter
+					context.getLogger()
 				);
 			}
 		} catch (AnchorIOException | GetOperationFailedException e) {
@@ -313,22 +293,6 @@ public class ExportFeaturesObjMaskTask<T extends FeatureInput> extends ExportFea
 		} catch (InitException | CreateException e) {
 			throw new OperationFailedException(e);
 		}
-	}
-	
-	public Define getNamedDefinitions() {
-		return namedDefinitions;
-	}
-
-	public void setNamedDefinitions(Define namedDefinitions) {
-		this.namedDefinitions = namedDefinitions;
-	}
-
-	public RandomNumberGeneratorBean getRandomNumberGenerator() {
-		return randomNumberGenerator;
-	}
-
-	public void setRandomNumberGenerator(RandomNumberGeneratorBean randomNumberGenerator) {
-		this.randomNumberGenerator = randomNumberGenerator;
 	}
 
 	public List<NamedBean<FeatureListProvider<FeatureInputSingleObj>>> getListFeaturesObjMask() {
@@ -389,5 +353,13 @@ public class ExportFeaturesObjMaskTask<T extends FeatureInput> extends ExportFea
 
 	public void setSuppressErrors(boolean suppressErrors) {
 		this.suppressErrors = suppressErrors;
+	}
+
+	public Define getDefine() {
+		return define;
+	}
+
+	public void setDefine(Define define) {
+		this.define = define;
 	}
 }

@@ -30,16 +30,14 @@ package org.anchoranalysis.plugin.mpp.experiment.bean.objs;
 import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
-import org.anchoranalysis.anchor.mpp.bean.init.GeneralInitParams;
 import org.anchoranalysis.anchor.mpp.bean.init.MPPInitParams;
 import org.anchoranalysis.bean.NamedBean;
 import org.anchoranalysis.bean.StringSet;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.bean.define.Define;
-import org.anchoranalysis.bean.shared.random.RandomNumberGeneratorBean;
-import org.anchoranalysis.bean.shared.random.RandomNumberGeneratorMersenneConstantBean;
 import org.anchoranalysis.core.bridge.IObjectBridge;
 import org.anchoranalysis.core.cache.IdentityOperation;
 import org.anchoranalysis.core.color.ColorIndex;
@@ -49,11 +47,8 @@ import org.anchoranalysis.core.error.AnchorNeverOccursException;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.error.reporter.ErrorReporter;
 import org.anchoranalysis.core.log.LogErrorReporter;
-import org.anchoranalysis.core.log.LogReporter;
 import org.anchoranalysis.core.name.provider.NamedProviderGetException;
-import org.anchoranalysis.core.name.store.SharedObjects;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
 import org.anchoranalysis.experiment.JobExecutionException;
 import org.anchoranalysis.experiment.task.InputTypesExpected;
@@ -79,9 +74,11 @@ import org.anchoranalysis.io.generator.sequence.GeneratorSequenceIncrementalRero
 import org.anchoranalysis.io.generator.sequence.GeneratorSequenceIncrementalWriter;
 import org.anchoranalysis.io.namestyle.IndexableOutputNameStyle;
 import org.anchoranalysis.io.namestyle.IntegerPrefixOutputNameStyle;
+import org.anchoranalysis.io.output.bound.BoundIOContext;
 import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.mpp.io.input.MultiInput;
+import org.anchoranalysis.mpp.io.input.MPPInitParamsFactory;
 import org.anchoranalysis.plugin.mpp.experiment.outputter.SharedObjectsUtilities;
 
 
@@ -103,10 +100,7 @@ public class ExportObjectsAsCroppedImagesTask extends ExportObjectsBase<MultiInp
 	
 	// START BEAN PROPERTIES
 	@BeanField
-	private Define namedDefinitions;
-	
-	@BeanField
-	private RandomNumberGeneratorBean randomNumberGenerator = new RandomNumberGeneratorMersenneConstantBean();
+	private Define define;
 	
 	@BeanField
 	private boolean suppressSubfolders = true;
@@ -153,27 +147,18 @@ public class ExportObjectsAsCroppedImagesTask extends ExportObjectsBase<MultiInp
 	@Override
 	public void doJobOnInputObject(	ParametersBound<MultiInput,Object> params)	throws JobExecutionException {
 		
-		LogErrorReporter logErrorReporter = params.getLogErrorReporter();
-		MultiInput inputObject = params.getInputObject();
-		BoundOutputManagerRouteErrors outputManager = params.getOutputManager();
+		BoundIOContext context = params.context();
+		LogErrorReporter logger = context.getLogger();
+		BoundOutputManagerRouteErrors outputManager = context.getOutputManager();
 		
 		try {
-			SharedObjects so = new SharedObjects( logErrorReporter );
-			MPPInitParams soMPP = MPPInitParams.create(
-				so,
-				namedDefinitions,
-				new GeneralInitParams(
-					randomNumberGenerator.create(),
-					params.getExperimentArguments().getModelDirectory(),
-					logErrorReporter
-				)
+			MPPInitParams soMPP = MPPInitParamsFactory.createFromInput(
+				params,
+				Optional.ofNullable(define)
 			);
-			ImageInitParams soImage = soMPP.getImage();
 			
-			inputObject.addToSharedObjects( soMPP, soImage );
-			
-			NamedImgStackCollection stackCollection = createStackCollection(soImage, logErrorReporter);
-			NamedImgStackCollection stackCollectionMIP = createStackCollectionMIP(soImage, logErrorReporter);
+			NamedImgStackCollection stackCollection = createStackCollection(soMPP.getImage(), logger);
+			NamedImgStackCollection stackCollectionMIP = createStackCollectionMIP(soMPP.getImage(), logger);
 			
 			if (stackCollection.keys().size()==0) {
 				// Nothing to do
@@ -185,26 +170,23 @@ public class ExportObjectsAsCroppedImagesTask extends ExportObjectsBase<MultiInp
 			).getDimensions();
 			
 			ObjMaskCollection objsZ = maybeExtendZObjs(
-				inputObjs(soImage, logErrorReporter),
+				inputObjs(soMPP.getImage(), logger),
 				dim.getZ()
 			);
 			
 			outputGeneratorSeq(
 				createGenerator(dim, stackCollection, stackCollectionMIP),
-				so,
 				objsZ,
-				outputManager,
-				logErrorReporter
+				context
 			);
 					
-			// For-e
 			if (suppressOutputExceptions) {
-				SharedObjectsUtilities.output(soMPP, outputManager, logErrorReporter, suppressSubfolders);
+				SharedObjectsUtilities.output(soMPP, suppressSubfolders, context);
 			} else {
 				SharedObjectsUtilities.outputWithException(soMPP, outputManager, suppressSubfolders);
 			}
 			
-		} catch (OperationFailedException | OutputWriteFailedException | CreateException | InitException e) {
+		} catch (OutputWriteFailedException | CreateException | InitException e) {
 			throw new JobExecutionException(e);
 		} catch (NamedProviderGetException e) {
 			throw new JobExecutionException(e.summarize());
@@ -219,22 +201,17 @@ public class ExportObjectsAsCroppedImagesTask extends ExportObjectsBase<MultiInp
 
 
 	@Override
-	public void afterAllJobsAreExecuted(BoundOutputManagerRouteErrors outputManager, Object sharedState,
-			LogReporter logReporter) throws ExperimentExecutionException {
+	public void afterAllJobsAreExecuted(Object sharedState,	BoundIOContext context) throws ExperimentExecutionException {
 	}	
 	
 	private void outputGeneratorSeq(
 		IterableGenerator<ObjMask> generator,
-		SharedObjects so,
 		ObjMaskCollection objs,
-		BoundOutputManagerRouteErrors outputManager,
-		LogErrorReporter logErrorReporter
+		BoundIOContext context
 	) throws CreateException {
 		GeneratorSequenceIncrementalRerouteErrors<ObjMask> generatorSeq = createGeneratorSequence(
 			generator,
-			outputManager,
-			so,
-			logErrorReporter.getErrorReporter()
+			context
 		);
 		
 		generatorSeq.start();
@@ -447,19 +424,22 @@ public class ExportObjectsAsCroppedImagesTask extends ExportObjectsBase<MultiInp
 		);
 	}
 		
-	private GeneratorSequenceIncrementalRerouteErrors<ObjMask> createGeneratorSequence( IterableGenerator<ObjMask> generator, BoundOutputManagerRouteErrors outputManager, SharedObjects psoImage, ErrorReporter errorReporter ) {
+	private GeneratorSequenceIncrementalRerouteErrors<ObjMask> createGeneratorSequence(
+		IterableGenerator<ObjMask> generator,
+		BoundIOContext context
+	) {
 		IndexableOutputNameStyle outputNameStyle = new IntegerPrefixOutputNameStyle("extractedObjs", 6);
 		
 		GeneratorSequenceIncrementalRerouteErrors<ObjMask> writer = new GeneratorSequenceIncrementalRerouteErrors<>(
 			new GeneratorSequenceIncrementalWriter<>(
-				outputManager.getDelegate(),
+				context.getOutputManager().getDelegate(),
 				outputNameStyle.getOutputName(),
 				outputNameStyle,
 				generator,
 				0,
 				true
 			),
-			errorReporter
+			context.getErrorReporter()
 		);
 		return writer;
 	}
@@ -552,23 +532,12 @@ public class ExportObjectsAsCroppedImagesTask extends ExportObjectsBase<MultiInp
 	public void setKeepEntireImage(boolean keepEntireImage) {
 		this.keepEntireImage = keepEntireImage;
 	}
-	
-	
-	public Define getNamedDefinitions() {
-		return namedDefinitions;
+
+	public Define getDefine() {
+		return define;
 	}
 
-
-	public void setNamedDefinitions(Define namedDefinitions) {
-		this.namedDefinitions = namedDefinitions;
-	}
-
-	public RandomNumberGeneratorBean getRandomNumberGenerator() {
-		return randomNumberGenerator;
-	}
-
-
-	public void setRandomNumberGenerator(RandomNumberGeneratorBean randomNumberGenerator) {
-		this.randomNumberGenerator = randomNumberGenerator;
+	public void setDefine(Define define) {
+		this.define = define;
 	}
 }

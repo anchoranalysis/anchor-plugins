@@ -31,7 +31,6 @@ import java.nio.ByteBuffer;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.random.RandomNumberGenerator;
 import org.anchoranalysis.image.bean.sgmn.binary.BinarySgmn;
 import org.anchoranalysis.image.bean.sgmn.binary.BinarySgmnParameters;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
@@ -78,10 +77,10 @@ public class SgmnInv extends BinarySgmn {
 	}
 
 	@Override
-	public BinaryVoxelBox<ByteBuffer> sgmn(VoxelBoxWrapper voxelBox, BinarySgmnParameters params, RandomNumberGenerator re)
+	public BinaryVoxelBox<ByteBuffer> sgmn(VoxelBoxWrapper voxelBox, BinarySgmnParameters params)
 			throws SgmnFailedException {
 
-		BinaryVoxelBox<ByteBuffer> bvb = sgmn.sgmn(voxelBox, params, re);
+		BinaryVoxelBox<ByteBuffer> bvb = sgmn.sgmn(voxelBox, params);
 		
 		if (bvb==null) {
 			return null;
@@ -98,9 +97,9 @@ public class SgmnInv extends BinarySgmn {
 
 	@Override
 	public BinaryVoxelBox<ByteBuffer> sgmn(VoxelBoxWrapper voxelBox,
-			BinarySgmnParameters params, ObjMask objMask, RandomNumberGenerator re) throws SgmnFailedException {
+			BinarySgmnParameters params, ObjMask objMask) throws SgmnFailedException {
 		
-		BinaryVoxelBox<ByteBuffer> vb = sgmn.sgmn(voxelBox, params, objMask, re);
+		BinaryVoxelBox<ByteBuffer> vb = sgmn.sgmn(voxelBox, params, objMask);
 		
 		try {
 			invertVoxelBox( vb );

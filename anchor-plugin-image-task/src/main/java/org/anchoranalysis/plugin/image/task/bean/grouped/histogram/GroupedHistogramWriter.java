@@ -32,62 +32,66 @@ import java.util.Map;
 
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.index.SetOperationFailedException;
-import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.core.name.CombinedName;
 import org.anchoranalysis.core.text.LanguageUtilities;
 import org.anchoranalysis.image.histogram.Histogram;
 import org.anchoranalysis.io.generator.histogram.HistogramCSVGenerator;
-import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
+import org.anchoranalysis.io.output.bound.BoundIOContext;
+import org.anchoranalysis.plugin.image.task.bean.grouped.BoundContextIntoSubfolder;
 import org.anchoranalysis.plugin.image.task.grouped.GroupMap;
 
 class GroupedHistogramWriter {
 
 	private HistogramCSVGenerator generator = new HistogramCSVGenerator();
 	
-	public void writeHistogramToFile( Histogram hist, String outputName, String errorName, BoundOutputManagerRouteErrors outputManager, LogErrorReporter logErrorReporter ) throws IOException {
+	public void writeHistogramToFile( Histogram hist, String outputName, String errorName, BoundIOContext context ) throws IOException {
 		
 		try {
 			generator.setIterableElement(hist);
 		} catch (SetOperationFailedException e) {
 			Exception excComb =new OperationFailedException( String.format("Cannot write histogram for %s", errorName, e) );
-			logErrorReporter.getErrorReporter().recordError(GroupMap.class, excComb);
+			context.getErrorReporter().recordError(GroupMap.class, excComb);
 		}
 		
-		outputManager.getWriterCheckIfAllowed().write(
+		context.getOutputManager().getWriterCheckIfAllowed().write(
 			outputName,
 			() -> generator
 		);
 	}
 	
-	public void writeAllGroupHistograms( GroupMap<?,Histogram> groupMap, BoundOutputManagerRouteErrors outputManager, LogErrorReporter logErrorReporter ) throws IOException {
+	public void writeAllGroupHistograms( GroupMap<?,Histogram> groupMap, BoundIOContext context ) throws IOException {
 				
 		if (!groupMap.keySet().isEmpty()) {
-			logErrorReporter.getLogReporter().log(
+			context.getLogReporter().log(
 				String.format(
 					"Writing %s into %s",
 					LanguageUtilities.prefixPluralize(groupMap.keySet().size(), "grouped histogram"),
-					outputManager.getOutputFolderPath()
+					context.getOutputManager().getOutputFolderPath()
 				)
 			);
 		}
 		
 		// We wish to create a new output-manager only once for each primary key, so we store them in a hashmap
-		Map<String, BoundOutputManagerRouteErrors> mapOutputManagers = new HashMap<>();
+		Map<String, BoundIOContext> mapOutputManagers = new HashMap<>();
 		
 		for( CombinedName group : groupMap.keySet() ) {
 		
-			BoundOutputManagerRouteErrors outputManagerGroup = mapOutputManagers.computeIfAbsent(
+			BoundIOContext contextGroup = mapOutputManagers.computeIfAbsent(
 				group.getPrimaryName(),
-				primaryName -> outputManager.resolveFolder(primaryName)
+				primaryName -> new BoundContextIntoSubfolder(context, primaryName)
 			);
 			
 			Histogram hist = groupMap.get(group);
 			assert( hist!=null);
-			writeHistogramToFileResolve( hist, group, outputManagerGroup, logErrorReporter );
+			writeHistogramToFileResolve(
+				hist,
+				group,
+				contextGroup
+			);
 		}
 
 	}
-
+	
 	public boolean isIgnoreZeros() {
 		return generator.isIgnoreZeros();
 	}
@@ -100,8 +104,9 @@ class GroupedHistogramWriter {
 	private void writeHistogramToFileResolve(
 		Histogram hist,
 		CombinedName outputIdentifier,
-		BoundOutputManagerRouteErrors outputManagerGroup, LogErrorReporter logErrorReporter ) throws IOException {
+		BoundIOContext context
+	) throws IOException {
 
-		writeHistogramToFile(hist, outputIdentifier.getSecondaryName(), outputIdentifier.getCombinedName(), outputManagerGroup, logErrorReporter);
+		writeHistogramToFile(hist, outputIdentifier.getSecondaryName(), outputIdentifier.getCombinedName(), context);
 	}
 }

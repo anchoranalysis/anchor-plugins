@@ -1,6 +1,6 @@
 package org.anchoranalysis.plugin.image.task.bean.feature;
 
-import java.nio.file.Path;
+
 
 /*
  * #%L
@@ -31,7 +31,6 @@ import java.nio.file.Path;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.experiment.task.InputTypesExpected;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.calc.results.ResultsVector;
@@ -39,7 +38,7 @@ import org.anchoranalysis.feature.list.NamedFeatureStore;
 import org.anchoranalysis.image.bean.provider.stack.StackProvider;
 import org.anchoranalysis.image.feature.stack.FeatureInputStack;
 import org.anchoranalysis.image.io.input.ProvidesStackInput;
-import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
+import org.anchoranalysis.io.output.bound.BoundIOContext;
 import org.anchoranalysis.plugin.image.task.imagefeature.calculator.FeatureCalculatorStackInputFromStore;
 
 
@@ -69,9 +68,7 @@ public class ExportFeaturesImageTask extends ExportFeaturesStoreTask<ProvidesSta
 	protected ResultsVector calcResultsVectorForInputObject(
 		ProvidesStackInput inputObject,
 		NamedFeatureStore<FeatureInputStack> featureStore,
-		BoundOutputManagerRouteErrors outputManager,
-		Path modelDir,
-		LogErrorReporter logErrorReporter
+		BoundIOContext context
 	) throws FeatureCalcException {
 
 		try {
@@ -79,8 +76,7 @@ public class ExportFeaturesImageTask extends ExportFeaturesStoreTask<ProvidesSta
 				inputObject,
 				getNrgStackProvider(),
 				featureStore,
-				modelDir,
-				logErrorReporter
+				context
 			);
 			
 			return featCalc.calcAllInStore();

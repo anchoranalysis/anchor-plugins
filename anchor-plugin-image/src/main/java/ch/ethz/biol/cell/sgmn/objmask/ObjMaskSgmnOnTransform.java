@@ -68,7 +68,7 @@ public class ObjMaskSgmnOnTransform extends ObjMaskSgmn {
 			BinarySgmnParameters params = new BinarySgmnParameters();
 			params.setRes(chnl.getDimensions().getRes());
 			
-			BinaryVoxelBox<ByteBuffer> bvb = sgmn.sgmn( chnl.getVoxelBox(), params, getSharedObjects().getRandomNumberGenerator() );
+			BinaryVoxelBox<ByteBuffer> bvb = sgmn.sgmn( chnl.getVoxelBox(), params );
 
 			// DEBUG
 			// getOutputManager().getWriterCheckIfAllowed().write("afterSgmn", new ChnlGenerator(chnl,"afterSgmn") );

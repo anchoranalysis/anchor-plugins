@@ -72,7 +72,7 @@ public class ObjMaskProviderBinarySgmn extends ObjMaskProvider {
 			for( ObjMask om : objMasks ) {
 				VoxelBox<?> vb = chnl.getVoxelBox().any().createBufferAvoidNew(om.getBoundingBox() );
 				
-				BinaryVoxelBox<ByteBuffer> bvb = binarySgmn.sgmn( new VoxelBoxWrapper(vb), null, new ObjMask( om.getVoxelBox()), getSharedObjects().getRandomNumberGenerator() );
+				BinaryVoxelBox<ByteBuffer> bvb = binarySgmn.sgmn( new VoxelBoxWrapper(vb), null, new ObjMask( om.getVoxelBox()) );
 				
 				ObjMask mask = new ObjMask( om.getBoundingBox(), bvb.getVoxelBox() );
 				mask.setBinaryValues( bvb.getBinaryValues() );

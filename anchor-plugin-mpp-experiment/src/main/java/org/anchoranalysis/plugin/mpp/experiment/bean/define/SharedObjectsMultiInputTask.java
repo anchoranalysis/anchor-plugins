@@ -30,19 +30,14 @@ package org.anchoranalysis.plugin.mpp.experiment.bean.define;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
-import org.anchoranalysis.anchor.mpp.bean.init.GeneralInitParams;
 import org.anchoranalysis.anchor.mpp.bean.init.MPPInitParams;
 import org.anchoranalysis.bean.annotation.AllowEmpty;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.define.Define;
-import org.anchoranalysis.bean.shared.random.RandomNumberGeneratorBean;
-import org.anchoranalysis.bean.shared.random.RandomNumberGeneratorMersenneConstantBean;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
-import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.log.LogErrorReporter;
-import org.anchoranalysis.core.name.store.SharedObjects;
 import org.anchoranalysis.experiment.JobExecutionException;
 import org.anchoranalysis.experiment.bean.task.TaskWithoutSharedState;
 import org.anchoranalysis.experiment.task.InputTypesExpected;
@@ -50,9 +45,11 @@ import org.anchoranalysis.experiment.task.ParametersBound;
 import org.anchoranalysis.image.init.ImageInitParams;
 import org.anchoranalysis.image.io.bean.feature.OutputFeatureTable;
 import org.anchoranalysis.image.stack.NamedImgStackCollection;
+import org.anchoranalysis.io.output.bound.BoundIOContext;
 import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.mpp.io.input.MultiInput;
+import org.anchoranalysis.mpp.io.input.MPPInitParamsFactory;
 import org.anchoranalysis.plugin.mpp.experiment.outputter.SharedObjectsUtilities;
 
 public class SharedObjectsMultiInputTask extends TaskWithoutSharedState<MultiInput> {
@@ -66,9 +63,6 @@ public class SharedObjectsMultiInputTask extends TaskWithoutSharedState<MultiInp
 	// START BEAN PROPERTIES
 	@BeanField
 	private Define define;
-	
-	@BeanField
-	private RandomNumberGeneratorBean randomNumberGenerator = new RandomNumberGeneratorMersenneConstantBean();
 	
 	@BeanField
 	private boolean suppressSubfolders = true;
@@ -95,36 +89,27 @@ public class SharedObjectsMultiInputTask extends TaskWithoutSharedState<MultiInp
 	@Override
 	public void doJobOnInputObject(	ParametersBound<MultiInput,Object> params)	throws JobExecutionException {
 		
-		LogErrorReporter logErrorReporter = params.getLogErrorReporter();
-		MultiInput inputObject = params.getInputObject();
 		BoundOutputManagerRouteErrors outputManager = params.getOutputManager();
 		
+		BoundIOContext context = params.context();
+		
 		try {
-			SharedObjects so = new SharedObjects( logErrorReporter	);
-			MPPInitParams soMPP = MPPInitParams.create(
-				so,
-				define,
-				new GeneralInitParams(
-					randomNumberGenerator.create(),
-					params.getExperimentArguments().getModelDirectory(),
-					logErrorReporter
-				)
+			MPPInitParams soMPP = MPPInitParamsFactory.createFromInput(
+				params,
+				Optional.ofNullable(define)
 			);
-			ImageInitParams soImage = soMPP.getImage();
-			inputObject.addToSharedObjects( soMPP, soImage );
 			
 			if (suppressOutputExceptions) {
-				SharedObjectsUtilities.output(soMPP, outputManager, logErrorReporter, suppressSubfolders);
-				outputFeatureTables(soImage, outputManager, logErrorReporter );
+				SharedObjectsUtilities.output(soMPP, suppressSubfolders, context);
+				outputFeatureTables(soMPP.getImage(), context);
 			} else {
 				SharedObjectsUtilities.outputWithException(soMPP, outputManager, suppressSubfolders);
-				outputFeatureTablesWithException(soImage, outputManager, logErrorReporter);
+				outputFeatureTablesWithException(soMPP.getImage(), context);
 			}
 			
-			SharedObjectsUtilities.writeNRGStackParams( soImage, nrgParamsName, outputManager, logErrorReporter );
+			SharedObjectsUtilities.writeNRGStackParams( soMPP.getImage(), nrgParamsName, context );
 
-			
-		} catch (OperationFailedException | OutputWriteFailedException | IOException | CreateException e) {
+		} catch (OutputWriteFailedException | IOException | CreateException e) {
 			throw new JobExecutionException(e);
 		}
 	}
@@ -134,26 +119,27 @@ public class SharedObjectsMultiInputTask extends TaskWithoutSharedState<MultiInp
 		return false;
 	}
 
-	private void outputFeatureTables( ImageInitParams so, BoundOutputManagerRouteErrors outputManager, LogErrorReporter logErrorReporter ) {
+	private void outputFeatureTables( ImageInitParams so, BoundIOContext context) {
+				
 		for (OutputFeatureTable oft : listOutputFeatureTable) {
 			try {
-				oft.initRecursive(so, logErrorReporter);
-				oft.output(outputManager, logErrorReporter);
+				oft.initRecursive(so, context.getLogger());
+				oft.output(context);
 			} catch (IOException | InitException e) {
-				logErrorReporter.getErrorReporter().recordError(NamedImgStackCollection.class, e);
+				context.getErrorReporter().recordError(NamedImgStackCollection.class, e);
 			}
 		}
 	}
 	
-	private void outputFeatureTablesWithException( ImageInitParams so, BoundOutputManagerRouteErrors outputManager, LogErrorReporter logErrorReporter ) throws IOException {
+	private void outputFeatureTablesWithException( ImageInitParams so, BoundIOContext context) throws IOException {
 		for (OutputFeatureTable oft : listOutputFeatureTable) {
 			
 			try {
-				oft.initRecursive(so, logErrorReporter);
+				oft.initRecursive(so, context.getLogger());
 			} catch (InitException e) {
 				throw new IOException(e);
 			}
-			oft.output(outputManager, logErrorReporter);
+			oft.output(context);
 		}
 	}
 
@@ -193,15 +179,6 @@ public class SharedObjectsMultiInputTask extends TaskWithoutSharedState<MultiInp
 
 	public void setNrgParamsName(String nrgParamsName) {
 		this.nrgParamsName = nrgParamsName;
-	}
-
-	public RandomNumberGeneratorBean getRandomNumberGenerator() {
-		return randomNumberGenerator;
-	}
-
-
-	public void setRandomNumberGenerator(RandomNumberGeneratorBean randomNumberGenerator) {
-		this.randomNumberGenerator = randomNumberGenerator;
 	}
 
 	public Define getDefine() {

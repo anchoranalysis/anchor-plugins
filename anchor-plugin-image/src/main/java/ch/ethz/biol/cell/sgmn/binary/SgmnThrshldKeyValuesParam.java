@@ -34,7 +34,6 @@ import org.anchoranalysis.bean.shared.params.keyvalue.KeyValueParamsProvider;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.params.KeyValueParams;
-import org.anchoranalysis.core.random.RandomNumberGenerator;
 import org.anchoranalysis.image.bean.sgmn.binary.BinarySgmn;
 import org.anchoranalysis.image.bean.sgmn.binary.BinarySgmnParameters;
 import org.anchoranalysis.image.bean.threshold.Thresholder;
@@ -87,7 +86,7 @@ public class SgmnThrshldKeyValuesParam extends BinarySgmn {
 	
 	
 	@Override
-	public BinaryVoxelBox<ByteBuffer> sgmn(VoxelBoxWrapper voxelBox, BinarySgmnParameters params, RandomNumberGenerator re) throws SgmnFailedException {
+	public BinaryVoxelBox<ByteBuffer> sgmn(VoxelBoxWrapper voxelBox, BinarySgmnParameters params) throws SgmnFailedException {
 		
 		BinaryValuesByte bvOut = BinaryValuesByte.getDefault();
 		
@@ -101,7 +100,7 @@ public class SgmnThrshldKeyValuesParam extends BinarySgmn {
 	}
 	
 	@Override
-	public BinaryVoxelBox<ByteBuffer> sgmn(VoxelBoxWrapper voxelBox, BinarySgmnParameters params, ObjMask objMask, RandomNumberGenerator re) throws SgmnFailedException {
+	public BinaryVoxelBox<ByteBuffer> sgmn(VoxelBoxWrapper voxelBox, BinarySgmnParameters params, ObjMask objMask) throws SgmnFailedException {
 		
 		VoxelBox<ByteBuffer> voxelBoxByte = voxelBox.asByte();
 		

@@ -31,7 +31,6 @@ import org.anchoranalysis.bean.annotation.SkipInit;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.log.LogErrorReporter;
-import org.anchoranalysis.core.log.LogReporter;
 import org.anchoranalysis.core.progress.ProgressReporterNull;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
 import org.anchoranalysis.experiment.JobExecutionException;
@@ -52,6 +51,7 @@ import org.anchoranalysis.image.io.input.NamedChnlsInput;
 import org.anchoranalysis.image.io.stack.StackCollectionOutputter;
 import org.anchoranalysis.image.stack.NamedImgStackCollection;
 import org.anchoranalysis.image.stack.wrap.WrapStackAsTimeSequenceStore;
+import org.anchoranalysis.io.output.bound.BoundIOContext;
 import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.plugin.image.task.imagefeature.calculator.FeatureCalculatorRepeated;
@@ -110,13 +110,12 @@ public class ExtractSingleSliceTask extends Task<NamedChnlsInput,SharedStateSele
 			NRGStackWithParams nrgStack = FeatureCalculatorRepeated.extractStack(
 				params.getInputObject(),
 				nrgStackProvider,
-				params.getExperimentArguments().getModelDirectory(),
-				params.getLogErrorReporter()
+				params.context()
 			);
 			
 			int optimaSliceIndex = selectSlice(
 				nrgStack,
-				params.getLogErrorReporter(),
+				params.getLogger(),
 				params.getInputObject().descriptiveName(),
 				params.getSharedState()
 			);
@@ -134,8 +133,8 @@ public class ExtractSingleSliceTask extends Task<NamedChnlsInput,SharedStateSele
 	}
 	
 	@Override
-	public void afterAllJobsAreExecuted(BoundOutputManagerRouteErrors outputManager,
-			SharedStateSelectedSlice sharedState, LogReporter logReporter) throws ExperimentExecutionException {
+	public void afterAllJobsAreExecuted(SharedStateSelectedSlice sharedState,
+			BoundIOContext context) throws ExperimentExecutionException {
 		sharedState.close();
 	}
 	

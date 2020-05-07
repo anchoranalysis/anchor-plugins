@@ -31,17 +31,14 @@ import java.nio.file.Path;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.error.BeanDuplicateException;
-import org.anchoranalysis.bean.shared.random.RandomNumberGeneratorBean;
-import org.anchoranalysis.bean.shared.random.RandomNumberGeneratorMersenneConstantBean;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
-import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 import org.anchoranalysis.core.name.store.LazyEvaluationStore;
 import org.anchoranalysis.core.progress.ProgressReporter;
 import org.anchoranalysis.core.progress.ProgressReporterNull;
-import org.anchoranalysis.experiment.ExperimentExecutionArguments;
+import org.anchoranalysis.core.random.RandomNumberGeneratorMersenne;
 import org.anchoranalysis.experiment.JobExecutionException;
 import org.anchoranalysis.image.chnl.Chnl;
 import org.anchoranalysis.image.experiment.bean.sgmn.SgmnObjMaskCollection;
@@ -55,6 +52,7 @@ import org.anchoranalysis.image.objmask.ObjMaskCollection;
 import org.anchoranalysis.image.sgmn.SgmnFailedException;
 import org.anchoranalysis.image.stack.NamedImgStackCollection;
 import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
+import org.anchoranalysis.io.output.bound.BoundIOContext;
 
 public class ObjMaskSgmnTask extends RasterTask {
 
@@ -69,9 +67,6 @@ public class ObjMaskSgmnTask extends RasterTask {
 	
 	@BeanField
 	private String outputNameOriginal = "original";
-	
-	@BeanField
-	private RandomNumberGeneratorBean randomNumberGenerator = new RandomNumberGeneratorMersenneConstantBean();
 	// END BEAN PROPERTIES
 	
 	public ObjMaskSgmnTask() {
@@ -90,22 +85,22 @@ public class ObjMaskSgmnTask extends RasterTask {
 	
 	
 	@Override
-	public void doStack( NamedChnlsInput inputObject, int seriesIndex, int numSeries, BoundOutputManagerRouteErrors outputManager, LogErrorReporter logErrorReporter, ExperimentExecutionArguments expArgs ) throws JobExecutionException {
+	public void doStack( NamedChnlsInput inputObject, int seriesIndex, int numSeries, BoundIOContext context ) throws JobExecutionException {
 		
 		try {
 			NamedImgStackCollection stackCollection = stacksForInput(
 				inputObject,
-				expArgs.getModelDirectory()
+				context.getModelDirectory()
 			);
 			
 			Chnl chnl = backgroundFromStacks(stackCollection);
 			
-			ObjMaskSgmnTaskOutputter.writeOriginal(outputManager, chnl, outputNameOriginal);
+			ObjMaskSgmnTaskOutputter.writeOriginal(context.getOutputManager(), chnl, outputNameOriginal);
 			
-			ObjMaskCollection objs = sgmnFromStacks(stackCollection, outputManager, logErrorReporter, expArgs);
+			ObjMaskCollection objs = sgmnFromStacks(stackCollection, context);
 			
 			// Write different visualizations of the result
-			ObjMaskSgmnTaskOutputter.writeMaskOutputs(objs, chnl, outputManager);
+			ObjMaskSgmnTaskOutputter.writeMaskOutputs(objs, chnl, context.getOutputManager());
 			
 		} catch (BeanDuplicateException | OperationFailedException e) {
 			throw new JobExecutionException(e);
@@ -114,17 +109,12 @@ public class ObjMaskSgmnTask extends RasterTask {
 		}
 	}
 	
-	private ObjMaskCollection sgmnFromStacks(
-		NamedImgStackCollection stackCollection,
-		BoundOutputManagerRouteErrors outputManager,
-		LogErrorReporter logErrorReporter,
-		ExperimentExecutionArguments expArgs
-	) throws OperationFailedException {
+	private ObjMaskCollection sgmnFromStacks(NamedImgStackCollection stackCollection, BoundIOContext context) throws OperationFailedException {
 		
 		SgmnObjMaskCollection sgmnDup = sgmn.duplicateBean();
 		assert( sgmnDup != null );
 		try {
-			sgmnDup.initRecursive(logErrorReporter);
+			sgmnDup.initRecursive( context.getLogger() );
 		} catch (InitException e) {
 			throw new OperationFailedException(e);
 		}
@@ -132,12 +122,10 @@ public class ObjMaskSgmnTask extends RasterTask {
 		try {
 			return sgmnDup.sgmn(
 				stackCollection,
-				new LazyEvaluationStore<>(logErrorReporter, "objMaskCollection"),
+				new LazyEvaluationStore<>( context.getLogger(), "objMaskCollection"),
 				null,
-				randomNumberGenerator.create(),
-				expArgs,
-				logErrorReporter,
-				outputManager
+				new RandomNumberGeneratorMersenne(false),
+				context
 			);
 		} catch (SgmnFailedException e) {
 			throw new OperationFailedException(e);
@@ -182,13 +170,5 @@ public class ObjMaskSgmnTask extends RasterTask {
 
 	public void setSgmn(SgmnObjMaskCollection sgmn) {
 		this.sgmn = sgmn;
-	}
-
-	public RandomNumberGeneratorBean getRandomNumberGenerator() {
-		return randomNumberGenerator;
-	}
-
-	public void setRandomNumberGenerator(RandomNumberGeneratorBean randomNumberGenerator) {
-		this.randomNumberGenerator = randomNumberGenerator;
 	}
 }

@@ -32,13 +32,12 @@ import org.anchoranalysis.annotation.io.assignment.AssignmentObjMask;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
-import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.shared.SharedFeaturesInitParams;
 import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.feature.bean.evaluator.FeatureEvaluatorSimple;
 import org.anchoranalysis.image.feature.objmask.pair.FeatureInputPairObjs;
-import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
+import org.anchoranalysis.io.output.bound.BoundIOContext;
 import org.anchoranalysis.plugin.annotation.comparison.AnnotationGroup;
 import org.anchoranalysis.plugin.annotation.comparison.AnnotationGroupObjMask;
 import org.anchoranalysis.plugin.annotation.comparison.ObjsToCompare;
@@ -69,12 +68,13 @@ public class FeatureCostAssigner extends AnnotationComparisonAssigner<Assignment
 		ObjsToCompare objsToCompare,
 		ImageDim dim,
 		boolean useMIP,
-		BoundOutputManagerRouteErrors outputManager,
-		LogErrorReporter logErrorReporter
+		BoundIOContext context
 	) throws CreateException {
 		try {
-			SharedFeaturesInitParams soFeature = SharedFeaturesInitParams.create(logErrorReporter);
-			featureEvaluator.initRecursive( soFeature, logErrorReporter );
+			SharedFeaturesInitParams soFeature = SharedFeaturesInitParams.create(
+				context.getLogger()
+			);
+			featureEvaluator.initRecursive( soFeature, context.getLogger() );
 
 			AssignmentObjMaskFactory assignmentCreator = new AssignmentObjMaskFactory(
 				featureEvaluator,
@@ -93,7 +93,7 @@ public class FeatureCostAssigner extends AnnotationComparisonAssigner<Assignment
 				assignment.removeTouchingBorderXY( dim );
 			}
 			
-			outputManager.getWriterCheckIfAllowed().write(
+			context.getOutputManager().getWriterCheckIfAllowed().write(
 				"costMatrix",
 				() -> new ObjMaskCollectionDistanceMatrixGenerator(assignmentCreator.getCost(), numDecimalPlaces )
 			);

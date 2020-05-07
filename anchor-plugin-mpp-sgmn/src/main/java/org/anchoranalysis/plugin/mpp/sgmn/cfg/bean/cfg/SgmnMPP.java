@@ -1,7 +1,8 @@
 package org.anchoranalysis.plugin.mpp.sgmn.cfg.bean.cfg;
 
+import java.util.Optional;
+
 import org.anchoranalysis.anchor.mpp.bean.cfg.CfgGen;
-import org.anchoranalysis.anchor.mpp.bean.init.GeneralInitParams;
 import org.anchoranalysis.anchor.mpp.bean.init.MPPInitParams;
 import org.anchoranalysis.anchor.mpp.cfg.Cfg;
 import org.anchoranalysis.anchor.mpp.feature.bean.nrgscheme.NRGSchemeCreator;
@@ -41,7 +42,6 @@ import org.anchoranalysis.anchor.mpp.mark.GlobalRegionIdentifiers;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.define.Define;
-import org.anchoranalysis.bean.shared.random.RandomNumberGeneratorBean;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.error.OperationFailedException;
@@ -49,16 +49,16 @@ import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.core.memory.MemoryUtilities;
 import org.anchoranalysis.core.name.provider.INamedProvider;
 import org.anchoranalysis.core.name.store.NamedProviderStore;
-import org.anchoranalysis.core.name.store.SharedObjects;
 import org.anchoranalysis.core.params.KeyValueParams;
-import org.anchoranalysis.experiment.ExperimentExecutionArguments;
+import org.anchoranalysis.core.random.RandomNumberGeneratorMersenne;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 import org.anchoranalysis.image.objmask.ObjMaskCollection;
 import org.anchoranalysis.image.sgmn.SgmnFailedException;
 import org.anchoranalysis.image.stack.DisplayStack;
 import org.anchoranalysis.image.stack.NamedImgStackCollection;
 import org.anchoranalysis.image.stack.Stack;
-import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
+import org.anchoranalysis.io.output.bound.BoundIOContext;
+import org.anchoranalysis.mpp.io.input.MPPInitParamsFactory;
 import org.anchoranalysis.mpp.io.output.BackgroundCreator;
 import org.anchoranalysis.mpp.sgmn.bean.cfg.CfgSgmn;
 import org.anchoranalysis.mpp.sgmn.bean.kernel.proposer.KernelProposer;
@@ -93,13 +93,10 @@ public class SgmnMPP extends CfgSgmn {
 	private KernelProposer<CfgNRGPixelized> kernelProposer = null;
 	
 	@BeanField
-	private RandomNumberGeneratorBean randomNumberGenerator = null;
-	
-	@BeanField
 	private FeedbackReceiverBean<CfgNRGPixelized> feedbackReceiver = null;
 	
 	@BeanField
-	private Define namedDefinitions = null;
+	private Define define = null;
 	
 	@BeanField
 	private int nrgSchemeIndCacheSize = 50;
@@ -107,6 +104,10 @@ public class SgmnMPP extends CfgSgmn {
 	// For debugging, allows us to exit before optimization begins
 	@BeanField
 	private boolean exitBeforeOpt = false;
+	
+	/** If TRUE uses a constant seed for the random-number-generator (useful for debugging) otherwise seeds with system clock */
+	@BeanField
+	private boolean fixRandomSeed = false;
 	// END BEAN PROPERTIES
 	
 	private NRGSchemeWithSharedFeatures nrgSchemeShared;
@@ -117,7 +118,7 @@ public class SgmnMPP extends CfgSgmn {
 	
 	@Override
 	public SgmnMPPState createExperimentState() {
-		return new SgmnMPPState(kernelProposer,namedDefinitions);
+		return new SgmnMPPState(kernelProposer,define);
 	}
 	
 	// Do segmentation
@@ -125,55 +126,49 @@ public class SgmnMPP extends CfgSgmn {
 	public Cfg sgmn(
 		NamedImgStackCollection stackCollection,
 		INamedProvider<ObjMaskCollection> objMaskCollection,
-		ExperimentExecutionArguments expArgs,
-		KeyValueParams params,
-		LogErrorReporter logger,
-		BoundOutputManagerRouteErrors outputManager
+		Optional<KeyValueParams> keyValueParams,
+		BoundIOContext context
 	) throws SgmnFailedException {
 		
 		assert(stackCollection!=null);
-		TriggerTerminationCondition triggerTerminationCondition = new TriggerTerminationCondition();
-		
-		
+	
 		ListUpdatableMarkSetCollection updatableMarkSetCollection = new ListUpdatableMarkSetCollection();
 		
 		DualStack dualStack = initAndPrepareInputStackCollectionForOpt(
 			stackCollection,
 			objMaskCollection,
 			updatableMarkSetCollection,
-			params,
-			outputManager,
-			new GeneralInitParams(
-				randomNumberGenerator.create(),
-				expArgs.getModelDirectory(),
-				logger
-			)
+			keyValueParams,
+			context
 		);
 		
 		// THIS SHOULD BE THE POINT AT WHICH WE LET PsoImage go out of scope, and everything in it, which isn't being used
 		//   can be garbage collected.  This will reduce memory usage for the rest of the algorithm, where hopefully
 		//   only what is needed will be kept
-		MemoryUtilities.logMemoryUsage("Before findOpt (after clean up)", logger.getLogReporter() );
+		MemoryUtilities.logMemoryUsage("Before findOpt (after clean up)", context.getLogger().getLogReporter() );
 		
 		if (exitBeforeOpt) {
 			return new Cfg();
 		}
 		
-		if (params!=null) {
-			outputManager.getWriterCheckIfAllowed().write(
+		if (keyValueParams.isPresent()) {
+			context.getOutputManager().getWriterCheckIfAllowed().write(
 				"groupParams",
-				() -> new GroupParamsGenerator(params)
+				() -> new GroupParamsGenerator(keyValueParams.get())
 			);
 		}
-		
-		CfgWithNrgTotal cfgNRG = findOpt(
-			dualStack,			
-			updatableMarkSetCollection,
-			triggerTerminationCondition,
-			expArgs,
-			logger,
-			outputManager
+				
+		OptSchemeInitContext initContext = new OptSchemeInitContext(
+			"MPP Sgmn",
+			nrgSchemeShared,
+			dualStack,
+			new TriggerTerminationCondition(),
+			context,
+			new RandomNumberGeneratorMersenne(fixRandomSeed),
+			cfgGen
 		);
+		
+		CfgWithNrgTotal cfgNRG = findOpt(dualStack,	updatableMarkSetCollection,	initContext);
 		return cfgNRG.getCfg().deepCopy();
 		
 	}
@@ -182,33 +177,35 @@ public class SgmnMPP extends CfgSgmn {
 		NamedImgStackCollection stackCollection,
 		INamedProvider<ObjMaskCollection> objMaskCollection,
 		ListUpdatableMarkSetCollection updatableMarkSetCollection,
-		KeyValueParams params,
-		BoundOutputManagerRouteErrors outputManager,
-		GeneralInitParams paramsGeneral
+		Optional<KeyValueParams> keyValueParams,
+		BoundIOContext context
 	) throws SgmnFailedException {
 		
 		try {
-			MemoryUtilities.logMemoryUsage("Start of SgmnMPP:sgmn", paramsGeneral.getLogReporter());
-			
-			MPPInitParams soMPP = SgmnMPPHelper.createParamsMPP(
-				namedDefinitions,
-				stackCollection,
-				objMaskCollection,
-				params,
-				new SharedObjects( paramsGeneral.getLogErrorReporter() ),
-				paramsGeneral
+			MemoryUtilities.logMemoryUsage("Start of SgmnMPP:sgmn", context.getLogReporter() );
+						
+			MPPInitParams soMPP = MPPInitParamsFactory.createFromExistingCollections(
+				context,
+				Optional.ofNullable(define),
+				Optional.of(stackCollection),
+				Optional.of(objMaskCollection),
+				keyValueParams
 			);
-			init( soMPP, paramsGeneral.getLogErrorReporter() );
 			
-			NRGStackWithParams nrgStack = SgmnMPPHelper.createNRGStack( soMPP.getImage().getStackCollection(), params );
-			SgmnMPPHelper.writeStacks( soMPP.getImage(), nrgStack, paramsGeneral.getLogErrorReporter(), outputManager );
+			init( soMPP, context.getLogger() );
 			
-			paramsGeneral.getLogReporter().log("Distinct number of probMap = " + updatableMarkSetCollection.numProbMap() );
+			NRGStackWithParams nrgStack = SgmnMPPHelper.createNRGStack(
+				soMPP.getImage().getStackCollection(),
+				keyValueParams.orElse( new KeyValueParams() )
+			);
+			SgmnMPPHelper.writeStacks( soMPP.getImage(), nrgStack, context );
+			
+			context.getLogReporter().log("Distinct number of probMap = " + updatableMarkSetCollection.numProbMap() );
 			
 			// We initialise the feedback recev
-			feedbackReceiver.initRecursive(soMPP, paramsGeneral.getLogErrorReporter());
+			feedbackReceiver.initRecursive(soMPP, context.getLogger());
 			
-			MemoryUtilities.logMemoryUsage("Before findOpt (before cleanup)", paramsGeneral.getLogReporter() );
+			MemoryUtilities.logMemoryUsage("Before findOpt (before cleanup)", context.getLogReporter());
 		
 			// There are two elements of the ProposerSharedObjects that we need to update with changes to the accepted
 			//   configuration
@@ -216,7 +213,7 @@ public class SgmnMPP extends CfgSgmn {
 				soMPP,
 				nrgStack,
 				updatableMarkSetCollection,
-				paramsGeneral.getLogErrorReporter()
+				context.getLogger()
 			).apply();
 			
 			return wrapWithBackground(nrgStack, soMPP.getImage().getStackCollection() );
@@ -239,24 +236,9 @@ public class SgmnMPP extends CfgSgmn {
 	private CfgWithNrgTotal findOpt(
 		DualStack dualStack,
 		ListUpdatableMarkSetCollection updatableMarkSetCollection,
-		TriggerTerminationCondition triggerTerminationCondition,
-		ExperimentExecutionArguments expArgs,
-		LogErrorReporter logger,
-		BoundOutputManagerRouteErrors outputManager
+		OptSchemeInitContext initContext
 	) throws SgmnFailedException {
 		try {
-			OptSchemeInitContext initContext = new OptSchemeInitContext(
-				"MPP Sgmn",
-				nrgSchemeShared,
-				dualStack,
-				triggerTerminationCondition,
-				expArgs,
-				logger,
-				outputManager,
-				randomNumberGenerator.create(),
-				cfgGen
-			);
-			
 			CfgNRG cfgNRG = optScheme.findOpt(
 				kernelProposer,
 				updatableMarkSetCollection,
@@ -268,8 +250,8 @@ public class SgmnMPP extends CfgSgmn {
 				cfgNRG,
 				dualStack,
 				nrgSchemeShared.getNrgScheme().getRegionMap().membershipWithFlagsForIndex( GlobalRegionIdentifiers.SUBMARK_INSIDE ),
-				logger,
-				outputManager
+				initContext.getLogger(),
+				initContext.getOutputManager()
 			);
 						
 			return cfgNRG.getCfgWithTotal();
@@ -290,7 +272,7 @@ public class SgmnMPP extends CfgSgmn {
 		return new DualStack(nrgStack,background);
 	}
 		
-	// START GETTERS AND SETTERS
+
 	
 	public OptScheme<CfgNRGPixelized,CfgNRGPixelized> getOptScheme() {
 		return optScheme;
@@ -328,14 +310,6 @@ public class SgmnMPP extends CfgSgmn {
 		this.feedbackReceiver = feedbackReceiver;
 	}
 
-	public Define getNamedDefinitions() {
-		return namedDefinitions;
-	}
-
-	public void setNamedDefinitions(Define namedDefinitions) {
-		this.namedDefinitions = namedDefinitions;
-	}
-
 	public NRGSchemeCreator getNrgSchemeCreator() {
 		return nrgSchemeCreator;
 	}
@@ -360,13 +334,19 @@ public class SgmnMPP extends CfgSgmn {
 		this.exitBeforeOpt = exitBeforeOpt;
 	}
 
-	public RandomNumberGeneratorBean getRandomNumberGenerator() {
-		return randomNumberGenerator;
+	public boolean isFixRandomSeed() {
+		return fixRandomSeed;
 	}
 
-	public void setRandomNumberGenerator(RandomNumberGeneratorBean randomNumberGenerator) {
-		this.randomNumberGenerator = randomNumberGenerator;
+	public void setFixRandomSeed(boolean fixRandomSeed) {
+		this.fixRandomSeed = fixRandomSeed;
 	}
-	// END GETTERS AND SETTERS
-	
+
+	public Define getDefine() {
+		return define;
+	}
+
+	public void setDefine(Define define) {
+		this.define = define;
+	}
 }

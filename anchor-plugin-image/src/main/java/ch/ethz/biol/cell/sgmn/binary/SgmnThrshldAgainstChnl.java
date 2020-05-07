@@ -32,7 +32,6 @@ import java.nio.ByteBuffer;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.geometry.Point3i;
-import org.anchoranalysis.core.random.RandomNumberGenerator;
 import org.anchoranalysis.image.bean.provider.ChnlProvider;
 import org.anchoranalysis.image.bean.sgmn.binary.BinarySgmn;
 import org.anchoranalysis.image.bean.sgmn.binary.BinarySgmnParameters;
@@ -67,8 +66,7 @@ public class SgmnThrshldAgainstChnl extends BinarySgmn {
 	@Override
 	public BinaryVoxelBox<ByteBuffer> sgmn(
 			VoxelBoxWrapper voxelBox,
-			BinarySgmnParameters params,
-			RandomNumberGenerator re) throws SgmnFailedException {
+			BinarySgmnParameters params) throws SgmnFailedException {
 
 		VoxelBox<?> voxelBoxIn = voxelBox.any();
 		VoxelBox<ByteBuffer> voxelBoxOut = createOutputChnl(voxelBox);
@@ -132,8 +130,7 @@ public class SgmnThrshldAgainstChnl extends BinarySgmn {
 	@Override
 	public BinaryVoxelBox<ByteBuffer> sgmn(
 			VoxelBoxWrapper voxelBox,
-			BinarySgmnParameters params, ObjMask objMask,
-			RandomNumberGenerator re) throws SgmnFailedException {
+			BinarySgmnParameters params, ObjMask objMask) throws SgmnFailedException {
 
 		VoxelBox<?> voxelBoxIn = voxelBox.any();
 		VoxelBox<ByteBuffer> voxelBoxOut = createOutputChnl(voxelBox);

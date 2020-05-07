@@ -35,7 +35,6 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.log.LogErrorReporter;
-import org.anchoranalysis.core.log.LogReporter;
 import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 import org.anchoranalysis.core.progress.ProgressReporterNull;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
@@ -51,6 +50,7 @@ import org.anchoranalysis.image.stack.wrap.WrapStackAsTimeSequenceStore;
 import org.anchoranalysis.io.bean.color.generator.ColorSetGenerator;
 import org.anchoranalysis.io.bean.color.generator.VeryBrightColorSetGenerator;
 import org.anchoranalysis.io.error.AnchorIOException;
+import org.anchoranalysis.io.output.bound.BoundIOContext;
 import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
 import org.anchoranalysis.plugin.annotation.bean.comparison.assigner.AnnotationComparisonAssigner;
 import org.anchoranalysis.plugin.annotation.comparison.AnnotationComparisonInput;
@@ -121,7 +121,7 @@ public class AnnotationComparisonTask<T extends Assignment> extends Task<Annotat
 		ParametersBound<AnnotationComparisonInput<ProvidesStackInput>,SharedState<T>> params
 	) throws JobExecutionException {
 
-		LogErrorReporter logErrorReporter = params.getLogErrorReporter();
+		LogErrorReporter logErrorReporter = params.getLogger();
 		AnnotationComparisonInput<ProvidesStackInput> input = params.getInputObject();
 		
 		// Create the background
@@ -135,9 +135,7 @@ public class AnnotationComparisonTask<T extends Assignment> extends Task<Annotat
 			input,
 			background,
 			descriptiveSplit,
-			params.getExperimentArguments().isDebugEnabled(),
-			logErrorReporter,
-			params.getOutputManager(),
+			params.context(),
 			params.getSharedState()
 		);
 		
@@ -157,9 +155,7 @@ public class AnnotationComparisonTask<T extends Assignment> extends Task<Annotat
 		AnnotationComparisonInput<ProvidesStackInput> input,
 		DisplayStack background,
 		SplitString descriptiveSplit,
-		boolean debugEnabled,
-		LogErrorReporter logErrorReporter,
-		BoundOutputManagerRouteErrors outputManager,
+		BoundIOContext context,
 		SharedState<T> sharedState
 	) throws JobExecutionException {
 		
@@ -172,9 +168,8 @@ public class AnnotationComparisonTask<T extends Assignment> extends Task<Annotat
 		ObjsToCompare objs = ObjsToCompareFactory.create(
 			input,
 			addAnnotation,
-			logErrorReporter,
 			background.getDimensions(),
-			debugEnabled
+			context
 		);
 		
 		if (objs==null) {
@@ -187,9 +182,8 @@ public class AnnotationComparisonTask<T extends Assignment> extends Task<Annotat
 			objs,			
 			addAnnotation,
 			sharedState,
-			outputManager,
 			descriptiveSplit,
-			logErrorReporter
+			context
 		);
 	}
 	
@@ -224,21 +218,19 @@ public class AnnotationComparisonTask<T extends Assignment> extends Task<Annotat
 		ObjsToCompare objs,
 		IAddAnnotation<T> addAnnotation,
 		SharedState<T> sharedStateC,
-		BoundOutputManagerRouteErrors outputManager,
 		SplitString descriptiveSplit,
-		LogErrorReporter logErrorReporter
+		BoundIOContext context
 	) throws JobExecutionException {
 		
 		
-		logErrorReporter.getLogReporter().log("Start processAcceptedAnnotation");
+		context.getLogReporter().log("Start processAcceptedAnnotation");
 		
 		try {
 			T assignment = assigner.createAssignment(
 				objs,
 				background.getDimensions(),
 				useMIP,
-				outputManager,
-				logErrorReporter
+				context
 			);
 			
 			addAnnotation.addAcceptedAnnotation(assignment);
@@ -305,7 +297,7 @@ public class AnnotationComparisonTask<T extends Assignment> extends Task<Annotat
 
 	@Override
 	public void afterAllJobsAreExecuted(
-			BoundOutputManagerRouteErrors outputManager, SharedState<T> sharedState, LogReporter logReporter)
+			SharedState<T> sharedState, BoundIOContext context)
 			throws ExperimentExecutionException {
 
 		@SuppressWarnings("unchecked")
@@ -314,7 +306,7 @@ public class AnnotationComparisonTask<T extends Assignment> extends Task<Annotat
 
 		// Write group statistics
 		try {
-			new CSVComparisonGroup<>(sharedStateC.allGroups()).writeGroupStats( outputManager );
+			new CSVComparisonGroup<>(sharedStateC.allGroups()).writeGroupStats( context.getOutputManager() );
 		} catch (AnchorIOException e) {
 			throw new ExperimentExecutionException(e);
 		}

@@ -34,12 +34,9 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
-import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.core.name.provider.INamedProvider;
 import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 import org.anchoranalysis.core.progress.ProgressReporterNull;
-import org.anchoranalysis.core.random.RandomNumberGeneratorMersenneTime;
-import org.anchoranalysis.experiment.ExperimentExecutionArguments;
 import org.anchoranalysis.experiment.JobExecutionException;
 import org.anchoranalysis.image.bean.scale.ScaleCalculator;
 import org.anchoranalysis.image.binary.BinaryChnl;
@@ -49,6 +46,7 @@ import org.anchoranalysis.image.experiment.bean.task.RasterTask;
 import org.anchoranalysis.image.init.ImageInitParams;
 import org.anchoranalysis.image.interpolator.InterpolatorFactory;
 import org.anchoranalysis.image.io.RasterIOException;
+import org.anchoranalysis.image.io.input.ImageInitParamsFactory;
 import org.anchoranalysis.image.io.input.NamedChnlsInput;
 import org.anchoranalysis.image.io.input.series.NamedChnlCollectionForSeries;
 import org.anchoranalysis.image.io.stack.StackCollectionOutputter;
@@ -56,6 +54,7 @@ import org.anchoranalysis.image.stack.NamedImgStackCollection;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.image.stack.wrap.WrapStackAsTimeSequenceStore;
 import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
+import org.anchoranalysis.io.output.bound.BoundIOContext;
 
 import ch.ethz.biol.cell.imageprocessing.binaryimgchnl.provider.BinaryImgChnlProviderScaleXY;
 import ch.ethz.biol.cell.imageprocessing.chnl.provider.ChnlProviderScale;
@@ -93,10 +92,12 @@ public class ScaleTask extends RasterTask {
 	}
 
 	@Override
-	public void doStack(NamedChnlsInput inputObject,
-			int seriesIndex, int numSeries,
-			BoundOutputManagerRouteErrors outputManager, LogErrorReporter logErrorReporter,
-			ExperimentExecutionArguments expArgs) throws JobExecutionException {
+	public void doStack(
+		NamedChnlsInput inputObject,
+		int seriesIndex,
+		int numSeries,
+		BoundIOContext context
+	) throws JobExecutionException {
 	
 		// Input
 		NamedChnlCollectionForSeries nccfs;
@@ -105,21 +106,8 @@ public class ScaleTask extends RasterTask {
 		} catch (RasterIOException e1) {
 			throw new JobExecutionException(e1);
 		}
-		
 
-		
-		
-		
-		// Our output collections
-		NamedImgStackCollection stackCollection = new NamedImgStackCollection();
-		NamedImgStackCollection stackCollectionMIP = new NamedImgStackCollection();
-		
-
-		ImageInitParams soImage = ImageInitParams.create(
-			logErrorReporter,
-			new RandomNumberGeneratorMersenneTime(),
-			expArgs.getModelDirectory()
-		);
+		ImageInitParams soImage = ImageInitParamsFactory.create(context);
 		
 		try {
 			// We store each channel as a stack in our collection, in case they need to be referenced by the scale calculator
@@ -127,22 +115,28 @@ public class ScaleTask extends RasterTask {
 				new WrapStackAsTimeSequenceStore( soImage.getStackCollection() ),
 				0
 			);
-			//scaleCalculator.initRecursive(soImage.getSharedObjects(), logErrorReporter);
-			scaleCalculator.initRecursive(logErrorReporter);
+			scaleCalculator.initRecursive(context.getLogger());
 		} catch (InitException | OperationFailedException e) {
 			throw new JobExecutionException(e);
 		}
+		
+		populateAndOutputCollections(soImage, context);
+	}
+	
+	private void populateAndOutputCollections(ImageInitParams soImage, BoundIOContext context) throws JobExecutionException {
+		// Our output collections
+		NamedImgStackCollection stackCollection = new NamedImgStackCollection();
+		NamedImgStackCollection stackCollectionMIP = new NamedImgStackCollection();
 		
 		populateOutputCollectionsFromSharedObjects(
 			soImage,
 			stackCollection,
 			stackCollectionMIP,
-			outputManager,
-			logErrorReporter
+			context
 		);
 		
-		outputStackCollection( stackCollection, outputManager, KEY_OUTPUT_STACK, "chnlScaledCollection", logErrorReporter.getErrorReporter() );
-		outputStackCollection( stackCollectionMIP, outputManager, KEY_OUTPUT_STACK, "chnlScaledCollectionMIP", logErrorReporter.getErrorReporter() );
+		outputStackCollection( stackCollection, KEY_OUTPUT_STACK, "chnlScaledCollection", context );
+		outputStackCollection( stackCollectionMIP, KEY_OUTPUT_STACK, "chnlScaledCollectionMIP", context );
 	}
 	
 	@Override
@@ -152,11 +146,12 @@ public class ScaleTask extends RasterTask {
 	
 	private static void outputStackCollection(
 		INamedProvider<Stack> stackCollection,
-		BoundOutputManagerRouteErrors outputManager,
 		String outputSecondLevelKey,
 		String outputName,
-		ErrorReporter errorReporter
+		BoundIOContext context
 	) {
+		BoundOutputManagerRouteErrors outputManager = context.getOutputManager();
+		
 		StackCollectionOutputter.output(
 			StackCollectionOutputter.subset(
 				stackCollection,
@@ -165,7 +160,7 @@ public class ScaleTask extends RasterTask {
 			outputManager.getDelegate(),
 			outputName,
 			"",
-			errorReporter,
+			context.getErrorReporter(),
 			false
 		);
 	}
@@ -175,15 +170,14 @@ public class ScaleTask extends RasterTask {
 		ImageInitParams so,
 		NamedImgStackCollection stackCollection,
 		NamedImgStackCollection stackCollectionMIP,
-		BoundOutputManagerRouteErrors outputManager,
-		LogErrorReporter logErrorReporter
+		BoundIOContext context
 	) throws JobExecutionException {
 				
 		Set<String> chnlNames = so.getStackCollection().keys();
 		for( String chnlName : chnlNames ) {
 			
 			// If this output is not allowed we simply skip
-			if (!outputManager.outputAllowedSecondLevel(KEY_OUTPUT_STACK).isOutputAllowed(chnlName)) {
+			if (!context.getOutputManager().outputAllowedSecondLevel(KEY_OUTPUT_STACK).isOutputAllowed(chnlName)) {
 				continue;
 			}
 			
@@ -195,7 +189,12 @@ public class ScaleTask extends RasterTask {
 					BinaryChnl binaryImg = new BinaryChnl(chnlIn, BinaryValues.getDefault() );
 					chnlOut = BinaryImgChnlProviderScaleXY.scale(binaryImg, scaleCalculator, InterpolatorFactory.getInstance().binaryResizing()).getChnl();
 				} else {
-					chnlOut = ChnlProviderScale.scale(chnlIn, scaleCalculator, InterpolatorFactory.getInstance().rasterResizing(), logErrorReporter);
+					chnlOut = ChnlProviderScale.scale(
+						chnlIn,
+						scaleCalculator,
+						InterpolatorFactory.getInstance().rasterResizing(),
+						context.getLogger()
+					);
 				}
 				
 				stackCollection.addImageStack(chnlName, new Stack(chnlOut) );

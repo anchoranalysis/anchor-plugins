@@ -32,7 +32,6 @@ import org.anchoranalysis.bean.annotation.AllowEmpty;
 
 
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.log.LogReporter;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
 import org.anchoranalysis.experiment.JobExecutionException;
 import org.anchoranalysis.experiment.task.InputTypesExpected;
@@ -43,6 +42,7 @@ import org.anchoranalysis.io.bean.root.RootPathMap;
 import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.generator.text.StringGenerator;
 import org.anchoranalysis.io.input.InputFromManager;
+import org.anchoranalysis.io.output.bound.BoundIOContext;
 import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
 
 public class RecordFilepathsTask<T extends InputFromManager> extends Task<T,StringBuilder> {
@@ -81,8 +81,11 @@ public class RecordFilepathsTask<T extends InputFromManager> extends Task<T,Stri
 		
 		if (!rootName.isEmpty()) {
 			try {
-				boolean debugMode = params.getExperimentArguments().isDebugEnabled();
-				path = RootPathMap.instance().split(path, rootName, debugMode).getPath();
+				path = RootPathMap.instance().split(
+					path,
+					rootName,
+					params.context().isDebugEnabled()
+				).getPath();
 			} catch (AnchorIOException e) {
 				throw new JobExecutionException(e);
 			}
@@ -95,10 +98,10 @@ public class RecordFilepathsTask<T extends InputFromManager> extends Task<T,Stri
 
 	@Override
 	public void afterAllJobsAreExecuted(
-			BoundOutputManagerRouteErrors outputManager, StringBuilder sharedState, LogReporter logReporter)
+			StringBuilder sharedState, BoundIOContext context)
 			throws ExperimentExecutionException {
 		
-		outputManager.getWriterAlwaysAllowed().write(
+		context.getOutputManager().getWriterAlwaysAllowed().write(
 			"list",
 			() -> new StringGenerator(
 				sharedState.toString()

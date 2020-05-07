@@ -1,6 +1,6 @@
 package org.anchoranalysis.plugin.image.task.bean.format;
 
-import java.nio.file.Path;
+
 
 /*
  * #%L
@@ -37,8 +37,6 @@ import org.anchoranalysis.core.error.reporter.ErrorReporter;
 import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.core.progress.ProgressReporterConsole;
 import org.anchoranalysis.core.progress.ProgressReporterNull;
-import org.anchoranalysis.core.random.RandomNumberGeneratorMersenneConstant;
-import org.anchoranalysis.experiment.ExperimentExecutionArguments;
 import org.anchoranalysis.experiment.JobExecutionException;
 import org.anchoranalysis.image.bean.chnl.converter.ChnlConverterBean;
 import org.anchoranalysis.image.experiment.bean.task.RasterTask;
@@ -56,6 +54,7 @@ import org.anchoranalysis.io.generator.sequence.GeneratorSequenceNonIncrementalW
 import org.anchoranalysis.io.manifest.sequencetype.SetSequenceType;
 import org.anchoranalysis.io.namestyle.StringSuffixOutputNameStyle;
 import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
+import org.anchoranalysis.io.output.bound.BoundIOContext;
 import org.anchoranalysis.plugin.image.task.bean.chnl.conversionstyle.ChnlConversionStyle;
 import org.anchoranalysis.plugin.image.task.chnl.convert.ChnlGetterForTimepoint;
 
@@ -130,16 +129,12 @@ public class FormatConverterTask extends RasterTask {
 	}
 	
 	@Override
-	public void doStack( NamedChnlsInput inputObjectUntyped, int seriesIndex, int numSeries, BoundOutputManagerRouteErrors outputManager, LogErrorReporter logErrorReporter, ExperimentExecutionArguments expArgs ) throws JobExecutionException {
+	public void doStack( NamedChnlsInput inputObjectUntyped, int seriesIndex, int numSeries, BoundIOContext context ) throws JobExecutionException {
 		
 		try {
 			NamedChnlCollectionForSeries chnlCollection = createChnlCollection( inputObjectUntyped, seriesIndex );	
 			
-			ChnlGetter chnlGetter = maybeAddFilter(
-				chnlCollection,
-				expArgs.getModelDirectory(),
-				logErrorReporter
-			);
+			ChnlGetter chnlGetter = maybeAddFilter(chnlCollection, context);
 
 			if (chnlConverter!=null) {
 				chnlGetter = maybeAddConverter(chnlGetter);
@@ -151,7 +146,7 @@ public class FormatConverterTask extends RasterTask {
 				numSeries,
 				chnlCollection.sizeT(ProgressReporterNull.get()),
 				chnlGetter,
-				logErrorReporter
+				context.getLogger()
 			);
 						
 		} catch (RasterIOException | CreateException | AnchorIOException e) {
@@ -196,15 +191,13 @@ public class FormatConverterTask extends RasterTask {
 		}
 	}
 	
-	private ChnlGetter maybeAddFilter( NamedChnlCollectionForSeries chnlCollection, Path modelDir, LogErrorReporter logErrorReporter ) {
+	private ChnlGetter maybeAddFilter( NamedChnlCollectionForSeries chnlCollection, BoundIOContext context) {
 		
 		if (chnlFilter!=null) {
 			
 			chnlFilter.init(
 				(NamedChnlCollectionForSeries) chnlCollection,
-				modelDir,
-				logErrorReporter,
-				new RandomNumberGeneratorMersenneConstant()
+				context
 			);
 			return chnlFilter;
 		} else {

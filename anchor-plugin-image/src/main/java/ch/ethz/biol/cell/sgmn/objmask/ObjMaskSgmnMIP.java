@@ -93,7 +93,7 @@ public class ObjMaskSgmnMIP extends ObjMaskSgmn {
 			VoxelBox<ByteBuffer> vb = chnl.getVoxelBox().asByte();
 			
 			VoxelBox<ByteBuffer> stackBinary = vb.duplicate(); 
-			BinaryVoxelBox<ByteBuffer> vbBinary = sgmnStack.sgmn( new VoxelBoxWrapper(stackBinary), params, getSharedObjects().getRandomNumberGenerator() );
+			BinaryVoxelBox<ByteBuffer> vbBinary = sgmnStack.sgmn( new VoxelBoxWrapper(stackBinary), params );
 			
 			return ExtendObjsInto3DMask.extendObjs(objs, vbBinary);
 			
