@@ -1,6 +1,8 @@
 package ch.ethz.biol.cell.mpp.nrg.feature.resultsvectorcollection;
 
-import org.anchoranalysis.anchor.mpp.feature.bean.results.FeatureResults;
+
+
+import org.anchoranalysis.feature.calc.FeatureCalcException;
 
 /*
  * #%L
@@ -29,62 +31,18 @@ import org.anchoranalysis.anchor.mpp.feature.bean.results.FeatureResults;
  */
 
 
-import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.index.GetOperationFailedException;
-import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.feature.calc.results.ResultsVectorCollection;
-import org.anchoranalysis.feature.resultsvectorcollection.FeatureInputResults;
-
 import cern.colt.list.DoubleArrayList;
 import cern.jet.stat.Descriptive;
 
-public class Mean extends FeatureResults {
+public class Mean extends FeatureResultsFromIndex {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 
-	// START BEAN PROPERTIES
-	@BeanField
-	private String id = "";
-	// END BEAN PROPERTIES
-	
 	@Override
-	public double calc(FeatureInputResults params)
-			throws FeatureCalcException {
-
-		try {
-			DoubleArrayList featureVals = new DoubleArrayList();
-			
-			int index = params.getFeatureNameIndex().indexOf(id);
-			
-			ResultsVectorCollection rvc = params.getResultsVectorCollection();
-
-			if (rvc.size()==0) {
-				throw new FeatureCalcException("There are 0 items");
-			}
-			
-			for (int i=0; i<rvc.size(); i++) {
-				featureVals.add(rvc.get(i).get(index));
-			}
-	
-			double val = Descriptive.mean(featureVals);
-			assert( !Double.isNaN(val) );
-			return val;
-			
-		} catch (GetOperationFailedException e) {
-			throw new FeatureCalcException(e);
-		}
+	protected double calcStatisticFromFeatureVal(DoubleArrayList featureVals) throws FeatureCalcException {
+		return Descriptive.mean(featureVals);
 	}
-
-	public String getId() {
-		return id;
-	}
-
-	public void setId(String id) {
-		this.id = id;
-	}
-
-
 }
