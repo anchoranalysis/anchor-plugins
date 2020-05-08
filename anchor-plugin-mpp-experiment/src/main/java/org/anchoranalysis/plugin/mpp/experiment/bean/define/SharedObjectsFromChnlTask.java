@@ -1,8 +1,6 @@
 package org.anchoranalysis.plugin.mpp.experiment.bean.define;
 
-import java.util.Optional;
 
-import org.anchoranalysis.anchor.mpp.bean.init.MPPInitParams;
 
 /*
  * #%L
@@ -32,8 +30,6 @@ import org.anchoranalysis.anchor.mpp.bean.init.MPPInitParams;
 
 
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.bean.define.Define;
-import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
 import org.anchoranalysis.core.index.GetOperationFailedException;
@@ -46,12 +42,9 @@ import org.anchoranalysis.image.io.RasterIOException;
 import org.anchoranalysis.image.io.generator.raster.ChnlGenerator;
 import org.anchoranalysis.image.io.input.NamedChnlsInput;
 import org.anchoranalysis.image.io.input.series.NamedChnlCollectionForSeries;
-import org.anchoranalysis.image.stack.wrap.WrapStackAsTimeSequenceStore;
 import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
+import org.anchoranalysis.mpp.sgmn.bean.define.DefineOutputterMPP;
 import org.anchoranalysis.io.output.bound.BoundIOContext;
-import org.anchoranalysis.io.output.error.OutputWriteFailedException;
-import org.anchoranalysis.mpp.io.input.MPPInitParamsFactory;
-import org.anchoranalysis.plugin.mpp.experiment.outputter.SharedObjectsUtilities;
 
 public class SharedObjectsFromChnlTask extends RasterTask {
 
@@ -63,16 +56,10 @@ public class SharedObjectsFromChnlTask extends RasterTask {
 	
 	// START BEAN PROPERTIES
 	@BeanField
-	private Define define;
+	private DefineOutputterMPP define;
 	
 	@BeanField
 	private String outputNameOriginal = "original";
-	
-	@BeanField
-	private boolean suppressSubfolders = true;
-	
-	@BeanField
-	private boolean suppressOutputExceptions = false;
 	// END BEAN PROPERTIES
 
 	@Override
@@ -104,23 +91,9 @@ public class SharedObjectsFromChnlTask extends RasterTask {
 				);
 			}
 
-			MPPInitParams soMPP = MPPInitParamsFactory.create(
-				context,
-				Optional.ofNullable(define)
-			);
-			
-			ncc.addAsSeparateChnls(
-				new WrapStackAsTimeSequenceStore( soMPP.getImage().getStackCollection() ),
-				0
-			);
-			
-			if (suppressOutputExceptions) {
-				SharedObjectsUtilities.output(soMPP, suppressSubfolders, context);
-			} else {
-				SharedObjectsUtilities.outputWithException(soMPP, context.getOutputManager(), suppressSubfolders);
-			}
-			
-		} catch (GetOperationFailedException | OperationFailedException | OutputWriteFailedException | CreateException e) {
+			define.processInput(ncc, context);
+						
+		} catch (GetOperationFailedException | OperationFailedException e) {
 			throw new JobExecutionException(e);
 		}
 	}
@@ -137,30 +110,12 @@ public class SharedObjectsFromChnlTask extends RasterTask {
 	
 	}
 
-	public boolean isSuppressSubfolders() {
-		return suppressSubfolders;
-	}
-
-
-	public void setSuppressSubfolders(boolean suppressSubfolders) {
-		this.suppressSubfolders = suppressSubfolders;
-	}
-
-
-	public boolean isSuppressOutputExceptions() {
-		return suppressOutputExceptions;
-	}
-
-
-	public void setSuppressOutputExceptions(boolean suppressOutputExceptions) {
-		this.suppressOutputExceptions = suppressOutputExceptions;
-	}
-
-	public Define getDefine() {
+	public DefineOutputterMPP getDefine() {
 		return define;
 	}
 
-	public void setDefine(Define define) {
+	public void setDefine(DefineOutputterMPP define) {
 		this.define = define;
 	}
+
 }

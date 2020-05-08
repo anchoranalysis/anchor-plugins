@@ -30,14 +30,10 @@ package org.anchoranalysis.plugin.mpp.experiment.bean.objs;
 import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
-
-import org.anchoranalysis.anchor.mpp.bean.init.MPPInitParams;
 import org.anchoranalysis.bean.NamedBean;
 import org.anchoranalysis.bean.StringSet;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
-import org.anchoranalysis.bean.define.Define;
 import org.anchoranalysis.core.bridge.IObjectBridge;
 import org.anchoranalysis.core.cache.IdentityOperation;
 import org.anchoranalysis.core.color.ColorIndex;
@@ -78,8 +74,7 @@ import org.anchoranalysis.io.output.bound.BoundIOContext;
 import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.mpp.io.input.MultiInput;
-import org.anchoranalysis.mpp.io.input.MPPInitParamsFactory;
-import org.anchoranalysis.plugin.mpp.experiment.outputter.SharedObjectsUtilities;
+import org.anchoranalysis.mpp.sgmn.bean.define.DefineOutputterMPP;
 
 
 /**
@@ -100,13 +95,7 @@ public class ExportObjectsAsCroppedImagesTask extends ExportObjectsBase<MultiInp
 	
 	// START BEAN PROPERTIES
 	@BeanField
-	private Define define;
-	
-	@BeanField
-	private boolean suppressSubfolders = true;
-	
-	@BeanField
-	private boolean suppressOutputExceptions = false;
+	private DefineOutputterMPP define;
 	
 	@BeanField @OptionalBean
 	private List<NamedBean<StackProvider>> listStackProvider = new ArrayList<>();	// The channels we apply the masks to - all assumed to be of same dimension
@@ -132,6 +121,24 @@ public class ExportObjectsAsCroppedImagesTask extends ExportObjectsBase<MultiInp
 	@BeanField
 	private boolean keepEntireImage = false;
 	// END BEAN PROPERTIES
+
+	@Override
+	public void doJobOnInputObject(	InputBound<MultiInput,Object> params)	throws JobExecutionException {
+		
+		BoundIOContext context = params.context();
+		
+		try {
+			define.processInput(
+				params.getInputObject(),
+				params.context(),
+				paramsInit -> outputObjs(paramsInit, context)
+			);
+			
+		} catch (OperationFailedException e) {
+			throw new JobExecutionException(e);
+		}
+	}
+	
 	
 	@Override
 	public InputTypesExpected inputTypesExpected() {
@@ -144,21 +151,13 @@ public class ExportObjectsAsCroppedImagesTask extends ExportObjectsBase<MultiInp
 		return false;
 	}
 	
-	@Override
-	public void doJobOnInputObject(	InputBound<MultiInput,Object> params)	throws JobExecutionException {
-		
-		BoundIOContext context = params.context();
-		LogErrorReporter logger = context.getLogger();
-		BoundOutputManagerRouteErrors outputManager = context.getOutputManager();
+	private void outputObjs( ImageInitParams paramsInit, BoundIOContext context ) throws OperationFailedException {
 		
 		try {
-			MPPInitParams soMPP = MPPInitParamsFactory.createFromInput(
-				params,
-				Optional.ofNullable(define)
-			);
+			LogErrorReporter logger = context.getLogger();
 			
-			NamedImgStackCollection stackCollection = createStackCollection(soMPP.getImage(), logger);
-			NamedImgStackCollection stackCollectionMIP = createStackCollectionMIP(soMPP.getImage(), logger);
+			NamedImgStackCollection stackCollection = createStackCollection(paramsInit, logger);
+			NamedImgStackCollection stackCollectionMIP = createStackCollectionMIP(paramsInit, logger);
 			
 			if (stackCollection.keys().size()==0) {
 				// Nothing to do
@@ -170,7 +169,7 @@ public class ExportObjectsAsCroppedImagesTask extends ExportObjectsBase<MultiInp
 			).getDimensions();
 			
 			ObjMaskCollection objsZ = maybeExtendZObjs(
-				inputObjs(soMPP.getImage(), logger),
+				inputObjs(paramsInit, logger),
 				dim.getZ()
 			);
 			
@@ -179,20 +178,13 @@ public class ExportObjectsAsCroppedImagesTask extends ExportObjectsBase<MultiInp
 				objsZ,
 				context
 			);
-					
-			if (suppressOutputExceptions) {
-				SharedObjectsUtilities.output(soMPP, suppressSubfolders, context);
-			} else {
-				SharedObjectsUtilities.outputWithException(soMPP, outputManager, suppressSubfolders);
-			}
-			
-		} catch (OutputWriteFailedException | CreateException | InitException e) {
-			throw new JobExecutionException(e);
+		} catch (CreateException | InitException e) {
+			throw new OperationFailedException(e);
 		} catch (NamedProviderGetException e) {
-			throw new JobExecutionException(e.summarize());
+			throw new OperationFailedException(e.summarize());
 		}
 	}
-
+	
 	@Override
 	public Object beforeAnyJobIsExecuted(BoundOutputManagerRouteErrors outputManager, ParametersExperiment params)
 			throws ExperimentExecutionException {
@@ -233,7 +225,7 @@ public class ExportObjectsAsCroppedImagesTask extends ExportObjectsBase<MultiInp
 	}
 	
 
-	private NamedImgStackCollection createStackCollection( ImageInitParams so, LogErrorReporter logger ) throws JobExecutionException {
+	private NamedImgStackCollection createStackCollection( ImageInitParams so, LogErrorReporter logger ) throws CreateException {
 		// Get named image stack collection
 		ImageDim dim = null;
 		NamedImgStackCollection stackCollection = new NamedImgStackCollection();
@@ -251,18 +243,13 @@ public class ExportObjectsAsCroppedImagesTask extends ExportObjectsBase<MultiInp
 			}
 			
 			
-			Stack stack;
-			try {
-				stack = ni.getValue().create();
-			} catch (CreateException e) {
-				throw new JobExecutionException(e);
-			}
+			Stack stack = ni.getValue().create();
 			
 			if (dim==null) {
 				dim = stack.getDimensions();
 			} else {
 				if (!stack.getDimensions().equals(dim)) {
-					throw new JobExecutionException(
+					throw new CreateException(
 						String.format("Channel dimensions are not uniform across the channels (%s vs %s)", stack.getDimensions(), dim )
 					);
 				}
@@ -271,7 +258,7 @@ public class ExportObjectsAsCroppedImagesTask extends ExportObjectsBase<MultiInp
 			try {
 				stackCollection.add(ni.getName(), new IdentityOperation<>(stack) );
 			} catch (OperationFailedException e) {
-				throw new JobExecutionException(e);
+				throw new CreateException(e);
 			}
 		}
 			
@@ -282,7 +269,7 @@ public class ExportObjectsAsCroppedImagesTask extends ExportObjectsBase<MultiInp
 	
 	
 	
-	private NamedImgStackCollection createStackCollectionMIP( ImageInitParams so, LogErrorReporter logger ) throws JobExecutionException {
+	private NamedImgStackCollection createStackCollectionMIP( ImageInitParams so, LogErrorReporter logger ) throws CreateException {
 		// Get named image stack collection
 		ImageDim dim = null;
 		NamedImgStackCollection stackCollection = new NamedImgStackCollection();
@@ -299,25 +286,20 @@ public class ExportObjectsAsCroppedImagesTask extends ExportObjectsBase<MultiInp
 			}
 			
 			
-			Stack stack;
-			try {
-				stack = ni.getValue().create();
-			} catch (CreateException e) {
-				throw new JobExecutionException(e);
-			}
+			Stack stack = ni.getValue().create();
 			
 			if (dim==null) {
 				dim = stack.getDimensions();
 			} else {
 				if (!stack.getDimensions().equals(dim)) {
-					throw new JobExecutionException("Stack dimensions do not match");
+					throw new CreateException("Stack dimensions do not match");
 				}
 			}
 			
 			try {
 				stackCollection.add(ni.getName(), new IdentityOperation<>(stack) );
 			} catch (OperationFailedException e) {
-				throw new JobExecutionException(e);
+				throw new CreateException(e);
 			}
 		}
 			
@@ -451,28 +433,6 @@ public class ExportObjectsAsCroppedImagesTask extends ExportObjectsBase<MultiInp
 		}
 		return out;
 	}
-	
-	
-
-
-	public boolean isSuppressSubfolders() {
-		return suppressSubfolders;
-	}
-
-
-	public void setSuppressSubfolders(boolean suppressSubfolders) {
-		this.suppressSubfolders = suppressSubfolders;
-	}
-
-
-	public boolean isSuppressOutputExceptions() {
-		return suppressOutputExceptions;
-	}
-
-
-	public void setSuppressOutputExceptions(boolean suppressOutputExceptions) {
-		this.suppressOutputExceptions = suppressOutputExceptions;
-	}
 
 	public StringSet getOutputRGBOutline() {
 		return outputRGBOutline;
@@ -533,11 +493,13 @@ public class ExportObjectsAsCroppedImagesTask extends ExportObjectsBase<MultiInp
 		this.keepEntireImage = keepEntireImage;
 	}
 
-	public Define getDefine() {
+
+	public DefineOutputterMPP getDefine() {
 		return define;
 	}
 
-	public void setDefine(Define define) {
+
+	public void setDefine(DefineOutputterMPP define) {
 		this.define = define;
 	}
 }

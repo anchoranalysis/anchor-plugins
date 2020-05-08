@@ -61,10 +61,10 @@ import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.output.bound.BoundIOContext;
 import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
 import org.anchoranalysis.mpp.io.input.MultiInput;
+import org.anchoranalysis.mpp.sgmn.bean.define.DefineOutputterMPPWithNrg;
 import org.anchoranalysis.plugin.image.feature.bean.obj.table.FeatureTableObjs;
 import org.anchoranalysis.plugin.image.task.bean.feature.ExportFeaturesTask;
 import org.anchoranalysis.plugin.image.task.sharedstate.SharedStateExportFeatures;
-import org.anchoranalysis.plugin.mpp.experiment.bean.define.DefineOutputter;
 
 
 /** Calculates feature on a 'grouped' set of objects
@@ -92,7 +92,7 @@ public class ExportFeaturesObjMaskTask<T extends FeatureInput> extends ExportFea
 	
 	// START BEAN PROPERTIES
 	@BeanField
-	private DefineOutputter define = new DefineOutputter();
+	private DefineOutputterMPPWithNrg define = new DefineOutputterMPPWithNrg();
 	
 	@BeanField
 	private List<NamedBean<FeatureListProvider<FeatureInputSingleObj>>> listFeaturesObjMask = new ArrayList<>();
@@ -142,7 +142,8 @@ public class ExportFeaturesObjMaskTask<T extends FeatureInput> extends ExportFea
 		
 		try {
 			define.processInput(
-				input,
+				input.getInputObject(),
+				input.context(),
 				(initParams, nrgStack) -> calculateFeaturesForImage(input, initParams, nrgStack) 
 			);
 						
@@ -151,7 +152,7 @@ public class ExportFeaturesObjMaskTask<T extends FeatureInput> extends ExportFea
 		}
 	}
 	
-	private void calculateFeaturesForImage(
+	private int calculateFeaturesForImage(
 		InputBound<MultiInput,SharedStateExportFeaturesObjMask<T>> input,
 		ImageInitParams imageInit,
 		NRGStackWithParams nrgStack
@@ -181,7 +182,10 @@ public class ExportFeaturesObjMaskTask<T extends FeatureInput> extends ExportFea
 			nrgStack,
 			input.getSharedState(),
 			context
-		);		
+		);
+		
+		// Arbitrary, we need a return-type
+		return 0;
 	}
 
 	
@@ -304,11 +308,11 @@ public class ExportFeaturesObjMaskTask<T extends FeatureInput> extends ExportFea
 		this.suppressErrors = suppressErrors;
 	}
 
-	public DefineOutputter getDefine() {
+	public DefineOutputterMPPWithNrg getDefine() {
 		return define;
 	}
 
-	public void setDefine(DefineOutputter define) {
+	public void setDefine(DefineOutputterMPPWithNrg define) {
 		this.define = define;
 	}
 }

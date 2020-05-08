@@ -30,14 +30,10 @@ package org.anchoranalysis.plugin.mpp.experiment.bean.define;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
-
-import org.anchoranalysis.anchor.mpp.bean.init.MPPInitParams;
 import org.anchoranalysis.bean.annotation.AllowEmpty;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.bean.define.Define;
-import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
+import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.experiment.JobExecutionException;
 import org.anchoranalysis.experiment.bean.task.TaskWithoutSharedState;
 import org.anchoranalysis.experiment.task.InputTypesExpected;
@@ -46,11 +42,8 @@ import org.anchoranalysis.image.init.ImageInitParams;
 import org.anchoranalysis.image.io.bean.feature.OutputFeatureTable;
 import org.anchoranalysis.image.stack.NamedImgStackCollection;
 import org.anchoranalysis.io.output.bound.BoundIOContext;
-import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
-import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.mpp.io.input.MultiInput;
-import org.anchoranalysis.mpp.io.input.MPPInitParamsFactory;
-import org.anchoranalysis.plugin.mpp.experiment.outputter.SharedObjectsUtilities;
+import org.anchoranalysis.mpp.sgmn.bean.define.DefineOutputterMPP;
 
 public class SharedObjectsMultiInputTask extends TaskWithoutSharedState<MultiInput> {
 
@@ -62,13 +55,7 @@ public class SharedObjectsMultiInputTask extends TaskWithoutSharedState<MultiInp
 	
 	// START BEAN PROPERTIES
 	@BeanField
-	private Define define;
-	
-	@BeanField
-	private boolean suppressSubfolders = true;
-	
-	@BeanField
-	private boolean suppressOutputExceptions = false;
+	private DefineOutputterMPP define;
 	
 	// Allows feature tables to be also outputted
 	@BeanField
@@ -89,29 +76,34 @@ public class SharedObjectsMultiInputTask extends TaskWithoutSharedState<MultiInp
 	@Override
 	public void doJobOnInputObject(	InputBound<MultiInput,Object> params)	throws JobExecutionException {
 		
-		BoundOutputManagerRouteErrors outputManager = params.getOutputManager();
-		
-		BoundIOContext context = params.context();
-		
 		try {
-			MPPInitParams soMPP = MPPInitParamsFactory.createFromInput(
-				params,
-				Optional.ofNullable(define)
+			define.processInput(
+				params.getInputObject(),
+				params.context(),
+				imageInitParams -> outputFeatureTablesMultiplex(
+					imageInitParams,
+					params.context()
+				)
 			);
-			
-			if (suppressOutputExceptions) {
-				SharedObjectsUtilities.output(soMPP, suppressSubfolders, context);
-				outputFeatureTables(soMPP.getImage(), context);
-			} else {
-				SharedObjectsUtilities.outputWithException(soMPP, outputManager, suppressSubfolders);
-				outputFeatureTablesWithException(soMPP.getImage(), context);
-			}
-			
-			SharedObjectsUtilities.writeNRGStackParams( soMPP.getImage(), nrgParamsName, context );
 
-		} catch (OutputWriteFailedException | IOException | CreateException e) {
+		} catch (OperationFailedException e) {
 			throw new JobExecutionException(e);
 		}
+	}
+	
+	private void outputFeatureTablesMultiplex( ImageInitParams imageInitParams, BoundIOContext context ) throws OperationFailedException {
+		
+		try {
+			if (define.isSuppressOutputExceptions()) {
+				outputFeatureTables(imageInitParams, context);
+			} else {
+				outputFeatureTablesWithException(imageInitParams, context);
+			}
+		} catch (IOException e) {
+			throw new OperationFailedException(e);
+		}
+		
+		NRGStackHelper.writeNRGStackParams(imageInitParams, nrgParamsName, context );
 	}
 
 	@Override
@@ -143,26 +135,6 @@ public class SharedObjectsMultiInputTask extends TaskWithoutSharedState<MultiInp
 		}
 	}
 
-	public boolean isSuppressSubfolders() {
-		return suppressSubfolders;
-	}
-
-
-	public void setSuppressSubfolders(boolean suppressSubfolders) {
-		this.suppressSubfolders = suppressSubfolders;
-	}
-
-
-	public boolean isSuppressOutputExceptions() {
-		return suppressOutputExceptions;
-	}
-
-
-	public void setSuppressOutputExceptions(boolean suppressOutputExceptions) {
-		this.suppressOutputExceptions = suppressOutputExceptions;
-	}
-
-
 	public List<OutputFeatureTable> getListOutputFeatureTable() {
 		return listOutputFeatureTable;
 	}
@@ -181,12 +153,5 @@ public class SharedObjectsMultiInputTask extends TaskWithoutSharedState<MultiInp
 		this.nrgParamsName = nrgParamsName;
 	}
 
-	public Define getDefine() {
-		return define;
-	}
-
-	public void setDefine(Define define) {
-		this.define = define;
-	}	
 	
 }

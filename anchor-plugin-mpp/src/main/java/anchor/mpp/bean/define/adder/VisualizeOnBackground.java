@@ -40,6 +40,7 @@ import org.anchoranalysis.image.bean.provider.BinaryImgChnlProvider;
 import org.anchoranalysis.image.bean.provider.ChnlProvider;
 import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
 import org.anchoranalysis.image.bean.provider.stack.StackProvider;
+import org.anchoranalysis.image.bean.provider.stack.StackProviderReference;
 
 import ch.ethz.biol.cell.imageprocessing.binaryimgchnl.provider.BinaryImgChnlProviderReference;
 import ch.ethz.biol.cell.imageprocessing.chnl.provider.ChnlProviderReference;
@@ -48,7 +49,6 @@ import ch.ethz.biol.cell.imageprocessing.stack.provider.StackProviderChnlProvide
 import ch.ethz.biol.cell.imageprocessing.stack.provider.StackProviderOutlineFromCfg;
 import ch.ethz.biol.cell.imageprocessing.stack.provider.StackProviderOutlineRGB;
 import ch.ethz.biol.cell.imageprocessing.stack.provider.StackProviderRGBFromObjMask;
-import ch.ethz.biol.cell.imageprocessing.stack.provider.StackProviderReference;
 import ch.ethz.biol.cell.imageprocessing.stack.provider.StackProviderWithBackground;
 import ch.ethz.biol.cell.mpp.cfg.provider.CfgProviderReference;
 
