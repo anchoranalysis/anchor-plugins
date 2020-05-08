@@ -1,7 +1,10 @@
-package ch.ethz.biol.cell.mpp.nrg.feature.ind;
+package ch.ethz.biol.cell.mpp.nrg.feature.mark;
 
-import org.anchoranalysis.anchor.mpp.feature.bean.nrg.elem.FeatureSingleMemo;
-import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputSingleMemo;
+import org.anchoranalysis.anchor.mpp.feature.bean.mark.FeatureInputMark;
+import org.anchoranalysis.anchor.mpp.feature.bean.mark.FeatureMark;
+import org.anchoranalysis.anchor.mpp.mark.GlobalRegionIdentifiers;
+import org.anchoranalysis.anchor.mpp.mark.Mark;
+import org.anchoranalysis.anchor.mpp.mark.conic.MarkEllipse;
 
 /*
  * #%L
@@ -31,50 +34,43 @@ import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputSingleMemo;
 
 
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.error.CreateException;
+import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.image.voxel.statistics.VoxelStatistics;
 
-import ch.ethz.biol.cell.mpp.mark.pixelstatisticsfrommark.PixelStatisticsFromMark;
+// Estimates the circumference of an ellipse based upon finding the area of the shell, and dividing
+//  by the ShellRad
+public class MarkEllipseCircumEstimate extends FeatureMark {
 
-public class IntensitySum extends FeatureSingleMemo {
-
+	
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 7660902471584365862L;
 
-	// START BEAN
+	// START BEAN PROPERTIES
 	@BeanField
-	private PixelStatisticsFromMark pixelList;
-	// END BEAN
+	private int regionID = GlobalRegionIdentifiers.SUBMARK_INSIDE;
+	// END BEAN PROPERTIES
 	
 	@Override
-	public double calcCast( FeatureInputSingleMemo input ) throws FeatureCalcException {
-
-		try {
-			VoxelStatistics stats = pixelList.createStatisticsFor(
-				input.getPxlPartMemo(),
-				input.getDimensionsRequired()
-			);
-			return stats.sum();
-		} catch (CreateException e) {
-			throw new FeatureCalcException(e);
-		}							
+	public double calc(SessionInput<FeatureInputMark> input) throws FeatureCalcException {
+		
+		Mark m = input.get().getMark();
+		
+		if (!(m instanceof MarkEllipse)) {
+			throw new FeatureCalcException("Only MarkEllipses are supported");
+		}
+		
+		MarkEllipse mark = (MarkEllipse) m;
+		
+		return mark.circumference(regionID);
 	}
 
-	@Override
-	public String getParamDscr() {
-		return pixelList.getBeanDscr();
-	}
-	
-	public PixelStatisticsFromMark getPixelList() {
-		return pixelList;
+	public int getRegionID() {
+		return regionID;
 	}
 
-
-	public void setPixelList(PixelStatisticsFromMark pixelList) {
-		this.pixelList = pixelList;
+	public void setRegionID(int regionID) {
+		this.regionID = regionID;
 	}
-
 }

@@ -34,6 +34,7 @@ import org.anchoranalysis.anchor.mpp.mark.conic.MarkEllipsoid;
 
 import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.core.geometry.Vector3d;
+import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.orientation.Orientation;
 import org.anchoranalysis.math.rotation.RotationMatrix;
@@ -62,9 +63,9 @@ public class EccentricityGuessXYPlane extends FeatureMark {
 	
 	
 	@Override
-	public double calc(FeatureInputMark params) throws FeatureCalcException {
+	public double calc(SessionInput<FeatureInputMark> input) throws FeatureCalcException {
 
-		Mark mark = params.getMark();
+		Mark mark = input.get().getMark();
 		
 		if (mark instanceof MarkAbstractRadii) {
 			MarkEllipsoid markCast = (MarkEllipsoid) mark;

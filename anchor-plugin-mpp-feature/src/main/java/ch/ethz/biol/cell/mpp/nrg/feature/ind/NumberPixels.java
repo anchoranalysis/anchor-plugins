@@ -34,6 +34,7 @@ import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputSingleMemo;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.relation.RelationToValue;
+import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.voxel.VoxelIntensityList;
 
@@ -63,12 +64,12 @@ public class NumberPixels extends FeatureSingleMemo {
 	}
 	
 	@Override
-	public double calcCast( FeatureInputSingleMemo input ) throws FeatureCalcException {
+	public double calc( SessionInput<FeatureInputSingleMemo> input ) throws FeatureCalcException {
 
 		try {
 			return pixelList.doOperation(
-				input.getPxlPartMemo(),
-				input.getDimensionsRequired()
+				input.get().getPxlPartMemo(),
+				input.get().getDimensionsRequired()
 			);
 		} catch (OperationFailedException e) {
 			throw new FeatureCalcException(e);

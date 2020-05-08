@@ -30,21 +30,19 @@ import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputSingleMemo;
  */
 
 import org.anchoranalysis.anchor.mpp.mark.conic.MarkEllipse;
+import org.anchoranalysis.feature.cache.SessionInput;
 
 public class MaxRatioRadii extends FeatureSingleMemo {
 
-	// START BEAN PROPERTIES
-	// END BEAN PROPERTIES
-	
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 
 	@Override
-	public double calcCast( FeatureInputSingleMemo params ) {
+	public double calc( SessionInput<FeatureInputSingleMemo> params ) {
 		
-		MarkEllipse mark = (MarkEllipse) params.getPxlPartMemo().getMark();
+		MarkEllipse mark = (MarkEllipse) params.get().getPxlPartMemo().getMark();
 		
 		double rad1 = mark.getRadii().getX();
 		double rad2 = mark.getRadii().getY();

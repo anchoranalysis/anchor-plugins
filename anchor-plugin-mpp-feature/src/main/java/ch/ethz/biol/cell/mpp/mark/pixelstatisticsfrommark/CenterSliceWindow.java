@@ -95,4 +95,30 @@ public class CenterSliceWindow extends CenterSliceBase {
 		this.windowSize = windowSize;
 	}
 
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = super.hashCode();
+		result = prime * result + windowSize;
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (!super.equals(obj))
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		CenterSliceWindow other = (CenterSliceWindow) obj;
+		if (windowSize != other.windowSize)
+			return false;
+		return true;
+	}
+
+	@Override
+	public String uniqueName() {
+		return super.uniqueName() + "_" + windowSize;
+	}
 }

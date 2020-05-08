@@ -34,6 +34,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.shared.relation.EqualToBean;
 import org.anchoranalysis.bean.shared.relation.threshold.RelationToConstant;
 import org.anchoranalysis.core.error.CreateException;
+import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.voxel.statistics.VoxelStatistics;
 
@@ -53,12 +54,12 @@ public class NumberUniquePixelValues extends FeatureSingleMemo {
 	// END BEAN
 	
 	@Override
-	public double calcCast( FeatureInputSingleMemo input ) throws FeatureCalcException {
+	public double calc( SessionInput<FeatureInputSingleMemo> input ) throws FeatureCalcException {
 
 		try {
 			VoxelStatistics stats = pixelList.createStatisticsFor(
-				input.getPxlPartMemo(),
-				input.getDimensionsRequired()
+				input.get().getPxlPartMemo(),
+				input.get().getDimensionsRequired()
 			);
 			
 			int numUniqueValues = 0;

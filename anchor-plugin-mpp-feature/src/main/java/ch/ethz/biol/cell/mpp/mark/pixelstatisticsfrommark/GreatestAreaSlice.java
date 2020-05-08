@@ -81,4 +81,33 @@ public class GreatestAreaSlice extends IndexedRegionBase {
 		this.threshold = threshold;
 	}
 
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = super.hashCode();
+		result = prime * result + ((threshold == null) ? 0 : threshold.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (!super.equals(obj))
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		GreatestAreaSlice other = (GreatestAreaSlice) obj;
+		if (threshold == null) {
+			if (other.threshold != null)
+				return false;
+		} else if (!threshold.equals(other.threshold))
+			return false;
+		return true;
+	}
+	
+	@Override
+	public String uniqueName() {
+		return super.uniqueName() + "_" + threshold.uniqueName();
+	}
 }

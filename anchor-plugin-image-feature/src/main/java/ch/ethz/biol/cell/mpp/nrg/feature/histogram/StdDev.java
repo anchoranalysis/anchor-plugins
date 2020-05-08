@@ -1,7 +1,7 @@
 package ch.ethz.biol.cell.mpp.nrg.feature.histogram;
 
 import org.anchoranalysis.core.error.OperationFailedException;
-
+import org.anchoranalysis.image.feature.histogram.FeatureHistogramStatistic;
 
 /*
  * #%L

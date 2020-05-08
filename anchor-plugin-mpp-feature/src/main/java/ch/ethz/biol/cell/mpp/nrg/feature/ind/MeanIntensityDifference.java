@@ -3,8 +3,7 @@ package ch.ethz.biol.cell.mpp.nrg.feature.ind;
 import org.anchoranalysis.anchor.mpp.feature.bean.nrg.elem.FeatureSingleMemo;
 import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputSingleMemo;
 import org.anchoranalysis.anchor.mpp.mark.GlobalRegionIdentifiers;
-import org.anchoranalysis.anchor.mpp.mark.Mark;
-import org.anchoranalysis.anchor.mpp.mark.conic.MarkEllipse;
+import org.anchoranalysis.anchor.mpp.pxlmark.PxlMark;
 
 /*
  * #%L
@@ -34,42 +33,52 @@ import org.anchoranalysis.anchor.mpp.mark.conic.MarkEllipse;
 
 
 import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 
-// Estimates the circumference of an ellipse based upon finding the area of the shell, and dividing
-//  by the ShellRad
-public class MarkEllipseCircumEstimate extends FeatureSingleMemo {
+public class MeanIntensityDifference extends FeatureSingleMemo {
 
-	
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 7660902471584365862L;
-
+	private static final long serialVersionUID = 1L;
+	
 	// START BEAN PROPERTIES
 	@BeanField
-	private int regionID = GlobalRegionIdentifiers.SUBMARK_INSIDE;
+	private double minDiff;
 	// END BEAN PROPERTIES
 	
+	public MeanIntensityDifference() {
+		super();
+	}
+	
+	
+	public MeanIntensityDifference(double minDiff) {
+		super();
+		this.minDiff = minDiff;
+	}
+		
 	@Override
-	public double calcCast(FeatureInputSingleMemo params) throws FeatureCalcException {
+	public double calc( SessionInput<FeatureInputSingleMemo> params ) throws FeatureCalcException {
+
+		PxlMark pm = params.get().getPxlPartMemo().doOperation();
 		
-		Mark m = params.getPxlPartMemo().getMark();
+		double mean_in = pm.statisticsForAllSlices(0,GlobalRegionIdentifiers.SUBMARK_INSIDE).mean();
+		double mean_shell = pm.statisticsForAllSlices(0,GlobalRegionIdentifiers.SUBMARK_SHELL).mean();
 		
-		if (!(m instanceof MarkEllipse)) {
-			throw new FeatureCalcException("Only MarkEllipses are supported");
-		}
-		
-		MarkEllipse mark = (MarkEllipse) m;
-		
-		return mark.circumference(regionID);
+		return ((mean_in-mean_shell) - minDiff) / 255;
 	}
 
-	public int getRegionID() {
-		return regionID;
+	@Override
+	public String getParamDscr() {
+		return String.format("minDiff=%f", minDiff);
+	}
+	
+	public double getMinDiff() {
+		return minDiff;
 	}
 
-	public void setRegionID(int regionID) {
-		this.regionID = regionID;
+	public void setMinDiff(double minDiff) {
+		this.minDiff = minDiff;
 	}
 }

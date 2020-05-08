@@ -32,6 +32,7 @@ import org.anchoranalysis.anchor.mpp.feature.bean.mark.FeatureInputMark;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.params.KeyValueParams;
+import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 
 public class KeyValueParam extends FeatureMark {
@@ -47,10 +48,9 @@ public class KeyValueParam extends FeatureMark {
 	// END BEAN PROPERTIES
 
 	@Override
-	public double calc(FeatureInputMark params)
-			throws FeatureCalcException {
+	public double calc(SessionInput<FeatureInputMark> input) throws FeatureCalcException {
 		
-		KeyValueParams kpv = params.getParamsOptional().orElseThrow(
+		KeyValueParams kpv = input.get().getParamsOptional().orElseThrow(
 			() -> new FeatureCalcException("features has no keyParamValues attached") 	
 		);
 		

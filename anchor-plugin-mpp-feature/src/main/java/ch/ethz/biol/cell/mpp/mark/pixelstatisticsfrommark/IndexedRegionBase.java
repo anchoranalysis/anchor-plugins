@@ -93,4 +93,39 @@ public abstract class IndexedRegionBase extends PixelStatisticsFromMark {
 	public void setRegionID(int regionID) {
 		this.regionID = regionID;
 	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + index;
+		result = prime * result + regionID;
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		IndexedRegionBase other = (IndexedRegionBase) obj;
+		if (index != other.index)
+			return false;
+		if (regionID != other.regionID)
+			return false;
+		return true;
+	}
+
+	@Override
+	public String uniqueName() {
+		return String.format(
+			"%s_%d_%d",
+			getClass().getCanonicalName(),
+			index,
+			regionID
+		);
+	}
 }

@@ -31,6 +31,7 @@ import org.anchoranalysis.anchor.mpp.feature.bean.mark.FeatureInputMark;
 
 
 import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 
 public class Volume extends FeatureMark  {
@@ -46,8 +47,8 @@ public class Volume extends FeatureMark  {
 	// END BEAN PROPERTIES
 	
 	@Override
-	public double calc(FeatureInputMark params) throws FeatureCalcException {
-		return params.getMark().volume(regionID);
+	public double calc(SessionInput<FeatureInputMark> input) throws FeatureCalcException {
+		return input.get().getMark().volume(regionID);
 	}
 
 	public int getRegionID() {
