@@ -167,7 +167,6 @@ public class ExportFeaturesObjMaskTask<T extends FeatureInput> extends ExportFea
 		try {
 			session.start(
 				imageInit,
-				imageInit.getFeature(),
 				Optional.of(nrgStack),
 				context.getLogger()
 			);
