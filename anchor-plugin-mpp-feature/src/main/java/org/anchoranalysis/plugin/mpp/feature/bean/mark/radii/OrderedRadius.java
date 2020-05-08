@@ -1,7 +1,8 @@
-package ch.ethz.biol.cell.mpp.nrg.feature.mark;
+package org.anchoranalysis.plugin.mpp.feature.bean.mark.radii;
 
 import org.anchoranalysis.anchor.mpp.feature.bean.mark.FeatureMark;
 import org.anchoranalysis.anchor.mpp.feature.bean.mark.FeatureInputMark;
+import org.anchoranalysis.anchor.mpp.mark.MarkAbstractRadii;
 
 /*
  * #%L
@@ -31,11 +32,10 @@ import org.anchoranalysis.anchor.mpp.feature.bean.mark.FeatureInputMark;
 
 
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.params.KeyValueParams;
 import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 
-public class KeyValueParam extends FeatureMark {
+public class OrderedRadius extends FeatureMark {
 
 	/**
 	 * 
@@ -44,30 +44,32 @@ public class KeyValueParam extends FeatureMark {
 	
 	// START BEAN PROPERTIES
 	@BeanField
-	private String key = "";
+	private int index;
 	// END BEAN PROPERTIES
-
+	
 	@Override
 	public double calc(SessionInput<FeatureInputMark> input) throws FeatureCalcException {
-		
-		KeyValueParams kpv = input.get().getParamsOptional().orElseThrow(
-			() -> new FeatureCalcException("features has no keyParamValues attached") 	
-		);
-		
-		String str = kpv.getProperty(key);
-		if (str==null) {
-			throw new FeatureCalcException( String.format("Does not have keyParamValue '%s'",key) );
+
+		if (input.get().getMark() instanceof MarkAbstractRadii) {
+			
+			MarkAbstractRadii markCast = (MarkAbstractRadii) input.get().getMark();
+			double[] radii = markCast.createRadiiArrayRslvd(input.get().getResRequired());
+			
+			if( index >= radii.length ) {
+				throw new FeatureCalcException(String.format("Feature index %d must be less than radii array length %d",index,radii.length));
+			}
+			
+			return radii[index];
 		}
-		return Double.valueOf( str );
-		
+		return -1;
 	}
 
-	public String getKey() {
-		return key;
+	public int getIndex() {
+		return index;
 	}
 
-	public void setKey(String key) {
-		this.key = key;
+	public void setIndex(int index) {
+		this.index = index;
 	}
 
 }

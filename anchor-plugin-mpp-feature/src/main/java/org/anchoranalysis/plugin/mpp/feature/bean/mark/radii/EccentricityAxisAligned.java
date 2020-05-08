@@ -1,10 +1,6 @@
-package ch.ethz.biol.cell.mpp.nrg.feature.mark;
+package org.anchoranalysis.plugin.mpp.feature.bean.mark.radii;
 
-import org.anchoranalysis.anchor.mpp.feature.bean.mark.FeatureMark;
-import org.anchoranalysis.anchor.mpp.feature.bean.mark.FeatureInputMark;
-import org.anchoranalysis.anchor.mpp.mark.Mark;
-import org.anchoranalysis.anchor.mpp.mark.MarkAbstractRadii;
-import org.anchoranalysis.feature.cache.SessionInput;
+
 
 /*-
  * #%L
@@ -32,50 +28,24 @@ import org.anchoranalysis.feature.cache.SessionInput;
  * #L%
  */
 
-import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.image.orientation.Orientation;
 
 // Calculates the eccentricity of the ellipse
 // If it's an ellipsoid it calculates the Meridional Eccentricity i.e. the eccentricity
 //    of the ellipse that cuts across the plane formed by the longest and shortest axes
-public class Eccentricity extends FeatureMark {
+public class EccentricityAxisAligned extends FeatureMarkEccentricity {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 
-	private double calcEccentricity( double semiMajorAxis, double semiMinorAxis ) {
-		double ratio = semiMinorAxis/semiMajorAxis;
-		return Math.sqrt( 1.0 - Math.pow(ratio, 2.0) );
-	}
-
 	@Override
-	public double calc(SessionInput<FeatureInputMark> input) throws FeatureCalcException {
-
-		Mark mark = input.get().getMark();
-		
-		if (mark instanceof MarkAbstractRadii) {
-			MarkAbstractRadii markCast = (MarkAbstractRadii) mark;
-			
-			double[] radii = markCast.radiiOrdered();
-			
-			// Old style
-			// return calcEccentricity(radii[radii.length-1], radii[0]);
-			
-			if (radii.length==2) {		
-				return calcEccentricity(radii[1], radii[0]);
-			} else {
-				double e0 = calcEccentricity(radii[1], radii[0]);
-				double e1 = calcEccentricity(radii[2], radii[1]);
-				double e2 = calcEccentricity(radii[2], radii[0]);
-				return (e0+e1+e2)/3;
-			}
-
-		} else {
-			throw new FeatureCalcException("mark must be of type MarkAbstractRadii");
-		}
-
-		
+	protected double calcEccentricityForEllipsoid(double[] radii, Orientation orientation) {
+		double e0 = calcEccentricity(radii[1], radii[0]);
+		double e1 = calcEccentricity(radii[2], radii[1]);
+		double e2 = calcEccentricity(radii[2], radii[0]);
+		return (e0+e1+e2)/3;
 	}
 
 }

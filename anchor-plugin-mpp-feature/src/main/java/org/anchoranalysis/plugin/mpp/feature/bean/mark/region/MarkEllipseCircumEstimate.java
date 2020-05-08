@@ -1,8 +1,8 @@
-package ch.ethz.biol.cell.mpp.nrg.feature.mark;
+package org.anchoranalysis.plugin.mpp.feature.bean.mark.region;
 
-import org.anchoranalysis.anchor.mpp.feature.bean.mark.FeatureMark;
 import org.anchoranalysis.anchor.mpp.feature.bean.mark.FeatureInputMark;
-import org.anchoranalysis.anchor.mpp.mark.MarkAbstractRadii;
+import org.anchoranalysis.anchor.mpp.mark.Mark;
+import org.anchoranalysis.anchor.mpp.mark.conic.MarkEllipse;
 
 /*
  * #%L
@@ -31,63 +31,30 @@ import org.anchoranalysis.anchor.mpp.mark.MarkAbstractRadii;
  */
 
 
-import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.image.extent.ImageRes;
 
-public class RadiiRatio extends FeatureMark {
+// Estimates the circumference of an ellipse based upon finding the area of the shell, and dividing
+//  by the ShellRad
+public class MarkEllipseCircumEstimate extends FeatureMarkRegion {
 
+	
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = -4380227015245049115L;
-
-	// START BEAN PROPERTIES
-	@BeanField
-	private boolean highestTwoRadiiOnly = false;
+	private static final long serialVersionUID = 7660902471584365862L;
 	
-	@BeanField
-	private boolean suppressRes = false;
-	// END BEAN PROPERTIES
-	
-	private ImageRes uniformRes = new ImageRes();
-
 	@Override
 	public double calc(SessionInput<FeatureInputMark> input) throws FeatureCalcException {
 		
-		MarkAbstractRadii markCast = (MarkAbstractRadii) input.get().getMark();
+		Mark m = input.get().getMark();
 		
-		ImageRes sr = suppressRes ? uniformRes : input.get().getResRequired(); 
-		double[] radiiOrdered = markCast.radiiOrderedRslvd( sr );
-		
-		int len = radiiOrdered.length;
-		assert(len>=2);
-		
-		if (len==2) {
-			return radiiOrdered[1] / radiiOrdered[0];
-		} else {
-			if (highestTwoRadiiOnly) {
-				return radiiOrdered[2] / radiiOrdered[1];
-			} else {
-				return radiiOrdered[2] / radiiOrdered[0];
-			}
+		if (!(m instanceof MarkEllipse)) {
+			throw new FeatureCalcException("Only MarkEllipses are supported");
 		}
-	}
-
-	public boolean isHighestTwoRadiiOnly() {
-		return highestTwoRadiiOnly;
-	}
-
-	public void setHighestTwoRadiiOnly(boolean highestTwoRadiiOnly) {
-		this.highestTwoRadiiOnly = highestTwoRadiiOnly;
-	}
-
-	public boolean isSuppressRes() {
-		return suppressRes;
-	}
-
-	public void setSuppressRes(boolean suppressRes) {
-		this.suppressRes = suppressRes;
+		
+		MarkEllipse mark = (MarkEllipse) m;
+		
+		return mark.circumference( getRegionID() );
 	}
 }

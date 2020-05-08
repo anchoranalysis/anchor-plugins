@@ -1,10 +1,9 @@
-package org.anchoranalysis.plugin.mpp.feature.bean.mark;
+package org.anchoranalysis.plugin.mpp.feature.bean.mark.region;
 
 import java.util.Optional;
 
 import org.anchoranalysis.anchor.mpp.feature.bean.mark.FeatureInputMark;
-import org.anchoranalysis.anchor.mpp.feature.bean.mark.FeatureMark;
-import org.anchoranalysis.anchor.mpp.mark.GlobalRegionIdentifiers;
+
 
 /*
  * #%L
@@ -44,7 +43,7 @@ import org.anchoranalysis.image.extent.ImageRes;
 import org.anchoranalysis.image.orientation.DirectionVector;
 import org.anchoranalysis.plugin.mpp.feature.bean.unit.UnitConverter;
 
-public class BoundingBoxExtent extends FeatureMark {
+public class BoundingBoxExtent extends FeatureMarkRegion {
 
 	/**
 	 * 
@@ -56,19 +55,18 @@ public class BoundingBoxExtent extends FeatureMark {
 	private String axis = "x";
 	
 	@BeanField
-	private int regionID = GlobalRegionIdentifiers.SUBMARK_INSIDE;
-	
-	@BeanField
 	private UnitConverter unit = new UnitConverter();
 	// END BEAN PARAMETERS
-	
 
 	@Override
 	public double calc(SessionInput<FeatureInputMark> input) throws FeatureCalcException {
 		
 		ImageDim dim = input.get().getDimensionsRequired();
 		
-		BoundingBox bbox = input.get().getMark().bbox(dim, regionID);
+		BoundingBox bbox = input.get().getMark().bbox(
+			dim,
+			getRegionID()
+		);
 		
 		return rslvDistance(
 			bbox,
@@ -104,14 +102,6 @@ public class BoundingBoxExtent extends FeatureMark {
 
 	public void setAxis(String axis) {
 		this.axis = axis;
-	}
-
-	public int getRegionID() {
-		return regionID;
-	}
-
-	public void setRegionID(int regionID) {
-		this.regionID = regionID;
 	}
 
 	public UnitConverter getUnit() {
