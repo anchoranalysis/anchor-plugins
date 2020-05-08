@@ -41,7 +41,6 @@ import org.anchoranalysis.anchor.mpp.mark.GlobalRegionIdentifiers;
 
 
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.bean.define.Define;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.error.OperationFailedException;
@@ -58,9 +57,9 @@ import org.anchoranalysis.image.stack.DisplayStack;
 import org.anchoranalysis.image.stack.NamedImgStackCollection;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.io.output.bound.BoundIOContext;
-import org.anchoranalysis.mpp.io.input.MPPInitParamsFactory;
 import org.anchoranalysis.mpp.io.output.BackgroundCreator;
 import org.anchoranalysis.mpp.sgmn.bean.cfg.CfgSgmn;
+import org.anchoranalysis.mpp.sgmn.bean.define.DefineOutputterMPPWithNrg;
 import org.anchoranalysis.mpp.sgmn.bean.kernel.proposer.KernelProposer;
 import org.anchoranalysis.mpp.sgmn.bean.optscheme.OptScheme;
 import org.anchoranalysis.mpp.sgmn.bean.optscheme.feedback.FeedbackReceiverBean;
@@ -96,7 +95,7 @@ public class SgmnMPP extends CfgSgmn {
 	private FeedbackReceiverBean<CfgNRGPixelized> feedbackReceiver = null;
 	
 	@BeanField
-	private Define define = null;
+	private DefineOutputterMPPWithNrg define;
 	
 	@BeanField
 	private int nrgSchemeIndCacheSize = 50;
@@ -118,7 +117,7 @@ public class SgmnMPP extends CfgSgmn {
 	
 	@Override
 	public SgmnMPPState createExperimentState() {
-		return new SgmnMPPState(kernelProposer,define);
+		return new SgmnMPPState(kernelProposer,define.getDefine());
 	}
 	
 	// Do segmentation
@@ -134,92 +133,87 @@ public class SgmnMPP extends CfgSgmn {
 	
 		ListUpdatableMarkSetCollection updatableMarkSetCollection = new ListUpdatableMarkSetCollection();
 		
-		DualStack dualStack = initAndPrepareInputStackCollectionForOpt(
-			stackCollection,
-			objMaskCollection,
-			updatableMarkSetCollection,
-			keyValueParams,
-			context
-		);
-		
-		// THIS SHOULD BE THE POINT AT WHICH WE LET PsoImage go out of scope, and everything in it, which isn't being used
-		//   can be garbage collected.  This will reduce memory usage for the rest of the algorithm, where hopefully
-		//   only what is needed will be kept
-		MemoryUtilities.logMemoryUsage("Before findOpt (after clean up)", context.getLogger().getLogReporter() );
-		
-		if (exitBeforeOpt) {
-			return new Cfg();
-		}
-		
-		if (keyValueParams.isPresent()) {
-			context.getOutputManager().getWriterCheckIfAllowed().write(
-				"groupParams",
-				() -> new GroupParamsGenerator(keyValueParams.get())
+		try {
+			MemoryUtilities.logMemoryUsage("Start of SgmnMPP:sgmn", context.getLogReporter() );
+					
+			return define.processInput(
+				context,
+				Optional.of(stackCollection),
+				Optional.of(objMaskCollection),
+				keyValueParams,
+				(mppInit, nrgStack) -> sgmnAndWrite(mppInit, nrgStack, updatableMarkSetCollection, keyValueParams, context)
 			);
+			
+		} catch( OperationFailedException e ) {
+			throw new SgmnFailedException(e);
 		}
-				
-		OptSchemeInitContext initContext = new OptSchemeInitContext(
-			"MPP Sgmn",
-			nrgSchemeShared,
-			dualStack,
-			new TriggerTerminationCondition(),
-			context,
-			new RandomNumberGeneratorMersenne(fixRandomSeed),
-			cfgGen
-		);
-		
-		CfgWithNrgTotal cfgNRG = findOpt(dualStack,	updatableMarkSetCollection,	initContext);
-		return cfgNRG.getCfg().deepCopy();
-		
 	}
-		
-	private DualStack initAndPrepareInputStackCollectionForOpt(
-		NamedImgStackCollection stackCollection,
-		INamedProvider<ObjMaskCollection> objMaskCollection,
+	
+	private Cfg sgmnAndWrite(
+		MPPInitParams mppInit,
+		NRGStackWithParams nrgStack,
 		ListUpdatableMarkSetCollection updatableMarkSetCollection,
 		Optional<KeyValueParams> keyValueParams,
 		BoundIOContext context
-	) throws SgmnFailedException {
-		
+	) throws OperationFailedException {
 		try {
-			MemoryUtilities.logMemoryUsage("Start of SgmnMPP:sgmn", context.getLogReporter() );
-						
-			MPPInitParams soMPP = MPPInitParamsFactory.createFromExistingCollections(
-				context,
-				Optional.ofNullable(define),
-				Optional.of(stackCollection),
-				Optional.of(objMaskCollection),
-				keyValueParams
-			);
+			init( mppInit, context.getLogger() );
 			
-			init( soMPP, context.getLogger() );
-			
-			NRGStackWithParams nrgStack = SgmnMPPHelper.createNRGStack(
+			/*NRGStackWithParams nrgStack = SgmnMPPHelper.createNRGStack(
 				soMPP.getImage().getStackCollection(),
 				keyValueParams.orElse( new KeyValueParams() )
-			);
-			SgmnMPPHelper.writeStacks( soMPP.getImage(), nrgStack, context );
+			);*/
+			SgmnMPPHelper.writeStacks( mppInit.getImage(), nrgStack, context );
 			
 			context.getLogReporter().log("Distinct number of probMap = " + updatableMarkSetCollection.numProbMap() );
 			
 			// We initialise the feedback recev
-			feedbackReceiver.initRecursive(soMPP, context.getLogger());
+			feedbackReceiver.initRecursive(mppInit, context.getLogger());
 			
 			MemoryUtilities.logMemoryUsage("Before findOpt (before cleanup)", context.getLogReporter());
 		
 			// There are two elements of the ProposerSharedObjects that we need to update with changes to the accepted
 			//   configuration
 			new UpdateMarkSet(
-				soMPP,
+				mppInit,
 				nrgStack,
 				updatableMarkSetCollection,
 				context.getLogger()
 			).apply();
 			
-			return wrapWithBackground(nrgStack, soMPP.getImage().getStackCollection() );
-
-		} catch( InitException | CreateException | OperationFailedException e ) {
-			throw new SgmnFailedException(e);
+			DualStack dualStack = wrapWithBackground(nrgStack, mppInit.getImage().getStackCollection() );
+			
+			// THIS SHOULD BE THE POINT AT WHICH WE LET PsoImage go out of scope, and everything in it, which isn't being used
+			//   can be garbage collected.  This will reduce memory usage for the rest of the algorithm, where hopefully
+			//   only what is needed will be kept
+			MemoryUtilities.logMemoryUsage("Before findOpt (after clean up)", context.getLogger().getLogReporter() );
+			
+			if (exitBeforeOpt) {
+				return new Cfg();
+			}
+			
+			if (keyValueParams.isPresent()) {
+				context.getOutputManager().getWriterCheckIfAllowed().write(
+					"groupParams",
+					() -> new GroupParamsGenerator(keyValueParams.get())
+				);
+			}
+					
+			OptSchemeInitContext initContext = new OptSchemeInitContext(
+				"MPP Sgmn",
+				nrgSchemeShared,
+				dualStack,
+				new TriggerTerminationCondition(),
+				context,
+				new RandomNumberGeneratorMersenne(fixRandomSeed),
+				cfgGen
+			);
+			
+			CfgWithNrgTotal cfgNRG = findOpt(dualStack,	updatableMarkSetCollection,	initContext);
+			return cfgNRG.getCfg().deepCopy();
+			
+		} catch (InitException | CreateException | SgmnFailedException e) {
+			throw new OperationFailedException(e);
 		}
 	}
 		
@@ -263,7 +257,6 @@ public class SgmnMPP extends CfgSgmn {
 		}
 	}
 	
-	
 	private DualStack wrapWithBackground( NRGStackWithParams nrgStack, NamedProviderStore<Stack> store ) throws CreateException {
 		DisplayStack background = BackgroundCreator.createBackground(
 			store,
@@ -271,8 +264,6 @@ public class SgmnMPP extends CfgSgmn {
 		); 
 		return new DualStack(nrgStack,background);
 	}
-		
-
 	
 	public OptScheme<CfgNRGPixelized,CfgNRGPixelized> getOptScheme() {
 		return optScheme;
@@ -342,11 +333,11 @@ public class SgmnMPP extends CfgSgmn {
 		this.fixRandomSeed = fixRandomSeed;
 	}
 
-	public Define getDefine() {
+	public DefineOutputterMPPWithNrg getDefine() {
 		return define;
 	}
 
-	public void setDefine(Define define) {
+	public void setDefine(DefineOutputterMPPWithNrg define) {
 		this.define = define;
 	}
 }
