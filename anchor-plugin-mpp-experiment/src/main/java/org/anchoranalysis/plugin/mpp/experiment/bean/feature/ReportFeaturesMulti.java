@@ -29,13 +29,10 @@ package org.anchoranalysis.plugin.mpp.experiment.bean.feature;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
-
 import org.anchoranalysis.anchor.mpp.bean.init.MPPInitParams;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
-import org.anchoranalysis.bean.define.Define;
-import org.anchoranalysis.core.error.CreateException;
+import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.core.text.TypedValue;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
@@ -50,7 +47,7 @@ import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
 import org.anchoranalysis.io.output.csv.CSVWriter;
 import org.anchoranalysis.mpp.io.bean.report.feature.ReportFeatureForSharedObjects;
 import org.anchoranalysis.mpp.io.input.MultiInput;
-import org.anchoranalysis.mpp.io.input.MPPInitParamsFactory;
+import org.anchoranalysis.mpp.sgmn.bean.define.DefineOutputterMPP;
 
 
 public class ReportFeaturesMulti extends Task<MultiInput,CSVWriter> {
@@ -65,7 +62,7 @@ public class ReportFeaturesMulti extends Task<MultiInput,CSVWriter> {
 	private List<ReportFeatureForSharedObjects> listReportFeatures = new ArrayList<>();
 	
 	@BeanField @OptionalBean
-	private Define define;
+	private DefineOutputterMPP define;
 	// END BEAN PROPERTIES
 	
 	@Override
@@ -98,36 +95,44 @@ public class ReportFeaturesMulti extends Task<MultiInput,CSVWriter> {
 	}
 	
 	@Override
-	public void doJobOnInputObject(InputBound<MultiInput,CSVWriter> params)	throws JobExecutionException {
-		
-		LogErrorReporter logErrorReporter = params.getLogger();
-		MultiInput input = params.getInputObject();
+	public void doJobOnInputObject(InputBound<MultiInput,CSVWriter> input)	throws JobExecutionException {
 
-		CSVWriter writer = (CSVWriter) params.getSharedState();
+		CSVWriter writer = input.getSharedState();
 		
 		if (!writer.isOutputEnabled()) {
 			return;
 		}
 		
+		BoundIOContext context = input.context();
+		
 		try {
-			MPPInitParams soMPP = MPPInitParamsFactory.createFromInput(
-				params,
-				Optional.ofNullable(define)
+			define.processInputMPP(
+				input.getInputObject(),
+				context,
+				soMPP -> writeFeaturesIntoReporter(
+					soMPP,
+					writer,
+					input.getInputObject().descriptiveName(),
+					context.getLogger()
+				)
 			);
+		
 			
-			List<TypedValue> rowElements = ReportFeatureUtilities.genElementList(
-				listReportFeatures,
-				soMPP,
-				logErrorReporter
-			);
-			
-			rowElements.add(0, new TypedValue(input.descriptiveName(),false) );
-			
-			writer.writeRow( rowElements );
-			
-		} catch (CreateException e) {
+		} catch (OperationFailedException e) {
 			throw new JobExecutionException(e);
 		}
+	}
+	
+	private void writeFeaturesIntoReporter(MPPInitParams soMPP, CSVWriter writer, String inputDescriptiveName, LogErrorReporter logger) {
+		List<TypedValue> rowElements = ReportFeatureUtilities.genElementList(
+			listReportFeatures,
+			soMPP,
+			logger
+		);
+		
+		rowElements.add(0, new TypedValue(inputDescriptiveName, false) );
+		
+		writer.writeRow( rowElements );
 	}
 
 	@Override
@@ -150,12 +155,11 @@ public class ReportFeaturesMulti extends Task<MultiInput,CSVWriter> {
 		this.listReportFeatures = listReportFeatures;
 	}
 
-	public Define getDefine() {
+	public DefineOutputterMPP getDefine() {
 		return define;
 	}
 
-	public void setDefine(Define define) {
+	public void setDefine(DefineOutputterMPP define) {
 		this.define = define;
 	}
-
 }
