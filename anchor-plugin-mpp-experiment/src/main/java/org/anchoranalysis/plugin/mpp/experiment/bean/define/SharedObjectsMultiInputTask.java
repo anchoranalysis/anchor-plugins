@@ -77,7 +77,7 @@ public class SharedObjectsMultiInputTask extends TaskWithoutSharedState<MultiInp
 	public void doJobOnInputObject(	InputBound<MultiInput,Object> params)	throws JobExecutionException {
 		
 		try {
-			define.processInput(
+			define.processInputImage(
 				params.getInputObject(),
 				params.context(),
 				imageInitParams -> outputFeatureTablesMultiplex(

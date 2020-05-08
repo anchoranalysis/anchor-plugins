@@ -128,7 +128,7 @@ public class ExportObjectsAsCroppedImagesTask extends ExportObjectsBase<MultiInp
 		BoundIOContext context = params.context();
 		
 		try {
-			define.processInput(
+			define.processInputImage(
 				params.getInputObject(),
 				params.context(),
 				paramsInit -> outputObjs(paramsInit, context)
