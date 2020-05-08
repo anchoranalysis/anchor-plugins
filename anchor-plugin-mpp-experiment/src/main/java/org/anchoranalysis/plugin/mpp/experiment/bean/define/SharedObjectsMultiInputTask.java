@@ -153,5 +153,11 @@ public class SharedObjectsMultiInputTask extends TaskWithoutSharedState<MultiInp
 		this.nrgParamsName = nrgParamsName;
 	}
 
-	
+	public DefineOutputterMPP getDefine() {
+		return define;
+	}
+
+	public void setDefine(DefineOutputterMPP define) {
+		this.define = define;
+	}
 }
