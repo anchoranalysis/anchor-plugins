@@ -53,7 +53,6 @@ import ch.ethz.biol.cell.imageprocessing.objmask.provider.ObjMaskProviderReferen
 class ExportFeaturesObjMaskTaskFixture {
 
 	private static final String PATH_FEATURES_SINGLE_DEFAULT = "singleFeatures.xml";
-	private static final String PATH_FEATURES_SINGLE_WITH_SHELL = "singleFeaturesWithShell.xml";
 	private static final String PATH_FEATURES_PAIR_DEFAULT = "pairFeatures.xml";
 	private static final String PATH_FEATURES_IMAGE_DEFAULT = "imageFeatures.xml";
 	
@@ -93,8 +92,8 @@ class ExportFeaturesObjMaskTaskFixture {
 	 * Additionally include a shell feature in the "single" features
 	 *  
 	 * @throws CreateException */
-	public void includeAdditionalShellFeature() throws CreateException {
-		singleFeatures.useAlternativeXMLList(PATH_FEATURES_SINGLE_WITH_SHELL);
+	public void useAlternativeXMLList(String alternativeFileName) throws CreateException {
+		singleFeatures.useAlternativeXMLList(alternativeFileName);
 	}
 	
 	/** 

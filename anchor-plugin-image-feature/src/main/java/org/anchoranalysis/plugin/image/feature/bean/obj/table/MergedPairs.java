@@ -45,8 +45,9 @@ import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
 import org.anchoranalysis.image.feature.objmask.pair.FeatureInputPairObjs;
 import org.anchoranalysis.image.feature.session.FeatureTableSession;
-import org.anchoranalysis.image.feature.session.MergedPairsFeatures;
-import org.anchoranalysis.image.feature.session.MergedPairsSession;
+import org.anchoranalysis.image.feature.session.merged.MergedPairsInclude;
+import org.anchoranalysis.image.feature.session.merged.MergedPairsFeatures;
+import org.anchoranalysis.image.feature.session.merged.MergedPairsSession;
 import org.anchoranalysis.image.feature.stack.FeatureInputStack;
 import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.image.objmask.ObjMaskCollection;
@@ -156,10 +157,8 @@ public class MergedPairs extends FeatureTableObjs<FeatureInputPairObjs> {
 			);
 			
 			return new MergedPairsSession(
-				includeFirst,
-				includeSecond,
-				includeMerged,
 				features,
+				new MergedPairsInclude(includeFirst, includeSecond, includeMerged),				
 				ignoreFeaturePrefixes.set(),
 				checkInverse,
 				suppressErrors
@@ -169,8 +168,6 @@ public class MergedPairs extends FeatureTableObjs<FeatureInputPairObjs> {
 			throw new CreateException(e);
 		}
 	}
-
-
 	
 	@Override
 	public List<FeatureInputPairObjs> createListInputs(ObjMaskCollection objs,
