@@ -31,7 +31,7 @@ import java.util.List;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.axis.AxisType;
-import org.anchoranalysis.core.axis.AxisTypeUtilities;
+import org.anchoranalysis.core.axis.AxisTypeConverter;
 import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
@@ -62,7 +62,7 @@ public class IntensityGradientMeanFromMultiple extends IntensityGradientBase {
 	@Override
 	public double calc(SessionInput<FeatureInputSingleObj> input) throws FeatureCalcException {
 		
-		AxisType axisType = AxisTypeUtilities.createFromString( axis );
+		AxisType axisType = AxisTypeConverter.createFromString( axis );
 		
 		// Calculate the mean
 		double sum = 0.0;
@@ -72,7 +72,7 @@ public class IntensityGradientMeanFromMultiple extends IntensityGradientBase {
 		);
 		
 		for( Point3d p : pnts ) {
-			sum += p.get(axisType);
+			sum += p.getValueByDimension(axisType);
 		}
 		
 		return sum/pnts.size();

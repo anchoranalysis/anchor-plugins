@@ -135,7 +135,13 @@ public class ReflectInAxesWithinDist extends PointsFitter {
 	
 
 	// Min=true means the lower side,  Min=false means the higher side of the dimension
-	private static boolean arePointsWithinDistOfBorder( List<Point3f> points, Extent extnt, int dimension, boolean min, double[] arrDistances ) {
+	private static boolean arePointsWithinDistOfBorder(
+		List<Point3f> points,
+		Extent extnt,
+		int dimension,
+		boolean min,
+		double[] arrDistances
+	) {
 		
 		double dimMax = extnt.getValueByDimension(dimension);
 		double maxAllowedDist = arrDistances[dimension];
