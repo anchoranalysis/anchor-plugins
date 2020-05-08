@@ -1,4 +1,4 @@
-package ch.ethz.biol.cell.mpp.nrg.feature.mark;
+package org.anchoranalysis.plugin.mpp.feature.bean.mark.direction;
 
 /*-
  * #%L
@@ -39,7 +39,7 @@ import org.anchoranalysis.image.orientation.DirectionVector;
 import org.anchoranalysis.image.orientation.Orientation;
 import org.anchoranalysis.math.rotation.RotationMatrix;
 
-public abstract class DirectionVectorBase extends FeatureMark {
+public abstract class FeatureMarkDirection extends FeatureMark {
 	
 	/**
 	 * 

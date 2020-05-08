@@ -1,12 +1,14 @@
-package ch.ethz.biol.cell.mpp.nrg.feature.mark;
+package org.anchoranalysis.plugin.mpp.feature.bean.mark.radii;
 
-import org.anchoranalysis.anchor.mpp.mark.conic.MarkEllipsoid;
+import org.anchoranalysis.anchor.mpp.feature.bean.mark.FeatureInputMark;
+import org.anchoranalysis.anchor.mpp.feature.bean.mark.FeatureMark;
 
-/*
+
+/*-
  * #%L
  * anchor-plugin-mpp-feature
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -28,15 +30,11 @@ import org.anchoranalysis.anchor.mpp.mark.conic.MarkEllipsoid;
  * #L%
  */
 
-
-import org.anchoranalysis.core.geometry.Point3d;
-import org.anchoranalysis.core.geometry.Vector3d;
+import org.anchoranalysis.anchor.mpp.mark.conic.MarkEllipse;
+import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.image.orientation.Orientation;
-import org.anchoranalysis.math.rotation.RotationMatrix;
 
-// Considers the 3 directions of an Ellipsoid
-public class DotProductOrientationToVector extends DirectionVectorBase {
+public class MaxRatioRadii extends FeatureMark {
 
 	/**
 	 * 
@@ -44,23 +42,24 @@ public class DotProductOrientationToVector extends DirectionVectorBase {
 	private static final long serialVersionUID = 1L;
 
 	@Override
-	protected double calcForEllipsoid(MarkEllipsoid mark, Orientation orientation, RotationMatrix rotMatrix, Vector3d directionVector)
-			throws FeatureCalcException {
-
-		double minDot = Double.POSITIVE_INFINITY;
+	public double calc( SessionInput<FeatureInputMark> input ) throws FeatureCalcException {
 		
-		for( int d=0; d<3; d++ ) {
-			Point3d vec = rotMatrix.column(d);
-			
-			double dot = Math.acos(
-				directionVector.dot(vec)
-			);
-			
-			if (dot<minDot) {
-				minDot = dot;
-			}
+		if (!(input.get().getMark() instanceof MarkEllipse)) {
+			throw new FeatureCalcException("Mark must be of type " + MarkEllipse.class.getName());
 		}
 		
-		return minDot;
+		MarkEllipse mark = (MarkEllipse) input.get().getMark();
+		
+		double rad1 = mark.getRadii().getX();
+		double rad2 = mark.getRadii().getY();
+		
+		assert( !Double.isNaN(rad1) );
+		assert( !Double.isNaN(rad2) );
+		
+		if (rad1==0 || rad2==0) {
+			return 0.0;
+		}
+		
+		return Math.max( rad1/rad2, rad2/rad1 );
 	}
 }

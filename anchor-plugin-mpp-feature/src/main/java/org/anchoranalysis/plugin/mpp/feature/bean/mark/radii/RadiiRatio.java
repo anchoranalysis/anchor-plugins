@@ -1,7 +1,8 @@
-package ch.ethz.biol.cell.mpp.nrg.feature.mark;
+package org.anchoranalysis.plugin.mpp.feature.bean.mark.radii;
 
 import org.anchoranalysis.anchor.mpp.feature.bean.mark.FeatureMark;
 import org.anchoranalysis.anchor.mpp.feature.bean.mark.FeatureInputMark;
+import org.anchoranalysis.anchor.mpp.mark.MarkAbstractRadii;
 
 /*
  * #%L
@@ -33,30 +34,60 @@ import org.anchoranalysis.anchor.mpp.feature.bean.mark.FeatureInputMark;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.image.extent.ImageRes;
 
-public class Volume extends FeatureMark  {
+public class RadiiRatio extends FeatureMark {
 
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 1L;
-	
+	private static final long serialVersionUID = -4380227015245049115L;
+
 	// START BEAN PROPERTIES
 	@BeanField
-	private int regionID = 0;
+	private boolean highestTwoRadiiOnly = false;
+	
+	@BeanField
+	private boolean suppressRes = false;
 	// END BEAN PROPERTIES
 	
+	private ImageRes uniformRes = new ImageRes();
+
 	@Override
 	public double calc(SessionInput<FeatureInputMark> input) throws FeatureCalcException {
-		return input.get().getMark().volume(regionID);
+		
+		MarkAbstractRadii markCast = (MarkAbstractRadii) input.get().getMark();
+		
+		ImageRes sr = suppressRes ? uniformRes : input.get().getResRequired(); 
+		double[] radiiOrdered = markCast.radiiOrderedRslvd( sr );
+		
+		int len = radiiOrdered.length;
+		assert(len>=2);
+		
+		if (len==2) {
+			return radiiOrdered[1] / radiiOrdered[0];
+		} else {
+			if (highestTwoRadiiOnly) {
+				return radiiOrdered[2] / radiiOrdered[1];
+			} else {
+				return radiiOrdered[2] / radiiOrdered[0];
+			}
+		}
 	}
 
-	public int getRegionID() {
-		return regionID;
+	public boolean isHighestTwoRadiiOnly() {
+		return highestTwoRadiiOnly;
 	}
 
-	public void setRegionID(int regionID) {
-		this.regionID = regionID;
+	public void setHighestTwoRadiiOnly(boolean highestTwoRadiiOnly) {
+		this.highestTwoRadiiOnly = highestTwoRadiiOnly;
 	}
 
+	public boolean isSuppressRes() {
+		return suppressRes;
+	}
+
+	public void setSuppressRes(boolean suppressRes) {
+		this.suppressRes = suppressRes;
+	}
 }

@@ -1,12 +1,12 @@
-package ch.ethz.biol.cell.mpp.nrg.feature.mark;
+package org.anchoranalysis.plugin.mpp.feature.bean.mark.direction;
 
 import org.anchoranalysis.anchor.mpp.mark.conic.MarkEllipsoid;
 
-/*-
+/*
  * #%L
  * anchor-plugin-mpp-feature
  * %%
- * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -28,47 +28,39 @@ import org.anchoranalysis.anchor.mpp.mark.conic.MarkEllipsoid;
  * #L%
  */
 
+
 import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.core.geometry.Vector3d;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.orientation.Orientation;
 import org.anchoranalysis.math.rotation.RotationMatrix;
 
-// Computes the axis ratio of the ellipse formed by a plane of an orientation relative to the ellipsoid
-//   intersectiong with the ellipsoid.  This is constant for all parallel planes.
-//
-// See paper:  Colin C. Ferguson "Intersections of Ellipsoids and Planes of Arbitrary Orientation and Position
-//
-public class EllipsoidMaxAreaIntersectingPlane extends DirectionVectorBase {
-	
-	
+// Considers the 3 directions of an Ellipsoid
+public class DotProductOrientationToVector extends FeatureMarkDirection {
+
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 
 	@Override
-	protected double calcForEllipsoid(MarkEllipsoid mark, Orientation orientation, RotationMatrix rotMatrix,
-			Vector3d normalToPlane) throws FeatureCalcException {
+	protected double calcForEllipsoid(MarkEllipsoid mark, Orientation orientation, RotationMatrix rotMatrix, Vector3d directionVector)
+			throws FeatureCalcException {
 
-		double[] radii  =mark.createRadiiArray();
+		double minDot = Double.POSITIVE_INFINITY;
 		
-		normalToPlane.normalize();
-		Point3d beta = rotMatrix.calcRotatedPoint( new Point3d(normalToPlane) );
+		for( int d=0; d<3; d++ ) {
+			Point3d vec = rotMatrix.column(d);
+			
+			double dot = Math.acos(
+				directionVector.dot(vec)
+			);
+			
+			if (dot<minDot) {
+				minDot = dot;
+			}
+		}
 		
-		double beta_1 = beta.getX();
-		double beta_2 = beta.getY();
-		double beta_3 = beta.getZ();
-		
-		double beta_1_sq = Math.pow(beta_1, 2);
-		double beta_2_sq = Math.pow(beta_2, 2);
-		double beta_3_sq = Math.pow(beta_3, 2);
-		
-		
-		double P_t = Math.sqrt((Math.pow(radii[0],2) * beta_1_sq) + (Math.pow(radii[1],2) * beta_2_sq) + (Math.pow(radii[2],2) * beta_3_sq)); 
-
-		double area_center = (Math.PI * radii[0] * radii[1] * radii[2]) / P_t;
-		
-		return area_center;
+		return minDot;
 	}
 }
