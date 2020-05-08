@@ -4,6 +4,7 @@ import org.anchoranalysis.anchor.mpp.feature.bean.mark.FeatureMark;
 import org.anchoranalysis.anchor.mpp.feature.bean.mark.FeatureInputMark;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.anchor.mpp.mark.MarkAbstractRadii;
+import org.anchoranalysis.feature.cache.SessionInput;
 
 /*-
  * #%L
@@ -49,9 +50,9 @@ public class Eccentricity extends FeatureMark {
 	}
 
 	@Override
-	public double calc(FeatureInputMark params) throws FeatureCalcException {
+	public double calc(SessionInput<FeatureInputMark> input) throws FeatureCalcException {
 
-		Mark mark = params.getMark();
+		Mark mark = input.get().getMark();
 		
 		if (mark instanceof MarkAbstractRadii) {
 			MarkAbstractRadii markCast = (MarkAbstractRadii) mark;

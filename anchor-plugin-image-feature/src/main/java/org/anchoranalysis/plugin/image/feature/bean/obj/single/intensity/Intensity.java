@@ -33,9 +33,8 @@ import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.chnl.Chnl;
 import org.anchoranalysis.image.feature.histogram.FeatureInputHistogram;
+import org.anchoranalysis.image.feature.histogram.Mean;
 import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
-
-import ch.ethz.biol.cell.mpp.nrg.feature.histogram.Mean;
 
 /**
  * Derives a histogram for an object against one channel from the NRG-stack, and applies a {@link org.anchoranalysis.image.feature.bean.FeatureHistogram} to it.

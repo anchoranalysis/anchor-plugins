@@ -32,6 +32,7 @@ import org.anchoranalysis.anchor.mpp.pxlmark.PxlMark;
 
 
 import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.voxel.statistics.VoxelStatistics;
 
@@ -65,15 +66,15 @@ public final class MaxSliceArea extends NRGElemIndPhysical {
 	}
 	
 	@Override
-	public double calcCast( FeatureInputSingleMemo input ) throws FeatureCalcException {
+	public double calc( SessionInput<FeatureInputSingleMemo> input ) throws FeatureCalcException {
 
-		PxlMark pm = input.getPxlPartMemo().doOperation();
+		PxlMark pm = input.get().getPxlPartMemo().doOperation();
 		
 		double maxSliceSizeVoxels = calcMaxSliceSize(pm);
 		
 		double retVal = rslvArea(
 			maxSliceSizeVoxels,
-			input.getResRequired()
+			input.get().getResRequired()
 		);
 		
 		getLogger().getLogReporter().logFormatted("MaxSliceArea = %f\n", retVal);

@@ -4,6 +4,7 @@ import org.anchoranalysis.anchor.mpp.feature.bean.nrg.elem.FeatureSingleMemo;
 import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputSingleMemo;
 import org.anchoranalysis.anchor.mpp.mark.GlobalRegionIdentifiers;
 import org.anchoranalysis.anchor.mpp.mark.MarkAbstractRadii;
+import org.anchoranalysis.feature.cache.SessionInput;
 
 /*-
  * #%L
@@ -43,11 +44,11 @@ public class BBoxRatio extends FeatureSingleMemo {
 	private static final long serialVersionUID = -4380227015245049115L;
 
 	@Override
-	public double calcCast(FeatureInputSingleMemo input) throws FeatureCalcException {
+	public double calc(SessionInput<FeatureInputSingleMemo> input) throws FeatureCalcException {
 		
-		MarkAbstractRadii markCast = (MarkAbstractRadii) input.getPxlPartMemo().getMark();
+		MarkAbstractRadii markCast = (MarkAbstractRadii) input.get().getPxlPartMemo().getMark();
 		
-		ImageDim dim = input.getDimensionsRequired();
+		ImageDim dim = input.get().getDimensionsRequired();
 		
 		BoundingBox bb = markCast.bbox(dim, GlobalRegionIdentifiers.SUBMARK_INSIDE );
 		bb.extnt().setZ( (int) (bb.extnt().getZ() * dim.getRes().getZRelRes()) );

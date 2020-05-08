@@ -35,6 +35,7 @@ import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputSingleMemo;
 import org.anchoranalysis.anchor.mpp.regionmap.RegionMapSingleton;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.extent.Extent;
@@ -76,12 +77,11 @@ public class SurfaceSizeMaskNonZero extends FeatureSingleMemo {
 	}
 
 	@Override
-	public double calcCast(FeatureInputSingleMemo params)
-			throws FeatureCalcException {
+	public double calc(SessionInput<FeatureInputSingleMemo> params) throws FeatureCalcException {
 
 		
-		ObjMaskWithProperties omWithProps = params.getPxlPartMemo().getMark().calcMask(
-			params.getDimensionsRequired(),
+		ObjMaskWithProperties omWithProps = params.get().getPxlPartMemo().getMark().calcMask(
+			params.get().getDimensionsRequired(),
 			regionMap.membershipWithFlagsForIndex(regionID),
 			BinaryValuesByte.getDefault()
 		);
@@ -97,7 +97,7 @@ public class SurfaceSizeMaskNonZero extends FeatureSingleMemo {
 		
 		try {
 			for( int z=0; z<extnt.getZ(); z++) {
-				VoxelStatistics stats = params.getPxlPartMemo().doOperation().statisticsFor(maskIndex, 0, z);
+				VoxelStatistics stats = params.get().getPxlPartMemo().doOperation().statisticsFor(maskIndex, 0, z);
 				if( stats.histogram().hasAboveZero() ) {
 					size += vbOutline.extractSlice(z).countEqual( om.getBinaryValues().getOnInt() );
 				}

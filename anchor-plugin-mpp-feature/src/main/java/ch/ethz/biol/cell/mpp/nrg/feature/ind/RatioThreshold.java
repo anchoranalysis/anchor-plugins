@@ -33,6 +33,7 @@ import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputSingleMemo;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.shared.relation.threshold.RelationToThreshold;
 import org.anchoranalysis.core.error.CreateException;
+import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.voxel.statistics.VoxelStatistics;
 
@@ -54,13 +55,13 @@ public class RatioThreshold extends FeatureSingleMemo {
 	// END BEAN PROPERTIES
 	
 	@Override
-	public double calcCast( FeatureInputSingleMemo input ) throws FeatureCalcException {
+	public double calc( SessionInput<FeatureInputSingleMemo> input ) throws FeatureCalcException {
 
 		VoxelStatistics stats;
 		try {
 			stats = pixelList.createStatisticsFor(
-				input.getPxlPartMemo(),
-				input.getDimensionsRequired()
+				input.get().getPxlPartMemo(),
+				input.get().getDimensionsRequired()
 			);
 		} catch (CreateException e) {
 			throw new FeatureCalcException(e);

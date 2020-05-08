@@ -1,9 +1,7 @@
-package ch.ethz.biol.cell.mpp.nrg.feature.ind;
+package org.anchoranalysis.plugin.mpp.feature.bean.ind;
 
 import org.anchoranalysis.anchor.mpp.feature.bean.nrg.elem.FeatureSingleMemo;
 import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputSingleMemo;
-import org.anchoranalysis.anchor.mpp.mark.GlobalRegionIdentifiers;
-import org.anchoranalysis.anchor.mpp.pxlmark.PxlMark;
 
 /*
  * #%L
@@ -33,59 +31,70 @@ import org.anchoranalysis.anchor.mpp.pxlmark.PxlMark;
 
 
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.bean.annotation.NonNegative;
+import org.anchoranalysis.feature.bean.Feature;
+import org.anchoranalysis.feature.cache.ChildCacheName;
+import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.image.voxel.statistics.VoxelStatistics;
+import org.anchoranalysis.image.feature.histogram.FeatureInputHistogram;
+import org.anchoranalysis.image.feature.histogram.Mean;
 
-public class IntensityDifferenceSize extends FeatureSingleMemo {
+import ch.ethz.biol.cell.mpp.mark.pixelstatisticsfrommark.PixelStatisticsFromMark;
+
+public class Intensity extends FeatureSingleMemo {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	
-	// START BEAN PROPERTIES
-	@BeanField @NonNegative
-	private double minDiff;
-	// END BEAN PROPERTIES
-	
-	public IntensityDifferenceSize() {
-		super();
-	}
-	
-	
-	public IntensityDifferenceSize(double minDiff) {
-		super();
-		this.minDiff = minDiff;
-	}
-	
-	@Override
-	public double calcCast( FeatureInputSingleMemo params ) throws FeatureCalcException {
 
-		PxlMark pm = params.getPxlPartMemo().doOperation();
-		
-		VoxelStatistics statsInside = pm.statisticsForAllSlices(0, GlobalRegionIdentifiers.SUBMARK_INSIDE);
-		VoxelStatistics statsOutside = pm.statisticsForAllSlices(0, GlobalRegionIdentifiers.SUBMARK_SHELL);
-		
-		double mean_in = statsInside.mean();
-		double mean_shell = statsOutside.mean();
-		
-		double diff = ( ((mean_in-mean_shell) - minDiff) / 255 );
-		long size = statsInside.size();
-		
-		return (diff * size) * 1e-3;
+	// START BEAN
+	/** Feature to apply to the histogram */
+	@BeanField
+	private Feature<FeatureInputHistogram> item = new Mean();
+	
+	/** If TRUE, zeros are excluded from considering in the histogram */
+	@BeanField
+	private boolean excludeZero = false;
+	
+	@BeanField
+	private PixelStatisticsFromMark pixelList;
+	// END BEAN
+			
+	@Override
+	public double calc( SessionInput<FeatureInputSingleMemo> input ) throws FeatureCalcException {
+
+		return input.forChild().calc(
+			item,
+			new CalculateHistogramInputFromMemo(pixelList, excludeZero),
+			cacheName()
+		);
+	}
+	
+	private ChildCacheName cacheName() {
+		return new ChildCacheName(
+			Intensity.class,
+			pixelList.uniqueName()
+		);
 	}
 
 	@Override
 	public String getParamDscr() {
-		return String.format("minDiff=%f", minDiff);
+		return pixelList.getBeanDscr();
+	}
+	
+	public PixelStatisticsFromMark getPixelList() {
+		return pixelList;
 	}
 
-	public double getMinDiff() {
-		return minDiff;
+	public void setPixelList(PixelStatisticsFromMark pixelList) {
+		this.pixelList = pixelList;
 	}
 
-	public void setMinDiff(double minDiff) {
-		this.minDiff = minDiff;
+	public boolean isExcludeZero() {
+		return excludeZero;
+	}
+
+	public void setExcludeZero(boolean excludeZero) {
+		this.excludeZero = excludeZero;
 	}
 }

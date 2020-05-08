@@ -34,11 +34,11 @@ import org.anchoranalysis.feature.cache.calculation.FeatureCalculation;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.feature.bean.FeatureStack;
 import org.anchoranalysis.image.feature.histogram.FeatureInputHistogram;
+import org.anchoranalysis.image.feature.histogram.Mean;
 import org.anchoranalysis.image.feature.stack.FeatureInputStack;
 import org.anchoranalysis.image.histogram.Histogram;
 import org.anchoranalysis.plugin.image.feature.bean.obj.single.intensity.CalculateDeriveHistogramInput;
 
-import ch.ethz.biol.cell.mpp.nrg.feature.histogram.Mean;
 import ch.ethz.biol.cell.mpp.nrg.feature.stack.cachedcalculation.CalculateHistogram;
 import ch.ethz.biol.cell.mpp.nrg.feature.stack.cachedcalculation.CalculateHistogramMasked;
 

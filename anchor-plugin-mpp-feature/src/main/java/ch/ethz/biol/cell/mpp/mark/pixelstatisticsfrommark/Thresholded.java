@@ -71,5 +71,44 @@ public class Thresholded extends PixelStatisticsFromMark {
 		this.threshold = threshold;
 	}
 
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((pixelList == null) ? 0 : pixelList.hashCode());
+		result = prime * result + ((threshold == null) ? 0 : threshold.hashCode());
+		return result;
+	}
 
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Thresholded other = (Thresholded) obj;
+		if (pixelList == null) {
+			if (other.pixelList != null)
+				return false;
+		} else if (!pixelList.equals(other.pixelList))
+			return false;
+		if (threshold == null) {
+			if (other.threshold != null)
+				return false;
+		} else if (!threshold.equals(other.threshold))
+			return false;
+		return true;
+	}
+
+	@Override
+	public String uniqueName() {
+		return String.format(
+			"%s_%s_%s",
+			Thresholded.class.getCanonicalName(),
+			pixelList.uniqueName(),
+			threshold.uniqueName()
+		);
+	}
 }

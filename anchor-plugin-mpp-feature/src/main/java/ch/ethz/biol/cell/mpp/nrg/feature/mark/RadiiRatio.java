@@ -32,6 +32,7 @@ import org.anchoranalysis.anchor.mpp.mark.MarkAbstractRadii;
 
 
 import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.extent.ImageRes;
 
@@ -53,12 +54,11 @@ public class RadiiRatio extends FeatureMark {
 	private ImageRes uniformRes = new ImageRes();
 
 	@Override
-	public double calc(FeatureInputMark params) throws FeatureCalcException {
+	public double calc(SessionInput<FeatureInputMark> input) throws FeatureCalcException {
 		
+		MarkAbstractRadii markCast = (MarkAbstractRadii) input.get().getMark();
 		
-		MarkAbstractRadii markCast = (MarkAbstractRadii) params.getMark();
-		
-		ImageRes sr = suppressRes ? uniformRes : params.getResRequired(); 
+		ImageRes sr = suppressRes ? uniformRes : input.get().getResRequired(); 
 		double[] radiiOrdered = markCast.radiiOrderedRslvd( sr );
 		
 		int len = radiiOrdered.length;

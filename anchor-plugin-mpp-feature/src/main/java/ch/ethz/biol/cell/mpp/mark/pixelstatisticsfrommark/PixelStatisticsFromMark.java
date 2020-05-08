@@ -29,11 +29,12 @@ import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
  */
 
 import org.anchoranalysis.bean.AnchorBean;
+import org.anchoranalysis.bean.GenerateUniqueParameterization;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.voxel.statistics.VoxelStatistics;
 
-public abstract class PixelStatisticsFromMark extends AnchorBean<PixelStatisticsFromMark> {
+public abstract class PixelStatisticsFromMark extends AnchorBean<PixelStatisticsFromMark> implements GenerateUniqueParameterization {
 
 	/**
 	 * 
