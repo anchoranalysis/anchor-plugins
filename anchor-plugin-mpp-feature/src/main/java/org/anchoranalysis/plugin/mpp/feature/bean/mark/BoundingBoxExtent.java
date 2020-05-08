@@ -34,6 +34,8 @@ import org.anchoranalysis.anchor.mpp.mark.GlobalRegionIdentifiers;
 
 
 import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.core.axis.AxisType;
+import org.anchoranalysis.core.axis.AxisTypeConverter;
 import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.extent.BoundingBox;
@@ -71,34 +73,17 @@ public class BoundingBoxExtent extends FeatureMark {
 		return rslvDistance(
 			bbox,
 			Optional.of(dim.getRes()),
-			dimIndex()
+			AxisTypeConverter.createFromString(axis)
 		);
 	}
 	
-	/** Translates a string describing the axis to the index of which dimension (X->0, Y->1, Z->2) */
-	private int dimIndex() throws FeatureCalcException {
-		String axisLowerCase = axis.toLowerCase();
-		if (axisLowerCase.equals("x")) {
-			return 0;
-			
-		} else if (axisLowerCase.equals("y")) {
-			return 1;
-			
-		} else if (axisLowerCase.equals("z")) {
-			return 2;
-			
-		} else {
-			throw new FeatureCalcException(
-				String.format("Axis must be x, y or z, instead a different value is specified: %s", axisLowerCase)
-			);
-		}
-	}
-	
-	private double rslvDistance(BoundingBox bbox, Optional<ImageRes> res, int dimIndex) throws FeatureCalcException {
+	private double rslvDistance(BoundingBox bbox, Optional<ImageRes> res, AxisType axisType) throws FeatureCalcException {
 		return unit.rslvDistance(
-			bbox.extnt().getIndex(dimIndex),
+			bbox.extnt().getValueByDimension(axisType),
 			res,
-			unitVector(dimIndex)
+			unitVector(
+				AxisTypeConverter.dimensionIndexFor(axisType)
+			)
 		);
 	}
 	
