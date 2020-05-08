@@ -1,6 +1,9 @@
-package ch.ethz.biol.cell.mpp.nrg.feature.ind;
+package org.anchoranalysis.plugin.mpp.feature.bean.mark;
 
-import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputSingleMemo;
+import java.util.Optional;
+
+import org.anchoranalysis.anchor.mpp.feature.bean.mark.FeatureInputMark;
+import org.anchoranalysis.anchor.mpp.feature.bean.mark.FeatureMark;
 import org.anchoranalysis.anchor.mpp.mark.GlobalRegionIdentifiers;
 
 /*
@@ -37,9 +40,9 @@ import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.extent.ImageRes;
 import org.anchoranalysis.image.orientation.DirectionVector;
+import org.anchoranalysis.plugin.mpp.feature.bean.unit.UnitConverter;
 
-// TODO we can also create a FeatureMark version 
-public class BoundingBoxExtent extends NRGElemIndPhysical {
+public class BoundingBoxExtent extends FeatureMark {
 
 	/**
 	 * 
@@ -52,42 +55,57 @@ public class BoundingBoxExtent extends NRGElemIndPhysical {
 	
 	@BeanField
 	private int regionID = GlobalRegionIdentifiers.SUBMARK_INSIDE;
+	
+	@BeanField
+	private UnitConverter unit = new UnitConverter();
 	// END BEAN PARAMETERS
 	
+
 	@Override
-	public double calc( SessionInput<FeatureInputSingleMemo> input ) throws FeatureCalcException {
+	public double calc(SessionInput<FeatureInputMark> input) throws FeatureCalcException {
 		
 		ImageDim dim = input.get().getDimensionsRequired();
 		
-		BoundingBox bbox = input.get().getPxlPartMemo().getMark().bbox(dim, regionID);
+		BoundingBox bbox = input.get().getMark().bbox(dim, regionID);
 		
-		String axisLowerCase = axis.toLowerCase();
-		
-		return calcAxisValue(axisLowerCase, bbox, dim.getRes() );
+		return rslvDistance(
+			bbox,
+			Optional.of(dim.getRes()),
+			dimIndex()
+		);
 	}
 	
-	
-	private double calcAxisValue( String axisLowerCase, BoundingBox bbox, ImageRes res) {
-		
+	/** Translates a string describing the axis to the index of which dimension (X->0, Y->1, Z->2) */
+	private int dimIndex() throws FeatureCalcException {
+		String axisLowerCase = axis.toLowerCase();
 		if (axisLowerCase.equals("x")) {
-			
-			double extnt = bbox.extnt().getX();
-			return rslvDistance(extnt, res, new DirectionVector(1,0,0) ); 
+			return 0;
 			
 		} else if (axisLowerCase.equals("y")) {
-			
-			double extnt = bbox.extnt().getY();
-			return rslvDistance(extnt, res, new DirectionVector(0,1,0) );
+			return 1;
 			
 		} else if (axisLowerCase.equals("z")) {
-			
-			double extnt = bbox.extnt().getZ();
-			return rslvDistance(extnt, res, new DirectionVector(0,1,0) );
+			return 2;
 			
 		} else {
-			assert false;
-			return -1;
+			throw new FeatureCalcException(
+				String.format("Axis must be x, y or z, instead a different value is specified: %s", axisLowerCase)
+			);
 		}
+	}
+	
+	private double rslvDistance(BoundingBox bbox, Optional<ImageRes> res, int dimIndex) throws FeatureCalcException {
+		return unit.rslvDistance(
+			bbox.extnt().getIndex(dimIndex),
+			res,
+			unitVector(dimIndex)
+		);
+	}
+	
+	private DirectionVector unitVector(int dimIndex) {
+		DirectionVector dirVector = new DirectionVector();
+		dirVector.setIndex(dimIndex, 1);
+		return dirVector;
 	}
 	
 	@Override
@@ -109,5 +127,13 @@ public class BoundingBoxExtent extends NRGElemIndPhysical {
 
 	public void setRegionID(int regionID) {
 		this.regionID = regionID;
+	}
+
+	public UnitConverter getUnit() {
+		return unit;
+	}
+
+	public void setUnit(UnitConverter unit) {
+		this.unit = unit;
 	}
 }

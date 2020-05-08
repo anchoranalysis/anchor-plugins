@@ -1,5 +1,6 @@
 package ch.ethz.biol.cell.mpp.nrg.feature.ind;
 
+import org.anchoranalysis.anchor.mpp.feature.bean.nrg.elem.FeatureSingleMemo;
 import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputSingleMemo;
 import org.anchoranalysis.anchor.mpp.mark.GlobalRegionIdentifiers;
 import org.anchoranalysis.anchor.mpp.pxlmark.PxlMark;
@@ -35,9 +36,10 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.voxel.statistics.VoxelStatistics;
+import org.anchoranalysis.plugin.mpp.feature.bean.unit.UnitConverter;
 
 // Size = Number of voxels
-public final class Size extends NRGElemIndPhysical {
+public final class Size extends FeatureSingleMemo {
 
 	/**
 	 * 
@@ -47,6 +49,9 @@ public final class Size extends NRGElemIndPhysical {
 	// START BEAN PROPERTIES
 	@BeanField
 	private int regionID = GlobalRegionIdentifiers.SUBMARK_INSIDE;
+	
+	@BeanField
+	private UnitConverter unit = new UnitConverter();
 	// END BEAN PROPERTIES
 	
 	@Override
@@ -56,9 +61,9 @@ public final class Size extends NRGElemIndPhysical {
 		
 		VoxelStatistics pxlStats = pm.statisticsForAllSlices(0, regionID);
 				
-		return rslvVolume(
+		return unit.rslvVolume(
 			(double) pxlStats.size(),
-			input.get().getResRequired()
+			input.get().getResOptional()
 		);
 	}
 
@@ -68,6 +73,14 @@ public final class Size extends NRGElemIndPhysical {
 
 	public void setRegionID(int regionID) {
 		this.regionID = regionID;
+	}
+
+	public UnitConverter getUnit() {
+		return unit;
+	}
+
+	public void setUnit(UnitConverter unit) {
+		this.unit = unit;
 	}
 
 }

@@ -1,5 +1,7 @@
 package ch.ethz.biol.cell.mpp.mark.check;
 
+import java.util.Optional;
+
 import org.anchoranalysis.anchor.mpp.bean.regionmap.RegionMap;
 import org.anchoranalysis.anchor.mpp.feature.bean.mark.FeatureInputMark;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
@@ -42,6 +44,9 @@ public class FeatureValueMarkGreaterEqualThan extends FeatureValueCheckMark<Feat
 	
 	@Override
 	protected FeatureInputMark createFeatureCalcParams(Mark mark, RegionMap regionMap, NRGStackWithParams nrgStack) {
-		return new FeatureInputMark(mark, nrgStack.getDimensions().getRes());
+		return new FeatureInputMark(
+			mark,
+			Optional.of( nrgStack.getDimensions() )
+		);
 	}
 }
