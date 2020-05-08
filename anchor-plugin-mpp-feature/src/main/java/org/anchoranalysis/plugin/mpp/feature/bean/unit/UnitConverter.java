@@ -1,6 +1,8 @@
-package ch.ethz.biol.cell.mpp.nrg.feature.ind;
+package org.anchoranalysis.plugin.mpp.feature.bean.unit;
 
-import org.anchoranalysis.anchor.mpp.feature.bean.nrg.elem.FeatureSingleMemo;
+import java.util.Optional;
+
+import org.anchoranalysis.bean.AnchorBean;
 
 /*
  * #%L
@@ -32,11 +34,18 @@ import org.anchoranalysis.anchor.mpp.feature.bean.nrg.elem.FeatureSingleMemo;
 import org.anchoranalysis.bean.annotation.AllowEmpty;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.unit.SpatialConversionUtilities;
+import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.convert.ImageUnitConverter;
 import org.anchoranalysis.image.extent.ImageRes;
 import org.anchoranalysis.image.orientation.DirectionVector;
 
-public abstract class NRGElemIndPhysical extends FeatureSingleMemo {
+/**
+ * Converts units (distance, area, volume) to a another representation (e.g. physical units)
+ * 
+ * @author Owen Feehan
+ *
+ */
+public class UnitConverter extends AnchorBean<UnitConverter> {
 
 	/**
 	 * 
@@ -51,51 +60,90 @@ public abstract class NRGElemIndPhysical extends FeatureSingleMemo {
 	private String unitType = "";
 	// END BEAN PROPERTIES
 	
-	public boolean isPhysical() {
-		return physical;
-	}
-
-	public void setPhysical(boolean physical) {
-		this.physical = physical;
-	}
 	
-	protected double rslvDistance( double value, ImageRes res, DirectionVector dirVector ) {
+	/**
+	 * Convert distance into another unit representation
+	 * 
+	 * @param value distance expressed as number of voxels
+	 * @param res image-resolution
+	 * @return distance expressed in desired units
+	 * @throws FeatureCalcException
+	 */
+	public double rslvDistance( double value, Optional<ImageRes> res, DirectionVector dirVector ) throws FeatureCalcException {
 		
 		// If we aren't doing anything physical, we can just return the current value
-		if (!physical) {
+		if (isNonPhysical(res)) {
 			return value;
 		}
 		
-		double valuePhysical = ImageUnitConverter.convertToPhysicalDistance(value, res, dirVector);
+		double valuePhysical = ImageUnitConverter.convertToPhysicalDistance(value, res.get(), dirVector);
+		SpatialConversionUtilities.UnitSuffix prefixType = SpatialConversionUtilities.suffixFromMeterString(unitType);
+		
+		return SpatialConversionUtilities.convertToUnits( valuePhysical, prefixType );
+	}
+	
+	
+	/**
+	 * Convert volume into another unit representation
+	 * 
+	 * @param value volume as number of voxels
+	 * @param res image-resolution
+	 * @return volume expressed in desired units
+	 * @throws FeatureCalcException
+	 */
+	public double rslvVolume( double value, Optional<ImageRes> res ) throws FeatureCalcException {
+		
+		// If we aren't doing anything physical, we can just return the current value
+		if (isNonPhysical(res)) {
+			return value;
+		}
+		
+		double valuePhysical = ImageUnitConverter.convertToPhysicalVolume(value, res.get() );
 		
 		SpatialConversionUtilities.UnitSuffix prefixType = SpatialConversionUtilities.suffixFromMeterString(unitType);
 		return SpatialConversionUtilities.convertToUnits( valuePhysical, prefixType );
 	}
 	
-	protected double rslvVolume( double value, ImageRes res ) {
+	/**
+	 * Convert area into another unit representation
+	 * 
+	 * @param value area as number of voxels
+	 * @param res image-resolution
+	 * @return area expressed in desired units
+	 * @throws FeatureCalcException
+	 */
+	public double rslvArea( double value, Optional<ImageRes> res ) throws FeatureCalcException {
 		
 		// If we aren't doing anything physical, we can just return the current value
-		if (!physical) {
+		if (isNonPhysical(res)) {
 			return value;
 		}
 		
-		double valuePhysical = ImageUnitConverter.convertToPhysicalVolume(value, res);
+		double valuePhysical = ImageUnitConverter.convertToPhysicalArea(value, res.get() );
 		
 		SpatialConversionUtilities.UnitSuffix prefixType = SpatialConversionUtilities.suffixFromMeterString(unitType);
 		return SpatialConversionUtilities.convertToUnits( valuePhysical, prefixType );
 	}
 	
-	protected double rslvArea( double value, ImageRes res ) {
-		
-		// If we aren't doing anything physical, we can just return the current value
-		if (!physical) {
-			return value;
+	/** 
+	 *  Do we desire to convert to NON-physical co-ordinates? If it's physical, check that image-resolution is present as required.
+	 * 
+	 *  @throws FeatureCalcException if physical is set, but the resolution is not
+	 *  @return true iff the target-units for conversion are non-physical
+	 * */
+	private boolean isNonPhysical( Optional<ImageRes> res ) throws FeatureCalcException {
+		if (physical) {
+			checkResIsPresent(res);
+			return false;
+		} else {
+			return true;
 		}
-		
-		double valuePhysical = ImageUnitConverter.convertToPhysicalArea(value, res);
-		
-		SpatialConversionUtilities.UnitSuffix prefixType = SpatialConversionUtilities.suffixFromMeterString(unitType);
-		return SpatialConversionUtilities.convertToUnits( valuePhysical, prefixType );
+	}
+	
+	private void checkResIsPresent( Optional<ImageRes> res ) throws FeatureCalcException {
+		if (!res.isPresent()) {
+			throw new FeatureCalcException("Image-resolution is required for conversions to physical units, but it is not specified");
+		}
 	}
 	
 	public String getUnitType() {
@@ -106,4 +154,11 @@ public abstract class NRGElemIndPhysical extends FeatureSingleMemo {
 		this.unitType = unitType;
 	}
 
+	public boolean isPhysical() {
+		return physical;
+	}
+
+	public void setPhysical(boolean physical) {
+		this.physical = physical;
+	}
 }

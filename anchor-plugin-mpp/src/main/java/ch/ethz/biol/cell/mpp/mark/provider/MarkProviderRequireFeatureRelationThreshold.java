@@ -1,5 +1,7 @@
 package ch.ethz.biol.cell.mpp.mark.provider;
 
+import java.util.Optional;
+
 import org.anchoranalysis.anchor.mpp.bean.provider.MarkProvider;
 import org.anchoranalysis.anchor.mpp.feature.bean.mark.FeatureInputMark;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
@@ -42,7 +44,7 @@ import org.anchoranalysis.feature.calc.FeatureInitParams;
 import org.anchoranalysis.feature.session.FeatureSession;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorSingle;
 import org.anchoranalysis.image.bean.provider.ImageDimProvider;
-import org.anchoranalysis.image.extent.ImageRes;
+import org.anchoranalysis.image.extent.ImageDim;
 
 public class MarkProviderRequireFeatureRelationThreshold extends MarkProvider {
 
@@ -65,7 +67,7 @@ public class MarkProviderRequireFeatureRelationThreshold extends MarkProvider {
 	private RelationBean relation;
 	
 	@BeanField @OptionalBean
-	private ImageDimProvider resProvider;
+	private ImageDimProvider dimProvider;
 	// END BEAN PROPERTIES
 	
 	@Override
@@ -78,13 +80,8 @@ public class MarkProviderRequireFeatureRelationThreshold extends MarkProvider {
 		}
 		
 		Feature<FeatureInputMark> feature = featureProvider.create();
-				
-		ImageRes res = resProvider!=null ? resProvider.create().getRes() : null;
 		
-		double featureVal = calculateParams(
-			feature,
-			new FeatureInputMark(mark, res)
-		);
+		double featureVal = calculateInput(feature, mark);
 		
 		if (relation.create().isRelationToValueTrue(featureVal, threshold)) {
 			return mark;
@@ -93,7 +90,22 @@ public class MarkProviderRequireFeatureRelationThreshold extends MarkProvider {
 		}
 	}
 	
-	private double calculateParams( Feature<FeatureInputMark> feature, FeatureInputMark params ) throws CreateException {
+	private Optional<ImageDim> dimensions() throws CreateException {
+		if (dimProvider!=null) {
+			return Optional.of(
+				dimProvider.create()
+			);
+		} else {
+			 return Optional.empty();
+		}
+	}
+	
+	private double calculateInput( Feature<FeatureInputMark> feature, Mark mark ) throws CreateException {
+
+		FeatureInputMark input = new FeatureInputMark(
+			mark,
+			dimensions()
+		);
 		
 		try {
 			FeatureCalculatorSingle<FeatureInputMark> session = FeatureSession.with(
@@ -102,7 +114,7 @@ public class MarkProviderRequireFeatureRelationThreshold extends MarkProvider {
 				getSharedObjects().getFeature().getSharedFeatureSet().downcast(),
 				getLogger()
 			);
-			return session.calc( params );
+			return session.calc( input );
 			
 		} catch (FeatureCalcException e) {
 			throw new CreateException(e);
@@ -148,11 +160,11 @@ public class MarkProviderRequireFeatureRelationThreshold extends MarkProvider {
 		this.relation = relation;
 	}
 
-	public ImageDimProvider getResProvider() {
-		return resProvider;
+	public ImageDimProvider getDimProvider() {
+		return dimProvider;
 	}
 
-	public void setResProvider(ImageDimProvider resProvider) {
-		this.resProvider = resProvider;
+	public void setDimProvider(ImageDimProvider dimProvider) {
+		this.dimProvider = dimProvider;
 	}
 }
