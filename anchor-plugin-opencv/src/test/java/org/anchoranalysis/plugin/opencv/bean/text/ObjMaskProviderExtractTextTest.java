@@ -93,7 +93,9 @@ public class ObjMaskProviderExtractTextTest {
 		
 		initProvider(
 			provider,
-			BoundContextFixture.withSimpleLogger()
+			BoundContextFixture.withSimpleLogger(
+				testLoader.getTestLoader().getRoot()
+			)
 		);
 		
 		return provider;

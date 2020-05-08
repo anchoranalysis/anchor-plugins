@@ -6,11 +6,13 @@ import org.anchoranalysis.test.LoggingFixture;
 
 import static org.mockito.Mockito.*;
 
+import java.nio.file.Path;
+
 public class BoundContextFixture {
 
 	private BoundContextFixture() {}
 	
-	public static BoundIOContext withSimpleLogger() {
+	public static BoundIOContext withSimpleLogger( Path modelDir ) {
 		
 		LogErrorReporter logger = LoggingFixture.simpleLogErrorReporter();
 		
@@ -18,6 +20,7 @@ public class BoundContextFixture {
 		when(out.getLogger()).thenReturn(logger);
 		when(out.getLogReporter()).thenReturn(logger.getLogReporter());
 		when(out.getErrorReporter()).thenReturn(logger.getErrorReporter());
+		when(out.getModelDirectory()).thenReturn(modelDir);
 		return out;
 	}
 }
