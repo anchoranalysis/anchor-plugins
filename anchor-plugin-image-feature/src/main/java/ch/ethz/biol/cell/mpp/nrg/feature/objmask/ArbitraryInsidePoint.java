@@ -85,16 +85,7 @@ public class ArbitraryInsidePoint extends FeatureObjMask {
 			return emptyValue;
 		}
 		
-		switch(axisType) {
-		case X:
-			return arbPoint.getX();
-		case Y:
-			return arbPoint.getY();
-		case Z:
-			return arbPoint.getZ();
-		default:
-			throw new FeatureCalcException( String.format("Unsupported axis-type '%s'", axis ));
-		}
+		return arbPoint.getValueByDimension(axisType);
 	}
 
 	public String getAxis() {
