@@ -34,12 +34,6 @@ import org.anchoranalysis.image.binary.BinaryChnl;
 // parameters
 // This is hack
 public class BinaryImgChnlProviderHolder extends BinaryImgChnlProvider {
-
-	
-
-	// START BEAN PROPERTIES
-	
-	// END BEAN PROPERTIES
 	
 	private BinaryChnl chnl;
 

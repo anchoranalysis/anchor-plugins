@@ -32,10 +32,11 @@ import org.anchoranalysis.bean.shared.params.keyvalue.KeyValueParamsProvider;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.params.KeyValueParams;
 import org.anchoranalysis.image.bean.provider.BinaryImgChnlProvider;
+import org.anchoranalysis.image.bean.provider.BinaryImgChnlProviderOne;
 import org.anchoranalysis.image.binary.BinaryChnl;
 
 // If a param is equal to a particular value, do soemthing
-public class BinaryImgChnlProviderIfParamEquals extends BinaryImgChnlProvider {
+public class BinaryImgChnlProviderIfParamEquals extends BinaryImgChnlProviderOne {
 
 	// START BEAN PROPERTIES
 	@BeanField
@@ -48,21 +49,18 @@ public class BinaryImgChnlProviderIfParamEquals extends BinaryImgChnlProvider {
 	private String value = "";
 	
 	@BeanField
-	private BinaryImgChnlProvider binaryImgChnlProvider;
-	
-	@BeanField
 	private BinaryImgChnlProvider binaryImgChnlProviderElse;
 	// END BEAN PROPERTIES
 	
 	@Override
-	public BinaryChnl create() throws CreateException {
+	public BinaryChnl createFromChnl( BinaryChnl chnl ) throws CreateException {
 		
 		KeyValueParams params = keyValueParamsProvider.create();
 		
 		String valueToCheck = params.getProperty(key);
 		
 		if( value.equals(valueToCheck) ) {
-			return binaryImgChnlProvider.create();
+			return chnl;
 		} else {
 			return binaryImgChnlProviderElse.create();
 		}
@@ -72,22 +70,10 @@ public class BinaryImgChnlProviderIfParamEquals extends BinaryImgChnlProvider {
 		return keyValueParamsProvider;
 	}
 
-
 	public void setKeyValueParamsProvider(
 			KeyValueParamsProvider keyValueParamsProvider) {
 		this.keyValueParamsProvider = keyValueParamsProvider;
 	}
-
-
-	public BinaryImgChnlProvider getBinaryImgChnlProvider() {
-		return binaryImgChnlProvider;
-	}
-
-
-	public void setBinaryImgChnlProvider(BinaryImgChnlProvider binaryImgChnlProvider) {
-		this.binaryImgChnlProvider = binaryImgChnlProvider;
-	}
-
 
 	public BinaryImgChnlProvider getBinaryImgChnlProviderElse() {
 		return binaryImgChnlProviderElse;
@@ -118,7 +104,5 @@ public class BinaryImgChnlProviderIfParamEquals extends BinaryImgChnlProvider {
 	public void setValue(String value) {
 		this.value = value;
 	}
-
-
 }
 

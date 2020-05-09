@@ -29,15 +29,12 @@ package ch.ethz.biol.cell.imageprocessing.binaryimgchnl.provider;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.image.bean.provider.BinaryImgChnlProvider;
+import org.anchoranalysis.image.bean.provider.BinaryImgChnlProviderOne;
 import org.anchoranalysis.image.binary.BinaryChnl;
 
-public class BinaryImgChnlProviderRejectIfOnGreaterThan extends BinaryImgChnlProvider {
+public class BinaryImgChnlProviderRejectIfOnGreaterThan extends BinaryImgChnlProviderOne {
 
 	// START BEAN PROPERTIES
-	@BeanField
-	private BinaryImgChnlProvider binaryImgChnlProvider;
-	
 	@BeanField
 	private double maxRatioOn;
 	
@@ -46,9 +43,7 @@ public class BinaryImgChnlProviderRejectIfOnGreaterThan extends BinaryImgChnlPro
 	// END BEAN PROPERTIES
 	
 	@Override
-	public BinaryChnl create() throws CreateException {
-		BinaryChnl binaryImgChnl = binaryImgChnlProvider.create();
-		
+	public BinaryChnl createFromChnl( BinaryChnl binaryImgChnl ) throws CreateException {
 		if (bySlice) {
 			for( int z=0; z<binaryImgChnl.getDimensions().getZ(); z++) {
 				testChnl( binaryImgChnl.extractSlice(z) );
@@ -70,14 +65,6 @@ public class BinaryImgChnlProviderRejectIfOnGreaterThan extends BinaryImgChnlPro
 				String.format("binaryImgChnl has on-pixel ratio of %f when a max of %f is allowed",ratio,maxRatioOn)
 			);
 		}
-	}
-	
-	public BinaryImgChnlProvider getBinaryImgChnlProvider() {
-		return binaryImgChnlProvider;
-	}
-
-	public void setBinaryImgChnlProvider(BinaryImgChnlProvider binaryImgChnlProvider) {
-		this.binaryImgChnlProvider = binaryImgChnlProvider;
 	}
 
 	public double getMaxRatioOn() {

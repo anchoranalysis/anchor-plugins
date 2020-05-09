@@ -30,6 +30,7 @@ package ch.ethz.biol.cell.imageprocessing.chnl.provider;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.bean.chnl.converter.ChnlConverterBean;
+import org.anchoranalysis.image.bean.provider.ChnlProviderOne;
 import org.anchoranalysis.image.chnl.Chnl;
 import org.anchoranalysis.image.stack.region.chnlconverter.ChnlConverter;
 import org.anchoranalysis.image.stack.region.chnlconverter.ConversionPolicy;

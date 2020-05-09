@@ -33,7 +33,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.core.geometry.Point3i;
-import org.anchoranalysis.image.bean.provider.BinaryImgChnlProvider;
+import org.anchoranalysis.image.bean.provider.BinaryImgChnlProviderOne;
 import org.anchoranalysis.image.binary.BinaryChnl;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
@@ -42,17 +42,36 @@ import org.anchoranalysis.image.extent.Extent;
 
 // Takes an existing binaryChnl and fits a box around the *On* pixels
 //  and makes the box On
-public class BinaryImgChnlProviderBox extends BinaryImgChnlProvider {
+public class BinaryImgChnlProviderBox extends BinaryImgChnlProviderOne {
 
 	// START BEAN PROPERTIES
-	@BeanField
-	private BinaryImgChnlProvider binaryImgChnlProvider;
-	
 	// If true, then each z slice is treated seperately
 	@BeanField
 	private boolean slicesSeperately = false;
 	// END BEAN PROPERTIES
 
+	@Override
+	public BinaryChnl createFromChnl( BinaryChnl bic ) throws CreateException {
+		
+		if (slicesSeperately) {
+			Extent e = bic.getDimensions().getExtnt();
+			for( int z=0; z<e.getZ(); z++) {
+				BinaryChnl slice = bic.extractSlice(z);
+				BoundingBox bbox = calcBBoxOfImg(slice.binaryVoxelBox());
+				
+				Point3i pnt = bbox.getCrnrMin();
+				pnt.setZ(z);
+				bbox.setCrnrMin(pnt);
+				
+				bic.binaryVoxelBox().setPixelsToOn(bbox);
+			}
+		} else {
+			BoundingBox bbox = calcBBoxOfImg(bic.binaryVoxelBox());
+			bic.binaryVoxelBox().setPixelsToOn(bbox);
+		}
+		
+		return bic;
+	}
 
 	private BoundingBox calcBBoxOfImg( BinaryVoxelBox<ByteBuffer> vb ) throws CreateException {
 		
@@ -84,40 +103,7 @@ public class BinaryImgChnlProviderBox extends BinaryImgChnlProvider {
 		
 		return bbox;
 	}
-
-	@Override
-	public BinaryChnl create() throws CreateException {
-		
-		BinaryChnl bic = binaryImgChnlProvider.create();
-		
-		if (slicesSeperately) {
-			Extent e = bic.getDimensions().getExtnt();
-			for( int z=0; z<e.getZ(); z++) {
-				BinaryChnl slice = bic.extractSlice(z);
-				BoundingBox bbox = calcBBoxOfImg(slice.binaryVoxelBox());
-				
-				Point3i pnt = bbox.getCrnrMin();
-				pnt.setZ(z);
-				bbox.setCrnrMin(pnt);
-				
-				bic.binaryVoxelBox().setPixelsToOn(bbox);
-			}
-		} else {
-			BoundingBox bbox = calcBBoxOfImg(bic.binaryVoxelBox());
-			bic.binaryVoxelBox().setPixelsToOn(bbox);
-		}
-		
-		return bic;
-	}
-
-	public BinaryImgChnlProvider getBinaryImgChnlProvider() {
-		return binaryImgChnlProvider;
-	}
-
-	public void setBinaryImgChnlProvider(BinaryImgChnlProvider binaryImgChnlProvider) {
-		this.binaryImgChnlProvider = binaryImgChnlProvider;
-	}
-
+	
 	public boolean isSlicesSeperately() {
 		return slicesSeperately;
 	}
@@ -125,7 +111,4 @@ public class BinaryImgChnlProviderBox extends BinaryImgChnlProvider {
 	public void setSlicesSeperately(boolean slicesSeperately) {
 		this.slicesSeperately = slicesSeperately;
 	}
-
-
-	
 }

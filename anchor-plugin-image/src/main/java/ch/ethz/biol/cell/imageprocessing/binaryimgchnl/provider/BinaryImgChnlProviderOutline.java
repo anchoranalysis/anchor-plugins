@@ -29,7 +29,7 @@ package ch.ethz.biol.cell.imageprocessing.binaryimgchnl.provider;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.image.bean.provider.BinaryImgChnlProvider;
+import org.anchoranalysis.image.bean.provider.BinaryImgChnlProviderOne;
 import org.anchoranalysis.image.binary.BinaryChnl;
 import org.anchoranalysis.image.outline.FindOutline;
 
@@ -39,12 +39,9 @@ import org.anchoranalysis.image.outline.FindOutline;
  * @author feehano
  *
  */
-public class BinaryImgChnlProviderOutline extends BinaryImgChnlProvider {
+public class BinaryImgChnlProviderOutline extends BinaryImgChnlProviderOne {
 
 	// START
-	@BeanField
-	private BinaryImgChnlProvider binaryImgChnlProvider;
-	
 	@BeanField
 	private boolean force2D = false;
 	
@@ -54,19 +51,9 @@ public class BinaryImgChnlProviderOutline extends BinaryImgChnlProvider {
 	
 
 	@Override
-	public BinaryChnl create() throws CreateException {
-		BinaryChnl chnl = binaryImgChnlProvider.create();
-		
+	public BinaryChnl createFromChnl( BinaryChnl chnl ) throws CreateException {
 		boolean do3D = chnl.getDimensions().getZ() > 1 && !force2D;
 		return FindOutline.outline(chnl, do3D, erodeEdges);
-	}
-
-	public BinaryImgChnlProvider getBinaryImgChnlProvider() {
-		return binaryImgChnlProvider;
-	}
-
-	public void setBinaryImgChnlProvider(BinaryImgChnlProvider binaryImgChnlProvider) {
-		this.binaryImgChnlProvider = binaryImgChnlProvider;
 	}
 
 	public boolean isForce2D() {

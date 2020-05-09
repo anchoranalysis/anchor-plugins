@@ -27,33 +27,16 @@ package ch.ethz.biol.cell.imageprocessing.binaryimgchnl.provider;
  */
 
 
-import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.image.bean.provider.BinaryImgChnlProvider;
+import org.anchoranalysis.image.bean.provider.BinaryImgChnlProviderOne;
 import org.anchoranalysis.image.binary.BinaryChnl;
 
 // Repeats an input slice, to match dimensions
-public class BinaryImgChnlProviderMaxIntensityProjection extends BinaryImgChnlProvider {
-
-	// START BEAN PROPERTIES
-	@BeanField
-	private BinaryImgChnlProvider binaryImgChnlProvider;
-	// END BEAN PROPERTIES
+public class BinaryImgChnlProviderMaxIntensityProjection extends BinaryImgChnlProviderOne {
 	
 	// ASSUMES REGIONS ARE IDENTICAL
 	@Override
-	public BinaryChnl create() throws CreateException {
-		BinaryChnl chnlCrnt = binaryImgChnlProvider.create();
-		return chnlCrnt.maxIntensityProj();
+	public BinaryChnl createFromChnl( BinaryChnl chnl ) throws CreateException {
+		return chnl.maxIntensityProj();
 	}
-
-	public BinaryImgChnlProvider getBinaryImgChnlProvider() {
-		return binaryImgChnlProvider;
-	}
-
-	public void setBinaryImgChnlProvider(BinaryImgChnlProvider binaryImgChnlProvider) {
-		this.binaryImgChnlProvider = binaryImgChnlProvider;
-	}
-
-
 }

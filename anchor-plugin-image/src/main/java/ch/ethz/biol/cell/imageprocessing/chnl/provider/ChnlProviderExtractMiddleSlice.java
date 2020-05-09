@@ -28,6 +28,7 @@ package ch.ethz.biol.cell.imageprocessing.chnl.provider;
 
 
 import org.anchoranalysis.core.error.CreateException;
+import org.anchoranalysis.image.bean.provider.ChnlProviderOne;
 import org.anchoranalysis.image.chnl.Chnl;
 
 public class ChnlProviderExtractMiddleSlice extends ChnlProviderOne {
