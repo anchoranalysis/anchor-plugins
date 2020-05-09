@@ -43,12 +43,6 @@ import org.anchoranalysis.plugin.io.bean.summarizer.SummarizerCount;
 
 public abstract class SummarizeTask<T extends InputFromManager,S> extends Task<T,Summarizer<S>> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
-	
 	// START BEAN PROPERTIES
 	@BeanField
 	private Summarizer<S> summarizer = new SummarizerCount<>();

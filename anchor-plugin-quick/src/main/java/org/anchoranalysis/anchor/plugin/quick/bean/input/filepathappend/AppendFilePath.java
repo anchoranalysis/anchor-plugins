@@ -35,11 +35,6 @@ import org.anchoranalysis.mpp.io.bean.input.MultiInputManager;
 
 public class AppendFilePath extends FilePathBaseAppendToManagerWithFileID {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	@Override
 	protected String createOutPathString() throws BeanMisconfiguredException {
 		return String.format(

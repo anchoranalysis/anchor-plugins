@@ -49,11 +49,6 @@ import org.anchoranalysis.plugin.image.bean.histogram.threshold.Constant;
 //   greater than the minimum bound
 public class SgmnThrshldAboveMinBound extends BinarySgmn {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
 	private boolean suppress3D = false;

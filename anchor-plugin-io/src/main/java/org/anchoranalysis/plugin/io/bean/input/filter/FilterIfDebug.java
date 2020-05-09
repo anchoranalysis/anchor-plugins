@@ -46,11 +46,6 @@ import org.anchoranalysis.plugin.io.input.filter.FilterDescriptiveNameEqualsCont
  */
 public class FilterIfDebug<T extends InputFromManager> extends InputManager<T> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	// START BEAN PROPERTIES
 	@BeanField
 	private InputManager<T> input;

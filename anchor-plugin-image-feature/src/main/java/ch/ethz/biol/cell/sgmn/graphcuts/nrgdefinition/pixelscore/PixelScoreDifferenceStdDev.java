@@ -42,11 +42,6 @@ import org.anchoranalysis.image.histogram.Histogram;
 //  associated with the init params
 public class PixelScoreDifferenceStdDev extends PixelScore {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
 	private int nrgChnlIndexFirst = 0;

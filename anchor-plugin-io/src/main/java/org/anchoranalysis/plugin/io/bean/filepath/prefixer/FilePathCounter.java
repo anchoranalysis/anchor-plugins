@@ -34,11 +34,6 @@ import org.anchoranalysis.io.filepath.prefixer.FilePathPrefix;
 
 public class FilePathCounter extends FilePathPrefixerAvoidResolve {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	private int cnt = 0;
 	
 	// START BEAN PROPERTIES

@@ -38,11 +38,6 @@ import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 
 public class MarkMergeProposerReference extends MarkMergeProposer {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -4122761299434774623L;
-
 	// Start BEAN
 	@BeanField
 	private String id;

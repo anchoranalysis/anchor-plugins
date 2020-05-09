@@ -45,11 +45,6 @@ import org.anchoranalysis.image.voxel.box.VoxelBox;
 
 public class ChnlProviderObjsChnl extends ChnlProviderLevel {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN
 	@BeanField
 	private ChnlProvider chnlProviderLevel;

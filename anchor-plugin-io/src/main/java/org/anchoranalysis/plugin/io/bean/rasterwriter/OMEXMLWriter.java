@@ -53,11 +53,6 @@ import loci.formats.ImageWriter;
 // Writes a stack to the file system in some manner
 public class OMEXMLWriter extends RasterWriter {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	// A default extension
 	@Override
 	public String dfltExt() {

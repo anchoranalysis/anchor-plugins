@@ -49,11 +49,6 @@ import org.anchoranalysis.image.voxel.box.factory.VoxelBoxFactory;
 
 public class SgmnMinVolume extends BinarySgmn {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
 	private BinarySgmn sgmn;

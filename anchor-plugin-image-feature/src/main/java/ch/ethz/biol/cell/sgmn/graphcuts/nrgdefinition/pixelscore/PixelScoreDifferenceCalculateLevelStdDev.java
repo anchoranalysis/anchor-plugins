@@ -38,11 +38,6 @@ import org.anchoranalysis.image.histogram.Histogram;
 //  associated with the init params, and the level is calculated from the histogram
 public class PixelScoreDifferenceCalculateLevelStdDev extends PixelScoreCalculateLevelBase {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
 	private int minDifference = 0;

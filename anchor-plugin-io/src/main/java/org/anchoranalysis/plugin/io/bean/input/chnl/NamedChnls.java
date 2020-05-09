@@ -45,11 +45,6 @@ import org.anchoranalysis.plugin.io.bean.chnl.map.ImgChnlMapAutoname;
 // Provides access to a named set of channels for each input
 public class NamedChnls extends NamedChnlsBase {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 4614409393859815802L;
-	
 	// START BEANS
 	@BeanField
 	private InputManager<FileInput> fileInput;

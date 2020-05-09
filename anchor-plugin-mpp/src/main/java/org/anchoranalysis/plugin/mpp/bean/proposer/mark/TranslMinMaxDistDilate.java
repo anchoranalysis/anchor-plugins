@@ -42,11 +42,6 @@ import ch.ethz.biol.cell.mpp.mark.distance.MarkDistanceAbstractPosition;
 
 public class TranslMinMaxDistDilate extends MarkProposer {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 2883963378247346128L;
-	
 	// BEAN PARAMETERS
 	@BeanField
 	private DistTo transl = new DistTo();

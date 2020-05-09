@@ -45,11 +45,6 @@ import ij.process.ImageProcessor;
 // TODO replace with ChnlProviderEdgeFilter in all relevant confifs
 public class StackProviderEdgeFilter extends StackProvider {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 3978226156945187112L;
-	
 	// START BEAN
 	@BeanField
 	private ChnlProvider chnlProvider;

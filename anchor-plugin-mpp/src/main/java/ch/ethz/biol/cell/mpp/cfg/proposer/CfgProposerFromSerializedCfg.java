@@ -44,11 +44,6 @@ import org.anchoranalysis.io.deserializer.DeserializationFailedException;
 
 public class CfgProposerFromSerializedCfg extends CfgProposer {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 7196359218788713244L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
 	private String filePath;

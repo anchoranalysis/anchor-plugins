@@ -30,11 +30,6 @@ import org.anchoranalysis.bean.AnchorBean;
 
 public abstract class FilePathParser extends AnchorBean<FilePathParser> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 4852535995780810260L;
-
 	public abstract boolean setPath( String path );
 	
 	public abstract Integer getChnlNum();

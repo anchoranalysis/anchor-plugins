@@ -44,11 +44,6 @@ import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
 //   empty slices in a binary on the top and bottom
 public class ChnlProviderExpandSliceToMask extends ChnlProvider {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
 	private ChnlProvider chnlProviderTargetDimensions;

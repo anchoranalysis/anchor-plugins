@@ -44,11 +44,6 @@ import org.anchoranalysis.io.deserializer.DeserializationFailedException;
 
 public class FromSerializedObject extends MarkProposer {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 8533470714320019901L;
-	
 	// START BEAN
 	@BeanField
 	private String filePath;

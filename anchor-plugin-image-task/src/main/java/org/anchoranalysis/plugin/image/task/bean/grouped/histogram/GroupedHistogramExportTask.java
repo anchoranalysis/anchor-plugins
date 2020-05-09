@@ -63,11 +63,6 @@ import org.anchoranalysis.plugin.image.task.grouped.NamedChnl;
 **/
 public class GroupedHistogramExportTask extends GroupedStackTask<Histogram,Histogram> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -5961126655531145104L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
 	private boolean writeImageHistograms = true;	// If enabled writes a histogram for each image, as well as the group

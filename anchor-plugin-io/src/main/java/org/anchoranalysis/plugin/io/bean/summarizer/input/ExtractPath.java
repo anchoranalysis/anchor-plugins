@@ -32,11 +32,6 @@ import org.anchoranalysis.io.input.InputFromManager;
 
 public class ExtractPath<T extends InputFromManager> extends SummarizerInputFromManager<T, Path> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	@Override
 	protected Path extractFrom(T input) {
 		return input.pathForBinding();

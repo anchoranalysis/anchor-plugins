@@ -39,11 +39,6 @@ import org.anchoranalysis.mpp.sgmn.optscheme.step.Reporting;
 
 public class CSVReporterBest extends ReporterOptimizationStep<CfgNRGPixelized> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -8675901189777706521L;
-	
 	private FileOutput csvOutput;
 	
 	// Constructor

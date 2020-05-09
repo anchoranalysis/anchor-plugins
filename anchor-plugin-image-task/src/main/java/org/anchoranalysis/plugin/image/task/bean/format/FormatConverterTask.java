@@ -67,10 +67,7 @@ import org.anchoranalysis.plugin.image.task.chnl.convert.ChnlGetterForTimepoint;
  */
 public class FormatConverterTask extends RasterTask {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -2389423680042363560L;
+	
 
 	// START BEAN PROPERTIES
 	

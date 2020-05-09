@@ -32,11 +32,6 @@ import org.anchoranalysis.image.bean.objmask.filter.ObjMaskFilterList;
 
 public abstract class ObjMaskFilterDelegate extends ObjMaskFilter {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
 	private ObjMaskFilterList list = null;

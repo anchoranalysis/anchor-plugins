@@ -38,10 +38,7 @@ import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 
 public class EllipsoidBoundsCheck extends CheckMark {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -7367208466737073130L;
+	
 	
 	// START BEAN PROPERTIES
 	

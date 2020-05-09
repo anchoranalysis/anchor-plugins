@@ -49,11 +49,6 @@ import org.anchoranalysis.plugin.io.manifest.ManifestCouplingDefinition;
 
 public class ReportFeaturesManifest extends TaskWithoutSharedState<ManifestCouplingDefinition> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -5961126655531145104L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
 	private List<ReportFeature<ManifestRecorderFile>> listReportFeatures = new ArrayList<>();

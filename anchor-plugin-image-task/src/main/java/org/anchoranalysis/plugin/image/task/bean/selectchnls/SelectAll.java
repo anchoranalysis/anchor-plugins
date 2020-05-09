@@ -46,11 +46,6 @@ import org.anchoranalysis.plugin.image.task.grouped.NamedChnl;
  */
 public class SelectAll extends SelectChnlsFromStacks {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	@Override
 	public List<NamedChnl> selectChnls( ChnlSource source, boolean checkType ) throws OperationFailedException {
 		

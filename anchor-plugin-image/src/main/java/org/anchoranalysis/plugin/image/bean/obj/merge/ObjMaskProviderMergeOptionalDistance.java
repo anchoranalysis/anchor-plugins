@@ -43,10 +43,7 @@ import org.anchoranalysis.plugin.image.obj.merge.condition.DistanceCondition;
  */
 public abstract class ObjMaskProviderMergeOptionalDistance extends ObjMaskProviderMergeBase {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
+	
 
 	// START BEAN FIELDS
 

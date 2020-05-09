@@ -36,10 +36,5 @@ import org.anchoranalysis.image.orientation.Orientation;
 
 public abstract class FindOutlinePixelAngle extends NullParamsBean<FindOutlinePixelAngle> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 4914537514160860797L;
-	
 	public abstract Point3d pointOnOutline( Point3d centrePoint, Orientation orientation ) throws OperationFailedException;
 }

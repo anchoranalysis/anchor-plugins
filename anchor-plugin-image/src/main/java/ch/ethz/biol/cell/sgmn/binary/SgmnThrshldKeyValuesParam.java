@@ -50,11 +50,6 @@ import org.anchoranalysis.plugin.image.bean.histogram.threshold.Constant;
 
 public class SgmnThrshldKeyValuesParam extends BinarySgmn {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START PARAMETERS
 	@BeanField
 	private KeyValueParamsProvider keyValueParamsProvider;

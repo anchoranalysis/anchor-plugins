@@ -41,11 +41,6 @@ import org.apache.commons.io.FilenameUtils;
  */
 public class FilePathGeneratorCollapseFileName extends FilePathGenerator {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN FIELDS
 	@BeanField
 	private FilePathGenerator filePathGenerator;

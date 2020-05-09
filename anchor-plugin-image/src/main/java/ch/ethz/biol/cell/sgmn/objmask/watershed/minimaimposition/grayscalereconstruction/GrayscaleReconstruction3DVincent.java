@@ -42,10 +42,7 @@ import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
 //   * Powerpoint Presentation by Gonzalez and Woods "Lecture 5: Morphological Image Processing"
 public class GrayscaleReconstruction3DVincent extends GrayscaleReconstructionByErosion {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
+	
 
 	// START BEAN PROPERTIES
 	

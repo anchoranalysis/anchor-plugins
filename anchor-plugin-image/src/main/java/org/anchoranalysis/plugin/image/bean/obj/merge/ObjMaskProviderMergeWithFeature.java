@@ -50,11 +50,6 @@ import org.anchoranalysis.plugin.image.obj.merge.priority.PrioritisedVertex;
 
 public abstract class ObjMaskProviderMergeWithFeature extends ObjMaskProviderMergeOptionalDistance {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	// START BEAN PROPERTIES
 	/** Requires for any potential merge that the bounding-boxes of the two objects must intersect or touch */
 	@BeanField

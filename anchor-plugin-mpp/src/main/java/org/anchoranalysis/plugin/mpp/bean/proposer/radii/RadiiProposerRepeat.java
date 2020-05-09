@@ -40,11 +40,6 @@ import org.anchoranalysis.image.orientation.Orientation;
 
 public class RadiiProposerRepeat extends RadiiProposer {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -638304023713686093L;
-
 	// START BEAN PROPERTIES
 	@BeanField
 	private RadiiProposer radiiProposer;

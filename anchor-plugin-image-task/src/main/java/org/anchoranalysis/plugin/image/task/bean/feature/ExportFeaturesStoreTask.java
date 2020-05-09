@@ -66,11 +66,6 @@ import org.anchoranalysis.plugin.image.task.sharedstate.SharedStateExportFeature
  */
 public abstract class ExportFeaturesStoreTask<T extends InputFromManager, S extends FeatureInput> extends ExportFeaturesTask<T,SharedStateExportFeaturesWithStore<S>> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	// START BEAN PROPERTIES
 	@BeanField @NonEmpty
 	private List<NamedBean<FeatureListProvider<S>>> listFeatures = new ArrayList<>();

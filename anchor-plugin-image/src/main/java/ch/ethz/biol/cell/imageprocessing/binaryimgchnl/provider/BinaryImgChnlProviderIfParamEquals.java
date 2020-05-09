@@ -37,11 +37,6 @@ import org.anchoranalysis.image.binary.BinaryChnl;
 // If a param is equal to a particular value, do soemthing
 public class BinaryImgChnlProviderIfParamEquals extends BinaryImgChnlProvider {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
 	private KeyValueParamsProvider keyValueParamsProvider;

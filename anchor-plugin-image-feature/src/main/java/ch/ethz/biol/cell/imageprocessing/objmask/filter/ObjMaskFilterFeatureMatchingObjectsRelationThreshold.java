@@ -47,11 +47,6 @@ import org.anchoranalysis.image.objmask.match.ObjWithMatches;
 // Evaluates a feature on the Source Object and exactly one Object that it matches
 public class ObjMaskFilterFeatureMatchingObjectsRelationThreshold extends ObjMaskFilter {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	// START BEAN PROPERTIES
 	@BeanField
 	private ObjMaskMatcher objMaskMatcher;

@@ -40,11 +40,6 @@ import org.anchoranalysis.mpp.sgmn.optscheme.step.Reporting;
 
 public class MemoryUsageReporter extends ReporterAgg<CfgNRGPixelized> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 7100271659547754714L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
 	private boolean showBest = true;

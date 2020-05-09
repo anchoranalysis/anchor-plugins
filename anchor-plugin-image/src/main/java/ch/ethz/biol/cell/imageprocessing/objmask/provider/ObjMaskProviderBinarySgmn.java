@@ -44,11 +44,6 @@ import org.anchoranalysis.image.voxel.box.VoxelBoxWrapper;
 
 public class ObjMaskProviderBinarySgmn extends ObjMaskProvider {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
 	private ObjMaskProvider objs;

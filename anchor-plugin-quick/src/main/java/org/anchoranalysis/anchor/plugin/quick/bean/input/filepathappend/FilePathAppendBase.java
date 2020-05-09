@@ -39,11 +39,6 @@ import org.anchoranalysis.io.bean.filepath.generator.Rooted;
 
 public abstract class FilePathAppendBase extends AnchorBean<FilePathAppendBase> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN FIELDS
 	/** The name of the appended entity */
 	@BeanField

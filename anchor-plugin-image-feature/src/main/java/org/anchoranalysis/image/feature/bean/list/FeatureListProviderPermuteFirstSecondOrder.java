@@ -49,11 +49,6 @@ import ch.ethz.biol.cell.mpp.nrg.feature.objmask.NRGParamThree;
 public abstract class FeatureListProviderPermuteFirstSecondOrder extends FeatureListProvider<FeatureInputNRGStack> {
 
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
 	private Feature<FeatureInputNRGStack> feature;

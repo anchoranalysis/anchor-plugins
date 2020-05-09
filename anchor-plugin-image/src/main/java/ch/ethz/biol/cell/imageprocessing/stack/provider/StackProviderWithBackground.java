@@ -38,10 +38,7 @@ import org.anchoranalysis.image.stack.DisplayStack;
 
 public abstract class StackProviderWithBackground extends StackProvider {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
+	
 
 	// START BEAN PROPERTIES
 	

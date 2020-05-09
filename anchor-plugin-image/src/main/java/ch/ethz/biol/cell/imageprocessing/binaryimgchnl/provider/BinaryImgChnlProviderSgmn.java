@@ -61,11 +61,6 @@ public class BinaryImgChnlProviderSgmn extends BinaryImgChnlProvider {
 	private HistogramProvider histogramProvider;
 	// END BEAN
 	
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-			
 	public BinaryChnl sgmn( Chnl chnl, BinarySgmnParameters params ) throws SgmnFailedException {
 		
 

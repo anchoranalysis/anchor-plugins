@@ -33,11 +33,6 @@ import org.anchoranalysis.anchor.mpp.mark.UnsupportedMarkTypeException;
 
 public class MarkDistanceAbstractPosition extends MarkDistance {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1919575942780482503L;
-
 	@Override
 	public boolean isCompatibleWith(Mark testMark) {
 		return testMark instanceof MarkAbstractPosition;

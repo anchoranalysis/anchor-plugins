@@ -55,11 +55,6 @@ import ch.ethz.biol.cell.imageprocessing.binaryimgchnl.provider.NRGStackUtilitie
 //   median +- (factor * stdDev)
 public class ObjMaskFilterFeatureRelationDiscardFeatureRatioLessThan extends ObjMaskFilter {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
 	private FeatureProvider<FeatureInputSingleObj> featureProvider;

@@ -68,11 +68,6 @@ import org.anchoranalysis.io.output.bean.OutputManager;
  */
 public class QuickMultiDatasetExperiment<T extends InputFromManager, S> extends Experiment implements IReplaceInputManager, IReplaceOutputManager {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
 	private String folderDataset;

@@ -42,11 +42,6 @@ import org.anchoranalysis.image.stack.region.chnlconverter.ChnlConverterToUnsign
  */
 public class ChnlConverterBeanScaleByKeyValueParams extends ChnlConverterBean {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	// START BEAN PROPERTIES 
 	@BeanField
 	private KeyValueParamsProvider keyValueParamsProvider;

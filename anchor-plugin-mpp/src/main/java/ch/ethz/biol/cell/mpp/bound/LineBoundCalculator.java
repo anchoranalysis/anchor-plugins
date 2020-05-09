@@ -46,11 +46,6 @@ import org.anchoranalysis.math.rotation.RotationMatrix;
 
 public class LineBoundCalculator extends BoundCalculator {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 6887744677691985554L;
-
 	// START BEAN PROPERTIES
 	@BeanField
 	private BinaryImgChnlProvider outlineProvider;

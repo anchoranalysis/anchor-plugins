@@ -62,11 +62,6 @@ import ch.ethz.biol.cell.mpp.mark.ellipsoidfitter.outlinepixelsretriever.Travers
 
 public class XYOrientationExtendToZ extends PointsProposer {
 	
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
 	private OrientationProposer orientationXYProposer;		// Should find an orientation in the XY plane

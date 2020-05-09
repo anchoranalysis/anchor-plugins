@@ -59,11 +59,6 @@ import org.anchoranalysis.plugin.annotation.comparison.ObjsToCompare;
 
 public class AnnotationComparisonTask<T extends Assignment> extends Task<AnnotationComparisonInput<ProvidesStackInput>,SharedState<T>> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	// START BEAN PROPERTIES
 	@BeanField
 	private String backgroundChnlName = "Image";

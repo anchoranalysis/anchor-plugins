@@ -34,11 +34,6 @@ import org.anchoranalysis.image.chnl.Chnl;
 
 public class ChnlProviderExtractMiddleSlice extends ChnlProvider {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEANS
 	@BeanField
 	private ChnlProvider chnlProvider;

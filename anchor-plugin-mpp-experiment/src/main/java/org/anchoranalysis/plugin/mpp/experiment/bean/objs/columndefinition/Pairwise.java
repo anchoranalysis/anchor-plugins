@@ -41,11 +41,6 @@ import org.w3c.dom.Element;
 
 public class Pairwise extends ColumnDefinition {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	// START BEAN PROPERTIES
 	/**
 	 * Name of CSV column with X coordinate of point for the first Object

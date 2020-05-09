@@ -31,11 +31,6 @@ import org.anchoranalysis.core.error.OperationFailedException;
 
 public abstract class ReportFeatureForManifestFileBase extends ReportFeatureForManifest {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
 	private String fileName = "";

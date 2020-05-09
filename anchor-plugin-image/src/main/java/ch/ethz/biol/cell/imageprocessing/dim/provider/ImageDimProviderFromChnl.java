@@ -48,11 +48,6 @@ import org.anchoranalysis.image.init.ImageInitParams;
  */
 public class ImageDimProviderFromChnl extends ImageDimProvider {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PROPERTIES
 	@BeanField @AllowEmpty
 	private String id = "";

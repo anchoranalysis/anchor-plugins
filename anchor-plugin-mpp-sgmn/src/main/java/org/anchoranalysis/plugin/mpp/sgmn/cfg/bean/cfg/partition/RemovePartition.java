@@ -35,11 +35,6 @@ import org.anchoranalysis.plugin.mpp.sgmn.cfg.optscheme.CfgFromPartition;
 
 public class RemovePartition extends StateTransformerBean<CfgFromPartition, Cfg> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	@Override
 	public Cfg transform(CfgFromPartition in, TransformationContext context) throws OperationFailedException {
 		return in.getCfg();

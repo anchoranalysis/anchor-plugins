@@ -39,11 +39,6 @@ import org.anchoranalysis.image.orientation.OrientationAxisAngle;
 
 public class RandomXY extends OrientationProposer {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -6739151761002161746L;
-	
 	@Override
 	public Optional<Orientation> propose(Mark mark,	ImageDim dim, RandomNumberGenerator re, ErrorNode proposerFailureDescription) {
 		OrientationAxisAngle orientation = new OrientationAxisAngle();

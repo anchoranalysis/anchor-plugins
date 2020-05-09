@@ -35,10 +35,5 @@ import org.anchoranalysis.core.random.RandomNumberGenerator;
 
 public abstract class OutlinePixelsRetriever extends PointsBean<OutlinePixelsRetriever> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -763300047098835458L;
-
 	public abstract void traverse( Point3i root, List<Point3i> listOut, RandomNumberGenerator re ) throws TraverseOutlineException;
 }

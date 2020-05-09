@@ -40,11 +40,6 @@ import org.anchoranalysis.io.filepath.prefixer.FilePathPrefix;
  */
 public class FromDescriptiveName extends FilePathPrefixerAvoidResolve {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	@Override
 	protected FilePathPrefix outFilePrefixFromPath(Path path, String descriptiveName, Path root)
 			throws AnchorIOException {

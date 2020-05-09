@@ -49,11 +49,6 @@ import org.anchoranalysis.plugin.io.manifest.ManifestCouplingDefinition;
 
 public class CoupledManifestsInputManager extends InputManager<ManifestCouplingDefinition> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 512394797830863641L;
-	
 	// START BEAN PROPERTIES
 	@BeanField @OptionalBean
 	private FileProvider manifestInputFileSet;

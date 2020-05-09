@@ -36,11 +36,6 @@ import org.anchoranalysis.image.seed.SeedCollection;
 
 public abstract class MinimaImposition extends AnchorBean<MinimaImposition> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	// containingMask can be null
 	public abstract Chnl imposeMinima( Chnl chnl, SeedCollection seeds, ObjMask containingMask ) throws OperationFailedException;
 }

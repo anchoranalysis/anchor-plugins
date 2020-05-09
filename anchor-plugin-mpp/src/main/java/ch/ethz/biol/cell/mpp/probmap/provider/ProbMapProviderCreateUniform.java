@@ -44,11 +44,6 @@ import org.anchoranalysis.image.extent.ImageDim;
 
 public class ProbMapProviderCreateUniform extends ProbMapProvider {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 5827024413979756723L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
 	private ImageDimProvider dimProvider;

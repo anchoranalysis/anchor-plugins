@@ -42,11 +42,6 @@ import org.anchoranalysis.image.binary.BinaryChnl;
 
 public class CentrePosOnBinaryImgChnl extends CheckMark {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -1700747133659495372L;
-
 	// START BEAN
 	@BeanField
 	private BinaryImgChnlProvider binaryImgChnlProvider;

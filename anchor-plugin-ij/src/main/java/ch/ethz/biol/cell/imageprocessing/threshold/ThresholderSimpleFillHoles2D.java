@@ -49,10 +49,7 @@ public class ThresholderSimpleFillHoles2D extends Thresholder {
 
 	/* Start bean properties */
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -3814067279777552936L;
+	
 	
 	// START BEAN PROPERTIES
 

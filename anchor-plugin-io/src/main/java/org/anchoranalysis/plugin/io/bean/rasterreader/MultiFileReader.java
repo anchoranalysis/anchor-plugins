@@ -51,11 +51,6 @@ import org.apache.commons.io.filefilter.TrueFileFilter;
 //   that is matched against files in the directory
 public class MultiFileReader extends RasterReader {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -817112855285215792L;
-
 	// START BEAN PROPERTIES
 	@BeanField
 	private FilePathParser filePathParser = null;

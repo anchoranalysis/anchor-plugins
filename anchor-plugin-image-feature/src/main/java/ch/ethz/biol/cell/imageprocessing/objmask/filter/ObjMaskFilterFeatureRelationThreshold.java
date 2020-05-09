@@ -39,11 +39,6 @@ import org.anchoranalysis.image.objmask.ObjMask;
 
 public class ObjMaskFilterFeatureRelationThreshold extends ObjMaskFilterByObject {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
 	private FeatureEvaluator<FeatureInputSingleObj> featureEvaluator;

@@ -49,11 +49,6 @@ import org.anchoranalysis.image.io.rasterreader.OpenedRaster;
  */
 public class ThreeWayBranchXYResolution extends RasterReader {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	// START BEAN PROPERTIES
 	@BeanField
 	private RasterReader rasterReaderInput;

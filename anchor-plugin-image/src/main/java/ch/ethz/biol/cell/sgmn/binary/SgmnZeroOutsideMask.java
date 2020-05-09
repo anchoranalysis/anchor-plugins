@@ -44,11 +44,6 @@ import org.anchoranalysis.image.voxel.box.factory.VoxelBoxFactory;
 // Zeroes voxels outside the mask
 public class SgmnZeroOutsideMask extends BinarySgmn {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	// START BEAN PROPERTIES
 	@BeanField
 	private BinarySgmn sgmn;

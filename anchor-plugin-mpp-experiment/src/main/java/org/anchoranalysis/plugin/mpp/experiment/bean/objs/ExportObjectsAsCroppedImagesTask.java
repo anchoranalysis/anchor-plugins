@@ -87,12 +87,6 @@ import org.anchoranalysis.mpp.sgmn.bean.define.DefineOutputterMPP;
  */
 public class ExportObjectsAsCroppedImagesTask extends ExportObjectsBase<MultiInput,Object> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
-	
 	// START BEAN PROPERTIES
 	@BeanField
 	private DefineOutputterMPP define;

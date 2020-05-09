@@ -41,11 +41,6 @@ import ch.ethz.biol.cell.mpp.mark.ellipsoidfitter.outlinepixelsretriever.Travers
 
 public class MergeLists extends PointsFromOrientationProposer {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
 	private PointsFromOrientationProposer pointsFromOrientationProposer;

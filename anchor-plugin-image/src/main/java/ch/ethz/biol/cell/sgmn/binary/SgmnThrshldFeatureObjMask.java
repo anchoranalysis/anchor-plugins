@@ -53,11 +53,6 @@ import org.anchoranalysis.plugin.image.bean.histogram.threshold.Constant;
 
 public class SgmnThrshldFeatureObjMask extends BinarySgmn {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START PARAMETERS
 	@BeanField
 	private FeatureEvaluator<FeatureInputSingleObj> featureEvaluator;

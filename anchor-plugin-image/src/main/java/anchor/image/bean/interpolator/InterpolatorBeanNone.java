@@ -32,11 +32,6 @@ import org.anchoranalysis.image.interpolator.InterpolatorNone;
 
 public class InterpolatorBeanNone extends InterpolatorBean {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	@Override
 	public Interpolator create() {
 		return new InterpolatorNone();

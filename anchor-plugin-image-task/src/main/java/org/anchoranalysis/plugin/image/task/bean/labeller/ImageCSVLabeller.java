@@ -42,11 +42,6 @@ import org.anchoranalysis.plugin.image.task.labeller.ImageCSVLabellerInitParams;
 
 public class ImageCSVLabeller extends ImageLabeller<ImageCSVLabellerInitParams> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	// START BEAN PROPERTIES
 	/** 
 	 * Path to a CSV label file (comma-separated, with header, no quotes)

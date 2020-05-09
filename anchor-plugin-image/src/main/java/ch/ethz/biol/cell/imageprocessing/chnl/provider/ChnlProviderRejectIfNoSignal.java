@@ -36,11 +36,6 @@ import org.anchoranalysis.image.histogram.HistogramFactoryUtilities;
 
 public class ChnlProviderRejectIfNoSignal extends ChnlProvider {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEANS
 	@BeanField
 	private ChnlProvider chnlProvider;

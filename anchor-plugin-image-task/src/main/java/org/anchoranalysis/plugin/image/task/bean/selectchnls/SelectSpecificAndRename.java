@@ -47,11 +47,6 @@ import ch.ethz.biol.cell.imageprocessing.chnl.provider.ChnlProviderStackReferenc
  */
 public class SelectSpecificAndRename extends SelectChnlsFromStacks {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	// START BEAN PROPERTIES
 	@BeanField
 	private List<NamedBean<ChnlProviderStackReference>> list = new ArrayList<>();

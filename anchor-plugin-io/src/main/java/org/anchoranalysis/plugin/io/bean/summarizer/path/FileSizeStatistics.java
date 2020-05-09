@@ -43,11 +43,6 @@ import org.apache.commons.io.FileUtils;
  */
 public class FileSizeStatistics extends Summarizer<Path> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	private RunningSum runningSum = new RunningSum();
 	private long min = Long.MAX_VALUE;
 	private long max = Long.MIN_VALUE;

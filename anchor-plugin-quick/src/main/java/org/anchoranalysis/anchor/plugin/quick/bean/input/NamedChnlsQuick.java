@@ -62,11 +62,6 @@ import org.anchoranalysis.image.io.bean.rasterreader.RasterReader;
  */
 public class NamedChnlsQuick extends NamedChnlsBase {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	// START BEAN PROPERTIES
 	/** A path to the main channel of each file */
 	@BeanField

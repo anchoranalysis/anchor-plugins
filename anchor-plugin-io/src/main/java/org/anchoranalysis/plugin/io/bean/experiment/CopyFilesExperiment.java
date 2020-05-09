@@ -56,11 +56,6 @@ import org.apache.commons.io.FileUtils;
 
 public class CopyFilesExperiment extends Experiment {
 	
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
 	private FileProvider fileProvider;

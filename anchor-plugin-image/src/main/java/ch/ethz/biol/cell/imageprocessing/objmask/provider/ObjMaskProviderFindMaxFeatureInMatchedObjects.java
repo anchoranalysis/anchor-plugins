@@ -45,11 +45,6 @@ import org.anchoranalysis.image.objmask.match.ObjWithMatches;
 // Returns a collection of each Max Object found in matches
 public class ObjMaskProviderFindMaxFeatureInMatchedObjects extends ObjMaskProvider {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
 	private ObjMaskProvider objs;

@@ -44,11 +44,6 @@ import org.anchoranalysis.image.sgmn.SgmnFailedException;
 
 public class ObjMaskSgmnOnTransform extends ObjMaskSgmn {
 	
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -642285838567127948L;
-
 	/* START Bean properties */
 	@BeanField
 	private BinarySgmn sgmn;

@@ -37,11 +37,6 @@ import org.anchoranalysis.image.voxel.statistics.VoxelStatisticsCombined;
 
 public class CenterSlice extends CenterSliceBase {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -3617915321417174160L;
-	
 	@Override
 	protected VoxelStatistics createStatisticsForBBox(PxlMark pm, ImageDim dim, BoundingBox bbox, int zCenter) {
 		

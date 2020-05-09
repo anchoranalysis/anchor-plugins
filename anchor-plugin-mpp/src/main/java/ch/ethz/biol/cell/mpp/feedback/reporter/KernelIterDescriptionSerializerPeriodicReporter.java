@@ -37,11 +37,6 @@ public class KernelIterDescriptionSerializerPeriodicReporter extends ObjectSeria
 	// BEAN PARAMETERS
 	// END BEAN PARAMETERS
 	
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -8978128679428962351L;
-
 	public KernelIterDescriptionSerializerPeriodicReporter() {
 		super("kernelIterDescription");
 	}

@@ -40,11 +40,6 @@ import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 
 public class ChnlProviderHistogramStretch extends ChnlProvider {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
 	private ChnlProvider chnlProvider;

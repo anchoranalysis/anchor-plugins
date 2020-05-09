@@ -37,11 +37,6 @@ import org.anchoranalysis.image.unitvalue.UnitValueException;
 
 public class ObjMaskFilterVolumeGreaterThan extends ObjMaskFilter {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -5379469121358194032L;
-
 	// START BEAN PROPERTIES
 	@BeanField
 	private UnitValueVolume minVolume;

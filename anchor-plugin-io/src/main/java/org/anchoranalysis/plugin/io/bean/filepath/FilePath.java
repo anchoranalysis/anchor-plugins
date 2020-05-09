@@ -33,10 +33,5 @@ import org.anchoranalysis.io.error.AnchorIOException;
 
 public abstract class FilePath extends AnchorBean<FilePath> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	public abstract Path path(boolean debugMode) throws AnchorIOException;
 }

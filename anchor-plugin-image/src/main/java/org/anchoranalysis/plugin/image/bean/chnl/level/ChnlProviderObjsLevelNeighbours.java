@@ -57,11 +57,6 @@ import org.anchoranalysis.image.voxel.nghb.CreateNghbGraph;
  */
 public class ChnlProviderObjsLevelNeighbours extends ChnlProviderObjsLevelBase {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN
 	/** How many neighbours to include by distance (distance==1 -> all directly touching neighbours, distance==2 -> those touching the directly touching etc.) */
 	@BeanField @Positive

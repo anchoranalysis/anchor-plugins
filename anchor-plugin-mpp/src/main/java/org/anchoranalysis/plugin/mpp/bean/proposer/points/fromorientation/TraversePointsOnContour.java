@@ -51,11 +51,6 @@ import ch.ethz.biol.cell.mpp.mark.ellipsoidfitter.outlinepixelsretriever.Travers
 
 public class TraversePointsOnContour extends PointsFromOrientationProposer {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -6882300188460868470L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
 	private FindOutlinePixelAngle findOutlinePixelAngle;

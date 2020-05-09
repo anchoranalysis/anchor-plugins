@@ -41,11 +41,6 @@ import org.anchoranalysis.plugin.io.summarizer.FrequencyMap;
  */
 public abstract class SummarizerNamedChnls<T> extends Summarizer<NamedChnlsInput> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	private FrequencyMap<T> map = new FrequencyMap<>();
 	
 	@Override

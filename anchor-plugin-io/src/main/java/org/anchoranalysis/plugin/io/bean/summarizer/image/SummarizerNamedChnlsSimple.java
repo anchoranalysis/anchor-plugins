@@ -35,11 +35,6 @@ import org.anchoranalysis.image.io.input.NamedChnlsInput;
  */
 public abstract class SummarizerNamedChnlsSimple<T> extends SummarizerNamedChnls<T> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	@Override
 	public void add(NamedChnlsInput element) throws OperationFailedException {
 		try {

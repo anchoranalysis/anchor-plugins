@@ -51,12 +51,6 @@ import org.anchoranalysis.image.objmask.ObjMaskCollection;
  */
 public class Simple extends FeatureTableObjs<FeatureInputSingleObj> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
-	
 	@Override
 	public FeatureTableSession<FeatureInputSingleObj> createFeatures(
 			List<NamedBean<FeatureListProvider<FeatureInputSingleObj>>> list, boolean suppressErrors

@@ -56,11 +56,6 @@ import org.anchoranalysis.io.output.bound.BoundIOContext;
 
 public class ObjMaskSgmnTask extends RasterTask {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -8271422044212019000L;
-
 	// START BEAN PROPERTIES
 	@BeanField
 	private SgmnObjMaskCollection sgmn = null;

@@ -40,11 +40,6 @@ import org.anchoranalysis.image.orientation.Orientation;
 
 public class Random extends OrientationProposer {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -6739151761002161746L;
-	
 	@Override
 	public Optional<Orientation> propose(Mark mark,	ImageDim dim, RandomNumberGenerator re, ErrorNode errorNode) {
 		

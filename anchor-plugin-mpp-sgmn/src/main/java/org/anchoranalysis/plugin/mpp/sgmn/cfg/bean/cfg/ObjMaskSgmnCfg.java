@@ -50,11 +50,6 @@ import org.anchoranalysis.mpp.sgmn.bean.cfg.CfgSgmn;
 
 public class ObjMaskSgmnCfg extends SgmnObjMaskCollection {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	// START BEAN PROPERTIES
 	@BeanField
 	private CfgSgmn cfgSgmn;

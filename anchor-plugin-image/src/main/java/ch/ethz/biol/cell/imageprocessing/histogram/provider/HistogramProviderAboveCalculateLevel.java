@@ -41,11 +41,6 @@ import org.anchoranalysis.plugin.image.intensity.HistogramThresholder;
  */
 public class HistogramProviderAboveCalculateLevel extends HistogramProvider {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	// START BEAN PROPERTIES
 	@BeanField
 	private HistogramProvider histogramProvider;

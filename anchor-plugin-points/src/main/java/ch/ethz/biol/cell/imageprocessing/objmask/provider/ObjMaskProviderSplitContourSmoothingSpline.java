@@ -48,11 +48,6 @@ import ch.ethz.biol.cell.imageprocessing.objmask.provider.smoothspline.SplitCont
  */
 public class ObjMaskProviderSplitContourSmoothingSpline extends ObjMaskProvider {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	// START BEAN PROPERTIES
 	/** Each contour is represented by an object */
 	@BeanField

@@ -51,10 +51,6 @@ import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
 //  It sets a pixel as high, if it is greater than or equal to the pixel in the other "Thrshld" channel
 public class SgmnThrshldAgainstChnl extends BinarySgmn {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
 	// START BEAN PROPERTIES
 	@BeanField
 	private ChnlProvider chnlProviderThrshld;

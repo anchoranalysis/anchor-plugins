@@ -48,12 +48,6 @@ import org.anchoranalysis.image.voxel.box.factory.VoxelBoxFactoryTypeBound;
 //   the primary segmentation
 public class SgmnSecondary extends BinarySgmn {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
-	
 	// START BEAN PROPERTIES
 	@BeanField
 	private BinarySgmn sgmn;

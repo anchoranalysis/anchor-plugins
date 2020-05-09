@@ -45,11 +45,6 @@ import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
 
 public class StackProviderRGBChnlProvider extends StackProvider {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 6951065129825367326L;
-	
 	// START BEAN PROPERTIES
 	@BeanField @OptionalBean
 	private ChnlProvider chnlProviderRed;

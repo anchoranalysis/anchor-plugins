@@ -45,11 +45,6 @@ import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 //   greater than or equal to a threshold value from the ChnlProvider
 public class ObjMaskFilterChnlIntensGreaterEqualThan extends ObjMaskFilterByObject {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
 	private ChnlProvider chnlProvider;

@@ -41,11 +41,6 @@ import org.anchoranalysis.image.objmask.morph.MorphologicalErosion;
  */
 public class BinaryImgChnlProviderErode extends BinaryImgChnlProviderMorphOp {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -9015477942124999871L;
-	
 	// START
 	@BeanField
 	private boolean outsideAtThreshold = true;

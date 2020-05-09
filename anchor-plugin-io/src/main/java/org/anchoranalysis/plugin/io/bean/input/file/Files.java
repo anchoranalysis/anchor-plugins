@@ -51,11 +51,6 @@ import org.anchoranalysis.plugin.io.bean.descriptivename.patternspan.PatternSpan
  */
 public class Files extends InputManager<FileInput> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -3838832669433747423L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
 	private FileProvider fileProvider = null;

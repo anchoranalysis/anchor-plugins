@@ -42,11 +42,6 @@ import org.anchoranalysis.image.extent.ImageDim;
 
 public class PointsFitterReference extends PointsFitter {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -5462890873512434544L;
-
 	// START BEAN
 	@BeanField
 	private String id;

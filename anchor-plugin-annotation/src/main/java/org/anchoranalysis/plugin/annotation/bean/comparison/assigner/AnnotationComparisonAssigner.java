@@ -36,11 +36,6 @@ import org.anchoranalysis.plugin.annotation.comparison.ObjsToCompare;
 
 public abstract class AnnotationComparisonAssigner<T extends Assignment> extends AnchorBean<AnnotationComparisonAssigner<T>> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	public abstract T createAssignment(
 		ObjsToCompare objsToCompare,
 		ImageDim dim,

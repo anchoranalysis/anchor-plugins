@@ -53,11 +53,6 @@ import org.apache.commons.lang.time.StopWatch;
  */
 public class ObjMaskProviderConnectedComponents extends ObjMaskProvider {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
 	private BinaryImgChnlProvider binaryImgChnlProvider;

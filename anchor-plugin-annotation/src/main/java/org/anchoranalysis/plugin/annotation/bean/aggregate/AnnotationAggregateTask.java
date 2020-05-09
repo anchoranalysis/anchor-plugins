@@ -49,11 +49,6 @@ import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
  */
 public class AnnotationAggregateTask<S extends AnnotatorStrategy> extends Task<AnnotationWithStrategy<S>,AggregateSharedState> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	@Override
 	public AggregateSharedState beforeAnyJobIsExecuted(BoundOutputManagerRouteErrors outputManager, ParametersExperiment params)
 			throws ExperimentExecutionException {

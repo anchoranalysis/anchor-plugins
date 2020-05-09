@@ -43,11 +43,6 @@ import org.anchoranalysis.image.voxel.box.VoxelBox;
 
 public class ChnlProviderExtractSliceRange extends ChnlProvider {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEANS
 	@BeanField
 	private ChnlProvider chnlProvider;

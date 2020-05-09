@@ -62,11 +62,6 @@ import org.anchoranalysis.plugin.image.task.sharedstate.SharedStateFilteredImage
  */
 public class ImageAssignLabelTask<T> extends Task<ProvidesStackInput,SharedStateFilteredImageOutput<T>> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	// START BEAN PROPERTIES
 	/** Maps a label to an image */
 	@BeanField

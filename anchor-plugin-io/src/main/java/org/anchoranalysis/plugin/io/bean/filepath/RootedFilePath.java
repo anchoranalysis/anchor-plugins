@@ -35,11 +35,6 @@ import org.anchoranalysis.plugin.io.filepath.RootedFilePathUtilities;
 
 public class RootedFilePath extends FilePath {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	// START BEAN PROPERTIES
 	@BeanField
 	private String path;

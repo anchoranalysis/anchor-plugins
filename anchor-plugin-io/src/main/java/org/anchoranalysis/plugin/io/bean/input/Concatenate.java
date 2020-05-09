@@ -46,11 +46,6 @@ import org.anchoranalysis.io.input.InputFromManager;
  */
 public class Concatenate<T extends InputFromManager> extends InputManager<T> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -8305744272662659794L;
-
 	// START BEAN PROPERTIES
 	@BeanField
 	private List<InputManager<T>> list = new ArrayList<>();

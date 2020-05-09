@@ -56,11 +56,6 @@ import org.anchoranalysis.plugin.mpp.sgmn.cfg.bean.optscheme.mode.AssignMode;
  */
 public class OptSchemeSimulatedAnnealing<S,T,U> extends OptScheme<S,U> {
 	
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -8255969832767406887L;
-
 	// START BEAN PARAMETERS
 	@BeanField
 	private TerminationCondition termCondition = null;

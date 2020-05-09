@@ -47,11 +47,6 @@ import org.anchoranalysis.image.objmask.match.ObjWithMatches;
 // Relation must hold true for all associated objects
 public class ObjMaskFilterFeatureRelationAssociatedObject extends ObjMaskFilter {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
 	private FeatureEvaluator<FeatureInputSingleObj> featureEvaluator;

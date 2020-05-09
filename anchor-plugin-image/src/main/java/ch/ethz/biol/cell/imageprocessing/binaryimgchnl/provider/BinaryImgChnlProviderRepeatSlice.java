@@ -45,11 +45,6 @@ import ch.ethz.biol.cell.imageprocessing.dim.provider.GuessDimFromInputImage;
 // Ors the receiveProvider onto the binaryImgChnlProvider
 public class BinaryImgChnlProviderRepeatSlice extends BinaryImgChnlProvider {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
 	private BinaryImgChnlProvider binaryImgChnlProvider;

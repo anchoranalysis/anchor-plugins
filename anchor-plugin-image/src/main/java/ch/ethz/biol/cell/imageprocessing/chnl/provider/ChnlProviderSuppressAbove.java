@@ -44,11 +44,6 @@ import org.anchoranalysis.image.voxel.box.VoxelBox;
 
 public class ChnlProviderSuppressAbove extends ChnlProvider {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
 	private ChnlProvider chnlProvider;

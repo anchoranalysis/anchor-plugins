@@ -36,11 +36,6 @@ import org.anchoranalysis.plugin.operator.feature.score.GaussianScoreCalculator;
 
 public class PixelScoreGaussianKeyValueParams extends PixelScoreParamsBase {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
 	private String keyMean;

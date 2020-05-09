@@ -52,11 +52,6 @@ import org.anchoranalysis.feature.shared.SharedFeatureSet;
 
 public abstract class FeatureValueCheckMark<T extends FeatureInput> extends CheckMark {
 	
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	// START BEANS
 	@BeanField
 	private FeatureProvider<T> featureProvider;

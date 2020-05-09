@@ -63,11 +63,6 @@ import org.anchoranalysis.mpp.sgmn.bean.cfg.ExperimentState;
 
 public class CfgSgmnTask extends Task<MultiInput,ExperimentState>{
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 5792374230960475316L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
 	private CfgSgmn sgmn = null;

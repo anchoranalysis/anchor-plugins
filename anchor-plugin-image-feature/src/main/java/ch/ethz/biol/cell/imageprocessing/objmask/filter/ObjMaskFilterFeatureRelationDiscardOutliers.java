@@ -55,11 +55,6 @@ import cern.jet.stat.Descriptive;
 //   median +- (factor * stdDev)
 public class ObjMaskFilterFeatureRelationDiscardOutliers extends ObjMaskFilter {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
 	private FeatureProvider<FeatureInputSingleObj> featureProvider;

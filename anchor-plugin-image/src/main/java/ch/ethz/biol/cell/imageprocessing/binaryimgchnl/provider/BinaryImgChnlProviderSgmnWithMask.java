@@ -64,11 +64,6 @@ public class BinaryImgChnlProviderSgmnWithMask extends BinaryImgChnlProvider {
 	private HistogramProvider histogramProvider;
 	// END BEAN
 	
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-		
 	public BinaryChnl sgmn( Chnl chnl, BinarySgmnParameters params, BinaryChnl maskChnl ) throws SgmnFailedException {
 		
 		ObjMask omMask = new ObjMask(maskChnl.binaryVoxelBox());

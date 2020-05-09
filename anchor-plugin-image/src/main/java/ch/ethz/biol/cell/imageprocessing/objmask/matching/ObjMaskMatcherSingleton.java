@@ -42,11 +42,6 @@ import org.anchoranalysis.image.objmask.match.ObjWithMatches;
 // Always matches a single object
 public class ObjMaskMatcherSingleton extends ObjMaskMatcher {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
 	private ObjMaskProvider objs;

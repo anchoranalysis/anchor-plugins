@@ -37,11 +37,6 @@ import org.anchoranalysis.image.bean.provider.ColorListProvider;
 
 public class ColorListProviderConcatenate extends ColorListProvider {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
 	private List<ColorListProvider> list = new ArrayList<ColorListProvider>();

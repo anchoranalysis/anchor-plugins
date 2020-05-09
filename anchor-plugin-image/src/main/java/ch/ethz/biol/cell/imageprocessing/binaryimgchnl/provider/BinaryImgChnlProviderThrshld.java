@@ -52,11 +52,6 @@ public class BinaryImgChnlProviderThrshld extends BinaryImgChnlProvider {
 	private Thresholder thresholder;
 	// END BEAN
 	
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	@Override
 	public BinaryChnl create() throws CreateException {
 

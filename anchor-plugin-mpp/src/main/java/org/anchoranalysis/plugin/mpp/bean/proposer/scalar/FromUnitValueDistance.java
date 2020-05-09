@@ -38,11 +38,6 @@ import org.anchoranalysis.image.extent.ImageRes;
 
 public class FromUnitValueDistance extends ScalarProposer {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
 	private UnitValueDistance unitValueDistance;

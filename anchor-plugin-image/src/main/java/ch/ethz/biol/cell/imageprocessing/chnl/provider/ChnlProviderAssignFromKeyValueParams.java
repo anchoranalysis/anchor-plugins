@@ -50,11 +50,6 @@ public class ChnlProviderAssignFromKeyValueParams extends ChnlProvider {
 	private ChnlProvider chnlProvider;
 	// END BEAN PROPERTIES
 	
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	@Override
 	public Chnl create() throws CreateException {
 		

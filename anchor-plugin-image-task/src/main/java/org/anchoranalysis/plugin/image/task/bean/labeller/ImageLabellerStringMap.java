@@ -47,11 +47,6 @@ import org.anchoranalysis.plugin.image.task.labeller.ImageLabellerStringMapInitP
  */
 public class ImageLabellerStringMap<T> extends ImageLabeller<ImageLabellerStringMapInitParams<T>> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
 	private ImageLabeller<T> filter;

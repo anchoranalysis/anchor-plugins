@@ -41,11 +41,6 @@ import org.anchoranalysis.image.bean.unitvalue.distance.UnitValueDistance;
 import org.anchoranalysis.image.extent.ImageDim;
 
 public class AddCriteriaDistanceTo extends AddCriteriaPair {
-
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -7256594098140540214L;
 	
 	// START BEAN PROPERTIES
 	@BeanField

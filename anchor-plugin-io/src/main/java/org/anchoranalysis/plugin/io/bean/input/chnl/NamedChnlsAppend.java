@@ -52,11 +52,6 @@ import org.anchoranalysis.io.input.OperationOutFilePath;
 
 public class NamedChnlsAppend extends NamedChnlsBase {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
 	private InputManager<NamedChnlsInputPart> input;

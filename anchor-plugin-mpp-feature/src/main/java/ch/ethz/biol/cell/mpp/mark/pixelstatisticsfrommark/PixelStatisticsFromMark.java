@@ -36,10 +36,5 @@ import org.anchoranalysis.image.voxel.statistics.VoxelStatistics;
 
 public abstract class PixelStatisticsFromMark extends AnchorBean<PixelStatisticsFromMark> implements GenerateUniqueParameterization {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 8768215241555595940L;
-
 	public abstract VoxelStatistics createStatisticsFor( PxlMarkMemo pmm, ImageDim dim ) throws CreateException;
 }

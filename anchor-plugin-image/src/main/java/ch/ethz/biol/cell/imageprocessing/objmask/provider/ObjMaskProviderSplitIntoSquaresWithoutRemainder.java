@@ -45,11 +45,6 @@ import org.anchoranalysis.image.voxel.box.factory.VoxelBoxFactory;
 // Only chops in X and Y, Z is unaffected
 public class ObjMaskProviderSplitIntoSquaresWithoutRemainder extends ObjMaskProvider {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
 	private ObjMaskProvider objs;

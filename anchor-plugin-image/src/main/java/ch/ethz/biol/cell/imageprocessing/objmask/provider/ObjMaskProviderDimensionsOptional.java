@@ -35,11 +35,6 @@ import org.anchoranalysis.image.extent.ImageDim;
 
 public abstract class ObjMaskProviderDimensionsOptional extends ObjMaskProvider {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	// START BEAN PROPERTIES
 	@BeanField @OptionalBean
 	private ImageDimProvider dimProvider;

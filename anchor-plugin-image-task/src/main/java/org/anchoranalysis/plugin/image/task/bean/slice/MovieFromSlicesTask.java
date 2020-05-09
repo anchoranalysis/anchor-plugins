@@ -49,11 +49,6 @@ import org.anchoranalysis.io.output.bound.BoundIOContext;
 
 public class MovieFromSlicesTask extends RasterTask {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -2389423680042363560L;
-
 	// START BEAN PROPERTIES
 	@BeanField
 	private boolean rgb = false;

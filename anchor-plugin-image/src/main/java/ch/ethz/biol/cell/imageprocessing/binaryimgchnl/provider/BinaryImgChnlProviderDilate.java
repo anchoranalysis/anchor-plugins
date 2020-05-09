@@ -44,11 +44,6 @@ import org.anchoranalysis.image.objmask.morph.MorphologicalDilation;
  */
 public class BinaryImgChnlProviderDilate extends BinaryImgChnlProviderMorphOp {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -9015477942124999871L;
-	
 	// START
 	@BeanField
 	private boolean zOnly = false;		// Only dilates in the z-direction

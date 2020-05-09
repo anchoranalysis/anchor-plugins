@@ -43,11 +43,6 @@ import org.anchoranalysis.image.extent.ImageDim;
 // Reflects points in each axes if all points are within a certain distance from it
 public class ReflectInAxesWithinDist extends PointsFitter {
 	
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
 	private PointsFitter pointsFitter;

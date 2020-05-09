@@ -42,11 +42,6 @@ import org.anchoranalysis.io.filepath.FilePathNormalizer;
 public class FileProviderRemove extends FileProvider {
 
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
 	private FileProvider fileProvider;

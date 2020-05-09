@@ -38,11 +38,6 @@ import org.anchoranalysis.core.error.OperationFailedException;
  */
 public class SummarizerListMultiline<T> extends Summarizer<T> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	private StringBuilder sb = null;
 	
 	@Override

@@ -39,11 +39,6 @@ import org.anchoranalysis.image.io.input.NamedChnlsInput;
  **/
 public class ImageSize extends SummarizerNamedChnls<WrappedImageDim> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	@Override
 	public void add( NamedChnlsInput img ) throws OperationFailedException {
 

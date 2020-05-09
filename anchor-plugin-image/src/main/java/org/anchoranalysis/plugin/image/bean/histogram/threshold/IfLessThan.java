@@ -43,11 +43,6 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
  */
 public class IfLessThan extends CalculateLevel {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
 	private CalculateLevel calculateLevel;

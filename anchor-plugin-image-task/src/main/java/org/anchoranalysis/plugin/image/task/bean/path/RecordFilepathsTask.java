@@ -47,10 +47,7 @@ import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
 
 public class RecordFilepathsTask<T extends InputFromManager> extends Task<T,StringBuilder> {
 	
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
+	
 	
 	// START BEAN PROPERTIES
 	

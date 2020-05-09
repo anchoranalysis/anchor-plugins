@@ -51,11 +51,6 @@ import org.anchoranalysis.image.voxel.datatype.IncorrectVoxelDataTypeException;
 
 public class ObjMaskProviderSgmn extends ObjMaskProvider {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PROPERTIES
 	@BeanField @OptionalBean
 	private BinaryImgChnlProvider binaryImgChnlProviderMask;

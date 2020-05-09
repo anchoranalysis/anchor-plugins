@@ -41,11 +41,6 @@ import ch.ethz.biol.cell.imageprocessing.objmask.matching.ObjMaskMatchUtilities;
 /** A base class for algorithms that merge obj-masks */
 public abstract class ObjMaskProviderMergeBase extends ObjMaskProvider {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	// START BEAN PROPERTIES
 	@BeanField
 	private ObjMaskProvider objs;

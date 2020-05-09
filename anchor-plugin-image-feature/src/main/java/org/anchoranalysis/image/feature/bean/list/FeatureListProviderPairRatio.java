@@ -33,11 +33,6 @@ import org.anchoranalysis.plugin.operator.feature.bean.arithmetic.Divide;
 
 public abstract class FeatureListProviderPairRatio extends FeatureListProviderAggregate {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	private static Feature<FeatureInputPairObjs> ratioTwoFeatures(
 		Feature<FeatureInputPairObjs> featFirst,
 		Feature<FeatureInputPairObjs> featSecond

@@ -39,11 +39,6 @@ import org.anchoranalysis.image.extent.Extent;
 // Ors the receiveProvider onto the binaryImgChnlProvider
 public class BinaryImgChnlProviderNot extends BinaryImgChnlProvider {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
 	private BinaryImgChnlProvider binaryImgChnlProvider;

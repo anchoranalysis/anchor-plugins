@@ -47,11 +47,6 @@ import org.anchoranalysis.image.voxel.box.factory.VoxelBoxFactory;
 
 public class ObjMaskProviderSplitByObjCollection extends ObjMaskProviderDimensions {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
 	private ObjMaskProvider objs;

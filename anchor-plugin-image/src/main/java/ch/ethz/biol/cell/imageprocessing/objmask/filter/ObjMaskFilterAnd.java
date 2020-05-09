@@ -33,11 +33,6 @@ import org.anchoranalysis.image.objmask.ObjMaskCollection;
 
 public class ObjMaskFilterAnd extends ObjMaskFilterDelegate {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1049151951022876436L;
-	
 	@Override
 	public void filter(ObjMaskCollection objs, ImageDim dim, ObjMaskCollection objsRejected) throws OperationFailedException {
 		

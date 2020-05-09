@@ -48,12 +48,6 @@ import org.anchoranalysis.io.output.bound.BoundIOContext;
 
 public class SharedObjectsFromChnlTask extends RasterTask {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
-	
 	// START BEAN PROPERTIES
 	@BeanField
 	private DefineOutputterMPP define;

@@ -82,11 +82,6 @@ import org.anchoranalysis.image.voxel.nghb.CreateNghbGraph;
  */
 public class MergedPairs extends FeatureTableObjs<FeatureInputPairObjs> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	// START BEAN PROPERTIES
 	/**
 	 * Additional features that are processed on the pair of images (i.e. First+Second as a pair)

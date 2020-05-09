@@ -41,11 +41,6 @@ import org.anchoranalysis.image.voxel.box.VoxelBox;
 
 public class ChnlProviderMask extends ChnlProvider {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -4943301687139533979L;
-	
 	// START
 	@BeanField
 	private ChnlProvider chnlProvider;

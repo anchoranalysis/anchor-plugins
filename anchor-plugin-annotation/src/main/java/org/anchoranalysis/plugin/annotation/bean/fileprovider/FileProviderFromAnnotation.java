@@ -48,11 +48,6 @@ public class FileProviderFromAnnotation<T extends AnnotatorStrategy> extends Fil
 	private AnnotationInputManager<NamedChnlsInputPart,T> annotationInputManager;
 	// END BEAN PROPERTIES
 	
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	@Override
 	public Collection<File> matchingFiles(InputManagerParams params)
 			throws AnchorIOException {

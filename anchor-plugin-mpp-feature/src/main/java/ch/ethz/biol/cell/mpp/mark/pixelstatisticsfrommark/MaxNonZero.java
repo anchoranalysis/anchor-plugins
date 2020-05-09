@@ -41,11 +41,6 @@ import org.anchoranalysis.image.voxel.statistics.VoxelStatistics;
 
 public class MaxNonZero extends IndexedRegionBase {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -3617915321417174160L;
-
 	@Override
 	protected VoxelStatistics createStatisticsFor(PxlMark pm, Mark mark, ImageDim dim) throws CreateException {
 

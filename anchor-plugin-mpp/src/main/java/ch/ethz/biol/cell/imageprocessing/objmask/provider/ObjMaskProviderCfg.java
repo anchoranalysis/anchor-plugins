@@ -41,11 +41,6 @@ import org.anchoranalysis.image.objmask.ObjMaskCollection;
 // Creates some object masks from a cfg
 public class ObjMaskProviderCfg extends ObjMaskProviderDimensions {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
 	private CfgProvider cfgProvider;

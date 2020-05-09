@@ -9,11 +9,6 @@ import org.anchoranalysis.image.objmask.ObjMaskCollection;
 
 public abstract class ChnlProviderLevel extends ChnlProvider {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
 	private ChnlProvider chnlProviderIntensity;

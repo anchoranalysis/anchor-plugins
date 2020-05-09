@@ -35,11 +35,6 @@ import org.anchoranalysis.image.objmask.ObjMask;
 
 public class ObjMaskFilterRemoveTouchingSceneBorder extends ObjMaskFilterByObject {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	// START BEAN PROPERTIES
 	@BeanField
 	private boolean includeZ = false;

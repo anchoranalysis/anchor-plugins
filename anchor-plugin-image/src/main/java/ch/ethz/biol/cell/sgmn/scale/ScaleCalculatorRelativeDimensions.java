@@ -39,11 +39,6 @@ import org.anchoranalysis.image.scale.ScaleFactorUtilities;
 
 public class ScaleCalculatorRelativeDimensions extends ScaleCalculator {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PROPERTIES
 	@BeanField @OptionalBean
 	private ImageDimProvider dimProviderSource;

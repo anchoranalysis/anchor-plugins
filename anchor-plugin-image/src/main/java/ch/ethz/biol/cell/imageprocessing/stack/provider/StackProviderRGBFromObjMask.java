@@ -44,11 +44,6 @@ import ch.ethz.biol.cell.imageprocessing.stack.color.ColoredObjsStackCreator;
 
 public class StackProviderRGBFromObjMask extends StackProviderWithBackground {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
 	private ObjMaskProvider objs;

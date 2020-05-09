@@ -70,11 +70,6 @@ import ch.ethz.biol.cell.imageprocessing.chnl.provider.ChnlProviderScale;
  */
 public class ScaleTask extends RasterTask {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	private static final String KEY_OUTPUT_STACK = "stack";
 	
 	// START BEAN PROPERTIES

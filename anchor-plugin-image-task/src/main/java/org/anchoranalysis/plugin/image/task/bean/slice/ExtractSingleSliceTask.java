@@ -67,11 +67,6 @@ import org.anchoranalysis.plugin.image.task.sharedstate.SharedStateSelectedSlice
  */
 public class ExtractSingleSliceTask extends Task<NamedChnlsInput,SharedStateSelectedSlice> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	private static final String OUTPUT_STACK_KEY = "stack";
 	
 	// START BEAN PROPERTIES

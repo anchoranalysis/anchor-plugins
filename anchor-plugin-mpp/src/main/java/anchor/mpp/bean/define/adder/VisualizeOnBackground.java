@@ -61,11 +61,6 @@ import ch.ethz.biol.cell.mpp.cfg.provider.CfgProviderReference;
  */
 public class VisualizeOnBackground extends DefineAdderBean {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	private static final String SUFFIX = ".visualize";
 	
 	// START BEAN PROPERTIES

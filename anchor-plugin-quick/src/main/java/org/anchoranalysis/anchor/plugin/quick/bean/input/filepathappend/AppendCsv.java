@@ -32,11 +32,6 @@ import org.anchoranalysis.bean.error.BeanMisconfiguredException;
 /** A CSV that is appended from the root of a project */
 public class AppendCsv extends FilePathAppendBase {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	// START BEAN PROPERTIES
 	/** Unique identifier for the stack, object-mask-collection etc. that is being appended. Filename is constructed from it */
 	@BeanField

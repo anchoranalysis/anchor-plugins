@@ -55,11 +55,6 @@ import ch.ethz.biol.cell.mpp.mark.pointsfitter.ConvexHullUtilities;
  */
 public class ObjMaskProviderConvexHullConnectLines extends ObjMaskProvider {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
 	private ObjMaskProvider objs;

@@ -47,11 +47,6 @@ import ch.ethz.biol.cell.mpp.mark.pointsfitter.ConvexHullUtilities;
 
 public class CfgProviderPointsFitterFromObjs extends CfgProvider {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	/// START BEAN PROPERTIES
 	@BeanField
 	private PointsFitterToMark pointsFitter;

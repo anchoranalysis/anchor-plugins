@@ -39,11 +39,6 @@ import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 
 public class FeatureValueIndividualEnergyGreaterThan extends FeatureValueCheckMark<FeatureInputSingleMemo> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1086432241915811567L;
-
 	@Override
 	protected FeatureInputSingleMemo createFeatureCalcParams(Mark mark, RegionMap regionMap, NRGStackWithParams nrgStack) {
 		PxlMarkMemo pmm = PxlMarkMemoFactory.create( mark, nrgStack.getNrgStack(), regionMap );

@@ -41,11 +41,6 @@ import org.anchoranalysis.image.outline.FindOutline;
  */
 public class BinaryImgChnlProviderOutline extends BinaryImgChnlProvider {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -9015477942124999871L;
-	
 	// START
 	@BeanField
 	private BinaryImgChnlProvider binaryImgChnlProvider;

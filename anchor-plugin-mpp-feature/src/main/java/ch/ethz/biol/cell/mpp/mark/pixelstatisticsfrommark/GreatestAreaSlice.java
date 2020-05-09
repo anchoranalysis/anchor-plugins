@@ -40,11 +40,6 @@ import org.anchoranalysis.image.voxel.statistics.VoxelStatistics;
 
 public class GreatestAreaSlice extends IndexedRegionBase {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -3617915321417174160L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
 	private RelationToThreshold threshold;

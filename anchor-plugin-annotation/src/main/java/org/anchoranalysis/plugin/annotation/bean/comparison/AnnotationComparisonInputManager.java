@@ -47,11 +47,6 @@ import org.anchoranalysis.plugin.annotation.comparison.AnnotationComparisonInput
 
 public class AnnotationComparisonInputManager<T extends InputFromManager> extends InputManager<AnnotationComparisonInput<T>> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	// START BEAN PROPERTIES
 	@BeanField
 	private InputManager<T> input;

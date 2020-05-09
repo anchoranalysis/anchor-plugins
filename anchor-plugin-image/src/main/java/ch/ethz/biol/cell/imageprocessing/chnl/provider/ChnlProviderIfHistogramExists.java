@@ -36,11 +36,6 @@ import org.anchoranalysis.image.histogram.Histogram;
 
 public class ChnlProviderIfHistogramExists extends ChnlProvider {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
 	private ChnlProvider chnlProvider;

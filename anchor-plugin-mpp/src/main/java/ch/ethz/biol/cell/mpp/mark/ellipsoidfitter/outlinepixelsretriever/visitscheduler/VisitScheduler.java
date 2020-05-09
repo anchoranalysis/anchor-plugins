@@ -36,11 +36,6 @@ import org.anchoranalysis.image.objmask.ObjMask;
 
 public abstract class VisitScheduler extends NullParamsBean<VisitScheduler> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	public abstract Tuple3i maxDistFromRootPoint(ImageRes res);
 	
 	public abstract void beforeCreateObjMask(RandomNumberGenerator re, ImageRes res) throws InitException;

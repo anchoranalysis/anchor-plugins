@@ -40,11 +40,6 @@ import org.anchoranalysis.image.orientation.Orientation;
 
 public class EllipsoidOrientationRadii extends MarkProposer {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 2076730247530509078L;
-
 	@Override
 	public boolean isCompatibleWith(Mark testMark) {
 		return testMark instanceof MarkEllipsoid;

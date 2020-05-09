@@ -44,11 +44,6 @@ import org.anchoranalysis.image.orientation.Orientation2D;
 
 public class MergeMarkEllipse extends MarkMergeProposer {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 6282040336297831772L;
-
 	// START BEAN
 	@BeanField
 	private MarkProposer markProposer = null;

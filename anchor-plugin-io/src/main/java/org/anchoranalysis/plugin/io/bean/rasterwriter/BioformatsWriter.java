@@ -53,11 +53,6 @@ import loci.formats.out.TiffWriter;
 // Writes a stack to the file system in some manner
 public class BioformatsWriter extends RasterWriter {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	// A default extension
 	@Override
 	public String dfltExt() {

@@ -45,11 +45,6 @@ import org.anchoranalysis.image.objmask.factory.CreateFromEntireChnlFactory;
 // Treats the entire binaryimgchnl as an object, and sees if it passes an ObjMaskFilter
 public class BinaryImgChnlProviderObjMaskRelateFeatures extends BinaryImgChnlProvider {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
 	private BinaryImgChnlProvider binaryImgChnlProviderMain;

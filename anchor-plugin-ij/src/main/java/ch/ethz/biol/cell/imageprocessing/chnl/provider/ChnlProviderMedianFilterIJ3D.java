@@ -37,11 +37,6 @@ import org.anchoranalysis.image.convert.IJWrap;
 
 public class ChnlProviderMedianFilterIJ3D extends ChnlProvider {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
 	private ChnlProvider chnlProvider;

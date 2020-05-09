@@ -44,11 +44,6 @@ import org.anchoranalysis.image.stack.region.chnlconverter.attached.ChnlConverte
 // calculated automatically from the incoming channel, or provided explicitly.
 public class ChnlProviderConverterHistogram extends ChnlProvider {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
 	private ChnlProvider chnlProvider;

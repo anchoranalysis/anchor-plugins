@@ -64,11 +64,6 @@ import org.anchoranalysis.io.output.bound.BoundIOContext;
  */
 public class ExportFeaturesHistogramTask extends ExportFeaturesStoreTask<FileInput,FeatureInputHistogram> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	/** The name of the input histogram made available to histogramProvider */
 	private static final String HISTOGRAM_INPUT_NAME_IN_PROVIDER = "input";
 	

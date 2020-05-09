@@ -38,11 +38,6 @@ import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
 
 public class ChnlProviderMax extends ChnlProviderTwo {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	private static void processVoxelBox( VoxelBoxWrapper vbOut, VoxelBoxWrapper vbIn1, VoxelBoxWrapper vbIn2) {
 
 		for (int z=0; z<vbOut.any().extnt().getZ(); z++) {

@@ -49,11 +49,6 @@ import ch.ethz.biol.cell.imageprocessing.chnl.provider.level.LevelResultCollecti
 
 public class ChnlProviderConnectedComponentScore extends ChnlProvider {
 	
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
 	private ChnlProvider chnlProvider;

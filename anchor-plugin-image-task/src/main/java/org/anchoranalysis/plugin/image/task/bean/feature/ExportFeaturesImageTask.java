@@ -45,11 +45,6 @@ import org.anchoranalysis.plugin.image.task.imagefeature.calculator.FeatureCalcu
 /** Calculates a feature on each image **/
 public class ExportFeaturesImageTask extends ExportFeaturesStoreTask<ProvidesStackInput,FeatureInputStack> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -5961126655531145104L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
 	private StackProvider nrgStackProvider;

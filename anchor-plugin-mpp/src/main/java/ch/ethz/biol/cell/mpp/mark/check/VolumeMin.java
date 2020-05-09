@@ -40,12 +40,6 @@ import org.anchoranalysis.image.unitvalue.UnitValueException;
 
 public class VolumeMin extends CheckMark {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 6398283247337550739L;
-	
-	
 	// START BEAN PROPERTIES
 	@BeanField
 	private UnitValueVolume minVolume;

@@ -39,11 +39,6 @@ import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
 
 public class ChnlProviderMeanThree extends ChnlProviderThree {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	private void processVoxelBox(
 		VoxelBox<ByteBuffer> vbOut,
 		VoxelBox<ByteBuffer> vbIn1,

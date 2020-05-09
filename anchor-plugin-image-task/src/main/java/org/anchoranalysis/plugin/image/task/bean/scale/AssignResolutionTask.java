@@ -59,11 +59,6 @@ import org.anchoranalysis.io.output.bound.BoundIOContext;
 
 public class AssignResolutionTask extends RasterTask {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -2389423680042363560L;
-
 	// START BEAN PROPERTIES
 	@BeanField
 	private boolean rgb = false;

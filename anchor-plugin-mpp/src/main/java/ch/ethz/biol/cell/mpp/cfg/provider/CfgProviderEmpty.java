@@ -33,11 +33,6 @@ import org.anchoranalysis.core.error.CreateException;
 
 public class CfgProviderEmpty extends CfgProvider {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	@Override
 	public Cfg create() throws CreateException {
 		return new Cfg();

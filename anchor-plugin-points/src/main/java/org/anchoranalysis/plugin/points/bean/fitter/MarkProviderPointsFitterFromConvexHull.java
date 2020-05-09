@@ -47,11 +47,6 @@ import ch.ethz.biol.cell.mpp.mark.pointsfitter.ConvexHullUtilities;
 // Only works in 2D for now
 public class MarkProviderPointsFitterFromConvexHull extends MarkProvider {
 	
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
 	private PointsFitterToMark pointsFitter;

@@ -78,11 +78,6 @@ import org.anchoranalysis.plugin.io.multifile.ParsedFilePathBag;
  */
 public class GroupFiles extends InputManager<NamedChnlsInput> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEANS
 	@BeanField
 	private Files fileInput;
