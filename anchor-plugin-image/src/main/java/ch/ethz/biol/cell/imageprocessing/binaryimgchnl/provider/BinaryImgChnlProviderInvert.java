@@ -33,6 +33,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.bean.provider.BinaryImgChnlProvider;
+import org.anchoranalysis.image.bean.provider.BinaryImgChnlProviderOne;
 import org.anchoranalysis.image.binary.BinaryChnl;
 import org.anchoranalysis.image.binary.BinaryChnlInverter;
 import org.anchoranalysis.image.binary.values.BinaryValues;
@@ -41,23 +42,18 @@ import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 
-public class BinaryImgChnlProviderInvert extends BinaryImgChnlProvider {
+public class BinaryImgChnlProviderInvert extends BinaryImgChnlProviderOne {
 
-	// START
-	@BeanField
-	private BinaryImgChnlProvider binaryImgChnlProvider;
-	
+	// START BEAN FIELDS
 	@BeanField @OptionalBean
 	private BinaryImgChnlProvider binaryImgChnlProviderMask;
 	
 	@BeanField
 	private boolean forceChangeBytes = false;
-	// END
+	// END BEAN FIELDS
 
 	@Override
-	public BinaryChnl create() throws CreateException {
-
-		BinaryChnl chnl = binaryImgChnlProvider.create();
+	public BinaryChnl createFromChnl( BinaryChnl chnl ) throws CreateException {
 		
 		if (binaryImgChnlProviderMask!=null) {
 			invertWithMask(chnl, binaryImgChnlProviderMask.create());
@@ -78,9 +74,7 @@ public class BinaryImgChnlProviderInvert extends BinaryImgChnlProvider {
 		BinaryValues bv = chnl.getBinaryValues();
 		BinaryValuesByte bvb = bv.createByte();
 		BinaryValuesByte bvbMask = mask.getBinaryValues().createByte();
-		
-		
-			
+					
 		ObjMask maskLocal = mask.createMaskAvoidNew( new BoundingBox( chnl.getDimensions().getExtnt() ) );
 		
 		VoxelBox<ByteBuffer> vb = chnl.getVoxelBox();
@@ -108,16 +102,6 @@ public class BinaryImgChnlProviderInvert extends BinaryImgChnlProvider {
 				}
 			}
 		}
-			
-		
-	}
-
-	public BinaryImgChnlProvider getBinaryImgChnlProvider() {
-		return binaryImgChnlProvider;
-	}
-
-	public void setBinaryImgChnlProvider(BinaryImgChnlProvider binaryImgChnlProvider) {
-		this.binaryImgChnlProvider = binaryImgChnlProvider;
 	}
 
 	public boolean isForceChangeBytes() {
@@ -136,6 +120,4 @@ public class BinaryImgChnlProviderInvert extends BinaryImgChnlProvider {
 			BinaryImgChnlProvider binaryImgChnlProviderMask) {
 		this.binaryImgChnlProviderMask = binaryImgChnlProviderMask;
 	}
-
-
 }

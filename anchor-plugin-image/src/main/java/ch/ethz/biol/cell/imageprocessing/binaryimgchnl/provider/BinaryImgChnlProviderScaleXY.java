@@ -30,19 +30,16 @@ package ch.ethz.biol.cell.imageprocessing.binaryimgchnl.provider;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.image.bean.provider.BinaryImgChnlProvider;
+import org.anchoranalysis.image.bean.provider.BinaryImgChnlProviderOne;
 import org.anchoranalysis.image.bean.scale.ScaleCalculator;
 import org.anchoranalysis.image.binary.BinaryChnl;
 import org.anchoranalysis.image.interpolator.Interpolator;
 import org.anchoranalysis.image.interpolator.InterpolatorFactory;
 import org.anchoranalysis.image.scale.ScaleFactor;
 
-public class BinaryImgChnlProviderScaleXY extends BinaryImgChnlProvider {
+public class BinaryImgChnlProviderScaleXY extends BinaryImgChnlProviderOne {
 
 	// START BEAN PROPERTIES
-	@BeanField
-	private BinaryImgChnlProvider binaryImgChnlProvider;
-	
 	@BeanField
 	private ScaleCalculator scaleCalculator;
 	
@@ -72,22 +69,10 @@ public class BinaryImgChnlProviderScaleXY extends BinaryImgChnlProvider {
 	}
 
 	@Override
-	public BinaryChnl create() throws CreateException {
-		BinaryChnl chnl = binaryImgChnlProvider.create();
-		
+	public BinaryChnl createFromChnl(BinaryChnl chnl) throws CreateException {
 		Interpolator interpolator = interpolate ? InterpolatorFactory.getInstance().binaryResizing() : InterpolatorFactory.getInstance().noInterpolation();
 		return scale( chnl, scaleCalculator, interpolator );
 	}
-
-	public BinaryImgChnlProvider getBinaryImgChnlProvider() {
-		return binaryImgChnlProvider;
-	}
-
-
-	public void setBinaryImgChnlProvider(BinaryImgChnlProvider binaryImgChnlProvider) {
-		this.binaryImgChnlProvider = binaryImgChnlProvider;
-	}
-
 
 	public ScaleCalculator getScaleCalculator() {
 		return scaleCalculator;
@@ -105,6 +90,4 @@ public class BinaryImgChnlProviderScaleXY extends BinaryImgChnlProvider {
 	public void setInterpolate(boolean interpolate) {
 		this.interpolate = interpolate;
 	}
-
-
 }

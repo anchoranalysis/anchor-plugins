@@ -31,7 +31,7 @@ import java.nio.ByteBuffer;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.image.bean.provider.BinaryImgChnlProvider;
+import org.anchoranalysis.image.bean.provider.BinaryImgChnlProviderOne;
 import org.anchoranalysis.image.bean.provider.ImageDimProvider;
 import org.anchoranalysis.image.binary.BinaryChnl;
 import org.anchoranalysis.image.chnl.Chnl;
@@ -43,20 +43,15 @@ import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
 import ch.ethz.biol.cell.imageprocessing.dim.provider.GuessDimFromInputImage;
 
 // Ors the receiveProvider onto the binaryImgChnlProvider
-public class BinaryImgChnlProviderRepeatSlice extends BinaryImgChnlProvider {
+public class BinaryImgChnlProviderRepeatSlice extends BinaryImgChnlProviderOne {
 
 	// START BEAN PROPERTIES
-	@BeanField
-	private BinaryImgChnlProvider binaryImgChnlProvider;
-	
 	@BeanField
 	private ImageDimProvider dimProvider = new GuessDimFromInputImage();
 	// END BEAN PROPERTIES
 
 	@Override
-	public BinaryChnl create() throws CreateException {
-		
-		BinaryChnl chnl = binaryImgChnlProvider.create();
+	public BinaryChnl createFromChnl(BinaryChnl chnl) throws CreateException {
 		
 		Chnl chnlIn = chnl.getChnl();
 		VoxelBox<ByteBuffer> vbIn = chnlIn.getVoxelBox().asByte();
@@ -83,14 +78,6 @@ public class BinaryImgChnlProviderRepeatSlice extends BinaryImgChnlProvider {
 		}
 		
 		return new BinaryChnl( chnlOut, chnl.getBinaryValues() );
-	}
-
-	public BinaryImgChnlProvider getBinaryImgChnlProvider() {
-		return binaryImgChnlProvider;
-	}
-
-	public void setBinaryImgChnlProvider(BinaryImgChnlProvider binaryImgChnlProvider) {
-		this.binaryImgChnlProvider = binaryImgChnlProvider;
 	}
 
 	public ImageDimProvider getDimProvider() {

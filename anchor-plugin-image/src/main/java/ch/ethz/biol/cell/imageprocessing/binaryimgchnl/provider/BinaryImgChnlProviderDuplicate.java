@@ -27,30 +27,14 @@ package ch.ethz.biol.cell.imageprocessing.binaryimgchnl.provider;
  */
 
 
-import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.image.bean.provider.BinaryImgChnlProvider;
+import org.anchoranalysis.image.bean.provider.BinaryImgChnlProviderOne;
 import org.anchoranalysis.image.binary.BinaryChnl;
 
-public class BinaryImgChnlProviderDuplicate extends BinaryImgChnlProvider {
-
-	// START BEAN
-	@BeanField
-	private BinaryImgChnlProvider binaryImgChnlProvider;
-	// END BEAN
+public class BinaryImgChnlProviderDuplicate extends BinaryImgChnlProviderOne {
 
 	@Override
-	public BinaryChnl create() throws CreateException {
-		return binaryImgChnlProvider.create().duplicate();
+	public BinaryChnl createFromChnl(BinaryChnl chnl) throws CreateException {
+		return chnl.duplicate();
 	}
-
-	public BinaryImgChnlProvider getBinaryImgChnlProvider() {
-		return binaryImgChnlProvider;
-	}
-
-	public void setBinaryImgChnlProvider(BinaryImgChnlProvider binaryImgChnlProvider) {
-		this.binaryImgChnlProvider = binaryImgChnlProvider;
-	}
-
-
 }

@@ -30,6 +30,7 @@ package ch.ethz.biol.cell.imageprocessing.chnl.provider;
 import java.nio.ByteBuffer;
 
 import org.anchoranalysis.core.error.CreateException;
+import org.anchoranalysis.image.bean.provider.ChnlProviderTwo;
 import org.anchoranalysis.image.chnl.Chnl;
 import org.anchoranalysis.image.chnl.factory.ChnlFactory;
 import org.anchoranalysis.image.convert.ByteConverter;

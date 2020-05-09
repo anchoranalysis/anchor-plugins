@@ -32,18 +32,16 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.bean.objmask.filter.ObjMaskFilter;
 import org.anchoranalysis.image.bean.provider.BinaryImgChnlProvider;
+import org.anchoranalysis.image.bean.provider.BinaryImgChnlProviderOne;
 import org.anchoranalysis.image.binary.BinaryChnl;
 import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.image.objmask.ObjMaskCollection;
 import org.anchoranalysis.image.objmask.factory.CreateFromEntireChnlFactory;
 
 // Treats the entire binaryimgchnl as an object, and sees if it passes an ObjMaskFilter
-public class BinaryImgChnlProviderObjMaskFilterAsChnl extends BinaryImgChnlProvider {
+public class BinaryImgChnlProviderObjMaskFilterAsChnl extends BinaryImgChnlProviderOne {
 
 	// START BEAN PROPERTIES
-	@BeanField
-	private BinaryImgChnlProvider binaryImgChnlProvider;
-	
 	@BeanField
 	private BinaryImgChnlProvider binaryImgChnlProviderElse;
 	
@@ -52,9 +50,7 @@ public class BinaryImgChnlProviderObjMaskFilterAsChnl extends BinaryImgChnlProvi
 	// END BEAN PROPERTIES
 	
 	@Override
-	public BinaryChnl create() throws CreateException {
-
-		BinaryChnl chnl = binaryImgChnlProvider.create();
+	public BinaryChnl createFromChnl(BinaryChnl chnl) throws CreateException {
 		
 		ObjMask om = CreateFromEntireChnlFactory.createObjMask( chnl );
 		
@@ -71,14 +67,6 @@ public class BinaryImgChnlProviderObjMaskFilterAsChnl extends BinaryImgChnlProvi
 		} else {
 			return binaryImgChnlProviderElse.create();
 		}
-	}
-
-	public BinaryImgChnlProvider getBinaryImgChnlProvider() {
-		return binaryImgChnlProvider;
-	}
-
-	public void setBinaryImgChnlProvider(BinaryImgChnlProvider binaryImgChnlProvider) {
-		this.binaryImgChnlProvider = binaryImgChnlProvider;
 	}
 
 	public BinaryImgChnlProvider getBinaryImgChnlProviderElse() {

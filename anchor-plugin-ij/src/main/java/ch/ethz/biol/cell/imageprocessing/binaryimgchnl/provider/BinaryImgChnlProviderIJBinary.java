@@ -37,19 +37,16 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.Positive;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.image.bean.provider.BinaryImgChnlProvider;
+import org.anchoranalysis.image.bean.provider.BinaryImgChnlProviderOne;
 import org.anchoranalysis.image.binary.BinaryChnl;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
 import org.anchoranalysis.image.chnl.factory.ChnlFactory;
 import org.anchoranalysis.image.convert.IJWrap;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
 
-public class BinaryImgChnlProviderIJBinary extends BinaryImgChnlProvider {
+public class BinaryImgChnlProviderIJBinary extends BinaryImgChnlProviderOne {
 
 	// START BEAN PROPERTIES
-	@BeanField
-	private BinaryImgChnlProvider binaryImgChnlProvider;
-	
 	@BeanField
 	private String command = "";		// One of: open, close, fill, erode, dilate, skel, outline
 	
@@ -88,8 +85,7 @@ public class BinaryImgChnlProviderIJBinary extends BinaryImgChnlProvider {
 	}
 	
 	@Override
-	public BinaryChnl create() throws CreateException {
-		BinaryChnl binaryChnl = binaryImgChnlProvider.create();
+	public BinaryChnl createFromChnl( BinaryChnl binaryChnl ) throws CreateException {
 		
 		BinaryVoxelBox<ByteBuffer> bvb = binaryChnl.binaryVoxelBox();
 		
@@ -119,13 +115,5 @@ public class BinaryImgChnlProviderIJBinary extends BinaryImgChnlProvider {
 
 	public void setIterations(int iterations) {
 		this.iterations = iterations;
-	}
-
-	public BinaryImgChnlProvider getBinaryImgChnlProvider() {
-		return binaryImgChnlProvider;
-	}
-
-	public void setBinaryImgChnlProvider(BinaryImgChnlProvider binaryImgChnlProvider) {
-		this.binaryImgChnlProvider = binaryImgChnlProvider;
 	}
 }

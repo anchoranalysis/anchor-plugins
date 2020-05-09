@@ -30,14 +30,12 @@ package ch.ethz.biol.cell.imageprocessing.binaryimgchnl.provider;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.bean.provider.BinaryImgChnlProvider;
+import org.anchoranalysis.image.bean.provider.BinaryImgChnlProviderOne;
 import org.anchoranalysis.image.binary.BinaryChnl;
 
-public class BinaryImgChnlProviderAcceptIfVolumeGreaterThan extends BinaryImgChnlProvider {
+public class BinaryImgChnlProviderAcceptIfVolumeGreaterThan extends BinaryImgChnlProviderOne {
 
 	// START BEAN PROPERTIES
-	@BeanField
-	private BinaryImgChnlProvider binaryImgChnlProvider;
-	
 	@BeanField
 	private BinaryImgChnlProvider receiveProvider;
 	
@@ -46,9 +44,8 @@ public class BinaryImgChnlProviderAcceptIfVolumeGreaterThan extends BinaryImgChn
 	// END BEAN PROPERTIES
 
 	@Override
-	public BinaryChnl create() throws CreateException {
+	public BinaryChnl createFromChnl(BinaryChnl larger) throws CreateException {
 
-		BinaryChnl larger = binaryImgChnlProvider.create();
 		BinaryChnl smaller = receiveProvider.create();
 		
 		int countLarger = larger.countHighValues();
@@ -61,14 +58,6 @@ public class BinaryImgChnlProviderAcceptIfVolumeGreaterThan extends BinaryImgChn
 		} else {
 			return larger;
 		}
-	}
-
-	public BinaryImgChnlProvider getBinaryImgChnlProvider() {
-		return binaryImgChnlProvider;
-	}
-
-	public void setBinaryImgChnlProvider(BinaryImgChnlProvider binaryImgChnlProvider) {
-		this.binaryImgChnlProvider = binaryImgChnlProvider;
 	}
 
 	public BinaryImgChnlProvider getReceiveProvider() {

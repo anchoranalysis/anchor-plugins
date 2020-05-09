@@ -32,7 +32,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.bean.annotation.Positive;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.image.bean.provider.BinaryImgChnlProvider;
+import org.anchoranalysis.image.bean.provider.BinaryImgChnlProviderOne;
 import org.anchoranalysis.image.bean.provider.ChnlProvider;
 import org.anchoranalysis.image.binary.BinaryChnl;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
@@ -40,12 +40,9 @@ import org.anchoranalysis.image.voxel.box.VoxelBox;
 /**
  * Base class for performing morphological operations
  */
-public abstract class BinaryImgChnlProviderMorphOp extends BinaryImgChnlProvider {
+public abstract class BinaryImgChnlProviderMorphOp extends BinaryImgChnlProviderOne {
 
 	// START PROPERTIES
-	@BeanField
-	private BinaryImgChnlProvider binaryImgChnlProvider;
-	
 	@BeanField @OptionalBean
 	private ChnlProvider backgroundChnlProvider;
 	
@@ -62,9 +59,7 @@ public abstract class BinaryImgChnlProviderMorphOp extends BinaryImgChnlProvider
 	protected abstract void applyMorphOp( BinaryChnl imgChnl, boolean do3D ) throws CreateException;
 	
 	@Override
-	public BinaryChnl create() throws CreateException {
-
-		BinaryChnl chnl = binaryImgChnlProvider.create();
+	public BinaryChnl createFromChnl( BinaryChnl chnl ) throws CreateException {
 		
 		// Gets outline
 		applyMorphOp( chnl, (chnl.getDimensions().getZ() > 1)&&!suppress3D );
@@ -79,14 +74,6 @@ public abstract class BinaryImgChnlProviderMorphOp extends BinaryImgChnlProvider
 		} else {
 			return null;
 		}
-	}
-	
-	public BinaryImgChnlProvider getBinaryImgChnlProvider() {
-		return binaryImgChnlProvider;
-	}
-
-	public void setBinaryImgChnlProvider(BinaryImgChnlProvider binaryImgChnlProvider) {
-		this.binaryImgChnlProvider = binaryImgChnlProvider;
 	}
 
 	public int getIterations() {
