@@ -36,29 +36,26 @@ import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.image.objmask.factory.CreateFromEntireChnlFactory;
 
 /** Assigns a scalar to the portion of the image covered by a mask */
-public class ChnlProviderAssignScalar extends ChnlProviderOne {
+public class ChnlProviderAssignScalar extends ChnlProviderOneValue {
 
 	// START BEAN PROPERTIES
-	@BeanField
-	private int value;
-	
 	@BeanField
 	private BinaryImgChnlProvider maskProvider;
 	// END BEAN PROPERTIES
 		
 	@Override
-	public Chnl createFromChnl(Chnl chnlSrc) throws CreateException {
+	public Chnl createFromChnlValue(Chnl chnlSrc, double value) throws CreateException {
 		
 		BinaryChnl binaryImgChnl = maskProvider.create();
 		
 		AssignUtilities.checkDims( chnlSrc, binaryImgChnl );
 		
-		assignScalar( chnlSrc, binaryImgChnl );
+		assignScalar( chnlSrc, binaryImgChnl, (int) value);
 		
 		return chnlSrc;
 	}
 	
-	private void assignScalar(Chnl chnlSrc, BinaryChnl mask) throws CreateException {
+	private void assignScalar(Chnl chnlSrc, BinaryChnl mask, int value) throws CreateException {
 		ObjMask om = CreateFromEntireChnlFactory.createObjMask(mask);
 		chnlSrc.getVoxelBox().any().setPixelsCheckMask(om, value);		
 	}
@@ -69,13 +66,5 @@ public class ChnlProviderAssignScalar extends ChnlProviderOne {
 
 	public void setMaskProvider(BinaryImgChnlProvider maskProvider) {
 		this.maskProvider = maskProvider;
-	}
-
-	public int getValue() {
-		return value;
-	}
-
-	public void setValue(int value) {
-		this.value = value;
 	}
 }

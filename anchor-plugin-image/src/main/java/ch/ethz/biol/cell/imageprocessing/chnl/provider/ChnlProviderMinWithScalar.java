@@ -27,21 +27,21 @@ package ch.ethz.biol.cell.imageprocessing.chnl.provider;
  */
 
 
-import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.chnl.Chnl;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 
-public class ChnlProviderMinWithScalar extends ChnlProviderOne {
+public class ChnlProviderMinWithScalar extends ChnlProviderOneValue {
 
-	// START BEAN PROPERTIES
-	@BeanField
-	private double value;
-	// END BEAN PROPERTIES
+	@Override
+	public Chnl createFromChnlValue(Chnl chnl, double value) throws CreateException {
+		processVoxelBox( chnl.getVoxelBox().any(), value );
+		return chnl;
+	}
 	
-	private void processVoxelBox( VoxelBox<?> vb, double value ) {
+	private static void processVoxelBox( VoxelBox<?> vb, double value ) {
 
 		int valueInt = (int) Math.floor(value);
 		
@@ -59,21 +59,5 @@ public class ChnlProviderMinWithScalar extends ChnlProviderOne {
 				}
 			}
 		}
-	}
-	
-
-	@Override
-	public Chnl createFromChnl(Chnl chnl) throws CreateException {
-		processVoxelBox( chnl.getVoxelBox().any(), value );
-		
-		return chnl;
-	}
-
-	public double getValue() {
-		return value;
-	}
-
-	public void setValue(double value) {
-		this.value = value;
 	}
 }

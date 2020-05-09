@@ -38,17 +38,14 @@ import org.anchoranalysis.image.convert.ByteConverter;
 import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 
-public class ChnlProviderAddConstant extends ChnlProviderOne {
+public class ChnlProviderAddConstant extends ChnlProviderOneValue {
 
 	private static ChnlFactorySingleType factory = new ChnlFactoryByte();
-	
-	// START BEAN PROPERTIES
-	@BeanField
-	private int value;
-	// END BEAN PROPERTIES
 
 	@Override
-	public Chnl createFromChnl(Chnl chnl) throws CreateException {
+	public Chnl createFromChnlValue(Chnl chnl, double value) throws CreateException {
+		
+		int valueInt = (int) value;
 		
 		VoxelBox<ByteBuffer> vb = chnl.getVoxelBox().asByte();
 		
@@ -68,7 +65,7 @@ public class ChnlProviderAddConstant extends ChnlProviderOne {
 				
 				byte b1 = in1.get();
 				
-				int mult = ByteConverter.unsignedByteToInt(b1) + value;
+				int mult = ByteConverter.unsignedByteToInt(b1) + valueInt;
 				
 				if (mult<0) {
 					mult=0;
@@ -85,14 +82,6 @@ public class ChnlProviderAddConstant extends ChnlProviderOne {
 		}
 
 		return chnlOut;
-	}
-	
-	public int getValue() {
-		return value;
-	}
-
-	public void setValue(int value) {
-		this.value = value;
 	}
 
 }
