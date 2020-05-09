@@ -27,10 +27,9 @@ package ch.ethz.biol.cell.imageprocessing.objmask.provider;
  */
 
 
-import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
+import org.anchoranalysis.image.bean.provider.ObjMaskProviderOne;
 import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.image.objmask.ObjMaskCollection;
 
@@ -40,17 +39,10 @@ import org.anchoranalysis.image.objmask.ObjMaskCollection;
  * @author Owen Feehan
  *
  */
-public class ObjMaskProviderRejectIfNotConnected extends ObjMaskProvider {
-
-	// START BEAN PROPERTIES
-	@BeanField
-	private ObjMaskProvider objs;
-	// END BEAN PROPERTIES
+public class ObjMaskProviderRejectIfNotConnected extends ObjMaskProviderOne {
 
 	@Override
-	public ObjMaskCollection create() throws CreateException {
-
-		ObjMaskCollection objsCollection = objs.create();
+	public ObjMaskCollection createFromObjs(ObjMaskCollection objsCollection) throws CreateException {
 		
 		for( ObjMask om : objsCollection ) {
 			try {
@@ -64,13 +56,4 @@ public class ObjMaskProviderRejectIfNotConnected extends ObjMaskProvider {
 		
 		return objsCollection;
 	}
-
-	public ObjMaskProvider getObjs() {
-		return objs;
-	}
-
-	public void setObjs(ObjMaskProvider objs) {
-		this.objs = objs;
-	}
-
 }

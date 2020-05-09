@@ -36,7 +36,7 @@ import org.anchoranalysis.core.geometry.Point2i;
 import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.core.geometry.PointConverter;
 import org.anchoranalysis.image.bean.provider.ImageDimProvider;
-import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
+import org.anchoranalysis.image.bean.provider.ObjMaskProviderOne;
 import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.image.objmask.ObjMaskCollection;
@@ -53,28 +53,24 @@ import ch.ethz.biol.cell.mpp.mark.pointsfitter.ConvexHullUtilities;
  * @author feehano
  *
  */
-public class ObjMaskProviderConvexHullConnectLines extends ObjMaskProvider {
+public class ObjMaskProviderConvexHullConnectLines extends ObjMaskProviderOne {
 
 	// START BEAN PROPERTIES
-	@BeanField
-	private ObjMaskProvider objs;
-	
 	@BeanField
 	private ImageDimProvider dimProvider;
 	// END BEAN PROPERTIES
 	
 	@Override
-	public ObjMaskCollection create() throws CreateException {
+	public ObjMaskCollection createFromObjs( ObjMaskCollection objsCollection ) throws CreateException {
 
 		ImageDim sd = dimProvider.create();
-		
-		ObjMaskCollection objsCollection = objs.create();
 		
 		ObjMaskCollection out = new ObjMaskCollection();
 		
 		for( ObjMask obj : objsCollection ) {
-			ObjMask polygon = transform(obj, sd);
-			out.add(polygon);
+			out.add(
+				transform(obj, sd)
+			);
 		}
 		
 		return out;
@@ -97,14 +93,6 @@ public class ObjMaskProviderConvexHullConnectLines extends ObjMaskProvider {
 		}
 	}
 
-	public ObjMaskProvider getObjs() {
-		return objs;
-	}
-
-	public void setObjs(ObjMaskProvider objs) {
-		this.objs = objs;
-	}
-
 	public ImageDimProvider getDimProvider() {
 		return dimProvider;
 	}
@@ -112,5 +100,4 @@ public class ObjMaskProviderConvexHullConnectLines extends ObjMaskProvider {
 	public void setDimProvider(ImageDimProvider dimProvider) {
 		this.dimProvider = dimProvider;
 	}
-
 }

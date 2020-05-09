@@ -33,26 +33,20 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.bean.objmask.match.ObjMaskMatcher;
-import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
+import org.anchoranalysis.image.bean.provider.ObjMaskProviderOne;
 import org.anchoranalysis.image.objmask.ObjMaskCollection;
 import org.anchoranalysis.image.objmask.match.ObjWithMatches;
 
-public class ObjMaskProviderMatch extends ObjMaskProvider {
+public class ObjMaskProviderMatch extends ObjMaskProviderOne {
 
 	// START BEAN PROPERTIES
-	@BeanField
-	private ObjMaskProvider objs;
-	
 	@BeanField
 	private ObjMaskMatcher objMaskMatcher;
 	// END BEAN PROPERTIES
 	
 	@Override
-	public ObjMaskCollection create() throws CreateException {
-
+	public ObjMaskCollection createFromObjs(ObjMaskCollection in) throws CreateException {
 		try {
-			ObjMaskCollection in = objs.create();
-					
 			List<ObjWithMatches> matches = objMaskMatcher.findMatch( in );
 			
 			ObjMaskCollection out = new ObjMaskCollection();
@@ -66,14 +60,6 @@ public class ObjMaskProviderMatch extends ObjMaskProvider {
 		}
 	}
 
-	public ObjMaskProvider getObjs() {
-		return objs;
-	}
-
-	public void setObjs(ObjMaskProvider objs) {
-		this.objs = objs;
-	}
-
 	public ObjMaskMatcher getObjMaskMatcher() {
 		return objMaskMatcher;
 	}
@@ -81,7 +67,4 @@ public class ObjMaskProviderMatch extends ObjMaskProvider {
 	public void setObjMaskMatcher(ObjMaskMatcher objMaskMatcher) {
 		this.objMaskMatcher = objMaskMatcher;
 	}
-
-	
-	
 }

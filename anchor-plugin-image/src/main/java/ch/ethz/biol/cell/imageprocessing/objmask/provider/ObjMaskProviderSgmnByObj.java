@@ -30,19 +30,16 @@ package ch.ethz.biol.cell.imageprocessing.objmask.provider;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.bean.provider.ChnlProvider;
-import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
+import org.anchoranalysis.image.bean.provider.ObjMaskProviderOne;
 import org.anchoranalysis.image.bean.sgmn.objmask.ObjMaskSgmn;
 import org.anchoranalysis.image.chnl.Chnl;
 import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.image.objmask.ObjMaskCollection;
 import org.anchoranalysis.image.sgmn.SgmnFailedException;
 
-public class ObjMaskProviderSgmnByObj extends ObjMaskProvider {
+public class ObjMaskProviderSgmnByObj extends ObjMaskProviderOne {
 
 	// START BEAN PROPERTIES
-	@BeanField
-	private ObjMaskProvider objs;
-	
 	@BeanField
 	private ObjMaskSgmn sgmn;
 	
@@ -51,11 +48,9 @@ public class ObjMaskProviderSgmnByObj extends ObjMaskProvider {
 	// END BEAN PROPERTIES
 
 	@Override
-	public ObjMaskCollection create() throws CreateException {
+	public ObjMaskCollection createFromObjs( ObjMaskCollection objsSrc ) throws CreateException {
 
 		Chnl chnl = chnlProvider.create();
-		
-		ObjMaskCollection objsSrc = objs.create();
 		
 		ObjMaskCollection objsOut = new ObjMaskCollection();
 		
@@ -79,8 +74,6 @@ public class ObjMaskProviderSgmnByObj extends ObjMaskProvider {
 		this.chnlProvider = chnlProvider;
 	}
 
-
-
 	public ObjMaskSgmn getSgmn() {
 		return sgmn;
 	}
@@ -88,14 +81,4 @@ public class ObjMaskProviderSgmnByObj extends ObjMaskProvider {
 	public void setSgmn(ObjMaskSgmn sgmn) {
 		this.sgmn = sgmn;
 	}
-
-	public ObjMaskProvider getObjs() {
-		return objs;
-	}
-
-	public void setObjs(ObjMaskProvider objs) {
-		this.objs = objs;
-	}
-
-
 }

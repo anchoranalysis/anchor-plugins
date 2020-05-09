@@ -34,6 +34,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
+import org.anchoranalysis.image.bean.provider.ObjMaskProviderOne;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.Extent;
@@ -44,20 +45,15 @@ import org.anchoranalysis.image.objmask.match.ObjWithMatches;
 import ch.ethz.biol.cell.imageprocessing.objmask.matching.ObjMaskMatchUtilities;
 
 // Extends an object as much as it can within the z-slices of a containing object
-public class ObjMaskProviderExtendInZ extends ObjMaskProvider {
+public class ObjMaskProviderExtendInZ extends ObjMaskProviderOne {
 
 	// START BEAN PROPERTIES
-	@BeanField
-	private ObjMaskProvider objs;
-	
 	@BeanField
 	private ObjMaskProvider objsContainer;
 	// END BEAN PROPERTIES
 
 	@Override
-	public ObjMaskCollection create() throws CreateException {
-		
-		ObjMaskCollection objsSource = objs.create();
+	public ObjMaskCollection createFromObjs(ObjMaskCollection objsSource) throws CreateException {
 		
 		// To avoid changing the original
 		ObjMaskCollection objs = new ObjMaskCollection();
@@ -65,8 +61,6 @@ public class ObjMaskProviderExtendInZ extends ObjMaskProvider {
 
 		ObjMaskCollection out = new ObjMaskCollection();
 		
-		
-			
 		ObjMaskCollection containerObjs = objsContainer.create();
 			
 		List<ObjWithMatches> matchList = ObjMaskMatchUtilities.matchIntersectingObjects( containerObjs, objs );
@@ -226,24 +220,13 @@ public class ObjMaskProviderExtendInZ extends ObjMaskProvider {
 		return omNew; 
 	}
 
-	public ObjMaskProvider getObjs() {
-		return objs;
-	}
-
-	public void setObjs(ObjMaskProvider objs) {
-		this.objs = objs;
-	}
-
-
 	public ObjMaskProvider getObjsContainer() {
 		return objsContainer;
 	}
 
-
 	public void setObjsContainer(ObjMaskProvider objsContainer) {
 		this.objsContainer = objsContainer;
 	}
-
 
 	// Merges small obj mask provider objets togehter
 }

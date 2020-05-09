@@ -29,7 +29,7 @@ package ch.ethz.biol.cell.imageprocessing.histogram.provider;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.image.bean.provider.HistogramProvider;
+import org.anchoranalysis.image.bean.provider.HistogramProviderOne;
 import org.anchoranalysis.image.histogram.Histogram;
 
 /**
@@ -41,12 +41,9 @@ import org.anchoranalysis.image.histogram.Histogram;
  * @author FEEHANO
  *
  */
-public class HistogramProviderBelow extends HistogramProvider {
+public class HistogramProviderBelow extends HistogramProviderOne {
 
 	// START BEAN PROPERTIES
-	@BeanField
-	private HistogramProvider histogramProvider;
-	
 	@BeanField
 	private int threshold = 0;
 	
@@ -55,22 +52,12 @@ public class HistogramProviderBelow extends HistogramProvider {
 	// END BEAN PROPERTIES
 
 	@Override
-	public Histogram create() throws CreateException {
-
-		Histogram h = histogramProvider.create();
+	public Histogram createFromHistogram(Histogram h) throws CreateException {
 		
 		for( int i=threshold; i<=h.getMaxBin(); i++) {
 			h.transferVal(i,threshold-1);
 		}
 		return h;
-	}
-
-	public HistogramProvider getHistogramProvider() {
-		return histogramProvider;
-	}
-
-	public void setHistogramProvider(HistogramProvider histogramProvider) {
-		this.histogramProvider = histogramProvider;
 	}
 
 	public int getThreshold() {

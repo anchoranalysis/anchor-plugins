@@ -30,10 +30,11 @@ package ch.ethz.biol.cell.imageprocessing.objmask.provider;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
+import org.anchoranalysis.image.bean.provider.ObjMaskProviderOne;
 import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.image.objmask.ObjMaskCollection;
 
-public class ObjMaskProviderFlattenZ extends ObjMaskProvider {
+public class ObjMaskProviderFlattenZ extends ObjMaskProviderOne {
 
 	// START BEAN PROPERTIES
 	@BeanField
@@ -41,9 +42,7 @@ public class ObjMaskProviderFlattenZ extends ObjMaskProvider {
 	// END BEAN PROPERTIES
 
 	@Override
-	public ObjMaskCollection create() throws CreateException {
-		
-		ObjMaskCollection in = objs.create();
+	public ObjMaskCollection createFromObjs( ObjMaskCollection in ) throws CreateException {
 		
 		ObjMaskCollection out = new ObjMaskCollection();
 		
@@ -53,13 +52,4 @@ public class ObjMaskProviderFlattenZ extends ObjMaskProvider {
 		
 		return out;
 	}
-
-	public ObjMaskProvider getObjs() {
-		return objs;
-	}
-
-	public void setObjs(ObjMaskProvider objs) {
-		this.objs = objs;
-	}
-
 }
