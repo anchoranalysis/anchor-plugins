@@ -41,11 +41,6 @@ import org.anchoranalysis.feature.input.FeatureInput;
  */
 public class Mean<T extends FeatureInput> extends FeatureListElem<T> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	@Override
 	public double calc( SessionInput<T> input ) throws FeatureCalcException {
 		

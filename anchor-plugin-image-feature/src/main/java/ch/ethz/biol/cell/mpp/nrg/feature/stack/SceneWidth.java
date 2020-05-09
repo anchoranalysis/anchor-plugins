@@ -34,11 +34,6 @@ import org.anchoranalysis.image.feature.stack.FeatureInputStack;
 
 public class SceneWidth extends FeatureStack {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	@Override
 	public double calc(SessionInput<FeatureInputStack> input) throws FeatureCalcException {
 		return input.get().getDimensionsRequired().getX();

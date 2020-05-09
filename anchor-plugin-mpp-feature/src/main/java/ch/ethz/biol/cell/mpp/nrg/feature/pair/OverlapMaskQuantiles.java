@@ -35,11 +35,6 @@ import ch.ethz.biol.cell.mpp.nrg.cachedcalculation.OverlapCalculationMaskGlobalM
 
 public abstract class OverlapMaskQuantiles extends OverlapMaskSingleRegion {
 	
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	// START BEAN PROPERTIES
 	@BeanField
 	private double quantileLow = 0;

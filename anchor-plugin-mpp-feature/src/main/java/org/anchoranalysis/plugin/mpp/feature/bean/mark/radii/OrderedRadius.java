@@ -37,11 +37,6 @@ import org.anchoranalysis.feature.calc.FeatureCalcException;
 
 public class OrderedRadius extends FeatureMark {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
 	private int index;

@@ -12,11 +12,6 @@ import org.anchoranalysis.plugin.operator.feature.bean.FeatureGenericWithValue;
  */
 public abstract class ReplaceUnusualValue<T extends FeatureInput> extends FeatureGenericWithValue<T> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	@Override
 	protected double combineValueAndFeature(double value, double featureResult) {
 		if (!isResultUnusual(featureResult)) {

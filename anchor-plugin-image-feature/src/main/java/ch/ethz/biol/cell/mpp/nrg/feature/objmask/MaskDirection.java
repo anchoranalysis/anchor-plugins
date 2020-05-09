@@ -34,11 +34,6 @@ import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
 
 public class MaskDirection extends ObjMaskPointsSpecificEigenvalueBase {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
 	private int eigenvectorIndex = 0;

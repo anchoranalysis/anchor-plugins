@@ -38,11 +38,6 @@ import org.anchoranalysis.plugin.image.calculation.CalculateShellObjMask;
 
 public class Shell extends DerivedObjMask {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	// START BEAN PROPERTIES
 	@BeanField
 	private int iterationsDilation = 0;

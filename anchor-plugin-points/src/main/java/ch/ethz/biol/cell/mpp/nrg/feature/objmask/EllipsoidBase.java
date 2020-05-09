@@ -37,11 +37,6 @@ import org.anchoranalysis.plugin.points.calculate.ellipsoid.CalculateEllipsoidLe
 
 public abstract class EllipsoidBase extends FeatureObjMask {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PROPERTIES
 	/** Iff true, Supresses covariance in the z-direction. */
 	@BeanField

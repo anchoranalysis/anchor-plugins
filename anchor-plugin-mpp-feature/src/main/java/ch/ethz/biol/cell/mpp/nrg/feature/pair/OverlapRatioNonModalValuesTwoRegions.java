@@ -39,11 +39,6 @@ import ch.ethz.biol.cell.mpp.nrg.cachedcalculation.OverlapCalculation;
 
 public class OverlapRatioNonModalValuesTwoRegions extends FeaturePairMemo {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
 	private int regionID1 = GlobalRegionIdentifiers.SUBMARK_INSIDE;

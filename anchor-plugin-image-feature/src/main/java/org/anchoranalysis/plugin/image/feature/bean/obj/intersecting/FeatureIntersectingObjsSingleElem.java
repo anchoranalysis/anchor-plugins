@@ -44,12 +44,6 @@ import org.anchoranalysis.image.objmask.ObjMaskCollection;
 public abstract class FeatureIntersectingObjsSingleElem extends FeatureIntersectingObjs {
 
 	
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
-
 	// START BEAN PROPERTIES
 	@BeanField
 	private Feature<FeatureInputPairObjs> item;

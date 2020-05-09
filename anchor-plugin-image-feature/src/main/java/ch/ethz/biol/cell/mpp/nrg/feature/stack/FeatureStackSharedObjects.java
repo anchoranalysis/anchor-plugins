@@ -34,11 +34,6 @@ import org.anchoranalysis.image.feature.stack.FeatureInputStackDescriptor;
 
 public abstract class FeatureStackSharedObjects extends FeatureSharedObjs<FeatureInputStack> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	@Override
 	public FeatureInputDescriptor paramType() throws FeatureCalcException {
 		return FeatureInputStackDescriptor.instance;

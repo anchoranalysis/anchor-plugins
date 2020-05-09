@@ -33,11 +33,6 @@ import org.anchoranalysis.image.extent.ImageDim;
 
 public class ResolutionExtent extends FeatureStackForAxis {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	@Override
 	protected double calcForAxis(ImageDim dim, AxisType axis) {
 		return dim.getRes().getValueByDimension(axis);

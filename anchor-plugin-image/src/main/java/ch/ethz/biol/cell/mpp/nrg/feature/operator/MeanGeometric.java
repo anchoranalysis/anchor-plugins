@@ -39,11 +39,6 @@ import org.apache.commons.math3.stat.descriptive.moment.GeometricMean;
 // Geometric mean
 public class MeanGeometric<T extends FeatureInput> extends FeatureListElem<T> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	private GeometricMean meanCalculator = new GeometricMean();
 	
 	@Override

@@ -35,11 +35,6 @@ import org.anchoranalysis.feature.calc.FeatureCalcException;
 
 public class MinFeatureAsIndividual extends NRGElemPairWithFeature {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	private static final ChildCacheName CACHE_NAME_FIRST = new ChildCacheName(MinFeatureAsIndividual.class, "first");
 	private static final ChildCacheName CACHE_NAME_SECOND = new ChildCacheName(MinFeatureAsIndividual.class, "second");
 	

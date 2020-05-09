@@ -33,11 +33,6 @@ import org.anchoranalysis.feature.resultsvectorcollection.FeatureInputResults;
 
 public class Size extends FeatureResults {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	@Override
 	public double calc(FeatureInputResults params)
 			throws FeatureCalcException {

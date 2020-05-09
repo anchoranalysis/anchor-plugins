@@ -34,11 +34,6 @@ import org.anchoranalysis.image.histogram.Histogram;
 /*** The mean of the intensity raised to power */
 public class MeanRaisedToPower extends FeatureHistogramStatistic {
 	
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	// START BEAN PROPERTIES
 	private double power = 1.0;
 	// END BEAN PROPERTIES

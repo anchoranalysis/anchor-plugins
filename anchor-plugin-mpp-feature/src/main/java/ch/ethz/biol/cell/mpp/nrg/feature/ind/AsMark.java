@@ -38,11 +38,6 @@ import org.anchoranalysis.feature.input.descriptor.FeatureInputDescriptor;
 
 public class AsMark extends FeatureSingleElem<FeatureInputSingleMemo,FeatureInputMark> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	private static final ChildCacheName CACHE_NAME = new ChildCacheName(AsMark.class);
 	
 	@Override

@@ -43,11 +43,6 @@ import org.anchoranalysis.feature.input.FeatureInput;
  */
 public class InvertedMax<T extends FeatureInput> extends FeatureGenericSingleElem<T> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PARAMETERS
 	@BeanField
 	private double max = 100;

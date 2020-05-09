@@ -40,11 +40,6 @@ import ch.ethz.biol.cell.mpp.nrg.cachedcalculation.OverlapMIPCalculation;
 
 public class Overlap extends FeaturePairMemo {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
 	private int regionID = GlobalRegionIdentifiers.SUBMARK_INSIDE;

@@ -21,11 +21,6 @@ import org.anchoranalysis.feature.input.FeatureInput;
  */
 public class IfCondition<T extends FeatureInput> extends FeatureGenericSingleElem<T> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	// START BEAN PROPERTIRES
 	@BeanField
 	private Feature<T> featureCondition;

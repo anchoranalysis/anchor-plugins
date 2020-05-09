@@ -45,11 +45,6 @@ import org.anchoranalysis.feature.input.FeatureInput;
  */
 public class Range<T extends FeatureInput> extends FeatureDoubleElem<T> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	// START BEAN PROPERTIES
 	@BeanField
 	private double weightItem1Greater = 1.0;

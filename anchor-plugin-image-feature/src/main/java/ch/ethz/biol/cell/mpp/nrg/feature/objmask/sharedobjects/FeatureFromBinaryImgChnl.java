@@ -49,11 +49,6 @@ import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
  */
 public class FeatureFromBinaryImgChnl extends FeatureObjMaskSharedObjects {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
 	private FeatureObjMaskPair item;

@@ -52,11 +52,6 @@ import org.anchoranalysis.plugin.image.calculation.CalculateShellObjMask;
  */
 public abstract class IntensityMeanShellBase extends FeatureNrgChnl {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	// START BEAN PROPERTIES
 	@BeanField @NonNegative
 	private int iterationsErosion = 0;

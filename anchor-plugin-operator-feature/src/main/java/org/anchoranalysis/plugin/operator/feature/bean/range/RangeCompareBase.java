@@ -9,11 +9,6 @@ import org.anchoranalysis.feature.input.FeatureInput;
 
 public abstract class RangeCompareBase<T extends FeatureInput> extends FeatureGenericSingleElem<T> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	// START BEAN PROPERTIES
 	/** Constant to return if outside the range (below the minimum allowed) */
 	@BeanField

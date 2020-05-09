@@ -43,11 +43,6 @@ import ch.ethz.biol.cell.mpp.mark.pixelstatisticsfrommark.PixelStatisticsFromMar
 // Number of unique pixel values 
 public class NumberUniquePixelValues extends FeatureSingleMemo {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	// START BEAN
 	@BeanField
 	private PixelStatisticsFromMark pixelList;

@@ -39,11 +39,6 @@ import org.anchoranalysis.feature.calc.FeatureCalcException;
 
 public class OverlapRatioTwoRegionsMaskGlobal extends OverlapMaskBase {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
 	private int regionID1 = GlobalRegionIdentifiers.SUBMARK_INSIDE;

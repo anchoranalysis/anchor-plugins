@@ -37,11 +37,6 @@ import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
 
 public abstract class BoundingBoxAxisBase extends FeatureObjMask {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	// START BEAN PARAMETERS
 	@BeanField
 	private String axis = "x";

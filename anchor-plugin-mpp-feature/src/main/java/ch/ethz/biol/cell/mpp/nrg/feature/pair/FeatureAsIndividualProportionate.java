@@ -42,11 +42,6 @@ import org.anchoranalysis.feature.calc.FeatureCalcException;
 /** Calculates each feature individually, and combines them using the ratios between itemProportionate as weights */
 public class FeatureAsIndividualProportionate extends NRGElemPairWithFeature {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	// START BEAN PROPERTIES
 	@BeanField
 	private Feature<FeatureInputSingleMemo> itemProportionate;

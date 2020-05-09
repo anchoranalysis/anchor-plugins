@@ -38,11 +38,6 @@ import org.anchoranalysis.image.extent.ImageRes;
 
 public class RadiiRatio extends FeatureMark {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -4380227015245049115L;
-
 	// START BEAN PROPERTIES
 	@BeanField
 	private boolean highestTwoRadiiOnly = false;

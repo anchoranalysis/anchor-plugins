@@ -44,11 +44,6 @@ import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
  */
 public class Intensity extends FeatureNrgChnl {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PROPERTIES
 	/** Feature to apply to the histogram */
 	@BeanField

@@ -40,11 +40,6 @@ import org.anchoranalysis.image.voxel.VoxelIntensityList;
 
 public class NumberPixels extends FeatureSingleMemo {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
 	private PxlListOperationFromMark pixelList;

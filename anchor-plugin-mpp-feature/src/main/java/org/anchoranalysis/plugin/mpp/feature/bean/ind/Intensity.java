@@ -42,11 +42,6 @@ import ch.ethz.biol.cell.mpp.mark.pixelstatisticsfrommark.PixelStatisticsFromMar
 
 public class Intensity extends FeatureSingleMemo {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	// START BEAN
 	/** Feature to apply to the histogram */
 	@BeanField

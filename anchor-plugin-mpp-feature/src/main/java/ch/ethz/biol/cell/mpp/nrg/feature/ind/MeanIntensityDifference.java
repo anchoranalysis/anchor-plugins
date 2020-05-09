@@ -38,11 +38,6 @@ import org.anchoranalysis.feature.calc.FeatureCalcException;
 
 public class MeanIntensityDifference extends FeatureSingleMemo {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
 	private double minDiff;

@@ -34,11 +34,6 @@ import org.anchoranalysis.feature.calc.FeatureCalcException;
 
 public class Volume extends FeatureMarkRegion  {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	@Override
 	public double calc(SessionInput<FeatureInputMark> input) throws FeatureCalcException {
 		return input.get().getMark().volume(

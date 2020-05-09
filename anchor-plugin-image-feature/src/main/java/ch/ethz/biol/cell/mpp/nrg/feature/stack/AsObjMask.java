@@ -45,11 +45,6 @@ import org.anchoranalysis.image.feature.stack.FeatureInputStack;
  */
 public class AsObjMask extends FeatureStack {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
 	private Feature<FeatureInputSingleObj> item;

@@ -38,11 +38,6 @@ import org.anchoranalysis.math.rotation.RotationMatrix;
 // Considers the 3 directions of an Ellipsoid
 public class DotProductOrientationToVector extends FeatureMarkDirection {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	@Override
 	protected double calcForEllipsoid(MarkEllipsoid mark, Orientation orientation, RotationMatrix rotMatrix, Vector3d directionVector)
 			throws FeatureCalcException {

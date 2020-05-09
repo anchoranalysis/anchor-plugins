@@ -42,11 +42,6 @@ import org.anchoranalysis.math.rotation.RotationMatrix;
 public class EllipsoidMaxAreaIntersectingPlane extends FeatureMarkDirection {
 	
 	
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	@Override
 	protected double calcForEllipsoid(MarkEllipsoid mark, Orientation orientation, RotationMatrix rotMatrix,
 			Vector3d normalToPlane) throws FeatureCalcException {

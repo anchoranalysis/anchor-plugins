@@ -15,11 +15,6 @@ import org.anchoranalysis.feature.input.FeatureInput;
  */
 public abstract class FeatureGenericWithValue<T extends FeatureInput> extends FeatureGenericSingleElem<T> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
 	private double value = 0;

@@ -42,11 +42,6 @@ import org.anchoranalysis.feature.input.FeatureInput;
  */
 public class IfOutsideRange<T extends FeatureInput> extends RangeCompareFromScalars<T> {
 	
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -8939465493485894918L;
-	
 	@Override
 	protected Feature<T> featureToCalcInputVal() {
 		return getItem();

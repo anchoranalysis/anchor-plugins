@@ -34,11 +34,6 @@ import cern.jet.stat.Descriptive;
 // Calculates the quantile of a feature applied to each connected component
 public class ObjMaskFeatureQuantile extends ObjMaskFeatureFromStack {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
 	private double quantile = 0.5;

@@ -11,11 +11,6 @@ import cern.colt.list.DoubleArrayList;
 
 public abstract class FeatureResultsFromIndex extends FeatureResults {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	// START BEAN PROPERTIES
 	@BeanField
 	private String id = "";

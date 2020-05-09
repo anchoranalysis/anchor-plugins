@@ -40,11 +40,6 @@ import org.anchoranalysis.image.init.ImageInitParams;
 
 public class KeyValueParam extends FeatureStack {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
 	private String collectionID = "";

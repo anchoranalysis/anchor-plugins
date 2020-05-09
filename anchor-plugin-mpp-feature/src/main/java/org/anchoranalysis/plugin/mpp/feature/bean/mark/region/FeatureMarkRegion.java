@@ -6,11 +6,6 @@ import org.anchoranalysis.bean.annotation.BeanField;
 
 public abstract class FeatureMarkRegion extends FeatureMark {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	// START BEAN PROPERTIES
 	@BeanField
 	private int regionID = GlobalRegionIdentifiers.SUBMARK_INSIDE;

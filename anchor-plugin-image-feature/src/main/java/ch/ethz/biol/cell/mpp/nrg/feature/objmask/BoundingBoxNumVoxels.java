@@ -34,11 +34,6 @@ import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
 
 public class BoundingBoxNumVoxels extends FeatureObjMask {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	@Override
 	public double calc(SessionInput<FeatureInputSingleObj> input) throws FeatureCalcException {
 				

@@ -38,11 +38,6 @@ import org.anchoranalysis.feature.calc.FeatureCalcException;
 
 public class OverlapRatioMaskGlobal extends OverlapMaskSingleRegion {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
 	private boolean useMax = false;

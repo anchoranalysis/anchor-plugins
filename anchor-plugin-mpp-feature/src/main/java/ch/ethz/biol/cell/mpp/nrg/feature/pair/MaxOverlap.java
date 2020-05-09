@@ -38,11 +38,6 @@ import ch.ethz.biol.cell.mpp.nrg.cachedcalculation.OverlapCalculation;
 
 public class MaxOverlap extends FeaturePairMemo {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	// START BEAN PROPERTIES
 	@BeanField
 	private double maxOverlap = -1;

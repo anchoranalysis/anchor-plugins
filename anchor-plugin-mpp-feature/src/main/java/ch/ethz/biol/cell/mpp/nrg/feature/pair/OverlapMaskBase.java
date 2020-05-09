@@ -42,11 +42,6 @@ import ch.ethz.biol.cell.mpp.nrg.cachedcalculation.OverlapCalculationMaskGlobal;
 
 public abstract class OverlapMaskBase extends FeaturePairMemo {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	// START BEAN PROPERTIES
 	@BeanField
 	private int maskValue = 255;

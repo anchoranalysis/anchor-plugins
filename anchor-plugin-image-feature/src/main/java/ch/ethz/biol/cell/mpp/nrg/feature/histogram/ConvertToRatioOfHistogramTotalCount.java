@@ -37,11 +37,6 @@ import org.anchoranalysis.image.feature.histogram.FeatureInputHistogram;
 
 public class ConvertToRatioOfHistogramTotalCount extends FeatureHistogram {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
 	private Feature<FeatureInputHistogram> item;

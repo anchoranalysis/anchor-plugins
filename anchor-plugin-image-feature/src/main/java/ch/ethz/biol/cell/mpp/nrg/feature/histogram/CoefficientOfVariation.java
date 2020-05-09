@@ -33,11 +33,6 @@ import org.anchoranalysis.image.histogram.HistogramStatistics;
 
 public class CoefficientOfVariation extends FeatureHistogramStatistic {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	@Override
 	protected double calcStatisticFrom(Histogram histogram) throws OperationFailedException {
 		return HistogramStatistics.coefficientOfVariation(histogram);

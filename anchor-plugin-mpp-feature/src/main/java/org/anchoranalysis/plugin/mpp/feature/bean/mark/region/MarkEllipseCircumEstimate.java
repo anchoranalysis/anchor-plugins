@@ -39,11 +39,6 @@ import org.anchoranalysis.feature.calc.FeatureCalcException;
 public class MarkEllipseCircumEstimate extends FeatureMarkRegion {
 
 	
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 7660902471584365862L;
-	
 	@Override
 	public double calc(SessionInput<FeatureInputMark> input) throws FeatureCalcException {
 		

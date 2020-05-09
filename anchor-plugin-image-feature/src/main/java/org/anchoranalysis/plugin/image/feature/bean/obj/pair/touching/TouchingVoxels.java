@@ -45,11 +45,6 @@ import org.anchoranalysis.image.voxel.kernel.count.CountKernelNghbMask;
  */
 public abstract class TouchingVoxels extends FeatureObjMaskPair {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
 	private boolean use3D = true;

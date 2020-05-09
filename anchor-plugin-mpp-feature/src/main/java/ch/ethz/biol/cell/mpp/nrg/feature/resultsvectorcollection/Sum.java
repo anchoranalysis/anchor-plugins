@@ -34,11 +34,6 @@ import cern.jet.stat.Descriptive;
 
 public class Sum extends FeatureResultsFromIndex {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	@Override
 	protected double calcStatisticFromFeatureVal(DoubleArrayList featureVals) {
 		return Descriptive.sum(featureVals);

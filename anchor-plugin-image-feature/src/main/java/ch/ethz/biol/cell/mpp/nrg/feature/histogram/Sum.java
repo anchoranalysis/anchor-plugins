@@ -33,11 +33,6 @@ import org.anchoranalysis.image.feature.histogram.FeatureInputHistogram;
 
 public class Sum extends FeatureHistogram {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	@Override
 	protected double calc(SessionInput<FeatureInputHistogram> input) throws FeatureCalcException {
 		return input.get().getHistogram().calcSum();

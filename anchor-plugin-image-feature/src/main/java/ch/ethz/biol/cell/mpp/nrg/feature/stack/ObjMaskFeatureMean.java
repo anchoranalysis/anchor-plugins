@@ -33,11 +33,6 @@ import cern.jet.stat.Descriptive;
 // Calculates the mean of a feature applied to each connected component
 public class ObjMaskFeatureMean extends ObjMaskFeatureFromStack {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	@Override
 	protected double deriveStatistic(DoubleArrayList featureVals) {
 		return Descriptive.mean(featureVals);

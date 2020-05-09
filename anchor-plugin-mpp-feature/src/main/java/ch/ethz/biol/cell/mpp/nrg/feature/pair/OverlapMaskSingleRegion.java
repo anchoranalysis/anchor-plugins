@@ -35,11 +35,6 @@ import ch.ethz.biol.cell.mpp.nrg.cachedcalculation.OverlapCalculationMaskGlobal;
 
 public abstract class OverlapMaskSingleRegion extends OverlapMaskBase {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	// START BEAN PROPERTIES
 	@BeanField
 	private int regionID = GlobalRegionIdentifiers.SUBMARK_INSIDE;

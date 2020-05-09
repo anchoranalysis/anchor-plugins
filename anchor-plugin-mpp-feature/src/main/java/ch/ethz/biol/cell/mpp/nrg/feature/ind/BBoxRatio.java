@@ -38,11 +38,6 @@ import org.anchoranalysis.image.extent.ImageDim;
 
 public class BBoxRatio extends FeatureSingleMemo {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -4380227015245049115L;
-
 	@Override
 	public double calc(SessionInput<FeatureInputSingleMemo> input) throws FeatureCalcException {
 		

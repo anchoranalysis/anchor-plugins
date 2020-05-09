@@ -31,11 +31,6 @@ import org.anchoranalysis.feature.input.FeatureInput;
 
 public class ReplaceNaN<T extends FeatureInput> extends ReplaceUnusualValue<T> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	@Override
 	protected boolean isResultUnusual(double featureResult) {
 		return Double.isNaN(featureResult);

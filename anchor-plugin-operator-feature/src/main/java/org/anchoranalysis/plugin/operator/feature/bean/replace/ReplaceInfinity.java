@@ -31,11 +31,6 @@ import org.anchoranalysis.feature.input.FeatureInput;
 
 public class ReplaceInfinity<T extends FeatureInput> extends ReplaceUnusualValue<T> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	@Override
 	protected boolean isResultUnusual(double featureResult) {
 		return Double.isInfinite(featureResult);

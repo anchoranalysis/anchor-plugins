@@ -45,11 +45,6 @@ import org.anchoranalysis.image.unitvalue.UnitValueException;
  */
 public class UnitsWithinRange<T extends FeatureInputWithRes> extends FeatureSingleElemWithRes<T> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	// START BEAN PROPERTIES
 	/** Returned as a constant if a value lies within the range */
 	@BeanField

@@ -33,11 +33,6 @@ import org.anchoranalysis.plugin.operator.feature.bean.FeatureGenericWithValue;
 
 public class MultiplyByConstant<T extends FeatureInput> extends FeatureGenericWithValue<T> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	public MultiplyByConstant() {
 		
 	}

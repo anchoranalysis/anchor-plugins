@@ -34,11 +34,6 @@ import org.anchoranalysis.feature.calc.FeatureCalcException;
 
 public class OverlapMaskGlobalMiddleQuantiles extends OverlapMaskQuantiles {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	public OverlapMaskGlobalMiddleQuantiles() {
 	}
 	
