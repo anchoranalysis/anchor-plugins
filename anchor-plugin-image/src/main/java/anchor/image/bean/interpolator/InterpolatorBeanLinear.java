@@ -32,11 +32,6 @@ import org.anchoranalysis.image.interpolator.InterpolatorImgLib2Linear;
 
 public class InterpolatorBeanLinear extends InterpolatorBean {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	@Override
 	public Interpolator create() {
 		return new InterpolatorImgLib2Linear();

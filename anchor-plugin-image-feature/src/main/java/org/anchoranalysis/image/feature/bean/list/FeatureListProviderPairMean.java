@@ -32,11 +32,6 @@ import org.anchoranalysis.plugin.operator.feature.bean.list.Mean;
 
 public class FeatureListProviderPairMean extends FeatureListProviderAggregatePair {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	@Override
 	protected FeatureListElem<FeatureInputPairObjs> createFeature() {
 		return new Mean<>();

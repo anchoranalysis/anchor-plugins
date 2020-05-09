@@ -41,11 +41,6 @@ import org.anchoranalysis.mpp.sgmn.bean.optscheme.termination.TerminationConditi
  */
 public class ConstantNRG extends TerminationCondition {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -5231021113947555019L;
-
 	// START BEAN PARAMETERS
 	@BeanField
 	private int toleranceLog10 = -1;

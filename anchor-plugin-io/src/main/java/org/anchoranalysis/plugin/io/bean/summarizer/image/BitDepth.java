@@ -31,11 +31,6 @@ import org.anchoranalysis.image.io.input.NamedChnlsInput;
 
 public class BitDepth extends SummarizerNamedChnlsSimple<Integer> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	@Override
 	protected Integer extractKey(NamedChnlsInput element) throws RasterIOException {
 		return element.bitDepth();

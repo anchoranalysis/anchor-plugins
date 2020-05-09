@@ -41,11 +41,6 @@ import ch.ethz.biol.cell.mpp.mark.pixelstatisticsfrommark.PixelStatisticsFromMar
 
 public class ThresholdedCount extends PxlListOperationFromMark {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
 	private PixelStatisticsFromMark pixelList;

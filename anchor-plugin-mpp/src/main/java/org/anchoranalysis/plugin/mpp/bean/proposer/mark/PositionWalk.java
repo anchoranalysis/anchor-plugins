@@ -42,11 +42,6 @@ import org.anchoranalysis.image.orientation.Orientation2D;
 
 public class PositionWalk extends MarkProposer {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -1595428117029956974L;
-
 	// START BEAN
 	@BeanField
 	private double boundsRatio = 1.7;

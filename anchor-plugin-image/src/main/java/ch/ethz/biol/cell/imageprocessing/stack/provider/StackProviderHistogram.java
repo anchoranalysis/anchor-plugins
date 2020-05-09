@@ -49,11 +49,6 @@ import org.anchoranalysis.image.stack.bufferedimage.CreateStackFromBufferedImage
  */
 public class StackProviderHistogram extends StackProvider {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
 	private HistogramProvider histogramProvider;

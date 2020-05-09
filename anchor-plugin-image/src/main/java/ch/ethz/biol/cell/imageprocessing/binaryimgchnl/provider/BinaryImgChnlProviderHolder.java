@@ -35,10 +35,7 @@ import org.anchoranalysis.image.binary.BinaryChnl;
 // This is hack
 public class BinaryImgChnlProviderHolder extends BinaryImgChnlProvider {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
+	
 
 	// START BEAN PROPERTIES
 	

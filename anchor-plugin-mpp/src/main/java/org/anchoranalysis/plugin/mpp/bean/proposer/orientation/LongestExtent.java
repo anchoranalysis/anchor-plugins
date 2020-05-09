@@ -44,11 +44,6 @@ import org.anchoranalysis.image.orientation.Orientation2D;
 
 public class LongestExtent extends OrientationProposer {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -5122961749674495354L;
-
 	// START BEAN
 	@BeanField
 	private double incrementDegrees = 1;

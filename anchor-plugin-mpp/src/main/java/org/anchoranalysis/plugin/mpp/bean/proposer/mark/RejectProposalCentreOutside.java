@@ -46,11 +46,6 @@ import org.anchoranalysis.image.chnl.Chnl;
 // Rejects a proposal if its centre is not found on a particular prob map
 public class RejectProposalCentreOutside extends MarkProposer {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 3969644806012270768L;
-
 	// START BEAN
 	@BeanField
 	private BinaryImgChnlProvider binaryImgChnlProvider;

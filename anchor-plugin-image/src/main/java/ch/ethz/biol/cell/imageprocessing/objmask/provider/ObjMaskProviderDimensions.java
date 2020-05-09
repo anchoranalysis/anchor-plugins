@@ -36,11 +36,6 @@ import ch.ethz.biol.cell.imageprocessing.dim.provider.GuessDimFromInputImage;
 
 public abstract class ObjMaskProviderDimensions extends ObjMaskProvider {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	// START BEAN PROPERTIES
 	@BeanField
 	private ImageDimProvider dimProvider = new GuessDimFromInputImage();

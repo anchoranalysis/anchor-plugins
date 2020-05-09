@@ -43,11 +43,6 @@ import org.anchoranalysis.mpp.sgmn.optscheme.step.Reporting;
 
 public abstract class ObjectSerializerPeriodicReporter<T extends Serializable> extends PeriodicSubfolderReporter<T> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -5648495815767398291L;
-
 	// BEAN PARAMETERS
 	@BeanField
 	private String manifestFunction;

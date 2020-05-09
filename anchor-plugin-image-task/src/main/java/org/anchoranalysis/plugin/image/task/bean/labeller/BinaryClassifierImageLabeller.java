@@ -48,11 +48,6 @@ import org.anchoranalysis.plugin.image.task.imagefeature.calculator.FeatureCalcu
 
 public class BinaryClassifierImageLabeller extends BinaryOutcomeImageLabeller<Object> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PROPERTIES
 	@BeanField @SkipInit
 	private FeatureListProvider<FeatureInputStack> classifierProvider;

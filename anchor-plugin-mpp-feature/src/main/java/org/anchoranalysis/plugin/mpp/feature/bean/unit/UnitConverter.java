@@ -47,11 +47,6 @@ import org.anchoranalysis.image.orientation.DirectionVector;
  */
 public class UnitConverter extends AnchorBean<UnitConverter> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	// START BEAN PROPERTIES
 	@BeanField
 	private boolean physical = false;

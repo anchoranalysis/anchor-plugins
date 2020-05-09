@@ -39,11 +39,6 @@ import org.anchoranalysis.image.objmask.ObjMaskCollection;
 // Considers all possible pairs of objects in a provider, and removes intersecting pixels
 public class ObjMaskProviderRemoveIntersectingPixels extends ObjMaskProviderDimensions {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
 	private ObjMaskProvider objs;

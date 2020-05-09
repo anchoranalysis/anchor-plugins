@@ -32,11 +32,6 @@ import org.anchoranalysis.image.feature.objmask.pair.FeatureInputPairObjs;
 
 public abstract class FeatureListProviderAggregatePair extends FeatureListProviderAggregate {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	@Override
 	protected Feature<FeatureInputPairObjs> createAggregateFeature(
 		Feature<FeatureInputPairObjs> featFirst,

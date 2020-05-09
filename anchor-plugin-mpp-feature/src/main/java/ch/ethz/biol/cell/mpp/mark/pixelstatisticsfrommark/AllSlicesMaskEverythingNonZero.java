@@ -46,11 +46,6 @@ import org.anchoranalysis.image.voxel.statistics.VoxelStatisticsFromHistogram;
  */
 public class AllSlicesMaskEverythingNonZero extends AllSlicesBase {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -3617915321417174160L;
-	
 	@Override
 	protected VoxelStatistics extractFromPxlMark(PxlMark pm) throws CreateException {
 		

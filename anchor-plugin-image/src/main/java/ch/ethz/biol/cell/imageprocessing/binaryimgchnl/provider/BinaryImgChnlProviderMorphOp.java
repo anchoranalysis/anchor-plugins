@@ -42,12 +42,6 @@ import org.anchoranalysis.image.voxel.box.VoxelBox;
  */
 public abstract class BinaryImgChnlProviderMorphOp extends BinaryImgChnlProvider {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
-
 	// START PROPERTIES
 	@BeanField
 	private BinaryImgChnlProvider binaryImgChnlProvider;

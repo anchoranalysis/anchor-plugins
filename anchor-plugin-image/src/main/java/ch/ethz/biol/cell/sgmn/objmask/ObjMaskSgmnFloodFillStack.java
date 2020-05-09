@@ -47,10 +47,7 @@ import org.anchoranalysis.image.voxel.box.VoxelBox;
 // Consider replacing with "Fast connected-componentlabeling", He et al.
 public class ObjMaskSgmnFloodFillStack extends ObjMaskSgmn {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
+	
 
 	// START BEAN PROPERTIES
 	

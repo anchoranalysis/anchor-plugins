@@ -43,11 +43,6 @@ import org.anchoranalysis.image.objmask.ObjMaskCollection;
 // Files holes
 public class ObjMaskProviderFill extends ObjMaskProvider {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PROPERTIES
 	/** The objects whose holes are filled, current object-masks are overwritten */
 	@BeanField

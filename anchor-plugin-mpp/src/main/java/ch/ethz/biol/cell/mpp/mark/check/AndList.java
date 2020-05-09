@@ -40,11 +40,6 @@ import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 
 public class AndList extends CheckMark {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 3477240370689161255L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
 	private List<CheckMark> list = new ArrayList<>();

@@ -38,11 +38,6 @@ import org.anchoranalysis.image.stack.region.chnlconverter.ConversionPolicy;
 // Converts a chnl by applying a ChnlConverter. Does not need a histogram
 public class ChnlProviderConverter extends ChnlProvider {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
 	private ChnlProvider chnlProvider;

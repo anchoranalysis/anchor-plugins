@@ -48,11 +48,6 @@ import org.anchoranalysis.plugin.mpp.sgmn.cfg.optscheme.AccptProbCalculator;
  */
 public abstract class AssignMode<S,T,U> extends AnchorBean<AssignMode<S,T,U>> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	public abstract AccptProbCalculator<T> probCalculator( AnnealScheme annealScheme );
 	
 	public KernelAssigner<U,T> kernelAssigner(TransformationContext tc) {

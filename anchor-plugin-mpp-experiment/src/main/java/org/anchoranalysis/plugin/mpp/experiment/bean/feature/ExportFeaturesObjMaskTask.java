@@ -85,11 +85,6 @@ import org.anchoranalysis.plugin.image.task.sharedstate.SharedStateExportFeature
 **/
 public class ExportFeaturesObjMaskTask<T extends FeatureInput> extends ExportFeaturesTask<MultiInput,SharedStateExportFeaturesObjMask<T>> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -5961126655531145104L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
 	private DefineOutputterMPPWithNrg define = new DefineOutputterMPPWithNrg();

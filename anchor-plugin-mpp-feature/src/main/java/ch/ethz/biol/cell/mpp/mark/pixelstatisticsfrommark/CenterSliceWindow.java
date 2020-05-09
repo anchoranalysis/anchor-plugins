@@ -46,11 +46,6 @@ import org.anchoranalysis.image.voxel.statistics.VoxelStatisticsCombined;
  */
 public class CenterSliceWindow extends CenterSliceBase {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -3617915321417174160L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
 	private int windowSize = 0;

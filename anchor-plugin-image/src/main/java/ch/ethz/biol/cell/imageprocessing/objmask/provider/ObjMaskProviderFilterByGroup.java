@@ -44,11 +44,6 @@ import ch.ethz.biol.cell.imageprocessing.objmask.matching.ObjMaskMatchUtilities;
 // TODO lots of duplication with ObjMaskProviderFilter
 public class ObjMaskProviderFilterByGroup extends ObjMaskProviderDimensionsOptional {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
 	private ObjMaskFilter objMaskFilter;

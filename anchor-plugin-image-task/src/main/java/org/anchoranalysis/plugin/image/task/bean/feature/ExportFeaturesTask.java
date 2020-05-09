@@ -58,11 +58,6 @@ import org.anchoranalysis.plugin.image.task.sharedstate.SharedStateExportFeature
  */
 public abstract class ExportFeaturesTask<T extends InputFromManager, S extends SharedStateExportFeatures> extends Task<T,S> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	// START BEAN
 	/**
 	 * If non-null this file-path is used to determine the group of the file

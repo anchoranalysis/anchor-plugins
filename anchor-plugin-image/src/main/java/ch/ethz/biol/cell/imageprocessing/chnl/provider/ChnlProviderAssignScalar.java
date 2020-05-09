@@ -39,11 +39,6 @@ import org.anchoranalysis.image.objmask.factory.CreateFromEntireChnlFactory;
 /** Assigns a scalar to the portion of the image covered by a mask */
 public class ChnlProviderAssignScalar extends ChnlProvider {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
 	private ChnlProvider chnlProvider;

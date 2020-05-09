@@ -42,11 +42,6 @@ import org.anchoranalysis.image.extent.ImageDim;
 
 public class ProbMapProviderDerivedPointContainer extends ProbMapProvider {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -6881986528956653861L;
-	
 	// START BEAN PARAMETERS
 	@BeanField
 	private BinaryImgChnlProvider binaryImgChnlProvider;

@@ -50,11 +50,6 @@ import org.anchoranalysis.image.voxel.box.VoxelBox;
 //		3. Adjust each pixel value by Value 2.
 public class ChnlProviderAdjustDifferenceToMedian extends ChnlProvider {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
 	private ChnlProvider chnlProvider;

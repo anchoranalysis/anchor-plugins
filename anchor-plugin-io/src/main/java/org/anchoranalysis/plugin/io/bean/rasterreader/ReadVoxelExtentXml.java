@@ -39,11 +39,6 @@ import org.anchoranalysis.plugin.io.xml.AnchorMetadataXml;
 
 public class ReadVoxelExtentXml extends RasterReader {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
 	private RasterReader rasterReader;

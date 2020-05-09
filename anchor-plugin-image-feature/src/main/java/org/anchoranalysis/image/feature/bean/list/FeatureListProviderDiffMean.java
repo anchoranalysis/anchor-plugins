@@ -32,11 +32,6 @@ import org.anchoranalysis.plugin.operator.feature.bean.list.Mean;
 
 public class FeatureListProviderDiffMean extends FeatureListProviderAggregateDiff {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	@Override
 	protected FeatureListElem<FeatureInputPairObjs> createFeature() {
 		return new Mean<>();

@@ -45,11 +45,6 @@ import ch.ethz.biol.cell.imageprocessing.dim.provider.GuessDimFromInputImage;
  **/
 public class BinaryImgChnlProviderFromObjMasks extends BinaryImgChnlProvider {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1360108340369477461L;
-	
 	// START BEAN
 	@BeanField
 	private ObjMaskProvider objs;

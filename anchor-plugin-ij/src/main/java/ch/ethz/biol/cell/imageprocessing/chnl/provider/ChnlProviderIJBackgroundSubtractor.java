@@ -38,11 +38,6 @@ import org.anchoranalysis.image.convert.IJWrap;
 
 public class ChnlProviderIJBackgroundSubtractor extends ChnlProvider {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
 	private ChnlProvider chnlProvider;

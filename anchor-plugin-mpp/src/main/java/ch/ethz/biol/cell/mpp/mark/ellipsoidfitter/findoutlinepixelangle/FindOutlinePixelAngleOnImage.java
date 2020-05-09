@@ -47,11 +47,6 @@ import org.anchoranalysis.math.rotation.RotationMatrix;
 // Finds a pixel on the outline of an object in a particular direction
 public class FindOutlinePixelAngleOnImage extends FindOutlinePixelAngle {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -7183706800668575661L;
-	
 	// START BEANS
 	@BeanField
 	private BinaryImgChnlProvider binaryImgChnlProvider;

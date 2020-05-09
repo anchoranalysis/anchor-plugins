@@ -10,11 +10,6 @@ import org.anchoranalysis.plugin.operator.feature.bean.score.ZScore;
  */
 public class FeatureListProviderPermuteZScore extends FeatureListProviderPermuteFirstSecondOrder {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	public FeatureListProviderPermuteZScore() {
 		super( ()-> new ZScore<>(),
 			-1 * Double.MAX_VALUE,

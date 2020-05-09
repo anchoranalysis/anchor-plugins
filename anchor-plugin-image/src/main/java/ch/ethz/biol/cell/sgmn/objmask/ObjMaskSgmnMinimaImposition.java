@@ -42,11 +42,6 @@ import ch.ethz.biol.cell.sgmn.objmask.watershed.minimaimposition.MinimaImpositio
 // Imposes minima only in seed locations on the input channel, and performs the segmentation
 public class ObjMaskSgmnMinimaImposition extends ObjMaskSgmn {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
 	private ObjMaskSgmn sgmn;

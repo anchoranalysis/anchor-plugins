@@ -36,11 +36,6 @@ import org.anchoranalysis.image.io.rasterreader.OpenedRaster;
 // For a raster with a single input channel
 public class ImgChnlMapSingle extends ImgChnlMapCreator {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	// START BEAN PROPERTIES
 	@BeanField
 	private String chnlName = "defaultName";

@@ -52,11 +52,6 @@ import org.anchoranalysis.mpp.sgmn.bean.define.DefineOutputterMPP;
 
 public class ReportFeaturesMulti extends Task<MultiInput,CSVWriter> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -5961126655531145104L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
 	private List<ReportFeatureForSharedObjects> listReportFeatures = new ArrayList<>();

@@ -48,11 +48,6 @@ import org.anchoranalysis.io.output.csv.CSVWriter;
 // At the moment, we don't check if the name number of rows/columns exist
 public class CombineCSVTask extends Task<FileInput,CSVWriter> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -5961126655531145104L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
 	private String seperator = ",";

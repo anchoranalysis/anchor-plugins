@@ -39,11 +39,6 @@ import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
 
 public class ChnlProviderMult extends ChnlProviderTwo {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	@Override
 	protected Chnl process(Chnl chnl1, Chnl chnl2) throws CreateException {
 		

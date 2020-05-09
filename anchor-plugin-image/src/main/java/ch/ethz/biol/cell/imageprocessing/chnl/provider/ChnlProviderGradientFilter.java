@@ -43,11 +43,6 @@ package ch.ethz.biol.cell.imageprocessing.chnl.provider;
  */
 public class ChnlProviderGradientFilter extends ChnlProviderGradientBase {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 3978226156945187112L;
-
 	@Override
 	protected boolean[] createDimensionArr() {
 		return new boolean[] { true, true, false };

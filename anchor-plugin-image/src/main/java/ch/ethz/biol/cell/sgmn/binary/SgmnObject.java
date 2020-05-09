@@ -52,11 +52,6 @@ import org.anchoranalysis.image.voxel.box.VoxelBoxWrapper;
 // WE SHOULD DELETE THIS
 public class SgmnObject extends BinarySgmn {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	// START BEANS
 	// The Thresholder applied on the whole image
 	@BeanField

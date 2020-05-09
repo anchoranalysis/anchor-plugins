@@ -37,11 +37,6 @@ import org.anchoranalysis.plugin.mpp.sgmn.cfg.optscheme.CfgNRGPixelizedUtilities
 
 public class AddNrg extends StateTransformerBean<Cfg,CfgNRGPixelized> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	@Override
 	public CfgNRGPixelized transform(Cfg in, TransformationContext context) throws OperationFailedException {
 		try {

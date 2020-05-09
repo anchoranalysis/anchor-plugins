@@ -46,11 +46,6 @@ import com.github.quickhull3d.QuickHull3D;
 
 public class BinaryImgChnlProviderConvexHull3D extends BinaryImgChnlProvider {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
 	private BinaryImgChnlProvider binaryImgChnlProvider;

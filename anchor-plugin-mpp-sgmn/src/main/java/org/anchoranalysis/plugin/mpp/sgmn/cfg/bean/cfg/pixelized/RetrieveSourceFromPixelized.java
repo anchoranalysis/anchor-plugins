@@ -33,11 +33,6 @@ import org.anchoranalysis.plugin.mpp.sgmn.cfg.optscheme.ToPixelized;
 
 public class RetrieveSourceFromPixelized<T> extends StateTransformerBean<ToPixelized<T>,T> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	@Override
 	public T transform(ToPixelized<T> in, TransformationContext context)
 			throws OperationFailedException {

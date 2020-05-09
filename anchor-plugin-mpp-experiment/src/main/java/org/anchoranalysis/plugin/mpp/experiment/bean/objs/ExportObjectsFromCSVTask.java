@@ -85,11 +85,6 @@ import org.anchoranalysis.plugin.mpp.experiment.objs.csv.MapGroupToRow;
  */
 public class ExportObjectsFromCSVTask extends ExportObjectsBase<FromCSVInputObject,FromCSVSharedState> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	// START BEAN PROPERTIES
 	@BeanField @OptionalBean
 	private FilePathGenerator idGenerator;	// Translates an input file name to a unique ID

@@ -36,11 +36,6 @@ import org.anchoranalysis.image.voxel.statistics.VoxelStatistics;
 // Gets all slices where indexNonZero has at least one non-zero pixel in that slice 
 public class AllSlicesMaskNonZero extends AllSlicesBase {
 	
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	@Override
 	protected VoxelStatistics extractFromPxlMark(PxlMark pm) throws CreateException {
 		return statisticsForAllSlices(pm, false);

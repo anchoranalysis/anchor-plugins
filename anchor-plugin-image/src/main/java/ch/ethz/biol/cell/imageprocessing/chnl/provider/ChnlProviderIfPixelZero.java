@@ -41,11 +41,6 @@ import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
 
 public class ChnlProviderIfPixelZero extends ChnlProvider {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
 	private ChnlProvider chnlProvider;

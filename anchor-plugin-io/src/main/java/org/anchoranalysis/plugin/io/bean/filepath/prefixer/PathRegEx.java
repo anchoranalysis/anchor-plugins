@@ -46,11 +46,6 @@ import org.anchoranalysis.io.filepath.prefixer.FilePathPrefix;
  */
 public class PathRegEx extends FilePathPrefixerAvoidResolve {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -2568294173350955724L;
-	
 	// START BEAN PROPERTIES
 	/** Regular expression to use to match path with at least one group in it. */
 	@BeanField

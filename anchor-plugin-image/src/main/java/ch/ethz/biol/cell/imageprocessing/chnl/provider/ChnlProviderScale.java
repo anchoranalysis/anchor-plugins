@@ -42,11 +42,6 @@ import anchor.image.bean.interpolator.InterpolatorBeanLanczos;
 
 public class ChnlProviderScale extends ChnlProvider {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// Start BEAN PROPERTIES
 	@BeanField
 	private ScaleCalculator scaleCalculator;

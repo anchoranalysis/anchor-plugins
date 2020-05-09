@@ -65,11 +65,6 @@ import cern.colt.matrix.DoubleMatrix1D;
 //
 public class LinearLeastSquaresEllipseFitter extends ConicFitterBase {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -4978995087569551060L;
-
 	// START BEAN
 	@BeanField
 	private double minRadius = 0.55;

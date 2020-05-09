@@ -41,11 +41,6 @@ import org.anchoranalysis.image.voxel.box.VoxelBox;
 
 public class ChnlProviderAddConstant extends ChnlProvider {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	private static ChnlFactorySingleType factory = new ChnlFactoryByte();
 	
 	// START BEAN PROPERTIES

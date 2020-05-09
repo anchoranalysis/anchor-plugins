@@ -48,12 +48,6 @@ import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
 public class StackProviderRGBFromObjMaskThreeColors extends StackProviderWithBackground {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
-	
 	// START BEAN PROPERTIES
 	@BeanField @OptionalBean
 	private ObjMaskProvider objsRed;

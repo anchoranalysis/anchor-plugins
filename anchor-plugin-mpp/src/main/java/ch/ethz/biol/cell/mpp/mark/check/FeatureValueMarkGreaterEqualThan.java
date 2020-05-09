@@ -37,11 +37,6 @@ import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 
 public class FeatureValueMarkGreaterEqualThan extends FeatureValueCheckMark<FeatureInputMark> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1086432241915811567L;
-	
 	@Override
 	protected FeatureInputMark createFeatureCalcParams(Mark mark, RegionMap regionMap, NRGStackWithParams nrgStack) {
 		return new FeatureInputMark(

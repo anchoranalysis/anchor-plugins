@@ -40,11 +40,6 @@ import org.anchoranalysis.bean.annotation.BeanField;
 //  abandoning after maxIter is reached
 public class Repeat extends MarkProposer {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 286045681411030790L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
 	private MarkProposer item;

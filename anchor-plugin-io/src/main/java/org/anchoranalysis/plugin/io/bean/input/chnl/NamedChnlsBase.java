@@ -32,9 +32,4 @@ import org.anchoranalysis.io.bean.input.InputManager;
 /*** Useful parent for all the NamedChnls classes */
 public abstract class NamedChnlsBase extends InputManager<NamedChnlsInputPart> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 }

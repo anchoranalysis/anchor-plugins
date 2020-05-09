@@ -39,11 +39,6 @@ import org.anchoranalysis.image.objmask.ObjMaskCollection;
 // So if an object intersects with neither, it still gets accepted, as both return 0
 public class ObjMaskFilterGreaterIntersectionWith extends ObjMaskFilterByObject {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
 	private ObjMaskProvider objsGreater;

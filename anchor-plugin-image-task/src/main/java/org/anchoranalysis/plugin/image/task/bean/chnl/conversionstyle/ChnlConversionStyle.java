@@ -37,11 +37,6 @@ import org.anchoranalysis.plugin.image.task.chnl.convert.ChnlGetterForTimepoint;
 
 public abstract class ChnlConversionStyle extends AnchorBean<ChnlConversionStyle> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	public abstract void convert(
 		Set<String> chnlNames,
 		ChnlGetterForTimepoint chnlGetter,

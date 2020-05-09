@@ -63,11 +63,6 @@ import org.anchoranalysis.mpp.sgmn.optscheme.step.Reporting;
 
 public class CfgOnProbMapChangeReporter extends ReporterOptimizationStep<CfgNRGPixelized> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -7205394305776410851L;
-	
 	// START BEAN PARAMETERS
 	@BeanField
 	private String manifestFunction = "probMapSeries";

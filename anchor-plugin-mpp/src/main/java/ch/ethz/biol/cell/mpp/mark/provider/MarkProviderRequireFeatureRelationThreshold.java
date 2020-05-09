@@ -48,11 +48,6 @@ import org.anchoranalysis.image.extent.ImageDim;
 
 public class MarkProviderRequireFeatureRelationThreshold extends MarkProvider {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
 	private MarkProvider markProvider;

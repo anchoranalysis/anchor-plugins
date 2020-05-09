@@ -53,11 +53,6 @@ import org.opencv.imgproc.Imgproc;
  */
 public abstract class StackProviderCVColorConverter extends StackProvider {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	static {
 		CVInit.alwaysExecuteBeforeCallingLibrary();
 	}

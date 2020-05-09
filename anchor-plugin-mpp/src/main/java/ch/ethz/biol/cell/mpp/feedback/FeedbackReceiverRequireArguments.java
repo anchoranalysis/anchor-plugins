@@ -38,11 +38,6 @@ import org.anchoranalysis.mpp.sgmn.optscheme.step.Reporting;
 
 public class FeedbackReceiverRequireArguments<T> extends FeedbackReceiverBean<T> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	// START BEAN PROPERTIES
 	@BeanField @OptionalBean
 	private FeedbackReceiverBean<T> feedbackReceiver;

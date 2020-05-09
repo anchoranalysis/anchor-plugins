@@ -50,11 +50,6 @@ import org.anchoranalysis.image.stack.Stack;
  */
 public class GuessDimFromInputImage extends ImageDimProvider {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	private ImageDim dim;
 	
 	public GuessDimFromInputImage() {

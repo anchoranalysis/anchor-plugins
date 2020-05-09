@@ -39,11 +39,6 @@ import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
 // Always returns a position
 public class ProbMapProviderObjMaskCollection extends ProbMapProvider {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
 	private ObjMaskProvider objs;

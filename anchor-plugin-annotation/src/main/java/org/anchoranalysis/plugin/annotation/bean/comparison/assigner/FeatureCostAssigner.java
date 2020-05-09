@@ -44,11 +44,6 @@ import org.anchoranalysis.plugin.annotation.comparison.ObjsToCompare;
 
 public class FeatureCostAssigner extends AnnotationComparisonAssigner<AssignmentObjMask> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	// START BEAN PROPERTIES
 	@BeanField
 	private FeatureEvaluatorSimple<FeatureInputPairObjs> featureEvaluator;

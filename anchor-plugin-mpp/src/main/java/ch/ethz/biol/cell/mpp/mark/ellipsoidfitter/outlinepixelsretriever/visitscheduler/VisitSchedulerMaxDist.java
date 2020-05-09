@@ -40,11 +40,6 @@ import org.anchoranalysis.image.objmask.ObjMask;
 // Breadth-first iteration of pixels
 public class VisitSchedulerMaxDist extends VisitScheduler {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	// START BEAN PROPERTIES
 	@BeanField
 	private double maxDist;

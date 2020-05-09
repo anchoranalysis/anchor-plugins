@@ -39,11 +39,6 @@ import ij.plugin.MontageMaker;
 
 public class StackProviderMontageFromSlices extends StackProvider {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PROPERTIES
 	/** The stack who will be turned into am ontage */
 	@BeanField

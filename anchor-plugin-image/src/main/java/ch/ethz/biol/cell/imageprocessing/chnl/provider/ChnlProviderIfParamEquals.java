@@ -37,11 +37,6 @@ import org.anchoranalysis.image.chnl.Chnl;
 // If a param is equal to a particular value, do soemthing
 public class ChnlProviderIfParamEquals extends ChnlProvider {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
 	private KeyValueParamsProvider keyValueParamsProvider;

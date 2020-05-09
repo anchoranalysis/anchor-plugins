@@ -45,11 +45,6 @@ import ch.ethz.biol.cell.mpp.mark.pointsfitter.ConvexHullUtilities;
 // USES Gift wrap algorithm taken from FIJI PolygonRoi.java
 public class BinaryImgChnlProviderConvexHull2D extends BinaryImgChnlProvider {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
 	private BinaryImgChnlProvider binaryImgChnlProvider;

@@ -36,11 +36,6 @@ import org.anchoranalysis.image.io.rasterreader.OpenedRaster;
 
 public class ImgChnlMapFromMetadata extends ImgChnlMapCreator {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	@Override
 	public ImgChnlMap createMap(OpenedRaster openedRaster) throws CreateException {
 

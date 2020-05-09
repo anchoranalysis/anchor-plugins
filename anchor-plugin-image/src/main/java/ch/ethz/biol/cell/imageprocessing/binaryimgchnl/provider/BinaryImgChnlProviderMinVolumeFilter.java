@@ -40,11 +40,6 @@ import org.anchoranalysis.image.unitvalue.UnitValueException;
 
 public class BinaryImgChnlProviderMinVolumeFilter extends BinaryImgChnlProvider {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -9015477942124999871L;
-	
 	// START
 	@BeanField
 	private BinaryImgChnlProvider binaryImgChnlProvider;

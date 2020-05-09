@@ -40,11 +40,6 @@ import org.anchoranalysis.image.voxel.box.VoxelBox;
 // Note behaviour is undefined when objects overlap with each other. An ID of either object arbitrarily will be assigned.
 public class ChnlProviderIdentifyObjects extends ChnlProvider {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
 	private ChnlProvider chnlProvider;

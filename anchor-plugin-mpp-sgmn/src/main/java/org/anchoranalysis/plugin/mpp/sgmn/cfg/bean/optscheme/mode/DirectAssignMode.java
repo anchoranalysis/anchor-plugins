@@ -42,11 +42,6 @@ import org.anchoranalysis.plugin.mpp.sgmn.cfg.optscheme.AccptProbCalculator;
  * */
 public class DirectAssignMode<S> extends AssignMode<S,S,S> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	// START BEAN PROPERTIES
 	@BeanField
 	private ExtractScoreSize<S> extractScoreSize;

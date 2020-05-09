@@ -43,11 +43,6 @@ import org.anchoranalysis.image.voxel.box.VoxelBox;
 
 public class BinaryImgChnlProviderInvert extends BinaryImgChnlProvider {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -9015477942124999871L;
-	
 	// START
 	@BeanField
 	private BinaryImgChnlProvider binaryImgChnlProvider;

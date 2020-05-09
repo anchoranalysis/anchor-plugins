@@ -39,11 +39,6 @@ import org.anchoranalysis.image.orientation.DirectionVector;
 // Breadth-first iteration of pixels
 public class VisitSchedulerMaxDistSep extends VisitScheduler {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	// START BEAN PROPERTIES
 	@BeanField
 	private UnitValueDistance maxDistX;

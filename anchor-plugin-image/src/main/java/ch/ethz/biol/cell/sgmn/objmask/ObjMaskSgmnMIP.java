@@ -47,11 +47,6 @@ import org.anchoranalysis.image.voxel.box.VoxelBoxWrapper;
 // TODO needs IInitProposeObjects
 public class ObjMaskSgmnMIP extends ObjMaskSgmn {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
 	private ObjMaskSgmn sgmnMIP;

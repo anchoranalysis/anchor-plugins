@@ -34,11 +34,6 @@ import org.anchoranalysis.image.objmask.ObjMask;
 
 public class ObjMaskFilterVolumeLessThan extends ObjMaskFilterByObject {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
 	private int maxVolume = 0;

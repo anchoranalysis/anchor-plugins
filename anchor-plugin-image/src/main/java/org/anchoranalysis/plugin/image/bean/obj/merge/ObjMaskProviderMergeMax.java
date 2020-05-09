@@ -46,11 +46,6 @@ import org.anchoranalysis.plugin.image.obj.merge.priority.AssignPriorityFromImpr
  */
 public class ObjMaskProviderMergeMax extends ObjMaskProviderMergeWithFeature {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
 	private FeatureEvaluator<FeatureInputSingleObj> featureEvaluator;

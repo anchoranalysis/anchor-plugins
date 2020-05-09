@@ -62,10 +62,6 @@ public class FeatureListProviderPermute<S, T extends FeatureInput> extends Featu
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 5595892123306950453L;
-	/**
-	 * 
-	 */
 	
 	// START BEAN PROPERTIES
 	@BeanField @SkipInit

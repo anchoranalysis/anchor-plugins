@@ -47,11 +47,6 @@ import org.anchoranalysis.plugin.io.xml.AnchorMetadataXml;
  */
 public class WriteResolutionXml extends RasterWriter {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
 	private RasterWriter writer;

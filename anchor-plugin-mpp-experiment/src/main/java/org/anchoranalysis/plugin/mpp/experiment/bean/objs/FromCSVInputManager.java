@@ -44,11 +44,6 @@ import org.anchoranalysis.plugin.mpp.experiment.objs.FromCSVInputObject;
 // An input stack
 public class FromCSVInputManager extends InputManager<FromCSVInputObject> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
 	private MultiInputManager input;

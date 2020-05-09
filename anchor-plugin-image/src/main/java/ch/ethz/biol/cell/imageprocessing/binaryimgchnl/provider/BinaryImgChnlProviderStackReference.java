@@ -39,11 +39,6 @@ import org.anchoranalysis.image.init.ImageInitParams;
 
 public class BinaryImgChnlProviderStackReference extends BinaryImgChnlProvider {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 8689748853607479300L;
-
 	// START BEAN PROPERTIES
 	@BeanField
 	private int chnlIndex = 0;

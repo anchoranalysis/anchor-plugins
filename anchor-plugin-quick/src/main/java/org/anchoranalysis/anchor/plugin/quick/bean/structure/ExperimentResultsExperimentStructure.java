@@ -50,11 +50,6 @@ import org.anchoranalysis.plugin.io.bean.provider.file.Rooted;
  */
 public class ExperimentResultsExperimentStructure extends FileProvider {
 	
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PROPERTIES
 	/** The name of the experiment including version suffix */
 	@BeanField

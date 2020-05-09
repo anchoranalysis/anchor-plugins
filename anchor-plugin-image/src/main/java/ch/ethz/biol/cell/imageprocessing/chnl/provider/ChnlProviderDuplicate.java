@@ -34,11 +34,6 @@ import org.anchoranalysis.image.chnl.Chnl;
 
 public class ChnlProviderDuplicate extends ChnlProvider {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
 	private ChnlProvider chnlProvider;

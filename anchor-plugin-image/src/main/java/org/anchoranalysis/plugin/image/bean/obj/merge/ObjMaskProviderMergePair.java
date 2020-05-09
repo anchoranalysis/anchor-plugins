@@ -62,11 +62,6 @@ import org.anchoranalysis.plugin.image.obj.merge.priority.AssignPriorityFromPair
  */
 public class ObjMaskProviderMergePair extends ObjMaskProviderMergeWithFeature {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	// START BEAN PROPERTIES
 	/**
 	 * Allows merge only if the feature-value is greater than or equal to this threshold

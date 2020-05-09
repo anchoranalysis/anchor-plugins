@@ -45,11 +45,6 @@ public class VisitSchedulerAnd extends VisitScheduler {
 	private List<VisitScheduler> list = new ArrayList<>();
 	// END BEAN PROPERTIES
 	
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	@Override
 	public Tuple3i maxDistFromRootPoint(ImageRes res) {
 		

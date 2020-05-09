@@ -47,11 +47,6 @@ import ij.process.ImageProcessor;
 ///  Does this multiple times for median filter from startRadius to endRadius (increment 2) and averages
 public class ChnlProviderEdgeFilterMedianMultiple extends ChnlProvider {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 3978226156945187112L;
-	
 	// START BEAN
 	@BeanField
 	private ChnlProvider chnlProvider;

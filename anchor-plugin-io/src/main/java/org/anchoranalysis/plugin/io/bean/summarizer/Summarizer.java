@@ -38,11 +38,6 @@ import org.anchoranalysis.core.error.OperationFailedException;
  */
 public abstract class Summarizer<T> extends AnchorBean<Summarizer<T>> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	/** Adds a element to the summary. Called one-time for each element */
 	public abstract void add( T element ) throws OperationFailedException;
 	

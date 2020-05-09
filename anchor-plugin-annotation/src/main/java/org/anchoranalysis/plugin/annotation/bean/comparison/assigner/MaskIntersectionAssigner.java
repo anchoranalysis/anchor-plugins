@@ -37,11 +37,6 @@ import org.anchoranalysis.plugin.annotation.comparison.ObjsToCompare;
 
 public class MaskIntersectionAssigner extends AnnotationComparisonAssigner<AssignmentMaskIntersection> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	@Override
 	public AssignmentMaskIntersection createAssignment(
 		ObjsToCompare objsToCompare, 

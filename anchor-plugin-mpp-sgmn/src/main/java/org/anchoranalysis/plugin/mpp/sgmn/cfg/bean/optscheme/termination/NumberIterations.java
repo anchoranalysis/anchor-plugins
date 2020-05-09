@@ -33,11 +33,6 @@ import org.anchoranalysis.mpp.sgmn.bean.optscheme.termination.TerminationConditi
 
 public class NumberIterations extends TerminationCondition {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 8554211447601682705L;
-
 	// START BEAN PROPERTIES
 	@BeanField
 	private int maxNumber = -1;

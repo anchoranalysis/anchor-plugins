@@ -40,11 +40,6 @@ import org.anchoranalysis.image.objmask.ops.ObjMaskMerger;
 //
 public class ObjMaskProviderMergeItemByItem extends ObjMaskProvider {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
 	private ObjMaskProvider objs1;

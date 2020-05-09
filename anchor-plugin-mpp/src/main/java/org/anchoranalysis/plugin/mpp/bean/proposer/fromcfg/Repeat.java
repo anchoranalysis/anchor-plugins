@@ -37,12 +37,6 @@ import org.anchoranalysis.bean.annotation.BeanField;
 
 public class Repeat extends MarkFromCfgProposer {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -4813619115351864179L;
-	
-	
 	// START BEAN
 	@BeanField
 	private MarkFromCfgProposer markFromCfgProposer;

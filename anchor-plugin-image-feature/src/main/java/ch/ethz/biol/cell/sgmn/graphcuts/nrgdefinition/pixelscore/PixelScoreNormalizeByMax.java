@@ -43,11 +43,6 @@ import org.anchoranalysis.image.histogram.Histogram;
  */
 public class PixelScoreNormalizeByMax extends PixelScoreSingleChnl {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	private double maxEdge;
 
 	@Override

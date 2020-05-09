@@ -38,11 +38,6 @@ import org.anchoranalysis.io.bean.color.generator.ColorSetGenerator;
 
 public class ColorListProviderFromObjMask extends ColorListProvider {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
 	private ColorSetGenerator colorSetGenerator;

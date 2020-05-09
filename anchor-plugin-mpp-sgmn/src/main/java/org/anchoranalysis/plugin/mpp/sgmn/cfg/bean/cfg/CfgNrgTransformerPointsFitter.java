@@ -40,11 +40,6 @@ import org.anchoranalysis.plugin.mpp.sgmn.cfg.optscheme.CfgNRGPixelizedUtilities
 
 public class CfgNrgTransformerPointsFitter extends StateTransformerBean<Cfg,CfgNRGPixelized> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	// START BEAN PROPERTIES
 	@BeanField
 	private CreateMarkFromPoints createMark;

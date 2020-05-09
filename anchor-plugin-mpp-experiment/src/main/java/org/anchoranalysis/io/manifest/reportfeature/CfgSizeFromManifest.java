@@ -40,11 +40,6 @@ import org.anchoranalysis.io.manifest.reportfeature.ReportFeatureForManifest;
 
 public class CfgSizeFromManifest extends ReportFeatureForManifest {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	@Override
 	public String genFeatureStrFor(ManifestRecorderFile obj, LogErrorReporter logger)
 			throws OperationFailedException {

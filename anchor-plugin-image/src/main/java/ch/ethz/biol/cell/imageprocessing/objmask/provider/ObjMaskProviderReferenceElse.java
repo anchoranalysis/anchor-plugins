@@ -38,11 +38,6 @@ import org.anchoranalysis.image.objmask.ObjMaskCollection;
 // Returns a reference if it exists, or else a different provider
 public class ObjMaskProviderReferenceElse extends ObjMaskProvider {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 8689748853607479300L;
-
 	// START BEAN PROPERTIES
 	@BeanField
 	private String id = "";

@@ -37,11 +37,6 @@ import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 
 public class ChnlProviderSubtractFromConstant extends ChnlProvider {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	// START BEAN PROPERTIES
 	@BeanField @Positive
 	private int value = 0;

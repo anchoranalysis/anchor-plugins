@@ -50,11 +50,6 @@ import org.anchoranalysis.image.io.rasterreader.OpenedRaster;
  */
 public class ImgChnlMapAutoname extends ImgChnlMapCreator {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	private static String[] RGB_CHNL_NAMES = {"red", "green", "blue" };
 	
 	public ImgChnlMapAutoname() {

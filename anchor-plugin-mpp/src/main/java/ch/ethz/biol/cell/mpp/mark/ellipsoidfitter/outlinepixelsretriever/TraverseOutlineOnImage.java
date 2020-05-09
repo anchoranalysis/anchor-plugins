@@ -47,11 +47,6 @@ import ch.ethz.biol.cell.mpp.mark.ellipsoidfitter.outlinepixelsretriever.visitsc
 // Traverses a pixel location
 public class TraverseOutlineOnImage extends OutlinePixelsRetriever {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -13764141682130803L;
-
 	// START BEAN
 	@BeanField
 	private VisitScheduler visitScheduler;

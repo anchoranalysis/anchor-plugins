@@ -40,11 +40,6 @@ import ch.ethz.biol.cell.imageprocessing.chnl.provider.level.LevelResultCollecti
 // Calculates a threshold-level for each object independently
 public class ChnlProviderObjsLevelIndependently extends ChnlProviderObjsLevelBase {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN
 	@BeanField
 	private int numDilations = 0;

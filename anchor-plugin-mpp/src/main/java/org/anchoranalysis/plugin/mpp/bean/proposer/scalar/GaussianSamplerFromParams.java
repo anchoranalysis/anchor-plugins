@@ -41,11 +41,6 @@ import cern.jet.random.Normal;
 
 public class GaussianSamplerFromParams extends ScalarProposer {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
 	private KeyValueParamsProvider keyValueParamsProvider;

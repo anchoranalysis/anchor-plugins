@@ -40,11 +40,6 @@ import org.anchoranalysis.io.filepath.FilePathToUnixStyleConverter;
  */
 public class NormalizedPath extends DescriptiveNameFromFileIndependent {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	@Override
 	protected String createDescriptiveName(File file, int index) throws CreateException {
 		return FilePathToUnixStyleConverter.toStringUnixStyle(

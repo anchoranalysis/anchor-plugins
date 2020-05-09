@@ -39,11 +39,6 @@ import org.anchoranalysis.io.manifest.ManifestRecorderFile;
 
 public class RootFilePathRegEx extends ReportFeatureForManifest {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	// START BEAN PROPERTIES
 	@BeanField
 	private int groupNum;

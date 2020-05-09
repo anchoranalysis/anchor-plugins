@@ -73,11 +73,6 @@ import org.anchoranalysis.plugin.mpp.sgmn.cfg.SgmnMPPState;
 // Segments a channel with marked pointed processes
 public class SgmnMPP extends CfgSgmn {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 5623335920871918625L;
-
 	// START BEAN PROPERTIES
 	@BeanField
 	private OptScheme<CfgNRGPixelized,CfgNRGPixelized> optScheme = null;

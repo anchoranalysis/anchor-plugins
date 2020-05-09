@@ -37,11 +37,6 @@ import org.anchoranalysis.image.orientation.Orientation2D;
 
 public class MarkProviderCreateEllipse extends MarkProvider {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	// START BEAN PROPERTIES
 	@BeanField
 	private double shellRad = 0.2;

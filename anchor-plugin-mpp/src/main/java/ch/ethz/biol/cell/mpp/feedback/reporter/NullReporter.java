@@ -34,10 +34,7 @@ import org.anchoranalysis.mpp.sgmn.optscheme.step.Reporting;
 
 public class NullReporter<T> extends ReporterOptimizationStep<T> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -337905500462161271L;
+	
 
 	// START BEAN PROPERTIES
 	

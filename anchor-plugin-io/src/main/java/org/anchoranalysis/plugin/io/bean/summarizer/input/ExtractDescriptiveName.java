@@ -30,11 +30,6 @@ import org.anchoranalysis.io.input.InputFromManager;
 
 public class ExtractDescriptiveName<T extends InputFromManager> extends SummarizerInputFromManager<T, String> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	@Override
 	protected String extractFrom(T input) {
 		return input.descriptiveName();

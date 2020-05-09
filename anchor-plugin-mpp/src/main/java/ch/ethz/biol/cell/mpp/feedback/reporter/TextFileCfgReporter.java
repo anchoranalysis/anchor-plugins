@@ -40,11 +40,6 @@ import ch.ethz.biol.cell.imageprocessing.io.generator.text.ObjectAsStringGenerat
 
 public class TextFileCfgReporter extends PeriodicSubfolderReporter<Cfg> {
 	
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 5108453586667112608L;
-
 	public TextFileCfgReporter() {
 		super();
 	}

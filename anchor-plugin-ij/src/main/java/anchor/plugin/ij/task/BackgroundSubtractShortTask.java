@@ -54,11 +54,6 @@ import ch.ethz.biol.cell.imageprocessing.chnl.provider.ChnlProviderIJBackgroundS
 
 public class BackgroundSubtractShortTask extends RasterTask {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	// START BEAN PROPERTIES
 	@BeanField
 	private int radius;

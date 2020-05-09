@@ -40,11 +40,6 @@ import org.anchoranalysis.image.objmask.morph.MorphologicalDilation;
 
 public class ObjMaskProviderDilate extends ObjMaskProviderDimensions {
 	
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
 	private ObjMaskProvider objs;

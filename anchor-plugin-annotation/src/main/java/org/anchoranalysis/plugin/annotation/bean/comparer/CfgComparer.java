@@ -51,11 +51,6 @@ import org.anchoranalysis.mpp.io.cfg.CfgDeserializer;
 public class CfgComparer extends Comparer {
 
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
 	private FilePathGenerator filePathGenerator;

@@ -41,11 +41,6 @@ import org.anchoranalysis.plugin.image.intensity.IntensityMeanCalculator;
 // Rewrites the intensity for each ObjMask (assume no overlap) so that its mean is 128
 public class ChnlProviderNormaliseIntensityForObjects extends ChnlProvider {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
 	private ChnlProvider chnlProvider;

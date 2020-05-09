@@ -44,11 +44,6 @@ import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 // Creates a 3D version of an object by simplying replicated the 2D slice in all z-stacks
 public class ObjMaskProviderExpandZ extends ObjMaskProviderDimensions {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
 	private ObjMaskProvider objs;

@@ -36,11 +36,6 @@ import org.anchoranalysis.image.stack.Stack;
 
 public class ChnlProviderStack extends ChnlProvider {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -4943301687139533979L;
-	
 	// START
 	@BeanField
 	private int chnlIndex = 0;

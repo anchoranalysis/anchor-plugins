@@ -42,11 +42,6 @@ import org.anchoranalysis.image.orientation.Orientation;
 
 public class RandomEllipsoidBounds extends RadiiProposer {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -8857499584987708120L;
-
 	@Override
 	public boolean isCompatibleWith(Mark testMark) {
 		return testMark instanceof MarkEllipsoid;

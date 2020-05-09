@@ -5,11 +5,6 @@ import org.anchoranalysis.image.bean.threshold.CalculateLevel;
 
 public abstract class ChnlProviderObjsLevelBase extends ChnlProviderLevel {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN
 	@BeanField
 	private CalculateLevel calculateLevel;

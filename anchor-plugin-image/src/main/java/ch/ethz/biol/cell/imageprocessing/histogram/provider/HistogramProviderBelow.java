@@ -43,11 +43,6 @@ import org.anchoranalysis.image.histogram.Histogram;
  */
 public class HistogramProviderBelow extends HistogramProvider {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
 	private HistogramProvider histogramProvider;

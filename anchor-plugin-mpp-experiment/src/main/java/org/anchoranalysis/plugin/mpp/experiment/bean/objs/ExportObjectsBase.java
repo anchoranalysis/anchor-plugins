@@ -49,11 +49,6 @@ import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
 public abstract class ExportObjectsBase<T extends InputFromManager, S> extends Task<T,S> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	// START BEAN PROPERTIES
 	/**
 	 * The objects that are matched against the points

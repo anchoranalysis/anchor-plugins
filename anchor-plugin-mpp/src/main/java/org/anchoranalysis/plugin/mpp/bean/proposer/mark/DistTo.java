@@ -41,11 +41,6 @@ import org.anchoranalysis.bean.annotation.BeanField;
 
 public class DistTo extends MarkProposer {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -2788200442802194855L;
-	
 	// BEAN PARAMETERS
 	@BeanField
 	private MarkProposer markProposer = null;

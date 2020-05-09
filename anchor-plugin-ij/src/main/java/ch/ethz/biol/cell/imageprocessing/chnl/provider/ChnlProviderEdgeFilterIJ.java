@@ -39,11 +39,6 @@ import org.anchoranalysis.image.voxel.box.VoxelBoxWrapper;
 
 public class ChnlProviderEdgeFilterIJ extends ChnlProvider {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 3978226156945187112L;
-	
 	// START BEAN
 	@BeanField
 	private ChnlProvider chnlProvider;

@@ -50,12 +50,6 @@ import org.anchoranalysis.mpp.sgmn.optscheme.step.Reporting;
 
 public class CfgNRGSerializerChangeReporter extends ReporterOptimizationStep<CfgNRGPixelized> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1774424246128858626L;
-	
-	
 	// START BEAN PARAMETERS
 	@BeanField
 	private String manifestFunction = "cfgNRG";

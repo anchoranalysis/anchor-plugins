@@ -35,11 +35,6 @@ import org.anchoranalysis.image.binary.BinaryChnl;
 // Repeats an input slice, to match dimensions
 public class BinaryImgChnlProviderMaxIntensityProjection extends BinaryImgChnlProvider {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
 	private BinaryImgChnlProvider binaryImgChnlProvider;

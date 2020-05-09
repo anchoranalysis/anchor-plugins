@@ -34,11 +34,6 @@ import org.anchoranalysis.plugin.operator.feature.bean.arithmetic.MultiplyByCons
 
 public abstract class FeatureListProviderAggregateDiff extends FeatureListProviderAggregate {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	@Override
 	protected Feature<FeatureInputPairObjs> createAggregateFeature(
 		Feature<FeatureInputPairObjs> featFirst,

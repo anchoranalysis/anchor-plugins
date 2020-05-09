@@ -66,11 +66,6 @@ import ch.ethz.biol.cell.sgmn.objmask.watershed.minimaimposition.MinimaImpositio
 
 public class ObjMaskSgmnFromSeedsReconWatershed extends ObjMaskSgmn {
 	
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 973021585507446579L;
-
 	/* START Bean properties */
 	@BeanField
 	private BinarySgmn sgmnBinary;

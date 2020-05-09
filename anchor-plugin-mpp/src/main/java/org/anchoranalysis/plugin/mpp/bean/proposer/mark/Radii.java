@@ -45,11 +45,6 @@ import org.anchoranalysis.image.orientation.Orientation;
 
 public class Radii extends MarkProposer {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -7481314419224313543L;
-	
 	// BEAN PARAMETERS
 	@BeanField
 	private RadiiProposer radiiProposer = null;

@@ -34,11 +34,6 @@ import org.anchoranalysis.image.binary.BinaryChnl;
 
 public class BinaryImgChnlProviderDuplicate extends BinaryImgChnlProvider {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1360108340369477461L;
-	
 	// START BEAN
 	@BeanField
 	private BinaryImgChnlProvider binaryImgChnlProvider;

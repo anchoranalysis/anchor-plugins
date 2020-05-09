@@ -39,11 +39,6 @@ import org.anchoranalysis.image.scale.ScaleFactor;
 
 public class BinaryImgChnlProviderScaleXY extends BinaryImgChnlProvider {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
 	private BinaryImgChnlProvider binaryImgChnlProvider;

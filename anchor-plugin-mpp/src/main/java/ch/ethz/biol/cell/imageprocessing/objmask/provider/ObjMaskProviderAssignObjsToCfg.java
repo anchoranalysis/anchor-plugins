@@ -52,11 +52,6 @@ import ch.ethz.biol.cell.imageprocessing.objmask.provider.assignobjstocfg.RslvdO
 // Assigns objects into groups, based upon distance to objects in a configuration. One group per object in the configuration
 public class ObjMaskProviderAssignObjsToCfg extends ObjMaskProviderDimensions {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
 	private ObjMaskProvider objs;

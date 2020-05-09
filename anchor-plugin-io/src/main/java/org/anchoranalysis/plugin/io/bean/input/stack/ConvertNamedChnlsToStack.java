@@ -58,11 +58,6 @@ import org.anchoranalysis.io.error.AnchorIOException;
  */
 public class ConvertNamedChnlsToStack extends InputManager<StackSequenceInput> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	// START BEAN PROPERTIES
 	@BeanField
 	private InputManager<NamedChnlsInput> input;

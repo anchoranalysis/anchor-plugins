@@ -62,11 +62,6 @@ public class FilePathPrefixerExperimentStructure extends FilePathPrefixer {
 	private String prefix;
 	// END BEAN PROPERTIES
 	
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	private FilePathPrefixer delegate;
 	
 	private BeanInstanceMap defaultInstances;

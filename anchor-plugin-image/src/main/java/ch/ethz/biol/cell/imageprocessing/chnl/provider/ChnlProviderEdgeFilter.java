@@ -61,11 +61,6 @@ import net.imglib2.view.Views;
 // 3x3 Sobel Filter
 public class ChnlProviderEdgeFilter extends ChnlProvider {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 3978226156945187112L;
-	
 	// START BEAN
 	@BeanField
 	private ChnlProvider chnlProvider;

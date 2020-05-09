@@ -44,11 +44,6 @@ import ch.ethz.biol.cell.imageprocessing.io.objmask.FloodFillUtils;
 
 public class ObjMaskSgmnFloodFillIJ2D extends ObjMaskSgmn {
 	
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
 	private int minBoundingBoxVolumeVoxels = 1;

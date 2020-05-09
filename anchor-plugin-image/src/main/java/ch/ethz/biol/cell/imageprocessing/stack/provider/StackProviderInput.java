@@ -36,10 +36,7 @@ import org.anchoranalysis.image.stack.Stack;
 // Simply returns the inputStack
 public class StackProviderInput extends StackProvider {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -5242194978354201519L;
+	
 	
 	// START BEAN PROPERTIES
 	// END BEAN PROPERTIES

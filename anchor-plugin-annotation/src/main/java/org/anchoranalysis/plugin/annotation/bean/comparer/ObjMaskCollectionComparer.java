@@ -54,11 +54,6 @@ import org.anchoranalysis.io.error.AnchorIOException;
  */
 public class ObjMaskCollectionComparer extends Comparer {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
 	private FilePathGenerator filePathGenerator;

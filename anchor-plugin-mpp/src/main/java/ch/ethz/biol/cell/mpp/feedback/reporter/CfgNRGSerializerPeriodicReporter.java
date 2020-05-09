@@ -35,11 +35,6 @@ import org.anchoranalysis.mpp.sgmn.optscheme.step.Reporting;
 
 public class CfgNRGSerializerPeriodicReporter extends ObjectSerializerPeriodicReporter<CfgNRG> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 3000616196624920526L;
-	
 	// BEAN PARAMETERS
 	@BeanField
 	private boolean proposal = false;

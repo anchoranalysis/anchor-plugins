@@ -44,11 +44,6 @@ import org.anchoranalysis.image.extent.BoundingBox;
 //  Tries overall centre point first, and then projects it onto each slice
 public class AnySliceCentrePosOnBinaryImgChnl extends CheckMark {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -1700747133659495372L;
-
 	// START BEAN
 	@BeanField
 	private BinaryImgChnlProvider binaryImgChnlProvider;

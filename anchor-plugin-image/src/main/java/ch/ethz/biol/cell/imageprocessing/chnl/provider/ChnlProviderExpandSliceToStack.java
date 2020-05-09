@@ -43,11 +43,6 @@ import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
 // Takes a 2-dimensional mask and converts into a 3-dimensional mask by repeating along the z-stack
 public class ChnlProviderExpandSliceToStack extends ChnlProvider {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
 	private ImageDimProvider dimProviderTarget;

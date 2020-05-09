@@ -43,11 +43,6 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
  */
 public class Constant extends CalculateLevel {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PROPERTIES
 	@BeanField @NonNegative
 	private int level = 0;

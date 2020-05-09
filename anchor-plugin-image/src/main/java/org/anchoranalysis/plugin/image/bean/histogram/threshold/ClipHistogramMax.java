@@ -46,11 +46,6 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
  */
 public class ClipHistogramMax extends CalculateLevel {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN
 	@BeanField
 	private CalculateLevel calculateLevel;

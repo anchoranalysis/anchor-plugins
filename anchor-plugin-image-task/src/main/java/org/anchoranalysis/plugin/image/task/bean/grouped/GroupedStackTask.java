@@ -54,11 +54,6 @@ import org.anchoranalysis.plugin.image.task.bean.selectchnls.SelectChnlsFromStac
  */
 public abstract class GroupedStackTask<S,T> extends Task<ProvidesStackInput,GroupedSharedState<S,T>> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
 	private FilePathGenerator groupGenerator = new FilePathGeneratorConstant("all");	// Translates an input file name to it's group

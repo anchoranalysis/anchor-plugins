@@ -48,11 +48,6 @@ import org.anchoranalysis.plugin.image.intensity.IntensityMeanCalculator;
 //  as joined if they have an intersecting pixel
 public class ObjMaskFilterHasSpheroidSmallInner extends ObjMaskFilter {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	// START BEAN PROPERTIES
 	@BeanField
 	private ObjMaskMatcher objMaskMatcherForContainedObjects;

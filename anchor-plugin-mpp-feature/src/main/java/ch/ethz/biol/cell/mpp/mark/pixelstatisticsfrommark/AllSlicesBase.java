@@ -35,11 +35,6 @@ import org.anchoranalysis.image.voxel.statistics.VoxelStatistics;
 
 public abstract class AllSlicesBase extends IndexedRegionBase {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
 	private int indexNonZero = 0;

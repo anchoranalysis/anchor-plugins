@@ -46,11 +46,6 @@ import ch.ethz.biol.cell.imageprocessing.objmask.matching.ObjMaskMatchUtilities;
 // Extends an object as much as it can within the z-slices of a containing object
 public class ObjMaskProviderExtendInZ extends ObjMaskProvider {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
 	private ObjMaskProvider objs;

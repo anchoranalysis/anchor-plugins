@@ -44,11 +44,6 @@ import org.anchoranalysis.image.extent.Extent;
 //  and makes the box On
 public class BinaryImgChnlProviderBox extends BinaryImgChnlProvider {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	// START BEAN PROPERTIES
 	@BeanField
 	private BinaryImgChnlProvider binaryImgChnlProvider;

@@ -43,11 +43,6 @@ import org.anchoranalysis.io.output.bound.BoundIOContext;
  */
 public abstract class ImageLabeller<T> extends AnchorBean<ImageLabeller<T>> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	/** Should be called once before calling any other methods
 	 * 
 	 *  @param pathForBinding a path that can be used by the labeller to make filePath decisions

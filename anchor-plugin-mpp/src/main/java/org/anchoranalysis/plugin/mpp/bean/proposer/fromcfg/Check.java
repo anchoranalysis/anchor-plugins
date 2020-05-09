@@ -40,11 +40,6 @@ import org.anchoranalysis.core.error.OperationFailedException;
 
 public class Check extends MarkFromCfgProposer {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -117699625305589530L;
-
 	// START BEANS
 	@BeanField
 	private MarkFromCfgProposer markFromCfgProposer;

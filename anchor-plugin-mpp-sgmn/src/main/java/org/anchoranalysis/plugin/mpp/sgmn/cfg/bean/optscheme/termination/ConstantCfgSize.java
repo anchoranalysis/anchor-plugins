@@ -41,11 +41,6 @@ import org.anchoranalysis.mpp.sgmn.bean.optscheme.termination.TerminationConditi
  */
 public class ConstantCfgSize extends TerminationCondition {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -5224455897080214459L;
-
 	// BEAN PARAMETERS
 	@BeanField
 	private int numRep = -1;

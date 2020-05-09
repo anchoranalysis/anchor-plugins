@@ -33,11 +33,6 @@ import java.util.Set;
 
 public abstract class BinaryOutcomeImageLabeller<T> extends ImageLabeller<T> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	private static final String POSITIVE = "positive";
 	private static final String NEGATIVE = "negative";
 		

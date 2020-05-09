@@ -42,11 +42,6 @@ import org.anchoranalysis.image.voxel.box.VoxelBoxWrapper;
 
 public class SgmnInv extends BinarySgmn {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START PROPERTIES
 	@BeanField
 	private BinarySgmn sgmn;

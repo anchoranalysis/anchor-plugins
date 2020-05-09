@@ -34,11 +34,6 @@ import org.anchoranalysis.bean.annotation.Positive;
 
 public class AnnealSchemeGeom extends AnnealScheme {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 6532948255769419812L;
-
 	// START BEAN PROPERTIES
 	@BeanField @Positive
 	private double rate = -1;

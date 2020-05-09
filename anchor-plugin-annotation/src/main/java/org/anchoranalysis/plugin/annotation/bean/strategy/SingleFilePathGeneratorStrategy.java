@@ -36,11 +36,6 @@ import org.anchoranalysis.io.error.AnchorIOException;
 
 public abstract class SingleFilePathGeneratorStrategy extends AnnotatorStrategy {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	// START BEAN PROPERTIES
 	@BeanField
 	private FilePathGenerator annotationFilePathGenerator;

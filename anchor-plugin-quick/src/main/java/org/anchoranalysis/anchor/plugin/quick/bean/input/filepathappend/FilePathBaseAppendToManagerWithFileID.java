@@ -30,11 +30,6 @@ import org.anchoranalysis.bean.annotation.BeanField;
 
 public abstract class FilePathBaseAppendToManagerWithFileID extends FilePathBaseAppendToManager {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	// START BEAN PROPERTIES
 	/** Unique identifier for the stack, object-mask-collection etc. that is being appended. Filename is constructed from it */
 	@BeanField

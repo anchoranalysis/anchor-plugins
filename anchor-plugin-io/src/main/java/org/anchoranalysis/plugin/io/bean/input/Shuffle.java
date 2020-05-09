@@ -45,11 +45,6 @@ import org.anchoranalysis.io.input.InputFromManager;
  */
 public class Shuffle<T extends InputFromManager> extends InputManager<T> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
 	private InputManager<T> input;

@@ -39,11 +39,6 @@ import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeFloat;
 
 public abstract class ChnlProviderGradientBase extends ChnlProvider {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	// START BEAN
 	@BeanField
 	private ChnlProvider chnlProvider;

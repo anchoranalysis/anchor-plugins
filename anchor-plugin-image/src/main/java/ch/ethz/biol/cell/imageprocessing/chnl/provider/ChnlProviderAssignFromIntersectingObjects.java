@@ -46,11 +46,6 @@ import ch.ethz.biol.cell.imageprocessing.objmask.matching.ObjMaskMatchUtilities;
 //   value in the respective source object to the target object
 public class ChnlProviderAssignFromIntersectingObjects extends ChnlProvider {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
 	private ChnlProvider chnlProvider;

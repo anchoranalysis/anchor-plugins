@@ -40,11 +40,6 @@ import org.anchoranalysis.image.points.PointsFromObjMask;
 
 public class CfgProviderPointsFromObjs extends CfgProvider {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
 	private ObjMaskProvider objs;

@@ -46,11 +46,6 @@ import org.anchoranalysis.plugin.image.bean.blur.BlurStrategy;
 public class ChnlProviderBlur extends ChnlProvider {
 
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
 	private ChnlProvider chnlProvider;

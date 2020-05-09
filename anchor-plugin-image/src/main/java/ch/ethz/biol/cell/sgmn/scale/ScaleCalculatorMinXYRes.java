@@ -35,11 +35,6 @@ import org.anchoranalysis.image.scale.ScaleFactor;
 
 public class ScaleCalculatorMinXYRes extends ScaleCalculator {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
 	private double minXYRes = 10e-9;
