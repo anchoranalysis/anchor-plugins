@@ -27,8 +27,6 @@ package ch.ethz.biol.cell.imageprocessing.chnl.provider;
  */
 
 
-import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.bean.annotation.Positive;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.chnl.Chnl;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
