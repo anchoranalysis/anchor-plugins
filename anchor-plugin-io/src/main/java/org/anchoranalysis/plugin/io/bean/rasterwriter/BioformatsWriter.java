@@ -31,27 +31,16 @@ package org.anchoranalysis.plugin.io.bean.rasterwriter;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
-import java.nio.file.Path;
-
 import org.anchoranalysis.image.chnl.Chnl;
-import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.io.RasterIOException;
-import org.anchoranalysis.image.io.bean.rasterwriter.RasterWriter;
-import org.anchoranalysis.image.io.generator.raster.series.ImgStackSeries;
 import org.anchoranalysis.image.stack.Stack;
-import org.anchoranalysis.image.voxel.box.VoxelBox;
-
-import ome.xml.model.enums.EnumerationException;
-import ome.xml.model.enums.PixelType;
-import loci.common.services.DependencyException;
-import loci.common.services.ServiceException;
 import loci.formats.FormatException;
 import loci.formats.IFormatWriter;
 import loci.formats.out.TiffWriter;
 
 
 // Writes a stack to the file system in some manner
-public class BioformatsWriter extends RasterWriter {
+public class BioformatsWriter extends ByteNoTimeSeriesWriter {
 
 	// A default extension
 	@Override
@@ -60,27 +49,22 @@ public class BioformatsWriter extends RasterWriter {
 	}
 
 	@Override
-	public void writeTimeSeriesStackByte(ImgStackSeries<ByteBuffer> stackSeries,
-			Path filePath, boolean makeRGB)
-			throws RasterIOException {
-		throw new RasterIOException("Writing time-series is unsupported for this format");
-	}
-
-	private void writeSeperateChnl( IFormatWriter writer, Stack stack ) throws FormatException, IOException, RasterIOException {
-		
-		int cnt = 0;
-		for( int c=0; c<stack.getNumChnl(); c++) {
-			Chnl chnl = stack.getChnl(c);
-			
-			VoxelBox<ByteBuffer> vb = chnl.getVoxelBox().asByte();
-			for (int z=0; z<stack.getDimensions().getZ(); z++) {
-				writer.saveBytes(cnt++, vb.getPixelsForPlane(z).buffer().array() );
-				
-			}
-		}
+	protected IFormatWriter createWriter() throws RasterIOException {
+		try {
+			TiffWriter writer = new TiffWriter();
+			// COMPRESSION CURRENTLY DISABLED
+			writer.setCompression("LZW");
+			writer.setBigTiff(false);
+			writer.setValidBitsPerPixel(8);
+			writer.setWriteSequentially(true);	
+			return writer;
+		} catch (FormatException e) {
+			throw new RasterIOException(e);
+		}			
 	}
 	
-	private void writeRGB( IFormatWriter writer, Stack stack ) throws FormatException, IOException, RasterIOException {
+	@Override
+	protected void writeRGB( IFormatWriter writer, Stack stack ) throws FormatException, IOException, RasterIOException {
 			
 		Chnl chnlRed = stack.getChnl(0);
 		Chnl chnlGreen = stack.getChnl(1);
@@ -104,58 +88,5 @@ public class BioformatsWriter extends RasterWriter {
 			writer.saveBytes(z, merged.array() );
 			
 		}
-		
-		
-		
 	}
-	
-	
-	// Key interface method
-	@Override
-	public void writeStackByte( Stack stack, Path filePath, boolean makeRGB ) throws RasterIOException {
-		
-		if (!(stack.getNumChnl()==1 || stack.getNumChnl()==3)) {
-			throw new RasterIOException("Stack must have 1 or 3 channels");
-		}
-		
-		ImageDim sd = stack.getDimensions();
-
-		PixelType pixelType = PixelType.UINT8;
-		
-		Stack stackCast = (Stack) stack;
-		
-		try (TiffWriter writer = new TiffWriter()) {
-			writer.setInterleaved(false);
-			
-			// COMPRESSION CURRENTLY DISABLED
-			writer.setCompression("LZW");
-			writer.setBigTiff(false);
-			writer.setValidBitsPerPixel(8);
-			writer.setWriteSequentially(true);	
-						
-			writer.setMetadataRetrieve( MetadataUtilities.createMetadata(sd, stack.getNumChnl(), pixelType, makeRGB, true) );
-			writer.setId( filePath.toString() );
-			
-			if (!writer.canDoStacks() && sd.getZ() > 1 ) {
-				throw new RasterIOException("The writer must support stacks for Z > 1");
-			}
-			
-			if (makeRGB && stack.getNumChnl()==3) {
-				writeRGB(writer, stackCast);
-			} else {
-				writeSeperateChnl(writer, stackCast);
-			}
-			
-		
-		} catch (IOException | EnumerationException | ServiceException | DependencyException | FormatException e) {
-			throw new RasterIOException(e);
-		}
-	}
-
-	@Override
-	public void writeStackShort(Stack stack, Path filePath,
-			boolean makeRGB) throws RasterIOException {
-		throw new RasterIOException("Writing ShortBuffer stack not yet implemented");
-	}
-	
 }
