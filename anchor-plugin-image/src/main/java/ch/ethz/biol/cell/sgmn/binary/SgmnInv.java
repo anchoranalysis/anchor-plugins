@@ -29,9 +29,9 @@ package ch.ethz.biol.cell.sgmn.binary;
 
 import java.nio.ByteBuffer;
 
-import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.bean.sgmn.binary.BinarySgmn;
+import org.anchoranalysis.image.bean.sgmn.binary.BinarySgmnOne;
 import org.anchoranalysis.image.bean.sgmn.binary.BinarySgmnParameters;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
@@ -40,12 +40,45 @@ import org.anchoranalysis.image.sgmn.SgmnFailedException;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.anchoranalysis.image.voxel.box.VoxelBoxWrapper;
 
-public class SgmnInv extends BinarySgmn {
+public class SgmnInv extends BinarySgmnOne {
+	
+	@Override
+	public BinaryVoxelBox<ByteBuffer> sgmnFromSgmn(VoxelBoxWrapper voxelBox, BinarySgmnParameters params, BinarySgmn sgmn)
+			throws SgmnFailedException {
 
-	// START PROPERTIES
-	@BeanField
-	private BinarySgmn sgmn;
-	// END PROPERTIES
+		BinaryVoxelBox<ByteBuffer> bvb = sgmn.sgmn(voxelBox, params);
+		
+		if (bvb==null) {
+			return null;
+		}
+		
+		try {
+			invertVoxelBox( bvb );
+		} catch (OperationFailedException e) {
+			throw new SgmnFailedException(e);
+		}
+		
+		return bvb;
+	}
+
+	@Override
+	public BinaryVoxelBox<ByteBuffer> sgmnFromSgmn(VoxelBoxWrapper voxelBox, BinarySgmnParameters params, ObjMask objMask, BinarySgmn sgmn) throws SgmnFailedException {
+		
+		BinaryVoxelBox<ByteBuffer> vb = sgmn.sgmn(voxelBox, params, objMask);
+		
+		try {
+			invertVoxelBox( vb );
+		} catch (OperationFailedException e) {
+			throw new SgmnFailedException(e);
+		}
+		
+		return vb;
+	}
+
+	@Override
+	public VoxelBox<ByteBuffer> getAdditionalOutput() {
+		return null;
+	}
 	
 	private void invertVoxelBox(BinaryVoxelBox<ByteBuffer> voxelBox) throws OperationFailedException {
 		
@@ -69,52 +102,5 @@ public class SgmnInv extends BinarySgmn {
 			}
 			
 		}		
-	}
-
-	@Override
-	public BinaryVoxelBox<ByteBuffer> sgmn(VoxelBoxWrapper voxelBox, BinarySgmnParameters params)
-			throws SgmnFailedException {
-
-		BinaryVoxelBox<ByteBuffer> bvb = sgmn.sgmn(voxelBox, params);
-		
-		if (bvb==null) {
-			return null;
-		}
-		
-		try {
-			invertVoxelBox( bvb );
-		} catch (OperationFailedException e) {
-			throw new SgmnFailedException(e);
-		}
-		
-		return bvb;
-	}
-
-	@Override
-	public BinaryVoxelBox<ByteBuffer> sgmn(VoxelBoxWrapper voxelBox,
-			BinarySgmnParameters params, ObjMask objMask) throws SgmnFailedException {
-		
-		BinaryVoxelBox<ByteBuffer> vb = sgmn.sgmn(voxelBox, params, objMask);
-		
-		try {
-			invertVoxelBox( vb );
-		} catch (OperationFailedException e) {
-			throw new SgmnFailedException(e);
-		}
-		
-		return vb;
-	}
-
-	@Override
-	public VoxelBox<ByteBuffer> getAdditionalOutput() {
-		return null;
-	}
-
-	public BinarySgmn getSgmn() {
-		return sgmn;
-	}
-
-	public void setSgmn(BinarySgmn sgmn) {
-		this.sgmn = sgmn;
 	}
 }
