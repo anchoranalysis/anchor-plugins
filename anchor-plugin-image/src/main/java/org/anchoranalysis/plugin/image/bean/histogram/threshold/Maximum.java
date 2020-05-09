@@ -27,14 +27,9 @@ package org.anchoranalysis.plugin.image.bean.histogram.threshold;
  */
 
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.bean.threshold.CalculateLevel;
 import org.anchoranalysis.image.histogram.Histogram;
-import org.apache.commons.lang.builder.HashCodeBuilder;
 
 
 /**
@@ -43,44 +38,18 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
  * @author owen
  *
  */
-public class Maximum extends CalculateLevel {
-
-	// START BEAN PROPERTIES
-	@BeanField
-	private List<CalculateLevel> list = new ArrayList<>();
-	// END BEAN PROPERTIES
+public class Maximum extends CalculateLevelListBase {
 	
 	@Override
 	public int calculateLevel(Histogram h) throws OperationFailedException {
 
 		int max = -1;	// As level should always be >=0
-		for( CalculateLevel cl : list) {
+		for( CalculateLevel cl : getList()) {
 			int level = cl.calculateLevel(h);
 			if (level>max) {
 				max = level;
 			}
 		}
 		return max;
-	}
-
-	public List<CalculateLevel> getList() {
-		return list;
-	}
-
-	public void setList(List<CalculateLevel> list) {
-		this.list = list;
-	}
-	
-	@Override
-	public boolean equals(Object obj) {
-		assert(false);
-		return false;
-	}
-
-	@Override
-	public int hashCode() {
-		assert(false);
-		return new HashCodeBuilder()
-			.toHashCode();
 	}
 }
