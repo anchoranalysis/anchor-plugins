@@ -33,30 +33,29 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.bean.provider.BinaryImgChnlProvider;
-import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
+import org.anchoranalysis.image.bean.provider.ObjMaskProviderOne;
 import org.anchoranalysis.image.binary.BinaryChnl;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.image.objmask.ObjMaskCollection;
 
-// Files holes
-public class ObjMaskProviderFill extends ObjMaskProvider {
+/**
+ * Fills holes in an object. Existing obj-masks are overwritten (i.e. their memory buffers are replaced with filled-in pixels).
+ * 
+ * @author Owen Feehan
+ *
+ */
+public class ObjMaskProviderFill extends ObjMaskProviderOne {
 
 	// START BEAN PROPERTIES
-	/** The objects whose holes are filled, current object-masks are overwritten */
-	@BeanField
-	private ObjMaskProvider objs;
-	
 	/** A mask which restricts where a fill operation can happen */
 	@BeanField
 	private BinaryImgChnlProvider maskProvider;
 	// END BEAN PROPERTIES
 	
 	@Override
-	public ObjMaskCollection create() throws CreateException {
-
-		ObjMaskCollection objsCollection = objs.create();
+	public ObjMaskCollection createFromObjs( ObjMaskCollection objsCollection ) throws CreateException {
 		
 		BinaryChnl mask = createMaskOrNull();
 		
@@ -92,14 +91,6 @@ public class ObjMaskProviderFill extends ObjMaskProvider {
 		} else {
 			return null;
 		}
-	}
-
-	public ObjMaskProvider getObjs() {
-		return objs;
-	}
-
-	public void setObjs(ObjMaskProvider objs) {
-		this.objs = objs;
 	}
 
 	public BinaryImgChnlProvider getMaskProvider() {

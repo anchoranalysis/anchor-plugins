@@ -29,23 +29,18 @@ package ch.ethz.biol.cell.imageprocessing.objmask.provider;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
+import org.anchoranalysis.image.bean.provider.ObjMaskProviderOne;
 import org.anchoranalysis.image.objmask.ObjMaskCollection;
 
-public class ObjMaskProviderIndex extends ObjMaskProvider {
+public class ObjMaskProviderIndex extends ObjMaskProviderOne {
 
 	// START BEAN PROPERTIES
 	@BeanField
 	private int index = 0;
-	
-	@BeanField
-	private ObjMaskProvider objs;
 	// END BEAN PROPERTIES
 
 	@Override
-	public ObjMaskCollection create() throws CreateException {
-		
-		ObjMaskCollection objMaskCollection = objs.create();
+	public ObjMaskCollection createFromObjs(ObjMaskCollection objMaskCollection) throws CreateException {
 		
 		if (index>=objMaskCollection.size()) {
 			throw new CreateException( String.format("Index %d is out of bounds. ObjMaskCollection has %d items", index, objMaskCollection.size()) );
@@ -61,13 +56,4 @@ public class ObjMaskProviderIndex extends ObjMaskProvider {
 	public void setIndex(int index) {
 		this.index = index;
 	}
-
-	public ObjMaskProvider getObjs() {
-		return objs;
-	}
-
-	public void setObjs(ObjMaskProvider objs) {
-		this.objs = objs;
-	}
-
 }

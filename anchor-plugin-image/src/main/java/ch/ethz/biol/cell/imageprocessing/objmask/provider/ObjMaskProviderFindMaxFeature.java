@@ -1,5 +1,7 @@
 package ch.ethz.biol.cell.imageprocessing.objmask.provider;
 
+import java.util.Optional;
+
 /*
  * #%L
  * anchor-plugin-image
@@ -32,26 +34,21 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorSingle;
-import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
+import org.anchoranalysis.image.bean.provider.ObjMaskProviderOne;
 import org.anchoranalysis.image.feature.bean.evaluator.FeatureEvaluator;
 import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
 import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.image.objmask.ObjMaskCollection;
 
-public class ObjMaskProviderFindMaxFeature extends ObjMaskProvider {
+public class ObjMaskProviderFindMaxFeature extends ObjMaskProviderOne {
 
 	// START BEAN PROPERTIES
-	@BeanField
-	private ObjMaskProvider objs;
-	
 	@BeanField
 	private FeatureEvaluator<FeatureInputSingleObj> featureEvaluator;
 	// END BEAN PROPERTIES
 
 	@Override
-	public ObjMaskCollection create() throws CreateException {
-		
-		ObjMaskCollection in = objs.create();
+	public ObjMaskCollection createFromObjs( ObjMaskCollection objMaskCollection ) throws CreateException {
 		
 		FeatureCalculatorSingle<FeatureInputSingleObj> session;
 		try {
@@ -60,11 +57,19 @@ public class ObjMaskProviderFindMaxFeature extends ObjMaskProvider {
 			throw new CreateException(e);
 		}
 
+		Optional<ObjMask> max = findMaxObj(session,	objMaskCollection);
 		
 		ObjMaskCollection out = new ObjMaskCollection();
-
-		ObjMask max = null;
+		max.ifPresent( obj->
+			out.add(obj)
+		);
+		return out;
+	}
+	
+	private Optional<ObjMask> findMaxObj( FeatureCalculatorSingle<FeatureInputSingleObj> session, ObjMaskCollection in ) throws CreateException {
+		
 		try {
+			ObjMask max = null;
 			
 			double maxVal = 0;
 			for( ObjMask om : in ) {
@@ -79,23 +84,11 @@ public class ObjMaskProviderFindMaxFeature extends ObjMaskProvider {
 				}
 			}
 			
+			return Optional.ofNullable(max);
+			
 		} catch (FeatureCalcException e) {
 			throw new CreateException(e);
 		}
-			
-		if (max!=null) {
-			out.add(max);
-		}
-		
-		return out;
-	}
-
-	public ObjMaskProvider getObjs() {
-		return objs;
-	}
-
-	public void setObjs(ObjMaskProvider objs) {
-		this.objs = objs;
 	}
 
 	public FeatureEvaluator<FeatureInputSingleObj> getFeatureEvaluator() {

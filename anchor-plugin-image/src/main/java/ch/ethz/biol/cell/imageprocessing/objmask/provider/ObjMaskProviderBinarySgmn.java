@@ -32,7 +32,7 @@ import java.nio.ByteBuffer;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.bean.provider.ChnlProvider;
-import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
+import org.anchoranalysis.image.bean.provider.ObjMaskProviderOne;
 import org.anchoranalysis.image.bean.sgmn.binary.BinarySgmn;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
 import org.anchoranalysis.image.chnl.Chnl;
@@ -42,12 +42,9 @@ import org.anchoranalysis.image.sgmn.SgmnFailedException;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.anchoranalysis.image.voxel.box.VoxelBoxWrapper;
 
-public class ObjMaskProviderBinarySgmn extends ObjMaskProvider {
+public class ObjMaskProviderBinarySgmn extends ObjMaskProviderOne {
 
 	// START BEAN PROPERTIES
-	@BeanField
-	private ObjMaskProvider objs;
-	
 	@BeanField
 	private BinarySgmn binarySgmn;
 	
@@ -56,9 +53,8 @@ public class ObjMaskProviderBinarySgmn extends ObjMaskProvider {
 	// END BEAN PROPERTIES
 
 	@Override
-	public ObjMaskCollection create() throws CreateException {
+	public ObjMaskCollection createFromObjs(ObjMaskCollection objMasks) throws CreateException {
 		
-		ObjMaskCollection objMasks = objs.create();
 		Chnl chnl = chnlProvider.create();
 		
 		ObjMaskCollection masksOut = new ObjMaskCollection();
@@ -81,14 +77,6 @@ public class ObjMaskProviderBinarySgmn extends ObjMaskProvider {
 		}
 		
 		return masksOut;
-	}
-
-	public ObjMaskProvider getObjs() {
-		return objs;
-	}
-
-	public void setObjs(ObjMaskProvider objs) {
-		this.objs = objs;
 	}
 
 	public BinarySgmn getBinarySgmn() {

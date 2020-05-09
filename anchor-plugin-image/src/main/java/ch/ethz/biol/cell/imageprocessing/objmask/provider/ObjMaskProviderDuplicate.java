@@ -26,28 +26,14 @@ package ch.ethz.biol.cell.imageprocessing.objmask.provider;
  * #L%
  */
 
-import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
+import org.anchoranalysis.image.bean.provider.ObjMaskProviderOne;
 import org.anchoranalysis.image.objmask.ObjMaskCollection;
 
-public class ObjMaskProviderDuplicate extends ObjMaskProvider {
-
-	// START BEAN PROPERTIES
-	@BeanField
-	private ObjMaskProvider objs;
-	// END BEAN PROPERTIES
+public class ObjMaskProviderDuplicate extends ObjMaskProviderOne {
 
 	@Override
-	public ObjMaskCollection create() throws CreateException {
-		return objs.create().duplicate();
-	}
-
-	public ObjMaskProvider getObjs() {
-		return objs;
-	}
-
-	public void setObjs(ObjMaskProvider objs) {
-		this.objs = objs;
+	public ObjMaskCollection createFromObjs( ObjMaskCollection objMaskCollection ) throws CreateException {
+		return objMaskCollection.duplicate();
 	}
 }

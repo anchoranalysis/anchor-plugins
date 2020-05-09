@@ -36,10 +36,13 @@ import org.anchoranalysis.bean.permute.setter.PermutationSetterException;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
+import org.anchoranalysis.image.bean.provider.ObjMaskProviderOne;
 import org.anchoranalysis.image.objmask.ObjMaskCollection;
 
 /**
  * Permutes some changes over an {@link ObjMaskProvider} and collects all the results in an {@link ObjMaskCollection}
+ * 
+ * We deliberately do not inherit from {@link ObjMaskProviderOne} as we not using the {@link ObjMaskProvider} in the same way.
  * 
  * @author Owen Feehan
  *
