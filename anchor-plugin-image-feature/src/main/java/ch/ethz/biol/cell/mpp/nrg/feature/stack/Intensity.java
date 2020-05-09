@@ -52,11 +52,6 @@ import ch.ethz.biol.cell.mpp.nrg.feature.stack.cachedcalculation.CalculateHistog
  */
 public class Intensity extends FeatureStack {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PROPERTIES
 	/** Feature to apply to the histogram */
 	@BeanField

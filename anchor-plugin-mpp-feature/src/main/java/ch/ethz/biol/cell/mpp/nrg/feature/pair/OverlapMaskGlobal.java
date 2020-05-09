@@ -34,10 +34,7 @@ import org.anchoranalysis.feature.calc.FeatureCalcException;
 
 public class OverlapMaskGlobal extends OverlapMaskSingleRegion {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
+	
 	
 	// START BEAN PROPERTIES
 

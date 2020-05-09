@@ -49,11 +49,6 @@ import cern.jet.stat.Descriptive;
 // Standard deviation of distance from surface voxels to centroid
 public class ObjectRadiusStdDev extends FeatureObjMask {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	// START BEAN PROPERTIES
 	@BeanField
 	private boolean cov = false;	// Returns the coefficient of variation (stdDev/mean) instead of stdDev

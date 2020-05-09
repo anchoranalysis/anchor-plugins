@@ -41,11 +41,6 @@ import org.anchoranalysis.plugin.image.feature.obj.pair.overlap.OverlapRatioUtil
  */
 public abstract class OverlapRelative extends FeatureObjMaskPair {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	@Override
 	public double calc(SessionInput<FeatureInputPairObjs> input)
 			throws FeatureCalcException {

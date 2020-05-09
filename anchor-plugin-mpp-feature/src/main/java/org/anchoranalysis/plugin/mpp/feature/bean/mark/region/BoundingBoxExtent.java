@@ -45,11 +45,6 @@ import org.anchoranalysis.plugin.mpp.feature.bean.unit.UnitConverter;
 
 public class BoundingBoxExtent extends FeatureMarkRegion {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	// START BEAN PARAMETERS
 	@BeanField
 	private String axis = "x";

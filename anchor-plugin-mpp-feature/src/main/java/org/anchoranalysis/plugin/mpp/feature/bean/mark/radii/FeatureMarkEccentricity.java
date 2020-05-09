@@ -11,11 +11,6 @@ import org.anchoranalysis.image.orientation.Orientation;
 
 public abstract class FeatureMarkEccentricity extends FeatureMark {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	@Override
 	public double calc(SessionInput<FeatureInputMark> input) throws FeatureCalcException {
 

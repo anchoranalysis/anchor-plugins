@@ -37,11 +37,6 @@ import org.anchoranalysis.feature.input.FeatureInput;
 
 public class Divide<T extends FeatureInput> extends FeatureListElem<T> {
 	
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	// START BEAN PROPERTIES
 	@BeanField
 	private boolean avoidDivideByZero = false;

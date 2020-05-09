@@ -48,11 +48,6 @@ import org.anchoranalysis.plugin.image.feature.obj.pair.overlap.OverlapRatioUtil
  */
 public class CostOverlapWithinMidpointDistance extends FeatureObjMaskPair {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	// START BEAN PROPERTIES
 	@BeanField
 	private UnitValueDistance maxDistance;

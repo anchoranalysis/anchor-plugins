@@ -37,11 +37,6 @@ import org.anchoranalysis.points.moment.CalculateObjMaskPointsSecondMomentMatrix
 
 public abstract class AxisMomentsBase extends FeatureObjMask {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	// START BEAN PROPERTIES
 	@BeanField
 	private boolean suppressZCovariance = false;		// Supresses covariance in the z-direction.

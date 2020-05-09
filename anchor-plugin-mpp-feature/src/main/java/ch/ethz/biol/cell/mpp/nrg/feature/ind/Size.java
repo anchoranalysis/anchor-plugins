@@ -41,11 +41,6 @@ import org.anchoranalysis.plugin.mpp.feature.bean.unit.UnitConverter;
 // Size = Number of voxels
 public final class Size extends FeatureSingleMemo {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	// START BEAN PROPERTIES
 	@BeanField
 	private int regionID = GlobalRegionIdentifiers.SUBMARK_INSIDE;

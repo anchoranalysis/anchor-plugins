@@ -41,11 +41,6 @@ import org.anchoranalysis.math.rotation.RotationMatrix;
 
 public abstract class FeatureMarkDirection extends FeatureMark {
 	
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	// START BEAN PROPERTIES
 	@BeanField
 	private DirectionVectorBean directionVector;

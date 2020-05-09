@@ -48,11 +48,6 @@ import org.anchoranalysis.image.voxel.statistics.VoxelStatistics;
 
 public class SurfaceSizeMaskNonZero extends FeatureSingleMemo {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	// START BEAN PROPERTIES
 	@BeanField
 	private int maskIndex = 0;

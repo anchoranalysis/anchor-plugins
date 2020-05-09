@@ -32,11 +32,6 @@ import org.anchoranalysis.image.feature.objmask.collection.FeatureInputObjs;
 
 public class NumObjs extends FeatureObjMaskCollection {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	@Override
 	public double calc(FeatureInputObjs params)
 			throws FeatureCalcException {

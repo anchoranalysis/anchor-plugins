@@ -35,11 +35,6 @@ import cern.jet.stat.Descriptive;
 
 public class Quantile extends FeatureResultsFromIndex {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	// START BEAN PROPERTIES
 	@BeanField
 	private double quantile = 0;

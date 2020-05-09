@@ -43,11 +43,6 @@ import ch.ethz.biol.cell.mpp.nrg.feature.objmask.ValueAndIndex;
  */
 public class IntensityMeanShellMaxSlice extends IntensityMeanShellBase {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	@Override
 	protected double calcForShell(ObjMask om, Chnl chnl) throws FeatureCalcException {
 				

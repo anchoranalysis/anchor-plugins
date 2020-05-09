@@ -47,11 +47,6 @@ import org.anchoranalysis.feature.input.FeatureInput;
  */
 public abstract class FeatureStatScore<T extends FeatureInput> extends FeatureGenericSingleElem<T> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	// START BEAN PROPERTIES
 	@BeanField
 	private Feature<T> itemMean = null;

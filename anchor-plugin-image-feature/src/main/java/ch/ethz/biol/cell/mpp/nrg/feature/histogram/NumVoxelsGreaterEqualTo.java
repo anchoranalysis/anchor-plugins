@@ -36,11 +36,6 @@ import org.anchoranalysis.image.histogram.Histogram;
 
 public class NumVoxelsGreaterEqualTo extends FeatureHistogram {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
 	private int threshold = 0;

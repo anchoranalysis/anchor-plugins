@@ -30,11 +30,6 @@ import org.anchoranalysis.image.extent.ImageDim;
 
 public class DimensionXYArea extends FeatureStackFromDimensions {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	@Override
 	protected double calcFromDims(ImageDim dim) {
 		return dim.getVolumeXY();

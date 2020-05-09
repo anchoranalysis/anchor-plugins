@@ -41,11 +41,6 @@ import org.anchoranalysis.feature.input.descriptor.FeatureInputDescriptorUtiliti
  
 public class DotProduct<T extends FeatureInput> extends Feature<T> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
 	private VectorFromFeature<T> vector1;

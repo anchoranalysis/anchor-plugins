@@ -40,10 +40,7 @@ import org.anchoranalysis.feature.input.FeatureInput;
  */
 public class NormalizedRange<T extends FeatureInput> extends FeatureDoubleElem<T> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
+	
 
 	// START BEAN PROPERTIES
 	// END BEAN PROPERTIES

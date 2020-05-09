@@ -34,11 +34,6 @@ import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
 
 public class Ellipsoidicity extends EllipsoidBase {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	@Override
 	protected double calc(FeatureInputSingleObj input, MarkEllipsoid me) throws FeatureCalcException {
 		

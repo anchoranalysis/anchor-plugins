@@ -41,11 +41,6 @@ import org.anchoranalysis.plugin.mpp.feature.bean.unit.UnitConverter;
 // Returns the maximum area of each slice 
 public final class MaxSliceArea extends FeatureSingleMemo {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	// START BEAN PROPERTIES
 	@BeanField
 	private int regionID = GlobalRegionIdentifiers.SUBMARK_INSIDE;

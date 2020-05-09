@@ -14,12 +14,6 @@ import org.anchoranalysis.feature.input.descriptor.FeatureInputDescriptor;
  */
 public class MockFeatureWithCalculation extends Feature<FeatureInput> {
 	
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
-	
 	// Incremented every calc executed is called
 	static int cntCalcCalled = 0;
 	

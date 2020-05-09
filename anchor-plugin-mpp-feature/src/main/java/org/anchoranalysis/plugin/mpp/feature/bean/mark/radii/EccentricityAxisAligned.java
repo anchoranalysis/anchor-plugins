@@ -35,11 +35,6 @@ import org.anchoranalysis.image.orientation.Orientation;
 //    of the ellipse that cuts across the plane formed by the longest and shortest axes
 public class EccentricityAxisAligned extends FeatureMarkEccentricity {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	@Override
 	protected double calcEccentricityForEllipsoid(double[] radii, Orientation orientation) {
 		double e0 = calcEccentricity(radii[1], radii[0]);

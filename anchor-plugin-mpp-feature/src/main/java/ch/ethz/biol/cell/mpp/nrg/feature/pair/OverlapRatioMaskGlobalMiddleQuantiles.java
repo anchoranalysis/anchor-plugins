@@ -40,11 +40,6 @@ import org.anchoranalysis.image.voxel.statistics.VoxelStatistics;
 
 public class OverlapRatioMaskGlobalMiddleQuantiles extends OverlapMaskQuantiles {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
 	private boolean useMax = false;

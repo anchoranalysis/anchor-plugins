@@ -36,11 +36,6 @@ import org.anchoranalysis.feature.calc.FeatureCalcException;
 
 public class MaxRatioRadii extends FeatureMark {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	@Override
 	public double calc( SessionInput<FeatureInputMark> input ) throws FeatureCalcException {
 		

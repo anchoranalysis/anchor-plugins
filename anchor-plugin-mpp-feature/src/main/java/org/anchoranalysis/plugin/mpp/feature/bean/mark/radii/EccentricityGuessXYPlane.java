@@ -41,11 +41,6 @@ import org.apache.commons.math3.util.Pair;
 //    of the ellipse that cuts across the plane formed by the longest and shortest axes
 public class EccentricityGuessXYPlane extends FeatureMarkEccentricity {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	@Override
 	protected double calcEccentricityForEllipsoid(double[] radii, Orientation orientation) {
 		

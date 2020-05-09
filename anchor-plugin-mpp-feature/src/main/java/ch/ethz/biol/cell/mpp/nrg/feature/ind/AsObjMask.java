@@ -42,11 +42,6 @@ import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
 
 public class AsObjMask extends FeatureSingleElem<FeatureInputSingleMemo,FeatureInputSingleObj> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
 	private RegionMap regionMap = RegionMapSingleton.instance();

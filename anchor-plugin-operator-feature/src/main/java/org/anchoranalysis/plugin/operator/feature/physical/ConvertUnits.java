@@ -38,11 +38,6 @@ import org.anchoranalysis.feature.input.FeatureInput;
 // 
 public class ConvertUnits<T extends FeatureInput> extends FeatureGenericSingleElem<T> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PROPERTIES
 	@BeanField @AllowEmpty
 	private String unitTypeFrom = "";

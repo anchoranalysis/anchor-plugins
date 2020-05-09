@@ -37,11 +37,6 @@ import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
 
 public class CountEqual extends FeatureObjMask {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
 	private int value = BinaryValues.getDefault().getOnInt();

@@ -36,11 +36,6 @@ import org.anchoranalysis.math.statistics.FirstSecondOrderStatistic;
 // Z-score of a value
 public class ZScore<T extends FeatureInput> extends FeatureStatScore<T> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	@Override
 	protected double deriveScore(double featureValue, double mean, Operation<Double,FeatureCalcException> stdDev) throws FeatureCalcException {
 

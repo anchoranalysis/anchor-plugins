@@ -44,11 +44,6 @@ import org.anchoranalysis.image.extent.ImageDim;
 // It is only calculated if there is overlap of the bounding boxes in XYZ, else 0 is returned
 public class BBoxZOverlapRatio extends FeaturePairMemo {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
 	private int regionID = 0;

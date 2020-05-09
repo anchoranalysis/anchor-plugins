@@ -30,11 +30,6 @@ import org.anchoranalysis.image.feature.objmask.pair.FeatureInputPairObjs;
 
 public class OverlapRelativeToFirst extends OverlapRelative {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	@Override
 	protected int calcDenominator( FeatureInputPairObjs params ) {
 		return params.getFirst().numPixels();

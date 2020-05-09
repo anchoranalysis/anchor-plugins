@@ -44,11 +44,6 @@ import org.anchoranalysis.image.init.ImageInitParams;
 
 public class BinaryImageChnlProviderFeature extends FeatureStackSharedObjects {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
 	private Feature<FeatureInputSingleObj> item;

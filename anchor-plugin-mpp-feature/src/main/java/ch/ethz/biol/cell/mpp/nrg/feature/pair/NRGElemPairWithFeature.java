@@ -33,11 +33,6 @@ import org.anchoranalysis.feature.bean.Feature;
 
 public abstract class NRGElemPairWithFeature extends FeaturePairMemo {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	// START BEAN PROPERTIES
 	@BeanField
 	private Feature<FeatureInputSingleMemo> item;

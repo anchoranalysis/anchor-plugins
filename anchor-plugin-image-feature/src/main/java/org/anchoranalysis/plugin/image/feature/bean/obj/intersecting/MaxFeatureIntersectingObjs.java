@@ -39,11 +39,6 @@ import java.util.List;
  */
 public class MaxFeatureIntersectingObjs extends FeatureIntersectingObjsSingleElem {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	@Override
 	protected double aggregateResults(List<Double> results) {
 		return results.stream().max( Comparator.comparing(Double::valueOf) ).orElse( getValueNoObjects() );

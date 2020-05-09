@@ -36,11 +36,6 @@ import cern.jet.stat.Descriptive;
 
 public class Mean extends FeatureResultsFromIndex {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	@Override
 	protected double calcStatisticFromFeatureVal(DoubleArrayList featureVals) throws FeatureCalcException {
 		return Descriptive.mean(featureVals);

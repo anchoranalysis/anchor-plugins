@@ -35,11 +35,6 @@ import org.anchoranalysis.image.objmask.ObjMask;
 
 public class ShapeRegularityMIP extends FeatureObjMask {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	@Override
 	public double calc(SessionInput<FeatureInputSingleObj> input) throws FeatureCalcException {
 		

@@ -41,11 +41,6 @@ import org.anchoranalysis.feature.calc.FeatureCalcException;
 
 public class CoefficientOfVarianceFromAll extends FeatureAllMemo {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	// START BEAN PROPERTIES
 	@BeanField
 	private Feature<FeatureInputSingleMemo> item;

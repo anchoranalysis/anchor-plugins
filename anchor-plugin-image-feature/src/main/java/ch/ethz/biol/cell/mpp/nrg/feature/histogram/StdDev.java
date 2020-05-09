@@ -34,11 +34,6 @@ import org.anchoranalysis.image.histogram.Histogram;
 
 public class StdDev extends FeatureHistogramStatistic {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-		
 	@Override
 	protected double calcStatisticFrom(Histogram histogram) throws OperationFailedException {
 		return histogram.stdDev();

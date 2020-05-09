@@ -40,11 +40,6 @@ import org.anchoranalysis.plugin.points.calculate.ellipse.ObjMaskAndEllipse;
 // Calculates the ellipticity of a objMask (on the COG slice if it's a zstack)
 public class Ellipticity extends FeatureObjMask {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	@Override
 	public double calc(SessionInput<FeatureInputSingleObj> input) throws FeatureCalcException {
 		

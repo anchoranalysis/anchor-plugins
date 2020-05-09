@@ -43,11 +43,6 @@ import org.anchoranalysis.feature.input.FeatureInput;
  */
 public class CompareWithRange<T extends FeatureInput> extends RangeCompareFromScalars<T> {
 	
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -8939465493485894918L;
-	
 	// START BEAN PROPERTIES
 	/** Constant to return if value lies within the range */
 	@BeanField

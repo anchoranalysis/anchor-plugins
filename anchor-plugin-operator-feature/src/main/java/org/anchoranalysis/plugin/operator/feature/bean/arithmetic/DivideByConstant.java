@@ -32,11 +32,6 @@ import org.anchoranalysis.plugin.operator.feature.bean.FeatureGenericWithValue;
 
 public class DivideByConstant<T extends FeatureInput> extends FeatureGenericWithValue<T> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	@Override
 	protected double combineValueAndFeature(double value, double featureResult) {
 		return featureResult / value;

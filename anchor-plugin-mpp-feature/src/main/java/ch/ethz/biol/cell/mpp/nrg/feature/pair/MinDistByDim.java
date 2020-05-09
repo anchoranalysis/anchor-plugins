@@ -34,11 +34,6 @@ import org.anchoranalysis.feature.cache.SessionInput;
 
 public class MinDistByDim extends FeaturePairMemo {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	@Override
 	public double calc( SessionInput<FeatureInputPairMemo> input ) {
 		
