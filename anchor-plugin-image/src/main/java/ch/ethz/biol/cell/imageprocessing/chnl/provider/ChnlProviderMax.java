@@ -38,30 +38,6 @@ import org.anchoranalysis.image.voxel.datatype.CombineTypes;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
 
 public class ChnlProviderMax extends ChnlProviderTwo {
-
-	private static void processVoxelBox( VoxelBoxWrapper vbOut, VoxelBoxWrapper vbIn1, VoxelBoxWrapper vbIn2) {
-
-		for (int z=0; z<vbOut.any().extnt().getZ(); z++) {
-			
-			VoxelBuffer<?> in1 = vbIn1.any().getPixelsForPlane(z);
-			VoxelBuffer<?> in2 = vbIn2.any().getPixelsForPlane(z);
-			VoxelBuffer<?> out = vbOut.any().getPixelsForPlane(z);
-			
-			
-			int totalPixels = vbIn1.any().extnt().getVolumeXY();
-			for (int offset=0; offset<totalPixels; offset++) {
-				
-				int val1 = in1.getInt(offset);
-				int val2 = in2.getInt(offset);
-				
-				if (val1>val2) {
-					out.putInt(offset,val1);
-				} else {
-					out.putInt(offset,val2);
-				}
-			}
-		}
-	}
 	
 	public static Chnl createMax( Chnl chnl1, Chnl chnl2 ) throws CreateException {
 		
@@ -82,4 +58,26 @@ public class ChnlProviderMax extends ChnlProviderTwo {
 		return createMax( chnl1, chnl2 );
 	}
 
+	private static void processVoxelBox( VoxelBoxWrapper vbOut, VoxelBoxWrapper vbIn1, VoxelBoxWrapper vbIn2) {
+
+		for (int z=0; z<vbOut.any().extnt().getZ(); z++) {
+			
+			VoxelBuffer<?> in1 = vbIn1.any().getPixelsForPlane(z);
+			VoxelBuffer<?> in2 = vbIn2.any().getPixelsForPlane(z);
+			VoxelBuffer<?> out = vbOut.any().getPixelsForPlane(z);
+			
+			int totalPixels = vbIn1.any().extnt().getVolumeXY();
+			for (int offset=0; offset<totalPixels; offset++) {
+				
+				int val1 = in1.getInt(offset);
+				int val2 = in2.getInt(offset);
+				
+				if (val1>val2) {
+					out.putInt(offset,val1);
+				} else {
+					out.putInt(offset,val2);
+				}
+			}
+		}
+	}
 }
