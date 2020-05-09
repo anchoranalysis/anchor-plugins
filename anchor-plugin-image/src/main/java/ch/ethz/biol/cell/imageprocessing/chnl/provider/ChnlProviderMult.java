@@ -46,10 +46,6 @@ public class ChnlProviderMult extends ChnlProviderTwo {
 		VoxelBox<ByteBuffer> vb1 = chnl1.getVoxelBox().asByte();
 		VoxelBox<ByteBuffer> vb2 = chnl2.getVoxelBox().asByte();
 		
-		if (!chnl1.getDimensions().equals(chnl2.getDimensions())) {
-			throw new CreateException("Dimensions of channels do not match");
-		}
-		
 		Chnl chnlOut = ChnlFactory.instance().createEmptyInitialised(
 			new ImageDim(chnl1.getDimensions()),
 			VoxelDataTypeUnsignedByte.instance

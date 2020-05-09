@@ -42,11 +42,7 @@ public class ChnlProviderMin extends ChnlProviderTwo {
 
 	@Override
 	protected Chnl process(Chnl chnl1, Chnl chnl2) throws CreateException {
-		
-		if (!chnl1.getDimensions().equals(chnl2.getDimensions())) {
-			throw new CreateException("Dimensions of channels do not match");
-		}
-		
+
 		Chnl chnlOut = ChnlFactory.instance().createEmptyInitialised(
 			new ImageDim(chnl1.getDimensions()),
 			VoxelDataTypeUnsignedByte.instance
