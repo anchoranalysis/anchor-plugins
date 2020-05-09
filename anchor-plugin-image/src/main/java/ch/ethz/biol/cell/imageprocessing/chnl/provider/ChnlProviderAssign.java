@@ -37,12 +37,9 @@ import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.image.objmask.factory.CreateFromEntireChnlFactory;
 
-public class ChnlProviderAssign extends ChnlProvider {
+public class ChnlProviderAssign extends ChnlProviderOne {
 
 	// START BEAN PROPERTIES
-	@BeanField
-	private ChnlProvider chnlProvider;
-	
 	@BeanField
 	private ChnlProvider chnlProviderAssignFrom;
 	
@@ -51,9 +48,8 @@ public class ChnlProviderAssign extends ChnlProvider {
 	// END BEAN PROPERTIES
 		
 	@Override
-	public Chnl create() throws CreateException {
-
-		Chnl chnlSrc = chnlProvider.create(); 
+	public Chnl createFromChnl(Chnl chnlSrc) throws CreateException {
+ 
 		Chnl chnlAssignFrom = chnlProviderAssignFrom.create();
 		AssignUtilities.checkDims( chnlSrc, chnlAssignFrom );
 		
@@ -71,14 +67,6 @@ public class ChnlProviderAssign extends ChnlProvider {
 		BoundingBox bbox = new BoundingBox( chnlSrc.getDimensions().getExtnt() );
 		
 		chnlAssignFrom.getVoxelBox().asByte().copyPixelsToCheckMask(bbox, chnlSrc.getVoxelBox().asByte(), bbox, om.getVoxelBox(), om.getBinaryValuesByte());		
-	}
-	
-	public ChnlProvider getChnlProvider() {
-		return chnlProvider;
-	}
-
-	public void setChnlProvider(ChnlProvider chnlProvider) {
-		this.chnlProvider = chnlProvider;
 	}
 
 	public ChnlProvider getChnlProviderAssignFrom() {

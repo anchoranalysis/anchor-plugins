@@ -28,7 +28,6 @@ package ch.ethz.biol.cell.imageprocessing.chnl.provider;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.image.bean.provider.ChnlProvider;
 import org.anchoranalysis.image.chnl.Chnl;
 import org.anchoranalysis.image.chnl.factory.ChnlFactory;
 import org.anchoranalysis.image.stack.region.chnlconverter.ChnlConverter;
@@ -37,16 +36,13 @@ import org.anchoranalysis.image.stack.region.chnlconverter.ChnlConverterToUnsign
 import org.anchoranalysis.image.stack.region.chnlconverter.ConversionPolicy;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeFloat;
 
-public abstract class ChnlProviderGradientBase extends ChnlProvider {
+public abstract class ChnlProviderGradientBase extends ChnlProviderOne {
 
 	// START BEAN
 	@BeanField
-	private ChnlProvider chnlProvider;
-	
-	@BeanField
 	private double scaleFactor = 1.0;
 	
-	/** Iff true, outputs a short channel, otherwise byte cjannel*/
+	/** Iff true, outputs a short channel, otherwise byte channel*/
 	@BeanField
 	private boolean outputShort=false;
 		
@@ -58,9 +54,7 @@ public abstract class ChnlProviderGradientBase extends ChnlProvider {
 	// END BEAN
 	
 	@Override
-	public Chnl create() throws CreateException {
-		
-		Chnl chnlIn = chnlProvider.create();
+	public Chnl createFromChnl(Chnl chnlIn) throws CreateException {
 		
 		// The gradient is calculated on a float
 		Chnl chnlIntermediate = ChnlFactory.instance().createEmptyInitialised(
@@ -102,14 +96,6 @@ public abstract class ChnlProviderGradientBase extends ChnlProvider {
 
 	public void setOutputShort(boolean outputShort) {
 		this.outputShort = outputShort;
-	}
-
-	public ChnlProvider getChnlProvider() {
-		return chnlProvider;
-	}
-
-	public void setChnlProvider(ChnlProvider chnlProvider) {
-		this.chnlProvider = chnlProvider;
 	}
 
 	public int getAddSum() {

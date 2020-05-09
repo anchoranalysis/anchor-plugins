@@ -27,28 +27,13 @@ package ch.ethz.biol.cell.imageprocessing.chnl.provider;
  */
 
 
-import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.image.bean.provider.ChnlProvider;
 import org.anchoranalysis.image.chnl.Chnl;
 
-public class ChnlProviderMeanIntensityProjection extends ChnlProvider {
-
-	// START BEAN PROPERTIES
-	@BeanField
-	private ChnlProvider chnlProvider;
-	// END BEAN PROPERTIES
+public class ChnlProviderMeanIntensityProjection extends ChnlProviderOne {
 	
 	@Override
-	public Chnl create() throws CreateException {
-		return chnlProvider.create().meanIntensityProj();
-	}
-
-	public ChnlProvider getChnlProvider() {
-		return chnlProvider;
-	}
-
-	public void setChnlProvider(ChnlProvider chnlProvider) {
-		this.chnlProvider = chnlProvider;
+	public Chnl createFromChnl(Chnl chnl) throws CreateException {
+		return chnl.meanIntensityProj();
 	}
 }

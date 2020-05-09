@@ -35,7 +35,7 @@ import org.anchoranalysis.image.bean.provider.ChnlProvider;
 import org.anchoranalysis.image.chnl.Chnl;
 
 // If a param is equal to a particular value, do soemthing
-public class ChnlProviderIfParamEquals extends ChnlProvider {
+public class ChnlProviderIfParamEquals extends ChnlProviderOne {
 
 	// START BEAN PROPERTIES
 	@BeanField
@@ -48,21 +48,18 @@ public class ChnlProviderIfParamEquals extends ChnlProvider {
 	private String value = "";
 	
 	@BeanField
-	private ChnlProvider chnlProvider;
-	
-	@BeanField
 	private ChnlProvider chnlProviderElse;
 	// END BEAN PROPERTIES
 	
 	@Override
-	public Chnl create() throws CreateException {
+	public Chnl createFromChnl(Chnl chnl) throws CreateException {
 		
 		KeyValueParams params = keyValueParamsProvider.create();
 		
 		String valueToCheck = params.getProperty(key);
 		
 		if( value.equals(valueToCheck) ) {
-			return chnlProvider.create();
+			return chnl;
 		} else {
 			return chnlProviderElse.create();
 		}
@@ -81,27 +78,16 @@ public class ChnlProviderIfParamEquals extends ChnlProvider {
 		return key;
 	}
 
-
 	public void setKey(String key) {
 		this.key = key;
 	}
-
 
 	public String getValue() {
 		return value;
 	}
 
-
 	public void setValue(String value) {
 		this.value = value;
-	}
-
-	public ChnlProvider getChnlProvider() {
-		return chnlProvider;
-	}
-
-	public void setChnlProvider(ChnlProvider chnlProvider) {
-		this.chnlProvider = chnlProvider;
 	}
 
 	public ChnlProvider getChnlProviderElse() {
@@ -111,7 +97,5 @@ public class ChnlProviderIfParamEquals extends ChnlProvider {
 	public void setChnlProviderElse(ChnlProvider chnlProviderElse) {
 		this.chnlProviderElse = chnlProviderElse;
 	}
-
-
 }
 

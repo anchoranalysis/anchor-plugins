@@ -33,7 +33,6 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.bean.provider.BinaryImgChnlProvider;
-import org.anchoranalysis.image.bean.provider.ChnlProvider;
 import org.anchoranalysis.image.binary.BinaryChnl;
 import org.anchoranalysis.image.chnl.Chnl;
 import org.anchoranalysis.image.convert.ByteConverter;
@@ -42,12 +41,9 @@ import org.anchoranalysis.image.histogram.Histogram;
 import org.anchoranalysis.image.histogram.HistogramFactoryUtilities;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 
-public class ChnlProviderSuppressAbove extends ChnlProvider {
+public class ChnlProviderSuppressAbove extends ChnlProviderOne {
 
 	// START BEAN PROPERTIES
-	@BeanField
-	private ChnlProvider chnlProvider;
-	
 	@BeanField
 	private BinaryImgChnlProvider binaryImgChnlProviderMask;
 	
@@ -56,9 +52,7 @@ public class ChnlProviderSuppressAbove extends ChnlProvider {
 	// END BEAN PROPERTIES
 
 	@Override
-	public Chnl create() throws CreateException {
-		
-		Chnl chnl = chnlProvider.create();
+	public Chnl createFromChnl(Chnl chnl) throws CreateException {
 		
 		BinaryChnl binaryImg = binaryImgChnlProviderMask.create();
 		
@@ -101,14 +95,6 @@ public class ChnlProviderSuppressAbove extends ChnlProvider {
 				}
 			}
 		}
-	}
-
-	public ChnlProvider getChnlProvider() {
-		return chnlProvider;
-	}
-
-	public void setChnlProvider(ChnlProvider chnlProvider) {
-		this.chnlProvider = chnlProvider;
 	}
 
 	public double getQuantile() {

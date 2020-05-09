@@ -48,12 +48,9 @@ import org.anchoranalysis.image.voxel.box.VoxelBox;
 //		1. Identify the median value from channelLookup
 //		2. Calculate the difference of each pixel value in channelLookup to Value 1.
 //		3. Adjust each pixel value by Value 2.
-public class ChnlProviderAdjustDifferenceToMedian extends ChnlProvider {
+public class ChnlProviderAdjustDifferenceToMedian extends ChnlProviderOne {
 
 	// START BEAN PROPERTIES
-	@BeanField
-	private ChnlProvider chnlProvider;
-	
 	@BeanField
 	private ChnlProvider chnlProviderLookup;
 	
@@ -62,9 +59,8 @@ public class ChnlProviderAdjustDifferenceToMedian extends ChnlProvider {
 	// END BEAN PROPERTIES
 	
 	@Override
-	public Chnl create() throws CreateException {
+	public Chnl createFromChnl( Chnl chnl ) throws CreateException {
 
-		Chnl chnl = chnlProvider.create();
 		Chnl chnlLookup = chnlProviderLookup.create();
 		
 		if (!chnl.getDimensions().equals(chnlLookup.getDimensions())) {
@@ -125,18 +121,7 @@ public class ChnlProviderAdjustDifferenceToMedian extends ChnlProvider {
 				}
 			}
 		}
-		
 	}
-	
-	public ChnlProvider getChnlProvider() {
-		return chnlProvider;
-	}
-
-
-	public void setChnlProvider(ChnlProvider chnlProvider) {
-		this.chnlProvider = chnlProvider;
-	}
-
 
 	public ChnlProvider getChnlProviderLookup() {
 		return chnlProviderLookup;

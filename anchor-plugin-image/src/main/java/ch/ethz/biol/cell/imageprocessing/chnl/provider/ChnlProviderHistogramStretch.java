@@ -30,7 +30,6 @@ package ch.ethz.biol.cell.imageprocessing.chnl.provider;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.image.bean.provider.ChnlProvider;
 import org.anchoranalysis.image.chnl.Chnl;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.histogram.Histogram;
@@ -38,12 +37,9 @@ import org.anchoranalysis.image.histogram.HistogramFactoryUtilities;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 
-public class ChnlProviderHistogramStretch extends ChnlProvider {
+public class ChnlProviderHistogramStretch extends ChnlProviderOne {
 
 	// START BEAN PROPERTIES
-	@BeanField
-	private ChnlProvider chnlProvider;
-	
 	@BeanField
 	private double quantile = 1.0;
 	// END BEAN PROPERTIES
@@ -113,22 +109,13 @@ public class ChnlProviderHistogramStretch extends ChnlProvider {
 	
 	
 	@Override
-	public Chnl create() throws CreateException {
+	public Chnl createFromChnl( Chnl chnl ) throws CreateException {
 		try {
-			Chnl chnl = chnlProvider.create(); 
 			histogramStretch( chnl, quantile );
 			return chnl;
 		} catch (OperationFailedException e) {
 			throw new CreateException(e);
 		}
-	}
-
-	public ChnlProvider getChnlProvider() {
-		return chnlProvider;
-	}
-
-	public void setChnlProvider(ChnlProvider chnlProvider) {
-		this.chnlProvider = chnlProvider;
 	}
 
 	public double getQuantile() {

@@ -30,25 +30,19 @@ package ch.ethz.biol.cell.imageprocessing.chnl.provider;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.Positive;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.image.bean.provider.ChnlProvider;
 import org.anchoranalysis.image.chnl.Chnl;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 
-public class ChnlProviderSubtractFromConstant extends ChnlProvider {
+public class ChnlProviderSubtractFromConstant extends ChnlProviderOne {
 
 	// START BEAN PROPERTIES
 	@BeanField @Positive
 	private int value = 0;
-	
-	@BeanField
-	private ChnlProvider chnlProvider;
 	// END BEAN PROPERTIES
 	
 	@Override
-	public Chnl create() throws CreateException {
-		
-		Chnl chnl = chnlProvider.create();
+	public Chnl createFromChnl(Chnl chnl) throws CreateException {
 		
 		VoxelBox<?> vb = chnl.getVoxelBox().any();
 		
@@ -74,13 +68,4 @@ public class ChnlProviderSubtractFromConstant extends ChnlProvider {
 	public void setValue(int value) {
 		this.value = value;
 	}
-
-	public ChnlProvider getChnlProvider() {
-		return chnlProvider;
-	}
-
-	public void setChnlProvider(ChnlProvider chnlProvider) {
-		this.chnlProvider = chnlProvider;
-	}
-
 }

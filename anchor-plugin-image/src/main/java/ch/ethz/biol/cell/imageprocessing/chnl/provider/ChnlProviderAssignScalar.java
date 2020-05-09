@@ -30,19 +30,15 @@ package ch.ethz.biol.cell.imageprocessing.chnl.provider;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.bean.provider.BinaryImgChnlProvider;
-import org.anchoranalysis.image.bean.provider.ChnlProvider;
 import org.anchoranalysis.image.binary.BinaryChnl;
 import org.anchoranalysis.image.chnl.Chnl;
 import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.image.objmask.factory.CreateFromEntireChnlFactory;
 
 /** Assigns a scalar to the portion of the image covered by a mask */
-public class ChnlProviderAssignScalar extends ChnlProvider {
+public class ChnlProviderAssignScalar extends ChnlProviderOne {
 
 	// START BEAN PROPERTIES
-	@BeanField
-	private ChnlProvider chnlProvider;
-	
 	@BeanField
 	private int value;
 	
@@ -51,9 +47,7 @@ public class ChnlProviderAssignScalar extends ChnlProvider {
 	// END BEAN PROPERTIES
 		
 	@Override
-	public Chnl create() throws CreateException {
-
-		Chnl chnlSrc = chnlProvider.create(); 
+	public Chnl createFromChnl(Chnl chnlSrc) throws CreateException {
 		
 		BinaryChnl binaryImgChnl = maskProvider.create();
 		
@@ -67,14 +61,6 @@ public class ChnlProviderAssignScalar extends ChnlProvider {
 	private void assignScalar(Chnl chnlSrc, BinaryChnl mask) throws CreateException {
 		ObjMask om = CreateFromEntireChnlFactory.createObjMask(mask);
 		chnlSrc.getVoxelBox().any().setPixelsCheckMask(om, value);		
-	}
-	
-	public ChnlProvider getChnlProvider() {
-		return chnlProvider;
-	}
-
-	public void setChnlProvider(ChnlProvider chnlProvider) {
-		this.chnlProvider = chnlProvider;
 	}
 
 	public BinaryImgChnlProvider getMaskProvider() {

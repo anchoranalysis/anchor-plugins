@@ -39,16 +39,39 @@ import org.anchoranalysis.image.voxel.datatype.CombineTypes;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
 
 
-public class ChnlProviderIfPixelZero extends ChnlProvider {
+public class ChnlProviderIfPixelZero extends ChnlProviderOne {
 
 	// START BEAN PROPERTIES
-	@BeanField
-	private ChnlProvider chnlProvider;
-	
 	@BeanField
 	private ChnlProvider chnlProviderIfPixelZero;
 	// END BEAN PROPERTIES
 	
+	@Override
+	public Chnl createFromChnl(Chnl chnl) throws CreateException {
+		
+		Chnl chnlIfPixelZero = chnlProviderIfPixelZero.create();
+		
+		VoxelDataType combinedType = CombineTypes.combineTypes(chnl.getVoxelDataType(), chnlIfPixelZero.getVoxelDataType());
+
+		double multFact = (double) combinedType.maxValue() / chnl.getVoxelDataType().maxValue();
+		return merge( chnl, chnlIfPixelZero, combinedType, multFact );
+		
+	}
+	
+	public static Chnl merge( Chnl chnl, Chnl chnlIfPixelZero, VoxelDataType combinedType, double multFactorIfNonZero ) throws CreateException {
+		
+		if (!chnl.getDimensions().equals(chnlIfPixelZero.getDimensions())) {
+			throw new CreateException("Dimensions of channels do not match");
+		}
+		
+		Chnl chnlOut = ChnlFactory.instance().createEmptyInitialised( new ImageDim(chnl.getDimensions()), combinedType );
+		
+		// We know these are all the same types from the logic above, so we can safetly cast
+		processVoxelBox( chnlOut.getVoxelBox(), chnl.getVoxelBox(), chnlIfPixelZero.getVoxelBox(), multFactorIfNonZero );
+		
+		return chnlOut;
+	}
+
 	private static void processVoxelBox( VoxelBoxWrapper vbOut, VoxelBoxWrapper vbIn, VoxelBoxWrapper vbIfZero, double multFactorIfNonZero ) {
 
 		for (int z=0; z<vbOut.any().extnt().getZ(); z++) {
@@ -74,41 +97,6 @@ public class ChnlProviderIfPixelZero extends ChnlProvider {
 		}
 	}
 	
-	@Override
-	public Chnl create() throws CreateException {
-		
-		Chnl chnl = chnlProvider.create();
-		Chnl chnlIfPixelZero = chnlProviderIfPixelZero.create();
-		
-		VoxelDataType combinedType = CombineTypes.combineTypes(chnl.getVoxelDataType(), chnlIfPixelZero.getVoxelDataType());
-
-		double multFact = (double) combinedType.maxValue() / chnl.getVoxelDataType().maxValue();
-		return merge( chnl, chnlIfPixelZero, combinedType, multFact );
-		
-	}
-	
-	public static Chnl merge( Chnl chnl, Chnl chnlIfPixelZero, VoxelDataType combinedType, double multFactorIfNonZero ) throws CreateException {
-		
-		if (!chnl.getDimensions().equals(chnlIfPixelZero.getDimensions())) {
-			throw new CreateException("Dimensions of channels do not match");
-		}
-		
-		Chnl chnlOut = ChnlFactory.instance().createEmptyInitialised( new ImageDim(chnl.getDimensions()), combinedType );
-		
-		// We know these are all the same types from the logic above, so we can safetly cast
-		processVoxelBox( chnlOut.getVoxelBox(), chnl.getVoxelBox(), chnlIfPixelZero.getVoxelBox(), multFactorIfNonZero );
-		
-		return chnlOut;
-	}
-
-	public ChnlProvider getChnlProvider() {
-		return chnlProvider;
-	}
-	
-	public void setChnlProvider(ChnlProvider chnlProvider) {
-		this.chnlProvider = chnlProvider;
-	}
-
 	public ChnlProvider getChnlProviderIfPixelZero() {
 		return chnlProviderIfPixelZero;
 	}

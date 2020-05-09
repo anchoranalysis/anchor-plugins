@@ -32,27 +32,21 @@ import java.nio.ByteBuffer;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.bean.provider.BinaryImgChnlProvider;
-import org.anchoranalysis.image.bean.provider.ChnlProvider;
 import org.anchoranalysis.image.binary.BinaryChnl;
 import org.anchoranalysis.image.chnl.Chnl;
 import org.anchoranalysis.image.chnl.factory.ChnlFactory;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 
-public class ChnlProviderMask extends ChnlProvider {
+public class ChnlProviderMask extends ChnlProviderOne {
 
 	// START
-	@BeanField
-	private ChnlProvider chnlProvider;
-	
 	@BeanField
 	private BinaryImgChnlProvider maskProvider;
 	// END
 	
 	@Override
-	public Chnl create() throws CreateException {
-		
-		Chnl chnl = chnlProvider.create();
+	public Chnl createFromChnl(Chnl chnl) throws CreateException {
 				
 		BinaryChnl mask = maskProvider.create();
 		VoxelBox<ByteBuffer> vbMask = mask.getChnl().getVoxelBox().asByte();
@@ -79,14 +73,4 @@ public class ChnlProviderMask extends ChnlProvider {
 	public void setMaskProvider(BinaryImgChnlProvider maskProvider) {
 		this.maskProvider = maskProvider;
 	}
-
-	public ChnlProvider getChnlProvider() {
-		return chnlProvider;
-	}
-
-	public void setChnlProvider(ChnlProvider chnlProvider) {
-		this.chnlProvider = chnlProvider;
-	}
-
-
 }

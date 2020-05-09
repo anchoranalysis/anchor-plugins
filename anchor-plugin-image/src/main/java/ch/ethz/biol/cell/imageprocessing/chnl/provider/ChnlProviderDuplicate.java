@@ -27,28 +27,14 @@ package ch.ethz.biol.cell.imageprocessing.chnl.provider;
  */
 
 
-import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.image.bean.provider.ChnlProvider;
 import org.anchoranalysis.image.chnl.Chnl;
 
-public class ChnlProviderDuplicate extends ChnlProvider {
+public class ChnlProviderDuplicate extends ChnlProviderOne {
 
-	// START BEAN PROPERTIES
-	@BeanField
-	private ChnlProvider chnlProvider;
-	// END BEAN PROPERTIES
-	
 	@Override
-	public Chnl create() throws CreateException {
-		return chnlProvider.create().duplicate();
+	protected Chnl createFromChnl(Chnl chnl) throws CreateException {
+		return chnl.duplicate();
 	}
 
-	public ChnlProvider getChnlProvider() {
-		return chnlProvider;
-	}
-
-	public void setChnlProvider(ChnlProvider chnlProvider) {
-		this.chnlProvider = chnlProvider;
-	}
 }

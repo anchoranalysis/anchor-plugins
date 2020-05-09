@@ -33,17 +33,13 @@ import ij.process.ImageProcessor;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.Positive;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.image.bean.provider.ChnlProvider;
 import org.anchoranalysis.image.chnl.Chnl;
 import org.anchoranalysis.image.convert.IJWrap;
 import org.anchoranalysis.image.voxel.box.VoxelBoxWrapper;
 
-public class ChnlProviderGaussianBlurIJ extends ChnlProvider {
+public class ChnlProviderGaussianBlurIJ extends ChnlProviderOne {
 
 	// START BEAN PROPERTIES
-	@BeanField
-	private ChnlProvider chnlProvider;
-	
 	@BeanField @Positive
 	private double sigma = 3;
 	// END BEAN PROPERTIES
@@ -65,16 +61,8 @@ public class ChnlProviderGaussianBlurIJ extends ChnlProvider {
 	}
 	
 	@Override
-	public Chnl create() throws CreateException {
-		return blur( chnlProvider.create() );
-	}
-
-	public ChnlProvider getChnlProvider() {
-		return chnlProvider;
-	}
-
-	public void setChnlProvider(ChnlProvider chnlProvider) {
-		this.chnlProvider = chnlProvider;
+	public Chnl createFromChnl(Chnl chnl) throws CreateException {
+		return blur(chnl);
 	}
 
 	public double getSigma() {

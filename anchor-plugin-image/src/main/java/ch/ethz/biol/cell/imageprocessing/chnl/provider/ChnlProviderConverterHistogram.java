@@ -32,7 +32,6 @@ import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.bean.chnl.converter.histogram.ChnlConverterHistogramBean;
-import org.anchoranalysis.image.bean.provider.ChnlProvider;
 import org.anchoranalysis.image.bean.provider.HistogramProvider;
 import org.anchoranalysis.image.chnl.Chnl;
 import org.anchoranalysis.image.histogram.Histogram;
@@ -42,12 +41,9 @@ import org.anchoranalysis.image.stack.region.chnlconverter.attached.ChnlConverte
 
 // Converts a chnl by applying a ChnlConverter. A histogram is used to determine the conversion. This is either
 // calculated automatically from the incoming channel, or provided explicitly.
-public class ChnlProviderConverterHistogram extends ChnlProvider {
+public class ChnlProviderConverterHistogram extends ChnlProviderOne {
 
 	// START BEAN PROPERTIES
-	@BeanField
-	private ChnlProvider chnlProvider;
-	
 	@BeanField @OptionalBean
 	private HistogramProvider histogramProvider;	// If null, the histogram is calculated from the image
 	
@@ -59,9 +55,8 @@ public class ChnlProviderConverterHistogram extends ChnlProvider {
 	// END BEAN PROPERTIES
 	
 	@Override
-	public Chnl create() throws CreateException {
+	public Chnl createFromChnl( Chnl chnl ) throws CreateException {
 
-		Chnl chnl = chnlProvider.create();
 		assert(chnl!=null);
 		
 		Histogram hist;
@@ -82,14 +77,6 @@ public class ChnlProviderConverterHistogram extends ChnlProvider {
 		ConversionPolicy conversionPolicy = changeExisting ? ConversionPolicy.CHANGE_EXISTING_CHANNEL : ConversionPolicy.DO_NOT_CHANGE_EXISTING;
 		chnl = converter.convert(chnl, conversionPolicy );
 		return chnl;
-	}
-
-	public ChnlProvider getChnlProvider() {
-		return chnlProvider;
-	}
-
-	public void setChnlProvider(ChnlProvider chnlProvider) {
-		this.chnlProvider = chnlProvider;
 	}
 
 	public HistogramProvider getHistogramProvider() {
