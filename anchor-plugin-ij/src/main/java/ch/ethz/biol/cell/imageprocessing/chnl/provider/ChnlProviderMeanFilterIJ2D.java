@@ -35,21 +35,22 @@ import java.nio.ByteBuffer;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.Positive;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.image.bean.provider.ChnlProvider;
 import org.anchoranalysis.image.chnl.Chnl;
 import org.anchoranalysis.image.convert.IJWrap;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 
-public class ChnlProviderMeanFilterIJ2D extends ChnlProvider {
+public class ChnlProviderMeanFilterIJ2D extends ChnlProviderOne {
 
 	// START BEAN PROPERTIES
-	@BeanField
-	private ChnlProvider chnlProvider;
-	
 	@BeanField @Positive
 	private int radius = 2;
 	// END BEAN PROPERTIES
 	
+	@Override
+	public Chnl createFromChnl(Chnl chnl) throws CreateException {
+		return median3d(chnl);
+	}
+
 	private Chnl median3d( Chnl chnl ) throws CreateException {
 		
 		//ImagePlus imp = ImgStackUtilities.createImagePlus(chnl);
@@ -69,19 +70,6 @@ public class ChnlProviderMeanFilterIJ2D extends ChnlProvider {
 		return chnl;
 	}
 	
-	@Override
-	public Chnl create() throws CreateException {
-		return median3d(chnlProvider.create());
-	}
-
-	public ChnlProvider getChnlProvider() {
-		return chnlProvider;
-	}
-
-	public void setChnlProvider(ChnlProvider chnlProvider) {
-		this.chnlProvider = chnlProvider;
-	}
-
 	public int getRadius() {
 		return radius;
 	}

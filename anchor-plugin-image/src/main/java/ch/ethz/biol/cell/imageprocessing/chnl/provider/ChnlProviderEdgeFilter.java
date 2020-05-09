@@ -31,7 +31,6 @@ import java.nio.FloatBuffer;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.image.bean.provider.ChnlProvider;
 import org.anchoranalysis.image.chnl.Chnl;
 import org.anchoranalysis.image.chnl.factory.ChnlFactory;
 import org.anchoranalysis.image.convert.ImgLib2Wrap;
@@ -59,27 +58,43 @@ import net.imglib2.view.Views;
 
 
 // 3x3 Sobel Filter
-public class ChnlProviderEdgeFilter extends ChnlProvider {
+public class ChnlProviderEdgeFilter extends ChnlProviderOne {
 
 	// START BEAN
-	@BeanField
-	private ChnlProvider chnlProvider;
-	
 	@BeanField
 	private double scaleFactor = 1.0;
 	
 	@BeanField
 	private boolean outputShort=false;	// If true, outputs a short. Otherwise a byte
 	// END BEAN
-
-	public ChnlProvider getChnlProvider() {
-		return chnlProvider;
+		
+	@Override
+	public Chnl createFromChnl( Chnl chnlIn ) throws CreateException {
+		
+		Chnl chnlIntermediate = ChnlFactory.instance().createEmptyInitialised(
+			chnlIn.getDimensions(),
+			VoxelDataTypeFloat.instance
+		);
+		VoxelBox<FloatBuffer> vb = chnlIntermediate.getVoxelBox().asFloat();
+		
+		NativeImg<FloatType,FloatArray> natOut = ImgLib2Wrap.wrapFloat(vb);
+		
+		if (chnlIn.getVoxelDataType().equals(VoxelDataTypeUnsignedByte.instance)) {
+			NativeImg<UnsignedByteType,ByteArray> natIn = ImgLib2Wrap.wrapByte(chnlIn.getVoxelBox().asByte());
+			process(natIn,natOut, (float) scaleFactor);
+		} else if (chnlIn.getVoxelDataType().equals(VoxelDataTypeUnsignedShort.instance)) {
+			NativeImg<UnsignedShortType,ShortArray> natIn = ImgLib2Wrap.wrapShort(chnlIn.getVoxelBox().asShort());
+			process(natIn,natOut, (float) scaleFactor);
+		} else {
+			throw new CreateException("Input type must be unsigned byte or short");
+		}
+		
+		// convert to our output from the float
+		ChnlConverter<?> converter = outputShort ? new ChnlConverterToUnsignedShort() : new ChnlConverterToUnsignedByte();
+		return converter.convert(chnlIntermediate, ConversionPolicy.CHANGE_EXISTING_CHANNEL );
 	}
 
-	public void setChnlProvider(ChnlProvider chnlProvider) {
-		this.chnlProvider = chnlProvider;
-	}
-	
+
 	// From netlib
 	// https://github.com/imglib/imglib2-algorithm-gpl/blob/master/src/main/java/net/imglib2/algorithm/pde/Gradient.java
 	private static <T extends RealType<T>> void process(
@@ -141,37 +156,8 @@ public class ChnlProviderEdgeFilter extends ChnlProvider {
 			float diffNorm = (float) Math.sqrt( Math.pow(gx, 2.0) + Math.pow(gy, 2.0) );
 			oc.get().set( diffNorm*scaleFactor );
 		}
-
 	}
 	
-	@Override
-	public Chnl create() throws CreateException {
-		
-		Chnl chnlIn = chnlProvider.create();
-		
-		Chnl chnlIntermediate = ChnlFactory.instance().createEmptyInitialised(
-			chnlIn.getDimensions(),
-			VoxelDataTypeFloat.instance
-		);
-		VoxelBox<FloatBuffer> vb = chnlIntermediate.getVoxelBox().asFloat();
-		
-		NativeImg<FloatType,FloatArray> natOut = ImgLib2Wrap.wrapFloat(vb);
-		
-		if (chnlIn.getVoxelDataType().equals(VoxelDataTypeUnsignedByte.instance)) {
-			NativeImg<UnsignedByteType,ByteArray> natIn = ImgLib2Wrap.wrapByte(chnlIn.getVoxelBox().asByte());
-			process(natIn,natOut, (float) scaleFactor);
-		} else if (chnlIn.getVoxelDataType().equals(VoxelDataTypeUnsignedShort.instance)) {
-			NativeImg<UnsignedShortType,ShortArray> natIn = ImgLib2Wrap.wrapShort(chnlIn.getVoxelBox().asShort());
-			process(natIn,natOut, (float) scaleFactor);
-		} else {
-			throw new CreateException("Input type must be unsigned byte or short");
-		}
-		
-		// convert to our output from the float
-		ChnlConverter<?> converter = outputShort ? new ChnlConverterToUnsignedShort() : new ChnlConverterToUnsignedByte();
-		return converter.convert(chnlIntermediate, ConversionPolicy.CHANGE_EXISTING_CHANNEL );
-	}
-
 	public double getScaleFactor() {
 		return scaleFactor;
 	}

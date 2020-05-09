@@ -59,6 +59,7 @@ public class ExportFeaturesObjMaskTaskTest {
 	private ExportFeaturesObjMaskTaskFixture taskFixture;
 	
 	private static final String SINGLE_FEATURES_WITH_SHELL = "singleFeaturesWithShell.xml";
+	@SuppressWarnings("unused")
 	private static final String SINGLE_FEATURES_WITH_REFERENCE = "singleFeaturesWithReference.xml";
 	
 	private static final String RELATIVE_PATH_SAVED_RESULTS = "expectedOutput/exportFeaturesObjMask/";
@@ -69,6 +70,7 @@ public class ExportFeaturesObjMaskTaskTest {
 	private static final String OUTPUT_DIR_MERGED_2 = "mergedPairs02/";
 	private static final String OUTPUT_DIR_MERGED_3 = "mergedPairs03/";
 	private static final String OUTPUT_DIR_IMAGE_CACHE = "imageCache/";
+	@SuppressWarnings("unused")
 	private static final String OUTPUT_DIR_SIMPLE_WITH_REFERENCE = "simpleWithReference/";
 	
 	// Used for tests where we expect an exception to be thrown, and thus never to actually be compared

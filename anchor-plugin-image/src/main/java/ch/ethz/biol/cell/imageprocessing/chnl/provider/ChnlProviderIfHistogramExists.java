@@ -29,39 +29,27 @@ package ch.ethz.biol.cell.imageprocessing.chnl.provider;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.image.bean.provider.ChnlProvider;
 import org.anchoranalysis.image.bean.provider.HistogramProvider;
 import org.anchoranalysis.image.chnl.Chnl;
 import org.anchoranalysis.image.histogram.Histogram;
 
-public class ChnlProviderIfHistogramExists extends ChnlProvider {
+public class ChnlProviderIfHistogramExists extends ChnlProviderOne {
 
 	// START BEAN PROPERTIES
-	@BeanField
-	private ChnlProvider chnlProvider;
-	
 	@BeanField
 	private HistogramProvider histogramProvider;
 	// END BEAN PROPERTIES
 
 	@Override
-	public Chnl create() throws CreateException {
+	public Chnl createFromChnl( Chnl chnl ) throws CreateException {
 		
 		Histogram hist = histogramProvider.create();
 
 		if (hist!=null) {
-			return chnlProvider.create();
+			return chnl;
 		} else {
 			throw new CreateException("histogram is null");
 		}
-	}
-
-	public ChnlProvider getChnlProvider() {
-		return chnlProvider;
-	}
-
-	public void setChnlProvider(ChnlProvider chnlProvider) {
-		this.chnlProvider = chnlProvider;
 	}
 
 	public HistogramProvider getHistogramProvider() {

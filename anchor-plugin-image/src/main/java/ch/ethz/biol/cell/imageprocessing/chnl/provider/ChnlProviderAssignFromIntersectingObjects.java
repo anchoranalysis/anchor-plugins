@@ -32,7 +32,6 @@ import java.util.List;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.geometry.Point3i;
-import org.anchoranalysis.image.bean.provider.ChnlProvider;
 import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
 import org.anchoranalysis.image.chnl.Chnl;
 import org.anchoranalysis.image.objmask.ObjMask;
@@ -44,12 +43,9 @@ import ch.ethz.biol.cell.imageprocessing.objmask.matching.ObjMaskMatchUtilities;
 
 // Matches source-objects to target objects, based upon intersection, and assigns the
 //   value in the respective source object to the target object
-public class ChnlProviderAssignFromIntersectingObjects extends ChnlProvider {
+public class ChnlProviderAssignFromIntersectingObjects extends ChnlProviderOne {
 
 	// START BEAN PROPERTIES
-	@BeanField
-	private ChnlProvider chnlProvider;
-	
 	@BeanField
 	private ObjMaskProvider objsSource;
 	
@@ -68,9 +64,7 @@ public class ChnlProviderAssignFromIntersectingObjects extends ChnlProvider {
 	}
 	
 	@Override
-	public Chnl create() throws CreateException {
-
-		Chnl chnl = chnlProvider.create();
+	public Chnl createFromChnl(Chnl chnl) throws CreateException {
 		
 		VoxelBox<?> vb = chnl.getVoxelBox().any();
 		
@@ -129,14 +123,6 @@ public class ChnlProviderAssignFromIntersectingObjects extends ChnlProvider {
 			}
 		}
 		return omMostIntersecting;
-	}
-	
-	public ChnlProvider getChnlProvider() {
-		return chnlProvider;
-	}
-
-	public void setChnlProvider(ChnlProvider chnlProvider) {
-		this.chnlProvider = chnlProvider;
 	}
 
 	public ObjMaskProvider getObjsSource() {

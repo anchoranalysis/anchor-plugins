@@ -30,18 +30,14 @@ package ch.ethz.biol.cell.imageprocessing.chnl.provider;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.bean.chnl.converter.ChnlConverterBean;
-import org.anchoranalysis.image.bean.provider.ChnlProvider;
 import org.anchoranalysis.image.chnl.Chnl;
 import org.anchoranalysis.image.stack.region.chnlconverter.ChnlConverter;
 import org.anchoranalysis.image.stack.region.chnlconverter.ConversionPolicy;
 
 // Converts a chnl by applying a ChnlConverter. Does not need a histogram
-public class ChnlProviderConverter extends ChnlProvider {
+public class ChnlProviderConverter extends ChnlProviderOne {
 
 	// START BEAN PROPERTIES
-	@BeanField
-	private ChnlProvider chnlProvider;
-	
 	@BeanField
 	private ChnlConverterBean chnlConverter;
 	
@@ -50,9 +46,8 @@ public class ChnlProviderConverter extends ChnlProvider {
 	// END BEAN PROPERTIES
 	
 	@Override
-	public Chnl create() throws CreateException {
+	public Chnl createFromChnl( Chnl chnl ) throws CreateException {
 
-		Chnl chnl = chnlProvider.create();
 		assert(chnl!=null);
 
 		ChnlConverter<?> converter = chnlConverter.createConverter();
@@ -60,14 +55,6 @@ public class ChnlProviderConverter extends ChnlProvider {
 		ConversionPolicy conversionPolicy = changeExisting ? ConversionPolicy.CHANGE_EXISTING_CHANNEL : ConversionPolicy.DO_NOT_CHANGE_EXISTING;
 		chnl = converter.convert(chnl, conversionPolicy );
 		return chnl;
-	}
-
-	public ChnlProvider getChnlProvider() {
-		return chnlProvider;
-	}
-
-	public void setChnlProvider(ChnlProvider chnlProvider) {
-		this.chnlProvider = chnlProvider;
 	}
 
 	public boolean isChangeExisting() {

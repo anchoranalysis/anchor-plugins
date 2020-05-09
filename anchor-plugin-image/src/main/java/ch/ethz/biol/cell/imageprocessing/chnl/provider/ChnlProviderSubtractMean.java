@@ -32,7 +32,6 @@ import java.nio.ByteBuffer;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.bean.provider.BinaryImgChnlProvider;
-import org.anchoranalysis.image.bean.provider.ChnlProvider;
 import org.anchoranalysis.image.binary.BinaryChnl;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.chnl.Chnl;
@@ -40,18 +39,37 @@ import org.anchoranalysis.image.convert.ByteConverter;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 
-public class ChnlProviderSubtractMean extends ChnlProvider {
+public class ChnlProviderSubtractMean extends ChnlProviderOne {
 
 	// START
-	@BeanField
-	private ChnlProvider chnlProvider;
-	
 	@BeanField
 	private BinaryImgChnlProvider maskProvider;
 	
 	@BeanField
 	private boolean subtractFromMaskOnly = true;
 	// END
+	
+	@Override
+	public Chnl createFromChnl(Chnl chnl) throws CreateException {
+				
+		BinaryChnl mask = maskProvider.create();
+		
+		if (!chnl.getDimensions().equals(chnl.getDimensions())) {
+			throw new CreateException("dimensions are not identical between chnlProvider and maskProvider");
+		}
+		
+		double mean = calculateMean(chnl, mask);
+		
+		int meanInt = (int) Math.round(mean);
+		
+		if (subtractFromMaskOnly) {
+			subtractMeanMask(chnl, mask, meanInt );
+		} else {
+			subtractMeanAll(chnl, meanInt );
+		}
+		
+		return chnl;
+	}
 	
 	private double calculateMean( Chnl chnl, BinaryChnl mask ) throws CreateException {
 		
@@ -162,46 +180,13 @@ public class ChnlProviderSubtractMean extends ChnlProvider {
 			
 		}
 	}
-	
-	
-	@Override
-	public Chnl create() throws CreateException {
 		
-		Chnl chnl = chnlProvider.create();
-				
-		BinaryChnl mask = maskProvider.create();
-		
-		if (!chnl.getDimensions().equals(chnl.getDimensions())) {
-			throw new CreateException("dimensions are not identical between chnlProvider and maskProvider");
-		}
-		
-		double mean = calculateMean(chnl, mask);
-		
-		int meanInt = (int) Math.round(mean);
-		
-		if (subtractFromMaskOnly) {
-			subtractMeanMask(chnl, mask, meanInt );
-		} else {
-			subtractMeanAll(chnl, meanInt );
-		}
-		
-		return chnl;
-	}
-
 	public BinaryImgChnlProvider getMaskProvider() {
 		return maskProvider;
 	}
 
 	public void setMaskProvider(BinaryImgChnlProvider maskProvider) {
 		this.maskProvider = maskProvider;
-	}
-
-	public ChnlProvider getChnlProvider() {
-		return chnlProvider;
-	}
-
-	public void setChnlProvider(ChnlProvider chnlProvider) {
-		this.chnlProvider = chnlProvider;
 	}
 
 	public boolean isSubtractFromMaskOnly() {

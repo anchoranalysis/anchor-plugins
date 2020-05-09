@@ -33,7 +33,6 @@ import java.util.List;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.image.bean.provider.ChnlProvider;
 import org.anchoranalysis.image.chnl.Chnl;
 import org.anchoranalysis.image.convert.ByteConverter;
 import org.anchoranalysis.image.convert.IJWrap;
@@ -45,12 +44,9 @@ import ij.process.ImageProcessor;
 
 // Performs an edge filter after a median filter
 ///  Does this multiple times for median filter from startRadius to endRadius (increment 2) and averages
-public class ChnlProviderEdgeFilterMedianMultiple extends ChnlProvider {
+public class ChnlProviderEdgeFilterMedianMultiple extends ChnlProviderOne {
 
 	// START BEAN
-	@BeanField
-	private ChnlProvider chnlProvider;
-	
 	@BeanField
 	private int startRadius;
 	
@@ -58,18 +54,9 @@ public class ChnlProviderEdgeFilterMedianMultiple extends ChnlProvider {
 	private int endRadius;
 	// END BEAN
 
-	public ChnlProvider getChnlProvider() {
-		return chnlProvider;
-	}
-
-	public void setChnlProvider(ChnlProvider chnlProvider) {
-		this.chnlProvider = chnlProvider;
-	}
-
 	@Override
-	public Chnl create() throws CreateException {
+	public Chnl createFromChnl(Chnl chnl) throws CreateException {
 		
-		Chnl chnl = chnlProvider.create();
 		VoxelBox<ByteBuffer> vb = chnl.getVoxelBox().asByte();
 		
 		List<Chnl> allResponses = new ArrayList<>(); 

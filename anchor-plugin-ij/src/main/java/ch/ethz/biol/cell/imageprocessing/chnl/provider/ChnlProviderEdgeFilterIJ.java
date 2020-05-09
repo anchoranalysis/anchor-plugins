@@ -29,33 +29,16 @@ package ch.ethz.biol.cell.imageprocessing.chnl.provider;
 
 import ij.process.ImageProcessor;
 
-import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.image.bean.provider.ChnlProvider;
 import org.anchoranalysis.image.chnl.Chnl;
 import org.anchoranalysis.image.convert.IJWrap;
 import org.anchoranalysis.image.voxel.box.VoxelBoxWrapper;
 
 
-public class ChnlProviderEdgeFilterIJ extends ChnlProvider {
-
-	// START BEAN
-	@BeanField
-	private ChnlProvider chnlProvider;
-	// END BEAN
-	
-	public ChnlProvider getChnlProvider() {
-		return chnlProvider;
-	}
-
-	public void setChnlProvider(ChnlProvider chnlProvider) {
-		this.chnlProvider = chnlProvider;
-	}
+public class ChnlProviderEdgeFilterIJ extends ChnlProviderOne {
 
 	@Override
-	public Chnl create() throws CreateException {
-		
-		Chnl chnl = chnlProvider.create();
+	public Chnl createFromChnl(Chnl chnl) throws CreateException {
 		
 		Chnl dup = chnl.duplicate();
 		VoxelBoxWrapper vbDup = dup.getVoxelBox();

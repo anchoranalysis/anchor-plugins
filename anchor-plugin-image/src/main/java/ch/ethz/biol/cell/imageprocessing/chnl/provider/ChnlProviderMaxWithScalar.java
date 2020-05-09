@@ -29,18 +29,14 @@ package ch.ethz.biol.cell.imageprocessing.chnl.provider;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.image.bean.provider.ChnlProvider;
 import org.anchoranalysis.image.chnl.Chnl;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 
-public class ChnlProviderMaxWithScalar extends ChnlProvider {
+public class ChnlProviderMaxWithScalar extends ChnlProviderOne {
 
 	// START BEAN PROPERTIES
-	@BeanField
-	private ChnlProvider chnlProvider;
-	
 	@BeanField
 	private double value;
 	// END BEAN PROPERTIES
@@ -67,9 +63,7 @@ public class ChnlProviderMaxWithScalar extends ChnlProvider {
 	
 
 	@Override
-	public Chnl create() throws CreateException {
-		
-		Chnl chnl = chnlProvider.create();
+	public Chnl createFromChnl(Chnl chnl) throws CreateException {
 		
 		processVoxelBox( chnl.getVoxelBox().any(), value );
 		
@@ -83,13 +77,4 @@ public class ChnlProviderMaxWithScalar extends ChnlProvider {
 	public void setValue(double value) {
 		this.value = value;
 	}
-
-	public ChnlProvider getChnlProvider() {
-		return chnlProvider;
-	}
-
-	public void setChnlProvider(ChnlProvider chnlProvider) {
-		this.chnlProvider = chnlProvider;
-	}
-
 }

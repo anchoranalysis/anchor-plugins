@@ -32,7 +32,6 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.image.bean.interpolator.InterpolatorBean;
-import org.anchoranalysis.image.bean.provider.ChnlProvider;
 import org.anchoranalysis.image.bean.scale.ScaleCalculator;
 import org.anchoranalysis.image.chnl.Chnl;
 import org.anchoranalysis.image.interpolator.Interpolator;
@@ -40,23 +39,18 @@ import org.anchoranalysis.image.scale.ScaleFactor;
 
 import anchor.image.bean.interpolator.InterpolatorBeanLanczos;
 
-public class ChnlProviderScale extends ChnlProvider {
+public class ChnlProviderScale extends ChnlProviderOne {
 
 	// Start BEAN PROPERTIES
 	@BeanField
 	private ScaleCalculator scaleCalculator;
 	
 	@BeanField
-	private ChnlProvider chnlProvider;
-	
-	@BeanField
 	private InterpolatorBean interpolator = new InterpolatorBeanLanczos();
 	// End BEAN PROPERTIES
 	
 	@Override
-	public Chnl create() throws CreateException {
-		
-		Chnl chnl = chnlProvider.create();
+	public Chnl createFromChnl(Chnl chnl) throws CreateException {
 		return scale( chnl, scaleCalculator, interpolator.create(), getLogger() );
 	}
 	
@@ -92,14 +86,6 @@ public class ChnlProviderScale extends ChnlProvider {
 
 	public void setScaleCalculator(ScaleCalculator scaleCalculator) {
 		this.scaleCalculator = scaleCalculator;
-	}
-
-	public ChnlProvider getChnlProvider() {
-		return chnlProvider;
-	}
-
-	public void setChnlProvider(ChnlProvider chnlProvider) {
-		this.chnlProvider = chnlProvider;
 	}
 
 	public InterpolatorBean getInterpolator() {

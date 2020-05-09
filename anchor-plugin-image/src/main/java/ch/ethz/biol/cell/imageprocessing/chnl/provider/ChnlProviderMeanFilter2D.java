@@ -34,7 +34,6 @@ import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.bean.provider.BinaryImgChnlProvider;
-import org.anchoranalysis.image.bean.provider.ChnlProvider;
 import org.anchoranalysis.image.binary.BinaryChnl;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
@@ -46,12 +45,9 @@ import org.anchoranalysis.image.extent.IncorrectImageSizeException;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.anchoranalysis.image.voxel.box.factory.VoxelBoxFactory;
 
-public class ChnlProviderMeanFilter2D extends ChnlProvider {
+public class ChnlProviderMeanFilter2D extends ChnlProviderOne {
 
 	// START BEAN PROPERTIES
-	@BeanField
-	private ChnlProvider chnlProvider;
-	
 	@BeanField @OptionalBean
 	private BinaryImgChnlProvider binaryImgChnlProviderMaskInput;		// A mask on which voxels are considered when calculating the filter
 	
@@ -226,10 +222,7 @@ public class ChnlProviderMeanFilter2D extends ChnlProvider {
 	}
 	
 	@Override
-	public Chnl create() throws CreateException {
-		
-		
-		Chnl chnl = chnlProvider.create(); 
+	public Chnl createFromChnl(Chnl chnl) throws CreateException {
 		
 		BinaryChnl biInput = null;
 		if (binaryImgChnlProviderMaskInput!=null) {
@@ -262,14 +255,6 @@ public class ChnlProviderMeanFilter2D extends ChnlProvider {
 		}
 		
 		return chnl;
-	}
-
-	public ChnlProvider getChnlProvider() {
-		return chnlProvider;
-	}
-
-	public void setChnlProvider(ChnlProvider chnlProvider) {
-		this.chnlProvider = chnlProvider;
 	}
 
 	public int getRadius() {
