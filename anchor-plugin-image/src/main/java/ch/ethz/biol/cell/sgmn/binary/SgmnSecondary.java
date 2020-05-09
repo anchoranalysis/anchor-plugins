@@ -32,6 +32,7 @@ import java.nio.ByteBuffer;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.image.bean.sgmn.binary.BinarySgmn;
+import org.anchoranalysis.image.bean.sgmn.binary.BinarySgmnOne;
 import org.anchoranalysis.image.bean.sgmn.binary.BinarySgmnParameters;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
 import org.anchoranalysis.image.extent.BoundingBox;
@@ -46,12 +47,9 @@ import org.anchoranalysis.image.voxel.box.factory.VoxelBoxFactoryTypeBound;
 // Performs a primary segmentation on the incoming voxels
 // And a secondary segmentation on all the voxels which were rejected by
 //   the primary segmentation
-public class SgmnSecondary extends BinarySgmn {
+public class SgmnSecondary extends BinarySgmnOne {
 
 	// START BEAN PROPERTIES
-	@BeanField
-	private BinarySgmn sgmn;
-	
 	@BeanField @OptionalBean
 	private BinarySgmn sgmnSecondary;	// Applied on pixels rejected from the first segmentation
 	
@@ -60,13 +58,17 @@ public class SgmnSecondary extends BinarySgmn {
 	// END BEAN PROPERTIES
 	
 	@Override
-	public BinaryVoxelBox<ByteBuffer> sgmn(VoxelBoxWrapper voxelBox, BinarySgmnParameters params) {
+	public BinaryVoxelBox<ByteBuffer> sgmnFromSgmn(VoxelBoxWrapper voxelBox, BinarySgmnParameters params, BinarySgmn sgmn) {
 		throw new IllegalArgumentException("Method not supported yet");
 	}
 
 	@Override
-	public BinaryVoxelBox<ByteBuffer> sgmn(VoxelBoxWrapper voxelBox,
-			BinarySgmnParameters params, ObjMask objMask) throws SgmnFailedException {
+	public BinaryVoxelBox<ByteBuffer> sgmnFromSgmn(
+		VoxelBoxWrapper voxelBox,
+		BinarySgmnParameters params,
+		ObjMask objMask,
+		BinarySgmn sgmn
+	) throws SgmnFailedException {
 
 		VoxelBox<ByteBuffer> voxelBoxByte = voxelBox.asByte();
 		
@@ -116,14 +118,6 @@ public class SgmnSecondary extends BinarySgmn {
 		return out;
 	}
 
-	public BinarySgmn getSgmn() {
-		return sgmn;
-	}
-
-	public void setSgmn(BinarySgmn sgmn) {
-		this.sgmn = sgmn;
-	}
-
 	public BinarySgmn getSgmnSecondary() {
 		return sgmnSecondary;
 	}
@@ -134,6 +128,6 @@ public class SgmnSecondary extends BinarySgmn {
 
 	@Override
 	public VoxelBox<ByteBuffer> getAdditionalOutput() {
-		return sgmn.getAdditionalOutput();
+		return getSgmn().getAdditionalOutput();
 	}
 }
