@@ -44,19 +44,18 @@ public class ChnlProviderIfPixelZero extends ChnlProviderOne {
 
 	// START BEAN PROPERTIES
 	@BeanField
-	private ChnlProvider chnlProviderIfPixelZero;
+	private ChnlProvider chnlIfPixelZero;
 	// END BEAN PROPERTIES
 	
 	@Override
 	public Chnl createFromChnl(Chnl chnl) throws CreateException {
 		
-		Chnl chnlIfPixelZero = chnlProviderIfPixelZero.create();
+		Chnl ifZero = DimChecker.createSameSize(chnlIfPixelZero, "chnlIfPixelZero", chnl);
 		
-		VoxelDataType combinedType = CombineTypes.combineTypes(chnl.getVoxelDataType(), chnlIfPixelZero.getVoxelDataType());
+		VoxelDataType combinedType = CombineTypes.combineTypes(chnl.getVoxelDataType(), ifZero.getVoxelDataType());
 
 		double multFact = (double) combinedType.maxValue() / chnl.getVoxelDataType().maxValue();
-		return merge( chnl, chnlIfPixelZero, combinedType, multFact );
-		
+		return merge( chnl, ifZero, combinedType, multFact );
 	}
 	
 	public static Chnl merge( Chnl chnl, Chnl chnlIfPixelZero, VoxelDataType combinedType, double multFactorIfNonZero ) throws CreateException {
@@ -93,16 +92,15 @@ public class ChnlProviderIfPixelZero extends ChnlProviderOne {
 					out.putInt(offset, b2);
 				}
 			}
-//		
-//			assert( !out.hasRemaining() );
 		}
 	}
-	
-	public ChnlProvider getChnlProviderIfPixelZero() {
-		return chnlProviderIfPixelZero;
+
+	public ChnlProvider getChnlIfPixelZero() {
+		return chnlIfPixelZero;
 	}
 
-	public void setChnlProviderIfPixelZero(ChnlProvider chnlProviderIfPixelZero) {
-		this.chnlProviderIfPixelZero = chnlProviderIfPixelZero;
+	public void setChnlIfPixelZero(ChnlProvider chnlIfPixelZero) {
+		this.chnlIfPixelZero = chnlIfPixelZero;
 	}
+
 }
