@@ -32,6 +32,7 @@ import org.anchoranalysis.bean.shared.relation.GreaterThanBean;
 import org.anchoranalysis.bean.shared.relation.threshold.RelationToConstant;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.bean.threshold.CalculateLevel;
+import org.anchoranalysis.image.bean.threshold.CalculateLevelOne;
 import org.anchoranalysis.image.histogram.Histogram;
 import org.anchoranalysis.image.histogram.HistogramArray;
 import org.apache.commons.lang.builder.EqualsBuilder;
@@ -44,16 +45,19 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
  * @author owen
  *
  */
-public class ClipHistogramMax extends CalculateLevel {
+public class ClipHistogramMax extends CalculateLevelOne {
 
 	// START BEAN
 	@BeanField
-	private CalculateLevel calculateLevel;
-	
-	@BeanField
 	private int max;
 	// END BEAN
-
+	
+	@Override
+	public int calculateLevel(Histogram h) throws OperationFailedException {
+		Histogram hClipped = createClipped(h,max);
+		return calculateLevelIncoming(hClipped);
+	}
+	
 	private static Histogram createClipped( Histogram histIn, int maxVal ) {
 		
 		assert( maxVal<= histIn.getMaxBin() );
@@ -72,33 +76,6 @@ public class ClipHistogramMax extends CalculateLevel {
 		out.incrValBy(maxVal, numAbove);
 		return out;
 	}
-	
-	@Override
-	public int calculateLevel(Histogram h) throws OperationFailedException {
-		Histogram hClipped = createClipped(h,max);
-		return calculateLevel.calculateLevel(hClipped);
-	}
-	
-	@Override
-	public boolean equals(Object obj) {
-		if(obj instanceof ClipHistogramMax){
-	    	final ClipHistogramMax other = (ClipHistogramMax) obj;
-	        return new EqualsBuilder()
-	            .append(calculateLevel, other.calculateLevel)
-	            .append(max, other.max)
-	            .isEquals();
-	    } else{
-	        return false;
-	    }
-	}
-
-	@Override
-	public int hashCode() {
-		return new HashCodeBuilder()
-			.append(calculateLevel)
-			.append(max)
-			.toHashCode();
-	}
 
 	public int getMax() {
 		return max;
@@ -108,11 +85,25 @@ public class ClipHistogramMax extends CalculateLevel {
 		this.max = max;
 	}
 
-	public CalculateLevel getCalculateLevel() {
-		return calculateLevel;
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = super.hashCode();
+		result = prime * result + max;
+		return result;
 	}
 
-	public void setCalculateLevel(CalculateLevel calculateLevel) {
-		this.calculateLevel = calculateLevel;
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (!super.equals(obj))
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		ClipHistogramMax other = (ClipHistogramMax) obj;
+		if (max != other.max)
+			return false;
+		return true;
 	}
 }
