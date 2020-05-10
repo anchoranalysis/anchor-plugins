@@ -33,12 +33,12 @@ import org.anchoranalysis.image.bean.objmask.filter.ObjMaskFilter;
 import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.objmask.ObjMaskCollection;
 
-public class ObjMaskFilterAnd extends ObjMaskFilterDelegate {
+public class ObjMaskFilterAnd extends ObjMaskFilterDerivedFromList {
 
 	@Override
 	public void filter(ObjMaskCollection objs, Optional<ImageDim> dim, Optional<ObjMaskCollection> objsRejected) throws OperationFailedException {
 		
-		for (ObjMaskFilter indFilter : delegate().getList()) {
+		for (ObjMaskFilter indFilter : list()) {
 			indFilter.filter(objs, dim, objsRejected);
 		}
 	}
