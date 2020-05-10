@@ -2,6 +2,8 @@ package org.anchoranalysis.plugin.image.bean.obj.merge;
 
 
 
+import java.util.Optional;
+
 /*
  * #%L
  * anchor-plugin-image
@@ -117,13 +119,11 @@ public abstract class ObjMaskProviderMergeWithFeature extends ObjMaskProviderMer
 		
 		LogReporter logger = getLogger().getLogReporter();
 		
-		ImageRes res = calcRes();
-		
 		MergeGraph graph;
 		try {
 			graph = createGraph(
 				objs,
-				res
+				calcResOptional()
 			);
 		} catch (CreateException e) {
 			throw new OperationFailedException(e);
@@ -176,7 +176,7 @@ public abstract class ObjMaskProviderMergeWithFeature extends ObjMaskProviderMer
 	
 	private MergeGraph createGraph(
 		ObjMaskCollection objs,
-		ImageRes res
+		Optional<ImageRes> res
 	) throws CreateException {
 			
 		try {

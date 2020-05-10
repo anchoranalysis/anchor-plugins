@@ -1,5 +1,7 @@
 package org.anchoranalysis.plugin.image.obj.merge.condition;
 
+import java.util.Optional;
+
 /*-
  * #%L
  * anchor-plugin-image
@@ -36,5 +38,5 @@ public interface AfterCondition {
 	
 	void init(LogErrorReporter logger) throws InitException;
 	
-	boolean accept(ObjMask omSrc, ObjMask omDest, ObjMask omMerged, ImageRes res) throws OperationFailedException;
+	boolean accept(ObjMask omSrc, ObjMask omDest, ObjMask omMerged, Optional<ImageRes> res) throws OperationFailedException;
 }

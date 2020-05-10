@@ -112,9 +112,12 @@ public class ObjMaskFilterChnlIntensGreaterEqualThan extends ObjMaskFilterByObje
 		return false;
 	}
 
-	private int threshold(Optional<ImageDim> dim) {
+	private int threshold(Optional<ImageDim> dim) throws OperationFailedException {
 		return (int) Math.ceil(
-			threshold.rslv( dim.get().getRes(), new DirectionVector(1.0, 0, 0) )
+			threshold.rslv(
+				dim.map(ImageDim::getRes),
+				new DirectionVector(1.0, 0, 0)
+			)
 		);
 	}
 	

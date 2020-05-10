@@ -32,6 +32,7 @@ import java.util.List;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.InitException;
+import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.core.geometry.Tuple3i;
 import org.anchoranalysis.core.random.RandomNumberGenerator;
@@ -49,7 +50,7 @@ public class VisitSchedulerUniformSample extends VisitScheduler {
 	private VisitScheduler selected;
 	
 	@Override
-	public Tuple3i maxDistFromRootPoint(ImageRes res) {
+	public Tuple3i maxDistFromRootPoint(ImageRes res) throws OperationFailedException {
 		return selected.maxDistFromRootPoint(res);
 	}
 	
@@ -78,10 +79,4 @@ public class VisitSchedulerUniformSample extends VisitScheduler {
 	public void setList(List<VisitScheduler> list) {
 		this.list = list;
 	}
-
-
-
-
-
-
 }

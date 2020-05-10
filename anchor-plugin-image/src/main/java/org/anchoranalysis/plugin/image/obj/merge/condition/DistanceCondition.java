@@ -1,5 +1,9 @@
 package org.anchoranalysis.plugin.image.obj.merge.condition;
 
+import java.util.Optional;
+
+import org.anchoranalysis.core.error.OperationFailedException;
+
 /*-
  * #%L
  * anchor-plugin-image
@@ -49,7 +53,7 @@ public class DistanceCondition implements BeforeCondition {
 	}
 
 	@Override
-	public boolean accept(ObjMask omSrc, ObjMask omDest, ImageRes res) {
+	public boolean accept(ObjMask omSrc, ObjMask omDest, Optional<ImageRes> res) throws OperationFailedException {
 		
 		// We impose a max dist condition if necessary
 		if (maxDist!=null) {
@@ -59,7 +63,7 @@ public class DistanceCondition implements BeforeCondition {
 		}
 	}
 	
-	private boolean isWithinMaxDist( ObjMask omSrc, ObjMask omDest, ImageRes res ) {
+	private boolean isWithinMaxDist( ObjMask omSrc, ObjMask omDest, Optional<ImageRes> res ) throws OperationFailedException {
 		
 		double dist = distCalc.dist( omSrc.getBoundingBox(), omDest.getBoundingBox(), !suppressZ );
 		
@@ -85,7 +89,7 @@ public class DistanceCondition implements BeforeCondition {
 		}
 	}
 	
-	private double rslvDist( ImageRes res, Point3d pnt1, Point3d pnt2 ) {
+	private double rslvDist( Optional<ImageRes> res, Point3d pnt1, Point3d pnt2 ) throws OperationFailedException {
 		if (suppressZ) {
 			return maxDist.rslv(res, new Point3d(pnt1.getX(),pnt1.getY(),0), new Point3d(pnt2.getX(),pnt2.getY(),0) );
 		} else {

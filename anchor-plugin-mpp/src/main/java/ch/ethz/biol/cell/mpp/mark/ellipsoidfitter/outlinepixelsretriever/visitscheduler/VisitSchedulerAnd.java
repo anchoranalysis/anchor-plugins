@@ -32,6 +32,7 @@ import java.util.List;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.InitException;
+import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.core.geometry.Tuple3i;
 import org.anchoranalysis.core.random.RandomNumberGenerator;
@@ -46,7 +47,7 @@ public class VisitSchedulerAnd extends VisitScheduler {
 	// END BEAN PROPERTIES
 	
 	@Override
-	public Tuple3i maxDistFromRootPoint(ImageRes res) {
+	public Tuple3i maxDistFromRootPoint(ImageRes res) throws OperationFailedException {
 		
 		Point3i maxDist = null;
 		

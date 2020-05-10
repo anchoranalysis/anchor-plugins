@@ -1,5 +1,7 @@
 package org.anchoranalysis.plugin.image.feature.bean.obj.pair.overlap;
 
+import java.util.Optional;
+
 /*
  * #%L
  * anchor-plugin-image-feature
@@ -28,6 +30,7 @@ package org.anchoranalysis.plugin.image.feature.bean.obj.pair.overlap;
 
 
 import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
@@ -87,13 +90,17 @@ public class CostOverlapWithinMidpointDistance extends FeatureObjMaskPair {
 		Point3d cog2 = params.getSecond().centerOfGravity();
 		
 		double dist = calcDist(cog1, cog2);
-		double maxDist = calcMaxDist(
-			cog1,
-			cog2,
-			params.getResOptional().get()
-		);
-		
-		return dist > maxDist;
+		try {
+			double maxDist = calcMaxDist(
+				cog1,
+				cog2,
+				params.getResOptional()
+			);
+			
+			return dist > maxDist;
+		} catch (OperationFailedException e) {
+			throw new FeatureCalcException(e);
+		}
 	}
 	
 	private double calcDist( Point3d cog1, Point3d cog2 ) {
@@ -105,7 +112,7 @@ public class CostOverlapWithinMidpointDistance extends FeatureObjMaskPair {
 	}
 
 	// We measure the euclidian distance between centre-points
-	private double calcMaxDist( Point3d cog1, Point3d cog2, ImageRes res ) {
+	private double calcMaxDist( Point3d cog1, Point3d cog2, Optional<ImageRes> res ) throws OperationFailedException {
 		DirectionVector vec = DirectionVector.createBetweenTwoPoints( cog1, cog2 );
 		 return maxDistance.rslv(res, vec);
 	}

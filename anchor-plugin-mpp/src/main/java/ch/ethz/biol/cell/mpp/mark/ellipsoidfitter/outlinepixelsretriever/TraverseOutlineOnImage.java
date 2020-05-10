@@ -70,31 +70,6 @@ public class TraverseOutlineOnImage extends OutlinePixelsRetriever {
 	public TraverseOutlineOnImage() {
 		super();
 	}
-
-	private ObjMask createObjMaskForPoint( Point3i root, BinaryChnl chnl ) throws CreateException {
-		
-		
-		
-		Tuple3i maxDist = visitScheduler.maxDistFromRootPoint(chnl.getDimensions().getRes()) ;
-		if (maxDist==null) {
-			throw new CreateException("A null maxDist is not supported");
-		}
-		BoundingBox box = VisitSchedulerMaxDist.createBoxAroundPoint(root, maxDist );
-		
-		// We make sure the box is within our scene boundaries
-		box.clipTo( chnl.getDimensions().getExtnt() );
-		
-		// This is our final intersection box, that we use for traversing and memorizing pixels
-		//  that we have already visited
-		
-		assert( box.extnt().getVolume() > 0 );
-		
-		return chnl.createMaskAlwaysNew(box);		
-	}
-	
-	
-	
-	//static int a = 0;
 	
 	@Override
 	public void traverse( Point3i root, List<Point3i> listOut, RandomNumberGenerator re ) throws TraverseOutlineException {
@@ -165,7 +140,30 @@ public class TraverseOutlineOnImage extends OutlinePixelsRetriever {
 		} catch (OperationFailedException e) {
 			throw new TraverseOutlineException("Cannot traverse outline", e);
 		}
-		
+	}
+	
+	private ObjMask createObjMaskForPoint( Point3i root, BinaryChnl chnl ) throws CreateException {
+				
+		try {
+			Tuple3i maxDist = visitScheduler.maxDistFromRootPoint(chnl.getDimensions().getRes()) ;
+			if (maxDist==null) {
+				throw new CreateException("A null maxDist is not supported");
+			}
+			BoundingBox box = VisitSchedulerMaxDist.createBoxAroundPoint(root, maxDist );
+			
+			// We make sure the box is within our scene boundaries
+			box.clipTo( chnl.getDimensions().getExtnt() );
+			
+			// This is our final intersection box, that we use for traversing and memorizing pixels
+			//  that we have already visited
+			
+			assert( box.extnt().getVolume() > 0 );
+			
+			return chnl.createMaskAlwaysNew(box);
+			
+		} catch (OperationFailedException e) {
+			throw new CreateException(e);
+		}
 	}
 
 	public boolean isNghb8() {

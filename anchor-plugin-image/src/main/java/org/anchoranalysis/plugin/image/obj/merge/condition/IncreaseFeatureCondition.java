@@ -1,5 +1,7 @@
 package org.anchoranalysis.plugin.image.obj.merge.condition;
 
+import java.util.Optional;
+
 /*-
  * #%L
  * anchor-plugin-image
@@ -63,7 +65,7 @@ public class IncreaseFeatureCondition implements AfterCondition {
 	}
 
 	@Override
-	public boolean accept(ObjMask omSrc, ObjMask omDest, ObjMask omMerged, ImageRes res) throws OperationFailedException {
+	public boolean accept(ObjMask omSrc, ObjMask omDest, ObjMask omMerged, Optional<ImageRes> res) throws OperationFailedException {
 		
 		if (session!=null) {
 			return doesIncreaseFeatureValueForBoth(omSrc, omDest, omMerged);

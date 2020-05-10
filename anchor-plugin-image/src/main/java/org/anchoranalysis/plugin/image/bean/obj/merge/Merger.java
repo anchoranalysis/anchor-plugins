@@ -29,6 +29,7 @@ package org.anchoranalysis.plugin.image.bean.obj.merge;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.error.OperationFailedException;
@@ -60,7 +61,7 @@ class Merger {
 	
 	private BeforeCondition beforeCondition;
 	private AfterCondition afterCondition;
-	private ImageRes res;
+	private Optional<ImageRes> res;
 	private boolean replaceWithMidpoint;
 	private LogErrorReporter logger;
 	
@@ -83,7 +84,7 @@ class Merger {
 		}
 	}
 	
-	public Merger(boolean replaceWithMidpoint, BeforeCondition beforeCondition, AfterCondition afterCondition, ImageRes res, LogErrorReporter logger) {
+	public Merger(boolean replaceWithMidpoint, BeforeCondition beforeCondition, AfterCondition afterCondition, Optional<ImageRes> res, LogErrorReporter logger) {
 		super();
 		this.beforeCondition = beforeCondition;
 		this.afterCondition = afterCondition;
@@ -139,8 +140,8 @@ class Merger {
 				ObjMask omSrc = objs.get(i);
 				ObjMask omDest = objs.get(j);
 				
-				ObjMask omMerge = tryMerge( omSrc, omDest );
-				if (omMerge==null) {
+				Optional<ObjMask> omMerge = tryMerge( omSrc, omDest );
+				if (!omMerge.isPresent()) {
 					continue;
 				}
 				
@@ -152,7 +153,7 @@ class Merger {
 					objs.remove(j);
 				}
 				
-				objs.add(omMerge);
+				objs.add(omMerge.get());
 				
 				int startPos = Math.max(i-1,0);
 				stack.add( new MergeParams(startPos, startPos) );
@@ -162,10 +163,10 @@ class Merger {
 		}
 	}
 
-	private ObjMask tryMerge( ObjMask omSrc, ObjMask omDest ) throws OperationFailedException {
+	private Optional<ObjMask> tryMerge( ObjMask omSrc, ObjMask omDest ) throws OperationFailedException {
 		
 		if(!beforeCondition.accept(omSrc, omDest, res)) {
-			return null;
+			return Optional.empty();
 		}
 		
 		// Do merge
@@ -179,10 +180,10 @@ class Merger {
 		}
 
 		if(!afterCondition.accept(omSrc, omDest, omMerge, res)) {
-			return null;
+			return Optional.empty();
 		}
 		
-		return omMerge;
+		return Optional.of(omMerge);
 	}
 		
 	private static ObjMask createSinglePixelObjMask( Point3i pnt ) {

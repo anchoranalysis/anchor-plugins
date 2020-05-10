@@ -1,5 +1,7 @@
 package ch.ethz.biol.cell.mpp.mark.ellipsoidfitter.outlinepixelsretriever.visitscheduler;
 
+import java.util.Optional;
+
 /*-
  * #%L
  * anchor-plugin-mpp
@@ -28,6 +30,8 @@ package ch.ethz.biol.cell.mpp.mark.ellipsoidfitter.outlinepixelsretriever.visits
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.InitException;
+import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.error.friendly.AnchorFriendlyRuntimeException;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.core.geometry.Tuple3i;
 import org.anchoranalysis.core.random.RandomNumberGenerator;
@@ -62,10 +66,13 @@ public class VisitSchedulerMaxDistUnitValue extends VisitScheduler {
 	}
 	
 	@Override
-	public Tuple3i maxDistFromRootPoint(ImageRes res) {
-		int distX = (int) Math.ceil( maxDist.rslv(res, new DirectionVector(1,0,0)) );
-		int distY = (int) Math.ceil( maxDist.rslv(res, new DirectionVector(0,1,0)) );
-		int distZ = (int) Math.ceil( maxDist.rslv(res, new DirectionVector(0,0,1)) );
+	public Tuple3i maxDistFromRootPoint(ImageRes res) throws OperationFailedException {
+		
+		Optional<ImageRes> resOpt = Optional.of(res);
+
+		int distX = (int) Math.ceil( maxDist.rslv(resOpt, new DirectionVector(1,0,0)) );
+		int distY = (int) Math.ceil( maxDist.rslv(resOpt, new DirectionVector(0,1,0)) );
+		int distZ = (int) Math.ceil( maxDist.rslv(resOpt, new DirectionVector(0,0,1)) );
 		return new Point3i(distX,distY,distZ);
 	}
 	
@@ -78,11 +85,19 @@ public class VisitSchedulerMaxDistUnitValue extends VisitScheduler {
 	@Override
 	public boolean considerVisit( Point3i pnt, int distAlongContour, ObjMask objMask ) {
 		
-		if (distToRoot(pnt)>=maxDist.rslv(res, root, pnt )) {
-			return false;
+		try {
+			if (distToRoot(pnt)>=maxDist.rslv(
+				Optional.of(res),
+				root,
+				pnt
+			)) {
+				return false;
+			}
+			
+			return true;
+		} catch (OperationFailedException e) {
+			throw new AnchorFriendlyRuntimeException(e);
 		}
-		
-		return true;
 	}
 	
 	private double distToRoot( Point3i pnt ) {

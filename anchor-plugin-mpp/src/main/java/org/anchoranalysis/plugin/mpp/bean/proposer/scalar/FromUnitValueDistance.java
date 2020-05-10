@@ -1,5 +1,7 @@
 package org.anchoranalysis.plugin.mpp.bean.proposer.scalar;
 
+import java.util.Optional;
+
 import org.anchoranalysis.anchor.mpp.bean.proposer.ScalarProposer;
 
 /*
@@ -50,7 +52,10 @@ public class FromUnitValueDistance extends ScalarProposer {
 	public double propose(RandomNumberGenerator re, ImageRes res)
 			throws OperationFailedException {
 		// TODO this could be a bit slow, we are creating an object on the heap every time from directionVector
-		return unitValueDistance.rslv(res, directionVector.createVector());
+		return unitValueDistance.rslv(
+			Optional.of(res),
+			directionVector.createVector()
+		);
 	}
 
 	public UnitValueDistance getUnitValueDistance() {
