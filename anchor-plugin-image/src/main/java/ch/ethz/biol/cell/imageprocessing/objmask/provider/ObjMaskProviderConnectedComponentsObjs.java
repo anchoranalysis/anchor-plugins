@@ -56,9 +56,7 @@ public class ObjMaskProviderConnectedComponentsObjs extends ObjMaskProviderOne {
 		
 		ObjMaskCollection out = new ObjMaskCollection();
 				
-		CreateFromConnectedComponentsFactory createObjMasks = new CreateFromConnectedComponentsFactory();
-		createObjMasks.setMinNumberVoxels(1);
-		createObjMasks.setBigNghb(bigNghb);
+		CreateFromConnectedComponentsFactory createObjMasks = new CreateFromConnectedComponentsFactory(bigNghb, 1);
 				
 		for( ObjMask om : objsCollection ) {
 			ObjMaskCollection omConnected = createObjs3D( om, createObjMasks );

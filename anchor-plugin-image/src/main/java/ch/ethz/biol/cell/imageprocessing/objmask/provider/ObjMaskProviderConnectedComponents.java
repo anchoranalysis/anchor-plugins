@@ -91,10 +91,7 @@ public class ObjMaskProviderConnectedComponents extends ObjMaskProvider {
 	}
 	
 	private CreateFromConnectedComponentsFactory createFactory( int minNumberVoxels ) {
-		CreateFromConnectedComponentsFactory createObjMasks = new CreateFromConnectedComponentsFactory();
-		createObjMasks.setBigNghb(bigNghb);
-		createObjMasks.setMinNumberVoxels(minNumberVoxels);
-		return createObjMasks;
+		return new CreateFromConnectedComponentsFactory(bigNghb, minNumberVoxels);
 	}
 	
 	private ObjMaskCollection createObjs3D( BinaryChnl bi, int minNumberVoxels ) throws CreateException {

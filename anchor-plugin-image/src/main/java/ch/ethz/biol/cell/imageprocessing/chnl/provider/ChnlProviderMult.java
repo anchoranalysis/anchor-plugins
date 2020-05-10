@@ -29,33 +29,18 @@ package ch.ethz.biol.cell.imageprocessing.chnl.provider;
 
 import java.nio.ByteBuffer;
 
-import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.image.bean.provider.ChnlProviderTwo;
-import org.anchoranalysis.image.chnl.Chnl;
-import org.anchoranalysis.image.chnl.factory.ChnlFactory;
 import org.anchoranalysis.image.convert.ByteConverter;
-import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
-import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
 
-public class ChnlProviderMult extends ChnlProviderTwo {
+public class ChnlProviderMult extends ChnlProviderTwoVoxelMapping {
 
 	@Override
-	protected Chnl process(Chnl chnl1, Chnl chnl2) throws CreateException {
-		
-		VoxelBox<ByteBuffer> vb1 = chnl1.getVoxelBox().asByte();
-		VoxelBox<ByteBuffer> vb2 = chnl2.getVoxelBox().asByte();
-		
-		Chnl chnlOut = ChnlFactory.instance().createEmptyInitialised(
-			new ImageDim(chnl1.getDimensions()),
-			VoxelDataTypeUnsignedByte.instance
-		);
-		VoxelBox<ByteBuffer> vbOut = chnlOut.getVoxelBox().asByte();
-		
-		for (int z=0; z<chnl1.getDimensions().getZ(); z++) {
+	protected void processVoxelBox(VoxelBox<ByteBuffer> vbOut, VoxelBox<ByteBuffer> vbIn1, VoxelBox<ByteBuffer> vbIn2) {
+
+		for (int z=0; z<vbOut.extnt().getZ(); z++) {
 			
-			ByteBuffer in1 = vb1.getPixelsForPlane(z).buffer();
-			ByteBuffer in2 = vb2.getPixelsForPlane(z).buffer();
+			ByteBuffer in1 = vbIn1.getPixelsForPlane(z).buffer();
+			ByteBuffer in2 = vbIn2.getPixelsForPlane(z).buffer();
 			ByteBuffer out = vbOut.getPixelsForPlane(z).buffer();
 			
 			while (in1.hasRemaining()) {
@@ -70,7 +55,5 @@ public class ChnlProviderMult extends ChnlProviderTwo {
 			assert( !in2.hasRemaining() );
 			assert( !out.hasRemaining() );
 		}
-
-		return chnlOut;
 	}
 }

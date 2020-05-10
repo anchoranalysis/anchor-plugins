@@ -1,5 +1,7 @@
 package ch.ethz.biol.cell.imageprocessing.chnl.provider;
 
+import java.nio.ByteBuffer;
+
 /*
  * #%L
  * anchor-plugin-image
@@ -28,16 +30,15 @@ package ch.ethz.biol.cell.imageprocessing.chnl.provider;
 
 
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.image.bean.provider.ChnlProviderTwo;
 import org.anchoranalysis.image.chnl.Chnl;
 import org.anchoranalysis.image.chnl.factory.ChnlFactory;
 import org.anchoranalysis.image.extent.ImageDim;
-import org.anchoranalysis.image.voxel.box.VoxelBoxWrapper;
+import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 import org.anchoranalysis.image.voxel.datatype.CombineTypes;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
 
-public class ChnlProviderMax extends ChnlProviderTwo {
+public class ChnlProviderMax extends ChnlProviderTwoVoxelMapping {
 	
 	public static Chnl createMax( Chnl chnl1, Chnl chnl2 ) throws CreateException {
 		
@@ -48,25 +49,28 @@ public class ChnlProviderMax extends ChnlProviderTwo {
 		VoxelDataType combinedType = CombineTypes.combineTypes(chnl1.getVoxelDataType(), chnl2.getVoxelDataType());
 		Chnl chnlOut = ChnlFactory.instance().createEmptyInitialised( new ImageDim(chnl1.getDimensions()), combinedType );
 		
-		processVoxelBox( chnlOut.getVoxelBox(), chnl1.getVoxelBox(), chnl2.getVoxelBox() );
+		setMaxInOutputVoxelBox(
+			chnlOut.getVoxelBox().asByte(),
+			chnl1.getVoxelBox().asByte(),
+			chnl2.getVoxelBox().asByte()
+		);
 		
 		return chnlOut;
 	}
-	
+
 	@Override
-	protected Chnl process(Chnl chnl1, Chnl chnl2) throws CreateException {
-		return createMax( chnl1, chnl2 );
+	protected void processVoxelBox( VoxelBox<ByteBuffer> vbOut, VoxelBox<ByteBuffer> vbIn1, VoxelBox<ByteBuffer> vbIn2) {
+		setMaxInOutputVoxelBox(vbOut, vbIn1, vbIn2);
 	}
-
-	private static void processVoxelBox( VoxelBoxWrapper vbOut, VoxelBoxWrapper vbIn1, VoxelBoxWrapper vbIn2) {
-
-		for (int z=0; z<vbOut.any().extnt().getZ(); z++) {
+	
+	private static void setMaxInOutputVoxelBox( VoxelBox<ByteBuffer> vbOut, VoxelBox<ByteBuffer> vbIn1, VoxelBox<ByteBuffer> vbIn2) {
+		for (int z=0; z<vbOut.extnt().getZ(); z++) {
 			
-			VoxelBuffer<?> in1 = vbIn1.any().getPixelsForPlane(z);
-			VoxelBuffer<?> in2 = vbIn2.any().getPixelsForPlane(z);
-			VoxelBuffer<?> out = vbOut.any().getPixelsForPlane(z);
+			VoxelBuffer<?> in1 = vbIn1.getPixelsForPlane(z);
+			VoxelBuffer<?> in2 = vbIn2.getPixelsForPlane(z);
+			VoxelBuffer<?> out = vbOut.getPixelsForPlane(z);
 			
-			int totalPixels = vbIn1.any().extnt().getVolumeXY();
+			int totalPixels = vbIn1.extnt().getVolumeXY();
 			for (int offset=0; offset<totalPixels; offset++) {
 				
 				int val1 = in1.getInt(offset);
