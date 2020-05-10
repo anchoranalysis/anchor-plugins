@@ -133,7 +133,7 @@ public class AddEdgeFilters extends DefineAdderWithPrefixBean {
 		private ChnlProvider edgeFilter( String unrslvdSrcName ) {
 			ChnlProviderEdgeFilter provider = new ChnlProviderEdgeFilter();
 			provider.setOutputShort(true);
-			provider.setChnlProvider(
+			provider.setChnl(
 				createDup(
 					rslvName(unrslvdSrcName)
 				)
@@ -146,7 +146,7 @@ public class AddEdgeFilters extends DefineAdderWithPrefixBean {
 			provider.setOutputShort(true);
 			provider.setAddSum(32768);
 			provider.setAxis(axis);
-			provider.setChnlProvider(
+			provider.setChnl(
 				createDup(
 					rslvName(filterName)
 				)
@@ -159,7 +159,7 @@ public class AddEdgeFilters extends DefineAdderWithPrefixBean {
 		ChnlProviderMedianFilterIJ2D provider = new ChnlProviderMedianFilterIJ2D();
 		provider.setRadius( (int) Math.round(medianRadiusMeters) );
 		provider.setRadiusInMeters(true);
-		provider.setChnlProvider( createDup(chnlID) );
+		provider.setChnl( createDup(chnlID) );
 		return provider;
 	}
 	
@@ -168,7 +168,7 @@ public class AddEdgeFilters extends DefineAdderWithPrefixBean {
 		provider.setStrategy(
 			createBlurStrategy()
 		);
-		provider.setChnlProvider( createDup(chnlID) );
+		provider.setChnl( createDup(chnlID) );
 		return provider;
 	}
 	
