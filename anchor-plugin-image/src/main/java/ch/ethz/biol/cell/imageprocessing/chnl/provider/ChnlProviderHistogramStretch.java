@@ -106,8 +106,14 @@ public class ChnlProviderHistogramStretch extends ChnlProviderOne {
 	/** Rounds a value up or down, and clips to ensure its in the range 0..255 inclusive */
 	private static int roundClip( double valD ) {
 		int valNew = (int) Math.round(valD);
-		if (valNew>255) valNew = 255;
-		if (valNew<0) valNew = 0;
+		
+		if (valNew>255) {
+			return 255;
+		}
+		if (valNew<0) {
+			return 0;
+		}
+		
 		return valNew;
 	}
 	
