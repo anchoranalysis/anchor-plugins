@@ -40,6 +40,20 @@ import org.anchoranalysis.image.voxel.datatype.CombineTypes;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
 
 
+/**
+ * Creates a new channel which is a merged version of two input channels according to rules.
+ * 
+ * <ul>
+ * <li>If the pixel in <pre>chnl</pre> is non-zero, then the corresponding output is <pre>chnl</pre></li>
+ * <li>If the pixel in <pre>chnl</pre> is zero, then the corresponding output is <pre>chnlIfPixelZero</pre>
+ * </ul>
+ * 
+ * <p>The two channels must be the same size.</p>
+ * 
+ * <p>Neither channel's input is changed. The operation is <b>immutable</b>.</p>
+ * @author Owen Feehan
+ *
+ */
 public class ChnlProviderIfPixelZero extends ChnlProviderOne {
 
 	// START BEAN PROPERTIES
@@ -63,13 +77,13 @@ public class ChnlProviderIfPixelZero extends ChnlProviderOne {
 	 * Creates a new channel which is a merged version of two input channels according to rules.
 	 * 
 	 * <ul>
-	 * <li>If the pixel in <pre>chnl</pre> is non-zero, then the corresponding output is <pre>channel * multFactorIfNonZero</pre></li>
+	 * <li>If the pixel in <pre>chnl</pre> is non-zero, then the corresponding output is <pre>chnl * multFactorIfNonZero</pre></li>
 	 * <li>If the pixel in <pre>chnl</pre> is zero, then the corresponding output is <pre>chnlIfPixelZero</pre>
 	 * </ul>
 	 * 
 	 * <p>Assumes the two channels are of the same size, but does not check.</p>
 	 * 
-	 * </p>Neither channel's input is changed. The operation is <b>immutable</b>.</p>
+	 * <p>Neither channel's input is changed. The operation is <b>immutable</b>.</p>
 	 * 
 	 * @param chnl the channel that is checked to be zero/non-zero, and whose pixels form the output (maybe multipled) if non-zero
 	 * @param chnlIfPixelZero the channel that forms the output if {@link chnl} is zero
