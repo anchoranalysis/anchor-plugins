@@ -1,5 +1,7 @@
 package org.anchoranalysis.plugin.image.obj.merge.condition;
 
+import java.util.Optional;
+
 /*-
  * #%L
  * anchor-plugin-image
@@ -45,7 +47,7 @@ import org.anchoranalysis.image.objmask.ObjMask;
  */
 public interface UpdatableBeforeCondition {
 	
-	void updateSrcObj(ObjMask omSrc, ImageRes res) throws OperationFailedException;
+	void updateSrcObj(ObjMask omSrc, Optional<ImageRes> res) throws OperationFailedException;
 	
-	boolean accept(ObjMask omDest);
+	boolean accept(ObjMask omDest) throws OperationFailedException;
 }

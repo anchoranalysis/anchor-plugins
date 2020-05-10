@@ -1,5 +1,7 @@
 package ch.ethz.biol.cell.mpp.pair.addcriteria;
 
+import java.util.Optional;
+
 import org.anchoranalysis.anchor.mpp.feature.addcriteria.AddCriteriaPair;
 import org.anchoranalysis.anchor.mpp.feature.addcriteria.IncludeMarksFailureException;
 import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputPairMemo;
@@ -35,6 +37,7 @@ import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
 
 
 import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorMulti;
 import org.anchoranalysis.image.bean.unitvalue.distance.UnitValueDistance;
@@ -63,12 +66,21 @@ public class AddCriteriaDistanceTo extends AddCriteriaPair {
 			throw new IncludeMarksFailureException(e);
 		}
 		
-		double thresholdVal = threshold.rslv(dim.getRes(), mark1.getMark().centerPoint(), mark2.getMark().centerPoint() );
-		
-		if (d < thresholdVal) {
-			return true;
-		} else {
-			return false;
+		try {
+			double thresholdVal = threshold.rslv(
+				Optional.of(dim.getRes()),
+				mark1.getMark().centerPoint(),
+				mark2.getMark().centerPoint()
+			);
+			
+			if (d < thresholdVal) {
+				return true;
+			} else {
+				return false;
+			}
+			
+		} catch (OperationFailedException e) {
+			throw new IncludeMarksFailureException(e);
 		}
 	}
 

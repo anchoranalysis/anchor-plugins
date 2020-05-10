@@ -67,7 +67,7 @@ public class NeighbourhoodCond implements UpdatableBeforeCondition {
 	}
 
 	@Override
-	public void updateSrcObj(ObjMask omSrc, ImageRes res) throws OperationFailedException {
+	public void updateSrcObj(ObjMask omSrc, Optional<ImageRes> res) throws OperationFailedException {
 
 		bboxSrcGrown = requireBBoxNeighbours ? bboxGrown( omSrc ) : null;
 		

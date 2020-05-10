@@ -156,8 +156,13 @@ public class XYOrientationExtendToZ extends PointsProposer {
 		return maxZDist;
 	}
 	
-	private int skipZDist(ImageRes res) {
-		int skipZDist = (int) Math.round(distanceZEndIfEmpty.rslv(res, new DirectionVector(0, 0, 1.0)) );
+	private int skipZDist(ImageRes res) throws OperationFailedException {
+		int skipZDist = (int) Math.round(
+			distanceZEndIfEmpty.rslv(
+				Optional.of(res),
+				new DirectionVector(0, 0, 1.0)
+			)
+		);
 		// TODO fix. Why this constant?
 		skipZDist = 100;
 		return skipZDist;

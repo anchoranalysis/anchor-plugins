@@ -28,6 +28,7 @@ package ch.ethz.biol.cell.mpp.mark.ellipsoidfitter.findoutlinepixelangle;
 
 
 import java.nio.ByteBuffer;
+import java.util.Optional;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
@@ -104,7 +105,13 @@ public class FindOutlinePixelAngleOnImage extends FindOutlinePixelAngle {
 				assert( binaryImage.getDimensions() != null );
 				assert( binaryImage.getDimensions().getRes()!=null );
 				
-				double maxDistRslv = maxDistance.rslv(binaryImage.getDimensions().getRes(), centrePoint, pnt);
+				double maxDistRslv = maxDistance.rslv(
+					Optional.of(
+						binaryImage.getDimensions().getRes()
+					),
+					centrePoint,
+					pnt
+				);
 				double dist = binaryImage.getDimensions().getRes().distZRel(centrePoint, pnt);
 				if (dist>maxDistRslv) {
 					return null;

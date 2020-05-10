@@ -29,6 +29,7 @@ package org.anchoranalysis.plugin.image.obj.merge;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 import org.anchoranalysis.core.arithmetic.FloatUtilities;
@@ -79,7 +80,7 @@ public class MergeGraph {
 	public MergeGraph(
 		PayloadCalculator payloadCalculator,
 		UpdatableBeforeCondition beforeCondition,
-		ImageRes imageRes,
+		Optional<ImageRes> imageRes,
 		AssignPriority prioritizer,
 		LogErrorReporter logger,
 		boolean logPayload

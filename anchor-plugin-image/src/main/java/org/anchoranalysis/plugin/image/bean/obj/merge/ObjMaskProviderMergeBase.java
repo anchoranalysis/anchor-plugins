@@ -30,6 +30,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.bean.provider.ImageDimProvider;
@@ -45,7 +46,7 @@ public abstract class ObjMaskProviderMergeBase extends ObjMaskProviderContainer 
 	
 	// START BEAN PROPERTIES
 	/* Image-resolution */
-	@BeanField
+	@BeanField @OptionalBean
 	private ImageDimProvider resProvider;
 	// END BEAN PROPERTIES
 	
@@ -54,12 +55,24 @@ public abstract class ObjMaskProviderMergeBase extends ObjMaskProviderContainer 
 		ObjMaskCollection mergeObjs( ObjMaskCollection objs ) throws OperationFailedException;
 	}
 		
-	protected ImageRes calcRes() throws OperationFailedException {
+	protected Optional<ImageRes> calcResOptional() throws OperationFailedException {
 		try {
-			return resProvider.create().getRes();
+			if (resProvider!=null) {
+				return Optional.of(
+					resProvider.create().getRes()
+				);
+			} else {
+				return Optional.empty();
+			}
 		} catch (CreateException e) {
 			throw new OperationFailedException(e);
 		}
+	}
+	
+	protected ImageRes calcResRequired() throws OperationFailedException {
+		return calcResOptional().orElseThrow( ()->
+			new OperationFailedException("This algorithm requires an image-resolution to be set via resProvider")
+		);
 	}
 	
 	/**
