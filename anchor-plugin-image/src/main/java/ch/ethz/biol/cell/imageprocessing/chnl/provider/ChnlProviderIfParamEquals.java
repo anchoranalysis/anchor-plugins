@@ -35,7 +35,7 @@ import org.anchoranalysis.image.bean.provider.ChnlProvider;
 import org.anchoranalysis.image.bean.provider.ChnlProviderOne;
 import org.anchoranalysis.image.chnl.Chnl;
 
-// If a param is equal to a particular value, do soemthing
+// If a param is equal to a particular value, do something
 public class ChnlProviderIfParamEquals extends ChnlProviderOne {
 
 	// START BEAN PROPERTIES
