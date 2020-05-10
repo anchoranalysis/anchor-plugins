@@ -1,5 +1,7 @@
 package ch.ethz.biol.cell.imageprocessing.binaryimgchnl.provider;
 
+import java.util.Optional;
+
 /*
  * #%L
  * anchor-plugin-ij
@@ -98,7 +100,9 @@ public class BinaryImgChnlProviderFill extends BinaryImgChnlProviderOne {
 		double maxVolumeRslvd = 0;
 		if (maxVolume!=null) {
 			try {
-				maxVolumeRslvd = maxVolume.rslv(sd.getRes());
+				maxVolumeRslvd = maxVolume.rslv(
+					Optional.of(sd.getRes())
+				);
 			} catch (UnitValueException e) {
 				throw new CreateException(e);
 			}				

@@ -63,7 +63,9 @@ public class ObjMaskFilterVolumeGreaterThan extends ObjMaskFilter {
 	
 	private int thresholdNumPixels( Optional<ImageDim> dim ) throws UnitValueException {
 		return (int) Math.floor(
-			minVolume.rslv(dim.get().getRes())
+			minVolume.rslv(
+				dim.map(ImageDim::getRes)
+			)
 		);
 	}
 

@@ -1,5 +1,7 @@
 package ch.ethz.biol.cell.imageprocessing.binaryimgchnl.provider;
 
+import java.util.Optional;
+
 /*
  * #%L
  * anchor-plugin-image
@@ -79,7 +81,11 @@ public class BinaryImgChnlProviderMinVolumeFilter extends BinaryImgChnlProviderO
 		
 		int rslvMinNum;
 		try {
-			rslvMinNum = (int) Math.floor( minVolume.rslv(bi.getDimensions().getRes()) );
+			rslvMinNum = (int) Math.floor(
+				minVolume.rslv(
+					Optional.of(bi.getDimensions().getRes())
+				)
+			);
 		} catch (UnitValueException e) {
 			throw new CreateException(e);
 		}
