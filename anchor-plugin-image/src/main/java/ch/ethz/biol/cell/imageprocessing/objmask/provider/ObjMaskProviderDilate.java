@@ -32,7 +32,6 @@ import java.util.Optional;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.NonNegative;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
 import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.image.objmask.ObjMaskCollection;
@@ -41,9 +40,6 @@ import org.anchoranalysis.image.objmask.morph.MorphologicalDilation;
 public class ObjMaskProviderDilate extends ObjMaskProviderDimensions {
 	
 	// START BEAN PROPERTIES
-	@BeanField
-	private ObjMaskProvider objs;
-	
 	@BeanField
 	private boolean do3D = false;
 	
@@ -55,11 +51,9 @@ public class ObjMaskProviderDilate extends ObjMaskProviderDimensions {
 	// END BEAN PROPERTIES
 
 	@Override
-	public ObjMaskCollection create() throws CreateException {
+	public ObjMaskCollection createFromObjs(ObjMaskCollection objsIn) throws CreateException {
 	
 		ImageDim dims = createDims();
-		
-		ObjMaskCollection objsIn = objs.create();
 				
 		ObjMaskCollection objsOut = new ObjMaskCollection();
 		
@@ -79,17 +73,7 @@ public class ObjMaskProviderDilate extends ObjMaskProviderDimensions {
 		}
 		return objsOut;
 	}
-
-	public ObjMaskProvider getObjs() {
-		return objs;
-	}
-
-
-	public void setObjs(ObjMaskProvider objs) {
-		this.objs = objs;
-	}
-
-
+	
 	public boolean isDo3D() {
 		return do3D;
 	}

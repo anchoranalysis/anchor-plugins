@@ -29,7 +29,6 @@ package ch.ethz.biol.cell.imageprocessing.objmask.provider;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
 import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.image.objmask.ObjMaskCollection;
@@ -39,16 +38,11 @@ public class ObjMaskProviderRemoveTouchBorder extends ObjMaskProviderDimensions 
 
 	// START BEAN PROPERTIES
 	@BeanField
-	private ObjMaskProvider objs;
-	
-	@BeanField
 	private boolean useZ = true;
 	// END BEAN PROPERTIES
 	
 	@Override
-	public ObjMaskCollection create() throws CreateException {
-
-		ObjMaskCollection objsIn = objs.create();
+	public ObjMaskCollection createFromObjs(ObjMaskCollection objsIn) throws CreateException {
 		
 		ObjMaskCollection objsOut = new ObjMaskCollection();
 		
@@ -70,14 +64,6 @@ public class ObjMaskProviderRemoveTouchBorder extends ObjMaskProviderDimensions 
 		return objsOut;
 	}
 
-	public ObjMaskProvider getObjs() {
-		return objs;
-	}
-
-	public void setObjs(ObjMaskProvider objs) {
-		this.objs = objs;
-	}
-
 	public boolean isUseZ() {
 		return useZ;
 	}
@@ -85,6 +71,4 @@ public class ObjMaskProviderRemoveTouchBorder extends ObjMaskProviderDimensions 
 	public void setUseZ(boolean useZ) {
 		this.useZ = useZ;
 	}
-
-
 }
