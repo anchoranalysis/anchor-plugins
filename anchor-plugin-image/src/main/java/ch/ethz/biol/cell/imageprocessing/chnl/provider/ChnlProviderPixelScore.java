@@ -63,8 +63,9 @@ public class ChnlProviderPixelScore extends ChnlProvider {
 	@BeanField @OptionalBean
 	private ChnlProvider gradientProvider;
 	
+	// We don't use {@link ChnlProiderMask} as here it's optional.
 	@BeanField @OptionalBean
-	private BinaryImgChnlProvider maskProvider;
+	private BinaryImgChnlProvider mask;
 	
 	@BeanField
 	private PixelScore pixelScore;
@@ -97,11 +98,11 @@ public class ChnlProviderPixelScore extends ChnlProvider {
 	
 	
 	private ObjMask createMaskOrNull() throws CreateException {
-		if (maskProvider==null) {
+		if (mask==null) {
 			return null;
 		}
 		
-		BinaryChnl binaryChnlMask = maskProvider.create();
+		BinaryChnl binaryChnlMask = mask.create();
 		Chnl chnlMask = binaryChnlMask.getChnl();
 		
 		return new ObjMask(
@@ -167,14 +168,6 @@ public class ChnlProviderPixelScore extends ChnlProvider {
 		this.gradientProvider = gradientProvider;
 	}
 
-	public BinaryImgChnlProvider getMaskProvider() {
-		return maskProvider;
-	}
-
-	public void setMaskProvider(BinaryImgChnlProvider maskProvider) {
-		this.maskProvider = maskProvider;
-	}
-
 	public PixelScore getPixelScore() {
 		return pixelScore;
 	}
@@ -211,4 +204,12 @@ public class ChnlProviderPixelScore extends ChnlProvider {
 	}
 
 
+	public BinaryImgChnlProvider getMask() {
+		return mask;
+	}
+
+
+	public void setMask(BinaryImgChnlProvider mask) {
+		this.mask = mask;
+	}
 }

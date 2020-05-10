@@ -27,38 +27,41 @@ package ch.ethz.biol.cell.imageprocessing.chnl.provider;
  */
 
 
-import org.anchoranalysis.bean.annotation.BeanField;
+import java.nio.ByteBuffer;
+
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.binary.BinaryChnl;
 import org.anchoranalysis.image.chnl.Chnl;
-import org.anchoranalysis.image.objmask.ObjMask;
-import org.anchoranalysis.image.objmask.factory.CreateFromEntireChnlFactory;
+import org.anchoranalysis.image.chnl.factory.ChnlFactory;
+import org.anchoranalysis.image.extent.BoundingBox;
+import org.anchoranalysis.image.voxel.box.VoxelBox;
 
-/** Assigns a scalar to the portion of the image covered by a mask */
-public class ChnlProviderAssignScalar extends ChnlProviderOneMask {
-
-	// START BEAN PROPERTIES
-	@BeanField
-	private double value;
-	// END BEAN PROPERTIES
+/**
+ * Set pixels NOT IN the mask to 0, but keep pixels IN the mask identical.
+ * 
+ * <p>It's an immutable operation and a new channel is always produced.</p>
+ * 
+ * @author Owen Feehan
+ *
+ */
+public class ChnlProviderMaskOut extends ChnlProviderOneMask {
 	
 	@Override
 	protected Chnl createFromMaskedChnl(Chnl chnl, BinaryChnl mask) throws CreateException {
-		assignScalar(chnl, mask, (int) value);
+
+		VoxelBox<ByteBuffer> vbMask = mask.getChnl().getVoxelBox().asByte();
 		
-		return chnl;
-	}
-	
-	private void assignScalar(Chnl chnlSrc, BinaryChnl mask, int value) throws CreateException {
-		ObjMask om = CreateFromEntireChnlFactory.createObjMask(mask);
-		chnlSrc.getVoxelBox().any().setPixelsCheckMask(om, value);		
-	}
-
-	public double getValue() {
-		return value;
-	}
-
-	public void setValue(double value) {
-		this.value = value;
+		Chnl chnlOut = ChnlFactory.instance().createEmptyInitialised( chnl.getDimensions(), chnl.getVoxelDataType() );
+				
+		BoundingBox bbox = new BoundingBox( chnlOut.getDimensions().getExtnt() );
+		chnl.getVoxelBox().copyPixelsToCheckMask(
+			bbox,
+			chnlOut.getVoxelBox(),
+			bbox,
+			vbMask,
+			mask.getBinaryValues().createByte()
+		);
+		
+		return chnlOut;
 	}
 }

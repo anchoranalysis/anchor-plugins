@@ -34,26 +34,11 @@ import org.anchoranalysis.image.bean.provider.ChnlProvider;
 import org.anchoranalysis.image.binary.BinaryChnl;
 import org.anchoranalysis.image.chnl.Chnl;
 
-public class ChnlProviderFromBinary extends ChnlProvider {
+public class ChnlProviderFromBinary extends ChnlProviderMask {
 
-	// START
-	@BeanField
-	private BinaryImgChnlProvider binaryImgChnlProvider;
-	// END
-	
 	@Override
-	public Chnl create() throws CreateException {
-		
-		BinaryChnl bi = binaryImgChnlProvider.create();
-		return bi.getChnl();
-	}
-
-	public BinaryImgChnlProvider getBinaryImgChnlProvider() {
-		return binaryImgChnlProvider;
-	}
-
-	public void setBinaryImgChnlProvider(BinaryImgChnlProvider binaryImgChnlProvider) {
-		this.binaryImgChnlProvider = binaryImgChnlProvider;
+	protected Chnl createFromMask(BinaryChnl mask) throws CreateException {
+		return mask.getChnl();
 	}
 
 }

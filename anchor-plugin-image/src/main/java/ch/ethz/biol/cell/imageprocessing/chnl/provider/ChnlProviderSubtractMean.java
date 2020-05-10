@@ -31,8 +31,6 @@ import java.nio.ByteBuffer;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.image.bean.provider.BinaryImgChnlProvider;
-import org.anchoranalysis.image.bean.provider.ChnlProviderOne;
 import org.anchoranalysis.image.binary.BinaryChnl;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.chnl.Chnl;
@@ -40,25 +38,16 @@ import org.anchoranalysis.image.convert.ByteConverter;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 
-public class ChnlProviderSubtractMean extends ChnlProviderOne {
+public class ChnlProviderSubtractMean extends ChnlProviderOneMask {
 
-	// START
-	@BeanField
-	private BinaryImgChnlProvider maskProvider;
-	
+	// START BEAN PROPERTIES
 	@BeanField
 	private boolean subtractFromMaskOnly = true;
-	// END
+	// END BEAN PROPERTIES
 	
 	@Override
-	public Chnl createFromChnl(Chnl chnl) throws CreateException {
-				
-		BinaryChnl mask = maskProvider.create();
-		
-		if (!chnl.getDimensions().equals(chnl.getDimensions())) {
-			throw new CreateException("dimensions are not identical between chnlProvider and maskProvider");
-		}
-		
+	protected Chnl createFromMaskedChnl(Chnl chnl, BinaryChnl mask) throws CreateException {
+
 		double mean = calculateMean(chnl, mask);
 		
 		int meanInt = (int) Math.round(mean);
@@ -181,14 +170,6 @@ public class ChnlProviderSubtractMean extends ChnlProviderOne {
 			
 		}
 	}
-		
-	public BinaryImgChnlProvider getMaskProvider() {
-		return maskProvider;
-	}
-
-	public void setMaskProvider(BinaryImgChnlProvider maskProvider) {
-		this.maskProvider = maskProvider;
-	}
 
 	public boolean isSubtractFromMaskOnly() {
 		return subtractFromMaskOnly;
@@ -197,6 +178,4 @@ public class ChnlProviderSubtractMean extends ChnlProviderOne {
 	public void setSubtractFromMaskOnly(boolean subtractFromMaskOnly) {
 		this.subtractFromMaskOnly = subtractFromMaskOnly;
 	}
-
-
 }
