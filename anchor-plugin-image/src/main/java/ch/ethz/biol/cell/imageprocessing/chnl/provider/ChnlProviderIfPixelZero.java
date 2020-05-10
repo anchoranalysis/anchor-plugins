@@ -43,6 +43,7 @@ import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
 public class ChnlProviderIfPixelZero extends ChnlProviderOne {
 
 	// START BEAN PROPERTIES
+	/** If a pixel is zero in the input-channel, the output is formed from the corresponding pixel in this channel instead */
 	@BeanField
 	private ChnlProvider chnlIfPixelZero;
 	// END BEAN PROPERTIES
@@ -55,25 +56,38 @@ public class ChnlProviderIfPixelZero extends ChnlProviderOne {
 		VoxelDataType combinedType = CombineTypes.combineTypes(chnl.getVoxelDataType(), ifZero.getVoxelDataType());
 
 		double multFact = (double) combinedType.maxValue() / chnl.getVoxelDataType().maxValue();
-		return merge( chnl, ifZero, combinedType, multFact );
+		return mergeViaZeroCheck( chnl, ifZero, combinedType, multFact );
 	}
 
 	/**
+	 * Creates a new channel which is a merged version of two input channels according to rules.
+	 * 
+	 * <ul>
+	 * <li>If the pixel in <pre>chnl</pre> is non-zero, then the corresponding output is <pre>channel * multFactorIfNonZero</pre></li>
+	 * <li>If the pixel in <pre>chnl</pre> is zero, then the corresponding output is <pre>chnlIfPixelZero</pre>
+	 * </ul>
 	 * 
 	 * <p>Assumes the two channels are of the same size, but does not check.</p>
 	 * 
-	 * @param chnl
-	 * @param chnlIfPixelZero
-	 * @param combinedType
-	 * @param multFactorIfNonZero
-	 * @return
+	 * </p>Neither channel's input is changed. The operation is <b>immutable</b>.</p>
+	 * 
+	 * @param chnl the channel that is checked to be zero/non-zero, and whose pixels form the output (maybe multipled) if non-zero
+	 * @param chnlIfPixelZero the channel that forms the output if {@link chnl} is zero
+	 * @param combinedType the type to use for the newly created channel
+	 * @param multFactorIfNonZero the multiplication factor to apply on non-zero pixels
+	 * @return a newly created merged channel according to the above rules
 	 * @throws CreateException
 	 */
-	public static Chnl merge( Chnl chnl, Chnl chnlIfPixelZero, VoxelDataType combinedType, double multFactorIfNonZero ) throws CreateException {
+	public static Chnl mergeViaZeroCheck( Chnl chnl, Chnl chnlIfPixelZero, VoxelDataType combinedType, double multFactorIfNonZero ) throws CreateException {
 		Chnl chnlOut = ChnlFactory.instance().createEmptyInitialised( new ImageDim(chnl.getDimensions()), combinedType );
 		
 		// We know these are all the same types from the logic above, so we can safetly cast
-		processVoxelBox( chnlOut.getVoxelBox(), chnl.getVoxelBox(), chnlIfPixelZero.getVoxelBox(), multFactorIfNonZero );
+		processVoxelBox(
+			chnlOut.getVoxelBox(),
+			chnl.getVoxelBox(),
+			chnlIfPixelZero.getVoxelBox(),
+			multFactorIfNonZero
+		);
 		
 		return chnlOut;
 	}
