@@ -1,5 +1,7 @@
 package ch.ethz.biol.cell.sgmn.objmask;
 
+import java.util.Optional;
+
 /*
  * #%L
  * anchor-plugin-image
@@ -33,6 +35,7 @@ import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.bean.objmask.filter.ObjMaskFilter;
 import org.anchoranalysis.image.bean.sgmn.objmask.ObjMaskSgmn;
 import org.anchoranalysis.image.chnl.Chnl;
+import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.image.objmask.ObjMaskCollection;
 import org.anchoranalysis.image.seed.SeedCollection;
@@ -49,53 +52,47 @@ public class ObjMaskSgmnFilter extends ObjMaskSgmn {
 	// END BEAN PROPERTIES
 
 	@Override
-	public ObjMaskCollection sgmn(Chnl chnl,
-			SeedCollection seeds) throws SgmnFailedException {
-		
-		ObjMaskCollection objs = sgmn.sgmn(chnl, seeds);
-		
-		try {
-			filter.filter(objs, chnl.getDimensions(), null);
-		} catch (OperationFailedException e) {
-			throw new SgmnFailedException(e);
-		}
-		
-		return objs;
+	public ObjMaskCollection sgmn(Chnl chnl, SeedCollection seeds) throws SgmnFailedException {
+
+		return filterObjs(
+			sgmn.sgmn(chnl, seeds),
+			chnl.getDimensions()
+		);
 	}
-	
 	
 	@Override
-	public ObjMaskCollection sgmn(Chnl chnl, ObjMask objMask,
-			SeedCollection seeds) throws SgmnFailedException {
-		
-		ObjMaskCollection objs = sgmn.sgmn(chnl, objMask, seeds);
-		
+	public ObjMaskCollection sgmn(Chnl chnl, ObjMask objMask, SeedCollection seeds) throws SgmnFailedException {
+		return filterObjs(
+			sgmn.sgmn(chnl, objMask, seeds),
+			chnl.getDimensions()
+		);
+	}
+
+	private ObjMaskCollection filterObjs( ObjMaskCollection objs, ImageDim dim ) throws SgmnFailedException {
 		try {
-			filter.filter(objs, chnl.getDimensions(), null);
+			filter.filter(
+				objs,
+				Optional.of(dim),
+				Optional.empty()
+			);
 		} catch (OperationFailedException e) {
 			throw new SgmnFailedException(e);
 		}
 		
 		return objs;
 	}
-
+	
 	public ObjMaskSgmn getSgmn() {
 		return sgmn;
 	}
-
-
 
 	public void setSgmn(ObjMaskSgmn sgmn) {
 		this.sgmn = sgmn;
 	}
 
-
-
 	public ObjMaskFilter getFilter() {
 		return filter;
 	}
-
-
 
 	public void setFilter(ObjMaskFilter filter) {
 		this.filter = filter;

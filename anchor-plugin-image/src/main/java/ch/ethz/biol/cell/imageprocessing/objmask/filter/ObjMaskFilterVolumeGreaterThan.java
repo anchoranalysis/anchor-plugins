@@ -1,5 +1,7 @@
 package ch.ethz.biol.cell.imageprocessing.objmask.filter;
 
+import java.util.Optional;
+
 /*
  * #%L
  * anchor-plugin-image
@@ -43,14 +45,26 @@ public class ObjMaskFilterVolumeGreaterThan extends ObjMaskFilter {
 	// END BEAN PROPERTIES
 	
 	@Override
-	public void filter(ObjMaskCollection objs, ImageDim dim, ObjMaskCollection objsRejected) throws OperationFailedException {
+	public void filter(ObjMaskCollection objs, Optional<ImageDim> dim, Optional<ObjMaskCollection> objsRejected) throws OperationFailedException {
 
+		if (!dim.isPresent()) {
+			throw new OperationFailedException("This operation requires image-resolution to be set");
+		}
+		
 		try {
-			int numPixels = (int) Math.floor( minVolume.rslv(dim.getRes()) );
-			objs.rmvNumPixelsLessThan( numPixels, objsRejected );
+			objs.rmvNumPixelsLessThan(
+				thresholdNumPixels(dim),
+				objsRejected
+			);
 		} catch (UnitValueException e) {
 			throw new OperationFailedException(e);
 		}
+	}
+	
+	private int thresholdNumPixels( Optional<ImageDim> dim ) throws UnitValueException {
+		return (int) Math.floor(
+			minVolume.rslv(dim.get().getRes())
+		);
 	}
 
 	public UnitValueVolume getMinVolume() {

@@ -28,6 +28,7 @@ package ch.ethz.biol.cell.imageprocessing.objmask.filter;
 
 
 import java.util.List;
+import java.util.Optional;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
@@ -70,7 +71,40 @@ public class ObjMaskFilterHasSpheroidSmallInner extends ObjMaskFilter {
 	@BeanField
 	private int minDistance = 0;
 	// END BEAN PROPERTIES
+	
+	@Override
+	public void filter(ObjMaskCollection objs, Optional<ImageDim> dim, Optional<ObjMaskCollection> objsRejected)
+			throws OperationFailedException {
 		
+		List<ObjWithMatches> matchList = objMaskMatcherForContainedObjects.findMatch(objs);
+		
+		Chnl chnlIntensity;
+		try {
+			chnlIntensity = chnlProviderIntensity.create();
+		} catch (CreateException e) {
+			throw new OperationFailedException(e);
+		}
+		
+		
+		Chnl chnlDistance;
+		try {
+			chnlDistance = chnlProviderDistance.create();
+		} catch (CreateException e) {
+			throw new OperationFailedException(e);
+		}
+		
+		
+		for( ObjWithMatches owm : matchList ) {
+			if (!includeObj(owm, chnlIntensity,chnlDistance)) {
+				objs.remove(owm.getSourceObj());
+				
+				if (objsRejected!=null) {
+					objsRejected.get().add( owm.getSourceObj() );
+				}
+			}
+		}
+	}
+	
 	private boolean isSmallInner( ObjMask om, ObjMask omContainer, Chnl chnlIntensity, Chnl chnlDistance ) throws OperationFailedException {
 		
 		ObjMask omInverse = omContainer.duplicate();
@@ -168,44 +202,6 @@ public class ObjMaskFilterHasSpheroidSmallInner extends ObjMaskFilter {
 		return true;
 	}
 	
-	@Override
-	public void filter(ObjMaskCollection objs, ImageDim dim, ObjMaskCollection objsRejected)
-			throws OperationFailedException {
-		
-		List<ObjWithMatches> matchList = objMaskMatcherForContainedObjects.findMatch(objs);
-		
-		Chnl chnlIntensity;
-		try {
-			chnlIntensity = chnlProviderIntensity.create();
-		} catch (CreateException e) {
-			throw new OperationFailedException(e);
-		}
-		
-		
-		Chnl chnlDistance;
-		try {
-			chnlDistance = chnlProviderDistance.create();
-		} catch (CreateException e) {
-			throw new OperationFailedException(e);
-		}
-		
-		
-		for( ObjWithMatches owm : matchList ) {
-			
-			if (!includeObj(owm, chnlIntensity,chnlDistance)) {
-				objs.remove(owm.getSourceObj());
-				
-				if (objsRejected!=null) {
-					objsRejected.add( owm.getSourceObj() );
-				}
-			}
-			
-			
-		}
-		
-
-	}
-
 	public double getMinIntensityDifference() {
 		return minIntensityDifference;
 	}

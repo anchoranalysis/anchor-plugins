@@ -29,6 +29,7 @@ package ch.ethz.biol.cell.imageprocessing.objmask.filter;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.shared.relation.RelationBean;
@@ -77,7 +78,7 @@ public class ObjMaskFilterFeatureCompareTwoMatchingObjectsRelationThreshold exte
 	}
 
 	@Override
-	public void filter(ObjMaskCollection objs, ImageDim dim, ObjMaskCollection objsRejected)
+	public void filter(ObjMaskCollection objs, Optional<ImageDim> dim, Optional<ObjMaskCollection> objsRejected)
 			throws OperationFailedException {
 
 		List<ObjWithMatches> matchList1 = objMaskMatcher1.findMatch(objs);
@@ -109,8 +110,8 @@ public class ObjMaskFilterFeatureCompareTwoMatchingObjectsRelationThreshold exte
 				if (!relationToValue.isRelationToValueTrue(featureVal, threshold)) {
 					listToRemove.add(objWithMatches1.getSourceObj());
 					
-					if (objsRejected!=null) {
-						objsRejected.add(objWithMatches1.getSourceObj());
+					if (objsRejected.isPresent()) {
+						objsRejected.get().add(objWithMatches1.getSourceObj());
 					}
 				}
 			}

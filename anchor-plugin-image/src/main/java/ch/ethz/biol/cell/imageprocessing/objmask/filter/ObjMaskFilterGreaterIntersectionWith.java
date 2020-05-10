@@ -1,5 +1,7 @@
 package ch.ethz.biol.cell.imageprocessing.objmask.filter;
 
+import java.util.Optional;
+
 /*
  * #%L
  * anchor-plugin-image
@@ -51,7 +53,7 @@ public class ObjMaskFilterGreaterIntersectionWith extends ObjMaskFilterByObject 
 	private ObjMaskCollection intersectionSetLesser;
 
 	@Override
-	protected void start(ImageDim dim) throws OperationFailedException {
+	protected void start() throws OperationFailedException {
 		
 		try {
 			intersectionSetGreater = objsGreater.create();
@@ -63,7 +65,7 @@ public class ObjMaskFilterGreaterIntersectionWith extends ObjMaskFilterByObject 
 	}
 	
 	@Override
-	protected boolean match(ObjMask om, ImageDim dim)
+	protected boolean match(ObjMask om, Optional<ImageDim> dim)
 			throws OperationFailedException {
 
 		int cntGreater =  intersectionSetGreater.countIntersectingPixels(om);

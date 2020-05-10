@@ -46,11 +46,11 @@ public class ObjMaskProviderScale extends ObjMaskProviderDimensions {
 	@Override
 	public ObjMaskCollection createFromObjs(ObjMaskCollection objsCollection) throws CreateException {
 		
-		ImageDim dims = createDims();
+		ImageDim dim = createDim();
 		
 		ScaleFactor sf;
 		try {
-			sf = scaleCalculator.calc(dims);
+			sf = scaleCalculator.calc(dim);
 		} catch (OperationFailedException e) {
 			throw new CreateException(e);
 		}

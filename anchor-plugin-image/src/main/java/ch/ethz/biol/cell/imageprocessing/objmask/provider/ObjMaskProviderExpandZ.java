@@ -45,7 +45,7 @@ public class ObjMaskProviderExpandZ extends ObjMaskProviderDimensions {
 	@Override
 	public ObjMaskCollection createFromObjs(ObjMaskCollection in) throws CreateException {
 		
-		ImageDim dims = createDims();
+		ImageDim dim = createDim();
 		
 		ObjMaskCollection out = new ObjMaskCollection();
 		
@@ -56,7 +56,7 @@ public class ObjMaskProviderExpandZ extends ObjMaskProviderDimensions {
 			}
 			
 			BoundingBox bboxNew = new BoundingBox(om.getBoundingBox());
-			Extent eNew = new Extent(bboxNew.extnt().getX(), bboxNew.extnt().getY(), dims.getZ());
+			Extent eNew = new Extent(bboxNew.extnt().getX(), bboxNew.extnt().getY(), dim.getZ());
 			
 			bboxNew.setExtnt( eNew );
 			

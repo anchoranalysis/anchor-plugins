@@ -119,7 +119,7 @@ public class ObjMaskProviderSplitByObjCollection extends ObjMaskProviderDimensio
 		
 		ObjMaskCollection objsSplitByCollection = objsSplitBy.create();
 
-		ImageDim dims = createDims();
+		ImageDim dims = createDim();
 		
 		ObjMaskCollection out = new ObjMaskCollection();
 		
@@ -134,7 +134,6 @@ public class ObjMaskProviderSplitByObjCollection extends ObjMaskProviderDimensio
 				throw new CreateException(e);
 			}
 		}
-
 		return out;
 	}
 

@@ -51,7 +51,7 @@ public class ObjMaskProviderRemoveIntersectingPixels extends ObjMaskProviderDime
 		
 		ObjMaskCollection objsDup = objsCollection.duplicate();
 		
-		ImageDim dims = createDims();
+		ImageDim dims = createDim();
 		
 		for( int i=0; i<objsCollection.size(); i++) {
 			

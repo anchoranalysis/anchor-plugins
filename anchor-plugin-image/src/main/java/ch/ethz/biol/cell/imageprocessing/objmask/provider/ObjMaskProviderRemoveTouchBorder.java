@@ -46,9 +46,9 @@ public class ObjMaskProviderRemoveTouchBorder extends ObjMaskProviderDimensions 
 		
 		ObjMaskCollection objsOut = new ObjMaskCollection();
 		
-		ImageDim dims = createDims();
+		ImageDim dims = createDim();
 		
-		for( ObjMask obj : objsIn ) {
+		for(ObjMask obj : objsIn) {
 			
 			if (useZ) {
 				if (!obj.getBoundingBox().atBorder(dims)) {

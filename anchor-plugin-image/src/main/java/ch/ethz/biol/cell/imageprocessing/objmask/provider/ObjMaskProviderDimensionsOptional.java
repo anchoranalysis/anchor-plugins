@@ -1,5 +1,7 @@
 package ch.ethz.biol.cell.imageprocessing.objmask.provider;
 
+import java.util.Optional;
+
 /*-
  * #%L
  * anchor-plugin-image
@@ -30,10 +32,10 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.bean.provider.ImageDimProvider;
-import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
+import org.anchoranalysis.image.bean.provider.ObjMaskProviderOne;
 import org.anchoranalysis.image.extent.ImageDim;
 
-public abstract class ObjMaskProviderDimensionsOptional extends ObjMaskProvider {
+public abstract class ObjMaskProviderDimensionsOptional extends ObjMaskProviderOne {
 
 	// START BEAN PROPERTIES
 	@BeanField @OptionalBean
@@ -41,11 +43,13 @@ public abstract class ObjMaskProviderDimensionsOptional extends ObjMaskProvider 
 	// END BEAN PROPERTIES
 	
 	/** Returns the dimensions or NULL if none are provided */
-	protected ImageDim createDims() throws CreateException {
+	protected Optional<ImageDim> createDims() throws CreateException {
 		if (dimProvider!=null) {
-			return dimProvider.create();
+			return Optional.of(
+				dimProvider.create()
+			);
 		} else {
-			return null;
+			return Optional.empty();
 		}
 	}
 

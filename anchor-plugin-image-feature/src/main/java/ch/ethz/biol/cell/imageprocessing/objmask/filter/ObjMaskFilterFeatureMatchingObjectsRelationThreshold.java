@@ -28,6 +28,7 @@ package ch.ethz.biol.cell.imageprocessing.objmask.filter;
 
 
 import java.util.List;
+import java.util.Optional;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.shared.relation.RelationBean;
@@ -62,7 +63,7 @@ public class ObjMaskFilterFeatureMatchingObjectsRelationThreshold extends ObjMas
 	// END BEAN PROPERTIES
 	
 	@Override
-	public void filter(ObjMaskCollection objs, ImageDim dim, ObjMaskCollection objsRejected)
+	public void filter(ObjMaskCollection objs, Optional<ImageDim> dim, Optional<ObjMaskCollection> objsRejected)
 			throws OperationFailedException {
 
 		List<ObjWithMatches> matchList = objMaskMatcher.findMatch(objs);
@@ -92,8 +93,8 @@ public class ObjMaskFilterFeatureMatchingObjectsRelationThreshold extends ObjMas
 					if (!r.isRelationToValueTrue(featureVal, threshold)) {
 						objs.remove(owm.getSourceObj());
 						
-						if (objsRejected!=null) {
-							objsRejected.add(owm.getSourceObj());
+						if (objsRejected.isPresent()) {
+							objsRejected.get().add(owm.getSourceObj());
 						}
 						
 						break;

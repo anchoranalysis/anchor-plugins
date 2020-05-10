@@ -29,6 +29,7 @@ package ch.ethz.biol.cell.imageprocessing.objmask.filter;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
@@ -73,7 +74,7 @@ public class ObjMaskFilterFeatureRelationDiscardOutliers extends ObjMaskFilter {
 	// END BEAN PROPERTIES
 	
 	@Override
-	public void filter(ObjMaskCollection objs, ImageDim dim, ObjMaskCollection objsRejected)
+	public void filter(ObjMaskCollection objs, Optional<ImageDim> dim, Optional<ObjMaskCollection> objsRejected)
 			throws OperationFailedException {
 
 		// Nothing to do if we don't have enough options
@@ -150,8 +151,8 @@ public class ObjMaskFilterFeatureRelationDiscardOutliers extends ObjMaskFilter {
 				ObjMask omRemove = objs.get(i);
 				listToRemove.add( omRemove );
 				
-				if (objsRejected!=null) {
-					objsRejected.add( omRemove );
+				if (objsRejected.isPresent()) {
+					objsRejected.get().add( omRemove );
 				}
 				
 				if (getLogger()!=null) {

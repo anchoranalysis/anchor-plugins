@@ -1,5 +1,7 @@
 package ch.ethz.biol.cell.imageprocessing.objmask.provider;
 
+import java.util.Optional;
+
 import org.anchoranalysis.bean.BeanInstanceMap;
 
 /*
@@ -32,7 +34,6 @@ import org.anchoranalysis.bean.BeanInstanceMap;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.error.BeanMisconfiguredException;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.objmask.ObjMask;
@@ -44,9 +45,6 @@ import org.anchoranalysis.image.objmask.morph.MorphologicalDilation.AcceptIterat
 public class ObjMaskProviderErode extends ObjMaskProviderDimensionsOptional {
 	
 	// START BEAN PROPERTIES
-	@BeanField
-	private ObjMaskProvider objs;
-	
 	@BeanField
 	private boolean do3D = false;
 	
@@ -63,8 +61,6 @@ public class ObjMaskProviderErode extends ObjMaskProviderDimensionsOptional {
 	private boolean rejectIterationifDisconnected = false;
 	// END BEAN PROPERTIES
 
-
-
 	@Override
 	public void checkMisconfigured( BeanInstanceMap defaultInstances ) throws BeanMisconfiguredException {
 		super.checkMisconfigured( defaultInstances );
@@ -74,9 +70,7 @@ public class ObjMaskProviderErode extends ObjMaskProviderDimensionsOptional {
 	}
 	
 	@Override
-	public ObjMaskCollection create() throws CreateException {
-		
-		ObjMaskCollection objsIn = objs.create();
+	public ObjMaskCollection createFromObjs(ObjMaskCollection objsIn) throws CreateException {
 		
 		ObjMaskCollection objsOut = new ObjMaskCollection();
 		
@@ -96,7 +90,7 @@ public class ObjMaskProviderErode extends ObjMaskProviderDimensionsOptional {
 				do3D,
 				iterations,
 				outsideAtThreshold,
-				acceptConditionsDilation
+				Optional.of(acceptConditionsDilation)
 			);
 			
 			objsOut.add(omOut);
@@ -104,55 +98,39 @@ public class ObjMaskProviderErode extends ObjMaskProviderDimensionsOptional {
 		return objsOut;
 	}
 	 
-	private Extent calcExtent() throws CreateException {
-		ImageDim dims = createDims();
-		return dims!=null ? dims.getExtnt() : null;
+	private Optional<Extent> calcExtent() throws CreateException {
+		return createDims().map(
+			ImageDim::getExtnt	
+		);
 	}
-
-	public ObjMaskProvider getObjs() {
-		return objs;
-	}
-
-
-	public void setObjs(ObjMaskProvider objs) {
-		this.objs = objs;
-	}
-
 
 	public boolean isDo3D() {
 		return do3D;
 	}
 
-
 	public void setDo3D(boolean do3d) {
 		do3D = do3d;
 	}
-
 
 	public int getIterations() {
 		return iterations;
 	}
 
-
 	public void setIterations(int iterations) {
 		this.iterations = iterations;
 	}
-
 
 	public boolean isRejectIterationIfAllLow() {
 		return rejectIterationIfAllLow;
 	}
 
-
 	public void setRejectIterationIfAllLow(boolean rejectIterationIfAllLow) {
 		this.rejectIterationIfAllLow = rejectIterationIfAllLow;
 	}
 
-
 	public boolean isOutsideAtThreshold() {
 		return outsideAtThreshold;
 	}
-
 
 	public void setOutsideAtThreshold(boolean outsideAtThreshold) {
 		this.outsideAtThreshold = outsideAtThreshold;

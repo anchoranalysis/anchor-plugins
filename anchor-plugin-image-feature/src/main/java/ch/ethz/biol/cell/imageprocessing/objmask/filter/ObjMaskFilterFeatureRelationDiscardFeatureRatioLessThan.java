@@ -29,6 +29,7 @@ package ch.ethz.biol.cell.imageprocessing.objmask.filter;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
@@ -79,7 +80,7 @@ public class ObjMaskFilterFeatureRelationDiscardFeatureRatioLessThan extends Obj
 	// END BEAN PROPERTIES
 	
 	@Override
-	public void filter(ObjMaskCollection objs, ImageDim dim, ObjMaskCollection objsRejected)
+	public void filter(ObjMaskCollection objs, Optional<ImageDim> dim, Optional<ObjMaskCollection> objsRejected)
 			throws OperationFailedException {
 		
 		// Nothing to do if we don't have enough options
@@ -135,7 +136,12 @@ public class ObjMaskFilterFeatureRelationDiscardFeatureRatioLessThan extends Obj
 		featureValsSorted.sort();		
 	}
 	
-	private void removeOutliers( ObjMaskCollection objs, ObjMaskCollection objsRejected, DoubleArrayList featureValsOriginalOrder, DoubleArrayList featureValsSorted ) {
+	private void removeOutliers(
+		ObjMaskCollection objs,
+		Optional<ObjMaskCollection> objsRejected,
+		DoubleArrayList featureValsOriginalOrder,
+		DoubleArrayList featureValsSorted
+	) {
 				
 		// Calculate standard deviation
 		double sum = Descriptive.sum( featureValsSorted );
@@ -169,7 +175,7 @@ public class ObjMaskFilterFeatureRelationDiscardFeatureRatioLessThan extends Obj
 		}		
 	}
 	
-	private List<ObjMask> listToRemove( ObjMaskCollection objs, ObjMaskCollection objsRejected, DoubleArrayList featureValsOriginalOrder, double lowerLimit, double upperLimit ) {
+	private List<ObjMask> listToRemove( ObjMaskCollection objs, Optional<ObjMaskCollection> objsRejected, DoubleArrayList featureValsOriginalOrder, double lowerLimit, double upperLimit ) {
 		List<ObjMask> listToRemove = new ArrayList<>();
 		for(int i=0; i<objs.size(); i++) {
 			double featureVal = featureValsOriginalOrder.get(i);
@@ -178,8 +184,8 @@ public class ObjMaskFilterFeatureRelationDiscardFeatureRatioLessThan extends Obj
 				ObjMask omRemove = objs.get(i);
 				listToRemove.add( omRemove );
 				
-				if (objsRejected!=null) {
-					objsRejected.add( omRemove );
+				if (objsRejected.isPresent()) {
+					objsRejected.get().add( omRemove );
 				}
 				
 				if (getLogger()!=null) {
@@ -191,8 +197,8 @@ public class ObjMaskFilterFeatureRelationDiscardFeatureRatioLessThan extends Obj
 				ObjMask omRemove = objs.get(i);
 				listToRemove.add( omRemove );
 				
-				if (objsRejected!=null) {
-					objsRejected.add( omRemove );
+				if (objsRejected.isPresent()) {
+					objsRejected.get().add( omRemove );
 				}
 				
 				if (getLogger()!=null) {
