@@ -133,7 +133,6 @@ public class SgmnObject extends BinarySgmn {
 	public static ObjMaskCollection createObjMaskCollectionFromVoxelBox( BinaryVoxelBox<ByteBuffer> buffer ) throws CreateException {
 		
 		CreateFromConnectedComponentsFactory omcCreator = new CreateFromConnectedComponentsFactory();
-		omcCreator.setMinNumberVoxels(1);
 		return omcCreator.createConnectedComponents(buffer.duplicate() );
 	}
 

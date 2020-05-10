@@ -84,9 +84,7 @@ public class BinaryImgChnlProviderMinVolumeFilter extends BinaryImgChnlProviderO
 			throw new CreateException(e);
 		}
 
-		CreateFromConnectedComponentsFactory createObjMasks = new CreateFromConnectedComponentsFactory();
-		createObjMasks.setMinNumberVoxels(rslvMinNum);
-		
+		CreateFromConnectedComponentsFactory createObjMasks = new CreateFromConnectedComponentsFactory(rslvMinNum);
 		if (inverted) {
 			
 			BinaryValues bvInverted = bi.getBinaryValues().createInverted();

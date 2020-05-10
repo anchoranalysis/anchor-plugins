@@ -60,8 +60,7 @@ public class ObjMaskSgmnBinarySgmn extends ObjMaskSgmn {
 			ChnlFactory.instance().create(bvb.getVoxelBox(), res),
 			bvb.getBinaryValues()
 		);
-		CreateFromConnectedComponentsFactory createObjMasks = new CreateFromConnectedComponentsFactory();
-		createObjMasks.setMinNumberVoxels(minNumberVoxels);
+		CreateFromConnectedComponentsFactory createObjMasks = new CreateFromConnectedComponentsFactory(minNumberVoxels);
 		
 		ObjMaskCollection objsBinary;
 		try {

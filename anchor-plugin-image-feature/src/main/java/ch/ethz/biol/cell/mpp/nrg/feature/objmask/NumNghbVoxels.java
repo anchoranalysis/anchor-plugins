@@ -82,8 +82,7 @@ public class NumNghbVoxels extends FeatureObjMask {
 
 		BinaryVoxelBox<ByteBuffer> bvbNotObject = binarize( vb );
 				
-		OutlineKernel3NghbMatchValue kernelMatch = new OutlineKernel3NghbMatchValue(outsideAtThreshold, do3D, om, bvbNotObject);
-		kernelMatch.setIgnoreAtThreshold(ignoreAtThreshold);
+		OutlineKernel3NghbMatchValue kernelMatch = new OutlineKernel3NghbMatchValue(outsideAtThreshold, do3D, om, bvbNotObject, ignoreAtThreshold);
 		return ApplyKernel.applyForCount(kernelMatch, om.getVoxelBox());
 	}
 
