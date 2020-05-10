@@ -50,12 +50,12 @@ public class ChnlProviderRejectIfNoSignal extends ChnlProviderOne {
 		Histogram h = HistogramFactoryUtilities.create( chnl );
 		
 		double percent = h.percentGreaterEqualTo(minIntensity);
-		
-		if (percent < minRatio) {
-			String msg = String.format("Rejecting as %f < %f for intensity %d", percent, minRatio, minIntensity );
-			throw new CreateException( msg );
-		}
 
+		if (percent < minRatio) {
+			throw new CreateException(
+				String.format("Rejecting as %f < %f for intensity %d", percent, minRatio, minIntensity)
+			);
+		}
 		return chnl;
 	}
 
