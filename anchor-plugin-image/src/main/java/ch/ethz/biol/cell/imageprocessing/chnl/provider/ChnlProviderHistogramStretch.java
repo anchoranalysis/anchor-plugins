@@ -92,16 +92,22 @@ public class ChnlProviderHistogramStretch extends ChnlProviderOne {
 					double valD = (double) val;
 					valD = (valD-rangeMin)*rangeMult;
 					
-					int valNew = (int) Math.round(valD);
-					if (valNew>255) valNew = 255;
-					if (valNew<0) valNew = 0;
-					
-					bb.putInt(offset,valNew);
+					bb.putInt(
+						offset,
+						roundClip(valD)
+					);
 					
 					offset++;
 				}
 			}
 		}
+	}
+	
+	private static int roundClip( double valD ) {
+		int valNew = (int) Math.round(valD);
+		if (valNew>255) valNew = 255;
+		if (valNew<0) valNew = 0;
+		return valNew;
 	}
 	
 	public double getQuantile() {
@@ -111,7 +117,4 @@ public class ChnlProviderHistogramStretch extends ChnlProviderOne {
 	public void setQuantile(double quantile) {
 		this.quantile = quantile;
 	}
-
-
-
 }
