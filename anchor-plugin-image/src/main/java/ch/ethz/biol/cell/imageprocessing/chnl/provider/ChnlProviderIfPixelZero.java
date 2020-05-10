@@ -93,7 +93,11 @@ public class ChnlProviderIfPixelZero extends ChnlProviderOne {
 	 * @throws CreateException
 	 */
 	public static Chnl mergeViaZeroCheck( Chnl chnl, Chnl chnlIfPixelZero, VoxelDataType combinedType, double multFactorIfNonZero ) throws CreateException {
-		Chnl chnlOut = ChnlFactory.instance().createEmptyInitialised( new ImageDim(chnl.getDimensions()), combinedType );
+		
+		Chnl chnlOut = ChnlFactory.instance().createEmptyInitialised(
+			new ImageDim(chnl.getDimensions()),
+			combinedType
+		);
 		
 		// We know these are all the same types from the logic above, so we can safetly cast
 		processVoxelBox(
