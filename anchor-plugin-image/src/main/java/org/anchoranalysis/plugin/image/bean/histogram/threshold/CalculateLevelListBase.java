@@ -13,8 +13,6 @@ public abstract class CalculateLevelListBase extends CalculateLevel {
 	@BeanField
 	private List<CalculateLevel> list = new ArrayList<>();
 	// END BEAN PROPERTIES
-	
-	
 
 	public List<CalculateLevel> getList() {
 		return list;
@@ -23,16 +21,29 @@ public abstract class CalculateLevelListBase extends CalculateLevel {
 	public void setList(List<CalculateLevel> list) {
 		this.list = list;
 	}
-	
-	@Override
-	public boolean equals(Object obj) {
-		throw new UnsupportedOperationException();
-	}
 
 	@Override
 	public int hashCode() {
-		assert(false);
-		return new HashCodeBuilder()
-			.toHashCode();
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((list == null) ? 0 : list.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		CalculateLevelListBase other = (CalculateLevelListBase) obj;
+		if (list == null) {
+			if (other.list != null)
+				return false;
+		} else if (!list.equals(other.list))
+			return false;
+		return true;
 	}
 }

@@ -29,22 +29,17 @@ package org.anchoranalysis.plugin.image.bean.histogram.threshold;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.image.bean.threshold.CalculateLevel;
+import org.anchoranalysis.image.bean.threshold.CalculateLevelOne;
 import org.anchoranalysis.image.histogram.Histogram;
-import org.apache.commons.lang.builder.EqualsBuilder;
-import org.apache.commons.lang.builder.HashCodeBuilder;
 
 /**
  * Specifies a constant if a histogram is empty, otherwise delegates to another {#link org.anchoranalysis.image.bean.threshold.CalculateLevel}
  * @author owen
  *
  */
-public class EmptyHistogramConstant extends CalculateLevel {
+public class EmptyHistogramConstant extends CalculateLevelOne {
 
 	// START BEAN PROPERTIES
-	@BeanField
-	private CalculateLevel calculateLevel;
-	
 	@BeanField
 	private int value = 0;
 	// END BEAN PROPERTIES
@@ -53,22 +48,12 @@ public class EmptyHistogramConstant extends CalculateLevel {
 	public int calculateLevel(Histogram h) throws OperationFailedException {
 		
 		if (!h.isEmpty()) {
-			return calculateLevel.calculateLevel(h);
+			return calculateLevelIncoming(h);
 		} else {
 			return value;
 		}
 	}
-
-	public CalculateLevel getCalculateLevel() {
-		return calculateLevel;
-	}
-
-
-	public void setCalculateLevel(CalculateLevel calculateLevel) {
-		this.calculateLevel = calculateLevel;
-	}
-
-
+	
 	public int getValue() {
 		return value;
 	}
@@ -77,25 +62,26 @@ public class EmptyHistogramConstant extends CalculateLevel {
 	public void setValue(int value) {
 		this.value = value;
 	}
-	
-	@Override
-	public boolean equals(Object obj) {
-		if(obj instanceof EmptyHistogramConstant){
-	    	final EmptyHistogramConstant other = (EmptyHistogramConstant) obj;
-	        return new EqualsBuilder()
-	            .append(calculateLevel, other.calculateLevel)
-	            .append(value, other.value)
-	            .isEquals();
-	    } else{
-	        return false;
-	    }
-	}
 
 	@Override
 	public int hashCode() {
-		return new HashCodeBuilder()
-			.append(calculateLevel)
-			.append(value)
-			.toHashCode();
+		final int prime = 31;
+		int result = super.hashCode();
+		result = prime * result + value;
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (!super.equals(obj))
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		EmptyHistogramConstant other = (EmptyHistogramConstant) obj;
+		if (value != other.value)
+			return false;
+		return true;
 	}
 }
