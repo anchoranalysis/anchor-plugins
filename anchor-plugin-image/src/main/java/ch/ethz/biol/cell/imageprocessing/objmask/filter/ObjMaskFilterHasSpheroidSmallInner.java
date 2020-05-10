@@ -98,7 +98,7 @@ public class ObjMaskFilterHasSpheroidSmallInner extends ObjMaskFilter {
 			if (!includeObj(owm, chnlIntensity,chnlDistance)) {
 				objs.remove(owm.getSourceObj());
 				
-				if (objsRejected!=null) {
+				if (objsRejected.isPresent()) {
 					objsRejected.get().add( owm.getSourceObj() );
 				}
 			}

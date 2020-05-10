@@ -1,5 +1,7 @@
 package org.anchoranalysis.plugin.image.feature.bean.physical;
 
+import java.util.Optional;
+
 /*-
  * #%L
  * anchor-image-feature
@@ -75,8 +77,9 @@ public class UnitsWithinRange<T extends FeatureInputWithRes> extends FeatureSing
 	protected double calcWithRes( double value, ImageRes res ) throws FeatureCalcException {
 		
 		try {
-			double minVoxels = min.rslv(res);
-			double maxVoxels = max.rslv(res);
+			Optional<ImageRes> resOpt = Optional.of(res);
+			double minVoxels = min.rslv(resOpt);
+			double maxVoxels = max.rslv(resOpt);
 					
 			if (value >= minVoxels && value <= maxVoxels) {
 				return within;

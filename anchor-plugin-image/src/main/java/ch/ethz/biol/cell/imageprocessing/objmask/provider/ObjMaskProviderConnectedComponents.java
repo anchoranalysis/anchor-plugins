@@ -28,6 +28,7 @@ package ch.ethz.biol.cell.imageprocessing.objmask.provider;
 
 
 import java.nio.ByteBuffer;
+import java.util.Optional;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
@@ -77,7 +78,11 @@ public class ObjMaskProviderConnectedComponents extends ObjMaskProvider {
 		sw.start();
 		
 		try {
-			int minNumberVoxels = (int) Math.round( minVolume.rslv( bi.getDimensions().getRes() ) );
+			int minNumberVoxels = (int) Math.round(
+				minVolume.rslv(
+					Optional.of(bi.getDimensions().getRes())
+				)
+			);
 			
 			if (bySlices) {
 				return createObjsBySlice(bi, minNumberVoxels);
