@@ -37,7 +37,7 @@ import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.image.objmask.ObjMaskCollection;
 
-public class ObjMaskFilterOr extends ObjMaskFilterDelegate {
+public class ObjMaskFilterOr extends ObjMaskFilterDerivedFromList {
 
 	@Override
 	public void filter(
@@ -48,7 +48,7 @@ public class ObjMaskFilterOr extends ObjMaskFilterDelegate {
 		
 		Set<ObjMask> set = new HashSet<ObjMask>();
 		
-		for (ObjMaskFilter indFilter : delegate().getList()) {
+		for (ObjMaskFilter indFilter : list()) {
 			ObjMaskCollection objsDup = objs.duplicate();
 			indFilter.filter(objsDup, dim, objsRejected);
 			set.addAll(objsDup.asList());
