@@ -32,15 +32,15 @@ import org.anchoranalysis.image.chnl.Chnl;
 
 class AssignUtilities {
 	
-	public static void checkDims(Chnl chnlSrc, BinaryChnl binaryImgChnl) throws CreateException {
-		if (!chnlSrc.getDimensions().equals(binaryImgChnl.getDimensions())) {
-			throw new CreateException( String.format("chnlSrc (%s) and maskProvider (%s) must have the same dimensions", chnlSrc.getDimensions().toString(), binaryImgChnl.getDimensions().toString() ) );
-		}		
+	public static void checkDims(Chnl chnl, BinaryChnl mask) throws CreateException {
+		if (!chnl.getDimensions().equals(mask.getDimensions())) {
+			throw new CreateException( String.format("chnl (%s) and mask (%s) must have the same dimensions", chnl.getDimensions().toString(), mask.getDimensions().toString() ) );
+		}
 	}
 	
-	public static void checkDims(Chnl chnlSrc, Chnl chnlAssignFrom) throws CreateException {
-		if (!chnlSrc.getDimensions().equals(chnlAssignFrom.getDimensions())) {
-			throw new CreateException( String.format("chnlSrc (%s) and chnlAssignFrom (%s) must have the same dimensions", chnlSrc.getDimensions().toString(), chnlAssignFrom.getDimensions().toString() ) );
+	public static void checkDims(Chnl chnl, Chnl chnlAssignFrom) throws CreateException {
+		if (!chnl.getDimensions().equals(chnlAssignFrom.getDimensions())) {
+			throw new CreateException( String.format("chnlSrc (%s) and chnlAssignFrom (%s) must have the same dimensions", chnl.getDimensions().toString(), chnlAssignFrom.getDimensions().toString() ) );
 		}
 	}
 }

@@ -29,33 +29,25 @@ package ch.ethz.biol.cell.imageprocessing.chnl.provider;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.image.bean.provider.BinaryImgChnlProvider;
 import org.anchoranalysis.image.bean.provider.ChnlProvider;
-import org.anchoranalysis.image.bean.provider.ChnlProviderOne;
 import org.anchoranalysis.image.binary.BinaryChnl;
 import org.anchoranalysis.image.chnl.Chnl;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.image.objmask.factory.CreateFromEntireChnlFactory;
 
-public class ChnlProviderAssign extends ChnlProviderOne {
+public class ChnlProviderAssign extends ChnlProviderOneMask {
 
 	// START BEAN PROPERTIES
 	@BeanField
 	private ChnlProvider chnlProviderAssignFrom;
-	
-	@BeanField
-	private BinaryImgChnlProvider maskProvider;
 	// END BEAN PROPERTIES
-		
+	
 	@Override
-	public Chnl createFromChnl(Chnl chnlSrc) throws CreateException {
- 
+	protected Chnl createFromMaskedChnl(Chnl chnlSrc, BinaryChnl binaryImgChnl) throws CreateException {
+
 		Chnl chnlAssignFrom = chnlProviderAssignFrom.create();
 		AssignUtilities.checkDims( chnlSrc, chnlAssignFrom );
-		
-		BinaryChnl binaryImgChnl = maskProvider.create();
-		AssignUtilities.checkDims( chnlSrc, binaryImgChnl );
 		
 		assign(chnlSrc, chnlAssignFrom, binaryImgChnl);
 		
@@ -76,13 +68,5 @@ public class ChnlProviderAssign extends ChnlProviderOne {
 
 	public void setChnlProviderAssignFrom(ChnlProvider chnlProviderAssignFrom) {
 		this.chnlProviderAssignFrom = chnlProviderAssignFrom;
-	}
-
-	public BinaryImgChnlProvider getMaskProvider() {
-		return maskProvider;
-	}
-
-	public void setMaskProvider(BinaryImgChnlProvider maskProvider) {
-		this.maskProvider = maskProvider;
 	}
 }
