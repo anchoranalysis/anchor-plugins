@@ -1,5 +1,7 @@
 package org.anchoranalysis.plugin.image.calculation;
 
+import java.util.Optional;
+
 /*
  * #%L
  * anchor-plugin-image
@@ -33,6 +35,7 @@ import org.anchoranalysis.feature.cache.calculation.FeatureCalculation;
 import org.anchoranalysis.feature.cache.calculation.ResolvedCalculation;
 import org.anchoranalysis.feature.cache.calculation.ResolvedCalculationMap;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
 import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.image.objmask.morph.MorphologicalErosion;
@@ -83,11 +86,11 @@ public class CalculateClosing extends FeatureCalculation<ObjMask,FeatureInputSin
 			
 			ObjMask omEroded = MorphologicalErosion.createErodedObjMask(
 				omDilated,
-				params.getDimensionsRequired().getExtnt(),
+				params.getDimensionsOptional().map(ImageDim::getExtnt),
 				do3D,
 				iterations,
 				false,
-				null
+				Optional.empty()
 			);
 			return omEroded;
 			

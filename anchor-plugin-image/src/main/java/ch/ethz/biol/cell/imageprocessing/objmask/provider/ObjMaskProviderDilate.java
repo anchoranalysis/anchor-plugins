@@ -37,7 +37,7 @@ import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.image.objmask.ObjMaskCollection;
 import org.anchoranalysis.image.objmask.morph.MorphologicalDilation;
 
-public class ObjMaskProviderDilate extends ObjMaskProviderDimensions {
+public class ObjMaskProviderDilate extends ObjMaskProviderDimensionsOptional {
 	
 	// START BEAN PROPERTIES
 	@BeanField
@@ -53,7 +53,7 @@ public class ObjMaskProviderDilate extends ObjMaskProviderDimensions {
 	@Override
 	public ObjMaskCollection createFromObjs(ObjMaskCollection objsIn) throws CreateException {
 	
-		ImageDim dims = createDims();
+		Optional<ImageDim> dim = createDims();
 				
 		ObjMaskCollection objsOut = new ObjMaskCollection();
 		
@@ -61,14 +61,12 @@ public class ObjMaskProviderDilate extends ObjMaskProviderDimensions {
 
 			ObjMask omGrown = MorphologicalDilation.createDilatedObjMask(
 				om,
-				Optional.of(
-					dims.getExtnt()
-				),
+				dim.map(ImageDim::getExtnt),
 				do3D,
 				iterations,
 				bigNghb
 			);
-			assert( dims.contains( omGrown.getBoundingBox()) );
+			assert( !dim.isPresent() || dim.get().contains( omGrown.getBoundingBox()) );
 			objsOut.add(omGrown);
 		}
 		return objsOut;

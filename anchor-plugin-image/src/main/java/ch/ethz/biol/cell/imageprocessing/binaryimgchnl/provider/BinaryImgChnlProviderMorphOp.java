@@ -27,6 +27,7 @@ package ch.ethz.biol.cell.imageprocessing.binaryimgchnl.provider;
  */
 
 import java.nio.ByteBuffer;
+import java.util.Optional;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
@@ -67,12 +68,14 @@ public abstract class BinaryImgChnlProviderMorphOp extends BinaryImgChnlProvider
 		return chnl;
 	}
 	
-	protected VoxelBox<ByteBuffer> backgroundVb() throws CreateException {
+	protected Optional<VoxelBox<ByteBuffer>> backgroundVb() throws CreateException {
 
 		if (minIntensityValue > 0) {
-			return backgroundChnlProvider.create().getVoxelBox().asByte();
+			return Optional.of(
+				backgroundChnlProvider.create().getVoxelBox().asByte()
+			);
 		} else {
-			return null;
+			return Optional.empty();
 		}
 	}
 

@@ -1,5 +1,7 @@
 package ch.ethz.biol.cell.imageprocessing.objmask.filter;
 
+import java.util.Optional;
+
 /*
  * #%L
  * anchor-plugin-image
@@ -34,7 +36,7 @@ import org.anchoranalysis.image.objmask.ObjMaskCollection;
 public class ObjMaskFilterAnd extends ObjMaskFilterDelegate {
 
 	@Override
-	public void filter(ObjMaskCollection objs, ImageDim dim, ObjMaskCollection objsRejected) throws OperationFailedException {
+	public void filter(ObjMaskCollection objs, Optional<ImageDim> dim, Optional<ObjMaskCollection> objsRejected) throws OperationFailedException {
 		
 		for (ObjMaskFilter indFilter : delegate().getList()) {
 			indFilter.filter(objs, dim, objsRejected);

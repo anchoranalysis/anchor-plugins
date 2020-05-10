@@ -1,5 +1,7 @@
 package ch.ethz.biol.cell.imageprocessing.objmask.filter;
 
+import java.util.Optional;
+
 /*
  * #%L
  * anchor-plugin-image
@@ -42,7 +44,7 @@ public class ObjMaskFilterSequence extends ObjMaskFilter {
 	// END BEAN PROPERTIES
 	
 	@Override
-	public void filter(ObjMaskCollection objs, ImageDim dim, ObjMaskCollection objsRejected) throws OperationFailedException {
+	public void filter(ObjMaskCollection objs, Optional<ImageDim> dim, Optional<ObjMaskCollection> objsRejected) throws OperationFailedException {
 		
 		for (ObjMaskFilter indFilter : sequence.getList()) {
 			indFilter.filter(objs, dim, objsRejected);

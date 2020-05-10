@@ -1,5 +1,7 @@
 package ch.ethz.biol.cell.imageprocessing.binaryimgchnl.provider;
 
+import java.util.Optional;
+
 /*
  * #%L
  * anchor-plugin-image
@@ -57,7 +59,11 @@ public class BinaryImgChnlProviderObjMaskFilterAsChnl extends BinaryImgChnlProvi
 		ObjMaskCollection omc = new ObjMaskCollection(om);
 		
 		try {
-			objMaskFilter.filter(omc, chnl.getDimensions(), null);
+			objMaskFilter.filter(
+				omc,
+				Optional.of(chnl.getDimensions()),
+				Optional.empty()
+			);
 		} catch (OperationFailedException e) {
 			throw new CreateException(e);
 		}

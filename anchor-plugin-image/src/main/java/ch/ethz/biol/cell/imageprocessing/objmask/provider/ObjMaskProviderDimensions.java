@@ -41,7 +41,7 @@ public abstract class ObjMaskProviderDimensions extends ObjMaskProviderOne {
 	private ImageDimProvider dimProvider = new GuessDimFromInputImage();
 	// END BEAN PROPERTIES
 	
-	protected ImageDim createDims() throws CreateException {
+	protected ImageDim createDim() throws CreateException {
 		return dimProvider.create();
 	}
 

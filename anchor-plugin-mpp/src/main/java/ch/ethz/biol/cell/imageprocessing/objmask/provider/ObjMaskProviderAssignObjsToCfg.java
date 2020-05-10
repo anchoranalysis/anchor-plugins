@@ -79,7 +79,7 @@ public class ObjMaskProviderAssignObjsToCfg extends ObjMaskProviderDimensions {
 	public ObjMaskCollection createFromObjs( ObjMaskCollection objsCollection ) throws CreateException {
 		
 		Cfg cfg = cfgProvider.create();
-		ImageDim dim = createDims();
+		ImageDim dim = createDim();
 		
 		// EXIT EARLY when there are no ellipsoids
 		if (cfg.size()==0) {

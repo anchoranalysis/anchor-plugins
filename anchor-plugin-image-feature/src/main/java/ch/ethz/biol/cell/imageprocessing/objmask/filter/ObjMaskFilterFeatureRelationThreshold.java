@@ -1,5 +1,7 @@
 package ch.ethz.biol.cell.imageprocessing.objmask.filter;
 
+import java.util.Optional;
+
 /*
  * #%L
  * anchor-plugin-image-feature
@@ -56,7 +58,7 @@ public class ObjMaskFilterFeatureRelationThreshold extends ObjMaskFilterByObject
 	private FeatureCalculatorSingle<FeatureInputSingleObj> featureSession = null;
 		
 	@Override
-	protected void start(ImageDim dim) throws OperationFailedException {
+	protected void start() throws OperationFailedException {
 		
 		//System.out.printf("ObjMaskFilterFeature start() this=%s\n", this);
 		
@@ -71,7 +73,7 @@ public class ObjMaskFilterFeatureRelationThreshold extends ObjMaskFilterByObject
 	}
 
 	@Override
-	protected boolean match(ObjMask om, ImageDim dim) throws OperationFailedException {
+	protected boolean match(ObjMask om, Optional<ImageDim> dim) throws OperationFailedException {
 
 		double val;
 		try {

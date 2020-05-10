@@ -1,5 +1,7 @@
 package ch.ethz.biol.cell.imageprocessing.objmask.provider;
 
+import java.util.Optional;
+
 /*
  * #%L
  * anchor-plugin-image
@@ -42,32 +44,33 @@ public class ObjMaskProviderFilter extends ObjMaskProviderDimensionsOptional {
 	@BeanField
 	private ObjMaskFilter objMaskFilter;
 	
-	@BeanField
-	private ObjMaskProvider objs;
-	
 	@BeanField @OptionalBean
 	private ObjMaskProvider objsRejected;	// The rejected objects are put here (OPTIONAL)
 	// END BEAN PROPERTIES
 	
 	@Override
-	public ObjMaskCollection create() throws CreateException {
-		
-		ObjMaskCollection in = objs.create();
+	public ObjMaskCollection createFromObjs(ObjMaskCollection in) throws CreateException {
 		
 		ObjMaskCollection out = new ObjMaskCollection();
 		out.addAll( in );
 		try {
-			ImageDim dims = createDims();
+			Optional<ImageDim> dims = createDims();
 			
-			ObjMaskCollection omcRejected = objsRejected!=null ? objsRejected.create() : null;
-				
-			objMaskFilter.filter(out, dims, omcRejected);
+			objMaskFilter.filter(
+				out,
+				dims,
+				createRejected()
+			);
 			
 		} catch (OperationFailedException e) {
 			throw new CreateException(e);
 		}
 	
 		return out;
+	}
+	
+	private Optional<ObjMaskCollection> createRejected() throws CreateException {
+		return objsRejected!=null ? Optional.of(objsRejected.create()) : Optional.empty();
 	}
 
 	public ObjMaskFilter getObjMaskFilter() {
@@ -78,14 +81,6 @@ public class ObjMaskProviderFilter extends ObjMaskProviderDimensionsOptional {
 		this.objMaskFilter = objMaskFilter;
 	}
 
-	public ObjMaskProvider getObjs() {
-		return objs;
-	}
-
-	public void setObjs(ObjMaskProvider objs) {
-		this.objs = objs;
-	}
-
 	public ObjMaskProvider getObjsRejected() {
 		return objsRejected;
 	}
@@ -93,5 +88,4 @@ public class ObjMaskProviderFilter extends ObjMaskProviderDimensionsOptional {
 	public void setObjsRejected(ObjMaskProvider objsRejected) {
 		this.objsRejected = objsRejected;
 	}
-
 }
