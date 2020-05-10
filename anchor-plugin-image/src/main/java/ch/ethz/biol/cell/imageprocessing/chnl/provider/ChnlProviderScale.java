@@ -30,7 +30,7 @@ package ch.ethz.biol.cell.imageprocessing.chnl.provider;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.log.LogErrorReporter;
+import org.anchoranalysis.core.log.LogReporter;
 import org.anchoranalysis.image.bean.interpolator.InterpolatorBean;
 import org.anchoranalysis.image.bean.provider.ChnlProviderOne;
 import org.anchoranalysis.image.bean.scale.ScaleCalculator;
@@ -52,27 +52,25 @@ public class ChnlProviderScale extends ChnlProviderOne {
 	
 	@Override
 	public Chnl createFromChnl(Chnl chnl) throws CreateException {
-		return scale( chnl, scaleCalculator, interpolator.create(), getLogger() );
+		return scale(
+			chnl,
+			scaleCalculator,
+			interpolator.create(),
+			getLogger().getLogReporter()
+		);
 	}
 	
-	// logErrorReporter can be null
-	public static Chnl scale( Chnl chnl, ScaleCalculator scaleCalculator, Interpolator interpolator, LogErrorReporter logErrorReporter ) throws CreateException {
+	public static Chnl scale( Chnl chnl, ScaleCalculator scaleCalculator, Interpolator interpolator, LogReporter logger) throws CreateException {
 		try {
-			if (logErrorReporter!=null) {
-				logErrorReporter.getLogReporter().logFormatted("Res in: %s\n", chnl.getDimensions().getRes() );
-			}
+			logger.logFormatted("incoming Image Resolution: %s\n", chnl.getDimensions().getRes() );
 			
 			ScaleFactor sf = scaleCalculator.calc( chnl.getDimensions() );
 			
-			if (logErrorReporter!=null) {
-				logErrorReporter.getLogReporter().logFormatted("ScaleFactor: %s\n", sf.toString() );
-			}
+			logger.logFormatted("Scale Factor: %s\n", sf.toString() );
 			
 			Chnl chnlOut = chnl.scaleXY( sf.getX(), sf.getY(), interpolator);
 			
-			if (logErrorReporter!=null) {
-				logErrorReporter.getLogReporter().logFormatted("Res out: %s\n", chnlOut.getDimensions().getRes() );
-			}
+			logger.logFormatted("outgoing Image Resolution: %s\n", chnlOut.getDimensions().getRes() );
 			
 			return chnlOut;
 			
@@ -96,7 +94,4 @@ public class ChnlProviderScale extends ChnlProviderOne {
 	public void setInterpolator(InterpolatorBean interpolator) {
 		this.interpolator = interpolator;
 	}
-
-
-
 }
