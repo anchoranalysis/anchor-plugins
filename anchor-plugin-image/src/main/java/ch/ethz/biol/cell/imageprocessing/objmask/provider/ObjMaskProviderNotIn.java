@@ -27,30 +27,21 @@ package ch.ethz.biol.cell.imageprocessing.objmask.provider;
  */
 
 
-import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
-import org.anchoranalysis.image.bean.provider.ObjMaskProviderOne;
 import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.image.objmask.ObjMaskCollection;
 
-public class ObjMaskProviderNotIn extends ObjMaskProviderOne {
-
-	// START BEAN PROPERTIES
-	@BeanField
-	private ObjMaskProvider objsContainer;
-	// END BEAN PROPERTIES
+public class ObjMaskProviderNotIn extends ObjMaskProviderContainer {
 	
 	@Override
 	public ObjMaskCollection createFromObjs(ObjMaskCollection objsCollection) throws CreateException {
 		
-		ObjMaskCollection objsContainerCollection = objsContainer.create();
+		ObjMaskCollection container = containerRequired();
 		
 		ObjMaskCollection out = new ObjMaskCollection();
-		
 		for( ObjMask om : objsCollection ) {
 			
-			if (!isObjIn(om,objsContainerCollection)) {
+			if (!isObjIn(om,container)) {
 				out.add(om);
 			}
 		}
@@ -58,7 +49,7 @@ public class ObjMaskProviderNotIn extends ObjMaskProviderOne {
 		return out;
 	}
 	
-	private boolean isObjIn( ObjMask om, ObjMaskCollection container ) {
+	private static boolean isObjIn( ObjMask om, ObjMaskCollection container ) {
 		
 		for( ObjMask omCompare : container ) {
 			if(om.equals(omCompare)) {
@@ -68,14 +59,4 @@ public class ObjMaskProviderNotIn extends ObjMaskProviderOne {
 		
 		return false;
 	}
-
-	public ObjMaskProvider getObjsContainer() {
-		return objsContainer;
-	}
-
-
-	public void setObjsContainer(ObjMaskProvider objsContainer) {
-		this.objsContainer = objsContainer;
-	}
-
 }

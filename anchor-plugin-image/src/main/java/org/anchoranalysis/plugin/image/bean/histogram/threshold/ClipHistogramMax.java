@@ -31,12 +31,9 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.shared.relation.GreaterThanBean;
 import org.anchoranalysis.bean.shared.relation.threshold.RelationToConstant;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.image.bean.threshold.CalculateLevel;
 import org.anchoranalysis.image.bean.threshold.CalculateLevelOne;
 import org.anchoranalysis.image.histogram.Histogram;
 import org.anchoranalysis.image.histogram.HistogramArray;
-import org.apache.commons.lang.builder.EqualsBuilder;
-import org.apache.commons.lang.builder.HashCodeBuilder;
 
 
 /**
