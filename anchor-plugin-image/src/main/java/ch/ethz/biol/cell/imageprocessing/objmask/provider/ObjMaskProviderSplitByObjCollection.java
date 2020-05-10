@@ -49,9 +49,6 @@ public class ObjMaskProviderSplitByObjCollection extends ObjMaskProviderDimensio
 
 	// START BEAN PROPERTIES
 	@BeanField
-	private ObjMaskProvider objs;
-	
-	@BeanField
 	private ObjMaskProvider objsSplitBy;
 	// END BEAN PROPERTIES
 	
@@ -116,12 +113,10 @@ public class ObjMaskProviderSplitByObjCollection extends ObjMaskProviderDimensio
 		//out.add( objToSplit );
 		return out;
 	}
-	
-	
-	@Override
-	public ObjMaskCollection create() throws CreateException {
 		
-		ObjMaskCollection objsCollection = objs.create();
+	@Override
+	public ObjMaskCollection createFromObjs(ObjMaskCollection objsCollection) throws CreateException {
+		
 		ObjMaskCollection objsSplitByCollection = objsSplitBy.create();
 
 		ImageDim dims = createDims();
@@ -143,19 +138,9 @@ public class ObjMaskProviderSplitByObjCollection extends ObjMaskProviderDimensio
 		return out;
 	}
 
-	public ObjMaskProvider getObjs() {
-		return objs;
-	}
-
-	public void setObjs(ObjMaskProvider objs) {
-		this.objs = objs;
-	}
-
-
 	public ObjMaskProvider getObjsSplitBy() {
 		return objsSplitBy;
 	}
-
 
 	public void setObjsSplitBy(ObjMaskProvider objsSplitBy) {
 		this.objsSplitBy = objsSplitBy;

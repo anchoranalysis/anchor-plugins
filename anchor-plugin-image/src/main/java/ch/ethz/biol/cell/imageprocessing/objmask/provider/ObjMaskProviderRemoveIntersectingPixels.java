@@ -30,7 +30,6 @@ package ch.ethz.biol.cell.imageprocessing.objmask.provider;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.objmask.ObjMask;
@@ -40,9 +39,6 @@ import org.anchoranalysis.image.objmask.ObjMaskCollection;
 public class ObjMaskProviderRemoveIntersectingPixels extends ObjMaskProviderDimensions {
 
 	// START BEAN PROPERTIES
-	@BeanField
-	private ObjMaskProvider objs;
-	
 	/**
 	 * If TRUE, throws an error if there is a disconnected object after the erosion
 	 */
@@ -50,6 +46,34 @@ public class ObjMaskProviderRemoveIntersectingPixels extends ObjMaskProviderDime
 	private boolean errorDisconnectedObjects = false;
 	// END BEAN PROPERTIES
 
+	@Override
+	public ObjMaskCollection createFromObjs( ObjMaskCollection objsCollection) throws CreateException {
+		
+		ObjMaskCollection objsDup = objsCollection.duplicate();
+		
+		ImageDim dims = createDims();
+		
+		for( int i=0; i<objsCollection.size(); i++) {
+			
+			ObjMask omWrite = objsDup.get(i);
+			
+			maybeErrorDisconnectedObjects( omWrite, "before" );
+			
+			for( int j=0; j<objsCollection.size(); j++) {
+				
+				ObjMask omRead = objsDup.get(j);
+				
+				if (i<j) {
+					removeIntersectingPixelsIfIntersects( omWrite, omRead, dims );
+				}
+			}
+			
+			maybeErrorDisconnectedObjects( omWrite, "after" );
+		}
+		
+		return objsDup;
+	}
+	
 	private void removeIntersectingPixels( ObjMask omWrite, ObjMask omRead, BoundingBox intersection  ) {
 		
 		BoundingBox bboxRelWrite = new BoundingBox();
@@ -96,37 +120,7 @@ public class ObjMaskProviderRemoveIntersectingPixels extends ObjMaskProviderDime
 			removeIntersectingPixels( omWrite, omRead, intersection );
 		}
 	}
-	
-	@Override
-	public ObjMaskCollection create() throws CreateException {
-
-		ObjMaskCollection objsCollection = objs.create();
 		
-		ObjMaskCollection objsDup = objsCollection.duplicate();
-		
-		ImageDim dims = createDims();
-		
-		for( int i=0; i<objsCollection.size(); i++) {
-			
-			ObjMask omWrite = objsDup.get(i);
-			
-			maybeErrorDisconnectedObjects( omWrite, "before" );
-			
-			for( int j=0; j<objsCollection.size(); j++) {
-				
-				ObjMask omRead = objsDup.get(j);
-				
-				if (i<j) {
-					removeIntersectingPixelsIfIntersects( omWrite, omRead, dims );
-				}
-			}
-			
-			maybeErrorDisconnectedObjects( omWrite, "after" );
-		}
-		
-		return objsDup;
-	}
-	
 	private void maybeErrorDisconnectedObjects( ObjMask omWrite, String dscr ) throws CreateException {
 		if (errorDisconnectedObjects) {
 			try {
@@ -140,14 +134,6 @@ public class ObjMaskProviderRemoveIntersectingPixels extends ObjMaskProviderDime
 			}
 		}		
 	}
-
-	public ObjMaskProvider getObjs() {
-		return objs;
-	}
-
-	public void setObjs(ObjMaskProvider objs) {
-		this.objs = objs;
-	}
 	
 	public boolean isErrorDisconnectedObjects() {
 		return errorDisconnectedObjects;
@@ -156,6 +142,4 @@ public class ObjMaskProviderRemoveIntersectingPixels extends ObjMaskProviderDime
 	public void setErrorDisconnectedObjects(boolean errorDisconnectedObjects) {
 		this.errorDisconnectedObjects = errorDisconnectedObjects;
 	}
-
-
 }

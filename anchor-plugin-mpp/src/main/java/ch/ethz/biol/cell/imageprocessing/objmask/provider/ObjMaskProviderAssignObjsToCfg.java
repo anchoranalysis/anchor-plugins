@@ -54,9 +54,6 @@ public class ObjMaskProviderAssignObjsToCfg extends ObjMaskProviderDimensions {
 
 	// START BEAN PROPERTIES
 	@BeanField
-	private ObjMaskProvider objs;
-	
-	@BeanField
 	private CfgProvider cfgProvider;
 	
 	@BeanField
@@ -78,35 +75,10 @@ public class ObjMaskProviderAssignObjsToCfg extends ObjMaskProviderDimensions {
 	private RegionMap regionMap = RegionMapSingleton.instance();
 	private int regionID = 0;
 	
-	private static RslvdObjMaskList createRslvdObjMaskList( ObjMaskCollection objs ) {
-		RslvdObjMaskList out = new RslvdObjMaskList();
-		for( ObjMask om : objs ) {
-			out.add( new RslvdObjMask(om) );
-		}
-		return out;
-	}
-	
-	
-	private static RslvdEllipsoidList createRslvdEllipsoidList( Cfg cfg, ImageDim dim, RegionMembershipWithFlags rm, BinaryValuesByte bvb ) throws CreateException {
-		RslvdEllipsoidList out = new RslvdEllipsoidList();
-		
-		for( Mark m : cfg ) {
-			
-			if (m instanceof MarkEllipsoid) {
-				out.add( new RslvdEllipsoid( (MarkEllipsoid) m, dim, rm, bvb ) );
-			} else {
-				throw new CreateException("Mark found that is not an ellipsoid");
-			}
-		}
-		
-		return out;
-	}
-	
 	@Override
-	public ObjMaskCollection create() throws CreateException {
+	public ObjMaskCollection createFromObjs( ObjMaskCollection objsCollection ) throws CreateException {
 		
 		Cfg cfg = cfgProvider.create();
-		ObjMaskCollection objsCollection = objs.create();
 		ImageDim dim = createDims();
 		
 		// EXIT EARLY when there are no ellipsoids
@@ -174,14 +146,29 @@ public class ObjMaskProviderAssignObjsToCfg extends ObjMaskProviderDimensions {
 		return listEllipsoids.createMergedObjsForIncluded();
 	}
 
-	public ObjMaskProvider getObjs() {
-		return objs;
+	private static RslvdObjMaskList createRslvdObjMaskList( ObjMaskCollection objs ) {
+		RslvdObjMaskList out = new RslvdObjMaskList();
+		for( ObjMask om : objs ) {
+			out.add( new RslvdObjMask(om) );
+		}
+		return out;
 	}
-
-	public void setObjs(ObjMaskProvider objs) {
-		this.objs = objs;
+		
+	private static RslvdEllipsoidList createRslvdEllipsoidList( Cfg cfg, ImageDim dim, RegionMembershipWithFlags rm, BinaryValuesByte bvb ) throws CreateException {
+		RslvdEllipsoidList out = new RslvdEllipsoidList();
+		
+		for( Mark m : cfg ) {
+			
+			if (m instanceof MarkEllipsoid) {
+				out.add( new RslvdEllipsoid( (MarkEllipsoid) m, dim, rm, bvb ) );
+			} else {
+				throw new CreateException("Mark found that is not an ellipsoid");
+			}
+		}
+		
+		return out;
 	}
-
+	
 	public CfgProvider getCfgProvider() {
 		return cfgProvider;
 	}
@@ -214,28 +201,19 @@ public class ObjMaskProviderAssignObjsToCfg extends ObjMaskProviderDimensions {
 		this.cfgProviderOutExcluded = cfgProviderOutExcluded;
 	}
 
-
-
-
 	public double getMaxDist() {
 		return maxDist;
 	}
-
 
 	public void setMaxDist(double maxDist) {
 		this.maxDist = maxDist;
 	}
 
-
 	public ObjMaskProvider getObjsOutUnassigned() {
 		return objsOutUnassigned;
 	}
 
-
 	public void setObjsOutUnassigned(ObjMaskProvider objsOutUnassigned) {
 		this.objsOutUnassigned = objsOutUnassigned;
 	}
-
-
-
 }

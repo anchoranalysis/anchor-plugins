@@ -34,12 +34,16 @@ import org.anchoranalysis.anchor.mpp.regionmap.RegionMapSingleton;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
+import org.anchoranalysis.image.bean.provider.ImageDimProvider;
+import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.objmask.ObjMaskCollection;
 
+import ch.ethz.biol.cell.imageprocessing.dim.provider.GuessDimFromInputImage;
+
 // Creates some object masks from a cfg
-public class ObjMaskProviderCfg extends ObjMaskProviderDimensions {
+public class ObjMaskProviderCfg extends ObjMaskProvider {
 
 	// START BEAN PROPERTIES
 	@BeanField
@@ -50,6 +54,9 @@ public class ObjMaskProviderCfg extends ObjMaskProviderDimensions {
 	
 	@BeanField
 	private RegionMap regionMap = RegionMapSingleton.instance();
+	
+	@BeanField
+	private ImageDimProvider dimProvider = new GuessDimFromInputImage();
 	// END BEAN PROPERTIES
 
 	@Override
@@ -57,7 +64,7 @@ public class ObjMaskProviderCfg extends ObjMaskProviderDimensions {
 		
 		Cfg cfg = cfgProvider.create();
 		
-		ImageDim dims = createDims();
+		ImageDim dims = dimProvider.create();
 		
 		return cfg.calcMask(
 			dims,
@@ -81,6 +88,14 @@ public class ObjMaskProviderCfg extends ObjMaskProviderDimensions {
 
 	public void setRegionID(int regionID) {
 		this.regionID = regionID;
+	}
+
+	public ImageDimProvider getDimProvider() {
+		return dimProvider;
+	}
+
+	public void setDimProvider(ImageDimProvider dimProvider) {
+		this.dimProvider = dimProvider;
 	}
 
 }
