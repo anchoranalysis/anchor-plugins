@@ -55,7 +55,7 @@ import org.anchoranalysis.image.voxel.nghb.CreateNghbGraph;
  *  A neighbourhood-graph is compiled of objects that touch each other. The threshold for each objects is determined by the object itself and neigbours that have dist < nghbDist (e.g. nghbDist==1 are all the immediate neighbours).
  *  </p>
  */
-public class ChnlProviderObjsLevelNeighbours extends ChnlProviderObjsLevelBase {
+public class ChnlProviderObjsLevelNeighbours extends ChnlProviderLevel {
 
 	// START BEAN
 	/** How many neighbours to include by distance (distance==1 -> all directly touching neighbours, distance==2 -> those touching the directly touching etc.) */

@@ -5,6 +5,7 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.bean.provider.ChnlProvider;
 import org.anchoranalysis.image.bean.provider.ChnlProviderOne;
 import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
+import org.anchoranalysis.image.bean.threshold.CalculateLevel;
 import org.anchoranalysis.image.chnl.Chnl;
 import org.anchoranalysis.image.objmask.ObjMaskCollection;
 
@@ -19,6 +20,9 @@ public abstract class ChnlProviderLevel extends ChnlProviderOne {
 	
 	@BeanField
 	private ChnlProvider chnlOutput;
+	
+	@BeanField
+	private CalculateLevel calculateLevel;
 	// END BEAN PROPERTIES
 	
 	@Override
@@ -49,5 +53,13 @@ public abstract class ChnlProviderLevel extends ChnlProviderOne {
 
 	public void setChnlOutput(ChnlProvider chnlOutput) {
 		this.chnlOutput = chnlOutput;
+	}
+	
+	public CalculateLevel getCalculateLevel() {
+		return calculateLevel;
+	}
+
+	public void setCalculateLevel(CalculateLevel calculateLevel) {
+		this.calculateLevel = calculateLevel;
 	}
 }
