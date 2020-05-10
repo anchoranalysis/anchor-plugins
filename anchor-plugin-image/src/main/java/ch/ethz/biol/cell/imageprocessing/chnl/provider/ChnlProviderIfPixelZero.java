@@ -57,13 +57,19 @@ public class ChnlProviderIfPixelZero extends ChnlProviderOne {
 		double multFact = (double) combinedType.maxValue() / chnl.getVoxelDataType().maxValue();
 		return merge( chnl, ifZero, combinedType, multFact );
 	}
-	
+
+	/**
+	 * 
+	 * <p>Assumes the two channels are of the same size, but does not check.</p>
+	 * 
+	 * @param chnl
+	 * @param chnlIfPixelZero
+	 * @param combinedType
+	 * @param multFactorIfNonZero
+	 * @return
+	 * @throws CreateException
+	 */
 	public static Chnl merge( Chnl chnl, Chnl chnlIfPixelZero, VoxelDataType combinedType, double multFactorIfNonZero ) throws CreateException {
-		
-		if (!chnl.getDimensions().equals(chnlIfPixelZero.getDimensions())) {
-			throw new CreateException("Dimensions of channels do not match");
-		}
-		
 		Chnl chnlOut = ChnlFactory.instance().createEmptyInitialised( new ImageDim(chnl.getDimensions()), combinedType );
 		
 		// We know these are all the same types from the logic above, so we can safetly cast
