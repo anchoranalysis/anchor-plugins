@@ -5,7 +5,6 @@ import java.util.List;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.image.bean.threshold.CalculateLevel;
-import org.apache.commons.lang.builder.HashCodeBuilder;
 
 public abstract class CalculateLevelListBase extends CalculateLevel {
 

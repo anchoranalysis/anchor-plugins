@@ -46,9 +46,7 @@ public class ObjMaskProviderMerge extends ObjMaskProviderMergeOptionalDistance {
 	// END BEAN PROPERTIES
 
 	@Override
-	public ObjMaskCollection create() throws CreateException {
-		
-		ObjMaskCollection objsSource = getObjs().create();
+	public ObjMaskCollection createFromObjs( ObjMaskCollection objsSource ) throws CreateException {
 		
 		try {
 			Merger merger = new Merger(

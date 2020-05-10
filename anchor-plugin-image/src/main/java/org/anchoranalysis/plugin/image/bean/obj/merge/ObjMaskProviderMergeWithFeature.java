@@ -68,9 +68,7 @@ public abstract class ObjMaskProviderMergeWithFeature extends ObjMaskProviderMer
 	// END BEAN PROPERTIES
 		
 	@Override
-	public ObjMaskCollection create() throws CreateException {
-		
-		ObjMaskCollection objsSource = getObjs().create();
+	public ObjMaskCollection createFromObjs(ObjMaskCollection objsSource) throws CreateException {
 		
 		ObjMaskCollection saveObjs = objsSave !=null ? objsSave.create() : null;
 		if (saveObjs!=null) {
