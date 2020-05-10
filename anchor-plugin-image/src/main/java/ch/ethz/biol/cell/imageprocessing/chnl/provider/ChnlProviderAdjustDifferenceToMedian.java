@@ -53,7 +53,7 @@ public class ChnlProviderAdjustDifferenceToMedian extends ChnlProviderOne {
 
 	// START BEAN PROPERTIES
 	@BeanField
-	private ChnlProvider chnlProviderLookup;
+	private ChnlProvider chnlLookup;
 	
 	@BeanField
 	private ObjMaskProvider objs;
@@ -62,19 +62,15 @@ public class ChnlProviderAdjustDifferenceToMedian extends ChnlProviderOne {
 	@Override
 	public Chnl createFromChnl( Chnl chnl ) throws CreateException {
 
-		Chnl chnlLookup = chnlProviderLookup.create();
-		
-		if (!chnl.getDimensions().equals(chnlLookup.getDimensions())) {
-			throw new CreateException("chnl and chnlLookup do not have the same dimensions");
-		}
+		Chnl lookup = DimChecker.createSameSize(chnlLookup, "chnlLookup", chnl);
 		
 		ObjMaskCollection objsCollection = objs.create();
 		
 		try {
 			for( ObjMask om : objsCollection ) {
-				Histogram h = HistogramFactoryUtilities.createWithMask(chnlLookup.getVoxelBox().any(), om);
+				Histogram h = HistogramFactoryUtilities.createWithMask(lookup.getVoxelBox().any(), om);
 				int objMedian = (int) Math.round(h.mean());
-				adjustObj(om, chnl, chnlLookup, objMedian );
+				adjustObj(om, chnl, lookup, objMedian );
 	
 			}
 			
@@ -124,16 +120,6 @@ public class ChnlProviderAdjustDifferenceToMedian extends ChnlProviderOne {
 		}
 	}
 
-	public ChnlProvider getChnlProviderLookup() {
-		return chnlProviderLookup;
-	}
-
-
-	public void setChnlProviderLookup(ChnlProvider chnlProviderLookup) {
-		this.chnlProviderLookup = chnlProviderLookup;
-	}
-
-
 	public ObjMaskProvider getObjs() {
 		return objs;
 	}
@@ -141,6 +127,14 @@ public class ChnlProviderAdjustDifferenceToMedian extends ChnlProviderOne {
 
 	public void setObjs(ObjMaskProvider objs) {
 		this.objs = objs;
+	}
+
+	public ChnlProvider getChnlLookup() {
+		return chnlLookup;
+	}
+
+	public void setChnlLookup(ChnlProvider chnlLookup) {
+		this.chnlLookup = chnlLookup;
 	}
 
 }

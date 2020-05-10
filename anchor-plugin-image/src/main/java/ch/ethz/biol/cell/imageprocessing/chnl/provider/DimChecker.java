@@ -27,20 +27,42 @@ package ch.ethz.biol.cell.imageprocessing.chnl.provider;
  */
 
 import org.anchoranalysis.core.error.CreateException;
+import org.anchoranalysis.image.bean.provider.ChnlProvider;
 import org.anchoranalysis.image.binary.BinaryChnl;
 import org.anchoranalysis.image.chnl.Chnl;
 
-class AssignUtilities {
+public class DimChecker {
 	
-	public static void checkDims(Chnl chnl, BinaryChnl mask) throws CreateException {
+	public static void check(Chnl chnl, BinaryChnl mask) throws CreateException {
 		if (!chnl.getDimensions().equals(mask.getDimensions())) {
 			throw new CreateException( String.format("chnl (%s) and mask (%s) must have the same dimensions", chnl.getDimensions().toString(), mask.getDimensions().toString() ) );
 		}
 	}
 	
-	public static void checkDims(Chnl chnl, Chnl chnlAssignFrom) throws CreateException {
-		if (!chnl.getDimensions().equals(chnlAssignFrom.getDimensions())) {
-			throw new CreateException( String.format("chnlSrc (%s) and chnlAssignFrom (%s) must have the same dimensions", chnl.getDimensions().toString(), chnlAssignFrom.getDimensions().toString() ) );
+	/**
+	 * Creates a new channel from a provider, making sure it's the same size as an an existing channel
+	 * 
+	 * @param provider the provider to to create the channel
+	 * @param providerName a user-meaningful string to identify the provider in error messages
+	 * @param chnlSameSize the channel which it must be the same size as (referred to in error messages as "chnl"
+	 * @return the newly created channel
+	 * @throws CreateException
+	 */
+	public static Chnl createSameSize(ChnlProvider provider, String providerName, Chnl chnlSameSize) throws CreateException {
+		
+		Chnl chnlNew = provider.create();
+		
+		if (!chnlSameSize.getDimensions().equals(chnlNew.getDimensions())) {
+			throw new CreateException(
+				String.format(
+					"chnl (%s) and %s (%s) must have the same dimensions",
+					chnlSameSize.getDimensions().toString(),
+					chnlNew,
+					chnlNew.getDimensions().toString()
+				)
+			);
 		}
+		
+		return chnlNew;
 	}
 }
