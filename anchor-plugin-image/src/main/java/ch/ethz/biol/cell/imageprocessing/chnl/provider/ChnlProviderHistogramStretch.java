@@ -45,30 +45,23 @@ public class ChnlProviderHistogramStretch extends ChnlProviderOne {
 	private double quantile = 1.0;
 	// END BEAN PROPERTIES
 	
-	public static void histogramStretch( Chnl chnl, double quantile ) throws OperationFailedException {
-		
-		//ImgChnl chnl = chnlProvider.create();
+	@Override
+	public Chnl createFromChnl( Chnl chnl ) throws CreateException {
+		try {
+			histogramStretch( chnl, quantile );
+			return chnl;
+		} catch (OperationFailedException e) {
+			throw new CreateException(e);
+		}
+	}
+	
+	private static void histogramStretch( Chnl chnl, double quantile ) throws OperationFailedException {
 		
 		VoxelBox<?> vb = chnl.getVoxelBox().any();
 		
 		Histogram hist = HistogramFactoryUtilities.create(vb);
 		
-//		ContrastEnhancer contrastEnhancer = new ContrastEnhancer();
-//		
-//		ImagePlus imp = ImgStackUtilities.createImagePlus( chnl );
-//		ImageStatistics stats = new StackStatistics(imp);
-//		for( int z=1; z<=imp.getNSlices(); z++) {
-//			ImageProcessor ip = imp.getStack().getProcessor(z);
-//			contrastEnhancer.stretchHistogram( ip, 0, stats);
-//		}
-//		
-//		double rangeMin = imp.getDisplayRangeMin();
-//		double rangeMax = imp.getDisplayRangeMax();
-		
-		
 		double rangeMin = hist.calcMin();
-		//double rangeMax = hist.calcMax();
-		
 		double rangeMax = hist.quantile(quantile);
 		
 		// To avoid a situation where we have a 0 range
@@ -76,7 +69,10 @@ public class ChnlProviderHistogramStretch extends ChnlProviderOne {
 			rangeMax = rangeMin + 1;
 		}
 		
-		//System.out.printf("rangeMin=%f  rangeMax=%f\n", rangeMin, rangeMax );
+		changeVoxels(vb, rangeMin, rangeMax);
+	}
+	
+	private static void changeVoxels(VoxelBox<?> vb, double rangeMin, double rangeMax) {
 		
 		double rangeExtnt = rangeMax-rangeMin;
 		double rangeMult = 255/rangeExtnt;
@@ -108,17 +104,6 @@ public class ChnlProviderHistogramStretch extends ChnlProviderOne {
 		}
 	}
 	
-	
-	@Override
-	public Chnl createFromChnl( Chnl chnl ) throws CreateException {
-		try {
-			histogramStretch( chnl, quantile );
-			return chnl;
-		} catch (OperationFailedException e) {
-			throw new CreateException(e);
-		}
-	}
-
 	public double getQuantile() {
 		return quantile;
 	}

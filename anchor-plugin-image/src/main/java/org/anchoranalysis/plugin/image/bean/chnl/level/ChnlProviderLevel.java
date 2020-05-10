@@ -3,50 +3,36 @@ package org.anchoranalysis.plugin.image.bean.chnl.level;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.bean.provider.ChnlProvider;
+import org.anchoranalysis.image.bean.provider.ChnlProviderOne;
 import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
 import org.anchoranalysis.image.chnl.Chnl;
 import org.anchoranalysis.image.objmask.ObjMaskCollection;
 
-public abstract class ChnlProviderLevel extends ChnlProvider {
+import ch.ethz.biol.cell.imageprocessing.chnl.provider.DimChecker;
+
+public abstract class ChnlProviderLevel extends ChnlProviderOne {
 
 	// START BEAN PROPERTIES
-	@BeanField
-	private ChnlProvider chnlProviderIntensity;
-	
+	/** The input (an intensity channel in the normal way) */
 	@BeanField
 	private ObjMaskProvider objs;
 	
 	@BeanField
-	private ChnlProvider chnlProviderOutput;
+	private ChnlProvider chnlOutput;
 	// END BEAN PROPERTIES
 	
 	@Override
-	public Chnl create() throws CreateException {
+	public Chnl createFromChnl(Chnl chnl) throws CreateException {
+				
 		return createFor(
-			chnlProviderIntensity.create(),
+			chnl,
 			objs.create(),
-			chnlProviderOutput.create()
+			DimChecker.createSameSize(chnlOutput, "chnlOutput", chnl)
 			
 		);
 	}
 	
 	protected abstract Chnl createFor( Chnl chnlIntensity, ObjMaskCollection objs, Chnl chnlOutput ) throws CreateException;
-	
-	public ChnlProvider getChnlProviderOutput() {
-		return chnlProviderOutput;
-	}
-		
-	public void setChnlProviderOutput(ChnlProvider chnlProviderOutput) {
-		this.chnlProviderOutput = chnlProviderOutput;
-	}
-		
-	public ChnlProvider getChnlProviderIntensity() {
-		return chnlProviderIntensity;
-	}
-		
-	public void setChnlProviderIntensity(ChnlProvider chnlProviderIntensity) {
-		this.chnlProviderIntensity = chnlProviderIntensity;
-	}
 	
 	public ObjMaskProvider getObjs() {
 		return objs;
@@ -55,5 +41,13 @@ public abstract class ChnlProviderLevel extends ChnlProvider {
 	
 	public void setObjs(ObjMaskProvider objs) {
 		this.objs = objs;
+	}
+
+	public ChnlProvider getChnlOutput() {
+		return chnlOutput;
+	}
+
+	public void setChnlOutput(ChnlProvider chnlOutput) {
+		this.chnlOutput = chnlOutput;
 	}
 }

@@ -36,37 +36,52 @@ import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.image.objmask.factory.CreateFromEntireChnlFactory;
 
+/**
+ * Copies the pixels from chnlAssignFrom to chnl (possibly masking)
+ * 
+ * <p>chnl is changed (mutable). chnlAssignFrom is unchanged (immutable).</p>.
+ * 
+ * @author Owen Feehan
+ *
+ */
 public class ChnlProviderAssign extends ChnlProviderOneMask {
 
 	// START BEAN PROPERTIES
 	@BeanField
-	private ChnlProvider chnlProviderAssignFrom;
+	private ChnlProvider chnlAssignFrom;
 	// END BEAN PROPERTIES
 	
 	@Override
 	protected Chnl createFromMaskedChnl(Chnl chnlSrc, BinaryChnl binaryImgChnl) throws CreateException {
-
-		Chnl chnlAssignFrom = chnlProviderAssignFrom.create();
-		AssignUtilities.checkDims( chnlSrc, chnlAssignFrom );
-		
-		assign(chnlSrc, chnlAssignFrom, binaryImgChnl);
+				
+		assign(
+			chnlSrc,
+			DimChecker.createSameSize(chnlAssignFrom, "chnlAssignFrom",chnlSrc),
+			binaryImgChnl
+		);
 		
 		return chnlSrc;
 	}
 	
-	private void assign( Chnl chnlSrc, Chnl chnlAssignFrom, BinaryChnl binaryImgChnl) throws CreateException {
-		ObjMask om = CreateFromEntireChnlFactory.createObjMask(binaryImgChnl);
+	private void assign( Chnl chnlSrc, Chnl chnlAssignFrom, BinaryChnl mask) throws CreateException {
 		
+		ObjMask om = CreateFromEntireChnlFactory.createObjMask(mask);
 		BoundingBox bbox = new BoundingBox( chnlSrc.getDimensions().getExtnt() );
 		
-		chnlAssignFrom.getVoxelBox().asByte().copyPixelsToCheckMask(bbox, chnlSrc.getVoxelBox().asByte(), bbox, om.getVoxelBox(), om.getBinaryValuesByte());		
+		chnlAssignFrom.getVoxelBox().asByte().copyPixelsToCheckMask(
+			bbox,
+			chnlSrc.getVoxelBox().asByte(),
+			bbox,
+			om.getVoxelBox(),
+			om.getBinaryValuesByte()
+		);		
 	}
 
-	public ChnlProvider getChnlProviderAssignFrom() {
-		return chnlProviderAssignFrom;
+	public ChnlProvider getChnlAssignFrom() {
+		return chnlAssignFrom;
 	}
 
-	public void setChnlProviderAssignFrom(ChnlProvider chnlProviderAssignFrom) {
-		this.chnlProviderAssignFrom = chnlProviderAssignFrom;
+	public void setChnlAssignFrom(ChnlProvider chnlAssignFrom) {
+		this.chnlAssignFrom = chnlAssignFrom;
 	}
 }

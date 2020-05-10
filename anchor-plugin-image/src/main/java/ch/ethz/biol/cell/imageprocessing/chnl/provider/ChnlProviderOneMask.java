@@ -17,7 +17,7 @@ public abstract class ChnlProviderOneMask extends ChnlProviderOne {
 	@Override
 	public Chnl createFromChnl(Chnl chnl) throws CreateException {
 		BinaryChnl maskChnl = mask.create();
-		AssignUtilities.checkDims(chnl, maskChnl);
+		DimChecker.check(chnl, maskChnl);
 		return createFromMaskedChnl(chnl, maskChnl);
 	}
 	
