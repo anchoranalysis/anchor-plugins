@@ -38,7 +38,7 @@ import ch.ethz.biol.cell.imageprocessing.chnl.provider.level.LevelResultCollecti
 import ch.ethz.biol.cell.imageprocessing.chnl.provider.level.LevelResultCollectionFactory;
 
 // Calculates a threshold-level for each object independently
-public class ChnlProviderObjsLevelIndependently extends ChnlProviderObjsLevelBase {
+public class ChnlProviderObjsLevelIndependently extends ChnlProviderLevel {
 
 	// START BEAN
 	@BeanField
