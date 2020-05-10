@@ -85,17 +85,14 @@ public class ChnlProviderHistogramStretch extends ChnlProviderOne {
 			int offset = 0;
 			for( int y=0; y<e.getY(); y++) {
 				for( int x=0; x<e.getX(); x++) {
-			
-					int val = bb.getInt(offset);
+								
+					double val = (double) bb.getInt(offset);
 					
-					// We apply the strecthing
-					double valD = (double) val;
-					valD = (valD-rangeMin)*rangeMult;
+					int stretched = roundAndClip(
+						(val-rangeMin)*rangeMult
+					); 
 					
-					bb.putInt(
-						offset,
-						roundClip(valD)
-					);
+					bb.putInt(offset, stretched);
 					
 					offset++;
 				}
@@ -104,17 +101,18 @@ public class ChnlProviderHistogramStretch extends ChnlProviderOne {
 	}
 	
 	/** Rounds a value up or down, and clips to ensure its in the range 0..255 inclusive */
-	private static int roundClip( double valD ) {
-		int valNew = (int) Math.round(valD);
+	private static int roundAndClip( double value ) {
 		
-		if (valNew>255) {
+		int rounded = (int) Math.round(value);
+		
+		if (rounded>255) {
 			return 255;
 		}
-		if (valNew<0) {
+		if (rounded<0) {
 			return 0;
 		}
 		
-		return valNew;
+		return rounded;
 	}
 	
 	public double getQuantile() {
