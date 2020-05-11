@@ -32,7 +32,7 @@ import java.nio.ByteBuffer;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.image.bean.provider.BinaryImgChnlProvider;
+import org.anchoranalysis.image.bean.provider.BinaryChnlProvider;
 import org.anchoranalysis.image.bean.provider.ChnlProvider;
 import org.anchoranalysis.image.bean.threshold.Thresholder;
 import org.anchoranalysis.image.binary.BinaryChnl;
@@ -42,7 +42,7 @@ import org.anchoranalysis.image.chnl.Chnl;
 import org.anchoranalysis.image.chnl.factory.ChnlFactory;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
 
-public class BinaryImgChnlProviderThrshld extends BinaryImgChnlProvider {
+public class BinaryImgChnlProviderThrshld extends BinaryChnlProvider {
 
 	// START BEAN
 	@BeanField

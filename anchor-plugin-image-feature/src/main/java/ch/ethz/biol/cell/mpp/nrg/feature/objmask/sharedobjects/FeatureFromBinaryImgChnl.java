@@ -34,7 +34,7 @@ import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.feature.cache.ChildCacheName;
 import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.image.bean.provider.BinaryImgChnlProvider;
+import org.anchoranalysis.image.bean.provider.BinaryChnlProvider;
 import org.anchoranalysis.image.binary.BinaryChnl;
 import org.anchoranalysis.image.feature.bean.objmask.FeatureObjMaskSharedObjects;
 import org.anchoranalysis.image.feature.bean.objmask.pair.FeatureObjMaskPair;
@@ -56,7 +56,7 @@ public class FeatureFromBinaryImgChnl extends FeatureObjMaskSharedObjects {
 	// This cannot be initialized in the normal way, as Feature isn't contained in a Shared-Objects
 	// container. So instead it's initialized at a later point.
 	@BeanField @SkipInit
-	private BinaryImgChnlProvider binaryImgChnlProvider;
+	private BinaryChnlProvider binaryImgChnlProvider;
 	// END BEAN PROPERTIES
 	
 	private BinaryChnl chnl;
@@ -91,11 +91,11 @@ public class FeatureFromBinaryImgChnl extends FeatureObjMaskSharedObjects {
 		this.item = item;
 	}
 
-	public BinaryImgChnlProvider getBinaryImgChnlProvider() {
+	public BinaryChnlProvider getBinaryImgChnlProvider() {
 		return binaryImgChnlProvider;
 	}
 
-	public void setBinaryImgChnlProvider(BinaryImgChnlProvider binaryImgChnlProvider) {
+	public void setBinaryImgChnlProvider(BinaryChnlProvider binaryImgChnlProvider) {
 		this.binaryImgChnlProvider = binaryImgChnlProvider;
 	}
 }

@@ -2,7 +2,7 @@ package ch.ethz.biol.cell.imageprocessing.chnl.provider;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.image.bean.provider.BinaryImgChnlProvider;
+import org.anchoranalysis.image.bean.provider.BinaryChnlProvider;
 import org.anchoranalysis.image.bean.provider.ChnlProvider;
 import org.anchoranalysis.image.binary.BinaryChnl;
 import org.anchoranalysis.image.chnl.Chnl;
@@ -19,7 +19,7 @@ public abstract class ChnlProviderMask extends ChnlProvider {
 
 	// START BEAN PROPERTIES
 	@BeanField
-	private BinaryImgChnlProvider mask;
+	private BinaryChnlProvider mask;
 	// END BEAN PROPERTIES
 	
 	@Override
@@ -30,11 +30,11 @@ public abstract class ChnlProviderMask extends ChnlProvider {
 	
 	protected abstract Chnl createFromMask(BinaryChnl mask) throws CreateException;
 
-	public BinaryImgChnlProvider getMask() {
+	public BinaryChnlProvider getMask() {
 		return mask;
 	}
 
-	public void setMask(BinaryImgChnlProvider mask) {
+	public void setMask(BinaryChnlProvider mask) {
 		this.mask = mask;
 	}
 }

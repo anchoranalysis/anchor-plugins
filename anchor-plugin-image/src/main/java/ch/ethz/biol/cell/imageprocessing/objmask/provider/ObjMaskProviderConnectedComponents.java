@@ -32,7 +32,7 @@ import java.util.Optional;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.image.bean.provider.BinaryImgChnlProvider;
+import org.anchoranalysis.image.bean.provider.BinaryChnlProvider;
 import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
 import org.anchoranalysis.image.bean.unitvalue.areavolume.UnitValueAreaOrVolume;
 import org.anchoranalysis.image.bean.unitvalue.volume.UnitValueVolumeVoxels;
@@ -56,7 +56,7 @@ public class ObjMaskProviderConnectedComponents extends ObjMaskProvider {
 
 	// START BEAN PROPERTIES
 	@BeanField
-	private BinaryImgChnlProvider binaryImgChnlProvider;
+	private BinaryChnlProvider mask;
 	
 	@BeanField
 	private UnitValueAreaOrVolume minVolume = new UnitValueVolumeVoxels(1);
@@ -72,7 +72,7 @@ public class ObjMaskProviderConnectedComponents extends ObjMaskProvider {
 	@Override
 	public ObjMaskCollection create() throws CreateException {
 	
-		BinaryChnl bi = binaryImgChnlProvider.create();
+		BinaryChnl bi = mask.create();
 		
 		StopWatch sw = new StopWatch();
 		sw.start();
@@ -135,14 +135,6 @@ public class ObjMaskProviderConnectedComponents extends ObjMaskProvider {
 		return omc;
 	}
 
-	public BinaryImgChnlProvider getBinaryImgChnlProvider() {
-		return binaryImgChnlProvider;
-	}
-
-	public void setBinaryImgChnlProvider(BinaryImgChnlProvider binaryImgChnlProvider) {
-		this.binaryImgChnlProvider = binaryImgChnlProvider;
-	}
-
 	public UnitValueAreaOrVolume getMinVolume() {
 		return minVolume;
 	}
@@ -165,6 +157,14 @@ public class ObjMaskProviderConnectedComponents extends ObjMaskProvider {
 
 	public void setBigNghb(boolean bigNghb) {
 		this.bigNghb = bigNghb;
+	}
+
+	public BinaryChnlProvider getMask() {
+		return mask;
+	}
+
+	public void setMask(BinaryChnlProvider mask) {
+		this.mask = mask;
 	}
 
 

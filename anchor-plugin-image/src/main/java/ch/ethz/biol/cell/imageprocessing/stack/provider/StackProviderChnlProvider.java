@@ -33,7 +33,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.bean.error.BeanMisconfiguredException;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.image.bean.provider.BinaryImgChnlProvider;
+import org.anchoranalysis.image.bean.provider.BinaryChnlProvider;
 import org.anchoranalysis.image.bean.provider.ChnlProvider;
 import org.anchoranalysis.image.bean.provider.stack.StackProvider;
 import org.anchoranalysis.image.stack.Stack;
@@ -42,10 +42,10 @@ public class StackProviderChnlProvider extends StackProvider {
 
 	// START BEAN PROPERTIES
 	@BeanField @OptionalBean
-	private ChnlProvider chnlProvider;
+	private ChnlProvider chnl;
 	
 	@BeanField @OptionalBean
-	private BinaryImgChnlProvider binaryImgChnlProvider;
+	private BinaryChnlProvider binaryImgChnlProvider;
 	// END BEAN PROPERTIES
 
 	public StackProviderChnlProvider() {
@@ -53,14 +53,14 @@ public class StackProviderChnlProvider extends StackProvider {
 	}
 	
 	public StackProviderChnlProvider( ChnlProvider chnlProvider ) {
-		this.chnlProvider = chnlProvider;
+		this.chnl = chnlProvider;
 	}
 	
 	@Override
 	public void checkMisconfigured( BeanInstanceMap defaultInstances ) throws BeanMisconfiguredException {
 		super.checkMisconfigured( defaultInstances );
 		
-		if (!(chnlProvider!=null ^ binaryImgChnlProvider!=null)) {
+		if (!(chnl!=null ^ binaryImgChnlProvider!=null)) {
 			throw new BeanMisconfiguredException( String.format("Either '%s' or '%s' must be non-null", "chnlProvider", "binaryImgChnlProvider") );
 		}
 	}	
@@ -68,26 +68,26 @@ public class StackProviderChnlProvider extends StackProvider {
 	@Override
 	public Stack create() throws CreateException {
 		
-		if (chnlProvider!=null) {
-			return new Stack( chnlProvider.create() );
+		if (chnl!=null) {
+			return new Stack( chnl.create() );
 		} else {
 			return new Stack( binaryImgChnlProvider.create().getChnl() );
 		}
 	}
-
-	public ChnlProvider getChnlProvider() {
-		return chnlProvider;
-	}
-
-	public void setChnlProvider(ChnlProvider chnlProvider) {
-		this.chnlProvider = chnlProvider;
-	}
-
-	public BinaryImgChnlProvider getBinaryImgChnlProvider() {
+	
+	public BinaryChnlProvider getBinaryImgChnlProvider() {
 		return binaryImgChnlProvider;
 	}
 
-	public void setBinaryImgChnlProvider(BinaryImgChnlProvider binaryImgChnlProvider) {
+	public void setBinaryImgChnlProvider(BinaryChnlProvider binaryImgChnlProvider) {
 		this.binaryImgChnlProvider = binaryImgChnlProvider;
+	}
+
+	public ChnlProvider getChnl() {
+		return chnl;
+	}
+
+	public void setChnl(ChnlProvider chnl) {
+		this.chnl = chnl;
 	}
 }

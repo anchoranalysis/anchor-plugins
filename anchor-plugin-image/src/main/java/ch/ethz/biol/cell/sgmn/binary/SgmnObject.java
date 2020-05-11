@@ -28,7 +28,6 @@ package ch.ethz.biol.cell.sgmn.binary;
 
 
 import java.nio.ByteBuffer;
-
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.Positive;
 import org.anchoranalysis.core.error.CreateException;
@@ -150,10 +149,4 @@ public class SgmnObject extends BinarySgmn {
 	public void setMinNumPixelsImageSgmn(int minNumPixelsImageSgmn) {
 		this.minNumPixelsImageSgmn = minNumPixelsImageSgmn;
 	}
-
-	@Override
-	public VoxelBox<ByteBuffer> getAdditionalOutput() {
-		return imageSgmn.getAdditionalOutput();
-	}
-
 }

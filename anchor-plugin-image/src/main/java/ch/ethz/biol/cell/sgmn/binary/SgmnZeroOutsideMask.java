@@ -28,7 +28,6 @@ package ch.ethz.biol.cell.sgmn.binary;
 
 
 import java.nio.ByteBuffer;
-
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.bean.sgmn.binary.BinarySgmn;
 import org.anchoranalysis.image.bean.sgmn.binary.BinarySgmnOne;
@@ -75,10 +74,5 @@ public class SgmnZeroOutsideMask extends BinarySgmnOne {
 		);
 		
 		return sgmn.sgmn( new VoxelBoxWrapper(destBuffer.duplicate()), params );
-	}
-
-	@Override
-	public VoxelBox<ByteBuffer> getAdditionalOutput() {
-		return null;
 	}
 }

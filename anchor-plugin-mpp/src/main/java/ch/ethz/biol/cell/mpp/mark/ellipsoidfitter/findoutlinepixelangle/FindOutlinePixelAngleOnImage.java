@@ -36,7 +36,7 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.geometry.Point3d;
-import org.anchoranalysis.image.bean.provider.BinaryImgChnlProvider;
+import org.anchoranalysis.image.bean.provider.BinaryChnlProvider;
 import org.anchoranalysis.image.bean.unitvalue.distance.UnitValueDistance;
 import org.anchoranalysis.image.binary.BinaryChnl;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
@@ -50,7 +50,7 @@ public class FindOutlinePixelAngleOnImage extends FindOutlinePixelAngle {
 
 	// START BEANS
 	@BeanField
-	private BinaryImgChnlProvider binaryImgChnlProvider;
+	private BinaryChnlProvider binaryImgChnlProvider;
 	
 	@BeanField @OptionalBean
 	private UnitValueDistance maxDistance;
@@ -178,11 +178,11 @@ public class FindOutlinePixelAngleOnImage extends FindOutlinePixelAngle {
 		
 	}
 
-	public BinaryImgChnlProvider getBinaryImgChnlProvider() {
+	public BinaryChnlProvider getBinaryImgChnlProvider() {
 		return binaryImgChnlProvider;
 	}
 
-	public void setBinaryImgChnlProvider(BinaryImgChnlProvider binaryImgChnlProvider) {
+	public void setBinaryImgChnlProvider(BinaryChnlProvider binaryImgChnlProvider) {
 		this.binaryImgChnlProvider = binaryImgChnlProvider;
 	}
 

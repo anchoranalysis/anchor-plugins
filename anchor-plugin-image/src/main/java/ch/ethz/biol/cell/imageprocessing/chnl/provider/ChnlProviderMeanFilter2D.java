@@ -33,7 +33,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.geometry.Point3i;
-import org.anchoranalysis.image.bean.provider.BinaryImgChnlProvider;
+import org.anchoranalysis.image.bean.provider.BinaryChnlProvider;
 import org.anchoranalysis.image.bean.provider.ChnlProviderOne;
 import org.anchoranalysis.image.binary.BinaryChnl;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
@@ -50,10 +50,10 @@ public class ChnlProviderMeanFilter2D extends ChnlProviderOne {
 
 	// START BEAN PROPERTIES
 	@BeanField @OptionalBean
-	private BinaryImgChnlProvider binaryImgChnlProviderMaskInput;		// A mask on which voxels are considered when calculating the filter
+	private BinaryChnlProvider binaryImgChnlProviderMaskInput;		// A mask on which voxels are considered when calculating the filter
 	
 	@BeanField @OptionalBean
-	private BinaryImgChnlProvider binaryImgChnlProviderMaskOutput;		// A mask on which voxels are outputted with a filter value
+	private BinaryChnlProvider binaryImgChnlProviderMaskOutput;		// A mask on which voxels are outputted with a filter value
 	
 	@BeanField
 	private int radius = 3;	// Should be odd
@@ -267,21 +267,21 @@ public class ChnlProviderMeanFilter2D extends ChnlProviderOne {
 	}
 
 
-	public BinaryImgChnlProvider getBinaryImgChnlProviderMaskOutput() {
+	public BinaryChnlProvider getBinaryImgChnlProviderMaskOutput() {
 		return binaryImgChnlProviderMaskOutput;
 	}
 
 	public void setBinaryImgChnlProviderMaskOutput(
-			BinaryImgChnlProvider binaryImgChnlProviderMaskOutput) {
+			BinaryChnlProvider binaryImgChnlProviderMaskOutput) {
 		this.binaryImgChnlProviderMaskOutput = binaryImgChnlProviderMaskOutput;
 	}
 
-	public BinaryImgChnlProvider getBinaryImgChnlProviderMaskInput() {
+	public BinaryChnlProvider getBinaryImgChnlProviderMaskInput() {
 		return binaryImgChnlProviderMaskInput;
 	}
 
 	public void setBinaryImgChnlProviderMaskInput(
-			BinaryImgChnlProvider binaryImgChnlProviderMaskInput) {
+			BinaryChnlProvider binaryImgChnlProviderMaskInput) {
 		this.binaryImgChnlProviderMaskInput = binaryImgChnlProviderMaskInput;
 	}
 

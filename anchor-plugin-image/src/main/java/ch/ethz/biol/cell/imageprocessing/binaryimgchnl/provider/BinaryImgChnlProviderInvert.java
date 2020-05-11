@@ -28,11 +28,13 @@ package ch.ethz.biol.cell.imageprocessing.binaryimgchnl.provider;
 
 
 import java.nio.ByteBuffer;
+import java.util.Optional;
 
+import org.anchoranalysis.bean.ProviderNullableCreator;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.image.bean.provider.BinaryImgChnlProvider;
+import org.anchoranalysis.image.bean.provider.BinaryChnlProvider;
 import org.anchoranalysis.image.bean.provider.BinaryImgChnlProviderOne;
 import org.anchoranalysis.image.binary.BinaryChnl;
 import org.anchoranalysis.image.binary.BinaryChnlInverter;
@@ -46,7 +48,7 @@ public class BinaryImgChnlProviderInvert extends BinaryImgChnlProviderOne {
 
 	// START BEAN FIELDS
 	@BeanField @OptionalBean
-	private BinaryImgChnlProvider binaryImgChnlProviderMask;
+	private BinaryChnlProvider binaryImgChnlProviderMask;
 	
 	@BeanField
 	private boolean forceChangeBytes = false;
@@ -55,8 +57,10 @@ public class BinaryImgChnlProviderInvert extends BinaryImgChnlProviderOne {
 	@Override
 	public BinaryChnl createFromChnl( BinaryChnl chnl ) throws CreateException {
 		
-		if (binaryImgChnlProviderMask!=null) {
-			invertWithMask(chnl, binaryImgChnlProviderMask.create());
+		Optional<BinaryChnl> maskChnl = ProviderNullableCreator.createOptional(binaryImgChnlProviderMask);
+		
+		if (maskChnl.isPresent()) {
+			invertWithMask(chnl, maskChnl.get());
 			return chnl;
 		}
 		
@@ -112,12 +116,12 @@ public class BinaryImgChnlProviderInvert extends BinaryImgChnlProviderOne {
 		this.forceChangeBytes = forceChangeBytes;
 	}
 
-	public BinaryImgChnlProvider getBinaryImgChnlProviderMask() {
+	public BinaryChnlProvider getBinaryImgChnlProviderMask() {
 		return binaryImgChnlProviderMask;
 	}
 
 	public void setBinaryImgChnlProviderMask(
-			BinaryImgChnlProvider binaryImgChnlProviderMask) {
+			BinaryChnlProvider binaryImgChnlProviderMask) {
 		this.binaryImgChnlProviderMask = binaryImgChnlProviderMask;
 	}
 }

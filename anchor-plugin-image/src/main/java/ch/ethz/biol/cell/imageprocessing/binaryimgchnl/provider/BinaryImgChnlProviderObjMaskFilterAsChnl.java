@@ -33,7 +33,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.bean.objmask.filter.ObjMaskFilter;
-import org.anchoranalysis.image.bean.provider.BinaryImgChnlProvider;
+import org.anchoranalysis.image.bean.provider.BinaryChnlProvider;
 import org.anchoranalysis.image.bean.provider.BinaryImgChnlProviderOne;
 import org.anchoranalysis.image.binary.BinaryChnl;
 import org.anchoranalysis.image.objmask.ObjMask;
@@ -45,7 +45,7 @@ public class BinaryImgChnlProviderObjMaskFilterAsChnl extends BinaryImgChnlProvi
 
 	// START BEAN PROPERTIES
 	@BeanField
-	private BinaryImgChnlProvider binaryImgChnlProviderElse;
+	private BinaryChnlProvider binaryImgChnlProviderElse;
 	
 	@BeanField
 	private ObjMaskFilter objMaskFilter;
@@ -75,12 +75,12 @@ public class BinaryImgChnlProviderObjMaskFilterAsChnl extends BinaryImgChnlProvi
 		}
 	}
 
-	public BinaryImgChnlProvider getBinaryImgChnlProviderElse() {
+	public BinaryChnlProvider getBinaryImgChnlProviderElse() {
 		return binaryImgChnlProviderElse;
 	}
 
 	public void setBinaryImgChnlProviderElse(
-			BinaryImgChnlProvider binaryImgChnlProviderElse) {
+			BinaryChnlProvider binaryImgChnlProviderElse) {
 		this.binaryImgChnlProviderElse = binaryImgChnlProviderElse;
 	}
 

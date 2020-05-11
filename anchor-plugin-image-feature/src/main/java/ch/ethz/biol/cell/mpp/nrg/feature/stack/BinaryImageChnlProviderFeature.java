@@ -35,7 +35,7 @@ import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.cache.ChildCacheName;
 import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.image.bean.provider.BinaryImgChnlProvider;
+import org.anchoranalysis.image.bean.provider.BinaryChnlProvider;
 import org.anchoranalysis.image.binary.BinaryChnl;
 import org.anchoranalysis.image.feature.init.FeatureInitParamsSharedObjs;
 import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
@@ -50,7 +50,7 @@ public class BinaryImageChnlProviderFeature extends FeatureStackSharedObjects {
 	
 	@BeanField
 	@SkipInit
-	private BinaryImgChnlProvider binaryImgChnlProvider;
+	private BinaryChnlProvider binaryImgChnlProvider;
 	// END BEAN PROPERTIES
 	
 	private BinaryChnl chnl;
@@ -87,11 +87,11 @@ public class BinaryImageChnlProviderFeature extends FeatureStackSharedObjects {
 		this.item = item;
 	}
 
-	public BinaryImgChnlProvider getBinaryImgChnlProvider() {
+	public BinaryChnlProvider getBinaryImgChnlProvider() {
 		return binaryImgChnlProvider;
 	}
 
-	public void setBinaryImgChnlProvider(BinaryImgChnlProvider binaryImgChnlProvider) {
+	public void setBinaryImgChnlProvider(BinaryChnlProvider binaryImgChnlProvider) {
 		this.binaryImgChnlProvider = binaryImgChnlProvider;
 	}
 }

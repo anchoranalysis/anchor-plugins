@@ -36,7 +36,7 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OptionalOperationUnsupportedException;
 import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.core.random.RandomNumberGenerator;
-import org.anchoranalysis.image.bean.provider.BinaryImgChnlProvider;
+import org.anchoranalysis.image.bean.provider.BinaryChnlProvider;
 import org.anchoranalysis.image.binary.BinaryChnl;
 import org.anchoranalysis.image.extent.ImageDim;
 
@@ -44,7 +44,7 @@ public class ProbMapProviderDerivedPointContainer extends ProbMapProvider {
 
 	// START BEAN PARAMETERS
 	@BeanField
-	private BinaryImgChnlProvider binaryImgChnlProvider;
+	private BinaryChnlProvider binaryImgChnlProvider;
 	
 	@BeanField
 	private UpdatablePointsContainer pointContainer;
@@ -78,11 +78,11 @@ public class ProbMapProviderDerivedPointContainer extends ProbMapProvider {
 		return getBeanName();
 	}
 
-	public BinaryImgChnlProvider getBinaryImgChnlProvider() {
+	public BinaryChnlProvider getBinaryImgChnlProvider() {
 		return binaryImgChnlProvider;
 	}
 
-	public void setBinaryImgChnlProvider(BinaryImgChnlProvider binaryImgChnlProvider) {
+	public void setBinaryImgChnlProvider(BinaryChnlProvider binaryImgChnlProvider) {
 		this.binaryImgChnlProvider = binaryImgChnlProvider;
 	}
 

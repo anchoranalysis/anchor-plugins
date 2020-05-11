@@ -34,7 +34,7 @@ import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.image.bean.provider.BinaryImgChnlProvider;
+import org.anchoranalysis.image.bean.provider.BinaryChnlProvider;
 import org.anchoranalysis.image.bean.provider.ChnlProvider;
 import org.anchoranalysis.image.binary.BinaryChnl;
 import org.anchoranalysis.image.chnl.Chnl;
@@ -50,7 +50,7 @@ public class StackProviderOutlineRGB extends StackProviderWithBackground {
 
 	// START BEAN PROPERTIES
 	@BeanField
-	private BinaryImgChnlProvider binaryImgChnlProviderMask;
+	private BinaryChnlProvider binaryImgChnlProviderMask;
 	
 	@BeanField @OptionalBean
 	private ChnlProvider chnlProviderBlue;
@@ -137,11 +137,11 @@ public class StackProviderOutlineRGB extends StackProviderWithBackground {
 		this.mip = mip;
 	}
 
-	public BinaryImgChnlProvider getBinaryImgChnlProviderMask() {
+	public BinaryChnlProvider getBinaryImgChnlProviderMask() {
 		return binaryImgChnlProviderMask;
 	}
 
-	public void setBinaryImgChnlProviderMask(BinaryImgChnlProvider chnlProviderMask) {
+	public void setBinaryImgChnlProviderMask(BinaryChnlProvider chnlProviderMask) {
 		this.binaryImgChnlProviderMask = chnlProviderMask;
 	}
 

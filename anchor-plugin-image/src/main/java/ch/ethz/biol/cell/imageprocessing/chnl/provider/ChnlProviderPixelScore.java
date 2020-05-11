@@ -37,7 +37,7 @@ import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.bean.shared.params.keyvalue.KeyValueParamsProvider;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.params.KeyValueParams;
-import org.anchoranalysis.image.bean.provider.BinaryImgChnlProvider;
+import org.anchoranalysis.image.bean.provider.BinaryChnlProvider;
 import org.anchoranalysis.image.bean.provider.ChnlProvider;
 import org.anchoranalysis.image.bean.provider.HistogramProvider;
 import org.anchoranalysis.image.binary.BinaryChnl;
@@ -65,7 +65,7 @@ public class ChnlProviderPixelScore extends ChnlProvider {
 	
 	// We don't use {@link ChnlProiderMask} as here it's optional.
 	@BeanField @OptionalBean
-	private BinaryImgChnlProvider mask;
+	private BinaryChnlProvider mask;
 	
 	@BeanField
 	private PixelScore pixelScore;
@@ -204,12 +204,12 @@ public class ChnlProviderPixelScore extends ChnlProvider {
 	}
 
 
-	public BinaryImgChnlProvider getMask() {
+	public BinaryChnlProvider getMask() {
 		return mask;
 	}
 
 
-	public void setMask(BinaryImgChnlProvider mask) {
+	public void setMask(BinaryChnlProvider mask) {
 		this.mask = mask;
 	}
 }

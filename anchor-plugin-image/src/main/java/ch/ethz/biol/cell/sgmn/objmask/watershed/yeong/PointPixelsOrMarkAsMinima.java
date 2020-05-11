@@ -42,6 +42,99 @@ import ch.ethz.biol.cell.sgmn.objmask.watershed.encoding.SteepestCalc;
 
 class PointPixelsOrMarkAsMinima {
 	
+	// MinimaStore is optional. Set to null if not desired
+	public void doForMask( VoxelBox<?> vbImg, EncodedVoxelBox matS, ObjMask om, MinimaStore minimaStore ) {
+		
+		Extent e = vbImg.extnt();
+		
+		SlidingBuffer<?> rbb = new SlidingBuffer<>( vbImg );
+
+		
+		boolean do3D = e.getZ()>1;
+		
+		FindEqualVoxels findEqualVoxels = new FindEqualVoxels( vbImg, matS, do3D, om );
+		SteepestCalc steepestCalc = new SteepestCalc(rbb,matS.getEncoding(), do3D ,true, om);
+		
+		Point3i crnrMin = om.getBoundingBox().getCrnrMin();
+	
+		byte maskOn = om.getBinaryValuesByte().getOnByte();
+		
+		Extent eObjMask = om.getVoxelBox().extnt();
+		
+		rbb.init(crnrMin.getZ());
+
+		
+		for (int z=0; z<eObjMask.getZ(); z++) {
+		
+			int z1 = z+crnrMin.getZ();
+			EncodedIntBuffer bbS = matS.getPixelsForPlane(z1);
+			
+			ByteBuffer bbOM = om.getVoxelBox().getPixelsForPlane(z).buffer();
+	
+			for (int y=0; y<eObjMask.getY(); y++) {
+				for (int x=0; x<eObjMask.getX(); x++) {
+			
+					int offsetObjMask = eObjMask.offset(x, y);
+
+					if (bbOM.get(offsetObjMask)==maskOn) {
+
+						int x1 = x+crnrMin.getX();
+						int y1 = y+crnrMin.getY();
+						
+						int indxBuffer = e.offset(x1, y1);
+						
+						if (bbS.isUnvisited(indxBuffer)) {
+							visitPixelMask( indxBuffer, x1, y1, z1, steepestCalc, bbS, matS, rbb, findEqualVoxels, do3D, om, minimaStore );
+						}
+					}
+				}
+			}
+			
+			// FIRST STEP
+			
+			
+			rbb.shift();
+		}
+	}
+
+	
+	public void doForAll( VoxelBoxWrapper vbImg, EncodedVoxelBox matS, MinimaStore minimaStore) {
+		
+		Extent e = vbImg.any().extnt();
+		
+		SlidingBuffer<?> rbb = new SlidingBuffer<>( vbImg.any() );
+		rbb.init();
+		
+		boolean do3D = e.getZ()>1;
+		
+		FindEqualVoxels findEqualVoxels = new FindEqualVoxels( vbImg.any(), matS, do3D );
+		SteepestCalc steepestCalc = new SteepestCalc(rbb,matS.getEncoding(), do3D ,true);
+		
+		for (int z=0; z<e.getZ(); z++) {
+		
+			// FIRST STEP
+			
+			EncodedIntBuffer bbS = matS.getPixelsForPlane(z);
+
+			int indxBuffer = 0;
+			
+			for (int y=0; y<e.getY(); y++) {
+				for (int x=0; x<e.getX(); x++) {
+					
+					if (bbS.isUnvisited(indxBuffer)) {
+						visitPixel( indxBuffer, x, y, z, steepestCalc, bbS, matS, rbb, findEqualVoxels, do3D, minimaStore );
+					}
+
+					indxBuffer++;
+				}
+			}
+			
+			rbb.shift();
+		}
+	}
+	
+	
+	
 	private void visitPixel( int indxBuffer, int x, int y, int z, SteepestCalc steepestCalc,
 		EncodedIntBuffer bbS, EncodedVoxelBox matS, SlidingBuffer<?> rbb, FindEqualVoxels findEqualVoxels, boolean do3D, MinimaStore minimaStore )
 	{
@@ -100,105 +193,5 @@ class PointPixelsOrMarkAsMinima {
 			// Record steepest
 			bbS.putCode(indxBuffer,chainCode);
 		}
-	}
-	
-	
-	// MinimaStore is optional. Set to null if not desired
-	public void doForMask( VoxelBox<?> vbImg, EncodedVoxelBox matS, ObjMask om, MinimaStore minimaStore ) {
-		
-		Extent e = vbImg.extnt();
-		
-		SlidingBuffer<?> rbb = new SlidingBuffer<>( vbImg );
-
-		
-		boolean do3D = e.getZ()>1;
-		
-		FindEqualVoxels findEqualVoxels = new FindEqualVoxels( vbImg, matS, do3D, om );
-		SteepestCalc steepestCalc = new SteepestCalc(rbb,matS.getEncoding(), do3D ,true, om);
-		
-		Point3i crnrMin = om.getBoundingBox().getCrnrMin();
-		//Point3i crnrMax = om.getBoundingBox().calcCrnrMax();
-		
-		byte maskOn = om.getBinaryValuesByte().getOnByte();
-		
-		Extent eObjMask = om.getVoxelBox().extnt();
-
-		
-		
-		rbb.init(crnrMin.getZ());
-		
-
-		
-		for (int z=0; z<eObjMask.getZ(); z++) {
-		
-			int z1 = z+crnrMin.getZ();
-			EncodedIntBuffer bbS = matS.getPixelsForPlane(z1);
-			
-			ByteBuffer bbOM = om.getVoxelBox().getPixelsForPlane(z).buffer();
-	
-			for (int y=0; y<eObjMask.getY(); y++) {
-				for (int x=0; x<eObjMask.getX(); x++) {
-			
-					int offsetObjMask = eObjMask.offset(x, y);
-
-					if (bbOM.get(offsetObjMask)==maskOn) {
-
-						int x1 = x+crnrMin.getX();
-						int y1 = y+crnrMin.getY();
-						
-						int indxBuffer = e.offset(x1, y1);
-						
-						if (bbS.isUnvisited(indxBuffer)) {
-							visitPixelMask( indxBuffer, x1, y1, z1, steepestCalc, bbS, matS, rbb, findEqualVoxels, do3D, om, minimaStore );
-						}
-					}
-				}
-			}
-			
-			// FIRST STEP
-			
-			
-			rbb.shift();
-		}
-		
-		//assert( !matS.hasTemporary() );
-	}
-
-	
-	public void doForAll( VoxelBoxWrapper vbImg, EncodedVoxelBox matS, MinimaStore minimaStore) {
-		
-		Extent e = vbImg.any().extnt();
-		
-		SlidingBuffer<?> rbb = new SlidingBuffer<>( vbImg.any() );
-		rbb.init();
-		
-		boolean do3D = e.getZ()>1;
-		
-		FindEqualVoxels findEqualVoxels = new FindEqualVoxels( vbImg.any(), matS, do3D );
-		SteepestCalc steepestCalc = new SteepestCalc(rbb,matS.getEncoding(), do3D ,true);
-		
-		for (int z=0; z<e.getZ(); z++) {
-		
-			// FIRST STEP
-			
-			EncodedIntBuffer bbS = matS.getPixelsForPlane(z);
-
-			int indxBuffer = 0;
-			
-			for (int y=0; y<e.getY(); y++) {
-				for (int x=0; x<e.getX(); x++) {
-					
-					if (bbS.isUnvisited(indxBuffer)) {
-						visitPixel( indxBuffer, x, y, z, steepestCalc, bbS, matS, rbb, findEqualVoxels, do3D, minimaStore );
-					}
-
-					indxBuffer++;
-				}
-			}
-			
-			rbb.shift();
-		}
-		
-		//assert( !matS.hasTemporary() );
 	}
 }

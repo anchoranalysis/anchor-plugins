@@ -35,7 +35,7 @@ import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.core.geometry.Tuple3i;
 import org.anchoranalysis.core.random.RandomNumberGenerator;
-import org.anchoranalysis.image.bean.provider.BinaryImgChnlProvider;
+import org.anchoranalysis.image.bean.provider.BinaryChnlProvider;
 import org.anchoranalysis.image.binary.BinaryChnl;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.objmask.ObjMask;
@@ -55,10 +55,10 @@ public class TraverseOutlineOnImage extends OutlinePixelsRetriever {
 	private boolean nghb8 = true;
 	
 	@BeanField
-	private BinaryImgChnlProvider binaryImgChnlProviderOutline;
+	private BinaryChnlProvider binaryImgChnlProviderOutline;
 	
 	@BeanField
-	private BinaryImgChnlProvider binaryImgChnlProviderFilled;
+	private BinaryChnlProvider binaryImgChnlProviderFilled;
 	
 	@BeanField
 	private boolean useZ = true;
@@ -190,21 +190,21 @@ public class TraverseOutlineOnImage extends OutlinePixelsRetriever {
 		this.useZ = useZ;
 	}
 
-	public BinaryImgChnlProvider getBinaryImgChnlProviderOutline() {
+	public BinaryChnlProvider getBinaryImgChnlProviderOutline() {
 		return binaryImgChnlProviderOutline;
 	}
 
 	public void setBinaryImgChnlProviderOutline(
-			BinaryImgChnlProvider binaryImgChnlProviderOutline) {
+			BinaryChnlProvider binaryImgChnlProviderOutline) {
 		this.binaryImgChnlProviderOutline = binaryImgChnlProviderOutline;
 	}
 
-	public BinaryImgChnlProvider getBinaryImgChnlProviderFilled() {
+	public BinaryChnlProvider getBinaryImgChnlProviderFilled() {
 		return binaryImgChnlProviderFilled;
 	}
 
 	public void setBinaryImgChnlProviderFilled(
-			BinaryImgChnlProvider binaryImgChnlProviderFilled) {
+			BinaryChnlProvider binaryImgChnlProviderFilled) {
 		this.binaryImgChnlProviderFilled = binaryImgChnlProviderFilled;
 	}
 }

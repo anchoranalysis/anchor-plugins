@@ -28,7 +28,6 @@ package ch.ethz.biol.cell.sgmn.binary;
 
 
 import java.nio.ByteBuffer;
-
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.geometry.Point3i;
@@ -185,11 +184,6 @@ public class SgmnThrshldAgainstChnl extends BinarySgmn {
 		}
 		
 		return new BinaryVoxelBoxByte( voxelBoxOut, bvb.createInt() );
-	}
-
-	@Override
-	public VoxelBox<ByteBuffer> getAdditionalOutput() {
-		return null;
 	}
 
 	public ChnlProvider getChnlProviderThrshld() {

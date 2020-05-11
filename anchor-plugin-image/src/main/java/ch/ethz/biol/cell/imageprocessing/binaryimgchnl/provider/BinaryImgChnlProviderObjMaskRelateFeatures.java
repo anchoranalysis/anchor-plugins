@@ -35,7 +35,7 @@ import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.calc.FeatureInitParams;
 import org.anchoranalysis.feature.session.FeatureSession;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorSingle;
-import org.anchoranalysis.image.bean.provider.BinaryImgChnlProvider;
+import org.anchoranalysis.image.bean.provider.BinaryChnlProvider;
 import org.anchoranalysis.image.bean.provider.ChnlProvider;
 import org.anchoranalysis.image.binary.BinaryChnl;
 import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
@@ -43,17 +43,17 @@ import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.image.objmask.factory.CreateFromEntireChnlFactory;
 
 // Treats the entire binaryimgchnl as an object, and sees if it passes an ObjMaskFilter
-public class BinaryImgChnlProviderObjMaskRelateFeatures extends BinaryImgChnlProvider {
+public class BinaryImgChnlProviderObjMaskRelateFeatures extends BinaryChnlProvider {
 
 	// START BEAN PROPERTIES
 	@BeanField
-	private BinaryImgChnlProvider binaryImgChnlProviderMain;
+	private BinaryChnlProvider binaryImgChnlProviderMain;
 	
 	@BeanField
-	private BinaryImgChnlProvider binaryImgChnlProviderCompareTo;
+	private BinaryChnlProvider binaryImgChnlProviderCompareTo;
 	
 	@BeanField
-	private BinaryImgChnlProvider binaryImgChnlProviderElse;
+	private BinaryChnlProvider binaryImgChnlProviderElse;
 	
 	@BeanField
 	private FeatureProvider<FeatureInputSingleObj> featureProvider;
@@ -117,30 +117,30 @@ public class BinaryImgChnlProviderObjMaskRelateFeatures extends BinaryImgChnlPro
 		}
 	}
 
-	public BinaryImgChnlProvider getBinaryImgChnlProviderMain() {
+	public BinaryChnlProvider getBinaryImgChnlProviderMain() {
 		return binaryImgChnlProviderMain;
 	}
 
 	public void setBinaryImgChnlProviderMain(
-			BinaryImgChnlProvider binaryImgChnlProviderMain) {
+			BinaryChnlProvider binaryImgChnlProviderMain) {
 		this.binaryImgChnlProviderMain = binaryImgChnlProviderMain;
 	}
 
-	public BinaryImgChnlProvider getBinaryImgChnlProviderCompareTo() {
+	public BinaryChnlProvider getBinaryImgChnlProviderCompareTo() {
 		return binaryImgChnlProviderCompareTo;
 	}
 
 	public void setBinaryImgChnlProviderCompareTo(
-			BinaryImgChnlProvider binaryImgChnlProviderCompareTo) {
+			BinaryChnlProvider binaryImgChnlProviderCompareTo) {
 		this.binaryImgChnlProviderCompareTo = binaryImgChnlProviderCompareTo;
 	}
 
-	public BinaryImgChnlProvider getBinaryImgChnlProviderElse() {
+	public BinaryChnlProvider getBinaryImgChnlProviderElse() {
 		return binaryImgChnlProviderElse;
 	}
 
 	public void setBinaryImgChnlProviderElse(
-			BinaryImgChnlProvider binaryImgChnlProviderElse) {
+			BinaryChnlProvider binaryImgChnlProviderElse) {
 		this.binaryImgChnlProviderElse = binaryImgChnlProviderElse;
 	}
 

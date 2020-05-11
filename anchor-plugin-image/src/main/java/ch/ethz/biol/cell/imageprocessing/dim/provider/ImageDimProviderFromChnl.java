@@ -53,16 +53,16 @@ public class ImageDimProviderFromChnl extends ImageDimProvider {
 	private String id = "";
 	
 	@BeanField @OptionalBean
-	private ChnlProvider chnlProvider;
+	private ChnlProvider chnl;
 	// END BEAN PROPERTIES
 	
 	@Override
 	public void onInit(ImageInitParams so) throws InitException {
 		super.onInit(so);
-		if (id.isEmpty() && chnlProvider==null) {
+		if (id.isEmpty() && chnl==null) {
 			throw new InitException("One of either chnlProvider or id must be set");
 		}
-		if (!id.isEmpty() && chnlProvider!=null) {
+		if (!id.isEmpty() && chnl!=null) {
 			throw new InitException("Only one -not both- of chnlProvider and id should be set");
 		}
 	}
@@ -78,7 +78,7 @@ public class ImageDimProviderFromChnl extends ImageDimProvider {
 			return selectChnlForId(id);
 		}
 		
-		return chnlProvider.create();
+		return chnl.create();
 	}
 	
 	private Chnl selectChnlForId( String id ) throws CreateException {
@@ -105,20 +105,20 @@ public class ImageDimProviderFromChnl extends ImageDimProvider {
 		}
 	}
 
-	public ChnlProvider getChnlProvider() {
-		return chnlProvider;
-	}
-
-	public void setChnlProvider(ChnlProvider chnlProvider) {
-		this.chnlProvider = chnlProvider;
-	}
-
 	public String getId() {
 		return id;
 	}
 
 	public void setId(String id) {
 		this.id = id;
+	}
+
+	public ChnlProvider getChnl() {
+		return chnl;
+	}
+
+	public void setChnl(ChnlProvider chnl) {
+		this.chnl = chnl;
 	}
 
 }

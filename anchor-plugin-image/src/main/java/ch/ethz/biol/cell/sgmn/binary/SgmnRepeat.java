@@ -28,7 +28,6 @@ package ch.ethz.biol.cell.sgmn.binary;
 
 
 import java.nio.ByteBuffer;
-
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.Positive;
 import org.anchoranalysis.image.bean.sgmn.binary.BinarySgmn;
@@ -38,7 +37,6 @@ import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.image.sgmn.SgmnFailedException;
-import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.anchoranalysis.image.voxel.box.VoxelBoxWrapper;
 
 public class SgmnRepeat extends BinarySgmnOne {
@@ -85,10 +83,5 @@ public class SgmnRepeat extends BinarySgmnOne {
 
 	public void setMaxIter(int maxIter) {
 		this.maxIter = maxIter;
-	}
-
-	@Override
-	public VoxelBox<ByteBuffer> getAdditionalOutput() {
-		return null;
 	}
 }

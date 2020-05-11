@@ -47,7 +47,7 @@ import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.core.random.RandomNumberGenerator;
-import org.anchoranalysis.image.bean.provider.BinaryImgChnlProvider;
+import org.anchoranalysis.image.bean.provider.BinaryChnlProvider;
 import org.anchoranalysis.image.bean.unitvalue.distance.UnitValueDistance;
 import org.anchoranalysis.image.bean.unitvalue.distance.UnitValueDistanceVoxels;
 import org.anchoranalysis.image.binary.BinaryChnl;
@@ -70,10 +70,10 @@ public class XYOrientationExtendToZ extends PointsProposer {
 	private PointsFromOrientationProposer pointsFromOrientationXYProposer;
 	
 	@BeanField
-	private BinaryImgChnlProvider binaryImgChnlProvider;
+	private BinaryChnlProvider binaryImgChnlProvider;
 	
 	@BeanField @OptionalBean
-	private BinaryImgChnlProvider binaryImgChnlProviderFilled;
+	private BinaryChnlProvider binaryImgChnlProviderFilled;
 	
 	@BeanField
 	private ScalarProposer maxDistanceZ;
@@ -177,11 +177,11 @@ public class XYOrientationExtendToZ extends PointsProposer {
 		return orientationXYProposer.isCompatibleWith(testMark);
 	}
 
-	public BinaryImgChnlProvider getBinaryImgChnlProvider() {
+	public BinaryChnlProvider getBinaryImgChnlProvider() {
 		return binaryImgChnlProvider;
 	}
 
-	public void setBinaryImgChnlProvider(BinaryImgChnlProvider binaryImgChnlProvider) {
+	public void setBinaryImgChnlProvider(BinaryChnlProvider binaryImgChnlProvider) {
 		this.binaryImgChnlProvider = binaryImgChnlProvider;
 	}
 
@@ -217,12 +217,12 @@ public class XYOrientationExtendToZ extends PointsProposer {
 		this.maxDistanceZ = maxDistanceZ;
 	}
 
-	public BinaryImgChnlProvider getBinaryImgChnlProviderFilled() {
+	public BinaryChnlProvider getBinaryImgChnlProviderFilled() {
 		return binaryImgChnlProviderFilled;
 	}
 
 	public void setBinaryImgChnlProviderFilled(
-			BinaryImgChnlProvider binaryImgChnlProviderFilled) {
+			BinaryChnlProvider binaryImgChnlProviderFilled) {
 		this.binaryImgChnlProviderFilled = binaryImgChnlProviderFilled;
 	}
 

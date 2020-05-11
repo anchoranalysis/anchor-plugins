@@ -61,7 +61,7 @@ public class ObjMaskFilterFeatureRelationDiscardOutliers extends ObjMaskFilter {
 	private FeatureProvider<FeatureInputSingleObj> featureProvider;
 	
 	@BeanField @OptionalBean
-	private ChnlProvider chnlProvider;
+	private ChnlProvider chnl;
 	
 	@BeanField
 	private double quantile;
@@ -104,9 +104,9 @@ public class ObjMaskFilterFeatureRelationDiscardOutliers extends ObjMaskFilter {
 				throw new OperationFailedException(e);
 			}
 			
-			if (chnlProvider!=null) {
+			if (chnl!=null) {
 				try {
-					nrgStack = new NRGStackWithParams(chnlProvider.create());
+					nrgStack = new NRGStackWithParams(chnl.create());
 				} catch (CreateException e) {
 					throw new OperationFailedException(e);
 				}
@@ -179,13 +179,6 @@ public class ObjMaskFilterFeatureRelationDiscardOutliers extends ObjMaskFilter {
 	public void setFeatureProvider(FeatureProvider<FeatureInputSingleObj> featureProvider) {
 		this.featureProvider = featureProvider;
 	}
-	public ChnlProvider getChnlProvider() {
-		return chnlProvider;
-	}
-
-	public void setChnlProvider(ChnlProvider chnlProvider) {
-		this.chnlProvider = chnlProvider;
-	}
 
 	public int getMinNumObjs() {
 		return minNumObjs;
@@ -209,6 +202,14 @@ public class ObjMaskFilterFeatureRelationDiscardOutliers extends ObjMaskFilter {
 
 	public void setMinRatio(double minRatio) {
 		this.minRatio = minRatio;
+	}
+
+	public ChnlProvider getChnl() {
+		return chnl;
+	}
+
+	public void setChnl(ChnlProvider chnl) {
+		this.chnl = chnl;
 	}
 
 	
