@@ -2,6 +2,10 @@ package ch.ethz.biol.cell.imageprocessing.stack.provider;
 
 
 
+import java.util.Optional;
+
+import org.anchoranalysis.bean.ProviderNullableCreator;
+
 /*
  * #%L
  * anchor-plugin-image
@@ -42,23 +46,14 @@ import org.anchoranalysis.io.bean.color.generator.ColorSetGenerator;
 
 import ch.ethz.biol.cell.imageprocessing.stack.color.ColoredObjsStackCreator;
 
-public class StackProviderRGBFromObjMask extends StackProviderWithBackground {
+public class StackProviderRGBFromObjMask extends StackProviderRGBFromObjMaskBase {
 
 	// START BEAN PROPERTIES
 	@BeanField
 	private ObjMaskProvider objs;
-		
-	@BeanField
-	private boolean outline = false;
 	
 	@BeanField @OptionalBean
 	private ColorListProvider colorListProvider;	// If null, uses the colorListGenerator below
-	
-	@BeanField
-	private int outlineWidth = 1;
-	
-	@BeanField
-	private boolean force2D = false;
 
 	// Fallback generator if colorListProvider is null
 	@BeanField
@@ -69,40 +64,24 @@ public class StackProviderRGBFromObjMask extends StackProviderWithBackground {
 	public Stack create() throws CreateException {
 				
 		ObjMaskCollection objsCollection = objs.create();
-		
-		return ColoredObjsStackCreator.create(
-			maybeFlatten(objsCollection),
-			outline,
-			outlineWidth,
-			force2D,
-			backgroundStack(!force2D),
+		return createStack(
+			objsCollection,
 			colors(objsCollection.size())
 		);
 	}
-	
-	private ObjMaskCollection maybeFlatten( ObjMaskCollection objs ) {
-		if (force2D) {
-			return objs.flattenZ();
-		} else {
-			return objs;
-		}
-	}
 		
 	private ColorList colors( int size ) throws CreateException {
-		ColorList colorList;
+		Optional<ColorList> colorList = ProviderNullableCreator.createOptional(colorListProvider);
 		
-		if (colorListProvider!=null) {
-			colorList = colorListProvider.create();
-		} else {
+		if (!colorList.isPresent()) {
 			try {
-				colorList = colorSetGenerator.genColors( size );
+				return colorSetGenerator.genColors( size );
 			} catch (OperationFailedException e) {
 				throw new CreateException(e);
 			} 
 		}
 		
-		assert( colorList.size()==size );
-		return colorList;
+		return colorList.get();
 	}
 
 	public ObjMaskProvider getObjs() {
@@ -111,30 +90,6 @@ public class StackProviderRGBFromObjMask extends StackProviderWithBackground {
 
 	public void setObjs(ObjMaskProvider objs) {
 		this.objs = objs;
-	}
-
-	public boolean isOutline() {
-		return outline;
-	}
-
-	public void setOutline(boolean outline) {
-		this.outline = outline;
-	}
-
-	public int getOutlineWidth() {
-		return outlineWidth;
-	}
-
-	public void setOutlineWidth(int outlineWidth) {
-		this.outlineWidth = outlineWidth;
-	}
-
-	public boolean isForce2D() {
-		return force2D;
-	}
-
-	public void setForce2D(boolean force2d) {
-		force2D = force2d;
 	}
 
 	public ColorListProvider getColorListProvider() {

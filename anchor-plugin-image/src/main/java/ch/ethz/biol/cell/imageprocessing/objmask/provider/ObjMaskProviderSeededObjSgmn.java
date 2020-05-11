@@ -41,7 +41,6 @@ import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.image.objmask.ObjMaskCollection;
 import org.anchoranalysis.image.objmask.match.ObjWithMatches;
 import org.anchoranalysis.image.seed.SeedCollection;
-import org.anchoranalysis.image.seed.SeedsFactory;
 import org.anchoranalysis.image.sgmn.SgmnFailedException;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 

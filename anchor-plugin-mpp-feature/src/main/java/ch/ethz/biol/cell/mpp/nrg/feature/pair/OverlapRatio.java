@@ -3,7 +3,7 @@ package ch.ethz.biol.cell.mpp.nrg.feature.pair;
 import org.anchoranalysis.anchor.mpp.feature.bean.nrg.elem.FeaturePairMemo;
 import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputPairMemo;
 import org.anchoranalysis.anchor.mpp.mark.GlobalRegionIdentifiers;
-import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
+
 
 /*
  * #%L
@@ -36,7 +36,6 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.cache.calculation.FeatureCalculation;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.image.voxel.statistics.VoxelStatistics;
 
 import ch.ethz.biol.cell.mpp.nrg.cachedcalculation.OverlapCalculation;
 import ch.ethz.biol.cell.mpp.nrg.cachedcalculation.OverlapMIPRatioCalculation;
@@ -53,59 +52,7 @@ public class OverlapRatio extends FeaturePairMemo {
 	@BeanField
 	private boolean useMax = false;
 	// END BEAN PROPERTIES
-	
-	public OverlapRatio() {
-	}
-	
-	public static double calcMinVolume( PxlMarkMemo obj1, PxlMarkMemo obj2, int regionID ) throws FeatureCalcException {
-
-		VoxelStatistics pxlStats1 =  obj1.doOperation().statisticsForAllSlices(0, regionID);
-		VoxelStatistics pxlStats2 =  obj2.doOperation().statisticsForAllSlices(0, regionID);
 		
-		long size1 = pxlStats1.size();
-		long size2 = pxlStats2.size();
-		return Math.min( size1, size2 );
-	}
-	
-	
-	public static double calcMaxVolume( PxlMarkMemo obj1, PxlMarkMemo obj2, int regionID ) throws FeatureCalcException {
-
-		VoxelStatistics pxlStats1 =  obj1.doOperation().statisticsForAllSlices(0, regionID);
-		VoxelStatistics pxlStats2 =  obj2.doOperation().statisticsForAllSlices(0, regionID);
-		
-		long size1 = pxlStats1.size();
-		long size2 = pxlStats2.size();
-		return Math.max( size1, size2 );
-	}
-	
-	public static double calcOverlapRatioMin( PxlMarkMemo obj1, PxlMarkMemo obj2, double overlap, int regionID, boolean mip ) throws FeatureCalcException {
-
-		if (overlap==0.0) {
-			return 0.0;
-		}
-		
-		if (mip) {
-			return overlap;
-		} else {
-			double volume = calcMinVolume( obj1, obj2, regionID );
-			return overlap / volume;
-		}
-	}
-	
-	public static double calcOverlapRatioMax( PxlMarkMemo obj1, PxlMarkMemo obj2, double overlap, int regionID, boolean mip ) throws FeatureCalcException {
-		
-		if (overlap==0.0) {
-			return 0.0;
-		}
-		
-		if (mip) {
-			return overlap;
-		} else {
-			double volume = calcMaxVolume( obj1, obj2, regionID );
-			return overlap / volume;
-		}
-	}
-	
 	@Override
 	public double calc( SessionInput<FeatureInputPairMemo> input ) throws FeatureCalcException {
 		
@@ -114,24 +61,15 @@ public class OverlapRatio extends FeaturePairMemo {
 		double overlap = input.calc(
 			overlapCalculation()
 		);
-		
-		if (useMax) {
-			return calcOverlapRatioMax(
-				inputSessionless.getObj1(),
-				inputSessionless.getObj2(),
-				overlap,
-				regionID,
-				mip
-			);
-		} else {
-			return calcOverlapRatioMin(
-				inputSessionless.getObj1(),
-				inputSessionless.getObj2(),
-				overlap,
-				regionID,
-				mip
-			);
-		}
+
+		return OverlapRatioUtilities.calcOverlapRatio(
+			inputSessionless.getObj1(),
+			inputSessionless.getObj2(),
+			overlap,
+			regionID,
+			mip,
+			OverlapRatioUtilities.maxOrMin(useMax)
+		);
 	}
 	
 	private FeatureCalculation<Double,FeatureInputPairMemo> overlapCalculation() {
