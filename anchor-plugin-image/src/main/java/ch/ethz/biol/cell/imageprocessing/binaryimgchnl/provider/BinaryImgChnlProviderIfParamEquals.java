@@ -31,7 +31,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.shared.params.keyvalue.KeyValueParamsProvider;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.params.KeyValueParams;
-import org.anchoranalysis.image.bean.provider.BinaryImgChnlProvider;
+import org.anchoranalysis.image.bean.provider.BinaryChnlProvider;
 import org.anchoranalysis.image.bean.provider.BinaryImgChnlProviderOne;
 import org.anchoranalysis.image.binary.BinaryChnl;
 
@@ -49,7 +49,7 @@ public class BinaryImgChnlProviderIfParamEquals extends BinaryImgChnlProviderOne
 	private String value = "";
 	
 	@BeanField
-	private BinaryImgChnlProvider binaryImgChnlProviderElse;
+	private BinaryChnlProvider binaryImgChnlProviderElse;
 	// END BEAN PROPERTIES
 	
 	@Override
@@ -75,13 +75,13 @@ public class BinaryImgChnlProviderIfParamEquals extends BinaryImgChnlProviderOne
 		this.keyValueParamsProvider = keyValueParamsProvider;
 	}
 
-	public BinaryImgChnlProvider getBinaryImgChnlProviderElse() {
+	public BinaryChnlProvider getBinaryImgChnlProviderElse() {
 		return binaryImgChnlProviderElse;
 	}
 
 
 	public void setBinaryImgChnlProviderElse(
-			BinaryImgChnlProvider binaryImgChnlProviderElse) {
+			BinaryChnlProvider binaryImgChnlProviderElse) {
 		this.binaryImgChnlProviderElse = binaryImgChnlProviderElse;
 	}
 

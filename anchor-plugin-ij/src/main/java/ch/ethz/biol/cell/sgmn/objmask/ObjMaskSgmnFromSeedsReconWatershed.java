@@ -34,7 +34,6 @@ import ij.process.FloatProcessor;
 import ij.process.ImageProcessor;
 
 import java.nio.ByteBuffer;
-
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.Positive;
 import org.anchoranalysis.core.error.CreateException;
@@ -81,12 +80,15 @@ public class ObjMaskSgmnFromSeedsReconWatershed extends ObjMaskSgmn {
 	public ObjMaskCollection sgmn(Chnl chnl,
 			SeedCollection seeds) throws SgmnFailedException {
 		
-		BinarySgmnParameters params = new BinarySgmnParameters();
-		params.setRes(chnl.getDimensions().getRes());
-		
+		BinarySgmnParameters params = new BinarySgmnParameters(
+			chnl.getDimensions().getRes()
+		);
 		
 		Chnl chnlNucWorking = chnl;
-		sgmnBinary.sgmn( chnlNucWorking.getVoxelBox(), params );
+		sgmnBinary.sgmn(
+			chnlNucWorking.getVoxelBox(),
+			params
+		);
 	
 
 		

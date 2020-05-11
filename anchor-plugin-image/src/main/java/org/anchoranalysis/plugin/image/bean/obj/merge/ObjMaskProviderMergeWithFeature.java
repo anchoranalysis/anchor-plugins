@@ -4,6 +4,8 @@ package org.anchoranalysis.plugin.image.bean.obj.merge;
 
 import java.util.Optional;
 
+import org.anchoranalysis.bean.ProviderNullableCreator;
+
 /*
  * #%L
  * anchor-plugin-image
@@ -72,10 +74,11 @@ public abstract class ObjMaskProviderMergeWithFeature extends ObjMaskProviderMer
 	@Override
 	public ObjMaskCollection createFromObjs(ObjMaskCollection objsSource) throws CreateException {
 		
-		ObjMaskCollection saveObjs = objsSave !=null ? objsSave.create() : null;
-		if (saveObjs!=null) {
-			saveObjs.addAll(objsSource);
-		}
+		Optional<ObjMaskCollection> saveObjs = ProviderNullableCreator.createOptional(objsSave);
+		saveObjs.ifPresent( so
+			->so.addAll(objsSource)
+		);
+
 
 		getLogger().getLogReporter().logFormatted("There are %d input objects", objsSource.size() );
 		
@@ -115,7 +118,7 @@ public abstract class ObjMaskProviderMergeWithFeature extends ObjMaskProviderMer
 	 * @return
 	 * @throws OperationFailedException
 	 */
-	private ObjMaskCollection mergeConnectedComponents( ObjMaskCollection objs, ObjMaskCollection saveObjs ) throws OperationFailedException {
+	private ObjMaskCollection mergeConnectedComponents( ObjMaskCollection objs, Optional<ObjMaskCollection> saveObjs ) throws OperationFailedException {
 		
 		LogReporter logger = getLogger().getLogReporter();
 		
@@ -128,20 +131,16 @@ public abstract class ObjMaskProviderMergeWithFeature extends ObjMaskProviderMer
 		} catch (CreateException e) {
 			throw new OperationFailedException(e);
 		}
-		
-		if (getLogger()!=null) {
-			logger.log("\nBefore");
-			graph.logGraphDescription();
-		}
+
+		logger.log("\nBefore");
+		graph.logGraphDescription();
 		
 		while( tryMerge(graph, saveObjs ) ) {
 			// NOTHING TO DO, we just keep merging until we cannot merge any moore
 		}
 		
-		if (getLogger()!=null) {
-			logger.log("After");
-			graph.logGraphDescription();
-		}
+		logger.log("After");
+		graph.logGraphDescription();
 		
 		return graph.verticesAsObjects();
 	}
@@ -151,11 +150,11 @@ public abstract class ObjMaskProviderMergeWithFeature extends ObjMaskProviderMer
 	 * Search for suitable merges in graph, and merges them
 	 * 
 	 * @param graph the graph containing objects that can maybe be merged
-	 * @param saveObjs if non-NULL, all merged objects are added to saveObjs
+	 * @param saveObjs if defined, all merged objects are added to saveObjs
 	 * @return
 	 * @throws OperationFailedException
 	 */
-	private boolean tryMerge( MergeGraph graph, ObjMaskCollection saveObjs ) throws OperationFailedException {
+	private boolean tryMerge( MergeGraph graph, Optional<ObjMaskCollection> saveObjs ) throws OperationFailedException {
 		
 		// Find the edge with the best improvement
 		EdgeTypeWithVertices<ObjVertex,PrioritisedVertex> edgeToMerge = graph.findMaxPriority();
@@ -163,11 +162,14 @@ public abstract class ObjMaskProviderMergeWithFeature extends ObjMaskProviderMer
 		if (edgeToMerge==null) {
 			return false;
 		}
-		
-		if (saveObjs!=null) {
-			// When we decide to merge, we save the merged object
-			saveObjs.add( edgeToMerge.getEdge().getOmWithFeature().getObjMask() );
-		}
+
+		// When we decide to merge, we save the merged object
+		saveObjs.ifPresent( so->
+			so.add(
+				edgeToMerge.getEdge().getOmWithFeature().getObjMask() 
+			)
+		);
+
 		
 		graph.merge(edgeToMerge,getLogger());
 

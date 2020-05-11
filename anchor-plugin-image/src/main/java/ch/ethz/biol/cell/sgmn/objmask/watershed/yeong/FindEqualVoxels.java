@@ -28,6 +28,7 @@ package ch.ethz.biol.cell.sgmn.objmask.watershed.yeong;
 
 
 import java.nio.ByteBuffer;
+import java.util.Optional;
 import java.util.Stack;
 
 import org.anchoranalysis.core.geometry.Point3i;
@@ -51,7 +52,7 @@ class FindEqualVoxels {
 	private VoxelBox<?> bufferValuesToFindEqual;
 	private EncodedVoxelBox matS;
 	private boolean do3D;
-	private ObjMask objMask;
+	private Optional<ObjMask> objMask;
 	
 	public FindEqualVoxels(VoxelBox<?> bufferValuesToFindEqual,
 			EncodedVoxelBox temporaryMarkVisitedBuffer,
@@ -60,7 +61,7 @@ class FindEqualVoxels {
 		this.bufferValuesToFindEqual = bufferValuesToFindEqual;
 		this.matS = temporaryMarkVisitedBuffer;
 		this.do3D = do3D;
-		this.objMask = null;
+		this.objMask = Optional.empty();
 	}
 	
 	public FindEqualVoxels(VoxelBox<?> bufferValuesToFindEqual,
@@ -70,7 +71,7 @@ class FindEqualVoxels {
 		this.bufferValuesToFindEqual = bufferValuesToFindEqual;
 		this.matS = matS;
 		this.do3D = do3D;
-		this.objMask = objMask;
+		this.objMask = Optional.of(objMask);
 	}
 	
 	
@@ -102,10 +103,9 @@ class FindEqualVoxels {
 		
 		
 		PointTester pt = new PointTester( stack, extnt, rbb, matS);
-		
-		
-		PointIterator itr = objMask!= null ?  new PointObjMaskIterator(pt, objMask) : new PointExtntIterator(extnt, pt);
-		
+				
+		PointIterator itr = objMask.isPresent() ? new PointObjMaskIterator(pt, objMask.get()) : new PointExtntIterator(extnt, pt);
+				
 		BigNghb nghb = new BigNghb();
 		
 		while( !stack.isEmpty() ) {

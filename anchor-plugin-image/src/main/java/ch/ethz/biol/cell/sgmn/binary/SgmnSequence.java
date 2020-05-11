@@ -30,7 +30,6 @@ package ch.ethz.biol.cell.sgmn.binary;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
-
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.image.bean.sgmn.binary.BinarySgmn;
 import org.anchoranalysis.image.bean.sgmn.binary.BinarySgmnParameters;
@@ -38,7 +37,6 @@ import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.image.sgmn.SgmnFailedException;
-import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.anchoranalysis.image.voxel.box.VoxelBoxWrapper;
 
 public class SgmnSequence extends BinarySgmn {
@@ -87,10 +85,5 @@ public class SgmnSequence extends BinarySgmn {
 
 	public void setListSgmn(List<BinarySgmn> listSgmn) {
 		this.listSgmn = listSgmn;
-	}
-
-	@Override
-	public VoxelBox<ByteBuffer> getAdditionalOutput() {
-		return null;
 	}
 }

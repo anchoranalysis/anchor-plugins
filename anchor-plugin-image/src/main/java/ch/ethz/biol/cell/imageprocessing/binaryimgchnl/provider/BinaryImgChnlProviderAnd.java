@@ -29,7 +29,7 @@ package ch.ethz.biol.cell.imageprocessing.binaryimgchnl.provider;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.image.bean.provider.BinaryImgChnlProvider;
+import org.anchoranalysis.image.bean.provider.BinaryChnlProvider;
 import org.anchoranalysis.image.bean.provider.BinaryImgChnlProviderOne;
 import org.anchoranalysis.image.binary.BinaryChnl;
 import org.anchoranalysis.image.binary.logical.BinaryChnlAnd;
@@ -39,7 +39,7 @@ public class BinaryImgChnlProviderAnd extends BinaryImgChnlProviderOne {
 
 	// START BEAN PROPERTIES
 	@BeanField
-	private BinaryImgChnlProvider receiveProvider;
+	private BinaryChnlProvider receiveProvider;
 	// END BEAN PROPERTIES
 
 	// ASSUMES REGIONS ARE IDENTICAL
@@ -53,11 +53,11 @@ public class BinaryImgChnlProviderAnd extends BinaryImgChnlProviderOne {
 		return chnlCrnt;
 	}
 
-	public BinaryImgChnlProvider getReceiveProvider() {
+	public BinaryChnlProvider getReceiveProvider() {
 		return receiveProvider;
 	}
 
-	public void setReceiveProvider(BinaryImgChnlProvider receiveProvider) {
+	public void setReceiveProvider(BinaryChnlProvider receiveProvider) {
 		this.receiveProvider = receiveProvider;
 	}
 

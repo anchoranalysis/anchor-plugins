@@ -29,11 +29,13 @@ package org.anchoranalysis.plugin.image.bean.obj.merge;
 import java.util.List;
 import java.util.Optional;
 
+import org.anchoranalysis.bean.ProviderNullableCreator;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.bean.provider.ImageDimProvider;
+import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.extent.ImageRes;
 import org.anchoranalysis.image.objmask.ObjMaskCollection;
 import org.anchoranalysis.image.objmask.match.ObjWithMatches;
@@ -57,13 +59,9 @@ public abstract class ObjMaskProviderMergeBase extends ObjMaskProviderContainer 
 		
 	protected Optional<ImageRes> calcResOptional() throws OperationFailedException {
 		try {
-			if (resProvider!=null) {
-				return Optional.of(
-					resProvider.create().getRes()
-				);
-			} else {
-				return Optional.empty();
-			}
+			return ProviderNullableCreator.createOptional(resProvider).map(
+				ImageDim::getRes
+			);
 		} catch (CreateException e) {
 			throw new OperationFailedException(e);
 		}

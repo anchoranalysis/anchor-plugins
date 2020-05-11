@@ -29,7 +29,7 @@ package ch.ethz.biol.cell.imageprocessing.binaryimgchnl.provider;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.image.bean.provider.BinaryImgChnlProvider;
+import org.anchoranalysis.image.bean.provider.BinaryChnlProvider;
 import org.anchoranalysis.image.bean.provider.ImageDimProvider;
 import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
 import org.anchoranalysis.image.binary.BinaryChnl;
@@ -43,7 +43,7 @@ import ch.ethz.biol.cell.imageprocessing.dim.provider.GuessDimFromInputImage;
 /** 
  * Creates a BinaryImgChannel from a collection of object masks
  **/
-public class BinaryImgChnlProviderFromObjMasks extends BinaryImgChnlProvider {
+public class BinaryImgChnlProviderFromObjMasks extends BinaryChnlProvider {
 
 	// START BEAN
 	@BeanField

@@ -28,7 +28,6 @@ package ch.ethz.biol.cell.sgmn.binary;
 
 
 import java.nio.ByteBuffer;
-
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.bean.sgmn.binary.BinarySgmn;
 import org.anchoranalysis.image.bean.sgmn.binary.BinarySgmnOne;
@@ -37,7 +36,6 @@ import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
 import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.image.sgmn.SgmnFailedException;
-import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.anchoranalysis.image.voxel.box.VoxelBoxWrapper;
 
 public class SgmnInv extends BinarySgmnOne {
@@ -47,10 +45,6 @@ public class SgmnInv extends BinarySgmnOne {
 			throws SgmnFailedException {
 
 		BinaryVoxelBox<ByteBuffer> bvb = sgmn.sgmn(voxelBox, params);
-		
-		if (bvb==null) {
-			return null;
-		}
 		
 		try {
 			invertVoxelBox( bvb );
@@ -75,11 +69,6 @@ public class SgmnInv extends BinarySgmnOne {
 		return vb;
 	}
 
-	@Override
-	public VoxelBox<ByteBuffer> getAdditionalOutput() {
-		return null;
-	}
-	
 	private void invertVoxelBox(BinaryVoxelBox<ByteBuffer> voxelBox) throws OperationFailedException {
 		
 		BinaryValuesByte bv = voxelBox.getBinaryValues().createByte();

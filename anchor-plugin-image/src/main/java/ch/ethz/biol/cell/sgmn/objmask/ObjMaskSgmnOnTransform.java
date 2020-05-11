@@ -28,7 +28,6 @@ package ch.ethz.biol.cell.sgmn.objmask;
 
 
 import java.nio.ByteBuffer;
-
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.bean.provider.ChnlProvider;
@@ -60,10 +59,14 @@ public class ObjMaskSgmnOnTransform extends ObjMaskSgmn {
 	public ObjMaskCollection sgmn( Chnl chnl, SeedCollection seeds ) throws SgmnFailedException {
 
 		try {
-			BinarySgmnParameters params = new BinarySgmnParameters();
-			params.setRes(chnl.getDimensions().getRes());
+			BinarySgmnParameters params = new BinarySgmnParameters(
+				chnl.getDimensions().getRes()
+			);
 			
-			BinaryVoxelBox<ByteBuffer> bvb = sgmn.sgmn( chnl.getVoxelBox(), params );
+			BinaryVoxelBox<ByteBuffer> bvb = sgmn.sgmn(
+				chnl.getVoxelBox(),
+				params
+			);
 
 			// DEBUG
 			// getOutputManager().getWriterCheckIfAllowed().write("afterSgmn", new ChnlGenerator(chnl,"afterSgmn") );

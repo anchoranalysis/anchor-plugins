@@ -28,7 +28,6 @@ package ch.ethz.biol.cell.sgmn.binary;
 
 
 import java.nio.ByteBuffer;
-
 import org.anchoranalysis.anchor.mpp.bean.bound.MarkBounds;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.image.bean.sgmn.binary.BinarySgmn;
@@ -41,7 +40,6 @@ import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.extent.ImageRes;
 import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.image.sgmn.SgmnFailedException;
-import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.anchoranalysis.image.voxel.box.VoxelBoxWrapper;
 import org.anchoranalysis.plugin.image.bean.histogram.threshold.Constant;
 
@@ -75,7 +73,12 @@ public class SgmnThrshldAboveMinBound extends BinarySgmn {
 	@Override
 	public BinaryVoxelBox<ByteBuffer> sgmn(VoxelBoxWrapper voxelBox, BinarySgmnParameters params)
 			throws SgmnFailedException {
-		setUpDelegate( voxelBox.any().extnt(), params.getRes() );
+		setUpDelegate(
+			voxelBox.any().extnt(),
+			params.getRes().orElseThrow( ()->
+				new SgmnFailedException("Image-resolution is required but missing")
+			)
+		);
 		return delegate.sgmn(voxelBox, params);
 	}
 
@@ -83,11 +86,6 @@ public class SgmnThrshldAboveMinBound extends BinarySgmn {
 	public BinaryVoxelBox<ByteBuffer> sgmn(VoxelBoxWrapper voxelBox,
 			BinarySgmnParameters params, ObjMask objMask) throws SgmnFailedException {
 		return delegate.sgmn(voxelBox, params, objMask);
-	}
-
-	@Override
-	public VoxelBox<ByteBuffer> getAdditionalOutput() {
-		return delegate.getAdditionalOutput();
 	}
 
 	public boolean isSuppress3D() {

@@ -27,13 +27,13 @@ package ch.ethz.biol.cell.imageprocessing.binaryimgchnl.provider;
  */
 
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.image.bean.provider.BinaryImgChnlProvider;
+import org.anchoranalysis.image.bean.provider.BinaryChnlProvider;
 import org.anchoranalysis.image.binary.BinaryChnl;
 
 // We don't really use this as a bean, convenient way of inserting channels into providers in bean
 // parameters
 // This is hack
-public class BinaryImgChnlProviderHolder extends BinaryImgChnlProvider {
+public class BinaryImgChnlProviderHolder extends BinaryChnlProvider {
 	
 	private BinaryChnl chnl;
 

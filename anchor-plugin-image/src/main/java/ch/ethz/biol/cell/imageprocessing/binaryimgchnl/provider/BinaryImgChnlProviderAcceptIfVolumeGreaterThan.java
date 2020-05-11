@@ -29,7 +29,7 @@ package ch.ethz.biol.cell.imageprocessing.binaryimgchnl.provider;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.image.bean.provider.BinaryImgChnlProvider;
+import org.anchoranalysis.image.bean.provider.BinaryChnlProvider;
 import org.anchoranalysis.image.bean.provider.BinaryImgChnlProviderOne;
 import org.anchoranalysis.image.binary.BinaryChnl;
 
@@ -37,7 +37,7 @@ public class BinaryImgChnlProviderAcceptIfVolumeGreaterThan extends BinaryImgChn
 
 	// START BEAN PROPERTIES
 	@BeanField
-	private BinaryImgChnlProvider receiveProvider;
+	private BinaryChnlProvider receiveProvider;
 	
 	@BeanField
 	private double minRatio = 0.01;
@@ -60,11 +60,11 @@ public class BinaryImgChnlProviderAcceptIfVolumeGreaterThan extends BinaryImgChn
 		}
 	}
 
-	public BinaryImgChnlProvider getReceiveProvider() {
+	public BinaryChnlProvider getReceiveProvider() {
 		return receiveProvider;
 	}
 
-	public void setReceiveProvider(BinaryImgChnlProvider receiveProvider) {
+	public void setReceiveProvider(BinaryChnlProvider receiveProvider) {
 		this.receiveProvider = receiveProvider;
 	}
 

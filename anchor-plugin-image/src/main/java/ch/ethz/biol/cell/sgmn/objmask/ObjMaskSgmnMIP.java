@@ -28,7 +28,6 @@ package ch.ethz.biol.cell.sgmn.objmask;
 
 
 import java.nio.ByteBuffer;
-
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.OptionalOperationUnsupportedException;
 import org.anchoranalysis.image.bean.sgmn.binary.BinarySgmn;
@@ -81,14 +80,17 @@ public class ObjMaskSgmnMIP extends ObjMaskSgmn {
 			ObjMaskCollection objs = sgmnMIP.sgmn(max, seeds);
 			
 			
-			BinarySgmnParameters params = new BinarySgmnParameters();
-			params.setRes(chnl.getDimensions().getRes());
-			
+			BinarySgmnParameters params = new BinarySgmnParameters(
+				chnl.getDimensions().getRes()
+			);
 			
 			VoxelBox<ByteBuffer> vb = chnl.getVoxelBox().asByte();
 			
 			VoxelBox<ByteBuffer> stackBinary = vb.duplicate(); 
-			BinaryVoxelBox<ByteBuffer> vbBinary = sgmnStack.sgmn( new VoxelBoxWrapper(stackBinary), params );
+			BinaryVoxelBox<ByteBuffer> vbBinary = sgmnStack.sgmn(
+				new VoxelBoxWrapper(stackBinary),
+				params
+			);
 			
 			return ExtendObjsInto3DMask.extendObjs(objs, vbBinary);
 			

@@ -28,7 +28,6 @@ package ch.ethz.biol.cell.sgmn.binary;
 
 
 import java.nio.ByteBuffer;
-
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.shared.params.keyvalue.KeyValueParamsProvider;
 import org.anchoranalysis.core.error.CreateException;
@@ -115,16 +114,20 @@ public class SgmnThrshldKeyValuesParam extends BinarySgmn {
 		
 		BinaryValuesByte bvOut = BinaryValuesByte.getDefault();
 		try {		
-			return thresholder.threshold(new VoxelBoxWrapper(maskDup),new ObjMask(bboxE,objMask.getVoxelBox(),objMask.getBinaryValuesByte()), bvOut, params.getIntensityHistogram() );
+			return thresholder.threshold(
+				new VoxelBoxWrapper(maskDup),
+				new ObjMask(
+					bboxE,
+					objMask.getVoxelBox(),
+					objMask.getBinaryValuesByte()
+				),
+				bvOut,
+				params.getIntensityHistogram()
+			);
 		} catch (OperationFailedException e) {
 			throw new SgmnFailedException(e);
 		}
 					
-	}
-
-	@Override
-	public VoxelBox<ByteBuffer> getAdditionalOutput() {
-		return null;
 	}
 
 	public KeyValueParamsProvider getKeyValueParamsProvider() {

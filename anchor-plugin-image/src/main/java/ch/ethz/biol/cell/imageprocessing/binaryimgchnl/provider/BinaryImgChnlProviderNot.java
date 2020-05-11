@@ -31,7 +31,7 @@ import java.nio.ByteBuffer;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.image.bean.provider.BinaryImgChnlProvider;
+import org.anchoranalysis.image.bean.provider.BinaryChnlProvider;
 import org.anchoranalysis.image.bean.provider.BinaryImgChnlProviderOne;
 import org.anchoranalysis.image.binary.BinaryChnl;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
@@ -42,7 +42,7 @@ public class BinaryImgChnlProviderNot extends BinaryImgChnlProviderOne {
 
 	// START BEAN PROPERTIES
 	@BeanField
-	private BinaryImgChnlProvider receiveProvider;
+	private BinaryChnlProvider receiveProvider;
 	// END BEAN PROPERTIES
 
 	// ASSUMES REGIONS ARE IDENTICAL
@@ -92,11 +92,11 @@ public class BinaryImgChnlProviderNot extends BinaryImgChnlProviderOne {
 		return chnlCrnt;
 	}
 
-	public BinaryImgChnlProvider getReceiveProvider() {
+	public BinaryChnlProvider getReceiveProvider() {
 		return receiveProvider;
 	}
 
-	public void setReceiveProvider(BinaryImgChnlProvider receiveProvider) {
+	public void setReceiveProvider(BinaryChnlProvider receiveProvider) {
 		this.receiveProvider = receiveProvider;
 	}
 

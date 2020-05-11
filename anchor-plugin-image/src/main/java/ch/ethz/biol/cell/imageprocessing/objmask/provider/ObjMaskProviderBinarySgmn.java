@@ -28,12 +28,12 @@ package ch.ethz.biol.cell.imageprocessing.objmask.provider;
 
 
 import java.nio.ByteBuffer;
-
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.bean.provider.ChnlProvider;
 import org.anchoranalysis.image.bean.provider.ObjMaskProviderOne;
 import org.anchoranalysis.image.bean.sgmn.binary.BinarySgmn;
+import org.anchoranalysis.image.bean.sgmn.binary.BinarySgmnParameters;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
 import org.anchoranalysis.image.chnl.Chnl;
 import org.anchoranalysis.image.objmask.ObjMask;
@@ -63,7 +63,11 @@ public class ObjMaskProviderBinarySgmn extends ObjMaskProviderOne {
 			for( ObjMask om : objMasks ) {
 				VoxelBox<?> vb = chnl.getVoxelBox().any().createBufferAvoidNew(om.getBoundingBox() );
 				
-				BinaryVoxelBox<ByteBuffer> bvb = binarySgmn.sgmn( new VoxelBoxWrapper(vb), null, new ObjMask( om.getVoxelBox()) );
+				BinaryVoxelBox<ByteBuffer> bvb = binarySgmn.sgmn(
+					new VoxelBoxWrapper(vb),
+					new BinarySgmnParameters(),
+					new ObjMask( om.getVoxelBox())
+				);
 				
 				ObjMask mask = new ObjMask( om.getBoundingBox(), bvb.getVoxelBox() );
 				mask.setBinaryValues( bvb.getBinaryValues() );

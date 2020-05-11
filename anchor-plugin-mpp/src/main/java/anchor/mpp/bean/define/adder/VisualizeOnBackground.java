@@ -36,7 +36,7 @@ import org.anchoranalysis.bean.define.Define;
 import org.anchoranalysis.bean.define.adder.DefineAdderBean;
 import org.anchoranalysis.bean.xml.error.BeanXmlException;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.image.bean.provider.BinaryImgChnlProvider;
+import org.anchoranalysis.image.bean.provider.BinaryChnlProvider;
 import org.anchoranalysis.image.bean.provider.ChnlProvider;
 import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
 import org.anchoranalysis.image.bean.provider.stack.StackProvider;
@@ -91,7 +91,7 @@ public class VisualizeOnBackground extends DefineAdderBean {
 			
 			// Now we add visualizations for the BinaryImgChnlProvider and ObjMaskProvider
 			
-			addVisualizationFor( def, define, BinaryImgChnlProvider.class, id ->
+			addVisualizationFor( def, define, BinaryChnlProvider.class, id ->
 				visualizationBinaryMask(id)
 			);
 			

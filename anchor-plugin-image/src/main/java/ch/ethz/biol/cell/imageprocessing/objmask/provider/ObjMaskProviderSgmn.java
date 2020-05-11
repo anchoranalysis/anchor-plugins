@@ -33,7 +33,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.geometry.Point3i;
-import org.anchoranalysis.image.bean.provider.BinaryImgChnlProvider;
+import org.anchoranalysis.image.bean.provider.BinaryChnlProvider;
 import org.anchoranalysis.image.bean.provider.ChnlProvider;
 import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
 import org.anchoranalysis.image.bean.sgmn.objmask.ObjMaskSgmn;
@@ -53,7 +53,7 @@ public class ObjMaskProviderSgmn extends ObjMaskProvider {
 
 	// START BEAN PROPERTIES
 	@BeanField @OptionalBean
-	private BinaryImgChnlProvider binaryImgChnlProviderMask;
+	private BinaryChnlProvider binaryImgChnlProviderMask;
 	
 	@BeanField
 	private ObjMaskSgmn sgmn;
@@ -143,12 +143,12 @@ public class ObjMaskProviderSgmn extends ObjMaskProvider {
 		this.sgmn = sgmn;
 	}
 
-	public BinaryImgChnlProvider getBinaryImgChnlProviderMask() {
+	public BinaryChnlProvider getBinaryImgChnlProviderMask() {
 		return binaryImgChnlProviderMask;
 	}
 
 	public void setBinaryImgChnlProviderMask(
-			BinaryImgChnlProvider binaryImgChnlProviderMask) {
+			BinaryChnlProvider binaryImgChnlProviderMask) {
 		this.binaryImgChnlProviderMask = binaryImgChnlProviderMask;
 	}
 

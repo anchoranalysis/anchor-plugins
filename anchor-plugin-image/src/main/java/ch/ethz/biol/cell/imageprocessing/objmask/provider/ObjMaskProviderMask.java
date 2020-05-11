@@ -29,10 +29,7 @@ package ch.ethz.biol.cell.imageprocessing.objmask.provider;
  */
 
 
-import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.image.bean.provider.BinaryImgChnlProvider;
-import org.anchoranalysis.image.bean.provider.ObjMaskProviderOne;
 import org.anchoranalysis.image.binary.BinaryChnl;
 import org.anchoranalysis.image.binary.logical.BinaryChnlAnd;
 import org.anchoranalysis.image.objmask.ObjMask;
@@ -47,20 +44,11 @@ import org.anchoranalysis.image.objmask.ObjMaskCollection;
  * @author feehano
  *
  */
-public class ObjMaskProviderMask extends ObjMaskProviderOne {
-	
-	// START BEAN PROPERTIES
-	@BeanField
-	private BinaryImgChnlProvider maskProvider;
-	// END BEAN PROPERTIES
-	
-	@Override
-	public ObjMaskCollection createFromObjs(ObjMaskCollection objsIn) throws CreateException {
-	
-		BinaryChnl mask = maskProvider.create();
-		
-		for( ObjMask om : objsIn ) {
+public class ObjMaskProviderMask extends ObjMaskProviderMaskBase {
 
+	@Override
+	protected ObjMaskCollection createFromObjs(ObjMaskCollection objsIn, BinaryChnl mask) throws CreateException {
+		for( ObjMask om : objsIn ) {
 			applyMask(om, mask);
 		}
 		return objsIn;
@@ -78,13 +66,4 @@ public class ObjMaskProviderMask extends ObjMaskProviderOne {
 			maskObj.binaryVoxelBox().getBinaryValues().createByte()
 		);		
 	}
-
-	public BinaryImgChnlProvider getMaskProvider() {
-		return maskProvider;
-	}
-
-	public void setMaskProvider(BinaryImgChnlProvider maskProvider) {
-		this.maskProvider = maskProvider;
-	}
-
 }

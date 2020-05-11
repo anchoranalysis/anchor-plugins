@@ -28,6 +28,7 @@ package ch.ethz.biol.cell.imageprocessing.threshold;
 
 
 import java.nio.ByteBuffer;
+import java.util.Optional;
 
 import ij.Prefs;
 import ij.plugin.filter.Binary;
@@ -46,27 +47,16 @@ import org.anchoranalysis.image.voxel.box.VoxelBoxWrapper;
 import org.anchoranalysis.image.voxel.box.thresholder.VoxelBoxThresholder;
 
 public class ThresholderSimpleFillHoles2D extends Thresholder {
-
-	/* Start bean properties */
-
-	
 	
 	// START BEAN PROPERTIES
-
-	// Intensity for thresholding
+	/** Intensity for thresholding */
 	@BeanField
 	private int minIntensity = -1;
 	// END BEAN PROPERTIES
-	
-	
-
-
 
 	public ThresholderSimpleFillHoles2D() {
-		
+		// Standard bean constructor
 	}
-	
-	
 	
 	public ThresholderSimpleFillHoles2D(int minIntensity) {
 		super();
@@ -76,7 +66,7 @@ public class ThresholderSimpleFillHoles2D extends Thresholder {
 	// Consumes input channel?
 	@Override
 	public BinaryVoxelBox<ByteBuffer> threshold(VoxelBoxWrapper inputBuffer, BinaryValuesByte bvOut,
-			Histogram histogram) throws OperationFailedException {
+			Optional<Histogram> histogram) throws OperationFailedException {
 
 		Prefs.blackBackground = true;
 		
@@ -99,34 +89,22 @@ public class ThresholderSimpleFillHoles2D extends Thresholder {
 		return thresholded;
 	}
 
-
-
 	@Override
 	public BinaryVoxelBox<ByteBuffer> threshold(VoxelBoxWrapper inputBuffer, ObjMask objMask, BinaryValuesByte bvOut,
-			Histogram histogram) throws OperationFailedException {
+			Optional<Histogram> histogram) throws OperationFailedException {
 		throw new IllegalAccessError("Method not supported");
 	}
-
-
 
 	@Override
 	public int getLastThreshold() {
 		return minIntensity;
 	}
 
-
 	public void setMinIntensity(int minIntensity) {
 		this.minIntensity = minIntensity;
 	}
-
-
 	
 	public int getMinIntensity() {
 		return minIntensity;
 	}
-
-
-
-
-
 }

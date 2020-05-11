@@ -44,20 +44,21 @@ public class ObjMaskProviderSgmnByObj extends ObjMaskProviderOne {
 	private ObjMaskSgmn sgmn;
 	
 	@BeanField
-	private ChnlProvider chnlProvider;
+	private ChnlProvider chnl;
 	// END BEAN PROPERTIES
 
 	@Override
 	public ObjMaskCollection createFromObjs( ObjMaskCollection objsSrc ) throws CreateException {
 
-		Chnl chnl = chnlProvider.create();
+		Chnl chnlToSgmn = chnl.create();
 		
 		ObjMaskCollection objsOut = new ObjMaskCollection();
 		
 		for( ObjMask om : objsSrc ) {
-			
 			try {
-				 objsOut.addAll( sgmn.sgmn(chnl, om, null) );
+				objsOut.addAll(
+					sgmn.sgmn(chnlToSgmn, om, null)
+				);
 			} catch (SgmnFailedException e) {
 				throw new CreateException(e);
 			}
@@ -66,19 +67,19 @@ public class ObjMaskProviderSgmnByObj extends ObjMaskProviderOne {
 		return objsOut;
 	}
 
-	public ChnlProvider getChnlProvider() {
-		return chnlProvider;
-	}
-
-	public void setChnlProvider(ChnlProvider chnlProvider) {
-		this.chnlProvider = chnlProvider;
-	}
-
 	public ObjMaskSgmn getSgmn() {
 		return sgmn;
 	}
 
 	public void setSgmn(ObjMaskSgmn sgmn) {
 		this.sgmn = sgmn;
+	}
+
+	public ChnlProvider getChnl() {
+		return chnl;
+	}
+
+	public void setChnl(ChnlProvider chnl) {
+		this.chnl = chnl;
 	}
 }

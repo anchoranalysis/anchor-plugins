@@ -29,7 +29,7 @@ package ch.ethz.biol.cell.imageprocessing.binaryimgchnl.provider;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.image.bean.provider.BinaryImgChnlProvider;
+import org.anchoranalysis.image.bean.provider.BinaryChnlProvider;
 import org.anchoranalysis.image.bean.provider.BinaryImgChnlProviderOne;
 import org.anchoranalysis.image.binary.BinaryChnl;
 
@@ -42,7 +42,7 @@ public class BinaryImgChnlProviderIfStackExists extends BinaryImgChnlProviderOne
 	private String stackID = "";
 	
 	@BeanField
-	private BinaryImgChnlProvider binaryImgChnlProviderElse;
+	private BinaryChnlProvider binaryImgChnlProviderElse;
 	// END BEAN PROPERTIES
 	
 	@Override
@@ -55,12 +55,12 @@ public class BinaryImgChnlProviderIfStackExists extends BinaryImgChnlProviderOne
 		}
 	}
 
-	public BinaryImgChnlProvider getBinaryImgChnlProviderElse() {
+	public BinaryChnlProvider getBinaryImgChnlProviderElse() {
 		return binaryImgChnlProviderElse;
 	}
 
 	public void setBinaryImgChnlProviderElse(
-			BinaryImgChnlProvider binaryImgChnlProviderElse) {
+			BinaryChnlProvider binaryImgChnlProviderElse) {
 		this.binaryImgChnlProviderElse = binaryImgChnlProviderElse;
 	}
 

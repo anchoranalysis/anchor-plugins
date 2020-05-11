@@ -30,7 +30,7 @@ package ch.ethz.biol.cell.imageprocessing.histogram.provider;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.image.bean.provider.BinaryImgChnlProvider;
+import org.anchoranalysis.image.bean.provider.BinaryChnlProvider;
 import org.anchoranalysis.image.bean.provider.ChnlProvider;
 import org.anchoranalysis.image.bean.provider.HistogramProvider;
 import org.anchoranalysis.image.binary.BinaryChnl;
@@ -45,7 +45,7 @@ public class HistogramProviderChnl extends HistogramProvider {
 	private ChnlProvider chnlProvider;
 	
 	@BeanField @OptionalBean
-	private BinaryImgChnlProvider maskProvider;
+	private BinaryChnlProvider maskProvider;
 	// END BEAN PROPERTIES
 	
 	@Override
@@ -69,11 +69,11 @@ public class HistogramProviderChnl extends HistogramProvider {
 		this.chnlProvider = chnlProvider;
 	}
 
-	public BinaryImgChnlProvider getMaskProvider() {
+	public BinaryChnlProvider getMaskProvider() {
 		return maskProvider;
 	}
 
-	public void setMaskProvider(BinaryImgChnlProvider maskProvider) {
+	public void setMaskProvider(BinaryChnlProvider maskProvider) {
 		this.maskProvider = maskProvider;
 	}
 }
