@@ -70,12 +70,13 @@ public class MaxOverlapRatio extends FeaturePairMemo {
 		
 		FeatureInputPairMemo params = input.get();
 		
-		double ratio = OverlapRatio.calcOverlapRatioMin(
+		double ratio = OverlapRatioUtilities.calcOverlapRatio(
 			params.getObj1(),
 			params.getObj2(),
 			input.calc( new OverlapCalculation(regionID) ),
 			regionID,
-			false
+			false,
+			Math::min
 		);
 		
 		if ( ratio > max ) {

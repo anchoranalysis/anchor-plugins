@@ -45,9 +45,6 @@ public class OverlapRatioMaskGlobal extends OverlapMaskSingleRegion {
 	
 	private RelationBean relationToThreshold = new EqualToBean();
 	
-	public OverlapRatioMaskGlobal() {
-	}
-	
 	@Override
 	public double calc( SessionInput<FeatureInputPairMemo> input ) throws FeatureCalcException {
 		
@@ -76,7 +73,13 @@ public class OverlapRatioMaskGlobal extends OverlapMaskSingleRegion {
 			return 0.0;
 		}
 		
-		double volume = useMax ? calcMaxVolume( obj1, obj2, regionID, relationToThreshold ) : calcMinVolume( obj1, obj2, regionID, relationToThreshold );
+		double volume = calcVolumeAgg(
+			obj1,
+			obj2,
+			regionID,
+			relationToThreshold,
+			OverlapRatioUtilities.maxOrMin(useMax)
+		);
 		return overlap / volume;
 	}
 

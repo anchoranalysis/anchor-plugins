@@ -56,26 +56,12 @@ public abstract class OverlapMaskBase extends FeaturePairMemo {
 		);
 	}
 
-	protected double calcMinVolume(
+	protected double calcVolumeAgg(
 		PxlMarkMemo obj1,
 		PxlMarkMemo obj2,
 		int regionID,
-		RelationBean relationToThreshold
-	) throws FeatureCalcException {
-		return calcVolumeStat(
-			obj1,
-			obj2,
-			regionID,
-			relationToThreshold,
-			Math::min
-		);
-	}
-
-	protected double calcMaxVolume(
-		PxlMarkMemo obj1,
-		PxlMarkMemo obj2,
-		int regionID,
-		RelationBean relationToThreshold
+		RelationBean relationToThreshold,
+		BiFunction<Long,Long,Long> statFunc
 	) throws FeatureCalcException {
 		
 		return calcVolumeStat(
@@ -83,7 +69,7 @@ public abstract class OverlapMaskBase extends FeaturePairMemo {
 			obj2,
 			regionID,
 			relationToThreshold,
-			Math::max
+			statFunc
 		);
 	}
 	
