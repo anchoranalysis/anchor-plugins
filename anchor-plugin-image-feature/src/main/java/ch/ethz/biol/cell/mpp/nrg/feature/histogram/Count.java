@@ -30,26 +30,31 @@ package ch.ethz.biol.cell.mpp.nrg.feature.histogram;
 
 
 import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.bean.shared.relation.threshold.RelationToThreshold;
 import org.anchoranalysis.image.feature.histogram.FeatureHistogramStatistic;
 import org.anchoranalysis.image.histogram.Histogram;
 
 /**
- * Counts the number of items in a threshold in relation to a threshold (above, below etc.)
+ * Counts the number of items in a histogram (posssibly in relation to a threshold: above, below etc.)
  * 
  * @author Owen Feehan
  *
  */
-public class ThresholdedCount extends FeatureHistogramStatistic {
+public class Count extends FeatureHistogramStatistic {
 
 	// START BEAN PROPERTIES
-	@BeanField
+	@BeanField @OptionalBean
 	private RelationToThreshold threshold;
 	// END BEAN PROPERTIES
 		
 	@Override
 	protected double calcStatisticFrom(Histogram histogram) {
-		return histogram.countThreshold(threshold);
+		if (threshold!=null) {
+			return histogram.countThreshold(threshold);
+		} else {
+			return histogram.getTotalCount();
+		}
 	}
 	
 	@Override
