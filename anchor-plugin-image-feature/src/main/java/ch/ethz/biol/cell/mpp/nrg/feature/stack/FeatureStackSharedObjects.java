@@ -26,7 +26,6 @@ package ch.ethz.biol.cell.mpp.nrg.feature.stack;
  * #L%
  */
 
-import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.input.descriptor.FeatureInputDescriptor;
 import org.anchoranalysis.image.feature.bean.FeatureSharedObjs;
 import org.anchoranalysis.image.feature.stack.FeatureInputStack;
@@ -35,7 +34,7 @@ import org.anchoranalysis.image.feature.stack.FeatureInputStackDescriptor;
 public abstract class FeatureStackSharedObjects extends FeatureSharedObjs<FeatureInputStack> {
 
 	@Override
-	public FeatureInputDescriptor paramType() throws FeatureCalcException {
+	public FeatureInputDescriptor paramType() {
 		return FeatureInputStackDescriptor.instance;
 	}
 }

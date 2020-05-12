@@ -1,8 +1,8 @@
 <config>
-<bean config-class="java.util.List" config-factory="list">
+<bean config-class="java.util.List" config-factory="listInclude">
 
 	<include>
-		<item filePath="singleFeatures" config-class="java.util.List" config-factory="include"/>
+		<item filePath="singleFeatures.xml" config-class="java.util.List" config-factory="include"/>
 	</include> 
 	
 	<item config-class="org.anchoranalysis.bean.NamedBean" name="cogYRef">

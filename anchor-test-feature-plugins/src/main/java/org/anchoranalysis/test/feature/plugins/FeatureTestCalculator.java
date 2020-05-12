@@ -37,7 +37,7 @@ import org.anchoranalysis.feature.calc.FeatureInitParams;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.session.FeatureSession;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorSingle;
-import org.anchoranalysis.feature.shared.SharedFeatureSet;
+import org.anchoranalysis.feature.shared.SharedFeatureMulti;
 import org.anchoranalysis.image.feature.init.FeatureInitParamsSharedObjs;
 import org.anchoranalysis.image.init.ImageInitParams;
 import org.anchoranalysis.test.LoggingFixture;
@@ -109,7 +109,7 @@ public class FeatureTestCalculator {
 		FeatureCalculatorSingle<T> calculator = FeatureSession.with(
 			feature,
 			initParams,
-			new SharedFeatureSet<>(),
+			new SharedFeatureMulti<>(),
 			LoggingFixture.simpleLogErrorReporter()
 		);
 		

@@ -38,7 +38,7 @@ import org.anchoranalysis.feature.calc.results.ResultsVector;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 import org.anchoranalysis.feature.session.FeatureSession;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorMulti;
-import org.anchoranalysis.feature.shared.SharedFeatureSet;
+import org.anchoranalysis.feature.shared.SharedFeatureMulti;
 import org.anchoranalysis.feature.shared.SharedFeaturesInitParams;
 import org.anchoranalysis.image.feature.stack.FeatureInputStack;
 
@@ -142,7 +142,7 @@ class HelperImageFeatureCalculator {
 	private ResultsVector calcInternal(
 			NRGStackWithParams stack,
 			FeatureList<FeatureInputStack> featuresDirectlyCalculate,
-			SharedFeatureSet<FeatureInputStack> sharedFeatures
+			SharedFeatureMulti<FeatureInputStack> sharedFeatures
 		) throws FeatureCalcException {
 		
 		FeatureCalculatorMulti<FeatureInputStack> session = FeatureSession.with(
