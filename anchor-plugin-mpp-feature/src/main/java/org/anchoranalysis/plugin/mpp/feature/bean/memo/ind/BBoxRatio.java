@@ -1,15 +1,16 @@
-package ch.ethz.biol.cell.mpp.nrg.feature.ind;
+package org.anchoranalysis.plugin.mpp.feature.bean.memo.ind;
 
 import org.anchoranalysis.anchor.mpp.feature.bean.nrg.elem.FeatureSingleMemo;
 import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputSingleMemo;
 import org.anchoranalysis.anchor.mpp.mark.GlobalRegionIdentifiers;
-import org.anchoranalysis.anchor.mpp.pxlmark.PxlMark;
+import org.anchoranalysis.anchor.mpp.mark.MarkAbstractRadii;
+import org.anchoranalysis.feature.cache.SessionInput;
 
-/*
+/*-
  * #%L
  * anchor-plugin-mpp-feature
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -31,49 +32,32 @@ import org.anchoranalysis.anchor.mpp.pxlmark.PxlMark;
  * #L%
  */
 
-
-import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.image.extent.BoundingBox;
+import org.anchoranalysis.image.extent.ImageDim;
 
-public class MeanIntensityDifference extends FeatureSingleMemo {
-
-	// START BEAN PROPERTIES
-	@BeanField
-	private double minDiff;
-	// END BEAN PROPERTIES
-	
-	public MeanIntensityDifference() {
-		super();
-	}
-	
-	
-	public MeanIntensityDifference(double minDiff) {
-		super();
-		this.minDiff = minDiff;
-	}
-		
-	@Override
-	public double calc( SessionInput<FeatureInputSingleMemo> params ) throws FeatureCalcException {
-
-		PxlMark pm = params.get().getPxlPartMemo().doOperation();
-		
-		double mean_in = pm.statisticsForAllSlices(0,GlobalRegionIdentifiers.SUBMARK_INSIDE).mean();
-		double mean_shell = pm.statisticsForAllSlices(0,GlobalRegionIdentifiers.SUBMARK_SHELL).mean();
-		
-		return ((mean_in-mean_shell) - minDiff) / 255;
-	}
+public class BBoxRatio extends FeatureSingleMemo {
 
 	@Override
-	public String getParamDscr() {
-		return String.format("minDiff=%f", minDiff);
-	}
-	
-	public double getMinDiff() {
-		return minDiff;
+	public double calc(SessionInput<FeatureInputSingleMemo> input) throws FeatureCalcException {
+		
+		MarkAbstractRadii markCast = (MarkAbstractRadii) input.get().getPxlPartMemo().getMark();
+		
+		ImageDim dim = input.get().getDimensionsRequired();
+		
+		BoundingBox bb = markCast.bbox(dim, GlobalRegionIdentifiers.SUBMARK_INSIDE );
+		bb.extnt().setZ( (int) (bb.extnt().getZ() * dim.getRes().getZRelRes()) );
+		
+		int[] extnt = bb.extnt().createOrderedArray();
+		
+		int len = extnt.length;
+		assert(len>=2);
+		
+		if (len==2) {
+			return ((double) extnt[1]) / extnt[0];
+		} else {
+			return ((double) extnt[2]) / extnt[0];
+		}
 	}
 
-	public void setMinDiff(double minDiff) {
-		this.minDiff = minDiff;
-	}
 }

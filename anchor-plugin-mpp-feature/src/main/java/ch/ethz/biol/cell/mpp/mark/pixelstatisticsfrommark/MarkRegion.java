@@ -1,11 +1,10 @@
-package ch.ethz.biol.cell.mpp.mark.pxllistoperation;
+package ch.ethz.biol.cell.mpp.mark.pixelstatisticsfrommark;
 
-import org.anchoranalysis.anchor.mpp.feature.bean.mark.PxlListOperationFromMark;
 import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
 
 /*
  * #%L
- * anchor-plugin-mpp-feature
+ * anchor-mpp
  * %%
  * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
  * %%
@@ -29,51 +28,13 @@ import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
  * #L%
  */
 
-
-import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.bean.shared.relation.threshold.RelationToThreshold;
+import org.anchoranalysis.bean.AnchorBean;
+import org.anchoranalysis.bean.GenerateUniqueParameterization;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.voxel.statistics.VoxelStatistics;
 
-import ch.ethz.biol.cell.mpp.mark.pixelstatisticsfrommark.PixelStatisticsFromMark;
+public abstract class MarkRegion extends AnchorBean<MarkRegion> implements GenerateUniqueParameterization {
 
-public class ThresholdedCount extends PxlListOperationFromMark {
-
-	// START BEAN PROPERTIES
-	@BeanField
-	private PixelStatisticsFromMark pixelList;
-	
-	@BeanField
-	private RelationToThreshold threshold;
-	// END BEAN PROPERTIES
-	
-	@Override
-	public double doOperation(PxlMarkMemo pxlMarkMemo, ImageDim dim) throws OperationFailedException {
-		VoxelStatistics stats;
-		try {
-			stats = pixelList.createStatisticsFor(pxlMarkMemo, dim);
-		} catch (CreateException e) {
-			throw new OperationFailedException(e);
-		}
-		
-		return stats.countThreshold(threshold);
-	}
-
-	public PixelStatisticsFromMark getPixelList() {
-		return pixelList;
-	}
-
-	public void setPixelList(PixelStatisticsFromMark pixelList) {
-		this.pixelList = pixelList;
-	}
-
-	public RelationToThreshold getThreshold() {
-		return threshold;
-	}
-
-	public void setThreshold(RelationToThreshold threshold) {
-		this.threshold = threshold;
-	}
+	public abstract VoxelStatistics createStatisticsFor( PxlMarkMemo pmm, ImageDim dim ) throws CreateException;
 }

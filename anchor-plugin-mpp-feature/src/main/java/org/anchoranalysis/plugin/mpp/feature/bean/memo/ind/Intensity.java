@@ -1,4 +1,4 @@
-package ch.ethz.biol.cell.mpp.nrg.feature.ind;
+package org.anchoranalysis.plugin.mpp.feature.bean.memo.ind;
 
 import org.anchoranalysis.anchor.mpp.feature.bean.nrg.elem.FeatureSingleMemo;
 import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputSingleMemo;
@@ -31,68 +31,65 @@ import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputSingleMemo;
 
 
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.bean.shared.relation.EqualToBean;
-import org.anchoranalysis.bean.shared.relation.threshold.RelationToConstant;
-import org.anchoranalysis.core.error.CreateException;
+import org.anchoranalysis.feature.bean.Feature;
+import org.anchoranalysis.feature.cache.ChildCacheName;
 import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.image.voxel.statistics.VoxelStatistics;
+import org.anchoranalysis.image.feature.histogram.FeatureInputHistogram;
+import org.anchoranalysis.image.feature.histogram.Mean;
 
-import ch.ethz.biol.cell.mpp.mark.pixelstatisticsfrommark.PixelStatisticsFromMark;
+import ch.ethz.biol.cell.mpp.mark.pixelstatisticsfrommark.MarkRegion;
 
-// Number of unique pixel values 
-public class NumberUniquePixelValues extends FeatureSingleMemo {
+public class Intensity extends FeatureSingleMemo {
 
 	// START BEAN
+	/** Feature to apply to the histogram */
 	@BeanField
-	private PixelStatisticsFromMark pixelList;
-	// END BEAN
+	private Feature<FeatureInputHistogram> item = new Mean();
 	
+	/** If TRUE, zeros are excluded from considering in the histogram */
+	@BeanField
+	private boolean excludeZero = false;
+	
+	@BeanField
+	private MarkRegion region;
+	// END BEAN
+			
 	@Override
 	public double calc( SessionInput<FeatureInputSingleMemo> input ) throws FeatureCalcException {
 
-		try {
-			VoxelStatistics stats = pixelList.createStatisticsFor(
-				input.get().getPxlPartMemo(),
-				input.get().getDimensionsRequired()
-			);
-			
-			int numUniqueValues = 0;
-				
-			for( int v=0; v<255; v++) {
-				long cnt = stats.countThreshold(
-					new RelationToConstant(
-						new EqualToBean(),
-						v
-					)
-				);
-				
-				if (cnt!=0) {
-					numUniqueValues++;
-				}
-			}
-			
-			return numUniqueValues;
-			
-		} catch (IndexOutOfBoundsException e) {
-			throw new FeatureCalcException(e);
-		} catch (CreateException e) {
-			throw new FeatureCalcException(e);
-		}
+		return input.forChild().calc(
+			item,
+			new CalculateHistogramInputFromMemo(region, excludeZero),
+			cacheName()
+		);
+	}
+	
+	private ChildCacheName cacheName() {
+		return new ChildCacheName(
+			Intensity.class,
+			region.uniqueName()
+		);
 	}
 
 	@Override
 	public String getParamDscr() {
-		return pixelList.getBeanDscr();
-	}
-	
-	public PixelStatisticsFromMark getPixelList() {
-		return pixelList;
+		return region.getBeanDscr();
 	}
 
-
-	public void setPixelList(PixelStatisticsFromMark pixelList) {
-		this.pixelList = pixelList;
+	public boolean isExcludeZero() {
+		return excludeZero;
 	}
 
+	public void setExcludeZero(boolean excludeZero) {
+		this.excludeZero = excludeZero;
+	}
+
+	public MarkRegion getRegion() {
+		return region;
+	}
+
+	public void setRegion(MarkRegion region) {
+		this.region = region;
+	}
 }

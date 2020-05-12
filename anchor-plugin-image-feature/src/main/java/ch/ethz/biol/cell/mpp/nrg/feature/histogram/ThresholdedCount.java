@@ -1,7 +1,6 @@
-package ch.ethz.biol.cell.mpp.mark.pxllistoperation;
+package ch.ethz.biol.cell.mpp.nrg.feature.histogram;
 
-import org.anchoranalysis.anchor.mpp.feature.bean.mark.PxlListOperationFromMark;
-import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
+
 
 /*
  * #%L
@@ -31,34 +30,38 @@ import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
 
 
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.image.extent.ImageDim;
+import org.anchoranalysis.bean.shared.relation.threshold.RelationToThreshold;
+import org.anchoranalysis.image.feature.histogram.FeatureHistogramStatistic;
+import org.anchoranalysis.image.histogram.Histogram;
 
-import ch.ethz.biol.cell.mpp.mark.pixelstatisticsfrommark.PixelStatisticsFromMark;
-
-public class Count extends PxlListOperationFromMark {
+/**
+ * Counts the number of items in a threshold in relation to a threshold (above, below etc.)
+ * 
+ * @author Owen Feehan
+ *
+ */
+public class ThresholdedCount extends FeatureHistogramStatistic {
 
 	// START BEAN PROPERTIES
 	@BeanField
-	private PixelStatisticsFromMark pixelList;
+	private RelationToThreshold threshold;
 	// END BEAN PROPERTIES
+		
+	@Override
+	protected double calcStatisticFrom(Histogram histogram) {
+		return histogram.countThreshold(threshold);
+	}
 	
 	@Override
-	public double doOperation(PxlMarkMemo pxlMarkMemo, ImageDim dim) throws OperationFailedException {
-		try {
-			return pixelList.createStatisticsFor(pxlMarkMemo, dim).size();
-		} catch (CreateException e) {
-			throw new OperationFailedException(e);
-		}
+	public String getParamDscr() {
+		return String.format("%f,%s,threshold=%s", threshold, super.getParamDscr(), threshold.toString() );
 	}
 
-	public PixelStatisticsFromMark getPixelList() {
-		return pixelList;
+	public RelationToThreshold getThreshold() {
+		return threshold;
 	}
 
-	public void setPixelList(PixelStatisticsFromMark pixelList) {
-		this.pixelList = pixelList;
+	public void setThreshold(RelationToThreshold threshold) {
+		this.threshold = threshold;
 	}
-
 }

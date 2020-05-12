@@ -1,8 +1,10 @@
 package ch.ethz.biol.cell.mpp.nrg.feature.histogram;
 
+
+
 /*
  * #%L
- * anchor-plugin-image-feature
+ * anchor-plugin-mpp-feature
  * %%
  * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
  * %%
@@ -27,45 +29,32 @@ package ch.ethz.biol.cell.mpp.nrg.feature.histogram;
  */
 
 
-import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.feature.bean.Feature;
-import org.anchoranalysis.feature.cache.SessionInput;
+import org.anchoranalysis.bean.shared.relation.EqualToBean;
+import org.anchoranalysis.bean.shared.relation.threshold.RelationToConstant;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.feature.input.descriptor.FeatureInputGenericDescriptor;
-import org.anchoranalysis.image.feature.bean.FeatureHistogram;
-import org.anchoranalysis.image.feature.histogram.FeatureInputHistogram;
+import org.anchoranalysis.image.feature.histogram.FeatureHistogramStatistic;
+import org.anchoranalysis.image.histogram.Histogram;
 
-public class ConvertToRatioOfHistogramTotalCount extends FeatureHistogram {
-
-	// START BEAN PROPERTIES
-	@BeanField
-	private Feature<FeatureInputHistogram> item;
-	// END BEAN PROPERTIES
-	
-	@Override
-	public double calc(SessionInput<FeatureInputHistogram> input)
-			throws FeatureCalcException {
-
-		double val = input.calc(item);
-		return val/ input.get().getHistogram().getTotalCount();
-	}
-	
-	@Override
-	public String getDscrLong() {
-		return String.format("convert_ratio(%s)", getItem().getDscrLong() );
-	}
-
-	public Feature<FeatureInputHistogram> getItem() {
-		return item;
-	}
-
-	public void setItem(Feature<FeatureInputHistogram> item) {
-		this.item = item;
-	}
+// Number of unique values in histogram i.e. how many non-zero bins
+public class NumberDistinctValues extends FeatureHistogramStatistic {
 
 	@Override
-	public FeatureInputGenericDescriptor paramType()
-			throws FeatureCalcException {
-		return FeatureInputGenericDescriptor.instance;
+	protected double calcStatisticFrom(Histogram histogram) throws FeatureCalcException {
+		int numUniqueValues = 0;
+		
+		for( int v=0; v<255; v++) {
+			long cnt = histogram.countThreshold(
+				new RelationToConstant(
+					new EqualToBean(),
+					v
+				)
+			);
+			
+			if (cnt!=0) {
+				numUniqueValues++;
+			}
+		}
+		
+		return numUniqueValues;
 	}
 }

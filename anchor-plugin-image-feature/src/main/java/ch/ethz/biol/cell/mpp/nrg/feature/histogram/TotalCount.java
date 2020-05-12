@@ -1,10 +1,12 @@
-package ch.ethz.biol.cell.mpp.nrg.feature.ind;
+package ch.ethz.biol.cell.mpp.nrg.feature.histogram;
 
-/*-
+import org.anchoranalysis.image.feature.histogram.FeatureHistogramStatistic;
+
+/*
  * #%L
- * anchor-plugin-mpp-feature
+ * anchor-plugin-image-feature
  * %%
- * Copyright (C) 2010 - 2020 Owen Feehan
+ * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -26,27 +28,13 @@ package ch.ethz.biol.cell.mpp.nrg.feature.ind;
  * #L%
  */
 
-import org.anchoranalysis.anchor.mpp.feature.bean.mark.FeatureInputMark;
-import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputSingleMemo;
-import org.anchoranalysis.feature.cache.calculation.FeatureCalculation;
 
-class CalculateDeriveMarkFromMemo extends FeatureCalculation<FeatureInputMark, FeatureInputSingleMemo> {
+import org.anchoranalysis.image.histogram.Histogram;
 
-	@Override
-	protected FeatureInputMark execute(FeatureInputSingleMemo input) {
-		return new FeatureInputMark(
-			input.getPxlPartMemo().getMark(),
-			input.getDimensionsOptional()
-		);
-	}
+public class TotalCount extends FeatureHistogramStatistic {
 
 	@Override
-	public boolean equals(Object obj) {
-		return obj instanceof CalculateDeriveMarkFromMemo;
-	}
-
-	@Override
-	public int hashCode() {
-		return 21;		// Arbitrary
+	protected double calcStatisticFrom(Histogram histogram) {
+		return histogram.getTotalCount();
 	}
 }

@@ -1,4 +1,4 @@
-package org.anchoranalysis.plugin.mpp.feature.bean.ind;
+package org.anchoranalysis.plugin.mpp.feature.bean.memo.ind;
 
 import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputSingleMemo;
 import org.anchoranalysis.core.error.CreateException;
@@ -35,14 +35,14 @@ import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.feature.histogram.FeatureInputHistogram;
 import org.anchoranalysis.image.histogram.Histogram;
 import org.anchoranalysis.image.voxel.statistics.VoxelStatistics;
-import ch.ethz.biol.cell.mpp.mark.pixelstatisticsfrommark.PixelStatisticsFromMark;
+import ch.ethz.biol.cell.mpp.mark.pixelstatisticsfrommark.MarkRegion;
 
 class CalculateHistogramInputFromMemo extends FeatureCalculation<FeatureInputHistogram, FeatureInputSingleMemo> {
 
-	private PixelStatisticsFromMark pixelList;
+	private MarkRegion pixelList;
 	private boolean excludeZero;
 	
-	public CalculateHistogramInputFromMemo(PixelStatisticsFromMark pixelList, boolean excludeZero) {
+	public CalculateHistogramInputFromMemo(MarkRegion pixelList, boolean excludeZero) {
 		super();
 		this.pixelList = pixelList;
 		this.excludeZero = excludeZero;

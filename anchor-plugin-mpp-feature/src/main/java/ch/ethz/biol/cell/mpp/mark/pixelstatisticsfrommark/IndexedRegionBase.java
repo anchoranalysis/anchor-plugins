@@ -37,12 +37,12 @@ import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.voxel.statistics.VoxelStatistics;
 
 /**
- * {@link PixelStatisticsFromMark} with a region and an index
+ * {@link MarkRegion} with a region and an index
  * 
  * @author owen
  *
  */
-public abstract class IndexedRegionBase extends PixelStatisticsFromMark {
+public abstract class IndexedRegionBase extends MarkRegion {
 
 	// START BEAN PROPERTIES
 	@BeanField
