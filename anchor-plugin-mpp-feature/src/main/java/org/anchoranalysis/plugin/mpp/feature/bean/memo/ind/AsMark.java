@@ -1,15 +1,14 @@
-package ch.ethz.biol.cell.mpp.nrg.feature.ind;
+package org.anchoranalysis.plugin.mpp.feature.bean.memo.ind;
 
-import org.anchoranalysis.anchor.mpp.feature.bean.nrg.elem.FeatureSingleMemo;
+import org.anchoranalysis.anchor.mpp.feature.bean.mark.FeatureInputMark;
 import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputSingleMemo;
-import org.anchoranalysis.anchor.mpp.mark.GlobalRegionIdentifiers;
-import org.anchoranalysis.anchor.mpp.pxlmark.PxlMark;
+import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputSingleMemoDescriptor;
 
-/*
+/*-
  * #%L
  * anchor-plugin-mpp-feature
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -31,51 +30,37 @@ import org.anchoranalysis.anchor.mpp.pxlmark.PxlMark;
  * #L%
  */
 
-
-import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.feature.bean.operator.FeatureSingleElem;
+import org.anchoranalysis.feature.cache.ChildCacheName;
 import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.image.voxel.statistics.VoxelStatistics;
-import org.anchoranalysis.plugin.mpp.feature.bean.unit.UnitConverter;
+import org.anchoranalysis.feature.input.descriptor.FeatureInputDescriptor;
 
-// Size = Number of voxels
-public final class Size extends FeatureSingleMemo {
+public class AsMark extends FeatureSingleElem<FeatureInputSingleMemo,FeatureInputMark> {
 
-	// START BEAN PROPERTIES
-	@BeanField
-	private int regionID = GlobalRegionIdentifiers.SUBMARK_INSIDE;
-	
-	@BeanField
-	private UnitConverter unit = new UnitConverter();
-	// END BEAN PROPERTIES
+	private static final ChildCacheName CACHE_NAME = new ChildCacheName(AsMark.class);
 	
 	@Override
-	public double calc( SessionInput<FeatureInputSingleMemo> input ) throws FeatureCalcException {
-		
-		PxlMark pm = input.get().getPxlPartMemo().doOperation();
-		
-		VoxelStatistics pxlStats = pm.statisticsForAllSlices(0, regionID);
-				
-		return unit.rslvVolume(
-			(double) pxlStats.size(),
-			input.get().getResOptional()
-		);
+	public double calc(SessionInput<FeatureInputSingleMemo> input) throws FeatureCalcException {
+		return input
+			.forChild()
+			.calc(
+				getItem(),
+				new CalculateDeriveMarkFromMemo(),
+				CACHE_NAME
+			);
 	}
 
-	public int getRegionID() {
-		return regionID;
+	// We change the default behaviour, as we don't want to give the same paramsFactory
+	//   as the item we pass to
+	@Override
+	public FeatureInputDescriptor paramType()
+			throws FeatureCalcException {
+		return FeatureInputSingleMemoDescriptor.instance;
 	}
 
-	public void setRegionID(int regionID) {
-		this.regionID = regionID;
+	@Override
+	public String getParamDscr() {
+		return getItem().getParamDscr();
 	}
-
-	public UnitConverter getUnit() {
-		return unit;
-	}
-
-	public void setUnit(UnitConverter unit) {
-		this.unit = unit;
-	}
-
 }

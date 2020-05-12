@@ -1,4 +1,4 @@
-package ch.ethz.biol.cell.mpp.nrg.feature.ind;
+package org.anchoranalysis.plugin.mpp.feature.bean.memo.ind;
 
 /*
  * #%L
@@ -30,8 +30,8 @@ package ch.ethz.biol.cell.mpp.nrg.feature.ind;
 import java.nio.ByteBuffer;
 
 import org.anchoranalysis.anchor.mpp.bean.regionmap.RegionMap;
-import org.anchoranalysis.anchor.mpp.feature.bean.nrg.elem.FeatureSingleMemo;
 import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputSingleMemo;
+import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
 import org.anchoranalysis.anchor.mpp.regionmap.RegionMapSingleton;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.OperationFailedException;
@@ -46,7 +46,7 @@ import org.anchoranalysis.image.voxel.kernel.ApplyKernel;
 import org.anchoranalysis.image.voxel.kernel.outline.OutlineKernel3;
 import org.anchoranalysis.image.voxel.statistics.VoxelStatistics;
 
-public class SurfaceSizeMaskNonZero extends FeatureSingleMemo {
+public class SurfaceSizeMaskNonZero extends FeatureSingleMemoRegion {
 
 	// START BEAN PROPERTIES
 	@BeanField
@@ -56,54 +56,58 @@ public class SurfaceSizeMaskNonZero extends FeatureSingleMemo {
 	private RegionMap regionMap = RegionMapSingleton.instance();
 	
 	@BeanField
-	private int regionID = 0;
-	
-	@BeanField
 	private boolean suppressZ = false;;
 	// END BEAN PROPERTIES
-	
-	public static VoxelBox<ByteBuffer> calcSurfaceSize( ObjMask objMask, boolean useZ ) {
-
-		OutlineKernel3 kernel = new OutlineKernel3( objMask.getBinaryValuesByte(), false, useZ );
-	
-		return ApplyKernel.apply(kernel, objMask.getVoxelBox(), objMask.getBinaryValuesByte() );
-
-		//return buf.countEqual( objMask.getBinaryValues().getOnInt() );
-	}
 
 	@Override
-	public double calc(SessionInput<FeatureInputSingleMemo> params) throws FeatureCalcException {
+	public double calc(SessionInput<FeatureInputSingleMemo> input) throws FeatureCalcException {
 
-		
-		ObjMaskWithProperties omWithProps = params.get().getPxlPartMemo().getMark().calcMask(
-			params.get().getDimensionsRequired(),
-			regionMap.membershipWithFlagsForIndex(regionID),
-			BinaryValuesByte.getDefault()
+		ObjMask om = createMask(input.get());
+		int surfaceSize = estimateSurfaceSize(
+			input.get().getPxlPartMemo(),
+			om
 		);
 		
-		ObjMask om = omWithProps.getMask();
+		return rslvArea(
+			surfaceSize,
+			input.get().getResOptional()
+		);
+	}
+	
+	private ObjMask createMask(FeatureInputSingleMemo input) throws FeatureCalcException {
+		ObjMaskWithProperties omWithProps = input.getPxlPartMemo().getMark().calcMask(
+			input.getDimensionsRequired(),
+			regionMap.membershipWithFlagsForIndex(getRegionID()),
+			BinaryValuesByte.getDefault()
+		);
+		return omWithProps.getMask();
+	}
+
+	private int estimateSurfaceSize(PxlMarkMemo pxlMarkMemo, ObjMask om) throws FeatureCalcException {
 		
-		VoxelBox<ByteBuffer> vbOutline = calcSurfaceSize( om, !suppressZ );
-		
+		VoxelBox<ByteBuffer> vbOutline = calcOutline(om, !suppressZ);
 		
 		Extent extnt = om.getBoundingBox().extnt();
 		
-		int size = 0;
-		
 		try {
+			int size = 0;
 			for( int z=0; z<extnt.getZ(); z++) {
-				VoxelStatistics stats = params.get().getPxlPartMemo().doOperation().statisticsFor(maskIndex, 0, z);
+				VoxelStatistics stats = pxlMarkMemo.doOperation().statisticsFor(maskIndex, 0, z);
 				if( stats.histogram().hasAboveZero() ) {
 					size += vbOutline.extractSlice(z).countEqual( om.getBinaryValues().getOnInt() );
 				}
 			}
+			return size;
 		} catch (OperationFailedException e) {
 			throw new FeatureCalcException(e);
 		}
-		
-		return size;
 	}
-
+	
+	private static VoxelBox<ByteBuffer> calcOutline( ObjMask objMask, boolean useZ ) {
+		OutlineKernel3 kernel = new OutlineKernel3( objMask.getBinaryValuesByte(), false, useZ );
+		return ApplyKernel.apply(kernel, objMask.getVoxelBox(), objMask.getBinaryValuesByte() );
+	}
+	
 	public int getMaskIndex() {
 		return maskIndex;
 	}
@@ -121,16 +125,6 @@ public class SurfaceSizeMaskNonZero extends FeatureSingleMemo {
 
 	public void setRegionMap(RegionMap regionMap) {
 		this.regionMap = regionMap;
-	}
-
-
-	public int getRegionID() {
-		return regionID;
-	}
-
-
-	public void setRegionID(int regionID) {
-		this.regionID = regionID;
 	}
 
 

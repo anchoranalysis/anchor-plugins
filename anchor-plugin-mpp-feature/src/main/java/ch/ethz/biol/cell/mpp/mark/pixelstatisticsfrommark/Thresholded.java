@@ -35,11 +35,11 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.voxel.statistics.VoxelStatistics;
 
-public class Thresholded extends PixelStatisticsFromMark {
+public class Thresholded extends MarkRegion {
 
 	// START BEAN PROPERTIES
 	@BeanField
-	private PixelStatisticsFromMark pixelList;
+	private MarkRegion region;
 	
 	@BeanField
 	private RelationToThreshold threshold;
@@ -47,15 +47,7 @@ public class Thresholded extends PixelStatisticsFromMark {
 	
 	@Override
 	public VoxelStatistics createStatisticsFor(PxlMarkMemo pmm, ImageDim dim) throws CreateException {
-		return pixelList.createStatisticsFor(pmm, dim).threshold(threshold);
-	}
-
-	public PixelStatisticsFromMark getPixelList() {
-		return pixelList;
-	}
-
-	public void setPixelList(PixelStatisticsFromMark pixelList) {
-		this.pixelList = pixelList;
+		return region.createStatisticsFor(pmm, dim).threshold(threshold);
 	}
 
 	public RelationToThreshold getThreshold() {
@@ -70,7 +62,7 @@ public class Thresholded extends PixelStatisticsFromMark {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((pixelList == null) ? 0 : pixelList.hashCode());
+		result = prime * result + ((region == null) ? 0 : region.hashCode());
 		result = prime * result + ((threshold == null) ? 0 : threshold.hashCode());
 		return result;
 	}
@@ -84,10 +76,10 @@ public class Thresholded extends PixelStatisticsFromMark {
 		if (getClass() != obj.getClass())
 			return false;
 		Thresholded other = (Thresholded) obj;
-		if (pixelList == null) {
-			if (other.pixelList != null)
+		if (region == null) {
+			if (other.region != null)
 				return false;
-		} else if (!pixelList.equals(other.pixelList))
+		} else if (!region.equals(other.region))
 			return false;
 		if (threshold == null) {
 			if (other.threshold != null)
@@ -102,8 +94,16 @@ public class Thresholded extends PixelStatisticsFromMark {
 		return String.format(
 			"%s_%s_%s",
 			Thresholded.class.getCanonicalName(),
-			pixelList.uniqueName(),
+			region.uniqueName(),
 			threshold.uniqueName()
 		);
+	}
+
+	public MarkRegion getRegion() {
+		return region;
+	}
+
+	public void setRegion(MarkRegion region) {
+		this.region = region;
 	}
 }

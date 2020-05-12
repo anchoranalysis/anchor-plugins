@@ -1,6 +1,7 @@
 package ch.ethz.biol.cell.mpp.nrg.feature.histogram;
 
 import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.feature.histogram.FeatureHistogramStatistic;
 
 /*
@@ -36,7 +37,11 @@ import org.anchoranalysis.image.histogram.HistogramStatistics;
 public class Skewness extends FeatureHistogramStatistic {
 
 	@Override
-	protected double calcStatisticFrom(Histogram histogram) throws OperationFailedException {
-		return HistogramStatistics.skewness(histogram);
+	protected double calcStatisticFrom(Histogram histogram) throws FeatureCalcException {
+		try {
+			return HistogramStatistics.skewness(histogram);
+		} catch (OperationFailedException e) {
+			throw new FeatureCalcException(e);
+		}
 	}
 }

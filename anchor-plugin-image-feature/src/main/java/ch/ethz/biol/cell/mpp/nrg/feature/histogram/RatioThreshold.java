@@ -1,8 +1,10 @@
 package ch.ethz.biol.cell.mpp.nrg.feature.histogram;
 
+
+
 /*
  * #%L
- * anchor-plugin-image-feature
+ * anchor-plugin-mpp-feature
  * %%
  * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
  * %%
@@ -28,39 +30,44 @@ package ch.ethz.biol.cell.mpp.nrg.feature.histogram;
 
 
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.feature.cache.SessionInput;
+import org.anchoranalysis.bean.shared.relation.threshold.RelationToThreshold;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.image.feature.bean.FeatureHistogram;
-import org.anchoranalysis.image.feature.histogram.FeatureInputHistogram;
+import org.anchoranalysis.image.feature.histogram.FeatureHistogramStatistic;
 import org.anchoranalysis.image.histogram.Histogram;
 
-public class NumVoxelsGreaterEqualTo extends FeatureHistogram {
+public class RatioThreshold extends FeatureHistogramStatistic {
 
 	// START BEAN PROPERTIES
 	@BeanField
-	private int threshold = 0;
+	private RelationToThreshold threshold;
 	// END BEAN PROPERTIES
-
+	
 	@Override
-	public double calc(SessionInput<FeatureInputHistogram> input)
-			throws FeatureCalcException {
-		
-		Histogram h = input.get().getHistogram();
-		
-		double sum = 0.0;
-		for( int i=threshold; i<=h.getMaxBin(); i++) {
-			sum += h.getCount(i);
+	protected double calcStatisticFrom(Histogram histogram) throws FeatureCalcException {
+		if (histogram.size()==0) {
+			return 0.0;
 		}
-		return sum;
+		
+		assert(histogram.size() > 0);
+		
+		long count = histogram.countThreshold(threshold);
+		return (((double) count) / histogram.size());
+	}
+	
+	@Override
+	public String getParamDscr() {
+		return String.format(
+			"%s,threshold=%s",
+			super.getParamDscr(),
+			threshold.toString()
+		);
 	}
 
-	// END BEAN PROPERTIES
-
-	public int getThreshold() {
+	public RelationToThreshold getThreshold() {
 		return threshold;
 	}
 
-	public void setThreshold(int threshold) {
+	public void setThreshold(RelationToThreshold threshold) {
 		this.threshold = threshold;
 	}
 }

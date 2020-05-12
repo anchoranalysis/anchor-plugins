@@ -1,14 +1,13 @@
-package ch.ethz.biol.cell.mpp.nrg.feature.ind;
+package org.anchoranalysis.plugin.mpp.feature.bean.memo.ind;
 
-import org.anchoranalysis.anchor.mpp.feature.bean.mark.FeatureInputMark;
 import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputSingleMemo;
-import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputSingleMemoDescriptor;
+import org.anchoranalysis.anchor.mpp.pxlmark.PxlMark;
 
-/*-
+/*
  * #%L
  * anchor-plugin-mpp-feature
  * %%
- * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -30,39 +29,43 @@ import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputSingleMemoDe
  * #L%
  */
 
-import org.anchoranalysis.feature.bean.operator.FeatureSingleElem;
-import org.anchoranalysis.feature.cache.ChildCacheName;
+
 import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.feature.input.descriptor.FeatureInputDescriptor;
+import org.anchoranalysis.image.voxel.statistics.VoxelStatistics;
 
-public class AsMark extends FeatureSingleElem<FeatureInputSingleMemo,FeatureInputMark> {
-
-	private static final ChildCacheName CACHE_NAME = new ChildCacheName(AsMark.class);
+// Returns the maximum area of each slice 
+public final class MaxSliceArea extends FeatureSingleMemoRegion {
 	
 	@Override
-	public double calc(SessionInput<FeatureInputSingleMemo> input) throws FeatureCalcException {
-		return input
-			.forChild()
-			.calc(
-				getItem(),
-				new CalculateDeriveMarkFromMemo(),
-				CACHE_NAME
-			);
+	public double calc( SessionInput<FeatureInputSingleMemo> input ) throws FeatureCalcException {
+
+		PxlMark pm = input.get().getPxlPartMemo().doOperation();
+		
+		double maxSliceSizeVoxels = calcMaxSliceSize(pm);
+		
+		double retVal = rslvArea(
+			maxSliceSizeVoxels,
+			input.get().getResOptional()
+		);
+		
+		getLogger().getLogReporter().logFormatted("MaxSliceArea = %f\n", retVal);
+		return retVal;
 	}
 
-	// We change the default behaviour, as we don't want to give the same paramsFactory
-	//   as the item we pass to
-	@Override
-	public FeatureInputDescriptor paramType()
-			throws FeatureCalcException {
-		return FeatureInputSingleMemoDescriptor.instance;
+	private long calcMaxSliceSize( PxlMark pm) {
+		
+		long max = 0;
+		for( int z=0; z<pm.getVoxelBox().extnt().getZ(); z++) {
+			
+			VoxelStatistics pxlStats = pm.statisticsFor(0, getRegionID(), z);
+			
+			long size = pxlStats.size();
+			
+			if (size>max) {
+				max = size;
+			}
+		}
+		return max;
 	}
-
-	@Override
-	public String getParamDscr() {
-		return getItem().getParamDscr();
-	}
-
-
 }

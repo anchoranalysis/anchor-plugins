@@ -1,13 +1,10 @@
-package ch.ethz.biol.cell.mpp.mark.pxllistoperation;
+package org.anchoranalysis.plugin.mpp.feature.bean.memo.ind;
 
-import org.anchoranalysis.anchor.mpp.feature.bean.mark.PxlListOperationFromMark;
-import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
-
-/*
+/*-
  * #%L
  * anchor-plugin-mpp-feature
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -29,36 +26,27 @@ import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
  * #L%
  */
 
+import org.anchoranalysis.anchor.mpp.feature.bean.mark.FeatureInputMark;
+import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputSingleMemo;
+import org.anchoranalysis.feature.cache.calculation.FeatureCalculation;
 
-import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.image.extent.ImageDim;
+class CalculateDeriveMarkFromMemo extends FeatureCalculation<FeatureInputMark, FeatureInputSingleMemo> {
 
-import ch.ethz.biol.cell.mpp.mark.pixelstatisticsfrommark.PixelStatisticsFromMark;
-
-public class Sum extends PxlListOperationFromMark {
-
-	// START BEAN PROPERTIES
-	@BeanField
-	private PixelStatisticsFromMark pixelList;
-	// END BEAN PROPERTIES
-	
 	@Override
-	public double doOperation(PxlMarkMemo pxlMarkMemo, ImageDim dim) throws OperationFailedException {
-		try {
-			return pixelList.createStatisticsFor(pxlMarkMemo, dim).sum();
-		} catch (CreateException e) {
-			throw new OperationFailedException(e);
-		}
+	protected FeatureInputMark execute(FeatureInputSingleMemo input) {
+		return new FeatureInputMark(
+			input.getPxlPartMemo().getMark(),
+			input.getDimensionsOptional()
+		);
 	}
 
-	public PixelStatisticsFromMark getPixelList() {
-		return pixelList;
+	@Override
+	public boolean equals(Object obj) {
+		return obj instanceof CalculateDeriveMarkFromMemo;
 	}
 
-	public void setPixelList(PixelStatisticsFromMark pixelList) {
-		this.pixelList = pixelList;
+	@Override
+	public int hashCode() {
+		return 21;		// Arbitrary
 	}
-
 }

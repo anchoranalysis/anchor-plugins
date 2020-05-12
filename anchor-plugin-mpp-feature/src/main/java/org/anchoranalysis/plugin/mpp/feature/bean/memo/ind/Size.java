@@ -1,8 +1,7 @@
-package ch.ethz.biol.cell.mpp.nrg.feature.ind;
+package org.anchoranalysis.plugin.mpp.feature.bean.memo.ind;
 
-import org.anchoranalysis.anchor.mpp.feature.bean.mark.PxlListOperationFromMark;
-import org.anchoranalysis.anchor.mpp.feature.bean.nrg.elem.FeatureSingleMemo;
 import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputSingleMemo;
+import org.anchoranalysis.anchor.mpp.pxlmark.PxlMark;
 
 /*
  * #%L
@@ -31,57 +30,23 @@ import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputSingleMemo;
  */
 
 
-import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.relation.RelationToValue;
 import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.image.voxel.VoxelIntensityList;
+import org.anchoranalysis.image.voxel.statistics.VoxelStatistics;
 
-public class NumberPixels extends FeatureSingleMemo {
+// Size = Number of voxels
+public final class Size extends FeatureSingleMemoRegion {
 
-	// START BEAN PROPERTIES
-	@BeanField
-	private PxlListOperationFromMark pixelList;
-	// END BEAN PROPERTIES
-	
-	public static int countFromPxlList( VoxelIntensityList list, RelationToValue relationToThreshold, double threshold ) {
-		int count = 0;
-		
-		for (int i=0; i<list.size(); i++) {
-			double pxlVal = list.get(i);
-			
-			if (relationToThreshold.isRelationToValueTrue(pxlVal,threshold)) {
-				count++;
-			}
-		}
-		return count;
-	}
-	
 	@Override
 	public double calc( SessionInput<FeatureInputSingleMemo> input ) throws FeatureCalcException {
-
-		try {
-			return pixelList.doOperation(
-				input.get().getPxlPartMemo(),
-				input.get().getDimensionsRequired()
-			);
-		} catch (OperationFailedException e) {
-			throw new FeatureCalcException(e);
-		}							
+		
+		PxlMark pm = input.get().getPxlPartMemo().doOperation();
+		
+		VoxelStatistics pxlStats = pm.statisticsForAllSlices(0, getRegionID());
+				
+		return rslvVolume(
+			(double) pxlStats.size(),
+			input.get().getResOptional()
+		);
 	}
-
-	@Override
-	public String getParamDscr() {
-		return String.format("pixelList=%s", pixelList.toString() );
-	}
-
-	public PxlListOperationFromMark getPixelList() {
-		return pixelList;
-	}
-
-	public void setPixelList(PxlListOperationFromMark pixelList) {
-		this.pixelList = pixelList;
-	}
-
 }

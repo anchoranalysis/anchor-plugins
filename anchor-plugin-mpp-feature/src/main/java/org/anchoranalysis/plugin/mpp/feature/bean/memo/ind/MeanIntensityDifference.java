@@ -1,4 +1,4 @@
-package ch.ethz.biol.cell.mpp.nrg.feature.ind;
+package org.anchoranalysis.plugin.mpp.feature.bean.memo.ind;
 
 import org.anchoranalysis.anchor.mpp.feature.bean.nrg.elem.FeatureSingleMemo;
 import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputSingleMemo;
@@ -35,67 +35,45 @@ import org.anchoranalysis.anchor.mpp.pxlmark.PxlMark;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.image.voxel.statistics.VoxelStatistics;
-import org.anchoranalysis.plugin.mpp.feature.bean.unit.UnitConverter;
 
-// Returns the maximum area of each slice 
-public final class MaxSliceArea extends FeatureSingleMemo {
+public class MeanIntensityDifference extends FeatureSingleMemo {
 
 	// START BEAN PROPERTIES
 	@BeanField
-	private int regionID = GlobalRegionIdentifiers.SUBMARK_INSIDE;
-	
-	@BeanField
-	private UnitConverter unit = new UnitConverter();
+	private double minDiff;
 	// END BEAN PROPERTIES
 	
-	private long calcMaxSliceSize( PxlMark pm) {
-		
-		long max = 0;
-		for( int z=0; z<pm.getVoxelBox().extnt().getZ(); z++) {
-			
-			VoxelStatistics pxlStats = pm.statisticsFor(0, regionID, z);
-			
-			long size = pxlStats.size();
-			
-			if (size>max) {
-				max = size;
-			}
-		}
-		return max;
+	public MeanIntensityDifference() {
+		super();
 	}
 	
+	
+	public MeanIntensityDifference(double minDiff) {
+		super();
+		this.minDiff = minDiff;
+	}
+		
 	@Override
-	public double calc( SessionInput<FeatureInputSingleMemo> input ) throws FeatureCalcException {
+	public double calc( SessionInput<FeatureInputSingleMemo> params ) throws FeatureCalcException {
 
-		PxlMark pm = input.get().getPxlPartMemo().doOperation();
+		PxlMark pm = params.get().getPxlPartMemo().doOperation();
 		
-		double maxSliceSizeVoxels = calcMaxSliceSize(pm);
+		double mean_in = pm.statisticsForAllSlices(0,GlobalRegionIdentifiers.SUBMARK_INSIDE).mean();
+		double mean_shell = pm.statisticsForAllSlices(0,GlobalRegionIdentifiers.SUBMARK_SHELL).mean();
 		
-		double retVal = unit.rslvArea(
-			maxSliceSizeVoxels,
-			input.get().getResOptional()
-		);
-		
-		getLogger().getLogReporter().logFormatted("MaxSliceArea = %f\n", retVal);
-		return retVal;
+		return ((mean_in-mean_shell) - minDiff) / 255;
 	}
 
-	public int getRegionID() {
-		return regionID;
+	@Override
+	public String getParamDscr() {
+		return String.format("minDiff=%f", minDiff);
+	}
+	
+	public double getMinDiff() {
+		return minDiff;
 	}
 
-	public void setRegionID(int regionID) {
-		this.regionID = regionID;
+	public void setMinDiff(double minDiff) {
+		this.minDiff = minDiff;
 	}
-
-	public UnitConverter getUnit() {
-		return unit;
-	}
-
-	public void setUnit(UnitConverter unit) {
-		this.unit = unit;
-	}
-
-
 }
