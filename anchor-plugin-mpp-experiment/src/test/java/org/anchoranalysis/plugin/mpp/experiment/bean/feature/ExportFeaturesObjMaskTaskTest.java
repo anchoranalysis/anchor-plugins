@@ -214,8 +214,8 @@ public class ExportFeaturesObjMaskTaskTest {
 	@Test
 	public void testSimpleLargeWithReference() throws OperationFailedException, CreateException {
 		// DISABLED UNTIL CODE IS FINISHED
-		//taskFixture.useAlternativeXMLList(SINGLE_FEATURES_WITH_REFERENCE);
-		//testOnTask(OUTPUT_DIR_SIMPLE_WITH_REFERENCE);
+		taskFixture.useAlternativeXMLList(SINGLE_FEATURES_WITH_REFERENCE);
+		testOnTask(OUTPUT_DIR_SIMPLE_WITH_REFERENCE);
 	}
 	
 	

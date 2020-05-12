@@ -166,5 +166,4 @@ class StackCollectionFromFilesInputObject extends StackSequenceInput {
 			}
 		}
 	}
-
 }

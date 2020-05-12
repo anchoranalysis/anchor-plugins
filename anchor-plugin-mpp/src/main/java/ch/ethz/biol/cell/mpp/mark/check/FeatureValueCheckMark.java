@@ -48,7 +48,7 @@ import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 import org.anchoranalysis.feature.session.FeatureSession;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorSingle;
-import org.anchoranalysis.feature.shared.SharedFeatureSet;
+import org.anchoranalysis.feature.shared.SharedFeatureMulti;
 
 public abstract class FeatureValueCheckMark<T extends FeatureInput> extends CheckMark {
 	
@@ -63,7 +63,7 @@ public abstract class FeatureValueCheckMark<T extends FeatureInput> extends Chec
 	private KeyValueParamsProvider keyValueParamsProvider;
 	// END BEANS
 	
-	private SharedFeatureSet<T> sharedFeatureSet;
+	private SharedFeatureMulti<T> sharedFeatureSet;
 	
 	private Feature<T> feature;
 	
