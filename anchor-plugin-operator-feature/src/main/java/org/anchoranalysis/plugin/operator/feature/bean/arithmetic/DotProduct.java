@@ -81,8 +81,8 @@ public class DotProduct<T extends FeatureInput> extends Feature<T> {
 	}
 
 	@Override
-	public FeatureInputDescriptor paramType() {
-		return FeatureInputDescriptorUtilities.paramTypeForTwo(vector1.paramType(), vector2.paramType());
+	public FeatureInputDescriptor inputDescriptor() {
+		return FeatureInputDescriptorUtilities.paramTypeForTwo(vector1.inputDescriptor(), vector2.inputDescriptor());
 	}
 
 	@Override

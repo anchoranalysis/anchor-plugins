@@ -26,22 +26,21 @@ package org.anchoranalysis.plugin.mpp.experiment.bean.feature;
  * #L%
  */
 
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
-
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
+
 import org.anchoranalysis.bean.NamedBean;
+import org.anchoranalysis.bean.error.BeanMisconfiguredException;
+import org.anchoranalysis.bean.xml.RegisterBeanFactories;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.nrg.NRGStack;
 import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
-import org.anchoranalysis.image.bean.provider.stack.StackProvider;
 import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
 import org.anchoranalysis.image.feature.objmask.pair.FeatureInputPairObjs;
 import org.anchoranalysis.image.feature.stack.FeatureInputStack;
-import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.plugin.image.feature.bean.obj.table.FeatureTableObjs;
 import org.anchoranalysis.plugin.image.feature.bean.obj.table.MergedPairs;
 import org.anchoranalysis.plugin.image.feature.bean.obj.table.Simple;
@@ -55,14 +54,18 @@ class ExportFeaturesObjMaskTaskFixture {
 	private static final String PATH_FEATURES_SINGLE_DEFAULT = "singleFeatures.xml";
 	private static final String PATH_FEATURES_PAIR_DEFAULT = "pairFeatures.xml";
 	private static final String PATH_FEATURES_IMAGE_DEFAULT = "imageFeatures.xml";
+	private static final String PATH_FEATURES_SHARED_DEFAULT = "sharedFeatures.xml";
 	
 	private NRGStack nrgStack = createNRGStack(true);
 	private FeatureTableObjs<?> flexiFeatureTable = new Simple();
 	
-	/** The "single" and "pair" features in use.*/
+	/** The "single" and "pair" and "image" features in use.*/
 	private LoadFeatureListProviderFixture<FeatureInputSingleObj> singleFeatures;
 	private LoadFeatureListProviderFixture<FeatureInputPairObjs> pairFeatures;
 	private LoadFeatureListProviderFixture<FeatureInputStack> imageFeatures;
+	
+	/** The features used for the shared-feature set */
+	private LoadFeatureListProviderFixture<FeatureInput> sharedFeatures;
 	
 	/**
 	 * Constructor
@@ -79,6 +82,7 @@ class ExportFeaturesObjMaskTaskFixture {
 		this.singleFeatures = new LoadFeatureListProviderFixture<>(loader, PATH_FEATURES_SINGLE_DEFAULT);
 		this.pairFeatures = new LoadFeatureListProviderFixture<>(loader, PATH_FEATURES_PAIR_DEFAULT);
 		this.imageFeatures = new LoadFeatureListProviderFixture<>(loader, PATH_FEATURES_IMAGE_DEFAULT);
+		this.sharedFeatures = new LoadFeatureListProviderFixture<>(loader, PATH_FEATURES_SHARED_DEFAULT);
 	}
 	
 	/** 
@@ -92,8 +96,16 @@ class ExportFeaturesObjMaskTaskFixture {
 	 * Additionally include a shell feature in the "single" features
 	 *  
 	 * @throws CreateException */
-	public void useAlternativeXMLList(String alternativeFileName) throws CreateException {
+	public void useAlternativeFileAsSingle(String alternativeFileName) throws CreateException {
 		singleFeatures.useAlternativeXMLList(alternativeFileName);
+	}
+	
+	/** 
+	 * Additionally include a shell feature in the "single" features
+	 *  
+	 * @throws CreateException */
+	public void useAlternativeFileAsShared(String alternativeFileName) throws CreateException {
+		sharedFeatures.useAlternativeXMLList(alternativeFileName);
 	}
 	
 	/** 
@@ -144,14 +156,23 @@ class ExportFeaturesObjMaskTaskFixture {
 		task.setListFeaturesObjMask(
 			singleFeatures.asListNamedBeansProvider()
 		);
-		task.getDefine().setNrgStackProvider(
-			nrgStackProvider(nrgStack)
+		task.setDefine(
+			DefineFixture.create(
+				nrgStack,
+				Optional.of(sharedFeatures.asListNamedBeansProvider())
+			)		
 		);
-		
 		task.setSelectFeaturesObjects( (FeatureTableObjs<T>) flexiFeatureTable);
 		task.setListObjMaskProvider(
 			createObjProviders(MultiInputFixture.OBJS_NAME)
 		);
+		
+		try {
+			task.checkMisconfigured( RegisterBeanFactories.getDefaultInstances() );
+		} catch (BeanMisconfiguredException e) {
+			throw new CreateException(e);
+		}
+		
 		return task;
 	}
 		
@@ -159,18 +180,6 @@ class ExportFeaturesObjMaskTaskFixture {
 		return Arrays.asList(
 			new NamedBean<>(objsName, new ObjMaskProviderReference(objsName))	
 		);
-	}
-
-	private static StackProvider nrgStackProvider(NRGStack nrgStack) throws CreateException {
-
-		// Create NRG stack 
-		Stack stack = nrgStack.asStack();
-		
-		// Encapsulate in a mock
-		StackProvider stackProvider = mock(StackProvider.class);
-		when(stackProvider.create()).thenReturn(stack);
-		when(stackProvider.duplicateBean()).thenReturn(stackProvider);
-		return stackProvider;
 	}
 
 	private MergedPairs createMergedPairs(boolean includeFeaturesInPair, boolean includeImageFeatures) throws CreateException {

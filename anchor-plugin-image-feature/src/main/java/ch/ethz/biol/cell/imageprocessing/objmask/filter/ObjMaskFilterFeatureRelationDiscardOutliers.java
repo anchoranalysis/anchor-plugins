@@ -97,7 +97,7 @@ public class ObjMaskFilterFeatureRelationDiscardOutliers extends ObjMaskFilter {
 				session = FeatureSession.with(
 					feature,
 					new FeatureInitParams(),
-					getSharedObjects().getFeature().getSharedFeatureSet().downcast(),
+					getSharedObjects().getFeature().getSharedFeatureSet(),
 					getLogger()
 				);				
 			} catch (FeatureCalcException e) {

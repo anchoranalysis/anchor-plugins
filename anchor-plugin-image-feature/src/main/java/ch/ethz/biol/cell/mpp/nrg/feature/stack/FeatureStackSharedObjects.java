@@ -34,7 +34,7 @@ import org.anchoranalysis.image.feature.stack.FeatureInputStackDescriptor;
 public abstract class FeatureStackSharedObjects extends FeatureSharedObjs<FeatureInputStack> {
 
 	@Override
-	public FeatureInputDescriptor paramType() {
+	public FeatureInputDescriptor inputDescriptor() {
 		return FeatureInputStackDescriptor.instance;
 	}
 }

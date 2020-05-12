@@ -59,8 +59,9 @@ public class ExportFeaturesObjMaskTaskTest {
 	private ExportFeaturesObjMaskTaskFixture taskFixture;
 	
 	private static final String SINGLE_FEATURES_WITH_SHELL = "singleFeaturesWithShell.xml";
-	@SuppressWarnings("unused")
-	private static final String SINGLE_FEATURES_WITH_REFERENCE = "singleFeaturesWithReference.xml";
+
+	private static final String SINGLE_FEATURES_REFERENCE_WITH_INCLUDE = "referenceWithInclude.xml";
+	private static final String SINGLE_FEATURES_REFERENCE_SHARED = "referenceWithShared.xml";
 	
 	private static final String RELATIVE_PATH_SAVED_RESULTS = "expectedOutput/exportFeaturesObjMask/";
 	
@@ -70,7 +71,6 @@ public class ExportFeaturesObjMaskTaskTest {
 	private static final String OUTPUT_DIR_MERGED_2 = "mergedPairs02/";
 	private static final String OUTPUT_DIR_MERGED_3 = "mergedPairs03/";
 	private static final String OUTPUT_DIR_IMAGE_CACHE = "imageCache/";
-	@SuppressWarnings("unused")
 	private static final String OUTPUT_DIR_SIMPLE_WITH_REFERENCE = "simpleWithReference/";
 	
 	// Used for tests where we expect an exception to be thrown, and thus never to actually be compared
@@ -131,7 +131,7 @@ public class ExportFeaturesObjMaskTaskTest {
 	
 	@Test
 	public void testMergedLargeWithPairs() throws OperationFailedException, CreateException {
-		taskFixture.useAlternativeXMLList(SINGLE_FEATURES_WITH_SHELL);
+		taskFixture.useAlternativeFileAsSingle(SINGLE_FEATURES_WITH_SHELL);
 		taskFixture.changeToMergedPairs(true, false);
 		testOnTask(OUTPUT_DIR_MERGED_2);
 	}
@@ -211,10 +211,19 @@ public class ExportFeaturesObjMaskTaskTest {
 		);
 	}
 
+	/** Calculate with a reference to another feature included in the list */
 	@Test
-	public void testSimpleLargeWithReference() throws OperationFailedException, CreateException {
+	public void testSimpleLargeWithIncludedReference() throws OperationFailedException, CreateException {
 		// DISABLED UNTIL CODE IS FINISHED
-		taskFixture.useAlternativeXMLList(SINGLE_FEATURES_WITH_REFERENCE);
+		taskFixture.useAlternativeFileAsSingle(SINGLE_FEATURES_REFERENCE_WITH_INCLUDE);
+		testOnTask(OUTPUT_DIR_SIMPLE_WITH_REFERENCE);
+	}
+	
+	/** Calculate with a reference to a feature that exists among the shared features */
+	@Test
+	public void testSimpleLargeWithSharedReference() throws OperationFailedException, CreateException {
+		// DISABLED UNTIL CODE IS FINISHED
+		taskFixture.useAlternativeFileAsSingle(SINGLE_FEATURES_REFERENCE_SHARED);
 		testOnTask(OUTPUT_DIR_SIMPLE_WITH_REFERENCE);
 	}
 	

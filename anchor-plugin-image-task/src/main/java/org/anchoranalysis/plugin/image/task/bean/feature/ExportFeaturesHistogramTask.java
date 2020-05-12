@@ -152,7 +152,7 @@ public class ExportFeaturesHistogramTask extends ExportFeaturesStoreTask<FileInp
 		 FeatureCalculatorMulti<FeatureInputHistogram> session = FeatureSession.with(
 			features,
 			new FeatureInitParams(),
-			initParams.getSharedFeatureSet().downcast(),
+			initParams.getSharedFeatureSet(),
 			logErrorReporter
 		);
 		

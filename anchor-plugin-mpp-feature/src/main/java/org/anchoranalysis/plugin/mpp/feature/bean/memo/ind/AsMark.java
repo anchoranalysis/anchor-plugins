@@ -54,7 +54,7 @@ public class AsMark extends FeatureSingleElem<FeatureInputSingleMemo,FeatureInpu
 	// We change the default behaviour, as we don't want to give the same paramsFactory
 	//   as the item we pass to
 	@Override
-	public FeatureInputDescriptor paramType() {
+	public FeatureInputDescriptor inputDescriptor() {
 		return FeatureInputSingleMemoDescriptor.instance;
 	}
 

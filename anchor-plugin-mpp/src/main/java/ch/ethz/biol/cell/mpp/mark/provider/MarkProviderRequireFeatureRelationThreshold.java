@@ -106,7 +106,7 @@ public class MarkProviderRequireFeatureRelationThreshold extends MarkProvider {
 			FeatureCalculatorSingle<FeatureInputMark> session = FeatureSession.with(
 				feature,
 				new FeatureInitParams(),
-				getSharedObjects().getFeature().getSharedFeatureSet().downcast(),
+				getSharedObjects().getFeature().getSharedFeatureSet(),
 				getLogger()
 			);
 			return session.calc( input );

@@ -66,7 +66,7 @@ public class Param<T extends FeatureInputParams> extends Feature<T> {
 	}
 
 	@Override
-	public FeatureInputDescriptor paramType() {
+	public FeatureInputDescriptor inputDescriptor() {
 		return FeatureInputParamsDescriptor.instance;
 	}
 
