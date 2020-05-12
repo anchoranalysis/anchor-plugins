@@ -26,7 +26,7 @@ public class MockFeatureWithCalculation extends Feature<FeatureInput> {
 	}
 
 	@Override
-	public FeatureInputDescriptor paramType() {
+	public FeatureInputDescriptor inputDescriptor() {
 		return FeatureInputGenericDescriptor.instance;
 	}
 }

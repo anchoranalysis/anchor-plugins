@@ -109,7 +109,7 @@ public class FeatureTestCalculator {
 		FeatureCalculatorSingle<T> calculator = FeatureSession.with(
 			feature,
 			initParams,
-			new SharedFeatureMulti<>(),
+			new SharedFeatureMulti(),
 			LoggingFixture.simpleLogErrorReporter()
 		);
 		

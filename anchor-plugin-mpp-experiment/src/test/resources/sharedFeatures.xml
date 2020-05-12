@@ -1,0 +1,35 @@
+<config>
+<bean config-class="java.util.List" config-factory="list">
+
+	<item config-class="org.anchoranalysis.bean.NamedBean" name="sharedNumVoxels">
+		<item config-class="org.anchoranalysis.feature.bean.list.FeatureListProviderDefineSingle">
+			<item config-class="org.anchoranalysis.image.feature.bean.objmask.NumVoxels"/>
+		</item>
+	</item>
+
+	<item config-class="org.anchoranalysis.bean.NamedBean" name="sharedCogX">
+		<item config-class="org.anchoranalysis.feature.bean.list.FeatureListProviderDefineSingle">
+			<item config-class="org.anchoranalysis.image.feature.bean.objmask.CenterOfGravity" axis="y"/>
+		</item>
+	</item>
+
+	<item config-class="org.anchoranalysis.bean.NamedBean" name="sharedCogY">
+		<item config-class="org.anchoranalysis.feature.bean.list.FeatureListProviderDefineSingle">
+			<item config-class="org.anchoranalysis.image.feature.bean.objmask.CenterOfGravity" axis="y"/>
+		</item>
+	</item>
+
+	<item config-class="org.anchoranalysis.bean.NamedBean" name="sharedNumBorderVoxels">
+		<item config-class="org.anchoranalysis.feature.bean.list.FeatureListProviderDefineSingle">
+			<item config-class="ch.ethz.biol.cell.mpp.nrg.feature.objmask.NumBorderVoxels"/>
+		</item>
+	</item>
+	
+	<item config-class="org.anchoranalysis.bean.NamedBean" name="sharedMeanIntensity">
+		<item config-class="org.anchoranalysis.feature.bean.list.FeatureListProviderDefineSingle">
+			<item config-class="org.anchoranalysis.plugin.image.feature.bean.obj.single.intensity.Intensity" nrgIndex="0"/>
+		</item>
+	</item>
+	
+</bean>
+</config>

@@ -106,7 +106,7 @@ public class ObjMaskFilterFeatureRelationDiscardFeatureRatioLessThan extends Obj
 			FeatureCalculatorSingle<FeatureInputSingleObj> session = FeatureSession.with(
 				feature,
 				new FeatureInitParams(),
-				getSharedObjects().getFeature().getSharedFeatureSet().downcast(),
+				getSharedObjects().getFeature().getSharedFeatureSet(),
 				getLogger()
 			);
 						

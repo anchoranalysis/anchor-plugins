@@ -32,6 +32,7 @@ import java.util.Optional;
 
 import org.anchoranalysis.bean.NamedBean;
 import org.anchoranalysis.core.error.CreateException;
+import org.anchoranalysis.core.error.friendly.AnchorFriendlyRuntimeException;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.list.FeatureListProvider;
 import org.anchoranalysis.feature.bean.list.FeatureListProviderDefine;
@@ -76,7 +77,7 @@ class LoadFeatureListProviderFixture<T extends FeatureInput> {
 	
 	/** Additionally include a shell feature in the "single" features 
 	 * @throws CreateException */
-	public void useAlternativeXMLList( String alternativePathToXml ) throws CreateException {
+	public void useAlternativeXMLList( String alternativePathToXml ) {
 		features = Optional.of(
 			loadFeatures(loader, alternativePathToXml)
 		);
@@ -101,7 +102,7 @@ class LoadFeatureListProviderFixture<T extends FeatureInput> {
 	}
 	
 	/** Creates the features as a list of providers in named-beans */
-	public List<NamedBean<FeatureListProvider<T>>> asListNamedBeansProvider() throws CreateException {
+	public List<NamedBean<FeatureListProvider<T>>> asListNamedBeansProvider() {
 		if (features.isPresent()) {
 			return features.get();
 		} else {
@@ -113,8 +114,13 @@ class LoadFeatureListProviderFixture<T extends FeatureInput> {
 	 *  
 	 * @throws CreateException 
 	 * */
-	private static <S extends FeatureInput> List<NamedBean<FeatureListProvider<S>>> loadFeatures( TestLoader loader, String pathFeatureList ) throws CreateException {
-		return FeaturesFromXmlFixture.createNamedFeatureProviders(pathFeatureList, loader);
+	private static <S extends FeatureInput> List<NamedBean<FeatureListProvider<S>>> loadFeatures( TestLoader loader, String pathFeatureList ) {
+		try {
+			return FeaturesFromXmlFixture.createNamedFeatureProviders(pathFeatureList, loader);
+		} catch (CreateException e) {
+			// Prefer run-time exceptions to avoid chaining in the tests
+			throw new AnchorFriendlyRuntimeException(e);
+		}
 	}
 	
 }

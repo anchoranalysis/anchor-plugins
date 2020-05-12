@@ -90,7 +90,7 @@ public class BinaryImgChnlProviderObjMaskRelateFeatures extends BinaryChnlProvid
 			return FeatureSession.with(
 				featureProvider.create(),
 				new FeatureInitParams(),
-				getSharedObjects().getFeature().getSharedFeatureSet().downcast(),
+				getSharedObjects().getFeature().getSharedFeatureSet(),
 				getLogger()
 			);
 		} catch (FeatureCalcException e1) {

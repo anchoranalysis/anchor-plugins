@@ -63,7 +63,7 @@ public abstract class FeatureValueCheckMark<T extends FeatureInput> extends Chec
 	private KeyValueParamsProvider keyValueParamsProvider;
 	// END BEANS
 	
-	private SharedFeatureMulti<T> sharedFeatureSet;
+	private SharedFeatureMulti sharedFeatureSet;
 	
 	private Feature<T> feature;
 	
@@ -72,7 +72,7 @@ public abstract class FeatureValueCheckMark<T extends FeatureInput> extends Chec
 	@Override
 	public void onInit(MPPInitParams soMPP) throws InitException {
 		super.onInit(soMPP);
-		sharedFeatureSet = soMPP.getFeature().getSharedFeatureSet().downcast();
+		sharedFeatureSet = soMPP.getFeature().getSharedFeatureSet();
 	}
 	
 	@Override
