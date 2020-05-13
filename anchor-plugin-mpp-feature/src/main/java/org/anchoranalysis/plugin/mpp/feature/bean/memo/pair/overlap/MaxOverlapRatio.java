@@ -1,8 +1,6 @@
-package ch.ethz.biol.cell.mpp.nrg.feature.pair;
+package org.anchoranalysis.plugin.mpp.feature.bean.memo.pair.overlap;
 
-import org.anchoranalysis.anchor.mpp.feature.bean.nrg.elem.FeaturePairMemo;
 import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputPairMemo;
-import org.anchoranalysis.anchor.mpp.mark.GlobalRegionIdentifiers;
 
 /*
  * #%L
@@ -34,37 +32,81 @@ import org.anchoranalysis.anchor.mpp.mark.GlobalRegionIdentifiers;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.plugin.mpp.feature.bean.memo.pair.FeaturePairMemoSingleRegion;
+
 import ch.ethz.biol.cell.mpp.nrg.cachedcalculation.OverlapCalculation;
 
-public final class NoOverlap extends FeaturePairMemo {
+public class MaxOverlapRatio extends FeaturePairMemoSingleRegion {
 
 	// START BEAN PROPERTIES
 	@BeanField
-	private int regionID = GlobalRegionIdentifiers.SUBMARK_INSIDE;
+	private double max = -1;
+	
+	@BeanField
+	private double penaltyValue = -10;
+	
+	@BeanField
+	private boolean includeShell = false;
 	// END BEAN PROPERTIES
-		
-	public NoOverlap() {
-
+	
+	public MaxOverlapRatio() {
+	}
+	
+	public MaxOverlapRatio(double maxOverlap) {
+		this();
+		this.max = maxOverlap;
 	}
 	
 	@Override
-	public double calc( SessionInput<FeatureInputPairMemo> params ) throws FeatureCalcException {
+	public String getParamDscr() {
+		return String.format("max=%f", max );
+	}
+
+	@Override
+	public double calc( SessionInput<FeatureInputPairMemo> input ) throws FeatureCalcException {
 		
-		double overlap = params.calc( new OverlapCalculation(regionID) );
-		if (overlap>0) {
-			return -1;
+		FeatureInputPairMemo params = input.get();
+		
+		double ratio = OverlapRatioUtilities.calcOverlapRatio(
+			params.getObj1(),
+			params.getObj2(),
+			input.calc(
+				new OverlapCalculation( getRegionID() )
+			),
+			getRegionID(),
+			false,
+			Math::min
+		);
+		
+		if ( ratio > max ) {
+			return penaltyValue;
 		} else {
-			return 0.0;
+			return 0;
 		}
 	}
 
-	public int getRegionID() {
-		return regionID;
+	public double getMax() {
+		return max;
 	}
 
-
-	public void setRegionID(int regionID) {
-		this.regionID = regionID;
+	public void setMax(double max) {
+		this.max = max;
 	}
 
+	public double getPenaltyValue() {
+		return penaltyValue;
+	}
+
+	public void setPenaltyValue(double penaltyValue) {
+		this.penaltyValue = penaltyValue;
+	}
+
+	public boolean isIncludeShell() {
+		return includeShell;
+	}
+
+	public void setIncludeShell(boolean includeShell) {
+		this.includeShell = includeShell;
+	}
 }
+

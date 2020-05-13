@@ -59,7 +59,7 @@ class KernelExecutionStats implements Serializable {
 		
 		RunningSum total = new RunningSum();
 		for (int i=0; i<arr.length; i++) {
-			total.incr( arr[i].getSum(), arr[i].getCnt() );
+			total.increment( arr[i].getSum(), arr[i].getCount() );
 		}
 		return total;
 	}
@@ -85,19 +85,19 @@ class KernelExecutionStats implements Serializable {
 	
 	public void incrNotProposed( int kernelID, double executionTime ) {
 		if (kernelID>=0) {
-			kernelExecutionTimeNotProposed[kernelID].add( executionTime );
+			kernelExecutionTimeNotProposed[kernelID].increment( executionTime );
 		}
 	}
 	
 	public void incrAccepted( int kernelID, double executionTime ) {
 		if (kernelID>=0) {
-			kernelExecutionTimeAccepted[kernelID].add( executionTime );
+			kernelExecutionTimeAccepted[kernelID].increment( executionTime );
 		}
 	}
 	
 	public void incrRejected( int kernelID, double executionTime ) {
 		if (kernelID>=0) {
-			kernelExecutionTimeRejected[kernelID].add( executionTime );
+			kernelExecutionTimeRejected[kernelID].increment( executionTime );
 		}
 	}
 	
@@ -106,7 +106,7 @@ class KernelExecutionStats implements Serializable {
 	}
 	
 	public int getProposedTimeForKernelCnt( int kernelID ) {
-		return kernelExecutionTimeAccepted[kernelID].getCnt() + kernelExecutionTimeRejected[kernelID].getCnt();
+		return kernelExecutionTimeAccepted[kernelID].getCount() + kernelExecutionTimeRejected[kernelID].getCount();
 	}
 	
 	// Proposed + non-proposed (but can be smaller than TotalExecutionTime due to reporting)
@@ -115,7 +115,7 @@ class KernelExecutionStats implements Serializable {
 	}
 	
 	public int getExecutionTimeForKernelCntExclReporting( int kernelID ) {
-		return getProposedTimeForKernelCnt(kernelID) + kernelExecutionTimeNotProposed[kernelID].getCnt();
+		return getProposedTimeForKernelCnt(kernelID) + kernelExecutionTimeNotProposed[kernelID].getCount();
 	}
 
 	public long getTotalExecutionTime() {

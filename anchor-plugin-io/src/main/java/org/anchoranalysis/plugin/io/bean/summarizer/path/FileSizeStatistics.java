@@ -54,7 +54,7 @@ public class FileSizeStatistics extends Summarizer<Path> {
 			long size = Files.size(filePath);
 			
 			synchronized(this) {
-				runningSum.add(size);
+				runningSum.increment(size);
 						
 				if (size<min) {
 					min = size;
@@ -74,11 +74,11 @@ public class FileSizeStatistics extends Summarizer<Path> {
 	@Override
 	public synchronized String describe() throws OperationFailedException {
 		
-		if (runningSum.getCnt()==0) {
+		if (runningSum.getCount()==0) {
 			throw new OperationFailedException("There are no paths to summarize");
 		}
 		
-		if (runningSum.getCnt()==1) {
+		if (runningSum.getCount()==1) {
 			// Special case if all files are the same size
 			return String.format(
 				"File-size is %s.",

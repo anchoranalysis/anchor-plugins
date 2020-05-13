@@ -1,4 +1,4 @@
-package ch.ethz.biol.cell.mpp.nrg.feature.pair;
+package org.anchoranalysis.plugin.mpp.feature.bean.memo.pair;
 
 /*-
  * #%L
@@ -26,31 +26,23 @@ package ch.ethz.biol.cell.mpp.nrg.feature.pair;
  * #L%
  */
 
-import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputPairMemo;
-import org.anchoranalysis.anchor.mpp.mark.GlobalRegionIdentifiers;
+import org.anchoranalysis.anchor.mpp.feature.bean.nrg.elem.FeaturePairMemo;
+import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputSingleMemo;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.feature.cache.SessionInput;
-import org.anchoranalysis.feature.calc.FeatureCalcException;
-import ch.ethz.biol.cell.mpp.nrg.cachedcalculation.OverlapCalculationMaskGlobal;
+import org.anchoranalysis.feature.bean.Feature;
 
-public abstract class OverlapMaskSingleRegion extends OverlapMaskBase {
+public abstract class FeaturePairMemoOne extends FeaturePairMemo {
 
 	// START BEAN PROPERTIES
 	@BeanField
-	private int regionID = GlobalRegionIdentifiers.SUBMARK_INSIDE;
+	private Feature<FeatureInputSingleMemo> item;
 	// END BEAN PROPERTIES
-		
-	protected double overlapWithGlobalMask( SessionInput<FeatureInputPairMemo> params ) throws FeatureCalcException {
-		return params.calc(
-			new OverlapCalculationMaskGlobal(regionID, getNrgIndex(), (byte) getMaskValue())
-		);
-	}
 	
-	public int getRegionID() {
-		return regionID;
+	public Feature<FeatureInputSingleMemo> getItem() {
+		return item;
 	}
 
-	public void setRegionID(int regionID) {
-		this.regionID = regionID;
+	public void setItem(Feature<FeatureInputSingleMemo> item) {
+		this.item = item;
 	}
 }

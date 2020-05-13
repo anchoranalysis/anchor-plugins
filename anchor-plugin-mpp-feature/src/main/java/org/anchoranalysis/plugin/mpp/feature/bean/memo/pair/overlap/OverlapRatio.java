@@ -1,8 +1,7 @@
-package ch.ethz.biol.cell.mpp.nrg.feature.pair;
+package org.anchoranalysis.plugin.mpp.feature.bean.memo.pair.overlap;
 
-import org.anchoranalysis.anchor.mpp.feature.bean.nrg.elem.FeaturePairMemo;
 import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputPairMemo;
-import org.anchoranalysis.anchor.mpp.mark.GlobalRegionIdentifiers;
+
 
 
 /*
@@ -34,67 +33,28 @@ import org.anchoranalysis.anchor.mpp.mark.GlobalRegionIdentifiers;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.cache.SessionInput;
-import org.anchoranalysis.feature.cache.calculation.FeatureCalculation;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 
-import ch.ethz.biol.cell.mpp.nrg.cachedcalculation.OverlapCalculation;
-import ch.ethz.biol.cell.mpp.nrg.cachedcalculation.OverlapMIPRatioCalculation;
-
-public class OverlapRatio extends FeaturePairMemo {
+public class OverlapRatio extends OverlapMIPBase {
 
 	// START BEAN PROPERTIES
-	@BeanField
-	private int regionID = GlobalRegionIdentifiers.SUBMARK_INSIDE;
-	
-	@BeanField
-	private boolean mip = false;
-	
 	@BeanField
 	private boolean useMax = false;
 	// END BEAN PROPERTIES
 		
 	@Override
-	public double calc( SessionInput<FeatureInputPairMemo> input ) throws FeatureCalcException {
+	public double calc(SessionInput<FeatureInputPairMemo> input) throws FeatureCalcException {
 		
 		FeatureInputPairMemo inputSessionless = input.get();
-		
-		double overlap = input.calc(
-			overlapCalculation()
-		);
 
 		return OverlapRatioUtilities.calcOverlapRatio(
 			inputSessionless.getObj1(),
 			inputSessionless.getObj2(),
-			overlap,
-			regionID,
-			mip,
+			overlappingNumVoxels(input),
+			getRegionID(),
+			isMip(),
 			OverlapRatioUtilities.maxOrMin(useMax)
 		);
-	}
-	
-	private FeatureCalculation<Double,FeatureInputPairMemo> overlapCalculation() {
-		if (mip) {
-			// If we use this we don't need to find the volume ourselves
-			return new OverlapMIPRatioCalculation(regionID);
-		} else {
-			return new OverlapCalculation(regionID);
-		}	
-	}
-	
-	public int getRegionID() {
-		return regionID;
-	}
-
-	public void setRegionID(int regionID) {
-		this.regionID = regionID;
-	}
-
-	public boolean isMip() {
-		return mip;
-	}
-
-	public void setMip(boolean mip) {
-		this.mip = mip;
 	}
 
 	public boolean isUseMax() {

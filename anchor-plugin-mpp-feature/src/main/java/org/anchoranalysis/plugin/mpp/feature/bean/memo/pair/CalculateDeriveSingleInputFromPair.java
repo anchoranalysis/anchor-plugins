@@ -1,4 +1,4 @@
-package ch.ethz.biol.cell.mpp.nrg.feature.pair;
+package org.anchoranalysis.plugin.mpp.feature.bean.memo.pair;
 
 /*-
  * #%L

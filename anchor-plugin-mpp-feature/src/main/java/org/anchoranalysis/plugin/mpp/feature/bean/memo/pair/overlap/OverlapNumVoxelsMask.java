@@ -1,8 +1,6 @@
-package ch.ethz.biol.cell.mpp.nrg.feature.pair;
+package org.anchoranalysis.plugin.mpp.feature.bean.memo.pair.overlap;
 
-import org.anchoranalysis.anchor.mpp.feature.bean.nrg.elem.FeaturePairMemo;
 import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputPairMemo;
-import org.anchoranalysis.anchor.mpp.mark.GlobalRegionIdentifiers;
 
 /*
  * #%L
@@ -31,58 +29,14 @@ import org.anchoranalysis.anchor.mpp.mark.GlobalRegionIdentifiers;
  */
 
 
-import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import ch.ethz.biol.cell.mpp.nrg.cachedcalculation.OverlapCalculation;
 
-public class MaxOverlap extends FeaturePairMemo {
-
-	// START BEAN PROPERTIES
-	@BeanField
-	private double maxOverlap = -1;
-	
-	@BeanField
-	private int regionID = GlobalRegionIdentifiers.SUBMARK_INSIDE;
-	// END BEAN PROPERTIES
-	
-	public MaxOverlap() {
-	}
-	
-	public MaxOverlap(double maxOverlap) {
-		this();
-		this.maxOverlap = maxOverlap;
-	}
-	
-	@Override
-	public String getParamDscr() {
-		return String.format("maxOverlap=%f", maxOverlap );
-	}
-	
+public class OverlapNumVoxelsMask extends OverlapMaskBase {
+		
 	@Override
 	public double calc( SessionInput<FeatureInputPairMemo> params ) throws FeatureCalcException {
-		
-		double overlap = params.calc(new OverlapCalculation(regionID)); 
-		if (overlap>maxOverlap) {
-			return -10;
-		} else {
-			return 0;
-		}
+		return overlapWithGlobalMask(params);
 	}
 
-	public double getMaxOverlap() {
-		return maxOverlap;
-	}
-
-	public void setMaxOverlap(double maxOverlap) {
-		this.maxOverlap = maxOverlap;
-	}
-
-	public int getRegionID() {
-		return regionID;
-	}
-
-	public void setRegionID(int regionID) {
-		this.regionID = regionID;
-	}
 }
