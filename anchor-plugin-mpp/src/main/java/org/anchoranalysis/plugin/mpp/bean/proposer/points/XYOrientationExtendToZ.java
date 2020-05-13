@@ -70,10 +70,10 @@ public class XYOrientationExtendToZ extends PointsProposer {
 	private PointsFromOrientationProposer pointsFromOrientationXYProposer;
 	
 	@BeanField
-	private BinaryChnlProvider binaryImgChnlProvider;
+	private BinaryChnlProvider binaryChnl;
 	
 	@BeanField @OptionalBean
-	private BinaryChnlProvider binaryImgChnlProviderFilled;
+	private BinaryChnlProvider binaryChnlFilled;
 	
 	@BeanField
 	private ScalarProposer maxDistanceZ;
@@ -135,7 +135,7 @@ public class XYOrientationExtendToZ extends PointsProposer {
 				pntsXY,
 				maxZDist(re, dim.getRes()),
 				skipZDist(dim.getRes()),
-				binaryImgChnlProvider.create(),
+				binaryChnl.create(),
 				chnlFilled(),
 				dim,
 				forceMinZSize
@@ -169,20 +169,12 @@ public class XYOrientationExtendToZ extends PointsProposer {
 	}
 	
 	private Optional<BinaryChnl> chnlFilled() throws CreateException {
-		return binaryImgChnlProviderFilled!=null ? Optional.of(binaryImgChnlProviderFilled.create()) : Optional.empty();
+		return binaryChnlFilled!=null ? Optional.of(binaryChnlFilled.create()) : Optional.empty();
 	}
 	
 	@Override
 	public boolean isCompatibleWith(Mark testMark) {
 		return orientationXYProposer.isCompatibleWith(testMark);
-	}
-
-	public BinaryChnlProvider getBinaryImgChnlProvider() {
-		return binaryImgChnlProvider;
-	}
-
-	public void setBinaryImgChnlProvider(BinaryChnlProvider binaryImgChnlProvider) {
-		this.binaryImgChnlProvider = binaryImgChnlProvider;
 	}
 
 	public UnitValueDistance getDistanceZEndIfEmpty() {
@@ -217,15 +209,6 @@ public class XYOrientationExtendToZ extends PointsProposer {
 		this.maxDistanceZ = maxDistanceZ;
 	}
 
-	public BinaryChnlProvider getBinaryImgChnlProviderFilled() {
-		return binaryImgChnlProviderFilled;
-	}
-
-	public void setBinaryImgChnlProviderFilled(
-			BinaryChnlProvider binaryImgChnlProviderFilled) {
-		this.binaryImgChnlProviderFilled = binaryImgChnlProviderFilled;
-	}
-
 	public boolean isForwardDirectionOnly() {
 		return forwardDirectionOnly;
 	}
@@ -249,5 +232,21 @@ public class XYOrientationExtendToZ extends PointsProposer {
 	public void setPointsFromOrientationXYProposer(
 			PointsFromOrientationProposer pointsFromOrientationXYProposer) {
 		this.pointsFromOrientationXYProposer = pointsFromOrientationXYProposer;
+	}
+
+	public BinaryChnlProvider getBinaryChnl() {
+		return binaryChnl;
+	}
+
+	public void setBinaryChnl(BinaryChnlProvider binaryChnl) {
+		this.binaryChnl = binaryChnl;
+	}
+
+	public BinaryChnlProvider getBinaryChnlFilled() {
+		return binaryChnlFilled;
+	}
+
+	public void setBinaryChnlFilled(BinaryChnlProvider binaryChnlFilled) {
+		this.binaryChnlFilled = binaryChnlFilled;
 	}
 }

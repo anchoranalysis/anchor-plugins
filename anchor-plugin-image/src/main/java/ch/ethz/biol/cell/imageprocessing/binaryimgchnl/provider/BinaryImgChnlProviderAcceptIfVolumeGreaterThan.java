@@ -29,25 +29,17 @@ package ch.ethz.biol.cell.imageprocessing.binaryimgchnl.provider;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.image.bean.provider.BinaryChnlProvider;
-import org.anchoranalysis.image.bean.provider.BinaryImgChnlProviderOne;
 import org.anchoranalysis.image.binary.BinaryChnl;
 
-public class BinaryImgChnlProviderAcceptIfVolumeGreaterThan extends BinaryImgChnlProviderOne {
+public class BinaryImgChnlProviderAcceptIfVolumeGreaterThan extends BinaryChnlProviderReceive {
 
 	// START BEAN PROPERTIES
-	@BeanField
-	private BinaryChnlProvider receiveProvider;
-	
 	@BeanField
 	private double minRatio = 0.01;
 	// END BEAN PROPERTIES
 
 	@Override
-	public BinaryChnl createFromChnl(BinaryChnl larger) throws CreateException {
-
-		BinaryChnl smaller = receiveProvider.create();
-		
+	protected BinaryChnl createFromChnlReceive(BinaryChnl larger, BinaryChnl smaller) throws CreateException {
 		int countLarger = larger.countHighValues();
 		int countSmaller = smaller.countHighValues();
 		
@@ -60,14 +52,6 @@ public class BinaryImgChnlProviderAcceptIfVolumeGreaterThan extends BinaryImgChn
 		}
 	}
 
-	public BinaryChnlProvider getReceiveProvider() {
-		return receiveProvider;
-	}
-
-	public void setReceiveProvider(BinaryChnlProvider receiveProvider) {
-		this.receiveProvider = receiveProvider;
-	}
-
 	public double getMinRatio() {
 		return minRatio;
 	}
@@ -75,6 +59,4 @@ public class BinaryImgChnlProviderAcceptIfVolumeGreaterThan extends BinaryImgChn
 	public void setMinRatio(double minRatio) {
 		this.minRatio = minRatio;
 	}
-
-
 }

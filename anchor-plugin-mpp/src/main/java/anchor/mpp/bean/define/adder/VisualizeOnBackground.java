@@ -141,7 +141,9 @@ public class VisualizeOnBackground extends DefineAdderBean {
 	private StackProvider visualizationBinaryMask( String binaryChnlProviderID ) {
 		StackProviderOutlineRGB provider = new StackProviderOutlineRGB();
 		addBackgroundProvider(provider);
-		provider.setBinaryImgChnlProviderMask( new BinaryImgChnlProviderReference(binaryChnlProviderID) );
+		provider.setMask(
+			new BinaryImgChnlProviderReference(binaryChnlProviderID)
+		);
 		return provider;
 	}
 	

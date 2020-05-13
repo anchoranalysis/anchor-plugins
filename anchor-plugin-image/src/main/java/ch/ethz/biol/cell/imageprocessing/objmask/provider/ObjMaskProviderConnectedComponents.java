@@ -56,7 +56,7 @@ public class ObjMaskProviderConnectedComponents extends ObjMaskProvider {
 
 	// START BEAN PROPERTIES
 	@BeanField
-	private BinaryChnlProvider mask;
+	private BinaryChnlProvider binaryChnl;
 	
 	@BeanField
 	private UnitValueAreaOrVolume minVolume = new UnitValueVolumeVoxels(1);
@@ -72,7 +72,7 @@ public class ObjMaskProviderConnectedComponents extends ObjMaskProvider {
 	@Override
 	public ObjMaskCollection create() throws CreateException {
 	
-		BinaryChnl bi = mask.create();
+		BinaryChnl bi = binaryChnl.create();
 		
 		StopWatch sw = new StopWatch();
 		sw.start();
@@ -159,13 +159,11 @@ public class ObjMaskProviderConnectedComponents extends ObjMaskProvider {
 		this.bigNghb = bigNghb;
 	}
 
-	public BinaryChnlProvider getMask() {
-		return mask;
+	public BinaryChnlProvider getBinaryChnl() {
+		return binaryChnl;
 	}
 
-	public void setMask(BinaryChnlProvider mask) {
-		this.mask = mask;
+	public void setBinaryChnl(BinaryChnlProvider binaryChnl) {
+		this.binaryChnl = binaryChnl;
 	}
-
-
 }

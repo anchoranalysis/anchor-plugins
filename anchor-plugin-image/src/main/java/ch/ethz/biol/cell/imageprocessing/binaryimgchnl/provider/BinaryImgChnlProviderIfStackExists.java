@@ -29,49 +29,27 @@ package ch.ethz.biol.cell.imageprocessing.binaryimgchnl.provider;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.image.bean.provider.BinaryChnlProvider;
-import org.anchoranalysis.image.bean.provider.BinaryImgChnlProviderOne;
 import org.anchoranalysis.image.binary.BinaryChnl;
 
 
 // If a param is equal to a particular value, do soemthing
-public class BinaryImgChnlProviderIfStackExists extends BinaryImgChnlProviderOne {
+public class BinaryImgChnlProviderIfStackExists extends BinaryChnlProviderElseBase {
 
 	// START BEAN PROPERTIES
 	@BeanField
 	private String stackID = "";
-	
-	@BeanField
-	private BinaryChnlProvider binaryImgChnlProviderElse;
 	// END BEAN PROPERTIES
 	
 	@Override
-	public BinaryChnl createFromChnl( BinaryChnl chnl ) throws CreateException {
-		
-		if( getSharedObjects().getChnlCollection().keys().contains(stackID) ) {
-			return chnl;
-		} else {
-			return binaryImgChnlProviderElse.create();
-		}
+	protected boolean condition(BinaryChnl chnl) throws CreateException {
+		return getSharedObjects().getChnlCollection().keys().contains(stackID);
 	}
-
-	public BinaryChnlProvider getBinaryImgChnlProviderElse() {
-		return binaryImgChnlProviderElse;
-	}
-
-	public void setBinaryImgChnlProviderElse(
-			BinaryChnlProvider binaryImgChnlProviderElse) {
-		this.binaryImgChnlProviderElse = binaryImgChnlProviderElse;
-	}
-
-
+	
 	public String getStackID() {
 		return stackID;
 	}
 
-
 	public void setStackID(String stackID) {
 		this.stackID = stackID;
 	}
-
 }

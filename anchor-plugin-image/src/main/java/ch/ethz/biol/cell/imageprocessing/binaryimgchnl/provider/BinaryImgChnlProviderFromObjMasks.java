@@ -29,8 +29,6 @@ package ch.ethz.biol.cell.imageprocessing.binaryimgchnl.provider;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.image.bean.provider.BinaryChnlProvider;
-import org.anchoranalysis.image.bean.provider.ImageDimProvider;
 import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
 import org.anchoranalysis.image.binary.BinaryChnl;
 import org.anchoranalysis.image.binary.values.BinaryValues;
@@ -38,43 +36,35 @@ import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.objmask.ObjMaskCollection;
 import org.anchoranalysis.image.objmask.ops.BinaryChnlFromObjs;
 
-import ch.ethz.biol.cell.imageprocessing.dim.provider.GuessDimFromInputImage;
-
 /** 
  * Creates a BinaryImgChannel from a collection of object masks
  **/
-public class BinaryImgChnlProviderFromObjMasks extends BinaryChnlProvider {
+public class BinaryImgChnlProviderFromObjMasks extends BinaryImgChnlProviderDimSource {
 
 	// START BEAN
 	@BeanField
 	private ObjMaskProvider objs;
 	
 	@BeanField
-	private ImageDimProvider dimProvider = new GuessDimFromInputImage();
-	
-	@BeanField
 	private boolean invert = false;
 	// END BEAN
-	
-	
-	
-	public static BinaryChnl create(  ObjMaskCollection objs, ImageDim sd, boolean invert ) throws CreateException {
 
-		BinaryValues bv = BinaryValues.getDefault();
-		
-		BinaryChnl maskedImage = createChnlFromObjsMux(objs, sd, bv, invert);
-		return new BinaryChnl(maskedImage.getChnl(), bv);	
-	}
-	
 	@Override
-	public BinaryChnl create() throws CreateException {
-		
+	protected BinaryChnl createFromSource(ImageDim dimSource) throws CreateException {
+
 		ObjMaskCollection objCollection = objs.create();
 		if (objCollection==null) {
 			throw new CreateException("objMaskProvider returned null");
 		}
+		return create( objCollection, dimSource, invert );
+	}
+	
+	private static BinaryChnl create(  ObjMaskCollection objs, ImageDim dim, boolean invert ) throws CreateException {
+
+		BinaryValues bv = BinaryValues.getDefault();
 		
-		return create( objCollection, dimProvider.create(), invert );
+		BinaryChnl maskedImage = createChnlFromObjsMux(objs, dim, bv, invert);
+		return new BinaryChnl(maskedImage.getChnl(), bv);	
 	}
 
 	public ObjMaskProvider getObjs() {
@@ -91,14 +81,6 @@ public class BinaryImgChnlProviderFromObjMasks extends BinaryChnlProvider {
 
 	public void setInvert(boolean invert) {
 		this.invert = invert;
-	}
-
-	public ImageDimProvider getDimProvider() {
-		return dimProvider;
-	}
-
-	public void setDimProvider(ImageDimProvider dimProvider) {
-		this.dimProvider = dimProvider;
 	}
 	
 	private static BinaryChnl createChnlFromObjsMux( ObjMaskCollection objs, ImageDim sd, BinaryValues outVal, boolean invert ) throws CreateException {

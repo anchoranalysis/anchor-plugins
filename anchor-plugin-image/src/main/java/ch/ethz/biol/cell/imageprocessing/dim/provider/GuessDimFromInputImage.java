@@ -78,7 +78,7 @@ public class GuessDimFromInputImage extends ImageDimProvider {
 		if (!keys.contains(ImgStackIdentifiers.INPUT_IMAGE)) {
 			throw new CreateException(
 				String.format(
-					"No input-image (%s) exists, so cannot guess Image Dimensions. Please set the dimensions explicitly.",
+					"No input-image (%s) exists so cannot guess Image Dimensions. Please set the dimensions explicitly.",
 					ImgStackIdentifiers.INPUT_IMAGE
 				)
 			);

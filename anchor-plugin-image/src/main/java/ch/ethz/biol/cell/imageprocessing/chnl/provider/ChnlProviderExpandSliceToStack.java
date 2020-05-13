@@ -32,7 +32,6 @@ import java.nio.ByteBuffer;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.bean.provider.ChnlProvider;
-import org.anchoranalysis.image.bean.provider.ImageDimProvider;
 import org.anchoranalysis.image.chnl.Chnl;
 import org.anchoranalysis.image.chnl.factory.ChnlFactory;
 import org.anchoranalysis.image.extent.ImageDim;
@@ -41,33 +40,28 @@ import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
 
 // Takes a 2-dimensional mask and converts into a 3-dimensional mask by repeating along the z-stack
-public class ChnlProviderExpandSliceToStack extends ChnlProvider {
+public class ChnlProviderExpandSliceToStack extends ChnlProviderDimSource {
 
 	// START BEAN PROPERTIES
-	@BeanField
-	private ImageDimProvider dimProviderTarget;
-	
 	@BeanField
 	private ChnlProvider chnlProviderSlice;
 	// END BEAN PROPERTIES
 	
 	@Override
-	public Chnl create() throws CreateException {
-		
-		ImageDim sdTarget = dimProviderTarget.create();
-		
+	protected Chnl createFromDim(ImageDim dim) throws CreateException {
+				
 		Chnl chnl = chnlProviderSlice.create();
 		
 		ImageDim sdSrc = chnl.getDimensions();
 		
-		if (sdSrc.getX()!=sdTarget.getX()) {
+		if (sdSrc.getX()!=dim.getX()) {
 			throw new CreateException("x dimension is not equal");
 		}
-		if (sdSrc.getY()!=sdTarget.getY()) {
+		if (sdSrc.getY()!=dim.getY()) {
 			throw new CreateException("y dimension is not equal");
 		}
 		
-		Chnl chnlOut = ChnlFactory.instance().createEmptyUninitialised(sdTarget, VoxelDataTypeUnsignedByte.instance);
+		Chnl chnlOut = ChnlFactory.instance().createEmptyUninitialised(dim, VoxelDataTypeUnsignedByte.instance);
 		
 		VoxelBox<ByteBuffer> vbSlice = chnl.getVoxelBox().asByte(); 
 		VoxelBox<ByteBuffer> vbOut = chnlOut.getVoxelBox().asByte();
@@ -88,11 +82,5 @@ public class ChnlProviderExpandSliceToStack extends ChnlProvider {
 		this.chnlProviderSlice = chnlProviderSlice;
 	}
 
-	public ImageDimProvider getDimProviderTarget() {
-		return dimProviderTarget;
-	}
 
-	public void setDimProviderTarget(ImageDimProvider dimProviderTarget) {
-		this.dimProviderTarget = dimProviderTarget;
-	}
 }

@@ -50,7 +50,7 @@ public class BinaryImageChnlProviderFeature extends FeatureStackSharedObjects {
 	
 	@BeanField
 	@SkipInit
-	private BinaryChnlProvider binaryImgChnlProvider;
+	private BinaryChnlProvider binaryChnl;
 	// END BEAN PROPERTIES
 	
 	private BinaryChnl chnl;
@@ -60,10 +60,10 @@ public class BinaryImageChnlProviderFeature extends FeatureStackSharedObjects {
 		super.beforeCalcCast(params);
 		
 		ImageInitParams sharedObjs = params.getSharedObjects();
-		binaryImgChnlProvider.initRecursive(sharedObjs, getLogger());
+		binaryChnl.initRecursive(sharedObjs, getLogger());
 		
 		try {
-			chnl = binaryImgChnlProvider.create();
+			chnl = binaryChnl.create();
 		} catch (CreateException e) {
 			throw new InitException(e);
 		}
@@ -87,11 +87,11 @@ public class BinaryImageChnlProviderFeature extends FeatureStackSharedObjects {
 		this.item = item;
 	}
 
-	public BinaryChnlProvider getBinaryImgChnlProvider() {
-		return binaryImgChnlProvider;
+	public BinaryChnlProvider getBinaryChnl() {
+		return binaryChnl;
 	}
 
-	public void setBinaryImgChnlProvider(BinaryChnlProvider binaryImgChnlProvider) {
-		this.binaryImgChnlProvider = binaryImgChnlProvider;
+	public void setBinaryChnl(BinaryChnlProvider binaryChnl) {
+		this.binaryChnl = binaryChnl;
 	}
 }

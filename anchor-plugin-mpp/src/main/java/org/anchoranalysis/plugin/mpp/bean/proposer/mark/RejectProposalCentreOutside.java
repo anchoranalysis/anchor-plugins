@@ -48,7 +48,7 @@ public class RejectProposalCentreOutside extends MarkProposer {
 
 	// START BEAN
 	@BeanField
-	private BinaryChnlProvider binaryImgChnlProvider;
+	private BinaryChnlProvider binaryChnl;
 	
 	@BeanField
 	private MarkProposer item;
@@ -66,7 +66,7 @@ public class RejectProposalCentreOutside extends MarkProposer {
 	public void onInit(MPPInitParams pso) throws InitException {
 		super.onInit(pso);
 		try {
-			binaryImgChnl = binaryImgChnlProvider.create();
+			binaryImgChnl = binaryChnl.create();
 		} catch (CreateException e) {
 			throw new InitException(e);
 		}
@@ -106,18 +106,20 @@ public class RejectProposalCentreOutside extends MarkProposer {
 	public ICreateProposalVisualization proposalVisualization(boolean detailed) {
 		return item.proposalVisualization(detailed);
 	}
-
-	public BinaryChnlProvider getBinaryImgChnlProvider() {
-		return binaryImgChnlProvider;
-	}
-
-	public void setBinaryImgChnlProvider(BinaryChnlProvider binaryImgChnlProvider) {
-		this.binaryImgChnlProvider = binaryImgChnlProvider;
-	}
 	
 	private static int getVoxelFromChnl(Chnl raster, int x, int y, int z) {
 		Point3i pnt = new Point3i(x,y,z);
 		return raster.getVoxelBox().asByte().getVoxel(pnt.getX(), pnt.getY(), pnt.getZ());
+	}
+
+
+	public BinaryChnlProvider getBinaryChnl() {
+		return binaryChnl;
+	}
+
+
+	public void setBinaryChnl(BinaryChnlProvider binaryChnl) {
+		this.binaryChnl = binaryChnl;
 	}
 }
 

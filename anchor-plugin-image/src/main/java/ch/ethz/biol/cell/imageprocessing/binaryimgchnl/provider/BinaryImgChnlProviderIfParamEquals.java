@@ -31,12 +31,10 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.shared.params.keyvalue.KeyValueParamsProvider;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.params.KeyValueParams;
-import org.anchoranalysis.image.bean.provider.BinaryChnlProvider;
-import org.anchoranalysis.image.bean.provider.BinaryImgChnlProviderOne;
 import org.anchoranalysis.image.binary.BinaryChnl;
 
 // If a param is equal to a particular value, do soemthing
-public class BinaryImgChnlProviderIfParamEquals extends BinaryImgChnlProviderOne {
+public class BinaryImgChnlProviderIfParamEquals extends BinaryChnlProviderElseBase {
 
 	// START BEAN PROPERTIES
 	@BeanField
@@ -47,25 +45,18 @@ public class BinaryImgChnlProviderIfParamEquals extends BinaryImgChnlProviderOne
 	
 	@BeanField
 	private String value = "";
-	
-	@BeanField
-	private BinaryChnlProvider binaryImgChnlProviderElse;
 	// END BEAN PROPERTIES
 	
 	@Override
-	public BinaryChnl createFromChnl( BinaryChnl chnl ) throws CreateException {
-		
+	protected boolean condition(BinaryChnl chnl) throws CreateException {
+
 		KeyValueParams params = keyValueParamsProvider.create();
 		
-		String valueToCheck = params.getProperty(key);
-		
-		if( value.equals(valueToCheck) ) {
-			return chnl;
-		} else {
-			return binaryImgChnlProviderElse.create();
-		}
+		return value.equals(
+			params.getProperty(key)
+		);
 	}
-
+	
 	public KeyValueParamsProvider getKeyValueParamsProvider() {
 		return keyValueParamsProvider;
 	}
@@ -75,34 +66,22 @@ public class BinaryImgChnlProviderIfParamEquals extends BinaryImgChnlProviderOne
 		this.keyValueParamsProvider = keyValueParamsProvider;
 	}
 
-	public BinaryChnlProvider getBinaryImgChnlProviderElse() {
-		return binaryImgChnlProviderElse;
-	}
-
-
-	public void setBinaryImgChnlProviderElse(
-			BinaryChnlProvider binaryImgChnlProviderElse) {
-		this.binaryImgChnlProviderElse = binaryImgChnlProviderElse;
-	}
-
-
 	public String getKey() {
 		return key;
 	}
-
 
 	public void setKey(String key) {
 		this.key = key;
 	}
 
-
 	public String getValue() {
 		return value;
 	}
 
-
 	public void setValue(String value) {
 		this.value = value;
 	}
+
+
 }
 

@@ -27,10 +27,7 @@ package ch.ethz.biol.cell.imageprocessing.binaryimgchnl.provider;
  */
 
 
-import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.image.bean.provider.BinaryChnlProvider;
-import org.anchoranalysis.image.bean.provider.ImageDimProvider;
 import org.anchoranalysis.image.binary.BinaryChnl;
 import org.anchoranalysis.image.binary.values.BinaryValues;
 import org.anchoranalysis.image.chnl.Chnl;
@@ -38,31 +35,19 @@ import org.anchoranalysis.image.chnl.factory.ChnlFactory;
 import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
 
-public class BinaryImgChnlProviderAll extends BinaryChnlProvider {
-
-	// START BEAN PROPERTIES
-	@BeanField
-	private ImageDimProvider dimProvider;
-	// END BEAN PROPERTIES
+public class BinaryImgChnlProviderAll extends BinaryImgChnlProviderDimSource {
 
 	@Override
-	public BinaryChnl create() throws CreateException {
-		
-		ImageDim sd = dimProvider.create();
-		
-		Chnl chnl = ChnlFactory.instance().createEmptyInitialised(sd, VoxelDataTypeUnsignedByte.instance);
+	protected BinaryChnl createFromSource(ImageDim dimSource) throws CreateException {
+				
+		Chnl chnl = ChnlFactory.instance().createEmptyInitialised(
+			dimSource,
+			VoxelDataTypeUnsignedByte.instance
+		);
 		
 		BinaryChnl bic = new BinaryChnl(chnl, BinaryValues.getDefault());
 		bic.binaryVoxelBox().setAllPixelsToOn();
 		return bic;
-	}
-
-	public ImageDimProvider getDimProvider() {
-		return dimProvider;
-	}
-
-	public void setDimProvider(ImageDimProvider dimProvider) {
-		this.dimProvider = dimProvider;
 	}
 
 }

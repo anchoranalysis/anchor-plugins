@@ -28,9 +28,6 @@ package ch.ethz.biol.cell.imageprocessing.chnl.provider;
 
 
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.image.bean.provider.ChnlProvider;
-import org.anchoranalysis.image.bean.provider.ImageDimProvider;
 import org.anchoranalysis.image.chnl.Chnl;
 import org.anchoranalysis.image.chnl.factory.ChnlFactory;
 import org.anchoranalysis.image.extent.ImageDim;
@@ -38,14 +35,9 @@ import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedShort;
 
-import ch.ethz.biol.cell.imageprocessing.dim.provider.GuessDimFromInputImage;
-
-public class ChnlProviderEmptyFromDimensions extends ChnlProvider {
+public class ChnlProviderEmptyFromDimensions extends ChnlProviderDimSource {
 	
 	// START BEAN PROPERTIES
-	@BeanField
-	private ImageDimProvider dimProvider = new GuessDimFromInputImage();
-	
 	@BeanField
 	private int value;
 	
@@ -54,18 +46,17 @@ public class ChnlProviderEmptyFromDimensions extends ChnlProvider {
 	// END BEAN PROPERTIES
 
 	@Override
-	public Chnl create() throws CreateException {
-		
+	protected Chnl createFromDim(ImageDim dim) {
+
 		VoxelDataType typeOut = createShort ? VoxelDataTypeUnsignedShort.instance : VoxelDataTypeUnsignedByte.instance; 
-		
-		ImageDim dims = dimProvider.create();
-		Chnl chnlNew = ChnlFactory.instance().createEmptyInitialised(dims, typeOut);
+
+		Chnl chnlNew = ChnlFactory.instance().createEmptyInitialised(dim, typeOut);
 		if (value!=0) {
 			chnlNew.getVoxelBox().any().setAllPixelsTo(value);
 		}
 		return chnlNew;
 	}
-
+	
 	public int getValue() {
 		return value;
 	}
@@ -81,13 +72,4 @@ public class ChnlProviderEmptyFromDimensions extends ChnlProvider {
 	public void setCreateShort(boolean createShort) {
 		this.createShort = createShort;
 	}
-
-	public ImageDimProvider getDimProvider() {
-		return dimProvider;
-	}
-
-	public void setDimProvider(ImageDimProvider dimProvider) {
-		this.dimProvider = dimProvider;
-	}
-
 }

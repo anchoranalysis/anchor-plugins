@@ -8,7 +8,6 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.bean.provider.BinaryChnlProvider;
-import org.anchoranalysis.image.bean.provider.ChnlProvider;
 import org.anchoranalysis.image.bean.provider.HistogramProvider;
 import org.anchoranalysis.image.bean.sgmn.binary.BinarySgmn;
 import org.anchoranalysis.image.bean.sgmn.binary.BinarySgmnParameters;
@@ -21,12 +20,9 @@ import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.image.sgmn.SgmnFailedException;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
 
-public class BinaryImgChnlProviderSgmn extends BinaryChnlProvider {
+public class BinaryImgChnlProviderSgmn extends BinaryImgChnlProviderChnlSource {
 
 	// START BEAN PROPERTIES
-	@BeanField
-	private ChnlProvider chnlProvider;
-	
 	@BeanField
 	private BinarySgmn sgmn;
 	
@@ -36,16 +32,14 @@ public class BinaryImgChnlProviderSgmn extends BinaryChnlProvider {
 	@BeanField @OptionalBean
 	private BinaryChnlProvider mask;
 	// END BEAN PROPERTIES
-		
+	
 	@Override
-	public BinaryChnl create() throws CreateException {
-		Chnl chnl = chnlProvider.create();
-		
+	protected BinaryChnl createFromSource(Chnl chnlSource) throws CreateException {
 		return new BinaryChnl(
-			sgmnResult(chnl),
-			chnl.getDimensions().getRes(),
-			ChnlFactory.instance().get(VoxelDataTypeUnsignedByte.instance)
-		);
+				sgmnResult(chnlSource),
+				chnlSource.getDimensions().getRes(),
+				ChnlFactory.instance().get(VoxelDataTypeUnsignedByte.instance)
+			);
 	}
 	
 	private BinaryVoxelBox<ByteBuffer> sgmnResult(Chnl chnl) throws CreateException {
@@ -77,14 +71,6 @@ public class BinaryImgChnlProviderSgmn extends BinaryChnlProvider {
 		return maskChnl.map( chnl->
 			new ObjMask(chnl.binaryVoxelBox())
 		);
-	}
-	
-	public ChnlProvider getChnlProvider() {
-		return chnlProvider;
-	}
-
-	public void setChnlProvider(ChnlProvider chnlProvider) {
-		this.chnlProvider = chnlProvider;
 	}
 
 	public BinarySgmn getSgmn() {
