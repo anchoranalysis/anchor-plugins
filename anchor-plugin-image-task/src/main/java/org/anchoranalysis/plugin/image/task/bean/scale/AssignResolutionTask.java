@@ -37,7 +37,7 @@ import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
 import org.anchoranalysis.core.index.GetOperationFailedException;
 import org.anchoranalysis.core.log.LogErrorReporter;
-import org.anchoranalysis.core.name.value.NameValue;
+import org.anchoranalysis.core.name.value.SimpleNameValue;
 import org.anchoranalysis.core.progress.ProgressReporter;
 import org.anchoranalysis.core.progress.ProgressReporterNull;
 import org.anchoranalysis.experiment.JobExecutionException;
@@ -154,7 +154,7 @@ public class AssignResolutionTask extends RasterTask {
 				generatorSeq.add(stack, seriesTimeString );
 			} else {
 
-				List<NameValue<Stack>> stackList = new ArrayList<>(); 
+				List<SimpleNameValue<Stack>> stackList = new ArrayList<>(); 
 				for( String key : chnlNames ) {
 					
 					Stack stack = new Stack(
@@ -167,12 +167,12 @@ public class AssignResolutionTask extends RasterTask {
 					
 					String combined = String.format("%s_%s", seriesTimeString, key );
 					stackList.add(
-						new NameValue<>(combined,stack)
+						new SimpleNameValue<>(combined,stack)
 					);
 					
 				}
 				
-				for( NameValue<Stack> ni : stackList ) {
+				for( SimpleNameValue<Stack> ni : stackList ) {
 					generatorSeq.add( ni.getValue(), ni.getName() );
 				}
 			}

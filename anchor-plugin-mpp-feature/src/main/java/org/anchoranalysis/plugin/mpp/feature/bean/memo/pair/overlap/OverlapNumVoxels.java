@@ -1,4 +1,4 @@
-package ch.ethz.biol.cell.mpp.nrg.feature.pair;
+package org.anchoranalysis.plugin.mpp.feature.bean.memo.pair.overlap;
 
 import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputPairMemo;
 
@@ -32,13 +32,10 @@ import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputPairMemo;
 import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 
-public class OverlapMaskGlobalMiddleQuantiles extends OverlapMaskQuantiles {
-
-	public OverlapMaskGlobalMiddleQuantiles() {
-	}
+public class OverlapNumVoxels extends OverlapMIPBase {
 	
 	@Override
-	public double calc( SessionInput<FeatureInputPairMemo> params ) throws FeatureCalcException {
-		return overlapWithQuantiles(params);
+	public double calc( SessionInput<FeatureInputPairMemo> input) throws FeatureCalcException {
+		return overlappingNumVoxels(input);
 	}
 }

@@ -32,7 +32,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
-import org.anchoranalysis.core.arithmetic.FloatUtilities;
+import org.anchoranalysis.core.arithmetic.DoubleUtilities;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.geometry.Comparator3i;
 import org.anchoranalysis.core.geometry.Point3i;
@@ -145,7 +145,7 @@ public class MergeGraph {
 			
 			if (max==null || edge.getPriority()>max.getEdge().getPriority()) {
 				max = entry;
-			} else if ( FloatUtilities.areEqual(edge.getPriority(),max.getEdge().getPriority())) {
+			} else if ( DoubleUtilities.areEqual(edge.getPriority(),max.getEdge().getPriority())) {
 				
 				// If we have equal values, we impose an arbitrary ordering
 				// so as to keep the output of the algorithm as deterministic as possible

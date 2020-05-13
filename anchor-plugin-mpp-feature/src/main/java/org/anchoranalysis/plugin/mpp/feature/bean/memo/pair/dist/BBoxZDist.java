@@ -1,7 +1,7 @@
-package ch.ethz.biol.cell.mpp.nrg.feature.pair;
+package org.anchoranalysis.plugin.mpp.feature.bean.memo.pair.dist;
 
 import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputPairMemo;
-import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
+
 
 /*
  * #%L
@@ -30,65 +30,54 @@ import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
  */
 
 
-import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.bean.shared.relation.EqualToBean;
-import org.anchoranalysis.bean.shared.relation.RelationBean;
 import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.image.extent.BoundingBox;
+import org.anchoranalysis.plugin.mpp.feature.bean.memo.pair.FeaturePairMemoSingleRegion;
 
-public class OverlapRatioMaskGlobal extends OverlapMaskSingleRegion {
-
-	// START BEAN PROPERTIES
-	@BeanField
-	private boolean useMax = false;
-	// END BEAN PROPERTIES
-	
-	private RelationBean relationToThreshold = new EqualToBean();
+/**
+ * Measures the amount of distance in Z for the bounding box.
+ * 
+ * This is useful for measuring how much two objects overlap in Z.
+ * 
+ * It is only calculated if there is overlap of the bounding boxes in XYZ, else 0 is returned.
+ * 
+ * @author Owen Feehan
+ *
+ */
+public class BBoxZDist extends FeaturePairMemoSingleRegion {
 	
 	@Override
-	public double calc( SessionInput<FeatureInputPairMemo> input ) throws FeatureCalcException {
-		
+	public double calc(SessionInput<FeatureInputPairMemo> input)
+			throws FeatureCalcException {
+
 		FeatureInputPairMemo inputSessionless = input.get();
 		
-		double overlap = overlapWithGlobalMask(input);
+		BoundingBox bbox1 = bbox(inputSessionless, p->p.getObj1());
+		BoundingBox bbox2 = bbox(inputSessionless, p->p.getObj2());
 		
-		return calcOverlapRatioToggle(
-			inputSessionless.getObj1(),
-			inputSessionless.getObj2(),
-			overlap,
-			getRegionID(),
-			false
-		);
-	}
-	
-	private double calcOverlapRatioToggle(
-		PxlMarkMemo obj1,
-		PxlMarkMemo obj2,
-		double overlap,
-		int regionID,
-		boolean mip
-	) throws FeatureCalcException {
-
-		if (overlap==0.0) {
+		// Check the bounding boxes intersect in general (including XY)
+		if (bbox1.hasIntersection(bbox2)) {
 			return 0.0;
 		}
 		
-		double volume = calcVolumeAgg(
-			obj1,
-			obj2,
-			regionID,
-			relationToThreshold,
-			OverlapRatioUtilities.maxOrMin(useMax)
-		);
-		return overlap / volume;
+		return calcZDist(bbox1, bbox2);
 	}
+	
+	private double calcZDist(BoundingBox bbox1, BoundingBox bbox2) {
+		int z1_min = bbox1.getCrnrMin().getZ();
+		int z1_max = bbox1.calcCrnrMax().getZ();
+		
+		int z2_min = bbox2.getCrnrMin().getZ();
+		int z2_max = bbox2.calcCrnrMax().getZ();
+		
+		int diff1 = Math.abs( z1_min - z2_min );
+		int diff2 = Math.abs( z1_min - z2_max );
+		int diff3 = Math.abs( z2_min - z1_max );
+		int diff4 = Math.abs( z2_min - z1_min );
 
-	public boolean isUseMax() {
-		return useMax;
+		int min1 = Math.min( diff1, diff2 );
+		int min2 = Math.min( diff3, diff4 );
+		return Math.min( min1, min2 );
 	}
-
-	public void setUseMax(boolean useMax) {
-		this.useMax = useMax;
-	}
-
 }

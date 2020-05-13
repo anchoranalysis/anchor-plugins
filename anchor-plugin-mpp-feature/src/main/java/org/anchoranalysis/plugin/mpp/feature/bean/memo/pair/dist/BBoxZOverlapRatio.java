@@ -1,6 +1,5 @@
-package ch.ethz.biol.cell.mpp.nrg.feature.pair;
+package org.anchoranalysis.plugin.mpp.feature.bean.memo.pair.dist;
 
-import org.anchoranalysis.anchor.mpp.feature.bean.nrg.elem.FeaturePairMemo;
 import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputPairMemo;
 
 /*
@@ -35,55 +34,72 @@ import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.ImageDim;
+import org.anchoranalysis.plugin.mpp.feature.bean.memo.pair.FeaturePairMemoSingleRegion;
 
-// Measures the amount of distance in Z for the bounding box
-// This is useful for measuring how much two objects overlap in Z
-//
-// It is only calculated if there is overlap of the bounding boxes in XYZ, else 0 is returned
-public class BBoxZDist extends FeaturePairMemo {
+/**
+ * Measures the amount of bounding box overlap in the Z dimension
+ * 
+ * Expresses it as a fraction of the minimum Z-extent
+ * 
+ * This is useful for measuring how much two objects overlap in Z
+ * 
+ * It is only calculated if there is overlap of the bounding boxes in XYZ, else 0 is returned
+ */
+
+public class BBoxZOverlapRatio extends FeaturePairMemoSingleRegion {
 
 	// START BEAN PROPERTIES
 	@BeanField
-	private int regionID = 0;
+	private boolean normalize=true;
 	// END BEAN PROPERTIES
 	
 	@Override
-	public double calc(SessionInput<FeatureInputPairMemo> input)
-			throws FeatureCalcException {
+	public double calc(SessionInput<FeatureInputPairMemo> input) throws FeatureCalcException {
 
 		FeatureInputPairMemo inputSessionless = input.get();
 		
-		ImageDim sd = inputSessionless.getDimensionsRequired();
-		BoundingBox bbox1 = inputSessionless.getObj1().getMark().bbox(sd,regionID);
-		BoundingBox bbox2 = inputSessionless.getObj2().getMark().bbox(sd,regionID);
+		BoundingBox bbox1 = bbox(inputSessionless, p->p.getObj1());
+		BoundingBox bbox2 = bbox(inputSessionless, p->p.getObj2());
 		
 		// Check the bounding boxes intersect in general (including XY)
-		if (bbox1.hasIntersection(bbox2)) {
+		if (!bbox1.hasIntersection(bbox2)) {
 			return 0.0;
 		}
 		
-		int z1_min = bbox1.getCrnrMin().getZ();
-		int z1_max = bbox1.calcCrnrMax().getZ();
+		return calcOverlap(
+			bbox1,
+			bbox2,
+			inputSessionless.getDimensionsRequired()
+		);
+	}
+	
+	private double calcOverlap(BoundingBox bbox1, BoundingBox bbox2, ImageDim dim) {
 		
-		int z2_min = bbox2.getCrnrMin().getZ();
-		int z2_max = bbox2.calcCrnrMax().getZ();
+		BoundingBox bboxOverlap = bbox1.intersectCreateNew(bbox2, dim.getExtnt());
 		
-		int diff1 = Math.abs( z1_min - z2_min );
-		int diff2 = Math.abs( z1_min - z2_max );
-		int diff3 = Math.abs( z2_min - z1_max );
-		int diff4 = Math.abs( z2_min - z1_min );
-
-		int min1 = Math.min( diff1, diff2 );
-		int min2 = Math.min( diff3, diff4 );
-		return Math.min( min1, min2 );
+		int minExtntZ = Math.min(
+			zFor(bbox1),
+			zFor(bbox2)
+		);
+		
+		double overlapZ = (double) zFor(bboxOverlap);
+		
+		if (normalize) {
+			return overlapZ / minExtntZ;
+		} else {
+			return overlapZ;
+		}		
+	}
+	
+	private static int zFor(BoundingBox bbox) {
+		return bbox.extnt().getZ();
 	}
 
-	public int getRegionID() {
-		return regionID;
+	public boolean isNormalize() {
+		return normalize;
 	}
 
-	public void setRegionID(int regionID) {
-		this.regionID = regionID;
+	public void setNormalize(boolean normalize) {
+		this.normalize = normalize;
 	}
-
 }

@@ -1,4 +1,4 @@
-package ch.ethz.biol.cell.mpp.nrg.feature.pair;
+package org.anchoranalysis.plugin.mpp.feature.bean.memo.pair.overlap;
 
 import java.util.function.BiFunction;
 
@@ -28,7 +28,6 @@ import java.util.function.BiFunction;
  * #L%
  */
 
-import org.anchoranalysis.anchor.mpp.feature.bean.nrg.elem.FeaturePairMemo;
 import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputPairMemo;
 import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
 import org.anchoranalysis.bean.annotation.BeanField;
@@ -37,10 +36,11 @@ import org.anchoranalysis.bean.shared.relation.threshold.RelationToConstant;
 import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.voxel.statistics.VoxelStatistics;
+import org.anchoranalysis.plugin.mpp.feature.bean.memo.pair.FeaturePairMemoSingleRegion;
 
 import ch.ethz.biol.cell.mpp.nrg.cachedcalculation.OverlapCalculationMaskGlobal;
 
-public abstract class OverlapMaskBase extends FeaturePairMemo {
+public abstract class OverlapMaskBase extends FeaturePairMemoSingleRegion {
 
 	// START BEAN PROPERTIES
 	@BeanField
@@ -49,10 +49,17 @@ public abstract class OverlapMaskBase extends FeaturePairMemo {
 	@BeanField
 	private int nrgIndex = 0;
 	// END BEAN PROPERTIES
-		
-	protected double overlapForRegion( SessionInput<FeatureInputPairMemo> input, int regionID ) throws FeatureCalcException {
+	
+	protected double overlapWithGlobalMask( SessionInput<FeatureInputPairMemo> params ) throws FeatureCalcException {
+		return params.calc(
+			new OverlapCalculationMaskGlobal(getRegionID(), getNrgIndex(), (byte) getMaskValue())
+		);
+	}
+	
+	@Override
+	protected double overlappingNumVoxels( SessionInput<FeatureInputPairMemo> input) throws FeatureCalcException {
 		return input.calc(
-			new OverlapCalculationMaskGlobal(regionID, nrgIndex, (byte) maskValue)
+			new OverlapCalculationMaskGlobal(getRegionID(), nrgIndex, (byte) maskValue)
 		);
 	}
 

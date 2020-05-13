@@ -1,7 +1,7 @@
-package ch.ethz.biol.cell.mpp.nrg.feature.pair;
+package org.anchoranalysis.plugin.mpp.feature.bean.memo.pair.overlap;
 
 import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputPairMemo;
-import org.anchoranalysis.feature.cache.ChildCacheName;
+import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
 
 /*
  * #%L
@@ -30,32 +30,65 @@ import org.anchoranalysis.feature.cache.ChildCacheName;
  */
 
 
+import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.bean.shared.relation.EqualToBean;
+import org.anchoranalysis.bean.shared.relation.RelationBean;
 import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 
-public class MinFeatureAsIndividual extends NRGElemPairWithFeature {
+public class OverlapRatioMask extends OverlapMaskBase {
 
-	private static final ChildCacheName CACHE_NAME_FIRST = new ChildCacheName(MinFeatureAsIndividual.class, "first");
-	private static final ChildCacheName CACHE_NAME_SECOND = new ChildCacheName(MinFeatureAsIndividual.class, "second");
+	// START BEAN PROPERTIES
+	@BeanField
+	private boolean useMax = false;
+	// END BEAN PROPERTIES
+	
+	private RelationBean relationToThreshold = new EqualToBean();
 	
 	@Override
 	public double calc( SessionInput<FeatureInputPairMemo> input ) throws FeatureCalcException {
-
-		return Math.min(
-			calcForInd( input, true ),
-			calcForInd( input, false )
+		
+		FeatureInputPairMemo inputSessionless = input.get();
+		
+		double overlap = overlapWithGlobalMask(input);
+		
+		return calcOverlapRatioToggle(
+			inputSessionless.getObj1(),
+			inputSessionless.getObj2(),
+			overlap,
+			getRegionID(),
+			false
 		);
 	}
 	
-	private double calcForInd(
-		SessionInput<FeatureInputPairMemo> input,
-		boolean first
+	private double calcOverlapRatioToggle(
+		PxlMarkMemo obj1,
+		PxlMarkMemo obj2,
+		double overlap,
+		int regionID,
+		boolean mip
 	) throws FeatureCalcException {
+
+		if (overlap==0.0) {
+			return 0.0;
+		}
 		
-		return input.forChild().calc(
-			getItem(),
-			new CalculateDeriveSingleInputFromPair(first),
-			first ? CACHE_NAME_FIRST : CACHE_NAME_SECOND
+		double volume = calcVolumeAgg(
+			obj1,
+			obj2,
+			regionID,
+			relationToThreshold,
+			OverlapRatioUtilities.maxOrMin(useMax)
 		);
+		return overlap / volume;
 	}
+
+	public boolean isUseMax() {
+		return useMax;
+	}
+
+	public void setUseMax(boolean useMax) {
+		this.useMax = useMax;
+	}
+
 }
