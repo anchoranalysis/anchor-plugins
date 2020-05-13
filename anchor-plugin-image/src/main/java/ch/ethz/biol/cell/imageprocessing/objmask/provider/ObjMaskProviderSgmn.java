@@ -52,7 +52,7 @@ public class ObjMaskProviderSgmn extends ObjMaskProvider {
 
 	// START BEAN PROPERTIES
 	@BeanField @OptionalBean
-	private BinaryChnlProvider binaryImgChnlProviderMask;
+	private BinaryChnlProvider mask;
 	
 	@BeanField
 	private ObjMaskSgmn sgmn;
@@ -67,9 +67,9 @@ public class ObjMaskProviderSgmn extends ObjMaskProvider {
 	@Override
 	public ObjMaskCollection create() throws CreateException {
 		
-		if (binaryImgChnlProviderMask!=null) {
+		if (mask!=null) {
 			return createWithMask(
-				binaryImgChnlProviderMask.create()
+				mask.create()
 			);
 		} else {
 			return createWithoutMask();
@@ -142,15 +142,6 @@ public class ObjMaskProviderSgmn extends ObjMaskProvider {
 		this.sgmn = sgmn;
 	}
 
-	public BinaryChnlProvider getBinaryImgChnlProviderMask() {
-		return binaryImgChnlProviderMask;
-	}
-
-	public void setBinaryImgChnlProviderMask(
-			BinaryChnlProvider binaryImgChnlProviderMask) {
-		this.binaryImgChnlProviderMask = binaryImgChnlProviderMask;
-	}
-
 	public ObjMaskProvider getObjsSeeds() {
 		return objsSeeds;
 	}
@@ -159,5 +150,11 @@ public class ObjMaskProviderSgmn extends ObjMaskProvider {
 		this.objsSeeds = objsSeeds;
 	}
 
+	public BinaryChnlProvider getMask() {
+		return mask;
+	}
 
+	public void setMask(BinaryChnlProvider mask) {
+		this.mask = mask;
+	}
 }

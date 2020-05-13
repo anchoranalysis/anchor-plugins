@@ -47,7 +47,7 @@ public class BinaryImgChnlProviderRepeatSlice extends BinaryImgChnlProviderOne {
 
 	// START BEAN PROPERTIES
 	@BeanField
-	private ImageDimProvider dimProvider = new GuessDimFromInputImage();
+	private ImageDimProvider dim = new GuessDimFromInputImage();
 	// END BEAN PROPERTIES
 
 	@Override
@@ -56,13 +56,13 @@ public class BinaryImgChnlProviderRepeatSlice extends BinaryImgChnlProviderOne {
 		Chnl chnlIn = chnl.getChnl();
 		VoxelBox<ByteBuffer> vbIn = chnlIn.getVoxelBox().asByte();
 		
-		ImageDim dims = dimProvider.create();
+		ImageDim dimSource = dim.create();
 		
-		if (chnl.getDimensions().getX()!=dims.getX() && chnl.getDimensions().getY()!=dims.getY() ) {
+		if (chnl.getDimensions().getX()!=dimSource.getX() && chnl.getDimensions().getY()!=dimSource.getY() ) {
 			throw new CreateException("dims do not match");
 		}
 		
-		Chnl chnlOut = ChnlFactory.instance().createEmptyInitialised(dims, VoxelDataTypeUnsignedByte.instance);
+		Chnl chnlOut = ChnlFactory.instance().createEmptyInitialised(dimSource, VoxelDataTypeUnsignedByte.instance);
 		VoxelBox<ByteBuffer> vbOut = chnlOut.getVoxelBox().asByte();
 		
 		for( int z=0; z<chnlOut.getDimensions().getExtnt().getZ(); z++) {
@@ -80,11 +80,11 @@ public class BinaryImgChnlProviderRepeatSlice extends BinaryImgChnlProviderOne {
 		return new BinaryChnl( chnlOut, chnl.getBinaryValues() );
 	}
 
-	public ImageDimProvider getDimProvider() {
-		return dimProvider;
+	public ImageDimProvider getDim() {
+		return dim;
 	}
 
-	public void setDimProvider(ImageDimProvider dimProvider) {
-		this.dimProvider = dimProvider;
+	public void setDim(ImageDimProvider dim) {
+		this.dim = dim;
 	}
 }

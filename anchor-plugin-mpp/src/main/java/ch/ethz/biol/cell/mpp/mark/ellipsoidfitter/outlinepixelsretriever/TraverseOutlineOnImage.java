@@ -55,10 +55,10 @@ public class TraverseOutlineOnImage extends OutlinePixelsRetriever {
 	private boolean nghb8 = true;
 	
 	@BeanField
-	private BinaryChnlProvider binaryImgChnlProviderOutline;
+	private BinaryChnlProvider binaryChnlOutline;
 	
 	@BeanField
-	private BinaryChnlProvider binaryImgChnlProviderFilled;
+	private BinaryChnlProvider binaryChnlFilled;
 	
 	@BeanField
 	private boolean useZ = true;
@@ -77,7 +77,7 @@ public class TraverseOutlineOnImage extends OutlinePixelsRetriever {
 		BinaryChnl chnlOutline;
 
 		try {
-			chnlOutline = binaryImgChnlProviderOutline.create();
+			chnlOutline = binaryChnlOutline.create();
 		} catch (CreateException e) {
 			throw new TraverseOutlineException("Unable to create binaryImgChnlProviderOutline", e);
 		}
@@ -85,7 +85,7 @@ public class TraverseOutlineOnImage extends OutlinePixelsRetriever {
 		
 		BinaryChnl chnlFilled;
 		try {
-			chnlFilled = binaryImgChnlProviderFilled.create(); 
+			chnlFilled = binaryChnlFilled.create(); 
 		} catch (CreateException e) {
 			throw new TraverseOutlineException("Unable to create binaryImgChnlProviderFilled", e);
 		}
@@ -190,21 +190,19 @@ public class TraverseOutlineOnImage extends OutlinePixelsRetriever {
 		this.useZ = useZ;
 	}
 
-	public BinaryChnlProvider getBinaryImgChnlProviderOutline() {
-		return binaryImgChnlProviderOutline;
+	public BinaryChnlProvider getBinaryChnlOutline() {
+		return binaryChnlOutline;
 	}
 
-	public void setBinaryImgChnlProviderOutline(
-			BinaryChnlProvider binaryImgChnlProviderOutline) {
-		this.binaryImgChnlProviderOutline = binaryImgChnlProviderOutline;
+	public void setBinaryChnlOutline(BinaryChnlProvider binaryChnlOutline) {
+		this.binaryChnlOutline = binaryChnlOutline;
 	}
 
-	public BinaryChnlProvider getBinaryImgChnlProviderFilled() {
-		return binaryImgChnlProviderFilled;
+	public BinaryChnlProvider getBinaryChnlFilled() {
+		return binaryChnlFilled;
 	}
 
-	public void setBinaryImgChnlProviderFilled(
-			BinaryChnlProvider binaryImgChnlProviderFilled) {
-		this.binaryImgChnlProviderFilled = binaryImgChnlProviderFilled;
+	public void setBinaryChnlFilled(BinaryChnlProvider binaryChnlFilled) {
+		this.binaryChnlFilled = binaryChnlFilled;
 	}
 }

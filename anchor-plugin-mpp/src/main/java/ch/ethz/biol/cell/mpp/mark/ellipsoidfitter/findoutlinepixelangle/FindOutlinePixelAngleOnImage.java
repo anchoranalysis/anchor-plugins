@@ -50,7 +50,7 @@ public class FindOutlinePixelAngleOnImage extends FindOutlinePixelAngle {
 
 	// START BEANS
 	@BeanField
-	private BinaryChnlProvider binaryImgChnlProvider;
+	private BinaryChnlProvider binaryChnl;
 	
 	@BeanField @OptionalBean
 	private UnitValueDistance maxDistance;
@@ -69,7 +69,7 @@ public class FindOutlinePixelAngleOnImage extends FindOutlinePixelAngle {
 		// The first time, we establish the binaryImage 
 		if (binaryImage==null) {
 			try {
-				binaryImage = binaryImgChnlProvider.create();
+				binaryImage = binaryChnl.create();
 				assert( binaryImage!=null );
 				
 				chnl = binaryImage.getChnl();
@@ -168,24 +168,6 @@ public class FindOutlinePixelAngleOnImage extends FindOutlinePixelAngle {
 		return bb.get( sd.offset( (int) x, (int) y ) )== bvb.getOnByte();
 	}
 
-	@Override
-	public void onInit() throws InitException {
-		
-		// We shouldn't need to initialise this explicitly
-		//binaryImgChnlProvider.initRecursive(pso, getLogger() );
-		
-
-		
-	}
-
-	public BinaryChnlProvider getBinaryImgChnlProvider() {
-		return binaryImgChnlProvider;
-	}
-
-	public void setBinaryImgChnlProvider(BinaryChnlProvider binaryImgChnlProvider) {
-		this.binaryImgChnlProvider = binaryImgChnlProvider;
-	}
-
 	public UnitValueDistance getMaxDistance() {
 		return maxDistance;
 	}
@@ -194,8 +176,11 @@ public class FindOutlinePixelAngleOnImage extends FindOutlinePixelAngle {
 		this.maxDistance = maxDistance;
 	}
 
-	
+	public BinaryChnlProvider getBinaryChnl() {
+		return binaryChnl;
+	}
 
-
-
+	public void setBinaryChnl(BinaryChnlProvider binaryChnl) {
+		this.binaryChnl = binaryChnl;
+	}
 }

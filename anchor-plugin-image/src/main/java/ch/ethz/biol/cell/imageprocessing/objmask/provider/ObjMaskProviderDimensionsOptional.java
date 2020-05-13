@@ -35,29 +35,31 @@ import org.anchoranalysis.image.bean.provider.ImageDimProvider;
 import org.anchoranalysis.image.bean.provider.ObjMaskProviderOne;
 import org.anchoranalysis.image.extent.ImageDim;
 
+import ch.ethz.biol.cell.imageprocessing.dim.provider.GuessDimFromInputImage;
+
 public abstract class ObjMaskProviderDimensionsOptional extends ObjMaskProviderOne {
 
 	// START BEAN PROPERTIES
 	@BeanField @OptionalBean
-	private ImageDimProvider dimProvider;
+	private ImageDimProvider dim;
 	// END BEAN PROPERTIES
 	
 	/** Returns the dimensions or NULL if none are provided */
 	protected Optional<ImageDim> createDims() throws CreateException {
-		if (dimProvider!=null) {
+		if (dim!=null) {
 			return Optional.of(
-				dimProvider.create()
+				dim.create()
 			);
 		} else {
 			return Optional.empty();
 		}
 	}
 
-	public ImageDimProvider getDimProvider() {
-		return dimProvider;
+	public ImageDimProvider getDim() {
+		return dim;
 	}
 
-	public void setDimProvider(ImageDimProvider dimProvider) {
-		this.dimProvider = dimProvider;
+	public void setDim(ImageDimProvider dim) {
+		this.dim = dim;
 	}
 }

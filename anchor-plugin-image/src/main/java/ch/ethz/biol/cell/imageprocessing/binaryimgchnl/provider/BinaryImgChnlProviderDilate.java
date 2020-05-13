@@ -28,6 +28,7 @@ package ch.ethz.biol.cell.imageprocessing.binaryimgchnl.provider;
 
 
 import java.nio.ByteBuffer;
+import java.util.Optional;
 
 import org.anchoranalysis.bean.BeanInstanceMap;
 import org.anchoranalysis.bean.annotation.BeanField;
@@ -73,7 +74,7 @@ public class BinaryImgChnlProviderDilate extends BinaryImgChnlProviderMorphOp {
 			getMinIntensityValue(),
 			zOnly,
 			false,
-			null,
+			Optional.empty(),
 			bigNghb
 		);
 		

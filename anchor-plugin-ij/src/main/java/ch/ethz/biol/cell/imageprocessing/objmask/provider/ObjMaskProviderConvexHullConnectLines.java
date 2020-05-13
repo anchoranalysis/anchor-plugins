@@ -29,19 +29,16 @@ package ch.ethz.biol.cell.imageprocessing.objmask.provider;
 import java.util.List;
 import java.util.Optional;
 
-import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.geometry.Point2i;
 import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.core.geometry.PointConverter;
-import org.anchoranalysis.image.bean.provider.ImageDimProvider;
-import org.anchoranalysis.image.bean.provider.ObjMaskProviderOne;
 import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.image.objmask.ObjMaskCollection;
 
-import ch.ethz.biol.cell.mpp.mark.pointsfitter.ConvexHullUtilities;
+import ch.ethz.biol.cell.imageprocessing.binaryimgchnl.provider.ConvexHullUtilities;
 
 /**
  * For each object:
@@ -53,23 +50,18 @@ import ch.ethz.biol.cell.mpp.mark.pointsfitter.ConvexHullUtilities;
  * @author feehano
  *
  */
-public class ObjMaskProviderConvexHullConnectLines extends ObjMaskProviderOne {
-
-	// START BEAN PROPERTIES
-	@BeanField
-	private ImageDimProvider dimProvider;
-	// END BEAN PROPERTIES
+public class ObjMaskProviderConvexHullConnectLines extends ObjMaskProviderDimensions {
 	
 	@Override
 	public ObjMaskCollection createFromObjs( ObjMaskCollection objsCollection ) throws CreateException {
 
-		ImageDim sd = dimProvider.create();
+		ImageDim dim = createDim();
 		
 		ObjMaskCollection out = new ObjMaskCollection();
 		
 		for( ObjMask obj : objsCollection ) {
 			out.add(
-				transform(obj, sd)
+				transform(obj, dim)
 			);
 		}
 		
@@ -91,13 +83,5 @@ public class ObjMaskProviderConvexHullConnectLines extends ObjMaskProviderOne {
 		} catch (OperationFailedException e) {
 			throw new CreateException(e);
 		}
-	}
-
-	public ImageDimProvider getDimProvider() {
-		return dimProvider;
-	}
-
-	public void setDimProvider(ImageDimProvider dimProvider) {
-		this.dimProvider = dimProvider;
 	}
 }

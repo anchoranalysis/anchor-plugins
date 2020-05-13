@@ -27,38 +27,18 @@ package ch.ethz.biol.cell.imageprocessing.binaryimgchnl.provider;
  */
 
 
-import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.image.bean.provider.BinaryChnlProvider;
-import org.anchoranalysis.image.bean.provider.BinaryImgChnlProviderOne;
 import org.anchoranalysis.image.binary.BinaryChnl;
 import org.anchoranalysis.image.binary.logical.BinaryChnlOr;
 
 // Ors the receiveProvider onto the binaryImgChnlProvider
-public class BinaryImgChnlProviderOr extends BinaryImgChnlProviderOne {
+public class BinaryImgChnlProviderOr extends BinaryChnlProviderReceive {
 
-	// START BEAN PROPERTIES
-	@BeanField
-	private BinaryChnlProvider receiveProvider;
-	// END BEAN PROPERTIES
-	
 	// ASSUMES REGIONS ARE IDENTICAL
 	@Override
-	public BinaryChnl createFromChnl(BinaryChnl chnlCrnt) throws CreateException {
-
-		BinaryChnl chnlReceiver = receiveProvider.create();
+	protected BinaryChnl createFromChnlReceive(BinaryChnl chnl, BinaryChnl receiveChnl) throws CreateException {
+		BinaryChnlOr.binaryOr(chnl,receiveChnl);
 		
-		BinaryChnlOr.binaryOr(chnlCrnt,chnlReceiver);
-		
-		return chnlCrnt;
+		return chnl;
 	}
-
-	public BinaryChnlProvider getReceiveProvider() {
-		return receiveProvider;
-	}
-
-	public void setReceiveProvider(BinaryChnlProvider receiveProvider) {
-		this.receiveProvider = receiveProvider;
-	}
-
 }

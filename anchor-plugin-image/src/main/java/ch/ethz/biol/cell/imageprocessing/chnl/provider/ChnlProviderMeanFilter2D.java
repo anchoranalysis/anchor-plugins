@@ -50,10 +50,10 @@ public class ChnlProviderMeanFilter2D extends ChnlProviderOne {
 
 	// START BEAN PROPERTIES
 	@BeanField @OptionalBean
-	private BinaryChnlProvider binaryImgChnlProviderMaskInput;		// A mask on which voxels are considered when calculating the filter
+	private BinaryChnlProvider binaryChnlMaskInput;		// A mask on which voxels are considered when calculating the filter
 	
 	@BeanField @OptionalBean
-	private BinaryChnlProvider binaryImgChnlProviderMaskOutput;		// A mask on which voxels are outputted with a filter value
+	private BinaryChnlProvider binaryChnlMaskOutput;		// A mask on which voxels are outputted with a filter value
 	
 	@BeanField
 	private int radius = 3;	// Should be odd
@@ -226,13 +226,13 @@ public class ChnlProviderMeanFilter2D extends ChnlProviderOne {
 	public Chnl createFromChnl(Chnl chnl) throws CreateException {
 		
 		BinaryChnl biInput = null;
-		if (binaryImgChnlProviderMaskInput!=null) {
-			biInput = binaryImgChnlProviderMaskInput.create();
+		if (binaryChnlMaskInput!=null) {
+			biInput = binaryChnlMaskInput.create();
 		}
 		
 		BinaryChnl biOutput = null;
-		if (binaryImgChnlProviderMaskOutput!=null) {
-			biOutput = binaryImgChnlProviderMaskOutput.create();
+		if (binaryChnlMaskOutput!=null) {
+			biOutput = binaryChnlMaskOutput.create();
 		}
 		
 		try {
@@ -266,24 +266,19 @@ public class ChnlProviderMeanFilter2D extends ChnlProviderOne {
 		this.radius = radius;
 	}
 
-
-	public BinaryChnlProvider getBinaryImgChnlProviderMaskOutput() {
-		return binaryImgChnlProviderMaskOutput;
+	public BinaryChnlProvider getBinaryChnlMaskInput() {
+		return binaryChnlMaskInput;
 	}
 
-	public void setBinaryImgChnlProviderMaskOutput(
-			BinaryChnlProvider binaryImgChnlProviderMaskOutput) {
-		this.binaryImgChnlProviderMaskOutput = binaryImgChnlProviderMaskOutput;
+	public void setBinaryChnlMaskInput(BinaryChnlProvider binaryChnlMaskInput) {
+		this.binaryChnlMaskInput = binaryChnlMaskInput;
 	}
 
-	public BinaryChnlProvider getBinaryImgChnlProviderMaskInput() {
-		return binaryImgChnlProviderMaskInput;
+	public BinaryChnlProvider getBinaryChnlMaskOutput() {
+		return binaryChnlMaskOutput;
 	}
 
-	public void setBinaryImgChnlProviderMaskInput(
-			BinaryChnlProvider binaryImgChnlProviderMaskInput) {
-		this.binaryImgChnlProviderMaskInput = binaryImgChnlProviderMaskInput;
+	public void setBinaryChnlMaskOutput(BinaryChnlProvider binaryChnlMaskOutput) {
+		this.binaryChnlMaskOutput = binaryChnlMaskOutput;
 	}
-
-
 }

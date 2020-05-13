@@ -1,4 +1,4 @@
-package ch.ethz.biol.cell.mpp.mark.pointsfitter;
+package ch.ethz.biol.cell.imageprocessing.binaryimgchnl.provider;
 
 /*
  * #%L
@@ -37,8 +37,6 @@ import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.image.objmask.ObjMaskCollection;
 import org.anchoranalysis.image.outline.FindOutline;
 import org.anchoranalysis.image.points.PointsFromBinaryVoxelBox;
-
-
 
 // Strongly influenced by http://rsb.info.nih.gov/ij/macros/ConvexHull.txt
 public class ConvexHullUtilities {

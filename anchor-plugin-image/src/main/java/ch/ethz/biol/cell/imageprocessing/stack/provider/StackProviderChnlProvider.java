@@ -45,7 +45,7 @@ public class StackProviderChnlProvider extends StackProvider {
 	private ChnlProvider chnl;
 	
 	@BeanField @OptionalBean
-	private BinaryChnlProvider binaryImgChnlProvider;
+	private BinaryChnlProvider binaryChnl;
 	// END BEAN PROPERTIES
 
 	public StackProviderChnlProvider() {
@@ -60,7 +60,7 @@ public class StackProviderChnlProvider extends StackProvider {
 	public void checkMisconfigured( BeanInstanceMap defaultInstances ) throws BeanMisconfiguredException {
 		super.checkMisconfigured( defaultInstances );
 		
-		if (!(chnl!=null ^ binaryImgChnlProvider!=null)) {
+		if (!(chnl!=null ^ binaryChnl!=null)) {
 			throw new BeanMisconfiguredException( String.format("Either '%s' or '%s' must be non-null", "chnlProvider", "binaryImgChnlProvider") );
 		}
 	}	
@@ -71,16 +71,8 @@ public class StackProviderChnlProvider extends StackProvider {
 		if (chnl!=null) {
 			return new Stack( chnl.create() );
 		} else {
-			return new Stack( binaryImgChnlProvider.create().getChnl() );
+			return new Stack( binaryChnl.create().getChnl() );
 		}
-	}
-	
-	public BinaryChnlProvider getBinaryImgChnlProvider() {
-		return binaryImgChnlProvider;
-	}
-
-	public void setBinaryImgChnlProvider(BinaryChnlProvider binaryImgChnlProvider) {
-		this.binaryImgChnlProvider = binaryImgChnlProvider;
 	}
 
 	public ChnlProvider getChnl() {
@@ -89,5 +81,13 @@ public class StackProviderChnlProvider extends StackProvider {
 
 	public void setChnl(ChnlProvider chnl) {
 		this.chnl = chnl;
+	}
+
+	public BinaryChnlProvider getBinaryChnl() {
+		return binaryChnl;
+	}
+
+	public void setBinaryChnl(BinaryChnlProvider binaryChnl) {
+		this.binaryChnl = binaryChnl;
 	}
 }

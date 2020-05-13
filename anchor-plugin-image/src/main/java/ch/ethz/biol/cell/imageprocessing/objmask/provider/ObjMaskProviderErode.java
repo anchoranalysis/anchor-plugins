@@ -64,7 +64,7 @@ public class ObjMaskProviderErode extends ObjMaskProviderDimensionsOptional {
 	@Override
 	public void checkMisconfigured( BeanInstanceMap defaultInstances ) throws BeanMisconfiguredException {
 		super.checkMisconfigured( defaultInstances );
-		if (outsideAtThreshold==false && getDimProvider()==null) {
+		if (outsideAtThreshold==false && getDim()==null) {
 			throw new BeanMisconfiguredException("If outsideAtThreshold==false then dimProvider must be set");
 		}
 	}

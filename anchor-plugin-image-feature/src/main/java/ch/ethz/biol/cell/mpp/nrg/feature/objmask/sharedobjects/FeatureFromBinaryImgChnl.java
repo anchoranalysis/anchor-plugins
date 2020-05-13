@@ -56,7 +56,7 @@ public class FeatureFromBinaryImgChnl extends FeatureObjMaskSharedObjects {
 	// This cannot be initialized in the normal way, as Feature isn't contained in a Shared-Objects
 	// container. So instead it's initialized at a later point.
 	@BeanField @SkipInit
-	private BinaryChnlProvider binaryImgChnlProvider;
+	private BinaryChnlProvider binaryChnl;
 	// END BEAN PROPERTIES
 	
 	private BinaryChnl chnl;
@@ -65,10 +65,10 @@ public class FeatureFromBinaryImgChnl extends FeatureObjMaskSharedObjects {
 	public void beforeCalcCast(FeatureInitParamsSharedObjs params) throws InitException {
 		super.beforeCalcCast(params);
 		assert( getLogger()!=null );
-		binaryImgChnlProvider.initRecursive(params.getSharedObjects(), getLogger() );
+		binaryChnl.initRecursive(params.getSharedObjects(), getLogger() );
 		
 		try {
-			chnl = binaryImgChnlProvider.create();
+			chnl = binaryChnl.create();
 		} catch (CreateException e) {
 			throw new InitException(e);
 		}
@@ -91,11 +91,11 @@ public class FeatureFromBinaryImgChnl extends FeatureObjMaskSharedObjects {
 		this.item = item;
 	}
 
-	public BinaryChnlProvider getBinaryImgChnlProvider() {
-		return binaryImgChnlProvider;
+	public BinaryChnlProvider getBinaryChnl() {
+		return binaryChnl;
 	}
 
-	public void setBinaryImgChnlProvider(BinaryChnlProvider binaryImgChnlProvider) {
-		this.binaryImgChnlProvider = binaryImgChnlProvider;
+	public void setBinaryChnl(BinaryChnlProvider binaryChnl) {
+		this.binaryChnl = binaryChnl;
 	}
 }

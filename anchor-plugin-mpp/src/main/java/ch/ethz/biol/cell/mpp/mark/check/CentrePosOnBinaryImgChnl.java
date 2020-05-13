@@ -1,7 +1,6 @@
 package ch.ethz.biol.cell.mpp.mark.check;
 
 import org.anchoranalysis.anchor.mpp.bean.regionmap.RegionMap;
-import org.anchoranalysis.anchor.mpp.feature.bean.mark.CheckMark;
 import org.anchoranalysis.anchor.mpp.feature.error.CheckException;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
 
@@ -32,76 +31,35 @@ import org.anchoranalysis.anchor.mpp.mark.Mark;
  */
 
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.core.geometry.PointConverter;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
-import org.anchoranalysis.image.bean.provider.BinaryChnlProvider;
-import org.anchoranalysis.image.binary.BinaryChnl;
 
-public class CentrePosOnBinaryImgChnl extends CheckMark {
+public class CentrePosOnBinaryImgChnl extends CheckMarkBinaryChnl {
 
-	// START BEAN
-	@BeanField
-	private BinaryChnlProvider binaryImgChnlProvider;
-	
-	@BeanField
-	private boolean acceptOutsideScene = false;
-	
+	// START BEAN PROPERTIES
 	@BeanField
 	private boolean suppressZ = false;
-	// END BEAN
-	
-	private BinaryChnl bi;
+	// END BEAN BEAN PROPERTIES
 	
 	@Override
 	public boolean check(Mark mark, RegionMap regionMap, NRGStackWithParams nrgStack) throws CheckException {
-
-		Point3d cp = mark.centerPoint();
-		
-		if (!nrgStack.getDimensions().contains(cp)) {
-			return acceptOutsideScene;
-		}
-		
-		try {
-			bi = binaryImgChnlProvider.create();
-		} catch (CreateException e) {
-			throw new CheckException(
-				String.format("Cannot create binaryImg (from provider %s)", binaryImgChnlProvider),
-				e
-			);
-		}
-			
-		
+		return isPointOnBinaryChnl(
+			mark.centerPoint(),
+			nrgStack,
+			pnt -> derivePoint(pnt)
+		);
+	}
+	
+	private Point3i derivePoint(Point3d cp) {
 		Point3i cpInt = PointConverter.intFromDouble(cp);
 		
 		if (suppressZ) {
 			cpInt.setZ(0);
 		}
-
-		return bi.isPointOn(cpInt);
-	}
-
-	@Override
-	public boolean isCompatibleWith(Mark testMark) {
-		return true;
-	}
-
-	public BinaryChnlProvider getBinaryImgChnlProvider() {
-		return binaryImgChnlProvider;
-	}
-
-	public void setBinaryImgChnlProvider(BinaryChnlProvider binaryImgChnlProvider) {
-		this.binaryImgChnlProvider = binaryImgChnlProvider;
-	}
-
-	public boolean isAcceptOutsideScene() {
-		return acceptOutsideScene;
-	}
-
-	public void setAcceptOutsideScene(boolean acceptOutsideScene) {
-		this.acceptOutsideScene = acceptOutsideScene;
+		
+		return cpInt;
 	}
 
 	public boolean isSuppressZ() {

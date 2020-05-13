@@ -36,43 +36,40 @@ import org.anchoranalysis.feature.calc.FeatureInitParams;
 import org.anchoranalysis.feature.session.FeatureSession;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorSingle;
 import org.anchoranalysis.image.bean.provider.BinaryChnlProvider;
-import org.anchoranalysis.image.bean.provider.ChnlProvider;
 import org.anchoranalysis.image.binary.BinaryChnl;
+import org.anchoranalysis.image.chnl.Chnl;
 import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
 import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.image.objmask.factory.CreateFromEntireChnlFactory;
 
 // Treats the entire binaryimgchnl as an object, and sees if it passes an ObjMaskFilter
-public class BinaryImgChnlProviderObjMaskRelateFeatures extends BinaryChnlProvider {
+public class BinaryImgChnlProviderObjMaskRelateFeatures extends BinaryImgChnlProviderChnlSource {
 
 	// START BEAN PROPERTIES
 	@BeanField
-	private BinaryChnlProvider binaryImgChnlProviderMain;
+	private BinaryChnlProvider binaryChnlMain;
 	
 	@BeanField
-	private BinaryChnlProvider binaryImgChnlProviderCompareTo;
+	private BinaryChnlProvider binaryChnlCompareTo;
 	
 	@BeanField
-	private BinaryChnlProvider binaryImgChnlProviderElse;
+	private BinaryChnlProvider binaryChnlElse;
 	
 	@BeanField
 	private FeatureProvider<FeatureInputSingleObj> featureProvider;
-	
-	@BeanField
-	private ChnlProvider chnlProvider;
 	
 	@BeanField
 	private RelationBean relation;
 	// END BEAN PROPERTIES
 	
 	@Override
-	public BinaryChnl create() throws CreateException {
-		
-		BinaryChnl chnlMain = binaryImgChnlProviderMain.create();
+	protected BinaryChnl createFromSource(Chnl chnlSource) throws CreateException {
+
+		BinaryChnl chnlMain = binaryChnlMain.create();
 		
 		ObjMask omMain = CreateFromEntireChnlFactory.createObjMask( chnlMain );
 		ObjMask omCompareTo = CreateFromEntireChnlFactory.createObjMask(
-			binaryImgChnlProviderCompareTo.create()
+			binaryChnlCompareTo.create()
 		);
 			
 		FeatureCalculatorSingle<FeatureInputSingleObj> session = createSession();
@@ -81,7 +78,7 @@ public class BinaryImgChnlProviderObjMaskRelateFeatures extends BinaryChnlProvid
 			omMain,
 			omCompareTo,
 			chnlMain,
-			NRGStackUtilities.maybeAddNrgStack(session, chnlProvider)
+			NRGStackUtilities.addNrgStack(session, chnlSource)
 		);
 	}
 	
@@ -110,38 +107,11 @@ public class BinaryImgChnlProviderObjMaskRelateFeatures extends BinaryChnlProvid
 			if (relation.create().isRelationToValueTrue(valMain, valCompareTo)) {
 				return chnlMain;
 			} else {
-				return binaryImgChnlProviderElse.create();
+				return binaryChnlElse.create();
 			}
 		} catch (FeatureCalcException e) {
 			throw new CreateException(e);
 		}
-	}
-
-	public BinaryChnlProvider getBinaryImgChnlProviderMain() {
-		return binaryImgChnlProviderMain;
-	}
-
-	public void setBinaryImgChnlProviderMain(
-			BinaryChnlProvider binaryImgChnlProviderMain) {
-		this.binaryImgChnlProviderMain = binaryImgChnlProviderMain;
-	}
-
-	public BinaryChnlProvider getBinaryImgChnlProviderCompareTo() {
-		return binaryImgChnlProviderCompareTo;
-	}
-
-	public void setBinaryImgChnlProviderCompareTo(
-			BinaryChnlProvider binaryImgChnlProviderCompareTo) {
-		this.binaryImgChnlProviderCompareTo = binaryImgChnlProviderCompareTo;
-	}
-
-	public BinaryChnlProvider getBinaryImgChnlProviderElse() {
-		return binaryImgChnlProviderElse;
-	}
-
-	public void setBinaryImgChnlProviderElse(
-			BinaryChnlProvider binaryImgChnlProviderElse) {
-		this.binaryImgChnlProviderElse = binaryImgChnlProviderElse;
 	}
 
 	public FeatureProvider<FeatureInputSingleObj> getFeatureProvider() {
@@ -152,14 +122,6 @@ public class BinaryImgChnlProviderObjMaskRelateFeatures extends BinaryChnlProvid
 		this.featureProvider = featureProvider;
 	}
 
-	public ChnlProvider getChnlProvider() {
-		return chnlProvider;
-	}
-
-	public void setChnlProvider(ChnlProvider chnlProvider) {
-		this.chnlProvider = chnlProvider;
-	}
-
 	public RelationBean getRelation() {
 		return relation;
 	}
@@ -167,4 +129,29 @@ public class BinaryImgChnlProviderObjMaskRelateFeatures extends BinaryChnlProvid
 	public void setRelation(RelationBean relation) {
 		this.relation = relation;
 	}
+
+	public BinaryChnlProvider getBinaryChnlMain() {
+		return binaryChnlMain;
+	}
+
+	public void setBinaryChnlMain(BinaryChnlProvider binaryChnlMain) {
+		this.binaryChnlMain = binaryChnlMain;
+	}
+
+	public BinaryChnlProvider getBinaryChnlCompareTo() {
+		return binaryChnlCompareTo;
+	}
+
+	public void setBinaryChnlCompareTo(BinaryChnlProvider binaryChnlCompareTo) {
+		this.binaryChnlCompareTo = binaryChnlCompareTo;
+	}
+
+	public BinaryChnlProvider getBinaryChnlElse() {
+		return binaryChnlElse;
+	}
+
+	public void setBinaryChnlElse(BinaryChnlProvider binaryChnlElse) {
+		this.binaryChnlElse = binaryChnlElse;
+	}
+
 }

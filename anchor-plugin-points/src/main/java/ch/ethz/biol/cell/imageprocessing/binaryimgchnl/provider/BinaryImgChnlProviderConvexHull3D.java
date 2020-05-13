@@ -31,34 +31,22 @@ import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.log.LogReporter;
-import org.anchoranalysis.image.bean.provider.BinaryImgChnlProviderOne;
 import org.anchoranalysis.image.binary.BinaryChnl;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.chnl.Chnl;
 import org.anchoranalysis.image.extent.Extent;
-import org.anchoranalysis.image.outline.FindOutline;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 
 import com.github.quickhull3d.Point3d;
 import com.github.quickhull3d.QuickHull3D;
 
-public class BinaryImgChnlProviderConvexHull3D extends BinaryImgChnlProviderOne {
+public class BinaryImgChnlProviderConvexHull3D extends ConvexHullBase {
 
-	// START BEAN PROPERTIES
-	@BeanField
-	private boolean erodeEdges = false;
-	// END BEAN PROPERTIES
-	
 	@Override
-	public BinaryChnl createFromChnl( BinaryChnl chnlIn ) throws CreateException {
-		
+	protected BinaryChnl createFromChnl(BinaryChnl chnlIn, BinaryChnl outline) throws CreateException {
 		LogReporter logger = getLogger().getLogReporter();
-		
-		BinaryChnl outline = FindOutline.outline(chnlIn, true, erodeEdges);
-		
 		List<Point3d> extPnts = pointsFromChnl(outline);
 		
 		Point3d[] pntArr = extPnts.toArray( new Point3d[]{} );
@@ -120,12 +108,5 @@ public class BinaryImgChnlProviderConvexHull3D extends BinaryImgChnlProviderOne 
 		
 		return listOut;
 	}
-	
-	public boolean isErodeEdges() {
-		return erodeEdges;
-	}
 
-	public void setErodeEdges(boolean erodeEdges) {
-		this.erodeEdges = erodeEdges;
-	}
 }

@@ -48,7 +48,7 @@ public class BinaryImgChnlProviderInvert extends BinaryImgChnlProviderOne {
 
 	// START BEAN FIELDS
 	@BeanField @OptionalBean
-	private BinaryChnlProvider binaryImgChnlProviderMask;
+	private BinaryChnlProvider mask;
 	
 	@BeanField
 	private boolean forceChangeBytes = false;
@@ -57,7 +57,7 @@ public class BinaryImgChnlProviderInvert extends BinaryImgChnlProviderOne {
 	@Override
 	public BinaryChnl createFromChnl( BinaryChnl chnl ) throws CreateException {
 		
-		Optional<BinaryChnl> maskChnl = ProviderNullableCreator.createOptional(binaryImgChnlProviderMask);
+		Optional<BinaryChnl> maskChnl = ProviderNullableCreator.createOptional(mask);
 		
 		if (maskChnl.isPresent()) {
 			invertWithMask(chnl, maskChnl.get());
@@ -116,12 +116,12 @@ public class BinaryImgChnlProviderInvert extends BinaryImgChnlProviderOne {
 		this.forceChangeBytes = forceChangeBytes;
 	}
 
-	public BinaryChnlProvider getBinaryImgChnlProviderMask() {
-		return binaryImgChnlProviderMask;
+	public BinaryChnlProvider getMask() {
+		return mask;
 	}
 
-	public void setBinaryImgChnlProviderMask(
-			BinaryChnlProvider binaryImgChnlProviderMask) {
-		this.binaryImgChnlProviderMask = binaryImgChnlProviderMask;
+	public void setMask(BinaryChnlProvider mask) {
+		this.mask = mask;
 	}
+
 }

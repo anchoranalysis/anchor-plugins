@@ -46,6 +46,8 @@ import org.anchoranalysis.feature.session.calculator.FeatureCalculatorSingle;
 import org.anchoranalysis.image.bean.provider.ImageDimProvider;
 import org.anchoranalysis.image.extent.ImageDim;
 
+import ch.ethz.biol.cell.imageprocessing.dim.provider.GuessDimFromInputImage;
+
 public class MarkProviderRequireFeatureRelationThreshold extends MarkProvider {
 
 	// START BEAN PROPERTIES
@@ -62,7 +64,7 @@ public class MarkProviderRequireFeatureRelationThreshold extends MarkProvider {
 	private RelationBean relation;
 	
 	@BeanField @OptionalBean
-	private ImageDimProvider dimProvider;
+	private ImageDimProvider dim = new GuessDimFromInputImage();
 	// END BEAN PROPERTIES
 	
 	@Override
@@ -86,9 +88,9 @@ public class MarkProviderRequireFeatureRelationThreshold extends MarkProvider {
 	}
 	
 	private Optional<ImageDim> dimensions() throws CreateException {
-		if (dimProvider!=null) {
+		if (dim!=null) {
 			return Optional.of(
-				dimProvider.create()
+				dim.create()
 			);
 		} else {
 			 return Optional.empty();
@@ -155,11 +157,11 @@ public class MarkProviderRequireFeatureRelationThreshold extends MarkProvider {
 		this.relation = relation;
 	}
 
-	public ImageDimProvider getDimProvider() {
-		return dimProvider;
+	public ImageDimProvider getDim() {
+		return dim;
 	}
 
-	public void setDimProvider(ImageDimProvider dimProvider) {
-		this.dimProvider = dimProvider;
+	public void setDim(ImageDimProvider dim) {
+		this.dim = dim;
 	}
 }

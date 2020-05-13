@@ -50,7 +50,7 @@ public class StackProviderOutlineRGB extends StackProviderWithBackground {
 
 	// START BEAN PROPERTIES
 	@BeanField
-	private BinaryChnlProvider binaryImgChnlProviderMask;
+	private BinaryChnlProvider mask;
 	
 	@BeanField @OptionalBean
 	private ChnlProvider chnlProviderBlue;
@@ -68,15 +68,15 @@ public class StackProviderOutlineRGB extends StackProviderWithBackground {
 	@Override
 	public Stack create() throws CreateException {
 		
-		BinaryChnl mask = binaryImgChnlProviderMask.create();
+		BinaryChnl maskChnl = mask.create();
 				
 		try {
-			boolean do3D = mip!=true || mask.getDimensions().getZ()==1;
+			boolean do3D = mip!=true || maskChnl.getDimensions().getZ()==1;
 			
 			return CalcOutlineRGB.apply(
-				calcOutline(mask),
+				calcOutline(maskChnl),
 				backgroundStack(do3D),
-				createBlue(do3D, mask.getDimensions()),
+				createBlue(do3D, maskChnl.getDimensions()),
 				createShort
 			);
 			
@@ -119,8 +119,7 @@ public class StackProviderOutlineRGB extends StackProviderWithBackground {
 		// We calculate outline of mask
 		BinaryImgChnlProviderOutline cpOutline = new BinaryImgChnlProviderOutline();
 		cpOutline.setForce2D(force2D);
-		
-		cpOutline.setBinaryImgChnlProvider( new BinaryImgChnlProviderHolder(maskIn) );
+		cpOutline.setBinaryChnl( new BinaryImgChnlProviderHolder(maskIn) );
 		try {
 			cpOutline.initRecursive( getSharedObjects(), getLogger() );
 			return cpOutline.create();
@@ -135,14 +134,6 @@ public class StackProviderOutlineRGB extends StackProviderWithBackground {
 
 	public void setMip(boolean mip) {
 		this.mip = mip;
-	}
-
-	public BinaryChnlProvider getBinaryImgChnlProviderMask() {
-		return binaryImgChnlProviderMask;
-	}
-
-	public void setBinaryImgChnlProviderMask(BinaryChnlProvider chnlProviderMask) {
-		this.binaryImgChnlProviderMask = chnlProviderMask;
 	}
 
 	public ChnlProvider getChnlProviderBlue() {
@@ -169,4 +160,11 @@ public class StackProviderOutlineRGB extends StackProviderWithBackground {
 		this.createShort = createShort;
 	}
 
+	public BinaryChnlProvider getMask() {
+		return mask;
+	}
+
+	public void setMask(BinaryChnlProvider mask) {
+		this.mask = mask;
+	}
 }
