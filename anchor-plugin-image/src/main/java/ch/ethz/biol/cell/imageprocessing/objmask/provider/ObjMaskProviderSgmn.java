@@ -34,7 +34,6 @@ import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.bean.provider.BinaryChnlProvider;
-import org.anchoranalysis.image.bean.provider.ChnlProvider;
 import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
 import org.anchoranalysis.image.bean.sgmn.objmask.ObjMaskSgmn;
 import org.anchoranalysis.image.binary.BinaryChnl;
@@ -48,7 +47,7 @@ import org.anchoranalysis.image.sgmn.SgmnFailedException;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.anchoranalysis.image.voxel.datatype.IncorrectVoxelDataTypeException;
 
-public class ObjMaskProviderSgmn extends ObjMaskProvider {
+public class ObjMaskProviderSgmn extends ObjMaskProviderChnlSource {
 
 	// START BEAN PROPERTIES
 	@BeanField @OptionalBean
@@ -57,26 +56,24 @@ public class ObjMaskProviderSgmn extends ObjMaskProvider {
 	@BeanField
 	private ObjMaskSgmn sgmn;
 	
-	@BeanField
-	private ChnlProvider chnlProvider;
-	
 	@BeanField @OptionalBean
 	private ObjMaskProvider objsSeeds;
 	// END BEAN PROPERTIES
 
 	@Override
-	public ObjMaskCollection create() throws CreateException {
-		
+	protected ObjMaskCollection createFromChnl(Chnl chnlSrc) throws CreateException {
+
 		if (mask!=null) {
 			return createWithMask(
-				mask.create()
+				mask.create(),
+				chnlSrc
 			);
 		} else {
-			return createWithoutMask();
+			return createWithoutMask(chnlSrc);
 		}
 	}
 	
-	private ObjMaskCollection createWithMask( BinaryChnl mask ) throws CreateException {
+	private ObjMaskCollection createWithMask( BinaryChnl mask, Chnl chnl ) throws CreateException {
 		
 		VoxelBox<ByteBuffer> maskVb;
 		try {
@@ -86,8 +83,6 @@ public class ObjMaskProviderSgmn extends ObjMaskProvider {
 		}
 		
 		ObjMask om = new ObjMask( new BinaryVoxelBoxByte(maskVb, mask.getBinaryValues()) );
-		
-		Chnl chnl = chnlProvider.create();
 		
 		SeedCollection seeds = null;
 		if (objsSeeds!=null) {
@@ -108,8 +103,7 @@ public class ObjMaskProviderSgmn extends ObjMaskProvider {
 		}
 	}
 	
-	private ObjMaskCollection createWithoutMask() throws CreateException {
-		Chnl chnl = chnlProvider.create();
+	private ObjMaskCollection createWithoutMask(Chnl chnl) throws CreateException {
 		
 		SeedCollection seeds = null;
 		
@@ -124,14 +118,6 @@ public class ObjMaskProviderSgmn extends ObjMaskProvider {
 			throw new CreateException(e);
 		}
 		
-	}
-	
-	public ChnlProvider getChnlProvider() {
-		return chnlProvider;
-	}
-
-	public void setChnlProvider(ChnlProvider chnlProvider) {
-		this.chnlProvider = chnlProvider;
 	}
 
 	public ObjMaskSgmn getSgmn() {

@@ -36,11 +36,6 @@ import org.anchoranalysis.image.stack.Stack;
 // Simply returns the inputStack
 public class StackProviderInput extends StackProvider {
 
-	
-	
-	// START BEAN PROPERTIES
-	// END BEAN PROPERTIES
-
 	private Stack inputStack;
 	
 	@Override

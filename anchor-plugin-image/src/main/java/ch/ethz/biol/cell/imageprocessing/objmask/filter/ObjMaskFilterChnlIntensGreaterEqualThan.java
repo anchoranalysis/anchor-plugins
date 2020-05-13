@@ -48,7 +48,7 @@ public class ObjMaskFilterChnlIntensGreaterEqualThan extends ObjMaskFilterByObje
 
 	// START BEAN PROPERTIES
 	@BeanField
-	private ChnlProvider chnlProvider;
+	private ChnlProvider chnl;
 	
 	// The threshold we use, the distance is always calculated in the direction of the XY plane.
 	@BeanField
@@ -62,7 +62,7 @@ public class ObjMaskFilterChnlIntensGreaterEqualThan extends ObjMaskFilterByObje
 		
 		Chnl chnlSingleRegion;
 		try {
-			chnlSingleRegion = chnlProvider.create();
+			chnlSingleRegion = chnl.create();
 		} catch (CreateException e) {
 			throw new OperationFailedException(e);
 		}
@@ -126,17 +126,6 @@ public class ObjMaskFilterChnlIntensGreaterEqualThan extends ObjMaskFilterByObje
 		vb = null;
 	}
 
-
-	public ChnlProvider getChnlProvider() {
-		return chnlProvider;
-	}
-
-
-	public void setChnlProvider(ChnlProvider chnlProvider) {
-		this.chnlProvider = chnlProvider;
-	}
-
-
 	public UnitValueDistance getThreshold() {
 		return threshold;
 	}
@@ -146,7 +135,11 @@ public class ObjMaskFilterChnlIntensGreaterEqualThan extends ObjMaskFilterByObje
 		this.threshold = threshold;
 	}
 
+	public ChnlProvider getChnl() {
+		return chnl;
+	}
 
-
-
+	public void setChnl(ChnlProvider chnl) {
+		this.chnl = chnl;
+	}
 }

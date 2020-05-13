@@ -35,8 +35,6 @@ import org.anchoranalysis.image.bean.provider.ImageDimProvider;
 import org.anchoranalysis.image.bean.provider.ObjMaskProviderOne;
 import org.anchoranalysis.image.extent.ImageDim;
 
-import ch.ethz.biol.cell.imageprocessing.dim.provider.GuessDimFromInputImage;
-
 public abstract class ObjMaskProviderDimensionsOptional extends ObjMaskProviderOne {
 
 	// START BEAN PROPERTIES

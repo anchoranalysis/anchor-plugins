@@ -48,7 +48,7 @@ public class ObjMaskSgmnOnTransform extends ObjMaskSgmn {
 	private BinarySgmn sgmn;
 	
 	@BeanField
-	private ChnlProvider chnlProviderTransform;
+	private ChnlProvider chnlTransform;
 	
 	@BeanField
 	private ObjMaskSgmn sgmnObj;
@@ -71,7 +71,7 @@ public class ObjMaskSgmnOnTransform extends ObjMaskSgmn {
 			// DEBUG
 			// getOutputManager().getWriterCheckIfAllowed().write("afterSgmn", new ChnlGenerator(chnl,"afterSgmn") );
 			
-			Chnl chnlEDM = chnlProviderTransform.create();
+			Chnl chnlEDM = chnlTransform.create();
 			
 			// DEBUG
 			// getOutputManager().getWriterCheckIfAllowed().write("edm", new ChnlGenerator(chnlEDM,"edm") );
@@ -125,13 +125,11 @@ public class ObjMaskSgmnOnTransform extends ObjMaskSgmn {
 		this.sgmnObj = sgmnObj;
 	}
 
-
-	public ChnlProvider getChnlProviderTransform() {
-		return chnlProviderTransform;
+	public ChnlProvider getChnlTransform() {
+		return chnlTransform;
 	}
 
-
-	public void setChnlProviderTransform(ChnlProvider chnlProviderTransform) {
-		this.chnlProviderTransform = chnlProviderTransform;
+	public void setChnlTransform(ChnlProvider chnlTransform) {
+		this.chnlTransform = chnlTransform;
 	}
 }

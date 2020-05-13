@@ -44,13 +44,13 @@ public class ChnlProviderExpandSliceToStack extends ChnlProviderDimSource {
 
 	// START BEAN PROPERTIES
 	@BeanField
-	private ChnlProvider chnlProviderSlice;
+	private ChnlProvider slice;
 	// END BEAN PROPERTIES
 	
 	@Override
 	protected Chnl createFromDim(ImageDim dim) throws CreateException {
 				
-		Chnl chnl = chnlProviderSlice.create();
+		Chnl chnl = slice.create();
 		
 		ImageDim sdSrc = chnl.getDimensions();
 		
@@ -74,13 +74,11 @@ public class ChnlProviderExpandSliceToStack extends ChnlProviderDimSource {
 		return chnlOut;
 	}
 
-	public ChnlProvider getChnlProviderSlice() {
-		return chnlProviderSlice;
+	public ChnlProvider getSlice() {
+		return slice;
 	}
 
-	public void setChnlProviderSlice(ChnlProvider chnlProviderSlice) {
-		this.chnlProviderSlice = chnlProviderSlice;
+	public void setSlice(ChnlProvider slice) {
+		this.slice = slice;
 	}
-
-
 }

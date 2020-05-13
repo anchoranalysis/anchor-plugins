@@ -53,7 +53,7 @@ public class StackProviderOutlineRGB extends StackProviderWithBackground {
 	private BinaryChnlProvider mask;
 	
 	@BeanField @OptionalBean
-	private ChnlProvider chnlProviderBlue;
+	private ChnlProvider chnlBlue;
 	
 	@BeanField
 	private boolean mip = false;
@@ -95,8 +95,8 @@ public class StackProviderOutlineRGB extends StackProviderWithBackground {
 	}
 	
 	private Chnl createBlueMaybeProvider(ImageDim dim) throws CreateException {
-		if (chnlProviderBlue!=null) {
-			return chnlProviderBlue.create();
+		if (chnlBlue!=null) {
+			return chnlBlue.create();
 		} else {
 			return ChnlFactory.instance().createEmptyInitialised(dim, VoxelDataTypeUnsignedByte.instance);
 		}
@@ -136,14 +136,6 @@ public class StackProviderOutlineRGB extends StackProviderWithBackground {
 		this.mip = mip;
 	}
 
-	public ChnlProvider getChnlProviderBlue() {
-		return chnlProviderBlue;
-	}
-
-	public void setChnlProviderBlue(ChnlProvider chnlProviderBlue) {
-		this.chnlProviderBlue = chnlProviderBlue;
-	}
-
 	public boolean isForce2D() {
 		return force2D;
 	}
@@ -166,5 +158,13 @@ public class StackProviderOutlineRGB extends StackProviderWithBackground {
 
 	public void setMask(BinaryChnlProvider mask) {
 		this.mask = mask;
+	}
+
+	public ChnlProvider getChnlBlue() {
+		return chnlBlue;
+	}
+
+	public void setChnlBlue(ChnlProvider chnlBlue) {
+		this.chnlBlue = chnlBlue;
 	}
 }

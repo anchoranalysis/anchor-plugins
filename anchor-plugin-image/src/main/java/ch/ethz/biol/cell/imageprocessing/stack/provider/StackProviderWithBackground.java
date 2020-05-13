@@ -45,32 +45,32 @@ public abstract class StackProviderWithBackground extends StackProvider {
 	// Either chnlProviderBackground or stackProviderBackground should be non-null
 	//  but not both
 	@BeanField @OptionalBean
-	private ChnlProvider chnlProviderBackground;
+	private ChnlProvider chnlBackground;
 	
 	@BeanField @OptionalBean
-	private StackProvider stackProviderBackground;
+	private StackProvider stackBackground;
 	
 	@BeanField @OptionalBean
-	private ChnlProvider chnlProviderBackgroundMIP;
+	private ChnlProvider chnlBackgroundMIP;
 	// END BEAN PROPERTIES
 	
 	
 	@Override
 	public void checkMisconfigured(BeanInstanceMap defaultInstances) throws BeanMisconfiguredException {
 		super.checkMisconfigured(defaultInstances);
-		if (chnlProviderBackground==null && stackProviderBackground==null) {
-			throw new BeanMisconfiguredException("Either chnlProviderBackground or stackProviderBackground should be set");
+		if (chnlBackground==null && stackBackground==null) {
+			throw new BeanMisconfiguredException("Either chnlBackground or stackBackground should be set");
 		}
 		
-		if (chnlProviderBackground!=null && stackProviderBackground!=null) {
-			throw new BeanMisconfiguredException("Only one of chnlProviderBackground and stackProviderBackground should be set");
+		if (chnlBackground!=null && stackBackground!=null) {
+			throw new BeanMisconfiguredException("Only one of chnlBackground and stackBackground should be set");
 		}
 	}
 
 	protected DisplayStack backgroundStack(boolean do3D) throws CreateException {
-		if (stackProviderBackground!=null) {
+		if (stackBackground!=null) {
 			return DisplayStack.create(
-				stackProviderBackground.createStack()
+				stackBackground.createStack()
 			);
 			
 		} else {
@@ -82,40 +82,38 @@ public abstract class StackProviderWithBackground extends StackProvider {
 
 	private Chnl backgroundChnl(boolean do3D) throws CreateException {
 		if (do3D) {
-			return chnlProviderBackground.create();
+			return chnlBackground.create();
 		} else {
 			
-			if (chnlProviderBackgroundMIP!=null) {
-				return chnlProviderBackgroundMIP.create();
+			if (chnlBackgroundMIP!=null) {
+				return chnlBackgroundMIP.create();
 			} else {
-				return chnlProviderBackground.create().maxIntensityProj();
+				return chnlBackground.create().maxIntensityProj();
 			}
 		}
 	}
-	
-	public ChnlProvider getChnlProviderBackground() {
-		return chnlProviderBackground;
+
+	public ChnlProvider getChnlBackground() {
+		return chnlBackground;
 	}
 
-	public void setChnlProviderBackground(ChnlProvider chnlProviderBackground) {
-		this.chnlProviderBackground = chnlProviderBackground;
-	}
-	
-
-	public StackProvider getStackProviderBackground() {
-		return stackProviderBackground;
+	public void setChnlBackground(ChnlProvider chnlBackground) {
+		this.chnlBackground = chnlBackground;
 	}
 
-	public void setStackProviderBackground(StackProvider stackProviderBackground) {
-		this.stackProviderBackground = stackProviderBackground;
-	}
-	
-
-	public ChnlProvider getChnlProviderBackgroundMIP() {
-		return chnlProviderBackgroundMIP;
+	public StackProvider getStackBackground() {
+		return stackBackground;
 	}
 
-	public void setChnlProviderBackgroundMIP(ChnlProvider chnlProviderBackgroundMIP) {
-		this.chnlProviderBackgroundMIP = chnlProviderBackgroundMIP;
+	public void setStackBackground(StackProvider stackBackground) {
+		this.stackBackground = stackBackground;
+	}
+
+	public ChnlProvider getChnlBackgroundMIP() {
+		return chnlBackgroundMIP;
+	}
+
+	public void setChnlBackgroundMIP(ChnlProvider chnlBackgroundMIP) {
+		this.chnlBackgroundMIP = chnlBackgroundMIP;
 	}
 }

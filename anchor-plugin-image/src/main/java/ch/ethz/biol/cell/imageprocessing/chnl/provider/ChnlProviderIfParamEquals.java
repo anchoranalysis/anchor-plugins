@@ -49,7 +49,7 @@ public class ChnlProviderIfParamEquals extends ChnlProviderOne {
 	private String value = "";
 	
 	@BeanField
-	private ChnlProvider chnlProviderElse;
+	private ChnlProvider chnlElse;
 	// END BEAN PROPERTIES
 	
 	@Override
@@ -62,7 +62,7 @@ public class ChnlProviderIfParamEquals extends ChnlProviderOne {
 		if( value.equals(valueToCheck) ) {
 			return chnl;
 		} else {
-			return chnlProviderElse.create();
+			return chnlElse.create();
 		}
 	}
 
@@ -91,12 +91,12 @@ public class ChnlProviderIfParamEquals extends ChnlProviderOne {
 		this.value = value;
 	}
 
-	public ChnlProvider getChnlProviderElse() {
-		return chnlProviderElse;
+	public ChnlProvider getChnlElse() {
+		return chnlElse;
 	}
 
-	public void setChnlProviderElse(ChnlProvider chnlProviderElse) {
-		this.chnlProviderElse = chnlProviderElse;
+	public void setChnlElse(ChnlProvider chnlElse) {
+		this.chnlElse = chnlElse;
 	}
 }
 

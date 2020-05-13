@@ -32,14 +32,13 @@ import java.util.List;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.geometry.Point3i;
-import org.anchoranalysis.image.bean.provider.ChnlProvider;
-import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
 import org.anchoranalysis.image.chnl.Chnl;
 import org.anchoranalysis.image.convert.ImgLib2Wrap;
 import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.image.objmask.ObjMaskCollection;
 import org.anchoranalysis.image.objmask.factory.CreateFromPointsFactory;
 
+import ch.ethz.biol.cell.imageprocessing.objmask.provider.ObjMaskProviderChnlSource;
 import net.imglib2.Localizable;
 import net.imglib2.algorithm.componenttree.mser.Mser;
 import net.imglib2.algorithm.componenttree.mser.MserTree;
@@ -52,12 +51,9 @@ import net.imglib2.type.Type;
  * @author FEEHANO
  *
  */
-public class ObjMaskProviderMser extends ObjMaskProvider {
+public class ObjMaskProviderMser extends ObjMaskProviderChnlSource {
 
 	// START BEAN PROPERTIES
-	@BeanField
-	private ChnlProvider chnlProvider;
-	
 	@BeanField
 	private long minSize = 100;
 	
@@ -76,9 +72,7 @@ public class ObjMaskProviderMser extends ObjMaskProvider {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public ObjMaskCollection create() throws CreateException {
-		
-		Chnl chnl = chnlProvider.create();
+	protected ObjMaskCollection createFromChnl(Chnl chnl) throws CreateException {
 		
 		@SuppressWarnings("rawtypes")
 		Img img = ImgLib2Wrap.wrap( chnl.getVoxelBox() );
@@ -116,14 +110,6 @@ public class ObjMaskProviderMser extends ObjMaskProvider {
 			out.add( new Point3i( l.getIntPosition(0), l.getIntPosition(1), 0 ) );
 		}
 		return out;
-	}
-
-	public ChnlProvider getChnlProvider() {
-		return chnlProvider;
-	}
-
-	public void setChnlProvider(ChnlProvider chnlProvider) {
-		this.chnlProvider = chnlProvider;
 	}
 
 	public double getMaxVar() {
@@ -165,5 +151,4 @@ public class ObjMaskProviderMser extends ObjMaskProvider {
 	public void setMaxSize(long maxSize) {
 		this.maxSize = maxSize;
 	}
-
 }

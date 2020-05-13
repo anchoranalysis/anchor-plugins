@@ -70,7 +70,7 @@ public class ObjMaskFilterFeatureRelationDiscardFeatureRatioLessThan extends Obj
 	private double minStdDev = 1;
 	
 	@BeanField @OptionalBean
-	private ChnlProvider chnlProvider;
+	private ChnlProvider chnl;
 	
 	@BeanField
 	private boolean includeHigherSide = true;		// Also apply the filter to the upper-side of the distribution
@@ -110,7 +110,7 @@ public class ObjMaskFilterFeatureRelationDiscardFeatureRatioLessThan extends Obj
 				getLogger()
 			);
 						
-			return NRGStackUtilities.maybeAddNrgStack(session, chnlProvider);
+			return NRGStackUtilities.maybeAddNrgStack(session, chnl);
 			
 		} catch (CreateException | FeatureCalcException e) {
 			throw new OperationFailedException(e);
@@ -216,13 +216,6 @@ public class ObjMaskFilterFeatureRelationDiscardFeatureRatioLessThan extends Obj
 	public void setFeatureProvider(FeatureProvider<FeatureInputSingleObj> featureProvider) {
 		this.featureProvider = featureProvider;
 	}
-	public ChnlProvider getChnlProvider() {
-		return chnlProvider;
-	}
-
-	public void setChnlProvider(ChnlProvider chnlProvider) {
-		this.chnlProvider = chnlProvider;
-	}
 
 	public double getFactor() {
 		return factor;
@@ -254,6 +247,14 @@ public class ObjMaskFilterFeatureRelationDiscardFeatureRatioLessThan extends Obj
 
 	public void setIncludeHigherSide(boolean includeHigherSide) {
 		this.includeHigherSide = includeHigherSide;
+	}
+
+	public ChnlProvider getChnl() {
+		return chnl;
+	}
+
+	public void setChnl(ChnlProvider chnl) {
+		this.chnl = chnl;
 	}
 
 }

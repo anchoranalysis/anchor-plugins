@@ -29,7 +29,7 @@ package ch.ethz.biol.cell.imageprocessing.stack.provider;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.image.bean.provider.stack.StackProvider;
+import org.anchoranalysis.image.bean.provider.stack.StackProviderOne;
 import org.anchoranalysis.image.chnl.Chnl;
 import org.anchoranalysis.image.convert.IJWrap;
 import org.anchoranalysis.image.stack.Stack;
@@ -37,13 +37,9 @@ import org.anchoranalysis.image.stack.Stack;
 import ij.ImagePlus;
 import ij.plugin.MontageMaker;
 
-public class StackProviderMontageFromSlices extends StackProvider {
+public class StackProviderMontageFromSlices extends StackProviderOne {
 
 	// START BEAN PROPERTIES
-	/** The stack who will be turned into am ontage */
-	@BeanField
-	private StackProvider stackProvider;
-	
 	/** 
 	 * How many columns to use in the montage, or 0 to guess an approximately square output
 	 * 
@@ -76,9 +72,7 @@ public class StackProviderMontageFromSlices extends StackProvider {
 	// END BEAN PROPERTIES
 	
 	@Override
-	public Stack create() throws CreateException {
-
-		Stack stack = stackProvider.createStack();
+	public Stack createFromStack(Stack stack) throws CreateException {
 		
 		int numSlices = stack.getDimensions().getZ();
 		
@@ -155,14 +149,6 @@ public class StackProviderMontageFromSlices extends StackProvider {
 	
 	private static int calcRowsForColumns( int totalNumSlices, int columns ) {
 		return (int) Math.ceil( ((double) totalNumSlices) / columns);
-	}
-
-	public StackProvider getStackProvider() {
-		return stackProvider;
-	}
-
-	public void setStackProvider(StackProvider stackProvider) {
-		this.stackProvider = stackProvider;
 	}
 
 	public int getColumns() {
