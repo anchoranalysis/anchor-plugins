@@ -30,8 +30,6 @@ package ch.ethz.biol.cell.imageprocessing.objmask.provider;
 import java.nio.ByteBuffer;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.image.bean.provider.ChnlProvider;
-import org.anchoranalysis.image.bean.provider.ObjMaskProviderOne;
 import org.anchoranalysis.image.bean.sgmn.binary.BinarySgmn;
 import org.anchoranalysis.image.bean.sgmn.binary.BinarySgmnParameters;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
@@ -42,26 +40,21 @@ import org.anchoranalysis.image.sgmn.SgmnFailedException;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.anchoranalysis.image.voxel.box.VoxelBoxWrapper;
 
-public class ObjMaskProviderBinarySgmn extends ObjMaskProviderOne {
+public class ObjMaskProviderBinarySgmn extends ObjMaskProviderOneChnlSource {
 
 	// START BEAN PROPERTIES
 	@BeanField
 	private BinarySgmn binarySgmn;
-	
-	@BeanField
-	private ChnlProvider chnlProvider;
 	// END BEAN PROPERTIES
 
 	@Override
-	public ObjMaskCollection createFromObjs(ObjMaskCollection objMasks) throws CreateException {
-		
-		Chnl chnl = chnlProvider.create();
+	protected ObjMaskCollection createFromObjs(ObjMaskCollection objsSrc, Chnl chnlSrc) throws CreateException {
 		
 		ObjMaskCollection masksOut = new ObjMaskCollection();
 		try {
 			
-			for( ObjMask om : objMasks ) {
-				VoxelBox<?> vb = chnl.getVoxelBox().any().createBufferAvoidNew(om.getBoundingBox() );
+			for( ObjMask om : objsSrc ) {
+				VoxelBox<?> vb = chnlSrc.getVoxelBox().any().createBufferAvoidNew(om.getBoundingBox() );
 				
 				BinaryVoxelBox<ByteBuffer> bvb = binarySgmn.sgmn(
 					new VoxelBoxWrapper(vb),
@@ -90,13 +83,4 @@ public class ObjMaskProviderBinarySgmn extends ObjMaskProviderOne {
 	public void setBinarySgmn(BinarySgmn binarySgmn) {
 		this.binarySgmn = binarySgmn;
 	}
-
-	public ChnlProvider getChnlProvider() {
-		return chnlProvider;
-	}
-
-	public void setChnlProvider(ChnlProvider chnlProvider) {
-		this.chnlProvider = chnlProvider;
-	}
-
 }

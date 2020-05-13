@@ -54,10 +54,10 @@ public class ObjMaskFilterHasSpheroidSmallInner extends ObjMaskFilter {
 	private ObjMaskMatcher objMaskMatcherForContainedObjects;
 	
 	@BeanField
-	private ChnlProvider chnlProviderIntensity;
+	private ChnlProvider chnlIntensity;
 	
 	@BeanField
-	private ChnlProvider chnlProviderDistance;
+	private ChnlProvider chnlDistance;
 	
 	@BeanField
 	private double minIntensityDifference = 0;
@@ -78,24 +78,24 @@ public class ObjMaskFilterHasSpheroidSmallInner extends ObjMaskFilter {
 		
 		List<ObjWithMatches> matchList = objMaskMatcherForContainedObjects.findMatch(objs);
 		
-		Chnl chnlIntensity;
+		Chnl intensity;
 		try {
-			chnlIntensity = chnlProviderIntensity.create();
+			intensity = chnlIntensity.create();
 		} catch (CreateException e) {
 			throw new OperationFailedException(e);
 		}
 		
 		
-		Chnl chnlDistance;
+		Chnl distance;
 		try {
-			chnlDistance = chnlProviderDistance.create();
+			distance = chnlDistance.create();
 		} catch (CreateException e) {
 			throw new OperationFailedException(e);
 		}
 		
 		
 		for( ObjWithMatches owm : matchList ) {
-			if (!includeObj(owm, chnlIntensity,chnlDistance)) {
+			if (!includeObj(owm, intensity, distance)) {
 				objs.remove(owm.getSourceObj());
 				
 				if (objsRejected.isPresent()) {
@@ -135,39 +135,47 @@ public class ObjMaskFilterHasSpheroidSmallInner extends ObjMaskFilter {
 		}
 		
 		// Size check
-		{
-			int sizeSmall = om.numPixels();
-			int sizeContainer = omContainer.numPixels();
-			double sizeRatio = ((double) sizeSmall) / sizeContainer;
-			
-			
-			//System.out.printf("Size:  Obj=%d  Container=%d  Diff=%f  MinSizeRatio=%f\n", sizeSmall, sizeContainer, sizeRatio, minSizeRatio);
-			
-			if (sizeRatio < minSizeRatio) {
-				return false;
-			}
-			
-			if (sizeRatio > maxSizeRatio) {
-				return false;
-			}			
+		if (!sizeCheck(om, omContainer)) {
+			return false;	
 		}
 		
+		if (!distanceCheck(chnlDistance, om, omInverse)) {
+			return false;
+		}
+		
+		return true;
+	}
+	
+	private boolean sizeCheck(ObjMask om, ObjMask omContainer) throws OperationFailedException {
+		int sizeSmall = om.numPixels();
+		int sizeContainer = omContainer.numPixels();
+		double sizeRatio = ((double) sizeSmall) / sizeContainer;
+		
+		if (sizeRatio < minSizeRatio) {
+			return false;
+		}
+		
+		if (sizeRatio > maxSizeRatio) {
+			return false;
+		}
+		return true;
+	}
+	
+	private boolean distanceCheck(Chnl chnlDistance, ObjMask om, ObjMask omInverse) throws OperationFailedException {
 		// Distance check
 		try{
 			// Calculate intensity of object
 			double distanceObj = IntensityMeanCalculator.calcMeanIntensityObjMask(chnlDistance, om);
 			double distanceInverse= IntensityMeanCalculator.calcMeanIntensityObjMask(chnlDistance, omInverse)  + minDistance;
-
-			//System.out.printf("Distance:  Obj=%f   Inverse=%f\n", distanceObj, distanceInverse);
 			
 			if (distanceObj < distanceInverse) {
 				return false;
 			}
+			return true;
+			
 		} catch (FeatureCalcException e) {
 			throw new OperationFailedException(e);
 		}
-		
-		return true;
 	}
 	
 	private ObjMask findMaxVolumeObjAndCnt( ObjMaskCollection objs ) {
@@ -211,17 +219,6 @@ public class ObjMaskFilterHasSpheroidSmallInner extends ObjMaskFilter {
 		this.minIntensityDifference = minIntensityDifference;
 	}
 
-
-	public ChnlProvider getChnlProviderIntensity() {
-		return chnlProviderIntensity;
-	}
-
-
-	public void setChnlProviderIntensity(ChnlProvider chnlProviderIntensity) {
-		this.chnlProviderIntensity = chnlProviderIntensity;
-	}
-
-
 	public double getMinSizeRatio() {
 		return minSizeRatio;
 	}
@@ -229,16 +226,6 @@ public class ObjMaskFilterHasSpheroidSmallInner extends ObjMaskFilter {
 
 	public void setMinSizeRatio(double minSizeRatio) {
 		this.minSizeRatio = minSizeRatio;
-	}
-
-
-	public ChnlProvider getChnlProviderDistance() {
-		return chnlProviderDistance;
-	}
-
-
-	public void setChnlProviderDistance(ChnlProvider chnlProviderDistance) {
-		this.chnlProviderDistance = chnlProviderDistance;
 	}
 
 
@@ -272,4 +259,19 @@ public class ObjMaskFilterHasSpheroidSmallInner extends ObjMaskFilter {
 		this.maxSizeRatio = maxSizeRatio;
 	}
 
+	public ChnlProvider getChnlIntensity() {
+		return chnlIntensity;
+	}
+
+	public void setChnlIntensity(ChnlProvider chnlIntensity) {
+		this.chnlIntensity = chnlIntensity;
+	}
+
+	public ChnlProvider getChnlDistance() {
+		return chnlDistance;
+	}
+
+	public void setChnlDistance(ChnlProvider chnlDistance) {
+		this.chnlDistance = chnlDistance;
+	}
 }

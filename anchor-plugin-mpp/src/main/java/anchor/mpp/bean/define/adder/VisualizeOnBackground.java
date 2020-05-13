@@ -85,12 +85,10 @@ public class VisualizeOnBackground extends DefineAdderBean {
 		Define def = fromDelegate();
 
 		try {
-					
 			// We add all the existing definitions
 			define.addAll(def);
 			
 			// Now we add visualizations for the BinaryImgChnlProvider and ObjMaskProvider
-			
 			addVisualizationFor( def, define, BinaryChnlProvider.class, id ->
 				visualizationBinaryMask(id)
 			);
@@ -163,14 +161,12 @@ public class VisualizeOnBackground extends DefineAdderBean {
 		provider.setOutlineWidth(outlineWidth);
 		return provider;
 	}
-	
-	
-	
+		
 	private void addBackgroundProvider( StackProviderWithBackground provider ) {
 		if (stackBackground) {
-			provider.setStackProviderBackground( backgroundStack() );
+			provider.setStackBackground( backgroundStack() );
 		} else {
-			provider.setChnlProviderBackground( backgroundChnl() );
+			provider.setChnlBackground( backgroundChnl() );
 		}
 	}
 	
@@ -186,8 +182,6 @@ public class VisualizeOnBackground extends DefineAdderBean {
 		return new ChnlProviderReference(backgroundID);
 	}
 	
-
-
 	public String getBackgroundID() {
 		return backgroundID;
 	}
@@ -219,5 +213,4 @@ public class VisualizeOnBackground extends DefineAdderBean {
 	public void setStackBackground(boolean stackBackground) {
 		this.stackBackground = stackBackground;
 	}
-
 }

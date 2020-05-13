@@ -29,28 +29,21 @@ package ch.ethz.biol.cell.imageprocessing.objmask.provider;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.image.bean.provider.ChnlProvider;
-import org.anchoranalysis.image.bean.provider.ObjMaskProviderOne;
 import org.anchoranalysis.image.bean.sgmn.objmask.ObjMaskSgmn;
 import org.anchoranalysis.image.chnl.Chnl;
 import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.image.objmask.ObjMaskCollection;
 import org.anchoranalysis.image.sgmn.SgmnFailedException;
 
-public class ObjMaskProviderSgmnByObj extends ObjMaskProviderOne {
+public class ObjMaskProviderSgmnByObj extends ObjMaskProviderOneChnlSource {
 
 	// START BEAN PROPERTIES
 	@BeanField
 	private ObjMaskSgmn sgmn;
-	
-	@BeanField
-	private ChnlProvider chnl;
 	// END BEAN PROPERTIES
 
 	@Override
-	public ObjMaskCollection createFromObjs( ObjMaskCollection objsSrc ) throws CreateException {
-
-		Chnl chnlToSgmn = chnl.create();
+	public ObjMaskCollection createFromObjs( ObjMaskCollection objsSrc, Chnl chnlToSgmn ) throws CreateException {
 		
 		ObjMaskCollection objsOut = new ObjMaskCollection();
 		
@@ -73,13 +66,5 @@ public class ObjMaskProviderSgmnByObj extends ObjMaskProviderOne {
 
 	public void setSgmn(ObjMaskSgmn sgmn) {
 		this.sgmn = sgmn;
-	}
-
-	public ChnlProvider getChnl() {
-		return chnl;
-	}
-
-	public void setChnl(ChnlProvider chnl) {
-		this.chnl = chnl;
 	}
 }

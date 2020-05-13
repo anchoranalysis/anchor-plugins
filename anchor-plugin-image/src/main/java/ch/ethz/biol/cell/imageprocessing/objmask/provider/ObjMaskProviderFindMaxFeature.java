@@ -29,35 +29,22 @@ import java.util.Optional;
  */
 
 
-import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorSingle;
-import org.anchoranalysis.image.bean.provider.ObjMaskProviderOne;
-import org.anchoranalysis.image.feature.bean.evaluator.FeatureEvaluator;
 import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
 import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.image.objmask.ObjMaskCollection;
 
-public class ObjMaskProviderFindMaxFeature extends ObjMaskProviderOne {
-
-	// START BEAN PROPERTIES
-	@BeanField
-	private FeatureEvaluator<FeatureInputSingleObj> featureEvaluator;
-	// END BEAN PROPERTIES
+public class ObjMaskProviderFindMaxFeature extends ObjMaskProviderFindMaxFeatureBase {
 
 	@Override
 	public ObjMaskCollection createFromObjs( ObjMaskCollection objMaskCollection ) throws CreateException {
-		
-		FeatureCalculatorSingle<FeatureInputSingleObj> session;
-		try {
-			session = featureEvaluator.createAndStartSession();
-		} catch (OperationFailedException e) {
-			throw new CreateException(e);
-		}
 
-		Optional<ObjMask> max = findMaxObj(session,	objMaskCollection);
+		Optional<ObjMask> max = findMaxObj(
+			createSession(),
+			objMaskCollection
+		);
 		
 		ObjMaskCollection out = new ObjMaskCollection();
 		max.ifPresent( obj->
@@ -90,14 +77,4 @@ public class ObjMaskProviderFindMaxFeature extends ObjMaskProviderOne {
 			throw new CreateException(e);
 		}
 	}
-
-	public FeatureEvaluator<FeatureInputSingleObj> getFeatureEvaluator() {
-		return featureEvaluator;
-	}
-
-	public void setFeatureEvaluator(FeatureEvaluator<FeatureInputSingleObj> featureEvaluator) {
-		this.featureEvaluator = featureEvaluator;
-	}
-
-
 }

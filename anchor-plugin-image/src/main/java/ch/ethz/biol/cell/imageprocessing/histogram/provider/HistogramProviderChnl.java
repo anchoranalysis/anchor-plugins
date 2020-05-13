@@ -33,7 +33,6 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.bean.provider.BinaryChnlProvider;
 import org.anchoranalysis.image.bean.provider.ChnlProvider;
 import org.anchoranalysis.image.bean.provider.HistogramProvider;
-import org.anchoranalysis.image.binary.BinaryChnl;
 import org.anchoranalysis.image.chnl.Chnl;
 import org.anchoranalysis.image.histogram.Histogram;
 import org.anchoranalysis.image.histogram.HistogramFactoryUtilities;
@@ -42,38 +41,40 @@ public class HistogramProviderChnl extends HistogramProvider {
 
 	// START BEAN PROPERTIES
 	@BeanField
-	private ChnlProvider chnlProvider;
+	private ChnlProvider chnl;
 	
 	@BeanField @OptionalBean
-	private BinaryChnlProvider maskProvider;
+	private BinaryChnlProvider mask;
 	// END BEAN PROPERTIES
 	
 	@Override
 	public Histogram create() throws CreateException {
 
-		Chnl chnl = chnlProvider.create();
+		Chnl chnlIn = chnl.create();
 		
-		if (maskProvider!=null) {
-			BinaryChnl mask = maskProvider.create();
-			return HistogramFactoryUtilities.create(chnl, mask);
+		if (mask!=null) {
+			return HistogramFactoryUtilities.create(
+				chnlIn,
+				mask.create()
+			);
 		} else {
-			return HistogramFactoryUtilities.create(chnl);
+			return HistogramFactoryUtilities.create(chnlIn);
 		}
 	}
 
-	public ChnlProvider getChnlProvider() {
-		return chnlProvider;
+	public ChnlProvider getChnl() {
+		return chnl;
 	}
 
-	public void setChnlProvider(ChnlProvider chnlProvider) {
-		this.chnlProvider = chnlProvider;
+	public void setChnl(ChnlProvider chnl) {
+		this.chnl = chnl;
 	}
 
-	public BinaryChnlProvider getMaskProvider() {
-		return maskProvider;
+	public BinaryChnlProvider getMask() {
+		return mask;
 	}
 
-	public void setMaskProvider(BinaryChnlProvider maskProvider) {
-		this.maskProvider = maskProvider;
+	public void setMask(BinaryChnlProvider mask) {
+		this.mask = mask;
 	}
 }

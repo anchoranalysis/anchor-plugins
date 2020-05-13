@@ -11,22 +11,24 @@ public abstract class ObjMaskProviderMaskBase extends ObjMaskProviderOne {
 
 	// START BEAN PROPERTIES
 	@BeanField
-	private BinaryChnlProvider maskProvider;
+	private BinaryChnlProvider mask;
 	// END BEAN PROPERTIES
 	
 	@Override
 	public ObjMaskCollection createFromObjs(ObjMaskCollection objsIn) throws CreateException {
-		BinaryChnl mask = maskProvider.create();
-		return createFromObjs(objsIn, mask);
+		return createFromObjs(
+			objsIn,
+			mask.create()
+		);
 	}
 	
 	protected abstract ObjMaskCollection createFromObjs(ObjMaskCollection objsIn, BinaryChnl mask) throws CreateException;
 
-	public BinaryChnlProvider getMaskProvider() {
-		return maskProvider;
+	public BinaryChnlProvider getMask() {
+		return mask;
 	}
 
-	public void setMaskProvider(BinaryChnlProvider maskProvider) {
-		this.maskProvider = maskProvider;
+	public void setMask(BinaryChnlProvider mask) {
+		this.mask = mask;
 	}
 }

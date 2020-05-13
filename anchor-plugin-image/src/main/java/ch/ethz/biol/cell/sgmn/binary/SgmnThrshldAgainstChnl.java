@@ -52,7 +52,7 @@ public class SgmnThrshldAgainstChnl extends BinarySgmn {
 
 	// START BEAN PROPERTIES
 	@BeanField
-	private ChnlProvider chnlProviderThrshld;
+	private ChnlProvider chnlThreshold;
 	
 	@BeanField
 	private boolean clearOutsideMask = true;
@@ -66,15 +66,15 @@ public class SgmnThrshldAgainstChnl extends BinarySgmn {
 		VoxelBox<?> voxelBoxIn = voxelBox.any();
 		VoxelBox<ByteBuffer> voxelBoxOut = createOutputChnl(voxelBox);
 		
-		Chnl chnlThrshld;
+		Chnl threshold;
 		
 		try {
-			chnlThrshld = chnlProviderThrshld.create();
+			threshold = chnlThreshold.create();
 		} catch (CreateException e) {
 			throw new SgmnFailedException(e);
 		}
 		
-		VoxelBox<?> vbThreshld = chnlThrshld.getVoxelBox().any();
+		VoxelBox<?> vbThreshld = threshold.getVoxelBox().any();
 		
 		
 		if (!vbThreshld.extnt().equals(voxelBoxIn.extnt())) {
@@ -130,14 +130,14 @@ public class SgmnThrshldAgainstChnl extends BinarySgmn {
 		VoxelBox<?> voxelBoxIn = voxelBox.any();
 		VoxelBox<ByteBuffer> voxelBoxOut = createOutputChnl(voxelBox);
 		
-		Chnl chnlThrshld;
+		Chnl threshold;
 		try {
-			chnlThrshld = chnlProviderThrshld.create();
+			threshold = chnlThreshold.create();
 		} catch (CreateException e) {
 			throw new SgmnFailedException(e);
 		}
 		
-		VoxelBox<?> vbThrshld = chnlThrshld.getVoxelBox().any();
+		VoxelBox<?> vbThrshld = threshold.getVoxelBox().any();
 		
 		if (!vbThrshld.extnt().equals(voxelBoxIn.extnt())) {
 			throw new SgmnFailedException("chnlProviderThrshld is of different size to voxelBox");
@@ -186,20 +186,22 @@ public class SgmnThrshldAgainstChnl extends BinarySgmn {
 		return new BinaryVoxelBoxByte( voxelBoxOut, bvb.createInt() );
 	}
 
-	public ChnlProvider getChnlProviderThrshld() {
-		return chnlProviderThrshld;
-	}
-
-	public void setChnlProviderThrshld(ChnlProvider chnlProviderThrshld) {
-		this.chnlProviderThrshld = chnlProviderThrshld;
-	}
-
 	public boolean isClearOutsideMask() {
 		return clearOutsideMask;
 	}
 
 	public void setClearOutsideMask(boolean clearOutsideMask) {
 		this.clearOutsideMask = clearOutsideMask;
+	}
+
+
+	public ChnlProvider getChnlThreshold() {
+		return chnlThreshold;
+	}
+
+
+	public void setChnlThreshold(ChnlProvider chnlThreshold) {
+		this.chnlThreshold = chnlThreshold;
 	}
 
 }
