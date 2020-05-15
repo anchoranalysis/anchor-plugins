@@ -162,7 +162,7 @@ class ExportFeaturesObjMaskTaskFixture {
 				Optional.of(sharedFeatures.asListNamedBeansProvider())
 			)		
 		);
-		task.setSelectFeaturesObjects( (FeatureTableObjs<T>) flexiFeatureTable);
+		task.setTable( (FeatureTableObjs<T>) flexiFeatureTable);
 		task.setListObjMaskProvider(
 			createObjProviders(MultiInputFixture.OBJS_NAME)
 		);
