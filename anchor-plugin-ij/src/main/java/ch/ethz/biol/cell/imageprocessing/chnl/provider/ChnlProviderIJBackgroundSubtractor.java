@@ -32,21 +32,13 @@ import ij.plugin.filter.BackgroundSubtracter;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.image.bean.provider.ChnlProvider;
+import org.anchoranalysis.image.bean.provider.ChnlProviderOne;
 import org.anchoranalysis.image.chnl.Chnl;
 import org.anchoranalysis.image.convert.IJWrap;
 
-public class ChnlProviderIJBackgroundSubtractor extends ChnlProvider {
+public class ChnlProviderIJBackgroundSubtractor extends ChnlProviderOne {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PROPERTIES
-	@BeanField
-	private ChnlProvider chnlProvider;
-	
 	@BeanField
 	private int radius = 0;
 	// END BEAN PROPERTIES
@@ -64,18 +56,8 @@ public class ChnlProviderIJBackgroundSubtractor extends ChnlProvider {
 
 
 	@Override
-	public Chnl create() throws CreateException {
-		
-		Chnl chnl = chnlProvider.create();
+	public Chnl createFromChnl(Chnl chnl) throws CreateException {
 		return subtractBackground(chnl, radius, true);
-	}
-
-	public ChnlProvider getChnlProvider() {
-		return chnlProvider;
-	}
-
-	public void setChnlProvider(ChnlProvider chnlProvider) {
-		this.chnlProvider = chnlProvider;
 	}
 
 	public int getRadius() {

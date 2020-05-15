@@ -1,5 +1,7 @@
 package ch.ethz.biol.cell.imageprocessing.objmask.filter;
 
+import java.util.Optional;
+
 /*
  * #%L
  * anchor-plugin-image
@@ -37,11 +39,6 @@ import org.anchoranalysis.image.objmask.ObjMaskCollection;
 
 public class ObjMaskFilterIntersectionWith extends ObjMaskFilterByObject {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
 	private ObjMaskProvider objs;
@@ -50,7 +47,7 @@ public class ObjMaskFilterIntersectionWith extends ObjMaskFilterByObject {
 	private ObjMaskCollection intersectionSet;
 
 	@Override
-	protected void start(ImageDim dim) throws OperationFailedException {
+	protected void start() throws OperationFailedException {
 		
 		try {
 			intersectionSet = objs.create();
@@ -73,7 +70,7 @@ public class ObjMaskFilterIntersectionWith extends ObjMaskFilterByObject {
 	}
 	
 	@Override
-	protected boolean match(ObjMask om, ImageDim dim)
+	protected boolean match(ObjMask om, Optional<ImageDim> dim)
 			throws OperationFailedException {
 
 		return insersects(om, intersectionSet);

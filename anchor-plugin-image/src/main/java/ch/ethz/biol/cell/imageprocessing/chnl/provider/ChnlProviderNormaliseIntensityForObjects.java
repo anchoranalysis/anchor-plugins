@@ -30,7 +30,7 @@ package ch.ethz.biol.cell.imageprocessing.chnl.provider;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.image.bean.provider.ChnlProvider;
+import org.anchoranalysis.image.bean.provider.ChnlProviderOne;
 import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
 import org.anchoranalysis.image.chnl.Chnl;
 import org.anchoranalysis.image.objmask.ObjMask;
@@ -39,25 +39,15 @@ import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.anchoranalysis.plugin.image.intensity.IntensityMeanCalculator;
 
 // Rewrites the intensity for each ObjMask (assume no overlap) so that its mean is 128
-public class ChnlProviderNormaliseIntensityForObjects extends ChnlProvider {
+public class ChnlProviderNormaliseIntensityForObjects extends ChnlProviderOne {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PROPERTIES
-	@BeanField
-	private ChnlProvider chnlProvider;
-	
 	@BeanField
 	private ObjMaskProvider objs;
 	// END BEAN PROPERTIES
 	
 	@Override
-	public Chnl create() throws CreateException {
-
-		Chnl chnl = chnlProvider.create();
+	public Chnl createFromChnl( Chnl chnl ) throws CreateException {
 		
 		VoxelBox<?> vb = chnl.getVoxelBox().any();
 		
@@ -85,15 +75,6 @@ public class ChnlProviderNormaliseIntensityForObjects extends ChnlProvider {
 		return chnl;
 	}
 
-	public ChnlProvider getChnlProvider() {
-		return chnlProvider;
-	}
-
-	public void setChnlProvider(ChnlProvider chnlProvider) {
-		this.chnlProvider = chnlProvider;
-	}
-
-
 	public ObjMaskProvider getObjs() {
 		return objs;
 	}
@@ -102,6 +83,4 @@ public class ChnlProviderNormaliseIntensityForObjects extends ChnlProvider {
 	public void setObjs(ObjMaskProvider objs) {
 		this.objs = objs;
 	}
-
-
 }

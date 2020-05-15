@@ -30,14 +30,9 @@ package org.anchoranalysis.image.feature.bean.list;
 
 import org.anchoranalysis.feature.bean.operator.FeatureListElem;
 import org.anchoranalysis.image.feature.objmask.pair.FeatureInputPairObjs;
-import org.anchoranalysis.plugin.operator.feature.bean.order.Maximum;
+import org.anchoranalysis.plugin.operator.feature.bean.list.Maximum;
 
 public class FeatureListProviderDiffMax extends FeatureListProviderAggregateDiff {
-
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
 
 	@Override
 	protected FeatureListElem<FeatureInputPairObjs> createFeature() {

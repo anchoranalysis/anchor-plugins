@@ -29,7 +29,7 @@ package ch.ethz.biol.cell.imageprocessing.chnl.provider;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.image.bean.provider.ChnlProvider;
+import org.anchoranalysis.image.bean.provider.ChnlProviderOne;
 import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
 import org.anchoranalysis.image.chnl.Chnl;
 import org.anchoranalysis.image.objmask.ObjMask;
@@ -38,24 +38,16 @@ import org.anchoranalysis.image.voxel.box.VoxelBox;
 
 // Assigns a unique id number to each objects
 // Note behaviour is undefined when objects overlap with each other. An ID of either object arbitrarily will be assigned.
-public class ChnlProviderIdentifyObjects extends ChnlProvider {
+public class ChnlProviderIdentifyObjects extends ChnlProviderOne {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PROPERTIES
-	@BeanField
-	private ChnlProvider chnlProvider;
-	
 	@BeanField
 	private ObjMaskProvider objs;
 	// END BEAN PROPERTIES
 
 	@Override
-	public Chnl create() throws CreateException {
-		Chnl chnl = chnlProvider.create();
+	public Chnl createFromChnl(Chnl chnl) throws CreateException {
+
 		VoxelBox<?> vb = chnl.getVoxelBox().any();
 		
 		ObjMaskCollection objsCollection = objs.create();
@@ -74,14 +66,6 @@ public class ChnlProviderIdentifyObjects extends ChnlProvider {
 		return chnl;
 	}
 
-	public ChnlProvider getChnlProvider() {
-		return chnlProvider;
-	}
-
-	public void setChnlProvider(ChnlProvider chnlProvider) {
-		this.chnlProvider = chnlProvider;
-	}
-
 	public ObjMaskProvider getObjs() {
 		return objs;
 	}
@@ -89,6 +73,4 @@ public class ChnlProviderIdentifyObjects extends ChnlProvider {
 	public void setObjs(ObjMaskProvider objs) {
 		this.objs = objs;
 	}
-
-
 }

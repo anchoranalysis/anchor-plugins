@@ -37,11 +37,6 @@ import org.anchoranalysis.plugin.mpp.sgmn.cfg.optscheme.DualCfgNRGPixelized;
 
 public class AddDualTransformer extends StateTransformerBean<CfgNRGPixelized,DualCfgNRGPixelized> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	// START BEAN PROPERTIES
 	@BeanField
 	private StateTransformerBean<Cfg,CfgNRGPixelized> transformerCfg;

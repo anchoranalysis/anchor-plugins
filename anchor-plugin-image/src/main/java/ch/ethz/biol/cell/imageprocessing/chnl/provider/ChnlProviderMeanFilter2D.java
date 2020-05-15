@@ -33,8 +33,8 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.geometry.Point3i;
-import org.anchoranalysis.image.bean.provider.BinaryImgChnlProvider;
-import org.anchoranalysis.image.bean.provider.ChnlProvider;
+import org.anchoranalysis.image.bean.provider.BinaryChnlProvider;
+import org.anchoranalysis.image.bean.provider.ChnlProviderOne;
 import org.anchoranalysis.image.binary.BinaryChnl;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
@@ -46,22 +46,14 @@ import org.anchoranalysis.image.extent.IncorrectImageSizeException;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.anchoranalysis.image.voxel.box.factory.VoxelBoxFactory;
 
-public class ChnlProviderMeanFilter2D extends ChnlProvider {
+public class ChnlProviderMeanFilter2D extends ChnlProviderOne {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PROPERTIES
-	@BeanField
-	private ChnlProvider chnlProvider;
+	@BeanField @OptionalBean
+	private BinaryChnlProvider binaryChnlMaskInput;		// A mask on which voxels are considered when calculating the filter
 	
 	@BeanField @OptionalBean
-	private BinaryImgChnlProvider binaryImgChnlProviderMaskInput;		// A mask on which voxels are considered when calculating the filter
-	
-	@BeanField @OptionalBean
-	private BinaryImgChnlProvider binaryImgChnlProviderMaskOutput;		// A mask on which voxels are outputted with a filter value
+	private BinaryChnlProvider binaryChnlMaskOutput;		// A mask on which voxels are outputted with a filter value
 	
 	@BeanField
 	private int radius = 3;	// Should be odd
@@ -231,19 +223,16 @@ public class ChnlProviderMeanFilter2D extends ChnlProvider {
 	}
 	
 	@Override
-	public Chnl create() throws CreateException {
-		
-		
-		Chnl chnl = chnlProvider.create(); 
+	public Chnl createFromChnl(Chnl chnl) throws CreateException {
 		
 		BinaryChnl biInput = null;
-		if (binaryImgChnlProviderMaskInput!=null) {
-			biInput = binaryImgChnlProviderMaskInput.create();
+		if (binaryChnlMaskInput!=null) {
+			biInput = binaryChnlMaskInput.create();
 		}
 		
 		BinaryChnl biOutput = null;
-		if (binaryImgChnlProviderMaskOutput!=null) {
-			biOutput = binaryImgChnlProviderMaskOutput.create();
+		if (binaryChnlMaskOutput!=null) {
+			biOutput = binaryChnlMaskOutput.create();
 		}
 		
 		try {
@@ -269,14 +258,6 @@ public class ChnlProviderMeanFilter2D extends ChnlProvider {
 		return chnl;
 	}
 
-	public ChnlProvider getChnlProvider() {
-		return chnlProvider;
-	}
-
-	public void setChnlProvider(ChnlProvider chnlProvider) {
-		this.chnlProvider = chnlProvider;
-	}
-
 	public int getRadius() {
 		return radius;
 	}
@@ -285,24 +266,19 @@ public class ChnlProviderMeanFilter2D extends ChnlProvider {
 		this.radius = radius;
 	}
 
-
-	public BinaryImgChnlProvider getBinaryImgChnlProviderMaskOutput() {
-		return binaryImgChnlProviderMaskOutput;
+	public BinaryChnlProvider getBinaryChnlMaskInput() {
+		return binaryChnlMaskInput;
 	}
 
-	public void setBinaryImgChnlProviderMaskOutput(
-			BinaryImgChnlProvider binaryImgChnlProviderMaskOutput) {
-		this.binaryImgChnlProviderMaskOutput = binaryImgChnlProviderMaskOutput;
+	public void setBinaryChnlMaskInput(BinaryChnlProvider binaryChnlMaskInput) {
+		this.binaryChnlMaskInput = binaryChnlMaskInput;
 	}
 
-	public BinaryImgChnlProvider getBinaryImgChnlProviderMaskInput() {
-		return binaryImgChnlProviderMaskInput;
+	public BinaryChnlProvider getBinaryChnlMaskOutput() {
+		return binaryChnlMaskOutput;
 	}
 
-	public void setBinaryImgChnlProviderMaskInput(
-			BinaryImgChnlProvider binaryImgChnlProviderMaskInput) {
-		this.binaryImgChnlProviderMaskInput = binaryImgChnlProviderMaskInput;
+	public void setBinaryChnlMaskOutput(BinaryChnlProvider binaryChnlMaskOutput) {
+		this.binaryChnlMaskOutput = binaryChnlMaskOutput;
 	}
-
-
 }

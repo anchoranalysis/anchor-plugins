@@ -30,9 +30,9 @@ import org.anchoranalysis.anchor.mpp.bean.bound.MarkBounds;
 
 import org.anchoranalysis.anchor.mpp.bean.proposer.radii.RadiiProposer;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
-import org.anchoranalysis.anchor.mpp.mark.conic.EllipsoidBounds;
 import org.anchoranalysis.anchor.mpp.mark.conic.EllipsoidRandomizer;
 import org.anchoranalysis.anchor.mpp.mark.conic.MarkEllipsoid;
+import org.anchoranalysis.anchor.mpp.mark.conic.bounds.EllipsoidBounds;
 import org.anchoranalysis.anchor.mpp.proposer.error.ErrorNode;
 import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.core.name.provider.NamedProviderGetException;
@@ -41,11 +41,6 @@ import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.orientation.Orientation;
 
 public class RandomEllipsoidBounds extends RadiiProposer {
-
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -8857499584987708120L;
 
 	@Override
 	public boolean isCompatibleWith(Mark testMark) {

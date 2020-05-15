@@ -38,11 +38,6 @@ import cern.colt.matrix.linalg.Algebra;
 
 public abstract class ConicFitterBase extends PointsFitter {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 439867542594390514L;
-	
 	// START BEAN
 	@BeanField @Positive
 	private double shellRad;

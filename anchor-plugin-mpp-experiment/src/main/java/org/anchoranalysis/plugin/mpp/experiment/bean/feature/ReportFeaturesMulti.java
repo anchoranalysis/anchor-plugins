@@ -29,49 +29,35 @@ package org.anchoranalysis.plugin.mpp.experiment.bean.feature;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import org.anchoranalysis.anchor.mpp.bean.init.MPPInitParams;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
-import org.anchoranalysis.bean.define.Define;
-import org.anchoranalysis.bean.shared.random.RandomNumberGeneratorBean;
-import org.anchoranalysis.bean.shared.random.RandomNumberGeneratorMersenneConstantBean;
-import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.log.LogErrorReporter;
-import org.anchoranalysis.core.log.LogReporter;
-import org.anchoranalysis.core.name.store.SharedObjects;
 import org.anchoranalysis.core.text.TypedValue;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
 import org.anchoranalysis.experiment.JobExecutionException;
 import org.anchoranalysis.experiment.task.InputTypesExpected;
-import org.anchoranalysis.experiment.task.ParametersBound;
+import org.anchoranalysis.experiment.task.InputBound;
 import org.anchoranalysis.experiment.task.ParametersExperiment;
 import org.anchoranalysis.experiment.task.Task;
-import org.anchoranalysis.image.init.ImageInitParams;
-import org.anchoranalysis.io.bean.report.feature.ReportFeature;
 import org.anchoranalysis.io.error.AnchorIOException;
+import org.anchoranalysis.io.output.bound.BoundIOContext;
 import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
 import org.anchoranalysis.io.output.csv.CSVWriter;
+import org.anchoranalysis.mpp.io.bean.report.feature.ReportFeatureForSharedObjects;
 import org.anchoranalysis.mpp.io.input.MultiInput;
+import org.anchoranalysis.mpp.sgmn.bean.define.DefineOutputterMPP;
 
 
 public class ReportFeaturesMulti extends Task<MultiInput,CSVWriter> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -5961126655531145104L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
-	private List<ReportFeature<SharedObjects>> listReportFeatures = new ArrayList<>();
+	private List<ReportFeatureForSharedObjects> listReportFeatures = new ArrayList<>();
 	
 	@BeanField @OptionalBean
-	private Define namedDefinitions;
-	
-	@BeanField
-	private RandomNumberGeneratorBean randomNumberGenerator = new RandomNumberGeneratorMersenneConstantBean();	
+	private DefineOutputterMPP define;
 	// END BEAN PROPERTIES
 	
 	@Override
@@ -104,46 +90,49 @@ public class ReportFeaturesMulti extends Task<MultiInput,CSVWriter> {
 	}
 	
 	@Override
-	public void doJobOnInputObject(ParametersBound<MultiInput,CSVWriter> params)	throws JobExecutionException {
-		
-		LogErrorReporter logErrorReporter = params.getLogErrorReporter();
-		MultiInput input = params.getInputObject();
+	public void doJobOnInputObject(InputBound<MultiInput,CSVWriter> input)	throws JobExecutionException {
 
-		CSVWriter writer = (CSVWriter) params.getSharedState();
+		CSVWriter writer = input.getSharedState();
 		
 		if (!writer.isOutputEnabled()) {
 			return;
 		}
 		
+		BoundIOContext context = input.context();
+		
 		try {
-			SharedObjects so = new SharedObjects(logErrorReporter);
-			MPPInitParams soMPP = MPPInitParams.create(
-				so,
-				namedDefinitions,
-				ParamsHelper.createGeneralParams(randomNumberGenerator.create(), params)
+			define.processInputMPP(
+				input.getInputObject(),
+				context,
+				soMPP -> writeFeaturesIntoReporter(
+					soMPP,
+					writer,
+					input.getInputObject().descriptiveName(),
+					context.getLogger()
+				)
 			);
-			ImageInitParams soImage = soMPP.getImage();
+		
 			
-			input.addToSharedObjects( soMPP, soImage );
-			
-			List<TypedValue> rowElements = ReportFeatureUtilities.genElementList(
-				listReportFeatures,
-				so,
-				logErrorReporter
-			);
-			
-			rowElements.add(0, new TypedValue(input.descriptiveName(),false) );
-			
-			writer.writeRow( rowElements );
-			
-		} catch (CreateException | OperationFailedException e) {
+		} catch (OperationFailedException e) {
 			throw new JobExecutionException(e);
 		}
+	}
+	
+	private void writeFeaturesIntoReporter(MPPInitParams soMPP, CSVWriter writer, String inputDescriptiveName, LogErrorReporter logger) {
+		List<TypedValue> rowElements = ReportFeatureUtilities.genElementList(
+			listReportFeatures,
+			soMPP,
+			logger
+		);
+		
+		rowElements.add(0, new TypedValue(inputDescriptiveName, false) );
+		
+		writer.writeRow( rowElements );
 	}
 
 	@Override
 	public void afterAllJobsAreExecuted(
-			BoundOutputManagerRouteErrors outputManager, CSVWriter writer, LogReporter logReporter)
+			CSVWriter writer, BoundIOContext context)
 			throws ExperimentExecutionException {
 		writer.close();
 	}
@@ -153,28 +142,19 @@ public class ReportFeaturesMulti extends Task<MultiInput,CSVWriter> {
 		return false;
 	}
 
-	public List<ReportFeature<SharedObjects>> getListReportFeatures() {
+	public List<ReportFeatureForSharedObjects> getListReportFeatures() {
 		return listReportFeatures;
 	}
 
-	public void setListReportFeatures(
-			List<ReportFeature<SharedObjects>> listReportFeatures) {
+	public void setListReportFeatures(List<ReportFeatureForSharedObjects> listReportFeatures) {
 		this.listReportFeatures = listReportFeatures;
 	}
 
-	public Define getNamedDefinitions() {
-		return namedDefinitions;
+	public DefineOutputterMPP getDefine() {
+		return define;
 	}
 
-	public void setNamedDefinitions(Define namedDefinitions) {
-		this.namedDefinitions = namedDefinitions;
-	}
-
-	public RandomNumberGeneratorBean getRandomNumberGenerator() {
-		return randomNumberGenerator;
-	}
-
-	public void setRandomNumberGenerator(RandomNumberGeneratorBean randomNumberGenerator) {
-		this.randomNumberGenerator = randomNumberGenerator;
+	public void setDefine(DefineOutputterMPP define) {
+		this.define = define;
 	}
 }

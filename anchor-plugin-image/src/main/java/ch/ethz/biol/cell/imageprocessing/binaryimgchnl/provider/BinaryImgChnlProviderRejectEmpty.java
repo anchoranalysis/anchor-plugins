@@ -27,38 +27,17 @@ package ch.ethz.biol.cell.imageprocessing.binaryimgchnl.provider;
  */
 
 
-import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.image.bean.provider.BinaryImgChnlProvider;
+import org.anchoranalysis.image.bean.provider.BinaryImgChnlProviderOne;
 import org.anchoranalysis.image.binary.BinaryChnl;
 
-public class BinaryImgChnlProviderRejectEmpty extends BinaryImgChnlProvider {
+public class BinaryImgChnlProviderRejectEmpty extends BinaryImgChnlProviderOne {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
-	// START BEAN PROPERTIES
-	@BeanField
-	private BinaryImgChnlProvider binaryImgChnlProvider;
-	// END BEAN PROPERTIES
-	
 	@Override
-	public BinaryChnl create() throws CreateException {
-
-		BinaryChnl binaryImgChnl = binaryImgChnlProvider.create();
+	public BinaryChnl createFromChnl(BinaryChnl binaryImgChnl) throws CreateException {
 		if (!binaryImgChnl.hasHighValues()) {
 			throw new CreateException("binaryImgChnl has no high values");
 		}
 		return binaryImgChnl;
-	}
-
-	public BinaryImgChnlProvider getBinaryImgChnlProvider() {
-		return binaryImgChnlProvider;
-	}
-
-	public void setBinaryImgChnlProvider(BinaryImgChnlProvider binaryImgChnlProvider) {
-		this.binaryImgChnlProvider = binaryImgChnlProvider;
 	}
 }

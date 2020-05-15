@@ -30,51 +30,26 @@ package org.anchoranalysis.plugin.mpp.experiment.bean.define;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-
-import org.anchoranalysis.anchor.mpp.bean.init.GeneralInitParams;
-import org.anchoranalysis.anchor.mpp.bean.init.MPPInitParams;
 import org.anchoranalysis.bean.annotation.AllowEmpty;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.bean.define.Define;
-import org.anchoranalysis.bean.shared.random.RandomNumberGeneratorBean;
-import org.anchoranalysis.bean.shared.random.RandomNumberGeneratorMersenneConstantBean;
-import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.log.LogErrorReporter;
-import org.anchoranalysis.core.name.store.SharedObjects;
 import org.anchoranalysis.experiment.JobExecutionException;
 import org.anchoranalysis.experiment.bean.task.TaskWithoutSharedState;
 import org.anchoranalysis.experiment.task.InputTypesExpected;
-import org.anchoranalysis.experiment.task.ParametersBound;
+import org.anchoranalysis.experiment.task.InputBound;
 import org.anchoranalysis.image.init.ImageInitParams;
 import org.anchoranalysis.image.io.bean.feature.OutputFeatureTable;
 import org.anchoranalysis.image.stack.NamedImgStackCollection;
-import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
-import org.anchoranalysis.io.output.error.OutputWriteFailedException;
+import org.anchoranalysis.io.output.bound.BoundIOContext;
 import org.anchoranalysis.mpp.io.input.MultiInput;
-import org.anchoranalysis.plugin.mpp.experiment.outputter.SharedObjectsUtilities;
+import org.anchoranalysis.mpp.sgmn.bean.define.DefineOutputterMPP;
 
 public class SharedObjectsMultiInputTask extends TaskWithoutSharedState<MultiInput> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
-	
 	// START BEAN PROPERTIES
 	@BeanField
-	private Define define;
-	
-	@BeanField
-	private RandomNumberGeneratorBean randomNumberGenerator = new RandomNumberGeneratorMersenneConstantBean();
-	
-	@BeanField
-	private boolean suppressSubfolders = true;
-	
-	@BeanField
-	private boolean suppressOutputExceptions = false;
+	private DefineOutputterMPP define;
 	
 	// Allows feature tables to be also outputted
 	@BeanField
@@ -93,40 +68,36 @@ public class SharedObjectsMultiInputTask extends TaskWithoutSharedState<MultiInp
 	}
 	
 	@Override
-	public void doJobOnInputObject(	ParametersBound<MultiInput,Object> params)	throws JobExecutionException {
-		
-		LogErrorReporter logErrorReporter = params.getLogErrorReporter();
-		MultiInput inputObject = params.getInputObject();
-		BoundOutputManagerRouteErrors outputManager = params.getOutputManager();
+	public void doJobOnInputObject(	InputBound<MultiInput,Object> params)	throws JobExecutionException {
 		
 		try {
-			SharedObjects so = new SharedObjects( logErrorReporter	);
-			MPPInitParams soMPP = MPPInitParams.create(
-				so,
-				define,
-				new GeneralInitParams(
-					randomNumberGenerator.create(),
-					params.getExperimentArguments().getModelDirectory(),
-					logErrorReporter
+			define.processInputImage(
+				params.getInputObject(),
+				params.context(),
+				imageInitParams -> outputFeatureTablesMultiplex(
+					imageInitParams,
+					params.context()
 				)
 			);
-			ImageInitParams soImage = soMPP.getImage();
-			inputObject.addToSharedObjects( soMPP, soImage );
-			
-			if (suppressOutputExceptions) {
-				SharedObjectsUtilities.output(soMPP, outputManager, logErrorReporter, suppressSubfolders);
-				outputFeatureTables(soImage, outputManager, logErrorReporter );
-			} else {
-				SharedObjectsUtilities.outputWithException(soMPP, outputManager, suppressSubfolders);
-				outputFeatureTablesWithException(soImage, outputManager, logErrorReporter);
-			}
-			
-			SharedObjectsUtilities.writeNRGStackParams( soImage, nrgParamsName, outputManager, logErrorReporter );
 
-			
-		} catch (OperationFailedException | OutputWriteFailedException | IOException | CreateException e) {
+		} catch (OperationFailedException e) {
 			throw new JobExecutionException(e);
 		}
+	}
+	
+	private void outputFeatureTablesMultiplex( ImageInitParams imageInitParams, BoundIOContext context ) throws OperationFailedException {
+		
+		try {
+			if (define.isSuppressOutputExceptions()) {
+				outputFeatureTables(imageInitParams, context);
+			} else {
+				outputFeatureTablesWithException(imageInitParams, context);
+			}
+		} catch (IOException e) {
+			throw new OperationFailedException(e);
+		}
+		
+		NRGStackHelper.writeNRGStackParams(imageInitParams, nrgParamsName, context );
 	}
 
 	@Override
@@ -134,48 +105,29 @@ public class SharedObjectsMultiInputTask extends TaskWithoutSharedState<MultiInp
 		return false;
 	}
 
-	private void outputFeatureTables( ImageInitParams so, BoundOutputManagerRouteErrors outputManager, LogErrorReporter logErrorReporter ) {
+	private void outputFeatureTables( ImageInitParams so, BoundIOContext context) {
+				
 		for (OutputFeatureTable oft : listOutputFeatureTable) {
 			try {
-				oft.initRecursive(so, logErrorReporter);
-				oft.output(outputManager, logErrorReporter);
+				oft.initRecursive(so, context.getLogger());
+				oft.output(context);
 			} catch (IOException | InitException e) {
-				logErrorReporter.getErrorReporter().recordError(NamedImgStackCollection.class, e);
+				context.getErrorReporter().recordError(NamedImgStackCollection.class, e);
 			}
 		}
 	}
 	
-	private void outputFeatureTablesWithException( ImageInitParams so, BoundOutputManagerRouteErrors outputManager, LogErrorReporter logErrorReporter ) throws IOException {
+	private void outputFeatureTablesWithException( ImageInitParams so, BoundIOContext context) throws IOException {
 		for (OutputFeatureTable oft : listOutputFeatureTable) {
 			
 			try {
-				oft.initRecursive(so, logErrorReporter);
+				oft.initRecursive(so, context.getLogger());
 			} catch (InitException e) {
 				throw new IOException(e);
 			}
-			oft.output(outputManager, logErrorReporter);
+			oft.output(context);
 		}
 	}
-
-	public boolean isSuppressSubfolders() {
-		return suppressSubfolders;
-	}
-
-
-	public void setSuppressSubfolders(boolean suppressSubfolders) {
-		this.suppressSubfolders = suppressSubfolders;
-	}
-
-
-	public boolean isSuppressOutputExceptions() {
-		return suppressOutputExceptions;
-	}
-
-
-	public void setSuppressOutputExceptions(boolean suppressOutputExceptions) {
-		this.suppressOutputExceptions = suppressOutputExceptions;
-	}
-
 
 	public List<OutputFeatureTable> getListOutputFeatureTable() {
 		return listOutputFeatureTable;
@@ -195,21 +147,11 @@ public class SharedObjectsMultiInputTask extends TaskWithoutSharedState<MultiInp
 		this.nrgParamsName = nrgParamsName;
 	}
 
-	public RandomNumberGeneratorBean getRandomNumberGenerator() {
-		return randomNumberGenerator;
-	}
-
-
-	public void setRandomNumberGenerator(RandomNumberGeneratorBean randomNumberGenerator) {
-		this.randomNumberGenerator = randomNumberGenerator;
-	}
-
-	public Define getDefine() {
+	public DefineOutputterMPP getDefine() {
 		return define;
 	}
 
-	public void setDefine(Define define) {
+	public void setDefine(DefineOutputterMPP define) {
 		this.define = define;
-	}	
-	
+	}
 }

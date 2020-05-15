@@ -26,9 +26,8 @@ package org.anchoranalysis.plugin.opencv.bean.color;
  * #L%
  */
 
-import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.image.bean.provider.stack.StackProvider;
+import org.anchoranalysis.image.bean.provider.stack.StackProviderOne;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.plugin.opencv.CVInit;
@@ -51,26 +50,16 @@ import org.opencv.imgproc.Imgproc;
  * @author FEEHANO
  *
  */
-public abstract class StackProviderCVColorConverter extends StackProvider {
-
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
+public abstract class StackProviderCVColorConverter extends StackProviderOne {
 
 	static {
 		CVInit.alwaysExecuteBeforeCallingLibrary();
 	}
 	
-	// START BEAN FIELDS
-	@BeanField
-	private StackProvider stackProvider;
-	// END BEAN FIELDS
-	
 	@Override
-	public Stack create() throws CreateException {
+	public Stack createFromStack( Stack stackRGB ) throws CreateException {
 
-		Stack stackRGB = createInputStack();
+		checkNumChnls(stackRGB);
 		
 		Mat matBGR = MatConverter.makeRGBStack(stackRGB);
 		
@@ -95,27 +84,15 @@ public abstract class StackProviderCVColorConverter extends StackProvider {
 		return matHSV;
 	}
 	
-	private Stack createInputStack() throws CreateException {
-		
-		Stack stack = stackProvider.create();
-		
+	private void checkNumChnls(Stack stack) throws CreateException {
 		if (stack.getNumChnl()!=3) {
 			throw new CreateException("Input stack must have exactly 3 channels representing a RGB image");
 		}
-		return stack;
 	}
 	
 	private static Stack createOutputStack( Stack stackIn, Mat matOut ) throws CreateException {
 		Stack stackOut = stackIn.duplicate();
 		MatConverter.matToRGB(matOut, stackOut );
 		return stackOut;
-	}
-
-	public StackProvider getStackProvider() {
-		return stackProvider;
-	}
-
-	public void setStackProvider(StackProvider stackProvider) {
-		this.stackProvider = stackProvider;
 	}
 }

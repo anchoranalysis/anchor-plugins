@@ -28,49 +28,43 @@ package ch.ethz.biol.cell.sgmn.binary;
 
 
 import java.nio.ByteBuffer;
-
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.Positive;
-import org.anchoranalysis.core.random.RandomNumberGenerator;
 import org.anchoranalysis.image.bean.sgmn.binary.BinarySgmn;
+import org.anchoranalysis.image.bean.sgmn.binary.BinarySgmnOne;
 import org.anchoranalysis.image.bean.sgmn.binary.BinarySgmnParameters;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.image.sgmn.SgmnFailedException;
-import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.anchoranalysis.image.voxel.box.VoxelBoxWrapper;
 
-public class SgmnRepeat extends BinarySgmn {
+public class SgmnRepeat extends BinarySgmnOne {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PROPERTIES
-	@BeanField
-	private BinarySgmn sgmn;
-	
 	@BeanField @Positive
 	private int maxIter = 10;
 	// END BEAN PROPERTIES
 	
 	@Override
-	public BinaryVoxelBox<ByteBuffer> sgmn(VoxelBoxWrapper voxelBox, BinarySgmnParameters params, RandomNumberGenerator re) {
+	public BinaryVoxelBox<ByteBuffer> sgmnFromSgmn(VoxelBoxWrapper voxelBox, BinarySgmnParameters params, BinarySgmn sgmn) {
 		throw new IllegalArgumentException("Invalid method");
 	}
 
 	@Override
-	public BinaryVoxelBox<ByteBuffer> sgmn(VoxelBoxWrapper voxelBox,
-			BinarySgmnParameters params, ObjMask objMask, RandomNumberGenerator re) throws SgmnFailedException {
+	public BinaryVoxelBox<ByteBuffer> sgmnFromSgmn(
+		VoxelBoxWrapper voxelBox,
+		BinarySgmnParameters params,
+		ObjMask objMask,
+		BinarySgmn sgmn
+	) throws SgmnFailedException {
 		
 		BinaryVoxelBox<ByteBuffer> outOld = null;
 		BoundingBox BoundingBox = new BoundingBox( objMask.getBoundingBox() );
 		
 		int cnt = 0;
 		while (cnt++<maxIter) {
-			BinaryVoxelBox<ByteBuffer> outNew = sgmn.sgmn(voxelBox, params, objMask, re);
+			BinaryVoxelBox<ByteBuffer> outNew = sgmn.sgmn(voxelBox, params, objMask);
 			
 			if (outNew==null) {
 				return outOld;
@@ -83,24 +77,11 @@ public class SgmnRepeat extends BinarySgmn {
 		return outOld;
 	}
 
-	public BinarySgmn getSgmn() {
-		return sgmn;
-	}
-
-	public void setSgmn(BinarySgmn sgmn) {
-		this.sgmn = sgmn;
-	}
-
 	public int getMaxIter() {
 		return maxIter;
 	}
 
 	public void setMaxIter(int maxIter) {
 		this.maxIter = maxIter;
-	}
-
-	@Override
-	public VoxelBox<ByteBuffer> getAdditionalOutput() {
-		return null;
 	}
 }

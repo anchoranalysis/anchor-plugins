@@ -30,7 +30,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.error.reporter.ErrorReporter;
 import org.anchoranalysis.core.name.store.NamedProviderStore;
 import org.anchoranalysis.core.progress.ProgressReporter;
 import org.anchoranalysis.image.io.input.ProvidesStackInput;
@@ -56,11 +55,6 @@ class StackAsProviderFixture extends ProvidesStackInput {
 	@Override
 	public Path pathForBinding() {
 		return Paths.get("arbitraryPath/");
-	}
-
-	@Override
-	public void close(ErrorReporter errorReporter) {
-	
 	}
 
 	@Override

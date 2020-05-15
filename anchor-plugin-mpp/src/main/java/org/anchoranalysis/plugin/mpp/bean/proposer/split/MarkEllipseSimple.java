@@ -48,12 +48,6 @@ import org.anchoranalysis.math.rotation.RotationMatrix;
 public class MarkEllipseSimple extends MarkSplitProposer {
 
 	
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 4863256108645202465L;
-	
-
 	// START BEAN
 	@BeanField
 	private double minRadScaleStart = 0.3;

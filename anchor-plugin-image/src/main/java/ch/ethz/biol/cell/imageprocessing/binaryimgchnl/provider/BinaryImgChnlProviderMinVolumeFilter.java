@@ -1,5 +1,7 @@
 package ch.ethz.biol.cell.imageprocessing.binaryimgchnl.provider;
 
+import java.util.Optional;
+
 /*
  * #%L
  * anchor-plugin-image
@@ -29,7 +31,7 @@ package ch.ethz.biol.cell.imageprocessing.binaryimgchnl.provider;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.image.bean.provider.BinaryImgChnlProvider;
+import org.anchoranalysis.image.bean.provider.BinaryImgChnlProviderOne;
 import org.anchoranalysis.image.bean.unitvalue.volume.UnitValueVolume;
 import org.anchoranalysis.image.binary.BinaryChnl;
 import org.anchoranalysis.image.binary.values.BinaryValues;
@@ -38,43 +40,19 @@ import org.anchoranalysis.image.objmask.factory.CreateFromConnectedComponentsFac
 import org.anchoranalysis.image.objmask.ops.BinaryChnlFromObjs;
 import org.anchoranalysis.image.unitvalue.UnitValueException;
 
-public class BinaryImgChnlProviderMinVolumeFilter extends BinaryImgChnlProvider {
+public class BinaryImgChnlProviderMinVolumeFilter extends BinaryImgChnlProviderOne {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -9015477942124999871L;
-	
-	// START
-	@BeanField
-	private BinaryImgChnlProvider binaryImgChnlProvider;
-	
+	// START BEAN FIELDS
 	@BeanField
 	private UnitValueVolume minVolume = null;
 	
 	@BeanField
 	private boolean inverted = false;
-	// END
-	
-	private BinaryChnl createMaskedImage( BinaryChnl bi ) throws CreateException {
-
-		ObjMaskCollection objs = connectedComponents(bi, inverted);
-		return BinaryChnlFromObjs.createFromObjs(objs, bi.getDimensions(), bi.getBinaryValues() );
-	}
+	// END BEAN FIELDS
 	
 	@Override
-	public BinaryChnl create() throws CreateException {
-	
-		BinaryChnl bi = binaryImgChnlProvider.create();
-		return createMaskedImage(bi);
-	}
-
-	public BinaryImgChnlProvider getBinaryImgChnlProvider() {
-		return binaryImgChnlProvider;
-	}
-
-	public void setBinaryImgChnlProvider(BinaryImgChnlProvider binaryImgChnlProvider) {
-		this.binaryImgChnlProvider = binaryImgChnlProvider;
+	public BinaryChnl createFromChnl( BinaryChnl chnl ) throws CreateException {
+		return createMaskedImage(chnl);
 	}
 
 	public boolean isInverted() {
@@ -93,19 +71,26 @@ public class BinaryImgChnlProviderMinVolumeFilter extends BinaryImgChnlProvider 
 		this.minVolume = minVolume;
 	}
 
+	private BinaryChnl createMaskedImage( BinaryChnl bi ) throws CreateException {
+
+		ObjMaskCollection objs = connectedComponents(bi, inverted);
+		return BinaryChnlFromObjs.createFromObjs(objs, bi.getDimensions(), bi.getBinaryValues() );
+	}
 	
 	private ObjMaskCollection connectedComponents( BinaryChnl bi, boolean inverted ) throws CreateException {
 		
 		int rslvMinNum;
 		try {
-			rslvMinNum = (int) Math.floor( minVolume.rslv(bi.getDimensions().getRes()) );
+			rslvMinNum = (int) Math.floor(
+				minVolume.rslv(
+					Optional.of(bi.getDimensions().getRes())
+				)
+			);
 		} catch (UnitValueException e) {
 			throw new CreateException(e);
 		}
 
-		CreateFromConnectedComponentsFactory createObjMasks = new CreateFromConnectedComponentsFactory();
-		createObjMasks.setMinNumberVoxels(rslvMinNum);
-		
+		CreateFromConnectedComponentsFactory createObjMasks = new CreateFromConnectedComponentsFactory(rslvMinNum);
 		if (inverted) {
 			
 			BinaryValues bvInverted = bi.getBinaryValues().createInverted();

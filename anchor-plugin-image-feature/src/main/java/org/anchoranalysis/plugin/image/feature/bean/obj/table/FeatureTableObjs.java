@@ -52,11 +52,6 @@ import org.anchoranalysis.image.objmask.ObjMaskCollection;
 public abstract class FeatureTableObjs<T extends FeatureInput> extends AnchorBean<FeatureTableObjs<T>> {
 
 	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
-	/**
 	 * Creates features that will be applied on the objMasks. Features should always be duplicated from the input list.
 	 * 
 	 * @param list

@@ -46,7 +46,7 @@ public class RslvdEllipsoid {
 	public RslvdEllipsoid(MarkEllipsoid mark, ImageDim dim, RegionMembershipWithFlags rm, BinaryValuesByte bvb ) {
 		super();
 		this.mark = mark;
-		this.objMask = mark.calcMask(dim, rm, bvb ).getMask();
+		this.objMask = mark.calcMask(dim, rm, bvb).getMask();
 		this.include = true;
 		this.dim = dim;
 		

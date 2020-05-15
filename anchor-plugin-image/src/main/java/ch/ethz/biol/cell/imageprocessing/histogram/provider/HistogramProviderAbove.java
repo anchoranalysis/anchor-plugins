@@ -29,37 +29,28 @@ package ch.ethz.biol.cell.imageprocessing.histogram.provider;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.image.bean.provider.HistogramProvider;
+import org.anchoranalysis.image.bean.provider.HistogramProviderOne;
 import org.anchoranalysis.image.histogram.Histogram;
 
-public class HistogramProviderAbove extends HistogramProvider {
+/**
+ * Removes all items in the histogram below a certain threshold.
+ * 
+ * <p>The incoming histogram is replaced i.e. this operation is MUTABLE.</p>
+ * 
+ * @author Owen Feehan
+ *
+ */
+public class HistogramProviderAbove extends HistogramProviderOne {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PROPERTIES
-	@BeanField
-	private HistogramProvider histogramProvider;
-	
 	@BeanField
 	private int threshold = 0;
 	// END BEAN PROPERTIES
 
 	@Override
-	public Histogram create() throws CreateException {
-		Histogram h = histogramProvider.create();
-		h.removeBelowThreshold(threshold);
-		return h;
-	}
-	
-	public HistogramProvider getHistogramProvider() {
-		return histogramProvider;
-	}
-
-	public void setHistogramProvider(HistogramProvider histogramProvider) {
-		this.histogramProvider = histogramProvider;
+	protected Histogram createFromHistogram(Histogram hist) throws CreateException {
+		hist.removeBelowThreshold(threshold);
+		return hist;
 	}
 
 	public int getThreshold() {
@@ -69,6 +60,4 @@ public class HistogramProviderAbove extends HistogramProvider {
 	public void setThreshold(int threshold) {
 		this.threshold = threshold;
 	}
-
-
 }

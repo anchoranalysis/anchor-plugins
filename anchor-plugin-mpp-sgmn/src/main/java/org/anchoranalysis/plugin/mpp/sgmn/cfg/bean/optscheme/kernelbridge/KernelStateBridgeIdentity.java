@@ -37,11 +37,6 @@ import org.anchoranalysis.mpp.sgmn.transformer.StateTransformer;
  */
 public class KernelStateBridgeIdentity<T> extends KernelStateBridge<T, T> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	@Override
 	public StateTransformer<T, T> kernelToState() {
 		return stateToKernel();

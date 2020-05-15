@@ -35,7 +35,7 @@ import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.cache.ChildCacheName;
 import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.image.bean.provider.BinaryImgChnlProvider;
+import org.anchoranalysis.image.bean.provider.BinaryChnlProvider;
 import org.anchoranalysis.image.binary.BinaryChnl;
 import org.anchoranalysis.image.feature.init.FeatureInitParamsSharedObjs;
 import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
@@ -44,18 +44,13 @@ import org.anchoranalysis.image.init.ImageInitParams;
 
 public class BinaryImageChnlProviderFeature extends FeatureStackSharedObjects {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
 	private Feature<FeatureInputSingleObj> item;
 	
 	@BeanField
 	@SkipInit
-	private BinaryImgChnlProvider binaryImgChnlProvider;
+	private BinaryChnlProvider binaryChnl;
 	// END BEAN PROPERTIES
 	
 	private BinaryChnl chnl;
@@ -65,10 +60,10 @@ public class BinaryImageChnlProviderFeature extends FeatureStackSharedObjects {
 		super.beforeCalcCast(params);
 		
 		ImageInitParams sharedObjs = params.getSharedObjects();
-		binaryImgChnlProvider.initRecursive(sharedObjs, getLogger());
+		binaryChnl.initRecursive(sharedObjs, getLogger());
 		
 		try {
-			chnl = binaryImgChnlProvider.create();
+			chnl = binaryChnl.create();
 		} catch (CreateException e) {
 			throw new InitException(e);
 		}
@@ -92,11 +87,11 @@ public class BinaryImageChnlProviderFeature extends FeatureStackSharedObjects {
 		this.item = item;
 	}
 
-	public BinaryImgChnlProvider getBinaryImgChnlProvider() {
-		return binaryImgChnlProvider;
+	public BinaryChnlProvider getBinaryChnl() {
+		return binaryChnl;
 	}
 
-	public void setBinaryImgChnlProvider(BinaryImgChnlProvider binaryImgChnlProvider) {
-		this.binaryImgChnlProvider = binaryImgChnlProvider;
+	public void setBinaryChnl(BinaryChnlProvider binaryChnl) {
+		this.binaryChnl = binaryChnl;
 	}
 }

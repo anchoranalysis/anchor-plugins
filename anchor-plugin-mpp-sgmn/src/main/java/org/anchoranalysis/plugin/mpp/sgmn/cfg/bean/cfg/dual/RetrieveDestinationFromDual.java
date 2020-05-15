@@ -35,11 +35,6 @@ import org.anchoranalysis.plugin.mpp.sgmn.cfg.optscheme.DualCfgNRGPixelized;
 
 public class RetrieveDestinationFromDual extends StateTransformerBean<DualCfgNRGPixelized,CfgNRGPixelized> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	@Override
 	public CfgNRGPixelized transform(DualCfgNRGPixelized in, TransformationContext context)
 			throws OperationFailedException {

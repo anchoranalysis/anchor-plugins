@@ -38,11 +38,6 @@ import org.anchoranalysis.image.stack.Stack;
 // Simply returns the inputStack
 public class ChnlProviderInput extends ChnlProvider {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -5242194978354201519L;
-
 	private Stack inputStack;
 	
 	@Override

@@ -47,11 +47,6 @@ import org.anchoranalysis.plugin.image.calculation.CalculateClosing;
  */
 public class NumAddedVoxelsAfterClosing extends FeatureObjMask {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	// START BEAN PROPERTIES
 	@BeanField
 	private int iterations = 1;

@@ -35,6 +35,7 @@ import org.anchoranalysis.core.name.store.SharedObjects;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
 import org.anchoranalysis.image.init.ImageInitParams;
+import org.anchoranalysis.image.io.input.ImageInitParamsFactory;
 import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.image.objmask.ObjMaskCollection;
 import org.anchoranalysis.test.LoggingFixture;
@@ -171,7 +172,7 @@ class InteresectingObjsTestHelper {
 		
 		so.getOrCreate(ObjMaskCollection.class).add(ID, ()->others);
 		
-		return ImageInitParams.create(
+		return ImageInitParamsFactory.create(
 			so,
 			Mockito.mock(Path.class)
 		);

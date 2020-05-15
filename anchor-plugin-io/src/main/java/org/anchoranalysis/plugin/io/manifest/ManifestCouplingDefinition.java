@@ -35,7 +35,6 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.error.reporter.ErrorReporter;
 import org.anchoranalysis.io.deserializer.DeserializationFailedException;
 import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.input.InputFromManager;
@@ -136,9 +135,4 @@ public class ManifestCouplingDefinition implements InputFromManager {
 	public Path pathForBinding() {
 		return null;
 	}
-
-	@Override
-	public void close(ErrorReporter errorReporter) {
-	}
-	
 }

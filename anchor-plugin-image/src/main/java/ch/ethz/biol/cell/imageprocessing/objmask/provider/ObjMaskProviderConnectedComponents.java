@@ -28,10 +28,11 @@ package ch.ethz.biol.cell.imageprocessing.objmask.provider;
 
 
 import java.nio.ByteBuffer;
+import java.util.Optional;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.image.bean.provider.BinaryImgChnlProvider;
+import org.anchoranalysis.image.bean.provider.BinaryChnlProvider;
 import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
 import org.anchoranalysis.image.bean.unitvalue.areavolume.UnitValueAreaOrVolume;
 import org.anchoranalysis.image.bean.unitvalue.volume.UnitValueVolumeVoxels;
@@ -53,14 +54,9 @@ import org.apache.commons.lang.time.StopWatch;
  */
 public class ObjMaskProviderConnectedComponents extends ObjMaskProvider {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
-	private BinaryImgChnlProvider binaryImgChnlProvider;
+	private BinaryChnlProvider binaryChnl;
 	
 	@BeanField
 	private UnitValueAreaOrVolume minVolume = new UnitValueVolumeVoxels(1);
@@ -76,13 +72,17 @@ public class ObjMaskProviderConnectedComponents extends ObjMaskProvider {
 	@Override
 	public ObjMaskCollection create() throws CreateException {
 	
-		BinaryChnl bi = binaryImgChnlProvider.create();
+		BinaryChnl bi = binaryChnl.create();
 		
 		StopWatch sw = new StopWatch();
 		sw.start();
 		
 		try {
-			int minNumberVoxels = (int) Math.round( minVolume.rslv( bi.getDimensions().getRes() ) );
+			int minNumberVoxels = (int) Math.round(
+				minVolume.rslv(
+					Optional.of(bi.getDimensions().getRes())
+				)
+			);
 			
 			if (bySlices) {
 				return createObjsBySlice(bi, minNumberVoxels);
@@ -96,10 +96,7 @@ public class ObjMaskProviderConnectedComponents extends ObjMaskProvider {
 	}
 	
 	private CreateFromConnectedComponentsFactory createFactory( int minNumberVoxels ) {
-		CreateFromConnectedComponentsFactory createObjMasks = new CreateFromConnectedComponentsFactory();
-		createObjMasks.setBigNghb(bigNghb);
-		createObjMasks.setMinNumberVoxels(minNumberVoxels);
-		return createObjMasks;
+		return new CreateFromConnectedComponentsFactory(bigNghb, minNumberVoxels);
 	}
 	
 	private ObjMaskCollection createObjs3D( BinaryChnl bi, int minNumberVoxels ) throws CreateException {
@@ -138,14 +135,6 @@ public class ObjMaskProviderConnectedComponents extends ObjMaskProvider {
 		return omc;
 	}
 
-	public BinaryImgChnlProvider getBinaryImgChnlProvider() {
-		return binaryImgChnlProvider;
-	}
-
-	public void setBinaryImgChnlProvider(BinaryImgChnlProvider binaryImgChnlProvider) {
-		this.binaryImgChnlProvider = binaryImgChnlProvider;
-	}
-
 	public UnitValueAreaOrVolume getMinVolume() {
 		return minVolume;
 	}
@@ -170,5 +159,11 @@ public class ObjMaskProviderConnectedComponents extends ObjMaskProvider {
 		this.bigNghb = bigNghb;
 	}
 
+	public BinaryChnlProvider getBinaryChnl() {
+		return binaryChnl;
+	}
 
+	public void setBinaryChnl(BinaryChnlProvider binaryChnl) {
+		this.binaryChnl = binaryChnl;
+	}
 }

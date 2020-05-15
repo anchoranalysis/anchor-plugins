@@ -33,11 +33,6 @@ import org.anchoranalysis.image.extent.ImageDim;
 
 public class AtBorderXY extends AtBorderBase {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	@Override
 	protected boolean isBoundingBoxAtBorder(BoundingBox boundingBox, ImageDim dim) {
 		return boundingBox.atBorderXY(dim);

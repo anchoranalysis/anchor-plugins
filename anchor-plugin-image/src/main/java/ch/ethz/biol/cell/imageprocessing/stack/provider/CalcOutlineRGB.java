@@ -125,7 +125,7 @@ class CalcOutlineRGB {
 				
 		double multFact = (double) outputType.maxValue() / outline.getChnl().getVoxelDataType().maxValue();
 		
-		return ChnlProviderIfPixelZero.merge(
+		return ChnlProviderIfPixelZero.mergeViaZeroCheck(
 			outline.getChnl(),
 			chnl,
 			outputType,

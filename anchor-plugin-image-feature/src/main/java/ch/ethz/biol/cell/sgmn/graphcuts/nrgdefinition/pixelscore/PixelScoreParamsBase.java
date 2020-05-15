@@ -35,11 +35,6 @@ import org.anchoranalysis.image.histogram.Histogram;
 
 public abstract class PixelScoreParamsBase extends PixelScoreSingleChnl {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	@Override
 	public void init(List<Histogram> histograms, Optional<KeyValueParams> keyValueParams) throws InitException {
 		

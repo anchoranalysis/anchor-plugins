@@ -44,17 +44,12 @@ import org.anchoranalysis.image.objmask.ObjMaskCollection;
 
 public class PointsFitterToMark extends AnchorBean<PointsFitterToMark> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	// START BEAN PROPERTIES
 	@BeanField
 	private PointsFitter pointsFitter;
 	
 	@BeanField
-	private ImageDimProvider dimProvider;
+	private ImageDimProvider dim;
 	
 	/** If an object has fewer points than before being fitted, we ignore */
 	@BeanField
@@ -77,7 +72,7 @@ public class PointsFitterToMark extends AnchorBean<PointsFitterToMark> {
 	}
 	
 	public ImageDim createDim() throws CreateException {
-		return dimProvider.create();
+		return dim.create();
 	}
 		
 	public ObjMaskProvider getObjs() {
@@ -104,12 +99,11 @@ public class PointsFitterToMark extends AnchorBean<PointsFitterToMark> {
 		this.pointsFitter = pointsFitter;
 	}
 
-	public ImageDimProvider getDimProvider() {
-		return dimProvider;
+	public ImageDimProvider getDim() {
+		return dim;
 	}
 
-
-	public void setDimProvider(ImageDimProvider dimProvider) {
-		this.dimProvider = dimProvider;
+	public void setDim(ImageDimProvider dim) {
+		this.dim = dim;
 	}
 }

@@ -35,8 +35,19 @@ import org.anchoranalysis.core.error.CreateException;
 
 class ProviderBeanUtilities {
 
-	private ProviderBeanUtilities() {
-		
+	private ProviderBeanUtilities() {}
+	
+	/**
+	 * Creates a list of ProviderType from Beans
+	 * 
+	 * @param listIn input-list
+	 * @return a newly-created list containing the newly created items
+	 * @throws CreateException  if a provider fails to create
+	 */
+	public static <T> List<T> listFromBeans( List<? extends Provider<T>> listIn ) throws CreateException {
+		List<T> listOut = new ArrayList<>();
+		addFromBeanList(listIn,listOut);
+		return listOut;
 	}
 	
 	/**
@@ -50,18 +61,5 @@ class ProviderBeanUtilities {
 		for( Provider<T> provider : listIn ) {
 			listOut.add(provider.create());
 		}
-	}
-	
-	/**
-	 * Creates a list of ProviderType from Beans
-	 * 
-	 * @param listIn input-list
-	 * @return a newly-created list containing the newly created items
-	 * @throws CreateException  if a provider fails to create
-	 */
-	public static <T> List<T> listFromBeans( List<? extends Provider<T>> listIn ) throws CreateException {
-		List<T> listOut = new ArrayList<>();
-		addFromBeanList(listIn,listOut);
-		return listOut;
 	}
 }

@@ -34,11 +34,6 @@ import org.anchoranalysis.io.error.AnchorIOException;
 
 public class StaticFilePath extends FilePath {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
 	private String path;

@@ -35,11 +35,6 @@ import org.anchoranalysis.core.geometry.Point3d;
 
 public class PositionProposerRepeat extends PositionProposerBean {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 6588267702318972830L;
-
 	// START BEAN PROPERTIES
 	@BeanField
 	private PositionProposerBean positionProposer;

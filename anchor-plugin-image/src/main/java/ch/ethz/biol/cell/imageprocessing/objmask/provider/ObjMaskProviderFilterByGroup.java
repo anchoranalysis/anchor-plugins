@@ -28,6 +28,7 @@ package ch.ethz.biol.cell.imageprocessing.objmask.provider;
 
 
 import java.util.List;
+import java.util.Optional;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
@@ -44,17 +45,9 @@ import ch.ethz.biol.cell.imageprocessing.objmask.matching.ObjMaskMatchUtilities;
 // TODO lots of duplication with ObjMaskProviderFilter
 public class ObjMaskProviderFilterByGroup extends ObjMaskProviderDimensionsOptional {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
 	private ObjMaskFilter objMaskFilter;
-	
-	@BeanField
-	private ObjMaskProvider objs;
 	
 	@BeanField
 	private ObjMaskProvider objsGrouped;
@@ -64,17 +57,15 @@ public class ObjMaskProviderFilterByGroup extends ObjMaskProviderDimensionsOptio
 	// END BEAN PROPERTIES
 	
 	@Override
-	public ObjMaskCollection create() throws CreateException {
-		
-		ObjMaskCollection in = objs.create();
+	public ObjMaskCollection createFromObjs(ObjMaskCollection in) throws CreateException {
 		
 		ObjMaskCollection inGroups = objsGrouped.create();
 		
-		ObjMaskCollection omcRejected = objsRejected!=null ? objsRejected.create() : null;
+		Optional<ObjMaskCollection> omcRejected = objsRejected!=null ? Optional.of(objsRejected.create()) : Optional.empty();
 		
 		List<ObjWithMatches> matchList = ObjMaskMatchUtilities.matchIntersectingObjects( inGroups, in );
 		
-		ImageDim dims = createDims();
+		Optional<ImageDim> dims = createDims();
 				
 		ObjMaskCollection out = new ObjMaskCollection();
 		
@@ -96,14 +87,6 @@ public class ObjMaskProviderFilterByGroup extends ObjMaskProviderDimensionsOptio
 
 	public void setObjMaskFilter(ObjMaskFilter objMaskFilter) {
 		this.objMaskFilter = objMaskFilter;
-	}
-
-	public ObjMaskProvider getObjs() {
-		return objs;
-	}
-
-	public void setObjs(ObjMaskProvider objs) {
-		this.objs = objs;
 	}
 
 	public ObjMaskProvider getObjsGrouped() {

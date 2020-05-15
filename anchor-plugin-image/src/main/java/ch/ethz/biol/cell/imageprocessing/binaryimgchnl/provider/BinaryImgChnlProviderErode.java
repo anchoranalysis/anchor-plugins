@@ -28,6 +28,7 @@ package ch.ethz.biol.cell.imageprocessing.binaryimgchnl.provider;
 
 
 import java.nio.ByteBuffer;
+import java.util.Optional;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
@@ -41,11 +42,6 @@ import org.anchoranalysis.image.objmask.morph.MorphologicalErosion;
  */
 public class BinaryImgChnlProviderErode extends BinaryImgChnlProviderMorphOp {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -9015477942124999871L;
-	
 	// START
 	@BeanField
 	private boolean outsideAtThreshold = true;
@@ -62,7 +58,7 @@ public class BinaryImgChnlProviderErode extends BinaryImgChnlProviderMorphOp {
 			backgroundVb(),
 			getMinIntensityValue(),
 			outsideAtThreshold,
-			null
+			Optional.empty()
 		);
 		
 		try {

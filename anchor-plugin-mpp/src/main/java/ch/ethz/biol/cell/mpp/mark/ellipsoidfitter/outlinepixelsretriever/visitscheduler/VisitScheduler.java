@@ -28,6 +28,7 @@ package ch.ethz.biol.cell.mpp.mark.ellipsoidfitter.outlinepixelsretriever.visits
 
 import org.anchoranalysis.bean.NullParamsBean;
 import org.anchoranalysis.core.error.InitException;
+import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.core.geometry.Tuple3i;
 import org.anchoranalysis.core.random.RandomNumberGenerator;
@@ -36,12 +37,7 @@ import org.anchoranalysis.image.objmask.ObjMask;
 
 public abstract class VisitScheduler extends NullParamsBean<VisitScheduler> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
-	public abstract Tuple3i maxDistFromRootPoint(ImageRes res);
+	public abstract Tuple3i maxDistFromRootPoint(ImageRes res) throws OperationFailedException;
 	
 	public abstract void beforeCreateObjMask(RandomNumberGenerator re, ImageRes res) throws InitException;
 	

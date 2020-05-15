@@ -35,11 +35,6 @@ import org.anchoranalysis.image.voxel.box.VoxelBoxWrapper;
 
 public abstract class GrayscaleReconstructionByErosion extends AnchorBean<GrayscaleReconstructionByErosion> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	// Reconstruction of maskImg from markerImg    mask<=markerImg
 	public abstract VoxelBoxWrapper reconstruction( VoxelBoxWrapper mask, VoxelBoxWrapper marker ) throws OperationFailedException;
 	

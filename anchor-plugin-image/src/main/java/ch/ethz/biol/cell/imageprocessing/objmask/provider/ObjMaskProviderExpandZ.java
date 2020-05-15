@@ -29,9 +29,7 @@ package ch.ethz.biol.cell.imageprocessing.objmask.provider;
 
 import java.nio.ByteBuffer;
 
-import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.extent.ImageDim;
@@ -44,22 +42,10 @@ import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 // Creates a 3D version of an object by simplying replicated the 2D slice in all z-stacks
 public class ObjMaskProviderExpandZ extends ObjMaskProviderDimensions {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
-	// START BEAN PROPERTIES
-	@BeanField
-	private ObjMaskProvider objs;
-	// END BEAN PROPERTIES
-
 	@Override
-	public ObjMaskCollection create() throws CreateException {
+	public ObjMaskCollection createFromObjs(ObjMaskCollection in) throws CreateException {
 		
-		ImageDim dims = createDims();
-		
-		ObjMaskCollection in = objs.create();
+		ImageDim dim = createDim();
 		
 		ObjMaskCollection out = new ObjMaskCollection();
 		
@@ -70,7 +56,7 @@ public class ObjMaskProviderExpandZ extends ObjMaskProviderDimensions {
 			}
 			
 			BoundingBox bboxNew = new BoundingBox(om.getBoundingBox());
-			Extent eNew = new Extent(bboxNew.extnt().getX(), bboxNew.extnt().getY(), dims.getZ());
+			Extent eNew = new Extent(bboxNew.extnt().getX(), bboxNew.extnt().getY(), dim.getZ());
 			
 			bboxNew.setExtnt( eNew );
 			
@@ -86,13 +72,5 @@ public class ObjMaskProviderExpandZ extends ObjMaskProviderDimensions {
 		}
 		
 		return out;
-	}
-
-	public ObjMaskProvider getObjs() {
-		return objs;
-	}
-
-	public void setObjs(ObjMaskProvider objs) {
-		this.objs = objs;
 	}
 }

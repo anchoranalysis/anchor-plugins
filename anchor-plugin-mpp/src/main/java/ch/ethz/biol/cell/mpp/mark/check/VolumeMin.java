@@ -1,5 +1,7 @@
 package ch.ethz.biol.cell.mpp.mark.check;
 
+import java.util.Optional;
+
 import org.anchoranalysis.anchor.mpp.bean.regionmap.RegionMap;
 import org.anchoranalysis.anchor.mpp.feature.bean.mark.CheckMark;
 import org.anchoranalysis.anchor.mpp.feature.error.CheckException;
@@ -40,12 +42,6 @@ import org.anchoranalysis.image.unitvalue.UnitValueException;
 
 public class VolumeMin extends CheckMark {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 6398283247337550739L;
-	
-	
 	// START BEAN PROPERTIES
 	@BeanField
 	private UnitValueVolume minVolume;
@@ -66,15 +62,16 @@ public class VolumeMin extends CheckMark {
 		
 		double volMin;
 		try {
-			volMin = minVolume.rslv( nrgStack.getDimensions().getRes() );
+			volMin = minVolume.rslv(
+				Optional.of(
+					nrgStack.getDimensions().getRes()
+				)
+			);
 		} catch (UnitValueException e) {
 			throw new CheckException( "The volume-min check, had a unit Value Exception: " + e.toString() );
 		}
 		
 		return vol > volMin;
-		//if (!succ) {
-		//	errorNode.add( String.format("VolumeMin: %f is < %s", vol , minVolume.toString()), mark );	
-		//}
 	}
 
 	public int getRegionID() {

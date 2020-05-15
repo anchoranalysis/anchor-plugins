@@ -27,11 +27,18 @@ package ch.ethz.biol.cell.mpp.mark.pointsfitter;
  */
 
 
+import georegression.fitting.ellipse.FitEllipseAlgebraic;
+import georegression.struct.point.Point2D_F64;
+import georegression.struct.shapes.EllipseQuadratic_F64;
+
+import java.util.ArrayList;
 import java.util.List;
 
+import org.anchoranalysis.anchor.mpp.bean.points.fitter.InsufficientPointsException;
 import org.anchoranalysis.anchor.mpp.bean.points.fitter.PointsFitterException;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.anchor.mpp.mark.conic.MarkEllipse;
+import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.geometry.Point2d;
 import org.anchoranalysis.core.geometry.Point3d;
@@ -40,35 +47,77 @@ import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.orientation.Orientation2D;
 
 import cern.colt.matrix.DoubleFactory1D;
-import cern.colt.matrix.DoubleFactory2D;
 import cern.colt.matrix.DoubleMatrix1D;
-import cern.colt.matrix.DoubleMatrix2D;
 
-// ellipsoid_fit matlab function
 //
-// see http://en.wikipedia.org/wiki/Matrix_representation_of_conic_sections
-public class LinearLeastSquaresEllipseFitter extends LinearLeastSquaresViaNormalEquationBase {
+// Based upon the approach of Li and Griffiths in 'Least Squares Ellipsoid Specific Fitting' (2004)
+//
+//
+// generalized eigenvalues in wolfram
+// http://reference.wolfram.com/legacy/applications/anm/GeneralizedEigenvalueProblem/9.1.html
+// ellipsoid_fit matlab function
+// http://planetmath.org/EigenvalueProblem
+// http://planetmath.org/node/4028
+//http://en.wikipedia.org/wiki/Quadric
+//
+// To convert back into normal ellipsoid form
+// http://www.mathworks.com/matlabcentral/fileexchange/45356-fitting-quadratic-curves-and-surfaces/content/ellipsoid_im2ex.m
+//
+public class LinearLeastSquaresEllipseFitter extends ConicFitterBase {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -4978995087569551060L;
+	// START BEAN
+	@BeanField
+	private double minRadius = 0.55;
+	// END BEAN
+	
+	public LinearLeastSquaresEllipseFitter() {
+		super();
+		
+	}
+	
+
+	
 	
 	@Override
-	public boolean isCompatibleWith(Mark testMark) {
-		return testMark instanceof MarkEllipse;
+	public void fit(List<Point3f> points, Mark mark, ImageDim dim)
+			throws PointsFitterException, InsufficientPointsException {
+		
+		List<Point2D_F64> pntsConvert = new ArrayList<>();
+		
+		for( Point3f pnt : points ) {
+			pntsConvert.add( new Point2D_F64(pnt.getX(), pnt.getY()));
+		}
+		
+		// Help
+		// http://georegression.org/javadoc/georegression/fitting/ellipse/FitEllipseAlgebraic.html
+		
+		FitEllipseAlgebraic fitter = new FitEllipseAlgebraic();
+		fitter.process(pntsConvert);
+		
+		EllipseQuadratic_F64 fittedResult = fitter.getEllipse();
+		
+		// We assume if we can't fit to an ellipse, it's because there wasn't enough points
+		if(!fittedResult.isEllipse()) {
+			throw new InsufficientPointsException(
+				String.format("Insufficient number of points for an ellipse-fit. There were %d points.", points.size())
+			);
+		}
+		
+		applyCoefficientsToMark(fittedResult, mark, dim);
 	}
-
-	@Override
-	protected void applyCoefficientsToMark(  DoubleMatrix2D matrixV, Mark mark, ImageDim dim ) throws PointsFitterException {
+	
+	private void applyCoefficientsToMark( EllipseQuadratic_F64 fittedResult, Mark mark, ImageDim dim ) throws PointsFitterException {
+		
+		//double div = fittedResult.f / -1; 
 		
 		// We create the coefficients by adding on a -1 at the end
 		DoubleMatrix1D coefficients = DoubleFactory1D.dense.make(6);
-		for( int i=0; i<5; i++) {
-			coefficients.set(i, matrixV.get(i, 0));
-		}
-		coefficients.set(5, -1);
-
+		coefficients.set(0, fittedResult.a);
+		coefficients.set(1, fittedResult.b*2);
+		coefficients.set(2, fittedResult.c);
+		coefficients.set(3, fittedResult.d*2);
+		coefficients.set(4, fittedResult.e*2);
+		coefficients.set(5, fittedResult.f);
 		
 		// We convert the coefficients to more useful geometric properties		
 		EllipseStandardFormConverter c = new EllipseStandardFormConverter(coefficients);
@@ -85,8 +134,7 @@ public class LinearLeastSquaresEllipseFitter extends LinearLeastSquaresViaNormal
 		if (radiusX<=0 || radiusY<=0) {
 			throw new PointsFitterException("fitter returned 0 width or height");
 		}
-		
-		
+				
 		// Put values onto the Mark Ellipse
 		MarkEllipse markE = (MarkEllipse) mark;
 		markE.setShellRad(getShellRad());
@@ -97,31 +145,18 @@ public class LinearLeastSquaresEllipseFitter extends LinearLeastSquaresViaNormal
 		);
 	}
 
-	@Override
-	protected DoubleMatrix2D createDesignMatrix( List<Point3f> points ) {
-		
-		// The columns are as follows: x^2 xy y^2 x y 1
-		DoubleMatrix2D matrix = DoubleFactory2D.dense.make( points.size(), 5 ); 
-		
-		for( int i=0; i<points.size(); i++) {
-			Point3f pnt = points.get(i);
-			
-			float x = pnt.getX() + getInputPointShift();
-			float y = pnt.getY() + getInputPointShift();
-			
-			matrix.set(i, 0, Math.pow( x, 2) );
-			matrix.set(i, 1, x * y );
-			matrix.set(i, 2, Math.pow( y, 2) );
-			matrix.set(i, 3, x );
-			matrix.set(i, 4, y );
-		}
-		
-		return matrix;
+	public double getMinRadius() {
+		return minRadius;
+	}
+
+	public void setMinRadius(double minRadius) {
+		this.minRadius = minRadius;
 	}
 
 	@Override
-	protected int minNumPoints() {
-		return 6;
+	public boolean isCompatibleWith(Mark testMark) {
+		return testMark instanceof MarkEllipse;
 	}
+
 
 }

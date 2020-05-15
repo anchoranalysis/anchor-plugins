@@ -35,11 +35,6 @@ import org.anchoranalysis.io.namestyle.IndexableOutputNameStyle;
 
 public class FromOutputName extends DescriptiveNameFromFileIndependent {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
 	private IndexableOutputNameStyle outputNameStyle;

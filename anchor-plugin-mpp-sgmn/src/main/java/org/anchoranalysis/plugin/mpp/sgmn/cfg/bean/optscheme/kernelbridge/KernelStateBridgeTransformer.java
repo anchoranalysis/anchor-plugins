@@ -34,11 +34,6 @@ import org.anchoranalysis.plugin.mpp.sgmn.cfg.bean.optscheme.mode.TransformIfNot
 public class KernelStateBridgeTransformer<U,T> extends KernelStateBridge<U, T> {
 
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	// START BEAN PROPERTIES
 	@BeanField
 	private StateTransformerBean<U,T> transformerKernelToState;

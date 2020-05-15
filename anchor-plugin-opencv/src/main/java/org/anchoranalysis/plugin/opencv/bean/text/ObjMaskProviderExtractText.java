@@ -62,11 +62,6 @@ public class ObjMaskProviderExtractText extends ObjMaskProvider {
 		CVInit.alwaysExecuteBeforeCallingLibrary();
 	}
 	
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PROPERTIES
 	/** An RGB stack to look for text in */
 	@BeanField

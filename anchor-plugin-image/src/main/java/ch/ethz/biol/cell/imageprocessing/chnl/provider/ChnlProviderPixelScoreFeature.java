@@ -39,6 +39,7 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.bean.provider.ChnlProvider;
+import org.anchoranalysis.image.bean.provider.ChnlProviderOne;
 import org.anchoranalysis.image.bean.provider.HistogramProvider;
 import org.anchoranalysis.image.chnl.Chnl;
 import org.anchoranalysis.image.extent.Extent;
@@ -48,17 +49,9 @@ import org.anchoranalysis.image.histogram.Histogram;
 import org.anchoranalysis.image.voxel.box.VoxelBoxWrapper;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 
-public class ChnlProviderPixelScoreFeature extends ChnlProvider {
+public class ChnlProviderPixelScoreFeature extends ChnlProviderOne {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PROPERTIES
-	@BeanField
-	private ChnlProvider chnlProvider;
-	
 	@BeanField
 	private PixelScore pixelScore;
 	
@@ -70,9 +63,7 @@ public class ChnlProviderPixelScoreFeature extends ChnlProvider {
 	// END BEAN PROPERTIES
 	
 	@Override
-	public Chnl create() throws CreateException {
-	
-		Chnl chnl = chnlProvider.create();
+	public Chnl createFromChnl(Chnl chnl) throws CreateException {
 		
 		List<Chnl> listAdditional = additionalChnls( chnl.getDimensions() );
 		
@@ -165,14 +156,6 @@ public class ChnlProviderPixelScoreFeature extends ChnlProvider {
 		return listAdditional;
 	}
 	
-	public ChnlProvider getChnlProvider() {
-		return chnlProvider;
-	}
-
-	public void setChnlProvider(ChnlProvider chnlProvider) {
-		this.chnlProvider = chnlProvider;
-	}
-
 	public List<ChnlProvider> getListAdditionalChnlProviders() {
 		return listAdditionalChnlProviders;
 	}
@@ -197,7 +180,4 @@ public class ChnlProviderPixelScoreFeature extends ChnlProvider {
 	public void setPixelScore(PixelScore pixelScore) {
 		this.pixelScore = pixelScore;
 	}
-
-
-
 }

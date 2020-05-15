@@ -29,46 +29,19 @@ package ch.ethz.biol.cell.imageprocessing.binaryimgchnl.provider;
 
 import java.util.List;
 
-import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.geometry.Point2i;
-import org.anchoranalysis.image.bean.provider.BinaryImgChnlProvider;
 import org.anchoranalysis.image.binary.BinaryChnl;
 import org.anchoranalysis.image.chnl.Chnl;
-import org.anchoranalysis.image.outline.FindOutline;
 import org.anchoranalysis.image.points.PointsFromBinaryChnl;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 
-import ch.ethz.biol.cell.mpp.mark.pointsfitter.ConvexHullUtilities;
-
 
 // USES Gift wrap algorithm taken from FIJI PolygonRoi.java
-public class BinaryImgChnlProviderConvexHull2D extends BinaryImgChnlProvider {
+public class BinaryImgChnlProviderConvexHull2D extends ConvexHullBase {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
-	// START BEAN PROPERTIES
-	@BeanField
-	private BinaryImgChnlProvider binaryImgChnlProvider;
-	
-	@BeanField
-	private boolean erodeEdges = false;
-	// END BEAN PROPERTIES
-	
 	@Override
-	public BinaryChnl create() throws CreateException {
-		
-		BinaryChnl chnlIn = binaryImgChnlProvider.create();
-		
-		BinaryChnl outline = FindOutline.outline(
-			chnlIn,
-			false,
-			erodeEdges
-		);
-		
+	protected BinaryChnl createFromChnl(BinaryChnl chnlIn, BinaryChnl outline) throws CreateException {
 		List<Point2i> extPnts = PointsFromBinaryChnl.pointsFromChnl2D(outline);
 		
 		List<Point2i> pntsConvexHull = ConvexHullUtilities.convexHull2D(extPnts);
@@ -84,21 +57,4 @@ public class BinaryImgChnlProviderConvexHull2D extends BinaryImgChnlProvider {
 		   
 		return outline;
 	}
-
-	public BinaryImgChnlProvider getBinaryImgChnlProvider() {
-		return binaryImgChnlProvider;
-	}
-
-	public void setBinaryImgChnlProvider(BinaryImgChnlProvider binaryImgChnlProvider) {
-		this.binaryImgChnlProvider = binaryImgChnlProvider;
-	}
-
-	public boolean isErodeEdges() {
-		return erodeEdges;
-	}
-
-	public void setErodeEdges(boolean erodeEdges) {
-		this.erodeEdges = erodeEdges;
-	}
-
 }

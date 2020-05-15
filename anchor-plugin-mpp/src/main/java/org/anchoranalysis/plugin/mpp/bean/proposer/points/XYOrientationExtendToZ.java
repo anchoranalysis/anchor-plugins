@@ -47,7 +47,7 @@ import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.core.random.RandomNumberGenerator;
-import org.anchoranalysis.image.bean.provider.BinaryImgChnlProvider;
+import org.anchoranalysis.image.bean.provider.BinaryChnlProvider;
 import org.anchoranalysis.image.bean.unitvalue.distance.UnitValueDistance;
 import org.anchoranalysis.image.bean.unitvalue.distance.UnitValueDistanceVoxels;
 import org.anchoranalysis.image.binary.BinaryChnl;
@@ -62,11 +62,6 @@ import ch.ethz.biol.cell.mpp.mark.ellipsoidfitter.outlinepixelsretriever.Travers
 
 public class XYOrientationExtendToZ extends PointsProposer {
 	
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
 	private OrientationProposer orientationXYProposer;		// Should find an orientation in the XY plane
@@ -75,10 +70,10 @@ public class XYOrientationExtendToZ extends PointsProposer {
 	private PointsFromOrientationProposer pointsFromOrientationXYProposer;
 	
 	@BeanField
-	private BinaryImgChnlProvider binaryImgChnlProvider;
+	private BinaryChnlProvider binaryChnl;
 	
 	@BeanField @OptionalBean
-	private BinaryImgChnlProvider binaryImgChnlProviderFilled;
+	private BinaryChnlProvider binaryChnlFilled;
 	
 	@BeanField
 	private ScalarProposer maxDistanceZ;
@@ -140,7 +135,7 @@ public class XYOrientationExtendToZ extends PointsProposer {
 				pntsXY,
 				maxZDist(re, dim.getRes()),
 				skipZDist(dim.getRes()),
-				binaryImgChnlProvider.create(),
+				binaryChnl.create(),
 				chnlFilled(),
 				dim,
 				forceMinZSize
@@ -161,28 +156,25 @@ public class XYOrientationExtendToZ extends PointsProposer {
 		return maxZDist;
 	}
 	
-	private int skipZDist(ImageRes res) {
-		int skipZDist = (int) Math.round(distanceZEndIfEmpty.rslv(res, new DirectionVector(0, 0, 1.0)) );
+	private int skipZDist(ImageRes res) throws OperationFailedException {
+		int skipZDist = (int) Math.round(
+			distanceZEndIfEmpty.rslv(
+				Optional.of(res),
+				new DirectionVector(0, 0, 1.0)
+			)
+		);
 		// TODO fix. Why this constant?
 		skipZDist = 100;
 		return skipZDist;
 	}
 	
 	private Optional<BinaryChnl> chnlFilled() throws CreateException {
-		return binaryImgChnlProviderFilled!=null ? Optional.of(binaryImgChnlProviderFilled.create()) : Optional.empty();
+		return binaryChnlFilled!=null ? Optional.of(binaryChnlFilled.create()) : Optional.empty();
 	}
 	
 	@Override
 	public boolean isCompatibleWith(Mark testMark) {
 		return orientationXYProposer.isCompatibleWith(testMark);
-	}
-
-	public BinaryImgChnlProvider getBinaryImgChnlProvider() {
-		return binaryImgChnlProvider;
-	}
-
-	public void setBinaryImgChnlProvider(BinaryImgChnlProvider binaryImgChnlProvider) {
-		this.binaryImgChnlProvider = binaryImgChnlProvider;
 	}
 
 	public UnitValueDistance getDistanceZEndIfEmpty() {
@@ -217,15 +209,6 @@ public class XYOrientationExtendToZ extends PointsProposer {
 		this.maxDistanceZ = maxDistanceZ;
 	}
 
-	public BinaryImgChnlProvider getBinaryImgChnlProviderFilled() {
-		return binaryImgChnlProviderFilled;
-	}
-
-	public void setBinaryImgChnlProviderFilled(
-			BinaryImgChnlProvider binaryImgChnlProviderFilled) {
-		this.binaryImgChnlProviderFilled = binaryImgChnlProviderFilled;
-	}
-
 	public boolean isForwardDirectionOnly() {
 		return forwardDirectionOnly;
 	}
@@ -249,5 +232,21 @@ public class XYOrientationExtendToZ extends PointsProposer {
 	public void setPointsFromOrientationXYProposer(
 			PointsFromOrientationProposer pointsFromOrientationXYProposer) {
 		this.pointsFromOrientationXYProposer = pointsFromOrientationXYProposer;
+	}
+
+	public BinaryChnlProvider getBinaryChnl() {
+		return binaryChnl;
+	}
+
+	public void setBinaryChnl(BinaryChnlProvider binaryChnl) {
+		this.binaryChnl = binaryChnl;
+	}
+
+	public BinaryChnlProvider getBinaryChnlFilled() {
+		return binaryChnlFilled;
+	}
+
+	public void setBinaryChnlFilled(BinaryChnlProvider binaryChnlFilled) {
+		this.binaryChnlFilled = binaryChnlFilled;
 	}
 }

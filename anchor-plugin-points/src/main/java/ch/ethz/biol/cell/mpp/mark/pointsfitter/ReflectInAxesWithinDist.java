@@ -43,11 +43,6 @@ import org.anchoranalysis.image.extent.ImageDim;
 // Reflects points in each axes if all points are within a certain distance from it
 public class ReflectInAxesWithinDist extends PointsFitter {
 	
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
 	private PointsFitter pointsFitter;
@@ -135,7 +130,13 @@ public class ReflectInAxesWithinDist extends PointsFitter {
 	
 
 	// Min=true means the lower side,  Min=false means the higher side of the dimension
-	private static boolean arePointsWithinDistOfBorder( List<Point3f> points, Extent extnt, int dimension, boolean min, double[] arrDistances ) {
+	private static boolean arePointsWithinDistOfBorder(
+		List<Point3f> points,
+		Extent extnt,
+		int dimension,
+		boolean min,
+		double[] arrDistances
+	) {
 		
 		double dimMax = extnt.getValueByDimension(dimension);
 		double maxAllowedDist = arrDistances[dimension];

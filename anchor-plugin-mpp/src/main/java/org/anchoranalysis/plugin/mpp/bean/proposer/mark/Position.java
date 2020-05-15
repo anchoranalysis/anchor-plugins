@@ -40,11 +40,6 @@ import org.anchoranalysis.core.geometry.Point3d;
 
 public class Position extends MarkProposer {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 8166722494036948387L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
 	private PositionProposerBean positionProposer;

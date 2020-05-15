@@ -31,11 +31,6 @@ import org.anchoranalysis.anchor.mpp.mark.Mark;
 /** All marks have weight of 1 */
 public class ConstantWeight extends ExtractWeightFromMark {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	@Override
 	public double weightFor(Mark mark) {
 		return 1.0;

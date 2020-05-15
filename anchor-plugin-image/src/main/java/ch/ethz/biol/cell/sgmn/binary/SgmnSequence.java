@@ -30,38 +30,30 @@ package ch.ethz.biol.cell.sgmn.binary;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
-
 import org.anchoranalysis.bean.annotation.OptionalBean;
-import org.anchoranalysis.core.random.RandomNumberGenerator;
 import org.anchoranalysis.image.bean.sgmn.binary.BinarySgmn;
 import org.anchoranalysis.image.bean.sgmn.binary.BinarySgmnParameters;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.image.sgmn.SgmnFailedException;
-import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.anchoranalysis.image.voxel.box.VoxelBoxWrapper;
 
 public class SgmnSequence extends BinarySgmn {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PROPERTIES
 	@OptionalBean
 	private List<BinarySgmn> listSgmn = new ArrayList<>();
 	// END BEAN PROPERTIES
 	
 	@Override
-	public BinaryVoxelBox<ByteBuffer> sgmn(VoxelBoxWrapper voxelBox, BinarySgmnParameters params, RandomNumberGenerator re) throws SgmnFailedException {
-		return sgmn(voxelBox, params, null, re);
+	public BinaryVoxelBox<ByteBuffer> sgmn(VoxelBoxWrapper voxelBox, BinarySgmnParameters params) throws SgmnFailedException {
+		return sgmn(voxelBox, params, null);
 	}
 
 	@Override
 	public BinaryVoxelBox<ByteBuffer> sgmn(VoxelBoxWrapper voxelBox,
-			BinarySgmnParameters params, ObjMask objMask, RandomNumberGenerator re) throws SgmnFailedException {
+			BinarySgmnParameters params, ObjMask objMask) throws SgmnFailedException {
 		
 		BinaryVoxelBox<ByteBuffer> outOld = null;
 		BoundingBox BoundingBox = objMask!=null ? objMask.getBoundingBox() : new BoundingBox( voxelBox.any().extnt() );
@@ -71,9 +63,9 @@ public class SgmnSequence extends BinarySgmn {
 			
 			BinaryVoxelBox<ByteBuffer> outNew;
 			if (objMask!=null) {
-				outNew = sgmn.sgmn(voxelBox, params, objMask, re);
+				outNew = sgmn.sgmn(voxelBox, params, objMask);
 			} else {
-				outNew = sgmn.sgmn(voxelBox, params, re);
+				outNew = sgmn.sgmn(voxelBox, params);
 			}
 			
 			if (outNew==null) {
@@ -93,10 +85,5 @@ public class SgmnSequence extends BinarySgmn {
 
 	public void setListSgmn(List<BinarySgmn> listSgmn) {
 		this.listSgmn = listSgmn;
-	}
-
-	@Override
-	public VoxelBox<ByteBuffer> getAdditionalOutput() {
-		return null;
 	}
 }

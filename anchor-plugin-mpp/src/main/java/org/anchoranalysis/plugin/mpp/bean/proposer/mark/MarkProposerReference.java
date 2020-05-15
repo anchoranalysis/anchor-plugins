@@ -41,11 +41,6 @@ import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 
 public class MarkProposerReference extends MarkProposer {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -1979334401557594170L;
-
 	// Start BEAN
 	@BeanField
 	private String id;

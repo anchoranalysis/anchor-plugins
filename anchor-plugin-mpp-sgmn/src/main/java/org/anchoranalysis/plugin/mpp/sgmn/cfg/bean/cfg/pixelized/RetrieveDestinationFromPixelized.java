@@ -35,11 +35,6 @@ import org.anchoranalysis.plugin.mpp.sgmn.cfg.optscheme.ToPixelized;
 
 public class RetrieveDestinationFromPixelized<T> extends StateTransformerBean<ToPixelized<T>,CfgNRGPixelized> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	@Override
 	public CfgNRGPixelized transform(ToPixelized<T> in, TransformationContext context)
 			throws OperationFailedException {

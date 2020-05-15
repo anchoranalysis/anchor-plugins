@@ -31,11 +31,6 @@ import org.anchoranalysis.mpp.sgmn.optscheme.ExtractScoreSize;
 
 public class CfgNRGPixelizedExtracter extends ExtractScoreSize<CfgNRGPixelized> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	@Override
 	public double extractScore(CfgNRGPixelized item) {
 		

@@ -37,11 +37,6 @@ import org.anchoranalysis.mpp.sgmn.kernel.proposer.WeightedKernel;
 
 public class KernelProposerOptionSingle<T> extends KernelProposerOption<T>  {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -6722347375925588035L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
 	private Kernel<T> kernel = null;

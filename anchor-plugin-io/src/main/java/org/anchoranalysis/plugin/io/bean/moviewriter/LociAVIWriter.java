@@ -53,12 +53,6 @@ import loci.formats.services.OMEXMLService;
 
 public class LociAVIWriter extends MovieWriter {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
-
 	private static class OpenOutput extends MovieOutputHandle {
 
 		private int indexIncr = 0;

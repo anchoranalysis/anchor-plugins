@@ -29,7 +29,6 @@ package ch.ethz.biol.cell.imageprocessing.objmask.provider;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
 import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.image.objmask.ObjMaskCollection;
 
@@ -40,41 +39,17 @@ import org.anchoranalysis.image.objmask.ObjMaskCollection;
  * @author feehano
  *
  */
-public class ObjMaskProviderIntersectsWith extends ObjMaskProvider {
+public class ObjMaskProviderIntersectsWith extends ObjMaskProviderContainer {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PROPERTIES
-	@BeanField
-	private ObjMaskProvider objs;
-	
-	@BeanField
-	private ObjMaskProvider objsContainer;
-	
 	@BeanField
 	private boolean inverse=false;	// If set, we return the objects that DO NOT intersect
 	// END BEAN PROPERTIES
 	
-	private boolean doesObjIntersect( ObjMask om, ObjMaskCollection container ) {
-		
-		for( ObjMask omCompare : container ) {
-			if(om.hasIntersectingPixels(omCompare)) {
-				return true;
-			}
-		}
-		
-		return false;
-	}
-	
-	
 	@Override
-	public ObjMaskCollection create() throws CreateException {
-		
-		ObjMaskCollection objsCollection = objs.create();
-		ObjMaskCollection objsCollectionContainer = objsContainer.create();
+	public ObjMaskCollection createFromObjs(ObjMaskCollection objsCollection) throws CreateException {
+
+		ObjMaskCollection objsCollectionContainer = containerRequired();
 		
 		ObjMaskCollection out = new ObjMaskCollection();
 		
@@ -95,13 +70,16 @@ public class ObjMaskProviderIntersectsWith extends ObjMaskProvider {
 
 		return out;
 	}
-
-	public ObjMaskProvider getObjs() {
-		return objs;
-	}
-
-	public void setObjs(ObjMaskProvider objs) {
-		this.objs = objs;
+	
+	private static boolean doesObjIntersect( ObjMask om, ObjMaskCollection container ) {
+		
+		for( ObjMask omCompare : container ) {
+			if(om.hasIntersectingPixels(omCompare)) {
+				return true;
+			}
+		}
+		
+		return false;
 	}
 
 	public boolean isInverse() {
@@ -110,13 +88,5 @@ public class ObjMaskProviderIntersectsWith extends ObjMaskProvider {
 
 	public void setInverse(boolean inverse) {
 		this.inverse = inverse;
-	}
-
-	public ObjMaskProvider getObjsContainer() {
-		return objsContainer;
-	}
-
-	public void setObjsContainer(ObjMaskProvider objsContainer) {
-		this.objsContainer = objsContainer;
 	}
 }

@@ -36,11 +36,6 @@ import ch.ethz.biol.cell.mpp.nrg.feature.objmask.ValueAndIndex;
 
 public class IntensityMeanMaxSlice extends FeatureNrgChnl {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	// START BEAN PROPERTIES
 	@BeanField
 	private boolean excludeZero = false;

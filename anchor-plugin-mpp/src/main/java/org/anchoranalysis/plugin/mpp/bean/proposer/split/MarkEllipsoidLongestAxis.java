@@ -44,11 +44,6 @@ import org.anchoranalysis.math.rotation.RotationMatrix3DFromRadianCreator;
 
 public class MarkEllipsoidLongestAxis extends MarkSplitProposer {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -2434034209101025377L;
-	
 	// START BEAN
 	@BeanField
 	private MarkProposer markProposer;

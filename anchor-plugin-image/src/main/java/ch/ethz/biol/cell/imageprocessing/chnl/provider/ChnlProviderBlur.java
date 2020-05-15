@@ -30,7 +30,7 @@ package ch.ethz.biol.cell.imageprocessing.chnl.provider;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.image.bean.provider.ChnlProvider;
+import org.anchoranalysis.image.bean.provider.ChnlProviderOne;
 import org.anchoranalysis.image.chnl.Chnl;
 import org.anchoranalysis.plugin.image.bean.blur.BlurGaussian3d;
 import org.anchoranalysis.plugin.image.bean.blur.BlurStrategy;
@@ -43,26 +43,15 @@ import org.anchoranalysis.plugin.image.bean.blur.BlurStrategy;
  * @author Owen Feehan
  *
  */
-public class ChnlProviderBlur extends ChnlProvider {
+public class ChnlProviderBlur extends ChnlProviderOne {
 
-
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PROPERTIES
-	@BeanField
-	private ChnlProvider chnlProvider;
-	
 	@BeanField
 	private BlurStrategy strategy = new BlurGaussian3d();
 	// END BEAN PROPERTIES
 	
 	@Override
-	public Chnl create() throws CreateException {
-		
-		Chnl chnl = chnlProvider.create();
+	public Chnl createFromChnl( Chnl chnl ) throws CreateException {
 		
 		try {
 			strategy.blur(
@@ -75,14 +64,6 @@ public class ChnlProviderBlur extends ChnlProvider {
 		}
 		
 		return chnl;
-	}
-
-	public ChnlProvider getChnlProvider() {
-		return chnlProvider;
-	}
-
-	public void setChnlProvider(ChnlProvider chnlProvider) {
-		this.chnlProvider = chnlProvider;
 	}
 
 	public BlurStrategy getStrategy() {

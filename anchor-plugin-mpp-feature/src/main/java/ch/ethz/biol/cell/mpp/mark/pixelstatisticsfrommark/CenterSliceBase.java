@@ -36,11 +36,6 @@ import org.anchoranalysis.image.voxel.statistics.VoxelStatistics;
 
 public abstract class CenterSliceBase extends IndexedRegionBase {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	@Override
 	protected VoxelStatistics createStatisticsFor(PxlMark pm, Mark mark, ImageDim dim) throws CreateException {
 		

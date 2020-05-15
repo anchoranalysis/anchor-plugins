@@ -37,7 +37,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.core.name.provider.NamedProviderGetException;
-import org.anchoranalysis.image.bean.provider.BinaryImgChnlProvider;
+import org.anchoranalysis.image.bean.provider.BinaryChnlProvider;
 import org.anchoranalysis.image.chnl.Chnl;
 import org.anchoranalysis.image.convert.ByteConverter;
 import org.anchoranalysis.image.extent.ImageDim;
@@ -46,14 +46,9 @@ import org.anchoranalysis.math.rotation.RotationMatrix;
 
 public class LineBoundCalculator extends BoundCalculator {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 6887744677691985554L;
-
 	// START BEAN PROPERTIES
 	@BeanField
-	private BinaryImgChnlProvider outlineProvider;
+	private BinaryChnlProvider outlineProvider;
 	// END BEAN PROPERTIES
 		
 	//private RslvdBound minMax;
@@ -218,11 +213,11 @@ public class LineBoundCalculator extends BoundCalculator {
 		this.extra = extra;
 	}
 
-	public BinaryImgChnlProvider getOutlineProvider() {
+	public BinaryChnlProvider getOutlineProvider() {
 		return outlineProvider;
 	}
 
-	public void setOutlineProvider(BinaryImgChnlProvider outlineProvider) {
+	public void setOutlineProvider(BinaryChnlProvider outlineProvider) {
 		this.outlineProvider = outlineProvider;
 	}
 

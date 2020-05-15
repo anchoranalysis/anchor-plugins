@@ -31,11 +31,6 @@ import org.anchoranalysis.anchor.mpp.mark.points.MarkPointList;
 
 public class NumberPoints extends ExtractWeightFromMark {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	@Override
 	public double weightFor(Mark mark) {
 		MarkPointList cast = (MarkPointList) mark;

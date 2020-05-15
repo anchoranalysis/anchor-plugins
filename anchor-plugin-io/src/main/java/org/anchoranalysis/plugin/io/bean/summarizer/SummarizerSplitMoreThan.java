@@ -39,11 +39,6 @@ import org.anchoranalysis.core.error.OperationFailedException;
  */
 public class SummarizerSplitMoreThan<T> extends Summarizer<T> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	// START BEAN PROPERTIES
 	/** If there are more than <code>countThreshold</code> elements, use summarizerGreaterThan, else summarizerElse */
 	@BeanField

@@ -28,6 +28,7 @@ package ch.ethz.biol.cell.imageprocessing.objmask.filter;
 
 
 import java.nio.ByteBuffer;
+import java.util.Optional;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
@@ -45,14 +46,9 @@ import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 //   greater than or equal to a threshold value from the ChnlProvider
 public class ObjMaskFilterChnlIntensGreaterEqualThan extends ObjMaskFilterByObject {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
-	private ChnlProvider chnlProvider;
+	private ChnlProvider chnl;
 	
 	// The threshold we use, the distance is always calculated in the direction of the XY plane.
 	@BeanField
@@ -62,11 +58,11 @@ public class ObjMaskFilterChnlIntensGreaterEqualThan extends ObjMaskFilterByObje
 	private VoxelBox<?> vb;
 
 	@Override
-	protected void start(ImageDim dim) throws OperationFailedException {
+	protected void start() throws OperationFailedException {
 		
 		Chnl chnlSingleRegion;
 		try {
-			chnlSingleRegion = chnlProvider.create();
+			chnlSingleRegion = chnl.create();
 		} catch (CreateException e) {
 			throw new OperationFailedException(e);
 		}
@@ -74,11 +70,14 @@ public class ObjMaskFilterChnlIntensGreaterEqualThan extends ObjMaskFilterByObje
 		vb = chnlSingleRegion.getVoxelBox().any();
 	}
 
-
 	@Override
-	protected boolean match(ObjMask om, ImageDim dim) {
+	protected boolean match(ObjMask om, Optional<ImageDim> dim) throws OperationFailedException {
 		
-		int thresholdRslv = (int) Math.ceil( threshold.rslv( dim.getRes(), new DirectionVector(1.0, 0, 0) ) );
+		if (!dim.isPresent()) {
+			throw new OperationFailedException("Image-dimensions are required for this operation");
+		}
+		
+		int thresholdRslv = threshold(dim);
 		
 		for( int z=0; z<om.getBoundingBox().extnt().getZ(); z++) {
 			
@@ -113,22 +112,19 @@ public class ObjMaskFilterChnlIntensGreaterEqualThan extends ObjMaskFilterByObje
 		return false;
 	}
 
-
+	private int threshold(Optional<ImageDim> dim) throws OperationFailedException {
+		return (int) Math.ceil(
+			threshold.rslv(
+				dim.map(ImageDim::getRes),
+				new DirectionVector(1.0, 0, 0)
+			)
+		);
+	}
+	
 	@Override
 	protected void end() throws OperationFailedException {
 		vb = null;
 	}
-
-
-	public ChnlProvider getChnlProvider() {
-		return chnlProvider;
-	}
-
-
-	public void setChnlProvider(ChnlProvider chnlProvider) {
-		this.chnlProvider = chnlProvider;
-	}
-
 
 	public UnitValueDistance getThreshold() {
 		return threshold;
@@ -139,7 +135,11 @@ public class ObjMaskFilterChnlIntensGreaterEqualThan extends ObjMaskFilterByObje
 		this.threshold = threshold;
 	}
 
+	public ChnlProvider getChnl() {
+		return chnl;
+	}
 
-
-
+	public void setChnl(ChnlProvider chnl) {
+		this.chnl = chnl;
+	}
 }

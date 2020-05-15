@@ -38,11 +38,6 @@ import org.anchoranalysis.image.voxel.statistics.VoxelStatistics;
 
 public class Specific extends IndexedRegionBase {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -3617915321417174160L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
 	private int sliceID = -1;	// -1 indicates that we use all slices
@@ -64,4 +59,32 @@ public class Specific extends IndexedRegionBase {
 	public void setSliceID(int sliceID) {
 		this.sliceID = sliceID;
 	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = super.hashCode();
+		result = prime * result + sliceID;
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (!super.equals(obj))
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Specific other = (Specific) obj;
+		if (sliceID != other.sliceID)
+			return false;
+		return true;
+	}
+	
+	@Override
+	public String uniqueName() {
+		return super.uniqueName() + "_" + sliceID;
+	}
 }
+

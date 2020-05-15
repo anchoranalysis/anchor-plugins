@@ -29,7 +29,6 @@ package ch.ethz.biol.cell.imageprocessing.chnl.provider;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.image.bean.provider.BinaryImgChnlProvider;
 import org.anchoranalysis.image.bean.provider.ChnlProvider;
 import org.anchoranalysis.image.binary.BinaryChnl;
 import org.anchoranalysis.image.chnl.Chnl;
@@ -37,68 +36,52 @@ import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.image.objmask.factory.CreateFromEntireChnlFactory;
 
-public class ChnlProviderAssign extends ChnlProvider {
+/**
+ * Copies the pixels from chnlAssignFrom to chnl (possibly masking)
+ * 
+ * <p>chnl is changed (mutable). chnlAssignFrom is unchanged (immutable).</p>.
+ * 
+ * @author Owen Feehan
+ *
+ */
+public class ChnlProviderAssign extends ChnlProviderOneMask {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
-	private ChnlProvider chnlProvider;
-	
-	@BeanField
-	private ChnlProvider chnlProviderAssignFrom;
-	
-	@BeanField
-	private BinaryImgChnlProvider maskProvider;
+	private ChnlProvider chnlAssignFrom;
 	// END BEAN PROPERTIES
-		
+	
 	@Override
-	public Chnl create() throws CreateException {
-
-		Chnl chnlSrc = chnlProvider.create(); 
-		Chnl chnlAssignFrom = chnlProviderAssignFrom.create();
-		AssignUtilities.checkDims( chnlSrc, chnlAssignFrom );
-		
-		BinaryChnl binaryImgChnl = maskProvider.create();
-		AssignUtilities.checkDims( chnlSrc, binaryImgChnl );
-		
-		assign(chnlSrc, chnlAssignFrom, binaryImgChnl);
+	protected Chnl createFromMaskedChnl(Chnl chnlSrc, BinaryChnl binaryImgChnl) throws CreateException {
+				
+		assign(
+			chnlSrc,
+			DimChecker.createSameSize(chnlAssignFrom, "chnlAssignFrom",chnlSrc),
+			binaryImgChnl
+		);
 		
 		return chnlSrc;
 	}
 	
-	private void assign( Chnl chnlSrc, Chnl chnlAssignFrom, BinaryChnl binaryImgChnl) throws CreateException {
-		ObjMask om = CreateFromEntireChnlFactory.createObjMask(binaryImgChnl);
+	private void assign( Chnl chnlSrc, Chnl chnlAssignFrom, BinaryChnl mask) throws CreateException {
 		
+		ObjMask om = CreateFromEntireChnlFactory.createObjMask(mask);
 		BoundingBox bbox = new BoundingBox( chnlSrc.getDimensions().getExtnt() );
 		
-		chnlAssignFrom.getVoxelBox().asByte().copyPixelsToCheckMask(bbox, chnlSrc.getVoxelBox().asByte(), bbox, om.getVoxelBox(), om.getBinaryValuesByte());		
-	}
-	
-	public ChnlProvider getChnlProvider() {
-		return chnlProvider;
-	}
-
-	public void setChnlProvider(ChnlProvider chnlProvider) {
-		this.chnlProvider = chnlProvider;
+		chnlAssignFrom.getVoxelBox().asByte().copyPixelsToCheckMask(
+			bbox,
+			chnlSrc.getVoxelBox().asByte(),
+			bbox,
+			om.getVoxelBox(),
+			om.getBinaryValuesByte()
+		);		
 	}
 
-	public ChnlProvider getChnlProviderAssignFrom() {
-		return chnlProviderAssignFrom;
+	public ChnlProvider getChnlAssignFrom() {
+		return chnlAssignFrom;
 	}
 
-	public void setChnlProviderAssignFrom(ChnlProvider chnlProviderAssignFrom) {
-		this.chnlProviderAssignFrom = chnlProviderAssignFrom;
-	}
-
-	public BinaryImgChnlProvider getMaskProvider() {
-		return maskProvider;
-	}
-
-	public void setMaskProvider(BinaryImgChnlProvider maskProvider) {
-		this.maskProvider = maskProvider;
+	public void setChnlAssignFrom(ChnlProvider chnlAssignFrom) {
+		this.chnlAssignFrom = chnlAssignFrom;
 	}
 }

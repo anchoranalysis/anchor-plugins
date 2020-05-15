@@ -36,11 +36,6 @@ import org.anchoranalysis.image.extent.ImageDim;
 
 public class PositionProposerUniformRandom extends PositionProposerBean {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -6767797259084343091L;
-	
 	// START BEAN
 	@BeanField
 	private boolean suppressZ = false;

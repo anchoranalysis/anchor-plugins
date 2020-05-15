@@ -43,11 +43,6 @@ import org.anchoranalysis.plugin.image.task.chnl.convert.ChnlGetterForTimepoint;
 
 public class RGB extends ChnlConversionStyle {
 	
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	// START BEAN PROPERTIES
 	/** 
 	 * If a channel doesn't match an RGB pattern, this conversion-style can be used instead.

@@ -43,11 +43,6 @@ import org.anchoranalysis.plugin.image.task.grouped.NamedChnl;
  */
 public class SelectOne extends SelectChnlsFromStacks {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	// START BEAN FIELDS
 	/** If defined, processing only occurs the stack with this specific stack and index. Otherwise processing occurs on all input stacks */
 	@BeanField

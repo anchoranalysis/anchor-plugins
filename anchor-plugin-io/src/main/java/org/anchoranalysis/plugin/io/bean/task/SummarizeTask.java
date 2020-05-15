@@ -32,22 +32,17 @@ import org.anchoranalysis.core.log.LogReporter;
 import org.anchoranalysis.experiment.ExperimentExecutionArguments;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
 import org.anchoranalysis.experiment.JobExecutionException;
-import org.anchoranalysis.experiment.task.ParametersBound;
+import org.anchoranalysis.experiment.task.InputBound;
 import org.anchoranalysis.experiment.task.ParametersExperiment;
 import org.anchoranalysis.experiment.task.Task;
 import org.anchoranalysis.io.input.InputFromManager;
+import org.anchoranalysis.io.output.bound.BoundIOContext;
 import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
 import org.anchoranalysis.plugin.io.bean.summarizer.Summarizer;
 import org.anchoranalysis.plugin.io.bean.summarizer.SummarizerCount;
 
 public abstract class SummarizeTask<T extends InputFromManager,S> extends Task<T,Summarizer<S>> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
-	
 	// START BEAN PROPERTIES
 	@BeanField
 	private Summarizer<S> summarizer = new SummarizerCount<>();
@@ -69,7 +64,7 @@ public abstract class SummarizeTask<T extends InputFromManager,S> extends Task<T
 	}
 	
 	@Override
-	public void doJobOnInputObject(ParametersBound<T, Summarizer<S>> params) throws JobExecutionException {
+	public void doJobOnInputObject(InputBound<T, Summarizer<S>> params) throws JobExecutionException {
 		try {
 			params.getSharedState().add( extractObjectForSummary(params.getInputObject()) );
 		} catch (OperationFailedException e) {
@@ -81,11 +76,10 @@ public abstract class SummarizeTask<T extends InputFromManager,S> extends Task<T
 	}
 
 	@Override
-	public void afterAllJobsAreExecuted(BoundOutputManagerRouteErrors outputManager, Summarizer<S> sharedState,
-			LogReporter logReporter) throws ExperimentExecutionException {
+	public void afterAllJobsAreExecuted(Summarizer<S> sharedState, BoundIOContext context) throws ExperimentExecutionException {
 		
 		try {
-			logReporter.log(
+			context.getLogReporter().log(
 				sharedState.describe()
 			);
 		} catch (OperationFailedException e) {

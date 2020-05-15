@@ -33,7 +33,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.Positive;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.geometry.Point3i;
-import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
+import org.anchoranalysis.image.bean.provider.ObjMaskProviderOne;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.objmask.ObjMask;
@@ -43,16 +43,9 @@ import org.anchoranalysis.image.voxel.box.factory.VoxelBoxFactory;
 
 // Chops objects up into squares (or mostly squares, sometimes rectangles at the very end)
 // Only chops in X and Y, Z is unaffected
-public class ObjMaskProviderSplitIntoSquares extends ObjMaskProvider {
+public class ObjMaskProviderSplitIntoSquares extends ObjMaskProviderOne {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
 	// START BEAN PROPERTIES
-	@BeanField
-	private ObjMaskProvider objs;
-	
 	@BeanField @Positive
 	private int squareSize = 10;
 	
@@ -61,9 +54,7 @@ public class ObjMaskProviderSplitIntoSquares extends ObjMaskProvider {
 	// END BEAN PROPERTIES
 	
 	@Override
-	public ObjMaskCollection create() throws CreateException {
-
-		ObjMaskCollection objsCollection = objs.create();
+	public ObjMaskCollection createFromObjs(ObjMaskCollection objsCollection) throws CreateException {
 		
 		ObjMaskCollection out = new ObjMaskCollection();
 		for (ObjMask om : objsCollection) {
@@ -147,14 +138,6 @@ public class ObjMaskProviderSplitIntoSquares extends ObjMaskProvider {
 		return out;
 	}
 
-	public ObjMaskProvider getObjs() {
-		return objs;
-	}
-
-	public void setObjs(ObjMaskProvider objs) {
-		this.objs = objs;
-	}
-
 	public int getSquareSize() {
 		return squareSize;
 	}
@@ -170,7 +153,4 @@ public class ObjMaskProviderSplitIntoSquares extends ObjMaskProvider {
 	public void setMinNumVoxels(int minNumVoxels) {
 		this.minNumVoxels = minNumVoxels;
 	}
-
-
-
 }

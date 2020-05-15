@@ -48,11 +48,6 @@ import org.anchoranalysis.plugin.mpp.sgmn.cfg.optscheme.AccptProbCalculator;
  */
 public class TransformationAssignMode<S,T,U> extends AssignMode<S,T,U> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	// START BEAN PROPERTIES
 	@BeanField
 	private KernelStateBridge<U, T> kernelStateBridge;

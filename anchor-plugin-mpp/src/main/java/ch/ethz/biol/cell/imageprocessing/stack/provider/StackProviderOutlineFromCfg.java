@@ -50,11 +50,6 @@ import org.anchoranalysis.mpp.io.cfg.generator.CfgGenerator;
 
 public class StackProviderOutlineFromCfg extends StackProvider {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
 	private CfgProvider cfgProvider;

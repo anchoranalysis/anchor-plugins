@@ -40,10 +40,7 @@ import org.w3c.dom.Element;
 
 public abstract class ColumnDefinition extends AnchorBean<ColumnDefinition> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
+	
 
 	// START BEAN PROPERTIES
 

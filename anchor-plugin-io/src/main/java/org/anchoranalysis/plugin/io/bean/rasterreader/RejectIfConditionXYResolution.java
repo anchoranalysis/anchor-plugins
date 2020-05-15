@@ -49,11 +49,6 @@ import org.anchoranalysis.image.io.rasterreader.OpenedRaster;
 // Assumes the X and Y resolution are equal. Throws an error otherwise.
 public class RejectIfConditionXYResolution extends RasterReader {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	// START BEAN PROPERTIES
 	@BeanField @DefaultInstance
 	private RasterReader rasterReader;

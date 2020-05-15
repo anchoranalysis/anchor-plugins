@@ -36,11 +36,6 @@ import org.anchoranalysis.image.init.ImageInitParams;
 
 public class HistogramProviderReference extends HistogramProvider {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 8689748853607479300L;
-
 	// START BEAN PROPERTIES
 	@BeanField
 	private String id = "";

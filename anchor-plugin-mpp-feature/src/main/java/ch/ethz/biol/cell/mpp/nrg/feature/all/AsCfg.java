@@ -36,11 +36,6 @@ import org.anchoranalysis.feature.calc.FeatureCalcException;
 
 public class AsCfg extends FeatureSingleElem<FeatureInputAllMemo,FeatureInputCfg> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	private static final ChildCacheName CACHE_NAME = new ChildCacheName(AsCfg.class);
 	
 	@Override

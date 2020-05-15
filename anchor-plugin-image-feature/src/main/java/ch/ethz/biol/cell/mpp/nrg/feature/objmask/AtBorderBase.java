@@ -35,11 +35,6 @@ import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
 
 public abstract class AtBorderBase extends FeatureObjMask {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	@Override
 	public double calc(SessionInput<FeatureInputSingleObj> input) throws FeatureCalcException {
 		

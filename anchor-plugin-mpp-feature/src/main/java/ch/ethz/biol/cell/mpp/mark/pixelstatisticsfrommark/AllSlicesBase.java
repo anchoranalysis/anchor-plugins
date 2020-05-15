@@ -35,11 +35,6 @@ import org.anchoranalysis.image.voxel.statistics.VoxelStatistics;
 
 public abstract class AllSlicesBase extends IndexedRegionBase {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
 	private int indexNonZero = 0;
@@ -82,5 +77,40 @@ public abstract class AllSlicesBase extends IndexedRegionBase {
 
 	public void setIndexNonZero(int indexNonZero) {
 		this.indexNonZero = indexNonZero;
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = super.hashCode();
+		result = prime * result + indexNonZero;
+		result = prime * result + sliceID;
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (!super.equals(obj))
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		AllSlicesBase other = (AllSlicesBase) obj;
+		if (indexNonZero != other.indexNonZero)
+			return false;
+		if (sliceID != other.sliceID)
+			return false;
+		return true;
+	}
+
+	@Override
+	public String uniqueName() {
+		return String.format(
+			"%s_%d_%d",
+			super.uniqueName(),
+			indexNonZero,
+			sliceID
+		);
 	}
 }

@@ -38,11 +38,6 @@ import org.anchoranalysis.plugin.image.task.chnl.convert.ChnlGetterForTimepoint;
 
 public class IndependentChnls extends ChnlConversionStyle {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PROPERTIES
 	/** Iff TRUE and we cannot find a channel in the file, we ignore it and carry on */
 	@BeanField

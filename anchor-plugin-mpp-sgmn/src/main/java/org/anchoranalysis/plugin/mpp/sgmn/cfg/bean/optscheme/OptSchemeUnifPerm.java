@@ -45,11 +45,6 @@ import org.anchoranalysis.mpp.sgmn.optscheme.feedback.FeedbackReceiver;
 
 public class OptSchemeUnifPerm<S> extends OptScheme<S,S> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -7155860791378525261L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
 	private int numItr = -1;

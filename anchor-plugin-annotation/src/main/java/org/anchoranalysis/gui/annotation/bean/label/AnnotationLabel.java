@@ -34,11 +34,6 @@ import org.anchoranalysis.io.bean.color.RGBColorBean;
 
 public class AnnotationLabel extends AnchorBean<AnnotationLabel> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	// START BEAN PROPERTIES
 	/** Label that uniquely identifies the ID (for machine purposes) */
 	@BeanField

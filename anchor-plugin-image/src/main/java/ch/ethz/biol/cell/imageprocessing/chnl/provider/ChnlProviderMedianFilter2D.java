@@ -32,7 +32,7 @@ import java.util.Iterator;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.image.bean.provider.ChnlProvider;
+import org.anchoranalysis.image.bean.provider.ChnlProviderOne;
 import org.anchoranalysis.image.chnl.Chnl;
 import org.anchoranalysis.image.convert.ByteConverter;
 import org.anchoranalysis.image.extent.Extent;
@@ -43,29 +43,12 @@ import com.google.common.collect.TreeMultiset;
 
 
 // 3x3 Sobel Filter
-public class ChnlProviderMedianFilter2D extends ChnlProvider {
+public class ChnlProviderMedianFilter2D extends ChnlProviderOne {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 3978226156945187112L;
-
-	// 	START BEAN
-	@BeanField
-	private ChnlProvider chnlProvider;
-	
+	//START BEAN PROPERTIES
 	@BeanField
 	private int kernelHalfWidth;
-	// END BEAN
-
-	public ChnlProvider getChnlProvider() {
-		return chnlProvider;
-	}
-
-	public void setChnlProvider(ChnlProvider chnlProvider) {
-		this.chnlProvider = chnlProvider;
-	}
-
+	// END BEAN PROPERTIES
 	
 	// Uses a square kernel of size (2*kernelHalfWidth+1)x(2*kernelHalfWidth+1)
 	private static class RollingMultiSet {
@@ -153,9 +136,8 @@ public class ChnlProviderMedianFilter2D extends ChnlProvider {
 	
 	
 	@Override
-	public Chnl create() throws CreateException {
+	public Chnl createFromChnl( Chnl chnl ) throws CreateException {
 		
-		Chnl chnl = chnlProvider.create();
 		VoxelBox<ByteBuffer> vb = chnl.getVoxelBox().asByte();
 		
 		RollingMultiSet set = new RollingMultiSet(kernelHalfWidth);

@@ -44,11 +44,6 @@ import org.anchoranalysis.io.input.InputFromManager;
 // 
 public class HomeSubdirectory extends FilePathPrefixer {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START PROPERTIES
 	@BeanField
 	private String subDirectoryName = "";

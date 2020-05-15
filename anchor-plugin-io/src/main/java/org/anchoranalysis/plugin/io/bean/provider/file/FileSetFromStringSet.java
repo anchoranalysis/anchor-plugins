@@ -42,11 +42,6 @@ import org.anchoranalysis.io.error.AnchorIOException;
 
 public class FileSetFromStringSet extends FileProviderWithDirectoryString {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	// START BEAN PROPERTIES
 	@BeanField
 	private StringSet filePaths;

@@ -44,11 +44,6 @@ import org.anchoranalysis.image.sgmn.SgmnFailedException;
 
 public class ObjMaskSgmnScale extends ObjMaskSgmn {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
 	private ObjMaskSgmn sgmn;

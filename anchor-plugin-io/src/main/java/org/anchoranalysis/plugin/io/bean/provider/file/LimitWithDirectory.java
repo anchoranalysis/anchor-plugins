@@ -39,11 +39,6 @@ import org.anchoranalysis.io.params.InputContextParams;
 
 public class LimitWithDirectory extends FileProviderWithDirectory {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEANS
 	@BeanField
 	private FileProviderWithDirectory fileProvider;

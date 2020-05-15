@@ -31,18 +31,13 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.name.provider.NamedProviderGetException;
-import org.anchoranalysis.image.bean.provider.BinaryImgChnlProvider;
+import org.anchoranalysis.image.bean.provider.BinaryChnlProvider;
 import org.anchoranalysis.image.binary.BinaryChnl;
 import org.anchoranalysis.image.binary.values.BinaryValues;
 import org.anchoranalysis.image.chnl.Chnl;
 import org.anchoranalysis.image.init.ImageInitParams;
 
-public class BinaryImgChnlProviderStackReference extends BinaryImgChnlProvider {
-
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 8689748853607479300L;
+public class BinaryImgChnlProviderStackReference extends BinaryChnlProvider {
 
 	// START BEAN PROPERTIES
 	@BeanField

@@ -1,7 +1,6 @@
 package org.anchoranalysis.plugin.mpp.sgmn.cfg.bean.cfg;
 
 import org.anchoranalysis.anchor.mpp.bean.cfg.CfgGen;
-import org.anchoranalysis.anchor.mpp.bean.init.GeneralInitParams;
 import org.anchoranalysis.anchor.mpp.bean.init.MPPInitParams;
 import org.anchoranalysis.anchor.mpp.feature.bean.nrgscheme.NRGScheme;
 import org.anchoranalysis.anchor.mpp.feature.bean.nrgscheme.NRGSchemeCreator;
@@ -34,14 +33,11 @@ import org.anchoranalysis.anchor.mpp.feature.nrg.scheme.NRGSchemeWithSharedFeatu
  * #L%
  */
 
-import org.anchoranalysis.bean.define.Define;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
-import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.core.name.provider.INamedProvider;
 import org.anchoranalysis.core.name.provider.NamedProviderGetException;
-import org.anchoranalysis.core.name.store.SharedObjects;
 import org.anchoranalysis.core.params.KeyValueParams;
 import org.anchoranalysis.feature.nrg.NRGStack;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
@@ -50,9 +46,8 @@ import org.anchoranalysis.image.experiment.identifiers.ImgStackIdentifiers;
 import org.anchoranalysis.image.init.CreateCombinedStack;
 import org.anchoranalysis.image.init.ImageInitParams;
 import org.anchoranalysis.image.io.stack.StackCollectionOutputter;
-import org.anchoranalysis.image.objmask.ObjMaskCollection;
-import org.anchoranalysis.image.stack.NamedImgStackCollection;
 import org.anchoranalysis.image.stack.Stack;
+import org.anchoranalysis.io.output.bound.BoundIOContext;
 import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
 import org.anchoranalysis.mpp.io.output.NRGStackWriter;
 import org.anchoranalysis.mpp.io.output.StackOutputKeys;
@@ -63,9 +58,9 @@ class SgmnMPPHelper {
 	public static void writeStacks(
 		ImageInitParams so,
 		NRGStackWithParams nrgStack,
-		LogErrorReporter logger,
-		BoundOutputManagerRouteErrors outputManager
+		BoundIOContext context
 	) {
+		BoundOutputManagerRouteErrors outputManager = context.getOutputManager();
 		
 		StackCollectionOutputter.output(
 			StackCollectionOutputter.subset(
@@ -75,41 +70,11 @@ class SgmnMPPHelper {
 			outputManager.getDelegate(),
 			"stackCollection",
 			"stack_",
-			logger.getErrorReporter(),
+			context.getErrorReporter(),
 			false
 		);
 
-		NRGStackWriter.writeNRGStack( nrgStack, outputManager, logger );		
-	}
-	
-	public static MPPInitParams createParamsMPP(
-		Define namedDefinitions,
-		NamedImgStackCollection stackCollection,
-		INamedProvider<ObjMaskCollection> objMaskCollection,
-		KeyValueParams params,
-		SharedObjects so,
-		GeneralInitParams paramsGeneral
-	) throws CreateException {
-		
-		MPPInitParams soMPP = MPPInitParams.create(
-			so,
-			namedDefinitions,
-			paramsGeneral
-		);
-		
-		try {
-			soMPP.getImage().copyStackCollectionFrom( stackCollection );
-			soMPP.getImage().copyObjMaskCollectionFrom( objMaskCollection );
-			
-			// TODO replace with a constant
-			if (params!=null) {
-				soMPP.getImage().addToKeyValueParamsCollection("input_params", params);
-			}
-		} catch (OperationFailedException e) {
-			throw new CreateException(e);
-		}
-		
-		return soMPP;
+		NRGStackWriter.writeNRGStack(nrgStack, context);		
 	}
 	
 	public static NRGSchemeWithSharedFeatures initNRG(

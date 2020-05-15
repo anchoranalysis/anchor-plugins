@@ -40,11 +40,6 @@ import org.anchoranalysis.image.scale.ScaleFactor;
 
 public class CfgProviderScaleXY extends CfgProvider {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
 	private CfgProvider cfgProvider;

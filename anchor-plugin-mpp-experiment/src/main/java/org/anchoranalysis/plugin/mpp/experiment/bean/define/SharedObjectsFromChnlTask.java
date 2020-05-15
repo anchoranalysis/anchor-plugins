@@ -1,7 +1,6 @@
 package org.anchoranalysis.plugin.mpp.experiment.bean.define;
 
-import org.anchoranalysis.anchor.mpp.bean.init.GeneralInitParams;
-import org.anchoranalysis.anchor.mpp.bean.init.MPPInitParams;
+
 
 /*
  * #%L
@@ -31,17 +30,10 @@ import org.anchoranalysis.anchor.mpp.bean.init.MPPInitParams;
 
 
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.bean.define.Define;
-import org.anchoranalysis.bean.shared.random.RandomNumberGeneratorBean;
-import org.anchoranalysis.bean.shared.random.RandomNumberGeneratorMersenneConstantBean;
-import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
 import org.anchoranalysis.core.index.GetOperationFailedException;
-import org.anchoranalysis.core.log.LogErrorReporter;
-import org.anchoranalysis.core.name.store.SharedObjects;
 import org.anchoranalysis.core.progress.ProgressReporterNull;
-import org.anchoranalysis.experiment.ExperimentExecutionArguments;
 import org.anchoranalysis.experiment.JobExecutionException;
 import org.anchoranalysis.image.chnl.Chnl;
 import org.anchoranalysis.image.experiment.bean.task.RasterTask;
@@ -50,34 +42,18 @@ import org.anchoranalysis.image.io.RasterIOException;
 import org.anchoranalysis.image.io.generator.raster.ChnlGenerator;
 import org.anchoranalysis.image.io.input.NamedChnlsInput;
 import org.anchoranalysis.image.io.input.series.NamedChnlCollectionForSeries;
-import org.anchoranalysis.image.stack.wrap.WrapStackAsTimeSequenceStore;
 import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
-import org.anchoranalysis.io.output.error.OutputWriteFailedException;
-import org.anchoranalysis.plugin.mpp.experiment.outputter.SharedObjectsUtilities;
+import org.anchoranalysis.mpp.sgmn.bean.define.DefineOutputterMPP;
+import org.anchoranalysis.io.output.bound.BoundIOContext;
 
 public class SharedObjectsFromChnlTask extends RasterTask {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
-	
 	// START BEAN PROPERTIES
 	@BeanField
-	private Define define;
+	private DefineOutputterMPP define;
 	
 	@BeanField
 	private String outputNameOriginal = "original";
-	
-	@BeanField
-	private RandomNumberGeneratorBean randomNumberGenerator = new RandomNumberGeneratorMersenneConstantBean();
-	
-	@BeanField
-	private boolean suppressSubfolders = true;
-	
-	@BeanField
-	private boolean suppressOutputExceptions = false;
 	// END BEAN PROPERTIES
 
 	@Override
@@ -86,10 +62,12 @@ public class SharedObjectsFromChnlTask extends RasterTask {
 	}
 	
 	@Override
-	public void doStack(NamedChnlsInput inputObject,
-			int seriesIndex, int numSeries,
-			BoundOutputManagerRouteErrors outputManager, LogErrorReporter logErrorReporter, ExperimentExecutionArguments expArgs)
-			throws JobExecutionException {
+	public void doStack(
+		NamedChnlsInput inputObject,
+		int seriesIndex,
+		int numSeries,
+		BoundIOContext context
+	) throws JobExecutionException {
 
 		NamedChnlCollectionForSeries ncc;
 		try {
@@ -101,36 +79,15 @@ public class SharedObjectsFromChnlTask extends RasterTask {
 		try {
 			Chnl inputImage = ncc.getChnlOrNull(ImgStackIdentifiers.INPUT_IMAGE, 0, ProgressReporterNull.get());
 			if (inputImage!=null) {
-				outputManager.getWriterCheckIfAllowed().write(
+				context.getOutputManager().getWriterCheckIfAllowed().write(
 					outputNameOriginal,
 					() -> new ChnlGenerator(inputImage,"original")
 				);
 			}
-			
-		
-			SharedObjects so = new SharedObjects(logErrorReporter);
-			MPPInitParams soMPP = MPPInitParams.create(
-				so,
-				define,
-				new GeneralInitParams(
-					randomNumberGenerator.create(),
-					expArgs.getModelDirectory(),
-					logErrorReporter
-				)
-			);
-			
-			ncc.addAsSeparateChnls(
-				new WrapStackAsTimeSequenceStore( soMPP.getImage().getStackCollection() ),
-				0
-			);
-			
-			if (suppressOutputExceptions) {
-				SharedObjectsUtilities.output(soMPP, outputManager, logErrorReporter, suppressSubfolders);
-			} else {
-				SharedObjectsUtilities.outputWithException(soMPP, outputManager, suppressSubfolders);
-			}
-			
-		} catch (GetOperationFailedException | OperationFailedException | OutputWriteFailedException | CreateException e) {
+
+			define.processInput(ncc, context);
+						
+		} catch (GetOperationFailedException | OperationFailedException e) {
 			throw new JobExecutionException(e);
 		}
 	}
@@ -146,41 +103,13 @@ public class SharedObjectsFromChnlTask extends RasterTask {
 			throws JobExecutionException {
 	
 	}
-	
-	public RandomNumberGeneratorBean getRandomNumberGenerator() {
-		return randomNumberGenerator;
-	}
 
-
-	public void setRandomNumberGenerator(RandomNumberGeneratorBean randomNumberGenerator) {
-		this.randomNumberGenerator = randomNumberGenerator;
-	}
-
-
-	public boolean isSuppressSubfolders() {
-		return suppressSubfolders;
-	}
-
-
-	public void setSuppressSubfolders(boolean suppressSubfolders) {
-		this.suppressSubfolders = suppressSubfolders;
-	}
-
-
-	public boolean isSuppressOutputExceptions() {
-		return suppressOutputExceptions;
-	}
-
-
-	public void setSuppressOutputExceptions(boolean suppressOutputExceptions) {
-		this.suppressOutputExceptions = suppressOutputExceptions;
-	}
-
-	public Define getDefine() {
+	public DefineOutputterMPP getDefine() {
 		return define;
 	}
 
-	public void setDefine(Define define) {
+	public void setDefine(DefineOutputterMPP define) {
 		this.define = define;
 	}
+
 }

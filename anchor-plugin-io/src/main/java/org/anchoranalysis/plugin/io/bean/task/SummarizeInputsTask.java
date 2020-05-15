@@ -34,11 +34,6 @@ import org.anchoranalysis.io.input.InputFromManager;
 
 public class SummarizeInputsTask<T extends InputFromManager> extends SummarizeTask<T,T> {
 	
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	@Override
 	protected T extractObjectForSummary(T input) {
 		return input;

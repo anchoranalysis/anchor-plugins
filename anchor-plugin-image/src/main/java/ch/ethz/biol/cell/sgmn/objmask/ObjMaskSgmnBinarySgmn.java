@@ -28,7 +28,6 @@ package ch.ethz.biol.cell.sgmn.objmask;
 
 
 import java.nio.ByteBuffer;
-
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.bean.sgmn.binary.BinarySgmn;
@@ -47,11 +46,6 @@ import org.anchoranalysis.image.sgmn.SgmnFailedException;
 
 public class ObjMaskSgmnBinarySgmn extends ObjMaskSgmn {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
 	private BinarySgmn sgmn;
@@ -65,8 +59,7 @@ public class ObjMaskSgmnBinarySgmn extends ObjMaskSgmn {
 			ChnlFactory.instance().create(bvb.getVoxelBox(), res),
 			bvb.getBinaryValues()
 		);
-		CreateFromConnectedComponentsFactory createObjMasks = new CreateFromConnectedComponentsFactory();
-		createObjMasks.setMinNumberVoxels(minNumberVoxels);
+		CreateFromConnectedComponentsFactory createObjMasks = new CreateFromConnectedComponentsFactory(minNumberVoxels);
 		
 		ObjMaskCollection objsBinary;
 		try {
@@ -88,10 +81,14 @@ public class ObjMaskSgmnBinarySgmn extends ObjMaskSgmn {
 	public ObjMaskCollection sgmn(Chnl chnl, SeedCollection seeds)
 			throws SgmnFailedException {
 	
-		BinarySgmnParameters params = new BinarySgmnParameters();
-		params.setRes(chnl.getDimensions().getRes());
+		BinarySgmnParameters params = new BinarySgmnParameters(
+			chnl.getDimensions().getRes()
+		);
 		
-		BinaryVoxelBox<ByteBuffer> bvb = sgmn.sgmn(chnl.getVoxelBox(), params, getSharedObjects().getRandomNumberGenerator() );
+		BinaryVoxelBox<ByteBuffer> bvb = sgmn.sgmn(
+			chnl.getVoxelBox(),
+			params
+		);
 		return createFromBinaryVoxelBox(bvb,chnl.getDimensions().getRes(), null);
 	}
 
@@ -99,10 +96,15 @@ public class ObjMaskSgmnBinarySgmn extends ObjMaskSgmn {
 	public ObjMaskCollection sgmn(Chnl chnl, ObjMask objMask,
 			SeedCollection seeds) throws SgmnFailedException {
 
-		BinarySgmnParameters params = new BinarySgmnParameters();
-		params.setRes(chnl.getDimensions().getRes());
+		BinarySgmnParameters params = new BinarySgmnParameters(
+			chnl.getDimensions().getRes()
+		);
 		
-		BinaryVoxelBox<ByteBuffer> bvb = sgmn.sgmn(chnl.getVoxelBox(), params, objMask, getSharedObjects().getRandomNumberGenerator() );
+		BinaryVoxelBox<ByteBuffer> bvb = sgmn.sgmn(
+			chnl.getVoxelBox(),
+			params,
+			objMask
+		);
 		return createFromBinaryVoxelBox(bvb,chnl.getDimensions().getRes(), objMask);
 	}
 

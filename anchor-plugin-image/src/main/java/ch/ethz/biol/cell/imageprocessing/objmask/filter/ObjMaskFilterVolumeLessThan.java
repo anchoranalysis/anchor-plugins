@@ -1,5 +1,7 @@
 package ch.ethz.biol.cell.imageprocessing.objmask.filter;
 
+import java.util.Optional;
+
 /*
  * #%L
  * anchor-plugin-image
@@ -34,23 +36,18 @@ import org.anchoranalysis.image.objmask.ObjMask;
 
 public class ObjMaskFilterVolumeLessThan extends ObjMaskFilterByObject {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
 	private int maxVolume = 0;
 	// END BEAN PROPERTIES
 	
 	@Override
-	protected void start(ImageDim dim) {
+	protected void start() {
 
 	}
 
 	@Override
-	protected boolean match(ObjMask om, ImageDim dim) {
+	protected boolean match(ObjMask om, Optional<ImageDim> dim) {
 		return om.numPixelsLessThan( maxVolume+1 );
 	}
 

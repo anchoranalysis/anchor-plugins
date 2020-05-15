@@ -45,10 +45,6 @@ public final class OptimizationStepLogReporter extends ReporterAgg<CfgNRGPixeliz
 	
 	// END BEANS
 	
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -8346417690571005766L;
 	private StopWatch timer = null;
 	
 	private LogReporter logReporter;

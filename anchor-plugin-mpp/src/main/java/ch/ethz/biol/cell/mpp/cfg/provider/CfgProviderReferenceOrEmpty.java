@@ -37,11 +37,6 @@ import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 // Returns an empty set if it doesn't exist
 public class CfgProviderReferenceOrEmpty extends CfgProvider {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -1575473809798849759L;
-
 	// START BEAN PROPERTIES
 	@BeanField
 	private String id = "";

@@ -34,11 +34,6 @@ import org.anchoranalysis.feature.calc.FeatureCalcException;
 
 public class NumMarks extends FeatureAllMemo {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	@Override
 	public double calc(SessionInput<FeatureInputAllMemo> params)
 			throws FeatureCalcException {

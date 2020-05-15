@@ -43,15 +43,11 @@ import org.anchoranalysis.core.geometry.PointConverter;
 import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.image.objmask.ObjMaskCollection;
-import ch.ethz.biol.cell.mpp.mark.pointsfitter.ConvexHullUtilities;
+
+import ch.ethz.biol.cell.imageprocessing.binaryimgchnl.provider.ConvexHullUtilities;
 
 public class CfgProviderPointsFitterFromObjs extends CfgProvider {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	/// START BEAN PROPERTIES
 	@BeanField
 	private PointsFitterToMark pointsFitter;

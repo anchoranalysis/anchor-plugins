@@ -39,11 +39,6 @@ import org.anchoranalysis.core.error.CreateException;
 
 public class CfgProposerFromProvider extends CfgProposer {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN FIELDS
 	@BeanField
 	private CfgProvider cfgProvider;

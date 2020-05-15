@@ -37,11 +37,6 @@ import org.anchoranalysis.core.error.CreateException;
 
 public class CfgProviderFromMark extends CfgProvider {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	/// START BEAN PROPERTIES
 	@BeanField
 	private MarkProvider markProvider;

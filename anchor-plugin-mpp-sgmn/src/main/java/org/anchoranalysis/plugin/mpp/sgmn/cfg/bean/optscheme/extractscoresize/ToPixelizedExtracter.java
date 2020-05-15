@@ -31,11 +31,6 @@ import org.anchoranalysis.plugin.mpp.sgmn.cfg.optscheme.ToPixelized;
 
 public class ToPixelizedExtracter<T> extends ExtractScoreSize<ToPixelized<T>> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	private CfgNRGPixelizedExtracter helper = new CfgNRGPixelizedExtracter();
 	
 	@Override

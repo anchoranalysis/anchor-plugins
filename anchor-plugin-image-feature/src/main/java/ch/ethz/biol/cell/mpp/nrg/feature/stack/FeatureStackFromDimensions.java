@@ -33,11 +33,6 @@ import org.anchoranalysis.image.feature.bean.FeatureNRGStack;
 
 public abstract class FeatureStackFromDimensions extends FeatureNRGStack {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	@Override
 	public final double calcCast( FeatureInputNRGStack params ) throws FeatureCalcException {
 		

@@ -37,11 +37,6 @@ import org.anchoranalysis.plugin.image.obj.merge.condition.IncreaseFeatureCondit
 
 public class ObjMaskProviderMerge extends ObjMaskProviderMergeOptionalDistance {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
 	private boolean replaceWithMidpoint = false;
@@ -51,16 +46,14 @@ public class ObjMaskProviderMerge extends ObjMaskProviderMergeOptionalDistance {
 	// END BEAN PROPERTIES
 
 	@Override
-	public ObjMaskCollection create() throws CreateException {
-		
-		ObjMaskCollection objsSource = getObjs().create();
+	public ObjMaskCollection createFromObjs( ObjMaskCollection objsSource ) throws CreateException {
 		
 		try {
 			Merger merger = new Merger(
 				replaceWithMidpoint,
 				maybeDistanceCondition(),
 				new IncreaseFeatureCondition(featureEvaluator),
-				calcRes(),
+				calcResOptional(),
 				getLogger()
 			);
 			

@@ -36,11 +36,6 @@ import org.anchoranalysis.image.feature.histogram.FeatureInputHistogram;
 
 public class CalculateLevelFromHistogram extends FeatureHistogram {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	// START BEAN PROPERTIES
 	@BeanField
 	private CalculateLevel calculateLevel;

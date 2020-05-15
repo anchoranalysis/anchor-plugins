@@ -32,11 +32,6 @@ import org.anchoranalysis.math.moment.MomentsFromPointsCalculator;
 
 public class AxisRatioMoments extends AxisMomentsBase {
 	
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	@Override
 	protected double calcFromMoments(MomentsFromPointsCalculator moments) throws FeatureCalcException {
 		

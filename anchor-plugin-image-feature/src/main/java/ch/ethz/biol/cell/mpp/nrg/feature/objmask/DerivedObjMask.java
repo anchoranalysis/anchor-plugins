@@ -46,11 +46,6 @@ import org.anchoranalysis.plugin.image.feature.obj.pair.CalculateInputFromDelega
 
 public abstract class DerivedObjMask extends FeatureObjMask {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	// START BEAN PROPERTIES
 	@BeanField
 	private double emptyValue = 255;

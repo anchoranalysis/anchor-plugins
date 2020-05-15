@@ -31,7 +31,7 @@ import java.nio.ByteBuffer;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.axis.AxisType;
-import org.anchoranalysis.core.axis.AxisTypeUtilities;
+import org.anchoranalysis.core.axis.AxisTypeConverter;
 import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.feature.cache.SessionInput;
@@ -75,7 +75,7 @@ public class ArbitraryInsidePoint extends FeatureObjMask {
 	@Override
 	public double calc(SessionInput<FeatureInputSingleObj> input) throws FeatureCalcException {
 				
-		AxisType axisType = AxisTypeUtilities.createFromString(axis);
+		AxisType axisType = AxisTypeConverter.createFromString(axis);
 		
 		Point3i arbPoint = calcArbitraryPointWithinMask(
 			input.get().getObjMask()
@@ -85,16 +85,7 @@ public class ArbitraryInsidePoint extends FeatureObjMask {
 			return emptyValue;
 		}
 		
-		switch(axisType) {
-		case X:
-			return arbPoint.getX();
-		case Y:
-			return arbPoint.getY();
-		case Z:
-			return arbPoint.getZ();
-		default:
-			throw new FeatureCalcException( String.format("Unsupported axis-type '%s'", axis ));
-		}
+		return arbPoint.getValueByDimension(axisType);
 	}
 
 	public String getAxis() {

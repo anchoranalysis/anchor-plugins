@@ -38,11 +38,6 @@ import org.anchoranalysis.plugin.image.calculation.CalculateOutlineNumVoxelFaces
  */
 public class SurfaceNumVoxelFaces extends SurfaceNumVoxelsBase {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	@Override
 	protected FeatureCalculation<Integer, FeatureInputSingleObj> createParams(boolean mip, boolean suppress3d) {
 		return new CalculateOutlineNumVoxelFaces(mip, suppress3d);

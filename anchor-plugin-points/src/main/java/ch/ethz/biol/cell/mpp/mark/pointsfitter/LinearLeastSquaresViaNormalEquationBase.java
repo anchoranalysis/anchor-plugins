@@ -39,11 +39,6 @@ import cern.colt.matrix.DoubleMatrix2D;
 
 public abstract class LinearLeastSquaresViaNormalEquationBase extends ConicFitterBase {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// This solves the normal-equation for a Linear Least Squares system where all our dependent variables
 	//   are treated as 1 (solution to the ellipsoid matrix equation).  It returns a matrix of our optimal coefficients
 	protected static DoubleMatrix2D solveNormalEquation( DoubleMatrix2D matrixD ) throws PointsFitterException {

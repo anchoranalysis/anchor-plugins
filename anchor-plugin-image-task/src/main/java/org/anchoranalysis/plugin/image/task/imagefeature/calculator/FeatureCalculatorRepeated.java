@@ -1,6 +1,6 @@
 package org.anchoranalysis.plugin.image.task.imagefeature.calculator;
 
-import java.nio.file.Path;
+
 
 /*-
  * #%L
@@ -29,17 +29,24 @@ import java.nio.file.Path;
  */
 
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 import org.anchoranalysis.image.bean.provider.stack.StackProvider;
 import org.anchoranalysis.image.init.ImageInitParams;
 import org.anchoranalysis.image.io.input.ProvidesStackInput;
 import org.anchoranalysis.image.io.input.StackInputInitParamsCreator;
+import org.anchoranalysis.io.output.bound.BoundIOContext;
 
 public class FeatureCalculatorRepeated {
 	
-	public static NRGStackWithParams extractStack( ProvidesStackInput inputObject, StackProvider nrgStackProvider, Path modelDir, LogErrorReporter logErrorReporter ) throws OperationFailedException {
-		ImageInitParams params = StackInputInitParamsCreator.createInitParams(inputObject, modelDir, logErrorReporter);
-		return HelperInit.extractStack(params, nrgStackProvider, logErrorReporter);
+	public static NRGStackWithParams extractStack( ProvidesStackInput inputObject, StackProvider nrgStackProvider, BoundIOContext context ) throws OperationFailedException {
+		ImageInitParams paramsInit = StackInputInitParamsCreator.createInitParams(
+			inputObject,
+			context
+		);
+		return HelperInit.extractStack(
+			paramsInit,
+			nrgStackProvider,
+			context.getLogger()
+		);
 	}
 }

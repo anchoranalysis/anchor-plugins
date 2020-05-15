@@ -28,6 +28,8 @@ package ch.ethz.biol.cell.mpp.nrg.feature.histogram;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.image.feature.histogram.FeatureHistogramStatistic;
 import org.anchoranalysis.image.histogram.Histogram;
 
 /**
@@ -38,11 +40,6 @@ import org.anchoranalysis.image.histogram.Histogram;
  */
 public class Range extends FeatureHistogramStatistic {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
 	private double quantileLow = 0;
@@ -52,11 +49,14 @@ public class Range extends FeatureHistogramStatistic {
 	// END BEAN PROPERTIES
 
 	@Override
-	protected double calcStatisticFrom(Histogram histogram) throws OperationFailedException {
-
-		double high = histogram.quantile(quantileHigh);
-		double low = histogram.quantile(quantileLow);
-		return high-low;
+	protected double calcStatisticFrom(Histogram histogram) throws FeatureCalcException {
+		try {
+			double high = histogram.quantile(quantileHigh);
+			double low = histogram.quantile(quantileLow);
+			return high-low;
+		} catch (OperationFailedException e) {
+			throw new FeatureCalcException(e);
+		}			
 	}
 	
 	public double getQuantileLow() {

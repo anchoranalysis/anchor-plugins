@@ -29,19 +29,16 @@ package ch.ethz.biol.cell.imageprocessing.objmask.provider;
 import java.util.List;
 import java.util.Optional;
 
-import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.geometry.Point2i;
 import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.core.geometry.PointConverter;
-import org.anchoranalysis.image.bean.provider.ImageDimProvider;
-import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
 import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.image.objmask.ObjMaskCollection;
 
-import ch.ethz.biol.cell.mpp.mark.pointsfitter.ConvexHullUtilities;
+import ch.ethz.biol.cell.imageprocessing.binaryimgchnl.provider.ConvexHullUtilities;
 
 /**
  * For each object:
@@ -53,33 +50,19 @@ import ch.ethz.biol.cell.mpp.mark.pointsfitter.ConvexHullUtilities;
  * @author feehano
  *
  */
-public class ObjMaskProviderConvexHullConnectLines extends ObjMaskProvider {
-
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
-	// START BEAN PROPERTIES
-	@BeanField
-	private ObjMaskProvider objs;
-	
-	@BeanField
-	private ImageDimProvider dimProvider;
-	// END BEAN PROPERTIES
+public class ObjMaskProviderConvexHullConnectLines extends ObjMaskProviderDimensions {
 	
 	@Override
-	public ObjMaskCollection create() throws CreateException {
+	public ObjMaskCollection createFromObjs( ObjMaskCollection objsCollection ) throws CreateException {
 
-		ImageDim sd = dimProvider.create();
-		
-		ObjMaskCollection objsCollection = objs.create();
+		ImageDim dim = createDim();
 		
 		ObjMaskCollection out = new ObjMaskCollection();
 		
 		for( ObjMask obj : objsCollection ) {
-			ObjMask polygon = transform(obj, sd);
-			out.add(polygon);
+			out.add(
+				transform(obj, dim)
+			);
 		}
 		
 		return out;
@@ -101,21 +84,4 @@ public class ObjMaskProviderConvexHullConnectLines extends ObjMaskProvider {
 			throw new CreateException(e);
 		}
 	}
-
-	public ObjMaskProvider getObjs() {
-		return objs;
-	}
-
-	public void setObjs(ObjMaskProvider objs) {
-		this.objs = objs;
-	}
-
-	public ImageDimProvider getDimProvider() {
-		return dimProvider;
-	}
-
-	public void setDimProvider(ImageDimProvider dimProvider) {
-		this.dimProvider = dimProvider;
-	}
-
 }

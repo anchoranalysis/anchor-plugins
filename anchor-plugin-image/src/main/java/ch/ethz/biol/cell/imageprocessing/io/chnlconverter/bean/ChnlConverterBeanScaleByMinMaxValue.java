@@ -40,11 +40,6 @@ import org.anchoranalysis.image.stack.region.chnlconverter.ChnlConverterToUnsign
  */
 public class ChnlConverterBeanScaleByMinMaxValue extends ChnlConverterBean {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	@BeanField @NonNegative
 	private int min = -1;
 	

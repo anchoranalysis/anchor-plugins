@@ -35,11 +35,6 @@ import org.anchoranalysis.mpp.io.output.StackOutputKeys;
 
 public class OutputManagerStack extends OutputManagerWithPrefixer {
 	
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	// BEAN PROPERTIES
 	@BeanField
 	private OutputAllowed outputEnabled = new AllOutputAllowed();		// What outputs are allowed and not allowed

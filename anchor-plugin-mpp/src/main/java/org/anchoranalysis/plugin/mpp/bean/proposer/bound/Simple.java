@@ -41,11 +41,6 @@ import org.anchoranalysis.math.rotation.RotationMatrix;
 
 public class Simple extends BoundProposer {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -6382232253095160193L;
-
 	// START BEAN PROPERTIES
 	@BeanField
 	private BoundCalculator boundCalculator = null;

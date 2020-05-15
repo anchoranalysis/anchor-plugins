@@ -28,8 +28,6 @@ package org.anchoranalysis.plugin.image.task.bean.feature;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Path;
-
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.bean.error.BeanDuplicateException;
@@ -38,7 +36,6 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.log.LogErrorReporter;
-import org.anchoranalysis.core.name.store.SharedObjects;
 import org.anchoranalysis.experiment.task.InputTypesExpected;
 import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
@@ -53,8 +50,9 @@ import org.anchoranalysis.image.feature.histogram.FeatureInputHistogram;
 import org.anchoranalysis.image.histogram.Histogram;
 import org.anchoranalysis.image.init.ImageInitParams;
 import org.anchoranalysis.image.io.histogram.HistogramCSVReader;
+import org.anchoranalysis.image.io.input.ImageInitParamsFactory;
 import org.anchoranalysis.io.input.FileInput;
-import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
+import org.anchoranalysis.io.output.bound.BoundIOContext;
 
 /**
  * 1. Reads a histogram from a CSV file
@@ -65,11 +63,6 @@ import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
  *
  */
 public class ExportFeaturesHistogramTask extends ExportFeaturesStoreTask<FileInput,FeatureInputHistogram> {
-
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
 
 	/** The name of the input histogram made available to histogramProvider */
 	private static final String HISTOGRAM_INPUT_NAME_IN_PROVIDER = "input";
@@ -99,9 +92,7 @@ public class ExportFeaturesHistogramTask extends ExportFeaturesStoreTask<FileInp
 	protected ResultsVector calcResultsVectorForInputObject(
 		FileInput inputObject,
 		NamedFeatureStore<FeatureInputHistogram> featureStore,
-		BoundOutputManagerRouteErrors outputManager,
-		Path modelDir,
-		LogErrorReporter logErrorReporter
+		BoundIOContext context
 	) throws FeatureCalcException {
 
 		// Reads histogram from file-system
@@ -109,21 +100,20 @@ public class ExportFeaturesHistogramTask extends ExportFeaturesStoreTask<FileInp
 			Histogram hist = readHistogramFromCsv(inputObject);
 
 			if (histogramProvider!=null) {
-				hist = filterHistogramFromProvider(hist, modelDir, logErrorReporter );
+				hist = filterHistogramFromProvider(hist, context);
 			}
 			
 			ResultsVector rv = calcFeatures(
 				hist,
 				featureStore.deepCopy().listFeatures(),
-				logErrorReporter
+				context.getLogger()
 			);
 			
 			// Exports results as a KeyValueParams
 			KeyValueParamsExporter.export(
 				featureStore.createFeatureNames(),
 				rv,
-				outputManager,
-				logErrorReporter
+				context
 			);
 		
 			return rv;
@@ -133,14 +123,14 @@ public class ExportFeaturesHistogramTask extends ExportFeaturesStoreTask<FileInp
 		}
 	}
 	
-	private Histogram filterHistogramFromProvider( Histogram inputtedHist, Path modelDir, LogErrorReporter logErrorReporter ) throws OperationFailedException {
+	private Histogram filterHistogramFromProvider( Histogram inputtedHist, BoundIOContext context ) throws OperationFailedException {
 		
 		HistogramProvider histProviderDup = histogramProvider.duplicateBean();
 		
 		try {
 			histProviderDup.initRecursive(
-				createImageInitParmas(inputtedHist, modelDir, logErrorReporter),
-				logErrorReporter
+				createImageInitParmas(inputtedHist, context),
+				context.getLogger()
 			);
 			
 			return histProviderDup.create();
@@ -149,13 +139,11 @@ public class ExportFeaturesHistogramTask extends ExportFeaturesStoreTask<FileInp
 		}
 	}
 	
-	private ImageInitParams createImageInitParmas( Histogram inputtedHist, Path modelDir, LogErrorReporter logErrorReporter ) throws OperationFailedException {
+	private ImageInitParams createImageInitParmas( Histogram inputtedHist, BoundIOContext context ) throws OperationFailedException {
 		// Create a shared-objects and initialise
-		SharedObjects so = new SharedObjects( logErrorReporter );
-		
-		ImageInitParams params = ImageInitParams.create(so, modelDir);
-		params.getHistogramCollection().add(HISTOGRAM_INPUT_NAME_IN_PROVIDER, new IdentityOperation<>(inputtedHist) );
-		return params;
+		ImageInitParams paramsInit = ImageInitParamsFactory.create(context);
+		paramsInit.getHistogramCollection().add(HISTOGRAM_INPUT_NAME_IN_PROVIDER, new IdentityOperation<>(inputtedHist) );
+		return paramsInit;
 	}
 
 	private ResultsVector calcFeatures( Histogram hist, FeatureList<FeatureInputHistogram> features, LogErrorReporter logErrorReporter ) throws InitException, FeatureCalcException {
@@ -164,7 +152,7 @@ public class ExportFeaturesHistogramTask extends ExportFeaturesStoreTask<FileInp
 		 FeatureCalculatorMulti<FeatureInputHistogram> session = FeatureSession.with(
 			features,
 			new FeatureInitParams(),
-			initParams.getSharedFeatureSet().downcast(),
+			initParams.getSharedFeatureSet(),
 			logErrorReporter
 		);
 		

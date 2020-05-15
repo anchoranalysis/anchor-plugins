@@ -27,6 +27,7 @@ package ch.ethz.biol.cell.mpp.nrg.feature.objmask;
  */
 
 import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.core.axis.AxisTypeConverter;
 import org.anchoranalysis.core.geometry.Tuple3i;
 import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
@@ -35,11 +36,6 @@ import org.anchoranalysis.image.feature.bean.objmask.FeatureObjMask;
 import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
 
 public abstract class BoundingBoxAxisBase extends FeatureObjMask {
-
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
 
 	// START BEAN PARAMETERS
 	@BeanField
@@ -55,26 +51,15 @@ public abstract class BoundingBoxAxisBase extends FeatureObjMask {
 			inputSessionless.getObjMask().getBoundingBox()
 		);
 		
-		return calcAxisValue(
-			axis.toLowerCase(),
-			pnt
-		);
+		return calcAxisValue(pnt);
 	}
 	
 	protected abstract Tuple3i extractTupleForBoundingBox( BoundingBox bbox );
 	
-	private double calcAxisValue( String axisLowerCase, Tuple3i pnt) {
-		
-		if (axisLowerCase.equals("x")) {
-			return pnt.getX();
-		} else if (axisLowerCase.equals("y")) {
-			return pnt.getY();
-		} else if (axisLowerCase.equals("z")) {
-			return pnt.getZ();
-		} else {
-			assert false;
-			return -1;
-		}
+	private double calcAxisValue(Tuple3i pnt) {
+		return pnt.getValueByDimension(
+			AxisTypeConverter.createFromString(axis)
+		);
 	}
 	
 	@Override

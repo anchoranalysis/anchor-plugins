@@ -41,11 +41,6 @@ import org.anchoranalysis.bean.annotation.NonEmpty;
 
 public class OrderedList extends MarkProposer {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 5307009712143133777L;
-	
 	// START BEAN
 	@BeanField @NonEmpty
 	private List<MarkProposer> markProposerList = new ArrayList<>();

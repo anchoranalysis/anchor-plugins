@@ -40,71 +40,63 @@ import org.anchoranalysis.image.voxel.buffer.VoxelBufferByte;
 import org.anchoranalysis.image.voxel.datatype.IncorrectVoxelDataTypeException;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
 
-// Takes a 2-dimensional mask and converts into a 3-dimensional mask along the z-stack but discards
-//   empty slices in a binary on the top and bottom
+/** Takes a 2-dimensional mask and converts into a 3-dimensional mask along the z-stack but discards
+   empty slices in a binary on the top and bottom */
 public class ChnlProviderExpandSliceToMask extends ChnlProvider {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
-	private ChnlProvider chnlProviderTargetDimensions;
+	private ChnlProvider chnlTargetDimensions;
 	
 	@BeanField
-	private ChnlProvider chnlProviderSlice;
+	private ChnlProvider chnlSlice;
 	// END BEAN PROPERTIES
 	
 	@Override
 	public Chnl create() throws CreateException {
 		
-		ImageDim sdTarget = chnlProviderTargetDimensions.create().getDimensions();
+		ImageDim sdTarget = chnlTargetDimensions.create().getDimensions();
 		
-		Chnl chnlSlice = chnlProviderSlice.create();
+		Chnl slice = chnlSlice.create();
+
+		checkDimensions(
+			slice.getDimensions(),
+			sdTarget
+		);
 		
-		VoxelBox<ByteBuffer> vbSlice;
 		try {
-			vbSlice = chnlSlice.getVoxelBox().asByte();
+			return createExpandedChnl(
+				sdTarget,
+				slice.getVoxelBox().asByte()
+			);
 		} catch (IncorrectVoxelDataTypeException e) {
 			throw new CreateException("chnlSlice must have unsigned 8 bit data");
 		}
-		
-		ImageDim sdSrc = chnlSlice.getDimensions();
-		
-		if (sdSrc.getX()!=sdTarget.getX()) {
+	}
+	
+	private static void checkDimensions(ImageDim dimSrc, ImageDim dimTarget) throws CreateException {
+		if (dimSrc.getX()!=dimTarget.getX()) {
 			throw new CreateException("x dimension is not equal");
 		}
-		if (sdSrc.getY()!=sdTarget.getY()) {
+		if (dimSrc.getY()!=dimTarget.getY()) {
 			throw new CreateException("y dimension is not equal");
 		}
+	}
+	
+	private Chnl createExpandedChnl(ImageDim sdTarget, VoxelBox<ByteBuffer> vbSlice) {
 		
-		Chnl chnlOut = ChnlFactory.instance().createEmptyUninitialised(sdTarget, VoxelDataTypeUnsignedByte.instance);
-		VoxelBox<ByteBuffer> vbOut = chnlOut.getVoxelBox().asByte();
+		Chnl chnl = ChnlFactory.instance().createEmptyUninitialised(
+			sdTarget,
+			VoxelDataTypeUnsignedByte.instance
+		);
 		
-		for( int z=0; z<chnlOut.getDimensions().getZ(); z++) {
+		VoxelBox<ByteBuffer> vbOut = chnl.getVoxelBox().asByte();
+			
+		for( int z=0; z<chnl.getDimensions().getZ(); z++) {
 			ByteBuffer bb = vbSlice.duplicate().getPixelsForPlane(0).buffer();
 			vbOut.setPixelsForPlane(z, VoxelBufferByte.wrap(bb) );
 		}
 		
-		return chnlOut;
-	}
-
-	public ChnlProvider getChnlProviderTargetDimensions() {
-		return chnlProviderTargetDimensions;
-	}
-
-	public void setChnlProviderTargetDimensions(
-			ChnlProvider chnlProvider) {
-		this.chnlProviderTargetDimensions = chnlProvider;
-	}
-
-	public ChnlProvider getChnlProviderSlice() {
-		return chnlProviderSlice;
-	}
-
-	public void setChnlProviderSlice(ChnlProvider chnlProviderSlice) {
-		this.chnlProviderSlice = chnlProviderSlice;
+		return chnl;
 	}
 }

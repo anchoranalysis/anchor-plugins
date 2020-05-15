@@ -28,11 +28,9 @@ package ch.ethz.biol.cell.sgmn.objmask.stackcollection;
 
 
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.core.name.provider.INamedProvider;
 import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 import org.anchoranalysis.core.random.RandomNumberGenerator;
-import org.anchoranalysis.experiment.ExperimentExecutionArguments;
 import org.anchoranalysis.image.bean.sgmn.objmask.ObjMaskSgmn;
 import org.anchoranalysis.image.chnl.Chnl;
 import org.anchoranalysis.image.experiment.bean.sgmn.SgmnObjMaskCollection;
@@ -41,14 +39,9 @@ import org.anchoranalysis.image.objmask.ObjMaskCollection;
 import org.anchoranalysis.image.seed.SeedCollection;
 import org.anchoranalysis.image.sgmn.SgmnFailedException;
 import org.anchoranalysis.image.stack.NamedImgStackCollection;
-import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
+import org.anchoranalysis.io.output.bound.BoundIOContext;
 
 public class ObjMaskSgmnChnl extends SgmnObjMaskCollection {
-
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
 
 	// START BEAN PROPERTIES
 	@BeanField
@@ -63,7 +56,7 @@ public class ObjMaskSgmnChnl extends SgmnObjMaskCollection {
 
 	@Override
 	public ObjMaskCollection sgmn(NamedImgStackCollection stackCollection,
-			INamedProvider<ObjMaskCollection> objMaskCollection, SeedCollection seeds, RandomNumberGenerator re, ExperimentExecutionArguments expArgs, LogErrorReporter logger, BoundOutputManagerRouteErrors outputManager) throws SgmnFailedException {
+			INamedProvider<ObjMaskCollection> objMaskCollection, SeedCollection seeds, RandomNumberGenerator re, BoundIOContext context) throws SgmnFailedException {
 		
 		try {
 			Chnl chnl = stackCollection.getException(inputChnlName).getChnl(chnlIndex);

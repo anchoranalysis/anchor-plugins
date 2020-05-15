@@ -50,11 +50,6 @@ import org.anchoranalysis.image.stack.Stack;
  */
 public class GuessDimFromInputImage extends ImageDimProvider {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	private ImageDim dim;
 	
 	public GuessDimFromInputImage() {
@@ -83,7 +78,7 @@ public class GuessDimFromInputImage extends ImageDimProvider {
 		if (!keys.contains(ImgStackIdentifiers.INPUT_IMAGE)) {
 			throw new CreateException(
 				String.format(
-					"No input-image (%s) exists, so cannot guess Image Dimensions. Please set the dimensions explicitly.",
+					"No input-image (%s) exists so cannot guess Image Dimensions. Please set the dimensions explicitly.",
 					ImgStackIdentifiers.INPUT_IMAGE
 				)
 			);

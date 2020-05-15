@@ -30,57 +30,80 @@ import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
 
 
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.bean.annotation.NonNegative;
-import org.anchoranalysis.bean.shared.relation.RelationBean;
+import org.anchoranalysis.bean.shared.relation.threshold.RelationToThreshold;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.voxel.statistics.VoxelStatistics;
 
-public class Thresholded extends PixelStatisticsFromMark {
+public class Thresholded extends MarkRegion {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
-	private PixelStatisticsFromMark pixelList;
-	
-	@BeanField @NonNegative
-	private double threshold = -1;
+	private MarkRegion region;
 	
 	@BeanField
-	private RelationBean relationToThreshold;
+	private RelationToThreshold threshold;
 	// END BEAN PROPERTIES
 	
 	@Override
 	public VoxelStatistics createStatisticsFor(PxlMarkMemo pmm, ImageDim dim) throws CreateException {
-		return pixelList.createStatisticsFor(pmm, dim).threshold(relationToThreshold.create(), threshold);
+		return region.createStatisticsFor(pmm, dim).threshold(threshold);
 	}
 
-	public PixelStatisticsFromMark getPixelList() {
-		return pixelList;
-	}
-
-	public void setPixelList(PixelStatisticsFromMark pixelList) {
-		this.pixelList = pixelList;
-	}
-
-	public double getThreshold() {
+	public RelationToThreshold getThreshold() {
 		return threshold;
 	}
 
-	public void setThreshold(double threshold) {
+	public void setThreshold(RelationToThreshold threshold) {
 		this.threshold = threshold;
 	}
 
-	public RelationBean getRelationToThreshold() {
-		return relationToThreshold;
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((region == null) ? 0 : region.hashCode());
+		result = prime * result + ((threshold == null) ? 0 : threshold.hashCode());
+		return result;
 	}
 
-	public void setRelationToThreshold(RelationBean relationToThreshold) {
-		this.relationToThreshold = relationToThreshold;
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Thresholded other = (Thresholded) obj;
+		if (region == null) {
+			if (other.region != null)
+				return false;
+		} else if (!region.equals(other.region))
+			return false;
+		if (threshold == null) {
+			if (other.threshold != null)
+				return false;
+		} else if (!threshold.equals(other.threshold))
+			return false;
+		return true;
 	}
 
+	@Override
+	public String uniqueName() {
+		return String.format(
+			"%s_%s_%s",
+			Thresholded.class.getCanonicalName(),
+			region.uniqueName(),
+			threshold.uniqueName()
+		);
+	}
+
+	public MarkRegion getRegion() {
+		return region;
+	}
+
+	public void setRegion(MarkRegion region) {
+		this.region = region;
+	}
 }

@@ -43,11 +43,6 @@ import org.anchoranalysis.image.voxel.box.VoxelBoxWrapper;
  */
 public abstract class BlurStrategy extends AnchorBean<BlurStrategy> {
 	
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	// START BEAN PROPERTIES
 	@BeanField @Positive
 	private double sigma = 3;

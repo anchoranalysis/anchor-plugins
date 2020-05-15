@@ -50,11 +50,6 @@ import com.owenfeehan.pathpatternfinder.patternelements.PatternElement;
  */
 public class PatternSpan extends DescriptiveNameFromFile {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	@Override
 	public List<DescriptiveFile> descriptiveNamesFor(Collection<File> files, String elseName) {
 	

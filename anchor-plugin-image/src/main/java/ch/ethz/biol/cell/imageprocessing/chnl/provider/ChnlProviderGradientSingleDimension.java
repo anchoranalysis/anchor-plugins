@@ -39,11 +39,6 @@ import org.anchoranalysis.core.error.CreateException;
  */
 public class ChnlProviderGradientSingleDimension extends ChnlProviderGradientBase {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 3978226156945187112L;
-	
 	// START BEAN
 	/** Which axis? X=0, Y=1, Z=2 */ 
 	@BeanField

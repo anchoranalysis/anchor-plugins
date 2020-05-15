@@ -34,6 +34,7 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.bean.provider.ChnlProvider;
+import org.anchoranalysis.image.bean.provider.ChnlProviderOne;
 import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
 import org.anchoranalysis.image.chnl.Chnl;
 import org.anchoranalysis.image.convert.ByteConverter;
@@ -48,41 +49,28 @@ import org.anchoranalysis.image.voxel.box.VoxelBox;
 //		1. Identify the median value from channelLookup
 //		2. Calculate the difference of each pixel value in channelLookup to Value 1.
 //		3. Adjust each pixel value by Value 2.
-public class ChnlProviderAdjustDifferenceToMedian extends ChnlProvider {
+public class ChnlProviderAdjustDifferenceToMedian extends ChnlProviderOne {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
-	private ChnlProvider chnlProvider;
-	
-	@BeanField
-	private ChnlProvider chnlProviderLookup;
+	private ChnlProvider chnlLookup;
 	
 	@BeanField
 	private ObjMaskProvider objs;
 	// END BEAN PROPERTIES
 	
 	@Override
-	public Chnl create() throws CreateException {
+	public Chnl createFromChnl( Chnl chnl ) throws CreateException {
 
-		Chnl chnl = chnlProvider.create();
-		Chnl chnlLookup = chnlProviderLookup.create();
-		
-		if (!chnl.getDimensions().equals(chnlLookup.getDimensions())) {
-			throw new CreateException("chnl and chnlLookup do not have the same dimensions");
-		}
+		Chnl lookup = DimChecker.createSameSize(chnlLookup, "chnlLookup", chnl);
 		
 		ObjMaskCollection objsCollection = objs.create();
 		
 		try {
 			for( ObjMask om : objsCollection ) {
-				Histogram h = HistogramFactoryUtilities.createWithMask(chnlLookup.getVoxelBox().any(), om);
+				Histogram h = HistogramFactoryUtilities.createWithMask(lookup.getVoxelBox().any(), om);
 				int objMedian = (int) Math.round(h.mean());
-				adjustObj(om, chnl, chnlLookup, objMedian );
+				adjustObj(om, chnl, lookup, objMedian );
 	
 			}
 			
@@ -130,28 +118,7 @@ public class ChnlProviderAdjustDifferenceToMedian extends ChnlProvider {
 				}
 			}
 		}
-		
 	}
-	
-	public ChnlProvider getChnlProvider() {
-		return chnlProvider;
-	}
-
-
-	public void setChnlProvider(ChnlProvider chnlProvider) {
-		this.chnlProvider = chnlProvider;
-	}
-
-
-	public ChnlProvider getChnlProviderLookup() {
-		return chnlProviderLookup;
-	}
-
-
-	public void setChnlProviderLookup(ChnlProvider chnlProviderLookup) {
-		this.chnlProviderLookup = chnlProviderLookup;
-	}
-
 
 	public ObjMaskProvider getObjs() {
 		return objs;
@@ -160,6 +127,14 @@ public class ChnlProviderAdjustDifferenceToMedian extends ChnlProvider {
 
 	public void setObjs(ObjMaskProvider objs) {
 		this.objs = objs;
+	}
+
+	public ChnlProvider getChnlLookup() {
+		return chnlLookup;
+	}
+
+	public void setChnlLookup(ChnlProvider chnlLookup) {
+		this.chnlLookup = chnlLookup;
 	}
 
 }

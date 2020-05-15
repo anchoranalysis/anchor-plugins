@@ -40,12 +40,12 @@ import org.anchoranalysis.mpp.sgmn.bean.kernel.proposer.KernelProposer;
 public class SgmnMPPState extends ExperimentState {
 		
 	private KernelProposer<CfgNRGPixelized> kernelProposer;
-	private Define namedDefinitions;
+	private Define define;
 	
-	public SgmnMPPState(KernelProposer<CfgNRGPixelized> kernelProposer, Define namedDefinitions ) {
+	public SgmnMPPState(KernelProposer<CfgNRGPixelized> kernelProposer, Define define ) {
 		super();
 		this.kernelProposer = kernelProposer;
-		this.namedDefinitions = namedDefinitions;
+		this.define = define;
 	}
 
 	@Override
@@ -53,7 +53,7 @@ public class SgmnMPPState extends ExperimentState {
 		
 		outputManager.getWriterCheckIfAllowed().write(
 			"namedDefinitions",
-			() -> new XStreamGenerator<Object>(namedDefinitions, "namedDefinitions")
+			() -> new XStreamGenerator<Object>(define, "namedDefinitions")
 		);
 	}
 	

@@ -1,5 +1,7 @@
 package org.anchoranalysis.plugin.image.bean.obj.merge;
 
+
+
 /*-
  * #%L
  * anchor-plugin-image
@@ -28,10 +30,7 @@ package org.anchoranalysis.plugin.image.bean.obj.merge;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
-import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.image.bean.provider.ImageDimProvider;
 import org.anchoranalysis.image.bean.unitvalue.distance.UnitValueDistance;
-import org.anchoranalysis.image.extent.ImageRes;
 import org.anchoranalysis.plugin.image.obj.merge.condition.BeforeCondition;
 import org.anchoranalysis.plugin.image.obj.merge.condition.DistanceCondition;
 
@@ -43,26 +42,14 @@ import org.anchoranalysis.plugin.image.obj.merge.condition.DistanceCondition;
  */
 public abstract class ObjMaskProviderMergeOptionalDistance extends ObjMaskProviderMergeBase {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	// START BEAN FIELDS
-
 	@BeanField
 	private boolean suppressZ = false;
 	
+	/** An optional maximum distance */
 	@BeanField @OptionalBean
-	private ImageDimProvider resProvider;		// optionally provides a resolution
-	
-	@BeanField @OptionalBean
-	private UnitValueDistance maxDist;			// optionally provides a maximum distance
+	private UnitValueDistance maxDist; 
 	// END BEAN FIELDS
-	
-	protected ImageRes calcRes() throws OperationFailedException {
-		return MergeHelpUtilities.calcRes(resProvider);
-	}
 	
 	protected BeforeCondition maybeDistanceCondition() {
 		return new DistanceCondition(getMaxDist(), suppressZ, getLogger().getLogReporter() );
@@ -82,13 +69,5 @@ public abstract class ObjMaskProviderMergeOptionalDistance extends ObjMaskProvid
 
 	public void setSuppressZ(boolean suppressZ) {
 		this.suppressZ = suppressZ;
-	}
-
-	public ImageDimProvider getResProvider() {
-		return resProvider;
-	}
-
-	public void setResProvider(ImageDimProvider resProvider) {
-		this.resProvider = resProvider;
 	}
 }

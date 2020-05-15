@@ -38,11 +38,6 @@ import org.anchoranalysis.core.error.CreateException;
 // Retrieves a mark from a cfg, assuming there is only one mark in a cfg, otherwise throwing an error
 public class RetrieveSingletonMark extends MarkProvider {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
 	private CfgProvider cfgProvider;

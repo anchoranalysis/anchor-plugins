@@ -29,45 +29,29 @@ package ch.ethz.biol.cell.imageprocessing.objmask.provider;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.image.bean.provider.ChnlProvider;
-import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
 import org.anchoranalysis.image.bean.sgmn.objmask.ObjMaskSgmn;
 import org.anchoranalysis.image.chnl.Chnl;
 import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.image.objmask.ObjMaskCollection;
 import org.anchoranalysis.image.sgmn.SgmnFailedException;
 
-public class ObjMaskProviderSgmnByObj extends ObjMaskProvider {
+public class ObjMaskProviderSgmnByObj extends ObjMaskProviderOneChnlSource {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
-	private ObjMaskProvider objs;
-	
-	@BeanField
 	private ObjMaskSgmn sgmn;
-	
-	@BeanField
-	private ChnlProvider chnlProvider;
 	// END BEAN PROPERTIES
 
 	@Override
-	public ObjMaskCollection create() throws CreateException {
-
-		Chnl chnl = chnlProvider.create();
-		
-		ObjMaskCollection objsSrc = objs.create();
+	public ObjMaskCollection createFromObjs( ObjMaskCollection objsSrc, Chnl chnlToSgmn ) throws CreateException {
 		
 		ObjMaskCollection objsOut = new ObjMaskCollection();
 		
 		for( ObjMask om : objsSrc ) {
-			
 			try {
-				 objsOut.addAll( sgmn.sgmn(chnl, om, null) );
+				objsOut.addAll(
+					sgmn.sgmn(chnlToSgmn, om, null)
+				);
 			} catch (SgmnFailedException e) {
 				throw new CreateException(e);
 			}
@@ -76,16 +60,6 @@ public class ObjMaskProviderSgmnByObj extends ObjMaskProvider {
 		return objsOut;
 	}
 
-	public ChnlProvider getChnlProvider() {
-		return chnlProvider;
-	}
-
-	public void setChnlProvider(ChnlProvider chnlProvider) {
-		this.chnlProvider = chnlProvider;
-	}
-
-
-
 	public ObjMaskSgmn getSgmn() {
 		return sgmn;
 	}
@@ -93,14 +67,4 @@ public class ObjMaskProviderSgmnByObj extends ObjMaskProvider {
 	public void setSgmn(ObjMaskSgmn sgmn) {
 		this.sgmn = sgmn;
 	}
-
-	public ObjMaskProvider getObjs() {
-		return objs;
-	}
-
-	public void setObjs(ObjMaskProvider objs) {
-		this.objs = objs;
-	}
-
-
 }

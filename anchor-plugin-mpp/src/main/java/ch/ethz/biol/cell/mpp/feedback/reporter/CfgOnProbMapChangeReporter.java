@@ -63,11 +63,6 @@ import org.anchoranalysis.mpp.sgmn.optscheme.step.Reporting;
 
 public class CfgOnProbMapChangeReporter extends ReporterOptimizationStep<CfgNRGPixelized> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -7205394305776410851L;
-	
 	// START BEAN PARAMETERS
 	@BeanField
 	private String manifestFunction = "probMapSeries";
@@ -101,7 +96,7 @@ public class CfgOnProbMapChangeReporter extends ReporterOptimizationStep<CfgNRGP
 	
 	// We generate an OutputName class from the outputName string
 	private IndexableOutputNameStyle generateOutputNameStyle() {
-		return new IntegerSuffixOutputNameStyle(outputName,"_%010d");
+		return new IntegerSuffixOutputNameStyle(outputName,10);
 	}
 	
 	@Override

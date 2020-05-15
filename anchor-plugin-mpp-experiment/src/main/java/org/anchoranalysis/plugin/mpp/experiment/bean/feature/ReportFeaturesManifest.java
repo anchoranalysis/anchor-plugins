@@ -37,7 +37,7 @@ import org.anchoranalysis.core.text.TypedValue;
 import org.anchoranalysis.experiment.JobExecutionException;
 import org.anchoranalysis.experiment.bean.task.TaskWithoutSharedState;
 import org.anchoranalysis.experiment.task.InputTypesExpected;
-import org.anchoranalysis.experiment.task.ParametersBound;
+import org.anchoranalysis.experiment.task.InputBound;
 import org.anchoranalysis.io.bean.report.feature.ReportFeature;
 import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.manifest.ManifestRecorderFile;
@@ -49,11 +49,6 @@ import org.anchoranalysis.plugin.io.manifest.ManifestCouplingDefinition;
 
 public class ReportFeaturesManifest extends TaskWithoutSharedState<ManifestCouplingDefinition> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -5961126655531145104L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
 	private List<ReportFeature<ManifestRecorderFile>> listReportFeatures = new ArrayList<>();
@@ -65,9 +60,9 @@ public class ReportFeaturesManifest extends TaskWithoutSharedState<ManifestCoupl
 	}
 		
 	@Override
-	public void doJobOnInputObject(ParametersBound<ManifestCouplingDefinition,Object> params ) throws JobExecutionException {
+	public void doJobOnInputObject(InputBound<ManifestCouplingDefinition,Object> params ) throws JobExecutionException {
 		
-		LogErrorReporter logErrorReporter = params.getLogErrorReporter();
+		LogErrorReporter logErrorReporter = params.getLogger();
 		ManifestCouplingDefinition input = params.getInputObject();
 		BoundOutputManagerRouteErrors outputManager = params.getOutputManager();
 		

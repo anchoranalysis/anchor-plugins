@@ -28,11 +28,9 @@ package ch.ethz.biol.cell.sgmn.binary;
 
 
 import java.nio.ByteBuffer;
-
-import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.geometry.Point3i;
-import org.anchoranalysis.core.random.RandomNumberGenerator;
 import org.anchoranalysis.image.bean.sgmn.binary.BinarySgmn;
+import org.anchoranalysis.image.bean.sgmn.binary.BinarySgmnOne;
 import org.anchoranalysis.image.bean.sgmn.binary.BinarySgmnParameters;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
 import org.anchoranalysis.image.extent.BoundingBox;
@@ -43,25 +41,24 @@ import org.anchoranalysis.image.voxel.box.VoxelBoxWrapper;
 import org.anchoranalysis.image.voxel.box.factory.VoxelBoxFactory;
 
 // Zeroes voxels outside the mask
-public class SgmnZeroOutsideMask extends BinarySgmn {
-
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
-	// START BEAN PROPERTIES
-	@BeanField
-	private BinarySgmn sgmn;
-	// END BEAN PROPERTIES
+public class SgmnZeroOutsideMask extends BinarySgmnOne {
 	
 	@Override
-	public BinaryVoxelBox<ByteBuffer> sgmn(VoxelBoxWrapper voxelBox, BinarySgmnParameters params, RandomNumberGenerator re) throws SgmnFailedException {
-		return sgmn.sgmn(voxelBox, params, re);
+	public BinaryVoxelBox<ByteBuffer> sgmnFromSgmn(
+		VoxelBoxWrapper voxelBox,
+		BinarySgmnParameters params,
+		BinarySgmn sgmn
+	) throws SgmnFailedException {
+		return sgmn.sgmn(voxelBox, params);
 	}
 
 	@Override
-	public BinaryVoxelBox<ByteBuffer> sgmn(VoxelBoxWrapper voxelBox, BinarySgmnParameters params, ObjMask objMask, RandomNumberGenerator re) throws SgmnFailedException {
+	public BinaryVoxelBox<ByteBuffer> sgmnFromSgmn(
+		VoxelBoxWrapper voxelBox,
+		BinarySgmnParameters params,
+		ObjMask objMask,
+		BinarySgmn sgmn
+	) throws SgmnFailedException {
 		
 		VoxelBox<ByteBuffer> voxelBoxByte = voxelBox.asByte();
 		
@@ -76,19 +73,6 @@ public class SgmnZeroOutsideMask extends BinarySgmn {
 			objMask.getBinaryValuesByte()
 		);
 		
-		return sgmn.sgmn( new VoxelBoxWrapper(destBuffer.duplicate()), params, re );
-	}
-
-	public BinarySgmn getSgmn() {
-		return sgmn;
-	}
-
-	public void setSgmn(BinarySgmn sgmn) {
-		this.sgmn = sgmn;
-	}
-
-	@Override
-	public VoxelBox<ByteBuffer> getAdditionalOutput() {
-		return null;
+		return sgmn.sgmn( new VoxelBoxWrapper(destBuffer.duplicate()), params );
 	}
 }

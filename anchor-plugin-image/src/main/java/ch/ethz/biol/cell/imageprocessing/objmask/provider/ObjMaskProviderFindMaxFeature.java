@@ -1,5 +1,7 @@
 package ch.ethz.biol.cell.imageprocessing.objmask.provider;
 
+import java.util.Optional;
+
 /*
  * #%L
  * anchor-plugin-image
@@ -27,49 +29,34 @@ package ch.ethz.biol.cell.imageprocessing.objmask.provider;
  */
 
 
-import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorSingle;
-import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
-import org.anchoranalysis.image.feature.bean.evaluator.FeatureEvaluator;
 import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
 import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.image.objmask.ObjMaskCollection;
 
-public class ObjMaskProviderFindMaxFeature extends ObjMaskProvider {
-
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
-	// START BEAN PROPERTIES
-	@BeanField
-	private ObjMaskProvider objs;
-	
-	@BeanField
-	private FeatureEvaluator<FeatureInputSingleObj> featureEvaluator;
-	// END BEAN PROPERTIES
+public class ObjMaskProviderFindMaxFeature extends ObjMaskProviderFindMaxFeatureBase {
 
 	@Override
-	public ObjMaskCollection create() throws CreateException {
-		
-		ObjMaskCollection in = objs.create();
-		
-		FeatureCalculatorSingle<FeatureInputSingleObj> session;
-		try {
-			session = featureEvaluator.createAndStartSession();
-		} catch (OperationFailedException e) {
-			throw new CreateException(e);
-		}
+	public ObjMaskCollection createFromObjs( ObjMaskCollection objMaskCollection ) throws CreateException {
 
+		Optional<ObjMask> max = findMaxObj(
+			createSession(),
+			objMaskCollection
+		);
 		
 		ObjMaskCollection out = new ObjMaskCollection();
-
-		ObjMask max = null;
+		max.ifPresent( obj->
+			out.add(obj)
+		);
+		return out;
+	}
+	
+	private Optional<ObjMask> findMaxObj( FeatureCalculatorSingle<FeatureInputSingleObj> session, ObjMaskCollection in ) throws CreateException {
+		
 		try {
+			ObjMask max = null;
 			
 			double maxVal = 0;
 			for( ObjMask om : in ) {
@@ -84,32 +71,10 @@ public class ObjMaskProviderFindMaxFeature extends ObjMaskProvider {
 				}
 			}
 			
+			return Optional.ofNullable(max);
+			
 		} catch (FeatureCalcException e) {
 			throw new CreateException(e);
 		}
-			
-		if (max!=null) {
-			out.add(max);
-		}
-		
-		return out;
 	}
-
-	public ObjMaskProvider getObjs() {
-		return objs;
-	}
-
-	public void setObjs(ObjMaskProvider objs) {
-		this.objs = objs;
-	}
-
-	public FeatureEvaluator<FeatureInputSingleObj> getFeatureEvaluator() {
-		return featureEvaluator;
-	}
-
-	public void setFeatureEvaluator(FeatureEvaluator<FeatureInputSingleObj> featureEvaluator) {
-		this.featureEvaluator = featureEvaluator;
-	}
-
-
 }

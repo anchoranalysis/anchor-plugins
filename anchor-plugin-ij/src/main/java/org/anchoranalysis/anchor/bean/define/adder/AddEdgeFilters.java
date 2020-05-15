@@ -47,24 +47,6 @@ public class AddEdgeFilters extends DefineAdderWithPrefixBean {
 	private static final String NAME_MEDIAN = "Median";
 	private static final String NAME_GAUSSIAN = "Blurred";
 	
-	/**
-	 * Applies a Median and Gaussian (Blurred) filter to a channel
-	 * 
-	 * Then calculates several gradients.
-	 * 
-	 * The following channels are outputted:
-	 * 		${PREFIX}Median								median-filter output
-	 * 		${PREFIX}Blurred							gaussian-filter output
-	 * 
-	 * 		${PREFIX}Median_Gradient_Magnitude			magnitude of gradient on median-filter output
-	 * 		${PREFIX}Median_Gradient_X					x-component of gradient on median-filter output
-	 * 		${PREFIX}Median_Gradient_Y					y-component of gradient on median-filter output
-	 * 		${PREFIX}Median_Gradient_Second_Magnitude	magnitude of gradient of gradient on median-filter output (trace of Hessian matrix)
-	 * 
-	 *  	and similar for the gaussian output as ${PREFIX}Blurred_Gradient_Magnitude etc. etc.
-	 */
-	private static final long serialVersionUID = 1L;
-
 	// START BEAN PROPERTIES
 	@BeanField
 	/** The ID of the chnl that provides the input to the filter */
@@ -151,7 +133,7 @@ public class AddEdgeFilters extends DefineAdderWithPrefixBean {
 		private ChnlProvider edgeFilter( String unrslvdSrcName ) {
 			ChnlProviderEdgeFilter provider = new ChnlProviderEdgeFilter();
 			provider.setOutputShort(true);
-			provider.setChnlProvider(
+			provider.setChnl(
 				createDup(
 					rslvName(unrslvdSrcName)
 				)
@@ -164,7 +146,7 @@ public class AddEdgeFilters extends DefineAdderWithPrefixBean {
 			provider.setOutputShort(true);
 			provider.setAddSum(32768);
 			provider.setAxis(axis);
-			provider.setChnlProvider(
+			provider.setChnl(
 				createDup(
 					rslvName(filterName)
 				)
@@ -177,7 +159,7 @@ public class AddEdgeFilters extends DefineAdderWithPrefixBean {
 		ChnlProviderMedianFilterIJ2D provider = new ChnlProviderMedianFilterIJ2D();
 		provider.setRadius( (int) Math.round(medianRadiusMeters) );
 		provider.setRadiusInMeters(true);
-		provider.setChnlProvider( createDup(chnlID) );
+		provider.setChnl( createDup(chnlID) );
 		return provider;
 	}
 	
@@ -186,7 +168,7 @@ public class AddEdgeFilters extends DefineAdderWithPrefixBean {
 		provider.setStrategy(
 			createBlurStrategy()
 		);
-		provider.setChnlProvider( createDup(chnlID) );
+		provider.setChnl( createDup(chnlID) );
 		return provider;
 	}
 	

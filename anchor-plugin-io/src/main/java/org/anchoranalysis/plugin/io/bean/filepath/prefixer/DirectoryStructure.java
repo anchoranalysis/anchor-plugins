@@ -47,11 +47,6 @@ import org.apache.commons.io.FilenameUtils;
  */
 public class DirectoryStructure extends FilePathPrefixerAvoidResolve {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -2568294173350955724L;
-	
 	// START BEAN PROPERTIES
 	/** If false, the folders are ignored, and only the file-name is used in the output */
 	@BeanField

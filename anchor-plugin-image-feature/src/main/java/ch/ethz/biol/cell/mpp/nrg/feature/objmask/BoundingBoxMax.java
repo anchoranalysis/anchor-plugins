@@ -33,11 +33,6 @@ import org.anchoranalysis.image.extent.BoundingBox;
 
 public class BoundingBoxMax extends BoundingBoxAxisBase {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	@Override
 	protected Tuple3i extractTupleForBoundingBox(BoundingBox bbox) {
 		return bbox.calcCrnrMax();

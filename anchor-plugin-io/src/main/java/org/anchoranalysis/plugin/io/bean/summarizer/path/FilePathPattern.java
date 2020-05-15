@@ -46,11 +46,6 @@ import com.owenfeehan.pathpatternfinder.Pattern;
  */
 public class FilePathPattern extends Summarizer<Path> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	// START BEAN PROPERTIES
 	/** Iff TRUE, any hidden-path is not considered, and simply ignored */
 	private boolean ignoreHidden = true;

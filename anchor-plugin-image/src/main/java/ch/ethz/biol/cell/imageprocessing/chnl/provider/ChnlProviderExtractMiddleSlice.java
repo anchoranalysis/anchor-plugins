@@ -27,37 +27,15 @@ package ch.ethz.biol.cell.imageprocessing.chnl.provider;
  */
 
 
-import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.image.bean.provider.ChnlProvider;
+import org.anchoranalysis.image.bean.provider.ChnlProviderOne;
 import org.anchoranalysis.image.chnl.Chnl;
 
-public class ChnlProviderExtractMiddleSlice extends ChnlProvider {
-
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
-	// START BEANS
-	@BeanField
-	private ChnlProvider chnlProvider;
-	// END BEANS
+public class ChnlProviderExtractMiddleSlice extends ChnlProviderOne {
 	
 	@Override
-	public Chnl create() throws CreateException {
-		Chnl chnl = chnlProvider.create();
-		
+	public Chnl createFromChnl(Chnl chnl) throws CreateException {
 		int z = (chnl.getDimensions().getZ()-1)/2; 
 		return chnl.extractSlice(z);
 	}
-
-	public ChnlProvider getChnlProvider() {
-		return chnlProvider;
-	}
-
-	public void setChnlProvider(ChnlProvider chnlProvider) {
-		this.chnlProvider = chnlProvider;
-	}
-
 }

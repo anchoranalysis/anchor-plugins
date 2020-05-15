@@ -57,11 +57,6 @@ import org.anchoranalysis.mpp.sgmn.optscheme.step.Reporting;
 
 public class TiffTimeSeriesReporter extends PeriodicSubfolderReporter<CfgNRG> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 6781381220576592268L;
-
 	// START Bean Properties
 	@BeanField
 	private int numColors = 20;

@@ -1,5 +1,7 @@
 package org.anchoranalysis.plugin.image.obj.merge.condition;
 
+import java.util.Optional;
+
 /*-
  * #%L
  * anchor-plugin-image
@@ -43,13 +45,13 @@ public class AndCondition implements UpdatableBeforeCondition {
 	}
 
 	@Override
-	public void updateSrcObj(ObjMask omSrc, ImageRes res) throws OperationFailedException {
+	public void updateSrcObj(ObjMask omSrc, Optional<ImageRes> res) throws OperationFailedException {
 		cond1.updateSrcObj(omSrc, res);
 		cond2.updateSrcObj(omSrc, res);
 	}
 
 	@Override
-	public boolean accept(ObjMask omDest) {
+	public boolean accept(ObjMask omDest) throws OperationFailedException {
 		return cond1.accept(omDest) && cond2.accept(omDest);
 	}
 }

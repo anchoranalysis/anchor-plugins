@@ -27,36 +27,50 @@ package org.anchoranalysis.plugin.image.bean.obj.merge;
  */
 
 import java.util.List;
+import java.util.Optional;
 
+import org.anchoranalysis.bean.ProviderNullableCreator;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
+import org.anchoranalysis.image.bean.provider.ImageDimProvider;
+import org.anchoranalysis.image.extent.ImageDim;
+import org.anchoranalysis.image.extent.ImageRes;
 import org.anchoranalysis.image.objmask.ObjMaskCollection;
 import org.anchoranalysis.image.objmask.match.ObjWithMatches;
 
 import ch.ethz.biol.cell.imageprocessing.objmask.matching.ObjMaskMatchUtilities;
+import ch.ethz.biol.cell.imageprocessing.objmask.provider.ObjMaskProviderContainer;
 
 /** A base class for algorithms that merge obj-masks */
-public abstract class ObjMaskProviderMergeBase extends ObjMaskProvider {
-
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
-	// START BEAN PROPERTIES
-	@BeanField
-	private ObjMaskProvider objs;
+public abstract class ObjMaskProviderMergeBase extends ObjMaskProviderContainer {
 	
+	// START BEAN PROPERTIES
+	/* Image-resolution */
 	@BeanField @OptionalBean
-	private ObjMaskProvider objsContainer;
+	private ImageDimProvider resProvider;
 	// END BEAN PROPERTIES
-
+	
 	@FunctionalInterface
 	protected static interface MergeObjs {
 		ObjMaskCollection mergeObjs( ObjMaskCollection objs ) throws OperationFailedException;
+	}
+		
+	protected Optional<ImageRes> calcResOptional() throws OperationFailedException {
+		try {
+			return ProviderNullableCreator.createOptional(resProvider).map(
+				ImageDim::getRes
+			);
+		} catch (CreateException e) {
+			throw new OperationFailedException(e);
+		}
+	}
+	
+	protected ImageRes calcResRequired() throws OperationFailedException {
+		return calcResOptional().orElseThrow( ()->
+			new OperationFailedException("This algorithm requires an image-resolution to be set via resProvider")
+		);
 	}
 	
 	/**
@@ -71,22 +85,20 @@ public abstract class ObjMaskProviderMergeBase extends ObjMaskProvider {
 		
 		// To avoid changing the original
 		ObjMaskCollection objsToMerge = objs.duplicateShallow();
-		
-		if (objsContainer==null) {
-			return mergeAll(mergeFunc, objsToMerge);
-		} else {
-			try {
-				
-				ObjMaskCollection containerObjs = objsContainer.create();
-				return mergeInContainer(mergeFunc, objsToMerge, containerObjs);
-				
-			} catch (CreateException e) {
-				throw new OperationFailedException(e);
+
+		try {
+			Optional<ObjMaskCollection> container = containerOptional();
+			if (container.isPresent()) {
+				return mergeInContainer(mergeFunc, objsToMerge, container.get());
+			} else {
+				return mergeAll(mergeFunc, objsToMerge);
 			}
+		} catch (CreateException e) {
+			throw new OperationFailedException(e);
 		}
 	}
 	
-	private ObjMaskCollection mergeAll( MergeObjs merger, ObjMaskCollection objs) throws OperationFailedException {
+	private static ObjMaskCollection mergeAll( MergeObjs merger, ObjMaskCollection objs) throws OperationFailedException {
 		ObjMaskCollection out = new ObjMaskCollection();
 		// We merge them all
 		ObjMaskCollection mergedObjs = merger.mergeObjs(objs);
@@ -94,7 +106,7 @@ public abstract class ObjMaskProviderMergeBase extends ObjMaskProvider {
 		return out;
 	}
 	
-	private ObjMaskCollection mergeInContainer( MergeObjs merger, ObjMaskCollection objs, ObjMaskCollection containerObjs) throws OperationFailedException {
+	private static ObjMaskCollection mergeInContainer( MergeObjs merger, ObjMaskCollection objs, ObjMaskCollection containerObjs) throws OperationFailedException {
 		
 		ObjMaskCollection out = new ObjMaskCollection();
 				
@@ -107,20 +119,12 @@ public abstract class ObjMaskProviderMergeBase extends ObjMaskProvider {
 		}
 		return out;		
 	}
-	
-	public ObjMaskProvider getObjs() {
-		return objs;
+
+	public ImageDimProvider getResProvider() {
+		return resProvider;
 	}
 
-	public void setObjs(ObjMaskProvider objs) {
-		this.objs = objs;
-	}
-
-	public ObjMaskProvider getObjsContainer() {
-		return objsContainer;
-	}
-
-	public void setObjsContainer(ObjMaskProvider objsContainer) {
-		this.objsContainer = objsContainer;
+	public void setResProvider(ImageDimProvider resProvider) {
+		this.resProvider = resProvider;
 	}
 }

@@ -27,42 +27,19 @@ package org.anchoranalysis.plugin.operator.feature.bean.arithmetic;
  */
 
 
-import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.feature.bean.operator.FeatureGenericSingleElem;
-import org.anchoranalysis.feature.cache.SessionInput;
-import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.input.FeatureInput;
+import org.anchoranalysis.plugin.operator.feature.bean.FeatureGenericWithValue;
 
-public class ConstantToThePowerOf<T extends FeatureInput> extends FeatureGenericSingleElem<T> {
+public class ConstantToThePowerOf<T extends FeatureInput> extends FeatureGenericWithValue<T> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
-	// START BEAN PARAMETERS
-	@BeanField
-	private double constant = 0.5;
-	// END BEAN PARAMETERS
-	
 	@Override
-	public double calc( SessionInput<T> input ) throws FeatureCalcException {
-		return Math.pow(
-			constant,
-			input.calc( getItem() )
-		);
+	protected double combineValueAndFeature(double value, double featureResult) {
+		return Math.pow(value, featureResult);
 	}
 
 	@Override
-	public String getParamDscr() {
-		return String.format("%f", constant );
-	}
-	
-	public double getConstant() {
-		return constant;
+	protected String combineDscr(String valueDscr, String featureDscr) {
+		return valueDscr + "^" + featureDscr;
 	}
 
-	public void setConstant(double constant) {
-		this.constant = constant;
-	}
 }

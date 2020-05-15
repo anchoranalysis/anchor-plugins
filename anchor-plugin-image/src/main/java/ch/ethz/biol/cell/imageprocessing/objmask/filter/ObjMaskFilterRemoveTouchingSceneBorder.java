@@ -1,5 +1,7 @@
 package ch.ethz.biol.cell.imageprocessing.objmask.filter;
 
+import java.util.Optional;
+
 /*
  * #%L
  * anchor-plugin-image
@@ -35,26 +37,25 @@ import org.anchoranalysis.image.objmask.ObjMask;
 
 public class ObjMaskFilterRemoveTouchingSceneBorder extends ObjMaskFilterByObject {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	// START BEAN PROPERTIES
 	@BeanField
 	private boolean includeZ = false;
 	// END BEAN PROPERTIES
 	
 	@Override
-	protected void start(ImageDim dim) throws OperationFailedException {
+	protected void start() throws OperationFailedException {
 
 	}
 
 	@Override
-	protected boolean match(ObjMask om, ImageDim dim)
+	protected boolean match(ObjMask om, Optional<ImageDim> dim)
 			throws OperationFailedException {
 		
-		if (om.getBoundingBox().atBorderXY(dim)) {
+		if (!dim.isPresent()) {
+			throw new OperationFailedException("Image-dimensions are required for this operation");
+		}
+		
+		if (om.getBoundingBox().atBorderXY(dim.get())) {
 			return false;
 		}
 		
@@ -65,7 +66,7 @@ public class ObjMaskFilterRemoveTouchingSceneBorder extends ObjMaskFilterByObjec
 			}
 
 			Point3i crnrMax = om.getBoundingBox().calcCrnrMax();
-			if (crnrMax.getZ()==(dim.getZ()-1)) {
+			if (crnrMax.getZ()==(dim.get().getZ()-1)) {
 				return false;
 			}
 		}

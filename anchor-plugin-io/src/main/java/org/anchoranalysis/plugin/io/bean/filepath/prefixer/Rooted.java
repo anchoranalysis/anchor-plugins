@@ -48,11 +48,6 @@ import org.apache.log4j.Logger;
  */
 public class Rooted extends FilePathPrefixer {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
 	private FilePathPrefixerAvoidResolve filePathPrefixer;

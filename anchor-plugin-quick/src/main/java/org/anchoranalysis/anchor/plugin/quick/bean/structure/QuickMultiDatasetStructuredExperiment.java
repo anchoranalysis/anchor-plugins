@@ -64,11 +64,6 @@ import org.apache.commons.lang.StringUtils;
  */
 public class QuickMultiDatasetStructuredExperiment<T extends InputFromManager,S> extends Experiment implements IReplaceInputManager, IReplaceOutputManager {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	// START BEAN PROPERTIES
 	/** How many directories to recurse back from the current file to the Experiments/ directory
 	 * 

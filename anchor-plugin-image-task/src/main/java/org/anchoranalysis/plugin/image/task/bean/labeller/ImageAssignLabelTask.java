@@ -35,11 +35,10 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.log.LogErrorReporter;
-import org.anchoranalysis.core.log.LogReporter;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
 import org.anchoranalysis.experiment.JobExecutionException;
 import org.anchoranalysis.experiment.task.InputTypesExpected;
-import org.anchoranalysis.experiment.task.ParametersBound;
+import org.anchoranalysis.experiment.task.InputBound;
 import org.anchoranalysis.experiment.task.ParametersExperiment;
 import org.anchoranalysis.experiment.task.Task;
 import org.anchoranalysis.image.bean.provider.stack.StackProvider;
@@ -48,6 +47,7 @@ import org.anchoranalysis.image.io.generator.raster.StackGenerator;
 import org.anchoranalysis.image.io.input.ProvidesStackInput;
 import org.anchoranalysis.image.io.input.StackInputInitParamsCreator;
 import org.anchoranalysis.image.stack.Stack;
+import org.anchoranalysis.io.output.bound.BoundIOContext;
 import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
 import org.anchoranalysis.plugin.image.task.sharedstate.SharedStateFilteredImageOutput;
 
@@ -61,11 +61,6 @@ import org.anchoranalysis.plugin.image.task.sharedstate.SharedStateFilteredImage
  * @param T type of init-params associated with the filter
  */
 public class ImageAssignLabelTask<T> extends Task<ProvidesStackInput,SharedStateFilteredImageOutput<T>> {
-
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
 
 	// START BEAN PROPERTIES
 	/** Maps a label to an image */
@@ -103,14 +98,13 @@ public class ImageAssignLabelTask<T> extends Task<ProvidesStackInput,SharedState
 	
 	
 	@Override
-	public void doJobOnInputObject(ParametersBound<ProvidesStackInput, SharedStateFilteredImageOutput<T>> params)
+	public void doJobOnInputObject(InputBound<ProvidesStackInput, SharedStateFilteredImageOutput<T>> params)
 			throws JobExecutionException {
 		
 		try {
 			String groupIdentifier = params.getSharedState().labelFor(
 				params.getInputObject(),
-				params.getExperimentArguments().getModelDirectory(),
-				params.getLogErrorReporter()
+				params.context()
 			);
 			
 			params.getSharedState().writeRow(
@@ -123,12 +117,11 @@ public class ImageAssignLabelTask<T> extends Task<ProvidesStackInput,SharedState
 					groupIdentifier,
 					StackInputInitParamsCreator.createInitParams(
 						params.getInputObject(),
-						params.getExperimentArguments().getModelDirectory(),
-						params.getLogErrorReporter()
+						params.context()
 					),
 					params.getInputObject().descriptiveName(),
 					params.getSharedState(),
-					params.getLogErrorReporter()
+					params.getLogger()
 				);
 			}
 		} catch (OperationFailedException e) {
@@ -142,8 +135,7 @@ public class ImageAssignLabelTask<T> extends Task<ProvidesStackInput,SharedState
 	}
 
 	@Override
-	public void afterAllJobsAreExecuted(BoundOutputManagerRouteErrors outputManager, SharedStateFilteredImageOutput<T> sharedState,
-			LogReporter logReporter) throws ExperimentExecutionException {
+	public void afterAllJobsAreExecuted(SharedStateFilteredImageOutput<T> sharedState, BoundIOContext context) throws ExperimentExecutionException {
 		sharedState.close();
 	}
 	

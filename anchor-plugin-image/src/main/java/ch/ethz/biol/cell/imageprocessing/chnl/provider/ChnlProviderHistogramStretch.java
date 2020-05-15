@@ -30,7 +30,7 @@ package ch.ethz.biol.cell.imageprocessing.chnl.provider;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.image.bean.provider.ChnlProvider;
+import org.anchoranalysis.image.bean.provider.ChnlProviderOne;
 import org.anchoranalysis.image.chnl.Chnl;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.histogram.Histogram;
@@ -38,45 +38,30 @@ import org.anchoranalysis.image.histogram.HistogramFactoryUtilities;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 
-public class ChnlProviderHistogramStretch extends ChnlProvider {
+public class ChnlProviderHistogramStretch extends ChnlProviderOne {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PROPERTIES
-	@BeanField
-	private ChnlProvider chnlProvider;
-	
 	@BeanField
 	private double quantile = 1.0;
 	// END BEAN PROPERTIES
 	
-	public static void histogramStretch( Chnl chnl, double quantile ) throws OperationFailedException {
-		
-		//ImgChnl chnl = chnlProvider.create();
+	@Override
+	public Chnl createFromChnl( Chnl chnl ) throws CreateException {
+		try {
+			histogramStretch( chnl, quantile );
+			return chnl;
+		} catch (OperationFailedException e) {
+			throw new CreateException(e);
+		}
+	}
+	
+	private static void histogramStretch( Chnl chnl, double quantile ) throws OperationFailedException {
 		
 		VoxelBox<?> vb = chnl.getVoxelBox().any();
 		
 		Histogram hist = HistogramFactoryUtilities.create(vb);
 		
-//		ContrastEnhancer contrastEnhancer = new ContrastEnhancer();
-//		
-//		ImagePlus imp = ImgStackUtilities.createImagePlus( chnl );
-//		ImageStatistics stats = new StackStatistics(imp);
-//		for( int z=1; z<=imp.getNSlices(); z++) {
-//			ImageProcessor ip = imp.getStack().getProcessor(z);
-//			contrastEnhancer.stretchHistogram( ip, 0, stats);
-//		}
-//		
-//		double rangeMin = imp.getDisplayRangeMin();
-//		double rangeMax = imp.getDisplayRangeMax();
-		
-		
 		double rangeMin = hist.calcMin();
-		//double rangeMax = hist.calcMax();
-		
 		double rangeMax = hist.quantile(quantile);
 		
 		// To avoid a situation where we have a 0 range
@@ -84,7 +69,10 @@ public class ChnlProviderHistogramStretch extends ChnlProvider {
 			rangeMax = rangeMin + 1;
 		}
 		
-		//System.out.printf("rangeMin=%f  rangeMax=%f\n", rangeMin, rangeMax );
+		changeVoxels(vb, rangeMin, rangeMax);
+	}
+	
+	private static void changeVoxels(VoxelBox<?> vb, double rangeMin, double rangeMax) {
 		
 		double rangeExtnt = rangeMax-rangeMin;
 		double rangeMult = 255/rangeExtnt;
@@ -97,18 +85,14 @@ public class ChnlProviderHistogramStretch extends ChnlProvider {
 			int offset = 0;
 			for( int y=0; y<e.getY(); y++) {
 				for( int x=0; x<e.getX(); x++) {
-			
-					int val = bb.getInt(offset);
+								
+					double val = (double) bb.getInt(offset);
 					
-					// We apply the strecthing
-					double valD = (double) val;
-					valD = (valD-rangeMin)*rangeMult;
+					int stretched = roundAndClip(
+						(val-rangeMin)*rangeMult
+					); 
 					
-					int valNew = (int) Math.round(valD);
-					if (valNew>255) valNew = 255;
-					if (valNew<0) valNew = 0;
-					
-					bb.putInt(offset,valNew);
+					bb.putInt(offset, stretched);
 					
 					offset++;
 				}
@@ -116,26 +100,21 @@ public class ChnlProviderHistogramStretch extends ChnlProvider {
 		}
 	}
 	
-	
-	@Override
-	public Chnl create() throws CreateException {
-		try {
-			Chnl chnl = chnlProvider.create(); 
-			histogramStretch( chnl, quantile );
-			return chnl;
-		} catch (OperationFailedException e) {
-			throw new CreateException(e);
+	/** Rounds a value up or down, and clips to ensure its in the range 0..255 inclusive */
+	private static int roundAndClip( double value ) {
+		
+		int rounded = (int) Math.round(value);
+		
+		if (rounded>255) {
+			return 255;
 		}
+		if (rounded<0) {
+			return 0;
+		}
+		
+		return rounded;
 	}
-
-	public ChnlProvider getChnlProvider() {
-		return chnlProvider;
-	}
-
-	public void setChnlProvider(ChnlProvider chnlProvider) {
-		this.chnlProvider = chnlProvider;
-	}
-
+	
 	public double getQuantile() {
 		return quantile;
 	}
@@ -143,7 +122,4 @@ public class ChnlProviderHistogramStretch extends ChnlProvider {
 	public void setQuantile(double quantile) {
 		this.quantile = quantile;
 	}
-
-
-
 }

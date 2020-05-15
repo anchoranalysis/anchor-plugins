@@ -33,22 +33,14 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.params.KeyValueParams;
 import org.anchoranalysis.core.unit.SpatialConversionUtilities;
 import org.anchoranalysis.core.unit.SpatialConversionUtilities.UnitSuffix;
-import org.anchoranalysis.image.bean.provider.ChnlProvider;
+import org.anchoranalysis.image.bean.provider.ChnlProviderOne;
 import org.anchoranalysis.image.chnl.Chnl;
 import org.anchoranalysis.image.convert.ImageUnitConverter;
 import org.anchoranalysis.image.orientation.DirectionVector;
 
-public class ChnlProviderIJBackgroundSubtractorFromParams extends ChnlProvider {
+public class ChnlProviderIJBackgroundSubtractorFromParams extends ChnlProviderOne {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PROPERTIES
-	@BeanField
-	private ChnlProvider chnlProvider;
-	
 	@BeanField
 	private KeyValueParamsProvider keyValueParamsProvider;
 	
@@ -57,7 +49,7 @@ public class ChnlProviderIJBackgroundSubtractorFromParams extends ChnlProvider {
 	// END BEAN PROPERTIES
 		
 	@Override
-	public Chnl create() throws CreateException {
+	public Chnl createFromChnl(Chnl chnl) throws CreateException {
 		
 		KeyValueParams params = keyValueParamsProvider.create();
 		
@@ -68,8 +60,6 @@ public class ChnlProviderIJBackgroundSubtractorFromParams extends ChnlProvider {
 		if (!params.containsKey(keyRadiusMicrons)) {
 			throw new CreateException(String.format("There is no key '%s'",keyRadiusMicrons));
 		}
-		
-		Chnl chnl = chnlProvider.create();
 		
 		double radiusMicrons = Double.parseDouble( params.getProperty(keyRadiusMicrons));
 		double radiusMeters = SpatialConversionUtilities.convertFromUnits(radiusMicrons, UnitSuffix.MICRO);	
@@ -84,15 +74,7 @@ public class ChnlProviderIJBackgroundSubtractorFromParams extends ChnlProvider {
 		
 		return ChnlProviderIJBackgroundSubtractor.subtractBackground(chnl, radiusPixels, true);
 	}
-
-	public ChnlProvider getChnlProvider() {
-		return chnlProvider;
-	}
-
-	public void setChnlProvider(ChnlProvider chnlProvider) {
-		this.chnlProvider = chnlProvider;
-	}
-
+	
 	public KeyValueParamsProvider getKeyValueParamsProvider() {
 		return keyValueParamsProvider;
 	}

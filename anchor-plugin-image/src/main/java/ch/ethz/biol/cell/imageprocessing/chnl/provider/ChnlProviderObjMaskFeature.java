@@ -41,6 +41,7 @@ import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 import org.anchoranalysis.feature.session.FeatureSession;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorSingle;
 import org.anchoranalysis.image.bean.provider.ChnlProvider;
+import org.anchoranalysis.image.bean.provider.ChnlProviderOne;
 import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
 import org.anchoranalysis.image.chnl.Chnl;
 import org.anchoranalysis.image.chnl.factory.ChnlFactory;
@@ -50,17 +51,9 @@ import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.image.objmask.ObjMaskCollection;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
 
-public class ChnlProviderObjMaskFeature extends ChnlProvider {
+public class ChnlProviderObjMaskFeature extends ChnlProviderOne {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PROPERTIES
-	@BeanField
-	private ChnlProvider chnlProvider;
-	
 	@BeanField
 	private ObjMaskProvider objs;
 	
@@ -78,15 +71,13 @@ public class ChnlProviderObjMaskFeature extends ChnlProvider {
 	// END BEAN PROPERTIES
 	
 	@Override
-	public Chnl create() throws CreateException {
+	public Chnl createFromChnl( Chnl chnl ) throws CreateException {
 
 		Feature<FeatureInputSingleObj> feature = featureProvider.create();
 		
 		ObjMaskCollection objsCollection = objs.create();
 		
 		try {
-			Chnl chnl = chnlProvider.create();
-			
 			NRGStack nrgStack = new NRGStack(chnl);
 			
 			// add other channels
@@ -105,7 +96,7 @@ public class ChnlProviderObjMaskFeature extends ChnlProvider {
 			FeatureCalculatorSingle<FeatureInputSingleObj> session = FeatureSession.with(
 				feature,
 				new FeatureInitParams(),
-				getSharedObjects().getFeature().getSharedFeatureSet().downcast(),
+				getSharedObjects().getFeature().getSharedFeatureSet(),
 				getLogger()
 			);
 			
@@ -127,14 +118,6 @@ public class ChnlProviderObjMaskFeature extends ChnlProvider {
 		}
 		
 		
-	}
-
-	public ChnlProvider getChnlProvider() {
-		return chnlProvider;
-	}
-
-	public void setChnlProvider(ChnlProvider chnlProvider) {
-		this.chnlProvider = chnlProvider;
 	}
 
 	public FeatureProvider<FeatureInputSingleObj> getFeatureProvider() {

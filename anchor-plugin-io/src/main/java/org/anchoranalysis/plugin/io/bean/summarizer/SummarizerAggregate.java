@@ -34,11 +34,6 @@ import org.anchoranalysis.core.error.OperationFailedException;
 /** Collects summary data about a set of input files that will eventually be outputted to the user */
 public class SummarizerAggregate<T> extends Summarizer<T> {
 	
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	private static String BULLET_POINT = "-> ";
 	
 	// START BEAN PROPERTIES

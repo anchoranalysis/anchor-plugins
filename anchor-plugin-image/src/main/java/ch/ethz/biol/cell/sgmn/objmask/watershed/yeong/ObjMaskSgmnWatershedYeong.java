@@ -58,11 +58,6 @@ import ch.ethz.biol.cell.sgmn.objmask.watershed.encoding.EncodedVoxelBox;
 //
 public class ObjMaskSgmnWatershedYeong extends ObjMaskSgmn {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	// START PROPERTIES
 	@BeanField
 	private ObjMaskSgmn sgmnFloodFill = new ObjMaskSgmnFloodFillStack();

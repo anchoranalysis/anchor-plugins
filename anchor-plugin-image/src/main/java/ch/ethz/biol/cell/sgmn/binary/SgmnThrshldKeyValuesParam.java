@@ -28,13 +28,11 @@ package ch.ethz.biol.cell.sgmn.binary;
 
 
 import java.nio.ByteBuffer;
-
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.shared.params.keyvalue.KeyValueParamsProvider;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.params.KeyValueParams;
-import org.anchoranalysis.core.random.RandomNumberGenerator;
 import org.anchoranalysis.image.bean.sgmn.binary.BinarySgmn;
 import org.anchoranalysis.image.bean.sgmn.binary.BinarySgmnParameters;
 import org.anchoranalysis.image.bean.threshold.Thresholder;
@@ -51,11 +49,6 @@ import org.anchoranalysis.plugin.image.bean.histogram.threshold.Constant;
 
 public class SgmnThrshldKeyValuesParam extends BinarySgmn {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START PARAMETERS
 	@BeanField
 	private KeyValueParamsProvider keyValueParamsProvider;
@@ -87,7 +80,7 @@ public class SgmnThrshldKeyValuesParam extends BinarySgmn {
 	
 	
 	@Override
-	public BinaryVoxelBox<ByteBuffer> sgmn(VoxelBoxWrapper voxelBox, BinarySgmnParameters params, RandomNumberGenerator re) throws SgmnFailedException {
+	public BinaryVoxelBox<ByteBuffer> sgmn(VoxelBoxWrapper voxelBox, BinarySgmnParameters params) throws SgmnFailedException {
 		
 		BinaryValuesByte bvOut = BinaryValuesByte.getDefault();
 		
@@ -101,7 +94,7 @@ public class SgmnThrshldKeyValuesParam extends BinarySgmn {
 	}
 	
 	@Override
-	public BinaryVoxelBox<ByteBuffer> sgmn(VoxelBoxWrapper voxelBox, BinarySgmnParameters params, ObjMask objMask, RandomNumberGenerator re) throws SgmnFailedException {
+	public BinaryVoxelBox<ByteBuffer> sgmn(VoxelBoxWrapper voxelBox, BinarySgmnParameters params, ObjMask objMask) throws SgmnFailedException {
 		
 		VoxelBox<ByteBuffer> voxelBoxByte = voxelBox.asByte();
 		
@@ -121,16 +114,20 @@ public class SgmnThrshldKeyValuesParam extends BinarySgmn {
 		
 		BinaryValuesByte bvOut = BinaryValuesByte.getDefault();
 		try {		
-			return thresholder.threshold(new VoxelBoxWrapper(maskDup),new ObjMask(bboxE,objMask.getVoxelBox(),objMask.getBinaryValuesByte()), bvOut, params.getIntensityHistogram() );
+			return thresholder.threshold(
+				new VoxelBoxWrapper(maskDup),
+				new ObjMask(
+					bboxE,
+					objMask.getVoxelBox(),
+					objMask.getBinaryValuesByte()
+				),
+				bvOut,
+				params.getIntensityHistogram()
+			);
 		} catch (OperationFailedException e) {
 			throw new SgmnFailedException(e);
 		}
 					
-	}
-
-	@Override
-	public VoxelBox<ByteBuffer> getAdditionalOutput() {
-		return null;
 	}
 
 	public KeyValueParamsProvider getKeyValueParamsProvider() {

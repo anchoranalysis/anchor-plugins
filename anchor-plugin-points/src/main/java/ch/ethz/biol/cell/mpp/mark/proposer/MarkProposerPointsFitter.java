@@ -50,11 +50,6 @@ import org.anchoranalysis.core.log.LogErrorReporter;
 
 public class MarkProposerPointsFitter extends MarkProposer {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -3794711261087672093L;
-
 	// START BEAN
 	@BeanField
 	private PointsProposer pointsProposer;

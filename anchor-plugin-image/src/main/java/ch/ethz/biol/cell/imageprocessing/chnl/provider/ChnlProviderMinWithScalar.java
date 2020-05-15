@@ -27,74 +27,12 @@ package ch.ethz.biol.cell.imageprocessing.chnl.provider;
  */
 
 
-import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.image.bean.provider.ChnlProvider;
-import org.anchoranalysis.image.chnl.Chnl;
-import org.anchoranalysis.image.extent.Extent;
-import org.anchoranalysis.image.voxel.box.VoxelBox;
-import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 
-public class ChnlProviderMinWithScalar extends ChnlProvider {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
-	// START BEAN PROPERTIES
-	@BeanField
-	private ChnlProvider chnlProvider;
-	
-	@BeanField
-	private double value;
-	// END BEAN PROPERTIES
-	
-	private void processVoxelBox( VoxelBox<?> vb, double value ) {
-
-		int valueInt = (int) Math.floor(value);
-		
-		Extent e = vb.extnt();
-		for (int z=0; z<e.getZ(); z++) {
-			
-			VoxelBuffer<?> buf = vb.getPixelsForPlane(z);
-			
-			for( int i=0; i<e.getVolumeXY(); i++) {
-				
-				int bufVal = buf.getInt(i); 
-				
-				if ( bufVal>value) {
-					buf.putInt(i,valueInt);
-				}
-			}
-		}
-	}
-	
+public class ChnlProviderMinWithScalar extends ChnlProviderConditionallyWriteScalar {
 
 	@Override
-	public Chnl create() throws CreateException {
-		
-		Chnl chnl = chnlProvider.create();
-		
-		processVoxelBox( chnl.getVoxelBox().any(), value );
-		
-		return chnl;
+	public boolean predicateBufVal( int bufVal, int value ) {
+		return bufVal>value;
 	}
-
-	public double getValue() {
-		return value;
-	}
-
-	public void setValue(double value) {
-		this.value = value;
-	}
-
-	public ChnlProvider getChnlProvider() {
-		return chnlProvider;
-	}
-
-	public void setChnlProvider(ChnlProvider chnlProvider) {
-		this.chnlProvider = chnlProvider;
-	}
-
 }

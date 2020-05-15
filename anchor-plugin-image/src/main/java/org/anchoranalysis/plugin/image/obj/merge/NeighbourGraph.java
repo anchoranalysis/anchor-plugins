@@ -28,6 +28,7 @@ package org.anchoranalysis.plugin.image.obj.merge;
 
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 
 import org.anchoranalysis.core.error.OperationFailedException;
@@ -46,7 +47,7 @@ import org.anchoranalysis.plugin.image.obj.merge.priority.PrioritisedVertex;
 class NeighbourGraph {
 	
 	private UpdatableBeforeCondition beforeCondition;
-	private ImageRes res;
+	private Optional<ImageRes> res;
 	
 	private GraphWithEdgeTypes<ObjVertex, PrioritisedVertex> graph = new GraphWithEdgeTypes<>(true);
 	
@@ -57,7 +58,7 @@ class NeighbourGraph {
 	 * @param imageRes
 	 * @param prioritizer
 	 */
-	public NeighbourGraph(UpdatableBeforeCondition beforeCondition, ImageRes imageRes) {
+	public NeighbourGraph(UpdatableBeforeCondition beforeCondition, Optional<ImageRes> imageRes) {
 		super();
 		this.beforeCondition = beforeCondition;
 		this.res = imageRes;

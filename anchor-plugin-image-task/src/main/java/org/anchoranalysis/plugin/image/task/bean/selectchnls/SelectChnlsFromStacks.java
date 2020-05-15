@@ -39,11 +39,6 @@ import org.anchoranalysis.plugin.image.task.grouped.NamedChnl;
  **/
 public abstract class SelectChnlsFromStacks extends AnchorBean<SelectChnlsFromStacks> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	/** Takes a stack-collection and extracts a set of references to particular channels (each with a name) */
 	public abstract List<NamedChnl> selectChnls( ChnlSource source, boolean checkType ) throws OperationFailedException;
 }

@@ -31,28 +31,23 @@ import java.io.IOException;
 import java.nio.file.Path;
 
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.log.LogReporter;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
 import org.anchoranalysis.experiment.JobExecutionException;
 import org.anchoranalysis.experiment.task.InputTypesExpected;
-import org.anchoranalysis.experiment.task.ParametersBound;
+import org.anchoranalysis.experiment.task.InputBound;
 import org.anchoranalysis.experiment.task.ParametersExperiment;
 import org.anchoranalysis.experiment.task.Task;
 import org.anchoranalysis.io.csv.reader.CSVReaderByLine;
 import org.anchoranalysis.io.csv.reader.CSVReaderByLine.ReadByLine;
 import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.input.FileInput;
+import org.anchoranalysis.io.output.bound.BoundIOContext;
 import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
 import org.anchoranalysis.io.output.csv.CSVWriter;
 
 // At the moment, we don't check if the name number of rows/columns exist
 public class CombineCSVTask extends Task<FileInput,CSVWriter> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -5961126655531145104L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
 	private String seperator = ",";
@@ -98,7 +93,7 @@ public class CombineCSVTask extends Task<FileInput,CSVWriter> {
 	}
 		
 	@Override
-	public void doJobOnInputObject(ParametersBound<FileInput,CSVWriter> params) throws JobExecutionException {
+	public void doJobOnInputObject(InputBound<FileInput,CSVWriter> params) throws JobExecutionException {
 		
 		FileInput inputObject = params.getInputObject();
 		
@@ -127,7 +122,7 @@ public class CombineCSVTask extends Task<FileInput,CSVWriter> {
 	}
 
 	@Override
-	public void afterAllJobsAreExecuted( BoundOutputManagerRouteErrors outputManager, CSVWriter writer, LogReporter logReporter )
+	public void afterAllJobsAreExecuted( CSVWriter writer, BoundIOContext context )
 			throws ExperimentExecutionException {
 		
 		if (writer!=null) {

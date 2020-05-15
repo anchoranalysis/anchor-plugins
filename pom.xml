@@ -19,8 +19,7 @@
   </scm>
   
     <modules>
-	
-        <module>anchor-plugin-eth</module>
+
         <module>anchor-plugin-image</module>
         <module>anchor-plugin-image-feature</module>
         <module>anchor-plugin-ij</module>

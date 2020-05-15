@@ -33,19 +33,14 @@ import java.util.Set;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.image.experiment.label.FileLabelMap;
 import org.anchoranalysis.image.io.input.ProvidesStackInput;
 import org.anchoranalysis.io.bean.filepath.generator.FilePathGenerator;
 import org.anchoranalysis.io.error.AnchorIOException;
+import org.anchoranalysis.io.output.bound.BoundIOContext;
 import org.anchoranalysis.plugin.image.task.labeller.ImageCSVLabellerInitParams;
 
 public class ImageCSVLabeller extends ImageLabeller<ImageCSVLabellerInitParams> {
-
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
 
 	// START BEAN PROPERTIES
 	/** 
@@ -80,7 +75,7 @@ public class ImageCSVLabeller extends ImageLabeller<ImageCSVLabellerInitParams> 
 	}
 
 	@Override
-	public String labelFor(ImageCSVLabellerInitParams initParams, ProvidesStackInput input, Path modelDir, LogErrorReporter logErrorReporter)
+	public String labelFor(ImageCSVLabellerInitParams initParams, ProvidesStackInput input, BoundIOContext context)
 			throws OperationFailedException {
 		String label = initParams.getLabelMap().get(
 			input.descriptiveName()

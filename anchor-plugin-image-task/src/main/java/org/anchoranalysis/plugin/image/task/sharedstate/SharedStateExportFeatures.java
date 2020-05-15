@@ -27,7 +27,6 @@ package org.anchoranalysis.plugin.image.task.sharedstate;
  */
 
 import org.anchoranalysis.core.index.GetOperationFailedException;
-import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.core.name.MultiName;
 import org.anchoranalysis.feature.calc.results.ResultsVectorCollection;
 import org.anchoranalysis.feature.input.FeatureInput;
@@ -36,7 +35,7 @@ import org.anchoranalysis.feature.list.NamedFeatureStore;
 import org.anchoranalysis.feature.name.FeatureNameList;
 import org.anchoranalysis.feature.resultsvectorcollection.FeatureInputResults;
 import org.anchoranalysis.io.error.AnchorIOException;
-import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
+import org.anchoranalysis.io.output.bound.BoundIOContext;
 
 public abstract class SharedStateExportFeatures {
 
@@ -55,14 +54,12 @@ public abstract class SharedStateExportFeatures {
 
 	public <T extends FeatureInput> void writeFeaturesAsCSVForAllGroups(
 		NamedFeatureStore<FeatureInputResults> featuresAggregate,
-		BoundOutputManagerRouteErrors outputManager,
-		LogErrorReporter logErrorReporter
+		BoundIOContext context
 	) throws AnchorIOException {
 		results.writeResultsForAllGroups(
 			featureNames(),
 			featuresAggregate,
-			outputManager,
-			logErrorReporter
+			context
 		);
 	}
 }

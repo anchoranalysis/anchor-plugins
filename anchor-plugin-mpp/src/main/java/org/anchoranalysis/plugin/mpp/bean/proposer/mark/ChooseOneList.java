@@ -41,11 +41,6 @@ import org.anchoranalysis.bean.annotation.BeanField;
 // Chooses one from a list
 public class ChooseOneList extends MarkProposer {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -7016972495582656795L;
-	
 	// START BEAN
 	@BeanField
 	private List<MarkProposer> markProposerList = new ArrayList<>();

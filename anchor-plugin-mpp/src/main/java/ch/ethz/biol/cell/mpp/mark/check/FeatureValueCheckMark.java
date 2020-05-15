@@ -48,15 +48,10 @@ import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 import org.anchoranalysis.feature.session.FeatureSession;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorSingle;
-import org.anchoranalysis.feature.shared.SharedFeatureSet;
+import org.anchoranalysis.feature.shared.SharedFeatureMulti;
 
 public abstract class FeatureValueCheckMark<T extends FeatureInput> extends CheckMark {
 	
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	// START BEANS
 	@BeanField
 	private FeatureProvider<T> featureProvider;
@@ -68,7 +63,7 @@ public abstract class FeatureValueCheckMark<T extends FeatureInput> extends Chec
 	private KeyValueParamsProvider keyValueParamsProvider;
 	// END BEANS
 	
-	private SharedFeatureSet<T> sharedFeatureSet;
+	private SharedFeatureMulti sharedFeatureSet;
 	
 	private Feature<T> feature;
 	
@@ -77,7 +72,7 @@ public abstract class FeatureValueCheckMark<T extends FeatureInput> extends Chec
 	@Override
 	public void onInit(MPPInitParams soMPP) throws InitException {
 		super.onInit(soMPP);
-		sharedFeatureSet = soMPP.getFeature().getSharedFeatureSet().downcast();
+		sharedFeatureSet = soMPP.getFeature().getSharedFeatureSet();
 	}
 	
 	@Override

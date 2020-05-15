@@ -28,6 +28,7 @@ package ch.ethz.biol.cell.imageprocessing.objmask.filter;
 
 
 import java.util.Iterator;
+import java.util.Optional;
 
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.bean.objmask.filter.ObjMaskFilter;
@@ -37,15 +38,10 @@ import org.anchoranalysis.image.objmask.ObjMaskCollection;
 
 public abstract class ObjMaskFilterByObject extends ObjMaskFilter {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	@Override
-	public void filter(ObjMaskCollection objs, ImageDim dim, ObjMaskCollection objsRejected) throws OperationFailedException {
+	public void filter(ObjMaskCollection objs, Optional<ImageDim> dim, Optional<ObjMaskCollection> objsRejected) throws OperationFailedException {
 
-		start( dim );
+		start();
 		
 		Iterator<ObjMask> itr=objs.iterator();
 		while( itr.hasNext() ) {
@@ -54,8 +50,8 @@ public abstract class ObjMaskFilterByObject extends ObjMaskFilter {
 			if (!match(om,dim)) {
 				itr.remove();
 				
-				if (objsRejected!=null) {
-					objsRejected.add(om);
+				if (objsRejected.isPresent()) {
+					objsRejected.get().add(om);
 				}
 			}
 		}
@@ -63,9 +59,9 @@ public abstract class ObjMaskFilterByObject extends ObjMaskFilter {
 		end();
 	}
 	
-	protected abstract void start(ImageDim dim) throws OperationFailedException;
+	protected abstract void start() throws OperationFailedException;
 	
-	protected abstract boolean match( ObjMask om, ImageDim dim ) throws OperationFailedException;
+	protected abstract boolean match( ObjMask om, Optional<ImageDim> dim ) throws OperationFailedException;
 	
 	protected abstract void end() throws OperationFailedException;
 

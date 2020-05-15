@@ -29,9 +29,7 @@ package ch.ethz.biol.cell.imageprocessing.chnl.provider;
 
 import java.nio.ByteBuffer;
 
-import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.image.bean.provider.ChnlProvider;
 import org.anchoranalysis.image.chnl.Chnl;
 import org.anchoranalysis.image.chnl.factory.ChnlFactorySingleType;
 import org.anchoranalysis.image.chnl.factory.ChnlFactoryByte;
@@ -39,27 +37,13 @@ import org.anchoranalysis.image.convert.ByteConverter;
 import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 
-public class ChnlProviderMultiplyConstant extends ChnlProvider {
+public class ChnlProviderMultiplyConstant extends ChnlProviderOneValue {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	private static ChnlFactorySingleType factory = new ChnlFactoryByte();
-	
-	// START BEAN PROPERTIES
-	@BeanField
-	private ChnlProvider chnlProvider;
-	
-	@BeanField
-	private double value;
-	// END BEAN PROPERTIES
 
 	@Override
-	public Chnl create() throws CreateException {
+	public Chnl createFromChnlValue(Chnl chnl, double value) throws CreateException {
 		
-		Chnl chnl = chnlProvider.create();
 		VoxelBox<ByteBuffer> vb = chnl.getVoxelBox().asByte();
 		
 		if (!chnl.getDimensions().equals(chnl.getDimensions())) {
@@ -96,25 +80,4 @@ public class ChnlProviderMultiplyConstant extends ChnlProvider {
 
 		return chnlOut;
 	}
-
-	public ChnlProvider getChnlProvider() {
-		return chnlProvider;
-	}
-
-
-
-	public void setChnlProvider(ChnlProvider chnlProvider) {
-		this.chnlProvider = chnlProvider;
-	}
-	
-	public double getValue() {
-		return value;
-	}
-
-
-
-	public void setValue(double value) {
-		this.value = value;
-	}
-
 }
