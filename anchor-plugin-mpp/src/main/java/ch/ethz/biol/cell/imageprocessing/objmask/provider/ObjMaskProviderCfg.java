@@ -56,7 +56,7 @@ public class ObjMaskProviderCfg extends ObjMaskProvider {
 	private RegionMap regionMap = RegionMapSingleton.instance();
 	
 	@BeanField
-	private ImageDimProvider dimProvider = new GuessDimFromInputImage();
+	private ImageDimProvider dim = new GuessDimFromInputImage();
 	// END BEAN PROPERTIES
 
 	@Override
@@ -64,7 +64,7 @@ public class ObjMaskProviderCfg extends ObjMaskProvider {
 		
 		Cfg cfg = cfgProvider.create();
 		
-		ImageDim dims = dimProvider.create();
+		ImageDim dims = dim.create();
 		
 		return cfg.calcMask(
 			dims,
@@ -90,12 +90,11 @@ public class ObjMaskProviderCfg extends ObjMaskProvider {
 		this.regionID = regionID;
 	}
 
-	public ImageDimProvider getDimProvider() {
-		return dimProvider;
+	public ImageDimProvider getDim() {
+		return dim;
 	}
 
-	public void setDimProvider(ImageDimProvider dimProvider) {
-		this.dimProvider = dimProvider;
+	public void setDim(ImageDimProvider dim) {
+		this.dim = dim;
 	}
-
 }

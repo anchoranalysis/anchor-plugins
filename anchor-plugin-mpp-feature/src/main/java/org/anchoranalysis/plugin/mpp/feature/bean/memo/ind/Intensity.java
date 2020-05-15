@@ -92,4 +92,12 @@ public class Intensity extends FeatureSingleMemo {
 	public void setRegion(MarkRegion region) {
 		this.region = region;
 	}
+
+	public Feature<FeatureInputHistogram> getItem() {
+		return item;
+	}
+
+	public void setItem(Feature<FeatureInputHistogram> item) {
+		this.item = item;
+	}
 }
