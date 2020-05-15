@@ -32,11 +32,6 @@ import org.anchoranalysis.image.objmask.ObjMaskCollection;
 
 public class ObjMaskProviderEmpty extends ObjMaskProvider {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	@Override
 	public ObjMaskCollection create() throws CreateException {
 		return new ObjMaskCollection();

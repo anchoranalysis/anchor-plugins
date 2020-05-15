@@ -39,10 +39,6 @@ import org.apache.commons.logging.LogFactory;
 
 public class Log4JReporter extends ReporterAgg<CfgNRGPixelized> implements IAggregateReceiver<CfgNRGPixelized> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -2915592624158759356L;
 	private static Log log = LogFactory.getLog(Log4JReporter.class);
 	
 	// Constructor

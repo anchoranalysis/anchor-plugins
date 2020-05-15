@@ -36,11 +36,6 @@ import org.anchoranalysis.math.moment.MomentsFromPointsCalculator;
 
 public abstract class AxisLengthBase extends FeatureObjMask {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
 	private int index = 0;

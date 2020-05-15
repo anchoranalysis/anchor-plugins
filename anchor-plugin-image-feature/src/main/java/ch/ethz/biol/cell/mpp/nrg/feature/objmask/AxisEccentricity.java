@@ -38,11 +38,6 @@ import org.anchoranalysis.math.moment.MomentsFromPointsCalculator;
  */
 public class AxisEccentricity extends AxisMomentsBase {
 	
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	@Override
 	protected double calcFromMoments( MomentsFromPointsCalculator moments ) throws FeatureCalcException {
 		double moments0 = moments.get(0).getEigenvalue();

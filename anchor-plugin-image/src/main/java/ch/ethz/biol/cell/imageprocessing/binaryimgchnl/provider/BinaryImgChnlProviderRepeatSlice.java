@@ -31,7 +31,7 @@ import java.nio.ByteBuffer;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.image.bean.provider.BinaryImgChnlProvider;
+import org.anchoranalysis.image.bean.provider.BinaryImgChnlProviderOne;
 import org.anchoranalysis.image.bean.provider.ImageDimProvider;
 import org.anchoranalysis.image.binary.BinaryChnl;
 import org.anchoranalysis.image.chnl.Chnl;
@@ -43,36 +43,26 @@ import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
 import ch.ethz.biol.cell.imageprocessing.dim.provider.GuessDimFromInputImage;
 
 // Ors the receiveProvider onto the binaryImgChnlProvider
-public class BinaryImgChnlProviderRepeatSlice extends BinaryImgChnlProvider {
+public class BinaryImgChnlProviderRepeatSlice extends BinaryImgChnlProviderOne {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
-	private BinaryImgChnlProvider binaryImgChnlProvider;
-	
-	@BeanField
-	private ImageDimProvider dimProvider = new GuessDimFromInputImage();
+	private ImageDimProvider dim = new GuessDimFromInputImage();
 	// END BEAN PROPERTIES
 
 	@Override
-	public BinaryChnl create() throws CreateException {
-		
-		BinaryChnl chnl = binaryImgChnlProvider.create();
+	public BinaryChnl createFromChnl(BinaryChnl chnl) throws CreateException {
 		
 		Chnl chnlIn = chnl.getChnl();
 		VoxelBox<ByteBuffer> vbIn = chnlIn.getVoxelBox().asByte();
 		
-		ImageDim dims = dimProvider.create();
+		ImageDim dimSource = dim.create();
 		
-		if (chnl.getDimensions().getX()!=dims.getX() && chnl.getDimensions().getY()!=dims.getY() ) {
+		if (chnl.getDimensions().getX()!=dimSource.getX() && chnl.getDimensions().getY()!=dimSource.getY() ) {
 			throw new CreateException("dims do not match");
 		}
 		
-		Chnl chnlOut = ChnlFactory.instance().createEmptyInitialised(dims, VoxelDataTypeUnsignedByte.instance);
+		Chnl chnlOut = ChnlFactory.instance().createEmptyInitialised(dimSource, VoxelDataTypeUnsignedByte.instance);
 		VoxelBox<ByteBuffer> vbOut = chnlOut.getVoxelBox().asByte();
 		
 		for( int z=0; z<chnlOut.getDimensions().getExtnt().getZ(); z++) {
@@ -90,19 +80,11 @@ public class BinaryImgChnlProviderRepeatSlice extends BinaryImgChnlProvider {
 		return new BinaryChnl( chnlOut, chnl.getBinaryValues() );
 	}
 
-	public BinaryImgChnlProvider getBinaryImgChnlProvider() {
-		return binaryImgChnlProvider;
+	public ImageDimProvider getDim() {
+		return dim;
 	}
 
-	public void setBinaryImgChnlProvider(BinaryImgChnlProvider binaryImgChnlProvider) {
-		this.binaryImgChnlProvider = binaryImgChnlProvider;
-	}
-
-	public ImageDimProvider getDimProvider() {
-		return dimProvider;
-	}
-
-	public void setDimProvider(ImageDimProvider dimProvider) {
-		this.dimProvider = dimProvider;
+	public void setDim(ImageDimProvider dim) {
+		this.dim = dim;
 	}
 }

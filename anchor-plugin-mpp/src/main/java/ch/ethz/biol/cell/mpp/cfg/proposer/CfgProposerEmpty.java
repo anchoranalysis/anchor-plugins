@@ -36,11 +36,6 @@ import org.anchoranalysis.anchor.mpp.proposer.ProposerContext;
 
 public class CfgProposerEmpty extends CfgProposer {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	@Override
 	public boolean isCompatibleWith(Mark testMark) {
 		return true;

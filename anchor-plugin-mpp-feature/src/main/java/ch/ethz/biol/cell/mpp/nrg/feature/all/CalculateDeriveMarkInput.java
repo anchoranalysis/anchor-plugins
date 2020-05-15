@@ -53,7 +53,7 @@ public class CalculateDeriveMarkInput extends FeatureCalculation<FeatureInputMar
 		
 		return new FeatureInputMark(
 			mark,
-			params.getResOptional()
+			params.getDimensionsOptional()
 		);	
 	}
 	

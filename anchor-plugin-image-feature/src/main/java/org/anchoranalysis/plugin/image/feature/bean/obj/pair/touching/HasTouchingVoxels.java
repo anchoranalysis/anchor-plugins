@@ -46,11 +46,6 @@ import org.anchoranalysis.image.voxel.kernel.count.CountKernel;
  */
 public class HasTouchingVoxels extends TouchingVoxels {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	@Override
 	protected double calcWithIntersection(ObjMask om1, ObjMask om2, BoundingBox bboxIntersect)
 			throws FeatureCalcException {

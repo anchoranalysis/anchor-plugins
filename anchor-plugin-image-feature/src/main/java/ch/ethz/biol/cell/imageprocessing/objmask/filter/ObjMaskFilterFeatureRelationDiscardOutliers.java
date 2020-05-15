@@ -29,6 +29,7 @@ package ch.ethz.biol.cell.imageprocessing.objmask.filter;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
@@ -55,17 +56,12 @@ import cern.jet.stat.Descriptive;
 //   median +- (factor * stdDev)
 public class ObjMaskFilterFeatureRelationDiscardOutliers extends ObjMaskFilter {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
 	private FeatureProvider<FeatureInputSingleObj> featureProvider;
 	
 	@BeanField @OptionalBean
-	private ChnlProvider chnlProvider;
+	private ChnlProvider chnl;
 	
 	@BeanField
 	private double quantile;
@@ -78,7 +74,7 @@ public class ObjMaskFilterFeatureRelationDiscardOutliers extends ObjMaskFilter {
 	// END BEAN PROPERTIES
 	
 	@Override
-	public void filter(ObjMaskCollection objs, ImageDim dim, ObjMaskCollection objsRejected)
+	public void filter(ObjMaskCollection objs, Optional<ImageDim> dim, Optional<ObjMaskCollection> objsRejected)
 			throws OperationFailedException {
 
 		// Nothing to do if we don't have enough options
@@ -101,16 +97,16 @@ public class ObjMaskFilterFeatureRelationDiscardOutliers extends ObjMaskFilter {
 				session = FeatureSession.with(
 					feature,
 					new FeatureInitParams(),
-					getSharedObjects().getFeature().getSharedFeatureSet().downcast(),
+					getSharedObjects().getFeature().getSharedFeatureSet(),
 					getLogger()
 				);				
 			} catch (FeatureCalcException e) {
 				throw new OperationFailedException(e);
 			}
 			
-			if (chnlProvider!=null) {
+			if (chnl!=null) {
 				try {
-					nrgStack = new NRGStackWithParams(chnlProvider.create());
+					nrgStack = new NRGStackWithParams(chnl.create());
 				} catch (CreateException e) {
 					throw new OperationFailedException(e);
 				}
@@ -155,8 +151,8 @@ public class ObjMaskFilterFeatureRelationDiscardOutliers extends ObjMaskFilter {
 				ObjMask omRemove = objs.get(i);
 				listToRemove.add( omRemove );
 				
-				if (objsRejected!=null) {
-					objsRejected.add( omRemove );
+				if (objsRejected.isPresent()) {
+					objsRejected.get().add( omRemove );
 				}
 				
 				if (getLogger()!=null) {
@@ -183,13 +179,6 @@ public class ObjMaskFilterFeatureRelationDiscardOutliers extends ObjMaskFilter {
 	public void setFeatureProvider(FeatureProvider<FeatureInputSingleObj> featureProvider) {
 		this.featureProvider = featureProvider;
 	}
-	public ChnlProvider getChnlProvider() {
-		return chnlProvider;
-	}
-
-	public void setChnlProvider(ChnlProvider chnlProvider) {
-		this.chnlProvider = chnlProvider;
-	}
 
 	public int getMinNumObjs() {
 		return minNumObjs;
@@ -213,6 +202,14 @@ public class ObjMaskFilterFeatureRelationDiscardOutliers extends ObjMaskFilter {
 
 	public void setMinRatio(double minRatio) {
 		this.minRatio = minRatio;
+	}
+
+	public ChnlProvider getChnl() {
+		return chnl;
+	}
+
+	public void setChnl(ChnlProvider chnl) {
+		this.chnl = chnl;
 	}
 
 	

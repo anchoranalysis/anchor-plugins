@@ -36,11 +36,6 @@ import org.anchoranalysis.anchor.mpp.mark.conic.MarkSphere;
 
 public class MarkDistanceRadii extends MarkDistance {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 5253528996942078895L;
-
 	@Override
 	public boolean isCompatibleWith(Mark testMark) {
 		

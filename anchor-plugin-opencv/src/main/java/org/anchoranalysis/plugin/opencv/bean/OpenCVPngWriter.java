@@ -40,11 +40,6 @@ import org.opencv.imgcodecs.Imgcodecs;
 
 public class OpenCVPngWriter extends RasterWriter {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	static {
 		CVInit.alwaysExecuteBeforeCallingLibrary();
 	}

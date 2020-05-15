@@ -41,11 +41,6 @@ import org.anchoranalysis.image.histogram.Histogram;
 
 public class PixelScoreIdentityImposeValueRelationToHistogram extends PixelScore {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
 	private int nrgChnlIndexCheck = 0;

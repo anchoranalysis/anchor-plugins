@@ -29,7 +29,7 @@ package ch.ethz.biol.cell.imageprocessing.objmask.provider;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.image.bean.provider.BinaryImgChnlProvider;
+import org.anchoranalysis.image.bean.provider.BinaryChnlProvider;
 import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
 import org.anchoranalysis.image.binary.BinaryChnl;
 import org.anchoranalysis.image.objmask.ObjMask;
@@ -37,14 +37,9 @@ import org.anchoranalysis.image.objmask.ObjMaskCollection;
 
 public class ObjMaskProviderFromBinaryImgChnl extends ObjMaskProvider {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
-	private BinaryImgChnlProvider binaryImgChnlProvider;
+	private BinaryChnlProvider binaryChnl;
 	// END BEAN PROPERTIES
 	
 	@Override
@@ -52,18 +47,18 @@ public class ObjMaskProviderFromBinaryImgChnl extends ObjMaskProvider {
 
 		ObjMaskCollection omc = new ObjMaskCollection();
 		
-		BinaryChnl chnl = binaryImgChnlProvider.create();
+		BinaryChnl chnl = binaryChnl.create();
 		
 		omc.add( new ObjMask( chnl.binaryVoxelBox() ) );
 		
 		return omc;
 	}
 
-	public BinaryImgChnlProvider getBinaryImgChnlProvider() {
-		return binaryImgChnlProvider;
+	public BinaryChnlProvider getBinaryChnl() {
+		return binaryChnl;
 	}
 
-	public void setBinaryImgChnlProvider(BinaryImgChnlProvider binaryImgChnlProvider) {
-		this.binaryImgChnlProvider = binaryImgChnlProvider;
+	public void setBinaryChnl(BinaryChnlProvider binaryChnl) {
+		this.binaryChnl = binaryChnl;
 	}
 }

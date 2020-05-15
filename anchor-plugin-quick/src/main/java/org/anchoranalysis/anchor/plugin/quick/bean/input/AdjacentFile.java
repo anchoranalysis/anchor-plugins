@@ -31,11 +31,6 @@ import org.anchoranalysis.bean.annotation.BeanField;
 
 public class AdjacentFile extends AnchorBean<AdjacentFile> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PROPERTIES
 	/** A name to describe the adjacent file */
 	@BeanField

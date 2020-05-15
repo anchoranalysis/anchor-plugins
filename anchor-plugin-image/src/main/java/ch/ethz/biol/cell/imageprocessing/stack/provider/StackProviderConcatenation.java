@@ -39,11 +39,6 @@ import org.anchoranalysis.image.stack.Stack;
 
 public class StackProviderConcatenation extends StackProvider {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 4178845846029799957L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
 	private List<BeanImgStackProvider<?,?>> list = new ArrayList<>();

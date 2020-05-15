@@ -27,33 +27,17 @@ package ch.ethz.biol.cell.imageprocessing.chnl.provider;
  */
 
 
-import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.bean.annotation.Positive;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.image.bean.provider.ChnlProvider;
 import org.anchoranalysis.image.chnl.Chnl;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 
-public class ChnlProviderSubtractFromConstant extends ChnlProvider {
-
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
-	// START BEAN PROPERTIES
-	@BeanField @Positive
-	private int value = 0;
-	
-	@BeanField
-	private ChnlProvider chnlProvider;
-	// END BEAN PROPERTIES
+public class ChnlProviderSubtractFromConstant extends ChnlProviderOneValue {
 	
 	@Override
-	public Chnl create() throws CreateException {
+	public Chnl createFromChnlValue(Chnl chnl, double value) throws CreateException {
 		
-		Chnl chnl = chnlProvider.create();
+		int valueInt = (int) value;
 		
 		VoxelBox<?> vb = chnl.getVoxelBox().any();
 		
@@ -63,29 +47,11 @@ public class ChnlProviderSubtractFromConstant extends ChnlProvider {
 			
 			for( int i=0; i<chnl.getDimensions().getVolumeXY(); i++) {
 				int posVal = bb.getInt(i);
-				int valOut = value - posVal; 
-				bb.putInt(i, valOut );
+				bb.putInt(i, valueInt - posVal);
 			}
 			
 		}
 		
 		return chnl;
 	}
-
-	public int getValue() {
-		return value;
-	}
-
-	public void setValue(int value) {
-		this.value = value;
-	}
-
-	public ChnlProvider getChnlProvider() {
-		return chnlProvider;
-	}
-
-	public void setChnlProvider(ChnlProvider chnlProvider) {
-		this.chnlProvider = chnlProvider;
-	}
-
 }

@@ -30,7 +30,7 @@ import java.nio.ByteBuffer;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
+import org.anchoranalysis.image.bean.provider.ObjMaskProviderOne;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
 import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.image.objmask.ObjMaskCollection;
@@ -43,35 +43,21 @@ import org.anchoranalysis.image.objmask.factory.CreateFromConnectedComponentsFac
  * @author FEEHANO
  *
  */
-public class ObjMaskProviderConnectedComponentsObjs extends ObjMaskProvider {
-
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
+public class ObjMaskProviderConnectedComponentsObjs extends ObjMaskProviderOne {
 
 	// START BEAN PROPERTIES
-	@BeanField
-	private ObjMaskProvider objs;
-	
 	/** if TRUE, uses 8 neighbourhood instead of 4, and similarly in 3d */
 	@BeanField
 	private boolean bigNghb = false;
 	// END BEAN PROPERTIES
 	
 	@Override
-	public ObjMaskCollection create() throws CreateException {
-		
-		ObjMaskCollection objsCollection = objs.create();
+	public ObjMaskCollection createFromObjs(ObjMaskCollection objsCollection) throws CreateException {
 		
 		ObjMaskCollection out = new ObjMaskCollection();
-		
-		
-		CreateFromConnectedComponentsFactory createObjMasks = new CreateFromConnectedComponentsFactory();
-		createObjMasks.setMinNumberVoxels(1);
-		createObjMasks.setBigNghb(bigNghb);
-		
-		
+				
+		CreateFromConnectedComponentsFactory createObjMasks = new CreateFromConnectedComponentsFactory(bigNghb, 1);
+				
 		for( ObjMask om : objsCollection ) {
 			ObjMaskCollection omConnected = createObjs3D( om, createObjMasks );
 			out.addAll(omConnected);
@@ -94,16 +80,7 @@ public class ObjMaskProviderConnectedComponentsObjs extends ObjMaskProvider {
 	}
 	
 	private ObjMaskCollection createObjsFromMask( BinaryVoxelBox<ByteBuffer> vb, CreateFromConnectedComponentsFactory createObjMasks ) throws CreateException {
-
 		return createObjMasks.createConnectedComponents(vb );
-	}
-
-	public ObjMaskProvider getObjs() {
-		return objs;
-	}
-
-	public void setObjs(ObjMaskProvider objs) {
-		this.objs = objs;
 	}
 
 	public boolean isBigNghb() {

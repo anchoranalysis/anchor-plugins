@@ -181,11 +181,11 @@ public class CalculatePairIntersection extends FeatureCalculation<Optional<ObjMa
 		
 		ObjMask omMergedEroded = MorphologicalErosion.createErodedObjMask(
 			omMerged,
-			dim.getExtnt(),
+			Optional.of(dim.getExtnt()),
 			do3D,
 			iterationsErosion,
 			true,
-			null
+			Optional.empty()
 		);
 		
 		Optional<ObjMask> omIntersect = omIntersection.intersect(omMergedEroded, dim);

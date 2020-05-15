@@ -48,11 +48,6 @@ public class ConsoleAcceptedReporter extends ReporterOptimizationStep<CfgNRGPixe
 	
 	//private static Log log = LogFactory.getLog(ConsoleAcceptedReporter.class);
 	
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -6363971468964257234L;
-
 	private LogErrorReporter logger;
 	
 	public ConsoleAcceptedReporter() {

@@ -49,13 +49,6 @@ import ch.ethz.biol.cell.sgmn.objmask.watershed.minimaimposition.grayscalerecons
 
 public class MinimaImpositionGrayscaleReconstruction extends MinimaImposition {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
-	
-	
 	// START BEAN PROPERTIES
 	@BeanField
 	private GrayscaleReconstructionByErosion grayscaleReconstruction;

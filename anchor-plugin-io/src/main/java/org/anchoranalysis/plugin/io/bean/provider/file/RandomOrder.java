@@ -40,11 +40,6 @@ import org.anchoranalysis.io.error.AnchorIOException;
 
 public class RandomOrder extends FileProvider {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
 	private FileProvider fileProvider;

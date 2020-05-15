@@ -27,49 +27,18 @@ package org.anchoranalysis.plugin.operator.feature.bean.arithmetic;
  */
 
 
-import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.feature.bean.operator.FeatureGenericSingleElem;
-import org.anchoranalysis.feature.cache.SessionInput;
-import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.input.FeatureInput;
+import org.anchoranalysis.plugin.operator.feature.bean.FeatureGenericWithValue;
 
-public class ToThePowerOfConstant<T extends FeatureInput> extends FeatureGenericSingleElem<T> {
+public class ToThePowerOfConstant<T extends FeatureInput> extends FeatureGenericWithValue<T> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
-	// START BEAN PARAMETERS
-	@BeanField
-	private double constant = 0.5;
-	// END BEAN PARAMETERS
-	
 	@Override
-	public double calc( SessionInput<T> input ) throws FeatureCalcException {
-		double ret = Math.pow(
-			input.calc( getItem() ),
-			constant
-		);
-		//assert( !Double.isNaN(ret) );
-		return ret;
-	}
-	
-	@Override
-	public String getParamDscr() {
-		return String.format("%f", constant);
-	}
-	
-	@Override
-	public String getDscrLong() {
-		return String.format("%s^%f)", getItem().getDscrLong(), constant );
+	protected double combineValueAndFeature(double value, double featureResult) {
+		return Math.pow(featureResult, value);
 	}
 
-	public double getConstant() {
-		return constant;
-	}
-
-	public void setConstant(double constant) {
-		this.constant = constant;
+	@Override
+	protected String combineDscr(String valueDscr, String featureDscr) {
+		return featureDscr + "^" + valueDscr;
 	}
 }

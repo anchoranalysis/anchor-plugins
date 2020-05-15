@@ -38,11 +38,6 @@ import org.anchoranalysis.image.voxel.kernel.outline.OutlineKernel3;
 
 public class NumBorderVoxels extends FeatureObjMask {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
 	private boolean outsideAtThreshold = false;
@@ -62,8 +57,7 @@ public class NumBorderVoxels extends FeatureObjMask {
 	}
 	
 	public static int numBorderPixels( ObjMask om, boolean ignoreAtThreshold, boolean outsideAtThreshold, boolean do3D ) {
-		OutlineKernel3 kernel = new OutlineKernel3(om.getBinaryValuesByte(), outsideAtThreshold, do3D);
-		kernel.setIgnoreAtThreshold(ignoreAtThreshold);
+		OutlineKernel3 kernel = new OutlineKernel3(om.getBinaryValuesByte(), outsideAtThreshold, do3D, ignoreAtThreshold);
 		return (int) ApplyKernel.applyForCount(kernel, om.getVoxelBox());
 	}
 

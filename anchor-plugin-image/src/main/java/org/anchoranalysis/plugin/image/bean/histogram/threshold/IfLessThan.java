@@ -27,12 +27,7 @@ package org.anchoranalysis.plugin.image.bean.histogram.threshold;
  */
 
 
-import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.image.bean.threshold.CalculateLevel;
-import org.anchoranalysis.image.histogram.Histogram;
-import org.apache.commons.lang.builder.EqualsBuilder;
-import org.apache.commons.lang.builder.HashCodeBuilder;
+
 
 
 /**
@@ -41,79 +36,10 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
  * @author owen
  *
  */
-public class IfLessThan extends CalculateLevel {
-
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
-	// START BEAN PROPERTIES
-	@BeanField
-	private CalculateLevel calculateLevel;
-	
-	@BeanField
-	private CalculateLevel calculateLevelElse;
-	
-	@BeanField
-	private int threshold;
-	// END BEAN PROPERTIES
-	
-	@Override
-	public int calculateLevel(Histogram h) throws OperationFailedException {
-
-		int level = calculateLevel.calculateLevel(h);
-		if (level<threshold) {
-			return calculateLevelElse.calculateLevel(h);
-		} else {
-			return level;
-		}
-	}
-	
-	public CalculateLevel getCalculateLevel() {
-		return calculateLevel;
-	}
-
-	public void setCalculateLevel(CalculateLevel calculateLevel) {
-		this.calculateLevel = calculateLevel;
-	}
-
-	public CalculateLevel getCalculateLevelElse() {
-		return calculateLevelElse;
-	}
-
-	public void setCalculateLevelElse(CalculateLevel calculateLevelElse) {
-		this.calculateLevelElse = calculateLevelElse;
-	}
-
-	public int getThreshold() {
-		return threshold;
-	}
-
-	public void setThreshold(int threshold) {
-		this.threshold = threshold;
-	}
-	
-	@Override
-	public boolean equals(Object obj) {
-		if(obj instanceof IfLessThan){
-	    	final IfLessThan other = (IfLessThan) obj;
-	        return new EqualsBuilder()
-	            .append(calculateLevel, other.calculateLevel)
-	            .append(calculateLevelElse, other.calculateLevelElse)
-	            .append(threshold, other.threshold)
-	            .isEquals();
-	    } else{
-	        return false;
-	    }
-	}
+public class IfLessThan extends CalculateLevelRelativeToThreshold {
 
 	@Override
-	public int hashCode() {
-		return new HashCodeBuilder()
-			.append(calculateLevel)
-			.append(calculateLevelElse)
-			.append(threshold)
-			.toHashCode();
+	protected boolean useElseInstead(int level, int threshold) {
+		return level<threshold;
 	}
 }

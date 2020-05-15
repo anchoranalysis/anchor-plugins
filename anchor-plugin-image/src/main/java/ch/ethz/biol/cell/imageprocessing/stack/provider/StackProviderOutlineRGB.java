@@ -34,7 +34,7 @@ import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.image.bean.provider.BinaryImgChnlProvider;
+import org.anchoranalysis.image.bean.provider.BinaryChnlProvider;
 import org.anchoranalysis.image.bean.provider.ChnlProvider;
 import org.anchoranalysis.image.binary.BinaryChnl;
 import org.anchoranalysis.image.chnl.Chnl;
@@ -48,18 +48,12 @@ import ch.ethz.biol.cell.imageprocessing.binaryimgchnl.provider.BinaryImgChnlPro
 
 public class StackProviderOutlineRGB extends StackProviderWithBackground {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
-	
 	// START BEAN PROPERTIES
 	@BeanField
-	private BinaryImgChnlProvider binaryImgChnlProviderMask;
+	private BinaryChnlProvider mask;
 	
 	@BeanField @OptionalBean
-	private ChnlProvider chnlProviderBlue;
+	private ChnlProvider chnlBlue;
 	
 	@BeanField
 	private boolean mip = false;
@@ -74,15 +68,15 @@ public class StackProviderOutlineRGB extends StackProviderWithBackground {
 	@Override
 	public Stack create() throws CreateException {
 		
-		BinaryChnl mask = binaryImgChnlProviderMask.create();
+		BinaryChnl maskChnl = mask.create();
 				
 		try {
-			boolean do3D = mip!=true || mask.getDimensions().getZ()==1;
+			boolean do3D = mip!=true || maskChnl.getDimensions().getZ()==1;
 			
 			return CalcOutlineRGB.apply(
-				calcOutline(mask),
+				calcOutline(maskChnl),
 				backgroundStack(do3D),
-				createBlue(do3D, mask.getDimensions()),
+				createBlue(do3D, maskChnl.getDimensions()),
 				createShort
 			);
 			
@@ -101,8 +95,8 @@ public class StackProviderOutlineRGB extends StackProviderWithBackground {
 	}
 	
 	private Chnl createBlueMaybeProvider(ImageDim dim) throws CreateException {
-		if (chnlProviderBlue!=null) {
-			return chnlProviderBlue.create();
+		if (chnlBlue!=null) {
+			return chnlBlue.create();
 		} else {
 			return ChnlFactory.instance().createEmptyInitialised(dim, VoxelDataTypeUnsignedByte.instance);
 		}
@@ -125,8 +119,7 @@ public class StackProviderOutlineRGB extends StackProviderWithBackground {
 		// We calculate outline of mask
 		BinaryImgChnlProviderOutline cpOutline = new BinaryImgChnlProviderOutline();
 		cpOutline.setForce2D(force2D);
-		
-		cpOutline.setBinaryImgChnlProvider( new BinaryImgChnlProviderHolder(maskIn) );
+		cpOutline.setBinaryChnl( new BinaryImgChnlProviderHolder(maskIn) );
 		try {
 			cpOutline.initRecursive( getSharedObjects(), getLogger() );
 			return cpOutline.create();
@@ -141,22 +134,6 @@ public class StackProviderOutlineRGB extends StackProviderWithBackground {
 
 	public void setMip(boolean mip) {
 		this.mip = mip;
-	}
-
-	public BinaryImgChnlProvider getBinaryImgChnlProviderMask() {
-		return binaryImgChnlProviderMask;
-	}
-
-	public void setBinaryImgChnlProviderMask(BinaryImgChnlProvider chnlProviderMask) {
-		this.binaryImgChnlProviderMask = chnlProviderMask;
-	}
-
-	public ChnlProvider getChnlProviderBlue() {
-		return chnlProviderBlue;
-	}
-
-	public void setChnlProviderBlue(ChnlProvider chnlProviderBlue) {
-		this.chnlProviderBlue = chnlProviderBlue;
 	}
 
 	public boolean isForce2D() {
@@ -175,4 +152,19 @@ public class StackProviderOutlineRGB extends StackProviderWithBackground {
 		this.createShort = createShort;
 	}
 
+	public BinaryChnlProvider getMask() {
+		return mask;
+	}
+
+	public void setMask(BinaryChnlProvider mask) {
+		this.mask = mask;
+	}
+
+	public ChnlProvider getChnlBlue() {
+		return chnlBlue;
+	}
+
+	public void setChnlBlue(ChnlProvider chnlBlue) {
+		this.chnlBlue = chnlBlue;
+	}
 }

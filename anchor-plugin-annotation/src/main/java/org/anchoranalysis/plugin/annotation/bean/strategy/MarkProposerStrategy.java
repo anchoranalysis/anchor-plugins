@@ -39,11 +39,6 @@ import org.anchoranalysis.io.bean.filepath.generator.FilePathGenerator;
 /** Annotates each image with a mark */
 public class MarkProposerStrategy extends SingleFilePathGeneratorStrategy {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
 	private String markProposerName;

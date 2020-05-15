@@ -33,11 +33,6 @@ import org.anchoranalysis.anchor.mpp.proposer.ProposerContext;
 
 public class UniformRandom extends MarkFromCfgProposer {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -6533845036739997986L;
-
 	@Override
 	public boolean isCompatibleWith(Mark testMark) {
 		return true;

@@ -41,11 +41,6 @@ import org.anchoranalysis.mpp.io.bean.input.MultiInputManager;
  */
 public class AppendStack extends FilePathBaseAppendToManagerWithFileID {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	// START BEAN PROPERTIES
 	@BeanField
 	private String extension = "tif";

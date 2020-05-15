@@ -41,16 +41,11 @@ import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.core.geometry.Point3f;
 import org.anchoranalysis.core.geometry.PointConverter;
 
-import ch.ethz.biol.cell.mpp.mark.pointsfitter.ConvexHullUtilities;
+import ch.ethz.biol.cell.imageprocessing.binaryimgchnl.provider.ConvexHullUtilities;
 
 // Applies a points fitter on the convex hull of some objects
 // Only works in 2D for now
 public class MarkProviderPointsFitterFromConvexHull extends MarkProvider {
-	
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
 	
 	// START BEAN PROPERTIES
 	@BeanField

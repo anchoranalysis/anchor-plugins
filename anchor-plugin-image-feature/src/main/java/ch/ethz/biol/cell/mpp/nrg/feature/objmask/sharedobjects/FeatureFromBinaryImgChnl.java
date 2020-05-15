@@ -34,7 +34,7 @@ import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.feature.cache.ChildCacheName;
 import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.image.bean.provider.BinaryImgChnlProvider;
+import org.anchoranalysis.image.bean.provider.BinaryChnlProvider;
 import org.anchoranalysis.image.binary.BinaryChnl;
 import org.anchoranalysis.image.feature.bean.objmask.FeatureObjMaskSharedObjects;
 import org.anchoranalysis.image.feature.bean.objmask.pair.FeatureObjMaskPair;
@@ -49,11 +49,6 @@ import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
  */
 public class FeatureFromBinaryImgChnl extends FeatureObjMaskSharedObjects {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
 	private FeatureObjMaskPair item;
@@ -61,7 +56,7 @@ public class FeatureFromBinaryImgChnl extends FeatureObjMaskSharedObjects {
 	// This cannot be initialized in the normal way, as Feature isn't contained in a Shared-Objects
 	// container. So instead it's initialized at a later point.
 	@BeanField @SkipInit
-	private BinaryImgChnlProvider binaryImgChnlProvider;
+	private BinaryChnlProvider binaryChnl;
 	// END BEAN PROPERTIES
 	
 	private BinaryChnl chnl;
@@ -70,10 +65,10 @@ public class FeatureFromBinaryImgChnl extends FeatureObjMaskSharedObjects {
 	public void beforeCalcCast(FeatureInitParamsSharedObjs params) throws InitException {
 		super.beforeCalcCast(params);
 		assert( getLogger()!=null );
-		binaryImgChnlProvider.initRecursive(params.getSharedObjects(), getLogger() );
+		binaryChnl.initRecursive(params.getSharedObjects(), getLogger() );
 		
 		try {
-			chnl = binaryImgChnlProvider.create();
+			chnl = binaryChnl.create();
 		} catch (CreateException e) {
 			throw new InitException(e);
 		}
@@ -96,11 +91,11 @@ public class FeatureFromBinaryImgChnl extends FeatureObjMaskSharedObjects {
 		this.item = item;
 	}
 
-	public BinaryImgChnlProvider getBinaryImgChnlProvider() {
-		return binaryImgChnlProvider;
+	public BinaryChnlProvider getBinaryChnl() {
+		return binaryChnl;
 	}
 
-	public void setBinaryImgChnlProvider(BinaryImgChnlProvider binaryImgChnlProvider) {
-		this.binaryImgChnlProvider = binaryImgChnlProvider;
+	public void setBinaryChnl(BinaryChnlProvider binaryChnl) {
+		this.binaryChnl = binaryChnl;
 	}
 }

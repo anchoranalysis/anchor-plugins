@@ -28,11 +28,9 @@ package ch.ethz.biol.cell.sgmn.binary;
 
 
 import java.nio.ByteBuffer;
-
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.geometry.Point3i;
-import org.anchoranalysis.core.random.RandomNumberGenerator;
 import org.anchoranalysis.image.bean.provider.ChnlProvider;
 import org.anchoranalysis.image.bean.sgmn.binary.BinarySgmn;
 import org.anchoranalysis.image.bean.sgmn.binary.BinarySgmnParameters;
@@ -52,13 +50,9 @@ import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
 //  It sets a pixel as high, if it is greater than or equal to the pixel in the other "Thrshld" channel
 public class SgmnThrshldAgainstChnl extends BinarySgmn {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
 	// START BEAN PROPERTIES
 	@BeanField
-	private ChnlProvider chnlProviderThrshld;
+	private ChnlProvider chnlThreshold;
 	
 	@BeanField
 	private boolean clearOutsideMask = true;
@@ -67,21 +61,20 @@ public class SgmnThrshldAgainstChnl extends BinarySgmn {
 	@Override
 	public BinaryVoxelBox<ByteBuffer> sgmn(
 			VoxelBoxWrapper voxelBox,
-			BinarySgmnParameters params,
-			RandomNumberGenerator re) throws SgmnFailedException {
+			BinarySgmnParameters params) throws SgmnFailedException {
 
 		VoxelBox<?> voxelBoxIn = voxelBox.any();
 		VoxelBox<ByteBuffer> voxelBoxOut = createOutputChnl(voxelBox);
 		
-		Chnl chnlThrshld;
+		Chnl threshold;
 		
 		try {
-			chnlThrshld = chnlProviderThrshld.create();
+			threshold = chnlThreshold.create();
 		} catch (CreateException e) {
 			throw new SgmnFailedException(e);
 		}
 		
-		VoxelBox<?> vbThreshld = chnlThrshld.getVoxelBox().any();
+		VoxelBox<?> vbThreshld = threshold.getVoxelBox().any();
 		
 		
 		if (!vbThreshld.extnt().equals(voxelBoxIn.extnt())) {
@@ -132,20 +125,19 @@ public class SgmnThrshldAgainstChnl extends BinarySgmn {
 	@Override
 	public BinaryVoxelBox<ByteBuffer> sgmn(
 			VoxelBoxWrapper voxelBox,
-			BinarySgmnParameters params, ObjMask objMask,
-			RandomNumberGenerator re) throws SgmnFailedException {
+			BinarySgmnParameters params, ObjMask objMask) throws SgmnFailedException {
 
 		VoxelBox<?> voxelBoxIn = voxelBox.any();
 		VoxelBox<ByteBuffer> voxelBoxOut = createOutputChnl(voxelBox);
 		
-		Chnl chnlThrshld;
+		Chnl threshold;
 		try {
-			chnlThrshld = chnlProviderThrshld.create();
+			threshold = chnlThreshold.create();
 		} catch (CreateException e) {
 			throw new SgmnFailedException(e);
 		}
 		
-		VoxelBox<?> vbThrshld = chnlThrshld.getVoxelBox().any();
+		VoxelBox<?> vbThrshld = threshold.getVoxelBox().any();
 		
 		if (!vbThrshld.extnt().equals(voxelBoxIn.extnt())) {
 			throw new SgmnFailedException("chnlProviderThrshld is of different size to voxelBox");
@@ -194,25 +186,22 @@ public class SgmnThrshldAgainstChnl extends BinarySgmn {
 		return new BinaryVoxelBoxByte( voxelBoxOut, bvb.createInt() );
 	}
 
-	@Override
-	public VoxelBox<ByteBuffer> getAdditionalOutput() {
-		return null;
-	}
-
-	public ChnlProvider getChnlProviderThrshld() {
-		return chnlProviderThrshld;
-	}
-
-	public void setChnlProviderThrshld(ChnlProvider chnlProviderThrshld) {
-		this.chnlProviderThrshld = chnlProviderThrshld;
-	}
-
 	public boolean isClearOutsideMask() {
 		return clearOutsideMask;
 	}
 
 	public void setClearOutsideMask(boolean clearOutsideMask) {
 		this.clearOutsideMask = clearOutsideMask;
+	}
+
+
+	public ChnlProvider getChnlThreshold() {
+		return chnlThreshold;
+	}
+
+
+	public void setChnlThreshold(ChnlProvider chnlThreshold) {
+		this.chnlThreshold = chnlThreshold;
 	}
 
 }

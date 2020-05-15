@@ -34,11 +34,6 @@ import org.anchoranalysis.points.moment.CalculateObjMaskSecondMomentMatrixMIP;
 
 public class AxisLengthMIP extends AxisLengthBase {
 	
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	@Override
 	protected FeatureCalculation<MomentsFromPointsCalculator, FeatureInputSingleObj> momentsCalculator() {
 		// Justification

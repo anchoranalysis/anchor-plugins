@@ -38,11 +38,6 @@ import org.anchoranalysis.io.manifest.finder.FinderFileAsText;
 
 public class TextFileAsIntegerFromPath extends ReportFeatureForManifestFileBase {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	@Override
 	public String genFeatureStrFor(ManifestRecorderFile obj, LogErrorReporter logger)
 			throws OperationFailedException {

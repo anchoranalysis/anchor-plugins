@@ -58,11 +58,6 @@ import org.anchoranalysis.image.io.bean.rasterreader.RasterReader;
  */
 public class MultiInputManagerQuick extends MultiInputManagerBase {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	// START BEAN PROPERTIES
 	/** If non-empty then a rooted file-system is used with this root */	
 	@BeanField @AllowEmpty

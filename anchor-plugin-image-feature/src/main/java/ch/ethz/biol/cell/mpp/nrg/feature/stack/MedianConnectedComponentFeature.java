@@ -43,11 +43,6 @@ import cern.jet.stat.Descriptive;
 /** Calculates the median of a feature applied to each connected component */
 public class MedianConnectedComponentFeature extends FeatureStack {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
 	private Feature<FeatureInputSingleObj> item;

@@ -37,11 +37,6 @@ import org.anchoranalysis.core.text.LanguageUtilities;
  */
 public class SummarizerCount<T> extends Summarizer<T> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	private int count = 0;
 	
 	@Override

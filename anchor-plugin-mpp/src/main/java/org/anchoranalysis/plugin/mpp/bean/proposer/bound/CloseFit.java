@@ -43,11 +43,6 @@ import org.anchoranalysis.math.rotation.RotationMatrix;
 
 public class CloseFit extends BoundProposer {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 7604524813422801975L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
 	private BoundProposer boundProposer;

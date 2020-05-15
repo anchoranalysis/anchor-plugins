@@ -45,11 +45,6 @@ import org.apache.commons.lang.time.StopWatch;
 
 public final class TextFileReporter extends ReporterAgg<CfgNRGPixelized> implements IAggregateReceiver<CfgNRGPixelized> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -232064240608574647L;
-
 	private FileOutput fileOutput;
 	
 	private StopWatch timer = null;

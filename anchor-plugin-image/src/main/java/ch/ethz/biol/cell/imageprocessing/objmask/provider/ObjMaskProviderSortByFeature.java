@@ -36,23 +36,15 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorSingle;
-import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
+import org.anchoranalysis.image.bean.provider.ObjMaskProviderOne;
 import org.anchoranalysis.image.feature.bean.evaluator.FeatureEvaluator;
 import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
 import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.image.objmask.ObjMaskCollection;
 
-public class ObjMaskProviderSortByFeature extends ObjMaskProvider {
+public class ObjMaskProviderSortByFeature extends ObjMaskProviderOne {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PROPERTIES
-	@BeanField
-	private ObjMaskProvider objs;
-	
 	@BeanField
 	private FeatureEvaluator<FeatureInputSingleObj> featureEvaluator;
 	// END BEAN PROPERTIES
@@ -80,11 +72,8 @@ public class ObjMaskProviderSortByFeature extends ObjMaskProvider {
 		
 	}
 	
-	
 	@Override
-	public ObjMaskCollection create() throws CreateException {
-
-		ObjMaskCollection objsCollection = objs.create();
+	public ObjMaskCollection createFromObjs( ObjMaskCollection objsCollection ) throws CreateException {
 		
 		try {
 			FeatureCalculatorSingle<FeatureInputSingleObj> featureSession = featureEvaluator.createAndStartSession();
@@ -114,24 +103,12 @@ public class ObjMaskProviderSortByFeature extends ObjMaskProvider {
 			throw new CreateException(e);
 		}
 	}
-	
-	public ObjMaskProvider getObjs() {
-		return objs;
-	}
-
-
-	public void setObjs(ObjMaskProvider objs) {
-		this.objs = objs;
-	}
-
 
 	public FeatureEvaluator<FeatureInputSingleObj> getFeatureEvaluator() {
 		return featureEvaluator;
 	}
 
-
 	public void setFeatureEvaluator(FeatureEvaluator<FeatureInputSingleObj> featureEvaluator) {
 		this.featureEvaluator = featureEvaluator;
 	}
-
 }

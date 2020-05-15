@@ -33,11 +33,11 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 import org.anchoranalysis.core.params.KeyValueParams;
-import org.anchoranalysis.image.bean.provider.ChnlProvider;
+import org.anchoranalysis.image.bean.provider.ChnlProviderOne;
 import org.anchoranalysis.image.chnl.Chnl;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 
-public class ChnlProviderAssignFromKeyValueParams extends ChnlProvider {
+public class ChnlProviderAssignFromKeyValueParams extends ChnlProviderOne {
 
 	// START BEAN PROPERTIES
 	@BeanField
@@ -45,20 +45,10 @@ public class ChnlProviderAssignFromKeyValueParams extends ChnlProvider {
 	
 	@BeanField
 	private String key;
-	
-	@BeanField
-	private ChnlProvider chnlProvider;
 	// END BEAN PROPERTIES
 	
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	@Override
-	public Chnl create() throws CreateException {
-		
-		Chnl chnl = chnlProvider.create();
+	public Chnl createFromChnl(Chnl chnl) throws CreateException {
 		
 		KeyValueParams params;
 		try {
@@ -107,15 +97,4 @@ public class ChnlProviderAssignFromKeyValueParams extends ChnlProvider {
 	public void setKey(String key) {
 		this.key = key;
 	}
-
-	public ChnlProvider getChnlProvider() {
-		return chnlProvider;
-	}
-
-	public void setChnlProvider(ChnlProvider chnlProvider) {
-		this.chnlProvider = chnlProvider;
-	}
-
-	
-
 }

@@ -36,10 +36,11 @@ import org.anchoranalysis.bean.define.Define;
 import org.anchoranalysis.bean.define.adder.DefineAdderBean;
 import org.anchoranalysis.bean.xml.error.BeanXmlException;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.image.bean.provider.BinaryImgChnlProvider;
+import org.anchoranalysis.image.bean.provider.BinaryChnlProvider;
 import org.anchoranalysis.image.bean.provider.ChnlProvider;
 import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
 import org.anchoranalysis.image.bean.provider.stack.StackProvider;
+import org.anchoranalysis.image.bean.provider.stack.StackProviderReference;
 
 import ch.ethz.biol.cell.imageprocessing.binaryimgchnl.provider.BinaryImgChnlProviderReference;
 import ch.ethz.biol.cell.imageprocessing.chnl.provider.ChnlProviderReference;
@@ -48,7 +49,6 @@ import ch.ethz.biol.cell.imageprocessing.stack.provider.StackProviderChnlProvide
 import ch.ethz.biol.cell.imageprocessing.stack.provider.StackProviderOutlineFromCfg;
 import ch.ethz.biol.cell.imageprocessing.stack.provider.StackProviderOutlineRGB;
 import ch.ethz.biol.cell.imageprocessing.stack.provider.StackProviderRGBFromObjMask;
-import ch.ethz.biol.cell.imageprocessing.stack.provider.StackProviderReference;
 import ch.ethz.biol.cell.imageprocessing.stack.provider.StackProviderWithBackground;
 import ch.ethz.biol.cell.mpp.cfg.provider.CfgProviderReference;
 
@@ -61,11 +61,6 @@ import ch.ethz.biol.cell.mpp.cfg.provider.CfgProviderReference;
  */
 public class VisualizeOnBackground extends DefineAdderBean {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	private static final String SUFFIX = ".visualize";
 	
 	// START BEAN PROPERTIES
@@ -90,13 +85,11 @@ public class VisualizeOnBackground extends DefineAdderBean {
 		Define def = fromDelegate();
 
 		try {
-					
 			// We add all the existing definitions
 			define.addAll(def);
 			
 			// Now we add visualizations for the BinaryImgChnlProvider and ObjMaskProvider
-			
-			addVisualizationFor( def, define, BinaryImgChnlProvider.class, id ->
+			addVisualizationFor( def, define, BinaryChnlProvider.class, id ->
 				visualizationBinaryMask(id)
 			);
 			
@@ -146,7 +139,9 @@ public class VisualizeOnBackground extends DefineAdderBean {
 	private StackProvider visualizationBinaryMask( String binaryChnlProviderID ) {
 		StackProviderOutlineRGB provider = new StackProviderOutlineRGB();
 		addBackgroundProvider(provider);
-		provider.setBinaryImgChnlProviderMask( new BinaryImgChnlProviderReference(binaryChnlProviderID) );
+		provider.setMask(
+			new BinaryImgChnlProviderReference(binaryChnlProviderID)
+		);
 		return provider;
 	}
 	
@@ -166,14 +161,12 @@ public class VisualizeOnBackground extends DefineAdderBean {
 		provider.setOutlineWidth(outlineWidth);
 		return provider;
 	}
-	
-	
-	
+		
 	private void addBackgroundProvider( StackProviderWithBackground provider ) {
 		if (stackBackground) {
-			provider.setStackProviderBackground( backgroundStack() );
+			provider.setStackBackground( backgroundStack() );
 		} else {
-			provider.setChnlProviderBackground( backgroundChnl() );
+			provider.setChnlBackground( backgroundChnl() );
 		}
 	}
 	
@@ -189,8 +182,6 @@ public class VisualizeOnBackground extends DefineAdderBean {
 		return new ChnlProviderReference(backgroundID);
 	}
 	
-
-
 	public String getBackgroundID() {
 		return backgroundID;
 	}
@@ -222,5 +213,4 @@ public class VisualizeOnBackground extends DefineAdderBean {
 	public void setStackBackground(boolean stackBackground) {
 		this.stackBackground = stackBackground;
 	}
-
 }

@@ -41,11 +41,6 @@ import org.anchoranalysis.io.params.InputContextParams;
 public class SampleWithDirectory extends FileProviderWithDirectory {
 
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
 	private FileProviderWithDirectory fileProvider;

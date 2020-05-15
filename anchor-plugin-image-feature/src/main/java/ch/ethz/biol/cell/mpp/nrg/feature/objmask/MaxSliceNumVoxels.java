@@ -36,11 +36,6 @@ import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
 
 public class MaxSliceNumVoxels extends FeatureObjMask {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	private static int cntForByteBuffer( ByteBuffer bb, byte equalVal ) {
 		int cnt = 0;
 		while(bb.hasRemaining()) {

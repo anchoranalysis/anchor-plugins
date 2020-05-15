@@ -45,7 +45,6 @@ import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 import org.anchoranalysis.feature.session.FeatureSession;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorMulti;
 import org.anchoranalysis.image.extent.ImageDim;
-import org.anchoranalysis.image.extent.ImageRes;
 import org.anchoranalysis.test.LoggingFixture;
 import org.anchoranalysis.test.feature.ConstantsInListFixture;
 import org.anchoranalysis.test.feature.plugins.ResultsVectorTestUtilities;
@@ -56,7 +55,6 @@ import org.junit.Test;
 public class FeatureListMPPTest {
 	
 	private static final NRGStackWithParams nrgStack = NRGStackFixture.create(false,true);
-	private static final ImageRes RES = nrgStack.getDimensions().getRes();
 	private static final ImageDim DIM = nrgStack.getDimensions();
 	
 	@Before
@@ -141,7 +139,7 @@ public class FeatureListMPPTest {
 
 	private static void assertMark( FeatureCalculatorMulti<FeatureInputMark> session, Mark mark, double expected1, double expected2, double expected3 ) throws CreateException, FeatureCalcException {
 		ResultsVector rv = session.calc(
-			new FeatureInputMark(mark, RES )
+			new FeatureInputMark(mark, Optional.of(DIM) )
 		); 
 		ResultsVectorTestUtilities.assertCalc(
 			rv,

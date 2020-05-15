@@ -43,11 +43,6 @@ public class MinimalExecutionTimeStatsReporter extends ReporterOptimizationStep<
 
 	//private static Log log = LogFactory.getLog(MinimalExecutionTimeStatsReporter.class);
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 920302426179556203L;
-
 	// START BEAN PROPERTIES
 	@BeanField
 	private String outputName  = "minimalExecutionTimeStats";

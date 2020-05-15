@@ -34,11 +34,6 @@ import org.apache.commons.io.FilenameUtils;
 /** Remembers each unique extension, and associated count */
 public class ExtensionCount extends Summarizer<Path> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	private static String NO_EXTENSION = "NO_EXTENSION";
 	
 	private FrequencyMap<String> map = new FrequencyMap<>();

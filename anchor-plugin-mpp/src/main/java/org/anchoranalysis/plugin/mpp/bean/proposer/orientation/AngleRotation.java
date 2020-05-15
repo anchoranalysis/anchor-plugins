@@ -42,11 +42,6 @@ import org.anchoranalysis.image.orientation.Orientation2D;
 
 public class AngleRotation extends OrientationProposer {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 986729142724352475L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
 	private double angleDegrees = 0;

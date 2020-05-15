@@ -39,11 +39,6 @@ import java.util.List;
  */
 public class NumIntersectingObjsAboveThreshold extends FeatureIntersectingObjsThreshold {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	@Override
 	protected double aggregateResults(List<Double> results) {
 		

@@ -30,7 +30,6 @@ package ch.ethz.biol.cell.imageprocessing.objmask.provider;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
 import org.anchoranalysis.image.bean.scale.ScaleCalculator;
 import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.interpolator.InterpolatorFactory;
@@ -39,32 +38,23 @@ import org.anchoranalysis.image.scale.ScaleFactor;
 
 public class ObjMaskProviderScale extends ObjMaskProviderDimensions {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
 	private ScaleCalculator scaleCalculator;
-	
-	@BeanField
-	private ObjMaskProvider objs;
 	// END BEAN PROPERTIES
 	
 	@Override
-	public ObjMaskCollection create() throws CreateException {
+	public ObjMaskCollection createFromObjs(ObjMaskCollection objsCollection) throws CreateException {
 		
-		ImageDim dims = createDims();
+		ImageDim dim = createDim();
 		
 		ScaleFactor sf;
 		try {
-			sf = scaleCalculator.calc(dims);
+			sf = scaleCalculator.calc(dim);
 		} catch (OperationFailedException e) {
 			throw new CreateException(e);
 		}
-		
-		ObjMaskCollection objsCollection = objs.create();
+
 		try {
 			objsCollection.scale(
 				sf,
@@ -82,13 +72,5 @@ public class ObjMaskProviderScale extends ObjMaskProviderDimensions {
 
 	public void setScaleCalculator(ScaleCalculator scaleCalculator) {
 		this.scaleCalculator = scaleCalculator;
-	}
-
-	public ObjMaskProvider getObjs() {
-		return objs;
-	}
-
-	public void setObjs(ObjMaskProvider objs) {
-		this.objs = objs;
 	}
 }

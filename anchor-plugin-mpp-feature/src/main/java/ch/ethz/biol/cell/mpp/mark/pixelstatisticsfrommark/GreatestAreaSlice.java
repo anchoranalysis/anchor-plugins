@@ -32,42 +32,30 @@ import org.anchoranalysis.anchor.mpp.pxlmark.PxlMark;
 
 
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.bean.shared.relation.RelationBean;
+import org.anchoranalysis.bean.shared.relation.threshold.RelationToThreshold;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.core.relation.RelationToValue;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.voxel.statistics.VoxelStatistics;
 
 public class GreatestAreaSlice extends IndexedRegionBase {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -3617915321417174160L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
-	private RelationBean relationToThreshold;		// Definies what is INSIDE
-	
-	@BeanField
-	private int threshold;
+	private RelationToThreshold threshold;
 	// END BEAN PROPERTIES
-
 
 	@Override
 	protected VoxelStatistics createStatisticsFor(PxlMark pm, Mark mark, ImageDim dim) throws CreateException {
 
 		BoundingBox bbox = boundingBoxForRegion(pm);
-
-		RelationToValue relation = relationToThreshold.create();
 		
 		long maxArea = -1;
 		VoxelStatistics psMax = null;
 		for( int z=0; z<bbox.extnt().getZ(); z++) {
 			
 			VoxelStatistics ps = sliceStatisticsForRegion(pm, z);
-			long num = ps.countThreshold(relation, threshold);
+			long num = ps.countThreshold(threshold);
 			
 			if (num>maxArea) {
 				psMax = ps;
@@ -80,19 +68,41 @@ public class GreatestAreaSlice extends IndexedRegionBase {
 		return psMax;
 	}
 
-	public RelationBean getRelationToThreshold() {
-		return relationToThreshold;
-	}
-
-	public void setRelationToThreshold(RelationBean relationToThreshold) {
-		this.relationToThreshold = relationToThreshold;
-	}
-
-	public int getThreshold() {
+	public RelationToThreshold getThreshold() {
 		return threshold;
 	}
 
-	public void setThreshold(int threshold) {
+	public void setThreshold(RelationToThreshold threshold) {
 		this.threshold = threshold;
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = super.hashCode();
+		result = prime * result + ((threshold == null) ? 0 : threshold.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (!super.equals(obj))
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		GreatestAreaSlice other = (GreatestAreaSlice) obj;
+		if (threshold == null) {
+			if (other.threshold != null)
+				return false;
+		} else if (!threshold.equals(other.threshold))
+			return false;
+		return true;
+	}
+	
+	@Override
+	public String uniqueName() {
+		return super.uniqueName() + "_" + threshold.uniqueName();
 	}
 }

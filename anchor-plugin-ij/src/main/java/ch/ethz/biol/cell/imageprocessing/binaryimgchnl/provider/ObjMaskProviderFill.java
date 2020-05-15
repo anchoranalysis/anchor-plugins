@@ -28,42 +28,41 @@ package ch.ethz.biol.cell.imageprocessing.binaryimgchnl.provider;
 
 
 import java.nio.ByteBuffer;
+import java.util.Optional;
 
+import org.anchoranalysis.bean.ProviderNullableCreator;
 import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.image.bean.provider.BinaryImgChnlProvider;
-import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
+import org.anchoranalysis.image.bean.provider.BinaryChnlProvider;
+import org.anchoranalysis.image.bean.provider.ObjMaskProviderOne;
 import org.anchoranalysis.image.binary.BinaryChnl;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.image.objmask.ObjMaskCollection;
 
-// Files holes
-public class ObjMaskProviderFill extends ObjMaskProvider {
+/**
+ * Fills holes in an object. Existing obj-masks are overwritten (i.e. their memory buffers are replaced with filled-in pixels).
+ * 
+ * <p>An optional mask which restricts where a fill operation can happen</p>
+ * 
+ * @author Owen Feehan
+ *
+ */
+public class ObjMaskProviderFill extends ObjMaskProviderOne {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PROPERTIES
-	/** The objects whose holes are filled, current object-masks are overwritten */
-	@BeanField
-	private ObjMaskProvider objs;
-	
-	/** A mask which restricts where a fill operation can happen */
-	@BeanField
-	private BinaryImgChnlProvider maskProvider;
+	/**  */
+	@BeanField @OptionalBean
+	private BinaryChnlProvider mask;
 	// END BEAN PROPERTIES
 	
 	@Override
-	public ObjMaskCollection create() throws CreateException {
-
-		ObjMaskCollection objsCollection = objs.create();
+	public ObjMaskCollection createFromObjs( ObjMaskCollection objsCollection ) throws CreateException {
 		
-		BinaryChnl mask = createMaskOrNull();
+		Optional<BinaryChnl> maskChnl = ProviderNullableCreator.createOptional(mask);
 		
 		for( ObjMask om : objsCollection ) {
 			BinaryVoxelBox<ByteBuffer> bvb = om.binaryVoxelBox();
@@ -76,9 +75,9 @@ public class ObjMaskProviderFill extends ObjMaskProvider {
 				throw new CreateException(e);
 			}
 			
-			if (mask!=null) {
+			if (maskChnl.isPresent()) {
 				// Let's make an object for our mask
-				ObjMask omMask = mask.createMaskAvoidNew(om.getBoundingBox());
+				ObjMask omMask = maskChnl.get().createMaskAvoidNew(om.getBoundingBox());
 				
 				BoundingBox bboxAll = new BoundingBox( bvb.extnt() );
 				
@@ -90,29 +89,4 @@ public class ObjMaskProviderFill extends ObjMaskProvider {
 		
 		return objsCollection;
 	}
-	
-	private BinaryChnl createMaskOrNull() throws CreateException {
-		if (maskProvider!=null) {
-			return maskProvider.create();
-		} else {
-			return null;
-		}
-	}
-
-	public ObjMaskProvider getObjs() {
-		return objs;
-	}
-
-	public void setObjs(ObjMaskProvider objs) {
-		this.objs = objs;
-	}
-
-	public BinaryImgChnlProvider getMaskProvider() {
-		return maskProvider;
-	}
-
-	public void setMaskProvider(BinaryImgChnlProvider maskProvider) {
-		this.maskProvider = maskProvider;
-	}
-
 }

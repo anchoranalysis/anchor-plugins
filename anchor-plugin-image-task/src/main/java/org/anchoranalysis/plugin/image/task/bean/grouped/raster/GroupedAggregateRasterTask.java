@@ -34,8 +34,6 @@ package org.anchoranalysis.plugin.image.task.bean.grouped.raster;
 
 
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.log.LogErrorReporter;
-import org.anchoranalysis.core.log.LogReporter;
 import org.anchoranalysis.core.name.CombinedName;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
 import org.anchoranalysis.experiment.JobExecutionException;
@@ -44,7 +42,9 @@ import org.anchoranalysis.image.chnl.Chnl;
 import org.anchoranalysis.image.io.generator.raster.ChnlGenerator;
 import org.anchoranalysis.image.stack.NamedImgStackCollection;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
+import org.anchoranalysis.io.output.bound.BoundIOContext;
 import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
+import org.anchoranalysis.plugin.image.task.bean.grouped.BoundContextIntoSubfolder;
 import org.anchoranalysis.plugin.image.task.bean.grouped.GroupedSharedState;
 import org.anchoranalysis.plugin.image.task.bean.grouped.GroupedStackTask;
 import org.anchoranalysis.plugin.image.task.grouped.ChnlSource;
@@ -58,10 +58,7 @@ import org.anchoranalysis.plugin.image.task.grouped.NamedChnl;
 **/
 public class GroupedAggregateRasterTask extends GroupedStackTask<Chnl,AggregateChnl> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -5961126655531145104L;
+	
 	
 	// START BEAN PROPERTIES
 	// END BEAN PROPERTIES
@@ -98,11 +95,13 @@ public class GroupedAggregateRasterTask extends GroupedStackTask<Chnl,AggregateC
 		NamedImgStackCollection store,
 		String groupName,
 		GroupedSharedState<Chnl,AggregateChnl> sharedState,
-		BoundOutputManagerRouteErrors outputManager,
-		LogErrorReporter logErrorReporter
+		BoundIOContext context
 	) throws JobExecutionException {
 
-		ChnlSource source = new ChnlSource( store, sharedState.getChnlChecker() );
+		ChnlSource source = new ChnlSource(
+			store,
+			sharedState.getChnlChecker()
+		);
 		
 		try {
 			for( NamedChnl chnl : getSelectChnls().selectChnls(source, true)) {
@@ -121,14 +120,7 @@ public class GroupedAggregateRasterTask extends GroupedStackTask<Chnl,AggregateC
 	}
 			
 	@Override
-	public void afterAllJobsAreExecuted(
-		BoundOutputManagerRouteErrors outputManager,
-		GroupedSharedState<Chnl,AggregateChnl> sharedState,
-		LogReporter logReporter
-	) throws ExperimentExecutionException {
-		
-		// To make it a bit neater, we put all the aggregate channels in a stackCollection output
-		BoundOutputManagerRouteErrors subFolder = outputManager.resolveFolder("stackCollection");
+	public void afterAllJobsAreExecuted( GroupedSharedState<Chnl,AggregateChnl> sharedState, BoundIOContext context) throws ExperimentExecutionException {
 		
 		ChnlGenerator generator = new ChnlGenerator("meanChnl");
 		
@@ -141,9 +133,8 @@ public class GroupedAggregateRasterTask extends GroupedStackTask<Chnl,AggregateC
 				generator,
 				agg,
 				group.getCombinedName(),
-				subFolder,
 				sharedState.getChnlChecker().getChnlType(),
-				logReporter
+				new BoundContextIntoSubfolder(context, "stackCollection")
 			);
 		}	
 	}
@@ -152,19 +143,18 @@ public class GroupedAggregateRasterTask extends GroupedStackTask<Chnl,AggregateC
 		ChnlGenerator generator,
 		AggregateChnl agg,
 		String outputName,
-		BoundOutputManagerRouteErrors outputManager,
 		VoxelDataType outputType,
-		LogReporter logReporter
+		BoundIOContext context
 	) throws ExperimentExecutionException {
 		try {
 			Chnl mean = agg.createMeanChnl( outputType );
 			generator.setIterableElement(mean);
-			outputManager.getWriterAlwaysAllowed().write(
+			context.getOutputManager().getWriterAlwaysAllowed().write(
 				outputName,
 				() -> generator
 			);
 			
-			logReporter.logFormatted(
+			context.getLogReporter().logFormatted(
 				"Writing chnl %s with %d items and numPixels>100=%d and outputType=%s",
 				outputName,
 				agg.getCnt(),

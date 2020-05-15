@@ -29,22 +29,13 @@ package ch.ethz.biol.cell.imageprocessing.chnl.provider;
 
 import java.nio.ByteBuffer;
 
-import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.image.chnl.Chnl;
-import org.anchoranalysis.image.chnl.factory.ChnlFactory;
 import org.anchoranalysis.image.convert.ByteConverter;
-import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
-import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
 
-public class ChnlProviderSubtract extends ChnlProviderTwo {
+public class ChnlProviderSubtract extends ChnlProviderTwoVoxelMapping {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
-	private void processVoxelBox( VoxelBox<ByteBuffer> vbOut, VoxelBox<ByteBuffer> vbIn1, VoxelBox<ByteBuffer> vbIn2) {
+	@Override
+	protected void processVoxelBox( VoxelBox<ByteBuffer> vbOut, VoxelBox<ByteBuffer> vbIn1, VoxelBox<ByteBuffer> vbIn2) {
 
 		for (int z=0; z<vbOut.extnt().getZ(); z++) {
 			
@@ -65,23 +56,4 @@ public class ChnlProviderSubtract extends ChnlProviderTwo {
 			assert( !out.hasRemaining() );
 		}
 	}
-
-	@Override
-	protected Chnl process(Chnl chnl1, Chnl chnl2) throws CreateException {
-		
-		if (!chnl1.getDimensions().equals(chnl2.getDimensions())) {
-			throw new CreateException("Dimensions of channels do not match");
-		}
-		
-		Chnl chnlOut = ChnlFactory.instance().createEmptyInitialised(
-			new ImageDim(chnl1.getDimensions()),
-			VoxelDataTypeUnsignedByte.instance
-		);
-		
-		processVoxelBox( chnlOut.getVoxelBox().asByte(), chnl1.getVoxelBox().asByte(), chnl2.getVoxelBox().asByte() );
-		
-		return chnlOut;
-	}
-
-
 }

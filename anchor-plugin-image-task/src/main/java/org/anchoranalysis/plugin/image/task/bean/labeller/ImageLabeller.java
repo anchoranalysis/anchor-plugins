@@ -32,8 +32,8 @@ import java.util.Set;
 import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.image.io.input.ProvidesStackInput;
+import org.anchoranalysis.io.output.bound.BoundIOContext;
 
 /**
  * 
@@ -42,11 +42,6 @@ import org.anchoranalysis.image.io.input.ProvidesStackInput;
  * @param <T> Init-params
  */
 public abstract class ImageLabeller<T> extends AnchorBean<ImageLabeller<T>> {
-
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
 
 	/** Should be called once before calling any other methods
 	 * 
@@ -64,6 +59,7 @@ public abstract class ImageLabeller<T> extends AnchorBean<ImageLabeller<T>> {
 	 * @param modelDir TODO*/
 	public abstract String labelFor(
 		T initParams,
-		ProvidesStackInput input, Path modelDir, LogErrorReporter logErrorReporter
+		ProvidesStackInput input,
+		BoundIOContext context
 	) throws OperationFailedException;
 }

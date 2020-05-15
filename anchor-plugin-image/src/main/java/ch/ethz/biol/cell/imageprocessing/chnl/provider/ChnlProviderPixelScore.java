@@ -37,7 +37,7 @@ import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.bean.shared.params.keyvalue.KeyValueParamsProvider;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.params.KeyValueParams;
-import org.anchoranalysis.image.bean.provider.BinaryImgChnlProvider;
+import org.anchoranalysis.image.bean.provider.BinaryChnlProvider;
 import org.anchoranalysis.image.bean.provider.ChnlProvider;
 import org.anchoranalysis.image.bean.provider.HistogramProvider;
 import org.anchoranalysis.image.binary.BinaryChnl;
@@ -56,11 +56,6 @@ import ch.ethz.biol.cell.mpp.nrg.feature.pixelwise.createvoxelbox.CreateVoxelBox
 
 public class ChnlProviderPixelScore extends ChnlProvider {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
 	private ChnlProvider intensityProvider;
@@ -68,8 +63,9 @@ public class ChnlProviderPixelScore extends ChnlProvider {
 	@BeanField @OptionalBean
 	private ChnlProvider gradientProvider;
 	
+	// We don't use {@link ChnlProiderMask} as here it's optional.
 	@BeanField @OptionalBean
-	private BinaryImgChnlProvider maskProvider;
+	private BinaryChnlProvider mask;
 	
 	@BeanField
 	private PixelScore pixelScore;
@@ -102,11 +98,11 @@ public class ChnlProviderPixelScore extends ChnlProvider {
 	
 	
 	private ObjMask createMaskOrNull() throws CreateException {
-		if (maskProvider==null) {
+		if (mask==null) {
 			return null;
 		}
 		
-		BinaryChnl binaryChnlMask = maskProvider.create();
+		BinaryChnl binaryChnlMask = mask.create();
 		Chnl chnlMask = binaryChnlMask.getChnl();
 		
 		return new ObjMask(
@@ -172,14 +168,6 @@ public class ChnlProviderPixelScore extends ChnlProvider {
 		this.gradientProvider = gradientProvider;
 	}
 
-	public BinaryImgChnlProvider getMaskProvider() {
-		return maskProvider;
-	}
-
-	public void setMaskProvider(BinaryImgChnlProvider maskProvider) {
-		this.maskProvider = maskProvider;
-	}
-
 	public PixelScore getPixelScore() {
 		return pixelScore;
 	}
@@ -216,4 +204,12 @@ public class ChnlProviderPixelScore extends ChnlProvider {
 	}
 
 
+	public BinaryChnlProvider getMask() {
+		return mask;
+	}
+
+
+	public void setMask(BinaryChnlProvider mask) {
+		this.mask = mask;
+	}
 }

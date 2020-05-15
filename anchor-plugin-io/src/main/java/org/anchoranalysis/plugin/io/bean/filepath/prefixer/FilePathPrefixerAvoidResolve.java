@@ -51,11 +51,6 @@ import org.anchoranalysis.io.input.InputFromManager;
  */
 public abstract class FilePathPrefixerAvoidResolve extends FilePathPrefixer {
 	
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PROPERTIES
 	/** 
 	 * A directory in which to output the experiment-directory and files

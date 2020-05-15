@@ -48,11 +48,6 @@ import org.anchoranalysis.image.points.PointsFromObjMask;
 
 public class ObjAsPoints extends MarkProposer {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
 	private ObjMaskProvider objs;

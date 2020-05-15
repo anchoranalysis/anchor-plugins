@@ -32,11 +32,6 @@ import org.anchoranalysis.image.histogram.Histogram;
 
 public class PixelScoreCalculateLevel extends PixelScoreCalculateLevelBase {
 	
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	// START BEAN PROPERTIES
 	@BeanField
 	private double distMax = 20;

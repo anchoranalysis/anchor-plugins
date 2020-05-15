@@ -34,6 +34,7 @@ import org.anchoranalysis.experiment.JobExecutionException;
 import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.io.input.ProvidesStackInput;
 import org.anchoranalysis.image.objmask.ObjMaskCollection;
+import org.anchoranalysis.io.output.bound.BoundIOContext;
 import org.anchoranalysis.plugin.annotation.comparison.AnnotationComparisonInput;
 import org.anchoranalysis.plugin.annotation.comparison.IAddAnnotation;
 import org.anchoranalysis.plugin.annotation.comparison.ObjsToCompare;
@@ -47,21 +48,20 @@ class ObjsToCompareFactory {
 	public static ObjsToCompare create(
 		AnnotationComparisonInput<ProvidesStackInput> input,
 		IAddAnnotation<?> addAnnotation,
-		LogErrorReporter logErrorReporter,
 		ImageDim dim,
-		boolean debugMode
+		BoundIOContext context
 	) throws JobExecutionException {
 		 
-		Findable<ObjMaskCollection> leftObjs = createObjs( true, input, dim, debugMode );
+		Findable<ObjMaskCollection> leftObjs = createObjs( true, input, dim, context.isDebugEnabled() );
 		
-		if (!checkNull(leftObjs,"leftObj", addAnnotation, logErrorReporter)) {
+		if (!checkNull(leftObjs,"leftObj", addAnnotation, context.getLogger())) {
 			return null;
 		}
 		
 		// Create our object groups, and add an assignment
-		Findable<ObjMaskCollection> rightObjs = createObjs( false, input, dim, debugMode );
+		Findable<ObjMaskCollection> rightObjs = createObjs( false, input, dim, context.isDebugEnabled() );
 		
-		if (!checkNull(rightObjs,"rightObj", addAnnotation, logErrorReporter)) {
+		if (!checkNull(rightObjs,"rightObj", addAnnotation, context.getLogger())) {
 			return null;
 		}
 		

@@ -1,7 +1,8 @@
 package ch.ethz.biol.cell.mpp.nrg.feature.histogram;
 
 import org.anchoranalysis.core.error.OperationFailedException;
-
+import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.image.feature.histogram.FeatureHistogramStatistic;
 
 /*
  * #%L
@@ -34,13 +35,12 @@ import org.anchoranalysis.image.histogram.Histogram;
 
 public class Mode extends FeatureHistogramStatistic {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	@Override
-	protected double calcStatisticFrom(Histogram histogram) throws OperationFailedException {
-		return histogram.calcMode();
+	protected double calcStatisticFrom(Histogram histogram) throws FeatureCalcException {
+		try {
+			return histogram.calcMode();
+		} catch (OperationFailedException e) {
+			throw new FeatureCalcException(e);
+		}			
 	}
 }

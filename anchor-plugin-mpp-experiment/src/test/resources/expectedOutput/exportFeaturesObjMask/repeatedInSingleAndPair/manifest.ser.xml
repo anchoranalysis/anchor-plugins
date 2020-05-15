@@ -69,10 +69,8 @@
         </manifestFolderDescription>
         <path>nrgStack</path>
         <outputName class="org.anchoranalysis.io.namestyle.IntegerSuffixOutputNameStyle">
-          <outputFormatString>nrgStack_%02d</outputFormatString>
           <outputName>nrgStack</outputName>
-          <prefix></prefix>
-          <integerFormatString>_%02d</integerFormatString>
+          <numDigits>2</numDigits>
         </outputName>
         <template>
           <org.anchoranalysis.io.manifest.file.FileType>

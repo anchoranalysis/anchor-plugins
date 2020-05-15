@@ -43,11 +43,6 @@ import org.anchoranalysis.plugin.io.bean.summarizer.Summarizer;
  */
 public abstract class SummarizerInputFromManager<T extends InputFromManager,S> extends Summarizer<T> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	// START BEAN PROPERTIES
 	@BeanField
 	private Summarizer<S> summarizer;

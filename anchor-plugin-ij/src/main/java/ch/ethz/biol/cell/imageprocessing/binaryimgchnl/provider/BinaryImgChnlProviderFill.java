@@ -1,5 +1,7 @@
 package ch.ethz.biol.cell.imageprocessing.binaryimgchnl.provider;
 
+import java.util.Optional;
+
 /*
  * #%L
  * anchor-plugin-ij
@@ -31,7 +33,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.image.bean.provider.BinaryImgChnlProvider;
+import org.anchoranalysis.image.bean.provider.BinaryImgChnlProviderOne;
 import org.anchoranalysis.image.bean.unitvalue.areavolume.UnitValueAreaOrVolume;
 import org.anchoranalysis.image.binary.BinaryChnl;
 import org.anchoranalysis.image.binary.logical.BinaryChnlAnd;
@@ -44,17 +46,9 @@ import org.anchoranalysis.image.objmask.factory.CreateFromConnectedComponentsFac
 import org.anchoranalysis.image.objmask.ops.BinaryChnlFromObjs;
 import org.anchoranalysis.image.unitvalue.UnitValueException;
 
-public class BinaryImgChnlProviderFill extends BinaryImgChnlProvider {
+public class BinaryImgChnlProviderFill extends BinaryImgChnlProviderOne {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PROPERTIES
-	@BeanField
-	private BinaryImgChnlProvider binaryImgChnlProvider;
-	
 	@BeanField @OptionalBean
 	private UnitValueAreaOrVolume maxVolume = null;
 	
@@ -64,9 +58,7 @@ public class BinaryImgChnlProviderFill extends BinaryImgChnlProvider {
 	// END BEAN PROPERTIES
 	
 	@Override
-	public BinaryChnl create() throws CreateException {
-		
-		BinaryChnl bic = binaryImgChnlProvider.create();
+	public BinaryChnl createFromChnl(BinaryChnl bic) throws CreateException {
 		
 		BinaryChnl bicDup = fillChnl(bic);
 		
@@ -108,7 +100,9 @@ public class BinaryImgChnlProviderFill extends BinaryImgChnlProvider {
 		double maxVolumeRslvd = 0;
 		if (maxVolume!=null) {
 			try {
-				maxVolumeRslvd = maxVolume.rslv(sd.getRes());
+				maxVolumeRslvd = maxVolume.rslv(
+					Optional.of(sd.getRes())
+				);
 			} catch (UnitValueException e) {
 				throw new CreateException(e);
 			}				
@@ -139,15 +133,6 @@ public class BinaryImgChnlProviderFill extends BinaryImgChnlProvider {
 		BinaryChnlOr.binaryOr(bcSelected,src);
 		return bcSelected;
 	}
-	
-
-	public BinaryImgChnlProvider getBinaryImgChnlProvider() {
-		return binaryImgChnlProvider;
-	}
-
-	public void setBinaryImgChnlProvider(BinaryImgChnlProvider binaryImgChnlProvider) {
-		this.binaryImgChnlProvider = binaryImgChnlProvider;
-	}
 
 	public UnitValueAreaOrVolume getMaxVolume() {
 		return maxVolume;
@@ -164,7 +149,4 @@ public class BinaryImgChnlProviderFill extends BinaryImgChnlProvider {
 	public void setSkipAtBorder(boolean skipAtBorder) {
 		this.skipAtBorder = skipAtBorder;
 	}
-
-
-
 }

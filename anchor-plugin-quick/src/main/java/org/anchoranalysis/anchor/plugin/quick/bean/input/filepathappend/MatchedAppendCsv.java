@@ -36,11 +36,6 @@ import org.anchoranalysis.bean.annotation.BeanField;
  */
 public class MatchedAppendCsv extends AnchorBean<MatchedAppendCsv> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	// START BEAN FIELDS
 	@BeanField
 	private AppendCsv appendCsv;

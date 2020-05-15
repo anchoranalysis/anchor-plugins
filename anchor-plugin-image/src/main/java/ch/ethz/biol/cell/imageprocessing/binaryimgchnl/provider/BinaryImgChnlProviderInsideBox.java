@@ -29,8 +29,6 @@ package ch.ethz.biol.cell.imageprocessing.binaryimgchnl.provider;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.geometry.Point3d;
-import org.anchoranalysis.image.bean.provider.BinaryImgChnlProvider;
-import org.anchoranalysis.image.bean.provider.ImageDimProvider;
 import org.anchoranalysis.image.binary.BinaryChnl;
 import org.anchoranalysis.image.binary.values.BinaryValues;
 import org.anchoranalysis.image.chnl.Chnl;
@@ -44,17 +42,9 @@ import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
  * This effectively creates a mask that is a box
  * 
  */
-public class BinaryImgChnlProviderInsideBox extends BinaryImgChnlProvider {
-
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
+public class BinaryImgChnlProviderInsideBox extends BinaryImgChnlProviderDimSource {
 
 	// START BEAN PROPERTIES
-	@BeanField
-	private ImageDimProvider dimProvider;
-	
 	/** Minimum X co-ordinate inclusive */
 	@BeanField
 	private int minX = 0;
@@ -81,13 +71,13 @@ public class BinaryImgChnlProviderInsideBox extends BinaryImgChnlProvider {
 	// END BEAN PROPERTIES
 	
 	@Override
-	public BinaryChnl create() throws CreateException {
+	protected BinaryChnl createFromSource(ImageDim dimSource) throws CreateException {
+		Chnl chnl = ChnlFactory.instance().createEmptyInitialised(
+			dimSource,
+			VoxelDataTypeUnsignedByte.instance
+		);
 		
-		ImageDim dims = dimProvider.create();
-		
-		Chnl chnl = ChnlFactory.instance().createEmptyInitialised(dims, VoxelDataTypeUnsignedByte.instance );
-		
-		BoundingBox bbox = createBox(dims);
+		BoundingBox bbox = createBox(dimSource);
 		
 		return createBinaryChnl(bbox, chnl);
 	}
@@ -156,13 +146,5 @@ public class BinaryImgChnlProviderInsideBox extends BinaryImgChnlProvider {
 
 	public void setMaxZ(int maxZ) {
 		this.maxZ = maxZ;
-	}
-
-	public ImageDimProvider getDimProvider() {
-		return dimProvider;
-	}
-
-	public void setDimProvider(ImageDimProvider dimProvider) {
-		this.dimProvider = dimProvider;
 	}
 }

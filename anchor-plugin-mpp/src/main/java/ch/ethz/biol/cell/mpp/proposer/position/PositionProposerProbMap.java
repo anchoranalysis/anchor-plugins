@@ -41,11 +41,6 @@ public class PositionProposerProbMap extends PositionProposerBean {
 	//private static Log log = LogFactory.getLog(PositionProposer.class);
 	//private boolean first = true;
 	
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -8759723672473644611L;
-
 	// BEAN PROPERTIES
 	@BeanField
 	private String probMapID = "";

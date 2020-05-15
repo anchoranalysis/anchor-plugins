@@ -49,11 +49,6 @@ import org.anchoranalysis.io.input.FileInput;
  */
 public class Stacks extends InputManager<StackSequenceInput> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 4614409393859815802L;
-	
 	// START BEANS
 	@BeanField
 	private InputManager<FileInput> fileInput;

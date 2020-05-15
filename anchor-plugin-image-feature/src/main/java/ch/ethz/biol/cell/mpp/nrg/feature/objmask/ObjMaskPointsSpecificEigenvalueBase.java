@@ -38,11 +38,6 @@ import org.anchoranalysis.points.moment.CalculateObjMaskPointsSecondMomentMatrix
 
 public abstract class ObjMaskPointsSpecificEigenvalueBase extends FeatureObjMask {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
 	private int eigenvalueIndex = 0;

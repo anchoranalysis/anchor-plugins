@@ -34,11 +34,6 @@ import org.anchoranalysis.image.feature.bean.FeatureNRGStack;
 
 public class NRGParam extends FeatureNRGStack {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
 	private String id;

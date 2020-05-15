@@ -34,8 +34,8 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.shared.StringMap;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.image.io.input.ProvidesStackInput;
+import org.anchoranalysis.io.output.bound.BoundIOContext;
 import org.anchoranalysis.plugin.image.task.labeller.ImageLabellerStringMapInitParams;
 
 /**
@@ -47,11 +47,6 @@ import org.anchoranalysis.plugin.image.task.labeller.ImageLabellerStringMapInitP
  */
 public class ImageLabellerStringMap<T> extends ImageLabeller<ImageLabellerStringMapInitParams<T>> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
 	private ImageLabeller<T> filter;
@@ -76,12 +71,12 @@ public class ImageLabellerStringMap<T> extends ImageLabeller<ImageLabellerString
 	}
 
 	@Override
-	public String labelFor(ImageLabellerStringMapInitParams<T> initParams, ProvidesStackInput input, Path modelDir, LogErrorReporter logErrorReporter)
+	public String labelFor(ImageLabellerStringMapInitParams<T> initParams, ProvidesStackInput input, BoundIOContext context)
 			throws OperationFailedException {
 		String firstId = filter.labelFor(
 			initParams.getInitParams(),
 			input,
-			modelDir, logErrorReporter
+			context
 		);
 		return initParams.getMap().get(firstId);
 	}

@@ -47,15 +47,7 @@ import org.anchoranalysis.image.voxel.box.factory.VoxelBoxFactory;
 
 public class ObjMaskProviderSplitByObjCollection extends ObjMaskProviderDimensions {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PROPERTIES
-	@BeanField
-	private ObjMaskProvider objs;
-	
 	@BeanField
 	private ObjMaskProvider objsSplitBy;
 	// END BEAN PROPERTIES
@@ -121,15 +113,13 @@ public class ObjMaskProviderSplitByObjCollection extends ObjMaskProviderDimensio
 		//out.add( objToSplit );
 		return out;
 	}
-	
-	
-	@Override
-	public ObjMaskCollection create() throws CreateException {
 		
-		ObjMaskCollection objsCollection = objs.create();
+	@Override
+	public ObjMaskCollection createFromObjs(ObjMaskCollection objsCollection) throws CreateException {
+		
 		ObjMaskCollection objsSplitByCollection = objsSplitBy.create();
 
-		ImageDim dims = createDims();
+		ImageDim dims = createDim();
 		
 		ObjMaskCollection out = new ObjMaskCollection();
 		
@@ -144,23 +134,12 @@ public class ObjMaskProviderSplitByObjCollection extends ObjMaskProviderDimensio
 				throw new CreateException(e);
 			}
 		}
-
 		return out;
 	}
-
-	public ObjMaskProvider getObjs() {
-		return objs;
-	}
-
-	public void setObjs(ObjMaskProvider objs) {
-		this.objs = objs;
-	}
-
 
 	public ObjMaskProvider getObjsSplitBy() {
 		return objsSplitBy;
 	}
-
 
 	public void setObjsSplitBy(ObjMaskProvider objsSplitBy) {
 		this.objsSplitBy = objsSplitBy;

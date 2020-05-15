@@ -42,11 +42,6 @@ import org.anchoranalysis.plugin.mpp.sgmn.cfg.optscheme.ToPixelized;
  */
 public class PixelizeWithTransform<T> extends StateTransformerBean<T,ToPixelized<T>> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	// START BEAN PROPERTIES
 	@BeanField
 	private StateTransformerBean<T,CfgNRGPixelized> transformer;

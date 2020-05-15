@@ -57,7 +57,6 @@ public class CalculateConnectedComponents extends FeatureCalculation<ObjMaskColl
 			);
 			
 			CreateFromConnectedComponentsFactory objMaskCreator = new CreateFromConnectedComponentsFactory();
-			objMaskCreator.setMinNumberVoxels(1);
 			return objMaskCreator.createConnectedComponents(binaryImgChnl );
 			
 		} catch (CreateException e) {

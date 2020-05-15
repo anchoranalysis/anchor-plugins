@@ -1,5 +1,7 @@
 package ch.ethz.biol.cell.mpp.nrg.feature.histogram;
 
+
+
 /*-
  * #%L
  * anchor-plugin-image-feature
@@ -26,20 +28,13 @@ package ch.ethz.biol.cell.mpp.nrg.feature.histogram;
  * #L%
  */
 
-import org.anchoranalysis.feature.cache.SessionInput;
-import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.image.feature.bean.FeatureHistogram;
-import org.anchoranalysis.image.feature.histogram.FeatureInputHistogram;
+import org.anchoranalysis.image.feature.histogram.FeatureHistogramStatistic;
+import org.anchoranalysis.image.histogram.Histogram;
 
-public class Sum extends FeatureHistogram {
-
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
+public class Sum extends FeatureHistogramStatistic {
 
 	@Override
-	protected double calc(SessionInput<FeatureInputHistogram> input) throws FeatureCalcException {
-		return input.get().getHistogram().calcSum();
+	protected double calcStatisticFrom(Histogram histogram) {
+		return histogram.calcSum();
 	}
 }

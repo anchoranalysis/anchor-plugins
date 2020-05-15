@@ -32,11 +32,6 @@ import org.anchoranalysis.image.stack.region.chnlconverter.ChnlConverterToUnsign
 
 public class ChnlConverterBeanToByte extends ChnlConverterBean {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	@Override
 	public ChnlConverter<?> createConverter() {
 		return new ChnlConverterToUnsignedByte();

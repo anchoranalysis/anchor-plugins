@@ -30,7 +30,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.geometry.PointConverter;
-import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
+import org.anchoranalysis.image.bean.provider.ObjMaskProviderOne;
 import org.anchoranalysis.image.contour.Contour;
 import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.image.objmask.ObjMaskCollection;
@@ -43,21 +43,14 @@ import ch.ethz.biol.cell.imageprocessing.objmask.provider.smoothspline.SplitCont
  * Splits a 2D contour represented by an obj-mask into several object-masks, by doing
  *  smoothing spline interpolation along the contour, and finding saddle points.
  *  
+ *  <p>Each contour is represented by an input object.</p>
+ *  
  * @author feehano
  *
  */
-public class ObjMaskProviderSplitContourSmoothingSpline extends ObjMaskProvider {
-
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
+public class ObjMaskProviderSplitContourSmoothingSpline extends ObjMaskProviderOne {
 
 	// START BEAN PROPERTIES
-	/** Each contour is represented by an object */
-	@BeanField
-	private ObjMaskProvider objs;
-	
 	@BeanField
 	private double smoothingFactor = 0.001;
 	
@@ -70,11 +63,9 @@ public class ObjMaskProviderSplitContourSmoothingSpline extends ObjMaskProvider 
 	// END BEAN PROPERTIES
 	
 	@Override
-	public ObjMaskCollection create() throws CreateException {
+	public ObjMaskCollection createFromObjs( ObjMaskCollection in ) throws CreateException {
 
 		ObjMaskCollection out = new ObjMaskCollection();
-		
-		ObjMaskCollection in = objs.create();
 		
 		for( ObjMask om : in ) {
 			splitContoursFromObj(om, out);
@@ -104,14 +95,6 @@ public class ObjMaskProviderSplitContourSmoothingSpline extends ObjMaskProvider 
 				createObjMaskFromContour(c, true)
 			);
 		}
-	}
-
-	public ObjMaskProvider getObjs() {
-		return objs;
-	}
-
-	public void setObjs(ObjMaskProvider objs) {
-		this.objs = objs;
 	}
 
 	public double getSmoothingFactor() {

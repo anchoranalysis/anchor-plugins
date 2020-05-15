@@ -27,29 +27,17 @@ package ch.ethz.biol.cell.imageprocessing.chnl.provider;
  */
 
 
-import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.image.bean.provider.ChnlProvider;
+import org.anchoranalysis.image.bean.provider.ChnlProviderOne;
 import org.anchoranalysis.image.chnl.Chnl;
 import org.anchoranalysis.image.voxel.box.VoxelBoxWrapper;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 
-public class ChnlProviderInvert extends ChnlProvider {
-
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
-	// START BEAN PROPERTIES
-	@BeanField
-	private ChnlProvider chnlProvider;
-	// END BEAN PROPERTIES
+public class ChnlProviderInvert extends ChnlProviderOne {
 	
 	@Override
-	public Chnl create() throws CreateException {
+	public Chnl createFromChnl(Chnl chnl) throws CreateException {
 		
-		Chnl chnl = chnlProvider.create();
 		VoxelBoxWrapper vb = chnl.getVoxelBox();
 		
 		int maxVal = (int) vb.getVoxelDataType().maxValue();
@@ -69,16 +57,4 @@ public class ChnlProviderInvert extends ChnlProvider {
 
 		return chnl;
 	}
-
-	public ChnlProvider getChnlProvider() {
-		return chnlProvider;
-	}
-
-
-
-	public void setChnlProvider(ChnlProvider chnlProvider) {
-		this.chnlProvider = chnlProvider;
-	}
-
-
 }

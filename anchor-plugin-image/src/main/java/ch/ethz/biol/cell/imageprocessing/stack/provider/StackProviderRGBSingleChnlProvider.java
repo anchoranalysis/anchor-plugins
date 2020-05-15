@@ -38,14 +38,9 @@ import org.anchoranalysis.image.stack.Stack;
 
 public class StackProviderRGBSingleChnlProvider extends StackProvider {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 6951065129825367326L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
-	private ChnlProvider chnlProvider;
+	private ChnlProvider chnl;
 	// END BEAN PROPERTIES
 	
 	private void addToStack( Stack stack, Chnl chnl, ImageDim dim ) throws IncorrectImageSizeException {
@@ -57,27 +52,26 @@ public class StackProviderRGBSingleChnlProvider extends StackProvider {
 	@Override
 	public Stack create() throws CreateException {
 
-		Chnl chnl = chnlProvider.create();
+		Chnl chnlIn = chnl.create();
 		
-		ImageDim sd = chnl.getDimensions();
+		ImageDim sd = chnlIn.getDimensions();
 		
 		try {
 			Stack out = new Stack();
-			addToStack( out, chnl, sd );
-			addToStack( out, chnl, sd );
-			addToStack( out, chnl, sd );
+			addToStack( out, chnlIn, sd );
+			addToStack( out, chnlIn, sd );
+			addToStack( out, chnlIn, sd );
 			return out;
 		} catch (IncorrectImageSizeException e) {
 			throw new CreateException(e);
 		}
 	}
 
-	public ChnlProvider getChnlProvider() {
-		return chnlProvider;
+	public ChnlProvider getChnl() {
+		return chnl;
 	}
 
-	public void setChnlProvider(ChnlProvider chnlProvider) {
-		this.chnlProvider = chnlProvider;
+	public void setChnl(ChnlProvider chnl) {
+		this.chnl = chnl;
 	}
-
 }

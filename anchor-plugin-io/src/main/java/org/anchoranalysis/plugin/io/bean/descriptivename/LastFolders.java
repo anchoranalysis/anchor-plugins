@@ -35,11 +35,6 @@ import org.apache.commons.io.FilenameUtils;
 
 public class LastFolders extends DescriptiveNameFromFileIndependent {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
 	private int numFoldersInDescription = 0;

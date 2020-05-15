@@ -43,11 +43,6 @@ import cern.jet.random.Poisson;
 
 public class CfgProposerSimple extends CfgProposer {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -1124249102380649830L;
-
 	// START BEAN
 	@BeanField
 	private MarkProposer markProposer;

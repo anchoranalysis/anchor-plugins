@@ -1,5 +1,7 @@
 package org.anchoranalysis.plugin.image.calculation;
 
+import java.util.Optional;
+
 import org.anchoranalysis.core.error.CreateException;
 
 /*
@@ -48,7 +50,14 @@ public class CalculateErosionMap extends CalculateIncrementalOperationMap {
 	@Override
 	protected ObjMask applyOperation( ObjMask om, Extent extnt, boolean do3D ) throws OperationFailedException {
 		try {
-			return MorphologicalErosion.createErodedObjMask(om, extnt, do3D, 1, true, null);
+			return MorphologicalErosion.createErodedObjMask(
+				om,
+				Optional.of(extnt),
+				do3D,
+				1,
+				true,
+				Optional.empty()
+			);
 		} catch (CreateException e) {
 			throw new OperationFailedException(e);
 		}

@@ -34,22 +34,14 @@ import java.nio.ByteBuffer;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.image.bean.provider.ChnlProvider;
+import org.anchoranalysis.image.bean.provider.ChnlProviderOne;
 import org.anchoranalysis.image.chnl.Chnl;
 import org.anchoranalysis.image.convert.IJWrap;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 
-public class ChnlProviderVarianceFilterIJ2D extends ChnlProvider {
+public class ChnlProviderVarianceFilterIJ2D extends ChnlProviderOne {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PROPERTIES
-	@BeanField
-	private ChnlProvider chnlProvider;
-	
 	@BeanField
 	private int radius = 2;
 	// END BEAN PROPERTIES
@@ -76,16 +68,8 @@ public class ChnlProviderVarianceFilterIJ2D extends ChnlProvider {
 	}
 	
 	@Override
-	public Chnl create() throws CreateException {
-		return variance3d(chnlProvider.create(),radius);
-	}
-
-	public ChnlProvider getChnlProvider() {
-		return chnlProvider;
-	}
-
-	public void setChnlProvider(ChnlProvider chnlProvider) {
-		this.chnlProvider = chnlProvider;
+	public Chnl createFromChnl(Chnl chnl) throws CreateException {
+		return variance3d(chnl, radius);
 	}
 
 	public int getRadius() {

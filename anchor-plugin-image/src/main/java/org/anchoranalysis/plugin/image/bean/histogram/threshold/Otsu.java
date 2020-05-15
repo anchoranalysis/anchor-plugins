@@ -48,11 +48,6 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
  */
 public class Otsu extends CalculateLevel {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	@Override
 	public int calculateLevel( Histogram hist ) throws OperationFailedException {
 		

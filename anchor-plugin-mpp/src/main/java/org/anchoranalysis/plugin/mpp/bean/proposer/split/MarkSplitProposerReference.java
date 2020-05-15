@@ -42,11 +42,6 @@ import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 
 public class MarkSplitProposerReference extends MarkSplitProposer {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 5274914953450127998L;
-
 	// Start BEAN
 	@BeanField
 	private String id;

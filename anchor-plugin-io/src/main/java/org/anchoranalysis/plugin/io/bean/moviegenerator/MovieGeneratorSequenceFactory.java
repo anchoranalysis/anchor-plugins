@@ -37,11 +37,6 @@ import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
 
 public class MovieGeneratorSequenceFactory extends GeneratorSequenceFactory {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -468521075507642728L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
 	private int framesPerSecond = 10;

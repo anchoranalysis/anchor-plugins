@@ -35,8 +35,6 @@ import org.anchoranalysis.bean.NamedBean;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.core.log.LogErrorReporter;
-import org.anchoranalysis.core.log.LogReporter;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
 import org.anchoranalysis.experiment.task.Task;
 import org.anchoranalysis.feature.bean.list.FeatureListProvider;
@@ -47,7 +45,7 @@ import org.anchoranalysis.io.bean.filepath.generator.FilePathGenerator;
 import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.filepath.FilePathToUnixStyleConverter;
 import org.anchoranalysis.io.input.InputFromManager;
-import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
+import org.anchoranalysis.io.output.bound.BoundIOContext;
 import org.anchoranalysis.plugin.image.task.sharedstate.SharedStateExportFeatures;
 
 /**
@@ -59,11 +57,6 @@ import org.anchoranalysis.plugin.image.task.sharedstate.SharedStateExportFeature
  * @param <S> See Task
  */
 public abstract class ExportFeaturesTask<T extends InputFromManager, S extends SharedStateExportFeatures> extends Task<T,S> {
-
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
 
 	// START BEAN
 	/**
@@ -99,12 +92,9 @@ public abstract class ExportFeaturesTask<T extends InputFromManager, S extends S
 	
 	@Override
 	public void afterAllJobsAreExecuted(
-			BoundOutputManagerRouteErrors outputManager,
 			S sharedState,
-			LogReporter logReporter
+			BoundIOContext context
 	) throws ExperimentExecutionException {
-		
-		LogErrorReporter logErrorReporter = new LogErrorReporter(logReporter);
 		
 		try {
 			NamedFeatureStore<FeatureInputResults> featuresAggregate = null;
@@ -113,11 +103,7 @@ public abstract class ExportFeaturesTask<T extends InputFromManager, S extends S
 				featuresAggregate = NamedFeatureStoreFactory.createNamedFeatureList(listFeaturesAggregate);
 			}
 			
-			sharedState.writeFeaturesAsCSVForAllGroups(
-				featuresAggregate,
-				outputManager,
-				logErrorReporter
-			);
+			sharedState.writeFeaturesAsCSVForAllGroups(featuresAggregate, context);
 		} catch (AnchorIOException | CreateException e) {
 			throw new ExperimentExecutionException(e);
 		}

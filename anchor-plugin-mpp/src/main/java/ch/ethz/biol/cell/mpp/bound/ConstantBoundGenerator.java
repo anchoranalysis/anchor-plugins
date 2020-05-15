@@ -38,11 +38,6 @@ import org.anchoranalysis.math.rotation.RotationMatrix;
 
 public class ConstantBoundGenerator extends BoundCalculator {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 5330256432596742783L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
 	private RslvdBound constantBound;

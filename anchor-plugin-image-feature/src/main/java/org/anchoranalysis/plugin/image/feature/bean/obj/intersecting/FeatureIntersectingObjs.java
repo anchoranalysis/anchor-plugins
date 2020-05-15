@@ -42,11 +42,6 @@ import org.anchoranalysis.plugin.image.feature.obj.intersecting.CalculateInterse
 public abstract class FeatureIntersectingObjs extends FeatureObjMaskSharedObjects {
 
 	
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	// START BEAN PROPERTIES
 	/**
 	 * ID for the particular ObjMaskCollection

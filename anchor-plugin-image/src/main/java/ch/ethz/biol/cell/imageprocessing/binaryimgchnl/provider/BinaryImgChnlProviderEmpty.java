@@ -29,8 +29,6 @@ package ch.ethz.biol.cell.imageprocessing.binaryimgchnl.provider;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.image.bean.provider.BinaryImgChnlProvider;
-import org.anchoranalysis.image.bean.provider.ImageDimProvider;
 import org.anchoranalysis.image.binary.BinaryChnl;
 import org.anchoranalysis.image.binary.values.BinaryValues;
 import org.anchoranalysis.image.chnl.Chnl;
@@ -38,19 +36,9 @@ import org.anchoranalysis.image.chnl.factory.ChnlFactory;
 import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
 
-import ch.ethz.biol.cell.imageprocessing.dim.provider.GuessDimFromInputImage;
-
-public class BinaryImgChnlProviderEmpty extends BinaryImgChnlProvider {
-
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
+public class BinaryImgChnlProviderEmpty extends BinaryImgChnlProviderDimSource {
 
 	// START BEAN PROPERTIES
-	@BeanField
-	private ImageDimProvider dimProvider = new GuessDimFromInputImage();
-	
 	/**
 	 * If true binary values are set high when created
 	 */
@@ -59,18 +47,15 @@ public class BinaryImgChnlProviderEmpty extends BinaryImgChnlProvider {
 	// END BEAN PROPERTIES
 	
 	@Override
-	public BinaryChnl create() throws CreateException {
-		
-		ImageDim sd = dimProvider.create();
-		
-		Chnl chnl = ChnlFactory.instance().createEmptyInitialised(sd, VoxelDataTypeUnsignedByte.instance);
+	protected BinaryChnl createFromSource(ImageDim dimSource) throws CreateException {
+		Chnl chnl = ChnlFactory.instance().createEmptyInitialised(dimSource, VoxelDataTypeUnsignedByte.instance);
 
 		BinaryValues bvOut = BinaryValues.getDefault();
 		 
 		if (createOn) {
 			chnl.getVoxelBox().any().setAllPixelsTo( bvOut.getOnInt() );	
 		}
-		return new BinaryChnl(chnl, bvOut );
+		return new BinaryChnl(chnl, bvOut);
 	}
 
 	public boolean isCreateOn() {
@@ -79,13 +64,5 @@ public class BinaryImgChnlProviderEmpty extends BinaryImgChnlProvider {
 
 	public void setCreateOn(boolean createOn) {
 		this.createOn = createOn;
-	}
-
-	public ImageDimProvider getDimProvider() {
-		return dimProvider;
-	}
-
-	public void setDimProvider(ImageDimProvider dimProvider) {
-		this.dimProvider = dimProvider;
 	}
 }

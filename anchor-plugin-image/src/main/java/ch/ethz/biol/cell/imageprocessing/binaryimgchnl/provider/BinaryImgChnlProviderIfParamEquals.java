@@ -31,17 +31,11 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.shared.params.keyvalue.KeyValueParamsProvider;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.params.KeyValueParams;
-import org.anchoranalysis.image.bean.provider.BinaryImgChnlProvider;
 import org.anchoranalysis.image.binary.BinaryChnl;
 
 // If a param is equal to a particular value, do soemthing
-public class BinaryImgChnlProviderIfParamEquals extends BinaryImgChnlProvider {
+public class BinaryImgChnlProviderIfParamEquals extends BinaryChnlProviderElseBase {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
 	private KeyValueParamsProvider keyValueParamsProvider;
@@ -51,74 +45,38 @@ public class BinaryImgChnlProviderIfParamEquals extends BinaryImgChnlProvider {
 	
 	@BeanField
 	private String value = "";
-	
-	@BeanField
-	private BinaryImgChnlProvider binaryImgChnlProvider;
-	
-	@BeanField
-	private BinaryImgChnlProvider binaryImgChnlProviderElse;
 	// END BEAN PROPERTIES
 	
 	@Override
-	public BinaryChnl create() throws CreateException {
-		
+	protected boolean condition(BinaryChnl chnl) throws CreateException {
+
 		KeyValueParams params = keyValueParamsProvider.create();
 		
-		String valueToCheck = params.getProperty(key);
-		
-		if( value.equals(valueToCheck) ) {
-			return binaryImgChnlProvider.create();
-		} else {
-			return binaryImgChnlProviderElse.create();
-		}
+		return value.equals(
+			params.getProperty(key)
+		);
 	}
-
+	
 	public KeyValueParamsProvider getKeyValueParamsProvider() {
 		return keyValueParamsProvider;
 	}
-
 
 	public void setKeyValueParamsProvider(
 			KeyValueParamsProvider keyValueParamsProvider) {
 		this.keyValueParamsProvider = keyValueParamsProvider;
 	}
 
-
-	public BinaryImgChnlProvider getBinaryImgChnlProvider() {
-		return binaryImgChnlProvider;
-	}
-
-
-	public void setBinaryImgChnlProvider(BinaryImgChnlProvider binaryImgChnlProvider) {
-		this.binaryImgChnlProvider = binaryImgChnlProvider;
-	}
-
-
-	public BinaryImgChnlProvider getBinaryImgChnlProviderElse() {
-		return binaryImgChnlProviderElse;
-	}
-
-
-	public void setBinaryImgChnlProviderElse(
-			BinaryImgChnlProvider binaryImgChnlProviderElse) {
-		this.binaryImgChnlProviderElse = binaryImgChnlProviderElse;
-	}
-
-
 	public String getKey() {
 		return key;
 	}
-
 
 	public void setKey(String key) {
 		this.key = key;
 	}
 
-
 	public String getValue() {
 		return value;
 	}
-
 
 	public void setValue(String value) {
 		this.value = value;

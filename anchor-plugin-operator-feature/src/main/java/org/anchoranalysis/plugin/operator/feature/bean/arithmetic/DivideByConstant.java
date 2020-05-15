@@ -27,40 +27,19 @@ package org.anchoranalysis.plugin.operator.feature.bean.arithmetic;
  */
 
 
-import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.feature.bean.operator.FeatureGenericSingleElem;
-import org.anchoranalysis.feature.cache.SessionInput;
-import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.input.FeatureInput;
+import org.anchoranalysis.plugin.operator.feature.bean.FeatureGenericWithValue;
 
-public class DivideByConstant<T extends FeatureInput> extends FeatureGenericSingleElem<T> {
+public class DivideByConstant<T extends FeatureInput> extends FeatureGenericWithValue<T> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
-	// START BEAN PROPERTIES
-	@BeanField
-	private double value = 10;
-	// END BEAN PROPERTIES
-	
 	@Override
-	public double calc( SessionInput<T> input ) throws FeatureCalcException {
-		return input.calc( getItem() ) / value;
-	}
-
-	public double getValue() {
-		return value;
-	}
-
-	public void setValue(double value) {
-		this.value = value;
+	protected double combineValueAndFeature(double value, double featureResult) {
+		return featureResult / value;
 	}
 
 	@Override
-	public String getDscrLong() {
-		return String.format("%f / %s", value, getItem().getDscrLong() );
+	protected String combineDscr(String valueDscr, String featureDscr) {
+		return featureDscr + " / " + valueDscr;
 	}
 
 }

@@ -43,11 +43,6 @@ import org.apache.commons.lang.time.StopWatch;
 
 public class CSVReporterAgg extends ReporterAgg<CfgNRGPixelized> implements IAggregateReceiver<CfgNRGPixelized> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 7829811659377706642L;
-
 	private FileOutput csvOutput;
 	
 	private StopWatch timer = null;

@@ -45,11 +45,6 @@ import org.anchoranalysis.image.voxel.kernel.outline.OutlineKernel3NghbMatchValu
 
 public class NumNghbVoxels extends FeatureObjMask {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
 	private boolean outsideAtThreshold = false;
@@ -87,8 +82,7 @@ public class NumNghbVoxels extends FeatureObjMask {
 
 		BinaryVoxelBox<ByteBuffer> bvbNotObject = binarize( vb );
 				
-		OutlineKernel3NghbMatchValue kernelMatch = new OutlineKernel3NghbMatchValue(outsideAtThreshold, do3D, om, bvbNotObject);
-		kernelMatch.setIgnoreAtThreshold(ignoreAtThreshold);
+		OutlineKernel3NghbMatchValue kernelMatch = new OutlineKernel3NghbMatchValue(outsideAtThreshold, do3D, om, bvbNotObject, ignoreAtThreshold);
 		return ApplyKernel.applyForCount(kernelMatch, om.getVoxelBox());
 	}
 

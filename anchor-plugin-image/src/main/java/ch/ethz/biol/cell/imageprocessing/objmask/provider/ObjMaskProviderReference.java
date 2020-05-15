@@ -35,11 +35,6 @@ import org.anchoranalysis.image.objmask.ObjMaskCollection;
 
 public class ObjMaskProviderReference extends ObjMaskProvider {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 8689748853607479300L;
-
 	// START BEAN PROPERTIES
 	@BeanField
 	private String id = "";

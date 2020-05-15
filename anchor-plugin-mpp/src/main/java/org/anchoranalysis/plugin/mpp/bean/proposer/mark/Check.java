@@ -44,11 +44,6 @@ import org.anchoranalysis.core.error.OperationFailedException;
 
 public class Check extends MarkProposer {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -905238995760827400L;
-	
 	// BEAN PARAMETERS
 	@BeanField
 	private MarkProposer markProposer = null;

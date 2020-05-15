@@ -34,24 +34,16 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.Positive;
 import org.anchoranalysis.bean.error.BeanMisconfiguredException;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.image.bean.provider.ChnlProvider;
+import org.anchoranalysis.image.bean.provider.ChnlProviderOne;
 import org.anchoranalysis.image.chnl.Chnl;
 import org.anchoranalysis.image.chnl.factory.ChnlFactoryByte;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 
-public class ChnlProviderExtractSliceRange extends ChnlProvider {
+public class ChnlProviderExtractSliceRange extends ChnlProviderOne {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEANS
-	@BeanField
-	private ChnlProvider chnlProvider;
-	
 	@BeanField @Positive
 	private int sliceStart;
 	
@@ -60,11 +52,10 @@ public class ChnlProviderExtractSliceRange extends ChnlProvider {
 	// END BEANS
 	
 	@Override
-	public Chnl create() throws CreateException {
+	public Chnl createFromChnl(Chnl chnl) throws CreateException {
 		
 		ChnlFactoryByte factory = new ChnlFactoryByte();
 		
-		Chnl chnl = chnlProvider.create();
 		VoxelBox<ByteBuffer> vb = chnl.getVoxelBox().asByte();
 		
 		Extent e = new Extent( chnl.getDimensions().getExtnt() );
@@ -93,14 +84,6 @@ public class ChnlProviderExtractSliceRange extends ChnlProvider {
 		if (sliceEnd<sliceStart) {
 			throw new BeanMisconfiguredException("SliceStart must be less than SliceEnd");
 		}
-	}
-
-	public ChnlProvider getChnlProvider() {
-		return chnlProvider;
-	}
-
-	public void setChnlProvider(ChnlProvider chnlProvider) {
-		this.chnlProvider = chnlProvider;
 	}
 
 	public int getSliceStart() {

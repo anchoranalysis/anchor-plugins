@@ -38,11 +38,6 @@ import org.anchoranalysis.image.histogram.Histogram;
 
 public abstract class PixelScoreCalculateLevelBase extends PixelScoreSingleChnl {
 	
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	// START BEAN PROPERTIES
 	@BeanField
 	private CalculateLevel calculateLevel;

@@ -39,21 +39,16 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.core.geometry.Point3i;
-import org.anchoranalysis.image.bean.provider.BinaryImgChnlProvider;
+import org.anchoranalysis.image.bean.provider.BinaryChnlProvider;
 import org.anchoranalysis.image.binary.BinaryChnl;
 import org.anchoranalysis.image.chnl.Chnl;
 
 // Rejects a proposal if its centre is not found on a particular prob map
 public class RejectProposalCentreOutside extends MarkProposer {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 3969644806012270768L;
-
 	// START BEAN
 	@BeanField
-	private BinaryImgChnlProvider binaryImgChnlProvider;
+	private BinaryChnlProvider binaryChnl;
 	
 	@BeanField
 	private MarkProposer item;
@@ -71,7 +66,7 @@ public class RejectProposalCentreOutside extends MarkProposer {
 	public void onInit(MPPInitParams pso) throws InitException {
 		super.onInit(pso);
 		try {
-			binaryImgChnl = binaryImgChnlProvider.create();
+			binaryImgChnl = binaryChnl.create();
 		} catch (CreateException e) {
 			throw new InitException(e);
 		}
@@ -111,18 +106,20 @@ public class RejectProposalCentreOutside extends MarkProposer {
 	public ICreateProposalVisualization proposalVisualization(boolean detailed) {
 		return item.proposalVisualization(detailed);
 	}
-
-	public BinaryImgChnlProvider getBinaryImgChnlProvider() {
-		return binaryImgChnlProvider;
-	}
-
-	public void setBinaryImgChnlProvider(BinaryImgChnlProvider binaryImgChnlProvider) {
-		this.binaryImgChnlProvider = binaryImgChnlProvider;
-	}
 	
 	private static int getVoxelFromChnl(Chnl raster, int x, int y, int z) {
 		Point3i pnt = new Point3i(x,y,z);
 		return raster.getVoxelBox().asByte().getVoxel(pnt.getX(), pnt.getY(), pnt.getZ());
+	}
+
+
+	public BinaryChnlProvider getBinaryChnl() {
+		return binaryChnl;
+	}
+
+
+	public void setBinaryChnl(BinaryChnlProvider binaryChnl) {
+		this.binaryChnl = binaryChnl;
 	}
 }
 

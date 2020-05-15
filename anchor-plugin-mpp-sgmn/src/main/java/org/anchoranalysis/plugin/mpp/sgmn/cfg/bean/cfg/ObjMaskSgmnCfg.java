@@ -1,5 +1,7 @@
 package org.anchoranalysis.plugin.mpp.sgmn.cfg.bean.cfg;
 
+import java.util.Optional;
+
 import org.anchoranalysis.anchor.mpp.cfg.Cfg;
 import org.anchoranalysis.anchor.mpp.mark.GlobalRegionIdentifiers;
 import org.anchoranalysis.anchor.mpp.regionmap.RegionMapSingleton;
@@ -32,12 +34,9 @@ import org.anchoranalysis.anchor.mpp.regionmap.RegionMapSingleton;
 
 
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.core.name.provider.INamedProvider;
 import org.anchoranalysis.core.name.provider.NamedProviderGetException;
-import org.anchoranalysis.core.params.KeyValueParams;
 import org.anchoranalysis.core.random.RandomNumberGenerator;
-import org.anchoranalysis.experiment.ExperimentExecutionArguments;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.experiment.bean.sgmn.SgmnObjMaskCollection;
 import org.anchoranalysis.image.experiment.identifiers.ImgStackIdentifiers;
@@ -46,15 +45,10 @@ import org.anchoranalysis.image.objmask.ObjMaskCollection;
 import org.anchoranalysis.image.seed.SeedCollection;
 import org.anchoranalysis.image.sgmn.SgmnFailedException;
 import org.anchoranalysis.image.stack.NamedImgStackCollection;
-import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
+import org.anchoranalysis.io.output.bound.BoundIOContext;
 import org.anchoranalysis.mpp.sgmn.bean.cfg.CfgSgmn;
 
 public class ObjMaskSgmnCfg extends SgmnObjMaskCollection {
-
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
 
 	// START BEAN PROPERTIES
 	@BeanField
@@ -62,14 +56,24 @@ public class ObjMaskSgmnCfg extends SgmnObjMaskCollection {
 	// END BEAN PROPERTIES
 
 	@Override
-	public ObjMaskCollection sgmn(NamedImgStackCollection stackCollection,
-			INamedProvider<ObjMaskCollection> objMaskCollection, SeedCollection seeds, RandomNumberGenerator re, ExperimentExecutionArguments expArgs, LogErrorReporter logger, BoundOutputManagerRouteErrors outputManager)
+	public ObjMaskCollection sgmn(
+		NamedImgStackCollection stackCollection,
+		INamedProvider<ObjMaskCollection> objMaskCollection,
+		SeedCollection seeds,
+		RandomNumberGenerator re,
+		BoundIOContext context
+	)
 			throws SgmnFailedException {
 
 		try {
 			ImageDim sd = stackCollection.getException(ImgStackIdentifiers.INPUT_IMAGE).getDimensions();
 			
-			Cfg cfg = cfgSgmn.sgmn(stackCollection, objMaskCollection, expArgs, new KeyValueParams(), logger, outputManager );
+			Cfg cfg = cfgSgmn.sgmn(
+				stackCollection,
+				objMaskCollection,
+				Optional.empty(),
+				context
+			);
 			return cfg.calcMask(
 				sd,
 				RegionMapSingleton.instance().membershipWithFlagsForIndex(GlobalRegionIdentifiers.SUBMARK_INSIDE),

@@ -33,11 +33,6 @@ import org.anchoranalysis.image.feature.bean.pixelwise.PixelScore;
 
 public class PixelScoreRejectIfIntensityLessThan extends PixelScore {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
 	private PixelScore item;

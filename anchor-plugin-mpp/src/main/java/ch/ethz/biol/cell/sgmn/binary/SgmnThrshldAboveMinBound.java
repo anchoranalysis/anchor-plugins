@@ -28,10 +28,8 @@ package ch.ethz.biol.cell.sgmn.binary;
 
 
 import java.nio.ByteBuffer;
-
 import org.anchoranalysis.anchor.mpp.bean.bound.MarkBounds;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.random.RandomNumberGenerator;
 import org.anchoranalysis.image.bean.sgmn.binary.BinarySgmn;
 import org.anchoranalysis.image.bean.sgmn.binary.BinarySgmnParameters;
 import org.anchoranalysis.image.bean.sgmn.binary.BinarySgmnThrshld;
@@ -42,7 +40,6 @@ import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.extent.ImageRes;
 import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.image.sgmn.SgmnFailedException;
-import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.anchoranalysis.image.voxel.box.VoxelBoxWrapper;
 import org.anchoranalysis.plugin.image.bean.histogram.threshold.Constant;
 
@@ -50,11 +47,6 @@ import org.anchoranalysis.plugin.image.bean.histogram.threshold.Constant;
 //   greater than the minimum bound
 public class SgmnThrshldAboveMinBound extends BinarySgmn {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
 	private boolean suppress3D = false;
@@ -79,21 +71,21 @@ public class SgmnThrshldAboveMinBound extends BinarySgmn {
 	}
 	
 	@Override
-	public BinaryVoxelBox<ByteBuffer> sgmn(VoxelBoxWrapper voxelBox, BinarySgmnParameters params, RandomNumberGenerator re)
+	public BinaryVoxelBox<ByteBuffer> sgmn(VoxelBoxWrapper voxelBox, BinarySgmnParameters params)
 			throws SgmnFailedException {
-		setUpDelegate( voxelBox.any().extnt(), params.getRes() );
-		return delegate.sgmn(voxelBox, params, re);
+		setUpDelegate(
+			voxelBox.any().extnt(),
+			params.getRes().orElseThrow( ()->
+				new SgmnFailedException("Image-resolution is required but missing")
+			)
+		);
+		return delegate.sgmn(voxelBox, params);
 	}
 
 	@Override
 	public BinaryVoxelBox<ByteBuffer> sgmn(VoxelBoxWrapper voxelBox,
-			BinarySgmnParameters params, ObjMask objMask, RandomNumberGenerator re) throws SgmnFailedException {
-		return delegate.sgmn(voxelBox, params, objMask, re);
-	}
-
-	@Override
-	public VoxelBox<ByteBuffer> getAdditionalOutput() {
-		return delegate.getAdditionalOutput();
+			BinarySgmnParameters params, ObjMask objMask) throws SgmnFailedException {
+		return delegate.sgmn(voxelBox, params, objMask);
 	}
 
 	public boolean isSuppress3D() {

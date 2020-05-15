@@ -1,0 +1,15 @@
+<config>
+<bean config-class="java.util.List" config-factory="listInclude">
+
+	<include>
+		<item filePath="singleFeatures.xml" config-class="java.util.List" config-factory="include"/>
+	</include> 
+	
+	<item config-class="org.anchoranalysis.bean.NamedBean" name="cogYRef">
+		<item config-class="org.anchoranalysis.feature.bean.list.FeatureListProviderDefineSingle">
+			<item config-class="org.anchoranalysis.feature.bean.operator.Reference" id="sharedCogY"/>
+		</item>
+	</item>	
+	
+</bean>
+</config>

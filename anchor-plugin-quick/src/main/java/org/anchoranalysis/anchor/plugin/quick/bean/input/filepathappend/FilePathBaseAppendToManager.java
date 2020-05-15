@@ -37,12 +37,6 @@ public abstract class FilePathBaseAppendToManager extends FilePathAppendBase {
 
 	/**
 	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
-	
-	/**
-	 * 
 	 * @param inputManager
 	 * @param rootName if non-empty (and non-NULL) a rooted filePathGenerator is created instead of a non rooted
 	 * @param regex a regular-expression that returns two groups, the first is the dataset name, the second is the file-name

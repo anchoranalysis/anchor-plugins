@@ -32,8 +32,6 @@ import java.nio.ByteBuffer;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.image.bean.provider.BinaryImgChnlProvider;
-import org.anchoranalysis.image.bean.provider.ChnlProvider;
 import org.anchoranalysis.image.binary.BinaryChnl;
 import org.anchoranalysis.image.chnl.Chnl;
 import org.anchoranalysis.image.convert.ByteConverter;
@@ -42,32 +40,19 @@ import org.anchoranalysis.image.histogram.Histogram;
 import org.anchoranalysis.image.histogram.HistogramFactoryUtilities;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 
-public class ChnlProviderSuppressAbove extends ChnlProvider {
+// TODO consider using a generic histogram-feature and a FeatureCalculation to cache the histogram creation
+// TODO consider using some form of histogram thresholder
+public class ChnlProviderSuppressAbove extends ChnlProviderOneMask {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PROPERTIES
-	@BeanField
-	private ChnlProvider chnlProvider;
-	
-	@BeanField
-	private BinaryImgChnlProvider binaryImgChnlProviderMask;
-	
 	@BeanField
 	private double quantile = 0.5;
 	// END BEAN PROPERTIES
 
 	@Override
-	public Chnl create() throws CreateException {
+	protected Chnl createFromMaskedChnl(Chnl chnl, BinaryChnl mask) throws CreateException {
 		
-		Chnl chnl = chnlProvider.create();
-		
-		BinaryChnl binaryImg = binaryImgChnlProviderMask.create();
-		
-		Histogram hist = HistogramFactoryUtilities.create(chnl, binaryImg );
+		Histogram hist = HistogramFactoryUtilities.create(chnl, mask );
 		
 		try {
 			double intensityThrshldDbl = hist.quantile(quantile);
@@ -108,28 +93,11 @@ public class ChnlProviderSuppressAbove extends ChnlProvider {
 		}
 	}
 
-	public ChnlProvider getChnlProvider() {
-		return chnlProvider;
-	}
-
-	public void setChnlProvider(ChnlProvider chnlProvider) {
-		this.chnlProvider = chnlProvider;
-	}
-
 	public double getQuantile() {
 		return quantile;
 	}
 
 	public void setQuantile(double quantile) {
 		this.quantile = quantile;
-	}
-
-	public BinaryImgChnlProvider getBinaryImgChnlProviderMask() {
-		return binaryImgChnlProviderMask;
-	}
-
-	public void setBinaryImgChnlProviderMask(
-			BinaryImgChnlProvider binaryImgChnlProviderMask) {
-		this.binaryImgChnlProviderMask = binaryImgChnlProviderMask;
 	}
 }

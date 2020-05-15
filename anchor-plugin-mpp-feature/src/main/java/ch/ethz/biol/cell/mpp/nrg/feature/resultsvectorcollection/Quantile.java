@@ -1,6 +1,6 @@
 package ch.ethz.biol.cell.mpp.nrg.feature.resultsvectorcollection;
 
-import org.anchoranalysis.anchor.mpp.feature.bean.results.FeatureResults;
+
 
 /*
  * #%L
@@ -30,26 +30,12 @@ import org.anchoranalysis.anchor.mpp.feature.bean.results.FeatureResults;
 
 
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.index.GetOperationFailedException;
-import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.feature.calc.results.ResultsVector;
-import org.anchoranalysis.feature.calc.results.ResultsVectorCollection;
-import org.anchoranalysis.feature.resultsvectorcollection.FeatureInputResults;
-
 import cern.colt.list.DoubleArrayList;
 import cern.jet.stat.Descriptive;
 
-public class Quantile extends FeatureResults {
-
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
+public class Quantile extends FeatureResultsFromIndex {
 
 	// START BEAN PROPERTIES
-	@BeanField
-	private String id = "";
-	
 	@BeanField
 	private double quantile = 0;
 	
@@ -59,38 +45,14 @@ public class Quantile extends FeatureResults {
 	@BeanField
 	private boolean asPercentage = false;
 	// END BEAN PROPERTIES
-
-	@Override
-	public double calc(FeatureInputResults params)
-			throws FeatureCalcException {
-
-		try {
-			DoubleArrayList featureVals = new DoubleArrayList();
-			
-			int index = params.getFeatureNameIndex().indexOf(id);
-			
-			ResultsVectorCollection rvc = params.getResultsVectorCollection();
-			
-			if (rvc.size()==0) {
-				throw new FeatureCalcException("There are 0 items");
-			}
-			
-			for (int i=0; i<rvc.size(); i++) {
-				ResultsVector rv = rvc.get(i);
-				assert(rv!=null);
-				featureVals.add(rv.get(index));
-			}
-			
-			featureVals.sort();
-			
-			double quantileFinal = asPercentage ? quantile/100 : quantile;
-			return Descriptive.quantile(featureVals, quantileFinal);
-			
-		} catch (GetOperationFailedException e) {
-			throw new FeatureCalcException(e);
-		}
-	}
 	
+	@Override
+	protected double calcStatisticFromFeatureVal(DoubleArrayList featureVals) {
+		featureVals.sort();
+		
+		double quantileFinal = asPercentage ? quantile/100 : quantile;
+		return Descriptive.quantile(featureVals, quantileFinal);
+	}
 	
 	public double getQuantile() {
 		return quantile;
@@ -100,15 +62,6 @@ public class Quantile extends FeatureResults {
 		this.quantile = quantile;
 	}
 
-
-	public String getId() {
-		return id;
-	}
-
-	public void setId(String id) {
-		this.id = id;
-	}
-
 	public boolean isAsPercentage() {
 		return asPercentage;
 	}
@@ -116,6 +69,4 @@ public class Quantile extends FeatureResults {
 	public void setAsPercentage(boolean asPercentage) {
 		this.asPercentage = asPercentage;
 	}
-
-
 }

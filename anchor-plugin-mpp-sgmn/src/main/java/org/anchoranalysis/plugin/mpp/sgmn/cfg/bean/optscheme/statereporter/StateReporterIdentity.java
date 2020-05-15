@@ -38,11 +38,6 @@ import org.anchoranalysis.mpp.sgmn.transformer.StateTransformer;
  */
 public class StateReporterIdentity<T> extends StateReporter<T, T> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	@Override
 	public StateTransformer<T, T> primaryReport() {
 		return (a,context)->a;

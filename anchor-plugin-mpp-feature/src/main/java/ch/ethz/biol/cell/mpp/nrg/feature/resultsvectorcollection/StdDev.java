@@ -1,6 +1,6 @@
 package ch.ethz.biol.cell.mpp.nrg.feature.resultsvectorcollection;
 
-import org.anchoranalysis.anchor.mpp.feature.bean.results.FeatureResults;
+
 
 /*
  * #%L
@@ -29,62 +29,16 @@ import org.anchoranalysis.anchor.mpp.feature.bean.results.FeatureResults;
  */
 
 
-import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.index.GetOperationFailedException;
-import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.feature.calc.results.ResultsVectorCollection;
-import org.anchoranalysis.feature.resultsvectorcollection.FeatureInputResults;
-
 import cern.colt.list.DoubleArrayList;
 import cern.jet.stat.Descriptive;
 
-public class StdDev extends FeatureResults {
+public class StdDev extends FeatureResultsFromIndex {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
-	// START BEAN PROPERTIES
-	@BeanField
-	private String id = "";
-	// END BEAN PROPERTIES
-	
 	@Override
-	public double calc(FeatureInputResults params)
-			throws FeatureCalcException {
-
-		try {
-			DoubleArrayList featureVals = new DoubleArrayList();
-			
-			int index = params.getFeatureNameIndex().indexOf(id);
-			
-			ResultsVectorCollection rvc = params.getResultsVectorCollection();
-			
-			if (rvc.size()==0) {
-				throw new FeatureCalcException("There are 0 items");
-			}
-			for (int i=0; i<rvc.size(); i++) {
-				featureVals.add(rvc.get(i).get(index));
-			}
-			
-			double sum = Descriptive.sum( featureVals );
-			//double mean = sum/featureVals.size();
-			double var = Descriptive.variance( featureVals.size(), sum, Descriptive.sumOfSquares( featureVals ) );
-			return Descriptive.standardDeviation(var);
-			
-		} catch (GetOperationFailedException e) {
-			throw new FeatureCalcException(e);
-		}
+	protected double calcStatisticFromFeatureVal(DoubleArrayList featureVals) {
+		double sum = Descriptive.sum( featureVals );
+		//double mean = sum/featureVals.size();
+		double var = Descriptive.variance( featureVals.size(), sum, Descriptive.sumOfSquares( featureVals ) );
+		return Descriptive.standardDeviation(var);
 	}
-
-	public String getId() {
-		return id;
-	}
-
-	public void setId(String id) {
-		this.id = id;
-	}
-
-
 }

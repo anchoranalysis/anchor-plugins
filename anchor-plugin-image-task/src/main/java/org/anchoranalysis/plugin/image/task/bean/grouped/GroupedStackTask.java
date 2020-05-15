@@ -29,11 +29,10 @@ package org.anchoranalysis.plugin.image.task.bean.grouped;
 import java.nio.file.Path;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.core.progress.ProgressReporterNull;
 import org.anchoranalysis.experiment.JobExecutionException;
 import org.anchoranalysis.experiment.task.InputTypesExpected;
-import org.anchoranalysis.experiment.task.ParametersBound;
+import org.anchoranalysis.experiment.task.InputBound;
 import org.anchoranalysis.experiment.task.Task;
 import org.anchoranalysis.image.io.input.ProvidesStackInput;
 import org.anchoranalysis.image.stack.NamedImgStackCollection;
@@ -41,7 +40,7 @@ import org.anchoranalysis.image.stack.wrap.WrapStackAsTimeSequenceStore;
 import org.anchoranalysis.io.bean.filepath.generator.FilePathGenerator;
 import org.anchoranalysis.io.bean.filepath.generator.FilePathGeneratorConstant;
 import org.anchoranalysis.io.error.AnchorIOException;
-import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
+import org.anchoranalysis.io.output.bound.BoundIOContext;
 import org.anchoranalysis.plugin.image.task.bean.selectchnls.SelectAll;
 import org.anchoranalysis.plugin.image.task.bean.selectchnls.SelectChnlsFromStacks;
 
@@ -55,11 +54,6 @@ import org.anchoranalysis.plugin.image.task.bean.selectchnls.SelectChnlsFromStac
  */
 public abstract class GroupedStackTask<S,T> extends Task<ProvidesStackInput,GroupedSharedState<S,T>> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
 	private FilePathGenerator groupGenerator = new FilePathGeneratorConstant("all");	// Translates an input file name to it's group
@@ -74,12 +68,13 @@ public abstract class GroupedStackTask<S,T> extends Task<ProvidesStackInput,Grou
 	}
 	
 	@Override
-	public void doJobOnInputObject(	ParametersBound<ProvidesStackInput,GroupedSharedState<S,T>> params) throws JobExecutionException {
+	public void doJobOnInputObject(	InputBound<ProvidesStackInput,GroupedSharedState<S,T>> params) throws JobExecutionException {
 		
 		ProvidesStackInput inputObject = params.getInputObject();
+		BoundIOContext context = params.context();
 
 		// Extract a group name
-		String groupName = extractGroupName( inputObject.pathForBinding(), params.getExperimentArguments().isDebugEnabled() );
+		String groupName = extractGroupName( inputObject.pathForBinding(), context.isDebugEnabled() );
 		
 		NamedImgStackCollection store = GroupedStackTask.extractInputStacks(inputObject);
 	
@@ -87,8 +82,7 @@ public abstract class GroupedStackTask<S,T> extends Task<ProvidesStackInput,Grou
 			store,
 			groupName,
 			params.getSharedState(),
-			params.getOutputManager(),
-			params.getLogErrorReporter()
+			context
 		);
 	}
 	
@@ -96,8 +90,7 @@ public abstract class GroupedStackTask<S,T> extends Task<ProvidesStackInput,Grou
 		NamedImgStackCollection store,
 		String groupName,
 		GroupedSharedState<S,T> sharedState,
-		BoundOutputManagerRouteErrors outputManager,
-		LogErrorReporter logErrorReporter
+		BoundIOContext context
 	) throws JobExecutionException;
 	
 	private String extractGroupName( Path path, boolean debugEnabled ) throws JobExecutionException {

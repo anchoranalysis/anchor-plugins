@@ -1,6 +1,6 @@
 package org.anchoranalysis.plugin.image.task.imagefeature.calculator;
 
-import java.nio.file.Path;
+
 
 /*-
  * #%L
@@ -29,7 +29,6 @@ import java.nio.file.Path;
  */
 
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.bean.list.FeatureListProvider;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
@@ -42,6 +41,7 @@ import org.anchoranalysis.image.feature.stack.FeatureInputStack;
 import org.anchoranalysis.image.init.ImageInitParams;
 import org.anchoranalysis.image.io.input.ProvidesStackInput;
 import org.anchoranalysis.image.io.input.StackInputInitParamsCreator;
+import org.anchoranalysis.io.output.bound.BoundIOContext;
 
 /**
  * Calculates feature or feature values with the following objects:
@@ -60,18 +60,21 @@ public class FeatureCalculatorStackInputFromStore {
 	private ImageInitParams initParams;
 	private NRGStackWithParams nrgStack;
 		
-	public FeatureCalculatorStackInputFromStore(ProvidesStackInput stackInput, StackProvider nrgStackProvider,
-			NamedFeatureStore<FeatureInputStack> featureStore, Path modelDir, LogErrorReporter logErrorReporter) throws OperationFailedException {
+	public FeatureCalculatorStackInputFromStore(
+		ProvidesStackInput stackInput,
+		StackProvider nrgStackProvider,
+		NamedFeatureStore<FeatureInputStack> featureStore,
+		BoundIOContext context
+	) throws OperationFailedException {
 		super();
 		
-		helper = new HelperImageFeatureCalculator(logErrorReporter);
-		this.initParams = StackInputInitParamsCreator.createInitParams(
-			stackInput,
-			modelDir,
-			logErrorReporter
+		helper = new HelperImageFeatureCalculator(context.getLogger());
+		this.initParams = StackInputInitParamsCreator.createInitParams(stackInput, context);
+		this.nrgStack = HelperInit.extractStack(
+			initParams,
+			nrgStackProvider,
+			context.getLogger()
 		);
-		this.nrgStack = HelperInit.extractStack( initParams, nrgStackProvider, logErrorReporter );
-		
 		this.featureList = extractFeatures(featureStore);
 	}
 	

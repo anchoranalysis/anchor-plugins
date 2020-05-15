@@ -35,44 +35,23 @@ import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorSingle;
 import org.anchoranalysis.image.bean.objmask.match.ObjMaskMatcher;
-import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
-import org.anchoranalysis.image.feature.bean.evaluator.FeatureEvaluator;
 import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
 import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.image.objmask.ObjMaskCollection;
 import org.anchoranalysis.image.objmask.match.ObjWithMatches;
 
 // Returns a collection of each Max Object found in matches
-public class ObjMaskProviderFindMaxFeatureInMatchedObjects extends ObjMaskProvider {
+public class ObjMaskProviderFindMaxFeatureInMatchedObjects extends ObjMaskProviderFindMaxFeatureBase {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
-	private ObjMaskProvider objs;
-	
-	@BeanField
 	private ObjMaskMatcher objMaskMatcher;
-	
-	@BeanField
-	private FeatureEvaluator<FeatureInputSingleObj> featureEvaluator;
 	// END BEAN PROPERTIES
 
 	@Override
-	public ObjMaskCollection create() throws CreateException {
+	public ObjMaskCollection createFromObjs( ObjMaskCollection in ) throws CreateException {
 		
-		ObjMaskCollection in = objs.create();
-		
-		FeatureCalculatorSingle<FeatureInputSingleObj> session;
-		try {
-			session = featureEvaluator.createAndStartSession();
-		} catch (OperationFailedException e) {
-			throw new CreateException(e);
-		}
-
+		FeatureCalculatorSingle<FeatureInputSingleObj> session = createSession();
 
 		ObjMaskCollection out = new ObjMaskCollection();
 		try {
@@ -85,9 +64,7 @@ public class ObjMaskProviderFindMaxFeatureInMatchedObjects extends ObjMaskProvid
 					out.add(max);
 				}
 			}
-		} catch (OperationFailedException e) {
-			throw new CreateException(e);
-		} catch (FeatureCalcException e) {
+		} catch (OperationFailedException | FeatureCalcException e) {
 			throw new CreateException(e);
 		}
 		
@@ -111,22 +88,6 @@ public class ObjMaskProviderFindMaxFeatureInMatchedObjects extends ObjMaskProvid
 		}
 		
 		return max;
-	}
-	
-	public ObjMaskProvider getObjs() {
-		return objs;
-	}
-
-	public void setObjs(ObjMaskProvider objs) {
-		this.objs = objs;
-	}
-
-	public FeatureEvaluator<FeatureInputSingleObj> getFeatureEvaluator() {
-		return featureEvaluator;
-	}
-
-	public void setFeatureEvaluator(FeatureEvaluator<FeatureInputSingleObj> featureEvaluator) {
-		this.featureEvaluator = featureEvaluator;
 	}
 
 	public ObjMaskMatcher getObjMaskMatcher() {

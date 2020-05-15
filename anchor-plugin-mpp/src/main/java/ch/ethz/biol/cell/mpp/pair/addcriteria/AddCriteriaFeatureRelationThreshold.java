@@ -43,11 +43,6 @@ import org.anchoranalysis.image.extent.ImageDim;
 
 public class AddCriteriaFeatureRelationThreshold extends AddCriteriaPair {
 	
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
 	private Feature<FeatureInputPairMemo> feature;

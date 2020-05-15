@@ -43,13 +43,12 @@ import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorSingle;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorSingleChangeInput;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorSingleFromMulti;
-import org.anchoranalysis.feature.shared.SharedFeaturesInitParams;
 import org.anchoranalysis.image.feature.bean.evaluator.FeatureEvaluator;
 import org.anchoranalysis.image.feature.bean.evaluator.FeatureEvaluatorNrgStack;
 import org.anchoranalysis.image.feature.evaluator.PayloadCalculator;
 import org.anchoranalysis.image.feature.objmask.pair.FeatureInputPairObjs;
-import org.anchoranalysis.image.feature.session.MergedPairsFeatures;
-import org.anchoranalysis.image.feature.session.MergedPairsSession;
+import org.anchoranalysis.image.feature.session.merged.MergedPairsFeatures;
+import org.anchoranalysis.image.feature.session.merged.MergedPairsSession;
 import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.plugin.image.obj.merge.priority.AssignPriority;
 import org.anchoranalysis.plugin.image.obj.merge.priority.AssignPriorityFromPair;
@@ -62,11 +61,6 @@ import org.anchoranalysis.plugin.image.obj.merge.priority.AssignPriorityFromPair
  *    
  */
 public class ObjMaskProviderMergePair extends ObjMaskProviderMergeWithFeature {
-
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
 
 	// START BEAN PROPERTIES
 	/**
@@ -120,7 +114,6 @@ public class ObjMaskProviderMergePair extends ObjMaskProviderMergeWithFeature {
 			);
 			session.start(
 				getSharedObjects(),
-				SharedFeaturesInitParams.create(getLogger()),	// To fix to include shared objects
 				nrgStack,
 				getLogger()
 			);

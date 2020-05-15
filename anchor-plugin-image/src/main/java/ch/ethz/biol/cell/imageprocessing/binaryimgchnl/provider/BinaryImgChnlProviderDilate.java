@@ -28,6 +28,7 @@ package ch.ethz.biol.cell.imageprocessing.binaryimgchnl.provider;
 
 
 import java.nio.ByteBuffer;
+import java.util.Optional;
 
 import org.anchoranalysis.bean.BeanInstanceMap;
 import org.anchoranalysis.bean.annotation.BeanField;
@@ -44,11 +45,6 @@ import org.anchoranalysis.image.objmask.morph.MorphologicalDilation;
  */
 public class BinaryImgChnlProviderDilate extends BinaryImgChnlProviderMorphOp {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -9015477942124999871L;
-	
 	// START
 	@BeanField
 	private boolean zOnly = false;		// Only dilates in the z-direction
@@ -78,7 +74,7 @@ public class BinaryImgChnlProviderDilate extends BinaryImgChnlProviderMorphOp {
 			getMinIntensityValue(),
 			zOnly,
 			false,
-			null,
+			Optional.empty(),
 			bigNghb
 		);
 		

@@ -35,11 +35,6 @@ import org.anchoranalysis.plugin.mpp.sgmn.cfg.bean.optscheme.mode.TransformIfNot
 
 public class StateReporterTransformer<T,S> extends StateReporter<T, S> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	// START BEAN PROPERTIES
 	@BeanField
 	private StateTransformerBean<T,S> transformerPrimary;

@@ -28,11 +28,9 @@ package ch.ethz.biol.cell.sgmn.binary;
 
 
 import java.nio.ByteBuffer;
-
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.random.RandomNumberGenerator;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorSingle;
 import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
@@ -54,11 +52,6 @@ import org.anchoranalysis.plugin.image.bean.histogram.threshold.Constant;
 
 public class SgmnThrshldFeatureObjMask extends BinarySgmn {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START PARAMETERS
 	@BeanField
 	private FeatureEvaluator<FeatureInputSingleObj> featureEvaluator;
@@ -84,17 +77,13 @@ public class SgmnThrshldFeatureObjMask extends BinarySgmn {
 				new FeatureInputSingleObj(omc.get(0))
 			);
 			
-		} catch (FeatureCalcException e) {
-			throw new SgmnFailedException(e);
-		} catch (OperationFailedException e) {
-			throw new SgmnFailedException(e);
-		} catch (CreateException e) {
+		} catch (FeatureCalcException | OperationFailedException | CreateException e) {
 			throw new SgmnFailedException(e);
 		}
 	}
 	
 	@Override
-	public BinaryVoxelBox<ByteBuffer> sgmn(VoxelBoxWrapper voxelBox, BinarySgmnParameters params, RandomNumberGenerator re) throws SgmnFailedException {
+	public BinaryVoxelBox<ByteBuffer> sgmn(VoxelBoxWrapper voxelBox, BinarySgmnParameters params) throws SgmnFailedException {
 		
 		BinaryValuesByte bvOut = BinaryValuesByte.getDefault();
 		
@@ -110,7 +99,7 @@ public class SgmnThrshldFeatureObjMask extends BinarySgmn {
 	}
 	
 	@Override
-	public BinaryVoxelBox<ByteBuffer> sgmn(VoxelBoxWrapper voxelBox, BinarySgmnParameters params, ObjMask objMask, RandomNumberGenerator re) throws SgmnFailedException {
+	public BinaryVoxelBox<ByteBuffer> sgmn(VoxelBoxWrapper voxelBox, BinarySgmnParameters params, ObjMask objMask) throws SgmnFailedException {
 		
 		BoundingBox bboxE = new BoundingBox(objMask.getVoxelBox().extnt());
 		
@@ -133,16 +122,20 @@ public class SgmnThrshldFeatureObjMask extends BinarySgmn {
 		
 		BinaryValuesByte bvOut = BinaryValuesByte.getDefault();
 		try {		
-			return thresholder.threshold( new VoxelBoxWrapper(maskDup),new ObjMask(bboxE,objMask.getVoxelBox(),objMask.getBinaryValuesByte()), bvOut, params.getIntensityHistogram() );
+			return thresholder.threshold(
+				new VoxelBoxWrapper(maskDup),
+				new ObjMask(
+					bboxE,
+					objMask.getVoxelBox(),
+					objMask.getBinaryValuesByte()
+				),
+				bvOut,
+				params.getIntensityHistogram()
+			);
 		}catch (OperationFailedException e) {
 			throw new SgmnFailedException(e);
 		}
 					
-	}
-
-	@Override
-	public VoxelBox<ByteBuffer> getAdditionalOutput() {
-		return null;
 	}
 
 	public FeatureEvaluator<FeatureInputSingleObj> getFeatureEvaluator() {

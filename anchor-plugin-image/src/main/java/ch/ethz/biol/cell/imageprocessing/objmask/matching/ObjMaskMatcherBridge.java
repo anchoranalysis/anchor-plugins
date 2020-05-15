@@ -38,11 +38,6 @@ import org.anchoranalysis.image.objmask.match.ObjWithMatches;
 // Matches to another object, and then uses that object to bridge to another
 public class ObjMaskMatcherBridge extends ObjMaskMatcher {
 	
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
 	private ObjMaskMatcher bridgeMatcher;		// What we use as an intermediatery

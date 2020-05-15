@@ -39,7 +39,7 @@ import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
 import org.anchoranalysis.image.objmask.ObjMask;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
-import ch.ethz.biol.cell.mpp.mark.pointsfitter.LinearLeastSquaresEllipseFitterGeoRegression;
+import ch.ethz.biol.cell.mpp.mark.pointsfitter.LinearLeastSquaresEllipseFitter;
 
 public class CalculateEllipseLeastSquares extends FeatureCalculation<ObjMaskAndEllipse, FeatureInputSingleObj> {
 
@@ -49,7 +49,7 @@ public class CalculateEllipseLeastSquares extends FeatureCalculation<ObjMaskAndE
 		super();
 		
 		factory = new EllipseFactory(
-			new LinearLeastSquaresEllipseFitterGeoRegression()
+			new LinearLeastSquaresEllipseFitter()
 		);
 	}
 		

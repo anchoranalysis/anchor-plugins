@@ -29,22 +29,14 @@ package ch.ethz.biol.cell.imageprocessing.chnl.provider;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.image.bean.provider.ChnlProvider;
+import org.anchoranalysis.image.bean.provider.ChnlProviderOne;
 import org.anchoranalysis.image.chnl.Chnl;
 import org.anchoranalysis.image.histogram.Histogram;
 import org.anchoranalysis.image.histogram.HistogramFactoryUtilities;
 
-public class ChnlProviderRejectIfNoSignal extends ChnlProvider {
+public class ChnlProviderRejectIfNoSignal extends ChnlProviderOne {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEANS
-	@BeanField
-	private ChnlProvider chnlProvider;
-	
 	@BeanField
 	private int minIntensity = 40;
 	
@@ -53,19 +45,17 @@ public class ChnlProviderRejectIfNoSignal extends ChnlProvider {
 	// END BEANS
 
 	@Override
-	public Chnl create() throws CreateException {
-		
-		Chnl chnl = chnlProvider.create();
+	public Chnl createFromChnl(Chnl chnl) throws CreateException {
 		
 		Histogram h = HistogramFactoryUtilities.create( chnl );
 		
 		double percent = h.percentGreaterEqualTo(minIntensity);
-		
-		if (percent < minRatio) {
-			String msg = String.format("Rejecting as %f < %f for intensity %d", percent, minRatio, minIntensity );
-			throw new CreateException( msg );
-		}
 
+		if (percent < minRatio) {
+			throw new CreateException(
+				String.format("Rejecting as %f < %f for intensity %d", percent, minRatio, minIntensity)
+			);
+		}
 		return chnl;
 	}
 
@@ -84,14 +74,4 @@ public class ChnlProviderRejectIfNoSignal extends ChnlProvider {
 	public void setMinRatio(double minRatio) {
 		this.minRatio = minRatio;
 	}
-
-	public ChnlProvider getChnlProvider() {
-		return chnlProvider;
-	}
-
-	public void setChnlProvider(ChnlProvider chnlProvider) {
-		this.chnlProvider = chnlProvider;
-	}
-
-
 }

@@ -36,11 +36,6 @@ import org.anchoranalysis.image.extent.ImageRes;
 
 public class MaxWithConstant extends ScalarProposer {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
 	private ScalarProposer scalarProposer;

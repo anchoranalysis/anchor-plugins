@@ -20,11 +20,6 @@ import org.anchoranalysis.image.orientation.Orientation3DEulerAngles;
 //   and below the upper maximum
 public class LongestExtentWithin extends OrientationProposer {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 7806665021959710908L;
-
 	// START BEAN
 	@BeanField
 	private double incrementDegrees = 1;

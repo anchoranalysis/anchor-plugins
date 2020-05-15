@@ -41,11 +41,6 @@ import org.anchoranalysis.image.voxel.box.VoxelBoxWrapper;
  */
 public class BlurGaussianEachSlice2d extends BlurStrategy {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	@Override
 	public void blur( VoxelBoxWrapper voxelBox, ImageDim dim, LogReporter logger ) throws OperationFailedException {
 		

@@ -39,17 +39,12 @@ import org.anchoranalysis.image.scale.ScaleFactorUtilities;
 
 public class ScaleCalculatorRelativeDimensions extends ScaleCalculator {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PROPERTIES
 	@BeanField @OptionalBean
-	private ImageDimProvider dimProviderSource;
+	private ImageDimProvider dimSource;
 	
 	@BeanField
-	private ImageDimProvider dimProviderTarget;
+	private ImageDimProvider dimTarget;
 	// END BEAN PROPERTIES
 
 	@Override
@@ -57,9 +52,9 @@ public class ScaleCalculatorRelativeDimensions extends ScaleCalculator {
 			throws OperationFailedException {
 		
 		ImageDim sdSource = srcDim;
-		if (dimProviderSource!=null) {
+		if (dimSource!=null) {
 			try {
-				sdSource = dimProviderSource.create();
+				sdSource = dimSource.create();
 			} catch (CreateException e) {
 				throw new OperationFailedException(e);
 			}
@@ -72,27 +67,26 @@ public class ScaleCalculatorRelativeDimensions extends ScaleCalculator {
 		try {
 			return ScaleFactorUtilities.calcRelativeScale(
 				sdSource.getExtnt(),
-				dimProviderTarget.create().getExtnt()
+				dimTarget.create().getExtnt()
 			);
 		} catch (CreateException e) {
 			throw new OperationFailedException(e);
 		}
 	}
 
-	public ImageDimProvider getDimProviderSource() {
-		return dimProviderSource;
+	public ImageDimProvider getDimSource() {
+		return dimSource;
 	}
 
-	public void setDimProviderSource(ImageDimProvider dimProviderSource) {
-		this.dimProviderSource = dimProviderSource;
+	public void setDimSource(ImageDimProvider dimSource) {
+		this.dimSource = dimSource;
 	}
 
-	public ImageDimProvider getDimProviderTarget() {
-		return dimProviderTarget;
+	public ImageDimProvider getDimTarget() {
+		return dimTarget;
 	}
 
-	public void setDimProviderTarget(ImageDimProvider dimProviderTarget) {
-		this.dimProviderTarget = dimProviderTarget;
+	public void setDimTarget(ImageDimProvider dimTarget) {
+		this.dimTarget = dimTarget;
 	}
-
 }

@@ -50,11 +50,6 @@ import org.anchoranalysis.image.feature.objmask.pair.impl.Second;
  */
 public class FeatureListProviderDelegateFromMerged extends FeatureListProvider<FeatureInputPairObjs> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
 	private FeatureListProvider<FeatureInputSingleObj> item;

@@ -40,11 +40,6 @@ import org.anchoranalysis.mpp.sgmn.transformer.StateTransformer;
  */
 public abstract class KernelStateBridge<U,T> extends AnchorBean<KernelStateBridge<U,T>> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	public abstract StateTransformer<U, T> kernelToState();
 
 	public abstract StateTransformer<T, U> stateToKernel();

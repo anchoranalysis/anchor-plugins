@@ -1,5 +1,7 @@
 package ch.ethz.biol.cell.imageprocessing.objmask.filter;
 
+import java.util.Optional;
+
 /*
  * #%L
  * anchor-plugin-image
@@ -37,25 +39,34 @@ import org.anchoranalysis.image.unitvalue.UnitValueException;
 
 public class ObjMaskFilterVolumeGreaterThan extends ObjMaskFilter {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -5379469121358194032L;
-
 	// START BEAN PROPERTIES
 	@BeanField
 	private UnitValueVolume minVolume;
 	// END BEAN PROPERTIES
 	
 	@Override
-	public void filter(ObjMaskCollection objs, ImageDim dim, ObjMaskCollection objsRejected) throws OperationFailedException {
+	public void filter(ObjMaskCollection objs, Optional<ImageDim> dim, Optional<ObjMaskCollection> objsRejected) throws OperationFailedException {
 
+		if (!dim.isPresent()) {
+			throw new OperationFailedException("This operation requires image-resolution to be set");
+		}
+		
 		try {
-			int numPixels = (int) Math.floor( minVolume.rslv(dim.getRes()) );
-			objs.rmvNumPixelsLessThan( numPixels, objsRejected );
+			objs.rmvNumPixelsLessThan(
+				thresholdNumPixels(dim),
+				objsRejected
+			);
 		} catch (UnitValueException e) {
 			throw new OperationFailedException(e);
 		}
+	}
+	
+	private int thresholdNumPixels( Optional<ImageDim> dim ) throws UnitValueException {
+		return (int) Math.floor(
+			minVolume.rslv(
+				dim.map(ImageDim::getRes)
+			)
+		);
 	}
 
 	public UnitValueVolume getMinVolume() {

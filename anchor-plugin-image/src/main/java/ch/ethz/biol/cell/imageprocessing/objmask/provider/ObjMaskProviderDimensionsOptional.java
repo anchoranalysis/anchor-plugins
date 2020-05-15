@@ -1,5 +1,7 @@
 package ch.ethz.biol.cell.imageprocessing.objmask.provider;
 
+import java.util.Optional;
+
 /*-
  * #%L
  * anchor-plugin-image
@@ -30,35 +32,32 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.bean.provider.ImageDimProvider;
-import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
+import org.anchoranalysis.image.bean.provider.ObjMaskProviderOne;
 import org.anchoranalysis.image.extent.ImageDim;
 
-public abstract class ObjMaskProviderDimensionsOptional extends ObjMaskProvider {
-
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
+public abstract class ObjMaskProviderDimensionsOptional extends ObjMaskProviderOne {
 
 	// START BEAN PROPERTIES
 	@BeanField @OptionalBean
-	private ImageDimProvider dimProvider;
+	private ImageDimProvider dim;
 	// END BEAN PROPERTIES
 	
 	/** Returns the dimensions or NULL if none are provided */
-	protected ImageDim createDims() throws CreateException {
-		if (dimProvider!=null) {
-			return dimProvider.create();
+	protected Optional<ImageDim> createDims() throws CreateException {
+		if (dim!=null) {
+			return Optional.of(
+				dim.create()
+			);
 		} else {
-			return null;
+			return Optional.empty();
 		}
 	}
 
-	public ImageDimProvider getDimProvider() {
-		return dimProvider;
+	public ImageDimProvider getDim() {
+		return dim;
 	}
 
-	public void setDimProvider(ImageDimProvider dimProvider) {
-		this.dimProvider = dimProvider;
+	public void setDim(ImageDimProvider dim) {
+		this.dim = dim;
 	}
 }

@@ -28,7 +28,6 @@ package ch.ethz.biol.cell.sgmn.objmask;
 
 
 import java.nio.ByteBuffer;
-
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.bean.provider.ChnlProvider;
@@ -44,17 +43,12 @@ import org.anchoranalysis.image.sgmn.SgmnFailedException;
 
 public class ObjMaskSgmnOnTransform extends ObjMaskSgmn {
 	
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -642285838567127948L;
-
 	/* START Bean properties */
 	@BeanField
 	private BinarySgmn sgmn;
 	
 	@BeanField
-	private ChnlProvider chnlProviderTransform;
+	private ChnlProvider chnlTransform;
 	
 	@BeanField
 	private ObjMaskSgmn sgmnObj;
@@ -65,15 +59,19 @@ public class ObjMaskSgmnOnTransform extends ObjMaskSgmn {
 	public ObjMaskCollection sgmn( Chnl chnl, SeedCollection seeds ) throws SgmnFailedException {
 
 		try {
-			BinarySgmnParameters params = new BinarySgmnParameters();
-			params.setRes(chnl.getDimensions().getRes());
+			BinarySgmnParameters params = new BinarySgmnParameters(
+				chnl.getDimensions().getRes()
+			);
 			
-			BinaryVoxelBox<ByteBuffer> bvb = sgmn.sgmn( chnl.getVoxelBox(), params, getSharedObjects().getRandomNumberGenerator() );
+			BinaryVoxelBox<ByteBuffer> bvb = sgmn.sgmn(
+				chnl.getVoxelBox(),
+				params
+			);
 
 			// DEBUG
 			// getOutputManager().getWriterCheckIfAllowed().write("afterSgmn", new ChnlGenerator(chnl,"afterSgmn") );
 			
-			Chnl chnlEDM = chnlProviderTransform.create();
+			Chnl chnlEDM = chnlTransform.create();
 			
 			// DEBUG
 			// getOutputManager().getWriterCheckIfAllowed().write("edm", new ChnlGenerator(chnlEDM,"edm") );
@@ -127,13 +125,11 @@ public class ObjMaskSgmnOnTransform extends ObjMaskSgmn {
 		this.sgmnObj = sgmnObj;
 	}
 
-
-	public ChnlProvider getChnlProviderTransform() {
-		return chnlProviderTransform;
+	public ChnlProvider getChnlTransform() {
+		return chnlTransform;
 	}
 
-
-	public void setChnlProviderTransform(ChnlProvider chnlProviderTransform) {
-		this.chnlProviderTransform = chnlProviderTransform;
+	public void setChnlTransform(ChnlProvider chnlTransform) {
+		this.chnlTransform = chnlTransform;
 	}
 }

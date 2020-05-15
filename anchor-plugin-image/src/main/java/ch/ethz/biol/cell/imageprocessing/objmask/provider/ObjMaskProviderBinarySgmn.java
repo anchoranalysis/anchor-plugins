@@ -28,12 +28,10 @@ package ch.ethz.biol.cell.imageprocessing.objmask.provider;
 
 
 import java.nio.ByteBuffer;
-
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.image.bean.provider.ChnlProvider;
-import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
 import org.anchoranalysis.image.bean.sgmn.binary.BinarySgmn;
+import org.anchoranalysis.image.bean.sgmn.binary.BinarySgmnParameters;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
 import org.anchoranalysis.image.chnl.Chnl;
 import org.anchoranalysis.image.objmask.ObjMask;
@@ -42,37 +40,27 @@ import org.anchoranalysis.image.sgmn.SgmnFailedException;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.anchoranalysis.image.voxel.box.VoxelBoxWrapper;
 
-public class ObjMaskProviderBinarySgmn extends ObjMaskProvider {
+public class ObjMaskProviderBinarySgmn extends ObjMaskProviderOneChnlSource {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
-	private ObjMaskProvider objs;
-	
-	@BeanField
 	private BinarySgmn binarySgmn;
-	
-	@BeanField
-	private ChnlProvider chnlProvider;
 	// END BEAN PROPERTIES
 
 	@Override
-	public ObjMaskCollection create() throws CreateException {
-		
-		ObjMaskCollection objMasks = objs.create();
-		Chnl chnl = chnlProvider.create();
+	protected ObjMaskCollection createFromObjs(ObjMaskCollection objsSrc, Chnl chnlSrc) throws CreateException {
 		
 		ObjMaskCollection masksOut = new ObjMaskCollection();
 		try {
 			
-			for( ObjMask om : objMasks ) {
-				VoxelBox<?> vb = chnl.getVoxelBox().any().createBufferAvoidNew(om.getBoundingBox() );
+			for( ObjMask om : objsSrc ) {
+				VoxelBox<?> vb = chnlSrc.getVoxelBox().any().createBufferAvoidNew(om.getBoundingBox() );
 				
-				BinaryVoxelBox<ByteBuffer> bvb = binarySgmn.sgmn( new VoxelBoxWrapper(vb), null, new ObjMask( om.getVoxelBox()), getSharedObjects().getRandomNumberGenerator() );
+				BinaryVoxelBox<ByteBuffer> bvb = binarySgmn.sgmn(
+					new VoxelBoxWrapper(vb),
+					new BinarySgmnParameters(),
+					new ObjMask( om.getVoxelBox())
+				);
 				
 				ObjMask mask = new ObjMask( om.getBoundingBox(), bvb.getVoxelBox() );
 				mask.setBinaryValues( bvb.getBinaryValues() );
@@ -88,14 +76,6 @@ public class ObjMaskProviderBinarySgmn extends ObjMaskProvider {
 		return masksOut;
 	}
 
-	public ObjMaskProvider getObjs() {
-		return objs;
-	}
-
-	public void setObjs(ObjMaskProvider objs) {
-		this.objs = objs;
-	}
-
 	public BinarySgmn getBinarySgmn() {
 		return binarySgmn;
 	}
@@ -103,13 +83,4 @@ public class ObjMaskProviderBinarySgmn extends ObjMaskProvider {
 	public void setBinarySgmn(BinarySgmn binarySgmn) {
 		this.binarySgmn = binarySgmn;
 	}
-
-	public ChnlProvider getChnlProvider() {
-		return chnlProvider;
-	}
-
-	public void setChnlProvider(ChnlProvider chnlProvider) {
-		this.chnlProvider = chnlProvider;
-	}
-
 }

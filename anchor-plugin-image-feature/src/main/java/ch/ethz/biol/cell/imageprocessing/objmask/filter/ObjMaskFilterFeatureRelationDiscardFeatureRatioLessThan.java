@@ -29,6 +29,7 @@ package ch.ethz.biol.cell.imageprocessing.objmask.filter;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
@@ -55,11 +56,6 @@ import ch.ethz.biol.cell.imageprocessing.binaryimgchnl.provider.NRGStackUtilitie
 //   median +- (factor * stdDev)
 public class ObjMaskFilterFeatureRelationDiscardFeatureRatioLessThan extends ObjMaskFilter {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
 	private FeatureProvider<FeatureInputSingleObj> featureProvider;
@@ -74,7 +70,7 @@ public class ObjMaskFilterFeatureRelationDiscardFeatureRatioLessThan extends Obj
 	private double minStdDev = 1;
 	
 	@BeanField @OptionalBean
-	private ChnlProvider chnlProvider;
+	private ChnlProvider chnl;
 	
 	@BeanField
 	private boolean includeHigherSide = true;		// Also apply the filter to the upper-side of the distribution
@@ -84,7 +80,7 @@ public class ObjMaskFilterFeatureRelationDiscardFeatureRatioLessThan extends Obj
 	// END BEAN PROPERTIES
 	
 	@Override
-	public void filter(ObjMaskCollection objs, ImageDim dim, ObjMaskCollection objsRejected)
+	public void filter(ObjMaskCollection objs, Optional<ImageDim> dim, Optional<ObjMaskCollection> objsRejected)
 			throws OperationFailedException {
 		
 		// Nothing to do if we don't have enough options
@@ -110,11 +106,11 @@ public class ObjMaskFilterFeatureRelationDiscardFeatureRatioLessThan extends Obj
 			FeatureCalculatorSingle<FeatureInputSingleObj> session = FeatureSession.with(
 				feature,
 				new FeatureInitParams(),
-				getSharedObjects().getFeature().getSharedFeatureSet().downcast(),
+				getSharedObjects().getFeature().getSharedFeatureSet(),
 				getLogger()
 			);
 						
-			return NRGStackUtilities.maybeAddNrgStack(session, chnlProvider);
+			return NRGStackUtilities.maybeAddNrgStack(session, chnl);
 			
 		} catch (CreateException | FeatureCalcException e) {
 			throw new OperationFailedException(e);
@@ -140,7 +136,12 @@ public class ObjMaskFilterFeatureRelationDiscardFeatureRatioLessThan extends Obj
 		featureValsSorted.sort();		
 	}
 	
-	private void removeOutliers( ObjMaskCollection objs, ObjMaskCollection objsRejected, DoubleArrayList featureValsOriginalOrder, DoubleArrayList featureValsSorted ) {
+	private void removeOutliers(
+		ObjMaskCollection objs,
+		Optional<ObjMaskCollection> objsRejected,
+		DoubleArrayList featureValsOriginalOrder,
+		DoubleArrayList featureValsSorted
+	) {
 				
 		// Calculate standard deviation
 		double sum = Descriptive.sum( featureValsSorted );
@@ -174,7 +175,7 @@ public class ObjMaskFilterFeatureRelationDiscardFeatureRatioLessThan extends Obj
 		}		
 	}
 	
-	private List<ObjMask> listToRemove( ObjMaskCollection objs, ObjMaskCollection objsRejected, DoubleArrayList featureValsOriginalOrder, double lowerLimit, double upperLimit ) {
+	private List<ObjMask> listToRemove( ObjMaskCollection objs, Optional<ObjMaskCollection> objsRejected, DoubleArrayList featureValsOriginalOrder, double lowerLimit, double upperLimit ) {
 		List<ObjMask> listToRemove = new ArrayList<>();
 		for(int i=0; i<objs.size(); i++) {
 			double featureVal = featureValsOriginalOrder.get(i);
@@ -183,8 +184,8 @@ public class ObjMaskFilterFeatureRelationDiscardFeatureRatioLessThan extends Obj
 				ObjMask omRemove = objs.get(i);
 				listToRemove.add( omRemove );
 				
-				if (objsRejected!=null) {
-					objsRejected.add( omRemove );
+				if (objsRejected.isPresent()) {
+					objsRejected.get().add( omRemove );
 				}
 				
 				if (getLogger()!=null) {
@@ -196,8 +197,8 @@ public class ObjMaskFilterFeatureRelationDiscardFeatureRatioLessThan extends Obj
 				ObjMask omRemove = objs.get(i);
 				listToRemove.add( omRemove );
 				
-				if (objsRejected!=null) {
-					objsRejected.add( omRemove );
+				if (objsRejected.isPresent()) {
+					objsRejected.get().add( omRemove );
 				}
 				
 				if (getLogger()!=null) {
@@ -214,13 +215,6 @@ public class ObjMaskFilterFeatureRelationDiscardFeatureRatioLessThan extends Obj
 
 	public void setFeatureProvider(FeatureProvider<FeatureInputSingleObj> featureProvider) {
 		this.featureProvider = featureProvider;
-	}
-	public ChnlProvider getChnlProvider() {
-		return chnlProvider;
-	}
-
-	public void setChnlProvider(ChnlProvider chnlProvider) {
-		this.chnlProvider = chnlProvider;
 	}
 
 	public double getFactor() {
@@ -253,6 +247,14 @@ public class ObjMaskFilterFeatureRelationDiscardFeatureRatioLessThan extends Obj
 
 	public void setIncludeHigherSide(boolean includeHigherSide) {
 		this.includeHigherSide = includeHigherSide;
+	}
+
+	public ChnlProvider getChnl() {
+		return chnl;
+	}
+
+	public void setChnl(ChnlProvider chnl) {
+		this.chnl = chnl;
 	}
 
 }

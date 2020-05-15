@@ -33,11 +33,6 @@ import org.anchoranalysis.feature.calc.FeatureCalcException;
 
 public class NumMarks extends FeatureCfg {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	@Override
 	public double calc(FeatureInputCfg params) throws FeatureCalcException {
 		return params.getCfg().size();

@@ -33,10 +33,5 @@ import org.anchoranalysis.bean.AnchorBean;
 
 public abstract class ExtractWeightFromMark extends AnchorBean<ExtractWeightFromMark> implements ICompatibleWith {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	public abstract double weightFor(Mark mark);
 }

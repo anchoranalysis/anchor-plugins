@@ -29,14 +29,11 @@ package ch.ethz.biol.cell.mpp.nrg.feature.histogram;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.image.feature.histogram.FeatureHistogramStatistic;
 import org.anchoranalysis.image.histogram.Histogram;
 
 public class Quantile extends FeatureHistogramStatistic {
-
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
 
 	// START BEAN PROPERTIES
 	@BeanField
@@ -44,8 +41,12 @@ public class Quantile extends FeatureHistogramStatistic {
 	// END BEAN PROPERTIES
 	
 	@Override
-	protected double calcStatisticFrom(Histogram histogram) throws OperationFailedException {
-		return histogram.quantile(quantile);
+	protected double calcStatisticFrom(Histogram histogram) throws FeatureCalcException {
+		try {
+			return histogram.quantile(quantile);
+		} catch (OperationFailedException e) {
+			throw new FeatureCalcException(e);
+		}			
 	}
 	
 	public double getQuantile() {

@@ -32,7 +32,6 @@ import java.util.List;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.image.bean.provider.ChnlProvider;
 import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
 import org.anchoranalysis.image.bean.sgmn.objmask.ObjMaskSgmn;
 import org.anchoranalysis.image.chnl.Chnl;
@@ -41,7 +40,6 @@ import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.image.objmask.ObjMaskCollection;
 import org.anchoranalysis.image.objmask.match.ObjWithMatches;
 import org.anchoranalysis.image.seed.SeedCollection;
-import org.anchoranalysis.image.seed.SeedsFactory;
 import org.anchoranalysis.image.sgmn.SgmnFailedException;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 
@@ -51,12 +49,7 @@ import ch.ethz.biol.cell.imageprocessing.objmask.matching.ObjMaskMatchUtilities;
 // objMaskProviderSeeds
 //
 // A segmentation is performed on the portion of chnlProviderSourceChnl
-public class ObjMaskProviderSeededObjSgmn extends ObjMaskProvider {
-
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
+public class ObjMaskProviderSeededObjSgmn extends ObjMaskProviderChnlSource {
 
 	// START BEAN PROPERTIES
 	@BeanField @OptionalBean
@@ -64,9 +57,6 @@ public class ObjMaskProviderSeededObjSgmn extends ObjMaskProvider {
 	
 	@BeanField
 	private ObjMaskProvider objsSeeds;
-	
-	@BeanField
-	private ChnlProvider chnlProvider;
 	
 	@BeanField
 	private ObjMaskSgmn sgmn;
@@ -158,25 +148,22 @@ public class ObjMaskProviderSeededObjSgmn extends ObjMaskProvider {
 			throw new CreateException(e);
 		}
 	}
-	
-	
+
 	@Override
-	public ObjMaskCollection create() throws CreateException {
-		
-		Chnl chnl = chnlProvider.create();
+	protected ObjMaskCollection createFromChnl(Chnl chnlSrc) throws CreateException {
 		
 		ObjMaskCollection seeds = objsSeeds.create();
 		
 		if (objsSource!=null) {
 			ObjMaskCollection sourceObjs = objsSource.create();
 			return createWithSourceObjs(
-				chnl,
+				chnlSrc,
 				seeds,
 				sourceObjs,
 				sgmn
 			);
 		} else {
-			return createWithoutSourceObjs( chnl, seeds, sgmn );
+			return createWithoutSourceObjs( chnlSrc, seeds, sgmn );
 		}
 	}
 
@@ -186,14 +173,6 @@ public class ObjMaskProviderSeededObjSgmn extends ObjMaskProvider {
 
 	public void setSgmn(ObjMaskSgmn sgmn) {
 		this.sgmn = sgmn;
-	}
-
-	public ChnlProvider getChnlProvider() {
-		return chnlProvider;
-	}
-
-	public void setChnlProvider(ChnlProvider chnlProvider) {
-		this.chnlProvider = chnlProvider;
 	}
 
 	public ObjMaskProvider getObjsSeeds() {

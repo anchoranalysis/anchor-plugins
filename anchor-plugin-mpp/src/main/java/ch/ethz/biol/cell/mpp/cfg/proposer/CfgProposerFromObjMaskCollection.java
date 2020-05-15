@@ -49,11 +49,6 @@ import org.anchoranalysis.plugin.points.calculate.ellipsoid.EllipsoidFactory;
 
 public class CfgProposerFromObjMaskCollection extends CfgProposer {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
 	private ObjMaskProvider objs;

@@ -37,11 +37,6 @@ import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 
 public class RadiiMinRatio extends CheckMark {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -4380227015245049115L;
-
 	// START BEAN PROPERTIES
 	@BeanField
 	private double min=1;

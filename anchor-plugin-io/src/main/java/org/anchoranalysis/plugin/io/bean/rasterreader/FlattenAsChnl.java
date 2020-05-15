@@ -54,11 +54,6 @@ import org.anchoranalysis.image.stack.TimeSequence;
  */
 public class FlattenAsChnl extends RasterReader {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	// START BEAN PROPERTIES
 	@BeanField
 	private RasterReader rasterReader;

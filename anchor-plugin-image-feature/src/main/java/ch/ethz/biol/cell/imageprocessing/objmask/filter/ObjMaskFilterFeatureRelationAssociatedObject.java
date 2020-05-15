@@ -28,6 +28,7 @@ package ch.ethz.biol.cell.imageprocessing.objmask.filter;
 
 
 import java.util.List;
+import java.util.Optional;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
@@ -47,11 +48,6 @@ import org.anchoranalysis.image.objmask.match.ObjWithMatches;
 // Relation must hold true for all associated objects
 public class ObjMaskFilterFeatureRelationAssociatedObject extends ObjMaskFilter {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
 	private FeatureEvaluator<FeatureInputSingleObj> featureEvaluator;
@@ -71,8 +67,52 @@ public class ObjMaskFilterFeatureRelationAssociatedObject extends ObjMaskFilter 
 	
 	private FeatureCalculatorSingle<FeatureInputSingleObj> evaluatorForMatch;
 	private FeatureCalculatorSingle<FeatureInputSingleObj> featureSession;
+	
+	@Override
+	public void filter(
+		ObjMaskCollection objs,
+		Optional<ImageDim> dim,
+		Optional<ObjMaskCollection> objsRejected
+	) throws OperationFailedException {
+
+		start();
+				
+		List<ObjWithMatches> matchList = objMaskMatcher.findMatch(objs);
 		
-	protected void start(ImageDim dim) throws OperationFailedException {
+		for( ObjWithMatches owm : matchList ) {
+			if (owm.getMatches().size()==0) {
+				throw new OperationFailedException("No matching object found");
+			}
+		}
+	
+		try {
+			for( ObjWithMatches owm : matchList ) {
+				
+				if (!match(owm.getSourceObj(), owm.getMatches())) {
+					objs.remove(owm.getSourceObj());
+					
+					if (objsRejected.isPresent()) {
+						objsRejected.get().add(owm.getSourceObj());
+					}
+				}
+				
+			}
+		} catch (FeatureCalcException e) {
+			throw new OperationFailedException(e);
+		}
+		
+		// We free up calculations
+		// TODO previously this is where we cleared the cache
+	}
+	
+	private boolean match(ObjMask om, ObjMaskCollection matches) throws FeatureCalcException {
+		double val = featureSession.calc(
+			new FeatureInputSingleObj(om)
+		);
+		return doesMatchAllAssociatedObjects(val,matches);
+	}
+	
+	private void start() throws OperationFailedException {
 
 		featureSession = featureEvaluator.createAndStartSession();
 
@@ -83,8 +123,7 @@ public class ObjMaskFilterFeatureRelationAssociatedObject extends ObjMaskFilter 
 			evaluatorForMatch = featureSession;
 		}
 	}
-	
-	
+		
 	private boolean doesMatchAllAssociatedObjects( double val, ObjMaskCollection matches ) throws FeatureCalcException {
 		
 		for( ObjMask match : matches ) {
@@ -100,49 +139,6 @@ public class ObjMaskFilterFeatureRelationAssociatedObject extends ObjMaskFilter 
 			}
 		}
 		return true;
-	}
-	
-	
-
-	@Override
-	public void filter(ObjMaskCollection objs, ImageDim dim, ObjMaskCollection objsRejected)
-			throws OperationFailedException {
-
-		start(dim);
-				
-		List<ObjWithMatches> matchList = objMaskMatcher.findMatch(objs);
-		
-		for( ObjWithMatches owm : matchList ) {
-			if (owm.getMatches().size()==0) {
-				throw new OperationFailedException("No matching object found");
-			}
-		}
-	
-		try {
-			for( ObjWithMatches owm : matchList ) {
-				
-				if (!match(owm.getSourceObj(),dim,owm.getMatches())) {
-					objs.remove(owm.getSourceObj());
-					
-					if (objsRejected!=null) {
-						objsRejected.add(owm.getSourceObj());
-					}
-				}
-				
-			}
-		} catch (FeatureCalcException e) {
-			throw new OperationFailedException(e);
-		}
-		
-		// We free up calculations
-		// TODO previously this is where we cleared the cache
-	}
-	
-	protected boolean match(ObjMask om, ImageDim dim, ObjMaskCollection matches) throws FeatureCalcException {
-		double val = featureSession.calc(
-			new FeatureInputSingleObj(om)
-		);
-		return doesMatchAllAssociatedObjects(val,matches);
 	}
 
 	public RelationBean getRelation() {
@@ -185,6 +181,4 @@ public class ObjMaskFilterFeatureRelationAssociatedObject extends ObjMaskFilter 
 			FeatureEvaluator<FeatureInputSingleObj> featureEvaluatorMatch) {
 		this.featureEvaluatorMatch = featureEvaluatorMatch;
 	}
-
-
 }

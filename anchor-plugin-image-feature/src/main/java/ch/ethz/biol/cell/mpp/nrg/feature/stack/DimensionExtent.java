@@ -27,53 +27,14 @@ package ch.ethz.biol.cell.mpp.nrg.feature.stack;
  */
 
 
-import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.core.axis.AxisType;
 import org.anchoranalysis.image.extent.ImageDim;
 
 
-public class DimensionExtent extends FeatureStackFromDimensions {
-
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
-	// START BEAN PARAMETERS
-	@BeanField
-	private String axis = "x";
-	// END BEAN PARAMETERS
+public class DimensionExtent extends FeatureStackForAxis {
 
 	@Override
-	protected double calcFromDims(ImageDim dim) {
-		String axisLowerCase = axis.toLowerCase();
-		
-		return calcAxisValue(axisLowerCase, dim );
-	}
-	
-	private double calcAxisValue( String axisLowerCase, ImageDim sd ) {
-		
-		if (axisLowerCase.equals("x")) {
-			return sd.getX();
-		} else if (axisLowerCase.equals("y")) {
-			return sd.getY();
-		} else if (axisLowerCase.equals("z")) {
-			return sd.getZ();
-		} else {
-			assert false;
-			return -1;
-		}
-	}
-	
-	@Override
-	public String getParamDscr() {
-		return String.format("%s", axis);
-	}
-
-	public String getAxis() {
-		return axis;
-	}
-
-	public void setAxis(String axis) {
-		this.axis = axis;
+	protected double calcForAxis(ImageDim dim, AxisType axis) {
+		return dim.getExtnt().getValueByDimension(axis);
 	}
 }

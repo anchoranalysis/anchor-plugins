@@ -31,14 +31,15 @@ import org.anchoranalysis.core.params.KeyValueParams;
 import org.anchoranalysis.feature.calc.results.ResultsVector;
 import org.anchoranalysis.feature.name.FeatureNameList;
 import org.anchoranalysis.io.generator.serialized.KeyValueParamsGenerator;
+import org.anchoranalysis.io.output.bound.BoundIOContext;
 import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
 
 /** Exports a ResultVector as a KeyValueParmas */
 class KeyValueParamsExporter {
 
-	public static void export( FeatureNameList featureNames, ResultsVector rv, BoundOutputManagerRouteErrors outputManager, LogErrorReporter logErrorReporter ) {
-		KeyValueParams kvp = convert( featureNames, rv, logErrorReporter );
-		writeKeyValueParams(kvp, outputManager);		
+	public static void export( FeatureNameList featureNames, ResultsVector rv, BoundIOContext context ) {
+		KeyValueParams kvp = convert( featureNames, rv, context.getLogger() );
+		writeKeyValueParams(kvp, context.getOutputManager() );		
 	}
 	
 	private static void writeKeyValueParams( KeyValueParams kvp, BoundOutputManagerRouteErrors outputManager ) {

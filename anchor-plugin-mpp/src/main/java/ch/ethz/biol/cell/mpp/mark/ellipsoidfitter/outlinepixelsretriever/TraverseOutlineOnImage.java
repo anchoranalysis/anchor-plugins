@@ -35,7 +35,7 @@ import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.core.geometry.Tuple3i;
 import org.anchoranalysis.core.random.RandomNumberGenerator;
-import org.anchoranalysis.image.bean.provider.BinaryImgChnlProvider;
+import org.anchoranalysis.image.bean.provider.BinaryChnlProvider;
 import org.anchoranalysis.image.binary.BinaryChnl;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.objmask.ObjMask;
@@ -47,11 +47,6 @@ import ch.ethz.biol.cell.mpp.mark.ellipsoidfitter.outlinepixelsretriever.visitsc
 // Traverses a pixel location
 public class TraverseOutlineOnImage extends OutlinePixelsRetriever {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -13764141682130803L;
-
 	// START BEAN
 	@BeanField
 	private VisitScheduler visitScheduler;
@@ -60,10 +55,10 @@ public class TraverseOutlineOnImage extends OutlinePixelsRetriever {
 	private boolean nghb8 = true;
 	
 	@BeanField
-	private BinaryImgChnlProvider binaryImgChnlProviderOutline;
+	private BinaryChnlProvider binaryChnlOutline;
 	
 	@BeanField
-	private BinaryImgChnlProvider binaryImgChnlProviderFilled;
+	private BinaryChnlProvider binaryChnlFilled;
 	
 	@BeanField
 	private boolean useZ = true;
@@ -75,31 +70,6 @@ public class TraverseOutlineOnImage extends OutlinePixelsRetriever {
 	public TraverseOutlineOnImage() {
 		super();
 	}
-
-	private ObjMask createObjMaskForPoint( Point3i root, BinaryChnl chnl ) throws CreateException {
-		
-		
-		
-		Tuple3i maxDist = visitScheduler.maxDistFromRootPoint(chnl.getDimensions().getRes()) ;
-		if (maxDist==null) {
-			throw new CreateException("A null maxDist is not supported");
-		}
-		BoundingBox box = VisitSchedulerMaxDist.createBoxAroundPoint(root, maxDist );
-		
-		// We make sure the box is within our scene boundaries
-		box.clipTo( chnl.getDimensions().getExtnt() );
-		
-		// This is our final intersection box, that we use for traversing and memorizing pixels
-		//  that we have already visited
-		
-		assert( box.extnt().getVolume() > 0 );
-		
-		return chnl.createMaskAlwaysNew(box);		
-	}
-	
-	
-	
-	//static int a = 0;
 	
 	@Override
 	public void traverse( Point3i root, List<Point3i> listOut, RandomNumberGenerator re ) throws TraverseOutlineException {
@@ -107,7 +77,7 @@ public class TraverseOutlineOnImage extends OutlinePixelsRetriever {
 		BinaryChnl chnlOutline;
 
 		try {
-			chnlOutline = binaryImgChnlProviderOutline.create();
+			chnlOutline = binaryChnlOutline.create();
 		} catch (CreateException e) {
 			throw new TraverseOutlineException("Unable to create binaryImgChnlProviderOutline", e);
 		}
@@ -115,7 +85,7 @@ public class TraverseOutlineOnImage extends OutlinePixelsRetriever {
 		
 		BinaryChnl chnlFilled;
 		try {
-			chnlFilled = binaryImgChnlProviderFilled.create(); 
+			chnlFilled = binaryChnlFilled.create(); 
 		} catch (CreateException e) {
 			throw new TraverseOutlineException("Unable to create binaryImgChnlProviderFilled", e);
 		}
@@ -170,7 +140,30 @@ public class TraverseOutlineOnImage extends OutlinePixelsRetriever {
 		} catch (OperationFailedException e) {
 			throw new TraverseOutlineException("Cannot traverse outline", e);
 		}
-		
+	}
+	
+	private ObjMask createObjMaskForPoint( Point3i root, BinaryChnl chnl ) throws CreateException {
+				
+		try {
+			Tuple3i maxDist = visitScheduler.maxDistFromRootPoint(chnl.getDimensions().getRes()) ;
+			if (maxDist==null) {
+				throw new CreateException("A null maxDist is not supported");
+			}
+			BoundingBox box = VisitSchedulerMaxDist.createBoxAroundPoint(root, maxDist );
+			
+			// We make sure the box is within our scene boundaries
+			box.clipTo( chnl.getDimensions().getExtnt() );
+			
+			// This is our final intersection box, that we use for traversing and memorizing pixels
+			//  that we have already visited
+			
+			assert( box.extnt().getVolume() > 0 );
+			
+			return chnl.createMaskAlwaysNew(box);
+			
+		} catch (OperationFailedException e) {
+			throw new CreateException(e);
+		}
 	}
 
 	public boolean isNghb8() {
@@ -197,21 +190,19 @@ public class TraverseOutlineOnImage extends OutlinePixelsRetriever {
 		this.useZ = useZ;
 	}
 
-	public BinaryImgChnlProvider getBinaryImgChnlProviderOutline() {
-		return binaryImgChnlProviderOutline;
+	public BinaryChnlProvider getBinaryChnlOutline() {
+		return binaryChnlOutline;
 	}
 
-	public void setBinaryImgChnlProviderOutline(
-			BinaryImgChnlProvider binaryImgChnlProviderOutline) {
-		this.binaryImgChnlProviderOutline = binaryImgChnlProviderOutline;
+	public void setBinaryChnlOutline(BinaryChnlProvider binaryChnlOutline) {
+		this.binaryChnlOutline = binaryChnlOutline;
 	}
 
-	public BinaryImgChnlProvider getBinaryImgChnlProviderFilled() {
-		return binaryImgChnlProviderFilled;
+	public BinaryChnlProvider getBinaryChnlFilled() {
+		return binaryChnlFilled;
 	}
 
-	public void setBinaryImgChnlProviderFilled(
-			BinaryImgChnlProvider binaryImgChnlProviderFilled) {
-		this.binaryImgChnlProviderFilled = binaryImgChnlProviderFilled;
+	public void setBinaryChnlFilled(BinaryChnlProvider binaryChnlFilled) {
+		this.binaryChnlFilled = binaryChnlFilled;
 	}
 }

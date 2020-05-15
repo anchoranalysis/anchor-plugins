@@ -30,9 +30,9 @@ package ch.ethz.biol.cell.imageprocessing.chnl.provider;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.log.LogErrorReporter;
+import org.anchoranalysis.core.log.LogReporter;
 import org.anchoranalysis.image.bean.interpolator.InterpolatorBean;
-import org.anchoranalysis.image.bean.provider.ChnlProvider;
+import org.anchoranalysis.image.bean.provider.ChnlProviderOne;
 import org.anchoranalysis.image.bean.scale.ScaleCalculator;
 import org.anchoranalysis.image.chnl.Chnl;
 import org.anchoranalysis.image.interpolator.Interpolator;
@@ -40,49 +40,37 @@ import org.anchoranalysis.image.scale.ScaleFactor;
 
 import anchor.image.bean.interpolator.InterpolatorBeanLanczos;
 
-public class ChnlProviderScale extends ChnlProvider {
+public class ChnlProviderScale extends ChnlProviderOne {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// Start BEAN PROPERTIES
 	@BeanField
 	private ScaleCalculator scaleCalculator;
-	
-	@BeanField
-	private ChnlProvider chnlProvider;
 	
 	@BeanField
 	private InterpolatorBean interpolator = new InterpolatorBeanLanczos();
 	// End BEAN PROPERTIES
 	
 	@Override
-	public Chnl create() throws CreateException {
-		
-		Chnl chnl = chnlProvider.create();
-		return scale( chnl, scaleCalculator, interpolator.create(), getLogger() );
+	public Chnl createFromChnl(Chnl chnl) throws CreateException {
+		return scale(
+			chnl,
+			scaleCalculator,
+			interpolator.create(),
+			getLogger().getLogReporter()
+		);
 	}
 	
-	// logErrorReporter can be null
-	public static Chnl scale( Chnl chnl, ScaleCalculator scaleCalculator, Interpolator interpolator, LogErrorReporter logErrorReporter ) throws CreateException {
+	public static Chnl scale( Chnl chnl, ScaleCalculator scaleCalculator, Interpolator interpolator, LogReporter logger) throws CreateException {
 		try {
-			if (logErrorReporter!=null) {
-				logErrorReporter.getLogReporter().logFormatted("Res in: %s\n", chnl.getDimensions().getRes() );
-			}
+			logger.logFormatted("incoming Image Resolution: %s\n", chnl.getDimensions().getRes() );
 			
 			ScaleFactor sf = scaleCalculator.calc( chnl.getDimensions() );
 			
-			if (logErrorReporter!=null) {
-				logErrorReporter.getLogReporter().logFormatted("ScaleFactor: %s\n", sf.toString() );
-			}
+			logger.logFormatted("Scale Factor: %s\n", sf.toString() );
 			
 			Chnl chnlOut = chnl.scaleXY( sf.getX(), sf.getY(), interpolator);
 			
-			if (logErrorReporter!=null) {
-				logErrorReporter.getLogReporter().logFormatted("Res out: %s\n", chnlOut.getDimensions().getRes() );
-			}
+			logger.logFormatted("outgoing Image Resolution: %s\n", chnlOut.getDimensions().getRes() );
 			
 			return chnlOut;
 			
@@ -99,14 +87,6 @@ public class ChnlProviderScale extends ChnlProvider {
 		this.scaleCalculator = scaleCalculator;
 	}
 
-	public ChnlProvider getChnlProvider() {
-		return chnlProvider;
-	}
-
-	public void setChnlProvider(ChnlProvider chnlProvider) {
-		this.chnlProvider = chnlProvider;
-	}
-
 	public InterpolatorBean getInterpolator() {
 		return interpolator;
 	}
@@ -114,7 +94,4 @@ public class ChnlProviderScale extends ChnlProvider {
 	public void setInterpolator(InterpolatorBean interpolator) {
 		this.interpolator = interpolator;
 	}
-
-
-
 }

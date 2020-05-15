@@ -38,7 +38,7 @@ import org.anchoranalysis.feature.calc.results.ResultsVector;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 import org.anchoranalysis.feature.session.FeatureSession;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorMulti;
-import org.anchoranalysis.feature.shared.SharedFeatureSet;
+import org.anchoranalysis.feature.shared.SharedFeatureMulti;
 import org.anchoranalysis.feature.shared.SharedFeaturesInitParams;
 import org.anchoranalysis.image.feature.stack.FeatureInputStack;
 
@@ -51,7 +51,6 @@ class HelperImageFeatureCalculator {
 		this.logErrorReporter = logErrorReporter;
 	}
 	
-
 	/** Places all image-features in the SharedObjects and calculates them indirectly via another 'gateway' feature which may call them */
 	public double calcSingleIndirectly(
 		FeatureListProvider<FeatureInputStack> gatewayFeatureProvider,
@@ -71,11 +70,9 @@ class HelperImageFeatureCalculator {
 		return calcInternal(
 			nrgStack,
 			new FeatureList<>(feature),
-			featureInitParams.getSharedFeatureSet().downcast()
+			featureInitParams.getSharedFeatureSet()
 		).get(0);
 	}
-	
-	
 	
 	/** Calculates all image-features directly, returning the results as a vector */
 	public ResultsVector calcAllDirectly(
@@ -86,31 +83,9 @@ class HelperImageFeatureCalculator {
 		return calcInternal(
 			nrgStack,
 			features,
-			featureInitParams.getSharedFeatureSet().downcast()
+			featureInitParams.getSharedFeatureSet()
 		);
 	}
-	
-
-
-	
-
-	/** Initializes a feature with shared-objects that
-	 *  also have a list of other features added (as duplicates) 
-	 * @throws InitException */
-	private void initFeatureProviderWithSharedFeatures(
-		FeatureListProvider<FeatureInputStack> provider,
-		SharedFeaturesInitParams initParams,
-		FeatureList<FeatureInputStack> sharedFeatures
-	) throws InitException {
-		
-		provider.initRecursive( initParams, logErrorReporter );
-		
-		// Add our image-features to the shared feature set
-		// This must be done before calling create() on classifierProvider
-		initParams.getSharedFeatureSet().addDuplicate(sharedFeatures.downcast());
-	}
-	
-	
 
 	/** Creates and initializes a single-feature that is provided via a featureProvider */
 	private Feature<FeatureInputStack> singleFeatureFromProvider(
@@ -121,11 +96,7 @@ class HelperImageFeatureCalculator {
 	) throws FeatureCalcException {
 
 		try {
-			initFeatureProviderWithSharedFeatures(
-				featureProvider,
-				initParams,
-				sharedFeatures
-			);
+			featureProvider.initRecursive( initParams, logErrorReporter );
 
 			FeatureList<FeatureInputStack> fl = featureProvider.create();
 			if (fl.size()!=1) {
@@ -142,7 +113,7 @@ class HelperImageFeatureCalculator {
 	private ResultsVector calcInternal(
 			NRGStackWithParams stack,
 			FeatureList<FeatureInputStack> featuresDirectlyCalculate,
-			SharedFeatureSet<FeatureInputStack> sharedFeatures
+			SharedFeatureMulti sharedFeatures
 		) throws FeatureCalcException {
 		
 		FeatureCalculatorMulti<FeatureInputStack> session = FeatureSession.with(
@@ -156,5 +127,4 @@ class HelperImageFeatureCalculator {
 			new FeatureInputStack(stack.getNrgStack())
 		);
 	}
-
 }

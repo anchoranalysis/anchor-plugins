@@ -30,6 +30,7 @@ package ch.ethz.biol.cell.imageprocessing.chnl.provider;
 import java.nio.ByteBuffer;
 
 import org.anchoranalysis.core.error.CreateException;
+import org.anchoranalysis.image.bean.provider.ChnlProviderThree;
 import org.anchoranalysis.image.chnl.Chnl;
 import org.anchoranalysis.image.chnl.factory.ChnlFactory;
 import org.anchoranalysis.image.convert.ByteConverter;
@@ -39,11 +40,26 @@ import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
 
 public class ChnlProviderMeanThree extends ChnlProviderThree {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
+	@Override
+	protected Chnl process(Chnl chnl1, Chnl chnl2, Chnl chnl3) throws CreateException {
+
+		checkDims(chnl1, chnl2, chnl3);
+		
+		Chnl chnlOut = ChnlFactory.instance().createEmptyInitialised(
+			new ImageDim(chnl1.getDimensions()),
+			VoxelDataTypeUnsignedByte.instance
+		);
+		
+		processVoxelBox(
+			chnlOut.getVoxelBox().asByte(),
+			chnl1.getVoxelBox().asByte(),
+			chnl2.getVoxelBox().asByte(),
+			chnl3.getVoxelBox().asByte()
+		);
+		
+		return chnlOut;
+	}
+
 	private void processVoxelBox(
 		VoxelBox<ByteBuffer> vbOut,
 		VoxelBox<ByteBuffer> vbIn1,
@@ -77,26 +93,6 @@ public class ChnlProviderMeanThree extends ChnlProviderThree {
 			assert( !in3.hasRemaining() );
 			assert( !out.hasRemaining() );
 		}
-	}
-
-	@Override
-	protected Chnl process(Chnl chnl1, Chnl chnl2, Chnl chnl3) throws CreateException {
-
-		checkDims(chnl1, chnl2, chnl3);
-		
-		Chnl chnlOut = ChnlFactory.instance().createEmptyInitialised(
-			new ImageDim(chnl1.getDimensions()),
-			VoxelDataTypeUnsignedByte.instance
-		);
-		
-		processVoxelBox(
-			chnlOut.getVoxelBox().asByte(),
-			chnl1.getVoxelBox().asByte(),
-			chnl2.getVoxelBox().asByte(),
-			chnl3.getVoxelBox().asByte()
-		);
-		
-		return chnlOut;
 	}
 	
 	private void checkDims(Chnl chnl1, Chnl chnl2, Chnl chnl3) throws CreateException {

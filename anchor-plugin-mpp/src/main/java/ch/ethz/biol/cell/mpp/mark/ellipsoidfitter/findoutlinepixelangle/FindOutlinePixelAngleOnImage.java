@@ -28,14 +28,14 @@ package ch.ethz.biol.cell.mpp.mark.ellipsoidfitter.findoutlinepixelangle;
 
 
 import java.nio.ByteBuffer;
+import java.util.Optional;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.geometry.Point3d;
-import org.anchoranalysis.image.bean.provider.BinaryImgChnlProvider;
+import org.anchoranalysis.image.bean.provider.BinaryChnlProvider;
 import org.anchoranalysis.image.bean.unitvalue.distance.UnitValueDistance;
 import org.anchoranalysis.image.binary.BinaryChnl;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
@@ -47,14 +47,9 @@ import org.anchoranalysis.math.rotation.RotationMatrix;
 // Finds a pixel on the outline of an object in a particular direction
 public class FindOutlinePixelAngleOnImage extends FindOutlinePixelAngle {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -7183706800668575661L;
-	
 	// START BEANS
 	@BeanField
-	private BinaryImgChnlProvider binaryImgChnlProvider;
+	private BinaryChnlProvider binaryChnl;
 	
 	@BeanField @OptionalBean
 	private UnitValueDistance maxDistance;
@@ -73,7 +68,7 @@ public class FindOutlinePixelAngleOnImage extends FindOutlinePixelAngle {
 		// The first time, we establish the binaryImage 
 		if (binaryImage==null) {
 			try {
-				binaryImage = binaryImgChnlProvider.create();
+				binaryImage = binaryChnl.create();
 				assert( binaryImage!=null );
 				
 				chnl = binaryImage.getChnl();
@@ -109,7 +104,13 @@ public class FindOutlinePixelAngleOnImage extends FindOutlinePixelAngle {
 				assert( binaryImage.getDimensions() != null );
 				assert( binaryImage.getDimensions().getRes()!=null );
 				
-				double maxDistRslv = maxDistance.rslv(binaryImage.getDimensions().getRes(), centrePoint, pnt);
+				double maxDistRslv = maxDistance.rslv(
+					Optional.of(
+						binaryImage.getDimensions().getRes()
+					),
+					centrePoint,
+					pnt
+				);
 				double dist = binaryImage.getDimensions().getRes().distZRel(centrePoint, pnt);
 				if (dist>maxDistRslv) {
 					return null;
@@ -166,24 +167,6 @@ public class FindOutlinePixelAngleOnImage extends FindOutlinePixelAngle {
 		return bb.get( sd.offset( (int) x, (int) y ) )== bvb.getOnByte();
 	}
 
-	@Override
-	public void onInit() throws InitException {
-		
-		// We shouldn't need to initialise this explicitly
-		//binaryImgChnlProvider.initRecursive(pso, getLogger() );
-		
-
-		
-	}
-
-	public BinaryImgChnlProvider getBinaryImgChnlProvider() {
-		return binaryImgChnlProvider;
-	}
-
-	public void setBinaryImgChnlProvider(BinaryImgChnlProvider binaryImgChnlProvider) {
-		this.binaryImgChnlProvider = binaryImgChnlProvider;
-	}
-
 	public UnitValueDistance getMaxDistance() {
 		return maxDistance;
 	}
@@ -192,8 +175,11 @@ public class FindOutlinePixelAngleOnImage extends FindOutlinePixelAngle {
 		this.maxDistance = maxDistance;
 	}
 
-	
+	public BinaryChnlProvider getBinaryChnl() {
+		return binaryChnl;
+	}
 
-
-
+	public void setBinaryChnl(BinaryChnlProvider binaryChnl) {
+		this.binaryChnl = binaryChnl;
+	}
 }

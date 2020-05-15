@@ -27,14 +27,9 @@ package org.anchoranalysis.plugin.image.bean.histogram.threshold;
  */
 
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.bean.threshold.CalculateLevel;
 import org.anchoranalysis.image.histogram.Histogram;
-import org.apache.commons.lang.builder.HashCodeBuilder;
 
 
 /**
@@ -43,49 +38,18 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
  * @author owen
  *
  */
-public class Minimum extends CalculateLevel {
+public class Minimum extends CalculateLevelListBase {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
-	// START BEAN PROPERTIES
-	@BeanField
-	private List<CalculateLevel> list = new ArrayList<>();
-	// END BEAN PROPERTIES
-	
 	@Override
 	public int calculateLevel(Histogram h) throws OperationFailedException {
 
-		int min = -1;	// We will always be
-		for( CalculateLevel cl : list) {
+		int min = -1;	// We will always be greater as calculateLevel returns >=0
+		for( CalculateLevel cl : getList()) {
 			int level = cl.calculateLevel(h);
 			if (level<min || min==-1) {
 				min = level;
 			}
 		}
 		return min;
-	}
-
-	public List<CalculateLevel> getList() {
-		return list;
-	}
-
-	public void setList(List<CalculateLevel> list) {
-		this.list = list;
-	}
-	
-	@Override
-	public boolean equals(Object obj) {
-		assert(false);
-		return false;
-	}
-
-	@Override
-	public int hashCode() {
-		assert(false);
-		return new HashCodeBuilder()
-			.toHashCode();
 	}
 }

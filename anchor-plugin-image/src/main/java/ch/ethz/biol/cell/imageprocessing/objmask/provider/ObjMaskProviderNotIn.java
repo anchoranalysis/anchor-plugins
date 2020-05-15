@@ -27,29 +27,29 @@ package ch.ethz.biol.cell.imageprocessing.objmask.provider;
  */
 
 
-import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
 import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.image.objmask.ObjMaskCollection;
 
-public class ObjMaskProviderNotIn extends ObjMaskProvider {
+public class ObjMaskProviderNotIn extends ObjMaskProviderContainer {
+	
+	@Override
+	public ObjMaskCollection createFromObjs(ObjMaskCollection objsCollection) throws CreateException {
+		
+		ObjMaskCollection container = containerRequired();
+		
+		ObjMaskCollection out = new ObjMaskCollection();
+		for( ObjMask om : objsCollection ) {
+			
+			if (!isObjIn(om,container)) {
+				out.add(om);
+			}
+		}
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
+		return out;
+	}
 	
-	// START BEAN PROPERTIES
-	@BeanField
-	private ObjMaskProvider objs;
-	
-	@BeanField
-	private ObjMaskProvider objsContainer;
-	// END BEAN PROPERTIES
-	
-	
-	private boolean isObjIn( ObjMask om, ObjMaskCollection container ) {
+	private static boolean isObjIn( ObjMask om, ObjMaskCollection container ) {
 		
 		for( ObjMask omCompare : container ) {
 			if(om.equals(omCompare)) {
@@ -59,42 +59,4 @@ public class ObjMaskProviderNotIn extends ObjMaskProvider {
 		
 		return false;
 	}
-	
-	
-	@Override
-	public ObjMaskCollection create() throws CreateException {
-		
-		ObjMaskCollection objsCollection = objs.create();
-		ObjMaskCollection objsContainerCollection = objsContainer.create();
-		
-		ObjMaskCollection out = new ObjMaskCollection();
-		
-		for( ObjMask om : objsCollection ) {
-			
-			if (!isObjIn(om,objsContainerCollection)) {
-				out.add(om);
-			}
-		}
-
-		return out;
-	}
-
-	public ObjMaskProvider getObjs() {
-		return objs;
-	}
-
-	public void setObjs(ObjMaskProvider objs) {
-		this.objs = objs;
-	}
-
-
-	public ObjMaskProvider getObjsContainer() {
-		return objsContainer;
-	}
-
-
-	public void setObjsContainer(ObjMaskProvider objsContainer) {
-		this.objsContainer = objsContainer;
-	}
-
 }

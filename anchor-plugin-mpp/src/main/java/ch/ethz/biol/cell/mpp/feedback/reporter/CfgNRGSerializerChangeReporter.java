@@ -50,12 +50,6 @@ import org.anchoranalysis.mpp.sgmn.optscheme.step.Reporting;
 
 public class CfgNRGSerializerChangeReporter extends ReporterOptimizationStep<CfgNRGPixelized> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1774424246128858626L;
-	
-	
 	// START BEAN PARAMETERS
 	@BeanField
 	private String manifestFunction = "cfgNRG";
@@ -85,8 +79,8 @@ public class CfgNRGSerializerChangeReporter extends ReporterOptimizationStep<Cfg
 	}
 	
 	// We generate an OutputName class from the outputName string
-	private  IndexableOutputNameStyle generateOutputNameStyle() {
-		return new IntegerSuffixOutputNameStyle(outputName,"_%010d");
+	private IndexableOutputNameStyle generateOutputNameStyle() {
+		return new IntegerSuffixOutputNameStyle(outputName,10);
 	}
 	
 	@Override

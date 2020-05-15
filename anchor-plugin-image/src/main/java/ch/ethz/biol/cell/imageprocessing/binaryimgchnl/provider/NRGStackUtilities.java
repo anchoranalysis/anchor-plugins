@@ -42,16 +42,25 @@ public class NRGStackUtilities {
 	) throws CreateException {
 		
 		if (chnlProvider!=null) {
-			Chnl chnl = chnlProvider.create();
-		
-			// Make sure an NRG stack is added to each params that are called
-			NRGStackWithParams nrgStack = new NRGStackWithParams(chnl); 
-			return new FeatureCalculatorSingleChangeInput<>(
+			return addNrgStack(
 				session,
-				params -> params.setNrgStack(nrgStack)
+				chnlProvider.create()
 			);
 		} else {
 			return session;
 		}
+	}
+	
+	public static FeatureCalculatorSingle<FeatureInputSingleObj> addNrgStack(
+		FeatureCalculatorSingle<FeatureInputSingleObj> session,
+		Chnl chnl
+	) throws CreateException {
+		
+		// Make sure an NRG stack is added to each params that are called
+		NRGStackWithParams nrgStack = new NRGStackWithParams(chnl); 
+		return new FeatureCalculatorSingleChangeInput<>(
+			session,
+			params -> params.setNrgStack(nrgStack)
+		);
 	}
 }

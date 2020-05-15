@@ -35,8 +35,6 @@ import org.anchoranalysis.image.stack.region.chnlconverter.attached.histogram.Ch
 
 public class ChnlConverterHistogramBeanToByteUpperLowerQuantileIntensity extends ChnlConverterHistogramBean {
 
-	private static final long serialVersionUID = 1L;
-
 	// START BEAN PROPERTIES
 	@BeanField
 	private double quantileLower = 0.0;

@@ -30,11 +30,6 @@ import org.opencv.imgproc.Imgproc;
 
 public class StackProviderConvertRGBToHSV extends StackProviderCVColorConverter {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	@Override
 	protected int colorSpaceCode() {
 		return Imgproc.COLOR_BGR2HSV;

@@ -37,12 +37,6 @@ import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 
 public class Not extends CheckMark {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -7591587926648409123L;
-	
-	
 	// START BEAN PROPERTIES
 	@BeanField
 	private CheckMark check;

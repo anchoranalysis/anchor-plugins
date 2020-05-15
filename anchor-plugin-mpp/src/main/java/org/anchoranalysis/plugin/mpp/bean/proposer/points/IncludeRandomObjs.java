@@ -54,11 +54,6 @@ import org.anchoranalysis.image.points.PointsFromObjMask;
  */
 public class IncludeRandomObjs extends PointsProposer {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
 	private ObjMaskProvider objs;

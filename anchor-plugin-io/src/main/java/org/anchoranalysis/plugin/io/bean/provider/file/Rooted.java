@@ -54,11 +54,6 @@ import org.apache.commons.logging.LogFactory;
 //
 public class Rooted extends FileProvider {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	// START BEAN PARAMETERS
 	@BeanField
 	private FileProviderWithDirectory fileProvider;

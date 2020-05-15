@@ -69,11 +69,6 @@ import org.anchoranalysis.plugin.mpp.experiment.bean.outputmanager.OutputManager
  */
 public class QuickExperiment extends Experiment {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PROPERTIES
 	/**
 	 * A string indicating the input file(s)

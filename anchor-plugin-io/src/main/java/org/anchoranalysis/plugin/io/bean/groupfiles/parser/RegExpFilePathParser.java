@@ -34,11 +34,6 @@ import org.anchoranalysis.bean.annotation.BeanField;
 
 public class RegExpFilePathParser extends FilePathParser {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 411422043940558266L;
-	
 	// START BEAN PARAMETERS
 	@BeanField
 	private String expression = null;

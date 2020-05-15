@@ -33,11 +33,6 @@ import org.anchoranalysis.image.feature.bean.pixelwise.PixelScore;
 
 public class PixelScoreOutsideRange extends PixelScore {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
 	private int min = 0;

@@ -50,11 +50,6 @@ import org.anchoranalysis.plugin.operator.feature.bean.arithmetic.Divide;
  */
 public class FeatureListProviderPermuteDivideByParam extends FeatureListProvider<FeatureInputNRGStack> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
 	private Feature<FeatureInputNRGStack> feature;

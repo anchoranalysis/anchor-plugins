@@ -37,11 +37,6 @@ import org.anchoranalysis.mpp.sgmn.kernel.proposer.WeightedKernel;
 
 public class KernelProposerOptionDual<T> extends KernelProposerOption<T> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -6288955673726367708L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
 	private KernelPosNeg<T> kernelPositive = null;

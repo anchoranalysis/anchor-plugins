@@ -31,11 +31,6 @@ import org.anchoranalysis.anchor.mpp.bean.anneal.AnnealScheme;
 
 public class AnnealSchemeNone extends AnnealScheme {
 	
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -1990777917638142252L;
-
 	// Returns identity
 	@Override
 	public final double calcTemp( int iter ) {

@@ -45,27 +45,22 @@ import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
 
 public class StackProviderRGBChnlProvider extends StackProvider {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 6951065129825367326L;
-	
 	// START BEAN PROPERTIES
 	@BeanField @OptionalBean
-	private ChnlProvider chnlProviderRed;
+	private ChnlProvider red;
 	
 	@BeanField @OptionalBean
-	private ChnlProvider chnlProviderGreen;
+	private ChnlProvider green;
 	
 	@BeanField @OptionalBean
-	private ChnlProvider chnlProviderBlue;
+	private ChnlProvider blue;
 	// END BEAN PROPERTIES
 	
 	@Override
 	public void checkMisconfigured( BeanInstanceMap defaultInstances ) throws BeanMisconfiguredException {
 		super.checkMisconfigured( defaultInstances );
 			
-		if (chnlProviderRed==null && chnlProviderGreen==null && chnlProviderBlue==null) {
+		if (red==null && green==null && blue==null) {
 			throw new BeanMisconfiguredException("At least one of the chnlProviderRed, chnlProviderGreen or chnlProviderBlue must be set");
 		}
 	}	
@@ -162,9 +157,9 @@ public class StackProviderRGBChnlProvider extends StackProvider {
 	@Override
 	public Stack create() throws CreateException {
 
-		Chnl chnlRed = chnlProviderRed!=null ? chnlProviderRed.create() : null;
-		Chnl chnlGreen = chnlProviderGreen!=null ? chnlProviderGreen.create() : null;
-		Chnl chnlBlue = chnlProviderBlue!=null ? chnlProviderBlue.create() : null;
+		Chnl chnlRed = red!=null ? red.create() : null;
+		Chnl chnlGreen = green!=null ? green.create() : null;
+		Chnl chnlBlue = blue!=null ? blue.create() : null;
 		
 		VoxelDataType outputType = chooseOutputDataType(chnlRed,chnlGreen,chnlBlue);
 		
@@ -185,29 +180,27 @@ public class StackProviderRGBChnlProvider extends StackProvider {
 		}			
 	}
 
-	public ChnlProvider getChnlProviderRed() {
-		return chnlProviderRed;
+	public ChnlProvider getRed() {
+		return red;
 	}
 
-	public void setChnlProviderRed(ChnlProvider chnlProviderRed) {
-		this.chnlProviderRed = chnlProviderRed;
+	public void setRed(ChnlProvider red) {
+		this.red = red;
 	}
 
-	public ChnlProvider getChnlProviderGreen() {
-		return chnlProviderGreen;
+	public ChnlProvider getGreen() {
+		return green;
 	}
 
-	public void setChnlProviderGreen(ChnlProvider chnlProviderGreen) {
-		this.chnlProviderGreen = chnlProviderGreen;
+	public void setGreen(ChnlProvider green) {
+		this.green = green;
 	}
 
-	public ChnlProvider getChnlProviderBlue() {
-		return chnlProviderBlue;
+	public ChnlProvider getBlue() {
+		return blue;
 	}
 
-	public void setChnlProviderBlue(ChnlProvider chnlProviderBlue) {
-		this.chnlProviderBlue = chnlProviderBlue;
+	public void setBlue(ChnlProvider blue) {
+		this.blue = blue;
 	}
-
-
 }

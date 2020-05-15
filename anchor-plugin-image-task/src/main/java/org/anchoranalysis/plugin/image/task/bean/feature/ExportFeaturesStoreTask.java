@@ -37,11 +37,10 @@ import org.anchoranalysis.bean.error.BeanDuplicateException;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.index.GetOperationFailedException;
-import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.core.name.MultiName;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
 import org.anchoranalysis.experiment.JobExecutionException;
-import org.anchoranalysis.experiment.task.ParametersBound;
+import org.anchoranalysis.experiment.task.InputBound;
 import org.anchoranalysis.experiment.task.ParametersExperiment;
 import org.anchoranalysis.feature.bean.list.FeatureListProvider;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
@@ -52,6 +51,7 @@ import org.anchoranalysis.feature.list.NamedFeatureStore;
 import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.input.InputFromManager;
 import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
+import org.anchoranalysis.io.output.bound.BoundIOContext;
 import org.anchoranalysis.plugin.image.task.sharedstate.SharedStateExportFeaturesWithStore;
 
 /**
@@ -65,11 +65,6 @@ import org.anchoranalysis.plugin.image.task.sharedstate.SharedStateExportFeature
  *
  */
 public abstract class ExportFeaturesStoreTask<T extends InputFromManager, S extends FeatureInput> extends ExportFeaturesTask<T,SharedStateExportFeaturesWithStore<S>> {
-
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
 
 	// START BEAN PROPERTIES
 	@BeanField @NonEmpty
@@ -102,15 +97,13 @@ public abstract class ExportFeaturesStoreTask<T extends InputFromManager, S exte
 	}
 
 	@Override
-	public void doJobOnInputObject( ParametersBound<T,SharedStateExportFeaturesWithStore<S>> params ) throws JobExecutionException {
+	public void doJobOnInputObject( InputBound<T,SharedStateExportFeaturesWithStore<S>> params ) throws JobExecutionException {
 		
 		try {
 			ResultsVector rv = calcResultsVectorForInputObject(
 				params.getInputObject(),
 				params.getSharedState().getFeatureStore(),
-				params.getOutputManager(),
-				params.getExperimentArguments().getModelDirectory(),
-				params.getLogErrorReporter()
+				params.context()
 			);
 			storeResults(params, rv);
 			
@@ -122,12 +115,11 @@ public abstract class ExportFeaturesStoreTask<T extends InputFromManager, S exte
 	protected abstract ResultsVector calcResultsVectorForInputObject(
 		T inputObject,
 		NamedFeatureStore<S> featureStore,
-		BoundOutputManagerRouteErrors outputManager,
-		Path modelDir, LogErrorReporter logErrorReporter
+		BoundIOContext context
 	) throws FeatureCalcException;
 
 
-	private void storeResults(ParametersBound<T,SharedStateExportFeaturesWithStore<S>> params, ResultsVector rv) throws OperationFailedException {
+	private void storeResults(InputBound<T,SharedStateExportFeaturesWithStore<S>> params, ResultsVector rv) throws OperationFailedException {
 		
 		MultiName identifier = identifierFor( params.getInputObject() );
 		

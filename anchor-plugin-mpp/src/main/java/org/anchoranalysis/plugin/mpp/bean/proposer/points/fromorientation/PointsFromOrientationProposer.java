@@ -40,11 +40,6 @@ import ch.ethz.biol.cell.mpp.mark.ellipsoidfitter.outlinepixelsretriever.Travers
 
 public abstract class PointsFromOrientationProposer extends NullParamsBean<PointsFromOrientationProposer> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	public abstract ICreateProposalVisualization proposalVisualization(boolean detailed);
 	
 	public abstract void clearVisualizationState();

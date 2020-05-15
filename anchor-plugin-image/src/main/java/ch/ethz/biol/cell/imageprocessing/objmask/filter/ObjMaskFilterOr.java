@@ -28,6 +28,7 @@ package ch.ethz.biol.cell.imageprocessing.objmask.filter;
 
 
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 
 import org.anchoranalysis.core.error.OperationFailedException;
@@ -36,19 +37,18 @@ import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.image.objmask.ObjMaskCollection;
 
-public class ObjMaskFilterOr extends ObjMaskFilterDelegate {
+public class ObjMaskFilterOr extends ObjMaskFilterDerivedFromList {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1049151951022876436L;
-	
 	@Override
-	public void filter(ObjMaskCollection objs, ImageDim dim, ObjMaskCollection objsRejected) throws OperationFailedException {
+	public void filter(
+		ObjMaskCollection objs,
+		Optional<ImageDim> dim,
+		Optional<ObjMaskCollection> objsRejected
+	) throws OperationFailedException {
 		
 		Set<ObjMask> set = new HashSet<ObjMask>();
 		
-		for (ObjMaskFilter indFilter : delegate().getList()) {
+		for (ObjMaskFilter indFilter : list()) {
 			ObjMaskCollection objsDup = objs.duplicate();
 			indFilter.filter(objsDup, dim, objsRejected);
 			set.addAll(objsDup.asList());

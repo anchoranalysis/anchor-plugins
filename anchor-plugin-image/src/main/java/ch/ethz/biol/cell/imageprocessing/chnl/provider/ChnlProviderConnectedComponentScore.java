@@ -32,7 +32,7 @@ import java.nio.ByteBuffer;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.geometry.Point3d;
-import org.anchoranalysis.image.bean.provider.ChnlProvider;
+import org.anchoranalysis.image.bean.provider.ChnlProviderOne;
 import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
 import org.anchoranalysis.image.bean.threshold.CalculateLevel;
 import org.anchoranalysis.image.chnl.Chnl;
@@ -47,17 +47,9 @@ import ch.ethz.biol.cell.imageprocessing.chnl.provider.level.LevelResult;
 import ch.ethz.biol.cell.imageprocessing.chnl.provider.level.LevelResultCollection;
 import ch.ethz.biol.cell.imageprocessing.chnl.provider.level.LevelResultCollectionFactory;
 
-public class ChnlProviderConnectedComponentScore extends ChnlProvider {
-	
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
+public class ChnlProviderConnectedComponentScore extends ChnlProviderOne {
 	
 	// START BEAN PROPERTIES
-	@BeanField
-	private ChnlProvider chnlProvider;
-	
 	@BeanField
 	private ObjMaskProvider objsMask;
 	
@@ -135,9 +127,8 @@ public class ChnlProviderConnectedComponentScore extends ChnlProvider {
 	
 	
 	@Override
-	public Chnl create() throws CreateException {
-		
-		Chnl chnl = chnlProvider.create();
+	public Chnl createFromChnl( Chnl chnl ) throws CreateException {
+
 		ObjMaskCollection objsMaskCollection = objsMask.create();
 	
 		LevelResultCollection lrc= LevelResultCollectionFactory.createCollection( chnl, objsMaskCollection, calculateLevel, 0, getLogger() );
@@ -147,14 +138,6 @@ public class ChnlProviderConnectedComponentScore extends ChnlProvider {
 		populateChnl( chnl, chnlOut, lrc );
 
 		return chnlOut;
-	}
-
-	public ChnlProvider getChnlProvider() {
-		return chnlProvider;
-	}
-
-	public void setChnlProvider(ChnlProvider chnlProvider) {
-		this.chnlProvider = chnlProvider;
 	}
 
 	public CalculateLevel getCalculateLevel() {

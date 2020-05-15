@@ -32,11 +32,6 @@ import org.anchoranalysis.image.feature.bean.FeatureNRGStack;
 
 public class VoxelDataTypeMaxValue extends FeatureNRGStack {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	@Override
 	public double calcCast(FeatureInputNRGStack params)
 			throws FeatureCalcException {

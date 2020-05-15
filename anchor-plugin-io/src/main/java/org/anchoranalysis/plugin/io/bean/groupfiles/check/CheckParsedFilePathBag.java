@@ -32,10 +32,5 @@ import org.anchoranalysis.plugin.io.multifile.ParsedFilePathBag;
 
 public abstract class CheckParsedFilePathBag extends AnchorBean<CheckParsedFilePathBag> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	public abstract boolean accept( ParsedFilePathBag parsedBag );
 }

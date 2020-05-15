@@ -32,16 +32,12 @@ import org.anchoranalysis.bean.shared.params.keyvalue.KeyValueParamsProvider;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.params.KeyValueParams;
 import org.anchoranalysis.image.bean.provider.ChnlProvider;
+import org.anchoranalysis.image.bean.provider.ChnlProviderOne;
 import org.anchoranalysis.image.chnl.Chnl;
 
-// If a param is equal to a particular value, do soemthing
-public class ChnlProviderIfParamEquals extends ChnlProvider {
+// If a param is equal to a particular value, do something
+public class ChnlProviderIfParamEquals extends ChnlProviderOne {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
 	private KeyValueParamsProvider keyValueParamsProvider;
@@ -53,23 +49,20 @@ public class ChnlProviderIfParamEquals extends ChnlProvider {
 	private String value = "";
 	
 	@BeanField
-	private ChnlProvider chnlProvider;
-	
-	@BeanField
-	private ChnlProvider chnlProviderElse;
+	private ChnlProvider chnlElse;
 	// END BEAN PROPERTIES
 	
 	@Override
-	public Chnl create() throws CreateException {
+	public Chnl createFromChnl(Chnl chnl) throws CreateException {
 		
 		KeyValueParams params = keyValueParamsProvider.create();
 		
 		String valueToCheck = params.getProperty(key);
 		
 		if( value.equals(valueToCheck) ) {
-			return chnlProvider.create();
+			return chnl;
 		} else {
-			return chnlProviderElse.create();
+			return chnlElse.create();
 		}
 	}
 
@@ -86,37 +79,24 @@ public class ChnlProviderIfParamEquals extends ChnlProvider {
 		return key;
 	}
 
-
 	public void setKey(String key) {
 		this.key = key;
 	}
-
 
 	public String getValue() {
 		return value;
 	}
 
-
 	public void setValue(String value) {
 		this.value = value;
 	}
 
-	public ChnlProvider getChnlProvider() {
-		return chnlProvider;
+	public ChnlProvider getChnlElse() {
+		return chnlElse;
 	}
 
-	public void setChnlProvider(ChnlProvider chnlProvider) {
-		this.chnlProvider = chnlProvider;
+	public void setChnlElse(ChnlProvider chnlElse) {
+		this.chnlElse = chnlElse;
 	}
-
-	public ChnlProvider getChnlProviderElse() {
-		return chnlProviderElse;
-	}
-
-	public void setChnlProviderElse(ChnlProvider chnlProviderElse) {
-		this.chnlProviderElse = chnlProviderElse;
-	}
-
-
 }
 

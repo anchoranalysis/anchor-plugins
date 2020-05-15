@@ -51,10 +51,7 @@ import ch.ethz.biol.cell.sgmn.objmask.watershed.encoding.PriorityQueueIndexRange
 
 public class GrayscaleReconstructionRobinson extends GrayscaleReconstructionByErosion {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
+	
 
 	// START BEAN PROPERTIES
 	

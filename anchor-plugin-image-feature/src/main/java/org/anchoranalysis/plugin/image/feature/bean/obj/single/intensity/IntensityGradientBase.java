@@ -41,11 +41,6 @@ import org.anchoranalysis.plugin.image.calculation.CalculateGradientFromMultiple
 public abstract class IntensityGradientBase extends FeatureObjMask {
 
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	// START BEAN PROPERTIES
 	@BeanField @NonNegative
 	private int nrgIndexX = -1;

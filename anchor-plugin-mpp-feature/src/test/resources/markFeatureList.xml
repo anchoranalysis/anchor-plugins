@@ -1,9 +1,9 @@
 <config>
 <bean config-class="org.anchoranalysis.feature.bean.list.FeatureListProviderDefine">
 	<list config-class="java.util.List" config-factory="list">
-		<item config-class="ch.ethz.biol.cell.mpp.nrg.feature.mark.Eccentricity"/>
-		<item config-class="ch.ethz.biol.cell.mpp.nrg.feature.mark.RadiiRatio"/>
-		<item config-class="ch.ethz.biol.cell.mpp.nrg.feature.mark.DotProductOrientationToVector">
+		<item config-class="org.anchoranalysis.plugin.mpp.feature.bean.mark.radii.EccentricityAxisAligned"/>
+		<item config-class="org.anchoranalysis.plugin.mpp.feature.bean.mark.radii.RadiiRatio"/>
+		<item config-class="org.anchoranalysis.plugin.mpp.feature.bean.mark.direction.DotProductOrientationToVector">
 			<directionVector x="0" y="0" z="1" config-class="org.anchoranalysis.image.bean.orientation.DirectionVectorBean"/>
 		</item>
 	</list>
