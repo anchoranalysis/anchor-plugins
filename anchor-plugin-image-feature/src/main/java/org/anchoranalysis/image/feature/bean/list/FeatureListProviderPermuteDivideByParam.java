@@ -59,12 +59,6 @@ public class FeatureListProviderPermuteDivideByParam extends FeatureListProvider
 	
 	@BeanField
 	private String paramPrefix;
-	
-	/**
-	 * If true the constant is appended to the param prefix (a dot and a number)
-	 */
-	@BeanField
-	private boolean paramPrefixAppendNumber = true;
 	// END BEAN PROPERTIES
 
 	// Possible defaultInstances for beans......... saved from checkMisconfigured for delayed checks elsewhere
@@ -85,7 +79,7 @@ public class FeatureListProviderPermuteDivideByParam extends FeatureListProvider
 					permuteProperty,
 					paramPrefix,
 					"_median",
-					paramPrefixAppendNumber
+					false
 				)	
 			)
 		);
@@ -96,13 +90,8 @@ public class FeatureListProviderPermuteDivideByParam extends FeatureListProvider
 		if (permuteProperty.getAdditionalPropertyPaths()==null) {
 			permuteProperty.setAdditionalPropertyPaths( new StringSet() );
 		}
-		
-		if (paramPrefixAppendNumber) {
-			permuteProperty.getAdditionalPropertyPaths().add("item2.idMiddle");
-		}
-		
 		permuteProperty.setPropertyPath(
-			String.format("item1.%s", permuteProperty.getPropertyPath() )
+			String.format("list.%s", permuteProperty.getPropertyPath() )	// This will change the first item in the list
 		);
 		return permuteProperty;
 	}
@@ -112,10 +101,10 @@ public class FeatureListProviderPermuteDivideByParam extends FeatureListProvider
 		
 		FeatureListProviderPermute<Integer,FeatureInputNRGStack> delegate = new FeatureListProviderPermute<>();
 		
-		// Wrap our feature in a gaussian score
-		Feature<FeatureInputNRGStack> featureScore = feature.duplicateBean();
-		featureScore = wrapInDivide(featureScore);
-		delegate.setFeature(featureScore);
+		// Wrap our feature in a Divide
+		delegate.setFeature(
+			wrapInDivide(feature.duplicateBean())
+		);
 				
 		PermutePropertySequenceInteger permutePropertyConfigured = configurePermuteProperty(
 			(PermutePropertySequenceInteger) permuteProperty.duplicateBean()
@@ -156,13 +145,5 @@ public class FeatureListProviderPermuteDivideByParam extends FeatureListProvider
 
 	public void setParamPrefix(String paramPrefix) {
 		this.paramPrefix = paramPrefix;
-	}
-
-	public boolean isParamPrefixAppendNumber() {
-		return paramPrefixAppendNumber;
-	}
-
-	public void setParamPrefixAppendNumber(boolean paramPrefixAppendNumber) {
-		this.paramPrefixAppendNumber = paramPrefixAppendNumber;
 	}
 }
