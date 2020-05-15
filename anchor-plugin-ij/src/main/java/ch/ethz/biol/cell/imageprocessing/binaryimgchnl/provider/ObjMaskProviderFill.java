@@ -89,4 +89,12 @@ public class ObjMaskProviderFill extends ObjMaskProviderOne {
 		
 		return objsCollection;
 	}
+
+	public BinaryChnlProvider getMask() {
+		return mask;
+	}
+
+	public void setMask(BinaryChnlProvider mask) {
+		this.mask = mask;
+	}
 }
