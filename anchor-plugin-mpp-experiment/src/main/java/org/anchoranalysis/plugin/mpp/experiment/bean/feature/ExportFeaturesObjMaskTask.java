@@ -96,7 +96,7 @@ public class ExportFeaturesObjMaskTask<T extends FeatureInput> extends ExportFea
 	private List<NamedBean<ObjMaskProvider>> listObjMaskProvider = new ArrayList<>();
 	
 	@BeanField
-	private FeatureTableObjs<T> selectFeaturesObjects;
+	private FeatureTableObjs<T> table;
 	
 	/**
 	 * If non-empty, A keyValueParams is treated as part of the nrgStack 
@@ -119,7 +119,7 @@ public class ExportFeaturesObjMaskTask<T extends FeatureInput> extends ExportFea
 		try {
 			return new SharedStateExportFeaturesObjMask<>(
 				new GroupedResultsVectorCollection("id","group","objSetName"),
-				selectFeaturesObjects.createFeatures(listFeaturesObjMask, suppressErrors)
+				table.createFeatures(listFeaturesObjMask, suppressErrors)
 			);
 			
 		} catch (CreateException | InitException e) {
@@ -224,7 +224,7 @@ public class ExportFeaturesObjMaskTask<T extends FeatureInput> extends ExportFea
 		LogErrorReporter logErrorReporter
 	) throws OperationFailedException {
 		try {
-			List<T> listParams = selectFeaturesObjects.createListInputs(
+			List<T> listParams = table.createListInputs(
 				objs,
 				nrgStack,
 				logErrorReporter
@@ -276,16 +276,6 @@ public class ExportFeaturesObjMaskTask<T extends FeatureInput> extends ExportFea
 		this.listObjMaskProvider = listObjMaskProvider;
 	}
 
-
-	public FeatureTableObjs<T> getSelectFeaturesObjects() {
-		return selectFeaturesObjects;
-	}
-
-
-	public void setSelectFeaturesObjects(FeatureTableObjs<T> selectFeaturesObjects) {
-		this.selectFeaturesObjects = selectFeaturesObjects;
-	}
-
 	public String getNrgParamsName() {
 		return nrgParamsName;
 	}
@@ -308,5 +298,13 @@ public class ExportFeaturesObjMaskTask<T extends FeatureInput> extends ExportFea
 
 	public void setDefine(DefineOutputterMPPWithNrg define) {
 		this.define = define;
+	}
+
+	public FeatureTableObjs<T> getTable() {
+		return table;
+	}
+
+	public void setTable(FeatureTableObjs<T> table) {
+		this.table = table;
 	}
 }
