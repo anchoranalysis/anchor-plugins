@@ -67,8 +67,8 @@ public class ObjMaskCollectionCompressionTest {
 		
 		assertTrue( uncompressed.getObjs().equalsDeep(compressed.getObjs()) );
 
-		// We expect compression of approximate 6.26 on this particular example
-		assertTrue( relativeSize > 6.1 && relativeSize < 6.3 );
+		// We expect compression of approximate 6.05 on this particular example
+		assertTrue( relativeSize > 6 && relativeSize < 6.1 );
 	}
 	
 	private ObjMaskCollectionWithSize calcUncompressed(String pathIn) {
