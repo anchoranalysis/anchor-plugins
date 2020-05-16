@@ -38,11 +38,6 @@ public class ChnlProviderMedianFilterIJ3D extends ChnlProviderOne {
 	
 	@Override
 	public Chnl createFromChnl(Chnl chnl) throws CreateException {
-		return median3d(chnl);
-	}
-	
-	private Chnl median3d( Chnl chnl ) throws CreateException {
-		
 		ImagePlus imp = IJWrap.createImagePlus(chnl);
 		
 		Hybrid_3D_Median_Filter plugin = new Hybrid_3D_Median_Filter();
