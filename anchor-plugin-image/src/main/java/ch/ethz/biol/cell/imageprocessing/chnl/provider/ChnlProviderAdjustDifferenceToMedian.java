@@ -34,8 +34,6 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.bean.provider.ChnlProvider;
-import org.anchoranalysis.image.bean.provider.ChnlProviderOne;
-import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
 import org.anchoranalysis.image.chnl.Chnl;
 import org.anchoranalysis.image.convert.ByteConverter;
 import org.anchoranalysis.image.histogram.Histogram;
@@ -49,25 +47,20 @@ import org.anchoranalysis.image.voxel.box.VoxelBox;
 //		1. Identify the median value from channelLookup
 //		2. Calculate the difference of each pixel value in channelLookup to Value 1.
 //		3. Adjust each pixel value by Value 2.
-public class ChnlProviderAdjustDifferenceToMedian extends ChnlProviderOne {
+public class ChnlProviderAdjustDifferenceToMedian extends ChnlProviderOneObjsSource {
 
 	// START BEAN PROPERTIES
 	@BeanField
 	private ChnlProvider chnlLookup;
-	
-	@BeanField
-	private ObjMaskProvider objs;
 	// END BEAN PROPERTIES
 	
 	@Override
-	public Chnl createFromChnl( Chnl chnl ) throws CreateException {
-
+	protected Chnl createFromChnl(Chnl chnl, ObjMaskCollection objsSource) throws CreateException {
+	
 		Chnl lookup = DimChecker.createSameSize(chnlLookup, "chnlLookup", chnl);
 		
-		ObjMaskCollection objsCollection = objs.create();
-		
 		try {
-			for( ObjMask om : objsCollection ) {
+			for( ObjMask om : objsSource ) {
 				Histogram h = HistogramFactoryUtilities.createWithMask(lookup.getVoxelBox().any(), om);
 				int objMedian = (int) Math.round(h.mean());
 				adjustObj(om, chnl, lookup, objMedian );
@@ -118,15 +111,6 @@ public class ChnlProviderAdjustDifferenceToMedian extends ChnlProviderOne {
 				}
 			}
 		}
-	}
-
-	public ObjMaskProvider getObjs() {
-		return objs;
-	}
-
-
-	public void setObjs(ObjMaskProvider objs) {
-		this.objs = objs;
 	}
 
 	public ChnlProvider getChnlLookup() {
