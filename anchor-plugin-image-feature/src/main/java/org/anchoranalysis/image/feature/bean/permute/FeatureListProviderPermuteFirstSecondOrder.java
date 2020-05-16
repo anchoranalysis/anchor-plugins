@@ -1,4 +1,4 @@
-package org.anchoranalysis.image.feature.bean.list;
+package org.anchoranalysis.image.feature.bean.permute;
 
 /*-
  * #%L
@@ -27,47 +27,26 @@ package org.anchoranalysis.image.feature.bean.list;
  */
 
 
-import java.util.ArrayList;
-
-import org.anchoranalysis.bean.BeanInstanceMap;
 import org.anchoranalysis.bean.StringSet;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.bean.error.BeanMisconfiguredException;
 import org.anchoranalysis.bean.permute.property.PermutePropertySequenceInteger;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.feature.bean.Feature;
-import org.anchoranalysis.feature.bean.list.FeatureList;
-import org.anchoranalysis.feature.bean.list.FeatureListProvider;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.input.FeatureInputNRGStack;
 import org.anchoranalysis.plugin.operator.feature.bean.arithmetic.MultiplyByConstant;
 import org.anchoranalysis.plugin.operator.feature.bean.range.IfOutsideRange;
 import org.anchoranalysis.plugin.operator.feature.bean.score.FeatureStatScore;
 
-import ch.ethz.biol.cell.mpp.nrg.feature.objmask.NRGParamThree;
-
-public abstract class FeatureListProviderPermuteFirstSecondOrder extends FeatureListProvider<FeatureInputNRGStack> {
-
+public abstract class FeatureListProviderPermuteFirstSecondOrder extends FeatureListProviderPermuteParamBase {
 
 	// START BEAN PROPERTIES
-	@BeanField
-	private Feature<FeatureInputNRGStack> feature;
-	
-	@BeanField
-	private PermutePropertySequenceInteger permuteProperty;
-	
-	@BeanField
-	private String paramPrefix;
-	
 	/**
 	 * If true the constant is appended to the param prefix (a dot and a number)
 	 */
 	@BeanField
 	private boolean paramPrefixAppendNumber = true;
 	// END BEAN PROPERTIES
-	
-	// Possible defaultInstances for beans......... saved from checkMisconfigured for delayed checks elsewhere
-	private BeanInstanceMap defaultInstances;
 	
 	private CreateFirstSecondOrder<FeatureInputNRGStack> factory;
 	private double minRange;
@@ -85,12 +64,21 @@ public abstract class FeatureListProviderPermuteFirstSecondOrder extends Feature
 		this.maxRange = maxRange;
 	}
 	
-	
 	@Override
-	public void checkMisconfigured(BeanInstanceMap defaultInstances) throws BeanMisconfiguredException {
-		super.checkMisconfigured(defaultInstances);
-		this.defaultInstances = defaultInstances;
+	protected FeatureListProviderPermute<Integer,FeatureInputNRGStack> createDelegate(Feature<FeatureInputNRGStack> feature) throws CreateException {
+		
+		FeatureListProviderPermute<Integer, FeatureInputNRGStack> delegate = new FeatureListProviderPermute<>();
+		
+		// Wrap our feature in a gaussian score
+		Feature<FeatureInputNRGStack> featureScore = feature.duplicateBean();
+		featureScore = wrapInScore(featureScore);
+		featureScore = wrapWithMultiplyByConstant(featureScore);
+		featureScore = wrapWithMinMaxRange(featureScore);
+		delegate.setFeature(featureScore);
+
+		return delegate;
 	}
+	
 
 	private static Feature<FeatureInputNRGStack> wrapWithMultiplyByConstant( Feature<FeatureInputNRGStack> feature ) {
 		MultiplyByConstant<FeatureInputNRGStack> out = new MultiplyByConstant<>();
@@ -108,32 +96,21 @@ public abstract class FeatureListProviderPermuteFirstSecondOrder extends Feature
 		out.setAboveMaxValue(maxRange);
 		return out;
 	}
-	
-	public static Feature<FeatureInputNRGStack> createNRGParam( PermutePropertySequenceInteger permuteProperty, String paramPrefix, String suffix, boolean appendNumber ) {
-		NRGParamThree paramMean = new NRGParamThree();
-		paramMean.setIdLeft(paramPrefix);
-		if (appendNumber) {
-			paramMean.setIdMiddle( Integer.toString(permuteProperty.getSequence().getStart()) );
-		} else {
-			paramMean.setIdMiddle("");
-		}
-		paramMean.setIdRight(suffix);
-		return paramMean;
-	}
 		
 	private Feature<FeatureInputNRGStack> wrapInScore( Feature<FeatureInputNRGStack> feature ) {
 		FeatureStatScore<FeatureInputNRGStack> featureScore = factory.create();
 		featureScore.setItem(feature);
 		featureScore.setItemMean(
-			createNRGParam(permuteProperty,paramPrefix,"_fitted_normal_mean",paramPrefixAppendNumber)
+			createNRGParam("_fitted_normal_mean",paramPrefixAppendNumber)
 		);
 		featureScore.setItemStdDev(
-			createNRGParam(permuteProperty,paramPrefix,"_fitted_normal_sd",paramPrefixAppendNumber)
+			createNRGParam("_fitted_normal_sd",paramPrefixAppendNumber)
 		);
 		return featureScore;
 	}
 	
-	private PermutePropertySequenceInteger configurePermuteProperty( PermutePropertySequenceInteger permuteProperty ) {
+	@Override
+	protected PermutePropertySequenceInteger configurePermuteProperty( PermutePropertySequenceInteger permuteProperty ) {
 		if (permuteProperty.getAdditionalPropertyPaths()==null) {
 			permuteProperty.setAdditionalPropertyPaths( new StringSet() );
 		}
@@ -147,58 +124,6 @@ public abstract class FeatureListProviderPermuteFirstSecondOrder extends Feature
 			String.format("item.item.item.%s", permuteProperty.getPropertyPath() )
 		);
 		return permuteProperty;
-	}
-	
-	@Override
-	public FeatureList<FeatureInputNRGStack> create() throws CreateException {
-		
-		FeatureListProviderPermute<Integer, FeatureInputNRGStack> delegate = new FeatureListProviderPermute<>();
-		
-		// Wrap our feature in a gaussian score
-		Feature<FeatureInputNRGStack> featureScore = feature.duplicateBean();
-		featureScore = wrapInScore(featureScore);
-		featureScore = wrapWithMultiplyByConstant(featureScore);
-		featureScore = wrapWithMinMaxRange(featureScore);
-		delegate.setFeature(featureScore);
-				
-		PermutePropertySequenceInteger permutePropertyConfigured = configurePermuteProperty(
-			(PermutePropertySequenceInteger) permuteProperty.duplicateBean()
-		);
-		
-		delegate.setListPermuteProperty( new ArrayList<>() );
-		delegate.getListPermuteProperty().add( permutePropertyConfigured );
-		
-		try {
-			delegate.checkMisconfigured( defaultInstances );
-		} catch (BeanMisconfiguredException e) {
-			throw new CreateException(e);
-		}
-		
-		return delegate.create();
-	}
-
-	public PermutePropertySequenceInteger getPermuteProperty() {
-		return permuteProperty;
-	}
-
-	public void setPermuteProperty(PermutePropertySequenceInteger permuteProperty) {
-		this.permuteProperty = permuteProperty;
-	}
-
-	public Feature<FeatureInputNRGStack> getFeature() {
-		return feature;
-	}
-
-	public void setFeature(Feature<FeatureInputNRGStack> feature) {
-		this.feature = feature;
-	}
-
-	public String getParamPrefix() {
-		return paramPrefix;
-	}
-
-	public void setParamPrefix(String paramPrefix) {
-		this.paramPrefix = paramPrefix;
 	}
 
 	public boolean isParamPrefixAppendNumber() {
