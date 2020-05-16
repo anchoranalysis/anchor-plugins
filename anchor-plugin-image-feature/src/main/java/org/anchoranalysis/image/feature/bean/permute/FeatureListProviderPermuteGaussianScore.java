@@ -1,4 +1,4 @@
-package org.anchoranalysis.image.feature.bean.list;
+package org.anchoranalysis.image.feature.bean.permute;
 
 
 

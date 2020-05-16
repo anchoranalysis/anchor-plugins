@@ -1,4 +1,4 @@
-package org.anchoranalysis.image.feature.bean.list;
+package org.anchoranalysis.image.feature.bean.permute;
 
 /*
  * #%L
@@ -34,7 +34,6 @@ import org.anchoranalysis.bean.StringSet;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.NonEmpty;
 import org.anchoranalysis.bean.annotation.OptionalBean;
-import org.anchoranalysis.bean.annotation.SkipInit;
 import org.anchoranalysis.bean.error.BeanDuplicateException;
 import org.anchoranalysis.bean.permute.ApplyPermutations;
 import org.anchoranalysis.bean.permute.property.PermuteProperty;
@@ -45,7 +44,6 @@ import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.list.FeatureList;
-import org.anchoranalysis.feature.bean.list.FeatureListProvider;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.shared.SharedFeaturesInitParams;
 
@@ -57,26 +55,23 @@ import org.anchoranalysis.feature.shared.SharedFeaturesInitParams;
  * @param S permutation type
  * @param T feature-input
  */
-public class FeatureListProviderPermute<S, T extends FeatureInput> extends FeatureListProvider<T> {
+public class FeatureListProviderPermute<S, T extends FeatureInput> extends FeatureListProviderPermuteBase<T> {
 
 	/**
 	 * 
 	 */
 	
 	// START BEAN PROPERTIES
-	@BeanField @SkipInit
-	private Feature<T> feature;
-	
 	@BeanField @OptionalBean
 	private StringSet referencesFeatureListCreator;	// Makes sure a particular feature list creator is evaluated
 	
 	@BeanField @NonEmpty
 	private List<PermuteProperty<S>> listPermuteProperty = new ArrayList<PermuteProperty<S>>();
 	// END BEAN PROPERTIES
-	
+		
 	@Override
-	public FeatureList<T> create() throws CreateException {
-				
+	protected FeatureList<T> createPermutedFeaturesFor( Feature<T> feature ) throws CreateException {
+		
 		FeatureList<T> flInput = createInitialList(feature);
 		
 		// Create many copies of 'item' with properties adjusted
@@ -89,7 +84,7 @@ public class FeatureListProviderPermute<S, T extends FeatureInput> extends Featu
 				fl = new ApplyPermutations<Feature<T>>(
 					(a) -> a.getCustomName(),
 					(a,s) -> a.setCustomName(s)
-					).applyPermutationsToCreateDuplicates(
+				).applyPermutationsToCreateDuplicates(
 					fl,
 					pp,
 					permutationSetter
@@ -153,15 +148,4 @@ public class FeatureListProviderPermute<S, T extends FeatureInput> extends Featu
 	public void setListPermuteProperty(List<PermuteProperty<S>> listPermuteProperty) {
 		this.listPermuteProperty = listPermuteProperty;
 	}
-
-
-	public Feature<T> getFeature() {
-		return feature;
-	}
-
-
-	public void setFeature(Feature<T> feature) {
-		this.feature = feature;
-	}
-
 }
