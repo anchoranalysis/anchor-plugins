@@ -30,18 +30,16 @@ package ch.ethz.biol.cell.imageprocessing.chnl.provider;
 import ij.ImagePlus;
 import ij.plugin.filter.BackgroundSubtracter;
 
-import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.image.bean.provider.ChnlProviderOne;
 import org.anchoranalysis.image.chnl.Chnl;
 import org.anchoranalysis.image.convert.IJWrap;
 
-public class ChnlProviderIJBackgroundSubtractor extends ChnlProviderOne {
-
-	// START BEAN PROPERTIES
-	@BeanField
-	private int radius = 0;
-	// END BEAN PROPERTIES
+public class ChnlProviderIJBackgroundSubtractor extends ChnlProviderFilterRadiusBase {
+	
+	@Override
+	protected Chnl createFromChnl(Chnl chnl, int radius) throws CreateException {
+		return subtractBackground(chnl, radius, true);
+	}
 	
 	public static Chnl subtractBackground( Chnl chnl, int radius, boolean doPreSmooth ) throws CreateException {
 		ImagePlus imp = IJWrap.createImagePlus(chnl);
@@ -53,20 +51,4 @@ public class ChnlProviderIJBackgroundSubtractor extends ChnlProviderOne {
 		
 		return IJWrap.chnlFromImagePlus(imp, chnl.getDimensions().getRes());
 	}
-
-
-	@Override
-	public Chnl createFromChnl(Chnl chnl) throws CreateException {
-		return subtractBackground(chnl, radius, true);
-	}
-
-	public int getRadius() {
-		return radius;
-	}
-
-	public void setRadius(int radius) {
-		this.radius = radius;
-	}
-
-
 }
