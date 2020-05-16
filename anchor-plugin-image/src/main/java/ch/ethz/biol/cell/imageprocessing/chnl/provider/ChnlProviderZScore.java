@@ -46,7 +46,7 @@ public class ChnlProviderZScore extends ChnlProviderOne {
 
 	// START BEAN PROPERTIES
 	@BeanField
-	private HistogramProvider histogramProvider;
+	private HistogramProvider histogram;
 	
 	@BeanField
 	private boolean alwaysDuplicate = false;
@@ -58,7 +58,7 @@ public class ChnlProviderZScore extends ChnlProviderOne {
 	@Override
 	public Chnl createFromChnl( Chnl chnl ) throws CreateException {
 		
-		Histogram hist = histogramProvider.create();
+		Histogram hist = histogram.create();
 		
 		VoxelBox<ByteBuffer> out = chnl.getVoxelBox().asByteOrCreateEmpty(alwaysDuplicate);
 
@@ -113,14 +113,6 @@ public class ChnlProviderZScore extends ChnlProviderOne {
 		}
 	}
 
-	public HistogramProvider getHistogramProvider() {
-		return histogramProvider;
-	}
-
-	public void setHistogramProvider(HistogramProvider histogramProvider) {
-		this.histogramProvider = histogramProvider;
-	}
-
 	public double getFactor() {
 		return factor;
 	}
@@ -135,6 +127,14 @@ public class ChnlProviderZScore extends ChnlProviderOne {
 
 	public void setAlwaysDuplicate(boolean alwaysDuplicate) {
 		this.alwaysDuplicate = alwaysDuplicate;
+	}
+
+	public HistogramProvider getHistogram() {
+		return histogram;
+	}
+
+	public void setHistogram(HistogramProvider histogram) {
+		this.histogram = histogram;
 	}
 
 }
