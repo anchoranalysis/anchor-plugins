@@ -2,6 +2,8 @@ package ch.ethz.biol.cell.imageprocessing.objmask.provider;
 
 import java.util.Optional;
 
+
+
 /*
  * #%L
  * anchor-plugin-image
@@ -29,63 +31,18 @@ import java.util.Optional;
  */
 
 
-import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.image.bean.objmask.filter.ObjMaskFilter;
-import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
 import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.objmask.ObjMaskCollection;
 
-public class ObjMaskProviderFilter extends ObjMaskProviderDimensionsOptional {
+public class ObjMaskProviderFilter extends ObjMaskProviderFilterBase {
 
-	// START BEAN PROPERTIES
-	@BeanField
-	private ObjMaskFilter objMaskFilter;
-	
-	@BeanField @OptionalBean
-	private ObjMaskProvider objsRejected;	// The rejected objects are put here (OPTIONAL)
-	// END BEAN PROPERTIES
-	
 	@Override
-	public ObjMaskCollection createFromObjs(ObjMaskCollection in) throws CreateException {
-		
+	protected ObjMaskCollection createFromObjs(ObjMaskCollection in, Optional<ObjMaskCollection> omcRejected,
+			Optional<ImageDim> dim) throws CreateException {
 		ObjMaskCollection out = new ObjMaskCollection();
 		out.addAll( in );
-		try {
-			Optional<ImageDim> dims = createDims();
-			
-			objMaskFilter.filter(
-				out,
-				dims,
-				createRejected()
-			);
-			
-		} catch (OperationFailedException e) {
-			throw new CreateException(e);
-		}
-	
+		filter(out, dim, omcRejected);
 		return out;
-	}
-	
-	private Optional<ObjMaskCollection> createRejected() throws CreateException {
-		return objsRejected!=null ? Optional.of(objsRejected.create()) : Optional.empty();
-	}
-
-	public ObjMaskFilter getObjMaskFilter() {
-		return objMaskFilter;
-	}
-
-	public void setObjMaskFilter(ObjMaskFilter objMaskFilter) {
-		this.objMaskFilter = objMaskFilter;
-	}
-
-	public ObjMaskProvider getObjsRejected() {
-		return objsRejected;
-	}
-
-	public void setObjsRejected(ObjMaskProvider objsRejected) {
-		this.objsRejected = objsRejected;
 	}
 }

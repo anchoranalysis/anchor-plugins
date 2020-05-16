@@ -31,10 +31,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.image.bean.objmask.filter.ObjMaskFilter;
 import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
 import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.objmask.ObjMaskCollection;
@@ -43,52 +40,31 @@ import org.anchoranalysis.image.objmask.match.ObjWithMatches;
 import ch.ethz.biol.cell.imageprocessing.objmask.matching.ObjMaskMatchUtilities;
 
 // TODO lots of duplication with ObjMaskProviderFilter
-public class ObjMaskProviderFilterByGroup extends ObjMaskProviderDimensionsOptional {
+public class ObjMaskProviderFilterByGroup extends ObjMaskProviderFilterBase {
 
 	// START BEAN PROPERTIES
 	@BeanField
-	private ObjMaskFilter objMaskFilter;
-	
-	@BeanField
 	private ObjMaskProvider objsGrouped;
-	
-	@BeanField @OptionalBean
-	private ObjMaskProvider objsRejected;	// The rejected objects are put here (OPTIONAL)
 	// END BEAN PROPERTIES
 	
 	@Override
-	public ObjMaskCollection createFromObjs(ObjMaskCollection in) throws CreateException {
-		
+	protected ObjMaskCollection createFromObjs(ObjMaskCollection in, Optional<ObjMaskCollection> omcRejected,
+			Optional<ImageDim> dim) throws CreateException {
+
 		ObjMaskCollection inGroups = objsGrouped.create();
-		
-		Optional<ObjMaskCollection> omcRejected = objsRejected!=null ? Optional.of(objsRejected.create()) : Optional.empty();
-		
 		List<ObjWithMatches> matchList = ObjMaskMatchUtilities.matchIntersectingObjects( inGroups, in );
-		
-		Optional<ImageDim> dims = createDims();
 				
 		ObjMaskCollection out = new ObjMaskCollection();
 		
-		try {
-			for( ObjWithMatches wm : matchList ) {
-				ObjMaskCollection objs = wm.getMatches();
-				objMaskFilter.filter(objs, dims, omcRejected);
-				out.addAll( objs );
-			}
-		} catch (OperationFailedException e) {
-			throw new CreateException(e);
+		for( ObjWithMatches wm : matchList ) {
+			ObjMaskCollection objs = wm.getMatches();
+			filter(objs, dim, omcRejected);
+			out.addAll( objs );
 		}
+
 		return out;
 	}
-
-	public ObjMaskFilter getObjMaskFilter() {
-		return objMaskFilter;
-	}
-
-	public void setObjMaskFilter(ObjMaskFilter objMaskFilter) {
-		this.objMaskFilter = objMaskFilter;
-	}
-
+	
 	public ObjMaskProvider getObjsGrouped() {
 		return objsGrouped;
 	}
@@ -96,13 +72,4 @@ public class ObjMaskProviderFilterByGroup extends ObjMaskProviderDimensionsOptio
 	public void setObjsGrouped(ObjMaskProvider objsGrouped) {
 		this.objsGrouped = objsGrouped;
 	}
-
-	public ObjMaskProvider getObjsRejected() {
-		return objsRejected;
-	}
-
-	public void setObjsRejected(ObjMaskProvider objsRejected) {
-		this.objsRejected = objsRejected;
-	}
-
 }

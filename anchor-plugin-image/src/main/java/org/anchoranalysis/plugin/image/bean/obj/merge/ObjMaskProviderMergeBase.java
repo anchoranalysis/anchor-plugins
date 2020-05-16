@@ -49,7 +49,7 @@ public abstract class ObjMaskProviderMergeBase extends ObjMaskProviderContainer 
 	// START BEAN PROPERTIES
 	/* Image-resolution */
 	@BeanField @OptionalBean
-	private ImageDimProvider resProvider;
+	private ImageDimProvider dim;
 	// END BEAN PROPERTIES
 	
 	@FunctionalInterface
@@ -59,7 +59,7 @@ public abstract class ObjMaskProviderMergeBase extends ObjMaskProviderContainer 
 		
 	protected Optional<ImageRes> calcResOptional() throws OperationFailedException {
 		try {
-			return ProviderNullableCreator.createOptional(resProvider).map(
+			return ProviderNullableCreator.createOptional(dim).map(
 				ImageDim::getRes
 			);
 		} catch (CreateException e) {
@@ -120,11 +120,11 @@ public abstract class ObjMaskProviderMergeBase extends ObjMaskProviderContainer 
 		return out;		
 	}
 
-	public ImageDimProvider getResProvider() {
-		return resProvider;
+	public ImageDimProvider getDim() {
+		return dim;
 	}
 
-	public void setResProvider(ImageDimProvider resProvider) {
-		this.resProvider = resProvider;
+	public void setDim(ImageDimProvider dim) {
+		this.dim = dim;
 	}
 }
