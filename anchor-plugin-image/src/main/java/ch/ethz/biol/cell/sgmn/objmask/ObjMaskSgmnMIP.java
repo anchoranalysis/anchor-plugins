@@ -28,8 +28,9 @@ package ch.ethz.biol.cell.sgmn.objmask;
 
 
 import java.nio.ByteBuffer;
+import java.util.Optional;
+
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.error.OptionalOperationUnsupportedException;
 import org.anchoranalysis.image.bean.sgmn.binary.BinarySgmn;
 import org.anchoranalysis.image.bean.sgmn.binary.BinarySgmnParameters;
 import org.anchoranalysis.image.bean.sgmn.objmask.ObjMaskSgmn;
@@ -53,57 +54,42 @@ public class ObjMaskSgmnMIP extends ObjMaskSgmn {
 	@BeanField
 	private BinarySgmn sgmnStack;
 	// END BEAN PROPERTIES
+
+	@Override
+	public ObjMaskCollection sgmn(Chnl chnl, Optional<SeedCollection> seeds) throws SgmnFailedException {
+		
+		Chnl max = chnl.maxIntensityProj();
+		
+		// Collapse seeds in z direction
+		seeds.ifPresent(ObjMaskSgmnMIP::flattenSeedsInZ);
+		
+		ObjMaskCollection objs = sgmnMIP.sgmn(max, seeds);
+		
+		
+		BinarySgmnParameters params = new BinarySgmnParameters(
+			chnl.getDimensions().getRes()
+		);
+		
+		VoxelBox<ByteBuffer> vb = chnl.getVoxelBox().asByte();
+		
+		VoxelBox<ByteBuffer> stackBinary = vb.duplicate(); 
+		BinaryVoxelBox<ByteBuffer> vbBinary = sgmnStack.sgmn(
+			new VoxelBoxWrapper(stackBinary),
+			params
+		);
+		
+		return ExtendObjsInto3DMask.extendObjs(objs, vbBinary);
+	}
 	
-	private SeedCollection flattenSeedsInZ( SeedCollection seeds ) throws OptionalOperationUnsupportedException {
-		
-		if (seeds==null) {
-			return seeds;
-		}
-		
+	private static SeedCollection flattenSeedsInZ( SeedCollection seeds ) {
 		SeedCollection seedsDup = seeds.duplicate();
 		seedsDup.flattenZ();
 		return seedsDup;
 	}
 
 	@Override
-	public ObjMaskCollection sgmn(Chnl chnl,
-			SeedCollection seeds) throws SgmnFailedException {
-		
-		try {
-			
-			Chnl max = chnl.maxIntensityProj();
-			
-			// Collapse seeds in z direction
-			
-			seeds = flattenSeedsInZ(seeds);
-			
-			ObjMaskCollection objs = sgmnMIP.sgmn(max, seeds);
-			
-			
-			BinarySgmnParameters params = new BinarySgmnParameters(
-				chnl.getDimensions().getRes()
-			);
-			
-			VoxelBox<ByteBuffer> vb = chnl.getVoxelBox().asByte();
-			
-			VoxelBox<ByteBuffer> stackBinary = vb.duplicate(); 
-			BinaryVoxelBox<ByteBuffer> vbBinary = sgmnStack.sgmn(
-				new VoxelBoxWrapper(stackBinary),
-				params
-			);
-			
-			return ExtendObjsInto3DMask.extendObjs(objs, vbBinary);
-			
-		} catch (OptionalOperationUnsupportedException e) {
-			throw new SgmnFailedException(e);
-		}
-	}
-	
-
-
-	@Override
 	public ObjMaskCollection sgmn(Chnl chnl, ObjMask objMask,
-			SeedCollection seeds) throws SgmnFailedException {
+			Optional<SeedCollection> seeds) throws SgmnFailedException {
 		throw new SgmnFailedException("Unsupported operation");
 	}
 

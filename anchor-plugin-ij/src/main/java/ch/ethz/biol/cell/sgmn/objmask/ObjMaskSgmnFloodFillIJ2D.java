@@ -29,6 +29,8 @@ package ch.ethz.biol.cell.sgmn.objmask;
 
 import ij.process.ImageProcessor;
 
+import java.util.Optional;
+
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.bean.sgmn.objmask.ObjMaskSgmn;
@@ -57,7 +59,7 @@ public class ObjMaskSgmnFloodFillIJ2D extends ObjMaskSgmn {
 	
 	@Override
 	public ObjMaskCollection sgmn(Chnl chnl,
-			SeedCollection seeds) throws SgmnFailedException {
+			Optional<SeedCollection> seeds) throws SgmnFailedException {
 		
 		BinaryValuesByte bv = BinaryValuesByte.getDefault();
 		try {
@@ -79,7 +81,7 @@ public class ObjMaskSgmnFloodFillIJ2D extends ObjMaskSgmn {
 	
 	@Override
 	public ObjMaskCollection sgmn(Chnl chnl, ObjMask objMask,
-			SeedCollection seeds) throws SgmnFailedException {
+			Optional<SeedCollection> seeds) throws SgmnFailedException {
 		throw new SgmnFailedException("Unsupported operation");
 	}
 

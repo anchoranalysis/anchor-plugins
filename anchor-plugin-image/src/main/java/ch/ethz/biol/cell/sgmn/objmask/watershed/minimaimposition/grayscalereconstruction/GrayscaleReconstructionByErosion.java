@@ -1,5 +1,7 @@
 package ch.ethz.biol.cell.sgmn.objmask.watershed.minimaimposition.grayscalereconstruction;
 
+import java.util.Optional;
+
 import org.anchoranalysis.bean.AnchorBean;
 
 /*
@@ -34,10 +36,7 @@ import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.image.voxel.box.VoxelBoxWrapper;
 
 public abstract class GrayscaleReconstructionByErosion extends AnchorBean<GrayscaleReconstructionByErosion> {
-
-	// Reconstruction of maskImg from markerImg    mask<=markerImg
-	public abstract VoxelBoxWrapper reconstruction( VoxelBoxWrapper mask, VoxelBoxWrapper marker ) throws OperationFailedException;
 	
 	// Reconstruction of maskImg from markerImg    mask<=markerImg  (but only inside containingMask)
-	public abstract VoxelBoxWrapper reconstruction( VoxelBoxWrapper mask, VoxelBoxWrapper marker, ObjMask containingMask ) throws OperationFailedException;
+	public abstract VoxelBoxWrapper reconstruction( VoxelBoxWrapper mask, VoxelBoxWrapper marker, Optional<ObjMask> containingMask ) throws OperationFailedException;
 }

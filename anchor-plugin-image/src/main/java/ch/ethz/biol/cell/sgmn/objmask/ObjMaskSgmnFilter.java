@@ -52,7 +52,7 @@ public class ObjMaskSgmnFilter extends ObjMaskSgmn {
 	// END BEAN PROPERTIES
 
 	@Override
-	public ObjMaskCollection sgmn(Chnl chnl, SeedCollection seeds) throws SgmnFailedException {
+	public ObjMaskCollection sgmn(Chnl chnl, Optional<SeedCollection> seeds) throws SgmnFailedException {
 
 		return filterObjs(
 			sgmn.sgmn(chnl, seeds),
@@ -61,7 +61,7 @@ public class ObjMaskSgmnFilter extends ObjMaskSgmn {
 	}
 	
 	@Override
-	public ObjMaskCollection sgmn(Chnl chnl, ObjMask objMask, SeedCollection seeds) throws SgmnFailedException {
+	public ObjMaskCollection sgmn(Chnl chnl, ObjMask objMask, Optional<SeedCollection> seeds) throws SgmnFailedException {
 		return filterObjs(
 			sgmn.sgmn(chnl, objMask, seeds),
 			chnl.getDimensions()

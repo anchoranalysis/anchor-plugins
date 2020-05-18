@@ -1,5 +1,7 @@
 package ch.ethz.biol.cell.sgmn.objmask;
 
+import java.util.Optional;
+
 /*
  * #%L
  * anchor-plugin-image
@@ -51,17 +53,18 @@ public class ObjMaskSgmnMinimaImposition extends ObjMaskSgmn {
 	// END BEAN PROPERTIES
 
 	@Override
-	public ObjMaskCollection sgmn(Chnl chnl, SeedCollection seeds)
+	public ObjMaskCollection sgmn(Chnl chnl, Optional<SeedCollection> seeds)
 			throws SgmnFailedException {
 
-		if (seeds==null) {
-			throw new SgmnFailedException("seeds must be non-null");
+		if (!seeds.isPresent()) {
+			throw new SgmnFailedException("seeds must be present");
 		}
 		
 		try {
-			Chnl chnlWithImposedMinima = seeds.size()>0 ? minimaImposition.imposeMinima(chnl, seeds, null) : chnl;
-				
-			return sgmn.sgmn(chnlWithImposedMinima, seeds);
+			return sgmn.sgmn(
+				chnlWithImposedMinima(chnl, seeds.get(), Optional.empty()),
+				seeds
+			);
 			
 		} catch (OperationFailedException e) {
 			throw new SgmnFailedException(e);
@@ -70,16 +73,14 @@ public class ObjMaskSgmnMinimaImposition extends ObjMaskSgmn {
 
 	@Override
 	public ObjMaskCollection sgmn(Chnl chnl, ObjMask objMask,
-			SeedCollection seeds) throws SgmnFailedException {
+			Optional<SeedCollection> seeds) throws SgmnFailedException {
 
-		if (seeds==null) {
-			throw new SgmnFailedException("seeds must be non-null");
+		if (!seeds.isPresent()) {
+			throw new SgmnFailedException("seeds must be present");
 		}
-		
-		
-		
+				
 		try {
-			Chnl chnlWithImposedMinima = seeds.size()>0 ? minimaImposition.imposeMinima(chnl, seeds, objMask) : chnl;
+			Chnl chnlWithImposedMinima = chnlWithImposedMinima(chnl, seeds.get(), Optional.of(objMask) );
 			
 			ObjMaskCollection omc = sgmn.sgmn(chnlWithImposedMinima, objMask, seeds );
 			
@@ -89,7 +90,15 @@ public class ObjMaskSgmnMinimaImposition extends ObjMaskSgmn {
 			throw new SgmnFailedException(e);
 		}
 	}
-
+	
+	private Chnl chnlWithImposedMinima(Chnl chnl, SeedCollection seeds, Optional<ObjMask> objMask) throws OperationFailedException {
+		if (seeds.size()>0) {
+			return minimaImposition.imposeMinima(chnl, seeds, objMask);
+		} else {
+			return chnl;
+		}
+	}
+	
 	public ObjMaskSgmn getSgmn() {
 		return sgmn;
 	}

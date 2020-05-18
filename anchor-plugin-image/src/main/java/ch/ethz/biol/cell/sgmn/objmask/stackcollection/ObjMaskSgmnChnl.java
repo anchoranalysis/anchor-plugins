@@ -1,5 +1,7 @@
 package ch.ethz.biol.cell.sgmn.objmask.stackcollection;
 
+import java.util.Optional;
+
 /*
  * #%L
  * anchor-plugin-image
@@ -55,8 +57,13 @@ public class ObjMaskSgmnChnl extends SgmnObjMaskCollection {
 	// END BEAN PROPERTIES
 
 	@Override
-	public ObjMaskCollection sgmn(NamedImgStackCollection stackCollection,
-			INamedProvider<ObjMaskCollection> objMaskCollection, SeedCollection seeds, RandomNumberGenerator re, BoundIOContext context) throws SgmnFailedException {
+	public ObjMaskCollection sgmn(
+		NamedImgStackCollection stackCollection,
+		INamedProvider<ObjMaskCollection> objMaskCollection,
+		Optional<SeedCollection> seeds,
+		RandomNumberGenerator re,
+		BoundIOContext context
+	) throws SgmnFailedException {
 		
 		try {
 			Chnl chnl = stackCollection.getException(inputChnlName).getChnl(chnlIndex);

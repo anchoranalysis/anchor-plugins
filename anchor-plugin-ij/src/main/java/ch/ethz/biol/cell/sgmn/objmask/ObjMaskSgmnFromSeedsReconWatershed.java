@@ -34,6 +34,8 @@ import ij.process.FloatProcessor;
 import ij.process.ImageProcessor;
 
 import java.nio.ByteBuffer;
+import java.util.Optional;
+
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.Positive;
 import org.anchoranalysis.core.error.CreateException;
@@ -78,7 +80,11 @@ public class ObjMaskSgmnFromSeedsReconWatershed extends ObjMaskSgmn {
 	
 	@Override
 	public ObjMaskCollection sgmn(Chnl chnl,
-			SeedCollection seeds) throws SgmnFailedException {
+			Optional<SeedCollection> seeds) throws SgmnFailedException {
+		
+		if (!seeds.isPresent()) {
+			throw new SgmnFailedException("This algorithm requires seeds to be passed as parameters");
+		}
 		
 		BinarySgmnParameters params = new BinarySgmnParameters(
 			chnl.getDimensions().getRes()
@@ -119,7 +125,7 @@ public class ObjMaskSgmnFromSeedsReconWatershed extends ObjMaskSgmn {
 		Chnl edmAsByte = new ChnlConverterToUnsignedByte().convert(edm, ConversionPolicy.CHANGE_EXISTING_CHANNEL);
 		Chnl edmRecon;
 		try {
-			edmRecon = seeds.size()>0 ? minimaImposition.imposeMinima(edmAsByte, seeds, null) : new ChnlConverterToUnsignedByte().convert(edm,ConversionPolicy.CHANGE_EXISTING_CHANNEL);
+			edmRecon = seeds.get().size()>0 ? minimaImposition.imposeMinima(edmAsByte, seeds.get(), null) : new ChnlConverterToUnsignedByte().convert(edm,ConversionPolicy.CHANGE_EXISTING_CHANNEL);
 			// Let's impose minima via morphological reconstruction
 		} catch (OperationFailedException e) {
 			throw new SgmnFailedException(e);
@@ -153,7 +159,7 @@ public class ObjMaskSgmnFromSeedsReconWatershed extends ObjMaskSgmn {
 
 	@Override
 	public ObjMaskCollection sgmn(Chnl chnl, ObjMask objMask,
-			SeedCollection seeds) throws SgmnFailedException {
+			Optional<SeedCollection> seeds) throws SgmnFailedException {
 		throw new SgmnFailedException("Unsupported operation");
 	}
 

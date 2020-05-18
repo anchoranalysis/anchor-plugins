@@ -28,6 +28,7 @@ package ch.ethz.biol.cell.sgmn.objmask.watershed.minimaimposition;
 
 
 import java.nio.ByteBuffer;
+import java.util.Optional;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
@@ -69,7 +70,7 @@ public class MinimaImpositionGrayscaleReconstruction extends MinimaImposition {
 	
 	// containingMask can be null
 	@Override
-	public Chnl imposeMinima( Chnl chnl, SeedCollection seeds, ObjMask containingMask ) throws OperationFailedException {
+	public Chnl imposeMinima( Chnl chnl, SeedCollection seeds, Optional<ObjMask> containingMask ) throws OperationFailedException {
 		
 		if (seeds.size()<1) {
 			throw new OperationFailedException("There must be at least one seed");
@@ -102,8 +103,11 @@ public class MinimaImpositionGrayscaleReconstruction extends MinimaImposition {
 		
 		// We set the EDM to 255 outside the channel, otherwise the reconstruction will be messed up
 		// Better alternative is to apply the reconstruction only on the ask
-		if (containingMask!=null) {
-			vbIntensity.any().setPixelsCheckMask(containingMask, (int) vbIntensity.getVoxelDataType().maxValue(), masks.getFirstBinaryValuesByte().getOffByte() );
+		if (containingMask.isPresent()) {
+			vbIntensity.any().setPixelsCheckMask(
+				containingMask.get(),
+				(int) vbIntensity.getVoxelDataType().maxValue(), masks.getFirstBinaryValuesByte().getOffByte()
+			);
 		}
 		
 		VoxelBoxWrapper markerForReconstruction = createMarkerImageFromGradient(
@@ -112,7 +116,11 @@ public class MinimaImpositionGrayscaleReconstruction extends MinimaImposition {
 			vbIntensity
 		);
 
-		VoxelBoxWrapper reconBuffer = grayscaleReconstruction.reconstruction( vbIntensity, markerForReconstruction, containingMask );
+		VoxelBoxWrapper reconBuffer = grayscaleReconstruction.reconstruction(
+			vbIntensity,
+			markerForReconstruction,
+			containingMask
+		);
 		
 		return ChnlFactory.instance().create(reconBuffer.any(), chnl.getDimensions().getRes() );
 	}

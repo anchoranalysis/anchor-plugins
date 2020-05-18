@@ -28,13 +28,13 @@ package ch.ethz.biol.cell.sgmn.objmask.watershed.minimaimposition.grayscalerecon
 
 
 import java.nio.ByteBuffer;
+import java.util.Optional;
 
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.anchoranalysis.image.voxel.box.VoxelBoxWrapper;
 import org.anchoranalysis.image.voxel.box.factory.VoxelBoxFactory;
-import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
 
 // Self-made grayscale reconstruction by erosion
 // See
@@ -42,18 +42,11 @@ import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
 //   * Powerpoint Presentation by Gonzalez and Woods "Lecture 5: Morphological Image Processing"
 public class GrayscaleReconstruction3DVincent extends GrayscaleReconstructionByErosion {
 
-	
-
-	// START BEAN PROPERTIES
-	
-	// END BEAN PROPERTIES
-
 	@Override
-	public VoxelBoxWrapper reconstruction(VoxelBoxWrapper mask,
-			VoxelBoxWrapper marker) throws OperationFailedException {
-
-		if (!marker.getVoxelDataType().equals(VoxelDataTypeUnsignedByte.instance) || !mask.getVoxelDataType().equals(VoxelDataTypeUnsignedByte.instance)) {
-			throw new OperationFailedException("Only unsigned byte supported for marker image");
+	public VoxelBoxWrapper reconstruction( VoxelBoxWrapper mask, VoxelBoxWrapper marker, Optional<ObjMask> containingMask) throws OperationFailedException {
+		
+		if (containingMask.isPresent()) {
+			throw new OperationFailedException("A mask is not supported for this operation");
 		}
 		
 		VoxelBox<ByteBuffer> in = marker.asByte();
@@ -81,13 +74,5 @@ public class GrayscaleReconstruction3DVincent extends GrayscaleReconstructionByE
 		} while(true);
 		
 		return new VoxelBoxWrapper(in);
-	}
-	
-	@Override
-	public VoxelBoxWrapper reconstruction(
-			VoxelBoxWrapper maskImg, VoxelBoxWrapper markerImg,
-			ObjMask containingMask)
-			throws OperationFailedException {
-		throw new OperationFailedException("Does not support a containing mask");
 	}
 }

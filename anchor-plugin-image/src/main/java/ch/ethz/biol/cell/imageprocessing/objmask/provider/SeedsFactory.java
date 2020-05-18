@@ -28,7 +28,6 @@ package ch.ethz.biol.cell.imageprocessing.objmask.provider;
 
 
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.geometry.Tuple3i;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.ImageDim;
@@ -39,12 +38,11 @@ import org.anchoranalysis.image.seed.SeedObjMask;
 
 class SeedsFactory {
 	
-	public static SeedCollection createSeedsWithoutMask( ObjMaskCollection seeds ) throws CreateException {
+	public static SeedCollection createSeedsWithoutMask( ObjMaskCollection seeds ) {
 		// We create a collection of seeds localised appropriately
 		// NB: we simply change the object seeds, as it seemingly won't be used again!!!
 		SeedCollection seedsObj = new SeedCollection();
 		for( ObjMask om : seeds ) {
-			
 			seedsObj.add(
 				createSeed(om)
 			);
@@ -73,12 +71,9 @@ class SeedsFactory {
 			);
 		}
 		
-		try {
-			seedsObj.verifySeedsAreInside( containingMask.getBoundingBox().extnt() );
-		} catch (OperationFailedException e) {
-			throw new CreateException(e);
-		}
-		
+		assert(
+			seedsObj.verifySeedsAreInside( containingMask.getBoundingBox().extnt())
+		);
 		return seedsObj;
 	}
 	
