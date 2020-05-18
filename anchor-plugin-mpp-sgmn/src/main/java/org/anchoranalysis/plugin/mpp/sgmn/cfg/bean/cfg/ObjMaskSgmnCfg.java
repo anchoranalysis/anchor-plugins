@@ -59,7 +59,7 @@ public class ObjMaskSgmnCfg extends SgmnObjMaskCollection {
 	public ObjMaskCollection sgmn(
 		NamedImgStackCollection stackCollection,
 		INamedProvider<ObjMaskCollection> objMaskCollection,
-		SeedCollection seeds,
+		Optional<SeedCollection> seeds,
 		RandomNumberGenerator re,
 		BoundIOContext context
 	)

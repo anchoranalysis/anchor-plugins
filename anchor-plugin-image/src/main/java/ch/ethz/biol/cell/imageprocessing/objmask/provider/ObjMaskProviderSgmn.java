@@ -28,7 +28,9 @@ package ch.ethz.biol.cell.imageprocessing.objmask.provider;
 
 
 import java.nio.ByteBuffer;
+import java.util.Optional;
 
+import org.anchoranalysis.bean.ProviderNullableCreator;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.core.error.CreateException;
@@ -39,6 +41,7 @@ import org.anchoranalysis.image.bean.sgmn.objmask.ObjMaskSgmn;
 import org.anchoranalysis.image.binary.BinaryChnl;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelBoxByte;
 import org.anchoranalysis.image.chnl.Chnl;
+import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.image.objmask.ObjMaskCollection;
 import org.anchoranalysis.image.objmask.factory.CreateFromEntireChnlFactory;
@@ -82,20 +85,18 @@ public class ObjMaskProviderSgmn extends ObjMaskProviderChnlSource {
 			throw new CreateException("binaryImgChnlProviderMask has incorrect data type", e1);
 		}
 		
-		ObjMask om = new ObjMask( new BinaryVoxelBoxByte(maskVb, mask.getBinaryValues()) );
+		ObjMask om = new ObjMask(
+			new BinaryVoxelBoxByte(
+				maskVb,
+				mask.getBinaryValues()
+			)
+		);
 		
-		SeedCollection seeds = null;
-		if (objsSeeds!=null) {
-			ObjMaskCollection seedsObjs = objsSeeds.create();
-			ObjMask maskAsObject = CreateFromEntireChnlFactory.createObjMask(mask);
-			seeds = SeedsFactory.createSeedsWithMask(
-				seedsObjs,
-				maskAsObject,
-				new Point3i(0,0,0),
-				chnl.getDimensions()
-			);
-		}
-		
+		Optional<SeedCollection> seeds = createSeeds(
+			mask,
+			chnl.getDimensions()
+		);
+	
 		try {
 			return sgmn.sgmn(chnl, om, seeds);
 		} catch (SgmnFailedException e) {
@@ -103,15 +104,30 @@ public class ObjMaskProviderSgmn extends ObjMaskProviderChnlSource {
 		}
 	}
 	
+	private Optional<SeedCollection> createSeeds(BinaryChnl mask, ImageDim dim) throws CreateException {
+		ObjMask maskSeeds = CreateFromEntireChnlFactory.createObjMask(mask);
+		Optional<ObjMaskCollection> seeds = ProviderNullableCreator.createOptional(objsSeeds);
+		
+		if (seeds.isPresent()) {
+			return Optional.of(
+				SeedsFactory.createSeedsWithMask(
+					seeds.get(),
+					maskSeeds,
+					new Point3i(0,0,0),
+					dim
+				)
+			);
+		} else {
+			return Optional.empty();
+		}
+	}
+	
 	private ObjMaskCollection createWithoutMask(Chnl chnl) throws CreateException {
 		
-		SeedCollection seeds = null;
-		
 		try {
-			if (objsSeeds!=null) {
-				ObjMaskCollection seedsObjs = objsSeeds.create();
-				seeds = SeedsFactory.createSeedsWithoutMask(seedsObjs);
-			}			
+			Optional<SeedCollection> seeds = ProviderNullableCreator.createOptional(objsSeeds).map(
+				SeedsFactory::createSeedsWithoutMask
+			);
 			
 			return sgmn.sgmn(chnl, seeds);
 		} catch (SgmnFailedException e) {

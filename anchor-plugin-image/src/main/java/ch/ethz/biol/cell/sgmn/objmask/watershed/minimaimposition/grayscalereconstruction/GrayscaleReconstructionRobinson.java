@@ -28,8 +28,8 @@ package ch.ethz.biol.cell.sgmn.objmask.watershed.minimaimposition.grayscalerecon
 
 
 import java.nio.ByteBuffer;
+import java.util.Optional;
 
-import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.extent.Extent;
@@ -56,10 +56,23 @@ public class GrayscaleReconstructionRobinson extends GrayscaleReconstructionByEr
 	// START BEAN PROPERTIES
 	
 	// END BEAN PROPERTIES
+	
+	@Override
+	public VoxelBoxWrapper reconstruction( VoxelBoxWrapper maskVb, VoxelBoxWrapper markerVb, Optional<ObjMask> containingMask ) {
+		
+		// We flip everything because the IJ plugin is reconstruction by Dilation, whereas we want reconstruction by Erosion
+		markerVb.subtractFromMaxValue();
+		maskVb.subtractFromMaxValue();
+		
+		VoxelBoxWrapper ret = reconstructionByDilation(maskVb, markerVb, containingMask);
+		ret.subtractFromMaxValue();
+		
+		return ret;
+	}
 
 	// we now have a markerForReconstruction in the same condition as the 'strong' condition in the Robison paper
 	// all pixels are either 0 or their final value (from chnl)
-	private VoxelBoxWrapper reconstructionByDilation( VoxelBoxWrapper maskVb, VoxelBoxWrapper markerVb, ObjMask containingMask ) {
+	private VoxelBoxWrapper reconstructionByDilation( VoxelBoxWrapper maskVb, VoxelBoxWrapper markerVb, Optional<ObjMask> containingMask ) {
 		
 		// We use this to track if something has been finalized or not
 		VoxelBox<ByteBuffer> vbFinalized = VoxelBoxFactory.instance().getByte().create( markerVb.any().extnt() );
@@ -74,8 +87,8 @@ public class GrayscaleReconstructionRobinson extends GrayscaleReconstructionByEr
 		// TODO make more efficient
 		// We put all non-zero pixels in our queue (these correspond to our seeds from our marker, but let's iterate the image again
 		//  for sake of keeping modularity
-		if (containingMask!=null) {
-			populateQueueFromNonZeroPixelsMask( queue, markerVb.any(), vbFinalized, containingMask );
+		if (containingMask.isPresent()) {
+			populateQueueFromNonZeroPixelsMask( queue, markerVb.any(), vbFinalized, containingMask.get() );
 		} else {
 			populateQueueFromNonZeroPixels( queue, markerVb.any(), vbFinalized );
 		}
@@ -85,7 +98,15 @@ public class GrayscaleReconstructionRobinson extends GrayscaleReconstructionByEr
 		return markerVb;
 	}
 	
-	private void readFromQueueUntilEmpty( PriorityQueueIndexRangeDownhill<Point3i> queue, VoxelBox<?> markerVb, VoxelBox<?> maskVb, VoxelBox<ByteBuffer> vbFinalized, ObjMask containingMask ) {
+	private PointIterator iteratorFromMask(Optional<ObjMask> containingMask, PointTester pt, Extent extnt) {
+		return containingMask.map( mask->
+			(PointIterator) new PointObjMaskIterator(pt, mask)
+		).orElseGet( ()->
+			new PointExtntIterator(extnt, pt)
+		);
+	}
+	
+	private void readFromQueueUntilEmpty( PriorityQueueIndexRangeDownhill<Point3i> queue, VoxelBox<?> markerVb, VoxelBox<?> maskVb, VoxelBox<ByteBuffer> vbFinalized, Optional<ObjMask> containingMask ) {
 		
 		Extent e = markerVb.extnt();
 		
@@ -96,7 +117,11 @@ public class GrayscaleReconstructionRobinson extends GrayscaleReconstructionByEr
 		BinaryValuesByte bvFinalized = BinaryValuesByte.getDefault();
 		
 		PointTester pt = new PointTester(sbMarker, sbMask, sbFinalized, queue, bvFinalized );
-		PointIterator pointIterator = containingMask!=null ?  new PointObjMaskIterator(pt, containingMask) : new PointExtntIterator( markerVb.extnt(), pt);
+		PointIterator pointIterator = iteratorFromMask(
+			containingMask,
+			pt,
+			markerVb.extnt()
+		);
 		
 		Nghb nghb = new BigNghb(false);
 		boolean do3D = e.getZ() > 1;
@@ -272,34 +297,5 @@ public class GrayscaleReconstructionRobinson extends GrayscaleReconstructionByEr
 				}
 			}
 		}	
-	}
-	
-	@Override
-	public VoxelBoxWrapper reconstruction( VoxelBoxWrapper maskVb, VoxelBoxWrapper markerVb ) {
-		
-		// We flip everything because the IJ plugin is reconstruction by Dilation, whereas we want reconstruction by Erosion
-		markerVb.subtractFromMaxValue();
-		maskVb.subtractFromMaxValue();
-		
-		VoxelBoxWrapper ret = reconstructionByDilation(maskVb, markerVb, null);
-		ret.subtractFromMaxValue();
-		
-		return ret;
-	}
-	
-	@Override
-	public VoxelBoxWrapper reconstruction(
-			VoxelBoxWrapper maskVb, VoxelBoxWrapper markerVb,
-			ObjMask containingMask)
-			throws OperationFailedException {
-
-		// We flip everything because original was reconstruction by Dilation, whereas we want reconstruction by Erosion
-		markerVb.subtractFromMaxValue();
-		maskVb.subtractFromMaxValue();
-		
-		VoxelBoxWrapper ret = reconstructionByDilation(maskVb, markerVb, containingMask);
-		ret.subtractFromMaxValue();
-		
-		return ret;
 	}
 }

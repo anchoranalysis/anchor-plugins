@@ -28,6 +28,7 @@ package ch.ethz.biol.cell.imageprocessing.objmask.provider;
 
 
 import java.util.List;
+import java.util.Optional;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
@@ -87,7 +88,7 @@ public class ObjMaskProviderSeededObjSgmn extends ObjMaskProviderChnlSource {
 		ObjMaskCollection sgmnObjs = sgmn.sgmn(
 			chnlObjLocal,
 			objMaskLocal,
-			seedsObj
+			Optional.of(seedsObj)
 		);
 		
 		// We shift each object back to were it belongs globally
@@ -143,7 +144,10 @@ public class ObjMaskProviderSeededObjSgmn extends ObjMaskProviderChnlSource {
 		SeedCollection seeds = SeedsFactory.createSeedsWithoutMask(seedsAsObjs);
 		
 		try {
-			return sgmn.sgmn(chnl, seeds);
+			return sgmn.sgmn(
+				chnl,
+				Optional.of(seeds)
+			);
 		} catch (SgmnFailedException e) {
 			throw new CreateException(e);
 		}

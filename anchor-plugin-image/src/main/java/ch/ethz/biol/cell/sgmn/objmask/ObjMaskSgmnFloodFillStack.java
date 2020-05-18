@@ -28,6 +28,7 @@ package ch.ethz.biol.cell.sgmn.objmask;
 
 
 import java.nio.ByteBuffer;
+import java.util.Optional;
 import java.util.Stack;
 
 import org.anchoranalysis.core.geometry.Point3i;
@@ -61,7 +62,7 @@ public class ObjMaskSgmnFloodFillStack extends ObjMaskSgmn {
 	private static final BinaryValuesByte bv = BinaryValuesByte.getDefault();
 	
 	@Override
-	public ObjMaskCollection sgmn(Chnl chnl, SeedCollection seeds)
+	public ObjMaskCollection sgmn(Chnl chnl, Optional<SeedCollection> seeds)
 			throws SgmnFailedException {
 		
 		//outputManager.getWriterCheckIfAllowed().write("beforeFloodFill", new ChnlGenerator(chnl,"chnl") );
@@ -121,7 +122,7 @@ public class ObjMaskSgmnFloodFillStack extends ObjMaskSgmn {
 	
 	@Override
 	public ObjMaskCollection sgmn(Chnl chnl, ObjMask objMask,
-			SeedCollection seeds) throws SgmnFailedException {
+			Optional<SeedCollection> seeds) throws SgmnFailedException {
 		throw new SgmnFailedException("Unsupported operation");
 	}
 	

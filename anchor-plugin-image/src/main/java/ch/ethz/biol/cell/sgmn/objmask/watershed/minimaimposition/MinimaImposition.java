@@ -1,5 +1,7 @@
 package ch.ethz.biol.cell.sgmn.objmask.watershed.minimaimposition;
 
+import java.util.Optional;
+
 import org.anchoranalysis.bean.AnchorBean;
 
 /*
@@ -36,6 +38,5 @@ import org.anchoranalysis.image.seed.SeedCollection;
 
 public abstract class MinimaImposition extends AnchorBean<MinimaImposition> {
 
-	// containingMask can be null
-	public abstract Chnl imposeMinima( Chnl chnl, SeedCollection seeds, ObjMask containingMask ) throws OperationFailedException;
+	public abstract Chnl imposeMinima( Chnl chnl, SeedCollection seeds, Optional<ObjMask> containingMask ) throws OperationFailedException;
 }

@@ -1,5 +1,7 @@
 package ch.ethz.biol.cell.sgmn.objmask;
 
+import java.util.Optional;
+
 /*
  * #%L
  * anchor-plugin-image
@@ -29,7 +31,6 @@ package ch.ethz.biol.cell.sgmn.objmask;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.error.OptionalOperationUnsupportedException;
 import org.anchoranalysis.image.bean.scale.ScaleCalculator;
 import org.anchoranalysis.image.bean.sgmn.objmask.ObjMaskSgmn;
 import org.anchoranalysis.image.chnl.Chnl;
@@ -64,7 +65,7 @@ public class ObjMaskSgmnScale extends ObjMaskSgmn {
 
 	@Override
 	public ObjMaskCollection sgmn(Chnl chnl,
-			SeedCollection seeds)
+			Optional<SeedCollection> seeds)
 			throws SgmnFailedException {
 		
 		try {
@@ -86,11 +87,7 @@ public class ObjMaskSgmnScale extends ObjMaskSgmn {
 	}
 	
 	
-	private SeedCollection scaleSeeds( SeedCollection seedsUnscaled, ScaleFactor sf ) throws OptionalOperationUnsupportedException, OperationFailedException {
-		
-		if (seedsUnscaled==null) {
-			return null;
-		}
+	private static SeedCollection scaleSeeds( SeedCollection seedsUnscaled, ScaleFactor sf ) throws OperationFailedException {
 		
 		if (sf.getX()!=sf.getY()) {
 			throw new OperationFailedException("scaleFactor in X and Y must be equal to scale seeds");
@@ -104,7 +101,7 @@ public class ObjMaskSgmnScale extends ObjMaskSgmn {
 	
 	@Override
 	public ObjMaskCollection sgmn(Chnl chnl, ObjMask objMask,
-			SeedCollection seeds) throws SgmnFailedException {
+			Optional<SeedCollection> seeds) throws SgmnFailedException {
 
 		ScaleFactor sf;
 		try {
@@ -116,9 +113,13 @@ public class ObjMaskSgmnScale extends ObjMaskSgmn {
 		Chnl chnlScaled = chnl.scaleXY( sf.getX(), sf.getY(), createInterpolator());
 
 		try {
-			seeds = scaleSeeds(seeds, sf);
-		} catch (OptionalOperationUnsupportedException | OperationFailedException e) {
-			throw new SgmnFailedException("Cannot scale seeds", e);
+			if (seeds.isPresent()) {
+				seeds = Optional.of(
+					scaleSeeds(seeds.get(), sf)
+				);
+			}
+		} catch (OperationFailedException e) {
+			throw new SgmnFailedException("Cannot scale seeds");
 		}
 		
 		// do watershed		

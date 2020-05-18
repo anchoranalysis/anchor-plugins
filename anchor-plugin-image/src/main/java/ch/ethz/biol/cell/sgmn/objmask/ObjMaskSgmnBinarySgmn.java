@@ -28,6 +28,8 @@ package ch.ethz.biol.cell.sgmn.objmask;
 
 
 import java.nio.ByteBuffer;
+import java.util.Optional;
+
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.bean.sgmn.binary.BinarySgmn;
@@ -78,7 +80,7 @@ public class ObjMaskSgmnBinarySgmn extends ObjMaskSgmn {
 	}
 	
 	@Override
-	public ObjMaskCollection sgmn(Chnl chnl, SeedCollection seeds)
+	public ObjMaskCollection sgmn(Chnl chnl, Optional<SeedCollection> seeds)
 			throws SgmnFailedException {
 	
 		BinarySgmnParameters params = new BinarySgmnParameters(
@@ -94,7 +96,7 @@ public class ObjMaskSgmnBinarySgmn extends ObjMaskSgmn {
 
 	@Override
 	public ObjMaskCollection sgmn(Chnl chnl, ObjMask objMask,
-			SeedCollection seeds) throws SgmnFailedException {
+			Optional<SeedCollection> seeds) throws SgmnFailedException {
 
 		BinarySgmnParameters params = new BinarySgmnParameters(
 			chnl.getDimensions().getRes()
