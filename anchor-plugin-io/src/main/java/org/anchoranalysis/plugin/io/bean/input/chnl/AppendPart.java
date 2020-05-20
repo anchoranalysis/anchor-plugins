@@ -32,8 +32,8 @@ import java.nio.Buffer;
 import java.nio.file.Path;
 import java.util.List;
 
-import org.anchoranalysis.core.cache.Operation;
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
+import org.anchoranalysis.core.functional.Operation;
 import org.anchoranalysis.core.index.GetOperationFailedException;
 import org.anchoranalysis.core.progress.ProgressReporter;
 import org.anchoranalysis.image.extent.ImageDim;

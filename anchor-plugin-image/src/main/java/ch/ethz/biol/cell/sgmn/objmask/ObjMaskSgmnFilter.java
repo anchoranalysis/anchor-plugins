@@ -50,18 +50,9 @@ public class ObjMaskSgmnFilter extends ObjMaskSgmn {
 	@BeanField
 	private ObjMaskFilter filter = null;
 	// END BEAN PROPERTIES
-
-	@Override
-	public ObjMaskCollection sgmn(Chnl chnl, Optional<SeedCollection> seeds) throws SgmnFailedException {
-
-		return filterObjs(
-			sgmn.sgmn(chnl, seeds),
-			chnl.getDimensions()
-		);
-	}
 	
 	@Override
-	public ObjMaskCollection sgmn(Chnl chnl, ObjMask objMask, Optional<SeedCollection> seeds) throws SgmnFailedException {
+	public ObjMaskCollection sgmn(Chnl chnl, Optional<ObjMask> objMask, Optional<SeedCollection> seeds) throws SgmnFailedException {
 		return filterObjs(
 			sgmn.sgmn(chnl, objMask, seeds),
 			chnl.getDimensions()

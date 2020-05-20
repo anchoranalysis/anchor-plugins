@@ -55,8 +55,27 @@ public class ObjMaskSgmnBinarySgmn extends ObjMaskSgmn {
 	@BeanField
 	private int minNumberVoxels = 1;
 	// END BEAN PROPERTIES
-	
-	private ObjMaskCollection createFromBinaryVoxelBox( BinaryVoxelBox<ByteBuffer> bvb, ImageRes res, ObjMask omSrc ) throws SgmnFailedException {
+
+	@Override
+	public ObjMaskCollection sgmn(
+		Chnl chnl,
+		Optional<ObjMask> mask,
+		Optional<SeedCollection> seeds
+	) throws SgmnFailedException {
+
+		BinarySgmnParameters params = new BinarySgmnParameters(
+			chnl.getDimensions().getRes()
+		);
+		
+		BinaryVoxelBox<ByteBuffer> bvb = sgmn.sgmn(
+			chnl.getVoxelBox(),
+			params,
+			mask
+		);
+		return createFromBinaryVoxelBox(bvb,chnl.getDimensions().getRes(), mask);
+	}
+
+	private ObjMaskCollection createFromBinaryVoxelBox( BinaryVoxelBox<ByteBuffer> bvb, ImageRes res, Optional<ObjMask> omSrc ) throws SgmnFailedException {
 		BinaryChnl bic = new BinaryChnl(
 			ChnlFactory.instance().create(bvb.getVoxelBox(), res),
 			bvb.getBinaryValues()
@@ -70,46 +89,15 @@ public class ObjMaskSgmnBinarySgmn extends ObjMaskSgmn {
 			throw new SgmnFailedException(e);
 		}
 		
-		if (omSrc!=null) {
+		if (omSrc.isPresent()) {
 			for (ObjMask om : objsBinary) {
-				om.getBoundingBox().getCrnrMin().add(omSrc.getBoundingBox().getCrnrMin());
+				om.getBoundingBox().getCrnrMin().add(omSrc.get().getBoundingBox().getCrnrMin());
 			}
 		}
 		
 		return objsBinary;
 	}
 	
-	@Override
-	public ObjMaskCollection sgmn(Chnl chnl, Optional<SeedCollection> seeds)
-			throws SgmnFailedException {
-	
-		BinarySgmnParameters params = new BinarySgmnParameters(
-			chnl.getDimensions().getRes()
-		);
-		
-		BinaryVoxelBox<ByteBuffer> bvb = sgmn.sgmn(
-			chnl.getVoxelBox(),
-			params
-		);
-		return createFromBinaryVoxelBox(bvb,chnl.getDimensions().getRes(), null);
-	}
-
-	@Override
-	public ObjMaskCollection sgmn(Chnl chnl, ObjMask objMask,
-			Optional<SeedCollection> seeds) throws SgmnFailedException {
-
-		BinarySgmnParameters params = new BinarySgmnParameters(
-			chnl.getDimensions().getRes()
-		);
-		
-		BinaryVoxelBox<ByteBuffer> bvb = sgmn.sgmn(
-			chnl.getVoxelBox(),
-			params,
-			objMask
-		);
-		return createFromBinaryVoxelBox(bvb,chnl.getDimensions().getRes(), objMask);
-	}
-
 	public BinarySgmn getSgmn() {
 		return sgmn;
 	}

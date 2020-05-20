@@ -42,7 +42,6 @@ import org.anchoranalysis.image.sgmn.SgmnFailedException;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.anchoranalysis.image.voxel.box.factory.VoxelBoxFactory;
 
-import ch.ethz.biol.cell.sgmn.objmask.ObjMaskSgmnFloodFillStack;
 import ch.ethz.biol.cell.sgmn.objmask.watershed.encoding.EncodedVoxelBox;
 
 
@@ -70,55 +69,13 @@ import ch.ethz.biol.cell.sgmn.objmask.watershed.encoding.EncodedVoxelBox;
 public class ObjMaskSgmnWatershedYeong extends ObjMaskSgmn {
 
 	// START PROPERTIES
-	@BeanField
-	private ObjMaskSgmn sgmnFloodFill = new ObjMaskSgmnFloodFillStack();
-	
 	// Exits and just returns the minima. NB TODO There is probably a more efficient way to find the minima. This is a quick fix
 	@BeanField
 	private boolean exitWithMinima = false;
 	// END PROPERTIES
 	
 	@Override
-	public ObjMaskCollection sgmn(Chnl chnl, Optional<SeedCollection> seeds)
-			throws SgmnFailedException {
-		
-		VoxelBox<IntBuffer> matSVoxelBox = VoxelBoxFactory.instance().getInt().create( chnl.getDimensions().getExtnt() );
-		
-		EncodedVoxelBox matS = new EncodedVoxelBox(matSVoxelBox );
-		
-		Optional<MinimaStore> minimaStore = exitWithMinima ? Optional.of( new MinimaStore() ) : Optional.empty();
-
-		if (seeds.isPresent()) {
-			try {
-				MarkSeeds.doForAll(seeds.get(), matS, minimaStore);
-			} catch (OperationFailedException e) {
-				throw new SgmnFailedException(e);
-			}
-		}
-		
-		new PointPixelsOrMarkAsMinima().doForAll( chnl.getVoxelBox(), matS, minimaStore );
-		
-		// Special behaviour where we just want to find the minima and nothing more
-		if (minimaStore.isPresent()) {
-			try {
-				return minimaStore.get().createObjMasks();
-			} catch (CreateException e) {
-				throw new SgmnFailedException(e);
-			}
-		}
-		
-		// TODO let's only work on the areas with regions
-		new ConvertAllToConnectedComponents().doForAll( matS );
-
-		ObjMaskCollection objsSgmn = CreateObjectsFromLabels.doForAll( matS.getVoxelBox() );
-		
-		return objsSgmn;
-	}
-	
-
-	
-	@Override
-	public ObjMaskCollection sgmn(Chnl chnl, ObjMask objMask,
+	public ObjMaskCollection sgmn(Chnl chnl, Optional<ObjMask> mask,
 			Optional<SeedCollection> seeds) throws SgmnFailedException {
 		
 		VoxelBox<IntBuffer> matSVoxelBox = VoxelBoxFactory.instance().getInt().create( chnl.getDimensions().getExtnt() );
@@ -130,9 +87,8 @@ public class ObjMaskSgmnWatershedYeong extends ObjMaskSgmn {
 		if (seeds.isPresent()) {
 			
 			try {
-				if (objMask!=null) {
-					//assert (seeds.doSeedsIntersectWithContainingMask(objMask));
-					MarkSeeds.doForMask(seeds.get(), matS, minimaStore, objMask);
+				if (mask.isPresent()) {
+					MarkSeeds.doForMask(seeds.get(), matS, minimaStore, mask.get());
 				} else {
 					MarkSeeds.doForAll(seeds.get(), matS, minimaStore);
 				}
@@ -141,7 +97,11 @@ public class ObjMaskSgmnWatershedYeong extends ObjMaskSgmn {
 			}
 		}
 		
-		new PointPixelsOrMarkAsMinima().doForMask( chnl.getVoxelBox().any(), matS, objMask, minimaStore );
+		if (mask.isPresent()) {
+			new PointPixelsOrMarkAsMinima().doForMask( chnl.getVoxelBox().any(), matS, mask.get(), minimaStore );
+		} else {
+			new PointPixelsOrMarkAsMinima().doForAll( chnl.getVoxelBox(), matS, minimaStore );
+		}
 
 		// Special behaviour where we just want to find the minima and nothing more
 		if (minimaStore.isPresent()) {
@@ -153,11 +113,17 @@ public class ObjMaskSgmnWatershedYeong extends ObjMaskSgmn {
 		}
 		
 		// TODO let's only work on the areas with regions
-		new ConvertAllToConnectedComponents().doForMask( matS, objMask );
+		if (mask.isPresent()) {
+			new ConvertAllToConnectedComponents().doForMask( matS, mask.get() );
+		} else {
+			new ConvertAllToConnectedComponents().doForAll( matS );
+		}
 		
-		ObjMaskCollection objsSgmn = CreateObjectsFromLabels.doForMask( matS.getVoxelBox(), objMask );
-		
-		return objsSgmn;
+		if (mask.isPresent()) {
+			return CreateObjectsFromLabels.doForMask( matS.getVoxelBox(), mask.get() );
+		} else {
+			return CreateObjectsFromLabels.doForAll( matS.getVoxelBox() );
+		}
 	}
 
 	public boolean isExitWithMinima() {
@@ -166,13 +132,5 @@ public class ObjMaskSgmnWatershedYeong extends ObjMaskSgmn {
 
 	public void setExitWithMinima(boolean exitWithMinima) {
 		this.exitWithMinima = exitWithMinima;
-	}
-
-	public ObjMaskSgmn getSgmnFloodFill() {
-		return sgmnFloodFill;
-	}
-
-	public void setSgmnFloodFill(ObjMaskSgmn sgmnFloodFill) {
-		this.sgmnFloodFill = sgmnFloodFill;
 	}
 }

@@ -30,6 +30,8 @@ package ch.ethz.biol.cell.sgmn.binary;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.image.bean.sgmn.binary.BinarySgmn;
 import org.anchoranalysis.image.bean.sgmn.binary.BinarySgmnParameters;
@@ -46,36 +48,37 @@ public class SgmnSequence extends BinarySgmn {
 	private List<BinarySgmn> listSgmn = new ArrayList<>();
 	// END BEAN PROPERTIES
 	
-	@Override
-	public BinaryVoxelBox<ByteBuffer> sgmn(VoxelBoxWrapper voxelBox, BinarySgmnParameters params) throws SgmnFailedException {
-		return sgmn(voxelBox, params, null);
-	}
 
 	@Override
 	public BinaryVoxelBox<ByteBuffer> sgmn(VoxelBoxWrapper voxelBox,
-			BinarySgmnParameters params, ObjMask objMask) throws SgmnFailedException {
+			BinarySgmnParameters params, Optional<ObjMask> mask) throws SgmnFailedException {
 		
 		BinaryVoxelBox<ByteBuffer> outOld = null;
-		BoundingBox BoundingBox = objMask!=null ? objMask.getBoundingBox() : new BoundingBox( voxelBox.any().extnt() );
 		
+		// A bounding-box capturing what part of the scene is being segmented
+		BoundingBox bbox = mask.map(
+			ObjMask::getBoundingBox
+		).orElseGet( ()->
+			new BoundingBox(
+				voxelBox.any().extnt()
+			)
+		);
+		
+		// A mask that evolves as we move through each segmentation to be increasingly smaller.
+		Optional<ObjMask> evolvingMask = mask;
 		for( BinarySgmn sgmn : listSgmn) {
 			
-			
-			BinaryVoxelBox<ByteBuffer> outNew;
-			if (objMask!=null) {
-				outNew = sgmn.sgmn(voxelBox, params, objMask);
-			} else {
-				outNew = sgmn.sgmn(voxelBox, params);
-			}
+			BinaryVoxelBox<ByteBuffer> outNew = sgmn.sgmn(voxelBox, params, evolvingMask);
 			
 			if (outNew==null) {
 				return outOld;
 			}
 			
 			outOld = outNew;
-			objMask = new ObjMask(BoundingBox, outNew);
+			evolvingMask = Optional.of(
+				new ObjMask(bbox, outNew)
+			);
 		}
-		
 		return outOld;
 	}
 

@@ -28,6 +28,8 @@ package ch.ethz.biol.cell.sgmn.binary;
 
 
 import java.nio.ByteBuffer;
+import java.util.Optional;
+
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
@@ -60,37 +62,20 @@ public class SgmnThrshldFeatureObjMask extends BinarySgmn {
 	private ObjMaskProvider objs;
 	// END PARAMETERS
 	
-	private double calculateLevel() throws SgmnFailedException {
-		
-		try {
-			FeatureCalculatorSingle<FeatureInputSingleObj> session = featureEvaluator.createAndStartSession();
-			
-			ObjMaskCollection omc = objs.create();
-			
-			if (omc.size()==0) {
-				throw new SgmnFailedException("objMaskProvider returned 0 objects. Exactly 1 required");
-			} else if (omc.size()>1) {
-				throw new SgmnFailedException("objMaskProvider returned more than 1 object. Exactly 1 required");
-			}
-		
-			return session.calc(
-				new FeatureInputSingleObj(omc.get(0))
-			);
-			
-		} catch (FeatureCalcException | OperationFailedException | CreateException e) {
-			throw new SgmnFailedException(e);
+	@Override
+	public BinaryVoxelBox<ByteBuffer> sgmn(VoxelBoxWrapper voxelBox, BinarySgmnParameters params, Optional<ObjMask> mask) throws SgmnFailedException {
+		if (mask.isPresent()) {
+			return sgmnWithMask(voxelBox, params, mask.get());
+		} else {
+			return sgmnWithoutMask(voxelBox, params);
 		}
 	}
 	
-	@Override
-	public BinaryVoxelBox<ByteBuffer> sgmn(VoxelBoxWrapper voxelBox, BinarySgmnParameters params) throws SgmnFailedException {
+	private BinaryVoxelBox<ByteBuffer> sgmnWithoutMask(VoxelBoxWrapper voxelBox, BinarySgmnParameters params) throws SgmnFailedException {
 		
 		BinaryValuesByte bvOut = BinaryValuesByte.getDefault();
 		
-		int level = (int) Math.round( calculateLevel() );
-		
-		ThresholderGlobal thresholder = new ThresholderGlobal();
-		thresholder.setCalculateLevel( new Constant(level) );
+		ThresholderGlobal thresholder = createThresholder();
 		try {
 			return thresholder.threshold(voxelBox, bvOut, null);
 		} catch (OperationFailedException e) {
@@ -98,8 +83,7 @@ public class SgmnThrshldFeatureObjMask extends BinarySgmn {
 		}
 	}
 	
-	@Override
-	public BinaryVoxelBox<ByteBuffer> sgmn(VoxelBoxWrapper voxelBox, BinarySgmnParameters params, ObjMask objMask) throws SgmnFailedException {
+	private BinaryVoxelBox<ByteBuffer> sgmnWithMask(VoxelBoxWrapper voxelBox, BinarySgmnParameters params, ObjMask objMask) throws SgmnFailedException {
 		
 		BoundingBox bboxE = new BoundingBox(objMask.getVoxelBox().extnt());
 		
@@ -112,15 +96,10 @@ public class SgmnThrshldFeatureObjMask extends BinarySgmn {
 			objMask.getVoxelBox(),
 			objMask.getBinaryValuesByte()
 		);
-		
-		
-		int level = (int) Math.round( calculateLevel() );
-		
-		ThresholderGlobal thresholder = new ThresholderGlobal();
-		thresholder.setCalculateLevel( new Constant(level) );
-		
+
 		
 		BinaryValuesByte bvOut = BinaryValuesByte.getDefault();
+		ThresholderGlobal thresholder = createThresholder();
 		try {		
 			return thresholder.threshold(
 				new VoxelBoxWrapper(maskDup),
@@ -135,9 +114,39 @@ public class SgmnThrshldFeatureObjMask extends BinarySgmn {
 		}catch (OperationFailedException e) {
 			throw new SgmnFailedException(e);
 		}
-					
 	}
 
+	private ThresholderGlobal createThresholder() throws SgmnFailedException {
+		
+		int level = (int) Math.round( calculateLevel() );
+		
+		ThresholderGlobal thresholder = new ThresholderGlobal();
+		thresholder.setCalculateLevel( new Constant(level) );
+		return thresholder;
+	}
+
+	private double calculateLevel() throws SgmnFailedException {
+		
+		try {
+			FeatureCalculatorSingle<FeatureInputSingleObj> session = featureEvaluator.createAndStartSession();
+			
+			ObjMaskCollection omc = objs.create();
+			
+			if (omc.size()==0) {
+				throw new SgmnFailedException("objs returned 0 objects. Exactly 1 required");
+			} else if (omc.size()>1) {
+				throw new SgmnFailedException("objs returned more than 1 object. Exactly 1 required");
+			}
+		
+			return session.calc(
+				new FeatureInputSingleObj(omc.get(0))
+			);
+			
+		} catch (FeatureCalcException | OperationFailedException | CreateException e) {
+			throw new SgmnFailedException(e);
+		}
+	}
+	
 	public FeatureEvaluator<FeatureInputSingleObj> getFeatureEvaluator() {
 		return featureEvaluator;
 	}
