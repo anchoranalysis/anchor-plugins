@@ -85,7 +85,6 @@ class MarkSeeds {
 			this.obj = obj;
 			this.crnrMin = obj.getBoundingBox().getCrnrMin();
 			this.crnrMax = obj.getBoundingBox().calcCrnrMax();
-			this.extnt = obj.getVoxelBox().extnt();
 		}
 		
 		public void throwExceptionIfNotConnected() throws OperationFailedException {
