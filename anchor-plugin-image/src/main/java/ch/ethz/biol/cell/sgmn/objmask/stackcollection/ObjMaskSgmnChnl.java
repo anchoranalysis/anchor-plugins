@@ -67,7 +67,7 @@ public class ObjMaskSgmnChnl extends SgmnObjMaskCollection {
 		
 		try {
 			Chnl chnl = stackCollection.getException(inputChnlName).getChnl(chnlIndex);
-			return sgmn.sgmn(chnl, seeds);
+			return sgmn.sgmn(chnl, Optional.empty(), seeds);
 			
 		} catch (NamedProviderGetException e) {
 			throw new SgmnFailedException(e.summarize());

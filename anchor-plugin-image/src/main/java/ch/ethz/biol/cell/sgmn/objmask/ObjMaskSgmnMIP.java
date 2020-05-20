@@ -44,7 +44,6 @@ import org.anchoranalysis.image.sgmn.SgmnFailedException;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.anchoranalysis.image.voxel.box.VoxelBoxWrapper;
 
-// TODO needs IInitProposeObjects
 public class ObjMaskSgmnMIP extends ObjMaskSgmn {
 
 	// START BEAN PROPERTIES
@@ -56,16 +55,26 @@ public class ObjMaskSgmnMIP extends ObjMaskSgmn {
 	// END BEAN PROPERTIES
 
 	@Override
-	public ObjMaskCollection sgmn(Chnl chnl, Optional<SeedCollection> seeds) throws SgmnFailedException {
+	public ObjMaskCollection sgmn(Chnl chnl, Optional<ObjMask> objMask, Optional<SeedCollection> seeds) throws SgmnFailedException {
+		
+		if (objMask.isPresent()) {
+			throw new SgmnFailedException("An object-mask is not supported for this operation");
+		}
 		
 		Chnl max = chnl.maxIntensityProj();
 		
 		// Collapse seeds in z direction
 		seeds.ifPresent(ObjMaskSgmnMIP::flattenSeedsInZ);
 		
-		ObjMaskCollection objs = sgmnMIP.sgmn(max, seeds);
+		ObjMaskCollection objs = sgmnMIP.sgmn(max, Optional.empty(), seeds);
 		
-		
+		return ExtendObjsInto3DMask.extendObjs(
+			objs,
+			binarySgmn(chnl)
+		);
+	}
+	
+	private BinaryVoxelBox<ByteBuffer> binarySgmn(Chnl chnl) throws SgmnFailedException {
 		BinarySgmnParameters params = new BinarySgmnParameters(
 			chnl.getDimensions().getRes()
 		);
@@ -73,24 +82,17 @@ public class ObjMaskSgmnMIP extends ObjMaskSgmn {
 		VoxelBox<ByteBuffer> vb = chnl.getVoxelBox().asByte();
 		
 		VoxelBox<ByteBuffer> stackBinary = vb.duplicate(); 
-		BinaryVoxelBox<ByteBuffer> vbBinary = sgmnStack.sgmn(
+		return sgmnStack.sgmn(
 			new VoxelBoxWrapper(stackBinary),
-			params
+			params,
+			Optional.empty()
 		);
-		
-		return ExtendObjsInto3DMask.extendObjs(objs, vbBinary);
 	}
 	
 	private static SeedCollection flattenSeedsInZ( SeedCollection seeds ) {
 		SeedCollection seedsDup = seeds.duplicate();
 		seedsDup.flattenZ();
 		return seedsDup;
-	}
-
-	@Override
-	public ObjMaskCollection sgmn(Chnl chnl, ObjMask objMask,
-			Optional<SeedCollection> seeds) throws SgmnFailedException {
-		throw new SgmnFailedException("Unsupported operation");
 	}
 
 	public ObjMaskSgmn getSgmnMIP() {
@@ -102,17 +104,11 @@ public class ObjMaskSgmnMIP extends ObjMaskSgmn {
 		this.sgmnMIP = sgmnMIP;
 	}
 
-
 	public BinarySgmn getSgmnStack() {
 		return sgmnStack;
 	}
 
-
 	public void setSgmnStack(BinarySgmn sgmnStack) {
 		this.sgmnStack = sgmnStack;
 	}
-
-
-
-
 }

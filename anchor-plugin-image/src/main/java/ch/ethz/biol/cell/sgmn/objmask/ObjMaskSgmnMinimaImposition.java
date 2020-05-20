@@ -53,36 +53,20 @@ public class ObjMaskSgmnMinimaImposition extends ObjMaskSgmn {
 	// END BEAN PROPERTIES
 
 	@Override
-	public ObjMaskCollection sgmn(Chnl chnl, Optional<SeedCollection> seeds)
-			throws SgmnFailedException {
-
-		if (!seeds.isPresent()) {
-			throw new SgmnFailedException("seeds must be present");
-		}
-		
-		try {
-			return sgmn.sgmn(
-				chnlWithImposedMinima(chnl, seeds.get(), Optional.empty()),
-				seeds
-			);
-			
-		} catch (OperationFailedException e) {
-			throw new SgmnFailedException(e);
-		}
-	}
-
-	@Override
-	public ObjMaskCollection sgmn(Chnl chnl, ObjMask objMask,
-			Optional<SeedCollection> seeds) throws SgmnFailedException {
+	public ObjMaskCollection sgmn(
+		Chnl chnl,
+		Optional<ObjMask> mask,
+		Optional<SeedCollection> seeds
+	) throws SgmnFailedException {
 
 		if (!seeds.isPresent()) {
 			throw new SgmnFailedException("seeds must be present");
 		}
 				
 		try {
-			Chnl chnlWithImposedMinima = chnlWithImposedMinima(chnl, seeds.get(), Optional.of(objMask) );
+			Chnl chnlWithImposedMinima = chnlWithImposedMinima(chnl, seeds.get(), mask );
 			
-			ObjMaskCollection omc = sgmn.sgmn(chnlWithImposedMinima, objMask, seeds );
+			ObjMaskCollection omc = sgmn.sgmn(chnlWithImposedMinima, mask, seeds );
 			
 			return omc;
 			

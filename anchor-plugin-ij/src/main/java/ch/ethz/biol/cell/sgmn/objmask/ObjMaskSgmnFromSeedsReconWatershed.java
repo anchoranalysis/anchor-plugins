@@ -65,6 +65,7 @@ import ch.ethz.biol.cell.imageprocessing.voxelbox.pixelsforplane.PixelsFromByteP
 import ch.ethz.biol.cell.imageprocessing.voxelbox.pixelsforplane.PixelsFromFloatProcessor;
 import ch.ethz.biol.cell.sgmn.objmask.watershed.minimaimposition.MinimaImpositionGrayscaleReconstruction;
 
+// TODO review. Do we use this? If so, it needs to be refactored.
 public class ObjMaskSgmnFromSeedsReconWatershed extends ObjMaskSgmn {
 	
 	/* START Bean properties */
@@ -79,11 +80,18 @@ public class ObjMaskSgmnFromSeedsReconWatershed extends ObjMaskSgmn {
 	/* END Bean properties */
 	
 	@Override
-	public ObjMaskCollection sgmn(Chnl chnl,
-			Optional<SeedCollection> seeds) throws SgmnFailedException {
+	public ObjMaskCollection sgmn(
+		Chnl chnl,
+		Optional<ObjMask> mask,
+		Optional<SeedCollection> seeds
+	) throws SgmnFailedException {
 		
 		if (!seeds.isPresent()) {
-			throw new SgmnFailedException("This algorithm requires seeds to be passed as parameters");
+			throw new SgmnFailedException("This operation requires seeds to be passed as parameters");
+		}
+		
+		if (mask.isPresent()) {
+			throw new SgmnFailedException("A mask is not supported by this operation.");
 		}
 		
 		BinarySgmnParameters params = new BinarySgmnParameters(
@@ -93,7 +101,8 @@ public class ObjMaskSgmnFromSeedsReconWatershed extends ObjMaskSgmn {
 		Chnl chnlNucWorking = chnl;
 		sgmnBinary.sgmn(
 			chnlNucWorking.getVoxelBox(),
-			params
+			params,
+			Optional.empty()
 		);
 	
 
@@ -154,13 +163,7 @@ public class ObjMaskSgmnFromSeedsReconWatershed extends ObjMaskSgmn {
 		}
 		
 		// We threshold our working channel
-		return sgmnObj.sgmn(chnlWorking, null);
-	}
-
-	@Override
-	public ObjMaskCollection sgmn(Chnl chnl, ObjMask objMask,
-			Optional<SeedCollection> seeds) throws SgmnFailedException {
-		throw new SgmnFailedException("Unsupported operation");
+		return sgmnObj.sgmn(chnlWorking, Optional.empty(), Optional.empty());
 	}
 
 	public int getMinBoundingBoxVolumeVoxels() {

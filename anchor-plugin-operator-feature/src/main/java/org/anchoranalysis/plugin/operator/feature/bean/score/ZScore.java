@@ -1,7 +1,6 @@
 package org.anchoranalysis.plugin.operator.feature.bean.score;
 
-import org.anchoranalysis.core.cache.Operation;
-
+import org.anchoranalysis.core.functional.Operation;
 
 /*-
  * #%L

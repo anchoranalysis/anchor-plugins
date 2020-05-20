@@ -48,11 +48,7 @@ public class BinaryImgChnlProviderSgmn extends BinaryImgChnlProviderChnlSource {
 		BinarySgmnParameters params = createParams(chnl.getDimensions()); 
 
 		try {
-			if (omMask.isPresent()) {
-				return sgmn.sgmn( chnl.getVoxelBox(), params, omMask.get() );
-			} else {
-				return sgmn.sgmn( chnl.getVoxelBox(), params);
-			}
+			return sgmn.sgmn(chnl.getVoxelBox(), params, omMask);
 		
 		} catch (SgmnFailedException e) {
 			throw new CreateException(e);

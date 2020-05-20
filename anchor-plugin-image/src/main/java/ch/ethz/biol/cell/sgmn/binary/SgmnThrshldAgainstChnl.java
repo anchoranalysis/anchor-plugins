@@ -28,9 +28,10 @@ package ch.ethz.biol.cell.sgmn.binary;
 
 
 import java.nio.ByteBuffer;
+import java.util.Optional;
+
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.bean.provider.ChnlProvider;
 import org.anchoranalysis.image.bean.sgmn.binary.BinarySgmn;
 import org.anchoranalysis.image.bean.sgmn.binary.BinarySgmnParameters;
@@ -38,12 +39,12 @@ import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelBoxByte;
 import org.anchoranalysis.image.chnl.Chnl;
+import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.image.sgmn.SgmnFailedException;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.anchoranalysis.image.voxel.box.VoxelBoxWrapper;
 import org.anchoranalysis.image.voxel.box.factory.VoxelBoxFactory;
-import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
 
 // Performs a threshold on each pixel, by comparing the pixel value to another channel
@@ -57,58 +58,52 @@ public class SgmnThrshldAgainstChnl extends BinarySgmn {
 	@BeanField
 	private boolean clearOutsideMask = true;
 	// END BEAN PROPERTIES
-
+	
 	@Override
 	public BinaryVoxelBox<ByteBuffer> sgmn(
-			VoxelBoxWrapper voxelBox,
-			BinarySgmnParameters params) throws SgmnFailedException {
-
+		VoxelBoxWrapper voxelBox,
+		BinarySgmnParameters params,
+		Optional<ObjMask> objMask
+	) throws SgmnFailedException {
+		
 		VoxelBox<?> voxelBoxIn = voxelBox.any();
 		VoxelBox<ByteBuffer> voxelBoxOut = createOutputChnl(voxelBox);
 		
-		Chnl threshold;
+		BinaryValuesByte bvb = BinaryValuesByte.getDefault();
 		
+		SliceThresholder sliceThresholder = createThresholder(objMask, bvb);
+		sliceThresholder.sgmnAll(
+			voxelBoxIn,
+			createThresholdedVoxelBox(voxelBox.any().extnt()),
+			createOutputChnl(voxelBox)
+		);
+		
+		return new BinaryVoxelBoxByte( voxelBoxOut, bvb.createInt() );
+	}
+	
+	private SliceThresholder createThresholder(Optional<ObjMask> objMask, BinaryValuesByte bvb) {
+		return objMask.map( om -> (SliceThresholder) new SliceThresholderMask(clearOutsideMask, om, bvb)).orElseGet( ()->
+			new SliceThresholderWithoutMask(bvb)
+		);
+	}
+	
+	private VoxelBox<?> createThresholdedVoxelBox(Extent voxelBoxExtent) throws SgmnFailedException {
+		
+		Chnl threshold;
 		try {
 			threshold = chnlThreshold.create();
 		} catch (CreateException e) {
 			throw new SgmnFailedException(e);
 		}
 		
-		VoxelBox<?> vbThreshld = threshold.getVoxelBox().any();
+		VoxelBox<?> vbThrshld = threshold.getVoxelBox().any();
 		
-		
-		if (!vbThreshld.extnt().equals(voxelBoxIn.extnt())) {
+		if (!vbThrshld.extnt().equals(voxelBoxExtent)) {
 			throw new SgmnFailedException("chnlProviderThrshld is of different size to voxelBox");
 		}
 		
-		BinaryValuesByte bvb = BinaryValuesByte.getDefault();
-		
-		for( int z=0; z<voxelBoxIn.extnt().getZ(); z++ ) {
-			
-			VoxelBuffer<?> bb = voxelBoxIn.getPixelsForPlane(z);
-			VoxelBuffer<ByteBuffer> bbOut = voxelBoxOut.getPixelsForPlane(z);
-			VoxelBuffer<?> bbThrshld = vbThreshld.getPixelsForPlane(z);
-			
-			int offset = 0;
-			for( int y=0; y<voxelBoxIn.extnt().getY(); y++) {
-				for( int x=0; x<voxelBoxIn.extnt().getX(); x++) {
-					
-					int val = bb.getInt(offset);
-					int valThrshld = bbThrshld.getInt(offset);
-
-					if( val >= valThrshld ) {
-						bbOut.buffer().put(offset, bvb.getOnByte());
-					} else {
-						bbOut.buffer().put(offset, bvb.getOffByte());
-					}
-					offset++;
-				}
-			}
-		}
-		
-		return new BinaryVoxelBoxByte( voxelBoxOut, bvb.createInt() );
+		return vbThrshld;
 	}
-	
 	
 	// If the input voxel-box is 8-bit we do it in place
 	// Otherwise, we create a new binary voxelbox buffer
@@ -121,71 +116,6 @@ public class SgmnThrshldAgainstChnl extends BinarySgmn {
 		}
 	}
 	
-
-	@Override
-	public BinaryVoxelBox<ByteBuffer> sgmn(
-			VoxelBoxWrapper voxelBox,
-			BinarySgmnParameters params, ObjMask objMask) throws SgmnFailedException {
-
-		VoxelBox<?> voxelBoxIn = voxelBox.any();
-		VoxelBox<ByteBuffer> voxelBoxOut = createOutputChnl(voxelBox);
-		
-		Chnl threshold;
-		try {
-			threshold = chnlThreshold.create();
-		} catch (CreateException e) {
-			throw new SgmnFailedException(e);
-		}
-		
-		VoxelBox<?> vbThrshld = threshold.getVoxelBox().any();
-		
-		if (!vbThrshld.extnt().equals(voxelBoxIn.extnt())) {
-			throw new SgmnFailedException("chnlProviderThrshld is of different size to voxelBox");
-		}
-		
-		BinaryValuesByte bvb = BinaryValuesByte.getDefault();
-		
-		Point3i crnrMin = objMask.getBoundingBox().getCrnrMin();
-		Point3i crnrMax = objMask.getBoundingBox().calcCrnrMax();
-		for( int z=crnrMin.getZ(); z<=crnrMax.getZ(); z++ ) {
-			
-			int relZ = z-crnrMin.getZ();
-			
-			VoxelBuffer<?> bbIn = voxelBoxIn.getPixelsForPlane(relZ);
-			VoxelBuffer<ByteBuffer> bbOut = voxelBoxOut.getPixelsForPlane(relZ);
-			VoxelBuffer<?> bbThrshld = vbThrshld.getPixelsForPlane(relZ);
-			VoxelBuffer<ByteBuffer> bbMask = objMask.getVoxelBox().getPixelsForPlane(z);
-			
-			int offsetMask = 0;
-			for( int y=crnrMin.getY(); y<=crnrMax.getY(); y++) {
-				for( int x=crnrMin.getX(); x<=crnrMax.getX(); x++) {
-					
-					int offset = voxelBoxIn.extnt().offset(x, y);
-					
-					if (bbMask.buffer().get(offsetMask++)==objMask.getBinaryValuesByte().getOffByte()) {
-						
-						if (clearOutsideMask) {
-							bbOut.buffer().put(offset, bvb.getOffByte());
-						}
-						
-						continue;
-					}
-										
-					int val = bbIn.getInt(offset);
-					int valThrshld = bbThrshld.getInt(offset);
-
-					if( val >= valThrshld ) {
-						bbOut.buffer().put(offset, bvb.getOnByte());
-					} else {
-						bbOut.buffer().put(offset, bvb.getOffByte());
-					}
-				}
-			}
-		}
-		
-		return new BinaryVoxelBoxByte( voxelBoxOut, bvb.createInt() );
-	}
-
 	public boolean isClearOutsideMask() {
 		return clearOutsideMask;
 	}

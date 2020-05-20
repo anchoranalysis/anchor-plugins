@@ -28,13 +28,14 @@ package ch.ethz.biol.cell.sgmn.binary;
 
 
 import java.nio.ByteBuffer;
+import java.util.Optional;
+
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.Positive;
 import org.anchoranalysis.image.bean.sgmn.binary.BinarySgmn;
 import org.anchoranalysis.image.bean.sgmn.binary.BinarySgmnOne;
 import org.anchoranalysis.image.bean.sgmn.binary.BinarySgmnParameters;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
-import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.image.sgmn.SgmnFailedException;
 import org.anchoranalysis.image.voxel.box.VoxelBoxWrapper;
@@ -55,12 +56,13 @@ public class SgmnRepeat extends BinarySgmnOne {
 	public BinaryVoxelBox<ByteBuffer> sgmnFromSgmn(
 		VoxelBoxWrapper voxelBox,
 		BinarySgmnParameters params,
-		ObjMask objMask,
+		ObjMask objMaskIn,
 		BinarySgmn sgmn
 	) throws SgmnFailedException {
 		
+		Optional<ObjMask> objMask = Optional.of(objMaskIn);
+		
 		BinaryVoxelBox<ByteBuffer> outOld = null;
-		BoundingBox BoundingBox = new BoundingBox( objMask.getBoundingBox() );
 		
 		int cnt = 0;
 		while (cnt++<maxIter) {
@@ -71,7 +73,11 @@ public class SgmnRepeat extends BinarySgmnOne {
 			}
 			
 			outOld = outNew;
-			objMask = new ObjMask(BoundingBox, outNew);
+			
+			// Increasingly tightens the obj-mask used for the segmentation
+			objMask = Optional.of(
+				objMask.isPresent() ? new ObjMask(objMask.get().getBoundingBox(), outNew) : new ObjMask(outNew)
+			);
 		}
 		
 		return outOld;

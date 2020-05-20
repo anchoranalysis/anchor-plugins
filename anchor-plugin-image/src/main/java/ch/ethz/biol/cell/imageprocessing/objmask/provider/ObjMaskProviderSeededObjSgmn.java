@@ -63,44 +63,25 @@ public class ObjMaskProviderSeededObjSgmn extends ObjMaskProviderChnlSource {
 	private ObjMaskSgmn sgmn;
 	// END BEAN PROPERTIES
 	
-	// NB Objects in seeds are changed
-	private static ObjMaskCollection sgmn(
-		ObjMask objMask,
-		ObjMaskCollection seeds,
-		Chnl chnl,
-		ObjMaskSgmn sgmn
-	) throws SgmnFailedException, CreateException {
+	@Override
+	protected ObjMaskCollection createFromChnl(Chnl chnlSrc) throws CreateException {
 		
-		// We make a channel just for the object
-		VoxelBox<?> vb = chnl.getVoxelBox().any().createBufferAlwaysNew( objMask.getBoundingBox() );
-		Chnl chnlObjLocal = ChnlFactory.instance().create(vb, chnl.getDimensions().getRes());
+		ObjMaskCollection seeds = objsSeeds.create();
 		
-		// We create a new ObjMask for the new channel
-		ObjMask objMaskLocal = new ObjMask( objMask.binaryVoxelBox() );
-		
-		SeedCollection seedsObj = SeedsFactory.createSeedsWithMask(
-			seeds,
-			objMaskLocal,
-			objMask.getBoundingBox().getCrnrMin(),
-			chnl.getDimensions()
-		);
-		
-		ObjMaskCollection sgmnObjs = sgmn.sgmn(
-			chnlObjLocal,
-			objMaskLocal,
-			Optional.of(seedsObj)
-		);
-		
-		// We shift each object back to were it belongs globally
-		for( ObjMask om : sgmnObjs ) {
-			om.getBoundingBox().getCrnrMin().add( objMask.getBoundingBox().getCrnrMin() );
+		if (objsSource!=null) {
+			ObjMaskCollection sourceObjs = objsSource.create();
+			return createWithSourceObjs(
+				chnlSrc,
+				seeds,
+				sourceObjs,
+				sgmn
+			);
+		} else {
+			return createWithoutSourceObjs( chnlSrc, seeds, sgmn );
 		}
-		
-		return sgmnObjs;
 	}
 	
-	
-	public static ObjMaskCollection createWithSourceObjs(
+	private static ObjMaskCollection createWithSourceObjs(
 		Chnl chnl,
 		ObjMaskCollection seeds,
 		ObjMaskCollection sourceObjs,
@@ -146,30 +127,52 @@ public class ObjMaskProviderSeededObjSgmn extends ObjMaskProviderChnlSource {
 		try {
 			return sgmn.sgmn(
 				chnl,
+				Optional.empty(),
 				Optional.of(seeds)
 			);
 		} catch (SgmnFailedException e) {
 			throw new CreateException(e);
 		}
 	}
-
-	@Override
-	protected ObjMaskCollection createFromChnl(Chnl chnlSrc) throws CreateException {
 		
-		ObjMaskCollection seeds = objsSeeds.create();
 		
-		if (objsSource!=null) {
-			ObjMaskCollection sourceObjs = objsSource.create();
-			return createWithSourceObjs(
-				chnlSrc,
-				seeds,
-				sourceObjs,
-				sgmn
-			);
-		} else {
-			return createWithoutSourceObjs( chnlSrc, seeds, sgmn );
+	// NB Objects in seeds are changed
+	private static ObjMaskCollection sgmn(
+		ObjMask objMask,
+		ObjMaskCollection seeds,
+		Chnl chnl,
+		ObjMaskSgmn sgmn
+	) throws SgmnFailedException, CreateException {
+		
+		// We make a channel just for the object
+		VoxelBox<?> vb = chnl.getVoxelBox().any().createBufferAlwaysNew( objMask.getBoundingBox() );
+		Chnl chnlObjLocal = ChnlFactory.instance().create(vb, chnl.getDimensions().getRes());
+		
+		// We create a new ObjMask for the new channel
+		ObjMask objMaskLocal = new ObjMask( objMask.binaryVoxelBox() );
+		
+		SeedCollection seedsObj = SeedsFactory.createSeedsWithMask(
+			seeds,
+			objMaskLocal,
+			objMask.getBoundingBox().getCrnrMin(),
+			chnl.getDimensions()
+		);
+		
+		ObjMaskCollection sgmnObjs = sgmn.sgmn(
+			chnlObjLocal,
+			Optional.of(objMaskLocal),
+			Optional.of(seedsObj)
+		);
+		
+		// We shift each object back to were it belongs globally
+		for( ObjMask om : sgmnObjs ) {
+			om.getBoundingBox().getCrnrMin().add( objMask.getBoundingBox().getCrnrMin() );
 		}
+		
+		return sgmnObjs;
 	}
+	
+	
 
 	public ObjMaskSgmn getSgmn() {
 		return sgmn;

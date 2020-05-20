@@ -28,6 +28,8 @@ package ch.ethz.biol.cell.sgmn.binary;
 
 
 import java.nio.ByteBuffer;
+import java.util.Optional;
+
 import org.anchoranalysis.anchor.mpp.bean.bound.MarkBounds;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.image.bean.sgmn.binary.BinarySgmn;
@@ -56,6 +58,20 @@ public class SgmnThrshldAboveMinBound extends BinarySgmn {
 	// END BEAN PROPERTIES
 	
 	private BinarySgmnThrshld delegate = new BinarySgmnThrshld();
+
+	@Override
+	public BinaryVoxelBox<ByteBuffer> sgmn(VoxelBoxWrapper voxelBox,
+			BinarySgmnParameters params, Optional<ObjMask> mask) throws SgmnFailedException {
+		
+		setUpDelegate(
+			voxelBox.any().extnt(),
+			params.getRes().orElseThrow( ()->
+				new SgmnFailedException("Image-resolution is required but missing")
+			)
+		);
+		
+		return delegate.sgmn(voxelBox, params, mask);
+	}
 	
 	private void setUpDelegate( Extent e, ImageRes res ) {
 		double minBound = markBounds.getMinRslvd( res, e.getZ()>1 && !suppress3D );
@@ -70,24 +86,6 @@ public class SgmnThrshldAboveMinBound extends BinarySgmn {
 		delegate.setThresholder( thresholder );
 	}
 	
-	@Override
-	public BinaryVoxelBox<ByteBuffer> sgmn(VoxelBoxWrapper voxelBox, BinarySgmnParameters params)
-			throws SgmnFailedException {
-		setUpDelegate(
-			voxelBox.any().extnt(),
-			params.getRes().orElseThrow( ()->
-				new SgmnFailedException("Image-resolution is required but missing")
-			)
-		);
-		return delegate.sgmn(voxelBox, params);
-	}
-
-	@Override
-	public BinaryVoxelBox<ByteBuffer> sgmn(VoxelBoxWrapper voxelBox,
-			BinarySgmnParameters params, ObjMask objMask) throws SgmnFailedException {
-		return delegate.sgmn(voxelBox, params, objMask);
-	}
-
 	public boolean isSuppress3D() {
 		return suppress3D;
 	}
@@ -99,7 +97,6 @@ public class SgmnThrshldAboveMinBound extends BinarySgmn {
 	public MarkBounds getMarkBounds() {
 		return markBounds;
 	}
-
 
 	public void setMarkBounds(MarkBounds markBounds) {
 		this.markBounds = markBounds;
