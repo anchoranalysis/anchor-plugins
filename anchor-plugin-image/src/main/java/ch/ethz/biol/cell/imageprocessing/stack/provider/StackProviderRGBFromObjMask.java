@@ -4,7 +4,7 @@ package ch.ethz.biol.cell.imageprocessing.stack.provider;
 
 import java.util.Optional;
 
-import org.anchoranalysis.bean.ProviderNullableCreator;
+import org.anchoranalysis.bean.OptionalFactory;
 
 /*
  * #%L
@@ -71,7 +71,7 @@ public class StackProviderRGBFromObjMask extends StackProviderRGBFromObjMaskBase
 	}
 		
 	private ColorList colors( int size ) throws CreateException {
-		Optional<ColorList> colorList = ProviderNullableCreator.createOptional(colorListProvider);
+		Optional<ColorList> colorList = OptionalFactory.create(colorListProvider);
 		
 		if (!colorList.isPresent()) {
 			try {

@@ -30,7 +30,7 @@ package ch.ethz.biol.cell.imageprocessing.binaryimgchnl.provider;
 import java.nio.ByteBuffer;
 import java.util.Optional;
 
-import org.anchoranalysis.bean.ProviderNullableCreator;
+import org.anchoranalysis.bean.OptionalFactory;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.core.error.CreateException;
@@ -57,7 +57,7 @@ public class BinaryImgChnlProviderInvert extends BinaryImgChnlProviderOne {
 	@Override
 	public BinaryChnl createFromChnl( BinaryChnl chnl ) throws CreateException {
 		
-		Optional<BinaryChnl> maskChnl = ProviderNullableCreator.createOptional(mask);
+		Optional<BinaryChnl> maskChnl = OptionalFactory.create(mask);
 		
 		if (maskChnl.isPresent()) {
 			invertWithMask(chnl, maskChnl.get());

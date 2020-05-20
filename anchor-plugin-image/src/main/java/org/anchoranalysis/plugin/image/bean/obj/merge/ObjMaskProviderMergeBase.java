@@ -29,7 +29,7 @@ package org.anchoranalysis.plugin.image.bean.obj.merge;
 import java.util.List;
 import java.util.Optional;
 
-import org.anchoranalysis.bean.ProviderNullableCreator;
+import org.anchoranalysis.bean.OptionalFactory;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.core.error.CreateException;
@@ -59,7 +59,7 @@ public abstract class ObjMaskProviderMergeBase extends ObjMaskProviderContainer 
 		
 	protected Optional<ImageRes> calcResOptional() throws OperationFailedException {
 		try {
-			return ProviderNullableCreator.createOptional(dim).map(
+			return OptionalFactory.create(dim).map(
 				ImageDim::getRes
 			);
 		} catch (CreateException e) {

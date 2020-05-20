@@ -2,7 +2,7 @@ package ch.ethz.biol.cell.imageprocessing.objmask.provider;
 
 import java.util.Optional;
 
-import org.anchoranalysis.bean.ProviderNullableCreator;
+import org.anchoranalysis.bean.OptionalFactory;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.core.error.CreateException;
@@ -26,7 +26,7 @@ public abstract class ObjMaskProviderFilterBase extends ObjMaskProviderDimension
 	public ObjMaskCollection createFromObjs(ObjMaskCollection in) throws CreateException {
 		return createFromObjs(
 			in,
-			ProviderNullableCreator.createOptional(objsRejected),
+			OptionalFactory.create(objsRejected),
 			createDims()
 		);
 	}
