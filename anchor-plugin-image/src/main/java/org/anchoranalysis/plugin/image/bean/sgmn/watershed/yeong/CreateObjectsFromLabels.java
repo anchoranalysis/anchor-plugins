@@ -30,6 +30,7 @@ package org.anchoranalysis.plugin.image.bean.sgmn.watershed.yeong;
 import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
 import java.util.List;
+import java.util.Optional;
 
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.extent.BoundingBox;
@@ -39,13 +40,26 @@ import org.anchoranalysis.image.objmask.ObjMaskCollection;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 
 class CreateObjectsFromLabels {
+	
+	private CreateObjectsFromLabels() {}
 
-	public static ObjMaskCollection doForAll( VoxelBox<IntBuffer> matS ) {
-		
-		Extent e = matS.extnt();
+	public static ObjMaskCollection apply( VoxelBox<IntBuffer> matS, Optional<ObjMask> mask) {
 		
 		BoundingBoxMap bbm = new BoundingBoxMap();
 		
+		if (mask.isPresent()) {
+			updateBufferWithMask(matS, bbm, mask.get());
+		} else {
+			updateBufferWithoutMask(matS, bbm);
+		}
+		
+		return bbm.deriveObjects(matS);
+	}
+	
+	private static void updateBufferWithoutMask( VoxelBox<IntBuffer> matS, BoundingBoxMap bbm ) {
+		
+		Extent e = matS.extnt();
+				
 		for (int z=0; z<e.getZ(); z++) {
 		
 			// We iterate through each pixel in matS and replace it with the Index for the final object
@@ -56,44 +70,30 @@ class CreateObjectsFromLabels {
 			
 			for (int y=0; y<e.getY(); y++) {
 				for (int x=0; x<e.getX(); x++) {
-	
-					int crntVal = bbS.get(indxBuffer);
-					
-					//assert( matM.getPixelsForPlane(0).get(crntVal)==ObjMask.VALUE_ON );
-					int reorderedIndex = bbm.indexForValue(crntVal);
-					BoundingBox BoundingBox = bbm.getBBoxForIndx(reorderedIndex, x, y, z);
-					BoundingBox.add(x,y,z);
-					
-					bbS.put(indxBuffer,reorderedIndex+1);
-					
+					putByte(indxBuffer, bbS, bbm, x, y, z);
 					indxBuffer++;
 				}
 			}
 		}
-
-		return objMaskCollectionFromMask(matS, bbm.getList());
 	}
 	
-	
-	public static ObjMaskCollection doForMask( VoxelBox<IntBuffer> matS, ObjMask om ) {
+	private static void updateBufferWithMask( VoxelBox<IntBuffer> matS, BoundingBoxMap bbm, ObjMask mask ) {
 		
 		Extent e = matS.extnt();
-		
-		BoundingBoxMap bbm = new BoundingBoxMap();
 		
 		// We iterate through each pixel in matS and replace it with the Index for the final object
 		//   and also add the pixel to appropriate bounding box
 
-		byte maskOn = om.getBinaryValuesByte().getOnByte();
+		byte maskOn = mask.getBinaryValuesByte().getOnByte();
 		
-		Point3i crnrMin = om.getBoundingBox().getCrnrMin();
-		Point3i crnrMax = om.getBoundingBox().calcCrnrMax();
+		Point3i crnrMin = mask.getBoundingBox().getCrnrMin();
+		Point3i crnrMax = mask.getBoundingBox().calcCrnrMax();
 		
 		for (int z=crnrMin.getZ(); z<=crnrMax.getZ(); z++) {
 			
 			IntBuffer bbS = matS.getPixelsForPlane(z).buffer();
 			
-			ByteBuffer bbMask = om.getVoxelBox().getPixelsForPlane(z-crnrMin.getZ()).buffer();
+			ByteBuffer bbMask = mask.getVoxelBox().getPixelsForPlane(z-crnrMin.getZ()).buffer();
 		
 			int indexMask = 0;
 			for (int y=crnrMin.getY(); y<=crnrMax.getY(); y++) {
@@ -102,16 +102,7 @@ class CreateObjectsFromLabels {
 					int indxBuffer = e.offset(x, y);
 					
 					if( bbMask.get(indexMask)==maskOn) {
-						
-						
-						int crntVal = bbS.get(indxBuffer);
-						
-						//assert( matM.getPixelsForPlane(0).get(crntVal)==ObjMask.VALUE_ON );
-						int reorderedIndex = bbm.indexForValue(crntVal);
-						BoundingBox BoundingBox = bbm.getBBoxForIndx(reorderedIndex, x, y, z);
-						BoundingBox.add(x,y,z);
-						
-						bbS.put(indxBuffer,reorderedIndex+1);
+						putByte(indxBuffer, bbS, bbm, x, y, z);
 					} else {
 						bbS.put(indxBuffer,0);
 					}
@@ -120,31 +111,13 @@ class CreateObjectsFromLabels {
 				}
 			}
 		}
-
-		return objMaskCollectionFromMask(matS, bbm.getList());
 	}
-
-	private static ObjMaskCollection objMaskCollectionFromMask(
-		VoxelBox<IntBuffer> matS,
-		List<BoundingBox> bboxList
-	) {
+	
+	private static void putByte(int indxBuffer, IntBuffer bbS, BoundingBoxMap bbm, int x, int y, int z) {
+		int crntVal = bbS.get(indxBuffer);
 		
-		ObjMaskCollection out = new ObjMaskCollection();
-		for (int i=0; i<bboxList.size(); i++) {
-			
-			BoundingBox bbox = bboxList.get(i);
-			
-			if(bbox==null) {
-				continue;
-			}
-			
-			ObjMask om = matS.equalMask(bbox, i+1 );
-			
-			//int countR = om.getVoxelBox().countEqual( ObjMask.VALUE_ON_INT );
-			//System.out.printf("Countequal=%d  %f\n", countR, ((double) countR) / om.getBoundingBox().getExtnt().getVolume() );
-			
-			out.add(om);
-		}
-		return out;
+		int outVal = bbm.addPointForValue(x, y, z, crntVal) + 1;
+		
+		bbS.put(indxBuffer, outVal);
 	}
 }

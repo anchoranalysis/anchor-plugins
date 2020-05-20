@@ -119,11 +119,7 @@ public class ObjMaskSgmnWatershedYeong extends ObjMaskSgmn {
 			new ConvertAllToConnectedComponents().doForAll( matS );
 		}
 		
-		if (mask.isPresent()) {
-			return CreateObjectsFromLabels.doForMask( matS.getVoxelBox(), mask.get() );
-		} else {
-			return CreateObjectsFromLabels.doForAll( matS.getVoxelBox() );
-		}
+		return CreateObjectsFromLabels.apply( matS.getVoxelBox(), mask );
 	}
 
 	public boolean isExitWithMinima() {
