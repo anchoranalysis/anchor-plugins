@@ -74,7 +74,6 @@ class MarkSeeds {
 		public final Point3i crnrMin;
 		public final Point3i crnrMax;
 		public final byte maskOn = BinaryValuesByte.getDefault().getOnByte(); 
-		private final Extent extnt;
 		
 		/**
 		 * A buffer for accessing a seed
