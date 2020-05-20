@@ -1,5 +1,7 @@
 package org.anchoranalysis.plugin.image.bean.sgmn.watershed.yeong;
 
+import java.nio.IntBuffer;
+
 /*
  * #%L
  * anchor-plugin-image
@@ -33,9 +35,11 @@ import java.util.List;
 
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.extent.BoundingBox;
+import org.anchoranalysis.image.objmask.ObjMaskCollection;
+import org.anchoranalysis.image.voxel.box.VoxelBox;
 
 
-class BoundingBoxMap {
+final class BoundingBoxMap {
 	
 	private List<BoundingBox> list = new ArrayList<>();
 	
@@ -56,18 +60,40 @@ class BoundingBoxMap {
 		return index;
 	}
 
-	public List<BoundingBox> getList() {
-		return list;
+	public ObjMaskCollection deriveObjects(	VoxelBox<IntBuffer> matS) {
+		ObjMaskCollection out = new ObjMaskCollection();
+		for (int i=0; i<list.size(); i++) {
+			
+			BoundingBox bbox = list.get(i);
+			
+			if(bbox==null) {
+				continue;
+			}
+			
+			out.add(
+				matS.equalMask(bbox, i+1)
+			);
+		}
+		return out;
+	}
+		
+	public int addPointForValue(int x, int y, int z, int val) {
+		int reorderedIndex = indexForValue(val);
+		
+		// Add the point to the bounding-box
+		boxForIndex(reorderedIndex, x, y, z).add(x,y,z);
+		return reorderedIndex;
 	}
 	
+	
 	// Get bounding box for a particular index.  The x,y,z is to set the initial boundaries
-	public BoundingBox getBBoxForIndx( int indx, int x, int y, int z) {
-		BoundingBox BoundingBox = list.get( indx );
-		if (BoundingBox==null) {
+	private BoundingBox boxForIndex( int indx, int x, int y, int z) {
+		BoundingBox box = list.get( indx );
+		if (box==null) {
 			Point3i pnt = new Point3i(x,y,z);
-			BoundingBox = new BoundingBox(pnt, pnt);
-			list.set(indx, BoundingBox);
+			box = new BoundingBox(pnt, pnt);
+			list.set(indx, box);
 		}
-		return BoundingBox;
+		return box;
 	}
 }
