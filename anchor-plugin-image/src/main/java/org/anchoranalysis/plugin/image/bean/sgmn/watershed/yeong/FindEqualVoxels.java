@@ -47,33 +47,24 @@ import org.anchoranalysis.image.voxel.nghb.iterator.PointObjMaskIterator;
 import ch.ethz.biol.cell.sgmn.objmask.watershed.encoding.EncodedIntBuffer;
 import ch.ethz.biol.cell.sgmn.objmask.watershed.encoding.EncodedVoxelBox;
 
-class FindEqualVoxels {
+final class FindEqualVoxels {
 	
-	private VoxelBox<?> bufferValuesToFindEqual;
-	private EncodedVoxelBox matS;
-	private boolean do3D;
-	private Optional<ObjMask> objMask;
+	private final VoxelBox<?> bufferValuesToFindEqual;
+	private final EncodedVoxelBox matS;
+	private final boolean do3D;
+	private final Optional<ObjMask> mask;
 	
-	public FindEqualVoxels(VoxelBox<?> bufferValuesToFindEqual,
-			EncodedVoxelBox temporaryMarkVisitedBuffer,
-			boolean do3D) {
-		super();
+	public FindEqualVoxels(
+		VoxelBox<?> bufferValuesToFindEqual,
+		EncodedVoxelBox temporaryMarkVisitedBuffer,
+		boolean do3D,
+		Optional<ObjMask> mask
+	) {
 		this.bufferValuesToFindEqual = bufferValuesToFindEqual;
 		this.matS = temporaryMarkVisitedBuffer;
 		this.do3D = do3D;
-		this.objMask = Optional.empty();
+		this.mask = mask;
 	}
-	
-	public FindEqualVoxels(VoxelBox<?> bufferValuesToFindEqual,
-			EncodedVoxelBox matS,
-			boolean do3D, ObjMask objMask) {
-		super();
-		this.bufferValuesToFindEqual = bufferValuesToFindEqual;
-		this.matS = matS;
-		this.do3D = do3D;
-		this.objMask = Optional.of(objMask);
-	}
-	
 	
 	public EqualVoxelsPlateau createPlateau( int x, int y, int z ) {
 		
@@ -104,7 +95,7 @@ class FindEqualVoxels {
 		
 		PointTester pt = new PointTester( stack, extnt, rbb, matS);
 				
-		PointIterator itr = objMask.isPresent() ? new PointObjMaskIterator(pt, objMask.get()) : new PointExtntIterator(extnt, pt);
+		PointIterator itr = mask.isPresent() ? new PointObjMaskIterator(pt, mask.get()) : new PointExtntIterator(extnt, pt);
 				
 		BigNghb nghb = new BigNghb();
 		
@@ -255,5 +246,13 @@ class FindEqualVoxels {
 				int objectMaskOffset) {
 			return processPoint(xChange, yChange, x1, y1);
 		}
+	}
+
+	public boolean isDo3D() {
+		return do3D;
+	}
+
+	public Extent extnt() {
+		return bufferValuesToFindEqual.extnt();
 	}
 }

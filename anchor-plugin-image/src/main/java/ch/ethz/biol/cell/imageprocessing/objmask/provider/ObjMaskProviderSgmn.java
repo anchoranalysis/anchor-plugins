@@ -29,7 +29,7 @@ package ch.ethz.biol.cell.imageprocessing.objmask.provider;
 
 import java.util.Optional;
 
-import org.anchoranalysis.bean.ProviderNullableCreator;
+import org.anchoranalysis.bean.OptionalFactory;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.core.error.CreateException;
@@ -76,14 +76,14 @@ public class ObjMaskProviderSgmn extends ObjMaskProviderChnlSource {
 	}
 	
 	private Optional<ObjMask> createMask() throws CreateException {
-		return ProviderNullableCreator.createOptional(mask).map(
+		return OptionalFactory.create(mask).map(
 			CreateFromEntireChnlFactory::createObjMask
 		);
 	}
 	
 	private Optional<SeedCollection> createSeeds(ImageDim dim, Optional<ObjMask> maskAsObj) throws CreateException {
 		return OptionalExceptional.map(
-			ProviderNullableCreator.createOptional(objsSeeds),
+			OptionalFactory.create(objsSeeds),
 			objs-> createSeeds(
 				objs,
 				maskAsObj,

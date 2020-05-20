@@ -43,72 +43,85 @@ import ch.ethz.biol.cell.sgmn.objmask.watershed.encoding.EncodedVoxelBox;
 
 class MarkSeeds {
 		
-	private MarkSeeds() {
-		super();
-	}
+	private MarkSeeds() {}
 
-	public static void doForAll( SeedCollection seeds, EncodedVoxelBox matS, Optional<MinimaStore> minimaStore ) throws OperationFailedException {
-		
-		for( Seed s : seeds ) {
-			ObjMask om = s.createMask();
+	public static void apply( SeedCollection seeds, EncodedVoxelBox matS, Optional<MinimaStore> minimaStore, Optional<ObjMask> containingMask ) throws OperationFailedException {
 			
-			if (!om.checkIfConnected()) {
-				throw new OperationFailedException("Seed must be a single connected-component");
-			}
-			
-			markSeed(om, matS, minimaStore );
-		}
-	}
-	
-	public static void doForMask( SeedCollection seeds, EncodedVoxelBox matS, Optional<MinimaStore> minimaStore, ObjMask containingMask ) throws OperationFailedException {
-	
-		if (!matS.extnt().equals(containingMask.getBoundingBox().extnt())) {
+		if (containingMask.isPresent() && !matS.extnt().equals(containingMask.get().getBoundingBox().extnt())) {
 			throw new OperationFailedException("Extnt of matS does not match containingMask");
 		}
 		
 		for( Seed s : seeds ) {
-			ObjMask om = s.createMask();
 			
-			if (!om.checkIfConnected()) {
-				throw new OperationFailedException("Seed must be a single connected-component");
+			SeedSlidingBuffer seedBuffer = new SeedSlidingBuffer(
+				s.createMask()
+			);
+			seedBuffer.throwExceptionIfNotConnected();
+		
+			ConnectedComponentWriter ccWriter = new ConnectedComponentWriter(matS, minimaStore);
+			if (containingMask.isPresent()) {
+				markSeedWithMask(seedBuffer, ccWriter, containingMask.get());
+			} else {
+				markSeedWithoutMask(seedBuffer, ccWriter);
 			}
-			
-			markSeedContainingMask(om, matS, containingMask, minimaStore);
 		}
 	}
 	
-	private static void markSeed( ObjMask omSeed, EncodedVoxelBox matS, Optional<MinimaStore> minimaStore ) {
+	private static final class SeedSlidingBuffer {
+		
+		private ObjMask obj;
 				
-		Point3i crnrMin = omSeed.getBoundingBox().getCrnrMin();
-		Point3i crnrMax = omSeed.getBoundingBox().calcCrnrMax();
+		public final Point3i crnrMin;
+		public final Point3i crnrMax;
+		public final byte maskOn = BinaryValuesByte.getDefault().getOnByte(); 
+		private final Extent extnt;
 		
-		int id = -1;
+		/**
+		 * A buffer for accessing a seed
+		 * 
+		 * @param obj the object representing a seed
+		 */
+		public SeedSlidingBuffer(ObjMask obj) {
+			super();
+			this.obj = obj;
+			this.crnrMin = obj.getBoundingBox().getCrnrMin();
+			this.crnrMax = obj.getBoundingBox().calcCrnrMax();
+			this.extnt = obj.getVoxelBox().extnt();
+		}
 		
-		
-		
-		byte maskOn = BinaryValuesByte.getDefault().getOnByte(); 
-				
-		for( int z=crnrMin.getZ(); z<=crnrMax.getZ(); z++) {
+		public void throwExceptionIfNotConnected() throws OperationFailedException {
+			if (!obj.checkIfConnected()) {
+				throw new OperationFailedException("Seed must be a single connected-component");
+			}
 			
-			ByteBuffer bb = omSeed.getVoxelBox().getPixelsForPlane(z-omSeed.getBoundingBox().getCrnrMin().getZ()).buffer();
-			
+		}
+		
+		/**
+		 * A z-slice buffer given a global z-slice coordinate
+		 * 
+		 * @param zGlobal global z-value
+		 * @return a buffer for a particular slice for the seed-object only
+		 */
+		public ByteBuffer bufferRelative(int zGlobal) {
+			return obj.getVoxelBox().getPixelsForPlane(
+				zGlobal - crnrMin.getZ()
+			).buffer();
+		}
+		
+		@FunctionalInterface
+		public interface ProcessPoint {
+			void process(Point3i pnt);
+		}
+		
+		public void callForEachPoint( ByteBuffer bb, int z, ProcessPoint process ) {
 			int index = 0;
 			for( int y=crnrMin.getY(); y<=crnrMax.getY(); y++) {
 				for( int x=crnrMin.getX(); x<=crnrMax.getX(); x++) {
 					
-					
-					
 					if (bb.get(index)==maskOn) {
-						// We write a connected component id based upon the first
-						if (id==-1) {
-							id = matS.extnt().offset(x, y, z);
-							
-							if (minimaStore.isPresent()) {
-								minimaStore.get().add( new Point3i(x,y,z) );
-							}
-						}
-												
-						matS.setPointConnectedComponentID(new Point3i(x,y,z), id);
+						process.process(
+							new Point3i(x,y,z)
+						);
 					}
 					index++;
 				}
@@ -116,52 +129,41 @@ class MarkSeeds {
 		}
 	}
 	
-	private static void markSeedContainingMask( ObjMask omSeed, EncodedVoxelBox matS, ObjMask containingMask, Optional<MinimaStore> minimaStore ) {
-		
-		Point3i crnrMin = omSeed.getBoundingBox().getCrnrMin();
-		Point3i crnrMax = omSeed.getBoundingBox().calcCrnrMax();
-		
-		int id = -1;
-		
-		byte maskOn = BinaryValuesByte.getDefault().getOnByte();
+	private static void markSeedWithoutMask( SeedSlidingBuffer seed, ConnectedComponentWriter writer ) {
+				
+		for( int z=seed.crnrMin.getZ(); z<=seed.crnrMax.getZ(); z++) {
+			
+			ByteBuffer bb = seed.bufferRelative(z);
+			
+			seed.callForEachPoint(
+				bb,
+				z,
+				pnt -> writer.writePoint(pnt)
+			);
+		}
+	}
+	
+	private static void markSeedWithMask( SeedSlidingBuffer seed, ConnectedComponentWriter writer, ObjMask containingMask) {
 		
 		Extent extntContainingMask = containingMask.getVoxelBox().extnt();
-		
-		Extent extnt = omSeed.getVoxelBox().extnt();
-		
-		for( int z=crnrMin.getZ(); z<=crnrMax.getZ(); z++) {
+				
+		for( int z=seed.crnrMin.getZ(); z<=seed.crnrMax.getZ(); z++) {
 			
-			ByteBuffer bb = omSeed.getVoxelBox().getPixelsForPlane(z-omSeed.getBoundingBox().getCrnrMin().getZ()).buffer();
+			ByteBuffer bb = seed.bufferRelative(z);
 			ByteBuffer bbContainingMask = containingMask.getVoxelBox().getPixelsForPlane(z).buffer();
-			
-			//int index = 0;
-			for( int y=crnrMin.getY(); y<=crnrMax.getY(); y++) {
-				for( int x=crnrMin.getX(); x<=crnrMax.getX(); x++) {
+						
+			seed.callForEachPoint(
+				bb,
+				z,
+				pnt -> {
+					int offsetContainingMask = extntContainingMask.offset(pnt.getX(), pnt.getY());
 					
-					int index =  extnt.offset(x-crnrMin.getX(), y-crnrMin.getY());
-							
-					if (bb.get(index)==maskOn) {
-						
-						int offsetContainingMask = extntContainingMask.offset(x, y);
-						
-						// We skip if our containing mask doesn't include it
-						if (bbContainingMask.get(offsetContainingMask)==maskOn) {
-						
-							// We write a connected component id based upon the first
-							if (id==-1) {
-								id = matS.extnt().offset(x, y, z);
-								
-								if (minimaStore.isPresent()) {
-									minimaStore.get().add( new Point3i(x,y,z) );
-								}
-							}
-							
-							matS.setPointConnectedComponentID(new Point3i(x,y,z), id);
-						}
+					// We skip if our containing mask doesn't include it
+					if (bbContainingMask.get(offsetContainingMask)==seed.maskOn) {
+						writer.writePoint(pnt);
 					}
-					//index++;
 				}
-			}
+			);
 		}
 	}
 }

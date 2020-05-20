@@ -30,11 +30,13 @@ package org.anchoranalysis.plugin.image.bean.sgmn.watershed.yeong;
 import java.nio.IntBuffer;
 import java.util.Optional;
 
+import org.anchoranalysis.bean.OptionalFactory;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.bean.sgmn.objmask.ObjMaskSgmn;
 import org.anchoranalysis.image.chnl.Chnl;
+import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.image.objmask.ObjMaskCollection;
 import org.anchoranalysis.image.seed.SeedCollection;
@@ -77,31 +79,17 @@ public class ObjMaskSgmnWatershedYeong extends ObjMaskSgmn {
 	@Override
 	public ObjMaskCollection sgmn(Chnl chnl, Optional<ObjMask> mask,
 			Optional<SeedCollection> seeds) throws SgmnFailedException {
-		
-		VoxelBox<IntBuffer> matSVoxelBox = VoxelBoxFactory.instance().getInt().create( chnl.getDimensions().getExtnt() );
 
-		EncodedVoxelBox matS = new EncodedVoxelBox(matSVoxelBox );
+		EncodedVoxelBox matS = createS(chnl.getDimensions().getExtnt());
 		
-		Optional<MinimaStore> minimaStore = exitWithMinima ? Optional.of( new MinimaStore() ) : Optional.empty();
+		Optional<MinimaStore> minimaStore = OptionalFactory.create(
+			exitWithMinima,
+			() -> new MinimaStore()
+		);
 		
-		if (seeds.isPresent()) {
-			
-			try {
-				if (mask.isPresent()) {
-					MarkSeeds.doForMask(seeds.get(), matS, minimaStore, mask.get());
-				} else {
-					MarkSeeds.doForAll(seeds.get(), matS, minimaStore);
-				}
-			} catch (OperationFailedException e) {
-				throw new SgmnFailedException(e);
-			}
-		}
+		maskSeedsIfPresent(seeds, matS, minimaStore, mask);
 		
-		if (mask.isPresent()) {
-			new PointPixelsOrMarkAsMinima().doForMask( chnl.getVoxelBox().any(), matS, mask.get(), minimaStore );
-		} else {
-			new PointPixelsOrMarkAsMinima().doForAll( chnl.getVoxelBox(), matS, minimaStore );
-		}
+		PointPixelsOrMarkAsMinima.apply( chnl.getVoxelBox().any(), matS, mask, minimaStore);
 
 		// Special behaviour where we just want to find the minima and nothing more
 		if (minimaStore.isPresent()) {
@@ -116,6 +104,22 @@ public class ObjMaskSgmnWatershedYeong extends ObjMaskSgmn {
 		ConvertAllToConnectedComponents.apply(matS, mask);
 		
 		return CreateObjectsFromLabels.apply(matS.getVoxelBox(), mask);
+	}
+	
+	/** Create 'S' matrix */
+	private EncodedVoxelBox createS(Extent extent) {
+		VoxelBox<IntBuffer> matSVoxelBox = VoxelBoxFactory.instance().getInt().create(extent);
+		return new EncodedVoxelBox(matSVoxelBox);
+	}
+	
+	private void maskSeedsIfPresent(Optional<SeedCollection> seeds, EncodedVoxelBox matS, Optional<MinimaStore> minimaStore, Optional<ObjMask> mask) throws SgmnFailedException {
+		if (seeds.isPresent()) {
+			try {
+				MarkSeeds.apply(seeds.get(), matS, minimaStore, mask);
+			} catch (OperationFailedException e) {
+				throw new SgmnFailedException(e);
+			}
+		}
 	}
 
 	public boolean isExitWithMinima() {

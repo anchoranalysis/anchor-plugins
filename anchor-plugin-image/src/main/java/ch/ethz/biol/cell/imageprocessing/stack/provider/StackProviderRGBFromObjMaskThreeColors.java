@@ -4,7 +4,7 @@ import java.util.Optional;
 
 import org.anchoranalysis.anchor.overlay.bean.objmask.writer.ObjMaskWriter;
 import org.anchoranalysis.bean.BeanInstanceMap;
-import org.anchoranalysis.bean.ProviderNullableCreator;
+import org.anchoranalysis.bean.OptionalFactory;
 
 /*
  * #%L
@@ -99,7 +99,7 @@ public class StackProviderRGBFromObjMaskThreeColors extends StackProviderRGBFrom
 	}
 
 	private void addWithColor( ObjMaskProvider provider, RGBColor color, ObjMaskCollection objsOut, ColorList colorsInOut ) throws CreateException {
-		Optional<ObjMaskCollection> providerObjs = ProviderNullableCreator.createOptional(provider);
+		Optional<ObjMaskCollection> providerObjs = OptionalFactory.create(provider);
 
 		if (providerObjs.isPresent()) {
 			ObjMaskCollection maybeFlattened = maybeFlatten(providerObjs.get()); 

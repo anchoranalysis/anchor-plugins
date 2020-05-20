@@ -34,41 +34,63 @@ import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
-import org.anchoranalysis.image.voxel.box.VoxelBoxWrapper;
-import org.anchoranalysis.image.voxel.buffer.SlidingBuffer;
 
 import ch.ethz.biol.cell.sgmn.objmask.watershed.encoding.EncodedIntBuffer;
 import ch.ethz.biol.cell.sgmn.objmask.watershed.encoding.EncodedVoxelBox;
-import ch.ethz.biol.cell.sgmn.objmask.watershed.encoding.SteepestCalc;
 
 class PointPixelsOrMarkAsMinima {
 	
-	// MinimaStore is optional. Set to null if not desired
-	public void doForMask( VoxelBox<?> vbImg, EncodedVoxelBox matS, ObjMask om, Optional<MinimaStore> minimaStore ) {
+	private PointPixelsOrMarkAsMinima() {}
 		
-		Extent e = vbImg.extnt();
+	public static void apply( VoxelBox<?> vbImg, EncodedVoxelBox matS, Optional<ObjMask> mask, Optional<MinimaStore> minimaStore ) {
 		
-		SlidingBuffer<?> rbb = new SlidingBuffer<>( vbImg );
-
+		SlidingBufferPlus state = new SlidingBufferPlus(vbImg, matS, mask, minimaStore);
 		
-		boolean do3D = e.getZ()>1;
-		
-		FindEqualVoxels findEqualVoxels = new FindEqualVoxels( vbImg, matS, do3D, om );
-		SteepestCalc steepestCalc = new SteepestCalc(rbb,matS.getEncoding(), do3D ,true, om);
-		
-		Point3i crnrMin = om.getBoundingBox().getCrnrMin();
+		if (mask.isPresent()) {
+			slideWithMask(state, mask.get());
+		} else {
+			slide(state);
+		}
+	}
 	
-		byte maskOn = om.getBinaryValuesByte().getOnByte();
+	private static void slide( SlidingBufferPlus buffer) {
 		
-		Extent eObjMask = om.getVoxelBox().extnt();
+		Extent e = buffer.extnt();
+		buffer.init(0);
 		
-		rbb.init(crnrMin.getZ());
+		for (int z=0; z<e.getZ(); z++) {
+			
+			EncodedIntBuffer bbS = buffer.getSPlane(z);
+			int indxBuffer = 0;
+			
+			for (int y=0; y<e.getY(); y++) {
+				for (int x=0; x<e.getX(); x++) {
+					
+					if (bbS.isUnvisited(indxBuffer)) {
+						buffer.visitPixel( indxBuffer, x, y, z, bbS);
+					}
 
-		
+					indxBuffer++;
+				}
+			}
+			
+			buffer.shift();
+		}
+	}
+
+	private static void slideWithMask( SlidingBufferPlus buffer, ObjMask om ) {
+			
+		Point3i crnrMin = om.getBoundingBox().getCrnrMin();
+		byte maskOn = om.getBinaryValuesByte().getOnByte();
+		Extent eObjMask = om.getVoxelBox().extnt();
+
+		Extent e = buffer.extnt();
+		buffer.init(crnrMin.getZ());
+
 		for (int z=0; z<eObjMask.getZ(); z++) {
 		
 			int z1 = z+crnrMin.getZ();
-			EncodedIntBuffer bbS = matS.getPixelsForPlane(z1);
+			EncodedIntBuffer bbS = buffer.getSPlane(z1);
 			
 			ByteBuffer bbOM = om.getVoxelBox().getPixelsForPlane(z).buffer();
 	
@@ -85,125 +107,13 @@ class PointPixelsOrMarkAsMinima {
 						int indxBuffer = e.offset(x1, y1);
 						
 						if (bbS.isUnvisited(indxBuffer)) {
-							visitPixelMask( indxBuffer, x1, y1, z1, steepestCalc, bbS, matS, rbb, findEqualVoxels, do3D, om, minimaStore );
+							buffer.visitPixel( indxBuffer, x1, y1, z1, bbS );
 						}
 					}
 				}
 			}
 			
-			// FIRST STEP
-			rbb.shift();
-		}
-	}
-	
-	public void doForAll( VoxelBoxWrapper vbImg, EncodedVoxelBox matS, Optional<MinimaStore> minimaStore) {
-		
-		Extent e = vbImg.any().extnt();
-		
-		SlidingBuffer<?> rbb = new SlidingBuffer<>( vbImg.any() );
-		rbb.init();
-		
-		boolean do3D = e.getZ()>1;
-		
-		FindEqualVoxels findEqualVoxels = new FindEqualVoxels( vbImg.any(), matS, do3D );
-		SteepestCalc steepestCalc = new SteepestCalc(rbb,matS.getEncoding(), do3D ,true);
-		
-		for (int z=0; z<e.getZ(); z++) {
-		
-			// FIRST STEP
-			
-			EncodedIntBuffer bbS = matS.getPixelsForPlane(z);
-
-			int indxBuffer = 0;
-			
-			for (int y=0; y<e.getY(); y++) {
-				for (int x=0; x<e.getX(); x++) {
-					
-					if (bbS.isUnvisited(indxBuffer)) {
-						visitPixel( indxBuffer, x, y, z, steepestCalc, bbS, matS, rbb, findEqualVoxels, do3D, minimaStore );
-					}
-
-					indxBuffer++;
-				}
-			}
-			
-			rbb.shift();
-		}
-	}
-
-	private void visitPixel(
-		int indxBuffer,
-		int x,
-		int y,
-		int z,
-		SteepestCalc steepestCalc,
-		EncodedIntBuffer bbS,
-		EncodedVoxelBox matS, SlidingBuffer<?> rbb,
-		FindEqualVoxels findEqualVoxels,
-		boolean do3D,
-		Optional<MinimaStore> minimaStore
-	) {
-		// We get the value of g
-		int gVal = rbb.getCentre().getInt(indxBuffer);
-		
-		// Calculate steepest descent. -1 indicates that there is no steepest descent
-		int chainCode = steepestCalc.calcSteepestDescent(x,y,z,gVal,indxBuffer);
-		
-		if (matS.isMinima(chainCode)) {
-			// Treat as local minima
-			bbS.putCode(indxBuffer, chainCode);	
-			
-			if (minimaStore.isPresent()) {
-				minimaStore.get().add( new Point3i(x,y,z) );
-			}
-			
-		} else if (matS.isPlateau(chainCode)) {
-			EqualVoxelsPlateau plateau = findEqualVoxels.createPlateau(x,y,z);
-			new MakePlateauLowerComplete(plateau, do3D).makeBufferLowerCompleteForPlateau(matS, minimaStore);
-			
-			
-		} else {
-			// Record steepest
-			bbS.putCode(indxBuffer,chainCode);
-		}
-	}
-	
-	private void visitPixelMask(
-		int indxBuffer,
-		int x,
-		int y,
-		int z,
-		SteepestCalc steepestCalc,
-		EncodedIntBuffer bbS,
-		EncodedVoxelBox matS,
-		SlidingBuffer<?> rbb,
-		FindEqualVoxels findEqualVoxels,
-		boolean do3D,
-		ObjMask om,
-		Optional<MinimaStore> minimaStore
-	) {
-		// We get the value of g
-		int gVal = rbb.getCentre().getInt(indxBuffer);
-		
-		// Calculate steepest descent. -1 indicates that there is no steepest descent
-		int chainCode = steepestCalc.calcSteepestDescent(x,y,z,gVal,indxBuffer);
-		
-		if (matS.isMinima(chainCode)) {
-			// Treat as local minima
-			bbS.putCode(indxBuffer, chainCode);
-			
-			if (minimaStore.isPresent()) {
-				minimaStore.get().add( new Point3i(x,y,z) );
-			}
-			
-		} else if (matS.isPlateau(chainCode)) {
-			// This should also be contrainted by the object mask   UNDER UNDER CHANGE
-			EqualVoxelsPlateau plateau = findEqualVoxels.createPlateau(x,y,z);
-			new MakePlateauLowerComplete(plateau, do3D).makeBufferLowerCompleteForPlateau(matS, minimaStore);
-			
-		} else {
-			// Record steepest
-			bbS.putCode(indxBuffer,chainCode);
+			buffer.shift();
 		}
 	}
 }

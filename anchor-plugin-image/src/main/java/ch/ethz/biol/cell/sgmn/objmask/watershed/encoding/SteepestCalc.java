@@ -28,6 +28,7 @@ package ch.ethz.biol.cell.sgmn.objmask.watershed.encoding;
 
 
 import java.nio.ByteBuffer;
+import java.util.Optional;
 
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.objmask.ObjMask;
@@ -42,36 +43,26 @@ import org.anchoranalysis.image.voxel.nghb.iterator.PointExtntIterator;
 import org.anchoranalysis.image.voxel.nghb.iterator.PointIterator;
 import org.anchoranalysis.image.voxel.nghb.iterator.PointObjMaskIterator;
 
-public class SteepestCalc {
+public final class SteepestCalc {
 
-	private boolean do3D = false;
-	private boolean bigNghb = false;	// If true we use 8-Connectivity instead of 4, and 26-connectivity instead of 6 in 3D
+	private final boolean do3D;
+	private final PointTester pt;
+	private final PointIterator pointIterator;
+	private final Nghb nghb;
 	
-	private PointTester pt;
-	private PointIterator pointIterator;
-	
-	private Nghb nghb;
-	
-	// Without mask
-	public SteepestCalc( SlidingBuffer<?> rbb, WatershedEncoding encoder, boolean do3D, boolean bigNghb ) {
+	/**
+	 * 
+	 * @param rbb
+	 * @param encoder
+	 * @param do3D
+	 * @param bigNghb iff true we use 8-Connectivity instead of 4, and 26-connectivity instead of 6 in 3D
+	 * @param mask
+	 */
+	public SteepestCalc( SlidingBuffer<?> rbb, WatershedEncoding encoder, boolean do3D, boolean bigNghb, Optional<ObjMask> mask ) {
 		this.do3D = do3D;
-		this.bigNghb = bigNghb;
 		this.pt = new PointTester(encoder,rbb);
-		this.pointIterator = new PointExtntIterator(rbb.extnt(), pt);
-		initNghb();
-	}
-	
-	// Masked
-	public SteepestCalc( SlidingBuffer<?> rbb, WatershedEncoding encoder, boolean do3D, boolean bigNghb, ObjMask om ) {
-		this.do3D = do3D;
-		this.bigNghb = bigNghb;
-		this.pt = new PointTester(encoder,rbb);
-		this.pointIterator = new PointObjMaskIterator(pt, om);
-		initNghb();
-	}
-	
-	private void initNghb() {
-		nghb = bigNghb ? new BigNghb() : new SmallNghb();
+		this.pointIterator = mask.isPresent() ? new PointObjMaskIterator(pt, mask.get()) : new PointExtntIterator(rbb.extnt(), pt);
+		this.nghb = bigNghb ? new BigNghb() : new SmallNghb();
 	}
 	
 	private static class PointTester implements IProcessAbsolutePoint, IProcessAbsolutePointObjectMask {
@@ -112,6 +103,7 @@ public class SteepestCalc {
 			int indxChange = extnt.offset(xChange, yChange);
 			int gValNghb = bb.getInt( indxBuffer + indxChange );
 			
+			// TODO check if it's okay these values exist?
 			//assert( gValNghb!= WatershedEncoding.CODE_UNVISITED );
 			//assert( gValNghb!= WatershedEncoding.CODE_TEMPORARY );
 			
@@ -123,10 +115,6 @@ public class SteepestCalc {
 			if (gValNghb<steepestVal) {
 				steepestVal = gValNghb;
 				steepestDrctn = encoder.encodeDirection(xChange, yChange, zChange);
-				
-				// Check that x+xChange,y+yChange+z+zChange is already visited
-				//assert( rbb.bufferRel(zChange).get( indxBuffer+ind)  )
-				
 				return true;
 			}
 			
