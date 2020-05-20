@@ -113,13 +113,9 @@ public class ObjMaskSgmnWatershedYeong extends ObjMaskSgmn {
 		}
 		
 		// TODO let's only work on the areas with regions
-		if (mask.isPresent()) {
-			new ConvertAllToConnectedComponents().doForMask( matS, mask.get() );
-		} else {
-			new ConvertAllToConnectedComponents().doForAll( matS );
-		}
+		ConvertAllToConnectedComponents.apply(matS, mask);
 		
-		return CreateObjectsFromLabels.apply( matS.getVoxelBox(), mask );
+		return CreateObjectsFromLabels.apply(matS.getVoxelBox(), mask);
 	}
 
 	public boolean isExitWithMinima() {

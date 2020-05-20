@@ -70,7 +70,30 @@ public final class EncodedIntBuffer {
 		return delegate.buffer().put(index, code);
 	}
 	
-	public IntBuffer putConnectedComponentID(int index, int connectedComponentID) {
+	/** Convert code to connected-component */
+	public void convertCode(int indxBuffer, int indxGlobal, EncodedVoxelBox matS, int x1, int y1, int z1) {
+		int crntVal = getCode(indxBuffer);
+		
+		assert( !matS.isPlateau(crntVal) );
+		assert( !matS.isUnvisited(crntVal) );
+		assert( !matS.isTemporary(crntVal) );
+		
+		// We translate the value into directions and use that to determine where to
+		//   travel to
+		if ( matS.isMinima(crntVal) ) {
+
+			putConnectedComponentID(indxBuffer, indxGlobal);
+			
+			// We maintain a mapping between each minimas indxGlobal and 
+		} else if (matS.isConnectedComponentIDCode(crntVal)) {
+			// NO CHANGE
+		} else {
+			int finalIndex = matS.calculateConnectedComponentID(x1, y1, z1, crntVal);
+			putCode(indxBuffer, finalIndex);
+		}
+	}
+	
+	private IntBuffer putConnectedComponentID(int index, int connectedComponentID) {
 		int encoded = encoding.encodeConnectedComponentID(connectedComponentID);
 		return delegate.buffer().put(index, encoded );
 	}

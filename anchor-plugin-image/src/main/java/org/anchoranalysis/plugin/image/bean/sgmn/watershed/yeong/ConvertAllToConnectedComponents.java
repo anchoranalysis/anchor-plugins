@@ -28,9 +28,8 @@ package org.anchoranalysis.plugin.image.bean.sgmn.watershed.yeong;
 
 
 import java.nio.ByteBuffer;
-
+import java.util.Optional;
 import org.anchoranalysis.core.geometry.Point3i;
-import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.objmask.ObjMask;
 
@@ -40,7 +39,17 @@ import ch.ethz.biol.cell.sgmn.objmask.watershed.encoding.EncodedVoxelBox;
 // Converts all the minima and direction IDs into the connected components they represent
 class ConvertAllToConnectedComponents {
 
-	public void doForAll( EncodedVoxelBox matS ) {
+	private ConvertAllToConnectedComponents() {}
+	
+	public static void apply( EncodedVoxelBox matS, Optional<ObjMask> mask ) {
+		if (mask.isPresent()) {
+			applyWithMask(matS, mask.get());
+		} else {
+			applyWithoutMask(matS);
+		}
+	}
+	
+	private static void applyWithoutMask( EncodedVoxelBox matS ) {
 		
 		Extent e = matS.extnt();
 		
@@ -56,24 +65,14 @@ class ConvertAllToConnectedComponents {
 			for (int y=0; y<e.getY(); y++) {
 				for (int x=0; x<e.getX(); x++) {
 					
-					int crntVal = bbS.getCode(indxBuffer);
-					
-					assert( !matS.isPlateau(crntVal) );
-					assert( !matS.isUnvisited(crntVal) );
-					assert( !matS.isTemporary(crntVal) );
-					
-					// We translate the value into directions and use that to determine where to
-					//   travel to
-					if ( matS.isMinima(crntVal) ) {
-						bbS.putConnectedComponentID(indxBuffer, indxGlobal);
-						
-						// We maintain a mapping between each minimas indxGlobal and 
-					} else if (matS.isConnectedComponentIDCode(crntVal)) {
-						// NO CHANGE
-					} else {
-						int finalIndex = matS.calculateConnectedComponentID(x, y, z, crntVal);
-						bbS.putCode(indxBuffer, finalIndex );
-					}
+					bbS.convertCode(
+						indxBuffer,
+						indxGlobal,
+						matS,
+						x,
+						y,
+						z
+					);
 					
 					indxGlobal++;
 					indxBuffer++;
@@ -81,48 +80,13 @@ class ConvertAllToConnectedComponents {
 			}
 		}
 	}
-	
-	
-	
-	public void doForMask( EncodedVoxelBox matS, ObjMask om ) {
+		
+	private static void applyWithMask( EncodedVoxelBox matS, ObjMask om ) {
 		
 		Extent e = matS.extnt();
-		
 		Extent eObjMask = om.getVoxelBox().extnt();
 		Point3i crnrMin = om.getBoundingBox().getCrnrMin();
-		
-		byte valueOn = BinaryValuesByte.getDefault().getOnByte();
-		
-		
-
-		// Just checks that we have no temporaries
-		for (int z=0; z<eObjMask.getZ(); z++) {
-
-			// For 3d we need to translate the global index back to local
-			int z1 = z + crnrMin.getZ();
-			EncodedIntBuffer bbS = matS.getPixelsForPlane(z1);
-			
-			ByteBuffer bbOM = om.getVoxelBox().getPixelsForPlane(z).buffer();
-			
-			for (int y=0; y<eObjMask.getY(); y++) {
-				for (int x=0; x<eObjMask.getX(); x++) {
-
-					if (bbOM.get()==valueOn) {
-						int x1 = x + crnrMin.getX();
-						int y1 = y + crnrMin.getY();
-
-						int indxBuffer = e.offset(x1, y1);
-						
-						int crntVal = bbS.getCode(indxBuffer);
-						
-						assert( !matS.isPlateau(crntVal) );
-						assert( !matS.isUnvisited(crntVal) );
-						assert( !matS.isTemporary(crntVal) );
-					}
-				}
-			}
-		}
-		
+		byte valueOn = om.getBinaryValuesByte().getOnByte();
 		
 		for (int z=0; z<eObjMask.getZ(); z++) {
 
@@ -132,40 +96,27 @@ class ConvertAllToConnectedComponents {
 			
 			ByteBuffer bbOM = om.getVoxelBox().getPixelsForPlane(z).buffer();
 			
+			int zOffset = e.offset(0, 0, z1);
+			
 			for (int y=0; y<eObjMask.getY(); y++) {
 				for (int x=0; x<eObjMask.getX(); x++) {
 
 					if (bbOM.get()==valueOn) {
 						int x1 = x + crnrMin.getX();
 						int y1 = y + crnrMin.getY();
-
-						int indxBuffer = e.offset(x1, y1);
-						
-						int crntVal = bbS.getCode(indxBuffer);
-						
-						assert( !matS.isPlateau(crntVal) );
-						assert( !matS.isUnvisited(crntVal) );
-						assert( !matS.isTemporary(crntVal) );
-						
-						// We translate the value into directions and use that to determine where to
-						//   travel to
-						if ( matS.isMinima(crntVal) ) {
-							
-							int indxGlobal = e.offset(x1, y1, z1);
-							bbS.putConnectedComponentID(indxBuffer, indxGlobal);
-							
-							// We maintain a mapping between each minimas indxGlobal and 
-						} else if (matS.isConnectedComponentIDCode(crntVal)) {
-							// NO CHANGE
-						} else {
-							int finalIndex = matS.calculateConnectedComponentID(x1, y1, z1, crntVal);
-							bbS.putCode(indxBuffer, finalIndex );
-						}
+ 
+						int offset = e.offset(x1, y1); 
+						bbS.convertCode(
+							offset,
+							zOffset + offset,
+							matS,
+							x1,
+							y1,
+							z1
+						);
 					}
 				}
 			}
 		}
 	}
-	
-	
 }
