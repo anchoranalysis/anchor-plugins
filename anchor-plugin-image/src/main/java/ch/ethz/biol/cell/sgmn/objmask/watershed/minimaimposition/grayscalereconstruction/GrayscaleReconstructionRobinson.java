@@ -39,23 +39,15 @@ import org.anchoranalysis.image.voxel.box.VoxelBoxWrapper;
 import org.anchoranalysis.image.voxel.box.factory.VoxelBoxFactory;
 import org.anchoranalysis.image.voxel.buffer.SlidingBuffer;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
+import org.anchoranalysis.image.voxel.iterator.changed.InitializableProcessChangedPoint;
+import org.anchoranalysis.image.voxel.iterator.changed.ProcessChangedPointAbsolute;
+import org.anchoranalysis.image.voxel.iterator.changed.ProcessChangedPointFactory;
 import org.anchoranalysis.image.voxel.nghb.BigNghb;
-import org.anchoranalysis.image.voxel.nghb.IProcessAbsolutePoint;
-import org.anchoranalysis.image.voxel.nghb.IProcessAbsolutePointObjectMask;
 import org.anchoranalysis.image.voxel.nghb.Nghb;
-import org.anchoranalysis.image.voxel.nghb.iterator.PointExtntIterator;
-import org.anchoranalysis.image.voxel.nghb.iterator.PointIterator;
-import org.anchoranalysis.image.voxel.nghb.iterator.PointObjMaskIterator;
 
 import ch.ethz.biol.cell.sgmn.objmask.watershed.encoding.PriorityQueueIndexRangeDownhill;
 
 public class GrayscaleReconstructionRobinson extends GrayscaleReconstructionByErosion {
-
-	
-
-	// START BEAN PROPERTIES
-	
-	// END BEAN PROPERTIES
 	
 	@Override
 	public VoxelBoxWrapper reconstruction( VoxelBoxWrapper maskVb, VoxelBoxWrapper markerVb, Optional<ObjMask> containingMask ) {
@@ -98,14 +90,6 @@ public class GrayscaleReconstructionRobinson extends GrayscaleReconstructionByEr
 		return markerVb;
 	}
 	
-	private PointIterator iteratorFromMask(Optional<ObjMask> containingMask, PointTester pt, Extent extnt) {
-		return containingMask.map( mask->
-			(PointIterator) new PointObjMaskIterator(pt, mask)
-		).orElseGet( ()->
-			new PointExtntIterator(extnt, pt)
-		);
-	}
-	
 	private void readFromQueueUntilEmpty( PriorityQueueIndexRangeDownhill<Point3i> queue, VoxelBox<?> markerVb, VoxelBox<?> maskVb, VoxelBox<ByteBuffer> vbFinalized, Optional<ObjMask> containingMask ) {
 		
 		Extent e = markerVb.extnt();
@@ -117,10 +101,10 @@ public class GrayscaleReconstructionRobinson extends GrayscaleReconstructionByEr
 		BinaryValuesByte bvFinalized = BinaryValuesByte.getDefault();
 		
 		PointTester pt = new PointTester(sbMarker, sbMask, sbFinalized, queue, bvFinalized );
-		PointIterator pointIterator = iteratorFromMask(
+		InitializableProcessChangedPoint pointIterator = ProcessChangedPointFactory.within(
 			containingMask,
-			pt,
-			markerVb.extnt()
+			markerVb.extnt(),
+			pt
 		);
 		
 		Nghb nghb = new BigNghb(false);
@@ -148,7 +132,7 @@ public class GrayscaleReconstructionRobinson extends GrayscaleReconstructionByEr
 	}
 	
 	
-	private static class PointTester implements IProcessAbsolutePoint, IProcessAbsolutePointObjectMask {
+	private static class PointTester implements ProcessChangedPointAbsolute {
 
 		private SlidingBuffer<?> sbMarker;
 		private SlidingBuffer<?> sbMask;
@@ -221,20 +205,6 @@ public class GrayscaleReconstructionRobinson extends GrayscaleReconstructionByEr
 			}
 			
 			return false;
-		}
-
-
-		@Override
-		public void notifyChangeZ(int zChange, int z,
-				ByteBuffer objectMaskBuffer) {
-			notifyChangeZ(zChange, z);
-		}
-
-
-		@Override
-		public boolean processPoint(int xChange, int yChange, int x1, int y1,
-				int objectMaskOffset) {
-			return processPoint(xChange, yChange, x1, y1);
 		}
 	}
 	

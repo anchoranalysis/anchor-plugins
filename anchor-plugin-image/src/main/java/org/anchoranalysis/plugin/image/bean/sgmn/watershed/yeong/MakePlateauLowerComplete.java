@@ -36,10 +36,11 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.objmask.ObjMask;
+import org.anchoranalysis.image.voxel.iterator.changed.InitializableProcessChangedPoint;
+import org.anchoranalysis.image.voxel.iterator.changed.ProcessChangedPointAbsoluteMasked;
+import org.anchoranalysis.image.voxel.iterator.changed.ProcessChangedPointFactory;
 import org.anchoranalysis.image.voxel.nghb.BigNghb;
-import org.anchoranalysis.image.voxel.nghb.IProcessAbsolutePointObjectMask;
 import org.anchoranalysis.image.voxel.nghb.Nghb;
-import org.anchoranalysis.image.voxel.nghb.iterator.PointObjMaskIterator;
 
 import ch.ethz.biol.cell.sgmn.objmask.ObjMaskChnlUtilities;
 import ch.ethz.biol.cell.sgmn.objmask.watershed.encoding.EncodedVoxelBox;
@@ -67,7 +68,7 @@ class MakePlateauLowerComplete {
 	}
 	
 	
-	private static class PointTester implements IProcessAbsolutePointObjectMask {
+	private static class PointTester implements ProcessChangedPointAbsoluteMasked {
 
 		// STATIC
 		private EncodedVoxelBox matS;
@@ -131,7 +132,7 @@ class MakePlateauLowerComplete {
 			
 			
 			PointTester pt = new PointTester(matS, om.getBinaryValuesByte());
-			PointObjMaskIterator itr = new PointObjMaskIterator(pt, om);
+			InitializableProcessChangedPoint process = ProcessChangedPointFactory.withinMask(om, pt);
 			
 			while( !searchPoints.isEmpty() ) {
 				
@@ -139,8 +140,8 @@ class MakePlateauLowerComplete {
 				
 				// We iterate through all the search points
 				for( Point3i p : searchPoints ) {
-					itr.initPnt(p.getX(), p.getY(), p.getZ());
-					nghb.processAllPointsInNghb(do3D, itr);
+					process.initPnt(p.getX(), p.getY(), p.getZ());
+					nghb.processAllPointsInNghb(do3D, process);
 				}
 				searchPoints = pt.getFoundPoints();
 			}

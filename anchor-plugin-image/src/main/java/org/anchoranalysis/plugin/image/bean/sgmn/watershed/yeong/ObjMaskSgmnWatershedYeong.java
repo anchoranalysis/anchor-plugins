@@ -33,7 +33,6 @@ import java.util.Optional;
 import org.anchoranalysis.bean.OptionalFactory;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.bean.sgmn.objmask.ObjMaskSgmn;
 import org.anchoranalysis.image.chnl.Chnl;
 import org.anchoranalysis.image.extent.Extent;
@@ -86,8 +85,10 @@ public class ObjMaskSgmnWatershedYeong extends ObjMaskSgmn {
 			exitWithMinima,
 			() -> new MinimaStore()
 		);
-		
-		maskSeedsIfPresent(seeds, matS, minimaStore, mask);
+
+		if (seeds.isPresent()) {
+			MarkSeeds.apply(seeds.get(), matS, minimaStore, mask);
+		}
 		
 		PointPixelsOrMarkAsMinima.apply( chnl.getVoxelBox().any(), matS, mask, minimaStore);
 
@@ -110,16 +111,6 @@ public class ObjMaskSgmnWatershedYeong extends ObjMaskSgmn {
 	private EncodedVoxelBox createS(Extent extent) {
 		VoxelBox<IntBuffer> matSVoxelBox = VoxelBoxFactory.instance().getInt().create(extent);
 		return new EncodedVoxelBox(matSVoxelBox);
-	}
-	
-	private void maskSeedsIfPresent(Optional<SeedCollection> seeds, EncodedVoxelBox matS, Optional<MinimaStore> minimaStore, Optional<ObjMask> mask) throws SgmnFailedException {
-		if (seeds.isPresent()) {
-			try {
-				MarkSeeds.apply(seeds.get(), matS, minimaStore, mask);
-			} catch (OperationFailedException e) {
-				throw new SgmnFailedException(e);
-			}
-		}
 	}
 
 	public boolean isExitWithMinima() {

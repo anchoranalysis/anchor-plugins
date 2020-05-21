@@ -27,7 +27,6 @@ package org.anchoranalysis.plugin.image.bean.sgmn.watershed.yeong;
  */
 
 
-import java.nio.ByteBuffer;
 import java.util.Optional;
 import java.util.Stack;
 
@@ -37,12 +36,10 @@ import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.anchoranalysis.image.voxel.buffer.SlidingBuffer;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
+import org.anchoranalysis.image.voxel.iterator.changed.InitializableProcessChangedPoint;
+import org.anchoranalysis.image.voxel.iterator.changed.ProcessChangedPointAbsolute;
+import org.anchoranalysis.image.voxel.iterator.changed.ProcessChangedPointFactory;
 import org.anchoranalysis.image.voxel.nghb.BigNghb;
-import org.anchoranalysis.image.voxel.nghb.IProcessAbsolutePoint;
-import org.anchoranalysis.image.voxel.nghb.IProcessAbsolutePointObjectMask;
-import org.anchoranalysis.image.voxel.nghb.iterator.PointExtntIterator;
-import org.anchoranalysis.image.voxel.nghb.iterator.PointIterator;
-import org.anchoranalysis.image.voxel.nghb.iterator.PointObjMaskIterator;
 
 import ch.ethz.biol.cell.sgmn.objmask.watershed.encoding.EncodedIntBuffer;
 import ch.ethz.biol.cell.sgmn.objmask.watershed.encoding.EncodedVoxelBox;
@@ -95,7 +92,7 @@ final class FindEqualVoxels {
 		
 		PointTester pt = new PointTester( stack, extnt, rbb, matS);
 				
-		PointIterator itr = mask.isPresent() ? new PointObjMaskIterator(pt, mask.get()) : new PointExtntIterator(extnt, pt);
+		InitializableProcessChangedPoint itr = ProcessChangedPointFactory.within(mask, extnt, pt);
 				
 		BigNghb nghb = new BigNghb();
 		
@@ -132,7 +129,7 @@ final class FindEqualVoxels {
 	
 	
 	
-	private static class PointTester implements IProcessAbsolutePoint, IProcessAbsolutePointObjectMask {
+	private static class PointTester implements ProcessChangedPointAbsolute {
 		
 		// Static arguments
 		private Stack<Point3i> stack;
@@ -233,18 +230,6 @@ final class FindEqualVoxels {
 				
 				return false;
 			}
-		}
-
-		@Override
-		public void notifyChangeZ(int zChange, int z,
-				ByteBuffer objectMaskBuffer) {
-			notifyChangeZ(zChange, z);
-		}
-
-		@Override
-		public boolean processPoint(int xChange, int yChange, int x1, int y1,
-				int objectMaskOffset) {
-			return processPoint(xChange, yChange, x1, y1);
 		}
 	}
 
