@@ -109,7 +109,7 @@ public class ArbitraryInsidePoint extends FeatureObjMask {
 	private static Point3i calcArbitraryPointWithinMask( ObjMask om ) {
 		
 		// First we try the mid point of the bounding box
-		Point3i midPoint = new Point3i( om.getBoundingBox().midpoint() );
+		Point3i midPoint = om.getBoundingBox().centerOfGravity();
 		if (om.contains(midPoint)) {
 			return midPoint;
 		}

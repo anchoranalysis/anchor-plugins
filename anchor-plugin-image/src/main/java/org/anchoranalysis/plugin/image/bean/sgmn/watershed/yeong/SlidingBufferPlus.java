@@ -53,6 +53,11 @@ final class SlidingBufferPlus {
 		int z,
 		EncodedIntBuffer bbS
 	) {
+		// Exit early if this voxel has already been visited
+		if (!bbS.isUnvisited(indxBuffer)) {
+			return;
+		}
+		
 		// We get the value of g
 		int gVal = rbb.getCentre().getInt(indxBuffer);
 		

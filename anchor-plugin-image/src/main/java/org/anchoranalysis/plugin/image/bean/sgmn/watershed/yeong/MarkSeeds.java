@@ -27,16 +27,15 @@ package org.anchoranalysis.plugin.image.bean.sgmn.watershed.yeong;
  */
 
 
-import java.nio.ByteBuffer;
 import java.util.Optional;
 
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.geometry.Point3i;
-import org.anchoranalysis.image.binary.values.BinaryValuesByte;
-import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.image.seed.Seed;
 import org.anchoranalysis.image.seed.SeedCollection;
+import org.anchoranalysis.image.sgmn.SgmnFailedException;
+import org.anchoranalysis.image.voxel.iterator.IterateVoxels;
+import org.anchoranalysis.image.voxel.iterator.ProcessPoint;
 
 import ch.ethz.biol.cell.sgmn.objmask.watershed.encoding.EncodedVoxelBox;
 
@@ -45,123 +44,38 @@ class MarkSeeds {
 		
 	private MarkSeeds() {}
 
-	public static void apply( SeedCollection seeds, EncodedVoxelBox matS, Optional<MinimaStore> minimaStore, Optional<ObjMask> containingMask ) throws OperationFailedException {
+	public static void apply( SeedCollection seeds, EncodedVoxelBox matS, Optional<MinimaStore> minimaStore, Optional<ObjMask> containingMask ) throws SgmnFailedException {
 			
 		if (containingMask.isPresent() && !matS.extnt().equals(containingMask.get().getBoundingBox().extnt())) {
-			throw new OperationFailedException("Extnt of matS does not match containingMask");
+			throw new SgmnFailedException("Extnt of matS does not match containingMask");
 		}
 		
 		for( Seed s : seeds ) {
 			
-			SeedSlidingBuffer seedBuffer = new SeedSlidingBuffer(
-				s.createMask()
-			);
-			seedBuffer.throwExceptionIfNotConnected();
+			ObjMask mask = s.createMask();
+			
+			throwExceptionIfNotConnected(mask);
 		
-			ConnectedComponentWriter ccWriter = new ConnectedComponentWriter(matS, minimaStore);
-			if (containingMask.isPresent()) {
-				markSeedWithMask(seedBuffer, ccWriter, containingMask.get());
-			} else {
-				markSeedWithoutMask(seedBuffer, ccWriter);
-			}
+			IterateVoxels.overMasks(
+				mask,
+				containingMask,
+				createPointProcessor(matS, minimaStore)
+			);
 		}
 	}
 	
-	private static final class SeedSlidingBuffer {
-		
-		private ObjMask obj;
-				
-		public final Point3i crnrMin;
-		public final Point3i crnrMax;
-		public final byte maskOn = BinaryValuesByte.getDefault().getOnByte(); 
-		
-		/**
-		 * A buffer for accessing a seed
-		 * 
-		 * @param obj the object representing a seed
-		 */
-		public SeedSlidingBuffer(ObjMask obj) {
-			super();
-			this.obj = obj;
-			this.crnrMin = obj.getBoundingBox().getCrnrMin();
-			this.crnrMax = obj.getBoundingBox().calcCrnrMax();
-		}
-		
-		public void throwExceptionIfNotConnected() throws OperationFailedException {
+	private static ProcessPoint createPointProcessor(EncodedVoxelBox matS, Optional<MinimaStore> minimaStore ) {
+		ConnectedComponentWriter ccWriter = new ConnectedComponentWriter(matS, minimaStore);
+		return pnt -> ccWriter.writePoint(pnt);
+	}
+	
+	private static void throwExceptionIfNotConnected( ObjMask obj ) throws SgmnFailedException {
+		try {
 			if (!obj.checkIfConnected()) {
-				throw new OperationFailedException("Seed must be a single connected-component");
+				throw new SgmnFailedException("Seed must be a single connected-component");
 			}
-			
-		}
-		
-		/**
-		 * A z-slice buffer given a global z-slice coordinate
-		 * 
-		 * @param zGlobal global z-value
-		 * @return a buffer for a particular slice for the seed-object only
-		 */
-		public ByteBuffer bufferRelative(int zGlobal) {
-			return obj.getVoxelBox().getPixelsForPlane(
-				zGlobal - crnrMin.getZ()
-			).buffer();
-		}
-		
-		@FunctionalInterface
-		public interface ProcessPoint {
-			void process(Point3i pnt);
-		}
-		
-		public void callForEachPoint( ByteBuffer bb, int z, ProcessPoint process ) {
-			int index = 0;
-			for( int y=crnrMin.getY(); y<=crnrMax.getY(); y++) {
-				for( int x=crnrMin.getX(); x<=crnrMax.getX(); x++) {
-					
-					if (bb.get(index)==maskOn) {
-						process.process(
-							new Point3i(x,y,z)
-						);
-					}
-					index++;
-				}
-			}
-		}
-	}
-	
-	private static void markSeedWithoutMask( SeedSlidingBuffer seed, ConnectedComponentWriter writer ) {
-				
-		for( int z=seed.crnrMin.getZ(); z<=seed.crnrMax.getZ(); z++) {
-			
-			ByteBuffer bb = seed.bufferRelative(z);
-			
-			seed.callForEachPoint(
-				bb,
-				z,
-				pnt -> writer.writePoint(pnt)
-			);
-		}
-	}
-	
-	private static void markSeedWithMask( SeedSlidingBuffer seed, ConnectedComponentWriter writer, ObjMask containingMask) {
-		
-		Extent extntContainingMask = containingMask.getVoxelBox().extnt();
-				
-		for( int z=seed.crnrMin.getZ(); z<=seed.crnrMax.getZ(); z++) {
-			
-			ByteBuffer bb = seed.bufferRelative(z);
-			ByteBuffer bbContainingMask = containingMask.getVoxelBox().getPixelsForPlane(z).buffer();
-						
-			seed.callForEachPoint(
-				bb,
-				z,
-				pnt -> {
-					int offsetContainingMask = extntContainingMask.offset(pnt.getX(), pnt.getY());
-					
-					// We skip if our containing mask doesn't include it
-					if (bbContainingMask.get(offsetContainingMask)==seed.maskOn) {
-						writer.writePoint(pnt);
-					}
-				}
-			);
+		} catch (OperationFailedException e) {
+			throw new SgmnFailedException("Cannot determine if a seed is a connected-component", e);
 		}
 	}
 }

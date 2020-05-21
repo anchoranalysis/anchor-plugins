@@ -6,6 +6,12 @@ import org.anchoranalysis.core.geometry.Point3i;
 
 import ch.ethz.biol.cell.sgmn.objmask.watershed.encoding.EncodedVoxelBox;
 
+/**
+ * Writes all points in a particular connected-component using the same ID
+ * 
+ * @author Owen Feehan
+ *
+ */
 final class ConnectedComponentWriter {
 
 	private final EncodedVoxelBox matS;
@@ -20,13 +26,19 @@ final class ConnectedComponentWriter {
 		this.minimaStore = minimaStore;
 	}
 	
+	/**
+	 * 
+	 * @param pnt a point that is treated immutably
+	 */
 	public void writePoint( Point3i pnt ) {
-		// We write a connected component id based upon the first
+		// We write a connected component id based upon the first voxel encountered
 		if (id==-1) {
 			id = matS.extnt().offset(pnt);
 			
 			if (minimaStore.isPresent()) {
-				minimaStore.get().add(pnt);
+				minimaStore.get().add(
+					new Point3i(pnt)	// Duplicated, as Point3i is mutable and changes over hte iteration
+				);
 			}
 		}
 		

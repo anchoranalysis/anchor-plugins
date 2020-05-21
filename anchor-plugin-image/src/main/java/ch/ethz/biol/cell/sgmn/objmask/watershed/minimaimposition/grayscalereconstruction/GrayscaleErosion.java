@@ -33,11 +33,11 @@ import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.anchoranalysis.image.voxel.buffer.SlidingBuffer;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
+import org.anchoranalysis.image.voxel.iterator.changed.InitializableProcessChangedPoint;
+import org.anchoranalysis.image.voxel.iterator.changed.ProcessChangedPointAbsolute;
+import org.anchoranalysis.image.voxel.iterator.changed.ProcessChangedPointFactory;
 import org.anchoranalysis.image.voxel.nghb.BigNghb;
-import org.anchoranalysis.image.voxel.nghb.IProcessAbsolutePoint;
 import org.anchoranalysis.image.voxel.nghb.Nghb;
-import org.anchoranalysis.image.voxel.nghb.iterator.PointExtntIterator;
-import org.anchoranalysis.image.voxel.nghb.iterator.PointIterator;
 
 
 // Performs grayscale erosion on a point using a 3x3 FLAT structuring element
@@ -48,25 +48,16 @@ public class GrayscaleErosion {
 	private boolean do3D = false;
 	
 	private PointTester pt;
-	private PointIterator pointIterator;
+	private InitializableProcessChangedPoint pointProcessor;
 	
 	// Without mask
 	public GrayscaleErosion( SlidingBuffer<ByteBuffer> rbb, boolean do3D ) {
 		this.do3D = do3D;
 		this.pt = new PointTester(rbb);
-		this.pointIterator = new PointExtntIterator( rbb.extnt(), pt);
+		this.pointProcessor = ProcessChangedPointFactory.withinExtent(rbb.extnt(), pt);
 	}
 	
-	// Masked
-//	public SteepestCalc( Extnt e, SlidingBuffer<ByteBuffer> rbb, WatershedEncoding encoder, boolean do3D, boolean bigNghb, ObjMask om ) {
-//		this.do3D = do3D;
-//		this.bigNghb = bigNghb;
-//		this.pt = new PointTester(e,encoder,rbb);
-//		this.pointIterator = new PointObjMaskIterator(pt, om);
-//	}
-	
-	
-	private static class PointTester implements IProcessAbsolutePoint {
+	private static class PointTester implements ProcessChangedPointAbsolute {
 
 		private SlidingBuffer<ByteBuffer> rbb;
 
@@ -117,12 +108,12 @@ public class GrayscaleErosion {
 	// The sliding buffer must be centred at the current value of z
 	public int grayscaleErosion( int x, int y, int z, SlidingBuffer<ByteBuffer> buffer, int indx, int exstVal ) {
 		
-		this.pointIterator.initPnt(x, y, z);
+		this.pointProcessor.initPnt(x, y, z);
 		this.pt.reset( indx, exstVal );
 		
 		// Makes sure that it includes its centre point
 		Nghb nghb = new BigNghb(false);
-		nghb.processAllPointsInNghb(do3D, pointIterator);
+		nghb.processAllPointsInNghb(do3D, pointProcessor);
 		
 		return pt.getMinima();
 	}

@@ -27,27 +27,24 @@ package ch.ethz.biol.cell.sgmn.objmask.watershed.encoding;
  */
 
 
-import java.nio.ByteBuffer;
 import java.util.Optional;
 
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.image.voxel.buffer.SlidingBuffer;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
+import org.anchoranalysis.image.voxel.iterator.changed.InitializableProcessChangedPoint;
+import org.anchoranalysis.image.voxel.iterator.changed.ProcessChangedPointAbsolute;
+import org.anchoranalysis.image.voxel.iterator.changed.ProcessChangedPointFactory;
 import org.anchoranalysis.image.voxel.nghb.BigNghb;
-import org.anchoranalysis.image.voxel.nghb.IProcessAbsolutePoint;
-import org.anchoranalysis.image.voxel.nghb.IProcessAbsolutePointObjectMask;
 import org.anchoranalysis.image.voxel.nghb.Nghb;
 import org.anchoranalysis.image.voxel.nghb.SmallNghb;
-import org.anchoranalysis.image.voxel.nghb.iterator.PointExtntIterator;
-import org.anchoranalysis.image.voxel.nghb.iterator.PointIterator;
-import org.anchoranalysis.image.voxel.nghb.iterator.PointObjMaskIterator;
 
 public final class SteepestCalc {
 
 	private final boolean do3D;
 	private final PointTester pt;
-	private final PointIterator pointIterator;
+	private final InitializableProcessChangedPoint process;
 	private final Nghb nghb;
 	
 	/**
@@ -61,11 +58,11 @@ public final class SteepestCalc {
 	public SteepestCalc( SlidingBuffer<?> rbb, WatershedEncoding encoder, boolean do3D, boolean bigNghb, Optional<ObjMask> mask ) {
 		this.do3D = do3D;
 		this.pt = new PointTester(encoder,rbb);
-		this.pointIterator = mask.isPresent() ? new PointObjMaskIterator(pt, mask.get()) : new PointExtntIterator(rbb.extnt(), pt);
+		this.process = ProcessChangedPointFactory.within(mask, rbb.extnt(), pt);
 		this.nghb = bigNghb ? new BigNghb() : new SmallNghb();
 	}
 	
-	private static class PointTester implements IProcessAbsolutePoint, IProcessAbsolutePointObjectMask {
+	private static class PointTester implements ProcessChangedPointAbsolute {
 
 		
 		private SlidingBuffer<?> rbb;
@@ -120,12 +117,6 @@ public final class SteepestCalc {
 			
 			return false;			
 		}
-		
-		@Override
-		public boolean processPoint(int xChange, int yChange, int x1, int y1,
-				int objectMaskOffset) {
-			return processPoint(xChange, yChange, x1, y1);
-		}
 
 		public int getSteepestDrctn() {
 			return steepestDrctn;
@@ -136,24 +127,15 @@ public final class SteepestCalc {
 			this.bb = rbb.bufferRel(zChange);
 			this.zChange = zChange;
 		}
-
-		@Override
-		public void notifyChangeZ(int zChange, int z1,
-				ByteBuffer objectMaskBuffer) {
-			notifyChangeZ(zChange, z1);
-		}
-
-		
-
 	}
 	
 	// Calculates the steepest descent
 	public int calcSteepestDescent( int x, int y, int z, int val, int indxBuffer ) {
 		
-		this.pointIterator.initPnt(x, y, z);
+		this.process.initPnt(x, y, z);
 		this.pt.initPnt(val, indxBuffer);
 		
-		nghb.processAllPointsInNghb(do3D, pointIterator);
+		nghb.processAllPointsInNghb(do3D, process);
 		
 		return pt.getSteepestDrctn();
 	}

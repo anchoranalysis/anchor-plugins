@@ -34,6 +34,7 @@ import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
+import org.anchoranalysis.image.voxel.iterator.ProcessPoint;
 
 import ch.ethz.biol.cell.sgmn.objmask.watershed.encoding.EncodedIntBuffer;
 import ch.ethz.biol.cell.sgmn.objmask.watershed.encoding.EncodedVoxelBox;
@@ -66,9 +67,7 @@ class PointPixelsOrMarkAsMinima {
 			for (int y=0; y<e.getY(); y++) {
 				for (int x=0; x<e.getX(); x++) {
 					
-					if (bbS.isUnvisited(indxBuffer)) {
-						buffer.visitPixel( indxBuffer, x, y, z, bbS);
-					}
+					buffer.visitPixel( indxBuffer, x, y, z, bbS);
 
 					indxBuffer++;
 				}
@@ -90,8 +89,8 @@ class PointPixelsOrMarkAsMinima {
 		for (int z=0; z<eObjMask.getZ(); z++) {
 		
 			int z1 = z+crnrMin.getZ();
-			EncodedIntBuffer bbS = buffer.getSPlane(z1);
 			
+			EncodedIntBuffer bbS = buffer.getSPlane(z1);
 			ByteBuffer bbOM = om.getVoxelBox().getPixelsForPlane(z).buffer();
 	
 			for (int y=0; y<eObjMask.getY(); y++) {
@@ -106,14 +105,42 @@ class PointPixelsOrMarkAsMinima {
 						
 						int indxBuffer = e.offset(x1, y1);
 						
-						if (bbS.isUnvisited(indxBuffer)) {
-							buffer.visitPixel( indxBuffer, x1, y1, z1, bbS );
-						}
+						buffer.visitPixel( indxBuffer, x1, y1, z1, bbS );
 					}
 				}
 			}
 			
 			buffer.shift();
+		}
+	}
+	
+	private static final class PointProcessor implements ProcessPoint {
+
+		private final SlidingBufferPlus buffer;
+		private final Extent extent;
+		
+		private EncodedIntBuffer bbS;
+		
+		public PointProcessor(SlidingBufferPlus buffer) {
+			super();
+			this.buffer = buffer;
+			this.extent = buffer.extnt();
+		}
+		
+		@Override
+		public void process(Point3i pnt) {
+			int indxBuffer = extent.offsetSlice(pnt);
+			
+			buffer.visitPixel( indxBuffer, pnt.getX(), pnt.getY(), pnt.getZ(), bbS );
+			
+		}
+
+		@Override
+		public void notifyChangeZ(int z) {
+			if (z!=0) {
+				buffer.shift();
+			}
+			bbS = buffer.getSPlane(z);
 		}
 	}
 }
