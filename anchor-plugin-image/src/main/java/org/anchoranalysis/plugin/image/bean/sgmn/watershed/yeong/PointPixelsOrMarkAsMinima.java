@@ -27,13 +27,13 @@ package org.anchoranalysis.plugin.image.bean.sgmn.watershed.yeong;
  */
 
 
-import java.nio.ByteBuffer;
 import java.util.Optional;
 
 import org.anchoranalysis.core.geometry.Point3i;
-import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
+import org.anchoranalysis.image.voxel.buffer.SlidingBuffer;
+import org.anchoranalysis.image.voxel.iterator.IterateVoxels;
 import org.anchoranalysis.image.voxel.iterator.ProcessPoint;
 
 import ch.ethz.biol.cell.sgmn.objmask.watershed.encoding.EncodedIntBuffer;
@@ -45,94 +45,58 @@ class PointPixelsOrMarkAsMinima {
 		
 	public static void apply( VoxelBox<?> vbImg, EncodedVoxelBox matS, Optional<ObjMask> mask, Optional<MinimaStore> minimaStore ) {
 		
-		SlidingBufferPlus state = new SlidingBufferPlus(vbImg, matS, mask, minimaStore);
-		
-		if (mask.isPresent()) {
-			slideWithMask(state, mask.get());
-		} else {
-			slide(state);
-		}
-	}
-	
-	private static void slide( SlidingBufferPlus buffer) {
-		
-		Extent e = buffer.extnt();
-		buffer.init(0);
-		
-		for (int z=0; z<e.getZ(); z++) {
-			
-			EncodedIntBuffer bbS = buffer.getSPlane(z);
-			int indxBuffer = 0;
-			
-			for (int y=0; y<e.getY(); y++) {
-				for (int x=0; x<e.getX(); x++) {
-					
-					buffer.visitPixel( indxBuffer, x, y, z, bbS);
-
-					indxBuffer++;
-				}
-			}
-			
-			buffer.shift();
-		}
-	}
-
-	private static void slideWithMask( SlidingBufferPlus buffer, ObjMask om ) {
-			
-		Point3i crnrMin = om.getBoundingBox().getCrnrMin();
-		byte maskOn = om.getBinaryValuesByte().getOnByte();
-		Extent eObjMask = om.getVoxelBox().extnt();
-
-		Extent e = buffer.extnt();
-		buffer.init(crnrMin.getZ());
-
-		for (int z=0; z<eObjMask.getZ(); z++) {
-		
-			int z1 = z+crnrMin.getZ();
-			
-			EncodedIntBuffer bbS = buffer.getSPlane(z1);
-			ByteBuffer bbOM = om.getVoxelBox().getPixelsForPlane(z).buffer();
-	
-			for (int y=0; y<eObjMask.getY(); y++) {
-				for (int x=0; x<eObjMask.getX(); x++) {
-			
-					int offsetObjMask = eObjMask.offset(x, y);
-
-					if (bbOM.get(offsetObjMask)==maskOn) {
-
-						int x1 = x+crnrMin.getX();
-						int y1 = y+crnrMin.getY();
-						
-						int indxBuffer = e.offset(x1, y1);
-						
-						buffer.visitPixel( indxBuffer, x1, y1, z1, bbS );
-					}
-				}
-			}
-			
-			buffer.shift();
-		}
+		SlidingBufferPlus buffer = new SlidingBufferPlus(vbImg, matS, mask, minimaStore);
+		buffer.getSlidingBuffer().init(
+			mask.map( om->
+				om.getBoundingBox().getCrnrMin().getZ()
+			).orElse(0)
+		);
+		IterateVoxels.callEachPoint(
+			mask,
+			buffer.getSlidingBuffer().extnt(),
+			new PointProcessorSlide(
+				buffer.getSlidingBuffer(),
+				new PointProcessor(buffer)
+			)
+		);
 	}
 	
 	private static final class PointProcessor implements ProcessPoint {
 
-		private final SlidingBufferPlus buffer;
-		private final Extent extent;
+		private final SlidingBufferPlus bufferPlus;
 		
 		private EncodedIntBuffer bbS;
 		
-		public PointProcessor(SlidingBufferPlus buffer) {
+		public PointProcessor(SlidingBufferPlus bufferPlus) {
 			super();
-			this.buffer = buffer;
-			this.extent = buffer.extnt();
+			this.bufferPlus = bufferPlus;
 		}
 		
 		@Override
 		public void process(Point3i pnt) {
-			int indxBuffer = extent.offsetSlice(pnt);
-			
-			buffer.visitPixel( indxBuffer, pnt.getX(), pnt.getY(), pnt.getZ(), bbS );
-			
+			bufferPlus.visitPixel( pnt, bbS );
+		}
+
+		@Override
+		public void notifyChangeZ(int z) {
+			bbS = bufferPlus.getSPlane(z);
+		}
+	}
+	
+	
+	private static final class PointProcessorSlide implements ProcessPoint {
+
+		private final SlidingBuffer<?> buffer;
+		private final ProcessPoint process;
+		
+		public PointProcessorSlide(SlidingBuffer<?> buffer, ProcessPoint process) {
+			this.process = process;
+			this.buffer = buffer;
+		}
+		
+		@Override
+		public void process(Point3i pnt) {
+			process.process(pnt);
 		}
 
 		@Override
@@ -140,7 +104,7 @@ class PointPixelsOrMarkAsMinima {
 			if (z!=0) {
 				buffer.shift();
 			}
-			bbS = buffer.getSPlane(z);
+			process.notifyChangeZ(z);
 		}
 	}
 }

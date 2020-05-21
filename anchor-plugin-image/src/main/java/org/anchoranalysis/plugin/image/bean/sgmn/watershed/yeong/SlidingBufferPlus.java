@@ -3,7 +3,6 @@ package org.anchoranalysis.plugin.image.bean.sgmn.watershed.yeong;
 import java.util.Optional;
 
 import org.anchoranalysis.core.geometry.Point3i;
-import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.anchoranalysis.image.voxel.buffer.SlidingBuffer;
@@ -33,26 +32,13 @@ final class SlidingBufferPlus {
 		this.findEqualVoxels = new FindEqualVoxels( vbImg, matS, do3D, mask );
 		this.steepestCalc = new SteepestCalc(rbb,matS.getEncoding(), do3D ,true, mask );
 	}
-
-	public void init( int z) {
-		rbb.init(z);
-	}
-
-	public void shift() {
-		rbb.shift();
-	}
-
-	public Extent extnt() {
-		return rbb.extnt();
-	}
 	
 	public void visitPixel(
-		int indxBuffer,
-		int x,
-		int y,
-		int z,
+		Point3i pnt,
 		EncodedIntBuffer bbS
 	) {
+		int indxBuffer = rbb.extnt().offsetSlice(pnt);
+		
 		// Exit early if this voxel has already been visited
 		if (!bbS.isUnvisited(indxBuffer)) {
 			return;
@@ -62,20 +48,20 @@ final class SlidingBufferPlus {
 		int gVal = rbb.getCentre().getInt(indxBuffer);
 		
 		// Calculate steepest descent. -1 indicates that there is no steepest descent
-		int chainCode = steepestCalc.calcSteepestDescent(x,y,z,gVal,indxBuffer);
+		int chainCode = steepestCalc.calcSteepestDescent(pnt,gVal,indxBuffer);
 		
 		if (matS.isMinima(chainCode)) {
 			// Treat as local minima
 			bbS.putCode(indxBuffer, chainCode);	
 			
 			if (minimaStore.isPresent()) {
-				minimaStore.get().add( new Point3i(x,y,z) );
+				minimaStore.get().addDuplicated(pnt);
 			}
 			
 		} else if (matS.isPlateau(chainCode)) {
 
 			new MakePlateauLowerComplete(
-				findEqualVoxels.createPlateau(x,y,z),
+				findEqualVoxels.createPlateau(pnt),
 				findEqualVoxels.isDo3D()
 			).makeBufferLowerCompleteForPlateau(
 				matS,
@@ -90,5 +76,9 @@ final class SlidingBufferPlus {
 
 	public EncodedIntBuffer getSPlane(int z) {
 		return matS.getPixelsForPlane(z);
+	}
+
+	public SlidingBuffer<?> getSlidingBuffer() {
+		return rbb;
 	}
 }

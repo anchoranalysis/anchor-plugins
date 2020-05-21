@@ -61,8 +61,13 @@ class MinimaStore {
 	
 	private List<Minima> list = new ArrayList<>();
 
-	public void add( Point3i pnt ) {
-		list.add( new Minima(pnt) );
+	/** Adds a new minima, but duplicates the point (which is mutable and may change during iteration) before adding */
+	public void addDuplicated( Point3i pnt ) {
+		list.add(
+			new Minima(
+				new Point3i(pnt)
+			)
+		);
 	}
 	
 	public void add( List<Point3i> pnts ) {

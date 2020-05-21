@@ -29,6 +29,7 @@ package ch.ethz.biol.cell.sgmn.objmask.watershed.encoding;
 
 import java.util.Optional;
 
+import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.image.voxel.buffer.SlidingBuffer;
@@ -130,9 +131,9 @@ public final class SteepestCalc {
 	}
 	
 	// Calculates the steepest descent
-	public int calcSteepestDescent( int x, int y, int z, int val, int indxBuffer ) {
+	public int calcSteepestDescent( Point3i pnt, int val, int indxBuffer ) {
 		
-		this.process.initPnt(x, y, z);
+		this.process.initPnt(pnt);
 		this.pt.initPnt(val, indxBuffer);
 		
 		nghb.processAllPointsInNghb(do3D, process);

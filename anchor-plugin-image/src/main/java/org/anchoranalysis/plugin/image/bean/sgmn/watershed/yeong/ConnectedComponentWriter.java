@@ -36,9 +36,7 @@ final class ConnectedComponentWriter {
 			id = matS.extnt().offset(pnt);
 			
 			if (minimaStore.isPresent()) {
-				minimaStore.get().add(
-					new Point3i(pnt)	// Duplicated, as Point3i is mutable and changes over hte iteration
-				);
+				minimaStore.get().addDuplicated(pnt);
 			}
 		}
 		

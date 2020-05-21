@@ -29,6 +29,7 @@ package ch.ethz.biol.cell.sgmn.objmask.watershed.minimaimposition.grayscalerecon
 
 import java.nio.ByteBuffer;
 
+import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.anchoranalysis.image.voxel.buffer.SlidingBuffer;
@@ -106,9 +107,9 @@ public class GrayscaleErosion {
 	
 	
 	// The sliding buffer must be centred at the current value of z
-	public int grayscaleErosion( int x, int y, int z, SlidingBuffer<ByteBuffer> buffer, int indx, int exstVal ) {
+	public int grayscaleErosion( Point3i pnt, SlidingBuffer<ByteBuffer> buffer, int indx, int exstVal ) {
 		
-		this.pointProcessor.initPnt(x, y, z);
+		this.pointProcessor.initPnt(pnt);
 		this.pt.reset( indx, exstVal );
 		
 		// Makes sure that it includes its centre point
@@ -143,7 +144,12 @@ public class GrayscaleErosion {
 					
 					int valExst = sb.getCentre().getInt(indx);
 					
-					int valNew = ge.grayscaleErosion(x, y, z, sb, indx, valExst);
+					int valNew = ge.grayscaleErosion(
+						new Point3i(x, y, z),
+						sb,
+						indx,
+						valExst
+					);
 					bbOut.put(indx, (byte) valNew );
 					
 					if (valNew!=valExst) {
