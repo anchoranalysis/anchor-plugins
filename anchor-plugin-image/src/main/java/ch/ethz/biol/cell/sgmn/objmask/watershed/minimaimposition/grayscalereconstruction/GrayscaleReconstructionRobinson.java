@@ -120,13 +120,14 @@ public class GrayscaleReconstructionRobinson extends GrayscaleReconstructionByEr
 			
 			// We have a point, and a value
 			// Now we iterate through the neighbours (but only if they haven't been finalised)
-			pointIterator.initPnt(pnt.getX(), pnt.getY(), pnt.getZ());
+			pointIterator.initPnt(pnt);
 			
-			int indx = e.offset(pnt.getX(), pnt.getY());
-			pt.reset( indx, nextVal );
+			pt.reset(
+				e.offsetSlice(pnt),
+				nextVal
+			);
 			
 			// Makes sure that it includes its centre point
-			
 			nghb.processAllPointsInNghb(do3D, pointIterator);
 		}
 	}

@@ -63,18 +63,18 @@ final class FindEqualVoxels {
 		this.mask = mask;
 	}
 	
-	public EqualVoxelsPlateau createPlateau( int x, int y, int z ) {
+	public EqualVoxelsPlateau createPlateau(Point3i pnt) {
 		
 		EqualVoxelsPlateau plateau = new EqualVoxelsPlateau();
 				
 		int valToFind = 
-			bufferValuesToFindEqual.getPixelsForPlane(z).getInt(
-				bufferValuesToFindEqual.extnt().offset(x, y)
+			bufferValuesToFindEqual.getPixelsForPlane( pnt.getZ() ).getInt(
+				bufferValuesToFindEqual.extnt().offsetSlice(pnt)
 			);
 		
 		{
 			Stack<Point3i> stack = new Stack<>(); 
-			stack.push( new Point3i(x,y,z) );
+			stack.push(pnt);
 			processStack(stack, plateau, valToFind);
 		}
 		
@@ -112,7 +112,7 @@ final class FindEqualVoxels {
 			
 			rbb.init(z);
 
-			itr.initPnt(pnt.getX(), pnt.getY(), pnt.getZ());
+			itr.initPnt(pnt);
 			pt.initForPoint(valToFind);
 
 			nghb.processAllPointsInNghb(do3D, itr);

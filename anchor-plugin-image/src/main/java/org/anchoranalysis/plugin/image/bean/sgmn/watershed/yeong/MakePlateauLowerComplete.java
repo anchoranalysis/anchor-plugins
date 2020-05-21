@@ -140,7 +140,7 @@ class MakePlateauLowerComplete {
 				
 				// We iterate through all the search points
 				for( Point3i p : searchPoints ) {
-					process.initPnt(p.getX(), p.getY(), p.getZ());
+					process.initPnt(p);
 					nghb.processAllPointsInNghb(do3D, process);
 				}
 				searchPoints = pt.getFoundPoints();
