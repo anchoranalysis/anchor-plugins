@@ -36,6 +36,7 @@ import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.anchoranalysis.image.voxel.buffer.SlidingBuffer;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
+import org.anchoranalysis.image.voxel.iterator.IterateVoxels;
 import org.anchoranalysis.image.voxel.iterator.changed.InitializableProcessChangedPoint;
 import org.anchoranalysis.image.voxel.iterator.changed.ProcessChangedPointAbsolute;
 import org.anchoranalysis.image.voxel.iterator.changed.ProcessChangedPointFactory;
@@ -78,7 +79,6 @@ final class FindEqualVoxels {
 			processStack(stack, plateau, valToFind);
 		}
 		
-		//assert( plateau.size() >= 2 );
 		assert( !plateau.hasNullItems() );
 		
 		return plateau;
@@ -98,24 +98,18 @@ final class FindEqualVoxels {
 		
 		while( !stack.isEmpty() ) {
 			Point3i pnt = stack.pop();
-
-			int x = pnt.getX();
-			int y = pnt.getY();
-			int z = pnt.getZ();
 			
 			// If we've already visited this point, we skip it
 			EncodedIntBuffer bbVisited = matS.getPixelsForPlane( pnt.getZ() );
-			int offset = extnt.offset(x, y);
+			int offset = extnt.offsetSlice(pnt);
 			if (bbVisited.isTemporary(offset)) {
 				continue;
 			}
 			
-			rbb.init(z);
-
-			itr.initPnt(pnt);
+			rbb.init(pnt.getZ());
 			pt.initForPoint(valToFind);
 
-			nghb.processAllPointsInNghb(do3D, itr);
+			IterateVoxels.callEachPointInNghb(pnt, nghb, do3D, itr);
 			
 			bbVisited.markAsTemporary(offset);
 			
@@ -162,10 +156,6 @@ final class FindEqualVoxels {
 			this.valToFind = pntVal;
 		}
 		
-		private void pushStack( int x1, int y1, int z1 ) {
-			stack.push( new Point3i(x1, y1, z1) );			
-		}
-		
 		public boolean hasLowestNghbIndex() {
 			return lowestNghbIndex!=-1;
 		}
@@ -207,15 +197,11 @@ final class FindEqualVoxels {
 					}
 					return false;	
 				}
-				
-				
 			}
 			
 			 
 			if (valPoint==valToFind) {
-				//bbox.add( x1,y1,z1 );
-				//bb.put(offset, CURRENT_OBJ);
-				pushStack(x1,y1,z1);
+				stack.push( new Point3i(x1, y1, z1) );
 				return true;
 			} else {
 				
