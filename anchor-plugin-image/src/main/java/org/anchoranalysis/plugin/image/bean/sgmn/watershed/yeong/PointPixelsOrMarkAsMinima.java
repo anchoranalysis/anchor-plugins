@@ -32,7 +32,6 @@ import java.util.Optional;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
-import org.anchoranalysis.image.voxel.buffer.SlidingBuffer;
 import org.anchoranalysis.image.voxel.iterator.IterateVoxels;
 import org.anchoranalysis.image.voxel.iterator.ProcessPoint;
 
@@ -46,18 +45,10 @@ class PointPixelsOrMarkAsMinima {
 	public static void apply( VoxelBox<?> vbImg, EncodedVoxelBox matS, Optional<ObjMask> mask, Optional<MinimaStore> minimaStore ) {
 		
 		SlidingBufferPlus buffer = new SlidingBufferPlus(vbImg, matS, mask, minimaStore);
-		buffer.getSlidingBuffer().init(
-			mask.map( om->
-				om.getBoundingBox().getCrnrMin().getZ()
-			).orElse(0)
-		);
 		IterateVoxels.callEachPoint(
+			buffer.getSlidingBuffer(),
 			mask,
-			buffer.getSlidingBuffer().extnt(),
-			new PointProcessorSlide(
-				buffer.getSlidingBuffer(),
-				new PointProcessor(buffer)
-			)
+			new PointProcessor(buffer)
 		);
 	}
 	
@@ -74,37 +65,36 @@ class PointPixelsOrMarkAsMinima {
 		
 		@Override
 		public void process(Point3i pnt) {
-			bufferPlus.visitPixel( pnt, bbS );
+			
+			int indxBuffer = bufferPlus.offsetSlice(pnt);
+			
+			// Exit early if this voxel has already been visited
+			if (!bbS.isUnvisited(indxBuffer)) {
+				return;
+			}
+			
+			// We get the value of g
+			int gVal = bufferPlus.getG(indxBuffer);
+			
+			// Calculate steepest descent. -1 indicates that there is no steepest descent
+			int chainCode = bufferPlus.calcSteepestDescent(pnt,gVal,indxBuffer);
+			
+			if (bufferPlus.isMinima(chainCode)) {
+				// Treat as local minima
+				bbS.putCode(indxBuffer, chainCode);	
+				bufferPlus.maybeAddMinima(pnt);
+				
+			} else if (bufferPlus.isPlateau(chainCode)) {
+				bufferPlus.makePlateauAt(pnt);
+			} else {
+				// Record steepest
+				bbS.putCode(indxBuffer,chainCode);
+			}
 		}
 
 		@Override
 		public void notifyChangeZ(int z) {
 			bbS = bufferPlus.getSPlane(z);
-		}
-	}
-	
-	
-	private static final class PointProcessorSlide implements ProcessPoint {
-
-		private final SlidingBuffer<?> buffer;
-		private final ProcessPoint process;
-		
-		public PointProcessorSlide(SlidingBuffer<?> buffer, ProcessPoint process) {
-			this.process = process;
-			this.buffer = buffer;
-		}
-		
-		@Override
-		public void process(Point3i pnt) {
-			process.process(pnt);
-		}
-
-		@Override
-		public void notifyChangeZ(int z) {
-			if (z!=0) {
-				buffer.shift();
-			}
-			process.notifyChangeZ(z);
 		}
 	}
 }

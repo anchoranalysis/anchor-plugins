@@ -34,6 +34,7 @@ import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.anchoranalysis.image.voxel.buffer.SlidingBuffer;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
+import org.anchoranalysis.image.voxel.iterator.IterateVoxels;
 import org.anchoranalysis.image.voxel.iterator.changed.InitializableProcessChangedPoint;
 import org.anchoranalysis.image.voxel.iterator.changed.ProcessChangedPointAbsolute;
 import org.anchoranalysis.image.voxel.iterator.changed.ProcessChangedPointFactory;
@@ -109,12 +110,11 @@ public class GrayscaleErosion {
 	// The sliding buffer must be centred at the current value of z
 	public int grayscaleErosion( Point3i pnt, SlidingBuffer<ByteBuffer> buffer, int indx, int exstVal ) {
 		
-		this.pointProcessor.initPnt(pnt);
 		this.pt.reset( indx, exstVal );
 		
 		// Makes sure that it includes its centre point
 		Nghb nghb = new BigNghb(false);
-		nghb.processAllPointsInNghb(do3D, pointProcessor);
+		IterateVoxels.callEachPointInNghb(pnt, nghb, do3D, pointProcessor);
 		
 		return pt.getMinima();
 	}

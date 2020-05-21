@@ -33,52 +33,48 @@ final class SlidingBufferPlus {
 		this.steepestCalc = new SteepestCalc(rbb,matS.getEncoding(), do3D ,true, mask );
 	}
 	
-	public void visitPixel(
-		Point3i pnt,
-		EncodedIntBuffer bbS
-	) {
-		int indxBuffer = rbb.extnt().offsetSlice(pnt);
-		
-		// Exit early if this voxel has already been visited
-		if (!bbS.isUnvisited(indxBuffer)) {
-			return;
-		}
-		
-		// We get the value of g
-		int gVal = rbb.getCentre().getInt(indxBuffer);
-		
-		// Calculate steepest descent. -1 indicates that there is no steepest descent
-		int chainCode = steepestCalc.calcSteepestDescent(pnt,gVal,indxBuffer);
-		
-		if (matS.isMinima(chainCode)) {
-			// Treat as local minima
-			bbS.putCode(indxBuffer, chainCode);	
-			
-			if (minimaStore.isPresent()) {
-				minimaStore.get().addDuplicated(pnt);
-			}
-			
-		} else if (matS.isPlateau(chainCode)) {
-
-			new MakePlateauLowerComplete(
-				findEqualVoxels.createPlateau(pnt),
-				findEqualVoxels.isDo3D()
-			).makeBufferLowerCompleteForPlateau(
-				matS,
-				minimaStore
-			);
-
-		} else {
-			// Record steepest
-			bbS.putCode(indxBuffer,chainCode);
-		}
+	public SlidingBuffer<?> getSlidingBuffer() {
+		return rbb;
 	}
+	
+	public int offsetSlice(Point3i pnt) {
+		return rbb.extnt().offsetSlice(pnt);
+	}
+	
+	public int getG(int indxBuffer) {
+		return rbb.getCentre().getInt(indxBuffer);
+	}
+	
 
 	public EncodedIntBuffer getSPlane(int z) {
 		return matS.getPixelsForPlane(z);
 	}
+	
+	public void maybeAddMinima(Point3i pnt) {
+		if (minimaStore.isPresent()) {
+			minimaStore.get().addDuplicated(pnt);
+		}
+	}
+	
+	public void makePlateauAt(Point3i pnt) {
+		new MakePlateauLowerComplete(
+			findEqualVoxels.createPlateau(pnt),
+			findEqualVoxels.isDo3D()
+		).makeBufferLowerCompleteForPlateau(
+			matS,
+			minimaStore
+		);
+	}
 
-	public SlidingBuffer<?> getSlidingBuffer() {
-		return rbb;
+	public int calcSteepestDescent(Point3i pnt, int val, int indxBuffer) {
+		return steepestCalc.calcSteepestDescent(pnt, val, indxBuffer);
+	}
+
+	public boolean isPlateau(int code) {
+		return matS.isPlateau(code);
+	}
+
+	public boolean isMinima(int code) {
+		return matS.isMinima(code);
 	}
 }

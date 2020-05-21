@@ -34,6 +34,7 @@ import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.image.voxel.buffer.SlidingBuffer;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
+import org.anchoranalysis.image.voxel.iterator.IterateVoxels;
 import org.anchoranalysis.image.voxel.iterator.changed.InitializableProcessChangedPoint;
 import org.anchoranalysis.image.voxel.iterator.changed.ProcessChangedPointAbsolute;
 import org.anchoranalysis.image.voxel.iterator.changed.ProcessChangedPointFactory;
@@ -132,12 +133,8 @@ public final class SteepestCalc {
 	
 	// Calculates the steepest descent
 	public int calcSteepestDescent( Point3i pnt, int val, int indxBuffer ) {
-		
-		this.process.initPnt(pnt);
 		this.pt.initPnt(val, indxBuffer);
-		
-		nghb.processAllPointsInNghb(do3D, process);
-		
+		IterateVoxels.callEachPointInNghb(pnt, nghb, do3D, process);
 		return pt.getSteepestDrctn();
 	}
 }

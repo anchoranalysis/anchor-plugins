@@ -36,6 +36,7 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.objmask.ObjMask;
+import org.anchoranalysis.image.voxel.iterator.IterateVoxels;
 import org.anchoranalysis.image.voxel.iterator.changed.InitializableProcessChangedPoint;
 import org.anchoranalysis.image.voxel.iterator.changed.ProcessChangedPointAbsoluteMasked;
 import org.anchoranalysis.image.voxel.iterator.changed.ProcessChangedPointFactory;
@@ -140,8 +141,7 @@ class MakePlateauLowerComplete {
 				
 				// We iterate through all the search points
 				for( Point3i p : searchPoints ) {
-					process.initPnt(p);
-					nghb.processAllPointsInNghb(do3D, process);
+					IterateVoxels.callEachPointInNghb(p, nghb, do3D, process);
 				}
 				searchPoints = pt.getFoundPoints();
 			}

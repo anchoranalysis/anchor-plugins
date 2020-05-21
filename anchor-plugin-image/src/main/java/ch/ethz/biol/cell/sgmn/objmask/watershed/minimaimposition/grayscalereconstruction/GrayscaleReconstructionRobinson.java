@@ -39,6 +39,7 @@ import org.anchoranalysis.image.voxel.box.VoxelBoxWrapper;
 import org.anchoranalysis.image.voxel.box.factory.VoxelBoxFactory;
 import org.anchoranalysis.image.voxel.buffer.SlidingBuffer;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
+import org.anchoranalysis.image.voxel.iterator.IterateVoxels;
 import org.anchoranalysis.image.voxel.iterator.changed.InitializableProcessChangedPoint;
 import org.anchoranalysis.image.voxel.iterator.changed.ProcessChangedPointAbsolute;
 import org.anchoranalysis.image.voxel.iterator.changed.ProcessChangedPointFactory;
@@ -120,7 +121,6 @@ public class GrayscaleReconstructionRobinson extends GrayscaleReconstructionByEr
 			
 			// We have a point, and a value
 			// Now we iterate through the neighbours (but only if they haven't been finalised)
-			pointIterator.initPnt(pnt);
 			
 			pt.reset(
 				e.offsetSlice(pnt),
@@ -128,7 +128,7 @@ public class GrayscaleReconstructionRobinson extends GrayscaleReconstructionByEr
 			);
 			
 			// Makes sure that it includes its centre point
-			nghb.processAllPointsInNghb(do3D, pointIterator);
+			IterateVoxels.callEachPointInNghb(pnt, nghb, do3D, pointIterator);
 		}
 	}
 	
