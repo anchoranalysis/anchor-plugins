@@ -35,6 +35,7 @@ import org.anchoranalysis.bean.annotation.Positive;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.bean.sgmn.binary.BinarySgmn;
 import org.anchoranalysis.image.bean.sgmn.binary.BinarySgmnParameters;
+import org.anchoranalysis.image.binary.values.BinaryValues;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelBoxByte;
 import org.anchoranalysis.image.extent.BoundingBox;
@@ -85,12 +86,12 @@ public class SgmnObject extends BinarySgmn {
 		VoxelBox<ByteBuffer> out = voxelBoxIn.asByte();
 		
 		sgmnByObj(
-			new BinaryVoxelBoxByte(out),
+			new BinaryVoxelBoxByte(out, BinaryValues.getDefault()),
 			new VoxelBoxWrapper(orig),
 			params
 		);
 		
-		return new BinaryVoxelBoxByte(out);
+		return new BinaryVoxelBoxByte(out, BinaryValues.getDefault());
 	}
 	
 	private void sgmnByObj(
