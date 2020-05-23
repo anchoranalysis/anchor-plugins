@@ -38,9 +38,10 @@ import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.image.objmask.ObjMaskCollection;
-import org.anchoranalysis.image.objmask.morph.MorphologicalDilation;
 import org.anchoranalysis.image.objmask.morph.MorphologicalErosion;
-import org.anchoranalysis.image.objmask.morph.MorphologicalDilation.AcceptIterationList;
+import org.anchoranalysis.image.objmask.morph.accept.AcceptIterationList;
+import org.anchoranalysis.image.objmask.morph.accept.RejectIterationIfAllHigh;
+import org.anchoranalysis.image.objmask.morph.accept.RejectIterationIfLowDisconnected;
 
 public class ObjMaskProviderErode extends ObjMaskProviderDimensionsOptional {
 	
@@ -78,10 +79,10 @@ public class ObjMaskProviderErode extends ObjMaskProviderDimensionsOptional {
 			
 			AcceptIterationList acceptConditionsDilation = new AcceptIterationList();
 			if (rejectIterationIfAllLow) {
-				acceptConditionsDilation.add( new MorphologicalDilation.RejectIterationIfAllHigh() );
+				acceptConditionsDilation.add( new RejectIterationIfAllHigh() );
 			}
 			if (rejectIterationifDisconnected) {
-				acceptConditionsDilation.add( new MorphologicalDilation.RejectIterationIfLowDisconnected() );
+				acceptConditionsDilation.add( new RejectIterationIfLowDisconnected() );
 			}
 			
 			ObjMask omOut = MorphologicalErosion.createErodedObjMask(
