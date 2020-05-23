@@ -103,8 +103,6 @@ public class GrayscaleErosion {
 		// We iterate
 
 		SlidingBuffer<ByteBuffer> sb = new SlidingBuffer<>(vbIn);
-		sb.init();
-		
 		GrayscaleErosion ge = new GrayscaleErosion(sb, vbIn.extnt().getZ() > 1 );
 		
 		boolean pixelChanged = false;

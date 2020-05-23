@@ -158,10 +158,12 @@ private static class PointTester extends ProcessVoxelNeighbourAbsoluteWithSlidin
 				bufferValuesToFindEqual.extnt().offsetSlice(pnt)
 			);
 		
+		SlidingBuffer<?> rbb = new SlidingBuffer<>(bufferValuesToFindEqual);
+		
 		{
 			Stack<Point3i> stack = new Stack<>(); 
 			stack.push(pnt);
-			processStack(stack, plateau, valToFind);
+			processStack(stack, rbb, plateau, valToFind);
 		}
 		
 		assert( !plateau.hasNullItems() );
@@ -169,15 +171,12 @@ private static class PointTester extends ProcessVoxelNeighbourAbsoluteWithSlidin
 		return plateau;
 	}
 	
-	private void processStack( Stack<Point3i> stack, EqualVoxelsPlateau plateau, int valToFind ) {
-
-		Extent extnt = bufferValuesToFindEqual.extnt();
-		SlidingBuffer<?> rbb = new SlidingBuffer<>(bufferValuesToFindEqual);
+	private void processStack( Stack<Point3i> stack, SlidingBuffer<?> slidingBuffer, EqualVoxelsPlateau plateau, int valToFind ) {
 				
 		ProcessVoxelNeighbour<Optional<Integer>> process = ProcessVoxelNeighbourFactory.within(
 			mask,
-			extnt,
-			new PointTester(stack, rbb, matS)
+			slidingBuffer.extnt(),
+			new PointTester(stack, slidingBuffer, matS)
 		);
 				
 		BigNghb nghb = new BigNghb();
@@ -187,12 +186,12 @@ private static class PointTester extends ProcessVoxelNeighbourAbsoluteWithSlidin
 			
 			// If we've already visited this point, we skip it
 			EncodedIntBuffer bbVisited = matS.getPixelsForPlane( pnt.getZ() );
-			int offset = extnt.offsetSlice(pnt);
+			int offset = slidingBuffer.extnt().offsetSlice(pnt);
 			if (bbVisited.isTemporary(offset)) {
 				continue;
 			}
 			
-			rbb.init(pnt.getZ());
+			slidingBuffer.seek(pnt.getZ());
 
 			Optional<Integer> lowestNghbIndex = IterateVoxels.callEachPointInNghb(pnt, nghb, do3D, process, valToFind, offset);
 			

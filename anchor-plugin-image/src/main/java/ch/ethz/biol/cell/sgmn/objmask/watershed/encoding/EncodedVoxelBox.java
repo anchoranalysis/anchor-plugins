@@ -33,7 +33,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
@@ -169,28 +168,23 @@ public class EncodedVoxelBox {
 	}
 	
 	// Returns the CODED final index (global)
-	public int calculateConnectedComponentID( int x, int y, int z, int firstChainCode ) {
+	public int calculateConnectedComponentID(Point3i pnt, int firstChainCode ) {
 		
 		Extent e = delegate.extnt();
 		
 		int crntChainCode = firstChainCode;
 		
 		do {
-			
-			int xMarg = encoding.xFromChainCode(crntChainCode);
-			int yMarg = encoding.yFromChainCode(crntChainCode);
-			int zMarg = encoding.zFromChainCode(crntChainCode);
-			
 			// Get local index from global index
-			x += xMarg;
-			y += yMarg;
-			z += zMarg;
+			pnt = addDirectionFromChainCode(pnt, crntChainCode);
 			
-			//System.out.printf(" %d %d %d  \n", x, y, z);
-			
-			assert( e.contains( new Point3d(x,y,z) ));
+			assert( e.contains(pnt));
 			// Replace with intelligence slices buffer?
-			int nextVal = delegate.getPixelsForPlane(z).buffer().get( e.offset(x, y) );
+			int nextVal = delegate.getPixelsForPlane(
+				pnt.getZ()
+			).buffer().get(
+				e.offsetSlice(pnt)
+			);
 		
 			assert(nextVal!=WatershedEncoding.CODE_UNVISITED);
 			assert(nextVal!=WatershedEncoding.CODE_TEMPORARY);
@@ -200,13 +194,28 @@ public class EncodedVoxelBox {
 			}
 			
 			if (nextVal==WatershedEncoding.CODE_MINIMA) {
-				return encoding.encodeConnectedComponentID( e.offset(x, y, z) );
+				return encoding.encodeConnectedComponentID(
+					e.offset(pnt)
+				);
 			}
 			
 			crntChainCode = nextVal;
 
 		} while (true);
 		
+	}
+	
+	/**
+	 * Adds a direction to a point from a chain-code, without altering the incoming point
+	 * 
+	 * @param pnt an input-point that is unchanged (immutable)
+	 * @param chainCode a chain-code from which to decode a direction, which is added to pnt
+	 * @return a new point which is the sum of pnt and the decoded-direction
+	 */
+	private Point3i addDirectionFromChainCode(Point3i pnt, int chainCode) {
+		Point3i out = encoding.chainCodes(chainCode);
+		out.add(pnt);
+		return out;
 	}
 	
 	public boolean isPlateau( int code ) {
