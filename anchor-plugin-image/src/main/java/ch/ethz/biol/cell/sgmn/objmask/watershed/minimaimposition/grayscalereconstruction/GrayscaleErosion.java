@@ -46,20 +46,7 @@ import org.anchoranalysis.image.voxel.nghb.Nghb;
 // NOT EFFICIENTLY IMPLEMENTED
 public class GrayscaleErosion {
 
-	private boolean do3D = false;
-	private static final Nghb NGHB = new BigNghb(false);
-		
-	private PointTester pt;
-	private ProcessVoxelNeighbour pointProcessor;
-	
-	// Without mask
-	public GrayscaleErosion( SlidingBuffer<ByteBuffer> rbb, boolean do3D ) {
-		this.do3D = do3D;
-		this.pt = new PointTester(rbb);
-		this.pointProcessor = ProcessVoxelNeighbourFactory.withinExtent(rbb.extnt(), pt);
-	}
-	
-	private static class PointTester extends ProcessVoxelNeighbourAbsoluteWithSlidingBuffer {
+	private static class PointTester extends ProcessVoxelNeighbourAbsoluteWithSlidingBuffer<Integer> {
 		
 		// Current minima
 		private int minima;
@@ -85,23 +72,34 @@ public class GrayscaleErosion {
 			return false;
 		}
 
-		public int getMinima() {
+		@Override
+		public Integer collectResult() {
 			return minima;
 		}
 	}
 	
+	private static final Nghb NGHB = new BigNghb(false);
+	
+	private final boolean do3D;
+	private final ProcessVoxelNeighbour<Integer> pointProcessor;
+	
+	// Without mask
+	public GrayscaleErosion( SlidingBuffer<ByteBuffer> rbb, boolean do3D ) {
+		this.do3D = do3D;
+		this.pointProcessor = ProcessVoxelNeighbourFactory.withinExtent(
+			rbb.extnt(),
+			new PointTester(rbb)
+		);
+	}
 	
 	// The sliding buffer must be centred at the current value of z
 	public int grayscaleErosion( Point3i pnt, SlidingBuffer<ByteBuffer> buffer, int indx, int exstVal ) {
-		this.pt.initSource( indx, exstVal );
-		IterateVoxels.callEachPointInNghb(pnt, NGHB, do3D, pointProcessor);
-		return pt.getMinima();
+		return IterateVoxels.callEachPointInNghb(pnt, NGHB, do3D, pointProcessor, exstVal, indx);
 	}
 	
 	// Returns a bool, if at least one pixel changed
 	public static boolean grayscaleErosion( VoxelBox<ByteBuffer> vbIn, VoxelBox<ByteBuffer> vbOut ) {
-		
-		
+				
 		Extent e = vbIn.extnt();
 		// We iterate
 
