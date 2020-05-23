@@ -36,7 +36,7 @@ import org.anchoranalysis.image.bean.provider.ChnlProviderOne;
 import org.anchoranalysis.image.bean.provider.HistogramProvider;
 import org.anchoranalysis.image.chnl.Chnl;
 import org.anchoranalysis.image.histogram.Histogram;
-import org.anchoranalysis.image.histogram.HistogramFactoryUtilities;
+import org.anchoranalysis.image.histogram.HistogramFactory;
 import org.anchoranalysis.image.stack.region.chnlconverter.ConversionPolicy;
 import org.anchoranalysis.image.stack.region.chnlconverter.attached.ChnlConverterAttached;
 
@@ -64,7 +64,7 @@ public class ChnlProviderConverterHistogram extends ChnlProviderOne {
 		if (histogramProvider!=null) {
 			hist = histogramProvider.create();
 		} else {
-			hist = HistogramFactoryUtilities.create(chnl);
+			hist = HistogramFactory.create(chnl);
 		}
 		
 		ChnlConverterAttached<Histogram, ?> converter = chnlConverter.createConverter();

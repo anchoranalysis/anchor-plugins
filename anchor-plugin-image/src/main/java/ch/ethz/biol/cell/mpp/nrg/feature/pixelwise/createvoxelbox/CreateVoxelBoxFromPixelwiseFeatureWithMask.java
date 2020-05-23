@@ -40,7 +40,7 @@ import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.feature.bean.pixelwise.PixelScore;
 import org.anchoranalysis.image.histogram.Histogram;
-import org.anchoranalysis.image.histogram.HistogramFactoryUtilities;
+import org.anchoranalysis.image.histogram.HistogramFactory;
 import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.anchoranalysis.image.voxel.box.VoxelBoxList;
@@ -95,11 +95,16 @@ public class CreateVoxelBoxFromPixelwiseFeatureWithMask {
 		);
 	}
 	
-	private List<Histogram> createHistograms(ObjMask objMask) {
+	private List<Histogram> createHistograms(ObjMask mask) {
 		List<Histogram> out = new ArrayList<>();
 
 		for( VoxelBoxWrapper voxelBox : listVoxelBox) {
-			out.add( HistogramFactoryUtilities.createWithMask(voxelBox.any(), objMask) );
+			out.add(
+				HistogramFactory.create(
+					voxelBox,
+					Optional.of(mask)
+				)
+			);
 		}
 		
 		for( Histogram hist : listAdditionalHistograms ) {

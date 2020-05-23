@@ -31,7 +31,7 @@ import org.anchoranalysis.feature.cache.calculation.FeatureCalculation;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.feature.stack.FeatureInputStack;
 import org.anchoranalysis.image.histogram.Histogram;
-import org.anchoranalysis.image.histogram.HistogramFactoryUtilities;
+import org.anchoranalysis.image.histogram.HistogramFactory;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
@@ -48,7 +48,7 @@ public class CalculateHistogram extends FeatureCalculation<Histogram, FeatureInp
 	protected Histogram execute( FeatureInputStack input ) throws FeatureCalcException {
 
 		try {
-			return HistogramFactoryUtilities.create(
+			return HistogramFactory.create(
 				input.getNrgStackRequired().getChnl(nrgIndex)
 			);
 		} catch (CreateException e) {

@@ -37,7 +37,7 @@ import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.image.bean.threshold.CalculateLevel;
 import org.anchoranalysis.image.chnl.Chnl;
 import org.anchoranalysis.image.histogram.Histogram;
-import org.anchoranalysis.image.histogram.HistogramFactoryUtilities;
+import org.anchoranalysis.image.histogram.HistogramFactory;
 import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.image.objmask.ObjMaskCollection;
 import org.anchoranalysis.image.objmask.morph.MorphologicalDilation;
@@ -74,7 +74,7 @@ public class LevelResultCollectionFactory {
 			
 			ObjMaskCollection omcSingle = new ObjMaskCollection(omForCalculateLevel);
 			
-			Histogram h = HistogramFactoryUtilities.create(chnl, omcSingle);
+			Histogram h = HistogramFactory.create(chnl, omcSingle);
 			int level;
 			try {
 				level = calculateLevel.calculateLevel(h);

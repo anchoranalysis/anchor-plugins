@@ -77,7 +77,12 @@ public class SgmnThrshldFeatureObjMask extends BinarySgmn {
 		
 		ThresholderGlobal thresholder = createThresholder();
 		try {
-			return thresholder.threshold(voxelBox, bvOut, null);
+			return thresholder.threshold(
+				voxelBox,
+				bvOut,
+				Optional.empty(),
+				Optional.empty()
+			);
 		} catch (OperationFailedException e) {
 			throw new SgmnFailedException(e);
 		}
@@ -103,13 +108,15 @@ public class SgmnThrshldFeatureObjMask extends BinarySgmn {
 		try {		
 			return thresholder.threshold(
 				new VoxelBoxWrapper(maskDup),
-				new ObjMask(
-					bboxE,
-					objMask.getVoxelBox(),
-					objMask.getBinaryValuesByte()
-				),
 				bvOut,
-				params.getIntensityHistogram()
+				params.getIntensityHistogram(),
+				Optional.of(
+					new ObjMask(
+						bboxE,
+						objMask.getVoxelBox(),
+						objMask.getBinaryValuesByte()
+					)						
+				)
 			);
 		}catch (OperationFailedException e) {
 			throw new SgmnFailedException(e);
