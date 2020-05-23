@@ -40,9 +40,9 @@ import org.anchoranalysis.image.voxel.box.factory.VoxelBoxFactory;
 import org.anchoranalysis.image.voxel.buffer.SlidingBuffer;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 import org.anchoranalysis.image.voxel.iterator.IterateVoxels;
-import org.anchoranalysis.image.voxel.iterator.changed.InitializableProcessChangedPoint;
-import org.anchoranalysis.image.voxel.iterator.changed.ProcessChangedPointAbsolute;
-import org.anchoranalysis.image.voxel.iterator.changed.ProcessChangedPointFactory;
+import org.anchoranalysis.image.voxel.iterator.changed.ProcessVoxelNeighbour;
+import org.anchoranalysis.image.voxel.iterator.changed.ProcessVoxelNeighbourAbsoluteWithSlidingBuffer;
+import org.anchoranalysis.image.voxel.iterator.changed.ProcessVoxelNeighbourFactory;
 import org.anchoranalysis.image.voxel.nghb.BigNghb;
 import org.anchoranalysis.image.voxel.nghb.Nghb;
 
@@ -93,7 +93,7 @@ public class GrayscaleReconstructionRobinson extends GrayscaleReconstructionByEr
 	
 	private void readFromQueueUntilEmpty( PriorityQueueIndexRangeDownhill<Point3i> queue, VoxelBox<?> markerVb, VoxelBox<?> maskVb, VoxelBox<ByteBuffer> vbFinalized, Optional<ObjMask> containingMask ) {
 		
-		Extent e = markerVb.extnt();
+		Extent extent = markerVb.extnt();
 		
 		SlidingBuffer<?> sbMarker = new SlidingBuffer<>(markerVb);
 		SlidingBuffer<?> sbMask = new SlidingBuffer<>(maskVb);
@@ -102,14 +102,10 @@ public class GrayscaleReconstructionRobinson extends GrayscaleReconstructionByEr
 		BinaryValuesByte bvFinalized = BinaryValuesByte.getDefault();
 		
 		PointTester pt = new PointTester(sbMarker, sbMask, sbFinalized, queue, bvFinalized );
-		InitializableProcessChangedPoint pointIterator = ProcessChangedPointFactory.within(
-			containingMask,
-			markerVb.extnt(),
-			pt
-		);
+		ProcessVoxelNeighbour pointIterator = ProcessVoxelNeighbourFactory.within(containingMask,extent,pt);
 		
 		Nghb nghb = new BigNghb(false);
-		boolean do3D = e.getZ() > 1;
+		boolean do3D = extent.getZ() > 1;
 		
 		for( int nextVal=queue.nextValue(); nextVal!=-1; nextVal=queue.nextValue() ) {
 			
@@ -122,8 +118,8 @@ public class GrayscaleReconstructionRobinson extends GrayscaleReconstructionByEr
 			// We have a point, and a value
 			// Now we iterate through the neighbours (but only if they haven't been finalised)
 			
-			pt.reset(
-				e.offsetSlice(pnt),
+			pt.initSource(
+				extent.offsetSlice(pnt),
 				nextVal
 			);
 			
@@ -133,43 +129,32 @@ public class GrayscaleReconstructionRobinson extends GrayscaleReconstructionByEr
 	}
 	
 	
-	private static class PointTester implements ProcessChangedPointAbsolute {
+	private static class PointTester extends ProcessVoxelNeighbourAbsoluteWithSlidingBuffer {
 
-		private SlidingBuffer<?> sbMarker;
 		private SlidingBuffer<?> sbMask;
 		private SlidingBuffer<ByteBuffer> sbFinalized;
 		private PriorityQueueIndexRangeDownhill<Point3i> queue;
 
 		// Current ByteBuffer
-		private VoxelBuffer<?> bbMarker;
 		private VoxelBuffer<?> bbMask;
 		private VoxelBuffer<ByteBuffer> bbFinalized;
 		private int z = 0;
-		
-		private int indx;
-		private int exstVal;
-		private Extent extnt;
+
 		private final BinaryValuesByte bv;
 		
 		public PointTester(SlidingBuffer<?> sbMarker, SlidingBuffer<?> sbMask, SlidingBuffer<ByteBuffer> sbFinalized, PriorityQueueIndexRangeDownhill<Point3i> queue, BinaryValuesByte bv) {
-			super();
-			this.sbMarker = sbMarker;
+			super(sbMarker);
+			assert(sbMarker.extnt().equals(sbFinalized.extnt()));
+			assert(sbMarker.extnt().equals(sbMask.extnt()));
 			this.sbFinalized = sbFinalized;
 			this.sbMask = sbMask;
-			this.extnt = sbMask.extnt();
 			this.queue = queue;
 			this.bv = bv;
-		}
-
-		
-		public void reset( int indx, int exstVal ) {
-			this.indx = indx;
-			this.exstVal = exstVal;
 		}
 		
 		@Override
 		public void notifyChangeZ(int zChange, int z) {
-			this.bbMarker = sbMarker.bufferRel(zChange);
+			super.notifyChangeZ(zChange, z);
 			this.bbMask = sbMask.bufferRel(zChange);
 			this.bbFinalized = sbFinalized.bufferRel(zChange);
 			this.z = z;
@@ -179,28 +164,25 @@ public class GrayscaleReconstructionRobinson extends GrayscaleReconstructionByEr
 		public boolean processPoint(int xChange, int yChange, int x1, int y1) {
 
 			// We can replace with local index changes
-			int indxChange = extnt.offset(xChange, yChange);
+			int index = changedOffset(xChange, yChange);
 			
 			// We see if it's been finalized or not
-			
-			int indx1 = indx+indxChange;
-			
-			byte b = bbFinalized.buffer().get(indx1);
+			byte b = bbFinalized.buffer().get(index);
 			if (b==bv.getOffByte()) {
 
 				// get value from mask
-				int maskVal = bbMask.getInt(indx1);
+				int maskVal = bbMask.getInt(index);
 				
-				int valToWrite = Math.min(maskVal, exstVal);
+				int valToWrite = Math.min(maskVal, sourceVal);
 				
 				// write this value to the output image
-				bbMarker.putInt(indx1, valToWrite);
+				putInt(index, valToWrite);
 				
 				// put the neighbour on the queue
 				queue.put(new Point3i(x1,y1,z), valToWrite);
 				
 				// point as finalized
-				bbFinalized.buffer().put( indx1, bv.getOnByte() );
+				bbFinalized.buffer().put( index, bv.getOnByte() );
 				
 				return true;
 			}

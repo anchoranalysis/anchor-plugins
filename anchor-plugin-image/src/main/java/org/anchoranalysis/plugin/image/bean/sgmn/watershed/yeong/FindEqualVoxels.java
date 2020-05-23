@@ -35,11 +35,10 @@ import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.anchoranalysis.image.voxel.buffer.SlidingBuffer;
-import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 import org.anchoranalysis.image.voxel.iterator.IterateVoxels;
-import org.anchoranalysis.image.voxel.iterator.changed.InitializableProcessChangedPoint;
-import org.anchoranalysis.image.voxel.iterator.changed.ProcessChangedPointAbsolute;
-import org.anchoranalysis.image.voxel.iterator.changed.ProcessChangedPointFactory;
+import org.anchoranalysis.image.voxel.iterator.changed.ProcessVoxelNeighbour;
+import org.anchoranalysis.image.voxel.iterator.changed.ProcessVoxelNeighbourAbsoluteWithSlidingBuffer;
+import org.anchoranalysis.image.voxel.iterator.changed.ProcessVoxelNeighbourFactory;
 import org.anchoranalysis.image.voxel.nghb.BigNghb;
 
 import ch.ethz.biol.cell.sgmn.objmask.watershed.encoding.EncodedIntBuffer;
@@ -68,7 +67,7 @@ final class FindEqualVoxels {
 		
 		EqualVoxelsPlateau plateau = new EqualVoxelsPlateau();
 				
-		int valToFind = 
+		int toFind = 
 			bufferValuesToFindEqual.getPixelsForPlane( pnt.getZ() ).getInt(
 				bufferValuesToFindEqual.extnt().offsetSlice(pnt)
 			);
@@ -76,7 +75,7 @@ final class FindEqualVoxels {
 		{
 			Stack<Point3i> stack = new Stack<>(); 
 			stack.push(pnt);
-			processStack(stack, plateau, valToFind);
+			processStack(stack, plateau, toFind);
 		}
 		
 		assert( !plateau.hasNullItems() );
@@ -84,15 +83,15 @@ final class FindEqualVoxels {
 		return plateau;
 	}
 	
-	private void processStack( Stack<Point3i> stack, EqualVoxelsPlateau plateau, int valToFind ) {
+	private void processStack( Stack<Point3i> stack, EqualVoxelsPlateau plateau, int toFind ) {
 
 		Extent extnt = bufferValuesToFindEqual.extnt();
 		SlidingBuffer<?> rbb = new SlidingBuffer<>(bufferValuesToFindEqual);
 		
 		
-		PointTester pt = new PointTester( stack, extnt, rbb, matS);
+		PointTester pt = new PointTester( stack, rbb, matS);
 				
-		InitializableProcessChangedPoint itr = ProcessChangedPointFactory.within(mask, extnt, pt);
+		ProcessVoxelNeighbour itr = ProcessVoxelNeighbourFactory.within(mask, extnt, pt);
 				
 		BigNghb nghb = new BigNghb();
 		
@@ -107,8 +106,8 @@ final class FindEqualVoxels {
 			}
 			
 			rbb.init(pnt.getZ());
-			pt.initForPoint(valToFind);
-
+			
+			pt.initSource(toFind, offset);
 			IterateVoxels.callEachPointInNghb(pnt, nghb, do3D, itr);
 			
 			bbVisited.markAsTemporary(offset);
@@ -123,37 +122,31 @@ final class FindEqualVoxels {
 	
 	
 	
-	private static class PointTester implements ProcessChangedPointAbsolute {
+	private static class PointTester extends ProcessVoxelNeighbourAbsoluteWithSlidingBuffer {
 		
 		// Static arguments
 		private Stack<Point3i> stack;
-		private Extent extnt;
-		private SlidingBuffer<?> rbb;
+		
 		private EncodedVoxelBox matS;
 		
 		// Arguments for each point
 		private int lowestNghbVal;
 		private int lowestNghbIndex = -1;
-		private int valToFind;
-		
-		private VoxelBuffer<?> bb;
+				
 		private EncodedIntBuffer bufS;
 		private int z1;
-		private int zChange;
 		
-		public PointTester(Stack<Point3i> stack, Extent extnt,
-				SlidingBuffer<?> rbb, EncodedVoxelBox matS) {
-			super();
+		public PointTester(Stack<Point3i> stack, SlidingBuffer<?> rbb, EncodedVoxelBox matS) {
+			super(rbb);
 			this.stack = stack;
-			this.extnt = extnt;
-			this.rbb = rbb;
 			this.matS = matS;
 		}
 
-		public void initForPoint( int pntVal ) {
-			this.lowestNghbVal = pntVal;
+		@Override
+		public void initSource( int sourceVal, int sourceOffsetXY) {
+			super.initSource(sourceVal, sourceOffsetXY);
+			this.lowestNghbVal = sourceVal;
 			this.lowestNghbIndex = - 1;
-			this.valToFind = pntVal;
 		}
 		
 		public boolean hasLowestNghbIndex() {
@@ -166,19 +159,16 @@ final class FindEqualVoxels {
 
 		@Override
 		public void notifyChangeZ(int zChange, int z1) {
-			bb = rbb.bufferRel(zChange);
+			super.notifyChangeZ(zChange, z1);
 			bufS = matS.getPixelsForPlane(z1);
-			this.zChange = zChange;
 			this.z1 = z1;
 		}
 
 		@Override
-		public boolean processPoint(int xChange, int yChange, int x1,
-				int y1) {
-			
-			int offset = extnt.offset( x1, y1 );
-			
-			int valPoint = bb.getInt(offset);
+		public boolean processPoint(int xChange, int yChange, int x1, int y1) {
+
+			int offset = changedOffset(xChange,yChange);
+			int valPoint = getInt(offset);
 			
 			// If we already have a connected component ID as a neighbour, it must because
 			//   we have imposed seeds.  So we always point towards it, irrespective of
@@ -198,22 +188,19 @@ final class FindEqualVoxels {
 					return false;	
 				}
 			}
-			
 			 
-			if (valPoint==valToFind) {
+			if (valPoint==sourceVal) {
 				stack.push( new Point3i(x1, y1, z1) );
 				return true;
 			} else {
-				
 				// We test if the neighbour is less
 				// NB we also force a check that it's less than the value to find, as this value
 				//   might have been forced up by the connected component
-				if (valPoint<valToFind && valPoint < lowestNghbVal) {
+				if (valPoint<sourceVal && valPoint<lowestNghbVal) {
 					lowestNghbVal = valPoint;
 					//lowestNghbIndex = extnt.offset(x1, y1, z1);
 					lowestNghbIndex = matS.getEncoding().encodeDirection(xChange, yChange, zChange);
 				}
-				
 				return false;
 			}
 		}

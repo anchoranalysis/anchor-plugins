@@ -33,7 +33,7 @@ import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.anchoranalysis.image.voxel.iterator.IterateVoxels;
-import org.anchoranalysis.image.voxel.iterator.ProcessPoint;
+import org.anchoranalysis.image.voxel.iterator.ProcessVoxel;
 
 import ch.ethz.biol.cell.sgmn.objmask.watershed.encoding.EncodedIntBuffer;
 import ch.ethz.biol.cell.sgmn.objmask.watershed.encoding.EncodedVoxelBox;
@@ -52,7 +52,7 @@ class PointPixelsOrMarkAsMinima {
 		);
 	}
 	
-	private static final class PointProcessor implements ProcessPoint {
+	private static final class PointProcessor implements ProcessVoxel {
 
 		private final SlidingBufferPlus bufferPlus;
 		

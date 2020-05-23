@@ -35,7 +35,7 @@ import org.anchoranalysis.image.seed.Seed;
 import org.anchoranalysis.image.seed.SeedCollection;
 import org.anchoranalysis.image.sgmn.SgmnFailedException;
 import org.anchoranalysis.image.voxel.iterator.IterateVoxels;
-import org.anchoranalysis.image.voxel.iterator.ProcessPoint;
+import org.anchoranalysis.image.voxel.iterator.ProcessVoxel;
 
 import ch.ethz.biol.cell.sgmn.objmask.watershed.encoding.EncodedVoxelBox;
 
@@ -64,7 +64,7 @@ class MarkSeeds {
 		}
 	}
 	
-	private static ProcessPoint createPointProcessor(EncodedVoxelBox matS, Optional<MinimaStore> minimaStore ) {
+	private static ProcessVoxel createPointProcessor(EncodedVoxelBox matS, Optional<MinimaStore> minimaStore ) {
 		ConnectedComponentWriter ccWriter = new ConnectedComponentWriter(matS, minimaStore);
 		return pnt -> ccWriter.writePoint(pnt);
 	}

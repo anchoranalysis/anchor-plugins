@@ -30,14 +30,12 @@ package ch.ethz.biol.cell.sgmn.objmask.watershed.encoding;
 import java.util.Optional;
 
 import org.anchoranalysis.core.geometry.Point3i;
-import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.image.voxel.buffer.SlidingBuffer;
-import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 import org.anchoranalysis.image.voxel.iterator.IterateVoxels;
-import org.anchoranalysis.image.voxel.iterator.changed.InitializableProcessChangedPoint;
-import org.anchoranalysis.image.voxel.iterator.changed.ProcessChangedPointAbsolute;
-import org.anchoranalysis.image.voxel.iterator.changed.ProcessChangedPointFactory;
+import org.anchoranalysis.image.voxel.iterator.changed.ProcessVoxelNeighbour;
+import org.anchoranalysis.image.voxel.iterator.changed.ProcessVoxelNeighbourAbsoluteWithSlidingBuffer;
+import org.anchoranalysis.image.voxel.iterator.changed.ProcessVoxelNeighbourFactory;
 import org.anchoranalysis.image.voxel.nghb.BigNghb;
 import org.anchoranalysis.image.voxel.nghb.Nghb;
 import org.anchoranalysis.image.voxel.nghb.SmallNghb;
@@ -46,7 +44,7 @@ public final class SteepestCalc {
 
 	private final boolean do3D;
 	private final PointTester pt;
-	private final InitializableProcessChangedPoint process;
+	private final ProcessVoxelNeighbour process;
 	private final Nghb nghb;
 	
 	/**
@@ -60,53 +58,39 @@ public final class SteepestCalc {
 	public SteepestCalc( SlidingBuffer<?> rbb, WatershedEncoding encoder, boolean do3D, boolean bigNghb, Optional<ObjMask> mask ) {
 		this.do3D = do3D;
 		this.pt = new PointTester(encoder,rbb);
-		this.process = ProcessChangedPointFactory.within(mask, rbb.extnt(), pt);
+		this.process = ProcessVoxelNeighbourFactory.within(mask, rbb.extnt(), pt);
 		this.nghb = bigNghb ? new BigNghb() : new SmallNghb();
 	}
 	
-	private static class PointTester implements ProcessChangedPointAbsolute {
+	private static class PointTester extends ProcessVoxelNeighbourAbsoluteWithSlidingBuffer {
 
-		
-		private SlidingBuffer<?> rbb;
 		private WatershedEncoding encoder;
-		
-		private int centreVal;
-		private int indxBuffer;
-		
+	
 		private int steepestDrctn;
 		private int steepestVal;
 		
-		
-		private VoxelBuffer<?> bb;
-		private int zChange;
-		
-		private Extent extnt;
-		
 		public PointTester(WatershedEncoding encoder, SlidingBuffer<?> rbb ) {
+			super(rbb);
 			this.encoder = encoder;
-			this.rbb = rbb;
-			this.extnt = rbb.extnt();
 		}
 
-		public void initPnt( int pnteVal, int indxBuffer ) {
-			this.centreVal = pnteVal;
-			this.indxBuffer = indxBuffer;
-			this.steepestVal = pnteVal;
+		@Override
+		public void initSource(int sourceVal, int sourceOffsetXY) {
+			super.initSource(sourceVal, sourceOffsetXY);
+			this.steepestVal = sourceVal;
 			this.steepestDrctn = WatershedEncoding.CODE_MINIMA;
 		}
-
 
 		@Override
 		public boolean processPoint( int xChange, int yChange, int x1, int y1) {
 			
-			int indxChange = extnt.offset(xChange, yChange);
-			int gValNghb = bb.getInt( indxBuffer + indxChange );
+			int gValNghb = getInt(xChange, yChange);
 			
 			// TODO check if it's okay these values exist?
 			//assert( gValNghb!= WatershedEncoding.CODE_UNVISITED );
 			//assert( gValNghb!= WatershedEncoding.CODE_TEMPORARY );
 			
-			if (gValNghb==centreVal) {
+			if (gValNghb==sourceVal) {
 				steepestDrctn = WatershedEncoding.CODE_PLATEAU;
 				return true;
 			}
@@ -123,17 +107,11 @@ public final class SteepestCalc {
 		public int getSteepestDrctn() {
 			return steepestDrctn;
 		}
-
-		@Override
-		public void notifyChangeZ(int zChange, int z1) {
-			this.bb = rbb.bufferRel(zChange);
-			this.zChange = zChange;
-		}
 	}
 	
 	// Calculates the steepest descent
 	public int calcSteepestDescent( Point3i pnt, int val, int indxBuffer ) {
-		this.pt.initPnt(val, indxBuffer);
+		this.pt.initSource(val, indxBuffer);
 		IterateVoxels.callEachPointInNghb(pnt, nghb, do3D, process);
 		return pt.getSteepestDrctn();
 	}
