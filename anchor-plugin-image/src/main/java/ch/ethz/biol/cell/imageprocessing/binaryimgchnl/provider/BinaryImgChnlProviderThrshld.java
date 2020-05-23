@@ -28,6 +28,7 @@ package ch.ethz.biol.cell.imageprocessing.binaryimgchnl.provider;
 
 
 import java.nio.ByteBuffer;
+import java.util.Optional;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
@@ -54,7 +55,8 @@ public class BinaryImgChnlProviderThrshld extends BinaryImgChnlProviderChnlSourc
 			BinaryVoxelBox<ByteBuffer> bvb = thresholder.threshold(
 				chnlSource.getVoxelBox(),
 				bvOut,
-				null
+				Optional.empty(),
+				Optional.empty()
 			);
 			return new BinaryChnl(
 				bvb,

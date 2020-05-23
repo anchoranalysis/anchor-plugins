@@ -28,6 +28,7 @@ package ch.ethz.biol.cell.imageprocessing.chnl.provider;
 
 
 import java.nio.ByteBuffer;
+import java.util.Optional;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
@@ -37,7 +38,7 @@ import org.anchoranalysis.image.bean.provider.ChnlProvider;
 import org.anchoranalysis.image.chnl.Chnl;
 import org.anchoranalysis.image.convert.ByteConverter;
 import org.anchoranalysis.image.histogram.Histogram;
-import org.anchoranalysis.image.histogram.HistogramFactoryUtilities;
+import org.anchoranalysis.image.histogram.HistogramFactory;
 import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.image.objmask.ObjMaskCollection;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
@@ -61,7 +62,10 @@ public class ChnlProviderAdjustDifferenceToMedian extends ChnlProviderOneObjsSou
 		
 		try {
 			for( ObjMask om : objsSource ) {
-				Histogram h = HistogramFactoryUtilities.createWithMask(lookup.getVoxelBox().any(), om);
+				Histogram h = HistogramFactory.create(
+					lookup.getVoxelBox(),
+					Optional.of(om)
+				);
 				int objMedian = (int) Math.round(h.mean());
 				adjustObj(om, chnl, lookup, objMedian );
 	

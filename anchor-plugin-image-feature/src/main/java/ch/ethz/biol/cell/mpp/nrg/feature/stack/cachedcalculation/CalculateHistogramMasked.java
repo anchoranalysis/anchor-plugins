@@ -35,7 +35,7 @@ import org.anchoranalysis.image.binary.values.BinaryValues;
 import org.anchoranalysis.image.chnl.Chnl;
 import org.anchoranalysis.image.feature.stack.FeatureInputStack;
 import org.anchoranalysis.image.histogram.Histogram;
-import org.anchoranalysis.image.histogram.HistogramFactoryUtilities;
+import org.anchoranalysis.image.histogram.HistogramFactory;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
@@ -64,7 +64,7 @@ public class CalculateHistogramMasked extends FeatureCalculation<Histogram, Feat
 			NRGStack nrgStack = input.getNrgStackRequired().getNrgStack();
 			Chnl chnl = extractChnl(nrgStack);
 			
-			return HistogramFactoryUtilities.create(
+			return HistogramFactory.create(
 				chnl,
 				extractMask(nrgStack)
 			);

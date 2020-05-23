@@ -31,7 +31,7 @@ import org.anchoranalysis.image.chnl.Chnl;
 import org.anchoranalysis.image.feature.histogram.FeatureInputHistogram;
 import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
 import org.anchoranalysis.image.histogram.Histogram;
-import org.anchoranalysis.image.histogram.HistogramFactoryUtilities;
+import org.anchoranalysis.image.histogram.HistogramFactory;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
@@ -58,7 +58,7 @@ class CalculateHistogramForNrgChnl extends FeatureCalculation<FeatureInputHistog
 	@Override
 	protected FeatureInputHistogram execute(FeatureInputSingleObj params) {
 
-		Histogram hist = HistogramFactoryUtilities.createHistogramIgnoreZero(
+		Histogram hist = HistogramFactory.createHistogramIgnoreZero(
 			chnl,
 			params.getObjMask(),
 			excludeZero

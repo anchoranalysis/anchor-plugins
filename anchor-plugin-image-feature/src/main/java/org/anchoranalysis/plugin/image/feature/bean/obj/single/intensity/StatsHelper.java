@@ -32,7 +32,7 @@ import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.chnl.Chnl;
 import org.anchoranalysis.image.histogram.Histogram;
-import org.anchoranalysis.image.histogram.HistogramFactoryUtilities;
+import org.anchoranalysis.image.histogram.HistogramFactory;
 import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.image.voxel.statistics.VoxelStatisticsFromHistogram;
 import org.anchoranalysis.plugin.image.intensity.IntensityMeanCalculator;
@@ -96,7 +96,7 @@ class StatsHelper {
 	 */
 	public static double calcMeanNumPixels( Chnl chnl, ObjMask om, int numPixels, boolean highest ) throws OperationFailedException {
 		
-		Histogram h = HistogramFactoryUtilities.create(chnl, om);
+		Histogram h = HistogramFactory.create(chnl, om);
 		
 		Histogram hCut = highest ? h.extractPixelsFromRight(numPixels) : h.extractPixelsFromLeft(numPixels);
 	
@@ -111,7 +111,7 @@ class StatsHelper {
 		double emptyValue,
 		Function<VoxelStatisticsFromHistogram,Double> funcExtractStatistic
 	) {
-		Histogram hist = HistogramFactoryUtilities.createHistogramIgnoreZero(chnl,objMask,ignoreZero);
+		Histogram hist = HistogramFactory.createHistogramIgnoreZero(chnl,objMask,ignoreZero);
 		
 		if (hist.getTotalCount()==0) {
 			return emptyValue;
