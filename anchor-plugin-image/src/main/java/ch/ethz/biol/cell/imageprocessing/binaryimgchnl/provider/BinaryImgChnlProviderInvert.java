@@ -34,15 +34,15 @@ import org.anchoranalysis.bean.OptionalFactory;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.core.error.CreateException;
+import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.bean.provider.BinaryChnlProvider;
 import org.anchoranalysis.image.bean.provider.BinaryImgChnlProviderOne;
 import org.anchoranalysis.image.binary.BinaryChnl;
 import org.anchoranalysis.image.binary.BinaryChnlInverter;
-import org.anchoranalysis.image.binary.values.BinaryValues;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
-import org.anchoranalysis.image.extent.BoundingBox;
-import org.anchoranalysis.image.objmask.ObjMask;
-import org.anchoranalysis.image.voxel.box.VoxelBox;
+import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
+import org.anchoranalysis.image.voxel.iterator.IterateVoxels;
+import org.anchoranalysis.image.voxel.iterator.ProcessVoxelOffsets;
 
 public class BinaryImgChnlProviderInvert extends BinaryImgChnlProviderOne {
 
@@ -64,46 +64,55 @@ public class BinaryImgChnlProviderInvert extends BinaryImgChnlProviderOne {
 			return chnl;
 		}
 		
-		if (!forceChangeBytes) {
-			BinaryValues bv = chnl.getBinaryValues();
-			return new BinaryChnl(chnl.getChnl(), bv.createInverted());
-		} else {
+		if (forceChangeBytes) {
 			BinaryChnlInverter.invertChnl( chnl );
+		} else {
+			return new BinaryChnl(
+				chnl.getChnl(),
+				chnl.getBinaryValues().createInverted()
+			);			
 		}
 		return chnl;
 	}
 		
 	private void invertWithMask( BinaryChnl chnl, BinaryChnl mask ) throws CreateException {
+		IterateVoxels.callEachPoint(
+			mask,
+			new Processer(
+				chnl.binaryVoxelBox()
+			)
+		);
+	}
+	
+	private static final class Processer implements ProcessVoxelOffsets {
+
+		private final BinaryVoxelBox<ByteBuffer> voxelBox;
+		private final byte byteOn;
+		private final byte byteOff;
 		
-		BinaryValues bv = chnl.getBinaryValues();
-		BinaryValuesByte bvb = bv.createByte();
-		BinaryValuesByte bvbMask = mask.getBinaryValues().createByte();
-					
-		ObjMask maskLocal = mask.createMaskAvoidNew( new BoundingBox( chnl.getDimensions().getExtnt() ) );
+		private ByteBuffer bbSlice;
 		
-		VoxelBox<ByteBuffer> vb = chnl.getVoxelBox();
-		for (int z=0; z<vb.extnt().getZ(); z++) {
+		public Processer(BinaryVoxelBox<ByteBuffer> voxelBox) {
+			super();
+			this.voxelBox = voxelBox;
+			BinaryValuesByte bvb = voxelBox.getBinaryValues().createByte();
+			this.byteOn = bvb.getOnByte();
+			this.byteOff = bvb.getOffByte();
+		}		
+		
+		@Override
+		public void notifyChangeZ(int z) {
+			bbSlice = voxelBox.getPixelsForPlane(z).buffer();
+		}
+		
+		@Override
+		public void process(Point3i pnt, int offset3d, int offsetSlice) {
+			byte val = bbSlice.get(offsetSlice);
 			
-			ByteBuffer bb = vb.getPixelsForPlane(z).buffer();
-			ByteBuffer bbMask = maskLocal.getVoxelBox().getPixelsForPlane(z).buffer();
-			
-			int offset = 0;
-			for (int y=0; y<vb.extnt().getY(); y++) {
-				for (int x=0; x<vb.extnt().getX(); x++) {
-					
-					if( bbMask.get(offset)==bvbMask.getOnByte()) {
-					
-						byte val = bb.get(offset);
-						
-						if (val==bvb.getOnByte()) {
-							bb.put(offset,bvb.getOffByte());
-						} else {
-							bb.put(offset,bvb.getOnByte());
-						}
-					}
-					
-					offset++;
-				}
+			if (val==byteOn) {
+				bbSlice.put(offsetSlice,byteOff);
+			} else {
+				bbSlice.put(offsetSlice,byteOn);
 			}
 		}
 	}
