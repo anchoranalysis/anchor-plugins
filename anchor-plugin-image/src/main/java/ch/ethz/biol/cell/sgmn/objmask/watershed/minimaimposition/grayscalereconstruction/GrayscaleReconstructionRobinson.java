@@ -137,12 +137,13 @@ public class GrayscaleReconstructionRobinson extends GrayscaleReconstructionByEr
 			int offset = 0;
 			for (int y=0; y<e.getY(); y++) {
 				for (int x=0; x<e.getX(); x++) {
-					
-					int val = bb.getInt(offset);
-					if (val!=0) {
-						
-						queue.put( new Point3i(x,y,z), val);	
-						bbFinalized.buffer().put(offset, maskOn);
+
+					{
+						int val = bb.getInt(offset);
+						if (val!=0) {
+							queue.put( new Point3i(x,y,z), val);	
+							bbFinalized.buffer().put(offset, maskOn);
+						}
 					}
 					
 					offset++;
@@ -169,13 +170,16 @@ public class GrayscaleReconstructionRobinson extends GrayscaleReconstructionByEr
 			int offset = 0;
 			for (int y=crnrPntMin.getY(); y<=crnrPntMax.getY(); y++) {
 				for (int x=crnrPntMin.getX(); x<=crnrPntMax.getX(); x++) {
-					
 					if (bbMask.buffer().get(offset)==maskOn) {
+						
 						int offsetGlobal = e.offset(x, y);
-						int val = bb.getInt(offsetGlobal);
-						if (val!=0) {
-							queue.put( new Point3i(x,y,z), val);	
-							bbFinalized.buffer().put(offsetGlobal, maskOn);
+					
+						{
+							int val = bb.getInt(offsetGlobal);
+							if (val!=0) {
+								queue.put( new Point3i(x,y,z), val);	
+								bbFinalized.buffer().put(offsetGlobal, maskOn);
+							}
 						}
 					}
 					
