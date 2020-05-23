@@ -87,7 +87,6 @@ public class GrayscaleErosion {
 	public GrayscaleErosion( SlidingBuffer<ByteBuffer> rbb, boolean do3D ) {
 		this.do3D = do3D;
 		this.pointProcessor = ProcessVoxelNeighbourFactory.withinExtent(
-			rbb.extnt(),
 			new PointTester(rbb)
 		);
 	}
