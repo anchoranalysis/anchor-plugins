@@ -14,10 +14,13 @@ import ch.ethz.biol.cell.sgmn.objmask.watershed.encoding.SteepestCalc;
 /** A sliding-buffer enhanced with other elements of internal state used to "visit" a pixel */
 final class SlidingBufferPlus {
 	
-	private final SlidingBuffer<?> rbb;
-	private final FindEqualVoxels findEqualVoxels;
 	private final SteepestCalc steepestCalc;
 	
+	/* The sliding buffer used for calculating the steepest-calc */
+	private final SlidingBuffer<?> slidingBufferSteepestCalc;
+	
+	
+	private final FindEqualVoxels findEqualVoxels;
 	private final EncodedVoxelBox matS;
 	private final Optional<MinimaStore> minimaStore;
 	
@@ -26,23 +29,23 @@ final class SlidingBufferPlus {
 		this.matS = matS;
 		this.minimaStore = minimaStore;
 		
-		this.rbb = new SlidingBuffer<>( vbImg );
+		this.slidingBufferSteepestCalc = new SlidingBuffer<>( vbImg );
 		
 		boolean do3D = vbImg.extnt().getZ()>1;
 		this.findEqualVoxels = new FindEqualVoxels( vbImg, matS, do3D, mask );
-		this.steepestCalc = new SteepestCalc(rbb,matS.getEncoding(), do3D ,true, mask );
+		this.steepestCalc = new SteepestCalc(slidingBufferSteepestCalc,matS.getEncoding(), do3D ,true, mask );
 	}
 	
 	public SlidingBuffer<?> getSlidingBuffer() {
-		return rbb;
+		return slidingBufferSteepestCalc;
 	}
 	
 	public int offsetSlice(Point3i pnt) {
-		return rbb.extnt().offsetSlice(pnt);
+		return slidingBufferSteepestCalc.extnt().offsetSlice(pnt);
 	}
 	
 	public int getG(int indxBuffer) {
-		return rbb.getCentre().getInt(indxBuffer);
+		return slidingBufferSteepestCalc.getCentre().getInt(indxBuffer);
 	}
 	
 

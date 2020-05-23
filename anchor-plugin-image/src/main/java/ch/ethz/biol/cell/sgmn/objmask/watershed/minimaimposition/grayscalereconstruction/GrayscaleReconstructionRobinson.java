@@ -188,9 +188,9 @@ public class GrayscaleReconstructionRobinson extends GrayscaleReconstructionByEr
 			
 			Point3i pnt = queue.get();
 			
-			sbMarker.init(pnt.getZ());
-			sbMask.init(pnt.getZ());
-			sbFinalized.init(pnt.getZ());
+			sbMarker.seek(pnt.getZ());
+			sbMask.seek(pnt.getZ());
+			sbFinalized.seek(pnt.getZ());
 			
 			// We have a point, and a value
 			// Now we iterate through the neighbours (but only if they haven't been finalised)

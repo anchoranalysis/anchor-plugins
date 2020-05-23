@@ -29,6 +29,7 @@ package ch.ethz.biol.cell.sgmn.objmask.watershed.encoding;
 
 import java.nio.IntBuffer;
 
+import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 
 public final class EncodedIntBuffer {
@@ -71,7 +72,7 @@ public final class EncodedIntBuffer {
 	}
 	
 	/** Convert code to connected-component */
-	public void convertCode(int indxBuffer, int indxGlobal, EncodedVoxelBox matS, int x1, int y1, int z1) {
+	public void convertCode(int indxBuffer, int indxGlobal, EncodedVoxelBox matS, Point3i pnt) {
 		int crntVal = getCode(indxBuffer);
 		
 		assert( !matS.isPlateau(crntVal) );
@@ -88,7 +89,7 @@ public final class EncodedIntBuffer {
 		} else if (matS.isConnectedComponentIDCode(crntVal)) {
 			// NO CHANGE
 		} else {
-			int finalIndex = matS.calculateConnectedComponentID(x1, y1, z1, crntVal);
+			int finalIndex = matS.calculateConnectedComponentID(pnt, crntVal);
 			putCode(indxBuffer, finalIndex);
 		}
 	}

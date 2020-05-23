@@ -42,6 +42,7 @@ import org.anchoranalysis.image.seed.SeedCollection;
 import org.anchoranalysis.image.sgmn.SgmnFailedException;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.anchoranalysis.image.voxel.box.factory.VoxelBoxFactory;
+import org.anchoranalysis.image.voxel.iterator.IterateVoxels;
 
 import ch.ethz.biol.cell.sgmn.objmask.watershed.encoding.EncodedVoxelBox;
 
@@ -90,7 +91,7 @@ public class ObjMaskSgmnWatershedYeong extends ObjMaskSgmn {
 			MarkSeeds.apply(seeds.get(), matS, minimaStore, mask);
 		}
 		
-		PointPixelsOrMarkAsMinima.apply( chnl.getVoxelBox().any(), matS, mask, minimaStore);
+		pointPixelsOrMarkAsMinima( chnl.getVoxelBox().any(), matS, mask, minimaStore);
 
 		// Special behaviour where we just want to find the minima and nothing more
 		if (minimaStore.isPresent()) {
@@ -102,15 +103,51 @@ public class ObjMaskSgmnWatershedYeong extends ObjMaskSgmn {
 		}
 		
 		// TODO let's only work on the areas with regions
-		ConvertAllToConnectedComponents.apply(matS, mask);
+		convertAllToConnectedComponents(matS, mask);
 		
-		return CreateObjectsFromLabels.apply(matS.getVoxelBox(), mask);
+		return createObjectsFromLabels(matS.getVoxelBox(), mask);
 	}
 	
 	/** Create 'S' matrix */
 	private EncodedVoxelBox createS(Extent extent) {
 		VoxelBox<IntBuffer> matSVoxelBox = VoxelBoxFactory.instance().getInt().create(extent);
 		return new EncodedVoxelBox(matSVoxelBox);
+	}
+	
+	private static void pointPixelsOrMarkAsMinima(
+		VoxelBox<?> vbImg,
+		EncodedVoxelBox matS,
+		Optional<ObjMask> mask,
+		Optional<MinimaStore> minimaStore
+	) {
+		
+		SlidingBufferPlus buffer = new SlidingBufferPlus(vbImg, matS, mask, minimaStore);
+		IterateVoxels.callEachPoint(
+			mask,
+			buffer.getSlidingBuffer(),
+			new PointPixelsOrMarkAsMinima(buffer)
+		);
+	}
+	
+	private static void convertAllToConnectedComponents( EncodedVoxelBox matS, Optional<ObjMask> mask) {
+		IterateVoxels.callEachPoint(
+			mask,
+			matS.extnt(),
+			new ConvertAllToConnectedComponents(matS)
+		);
+	}
+	
+	private static ObjMaskCollection createObjectsFromLabels( VoxelBox<IntBuffer> matS, Optional<ObjMask> mask) {
+		
+		BoundingBoxMap bbm = new BoundingBoxMap();
+
+		IterateVoxels.callEachPoint(
+			mask,
+			matS.extnt(),
+			new CreateObjectsFromLabels(matS, bbm)
+		);
+		
+		return bbm.deriveObjects(matS);
 	}
 
 	public boolean isExitWithMinima() {
