@@ -50,6 +50,80 @@ import ch.ethz.biol.cell.sgmn.objmask.watershed.encoding.PriorityQueueIndexRange
 
 public class GrayscaleReconstructionRobinson extends GrayscaleReconstructionByErosion {
 	
+	/** There's no meaningful "result" value here, so we always return -1 */
+	private static class PointTester extends ProcessVoxelNeighbourAbsoluteWithSlidingBuffer<Object> {
+
+		private SlidingBuffer<?> sbMask;
+		private SlidingBuffer<ByteBuffer> sbFinalized;
+		private PriorityQueueIndexRangeDownhill<Point3i> queue;
+
+		// Current ByteBuffer
+		private VoxelBuffer<?> bbMask;
+		private VoxelBuffer<ByteBuffer> bbFinalized;
+		private int z = 0;
+
+		private final BinaryValuesByte bv;
+		
+		public PointTester(
+			SlidingBuffer<?> sbMarker,
+			SlidingBuffer<?> sbMask,
+			SlidingBuffer<ByteBuffer> sbFinalized,
+			PriorityQueueIndexRangeDownhill<Point3i> queue,
+			BinaryValuesByte bv
+		) {
+			super(sbMarker);
+			assert(sbMarker.extnt().equals(sbFinalized.extnt()));
+			assert(sbMarker.extnt().equals(sbMask.extnt()));
+			this.sbFinalized = sbFinalized;
+			this.sbMask = sbMask;
+			this.queue = queue;
+			this.bv = bv;
+		}
+		
+		@Override
+		public void notifyChangeZ(int zChange, int z) {
+			super.notifyChangeZ(zChange, z);
+			this.bbMask = sbMask.bufferRel(zChange);
+			this.bbFinalized = sbFinalized.bufferRel(zChange);
+			this.z = z;
+		}
+
+		@Override
+		public boolean processPoint(int xChange, int yChange, int x1, int y1) {
+
+			// We can replace with local index changes
+			int index = changedOffset(xChange, yChange);
+			
+			// We see if it's been finalized or not
+			byte b = bbFinalized.buffer().get(index);
+			if (b==bv.getOffByte()) {
+
+				// get value from mask
+				int maskVal = bbMask.getInt(index);
+				
+				int valToWrite = Math.min(maskVal, sourceVal);
+				
+				// write this value to the output image
+				putInt(index, valToWrite);
+				
+				// put the neighbour on the queue
+				queue.put(new Point3i(x1,y1,z), valToWrite);
+				
+				// point as finalized
+				bbFinalized.buffer().put( index, bv.getOnByte() );
+				
+				return true;
+			}
+			
+			return false;
+		}
+
+		@Override
+		public Integer collectResult() {
+			return null;	// Arbitrary value as no result exists (instead buffers are changed during the iteration)
+		}
+	}
+	
 	@Override
 	public VoxelBoxWrapper reconstruction( VoxelBoxWrapper maskVb, VoxelBoxWrapper markerVb, Optional<ObjMask> containingMask ) {
 		
@@ -100,9 +174,12 @@ public class GrayscaleReconstructionRobinson extends GrayscaleReconstructionByEr
 		SlidingBuffer<ByteBuffer> sbFinalized = new SlidingBuffer<>(vbFinalized);
 		
 		BinaryValuesByte bvFinalized = BinaryValuesByte.getDefault();
-		
-		PointTester pt = new PointTester(sbMarker, sbMask, sbFinalized, queue, bvFinalized );
-		ProcessVoxelNeighbour pointIterator = ProcessVoxelNeighbourFactory.within(containingMask,extent,pt);
+
+		ProcessVoxelNeighbour<?> process = ProcessVoxelNeighbourFactory.within(
+			containingMask,
+			extent,
+			new PointTester(sbMarker, sbMask, sbFinalized, queue, bvFinalized )
+		);
 		
 		Nghb nghb = new BigNghb(false);
 		boolean do3D = extent.getZ() > 1;
@@ -117,80 +194,11 @@ public class GrayscaleReconstructionRobinson extends GrayscaleReconstructionByEr
 			
 			// We have a point, and a value
 			// Now we iterate through the neighbours (but only if they haven't been finalised)
-			
-			pt.initSource(
-				extent.offsetSlice(pnt),
-				nextVal
-			);
-			
 			// Makes sure that it includes its centre point
-			IterateVoxels.callEachPointInNghb(pnt, nghb, do3D, pointIterator);
+			IterateVoxels.callEachPointInNghb(pnt, nghb, do3D, process, nextVal, extent.offsetSlice(pnt));
 		}
 	}
-	
-	
-	private static class PointTester extends ProcessVoxelNeighbourAbsoluteWithSlidingBuffer {
-
-		private SlidingBuffer<?> sbMask;
-		private SlidingBuffer<ByteBuffer> sbFinalized;
-		private PriorityQueueIndexRangeDownhill<Point3i> queue;
-
-		// Current ByteBuffer
-		private VoxelBuffer<?> bbMask;
-		private VoxelBuffer<ByteBuffer> bbFinalized;
-		private int z = 0;
-
-		private final BinaryValuesByte bv;
 		
-		public PointTester(SlidingBuffer<?> sbMarker, SlidingBuffer<?> sbMask, SlidingBuffer<ByteBuffer> sbFinalized, PriorityQueueIndexRangeDownhill<Point3i> queue, BinaryValuesByte bv) {
-			super(sbMarker);
-			assert(sbMarker.extnt().equals(sbFinalized.extnt()));
-			assert(sbMarker.extnt().equals(sbMask.extnt()));
-			this.sbFinalized = sbFinalized;
-			this.sbMask = sbMask;
-			this.queue = queue;
-			this.bv = bv;
-		}
-		
-		@Override
-		public void notifyChangeZ(int zChange, int z) {
-			super.notifyChangeZ(zChange, z);
-			this.bbMask = sbMask.bufferRel(zChange);
-			this.bbFinalized = sbFinalized.bufferRel(zChange);
-			this.z = z;
-		}
-
-		@Override
-		public boolean processPoint(int xChange, int yChange, int x1, int y1) {
-
-			// We can replace with local index changes
-			int index = changedOffset(xChange, yChange);
-			
-			// We see if it's been finalized or not
-			byte b = bbFinalized.buffer().get(index);
-			if (b==bv.getOffByte()) {
-
-				// get value from mask
-				int maskVal = bbMask.getInt(index);
-				
-				int valToWrite = Math.min(maskVal, sourceVal);
-				
-				// write this value to the output image
-				putInt(index, valToWrite);
-				
-				// put the neighbour on the queue
-				queue.put(new Point3i(x1,y1,z), valToWrite);
-				
-				// point as finalized
-				bbFinalized.buffer().put( index, bv.getOnByte() );
-				
-				return true;
-			}
-			
-			return false;
-		}
-	}
-	
 	private void populateQueueFromNonZeroPixels( PriorityQueueIndexRangeDownhill<Point3i> queue, VoxelBox<?> vb, VoxelBox<ByteBuffer> vbFinalized ) {
 		
 		byte maskOn = BinaryValuesByte.getDefault().getOnByte();

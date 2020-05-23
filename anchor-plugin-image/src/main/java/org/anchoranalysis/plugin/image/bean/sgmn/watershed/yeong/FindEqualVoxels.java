@@ -46,83 +46,7 @@ import ch.ethz.biol.cell.sgmn.objmask.watershed.encoding.EncodedVoxelBox;
 
 final class FindEqualVoxels {
 	
-	private final VoxelBox<?> bufferValuesToFindEqual;
-	private final EncodedVoxelBox matS;
-	private final boolean do3D;
-	private final Optional<ObjMask> mask;
-	
-	public FindEqualVoxels(
-		VoxelBox<?> bufferValuesToFindEqual,
-		EncodedVoxelBox temporaryMarkVisitedBuffer,
-		boolean do3D,
-		Optional<ObjMask> mask
-	) {
-		this.bufferValuesToFindEqual = bufferValuesToFindEqual;
-		this.matS = temporaryMarkVisitedBuffer;
-		this.do3D = do3D;
-		this.mask = mask;
-	}
-	
-	public EqualVoxelsPlateau createPlateau(Point3i pnt) {
-		
-		EqualVoxelsPlateau plateau = new EqualVoxelsPlateau();
-				
-		int toFind = 
-			bufferValuesToFindEqual.getPixelsForPlane( pnt.getZ() ).getInt(
-				bufferValuesToFindEqual.extnt().offsetSlice(pnt)
-			);
-		
-		{
-			Stack<Point3i> stack = new Stack<>(); 
-			stack.push(pnt);
-			processStack(stack, plateau, toFind);
-		}
-		
-		assert( !plateau.hasNullItems() );
-		
-		return plateau;
-	}
-	
-	private void processStack( Stack<Point3i> stack, EqualVoxelsPlateau plateau, int toFind ) {
-
-		Extent extnt = bufferValuesToFindEqual.extnt();
-		SlidingBuffer<?> rbb = new SlidingBuffer<>(bufferValuesToFindEqual);
-		
-		
-		PointTester pt = new PointTester( stack, rbb, matS);
-				
-		ProcessVoxelNeighbour itr = ProcessVoxelNeighbourFactory.within(mask, extnt, pt);
-				
-		BigNghb nghb = new BigNghb();
-		
-		while( !stack.isEmpty() ) {
-			Point3i pnt = stack.pop();
-			
-			// If we've already visited this point, we skip it
-			EncodedIntBuffer bbVisited = matS.getPixelsForPlane( pnt.getZ() );
-			int offset = extnt.offsetSlice(pnt);
-			if (bbVisited.isTemporary(offset)) {
-				continue;
-			}
-			
-			rbb.init(pnt.getZ());
-			
-			pt.initSource(toFind, offset);
-			IterateVoxels.callEachPointInNghb(pnt, nghb, do3D, itr);
-			
-			bbVisited.markAsTemporary(offset);
-			
-			if (pt.hasLowestNghbIndex()) {
-				plateau.addEdge(pnt, pt.getLowestNghbIndex());
-			} else {
-				plateau.addInner(pnt);				
-			}
-		}
-	}
-	
-	
-	
-	private static class PointTester extends ProcessVoxelNeighbourAbsoluteWithSlidingBuffer {
+private static class PointTester extends ProcessVoxelNeighbourAbsoluteWithSlidingBuffer<Optional<Integer>> {
 		
 		// Static arguments
 		private Stack<Point3i> stack;
@@ -148,15 +72,17 @@ final class FindEqualVoxels {
 			this.lowestNghbVal = sourceVal;
 			this.lowestNghbIndex = - 1;
 		}
+
+		/** The lowestNghbIndex if it exists */
+		@Override
+		public Optional<Integer> collectResult() {
+			if (lowestNghbIndex!=-1) {
+				return Optional.of(lowestNghbIndex);
+			} else {
+				return Optional.empty();
+			}
+		}
 		
-		public boolean hasLowestNghbIndex() {
-			return lowestNghbIndex!=-1;
-		}
-
-		public int getLowestNghbIndex() {
-			return lowestNghbIndex;
-		}
-
 		@Override
 		public void notifyChangeZ(int zChange, int z1) {
 			super.notifyChangeZ(zChange, z1);
@@ -206,6 +132,80 @@ final class FindEqualVoxels {
 		}
 	}
 
+	private final VoxelBox<?> bufferValuesToFindEqual;
+	private final EncodedVoxelBox matS;
+	private final boolean do3D;
+	private final Optional<ObjMask> mask;
+	
+	public FindEqualVoxels(
+		VoxelBox<?> bufferValuesToFindEqual,
+		EncodedVoxelBox temporaryMarkVisitedBuffer,
+		boolean do3D,
+		Optional<ObjMask> mask
+	) {
+		this.bufferValuesToFindEqual = bufferValuesToFindEqual;
+		this.matS = temporaryMarkVisitedBuffer;
+		this.do3D = do3D;
+		this.mask = mask;
+	}
+	
+	public EqualVoxelsPlateau createPlateau(Point3i pnt) {
+		
+		EqualVoxelsPlateau plateau = new EqualVoxelsPlateau();
+				
+		int valToFind = 
+			bufferValuesToFindEqual.getPixelsForPlane( pnt.getZ() ).getInt(
+				bufferValuesToFindEqual.extnt().offsetSlice(pnt)
+			);
+		
+		{
+			Stack<Point3i> stack = new Stack<>(); 
+			stack.push(pnt);
+			processStack(stack, plateau, valToFind);
+		}
+		
+		assert( !plateau.hasNullItems() );
+		
+		return plateau;
+	}
+	
+	private void processStack( Stack<Point3i> stack, EqualVoxelsPlateau plateau, int valToFind ) {
+
+		Extent extnt = bufferValuesToFindEqual.extnt();
+		SlidingBuffer<?> rbb = new SlidingBuffer<>(bufferValuesToFindEqual);
+				
+		ProcessVoxelNeighbour<Optional<Integer>> process = ProcessVoxelNeighbourFactory.within(
+			mask,
+			extnt,
+			new PointTester(stack, rbb, matS)
+		);
+				
+		BigNghb nghb = new BigNghb();
+		
+		while( !stack.isEmpty() ) {
+			Point3i pnt = stack.pop();
+			
+			// If we've already visited this point, we skip it
+			EncodedIntBuffer bbVisited = matS.getPixelsForPlane( pnt.getZ() );
+			int offset = extnt.offsetSlice(pnt);
+			if (bbVisited.isTemporary(offset)) {
+				continue;
+			}
+			
+			rbb.init(pnt.getZ());
+
+			Optional<Integer> lowestNghbIndex = IterateVoxels.callEachPointInNghb(pnt, nghb, do3D, process, valToFind, offset);
+			
+			bbVisited.markAsTemporary(offset);
+						
+			if (lowestNghbIndex.isPresent()) {
+				plateau.addEdge(pnt, lowestNghbIndex.get());
+			} else {
+				plateau.addInner(pnt);				
+			}
+		}
+	}
+	
 	public boolean isDo3D() {
 		return do3D;
 	}

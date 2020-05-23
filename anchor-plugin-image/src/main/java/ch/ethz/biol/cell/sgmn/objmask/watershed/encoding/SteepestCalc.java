@@ -42,27 +42,8 @@ import org.anchoranalysis.image.voxel.nghb.SmallNghb;
 
 public final class SteepestCalc {
 
-	private final boolean do3D;
-	private final PointTester pt;
-	private final ProcessVoxelNeighbour process;
-	private final Nghb nghb;
 	
-	/**
-	 * 
-	 * @param rbb
-	 * @param encoder
-	 * @param do3D
-	 * @param bigNghb iff true we use 8-Connectivity instead of 4, and 26-connectivity instead of 6 in 3D
-	 * @param mask
-	 */
-	public SteepestCalc( SlidingBuffer<?> rbb, WatershedEncoding encoder, boolean do3D, boolean bigNghb, Optional<ObjMask> mask ) {
-		this.do3D = do3D;
-		this.pt = new PointTester(encoder,rbb);
-		this.process = ProcessVoxelNeighbourFactory.within(mask, rbb.extnt(), pt);
-		this.nghb = bigNghb ? new BigNghb() : new SmallNghb();
-	}
-	
-	private static class PointTester extends ProcessVoxelNeighbourAbsoluteWithSlidingBuffer {
+	private static class PointTester extends ProcessVoxelNeighbourAbsoluteWithSlidingBuffer<Integer> {
 
 		private WatershedEncoding encoder;
 	
@@ -104,15 +85,37 @@ public final class SteepestCalc {
 			return false;			
 		}
 
-		public int getSteepestDrctn() {
+		/** The steepest direction */
+		@Override
+		public Integer collectResult() {
 			return steepestDrctn;
 		}
 	}
 	
+	private final boolean do3D;
+	private final ProcessVoxelNeighbour<Integer> process;
+	private final Nghb nghb;
+	
+	/**
+	 * 
+	 * @param rbb
+	 * @param encoder
+	 * @param do3D
+	 * @param bigNghb iff true we use 8-Connectivity instead of 4, and 26-connectivity instead of 6 in 3D
+	 * @param mask
+	 */
+	public SteepestCalc( SlidingBuffer<?> rbb, WatershedEncoding encoder, boolean do3D, boolean bigNghb, Optional<ObjMask> mask ) {
+		this.do3D = do3D;
+		this.process = ProcessVoxelNeighbourFactory.within(
+			mask,
+			rbb.extnt(),
+			new PointTester(encoder,rbb)
+		);
+		this.nghb = bigNghb ? new BigNghb() : new SmallNghb();
+	}
+	
 	// Calculates the steepest descent
 	public int calcSteepestDescent( Point3i pnt, int val, int indxBuffer ) {
-		this.pt.initSource(val, indxBuffer);
-		IterateVoxels.callEachPointInNghb(pnt, nghb, do3D, process);
-		return pt.getSteepestDrctn();
+		return IterateVoxels.callEachPointInNghb(pnt, nghb, do3D, process, val, indxBuffer);
 	}
 }

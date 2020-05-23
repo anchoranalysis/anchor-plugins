@@ -48,33 +48,12 @@ import ch.ethz.biol.cell.sgmn.objmask.watershed.encoding.EncodedVoxelBox;
 
 class MakePlateauLowerComplete {
 
-	private EqualVoxelsPlateau plateau;
-	private boolean do3D;
-
-	public MakePlateauLowerComplete(EqualVoxelsPlateau plateau, boolean do3D ) {
-		super();
-		this.plateau = plateau;
-		this.do3D = do3D;
-	}
-
-	private void pointEdgeToNeighbouring( EncodedVoxelBox matS ) {
-		// We set them all to their neighbouring points
-		for( PointWithNghb pntNghb : plateau.getPtsEdge()) {
-			assert( pntNghb.getNghbIndex() >= 0 );
-			
-			// IMPROVE BY SORTING BY Z-VALUE
-			//ByteBuffer bb = rbb.bufferRel( pntNghb.getPnt().getZ() )
-			matS.setPoint( pntNghb.getPnt(), pntNghb.getNghbIndex() );
-		}		
-	}
-	
-	
-	private static class PointTester implements ProcessChangedPointAbsoluteMasked {
+	private static class PointTester implements ProcessChangedPointAbsoluteMasked<List<Point3i>> {
 
 		// STATIC
 		private EncodedVoxelBox matS;
 		
-		private List<Point3i> foundPoints;
+		private final List<Point3i> foundPoints = new ArrayList<>();	
 		
 		private int zChange;
 		private ByteBuffer bb;
@@ -87,10 +66,20 @@ class MakePlateauLowerComplete {
 			this.maskValueOff = bv.getOffByte();
 		}
 		
-		public void resetFoundPoints() {
-			this.foundPoints = new ArrayList<>();			
+		@Override
+		public void initSource(int sourceVal, int sourceOffsetXY) {
+			foundPoints.clear();	
 		}
-		
+
+		@Override
+		public void notifyChangeZ(int zChange, int z1,
+				ByteBuffer objectMaskBuffer) {
+			this.bb = objectMaskBuffer;
+			this.zChange = zChange;
+			this.z1 = z1;
+		}
+
+		@Override
 		public boolean processPoint(int xChange, int yChange, int x1, int y1, int objectMaskOffset) {
 			
 			Point3i pntRel = new Point3i(x1,y1,z1);
@@ -103,55 +92,21 @@ class MakePlateauLowerComplete {
 			return true;
 		}
 
-		public List<Point3i> getFoundPoints() {
+		@Override
+		public List<Point3i> collectResult() {
 			return foundPoints;
 		}
+	}
+	
+	private EqualVoxelsPlateau plateau;
+	private boolean do3D;
 
-		@Override
-		public void notifyChangeZ(int zChange, int z1,
-				ByteBuffer objectMaskBuffer) {
-			this.bb = objectMaskBuffer;
-			this.zChange = zChange;
-			this.z1 = z1;
-		}
+	public MakePlateauLowerComplete(EqualVoxelsPlateau plateau, boolean do3D ) {
+		super();
+		this.plateau = plateau;
+		this.do3D = do3D;
 	}
-	
-	
-	private void pointInnerToEdge( EncodedVoxelBox matS ) {
-		
-		// Iterate through each edge pixel, and look for neighbouring points in the Inner pixels
-		//   for any such point, point towards the edge pixel, and move to the new edge list
-		
-		
-		
-		List<Point3i> searchPoints = plateau.ptsEdgeAsPoints();
-		
-		try {
-			// We create an objMask from the list of points
-			ObjMask om = ObjMaskChnlUtilities.createObjMaskFromPoints( plateau.getPtsInner() );
-			Nghb nghb = new BigNghb();
-			
-			
-			PointTester pt = new PointTester(matS, om.getBinaryValuesByte());
-			ProcessVoxelNeighbour process = ProcessVoxelNeighbourFactory.withinMask(om, pt);
-			
-			while( !searchPoints.isEmpty() ) {
-				
-				pt.resetFoundPoints();
-				
-				// We iterate through all the search points
-				for( Point3i p : searchPoints ) {
-					IterateVoxels.callEachPointInNghb(p, nghb, do3D, process);
-				}
-				searchPoints = pt.getFoundPoints();
-			}
-			
-		} catch (CreateException e) {
-			// the only exception possible should be when there are 0 pixels
-			assert false;
-		}
-	}
-	
+
 	public void makeBufferLowerCompleteForPlateau( EncodedVoxelBox matS, Optional<MinimaStore> minimaStore ) {
 		
 		assert(plateau.hasPoints());
@@ -176,5 +131,62 @@ class MakePlateauLowerComplete {
 			pointEdgeToNeighbouring( matS );
 			pointInnerToEdge( matS );
 		}
+	}
+	
+	private void pointEdgeToNeighbouring( EncodedVoxelBox matS ) {
+		// We set them all to their neighbouring points
+		for( PointWithNghb pntNghb : plateau.getPtsEdge()) {
+			assert( pntNghb.getNghbIndex() >= 0 );
+			
+			// IMPROVE BY SORTING BY Z-VALUE
+			//ByteBuffer bb = rbb.bufferRel( pntNghb.getPnt().getZ() )
+			matS.setPoint( pntNghb.getPnt(), pntNghb.getNghbIndex() );
+		}		
+	}
+		
+	private void pointInnerToEdge( EncodedVoxelBox matS ) {
+		// Iterate through each edge pixel, and look for neighbouring points in the Inner pixels
+		//   for any such point, point towards the edge pixel, and move to the new edge list
+		List<Point3i> searchPoints = plateau.ptsEdgeAsPoints();
+		
+		try {
+			// We create an objMask from the list of points
+			ObjMask om = ObjMaskChnlUtilities.createObjMaskFromPoints( plateau.getPtsInner() );
+			Nghb nghb = new BigNghb();
+
+			ProcessVoxelNeighbour<List<Point3i>> process = ProcessVoxelNeighbourFactory.withinMask(
+				om,
+				new PointTester(matS, om.getBinaryValuesByte())
+			);
+			
+			while( !searchPoints.isEmpty() ) {
+				searchPoints = findPointsFor(searchPoints, nghb, process);
+			}
+			
+		} catch (CreateException e) {
+			// the only exception possible should be when there are 0 pixels
+			assert false;
+		}
+	}
+	
+	private List<Point3i> findPointsFor( List<Point3i> points, Nghb nghb, ProcessVoxelNeighbour<List<Point3i>> process ) {
+		
+		List<Point3i> foundPoints = new ArrayList<>();
+		
+		// We iterate through all the search points
+		for( Point3i p : points ) {
+			
+			foundPoints.addAll(
+				IterateVoxels.callEachPointInNghb(
+					p,
+					nghb,
+					do3D,
+					process,
+					-1,	// The -1 value are arbitrary, as it will be ignored
+					-1  // The -1 value are arbitrary, as it will be ignored
+				)
+			);
+		}
+		return foundPoints;
 	}
 }
