@@ -33,11 +33,10 @@ import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.anchoranalysis.image.voxel.buffer.SlidingBuffer;
-import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 import org.anchoranalysis.image.voxel.iterator.IterateVoxels;
-import org.anchoranalysis.image.voxel.iterator.changed.InitializableProcessChangedPoint;
-import org.anchoranalysis.image.voxel.iterator.changed.ProcessChangedPointAbsolute;
-import org.anchoranalysis.image.voxel.iterator.changed.ProcessChangedPointFactory;
+import org.anchoranalysis.image.voxel.iterator.changed.ProcessVoxelNeighbour;
+import org.anchoranalysis.image.voxel.iterator.changed.ProcessVoxelNeighbourAbsoluteWithSlidingBuffer;
+import org.anchoranalysis.image.voxel.iterator.changed.ProcessVoxelNeighbourFactory;
 import org.anchoranalysis.image.voxel.nghb.BigNghb;
 import org.anchoranalysis.image.voxel.nghb.Nghb;
 
@@ -48,51 +47,36 @@ import org.anchoranalysis.image.voxel.nghb.Nghb;
 public class GrayscaleErosion {
 
 	private boolean do3D = false;
-	
+	private static final Nghb NGHB = new BigNghb(false);
+		
 	private PointTester pt;
-	private InitializableProcessChangedPoint pointProcessor;
+	private ProcessVoxelNeighbour pointProcessor;
 	
 	// Without mask
 	public GrayscaleErosion( SlidingBuffer<ByteBuffer> rbb, boolean do3D ) {
 		this.do3D = do3D;
 		this.pt = new PointTester(rbb);
-		this.pointProcessor = ProcessChangedPointFactory.withinExtent(rbb.extnt(), pt);
+		this.pointProcessor = ProcessVoxelNeighbourFactory.withinExtent(rbb.extnt(), pt);
 	}
 	
-	private static class PointTester implements ProcessChangedPointAbsolute {
-
-		private SlidingBuffer<ByteBuffer> rbb;
-
-		// Current bytebuffer
-		private VoxelBuffer<ByteBuffer> bb;
-		private int indx;
+	private static class PointTester extends ProcessVoxelNeighbourAbsoluteWithSlidingBuffer {
 		
 		// Current minima
 		private int minima;
 		
 		public PointTester(SlidingBuffer<ByteBuffer> rbb) {
-			super();
-			this.rbb = rbb;
+			super(rbb);
 		}
 
-		public void reset( int indx, int exstVal ) {
-			// Undefined
-			minima = exstVal;
-			this.indx = indx;
-		}
-		
 		@Override
-		public void notifyChangeZ(int zChange, int z) {
-			this.bb = rbb.bufferRel(zChange);
+		public void initSource( int indx, int exstVal ) {
+			super.initSource(exstVal, indx);
+			minima = exstVal;
 		}
 
 		@Override
 		public boolean processPoint(int xChange, int yChange, int x1, int y1) {
-
-			// We can replace with local index changes
-			int indxChange = rbb.extnt().offset(xChange, yChange);
-			
-			int val = bb.getInt(indx+indxChange);
+			int val = getInt(xChange, yChange);
 			
 			if (val < minima) {
 				minima = val;
@@ -109,13 +93,8 @@ public class GrayscaleErosion {
 	
 	// The sliding buffer must be centred at the current value of z
 	public int grayscaleErosion( Point3i pnt, SlidingBuffer<ByteBuffer> buffer, int indx, int exstVal ) {
-		
-		this.pt.reset( indx, exstVal );
-		
-		// Makes sure that it includes its centre point
-		Nghb nghb = new BigNghb(false);
-		IterateVoxels.callEachPointInNghb(pnt, nghb, do3D, pointProcessor);
-		
+		this.pt.initSource( indx, exstVal );
+		IterateVoxels.callEachPointInNghb(pnt, NGHB, do3D, pointProcessor);
 		return pt.getMinima();
 	}
 	

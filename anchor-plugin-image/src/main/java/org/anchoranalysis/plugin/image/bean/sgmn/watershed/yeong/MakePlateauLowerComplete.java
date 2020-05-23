@@ -37,9 +37,9 @@ import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.image.voxel.iterator.IterateVoxels;
-import org.anchoranalysis.image.voxel.iterator.changed.InitializableProcessChangedPoint;
 import org.anchoranalysis.image.voxel.iterator.changed.ProcessChangedPointAbsoluteMasked;
-import org.anchoranalysis.image.voxel.iterator.changed.ProcessChangedPointFactory;
+import org.anchoranalysis.image.voxel.iterator.changed.ProcessVoxelNeighbour;
+import org.anchoranalysis.image.voxel.iterator.changed.ProcessVoxelNeighbourFactory;
 import org.anchoranalysis.image.voxel.nghb.BigNghb;
 import org.anchoranalysis.image.voxel.nghb.Nghb;
 
@@ -133,7 +133,7 @@ class MakePlateauLowerComplete {
 			
 			
 			PointTester pt = new PointTester(matS, om.getBinaryValuesByte());
-			InitializableProcessChangedPoint process = ProcessChangedPointFactory.withinMask(om, pt);
+			ProcessVoxelNeighbour process = ProcessVoxelNeighbourFactory.withinMask(om, pt);
 			
 			while( !searchPoints.isEmpty() ) {
 				
