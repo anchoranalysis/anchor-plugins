@@ -40,9 +40,7 @@ import org.anchoranalysis.image.bean.provider.BinaryImgChnlProviderOne;
 import org.anchoranalysis.image.binary.BinaryChnl;
 import org.anchoranalysis.image.binary.BinaryChnlInverter;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
-import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
 import org.anchoranalysis.image.voxel.iterator.IterateVoxels;
-import org.anchoranalysis.image.voxel.iterator.ProcessVoxelOffsets;
 
 public class BinaryImgChnlProviderInvert extends BinaryImgChnlProviderOne {
 
@@ -76,45 +74,24 @@ public class BinaryImgChnlProviderInvert extends BinaryImgChnlProviderOne {
 	}
 		
 	private void invertWithMask( BinaryChnl chnl, BinaryChnl mask ) throws CreateException {
-		IterateVoxels.callEachPoint(
-			mask,
-			new Processer(
-				chnl.binaryVoxelBox()
-			)
-		);
-	}
-	
-	private static final class Processer implements ProcessVoxelOffsets {
 
-		private final BinaryVoxelBox<ByteBuffer> voxelBox;
-		private final byte byteOn;
-		private final byte byteOff;
+		BinaryValuesByte bvb = chnl.getBinaryValues().createByte();
+		final byte byteOn = bvb.getOnByte();
+		final byte byteOff = bvb.getOffByte();
 		
-		private ByteBuffer bbSlice;
-		
-		public Processer(BinaryVoxelBox<ByteBuffer> voxelBox) {
-			super();
-			this.voxelBox = voxelBox;
-			BinaryValuesByte bvb = voxelBox.getBinaryValues().createByte();
-			this.byteOn = bvb.getOnByte();
-			this.byteOff = bvb.getOffByte();
-		}		
-		
-		@Override
-		public void notifyChangeZ(int z) {
-			bbSlice = voxelBox.getPixelsForPlane(z).buffer();
-		}
-		
-		@Override
-		public void process(Point3i pnt, int offset3d, int offsetSlice) {
-			byte val = bbSlice.get(offsetSlice);
-			
-			if (val==byteOn) {
-				bbSlice.put(offsetSlice,byteOff);
-			} else {
-				bbSlice.put(offsetSlice,byteOn);
+		IterateVoxels.callEachPoint(
+			chnl.binaryVoxelBox().getVoxelBox(),				
+			mask,
+			(Point3i pnt, ByteBuffer buffer, int offset) -> {
+				byte val = buffer.get(offset);
+				
+				if (val==byteOn) {
+					buffer.put(offset,byteOff);
+				} else {
+					buffer.put(offset,byteOn);
+				}
 			}
-		}
+		);
 	}
 
 	public boolean isForceChangeBytes() {

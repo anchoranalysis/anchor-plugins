@@ -57,11 +57,11 @@ public class BinaryImgChnlProviderInvertTest {
 		return WIDTH * HEIGHT * depth(use3d);
 	}
 	
-	private static int expectedNumPixelsAfterWithoutMask(boolean use3d) {
+	private static long expectedNumPixelsAfterWithoutMask(boolean use3d) {
 		return extent(use3d).getVolume() - expectedNumPixelsBefore(use3d);
 	}
 	
-	private static void testRectangle(boolean use3d, boolean mask, int expectedNumPixelsAfter) throws CreateException {
+	private static void testRectangle(boolean use3d, boolean mask, long expectedNumPixelsAfter) throws CreateException {
 		
 		BinaryChnl chnlBefore = createWithRectangle(CORNER_RECTANGLE, use3d);
 		
@@ -105,7 +105,7 @@ public class BinaryImgChnlProviderInvertTest {
 		return provider;
 	}
 	
-	private static void assertPixelsOn(String messagePrefix, int expectedNumPixels, BinaryChnl chnl ) {
+	private static void assertPixelsOn(String messagePrefix, long expectedNumPixels, BinaryChnl chnl ) {
 		assertEquals( messagePrefix + "PixelsOn", expectedNumPixels, chnl.binaryVoxelBox().countOn() );
 	}
 	

@@ -56,7 +56,7 @@ public class BinaryImgChnlProviderRejectIfOnGreaterThan extends BinaryImgChnlPro
 	
 	private void testChnl( BinaryChnl binaryImgChnl ) throws CreateException {
 		int cnt = binaryImgChnl.countHighValues();
-		int volume = binaryImgChnl.getDimensions().getVolume();
+		long volume = binaryImgChnl.getDimensions().getVolume();
 		
 		double ratio = ((double) cnt) / volume;
 		

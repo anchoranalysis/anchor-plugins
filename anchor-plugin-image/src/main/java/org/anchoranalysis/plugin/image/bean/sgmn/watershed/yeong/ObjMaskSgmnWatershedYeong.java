@@ -33,6 +33,7 @@ import java.util.Optional;
 import org.anchoranalysis.bean.OptionalFactory;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
+import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.bean.sgmn.objmask.ObjMaskSgmn;
 import org.anchoranalysis.image.chnl.Chnl;
 import org.anchoranalysis.image.extent.Extent;
@@ -132,19 +133,25 @@ public class ObjMaskSgmnWatershedYeong extends ObjMaskSgmn {
 	private static void convertAllToConnectedComponents( EncodedVoxelBox matS, Optional<ObjMask> mask) {
 		IterateVoxels.callEachPoint(
 			mask,
-			matS.extnt(),
+			matS.getVoxelBox(),
 			new ConvertAllToConnectedComponents(matS)
 		);
 	}
 	
 	private static ObjMaskCollection createObjectsFromLabels( VoxelBox<IntBuffer> matS, Optional<ObjMask> mask) {
 		
-		BoundingBoxMap bbm = new BoundingBoxMap();
-
+		final BoundingBoxMap bbm = new BoundingBoxMap();
+		
 		IterateVoxels.callEachPoint(
 			mask,
-			matS.extnt(),
-			new CreateObjectsFromLabels(matS, bbm)
+			matS,
+			(Point3i pnt, IntBuffer buffer, int offset) -> {
+				int crntVal = buffer.get(offset);
+				buffer.put(
+					offset,
+					bbm.addPointForValue(pnt, crntVal) + 1
+				);
+			}
 		);
 		
 		return bbm.deriveObjects(matS);
