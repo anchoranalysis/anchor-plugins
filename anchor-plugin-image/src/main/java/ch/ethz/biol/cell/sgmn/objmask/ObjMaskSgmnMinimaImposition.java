@@ -32,6 +32,7 @@ import java.util.Optional;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.bean.sgmn.objmask.ObjMaskSgmn;
+import org.anchoranalysis.image.bean.sgmn.objmask.ObjMaskSgmnOne;
 import org.anchoranalysis.image.chnl.Chnl;
 import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.image.objmask.ObjMaskCollection;
@@ -42,12 +43,9 @@ import ch.ethz.biol.cell.sgmn.objmask.watershed.minimaimposition.MinimaImpositio
 
 
 // Imposes minima only in seed locations on the input channel, and performs the segmentation
-public class ObjMaskSgmnMinimaImposition extends ObjMaskSgmn {
+public class ObjMaskSgmnMinimaImposition extends ObjMaskSgmnOne {
 
 	// START BEAN PROPERTIES
-	@BeanField
-	private ObjMaskSgmn sgmn;
-	
 	@BeanField
 	private MinimaImposition minimaImposition;
 	// END BEAN PROPERTIES
@@ -56,7 +54,8 @@ public class ObjMaskSgmnMinimaImposition extends ObjMaskSgmn {
 	public ObjMaskCollection sgmn(
 		Chnl chnl,
 		Optional<ObjMask> mask,
-		Optional<SeedCollection> seeds
+		Optional<SeedCollection> seeds,
+		ObjMaskSgmn sgmn
 	) throws SgmnFailedException {
 
 		if (!seeds.isPresent()) {
@@ -81,14 +80,6 @@ public class ObjMaskSgmnMinimaImposition extends ObjMaskSgmn {
 		} else {
 			return chnl;
 		}
-	}
-	
-	public ObjMaskSgmn getSgmn() {
-		return sgmn;
-	}
-
-	public void setSgmn(ObjMaskSgmn sgmn) {
-		this.sgmn = sgmn;
 	}
 
 	public MinimaImposition getMinimaImposition() {

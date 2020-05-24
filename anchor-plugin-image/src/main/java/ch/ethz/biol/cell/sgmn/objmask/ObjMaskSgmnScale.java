@@ -34,6 +34,7 @@ import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.functional.UnaryOperatorWithException;
 import org.anchoranalysis.image.bean.scale.ScaleCalculator;
 import org.anchoranalysis.image.bean.sgmn.objmask.ObjMaskSgmn;
+import org.anchoranalysis.image.bean.sgmn.objmask.ObjMaskSgmnOne;
 import org.anchoranalysis.image.chnl.Chnl;
 import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.interpolator.Interpolator;
@@ -45,12 +46,9 @@ import org.anchoranalysis.image.seed.SeedCollection;
 import org.anchoranalysis.image.sgmn.SgmnFailedException;
 
 
-public class ObjMaskSgmnScale extends ObjMaskSgmn {
+public class ObjMaskSgmnScale extends ObjMaskSgmnOne {
 
 	// START BEAN PROPERTIES
-	@BeanField
-	private ObjMaskSgmn sgmn;
-	
 	@BeanField
 	private ScaleCalculator scaleCalculator;
 	
@@ -62,7 +60,7 @@ public class ObjMaskSgmnScale extends ObjMaskSgmn {
 	// END BEAN PROPERTIES
 	
 	@Override
-	public ObjMaskCollection sgmn(Chnl chnl, Optional<ObjMask> mask,	Optional<SeedCollection> seeds) throws SgmnFailedException {
+	public ObjMaskCollection sgmn(Chnl chnl, Optional<ObjMask> mask, Optional<SeedCollection> seeds, ObjMaskSgmn sgmn) throws SgmnFailedException {
 
 		Interpolator interpolator = createInterpolator();
 		
@@ -152,14 +150,6 @@ public class ObjMaskSgmnScale extends ObjMaskSgmn {
 		return interpolate ? InterpolatorFactory.getInstance().binaryResizing() : InterpolatorFactory.getInstance().noInterpolation();
 	}
 
-	public ObjMaskSgmn getSgmn() {
-		return sgmn;
-	}
-
-	public void setSgmn(ObjMaskSgmn sgmn) {
-		this.sgmn = sgmn;
-	}
-
 	public ScaleCalculator getScaleCalculator() {
 		return scaleCalculator;
 	}
@@ -183,6 +173,4 @@ public class ObjMaskSgmnScale extends ObjMaskSgmn {
 	public void setInterpolate(boolean interpolate) {
 		this.interpolate = interpolate;
 	}
-
-
 }
