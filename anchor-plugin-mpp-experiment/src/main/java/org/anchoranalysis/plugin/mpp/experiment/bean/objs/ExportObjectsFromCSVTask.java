@@ -281,7 +281,7 @@ public class ExportObjectsFromCSVTask extends ExportObjectsBase<FromCSVInputObje
 		}
 
 		@Override
-		public ManifestDescription createManifestDescription() {
+		public Optional<ManifestDescription> createManifestDescription() {
 			return delegate.createManifestDescription();
 		}
 

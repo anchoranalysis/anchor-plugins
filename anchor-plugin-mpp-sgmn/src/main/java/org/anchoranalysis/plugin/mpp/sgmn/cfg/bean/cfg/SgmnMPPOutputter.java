@@ -1,5 +1,7 @@
 package org.anchoranalysis.plugin.mpp.sgmn.cfg.bean.cfg;
 
+import java.util.Optional;
+
 import org.anchoranalysis.anchor.mpp.bean.regionmap.RegionMembershipWithFlags;
 import org.anchoranalysis.anchor.mpp.cfg.Cfg;
 import org.anchoranalysis.anchor.mpp.cfg.ColoredCfg;
@@ -85,7 +87,10 @@ class SgmnMPPOutputter {
 	private static void writeCfg( CfgNRG cfgNRG, WriterRouterErrors writer ) {
 		writer.write(
 			"finalCfgNRG",
-			() -> new XStreamGenerator<>(cfgNRG, "cfgNRG")
+			() -> new XStreamGenerator<>(
+				cfgNRG,
+				Optional.of("cfgNRG")
+			)
 		);
 	}
 	
@@ -116,11 +121,16 @@ class SgmnMPPOutputter {
 	private static void writeFinalCfg( Cfg cfg, WriterRouterErrors writer ) {
 		writer.write(
 			"finalCfg",
-			() -> new XStreamGenerator<>(cfg, "cfg")
+			() -> new XStreamGenerator<>(
+				cfg,
+				Optional.of("cfg")
+			)
 		);
 		writer.write(
 			"finalCfgBinary",
-			() -> new ObjectOutputStreamGenerator<>(cfg, "cfg")
+			() -> new ObjectOutputStreamGenerator<>(
+				cfg,
+				Optional.of("cfg") )
 		);
 	}
 	

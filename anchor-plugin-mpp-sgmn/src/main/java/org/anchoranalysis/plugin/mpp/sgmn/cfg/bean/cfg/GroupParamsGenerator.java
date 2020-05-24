@@ -29,6 +29,7 @@ package org.anchoranalysis.plugin.mpp.sgmn.cfg.bean.cfg;
 
 import java.io.IOException;
 import java.nio.file.Path;
+import java.util.Optional;
 
 import org.anchoranalysis.core.params.KeyValueParams;
 import org.anchoranalysis.io.generator.serialized.SerializedGenerator;
@@ -60,8 +61,10 @@ class GroupParamsGenerator extends SerializedGenerator {
 	}
 
 	@Override
-	public ManifestDescription createManifestDescription() {
-		return new ManifestDescription("serialized", "groupParams" );
+	public Optional<ManifestDescription> createManifestDescription() {
+		return Optional.of(
+			new ManifestDescription("serialized", "groupParams" )
+		);
 	}
 
 }

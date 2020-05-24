@@ -29,6 +29,8 @@ package ch.ethz.biol.cell.imageprocessing.io.generator.imagestack;
 
 import ij.ImageStack;
 
+import java.util.Optional;
+
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.index.SetOperationFailedException;
 import org.anchoranalysis.image.convert.IJWrap;
@@ -62,7 +64,7 @@ public class RasterConverterIterableGenerator<IterationType> extends ImageStackG
 	}
 
 	@Override
-	public ManifestDescription createManifestDescription() {
+	public Optional<ManifestDescription> createManifestDescription() {
 		return rasterGenerator.getGenerator().createManifestDescription();
 	}
 
