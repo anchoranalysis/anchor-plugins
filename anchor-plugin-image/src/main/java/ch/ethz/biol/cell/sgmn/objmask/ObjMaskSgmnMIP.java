@@ -34,6 +34,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.image.bean.sgmn.binary.BinarySgmn;
 import org.anchoranalysis.image.bean.sgmn.binary.BinarySgmnParameters;
 import org.anchoranalysis.image.bean.sgmn.objmask.ObjMaskSgmn;
+import org.anchoranalysis.image.bean.sgmn.objmask.ObjMaskSgmnOne;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
 import org.anchoranalysis.image.chnl.Chnl;
 import org.anchoranalysis.image.objmask.ObjMask;
@@ -44,18 +45,23 @@ import org.anchoranalysis.image.sgmn.SgmnFailedException;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.anchoranalysis.image.voxel.box.VoxelBoxWrapper;
 
-public class ObjMaskSgmnMIP extends ObjMaskSgmn {
+/**
+ * Perform a segmentation in a MIP instead of z-stacks.
+ * 
+ * <p>The incoming segmentation should return 2D objects</p>.
+ * 
+ * @author Owen Feehan
+ *
+ */
+public class ObjMaskSgmnMIP extends ObjMaskSgmnOne {
 
 	// START BEAN PROPERTIES
-	@BeanField
-	private ObjMaskSgmn sgmnMIP;
-	
 	@BeanField
 	private BinarySgmn sgmnStack;
 	// END BEAN PROPERTIES
 
 	@Override
-	public ObjMaskCollection sgmn(Chnl chnl, Optional<ObjMask> objMask, Optional<SeedCollection> seeds) throws SgmnFailedException {
+	public ObjMaskCollection sgmn(Chnl chnl, Optional<ObjMask> objMask, Optional<SeedCollection> seeds, ObjMaskSgmn sgmn) throws SgmnFailedException {
 		
 		if (objMask.isPresent()) {
 			throw new SgmnFailedException("An object-mask is not supported for this operation");
@@ -66,11 +72,21 @@ public class ObjMaskSgmnMIP extends ObjMaskSgmn {
 		// Collapse seeds in z direction
 		seeds.ifPresent(ObjMaskSgmnMIP::flattenSeedsInZ);
 		
-		ObjMaskCollection objs = sgmnMIP.sgmn(max, Optional.empty(), seeds);
+		ObjMaskCollection objs = sgmn.sgmn(max, Optional.empty(), seeds);
+		
+		if (isAny3d(objs)) {
+			throw new SgmnFailedException("A 3D object was returned from the initial segmentation. This must return only 2D objects");
+		}
 		
 		return ExtendObjsInto3DMask.extendObjs(
 			objs,
 			binarySgmn(chnl)
+		);
+	}
+	
+	private boolean isAny3d(ObjMaskCollection objs) {
+		return objs.asList().stream().anyMatch(om
+			->om.getVoxelBox().extnt().getZ() >1
 		);
 	}
 	
@@ -93,15 +109,6 @@ public class ObjMaskSgmnMIP extends ObjMaskSgmn {
 		SeedCollection seedsDup = seeds.duplicate();
 		seedsDup.flattenZ();
 		return seedsDup;
-	}
-
-	public ObjMaskSgmn getSgmnMIP() {
-		return sgmnMIP;
-	}
-
-
-	public void setSgmnMIP(ObjMaskSgmn sgmnMIP) {
-		this.sgmnMIP = sgmnMIP;
 	}
 
 	public BinarySgmn getSgmnStack() {
