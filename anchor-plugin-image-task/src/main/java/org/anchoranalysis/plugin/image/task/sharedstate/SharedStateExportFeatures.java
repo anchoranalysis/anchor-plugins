@@ -1,5 +1,7 @@
 package org.anchoranalysis.plugin.image.task.sharedstate;
 
+import java.util.Optional;
+
 /*-
  * #%L
  * anchor-plugin-image-task
@@ -53,7 +55,7 @@ public abstract class SharedStateExportFeatures {
 	}
 
 	public <T extends FeatureInput> void writeFeaturesAsCSVForAllGroups(
-		NamedFeatureStore<FeatureInputResults> featuresAggregate,
+		Optional<NamedFeatureStore<FeatureInputResults>> featuresAggregate,
 		BoundIOContext context
 	) throws AnchorIOException {
 		results.writeResultsForAllGroups(

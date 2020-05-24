@@ -1,5 +1,7 @@
 package org.anchoranalysis.plugin.annotation.bean.comparison;
 
+import java.util.Optional;
+
 /*
  * #%L
  * anchor-annotation
@@ -52,23 +54,23 @@ class CSVComparisonGroup<T extends Assignment> {
 	
 	public void writeGroupStats( BoundOutputManagerRouteErrors outputManager ) throws AnchorIOException {
 		
-		CSVWriter writer = CSVWriter.createFromOutputManager("byGroup", outputManager.getDelegate());
+		Optional<CSVWriter> writer = CSVWriter.createFromOutputManager("byGroup", outputManager.getDelegate());
 
-		if (writer==null) {
+		if (!writer.isPresent()) {
 			return;
 		}
 			
 		try {
-			writer.writeHeaders(
+			writer.get().writeHeaders(
 				annotationGroupList.first().createHeaders()
 			);
 			
 			for( AnnotationGroup<T> group : annotationGroupList) {
-				writeGroupStatsForGroup( group, writer );
+				writeGroupStatsForGroup( group, writer.get() );
 			}
 			
 		} finally {
-			writer.close();
+			writer.get().close();
 		}
 	}
 }

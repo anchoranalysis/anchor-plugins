@@ -1,5 +1,7 @@
 package ch.ethz.biol.cell.mpp.feedback.reporter;
 
+import java.util.Optional;
+
 import org.anchoranalysis.anchor.mpp.feature.nrg.cfg.CfgNRGPixelized;
 
 /*-
@@ -36,7 +38,7 @@ import org.anchoranalysis.mpp.sgmn.optscheme.feedback.OptimizationFeedbackInitPa
 
 public class CSVReporterUtilities {
 
-	public static FileOutput createFileOutputFor(
+	public static Optional<FileOutput> createFileOutputFor(
 		String outputName,
 		OptimizationFeedbackInitParams<CfgNRGPixelized> initParams,
 		String manifestDscrFunction

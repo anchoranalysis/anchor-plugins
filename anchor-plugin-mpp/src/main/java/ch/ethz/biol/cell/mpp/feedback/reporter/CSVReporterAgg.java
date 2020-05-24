@@ -1,5 +1,8 @@
 package ch.ethz.biol.cell.mpp.feedback.reporter;
 
+import java.io.PrintWriter;
+import java.util.Optional;
+
 import org.anchoranalysis.anchor.mpp.feature.nrg.cfg.CfgNRGPixelized;
 
 /*-
@@ -43,7 +46,7 @@ import org.apache.commons.lang.time.StopWatch;
 
 public class CSVReporterAgg extends ReporterAgg<CfgNRGPixelized> implements IAggregateReceiver<CfgNRGPixelized> {
 
-	private FileOutput csvOutput;
+	private Optional<FileOutput> csvOutput;
 	
 	private StopWatch timer = null;
 
@@ -92,15 +95,14 @@ public class CSVReporterAgg extends ReporterAgg<CfgNRGPixelized> implements IAgg
 	public void aggStart( OptimizationFeedbackInitParams<CfgNRGPixelized> initParams, Aggregator agg ) throws AggregatorException {
 		
 		try {
-			if (csvOutput!=null) {
-				this.csvOutput.start();
+			if (csvOutput.isPresent()) {
+				this.csvOutput.get().start();
 				
-				if (csvOutput.isEnabled()) {
-					this.csvOutput.getWriter().print("Itr,");
-					agg.outputHeaderToWriter(this.csvOutput.getWriter());
-					this.csvOutput.getWriter().print(",Time,TimePerIter,IntervalTimePerIter");
-					this.csvOutput.getWriter().println();
-				}
+				PrintWriter writer = csvOutput.get().getWriter();
+				writer.print("Itr,");
+				agg.outputHeaderToWriter(writer);
+				writer.print(",Time,TimePerIter,IntervalTimePerIter");
+				writer.println();
 			}
 			
 		} catch (AnchorIOException e) {
@@ -110,7 +112,7 @@ public class CSVReporterAgg extends ReporterAgg<CfgNRGPixelized> implements IAgg
 	
 	@Override
 	public void aggReport( Reporting<CfgNRGPixelized> reporting, Aggregator agg ) {
-		if (csvOutput!=null && csvOutput.isEnabled()) {
+		if (csvOutput.isPresent() && csvOutput.get().isEnabled()) {
 
 			// Shift time
 			this.lastTime = this.crntTime;
@@ -119,13 +121,14 @@ public class CSVReporterAgg extends ReporterAgg<CfgNRGPixelized> implements IAgg
 			totalCount++;
 			long totalItr = getAggInterval() * totalCount;
 			
-			csvOutput.getWriter().printf("%d,", totalItr ); 
+			PrintWriter writer = csvOutput.get().getWriter();
+			writer.printf("%d,", totalItr ); 
 			
-			agg.outputToWriter( csvOutput.getWriter() );
+			agg.outputToWriter(writer);
 			
-			csvOutput.getWriter().printf(",%e,%e,%e", toSeconds(this.crntTime), toSeconds(this.crntTime)/totalItr, toSeconds((this.crntTime-this.lastTime))/getAggInterval() );
-			csvOutput.getWriter().println();
-			csvOutput.getWriter().flush();
+			writer.printf(",%e,%e,%e", toSeconds(this.crntTime), toSeconds(this.crntTime)/totalItr, toSeconds((this.crntTime-this.lastTime))/getAggInterval() );
+			writer.println();
+			writer.flush();
 		}
 	}
 	
@@ -145,16 +148,13 @@ public class CSVReporterAgg extends ReporterAgg<CfgNRGPixelized> implements IAgg
 		
 		timer.stop();
 		
-		if (csvOutput!=null && csvOutput.isEnabled()) {
-			this.csvOutput.end();
+		if (csvOutput.isPresent() && csvOutput.get().isEnabled()) {
+			this.csvOutput.get().end();
 		}
 		
 	}
 
-
 	@Override
 	public void reportNewBest(Reporting<CfgNRGPixelized> reporting) {
 	}
-
-
 }

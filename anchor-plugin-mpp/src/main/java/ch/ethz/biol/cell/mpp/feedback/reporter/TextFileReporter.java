@@ -1,5 +1,8 @@
 package ch.ethz.biol.cell.mpp.feedback.reporter;
 
+import java.io.PrintWriter;
+import java.util.Optional;
+
 import org.anchoranalysis.anchor.mpp.feature.nrg.cfg.CfgNRGPixelized;
 
 /*-
@@ -45,15 +48,15 @@ import org.apache.commons.lang.time.StopWatch;
 
 public final class TextFileReporter extends ReporterAgg<CfgNRGPixelized> implements IAggregateReceiver<CfgNRGPixelized> {
 
-	private FileOutput fileOutput;
+	private Optional<FileOutput> fileOutput;
 	
 	private StopWatch timer = null;
 
 	@Override
 	public void reportNewBest( Reporting<CfgNRGPixelized> reporting ) {
-		if (fileOutput.isEnabled()) {
+		if (fileOutput.get().isEnabled()) {
 			
-			fileOutput.getWriter().printf(
+			fileOutput.get().getWriter().printf(
 				"*** itr=%d  size=%d  best_nrg=%e  kernel=%s%n",
 				reporting.getIter(),
 				reporting.getCfgNRGAfter().getCfg().size(),
@@ -79,9 +82,9 @@ public final class TextFileReporter extends ReporterAgg<CfgNRGPixelized> impleme
 
 	@Override
 	public void aggReport( Reporting<CfgNRGPixelized> reporting, Aggregator agg ) {
-		if (fileOutput.isEnabled()) {
+		if (fileOutput.isPresent() && fileOutput.get().isEnabled()) {
 			
-			fileOutput.getWriter().printf(
+			fileOutput.get().getWriter().printf(
 				"itr=%d  time=%e  tpi=%e   %s%n",
 				reporting.getIter(),
 				((double) timer.getTime()) / 1000,
@@ -106,9 +109,9 @@ public final class TextFileReporter extends ReporterAgg<CfgNRGPixelized> impleme
 		
 		super.reportBegin( initParams );
 		try {
-			fileOutput.start();
-			
-			if (fileOutput.isEnabled()) {
+			if (fileOutput.isPresent()) {
+				fileOutput.get().start();
+				
 				timer = new StopWatch();
 				timer.start();
 			}
@@ -124,22 +127,14 @@ public final class TextFileReporter extends ReporterAgg<CfgNRGPixelized> impleme
 	public void reportEnd( OptimizationFeedbackEndParams<CfgNRGPixelized> optStep ) {
 		
 		super.reportEnd( optStep );
-		if (fileOutput.isEnabled()) {
+		if (fileOutput.isPresent() && fileOutput.get().isEnabled()) {
 			
 			timer.stop();
 			
-			this.fileOutput.getWriter().print( optStep.toString() );
-			this.fileOutput.getWriter().printf( "Optimization time took %e s%n", ((double) timer.getTime()) / 1000 );
-			
-			this.fileOutput.getWriter().close();
+			PrintWriter writer = this.fileOutput.get().getWriter(); 
+			writer.print( optStep.toString() );
+			writer.printf( "Optimization time took %e s%n", ((double) timer.getTime()) / 1000 );
+			writer.close();
 		}
-	}
-
-	public String getFilePath() {
-		return fileOutput.getFilePath();
-	}
-
-	public void setFilePath(String filePath) {
-		this.fileOutput.setFilePath(filePath);
 	}
 }

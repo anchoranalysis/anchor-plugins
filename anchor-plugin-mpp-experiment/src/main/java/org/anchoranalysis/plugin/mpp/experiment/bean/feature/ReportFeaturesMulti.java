@@ -29,6 +29,8 @@ package org.anchoranalysis.plugin.mpp.experiment.bean.feature;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+
 import org.anchoranalysis.anchor.mpp.bean.init.MPPInitParams;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
@@ -65,23 +67,23 @@ public class ReportFeaturesMulti extends Task<MultiInput,CSVWriter> {
 			BoundOutputManagerRouteErrors outputManager, ParametersExperiment params)
 			throws ExperimentExecutionException {
 				
-		CSVWriter writer;
+		Optional<CSVWriter> writer;
 		try {
 			writer = CSVWriter.createFromOutputManager("featureReport", outputManager.getDelegate());
 		} catch (AnchorIOException e) {
 			throw new ExperimentExecutionException(e);
 		}
 				
-		if (writer==null) {
+		if (!writer.isPresent()) {
 			throw new ExperimentExecutionException("'featureReport' output not enabled, as is required");
 		}
 		
 		List<String> headerNames = ReportFeatureUtilities.genHeaderNames( listReportFeatures, null );
 		
 		headerNames.add(0, "id" );
-		writer.writeHeaders( headerNames );
+		writer.get().writeHeaders( headerNames );
 
-		return writer;
+		return writer.get();
 	}
 	
 	@Override
