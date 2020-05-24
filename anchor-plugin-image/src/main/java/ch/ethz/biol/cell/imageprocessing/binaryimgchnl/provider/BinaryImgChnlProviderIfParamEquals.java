@@ -28,9 +28,8 @@ package ch.ethz.biol.cell.imageprocessing.binaryimgchnl.provider;
 
 
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.bean.shared.params.keyvalue.KeyValueParamsProvider;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.core.params.KeyValueParams;
+import org.anchoranalysis.image.bean.provider.KeyValueCondition;
 import org.anchoranalysis.image.binary.BinaryChnl;
 
 // If a param is equal to a particular value, do soemthing
@@ -38,50 +37,22 @@ public class BinaryImgChnlProviderIfParamEquals extends BinaryChnlProviderElseBa
 
 	// START BEAN PROPERTIES
 	@BeanField
-	private KeyValueParamsProvider keyValueParamsProvider;
-	
-	@BeanField
-	private String key = "";
-	
-	@BeanField
-	private String value = "";
+	private KeyValueCondition condition;
 	// END BEAN PROPERTIES
 	
 	@Override
 	protected boolean condition(BinaryChnl chnl) throws CreateException {
+		return condition.isConditionTrue();
+	}
 
-		KeyValueParams params = keyValueParamsProvider.create();
-		
-		return value.equals(
-			params.getProperty(key)
-		);
+	public KeyValueCondition getCondition() {
+		return condition;
+	}
+
+	public void setCondition(KeyValueCondition condition) {
+		this.condition = condition;
 	}
 	
-	public KeyValueParamsProvider getKeyValueParamsProvider() {
-		return keyValueParamsProvider;
-	}
-
-	public void setKeyValueParamsProvider(
-			KeyValueParamsProvider keyValueParamsProvider) {
-		this.keyValueParamsProvider = keyValueParamsProvider;
-	}
-
-	public String getKey() {
-		return key;
-	}
-
-	public void setKey(String key) {
-		this.key = key;
-	}
-
-	public String getValue() {
-		return value;
-	}
-
-	public void setValue(String value) {
-		this.value = value;
-	}
-
-
+	
 }
 

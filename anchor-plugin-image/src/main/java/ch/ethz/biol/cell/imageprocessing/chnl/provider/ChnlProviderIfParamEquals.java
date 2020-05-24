@@ -28,11 +28,10 @@ package ch.ethz.biol.cell.imageprocessing.chnl.provider;
 
 
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.bean.shared.params.keyvalue.KeyValueParamsProvider;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.core.params.KeyValueParams;
 import org.anchoranalysis.image.bean.provider.ChnlProvider;
 import org.anchoranalysis.image.bean.provider.ChnlProviderOne;
+import org.anchoranalysis.image.bean.provider.KeyValueCondition;
 import org.anchoranalysis.image.chnl.Chnl;
 
 // If a param is equal to a particular value, do something
@@ -40,13 +39,8 @@ public class ChnlProviderIfParamEquals extends ChnlProviderOne {
 
 	// START BEAN PROPERTIES
 	@BeanField
-	private KeyValueParamsProvider keyValueParamsProvider;
-	
-	@BeanField
-	private String key = "";
-	
-	@BeanField
-	private String value = "";
+	private KeyValueCondition condition;
+	// END BEAN PROPERTIES
 	
 	@BeanField
 	private ChnlProvider chnlElse;
@@ -54,41 +48,11 @@ public class ChnlProviderIfParamEquals extends ChnlProviderOne {
 	
 	@Override
 	public Chnl createFromChnl(Chnl chnl) throws CreateException {
-		
-		KeyValueParams params = keyValueParamsProvider.create();
-		
-		String valueToCheck = params.getProperty(key);
-		
-		if( value.equals(valueToCheck) ) {
+		if(condition.isConditionTrue()) {
 			return chnl;
 		} else {
 			return chnlElse.create();
 		}
-	}
-
-	public KeyValueParamsProvider getKeyValueParamsProvider() {
-		return keyValueParamsProvider;
-	}
-
-	public void setKeyValueParamsProvider(
-			KeyValueParamsProvider keyValueParamsProvider) {
-		this.keyValueParamsProvider = keyValueParamsProvider;
-	}
-
-	public String getKey() {
-		return key;
-	}
-
-	public void setKey(String key) {
-		this.key = key;
-	}
-
-	public String getValue() {
-		return value;
-	}
-
-	public void setValue(String value) {
-		this.value = value;
 	}
 
 	public ChnlProvider getChnlElse() {
@@ -97,6 +61,14 @@ public class ChnlProviderIfParamEquals extends ChnlProviderOne {
 
 	public void setChnlElse(ChnlProvider chnlElse) {
 		this.chnlElse = chnlElse;
+	}
+
+	public KeyValueCondition getCondition() {
+		return condition;
+	}
+
+	public void setCondition(KeyValueCondition condition) {
+		this.condition = condition;
 	}
 }
 
