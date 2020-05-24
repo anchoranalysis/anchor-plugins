@@ -1,6 +1,8 @@
 package ch.ethz.biol.cell.imageprocessing.objmask.provider;
 
 import java.nio.ByteBuffer;
+import java.util.Iterator;
+import java.util.stream.IntStream;
 
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
@@ -27,20 +29,21 @@ class ExtendObjsInZHelper {
 		if (zCent<zLow) { zCent = zLow; }
 		
 		//zCent = ((int) omNew.centerOfGravity().z);
-		extendHigh( bbFlat, extent, omNew, omFlat, zLow, zCent, zHigh );
-		extendLow( bbFlat, extent, omNew, omFlat, zLow, zCent, zHigh );
-
+		extend( bbFlat, extent, omNew, omFlat, zLow, IntStream.range(zCent, zHigh+1) );
+		extend( bbFlat, extent, omNew, omFlat, zLow, revRange(zLow, zCent) );
 		return omNew; 
 	}
 	
-	private static boolean extendHigh( ByteBuffer bbFlat, Extent e, ObjMask omNew, ObjMask omFlat, int zLow, int zCent, int zHigh ) {
+	private static boolean extend( ByteBuffer bbFlat, Extent e, ObjMask omNew, ObjMask omFlat, int zLow, IntStream zRange ) {
 		
 		boolean andMode = true;
 		boolean writtenOneSlice = false;
 		
 		// Start in the mid point, and go upwards
-		for( int z=zCent; z<=zHigh;z++ ) {
-				
+		Iterator<Integer> itr = zRange.iterator();
+		while(itr.hasNext()) {
+			
+			int z = itr.next();
 			int zRel = z - zLow;
 			
 			// We want to set to the Flat version ANDed with
@@ -60,39 +63,8 @@ class ExtendObjsInZHelper {
 			} else {
 				setBufferLow( e.getVolumeXY(), bbExst, omNew.getBinaryValuesByte() );
 			}
-		}
+		};
 		
-		return writtenOneSlice;
-	}
-	
-	private static boolean extendLow( ByteBuffer bbFlat, Extent e, ObjMask omNew, ObjMask omFlat, int zLow, int zCent, int zHigh ) {
-		
-		boolean andMode = true;
-		boolean writtenOneSlice = false;
-		
-		// We go downwards
-		for( int z=(zCent-1); z>=zLow;z-- ) {
-			
-			int zRel = z - zLow;
-			
-			// We want to set to the Flat version ANDed with
-			ByteBuffer bbExst = omNew.getVoxelBox().getPixelsForPlane(zRel).buffer();
-			
-			if (andMode) {
-			
-				if (bufferLogicalAnd( e.getVolumeXY(), bbExst, bbFlat, omNew.getBinaryValuesByte(), omFlat.getBinaryValuesByte() )) {
-					writtenOneSlice = true;
-				} else {
-					// As soon as we have no pixel high, we switch to simply clearing instead, so long as we've written a slice before
-					if (writtenOneSlice) {
-						andMode = false;
-					}
-				}
-				
-			} else {
-				setBufferLow( e.getVolumeXY(), bbExst, omNew.getBinaryValuesByte() );
-			}
-		}
 		return writtenOneSlice;
 	}
 		
@@ -122,5 +94,10 @@ class ExtendObjsInZHelper {
 		}
 		
 		return atLeastOneHigh;
+	}
+	
+	/** Like @{link range} in {@link IntStream} but in reverse order */
+	private static IntStream revRange(int from, int to) {
+	    return IntStream.range(from, to).map(i -> to - i + from - 1);
 	}
 }
