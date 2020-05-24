@@ -39,7 +39,7 @@ import org.anchoranalysis.image.io.movie.MovieOutputHandle;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.image.stack.rgb.RGBStack;
 import org.anchoranalysis.io.generator.IterableObjectGenerator;
-import org.anchoranalysis.io.generator.sequence.IGeneratorSequenceNonIncremental;
+import org.anchoranalysis.io.generator.sequence.GeneratorSequenceNonIncremental;
 import org.anchoranalysis.io.manifest.sequencetype.SequenceType;
 import org.anchoranalysis.io.manifest.sequencetype.SequenceTypeException;
 import org.anchoranalysis.io.namestyle.OutputNameStyle;
@@ -47,7 +47,7 @@ import org.anchoranalysis.io.output.bound.BoundOutputManager;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
 
-class GeneratorSequenceMovieWriter<GeneratorType> implements IGeneratorSequenceNonIncremental<GeneratorType> {
+class GeneratorSequenceMovieWriter<GeneratorType> implements GeneratorSequenceNonIncremental<GeneratorType> {
 
 	private BoundOutputManager outputManager = null;
 	
