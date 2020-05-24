@@ -46,27 +46,20 @@ public class SgmnRepeat extends BinarySgmnOne {
 	@BeanField @Positive
 	private int maxIter = 10;
 	// END BEAN PROPERTIES
-	
-	@Override
-	public BinaryVoxelBox<ByteBuffer> sgmnFromSgmn(VoxelBoxWrapper voxelBox, BinarySgmnParameters params, BinarySgmn sgmn) {
-		throw new IllegalArgumentException("Invalid method");
-	}
 
 	@Override
 	public BinaryVoxelBox<ByteBuffer> sgmnFromSgmn(
 		VoxelBoxWrapper voxelBox,
 		BinarySgmnParameters params,
-		ObjMask objMaskIn,
+		Optional<ObjMask> mask,
 		BinarySgmn sgmn
 	) throws SgmnFailedException {
-		
-		Optional<ObjMask> objMask = Optional.of(objMaskIn);
 		
 		BinaryVoxelBox<ByteBuffer> outOld = null;
 		
 		int cnt = 0;
 		while (cnt++<maxIter) {
-			BinaryVoxelBox<ByteBuffer> outNew = sgmn.sgmn(voxelBox, params, objMask);
+			BinaryVoxelBox<ByteBuffer> outNew = sgmn.sgmn(voxelBox, params, mask);
 			
 			if (outNew==null) {
 				return outOld;
@@ -75,8 +68,8 @@ public class SgmnRepeat extends BinarySgmnOne {
 			outOld = outNew;
 			
 			// Increasingly tightens the obj-mask used for the segmentation
-			objMask = Optional.of(
-				objMask.isPresent() ? new ObjMask(objMask.get().getBoundingBox(), outNew) : new ObjMask(outNew)
+			mask = Optional.of(
+				mask.isPresent() ? new ObjMask(mask.get().getBoundingBox(), outNew) : new ObjMask(outNew)
 			);
 		}
 		

@@ -30,45 +30,46 @@ package ch.ethz.biol.cell.sgmn.objmask.watershed.encoding;
 import java.nio.IntBuffer;
 
 import org.anchoranalysis.core.geometry.Point3i;
-import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 
 public final class EncodedIntBuffer {
 
-	private final VoxelBuffer<IntBuffer> delegate;
+	private final IntBuffer delegate;
 	private final WatershedEncoding encoding;
 
-	public EncodedIntBuffer(final VoxelBuffer<IntBuffer> delegate, final WatershedEncoding encoding) {
+	public EncodedIntBuffer(IntBuffer buffer, final WatershedEncoding encoding) {
 		super();
-		this.delegate = delegate;
+		this.delegate = buffer;
 		this.encoding = encoding;
 	}
 	
 	public boolean isTemporary( int offset ) {
-		return (delegate.buffer().get(offset)==WatershedEncoding.CODE_TEMPORARY);
+		return (delegate.get(offset)==WatershedEncoding.CODE_TEMPORARY);
 	}
 	
 	public boolean isUnvisited( int offset ) {
-		return (delegate.buffer().get(offset)==WatershedEncoding.CODE_UNVISITED);
+		return (delegate.get(offset)==WatershedEncoding.CODE_UNVISITED);
 	}
 	
 	public boolean isMinima( int offset ) {
-		return (delegate.buffer().get(offset)==WatershedEncoding.CODE_MINIMA);
+		return (delegate.get(offset)==WatershedEncoding.CODE_MINIMA);
 	}
 	
 	public boolean isConnectedComponentID( int offset ) {
-		return( encoding.isConnectedComponentIDCode( delegate.buffer().get(offset)) );
+		return( encoding.isConnectedComponentIDCode(
+			delegate.get(offset))
+			);
 	}
 	
 	public void markAsTemporary( int offset ) {
-		delegate.buffer().put(offset,WatershedEncoding.CODE_TEMPORARY);
+		delegate.put(offset,WatershedEncoding.CODE_TEMPORARY);
 	}
 
 	public int getCode(int index) {
-		return delegate.buffer().get(index);
+		return delegate.get(index);
 	}
 
 	public IntBuffer putCode(int index, int code) {
-		return delegate.buffer().put(index, code);
+		return delegate.put(index, code);
 	}
 	
 	/** Convert code to connected-component */
@@ -96,6 +97,6 @@ public final class EncodedIntBuffer {
 	
 	private IntBuffer putConnectedComponentID(int index, int connectedComponentID) {
 		int encoded = encoding.encodeConnectedComponentID(connectedComponentID);
-		return delegate.buffer().put(index, encoded );
+		return delegate.put(index, encoded );
 	}
 }

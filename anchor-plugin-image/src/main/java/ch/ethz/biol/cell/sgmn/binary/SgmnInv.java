@@ -41,26 +41,11 @@ import org.anchoranalysis.image.sgmn.SgmnFailedException;
 import org.anchoranalysis.image.voxel.box.VoxelBoxWrapper;
 
 public class SgmnInv extends BinarySgmnOne {
-	
-	@Override
-	public BinaryVoxelBox<ByteBuffer> sgmnFromSgmn(VoxelBoxWrapper voxelBox, BinarySgmnParameters params, BinarySgmn sgmn)
-			throws SgmnFailedException {
-
-		BinaryVoxelBox<ByteBuffer> bvb = sgmn.sgmn(voxelBox, params, Optional.empty());
-		
-		try {
-			invertVoxelBox( bvb );
-		} catch (OperationFailedException e) {
-			throw new SgmnFailedException(e);
-		}
-		
-		return bvb;
-	}
 
 	@Override
-	public BinaryVoxelBox<ByteBuffer> sgmnFromSgmn(VoxelBoxWrapper voxelBox, BinarySgmnParameters params, ObjMask objMask, BinarySgmn sgmn) throws SgmnFailedException {
+	public BinaryVoxelBox<ByteBuffer> sgmnFromSgmn(VoxelBoxWrapper voxelBox, BinarySgmnParameters params, Optional<ObjMask> mask, BinarySgmn sgmn) throws SgmnFailedException {
 		
-		BinaryVoxelBox<ByteBuffer> vb = sgmn.sgmn(voxelBox, params, Optional.of(objMask));
+		BinaryVoxelBox<ByteBuffer> vb = sgmn.sgmn(voxelBox, params, mask);
 		
 		try {
 			invertVoxelBox( vb );

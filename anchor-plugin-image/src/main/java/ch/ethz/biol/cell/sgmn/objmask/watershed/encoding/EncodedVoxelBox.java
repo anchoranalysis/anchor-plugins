@@ -37,17 +37,15 @@ import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 
-public class EncodedVoxelBox {
+public final class EncodedVoxelBox {
 
-	private VoxelBox<IntBuffer> delegate;
+	private final VoxelBox<IntBuffer> delegate;
 	
-	private WatershedEncoding encoding;
+	private final WatershedEncoding encoding;
 
 	public EncodedVoxelBox(VoxelBox<IntBuffer> voxelBox) {
 		super();
-		
 		this.encoding = new WatershedEncoding();
-		
 		this.delegate = voxelBox;
 	}
 
@@ -99,7 +97,7 @@ public class EncodedVoxelBox {
 	}
 
 	public EncodedIntBuffer getPixelsForPlane(int z) {
-		return new EncodedIntBuffer( delegate.getPixelsForPlane(z), encoding );
+		return new EncodedIntBuffer( delegate.getPixelsForPlane(z).buffer(), encoding );
 	}
 	
 	public boolean hasTemporary() {

@@ -1,32 +1,39 @@
 package org.anchoranalysis.plugin.image.bean.sgmn.watershed.yeong;
 
+import java.nio.IntBuffer;
+
 import org.anchoranalysis.core.geometry.Point3i;
-import org.anchoranalysis.image.voxel.iterator.ProcessVoxelOffsets;
+import org.anchoranalysis.image.extent.Extent;
+import org.anchoranalysis.image.voxel.iterator.ProcessVoxelSliceBuffer;
 
 import ch.ethz.biol.cell.sgmn.objmask.watershed.encoding.EncodedIntBuffer;
 import ch.ethz.biol.cell.sgmn.objmask.watershed.encoding.EncodedVoxelBox;
 
-final class ConvertAllToConnectedComponents implements ProcessVoxelOffsets {
+final class ConvertAllToConnectedComponents implements ProcessVoxelSliceBuffer<IntBuffer> {
 	
 	private final EncodedVoxelBox matS;
+	private final Extent extent;
 	
-	private EncodedIntBuffer currentSlice;
+	/** A 3D offset for the 0th pixel in the current slice. */
+	private int offsetZ = 0;
 	
 	public ConvertAllToConnectedComponents(EncodedVoxelBox matS) {
 		super();
 		this.matS = matS;
+		this.extent = matS.extnt();
 	}
 	
 	@Override
 	public void notifyChangeZ(int z) {
-		currentSlice = matS.getPixelsForPlane(z);
+		offsetZ = extent.offset(0, 0, z);
 	}		
 	
 	@Override
-	public void process(Point3i pnt, int offset3d, int offsetSlice) {
-		currentSlice.convertCode(
+	public void process(Point3i pnt, IntBuffer buffer, int offsetSlice) {
+		assert(buffer!=null);
+		new EncodedIntBuffer(buffer, matS.getEncoding()).convertCode(
 			offsetSlice,
-			offset3d,
+			offsetZ + offsetSlice,
 			matS,
 			pnt
 		);

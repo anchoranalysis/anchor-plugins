@@ -32,7 +32,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import org.anchoranalysis.bean.BeanInstanceMap;
 import org.anchoranalysis.bean.annotation.OptionalBean;
+import org.anchoranalysis.bean.error.BeanMisconfiguredException;
 import org.anchoranalysis.image.bean.sgmn.binary.BinarySgmn;
 import org.anchoranalysis.image.bean.sgmn.binary.BinarySgmnParameters;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
@@ -48,12 +50,19 @@ public class SgmnSequence extends BinarySgmn {
 	private List<BinarySgmn> listSgmn = new ArrayList<>();
 	// END BEAN PROPERTIES
 	
+	@Override
+	public void checkMisconfigured(BeanInstanceMap defaultInstances) throws BeanMisconfiguredException {
+		super.checkMisconfigured(defaultInstances);
+		if (listSgmn.isEmpty()) {
+			throw new BeanMisconfiguredException("At least one item is required in listSgmn");
+		}
+	}
 
 	@Override
 	public BinaryVoxelBox<ByteBuffer> sgmn(VoxelBoxWrapper voxelBox,
 			BinarySgmnParameters params, Optional<ObjMask> mask) throws SgmnFailedException {
 		
-		BinaryVoxelBox<ByteBuffer> outOld = null;
+		BinaryVoxelBox<ByteBuffer> out = null;
 		
 		// A bounding-box capturing what part of the scene is being segmented
 		BoundingBox bbox = mask.map(
@@ -70,16 +79,15 @@ public class SgmnSequence extends BinarySgmn {
 			
 			BinaryVoxelBox<ByteBuffer> outNew = sgmn.sgmn(voxelBox, params, evolvingMask);
 			
-			if (outNew==null) {
-				return outOld;
-			}
-			
-			outOld = outNew;
+			out = outNew;
 			evolvingMask = Optional.of(
 				new ObjMask(bbox, outNew)
 			);
 		}
-		return outOld;
+		
+		assert(out!=null);
+		
+		return out;
 	}
 
 	public List<BinarySgmn> getListSgmn() {

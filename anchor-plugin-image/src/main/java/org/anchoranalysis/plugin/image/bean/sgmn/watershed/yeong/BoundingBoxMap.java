@@ -53,7 +53,6 @@ final class BoundingBoxMap {
 			int idNew = list.size();
 			list.add( null );
 			map.put( val, idNew );
-			//assert( list.size()==(idNew+1) );
 			return idNew;
 		}
 		
@@ -77,20 +76,23 @@ final class BoundingBoxMap {
 		return out;
 	}
 		
-	public int addPointForValue(int x, int y, int z, int val) {
+	public int addPointForValue(Point3i pnt, int val) {
 		int reorderedIndex = indexForValue(val);
 		
 		// Add the point to the bounding-box
-		boxForIndex(reorderedIndex, x, y, z).add(x,y,z);
+		addPointToBox(reorderedIndex, pnt);
 		return reorderedIndex;
 	}
 	
 	
-	// Get bounding box for a particular index.  The x,y,z is to set the initial boundaries
-	private BoundingBox boxForIndex( int indx, int x, int y, int z) {
-		BoundingBox box = list.get( indx );
-		if (box==null) {
-			Point3i pnt = new Point3i(x,y,z);
+	/**
+	 * Get bounding box for a particular index, creating if not already there, and then add a point to the box.
+	 */ 
+	private BoundingBox addPointToBox(int indx, Point3i pnt) {
+		BoundingBox box = list.get(indx);
+		if (box!=null) {
+			box.add(pnt);
+		} else {
 			box = new BoundingBox(pnt, pnt);
 			list.set(indx, box);
 		}

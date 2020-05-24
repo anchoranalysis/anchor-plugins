@@ -157,7 +157,7 @@ public class TraverseOutlineOnImage extends OutlinePixelsRetriever {
 			// This is our final intersection box, that we use for traversing and memorizing pixels
 			//  that we have already visited
 			
-			assert( box.extnt().getVolume() > 0 );
+			assert( !box.extnt().isEmpty() );
 			
 			return chnl.createMaskAlwaysNew(box);
 			

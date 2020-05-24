@@ -60,10 +60,10 @@ public class NonMaximaSuppressionBoundingBox extends NonMaximaSuppression<Boundi
 			return 0.0;
 		}
 		
-		int intersectionArea = intersection.extnt().getVolume();
+		long intersectionArea = intersection.extnt().getVolume();
 		
 		// The total area is equal to the sum of both minus the intersection (which is otherwise counted twice)
-		int total = obj2.extnt().getVolume() + obj1.extnt().getVolume() - intersectionArea;
+		long total = obj2.extnt().getVolume() + obj1.extnt().getVolume() - intersectionArea;
 		
 		return ((double) intersectionArea) / total;
 	}

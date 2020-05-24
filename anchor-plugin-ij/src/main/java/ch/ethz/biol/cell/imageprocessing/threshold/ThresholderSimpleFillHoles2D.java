@@ -79,7 +79,7 @@ public class ThresholderSimpleFillHoles2D extends Thresholder {
 		
 		BinaryVoxelBox<ByteBuffer> thresholded;
 		try {
-			thresholded = VoxelBoxThresholder.thresholdForLevel(inputBuffer, minIntensity, bvOut, false );
+			thresholded = VoxelBoxThresholder.thresholdForLevel(inputBuffer, minIntensity, bvOut, mask, false);
 		} catch (CreateException e) {
 			throw new OperationFailedException(e);
 		}
