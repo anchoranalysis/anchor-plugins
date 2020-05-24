@@ -29,6 +29,7 @@ package org.anchoranalysis.plugin.io.bean.moviegenerator;
 
 import java.io.IOException;
 import java.nio.file.Path;
+import java.util.Optional;
 
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
@@ -63,7 +64,7 @@ class GeneratorSequenceMovieWriter<GeneratorType> implements GeneratorSequenceNo
 	
 	private OutputNameStyle outputName;
 	
-	private MovieOutputHandle movieOutputHandle;
+	private Optional<MovieOutputHandle> movieOutputHandle;
 	
 	// Automatically create a ManifestDescription for the folder from the Generator
 	public GeneratorSequenceMovieWriter( BoundOutputManager outputManager, OutputNameStyle outputName, IterableObjectGenerator<GeneratorType,Stack> iterableGenerator, int framesPerSecond ) {
@@ -103,13 +104,32 @@ class GeneratorSequenceMovieWriter<GeneratorType> implements GeneratorSequenceNo
 		}
 	}
 	
-	private static MovieOutputHandle writeMovie( BoundOutputManager outputManager, OutputNameStyle outputNameStyle, ImageDim dim, int numFrames, int numChnl, int framesPerSecond ) throws OutputWriteFailedException {
+	private static Optional<MovieOutputHandle> writeMovie( BoundOutputManager outputManager, OutputNameStyle outputNameStyle, ImageDim dim, int numFrames, int numChnl, int framesPerSecond ) throws OutputWriteFailedException {
 		
 		MovieWriter movieWriter = (MovieWriter) outputManager.getOutputWriteSettings().getWriterInstance(MovieWriter.class);
 		
 		try {
-			Path filePath = outputManager.getWriterCheckIfAllowed().writeGenerateFilename( outputNameStyle.getOutputName(), movieWriter.getDefaultFileExt(), null, "", "", "");
-			return movieWriter.writeMovie(filePath, dim, numFrames, numChnl, framesPerSecond );
+			Optional<Path> filePath = outputManager.getWriterCheckIfAllowed().writeGenerateFilename(
+				outputNameStyle.getOutputName(),
+				movieWriter.getDefaultFileExt(),
+				Optional.empty(),
+				"",
+				"",
+				""
+			);
+			if (filePath.isPresent()) {
+				return Optional.of(
+					movieWriter.writeMovie(
+						filePath.get(),
+						dim,
+						numFrames,
+						numChnl,
+						framesPerSecond
+					)
+				);
+			} else {
+				return Optional.empty();
+			}
 		} catch (IOException e) {
 			throw new OutputWriteFailedException(e);
 		}
@@ -131,12 +151,10 @@ class GeneratorSequenceMovieWriter<GeneratorType> implements GeneratorSequenceNo
 	public void end() throws OutputWriteFailedException {
 		iterableGenerator.end();
 		
-		if (movieOutputHandle==null) {
-			return;
-		}
-		
 		try {
-			movieOutputHandle.close();
+			if (movieOutputHandle.isPresent()) {
+				movieOutputHandle.get().close();
+			}
 		} catch (IOException e) {
 			throw new OutputWriteFailedException(e);
 		}
@@ -163,7 +181,7 @@ class GeneratorSequenceMovieWriter<GeneratorType> implements GeneratorSequenceNo
 				firstAdd = false;
 			}
 	
-			if (movieOutputHandle==null) {
+			if (!movieOutputHandle.isPresent()) {
 				return;
 			}
 			
@@ -173,30 +191,16 @@ class GeneratorSequenceMovieWriter<GeneratorType> implements GeneratorSequenceNo
 				return;
 			}
 		
-		
-			movieOutputHandle.add(stack);
-		} catch (IOException e) {
-			throw new OutputWriteFailedException(e);
-		} catch (SequenceTypeException e) {
-			throw new OutputWriteFailedException(e);
-		} catch (InitException e) {
-			throw new OutputWriteFailedException(e);
-		} catch (SetOperationFailedException e) {
-			throw new OutputWriteFailedException(e);
-		} catch (CreateException e) {
+			movieOutputHandle.get().add(stack);
+
+		} catch (IOException | SequenceTypeException | InitException | SetOperationFailedException | CreateException e) {
 			throw new OutputWriteFailedException(e);
 		}
 		
 	}
 
-
-
-
-
 	@Override
 	public void setSuppressSubfolder(boolean suppressSubfolder) {
 		assert false;
 	}
-
-
 }

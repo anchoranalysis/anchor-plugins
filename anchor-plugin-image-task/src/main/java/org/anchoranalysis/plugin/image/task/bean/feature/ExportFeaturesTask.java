@@ -29,12 +29,14 @@ package org.anchoranalysis.plugin.image.task.bean.feature;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.function.Function;
 
 import org.anchoranalysis.bean.NamedBean;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.core.error.CreateException;
+import org.anchoranalysis.core.functional.OptionalExceptional;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
 import org.anchoranalysis.experiment.task.Task;
 import org.anchoranalysis.feature.bean.list.FeatureListProvider;
@@ -97,11 +99,10 @@ public abstract class ExportFeaturesTask<T extends InputFromManager, S extends S
 	) throws ExperimentExecutionException {
 		
 		try {
-			NamedFeatureStore<FeatureInputResults> featuresAggregate = null;
-			
-			if (listFeaturesAggregate!=null) {
-				featuresAggregate = NamedFeatureStoreFactory.createNamedFeatureList(listFeaturesAggregate);
-			}
+			Optional<NamedFeatureStore<FeatureInputResults>> featuresAggregate = OptionalExceptional.map(
+				Optional.ofNullable(listFeaturesAggregate),
+				list-> NamedFeatureStoreFactory.createNamedFeatureList(list)
+			);
 			
 			sharedState.writeFeaturesAsCSVForAllGroups(featuresAggregate, context);
 		} catch (AnchorIOException | CreateException e) {

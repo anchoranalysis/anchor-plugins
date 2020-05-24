@@ -29,6 +29,7 @@ package org.anchoranalysis.plugin.annotation.bean.comparison;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.anchoranalysis.annotation.io.assignment.Assignment;
 import org.anchoranalysis.core.text.TypedValue;
@@ -42,7 +43,7 @@ class CSVAssignment {
 	private boolean includeDescriptiveSplit;
 	private int maxSplitGroups;
 		
-	private CSVWriter writer;
+	private Optional<CSVWriter> writer;
 	
 	private boolean firstRow = true;
 	
@@ -60,19 +61,19 @@ class CSVAssignment {
 		InputFromManager inputObject
 	) {
 
-		if (!writer.isOutputEnabled()) {
+		if (!writer.isPresent() || !writer.get().isOutputEnabled()) {
 			return;
 		}
 		
 		if (firstRow) {
 			firstRow = false;
 			
-			writer.writeHeaders(
+			writer.get().writeHeaders(
 				createHeaders(assignment)
 			);
 		}
 			
-		writer.writeRow(
+		writer.get().writeRow(
 			createValues(
 				assignment,
 				inputObject,
@@ -124,7 +125,7 @@ class CSVAssignment {
 	}
 		
 	public void end() {
-		writer.close();
+		writer.ifPresent( CSVWriter::close );
 	}
 
 	private static class Elements {
