@@ -2,6 +2,8 @@ package org.anchoranalysis.plugin.mpp.sgmn.cfg;
 
 
 
+import java.util.Optional;
+
 import org.anchoranalysis.anchor.mpp.feature.nrg.cfg.CfgNRGPixelized;
 
 /*-
@@ -53,7 +55,10 @@ public class SgmnMPPState extends ExperimentState {
 		
 		outputManager.getWriterCheckIfAllowed().write(
 			"namedDefinitions",
-			() -> new XStreamGenerator<Object>(define, "namedDefinitions")
+			() -> new XStreamGenerator<Object>(
+				define,
+				Optional.of("namedDefinitions")
+			)
 		);
 	}
 	
@@ -75,7 +80,10 @@ public class SgmnMPPState extends ExperimentState {
 			
 			outputManager.getWriterCheckIfAllowed().write(
 				"kernelProposer",
-				() -> new XStreamGenerator<Object>(kernelProposer, "kernelProposer")
+				() -> new XStreamGenerator<Object>(
+					kernelProposer,
+					Optional.of("kernelProposer")
+				)
 			);
 		}
 }

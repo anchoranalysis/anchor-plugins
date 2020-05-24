@@ -28,6 +28,7 @@ package org.anchoranalysis.plugin.mpp.experiment.bean.objs;
 
 import java.io.IOException;
 import java.nio.file.Path;
+import java.util.Optional;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.ParserConfigurationException;
@@ -89,8 +90,10 @@ class CSVRowXMLGenerator extends XMLGenerator implements IterableGenerator<CSVRo
 	}
 
 	@Override
-	public ManifestDescription createManifestDescription() {
-		return new ManifestDescription("xml", "objectPairsClass");
+	public Optional<ManifestDescription> createManifestDescription() {
+		return Optional.of(
+			new ManifestDescription("xml", "objectPairsClass")
+		);
 	}
 	
 }

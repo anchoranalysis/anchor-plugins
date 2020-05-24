@@ -29,6 +29,7 @@ package ch.ethz.biol.cell.imageprocessing.objmask.provider.smoothspline;
 
 import java.util.Iterator;
 import java.util.List;
+import java.util.Optional;
 
 import org.anchoranalysis.anchor.mpp.cfg.Cfg;
 import org.anchoranalysis.anchor.mpp.cfg.ColoredCfg;
@@ -93,7 +94,7 @@ class ContourListGenerator extends RasterGenerator implements IterableObjectGene
 	}
 
 	@Override
-	public ManifestDescription createManifestDescription() {
+	public Optional<ManifestDescription> createManifestDescription() {
 		return delegate.createManifestDescription();
 	}
 

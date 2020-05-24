@@ -28,7 +28,6 @@ class ExtendObjsInZHelper {
 		if (zCent>zHigh) { zCent = zHigh; }
 		if (zCent<zLow) { zCent = zLow; }
 		
-		//zCent = ((int) omNew.centerOfGravity().z);
 		extend( bbFlat, extent, omNew, omFlat, zLow, IntStream.range(zCent, zHigh+1) );
 		extend( bbFlat, extent, omNew, omFlat, zLow, revRange(zLow, zCent) );
 		return omNew; 
@@ -74,8 +73,9 @@ class ExtendObjsInZHelper {
 		}
 	}
 	
-	// Does a logicalAND between buffer and receive.  The result is placed in buffer.  receive is unchanged
-	// Returns TRUE if at least one pixel is HIGH, or false otherwise
+	/** Does a logical AND between buffer and receive.  The result is placed in buffer.  receive is unchanged
+	  * Returns TRUE if at least one pixel is HIGH, or false otherwise
+	  */
 	private static boolean bufferLogicalAnd( int numVoxels, ByteBuffer buffer, ByteBuffer receive, BinaryValuesByte bvb, BinaryValuesByte bvbReceive ) {
 		
 		boolean atLeastOneHigh = false;
