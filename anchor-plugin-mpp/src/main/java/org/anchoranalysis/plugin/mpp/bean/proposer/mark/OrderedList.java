@@ -29,6 +29,7 @@ package org.anchoranalysis.plugin.mpp.bean.proposer.mark;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.anchoranalysis.anchor.mpp.bean.proposer.MarkProposer;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
@@ -86,7 +87,7 @@ public class OrderedList extends MarkProposer {
 
 
 	@Override
-	public ICreateProposalVisualization proposalVisualization(boolean detailed) {
-		return null;
+	public Optional<ICreateProposalVisualization> proposalVisualization(boolean detailed) {
+		return Optional.empty();
 	}
 }

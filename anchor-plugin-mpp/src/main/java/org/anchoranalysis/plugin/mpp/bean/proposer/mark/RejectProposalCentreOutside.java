@@ -1,5 +1,7 @@
 package org.anchoranalysis.plugin.mpp.bean.proposer.mark;
 
+import java.util.Optional;
+
 import org.anchoranalysis.anchor.mpp.bean.init.MPPInitParams;
 
 /*-
@@ -103,7 +105,7 @@ public class RejectProposalCentreOutside extends MarkProposer {
 	}
 
 	@Override
-	public ICreateProposalVisualization proposalVisualization(boolean detailed) {
+	public Optional<ICreateProposalVisualization> proposalVisualization(boolean detailed) {
 		return item.proposalVisualization(detailed);
 	}
 	

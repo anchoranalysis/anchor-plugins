@@ -45,7 +45,9 @@ public class CSVReporterUtilities {
 	) throws OutputWriteFailedException {
 		return FileOutputFromManager.create(
 			"csv",
-			new ManifestDescription("csv",manifestDscrFunction),
+			Optional.of(
+				new ManifestDescription("csv",manifestDscrFunction)
+			),
 			initParams.getInitContext().getOutputManager().getDelegate(),
 			outputName
 		);

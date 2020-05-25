@@ -1,5 +1,7 @@
 package org.anchoranalysis.plugin.mpp.bean.proposer.mark;
 
+import java.util.Optional;
+
 import org.anchoranalysis.anchor.mpp.bean.proposer.MarkProposer;
 import org.anchoranalysis.anchor.mpp.bean.proposer.PositionProposerBean;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
@@ -88,7 +90,7 @@ public class Position extends MarkProposer {
 	}
 
 	@Override
-	public ICreateProposalVisualization proposalVisualization(boolean detailed) {
-		return null;
+	public Optional<ICreateProposalVisualization> proposalVisualization(boolean detailed) {
+		return Optional.empty();
 	}
 }

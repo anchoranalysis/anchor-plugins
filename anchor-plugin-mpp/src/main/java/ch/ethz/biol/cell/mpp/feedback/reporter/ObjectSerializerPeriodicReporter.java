@@ -87,7 +87,7 @@ public abstract class ObjectSerializerPeriodicReporter<T extends Serializable> e
 
 	
 	@Override
-	protected abstract T generateIterableElement( Reporting<CfgNRGPixelized> reporting );
+	protected abstract T generateIterableElement( Reporting<CfgNRGPixelized> reporting ) throws ReporterException;
 
 	public String getManifestFunction() {
 		return manifestFunction;

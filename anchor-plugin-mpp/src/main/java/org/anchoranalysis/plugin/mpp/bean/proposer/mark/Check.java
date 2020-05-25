@@ -28,9 +28,9 @@ package org.anchoranalysis.plugin.mpp.bean.proposer.mark;
 
 
 import java.awt.Color;
+import java.util.Optional;
 
 import org.anchoranalysis.anchor.mpp.bean.proposer.MarkProposer;
-import org.anchoranalysis.anchor.mpp.cfg.ColoredCfg;
 import org.anchoranalysis.anchor.mpp.feature.bean.mark.CheckMark;
 import org.anchoranalysis.anchor.mpp.feature.error.CheckException;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
@@ -119,15 +119,14 @@ public class Check extends MarkProposer {
 
 
 
-	public ICreateProposalVisualization proposalVisualization(boolean detailed) {
+	public Optional<ICreateProposalVisualization> proposalVisualization(boolean detailed) {
 		if (lastFailedMark!=null) {
-			return new ICreateProposalVisualization() {
-				
-				@Override
-				public void addToCfg(ColoredCfg cfg) {
-					cfg.addChangeID(lastFailedMark, new RGBColor(Color.ORANGE));
-				}
-			};
+			return Optional.of( cfg ->
+				cfg.addChangeID(
+					lastFailedMark,
+					new RGBColor(Color.ORANGE)
+				)
+			);
 		} else {
 			return markProposer.proposalVisualization(detailed);
 		}

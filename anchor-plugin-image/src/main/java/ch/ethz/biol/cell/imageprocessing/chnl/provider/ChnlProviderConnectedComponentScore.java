@@ -58,7 +58,13 @@ public class ChnlProviderConnectedComponentScore extends ChnlProviderOneObjsSour
 	@Override
 	protected Chnl createFromChnl(Chnl chnl, ObjMaskCollection objsSource) throws CreateException {
 	
-		LevelResultCollection lrc= LevelResultCollectionFactory.createCollection( chnl, objsSource, calculateLevel, 0, getLogger() );
+		LevelResultCollection lrc = LevelResultCollectionFactory.createCollection(
+			chnl,
+			objsSource,
+			calculateLevel,
+			0,
+			getLogger().getLogReporter()
+		);
 		
 		Chnl chnlOut = ChnlFactory.instance().createEmptyInitialised( chnl.getDimensions(), VoxelDataTypeUnsignedByte.instance );
 		

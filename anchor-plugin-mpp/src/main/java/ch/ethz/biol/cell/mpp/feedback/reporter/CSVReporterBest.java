@@ -3,6 +3,7 @@ package ch.ethz.biol.cell.mpp.feedback.reporter;
 import java.util.Optional;
 
 import org.anchoranalysis.anchor.mpp.feature.nrg.cfg.CfgNRGPixelized;
+import org.anchoranalysis.core.functional.OptionalUtilities;
 
 /*-
  * #%L
@@ -50,11 +51,11 @@ public class CSVReporterBest extends ReporterOptimizationStep<CfgNRGPixelized> {
 	
 	@Override
 	public void reportItr( Reporting<CfgNRGPixelized> reporting ) {
-
+		// NOTHING TO DO
 	}
 	
 	@Override
-	public void reportNewBest( Reporting<CfgNRGPixelized> reporting ) {
+	public void reportNewBest( Reporting<CfgNRGPixelized> reporting ) throws ReporterException {
 		if (csvOutput.isPresent() && csvOutput.get().isEnabled()) {
 
 			this.csvOutput.get().getWriter().printf(
@@ -78,10 +79,13 @@ public class CSVReporterBest extends ReporterOptimizationStep<CfgNRGPixelized> {
 				throw new ReporterException(e);
 			} 
 			
-			if (csvOutput.isPresent()) {
-				this.csvOutput.get().start();
-				this.csvOutput.get().getWriter().printf("Itr,Size,Best_Nrg%n");
-			}
+			OptionalUtilities.ifPresent(
+				csvOutput,
+				output-> {
+					output.start();
+					output.getWriter().printf("Itr,Size,Best_Nrg%n");
+				}
+			);
 		} catch (AnchorIOException e) {
 			throw new ReporterException(e);
 		}
@@ -91,8 +95,8 @@ public class CSVReporterBest extends ReporterOptimizationStep<CfgNRGPixelized> {
 
 	@Override
 	public void reportEnd( OptimizationFeedbackEndParams<CfgNRGPixelized> optStep ) {
-		if (csvOutput.isPresent() && csvOutput.get().isEnabled()) {
-			this.csvOutput.get().getWriter().close();
-		}
+		csvOutput.ifPresent( output->
+			output.getWriter().close()
+		);
 	}
 }

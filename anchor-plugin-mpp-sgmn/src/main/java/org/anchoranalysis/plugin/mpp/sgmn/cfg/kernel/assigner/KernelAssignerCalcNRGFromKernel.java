@@ -55,17 +55,24 @@ public class KernelAssignerCalcNRGFromKernel<S,T> implements KernelAssigner<S,T>
 		
 		try {
 			S prop = kid.getKernel().makeProposal(
-				kernelStateBridge.stateToKernel().transform(optStep.getCrnt(), context),
+				kernelStateBridge.stateToKernel().transform(
+					optStep.getCrnt().orElseThrow( ()->
+						new KernelCalcNRGException("No current item is defined")
+					),
+					context
+				),
 				context.getKernelCalcContext()
 			);
 				
 			optStep.assignProposal(
-				kernelStateBridge.kernelToState().transform(prop, context),
+				kernelStateBridge.kernelToState().transform(
+					prop,
+					context
+				),
 				kid
 			);
 		} catch (OperationFailedException e) {
 			throw new KernelCalcNRGException("Cannot transform function", e);
 		}
-	
 	}
 }

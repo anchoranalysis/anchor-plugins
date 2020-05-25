@@ -33,7 +33,7 @@ import org.anchoranalysis.bean.OptionalFactory;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.core.functional.OptionalExceptional;
+import org.anchoranalysis.core.functional.OptionalUtilities;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.bean.provider.BinaryChnlProvider;
 import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
@@ -82,7 +82,7 @@ public class ObjMaskProviderSgmn extends ObjMaskProviderChnlSource {
 	}
 	
 	private Optional<SeedCollection> createSeeds(ImageDim dim, Optional<ObjMask> maskAsObj) throws CreateException {
-		return OptionalExceptional.map(
+		return OptionalUtilities.map(
 			OptionalFactory.create(objsSeeds),
 			objs-> createSeeds(
 				objs,
@@ -93,7 +93,7 @@ public class ObjMaskProviderSgmn extends ObjMaskProviderChnlSource {
 	}
 	
 	private static SeedCollection createSeeds(ObjMaskCollection seeds, Optional<ObjMask> maskAsObj, ImageDim dim) throws CreateException {
-		return OptionalExceptional.map(
+		return OptionalUtilities.map(
 			maskAsObj,
 			m -> SeedsFactory.createSeedsWithMask(
 				seeds,

@@ -1,5 +1,7 @@
 package org.anchoranalysis.plugin.mpp.bean.proposer.mark;
 
+import java.util.Optional;
+
 /*-
  * #%L
  * anchor-plugin-mpp
@@ -77,7 +79,7 @@ public class EllipsoidOrientationRadii extends MarkProposer {
 	}
 	
 	@Override
-	public ICreateProposalVisualization proposalVisualization(boolean detailed) {
-		return null;
+	public Optional<ICreateProposalVisualization> proposalVisualization(boolean detailed) {
+		return Optional.empty();
 	}
 }

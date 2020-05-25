@@ -133,7 +133,7 @@ public class Radii extends MarkProposer {
 	}
 
 	@Override
-	public ICreateProposalVisualization proposalVisualization(boolean detailed) {
-		return null;
+	public Optional<ICreateProposalVisualization> proposalVisualization(boolean detailed) {
+		return Optional.empty();
 	}
 }
