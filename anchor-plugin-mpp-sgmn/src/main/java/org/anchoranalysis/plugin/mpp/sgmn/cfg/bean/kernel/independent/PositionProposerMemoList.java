@@ -59,13 +59,13 @@ class PositionProposerMemoList implements PositionProposer {
 		this.markBlock = markBlock;
 	}
 	
-	private static Point3d randomPosition( BoundingBox BoundingBox, RandomNumberGenerator re ) {
+	private static Point3d randomPosition( BoundingBox bbox, RandomNumberGenerator re ) {
 		
-		Extent extnt = BoundingBox.extnt();
+		Extent extnt = bbox.extnt();
 		
-		int x = BoundingBox.getCrnrMin().getX() + (int) (re.nextDouble() * extnt.getX() );
-		int y = BoundingBox.getCrnrMin().getY() + (int) (re.nextDouble() * extnt.getY() );
-		int z = BoundingBox.getCrnrMin().getZ() + (int) (re.nextDouble() * extnt.getZ() );
+		int x = bbox.getCrnrMin().getX() + (int) (re.nextDouble() * extnt.getX() );
+		int y = bbox.getCrnrMin().getY() + (int) (re.nextDouble() * extnt.getY() );
+		int z = bbox.getCrnrMin().getZ() + (int) (re.nextDouble() * extnt.getZ() );
 		
 		return new Point3d(x,y,z);
 	}

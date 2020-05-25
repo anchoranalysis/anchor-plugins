@@ -27,31 +27,12 @@ package ch.ethz.biol.cell.imageprocessing.chnl.provider;
  */
 
 
-import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.image.chnl.Chnl;
-import org.anchoranalysis.image.voxel.box.VoxelBox;
-import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 
-public class ChnlProviderSubtractFromConstant extends ChnlProviderOneValue {
+
+public class ChnlProviderSubtractFromConstant extends ChnlProviderOneValueArithmetic {
 	
 	@Override
-	public Chnl createFromChnlValue(Chnl chnl, double value) throws CreateException {
-		
-		int valueInt = (int) value;
-		
-		VoxelBox<?> vb = chnl.getVoxelBox().any();
-		
-		for (int z=0; z<chnl.getDimensions().getZ(); z++) {
-			
-			VoxelBuffer<?> bb = vb.getPixelsForPlane(z);
-			
-			for( int i=0; i<chnl.getDimensions().getVolumeXY(); i++) {
-				int posVal = bb.getInt(i);
-				bb.putInt(i, valueInt - posVal);
-			}
-			
-		}
-		
-		return chnl;
+	protected int binaryOp(int voxel, int constant) {
+		return constant - voxel;
 	}
 }

@@ -33,12 +33,15 @@ import org.anchoranalysis.core.geometry.Point2i;
 import org.anchoranalysis.core.geometry.PointConverter;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
+import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.objmask.ObjMask;
 
 public class CircleObjMaskFixture {
 
-	private static ImageDim DIMS = new ImageDim(800, 600, 1);
+	private static ImageDim DIMS = new ImageDim(
+		new Extent(800, 600, 1)
+	);
 	
 	public static ObjMask circleAt( Point2i center, double radius ) {
 		MarkCircle mark = new MarkCircle();

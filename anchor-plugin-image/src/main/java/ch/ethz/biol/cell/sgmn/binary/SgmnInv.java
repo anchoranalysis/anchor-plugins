@@ -60,11 +60,13 @@ public class SgmnInv extends BinarySgmnOne {
 		
 		BinaryValuesByte bv = voxelBox.getBinaryValues().createByte();
 		
+		int volumeXY = voxelBox.extnt().getVolumeXY();
+		
 		// We invert each item in the VoxelBox
 		for( int z=0; z<voxelBox.extnt().getZ(); z++) {
 			
 			ByteBuffer bb = voxelBox.getPixelsForPlane(z).buffer();
-			for( int index = 0; index<voxelBox.extnt().getVolumeXY(); index++) {
+			for( int index = 0; index<volumeXY; index++) {
 				
 				byte val = bb.get(index);
 				

@@ -5,6 +5,12 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.bean.provider.ChnlProviderOne;
 import org.anchoranalysis.image.chnl.Chnl;
 
+/**
+ * A {@link ChnlProviderOne} which has a scalar value field
+ * 
+ * @author Owen Feehan
+ *
+ */
 public abstract class ChnlProviderOneValue extends ChnlProviderOne {
 
 	// START BEAN PROPERTIES

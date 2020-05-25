@@ -101,11 +101,12 @@ public final class EncodedVoxelBox {
 	}
 	
 	public boolean hasTemporary() {
+		int volumeXY = extnt().getVolumeXY();
+		
 		for (int z=0; z<extnt().getZ(); z++) {
 			EncodedIntBuffer bb = getPixelsForPlane(z);
 			
-			int size = extnt().getVolumeXY();
-			for (int i=0; i<size; i++) {
+			for (int i=0; i<volumeXY; i++) {
 				if( bb.isTemporary(i) ) {
 					return true;
 				}
