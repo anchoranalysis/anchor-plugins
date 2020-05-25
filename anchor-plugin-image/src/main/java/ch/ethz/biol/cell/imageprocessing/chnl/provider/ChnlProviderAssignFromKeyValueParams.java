@@ -68,13 +68,13 @@ public class ChnlProviderAssignFromKeyValueParams extends ChnlProviderOne {
 		byte valueByte = (byte) value;
 		
 		VoxelBox<ByteBuffer> vb = chnl.getVoxelBox().asByte();
-		
+
+		int volumeXY = vb.extnt().getVolumeXY();
 		for( int z=0; z<vb.extnt().getZ(); z++) {
 			ByteBuffer bb = vb.getPixelsForPlane(z).buffer();
 			
-			int vol = vb.extnt().getVolumeXY();
 			int offset = 0;
-			while(offset<vol) {
+			while(offset<volumeXY) {
 				bb.put(offset++,valueByte);
 			}
 		}

@@ -86,12 +86,14 @@ public class ChnlProviderZScore extends ChnlProviderOne {
 		// We loop through each item
 		Extent e = chnl.getDimensions().getExtnt();
 		
+		int volumeXY = e.getVolumeXY();
+		
 		for( int z=0; z<e.getZ(); z++ ) {
 			
 			VoxelBuffer<?> vbIn = chnl.getVoxelBox().any().getPixelsForPlane(z);
 			VoxelBuffer<?> vbOut = out.getPixelsForPlane(z);
 			
-			for( int offset=0; offset<e.getVolumeXY(); offset++ ) {
+			for( int offset=0; offset<volumeXY; offset++ ) {
 				
 				int val = vbIn.getInt(offset);
 				

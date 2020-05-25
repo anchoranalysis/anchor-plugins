@@ -38,6 +38,8 @@ class ExtendObjsInZHelper {
 		boolean andMode = true;
 		boolean writtenOneSlice = false;
 		
+		int volumeXY = e.getVolumeXY();
+		
 		// Start in the mid point, and go upwards
 		Iterator<Integer> itr = zRange.iterator();
 		while(itr.hasNext()) {
@@ -50,7 +52,7 @@ class ExtendObjsInZHelper {
 			
 			if (andMode) {
 			
-				if (bufferLogicalAnd( e.getVolumeXY(), bbExst, bbFlat, omNew.getBinaryValuesByte(), omFlat.getBinaryValuesByte() )) {
+				if (bufferLogicalAnd( volumeXY, bbExst, bbFlat, omNew.getBinaryValuesByte(), omFlat.getBinaryValuesByte() )) {
 					writtenOneSlice = true;
 				} else {
 					// As soon as we have no pixel high, we switch to simply clearing instead, so long as we've written a slice before

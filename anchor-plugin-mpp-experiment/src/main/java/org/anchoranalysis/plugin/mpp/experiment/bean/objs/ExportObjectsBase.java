@@ -96,12 +96,17 @@ public abstract class ExportObjectsBase<T extends InputFromManager, S> extends T
 		bboxToExtract.getCrnrMin().setY( bboxToExtract.getCrnrMin().getY() - paddingXY );
 		bboxToExtract.getCrnrMin().setZ( bboxToExtract.getCrnrMin().getZ() - paddingZ );
 		
-		Extent e = bboxToExtract.extnt();
-		e.setX( e.getX() + (paddingXY*2) );
-		e.setY( e.getY() + (paddingXY*2) );
-		e.setZ( e.getZ() + (paddingZ*2) );
+		Extent exst = bboxToExtract.extnt();
 		
-		bboxToExtract.clipTo(dim.getExtnt());	
+		bboxToExtract.setExtnt(
+			new Extent(
+				exst.getX() + (paddingXY*2),
+				exst.getY() + (paddingXY*2),
+				exst.getZ() + (paddingZ*2)
+			)
+		);
+		bboxToExtract.clipTo(dim.getExtnt());
+		
 		return BBoxUtilities.createObjMaskForBBox( om, bboxToExtract );
 	}
 		

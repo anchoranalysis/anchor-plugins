@@ -67,16 +67,13 @@ public class ImposeResolution extends RasterReader {
 
 		@Override
 		public void maybeAlterDimensions(ImageDim sd) throws RasterIOException {
-
-			ImageRes sr = new ImageRes();
-			sr.setX(resX);
-			sr.setY(resY);
-			if (keepZ) {
-				sr.setZ(sd.getRes().getZ());
-			} else {
-				sr.setZ(resZ);
-			}
-			sd.setRes( sr );
+			sd.setRes(
+				new ImageRes(
+					resX,
+					resY,
+					keepZ ? sd.getRes().getZ() : resZ
+				)
+			);
 		}
 		
 	}

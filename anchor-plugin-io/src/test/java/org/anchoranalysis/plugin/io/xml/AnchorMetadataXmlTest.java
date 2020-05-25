@@ -50,11 +50,7 @@ public class AnchorMetadataXmlTest {
 	public TemporaryFolder folder = new TemporaryFolder();
 	
 	private static ImageRes createMockRes01() {
-		ImageRes sr = new ImageRes();
-		sr.setX(1.0);
-		sr.setY(2.0);
-		sr.setZ(3.0);
-		return sr;
+		return new ImageRes(1.0, 2.0, 3.0);
 	}
 	
 	@Test

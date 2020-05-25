@@ -64,14 +64,14 @@ public class ChnlProviderMax extends ChnlProviderTwoVoxelMapping {
 	}
 	
 	private static void setMaxInOutputVoxelBox( VoxelBox<ByteBuffer> vbOut, VoxelBox<ByteBuffer> vbIn1, VoxelBox<ByteBuffer> vbIn2) {
+		int volumeXY = vbIn1.extnt().getVolumeXY();
 		for (int z=0; z<vbOut.extnt().getZ(); z++) {
 			
 			VoxelBuffer<?> in1 = vbIn1.getPixelsForPlane(z);
 			VoxelBuffer<?> in2 = vbIn2.getPixelsForPlane(z);
 			VoxelBuffer<?> out = vbOut.getPixelsForPlane(z);
 			
-			int totalPixels = vbIn1.extnt().getVolumeXY();
-			for (int offset=0; offset<totalPixels; offset++) {
+			for (int offset=0; offset<volumeXY; offset++) {
 				
 				int val1 = in1.getInt(offset);
 				int val2 = in2.getInt(offset);

@@ -32,7 +32,7 @@ package ch.ethz.biol.cell.imageprocessing.chnl.provider;
 public class ChnlProviderMaxWithScalar extends ChnlProviderConditionallyWriteScalar {
 
 	@Override
-	public boolean predicateBufVal( int bufVal, int value ) {
-		return bufVal<value;
+	public boolean shouldOverwriteVoxelWithConstant(int voxel, int constant) {
+		return voxel<constant;
 	}
 }

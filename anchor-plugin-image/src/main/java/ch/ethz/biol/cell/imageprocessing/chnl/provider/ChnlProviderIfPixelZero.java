@@ -112,14 +112,15 @@ public class ChnlProviderIfPixelZero extends ChnlProviderOne {
 
 	private static void processVoxelBox( VoxelBoxWrapper vbOut, VoxelBoxWrapper vbIn, VoxelBoxWrapper vbIfZero, double multFactorIfNonZero ) {
 
+		int volumeXY = vbIn.any().extnt().getVolumeXY();
+		
 		for (int z=0; z<vbOut.any().extnt().getZ(); z++) {
 			
 			VoxelBuffer<?> in1 = vbIn.any().getPixelsForPlane(z);
 			VoxelBuffer<?> in2 = vbIfZero.any().getPixelsForPlane(z);
 			VoxelBuffer<?> out = vbOut.any().getPixelsForPlane(z);
 			
-			int totalPixels = vbIn.any().extnt().getVolumeXY();
-			for (int offset=0; offset<totalPixels; offset++) {
+			for (int offset=0; offset<volumeXY; offset++) {
 				
 				int b1 = in1.getInt(offset);
 								
