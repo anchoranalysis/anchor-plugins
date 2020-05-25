@@ -36,7 +36,7 @@ import org.anchoranalysis.bean.NamedBean;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.core.functional.OptionalExceptional;
+import org.anchoranalysis.core.functional.OptionalUtilities;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
 import org.anchoranalysis.experiment.task.Task;
 import org.anchoranalysis.feature.bean.list.FeatureListProvider;
@@ -99,7 +99,7 @@ public abstract class ExportFeaturesTask<T extends InputFromManager, S extends S
 	) throws ExperimentExecutionException {
 		
 		try {
-			Optional<NamedFeatureStore<FeatureInputResults>> featuresAggregate = OptionalExceptional.map(
+			Optional<NamedFeatureStore<FeatureInputResults>> featuresAggregate = OptionalUtilities.map(
 				Optional.ofNullable(listFeaturesAggregate),
 				list-> NamedFeatureStoreFactory.createNamedFeatureList(list)
 			);

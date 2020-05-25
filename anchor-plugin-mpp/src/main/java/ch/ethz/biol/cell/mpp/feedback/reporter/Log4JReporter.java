@@ -3,6 +3,7 @@ package ch.ethz.biol.cell.mpp.feedback.reporter;
 import org.anchoranalysis.anchor.mpp.feature.nrg.cfg.CfgNRGPixelized;
 import org.anchoranalysis.mpp.sgmn.bean.optscheme.feedback.ReporterAgg;
 import org.anchoranalysis.mpp.sgmn.optscheme.feedback.OptimizationFeedbackInitParams;
+import org.anchoranalysis.mpp.sgmn.optscheme.feedback.ReporterException;
 import org.anchoranalysis.mpp.sgmn.optscheme.feedback.aggregate.Aggregator;
 import org.anchoranalysis.mpp.sgmn.optscheme.feedback.aggregate.IAggregateReceiver;
 import org.anchoranalysis.mpp.sgmn.optscheme.step.Reporting;
@@ -52,7 +53,7 @@ public class Log4JReporter extends ReporterAgg<CfgNRGPixelized> implements IAggr
 	}
 	
 	@Override
-	public void reportNewBest( Reporting<CfgNRGPixelized> reporting ) {
+	public void reportNewBest( Reporting<CfgNRGPixelized> reporting ) throws ReporterException {
 		
 		String out = String.format(
 			"*** itr=%d  size=%d  best_nrg=%e  kernel=%s",

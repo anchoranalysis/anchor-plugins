@@ -57,7 +57,7 @@ public class TextFileCfgReporter extends PeriodicSubfolderReporter<Cfg> {
 	}
 	
 	@Override
-	protected Cfg generateIterableElement( Reporting<CfgNRGPixelized> reporting ) {
+	protected Cfg generateIterableElement( Reporting<CfgNRGPixelized> reporting ) throws ReporterException {
 		return reporting.getCfgNRGAfter().getCfg();
 	}
 

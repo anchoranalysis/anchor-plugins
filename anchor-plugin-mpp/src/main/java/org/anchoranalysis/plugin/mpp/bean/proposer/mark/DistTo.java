@@ -1,5 +1,7 @@
 package org.anchoranalysis.plugin.mpp.bean.proposer.mark;
 
+import java.util.Optional;
+
 import org.anchoranalysis.anchor.mpp.bean.proposer.MarkProposer;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.anchor.mpp.mark.MarkDistance;
@@ -139,7 +141,7 @@ public class DistTo extends MarkProposer {
 	}
 
 	@Override
-	public ICreateProposalVisualization proposalVisualization(boolean detailed) {
+	public Optional<ICreateProposalVisualization> proposalVisualization(boolean detailed) {
 		return markProposer.proposalVisualization(detailed);
 	}
 }

@@ -1,5 +1,7 @@
 package org.anchoranalysis.plugin.mpp.bean.proposer.mark;
 
+import java.util.Optional;
+
 import org.anchoranalysis.anchor.mpp.bean.proposer.MarkProposer;
 import org.anchoranalysis.anchor.mpp.bean.proposer.OrientationProposer;
 import org.anchoranalysis.anchor.mpp.bean.proposer.radii.RadiiProposer;
@@ -49,11 +51,8 @@ public class TranslMinMaxDistDilate extends MarkProposer {
 	@BeanField
 	private Radii radii = new Radii();
 	// END BEAN PARAMETERS
-	
-	
+		
 	private MarkProposer delegate;
-	
-	
 	
 	public TranslMinMaxDistDilate() {
 		
@@ -127,7 +126,7 @@ public class TranslMinMaxDistDilate extends MarkProposer {
 	}
 
 	@Override
-	public ICreateProposalVisualization proposalVisualization(boolean detailed) {
+	public Optional<ICreateProposalVisualization> proposalVisualization(boolean detailed) {
 		return delegate.proposalVisualization(detailed);
 	}
 }

@@ -32,8 +32,7 @@ import org.anchoranalysis.core.error.CreateException;
 
 
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.geometry.Point3d;
-import org.anchoranalysis.core.log.LogErrorReporter;
+import org.anchoranalysis.core.log.LogReporter;
 import org.anchoranalysis.image.bean.threshold.CalculateLevel;
 import org.anchoranalysis.image.chnl.Chnl;
 import org.anchoranalysis.image.histogram.Histogram;
@@ -43,8 +42,16 @@ import org.anchoranalysis.image.objmask.ObjMaskCollection;
 import org.anchoranalysis.image.objmask.morph.MorphologicalDilation;
 
 public class LevelResultCollectionFactory {
+	
+	private LevelResultCollectionFactory() {}
 
-	public static LevelResultCollection createCollection( Chnl chnl, ObjMaskCollection objMasks, CalculateLevel calculateLevel, int numDilations, LogErrorReporter logErrorReporter ) throws CreateException {
+	public static LevelResultCollection createCollection(
+			Chnl chnl,
+			ObjMaskCollection objMasks,
+			CalculateLevel calculateLevel,
+			int numDilations,
+			LogReporter logger
+		) throws CreateException {
 		
 		LevelResultCollection all = new LevelResultCollection(); 
 		
@@ -52,10 +59,7 @@ public class LevelResultCollectionFactory {
 			
 			ObjMask omForCalculateLevel;
 			
-			if (logErrorReporter!=null) {
-				Point3d pnt = om.centerOfGravity();
-				logErrorReporter.getLogReporter().logFormatted("Creating level result %f,%f,%f", pnt.getX(), pnt.getY(), pnt.getZ() );
-			}
+			logger.logFormatted("Creating level result %s", om.centerOfGravity().toString() );
 			
 			// Optional dilation
 			if (numDilations!=0) {
@@ -82,13 +86,9 @@ public class LevelResultCollectionFactory {
 				throw new CreateException(e);
 			}
 			
-			//System.out.printf("Mask centre-point=%s  level=%d\n", om.getBoundingBox().midpoint().toString(), level );
-			
 			LevelResult res = new LevelResult(level, om, h);
 			
-			if (logErrorReporter!=null) {
-				logErrorReporter.getLogReporter().logFormatted("Level result is %d", res.getLevel());
-			}
+			logger.logFormatted("Level result is %d", res.getLevel());
 			
 			all.add(res);
 		}

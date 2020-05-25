@@ -53,7 +53,7 @@ public final class TextFileReporter extends ReporterAgg<CfgNRGPixelized> impleme
 	private StopWatch timer = null;
 
 	@Override
-	public void reportNewBest( Reporting<CfgNRGPixelized> reporting ) {
+	public void reportNewBest( Reporting<CfgNRGPixelized> reporting ) throws ReporterException {
 		if (fileOutput.get().isEnabled()) {
 			
 			fileOutput.get().getWriter().printf(
@@ -71,13 +71,34 @@ public final class TextFileReporter extends ReporterAgg<CfgNRGPixelized> impleme
 		try {
 			fileOutput = FileOutputFromManager.create(
 				"txt",
-				new ManifestDescription("text","event_log"),
+				Optional.of(
+					new ManifestDescription("text","event_log")
+				),
 				initParams.getInitContext().getOutputManager().getDelegate(),
 				"eventLog"
 			);
 		} catch (OutputWriteFailedException e) {
 			throw new AggregatorException(e);
 		}
+	}
+	
+	@Override
+	public void reportBegin( OptimizationFeedbackInitParams<CfgNRGPixelized> initParams ) throws ReporterException {
+		
+		super.reportBegin( initParams );
+		try {
+			if (fileOutput.isPresent()) {
+				fileOutput.get().start();
+				
+				timer = new StopWatch();
+				timer.start();
+			}
+			
+		} catch (AnchorIOException e) {
+			throw new ReporterException(e);
+		}
+		
+		
 	}
 
 	@Override
@@ -102,25 +123,6 @@ public final class TextFileReporter extends ReporterAgg<CfgNRGPixelized> impleme
 	@Override
 	protected IAggregateReceiver<CfgNRGPixelized> getAggregateReceiver() {
 		return this;
-	}
-	
-	@Override
-	public void reportBegin( OptimizationFeedbackInitParams<CfgNRGPixelized> initParams ) throws ReporterException {
-		
-		super.reportBegin( initParams );
-		try {
-			if (fileOutput.isPresent()) {
-				fileOutput.get().start();
-				
-				timer = new StopWatch();
-				timer.start();
-			}
-			
-		} catch (AnchorIOException e) {
-			throw new ReporterException(e);
-		}
-		
-		
 	}
 
 	@Override

@@ -54,8 +54,9 @@ public class ChnlProviderObjsLevelIndependently extends ChnlProviderLevel {
 				objs,
 				getCalculateLevel(),
 				numDilations,
-				getLogger()
+				getLogger().getLogReporter()
 			);
+			
 			VoxelBox<?> vbOutput = chnlOutput.getVoxelBox().any(); 
 			for( LevelResult lr : lrc ) {
 				vbOutput.setPixelsCheckMask(lr.getObjMask(), lr.getLevel());

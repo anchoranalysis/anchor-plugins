@@ -29,6 +29,7 @@ package org.anchoranalysis.plugin.mpp.bean.proposer.mark;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.anchoranalysis.anchor.mpp.bean.proposer.MarkProposer;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
@@ -88,11 +89,10 @@ public class ChooseOneList extends MarkProposer {
 	}
 
 	@Override
-	public ICreateProposalVisualization proposalVisualization(boolean detailed) {
-
+	public Optional<ICreateProposalVisualization> proposalVisualization(boolean detailed) {
 		if (lastIndex!=-1) {
 			return markProposerList.get(lastIndex).proposalVisualization(detailed);
 		}
-		return null;
+		return Optional.empty();
 	}
 }
