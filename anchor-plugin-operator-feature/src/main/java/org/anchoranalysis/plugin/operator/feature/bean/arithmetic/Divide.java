@@ -28,7 +28,6 @@ package org.anchoranalysis.plugin.operator.feature.bean.arithmetic;
 
 
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.operator.FeatureListElem;
 import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
@@ -68,22 +67,7 @@ public class Divide<T extends FeatureInput> extends FeatureListElem<T> {
 	
 	@Override
 	public String getDscrLong() {
-		
-		StringBuilder sb = new StringBuilder();
-		
-		boolean first = true;
-		for (Feature<T> elem : getList()) {
-			
-			if (first==true) {
-				first = false;
-			} else {
-				sb.append("/");
-			}
-		
-			sb.append(elem.getDscrLong());
-		}
-				
-		return sb.toString();
+		return descriptionForList("/");
 	}
 	
 	public boolean isAvoidDivideByZero() {
