@@ -1,12 +1,8 @@
 package org.anchoranalysis.plugin.mpp.bean.proposer.mark;
 
-import java.util.Optional;
-
 import org.anchoranalysis.anchor.mpp.bean.proposer.MarkProposer;
-import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.anchor.mpp.proposer.ProposalAbnormalFailureException;
 import org.anchoranalysis.anchor.mpp.proposer.ProposerContext;
-import org.anchoranalysis.anchor.mpp.proposer.visualization.ICreateProposalVisualization;
 import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
 
 /*
@@ -40,43 +36,26 @@ import org.anchoranalysis.bean.annotation.BeanField;
 
 // Repeat multiple times until we get a successful proposal
 //  abandoning after maxIter is reached
-public class Repeat extends MarkProposer {
+public class Repeat extends MarkProposerOne {
 
 	// START BEAN PROPERTIES
-	@BeanField
-	private MarkProposer item;
-	
 	@BeanField
 	private int maxIter = 20;
 	// END BEAN PROPERTIES	
 
 	@Override
-	public boolean isCompatibleWith(Mark testMark) {
-		return item.isCompatibleWith(testMark);
-	}
-
-	@Override
-	public boolean propose(PxlMarkMemo inputMark, ProposerContext context) throws ProposalAbnormalFailureException {
-
+	protected boolean propose(PxlMarkMemo inputMark, ProposerContext context, MarkProposer source)
+			throws ProposalAbnormalFailureException {
+	
 		for (int i=0; i<maxIter; i++) {
 			
-			if (item.propose(inputMark, context)) {
+			if (source.propose(inputMark, context)) {
 				return true;
 			}
-			
 		}
 		
 		context.getErrorNode().add("max number of iterations reached");
-		
 		return false;
-	}
-
-	public MarkProposer getItem() {
-		return item;
-	}
-
-	public void setItem(MarkProposer item) {
-		this.item = item;
 	}
 
 	public int getMaxIter() {
@@ -85,10 +64,5 @@ public class Repeat extends MarkProposer {
 
 	public void setMaxIter(int maxIter) {
 		this.maxIter = maxIter;
-	}
-
-	@Override
-	public Optional<ICreateProposalVisualization> proposalVisualization(boolean detailed) {
-		return item.proposalVisualization(detailed);
 	}
 }

@@ -1,5 +1,7 @@
 package ch.ethz.biol.cell.mpp.proposer.position;
 
+import java.util.Optional;
+
 import org.anchoranalysis.anchor.mpp.bean.proposer.PositionProposerBean;
 import org.anchoranalysis.anchor.mpp.proposer.ProposerContext;
 
@@ -42,12 +44,14 @@ public class PositionProposerUniformRandom extends PositionProposerBean {
 	// END BEAN
 	
 	@Override
-	public Point3d propose(ProposerContext context) {
+	public Optional<Point3d> propose(ProposerContext context) {
 		ImageDim bndScene = context.getDimensions();
 		double x = context.getRe().nextDouble() * bndScene.getX();
 		double y = context.getRe().nextDouble() * bndScene.getY();
 		double z = suppressZ ? 0 : context.getRe().nextDouble() * bndScene.getZ();
-		return new Point3d(x,y,z);
+		return Optional.of(
+			new Point3d(x,y,z)
+		);
 	}
 
 	public boolean isSuppressZ() {

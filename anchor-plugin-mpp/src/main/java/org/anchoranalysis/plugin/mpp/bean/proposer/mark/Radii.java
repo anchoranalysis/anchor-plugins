@@ -52,22 +52,6 @@ public class Radii extends MarkProposer {
 	@BeanField
 	private OrientationProposer orientationProposer = null;
 	// END BEAN PARAMETERS
-	
-	public Radii() {
-		
-	}
-	
-	public Radii(RadiiProposer radiiProposer,
-			OrientationProposer orientationProposer) {
-		super();
-		this.radiiProposer = radiiProposer;
-		this.orientationProposer = orientationProposer;
-	}
-
-	@Override
-	public boolean isCompatibleWith(Mark testMark) {
-		return testMark instanceof ISetMarksExplicit;
-	}
 
 	@Override
 	public boolean propose(PxlMarkMemo inputMark, ProposerContext context) {
@@ -116,6 +100,16 @@ public class Radii extends MarkProposer {
 		return true;
 	}
 
+	@Override
+	public boolean isCompatibleWith(Mark testMark) {
+		return testMark instanceof ISetMarksExplicit;
+	}
+
+	@Override
+	public Optional<ICreateProposalVisualization> proposalVisualization(boolean detailed) {
+		return Optional.empty();
+	}
+	
 	public OrientationProposer getOrientationProposer() {
 		return orientationProposer;
 	}
@@ -130,10 +124,5 @@ public class Radii extends MarkProposer {
 
 	public void setRadiiProposer(RadiiProposer radiiProposer) {
 		this.radiiProposer = radiiProposer;
-	}
-
-	@Override
-	public Optional<ICreateProposalVisualization> proposalVisualization(boolean detailed) {
-		return Optional.empty();
 	}
 }

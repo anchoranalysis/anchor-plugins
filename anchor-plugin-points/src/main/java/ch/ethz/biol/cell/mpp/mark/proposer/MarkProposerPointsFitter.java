@@ -49,7 +49,7 @@ import org.anchoranalysis.core.log.LogErrorReporter;
 
 public class MarkProposerPointsFitter extends MarkProposer {
 
-	// START BEAN
+	// START BEAN PROPERTIES
 	@BeanField
 	private PointsProposer pointsProposer;
 	
@@ -58,7 +58,7 @@ public class MarkProposerPointsFitter extends MarkProposer {
 	
 	@BeanField
 	private boolean reportFitterErrors = true;
-	// END BEAN
+	// END BEAN PROPERTIES
 	
 	@SuppressWarnings("unused")
 	private LogErrorReporter logErrorReporter;
