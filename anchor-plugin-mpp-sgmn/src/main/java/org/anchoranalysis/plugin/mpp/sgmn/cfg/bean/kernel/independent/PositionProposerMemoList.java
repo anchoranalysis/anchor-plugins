@@ -92,7 +92,7 @@ class PositionProposerMemoList implements PositionProposer {
 		while(true) {
 		
 			if (i++==numTries) {
-				return null;
+				return Optional.empty();
 			}
 			
 			// We keep randomly picking a memo from the list 
