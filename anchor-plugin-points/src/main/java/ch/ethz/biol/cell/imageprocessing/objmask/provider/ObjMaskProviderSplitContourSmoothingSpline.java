@@ -89,11 +89,15 @@ public class ObjMaskProviderSplitContourSmoothingSpline extends ObjMaskProviderO
 		}		
 	}
 	
-	private void addContoursAsObjs( ContourList cl, ObjMaskCollection out ) {
+	private void addContoursAsObjs( ContourList cl, ObjMaskCollection out ) throws OperationFailedException {
 		for( Contour c : cl) {
-			out.add(
-				createObjMaskFromContour(c, true)
-			);
+			try {
+				out.add(
+					createObjMaskFromContour(c, true)
+				);
+			} catch (CreateException e) {
+				throw new OperationFailedException(e);
+			}
 		}
 	}
 
@@ -121,7 +125,7 @@ public class ObjMaskProviderSplitContourSmoothingSpline extends ObjMaskProviderO
 		this.minNumPoints = minNumPoints;
 	}
 	
-	private static ObjMask createObjMaskFromContour( Contour c, boolean round ) {
+	private static ObjMask createObjMaskFromContour( Contour c, boolean round ) throws CreateException {
 		return CreateFromPointsFactory.create(
 			PointConverter.convert3i(c.getPoints(), round)
 		);

@@ -31,17 +31,16 @@ import java.nio.IntBuffer;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
-
+import java.util.List;import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.geometry.Point3i;
-import org.anchoranalysis.image.extent.BoundingBox;
+import org.anchoranalysis.image.extent.PointRange;
 import org.anchoranalysis.image.objmask.ObjMaskCollection;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 
 
 final class BoundingBoxMap {
 	
-	private List<BoundingBox> list = new ArrayList<>();
+	private List<PointRange> list = new ArrayList<>();
 	
 	private HashMap<Integer,Integer> map = new HashMap<>();
 	
@@ -59,18 +58,21 @@ final class BoundingBoxMap {
 		return index;
 	}
 
-	public ObjMaskCollection deriveObjects(	VoxelBox<IntBuffer> matS) {
+	public ObjMaskCollection deriveObjects(	VoxelBox<IntBuffer> matS) throws OperationFailedException {
 		ObjMaskCollection out = new ObjMaskCollection();
 		for (int i=0; i<list.size(); i++) {
 			
-			BoundingBox bbox = list.get(i);
+			PointRange pointRange = list.get(i);
 			
-			if(bbox==null) {
+			if(pointRange==null) {
 				continue;
 			}
 			
 			out.add(
-				matS.equalMask(bbox, i+1)
+				matS.equalMask(
+					pointRange.deriveBoundingBox(),
+					i+1
+				)
 			);
 		}
 		return out;
@@ -88,14 +90,12 @@ final class BoundingBoxMap {
 	/**
 	 * Get bounding box for a particular index, creating if not already there, and then add a point to the box.
 	 */ 
-	private BoundingBox addPointToBox(int indx, Point3i pnt) {
-		BoundingBox box = list.get(indx);
-		if (box!=null) {
-			box.add(pnt);
-		} else {
-			box = new BoundingBox(pnt, pnt);
-			list.set(indx, box);
+	private void addPointToBox(int indx, Point3i pnt) {
+		PointRange pointRange = list.get(indx);
+		if (pointRange==null) {
+			pointRange = new PointRange();
+			list.set(indx, pointRange);
 		}
-		return box;
+		pointRange.add(pnt);
 	}
 }
