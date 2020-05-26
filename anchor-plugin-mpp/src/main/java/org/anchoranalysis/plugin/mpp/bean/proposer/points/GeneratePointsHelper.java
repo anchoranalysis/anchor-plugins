@@ -64,9 +64,7 @@ class GeneratePointsHelper {
 		int zLow = Math.max(0, bbox.getCrnrMin().getZ()-maxZDist );
 		int zHigh = Math.min(sceneDim.getZ(), bbox.getCrnrMin().getZ()+maxZDist );
 		
-		Extent e = bbox.extnt();
-		e.setZ(zHigh-zLow);
-		
+		Extent e = bbox.extnt().duplicateChangeZ(zHigh-zLow);
 		bbox.getCrnrMin().setZ( zLow );
 		bbox.setExtnt(e);
 

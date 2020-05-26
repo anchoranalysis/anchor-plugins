@@ -46,9 +46,11 @@ public class BBoxRatio extends FeatureSingleMemo {
 		ImageDim dim = input.get().getDimensionsRequired();
 		
 		BoundingBox bb = markCast.bbox(dim, GlobalRegionIdentifiers.SUBMARK_INSIDE );
-		bb.extnt().setZ( (int) (bb.extnt().getZ() * dim.getRes().getZRelRes()) );
 		
 		int[] extnt = bb.extnt().createOrderedArray();
+		
+		// Let's change the z-dimension to include the relative-resolution
+		extnt[2] = (int) (bb.extnt().getZ() * dim.getRes().getZRelRes());
 		
 		int len = extnt.length;
 		assert(len>=2);

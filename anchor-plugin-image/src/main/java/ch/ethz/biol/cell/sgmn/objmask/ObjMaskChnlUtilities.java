@@ -30,14 +30,17 @@ package ch.ethz.biol.cell.sgmn.objmask;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.anchoranalysis.core.error.CreateException;
+import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.convert.ByteConverter;
 import org.anchoranalysis.image.extent.BoundingBox;
-import org.anchoranalysis.image.extent.Extent;
+import org.anchoranalysis.image.extent.PointRange;
 import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.image.objmask.ObjMaskCollection;
+import org.anchoranalysis.image.points.BoundingBoxFromPoints;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 
 // Maximum intensity projection and scales down
@@ -49,13 +52,13 @@ public class ObjMaskChnlUtilities {
 		int minBBoxVolume
 	) {
 		int numPixel[] = new int[maxColorID];
-		ArrayList<BoundingBox> bboxList = calcBBox( bufferAcccess, maxColorID, numPixel );
+		List<BoundingBox> bboxList = calcBBox( bufferAcccess, maxColorID, numPixel );
 		return calcObjMask( bboxList, bufferAcccess, minBBoxVolume );
 	}
 	
 	
 	private static ObjMaskCollection calcObjMask(
-		ArrayList<BoundingBox> bboxList,
+		List<BoundingBox> bboxList,
 		VoxelBox<ByteBuffer> bufferAccess,
 		int smallVolumeThreshold
 	) {
@@ -70,57 +73,48 @@ public class ObjMaskChnlUtilities {
 				continue;
 			}
 			
-			ObjMask om = bufferAccess.equalMask(bbox, col);
-			list.add( om );
+			list.add(
+				bufferAccess.equalMask(bbox, col)
+			);
 		}
 				
 		return list;
-	}
-
-	private static BoundingBox createBBoxFromPoints( List<Point3i> points ) throws CreateException {
-		
-		if (points.size()==0) {
-			throw new CreateException("Points list must contain at least one item");
-		}
-		
-		// We iterate through all points to establishing a bounding box size
-		BoundingBox bbox = new BoundingBox( points.get(0), new Extent(1,1,1) );
-		for( int i=1; i<points.size(); i++) {
-			bbox.add(points.get(i));
-		}
-		return bbox;
 	}
 	
 	// TODO Optimize by requiring sorted list of points and moving through the z-stacks sequentially
 	public static ObjMask createObjMaskFromPoints( List<Point3i> points ) throws CreateException {
 		
-		BoundingBox bbox = createBBoxFromPoints(points);
-		
-		ObjMask om = new ObjMask(bbox);
-		
-		for( int i=0; i<points.size(); i++) {
+		try {
+			ObjMask om = new ObjMask(
+				BoundingBoxFromPoints.forList(points)
+			);
 			
-			Point3i pnt = points.get(i);
+			for( int i=0; i<points.size(); i++) {
+				
+				Point3i pnt = points.get(i);
+				
+				int relX = pnt.getX()-om.getBoundingBox().getCrnrMin().getX();
+				int relY = pnt.getY()-om.getBoundingBox().getCrnrMin().getY();
+				int relZ = pnt.getZ()-om.getBoundingBox().getCrnrMin().getZ();
+				
+				ByteBuffer bb = om.getVoxelBox().getPixelsForPlane(relZ).buffer();
+				bb.put( om.getVoxelBox().extnt().offset(relX, relY), om.getBinaryValuesByte().getOnByte() );
+			}
 			
-			int relX = pnt.getX()-om.getBoundingBox().getCrnrMin().getX();
-			int relY = pnt.getY()-om.getBoundingBox().getCrnrMin().getY();
-			int relZ = pnt.getZ()-om.getBoundingBox().getCrnrMin().getZ();
+			return om;
 			
-			ByteBuffer bb = om.getVoxelBox().getPixelsForPlane(relZ).buffer();
-			bb.put( om.getVoxelBox().extnt().offset(relX, relY), om.getBinaryValuesByte().getOnByte() );
+		} catch (OperationFailedException e) {
+			throw new CreateException(e);
 		}
-		
-		return om;
 	}
 	
 	
-	private static ArrayList<BoundingBox> calcBBox( VoxelBox<ByteBuffer> bufferAccess, int numC, int[] numPixel ) {
+	private static List<BoundingBox> calcBBox( VoxelBox<ByteBuffer> bufferAccess, int numC, int[] numPixel ) {
 		
-		ArrayList<BoundingBox> bboxList = new ArrayList<>(numC);
+		List<PointRange> list = new ArrayList<>(numC);
 		
 		for (int i=1; i<=numC; i++) {
-			bboxList.add( new BoundingBox( new Point3i(Integer.MAX_VALUE,Integer.MAX_VALUE,Integer.MAX_VALUE), 
-					new Point3i(Integer.MIN_VALUE,Integer.MIN_VALUE,Integer.MIN_VALUE) ) );
+			list.add(	new PointRange() );
 		}
 		
 		for (int z=0; z<bufferAccess.getPlaneAccess().extnt().getZ(); z++) {
@@ -136,25 +130,18 @@ public class ObjMaskChnlUtilities {
 						continue;
 					}
 					
-					bboxList.get(col-1).add( x,y,z );
+					list.get(col-1).add( x,y,z );
 					numPixel[col-1]++;
 				}
 			}
 		}
-		
-		
-		ArrayList<BoundingBox> bboxToDelete = new ArrayList<>(); 
-		
-		// We remove any bounding boxes from our list if they have had no pixels assigned still has max off min values
-		for (BoundingBox bbox : bboxList) {
-			if (bbox.getCrnrMin().getX()==Integer.MAX_VALUE || bbox.getCrnrMin().getY()==Integer.MAX_VALUE || bbox.getCrnrMin().getZ()==Integer.MAX_VALUE) {
-				bboxToDelete.add(bbox);
-			}
-		}
-		
-		bboxList.removeAll(bboxToDelete);
 
-		return bboxList;
+		/** Convert to bounding-boxes after filtering any empty point-ranges */
+		return list
+			.stream()
+			.filter( p -> !p.isEmpty() )
+			.map(PointRange::deriveBoundingBoxNoCheck)
+			.collect(Collectors.toList());
 	}
 	
 

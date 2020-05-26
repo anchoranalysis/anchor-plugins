@@ -311,9 +311,7 @@ public class ExportObjectsAsCroppedImagesTask extends ExportObjectsBase<MultiInp
 				@Override
 				public BoundingBox bridgeElement(ObjMask sourceObject) {
 					if (mip) {
-						BoundingBox bbox = new BoundingBox( sourceObject.getBoundingBox() );
-						bbox.flattenZ();
-						return bbox;
+						return sourceObject.getBoundingBox().flattenZ();
 					} else {
 						return sourceObject.getBoundingBox();
 					}

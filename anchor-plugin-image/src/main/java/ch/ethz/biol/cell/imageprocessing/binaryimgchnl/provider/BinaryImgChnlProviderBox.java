@@ -31,7 +31,7 @@ import java.nio.ByteBuffer;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.core.geometry.Point3d;
+import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.bean.provider.BinaryImgChnlProviderOne;
 import org.anchoranalysis.image.binary.BinaryChnl;
@@ -39,6 +39,7 @@ import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.Extent;
+import org.anchoranalysis.image.extent.PointRange;
 
 // Takes an existing binaryChnl and fits a box around the *On* pixels
 //  and makes the box On
@@ -75,33 +76,33 @@ public class BinaryImgChnlProviderBox extends BinaryImgChnlProviderOne {
 
 	private BoundingBox calcBBoxOfImg( BinaryVoxelBox<ByteBuffer> vb ) throws CreateException {
 		
-		Point3d negInf = new Point3d( Double.NEGATIVE_INFINITY, Double.NEGATIVE_INFINITY, Double.NEGATIVE_INFINITY );
-		Point3d posInf = new Point3d( Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY );
+		PointRange pointRange = new PointRange();
 		
-		// We initialize with extreme bounds, so no point is already set
-		BoundingBox bbox = new BoundingBox(posInf,negInf);
-		
-		Extent e = vb.extnt();
+		Extent extent = vb.extnt();
 		
 		BinaryValuesByte bvb = vb.getBinaryValues().createByte();
 		
 		Point3i pnt = new Point3i(0,0,0);
-		for( pnt.setZ(0); pnt.getZ()<e.getZ(); pnt.incrZ() ) {
+		for( pnt.setZ(0); pnt.getZ()<extent.getZ(); pnt.incrZ() ) {
 			
 			ByteBuffer buf = vb.getPixelsForPlane(pnt.getZ()).buffer();
 			
-			for( pnt.setY(0); pnt.getY()<e.getY(); pnt.incrY() ) {
-				for( pnt.setX(0); pnt.getX()<e.getX(); pnt.incrX() ) {
+			for( pnt.setY(0); pnt.getY()<extent.getY(); pnt.incrY() ) {
+				for( pnt.setX(0); pnt.getX()<extent.getX(); pnt.incrX() ) {
 				
-					int offset = e.offset(pnt.getX(), pnt.getY());
+					int offset = extent.offset(pnt.getX(), pnt.getY());
 					if (buf.get(offset)==bvb.getOnByte()) {
-						bbox.add(pnt);
+						pointRange.add(pnt);
 					}
 				}
 			}
 		}
 		
-		return bbox;
+		try {
+			return pointRange.deriveBoundingBox();
+		} catch (OperationFailedException e) {
+			throw new CreateException(e);
+		}
 	}
 	
 	public boolean isSlicesSeperately() {

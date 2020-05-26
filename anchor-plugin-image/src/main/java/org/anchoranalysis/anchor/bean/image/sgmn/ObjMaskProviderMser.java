@@ -90,7 +90,7 @@ public class ObjMaskProviderMser extends ObjMaskProviderChnlSource {
 		return convertOutputToObjs( treeDarkToBright );
 	}
 	
-	private <T extends Type<T>> ObjMaskCollection convertOutputToObjs( MserTree<T> tree ) {
+	private <T extends Type<T>> ObjMaskCollection convertOutputToObjs( MserTree<T> tree ) throws CreateException {
 		
 		ObjMaskCollection out = new ObjMaskCollection();
 		for ( Mser<T> mser :  tree)	{

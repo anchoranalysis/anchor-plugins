@@ -33,6 +33,7 @@ import java.util.Optional;
 import org.anchoranalysis.bean.OptionalFactory;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
+import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.bean.sgmn.objmask.ObjMaskSgmn;
 import org.anchoranalysis.image.chnl.Chnl;
@@ -106,7 +107,11 @@ public class ObjMaskSgmnWatershedYeong extends ObjMaskSgmn {
 		// TODO let's only work on the areas with regions
 		convertAllToConnectedComponents(matS, mask);
 		
-		return createObjectsFromLabels(matS.getVoxelBox(), mask);
+		try {
+			return createObjectsFromLabels(matS.getVoxelBox(), mask);
+		} catch (CreateException e) {
+			throw new SgmnFailedException(e);
+		}
 	}
 	
 	/** Create 'S' matrix */
@@ -138,7 +143,7 @@ public class ObjMaskSgmnWatershedYeong extends ObjMaskSgmn {
 		);
 	}
 	
-	private static ObjMaskCollection createObjectsFromLabels( VoxelBox<IntBuffer> matS, Optional<ObjMask> mask) {
+	private static ObjMaskCollection createObjectsFromLabels( VoxelBox<IntBuffer> matS, Optional<ObjMask> mask) throws CreateException {
 		
 		final BoundingBoxMap bbm = new BoundingBoxMap();
 		
@@ -154,7 +159,11 @@ public class ObjMaskSgmnWatershedYeong extends ObjMaskSgmn {
 			}
 		);
 		
-		return bbm.deriveObjects(matS);
+		try {
+			return bbm.deriveObjects(matS);
+		} catch (OperationFailedException e) {
+			throw new CreateException(e);
+		}
 	}
 
 	public boolean isExitWithMinima() {
