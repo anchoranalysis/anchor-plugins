@@ -81,10 +81,10 @@ class AggregateChnl {
 		return chnlOut;
 	}
 		
-	private void createRasterIfNecessary(ImageDim sd) {
+	private void createRasterIfNecessary(ImageDim dim) {
 		if (raster==null) {
 			this.raster = ChnlFactory.instance().createEmptyInitialised(
-				new ImageDim(sd),
+				dim,
 				VoxelDataTypeUnsignedInt.instance
 			);	
 		}
