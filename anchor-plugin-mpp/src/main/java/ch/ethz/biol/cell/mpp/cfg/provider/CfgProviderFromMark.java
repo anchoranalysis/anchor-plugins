@@ -1,5 +1,7 @@
 package ch.ethz.biol.cell.mpp.cfg.provider;
 
+import java.util.Optional;
+
 import org.anchoranalysis.anchor.mpp.bean.cfg.CfgProvider;
 import org.anchoranalysis.anchor.mpp.bean.provider.MarkProvider;
 import org.anchoranalysis.anchor.mpp.cfg.Cfg;
@@ -47,12 +49,10 @@ public class CfgProviderFromMark extends CfgProvider {
 
 		Cfg cfg = new Cfg();
 		
-		Mark mark = markProvider.create();
-		
-		if (mark!=null) {
-			cfg.add( mark );
-		}
-		
+		Optional<Mark> mark = markProvider.create();
+		mark.ifPresent( m->
+			cfg.add(m)
+		);
 		return cfg;
 	}
 
