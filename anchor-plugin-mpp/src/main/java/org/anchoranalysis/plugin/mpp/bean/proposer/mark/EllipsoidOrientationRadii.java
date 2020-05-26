@@ -43,11 +43,6 @@ import org.anchoranalysis.image.orientation.Orientation;
 public class EllipsoidOrientationRadii extends MarkProposer {
 
 	@Override
-	public boolean isCompatibleWith(Mark testMark) {
-		return testMark instanceof MarkEllipsoid;
-	}
-
-	@Override
 	public boolean propose(PxlMarkMemo inputMark, ProposerContext context) {
 
 		EllipsoidBounds markBounds;
@@ -76,6 +71,11 @@ public class EllipsoidOrientationRadii extends MarkProposer {
 		mark.setMarksExplicit( mark.getPos(), orientation, radii);
 		
 		return true;
+	}
+
+	@Override
+	public boolean isCompatibleWith(Mark testMark) {
+		return testMark instanceof MarkEllipsoid;
 	}
 	
 	@Override

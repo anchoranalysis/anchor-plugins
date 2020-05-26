@@ -27,33 +27,19 @@ package org.anchoranalysis.plugin.mpp.bean.proposer.mark;
  */
 
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 import org.anchoranalysis.anchor.mpp.bean.proposer.MarkProposer;
-import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.anchor.mpp.proposer.ProposalAbnormalFailureException;
 import org.anchoranalysis.anchor.mpp.proposer.ProposerContext;
 import org.anchoranalysis.anchor.mpp.proposer.visualization.ICreateProposalVisualization;
 import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
-import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.bean.annotation.NonEmpty;
 
-public class OrderedList extends MarkProposer {
-
-	// START BEAN
-	@BeanField @NonEmpty
-	private List<MarkProposer> markProposerList = new ArrayList<>();
-	// END BEAN
-	
-	public OrderedList() {
-		super();
-	}
+public class OrderedList extends MarkProposerFromList {
 	
 	@Override
-	public boolean propose(PxlMarkMemo inputMark, ProposerContext context) throws ProposalAbnormalFailureException {
-		
+	protected boolean propose(PxlMarkMemo inputMark, ProposerContext context, List<MarkProposer> markProposerList) throws ProposalAbnormalFailureException {
 		for (MarkProposer markProposer : markProposerList) {
 			// Calculate position
 	        if(!markProposer.propose(inputMark, context)) {
@@ -63,31 +49,9 @@ public class OrderedList extends MarkProposer {
 		return true;
 	}
 
-	
 	@Override
-	public boolean isCompatibleWith(Mark testMark) {
-		
-		for (MarkProposer markProposer : markProposerList) {
-			
-			if (!markProposer.isCompatibleWith(testMark)) {
-				return false;
-			}
-		}
-		
-		return true;
-	}
-
-	public List<MarkProposer> getMarkProposerList() {
-		return markProposerList;
-	}
-
-	public void setMarkProposerList(List<MarkProposer> markProposerList) {
-		this.markProposerList = markProposerList;
-	}
-
-
-	@Override
-	public Optional<ICreateProposalVisualization> proposalVisualization(boolean detailed) {
+	protected Optional<ICreateProposalVisualization> proposalVisualization(boolean detailed,
+			List<MarkProposer> markProposerList) {
 		return Optional.empty();
 	}
 }

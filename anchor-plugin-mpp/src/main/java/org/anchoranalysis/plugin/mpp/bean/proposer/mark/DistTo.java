@@ -1,7 +1,5 @@
 package org.anchoranalysis.plugin.mpp.bean.proposer.mark;
 
-import java.util.Optional;
-
 import org.anchoranalysis.anchor.mpp.bean.proposer.MarkProposer;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.anchor.mpp.mark.MarkDistance;
@@ -9,7 +7,6 @@ import org.anchoranalysis.anchor.mpp.mark.UnsupportedMarkTypeException;
 import org.anchoranalysis.anchor.mpp.proposer.ProposalAbnormalFailureException;
 import org.anchoranalysis.anchor.mpp.proposer.ProposerContext;
 import org.anchoranalysis.anchor.mpp.proposer.error.ErrorNode;
-import org.anchoranalysis.anchor.mpp.proposer.visualization.ICreateProposalVisualization;
 import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
 
 /*
@@ -41,12 +38,9 @@ import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 
-public class DistTo extends MarkProposer {
+public class DistTo extends MarkProposerOne {
 
 	// BEAN PARAMETERS
-	@BeanField
-	private MarkProposer markProposer = null;
-	
 	@BeanField
 	private double maxDist;
 	
@@ -59,15 +53,11 @@ public class DistTo extends MarkProposer {
 	@BeanField
 	private MarkDistance distance;
 	// END BEAN PARAMETERS
+
+	@Override
+	protected boolean propose(PxlMarkMemo inputMark, ProposerContext context, MarkProposer source)
+			throws ProposalAbnormalFailureException {
 	
-	@Override
-	public boolean isCompatibleWith(Mark testMark) {
-		return markProposer.isCompatibleWith(testMark);
-	}
-
-	@Override
-	public boolean propose(PxlMarkMemo inputMark, ProposerContext context) throws ProposalAbnormalFailureException {
-
 		ErrorNode errorNode = context.getErrorNode().add("MarkProposerDistTo");
 		
 		Mark markOld = inputMark.getMark().duplicate();
@@ -77,7 +67,7 @@ public class DistTo extends MarkProposer {
 		int tryNum = 0;
 		do {
 			
-			boolean succ = markProposer.propose(inputMark, context);
+			boolean succ = source.propose(inputMark, context);
 			if (!succ) {
 				return false;
 			}
@@ -116,14 +106,6 @@ public class DistTo extends MarkProposer {
 		this.minDist = minDist;
 	}
 
-	public MarkProposer getMarkProposer() {
-		return markProposer;
-	}
-
-	public void setMarkProposer(MarkProposer markProposer) {
-		this.markProposer = markProposer;
-	}
-
 	public int getMaxNumTries() {
 		return maxNumTries;
 	}
@@ -138,10 +120,5 @@ public class DistTo extends MarkProposer {
 
 	public void setDistance(MarkDistance distance) {
 		this.distance = distance;
-	}
-
-	@Override
-	public Optional<ICreateProposalVisualization> proposalVisualization(boolean detailed) {
-		return markProposer.proposalVisualization(detailed);
 	}
 }

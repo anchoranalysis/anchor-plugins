@@ -55,16 +55,14 @@ public class TranslMinMaxDistDilate extends MarkProposer {
 	private MarkProposer delegate;
 	
 	public TranslMinMaxDistDilate() {
-		
 		OrderedList list = new OrderedList();
 		
 		transl.setDistance( new MarkDistanceAbstractPosition() );
 		
-		list.getMarkProposerList().add(transl);
-		list.getMarkProposerList().add(radii);
+		list.getList().add(transl);
+		list.getList().add(radii);
 		
 		delegate = list;
-		
 	}
 
 	@Override
@@ -78,11 +76,11 @@ public class TranslMinMaxDistDilate extends MarkProposer {
 	}
 	
 	public MarkProposer getPositionMarkProposer() {
-		return transl.getMarkProposer();
+		return transl.getProposer();
 	}
 
 	public void setPositionMarkProposer(MarkProposer positionMarkProposer) {
-		transl.setMarkProposer(positionMarkProposer);
+		transl.setProposer(positionMarkProposer);
 	}
 
 	public double getMinDist() {

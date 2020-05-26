@@ -1,7 +1,5 @@
 package org.anchoranalysis.plugin.mpp.bean.proposer.mark;
 
-import java.util.Optional;
-
 import org.anchoranalysis.anchor.mpp.bean.init.MPPInitParams;
 
 /*-
@@ -31,10 +29,8 @@ import org.anchoranalysis.anchor.mpp.bean.init.MPPInitParams;
  */
 
 import org.anchoranalysis.anchor.mpp.bean.proposer.MarkProposer;
-import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.anchor.mpp.proposer.ProposalAbnormalFailureException;
 import org.anchoranalysis.anchor.mpp.proposer.ProposerContext;
-import org.anchoranalysis.anchor.mpp.proposer.visualization.ICreateProposalVisualization;
 import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
@@ -46,23 +42,14 @@ import org.anchoranalysis.image.binary.BinaryChnl;
 import org.anchoranalysis.image.chnl.Chnl;
 
 // Rejects a proposal if its centre is not found on a particular prob map
-public class RejectProposalCentreOutside extends MarkProposer {
+public class RejectProposalCentreOutside extends MarkProposerOne {
 
 	// START BEAN
 	@BeanField
 	private BinaryChnlProvider binaryChnl;
-	
-	@BeanField
-	private MarkProposer item;
 	// END BEAN
 
 	private BinaryChnl binaryImgChnl;
-	
-	@Override
-	public boolean isCompatibleWith(Mark testMark) {
-		return item.isCompatibleWith(testMark);
-	}
-	
 
 	@Override
 	public void onInit(MPPInitParams pso) throws InitException {
@@ -74,12 +61,12 @@ public class RejectProposalCentreOutside extends MarkProposer {
 		}
 	}
 
+
 	@Override
-	public boolean propose(PxlMarkMemo inputMark, ProposerContext context) throws ProposalAbnormalFailureException {
-		
-		
-		
-		boolean succ = item.propose(inputMark, context);
+	protected boolean propose(PxlMarkMemo inputMark, ProposerContext context, MarkProposer source)
+			throws ProposalAbnormalFailureException {
+			
+		boolean succ = source.propose(inputMark, context);
 		
 		if (!succ) {
 			return false;	
@@ -95,25 +82,11 @@ public class RejectProposalCentreOutside extends MarkProposer {
 				
 		return true;
 	}
-
-	public MarkProposer getItem() {
-		return item;
-	}
-
-	public void setItem(MarkProposer item) {
-		this.item = item;
-	}
-
-	@Override
-	public Optional<ICreateProposalVisualization> proposalVisualization(boolean detailed) {
-		return item.proposalVisualization(detailed);
-	}
 	
 	private static int getVoxelFromChnl(Chnl raster, int x, int y, int z) {
 		Point3i pnt = new Point3i(x,y,z);
 		return raster.getVoxelBox().asByte().getVoxel(pnt.getX(), pnt.getY(), pnt.getZ());
 	}
-
 
 	public BinaryChnlProvider getBinaryChnl() {
 		return binaryChnl;

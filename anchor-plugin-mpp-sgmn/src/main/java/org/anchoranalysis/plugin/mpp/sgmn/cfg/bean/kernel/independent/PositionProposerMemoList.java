@@ -28,6 +28,7 @@ package org.anchoranalysis.plugin.mpp.sgmn.cfg.bean.kernel.independent;
 
 
 import java.util.List;
+import java.util.Optional;
 
 import org.anchoranalysis.anchor.mpp.bean.regionmap.RegionMembership;
 import org.anchoranalysis.anchor.mpp.mark.GlobalRegionIdentifiers;
@@ -71,14 +72,14 @@ class PositionProposerMemoList implements PositionProposer {
 	}
 
 	@Override
-	public Point3d propose(ProposerContext context) {
+	public Optional<Point3d> propose(ProposerContext context) {
 		
 		RegionMembership rm = context.getRegionMap().membershipForIndex(GlobalRegionIdentifiers.SUBMARK_INSIDE);
 		
 		byte flags = rm.flags();
 		
 		if (listPxlMarkMemo.size()==0) {
-			return null;
+			return Optional.empty();
 		}
 		
 		// ASSUMES a single channel
@@ -124,7 +125,7 @@ class PositionProposerMemoList implements PositionProposer {
 			break;
 		}
 
-		return pnt;
+		return Optional.of(pnt);
 							
 	}
 }

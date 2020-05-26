@@ -42,27 +42,20 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.color.RGBColor;
 import org.anchoranalysis.core.error.OperationFailedException;
 
-public class Check extends MarkProposer {
+public class Check extends MarkProposerOne {
 
 	// BEAN PARAMETERS
-	@BeanField
-	private MarkProposer markProposer = null;
-	
 	@BeanField
 	private CheckMark checkMark = null;
 	// END BEAN
 
 	private Mark lastFailedMark;
-	
-	@Override
-	public boolean isCompatibleWith(Mark testMark) {
-		return markProposer.isCompatibleWith(testMark) && checkMark.isCompatibleWith(testMark);
-	}
 
 	@Override
-	public boolean propose(PxlMarkMemo inputMark, ProposerContext context) throws ProposalAbnormalFailureException {
-		
-		if (!markProposer.propose(inputMark, context)) {
+	protected boolean propose(PxlMarkMemo inputMark, ProposerContext context, MarkProposer source)
+			throws ProposalAbnormalFailureException {
+
+		if (!source.propose(inputMark, context)) {
 			lastFailedMark = null;
 			return false;
 		}
@@ -95,30 +88,6 @@ public class Check extends MarkProposer {
 		return true;
 	}
 
-	public MarkProposer getMarkProposer() {
-		return markProposer;
-	}
-
-
-
-	public void setMarkProposer(MarkProposer markProposer) {
-		this.markProposer = markProposer;
-	}
-
-
-
-	public CheckMark getCheckMark() {
-		return checkMark;
-	}
-
-
-
-	public void setCheckMark(CheckMark checkMark) {
-		this.checkMark = checkMark;
-	}
-
-
-
 	public Optional<ICreateProposalVisualization> proposalVisualization(boolean detailed) {
 		if (lastFailedMark!=null) {
 			return Optional.of( cfg ->
@@ -128,7 +97,20 @@ public class Check extends MarkProposer {
 				)
 			);
 		} else {
-			return markProposer.proposalVisualization(detailed);
+			return super.proposalVisualization(detailed);
 		}
+	}
+
+	@Override
+	public boolean isCompatibleWith(Mark testMark) {
+		return super.isCompatibleWith(testMark) && checkMark.isCompatibleWith(testMark);
+	}
+	
+	public CheckMark getCheckMark() {
+		return checkMark;
+	}
+
+	public void setCheckMark(CheckMark checkMark) {
+		this.checkMark = checkMark;
 	}
 }
