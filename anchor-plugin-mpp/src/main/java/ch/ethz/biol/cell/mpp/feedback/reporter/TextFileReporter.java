@@ -51,20 +51,6 @@ public final class TextFileReporter extends ReporterAgg<CfgNRGPixelized> impleme
 	private Optional<FileOutput> fileOutput;
 	
 	private StopWatch timer = null;
-
-	@Override
-	public void reportNewBest( Reporting<CfgNRGPixelized> reporting ) throws ReporterException {
-		if (fileOutput.get().isEnabled()) {
-			
-			fileOutput.get().getWriter().printf(
-				"*** itr=%d  size=%d  best_nrg=%e  kernel=%s%n",
-				reporting.getIter(),
-				reporting.getCfgNRGAfter().getCfg().size(),
-				reporting.getCfgNRGAfter().getCfgNRG().getNrgTotal(),
-				reporting.getKernel().getDescription()
-			);
-		}
-	}
 	
 	@Override
 	public void aggStart( OptimizationFeedbackInitParams<CfgNRGPixelized> initParams, Aggregator agg ) throws AggregatorException {
@@ -97,8 +83,6 @@ public final class TextFileReporter extends ReporterAgg<CfgNRGPixelized> impleme
 		} catch (AnchorIOException e) {
 			throw new ReporterException(e);
 		}
-		
-		
 	}
 
 	@Override
@@ -111,6 +95,20 @@ public final class TextFileReporter extends ReporterAgg<CfgNRGPixelized> impleme
 				((double) timer.getTime()) / 1000,
 				((double) timer.getTime()) / (reporting.getIter()*1000),
 				agg.toString()
+			);
+		}
+	}
+	
+	@Override
+	public void reportNewBest( Reporting<CfgNRGPixelized> reporting ) throws ReporterException {
+		if (fileOutput.isPresent() && fileOutput.get().isEnabled()) {
+			
+			fileOutput.get().getWriter().printf(
+				"*** itr=%d  size=%d  best_nrg=%e  kernel=%s%n",
+				reporting.getIter(),
+				reporting.getCfgNRGAfter().getCfg().size(),
+				reporting.getCfgNRGAfter().getCfgNRG().getNrgTotal(),
+				reporting.getKernel().getDescription()
 			);
 		}
 	}
