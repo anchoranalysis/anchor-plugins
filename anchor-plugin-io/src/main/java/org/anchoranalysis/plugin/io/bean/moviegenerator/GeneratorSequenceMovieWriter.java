@@ -78,7 +78,7 @@ class GeneratorSequenceMovieWriter<GeneratorType> implements GeneratorSequenceNo
 	
 
 
-	private void initOnFirstAdd( ImageDim dim, int numFrames ) throws InitException {
+	private Optional<MovieOutputHandle> initOnFirstAdd( ImageDim dim, int numFrames ) throws InitException {
 		
 		// Assume we are incrementing + 1
 		
@@ -90,7 +90,7 @@ class GeneratorSequenceMovieWriter<GeneratorType> implements GeneratorSequenceNo
 		
 		try {
 			//String filePath = outputManager.writeGenerateFilename( outputName.getOutputName(), writer.getDefaultFileExt(), null, "", "", "");
-			movieOutputHandle = writeMovie(
+			return writeMovie(
 				outputManager,
 				outputName,
 				dim,
@@ -168,7 +168,7 @@ class GeneratorSequenceMovieWriter<GeneratorType> implements GeneratorSequenceNo
 			
 			iterableGenerator.setIterableElement( element );
 	
-			if (!firstAdd && movieOutputHandle==null) {
+			if (!firstAdd && !movieOutputHandle.isPresent()) {
 				return;
 			}
 			
@@ -176,8 +176,7 @@ class GeneratorSequenceMovieWriter<GeneratorType> implements GeneratorSequenceNo
 			
 			// We delay the initialisation of subFolder until the first iteration and we have a valid generator
 			if (firstAdd==true) {
-				
-				initOnFirstAdd( stack.getChnl(0).getDimensions(), totalNumAdd );
+				movieOutputHandle = initOnFirstAdd( stack.getChnl(0).getDimensions(), totalNumAdd );
 				firstAdd = false;
 			}
 	
