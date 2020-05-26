@@ -28,6 +28,7 @@ package ch.ethz.biol.cell.imageprocessing.binaryimgchnl.provider;
 
 
 import java.util.List;
+import java.util.Optional;
 
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.geometry.Point2i;
@@ -44,17 +45,18 @@ public class BinaryImgChnlProviderConvexHull2D extends ConvexHullBase {
 	protected BinaryChnl createFromChnl(BinaryChnl chnlIn, BinaryChnl outline) throws CreateException {
 		List<Point2i> extPnts = PointsFromBinaryChnl.pointsFromChnl2D(outline);
 		
-		List<Point2i> pntsConvexHull = ConvexHullUtilities.convexHull2D(extPnts);
-		
+		Optional<List<Point2i>> pntsConvexHull = ConvexHullUtilities.convexHull2D(extPnts);
+				
 		// we write the vertices to the outline
 		Chnl out = outline.getChnl();
 		VoxelBox<?> vbOut = out.getVoxelBox().any();
 		
-		vbOut.setAllPixelsTo(outline.getBinaryValues().getOffInt());
-		for (Point2i pnt : pntsConvexHull) {
-			vbOut.setVoxel( pnt.getX(), pnt.getY(), 0, outline.getBinaryValues().getOnInt());
-	    }		
-		   
+		vbOut.setAllPixelsTo(
+			outline.getBinaryValues().getOffInt()
+		);
+		pntsConvexHull.ifPresent(pnts->pnts.forEach( pnt->
+			vbOut.setVoxel( pnt.getX(), pnt.getY(), 0, outline.getBinaryValues().getOnInt() )
+		));
 		return outline;
 	}
 }
