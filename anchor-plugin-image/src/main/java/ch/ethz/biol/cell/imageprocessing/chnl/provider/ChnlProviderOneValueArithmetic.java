@@ -4,7 +4,6 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.chnl.Chnl;
 import org.anchoranalysis.image.chnl.factory.ChnlFactoryByte;
 import org.anchoranalysis.image.chnl.factory.ChnlFactorySingleType;
-import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 
@@ -23,7 +22,7 @@ public abstract class ChnlProviderOneValueArithmetic extends ChnlProviderOneValu
 		
 		int constant = (int) value;
 		
-		Chnl chnlOut = FACTORY.createEmptyInitialised( new ImageDim(chnl.getDimensions()) );
+		Chnl chnlOut = FACTORY.createEmptyInitialised( chnl.getDimensions() );
 		
 		VoxelBox<?> vbIn = chnl.getVoxelBox().any();
 		VoxelBox<?> vbOut = chnlOut.getVoxelBox().any();

@@ -33,7 +33,6 @@ import org.anchoranalysis.image.bean.provider.ChnlProvider;
 import org.anchoranalysis.image.bean.provider.ChnlProviderOne;
 import org.anchoranalysis.image.chnl.Chnl;
 import org.anchoranalysis.image.chnl.factory.ChnlFactory;
-import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.voxel.box.VoxelBoxWrapper;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 import org.anchoranalysis.image.voxel.datatype.CombineTypes;
@@ -95,7 +94,7 @@ public class ChnlProviderIfPixelZero extends ChnlProviderOne {
 	public static Chnl mergeViaZeroCheck( Chnl chnl, Chnl chnlIfPixelZero, VoxelDataType combinedType, double multFactorIfNonZero ) throws CreateException {
 		
 		Chnl chnlOut = ChnlFactory.instance().createEmptyInitialised(
-			new ImageDim(chnl.getDimensions()),
+			chnl.getDimensions(),
 			combinedType
 		);
 		

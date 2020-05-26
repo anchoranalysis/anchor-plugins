@@ -31,7 +31,6 @@ import java.nio.file.Path;
 import java.util.Optional;
 
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.extent.ImageRes;
 import org.anchoranalysis.image.io.RasterIOException;
 import org.anchoranalysis.image.io.bean.rasterreader.RasterReader;
@@ -78,12 +77,6 @@ public class ReadVoxelExtentXml extends RasterReader {
 		return res;
 	}
 		
-	private static void replaceResIfNotNull( ImageDim dims, Optional<ImageRes> res ) {
-		if (res.isPresent()) {
-			dims.setRes(res.get());
-		}
-	}
-	
 	@Override
 	public OpenedRaster openFile(Path filepath) throws RasterIOException {
 		
@@ -93,10 +86,10 @@ public class ReadVoxelExtentXml extends RasterReader {
 		
 		return new OpenedRasterAlterDimensions(
 			delegate,
-			dim -> replaceResIfNotNull(dim,sr)
+			res -> sr
 		);
 	}
-
+	
 	public RasterReader getRasterReader() {
 		return rasterReader;
 	}

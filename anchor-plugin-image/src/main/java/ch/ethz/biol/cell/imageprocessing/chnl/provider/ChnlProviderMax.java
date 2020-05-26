@@ -32,7 +32,6 @@ import java.nio.ByteBuffer;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.chnl.Chnl;
 import org.anchoranalysis.image.chnl.factory.ChnlFactory;
-import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 import org.anchoranalysis.image.voxel.datatype.CombineTypes;
@@ -47,7 +46,7 @@ public class ChnlProviderMax extends ChnlProviderTwoVoxelMapping {
 		}
 		
 		VoxelDataType combinedType = CombineTypes.combineTypes(chnl1.getVoxelDataType(), chnl2.getVoxelDataType());
-		Chnl chnlOut = ChnlFactory.instance().createEmptyInitialised( new ImageDim(chnl1.getDimensions()), combinedType );
+		Chnl chnlOut = ChnlFactory.instance().createEmptyInitialised( chnl1.getDimensions(), combinedType );
 		
 		setMaxInOutputVoxelBox(
 			chnlOut.getVoxelBox().asByte(),

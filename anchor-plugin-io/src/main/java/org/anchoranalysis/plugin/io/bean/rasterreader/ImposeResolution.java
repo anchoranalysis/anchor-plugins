@@ -1,6 +1,7 @@
 package org.anchoranalysis.plugin.io.bean.rasterreader;
 
 import java.nio.file.Path;
+import java.util.Optional;
 
 /*
  * #%L
@@ -30,7 +31,6 @@ import java.nio.file.Path;
 
 
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.extent.ImageRes;
 import org.anchoranalysis.image.io.RasterIOException;
 import org.anchoranalysis.image.io.bean.rasterreader.RasterReader;
@@ -57,27 +57,24 @@ public class ImposeResolution extends RasterReader {
 	@BeanField
 	private boolean keepZ = false;
 	// END BEAN PROPERTIES
-
 	
-	private class ImposeResolutionProcessor implements OpenedRasterAlterDimensions.ProcessDimensions {
-				
+	private class ImposeResolutionProcessor implements OpenedRasterAlterDimensions.ConsiderUpdatedImageRes {
+		
 		public ImposeResolutionProcessor() {
 			super();
 		}
 
 		@Override
-		public void maybeAlterDimensions(ImageDim sd) throws RasterIOException {
-			sd.setRes(
+		public Optional<ImageRes> maybeUpdatedResolution(ImageRes res) throws RasterIOException {
+			return Optional.of(
 				new ImageRes(
 					resX,
 					resY,
-					keepZ ? sd.getRes().getZ() : resZ
-				)
+					keepZ ? res.getZ() : resZ
+				)	
 			);
 		}
-		
 	}
-	
 	
 	@Override
 	public OpenedRaster openFile(Path filepath) throws RasterIOException {

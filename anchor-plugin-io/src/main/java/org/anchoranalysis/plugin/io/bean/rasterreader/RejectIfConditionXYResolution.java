@@ -1,6 +1,7 @@
 package org.anchoranalysis.plugin.io.bean.rasterreader;
 
 import java.nio.file.Path;
+import java.util.Optional;
 
 /*
  * #%L
@@ -34,7 +35,6 @@ import org.anchoranalysis.bean.annotation.DefaultInstance;
 import org.anchoranalysis.bean.annotation.NonNegative;
 import org.anchoranalysis.bean.shared.relation.RelationBean;
 import org.anchoranalysis.core.relation.RelationToValue;
-import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.extent.ImageRes;
 import org.anchoranalysis.image.io.RasterIOException;
 import org.anchoranalysis.image.io.bean.rasterreader.RasterReader;
@@ -60,7 +60,7 @@ public class RejectIfConditionXYResolution extends RasterReader {
 	private double value;
 	// END BEAN PROPERTIES
 	
-	private static class MaybeRejectProcessor implements OpenedRasterAlterDimensions.ProcessDimensions {
+	private static class MaybeRejectProcessor implements OpenedRasterAlterDimensions.ConsiderUpdatedImageRes {
 
 		private RelationToValue relation;
 		private double value;
@@ -72,27 +72,28 @@ public class RejectIfConditionXYResolution extends RasterReader {
 		}
 
 		@Override
-		public void maybeAlterDimensions(ImageDim sd) throws RasterIOException {
+		public Optional<ImageRes> maybeUpdatedResolution(ImageRes res) throws RasterIOException {
 			
-			ImageRes sr = sd.getRes();
-			
-			if (sr.getX()!=sr.getY()) {
+			if (res.getX()!=res.getY()) {
 				throw new RasterIOException("X and Y pixel-sizes are different. They must be equal");
 			}
 			
-			if( relation.isRelationToValueTrue(sr.getX(), value) ) {
+			if( relation.isRelationToValueTrue(res.getX(), value) ) {
 				throw new RasterIOException("XY-resolution fufills condition, and is thus rejected");
 			}
 			
+			return Optional.empty();
 		}
 		
 	}
 	
 	@Override
 	public OpenedRaster openFile(Path filepath) throws RasterIOException {
-
 		OpenedRaster or = rasterReader.openFile(filepath);
-		return new OpenedRasterAlterDimensions(or,new MaybeRejectProcessor(relation.create(),value));
+		return new OpenedRasterAlterDimensions(
+			or,
+			new MaybeRejectProcessor(relation.create(),value)
+		);
 	}
 
 	public RasterReader getRasterReader() {
