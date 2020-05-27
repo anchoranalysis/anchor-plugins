@@ -27,6 +27,7 @@ package org.anchoranalysis.plugin.annotation.bean.strategy;
  */
 
 import java.nio.file.Path;
+import java.util.Optional;
 
 import org.anchoranalysis.annotation.io.wholeimage.WholeImageLabelAnnotationReader;
 import org.anchoranalysis.annotation.wholeimage.WholeImageLabelAnnotation;
@@ -36,22 +37,22 @@ public class ReadAnnotationFromFile {
 
 	private ReadAnnotationFromFile() {}
 	
-	public static WholeImageLabelAnnotation readCheckExists( Path path ) {
+	public static Optional<WholeImageLabelAnnotation> readCheckExists( Path path ) {
 		
 		if (path.toFile().exists()) {
 			return readAssumeExists(path);
 		} else {
-			return null;
+			return Optional.empty();
 		}
 	}
 	
-	public static WholeImageLabelAnnotation readAssumeExists( Path path ) {
+	public static Optional<WholeImageLabelAnnotation> readAssumeExists( Path path ) {
 		try {
 			WholeImageLabelAnnotationReader reader = new WholeImageLabelAnnotationReader();
 			return reader.read( path );
 		} catch (AnchorIOException exc) {
 			// TODO PUT SOME LOGGING HERE
-			return null;
+			return Optional.empty();
 		}
 	}
 }
