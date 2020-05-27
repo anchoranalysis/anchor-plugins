@@ -39,8 +39,8 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 public class CalculateDilationMap extends CalculateIncrementalOperationMap {
 
-	public CalculateDilationMap(boolean do3d) {
-		super(do3d);
+	public CalculateDilationMap(boolean do3D) {
+		super(do3D);
 	}
 	
 	protected CalculateDilationMap(CalculateIncrementalOperationMap other) {

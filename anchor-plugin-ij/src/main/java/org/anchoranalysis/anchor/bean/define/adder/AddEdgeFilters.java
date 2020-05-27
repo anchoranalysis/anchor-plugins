@@ -33,7 +33,7 @@ import org.anchoranalysis.bean.define.Define;
 import org.anchoranalysis.bean.define.adder.DefineAdderWithPrefixBean;
 import org.anchoranalysis.bean.xml.error.BeanXmlException;
 import org.anchoranalysis.image.bean.provider.ChnlProvider;
-import org.anchoranalysis.plugin.image.bean.blur.BlurGaussian3d;
+import org.anchoranalysis.plugin.image.bean.blur.BlurGaussian3D;
 import org.anchoranalysis.plugin.image.bean.blur.BlurStrategy;
 
 import ch.ethz.biol.cell.imageprocessing.chnl.provider.ChnlProviderEdgeFilter;
@@ -173,7 +173,7 @@ public class AddEdgeFilters extends DefineAdderWithPrefixBean {
 	}
 	
 	private BlurStrategy createBlurStrategy() {
-		BlurGaussian3d blurStrategy = new BlurGaussian3d();
+		BlurGaussian3D blurStrategy = new BlurGaussian3D();
 		blurStrategy.setSigma( gaussianSigmaMeters );
 		blurStrategy.setSigmaInMeters(true);
 		return blurStrategy;

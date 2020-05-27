@@ -109,8 +109,8 @@ public class ObjMaskProviderErode extends ObjMaskProviderDimensionsOptional {
 		return do3D;
 	}
 
-	public void setDo3D(boolean do3d) {
-		do3D = do3d;
+	public void setDo3D(boolean do3D) {
+		do3D = do3D;
 	}
 
 	public int getIterations() {

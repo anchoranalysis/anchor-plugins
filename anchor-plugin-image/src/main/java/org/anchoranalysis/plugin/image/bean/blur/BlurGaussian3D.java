@@ -29,33 +29,26 @@ package org.anchoranalysis.plugin.image.bean.blur;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.log.LogReporter;
 import org.anchoranalysis.image.convert.ImgLib2Wrap;
-import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.voxel.box.VoxelBoxWrapper;
 
 /**
- * Performs a Gaussian-blur in 2D on each slice independently
+ * Performs a Gaussian Blur in 3D
  * 
  * @author Owen Feehan
  *
  */
-public class BlurGaussianEachSlice2d extends BlurStrategy {
+public class BlurGaussian3D extends BlurStrategy {
 
 	@Override
 	public void blur( VoxelBoxWrapper voxelBox, ImageDim dim, LogReporter logger ) throws OperationFailedException {
 		
 		double sigma = calcSigma(dim, logger);
 		
-		Extent e = voxelBox.any().extent();
-		double[] sigmaArr = new double[]{ sigma, sigma };
-		
-		for( int z=0; z<e.getZ(); z++) {
-
-			GaussianBlurUtilities.applyBlur(
-				ImgLib2Wrap.wrap( voxelBox.any().getPixelsForPlane(z), e ),
-				dim.getRes(),
-				sigmaArr
-			);
-		}
+		GaussianBlurUtilities.applyBlur(
+			ImgLib2Wrap.wrap( voxelBox ),
+			dim.getRes(),
+			new double[]{ sigma, sigma, sigma/dim.getRes().getZRelRes() }	// Sigma-array
+		);
 	}
 }
