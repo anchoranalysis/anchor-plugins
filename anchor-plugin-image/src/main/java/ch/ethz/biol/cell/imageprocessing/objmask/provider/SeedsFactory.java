@@ -90,7 +90,7 @@ class SeedsFactory {
 		omSeedDup.getBoundingBox().getCrnrMin().sub( subtractFromCrnrMin );
 		
 		// If a seed object is partially located outside an object, the above line might fail, so we should test
-		if (!containingBBox.contains( omSeedDup.getBoundingBox())) {
+		if (!containingBBox.contains().box( omSeedDup.getBoundingBox())) {
 			
 			// We only take the part of the seed object that intersects with our bbox
 			BoundingBox bboxIntersect = containingBBox.intersection().withInside( omSeedDup.getBoundingBox(), dim.getExtnt() ).orElseThrow( ()->

@@ -75,7 +75,7 @@ public class ObjMaskProviderExtendInZ extends ObjMaskProviderContainer {
 		BoundingBox bbox = potentialZExpansion(omFlat, container);
 		
 		// We update these values after our intersection with the container, in case they have changed
-		assert(container.getBoundingBox().contains(bbox));
+		assert(container.getBoundingBox().contains().box(bbox));
 		
 		return ExtendObjsInZHelper.createExtendedObj(omFlat, container, bbox, zCent);
 	}
