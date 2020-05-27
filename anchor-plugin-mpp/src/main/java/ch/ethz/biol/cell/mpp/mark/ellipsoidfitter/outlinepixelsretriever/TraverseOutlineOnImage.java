@@ -152,7 +152,7 @@ public class TraverseOutlineOnImage extends OutlinePixelsRetriever {
 			BoundingBox box = VisitSchedulerMaxDist.createBoxAroundPoint(root, maxDist );
 			
 			// We make sure the box is within our scene boundaries
-			box.clipTo( chnl.getDimensions().getExtnt() );
+			box = box.clipTo( chnl.getDimensions().getExtnt() );
 			
 			// This is our final intersection box, that we use for traversing and memorizing pixels
 			//  that we have already visited
