@@ -73,7 +73,7 @@ public class ReflectInAxesWithinDist extends PointsFitter {
 		double[] arrDistances = new double[]{ distanceX, distanceY, distanceZ };
 		
 		List<Point3f> pointsCurrent = points;
-		Extent extnt = dim.getExtnt();
+		Extent extent = dim.getExtnt();
 		
 		// Try each dimension: x, y, and z respectively
 		for( int d=0; d<3; d++) {
@@ -84,7 +84,7 @@ public class ReflectInAxesWithinDist extends PointsFitter {
 				// Are all points within
 				boolean insideDist = arePointsWithinDistOfBorder(
 					points,
-					extnt,
+					extent,
 					d,
 					side==0,
 					arrDistances
@@ -93,7 +93,7 @@ public class ReflectInAxesWithinDist extends PointsFitter {
 					
 					pointsCurrent = reflectInDimension(
 						pointsCurrent,
-						extnt,
+						extent,
 						d,
 						side==0
 					);
@@ -107,7 +107,7 @@ public class ReflectInAxesWithinDist extends PointsFitter {
 		pointsFitter.fit(pointsCurrent, mark, dim);
 	}
 	
-	private static List<Point3f> reflectInDimension( List<Point3f> pointsIn, Extent extnt, int dimension, boolean min ) {
+	private static List<Point3f> reflectInDimension( List<Point3f> pointsIn, Extent extent, int dimension, boolean min ) {
 		
 		ArrayList<Point3f> pointsOut = new ArrayList<Point3f>();
 		
@@ -119,7 +119,7 @@ public class ReflectInAxesWithinDist extends PointsFitter {
 			if( min) {
 				pDup.setValueByDimension(dimension, pDup.getValueByDimension(dimension)*-1 );
 			} else {
-				float eMax = extnt.getValueByDimension(dimension);
+				float eMax = extent.getValueByDimension(dimension);
 				pDup.setValueByDimension(dimension, (2*eMax) - pDup.getValueByDimension(dimension) );
 			}
 			
@@ -132,13 +132,13 @@ public class ReflectInAxesWithinDist extends PointsFitter {
 	// Min=true means the lower side,  Min=false means the higher side of the dimension
 	private static boolean arePointsWithinDistOfBorder(
 		List<Point3f> points,
-		Extent extnt,
+		Extent extent,
 		int dimension,
 		boolean min,
 		double[] arrDistances
 	) {
 		
-		double dimMax = extnt.getValueByDimension(dimension);
+		double dimMax = extent.getValueByDimension(dimension);
 		double maxAllowedDist = arrDistances[dimension];
 		
 		for( Point3f p : points) {

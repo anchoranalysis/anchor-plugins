@@ -87,11 +87,11 @@ public class SurfaceSizeMaskNonZero extends FeatureSingleMemoRegion {
 		
 		VoxelBox<ByteBuffer> vbOutline = calcOutline(om, !suppressZ);
 		
-		Extent extnt = om.getBoundingBox().extent();
+		Extent extent = om.getBoundingBox().extent();
 		
 		try {
 			int size = 0;
-			for( int z=0; z<extnt.getZ(); z++) {
+			for( int z=0; z<extent.getZ(); z++) {
 				VoxelStatistics stats = pxlMarkMemo.doOperation().statisticsFor(maskIndex, 0, z);
 				if( stats.histogram().hasAboveZero() ) {
 					size += vbOutline.extractSlice(z).countEqual( om.getBinaryValues().getOnInt() );

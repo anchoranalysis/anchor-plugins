@@ -106,13 +106,13 @@ class EastMarkExtractor {
 	private static List<WithConfidence<Mark>> extractFromMatricesReshaped(
 		Mat scores,
 		Mat geometry,
-		Extent extnt,
+		Extent extent,
 		ScaleFactorInt offsetScale,
 		double minConfidence
 	) {
 		List<WithConfidence<Mark>> list = new ArrayList<>();
 		
-		int rowsByCols = extnt.getVolumeXY();
+		int rowsByCols = extent.getVolumeXY();
 		
 		float[] scoresData = arrayFromMat(scores, 0, rowsByCols);
 		float[][] geometryArrs = splitGeometryIntoFiveArrays(geometry, rowsByCols);
@@ -120,8 +120,8 @@ class EastMarkExtractor {
 		int index = 0;
 		
 		Point2i pnt = new Point2i(0,0);
-		for (pnt.setY(0); pnt.getY()<extnt.getY(); pnt.incrY()) {
-			for (pnt.setX(0); pnt.getX()<extnt.getX(); pnt.incrX()) {
+		for (pnt.setY(0); pnt.getY()<extent.getY(); pnt.incrY()) {
+			for (pnt.setX(0); pnt.getX()<extent.getX(); pnt.incrX()) {
 				
 				float confidence = scoresData[index]; 
 				if (confidence>=minConfidence) {
