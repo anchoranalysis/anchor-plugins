@@ -41,7 +41,7 @@ final class SlidingBufferPlus {
 	}
 	
 	public int offsetSlice(Point3i pnt) {
-		return slidingBufferSteepestCalc.extnt().offsetSlice(pnt);
+		return slidingBufferSteepestCalc.extent().offsetSlice(pnt);
 	}
 	
 	public int getG(int indxBuffer) {

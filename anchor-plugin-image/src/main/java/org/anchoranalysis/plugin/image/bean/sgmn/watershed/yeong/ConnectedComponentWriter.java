@@ -33,7 +33,7 @@ final class ConnectedComponentWriter {
 	public void writePoint( Point3i pnt ) {
 		// We write a connected component id based upon the first voxel encountered
 		if (id==-1) {
-			id = matS.extnt().offset(pnt);
+			id = matS.extent().offset(pnt);
 			
 			if (minimaStore.isPresent()) {
 				minimaStore.get().addDuplicated(pnt);

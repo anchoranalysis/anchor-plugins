@@ -46,7 +46,7 @@ class MarkSeeds {
 
 	public static void apply( SeedCollection seeds, EncodedVoxelBox matS, Optional<MinimaStore> minimaStore, Optional<ObjMask> containingMask ) throws SgmnFailedException {
 			
-		if (containingMask.isPresent() && !matS.extnt().equals(containingMask.get().getBoundingBox().extent())) {
+		if (containingMask.isPresent() && !matS.extent().equals(containingMask.get().getBoundingBox().extent())) {
 			throw new SgmnFailedException("Extnt of matS does not match containingMask");
 		}
 		

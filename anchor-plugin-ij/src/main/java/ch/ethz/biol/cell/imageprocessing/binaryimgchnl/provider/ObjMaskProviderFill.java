@@ -79,7 +79,7 @@ public class ObjMaskProviderFill extends ObjMaskProviderOne {
 				// Let's make an object for our mask
 				ObjMask omMask = maskChnl.get().createMaskAvoidNew(om.getBoundingBox());
 				
-				BoundingBox bboxAll = new BoundingBox( bvb.extnt() );
+				BoundingBox bboxAll = new BoundingBox( bvb.extent() );
 				
 				// We do an and operation with the mask
 				bvbDup.copyPixelsToCheckMask(bboxAll, bvb.getVoxelBox(), bboxAll, omMask.getVoxelBox(), omMask.getBinaryValuesByte());

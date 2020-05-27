@@ -56,7 +56,7 @@ public final class MaxSliceArea extends FeatureSingleMemoRegion {
 	private long calcMaxSliceSize( PxlMark pm) {
 		
 		long max = 0;
-		for( int z=0; z<pm.getVoxelBox().extnt().getZ(); z++) {
+		for( int z=0; z<pm.getVoxelBox().extent().getZ(); z++) {
 			
 			VoxelStatistics pxlStats = pm.statisticsFor(0, getRegionID(), z);
 			
