@@ -43,7 +43,10 @@ public abstract class SingleFilePathGeneratorStrategy extends AnnotatorStrategy 
 
 	@Override
 	public Path annotationPathFor(ProvidesStackInput item) throws AnchorIOException {
-		return PathFromGenerator.derivePath( annotationFilePathGenerator, item.pathForBinding() );
+		return PathFromGenerator.derivePath(
+			annotationFilePathGenerator,
+			item.pathForBindingRequired()
+		);
 	}
 	
 	public FilePathGenerator getAnnotationFilePathGenerator() {

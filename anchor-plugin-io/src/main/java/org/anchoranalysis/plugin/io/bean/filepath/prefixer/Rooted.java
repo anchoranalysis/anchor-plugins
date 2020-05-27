@@ -1,5 +1,7 @@
 package org.anchoranalysis.plugin.io.bean.filepath.prefixer;
 
+
+
 /*
  * #%L
  * anchor-io
@@ -31,11 +33,11 @@ import java.nio.file.Path;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.io.bean.filepath.prefixer.FilePathPrefixer;
+import org.anchoranalysis.io.bean.filepath.prefixer.PathWithDescription;
 import org.anchoranalysis.io.bean.root.RootPathMap;
 import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.filepath.prefixer.FilePathPrefix;
 import org.anchoranalysis.io.filepath.prefixer.FilePathPrefixerParams;
-import org.anchoranalysis.io.input.InputFromManager;
 import org.apache.log4j.Logger;
 
 /**
@@ -60,14 +62,15 @@ public class Rooted extends FilePathPrefixer {
 	private static Logger logger = Logger.getLogger(Rooted.class);
 		
 	@Override
-	public FilePathPrefix outFilePrefix(InputFromManager input, String expName, FilePathPrefixerParams context)
+	public FilePathPrefix outFilePrefix(PathWithDescription input, String expName, FilePathPrefixerParams context)
 			throws AnchorIOException {
 
 		logger.debug( String.format("pathIn=%s", input) );
 		
-		Path pathInWithoutRoot = RootPathMap.instance().split(input.pathForBinding(), rootName, context.isDebugMode()).getPath();
-		
-		FilePathPrefix fpp = filePathPrefixer.outFilePrefixAvoidResolve( pathInWithoutRoot, input.descriptiveName(), expName);
+		FilePathPrefix fpp = filePathPrefixer.outFilePrefixAvoidResolve(
+			removeRoot(input, context.isDebugMode()),
+			expName
+		);
 		
 		Path pathOut = folderPathOut(fpp.getFolderPath(), context.isDebugMode());
 		fpp.setFolderPath( pathOut );
@@ -76,6 +79,14 @@ public class Rooted extends FilePathPrefixer {
 		logger.debug( String.format("multiRoot+Rest()=%s",pathOut) );
 		
 		return fpp;
+	}
+	
+	private PathWithDescription removeRoot(PathWithDescription input, boolean debugMode) throws AnchorIOException {
+		Path pathInWithoutRoot = RootPathMap.instance().split(input.getPath(), rootName, debugMode).getPath();
+		return new PathWithDescription(
+			pathInWithoutRoot,
+			input.getDescriptiveName()
+		);
 	}
 	
 	private Path folderPathOut( Path pathIn, boolean debugMode ) throws AnchorIOException {

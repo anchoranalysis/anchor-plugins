@@ -28,6 +28,7 @@ package org.anchoranalysis.plugin.mpp.experiment.bean.feature;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Optional;
 
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.name.store.NamedProviderStore;
@@ -53,8 +54,10 @@ class StackAsProviderFixture extends ProvidesStackInput {
 	}
 
 	@Override
-	public Path pathForBinding() {
-		return Paths.get("arbitraryPath/");
+	public Optional<Path> pathForBinding() {
+		return Optional.of(
+			Paths.get("arbitraryPath/")
+		);
 	}
 
 	@Override

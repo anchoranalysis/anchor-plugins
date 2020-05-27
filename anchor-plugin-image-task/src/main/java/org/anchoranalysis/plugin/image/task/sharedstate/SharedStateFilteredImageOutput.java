@@ -114,8 +114,8 @@ public class SharedStateFilteredImageOutput<T> {
 			//  this function is called. We do this so we have a sensible input-path
 			//  to give to the filter.
 			try {
-				initFilterOutputManagers( input.pathForBinding() );
-			} catch (InitException e) {
+				initFilterOutputManagers( input.pathForBindingRequired() );
+			} catch (InitException | AnchorIOException e) {
 				throw new OperationFailedException(e);
 			}
 			groupIdentifierForCalled = true;	

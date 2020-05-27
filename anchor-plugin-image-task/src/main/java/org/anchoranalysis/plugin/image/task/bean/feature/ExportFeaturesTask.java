@@ -83,12 +83,22 @@ public abstract class ExportFeaturesTask<T extends InputFromManager, S extends S
 	
 	/** Determines the unique image name from an inputPath */
 	protected String extractImageIdentifier( Path inputPath, boolean debugMode ) throws AnchorIOException {
-		return filePathAsIdentifier(idGenerator, inputPath, debugMode, path->path );
+		return filePathAsIdentifier(
+			Optional.ofNullable(idGenerator),
+			inputPath,
+			debugMode,
+			path->path
+		);
 	}
 	
 	/** Determines the group name corresponding to an inputPath */
 	protected String extractGroupName( Path inputPath, boolean debugMode ) throws AnchorIOException {
-		return filePathAsIdentifier(groupGenerator, inputPath, debugMode, path->path.getFileName() );
+		return filePathAsIdentifier(
+			Optional.ofNullable(groupGenerator),
+			inputPath,
+			debugMode,
+			path->path.getFileName()
+		);
 	}
 	
 	
@@ -110,14 +120,14 @@ public abstract class ExportFeaturesTask<T extends InputFromManager, S extends S
 		}
 	}
 	
-	private static String filePathAsIdentifier( FilePathGenerator generator, Path path, boolean debugMode, Function<Path,Path> alternative ) throws AnchorIOException {
+	private static String filePathAsIdentifier( Optional<FilePathGenerator> generator, Path path, boolean debugMode, Function<Path,Path> alternative ) throws AnchorIOException {
 		Path out = determinePath(generator, path, debugMode, alternative);
 		return FilePathToUnixStyleConverter.toStringUnixStyle(out);
 	}
 	
-	private static Path determinePath( FilePathGenerator generator, Path path, boolean debugMode, Function<Path,Path> alternative ) throws AnchorIOException {
-		if (generator!=null) {
-			return generator.outFilePath(path, debugMode );
+	private static Path determinePath( Optional<FilePathGenerator> generator, Path path, boolean debugMode, Function<Path,Path> alternative ) throws AnchorIOException {
+		if (generator.isPresent()) {
+			return generator.get().outFilePath(path, debugMode );
 		} else {
 			return alternative.apply(path);
 		}

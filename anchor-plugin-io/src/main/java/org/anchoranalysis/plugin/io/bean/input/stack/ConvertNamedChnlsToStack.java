@@ -29,6 +29,7 @@ package org.anchoranalysis.plugin.io.bean.input.stack;
 
 import java.nio.file.Path;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.anchoranalysis.bean.annotation.BeanField;
@@ -92,7 +93,7 @@ public class ConvertNamedChnlsToStack extends InputManager<StackSequenceInput> {
 		}
 
 		@Override
-		public Path pathForBinding() {
+		public Optional<Path> pathForBinding() {
 			return in.pathForBinding();
 		}
 

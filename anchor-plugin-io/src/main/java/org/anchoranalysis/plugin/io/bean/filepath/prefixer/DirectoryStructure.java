@@ -32,6 +32,7 @@ import java.nio.file.Paths;
 
 import org.anchoranalysis.bean.annotation.AllowEmpty;
 import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.io.bean.filepath.prefixer.PathWithDescription;
 import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.filepath.prefixer.FilePathDifferenceFromFolderPath;
 import org.anchoranalysis.io.filepath.prefixer.FilePathPrefix;
@@ -57,9 +58,9 @@ public class DirectoryStructure extends FilePathPrefixerAvoidResolve {
 	// END BEAN PROPERTIES
 
 	@Override
-	protected FilePathPrefix outFilePrefixFromPath(Path path, String descriptiveName, Path root) throws AnchorIOException {
+	protected FilePathPrefix outFilePrefixFromPath(PathWithDescription input, Path root) throws AnchorIOException {
 		// We strip the incoming path of it's extension
-		Path pathInRemoved = Paths.get( FilenameUtils.removeExtension( path.toString() ) );
+		Path pathInRemoved = Paths.get( FilenameUtils.removeExtension( input.getPath().toString() ) );
 		
 		FilePathDifferenceFromFolderPath ff = difference(pathInRemoved);
 				
