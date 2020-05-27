@@ -28,6 +28,7 @@ package org.anchoranalysis.plugin.annotation.bean.strategy;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.anchoranalysis.anchor.mpp.feature.bean.mark.MarkEvaluator;
 import org.anchoranalysis.annotation.io.bean.comparer.MultipleComparer;
@@ -72,8 +73,8 @@ public class MarkProposerStrategy extends SingleFilePathGeneratorStrategy {
 	}
 	
 	@Override
-	public String annotationLabelFor(ProvidesStackInput item) {
-		return null;
+	public Optional<String> annotationLabelFor(ProvidesStackInput item) {
+		return Optional.empty();
 	}
 	
 	public MarkEvaluator getMarkEvaluator() {

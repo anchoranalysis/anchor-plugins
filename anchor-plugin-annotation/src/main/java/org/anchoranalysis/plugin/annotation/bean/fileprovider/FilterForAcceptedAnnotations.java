@@ -32,6 +32,7 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 
 import org.anchoranalysis.annotation.io.mark.MarkAnnotationReader;
 import org.anchoranalysis.annotation.mark.MarkAnnotation;
@@ -94,9 +95,9 @@ public class FilterForAcceptedAnnotations extends FileProvider {
 		for( FilePathGenerator fpg : listFilePathGenerator ) {
 			Path annotationPath = fpg.outFilePath( file.toPath(), false );
 			
-			MarkAnnotation annotation = annotationReader.read( annotationPath );
+			Optional<MarkAnnotation> annotation = annotationReader.read( annotationPath );
 			
-			if (annotation==null || !annotation.isAccepted()) {
+			if (!annotation.isPresent() || !annotation.get().isAccepted()) {
 				return false;
 			}
 		}
