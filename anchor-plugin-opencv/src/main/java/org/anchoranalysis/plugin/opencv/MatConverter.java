@@ -97,11 +97,11 @@ public class MatConverter {
 		
 	private static Mat singleChnlMatFromVoxelBox( VoxelBox<ByteBuffer> vb ) {
 		
-		assert(vb.extnt().getZ())==1;
+		assert(vb.extent().getZ())==1;
 		
 		
 		
-		Mat mat = createEmptyMat( vb.extnt(), CvType.CV_8UC1 );
+		Mat mat = createEmptyMat( vb.extent(), CvType.CV_8UC1 );
 		mat.put(0, 0, vb.getPixelsForPlane(0).buffer().array() );
 		
 		// TODO

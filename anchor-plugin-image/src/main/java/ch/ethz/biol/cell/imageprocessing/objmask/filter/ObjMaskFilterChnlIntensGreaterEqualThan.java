@@ -95,7 +95,7 @@ public class ObjMaskFilterChnlIntensGreaterEqualThan extends ObjMaskFilterByObje
 						int y1 = y + om.getBoundingBox().getCrnrMin().getY();
 						int x1 = x + om.getBoundingBox().getCrnrMin().getX();
 						
-						int offsetGlobal = vb.extnt().offset(x1,y1);
+						int offsetGlobal = vb.extent().offset(x1,y1);
 						
 						// Now we get a value from the vb
 						int val = bbChnl.getInt(offsetGlobal);

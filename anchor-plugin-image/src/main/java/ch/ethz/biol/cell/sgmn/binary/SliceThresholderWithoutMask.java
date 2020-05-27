@@ -19,9 +19,9 @@ public class SliceThresholderWithoutMask extends SliceThresholder {
 		VoxelBox<?> vbThrshld,
 		VoxelBox<ByteBuffer> voxelBoxOut		
 	) {
-		for( int z=0; z<voxelBoxIn.extnt().getZ(); z++ ) {
+		for( int z=0; z<voxelBoxIn.extent().getZ(); z++ ) {
 			sgmnSlice(
-				voxelBoxIn.extnt(),
+				voxelBoxIn.extent(),
 				voxelBoxIn.getPixelsForPlane(z),
 				vbThrshld.getPixelsForPlane(z),
 				voxelBoxOut.getPixelsForPlane(z)

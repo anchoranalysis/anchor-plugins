@@ -79,7 +79,7 @@ class MomentsFromObjMask {
 		
 		List<Point3i> listPts = new ArrayList<>();
 		
-		Extent e = om.getVoxelBox().extnt();
+		Extent e = om.getVoxelBox().extent();
 		
 		
 		for (int z=0; z<e.getZ(); z++) {

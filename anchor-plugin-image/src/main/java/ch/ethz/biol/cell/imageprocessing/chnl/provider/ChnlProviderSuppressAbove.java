@@ -72,7 +72,7 @@ public class ChnlProviderSuppressAbove extends ChnlProviderOneMask {
 	private static void replacePixelsAbove( int threshold, VoxelBox<ByteBuffer> vb ) {
 		byte meanIntensityByte = (byte) threshold;
 
-		Extent e = vb.extnt();
+		Extent e = vb.extent();
 		
 		for( int z=0; z<e.getZ(); z++) {
 			

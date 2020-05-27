@@ -74,7 +74,7 @@ public class SgmnThrshldAgainstChnl extends BinarySgmn {
 		SliceThresholder sliceThresholder = createThresholder(objMask, bvb);
 		sliceThresholder.sgmnAll(
 			voxelBoxIn,
-			createThresholdedVoxelBox(voxelBox.any().extnt()),
+			createThresholdedVoxelBox(voxelBox.any().extent()),
 			createOutputChnl(voxelBox)
 		);
 		
@@ -98,7 +98,7 @@ public class SgmnThrshldAgainstChnl extends BinarySgmn {
 		
 		VoxelBox<?> vbThrshld = threshold.getVoxelBox().any();
 		
-		if (!vbThrshld.extnt().equals(voxelBoxExtent)) {
+		if (!vbThrshld.extent().equals(voxelBoxExtent)) {
 			throw new SgmnFailedException("chnlProviderThrshld is of different size to voxelBox");
 		}
 		
@@ -112,7 +112,7 @@ public class SgmnThrshldAgainstChnl extends BinarySgmn {
 		if (voxelBox.getVoxelDataType().equals( VoxelDataTypeUnsignedByte.instance )) {
 			return voxelBox.asByte();
 		} else {
-			return VoxelBoxFactory.instance().getByte().create( voxelBox.any().extnt() );
+			return VoxelBoxFactory.instance().getByte().create( voxelBox.any().extent() );
 		}
 	}
 	

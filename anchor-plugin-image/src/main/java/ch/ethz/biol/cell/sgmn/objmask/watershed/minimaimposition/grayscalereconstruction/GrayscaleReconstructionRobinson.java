@@ -67,7 +67,7 @@ public class GrayscaleReconstructionRobinson extends GrayscaleReconstructionByEr
 	private VoxelBoxWrapper reconstructionByDilation( VoxelBoxWrapper maskVb, VoxelBoxWrapper markerVb, Optional<ObjMask> containingMask ) {
 		
 		// We use this to track if something has been finalized or not
-		VoxelBox<ByteBuffer> vbFinalized = VoxelBoxFactory.instance().getByte().create( markerVb.any().extnt() );
+		VoxelBox<ByteBuffer> vbFinalized = VoxelBoxFactory.instance().getByte().create( markerVb.any().extent() );
 		
 		
 		// TODO make more efficient
@@ -92,7 +92,7 @@ public class GrayscaleReconstructionRobinson extends GrayscaleReconstructionByEr
 	
 	private void readFromQueueUntilEmpty( PriorityQueueIndexRangeDownhill<Point3i> queue, VoxelBox<?> markerVb, VoxelBox<?> maskVb, VoxelBox<ByteBuffer> vbFinalized, Optional<ObjMask> containingMask ) {
 		
-		Extent extent = markerVb.extnt();
+		Extent extent = markerVb.extent();
 		
 		SlidingBuffer<?> sbMarker = new SlidingBuffer<>(markerVb);
 		SlidingBuffer<?> sbMask = new SlidingBuffer<>(maskVb);
@@ -128,7 +128,7 @@ public class GrayscaleReconstructionRobinson extends GrayscaleReconstructionByEr
 		
 		byte maskOn = BinaryValuesByte.getDefault().getOnByte();
 		
-		Extent e = vb.extnt();
+		Extent e = vb.extent();
 		for (int z=0; z<e.getZ(); z++) {
 			
 			VoxelBuffer<?> bb = vb.getPixelsForPlane(z);
@@ -160,7 +160,7 @@ public class GrayscaleReconstructionRobinson extends GrayscaleReconstructionByEr
 		
 		byte maskOn = containingMask.getBinaryValuesByte().getOnByte(); 
 				
-		Extent e = vb.extnt();
+		Extent e = vb.extent();
 		for (int z=crnrPntMin.getZ(); z<=crnrPntMax.getZ(); z++) {
 			
 			VoxelBuffer<?> bb = vb.getPixelsForPlane(z);

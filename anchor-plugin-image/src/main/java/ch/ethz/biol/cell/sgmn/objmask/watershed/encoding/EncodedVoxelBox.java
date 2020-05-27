@@ -54,12 +54,12 @@ public final class EncodedVoxelBox {
 	}
 
 	public Extent extnt() {
-		return delegate.extnt();
+		return delegate.extent();
 	}
 	
 	// TODO optimize
 	public void setPoint( Point3i pnt, int code ) {
-		int offset = delegate.extnt().offset( pnt.getX(), pnt.getY() );
+		int offset = delegate.extent().offset( pnt.getX(), pnt.getY() );
 		IntBuffer bbS = delegate.getPixelsForPlane( pnt.getZ() ).buffer();
 		bbS.put(offset, code );		
 	}
@@ -82,7 +82,7 @@ public final class EncodedVoxelBox {
 	public void pointListAtFirst( List<Point3i> points ) {
 		
 		Point3i rootPoint = points.get(0);
-		int rootPointOffsetEncoded = encoding.encodeConnectedComponentID( delegate.extnt().offset(rootPoint) );
+		int rootPointOffsetEncoded = encoding.encodeConnectedComponentID( delegate.extent().offset(rootPoint) );
 		
 		setPoint( rootPoint, rootPointOffsetEncoded );
 
@@ -169,7 +169,7 @@ public final class EncodedVoxelBox {
 	// Returns the CODED final index (global)
 	public int calculateConnectedComponentID(Point3i pnt, int firstChainCode ) {
 		
-		Extent e = delegate.extnt();
+		Extent e = delegate.extent();
 		
 		int crntChainCode = firstChainCode;
 		

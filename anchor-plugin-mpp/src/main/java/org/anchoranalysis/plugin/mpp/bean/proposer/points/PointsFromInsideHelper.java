@@ -43,7 +43,7 @@ class PointsFromInsideHelper {
 		// Stays as -1 until we reach a non-empty slice
 		int successiveEmptySlices = -1;
 			
-		Extent e = vb.extnt();
+		Extent e = vb.extent();
 		Point3i crnrMin = bbox.getCrnrMin();
 		Point3i crnrMax = bbox.calcCrnrMax();
 		

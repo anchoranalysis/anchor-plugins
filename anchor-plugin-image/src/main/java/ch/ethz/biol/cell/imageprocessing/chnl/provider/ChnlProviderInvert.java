@@ -42,7 +42,7 @@ public class ChnlProviderInvert extends ChnlProviderOne {
 		
 		int maxVal = (int) vb.getVoxelDataType().maxValue();
 		
-		int volumeXY = vb.any().extnt().getVolumeXY();
+		int volumeXY = vb.any().extent().getVolumeXY();
 		
 		for (int z=0; z<chnl.getDimensions().getZ(); z++) {
 			

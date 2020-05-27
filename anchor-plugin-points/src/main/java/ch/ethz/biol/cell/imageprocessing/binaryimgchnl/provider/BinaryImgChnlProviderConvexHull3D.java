@@ -90,7 +90,7 @@ public class BinaryImgChnlProviderConvexHull3D extends ConvexHullBase {
 		
 		BinaryValuesByte bvb = chnl.getBinaryValues().createByte();
 					
-		Extent e = chnl.getVoxelBox().extnt();
+		Extent e = chnl.getVoxelBox().extent();
 		for( int z=0; z<e.getZ(); z++) {
 			
 			ByteBuffer bb = chnl.getVoxelBox().getPixelsForPlane(z).buffer();

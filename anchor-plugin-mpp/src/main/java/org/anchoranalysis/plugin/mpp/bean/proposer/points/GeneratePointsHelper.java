@@ -11,7 +11,6 @@ import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.binary.BinaryChnl;
 import org.anchoranalysis.image.extent.BoundingBox;
-import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.points.BoundingBoxFromPoints;
 import org.anchoranalysis.image.points.PointsFromBinaryChnl;
@@ -34,9 +33,7 @@ class GeneratePointsHelper {
 		// We take the first point in each list, as where it intersects with the edge
 		PointListForConvex pl = pointListForConvex(pntsXY);
 		
-		
 		List<Point3i> lastPntsAll = new ArrayList<Point3i>();
-		//lastPntsAll.clear();
 		
 		for( List<Point3i> contourPnts : pntsXY ) {
 			try {
@@ -63,13 +60,14 @@ class GeneratePointsHelper {
 
 		int zLow = Math.max(0, bbox.getCrnrMin().getZ()-maxZDist );
 		int zHigh = Math.min(sceneDim.getZ(), bbox.getCrnrMin().getZ()+maxZDist );
-		
-		Extent e = bbox.extent().duplicateChangeZ(zHigh-zLow);
-		bbox.getCrnrMin().setZ( zLow );
-		bbox.setExtent(e);
 
 		if (!chnlFilled.isPresent()) {
-			return PointsFromBinaryChnl.pointsFromChnlInsideBox(chnl, bbox, (int) Math.floor(pntRoot.getZ()), skipZDist);
+			return PointsFromBinaryChnl.pointsFromChnlInsideBox(
+				chnl,
+				bbox.duplicateChangeZ(zLow, zHigh-zLow),
+				(int) Math.floor(pntRoot.getZ()),
+				skipZDist
+			);
 		}
 		
 		return PointsFromInsideHelper.convexOnly(chnl, chnlFilled.get(), bbox, pntRoot, pl, skipZDist);

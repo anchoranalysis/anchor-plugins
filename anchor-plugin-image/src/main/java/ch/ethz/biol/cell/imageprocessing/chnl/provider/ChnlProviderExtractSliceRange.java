@@ -65,7 +65,7 @@ public class ChnlProviderExtractSliceRange extends ChnlProviderOne {
 		Chnl chnlOut = factory.createEmptyInitialised( new ImageDim(e, chnl.getDimensions().getRes()) );
 		VoxelBox<ByteBuffer> vbOut = chnlOut.getVoxelBox().asByte();
 		
-		int volumeXY = vb.extnt().getVolumeXY();
+		int volumeXY = vb.extent().getVolumeXY();
 		for( int z=sliceStart; z<=sliceEnd; z++) {
 	
 			ByteBuffer bbIn = vb.getPixelsForPlane(z).buffer();
