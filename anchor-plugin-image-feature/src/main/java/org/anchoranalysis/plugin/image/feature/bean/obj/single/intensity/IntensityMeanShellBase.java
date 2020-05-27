@@ -203,6 +203,6 @@ public abstract class IntensityMeanShellBase extends FeatureNrgChnl {
 	}
 
 	public void setDo3D(boolean do3D) {
-		do3D = do3D;
+		this.do3D = do3D;
 	}
 }

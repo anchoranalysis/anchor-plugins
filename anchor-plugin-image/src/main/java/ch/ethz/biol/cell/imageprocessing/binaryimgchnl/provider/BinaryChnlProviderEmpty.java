@@ -1,6 +1,4 @@
-package ch.ethz.biol.cell.imageprocessing.objmask.provider;
-
-import java.util.Optional;
+package ch.ethz.biol.cell.imageprocessing.binaryimgchnl.provider;
 
 /*
  * #%L
@@ -30,73 +28,41 @@ import java.util.Optional;
 
 
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.bean.annotation.NonNegative;
 import org.anchoranalysis.core.error.CreateException;
+import org.anchoranalysis.image.binary.BinaryChnl;
+import org.anchoranalysis.image.binary.values.BinaryValues;
+import org.anchoranalysis.image.chnl.Chnl;
+import org.anchoranalysis.image.chnl.factory.ChnlFactory;
 import org.anchoranalysis.image.extent.ImageDim;
-import org.anchoranalysis.image.objmask.ObjMask;
-import org.anchoranalysis.image.objmask.ObjMaskCollection;
-import org.anchoranalysis.image.objmask.morph.MorphologicalDilation;
+import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
 
-public class ObjMaskProviderDilate extends ObjMaskProviderDimensionsOptional {
-	
+public class BinaryChnlProviderEmpty extends BinaryChnlProviderDimSource {
+
 	// START BEAN PROPERTIES
+	/**
+	 * If true binary values are set high when created
+	 */
 	@BeanField
-	private boolean do3D = false;
-	
-	@BeanField @NonNegative
-	private int iterations = 1;
-	
-	@BeanField
-	private boolean bigNghb = false;
+	private boolean createOn = false;
 	// END BEAN PROPERTIES
-
+	
 	@Override
-	public ObjMaskCollection createFromObjs(ObjMaskCollection objsIn) throws CreateException {
-	
-		Optional<ImageDim> dim = createDims();
-				
-		ObjMaskCollection objsOut = new ObjMaskCollection();
-		
-		for( ObjMask om : objsIn ) {
+	protected BinaryChnl createFromSource(ImageDim dimSource) throws CreateException {
+		Chnl chnl = ChnlFactory.instance().createEmptyInitialised(dimSource, VoxelDataTypeUnsignedByte.instance);
 
-			ObjMask omGrown = MorphologicalDilation.createDilatedObjMask(
-				om,
-				dim.map(ImageDim::getExtnt),
-				do3D,
-				iterations,
-				bigNghb
-			);
-			assert( !dim.isPresent() || dim.get().contains( omGrown.getBoundingBox()) );
-			objsOut.add(omGrown);
+		BinaryValues bvOut = BinaryValues.getDefault();
+		 
+		if (createOn) {
+			chnl.getVoxelBox().any().setAllPixelsTo( bvOut.getOnInt() );	
 		}
-		return objsOut;
-	}
-	
-	public boolean isDo3D() {
-		return do3D;
+		return new BinaryChnl(chnl, bvOut);
 	}
 
-
-	public void setDo3D(boolean do3D) {
-		this.do3D = do3D;
+	public boolean isCreateOn() {
+		return createOn;
 	}
 
-
-	public int getIterations() {
-		return iterations;
+	public void setCreateOn(boolean createOn) {
+		this.createOn = createOn;
 	}
-
-
-	public void setIterations(int iterations) {
-		this.iterations = iterations;
-	}
-
-	public boolean isBigNghb() {
-		return bigNghb;
-	}
-
-	public void setBigNghb(boolean bigNghb) {
-		this.bigNghb = bigNghb;
-	}
-
 }

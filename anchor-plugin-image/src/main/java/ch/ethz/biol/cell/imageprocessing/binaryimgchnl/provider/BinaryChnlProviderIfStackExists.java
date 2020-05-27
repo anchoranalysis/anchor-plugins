@@ -1,10 +1,8 @@
-package ch.ethz.biol.cell.mpp.nrg.feature.objmask;
-
-
+package ch.ethz.biol.cell.imageprocessing.binaryimgchnl.provider;
 
 /*
  * #%L
- * anchor-plugin-image-feature
+ * anchor-plugin-image
  * %%
  * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
  * %%
@@ -30,50 +28,28 @@ package ch.ethz.biol.cell.mpp.nrg.feature.objmask;
 
 
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.feature.cache.ChildCacheName;
-import org.anchoranalysis.feature.cache.calculation.CalculationResolver;
-import org.anchoranalysis.feature.cache.calculation.FeatureCalculation;
-import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
-import org.anchoranalysis.image.objmask.ObjMask;
-import org.anchoranalysis.plugin.image.calculation.CalculateErosion;
+import org.anchoranalysis.core.error.CreateException;
+import org.anchoranalysis.image.binary.BinaryChnl;
 
-public class Erode extends DerivedObjMask {
-	
+
+// If a param is equal to a particular value, do soemthing
+public class BinaryChnlProviderIfStackExists extends BinaryChnlProviderElseBase {
+
 	// START BEAN PROPERTIES
 	@BeanField
-	private int iterations;
-	
-	@BeanField
-	private boolean do3D = true;
+	private String stackID = "";
 	// END BEAN PROPERTIES
-
-	@Override
-	protected FeatureCalculation<ObjMask,FeatureInputSingleObj> createCachedCalculationForDerived( CalculationResolver<FeatureInputSingleObj> session ) {
-		return CalculateErosion.create(session, iterations, do3D);
-	}
 	
 	@Override
-	public ChildCacheName cacheName() {
-		return new ChildCacheName(
-			Erode.class,
-			iterations + "_" + do3D
-		);
+	protected boolean condition(BinaryChnl chnl) throws CreateException {
+		return getSharedObjects().getChnlCollection().keys().contains(stackID);
+	}
+	
+	public String getStackID() {
+		return stackID;
 	}
 
-	public int getIterations() {
-		return iterations;
+	public void setStackID(String stackID) {
+		this.stackID = stackID;
 	}
-
-	public void setIterations(int iterations) {
-		this.iterations = iterations;
-	}
-
-	public boolean isDo3D() {
-		return do3D;
-	}
-
-	public void setDo3D(boolean do3D) {
-		this.do3D = do3D;
-	}
-
 }

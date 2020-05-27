@@ -280,7 +280,7 @@ public class MergedPairs extends FeatureTableObjs<FeatureInputPairObjs> {
 
 
 	public void setDo3D(boolean do3D) {
-		do3D = do3D;
+		this.do3D = do3D;
 	}
 
 

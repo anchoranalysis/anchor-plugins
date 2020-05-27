@@ -1,6 +1,4 @@
-package ch.ethz.biol.cell.imageprocessing.objmask.provider;
-
-import java.util.Optional;
+package ch.ethz.biol.cell.imageprocessing.binaryimgchnl.provider;
 
 /*
  * #%L
@@ -30,73 +28,58 @@ import java.util.Optional;
 
 
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.bean.annotation.NonNegative;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.image.extent.ImageDim;
-import org.anchoranalysis.image.objmask.ObjMask;
-import org.anchoranalysis.image.objmask.ObjMaskCollection;
-import org.anchoranalysis.image.objmask.morph.MorphologicalDilation;
+import org.anchoranalysis.image.bean.provider.BinaryChnlProviderOne;
+import org.anchoranalysis.image.binary.BinaryChnl;
 
-public class ObjMaskProviderDilate extends ObjMaskProviderDimensionsOptional {
-	
+public class BinaryChnlProviderRejectIfOnGreaterThan extends BinaryChnlProviderOne {
+
 	// START BEAN PROPERTIES
 	@BeanField
-	private boolean do3D = false;
-	
-	@BeanField @NonNegative
-	private int iterations = 1;
+	private double maxRatioOn;
 	
 	@BeanField
-	private boolean bigNghb = false;
+	private boolean bySlice = false;		// Rejects if any slice has more On than the maxRatio allows
 	// END BEAN PROPERTIES
-
+	
 	@Override
-	public ObjMaskCollection createFromObjs(ObjMaskCollection objsIn) throws CreateException {
-	
-		Optional<ImageDim> dim = createDims();
-				
-		ObjMaskCollection objsOut = new ObjMaskCollection();
-		
-		for( ObjMask om : objsIn ) {
-
-			ObjMask omGrown = MorphologicalDilation.createDilatedObjMask(
-				om,
-				dim.map(ImageDim::getExtnt),
-				do3D,
-				iterations,
-				bigNghb
-			);
-			assert( !dim.isPresent() || dim.get().contains( omGrown.getBoundingBox()) );
-			objsOut.add(omGrown);
+	public BinaryChnl createFromChnl( BinaryChnl binaryImgChnl ) throws CreateException {
+		if (bySlice) {
+			for( int z=0; z<binaryImgChnl.getDimensions().getZ(); z++) {
+				testChnl( binaryImgChnl.extractSlice(z) );
+			}
+		} else {
+			testChnl(binaryImgChnl);
 		}
-		return objsOut;
+		return binaryImgChnl;
 	}
 	
-	public boolean isDo3D() {
-		return do3D;
+	private void testChnl( BinaryChnl binaryImgChnl ) throws CreateException {
+		int cnt = binaryImgChnl.countHighValues();
+		long volume = binaryImgChnl.getDimensions().getVolume();
+		
+		double ratio = ((double) cnt) / volume;
+		
+		if (ratio>maxRatioOn) {
+			throw new CreateException(
+				String.format("binaryImgChnl has on-pixel ratio of %f when a max of %f is allowed",ratio,maxRatioOn)
+			);
+		}
 	}
 
-
-	public void setDo3D(boolean do3D) {
-		this.do3D = do3D;
+	public double getMaxRatioOn() {
+		return maxRatioOn;
 	}
 
-
-	public int getIterations() {
-		return iterations;
+	public void setMaxRatioOn(double maxRatioOn) {
+		this.maxRatioOn = maxRatioOn;
 	}
 
-
-	public void setIterations(int iterations) {
-		this.iterations = iterations;
+	public boolean isBySlice() {
+		return bySlice;
 	}
 
-	public boolean isBigNghb() {
-		return bigNghb;
+	public void setBySlice(boolean bySlice) {
+		this.bySlice = bySlice;
 	}
-
-	public void setBigNghb(boolean bigNghb) {
-		this.bigNghb = bigNghb;
-	}
-
 }

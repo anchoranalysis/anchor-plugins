@@ -1,4 +1,4 @@
-package ch.ethz.biol.cell.imageprocessing.objmask.provider;
+package ch.ethz.biol.cell.imageprocessing.binaryimgchnl.provider;
 
 import java.util.Optional;
 
@@ -30,73 +30,47 @@ import java.util.Optional;
 
 
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.bean.annotation.NonNegative;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.image.extent.ImageDim;
+import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.image.bean.objmask.filter.ObjMaskFilter;
+import org.anchoranalysis.image.binary.BinaryChnl;
 import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.image.objmask.ObjMaskCollection;
-import org.anchoranalysis.image.objmask.morph.MorphologicalDilation;
+import org.anchoranalysis.image.objmask.factory.CreateFromEntireChnlFactory;
 
-public class ObjMaskProviderDilate extends ObjMaskProviderDimensionsOptional {
-	
+// Treats the entire binaryimgchnl as an object, and sees if it passes an ObjMaskFilter
+public class BinaryChnlProviderObjMaskFilterAsChnl extends BinaryChnlProviderElseBase {
+
 	// START BEAN PROPERTIES
 	@BeanField
-	private boolean do3D = false;
-	
-	@BeanField @NonNegative
-	private int iterations = 1;
-	
-	@BeanField
-	private boolean bigNghb = false;
+	private ObjMaskFilter objMaskFilter;
 	// END BEAN PROPERTIES
 
 	@Override
-	public ObjMaskCollection createFromObjs(ObjMaskCollection objsIn) throws CreateException {
-	
-		Optional<ImageDim> dim = createDims();
-				
-		ObjMaskCollection objsOut = new ObjMaskCollection();
+	protected boolean condition(BinaryChnl chnl) throws CreateException {
+
+		ObjMask om = CreateFromEntireChnlFactory.createObjMask( chnl );
 		
-		for( ObjMask om : objsIn ) {
-
-			ObjMask omGrown = MorphologicalDilation.createDilatedObjMask(
-				om,
-				dim.map(ImageDim::getExtnt),
-				do3D,
-				iterations,
-				bigNghb
+		ObjMaskCollection omc = new ObjMaskCollection(om);
+		
+		try {
+			objMaskFilter.filter(
+				omc,
+				Optional.of(chnl.getDimensions()),
+				Optional.empty()
 			);
-			assert( !dim.isPresent() || dim.get().contains( omGrown.getBoundingBox()) );
-			objsOut.add(omGrown);
+		} catch (OperationFailedException e) {
+			throw new CreateException(e);
 		}
-		return objsOut;
-	}
-	
-	public boolean isDo3D() {
-		return do3D;
+		
+		return omc.size()==1;
 	}
 
-
-	public void setDo3D(boolean do3D) {
-		this.do3D = do3D;
+	public ObjMaskFilter getObjMaskFilter() {
+		return objMaskFilter;
 	}
 
-
-	public int getIterations() {
-		return iterations;
+	public void setObjMaskFilter(ObjMaskFilter objMaskFilter) {
+		this.objMaskFilter = objMaskFilter;
 	}
-
-
-	public void setIterations(int iterations) {
-		this.iterations = iterations;
-	}
-
-	public boolean isBigNghb() {
-		return bigNghb;
-	}
-
-	public void setBigNghb(boolean bigNghb) {
-		this.bigNghb = bigNghb;
-	}
-
 }

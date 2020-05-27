@@ -99,7 +99,7 @@ public class NumNghbVoxels extends FeatureObjMask {
 	}
 
 	public void setDo3D(boolean do3D) {
-		do3D = do3D;
+		this.do3D = do3D;
 	}
 
 	public int getNrgIndex() {
