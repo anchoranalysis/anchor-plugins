@@ -2,7 +2,7 @@ package ch.ethz.biol.cell.imageprocessing.binaryimgchnl.provider;
 
 /*
  * #%L
- * anchor-plugin-ij
+ * anchor-plugin-image
  * %%
  * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
  * %%
@@ -34,60 +34,72 @@ import org.anchoranalysis.bean.OptionalFactory;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.bean.provider.BinaryChnlProvider;
-import org.anchoranalysis.image.bean.provider.ObjMaskProviderOne;
+import org.anchoranalysis.image.bean.provider.BinaryChnlProviderOne;
 import org.anchoranalysis.image.binary.BinaryChnl;
-import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
-import org.anchoranalysis.image.extent.BoundingBox;
-import org.anchoranalysis.image.objmask.ObjMask;
-import org.anchoranalysis.image.objmask.ObjMaskCollection;
+import org.anchoranalysis.image.binary.BinaryChnlInverter;
+import org.anchoranalysis.image.binary.values.BinaryValuesByte;
+import org.anchoranalysis.image.voxel.iterator.IterateVoxels;
 
-/**
- * Fills holes in an object. Existing obj-masks are overwritten (i.e. their memory buffers are replaced with filled-in pixels).
- * 
- * <p>An optional mask which restricts where a fill operation can happen</p>
- * 
- * @author Owen Feehan
- *
- */
-public class ObjMaskProviderFill extends ObjMaskProviderOne {
+public class BinaryChnlProviderInvert extends BinaryChnlProviderOne {
 
-	// START BEAN PROPERTIES
-	/**  */
+	// START BEAN FIELDS
 	@BeanField @OptionalBean
 	private BinaryChnlProvider mask;
-	// END BEAN PROPERTIES
 	
+	@BeanField
+	private boolean forceChangeBytes = false;
+	// END BEAN FIELDS
+
 	@Override
-	public ObjMaskCollection createFromObjs( ObjMaskCollection objsCollection ) throws CreateException {
+	public BinaryChnl createFromChnl( BinaryChnl chnl ) throws CreateException {
 		
 		Optional<BinaryChnl> maskChnl = OptionalFactory.create(mask);
 		
-		for( ObjMask om : objsCollection ) {
-			BinaryVoxelBox<ByteBuffer> bvb = om.binaryVoxelBox();
-			
-			
-			BinaryVoxelBox<ByteBuffer> bvbDup = bvb.duplicate();
-			try {
-				BinaryChnlProviderIJBinary.fill(bvbDup);
-			} catch (OperationFailedException e) {
-				throw new CreateException(e);
-			}
-			
-			if (maskChnl.isPresent()) {
-				// Let's make an object for our mask
-				ObjMask omMask = maskChnl.get().createMaskAvoidNew(om.getBoundingBox());
-				
-				BoundingBox bboxAll = new BoundingBox( bvb.extent() );
-				
-				// We do an and operation with the mask
-				bvbDup.copyPixelsToCheckMask(bboxAll, bvb.getVoxelBox(), bboxAll, omMask.getVoxelBox(), omMask.getBinaryValuesByte());
-			}
-			
+		if (maskChnl.isPresent()) {
+			invertWithMask(chnl, maskChnl.get());
+			return chnl;
 		}
 		
-		return objsCollection;
+		if (forceChangeBytes) {
+			BinaryChnlInverter.invertChnl( chnl );
+		} else {
+			return new BinaryChnl(
+				chnl.getChnl(),
+				chnl.getBinaryValues().createInverted()
+			);			
+		}
+		return chnl;
+	}
+		
+	private void invertWithMask( BinaryChnl chnl, BinaryChnl mask ) throws CreateException {
+
+		BinaryValuesByte bvb = chnl.getBinaryValues().createByte();
+		final byte byteOn = bvb.getOnByte();
+		final byte byteOff = bvb.getOffByte();
+		
+		IterateVoxels.callEachPoint(
+			chnl.binaryVoxelBox().getVoxelBox(),				
+			mask,
+			(Point3i pnt, ByteBuffer buffer, int offset) -> {
+				byte val = buffer.get(offset);
+				
+				if (val==byteOn) {
+					buffer.put(offset,byteOff);
+				} else {
+					buffer.put(offset,byteOn);
+				}
+			}
+		);
+	}
+
+	public boolean isForceChangeBytes() {
+		return forceChangeBytes;
+	}
+
+	public void setForceChangeBytes(boolean forceChangeBytes) {
+		this.forceChangeBytes = forceChangeBytes;
 	}
 
 	public BinaryChnlProvider getMask() {
@@ -97,4 +109,5 @@ public class ObjMaskProviderFill extends ObjMaskProviderOne {
 	public void setMask(BinaryChnlProvider mask) {
 		this.mask = mask;
 	}
+
 }

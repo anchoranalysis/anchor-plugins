@@ -2,11 +2,11 @@ package ch.ethz.biol.cell.imageprocessing.binaryimgchnl.provider;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.image.bean.provider.BinaryImgChnlProviderOne;
+import org.anchoranalysis.image.bean.provider.BinaryChnlProviderOne;
 import org.anchoranalysis.image.binary.BinaryChnl;
 import org.anchoranalysis.image.outline.FindOutline;
 
-public abstract class ConvexHullBase extends BinaryImgChnlProviderOne {
+public abstract class ConvexHullBase extends BinaryChnlProviderOne {
 
 	// START BEAN PROPERTIES
 	@BeanField

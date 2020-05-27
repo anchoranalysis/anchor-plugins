@@ -3,10 +3,10 @@ package ch.ethz.biol.cell.imageprocessing.binaryimgchnl.provider;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.bean.provider.BinaryChnlProvider;
-import org.anchoranalysis.image.bean.provider.BinaryImgChnlProviderOne;
+import org.anchoranalysis.image.bean.provider.BinaryChnlProviderOne;
 import org.anchoranalysis.image.binary.BinaryChnl;
 
-public abstract class BinaryChnlProviderReceive extends BinaryImgChnlProviderOne {
+public abstract class BinaryChnlProviderReceive extends BinaryChnlProviderOne {
 
 	// START BEAN PROPERTIES
 	@BeanField

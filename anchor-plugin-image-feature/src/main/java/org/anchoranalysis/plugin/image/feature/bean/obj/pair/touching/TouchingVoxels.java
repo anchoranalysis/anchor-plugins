@@ -89,6 +89,6 @@ public abstract class TouchingVoxels extends FeatureObjMaskPair {
 	}
 
 	public void setUse3D(boolean use3D) {
-		use3D = use3D;
+		this.use3D = use3D;
 	}
 }

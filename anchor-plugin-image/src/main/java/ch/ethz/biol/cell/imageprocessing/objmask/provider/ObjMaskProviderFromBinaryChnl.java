@@ -1,7 +1,5 @@
 package ch.ethz.biol.cell.imageprocessing.objmask.provider;
 
-import java.util.Optional;
-
 /*
  * #%L
  * anchor-plugin-image
@@ -30,73 +28,37 @@ import java.util.Optional;
 
 
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.bean.annotation.NonNegative;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.image.extent.ImageDim;
+import org.anchoranalysis.image.bean.provider.BinaryChnlProvider;
+import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
+import org.anchoranalysis.image.binary.BinaryChnl;
 import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.image.objmask.ObjMaskCollection;
-import org.anchoranalysis.image.objmask.morph.MorphologicalDilation;
 
-public class ObjMaskProviderDilate extends ObjMaskProviderDimensionsOptional {
-	
+public class ObjMaskProviderFromBinaryChnl extends ObjMaskProvider {
+
 	// START BEAN PROPERTIES
 	@BeanField
-	private boolean do3D = false;
-	
-	@BeanField @NonNegative
-	private int iterations = 1;
-	
-	@BeanField
-	private boolean bigNghb = false;
+	private BinaryChnlProvider binaryChnl;
 	// END BEAN PROPERTIES
-
+	
 	@Override
-	public ObjMaskCollection createFromObjs(ObjMaskCollection objsIn) throws CreateException {
-	
-		Optional<ImageDim> dim = createDims();
-				
-		ObjMaskCollection objsOut = new ObjMaskCollection();
+	public ObjMaskCollection create() throws CreateException {
+
+		ObjMaskCollection omc = new ObjMaskCollection();
 		
-		for( ObjMask om : objsIn ) {
-
-			ObjMask omGrown = MorphologicalDilation.createDilatedObjMask(
-				om,
-				dim.map(ImageDim::getExtnt),
-				do3D,
-				iterations,
-				bigNghb
-			);
-			assert( !dim.isPresent() || dim.get().contains( omGrown.getBoundingBox()) );
-			objsOut.add(omGrown);
-		}
-		return objsOut;
-	}
-	
-	public boolean isDo3D() {
-		return do3D;
+		BinaryChnl chnl = binaryChnl.create();
+		
+		omc.add( new ObjMask( chnl.binaryVoxelBox() ) );
+		
+		return omc;
 	}
 
-
-	public void setDo3D(boolean do3D) {
-		this.do3D = do3D;
+	public BinaryChnlProvider getBinaryChnl() {
+		return binaryChnl;
 	}
 
-
-	public int getIterations() {
-		return iterations;
+	public void setBinaryChnl(BinaryChnlProvider binaryChnl) {
+		this.binaryChnl = binaryChnl;
 	}
-
-
-	public void setIterations(int iterations) {
-		this.iterations = iterations;
-	}
-
-	public boolean isBigNghb() {
-		return bigNghb;
-	}
-
-	public void setBigNghb(boolean bigNghb) {
-		this.bigNghb = bigNghb;
-	}
-
 }

@@ -1,10 +1,8 @@
-package ch.ethz.biol.cell.mpp.nrg.feature.objmask;
-
-
+package ch.ethz.biol.cell.imageprocessing.binaryimgchnl.provider;
 
 /*
  * #%L
- * anchor-plugin-image-feature
+ * anchor-plugin-image
  * %%
  * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
  * %%
@@ -30,50 +28,35 @@ package ch.ethz.biol.cell.mpp.nrg.feature.objmask;
 
 
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.feature.cache.ChildCacheName;
-import org.anchoranalysis.feature.cache.calculation.CalculationResolver;
-import org.anchoranalysis.feature.cache.calculation.FeatureCalculation;
-import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
-import org.anchoranalysis.image.objmask.ObjMask;
-import org.anchoranalysis.plugin.image.calculation.CalculateErosion;
+import org.anchoranalysis.core.error.CreateException;
+import org.anchoranalysis.image.binary.BinaryChnl;
 
-public class Erode extends DerivedObjMask {
-	
+public class BinaryChnlProviderAcceptIfVolumeGreaterThan extends BinaryChnlProviderReceive {
+
 	// START BEAN PROPERTIES
 	@BeanField
-	private int iterations;
-	
-	@BeanField
-	private boolean do3D = true;
+	private double minRatio = 0.01;
 	// END BEAN PROPERTIES
 
 	@Override
-	protected FeatureCalculation<ObjMask,FeatureInputSingleObj> createCachedCalculationForDerived( CalculationResolver<FeatureInputSingleObj> session ) {
-		return CalculateErosion.create(session, iterations, do3D);
-	}
-	
-	@Override
-	public ChildCacheName cacheName() {
-		return new ChildCacheName(
-			Erode.class,
-			iterations + "_" + do3D
-		);
-	}
-
-	public int getIterations() {
-		return iterations;
+	protected BinaryChnl createFromChnlReceive(BinaryChnl larger, BinaryChnl smaller) throws CreateException {
+		int countLarger = larger.countHighValues();
+		int countSmaller = smaller.countHighValues();
+		
+		double ratio = ((double) countSmaller) / countLarger;
+		
+		if (ratio>minRatio) {
+			return smaller;
+		} else {
+			return larger;
+		}
 	}
 
-	public void setIterations(int iterations) {
-		this.iterations = iterations;
+	public double getMinRatio() {
+		return minRatio;
 	}
 
-	public boolean isDo3D() {
-		return do3D;
+	public void setMinRatio(double minRatio) {
+		this.minRatio = minRatio;
 	}
-
-	public void setDo3D(boolean do3D) {
-		this.do3D = do3D;
-	}
-
 }

@@ -1,10 +1,8 @@
-package ch.ethz.biol.cell.mpp.nrg.feature.objmask;
-
-
+package ch.ethz.biol.cell.imageprocessing.binaryimgchnl.provider;
 
 /*
  * #%L
- * anchor-plugin-image-feature
+ * anchor-plugin-image
  * %%
  * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
  * %%
@@ -30,50 +28,49 @@ package ch.ethz.biol.cell.mpp.nrg.feature.objmask;
 
 
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.feature.cache.ChildCacheName;
-import org.anchoranalysis.feature.cache.calculation.CalculationResolver;
-import org.anchoranalysis.feature.cache.calculation.FeatureCalculation;
-import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
-import org.anchoranalysis.image.objmask.ObjMask;
-import org.anchoranalysis.plugin.image.calculation.CalculateErosion;
+import org.anchoranalysis.core.error.CreateException;
+import org.anchoranalysis.image.bean.provider.BinaryChnlProviderOne;
+import org.anchoranalysis.image.binary.BinaryChnl;
+import org.anchoranalysis.image.outline.FindOutline;
 
-public class Erode extends DerivedObjMask {
-	
-	// START BEAN PROPERTIES
+/**
+ * Always creates a new BinaryChnl for the result (no need to duplicate input)
+ * 
+ * @author feehano
+ *
+ */
+public class BinaryChnlProviderOutline extends BinaryChnlProviderOne {
+
+	// START
 	@BeanField
-	private int iterations;
+	private boolean force2D = false;
 	
 	@BeanField
-	private boolean do3D = true;
-	// END BEAN PROPERTIES
+	private boolean erodeEdges = true;
+	// END
+	
 
 	@Override
-	protected FeatureCalculation<ObjMask,FeatureInputSingleObj> createCachedCalculationForDerived( CalculationResolver<FeatureInputSingleObj> session ) {
-		return CalculateErosion.create(session, iterations, do3D);
-	}
-	
-	@Override
-	public ChildCacheName cacheName() {
-		return new ChildCacheName(
-			Erode.class,
-			iterations + "_" + do3D
-		);
+	public BinaryChnl createFromChnl( BinaryChnl chnl ) throws CreateException {
+		boolean do3D = chnl.getDimensions().getZ() > 1 && !force2D;
+		return FindOutline.outline(chnl, do3D, erodeEdges);
 	}
 
-	public int getIterations() {
-		return iterations;
+	public boolean isForce2D() {
+		return force2D;
 	}
 
-	public void setIterations(int iterations) {
-		this.iterations = iterations;
+	public void setForce2D(boolean force2d) {
+		force2D = force2d;
 	}
 
-	public boolean isDo3D() {
-		return do3D;
+	public boolean isErodeEdges() {
+		return erodeEdges;
 	}
 
-	public void setDo3D(boolean do3D) {
-		this.do3D = do3D;
+	public void setErodeEdges(boolean erodeEdges) {
+		this.erodeEdges = erodeEdges;
 	}
+
 
 }

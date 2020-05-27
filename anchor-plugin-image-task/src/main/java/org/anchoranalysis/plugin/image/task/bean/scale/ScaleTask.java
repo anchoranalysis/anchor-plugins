@@ -56,7 +56,7 @@ import org.anchoranalysis.image.stack.wrap.WrapStackAsTimeSequenceStore;
 import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
 import org.anchoranalysis.io.output.bound.BoundIOContext;
 
-import ch.ethz.biol.cell.imageprocessing.binaryimgchnl.provider.BinaryImgChnlProviderScaleXY;
+import ch.ethz.biol.cell.imageprocessing.binaryimgchnl.provider.BinaryChnlProviderScaleXY;
 import ch.ethz.biol.cell.imageprocessing.chnl.provider.ChnlProviderScale;
 
 
@@ -182,7 +182,7 @@ public class ScaleTask extends RasterTask {
 				Chnl chnlOut;
 				if (forceBinary) {
 					BinaryChnl binaryImg = new BinaryChnl(chnlIn, BinaryValues.getDefault() );
-					chnlOut = BinaryImgChnlProviderScaleXY.scale(binaryImg, scaleCalculator, InterpolatorFactory.getInstance().binaryResizing()).getChnl();
+					chnlOut = BinaryChnlProviderScaleXY.scale(binaryImg, scaleCalculator, InterpolatorFactory.getInstance().binaryResizing()).getChnl();
 				} else {
 					chnlOut = ChnlProviderScale.scale(
 						chnlIn,
