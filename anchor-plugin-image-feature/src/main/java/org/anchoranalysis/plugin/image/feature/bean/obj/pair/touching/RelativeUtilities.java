@@ -51,8 +51,7 @@ class RelativeUtilities {
 			box.relPosTo(omRelativeBase.getBoundingBox()),
 			box.extent()
 		);
-		bboxIntersectRel.clipTo( omRelativeBase.getBoundingBox().extent() );
-		return bboxIntersectRel;
+		return bboxIntersectRel.clipTo( omRelativeBase.getBoundingBox().extent() );
 	}
 	
 	/**
