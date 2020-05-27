@@ -69,7 +69,7 @@ public class SgmnSequence extends BinarySgmn {
 			ObjMask::getBoundingBox
 		).orElseGet( ()->
 			new BoundingBox(
-				voxelBox.any().extnt()
+				voxelBox.any().extent()
 			)
 		);
 		

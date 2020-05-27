@@ -31,7 +31,7 @@ final class SlidingBufferPlus {
 		
 		this.slidingBufferSteepestCalc = new SlidingBuffer<>( vbImg );
 		
-		boolean do3D = vbImg.extnt().getZ()>1;
+		boolean do3D = vbImg.extent().getZ()>1;
 		this.findEqualVoxels = new FindEqualVoxels( vbImg, matS, do3D, mask );
 		this.steepestCalc = new SteepestCalc(slidingBufferSteepestCalc,matS.getEncoding(), do3D ,true, mask );
 	}

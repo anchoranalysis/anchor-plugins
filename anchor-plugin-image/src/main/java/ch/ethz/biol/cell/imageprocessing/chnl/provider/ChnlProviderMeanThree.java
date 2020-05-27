@@ -66,7 +66,7 @@ public class ChnlProviderMeanThree extends ChnlProviderThree {
 		VoxelBox<ByteBuffer> vbIn3
 	) {
 
-		for (int z=0; z<vbOut.extnt().getZ(); z++) {
+		for (int z=0; z<vbOut.extent().getZ(); z++) {
 			
 			ByteBuffer in1 = vbIn1.getPixelsForPlane(z).buffer();
 			ByteBuffer in2 = vbIn2.getPixelsForPlane(z).buffer();

@@ -64,7 +64,7 @@ public class SgmnThrshldAboveMinBound extends BinarySgmn {
 			BinarySgmnParameters params, Optional<ObjMask> mask) throws SgmnFailedException {
 		
 		setUpDelegate(
-			voxelBox.any().extnt(),
+			voxelBox.any().extent(),
 			params.getRes().orElseThrow( ()->
 				new SgmnFailedException("Image-resolution is required but missing")
 			)

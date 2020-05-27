@@ -24,7 +24,7 @@ public abstract class ChnlProviderConditionallyWriteScalar extends ChnlProviderO
 
 		int constant = (int) Math.floor(value);
 		
-		Extent e = vb.extnt();
+		Extent e = vb.extent();
 		int volumeXY = e.getVolumeXY();
 		for (int z=0; z<e.getZ(); z++) {
 			

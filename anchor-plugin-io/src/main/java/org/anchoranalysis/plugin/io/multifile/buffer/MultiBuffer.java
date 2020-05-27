@@ -122,7 +122,7 @@ class MultiBuffer {
 	}
 	
 	private void copyAllSlicesForChnl( int t, int c, VoxelBox<?> vb ) {
-		for( int z=0; z<vb.extnt().getZ(); z++) {
+		for( int z=0; z<vb.extent().getZ(); z++) {
 			buffers[t][c][z] = vb.getPixelsForPlane(z);
 		}
 	}

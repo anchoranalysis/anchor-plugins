@@ -92,7 +92,7 @@ class ObjMaskWalkShortestPath {
 			
 			drawLineOnVoxelBuffer(
 				om.binaryVoxelBox().getVoxelBox().getPixelsForPlane(pnt1.getZ() - bbox.getCrnrMin().getZ()),
-				om.binaryVoxelBox().getVoxelBox().extnt(),
+				om.binaryVoxelBox().getVoxelBox().extent(),
 				om.binaryVoxelBox().getBinaryValues().createByte(),
 				pnt1,
 				pnt2,

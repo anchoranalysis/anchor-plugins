@@ -86,7 +86,7 @@ public class CreateVoxelBoxFromPixelwiseFeature {
 		);
 		
 		
-		Extent e = vbOut.extnt();
+		Extent e = vbOut.extent();
 		
 		for( int z=0;z<e.getZ(); z++) {
 			

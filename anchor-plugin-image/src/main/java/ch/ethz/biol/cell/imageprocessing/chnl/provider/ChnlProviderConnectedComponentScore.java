@@ -104,9 +104,9 @@ public class ChnlProviderConnectedComponentScore extends ChnlProviderOneObjsSour
 		VoxelBox<ByteBuffer> vbIn = regionIn.getVoxelBox().asByte();
 		VoxelBox<ByteBuffer> vbOut = regionOut.getVoxelBox().asByte();
 		
-		assert( vbIn.extnt().equals(vbOut.extnt()) );
+		assert( vbIn.extent().equals(vbOut.extent()) );
 		
-		Extent e = vbIn.extnt();
+		Extent e = vbIn.extent();
 		
 		Point3d pnt = new Point3d();
 		

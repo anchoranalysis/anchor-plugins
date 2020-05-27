@@ -98,7 +98,7 @@ public class ObjMaskChnlUtilities {
 				int relZ = pnt.getZ()-om.getBoundingBox().getCrnrMin().getZ();
 				
 				ByteBuffer bb = om.getVoxelBox().getPixelsForPlane(relZ).buffer();
-				bb.put( om.getVoxelBox().extnt().offset(relX, relY), om.getBinaryValuesByte().getOnByte() );
+				bb.put( om.getVoxelBox().extent().offset(relX, relY), om.getBinaryValuesByte().getOnByte() );
 			}
 			
 			return om;
@@ -117,12 +117,12 @@ public class ObjMaskChnlUtilities {
 			list.add(	new PointRange() );
 		}
 		
-		for (int z=0; z<bufferAccess.getPlaneAccess().extnt().getZ(); z++) {
+		for (int z=0; z<bufferAccess.getPlaneAccess().extent().getZ(); z++) {
 			
 			ByteBuffer pixel = bufferAccess.getPlaneAccess().getPixelsForPlane(z).buffer();
 			
-			for (int y=0; y<bufferAccess.getPlaneAccess().extnt().getY(); y++) {
-				for (int x=0; x<bufferAccess.getPlaneAccess().extnt().getX(); x++) {
+			for (int y=0; y<bufferAccess.getPlaneAccess().extent().getY(); y++) {
+				for (int x=0; x<bufferAccess.getPlaneAccess().extent().getX(); x++) {
 					
 					int col = ByteConverter.unsignedByteToInt(pixel.get());
 					

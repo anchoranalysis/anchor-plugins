@@ -46,7 +46,7 @@ public class BlurGaussianEachSlice2d extends BlurStrategy {
 		
 		double sigma = calcSigma(dim, logger);
 		
-		Extent e = voxelBox.any().extnt();
+		Extent e = voxelBox.any().extent();
 		double[] sigmaArr = new double[]{ sigma, sigma };
 		
 		for( int z=0; z<e.getZ(); z++) {

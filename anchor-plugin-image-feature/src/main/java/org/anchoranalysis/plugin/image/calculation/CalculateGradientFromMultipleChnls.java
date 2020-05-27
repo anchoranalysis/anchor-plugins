@@ -86,7 +86,7 @@ public class CalculateGradientFromMultipleChnls extends FeatureCalculation<List<
 		BoundingBox bbox = om.getBoundingBox();
 
 
-		Extent e = vb.extnt();
+		Extent e = vb.extent();
 		Extent eMask = bbox.extent();
 		
 		BinaryValuesByte bvbMask = bvb.getBinaryValues().createByte();

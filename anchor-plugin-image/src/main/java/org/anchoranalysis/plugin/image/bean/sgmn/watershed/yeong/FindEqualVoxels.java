@@ -155,7 +155,7 @@ private static class PointTester extends ProcessVoxelNeighbourAbsoluteWithSlidin
 				
 		int valToFind = 
 			bufferValuesToFindEqual.getPixelsForPlane( pnt.getZ() ).getInt(
-				bufferValuesToFindEqual.extnt().offsetSlice(pnt)
+				bufferValuesToFindEqual.extent().offsetSlice(pnt)
 			);
 		
 		SlidingBuffer<?> rbb = new SlidingBuffer<>(bufferValuesToFindEqual);
@@ -210,6 +210,6 @@ private static class PointTester extends ProcessVoxelNeighbourAbsoluteWithSlidin
 	}
 
 	public Extent extnt() {
-		return bufferValuesToFindEqual.extnt();
+		return bufferValuesToFindEqual.extent();
 	}
 }

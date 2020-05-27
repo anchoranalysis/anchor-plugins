@@ -76,7 +76,7 @@ public class IntensityMeanCalculator {
 				for( int x=crnrMin.getX(); x<=crnrMax.getX(); x++) {
 				
 					if (bbMask.get(offsetMask)==om.getBinaryValuesByte().getOnByte()) {
-						int offsetIntens = vbIntens.any().extnt().offset(x, y);
+						int offsetIntens = vbIntens.any().extent().offset(x, y);
 						
 						int val = bbIntens.getInt(offsetIntens);
 						

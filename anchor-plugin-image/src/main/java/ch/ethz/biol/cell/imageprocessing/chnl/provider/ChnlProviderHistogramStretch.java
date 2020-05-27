@@ -78,7 +78,7 @@ public class ChnlProviderHistogramStretch extends ChnlProviderOne {
 		double rangeExtnt = rangeMax-rangeMin;
 		double rangeMult = 255/rangeExtnt;
 		
-		Extent e = vb.extnt();
+		Extent e = vb.extent();
 		for( int z=0; z<e.getZ(); z++) {
 			
 			VoxelBuffer<?> bb = vb.getPixelsForPlane(z);

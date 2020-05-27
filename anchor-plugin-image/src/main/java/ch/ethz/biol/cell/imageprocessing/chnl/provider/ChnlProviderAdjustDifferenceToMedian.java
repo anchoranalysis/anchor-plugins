@@ -98,7 +98,7 @@ public class ChnlProviderAdjustDifferenceToMedian extends ChnlProviderOneObjsSou
 					
 					if( bbMask.get(maskOffset++)==om.getBinaryValuesByte().getOnByte()) {
 						
-						int offset = vb.extnt().offset(x, y);
+						int offset = vb.extent().offset(x, y);
 						
 						int lookupVal = ByteConverter.unsignedByteToInt( bbChnlLookup.get(offset) );
 						int adj = (objMedian - lookupVal);

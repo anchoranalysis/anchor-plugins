@@ -35,7 +35,7 @@ final class SliceThresholderMask extends SliceThresholder {
 			int relZ = z - crnrMin.getZ();
 			
 			sgmnSlice(
-				voxelBoxIn.extnt(),
+				voxelBoxIn.extent(),
 				voxelBoxIn.getPixelsForPlane(relZ),
 				vbThrshld.getPixelsForPlane(relZ),
 				voxelBoxOut.getPixelsForPlane(relZ),

@@ -65,7 +65,7 @@ public class BinaryImgChnlProviderRepeatSlice extends BinaryImgChnlProviderOne {
 		Chnl chnlOut = ChnlFactory.instance().createEmptyInitialised(dimSource, VoxelDataTypeUnsignedByte.instance);
 		VoxelBox<ByteBuffer> vbOut = chnlOut.getVoxelBox().asByte();
 
-		int volumeXY = vbIn.extnt().getVolumeXY();
+		int volumeXY = vbIn.extent().getVolumeXY();
 		for( int z=0; z<chnlOut.getDimensions().getExtnt().getZ(); z++) {
 
 			ByteBuffer bbOut = vbOut.getPixelsForPlane(z).buffer();

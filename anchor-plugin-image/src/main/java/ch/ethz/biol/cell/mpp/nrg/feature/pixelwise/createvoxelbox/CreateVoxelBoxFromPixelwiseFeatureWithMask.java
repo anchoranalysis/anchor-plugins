@@ -116,7 +116,7 @@ public class CreateVoxelBoxFromPixelwiseFeatureWithMask {
 
 	private void setPixelsWithoutMask( VoxelBox<ByteBuffer> vbOut, PixelScore pixelScore ) throws FeatureCalcException, InitException {
 		
-		Extent e = vbOut.extnt();
+		Extent e = vbOut.extent();
 		
 		for( int z=0;z<e.getZ(); z++) {
 			
@@ -138,7 +138,7 @@ public class CreateVoxelBoxFromPixelwiseFeatureWithMask {
 	private void setPixelsWithMask( VoxelBox<ByteBuffer> vbOut, ObjMask objMask, PixelScore pixelScore ) throws FeatureCalcException, InitException {
 		
 		byte maskOn = objMask.getBinaryValuesByte().getOnByte();
-		Extent e = vbOut.extnt();
+		Extent e = vbOut.extent();
 		Extent eMask = objMask.binaryVoxelBox().extnt();
 		
 		Point3i crnrMin = objMask.getBoundingBox().getCrnrMin();

@@ -59,7 +59,7 @@ public class PixelsFromByteProcessor implements IPixelsForPlane<ByteBuffer> {
 	}
 
 	@Override
-	public Extent extnt() {
+	public Extent extent() {
 		return extnt;
 	}
 }
