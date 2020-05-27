@@ -39,7 +39,7 @@ import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.Extent;
-import org.anchoranalysis.image.extent.PointRange;
+import org.anchoranalysis.image.points.PointRange;
 
 /**
  * Takes an existing binaryChnl and fits a box around the *On* pixels.

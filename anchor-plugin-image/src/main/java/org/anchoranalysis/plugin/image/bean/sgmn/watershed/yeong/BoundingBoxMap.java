@@ -33,8 +33,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.geometry.Point3i;
-import org.anchoranalysis.image.extent.PointRange;
 import org.anchoranalysis.image.objmask.ObjMaskCollection;
+import org.anchoranalysis.image.points.PointRange;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 
 
