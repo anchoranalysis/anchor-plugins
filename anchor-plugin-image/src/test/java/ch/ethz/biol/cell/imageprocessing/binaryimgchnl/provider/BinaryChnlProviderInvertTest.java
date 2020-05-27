@@ -53,23 +53,23 @@ public class BinaryChnlProviderInvertTest {
 		);
 	}
 	
-	private static int expectedNumPixelsBefore(boolean use3D) {
-		return WIDTH * HEIGHT * depth(use3D);
+	private static int expectedNumPixelsBefore(boolean do3D) {
+		return WIDTH * HEIGHT * depth(do3D);
 	}
 	
-	private static long expectedNumPixelsAfterWithoutMask(boolean use3D) {
-		return extent(use3D).getVolume() - expectedNumPixelsBefore(use3D);
+	private static long expectedNumPixelsAfterWithoutMask(boolean do3D) {
+		return extent(do3D).getVolume() - expectedNumPixelsBefore(do3D);
 	}
 	
-	private static void testRectangle(boolean use3D, boolean mask, long expectedNumPixelsAfter) throws CreateException {
+	private static void testRectangle(boolean do3D, boolean mask, long expectedNumPixelsAfter) throws CreateException {
 		
-		BinaryChnl chnlBefore = createWithRectangle(CORNER_RECTANGLE, use3D);
+		BinaryChnl chnlBefore = createWithRectangle(CORNER_RECTANGLE, do3D);
 		
-		Optional<BinaryChnl> chnlMask = createMask(use3D, mask);
+		Optional<BinaryChnl> chnlMask = createMask(do3D, mask);
 		
 		assertPixelsOn(
 			"before",
-			expectedNumPixelsBefore(use3D),
+			expectedNumPixelsBefore(do3D),
 			chnlBefore
 		);
 		
@@ -82,10 +82,10 @@ public class BinaryChnlProviderInvertTest {
 		);
 	}
 	
-	private static Optional<BinaryChnl> createMask(boolean use3D, boolean mask) throws CreateException {
+	private static Optional<BinaryChnl> createMask(boolean do3D, boolean mask) throws CreateException {
 		if (mask) {
 			return Optional.of(
-				createWithRectangle(CORNER_MASK, use3D)		
+				createWithRectangle(CORNER_MASK, do3D)		
 			);
 		} else {
 			return Optional.empty(); 

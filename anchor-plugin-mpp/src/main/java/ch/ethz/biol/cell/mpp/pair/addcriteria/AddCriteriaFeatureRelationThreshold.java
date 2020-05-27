@@ -65,7 +65,7 @@ public class AddCriteriaFeatureRelationThreshold extends AddCriteriaPair {
 		PxlMarkMemo mark2,
 		ImageDim dim,
 		FeatureCalculatorMulti<FeatureInputPairMemo> session,
-		boolean use3D
+		boolean do3D
 	) throws IncludeMarksFailureException {
 		
 		try {

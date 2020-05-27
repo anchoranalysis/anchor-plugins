@@ -40,11 +40,11 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
 
 class CalculateIntersectionOfDilatedBoundingBox extends FeatureCalculation<Optional<BoundingBox>, FeatureInputPairObjs> {
 	
-	private boolean use3D = false;
+	private boolean do3D = false;
 			
-	public CalculateIntersectionOfDilatedBoundingBox(boolean use3D) {
+	public CalculateIntersectionOfDilatedBoundingBox(boolean do3D) {
 		super();
-		this.use3D = use3D;
+		this.do3D = do3D;
 	}
 
 	@Override
@@ -61,7 +61,7 @@ class CalculateIntersectionOfDilatedBoundingBox extends FeatureCalculation<Optio
 		 if(obj instanceof CalculateIntersectionOfDilatedBoundingBox){
 			 final CalculateIntersectionOfDilatedBoundingBox other = (CalculateIntersectionOfDilatedBoundingBox) obj;
 		        return new EqualsBuilder()
-		            .append(use3D, other.use3D)
+		            .append(do3D, other.do3D)
 		            .isEquals();
 	    } else{
 	        return false;
@@ -70,7 +70,7 @@ class CalculateIntersectionOfDilatedBoundingBox extends FeatureCalculation<Optio
 
 	@Override
 	public int hashCode() {
-		return new HashCodeBuilder().append(use3D).toHashCode();
+		return new HashCodeBuilder().append(do3D).toHashCode();
 	}
 
 	private Optional<BoundingBox> findIntersectionOfDilatedBoundingBox( ObjMask om1, ObjMask om2, Extent extent) {
@@ -85,7 +85,7 @@ class CalculateIntersectionOfDilatedBoundingBox extends FeatureCalculation<Optio
 	
 	private BoundingBox dilatedBoundingBoxFor( ObjMask om, Extent extent ) {
 		return om.getVoxelBoxBounded().dilate(
-			use3D,
+			do3D,
 			Optional.of(extent)
 		);
 	}
