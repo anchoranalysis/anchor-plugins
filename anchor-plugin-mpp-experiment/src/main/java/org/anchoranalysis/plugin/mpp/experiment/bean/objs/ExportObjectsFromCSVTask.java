@@ -131,8 +131,13 @@ public class ExportObjectsFromCSVTask extends ExportObjectsBase<FromCSVInputObje
 		);
 	}
 	
-	private Path idStringForPath( Path path, boolean debugMode ) throws AnchorIOException {
-		return idGenerator!=null ? idGenerator.outFilePath(path, debugMode) : path;
+	private Path idStringForPath( Optional<Path> path, boolean debugMode ) throws AnchorIOException {
+		
+		if (!path.isPresent()) {
+			throw new AnchorIOException("A binding-path is not present for the input, but is required");
+		}
+		
+		return idGenerator!=null ? idGenerator.outFilePath(path.get(), debugMode) : path.get();
 	}
 	
 	@Override

@@ -64,8 +64,13 @@ public class FromCSVInputManager extends InputManager<FromCSVInputObject> {
 		while( itr.hasNext() ) {
 			MultiInput inputObj = itr.next();
 			
-			Path csvFilePathOut = appendCSV.outFilePath(inputObj.pathForBinding(), params.isDebugModeActivated() );
-			out.add( new FromCSVInputObject(inputObj, csvFilePathOut) );
+			Path csvFilePathOut = appendCSV.outFilePath(
+				inputObj.pathForBindingRequired(),
+				params.isDebugModeActivated()
+			);
+			out.add(
+				new FromCSVInputObject(inputObj, csvFilePathOut)
+			);
 		}
 		
 		return out;

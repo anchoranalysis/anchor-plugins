@@ -133,7 +133,9 @@ public abstract class ExportFeaturesStoreTask<T extends InputFromManager, S exte
 	private MultiName identifierFor( T inputObject ) throws OperationFailedException {
 		
 		try {
-			Path inputPath = inputObject.pathForBinding();
+			Path inputPath = inputObject.pathForBinding().orElseThrow( ()->
+				new OperationFailedException("A binding path is required to be associated with each input for this algorithm, but is not")
+			);
 			return new GroupAndImageNames(
 				extractGroupName(inputPath, false),
 				extractImageIdentifier(inputPath, false)

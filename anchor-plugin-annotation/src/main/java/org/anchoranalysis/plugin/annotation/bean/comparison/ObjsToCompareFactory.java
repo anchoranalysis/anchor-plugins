@@ -37,6 +37,7 @@ import org.anchoranalysis.experiment.JobExecutionException;
 import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.io.input.ProvidesStackInput;
 import org.anchoranalysis.image.objmask.ObjMaskCollection;
+import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.output.bound.BoundIOContext;
 import org.anchoranalysis.plugin.annotation.comparison.AnnotationComparisonInput;
 import org.anchoranalysis.plugin.annotation.comparison.IAddAnnotation;
@@ -95,11 +96,11 @@ class ObjsToCompareFactory {
 	) throws JobExecutionException {
 		try {
 			return input.getComparerMultiplex(left).createObjs(
-				input.pathForBinding(),
+				input.pathForBindingRequired(),
 				dim,
 				debugMode
 			);
-		} catch (CreateException e) {
+		} catch (CreateException | AnchorIOException e) {
 			throw new JobExecutionException(e);
 		}
 	}

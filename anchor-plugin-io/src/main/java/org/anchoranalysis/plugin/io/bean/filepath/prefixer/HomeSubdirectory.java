@@ -36,10 +36,10 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.error.BeanMisconfiguredException;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.io.bean.filepath.prefixer.FilePathPrefixer;
+import org.anchoranalysis.io.bean.filepath.prefixer.PathWithDescription;
 import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.filepath.prefixer.FilePathPrefix;
 import org.anchoranalysis.io.filepath.prefixer.FilePathPrefixerParams;
-import org.anchoranalysis.io.input.InputFromManager;
 
 // 
 public class HomeSubdirectory extends FilePathPrefixer {
@@ -105,7 +105,7 @@ public class HomeSubdirectory extends FilePathPrefixer {
 	}
 	
 	@Override
-	public FilePathPrefix outFilePrefix(InputFromManager input, String expName, FilePathPrefixerParams context)
+	public FilePathPrefix outFilePrefix(PathWithDescription input, String expName, FilePathPrefixerParams context)
 			throws AnchorIOException {
 		try {
 			initIfPossible();

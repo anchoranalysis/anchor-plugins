@@ -240,7 +240,7 @@ public class AnnotationComparisonTask<T extends Assignment> extends Task<Annotat
 				
 			return assignment;
 			
-		} catch (CreateException e) {
+		} catch (CreateException | OperationFailedException e) {
 			throw new JobExecutionException(e);
 		}
 	}

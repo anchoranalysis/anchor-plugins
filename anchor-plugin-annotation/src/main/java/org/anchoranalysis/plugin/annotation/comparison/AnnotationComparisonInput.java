@@ -1,6 +1,7 @@
 package org.anchoranalysis.plugin.annotation.comparison;
 
 import java.nio.file.Path;
+import java.util.Optional;
 
 import org.anchoranalysis.annotation.io.bean.comparer.Comparer;
 
@@ -63,7 +64,7 @@ public class AnnotationComparisonInput<T extends InputFromManager> implements In
 	}
 
 	@Override
-	public Path pathForBinding() {
+	public Optional<Path> pathForBinding() {
 		return inputObject.pathForBinding();
 	}
 	

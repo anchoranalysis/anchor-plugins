@@ -169,14 +169,18 @@ public class ExportFeaturesObjMaskTask<T extends FeatureInput> extends ExportFea
 			throw new OperationFailedException(e);
 		}
 					
-		processAllProviders(
-			input.getInputObject().pathForBinding(),
-			session,
-			imageInit,
-			nrgStack,
-			input.getSharedState(),
-			context
-		);
+		try {
+			processAllProviders(
+				input.getInputObject().pathForBindingRequired(),
+				session,
+				imageInit,
+				nrgStack,
+				input.getSharedState(),
+				context
+			);
+		} catch (AnchorIOException e) {
+			throw new OperationFailedException(e);
+		}
 		
 		// Arbitrary, we need a return-type
 		return 0;

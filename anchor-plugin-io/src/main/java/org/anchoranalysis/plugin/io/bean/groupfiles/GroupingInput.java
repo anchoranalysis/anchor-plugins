@@ -28,6 +28,7 @@ package org.anchoranalysis.plugin.io.bean.groupfiles;
 
 
 import java.nio.file.Path;
+import java.util.Optional;
 
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
@@ -89,8 +90,8 @@ class GroupingInput extends NamedChnlsInput {
 	}
 
 	@Override
-	public Path pathForBinding() {
-		return virtualPath;
+	public Optional<Path> pathForBinding() {
+		return Optional.of(virtualPath);
 	}
 
 	@Override

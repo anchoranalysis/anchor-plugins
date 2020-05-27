@@ -29,6 +29,7 @@ package org.anchoranalysis.plugin.io.bean.summarizer.path;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Optional;
 
 import org.anchoranalysis.core.arithmetic.RunningSum;
 import org.anchoranalysis.core.error.OperationFailedException;
@@ -41,17 +42,22 @@ import org.apache.commons.io.FileUtils;
  * @author Owen Feehan
  *
  */
-public class FileSizeStatistics extends Summarizer<Path> {
+public class FileSizeStatistics extends Summarizer<Optional<Path>> {
 
 	private RunningSum runningSum = new RunningSum();
 	private long min = Long.MAX_VALUE;
 	private long max = Long.MIN_VALUE;
 	
 	@Override
-	public void add( Path filePath ) throws OperationFailedException {
+	public void add( Optional<Path> filePath ) throws OperationFailedException {
 		
 		try {
-			long size = Files.size(filePath);
+			if (!filePath.isPresent()) {
+				// Nothing to do if no file-path is defined
+				return;
+			}
+			
+			long size = Files.size(filePath.get());
 			
 			synchronized(this) {
 				runningSum.increment(size);

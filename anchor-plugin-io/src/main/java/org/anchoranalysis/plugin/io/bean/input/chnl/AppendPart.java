@@ -31,6 +31,7 @@ import java.io.File;
 import java.nio.Buffer;
 import java.nio.file.Path;
 import java.util.List;
+import java.util.Optional;
 
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
 import org.anchoranalysis.core.functional.Operation;
@@ -141,7 +142,7 @@ class AppendPart<T extends Buffer> extends NamedChnlsInputPart {
 	}
 
 	@Override
-	public Path pathForBinding() {
+	public Optional<Path> pathForBinding() {
 		return delegate.pathForBinding();
 	}
 
