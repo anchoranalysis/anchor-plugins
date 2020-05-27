@@ -76,7 +76,7 @@ public class ObjMaskProviderSplitContourSmoothingSpline extends ObjMaskProviderO
 	
 	private void splitContoursFromObj( ObjMask om, ObjMaskCollection out ) throws CreateException {
 		
-		if (om.getBoundingBox().extnt().getZ()>1) {
+		if (om.getBoundingBox().extent().getZ()>1) {
 			throw new CreateException("Only objs with z-slices > 1 are allowed");
 		}
 		

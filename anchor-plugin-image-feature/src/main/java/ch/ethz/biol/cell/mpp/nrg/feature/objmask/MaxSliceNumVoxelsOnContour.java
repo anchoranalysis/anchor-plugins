@@ -56,7 +56,7 @@ public class MaxSliceNumVoxelsOnContour extends FeatureObjMask {
 		int max = 0;
 		int ind = 0;
 		
-		for( int z=0; z<om.getBoundingBox().extnt().getZ(); z++) {
+		for( int z=0; z<om.getBoundingBox().extent().getZ(); z++) {
 			ByteBuffer bb = om.getVoxelBox().getPixelsForPlane(z).buffer();
 			int cnt = cntForByteBuffer(bb, om.getBinaryValuesByte().getOnByte());
 		

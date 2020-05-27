@@ -31,11 +31,11 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.color.ColorList;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
+import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.experiment.task.Task;
 import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
 import org.anchoranalysis.image.extent.BoundingBox;
-import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.init.ImageInitParams;
 import org.anchoranalysis.image.io.generator.raster.bbox.ExtractedBBoxGenerator;
@@ -92,20 +92,10 @@ public abstract class ExportObjectsBase<T extends InputFromManager, S> extends T
 		
 		BoundingBox bboxToExtract = new BoundingBox(om.getBoundingBox());
 		
-		bboxToExtract.getCrnrMin().setX( bboxToExtract.getCrnrMin().getX() - paddingXY );
-		bboxToExtract.getCrnrMin().setY( bboxToExtract.getCrnrMin().getY() - paddingXY );
-		bboxToExtract.getCrnrMin().setZ( bboxToExtract.getCrnrMin().getZ() - paddingZ );
-		
-		Extent exst = bboxToExtract.extnt();
-		
-		bboxToExtract.setExtnt(
-			new Extent(
-				exst.getX() + (paddingXY*2),
-				exst.getY() + (paddingXY*2),
-				exst.getZ() + (paddingZ*2)
-			)
+		bboxToExtract.growBy(
+			new Point3i(paddingXY, paddingXY, paddingZ),
+			dim.getExtnt()
 		);
-		bboxToExtract.clipTo(dim.getExtnt());
 		
 		return BBoxUtilities.createObjMaskForBBox( om, bboxToExtract );
 	}

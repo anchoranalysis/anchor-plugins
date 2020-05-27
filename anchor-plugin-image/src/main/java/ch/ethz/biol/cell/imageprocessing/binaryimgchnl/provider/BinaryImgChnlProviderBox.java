@@ -41,8 +41,14 @@ import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.extent.PointRange;
 
-// Takes an existing binaryChnl and fits a box around the *On* pixels
-//  and makes the box On
+/**
+ * Takes an existing binaryChnl and fits a box around the *On* pixels.
+ * 
+ * <p>The tightest box that fits is always used</p>
+ * 
+ * @author Owen Feehan
+ *
+ */
 public class BinaryImgChnlProviderBox extends BinaryImgChnlProviderOne {
 
 	// START BEAN PROPERTIES
@@ -57,24 +63,23 @@ public class BinaryImgChnlProviderBox extends BinaryImgChnlProviderOne {
 		if (slicesSeperately) {
 			Extent e = bic.getDimensions().getExtnt();
 			for( int z=0; z<e.getZ(); z++) {
-				BinaryChnl slice = bic.extractSlice(z);
-				BoundingBox bbox = calcBBoxOfImg(slice.binaryVoxelBox());
 				
-				Point3i pnt = bbox.getCrnrMin();
-				pnt.setZ(z);
-				bbox.setCrnrMin(pnt);
-				
-				bic.binaryVoxelBox().setPixelsToOn(bbox);
+				BoundingBox bbox = calcNarrowestBoxAroundMask(
+					bic.extractSlice(z).binaryVoxelBox()
+				);
+				bic.binaryVoxelBox().setPixelsToOn(
+					bbox.duplicateChangeCornerZ(z)
+				);
 			}
 		} else {
-			BoundingBox bbox = calcBBoxOfImg(bic.binaryVoxelBox());
+			BoundingBox bbox = calcNarrowestBoxAroundMask(bic.binaryVoxelBox());
 			bic.binaryVoxelBox().setPixelsToOn(bbox);
 		}
 		
 		return bic;
 	}
 
-	private BoundingBox calcBBoxOfImg( BinaryVoxelBox<ByteBuffer> vb ) throws CreateException {
+	private BoundingBox calcNarrowestBoxAroundMask( BinaryVoxelBox<ByteBuffer> vb ) throws CreateException {
 		
 		PointRange pointRange = new PointRange();
 		

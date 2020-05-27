@@ -57,7 +57,7 @@ public class BBoxZDist extends FeaturePairMemoSingleRegion {
 		BoundingBox bbox2 = bbox(inputSessionless, p->p.getObj2());
 		
 		// Check the bounding boxes intersect in general (including XY)
-		if (bbox1.hasIntersection(bbox2)) {
+		if (bbox1.intersection().existsWith(bbox2)) {
 			return 0.0;
 		}
 		

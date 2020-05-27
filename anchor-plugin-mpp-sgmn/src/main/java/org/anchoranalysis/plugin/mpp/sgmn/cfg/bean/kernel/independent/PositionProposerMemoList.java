@@ -62,7 +62,7 @@ class PositionProposerMemoList implements PositionProposer {
 	
 	private static Point3d randomPosition( BoundingBox bbox, RandomNumberGenerator re ) {
 		
-		Extent extnt = bbox.extnt();
+		Extent extnt = bbox.extent();
 		
 		int x = bbox.getCrnrMin().getX() + (int) (re.nextDouble() * extnt.getX() );
 		int y = bbox.getCrnrMin().getY() + (int) (re.nextDouble() * extnt.getY() );
@@ -108,7 +108,7 @@ class PositionProposerMemoList implements PositionProposer {
 			int relY = (int) pnt.getY() - bbox.getCrnrMin().getY();
 			int relZ = (int) pnt.getZ() - bbox.getCrnrMin().getZ();
 			
-			byte membershipExst = pm.getVoxelBox().getPixelsForPlane(relZ).get( bbox.extnt().offset(relX, relY) );
+			byte membershipExst = pm.getVoxelBox().getPixelsForPlane(relZ).get( bbox.extent().offset(relX, relY) );
 			
 			// If it's not inside our mark, then we don't consider it
 			if (!rm.isMemberFlag(membershipExst, flags)) {

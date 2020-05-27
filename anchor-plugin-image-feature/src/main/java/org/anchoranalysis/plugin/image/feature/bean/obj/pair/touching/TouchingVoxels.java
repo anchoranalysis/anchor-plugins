@@ -1,5 +1,7 @@
 package org.anchoranalysis.plugin.image.feature.bean.obj.pair.touching;
 
+import java.util.Optional;
+
 /*-
  * #%L
  * anchor-plugin-image-feature
@@ -55,9 +57,9 @@ public abstract class TouchingVoxels extends FeatureObjMaskPair {
 
 		FeatureInputPairObjs inputSessionless = input.get();
 		
-		BoundingBox bboxIntersect = bboxIntersectDilated(input);
+		Optional<BoundingBox> bboxIntersect = bboxIntersectDilated(input);
 		
-		if (bboxIntersect==null) {
+		if (!bboxIntersect.isPresent()) {
 			// No intersection, so therefore return 0
 			return 0;
 		}
@@ -65,14 +67,14 @@ public abstract class TouchingVoxels extends FeatureObjMaskPair {
 		return calcWithIntersection(
 			inputSessionless.getFirst(),
 			inputSessionless.getSecond(),
-			bboxIntersect
+			bboxIntersect.get()
 		);
 	}
 	
 	protected abstract double calcWithIntersection(ObjMask om1, ObjMask om2, BoundingBox bboxIntersect) throws FeatureCalcException;
 	
 	/** The intersection of the bounding box of one mask with the (dilated by 1 bounding-box) of the other */
-	private BoundingBox bboxIntersectDilated(SessionInput<FeatureInputPairObjs> input) throws FeatureCalcException {
+	private Optional<BoundingBox> bboxIntersectDilated(SessionInput<FeatureInputPairObjs> input) throws FeatureCalcException {
 		return input.calc(
 			new CalculateIntersectionOfDilatedBoundingBox(use3D)	
 		);

@@ -35,6 +35,6 @@ public class BoundingBoxExtent extends BoundingBoxAxisBase {
 
 	@Override
 	protected Tuple3i extractTupleForBoundingBox(BoundingBox bbox) {
-		return bbox.extnt().asTuple();
+		return bbox.extent().asTuple();
 	}
 }

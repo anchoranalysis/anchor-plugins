@@ -75,7 +75,7 @@ public class ObjMaskProviderSplitIntoSquares extends ObjMaskProviderOne {
 		
 		ObjMaskCollection out = new ObjMaskCollection();
 		
-		Extent e = om.getBoundingBox().extnt();
+		Extent e = om.getBoundingBox().extent();
 		
 		int numX = e.getX() / squareSize;
 		int numY = e.getY() / squareSize;
