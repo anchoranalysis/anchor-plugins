@@ -48,7 +48,7 @@ public class ObjMaskProviderExtractSlice extends ObjMaskProviderOne {
 		
 		for( ObjMask om : in ) {
 			
-			if (om.getBoundingBox().containsZ(slice)) {
+			if (om.getBoundingBox().contains().z(slice)) {
 				try {
 					ObjMask omExtract = om.extractSlice(slice - om.getBoundingBox().getCrnrMin().getZ(), false); 
 					out.add( omExtract );
