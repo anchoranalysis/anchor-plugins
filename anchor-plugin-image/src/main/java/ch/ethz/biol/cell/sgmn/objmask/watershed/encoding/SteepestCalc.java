@@ -108,7 +108,7 @@ public final class SteepestCalc {
 		this.do3D = do3D;
 		this.process = ProcessVoxelNeighbourFactory.within(
 			mask,
-			rbb.extnt(),
+			rbb.extent(),
 			new PointTester(encoder,rbb)
 		);
 		this.nghb = bigNghb ? new BigNghb() : new SmallNghb();

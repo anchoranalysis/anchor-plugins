@@ -20,7 +20,7 @@ final class ConvertAllToConnectedComponents implements ProcessVoxelSliceBuffer<I
 	public ConvertAllToConnectedComponents(EncodedVoxelBox matS) {
 		super();
 		this.matS = matS;
-		this.extent = matS.extnt();
+		this.extent = matS.extent();
 	}
 	
 	@Override

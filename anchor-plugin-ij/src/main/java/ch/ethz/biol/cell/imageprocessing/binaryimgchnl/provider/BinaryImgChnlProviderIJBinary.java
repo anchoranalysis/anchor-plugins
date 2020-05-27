@@ -69,12 +69,12 @@ public class BinaryImgChnlProviderIJBinary extends BinaryImgChnlProviderOne {
 		// Fills Holes
 		Binary binaryPlugin = new Binary();
 		binaryPlugin.setup(command, null);
-		binaryPlugin.setNPasses( bvb.extnt().getZ() );
+		binaryPlugin.setNPasses( bvb.extent().getZ() );
 
 		for( int i=0; i<iterations; i++) {
 		
 			// Are we missing a Z slice?
-			for (int z=0; z<bvb.extnt().getZ(); z++) {
+			for (int z=0; z<bvb.extent().getZ(); z++) {
 				
 				ImageProcessor ip = IJWrap.imageProcessorByte( bvb.getVoxelBox().getPlaneAccess(), z); 
 				binaryPlugin.run( ip );

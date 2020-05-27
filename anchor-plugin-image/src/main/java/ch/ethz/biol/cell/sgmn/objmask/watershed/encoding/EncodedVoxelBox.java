@@ -53,7 +53,7 @@ public final class EncodedVoxelBox {
 		return delegate;
 	}
 
-	public Extent extnt() {
+	public Extent extent() {
 		return delegate.extent();
 	}
 	
@@ -101,9 +101,9 @@ public final class EncodedVoxelBox {
 	}
 	
 	public boolean hasTemporary() {
-		int volumeXY = extnt().getVolumeXY();
+		int volumeXY = extent().getVolumeXY();
 		
-		for (int z=0; z<extnt().getZ(); z++) {
+		for (int z=0; z<extent().getZ(); z++) {
 			EncodedIntBuffer bb = getPixelsForPlane(z);
 			
 			for (int i=0; i<volumeXY; i++) {
@@ -119,12 +119,12 @@ public final class EncodedVoxelBox {
 		
 		ArrayList<Point3i> listOut = new ArrayList<>();
 		
-		for (int z=0; z<extnt().getZ(); z++) {
+		for (int z=0; z<extent().getZ(); z++) {
 			EncodedIntBuffer bb = getPixelsForPlane(z);
 			
 			int offset =0;
-			for (int y=0; y<extnt().getY(); y++) {
-				for (int x=0; x<extnt().getX(); x++) {
+			for (int y=0; y<extent().getY(); y++) {
+				for (int x=0; x<extent().getX(); x++) {
 
 					if( bb.isTemporary(offset++) ) {
 						listOut.add( new Point3i(x,y,z) );
@@ -140,12 +140,12 @@ public final class EncodedVoxelBox {
 		
 		Set<Integer> setOut = new HashSet<>();
 		
-		for (int z=0; z<extnt().getZ(); z++) {
+		for (int z=0; z<extent().getZ(); z++) {
 			EncodedIntBuffer bb = getPixelsForPlane(z);
 			
 			int offset =0;
-			for (int y=0; y<extnt().getY(); y++) {
-				for (int x=0; x<extnt().getX(); x++) {
+			for (int y=0; y<extent().getY(); y++) {
+				for (int x=0; x<extent().getX(); x++) {
 
 					if( bb.isConnectedComponentID(offset)) {
 						setOut.add( bb.getCode(offset) );

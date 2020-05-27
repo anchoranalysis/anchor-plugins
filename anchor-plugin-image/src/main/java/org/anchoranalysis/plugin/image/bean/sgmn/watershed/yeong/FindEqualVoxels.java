@@ -31,7 +31,6 @@ import java.util.Optional;
 import java.util.Stack;
 
 import org.anchoranalysis.core.geometry.Point3i;
-import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.anchoranalysis.image.voxel.buffer.SlidingBuffer;
@@ -175,7 +174,7 @@ private static class PointTester extends ProcessVoxelNeighbourAbsoluteWithSlidin
 				
 		ProcessVoxelNeighbour<Optional<Integer>> process = ProcessVoxelNeighbourFactory.within(
 			mask,
-			slidingBuffer.extnt(),
+			slidingBuffer.extent(),
 			new PointTester(stack, slidingBuffer, matS)
 		);
 				
@@ -186,7 +185,7 @@ private static class PointTester extends ProcessVoxelNeighbourAbsoluteWithSlidin
 			
 			// If we've already visited this point, we skip it
 			EncodedIntBuffer bbVisited = matS.getPixelsForPlane( pnt.getZ() );
-			int offset = slidingBuffer.extnt().offsetSlice(pnt);
+			int offset = slidingBuffer.extent().offsetSlice(pnt);
 			if (bbVisited.isTemporary(offset)) {
 				continue;
 			}
@@ -207,9 +206,5 @@ private static class PointTester extends ProcessVoxelNeighbourAbsoluteWithSlidin
 	
 	public boolean isDo3D() {
 		return do3D;
-	}
-
-	public Extent extnt() {
-		return bufferValuesToFindEqual.extent();
 	}
 }

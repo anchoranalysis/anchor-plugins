@@ -32,8 +32,8 @@ class PointProcessor extends ProcessVoxelNeighbourAbsoluteWithSlidingBuffer<Obje
 		BinaryValuesByte bv
 	) {
 		super(sbMarker);
-		assert(sbMarker.extnt().equals(sbFinalized.extnt()));
-		assert(sbMarker.extnt().equals(sbMask.extnt()));
+		assert(sbMarker.extent().equals(sbFinalized.extent()));
+		assert(sbMarker.extent().equals(sbMask.extent()));
 		this.sbFinalized = sbFinalized;
 		this.sbMask = sbMask;
 		this.queue = queue;

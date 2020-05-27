@@ -83,7 +83,7 @@ public class BinaryImgChnlProviderBox extends BinaryImgChnlProviderOne {
 		
 		PointRange pointRange = new PointRange();
 		
-		Extent extent = vb.extnt();
+		Extent extent = vb.extent();
 		
 		BinaryValuesByte bvb = vb.getBinaryValues().createByte();
 		
