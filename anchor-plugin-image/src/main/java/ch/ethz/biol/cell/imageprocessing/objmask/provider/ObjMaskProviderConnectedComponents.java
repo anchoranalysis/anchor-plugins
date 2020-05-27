@@ -130,7 +130,7 @@ public class ObjMaskProviderConnectedComponents extends ObjMaskProvider {
 		ObjMaskCollection omc = createObjMasks.createConnectedComponents(bvb) ; 
 		for (ObjMask om : omc) {
 			// respecify the z
-			om.getBoundingBox().getCrnrMin().setZ(z);
+			om.shiftToZ(z);
 		}
 		return omc;
 	}

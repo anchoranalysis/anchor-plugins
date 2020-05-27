@@ -78,7 +78,7 @@ public class ObjMaskProviderSplitByObjCollection extends ObjMaskProviderDimensio
 				continue;
 			}
 			
-			intersect.get().getBoundingBox().getCrnrMin().sub(objToSplit.getBoundingBox().getCrnrMin());
+			intersect.get().shiftBackBy(objToSplit.getBoundingBox().getCrnrMin());
 			
 			// We make the intersection relative to objToSplit
 			boundedVbId.getVoxelBox().setPixelsCheckMask( intersect.get(), cnt++);
@@ -100,7 +100,9 @@ public class ObjMaskProviderSplitByObjCollection extends ObjMaskProviderDimensio
 				
 				// for every object we add the objToSplit Bounding Box crnr, to restore it to global co-ordinates
 				for( ObjMask om : omc ) {
-					om.getBoundingBox().getCrnrMin().add( objToSplit.getBoundingBox().getCrnrMin() );
+					om.shiftBy(
+						objToSplit.getBoundingBox().getCrnrMin()
+					);
 					out.add(om);
 				}
 				

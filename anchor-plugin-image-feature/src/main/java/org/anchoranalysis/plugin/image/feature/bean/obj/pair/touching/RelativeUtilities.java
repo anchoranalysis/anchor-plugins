@@ -63,7 +63,7 @@ class RelativeUtilities {
 	 */
 	public static ObjMask createRelMask( ObjMask om, ObjMask omRelativeBase ) {
 		ObjMask om2Rel = om.relMaskTo(omRelativeBase.getBoundingBox());
-		om2Rel.getBoundingBox().getCrnrMin().scale(-1);
+		om2Rel.reflectThroughOrigin();
 		return om2Rel;
 	}
 }

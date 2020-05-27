@@ -33,7 +33,7 @@ import java.util.stream.Collectors;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.geometry.Point3f;
-import org.anchoranalysis.core.geometry.Point3i;
+import org.anchoranalysis.core.geometry.ReadableTuple3i;
 import org.anchoranalysis.image.contour.Contour;
 import org.anchoranalysis.image.objmask.ObjMask;
 import org.opencv.core.Mat;
@@ -67,13 +67,13 @@ public class CVFindContours {
 		}
 	}
 	
-	private static List<Contour> convertMatOfPoint( List<MatOfPoint> contours, Point3i crnrMin ) {
+	private static List<Contour> convertMatOfPoint( List<MatOfPoint> contours, ReadableTuple3i crnrMin ) {
 		return contours.stream().map(
 			a -> CVFindContours.createContour(a, crnrMin )
 		).collect( Collectors.toList() );
 	}
 	
-	private static Contour createContour(MatOfPoint mop, Point3i crnrMin) {
+	private static Contour createContour(MatOfPoint mop, ReadableTuple3i crnrMin) {
 		Contour c = new Contour();
 		for( Point p : mop.toArray() ) {
 			

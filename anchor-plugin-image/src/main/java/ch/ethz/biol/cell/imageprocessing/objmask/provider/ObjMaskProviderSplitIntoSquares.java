@@ -110,7 +110,10 @@ public class ObjMaskProviderSplitIntoSquares extends ObjMaskProviderOne {
 				int extntX = endX-startX;
 				
 				Extent extntNew = new Extent(extntX,extntY,om.getVoxelBox().extent().getZ());
-				BoundingBox srcBox = new BoundingBox(new Point3i(startX,startY,0), extntNew);
+				BoundingBox srcBox = new BoundingBox(
+					new Point3i(startX,startY,0),
+					extntNew
+				);
 				
 				VoxelBox<ByteBuffer> vbNew = VoxelBoxFactory.instance().getByte().create(extntNew);
 				
@@ -129,9 +132,13 @@ public class ObjMaskProviderSplitIntoSquares extends ObjMaskProviderOne {
 				}
 					
 				// Now we add our box to the collection
-				srcBox.getCrnrMin().add(om.getBoundingBox().getCrnrMin() );
+				srcBox = srcBox.shiftBy(
+					om.getBoundingBox().getCrnrMin()
+				);
 				
-				out.add( new ObjMask(srcBox, vbNew, om.getBinaryValuesByte()));
+				out.add(
+					new ObjMask(srcBox, vbNew, om.getBinaryValuesByte())
+				);
 			}
 		}
 		

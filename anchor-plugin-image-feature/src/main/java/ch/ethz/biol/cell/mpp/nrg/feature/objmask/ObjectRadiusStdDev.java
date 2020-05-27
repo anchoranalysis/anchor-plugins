@@ -109,7 +109,11 @@ public class ObjectRadiusStdDev extends FeatureObjMask {
 			List<Point3i> ptsOutline = new ArrayList<Point3i>();
 			
 			ObjMask outline = FindOutline.outline(mask, 1, false, true);
-			PointsFromBinaryVoxelBox.addPointsFromVoxelBox3D( outline.binaryVoxelBox(), outline.getBoundingBox().getCrnrMin(), ptsOutline );
+			PointsFromBinaryVoxelBox.addPointsFromVoxelBox3D(
+				outline.binaryVoxelBox(),
+				outline.getBoundingBox().getCrnrMin(),
+				ptsOutline
+			);
 			
 			return ptsOutline;
 		} catch (CreateException e) {

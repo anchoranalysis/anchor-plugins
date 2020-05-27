@@ -31,6 +31,7 @@ import java.nio.ByteBuffer;
 import java.util.Optional;
 
 import org.anchoranalysis.core.geometry.Point3i;
+import org.anchoranalysis.core.geometry.ReadableTuple3i;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.objmask.ObjMask;
@@ -155,8 +156,8 @@ public class GrayscaleReconstructionRobinson extends GrayscaleReconstructionByEr
 	
 	private void populateQueueFromNonZeroPixelsMask( PriorityQueueIndexRangeDownhill<Point3i> queue, VoxelBox<?> vb, VoxelBox<ByteBuffer> vbFinalized, ObjMask containingMask ) {
 
-		Point3i crnrPntMin = containingMask.getBoundingBox().getCrnrMin();
-		Point3i crnrPntMax = containingMask.getBoundingBox().calcCrnrMax();
+		ReadableTuple3i crnrPntMin = containingMask.getBoundingBox().getCrnrMin();
+		ReadableTuple3i crnrPntMax = containingMask.getBoundingBox().calcCrnrMax();
 		
 		byte maskOn = containingMask.getBinaryValuesByte().getOnByte(); 
 				

@@ -30,7 +30,7 @@ package ch.ethz.biol.cell.imageprocessing.objmask.provider;
 
 
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.core.geometry.Tuple3i;
+import org.anchoranalysis.core.geometry.ReadableTuple3i;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.objmask.ObjMask;
@@ -56,7 +56,7 @@ class SeedsFactory {
 	public static SeedCollection createSeedsWithMask(
 		ObjMaskCollection seeds,
 		ObjMask containingMask,
-		Tuple3i subtractFromCrnrMin,
+		ReadableTuple3i subtractFromCrnrMin,
 		ImageDim dim
 	) throws CreateException {
 		// We create a collection of seeds localised appropriately
@@ -85,9 +85,14 @@ class SeedsFactory {
 		);
 	}
 	
-	private static SeedObjMask createSeedWithinMask( ObjMask om, BoundingBox containingBBox, Tuple3i subtractFromCrnrMin, ImageDim dim ) throws CreateException {
+	private static SeedObjMask createSeedWithinMask(
+		ObjMask om,
+		BoundingBox containingBBox,
+		ReadableTuple3i subtractFromCrnrMin,
+		ImageDim dim
+	) throws CreateException {
 		ObjMask omSeedDup = om.duplicate();
-		omSeedDup.getBoundingBox().getCrnrMin().sub( subtractFromCrnrMin );
+		omSeedDup.shiftBackBy(subtractFromCrnrMin);
 		
 		// If a seed object is partially located outside an object, the above line might fail, so we should test
 		if (!containingBBox.contains().box( omSeedDup.getBoundingBox())) {

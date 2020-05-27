@@ -34,7 +34,7 @@ import java.util.Optional;
 
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
-import org.anchoranalysis.core.geometry.Point3i;
+import org.anchoranalysis.core.geometry.ReadableTuple3i;
 import org.anchoranalysis.core.params.KeyValueParams;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.extent.Extent;
@@ -141,8 +141,8 @@ public class CreateVoxelBoxFromPixelwiseFeatureWithMask {
 		Extent e = vbOut.extent();
 		Extent eMask = objMask.binaryVoxelBox().extnt();
 		
-		Point3i crnrMin = objMask.getBoundingBox().getCrnrMin();
-		Point3i crnrMax = objMask.getBoundingBox().calcCrnrMax();
+		ReadableTuple3i crnrMin = objMask.getBoundingBox().getCrnrMin();
+		ReadableTuple3i crnrMax = objMask.getBoundingBox().calcCrnrMax();
 		
 		for( int z=crnrMin.getZ();z<=crnrMax.getZ(); z++) {
 			

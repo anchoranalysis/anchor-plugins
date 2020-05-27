@@ -65,8 +65,9 @@ class StatsHelper {
 			}
 			
 			// We adjust the z coordiante to point to the channel
-			int oldZ = omSlice.getBoundingBox().getCrnrMin().getZ();
-			omSlice.getBoundingBox().getCrnrMin().setZ( oldZ + om.getBoundingBox().getCrnrMin().getZ() );
+			omSlice.shiftToZ(
+				omSlice.getBoundingBox().getCrnrMin().getZ() + om.getBoundingBox().getCrnrMin().getZ()
+			);
 			
 			if (omSlice.hasPixelsGreaterThan(0)) {
 				double mean = IntensityMeanCalculator.calcMeanIntensityObjMask(chnl, omSlice, excludeZero);

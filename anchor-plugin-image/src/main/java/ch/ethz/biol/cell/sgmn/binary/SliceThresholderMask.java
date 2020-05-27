@@ -2,7 +2,7 @@ package ch.ethz.biol.cell.sgmn.binary;
 
 import java.nio.ByteBuffer;
 
-import org.anchoranalysis.core.geometry.Point3i;
+import org.anchoranalysis.core.geometry.ReadableTuple3i;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.objmask.ObjMask;
@@ -12,8 +12,8 @@ import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 final class SliceThresholderMask extends SliceThresholder {
 
 	private boolean clearOutsideMask;
-	private Point3i crnrMin;
-	private Point3i crnrMax;
+	private ReadableTuple3i crnrMin;
+	private ReadableTuple3i crnrMax;
 	private ObjMask objMask;
 	
 	public SliceThresholderMask(boolean clearOutsideMask, ObjMask objMask, BinaryValuesByte bvb) {

@@ -68,7 +68,7 @@ public class BinaryImgChnlProviderBox extends BinaryImgChnlProviderOne {
 					bic.extractSlice(z).binaryVoxelBox()
 				);
 				bic.binaryVoxelBox().setPixelsToOn(
-					bbox.duplicateChangeCornerZ(z)
+					bbox.shiftToZ(z)
 				);
 			}
 		} else {

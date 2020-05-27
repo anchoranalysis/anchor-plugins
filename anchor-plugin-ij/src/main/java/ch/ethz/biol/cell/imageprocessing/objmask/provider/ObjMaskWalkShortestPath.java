@@ -34,6 +34,7 @@ import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.core.geometry.PointConverter;
+import org.anchoranalysis.core.geometry.ReadableTuple3i;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.Extent;
@@ -123,7 +124,14 @@ class ObjMaskWalkShortestPath {
 		}
 	}
 	
-	private static void drawLineOnVoxelBuffer( VoxelBuffer<ByteBuffer> plane, Extent extnt, BinaryValuesByte bvb, Point3i pnt1, Point3i pnt2, Point3i crnrMin ) {
+	private static void drawLineOnVoxelBuffer(
+		VoxelBuffer<ByteBuffer> plane,
+		Extent extnt,
+		BinaryValuesByte bvb,
+		Point3i pnt1,
+		Point3i pnt2,
+		ReadableTuple3i crnrMin
+	) {
 		drawLine4(
 			plane,
 			extnt,
