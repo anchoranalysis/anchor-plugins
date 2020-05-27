@@ -1,5 +1,7 @@
 package ch.ethz.biol.cell.imageprocessing.objmask.provider;
 
+import java.util.Optional;
+
 /*
  * #%L
  * anchor-plugin-image
@@ -78,12 +80,12 @@ public class ObjMaskProviderRemoveIntersectingPixels extends ObjMaskProviderDime
 		
 		BoundingBox bboxRelWrite = new BoundingBox(
 			intersection.relPosTo( omWrite.getBoundingBox() ),
-			intersection.extnt()
+			intersection.extent()
 		);
 		
 		BoundingBox bboxRelRead = new BoundingBox(
 			intersection.relPosTo( omRead.getBoundingBox() ),
-			intersection.extnt()
+			intersection.extent()
 		);
 		
 		// TODO we can make this more efficient, as we only need to duplicate the intersection area
@@ -109,16 +111,16 @@ public class ObjMaskProviderRemoveIntersectingPixels extends ObjMaskProviderDime
 	
 	private void removeIntersectingPixelsIfIntersects( ObjMask omWrite, ObjMask omRead, ImageDim sd ) {
 
-		BoundingBox intersection = omWrite.getBoundingBox().intersectCreateNew(omRead.getBoundingBox(), sd.getExtnt() );
+		Optional<BoundingBox> intersection = omWrite.getBoundingBox().intersection().withInside(omRead.getBoundingBox(), sd.getExtnt() );
 				
 		// We check if their bounding boxes intersect
-		if(intersection!=null) {
+		if(intersection.isPresent()) {
 			
 			// Let's get a mask for the intersecting pixels
 	
 			// TODO we can make this more efficient, we only need to duplicate intersection bit
 			// We duplicate the originals before everything is changed
-			removeIntersectingPixels( omWrite, omRead, intersection );
+			removeIntersectingPixels( omWrite, omRead, intersection.get() );
 		}
 	}
 		

@@ -80,24 +80,18 @@ public class ObjMaskProviderExtendInZ extends ObjMaskProviderContainer {
 		return ExtendObjsInZHelper.createExtendedObj(omFlat, container, bbox, zCent);
 	}
 	
-	private static BoundingBox potentialZExpansion( ObjMask omFlat, ObjMask container ) {
+	private static BoundingBox potentialZExpansion( ObjMask omFlat, ObjMask container ) throws CreateException {
 		
 		int zLow = container.getBoundingBox().getCrnrMin().getZ();
 		int zHigh = container.getBoundingBox().calcCrnrMax().getZ();
 		
-		Extent e = new Extent(
-			omFlat.getBoundingBox().extnt().getX(),
-			omFlat.getBoundingBox().extnt().getY(),
+		Extent e = omFlat.getBoundingBox().extent().duplicateChangeZ(
 			zHigh-zLow+1
 		);
-		Point3i crnrMin = new Point3i(
-			omFlat.getBoundingBox().getCrnrMin().getX(),
-			omFlat.getBoundingBox().getCrnrMin().getY(),
-			zLow
-		);
+		Point3i crnrMin = omFlat.getBoundingBox().getCrnrMin().duplicateChangeZ(zLow);
 		
-		BoundingBox bbox = new BoundingBox( crnrMin, e );
-		bbox.intersect(container.getBoundingBox(), true);
-		return bbox;
+		return new BoundingBox( crnrMin, e ).intersection().with( container.getBoundingBox() ).orElseThrow( ()->
+			new CreateException("Bounding boxes don't intersect")	
+		);
 	}
 }

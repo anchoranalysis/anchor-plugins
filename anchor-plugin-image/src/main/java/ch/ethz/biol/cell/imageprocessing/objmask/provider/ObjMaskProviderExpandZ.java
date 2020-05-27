@@ -51,26 +51,30 @@ public class ObjMaskProviderExpandZ extends ObjMaskProviderDimensions {
 		
 		for( ObjMask om : in ) {
 			
-			if (om.getBoundingBox().extnt().getZ()!=1) {
-				throw new CreateException( String.format("Existing object has a z extnt of %d. It must be 1", om.getBoundingBox().extnt().getZ() ) );
+			if (om.getBoundingBox().extent().getZ()!=1) {
+				throw new CreateException( String.format("Existing object has a z extnt of %d. It must be 1", om.getBoundingBox().extent().getZ() ) );
 			}
 			
-			BoundingBox bboxNew = new BoundingBox(om.getBoundingBox());
-			Extent eNew = new Extent(bboxNew.extnt().getX(), bboxNew.extnt().getY(), dim.getZ());
+			BoundingBox bboxNew = om.getBoundingBox().duplicateChangeExtentZ(dim.getZ());
 			
-			bboxNew.setExtnt( eNew );
+			VoxelBox<ByteBuffer> vbNew = createVoxelBoxOfDuplicatedPlanes(
+				om.getVoxelBox().getPixelsForPlane(0),
+				bboxNew.extent()
+			);
 			
-			VoxelBuffer<ByteBuffer> pixels = om.getVoxelBox().getPixelsForPlane(0);
-			
-			VoxelBox<ByteBuffer> vbNew = VoxelBoxFactory.instance().getByte().create(eNew);
-			for( int z=0; z<eNew.getZ(); z++) {
-				vbNew.setPixelsForPlane(z, pixels);
-			}
-			
-			ObjMask omNew = new ObjMask(bboxNew, vbNew, om.getBinaryValues());
-			out.add( omNew);
+			out.add(
+				new ObjMask(bboxNew, vbNew, om.getBinaryValues())
+			);
 		}
 		
 		return out;
+	}
+	
+	private static VoxelBox<ByteBuffer> createVoxelBoxOfDuplicatedPlanes( VoxelBuffer<ByteBuffer> planeIn, Extent extent ) {
+		VoxelBox<ByteBuffer> vbNew = VoxelBoxFactory.instance().getByte().create(extent);
+		for( int z=0; z<extent.getZ(); z++) {
+			vbNew.setPixelsForPlane(z, planeIn);
+		}
+		return vbNew;
 	}
 }

@@ -55,7 +55,7 @@ class StatsHelper {
 		double max = Double.NEGATIVE_INFINITY;
 		int index = -1;
 		
-		for( int z=0; z<om.getBoundingBox().extnt().getZ(); z++ ) {
+		for( int z=0; z<om.getBoundingBox().extent().getZ(); z++ ) {
 			
 			ObjMask omSlice;
 			try {

@@ -49,9 +49,9 @@ class RelativeUtilities {
 	public static BoundingBox createRelBBox( BoundingBox box, ObjMask omRelativeBase ) {
 		BoundingBox bboxIntersectRel = new BoundingBox(
 			box.relPosTo(omRelativeBase.getBoundingBox()),
-			box.extnt()
+			box.extent()
 		);
-		bboxIntersectRel.clipTo( omRelativeBase.getBoundingBox().extnt() );
+		bboxIntersectRel.clipTo( omRelativeBase.getBoundingBox().extent() );
 		return bboxIntersectRel;
 	}
 	

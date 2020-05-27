@@ -69,7 +69,7 @@ public class ObjMaskChnlUtilities {
 		for (BoundingBox bbox : bboxList) {
 			col++;
 			
-			if ( bbox.extnt().getVolumeXY() < smallVolumeThreshold ) {
+			if ( bbox.extent().getVolumeXY() < smallVolumeThreshold ) {
 				continue;
 			}
 			

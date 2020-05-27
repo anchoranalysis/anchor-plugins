@@ -27,6 +27,8 @@ package org.anchoranalysis.plugin.opencv.nonmaxima;
  */
 
 import java.util.Collection;
+import java.util.Optional;
+
 import org.anchoranalysis.image.extent.BoundingBox;
 
 import com.google.common.base.Predicate;
@@ -54,16 +56,16 @@ public class NonMaximaSuppressionBoundingBox extends NonMaximaSuppression<Boundi
 	@Override
 	protected double overlapScoreFor(BoundingBox obj1, BoundingBox obj2) {
 
-		BoundingBox intersection = new BoundingBox(obj1);
-		if (!intersection.intersect(obj2, true)) {
+		Optional<BoundingBox> intersection = obj1.intersection().with(obj2);
+		if (!intersection.isPresent()) {
 			// If there's no intersection then the score is 0
 			return 0.0;
 		}
 		
-		long intersectionArea = intersection.extnt().getVolume();
+		long intersectionArea = intersection.get().extent().getVolume();
 		
 		// The total area is equal to the sum of both minus the intersection (which is otherwise counted twice)
-		long total = obj2.extnt().getVolume() + obj1.extnt().getVolume() - intersectionArea;
+		long total = obj2.extent().getVolume() + obj1.extent().getVolume() - intersectionArea;
 		
 		return ((double) intersectionArea) / total;
 	}

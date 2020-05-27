@@ -39,7 +39,7 @@ class GrowUtilities {
 		crnrMin.sub(subExtnt);
 		return new BoundingBox(
 			crnrMin,
-			bbox.extnt().growBy(2)	
+			bbox.extent().growBy(2)	
 		);
 	}
 }

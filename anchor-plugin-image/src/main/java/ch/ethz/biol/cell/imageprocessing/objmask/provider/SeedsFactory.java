@@ -1,5 +1,7 @@
 package ch.ethz.biol.cell.imageprocessing.objmask.provider;
 
+
+
 /*
  * #%L
  * anchor-image
@@ -72,7 +74,7 @@ class SeedsFactory {
 		}
 		
 		assert(
-			seedsObj.verifySeedsAreInside( containingMask.getBoundingBox().extnt())
+			seedsObj.verifySeedsAreInside( containingMask.getBoundingBox().extent())
 		);
 		return seedsObj;
 	}
@@ -91,8 +93,9 @@ class SeedsFactory {
 		if (!containingBBox.contains( omSeedDup.getBoundingBox())) {
 			
 			// We only take the part of the seed object that intersects with our bbox
-			BoundingBox bboxIntersect = containingBBox.intersectCreateNew( omSeedDup.getBoundingBox(), dim.getExtnt() );
-			assert( bboxIntersect!=null );
+			BoundingBox bboxIntersect = containingBBox.intersection().withInside( omSeedDup.getBoundingBox(), dim.getExtnt() ).orElseThrow( ()->
+				new CreateException("No bounding box intersection exists between seed and containing bounding-box")
+			);
 			omSeedDup = omSeedDup.createSubmaskAlwaysNew(bboxIntersect);
 		}
 		return new SeedObjMask(omSeedDup);

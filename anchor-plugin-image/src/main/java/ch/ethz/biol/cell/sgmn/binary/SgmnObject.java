@@ -115,7 +115,7 @@ public class SgmnObject extends BinarySgmn {
 				}
 				
 				out.copyPixelsToCheckMask(
-					new BoundingBox(obj.getBoundingBox().extnt()),
+					new BoundingBox(obj.getBoundingBox().extent()),
 					voxelBox.getVoxelBox(),
 					obj.getBoundingBox(),
 					obj.getVoxelBox(),

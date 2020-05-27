@@ -38,9 +38,7 @@ import org.anchoranalysis.image.objmask.ObjMask;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
-class CalculateIntersectionOfDilatedBoundingBox extends FeatureCalculation<BoundingBox, FeatureInputPairObjs> {
-
-	
+class CalculateIntersectionOfDilatedBoundingBox extends FeatureCalculation<Optional<BoundingBox>, FeatureInputPairObjs> {
 	
 	private boolean use3D = false;
 			
@@ -49,18 +47,8 @@ class CalculateIntersectionOfDilatedBoundingBox extends FeatureCalculation<Bound
 		this.use3D = use3D;
 	}
 
-	private BoundingBox findIntersectionOfDilatedBoundingBox( ObjMask om1, ObjMask om2, Extent e ) {
-	
-		// Grow each bounding box
-		BoundingBox bbox1 = dilatedBoundingBoxFor(om1, e);
-		BoundingBox bbox2 = dilatedBoundingBoxFor(om2, e);
-		
-		// Find the intersection
-		return bbox1.intersectCreateNew(bbox2, e );
-	}
-
 	@Override
-	protected BoundingBox execute(FeatureInputPairObjs input) throws FeatureCalcException {
+	protected Optional<BoundingBox> execute(FeatureInputPairObjs input) throws FeatureCalcException {
 		return findIntersectionOfDilatedBoundingBox(
 			input.getFirst(),
 			input.getSecond(),
@@ -85,6 +73,16 @@ class CalculateIntersectionOfDilatedBoundingBox extends FeatureCalculation<Bound
 		return new HashCodeBuilder().append(use3D).toHashCode();
 	}
 
+	private Optional<BoundingBox> findIntersectionOfDilatedBoundingBox( ObjMask om1, ObjMask om2, Extent extent) {
+		
+		// Grow each bounding box
+		BoundingBox bbox1 = dilatedBoundingBoxFor(om1, extent);
+		BoundingBox bbox2 = dilatedBoundingBoxFor(om2, extent);
+		
+		// Find the intersection
+		return bbox1.intersection().withInside(bbox2, extent);
+	}
+	
 	private BoundingBox dilatedBoundingBoxFor( ObjMask om, Extent extent ) {
 		return om.getVoxelBoxBounded().dilate(
 			use3D,

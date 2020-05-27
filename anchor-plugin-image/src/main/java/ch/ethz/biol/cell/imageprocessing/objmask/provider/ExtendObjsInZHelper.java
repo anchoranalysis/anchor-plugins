@@ -16,7 +16,7 @@ class ExtendObjsInZHelper {
 	
 	public static ObjMask createExtendedObj( ObjMask omFlat, ObjMask container, BoundingBox bbox, int zCent ) throws CreateException {
 		
-		Extent extent = bbox.extnt();
+		Extent extent = bbox.extent();
 		
 		ObjMask omNew = container.createSubmaskAlwaysNew(bbox);
 		

@@ -74,7 +74,7 @@ public class ObjMaskCollectionRandomSampler {
 			
 			VoxelBox<ByteBuffer> vb = chnl.getVoxelBox().asByte(); 
 			
-			Extent e = bbox.extnt();
+			Extent e = bbox.extent();
 			Extent eGlob = vb.extnt();
 			
 			int emergencyBreak = 1000;

@@ -87,7 +87,7 @@ public class SurfaceSizeMaskNonZero extends FeatureSingleMemoRegion {
 		
 		VoxelBox<ByteBuffer> vbOutline = calcOutline(om, !suppressZ);
 		
-		Extent extnt = om.getBoundingBox().extnt();
+		Extent extnt = om.getBoundingBox().extent();
 		
 		try {
 			int size = 0;

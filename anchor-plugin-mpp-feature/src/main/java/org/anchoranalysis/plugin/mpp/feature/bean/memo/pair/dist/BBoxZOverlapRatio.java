@@ -1,5 +1,7 @@
 package org.anchoranalysis.plugin.mpp.feature.bean.memo.pair.dist;
 
+import java.util.Optional;
+
 import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputPairMemo;
 
 /*
@@ -62,7 +64,7 @@ public class BBoxZOverlapRatio extends FeaturePairMemoSingleRegion {
 		BoundingBox bbox2 = bbox(inputSessionless, p->p.getObj2());
 		
 		// Check the bounding boxes intersect in general (including XY)
-		if (!bbox1.hasIntersection(bbox2)) {
+		if (!bbox1.intersection().existsWith(bbox2)) {
 			return 0.0;
 		}
 		
@@ -75,14 +77,17 @@ public class BBoxZOverlapRatio extends FeaturePairMemoSingleRegion {
 	
 	private double calcOverlap(BoundingBox bbox1, BoundingBox bbox2, ImageDim dim) {
 		
-		BoundingBox bboxOverlap = bbox1.intersectCreateNew(bbox2, dim.getExtnt());
+		Optional<BoundingBox> bboxOverlap = bbox1.intersection().withInside(bbox2, dim.getExtnt());
+		if (!bboxOverlap.isPresent()) {
+			return 0;
+		}
 		
 		int minExtntZ = Math.min(
 			zFor(bbox1),
 			zFor(bbox2)
 		);
 		
-		double overlapZ = (double) zFor(bboxOverlap);
+		double overlapZ = (double) zFor(bboxOverlap.get());
 		
 		if (normalize) {
 			return overlapZ / minExtntZ;
@@ -92,7 +97,7 @@ public class BBoxZOverlapRatio extends FeaturePairMemoSingleRegion {
 	}
 	
 	private static int zFor(BoundingBox bbox) {
-		return bbox.extnt().getZ();
+		return bbox.extent().getZ();
 	}
 
 	public boolean isNormalize() {

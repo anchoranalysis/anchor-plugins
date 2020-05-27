@@ -83,6 +83,6 @@ public class MarkFixture {
 	}
 	
 	private boolean nonZeroBBoxVolume(MarkEllipsoid ell) {
-		return !ell.bbox(dim, GlobalRegionIdentifiers.SUBMARK_INSIDE).extnt().isEmpty();
+		return !ell.bbox(dim, GlobalRegionIdentifiers.SUBMARK_INSIDE).extent().isEmpty();
 	}
 }

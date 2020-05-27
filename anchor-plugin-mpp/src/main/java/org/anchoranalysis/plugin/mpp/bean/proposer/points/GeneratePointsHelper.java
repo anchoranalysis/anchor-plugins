@@ -64,9 +64,9 @@ class GeneratePointsHelper {
 		int zLow = Math.max(0, bbox.getCrnrMin().getZ()-maxZDist );
 		int zHigh = Math.min(sceneDim.getZ(), bbox.getCrnrMin().getZ()+maxZDist );
 		
-		Extent e = bbox.extnt().duplicateChangeZ(zHigh-zLow);
+		Extent e = bbox.extent().duplicateChangeZ(zHigh-zLow);
 		bbox.getCrnrMin().setZ( zLow );
-		bbox.setExtnt(e);
+		bbox.setExtent(e);
 
 		if (!chnlFilled.isPresent()) {
 			return PointsFromBinaryChnl.pointsFromChnlInsideBox(chnl, bbox, (int) Math.floor(pntRoot.getZ()), skipZDist);

@@ -94,7 +94,7 @@ public class NeighbourhoodCond implements UpdatableBeforeCondition {
 		
 		// If this is set, we ignore any combinations whose bounding boxes don't touch or intersect
 		if (requireBBoxNeighbours) {
-			if (!bboxSrcGrown.hasIntersection(omDest.getBoundingBox())) {
+			if (!bboxSrcGrown.intersection().existsWith(omDest.getBoundingBox())) {
 				return false;
 			}
 		}
