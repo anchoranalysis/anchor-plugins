@@ -54,10 +54,10 @@ public class SgmnMPPState extends ExperimentState {
 	public void outputBeforeAnyTasksAreExecuted( BoundOutputManagerRouteErrors outputManager ) {
 		
 		outputManager.getWriterCheckIfAllowed().write(
-			"namedDefinitions",
+			"define",
 			() -> new XStreamGenerator<Object>(
 				define,
-				Optional.of("namedDefinitions")
+				Optional.of("define")
 			)
 		);
 	}
