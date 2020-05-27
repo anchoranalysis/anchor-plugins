@@ -49,7 +49,7 @@ public abstract class TouchingVoxels extends FeatureObjMaskPair {
 
 	// START BEAN PROPERTIES
 	@BeanField
-	private boolean use3D = true;
+	private boolean do3D = true;
 	// END BEAN PROPERTIES
 	
 	@Override
@@ -76,19 +76,19 @@ public abstract class TouchingVoxels extends FeatureObjMaskPair {
 	/** The intersection of the bounding box of one mask with the (dilated by 1 bounding-box) of the other */
 	private Optional<BoundingBox> bboxIntersectDilated(SessionInput<FeatureInputPairObjs> input) throws FeatureCalcException {
 		return input.calc(
-			new CalculateIntersectionOfDilatedBoundingBox(use3D)	
+			new CalculateIntersectionOfDilatedBoundingBox(do3D)	
 		);
 	}
 	
 	protected CountKernel createCountKernelMask( ObjMask om1, ObjMask om2Rel ) {
-		return new CountKernelNghbMask(use3D, om1.getBinaryValuesByte(), om2Rel, true );
-	}
-	
-	public boolean isUse3D() {
-		return use3D;
+		return new CountKernelNghbMask(do3D, om1.getBinaryValuesByte(), om2Rel, true );
 	}
 
-	public void setUse3D(boolean use3D) {
-		this.use3D = use3D;
+	public boolean isDo3D() {
+		return do3D;
+	}
+
+	public void setDo3D(boolean do3d) {
+		do3D = do3d;
 	}
 }
