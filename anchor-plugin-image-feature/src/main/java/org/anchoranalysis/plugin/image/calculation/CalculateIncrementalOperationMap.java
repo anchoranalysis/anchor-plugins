@@ -43,9 +43,9 @@ public abstract class CalculateIncrementalOperationMap extends CacheableCalculat
 > {
 	private boolean do3D;
 	
-	public CalculateIncrementalOperationMap(boolean do3d) {
+	public CalculateIncrementalOperationMap(boolean do3D) {
 		super(100);
-		this.do3D = do3d;
+		this.do3D = do3D;
 	}
 	
 	protected CalculateIncrementalOperationMap(CalculateIncrementalOperationMap other) {

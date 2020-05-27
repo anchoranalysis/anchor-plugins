@@ -23,38 +23,38 @@ class BinaryChnlFixture {
 	
 	private BinaryChnlFixture() {}
 	
-	public static BinaryChnl createWithRectangle( Point3i crnr, boolean use3d ) throws CreateException {
+	public static BinaryChnl createWithRectangle( Point3i crnr, boolean use3D ) throws CreateException {
 
 		BinaryChnl chnl = new BinaryChnl(
 			BinaryVoxelBoxFactory.instance().create(
-				extent(use3d)
+				extent(use3D)
 			)
 		);
 		
 		chnl.binaryVoxelBox().setPixelsCheckMaskOn(
-			createRectange(crnr, use3d)
+			createRectange(crnr, use3D)
 		);
 		
 		return chnl;
 	}
 
-	public static Extent extent(boolean use3d) {
-		return use3d ? ChnlFixture.MEDIUM_3D : ChnlFixture.MEDIUM_2D;
+	public static Extent extent(boolean use3D) {
+		return use3D ? ChnlFixture.MEDIUM_3D : ChnlFixture.MEDIUM_2D;
 	}
 	
-	public static int depth(boolean use3d) {
-		return use3d ? DEPTH : 1;
+	public static int depth(boolean use3D) {
+		return use3D ? DEPTH : 1;
 	}
 	
 	/** Creates a rectangle (2d) or cuboid (3d) */
-	private static ObjMask createRectange( Point3i crnr, boolean use3d ) {
+	private static ObjMask createRectange( Point3i crnr, boolean use3D ) {
 		ObjMask om = new ObjMask(
 			new BoundingBox(
 				crnr,
 				new Extent(
 					WIDTH,
 					HEIGHT,
-					depth(use3d)
+					depth(use3D)
 				)
 			)
 		);

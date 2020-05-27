@@ -39,8 +39,8 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 public class CalculateErosionMap extends CalculateIncrementalOperationMap {
 
-	public CalculateErosionMap(boolean do3d) {
-		super(do3d);
+	public CalculateErosionMap(boolean do3D) {
+		super(do3D);
 	}
 	
 	protected CalculateErosionMap(CalculateIncrementalOperationMap other) {
