@@ -62,11 +62,11 @@ class PositionProposerMemoList implements PositionProposer {
 	
 	private static Point3d randomPosition( BoundingBox bbox, RandomNumberGenerator re ) {
 		
-		Extent extnt = bbox.extent();
+		Extent extent = bbox.extent();
 		
-		int x = bbox.getCrnrMin().getX() + (int) (re.nextDouble() * extnt.getX() );
-		int y = bbox.getCrnrMin().getY() + (int) (re.nextDouble() * extnt.getY() );
-		int z = bbox.getCrnrMin().getZ() + (int) (re.nextDouble() * extnt.getZ() );
+		int x = bbox.getCrnrMin().getX() + (int) (re.nextDouble() * extent.getX() );
+		int y = bbox.getCrnrMin().getY() + (int) (re.nextDouble() * extent.getY() );
+		int z = bbox.getCrnrMin().getZ() + (int) (re.nextDouble() * extent.getZ() );
 		
 		return new Point3d(x,y,z);
 	}

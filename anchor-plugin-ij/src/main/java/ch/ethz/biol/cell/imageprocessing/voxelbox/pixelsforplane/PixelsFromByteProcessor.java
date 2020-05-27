@@ -39,12 +39,12 @@ import org.anchoranalysis.image.voxel.buffer.VoxelBufferByte;
 public class PixelsFromByteProcessor implements IPixelsForPlane<ByteBuffer> {
 	
 	private ByteProcessor bp;
-	private Extent extnt;
+	private Extent extent;
 	
 	public PixelsFromByteProcessor( ByteProcessor bp ) {
 		super();
 		this.bp = bp;
-		this.extnt = new Extent( bp.getWidth(), bp.getHeight(), 1 );
+		this.extent = new Extent( bp.getWidth(), bp.getHeight(), 1 );
 	}
 
 	@Override
@@ -60,6 +60,6 @@ public class PixelsFromByteProcessor implements IPixelsForPlane<ByteBuffer> {
 
 	@Override
 	public Extent extent() {
-		return extnt;
+		return extent;
 	}
 }

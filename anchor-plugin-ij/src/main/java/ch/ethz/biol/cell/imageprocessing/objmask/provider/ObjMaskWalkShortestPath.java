@@ -126,7 +126,7 @@ class ObjMaskWalkShortestPath {
 	
 	private static void drawLineOnVoxelBuffer(
 		VoxelBuffer<ByteBuffer> plane,
-		Extent extnt,
+		Extent extent,
 		BinaryValuesByte bvb,
 		Point3i pnt1,
 		Point3i pnt2,
@@ -134,7 +134,7 @@ class ObjMaskWalkShortestPath {
 	) {
 		drawLine4(
 			plane,
-			extnt,
+			extent,
 			bvb,
 			pnt1.getX() - crnrMin.getX(),
 			pnt1.getY() - crnrMin.getY(),
@@ -150,7 +150,7 @@ class ObjMaskWalkShortestPath {
 	Based on code from http://stackoverflow.com/questions/5186939/algorithm-for-drawing-a-4-connected-line<br>
 	Author: Gabriel Landini (G.Landini at bham.ac.uk)
 	 */
-	 private static void drawLine4(VoxelBuffer<ByteBuffer> plane, Extent extnt, BinaryValuesByte bvb, int x1, int y1, int x2, int y2) {
+	 private static void drawLine4(VoxelBuffer<ByteBuffer> plane, Extent extent, BinaryValuesByte bvb, int x1, int y1, int x2, int y2) {
 				  
 		int dx = Math.abs(x2 - x1);
 		int dy = Math.abs(y2 - y1);
@@ -158,7 +158,7 @@ class ObjMaskWalkShortestPath {
 		int sgnY = sgn(y1,y2);
 		int e = 0;
 		for (int i=0; i < dx+dy; i++) {
-			drawPoint( plane, extnt, bvb, x1, y1 );
+			drawPoint( plane, extent, bvb, x1, y1 );
 
 			int e1 = e + dy;
 			int e2 = e - dx;
@@ -170,14 +170,14 @@ class ObjMaskWalkShortestPath {
 				e = e2;
 			}
 		}
-		drawPoint( plane, extnt, bvb, x2, y2 );
+		drawPoint( plane, extent, bvb, x2, y2 );
 	}
 	 
 	 private static int sgn( int x1, int x2 ) {
 		 return x1 < x2 ? 1 : -1;
 	 }
 	 
-	 private static void drawPoint( VoxelBuffer<ByteBuffer> plane, Extent extnt, BinaryValuesByte bvb, int x, int y ) {
-		 plane.putByte( extnt.offset(x,y) , bvb.getOnByte() );
+	 private static void drawPoint( VoxelBuffer<ByteBuffer> plane, Extent extent, BinaryValuesByte bvb, int x, int y ) {
+		 plane.putByte( extent.offset(x,y) , bvb.getOnByte() );
 	 }
 }

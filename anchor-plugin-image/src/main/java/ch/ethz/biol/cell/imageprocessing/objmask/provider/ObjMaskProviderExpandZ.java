@@ -52,7 +52,7 @@ public class ObjMaskProviderExpandZ extends ObjMaskProviderDimensions {
 		for( ObjMask om : in ) {
 			
 			if (om.getBoundingBox().extent().getZ()!=1) {
-				throw new CreateException( String.format("Existing object has a z extnt of %d. It must be 1", om.getBoundingBox().extent().getZ() ) );
+				throw new CreateException( String.format("Existing object has a z extent of %d. It must be 1", om.getBoundingBox().extent().getZ() ) );
 			}
 			
 			BoundingBox bboxNew = om.getBoundingBox().duplicateChangeExtentZ(dim.getZ());

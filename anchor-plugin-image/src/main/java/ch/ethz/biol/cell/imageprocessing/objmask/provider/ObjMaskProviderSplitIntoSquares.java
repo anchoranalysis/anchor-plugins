@@ -95,7 +95,7 @@ public class ObjMaskProviderSplitIntoSquares extends ObjMaskProviderOne {
 				endY = Math.min(endY+squareSize,e.getY());
 			}
 			
-			int extntY = endY-startY;
+			int extentY = endY-startY;
 			
 			for( int x=0; x<numX; x++ ) {
 			
@@ -107,17 +107,17 @@ public class ObjMaskProviderSplitIntoSquares extends ObjMaskProviderOne {
 					endX = Math.min(endX+squareSize,e.getX());
 				}				
 			
-				int extntX = endX-startX;
+				int extentX = endX-startX;
 				
-				Extent extntNew = new Extent(extntX,extntY,om.getVoxelBox().extent().getZ());
+				Extent extentNew = new Extent(extentX,extentY,om.getVoxelBox().extent().getZ());
 				BoundingBox srcBox = new BoundingBox(
 					new Point3i(startX,startY,0),
-					extntNew
+					extentNew
 				);
 				
-				VoxelBox<ByteBuffer> vbNew = VoxelBoxFactory.instance().getByte().create(extntNew);
+				VoxelBox<ByteBuffer> vbNew = VoxelBoxFactory.instance().getByte().create(extentNew);
 				
-				om.getVoxelBox().copyPixelsTo(srcBox, vbNew, new BoundingBox(extntNew));
+				om.getVoxelBox().copyPixelsTo(srcBox, vbNew, new BoundingBox(extentNew));
 				
 				// We only add the square if there's at least one voxel in it
 				if (minNumVoxels==1) {
