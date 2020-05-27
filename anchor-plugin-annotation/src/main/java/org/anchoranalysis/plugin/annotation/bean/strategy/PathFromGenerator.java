@@ -27,32 +27,17 @@ package org.anchoranalysis.plugin.annotation.bean.strategy;
  */
 
 import java.nio.file.Path;
-
 import org.anchoranalysis.io.bean.filepath.generator.FilePathGenerator;
 import org.anchoranalysis.io.error.AnchorIOException;
 
-public class GeneratorPathRslvr {
+public class PathFromGenerator {
 
 	/** The debug-mode for everything that isn't the main input */
 	private final static boolean DEBUG_MODE_NON_INPUT = false;
 	
-	private Path pathForBinding;
+	private PathFromGenerator() {}
 	
-
-	public GeneratorPathRslvr(Path pathForBinding) {
-		super();
-		this.pathForBinding = pathForBinding;
-	}	
-	
-	public Path path( FilePathGenerator generator ) throws AnchorIOException {
+	public static Path derivePath( FilePathGenerator generator, Path pathForBinding ) throws AnchorIOException {
 		return generator.outFilePath( pathForBinding, DEBUG_MODE_NON_INPUT );
-	}
-	
-	public Path pathOrNull( FilePathGenerator generator ) throws AnchorIOException {
-		if (generator!=null) {
-			return path( generator );
-		} else {
-			return null;
-		}
 	}
 }
