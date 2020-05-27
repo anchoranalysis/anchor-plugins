@@ -67,6 +67,14 @@ public class MarkProposerStrategy extends SingleFilePathGeneratorStrategy {
 	private MarkEvaluator markEvaluator;
 	// END BEAN PROPERTIES
 
+	public Optional<FilePathGenerator> paramsFilePathGenerator() {
+		return Optional.ofNullable(keyValueParamsFilePathGenerator);
+	}
+	
+	public Optional<FilePathGenerator> cfgFilePathGenerator() {
+		return Optional.ofNullable(defaultCfgFilePathGenerator);
+	}
+	
 	@Override
 	public int weightWidthDescription() {
 		return 1;
