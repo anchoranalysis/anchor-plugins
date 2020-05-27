@@ -66,13 +66,16 @@ public class ObjMaskProviderConnectedComponentsObjs extends ObjMaskProviderOne {
 		return out;
 	}
 	
-	private ObjMaskCollection createObjs3D( ObjMask omUnconnected, CreateFromConnectedComponentsFactory createObjMasks ) throws CreateException {
+	private ObjMaskCollection createObjs3D(
+		ObjMask omUnconnected,
+		CreateFromConnectedComponentsFactory createObjMasks
+	) throws CreateException {
 		
 		ObjMaskCollection objs = createObjsFromMask( omUnconnected.binaryVoxelBox(), createObjMasks );
 		
 		// Adjust the crnr of each object, by adding on the original starting point of our object-mask
 		for( ObjMask omConnected : objs ) {
-			omConnected.getBoundingBox().getCrnrMin().add(
+			omConnected.shiftBy(
 				omUnconnected.getBoundingBox().getCrnrMin()
 			);
 		}

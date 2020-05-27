@@ -30,7 +30,7 @@ package ch.ethz.biol.cell.imageprocessing.objmask.provider;
 import java.util.List;
 
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.core.geometry.Point3i;
+import org.anchoranalysis.core.geometry.ReadableTuple3i;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.objmask.ObjMask;
@@ -88,7 +88,7 @@ public class ObjMaskProviderExtendInZ extends ObjMaskProviderContainer {
 		Extent e = omFlat.getBoundingBox().extent().duplicateChangeZ(
 			zHigh-zLow+1
 		);
-		Point3i crnrMin = omFlat.getBoundingBox().getCrnrMin().duplicateChangeZ(zLow);
+		ReadableTuple3i crnrMin = omFlat.getBoundingBox().getCrnrMin().duplicateChangeZ(zLow);
 		
 		return new BoundingBox( crnrMin, e ).intersection().with( container.getBoundingBox() ).orElseThrow( ()->
 			new CreateException("Bounding boxes don't intersect")	

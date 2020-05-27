@@ -28,7 +28,7 @@ package org.anchoranalysis.plugin.image.intensity;
 
 import java.nio.ByteBuffer;
 
-import org.anchoranalysis.core.geometry.Point3i;
+import org.anchoranalysis.core.geometry.ReadableTuple3i;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.chnl.Chnl;
 import org.anchoranalysis.image.extent.BoundingBox;
@@ -60,8 +60,8 @@ public class IntensityMeanCalculator {
 		
 		BoundingBox bbox = om.getBoundingBox();
 		
-		Point3i crnrMin = bbox.getCrnrMin();
-		Point3i crnrMax = bbox.calcCrnrMax();
+		ReadableTuple3i crnrMin = bbox.getCrnrMin();
+		ReadableTuple3i crnrMax = bbox.calcCrnrMax();
 		
 		double sum = 0.0;
 		int cnt = 0;

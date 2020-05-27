@@ -33,7 +33,7 @@ import java.util.Optional;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.geometry.Point3i;
+import org.anchoranalysis.core.geometry.ReadableTuple3i;
 import org.anchoranalysis.image.bean.provider.ChnlProvider;
 import org.anchoranalysis.image.chnl.Chnl;
 import org.anchoranalysis.image.convert.ByteConverter;
@@ -80,8 +80,8 @@ public class ChnlProviderAdjustDifferenceToMedian extends ChnlProviderOneObjsSou
 	
 	private void adjustObj( ObjMask om, Chnl chnl, Chnl chnlLookup, int objMedian ) {
 		
-		Point3i crnrMin = om.getBoundingBox().getCrnrMin();
-		Point3i crnrMax = om.getBoundingBox().calcCrnrMax();
+		ReadableTuple3i crnrMin = om.getBoundingBox().getCrnrMin();
+		ReadableTuple3i crnrMax = om.getBoundingBox().calcCrnrMax();
 		
 		VoxelBox<ByteBuffer> vb = chnl.getVoxelBox().asByte();
 		VoxelBox<ByteBuffer> vbLookup = chnlLookup.getVoxelBox().asByte();

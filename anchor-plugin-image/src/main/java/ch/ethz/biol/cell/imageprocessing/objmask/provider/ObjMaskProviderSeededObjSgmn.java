@@ -166,7 +166,7 @@ public class ObjMaskProviderSeededObjSgmn extends ObjMaskProviderChnlSource {
 		
 		// We shift each object back to were it belongs globally
 		for( ObjMask om : sgmnObjs ) {
-			om.getBoundingBox().getCrnrMin().add( objMask.getBoundingBox().getCrnrMin() );
+			om.shiftBy( objMask.getBoundingBox().getCrnrMin() );
 		}
 		
 		return sgmnObjs;

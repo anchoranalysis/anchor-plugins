@@ -31,7 +31,7 @@ import java.util.Optional;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.geometry.Point3i;
+import org.anchoranalysis.core.geometry.ReadableTuple3i;
 import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.objmask.ObjMask;
 
@@ -60,12 +60,12 @@ public class ObjMaskFilterRemoveTouchingSceneBorder extends ObjMaskFilterByObjec
 		}
 		
 		if (includeZ) {
-			Point3i crnrMin = om.getBoundingBox().getCrnrMin();
+			ReadableTuple3i crnrMin = om.getBoundingBox().getCrnrMin();
 			if (crnrMin.getZ()==0) {
 				return false;
 			}
 
-			Point3i crnrMax = om.getBoundingBox().calcCrnrMax();
+			ReadableTuple3i crnrMax = om.getBoundingBox().calcCrnrMax();
 			if (crnrMax.getZ()==(dim.get().getZ()-1)) {
 				return false;
 			}

@@ -32,6 +32,7 @@ import org.anchoranalysis.anchor.mpp.mark.Mark;
 
 import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.core.geometry.Point3i;
+import org.anchoranalysis.core.geometry.ReadableTuple3i;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 import org.anchoranalysis.image.extent.BoundingBox;
 
@@ -52,7 +53,7 @@ public class AnySliceCentrePosOnBinaryImgChnl extends CheckMarkBinaryChnl {
 		}
 		
 		BoundingBox bbox = mark.bboxAllRegions( nrgStack.getDimensions() ) ;
-		Point3i crnrMax = bbox.calcCrnrMax();
+		ReadableTuple3i crnrMax = bbox.calcCrnrMax();
 		for( int z=bbox.getCrnrMin().getZ(); z<=crnrMax.getZ(); z++) {
 			Point3d cpSlice = new Point3d(cp.getX(), cp.getY(),z);
 			if(isPointOnBinaryChnl( cpSlice, nrgStack, AnySliceCentrePosOnBinaryImgChnl::derivePoint )) {

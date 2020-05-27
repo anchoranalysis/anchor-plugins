@@ -91,7 +91,7 @@ public class ObjMaskSgmnBinarySgmn extends ObjMaskSgmn {
 		
 		if (omSrc.isPresent()) {
 			for (ObjMask om : objsBinary) {
-				om.getBoundingBox().getCrnrMin().add(omSrc.get().getBoundingBox().getCrnrMin());
+				om.shiftBy(omSrc.get().getBoundingBox().getCrnrMin());
 			}
 		}
 		
