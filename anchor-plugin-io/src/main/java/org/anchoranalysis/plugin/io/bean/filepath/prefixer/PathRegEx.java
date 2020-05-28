@@ -66,11 +66,11 @@ public class PathRegEx extends FilePathPrefixerAvoidResolve {
 		
 		String pathInForwardSlashes = FilePathToUnixStyleConverter.toStringUnixStyle( pathIn );
 		
-		String[] components = regEx.matchStr( pathInForwardSlashes );
-		
-		if (components==null) {
-			throw new AnchorIOException( String.format("Cannot match '%s'", pathInForwardSlashes ));
-		}
+		String[] components = regEx.matchStr( pathInForwardSlashes ).orElseThrow( ()->
+			new AnchorIOException(
+				String.format("Cannot match '%s'", pathInForwardSlashes )
+			)
+		);
 		
 		return components;
 	}

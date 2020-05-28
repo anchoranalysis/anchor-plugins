@@ -42,26 +42,17 @@ public class RegExMatcher extends DescriptiveNameFromFileIndependent {
 	@Override
 	protected String createDescriptiveName(File file, int index) {
 		
-		String filePath = file.getPath();
-		filePath = filePath.replace('\\', '/');
+		String filePath = file.getPath().replace('\\', '/');
 		
-		
-		String[] components = regEx.matchStr(filePath);
-		
-		if (components==null) {
-			return String.format("regEx match failed on %s", filePath);
-		}
-		
-		StringBuilder out = new StringBuilder();
-		for (int i=0; i<components.length; i++) {
-			
-			if (i!=0) {
-				out.append( "/" );
-			}
-			
-			out.append( components[i] );
-		}
-		return out.toString();
+		return regEx.matchStr(filePath)
+			.map( RegExMatcher::buildStrFromComponents )
+			.orElse(
+				String.format("regEx match failed on %s", filePath)
+			);
+	}
+	
+	private static String buildStrFromComponents( String[] components ) {
+		return String.join("/", components);
 	}
 
 	public RegEx getRegEx() {
@@ -71,6 +62,4 @@ public class RegExMatcher extends DescriptiveNameFromFileIndependent {
 	public void setRegEx(RegEx regEx) {
 		this.regEx = regEx;
 	}
-
-
 }
