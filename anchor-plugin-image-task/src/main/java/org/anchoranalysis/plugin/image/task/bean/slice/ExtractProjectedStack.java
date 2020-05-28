@@ -1,6 +1,6 @@
 package org.anchoranalysis.plugin.image.task.bean.slice;
 
-import org.anchoranalysis.core.error.friendly.AnchorFriendlyRuntimeException;
+import org.anchoranalysis.core.error.friendly.AnchorImpossibleSituationException;
 
 /*-
  * #%L
@@ -98,7 +98,7 @@ class ExtractProjectedStack {
 	
 	private static BoundingBox boxToProject( Point3i crnrPos, Extent eChnl, Extent eTrgt ) {
 		return new BoundingBox(crnrPos, eChnl).intersection().with( new BoundingBox(eTrgt) ).orElseThrow( ()-> 
-			new AnchorFriendlyRuntimeException("Bounding boxes don't intersect. This should never occur")
+			new AnchorImpossibleSituationException()
 		);
 	}
 		

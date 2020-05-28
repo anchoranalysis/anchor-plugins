@@ -31,6 +31,7 @@ import java.util.List;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
+import org.anchoranalysis.core.error.friendly.AnchorImpossibleSituationException;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.bean.provider.ChnlProviderOne;
 import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
@@ -54,16 +55,6 @@ public class ChnlProviderAssignFromIntersectingObjects extends ChnlProviderOne {
 	private ObjMaskProvider objsTarget;
 	// END BEAN PROPERTIES
 	
-	private int getValForMask( Chnl chnl, ObjMask om ) {
-		
-		VoxelBox<?> vb = chnl.getVoxelBox().any();
-		
-		Point3i pnt = om.findAnyPntOnMask();
-		assert(pnt!=null);
-		int a = vb.getVoxel(pnt.getX(), pnt.getY(), pnt.getZ());
-		return a;
-	}
-	
 	@Override
 	public Chnl createFromChnl(Chnl chnl) throws CreateException {
 		
@@ -76,16 +67,10 @@ public class ChnlProviderAssignFromIntersectingObjects extends ChnlProviderOne {
 		for( ObjWithMatches own : matchList ) {
 			
 			int level = getValForMask( chnl, own.getSourceObj() );
-			
-//			if (own.getMatches().size()==0) {
-//				getLogErrorReporter().getLogReporter().log("Cannot find a match for an src-object");
-//				continue;
-//			}
 			assert(own.getMatches().size()==1);
 			
 			vb.setPixelsCheckMask( own.getMatches().get(0), level);
 		}
-		
 		return chnl;
 	}
 	
@@ -126,6 +111,17 @@ public class ChnlProviderAssignFromIntersectingObjects extends ChnlProviderOne {
 		return omMostIntersecting;
 	}
 
+	private int getValForMask( Chnl chnl, ObjMask om ) {
+		
+		VoxelBox<?> vb = chnl.getVoxelBox().any();
+		
+		Point3i pnt = om.findAnyPntOnMask().orElseThrow( ()->
+			new AnchorImpossibleSituationException()
+		);
+		int a = vb.getVoxel(pnt.getX(), pnt.getY(), pnt.getZ());
+		return a;
+	}
+	
 	public ObjMaskProvider getObjsSource() {
 		return objsSource;
 	}
@@ -141,8 +137,4 @@ public class ChnlProviderAssignFromIntersectingObjects extends ChnlProviderOne {
 	public void setObjsTarget(ObjMaskProvider objsTarget) {
 		this.objsTarget = objsTarget;
 	}
-
-
-	
-	
 }

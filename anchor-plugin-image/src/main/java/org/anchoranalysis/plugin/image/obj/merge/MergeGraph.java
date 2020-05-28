@@ -147,11 +147,13 @@ public class MergeGraph {
 				max = entry;
 			} else if ( DoubleUtilities.areEqual(edge.getPriority(),max.getEdge().getPriority())) {
 				
+				// We can safely assume a point exists on the mask and call .get(), as none of the masks are empty
+				
 				// If we have equal values, we impose an arbitrary ordering
 				// so as to keep the output of the algorithm as deterministic as possible
 				int cmp = comparator.compare(
-					max.getEdge().getOmWithFeature().getObjMask().findAnyPntOnMask(),
-					edge.getOmWithFeature().getObjMask().findAnyPntOnMask()
+					max.getEdge().getOmWithFeature().getObjMask().findAnyPntOnMask().get(),
+					edge.getOmWithFeature().getObjMask().findAnyPntOnMask().get()
 				);
 				if (cmp>0) {
 					max = entry;
