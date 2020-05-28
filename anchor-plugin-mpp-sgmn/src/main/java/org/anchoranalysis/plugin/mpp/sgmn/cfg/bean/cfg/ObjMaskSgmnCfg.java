@@ -34,7 +34,7 @@ import org.anchoranalysis.anchor.mpp.regionmap.RegionMapSingleton;
 
 
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.name.provider.INamedProvider;
+import org.anchoranalysis.core.name.provider.NamedProvider;
 import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 import org.anchoranalysis.core.random.RandomNumberGenerator;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
@@ -58,7 +58,7 @@ public class ObjMaskSgmnCfg extends SgmnObjMaskCollection {
 	@Override
 	public ObjMaskCollection sgmn(
 		NamedImgStackCollection stackCollection,
-		INamedProvider<ObjMaskCollection> objMaskCollection,
+		NamedProvider<ObjMaskCollection> objMaskCollection,
 		Optional<SeedCollection> seeds,
 		RandomNumberGenerator re,
 		BoundIOContext context

@@ -34,6 +34,7 @@ import org.anchoranalysis.bean.annotation.AllowEmpty;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.functional.OptionalUtilities;
 import org.anchoranalysis.experiment.JobExecutionException;
 import org.anchoranalysis.experiment.bean.task.TaskWithoutSharedState;
 import org.anchoranalysis.experiment.task.InputTypesExpected;
@@ -97,7 +98,11 @@ public class SharedObjectsMultiInputTask extends TaskWithoutSharedState<MultiInp
 			throw new OperationFailedException(e);
 		}
 		
-		NRGStackHelper.writeNRGStackParams(imageInitParams, nrgParamsName, context );
+		NRGStackHelper.writeNRGStackParams(
+			imageInitParams,
+			OptionalUtilities.create(nrgParamsName),
+			context
+		);
 	}
 
 	@Override

@@ -34,7 +34,7 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
-import org.anchoranalysis.core.name.provider.INamedProvider;
+import org.anchoranalysis.core.name.provider.NamedProvider;
 import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 import org.anchoranalysis.core.progress.ProgressReporterNull;
 import org.anchoranalysis.experiment.JobExecutionException;
@@ -140,7 +140,7 @@ public class ScaleTask extends RasterTask {
 	}
 	
 	private static void outputStackCollection(
-		INamedProvider<Stack> stackCollection,
+		NamedProvider<Stack> stackCollection,
 		String outputSecondLevelKey,
 		String outputName,
 		BoundIOContext context
