@@ -69,10 +69,4 @@ class MinimaStore {
 	public int size() {
 		return list.size();
 	}
-	
-//	public Minima addEmptyMinima() {
-//		Minima m = new Minima();
-//		list.add(m);
-//		return m;
-//	}
 }
