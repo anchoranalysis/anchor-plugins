@@ -91,7 +91,7 @@ public class GuessDimFromInputImage extends ImageDimProvider {
 	private ImageDim takeDimFromSpecificStack( NamedProviderStore<Stack> stackCollection, String keyThatExists ) throws CreateException {
 		Stack stack;
 		try {
-			stack = getSharedObjects().getStackCollection().getNull(keyThatExists);
+			stack = getSharedObjects().getStackCollection().getException(keyThatExists);
 		} catch (NamedProviderGetException e) {
 			throw new CreateException(e);
 		}

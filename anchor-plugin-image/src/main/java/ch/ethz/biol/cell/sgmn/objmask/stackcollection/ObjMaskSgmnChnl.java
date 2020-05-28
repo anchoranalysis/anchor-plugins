@@ -30,7 +30,7 @@ import java.util.Optional;
 
 
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.name.provider.INamedProvider;
+import org.anchoranalysis.core.name.provider.NamedProvider;
 import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 import org.anchoranalysis.core.random.RandomNumberGenerator;
 import org.anchoranalysis.image.bean.sgmn.objmask.ObjMaskSgmn;
@@ -59,7 +59,7 @@ public class ObjMaskSgmnChnl extends SgmnObjMaskCollection {
 	@Override
 	public ObjMaskCollection sgmn(
 		NamedImgStackCollection stackCollection,
-		INamedProvider<ObjMaskCollection> objMaskCollection,
+		NamedProvider<ObjMaskCollection> objMaskCollection,
 		Optional<SeedCollection> seeds,
 		RandomNumberGenerator re,
 		BoundIOContext context
