@@ -44,7 +44,7 @@ public class RegExMatcher extends DescriptiveNameFromFileIndependent {
 		
 		String filePath = file.getPath().replace('\\', '/');
 		
-		return regEx.matchStr(filePath)
+		return regEx.match(filePath)
 			.map( RegExMatcher::buildStrFromComponents )
 			.orElse(
 				String.format("regEx match failed on %s", filePath)
