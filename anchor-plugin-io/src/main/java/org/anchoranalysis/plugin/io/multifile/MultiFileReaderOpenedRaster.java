@@ -104,11 +104,6 @@ public class MultiFileReaderOpenedRaster extends OpenedRaster {
 	public int bitDepth() throws RasterIOException {
 		
 		MultiFile multiFile = createMultiFileMemo( ProgressReporterNull.get() );
-		
-		if (!multiFile.dataTypeDefined()) {
-			throw new RasterIOException("Number of frames is not defined");
-		}
-		
 		return multiFile.dataType().numBits();
 	}
 	

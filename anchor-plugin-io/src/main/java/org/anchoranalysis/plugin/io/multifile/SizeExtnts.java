@@ -1,5 +1,7 @@
 package org.anchoranalysis.plugin.io.multifile;
 
+import java.util.Optional;
+
 /*-
  * #%L
  * anchor-plugin-io
@@ -36,11 +38,13 @@ import org.anchoranalysis.image.stack.Stack;
  *
  */
 public class SizeExtnts {
+	
+	private Optional<IntegerRange> rangeZ;
+	private Optional<IntegerRange> rangeC;
+	private Optional<IntegerRange> rangeT;
+	
 	private Integer sizeX = null;
 	private Integer sizeY = null;
-	private IntegerRange rangeZ = null;
-	private IntegerRange rangeC = null;
-	private IntegerRange rangeT = null;
 	
 	// Assumes numbering starts from 0
 	public SizeExtnts( ParsedFilePathBag fileBag ) {
@@ -50,7 +54,7 @@ public class SizeExtnts {
 	}
 	
 	public boolean hasNecessaryExtnts() {
-		return rangeC.hasSizeDefined() && rangeZ.hasSizeDefined() && rangeT.hasSizeDefined();
+		return rangeC.isPresent() && rangeZ.isPresent() && rangeT.isPresent();
 	}
 	
 	public void populateMissingFromArbitrarySlice( Stack stackArbitrarySlice ) {
@@ -58,36 +62,56 @@ public class SizeExtnts {
 		sizeX = stackArbitrarySlice.getDimensions().getX();
 		sizeY = stackArbitrarySlice.getDimensions().getY();
 		
-		if (!rangeC.hasSizeDefined()) {
-			rangeC = new IntegerRange(stackArbitrarySlice.getNumChnl());
+		if (!rangeC.isPresent()) {
+			rangeC = Optional.of(
+				new IntegerRange(
+					stackArbitrarySlice.getNumChnl()
+				)
+			);
 		}
 		
-		if (!rangeZ.hasSizeDefined()) {
-			rangeZ = new IntegerRange(stackArbitrarySlice.getDimensions().getZ());
+		if (!rangeZ.isPresent()) {
+			rangeZ = Optional.of(
+				new IntegerRange(
+					stackArbitrarySlice.getDimensions().getZ()
+				)
+			);
 		}
 		
-		if (!rangeT.hasSizeDefined()) {
+		if (!rangeT.isPresent()) {
 			// If there's no indexes associated with the files, we assume there's a single index
-			rangeT = new IntegerRange(1);
+			rangeT = Optional.of( 
+				new IntegerRange(1)
+			);
 		}
 	}
 	
 
 	public Extent toExtnt() {
-		 return new Extent(sizeX,sizeY,rangeZ.getSize());
+		 return new Extent(
+			sizeX,
+			sizeY,
+			rangeZ.get().getSize()
+		);
 	}
 
 	public IntegerRange getRangeZ() {
-		return rangeZ;
+		return rangeZ.get();
 	}
 
 	public IntegerRange getRangeC() {
-		return rangeC;
+		return rangeC.get();
 	}
 
 	public IntegerRange getRangeT() {
-		return rangeT;
+		return rangeT.get();
 	}
 
+	public boolean rangeTPresent() {
+		return rangeT.isPresent();
+	}
 
+	public boolean rangeCPresent() {
+		return rangeC.isPresent();
+	}
 }
