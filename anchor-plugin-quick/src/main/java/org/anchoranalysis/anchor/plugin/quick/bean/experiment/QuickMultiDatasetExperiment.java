@@ -31,6 +31,8 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Optional;
+
 import org.anchoranalysis.bean.BeanInstanceMap;
 import org.anchoranalysis.bean.StringSet;
 import org.anchoranalysis.bean.annotation.AllowEmpty;
@@ -172,7 +174,9 @@ public class QuickMultiDatasetExperiment<T extends InputFromManager, S> extends 
 		MonitoredSequentialExecutor<String> serialExecutor = new MonitoredSequentialExecutor<>(
 			name-> executeSingleDataset(name, expArgs, reporter.getErrorReporter() ),
 			name-> name,
-			reporter.getLogReporter(),
+			Optional.of(
+				reporter.getLogReporter()
+			),
 			true
 		);
 		
