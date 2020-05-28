@@ -36,13 +36,13 @@ public abstract class FeatureListProviderPermuteParamBase extends FeatureListPro
 	protected FeatureList<FeatureInputNRGStack> createPermutedFeaturesFor(Feature<FeatureInputNRGStack> feature) throws CreateException {
 		FeatureListProviderPermute<Integer,FeatureInputNRGStack> delegate = createDelegate(feature);
 		
+		configurePermutePropertyOnDelegate(delegate);
 		try {
 			delegate.checkMisconfigured( defaultInstances );
 		} catch (BeanMisconfiguredException e) {
 			throw new CreateException(e);
 		}
-		
-		configurePermutePropertyOnDelegate(delegate);
+				
 		return delegate.create();
 	}
 	
