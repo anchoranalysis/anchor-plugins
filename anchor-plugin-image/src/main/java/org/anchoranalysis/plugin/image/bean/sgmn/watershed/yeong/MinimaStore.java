@@ -38,27 +38,7 @@ import ch.ethz.biol.cell.sgmn.objmask.ObjMaskChnlUtilities;
 
 // Stores minima points
 class MinimaStore {
-
-	private static class Minima {
-
-		private List<Point3i> delegate;
 		
-		public Minima( List<Point3i> pntList ) {
-			delegate = pntList;
-		}
-		
-		public Minima( Point3i pnt ) {
-			delegate = new ArrayList<>();
-			delegate.add(pnt);
-		}
-
-		public List<Point3i> getListPnts() {
-			return delegate;
-		}
-
-
-	}
-	
 	private List<Minima> list = new ArrayList<>();
 
 	/** Adds a new minima, but duplicates the point (which is mutable and may change during iteration) before adding */
@@ -78,7 +58,10 @@ class MinimaStore {
 		
 		ObjMaskCollection out = new ObjMaskCollection();
 		for( Minima m : list ) {
-			out.add( ObjMaskChnlUtilities.createObjMaskFromPoints( m.getListPnts() ) );
+  
+			out.add(
+				ObjMaskChnlUtilities.createObjMaskFromPoints( m.getListPnts() )
+			);
 		}
 		return out;
 	}

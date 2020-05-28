@@ -73,10 +73,6 @@ public class ObjMaskFilterChnlIntensGreaterEqualThan extends ObjMaskFilterByObje
 	@Override
 	protected boolean match(ObjMask om, Optional<ImageDim> dim) throws OperationFailedException {
 		
-		if (!dim.isPresent()) {
-			throw new OperationFailedException("Image-dimensions are required for this operation");
-		}
-		
 		int thresholdRslv = threshold(dim);
 		
 		for( int z=0; z<om.getBoundingBox().extent().getZ(); z++) {
