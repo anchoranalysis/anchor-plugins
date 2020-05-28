@@ -44,7 +44,10 @@ class EqualVoxelsPlateau {
 		}
 		
 		public void addInner( Point3i pnt ) {
-			ptsInner.add(pnt);
+			// We make we duplicate, as pnt is coming from an iterator and is mutable
+			ptsInner.add(
+				new Point3i(pnt)
+			);
 		}
 		
 		public boolean hasPoints() {
