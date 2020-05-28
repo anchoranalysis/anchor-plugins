@@ -13,7 +13,7 @@ public abstract class ChnlProviderFilterRadiusBase extends ChnlProviderOne {
 
 	// START BEAN PROPERTIES
 	@BeanField @Positive
-	private int radius = 2;
+	private double radius = 2;
 	
 	@BeanField
 	private boolean radiusInMeters = false;	// Treats radius if it's microns
@@ -36,15 +36,15 @@ public abstract class ChnlProviderFilterRadiusBase extends ChnlProviderOne {
 				ImageUnitConverter.convertFromMeters( radius, dim.getRes() )
 			);
 		} else {
-			return radius;
+			return (int) radius;
 		}
 	}
 	
-	public int getRadius() {
+	public double getRadius() {
 		return radius;
 	}
 
-	public void setRadius(int radius) {
+	public void setRadius(double radius) {
 		this.radius = radius;
 	}
 
