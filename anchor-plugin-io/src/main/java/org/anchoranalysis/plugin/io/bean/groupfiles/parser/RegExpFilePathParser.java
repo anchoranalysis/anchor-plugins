@@ -1,5 +1,7 @@
 package org.anchoranalysis.plugin.io.bean.groupfiles.parser;
 
+import java.util.Optional;
+
 /*
  * #%L
  * anchor-io
@@ -84,29 +86,29 @@ public class RegExpFilePathParser extends FilePathParser {
 		}
 		
 		if (keyGroupID > 0) {
-			key = ExtractGroup.extractStr( keyGroupID, matcher, "key" );
-			if ((key==null||key.isEmpty()) && keyRequired==true) {
+			Optional<String> extractedKey = ExtractGroup.extractStr( keyGroupID, matcher, "key" );
+			if (!extractedKey.isPresent() || (extractedKey.get().isEmpty() && keyRequired)) {
 				return false;
 			}
+			key = extractedKey.get();
 		}
-		
 		return true;
 	}
 	
 	@Override
-	public Integer getChnlNum() {
-		return intOrNull(chnlGroupID, chnlNum);
+	public Optional<Integer> getChnlNum() {
+		return asOptional(chnlGroupID, chnlNum);
 	}
 
 	@Override
-	public Integer getZSliceNum() {
-		return intOrNull(zSliceGroupID, zSliceNum);
+	public Optional<Integer> getZSliceNum() {
+		return asOptional(zSliceGroupID, zSliceNum);
 	}
 	
 
 	@Override
-	public Integer getTimeIndex() {
-		return intOrNull(timeIndexGroupID, timeIndex);
+	public Optional<Integer> getTimeIndex() {
+		return asOptional(timeIndexGroupID, timeIndex);
 	}
 	
 
@@ -115,11 +117,11 @@ public class RegExpFilePathParser extends FilePathParser {
 		return key;
 	}
 
-	private static Integer intOrNull(int groupID, int val) {
+	private static Optional<Integer> asOptional(int groupID, int val) {
 		if (groupID > 0) {
-			return val;
+			return Optional.of(val);
 		} else {
-			return null;
+			return Optional.empty();
 		}
 	}
 	

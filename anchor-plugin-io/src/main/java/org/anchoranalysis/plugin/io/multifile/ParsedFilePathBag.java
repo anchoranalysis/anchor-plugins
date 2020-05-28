@@ -30,7 +30,10 @@ package org.anchoranalysis.plugin.io.multifile;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Optional;
 import java.util.function.Function;
+
+import org.anchoranalysis.core.functional.OptionalUtilities;
 
 public class ParsedFilePathBag implements Iterable<FileDetails> {
 	
@@ -45,43 +48,54 @@ public class ParsedFilePathBag implements Iterable<FileDetails> {
 		return list.iterator();
 	}
 	
-	public IntegerRange rangeChnlNum() {
+	public Optional<IntegerRange> rangeChnlNum() {
 		return range( fd -> fd.getChnlNum() );
 	}
 	
-	public IntegerRange rangeSliceNum() {
+	public Optional<IntegerRange> rangeSliceNum() {
 		return range( fd -> fd.getSliceNum() );
 	}
 	
-	public IntegerRange rangeTimeIndex() {
+	public Optional<IntegerRange> rangeTimeIndex() {
 		return range( fd -> fd.getTimeIndex() );
 	}
 		
-	private IntegerRange range( Function<FileDetails,Integer> func ) {
-		return new IntegerRange(
+	private Optional<IntegerRange> range( Function<FileDetails,Optional<Integer>> func ) {
+		return OptionalUtilities.mapBoth(
 			getMin( func ),
-			getMax( func )
+			getMax( func ),
+			(min, max) -> new IntegerRange(min, max)
 		);
 	}
 	
-	private Integer getMax( Function<FileDetails,Integer> func ) {
+	private Optional<Integer> getMax( Function<FileDetails,Optional<Integer>> func ) {
 		
-		Integer max = null;
+		Optional<Integer> max = Optional.empty();
 		for (FileDetails fd : list) {
-			Integer val = func.apply(fd); 
-			if (max==null || val>max) {
+			Optional<Integer> val = func.apply(fd); 
+			
+			if (!val.isPresent()) {
+				continue;
+			}
+			
+			if (!max.isPresent() || val.get()>max.get()) {
 				max = val;
 			}
 		}
 		return max;
 	}
 	
-	public Integer getMin( Function<FileDetails,Integer> func ) {
+	public Optional<Integer> getMin( Function<FileDetails,Optional<Integer>> func ) {
 		
-		Integer min = null;
+		Optional<Integer> min = Optional.empty();
 		for (FileDetails fd : list) {
-			Integer val = func.apply(fd); 
-			if (min==null || val<min) {
+			Optional<Integer> val = func.apply(fd);
+			
+			if (!val.isPresent()) {
+				continue;
+			}
+			
+			if (!min.isPresent() || val.get() < min.get()) {
 				min = val;
 			}
 		}

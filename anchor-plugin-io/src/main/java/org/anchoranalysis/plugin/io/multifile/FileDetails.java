@@ -1,6 +1,7 @@
 package org.anchoranalysis.plugin.io.multifile;
 
 import java.nio.file.Path;
+import java.util.Optional;
 
 /*
  * #%L
@@ -31,11 +32,11 @@ import java.nio.file.Path;
 
 public class FileDetails {
 	private Path filePath;
-	private Integer chnlNum;
-	private Integer sliceNum;
-	private Integer timeIndex;
+	private Optional<Integer> chnlNum;
+	private Optional<Integer> sliceNum;
+	private Optional<Integer> timeIndex;
 	
-	public FileDetails(Path filePath, Integer chnlNum, Integer sliceNum, Integer timeIndex) {
+	public FileDetails(Path filePath, Optional<Integer> chnlNum, Optional<Integer> sliceNum, Optional<Integer> timeIndex) {
 		super();
 		this.filePath = filePath;
 		this.chnlNum = chnlNum;
@@ -49,25 +50,28 @@ public class FileDetails {
 	public void setFilePath(Path filePath) {
 		this.filePath = filePath;
 	}
-	
-	public Integer getChnlNum() {
+
+	public Optional<Integer> getChnlNum() {
 		return chnlNum;
 	}
-	public void setChnlNum(Integer chnlNum) {
+
+	public void setChnlNum(Optional<Integer> chnlNum) {
 		this.chnlNum = chnlNum;
 	}
-	
-	public Integer getSliceNum() {
+
+	public Optional<Integer> getSliceNum() {
 		return sliceNum;
 	}
-	public void setSliceNum(Integer sliceNum) {
+
+	public void setSliceNum(Optional<Integer> sliceNum) {
 		this.sliceNum = sliceNum;
 	}
 
-	public Integer getTimeIndex() {
+	public Optional<Integer> getTimeIndex() {
 		return timeIndex;
 	}
-	public void setTimeIndex(Integer timeIndex) {
+
+	public void setTimeIndex(Optional<Integer> timeIndex) {
 		this.timeIndex = timeIndex;
 	}
 }

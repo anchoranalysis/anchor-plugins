@@ -1,5 +1,7 @@
 package org.anchoranalysis.plugin.io.multifile.buffer;
 
+import java.util.Optional;
+
 /*-
  * #%L
  * anchor-plugin-io
@@ -47,24 +49,22 @@ public class MultiBufferSized {
 		sizeT = size.getRangeT().getSize();
 	}
 	
-	public void populateFrom( Stack stackForFile, Integer chnlNum, Integer sliceNum, Integer timeIndex ) {
+	public void populateFrom( Stack stackForFile, Optional<Integer> chnlNum, Optional<Integer> sliceNum, Optional<Integer> timeIndex ) {
 
 		// If timeIndex is unspecified, we assume not
-		if (timeIndex==null) {
-			timeIndex = 0;
-		}
+		int time = timeIndex.orElse(0);
 		
 		// If we specify a channel, then we only care about slices
-		if( chnlNum!=null) {
-			buffers.populateWithSpecifiedChnl(stackForFile, chnlNum, sliceNum, timeIndex);
+		if( chnlNum.isPresent()) {
+			buffers.populateWithSpecifiedChnl(stackForFile, chnlNum.get(), sliceNum, time);
 		} else {
 			
-			if( sliceNum!=null) {
+			if( sliceNum.isPresent()) {
 				// No specific Channel Number, but specific Slice Number
-				buffers.populateWithSpecifiedSlice(stackForFile, sliceNum, timeIndex);
+				buffers.populateWithSpecifiedSlice(stackForFile, sliceNum.get(), time);
 				
 			} else {
-				buffers.populateNoSpecifics(stackForFile, timeIndex);
+				buffers.populateNoSpecifics(stackForFile, time);
 			}
 		}
 	}

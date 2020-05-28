@@ -45,15 +45,14 @@ public class RegExpFilePathParserTest {
 		
 		parser.setPath("hello_4_2_world");
 
-		assertTrue( parser.getChnlNum()==2 );
-		assertTrue( parser.getZSliceNum()==4 );
+		assertTrue( parser.getChnlNum().get()==2 );
+		assertTrue( parser.getZSliceNum().get()==4 );
 		
 		parser.setChnlGroupID(0);
 		
 		parser.setPath("hello_5_7_world");
 		
-		//assertTrue( parser.getChnlNum()==2 );
-		assertTrue( parser.getZSliceNum()==5 );
+		assertTrue( parser.getZSliceNum().get()==5 );
 	}
 
 }
