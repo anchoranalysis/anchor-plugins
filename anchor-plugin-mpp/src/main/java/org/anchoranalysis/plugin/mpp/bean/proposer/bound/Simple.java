@@ -1,5 +1,7 @@
 package org.anchoranalysis.plugin.mpp.bean.proposer.bound;
 
+import java.util.Optional;
+
 import org.anchoranalysis.anchor.mpp.bean.bound.BoundCalculator;
 import org.anchoranalysis.anchor.mpp.bean.bound.RslvdBound;
 import org.anchoranalysis.anchor.mpp.bean.proposer.BoundProposer;
@@ -52,7 +54,7 @@ public class Simple extends BoundProposer {
 	}
 
 	@Override
-	public BidirectionalBound propose( Point3d pos, RotationMatrix orientation, ImageDim bndScene, RslvdBound minMaxBound, ErrorNode proposerFailureDescription ) {
+	public Optional<BidirectionalBound> propose( Point3d pos, RotationMatrix orientation, ImageDim bndScene, RslvdBound minMaxBound, ErrorNode proposerFailureDescription ) {
 		
 		proposerFailureDescription = proposerFailureDescription.add("BoundProposerSimple");
 		
@@ -72,7 +74,7 @@ public class Simple extends BoundProposer {
 		if (bothX==null) {
 			//proposerFailureDescription.add( String.format("cannot calculate bound in direction %f", orientation2D.getAngleRadians()) );
 			proposerFailureDescription.addFormatted("cannot calculate bound in direction " + orientation.toString());
-			return null;
+			return Optional.empty();
 		}
 		
 		/*{
@@ -84,7 +86,7 @@ public class Simple extends BoundProposer {
 				bothX.setReverse( minMaxBound );
 			}
 		}*/
-		return bothX;
+		return Optional.of(bothX);
 	}
 	
 	public BoundCalculator getBoundCalculator() {

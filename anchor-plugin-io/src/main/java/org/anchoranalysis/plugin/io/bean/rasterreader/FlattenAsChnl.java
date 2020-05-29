@@ -29,6 +29,7 @@ package org.anchoranalysis.plugin.io.bean.rasterreader;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.progress.ProgressReporter;
@@ -115,9 +116,9 @@ public class FlattenAsChnl extends RasterReader {
 		}
 				
 		@Override
-		public List<String> channelNames() {
+		public Optional<List<String>> channelNames() {
 			// We do not report channel-names, as we create them from the series
-			return null;
+			return Optional.empty();
 		}
 		
 		@Override

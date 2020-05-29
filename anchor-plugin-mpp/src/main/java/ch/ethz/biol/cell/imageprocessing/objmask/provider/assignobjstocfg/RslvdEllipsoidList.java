@@ -280,10 +280,6 @@ public class RslvdEllipsoidList implements Iterable<RslvdEllipsoid> {
 	// Returns nullif there are no objects
 	private DistWithIndex indexWithMinDist( RslvdObjMask rom ) {
 		
-		if (delegate.size()==0) {
-			return null;
-		}
-		
 		int minIndex = -1;
 		double minDist = Double.MAX_VALUE;
 		
