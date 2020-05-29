@@ -1,5 +1,7 @@
 package org.anchoranalysis.plugin.mpp.bean.proposer.radii;
 
+import java.util.Optional;
+
 import org.anchoranalysis.anchor.mpp.bean.bound.MarkBounds;
 import org.anchoranalysis.anchor.mpp.bean.proposer.radii.RadiiProposer;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
@@ -54,22 +56,22 @@ public class RadiiProposerRepeat extends RadiiProposer {
 	}
 
 	@Override
-	public Point3d propose(Point3d pos, MarkBounds markBounds,
+	public Optional<Point3d> propose(Point3d pos, MarkBounds markBounds,
 			RandomNumberGenerator re, ImageDim bndScene, Orientation orientation,
 			ErrorNode proposerFailureDescription) {
 
 		proposerFailureDescription = proposerFailureDescription.add("RadiiProposerRepeat");
 		
 		for (int i=0; i<maxIter; i++) {
-			Point3d point = radiiProposer.propose(pos, markBounds, re, bndScene, orientation, proposerFailureDescription);
-			if (point!=null) {
+			Optional<Point3d> point = radiiProposer.propose(pos, markBounds, re, bndScene, orientation, proposerFailureDescription);
+			if (point.isPresent()) {
 				return point;
 			}
 		}
 		
 		proposerFailureDescription.add("maxIter reached");
 		
-		return null;
+		return Optional.empty();
 	}
 
 	public RadiiProposer getRadiiProposer() {

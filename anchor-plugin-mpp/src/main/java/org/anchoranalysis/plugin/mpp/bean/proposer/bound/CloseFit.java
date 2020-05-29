@@ -1,5 +1,7 @@
 package org.anchoranalysis.plugin.mpp.bean.proposer.bound;
 
+import java.util.Optional;
+
 import org.anchoranalysis.anchor.mpp.bean.bound.RslvdBound;
 import org.anchoranalysis.anchor.mpp.bean.proposer.BoundProposer;
 import org.anchoranalysis.anchor.mpp.bound.BidirectionalBound;
@@ -60,25 +62,31 @@ public class CloseFit extends BoundProposer {
 	}
 
 	@Override
-	public BidirectionalBound propose(Point3d pos, RotationMatrix orientation,
+	public Optional<BidirectionalBound> propose(Point3d pos, RotationMatrix orientation,
 			ImageDim bndScene, RslvdBound minMaxBound, ErrorNode proposerFailureDescription) {
 
 		proposerFailureDescription = proposerFailureDescription.add("BoundProposerCloseFit");
 		
 		// Our delegate bound is what is our normal best guess on the bounds
-		BidirectionalBound delegateBound = calcDelegate(pos, orientation, bndScene, minMaxBound, proposerFailureDescription);
-		if (delegateBound==null) {
-			return null;
+		Optional<BidirectionalBound> delegateBound = calcDelegate(pos, orientation, bndScene, minMaxBound, proposerFailureDescription);
+		if (!delegateBound.isPresent()) {
+			return Optional.empty();
 		}
 		
 		proposerFailureDescription.add("delegateBound=" + delegateBound.toString());
 
 		// But we try to get a new better set of bounds, basedup on a 'close fit' criteria
-		BidirectionalBound bothNew = proposeBoundCloseFit(pos, bndScene, minMaxBound, delegateBound, proposerFailureDescription );
+		BidirectionalBound bothNew = proposeBoundCloseFit(
+			pos,
+			bndScene,
+			minMaxBound,
+			delegateBound.get(),
+			proposerFailureDescription
+		);
 		
 		proposerFailureDescription.add("delegateBoundAfterCloseFit=" + bothNew.toString());
 		
-		return bothNew;
+		return Optional.of(bothNew);
 	}
 
 	public BoundProposer getBoundProposer() {
@@ -126,15 +134,8 @@ public class CloseFit extends BoundProposer {
 	}
 
 	
-	private BidirectionalBound calcDelegate( Point3d pos, RotationMatrix orientation, ImageDim bndScene, RslvdBound minMaxBound, ErrorNode proposerFailureDescription ) {
-		
-		BidirectionalBound bothX = getBoundProposer().propose(pos, orientation, bndScene, minMaxBound, proposerFailureDescription);
-		
-		if (bothX==null) {
-			return null;
-		}
-
-		return bothX;
+	private Optional<BidirectionalBound> calcDelegate( Point3d pos, RotationMatrix orientation, ImageDim bndScene, RslvdBound minMaxBound, ErrorNode proposerFailureDescription ) {
+		return getBoundProposer().propose(pos, orientation, bndScene, minMaxBound, proposerFailureDescription);
 	}
 
 	public UnitValueDistance getEdgeDevOutside() {

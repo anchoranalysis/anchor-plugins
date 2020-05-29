@@ -1,5 +1,7 @@
 package org.anchoranalysis.plugin.mpp.bean.proposer.radii;
 
+import java.util.Optional;
+
 import org.anchoranalysis.anchor.mpp.bean.bound.MarkBounds;
 
 /*-
@@ -48,14 +50,16 @@ public class RandomEllipsoidBounds extends RadiiProposer {
 	}
 
 	@Override
-	public Point3d propose(Point3d pos, MarkBounds markBounds, RandomNumberGenerator re,
+	public Optional<Point3d> propose(Point3d pos, MarkBounds markBounds, RandomNumberGenerator re,
 			ImageDim bndScene, Orientation orientation,
 			ErrorNode errorNode) {
 		try {
-			return EllipsoidRandomizer.randomizeRadii( (EllipsoidBounds) getSharedObjects().getMarkBounds(), re, bndScene.getRes() );
+			return Optional.of(
+				EllipsoidRandomizer.randomizeRadii( (EllipsoidBounds) getSharedObjects().getMarkBounds(), re, bndScene.getRes() )
+			);
 		} catch (NamedProviderGetException e) {
 			errorNode.add(e.summarize().toString());
-			return null;
+			return Optional.empty();
 		}
 	}
 }

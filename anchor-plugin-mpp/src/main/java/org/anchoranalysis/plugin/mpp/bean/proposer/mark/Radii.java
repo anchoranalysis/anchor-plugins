@@ -75,7 +75,7 @@ public class Radii extends MarkProposer {
 		
 		assert( context.getDimensions().contains( inputMark.getMark().centerPoint() ));
 		
-		Point3d rad;
+		Optional<Point3d> rad;
 		try {
 			rad = radiiProposer.propose(
 				inputMark.getMark().centerPoint(),
@@ -90,12 +90,12 @@ public class Radii extends MarkProposer {
 			return false;
 		}
 		
-		if (rad==null) {
+		if (!rad.isPresent()) {
 			context.getErrorNode().add("radiiProposer returned null");
 			return false;
 		}
 
-		mark.setMarksExplicit( inputMark.getMark().centerPoint(), orientationNew.get(), rad);
+		mark.setMarksExplicit( inputMark.getMark().centerPoint(), orientationNew.get(), rad.get());
 		inputMark.reset();
 		return true;
 	}

@@ -27,6 +27,7 @@ package org.anchoranalysis.plugin.io.bean.chnl.map;
  */
 
 import java.util.List;
+import java.util.Optional;
 
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.io.RasterIOException;
@@ -62,7 +63,7 @@ public class ImgChnlMapAutoname extends ImgChnlMapCreator {
 		ImgChnlMap map = new ImgChnlMap();
 
 		// null indicates that there are no names
-		List<String> names = openedRaster.channelNames();
+		Optional<List<String>> names = openedRaster.channelNames();
 		
 		try {
 			boolean rgb = openedRaster.isRGB() && openedRaster.numChnl()==3;
@@ -84,9 +85,9 @@ public class ImgChnlMapAutoname extends ImgChnlMapCreator {
 		return map;
 	}
 	
-	private String nameFor( int c, List<String> names, boolean rgb ) {
-		if (names != null) {
-			return names.get(c);
+	private String nameFor( int c, Optional<List<String>> names, boolean rgb ) {
+		if (names.isPresent()) {
+			return names.get().get(c);
 		} else if (rgb) {
 			return rgbNameFor(c);
 		} else {

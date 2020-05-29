@@ -83,7 +83,7 @@ class OpenedRasterAlterDimensions extends OpenedRaster {
 	}
 
 	@Override
-	public List<String> channelNames() {
+	public Optional<List<String>> channelNames() {
 		return delegate.channelNames();
 	}
 
