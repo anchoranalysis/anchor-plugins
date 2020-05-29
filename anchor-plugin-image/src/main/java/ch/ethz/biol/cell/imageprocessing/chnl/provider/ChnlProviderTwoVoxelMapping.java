@@ -6,7 +6,6 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.bean.provider.ChnlProviderTwo;
 import org.anchoranalysis.image.chnl.Chnl;
 import org.anchoranalysis.image.chnl.factory.ChnlFactory;
-import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
 
@@ -24,7 +23,7 @@ public abstract class ChnlProviderTwoVoxelMapping extends ChnlProviderTwo {
 	protected Chnl process(Chnl chnl1, Chnl chnl2) throws CreateException {
 
 		Chnl chnlOut = ChnlFactory.instance().createEmptyInitialised(
-			new ImageDim(chnl1.getDimensions()),
+			chnl1.getDimensions(),
 			VoxelDataTypeUnsignedByte.instance
 		);
 		

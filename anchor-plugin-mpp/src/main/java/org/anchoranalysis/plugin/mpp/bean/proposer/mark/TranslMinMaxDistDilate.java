@@ -1,5 +1,7 @@
 package org.anchoranalysis.plugin.mpp.bean.proposer.mark;
 
+import java.util.Optional;
+
 import org.anchoranalysis.anchor.mpp.bean.proposer.MarkProposer;
 import org.anchoranalysis.anchor.mpp.bean.proposer.OrientationProposer;
 import org.anchoranalysis.anchor.mpp.bean.proposer.radii.RadiiProposer;
@@ -49,23 +51,18 @@ public class TranslMinMaxDistDilate extends MarkProposer {
 	@BeanField
 	private Radii radii = new Radii();
 	// END BEAN PARAMETERS
-	
-	
+		
 	private MarkProposer delegate;
 	
-	
-	
 	public TranslMinMaxDistDilate() {
-		
 		OrderedList list = new OrderedList();
 		
 		transl.setDistance( new MarkDistanceAbstractPosition() );
 		
-		list.getMarkProposerList().add(transl);
-		list.getMarkProposerList().add(radii);
+		list.getList().add(transl);
+		list.getList().add(radii);
 		
 		delegate = list;
-		
 	}
 
 	@Override
@@ -79,11 +76,11 @@ public class TranslMinMaxDistDilate extends MarkProposer {
 	}
 	
 	public MarkProposer getPositionMarkProposer() {
-		return transl.getMarkProposer();
+		return transl.getProposer();
 	}
 
 	public void setPositionMarkProposer(MarkProposer positionMarkProposer) {
-		transl.setMarkProposer(positionMarkProposer);
+		transl.setProposer(positionMarkProposer);
 	}
 
 	public double getMinDist() {
@@ -127,7 +124,7 @@ public class TranslMinMaxDistDilate extends MarkProposer {
 	}
 
 	@Override
-	public ICreateProposalVisualization proposalVisualization(boolean detailed) {
+	public Optional<ICreateProposalVisualization> proposalVisualization(boolean detailed) {
 		return delegate.proposalVisualization(detailed);
 	}
 }

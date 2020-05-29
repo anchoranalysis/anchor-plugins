@@ -57,11 +57,6 @@ public class SharedObjectsFromChnlTask extends RasterTask {
 	// END BEAN PROPERTIES
 
 	@Override
-	public boolean hasVeryQuickPerInputExecution() {
-		return false;
-	}
-	
-	@Override
 	public void doStack(
 		NamedChnlsInput inputObject,
 		int seriesIndex,
@@ -104,6 +99,11 @@ public class SharedObjectsFromChnlTask extends RasterTask {
 	
 	}
 
+	@Override
+	public boolean hasVeryQuickPerInputExecution() {
+		return false;
+	}
+	
 	public DefineOutputterMPP getDefine() {
 		return define;
 	}

@@ -1,5 +1,7 @@
 package org.anchoranalysis.plugin.image.feature.bean.obj.pair.touching;
 
+import java.util.Optional;
+
 /*-
  * #%L
  * anchor-plugin-image-feature
@@ -47,7 +49,7 @@ public abstract class TouchingVoxels extends FeatureObjMaskPair {
 
 	// START BEAN PROPERTIES
 	@BeanField
-	private boolean use3D = true;
+	private boolean do3D = true;
 	// END BEAN PROPERTIES
 	
 	@Override
@@ -55,9 +57,9 @@ public abstract class TouchingVoxels extends FeatureObjMaskPair {
 
 		FeatureInputPairObjs inputSessionless = input.get();
 		
-		BoundingBox bboxIntersect = bboxIntersectDilated(input);
+		Optional<BoundingBox> bboxIntersect = bboxIntersectDilated(input);
 		
-		if (bboxIntersect==null) {
+		if (!bboxIntersect.isPresent()) {
 			// No intersection, so therefore return 0
 			return 0;
 		}
@@ -65,28 +67,28 @@ public abstract class TouchingVoxels extends FeatureObjMaskPair {
 		return calcWithIntersection(
 			inputSessionless.getFirst(),
 			inputSessionless.getSecond(),
-			bboxIntersect
+			bboxIntersect.get()
 		);
 	}
 	
 	protected abstract double calcWithIntersection(ObjMask om1, ObjMask om2, BoundingBox bboxIntersect) throws FeatureCalcException;
 	
 	/** The intersection of the bounding box of one mask with the (dilated by 1 bounding-box) of the other */
-	private BoundingBox bboxIntersectDilated(SessionInput<FeatureInputPairObjs> input) throws FeatureCalcException {
+	private Optional<BoundingBox> bboxIntersectDilated(SessionInput<FeatureInputPairObjs> input) throws FeatureCalcException {
 		return input.calc(
-			new CalculateIntersectionOfDilatedBoundingBox(use3D)	
+			new CalculateIntersectionOfDilatedBoundingBox(do3D)	
 		);
 	}
 	
 	protected CountKernel createCountKernelMask( ObjMask om1, ObjMask om2Rel ) {
-		return new CountKernelNghbMask(use3D, om1.getBinaryValuesByte(), om2Rel, true );
-	}
-	
-	public boolean isUse3D() {
-		return use3D;
+		return new CountKernelNghbMask(do3D, om1.getBinaryValuesByte(), om2Rel, true );
 	}
 
-	public void setUse3D(boolean use3d) {
-		use3D = use3d;
+	public boolean isDo3D() {
+		return do3D;
+	}
+
+	public void setDo3D(boolean do3d) {
+		do3D = do3d;
 	}
 }

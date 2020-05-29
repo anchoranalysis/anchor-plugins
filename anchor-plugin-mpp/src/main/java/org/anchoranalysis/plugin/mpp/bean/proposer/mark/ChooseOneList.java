@@ -27,33 +27,23 @@ package org.anchoranalysis.plugin.mpp.bean.proposer.mark;
  */
 
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.anchoranalysis.anchor.mpp.bean.proposer.MarkProposer;
-import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.anchor.mpp.proposer.ProposalAbnormalFailureException;
 import org.anchoranalysis.anchor.mpp.proposer.ProposerContext;
 import org.anchoranalysis.anchor.mpp.proposer.visualization.ICreateProposalVisualization;
 import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
-import org.anchoranalysis.bean.annotation.BeanField;
 
 // Chooses one from a list
-public class ChooseOneList extends MarkProposer {
-
-	// START BEAN
-	@BeanField
-	private List<MarkProposer> markProposerList = new ArrayList<>();
-	// END BEAN
+public class ChooseOneList extends MarkProposerFromList {
 	
 	private int lastIndex = -1;
-	
-	public ChooseOneList() {
-		super();
-	}
-	
+
 	@Override
-	public boolean propose(PxlMarkMemo inputMark, ProposerContext context) throws ProposalAbnormalFailureException {
+	protected boolean propose(PxlMarkMemo inputMark, ProposerContext context, List<MarkProposer> markProposerList)
+			throws ProposalAbnormalFailureException {
 		
 		int index = (int) (context.getRe().nextDouble() * markProposerList.size());
 		
@@ -65,34 +55,12 @@ public class ChooseOneList extends MarkProposer {
         return markProposer.propose(inputMark, context);
 	}
 
-	
 	@Override
-	public boolean isCompatibleWith(Mark testMark) {
-		
-		for (MarkProposer markProposer : markProposerList) {
-			
-			if (!markProposer.isCompatibleWith(testMark)) {
-				return false;
-			}
-		}
-		
-		return true;
-	}
-
-	public List<MarkProposer> getMarkProposerList() {
-		return markProposerList;
-	}
-
-	public void setMarkProposerList(List<MarkProposer> markProposerList) {
-		this.markProposerList = markProposerList;
-	}
-
-	@Override
-	public ICreateProposalVisualization proposalVisualization(boolean detailed) {
-
+	protected Optional<ICreateProposalVisualization> proposalVisualization(boolean detailed,
+			List<MarkProposer> markProposerList) {
 		if (lastIndex!=-1) {
 			return markProposerList.get(lastIndex).proposalVisualization(detailed);
 		}
-		return null;
+		return Optional.empty();
 	}
 }

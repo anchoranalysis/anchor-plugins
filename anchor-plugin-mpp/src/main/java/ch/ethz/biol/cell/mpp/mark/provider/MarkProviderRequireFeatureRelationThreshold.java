@@ -37,6 +37,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.bean.shared.relation.RelationBean;
 import org.anchoranalysis.core.error.CreateException;
+import org.anchoranalysis.core.functional.OptionalUtilities;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.provider.FeatureProvider;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
@@ -68,23 +69,27 @@ public class MarkProviderRequireFeatureRelationThreshold extends MarkProvider {
 	// END BEAN PROPERTIES
 	
 	@Override
-	public Mark create() throws CreateException {
+	public Optional<Mark> create() throws CreateException {
 
-		Mark mark = markProvider.create();
-		
-		if (mark==null) {
-			return null;
-		}
-		
+		Optional<Mark> mark = markProvider.create();
+		return OptionalUtilities.flatMap(
+			mark,
+			m-> {
+				if (isFeatureAccepted(m)) {
+					return mark;
+				} else {
+					return Optional.empty();
+				}
+			}
+		);
+	}
+	
+	private boolean isFeatureAccepted(Mark mark) throws CreateException {
 		Feature<FeatureInputMark> feature = featureProvider.create();
 		
 		double featureVal = calculateInput(feature, mark);
 		
-		if (relation.create().isRelationToValueTrue(featureVal, threshold)) {
-			return mark;
-		} else {
-			return null;
-		}
+		return relation.create().isRelationToValueTrue(featureVal, threshold);
 	}
 	
 	private Optional<ImageDim> dimensions() throws CreateException {

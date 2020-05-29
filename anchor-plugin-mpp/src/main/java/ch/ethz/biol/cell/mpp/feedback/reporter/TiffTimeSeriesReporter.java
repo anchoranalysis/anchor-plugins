@@ -1,5 +1,6 @@
 package ch.ethz.biol.cell.mpp.feedback.reporter;
 
+import org.anchoranalysis.anchor.mpp.cfg.Cfg;
 import org.anchoranalysis.anchor.mpp.cfg.ColoredCfg;
 import org.anchoranalysis.anchor.mpp.feature.bean.nrgscheme.NRGScheme;
 import org.anchoranalysis.anchor.mpp.feature.nrg.cfg.CfgNRG;
@@ -35,7 +36,6 @@ import org.anchoranalysis.anchor.overlay.id.IDGetterOverlayID;
 
 
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.bridge.IObjectBridge;
 import org.anchoranalysis.core.color.ColorIndex;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.idgetter.IDGetterIter;
@@ -67,25 +67,6 @@ public class TiffTimeSeriesReporter extends PeriodicSubfolderReporter<CfgNRG> {
 	
 	private ColorIndex colorIndex;
 	
-	private static class CfgNRGToCfgBridge implements IObjectBridge<CfgNRG, ColoredCfgWithDisplayStack,Exception> {
-
-		private DisplayStack stack;
-		private ColorIndex colorIndex;
-		
-		public CfgNRGToCfgBridge(DisplayStack stack, ColorIndex colorIndex) {
-			super();
-			this.stack = stack;
-			this.colorIndex = colorIndex;
-		}
-
-		@Override
-		public ColoredCfgWithDisplayStack bridgeElement(CfgNRG sourceObject) {
-			
-			ColoredCfg coloredCfg = new ColoredCfg(sourceObject.getCfg(), colorIndex, new IDGetterIter<Mark>() );
-			return new ColoredCfgWithDisplayStack( coloredCfg, stack );
-		}
-	}
-	
 	@Override
 	public void reportBegin(OptimizationFeedbackInitParams<CfgNRGPixelized> initParams) throws ReporterException {
 	
@@ -101,14 +82,10 @@ public class TiffTimeSeriesReporter extends PeriodicSubfolderReporter<CfgNRG> {
 		//   cleaning up woould be nice
 		IterableCombinedListGenerator<CfgNRG> iterableCombined = new IterableCombinedListGenerator<>();
 		iterableCombined.add(
-				null,
-				new IterableGeneratorBridge<>(
-					iterableRaster,
-					new CfgNRGToCfgBridge(
-						initParams.getInitContext().getDualStack().getBgStack(),
-						colorIndex
-					)
-				)
+			new IterableGeneratorBridge<>(
+				iterableRaster,
+				sourceObject -> addColor(sourceObject.getCfg(), initParams)
+			)
 		);
 
 		
@@ -121,17 +98,15 @@ public class TiffTimeSeriesReporter extends PeriodicSubfolderReporter<CfgNRG> {
 		super.reportBegin(initParams);
 	}
 	
-	
-	
-	
+	private ColoredCfgWithDisplayStack addColor(Cfg cfg, OptimizationFeedbackInitParams<CfgNRGPixelized> initParams) {
+		DisplayStack stack = initParams.getInitContext().getDualStack().getBgStack(); 
+		ColoredCfg coloredCfg = new ColoredCfg(cfg, colorIndex, new IDGetterIter<Mark>() );
+		return new ColoredCfgWithDisplayStack( coloredCfg, stack );
+	}
 
 	@Override
-	protected CfgNRG generateIterableElement( Reporting<CfgNRGPixelized> reporting ) {
+	protected CfgNRG generateIterableElement( Reporting<CfgNRGPixelized> reporting ) throws ReporterException {
 		return reporting.getCfgNRGAfter().getCfgNRG();
-	}
-	
-	public TiffTimeSeriesReporter() {
-		super();
 	}
 
 	public int getNumColors() {

@@ -28,11 +28,13 @@ package ch.ethz.biol.cell.sgmn.objmask;
 
 
 import java.nio.ByteBuffer;
+import java.util.Optional;
+
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.error.OptionalOperationUnsupportedException;
 import org.anchoranalysis.image.bean.sgmn.binary.BinarySgmn;
 import org.anchoranalysis.image.bean.sgmn.binary.BinarySgmnParameters;
 import org.anchoranalysis.image.bean.sgmn.objmask.ObjMaskSgmn;
+import org.anchoranalysis.image.bean.sgmn.objmask.ObjMaskSgmnOne;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
 import org.anchoranalysis.image.chnl.Chnl;
 import org.anchoranalysis.image.objmask.ObjMask;
@@ -43,90 +45,77 @@ import org.anchoranalysis.image.sgmn.SgmnFailedException;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.anchoranalysis.image.voxel.box.VoxelBoxWrapper;
 
-// TODO needs IInitProposeObjects
-public class ObjMaskSgmnMIP extends ObjMaskSgmn {
+/**
+ * Perform a segmentation in a MIP instead of z-stacks.
+ * 
+ * <p>The incoming segmentation should return 2D objects</p>.
+ * 
+ * @author Owen Feehan
+ *
+ */
+public class ObjMaskSgmnMIP extends ObjMaskSgmnOne {
 
 	// START BEAN PROPERTIES
 	@BeanField
-	private ObjMaskSgmn sgmnMIP;
-	
-	@BeanField
 	private BinarySgmn sgmnStack;
 	// END BEAN PROPERTIES
-	
-	private SeedCollection flattenSeedsInZ( SeedCollection seeds ) throws OptionalOperationUnsupportedException {
+
+	@Override
+	public ObjMaskCollection sgmn(Chnl chnl, Optional<ObjMask> objMask, Optional<SeedCollection> seeds, ObjMaskSgmn sgmn) throws SgmnFailedException {
 		
-		if (seeds==null) {
-			return seeds;
+		if (objMask.isPresent()) {
+			throw new SgmnFailedException("An object-mask is not supported for this operation");
 		}
 		
+		Chnl max = chnl.maxIntensityProj();
+		
+		// Collapse seeds in z direction
+		seeds.ifPresent(ObjMaskSgmnMIP::flattenSeedsInZ);
+		
+		ObjMaskCollection objs = sgmn.sgmn(max, Optional.empty(), seeds);
+		
+		if (isAny3d(objs)) {
+			throw new SgmnFailedException("A 3D object was returned from the initial segmentation. This must return only 2D objects");
+		}
+		
+		return ExtendObjsInto3DMask.extendObjs(
+			objs,
+			binarySgmn(chnl)
+		);
+	}
+	
+	private boolean isAny3d(ObjMaskCollection objs) {
+		return objs.asList().stream().anyMatch(om
+			->om.getVoxelBox().extent().getZ() >1
+		);
+	}
+	
+	private BinaryVoxelBox<ByteBuffer> binarySgmn(Chnl chnl) throws SgmnFailedException {
+		BinarySgmnParameters params = new BinarySgmnParameters(
+			chnl.getDimensions().getRes()
+		);
+		
+		VoxelBox<ByteBuffer> vb = chnl.getVoxelBox().asByte();
+		
+		VoxelBox<ByteBuffer> stackBinary = vb.duplicate(); 
+		return sgmnStack.sgmn(
+			new VoxelBoxWrapper(stackBinary),
+			params,
+			Optional.empty()
+		);
+	}
+	
+	private static SeedCollection flattenSeedsInZ( SeedCollection seeds ) {
 		SeedCollection seedsDup = seeds.duplicate();
 		seedsDup.flattenZ();
 		return seedsDup;
 	}
 
-	@Override
-	public ObjMaskCollection sgmn(Chnl chnl,
-			SeedCollection seeds) throws SgmnFailedException {
-		
-		try {
-			
-			Chnl max = chnl.maxIntensityProj();
-			
-			// Collapse seeds in z direction
-			
-			seeds = flattenSeedsInZ(seeds);
-			
-			ObjMaskCollection objs = sgmnMIP.sgmn(max, seeds);
-			
-			
-			BinarySgmnParameters params = new BinarySgmnParameters(
-				chnl.getDimensions().getRes()
-			);
-			
-			VoxelBox<ByteBuffer> vb = chnl.getVoxelBox().asByte();
-			
-			VoxelBox<ByteBuffer> stackBinary = vb.duplicate(); 
-			BinaryVoxelBox<ByteBuffer> vbBinary = sgmnStack.sgmn(
-				new VoxelBoxWrapper(stackBinary),
-				params
-			);
-			
-			return ExtendObjsInto3DMask.extendObjs(objs, vbBinary);
-			
-		} catch (OptionalOperationUnsupportedException e) {
-			throw new SgmnFailedException(e);
-		}
-	}
-	
-
-
-	@Override
-	public ObjMaskCollection sgmn(Chnl chnl, ObjMask objMask,
-			SeedCollection seeds) throws SgmnFailedException {
-		throw new SgmnFailedException("Unsupported operation");
-	}
-
-	public ObjMaskSgmn getSgmnMIP() {
-		return sgmnMIP;
-	}
-
-
-	public void setSgmnMIP(ObjMaskSgmn sgmnMIP) {
-		this.sgmnMIP = sgmnMIP;
-	}
-
-
 	public BinarySgmn getSgmnStack() {
 		return sgmnStack;
 	}
 
-
 	public void setSgmnStack(BinarySgmn sgmnStack) {
 		this.sgmnStack = sgmnStack;
 	}
-
-
-
-
 }

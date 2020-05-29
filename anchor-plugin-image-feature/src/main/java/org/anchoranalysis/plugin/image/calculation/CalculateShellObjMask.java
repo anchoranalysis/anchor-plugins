@@ -164,7 +164,7 @@ public class CalculateShellObjMask extends FeatureCalculation<ObjMask,FeatureInp
 		
 		ObjMask omEroded = ccErosion.getOrCalculate(input);
 		
-		assert( omDilated.getBoundingBox().contains(omEroded.getBoundingBox()) );
+		assert( omDilated.getBoundingBox().contains().box(omEroded.getBoundingBox()) );
 		
 		assert( omDilated!=null);
 		assert( omEroded!=null);

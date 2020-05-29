@@ -54,22 +54,7 @@ public class Multiply<T extends FeatureInput> extends FeatureListElem<T> {
 
 	@Override
 	public String getDscrLong() {
-		
-		StringBuilder sb = new StringBuilder();
-		
-		boolean first = true;
-		for (Feature<T> elem : getList()) {
-			
-			if (first==true) {
-				first = false;
-			} else {
-				sb.append("*");
-			}
-		
-			sb.append(elem.getDscrLong());
-		}
-				
-		return sb.toString();
+		return descriptionForList("*");
 	}
 
 }

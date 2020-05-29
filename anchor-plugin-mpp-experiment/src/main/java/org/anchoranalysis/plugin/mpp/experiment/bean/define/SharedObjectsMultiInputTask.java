@@ -34,9 +34,11 @@ import org.anchoranalysis.bean.annotation.AllowEmpty;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.functional.OptionalUtilities;
 import org.anchoranalysis.experiment.JobExecutionException;
 import org.anchoranalysis.experiment.bean.task.TaskWithoutSharedState;
 import org.anchoranalysis.experiment.task.InputTypesExpected;
+import org.anchoranalysis.experiment.task.NoSharedState;
 import org.anchoranalysis.experiment.task.InputBound;
 import org.anchoranalysis.image.init.ImageInitParams;
 import org.anchoranalysis.image.io.bean.feature.OutputFeatureTable;
@@ -68,7 +70,7 @@ public class SharedObjectsMultiInputTask extends TaskWithoutSharedState<MultiInp
 	}
 	
 	@Override
-	public void doJobOnInputObject(	InputBound<MultiInput,Object> params)	throws JobExecutionException {
+	public void doJobOnInputObject(	InputBound<MultiInput,NoSharedState> params)	throws JobExecutionException {
 		
 		try {
 			define.processInputImage(
@@ -97,7 +99,11 @@ public class SharedObjectsMultiInputTask extends TaskWithoutSharedState<MultiInp
 			throw new OperationFailedException(e);
 		}
 		
-		NRGStackHelper.writeNRGStackParams(imageInitParams, nrgParamsName, context );
+		NRGStackHelper.writeNRGStackParams(
+			imageInitParams,
+			OptionalUtilities.create(nrgParamsName),
+			context
+		);
 	}
 
 	@Override

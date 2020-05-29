@@ -28,6 +28,7 @@ package org.anchoranalysis.plugin.annotation.bean.comparer;
 
 
 import java.nio.file.Path;
+import java.util.Optional;
 
 import org.anchoranalysis.annotation.io.bean.comparer.Comparer;
 import org.anchoranalysis.annotation.io.mark.MarkAnnotationReader;
@@ -66,24 +67,24 @@ public class AnnotationCfgComparer extends Comparer {
 		}
 		
 		MarkAnnotationReader annotationReader = new MarkAnnotationReader(false);
-		MarkAnnotation annotation;
+		Optional<MarkAnnotation> annotation;
 		try {
 			annotation = annotationReader.read( filePath );
 		} catch (AnchorIOException e) {
 			throw new CreateException(e);
 		}
 		
-		if (annotation==null) {
+		if (!annotation.isPresent()) {
 			return new NotFound<>(filePath, "No annotation exists");
 		}
 		
-		if (!annotation.isAccepted()) {
+		if (!annotation.get().isAccepted()) {
 			return new NotFound<>(filePath, "The annotation is NOT accepted");
 		}
 		
-		ObjMaskWithPropertiesCollection omwp = annotation.getCfg().calcMask(
+		ObjMaskWithPropertiesCollection omwp = annotation.get().getCfg().calcMask(
 			dim,
-			annotation.getRegionMap().membershipWithFlagsForIndex(annotation.getRegionID()),
+			annotation.get().getRegionMap().membershipWithFlagsForIndex(annotation.get().getRegionID()),
 			BinaryValuesByte.getDefault(),
 			null
 		); 

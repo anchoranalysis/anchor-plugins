@@ -73,7 +73,7 @@ public class NumTouchingVoxels extends TouchingVoxels {
 		ObjMask omOtherDest = RelativeUtilities.createRelMask( omDest, omSrc );
 		
 		CountKernelNghbMask kernelMatch = new CountKernelNghbMask(
-			isUse3D(),
+			isDo3D(),
 			omSrc.getBinaryValuesByte(),
 			omOtherDest,
 			false

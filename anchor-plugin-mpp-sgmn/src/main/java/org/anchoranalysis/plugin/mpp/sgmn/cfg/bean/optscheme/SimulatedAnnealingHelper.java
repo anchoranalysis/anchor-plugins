@@ -1,5 +1,7 @@
 package org.anchoranalysis.plugin.mpp.sgmn.cfg.bean.optscheme;
 
+import java.util.Optional;
+
 import org.anchoranalysis.anchor.mpp.bean.anneal.AnnealScheme;
 import org.anchoranalysis.anchor.mpp.feature.mark.ListUpdatableMarkSetCollection;
 import org.anchoranalysis.anchor.mpp.mark.set.UpdateMarkSetException;
@@ -44,6 +46,7 @@ import org.anchoranalysis.mpp.sgmn.kernel.KernelCalcNRGException;
 import org.anchoranalysis.mpp.sgmn.kernel.proposer.KernelWithID;
 import org.anchoranalysis.mpp.sgmn.optscheme.ExtractScoreSize;
 import org.anchoranalysis.mpp.sgmn.optscheme.OptTerminatedEarlyException;
+import org.anchoranalysis.mpp.sgmn.optscheme.feedback.ReporterException;
 import org.anchoranalysis.mpp.sgmn.optscheme.step.OptimizationStep;
 import org.anchoranalysis.mpp.sgmn.optscheme.step.Reporting;
 import org.anchoranalysis.mpp.sgmn.transformer.StateTransformer;
@@ -118,7 +121,7 @@ class SimulatedAnnealingHelper {
 					),
 					feedbackGenerator
 				);
-			} catch (OperationFailedException e) {
+			} catch (OperationFailedException | ReporterException e) {
 				throw new OptTerminatedEarlyException("Cannot create reporting for optStep", e);
 			}
 		}
@@ -133,25 +136,33 @@ class SimulatedAnnealingHelper {
 		// We decrement the iterator to reflect its final state
 		iter--;
 		
-		return optStep.releaseKeepBest();
+		try {
+			return optStep.releaseKeepBest();
+		} catch (OperationFailedException e) {
+			throw new OptTerminatedEarlyException("Cannot release the best item", e);
+		}
 	}
 	
 	private static <T> boolean continueIterations(
-		T state,
+		Optional<T> state,
 		int iter,
 		TerminationCondition termConditionAll,
 		ExtractScoreSize<T> extractScoreSize,
 		LogReporter logger
 	) {
+		if (!state.isPresent()) {
+			return true;
+		}
+		
 		return termConditionAll.continueIterations(
 			iter,
-			extractScoreSize.extractScore( state ),
-			extractScoreSize.extractSize( state ),
+			extractScoreSize.extractScore( state.get() ),
+			extractScoreSize.extractSize( state.get() ),
 			logger
 		);
 	}
 		
-	private static <S> void reportOptStep( Reporting<S> reporting, FeedbackGenerator<S> feedbackGenerator ) {
+	private static <S> void reportOptStep( Reporting<S> reporting, FeedbackGenerator<S> feedbackGenerator ) throws ReporterException {
 		
 		if (reporting.isBest()) {
 			feedbackGenerator.recordBest(reporting);

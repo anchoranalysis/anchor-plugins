@@ -1,5 +1,7 @@
 package ch.ethz.biol.cell.sgmn.objmask.watershed.encoding;
 
+import org.anchoranalysis.core.geometry.Point3i;
+
 /*
  * #%L
  * anchor-plugin-image
@@ -48,16 +50,21 @@ public class WatershedEncoding implements IEncodeDirection {
 		return chainCodes.chainCode(x, y, z) + START_CHAIN_CODE_RANGE;
 	}
 	
-	public int xFromChainCode( int chainCode ) {
-		return chainCodes.xFromChainCode(chainCode - START_CHAIN_CODE_RANGE);
-	}
-	
-	public int yFromChainCode( int chainCode) {
-		return chainCodes.yFromChainCode(chainCode - START_CHAIN_CODE_RANGE);
-	}
-	
-	public int zFromChainCode( int chainCode ) {
-		return chainCodes.zFromChainCode(chainCode - START_CHAIN_CODE_RANGE);
+	/**
+	 * Decodes a chain-code into a point
+	 * 
+	 * TODO is it a good idea to cache the creation of chain codes, to avoid work on the heap? There is a finite number.
+	 * 
+	 * @param chainCode the chain-code
+	 * @return a new point (always newly created) for the given chain-code.
+	 */
+	public Point3i chainCodes(int chainCode) {
+		int chainCodeSubbed = chainCode - START_CHAIN_CODE_RANGE;
+		return new Point3i(
+			chainCodes.xFromChainCode(chainCodeSubbed),
+			chainCodes.yFromChainCode(chainCodeSubbed),
+			chainCodes.zFromChainCode(chainCodeSubbed)
+		);
 	}
 	
 	public int encodeConnectedComponentID( int connected_component_id ) {

@@ -34,6 +34,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.bean.objmask.filter.ObjMaskFilter;
 import org.anchoranalysis.image.bean.sgmn.objmask.ObjMaskSgmn;
+import org.anchoranalysis.image.bean.sgmn.objmask.ObjMaskSgmnOne;
 import org.anchoranalysis.image.chnl.Chnl;
 import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.objmask.ObjMask;
@@ -41,27 +42,15 @@ import org.anchoranalysis.image.objmask.ObjMaskCollection;
 import org.anchoranalysis.image.seed.SeedCollection;
 import org.anchoranalysis.image.sgmn.SgmnFailedException;
 
-public class ObjMaskSgmnFilter extends ObjMaskSgmn {
+public class ObjMaskSgmnFilter extends ObjMaskSgmnOne {
 
 	// START BEAN PROPERTIES
 	@BeanField
-	private ObjMaskSgmn sgmn;
-	
-	@BeanField
 	private ObjMaskFilter filter = null;
 	// END BEAN PROPERTIES
-
-	@Override
-	public ObjMaskCollection sgmn(Chnl chnl, SeedCollection seeds) throws SgmnFailedException {
-
-		return filterObjs(
-			sgmn.sgmn(chnl, seeds),
-			chnl.getDimensions()
-		);
-	}
 	
 	@Override
-	public ObjMaskCollection sgmn(Chnl chnl, ObjMask objMask, SeedCollection seeds) throws SgmnFailedException {
+	public ObjMaskCollection sgmn(Chnl chnl, Optional<ObjMask> objMask, Optional<SeedCollection> seeds, ObjMaskSgmn sgmn) throws SgmnFailedException {
 		return filterObjs(
 			sgmn.sgmn(chnl, objMask, seeds),
 			chnl.getDimensions()
@@ -80,14 +69,6 @@ public class ObjMaskSgmnFilter extends ObjMaskSgmn {
 		}
 		
 		return objs;
-	}
-	
-	public ObjMaskSgmn getSgmn() {
-		return sgmn;
-	}
-
-	public void setSgmn(ObjMaskSgmn sgmn) {
-		this.sgmn = sgmn;
 	}
 
 	public ObjMaskFilter getFilter() {

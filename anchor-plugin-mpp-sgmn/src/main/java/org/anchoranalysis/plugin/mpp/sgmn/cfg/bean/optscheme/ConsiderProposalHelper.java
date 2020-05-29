@@ -67,9 +67,13 @@ class ConsiderProposalHelper {
 		TransformationContext context
 	) throws UpdateMarkSetException {
 		
+		T crnt = optStep.getCrnt().orElseThrow( ()->
+			new UpdateMarkSetException("No current item is defined in the optimization")
+		);
+		
 		double accptProb = accptProbCalculator.calcAccptProb(
 			optStep.getKernel().getKernel(),
-			optStep.getCrnt(),
+			crnt,
 			optStep.getProposal(),
 			iter,
 			context.getKernelCalcContext()
@@ -79,12 +83,12 @@ class ConsiderProposalHelper {
 		// check that the proposal actually contains a change
 		assert !Double.isNaN(accptProb);
 		
-		if (r <= accptProb || optStep.isBestUndefined() ) {
+		if (r <= accptProb || !optStep.getBest().isPresent() ) {
 			
 			// We inform the kernels that we've accepted a CfgNRG
 			kernelUpdater.kernelAccepted(
 				optStep.getKernel().getKernel(),
-				optStep.getCrnt(),
+				crnt,
 				optStep.getProposal(),
 				context
 			);

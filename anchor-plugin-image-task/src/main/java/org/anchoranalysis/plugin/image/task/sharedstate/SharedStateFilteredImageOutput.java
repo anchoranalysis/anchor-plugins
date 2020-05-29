@@ -29,6 +29,7 @@ package org.anchoranalysis.plugin.image.task.sharedstate;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
@@ -55,7 +56,7 @@ public class SharedStateFilteredImageOutput<T> {
 	
 	private GroupedMultiplexOutputManagers outputManagers;
 	
-	private FeatureCSVWriter csvWriter;
+	private Optional<FeatureCSVWriter> csvWriter;
 
 	private T filterInitParams;
 	
@@ -93,11 +94,13 @@ public class SharedStateFilteredImageOutput<T> {
 		row.add( new TypedValue(name ) );
 		row.add( new TypedValue(groupIdentifier) );
 		
-		this.csvWriter.addRow(row);
+		csvWriter.ifPresent( writer
+			->writer.addRow(row)
+		);
 	}
 	
 	public synchronized void close() {
-		this.csvWriter.close();
+		csvWriter.ifPresent(FeatureCSVWriter::close);
 	}
 	
 	/** Determines a particular group-identifier for an input */
@@ -111,8 +114,8 @@ public class SharedStateFilteredImageOutput<T> {
 			//  this function is called. We do this so we have a sensible input-path
 			//  to give to the filter.
 			try {
-				initFilterOutputManagers( input.pathForBinding() );
-			} catch (InitException e) {
+				initFilterOutputManagers( input.pathForBindingRequired() );
+			} catch (InitException | AnchorIOException e) {
 				throw new OperationFailedException(e);
 			}
 			groupIdentifierForCalled = true;	

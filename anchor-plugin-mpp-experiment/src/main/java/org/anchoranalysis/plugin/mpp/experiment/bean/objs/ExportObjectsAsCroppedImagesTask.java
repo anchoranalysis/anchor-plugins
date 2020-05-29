@@ -35,7 +35,6 @@ import org.anchoranalysis.bean.StringSet;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.core.bridge.IObjectBridge;
-import org.anchoranalysis.core.cache.IdentityOperation;
 import org.anchoranalysis.core.color.ColorIndex;
 import org.anchoranalysis.core.color.ColorList;
 import org.anchoranalysis.core.color.RGBColor;
@@ -43,6 +42,7 @@ import org.anchoranalysis.core.error.AnchorNeverOccursException;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.functional.IdentityOperation;
 import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
@@ -311,9 +311,7 @@ public class ExportObjectsAsCroppedImagesTask extends ExportObjectsBase<MultiInp
 				@Override
 				public BoundingBox bridgeElement(ObjMask sourceObject) {
 					if (mip) {
-						BoundingBox bbox = new BoundingBox( sourceObject.getBoundingBox() );
-						bbox.flattenZ();
-						return bbox;
+						return sourceObject.getBoundingBox().flattenZ();
 					} else {
 						return sourceObject.getBoundingBox();
 					}

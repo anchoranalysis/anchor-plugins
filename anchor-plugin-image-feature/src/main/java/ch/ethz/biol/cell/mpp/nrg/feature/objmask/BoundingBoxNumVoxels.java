@@ -41,7 +41,7 @@ public class BoundingBoxNumVoxels extends FeatureObjMask {
 				.get()
 				.getObjMask()
 				.getBoundingBox()
-				.extnt()
+				.extent()
 				.getVolume();
 	}
 }

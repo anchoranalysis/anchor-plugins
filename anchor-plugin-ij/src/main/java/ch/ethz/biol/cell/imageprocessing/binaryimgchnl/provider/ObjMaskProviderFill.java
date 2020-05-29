@@ -30,7 +30,7 @@ package ch.ethz.biol.cell.imageprocessing.binaryimgchnl.provider;
 import java.nio.ByteBuffer;
 import java.util.Optional;
 
-import org.anchoranalysis.bean.ProviderNullableCreator;
+import org.anchoranalysis.bean.OptionalFactory;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.core.error.CreateException;
@@ -62,7 +62,7 @@ public class ObjMaskProviderFill extends ObjMaskProviderOne {
 	@Override
 	public ObjMaskCollection createFromObjs( ObjMaskCollection objsCollection ) throws CreateException {
 		
-		Optional<BinaryChnl> maskChnl = ProviderNullableCreator.createOptional(mask);
+		Optional<BinaryChnl> maskChnl = OptionalFactory.create(mask);
 		
 		for( ObjMask om : objsCollection ) {
 			BinaryVoxelBox<ByteBuffer> bvb = om.binaryVoxelBox();
@@ -70,7 +70,7 @@ public class ObjMaskProviderFill extends ObjMaskProviderOne {
 			
 			BinaryVoxelBox<ByteBuffer> bvbDup = bvb.duplicate();
 			try {
-				BinaryImgChnlProviderIJBinary.fill(bvbDup);
+				BinaryChnlProviderIJBinary.fill(bvbDup);
 			} catch (OperationFailedException e) {
 				throw new CreateException(e);
 			}
@@ -79,7 +79,7 @@ public class ObjMaskProviderFill extends ObjMaskProviderOne {
 				// Let's make an object for our mask
 				ObjMask omMask = maskChnl.get().createMaskAvoidNew(om.getBoundingBox());
 				
-				BoundingBox bboxAll = new BoundingBox( bvb.extnt() );
+				BoundingBox bboxAll = new BoundingBox( bvb.extent() );
 				
 				// We do an and operation with the mask
 				bvbDup.copyPixelsToCheckMask(bboxAll, bvb.getVoxelBox(), bboxAll, omMask.getVoxelBox(), omMask.getBinaryValuesByte());
@@ -88,5 +88,13 @@ public class ObjMaskProviderFill extends ObjMaskProviderOne {
 		}
 		
 		return objsCollection;
+	}
+
+	public BinaryChnlProvider getMask() {
+		return mask;
+	}
+
+	public void setMask(BinaryChnlProvider mask) {
+		this.mask = mask;
 	}
 }

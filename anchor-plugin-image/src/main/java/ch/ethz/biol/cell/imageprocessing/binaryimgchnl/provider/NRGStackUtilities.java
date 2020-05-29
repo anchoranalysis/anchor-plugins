@@ -1,5 +1,7 @@
 package ch.ethz.biol.cell.imageprocessing.binaryimgchnl.provider;
 
+import java.util.Optional;
+
 /*-
  * #%L
  * anchor-plugin-image
@@ -30,21 +32,22 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorSingle;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorSingleChangeInput;
-import org.anchoranalysis.image.bean.provider.ChnlProvider;
 import org.anchoranalysis.image.chnl.Chnl;
 import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
 
 public class NRGStackUtilities {
 
+	private NRGStackUtilities() {}
+	
 	public static FeatureCalculatorSingle<FeatureInputSingleObj> maybeAddNrgStack(
 		FeatureCalculatorSingle<FeatureInputSingleObj> session,
-		ChnlProvider chnlProvider
+		Optional<Chnl> chnl
 	) throws CreateException {
 		
-		if (chnlProvider!=null) {
+		if (chnl.isPresent()) {
 			return addNrgStack(
 				session,
-				chnlProvider.create()
+				chnl.get()
 			);
 		} else {
 			return session;

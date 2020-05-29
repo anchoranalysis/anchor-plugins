@@ -1,5 +1,7 @@
 package org.anchoranalysis.plugin.io.multifile.buffer;
 
+import java.util.Optional;
+
 /*-
  * #%L
  * anchor-plugin-io
@@ -54,7 +56,7 @@ class MultiBuffer {
 		buffers = new VoxelBuffer<?>[size.getRangeT().getSize()][size.getRangeC().getSize()][size.getRangeZ().getSize()];
 	}
 			
-	public void populateWithSpecifiedChnl(Stack stackForFile, int chnlNum, Integer sliceNum, int timeIndex) {
+	public void populateWithSpecifiedChnl(Stack stackForFile, int chnlNum, Optional<Integer> sliceNum, int timeIndex) {
 		// Specific Channel Number, but no specific Slice Number
 		Chnl chnl = stackForFile.getChnl(0);
 		VoxelBox<?> vb = chnl.getVoxelBox().any();
@@ -62,8 +64,8 @@ class MultiBuffer {
 		int chnlIndexRslvd = size.getRangeC().index(chnlNum);
 		int timeIndexRslvd = size.getRangeT().index(timeIndex);
 		
-		if( sliceNum!=null) {
-			copyFirstSliceForChnl(timeIndexRslvd, chnlIndexRslvd, vb, sliceNum);
+		if( sliceNum.isPresent()) {
+			copyFirstSliceForChnl(timeIndexRslvd, chnlIndexRslvd, vb, sliceNum.get());
 			
 		} else {
 			copyAllSlicesForChnl(timeIndexRslvd, chnlIndexRslvd, vb);
@@ -122,7 +124,7 @@ class MultiBuffer {
 	}
 	
 	private void copyAllSlicesForChnl( int t, int c, VoxelBox<?> vb ) {
-		for( int z=0; z<vb.extnt().getZ(); z++) {
+		for( int z=0; z<vb.extent().getZ(); z++) {
 			buffers[t][c][z] = vb.getPixelsForPlane(z);
 		}
 	}

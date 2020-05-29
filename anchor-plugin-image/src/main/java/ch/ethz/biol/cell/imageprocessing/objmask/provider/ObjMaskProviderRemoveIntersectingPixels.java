@@ -1,5 +1,7 @@
 package ch.ethz.biol.cell.imageprocessing.objmask.provider;
 
+import java.util.Optional;
+
 /*
  * #%L
  * anchor-plugin-image
@@ -76,16 +78,17 @@ public class ObjMaskProviderRemoveIntersectingPixels extends ObjMaskProviderDime
 	
 	private void removeIntersectingPixels( ObjMask omWrite, ObjMask omRead, BoundingBox intersection  ) {
 		
-		BoundingBox bboxRelWrite = new BoundingBox();
-		bboxRelWrite.setCrnrMin( intersection.relPosTo( omWrite.getBoundingBox() ));
-		bboxRelWrite.setExtnt( intersection.extnt() );
+		BoundingBox bboxRelWrite = new BoundingBox(
+			intersection.relPosTo( omWrite.getBoundingBox() ),
+			intersection.extent()
+		);
 		
-		BoundingBox bboxRelRead = new BoundingBox();
-		bboxRelRead.setCrnrMin( intersection.relPosTo( omRead.getBoundingBox() ));
-		bboxRelRead.setExtnt( intersection.extnt() );
+		BoundingBox bboxRelRead = new BoundingBox(
+			intersection.relPosTo( omRead.getBoundingBox() ),
+			intersection.extent()
+		);
 		
 		// TODO we can make this more efficient, as we only need to duplicate the intersection area
-		//  but for now we don't do anything
 		ObjMask omReadDup = omRead.duplicate();
 		ObjMask omWriteDup = omWrite.duplicate();
 		
@@ -108,16 +111,16 @@ public class ObjMaskProviderRemoveIntersectingPixels extends ObjMaskProviderDime
 	
 	private void removeIntersectingPixelsIfIntersects( ObjMask omWrite, ObjMask omRead, ImageDim sd ) {
 
-		BoundingBox intersection = omWrite.getBoundingBox().intersectCreateNew(omRead.getBoundingBox(), sd.getExtnt() );
+		Optional<BoundingBox> intersection = omWrite.getBoundingBox().intersection().withInside(omRead.getBoundingBox(), sd.getExtnt() );
 				
 		// We check if their bounding boxes intersect
-		if(intersection!=null) {
+		if(intersection.isPresent()) {
 			
 			// Let's get a mask for the intersecting pixels
 	
 			// TODO we can make this more efficient, we only need to duplicate intersection bit
 			// We duplicate the originals before everything is changed
-			removeIntersectingPixels( omWrite, omRead, intersection );
+			removeIntersectingPixels( omWrite, omRead, intersection.get() );
 		}
 	}
 		

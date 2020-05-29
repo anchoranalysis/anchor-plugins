@@ -73,29 +73,25 @@ public class ObjMaskFilterChnlIntensGreaterEqualThan extends ObjMaskFilterByObje
 	@Override
 	protected boolean match(ObjMask om, Optional<ImageDim> dim) throws OperationFailedException {
 		
-		if (!dim.isPresent()) {
-			throw new OperationFailedException("Image-dimensions are required for this operation");
-		}
-		
 		int thresholdRslv = threshold(dim);
 		
-		for( int z=0; z<om.getBoundingBox().extnt().getZ(); z++) {
+		for( int z=0; z<om.getBoundingBox().extent().getZ(); z++) {
 			
 			ByteBuffer bb = om.getVoxelBox().getPixelsForPlane(z).buffer();
 			
 			int z1 = z + om.getBoundingBox().getCrnrMin().getZ();
 			VoxelBuffer<?> bbChnl = vb.getPixelsForPlane(z1);
 			
-			for( int y=0; y<om.getBoundingBox().extnt().getY(); y++) {
-				for( int x=0; x<om.getBoundingBox().extnt().getX(); x++) {
+			for( int y=0; y<om.getBoundingBox().extent().getY(); y++) {
+				for( int x=0; x<om.getBoundingBox().extent().getX(); x++) {
 			
-					int offset = om.getBoundingBox().extnt().offset(x, y);
+					int offset = om.getBoundingBox().extent().offset(x, y);
 					if( bb.get(offset)==om.getBinaryValuesByte().getOnByte() ) {
 						
 						int y1 = y + om.getBoundingBox().getCrnrMin().getY();
 						int x1 = x + om.getBoundingBox().getCrnrMin().getX();
 						
-						int offsetGlobal = vb.extnt().offset(x1,y1);
+						int offsetGlobal = vb.extent().offset(x1,y1);
 						
 						// Now we get a value from the vb
 						int val = bbChnl.getInt(offsetGlobal);

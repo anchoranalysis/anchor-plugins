@@ -28,11 +28,14 @@ package ch.ethz.biol.cell.sgmn.binary;
 
 
 import java.nio.ByteBuffer;
+import java.util.Optional;
+
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.Positive;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.bean.sgmn.binary.BinarySgmn;
 import org.anchoranalysis.image.bean.sgmn.binary.BinarySgmnParameters;
+import org.anchoranalysis.image.binary.values.BinaryValues;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelBoxByte;
 import org.anchoranalysis.image.extent.BoundingBox;
@@ -52,19 +55,97 @@ import org.anchoranalysis.image.voxel.box.VoxelBoxWrapper;
 public class SgmnObject extends BinarySgmn {
 
 	// START BEANS
-	// The Thresholder applied on the whole image
+	/** The Thresholder applied on the whole image */
 	@BeanField
 	private BinarySgmn imageSgmn;
 	
-	// The Thresholder applied on the local object
-	
+	/** The Thresholder applied on the local object */
 	@BeanField
 	private BinarySgmn objectSgmn;
 	
 	@BeanField @Positive
 	private int minNumPixelsImageSgmn = 100;
 	// END BEANS
+	
+	@Override
+	public BinaryVoxelBox<ByteBuffer> sgmn(
+		VoxelBoxWrapper voxelBoxIn,
+		BinarySgmnParameters params,
+		Optional<ObjMask> mask
+	) throws SgmnFailedException {
+	
+		if (mask.isPresent()) {
+			throw new SgmnFailedException("Masks are not supported on this operation");
+		}
+		
+		// Keep a copy of the original unchanged
+		VoxelBox<?> orig = voxelBoxIn.any().duplicate();
+		
+		imageSgmn.sgmn( voxelBoxIn, params, Optional.empty() );
 
+		VoxelBox<ByteBuffer> out = voxelBoxIn.asByte();
+		
+		sgmnByObj(
+			new BinaryVoxelBoxByte(out, BinaryValues.getDefault()),
+			new VoxelBoxWrapper(orig),
+			params
+		);
+		
+		return new BinaryVoxelBoxByte(out, BinaryValues.getDefault());
+	}
+	
+	private void sgmnByObj(
+		BinaryVoxelBox<ByteBuffer> voxelBox,
+		VoxelBoxWrapper orig,
+		BinarySgmnParameters params
+	) throws SgmnFailedException {
+
+		for( ObjMask obj : objsFromVoxelBox(voxelBox)) {
+			
+			if (!obj.numPixelsLessThan(minNumPixelsImageSgmn)) {
+				
+				BinaryVoxelBox<ByteBuffer> out = objectSgmn.sgmn(
+					orig,
+					params,
+					Optional.of(obj)
+				);
+				
+				if (out==null) {
+					continue;
+				}
+				
+				out.copyPixelsToCheckMask(
+					new BoundingBox(obj.getBoundingBox().extent()),
+					voxelBox.getVoxelBox(),
+					obj.getBoundingBox(),
+					obj.getVoxelBox(),
+					obj.getBinaryValuesByte()
+				);
+				
+			} else {
+				voxelBox.setPixelsCheckMaskOff( obj );
+			}
+		}		
+	}
+		
+	private static ObjMaskCollection objsFromVoxelBox( BinaryVoxelBox<ByteBuffer> buffer ) throws SgmnFailedException {
+		try {
+			CreateFromConnectedComponentsFactory omcCreator = new CreateFromConnectedComponentsFactory();
+			return omcCreator.createConnectedComponents(buffer.duplicate() );
+		} catch (CreateException e) {
+			throw new SgmnFailedException(e);
+		}
+	}
+	
+	public int getMinNumPixelsImageSgmn() {
+		return minNumPixelsImageSgmn;
+	}
+
+
+	public void setMinNumPixelsImageSgmn(int minNumPixelsImageSgmn) {
+		this.minNumPixelsImageSgmn = minNumPixelsImageSgmn;
+	}
+	
 	public BinarySgmn getImageSgmn() {
 		return imageSgmn;
 	}
@@ -82,71 +163,5 @@ public class SgmnObject extends BinarySgmn {
 
 	public void setObjectSgmn(BinarySgmn objectSgmn) {
 		this.objectSgmn = objectSgmn;
-	}
-
-	
-	@Override
-	public BinaryVoxelBox<ByteBuffer> sgmn(VoxelBoxWrapper voxelBoxIn, BinarySgmnParameters params) throws SgmnFailedException {
-		
-		
-		
-		VoxelBox<?> orig = voxelBoxIn.any().duplicate();
-		
-		imageSgmn.sgmn( voxelBoxIn, params );
-
-		VoxelBox<ByteBuffer> voxelBoxInByte = voxelBoxIn.asByte();
-		BinaryVoxelBox<ByteBuffer> voxelBox = new BinaryVoxelBoxByte(voxelBoxInByte);
-		
-		// Main segmentation
-		ObjMaskCollection omc;
-		try {
-			omc = createObjMaskCollectionFromVoxelBox(voxelBox);
-		} catch (CreateException e) {
-			throw new SgmnFailedException(e);
-		}
-		
-		for( ObjMask objMask : omc) {
-			
-			if (!objMask.numPixelsLessThan(minNumPixelsImageSgmn)) {
-				
-				BinaryVoxelBox<ByteBuffer> out = objectSgmn.sgmn(new VoxelBoxWrapper(orig), params, objMask);
-				if (out==null) {
-					continue;
-				}
-				
-				out.copyPixelsToCheckMask(
-					new BoundingBox(objMask.getBoundingBox().extnt()),
-					voxelBox.getVoxelBox(),
-					objMask.getBoundingBox(),
-					objMask.getVoxelBox(),
-					objMask.getBinaryValuesByte()
-				);
-				
-			} else {
-				voxelBox.setPixelsCheckMaskOff( objMask );
-			}
-		}
-		return new BinaryVoxelBoxByte(voxelBoxInByte);
-	}
-	
-	public static ObjMaskCollection createObjMaskCollectionFromVoxelBox( BinaryVoxelBox<ByteBuffer> buffer ) throws CreateException {
-		
-		CreateFromConnectedComponentsFactory omcCreator = new CreateFromConnectedComponentsFactory();
-		return omcCreator.createConnectedComponents(buffer.duplicate() );
-	}
-
-	@Override
-	public BinaryVoxelBox<ByteBuffer> sgmn(VoxelBoxWrapper voxelBox, BinarySgmnParameters params, ObjMask objMask) {
-		throw new IllegalArgumentException("Method not supported");
-	}
-
-
-	public int getMinNumPixelsImageSgmn() {
-		return minNumPixelsImageSgmn;
-	}
-
-
-	public void setMinNumPixelsImageSgmn(int minNumPixelsImageSgmn) {
-		this.minNumPixelsImageSgmn = minNumPixelsImageSgmn;
 	}
 }

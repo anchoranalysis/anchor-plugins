@@ -28,6 +28,8 @@ package ch.ethz.biol.cell.sgmn.binary;
 
 
 import java.nio.ByteBuffer;
+import java.util.Optional;
+
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.bean.sgmn.binary.BinarySgmn;
 import org.anchoranalysis.image.bean.sgmn.binary.BinarySgmnOne;
@@ -39,26 +41,11 @@ import org.anchoranalysis.image.sgmn.SgmnFailedException;
 import org.anchoranalysis.image.voxel.box.VoxelBoxWrapper;
 
 public class SgmnInv extends BinarySgmnOne {
-	
-	@Override
-	public BinaryVoxelBox<ByteBuffer> sgmnFromSgmn(VoxelBoxWrapper voxelBox, BinarySgmnParameters params, BinarySgmn sgmn)
-			throws SgmnFailedException {
-
-		BinaryVoxelBox<ByteBuffer> bvb = sgmn.sgmn(voxelBox, params);
-		
-		try {
-			invertVoxelBox( bvb );
-		} catch (OperationFailedException e) {
-			throw new SgmnFailedException(e);
-		}
-		
-		return bvb;
-	}
 
 	@Override
-	public BinaryVoxelBox<ByteBuffer> sgmnFromSgmn(VoxelBoxWrapper voxelBox, BinarySgmnParameters params, ObjMask objMask, BinarySgmn sgmn) throws SgmnFailedException {
+	public BinaryVoxelBox<ByteBuffer> sgmnFromSgmn(VoxelBoxWrapper voxelBox, BinarySgmnParameters params, Optional<ObjMask> mask, BinarySgmn sgmn) throws SgmnFailedException {
 		
-		BinaryVoxelBox<ByteBuffer> vb = sgmn.sgmn(voxelBox, params, objMask);
+		BinaryVoxelBox<ByteBuffer> vb = sgmn.sgmn(voxelBox, params, mask);
 		
 		try {
 			invertVoxelBox( vb );
@@ -73,11 +60,13 @@ public class SgmnInv extends BinarySgmnOne {
 		
 		BinaryValuesByte bv = voxelBox.getBinaryValues().createByte();
 		
+		int volumeXY = voxelBox.extent().getVolumeXY();
+		
 		// We invert each item in the VoxelBox
-		for( int z=0; z<voxelBox.extnt().getZ(); z++) {
+		for( int z=0; z<voxelBox.extent().getZ(); z++) {
 			
 			ByteBuffer bb = voxelBox.getPixelsForPlane(z).buffer();
-			for( int index = 0; index<voxelBox.extnt().getVolumeXY(); index++) {
+			for( int index = 0; index<volumeXY; index++) {
 				
 				byte val = bb.get(index);
 				

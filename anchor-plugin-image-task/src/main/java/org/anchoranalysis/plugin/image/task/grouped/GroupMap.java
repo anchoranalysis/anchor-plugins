@@ -30,9 +30,9 @@ package org.anchoranalysis.plugin.image.task.grouped;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import org.anchoranalysis.core.cache.Operation;
 import org.anchoranalysis.core.collection.TreeMapCreate;
 import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.functional.Operation;
 import org.anchoranalysis.core.index.GetOperationFailedException;
 import org.anchoranalysis.core.name.CombinedName;
 import org.anchoranalysis.experiment.JobExecutionException;

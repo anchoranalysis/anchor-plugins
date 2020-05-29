@@ -1,5 +1,7 @@
 package ch.ethz.biol.cell.sgmn.objmask;
 
+import java.util.Optional;
+
 /*
  * #%L
  * anchor-plugin-image
@@ -30,6 +32,7 @@ package ch.ethz.biol.cell.sgmn.objmask;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.bean.sgmn.objmask.ObjMaskSgmn;
+import org.anchoranalysis.image.bean.sgmn.objmask.ObjMaskSgmnOne;
 import org.anchoranalysis.image.chnl.Chnl;
 import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.image.objmask.ObjMaskCollection;
@@ -40,48 +43,29 @@ import ch.ethz.biol.cell.sgmn.objmask.watershed.minimaimposition.MinimaImpositio
 
 
 // Imposes minima only in seed locations on the input channel, and performs the segmentation
-public class ObjMaskSgmnMinimaImposition extends ObjMaskSgmn {
+public class ObjMaskSgmnMinimaImposition extends ObjMaskSgmnOne {
 
 	// START BEAN PROPERTIES
-	@BeanField
-	private ObjMaskSgmn sgmn;
-	
 	@BeanField
 	private MinimaImposition minimaImposition;
 	// END BEAN PROPERTIES
 
 	@Override
-	public ObjMaskCollection sgmn(Chnl chnl, SeedCollection seeds)
-			throws SgmnFailedException {
+	public ObjMaskCollection sgmn(
+		Chnl chnl,
+		Optional<ObjMask> mask,
+		Optional<SeedCollection> seeds,
+		ObjMaskSgmn sgmn
+	) throws SgmnFailedException {
 
-		if (seeds==null) {
-			throw new SgmnFailedException("seeds must be non-null");
+		if (!seeds.isPresent()) {
+			throw new SgmnFailedException("seeds must be present");
 		}
-		
-		try {
-			Chnl chnlWithImposedMinima = seeds.size()>0 ? minimaImposition.imposeMinima(chnl, seeds, null) : chnl;
 				
-			return sgmn.sgmn(chnlWithImposedMinima, seeds);
-			
-		} catch (OperationFailedException e) {
-			throw new SgmnFailedException(e);
-		}
-	}
-
-	@Override
-	public ObjMaskCollection sgmn(Chnl chnl, ObjMask objMask,
-			SeedCollection seeds) throws SgmnFailedException {
-
-		if (seeds==null) {
-			throw new SgmnFailedException("seeds must be non-null");
-		}
-		
-		
-		
 		try {
-			Chnl chnlWithImposedMinima = seeds.size()>0 ? minimaImposition.imposeMinima(chnl, seeds, objMask) : chnl;
+			Chnl chnlWithImposedMinima = chnlWithImposedMinima(chnl, seeds.get(), mask );
 			
-			ObjMaskCollection omc = sgmn.sgmn(chnlWithImposedMinima, objMask, seeds );
+			ObjMaskCollection omc = sgmn.sgmn(chnlWithImposedMinima, mask, seeds );
 			
 			return omc;
 			
@@ -89,13 +73,13 @@ public class ObjMaskSgmnMinimaImposition extends ObjMaskSgmn {
 			throw new SgmnFailedException(e);
 		}
 	}
-
-	public ObjMaskSgmn getSgmn() {
-		return sgmn;
-	}
-
-	public void setSgmn(ObjMaskSgmn sgmn) {
-		this.sgmn = sgmn;
+	
+	private Chnl chnlWithImposedMinima(Chnl chnl, SeedCollection seeds, Optional<ObjMask> objMask) throws OperationFailedException {
+		if (seeds.size()>0) {
+			return minimaImposition.imposeMinima(chnl, seeds, objMask);
+		} else {
+			return chnl;
+		}
 	}
 
 	public MinimaImposition getMinimaImposition() {

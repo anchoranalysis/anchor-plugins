@@ -38,9 +38,10 @@ import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.image.objmask.ObjMaskCollection;
-import org.anchoranalysis.image.objmask.morph.MorphologicalDilation;
 import org.anchoranalysis.image.objmask.morph.MorphologicalErosion;
-import org.anchoranalysis.image.objmask.morph.MorphologicalDilation.AcceptIterationList;
+import org.anchoranalysis.image.objmask.morph.accept.AcceptIterationList;
+import org.anchoranalysis.image.objmask.morph.accept.RejectIterationIfAllHigh;
+import org.anchoranalysis.image.objmask.morph.accept.RejectIterationIfLowDisconnected;
 
 public class ObjMaskProviderErode extends ObjMaskProviderDimensionsOptional {
 	
@@ -65,7 +66,7 @@ public class ObjMaskProviderErode extends ObjMaskProviderDimensionsOptional {
 	public void checkMisconfigured( BeanInstanceMap defaultInstances ) throws BeanMisconfiguredException {
 		super.checkMisconfigured( defaultInstances );
 		if (outsideAtThreshold==false && getDim()==null) {
-			throw new BeanMisconfiguredException("If outsideAtThreshold==false then dimProvider must be set");
+			throw new BeanMisconfiguredException("If outsideAtThreshold==false then dim must be set");
 		}
 	}
 	
@@ -78,10 +79,10 @@ public class ObjMaskProviderErode extends ObjMaskProviderDimensionsOptional {
 			
 			AcceptIterationList acceptConditionsDilation = new AcceptIterationList();
 			if (rejectIterationIfAllLow) {
-				acceptConditionsDilation.add( new MorphologicalDilation.RejectIterationIfAllHigh() );
+				acceptConditionsDilation.add( new RejectIterationIfAllHigh() );
 			}
 			if (rejectIterationifDisconnected) {
-				acceptConditionsDilation.add( new MorphologicalDilation.RejectIterationIfLowDisconnected() );
+				acceptConditionsDilation.add( new RejectIterationIfLowDisconnected() );
 			}
 			
 			ObjMask omOut = MorphologicalErosion.createErodedObjMask(
@@ -108,8 +109,8 @@ public class ObjMaskProviderErode extends ObjMaskProviderDimensionsOptional {
 		return do3D;
 	}
 
-	public void setDo3D(boolean do3d) {
-		do3D = do3d;
+	public void setDo3D(boolean do3D) {
+		this.do3D = do3D;
 	}
 
 	public int getIterations() {

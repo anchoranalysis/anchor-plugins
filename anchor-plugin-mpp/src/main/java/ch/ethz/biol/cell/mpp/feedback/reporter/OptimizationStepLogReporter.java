@@ -55,7 +55,7 @@ public final class OptimizationStepLogReporter extends ReporterAgg<CfgNRGPixeliz
 	}
 	
 	@Override
-	public void reportNewBest( Reporting<CfgNRGPixelized> reporting ) {
+	public void reportNewBest( Reporting<CfgNRGPixelized> reporting ) throws ReporterException {
 		
 		logReporter.logFormatted(
 			"*** itr=%d  size=%d  best_nrg=%e  kernel=%s",

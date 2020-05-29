@@ -32,7 +32,7 @@ import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.chnl.Chnl;
 import org.anchoranalysis.image.histogram.Histogram;
-import org.anchoranalysis.image.histogram.HistogramFactoryUtilities;
+import org.anchoranalysis.image.histogram.HistogramFactory;
 import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.image.voxel.statistics.VoxelStatisticsFromHistogram;
 import org.anchoranalysis.plugin.image.intensity.IntensityMeanCalculator;
@@ -55,7 +55,7 @@ class StatsHelper {
 		double max = Double.NEGATIVE_INFINITY;
 		int index = -1;
 		
-		for( int z=0; z<om.getBoundingBox().extnt().getZ(); z++ ) {
+		for( int z=0; z<om.getBoundingBox().extent().getZ(); z++ ) {
 			
 			ObjMask omSlice;
 			try {
@@ -65,8 +65,9 @@ class StatsHelper {
 			}
 			
 			// We adjust the z coordiante to point to the channel
-			int oldZ = omSlice.getBoundingBox().getCrnrMin().getZ();
-			omSlice.getBoundingBox().getCrnrMin().setZ( oldZ + om.getBoundingBox().getCrnrMin().getZ() );
+			omSlice.shiftToZ(
+				omSlice.getBoundingBox().getCrnrMin().getZ() + om.getBoundingBox().getCrnrMin().getZ()
+			);
 			
 			if (omSlice.hasPixelsGreaterThan(0)) {
 				double mean = IntensityMeanCalculator.calcMeanIntensityObjMask(chnl, omSlice, excludeZero);
@@ -96,7 +97,7 @@ class StatsHelper {
 	 */
 	public static double calcMeanNumPixels( Chnl chnl, ObjMask om, int numPixels, boolean highest ) throws OperationFailedException {
 		
-		Histogram h = HistogramFactoryUtilities.create(chnl, om);
+		Histogram h = HistogramFactory.create(chnl, om);
 		
 		Histogram hCut = highest ? h.extractPixelsFromRight(numPixels) : h.extractPixelsFromLeft(numPixels);
 	
@@ -111,7 +112,7 @@ class StatsHelper {
 		double emptyValue,
 		Function<VoxelStatisticsFromHistogram,Double> funcExtractStatistic
 	) {
-		Histogram hist = HistogramFactoryUtilities.createHistogramIgnoreZero(chnl,objMask,ignoreZero);
+		Histogram hist = HistogramFactory.createHistogramIgnoreZero(chnl,objMask,ignoreZero);
 		
 		if (hist.getTotalCount()==0) {
 			return emptyValue;

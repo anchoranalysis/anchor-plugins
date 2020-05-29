@@ -29,6 +29,8 @@ package ch.ethz.biol.cell.sgmn.objmask;
 
 import ij.process.ImageProcessor;
 
+import java.util.Optional;
+
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.bean.sgmn.objmask.ObjMaskSgmn;
@@ -56,33 +58,57 @@ public class ObjMaskSgmnFloodFillIJ2D extends ObjMaskSgmn {
 	// END BEAN PROPERTIES
 	
 	@Override
-	public ObjMaskCollection sgmn(Chnl chnl,
-			SeedCollection seeds) throws SgmnFailedException {
+	public ObjMaskCollection sgmn(
+		Chnl chnl,
+		Optional<ObjMask> mask,
+		Optional<SeedCollection> seeds
+	) throws SgmnFailedException {
 		
-		BinaryValuesByte bv = BinaryValuesByte.getDefault();
+		if (mask.isPresent()) {
+			throw new SgmnFailedException("A mask is not supported for this operation");
+		}
+		
+		if (seeds.isPresent()) {
+			throw new SgmnFailedException("Seeds are not supported for this operation");
+		}
+		
 		try {
-
-			ImageProcessor ip = IJWrap.imageProcessorByte(chnl.getVoxelBox().asByte().getPlaneAccess(), 0);
-			int numC = FloodFillUtils.floodFill2D( ip, bv.getOnByte(), startingColor, minBoundingBoxVolumeVoxels );
-	
-			//log.debug("Creation-object-masks started");
-			return ObjMaskChnlUtilities.calcObjMaskFromLabelChnl(
-				chnl.getVoxelBox().asByte(),
-				numC,
-				minBoundingBoxVolumeVoxels
-			);
+			int numC = floodFillChnl(chnl);
+			return objectsFromLabels(chnl, numC);
 			
 		} catch (OperationFailedException e) {
 			throw new SgmnFailedException(e);
 		}
 	}
 	
-	@Override
-	public ObjMaskCollection sgmn(Chnl chnl, ObjMask objMask,
-			SeedCollection seeds) throws SgmnFailedException {
-		throw new SgmnFailedException("Unsupported operation");
+	/** 
+	 * Flood fills a channel, converting it into objects each labelled with an incrementing integer id
+	 * 
+	 * @param chnl channel to flood-fill
+	 * @return the number of objects (so that the label ids are 1.... N) 
+	 * @throws OperationFailedException 
+	 **/
+	private int floodFillChnl( Chnl chnl ) throws OperationFailedException {
+		BinaryValuesByte bv = BinaryValuesByte.getDefault();
+		ImageProcessor ip = IJWrap.imageProcessorByte(chnl.getVoxelBox().asByte().getPlaneAccess(), 0);
+		return FloodFillUtils.floodFill2D( ip, bv.getOnByte(), startingColor, minBoundingBoxVolumeVoxels );
 	}
-
+	
+	/**
+	 * Create object-masks from an image labelled as per {@link floodFillChnl}
+	 * 
+	 * @param chnl a channel labelled as per {@link floodFillChnl}
+	 * @param numLabels the number of objects, so that the label ids are a sequence (1,numLabels) inclusive. 
+	 * @return a derived collection of objs
+	 */
+	private ObjMaskCollection objectsFromLabels( Chnl chnl, int numLabels ) {
+		return ObjMaskChnlUtilities.calcObjMaskFromLabelChnl(
+			chnl.getVoxelBox().asByte(),
+			numLabels,
+			minBoundingBoxVolumeVoxels
+		);
+	}
+	
 	public int getMinBoundingBoxVolumeVoxels() {
 		return minBoundingBoxVolumeVoxels;
 	}
@@ -107,5 +133,4 @@ public class ObjMaskSgmnFloodFillIJ2D extends ObjMaskSgmn {
 	public void setDoInt(boolean doInt) {
 		this.doInt = doInt;
 	}
-
 }

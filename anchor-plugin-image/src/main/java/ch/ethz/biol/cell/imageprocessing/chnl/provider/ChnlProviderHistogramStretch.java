@@ -34,8 +34,9 @@ import org.anchoranalysis.image.bean.provider.ChnlProviderOne;
 import org.anchoranalysis.image.chnl.Chnl;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.histogram.Histogram;
-import org.anchoranalysis.image.histogram.HistogramFactoryUtilities;
+import org.anchoranalysis.image.histogram.HistogramFactory;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
+import org.anchoranalysis.image.voxel.box.VoxelBoxWrapper;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 
 public class ChnlProviderHistogramStretch extends ChnlProviderOne {
@@ -57,9 +58,9 @@ public class ChnlProviderHistogramStretch extends ChnlProviderOne {
 	
 	private static void histogramStretch( Chnl chnl, double quantile ) throws OperationFailedException {
 		
-		VoxelBox<?> vb = chnl.getVoxelBox().any();
+		VoxelBoxWrapper vb = chnl.getVoxelBox();
 		
-		Histogram hist = HistogramFactoryUtilities.create(vb);
+		Histogram hist = HistogramFactory.create(vb);
 		
 		double rangeMin = hist.calcMin();
 		double rangeMax = hist.quantile(quantile);
@@ -69,7 +70,7 @@ public class ChnlProviderHistogramStretch extends ChnlProviderOne {
 			rangeMax = rangeMin + 1;
 		}
 		
-		changeVoxels(vb, rangeMin, rangeMax);
+		changeVoxels(vb.any(), rangeMin, rangeMax);
 	}
 	
 	private static void changeVoxels(VoxelBox<?> vb, double rangeMin, double rangeMax) {
@@ -77,7 +78,7 @@ public class ChnlProviderHistogramStretch extends ChnlProviderOne {
 		double rangeExtnt = rangeMax-rangeMin;
 		double rangeMult = 255/rangeExtnt;
 		
-		Extent e = vb.extnt();
+		Extent e = vb.extent();
 		for( int z=0; z<e.getZ(); z++) {
 			
 			VoxelBuffer<?> bb = vb.getPixelsForPlane(z);

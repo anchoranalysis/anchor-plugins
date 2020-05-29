@@ -27,6 +27,7 @@ package org.anchoranalysis.plugin.annotation.bean.aggregate;
  */
 
 import java.util.List;
+import java.util.Optional;
 
 import org.anchoranalysis.annotation.io.bean.strategy.AnnotatorStrategy;
 import org.anchoranalysis.annotation.io.input.AnnotationWithStrategy;
@@ -63,11 +64,10 @@ public class AnnotationAggregateTask<S extends AnnotatorStrategy> extends Task<A
 	public void doJobOnInputObject(InputBound<AnnotationWithStrategy<S>, AggregateSharedState> params)
 			throws JobExecutionException {
 			
-		ImageAnnotation ann = createFromInputObject( params.getInputObject() );
-		
-		if (ann!=null) {
-			params.getSharedState().getAnnotations().add(ann);
-		}
+		Optional<ImageAnnotation> ann = createFromInputObject( params.getInputObject() );
+		ann.ifPresent( annotation->
+			params.getSharedState().getAnnotations().add(annotation)
+		);
 	}
 	
 	@Override
@@ -86,18 +86,13 @@ public class AnnotationAggregateTask<S extends AnnotatorStrategy> extends Task<A
 		return generator;
 	}
 	
-	private ImageAnnotation createFromInputObject( AnnotationWithStrategy<S> inputObject ) throws JobExecutionException {
+	private Optional<ImageAnnotation> createFromInputObject( AnnotationWithStrategy<S> inputObject ) throws JobExecutionException {
 		try {
-			String label = inputObject.labelForAggregation();
-			
-			// There is no label
-			if (label==null) {
-				return null;
-			}
-			
-			return new ImageAnnotation(
-				inputObject.descriptiveName(),
-				label		
+			return inputObject.labelForAggregation().map( label-> 
+				new ImageAnnotation(
+					inputObject.descriptiveName(),
+					label		
+				)
 			);
 		} catch (AnchorIOException exc) {
 			throw new JobExecutionException(exc);

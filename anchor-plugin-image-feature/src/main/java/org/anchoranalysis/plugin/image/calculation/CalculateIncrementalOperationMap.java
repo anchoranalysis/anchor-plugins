@@ -43,9 +43,9 @@ public abstract class CalculateIncrementalOperationMap extends CacheableCalculat
 > {
 	private boolean do3D;
 	
-	public CalculateIncrementalOperationMap(boolean do3d) {
+	public CalculateIncrementalOperationMap(boolean do3D) {
 		super(100);
-		this.do3D = do3d;
+		this.do3D = do3D;
 	}
 	
 	protected CalculateIncrementalOperationMap(CalculateIncrementalOperationMap other) {
@@ -56,7 +56,7 @@ public abstract class CalculateIncrementalOperationMap extends CacheableCalculat
 	@Override
 	protected ObjMask execute(FeatureInputSingleObj params, Integer key)
 			throws FeatureCalcException {
-		Extent extnt = params.getDimensionsRequired().getExtnt();
+		Extent extent = params.getDimensionsRequired().getExtnt();
 
 		if (key==0) {
 			throw new FeatureCalcException("Key must be > 0");
@@ -70,7 +70,7 @@ public abstract class CalculateIncrementalOperationMap extends CacheableCalculat
 		try {
 			for( int i=(lowestExistingKey+1); i<=key; i++ ) {
 				
-				ObjMask omNext = applyOperation( omIn, extnt, do3D );
+				ObjMask omNext = applyOperation( omIn, extent, do3D );
 				
 				// save in cache, as long as it's not the final one, as this will save after the function executes
 				if (i!=key) {
@@ -101,7 +101,7 @@ public abstract class CalculateIncrementalOperationMap extends CacheableCalculat
 		return 0;
 	}
 	
-	protected abstract ObjMask applyOperation( ObjMask om, Extent extnt, boolean do3D ) throws OperationFailedException;
+	protected abstract ObjMask applyOperation( ObjMask om, Extent extent, boolean do3D ) throws OperationFailedException;
 	
 	@Override
 	public int hashCode() {

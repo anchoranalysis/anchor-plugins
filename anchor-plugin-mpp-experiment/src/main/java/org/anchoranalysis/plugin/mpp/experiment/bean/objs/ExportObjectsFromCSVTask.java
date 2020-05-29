@@ -131,20 +131,25 @@ public class ExportObjectsFromCSVTask extends ExportObjectsBase<FromCSVInputObje
 		);
 	}
 	
-	private Path idStringForPath( Path path, boolean debugMode ) throws AnchorIOException {
-		return idGenerator!=null ? idGenerator.outFilePath(path, debugMode) : path;
+	private Path idStringForPath( Optional<Path> path, boolean debugMode ) throws AnchorIOException {
+		
+		if (!path.isPresent()) {
+			throw new AnchorIOException("A binding-path is not present for the input, but is required");
+		}
+		
+		return idGenerator!=null ? idGenerator.outFilePath(path.get(), debugMode) : path.get();
 	}
 	
 	@Override
 	public void doJobOnInputObject(
-		InputBound<FromCSVInputObject,FromCSVSharedState> params
+		InputBound<FromCSVInputObject,FromCSVSharedState> input
 	) throws JobExecutionException {
 		
-		FromCSVInputObject inputObject = params.getInputObject();
-		BoundIOContext context = params.context();
+		FromCSVInputObject inputObject = input.getInputObject();
+		BoundIOContext context = input.context();
 		
 		try {
-			FromCSVSharedState ss = params.getSharedState();
+			FromCSVSharedState ss = input.getSharedState();
 			
 			// TODO maybe move IndexedCSVRows shared-state inside input-object?
 			IndexedCSVRows groupedRows = ss.getIndexedRowsOrCreate( inputObject.getCsvFilePath(), columnDefinition );
@@ -162,7 +167,11 @@ public class ExportObjectsFromCSVTask extends ExportObjectsBase<FromCSVInputObje
 			}
 			
 			processFileWithMap(
-				MPPInitParamsFactory.createFromInputAsImage(params, Optional.empty()),
+				MPPInitParamsFactory.create(
+					context,
+					Optional.empty(),
+					Optional.of(inputObject)
+				).getImage(),
 				mapGroup,
 				groupedRows.groupNameSet(),
 				context
@@ -277,7 +286,7 @@ public class ExportObjectsFromCSVTask extends ExportObjectsBase<FromCSVInputObje
 		}
 
 		@Override
-		public ManifestDescription createManifestDescription() {
+		public Optional<ManifestDescription> createManifestDescription() {
 			return delegate.createManifestDescription();
 		}
 

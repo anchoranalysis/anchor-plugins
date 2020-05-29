@@ -56,23 +56,12 @@ public class MeanGeometric<T extends FeatureInput> extends FeatureListElem<T> {
 	
 	@Override
 	public String getDscrLong() {
-		
 		StringBuilder sb = new StringBuilder();
 		sb.append("geo_mean(");
-		
-		boolean first = true;
-		for (Feature<T> elem : getList()) {
-			
-			if (first==true) {
-				first = false;
-			} else {
-				sb.append(",");
-			}
-		
-			sb.append(elem.getDscrLong());
-		}
+		sb.append(
+			descriptionForList(",")
+		);
 		sb.append(")");
-			
 		return sb.toString();
 	}
 }

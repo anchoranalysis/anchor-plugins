@@ -75,7 +75,7 @@ class VoxelBoxArithmetic {
 	 */
 	private static void divideValueShort( VoxelBox<IntBuffer> vbIn, int div, VoxelBox<ShortBuffer> vbOut ) {
 		
-		for (int z=0; z<vbIn.extnt().getZ(); z++) {
+		for (int z=0; z<vbIn.extent().getZ(); z++) {
 			
 			IntBuffer in = vbIn.getPixelsForPlane(z).buffer();
 			ShortBuffer out = vbOut.getPixelsForPlane(z).buffer();
@@ -100,7 +100,7 @@ class VoxelBoxArithmetic {
 	 */
 	private static void divideValueByte( VoxelBox<IntBuffer> vbIn, int div, VoxelBox<ByteBuffer> vbOut ) {
 		
-		for (int z=0; z<vbIn.extnt().getZ(); z++) {
+		for (int z=0; z<vbIn.extent().getZ(); z++) {
 			
 			IntBuffer in = vbIn.getPixelsForPlane(z).buffer();
 			ByteBuffer out = vbOut.getPixelsForPlane(z).buffer();
@@ -125,7 +125,7 @@ class VoxelBoxArithmetic {
 
 	private static void addShort( VoxelBox<IntBuffer> vb, VoxelBox<ShortBuffer> toAdd) {
 
-		for (int z=0; z<toAdd.extnt().getZ(); z++) {
+		for (int z=0; z<toAdd.extent().getZ(); z++) {
 			
 			IntBuffer in1 = vb.getPixelsForPlane(z).buffer();
 			ShortBuffer in2 = toAdd.getPixelsForPlane(z).buffer();
@@ -148,7 +148,7 @@ class VoxelBoxArithmetic {
 	
 	private static void addByte( VoxelBox<IntBuffer> vb, VoxelBox<ByteBuffer> toAdd) {
 
-		for (int z=0; z<toAdd.extnt().getZ(); z++) {
+		for (int z=0; z<toAdd.extent().getZ(); z++) {
 			
 			IntBuffer in1 = vb.getPixelsForPlane(z).buffer();
 			ByteBuffer in2 = toAdd.getPixelsForPlane(z).buffer();

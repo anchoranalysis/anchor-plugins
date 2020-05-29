@@ -27,6 +27,8 @@ package org.anchoranalysis.plugin.image.task.bean.grouped;
  */
 
 import java.nio.file.Path;
+import java.util.Optional;
+
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.progress.ProgressReporterNull;
@@ -74,7 +76,10 @@ public abstract class GroupedStackTask<S,T> extends Task<ProvidesStackInput,Grou
 		BoundIOContext context = params.context();
 
 		// Extract a group name
-		String groupName = extractGroupName( inputObject.pathForBinding(), context.isDebugEnabled() );
+		String groupName = extractGroupName(
+			inputObject.pathForBinding(),
+			context.isDebugEnabled()
+		);
 		
 		NamedImgStackCollection store = GroupedStackTask.extractInputStacks(inputObject);
 	
@@ -93,9 +98,15 @@ public abstract class GroupedStackTask<S,T> extends Task<ProvidesStackInput,Grou
 		BoundIOContext context
 	) throws JobExecutionException;
 	
-	private String extractGroupName( Path path, boolean debugEnabled ) throws JobExecutionException {
+	private String extractGroupName( Optional<Path> path, boolean debugEnabled ) throws JobExecutionException {
+		
+		if (!path.isPresent()) {
+			// Return an arbitrary group-name if there's no binding-path
+			return "group";
+		}
+		
 		try {
-			return groupGenerator.outFilePath( path, debugEnabled ).toString();
+			return groupGenerator.outFilePath( path.get(), debugEnabled ).toString();
 		} catch (AnchorIOException e1) {
 			throw new JobExecutionException(
 				String.format("Cannot establish a group-identifier for: %s", path ),

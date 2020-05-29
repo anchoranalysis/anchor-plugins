@@ -1,5 +1,7 @@
 package org.anchoranalysis.plugin.image.task.bean.feature;
 
+import java.util.Optional;
+
 /*-
  * #%L
  * anchor-plugin-image-task
@@ -56,15 +58,15 @@ class KeyValueParamsExporter {
 		for( int i=0; i<featureNames.size(); i++) {
 			
 			String key = featureNames.get(i);
-			Double val = rv.getDoubleOrNull(i);
+			Optional<Double> val = rv.getDoubleOrNull(i);
 			
-			if (val==null) {
+			if (val.isPresent()) {
+				kv.put(key, val.get() );	
+			} else {
 				// Then an error happened and we report it
 				logErrorReporter.getErrorReporter().recordError(ExportFeaturesHistogramTask.class, rv.getException(i) );
-				val = Double.NaN;
+				kv.put(key, Double.NaN);
 			}
-			
-			kv.put(key, val);
 		}
 		return kv;
 	}

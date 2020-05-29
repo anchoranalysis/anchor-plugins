@@ -1,6 +1,9 @@
 package ch.ethz.biol.cell.mpp.feedback.reporter;
 
+import java.util.Optional;
+
 import org.anchoranalysis.anchor.mpp.feature.nrg.cfg.CfgNRGPixelized;
+import org.anchoranalysis.core.functional.OptionalUtilities;
 
 /*-
  * #%L
@@ -39,7 +42,7 @@ import org.anchoranalysis.mpp.sgmn.optscheme.step.Reporting;
 
 public class CSVReporterBest extends ReporterOptimizationStep<CfgNRGPixelized> {
 
-	private FileOutput csvOutput;
+	private Optional<FileOutput> csvOutput;
 	
 	// Constructor
 	public CSVReporterBest() {
@@ -48,14 +51,14 @@ public class CSVReporterBest extends ReporterOptimizationStep<CfgNRGPixelized> {
 	
 	@Override
 	public void reportItr( Reporting<CfgNRGPixelized> reporting ) {
-
+		// NOTHING TO DO
 	}
 	
 	@Override
-	public void reportNewBest( Reporting<CfgNRGPixelized> reporting ) {
-		if (csvOutput != null && csvOutput.isEnabled()) {
+	public void reportNewBest( Reporting<CfgNRGPixelized> reporting ) throws ReporterException {
+		if (csvOutput.isPresent() && csvOutput.get().isEnabled()) {
 
-			this.csvOutput.getWriter().printf(
+			this.csvOutput.get().getWriter().printf(
 				"%d,%d,%e%n",
 				reporting.getIter(),
 				reporting.getCfgNRGAfter().getCfg().size(),
@@ -76,13 +79,13 @@ public class CSVReporterBest extends ReporterOptimizationStep<CfgNRGPixelized> {
 				throw new ReporterException(e);
 			} 
 			
-			if (csvOutput!=null) {
-				this.csvOutput.start();
-				
-				if (csvOutput.isEnabled()) {
-					this.csvOutput.getWriter().printf("Itr,Size,Best_Nrg%n");
+			OptionalUtilities.ifPresent(
+				csvOutput,
+				output-> {
+					output.start();
+					output.getWriter().printf("Itr,Size,Best_Nrg%n");
 				}
-			}
+			);
 		} catch (AnchorIOException e) {
 			throw new ReporterException(e);
 		}
@@ -92,8 +95,8 @@ public class CSVReporterBest extends ReporterOptimizationStep<CfgNRGPixelized> {
 
 	@Override
 	public void reportEnd( OptimizationFeedbackEndParams<CfgNRGPixelized> optStep ) {
-		if (csvOutput != null && csvOutput.isEnabled()) {
-			this.csvOutput.getWriter().close();
-		}
+		csvOutput.ifPresent( output->
+			output.getWriter().close()
+		);
 	}
 }

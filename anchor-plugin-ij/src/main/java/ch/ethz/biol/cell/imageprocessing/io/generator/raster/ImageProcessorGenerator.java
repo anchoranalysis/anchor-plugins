@@ -32,6 +32,7 @@ import ij.io.FileSaver;
 import ij.process.ImageProcessor;
 
 import java.nio.file.Path;
+import java.util.Optional;
 
 import org.anchoranalysis.io.generator.SingleFileTypeGenerator;
 import org.anchoranalysis.io.manifest.ManifestDescription;
@@ -67,8 +68,10 @@ public class ImageProcessorGenerator extends SingleFileTypeGenerator {
 	}
 
 	@Override
-	public ManifestDescription createManifestDescription() {
-		return new ManifestDescription("raster", manifestDescriptionFunction);
+	public Optional<ManifestDescription> createManifestDescription() {
+		return Optional.of(
+			new ManifestDescription("raster", manifestDescriptionFunction)
+		);
 	}
 
 	

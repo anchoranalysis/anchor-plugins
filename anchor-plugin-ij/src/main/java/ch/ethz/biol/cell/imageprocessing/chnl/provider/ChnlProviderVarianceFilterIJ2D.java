@@ -28,57 +28,13 @@ package ch.ethz.biol.cell.imageprocessing.chnl.provider;
 
 
 import ij.plugin.filter.RankFilters;
-import ij.process.ImageProcessor;
-
-import java.nio.ByteBuffer;
-
-import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.image.bean.provider.ChnlProviderOne;
 import org.anchoranalysis.image.chnl.Chnl;
-import org.anchoranalysis.image.convert.IJWrap;
-import org.anchoranalysis.image.voxel.box.VoxelBox;
 
-public class ChnlProviderVarianceFilterIJ2D extends ChnlProviderOne {
-
-	// START BEAN PROPERTIES
-	@BeanField
-	private int radius = 2;
-	// END BEAN PROPERTIES
-	
-	public static Chnl variance3d( Chnl chnl, int radius ) throws CreateException {
-		
-		//ImagePlus imp = ImgStackUtilities.createImagePlus(chnl);
-		
-		RankFilters rankFilters = new RankFilters();
-		//rankFilters.setup("despeckle",null);
-		
-		
-		VoxelBox<ByteBuffer> vb = chnl.getVoxelBox().asByte();
-		
-		// Are we missing a Z slice?
-		for (int z=0; z<chnl.getDimensions().getZ(); z++) {
-		
-			ImageProcessor ip = IJWrap.imageProcessorByte(vb.getPlaneAccess(), z);
-			rankFilters.rank( ip, radius, RankFilters.VARIANCE );
-		}
-		
-		
-		return chnl;
-	}
+public class ChnlProviderVarianceFilterIJ2D extends ChnlProviderFilterRadiusBase {
 	
 	@Override
-	public Chnl createFromChnl(Chnl chnl) throws CreateException {
-		return variance3d(chnl, radius);
+	public Chnl createFromChnl(Chnl chnl, int radius) throws CreateException {
+		return RankFilterUtilities.applyEachSlice(chnl, radius, RankFilters.VARIANCE);
 	}
-
-	public int getRadius() {
-		return radius;
-	}
-
-	public void setRadius(int radius) {
-		this.radius = radius;
-	}
-
-
 }

@@ -33,12 +33,10 @@ import java.util.Optional;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.Positive;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.cache.ChildCacheName;
 import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.cache.calculation.FeatureCalculation;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.image.feature.objmask.pair.FeatureDeriveFromPair;
 import org.anchoranalysis.image.feature.objmask.pair.FeatureInputPairObjs;
 import org.anchoranalysis.image.objmask.ObjMask;
@@ -85,19 +83,6 @@ public class Intersection extends FeatureDeriveFromPair {
 		);
 	}
 	
-	@Override
-	public SessionInput<FeatureInput> transformInput(SessionInput<FeatureInputPairObjs> params,
-			Feature<FeatureInput> dependentFeature) throws FeatureCalcException {
-		
-		//Optional<FeatureObjMaskParams> paramsDerived = createParamsForIntersection(params);
-		// TODO FIX
-		/*CacheableParams<FeatureCalcParams> p = params 
-				.map( p->
-			p.upcastParams()
-		);*/
-		return null;
-	}
-	
 	/** A unique cache-name for the intersection of how we find a parameterization */
 	private ChildCacheName cacheIntersectionName() {
 		String id = String.format(
@@ -128,8 +113,8 @@ public class Intersection extends FeatureDeriveFromPair {
 		return do3D;
 	}
 
-	public void setDo3D(boolean do3d) {
-		do3D = do3d;
+	public void setDo3D(boolean do3D) {
+		this.do3D = do3D;
 	}
 
 	public int getIterationsDilation() {

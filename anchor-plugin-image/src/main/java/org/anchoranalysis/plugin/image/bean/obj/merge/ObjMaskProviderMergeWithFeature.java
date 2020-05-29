@@ -4,7 +4,7 @@ package org.anchoranalysis.plugin.image.bean.obj.merge;
 
 import java.util.Optional;
 
-import org.anchoranalysis.bean.ProviderNullableCreator;
+import org.anchoranalysis.bean.OptionalFactory;
 
 /*
  * #%L
@@ -74,7 +74,7 @@ public abstract class ObjMaskProviderMergeWithFeature extends ObjMaskProviderMer
 	@Override
 	public ObjMaskCollection createFromObjs(ObjMaskCollection objsSource) throws CreateException {
 		
-		Optional<ObjMaskCollection> saveObjs = ProviderNullableCreator.createOptional(objsSave);
+		Optional<ObjMaskCollection> saveObjs = OptionalFactory.create(objsSave);
 		saveObjs.ifPresent( so
 			->so.addAll(objsSource)
 		);

@@ -52,7 +52,7 @@ public class MaxNonZero extends IndexedRegionBase {
 		long maxNonZero = -1;
 		VoxelStatistics maxStats = null;
 		
-		for( int z=0; z<pm.getObjMask().getBoundingBox().extnt().getZ(); z++ ) {
+		for( int z=0; z<pm.getObjMask().getBoundingBox().extent().getZ(); z++ ) {
 			VoxelStatistics stats = sliceStatisticsForRegion(pm, z);
 			
 			Histogram h;

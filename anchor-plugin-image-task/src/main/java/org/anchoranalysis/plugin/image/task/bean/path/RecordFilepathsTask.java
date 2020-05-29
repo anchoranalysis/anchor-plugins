@@ -69,10 +69,14 @@ public class RecordFilepathsTask<T extends InputFromManager> extends Task<T,Stri
 	}
 	
 	@Override
-	public void doJobOnInputObject(InputBound<T,StringBuilder> params)
-			throws JobExecutionException {
+	public void doJobOnInputObject(InputBound<T,StringBuilder> params)	throws JobExecutionException {
 
-		Path path = params.getInputObject().pathForBinding();
+		Path path;
+		try {
+			path = params.getInputObject().pathForBindingRequired();
+		} catch (AnchorIOException e) {
+			throw new JobExecutionException(e);
+		}
 		
 		StringBuilder sb = params.getSharedState();
 		

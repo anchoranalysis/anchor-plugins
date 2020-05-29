@@ -28,6 +28,7 @@ package org.anchoranalysis.plugin.io.bean.copyfilesmode.naming;
 
 import java.io.File;
 import java.nio.file.Path;
+import java.util.Optional;
 
 import org.anchoranalysis.io.error.AnchorIOException;
 
@@ -42,18 +43,15 @@ public abstract class CopyFilesNaming {
 	 * @param destDir
 	 * @param file
 	 * @param iter
-	 * @return the absolute-path. if NULL, the file should be skipped.
+	 * @return the absolute-path. if empty, the file should be skipped.
 	 * @throws AnchorIOException TODO
 	 */
-	public Path destinationPath(Path sourceDir, Path destDir, File file, int iter) throws AnchorIOException {
+	public Optional<Path> destinationPath(Path sourceDir, Path destDir, File file, int iter) throws AnchorIOException {
 		
-		Path remainder = destinationPathRelative( sourceDir, destDir, file, iter );
-		
-		if (remainder==null) {
-			return null;
-		}
-		
-		return destDir.resolve(remainder);
+		Optional<Path> remainder = destinationPathRelative( sourceDir, destDir, file, iter );
+		return remainder.map(r->
+			destDir.resolve(r)
+		);
 	}
 	
 	/**
@@ -63,10 +61,10 @@ public abstract class CopyFilesNaming {
 	 * @param destDir
 	 * @param file
 	 * @param iter
-	 * @return the relative-path. if NULL, the file should be skipped.
+	 * @return the relative-path. if empty, the file should be skipped.
 	 * @throws AnchorIOException TODO
 	 */
-	public abstract Path destinationPathRelative(Path sourceDir, Path destDir, File file, int iter) throws AnchorIOException;
+	public abstract Optional<Path> destinationPathRelative(Path sourceDir, Path destDir, File file, int iter) throws AnchorIOException;
 	
 	public abstract void afterCopying(Path destDir, boolean dummyMode) throws AnchorIOException;
 }

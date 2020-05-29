@@ -42,7 +42,7 @@ import org.opencv.core.Mat;
 public class MatConverter {
 
 	public static Mat fromObjMask( ObjMask om ) throws CreateException {
-		Extent e = om.getBoundingBox().extnt(); 
+		Extent e = om.getBoundingBox().extent(); 
 		if (e.getZ()>1) {
 			throw new CreateException("Objects with more than 1 z-stack are not supported for OpenCV to Mat conversion (at the moment)");
 		}
@@ -97,11 +97,11 @@ public class MatConverter {
 		
 	private static Mat singleChnlMatFromVoxelBox( VoxelBox<ByteBuffer> vb ) {
 		
-		assert(vb.extnt().getZ())==1;
+		assert(vb.extent().getZ())==1;
 		
 		
 		
-		Mat mat = createEmptyMat( vb.extnt(), CvType.CV_8UC1 );
+		Mat mat = createEmptyMat( vb.extent(), CvType.CV_8UC1 );
 		mat.put(0, 0, vb.getPixelsForPlane(0).buffer().array() );
 		
 		// TODO

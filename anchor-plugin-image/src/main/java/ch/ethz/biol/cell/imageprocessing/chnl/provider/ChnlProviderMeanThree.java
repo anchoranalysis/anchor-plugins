@@ -34,7 +34,6 @@ import org.anchoranalysis.image.bean.provider.ChnlProviderThree;
 import org.anchoranalysis.image.chnl.Chnl;
 import org.anchoranalysis.image.chnl.factory.ChnlFactory;
 import org.anchoranalysis.image.convert.ByteConverter;
-import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
 
@@ -46,7 +45,7 @@ public class ChnlProviderMeanThree extends ChnlProviderThree {
 		checkDims(chnl1, chnl2, chnl3);
 		
 		Chnl chnlOut = ChnlFactory.instance().createEmptyInitialised(
-			new ImageDim(chnl1.getDimensions()),
+			chnl1.getDimensions(),
 			VoxelDataTypeUnsignedByte.instance
 		);
 		
@@ -67,7 +66,7 @@ public class ChnlProviderMeanThree extends ChnlProviderThree {
 		VoxelBox<ByteBuffer> vbIn3
 	) {
 
-		for (int z=0; z<vbOut.extnt().getZ(); z++) {
+		for (int z=0; z<vbOut.extent().getZ(); z++) {
 			
 			ByteBuffer in1 = vbIn1.getPixelsForPlane(z).buffer();
 			ByteBuffer in2 = vbIn2.getPixelsForPlane(z).buffer();

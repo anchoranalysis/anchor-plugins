@@ -29,6 +29,7 @@ package org.anchoranalysis.plugin.io.bean.task;
 
 import java.io.IOException;
 import java.nio.file.Path;
+import java.util.Optional;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
@@ -66,16 +67,16 @@ public class CombineCSVTask extends Task<FileInput,CSVWriter> {
 	public CSVWriter beforeAnyJobIsExecuted( BoundOutputManagerRouteErrors outputManager, ParametersExperiment params)	throws ExperimentExecutionException {
 	
 		try {
-			CSVWriter writer = CSVWriter.createFromOutputManager(
+			Optional<CSVWriter> writer = CSVWriter.createFromOutputManager(
 				"featureReport",
 				outputManager.getDelegate()
 			);
 			
-			if (writer==null) {
+			if (!writer.isPresent()) {
 				throw new ExperimentExecutionException("'featureReport' output not enabled, as is required");
 			}
 				
-			return writer;
+			return writer.get();
 			
 		} catch (AnchorIOException e) {
 			throw new ExperimentExecutionException(e);

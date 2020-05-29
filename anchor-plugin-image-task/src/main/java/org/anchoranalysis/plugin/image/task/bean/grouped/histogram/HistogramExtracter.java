@@ -33,7 +33,7 @@ import org.anchoranalysis.image.binary.BinaryChnl;
 import org.anchoranalysis.image.binary.values.BinaryValues;
 import org.anchoranalysis.image.chnl.Chnl;
 import org.anchoranalysis.image.histogram.Histogram;
-import org.anchoranalysis.image.histogram.HistogramFactoryUtilities;
+import org.anchoranalysis.image.histogram.HistogramFactory;
 import org.anchoranalysis.plugin.image.task.grouped.ChnlSource;
 
 /** Extracts a histogram from an image for a given key */
@@ -59,9 +59,9 @@ class HistogramExtracter {
 		try {
 			if (!keyMask.isEmpty()) {
 				BinaryChnl mask = extractMask(keyMask);
-				return HistogramFactoryUtilities.create( chnl, mask );
+				return HistogramFactory.create( chnl, mask );
 			} else {
-				return HistogramFactoryUtilities.create( chnl );	
+				return HistogramFactory.create( chnl );	
 			}
 			
 		} catch ( CreateException e) {

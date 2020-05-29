@@ -1,5 +1,7 @@
 package org.anchoranalysis.plugin.annotation.bean.comparison;
 
+import java.util.Optional;
+
 import org.anchoranalysis.annotation.io.wholeimage.findable.Findable;
 
 /*-
@@ -29,11 +31,13 @@ import org.anchoranalysis.annotation.io.wholeimage.findable.Findable;
  */
 
 import org.anchoranalysis.core.error.CreateException;
+import org.anchoranalysis.core.functional.OptionalUtilities;
 import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.experiment.JobExecutionException;
 import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.io.input.ProvidesStackInput;
 import org.anchoranalysis.image.objmask.ObjMaskCollection;
+import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.output.bound.BoundIOContext;
 import org.anchoranalysis.plugin.annotation.comparison.AnnotationComparisonInput;
 import org.anchoranalysis.plugin.annotation.comparison.IAddAnnotation;
@@ -44,45 +48,47 @@ class ObjsToCompareFactory {
 	private ObjsToCompareFactory() {
 	}
 	
-	// Returns null if an error occurs
-	public static ObjsToCompare create(
+	public static Optional<ObjsToCompare> create(
 		AnnotationComparisonInput<ProvidesStackInput> input,
 		IAddAnnotation<?> addAnnotation,
 		ImageDim dim,
 		BoundIOContext context
 	) throws JobExecutionException {
-		 
-		Findable<ObjMaskCollection> leftObjs = createObjs( true, input, dim, context.isDebugEnabled() );
-		
-		if (!checkNull(leftObjs,"leftObj", addAnnotation, context.getLogger())) {
-			return null;
-		}
-		
-		// Create our object groups, and add an assignment
-		Findable<ObjMaskCollection> rightObjs = createObjs( false, input, dim, context.isDebugEnabled() );
-		
-		if (!checkNull(rightObjs,"rightObj", addAnnotation, context.getLogger())) {
-			return null;
-		}
-		
-		// We can only get this far if both objects were found
-		return new ObjsToCompare(leftObjs.getOrNull(), rightObjs.getOrNull());
+
+		// Both objects need to be found
+		return OptionalUtilities.mapBoth(
+			createObjs(true, "leftObj", addAnnotation, input, dim, context),
+			createObjs(false,"rightObj", addAnnotation, input, dim, context),
+			(left, right) -> new ObjsToCompare(left, right)
+		);
 	}
 	
-	private static boolean checkNull(
+	private static Optional<ObjMaskCollection> createObjs(
+		boolean left,
+		String objName,
+		IAddAnnotation<?> addAnnotation,
+		AnnotationComparisonInput<ProvidesStackInput> input,
+		ImageDim dim,
+		BoundIOContext context
+	) throws JobExecutionException {
+		Findable<ObjMaskCollection> findable = createFindable(left, input, dim, context.isDebugEnabled() );
+		return foundOrLogAddUnnannotated(findable, objName, addAnnotation, context.getLogger());
+	}
+	
+	private static Optional<ObjMaskCollection> foundOrLogAddUnnannotated(
 		Findable<ObjMaskCollection> objs,
 		String objName,
 		IAddAnnotation<?> addAnnotation,
 		LogErrorReporter logErrorReporter
 	) {
-		boolean success = objs.logIfFailure(objName, logErrorReporter );
-		if (!success) {
+		Optional<ObjMaskCollection> found = objs.getFoundOrLog(objName, logErrorReporter );
+		if (!found.isPresent()) {
 			addAnnotation.addUnannotatedImage();
 		}
-		return success;
+		return found;
 	}
 
-	private static Findable<ObjMaskCollection> createObjs(
+	private static Findable<ObjMaskCollection> createFindable(
 		boolean left,
 		AnnotationComparisonInput<ProvidesStackInput> input,
 		ImageDim dim,
@@ -90,11 +96,11 @@ class ObjsToCompareFactory {
 	) throws JobExecutionException {
 		try {
 			return input.getComparerMultiplex(left).createObjs(
-				input.pathForBinding(),
+				input.pathForBindingRequired(),
 				dim,
 				debugMode
 			);
-		} catch (CreateException e) {
+		} catch (CreateException | AnchorIOException e) {
 			throw new JobExecutionException(e);
 		}
 	}

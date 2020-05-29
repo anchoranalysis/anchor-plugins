@@ -42,7 +42,7 @@ import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
 import org.anchoranalysis.image.bean.provider.stack.StackProvider;
 import org.anchoranalysis.image.bean.provider.stack.StackProviderReference;
 
-import ch.ethz.biol.cell.imageprocessing.binaryimgchnl.provider.BinaryImgChnlProviderReference;
+import ch.ethz.biol.cell.imageprocessing.binaryimgchnl.provider.BinaryChnlProviderReference;
 import ch.ethz.biol.cell.imageprocessing.chnl.provider.ChnlProviderReference;
 import ch.ethz.biol.cell.imageprocessing.objmask.provider.ObjMaskProviderReference;
 import ch.ethz.biol.cell.imageprocessing.stack.provider.StackProviderChnlProvider;
@@ -88,7 +88,7 @@ public class VisualizeOnBackground extends DefineAdderBean {
 			// We add all the existing definitions
 			define.addAll(def);
 			
-			// Now we add visualizations for the BinaryImgChnlProvider and ObjMaskProvider
+			// Now we add visualizations for the BinaryChnlProvider and ObjMaskProvider
 			addVisualizationFor( def, define, BinaryChnlProvider.class, id ->
 				visualizationBinaryMask(id)
 			);
@@ -140,7 +140,7 @@ public class VisualizeOnBackground extends DefineAdderBean {
 		StackProviderOutlineRGB provider = new StackProviderOutlineRGB();
 		addBackgroundProvider(provider);
 		provider.setMask(
-			new BinaryImgChnlProviderReference(binaryChnlProviderID)
+			new BinaryChnlProviderReference(binaryChnlProviderID)
 		);
 		return provider;
 	}

@@ -37,7 +37,7 @@ public class ChnlProviderSubtract extends ChnlProviderTwoVoxelMapping {
 	@Override
 	protected void processVoxelBox( VoxelBox<ByteBuffer> vbOut, VoxelBox<ByteBuffer> vbIn1, VoxelBox<ByteBuffer> vbIn2) {
 
-		for (int z=0; z<vbOut.extnt().getZ(); z++) {
+		for (int z=0; z<vbOut.extent().getZ(); z++) {
 			
 			ByteBuffer in1 = vbIn1.getPixelsForPlane(z).buffer();
 			ByteBuffer in2 = vbIn2.getPixelsForPlane(z).buffer();

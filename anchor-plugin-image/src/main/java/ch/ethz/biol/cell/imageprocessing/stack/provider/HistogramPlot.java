@@ -28,6 +28,7 @@ package ch.ethz.biol.cell.imageprocessing.stack.provider;
 
 
 import java.util.Iterator;
+import java.util.Optional;
 
 import org.anchoranalysis.anchor.graph.AxisLimits;
 import org.anchoranalysis.anchor.graph.GraphInstance;
@@ -40,7 +41,7 @@ class HistogramPlot {
 	
 	private HistogramPlot() throws InitException {}
 
-	public static GraphInstance create( Iterator<HistogramItem> itr, AxisLimits domainLimits, AxisLimits rangeLimits ) throws CreateException {
+	public static GraphInstance create( Iterator<HistogramItem> itr, Optional<AxisLimits> domainLimits, Optional<AxisLimits> rangeLimits ) throws CreateException {
 
 		GraphColorScheme graphColorScheme = new GraphColorScheme();
 		

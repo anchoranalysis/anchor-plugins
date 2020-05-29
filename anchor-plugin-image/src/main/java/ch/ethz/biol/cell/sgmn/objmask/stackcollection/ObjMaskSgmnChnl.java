@@ -1,5 +1,7 @@
 package ch.ethz.biol.cell.sgmn.objmask.stackcollection;
 
+import java.util.Optional;
+
 /*
  * #%L
  * anchor-plugin-image
@@ -28,7 +30,7 @@ package ch.ethz.biol.cell.sgmn.objmask.stackcollection;
 
 
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.name.provider.INamedProvider;
+import org.anchoranalysis.core.name.provider.NamedProvider;
 import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 import org.anchoranalysis.core.random.RandomNumberGenerator;
 import org.anchoranalysis.image.bean.sgmn.objmask.ObjMaskSgmn;
@@ -55,12 +57,17 @@ public class ObjMaskSgmnChnl extends SgmnObjMaskCollection {
 	// END BEAN PROPERTIES
 
 	@Override
-	public ObjMaskCollection sgmn(NamedImgStackCollection stackCollection,
-			INamedProvider<ObjMaskCollection> objMaskCollection, SeedCollection seeds, RandomNumberGenerator re, BoundIOContext context) throws SgmnFailedException {
+	public ObjMaskCollection sgmn(
+		NamedImgStackCollection stackCollection,
+		NamedProvider<ObjMaskCollection> objMaskCollection,
+		Optional<SeedCollection> seeds,
+		RandomNumberGenerator re,
+		BoundIOContext context
+	) throws SgmnFailedException {
 		
 		try {
 			Chnl chnl = stackCollection.getException(inputChnlName).getChnl(chnlIndex);
-			return sgmn.sgmn(chnl, seeds);
+			return sgmn.sgmn(chnl, Optional.empty(), seeds);
 			
 		} catch (NamedProviderGetException e) {
 			throw new SgmnFailedException(e.summarize());

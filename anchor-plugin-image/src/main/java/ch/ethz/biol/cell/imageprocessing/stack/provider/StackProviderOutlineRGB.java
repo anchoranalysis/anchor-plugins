@@ -43,8 +43,8 @@ import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
 
-import ch.ethz.biol.cell.imageprocessing.binaryimgchnl.provider.BinaryImgChnlProviderHolder;
-import ch.ethz.biol.cell.imageprocessing.binaryimgchnl.provider.BinaryImgChnlProviderOutline;
+import ch.ethz.biol.cell.imageprocessing.binaryimgchnl.provider.BinaryChnlProviderHolder;
+import ch.ethz.biol.cell.imageprocessing.binaryimgchnl.provider.BinaryChnlProviderOutline;
 
 public class StackProviderOutlineRGB extends StackProviderWithBackground {
 
@@ -117,9 +117,9 @@ public class StackProviderOutlineRGB extends StackProviderWithBackground {
 	
 	private BinaryChnl createOutline( BinaryChnl maskIn ) throws OperationFailedException {
 		// We calculate outline of mask
-		BinaryImgChnlProviderOutline cpOutline = new BinaryImgChnlProviderOutline();
+		BinaryChnlProviderOutline cpOutline = new BinaryChnlProviderOutline();
 		cpOutline.setForce2D(force2D);
-		cpOutline.setBinaryChnl( new BinaryImgChnlProviderHolder(maskIn) );
+		cpOutline.setBinaryChnl( new BinaryChnlProviderHolder(maskIn) );
 		try {
 			cpOutline.initRecursive( getSharedObjects(), getLogger() );
 			return cpOutline.create();

@@ -29,6 +29,7 @@ package org.anchoranalysis.plugin.io.bean.input.stack;
 
 import java.io.File;
 import java.nio.file.Path;
+import java.util.Optional;
 
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
@@ -137,7 +138,7 @@ class StackCollectionFromFilesInputObject extends StackSequenceInput {
 	}
 
 	@Override
-	public Path pathForBinding() {
+	public Optional<Path> pathForBinding() {
 		return delegate.pathForBinding();
 	}
 
@@ -151,7 +152,11 @@ class StackCollectionFromFilesInputObject extends StackSequenceInput {
 	
 	private OpenedRaster getOpenedRaster() throws RasterIOException {
 		if (openedRasterMemo==null) {
-			openedRasterMemo = rasterReader.openFile( delegate.pathForBinding() );
+			openedRasterMemo = rasterReader.openFile(
+				delegate.pathForBinding().orElseThrow( ()->
+					new RasterIOException("A binding-path must be associated with this file")
+				)
+			);
 		}
 		return openedRasterMemo;
 	}

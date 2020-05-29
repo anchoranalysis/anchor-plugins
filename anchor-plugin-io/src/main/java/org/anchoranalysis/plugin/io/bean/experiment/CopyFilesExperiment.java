@@ -31,6 +31,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.Collection;
+import java.util.Optional;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
@@ -146,10 +147,10 @@ public class CopyFilesExperiment extends Experiment {
 	private void copyFile( Path sourcePath, Path destPath, File file, int iter, ProgressReporter progressReporter ) throws OperationFailedException {
 
 		try {
-			Path destination = copyFilesNaming.destinationPath(sourcePath, destPath, file, iter);
+			Optional<Path> destination = copyFilesNaming.destinationPath(sourcePath, destPath, file, iter);
 			
 			// Skip any files with a NULL destinationPath
-			if (destination==null) {
+			if (!destination.isPresent()) {
 				if (dummyMode) {
 					System.out.printf("Skipping %s%n", file.getPath() );
 				}
@@ -159,7 +160,10 @@ public class CopyFilesExperiment extends Experiment {
 			if (dummyMode) {
 				System.out.printf("Copying %s to %s%n", file.getPath(), destination.toString() );		
 			} else {
-				copyFilesMethod.createDestinationFile(file.toPath(), destination);
+				copyFilesMethod.createDestinationFile(
+					file.toPath(),
+					destination.get()
+				);
 			}
 		} catch (AnchorIOException | CreateException e) {
 			throw new OperationFailedException(e);

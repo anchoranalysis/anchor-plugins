@@ -70,7 +70,7 @@ public class BioformatsWriter extends ByteNoTimeSeriesWriter {
 		Chnl chnlGreen = stack.getChnl(1);
 		Chnl chnlBlue = stack.getChnl(2);
 		
-		int cap = chnlRed.getVoxelBox().any().extnt().getVolumeXY();
+		int cap = chnlRed.getVoxelBox().any().extent().getVolumeXY();
 		int cap3 = cap * 3;
 		
 		for (int z=0; z<stack.getDimensions().getZ(); z++) {

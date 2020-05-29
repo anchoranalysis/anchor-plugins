@@ -32,6 +32,7 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.text.TypedValue;
@@ -99,7 +100,7 @@ public class Anonymize extends CopyFilesNaming {
 	
 
 	@Override
-	public Path destinationPathRelative(Path sourceDir, Path destDir, File file, int iter) throws AnchorIOException {
+	public Optional<Path> destinationPathRelative(Path sourceDir, Path destDir, File file, int iter) throws AnchorIOException {
 		String ext = FilenameUtils.getExtension(file.toString());
 		String fileNameNew = createNumericString(iter) + "." + ext;
 		
@@ -112,7 +113,9 @@ public class Anonymize extends CopyFilesNaming {
 				)
 			);
 		}
-		return Paths.get(fileNameNew);
+		return Optional.of(
+			Paths.get(fileNameNew)
+		);
 	}
 
 	@Override
