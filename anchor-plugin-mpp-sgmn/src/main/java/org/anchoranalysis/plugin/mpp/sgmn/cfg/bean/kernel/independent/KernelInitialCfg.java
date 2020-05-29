@@ -1,5 +1,7 @@
 package org.anchoranalysis.plugin.mpp.sgmn.cfg.bean.kernel.independent;
 
+import java.util.Optional;
+
 import org.anchoranalysis.anchor.mpp.bean.proposer.CfgProposer;
 import org.anchoranalysis.anchor.mpp.cfg.Cfg;
 import org.anchoranalysis.anchor.mpp.feature.mark.ListUpdatableMarkSetCollection;
@@ -52,10 +54,7 @@ public class KernelInitialCfg extends KernelIndependent<Cfg> {
 	private CfgProposer cfgProposer;
 	// END BEAN LIST
 	
-	private Cfg lastCfg;
-	
-	public KernelInitialCfg() {
-	}
+	private Optional<Cfg> lastCfg;
 
 	@Override
 	public boolean isCompatibleWith(Mark testMark) {
@@ -63,7 +62,7 @@ public class KernelInitialCfg extends KernelIndependent<Cfg> {
 	}
 
 	@Override
-	public Cfg makeProposal(Cfg exst, KernelCalcContext context ) throws KernelCalcNRGException {
+	public Optional<Cfg> makeProposal(Cfg exst, KernelCalcContext context ) throws KernelCalcNRGException {
 		this.lastCfg = InitCfgUtilities.propose(cfgProposer, context);
 		return lastCfg;
 	}
@@ -77,7 +76,10 @@ public class KernelInitialCfg extends KernelIndependent<Cfg> {
 
 	@Override
 	public String dscrLast() {
-		return String.format("initialCfg(size=%d)", this.lastCfg.size());
+		return String.format(
+			"initialCfg(size=%d)",
+			this.lastCfg.map(Cfg::size).orElse(-1)
+		);
 	}
 
 	@Override
@@ -87,7 +89,9 @@ public class KernelInitialCfg extends KernelIndependent<Cfg> {
 
 	@Override
 	public int[] changedMarkIDArray() {
-		return this.lastCfg.createIdArr();
+		return this.lastCfg.map(
+			Cfg::createIdArr
+		).orElse( new int[]{} );
 	}
 
 	public CfgProposer getCfgProposer() {

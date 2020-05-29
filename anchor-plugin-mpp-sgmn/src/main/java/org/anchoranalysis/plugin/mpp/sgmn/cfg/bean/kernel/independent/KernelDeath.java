@@ -1,5 +1,7 @@
 package org.anchoranalysis.plugin.mpp.sgmn.cfg.bean.kernel.independent;
 
+import java.util.Optional;
+
 import org.anchoranalysis.anchor.mpp.cfg.Cfg;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
 
@@ -47,16 +49,15 @@ public abstract class KernelDeath<T> extends KernelPosNeg<T> {
 	
 	private Mark markRmv;
 	
-	public KernelDeath() {
-	}
-	
 	@Override
-	public T makeProposal(T exst,
+	public Optional<T> makeProposal(T exst,
 			KernelCalcContext context ) throws KernelCalcNRGException {
 
 		MarkAnd<Mark,T> markNrg = removeAndUpdateNrg( exst, context.proposer() );
 		markRmv = markNrg.getMark();
-		return markNrg.getCfgNrg();
+		return Optional.of(
+			markNrg.getCfgNrg()
+		);
 		
 	}
 	

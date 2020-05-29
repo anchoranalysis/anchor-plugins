@@ -1,5 +1,7 @@
 package org.anchoranalysis.plugin.mpp.sgmn.cfg.kernel.assigner;
 
+import java.util.Optional;
+
 /*-
  * #%L
  * anchor-plugin-mpp-sgmn
@@ -27,6 +29,7 @@ package org.anchoranalysis.plugin.mpp.sgmn.cfg.kernel.assigner;
  */
 
 import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.functional.OptionalUtilities;
 import org.anchoranalysis.mpp.sgmn.kernel.KernelAssigner;
 import org.anchoranalysis.mpp.sgmn.kernel.KernelCalcNRGException;
 import org.anchoranalysis.mpp.sgmn.kernel.proposer.KernelWithID;
@@ -54,7 +57,7 @@ public class KernelAssignerCalcNRGFromKernel<S,T> implements KernelAssigner<S,T>
 	public void assignProposal(OptimizationStep<S,T> optStep, TransformationContext context, KernelWithID<S> kid) throws KernelCalcNRGException {
 		
 		try {
-			S prop = kid.getKernel().makeProposal(
+			Optional<S> prop = kid.getKernel().makeProposal(
 				kernelStateBridge.stateToKernel().transform(
 					optStep.getCrnt().orElseThrow( ()->
 						new KernelCalcNRGException("No current item is defined")
@@ -63,13 +66,16 @@ public class KernelAssignerCalcNRGFromKernel<S,T> implements KernelAssigner<S,T>
 				),
 				context.getKernelCalcContext()
 			);
-				
-			optStep.assignProposal(
-				kernelStateBridge.kernelToState().transform(
-					prop,
-					context
-				),
-				kid
+			
+			OptionalUtilities.ifPresent(
+				prop,
+				proposal-> optStep.assignProposal(
+					kernelStateBridge.kernelToState().transform(
+						proposal,
+						context
+					),
+					kid
+				)
 			);
 		} catch (OperationFailedException e) {
 			throw new KernelCalcNRGException("Cannot transform function", e);

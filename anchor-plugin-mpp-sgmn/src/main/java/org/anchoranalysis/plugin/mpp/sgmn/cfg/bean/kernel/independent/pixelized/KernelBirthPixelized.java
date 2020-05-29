@@ -27,6 +27,7 @@ package org.anchoranalysis.plugin.mpp.sgmn.cfg.bean.kernel.independent.pixelized
  */
 
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 
 import org.anchoranalysis.anchor.mpp.bean.proposer.MarkProposer;
@@ -38,6 +39,7 @@ import org.anchoranalysis.anchor.mpp.proposer.ProposalAbnormalFailureException;
 import org.anchoranalysis.anchor.mpp.proposer.ProposerContext;
 import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
 import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.core.functional.OptionalUtilities;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.mpp.sgmn.kernel.KernelCalcContext;
 import org.anchoranalysis.mpp.sgmn.kernel.KernelCalcNRGException;
@@ -81,7 +83,7 @@ public class KernelBirthPixelized extends KernelBirth<CfgNRGPixelized> {
 	
 
 	@Override
-	protected Set<Mark> proposeNewMarks(CfgNRGPixelized exst, int number, KernelCalcContext context) {
+	protected Optional<Set<Mark>> proposeNewMarks(CfgNRGPixelized exst, int number, KernelCalcContext context) {
 		
 		Set<Mark> out = new HashSet<>();
 		for( int i=0; i<number; i++) {
@@ -90,7 +92,7 @@ public class KernelBirthPixelized extends KernelBirth<CfgNRGPixelized> {
 				out.add(m);
 			}
 		}
-		return out;
+		return Optional.of(out);
 	}
 	
 	private Mark proposeNewMark(CfgNRGPixelized exst, KernelCalcContext context) {
@@ -98,28 +100,36 @@ public class KernelBirthPixelized extends KernelBirth<CfgNRGPixelized> {
 	}
 	
 	@Override
-	protected CfgNRGPixelized calcForNewMark( CfgNRGPixelized exst, Set<Mark> listMarksNew, KernelCalcContext context ) throws KernelCalcNRGException {
+	protected Optional<CfgNRGPixelized> calcForNewMark(
+		CfgNRGPixelized exst,
+		Set<Mark> listMarksNew,
+		KernelCalcContext context
+	) throws KernelCalcNRGException {
 		
 		ProposerContext propContext = context.proposer();
 		
-		CfgNRGPixelized pixelized = exst;
+		Optional<CfgNRGPixelized> pixelized = Optional.of(exst);
 		for( Mark m : listMarksNew ) {
-			pixelized = proposeAndUpdate(pixelized, m, propContext);
-			
+			pixelized = OptionalUtilities.flatMap( 
+				pixelized,
+				p -> proposeAndUpdate(p, m, propContext)
+			);
 		}
 						
 		return pixelized;		
 	}
 	
-	private CfgNRGPixelized proposeAndUpdate( CfgNRGPixelized exst, Mark markNew, ProposerContext propContext) throws KernelCalcNRGException {
+	private Optional<CfgNRGPixelized> proposeAndUpdate( CfgNRGPixelized exst, Mark markNew, ProposerContext propContext) throws KernelCalcNRGException {
 
 		PxlMarkMemo pmmMarkNew = propContext.create(markNew );
 		
 		if (!applyMarkProposer(pmmMarkNew, propContext)) {
-			return null;
+			return Optional.empty();
 		}
 				
-		return calcUpdatedNRG(exst, pmmMarkNew, propContext);	
+		return Optional.of(
+			calcUpdatedNRG(exst, pmmMarkNew, propContext)
+		);
 	}
 	
 	private boolean applyMarkProposer( PxlMarkMemo pmmMarkNew, ProposerContext context ) throws KernelCalcNRGException {

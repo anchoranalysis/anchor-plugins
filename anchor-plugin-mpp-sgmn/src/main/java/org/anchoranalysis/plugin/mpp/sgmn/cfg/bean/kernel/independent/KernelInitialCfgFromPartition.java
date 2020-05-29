@@ -1,5 +1,7 @@
 package org.anchoranalysis.plugin.mpp.sgmn.cfg.bean.kernel.independent;
 
+import java.util.Optional;
+
 import org.anchoranalysis.anchor.mpp.bean.proposer.CfgProposer;
 import org.anchoranalysis.anchor.mpp.cfg.Cfg;
 import org.anchoranalysis.anchor.mpp.feature.mark.ListUpdatableMarkSetCollection;
@@ -61,28 +63,27 @@ public class KernelInitialCfgFromPartition extends KernelIndependent<CfgFromPart
 	
 	private Cfg lastCfg;
 	
-	public KernelInitialCfgFromPartition() {
-	}
-
 	@Override
 	public boolean isCompatibleWith(Mark testMark) {
 		return cfgProposer.isCompatibleWith(testMark);
 	}
 
 	@Override
-	public CfgFromPartition makeProposal(CfgFromPartition exst, KernelCalcContext context ) throws KernelCalcNRGException {
+	public Optional<CfgFromPartition> makeProposal(CfgFromPartition exst, KernelCalcContext context ) throws KernelCalcNRGException {
 		
-		Cfg cfg = InitCfgUtilities.propose(cfgProposer, context);
+		Optional<Cfg> cfg = InitCfgUtilities.propose(cfgProposer, context);
 		
-		if (cfg==null) {
-			return null;
+		if (!cfg.isPresent()) {
+			return Optional.empty();
 		}
 		
-		this.lastCfg = cfg;
+		this.lastCfg = cfg.get();
 		
-		return new CfgFromPartition(
-			new Cfg(),
-			createPartition(cfg)
+		return Optional.of(
+			new CfgFromPartition(
+				new Cfg(),
+				createPartition(cfg.get())
+			)
 		);
 	}
 

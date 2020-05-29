@@ -1,5 +1,7 @@
 package org.anchoranalysis.plugin.mpp.sgmn.cfg.bean.kernel.independent;
 
+import java.util.Optional;
+
 import org.anchoranalysis.anchor.mpp.bean.proposer.MarkProposer;
 import org.anchoranalysis.anchor.mpp.feature.mark.ListUpdatableMarkSetCollection;
 import org.anchoranalysis.anchor.mpp.feature.nrg.cfg.CfgNRGPixelized;
@@ -59,9 +61,6 @@ public class KernelExchange extends KernelIndependent<CfgNRGPixelized> {
 	private Mark markExst;
 	private Mark markNew;
 	
-	public KernelExchange() {
-	}
-	
 	@Override
 	public double calcAccptProb( int exstSize, int propSize, double poisson_intens, ImageDim scene_size, double densityRatio ) {
 		return Math.min(1.0, densityRatio );
@@ -90,7 +89,7 @@ public class KernelExchange extends KernelIndependent<CfgNRGPixelized> {
 	}
 	
 	@Override
-	public CfgNRGPixelized makeProposal(
+	public Optional<CfgNRGPixelized> makeProposal(
 		CfgNRGPixelized exst,
 		KernelCalcContext context) throws KernelCalcNRGException {
 
@@ -118,7 +117,7 @@ public class KernelExchange extends KernelIndependent<CfgNRGPixelized> {
 		}
 		
 		if (!succ) {
-			return null;
+			return Optional.empty();
 		}
 
 		// We calculate a new NRG by exchanging our marks
@@ -132,7 +131,7 @@ public class KernelExchange extends KernelIndependent<CfgNRGPixelized> {
 			);
 		}
 		
-		return newNRG;
+		return Optional.of(newNRG);
 	}
 
 	@Override

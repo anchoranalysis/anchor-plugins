@@ -1,5 +1,7 @@
 package org.anchoranalysis.plugin.mpp.sgmn.cfg.bean.kernel.dependent.mark;
 
+import java.util.Optional;
+
 import org.anchoranalysis.anchor.mpp.mark.Mark;
 
 /*-
@@ -40,22 +42,13 @@ public class KernelReplacePartition extends KernelReplace<CfgFromPartition> {
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	public KernelReplacePartition() {
-	}
-
-	private static KernelBirthPartition createBirthKernel( int repeats ) {
-		KernelBirthPartition part = new KernelBirthPartition();
-		part.setRepeats(repeats);
-		return part;
-	}
-	
 	@Override
 	public boolean isCompatibleWith(Mark testMark) {
 		return true;
 	}
 
 	@Override
-	public CfgFromPartition makeProposal(CfgFromPartition exst, KernelCalcContext context)
+	public Optional<CfgFromPartition> makeProposal(CfgFromPartition exst, KernelCalcContext context)
 			throws KernelCalcNRGException {
 
 		if (!hasBeenInit()) {
@@ -67,7 +60,10 @@ public class KernelReplacePartition extends KernelReplace<CfgFromPartition> {
 		
 		return super.makeProposal(exst, context);
 	}
-	
-	
-	
+
+	private static KernelBirthPartition createBirthKernel( int repeats ) {
+		KernelBirthPartition part = new KernelBirthPartition();
+		part.setRepeats(repeats);
+		return part;
+	}
 }

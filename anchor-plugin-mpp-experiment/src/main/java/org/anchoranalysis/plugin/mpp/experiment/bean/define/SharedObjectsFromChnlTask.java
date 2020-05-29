@@ -2,6 +2,8 @@ package org.anchoranalysis.plugin.mpp.experiment.bean.define;
 
 
 
+import java.util.Optional;
+
 /*
  * #%L
  * anchor-plugin-mpp-experiment
@@ -72,13 +74,13 @@ public class SharedObjectsFromChnlTask extends RasterTask {
 		}
 		
 		try {
-			Chnl inputImage = ncc.getChnlOrNull(ImgStackIdentifiers.INPUT_IMAGE, 0, ProgressReporterNull.get());
-			if (inputImage!=null) {
+			Optional<Chnl> inputImage = ncc.getChnlOrNull(ImgStackIdentifiers.INPUT_IMAGE, 0, ProgressReporterNull.get());
+			inputImage.ifPresent( image ->
 				context.getOutputManager().getWriterCheckIfAllowed().write(
 					outputNameOriginal,
-					() -> new ChnlGenerator(inputImage,"original")
-				);
-			}
+					() -> new ChnlGenerator(image,"original")
+				)
+			);
 
 			define.processInput(ncc, context);
 						

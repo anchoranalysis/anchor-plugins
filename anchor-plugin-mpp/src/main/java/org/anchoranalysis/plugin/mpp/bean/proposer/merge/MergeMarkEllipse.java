@@ -1,5 +1,7 @@
 package org.anchoranalysis.plugin.mpp.bean.proposer.merge;
 
+import java.util.Optional;
+
 import org.anchoranalysis.anchor.mpp.bean.proposer.MarkMergeProposer;
 import org.anchoranalysis.anchor.mpp.bean.proposer.MarkProposer;
 import org.anchoranalysis.anchor.mpp.mark.ISetMarksExplicit;
@@ -53,7 +55,7 @@ public class MergeMarkEllipse extends MarkMergeProposer {
 	// END BEAN
 	
 	@Override
-	public Mark propose(PxlMarkMemo mark1, PxlMarkMemo mark2, ProposerContext context) throws ProposalAbnormalFailureException {
+	public Optional<Mark> propose(PxlMarkMemo mark1, PxlMarkMemo mark2, ProposerContext context) throws ProposalAbnormalFailureException {
 		
 		PxlMarkMemo targetPmm = mark1.duplicateFresh();
 		ISetMarksExplicit target = (ISetMarksExplicit) targetPmm.getMark();
@@ -65,13 +67,15 @@ public class MergeMarkEllipse extends MarkMergeProposer {
 		
 		try {
 			if (!markProposer.propose(targetPmm, context)) {
-				return null;
+				return Optional.empty();
 			}
 		} catch (ProposalAbnormalFailureException e) {
 			throw new ProposalAbnormalFailureException("Failed to propose mark", e);
 		}
 		
-		return targetPmm.getMark();
+		return Optional.of(
+			targetPmm.getMark()
+		);
 	}
 	
 	

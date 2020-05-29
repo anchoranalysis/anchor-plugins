@@ -27,6 +27,7 @@ package org.anchoranalysis.plugin.mpp.sgmn.cfg.bean.kernel.dependent.mark;
  */
 
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 
 import org.anchoranalysis.anchor.mpp.cfg.Cfg;
@@ -52,26 +53,27 @@ public class KernelBirthPartition extends KernelBirth<CfgFromPartition> {
 	}
 
 	@Override
-	protected Set<Mark> proposeNewMarks(CfgFromPartition exst, int number, KernelCalcContext context) {
+	protected Optional<Set<Mark>> proposeNewMarks(CfgFromPartition exst, int number, KernelCalcContext context) {
 		assert( exst!= null);
 		assert( exst.getPartition()!= null);
 		
 		Mark[] arr = new Mark[number];
-		
-		
+				
 		if (exst.getPartition().sampleAvailable(context.proposer(), number, arr)) {
-			return convertArrToSet(arr);
+			return Optional.of(
+				convertArrToSet(arr)
+			);
 		} else {
-			return null;
+			return Optional.empty();
 		}
 	}
 	
 	@Override
-	protected CfgFromPartition calcForNewMark(CfgFromPartition exst, Set<Mark> listMarksNew, KernelCalcContext context)
+	protected Optional<CfgFromPartition> calcForNewMark(CfgFromPartition exst, Set<Mark> listMarksNew, KernelCalcContext context)
 			throws KernelCalcNRGException {
 
 		if (listMarksNew==null || listMarksNew.size()==0) {
-			return null;
+			return Optional.empty();
 		}
 		
 		Cfg cfg = exst.getCfg();
@@ -79,7 +81,9 @@ public class KernelBirthPartition extends KernelBirth<CfgFromPartition> {
 			cfg = calcUpdatedCfg(cfg, m);
 		}
 		
-		return exst.copyChange(cfg);
+		return Optional.of(
+			exst.copyChange(cfg)
+		);
 	}
 
 	@Override

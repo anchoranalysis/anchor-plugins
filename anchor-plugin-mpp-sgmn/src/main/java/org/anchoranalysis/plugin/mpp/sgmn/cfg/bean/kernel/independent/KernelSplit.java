@@ -1,5 +1,7 @@
 package org.anchoranalysis.plugin.mpp.sgmn.cfg.bean.kernel.independent;
 
+import java.util.Optional;
+
 import org.anchoranalysis.anchor.mpp.bean.proposer.MarkFromCfgProposer;
 import org.anchoranalysis.anchor.mpp.bean.proposer.MarkSplitProposer;
 import org.anchoranalysis.anchor.mpp.feature.mark.ListUpdatableMarkSetCollection;
@@ -66,14 +68,11 @@ public class KernelSplit extends KernelPosNeg<CfgNRGPixelized> {
 	// END BEAN
 	
 	private transient int markExstIndex;
-	private transient Mark markExst;
+	private transient Optional<Mark> markExst;
 	private transient PairPxlMarkMemo pairNew;
-	
-	public KernelSplit() {
-	}
-	
+
 	@Override
-	public CfgNRGPixelized makeProposal(CfgNRGPixelized exst, KernelCalcContext context ) throws KernelCalcNRGException {
+	public Optional<CfgNRGPixelized> makeProposal(CfgNRGPixelized exst, KernelCalcContext context ) throws KernelCalcNRGException {
 		
 		ProposerContext propContext = context.proposer();
 		
@@ -86,21 +85,14 @@ public class KernelSplit extends KernelPosNeg<CfgNRGPixelized> {
 			);
 		}
 		
-		if (markExst==null) {
-			propContext.getErrorNode().add("markExst is null");
-			return null;
-		}
-		
-		
-		
-		if (markExst==null) {
+		if (!markExst.isPresent()) {
 			propContext.getErrorNode().add("cannot find an existing mark to split");
 			pairNew = null;
 			markExst = null;
-			return null;
+			return Optional.empty();
 		}
 		
-		this.markExstIndex = exst.getCfg().indexOf( markExst );
+		this.markExstIndex = exst.getCfg().indexOf( markExst.get() );
 		PxlMarkMemo pmmMarkExst = exst.getMemoForIndex(markExstIndex);
 		
 		try {
@@ -118,10 +110,12 @@ public class KernelSplit extends KernelPosNeg<CfgNRGPixelized> {
 		}
 		
 		if (pairNew==null) {
-			return null;
+			return Optional.empty();
 		}
 		
-		return createCfgNRG( exst, propContext.getNrgStack().getNrgStack() );
+		return Optional.of(
+			createCfgNRG( exst, propContext.getNrgStack().getNrgStack() )
+		);
 	}
 
 	
@@ -168,8 +162,13 @@ public class KernelSplit extends KernelPosNeg<CfgNRGPixelized> {
 
 	@Override
 	public String dscrLast() {
-		if (markExst != null && pairNew !=null && pairNew.getSource()!=null && pairNew.getDestination()!=null) {
-			return String.format("%s %d into %d into %d", getBeanName(), markExst.getId(), pairNew.getSource().getMark().getId(), pairNew.getDestination().getMark().getId() );
+		if (markExst.isPresent() && pairNew !=null && pairNew.getSource()!=null && pairNew.getDestination()!=null) {
+			return String.format(
+				"%s %d into %d into %d", getBeanName(),
+				markExst.get().getId(),
+				pairNew.getSource().getMark().getId(),
+				pairNew.getDestination().getMark().getId()
+			);
 		} else {
 			return getBeanName();
 		}
@@ -182,7 +181,7 @@ public class KernelSplit extends KernelPosNeg<CfgNRGPixelized> {
 		
 		MemoList memoList = exst.createDuplicatePxlMarkMemoList();
 		
-		PxlMarkMemo memoExst = exst.getMemoForMark( this.markExst );
+		PxlMarkMemo memoExst = exst.getMemoForMark( this.markExst.get() );
 		
 		updatableMarkSetCollection.rmv( memoList, memoExst );
 		memoList.remove( memoExst );
@@ -198,14 +197,16 @@ public class KernelSplit extends KernelPosNeg<CfgNRGPixelized> {
 		PxlMarkMemo memoAdded2 = pairNew.getDestination();
 		assert memoAdded2!=null;
 		
-		
 		updatableMarkSetCollection.add(memoList, memoAdded2 );
-		
 	}
 
 	@Override
 	public int[] changedMarkIDArray() {
-		return new int[]{ markExst.getId(), pairNew.getSource().getMark().getId(), pairNew.getDestination().getMark().getId() };
+		return new int[]{
+			markExst.get().getId(),
+			pairNew.getSource().getMark().getId(),
+			pairNew.getDestination().getMark().getId()
+		};
 	}
 
 	public MarkSplitProposer getSplitProposer() {

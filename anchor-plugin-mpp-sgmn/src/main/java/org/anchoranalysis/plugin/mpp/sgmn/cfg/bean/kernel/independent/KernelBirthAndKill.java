@@ -28,6 +28,7 @@ package org.anchoranalysis.plugin.mpp.sgmn.cfg.bean.kernel.independent;
 
 
 import java.util.List;
+import java.util.Optional;
 
 import org.anchoranalysis.anchor.mpp.bean.cfg.CfgGen;
 import org.anchoranalysis.anchor.mpp.bean.proposer.MarkProposer;
@@ -43,6 +44,7 @@ import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.functional.OptionalUtilities;
 import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.mpp.sgmn.bean.kernel.KernelPosNeg;
 import org.anchoranalysis.mpp.sgmn.kernel.KernelCalcContext;
@@ -69,19 +71,14 @@ public class KernelBirthAndKill extends KernelPosNeg<CfgNRGPixelized> {
 	@BeanField
 	private int regionID = GlobalRegionIdentifiers.SUBMARK_INSIDE;
 	// END BEANS
-
-	
 	
 	private Mark markNew;
 	private Mark markNewAdditional;
 	
 	private transient List<PxlMarkMemo> toKill;
 	
-	public KernelBirthAndKill() {
-	}
-	
 	@Override
-	public CfgNRGPixelized makeProposal(CfgNRGPixelized exst, KernelCalcContext context) throws KernelCalcNRGException {
+	public Optional<CfgNRGPixelized> makeProposal(CfgNRGPixelized exst, KernelCalcContext context) throws KernelCalcNRGException {
 
 		markNew = context.cfgGen().getCfgGen().newTemplateMark();
 		
@@ -89,7 +86,7 @@ public class KernelBirthAndKill extends KernelPosNeg<CfgNRGPixelized> {
 		
 		PxlMarkMemo memoNew = propContext.create( markNew );
 		if (!proposeMark(memoNew, propContext)) {
-			return null;
+			return Optional.empty();
 		}
 		
 		try {	
@@ -102,20 +99,22 @@ public class KernelBirthAndKill extends KernelPosNeg<CfgNRGPixelized> {
 		} catch ( OperationFailedException e ) {
 			throw new KernelCalcNRGException("Cannot add kill-objects", e );
 		}
-			
 
 		// Now we want to do another birth, and we take this somewhere from the memos, 
 		//  of the killed objects that isn't covered by the birthMark
-		PxlMarkMemo pmmAdditional = maybeMakeAdditionalBirth(
+		Optional<PxlMarkMemo> pmmAdditional = maybeMakeAdditionalBirth(
 			memoNew.getMark(),
 			context.cfgGen().getCfgGen(),
 			context
 		);
 				
-		return KernelBirthAndKillHelper.calcUpdatedNRG(exst, memoNew, pmmAdditional, toKill, context, propContext);
+		return OptionalUtilities.map(
+			pmmAdditional,
+			pmm -> KernelBirthAndKillHelper.calcUpdatedNRG(exst, memoNew, pmm, toKill, context, propContext)
+		);
 	}
 	
-	private PxlMarkMemo maybeMakeAdditionalBirth( Mark markNew, CfgGen cfgGen, KernelCalcContext context ) throws KernelCalcNRGException {
+	private Optional<PxlMarkMemo> maybeMakeAdditionalBirth( Mark markNew, CfgGen cfgGen, KernelCalcContext context ) throws KernelCalcNRGException {
 		if (markProposerAdditionalBirth!=null) {
 			PxlMarkMemo pmmAdditional = KernelBirthAndKillHelper.makeAdditionalBirth(
 				markProposerAdditionalBirth,
@@ -128,9 +127,9 @@ public class KernelBirthAndKill extends KernelPosNeg<CfgNRGPixelized> {
 			if (pmmAdditional!=null) {
 				markNewAdditional = pmmAdditional.getMark();
 			}
-			return pmmAdditional;
+			return Optional.ofNullable(pmmAdditional);
 		} else {
-			return null;
+			return Optional.empty();
 		}
 	}
 		

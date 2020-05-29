@@ -30,6 +30,7 @@ package org.anchoranalysis.test.projects;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Optional;
 
 import org.anchoranalysis.test.TestDataInitException;
 import org.anchoranalysis.test.TestDataLoadException;
@@ -109,42 +110,28 @@ public class ExperimentLauncherFromShell {
 	 * Creates a shell command for calling anchor
 	 * 
 	 * @param experimentPath the path to the experiment configuration
-	 * @param inputPath if non-null, the path to a replacement input manager. if null, ignored.
-	 * @param outputPath if non-null, the path to a replacement output manager. if null, ignored.
+	 * @param inputPath if defined, the path to a replacement input manager. if empty(), ignored.
+	 * @param outputPath if defined, the path to a replacement output manager. if empty(), ignored.
 	 * @return a command to call anchor with appropripate arguments
 	 */
-	private CommandLine createShellCommand( Path experimentPath, Path inputPath, Path outputPath ) {
+	private CommandLine createShellCommand( Path experimentPath, Optional<Path> inputPath, Optional<Path> outputPath ) {
 
 		CommandLine command = new CommandLine(pathToAnchorExecutable());
 		command.addArgument( experimentPath.toString() );
 		
-		if (inputPath!=null) {
+		if (inputPath.isPresent()) {
 			command.addArgument("-input");
-			command.addArgument(inputPath.toString());
+			command.addArgument(inputPath.get().toString());
 		}
 		
-		if (outputPath!=null) {
+		if (outputPath.isPresent()) {
 			command.addArgument("-output");
-			command.addArgument(outputPath.toString());
+			command.addArgument(outputPath.get().toString());
 		}
 		
 		return command;
 	}
-	
-	/**
-	 * Resolves a path if it's non-null, otherwise return null
-	 * 
-	 * @param testPath path to resolve
-	 * @return resolved path or null
-	 */
-	private Path resolveOrNull( String testPath ) {
-		if (testPath!=null) {
-			return testLoader.resolveTestPath(testPath);
-		} else {
-			return null;
-		}
-	}
-	
+
 	/**
 	 * Runs an experiment identified by an XML found in the resources
 	 * 
@@ -152,13 +139,13 @@ public class ExperimentLauncherFromShell {
 	 * @param testPathToInput if non-null, the path to a replacement input-manager. if null, ignored.
 	 * @param testPathToOutput if non-null, the path to a replacement output-manager. if null, ignored.
 	 */
-	public void runExperiment( String testPathToExperiment, String testPathToInput, String testPathToOutput ) {
+	public void runExperiment( String testPathToExperiment, Optional<String> testPathToInput, Optional<String> testPathToOutput ) {
 		
 		// The command we pass to the shell
 		CommandLine shellCmd = createShellCommand(
 			testLoader.resolveTestPath( testPathToExperiment ),
-			resolveOrNull(testPathToInput),
-			resolveOrNull(testPathToOutput)
+			resolve(testPathToInput),
+			resolve(testPathToOutput)
 		);
 		
 		System.out.printf("Shell command: %s\n", shellCmd.toString());
@@ -224,16 +211,16 @@ public class ExperimentLauncherFromShell {
 	 * an experiment
 	 *
 	 * @param testPathToExperiment path to the resources where the experiment XML is found
-	 * @param testPathToInput if non-null, the path to a replacement input-manager. if null, ignored.
-	 * @param testPathToOutput if non-null, the path to a replacement output-manager. if null, ignored.	 * 
+	 * @param testPathToInput if defined, the path to a replacement input-manager. if empty(), ignored.
+	 * @param testPathToOutput if defined, the path to a replacement output-manager. if empty(), ignored. 
 	 * @param temporaryFolder the temporary folder to copy files to
 	 * @param specificSubdirs if non-null, specific subdirectories to copy. if null, ignored.
 	 * @return a test-loader bounded to the temporary folder
 	 */
 	public TestLoader runExperimentInTemporaryFolder(
 		String testPathToExperiment,
-		String testPathToInput,
-		String testPathToOutput,
+		Optional<String> testPathToInput,
+		Optional<String> testPathToOutput,
 		TemporaryFolder temporaryFolder,
 		String[] specificSubdirs
 	) {
@@ -243,11 +230,25 @@ public class ExperimentLauncherFromShell {
 		TestLoader loaderTemporaryFolder = TestLoader.createFromExplicitDirectory( temporaryFolder.getRoot().toPath() );
 				
 		ExperimentLauncherFromShell launcherTemporaryFolder = new ExperimentLauncherFromShell(loaderTemporaryFolder);
-		launcherTemporaryFolder.runExperiment(testPathToExperiment, testPathToInput, testPathToOutput);
+		launcherTemporaryFolder.runExperiment(
+			testPathToExperiment,
+			testPathToInput,
+			testPathToOutput
+		);
 	    	    
 	    return TestLoader.createFromExplicitDirectory(temporaryFolder.getRoot().toPath());
 	}
+		
 	
-	
-	
+	/**
+	 * Resolves a path if it's non-null, otherwise return null
+	 * 
+	 * @param testPath path to resolve
+	 * @return resolved path or null
+	 */
+	private Optional<Path> resolve( Optional<String> testPath ) {
+		return testPath.map( path->
+			testLoader.resolveTestPath(path)
+		);
+	}
 }
