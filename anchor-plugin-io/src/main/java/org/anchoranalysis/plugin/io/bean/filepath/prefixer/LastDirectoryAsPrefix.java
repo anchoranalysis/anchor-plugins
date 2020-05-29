@@ -29,6 +29,7 @@ package org.anchoranalysis.plugin.io.bean.filepath.prefixer;
 import java.nio.file.Path;
 
 import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.io.bean.filepath.prefixer.PathWithDescription;
 import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.filepath.prefixer.FilePathPrefix;
 
@@ -52,10 +53,9 @@ public class LastDirectoryAsPrefix extends FilePathPrefixerAvoidResolve {
 	// END BEAN PROPERTIES
 	
 	@Override
-	protected FilePathPrefix outFilePrefixFromPath(Path path, String descriptiveName, Path root)
-			throws AnchorIOException {
+	protected FilePathPrefix outFilePrefixFromPath(PathWithDescription input, Path root) throws AnchorIOException {
 		
-		FilePathPrefix fpp = filePathPrefixer.outFilePrefixFromPath(path, descriptiveName, root);
+		FilePathPrefix fpp = filePathPrefixer.outFilePrefixFromPath(input, root);
 		
 		Path dir = fpp.getFolderPath();
 		

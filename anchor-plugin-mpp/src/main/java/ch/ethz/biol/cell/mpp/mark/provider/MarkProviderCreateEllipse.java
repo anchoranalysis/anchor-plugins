@@ -1,5 +1,7 @@
 package ch.ethz.biol.cell.mpp.mark.provider;
 
+import java.util.Optional;
+
 import org.anchoranalysis.anchor.mpp.bean.provider.MarkProvider;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.anchor.mpp.mark.conic.MarkEllipse;
@@ -46,12 +48,12 @@ public class MarkProviderCreateEllipse extends MarkProvider {
 	// END BEAN PROPERTIES
 	
 	@Override
-	public Mark create() throws CreateException {
+	public Optional<Mark> create() throws CreateException {
 		MarkEllipse mark = new MarkEllipse();
 		mark.setMarks( new Point2d(5,5), new Orientation2D(0) );
 		mark.setId(id);
 		mark.updateShellRad(shellRad);
-		return mark;
+		return Optional.of(mark);
 	}
 
 	public double getShellRad() {

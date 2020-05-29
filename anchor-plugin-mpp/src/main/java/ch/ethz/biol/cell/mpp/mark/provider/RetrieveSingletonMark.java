@@ -1,5 +1,7 @@
 package ch.ethz.biol.cell.mpp.mark.provider;
 
+import java.util.Optional;
+
 import org.anchoranalysis.anchor.mpp.bean.cfg.CfgProvider;
 import org.anchoranalysis.anchor.mpp.bean.provider.MarkProvider;
 import org.anchoranalysis.anchor.mpp.cfg.Cfg;
@@ -44,7 +46,7 @@ public class RetrieveSingletonMark extends MarkProvider {
 	// END BEAN PROPERTIES
 
 	@Override
-	public Mark create() throws CreateException {
+	public Optional<Mark> create() throws CreateException {
 		Cfg cfg = cfgProvider.create();
 		
 		if (cfg.size()==0) {
@@ -55,7 +57,9 @@ public class RetrieveSingletonMark extends MarkProvider {
 			throw new CreateException("Cfg has multiple marks. It must have exactly one item");
 		}
 		
-		return cfg.get(0);
+		return Optional.of(
+			cfg.get(0)
+		);
 	}
 
 	public CfgProvider getCfgProvider() {

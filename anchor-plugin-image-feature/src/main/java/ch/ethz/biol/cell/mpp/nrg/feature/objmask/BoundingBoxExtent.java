@@ -1,5 +1,7 @@
 package ch.ethz.biol.cell.mpp.nrg.feature.objmask;
 
+import org.anchoranalysis.core.geometry.ReadableTuple3i;
+
 /*
  * #%L
  * anchor-plugin-image-feature
@@ -27,14 +29,13 @@ package ch.ethz.biol.cell.mpp.nrg.feature.objmask;
  */
 
 
-import org.anchoranalysis.core.geometry.Tuple3i;
 import org.anchoranalysis.image.extent.BoundingBox;
 
 
 public class BoundingBoxExtent extends BoundingBoxAxisBase {
 
 	@Override
-	protected Tuple3i extractTupleForBoundingBox(BoundingBox bbox) {
-		return bbox.extnt().asTuple();
+	protected ReadableTuple3i extractTupleForBoundingBox(BoundingBox bbox) {
+		return bbox.extent().asTuple();
 	}
 }

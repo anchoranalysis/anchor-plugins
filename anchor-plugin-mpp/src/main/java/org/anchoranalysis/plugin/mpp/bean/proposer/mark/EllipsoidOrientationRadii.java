@@ -1,5 +1,7 @@
 package org.anchoranalysis.plugin.mpp.bean.proposer.mark;
 
+import java.util.Optional;
+
 /*-
  * #%L
  * anchor-plugin-mpp
@@ -41,11 +43,6 @@ import org.anchoranalysis.image.orientation.Orientation;
 public class EllipsoidOrientationRadii extends MarkProposer {
 
 	@Override
-	public boolean isCompatibleWith(Mark testMark) {
-		return testMark instanceof MarkEllipsoid;
-	}
-
-	@Override
 	public boolean propose(PxlMarkMemo inputMark, ProposerContext context) {
 
 		EllipsoidBounds markBounds;
@@ -75,9 +72,14 @@ public class EllipsoidOrientationRadii extends MarkProposer {
 		
 		return true;
 	}
+
+	@Override
+	public boolean isCompatibleWith(Mark testMark) {
+		return testMark instanceof MarkEllipsoid;
+	}
 	
 	@Override
-	public ICreateProposalVisualization proposalVisualization(boolean detailed) {
-		return null;
+	public Optional<ICreateProposalVisualization> proposalVisualization(boolean detailed) {
+		return Optional.empty();
 	}
 }

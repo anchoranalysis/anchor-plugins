@@ -28,6 +28,7 @@ package org.anchoranalysis.plugin.mpp.sgmn.cfg.bean.kernel.independent;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.anchoranalysis.anchor.mpp.bean.cfg.CfgGen;
 import org.anchoranalysis.anchor.mpp.bean.proposer.MarkProposer;
@@ -61,11 +62,11 @@ class KernelBirthAndKillHelper {
 		
 		ProposerContext propContext = context.proposer();
 		
-		Point3d pntAdditionalBirth = pp.propose( propContext	);
+		Optional<Point3d> pntAdditionalBirth = pp.propose( propContext );
 	
-		if (pntAdditionalBirth!=null) {
+		if (pntAdditionalBirth.isPresent()) {
 			MarkAbstractPosition markNewAdditional = (MarkAbstractPosition) cfgGen.newTemplateMark();
-			markNewAdditional.setPos( pntAdditionalBirth );
+			markNewAdditional.setPos( pntAdditionalBirth.get() );
 						
 			pmmAdditional = propContext.create(markNewAdditional);
 					

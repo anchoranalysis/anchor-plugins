@@ -40,12 +40,12 @@ import org.anchoranalysis.image.voxel.buffer.VoxelBufferFloat;
 public class PixelsFromFloatProcessor implements IPixelsForPlane<FloatBuffer> {
 	
 	private FloatProcessor bp;
-	private Extent extnt;
+	private Extent extent;
 	
 	public PixelsFromFloatProcessor( FloatProcessor fp ) {
 		super();
 		this.bp = fp;
-		this.extnt = new Extent( fp.getWidth(), fp.getHeight(), 1 );
+		this.extent = new Extent( fp.getWidth(), fp.getHeight(), 1 );
 	}
 
 	@Override
@@ -60,7 +60,7 @@ public class PixelsFromFloatProcessor implements IPixelsForPlane<FloatBuffer> {
 	}
 
 	@Override
-	public Extent extnt() {
-		return extnt;
+	public Extent extent() {
+		return extent;
 	}
 }

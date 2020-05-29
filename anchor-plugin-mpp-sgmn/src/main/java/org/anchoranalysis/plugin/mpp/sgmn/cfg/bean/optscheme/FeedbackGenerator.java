@@ -82,7 +82,7 @@ class FeedbackGenerator<T> {
 		}
 	}
 	
-	public void record( Reporting<T> reporting ) {
+	public void record( Reporting<T> reporting ) throws ReporterException {
 		
 		aggregateTriggerBank.record( reporting );
 		

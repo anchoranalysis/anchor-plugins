@@ -1,5 +1,7 @@
 package org.anchoranalysis.plugin.io.bean.groupfiles.check;
 
+import java.util.Optional;
+
 /*
  * #%L
  * anchor-io
@@ -28,6 +30,7 @@ package org.anchoranalysis.plugin.io.bean.groupfiles.check;
 
 
 import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.plugin.io.multifile.IntegerRange;
 import org.anchoranalysis.plugin.io.multifile.ParsedFilePathBag;
 
 public class AtLeastZSlices extends CheckParsedFilePathBag {
@@ -39,7 +42,8 @@ public class AtLeastZSlices extends CheckParsedFilePathBag {
 	
 	@Override
 	public boolean accept(ParsedFilePathBag parsedBag) {
-		return parsedBag.rangeSliceNum().getSize() >= minNumZSlices;
+		Optional<IntegerRange> sliceRange = parsedBag.rangeSliceNum();
+		return sliceRange.isPresent() && sliceRange.get().getSize() >= minNumZSlices;
 	}
 
 	public int getMinNumZSlices() {

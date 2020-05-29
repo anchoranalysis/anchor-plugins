@@ -29,6 +29,7 @@ package org.anchoranalysis.plugin.io.bean.moviegenerator;
 
 import java.io.IOException;
 import java.nio.file.Path;
+import java.util.Optional;
 
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
@@ -39,7 +40,7 @@ import org.anchoranalysis.image.io.movie.MovieOutputHandle;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.image.stack.rgb.RGBStack;
 import org.anchoranalysis.io.generator.IterableObjectGenerator;
-import org.anchoranalysis.io.generator.sequence.IGeneratorSequenceNonIncremental;
+import org.anchoranalysis.io.generator.sequence.GeneratorSequenceNonIncremental;
 import org.anchoranalysis.io.manifest.sequencetype.SequenceType;
 import org.anchoranalysis.io.manifest.sequencetype.SequenceTypeException;
 import org.anchoranalysis.io.namestyle.OutputNameStyle;
@@ -47,7 +48,7 @@ import org.anchoranalysis.io.output.bound.BoundOutputManager;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
 
-class GeneratorSequenceMovieWriter<GeneratorType> implements IGeneratorSequenceNonIncremental<GeneratorType> {
+class GeneratorSequenceMovieWriter<GeneratorType> implements GeneratorSequenceNonIncremental<GeneratorType> {
 
 	private BoundOutputManager outputManager = null;
 	
@@ -63,7 +64,7 @@ class GeneratorSequenceMovieWriter<GeneratorType> implements IGeneratorSequenceN
 	
 	private OutputNameStyle outputName;
 	
-	private MovieOutputHandle movieOutputHandle;
+	private Optional<MovieOutputHandle> movieOutputHandle;
 	
 	// Automatically create a ManifestDescription for the folder from the Generator
 	public GeneratorSequenceMovieWriter( BoundOutputManager outputManager, OutputNameStyle outputName, IterableObjectGenerator<GeneratorType,Stack> iterableGenerator, int framesPerSecond ) {
@@ -77,7 +78,7 @@ class GeneratorSequenceMovieWriter<GeneratorType> implements IGeneratorSequenceN
 	
 
 
-	private void initOnFirstAdd( ImageDim dim, int numFrames ) throws InitException {
+	private Optional<MovieOutputHandle> initOnFirstAdd( ImageDim dim, int numFrames ) throws InitException {
 		
 		// Assume we are incrementing + 1
 		
@@ -89,7 +90,7 @@ class GeneratorSequenceMovieWriter<GeneratorType> implements IGeneratorSequenceN
 		
 		try {
 			//String filePath = outputManager.writeGenerateFilename( outputName.getOutputName(), writer.getDefaultFileExt(), null, "", "", "");
-			movieOutputHandle = writeMovie(
+			return writeMovie(
 				outputManager,
 				outputName,
 				dim,
@@ -103,13 +104,32 @@ class GeneratorSequenceMovieWriter<GeneratorType> implements IGeneratorSequenceN
 		}
 	}
 	
-	private static MovieOutputHandle writeMovie( BoundOutputManager outputManager, OutputNameStyle outputNameStyle, ImageDim dim, int numFrames, int numChnl, int framesPerSecond ) throws OutputWriteFailedException {
+	private static Optional<MovieOutputHandle> writeMovie( BoundOutputManager outputManager, OutputNameStyle outputNameStyle, ImageDim dim, int numFrames, int numChnl, int framesPerSecond ) throws OutputWriteFailedException {
 		
 		MovieWriter movieWriter = (MovieWriter) outputManager.getOutputWriteSettings().getWriterInstance(MovieWriter.class);
 		
 		try {
-			Path filePath = outputManager.getWriterCheckIfAllowed().writeGenerateFilename( outputNameStyle.getOutputName(), movieWriter.getDefaultFileExt(), null, "", "", "");
-			return movieWriter.writeMovie(filePath, dim, numFrames, numChnl, framesPerSecond );
+			Optional<Path> filePath = outputManager.getWriterCheckIfAllowed().writeGenerateFilename(
+				outputNameStyle.getOutputName(),
+				movieWriter.getDefaultFileExt(),
+				Optional.empty(),
+				"",
+				"",
+				""
+			);
+			if (filePath.isPresent()) {
+				return Optional.of(
+					movieWriter.writeMovie(
+						filePath.get(),
+						dim,
+						numFrames,
+						numChnl,
+						framesPerSecond
+					)
+				);
+			} else {
+				return Optional.empty();
+			}
 		} catch (IOException e) {
 			throw new OutputWriteFailedException(e);
 		}
@@ -131,12 +151,10 @@ class GeneratorSequenceMovieWriter<GeneratorType> implements IGeneratorSequenceN
 	public void end() throws OutputWriteFailedException {
 		iterableGenerator.end();
 		
-		if (movieOutputHandle==null) {
-			return;
-		}
-		
 		try {
-			movieOutputHandle.close();
+			if (movieOutputHandle.isPresent()) {
+				movieOutputHandle.get().close();
+			}
 		} catch (IOException e) {
 			throw new OutputWriteFailedException(e);
 		}
@@ -150,7 +168,7 @@ class GeneratorSequenceMovieWriter<GeneratorType> implements IGeneratorSequenceN
 			
 			iterableGenerator.setIterableElement( element );
 	
-			if (!firstAdd && movieOutputHandle==null) {
+			if (!firstAdd && !movieOutputHandle.isPresent()) {
 				return;
 			}
 			
@@ -158,12 +176,11 @@ class GeneratorSequenceMovieWriter<GeneratorType> implements IGeneratorSequenceN
 			
 			// We delay the initialisation of subFolder until the first iteration and we have a valid generator
 			if (firstAdd==true) {
-				
-				initOnFirstAdd( stack.getChnl(0).getDimensions(), totalNumAdd );
+				movieOutputHandle = initOnFirstAdd( stack.getChnl(0).getDimensions(), totalNumAdd );
 				firstAdd = false;
 			}
 	
-			if (movieOutputHandle==null) {
+			if (!movieOutputHandle.isPresent()) {
 				return;
 			}
 			
@@ -173,30 +190,16 @@ class GeneratorSequenceMovieWriter<GeneratorType> implements IGeneratorSequenceN
 				return;
 			}
 		
-		
-			movieOutputHandle.add(stack);
-		} catch (IOException e) {
-			throw new OutputWriteFailedException(e);
-		} catch (SequenceTypeException e) {
-			throw new OutputWriteFailedException(e);
-		} catch (InitException e) {
-			throw new OutputWriteFailedException(e);
-		} catch (SetOperationFailedException e) {
-			throw new OutputWriteFailedException(e);
-		} catch (CreateException e) {
+			movieOutputHandle.get().add(stack);
+
+		} catch (IOException | SequenceTypeException | InitException | SetOperationFailedException | CreateException e) {
 			throw new OutputWriteFailedException(e);
 		}
 		
 	}
 
-
-
-
-
 	@Override
 	public void setSuppressSubfolder(boolean suppressSubfolder) {
 		assert false;
 	}
-
-
 }

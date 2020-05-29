@@ -28,9 +28,11 @@ package org.anchoranalysis.plugin.io.bean.rasterreader;
 
 
 import java.util.List;
+import java.util.Optional;
 
 import org.anchoranalysis.core.progress.ProgressReporter;
 import org.anchoranalysis.image.extent.ImageDim;
+import org.anchoranalysis.image.extent.ImageRes;
 import org.anchoranalysis.image.io.RasterIOException;
 import org.anchoranalysis.image.io.rasterreader.OpenedRaster;
 import org.anchoranalysis.image.stack.Stack;
@@ -39,14 +41,22 @@ import org.anchoranalysis.image.stack.TimeSequence;
 class OpenedRasterAlterDimensions extends OpenedRaster {
 	
 	private OpenedRaster delegate;
-	private ProcessDimensions processor;
+	private ConsiderUpdatedImageRes processor;
 
 	@FunctionalInterface
-	public static interface ProcessDimensions {
-		void maybeAlterDimensions( ImageDim sd ) throws RasterIOException;
+	public static interface ConsiderUpdatedImageRes {
+		
+		/**
+		 * A possibly-updated image resolution
+		 * 
+		 * @param res the existing image resolution
+		 * @return a new image resolution or empty if no change should occur
+		 * @throws RasterIOException
+		 */
+		Optional<ImageRes> maybeUpdatedResolution( ImageRes res ) throws RasterIOException;
 	}
 	
-	public OpenedRasterAlterDimensions(OpenedRaster delegate, ProcessDimensions processor ) {
+	public OpenedRasterAlterDimensions(OpenedRaster delegate, ConsiderUpdatedImageRes processor ) {
 		super();
 		this.delegate = delegate;
 		this.processor = processor;
@@ -64,9 +74,11 @@ class OpenedRasterAlterDimensions extends OpenedRaster {
 		TimeSequence ts = delegate.open(seriesIndex, progressReporter);
 		
 		for( Stack stack : ts ) {
-			processor.maybeAlterDimensions(stack.getDimensions());
+			Optional<ImageRes> res = processor.maybeUpdatedResolution( stack.getDimensions().getRes() );
+			res.ifPresent( r->
+				stack.updateResolution(r)
+			);
 		}
-		
 		return ts;
 	}
 
@@ -82,10 +94,16 @@ class OpenedRasterAlterDimensions extends OpenedRaster {
 
 	@Override
 	public ImageDim dim(int seriesIndex) throws RasterIOException {
-
+		
 		ImageDim sd = delegate.dim(seriesIndex);
-		processor.maybeAlterDimensions(sd);
-		return sd;
+		
+		Optional<ImageRes> res = processor.maybeUpdatedResolution(sd.getRes());
+		
+		if (res.isPresent()) {
+			return sd.duplicateChangeRes(res.get());
+		} else {
+			return sd;	
+		}
 	}
 
 	@Override

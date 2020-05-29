@@ -378,7 +378,7 @@ public class LinearLeastSquaresEllipsoidFitter extends ConicFitterBase {
 
 		
 		BoundingBox bbox = markEll.bboxAllRegions(sceneDim);
-		if (bbox.extnt().getX()<1||bbox.extnt().getY()<1||bbox.extnt().getZ()<1) {
+		if (bbox.extent().getX()<1||bbox.extent().getY()<1||bbox.extent().getZ()<1) {
 			throw new PointsFitterException("Ellipsoid is outside scene");
 		}
 	}

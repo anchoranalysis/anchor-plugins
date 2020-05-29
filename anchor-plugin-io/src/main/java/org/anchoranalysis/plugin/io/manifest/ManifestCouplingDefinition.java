@@ -33,6 +33,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Optional;
 
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.io.deserializer.DeserializationFailedException;
@@ -132,7 +133,7 @@ public class ManifestCouplingDefinition implements InputFromManager {
 	}
 
 	@Override
-	public Path pathForBinding() {
-		return null;
+	public Optional<Path> pathForBinding() {
+		return Optional.empty();
 	}
 }

@@ -79,6 +79,7 @@ class ObjMaskCollectionFixture {
 			new BoundingBox(crnr, e)
 		);
 		
+		int volumeXY = e.getVolumeXY();
 		for( int z=0; z<e.getZ(); z++) {
 			
 			VoxelBuffer<ByteBuffer> vb = om.getVoxelBox().getPixelsForPlane(z);
@@ -86,7 +87,7 @@ class ObjMaskCollectionFixture {
 			
 			int prevVal = 0;
 			
-			for( int i=0; i<e.getVolumeXY(); i++) {
+			for( int i=0; i<volumeXY; i++) {
 				prevVal = randomMaybeChangeVal(prevVal);
 				bb.put(
 					(byte) prevVal

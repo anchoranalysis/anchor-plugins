@@ -1,5 +1,7 @@
 package org.anchoranalysis.plugin.io.bean.groupfiles.parser;
 
+import java.util.Optional;
+
 /*-
  * #%L
  * anchor-plugin-io
@@ -30,13 +32,15 @@ import java.util.regex.Matcher;
 
 class ExtractGroup {
 
-	public static String extractStr( int groupID, Matcher matcher, String failureGroupDescription ) {
+	public static Optional<String> extractStr( int groupID, Matcher matcher, String failureGroupDescription ) {
 		
 		if (groupID > matcher.groupCount() ) {
-			return null;
+			return Optional.empty();
 		}
 		
-		return matcher.group(groupID);
+		return Optional.of(
+			matcher.group(groupID)
+		);
 	}
 		
 	public static int maybeExtractInt( int groupID, String failureDescr, Matcher matcher ) {
@@ -53,12 +57,9 @@ class ExtractGroup {
 			return -1;
 		}
 		
-		String groupText = extractStr(groupID, matcher, failureGroupDescription);
-		
-		if (groupText==null) {
-			return -1;
-		}
-		
-		return Integer.parseInt(groupText);
+		Optional<String> groupText = extractStr(groupID, matcher, failureGroupDescription);
+		return groupText
+				.map(Integer::parseInt)
+				.orElse(-1);
 	}
 }

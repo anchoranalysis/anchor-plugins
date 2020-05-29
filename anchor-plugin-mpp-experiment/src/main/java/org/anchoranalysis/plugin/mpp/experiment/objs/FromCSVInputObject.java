@@ -1,6 +1,7 @@
 package org.anchoranalysis.plugin.mpp.experiment.objs;
 
 import java.nio.file.Path;
+import java.util.Optional;
 
 import org.anchoranalysis.anchor.mpp.bean.init.MPPInitParams;
 
@@ -54,7 +55,7 @@ public class FromCSVInputObject implements InputFromManager, InputForMPPBean {
 	}
 
 	@Override
-	public Path pathForBinding() {
+	public Optional<Path> pathForBinding() {
 		return input.pathForBinding();
 	}
 

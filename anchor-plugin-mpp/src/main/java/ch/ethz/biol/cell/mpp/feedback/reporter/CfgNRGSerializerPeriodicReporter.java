@@ -31,6 +31,7 @@ import org.anchoranalysis.anchor.mpp.feature.nrg.cfg.CfgNRGPixelized;
 
 
 import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.mpp.sgmn.optscheme.feedback.ReporterException;
 import org.anchoranalysis.mpp.sgmn.optscheme.step.Reporting;
 
 public class CfgNRGSerializerPeriodicReporter extends ObjectSerializerPeriodicReporter<CfgNRG> {
@@ -49,7 +50,7 @@ public class CfgNRGSerializerPeriodicReporter extends ObjectSerializerPeriodicRe
 	}
 	
 	@Override
-	protected CfgNRG generateIterableElement( Reporting<CfgNRGPixelized> reporting ) {
+	protected CfgNRG generateIterableElement( Reporting<CfgNRGPixelized> reporting ) throws ReporterException {
 		
 		if (proposal) {
 			return proposalCfgNRGOrNull(reporting);

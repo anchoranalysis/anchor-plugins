@@ -62,7 +62,7 @@ public class FileProviderRemove extends FileProvider {
 			File f = itr.next();
 			
 			String normalizedPath = FilePathNormalizer.normalizeFilePath( f.toString() );
-			if (regEx.matchStr(normalizedPath)!=null) {
+			if (regEx.hasMatch(normalizedPath)) {
 				itr.remove();
 			}
 		}

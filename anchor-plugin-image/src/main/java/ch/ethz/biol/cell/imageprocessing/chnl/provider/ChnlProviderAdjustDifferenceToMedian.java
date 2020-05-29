@@ -28,18 +28,17 @@ package ch.ethz.biol.cell.imageprocessing.chnl.provider;
 
 
 import java.nio.ByteBuffer;
+import java.util.Optional;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.geometry.Point3i;
+import org.anchoranalysis.core.geometry.ReadableTuple3i;
 import org.anchoranalysis.image.bean.provider.ChnlProvider;
-import org.anchoranalysis.image.bean.provider.ChnlProviderOne;
-import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
 import org.anchoranalysis.image.chnl.Chnl;
 import org.anchoranalysis.image.convert.ByteConverter;
 import org.anchoranalysis.image.histogram.Histogram;
-import org.anchoranalysis.image.histogram.HistogramFactoryUtilities;
+import org.anchoranalysis.image.histogram.HistogramFactory;
 import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.image.objmask.ObjMaskCollection;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
@@ -49,26 +48,24 @@ import org.anchoranalysis.image.voxel.box.VoxelBox;
 //		1. Identify the median value from channelLookup
 //		2. Calculate the difference of each pixel value in channelLookup to Value 1.
 //		3. Adjust each pixel value by Value 2.
-public class ChnlProviderAdjustDifferenceToMedian extends ChnlProviderOne {
+public class ChnlProviderAdjustDifferenceToMedian extends ChnlProviderOneObjsSource {
 
 	// START BEAN PROPERTIES
 	@BeanField
 	private ChnlProvider chnlLookup;
-	
-	@BeanField
-	private ObjMaskProvider objs;
 	// END BEAN PROPERTIES
 	
 	@Override
-	public Chnl createFromChnl( Chnl chnl ) throws CreateException {
-
+	protected Chnl createFromChnl(Chnl chnl, ObjMaskCollection objsSource) throws CreateException {
+	
 		Chnl lookup = DimChecker.createSameSize(chnlLookup, "chnlLookup", chnl);
 		
-		ObjMaskCollection objsCollection = objs.create();
-		
 		try {
-			for( ObjMask om : objsCollection ) {
-				Histogram h = HistogramFactoryUtilities.createWithMask(lookup.getVoxelBox().any(), om);
+			for( ObjMask om : objsSource ) {
+				Histogram h = HistogramFactory.create(
+					lookup.getVoxelBox(),
+					Optional.of(om)
+				);
 				int objMedian = (int) Math.round(h.mean());
 				adjustObj(om, chnl, lookup, objMedian );
 	
@@ -83,8 +80,8 @@ public class ChnlProviderAdjustDifferenceToMedian extends ChnlProviderOne {
 	
 	private void adjustObj( ObjMask om, Chnl chnl, Chnl chnlLookup, int objMedian ) {
 		
-		Point3i crnrMin = om.getBoundingBox().getCrnrMin();
-		Point3i crnrMax = om.getBoundingBox().calcCrnrMax();
+		ReadableTuple3i crnrMin = om.getBoundingBox().getCrnrMin();
+		ReadableTuple3i crnrMax = om.getBoundingBox().calcCrnrMax();
 		
 		VoxelBox<ByteBuffer> vb = chnl.getVoxelBox().asByte();
 		VoxelBox<ByteBuffer> vbLookup = chnlLookup.getVoxelBox().asByte();
@@ -101,7 +98,7 @@ public class ChnlProviderAdjustDifferenceToMedian extends ChnlProviderOne {
 					
 					if( bbMask.get(maskOffset++)==om.getBinaryValuesByte().getOnByte()) {
 						
-						int offset = vb.extnt().offset(x, y);
+						int offset = vb.extent().offset(x, y);
 						
 						int lookupVal = ByteConverter.unsignedByteToInt( bbChnlLookup.get(offset) );
 						int adj = (objMedian - lookupVal);
@@ -118,15 +115,6 @@ public class ChnlProviderAdjustDifferenceToMedian extends ChnlProviderOne {
 				}
 			}
 		}
-	}
-
-	public ObjMaskProvider getObjs() {
-		return objs;
-	}
-
-
-	public void setObjs(ObjMaskProvider objs) {
-		this.objs = objs;
 	}
 
 	public ChnlProvider getChnlLookup() {

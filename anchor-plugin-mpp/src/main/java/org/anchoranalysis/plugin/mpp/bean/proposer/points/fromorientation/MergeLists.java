@@ -58,10 +58,10 @@ public class MergeLists extends PointsFromOrientationProposer {
 
 	@Override
 	public List<List<Point3i>> calcPoints(Point3d centrePoint,
-			Orientation orientation, boolean do3d, RandomNumberGenerator re,
+			Orientation orientation, boolean do3D, RandomNumberGenerator re,
 			boolean forwardDirectionOnly) throws TraverseOutlineException {
 		
-		List<List<Point3i>> listOfLists = pointsFromOrientationProposer.calcPoints(centrePoint, orientation, do3d, re, forwardDirectionOnly);
+		List<List<Point3i>> listOfLists = pointsFromOrientationProposer.calcPoints(centrePoint, orientation, do3D, re, forwardDirectionOnly);
 		
 		List<Point3i> combinedList = new ArrayList<Point3i>();
 		for( List<Point3i> list : listOfLists ) {

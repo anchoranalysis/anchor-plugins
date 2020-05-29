@@ -34,13 +34,13 @@ import java.util.Optional;
 
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
-import org.anchoranalysis.core.geometry.Point3i;
+import org.anchoranalysis.core.geometry.ReadableTuple3i;
 import org.anchoranalysis.core.params.KeyValueParams;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.feature.bean.pixelwise.PixelScore;
 import org.anchoranalysis.image.histogram.Histogram;
-import org.anchoranalysis.image.histogram.HistogramFactoryUtilities;
+import org.anchoranalysis.image.histogram.HistogramFactory;
 import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.anchoranalysis.image.voxel.box.VoxelBoxList;
@@ -95,11 +95,16 @@ public class CreateVoxelBoxFromPixelwiseFeatureWithMask {
 		);
 	}
 	
-	private List<Histogram> createHistograms(ObjMask objMask) {
+	private List<Histogram> createHistograms(ObjMask mask) {
 		List<Histogram> out = new ArrayList<>();
 
 		for( VoxelBoxWrapper voxelBox : listVoxelBox) {
-			out.add( HistogramFactoryUtilities.createWithMask(voxelBox.any(), objMask) );
+			out.add(
+				HistogramFactory.create(
+					voxelBox,
+					Optional.of(mask)
+				)
+			);
 		}
 		
 		for( Histogram hist : listAdditionalHistograms ) {
@@ -111,7 +116,7 @@ public class CreateVoxelBoxFromPixelwiseFeatureWithMask {
 
 	private void setPixelsWithoutMask( VoxelBox<ByteBuffer> vbOut, PixelScore pixelScore ) throws FeatureCalcException, InitException {
 		
-		Extent e = vbOut.extnt();
+		Extent e = vbOut.extent();
 		
 		for( int z=0;z<e.getZ(); z++) {
 			
@@ -133,11 +138,11 @@ public class CreateVoxelBoxFromPixelwiseFeatureWithMask {
 	private void setPixelsWithMask( VoxelBox<ByteBuffer> vbOut, ObjMask objMask, PixelScore pixelScore ) throws FeatureCalcException, InitException {
 		
 		byte maskOn = objMask.getBinaryValuesByte().getOnByte();
-		Extent e = vbOut.extnt();
-		Extent eMask = objMask.binaryVoxelBox().extnt();
+		Extent e = vbOut.extent();
+		Extent eMask = objMask.binaryVoxelBox().extent();
 		
-		Point3i crnrMin = objMask.getBoundingBox().getCrnrMin();
-		Point3i crnrMax = objMask.getBoundingBox().calcCrnrMax();
+		ReadableTuple3i crnrMin = objMask.getBoundingBox().getCrnrMin();
+		ReadableTuple3i crnrMax = objMask.getBoundingBox().calcCrnrMax();
 		
 		for( int z=crnrMin.getZ();z<=crnrMax.getZ(); z++) {
 			

@@ -103,8 +103,12 @@ public class AnchorMetadataXml {
 	}
 
 	private static ImageRes resFromNodeList( NodeList nodeList ) {
-		
+				
+		// Initialize to defaults 
 		ImageRes res = new ImageRes();
+		double x = res.getX();
+		double y = res.getY();
+		double z = res.getZ();
 		
 		for (int i=0; i<nodeList.getLength(); i++) {
 			 
@@ -113,19 +117,19 @@ public class AnchorMetadataXml {
 			 if (n.getNodeType()==Node.ELEMENT_NODE) {
 				 
 				 if (n.getNodeName().equals("xres")) {
-					 res.setX( doubleFromNode(n) );
+					 x = doubleFromNode(n);
 				 }
 				 else if (n.getNodeName().equals("yres")) {
-					 res.setY( doubleFromNode(n) );
+					 y = doubleFromNode(n);
 				 }
 				 else if (n.getNodeName().equals("zres")) {
-					 res.setZ( doubleFromNode(n) );
+					 z = doubleFromNode(n);
 				 }
 				 
 			 }
 		 }
 		 
-		 return res;		
+		 return new ImageRes(x, y, z);		
 	}
 	
 	private static double doubleFromNode(Node n) {

@@ -31,6 +31,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import org.anchoranalysis.bean.OptionalFactory;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.core.error.CreateException;
@@ -47,7 +48,6 @@ import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
 import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.image.objmask.ObjMaskCollection;
-
 import cern.colt.list.DoubleArrayList;
 import cern.jet.stat.Descriptive;
 import ch.ethz.biol.cell.imageprocessing.binaryimgchnl.provider.NRGStackUtilities;
@@ -110,7 +110,10 @@ public class ObjMaskFilterFeatureRelationDiscardFeatureRatioLessThan extends Obj
 				getLogger()
 			);
 						
-			return NRGStackUtilities.maybeAddNrgStack(session, chnl);
+			return NRGStackUtilities.maybeAddNrgStack(
+				session,
+				OptionalFactory.create(chnl)
+			);
 			
 		} catch (CreateException | FeatureCalcException e) {
 			throw new OperationFailedException(e);

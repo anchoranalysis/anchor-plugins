@@ -28,6 +28,8 @@ package ch.ethz.biol.cell.imageprocessing.objmask.provider;
 
 
 import java.nio.ByteBuffer;
+import java.util.Optional;
+
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.bean.sgmn.binary.BinarySgmn;
@@ -59,7 +61,9 @@ public class ObjMaskProviderBinarySgmn extends ObjMaskProviderOneChnlSource {
 				BinaryVoxelBox<ByteBuffer> bvb = binarySgmn.sgmn(
 					new VoxelBoxWrapper(vb),
 					new BinarySgmnParameters(),
-					new ObjMask( om.getVoxelBox())
+					Optional.of(
+						new ObjMask( om.getVoxelBox())
+					)
 				);
 				
 				ObjMask mask = new ObjMask( om.getBoundingBox(), bvb.getVoxelBox() );

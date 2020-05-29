@@ -28,6 +28,7 @@ package org.anchoranalysis.plugin.io.bean.filepath.prefixer;
 
 import static org.junit.Assert.*;
 
+import org.anchoranalysis.io.bean.filepath.prefixer.PathWithDescription;
 import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.filepath.prefixer.FilePathPrefix;
 import org.junit.Test;
@@ -41,22 +42,25 @@ public class FilePathPrefixerLastDirectoryAsPrefixTest {
 	@Test
 	public void test() throws AnchorIOException {
 		
-		Path path = Paths.get("/a/b/c/d/e/somefile.tif");
 		Path root = mock(Path.class);
-		String descriptiveName = "somefile";
+		
+		PathWithDescription input = new PathWithDescription(
+			Paths.get("/a/b/c/d/e/somefile.tif"),
+			"somefile"
+		);
 		
 		LastDirectoryAsPrefix fpp = new LastDirectoryAsPrefix();
-		fpp.setFilePathPrefixer( createDelegate(path, descriptiveName, root) );
+		fpp.setFilePathPrefixer( createDelegate(input, root) );
 				
-		FilePathPrefix out = fpp.outFilePrefixFromPath(path, descriptiveName, root);
+		FilePathPrefix out = fpp.outFilePrefixFromPath(input, root);
 		
 		assertEquals( Paths.get("/g/h"), out.getFolderPath() );
 		assertEquals( "i_outprefix", out.getFilenamePrefix() );
 	}
 
-	private FilePathPrefixerAvoidResolve createDelegate(Path path, String descriptiveName, Path root) throws AnchorIOException {
+	private FilePathPrefixerAvoidResolve createDelegate(PathWithDescription input, Path root) throws AnchorIOException {
 		FilePathPrefixerAvoidResolve fppSrc = mock(FilePathPrefixerAvoidResolve.class);
-		when(fppSrc.outFilePrefixFromPath(path, descriptiveName, root)).thenReturn(
+		when(fppSrc.outFilePrefixFromPath(input, root)).thenReturn(
 			new FilePathPrefix( Paths.get("/g/h/i/"), "outprefix")
 		);
 		return fppSrc;

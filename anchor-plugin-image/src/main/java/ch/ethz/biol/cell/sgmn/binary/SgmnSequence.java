@@ -30,7 +30,11 @@ package ch.ethz.biol.cell.sgmn.binary;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+
+import org.anchoranalysis.bean.BeanInstanceMap;
 import org.anchoranalysis.bean.annotation.OptionalBean;
+import org.anchoranalysis.bean.error.BeanMisconfiguredException;
 import org.anchoranalysis.image.bean.sgmn.binary.BinarySgmn;
 import org.anchoranalysis.image.bean.sgmn.binary.BinarySgmnParameters;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
@@ -47,36 +51,43 @@ public class SgmnSequence extends BinarySgmn {
 	// END BEAN PROPERTIES
 	
 	@Override
-	public BinaryVoxelBox<ByteBuffer> sgmn(VoxelBoxWrapper voxelBox, BinarySgmnParameters params) throws SgmnFailedException {
-		return sgmn(voxelBox, params, null);
+	public void checkMisconfigured(BeanInstanceMap defaultInstances) throws BeanMisconfiguredException {
+		super.checkMisconfigured(defaultInstances);
+		if (listSgmn.isEmpty()) {
+			throw new BeanMisconfiguredException("At least one item is required in listSgmn");
+		}
 	}
 
 	@Override
 	public BinaryVoxelBox<ByteBuffer> sgmn(VoxelBoxWrapper voxelBox,
-			BinarySgmnParameters params, ObjMask objMask) throws SgmnFailedException {
+			BinarySgmnParameters params, Optional<ObjMask> mask) throws SgmnFailedException {
 		
-		BinaryVoxelBox<ByteBuffer> outOld = null;
-		BoundingBox BoundingBox = objMask!=null ? objMask.getBoundingBox() : new BoundingBox( voxelBox.any().extnt() );
+		BinaryVoxelBox<ByteBuffer> out = null;
 		
+		// A bounding-box capturing what part of the scene is being segmented
+		BoundingBox bbox = mask.map(
+			ObjMask::getBoundingBox
+		).orElseGet( ()->
+			new BoundingBox(
+				voxelBox.any().extent()
+			)
+		);
+		
+		// A mask that evolves as we move through each segmentation to be increasingly smaller.
+		Optional<ObjMask> evolvingMask = mask;
 		for( BinarySgmn sgmn : listSgmn) {
 			
+			BinaryVoxelBox<ByteBuffer> outNew = sgmn.sgmn(voxelBox, params, evolvingMask);
 			
-			BinaryVoxelBox<ByteBuffer> outNew;
-			if (objMask!=null) {
-				outNew = sgmn.sgmn(voxelBox, params, objMask);
-			} else {
-				outNew = sgmn.sgmn(voxelBox, params);
-			}
-			
-			if (outNew==null) {
-				return outOld;
-			}
-			
-			outOld = outNew;
-			objMask = new ObjMask(BoundingBox, outNew);
+			out = outNew;
+			evolvingMask = Optional.of(
+				new ObjMask(bbox, outNew)
+			);
 		}
 		
-		return outOld;
+		assert(out!=null);
+		
+		return out;
 	}
 
 	public List<BinarySgmn> getListSgmn() {

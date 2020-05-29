@@ -51,7 +51,7 @@ public class MarkFixture {
 			new Point3d(5,11,3)
 		);
 		
-		assert ell.bbox(dim, GlobalRegionIdentifiers.SUBMARK_INSIDE).extnt().getVolume()>0 ;
+		assert nonZeroBBoxVolume(ell);
 		return ell;
 	}
 	
@@ -65,11 +65,10 @@ public class MarkFixture {
 			new Point3d(5,11,6)
 		);
 		
-		assert ell.bbox(dim, GlobalRegionIdentifiers.SUBMARK_INSIDE).extnt().getVolume()>0 ;
+		assert nonZeroBBoxVolume(ell);
 		return ell;
 	}
-	
-	
+		
 	public MarkEllipsoid createEllipsoid3() {
 		
 		MarkEllipsoid ell = new MarkEllipsoid();
@@ -79,7 +78,11 @@ public class MarkFixture {
 			new Point3d(12,21,7)
 		);
 		
-		assert ell.bbox(dim, GlobalRegionIdentifiers.SUBMARK_INSIDE).extnt().getVolume()>0 ;
+		assert nonZeroBBoxVolume(ell);
 		return ell;
+	}
+	
+	private boolean nonZeroBBoxVolume(MarkEllipsoid ell) {
+		return !ell.bbox(dim, GlobalRegionIdentifiers.SUBMARK_INSIDE).extent().isEmpty();
 	}
 }

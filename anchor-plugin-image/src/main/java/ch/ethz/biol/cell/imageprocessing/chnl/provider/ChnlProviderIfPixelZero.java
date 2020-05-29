@@ -33,7 +33,6 @@ import org.anchoranalysis.image.bean.provider.ChnlProvider;
 import org.anchoranalysis.image.bean.provider.ChnlProviderOne;
 import org.anchoranalysis.image.chnl.Chnl;
 import org.anchoranalysis.image.chnl.factory.ChnlFactory;
-import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.voxel.box.VoxelBoxWrapper;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 import org.anchoranalysis.image.voxel.datatype.CombineTypes;
@@ -95,7 +94,7 @@ public class ChnlProviderIfPixelZero extends ChnlProviderOne {
 	public static Chnl mergeViaZeroCheck( Chnl chnl, Chnl chnlIfPixelZero, VoxelDataType combinedType, double multFactorIfNonZero ) throws CreateException {
 		
 		Chnl chnlOut = ChnlFactory.instance().createEmptyInitialised(
-			new ImageDim(chnl.getDimensions()),
+			chnl.getDimensions(),
 			combinedType
 		);
 		
@@ -112,14 +111,15 @@ public class ChnlProviderIfPixelZero extends ChnlProviderOne {
 
 	private static void processVoxelBox( VoxelBoxWrapper vbOut, VoxelBoxWrapper vbIn, VoxelBoxWrapper vbIfZero, double multFactorIfNonZero ) {
 
-		for (int z=0; z<vbOut.any().extnt().getZ(); z++) {
+		int volumeXY = vbIn.any().extent().getVolumeXY();
+		
+		for (int z=0; z<vbOut.any().extent().getZ(); z++) {
 			
 			VoxelBuffer<?> in1 = vbIn.any().getPixelsForPlane(z);
 			VoxelBuffer<?> in2 = vbIfZero.any().getPixelsForPlane(z);
 			VoxelBuffer<?> out = vbOut.any().getPixelsForPlane(z);
 			
-			int totalPixels = vbIn.any().extnt().getVolumeXY();
-			for (int offset=0; offset<totalPixels; offset++) {
+			for (int offset=0; offset<volumeXY; offset++) {
 				
 				int b1 = in1.getInt(offset);
 								

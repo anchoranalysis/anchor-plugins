@@ -44,7 +44,6 @@ import org.anchoranalysis.experiment.bean.identifier.ExperimentIdentifierConstan
 import org.anchoranalysis.experiment.bean.io.InputOutputExperiment;
 import org.anchoranalysis.experiment.bean.logreporter.ConsoleLogReporterBean;
 import org.anchoranalysis.experiment.bean.processor.SequentialProcessor;
-import org.anchoranalysis.experiment.bean.task.HelloWorldTask;
 import org.anchoranalysis.experiment.task.Task;
 import org.anchoranalysis.io.bean.provider.file.SearchDirectory;
 import org.anchoranalysis.io.output.bean.OutputManager;
@@ -65,9 +64,10 @@ import org.anchoranalysis.plugin.mpp.experiment.bean.outputmanager.OutputManager
  * TODO remove the explicit setting of setWriteRasterMetadata
  * 
  * @author Owen Feehan
+ * @param <S> shared-state
  *
  */
-public class QuickExperiment extends Experiment {
+public class QuickExperiment<S> extends Experiment {
 
 	// START BEAN PROPERTIES
 	/**
@@ -86,7 +86,7 @@ public class QuickExperiment extends Experiment {
 	private String folderOutput;
 	
 	@BeanField
-	private Task<MultiInput,Object> task = new HelloWorldTask<MultiInput>();
+	private Task<MultiInput,S> task;
 	
 	@BeanField
 	private String inputName = "stackInput";
@@ -107,12 +107,12 @@ public class QuickExperiment extends Experiment {
 	// Possible defaultInstances for beans......... saved from checkMisconfigured for delayed checks elsewhere
 	private BeanInstanceMap defaultInstances;
 		
-	private InputOutputExperiment<MultiInput,Object> delegate;
+	private InputOutputExperiment<MultiInput,S> delegate;
 	
 	private ExperimentIdentifierConstant experimentIdentifier = new ExperimentIdentifierConstant("single", "1.0");
 	
 	public QuickExperiment() {
-		delegate = new InputOutputExperiment<MultiInput,Object>();
+		delegate = new InputOutputExperiment<MultiInput,S>();
 		delegate.setExperimentIdentifier(experimentIdentifier);		
 	}
 	
@@ -221,7 +221,7 @@ public class QuickExperiment extends Experiment {
 		
 		
 		// Task
-		SequentialProcessor<MultiInput,Object> taskProcessor = new SequentialProcessor<>();
+		SequentialProcessor<MultiInput,S> taskProcessor = new SequentialProcessor<>();
 		taskProcessor.setTask(task);
 		delegate.setTaskProcessor(taskProcessor);
 		
@@ -255,11 +255,11 @@ public class QuickExperiment extends Experiment {
 		this.folderOutput = folderOutput;
 	}
 
-	public Task<MultiInput,Object> getTask() {
+	public Task<MultiInput,S> getTask() {
 		return task;
 	}
 
-	public void setTask(Task<MultiInput,Object> task) {
+	public void setTask(Task<MultiInput,S> task) {
 		this.task = task;
 	}
 

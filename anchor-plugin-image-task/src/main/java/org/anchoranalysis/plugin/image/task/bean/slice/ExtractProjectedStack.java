@@ -1,5 +1,7 @@
 package org.anchoranalysis.plugin.image.task.bean.slice;
 
+import org.anchoranalysis.core.error.friendly.AnchorImpossibleSituationException;
+
 /*-
  * #%L
  * anchor-plugin-image-task
@@ -88,7 +90,6 @@ class ExtractProjectedStack {
 	
 	private static Point3i createTarget( ImageDim sd, Extent e ) {
 		Point3i crnrPos = new Point3i();
-		
 		crnrPos.setX( (e.getX() - sd.getX()) / 2);
 		crnrPos.setY( (e.getY() - sd.getY()) / 2);
 		crnrPos.setZ( 0 );
@@ -96,28 +97,28 @@ class ExtractProjectedStack {
 	}
 	
 	private static BoundingBox boxToProject( Point3i crnrPos, Extent eChnl, Extent eTrgt ) {
-		BoundingBox bboxToProject = new BoundingBox( crnrPos, eChnl );
-		bboxToProject.intersect(new BoundingBox(eTrgt), true);
-		return bboxToProject;
+		return new BoundingBox(crnrPos, eChnl).intersection().with( new BoundingBox(eTrgt) ).orElseThrow( ()-> 
+			new AnchorImpossibleSituationException()
+		);
 	}
 		
 	private static BoundingBox bboxSrc( BoundingBox bboxToProject, ImageDim sd ) {
 		Point3i srcCrnrPos = createSrcCrnrPos(bboxToProject, sd);
-		return new BoundingBox(srcCrnrPos, bboxToProject.extnt() );
+		return new BoundingBox(srcCrnrPos, bboxToProject.extent() );
 	}
 	
 	private static Point3i createSrcCrnrPos( BoundingBox bboxToProject, ImageDim sd ) {
 		Point3i srcCrnrPos = new Point3i(0,0,0);
 		
-		if (bboxToProject.extnt().getX() < sd.getX()) {
+		if (bboxToProject.extent().getX() < sd.getX()) {
 			srcCrnrPos.setX(
-				(sd.getX() - bboxToProject.extnt().getX())/2
+				(sd.getX() - bboxToProject.extent().getX())/2
 			);
 		}
 		
-		if (bboxToProject.extnt().getY() < sd.getY()) {
+		if (bboxToProject.extent().getY() < sd.getY()) {
 			srcCrnrPos.setY(
-				(sd.getY() - bboxToProject.extnt().getY())/2
+				(sd.getY() - bboxToProject.extent().getY())/2
 			);
 		}
 		return srcCrnrPos;

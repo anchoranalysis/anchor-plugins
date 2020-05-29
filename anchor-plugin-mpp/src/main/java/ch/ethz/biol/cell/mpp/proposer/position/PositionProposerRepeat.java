@@ -1,5 +1,7 @@
 package ch.ethz.biol.cell.mpp.proposer.position;
 
+import java.util.Optional;
+
 import org.anchoranalysis.anchor.mpp.bean.proposer.PositionProposerBean;
 import org.anchoranalysis.anchor.mpp.proposer.ProposerContext;
 
@@ -44,19 +46,19 @@ public class PositionProposerRepeat extends PositionProposerBean {
 	// END BEAN PROPERTIES
 		
 	@Override
-	public Point3d propose(ProposerContext context) {
+	public Optional<Point3d> propose(ProposerContext context) {
 
 		for (int i=0; i<maxIter; i++) {
-			Point3d pnt = positionProposer.propose(
+			Optional<Point3d> pnt = positionProposer.propose(
 				context.addErrorLevel(positionProposer.getBeanName())
 			);
 			
-			if (pnt!=null) {
+			if (pnt.isPresent()) {
 				return pnt;
 			}
 		}
 		
-		return null;
+		return Optional.empty();
 	}
 
 	public PositionProposerBean getPositionProposer() {

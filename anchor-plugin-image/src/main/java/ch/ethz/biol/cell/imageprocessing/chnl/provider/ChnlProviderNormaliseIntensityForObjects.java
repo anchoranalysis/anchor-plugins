@@ -27,11 +27,8 @@ package ch.ethz.biol.cell.imageprocessing.chnl.provider;
  */
 
 
-import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.image.bean.provider.ChnlProviderOne;
-import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
 import org.anchoranalysis.image.chnl.Chnl;
 import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.image.objmask.ObjMaskCollection;
@@ -39,21 +36,14 @@ import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.anchoranalysis.plugin.image.intensity.IntensityMeanCalculator;
 
 // Rewrites the intensity for each ObjMask (assume no overlap) so that its mean is 128
-public class ChnlProviderNormaliseIntensityForObjects extends ChnlProviderOne {
-
-	// START BEAN PROPERTIES
-	@BeanField
-	private ObjMaskProvider objs;
-	// END BEAN PROPERTIES
+public class ChnlProviderNormaliseIntensityForObjects extends ChnlProviderOneObjsSource {
 	
 	@Override
-	public Chnl createFromChnl( Chnl chnl ) throws CreateException {
+	protected Chnl createFromChnl(Chnl chnl, ObjMaskCollection objsSource) throws CreateException {
 		
 		VoxelBox<?> vb = chnl.getVoxelBox().any();
 		
-		ObjMaskCollection objsCollection = objs.create();
-		
-		for( ObjMask om : objsCollection ) {
+		for(ObjMask om : objsSource) {
 			
 			try {
 				double meanIntensity = IntensityMeanCalculator.calcMeanIntensityObjMask(chnl, om);
@@ -73,14 +63,5 @@ public class ChnlProviderNormaliseIntensityForObjects extends ChnlProviderOne {
 		}
 		
 		return chnl;
-	}
-
-	public ObjMaskProvider getObjs() {
-		return objs;
-	}
-
-
-	public void setObjs(ObjMaskProvider objs) {
-		this.objs = objs;
 	}
 }

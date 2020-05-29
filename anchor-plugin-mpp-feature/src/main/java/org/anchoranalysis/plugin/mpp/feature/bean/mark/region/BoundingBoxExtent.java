@@ -72,7 +72,7 @@ public class BoundingBoxExtent extends FeatureMarkRegion {
 	
 	private double rslvDistance(BoundingBox bbox, Optional<ImageRes> res, AxisType axisType) throws FeatureCalcException {
 		return unit.rslvDistance(
-			bbox.extnt().getValueByDimension(axisType),
+			bbox.extent().getValueByDimension(axisType),
 			res,
 			unitVector(
 				AxisTypeConverter.dimensionIndexFor(axisType)

@@ -26,61 +26,10 @@ package ch.ethz.biol.cell.imageprocessing.chnl.provider;
  * #L%
  */
 
-
-import java.nio.ByteBuffer;
-
-import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.image.chnl.Chnl;
-import org.anchoranalysis.image.chnl.factory.ChnlFactorySingleType;
-import org.anchoranalysis.image.chnl.factory.ChnlFactoryByte;
-import org.anchoranalysis.image.convert.ByteConverter;
-import org.anchoranalysis.image.extent.ImageDim;
-import org.anchoranalysis.image.voxel.box.VoxelBox;
-
-public class ChnlProviderAddConstant extends ChnlProviderOneValue {
-
-	private static ChnlFactorySingleType factory = new ChnlFactoryByte();
+public final class ChnlProviderAddConstant extends ChnlProviderOneValueArithmetic {
 
 	@Override
-	public Chnl createFromChnlValue(Chnl chnl, double value) throws CreateException {
-		
-		int valueInt = (int) value;
-		
-		VoxelBox<ByteBuffer> vb = chnl.getVoxelBox().asByte();
-		
-		if (!chnl.getDimensions().equals(chnl.getDimensions())) {
-			throw new CreateException("Dimensions of channels do not match");
-		}
-		
-		Chnl chnlOut = factory.createEmptyInitialised( new ImageDim(chnl.getDimensions()) );
-		VoxelBox<ByteBuffer> vbOut = chnlOut.getVoxelBox().asByte();
-		
-		for (int z=0; z<chnl.getDimensions().getZ(); z++) {
-			
-			ByteBuffer in1 = vb.getPixelsForPlane(z).buffer();
-			ByteBuffer out = vbOut.getPixelsForPlane(z).buffer();
-			
-			while (in1.hasRemaining()) {
-				
-				byte b1 = in1.get();
-				
-				int mult = ByteConverter.unsignedByteToInt(b1) + valueInt;
-				
-				if (mult<0) {
-					mult=0;
-				}
-				
-				if (mult>255) {
-					mult = 255;
-				}
-				
-				out.put( (byte) mult );
-			}
-		
-			assert( !out.hasRemaining() );
-		}
-
-		return chnlOut;
+	protected int binaryOp(int voxel, int constant) {
+		return voxel + constant;
 	}
-
 }

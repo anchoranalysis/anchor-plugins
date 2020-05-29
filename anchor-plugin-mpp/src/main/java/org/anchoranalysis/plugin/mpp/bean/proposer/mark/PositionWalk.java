@@ -1,5 +1,7 @@
 package org.anchoranalysis.plugin.mpp.bean.proposer.mark;
 
+import java.util.Optional;
+
 import org.anchoranalysis.anchor.mpp.bean.bound.BoundCalculator;
 import org.anchoranalysis.anchor.mpp.bean.proposer.MarkProposer;
 import org.anchoranalysis.anchor.mpp.bound.BidirectionalBound;
@@ -49,11 +51,6 @@ public class PositionWalk extends MarkProposer {
 	@BeanField
 	private BoundCalculator boundCalculator;
 	// END BEAN
-		
-	@Override
-	public boolean isCompatibleWith(Mark testMark) {
-		return testMark instanceof MarkEllipse;
-	}
 
 	@Override
 	public boolean propose(PxlMarkMemo inputMark, ProposerContext context) {
@@ -110,19 +107,22 @@ public class PositionWalk extends MarkProposer {
 		
 		return true;
 	}
-
+	
+	@Override
+	public Optional<ICreateProposalVisualization> proposalVisualization(boolean detailed) {
+		return Optional.empty();
+	}
+	
+	@Override
+	public boolean isCompatibleWith(Mark testMark) {
+		return testMark instanceof MarkEllipse;
+	}
+	
 	public BoundCalculator getBoundCalculator() {
 		return boundCalculator;
 	}
 
-
 	public void setBoundCalculator(BoundCalculator boundCalculator) {
 		this.boundCalculator = boundCalculator;
-	}
-
-
-	@Override
-	public ICreateProposalVisualization proposalVisualization(boolean detailed) {
-		return null;
 	}
 }

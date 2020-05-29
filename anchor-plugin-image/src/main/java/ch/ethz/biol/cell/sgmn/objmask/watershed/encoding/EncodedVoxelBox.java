@@ -33,22 +33,19 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 
-public class EncodedVoxelBox {
+public final class EncodedVoxelBox {
 
-	private VoxelBox<IntBuffer> delegate;
+	private final VoxelBox<IntBuffer> delegate;
 	
-	private WatershedEncoding encoding;
+	private final WatershedEncoding encoding;
 
 	public EncodedVoxelBox(VoxelBox<IntBuffer> voxelBox) {
 		super();
-		
 		this.encoding = new WatershedEncoding();
-		
 		this.delegate = voxelBox;
 	}
 
@@ -56,13 +53,13 @@ public class EncodedVoxelBox {
 		return delegate;
 	}
 
-	public Extent extnt() {
-		return delegate.extnt();
+	public Extent extent() {
+		return delegate.extent();
 	}
 	
 	// TODO optimize
 	public void setPoint( Point3i pnt, int code ) {
-		int offset = delegate.extnt().offset( pnt.getX(), pnt.getY() );
+		int offset = delegate.extent().offset( pnt.getX(), pnt.getY() );
 		IntBuffer bbS = delegate.getPixelsForPlane( pnt.getZ() ).buffer();
 		bbS.put(offset, code );		
 	}
@@ -85,7 +82,7 @@ public class EncodedVoxelBox {
 	public void pointListAtFirst( List<Point3i> points ) {
 		
 		Point3i rootPoint = points.get(0);
-		int rootPointOffsetEncoded = encoding.encodeConnectedComponentID( delegate.extnt().offset(rootPoint) );
+		int rootPointOffsetEncoded = encoding.encodeConnectedComponentID( delegate.extent().offset(rootPoint) );
 		
 		setPoint( rootPoint, rootPointOffsetEncoded );
 
@@ -100,15 +97,16 @@ public class EncodedVoxelBox {
 	}
 
 	public EncodedIntBuffer getPixelsForPlane(int z) {
-		return new EncodedIntBuffer( delegate.getPixelsForPlane(z), encoding );
+		return new EncodedIntBuffer( delegate.getPixelsForPlane(z).buffer(), encoding );
 	}
 	
 	public boolean hasTemporary() {
-		for (int z=0; z<extnt().getZ(); z++) {
+		int volumeXY = extent().getVolumeXY();
+		
+		for (int z=0; z<extent().getZ(); z++) {
 			EncodedIntBuffer bb = getPixelsForPlane(z);
 			
-			int size = extnt().getVolumeXY();
-			for (int i=0; i<size; i++) {
+			for (int i=0; i<volumeXY; i++) {
 				if( bb.isTemporary(i) ) {
 					return true;
 				}
@@ -121,12 +119,12 @@ public class EncodedVoxelBox {
 		
 		ArrayList<Point3i> listOut = new ArrayList<>();
 		
-		for (int z=0; z<extnt().getZ(); z++) {
+		for (int z=0; z<extent().getZ(); z++) {
 			EncodedIntBuffer bb = getPixelsForPlane(z);
 			
 			int offset =0;
-			for (int y=0; y<extnt().getY(); y++) {
-				for (int x=0; x<extnt().getX(); x++) {
+			for (int y=0; y<extent().getY(); y++) {
+				for (int x=0; x<extent().getX(); x++) {
 
 					if( bb.isTemporary(offset++) ) {
 						listOut.add( new Point3i(x,y,z) );
@@ -142,12 +140,12 @@ public class EncodedVoxelBox {
 		
 		Set<Integer> setOut = new HashSet<>();
 		
-		for (int z=0; z<extnt().getZ(); z++) {
+		for (int z=0; z<extent().getZ(); z++) {
 			EncodedIntBuffer bb = getPixelsForPlane(z);
 			
 			int offset =0;
-			for (int y=0; y<extnt().getY(); y++) {
-				for (int x=0; x<extnt().getX(); x++) {
+			for (int y=0; y<extent().getY(); y++) {
+				for (int x=0; x<extent().getX(); x++) {
 
 					if( bb.isConnectedComponentID(offset)) {
 						setOut.add( bb.getCode(offset) );
@@ -169,28 +167,23 @@ public class EncodedVoxelBox {
 	}
 	
 	// Returns the CODED final index (global)
-	public int calculateConnectedComponentID( int x, int y, int z, int firstChainCode ) {
+	public int calculateConnectedComponentID(Point3i pnt, int firstChainCode ) {
 		
-		Extent e = delegate.extnt();
+		Extent e = delegate.extent();
 		
 		int crntChainCode = firstChainCode;
 		
 		do {
-			
-			int xMarg = encoding.xFromChainCode(crntChainCode);
-			int yMarg = encoding.yFromChainCode(crntChainCode);
-			int zMarg = encoding.zFromChainCode(crntChainCode);
-			
 			// Get local index from global index
-			x += xMarg;
-			y += yMarg;
-			z += zMarg;
+			pnt = addDirectionFromChainCode(pnt, crntChainCode);
 			
-			//System.out.printf(" %d %d %d  \n", x, y, z);
-			
-			assert( e.contains( new Point3d(x,y,z) ));
+			assert( e.contains(pnt));
 			// Replace with intelligence slices buffer?
-			int nextVal = delegate.getPixelsForPlane(z).buffer().get( e.offset(x, y) );
+			int nextVal = delegate.getPixelsForPlane(
+				pnt.getZ()
+			).buffer().get(
+				e.offsetSlice(pnt)
+			);
 		
 			assert(nextVal!=WatershedEncoding.CODE_UNVISITED);
 			assert(nextVal!=WatershedEncoding.CODE_TEMPORARY);
@@ -200,13 +193,28 @@ public class EncodedVoxelBox {
 			}
 			
 			if (nextVal==WatershedEncoding.CODE_MINIMA) {
-				return encoding.encodeConnectedComponentID( e.offset(x, y, z) );
+				return encoding.encodeConnectedComponentID(
+					e.offset(pnt)
+				);
 			}
 			
 			crntChainCode = nextVal;
 
 		} while (true);
 		
+	}
+	
+	/**
+	 * Adds a direction to a point from a chain-code, without altering the incoming point
+	 * 
+	 * @param pnt an input-point that is unchanged (immutable)
+	 * @param chainCode a chain-code from which to decode a direction, which is added to pnt
+	 * @return a new point which is the sum of pnt and the decoded-direction
+	 */
+	private Point3i addDirectionFromChainCode(Point3i pnt, int chainCode) {
+		Point3i out = encoding.chainCodes(chainCode);
+		out.add(pnt);
+		return out;
 	}
 	
 	public boolean isPlateau( int code ) {

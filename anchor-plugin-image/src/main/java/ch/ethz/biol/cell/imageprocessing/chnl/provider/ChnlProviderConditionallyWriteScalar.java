@@ -10,27 +10,32 @@ public abstract class ChnlProviderConditionallyWriteScalar extends ChnlProviderO
 	
 	@Override
 	public Chnl createFromChnlValue(Chnl chnl, double value) throws CreateException {
-		processVoxelBox( chnl.getVoxelBox().any(), value );
+		processVoxelBox(
+			chnl.getVoxelBox().any(),
+			value
+		);
 		return chnl;
 	}
 	
-	protected abstract boolean predicateBufVal( int bufVal, int value );
+	/** Whether to overwrite the current voxel-value with the constant? */
+	protected abstract boolean shouldOverwriteVoxelWithConstant( int voxel, int constant );
 	
 	private void processVoxelBox( VoxelBox<?> vb, double value ) {
 
-		int valueInt = (int) Math.floor(value);
+		int constant = (int) Math.floor(value);
 		
-		Extent e = vb.extnt();
+		Extent e = vb.extent();
+		int volumeXY = e.getVolumeXY();
 		for (int z=0; z<e.getZ(); z++) {
 			
 			VoxelBuffer<?> buf = vb.getPixelsForPlane(z);
 			
-			for( int i=0; i<e.getVolumeXY(); i++) {
+			for( int i=0; i<volumeXY; i++) {
 				
-				int bufVal = buf.getInt(i); 
+				int voxel = buf.getInt(i); 
 				
-				if (predicateBufVal(bufVal, valueInt)) {
-					buf.putInt(i,valueInt);
+				if (shouldOverwriteVoxelWithConstant(voxel, constant)) {
+					buf.putInt(i,constant);
 				}
 			}
 		}

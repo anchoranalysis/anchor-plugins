@@ -32,12 +32,14 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
+import org.anchoranalysis.core.functional.OptionalUtilities;
 import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 import org.anchoranalysis.image.bean.provider.ChnlProvider;
 import org.anchoranalysis.image.bean.provider.ImageDimProvider;
 import org.anchoranalysis.image.chnl.Chnl;
 import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.init.ImageInitParams;
+import org.anchoranalysis.image.stack.Stack;
 
 
 /**
@@ -84,25 +86,25 @@ public class ImageDimProviderFromChnl extends ImageDimProvider {
 	private Chnl selectChnlForId( String id ) throws CreateException {
 		
 		try {
-			Chnl chnl = getSharedObjects().getChnlCollection().getNull(id);
-			
-			if (chnl==null) {
-				chnl = getSharedObjects().getStackCollection().getException(id).getChnl(0);
-			}
-			
-			if (chnl==null) {
-				throw new CreateException(
+			return OptionalUtilities.orFlat(
+				getSharedObjects().getChnlCollection().getOptional(id),
+				getSharedObjects().getStackCollection().getOptional(id).map(ImageDimProviderFromChnl::firstChnl)
+			).orElseThrow( () ->
+				new CreateException(
 					String.format("Failed to find either a channel or stack with id `%s`", id)
-				);
-			}
+				)
+			);
 			
-			return getSharedObjects().getChnlCollection().getException(id);
 		} catch (NamedProviderGetException e) {
 			throw new CreateException(
-				String.format("A error occurred while retrieing channel `%s`", id),
+				String.format("A error occurred while retrieving channel `%s`", id),
 				e
 			);
 		}
+	}
+	
+	private static Chnl firstChnl( Stack stack ) {
+		return stack.getChnl(0);
 	}
 
 	public String getId() {
@@ -120,5 +122,4 @@ public class ImageDimProviderFromChnl extends ImageDimProvider {
 	public void setChnl(ChnlProvider chnl) {
 		this.chnl = chnl;
 	}
-
 }

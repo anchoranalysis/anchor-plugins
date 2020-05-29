@@ -38,7 +38,6 @@ import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.cache.calculation.CalculationResolver;
 import org.anchoranalysis.feature.cache.calculation.FeatureCalculation;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.image.feature.bean.objmask.FeatureObjMask;
 import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
 import org.anchoranalysis.image.objmask.ObjMask;
@@ -70,33 +69,7 @@ public abstract class DerivedObjMask extends FeatureObjMask {
 			emptyValue
 		);
 	}
-	
-	@Override
-	public SessionInput<FeatureInput> transformInput(
-			SessionInput<FeatureInputSingleObj> params,
-			Feature<FeatureInput> dependentFeature
-	) throws FeatureCalcException {
-		//try {
-			/*ObjMask omDerived = derivedObjMask(params);
-			
-			if (omDerived==null || !omDerived.hasPixelsGreaterThan(0)) {
-				// TODO is this the correct way of handling a null-mask?
-				assert(false);
-				// Broken, please fix
-				return null;
-			}
-			
-			return params.mapParams(
-				p -> createDerivedParams(p, omDerived ),
-				cacheName()
-			);*/
-			// TODO broken fix
-			return null;
-		/*} catch (ExecuteException e) {
-			throw new FeatureCalcException(e.getCause());
-		}*/			
-	}
-	
+		
 	protected abstract FeatureCalculation<ObjMask,FeatureInputSingleObj> createCachedCalculationForDerived( CalculationResolver<FeatureInputSingleObj> session ) throws FeatureCalcException;
 	
 	protected abstract ChildCacheName cacheName();

@@ -1,6 +1,7 @@
 package org.anchoranalysis.plugin.io.bean.summarizer.input;
 
 import java.nio.file.Path;
+import java.util.Optional;
 
 /*-
  * #%L
@@ -30,10 +31,10 @@ import java.nio.file.Path;
 
 import org.anchoranalysis.io.input.InputFromManager;
 
-public class ExtractPath<T extends InputFromManager> extends SummarizerInputFromManager<T, Path> {
+public class ExtractPath<T extends InputFromManager> extends SummarizerInputFromManager<T, Optional<Path>> {
 
 	@Override
-	protected Path extractFrom(T input) {
+	protected Optional<Path> extractFrom(T input) {
 		return input.pathForBinding();
 	}
 }

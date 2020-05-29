@@ -28,20 +28,17 @@ package org.anchoranalysis.plugin.io.multifile;
 
 public class IntegerRange {
 	
-	private Integer size = null;
+	private int size;
 	private int deduct = 0;
 	
-	public IntegerRange( Integer maxNum ) {
+	public IntegerRange( int maxNum ) {
 		this.size = maxNum;
 	}
 	
-	public IntegerRange( Integer minNum, Integer maxNum ) {
-
-		if (maxNum!=null) {
-			// We deduct the min
-			deduct = minNum;
-			this.size = maxNum - deduct + 1;
-		}
+	public IntegerRange(int minNum, int maxNum) {
+		// We deduct the min
+		deduct = minNum;
+		this.size = maxNum - deduct + 1;
 	}
 	
 	/** Maps an original integer to it's index from (0..size] */ 
@@ -50,11 +47,6 @@ public class IntegerRange {
 	}
 
 	public int getSize() {
-		assert(size!=null);
 		return size;
-	}
-	
-	public boolean hasSizeDefined() {
-		return size!=null;
 	}
 }

@@ -39,8 +39,8 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 public class CalculateErosionMap extends CalculateIncrementalOperationMap {
 
-	public CalculateErosionMap(boolean do3d) {
-		super(do3d);
+	public CalculateErosionMap(boolean do3D) {
+		super(do3D);
 	}
 	
 	protected CalculateErosionMap(CalculateIncrementalOperationMap other) {
@@ -48,11 +48,11 @@ public class CalculateErosionMap extends CalculateIncrementalOperationMap {
 	}
 
 	@Override
-	protected ObjMask applyOperation( ObjMask om, Extent extnt, boolean do3D ) throws OperationFailedException {
+	protected ObjMask applyOperation( ObjMask om, Extent extent, boolean do3D ) throws OperationFailedException {
 		try {
 			return MorphologicalErosion.createErodedObjMask(
 				om,
-				Optional.of(extnt),
+				Optional.of(extent),
 				do3D,
 				1,
 				true,

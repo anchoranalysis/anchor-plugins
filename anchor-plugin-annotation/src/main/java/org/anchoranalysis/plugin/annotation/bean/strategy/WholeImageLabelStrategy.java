@@ -27,8 +27,8 @@ package org.anchoranalysis.plugin.annotation.bean.strategy;
  */
 
 import java.util.List;
+import java.util.Optional;
 
-import org.anchoranalysis.annotation.wholeimage.WholeImageLabelAnnotation;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.gui.annotation.bean.label.AnnotationLabel;
 import org.anchoranalysis.gui.annotation.bean.label.GroupedAnnotationLabels;
@@ -46,14 +46,12 @@ public class WholeImageLabelStrategy extends SingleFilePathGeneratorStrategy {
 	// END BEAN PROPERTIES
 
 	@Override
-	public String annotationLabelFor(ProvidesStackInput item) throws AnchorIOException {
-		WholeImageLabelAnnotation annotation = ReadAnnotationFromFile.readCheckExists(
+	public Optional<String> annotationLabelFor(ProvidesStackInput item) throws AnchorIOException {
+		return ReadAnnotationFromFile.readCheckExists(
 			annotationPathFor(item)
+		).map( ann->
+			ann.getLabel()
 		);
-		if (annotation==null) {
-			return null;
-		}
-		return annotation.getLabel();
 	}
 	
 	// This is actually called twice during a typically opening of an annotation

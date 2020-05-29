@@ -32,7 +32,6 @@ import org.anchoranalysis.bean.BeanInstanceMap;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.NonNegative;
 import org.anchoranalysis.bean.error.BeanMisconfiguredException;
-import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.cache.calculation.FeatureCalculation;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
@@ -131,15 +130,11 @@ public abstract class IntensityMeanShellBase extends FeatureNrgChnl {
 	protected abstract double calcForShell( ObjMask shell, Chnl chnl) throws FeatureCalcException;
 
 	private ObjMask createNrgMask( NRGStack nrgStack ) throws FeatureCalcException {
-		try {
-			return new ObjMask(
-				new BoundingBox( nrgStack.getDimensions().getExtnt() ),
-				nrgStack.getChnl(nrgIndexMask).getVoxelBox().asByte(),
-				inverseMask ? BinaryValues.getDefault().createInverted() : BinaryValues.getDefault()
-			);
-		} catch (CreateException e) {
-			throw new FeatureCalcException(e);
-		}
+		return new ObjMask(
+			new BoundingBox( nrgStack.getDimensions().getExtnt() ),
+			nrgStack.getChnl(nrgIndexMask).getVoxelBox().asByte(),
+			inverseMask ? BinaryValues.getDefault().createInverted() : BinaryValues.getDefault()
+		);
 	}
 	
 	@Override
@@ -207,7 +202,7 @@ public abstract class IntensityMeanShellBase extends FeatureNrgChnl {
 		return do3D;
 	}
 
-	public void setDo3D(boolean do3d) {
-		do3D = do3d;
+	public void setDo3D(boolean do3D) {
+		this.do3D = do3D;
 	}
 }

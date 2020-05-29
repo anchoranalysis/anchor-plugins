@@ -141,7 +141,7 @@ public class VisitSchedulerConvexAboutRoot extends VisitScheduler {
 	
 	private static boolean isPntOnObj( Point3i pnt, VoxelBox<ByteBuffer> vb, BinaryValues bv ) {
 		
-		if (!vb.extnt().contains(pnt)) {
+		if (!vb.extent().contains(pnt)) {
 			return false;
 		}
 		

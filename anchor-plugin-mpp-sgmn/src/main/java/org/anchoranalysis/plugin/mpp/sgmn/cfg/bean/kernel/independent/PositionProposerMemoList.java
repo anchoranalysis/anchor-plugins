@@ -28,6 +28,7 @@ package org.anchoranalysis.plugin.mpp.sgmn.cfg.bean.kernel.independent;
 
 
 import java.util.List;
+import java.util.Optional;
 
 import org.anchoranalysis.anchor.mpp.bean.regionmap.RegionMembership;
 import org.anchoranalysis.anchor.mpp.mark.GlobalRegionIdentifiers;
@@ -59,26 +60,26 @@ class PositionProposerMemoList implements PositionProposer {
 		this.markBlock = markBlock;
 	}
 	
-	private static Point3d randomPosition( BoundingBox BoundingBox, RandomNumberGenerator re ) {
+	private static Point3d randomPosition( BoundingBox bbox, RandomNumberGenerator re ) {
 		
-		Extent extnt = BoundingBox.extnt();
+		Extent extent = bbox.extent();
 		
-		int x = BoundingBox.getCrnrMin().getX() + (int) (re.nextDouble() * extnt.getX() );
-		int y = BoundingBox.getCrnrMin().getY() + (int) (re.nextDouble() * extnt.getY() );
-		int z = BoundingBox.getCrnrMin().getZ() + (int) (re.nextDouble() * extnt.getZ() );
+		int x = bbox.getCrnrMin().getX() + (int) (re.nextDouble() * extent.getX() );
+		int y = bbox.getCrnrMin().getY() + (int) (re.nextDouble() * extent.getY() );
+		int z = bbox.getCrnrMin().getZ() + (int) (re.nextDouble() * extent.getZ() );
 		
 		return new Point3d(x,y,z);
 	}
 
 	@Override
-	public Point3d propose(ProposerContext context) {
+	public Optional<Point3d> propose(ProposerContext context) {
 		
 		RegionMembership rm = context.getRegionMap().membershipForIndex(GlobalRegionIdentifiers.SUBMARK_INSIDE);
 		
 		byte flags = rm.flags();
 		
 		if (listPxlMarkMemo.size()==0) {
-			return null;
+			return Optional.empty();
 		}
 		
 		// ASSUMES a single channel
@@ -91,7 +92,7 @@ class PositionProposerMemoList implements PositionProposer {
 		while(true) {
 		
 			if (i++==numTries) {
-				return null;
+				return Optional.empty();
 			}
 			
 			// We keep randomly picking a memo from the list 
@@ -107,7 +108,7 @@ class PositionProposerMemoList implements PositionProposer {
 			int relY = (int) pnt.getY() - bbox.getCrnrMin().getY();
 			int relZ = (int) pnt.getZ() - bbox.getCrnrMin().getZ();
 			
-			byte membershipExst = pm.getVoxelBox().getPixelsForPlane(relZ).get( bbox.extnt().offset(relX, relY) );
+			byte membershipExst = pm.getVoxelBox().getPixelsForPlane(relZ).get( bbox.extent().offset(relX, relY) );
 			
 			// If it's not inside our mark, then we don't consider it
 			if (!rm.isMemberFlag(membershipExst, flags)) {
@@ -124,7 +125,7 @@ class PositionProposerMemoList implements PositionProposer {
 			break;
 		}
 
-		return pnt;
+		return Optional.of(pnt);
 							
 	}
 }

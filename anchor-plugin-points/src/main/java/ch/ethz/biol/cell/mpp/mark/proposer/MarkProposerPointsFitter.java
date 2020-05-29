@@ -36,7 +36,6 @@ import org.anchoranalysis.anchor.mpp.bean.points.fitter.PointsFitter;
 import org.anchoranalysis.anchor.mpp.bean.points.fitter.PointsFitterException;
 import org.anchoranalysis.anchor.mpp.bean.proposer.MarkProposer;
 import org.anchoranalysis.anchor.mpp.bean.proposer.PointsProposer;
-import org.anchoranalysis.anchor.mpp.cfg.ColoredCfg;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.anchor.mpp.proposer.ProposerContext;
 import org.anchoranalysis.anchor.mpp.proposer.visualization.ICreateProposalVisualization;
@@ -50,7 +49,7 @@ import org.anchoranalysis.core.log.LogErrorReporter;
 
 public class MarkProposerPointsFitter extends MarkProposer {
 
-	// START BEAN
+	// START BEAN PROPERTIES
 	@BeanField
 	private PointsProposer pointsProposer;
 	
@@ -59,7 +58,7 @@ public class MarkProposerPointsFitter extends MarkProposer {
 	
 	@BeanField
 	private boolean reportFitterErrors = true;
-	// END BEAN
+	// END BEAN PROPERTIES
 	
 	@SuppressWarnings("unused")
 	private LogErrorReporter logErrorReporter;
@@ -111,19 +110,13 @@ public class MarkProposerPointsFitter extends MarkProposer {
 	}
 	
 	@Override
-	public ICreateProposalVisualization proposalVisualization(final boolean detailed) {
-		return new ICreateProposalVisualization() {
-
-			@Override
-			public void addToCfg(ColoredCfg cfg) {
-
-				ICreateProposalVisualization pv = pointsProposer.proposalVisualization(detailed); 
-				if (pv!=null) {
-					pv.addToCfg(cfg);
-				}
+	public Optional<ICreateProposalVisualization> proposalVisualization(final boolean detailed) {
+		return Optional.of(	cfg -> {
+			ICreateProposalVisualization pv = pointsProposer.proposalVisualization(detailed); 
+			if (pv!=null) {
+				pv.addToCfg(cfg);
 			}
-			
-		};
+		});
 	}
 	
 	public PointsProposer getPointsProposer() {

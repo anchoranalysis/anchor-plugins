@@ -1,5 +1,7 @@
 package ch.ethz.biol.cell.mpp.feedback.reporter;
 
+import java.util.Optional;
+
 import org.anchoranalysis.anchor.mpp.feature.nrg.cfg.CfgNRGPixelized;
 
 /*
@@ -92,7 +94,10 @@ public class MinimalExecutionTimeStatsReporter extends ReporterOptimizationStep<
 		
 		outputManager.getWriterCheckIfAllowed().write(
 			outputName,
-			() -> new XStreamGenerator<>(stats, "minimalExecutionTimeStats")
+			() -> new XStreamGenerator<>(
+				stats,
+				Optional.of("minimalExecutionTimeStats")
+			)
 		);
 	}
 

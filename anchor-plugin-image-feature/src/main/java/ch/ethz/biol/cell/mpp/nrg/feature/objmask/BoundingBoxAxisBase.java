@@ -28,7 +28,7 @@ package ch.ethz.biol.cell.mpp.nrg.feature.objmask;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.axis.AxisTypeConverter;
-import org.anchoranalysis.core.geometry.Tuple3i;
+import org.anchoranalysis.core.geometry.ReadableTuple3i;
 import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.extent.BoundingBox;
@@ -47,16 +47,16 @@ public abstract class BoundingBoxAxisBase extends FeatureObjMask {
 		
 		FeatureInputSingleObj inputSessionless = input.get();
 		
-		Tuple3i pnt = extractTupleForBoundingBox(
+		ReadableTuple3i pnt = extractTupleForBoundingBox(
 			inputSessionless.getObjMask().getBoundingBox()
 		);
 		
 		return calcAxisValue(pnt);
 	}
 	
-	protected abstract Tuple3i extractTupleForBoundingBox( BoundingBox bbox );
+	protected abstract ReadableTuple3i extractTupleForBoundingBox( BoundingBox bbox );
 	
-	private double calcAxisValue(Tuple3i pnt) {
+	private double calcAxisValue(ReadableTuple3i pnt) {
 		return pnt.getValueByDimension(
 			AxisTypeConverter.createFromString(axis)
 		);

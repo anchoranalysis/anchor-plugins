@@ -27,6 +27,7 @@ package org.anchoranalysis.plugin.io.multifile;
  */
 
 import java.nio.file.Path;
+import java.util.Optional;
 
 import org.anchoranalysis.image.io.RasterIOException;
 import org.anchoranalysis.image.stack.Stack;
@@ -50,7 +51,7 @@ class MultiFile {
 		size = new SizeExtnts(fileBag);
 	}
 
-	public void add( Stack stackForFile, Integer chnlNum, Integer sliceNum, Integer timeIndex, Path filePath ) throws RasterIOException {
+	public void add( Stack stackForFile, Optional<Integer> chnlNum, Optional<Integer> sliceNum, Optional<Integer> timeIndex, Path filePath ) throws RasterIOException {
 		
 		dataTypeChecker.check( stackForFile );
 		
@@ -69,10 +70,10 @@ class MultiFile {
 		return buffers.createSequence(dataTypeChecker.getDataType());
 	}
 		
-	private void checkSliceNum( Stack stackForFile, Integer sliceNum, Path filePath ) throws RasterIOException {
-		if (sliceNum!=null) {
+	private void checkSliceNum( Stack stackForFile, Optional<Integer> sliceNum, Path filePath ) throws RasterIOException {
+		if (sliceNum.isPresent()) {
 			if (stackForFile.getDimensions().getZ()!=1) {
-				throw new RasterIOException( String.format("A sliceNum %d is specified, but the file '%s' has more than one slice",sliceNum, filePath) );
+				throw new RasterIOException( String.format("A sliceNum %d is specified, but the file '%s' has more than one slice",sliceNum.get(), filePath) );
 			}
 		} else {
 			if (stackForFile.getDimensions().getZ()!=size.getRangeZ().getSize()) {
@@ -82,10 +83,10 @@ class MultiFile {
 	}
 
 		
-	private void checkChnlNum( Stack stackForFile, Integer chnlNum, Path filePath ) throws RasterIOException {
-		if (chnlNum!=null) {
+	private void checkChnlNum( Stack stackForFile, Optional<Integer> chnlNum, Path filePath ) throws RasterIOException {
+		if (chnlNum.isPresent()) {
 			if( stackForFile.getNumChnl() !=1) {
-				throw new RasterIOException( String.format("A chnlNum %d is specified, but the file '%s' has more than one channel",chnlNum, filePath) );
+				throw new RasterIOException( String.format("A chnlNum %d is specified, but the file '%s' has more than one channel",chnlNum.get(), filePath) );
 			}
 		} else {
 			if (stackForFile.getNumChnl() != size.getRangeC().getSize()) {
@@ -103,15 +104,11 @@ class MultiFile {
 	}
 
 	public boolean numFramesDefined() {
-		return size.getRangeT().hasSizeDefined();
+		return size.rangeTPresent();
 	}
 	
 	public boolean numChnlDefined() {
-		return size.getRangeC().hasSizeDefined();
-	}
-	
-	public boolean dataTypeDefined() {
-		return dataTypeChecker!=null;
+		return size.rangeCPresent();
 	}
 	
 	public VoxelDataType dataType() {

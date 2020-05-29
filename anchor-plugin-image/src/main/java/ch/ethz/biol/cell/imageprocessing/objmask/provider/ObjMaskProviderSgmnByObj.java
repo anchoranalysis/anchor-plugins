@@ -1,5 +1,7 @@
 package ch.ethz.biol.cell.imageprocessing.objmask.provider;
 
+import java.util.Optional;
+
 /*
  * #%L
  * anchor-plugin-image
@@ -50,7 +52,11 @@ public class ObjMaskProviderSgmnByObj extends ObjMaskProviderOneChnlSource {
 		for( ObjMask om : objsSrc ) {
 			try {
 				objsOut.addAll(
-					sgmn.sgmn(chnlToSgmn, om, null)
+					sgmn.sgmn(
+						chnlToSgmn,
+						Optional.of(om),
+						Optional.empty()
+					)
 				);
 			} catch (SgmnFailedException e) {
 				throw new CreateException(e);

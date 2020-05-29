@@ -27,95 +27,51 @@ package ch.ethz.biol.cell.sgmn.objmask.watershed.encoding;
  */
 
 
-import java.nio.ByteBuffer;
+import java.util.Optional;
 
-import org.anchoranalysis.image.extent.Extent;
+import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.image.voxel.buffer.SlidingBuffer;
-import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
+import org.anchoranalysis.image.voxel.iterator.IterateVoxels;
+import org.anchoranalysis.image.voxel.iterator.changed.ProcessVoxelNeighbour;
+import org.anchoranalysis.image.voxel.iterator.changed.ProcessVoxelNeighbourAbsoluteWithSlidingBuffer;
+import org.anchoranalysis.image.voxel.iterator.changed.ProcessVoxelNeighbourFactory;
 import org.anchoranalysis.image.voxel.nghb.BigNghb;
-import org.anchoranalysis.image.voxel.nghb.IProcessAbsolutePoint;
-import org.anchoranalysis.image.voxel.nghb.IProcessAbsolutePointObjectMask;
 import org.anchoranalysis.image.voxel.nghb.Nghb;
 import org.anchoranalysis.image.voxel.nghb.SmallNghb;
-import org.anchoranalysis.image.voxel.nghb.iterator.PointExtntIterator;
-import org.anchoranalysis.image.voxel.nghb.iterator.PointIterator;
-import org.anchoranalysis.image.voxel.nghb.iterator.PointObjMaskIterator;
 
-public class SteepestCalc {
+public final class SteepestCalc {
 
-	private boolean do3D = false;
-	private boolean bigNghb = false;	// If true we use 8-Connectivity instead of 4, and 26-connectivity instead of 6 in 3D
 	
-	private PointTester pt;
-	private PointIterator pointIterator;
-	
-	private Nghb nghb;
-	
-	// Without mask
-	public SteepestCalc( SlidingBuffer<?> rbb, WatershedEncoding encoder, boolean do3D, boolean bigNghb ) {
-		this.do3D = do3D;
-		this.bigNghb = bigNghb;
-		this.pt = new PointTester(encoder,rbb);
-		this.pointIterator = new PointExtntIterator(rbb.extnt(), pt);
-		initNghb();
-	}
-	
-	// Masked
-	public SteepestCalc( SlidingBuffer<?> rbb, WatershedEncoding encoder, boolean do3D, boolean bigNghb, ObjMask om ) {
-		this.do3D = do3D;
-		this.bigNghb = bigNghb;
-		this.pt = new PointTester(encoder,rbb);
-		this.pointIterator = new PointObjMaskIterator(pt, om);
-		initNghb();
-	}
-	
-	private void initNghb() {
-		nghb = bigNghb ? new BigNghb() : new SmallNghb();
-	}
-	
-	private static class PointTester implements IProcessAbsolutePoint, IProcessAbsolutePointObjectMask {
+	private static class PointTester extends ProcessVoxelNeighbourAbsoluteWithSlidingBuffer<Integer> {
 
-		
-		private SlidingBuffer<?> rbb;
 		private WatershedEncoding encoder;
-		
-		private int centreVal;
-		private int indxBuffer;
-		
+	
 		private int steepestDrctn;
 		private int steepestVal;
 		
-		
-		private VoxelBuffer<?> bb;
-		private int zChange;
-		
-		private Extent extnt;
-		
 		public PointTester(WatershedEncoding encoder, SlidingBuffer<?> rbb ) {
+			super(rbb);
 			this.encoder = encoder;
-			this.rbb = rbb;
-			this.extnt = rbb.extnt();
 		}
 
-		public void initPnt( int pnteVal, int indxBuffer ) {
-			this.centreVal = pnteVal;
-			this.indxBuffer = indxBuffer;
-			this.steepestVal = pnteVal;
+		@Override
+		public void initSource(int sourceVal, int sourceOffsetXY) {
+			super.initSource(sourceVal, sourceOffsetXY);
+			this.steepestVal = sourceVal;
 			this.steepestDrctn = WatershedEncoding.CODE_MINIMA;
 		}
-
 
 		@Override
 		public boolean processPoint( int xChange, int yChange, int x1, int y1) {
 			
-			int indxChange = extnt.offset(xChange, yChange);
-			int gValNghb = bb.getInt( indxBuffer + indxChange );
+			int gValNghb = getInt(xChange, yChange);
 			
+			// TODO check if it's okay these values exist?
 			//assert( gValNghb!= WatershedEncoding.CODE_UNVISITED );
 			//assert( gValNghb!= WatershedEncoding.CODE_TEMPORARY );
 			
-			if (gValNghb==centreVal) {
+			if (gValNghb==sourceVal) {
 				steepestDrctn = WatershedEncoding.CODE_PLATEAU;
 				return true;
 			}
@@ -123,50 +79,43 @@ public class SteepestCalc {
 			if (gValNghb<steepestVal) {
 				steepestVal = gValNghb;
 				steepestDrctn = encoder.encodeDirection(xChange, yChange, zChange);
-				
-				// Check that x+xChange,y+yChange+z+zChange is already visited
-				//assert( rbb.bufferRel(zChange).get( indxBuffer+ind)  )
-				
 				return true;
 			}
 			
 			return false;			
 		}
-		
-		@Override
-		public boolean processPoint(int xChange, int yChange, int x1, int y1,
-				int objectMaskOffset) {
-			return processPoint(xChange, yChange, x1, y1);
-		}
 
-		public int getSteepestDrctn() {
+		/** The steepest direction */
+		@Override
+		public Integer collectResult() {
 			return steepestDrctn;
 		}
-
-		@Override
-		public void notifyChangeZ(int zChange, int z1) {
-			this.bb = rbb.bufferRel(zChange);
-			this.zChange = zChange;
-		}
-
-		@Override
-		public void notifyChangeZ(int zChange, int z1,
-				ByteBuffer objectMaskBuffer) {
-			notifyChangeZ(zChange, z1);
-		}
-
-		
-
+	}
+	
+	private final boolean do3D;
+	private final ProcessVoxelNeighbour<Integer> process;
+	private final Nghb nghb;
+	
+	/**
+	 * 
+	 * @param rbb
+	 * @param encoder
+	 * @param do3D
+	 * @param bigNghb iff true we use 8-Connectivity instead of 4, and 26-connectivity instead of 6 in 3D
+	 * @param mask
+	 */
+	public SteepestCalc( SlidingBuffer<?> rbb, WatershedEncoding encoder, boolean do3D, boolean bigNghb, Optional<ObjMask> mask ) {
+		this.do3D = do3D;
+		this.process = ProcessVoxelNeighbourFactory.within(
+			mask,
+			rbb.extent(),
+			new PointTester(encoder,rbb)
+		);
+		this.nghb = bigNghb ? new BigNghb() : new SmallNghb();
 	}
 	
 	// Calculates the steepest descent
-	public int calcSteepestDescent( int x, int y, int z, int val, int indxBuffer ) {
-		
-		this.pointIterator.initPnt(x, y, z);
-		this.pt.initPnt(val, indxBuffer);
-		
-		nghb.processAllPointsInNghb(do3D, pointIterator);
-		
-		return pt.getSteepestDrctn();
+	public int calcSteepestDescent( Point3i pnt, int val, int indxBuffer ) {
+		return IterateVoxels.callEachPointInNghb(pnt, nghb, do3D, process, val, indxBuffer);
 	}
 }

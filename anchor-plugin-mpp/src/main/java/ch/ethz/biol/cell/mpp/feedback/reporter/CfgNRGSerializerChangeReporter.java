@@ -1,5 +1,7 @@
 package ch.ethz.biol.cell.mpp.feedback.reporter;
 
+import java.util.Optional;
+
 import org.anchoranalysis.anchor.mpp.feature.nrg.cfg.CfgNRG;
 import org.anchoranalysis.anchor.mpp.feature.nrg.cfg.CfgNRGPixelized;
 
@@ -72,29 +74,14 @@ public class CfgNRGSerializerChangeReporter extends ReporterOptimizationStep<Cfg
 	
 	private Reporting<CfgNRGPixelized> lastOptimizationStep;
 	
-	//private static Log log = LogFactory.getLog(CfgNRGSerializerChangeReporter.class);
-	
-	public CfgNRGSerializerChangeReporter() {
-		super();
-	}
-	
-	// We generate an OutputName class from the outputName string
-	private IndexableOutputNameStyle generateOutputNameStyle() {
-		return new IntegerSuffixOutputNameStyle(outputName,10);
-	}
-	
 	@Override
 	public void reportBegin(OptimizationFeedbackInitParams<CfgNRGPixelized> initParams) throws ReporterException {
-		
-		//IterableGenerator<CfgNRG> iterableGenerator = new ObjectOutputStreamGenerator<CfgNRG>("cfgNRG");
 		
 		outputManager = initParams.getInitContext().getOutputManager();
 		
 		sequenceType = new ChangeSequenceType();
 		
-		BundleParameters bundleParams = new BundleParameters();
-		bundleParams.setBundleSize(bundleSize);
-		bundleParams.setSequenceType(sequenceType);
+		BundleParameters bundleParams = createBundleParameters();
 		
 		IterableGenerator<CfgNRG> iterableGenerator = new BundledObjectOutputStreamGenerator<>(
 			bundleParams,
@@ -118,48 +105,16 @@ public class CfgNRGSerializerChangeReporter extends ReporterOptimizationStep<Cfg
 		} catch (OutputWriteFailedException e) {
 			throw new ReporterException(e);
 		}
-
-		
-		//IterableGenerator<CfgNRG> iterableGenerator = new XStreamGenerator<CfgNRG>("cfgNRG");
-		//init( new ObjectOutputStreamGenerator<CfgNRG>() );
-
-		/*BundleParameters bundleParams = new BundleParameters();
-		bundleParams.setBundleSize(10000);
-		
-		SequenceType sequenceType = init( new BundledObjectOutputStreamGenerator<CfgNRG>(
-			bundleParams,
-			this.generateOutputNameStyle(),
-			getParentOutputManager(), 
-			manifestFunction
-		));
-				
-		bundleParams.setSequenceType( sequenceType );*/
 	}
 
 	@Override
 	public void reportItr(Reporting<CfgNRGPixelized> reporting) throws ReporterException {
-		
 		try {
 			if (reporting.isAccptd() && sequenceWriter!=null) {
-				if (best) {
-					
-					if (reporting.getBest()!=null) {
-					
-						sequenceWriter.add(
-							reporting.getBest().getCfgNRG(),
-							String.valueOf(reporting.getIter())
-						);
-					}
-				} else {
-					
-					if (reporting.getCfgNRGAfter()!=null) {
-					
-						sequenceWriter.add(
-							reporting.getCfgNRGAfter().getCfgNRG(),
-							String.valueOf(reporting.getIter())
-						);
-					}
-				}
+				addToSequenceWriter(
+					best ? reporting.getBest() : reporting.getCfgNRGAfterOptional(),
+					reporting.getIter()
+				);
 			}
 			lastOptimizationStep = reporting;
 		} catch (OutputWriteFailedException e) {
@@ -167,8 +122,6 @@ public class CfgNRGSerializerChangeReporter extends ReporterOptimizationStep<Cfg
 		}
 	}
 	
-	
-
 	@Override
 	public void reportEnd(OptimizationFeedbackEndParams<CfgNRGPixelized> optStep) throws ReporterException {
 		
@@ -190,6 +143,32 @@ public class CfgNRGSerializerChangeReporter extends ReporterOptimizationStep<Cfg
 			throw new ReporterException(e);
 		}
 	}	
+
+	@Override
+	public void reportNewBest(Reporting<CfgNRGPixelized> reporting) {
+		// NOTHING TO DO
+	}
+	
+	// We generate an OutputName class from the outputName string
+	private IndexableOutputNameStyle generateOutputNameStyle() {
+		return new IntegerSuffixOutputNameStyle(outputName,10);
+	}
+	
+	private BundleParameters createBundleParameters() {
+		BundleParameters bundleParams = new BundleParameters();
+		bundleParams.setBundleSize(bundleSize);
+		bundleParams.setSequenceType(sequenceType);
+		return bundleParams;
+	}
+	
+	private void addToSequenceWriter(Optional<CfgNRGPixelized> cfgNRGAfter, int iter) throws OutputWriteFailedException {
+		if (cfgNRGAfter.isPresent()) {
+			sequenceWriter.add(
+				cfgNRGAfter.get().getCfgNRG(),
+				String.valueOf(iter)
+			);
+		}
+	}
 	
 	public String getManifestFunction() {
 		return manifestFunction;
@@ -223,8 +202,4 @@ public class CfgNRGSerializerChangeReporter extends ReporterOptimizationStep<Cfg
 		this.best = best;
 	}
 
-	@Override
-	public void reportNewBest(Reporting<CfgNRGPixelized> reporting) {
-		
-	}
 }

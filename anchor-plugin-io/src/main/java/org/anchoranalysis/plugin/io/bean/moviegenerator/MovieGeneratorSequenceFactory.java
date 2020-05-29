@@ -31,7 +31,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.io.generator.IterableObjectGenerator;
 import org.anchoranalysis.io.generator.bean.sequence.factory.GeneratorSequenceFactory;
-import org.anchoranalysis.io.generator.sequence.IGeneratorSequenceNonIncremental;
+import org.anchoranalysis.io.generator.sequence.GeneratorSequenceNonIncremental;
 import org.anchoranalysis.io.namestyle.SimpleOutputNameStyle;
 import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
 
@@ -43,7 +43,7 @@ public class MovieGeneratorSequenceFactory extends GeneratorSequenceFactory {
 	// END BEAN PROPERTIES
 	
 	@Override
-	public <GeneratorType> IGeneratorSequenceNonIncremental<GeneratorType> createGeneratorSequenceNonIncremental(
+	public <GeneratorType> GeneratorSequenceNonIncremental<GeneratorType> createGeneratorSequenceNonIncremental(
 			BoundOutputManagerRouteErrors outputManager, String outputName,
 			IterableObjectGenerator<GeneratorType, Stack> generator) {
 

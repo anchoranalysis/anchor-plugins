@@ -1,5 +1,7 @@
 package org.anchoranalysis.plugin.mpp.bean.proposer.mark;
 
+import java.util.Optional;
+
 import org.anchoranalysis.anchor.mpp.bean.proposer.MarkProposer;
 import org.anchoranalysis.anchor.mpp.bean.proposer.PositionProposerBean;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
@@ -44,19 +46,6 @@ public class Position extends MarkProposer {
 	@BeanField
 	private PositionProposerBean positionProposer;
 	// END BEAN PROPERTIES
-	
-	public Position() {
-		
-	}
-	
-	public Position( PositionProposerBean positionProposer ) {
-		this.positionProposer = positionProposer;
-	}
-
-	@Override
-	public boolean isCompatibleWith(Mark testMark) {
-		return testMark instanceof MarkAbstractPosition;
-	}
 
 	@Override
 	public boolean propose(PxlMarkMemo inputMark, ProposerContext context) {
@@ -66,29 +55,35 @@ public class Position extends MarkProposer {
 		inputMark.reset();
 				
 		// We create a new point, so that if it's changed later it doesn't affect the original home
-		Point3d pos = positionProposer.propose(
+		Optional<Point3d> pos = positionProposer.propose(
 			context.addErrorLevel("MarkPositionProposer")
 		);
 	
-        if(pos==null) {
+        if(!pos.isPresent()) {
         	context.getErrorNode().add("positionProposer returned null");
         	return false;
         }
-        inputMarkPos.setPos(pos);
+        
+        inputMarkPos.setPos(pos.get());
 		
         return true;
 	}
 
+	@Override
+	public Optional<ICreateProposalVisualization> proposalVisualization(boolean detailed) {
+		return Optional.empty();
+	}
+	
+	@Override
+	public boolean isCompatibleWith(Mark testMark) {
+		return testMark instanceof MarkAbstractPosition;
+	}
+	
 	public PositionProposerBean getPositionProposer() {
 		return positionProposer;
 	}
 
 	public void setPositionProposer(PositionProposerBean positionProposer) {
 		this.positionProposer = positionProposer;
-	}
-
-	@Override
-	public ICreateProposalVisualization proposalVisualization(boolean detailed) {
-		return null;
 	}
 }

@@ -28,6 +28,7 @@ package org.anchoranalysis.plugin.points.bean.fitter;
 
 
 import java.util.List;
+import java.util.Optional;
 
 import org.anchoranalysis.anchor.mpp.bean.provider.MarkProvider;
 import org.anchoranalysis.anchor.mpp.bean.regionmap.RegionMap;
@@ -65,15 +66,19 @@ public class MarkProviderPointsFitterFromConvexHull extends MarkProvider {
 	// END BEAN PROPERTIES
 	
 	@Override
-	public Mark create() throws CreateException {
+	public Optional<Mark> create() throws CreateException {
 
-		List<Point3f> pntsForFitter = pointsForFitter();
-
-		Mark mark = markProvider.create();
+		Optional<List<Point3f>> pntsForFitter = pointsForFitter();
+		Optional<Mark> mark = markProvider.create();
+		
+		if (!mark.isPresent() || !pntsForFitter.isPresent()) {
+			return Optional.empty();
+		}
+		
 		try {
 			pointsFitter.fitPointsToMark(
-				pntsForFitter,
-				mark,
+				pntsForFitter.get(),
+				mark.get(),
 				pointsFitter.createDim()
 			);
 		} catch (OperationFailedException | CreateException e) {
@@ -82,13 +87,17 @@ public class MarkProviderPointsFitterFromConvexHull extends MarkProvider {
 		
 		if (minRatioPntsInsideRegion>0) {
 			// We perform a check that a minimum % of pnts are inside a particular region
-			double ratioInside = ratioPointsInsideRegion( mark, pntsForFitter, regionMap, regionID );
+			double ratioInside = ratioPointsInsideRegion(
+				mark.get(),
+				pntsForFitter.get(),
+				regionMap,
+				regionID
+			);
 			
 			if (ratioInside<minRatioPntsInsideRegion) {
-				return null;
+				return Optional.empty();
 			}
 		}
-		
 		return mark;
 	}
 	
@@ -110,14 +119,13 @@ public class MarkProviderPointsFitterFromConvexHull extends MarkProvider {
 		return ((double) cnt) / pnts.size();
 	}
 	
-	private List<Point3f> pointsForFitter() throws CreateException {
+	private Optional<List<Point3f>> pointsForFitter() throws CreateException {
 		
-		List<Point2i> selectedPoints = ConvexHullUtilities.convexHullFromAllOutlines(
+		Optional<List<Point2i>> selectedPoints = ConvexHullUtilities.convexHullFromAllOutlines(
 			pointsFitter.createObjs(),
 			pointsFitter.getMinNumPnts()
 		);
-				
-		return PointConverter.convert2i_3f(selectedPoints);
+		return selectedPoints.map(PointConverter::convert2i_3f);
 	}
 	
 	public MarkProvider getMarkProvider() {

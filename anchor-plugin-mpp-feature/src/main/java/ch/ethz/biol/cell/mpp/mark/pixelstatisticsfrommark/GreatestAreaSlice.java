@@ -52,7 +52,7 @@ public class GreatestAreaSlice extends IndexedRegionBase {
 		
 		long maxArea = -1;
 		VoxelStatistics psMax = null;
-		for( int z=0; z<bbox.extnt().getZ(); z++) {
+		for( int z=0; z<bbox.extent().getZ(); z++) {
 			
 			VoxelStatistics ps = sliceStatisticsForRegion(pm, z);
 			long num = ps.countThreshold(threshold);

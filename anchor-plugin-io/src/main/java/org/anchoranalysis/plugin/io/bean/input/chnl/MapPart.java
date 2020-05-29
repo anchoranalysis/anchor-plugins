@@ -32,6 +32,7 @@ import java.nio.Buffer;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
@@ -116,8 +117,13 @@ class MapPart<T extends Buffer> extends NamedChnlsInputPart {
 		}
 		
 		NamedChnlCollectionForSeriesConcatenate<T> out = new NamedChnlCollectionForSeriesConcatenate<>();
-		out.add( new NamedChnlCollectionForSeriesMap( openedRaster(), chnlMap(), seriesNum ) );
-		
+		out.add(
+			new NamedChnlCollectionForSeriesMap(
+				openedRaster(),
+				chnlMap(),
+				seriesNum
+			)
+		);
 		return out;
 	}
 	
@@ -129,12 +135,14 @@ class MapPart<T extends Buffer> extends NamedChnlsInputPart {
 	@Override
 	public List<Path> pathForBindingForAllChannels() {
 		ArrayList<Path> out = new ArrayList<>();
-		out.add(pathForBinding());
+		pathForBinding().ifPresent( path->
+			out.add(path)
+		);
 		return out;
 	}
 
 	@Override
-	public Path pathForBinding() {
+	public Optional<Path> pathForBinding() {
 		return delegate.pathForBinding();
 	}
 
@@ -160,7 +168,11 @@ class MapPart<T extends Buffer> extends NamedChnlsInputPart {
 	
 	private OpenedRaster openedRaster() throws RasterIOException {
 		if (openedRasterMemo==null) {
-			openedRasterMemo = rasterReader.openFile( delegate.pathForBinding() );
+			openedRasterMemo = rasterReader.openFile(
+				delegate.pathForBinding().orElseThrow( ()->
+					new RasterIOException("A binding-path is needed in the delegate.")
+				)
+			);
 			try {
 				chnlMap = chnlMapCreator.createMap( openedRasterMemo );
 			} catch (CreateException e) {

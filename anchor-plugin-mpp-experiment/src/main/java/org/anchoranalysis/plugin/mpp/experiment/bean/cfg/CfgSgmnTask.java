@@ -156,7 +156,10 @@ public class CfgSgmnTask extends Task<MultiInput,ExperimentState>{
 	private void writeVisualization( Cfg cfg, BoundOutputManagerRouteErrors outputManager, NamedImgStackCollection stackCollection, LogErrorReporter logErrorReporter ) {
 		outputManager.getWriterCheckIfAllowed().write(
 			"cfg",
-			() -> new XStreamGenerator<Object>(cfg, "cfg")
+			() -> new XStreamGenerator<Object>(
+				cfg, 
+				Optional.of("cfg")
+			)
 		);
 		
 		try {

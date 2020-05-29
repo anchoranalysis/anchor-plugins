@@ -28,9 +28,9 @@ package org.anchoranalysis.plugin.io.bean.rasterreader;
 
 import java.io.File;
 import java.nio.file.Path;
+import java.util.Optional;
 
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.extent.ImageRes;
 import org.anchoranalysis.image.io.RasterIOException;
 import org.anchoranalysis.image.io.bean.rasterreader.RasterReader;
@@ -59,14 +59,16 @@ public class ReadVoxelExtentXml extends RasterReader {
 	 * @return the scene res if the metadata file exists and was parsed. null otherwise.
 	 * @throws RasterIOException
 	 */
-	public static ImageRes readMetadata( Path filepath, boolean acceptNoResolution ) throws RasterIOException {
+	public static Optional<ImageRes> readMetadata( Path filepath, boolean acceptNoResolution ) throws RasterIOException {
 		
 		// How we try to open the metadata
-		ImageRes res = null;
+		Optional<ImageRes> res = null;
 		File fileMeta = new File( filepath.toString() + ".xml" );
 		  
 		if( fileMeta.exists() ) {
-			res = AnchorMetadataXml.readResolutionXml( fileMeta );	    	  
+			res = Optional.of(
+				AnchorMetadataXml.readResolutionXml( fileMeta )
+			);
 		} else {
 			if (acceptNoResolution==false) {
 				throw new RasterIOException( String.format("Resolution metadata is required for '%s'", filepath) );
@@ -75,25 +77,19 @@ public class ReadVoxelExtentXml extends RasterReader {
 		return res;
 	}
 		
-	private static void replaceResIfNotNull( ImageDim dims, ImageRes res ) {
-		if (res!=null) {
-			dims.setRes(res);
-		}
-	}
-	
 	@Override
 	public OpenedRaster openFile(Path filepath) throws RasterIOException {
 		
 		OpenedRaster delegate = rasterReader.openFile(filepath);
 		
-		ImageRes sr = readMetadata(filepath, acceptNoResolution);
+		Optional<ImageRes> sr = readMetadata(filepath, acceptNoResolution);
 		
 		return new OpenedRasterAlterDimensions(
 			delegate,
-			(ImageDim sd) -> replaceResIfNotNull(sd,sr)
+			res -> sr
 		);
 	}
-
+	
 	public RasterReader getRasterReader() {
 		return rasterReader;
 	}

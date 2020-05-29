@@ -39,12 +39,12 @@ import org.anchoranalysis.image.voxel.buffer.VoxelBufferShort;
 public class PixelsFromShortProcessor implements IPixelsForPlane<ShortBuffer> {
 	
 	private ShortProcessor processor;
-	private Extent extnt;
+	private Extent extent;
 	
 	public PixelsFromShortProcessor( ShortProcessor processor ) {
 		super();
 		this.processor = processor;
-		this.extnt = new Extent( processor.getWidth(), processor.getHeight(), 1 );
+		this.extent = new Extent( processor.getWidth(), processor.getHeight(), 1 );
 	}
 
 	@Override
@@ -59,7 +59,7 @@ public class PixelsFromShortProcessor implements IPixelsForPlane<ShortBuffer> {
 	}
 
 	@Override
-	public Extent extnt() {
-		return extnt;
+	public Extent extent() {
+		return extent;
 	}
 }

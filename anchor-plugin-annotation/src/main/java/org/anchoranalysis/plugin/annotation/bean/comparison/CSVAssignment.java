@@ -29,8 +29,10 @@ package org.anchoranalysis.plugin.annotation.bean.comparison;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.anchoranalysis.annotation.io.assignment.Assignment;
+import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.text.TypedValue;
 import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.input.InputFromManager;
@@ -42,7 +44,7 @@ class CSVAssignment {
 	private boolean includeDescriptiveSplit;
 	private int maxSplitGroups;
 		
-	private CSVWriter writer;
+	private Optional<CSVWriter> writer;
 	
 	private boolean firstRow = true;
 	
@@ -58,21 +60,21 @@ class CSVAssignment {
 		Assignment assignment,
 		SplitString descriptiveSplit,
 		InputFromManager inputObject
-	) {
+	) throws OperationFailedException {
 
-		if (!writer.isOutputEnabled()) {
+		if (!writer.isPresent() || !writer.get().isOutputEnabled()) {
 			return;
 		}
 		
 		if (firstRow) {
 			firstRow = false;
 			
-			writer.writeHeaders(
+			writer.get().writeHeaders(
 				createHeaders(assignment)
 			);
 		}
 			
-		writer.writeRow(
+		writer.get().writeRow(
 			createValues(
 				assignment,
 				inputObject,
@@ -101,18 +103,23 @@ class CSVAssignment {
 		return headerNames;
 	}
 	
-	private List<TypedValue> createValues( Assignment assignment, InputFromManager inputObject, SplitString descriptiveSplit ) {
+	private List<TypedValue> createValues( Assignment assignment, InputFromManager inputObject, SplitString descriptiveSplit ) throws OperationFailedException {
 		List<TypedValue> base = createBaseValues( inputObject, descriptiveSplit );
 		base.addAll( assignment.createStatistics() );
 		return base;
 	}
 	
-	private List<TypedValue> createBaseValues( InputFromManager inputObject, SplitString descriptiveSplit ) {
+	private List<TypedValue> createBaseValues( InputFromManager inputObject, SplitString descriptiveSplit ) throws OperationFailedException {
 		
 		Elements rowElements = new Elements();
 		
-		rowElements.add( inputObject.descriptiveName() );
-		rowElements.add( inputObject.pathForBinding().toString() );
+		
+		try {
+			rowElements.add( inputObject.descriptiveName() );
+			rowElements.add( inputObject.pathForBindingRequired().toString() );
+		} catch (AnchorIOException e) {
+			throw new OperationFailedException(e);
+		}
 				
 		if (includeDescriptiveSplit) {
 			for( int i=0; i<maxSplitGroups; i++) {
@@ -124,7 +131,7 @@ class CSVAssignment {
 	}
 		
 	public void end() {
-		writer.close();
+		writer.ifPresent( CSVWriter::close );
 	}
 
 	private static class Elements {

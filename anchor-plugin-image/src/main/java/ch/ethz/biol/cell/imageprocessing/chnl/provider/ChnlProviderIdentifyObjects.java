@@ -27,10 +27,7 @@ package ch.ethz.biol.cell.imageprocessing.chnl.provider;
  */
 
 
-import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.image.bean.provider.ChnlProviderOne;
-import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
 import org.anchoranalysis.image.chnl.Chnl;
 import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.image.objmask.ObjMaskCollection;
@@ -38,39 +35,26 @@ import org.anchoranalysis.image.voxel.box.VoxelBox;
 
 // Assigns a unique id number to each objects
 // Note behaviour is undefined when objects overlap with each other. An ID of either object arbitrarily will be assigned.
-public class ChnlProviderIdentifyObjects extends ChnlProviderOne {
-
-	// START BEAN PROPERTIES
-	@BeanField
-	private ObjMaskProvider objs;
-	// END BEAN PROPERTIES
+public class ChnlProviderIdentifyObjects extends ChnlProviderOneObjsSource {
 
 	@Override
-	public Chnl createFromChnl(Chnl chnl) throws CreateException {
+	protected Chnl createFromChnl(Chnl chnl, ObjMaskCollection objsSource) throws CreateException {
 
 		VoxelBox<?> vb = chnl.getVoxelBox().any();
 		
-		ObjMaskCollection objsCollection = objs.create();
-		
-		if (objsCollection.size()>255) {
-			throw new CreateException( String.format("A maximum of 255 objs is allowed. There are %d",objsCollection.size()));
+		if (objsSource.size()>255) {
+			throw new CreateException(
+				String.format("A maximum of 255 objs is allowed. There are %d",objsSource.size())
+			);
 		}
 		
 		vb.setAllPixelsTo(0);
 		
 		int index = 1;
-		for( ObjMask om : objsCollection ) {
+		for(ObjMask om : objsSource) {
 			vb.setPixelsCheckMask(om, index++);
 		}
 		
 		return chnl;
-	}
-
-	public ObjMaskProvider getObjs() {
-		return objs;
-	}
-
-	public void setObjs(ObjMaskProvider objs) {
-		this.objs = objs;
 	}
 }

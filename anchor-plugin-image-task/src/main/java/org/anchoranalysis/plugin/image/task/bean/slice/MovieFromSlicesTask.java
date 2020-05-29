@@ -51,9 +51,6 @@ public class MovieFromSlicesTask extends RasterTask {
 
 	// START BEAN PROPERTIES
 	@BeanField
-	private boolean rgb = false;
-	
-	@BeanField
 	private int delaySizeAtEnd = 0;
 	
 	@BeanField
@@ -159,15 +156,6 @@ public class MovieFromSlicesTask extends RasterTask {
 	@Override
 	public void endSeries(BoundOutputManagerRouteErrors outputManager) throws JobExecutionException {
 		generatorSeq.end();
-	}
-
-	public boolean isRgb() {
-		return rgb;
-	}
-
-
-	public void setRgb(boolean rgb) {
-		this.rgb = rgb;
 	}
 
 	public int getDelaySizeAtEnd() {

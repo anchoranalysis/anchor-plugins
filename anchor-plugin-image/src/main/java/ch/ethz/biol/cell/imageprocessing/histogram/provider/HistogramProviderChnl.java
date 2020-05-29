@@ -35,7 +35,7 @@ import org.anchoranalysis.image.bean.provider.ChnlProvider;
 import org.anchoranalysis.image.bean.provider.HistogramProvider;
 import org.anchoranalysis.image.chnl.Chnl;
 import org.anchoranalysis.image.histogram.Histogram;
-import org.anchoranalysis.image.histogram.HistogramFactoryUtilities;
+import org.anchoranalysis.image.histogram.HistogramFactory;
 
 public class HistogramProviderChnl extends HistogramProvider {
 
@@ -53,12 +53,12 @@ public class HistogramProviderChnl extends HistogramProvider {
 		Chnl chnlIn = chnl.create();
 		
 		if (mask!=null) {
-			return HistogramFactoryUtilities.create(
+			return HistogramFactory.create(
 				chnlIn,
 				mask.create()
 			);
 		} else {
-			return HistogramFactoryUtilities.create(chnlIn);
+			return HistogramFactory.create(chnlIn);
 		}
 	}
 

@@ -99,7 +99,7 @@ public class ChnlProviderPixelScoreFeature extends ChnlProviderOne {
 		
 		ByteBuffer[] arrByteBuffer = new ByteBuffer[ listAdditional.size() ];
 		
-		Extent e = vb.any().extnt();
+		Extent e = vb.any().extent();
 		for( int z=0; z<e.getZ(); z++) {
 			
 			VoxelBuffer<?> bb = vb.any().getPixelsForPlane(z);

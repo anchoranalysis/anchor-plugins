@@ -36,7 +36,7 @@ import org.anchoranalysis.anchor.mpp.feature.nrg.scheme.NRGSchemeWithSharedFeatu
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.log.LogErrorReporter;
-import org.anchoranalysis.core.name.provider.INamedProvider;
+import org.anchoranalysis.core.name.provider.NamedProvider;
 import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 import org.anchoranalysis.core.params.KeyValueParams;
 import org.anchoranalysis.feature.nrg.NRGStack;
@@ -102,7 +102,7 @@ class SgmnMPPHelper {
 		}
 	}
 		
-	public static NRGStackWithParams createNRGStack( INamedProvider<Stack> stackCollection, KeyValueParams params ) throws CreateException {
+	public static NRGStackWithParams createNRGStack( NamedProvider<Stack> stackCollection, KeyValueParams params ) throws CreateException {
 		try {
 			NRGStack nrgStack = new NRGStack( stackCollection.getException(ImgStackIdentifiers.NRG_STACK) );
 			return new NRGStackWithParams( nrgStack, params );

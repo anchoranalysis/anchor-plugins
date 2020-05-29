@@ -62,7 +62,7 @@ public class Exclude<T extends InputFromManager> extends InputManager<T> {
 		ListIterator<T> itr = list.listIterator();
 		while( itr.hasNext() ) {
 			
-			if (regEx.matchStr(itr.next().descriptiveName())!=null) {
+			if (regEx.hasMatch(itr.next().descriptiveName())) {
 				itr.remove();
 			}
 		}

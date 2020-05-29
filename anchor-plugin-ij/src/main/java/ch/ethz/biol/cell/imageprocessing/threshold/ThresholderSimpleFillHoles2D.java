@@ -63,16 +63,23 @@ public class ThresholderSimpleFillHoles2D extends Thresholder {
 		this.minIntensity = minIntensity;
 	}
 
-	// Consumes input channel?
 	@Override
-	public BinaryVoxelBox<ByteBuffer> threshold(VoxelBoxWrapper inputBuffer, BinaryValuesByte bvOut,
-			Optional<Histogram> histogram) throws OperationFailedException {
+	public BinaryVoxelBox<ByteBuffer> threshold(
+		VoxelBoxWrapper inputBuffer,
+		BinaryValuesByte bvOut,
+		Optional<Histogram> histogram,
+		Optional<ObjMask> mask
+	) throws OperationFailedException {
 
+		if (mask.isPresent()) {
+			throw new OperationFailedException("A mask is not supported for this operation");
+		}
+		
 		Prefs.blackBackground = true;
 		
 		BinaryVoxelBox<ByteBuffer> thresholded;
 		try {
-			thresholded = VoxelBoxThresholder.thresholdForLevel(inputBuffer, minIntensity, bvOut, false );
+			thresholded = VoxelBoxThresholder.thresholdForLevel(inputBuffer, minIntensity, bvOut, mask, false);
 		} catch (CreateException e) {
 			throw new OperationFailedException(e);
 		}
@@ -81,23 +88,12 @@ public class ThresholderSimpleFillHoles2D extends Thresholder {
 		binaryPlugin.setup("fill", null);
 		binaryPlugin.setNPasses( 1 );
 		
-		for( int z=0; z<thresholded.extnt().getZ(); z++) {
+		for( int z=0; z<thresholded.extent().getZ(); z++) {
 			ImageProcessor ip = IJWrap.imageProcessor( new VoxelBoxWrapper(thresholded.getVoxelBox()), z );
 			binaryPlugin.run( ip );
 		}
 		
 		return thresholded;
-	}
-
-	@Override
-	public BinaryVoxelBox<ByteBuffer> threshold(VoxelBoxWrapper inputBuffer, ObjMask objMask, BinaryValuesByte bvOut,
-			Optional<Histogram> histogram) throws OperationFailedException {
-		throw new IllegalAccessError("Method not supported");
-	}
-
-	@Override
-	public int getLastThreshold() {
-		return minIntensity;
 	}
 
 	public void setMinIntensity(int minIntensity) {

@@ -32,7 +32,7 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.bean.provider.ChnlProviderOne;
 import org.anchoranalysis.image.chnl.Chnl;
-import org.anchoranalysis.plugin.image.bean.blur.BlurGaussian3d;
+import org.anchoranalysis.plugin.image.bean.blur.BlurGaussian3D;
 import org.anchoranalysis.plugin.image.bean.blur.BlurStrategy;
 
 /**
@@ -47,7 +47,7 @@ public class ChnlProviderBlur extends ChnlProviderOne {
 
 	// START BEAN PROPERTIES
 	@BeanField
-	private BlurStrategy strategy = new BlurGaussian3d();
+	private BlurStrategy strategy = new BlurGaussian3D();
 	// END BEAN PROPERTIES
 	
 	@Override

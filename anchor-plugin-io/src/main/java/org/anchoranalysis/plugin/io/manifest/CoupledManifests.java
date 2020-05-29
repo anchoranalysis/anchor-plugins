@@ -30,6 +30,7 @@ package org.anchoranalysis.plugin.io.manifest;
 
 
 import java.nio.file.Path;
+import java.util.Optional;
 
 import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.filepath.prefixer.FilePathDifferenceFromFolderPath;
@@ -99,7 +100,9 @@ public class CoupledManifests implements InputFromManager {
 	}
 
 	@Override
-	public Path pathForBinding() {
-		return fileManifest.getRootPath();
+	public Optional<Path> pathForBinding() {
+		return Optional.of(
+			fileManifest.getRootPath()
+		);
 	}
 }

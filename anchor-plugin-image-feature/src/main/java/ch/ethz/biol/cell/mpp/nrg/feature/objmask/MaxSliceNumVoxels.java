@@ -53,7 +53,7 @@ public class MaxSliceNumVoxels extends FeatureObjMask {
 		
 		int max = 0;
 		
-		for( int z=0; z<params.getObjMask().getBoundingBox().extnt().getZ(); z++) {
+		for( int z=0; z<params.getObjMask().getBoundingBox().extent().getZ(); z++) {
 			ByteBuffer bb = params.getObjMask().getVoxelBox().getPixelsForPlane(z).buffer();
 			int cnt = cntForByteBuffer(bb, params.getObjMask().getBinaryValuesByte().getOnByte());
 		

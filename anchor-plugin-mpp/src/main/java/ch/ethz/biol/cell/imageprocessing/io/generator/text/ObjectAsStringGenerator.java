@@ -31,6 +31,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.nio.file.Path;
+import java.util.Optional;
 
 import org.anchoranalysis.io.generator.Generator;
 import org.anchoranalysis.io.generator.IterableGenerator;
@@ -92,7 +93,9 @@ public class ObjectAsStringGenerator<T> extends SingleFileTypeGenerator implemen
 
 	
 	@Override
-	public ManifestDescription createManifestDescription() {
-		return new ManifestDescription("text", "object");
+	public Optional<ManifestDescription> createManifestDescription() {
+		return Optional.of(
+			new ManifestDescription("text", "object")
+		);
 	}
 }

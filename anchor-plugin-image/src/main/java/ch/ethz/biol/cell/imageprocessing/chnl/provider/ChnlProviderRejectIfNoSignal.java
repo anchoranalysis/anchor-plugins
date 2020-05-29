@@ -32,7 +32,7 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.bean.provider.ChnlProviderOne;
 import org.anchoranalysis.image.chnl.Chnl;
 import org.anchoranalysis.image.histogram.Histogram;
-import org.anchoranalysis.image.histogram.HistogramFactoryUtilities;
+import org.anchoranalysis.image.histogram.HistogramFactory;
 
 public class ChnlProviderRejectIfNoSignal extends ChnlProviderOne {
 
@@ -47,7 +47,7 @@ public class ChnlProviderRejectIfNoSignal extends ChnlProviderOne {
 	@Override
 	public Chnl createFromChnl(Chnl chnl) throws CreateException {
 		
-		Histogram h = HistogramFactoryUtilities.create( chnl );
+		Histogram h = HistogramFactory.create( chnl );
 		
 		double percent = h.percentGreaterEqualTo(minIntensity);
 

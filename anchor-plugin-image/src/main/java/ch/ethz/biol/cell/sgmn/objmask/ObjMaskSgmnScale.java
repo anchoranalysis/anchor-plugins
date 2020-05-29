@@ -1,5 +1,7 @@
 package ch.ethz.biol.cell.sgmn.objmask;
 
+import java.util.Optional;
+
 /*
  * #%L
  * anchor-plugin-image
@@ -29,10 +31,12 @@ package ch.ethz.biol.cell.sgmn.objmask;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.error.OptionalOperationUnsupportedException;
+import org.anchoranalysis.core.functional.UnaryOperatorWithException;
 import org.anchoranalysis.image.bean.scale.ScaleCalculator;
 import org.anchoranalysis.image.bean.sgmn.objmask.ObjMaskSgmn;
+import org.anchoranalysis.image.bean.sgmn.objmask.ObjMaskSgmnOne;
 import org.anchoranalysis.image.chnl.Chnl;
+import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.interpolator.Interpolator;
 import org.anchoranalysis.image.interpolator.InterpolatorFactory;
 import org.anchoranalysis.image.objmask.ObjMask;
@@ -42,12 +46,9 @@ import org.anchoranalysis.image.seed.SeedCollection;
 import org.anchoranalysis.image.sgmn.SgmnFailedException;
 
 
-public class ObjMaskSgmnScale extends ObjMaskSgmn {
+public class ObjMaskSgmnScale extends ObjMaskSgmnOne {
 
 	// START BEAN PROPERTIES
-	@BeanField
-	private ObjMaskSgmn sgmn;
-	
 	@BeanField
 	private ScaleCalculator scaleCalculator;
 	
@@ -58,39 +59,83 @@ public class ObjMaskSgmnScale extends ObjMaskSgmn {
 	private boolean interpolate = true;
 	// END BEAN PROPERTIES
 	
-	private Interpolator createInterpolator() {
-		return interpolate ? InterpolatorFactory.getInstance().binaryResizing() : InterpolatorFactory.getInstance().noInterpolation();
+	@Override
+	public ObjMaskCollection sgmn(Chnl chnl, Optional<ObjMask> mask, Optional<SeedCollection> seeds, ObjMaskSgmn sgmn) throws SgmnFailedException {
+
+		Interpolator interpolator = createInterpolator();
+		
+		ScaleFactor sf = determineScaleFactor(chnl.getDimensions());
+		
+		// Scale input channel
+		Chnl chnlScaled = chnl.scaleXY( sf.getX(), sf.getY(), interpolator);
+		
+		// Scale seeds
+		seeds = mapScale(
+			seeds,
+			s -> scaleSeeds(s, sf),
+			"seeds"
+		);
+		
+		// Scale mask
+		mask = mapScale(
+			mask,
+			om -> om.scaleNew(sf, interpolator),
+			"mask"
+		);
+
+		// Segment and scale results back up to original-scale
+		return scaleResultToOriginalScale(
+			sgmn.sgmn( chnlScaled.duplicate(), mask, seeds ),
+			sf
+		);
+	}
+	
+	private ScaleFactor determineScaleFactor( ImageDim dim ) throws SgmnFailedException {
+		try {
+			return scaleCalculator.calc(dim);
+		} catch (OperationFailedException e) {
+			throw new SgmnFailedException("Cannot calculate scale", e);
+		}
+	}
+	
+	private ObjMaskCollection scaleResultToOriginalScale(ObjMaskCollection objs, ScaleFactor sf) throws SgmnFailedException {
+		try {
+			objs.scale( sf.invert(), createInterpolator() );
+		} catch (OperationFailedException e) {
+			throw new SgmnFailedException("Cannot scale objects", e);
+		}
+		return objs;
+	}
+	
+	/**
+	 * Scales an {@link Optional} if its present
+	 * 
+	 * @param <T> optional-type
+	 * @param optional the optional to be scaled
+	 * @param scaleFunc function to use for scaling
+	 * @param textualDscrInError how to describe the optional in an error message
+	 * @return an optional with either a scaled value or empty() depending on the input-option
+	 * @throws SgmnFailedException if the scaling operation fails
+	 */
+	private static <T> Optional<T> mapScale(
+		Optional<T> optional,
+		UnaryOperatorWithException<T,OperationFailedException> scaleFunc,
+		String textualDscrInError
+	) throws SgmnFailedException {
+		try {
+			if (optional.isPresent()) {
+				return Optional.of(
+					scaleFunc.apply(optional.get())
+				);
+			} else {
+				return Optional.empty();
+			}
+		} catch (OperationFailedException e) {
+			throw new SgmnFailedException("Cannot scale " + textualDscrInError);
+		}
 	}
 
-	@Override
-	public ObjMaskCollection sgmn(Chnl chnl,
-			SeedCollection seeds)
-			throws SgmnFailedException {
-		
-		try {
-			ScaleFactor sf = scaleCalculator.calc( chnl.getDimensions() );
-			
-			Chnl chnlScaled = chnl.scaleXY( sf.getX(), sf.getY(), createInterpolator() );
-			
-			// do watershed		
-			ObjMaskCollection objs = sgmn.sgmn( chnlScaled.duplicate(), seeds );
-			
-			ScaleFactor sfInv = sf.invert();
-			
-			objs.scale( sfInv, createInterpolator() );
-			
-			return objs;
-		} catch (OperationFailedException e) {
-			throw new SgmnFailedException(e);
-		}
-	}
-	
-	
-	private SeedCollection scaleSeeds( SeedCollection seedsUnscaled, ScaleFactor sf ) throws OptionalOperationUnsupportedException, OperationFailedException {
-		
-		if (seedsUnscaled==null) {
-			return null;
-		}
+	private static SeedCollection scaleSeeds( SeedCollection seedsUnscaled, ScaleFactor sf ) throws OperationFailedException {
 		
 		if (sf.getX()!=sf.getY()) {
 			throw new OperationFailedException("scaleFactor in X and Y must be equal to scale seeds");
@@ -101,46 +146,8 @@ public class ObjMaskSgmnScale extends ObjMaskSgmn {
 		return seedsScaled;
 	}
 	
-	
-	@Override
-	public ObjMaskCollection sgmn(Chnl chnl, ObjMask objMask,
-			SeedCollection seeds) throws SgmnFailedException {
-
-		ScaleFactor sf;
-		try {
-			sf = scaleCalculator.calc( chnl.getDimensions() );
-		} catch (OperationFailedException e) {
-			throw new SgmnFailedException("Cannot calculate scale", e);
-		}
-		
-		Chnl chnlScaled = chnl.scaleXY( sf.getX(), sf.getY(), createInterpolator());
-
-		try {
-			seeds = scaleSeeds(seeds, sf);
-		} catch (OptionalOperationUnsupportedException | OperationFailedException e) {
-			throw new SgmnFailedException("Cannot scale seeds", e);
-		}
-		
-		// do watershed		
-		ObjMaskCollection objs = sgmn.sgmn( chnlScaled.duplicate(), objMask, seeds );
-		
-		ScaleFactor sfInv = sf.invert();
-		
-		try {
-			objs.scale( sfInv, createInterpolator() );
-		} catch (OperationFailedException e) {
-			throw new SgmnFailedException("Cannot scale objects", e);
-		}
-		
-		return objs;
-	}
-
-	public ObjMaskSgmn getSgmn() {
-		return sgmn;
-	}
-
-	public void setSgmn(ObjMaskSgmn sgmn) {
-		this.sgmn = sgmn;
+	private Interpolator createInterpolator() {
+		return interpolate ? InterpolatorFactory.getInstance().binaryResizing() : InterpolatorFactory.getInstance().noInterpolation();
 	}
 
 	public ScaleCalculator getScaleCalculator() {
@@ -166,6 +173,4 @@ public class ObjMaskSgmnScale extends ObjMaskSgmn {
 	public void setInterpolate(boolean interpolate) {
 		this.interpolate = interpolate;
 	}
-
-
 }

@@ -35,9 +35,11 @@ class GrowUtilities {
 	
 	public static BoundingBox growBBox( BoundingBox bbox ) {
 		
-		BoundingBox bboxSrcGrown = new BoundingBox( bbox );
-		bboxSrcGrown.getCrnrMin().sub(subExtnt);
-		bboxSrcGrown.extnt().growBy(2);
-		return bboxSrcGrown;
+		Point3i crnrMin = new Point3i(bbox.getCrnrMin());
+		crnrMin.sub(subExtnt);
+		return new BoundingBox(
+			crnrMin,
+			bbox.extent().growBy(2)	
+		);
 	}
 }

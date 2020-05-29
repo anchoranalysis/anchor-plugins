@@ -28,76 +28,13 @@ package ch.ethz.biol.cell.imageprocessing.chnl.provider;
 
 
 import ij.plugin.filter.RankFilters;
-import ij.process.ImageProcessor;
-
-import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.image.bean.provider.ChnlProviderOne;
 import org.anchoranalysis.image.chnl.Chnl;
-import org.anchoranalysis.image.convert.IJWrap;
-import org.anchoranalysis.image.convert.ImageUnitConverter;
-import org.anchoranalysis.image.voxel.box.VoxelBoxWrapper;
 
-public class ChnlProviderMedianFilterIJ2D extends ChnlProviderOne {
+public class ChnlProviderMedianFilterIJ2D extends ChnlProviderFilterRadiusBase {
 
-	// START BEAN PROPERTIES
-	@BeanField
-	private int radius = 2;
-	
-	@BeanField
-	private boolean radiusInMeters = false;	// Treats radius if it's microns
-	// END BEAN PROPERTIES
-	
-	public static Chnl median3d( Chnl chnl, int radius ) throws CreateException {
-		
-
-		//ImagePlus imp = ImgStackUtilities.createImagePlus(chnl);
-		
-		RankFilters rankFilters = new RankFilters();
-		//rankFilters.setup("despeckle",null);
-		
-		VoxelBoxWrapper vb = chnl.getVoxelBox();
-		
-		// Are we missing a Z slice?
-		for (int z=0; z<chnl.getDimensions().getZ(); z++) {
-		
-			ImageProcessor processor = IJWrap.imageProcessor(vb, z);
-			rankFilters.rank( processor, radius, RankFilters.MEDIAN );
-		}
-		
-		return chnl;
-	}
-	
 	@Override
-	public Chnl createFromChnl(Chnl chnl) throws CreateException {
-		
-		int radiusToUse = radius;
-		
-		if (radiusInMeters) {
-			// Then we reconcile our sigma in microns against the Pixel Size XY (Z is taken care of later)
-			radiusToUse = (int) Math.round(
-				ImageUnitConverter.convertFromMeters( radius, chnl.getDimensions().getRes() )
-			);
-		}
-		
-		return median3d(chnl,radiusToUse);
+	public Chnl createFromChnl(Chnl chnl, int radius) throws CreateException {
+		return RankFilterUtilities.applyEachSlice(chnl,radius, RankFilters.MEDIAN);
 	}
-
-	public int getRadius() {
-		return radius;
-	}
-
-	public void setRadius(int radius) {
-		this.radius = radius;
-	}
-
-	public boolean isRadiusInMeters() {
-		return radiusInMeters;
-	}
-
-	public void setRadiusInMeters(boolean radiusInMeters) {
-		this.radiusInMeters = radiusInMeters;
-	}
-
-
 }

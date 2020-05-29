@@ -59,12 +59,10 @@ public class ConvexHullUtilities {
 			return Optional.empty();
 		}
 		
-		return Optional.of(
-			applyConvexHull ? convexHull2D(pts) : pts
-		);
+		return applyConvexHull ? convexHull2D(pts) : Optional.of(pts);
 	}
 
-	public static List<Point2i> convexHullFromAllOutlines( ObjMaskCollection objs, int minNumPnts ) throws CreateException {
+	public static Optional<List<Point2i>> convexHullFromAllOutlines( ObjMaskCollection objs, int minNumPnts ) throws CreateException {
 		
 		List<Point2i> pts = new ArrayList<>();
 			
@@ -73,17 +71,19 @@ public class ConvexHullUtilities {
 		}
 		
 		if (pts.size()<minNumPnts) {
-			return null;
+			return Optional.empty();
 		}
 		
-		return convexHull2D(pts);		
+		return convexHull2D(pts);
 	}
 	
 	// Gift wrap algorithm
-	public static List<Point2i> convexHull2D( List<Point2i> pntsIn ) {
+	public static Optional<List<Point2i>> convexHull2D( List<Point2i> pntsIn ) {
 		
 		if (pntsIn.size()==0) {
-			return new ArrayList<>();
+			return Optional.of(
+				new ArrayList<>()
+			);
 		}
 		
 		int xbase = 0;
@@ -134,7 +134,9 @@ public class ConvexHullUtilities {
 				n2++;
 			} else {
 				count++;
-				if (count>10) return null;
+				if (count>10) {
+					return Optional.empty();
+				}
 			}
 			
 			p1 = p2;
@@ -149,7 +151,7 @@ public class ConvexHullUtilities {
 			out.add( new Point2i(xx[i], yy[i]) );
 		}
 
-		return out;
+		return Optional.of(out);
 	}
 	
 	private static int calculateStartingIndex( List<Point2i> pntsIn ) {
@@ -174,11 +176,14 @@ public class ConvexHullUtilities {
 		}
 		return p1;
 	}
-	
-	
+		
 	public static void addPointsFromObjOutline( ObjMask obj, List<Point2i> pts) throws CreateException {
 		ObjMask outline = FindOutline.outline(obj, 1, true, false);
-		PointsFromBinaryVoxelBox.addPointsFromVoxelBox( outline.binaryVoxelBox(), outline.getBoundingBox().getCrnrMin(), pts );
+		PointsFromBinaryVoxelBox.addPointsFromVoxelBox(
+			outline.binaryVoxelBox(),
+			outline.getBoundingBox().getCrnrMin(),
+			pts
+		);
 	}
 	
 }

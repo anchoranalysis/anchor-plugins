@@ -1,5 +1,7 @@
 package ch.ethz.biol.cell.mpp.proposer.position;
 
+import java.util.Optional;
+
 import org.anchoranalysis.anchor.mpp.bean.init.MPPInitParams;
 
 /*-
@@ -37,16 +39,13 @@ import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 
 public class PositionProposerProbMap extends PositionProposerBean {
-
-	//private static Log log = LogFactory.getLog(PositionProposer.class);
-	//private boolean first = true;
 	
 	// BEAN PROPERTIES
 	@BeanField
 	private String probMapID = "";
 	// END BEAN PROPERTIES
 	
-	private ProbMap probMap = null;	
+	private ProbMap probMap;	
 	
 	@Override
 	public void onInit(MPPInitParams pso) throws InitException {
@@ -59,24 +58,8 @@ public class PositionProposerProbMap extends PositionProposerBean {
 	}
 	
 	@Override
-	public Point3d propose(ProposerContext context) {
-		
-		// TODO probMap can fail, be able to handle this circumstance
-		Point3d pnt = probMap.sample( context.getRe() );
-		
-		if (pnt==null) {
-			return null;
-		}
-		
-		assert( pnt.getX() >= 0 );
-		assert( pnt.getY() >= 0 );
-		assert( pnt.getZ() >= 0 );
-		
-		assert( pnt.getX() < context.getDimensions().getX() );
-		assert( pnt.getY() < context.getDimensions().getY() );
-		assert( pnt.getZ() < context.getDimensions().getZ() );
-		
-		return pnt;
+	public Optional<Point3d> propose(ProposerContext context) {
+		return probMap.sample( context.getRe() );
 	}
 
 	public String getProbMapID() {

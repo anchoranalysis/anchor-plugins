@@ -37,7 +37,7 @@ import org.anchoranalysis.image.chnl.Chnl;
 import org.anchoranalysis.image.convert.ByteConverter;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.histogram.Histogram;
-import org.anchoranalysis.image.histogram.HistogramFactoryUtilities;
+import org.anchoranalysis.image.histogram.HistogramFactory;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 
 // TODO consider using a generic histogram-feature and a FeatureCalculation to cache the histogram creation
@@ -52,7 +52,7 @@ public class ChnlProviderSuppressAbove extends ChnlProviderOneMask {
 	@Override
 	protected Chnl createFromMaskedChnl(Chnl chnl, BinaryChnl mask) throws CreateException {
 		
-		Histogram hist = HistogramFactoryUtilities.create(chnl, mask );
+		Histogram hist = HistogramFactory.create(chnl, mask );
 		
 		try {
 			double intensityThrshldDbl = hist.quantile(quantile);
@@ -72,7 +72,7 @@ public class ChnlProviderSuppressAbove extends ChnlProviderOneMask {
 	private static void replacePixelsAbove( int threshold, VoxelBox<ByteBuffer> vb ) {
 		byte meanIntensityByte = (byte) threshold;
 
-		Extent e = vb.extnt();
+		Extent e = vb.extent();
 		
 		for( int z=0; z<e.getZ(); z++) {
 			

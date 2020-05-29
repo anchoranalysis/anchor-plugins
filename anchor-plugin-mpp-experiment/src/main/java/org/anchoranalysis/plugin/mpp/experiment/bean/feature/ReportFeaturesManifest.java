@@ -30,6 +30,7 @@ package org.anchoranalysis.plugin.mpp.experiment.bean.feature;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Optional;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.log.LogErrorReporter;
@@ -37,6 +38,7 @@ import org.anchoranalysis.core.text.TypedValue;
 import org.anchoranalysis.experiment.JobExecutionException;
 import org.anchoranalysis.experiment.bean.task.TaskWithoutSharedState;
 import org.anchoranalysis.experiment.task.InputTypesExpected;
+import org.anchoranalysis.experiment.task.NoSharedState;
 import org.anchoranalysis.experiment.task.InputBound;
 import org.anchoranalysis.io.bean.report.feature.ReportFeature;
 import org.anchoranalysis.io.error.AnchorIOException;
@@ -60,13 +62,13 @@ public class ReportFeaturesManifest extends TaskWithoutSharedState<ManifestCoupl
 	}
 		
 	@Override
-	public void doJobOnInputObject(InputBound<ManifestCouplingDefinition,Object> params ) throws JobExecutionException {
+	public void doJobOnInputObject(InputBound<ManifestCouplingDefinition,NoSharedState> params ) throws JobExecutionException {
 		
 		LogErrorReporter logErrorReporter = params.getLogger();
 		ManifestCouplingDefinition input = params.getInputObject();
 		BoundOutputManagerRouteErrors outputManager = params.getOutputManager();
 		
-		CSVWriter writer;
+		Optional<CSVWriter> writer;
 		try {
 			writer = CSVWriter.createFromOutputManager("featureReport", outputManager.getDelegate());
 		} catch (AnchorIOException e1) {
@@ -75,13 +77,13 @@ public class ReportFeaturesManifest extends TaskWithoutSharedState<ManifestCoupl
 		
 		try {
 					
-			if (writer==null) {
+			if (!writer.isPresent()) {
 				return;
 			}
 			
-			List<String> headerNames = ReportFeatureUtilities.genHeaderNames( listReportFeatures, logErrorReporter );
-			
-			writer.writeHeaders( headerNames );
+			writer.get().writeHeaders(
+				ReportFeatureUtilities.genHeaderNames( listReportFeatures, logErrorReporter )
+			);
 
 			
 			Iterator<CoupledManifests> itr = input.iteratorCoupledManifests();
@@ -96,14 +98,14 @@ public class ReportFeaturesManifest extends TaskWithoutSharedState<ManifestCoupl
 				); 
 
 				try {
-					writer.writeRow( rowElements );
+					writer.get().writeRow( rowElements );
 				} catch (NumberFormatException e) {
 					throw new JobExecutionException(e);
 				}
 			}
 			
 		} finally {
-			writer.close();
+			writer.get().close();
 		}
 		
 	}

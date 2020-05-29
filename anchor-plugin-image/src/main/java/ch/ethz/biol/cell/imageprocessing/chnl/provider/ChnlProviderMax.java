@@ -32,7 +32,6 @@ import java.nio.ByteBuffer;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.chnl.Chnl;
 import org.anchoranalysis.image.chnl.factory.ChnlFactory;
-import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 import org.anchoranalysis.image.voxel.datatype.CombineTypes;
@@ -47,7 +46,7 @@ public class ChnlProviderMax extends ChnlProviderTwoVoxelMapping {
 		}
 		
 		VoxelDataType combinedType = CombineTypes.combineTypes(chnl1.getVoxelDataType(), chnl2.getVoxelDataType());
-		Chnl chnlOut = ChnlFactory.instance().createEmptyInitialised( new ImageDim(chnl1.getDimensions()), combinedType );
+		Chnl chnlOut = ChnlFactory.instance().createEmptyInitialised( chnl1.getDimensions(), combinedType );
 		
 		setMaxInOutputVoxelBox(
 			chnlOut.getVoxelBox().asByte(),
@@ -64,14 +63,14 @@ public class ChnlProviderMax extends ChnlProviderTwoVoxelMapping {
 	}
 	
 	private static void setMaxInOutputVoxelBox( VoxelBox<ByteBuffer> vbOut, VoxelBox<ByteBuffer> vbIn1, VoxelBox<ByteBuffer> vbIn2) {
-		for (int z=0; z<vbOut.extnt().getZ(); z++) {
+		int volumeXY = vbIn1.extent().getVolumeXY();
+		for (int z=0; z<vbOut.extent().getZ(); z++) {
 			
 			VoxelBuffer<?> in1 = vbIn1.getPixelsForPlane(z);
 			VoxelBuffer<?> in2 = vbIn2.getPixelsForPlane(z);
 			VoxelBuffer<?> out = vbOut.getPixelsForPlane(z);
 			
-			int totalPixels = vbIn1.extnt().getVolumeXY();
-			for (int offset=0; offset<totalPixels; offset++) {
+			for (int offset=0; offset<volumeXY; offset++) {
 				
 				int val1 = in1.getInt(offset);
 				int val2 = in2.getInt(offset);

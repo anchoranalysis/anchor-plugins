@@ -28,6 +28,7 @@ package org.anchoranalysis.plugin.image.task.sharedstate;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.text.TypedValue;
@@ -38,7 +39,7 @@ import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
 
 public class SharedStateSelectedSlice {
 
-	private FeatureCSVWriter csvWriter;
+	private Optional<FeatureCSVWriter> csvWriter;
 	
 	public SharedStateSelectedSlice(BoundOutputManagerRouteErrors baseOutputManager) throws CreateException {
 		super();
@@ -60,7 +61,9 @@ public class SharedStateSelectedSlice {
 		row.add( new TypedValue(name) );
 		row.add( new TypedValue(selectedSliceIndex) );
 		row.add( new TypedValue(featureOptima, 7) );
-		this.csvWriter.addRow(row);
+		this.csvWriter.ifPresent( writer->
+			writer.addRow(row)
+		);
 	}
 	
 	private static FeatureNameList createFeatureNames() {
@@ -71,7 +74,7 @@ public class SharedStateSelectedSlice {
 	}
 
 	public void close() {
-		csvWriter.close();
+		csvWriter.ifPresent( FeatureCSVWriter::close );
 	}
 	
 }

@@ -68,6 +68,6 @@ class WrappedImageDim implements Comparable<WrappedImageDim> {
 	@Override
 	public int compareTo(WrappedImageDim othr) {
 		// Order by volume, smaller first
-		return Integer.compare(dim.getVolume(), othr.dim.getVolume() );
+		return Long.compare(dim.getVolume(), othr.dim.getVolume() );
 	}
 }

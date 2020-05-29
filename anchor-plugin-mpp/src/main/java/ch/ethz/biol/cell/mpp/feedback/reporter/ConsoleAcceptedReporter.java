@@ -1,5 +1,7 @@
 package ch.ethz.biol.cell.mpp.feedback.reporter;
 
+import java.util.Optional;
+
 /*-
  * #%L
  * anchor-plugin-mpp
@@ -40,14 +42,6 @@ import org.anchoranalysis.mpp.sgmn.optscheme.step.Reporting;
 
 public class ConsoleAcceptedReporter extends ReporterOptimizationStep<CfgNRGPixelized> {
 
-	// START BEAN PARAMETERS
-	// END BEAN PARAMETERS
-	
-	
-	//private OptimizationStep lastOptimizationStep;
-	
-	//private static Log log = LogFactory.getLog(ConsoleAcceptedReporter.class);
-	
 	private LogErrorReporter logger;
 	
 	public ConsoleAcceptedReporter() {
@@ -67,27 +61,25 @@ public class ConsoleAcceptedReporter extends ReporterOptimizationStep<CfgNRGPixe
 			logger.getLogReporter().logFormatted(
 				"itr=%5d  size=%3d  nrg=%e  best_nrg=%e   kernel=%s",
 				reporting.getIter(),
-				extractStatInt(reporting.getCfgNRGAfter(), a->a.getCfg().size() ),
-				extractStatDbl(reporting.getCfgNRGAfter(), a->a.getNrgTotal() ),
+				extractStatInt(reporting.getCfgNRGAfterOptional(), a->a.getCfg().size() ),
+				extractStatDbl(reporting.getCfgNRGAfterOptional(), a->a.getNrgTotal() ),
 				extractStatDbl(reporting.getBest(), a->a.getNrgTotal() ),
 				reporting.getKernel().getDescription()
 			);
 		}
-		//lastOptimizationStep = optStep;
 	}
 	
-	/* Only extract a stat if non-null */
-	private static double extractStatDbl( CfgNRGPixelized cfgNRG, Function<CfgNRG,Double> func ) {
-		if (cfgNRG!= null) {
-			return func.apply( cfgNRG.getCfgNRG() );
+	private static double extractStatDbl( Optional<CfgNRGPixelized> cfgNRG, Function<CfgNRG,Double> func ) {
+		if (cfgNRG.isPresent()) {
+			return func.apply( cfgNRG.get().getCfgNRG() );
 		} else {
 			return Double.NaN;
 		}
 	}
 	
-	private static int extractStatInt( CfgNRGPixelized cfgNRG, Function<CfgNRG,Integer> func ) {
-		if (cfgNRG!= null) {
-			return func.apply( cfgNRG.getCfgNRG() );
+	private static int extractStatInt( Optional<CfgNRGPixelized> cfgNRG, Function<CfgNRG,Integer> func ) {
+		if (cfgNRG.isPresent()) {
+			return func.apply( cfgNRG.get().getCfgNRG() );
 		} else {
 			return Integer.MIN_VALUE;
 		}
@@ -95,12 +87,11 @@ public class ConsoleAcceptedReporter extends ReporterOptimizationStep<CfgNRGPixe
 
 	@Override
 	public void reportEnd(OptimizationFeedbackEndParams<CfgNRGPixelized> optStep) {
-		
+		// NOTHING TO DO
 	}	
 
 	@Override
 	public void reportNewBest(Reporting<CfgNRGPixelized> reporting) {
-		
+		// NOTHING TO DO
 	}
-
 }

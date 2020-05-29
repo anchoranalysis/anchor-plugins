@@ -1,5 +1,7 @@
 package org.anchoranalysis.plugin.annotation.bean.comparison;
 
+import java.util.Optional;
+
 /*
  * #%L
  * anchor-annotation
@@ -34,6 +36,7 @@ import org.anchoranalysis.annotation.io.assignment.generator.ColorPool;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.functional.OptionalUtilities;
 import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 import org.anchoranalysis.core.progress.ProgressReporterNull;
@@ -126,7 +129,7 @@ public class AnnotationComparisonTask<T extends Assignment> extends Task<Annotat
 		SplitString descriptiveSplit = createSplitString(input);  
 		
 		// Now do whatever comparison is necessary to update the assignment
-		Assignment assignment = compareAndUpdate(
+		Optional<Assignment> assignment = compareAndUpdate(
 			input,
 			background,
 			descriptiveSplit,
@@ -135,18 +138,18 @@ public class AnnotationComparisonTask<T extends Assignment> extends Task<Annotat
 		);
 		
 		
-		if (assignment==null) {
+		if (!assignment.isPresent()) {
 			return;
 		}
 
 		try {
-			writeRGBOutlineStack("rgbOutline", params.getOutputManager(), input, assignment, background);
+			writeRGBOutlineStack("rgbOutline", params.getOutputManager(), input, assignment.get(), background);
 		} catch (OperationFailedException e) {
 			logErrorReporter.getErrorReporter().recordError(AnnotationComparisonTask.class, e);
 		}
 	}
 	
-	private Assignment compareAndUpdate(
+	private Optional<Assignment> compareAndUpdate(
 		AnnotationComparisonInput<ProvidesStackInput> input,
 		DisplayStack background,
 		SplitString descriptiveSplit,
@@ -160,25 +163,23 @@ public class AnnotationComparisonTask<T extends Assignment> extends Task<Annotat
 			descriptiveSplit
 		);
 		
-		ObjsToCompare objs = ObjsToCompareFactory.create(
+		Optional<ObjsToCompare> objs = ObjsToCompareFactory.create(
 			input,
 			addAnnotation,
 			background.getDimensions(),
 			context
 		);
-		
-		if (objs==null) {
-			return null;
-		}
-		
-		return processAcceptedAnnotation(
-			input,
-			background,
-			objs,			
-			addAnnotation,
-			sharedState,
-			descriptiveSplit,
-			context
+		return OptionalUtilities.map(
+			objs,
+			objCollection-> processAcceptedAnnotation(
+				input,
+				background,
+				objCollection,			
+				addAnnotation,
+				sharedState,
+				descriptiveSplit,
+				context
+			)
 		);
 	}
 	
@@ -239,7 +240,7 @@ public class AnnotationComparisonTask<T extends Assignment> extends Task<Annotat
 				
 			return assignment;
 			
-		} catch (CreateException e) {
+		} catch (CreateException | OperationFailedException e) {
 			throw new JobExecutionException(e);
 		}
 	}

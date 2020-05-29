@@ -32,8 +32,6 @@ import java.nio.ByteBuffer;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.geometry.Point3d;
-import org.anchoranalysis.image.bean.provider.ChnlProviderOne;
-import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
 import org.anchoranalysis.image.bean.threshold.CalculateLevel;
 import org.anchoranalysis.image.chnl.Chnl;
 import org.anchoranalysis.image.chnl.factory.ChnlFactory;
@@ -47,18 +45,33 @@ import ch.ethz.biol.cell.imageprocessing.chnl.provider.level.LevelResult;
 import ch.ethz.biol.cell.imageprocessing.chnl.provider.level.LevelResultCollection;
 import ch.ethz.biol.cell.imageprocessing.chnl.provider.level.LevelResultCollectionFactory;
 
-public class ChnlProviderConnectedComponentScore extends ChnlProviderOne {
+public class ChnlProviderConnectedComponentScore extends ChnlProviderOneObjsSource {
 	
 	// START BEAN PROPERTIES
-	@BeanField
-	private ObjMaskProvider objsMask;
-	
 	@BeanField
 	private CalculateLevel calculateLevel;
 	
 	@BeanField
 	private int intensityTolerance= 0;
 	// END BEAN PROPERTIES
+	
+	@Override
+	protected Chnl createFromChnl(Chnl chnl, ObjMaskCollection objsSource) throws CreateException {
+	
+		LevelResultCollection lrc = LevelResultCollectionFactory.createCollection(
+			chnl,
+			objsSource,
+			calculateLevel,
+			0,
+			getLogger().getLogReporter()
+		);
+		
+		Chnl chnlOut = ChnlFactory.instance().createEmptyInitialised( chnl.getDimensions(), VoxelDataTypeUnsignedByte.instance );
+		
+		populateChnl( chnl, chnlOut, lrc );
+
+		return chnlOut;
+	}
 
 	private int calcOutValue( int pixelVal, int level ) {
 		
@@ -91,9 +104,9 @@ public class ChnlProviderConnectedComponentScore extends ChnlProviderOne {
 		VoxelBox<ByteBuffer> vbIn = regionIn.getVoxelBox().asByte();
 		VoxelBox<ByteBuffer> vbOut = regionOut.getVoxelBox().asByte();
 		
-		assert( vbIn.extnt().equals(vbOut.extnt()) );
+		assert( vbIn.extent().equals(vbOut.extent()) );
 		
-		Extent e = vbIn.extnt();
+		Extent e = vbIn.extent();
 		
 		Point3d pnt = new Point3d();
 		
@@ -125,21 +138,6 @@ public class ChnlProviderConnectedComponentScore extends ChnlProviderOne {
 		}
 	}
 	
-	
-	@Override
-	public Chnl createFromChnl( Chnl chnl ) throws CreateException {
-
-		ObjMaskCollection objsMaskCollection = objsMask.create();
-	
-		LevelResultCollection lrc= LevelResultCollectionFactory.createCollection( chnl, objsMaskCollection, calculateLevel, 0, getLogger() );
-		
-		Chnl chnlOut = ChnlFactory.instance().createEmptyInitialised( chnl.getDimensions(), VoxelDataTypeUnsignedByte.instance );
-		
-		populateChnl( chnl, chnlOut, lrc );
-
-		return chnlOut;
-	}
-
 	public CalculateLevel getCalculateLevel() {
 		return calculateLevel;
 	}
@@ -154,13 +152,5 @@ public class ChnlProviderConnectedComponentScore extends ChnlProviderOne {
 
 	public void setIntensityTolerance(int intensityTolerance) {
 		this.intensityTolerance = intensityTolerance;
-	}
-
-	public ObjMaskProvider getObjsMask() {
-		return objsMask;
-	}
-
-	public void setObjsMask(ObjMaskProvider objsMask) {
-		this.objsMask = objsMask;
 	}
 }
