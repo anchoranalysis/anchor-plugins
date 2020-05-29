@@ -28,7 +28,6 @@ package anchor.plugin.ij.task;
 
 
 import java.nio.ByteBuffer;
-
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
@@ -83,9 +82,13 @@ public class BackgroundSubtractShortTask extends RasterTask {
 		try {
 			NamedChnlCollectionForSeries ncc = inputObject.createChnlCollectionForSeries(0, progressReporter );
 			
-			Chnl inputImage = ncc.getChnlOrNull(ImgStackIdentifiers.INPUT_IMAGE, 0, progressReporter);
+			Chnl inputImage = ncc.getChnl(ImgStackIdentifiers.INPUT_IMAGE, 0, progressReporter);
 			
-			Chnl bgSubOut = ChnlProviderIJBackgroundSubtractor.subtractBackground(inputImage, radius, false );
+			Chnl bgSubOut = ChnlProviderIJBackgroundSubtractor.subtractBackground(
+				inputImage,
+				radius,
+				false
+			);
 			VoxelBox<?> vbSubOut = bgSubOut.getVoxelBox().any();
 			
 			double maxPixel = vbSubOut.ceilOfMaxPixel();

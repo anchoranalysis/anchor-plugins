@@ -1,5 +1,7 @@
 package org.anchoranalysis.plugin.mpp.bean.proposer.fromcfg;
 
+import java.util.Optional;
+
 import org.anchoranalysis.anchor.mpp.bean.proposer.MarkFromCfgProposer;
 import org.anchoranalysis.anchor.mpp.cfg.Cfg;
 import org.anchoranalysis.anchor.mpp.feature.bean.mark.CheckMark;
@@ -49,20 +51,24 @@ public class Check extends MarkFromCfgProposer {
 	// END BEANS
 		
 	@Override
-	public Mark	markFromCfg( Cfg cfg, ProposerContext context) throws ProposalAbnormalFailureException {
+	public Optional<Mark> markFromCfg( Cfg cfg, ProposerContext context) throws ProposalAbnormalFailureException {
 
-		Mark mark = markFromCfgProposer.markFromCfg(cfg, context);
+		Optional<Mark> mark = markFromCfgProposer.markFromCfg(cfg, context);
+		
+		if (!mark.isPresent()) {
+			return mark;
+		}
 		
 		try {
 			checkMark.start( context.getNrgStack() );
 		} catch (OperationFailedException e) {
 			// Serious error
 			context.getErrorNode().add(e);
-			return null;
+			return Optional.empty();
 		}
 		
 		try {
-			if (checkMark.check(mark, context.getRegionMap(), context.getNrgStack() )) {
+			if (checkMark.check(mark.get(), context.getRegionMap(), context.getNrgStack() )) {
 			
 				checkMark.end();
 				
@@ -70,7 +76,7 @@ public class Check extends MarkFromCfgProposer {
 				return mark;
 			} else {
 				checkMark.end();
-				return null;
+				return Optional.empty();
 			}
 		} catch (CheckException e) {
 			checkMark.end();

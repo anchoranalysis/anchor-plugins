@@ -1,5 +1,7 @@
 package org.anchoranalysis.plugin.mpp.sgmn.cfg.bean.kernel.independent;
 
+import java.util.Optional;
+
 import org.anchoranalysis.anchor.mpp.feature.mark.ListUpdatableMarkSetCollection;
 import org.anchoranalysis.anchor.mpp.mark.set.UpdateMarkSetException;
 
@@ -30,6 +32,7 @@ import org.anchoranalysis.anchor.mpp.mark.set.UpdateMarkSetException;
  */
 
 import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.core.functional.OptionalUtilities;
 import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.mpp.sgmn.bean.kernel.Kernel;
 import org.anchoranalysis.mpp.sgmn.bean.kernel.KernelPosNeg;
@@ -46,7 +49,7 @@ public abstract class KernelReplace<T> extends KernelPosNeg<T> {
 	private KernelBirth<T> kernelBirth;
 	private KernelDeath<T> kernelDeath;
 	
-	private T afterDeathProp;
+	private Optional<T> afterDeathProp;
 	
 	// START BEAN PROPERTIES
 	@BeanField
@@ -68,15 +71,13 @@ public abstract class KernelReplace<T> extends KernelPosNeg<T> {
 
 	
 	@Override
-	public T makeProposal(T exst, KernelCalcContext context) throws KernelCalcNRGException {
+	public Optional<T> makeProposal(T exst, KernelCalcContext context) throws KernelCalcNRGException {
 
 		afterDeathProp = kernelDeath.makeProposal(exst, context);
-		
-		if (afterDeathProp==null) {
-			return null;
-		}
-		
-		return kernelBirth.makeProposal(afterDeathProp, context);
+		return OptionalUtilities.flatMap(
+			afterDeathProp,
+			prop -> kernelBirth.makeProposal(prop, context)
+		);
 	}
 
 	@Override
@@ -94,8 +95,13 @@ public abstract class KernelReplace<T> extends KernelPosNeg<T> {
 	public void updateAfterAccpt(ListUpdatableMarkSetCollection updatableMarkSetCollection, T nrgExst, T nrgNew)
 			throws UpdateMarkSetException {
 
-		kernelDeath.updateAfterAccpt(updatableMarkSetCollection, nrgExst, afterDeathProp);
-		kernelBirth.updateAfterAccpt(updatableMarkSetCollection, afterDeathProp, nrgNew);
+		OptionalUtilities.ifPresent(
+			afterDeathProp,
+			prop -> {
+				kernelDeath.updateAfterAccpt(updatableMarkSetCollection, nrgExst, prop);
+				kernelBirth.updateAfterAccpt(updatableMarkSetCollection, prop, nrgNew);
+			}
+		);
 	}
 
 	@Override

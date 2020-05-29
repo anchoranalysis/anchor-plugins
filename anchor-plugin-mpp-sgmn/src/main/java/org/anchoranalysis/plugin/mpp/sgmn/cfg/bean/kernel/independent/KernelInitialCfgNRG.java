@@ -1,5 +1,7 @@
 package org.anchoranalysis.plugin.mpp.sgmn.cfg.bean.kernel.independent;
 
+import java.util.Optional;
+
 import org.anchoranalysis.anchor.mpp.bean.cfg.CfgGen;
 import org.anchoranalysis.anchor.mpp.bean.proposer.CfgProposer;
 import org.anchoranalysis.anchor.mpp.cfg.Cfg;
@@ -40,6 +42,7 @@ import org.anchoranalysis.anchor.mpp.proposer.ProposerContext;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
+import org.anchoranalysis.core.functional.OptionalUtilities;
 import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.mpp.sgmn.bean.kernel.KernelIndependent;
 import org.anchoranalysis.mpp.sgmn.kernel.KernelCalcContext;
@@ -58,10 +61,7 @@ public class KernelInitialCfgNRG extends KernelIndependent<CfgNRGPixelized> {
 	private CfgProposer cfgProposer;
 	// END BEAN LIST
 	
-	private Cfg lastCfg;
-	
-	public KernelInitialCfgNRG() {
-	}
+	private Optional<Cfg> lastCfg;
 
 	@Override
 	public boolean isCompatibleWith(Mark testMark) {
@@ -69,25 +69,28 @@ public class KernelInitialCfgNRG extends KernelIndependent<CfgNRGPixelized> {
 	}
 
 	@Override
-	public CfgNRGPixelized makeProposal(CfgNRGPixelized exst, KernelCalcContext context ) throws KernelCalcNRGException {
+	public Optional<CfgNRGPixelized> makeProposal(CfgNRGPixelized exst, KernelCalcContext context ) throws KernelCalcNRGException {
 	
 		ProposerContext propContext = context.proposer();
 		
 		// We don't expect an existing exsting CfgNRG, but rather null (or whatever)
 		
 		// Initial cfg
-		Cfg cfg = proposeCfg( context.cfgGen().getCfgGen(), propContext );
+		Optional<Cfg> cfg = proposeCfg( context.cfgGen().getCfgGen(), propContext );
 		
 		this.lastCfg = cfg;
-		
+
 		try {
-			return CfgNRGPixelizedUtilities.createFromCfg( cfg, context, getLogger() );
+			return OptionalUtilities.map(
+				cfg,
+				c -> CfgNRGPixelizedUtilities.createFromCfg(c, context, getLogger())
+			);
 		} catch (CreateException e) {
 			throw new KernelCalcNRGException("Cannot create CfgNRGPixelized", e);
 		}
 	}
 	
-	private Cfg proposeCfg( CfgGen cfgGen, ProposerContext propContext ) throws KernelCalcNRGException {
+	private Optional<Cfg> proposeCfg( CfgGen cfgGen, ProposerContext propContext ) throws KernelCalcNRGException {
 		try {
 			return cfgProposer.propose( cfgGen, propContext );
 		} catch (ProposalAbnormalFailureException e) {
@@ -107,7 +110,10 @@ public class KernelInitialCfgNRG extends KernelIndependent<CfgNRGPixelized> {
 
 	@Override
 	public String dscrLast() {
-		return String.format("initialCfg(size=%d)", this.lastCfg.size());
+		return String.format(
+			"initialCfg(size=%d)",
+			this.lastCfg.map(Cfg::size).orElse(-1)
+		);
 	}
 
 	@Override
@@ -117,7 +123,7 @@ public class KernelInitialCfgNRG extends KernelIndependent<CfgNRGPixelized> {
 
 	@Override
 	public int[] changedMarkIDArray() {
-		return this.lastCfg.createIdArr();
+		return this.lastCfg.map(Cfg::createIdArr).orElse( new int[]{} );
 	}
 
 	public CfgProposer getCfgProposer() {

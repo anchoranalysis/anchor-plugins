@@ -2,6 +2,8 @@ package org.anchoranalysis.plugin.mpp.sgmn.cfg.bean.optscheme;
 
 
 
+import java.util.Optional;
+
 import org.anchoranalysis.anchor.mpp.feature.mark.ListUpdatableMarkSetCollection;
 
 /*
@@ -79,15 +81,15 @@ public class OptSchemeUnifPerm<S> extends OptScheme<S,S> {
 			kernelProposer.initBeforeCalc(context);
 			
 			for( int i=0; i<this.numItr; i++) {
-				S cfgNRG = kernelProposer.getInitialKernel().makeProposal(null, context);
+				Optional<S> cfgNRG = kernelProposer.getInitialKernel().makeProposal(null, context);
 				
-				if (cfgNRG==null) {
+				if (!cfgNRG.isPresent()) {
 					continue;
 				}
 				
 				// We find the maximum
-				if( best==null || extractScore(cfgNRG) > extractScore(best) ) {
-					best = cfgNRG;
+				if( best==null || extractScore(cfgNRG.get()) > extractScore(best) ) {
+					best = cfgNRG.get();
 				}
 			}
 		} catch (KernelCalcNRGException | InitException e) {

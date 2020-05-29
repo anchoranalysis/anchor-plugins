@@ -1,5 +1,7 @@
 package ch.ethz.biol.cell.mpp.cfg.proposer;
 
+import java.util.Optional;
+
 import org.anchoranalysis.anchor.mpp.bean.cfg.CfgGen;
 import org.anchoranalysis.anchor.mpp.bean.proposer.CfgProposer;
 import org.anchoranalysis.anchor.mpp.cfg.Cfg;
@@ -74,8 +76,7 @@ public class CfgProposerFromObjMaskCollection extends CfgProposer {
 	}
 	
 	@Override
-	public Cfg propose(CfgGen cfgGen, ProposerContext context) throws ProposalAbnormalFailureException {
-
+	public Optional<Cfg> propose(CfgGen cfgGen, ProposerContext context) throws ProposalAbnormalFailureException {
 
 		ObjMaskCollection objsCollection;
 		try {
@@ -112,7 +113,7 @@ public class CfgProposerFromObjMaskCollection extends CfgProposer {
 				checkMark.end();
 			}
 			
-			return cfg;
+			return Optional.of(cfg);
 			
 		} catch (CreateException e) {
 			throw new ProposalAbnormalFailureException("Failed to create a mark from the obj-mask", e);
