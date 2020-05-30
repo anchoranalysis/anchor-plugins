@@ -38,6 +38,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.io.bean.filepath.prefixer.FilePathPrefixer;
 import org.anchoranalysis.io.bean.filepath.prefixer.PathWithDescription;
 import org.anchoranalysis.io.error.AnchorIOException;
+import org.anchoranalysis.io.error.FilePathPrefixerException;
 import org.anchoranalysis.io.filepath.prefixer.FilePathPrefix;
 import org.anchoranalysis.io.filepath.prefixer.FilePathPrefixerParams;
 
@@ -73,13 +74,12 @@ public abstract class FilePathPrefixerAvoidResolve extends FilePathPrefixer {
 	}
 	
 	@Override
-	public FilePathPrefix rootFolderPrefix(String expName, FilePathPrefixerParams context) throws AnchorIOException {
+	public FilePathPrefix rootFolderPrefix(String expName, FilePathPrefixerParams context) throws FilePathPrefixerException {
 		return new FilePathPrefix( resolveExperimentAbsoluteRootOut(expName, context) );
 	}
 	
 	@Override
-	public FilePathPrefix outFilePrefix(PathWithDescription input, String expName, FilePathPrefixerParams context)
-			throws AnchorIOException {
+	public FilePathPrefix outFilePrefix(PathWithDescription input, String expName, FilePathPrefixerParams context) throws FilePathPrefixerException {
 
 		Path root = resolveExperimentAbsoluteRootOut(expName, context);
 		return outFilePrefixFromPath(input, root);
@@ -107,7 +107,7 @@ public abstract class FilePathPrefixerAvoidResolve extends FilePathPrefixer {
 	 * @return a prefixer
 	 * @throws AnchorIOException TODO
 	 */
-	public FilePathPrefix outFilePrefixAvoidResolve( PathWithDescription input, String experimentIdentifier ) throws AnchorIOException {
+	public FilePathPrefix outFilePrefixAvoidResolve( PathWithDescription input, String experimentIdentifier ) throws FilePathPrefixerException {
 		return outFilePrefixFromPath(
 			input,
 			rootFolderPrefixAvoidResolve(experimentIdentifier).getFolderPath()
@@ -123,7 +123,7 @@ public abstract class FilePathPrefixerAvoidResolve extends FilePathPrefixer {
 	 * @return folder/filename for prefixing
 	 * @throws AnchorIOException
 	 */
-	protected abstract FilePathPrefix outFilePrefixFromPath(PathWithDescription input, Path root ) throws AnchorIOException;
+	protected abstract FilePathPrefix outFilePrefixFromPath(PathWithDescription input, Path root ) throws FilePathPrefixerException;
 	
 	/** The root of the experiment for outputting files */
 	private Path resolveExperimentAbsoluteRootOut( String expName, FilePathPrefixerParams context ) {
@@ -138,9 +138,9 @@ public abstract class FilePathPrefixerAvoidResolve extends FilePathPrefixer {
 		
 		if (outPathPrefix.isEmpty()) {
 			// If there's an outPathPrefix specified, then use it
-			if (context.getOutputDirectory()!=null) {
-				assert( context.getOutputDirectory().isAbsolute() );
-				return context.getOutputDirectory();
+			if (context.getOutputDirectory().isPresent()) {
+				assert( context.getOutputDirectory().get().isAbsolute() );
+				return context.getOutputDirectory().get();
 			} else {
 				// Otherwise use the system temporary directory
 				return tempDir();

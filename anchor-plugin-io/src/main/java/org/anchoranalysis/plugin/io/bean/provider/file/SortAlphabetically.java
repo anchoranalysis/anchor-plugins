@@ -32,7 +32,7 @@ import java.util.Collection;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.io.bean.input.InputManagerParams;
 import org.anchoranalysis.io.bean.provider.file.FileProvider;
-import org.anchoranalysis.io.error.AnchorIOException;
+import org.anchoranalysis.io.error.FileProviderException;
 
 public class SortAlphabetically extends FileProvider {
 
@@ -42,9 +42,9 @@ public class SortAlphabetically extends FileProvider {
 	// END BEAN PROPERTIES
 	
 	@Override
-	public Collection<File> matchingFiles(InputManagerParams params) throws AnchorIOException {
+	public Collection<File> create(InputManagerParams params) throws FileProviderException {
 		return SortUtilities.sortFiles(
-			fileProvider.matchingFiles(params)
+			fileProvider.create(params)
 		);
 	}
 

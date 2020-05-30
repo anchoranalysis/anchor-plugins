@@ -54,8 +54,7 @@ public class MarkMergeProposerReference extends MarkMergeProposer {
 			delegate = getSharedObjects().getMarkMergeProposerSet().getException(id);
 		} catch (NamedProviderGetException e) {
 			throw new InitException(
-				String.format("Cannot find referenced markSplitProposer '%s'", id),
-				e.summarize()
+				String.format("Cannot find referenced markSplitProposer '%s': %s", id, e.summarize().toString() )
 			);
 		}
 	}

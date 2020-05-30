@@ -41,6 +41,7 @@ import org.anchoranalysis.io.bean.filepath.generator.FilePathGenerator;
 import org.anchoranalysis.io.bean.input.InputManagerParams;
 import org.anchoranalysis.io.bean.provider.file.FileProvider;
 import org.anchoranalysis.io.error.AnchorIOException;
+import org.anchoranalysis.io.error.FileProviderException;
 
 public class FilterForAcceptedAnnotations extends FileProvider {
 
@@ -55,22 +56,24 @@ public class FilterForAcceptedAnnotations extends FileProvider {
 	private MarkAnnotationReader annotationReader = new MarkAnnotationReader(false);
 	
 	@Override
-	public Collection<File> matchingFiles(InputManagerParams params)
-			throws AnchorIOException {
-		
-		Collection<File> filesIn = fileProvider.matchingFiles(params);
-		
-		List<File> filesOut = new ArrayList<>();
-		
-		for( File f : filesIn ) {
+	public Collection<File> create(InputManagerParams params) throws FileProviderException {
+		try {
+			Collection<File> filesIn = fileProvider.create(params);
 			
-			if (isFileAccepted(f)) {
-				filesOut.add(f);
+			List<File> filesOut = new ArrayList<>();
+			
+			for( File f : filesIn ) {
+				
+				if (isFileAccepted(f)) {
+					filesOut.add(f);
+				}
+				
 			}
 			
+			return filesOut;
+		} catch (AnchorIOException e) {
+			throw new FileProviderException(e);
 		}
-		
-		return filesOut;
 	}
 
 	public List<FilePathGenerator> getListFilePathGenerator() {
