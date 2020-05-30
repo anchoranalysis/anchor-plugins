@@ -27,12 +27,12 @@ package org.anchoranalysis.plugin.mpp.experiment.objs.csv;
  */
 
 
-import java.io.IOException;
 import java.util.Set;
 
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.io.csv.reader.CSVReaderByLine.ReadByLine;
+import org.anchoranalysis.io.csv.reader.CSVReaderException;
 import org.anchoranalysis.plugin.mpp.experiment.bean.objs.columndefinition.ColumnDefinition;
 
 /**
@@ -60,13 +60,13 @@ public class IndexedCSVRows {
 			columnDefinition.initHeaders(headers);
 			
 			processLines(csvFile, columnDefinition );
-		} catch (IOException | InitException e) {
+		} catch (CSVReaderException | InitException e) {
 			throw new CreateException(e);
 		}
 
 	}
 	
-	private void processLines( ReadByLine csvFile, ColumnDefinition columnDefinition ) throws IOException {
+	private void processLines( ReadByLine csvFile, ColumnDefinition columnDefinition ) throws CSVReaderException {
 		
 		csvFile.read(
 			(line, firstLine) -> {

@@ -30,7 +30,6 @@ import org.anchoranalysis.anchor.plugin.quick.bean.filepath.FilePathGeneratorCol
 import org.anchoranalysis.anchor.plugin.quick.bean.filepath.FilePathGeneratorRemoveTrailingDir;
 import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.bean.NamedBean;
-import org.anchoranalysis.bean.annotation.AllowEmpty;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.error.BeanMisconfiguredException;
 import org.anchoranalysis.io.bean.filepath.generator.FilePathGenerator;
@@ -59,10 +58,6 @@ public abstract class FilePathAppendBase extends AnchorBean<FilePathAppendBase> 
 	@BeanField
 	private int skipFirstTrim = 0;
 	
-	// If non-empty, it overrides the dataset in the regular-expression
-	@BeanField @AllowEmpty
-	private String dataset = "";
-	
 	// Do not include the file-name
 	@BeanField
 	private boolean skipFileName = false;
@@ -90,22 +85,21 @@ public abstract class FilePathAppendBase extends AnchorBean<FilePathAppendBase> 
 	}
 	
 	private String firstPartWithCustomEnd( String end) {
-		if (!dataset.isEmpty()) {
-			return String.format(
-				"experiments/$1/%s/%s%s%s",
-				getExperimentType(),
-				dataset,
-				getDatasetSuffix(),
-				end
-			);
-		} else {
-			return String.format(
-				"experiments/$1/%s/$2%s%s",
-				getExperimentType(),
-				getDatasetSuffix(),
-				end
-			);
-		}
+		return String.format(
+			"experiments/$1/%s/$2%s%s",
+			getExperimentType(),
+			getDatasetSuffix(),
+			end
+		);
+	}
+
+	protected String firstPartWithCustomMiddle(String middle) {
+		return String.format(
+			"$1/experiments/%s/$2%s%s/$2",
+			getExperimentType(),
+			getDatasetSuffix(),
+			middle
+		);
 	}
 	
 	
@@ -201,14 +195,6 @@ public abstract class FilePathAppendBase extends AnchorBean<FilePathAppendBase> 
 
 	public void setTrimTrailingDirectory(int trimTrailingDirectory) {
 		this.trimTrailingDirectory = trimTrailingDirectory;
-	}
-
-	public String getDataset() {
-		return dataset;
-	}
-
-	public void setDataset(String dataset) {
-		this.dataset = dataset;
 	}
 
 	public int getSkipFirstTrim() {

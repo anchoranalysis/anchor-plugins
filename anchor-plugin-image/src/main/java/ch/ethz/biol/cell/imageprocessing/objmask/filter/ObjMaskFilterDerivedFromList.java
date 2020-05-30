@@ -1,5 +1,6 @@
 package ch.ethz.biol.cell.imageprocessing.objmask.filter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /*-
@@ -30,7 +31,6 @@ import java.util.List;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.image.bean.objmask.filter.ObjMaskFilter;
-import org.anchoranalysis.image.bean.objmask.filter.ObjMaskFilterList;
 
 
 /**
@@ -44,18 +44,17 @@ public abstract class ObjMaskFilterDerivedFromList extends ObjMaskFilter {
 	// START BEAN PROPERTIES
 	/** A list of other filters from which the sub-classes implement filtering behaviour. */
 	@BeanField
-	private ObjMaskFilterList list;
+	private List<ObjMaskFilter> list = new ArrayList<>();
 	// END BEAN PROPERTIES
-	
-	protected List<ObjMaskFilter> list() {
-		return list.getList();
-	}
-	
-	public ObjMaskFilterList getList() {
+
+	public List<ObjMaskFilter> getList() {
 		return list;
 	}
 
-	public void setList(ObjMaskFilterList list) {
+	public void setList(List<ObjMaskFilter> list) {
 		this.list = list;
 	}
+	
+	
+
 }

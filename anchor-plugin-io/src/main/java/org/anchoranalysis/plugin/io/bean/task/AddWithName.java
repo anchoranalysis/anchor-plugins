@@ -28,13 +28,13 @@ package org.anchoranalysis.plugin.io.bean.task;
 
 import static org.anchoranalysis.plugin.io.bean.task.TypedValueUtilities.*;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.text.TypedValue;
 import org.anchoranalysis.io.csv.reader.CSVReaderByLine.ReadByLine;
+import org.anchoranalysis.io.csv.reader.CSVReaderException;
 import org.anchoranalysis.io.output.csv.CSVWriter;
 
 class AddWithName {
@@ -50,14 +50,14 @@ class AddWithName {
 		this.name = name;
 	}
 	
-	public void addNonTransposed( ReadByLine readByLine ) throws IOException {
+	public void addNonTransposed( ReadByLine readByLine ) throws CSVReaderException {
 		
 		readByLine.read(
 			(line, firstLine) -> addNonTransposedLine(line, firstLine)
 		);
 	}
 	
-	public void addTransposed( ReadByLine readByLine ) throws IOException {
+	public void addTransposed( ReadByLine readByLine ) throws CSVReaderException {
 		
 		List<String[]> rows = readRowsFromCSV(readByLine);
 		
@@ -84,7 +84,7 @@ class AddWithName {
 			}
 			
 		} catch (OperationFailedException e) {
-			throw new IOException(e);
+			throw new CSVReaderException(e);
 		}
 	}
 	
@@ -117,7 +117,7 @@ class AddWithName {
 		writer.writeRow( list );
 	}
 
-	private static List<String[]> readRowsFromCSV( ReadByLine readByLine ) throws IOException {
+	private static List<String[]> readRowsFromCSV( ReadByLine readByLine ) throws CSVReaderException {
 		List<String[]> rows = new ArrayList<>(); 
 		
 		readByLine.read(

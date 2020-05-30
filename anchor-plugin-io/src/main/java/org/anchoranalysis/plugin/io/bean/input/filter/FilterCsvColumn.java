@@ -26,7 +26,6 @@ package org.anchoranalysis.plugin.io.bean.input.filter;
  * #L%
  */
 
-import java.io.IOException;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.ListIterator;
@@ -35,6 +34,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.io.bean.filepath.generator.FilePathGenerator;
 import org.anchoranalysis.io.bean.input.InputManager;
 import org.anchoranalysis.io.bean.input.InputManagerParams;
+import org.anchoranalysis.io.csv.reader.CSVReaderException;
 import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.input.InputFromManager;
 
@@ -90,7 +90,7 @@ public class FilterCsvColumn<T extends InputFromManager> extends InputManager<T>
 		
 		try {
 			return CsvMatcher.rowsFromCsvThatMatch(csvPath, match, numRowsExpected);
-		} catch (IOException e) {
+		} catch (CSVReaderException e) {
 			throw new AnchorIOException("Cannot match rows from csv", e);
 		}
 	}

@@ -48,7 +48,7 @@ public class ObjMaskFilterOr extends ObjMaskFilterDerivedFromList {
 		
 		Set<ObjMask> set = new HashSet<ObjMask>();
 		
-		for (ObjMaskFilter indFilter : list()) {
+		for (ObjMaskFilter indFilter : getList()) {
 			ObjMaskCollection objsDup = objs.duplicate();
 			indFilter.filter(objsDup, dim, objsRejected);
 			set.addAll(objsDup.asList());

@@ -29,35 +29,18 @@ import java.util.Optional;
  */
 
 
-import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.bean.objmask.filter.ObjMaskFilter;
-import org.anchoranalysis.image.bean.objmask.filter.ObjMaskFilterList;
 import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.objmask.ObjMaskCollection;
 
-public class ObjMaskFilterSequence extends ObjMaskFilter {
-
-	// START BEAN PROPERTIES
-	@BeanField
-	private ObjMaskFilterList sequence = null;
-	// END BEAN PROPERTIES
+public class ObjMaskFilterSequence extends ObjMaskFilterDerivedFromList {
 	
 	@Override
 	public void filter(ObjMaskCollection objs, Optional<ImageDim> dim, Optional<ObjMaskCollection> objsRejected) throws OperationFailedException {
 		
-		for (ObjMaskFilter indFilter : sequence.getList()) {
+		for (ObjMaskFilter indFilter : getList()) {
 			indFilter.filter(objs, dim, objsRejected);
 		}
-
 	}
-
-	public ObjMaskFilterList getSequence() {
-		return sequence;
-	}
-
-	public void setSequence(ObjMaskFilterList sequence) {
-		this.sequence = sequence;
-	}
-
 }
