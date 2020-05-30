@@ -26,7 +26,6 @@ package org.anchoranalysis.plugin.io.bean.input.filter;
  * #L%
  */
 
-import java.io.IOException;
 import java.nio.file.Path;
 import java.util.Set;
 import java.util.TreeSet;
@@ -34,10 +33,11 @@ import java.util.TreeSet;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.io.csv.reader.CSVReaderByLine;
 import org.anchoranalysis.io.csv.reader.CSVReaderByLine.ReadByLine;
+import org.anchoranalysis.io.csv.reader.CSVReaderException;
 
 class CsvMatcher {
 
-	public static Set<String> rowsFromCsvThatMatch( Path path, String match, int numRowsExpected ) throws IOException {
+	public static Set<String> rowsFromCsvThatMatch( Path path, String match, int numRowsExpected ) throws CSVReaderException {
 				
 		Set<String> set = new TreeSet<>();
 		
@@ -46,7 +46,7 @@ class CsvMatcher {
 			int cnt = processLines( csvFile, set, match );
 			
 			if (cnt!=numRowsExpected) {
-				throw new IOException(
+				throw new CSVReaderException(
 					String.format("Csv file must have exactly %d rows. It has %d.", numRowsExpected, cnt)
 				);
 			}
@@ -56,7 +56,7 @@ class CsvMatcher {
 	}
 	
 	// Returns the number of lines processed
-	private static int processLines( ReadByLine csvFile, Set<String> set, String match ) throws IOException {
+	private static int processLines( ReadByLine csvFile, Set<String> set, String match ) throws CSVReaderException {
 		return csvFile.read(
 			(line, firstLine) -> maybeAddLineToSet( set, line, match )
 		);

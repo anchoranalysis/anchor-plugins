@@ -33,6 +33,7 @@ import java.nio.file.Path;
 
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.error.OperationFailedRuntimeException;
+import org.anchoranalysis.io.csv.reader.CSVReaderException;
 import org.anchoranalysis.test.TestLoader;
 import org.anchoranalysis.test.image.DualComparer;
 
@@ -47,33 +48,33 @@ class CompareHelper {
 			loaderSavedObjs
 		);
 		
-		try {
-			for(String path : relativePaths) {
-				assertIdentical(comparer, path);	
-			}
-		} catch (IOException e) {
-			throw new OperationFailedException(e);
+		for(String path : relativePaths) {
+			assertIdentical(comparer, path);	
 		}
 	}
 	
-	private static void assertIdentical(DualComparer comparer, String relativePath) throws IOException {
+	private static void assertIdentical(DualComparer comparer, String relativePath) throws OperationFailedException {
 		assertTrue(
 			relativePath + " is not identical",
 			compareForExtr(comparer, relativePath)
 		);
 	}
 	
-	private static boolean compareForExtr(DualComparer comparer, String relativePath) throws IOException {
-		if (hasExtension(relativePath,".tif")) {
-			return comparer.compareTwoImages(relativePath);
-		} else if (hasExtension(relativePath,".csv")) {
-			return comparer.compareTwoCsvFiles( relativePath, ",", true, 0, true, false, System.out);
-		} else if (hasExtension(relativePath,".xml")) {
-			return comparer.compareTwoXmlDocuments(relativePath);
-		} else if (hasExtension(relativePath,".h5")) {
-			return comparer.compareTwoObjs(relativePath);			
-		} else {
-			throw new OperationFailedRuntimeException("Extension not supported");
+	private static boolean compareForExtr(DualComparer comparer, String relativePath) throws OperationFailedException {
+		try {
+			if (hasExtension(relativePath,".tif")) {
+				return comparer.compareTwoImages(relativePath);
+			} else if (hasExtension(relativePath,".csv")) {
+				return comparer.compareTwoCsvFiles( relativePath, ",", true, 0, true, false, System.out);
+			} else if (hasExtension(relativePath,".xml")) {
+				return comparer.compareTwoXmlDocuments(relativePath);
+			} else if (hasExtension(relativePath,".h5")) {
+				return comparer.compareTwoObjs(relativePath);			
+			} else {
+				throw new OperationFailedRuntimeException("Extension not supported");
+			}
+		} catch (IOException | CSVReaderException e) {
+			throw new OperationFailedException(e);
 		}
 	}
 	

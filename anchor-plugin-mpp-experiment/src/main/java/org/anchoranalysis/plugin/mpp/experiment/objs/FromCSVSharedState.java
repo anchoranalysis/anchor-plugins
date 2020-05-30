@@ -1,6 +1,6 @@
 package org.anchoranalysis.plugin.mpp.experiment.objs;
 
-import java.io.IOException;
+
 
 /*
  * #%L
@@ -35,6 +35,7 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.index.GetOperationFailedException;
 import org.anchoranalysis.io.csv.reader.CSVReaderByLine;
 import org.anchoranalysis.io.csv.reader.CSVReaderByLine.ReadByLine;
+import org.anchoranalysis.io.csv.reader.CSVReaderException;
 import org.anchoranalysis.plugin.mpp.experiment.bean.objs.columndefinition.ColumnDefinition;
 import org.anchoranalysis.plugin.mpp.experiment.objs.csv.IndexedCSVRows;
 
@@ -69,7 +70,7 @@ public class FromCSVSharedState {
 				
 				this.csvFilePathRead = csvFilePath;
 				
-			} catch (CreateException | IOException e) {
+			} catch (CreateException | CSVReaderException e) {
 				throw new GetOperationFailedException(e);
 			}
 		}

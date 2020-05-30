@@ -38,7 +38,7 @@ public class ObjMaskFilterAnd extends ObjMaskFilterDerivedFromList {
 	@Override
 	public void filter(ObjMaskCollection objs, Optional<ImageDim> dim, Optional<ObjMaskCollection> objsRejected) throws OperationFailedException {
 		
-		for (ObjMaskFilter indFilter : list()) {
+		for (ObjMaskFilter indFilter : getList()) {
 			indFilter.filter(objs, dim, objsRejected);
 		}
 	}

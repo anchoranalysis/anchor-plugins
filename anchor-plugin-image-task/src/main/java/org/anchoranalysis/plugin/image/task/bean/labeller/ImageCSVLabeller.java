@@ -26,7 +26,6 @@ package org.anchoranalysis.plugin.image.task.bean.labeller;
  * #L%
  */
 
-import java.io.IOException;
 import java.nio.file.Path;
 import java.util.Set;
 
@@ -36,6 +35,7 @@ import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.experiment.label.FileLabelMap;
 import org.anchoranalysis.image.io.input.ProvidesStackInput;
 import org.anchoranalysis.io.bean.filepath.generator.FilePathGenerator;
+import org.anchoranalysis.io.csv.reader.CSVReaderException;
 import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.output.bound.BoundIOContext;
 import org.anchoranalysis.plugin.image.task.labeller.ImageCSVLabellerInitParams;
@@ -64,7 +64,7 @@ public class ImageCSVLabeller extends ImageLabeller<ImageCSVLabellerInitParams> 
 				FileLabelMap.readFromCSV(csvPath, false)	
 			);
 			
-		} catch (IOException | AnchorIOException e) {
+		} catch (CSVReaderException | AnchorIOException e) {
 			throw new InitException(e);
 		}
 	}
