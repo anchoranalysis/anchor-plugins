@@ -30,7 +30,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 import org.anchoranalysis.io.bean.filepath.prefixer.PathWithDescription;
-import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.filepath.prefixer.FilePathPrefix;
 
 
@@ -42,7 +41,7 @@ import org.anchoranalysis.io.filepath.prefixer.FilePathPrefix;
 public class FromDescriptiveName extends FilePathPrefixerAvoidResolve {
 
 	@Override
-	protected FilePathPrefix outFilePrefixFromPath(PathWithDescription input, Path root) throws AnchorIOException {
+	protected FilePathPrefix outFilePrefixFromPath(PathWithDescription input, Path root) {
 		Path combined = root.resolve(
 			Paths.get( input.getDescriptiveName() )
 		);

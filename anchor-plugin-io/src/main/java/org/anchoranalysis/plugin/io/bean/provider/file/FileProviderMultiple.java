@@ -37,7 +37,7 @@ import org.anchoranalysis.core.progress.ProgressReporterMultiple;
 import org.anchoranalysis.core.progress.ProgressReporterOneOfMany;
 import org.anchoranalysis.io.bean.input.InputManagerParams;
 import org.anchoranalysis.io.bean.provider.file.FileProvider;
-import org.anchoranalysis.io.error.AnchorIOException;
+import org.anchoranalysis.io.error.FileProviderException;
 
 public class FileProviderMultiple extends FileProvider {
 
@@ -47,7 +47,7 @@ public class FileProviderMultiple extends FileProvider {
 	// END BEAN PROPERTIES
 	
 	@Override
-	public Collection<File> matchingFiles(InputManagerParams params) throws AnchorIOException {
+	public Collection<File> create(InputManagerParams params) throws FileProviderException {
 
 		try( ProgressReporterMultiple prm = new ProgressReporterMultiple(params.getProgressReporter(), list.size())) {
 			
@@ -57,7 +57,7 @@ public class FileProviderMultiple extends FileProvider {
 				
 				ProgressReporterOneOfMany prLocal = new ProgressReporterOneOfMany(prm);
 				combined.addAll(
-					fp.matchingFiles(params.withProgressReporter(prLocal))
+					fp.create(params.withProgressReporter(prLocal))
 				);
 				prm.incrWorker();
 			}

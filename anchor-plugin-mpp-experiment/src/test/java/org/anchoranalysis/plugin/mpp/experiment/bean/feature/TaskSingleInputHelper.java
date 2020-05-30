@@ -49,6 +49,7 @@ import org.anchoranalysis.experiment.task.ParametersUnbound;
 import org.anchoranalysis.experiment.task.Task;
 import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.input.InputFromManager;
+import org.anchoranalysis.io.output.bound.BindFailedException;
 import org.anchoranalysis.io.output.bound.BoundOutputManager;
 import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
 import org.anchoranalysis.test.image.io.OutputManagerFixture;
@@ -150,7 +151,7 @@ class TaskSingleInputHelper {
 			task.afterAllJobsAreExecuted(sharedState, paramsExp.context());
 			
 			return successful;
-		} catch (AnchorIOException | ExperimentExecutionException | JobExecutionException | BeanMisconfiguredException e) {
+		} catch (AnchorIOException | ExperimentExecutionException | JobExecutionException | BeanMisconfiguredException | BindFailedException e) {
 			throw new OperationFailedException(e);
 		}
 	}

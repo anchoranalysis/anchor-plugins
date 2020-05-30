@@ -35,7 +35,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.shared.regex.RegEx;
 import org.anchoranalysis.io.bean.input.InputManagerParams;
 import org.anchoranalysis.io.bean.provider.file.FileProvider;
-import org.anchoranalysis.io.error.AnchorIOException;
+import org.anchoranalysis.io.error.FileProviderException;
 import org.anchoranalysis.io.filepath.FilePathNormalizer;
 
 // Removes one or more files if they match a regex
@@ -51,10 +51,9 @@ public class FileProviderRemove extends FileProvider {
 	// END BEAN PROPERTIES
 	
 	@Override
-	public Collection<File> matchingFiles(InputManagerParams params)
-			throws AnchorIOException {
+	public Collection<File> create(InputManagerParams params) throws FileProviderException {
 		
-		Collection<File> files = fileProvider.matchingFiles(params);
+		Collection<File> files = fileProvider.create(params);
 
 		// Loop through each file and see if it's in our has map
 		Iterator<File> itr = files.iterator();

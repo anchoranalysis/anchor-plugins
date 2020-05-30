@@ -36,7 +36,7 @@ import java.util.List;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.io.bean.input.InputManagerParams;
 import org.anchoranalysis.io.bean.provider.file.FileProvider;
-import org.anchoranalysis.io.error.AnchorIOException;
+import org.anchoranalysis.io.error.FileProviderException;
 
 public class RandomOrder extends FileProvider {
 
@@ -46,9 +46,9 @@ public class RandomOrder extends FileProvider {
 	// END BEAN PROPERTIES
 	
 	@Override
-	public Collection<File> matchingFiles(InputManagerParams params) throws AnchorIOException {
+	public Collection<File> create(InputManagerParams params) throws FileProviderException {
 
-		Collection<File> in = fileProvider.matchingFiles(params);
+		Collection<File> in = fileProvider.create(params);
 		
 		List<File> out = new ArrayList<>();
 		out.addAll(in);

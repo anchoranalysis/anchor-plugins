@@ -40,6 +40,7 @@ import org.anchoranalysis.image.io.input.NamedChnlsInputPart;
 import org.anchoranalysis.io.bean.input.InputManagerParams;
 import org.anchoranalysis.io.bean.provider.file.FileProvider;
 import org.anchoranalysis.io.error.AnchorIOException;
+import org.anchoranalysis.io.error.FileProviderException;
 
 public class FileProviderFromAnnotation<T extends AnnotatorStrategy> extends FileProvider {
 	
@@ -49,8 +50,7 @@ public class FileProviderFromAnnotation<T extends AnnotatorStrategy> extends Fil
 	// END BEAN PROPERTIES
 	
 	@Override
-	public Collection<File> matchingFiles(InputManagerParams params)
-			throws AnchorIOException {
+	public Collection<File> create(InputManagerParams params) throws FileProviderException {
 
 		List<File> filesOut = new ArrayList<File>();
 		
@@ -65,7 +65,7 @@ public class FileProviderFromAnnotation<T extends AnnotatorStrategy> extends Fil
 			}
 			
 		} catch (AnchorIOException e) {
-			throw new AnchorIOException("Cannot create annotation-input objects", e);
+			throw new FileProviderException(e);
 		}
 		
 		return filesOut;

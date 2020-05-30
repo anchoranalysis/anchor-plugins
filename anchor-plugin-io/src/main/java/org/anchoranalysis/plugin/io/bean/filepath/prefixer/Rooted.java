@@ -36,6 +36,7 @@ import org.anchoranalysis.io.bean.filepath.prefixer.FilePathPrefixer;
 import org.anchoranalysis.io.bean.filepath.prefixer.PathWithDescription;
 import org.anchoranalysis.io.bean.root.RootPathMap;
 import org.anchoranalysis.io.error.AnchorIOException;
+import org.anchoranalysis.io.error.FilePathPrefixerException;
 import org.anchoranalysis.io.filepath.prefixer.FilePathPrefix;
 import org.anchoranalysis.io.filepath.prefixer.FilePathPrefixerParams;
 import org.apache.log4j.Logger;
@@ -62,8 +63,7 @@ public class Rooted extends FilePathPrefixer {
 	private static Logger logger = Logger.getLogger(Rooted.class);
 		
 	@Override
-	public FilePathPrefix outFilePrefix(PathWithDescription input, String expName, FilePathPrefixerParams context)
-			throws AnchorIOException {
+	public FilePathPrefix outFilePrefix(PathWithDescription input, String expName, FilePathPrefixerParams context) throws FilePathPrefixerException {
 
 		logger.debug( String.format("pathIn=%s", input) );
 		
@@ -81,25 +81,33 @@ public class Rooted extends FilePathPrefixer {
 		return fpp;
 	}
 	
-	private PathWithDescription removeRoot(PathWithDescription input, boolean debugMode) throws AnchorIOException {
-		Path pathInWithoutRoot = RootPathMap.instance().split(input.getPath(), rootName, debugMode).getPath();
-		return new PathWithDescription(
-			pathInWithoutRoot,
-			input.getDescriptiveName()
-		);
-	}
-	
-	private Path folderPathOut( Path pathIn, boolean debugMode ) throws AnchorIOException {
-		return RootPathMap.instance().findRoot(rootName, debugMode).asPath().resolve( pathIn );
+	private PathWithDescription removeRoot(PathWithDescription input, boolean debugMode) throws FilePathPrefixerException {
+		try {
+			Path pathInWithoutRoot = RootPathMap.instance().split(input.getPath(), rootName, debugMode).getPath();
+			return new PathWithDescription(
+				pathInWithoutRoot,
+				input.getDescriptiveName()
+			);
+		} catch (AnchorIOException e) {
+			throw new FilePathPrefixerException(e);
+		}
 	}
 
 	@Override
-	public FilePathPrefix rootFolderPrefix(String expName, FilePathPrefixerParams context) throws AnchorIOException {
+	public FilePathPrefix rootFolderPrefix(String expName, FilePathPrefixerParams context) throws FilePathPrefixerException {
 		FilePathPrefix fpp = filePathPrefixer.rootFolderPrefixAvoidResolve(expName) ;
 		fpp.setFolderPath( folderPathOut( fpp.getFolderPath(), context.isDebugMode() ) );
 		return fpp;
 	}
-
+	
+	private Path folderPathOut( Path pathIn, boolean debugMode ) throws FilePathPrefixerException {
+		try {
+			return RootPathMap.instance().findRoot(rootName, debugMode).asPath().resolve( pathIn );
+		} catch (AnchorIOException e) {
+			throw new FilePathPrefixerException(e);
+		}
+	}
+	
 	public FilePathPrefixerAvoidResolve getFilePathPrefixer() {
 		return filePathPrefixer;
 	}

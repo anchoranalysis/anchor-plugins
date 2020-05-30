@@ -36,7 +36,7 @@ import org.anchoranalysis.bean.xml.RegisterBeanFactories;
 import org.anchoranalysis.core.index.SetOperationFailedException;
 import org.anchoranalysis.image.objmask.ObjMaskCollection;
 import org.anchoranalysis.io.deserializer.DeserializationFailedException;
-import org.anchoranalysis.io.error.AnchorIOException;
+import org.anchoranalysis.io.output.bound.BindFailedException;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -62,16 +62,16 @@ public class ObjMaskCollectionWriterTest {
     }
 	
 	@Test
-	public void testHdf5() throws SetOperationFailedException, DeserializationFailedException, AnchorIOException {
+	public void testHdf5() throws SetOperationFailedException, DeserializationFailedException, BindFailedException {
 		testWriteRead(true);
 	}
 	
 	@Test
-	public void testTIFFDirectory() throws SetOperationFailedException, DeserializationFailedException, AnchorIOException {
+	public void testTIFFDirectory() throws SetOperationFailedException, DeserializationFailedException, BindFailedException {
 		testWriteRead(false);	
 	}
 		
-	private void testWriteRead(boolean hdf5) throws SetOperationFailedException, DeserializationFailedException, AnchorIOException {
+	private void testWriteRead(boolean hdf5) throws SetOperationFailedException, DeserializationFailedException, BindFailedException {
 		Path path = folder.getRoot().toPath();
 		
 		ObjMaskCollection objs = fixture.createMockObjs(2, 7);

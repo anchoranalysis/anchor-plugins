@@ -34,6 +34,7 @@ import org.anchoranalysis.bean.annotation.AllowEmpty;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.io.bean.filepath.prefixer.PathWithDescription;
 import org.anchoranalysis.io.error.AnchorIOException;
+import org.anchoranalysis.io.error.FilePathPrefixerException;
 import org.anchoranalysis.io.filepath.prefixer.FilePathDifferenceFromFolderPath;
 import org.anchoranalysis.io.filepath.prefixer.FilePathPrefix;
 import org.apache.commons.io.FilenameUtils;
@@ -58,7 +59,7 @@ public class DirectoryStructure extends FilePathPrefixerAvoidResolve {
 	// END BEAN PROPERTIES
 
 	@Override
-	protected FilePathPrefix outFilePrefixFromPath(PathWithDescription input, Path root) throws AnchorIOException {
+	protected FilePathPrefix outFilePrefixFromPath(PathWithDescription input, Path root) throws FilePathPrefixerException {
 		// We strip the incoming path of it's extension
 		Path pathInRemoved = Paths.get( FilenameUtils.removeExtension( input.getPath().toString() ) );
 		
@@ -77,13 +78,17 @@ public class DirectoryStructure extends FilePathPrefixerAvoidResolve {
 		return new FilePathPrefix( outFolderPath );
 	}
 	
-	private FilePathDifferenceFromFolderPath difference(Path pathInRemoved) throws AnchorIOException {
-		FilePathDifferenceFromFolderPath ff = new FilePathDifferenceFromFolderPath();
-		ff.init(
-			Paths.get(inPathPrefix),
-			pathInRemoved
-		);
-		return ff;
+	private FilePathDifferenceFromFolderPath difference(Path pathInRemoved) throws FilePathPrefixerException {
+		try {
+			FilePathDifferenceFromFolderPath ff = new FilePathDifferenceFromFolderPath();
+			ff.init(
+				Paths.get(inPathPrefix),
+				pathInRemoved
+			);
+			return ff;
+		} catch (AnchorIOException e) {
+			throw new FilePathPrefixerException(e);
+		}
 	}
 
 	public boolean isIncludeFolders() {
