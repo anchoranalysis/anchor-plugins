@@ -1,5 +1,7 @@
 package ch.ethz.biol.cell.mpp.feedback.reporter;
 
+import java.util.Optional;
+
 import org.anchoranalysis.anchor.mpp.cfg.Cfg;
 import org.anchoranalysis.anchor.mpp.cfg.ColoredCfg;
 import org.anchoranalysis.anchor.mpp.feature.bean.nrgscheme.NRGScheme;
@@ -105,8 +107,10 @@ public class TiffTimeSeriesReporter extends PeriodicSubfolderReporter<CfgNRG> {
 	}
 
 	@Override
-	protected CfgNRG generateIterableElement( Reporting<CfgNRGPixelized> reporting ) throws ReporterException {
-		return reporting.getCfgNRGAfter().getCfgNRG();
+	protected Optional<CfgNRG> generateIterableElement( Reporting<CfgNRGPixelized> reporting ) throws ReporterException {
+		return Optional.of(
+			reporting.getCfgNRGAfter().getCfgNRG()
+		);
 	}
 
 	public int getNumColors() {

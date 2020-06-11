@@ -28,11 +28,11 @@ package org.anchoranalysis.plugin.points.bean.fitter;
 
 import java.util.List;
 
+import org.anchoranalysis.anchor.mpp.bean.points.PointsBean;
 import org.anchoranalysis.anchor.mpp.bean.points.fitter.InsufficientPointsException;
 import org.anchoranalysis.anchor.mpp.bean.points.fitter.PointsFitter;
 import org.anchoranalysis.anchor.mpp.bean.points.fitter.PointsFitterException;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
-import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
@@ -42,7 +42,7 @@ import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
 import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.objmask.ObjMaskCollection;
 
-public class PointsFitterToMark extends AnchorBean<PointsFitterToMark> {
+public class PointsFitterToMark extends PointsBean<PointsFitterToMark> {
 
 	// START BEAN PROPERTIES
 	@BeanField

@@ -62,7 +62,7 @@ public class KernelInitialCfg extends KernelIndependent<Cfg> {
 	}
 
 	@Override
-	public Optional<Cfg> makeProposal(Cfg exst, KernelCalcContext context ) throws KernelCalcNRGException {
+	public Optional<Cfg> makeProposal(Optional<Cfg> exst, KernelCalcContext context ) throws KernelCalcNRGException {
 		this.lastCfg = InitCfgUtilities.propose(cfgProposer, context);
 		return lastCfg;
 	}

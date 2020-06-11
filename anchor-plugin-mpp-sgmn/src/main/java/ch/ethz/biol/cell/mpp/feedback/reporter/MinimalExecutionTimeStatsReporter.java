@@ -69,7 +69,7 @@ public class MinimalExecutionTimeStatsReporter extends ReporterOptimizationStep<
 		int kernelID = reporting.getKernel().getID();
 		double executionTime = reporting.getExecutionTime();
 		
-		if (reporting.hasProposal()) {
+		if (reporting.getProposal().isPresent()) {
 			
 			if (reporting.isAccptd()) {
 				stats.incrAccepted( kernelID, executionTime );

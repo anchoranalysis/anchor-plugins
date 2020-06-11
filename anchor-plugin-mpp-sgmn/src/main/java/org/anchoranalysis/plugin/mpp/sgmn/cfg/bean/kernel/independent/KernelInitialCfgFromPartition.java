@@ -44,7 +44,7 @@ import org.anchoranalysis.mpp.sgmn.kernel.KernelCalcNRGException;
 import org.anchoranalysis.plugin.mpp.sgmn.cfg.bean.mark.extractweight.ConstantWeight;
 import org.anchoranalysis.plugin.mpp.sgmn.cfg.bean.mark.extractweight.ExtractWeightFromMark;
 import org.anchoranalysis.plugin.mpp.sgmn.cfg.optscheme.CfgFromPartition;
-import org.anchoranalysis.plugin.mpp.sgmn.cfg.optscheme.PartitionMarks;
+import org.anchoranalysis.plugin.mpp.sgmn.cfg.optscheme.PartitionedCfg;
 
 public class KernelInitialCfgFromPartition extends KernelIndependent<CfgFromPartition> {
 
@@ -69,7 +69,7 @@ public class KernelInitialCfgFromPartition extends KernelIndependent<CfgFromPart
 	}
 
 	@Override
-	public Optional<CfgFromPartition> makeProposal(CfgFromPartition exst, KernelCalcContext context ) throws KernelCalcNRGException {
+	public Optional<CfgFromPartition> makeProposal(Optional<CfgFromPartition> exst, KernelCalcContext context ) throws KernelCalcNRGException {
 		
 		Optional<Cfg> cfg = InitCfgUtilities.propose(cfgProposer, context);
 		
@@ -125,9 +125,9 @@ public class KernelInitialCfgFromPartition extends KernelIndependent<CfgFromPart
 		this.extractWeight = extractWeight;
 	}
 		
-	private PartitionMarks<Mark> createPartition( Cfg cfg ) {
-		return new PartitionMarks<Mark>(
-			cfg.getMarks(),
+	private PartitionedCfg createPartition( Cfg cfg ) {
+		return new PartitionedCfg(
+			cfg,
 			mark-> extractWeight.weightFor(mark)
 		);
 	}

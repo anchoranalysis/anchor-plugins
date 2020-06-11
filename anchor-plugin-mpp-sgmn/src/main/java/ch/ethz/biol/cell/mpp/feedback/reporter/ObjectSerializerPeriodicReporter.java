@@ -28,6 +28,7 @@ package ch.ethz.biol.cell.mpp.feedback.reporter;
 
 
 import java.io.Serializable;
+import java.util.Optional;
 
 import org.anchoranalysis.anchor.mpp.feature.nrg.cfg.CfgNRGPixelized;
 import org.anchoranalysis.bean.annotation.BeanField;
@@ -87,7 +88,7 @@ public abstract class ObjectSerializerPeriodicReporter<T extends Serializable> e
 
 	
 	@Override
-	protected abstract T generateIterableElement( Reporting<CfgNRGPixelized> reporting ) throws ReporterException;
+	protected abstract Optional<T> generateIterableElement( Reporting<CfgNRGPixelized> reporting ) throws ReporterException;
 
 	public String getManifestFunction() {
 		return manifestFunction;

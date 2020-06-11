@@ -72,12 +72,16 @@ public class KernelSplit extends KernelPosNeg<CfgNRGPixelized> {
 	private transient PairPxlMarkMemo pairNew;
 
 	@Override
-	public Optional<CfgNRGPixelized> makeProposal(CfgNRGPixelized exst, KernelCalcContext context ) throws KernelCalcNRGException {
+	public Optional<CfgNRGPixelized> makeProposal(Optional<CfgNRGPixelized> exst, KernelCalcContext context ) throws KernelCalcNRGException {
+		
+		if (exst.isPresent()) {
+			return Optional.empty();
+		}
 		
 		ProposerContext propContext = context.proposer();
 		
 		try {
-			this.markExst = markFromCfgProposer.markFromCfg( exst.getCfg(),	propContext	);
+			this.markExst = markFromCfgProposer.markFromCfg( exst.get().getCfg(),	propContext	);
 		} catch (ProposalAbnormalFailureException e) {
 			throw new KernelCalcNRGException(
 				"Could not propose a mark due to an abnormal exception",
@@ -92,8 +96,8 @@ public class KernelSplit extends KernelPosNeg<CfgNRGPixelized> {
 			return Optional.empty();
 		}
 		
-		this.markExstIndex = exst.getCfg().indexOf( markExst.get() );
-		PxlMarkMemo pmmMarkExst = exst.getMemoForIndex(markExstIndex);
+		this.markExstIndex = exst.get().getCfg().indexOf( markExst.get() );
+		PxlMarkMemo pmmMarkExst = exst.get().getMemoForIndex(markExstIndex);
 		
 		try {
 			// Let's get positions for our two marks
@@ -114,7 +118,7 @@ public class KernelSplit extends KernelPosNeg<CfgNRGPixelized> {
 		}
 		
 		return Optional.of(
-			createCfgNRG( exst, propContext.getNrgStack().getNrgStack() )
+			createCfgNRG( exst.get(), propContext.getNrgStack().getNrgStack() )
 		);
 	}
 

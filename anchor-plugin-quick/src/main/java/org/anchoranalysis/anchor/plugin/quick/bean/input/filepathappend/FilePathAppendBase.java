@@ -86,7 +86,7 @@ public abstract class FilePathAppendBase extends AnchorBean<FilePathAppendBase> 
 	
 	private String firstPartWithCustomEnd( String end) {
 		return String.format(
-			"experiments/$1/%s/$2%s%s",
+			"$1/experiments/%s/$2%s%s",
 			getExperimentType(),
 			getDatasetSuffix(),
 			end

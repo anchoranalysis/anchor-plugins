@@ -81,7 +81,10 @@ public class OptSchemeUnifPerm<S> extends OptScheme<S,S> {
 			kernelProposer.initBeforeCalc(context);
 			
 			for( int i=0; i<this.numItr; i++) {
-				Optional<S> cfgNRG = kernelProposer.getInitialKernel().makeProposal(null, context);
+				Optional<S> cfgNRG = kernelProposer.getInitialKernel().makeProposal(
+					Optional.empty(),
+					context
+				);
 				
 				if (!cfgNRG.isPresent()) {
 					continue;

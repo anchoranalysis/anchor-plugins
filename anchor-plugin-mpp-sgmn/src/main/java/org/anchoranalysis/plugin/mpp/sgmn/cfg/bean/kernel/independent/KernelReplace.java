@@ -71,12 +71,19 @@ public abstract class KernelReplace<T> extends KernelPosNeg<T> {
 
 	
 	@Override
-	public Optional<T> makeProposal(T exst, KernelCalcContext context) throws KernelCalcNRGException {
+	public Optional<T> makeProposal(Optional<T> exst, KernelCalcContext context) throws KernelCalcNRGException {
 
+		if (exst.isPresent()) {
+			return Optional.empty();
+		}
+		
 		afterDeathProp = kernelDeath.makeProposal(exst, context);
 		return OptionalUtilities.flatMap(
 			afterDeathProp,
-			prop -> kernelBirth.makeProposal(prop, context)
+			prop -> kernelBirth.makeProposal(
+				Optional.of(prop),
+				context
+			)
 		);
 	}
 

@@ -1,5 +1,7 @@
 package org.anchoranalysis.plugin.mpp.sgmn.cfg.bean.optscheme.statereporter;
 
+import java.util.Optional;
+
 /*-
  * #%L
  * anchor-plugin-mpp-sgmn
@@ -42,14 +44,9 @@ public class StateReporterIdentity<T> extends StateReporter<T, T> {
 	public StateTransformer<T, T> primaryReport() {
 		return (a,context)->a;
 	}
-
-	@Override
-	public boolean hasSecondaryReport() {
-		return false;
-	}
 	
 	@Override
-	public StateTransformer<T, T> secondaryReport() {
-		return null;
+	public Optional<StateTransformer<T, T>> secondaryReport() {
+		return Optional.empty();
 	}
 }

@@ -41,6 +41,14 @@ import org.anchoranalysis.mpp.sgmn.bean.kernel.KernelPosNeg;
 import org.anchoranalysis.mpp.sgmn.kernel.KernelCalcContext;
 import org.anchoranalysis.mpp.sgmn.kernel.KernelCalcNRGException;
 
+
+/**
+ * Adds a new mark (a "birth") to create a proposal
+ * 
+ * @author Owen Feehan
+ *
+ * @param <T> proposal-type
+ */
 public abstract class KernelBirth<T> extends KernelPosNeg<T> {
 
 	/**
@@ -48,7 +56,7 @@ public abstract class KernelBirth<T> extends KernelPosNeg<T> {
 	 */
 	private static final long serialVersionUID = -3031519899206383216L;
 	
-	private Set<Mark> setMarksNew;
+	private Optional<Set<Mark>> setMarksNew;
 	
 	// START BEAN PROPERTIES
 	/** Total number of births */
@@ -57,12 +65,16 @@ public abstract class KernelBirth<T> extends KernelPosNeg<T> {
 	// END BEAN PROPERTIES
 
 	@Override
-	public Optional<T> makeProposal(T exst, KernelCalcContext context ) throws KernelCalcNRGException {
+	public Optional<T> makeProposal(Optional<T> exst, KernelCalcContext context ) throws KernelCalcNRGException {
 		
-		Optional<Set<Mark>> marksNew = proposeNewMarks(exst, repeats, context);;
+		if (!exst.isPresent()) {
+			return Optional.empty();
+		}
+		
+		setMarksNew = proposeNewMarks(exst.get(), repeats, context);;
 		return OptionalUtilities.flatMap(
-			marksNew,
-			set -> calcForNewMark(exst, set, context)
+			setMarksNew,
+			set -> calcForNewMark(exst.get(), set, context)
 		);
 	}
 		
@@ -88,15 +100,19 @@ public abstract class KernelBirth<T> extends KernelPosNeg<T> {
 	
 	@Override
 	public String dscrLast() {
-		return String.format("birth_%d(%s)", repeats, idStr(setMarksNew) );
+		return String.format(
+			"birth_%d(%s)",
+			repeats,
+			idStr(setMarksNew.get())
+		);
 	}
 
 	@Override
 	public int[] changedMarkIDArray() {
-		return idArr(setMarksNew);
+		return idArr(setMarksNew.get());
 	}
 
-	protected Set<Mark> getMarkNew() {
+	protected Optional<Set<Mark>> getMarkNew() {
 		return setMarksNew;
 	}
 	

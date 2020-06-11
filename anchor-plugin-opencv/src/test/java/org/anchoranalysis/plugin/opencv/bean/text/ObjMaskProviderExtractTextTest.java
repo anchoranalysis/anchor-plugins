@@ -40,6 +40,7 @@ import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.output.bound.BoundIOContext;
 import org.anchoranalysis.test.TestLoader;
+import org.anchoranalysis.test.image.BoundContextFixture;
 import org.anchoranalysis.test.image.io.TestLoaderImageIO;
 import org.junit.Test;
 import static org.junit.Assert.assertTrue;
