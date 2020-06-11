@@ -1,5 +1,7 @@
 package org.anchoranalysis.plugin.mpp.sgmn.cfg.bean.optscheme.statereporter;
 
+import java.util.Optional;
+
 import org.anchoranalysis.anchor.mpp.feature.nrg.cfg.CfgNRGPixelized;
 
 /*-
@@ -36,7 +38,6 @@ import org.anchoranalysis.mpp.sgmn.transformer.StateTransformer;
 import org.anchoranalysis.mpp.sgmn.transformer.StateTransformerBean;
 import org.anchoranalysis.plugin.mpp.sgmn.cfg.bean.cfg.pixelized.RetrieveDestinationFromPixelized;
 import org.anchoranalysis.plugin.mpp.sgmn.cfg.bean.cfg.pixelized.RetrieveSourceFromPixelized;
-import org.anchoranalysis.plugin.mpp.sgmn.cfg.bean.optscheme.mode.TransformIfNotNull;
 import org.anchoranalysis.plugin.mpp.sgmn.cfg.optscheme.ToPixelized;
 
 /**
@@ -56,19 +57,12 @@ public class StateReporterToPixelized<T> extends StateReporter<ToPixelized<T>, C
 	
 	@Override
 	public StateTransformer<ToPixelized<T>, CfgNRGPixelized> primaryReport() {
-		return new TransformIfNotNull<>(
-			new RetrieveDestinationFromPixelized<>()
-		);
+		return new RetrieveDestinationFromPixelized<>();
 	}
 
 	@Override
-	public boolean hasSecondaryReport() {
-		return secondary!=null;
-	}
-
-	@Override
-	public StateTransformer<ToPixelized<T>, CfgNRGPixelized> secondaryReport() {
-		return new TransformIfNotNull<>(
+	public Optional<StateTransformer<ToPixelized<T>, CfgNRGPixelized>> secondaryReport() {
+		return Optional.of(
 			createCompose()
 		);
 	}

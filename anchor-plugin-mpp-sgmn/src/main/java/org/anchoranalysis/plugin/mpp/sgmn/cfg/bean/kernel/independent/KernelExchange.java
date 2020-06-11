@@ -89,16 +89,18 @@ public class KernelExchange extends KernelIndependent<CfgNRGPixelized> {
 	}
 	
 	@Override
-	public Optional<CfgNRGPixelized> makeProposal(
-		CfgNRGPixelized exst,
-		KernelCalcContext context) throws KernelCalcNRGException {
+	public Optional<CfgNRGPixelized> makeProposal(Optional<CfgNRGPixelized> exst, KernelCalcContext context) throws KernelCalcNRGException {
 
+		if (exst.isPresent()) {
+			return Optional.empty();
+		}
+		
 		ProposerContext propContext = context.proposer(); 
 		
 		// Pick an element from the existing configuration
-		int index = exst.getCfg().randomIndex( propContext.getRe() );
+		int index = exst.get().getCfg().randomIndex( propContext.getRe() );
 		
-		markExst = exst.getCfg().get(index);
+		markExst = exst.get().getCfg().get(index);
 		
 		// We copy the particular mark in question
 		markNew = markExst.duplicate();
@@ -121,7 +123,7 @@ public class KernelExchange extends KernelIndependent<CfgNRGPixelized> {
 		}
 
 		// We calculate a new NRG by exchanging our marks
-		CfgNRGPixelized newNRG = exst.shallowCopy();
+		CfgNRGPixelized newNRG = exst.get().shallowCopy();
 		try {
 			newNRG.exchange(index, pmmMarkNew, propContext.getNrgStack() );
 		} catch (FeatureCalcException e) {

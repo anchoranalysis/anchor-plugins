@@ -180,7 +180,7 @@ class SimulatedAnnealingHelper {
 		ListUpdatableMarkSetCollection updatableMarkSetCollection,
 		AccptProbCalculator<T> accptProbCalc,
 		KernelAssigner<S,T> kernelAssigner,
-		StateTransformer<T,S> funcExtractForUpdate
+		StateTransformer<Optional<T>,Optional<S>> funcExtractForUpdate
 	) throws OptTerminatedEarlyException {
 		try {
 			// Propose a kernel

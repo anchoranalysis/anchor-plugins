@@ -45,6 +45,13 @@ import org.anchoranalysis.mpp.sgmn.kernel.KernelCalcContext;
 import org.anchoranalysis.mpp.sgmn.kernel.KernelCalcNRGException;
 import org.anchoranalysis.plugin.mpp.sgmn.cfg.bean.kernel.independent.KernelBirth;
 
+/**
+ * 
+ * <p>As an example, this is like sampling WITH replacement.</p>
+ * 
+ * @author Owen Feehan
+ *
+ */
 public class KernelBirthPixelized extends KernelBirth<CfgNRGPixelized> {
 
 	/**
@@ -56,31 +63,6 @@ public class KernelBirthPixelized extends KernelBirth<CfgNRGPixelized> {
 	@BeanField
 	private MarkProposer markProposer = null;
 	// END BEAN PROPERTIES
-
-	@Override
-	public void updateAfterAccpt(
-			ListUpdatableMarkSetCollection updatableMarkSetCollection, CfgNRGPixelized exst, CfgNRGPixelized accptd) throws UpdateMarkSetException {
-		
-		for( Mark m : getMarkNew() ) {
-			PxlMarkMemo memo = accptd.getMemoForMark( m );
-			exst.addToUpdatablePairList( updatableMarkSetCollection, memo );
-		}
-	}
-	
-	public MarkProposer getMarkProposer() {
-		return markProposer;
-	}
-
-	public void setMarkProposer(MarkProposer markProposer) {
-		this.markProposer = markProposer;
-	}
-
-	@Override
-	public boolean isCompatibleWith(Mark testMark) {
-		return markProposer.isCompatibleWith(testMark);
-	}
-	
-	
 
 	@Override
 	protected Optional<Set<Mark>> proposeNewMarks(CfgNRGPixelized exst, int number, KernelCalcContext context) {
@@ -117,6 +99,29 @@ public class KernelBirthPixelized extends KernelBirth<CfgNRGPixelized> {
 		}
 						
 		return pixelized;		
+	}
+
+	@Override
+	public void updateAfterAccpt(
+			ListUpdatableMarkSetCollection updatableMarkSetCollection, CfgNRGPixelized exst, CfgNRGPixelized accptd) throws UpdateMarkSetException {
+		
+		for( Mark m : getMarkNew().get() ) {
+			PxlMarkMemo memo = accptd.getMemoForMark( m );
+			exst.addToUpdatablePairList( updatableMarkSetCollection, memo );
+		}
+	}
+	
+	public MarkProposer getMarkProposer() {
+		return markProposer;
+	}
+
+	public void setMarkProposer(MarkProposer markProposer) {
+		this.markProposer = markProposer;
+	}
+
+	@Override
+	public boolean isCompatibleWith(Mark testMark) {
+		return markProposer.isCompatibleWith(testMark);
 	}
 	
 	private Optional<CfgNRGPixelized> proposeAndUpdate( CfgNRGPixelized exst, Mark markNew, ProposerContext propContext) throws KernelCalcNRGException {

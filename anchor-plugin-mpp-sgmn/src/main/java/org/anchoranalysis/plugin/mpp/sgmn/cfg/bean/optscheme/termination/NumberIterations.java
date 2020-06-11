@@ -39,7 +39,11 @@ public class NumberIterations extends TerminationCondition {
 	// END BEAN PROPERTIES
 	
 	public NumberIterations() {
-		super();
+		// Standard Bean Constructor
+	}
+	
+	public NumberIterations(int maxNumber) {
+		this.maxNumber = maxNumber;
 	}
 	
 	@Override

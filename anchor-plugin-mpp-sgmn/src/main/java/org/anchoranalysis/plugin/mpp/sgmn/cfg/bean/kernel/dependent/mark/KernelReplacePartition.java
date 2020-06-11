@@ -48,9 +48,12 @@ public class KernelReplacePartition extends KernelReplace<CfgFromPartition> {
 	}
 
 	@Override
-	public Optional<CfgFromPartition> makeProposal(CfgFromPartition exst, KernelCalcContext context)
-			throws KernelCalcNRGException {
+	public Optional<CfgFromPartition> makeProposal(Optional<CfgFromPartition> exst, KernelCalcContext context) throws KernelCalcNRGException {
 
+		if (exst.isPresent()) {
+			return Optional.empty();
+		}
+		
 		if (!hasBeenInit()) {
 			init(
 				createBirthKernel( getBirthRepeats() ),

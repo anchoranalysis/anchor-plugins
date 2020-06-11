@@ -50,10 +50,13 @@ public abstract class KernelDeath<T> extends KernelPosNeg<T> {
 	private Mark markRmv;
 	
 	@Override
-	public Optional<T> makeProposal(T exst,
-			KernelCalcContext context ) throws KernelCalcNRGException {
+	public Optional<T> makeProposal(Optional<T> exst,KernelCalcContext context ) throws KernelCalcNRGException {
 
-		MarkAnd<Mark,T> markNrg = removeAndUpdateNrg( exst, context.proposer() );
+		if (exst.isPresent()) {
+			return Optional.empty();
+		}
+		
+		MarkAnd<Mark,T> markNrg = removeAndUpdateNrg( exst.get(), context.proposer() );
 		markRmv = markNrg.getMark();
 		return Optional.of(
 			markNrg.getCfgNrg()

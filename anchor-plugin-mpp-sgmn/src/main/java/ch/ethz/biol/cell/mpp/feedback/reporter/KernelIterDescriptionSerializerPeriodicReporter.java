@@ -1,13 +1,14 @@
 package ch.ethz.biol.cell.mpp.feedback.reporter;
 
-import org.anchoranalysis.anchor.mpp.feature.nrg.cfg.CfgNRG;
+import java.util.Optional;
+
 import org.anchoranalysis.anchor.mpp.feature.nrg.cfg.CfgNRGPixelized;
 
-/*
+/*-
  * #%L
  * anchor-plugin-mpp
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -29,64 +30,35 @@ import org.anchoranalysis.anchor.mpp.feature.nrg.cfg.CfgNRGPixelized;
  * #L%
  */
 
-
-import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.mpp.sgmn.optscheme.feedback.ReporterException;
+import org.anchoranalysis.mpp.sgmn.kernel.proposer.KernelIterDescription;
 import org.anchoranalysis.mpp.sgmn.optscheme.step.Reporting;
 
-public class CfgNRGSerializerPeriodicReporter extends ObjectSerializerPeriodicReporter<CfgNRG> {
+
+public class KernelIterDescriptionSerializerPeriodicReporter extends ObjectSerializerPeriodicReporter<KernelIterDescription> {
 
 	// BEAN PARAMETERS
-	@BeanField
-	private boolean proposal = false;
-	
-	/** If proposal==true, this toggles between the primary and secondary proposal */
-	@BeanField
-	private boolean secondary = false;
 	// END BEAN PARAMETERS
 	
-	public CfgNRGSerializerPeriodicReporter() {
-		super("cfgNRG");
+	public KernelIterDescriptionSerializerPeriodicReporter() {
+		super("kernelIterDescription");
 	}
 	
 	@Override
-	protected CfgNRG generateIterableElement( Reporting<CfgNRGPixelized> reporting ) throws ReporterException {
-		
-		if (proposal) {
-			return proposalCfgNRGOrNull(reporting);
-		} else {
-			return reporting.getCfgNRGAfter().getCfgNRG();
-		}
-	}
-	
-	
-	private CfgNRG proposalCfgNRGOrNull( Reporting<CfgNRGPixelized> reporting ) {
-		
-		CfgNRGPixelized p = secondary ? reporting.getProposalSecondary() : reporting.getProposal();
-		if (p!=null) {
-			return p.getCfgNRG();
-		} else {
-			return null;
-		}
-	}
-	
-	public boolean isProposal() {
-		return proposal;
+	protected Optional<KernelIterDescription> generateIterableElement( Reporting<CfgNRGPixelized> reporting ) {
+		return Optional.of(
+				new KernelIterDescription(
+				reporting.getKernel(),
+				reporting.isAccptd(),
+				reporting.getProposal().isPresent(),
+				reporting.getChangedMarkIDs(),
+				reporting.getExecutionTime(),
+				reporting.getIter(),
+				reporting.getKernelNoProposalDescription()
+			)
+		);
 	}
 
-	public void setProposal(boolean proposal) {
-		this.proposal = proposal;
-	}
-	
 	@Override
 	public void reportNewBest(Reporting<CfgNRGPixelized> reporting) {
-	}
-
-	public boolean isSecondary() {
-		return secondary;
-	}
-
-	public void setSecondary(boolean secondary) {
-		this.secondary = secondary;
 	}
 }

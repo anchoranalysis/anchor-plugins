@@ -1,5 +1,7 @@
 package org.anchoranalysis.plugin.mpp.sgmn.cfg.kernel.updater;
 
+import java.util.Optional;
+
 import org.anchoranalysis.anchor.mpp.mark.set.UpdateMarkSetException;
 
 /*-
@@ -49,5 +51,5 @@ public abstract class KernelUpdater<S,T> {
 	 * @param context TODO
 	 * @throws UpdateMarkSetException
 	 */
-	public abstract void kernelAccepted( Kernel<S> kernel, T crnt, T proposed, TransformationContext context ) throws UpdateMarkSetException;
+	public abstract void kernelAccepted( Kernel<S> kernel, Optional<T> crnt, T proposed, TransformationContext context ) throws UpdateMarkSetException;
 }

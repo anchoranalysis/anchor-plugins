@@ -1,4 +1,4 @@
-package ch.ethz.biol.cell.imageprocessing.io.generator.text;
+package ch.ethz.biol.cell.mpp.feedback.reporter;
 
 /*
  * #%L
@@ -40,7 +40,7 @@ import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.output.bean.OutputWriteSettings;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
-public class ObjectAsStringGenerator<T> extends SingleFileTypeGenerator implements IterableGenerator<T> {
+class ObjectAsStringGenerator<T> extends SingleFileTypeGenerator implements IterableGenerator<T> {
 
 	private T object = null;
 		

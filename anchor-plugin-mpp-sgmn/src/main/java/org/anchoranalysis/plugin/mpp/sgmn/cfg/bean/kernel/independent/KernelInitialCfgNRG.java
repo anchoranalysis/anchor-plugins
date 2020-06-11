@@ -69,7 +69,7 @@ public class KernelInitialCfgNRG extends KernelIndependent<CfgNRGPixelized> {
 	}
 
 	@Override
-	public Optional<CfgNRGPixelized> makeProposal(CfgNRGPixelized exst, KernelCalcContext context ) throws KernelCalcNRGException {
+	public Optional<CfgNRGPixelized> makeProposal(Optional<CfgNRGPixelized> exst, KernelCalcContext context ) throws KernelCalcNRGException {
 	
 		ProposerContext propContext = context.proposer();
 		

@@ -100,7 +100,11 @@ public class KernelMerge extends KernelPosNeg<CfgNRGPixelized> {
 	}
 	
 	@Override
-	public Optional<CfgNRGPixelized> makeProposal(CfgNRGPixelized exst, KernelCalcContext context) throws KernelCalcNRGException {
+	public Optional<CfgNRGPixelized> makeProposal(Optional<CfgNRGPixelized> exst, KernelCalcContext context) throws KernelCalcNRGException {
+		
+		if (exst.isPresent()) {
+			return Optional.empty();
+		}
 		
 		ProposerContext propContext = context.proposer();
 		
@@ -112,8 +116,8 @@ public class KernelMerge extends KernelPosNeg<CfgNRGPixelized> {
 			return Optional.empty();
 		}
 		
-		PxlMarkMemo pmmSrc = exst.getMemoForMark(pair.getSource());
-		PxlMarkMemo pmmDest = exst.getMemoForMark(pair.getDestination());
+		PxlMarkMemo pmmSrc = exst.get().getMemoForMark(pair.getSource());
+		PxlMarkMemo pmmDest = exst.get().getMemoForMark(pair.getDestination());
 				
 		// How and why does this happen?
 		if (pmmSrc==null||pmmDest==null) {
@@ -151,7 +155,7 @@ public class KernelMerge extends KernelPosNeg<CfgNRGPixelized> {
 		return Optional.of(
 			createCfgNRG(
 				markAdded.get(),
-				exst,
+				exst.get(),
 				propContext.getNrgStack(),
 				propContext.getRegionMap()
 			)

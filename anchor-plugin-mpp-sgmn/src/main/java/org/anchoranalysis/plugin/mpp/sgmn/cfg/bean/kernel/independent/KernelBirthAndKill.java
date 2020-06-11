@@ -78,8 +78,12 @@ public class KernelBirthAndKill extends KernelPosNeg<CfgNRGPixelized> {
 	private transient List<PxlMarkMemo> toKill;
 	
 	@Override
-	public Optional<CfgNRGPixelized> makeProposal(CfgNRGPixelized exst, KernelCalcContext context) throws KernelCalcNRGException {
+	public Optional<CfgNRGPixelized> makeProposal(Optional<CfgNRGPixelized> exst, KernelCalcContext context) throws KernelCalcNRGException {
 
+		if (exst.isPresent()) {
+			return Optional.empty();
+		}
+		
 		markNew = context.cfgGen().getCfgGen().newTemplateMark();
 		
 		ProposerContext propContext = context.proposer();
@@ -92,7 +96,7 @@ public class KernelBirthAndKill extends KernelPosNeg<CfgNRGPixelized> {
 		try {	
 			toKill = KernelBirthAndKillHelper.determineKillObjects(
 				memoNew,
-				exst,
+				exst.get(),
 				regionID,
 				overlapRatioThreshold
 			);
@@ -110,7 +114,7 @@ public class KernelBirthAndKill extends KernelPosNeg<CfgNRGPixelized> {
 				
 		return OptionalUtilities.map(
 			pmmAdditional,
-			pmm -> KernelBirthAndKillHelper.calcUpdatedNRG(exst, memoNew, pmm, toKill, context, propContext)
+			pmm -> KernelBirthAndKillHelper.calcUpdatedNRG(exst.get(), memoNew, pmm, toKill, context, propContext)
 		);
 	}
 	

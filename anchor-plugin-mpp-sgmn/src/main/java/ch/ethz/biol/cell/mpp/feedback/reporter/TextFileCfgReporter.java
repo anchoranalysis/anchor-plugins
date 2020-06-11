@@ -1,12 +1,15 @@
 package ch.ethz.biol.cell.mpp.feedback.reporter;
 
+import java.util.Optional;
+
+import org.anchoranalysis.anchor.mpp.cfg.Cfg;
 import org.anchoranalysis.anchor.mpp.feature.nrg.cfg.CfgNRGPixelized;
 
 /*-
  * #%L
  * anchor-plugin-mpp
  * %%
- * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -28,33 +31,40 @@ import org.anchoranalysis.anchor.mpp.feature.nrg.cfg.CfgNRGPixelized;
  * #L%
  */
 
-import org.anchoranalysis.mpp.sgmn.kernel.proposer.KernelIterDescription;
+import org.anchoranalysis.io.output.error.OutputWriteFailedException;
+import org.anchoranalysis.mpp.sgmn.bean.optscheme.feedback.PeriodicSubfolderReporter;
+import org.anchoranalysis.mpp.sgmn.optscheme.feedback.OptimizationFeedbackInitParams;
+import org.anchoranalysis.mpp.sgmn.optscheme.feedback.ReporterException;
 import org.anchoranalysis.mpp.sgmn.optscheme.step.Reporting;
 
 
-public class KernelIterDescriptionSerializerPeriodicReporter extends ObjectSerializerPeriodicReporter<KernelIterDescription> {
-
-	// BEAN PARAMETERS
-	// END BEAN PARAMETERS
+public class TextFileCfgReporter extends PeriodicSubfolderReporter<Cfg> {
 	
-	public KernelIterDescriptionSerializerPeriodicReporter() {
-		super("kernelIterDescription");
+	public TextFileCfgReporter() {
+		super();
+	}
+
+	@Override
+	public void reportBegin( OptimizationFeedbackInitParams<CfgNRGPixelized> initParams ) throws ReporterException {
+		
+		super.reportBegin( initParams );
+		
+		try {
+			init( new ObjectAsStringGenerator<Cfg>() );
+		} catch (OutputWriteFailedException e) {
+			throw new ReporterException(e);
+		}
 	}
 	
 	@Override
-	protected KernelIterDescription generateIterableElement( Reporting<CfgNRGPixelized> reporting ) {
-		return new KernelIterDescription(
-			reporting.getKernel(),
-			reporting.isAccptd(),
-			reporting.hasProposal(),
-			reporting.getChangedMarkIDs(),
-			reporting.getExecutionTime(),
-			reporting.getIter(),
-			reporting.getKernelNoProposalDescription()
+	protected Optional<Cfg> generateIterableElement( Reporting<CfgNRGPixelized> reporting ) throws ReporterException {
+		return Optional.of(
+			reporting.getCfgNRGAfter().getCfg()
 		);
 	}
 
 	@Override
 	public void reportNewBest(Reporting<CfgNRGPixelized> reporting) {
+		
 	}
 }

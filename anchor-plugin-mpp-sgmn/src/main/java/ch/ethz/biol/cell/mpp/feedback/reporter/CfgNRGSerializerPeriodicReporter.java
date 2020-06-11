@@ -1,13 +1,15 @@
 package ch.ethz.biol.cell.mpp.feedback.reporter;
 
-import org.anchoranalysis.anchor.mpp.cfg.Cfg;
+import java.util.Optional;
+
+import org.anchoranalysis.anchor.mpp.feature.nrg.cfg.CfgNRG;
 import org.anchoranalysis.anchor.mpp.feature.nrg.cfg.CfgNRGPixelized;
 
-/*-
+/*
  * #%L
  * anchor-plugin-mpp
  * %%
- * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -29,40 +31,62 @@ import org.anchoranalysis.anchor.mpp.feature.nrg.cfg.CfgNRGPixelized;
  * #L%
  */
 
-import org.anchoranalysis.io.output.error.OutputWriteFailedException;
-import org.anchoranalysis.mpp.sgmn.bean.optscheme.feedback.PeriodicSubfolderReporter;
-import org.anchoranalysis.mpp.sgmn.optscheme.feedback.OptimizationFeedbackInitParams;
+
+import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.mpp.sgmn.optscheme.feedback.ReporterException;
 import org.anchoranalysis.mpp.sgmn.optscheme.step.Reporting;
 
-import ch.ethz.biol.cell.imageprocessing.io.generator.text.ObjectAsStringGenerator;
+public class CfgNRGSerializerPeriodicReporter extends ObjectSerializerPeriodicReporter<CfgNRG> {
 
-
-public class TextFileCfgReporter extends PeriodicSubfolderReporter<Cfg> {
+	// BEAN PARAMETERS
+	@BeanField
+	private boolean proposal = false;
 	
-	public TextFileCfgReporter() {
-		super();
+	/** If proposal==true, this toggles between the primary and secondary proposal */
+	@BeanField
+	private boolean secondary = false;
+	// END BEAN PARAMETERS
+	
+	public CfgNRGSerializerPeriodicReporter() {
+		super("cfgNRG");
 	}
-
+	
 	@Override
-	public void reportBegin( OptimizationFeedbackInitParams<CfgNRGPixelized> initParams ) throws ReporterException {
+	protected Optional<CfgNRG> generateIterableElement( Reporting<CfgNRGPixelized> reporting ) throws ReporterException {
 		
-		super.reportBegin( initParams );
-		
-		try {
-			init( new ObjectAsStringGenerator<Cfg>() );
-		} catch (OutputWriteFailedException e) {
-			throw new ReporterException(e);
+		if (proposal) {
+			return proposalCfgNRGOrNull(reporting);
+		} else {
+			return Optional.of(
+				reporting.getCfgNRGAfter().getCfgNRG()
+			);
 		}
 	}
 	
-	@Override
-	protected Cfg generateIterableElement( Reporting<CfgNRGPixelized> reporting ) throws ReporterException {
-		return reporting.getCfgNRGAfter().getCfg();
+	
+	private Optional<CfgNRG> proposalCfgNRGOrNull( Reporting<CfgNRGPixelized> reporting ) {
+		
+		Optional<CfgNRGPixelized> p = secondary ? reporting.getProposalSecondary() : reporting.getProposal();
+		return p.map(CfgNRGPixelized::getCfgNRG);
+	}
+	
+	public boolean isProposal() {
+		return proposal;
 	}
 
+	public void setProposal(boolean proposal) {
+		this.proposal = proposal;
+	}
+	
 	@Override
 	public void reportNewBest(Reporting<CfgNRGPixelized> reporting) {
-		
+	}
+
+	public boolean isSecondary() {
+		return secondary;
+	}
+
+	public void setSecondary(boolean secondary) {
+		this.secondary = secondary;
 	}
 }
