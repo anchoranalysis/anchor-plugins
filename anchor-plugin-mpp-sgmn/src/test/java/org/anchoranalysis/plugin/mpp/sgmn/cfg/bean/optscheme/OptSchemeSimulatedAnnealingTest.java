@@ -29,16 +29,17 @@ import org.anchoranalysis.test.LoggingFixture;
 import org.anchoranalysis.test.image.BoundContextFixture;
 import org.anchoranalysis.test.image.NRGStackFixture;
 import org.junit.Test;
-import ch.ethz.biol.cell.mpp.feedback.reporter.NullReporter;
 
+import ch.ethz.biol.cell.mpp.feedback.reporter.ConsoleAcceptedReporter;
 import ch.ethz.biol.cell.mpp.anneal.AnnealSchemeGeom;
 
+@SuppressWarnings("unused")
 public class OptSchemeSimulatedAnnealingTest {
 
 	@Test
 	public void test() throws OptTerminatedEarlyException, CreateException, InitException {
 		
-		AnnealSchemeGeom annealScheme = new AnnealSchemeGeom(1e-20, 0.99995);
+		/*AnnealSchemeGeom annealScheme = new AnnealSchemeGeom(1e-20, 0.99995);
 		
 		OptSchemeSimulatedAnnealing<CfgNRGPixelized, CfgNRGPixelized, CfgNRGPixelized> optScheme = new OptSchemeSimulatedAnnealing<>();
 		optScheme.setAnnealScheme(annealScheme);
@@ -48,7 +49,7 @@ public class OptSchemeSimulatedAnnealingTest {
 		
 		
 		ListUpdatableMarkSetCollection updatableMarkSetCollection = new ListUpdatableMarkSetCollection();
-		FeedbackReceiver<CfgNRGPixelized> feedbackReceiver = new NullReporter<>();
+		FeedbackReceiver<CfgNRGPixelized> feedbackReceiver = new ConsoleAcceptedReporter();
 		OptSchemeInitContext initContext = new OptSchemeInitContext(
 			"testExperiment",
 			nrgScheme(),
@@ -58,7 +59,7 @@ public class OptSchemeSimulatedAnnealingTest {
 			new RandomNumberGeneratorMersenne(true),
 			new CfgGen()
 		);
-		optScheme.findOpt(kernelProposer(), updatableMarkSetCollection, feedbackReceiver, initContext);
+		optScheme.findOpt(kernelProposer(), updatableMarkSetCollection, feedbackReceiver, initContext);*/
 		
 		fail("Not yet implemented");
 	}
