@@ -175,8 +175,6 @@ public class FeatureListImageTest {
 	}
 	
 	private static FeatureInputSingleObj createParams( ObjMask om ) throws CreateException {
-		FeatureInputSingleObj params = new FeatureInputSingleObj(om);
-		params.setNrgStack(NRG_STACK);
-		return params;
+		return new FeatureInputSingleObj(om, NRG_STACK);
 	}
 }

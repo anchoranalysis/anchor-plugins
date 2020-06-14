@@ -30,7 +30,6 @@ import java.nio.ByteBuffer;
 
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.chnl.Chnl;
-import org.anchoranalysis.image.convert.ByteConverter;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.image.stack.Stack;
@@ -41,6 +40,8 @@ import org.opencv.core.Mat;
 
 public class MatConverter {
 
+	private MatConverter() {}
+	
 	public static Mat fromObjMask( ObjMask om ) throws CreateException {
 		Extent e = om.getBoundingBox().extent(); 
 		if (e.getZ()>1) {
@@ -99,34 +100,9 @@ public class MatConverter {
 		
 		assert(vb.extent().getZ())==1;
 		
-		
-		
 		Mat mat = createEmptyMat( vb.extent(), CvType.CV_8UC1 );
 		mat.put(0, 0, vb.getPixelsForPlane(0).buffer().array() );
-		
-		// TODO
-		//System.out.printf("NumPixels>100 (Mat) = %d%n", cntMoreThan(mat,100) );
-		
 		return mat;
-	}
-	
-	@SuppressWarnings("unused")
-	private static int cntMoreThan( Mat mat, int thrshld ) {
-				
-		int c = 0;
-		
-		int size = (int) mat.size().area();
-		
-		byte[] arr = new byte[ size ];
-		mat.get(0, 0, arr);
-		
-		for( int i=0; i<size; i++ ) {
-			if( ByteConverter.unsignedByteToInt(arr[i]) > thrshld ) {
-				c++;
-			}
-		}
-
-		return c;
 	}
 	
 	private static Mat matFromRGB( Chnl chnlRed, Chnl chnlGreen, Chnl chnlBlue ) {

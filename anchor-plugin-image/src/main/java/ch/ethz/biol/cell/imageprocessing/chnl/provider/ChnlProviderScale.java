@@ -32,13 +32,12 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.log.LogReporter;
 import org.anchoranalysis.image.bean.interpolator.InterpolatorBean;
+import org.anchoranalysis.image.bean.interpolator.InterpolatorBeanLanczos;
 import org.anchoranalysis.image.bean.provider.ChnlProviderOne;
 import org.anchoranalysis.image.bean.scale.ScaleCalculator;
 import org.anchoranalysis.image.chnl.Chnl;
 import org.anchoranalysis.image.interpolator.Interpolator;
 import org.anchoranalysis.image.scale.ScaleFactor;
-
-import anchor.image.bean.interpolator.InterpolatorBeanLanczos;
 
 public class ChnlProviderScale extends ChnlProviderOne {
 
