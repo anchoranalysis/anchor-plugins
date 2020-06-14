@@ -1,0 +1,105 @@
+package org.anchoranalysis.plugin.opencv.bean.feature;
+
+import java.util.Optional;
+
+import org.anchoranalysis.core.error.CreateException;
+import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.feature.cache.calculation.FeatureCalculation;
+import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.image.bean.interpolator.InterpolatorBeanLanczos;
+import org.anchoranalysis.image.bean.size.SizeXY;
+import org.anchoranalysis.image.extent.Extent;
+import org.anchoranalysis.image.feature.stack.FeatureInputStack;
+import org.anchoranalysis.image.interpolator.Interpolator;
+import org.anchoranalysis.image.stack.Stack;
+import org.anchoranalysis.plugin.opencv.MatConverter;
+import org.apache.commons.lang.builder.EqualsBuilder;
+import org.apache.commons.lang.builder.HashCodeBuilder;
+import org.opencv.core.Mat;
+import org.opencv.core.MatOfFloat;
+import org.opencv.objdetect.HOGDescriptor;
+
+class CalculateHOGDescriptors extends FeatureCalculation<float[], FeatureInputStack> {
+
+	private static final Interpolator INTERPOLATOR = new InterpolatorBeanLanczos().create();
+	
+	private Optional<SizeXY> resizeTo;
+	private HOGParameters params;
+
+	public CalculateHOGDescriptors(Optional<SizeXY> resizeTo, HOGParameters params) {
+		super();
+		this.resizeTo = resizeTo;
+		this.params = params;
+	}
+
+	@Override
+	protected float[] execute(FeatureInputStack input) throws FeatureCalcException {
+		try {
+			Stack stack = extractStack(input);
+			
+			checkSize(stack.getDimensions().getExtnt());
+			
+			Mat img = MatConverter.makeRGBStack(stack);
+			
+			MatOfFloat out = new MatOfFloat();
+			
+			HOGDescriptor descriptor = new HOGDescriptor();
+			descriptor.compute(img, out);
+			
+			float[] arr = new float[out.rows()];
+			out.get(0, 0, arr);
+			return arr;
+			
+		} catch (CreateException | OperationFailedException e) {
+			throw new FeatureCalcException(e);
+		}
+	}
+	
+	/** Extracts a stack (that is maybe resized) 
+	 * @throws FeatureCalcException 
+	 * @throws OperationFailedException */
+	private Stack extractStack(FeatureInputStack input) throws OperationFailedException {
+		
+		// We can rely that an NRG stack always exists
+		Stack stack = input.getNrgStackOptional().get().getNrgStack().asStack();
+
+		if (resizeTo.isPresent()) {
+			SizeXY size = resizeTo.get(); 
+			return stack.mapChnl( chnl->
+				chnl.resizeXY(size.getWidth(), size.getHeight(), INTERPOLATOR)
+			);
+		} else {
+			return stack;
+		}
+	}
+	
+	@Override
+	public boolean equals(final Object obj){
+	    if(obj instanceof CalculateHOGDescriptors){
+	        final CalculateHOGDescriptors other = (CalculateHOGDescriptors) obj;
+	        return new EqualsBuilder()
+	            .append(resizeTo, other.resizeTo)
+	            .append(params, other.params)
+	            .isEquals();
+	    } else{
+	        return false;
+	    }
+	}
+	
+	@Override
+	public int hashCode() {
+		return new HashCodeBuilder()
+			.append(resizeTo)
+			.append(params)
+			.toHashCode();
+	}
+	
+	private void checkSize(Extent extent) throws OperationFailedException {
+		if (extent.getX() < params.getWindowSize().getWidth()) {
+			throw new OperationFailedException("Image width is smaller than HOG window width. This is not permitted.");
+		}
+		if (extent.getY() < params.getWindowSize().getHeight()) {
+			throw new OperationFailedException("Image height is smaller than HOG window height. This is not permitted.");
+		}
+	}
+}

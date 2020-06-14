@@ -67,10 +67,10 @@ public class Simple extends FeatureTableObjs<FeatureInputSingleObj> {
 		
 		for( ObjMask om : objs ) {
 			checkObjInsideScene(om, nrgStack.getDimensions().getExtnt());
-			
-			FeatureInputSingleObj params = new FeatureInputSingleObj(om);
-			params.setNrgStack(nrgStack);
-			out.add(params);
+
+			out.add(
+				new FeatureInputSingleObj(om, nrgStack)
+			);
 		}
 		
 		return out;
