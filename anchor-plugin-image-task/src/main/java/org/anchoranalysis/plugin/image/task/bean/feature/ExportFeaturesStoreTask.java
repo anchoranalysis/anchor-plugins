@@ -48,6 +48,7 @@ import org.anchoranalysis.feature.calc.results.ResultsVector;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.io.csv.GroupedResultsVectorCollection;
 import org.anchoranalysis.feature.list.NamedFeatureStore;
+import org.anchoranalysis.feature.list.NamedFeatureStoreFactory;
 import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.input.InputFromManager;
 import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
@@ -66,6 +67,8 @@ import org.anchoranalysis.plugin.image.task.sharedstate.SharedStateExportFeature
  */
 public abstract class ExportFeaturesStoreTask<T extends InputFromManager, S extends FeatureInput> extends ExportFeaturesTask<T,SharedStateExportFeaturesWithStore<S>> {
 
+	private static final NamedFeatureStoreFactory storeFactory = NamedFeatureStoreFactory.factoryParamsOnly();
+	
 	// START BEAN PROPERTIES
 	@BeanField @NonEmpty
 	private List<NamedBean<FeatureListProvider<S>>> listFeatures = new ArrayList<>();
@@ -88,8 +91,11 @@ public abstract class ExportFeaturesStoreTask<T extends InputFromManager, S exte
 			throws ExperimentExecutionException {
 		try {
 			return new SharedStateExportFeaturesWithStore<>(
-				getListFeatures(),
-				new GroupedResultsVectorCollection(firstResultHeader,"group")
+				storeFactory.createNamedFeatureList(listFeatures),
+				new GroupedResultsVectorCollection(
+					firstResultHeader,
+					"group"
+				)
 			);
 		} catch (CreateException e) {
 			throw new ExperimentExecutionException(e);

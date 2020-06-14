@@ -41,7 +41,6 @@ public class HOGFeature extends FeatureStack {
 	@BeanField @NonNegative
 	private int index = 0;
 	// END BEAN PROPRERTIES
-	
 
 	@Override
 	public void checkMisconfigured(BeanInstanceMap defaultInstances) throws BeanMisconfiguredException {
@@ -96,6 +95,11 @@ public class HOGFeature extends FeatureStack {
 
 	public void setParams(HOGParameters params) {
 		this.params = params;
+	}
+
+	@Override
+	public String getParamDscr() {
+		return Integer.toString(index);
 	}
 
 }

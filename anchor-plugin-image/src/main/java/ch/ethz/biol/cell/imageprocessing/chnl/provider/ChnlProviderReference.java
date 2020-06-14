@@ -49,7 +49,7 @@ public class ChnlProviderReference extends ChnlProvider {
 	private Chnl chnl;
 
 	public ChnlProviderReference() {
-		
+		// Standard Bean Constructor
 	}
 		
 	public ChnlProviderReference(String id) {

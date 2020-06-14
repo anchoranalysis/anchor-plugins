@@ -26,15 +26,10 @@ package org.anchoranalysis.plugin.image.task.sharedstate;
  * #L%
  */
 
-import java.util.List;
-
-import org.anchoranalysis.bean.NamedBean;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.feature.bean.list.FeatureListProvider;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.io.csv.GroupedResultsVectorCollection;
 import org.anchoranalysis.feature.list.NamedFeatureStore;
-import org.anchoranalysis.feature.list.NamedFeatureStoreFactory;
 import org.anchoranalysis.feature.name.FeatureNameList;
 
 public class SharedStateExportFeaturesWithStore<T extends FeatureInput> extends SharedStateExportFeatures {
@@ -42,11 +37,11 @@ public class SharedStateExportFeaturesWithStore<T extends FeatureInput> extends 
 	private NamedFeatureStore<T> featureStore;
 	
 	public SharedStateExportFeaturesWithStore(
-		List<NamedBean<FeatureListProvider<T>>> listFeatureListProvider,
+		NamedFeatureStore<T> featureStore,
 		GroupedResultsVectorCollection groupResults
 	) throws CreateException {
 		super( groupResults );
-		this.featureStore = NamedFeatureStoreFactory.createNamedFeatureList(listFeatureListProvider);
+		this.featureStore = featureStore;
 	}
 	
 	public NamedFeatureStore<T> getFeatureStore() {

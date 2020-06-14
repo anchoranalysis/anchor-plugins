@@ -23,7 +23,7 @@ public class HOGParameters extends AnchorBean<HOGParameters> {
 	// START BEAN PROPERTIES
 	/** The window-size as per OpenCV implementation. If not specified, the window is set to be the same size as the (possibly resized) image.*/
 	@BeanField @OptionalBean
-	private SizeXY windowSize = new SizeXY(32,32);
+	private SizeXY windowSize;
 
 	/** The block-size as per OpenCV implementation (identical default-size)*/
 	@BeanField
@@ -161,6 +161,8 @@ public class HOGParameters extends AnchorBean<HOGParameters> {
 		
 		return timesX * timesY;
 	}
+	
+	
 
 	
 	/** Convert to OpenCV Size class */
@@ -178,5 +180,51 @@ public class HOGParameters extends AnchorBean<HOGParameters> {
 	
 	private static Size sizeFor(SizeXY size) {
 		return new Size(size.getWidth(), size.getHeight());
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((blockSize == null) ? 0 : blockSize.hashCode());
+		result = prime * result + ((blockStride == null) ? 0 : blockStride.hashCode());
+		result = prime * result + ((cellSize == null) ? 0 : cellSize.hashCode());
+		result = prime * result + numBins;
+		result = prime * result + ((windowSize == null) ? 0 : windowSize.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		HOGParameters other = (HOGParameters) obj;
+		if (blockSize == null) {
+			if (other.blockSize != null)
+				return false;
+		} else if (!blockSize.equals(other.blockSize))
+			return false;
+		if (blockStride == null) {
+			if (other.blockStride != null)
+				return false;
+		} else if (!blockStride.equals(other.blockStride))
+			return false;
+		if (cellSize == null) {
+			if (other.cellSize != null)
+				return false;
+		} else if (!cellSize.equals(other.cellSize))
+			return false;
+		if (numBins != other.numBins)
+			return false;
+		if (windowSize == null) {
+			if (other.windowSize != null)
+				return false;
+		} else if (!windowSize.equals(other.windowSize))
+			return false;
+		return true;
 	}
 }

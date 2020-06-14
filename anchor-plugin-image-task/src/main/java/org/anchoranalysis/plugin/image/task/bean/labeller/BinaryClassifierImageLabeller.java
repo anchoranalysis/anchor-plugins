@@ -29,6 +29,8 @@ package org.anchoranalysis.plugin.image.task.bean.labeller;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+
 import org.anchoranalysis.bean.NamedBean;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.NonEmpty;
@@ -48,6 +50,8 @@ import org.anchoranalysis.plugin.image.task.imagefeature.calculator.FeatureCalcu
 
 public class BinaryClassifierImageLabeller extends BinaryOutcomeImageLabeller<Object> {
 
+	private static final NamedFeatureStoreFactory STORE_FACTORY = new NamedFeatureStoreFactory();
+	
 	// START BEAN PROPERTIES
 	@BeanField @SkipInit
 	private FeatureListProvider<FeatureInputStack> classifierProvider;
@@ -72,13 +76,13 @@ public class BinaryClassifierImageLabeller extends BinaryOutcomeImageLabeller<Ob
 	) throws OperationFailedException {
 		
 		try {
-			NamedFeatureStore<FeatureInputStack> featureStore = NamedFeatureStoreFactory.createNamedFeatureList(
-				listFeatures
-			);
+			NamedFeatureStore<FeatureInputStack> featureStore = STORE_FACTORY.createNamedFeatureList(listFeatures);
 			
 			FeatureCalculatorStackInputFromStore featureCalculator = new FeatureCalculatorStackInputFromStore(
 				input,
-				getNrgStackProvider(),
+				Optional.of(
+					getNrgStackProvider()
+				),
 				featureStore,
 				context
 			);
