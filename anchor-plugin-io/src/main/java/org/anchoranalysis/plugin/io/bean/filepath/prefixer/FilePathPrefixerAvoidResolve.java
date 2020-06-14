@@ -137,14 +137,8 @@ public abstract class FilePathPrefixerAvoidResolve extends FilePathPrefixer {
 	private Path selectResolvedPath(FilePathPrefixerParams context) {
 		
 		if (outPathPrefix.isEmpty()) {
-			// If there's an outPathPrefix specified, then use it
-			if (context.getOutputDirectory().isPresent()) {
-				assert( context.getOutputDirectory().get().isAbsolute() );
-				return context.getOutputDirectory().get();
-			} else {
-				// Otherwise use the system temporary directory
-				return tempDir();
-			}
+			// If there's an outPathPrefix specified, then use it, otherwise a temporary directory
+			return context.getOutputDirectory().orElseGet(FilePathPrefixerAvoidResolve::tempDir);
 		}
 		
 		return resolvePath(outPathPrefix);

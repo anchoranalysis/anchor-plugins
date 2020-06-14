@@ -84,6 +84,4 @@ public class FileProviderRemove extends FileProvider {
 	public void setFileProvider(FileProvider fileProvider) {
 		this.fileProvider = fileProvider;
 	}
-
-
 }
