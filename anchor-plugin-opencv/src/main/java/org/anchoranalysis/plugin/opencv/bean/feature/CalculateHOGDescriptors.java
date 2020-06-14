@@ -17,7 +17,6 @@ import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.opencv.core.Mat;
 import org.opencv.core.MatOfFloat;
-import org.opencv.objdetect.HOGDescriptor;
 
 class CalculateHOGDescriptors extends FeatureCalculation<float[], FeatureInputStack> {
 
@@ -36,19 +35,16 @@ class CalculateHOGDescriptors extends FeatureCalculation<float[], FeatureInputSt
 	protected float[] execute(FeatureInputStack input) throws FeatureCalcException {
 		try {
 			Stack stack = extractStack(input);
+			Extent extent = stack.getDimensions().getExtnt();
 			
-			checkSize(stack.getDimensions().getExtnt());
+			checkSize(extent);
 			
 			Mat img = MatConverter.makeRGBStack(stack);
 			
-			MatOfFloat out = new MatOfFloat();
-			
-			HOGDescriptor descriptor = new HOGDescriptor();
-			descriptor.compute(img, out);
-			
-			float[] arr = new float[out.rows()];
-			out.get(0, 0, arr);
-			return arr;
+			MatOfFloat descriptorValues = new MatOfFloat();
+			params.createDescriptor(extent).compute(img, descriptorValues);
+
+			return convertToArray(descriptorValues);
 			
 		} catch (CreateException | OperationFailedException e) {
 			throw new FeatureCalcException(e);
@@ -94,12 +90,16 @@ class CalculateHOGDescriptors extends FeatureCalculation<float[], FeatureInputSt
 			.toHashCode();
 	}
 	
-	private void checkSize(Extent extent) throws OperationFailedException {
-		if (extent.getX() < params.getWindowSize().getWidth()) {
-			throw new OperationFailedException("Image width is smaller than HOG window width. This is not permitted.");
+	private void checkSize(Extent extent) throws FeatureCalcException {
+		if (extent.getZ()>1) {
+			throw new FeatureCalcException("The image is 3D, but the feture only supports 2D images");
 		}
-		if (extent.getY() < params.getWindowSize().getHeight()) {
-			throw new OperationFailedException("Image height is smaller than HOG window height. This is not permitted.");
-		}
+		params.checkSize(extent);
+	}
+		
+	private static float[] convertToArray(MatOfFloat mat) {
+		float[] arr = new float[mat.rows()];
+		mat.get(0, 0, arr);
+		return arr;
 	}
 }
