@@ -18,14 +18,26 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.opencv.core.Mat;
 import org.opencv.core.MatOfFloat;
 
-class CalculateHOGDescriptors extends FeatureCalculation<float[], FeatureInputStack> {
+/**
+ * Calculates the entire HOG descriptor for an image
+ * 
+ * @author Owen Feehan
+ *
+ */
+class CalculateHOGDescriptor extends FeatureCalculation<float[], FeatureInputStack> {
 
 	private static final Interpolator INTERPOLATOR = new InterpolatorBeanLanczos().create();
 	
 	private Optional<SizeXY> resizeTo;
 	private HOGParameters params;
 
-	public CalculateHOGDescriptors(Optional<SizeXY> resizeTo, HOGParameters params) {
+	/**
+	 * Constructor
+	 * 
+	 * @param resizeTo optionally resizes the image before calculating the descriptor (useful for achiving constant-sized descriptors for different sized images)
+	 * @param params parameters for the HOG-calculation
+	 */
+	public CalculateHOGDescriptor(Optional<SizeXY> resizeTo, HOGParameters params) {
 		super();
 		this.resizeTo = resizeTo;
 		this.params = params;
@@ -71,8 +83,8 @@ class CalculateHOGDescriptors extends FeatureCalculation<float[], FeatureInputSt
 	
 	@Override
 	public boolean equals(final Object obj){
-	    if(obj instanceof CalculateHOGDescriptors){
-	        final CalculateHOGDescriptors other = (CalculateHOGDescriptors) obj;
+	    if(obj instanceof CalculateHOGDescriptor){
+	        final CalculateHOGDescriptor other = (CalculateHOGDescriptor) obj;
 	        return new EqualsBuilder()
 	            .append(resizeTo, other.resizeTo)
 	            .append(params, other.params)

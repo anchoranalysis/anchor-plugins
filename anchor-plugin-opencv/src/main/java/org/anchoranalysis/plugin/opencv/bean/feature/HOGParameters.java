@@ -11,6 +11,13 @@ import org.anchoranalysis.image.extent.Extent;
 import org.opencv.core.Size;
 import org.opencv.objdetect.HOGDescriptor;
 
+
+/**
+ * Parameters for calculating a HOG Descriptor covering window-size, block-size etc.
+ * 
+ * @author Owen Feehan
+ *
+ */
 public class HOGParameters extends AnchorBean<HOGParameters> {
 
 	// START BEAN PROPERTIES
