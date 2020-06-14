@@ -59,7 +59,7 @@ public class HOGFeature extends FeatureStack {
 	@Override
 	protected double calc(SessionInput<FeatureInputStack> input) throws FeatureCalcException {
 		float[] arr = input.calc(
-			new CalculateHOGDescriptors(
+			new CalculateHOGDescriptor(
 				Optional.ofNullable(resizeTo),
 				params
 			)
