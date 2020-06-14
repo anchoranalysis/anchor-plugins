@@ -25,7 +25,7 @@ public class HOGFeatureTest {
 	
 	@Test
 	public void testWithinBounds() throws FeatureCalcException {
-		assertEquals(0.018804837, featureValForIndex(0), 10e-6);
+		assertEquals(0.006448161, featureValForIndex(0), 10e-6);
 	}
 	
 	@Test(expected = FeatureCalcException.class)
@@ -36,7 +36,7 @@ public class HOGFeatureTest {
 	private double featureValForIndex( int index ) throws FeatureCalcException {
 				
 		HOGFeature feature = new HOGFeature();
-		feature.setResizeTo( new SizeXY(128,128) );
+		feature.setResizeTo( new SizeXY(64,64) );
 		feature.setIndex(index);
 		
 		FeatureCalculatorSingle<FeatureInputStack> session = FeatureSession.with(

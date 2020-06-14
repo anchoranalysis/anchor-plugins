@@ -33,6 +33,7 @@ public class HOGFeature extends FeatureStack {
 	@BeanField @OptionalBean
 	private SizeXY resizeTo;
 	
+	/** Parameters used for calculating HOG */
 	@BeanField
 	private HOGParameters params = new HOGParameters();
 	
