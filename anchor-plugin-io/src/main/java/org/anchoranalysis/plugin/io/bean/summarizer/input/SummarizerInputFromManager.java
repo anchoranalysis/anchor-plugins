@@ -1,5 +1,7 @@
 package org.anchoranalysis.plugin.io.bean.summarizer.input;
 
+import java.util.Optional;
+
 /*-
  * #%L
  * anchor-plugin-io
@@ -28,6 +30,7 @@ package org.anchoranalysis.plugin.io.bean.summarizer.input;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.functional.OptionalUtilities;
 import org.anchoranalysis.io.input.InputFromManager;
 import org.anchoranalysis.plugin.io.bean.summarizer.Summarizer;
 
@@ -50,9 +53,10 @@ public abstract class SummarizerInputFromManager<T extends InputFromManager,S> e
 	
 	@Override
 	public void add(T element) throws OperationFailedException {
-
-		S extractedElement = extractFrom(element);
-		summarizer.add( extractedElement );
+		OptionalUtilities.ifPresent(
+			extractFrom(element),
+			e->summarizer.add(e)
+		);
 	}
 
 	@Override
@@ -60,7 +64,7 @@ public abstract class SummarizerInputFromManager<T extends InputFromManager,S> e
 		return summarizer.describe();
 	}
 	
-	protected abstract S extractFrom( T input );
+	protected abstract Optional<S> extractFrom( T input );
 
 	public Summarizer<S> getSummarizer() {
 		return summarizer;
