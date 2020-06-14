@@ -35,6 +35,7 @@ import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.feature.bean.list.FeatureListProvider;
 import org.anchoranalysis.feature.input.FeatureInput;
+import org.anchoranalysis.feature.list.NamedFeatureStoreFactory;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
 import org.anchoranalysis.image.feature.session.FeatureTableSession;
@@ -55,11 +56,12 @@ public abstract class FeatureTableObjs<T extends FeatureInput> extends AnchorBea
 	 * Creates features that will be applied on the objMasks. Features should always be duplicated from the input list.
 	 * 
 	 * @param list
+	 * @param storeFactory TODO
 	 * @param suppressErrors TODO
 	 * @return
 	 * @throws CreateException
 	 */
-	public abstract FeatureTableSession<T> createFeatures( List<NamedBean<FeatureListProvider<FeatureInputSingleObj>>> list, boolean suppressErrors ) throws CreateException, InitException;
+	public abstract FeatureTableSession<T> createFeatures( List<NamedBean<FeatureListProvider<FeatureInputSingleObj>>> list, NamedFeatureStoreFactory storeFactory, boolean suppressErrors ) throws CreateException, InitException;
 	
 	public abstract List<T> createListInputs(
 		ObjMaskCollection objs,

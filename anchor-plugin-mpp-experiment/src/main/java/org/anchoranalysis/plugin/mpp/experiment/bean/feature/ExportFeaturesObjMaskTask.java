@@ -51,6 +51,7 @@ import org.anchoranalysis.feature.bean.list.FeatureListProvider;
 import org.anchoranalysis.feature.calc.results.ResultsVectorCollection;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.io.csv.GroupedResultsVectorCollection;
+import org.anchoranalysis.feature.list.NamedFeatureStoreFactory;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
 import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
@@ -85,6 +86,8 @@ import org.anchoranalysis.plugin.image.task.sharedstate.SharedStateExportFeature
 **/
 public class ExportFeaturesObjMaskTask<T extends FeatureInput> extends ExportFeaturesTask<MultiInput,SharedStateExportFeaturesObjMask<T>> {
 
+	private static final NamedFeatureStoreFactory storeFactory = new NamedFeatureStoreFactory();
+	
 	// START BEAN PROPERTIES
 	@BeanField
 	private DefineOutputterMPPWithNrg define = new DefineOutputterMPPWithNrg();
@@ -119,7 +122,11 @@ public class ExportFeaturesObjMaskTask<T extends FeatureInput> extends ExportFea
 		try {
 			return new SharedStateExportFeaturesObjMask<>(
 				new GroupedResultsVectorCollection("id","group","objSetName"),
-				table.createFeatures(listFeaturesObjMask, suppressErrors)
+				table.createFeatures(
+					listFeaturesObjMask,
+					storeFactory,
+					suppressErrors
+				)
 			);
 			
 		} catch (CreateException | InitException e) {

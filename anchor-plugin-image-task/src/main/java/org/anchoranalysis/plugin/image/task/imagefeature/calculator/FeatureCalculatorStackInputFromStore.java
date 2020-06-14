@@ -1,7 +1,5 @@
 package org.anchoranalysis.plugin.image.task.imagefeature.calculator;
 
-
-
 /*-
  * #%L
  * anchor-plugin-image-task
@@ -28,7 +26,9 @@ package org.anchoranalysis.plugin.image.task.imagefeature.calculator;
  * #L%
  */
 
+import java.util.Optional;
 import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.bean.list.FeatureListProvider;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
@@ -62,7 +62,7 @@ public class FeatureCalculatorStackInputFromStore {
 		
 	public FeatureCalculatorStackInputFromStore(
 		ProvidesStackInput stackInput,
-		StackProvider nrgStackProvider,
+		Optional<StackProvider> nrgStackProvider,
 		NamedFeatureStore<FeatureInputStack> featureStore,
 		BoundIOContext context
 	) throws OperationFailedException {
@@ -70,12 +70,30 @@ public class FeatureCalculatorStackInputFromStore {
 		
 		helper = new HelperImageFeatureCalculator(context.getLogger());
 		this.initParams = StackInputInitParamsCreator.createInitParams(stackInput, context);
-		this.nrgStack = HelperInit.extractStack(
-			initParams,
+		this.nrgStack = nrgStackFromProvider(
+			stackInput,
 			nrgStackProvider,
 			context.getLogger()
 		);
 		this.featureList = extractFeatures(featureStore);
+	}
+	
+	private NRGStackWithParams nrgStackFromProvider(
+		ProvidesStackInput stackInput,
+		Optional<StackProvider> nrgStackProvider,
+		LogErrorReporter logger
+	) throws OperationFailedException {
+		if (nrgStackProvider.isPresent()) {
+			return HelperInit.extractStack(
+				initParams,
+				nrgStackProvider.get(),
+				logger
+			);
+		} else {
+			return new NRGStackWithParams(
+				stackInput.extractSingleStack()
+			);
+		}
 	}
 	
 	/** Calculates a single-feature that comes in a featureProvider 

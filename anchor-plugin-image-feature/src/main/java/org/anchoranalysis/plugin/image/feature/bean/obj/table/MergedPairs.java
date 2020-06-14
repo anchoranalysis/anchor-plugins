@@ -41,6 +41,7 @@ import org.anchoranalysis.core.graph.EdgeTypeWithVertices;
 import org.anchoranalysis.core.graph.GraphWithEdgeTypes;
 import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.feature.bean.list.FeatureListProvider;
+import org.anchoranalysis.feature.list.NamedFeatureStoreFactory;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
 import org.anchoranalysis.image.feature.objmask.pair.FeatureInputPairObjs;
@@ -141,14 +142,17 @@ public class MergedPairs extends FeatureTableObjs<FeatureInputPairObjs> {
 	@Override
 	public FeatureTableSession<FeatureInputPairObjs> createFeatures(
 		List<NamedBean<FeatureListProvider<FeatureInputSingleObj>>> list,
+		NamedFeatureStoreFactory storeFactory,
 		boolean suppressErrors
 	) throws CreateException {
 		
 		try {
+			FeatureListCustomNameHelper helper = new FeatureListCustomNameHelper(storeFactory);
+			
 			MergedPairsFeatures features = new MergedPairsFeatures(
-				FeatureListCustomNameHelper.copyFeaturesCreateCustomName(listFeaturesImage),
-				FeatureListCustomNameHelper.copyFeaturesCreateCustomName(list),
-				FeatureListCustomNameHelper.copyFeaturesCreateCustomName(listFeaturesPair)
+				helper.copyFeaturesCreateCustomName(listFeaturesImage),
+				helper.copyFeaturesCreateCustomName(list),
+				helper.copyFeaturesCreateCustomName(listFeaturesPair)
 			);
 			
 			return new MergedPairsSession(
