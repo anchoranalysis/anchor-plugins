@@ -31,8 +31,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
-
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.plugin.io.bean.summarizer.Summarizer;
 import org.apache.commons.io.IOCase;
@@ -45,7 +43,7 @@ import com.owenfeehan.pathpatternfinder.Pattern;
  * Converts a list of file-paths into a form that tries to find a pattern in the
  *   naming style using the path-pattern-finder library
  */
-public class FilePathPattern extends Summarizer<Optional<Path>> {
+public class FilePathPattern extends Summarizer<Path> {
 
 	// START BEAN PROPERTIES
 	/** Iff TRUE, any hidden-path is not considered, and simply ignored */
@@ -60,15 +58,10 @@ public class FilePathPattern extends Summarizer<Optional<Path>> {
 	private List<Path> paths = new ArrayList<>();
 	
 	@Override
-	public synchronized void add(Optional<Path> element) throws OperationFailedException {
+	public synchronized void add(Path element) throws OperationFailedException {
 		try {
-			if (!element.isPresent()) {
-				// Nothing to do, if there's no path-defined
-				return;
-			}
-			
-			if (acceptPath(element.get())) {
-				paths.add(element.get());
+			if (acceptPath(element)) {
+				paths.add(element);
 			}
 		} catch (IOException e) {
 			throw new OperationFailedException(e);

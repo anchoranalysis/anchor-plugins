@@ -30,8 +30,6 @@ import static org.junit.Assert.*;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Optional;
-
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.junit.Test;
 
@@ -44,8 +42,8 @@ public class FilePathPatternTest {
 		Path path2 = Paths.get("a/b/d");
 		
 		FilePathPattern fpp = new FilePathPattern();
-		fpp.add( Optional.of(path1) );
-		fpp.add( Optional.of(path2) );
+		fpp.add(path1);
+		fpp.add(path2);
 
 		assertEquals(
 			"${0} = \"d\" (1) | \"c\" (1)",
