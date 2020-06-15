@@ -1,12 +1,9 @@
 package org.anchoranalysis.plugin.image.task.bean.grouped.raster;
 
-
-
-
-
-
-
 import java.util.Optional;
+
+import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.bean.annotation.OptionalBean;
 
 /*
  * #%L
@@ -37,6 +34,7 @@ import java.util.Optional;
 
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.experiment.JobExecutionException;
+import org.anchoranalysis.image.bean.size.SizeXY;
 import org.anchoranalysis.image.chnl.Chnl;
 import org.anchoranalysis.image.stack.NamedImgStackCollection;
 import org.anchoranalysis.io.output.bound.BoundIOContext;
@@ -55,6 +53,12 @@ import org.anchoranalysis.plugin.image.task.grouped.NamedChnl;
   */
 public class GroupedMeanChnlTask extends GroupedStackTask<Chnl,AggregateChnl> {
 
+	// START BEAN PROPERTIES
+	/** If set, each channel is scaled to a specific size before the mean is calculated (useful for combining different sized images)*/
+	@BeanField @OptionalBean
+	private SizeXY resizeTo;
+	// END BEAN PROPERTIES
+	
 	@Override
 	protected GroupMapByName<Chnl, AggregateChnl> createGroupMap(ConsistentChnlChecker chnlChecker) {
 		return new GroupedMeanChnlMap();
@@ -70,7 +74,8 @@ public class GroupedMeanChnlTask extends GroupedStackTask<Chnl,AggregateChnl> {
 
 		ChnlSource source = new ChnlSource(
 			store,
-			sharedState.getChnlChecker()
+			sharedState.getChnlChecker(),
+			Optional.ofNullable(resizeTo)
 		);
 		
 		try {
@@ -90,5 +95,13 @@ public class GroupedMeanChnlTask extends GroupedStackTask<Chnl,AggregateChnl> {
 	@Override
 	protected Optional<String> subdirectoryForGroupOutputs() {
 		return Optional.empty();
+	}
+
+	public SizeXY getResizeTo() {
+		return resizeTo;
+	}
+
+	public void setResizeTo(SizeXY resizeTo) {
+		this.resizeTo = resizeTo;
 	}
 }

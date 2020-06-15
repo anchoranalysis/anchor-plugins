@@ -1,5 +1,7 @@
 package org.anchoranalysis.plugin.image.task.grouped;
 
+import java.util.Optional;
+
 /*-
  * #%L
  * anchor-plugin-image-task
@@ -29,20 +31,38 @@ package org.anchoranalysis.plugin.image.task.grouped;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.index.SetOperationFailedException;
 import org.anchoranalysis.core.name.provider.NamedProviderGetException;
+import org.anchoranalysis.image.bean.size.SizeXY;
 import org.anchoranalysis.image.chnl.Chnl;
 import org.anchoranalysis.image.stack.NamedImgStackCollection;
 import org.anchoranalysis.image.stack.Stack;
 
-/** Source of channels for aggregating. Checks have been applied to make sure all chnls are consistent (same dimensions, type etc.) */
+/** 
+ * Source of channels for aggregating.
+ * 
+ * <p>Checks may be applied to make sure all chnls have the same-type</p>
+ **/
 public class ChnlSource {
 
-	private NamedImgStackCollection stackStore;
-	private ConsistentChnlChecker chnlChecker;
+	private final NamedImgStackCollection stackStore;
+	private final ConsistentChnlChecker chnlChecker;
+	private final Optional<SizeXY> resizeTo;
 	
-	public ChnlSource(NamedImgStackCollection stackStore, ConsistentChnlChecker chnlChecker) {
+	/**
+	 * Constructor
+	 * 
+	 * @param stackStore
+	 * @param chnlChecker
+	 * @param resizeTo optionally resizes all extracted channels in XY
+	 */
+	public ChnlSource(
+		NamedImgStackCollection stackStore,
+		ConsistentChnlChecker chnlChecker,
+		Optional<SizeXY> resizeTo
+	) {
 		super();
 		this.stackStore = stackStore;
 		this.chnlChecker = chnlChecker;
+		this.resizeTo = resizeTo;
 	}
 	
 	public Chnl extractChnl( String stackName, boolean checkType ) throws OperationFailedException {
@@ -87,12 +107,20 @@ public class ChnlSource {
 				chnlChecker.checkChnlType(chnl.getVoxelDataType());
 			}
 			
-			return chnl;
+			return maybeResize(chnl);
 		} catch ( SetOperationFailedException e) {
 			throw new OperationFailedException(
 				String.format("Cannot extract channel %d from stack", index),
 				e
 			);
+		}
+	}
+	
+	private Chnl maybeResize(Chnl chnl) {
+		if (resizeTo.isPresent()) {
+			return chnl.resizeXY(resizeTo.get().getWidth(), resizeTo.get().getHeight());
+		} else {
+			return chnl;
 		}
 	}
 

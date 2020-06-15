@@ -90,7 +90,7 @@ public class StackProviderOutlineRGB extends StackProviderWithBackground {
 		if (do3D) {
 			return chnlBlue;
 		} else {
-			return chnlBlue.maxIntensityProj();
+			return chnlBlue.maxIntensityProjection();
 		}
 	}
 	

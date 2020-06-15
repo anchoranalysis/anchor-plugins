@@ -67,7 +67,7 @@ public class ObjMaskSgmnMIP extends ObjMaskSgmnOne {
 			throw new SgmnFailedException("An object-mask is not supported for this operation");
 		}
 		
-		Chnl max = chnl.maxIntensityProj();
+		Chnl max = chnl.maxIntensityProjection();
 		
 		// Collapse seeds in z direction
 		seeds.ifPresent(ObjMaskSgmnMIP::flattenSeedsInZ);

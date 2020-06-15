@@ -94,7 +94,7 @@ public class GroupedHistogramExportTask extends GroupedStackTask<Histogram,Histo
 		BoundIOContext context
 	) throws JobExecutionException {
 		
-		ChnlSource source = new ChnlSource( store, sharedState.getChnlChecker() );
+		ChnlSource source = new ChnlSource( store, sharedState.getChnlChecker(), Optional.empty() );
 		
 		HistogramExtracter histogramExtracter = new HistogramExtracter(
 			source,
