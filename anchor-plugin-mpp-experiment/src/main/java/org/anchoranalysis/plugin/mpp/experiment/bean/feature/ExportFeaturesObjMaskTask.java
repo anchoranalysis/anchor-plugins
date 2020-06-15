@@ -31,6 +31,7 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Consumer;
 
 import org.anchoranalysis.bean.NamedBean;
 import org.anchoranalysis.bean.annotation.AllowEmpty;
@@ -38,7 +39,6 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.index.GetOperationFailedException;
 import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.core.name.CombinedName;
 import org.anchoranalysis.core.name.MultiName;
@@ -48,7 +48,7 @@ import org.anchoranalysis.experiment.task.InputTypesExpected;
 import org.anchoranalysis.experiment.task.InputBound;
 import org.anchoranalysis.experiment.task.ParametersExperiment;
 import org.anchoranalysis.feature.bean.list.FeatureListProvider;
-import org.anchoranalysis.feature.calc.results.ResultsVectorCollection;
+import org.anchoranalysis.feature.calc.results.ResultsVector;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.io.csv.GroupedResultsVectorCollection;
 import org.anchoranalysis.feature.list.NamedFeatureStoreFactory;
@@ -216,11 +216,11 @@ public class ExportFeaturesObjMaskTask<T extends FeatureInput> extends ExportFea
 					objsFromProvider(ni.getValue(), imageInitParams, context.getLogger()),
 					session,
 					nrgStack,
-					sharedState.resultsVectorForIdentifier(rowName),
+					results -> sharedState.addResultsFor(rowName, results),
 					context.getLogger()
 				);
 			}
-		} catch (AnchorIOException | GetOperationFailedException e) {
+		} catch (AnchorIOException e) {
 			throw new OperationFailedException(e);
 		}
 	}
@@ -231,7 +231,7 @@ public class ExportFeaturesObjMaskTask<T extends FeatureInput> extends ExportFea
 		ObjMaskCollection objs,
 		FeatureTableSession<T> session,
 		NRGStackWithParams nrgStack,
-		ResultsVectorCollection resultsDestination,
+		Consumer<ResultsVector> resultsConsumer,
 		LogErrorReporter logErrorReporter
 	) throws OperationFailedException {
 		try {
@@ -245,7 +245,7 @@ public class ExportFeaturesObjMaskTask<T extends FeatureInput> extends ExportFea
 				id,
 				session,
 				listParams,
-				resultsDestination,
+				resultsConsumer,
 				suppressErrors,
 				logErrorReporter
 			);

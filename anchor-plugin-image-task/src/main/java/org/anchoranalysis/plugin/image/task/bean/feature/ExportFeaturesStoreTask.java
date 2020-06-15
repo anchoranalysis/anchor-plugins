@@ -36,7 +36,6 @@ import org.anchoranalysis.bean.annotation.NonEmpty;
 import org.anchoranalysis.bean.error.BeanDuplicateException;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.index.GetOperationFailedException;
 import org.anchoranalysis.core.name.MultiName;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
 import org.anchoranalysis.experiment.JobExecutionException;
@@ -106,12 +105,16 @@ public abstract class ExportFeaturesStoreTask<T extends InputFromManager, S exte
 	public void doJobOnInputObject( InputBound<T,SharedStateExportFeaturesWithStore<S>> params ) throws JobExecutionException {
 		
 		try {
-			ResultsVector rv = calcResultsVectorForInputObject(
+			ResultsVector results = calcResultsVectorForInputObject(
 				params.getInputObject(),
 				params.getSharedState().getFeatureStore(),
 				params.context()
 			);
-			storeResults(params, rv);
+			
+			params.getSharedState().addResultsFor(
+				identifierFor( params.getInputObject() ),
+				results
+			);
 			
 		} catch (OperationFailedException | BeanDuplicateException | FeatureCalcException e) {
 			throw new JobExecutionException(e);
@@ -123,18 +126,6 @@ public abstract class ExportFeaturesStoreTask<T extends InputFromManager, S exte
 		NamedFeatureStore<S> featureStore,
 		BoundIOContext context
 	) throws FeatureCalcException;
-
-
-	private void storeResults(InputBound<T,SharedStateExportFeaturesWithStore<S>> params, ResultsVector rv) throws OperationFailedException {
-		
-		MultiName identifier = identifierFor( params.getInputObject() );
-		
-		try {
-			params.getSharedState().resultsVectorForIdentifier(identifier).add( rv );
-		} catch ( GetOperationFailedException e ) {
-			throw new OperationFailedException(e);
-		}
-	}
 	
 	private MultiName identifierFor( T inputObject ) throws OperationFailedException {
 		
