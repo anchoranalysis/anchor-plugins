@@ -29,6 +29,7 @@ package org.anchoranalysis.plugin.image.task.bean.feature;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.anchoranalysis.bean.NamedBean;
 import org.anchoranalysis.bean.annotation.BeanField;
@@ -37,6 +38,7 @@ import org.anchoranalysis.bean.error.BeanDuplicateException;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.name.MultiName;
+import org.anchoranalysis.core.name.MultiNameFactory;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
 import org.anchoranalysis.experiment.JobExecutionException;
 import org.anchoranalysis.experiment.task.InputBound;
@@ -92,8 +94,8 @@ public abstract class ExportFeaturesStoreTask<T extends InputFromManager, S exte
 			return new SharedStateExportFeaturesWithStore<>(
 				storeFactory.createNamedFeatureList(listFeatures),
 				new GroupedResultsVectorCollection(
-					firstResultHeader,
-					"group"
+					"group",
+					firstResultHeader
 				)
 			);
 		} catch (CreateException e) {
@@ -111,7 +113,7 @@ public abstract class ExportFeaturesStoreTask<T extends InputFromManager, S exte
 				params.context()
 			);
 			
-			params.getSharedState().addResultsFor(
+			params.getSharedState().getGroupedResults().addResultsFor(
 				identifierFor( params.getInputObject() ),
 				results
 			);
@@ -133,8 +135,10 @@ public abstract class ExportFeaturesStoreTask<T extends InputFromManager, S exte
 			Path inputPath = inputObject.pathForBinding().orElseThrow( ()->
 				new OperationFailedException("A binding path is required to be associated with each input for this algorithm, but is not")
 			);
-			return new GroupAndImageNames(
-				extractGroupName(inputPath, false),
+			
+			Optional<String> groupName = extractGroupName(inputPath, false); 
+			return MultiNameFactory.create(
+				groupName,
 				extractImageIdentifier(inputPath, false)
 			);		
 		} catch (AnchorIOException e) {

@@ -45,7 +45,7 @@ import org.anchoranalysis.plugin.image.task.bean.grouped.GroupedSharedState;
 import org.anchoranalysis.plugin.image.task.bean.grouped.GroupedStackTask;
 import org.anchoranalysis.plugin.image.task.grouped.ChnlSource;
 import org.anchoranalysis.plugin.image.task.grouped.ConsistentChnlChecker;
-import org.anchoranalysis.plugin.image.task.grouped.GroupMap;
+import org.anchoranalysis.plugin.image.task.grouped.GroupMapByName;
 import org.anchoranalysis.plugin.image.task.grouped.NamedChnl;
 
 
@@ -79,7 +79,7 @@ public class GroupedHistogramExportTask extends GroupedStackTask<Histogram,Histo
 	// END BEAN PROPERTIES
 
 	@Override
-	protected GroupMap<Histogram, Histogram> createGroupMap(ConsistentChnlChecker chnlChecker) {
+	protected GroupMapByName<Histogram, Histogram> createGroupMap(ConsistentChnlChecker chnlChecker) {
 		return new GroupedHistogramMap(
 			createWriter(),
 			(int) chnlChecker.getMaxValue() 
@@ -123,7 +123,7 @@ public class GroupedHistogramExportTask extends GroupedStackTask<Histogram,Histo
 		NamedChnl chnl,
 		HistogramExtracter histogramExtracter,
 		Optional<String> groupName,
-		GroupMap<Histogram,Histogram> groupMap,
+		GroupMapByName<Histogram,Histogram> groupMap,
 		BoundIOContext context
 	) throws JobExecutionException {
 		
@@ -155,7 +155,7 @@ public class GroupedHistogramExportTask extends GroupedStackTask<Histogram,Histo
 
 	@Override
 	protected Optional<String> subdirectoryForGroupOutputs() {
-		return Optional.of("grouped");
+		return Optional.of("sum");
 	}
 
 	public boolean isWriteImageHistograms() {

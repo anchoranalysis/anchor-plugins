@@ -8,9 +8,9 @@ import org.anchoranalysis.image.io.generator.raster.ChnlGenerator;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
 import org.anchoranalysis.io.output.bound.BoundIOContext;
 import org.anchoranalysis.plugin.image.task.grouped.ConsistentChnlChecker;
-import org.anchoranalysis.plugin.image.task.grouped.GroupMap;
+import org.anchoranalysis.plugin.image.task.grouped.GroupMapByName;
 
-class GroupedMeanChnlMap extends GroupMap<Chnl,AggregateChnl> {
+class GroupedMeanChnlMap extends GroupMapByName<Chnl,AggregateChnl> {
 	
 	public GroupedMeanChnlMap() {
 		super(

@@ -35,7 +35,7 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.text.TypedValue;
-import org.anchoranalysis.feature.io.csv.FeatureCSVWriter;
+import org.anchoranalysis.feature.io.csv.writer.FeatureCSVWriter;
 import org.anchoranalysis.feature.name.FeatureNameList;
 import org.anchoranalysis.image.io.input.ProvidesStackInput;
 import org.anchoranalysis.io.error.AnchorIOException;
