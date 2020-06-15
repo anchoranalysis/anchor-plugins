@@ -62,6 +62,9 @@ public abstract class ExportFeaturesTask<T extends InputFromManager, S extends S
 
 	private static final NamedFeatureStoreFactory storeFactoryAggregate = new NamedFeatureStoreFactory();
 	
+	// Used as a group-identifier if no group-generator is specified
+	private static final String GROUP_NAME_FALLBACK = "group";
+	
 	// START BEAN
 	/**
 	 * If non-null this file-path is used to determine the group of the file
@@ -89,7 +92,7 @@ public abstract class ExportFeaturesTask<T extends InputFromManager, S extends S
 			Optional.ofNullable(idGenerator),
 			inputPath,
 			debugMode,
-			path->path
+			path-> FilePathToUnixStyleConverter.toStringUnixStyle(path)
 		);
 	}
 	
@@ -99,11 +102,10 @@ public abstract class ExportFeaturesTask<T extends InputFromManager, S extends S
 			Optional.ofNullable(groupGenerator),
 			inputPath,
 			debugMode,
-			path->path.getFileName()
+			path->GROUP_NAME_FALLBACK
 		);
 	}
-	
-	
+		
 	@Override
 	public void afterAllJobsAreExecuted(
 			S sharedState,
@@ -113,26 +115,29 @@ public abstract class ExportFeaturesTask<T extends InputFromManager, S extends S
 		try {
 			Optional<NamedFeatureStore<FeatureInputResults>> featuresAggregate = OptionalUtilities.map(
 				Optional.ofNullable(listFeaturesAggregate),
-				list-> storeFactoryAggregate.createNamedFeatureList(list)
+				storeFactoryAggregate::createNamedFeatureList
 			);
 			
-			sharedState.writeFeaturesAsCSVForAllGroups(featuresAggregate, context);
+			sharedState.writeFeaturesAsCSVForAllGroups(
+				featuresAggregate,
+				groupGenerator != null,
+				context
+			);
 		} catch (AnchorIOException | CreateException e) {
 			throw new ExperimentExecutionException(e);
 		}
 	}
 	
-	private static String filePathAsIdentifier( Optional<FilePathGenerator> generator, Path path, boolean debugMode, Function<Path,Path> alternative ) throws AnchorIOException {
-		Path out = determinePath(generator, path, debugMode, alternative);
-		return FilePathToUnixStyleConverter.toStringUnixStyle(out);
-	}
-	
-	private static Path determinePath( Optional<FilePathGenerator> generator, Path path, boolean debugMode, Function<Path,Path> alternative ) throws AnchorIOException {
-		if (generator.isPresent()) {
-			return generator.get().outFilePath(path, debugMode );
-		} else {
-			return alternative.apply(path);
-		}
+	private static String filePathAsIdentifier( Optional<FilePathGenerator> generator, Path path, boolean debugMode, Function<Path,String> alternative ) throws AnchorIOException {
+		Optional<String> out = OptionalUtilities.map(
+			generator,
+			gen-> FilePathToUnixStyleConverter.toStringUnixStyle(
+				gen.outFilePath(path, debugMode)
+			)
+		);
+		return out.orElseGet( ()->
+			alternative.apply(path)
+		);
 	}
 	
 	public FilePathGenerator getGroupGenerator() {

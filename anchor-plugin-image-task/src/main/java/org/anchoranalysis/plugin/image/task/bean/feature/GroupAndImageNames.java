@@ -28,7 +28,7 @@ package org.anchoranalysis.plugin.image.task.bean.feature;
 
 import org.anchoranalysis.core.name.MultiName;
 
-class GroupAndImageNames implements MultiName, Comparable<GroupAndImageNames> {
+class GroupAndImageNames implements MultiName {
 	
 	private String groupName;
 	private String imageName;
@@ -63,13 +63,17 @@ class GroupAndImageNames implements MultiName, Comparable<GroupAndImageNames> {
 	}
 
 	@Override
-	public int compareTo(GroupAndImageNames arg0) {
-		int comparisonFirst = imageName.compareTo(arg0.imageName);
+	public int compareTo(MultiName arg0) {
+		int comparisonFirst = imageName.compareTo(arg0.getPart(0));
 		if (comparisonFirst!=0) {
 			return comparisonFirst;
 		}
 		
-		return groupName.compareTo(arg0.groupName);
+		if (arg0.numParts()>1) {
+			return groupName.compareTo(arg0.getPart(1));
+		}
+		
+		return 0;
 	}
 	
 	

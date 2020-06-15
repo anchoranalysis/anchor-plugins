@@ -3,6 +3,7 @@ package org.anchoranalysis.plugin.image.task.bean.grouped.histogram;
 
 
 import java.io.IOException;
+import java.util.Optional;
 
 /*
  * #%L
@@ -35,20 +36,15 @@ import org.anchoranalysis.bean.annotation.AllowEmpty;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.name.CombinedName;
-import org.anchoranalysis.experiment.ExperimentExecutionException;
 import org.anchoranalysis.experiment.JobExecutionException;
-import org.anchoranalysis.experiment.task.ParametersExperiment;
 import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
 import org.anchoranalysis.image.histogram.Histogram;
-import org.anchoranalysis.image.histogram.HistogramArray;
 import org.anchoranalysis.image.stack.NamedImgStackCollection;
 import org.anchoranalysis.io.output.bound.BoundIOContext;
-import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
-import org.anchoranalysis.plugin.image.task.bean.grouped.BoundContextIntoSubfolder;
 import org.anchoranalysis.plugin.image.task.bean.grouped.GroupedSharedState;
 import org.anchoranalysis.plugin.image.task.bean.grouped.GroupedStackTask;
 import org.anchoranalysis.plugin.image.task.grouped.ChnlSource;
+import org.anchoranalysis.plugin.image.task.grouped.ConsistentChnlChecker;
 import org.anchoranalysis.plugin.image.task.grouped.GroupMap;
 import org.anchoranalysis.plugin.image.task.grouped.NamedChnl;
 
@@ -81,40 +77,19 @@ public class GroupedHistogramExportTask extends GroupedStackTask<Histogram,Histo
 	@BeanField
 	private boolean csvIgnoreZeros = false;
 	// END BEAN PROPERTIES
-	
-	@Override
-	public boolean hasVeryQuickPerInputExecution() {
-		return false;
-	}
 
 	@Override
-	public GroupedSharedState<Histogram,Histogram> beforeAnyJobIsExecuted(
-		BoundOutputManagerRouteErrors outputManager,
-		ParametersExperiment params
-	) throws ExperimentExecutionException {
-		
-		class HistogramGroupMap extends GroupMap<Histogram,Histogram> {
-			
-			public HistogramGroupMap(int maxValue) {
-				super(
-					"histogram",
-					() -> new HistogramArray( maxValue ),
-					(toAdd,group) -> group.addHistogram(toAdd)		
-				);
-			}
-		}
-		
-		return new GroupedSharedState<Histogram,Histogram>(
-			chnlChecker -> new HistogramGroupMap(
-				(int) chnlChecker.getMaxValue() 
-			)
+	protected GroupMap<Histogram, Histogram> createGroupMap(ConsistentChnlChecker chnlChecker) {
+		return new GroupedHistogramMap(
+			createWriter(),
+			(int) chnlChecker.getMaxValue() 
 		);
 	}
 
 	@Override
 	protected void processKeys(
 		NamedImgStackCollection store,
-		String groupName,
+		Optional<String> groupName,
 		GroupedSharedState<Histogram,Histogram> sharedState,
 		BoundIOContext context
 	) throws JobExecutionException {
@@ -147,7 +122,7 @@ public class GroupedHistogramExportTask extends GroupedStackTask<Histogram,Histo
 	private void addHistogramFromChnl(
 		NamedChnl chnl,
 		HistogramExtracter histogramExtracter,
-		String groupName,
+		Optional<String> groupName,
 		GroupMap<Histogram,Histogram> groupMap,
 		BoundIOContext context
 	) throws JobExecutionException {
@@ -160,7 +135,6 @@ public class GroupedHistogramExportTask extends GroupedStackTask<Histogram,Histo
 				createWriter().writeHistogramToFile(
 					hist,
 					chnl.getName(),
-					chnl.getName(),
 					context
 				);
 			} catch (IOException e) {
@@ -168,33 +142,20 @@ public class GroupedHistogramExportTask extends GroupedStackTask<Histogram,Histo
 			}
 		}
 		
-		groupMap.addToGroup(
-			new CombinedName(groupName, chnl.getName() ),
+		groupMap.add(
+			groupName,
+			chnl.getName(),
 			hist
 		);
 	}
 	
 	private GroupedHistogramWriter createWriter() {
-		GroupedHistogramWriter writer = new GroupedHistogramWriter();
-		writer.setIgnoreZeros(csvIgnoreZeros);
-		return writer;
+		return new GroupedHistogramWriter(csvIgnoreZeros);
 	}
 
-		
 	@Override
-	public void afterAllJobsAreExecuted(
-		GroupedSharedState<Histogram,Histogram> sharedState,
-		BoundIOContext context
-	) throws ExperimentExecutionException {
-		
-		try {
-			createWriter().writeAllGroupHistograms(
-				sharedState.getGroupMap(),
-				new BoundContextIntoSubfolder(context, "grouped")
-			);
-		} catch (IOException e) {
-			throw new ExperimentExecutionException(e);
-		}
+	protected Optional<String> subdirectoryForGroupOutputs() {
+		return Optional.of("grouped");
 	}
 
 	public boolean isWriteImageHistograms() {
@@ -218,16 +179,13 @@ public class GroupedHistogramExportTask extends GroupedStackTask<Histogram,Histo
 		return keyMask;
 	}
 
-
 	public void setKeyMask(String keyMask) {
 		this.keyMask = keyMask;
 	}
 
-
 	public int getMaskValue() {
 		return maskValue;
 	}
-
 
 	public void setMaskValue(int maskValue) {
 		this.maskValue = maskValue;
@@ -240,5 +198,4 @@ public class GroupedHistogramExportTask extends GroupedStackTask<Histogram,Histo
 	public void setCsvIgnoreZeros(boolean csvIgnoreZeros) {
 		this.csvIgnoreZeros = csvIgnoreZeros;
 	}
-
 }

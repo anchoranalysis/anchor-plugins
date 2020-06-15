@@ -54,13 +54,24 @@ public abstract class SharedStateExportFeatures {
 		return results.getOrCreateNew(identifier);
 	}
 
+	/**
+	 * Writes all the results that have been collected as a CSV file
+	 * 
+	 * @param <T> feature input-type
+	 * @param featuresAggregate features that can be used for generating additional "aggregated" exports
+	 * @param includeGroups iff TRUE a group-column is included in the CSV file and the group exports occur, otherwise not
+	 * @param context io-context
+	 * @throws AnchorIOException
+	 */
 	public <T extends FeatureInput> void writeFeaturesAsCSVForAllGroups(
 		Optional<NamedFeatureStore<FeatureInputResults>> featuresAggregate,
+		boolean includeGroups,
 		BoundIOContext context
 	) throws AnchorIOException {
 		results.writeResultsForAllGroups(
 			featureNames(),
 			featuresAggregate,
+			includeGroups,
 			context
 		);
 	}

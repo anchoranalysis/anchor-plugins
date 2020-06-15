@@ -1,5 +1,7 @@
 package org.anchoranalysis.plugin.image.task.bean.grouped;
 
+import java.io.IOException;
+
 /*-
  * #%L
  * anchor-plugin-image-task
@@ -30,21 +32,26 @@ import java.nio.file.Path;
 import java.util.Optional;
 
 import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.progress.ProgressReporterNull;
+import org.anchoranalysis.experiment.ExperimentExecutionException;
 import org.anchoranalysis.experiment.JobExecutionException;
 import org.anchoranalysis.experiment.task.InputTypesExpected;
+import org.anchoranalysis.experiment.task.ParametersExperiment;
 import org.anchoranalysis.experiment.task.InputBound;
 import org.anchoranalysis.experiment.task.Task;
 import org.anchoranalysis.image.io.input.ProvidesStackInput;
 import org.anchoranalysis.image.stack.NamedImgStackCollection;
 import org.anchoranalysis.image.stack.wrap.WrapStackAsTimeSequenceStore;
 import org.anchoranalysis.io.bean.filepath.generator.FilePathGenerator;
-import org.anchoranalysis.io.bean.filepath.generator.FilePathGeneratorConstant;
 import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.output.bound.BoundIOContext;
+import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
 import org.anchoranalysis.plugin.image.task.bean.selectchnls.SelectAll;
 import org.anchoranalysis.plugin.image.task.bean.selectchnls.SelectChnlsFromStacks;
+import org.anchoranalysis.plugin.image.task.grouped.ConsistentChnlChecker;
+import org.anchoranalysis.plugin.image.task.grouped.GroupMap;
 
 /**
  * Base class for stacks that somehow are grouped-together
@@ -57,8 +64,9 @@ import org.anchoranalysis.plugin.image.task.bean.selectchnls.SelectChnlsFromStac
 public abstract class GroupedStackTask<S,T> extends Task<ProvidesStackInput,GroupedSharedState<S,T>> {
 
 	// START BEAN PROPERTIES
-	@BeanField
-	private FilePathGenerator groupGenerator = new FilePathGeneratorConstant("all");	// Translates an input file name to it's group
+	/** If defined, translates a file-path into a group. If not-defined, all images are treated as part of the same group */
+	@BeanField @OptionalBean
+	private FilePathGenerator groupGenerator;	
 	
 	@BeanField
 	private SelectChnlsFromStacks selectChnls = new SelectAll();
@@ -68,7 +76,22 @@ public abstract class GroupedStackTask<S,T> extends Task<ProvidesStackInput,Grou
 	public InputTypesExpected inputTypesExpected() {
 		return new InputTypesExpected(ProvidesStackInput.class);
 	}
+		
+	@Override
+	public boolean hasVeryQuickPerInputExecution() {
+		return false;
+	}
 	
+	@Override
+	public GroupedSharedState<S,T> beforeAnyJobIsExecuted(
+		BoundOutputManagerRouteErrors outputManager,
+		ParametersExperiment params
+	) throws ExperimentExecutionException {
+		return new GroupedSharedState<S,T>(
+			chnlChecker -> createGroupMap(chnlChecker)
+		);
+	}
+		
 	@Override
 	public void doJobOnInputObject(	InputBound<ProvidesStackInput,GroupedSharedState<S,T>> params) throws JobExecutionException {
 		
@@ -76,7 +99,7 @@ public abstract class GroupedStackTask<S,T> extends Task<ProvidesStackInput,Grou
 		BoundIOContext context = params.context();
 
 		// Extract a group name
-		String groupName = extractGroupName(
+		Optional<String> groupName = extractGroupName(
 			inputObject.pathForBinding(),
 			context.isDebugEnabled()
 		);
@@ -91,30 +114,54 @@ public abstract class GroupedStackTask<S,T> extends Task<ProvidesStackInput,Grou
 		);
 	}
 	
+	@Override
+	public void afterAllJobsAreExecuted(
+		GroupedSharedState<S,T> sharedState,
+		BoundIOContext context
+	) throws ExperimentExecutionException {
+		
+		try {
+			sharedState.getGroupMap().outputGroupedData(
+				sharedState.getChnlChecker(),
+				context.maybeSubdirectory(subdirectoryForGroupOutputs())
+			);
+	
+		} catch (IOException e) {
+			throw new ExperimentExecutionException(e);
+		}
+	}
+	
+	/** An optional sub-directory where the group outputs are placed, to avoid placing them in the top-level output */
+	protected abstract Optional<String> subdirectoryForGroupOutputs();
+	
+	protected abstract GroupMap<S,T> createGroupMap( ConsistentChnlChecker chnlChecker );
+	
 	protected abstract void processKeys(
 		NamedImgStackCollection store,
-		String groupName,
+		Optional<String> groupName,
 		GroupedSharedState<S,T> sharedState,
 		BoundIOContext context
 	) throws JobExecutionException;
 	
-	private String extractGroupName( Optional<Path> path, boolean debugEnabled ) throws JobExecutionException {
-		
-		if (!path.isPresent()) {
-			// Return an arbitrary group-name if there's no binding-path
-			return "group";
+	private Optional<String> extractGroupName( Optional<Path> path, boolean debugEnabled ) throws JobExecutionException {
+
+		// 	Return an arbitrary group-name if there's no binding-path, or a group-generator is not defined		
+		if (groupGenerator==null || !path.isPresent()) {
+			return Optional.empty();
 		}
 		
 		try {
-			return groupGenerator.outFilePath( path.get(), debugEnabled ).toString();
-		} catch (AnchorIOException e1) {
+			return Optional.of(
+				groupGenerator.outFilePath( path.get(), debugEnabled ).toString()
+			);
+		} catch (AnchorIOException e) {
 			throw new JobExecutionException(
 				String.format("Cannot establish a group-identifier for: %s", path ),
-				e1
+				e
 			);
 		}
 	}
-		
+
 	private static NamedImgStackCollection extractInputStacks( ProvidesStackInput inputObject ) throws JobExecutionException {
 		NamedImgStackCollection stackCollection = new NamedImgStackCollection();
 		try {
@@ -128,7 +175,7 @@ public abstract class GroupedStackTask<S,T> extends Task<ProvidesStackInput,Grou
 		}
 		return stackCollection;
 	}
-	
+		
 	public FilePathGenerator getGroupGenerator() {
 		return groupGenerator;
 	}
