@@ -27,12 +27,12 @@ package org.anchoranalysis.plugin.mpp.experiment.bean.feature;
  */
 
 import java.util.List;
+import java.util.function.Consumer;
 
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.calc.results.ResultsVector;
-import org.anchoranalysis.feature.calc.results.ResultsVectorCollection;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.image.feature.session.FeatureTableSession;
 
@@ -46,21 +46,19 @@ class FeatureCalculator {
 	 * @param groupId  		group-identifier
 	 * @param objectId  	identifier of object (guaranteed to be unique)
 	 * @param listInputs 	a list of parameters. Each parameters creates a new result (e.g. a new row in a feature-table)
-	 * @param resultsDestination where the result-calculations are placed
+	 * @param resultsConsumer called with the results
 	 * @throws OperationFailedException
 	 */
 	public static <T extends FeatureInput> void calculateManyFeaturesInto(
 		String objectId,
 		FeatureTableSession<T> session,
 		List<T> listInputs,
-		ResultsVectorCollection resultsDestination,
+		Consumer<ResultsVector> resultsConsumer,
 		boolean suppressErrors,
 		LogErrorReporter logger
 	) throws OperationFailedException {
 
 		try {
-			assert(resultsDestination!=null);
-			
 			for(int i=0; i<listInputs.size(); i++ ) {
 				
 				T input = listInputs.get(i);
@@ -69,7 +67,7 @@ class FeatureCalculator {
 				
 				ResultsVector rv = suppressErrors ? session.calcSuppressErrors(input, logger.getErrorReporter()) : session.calc(input);
 				rv.setIdentifier(objectId);
-				resultsDestination.add( rv );
+				resultsConsumer.accept( rv );
 			}
 			
 		} catch (FeatureCalcException e) {

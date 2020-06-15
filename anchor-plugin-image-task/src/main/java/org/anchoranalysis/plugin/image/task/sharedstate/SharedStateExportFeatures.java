@@ -28,9 +28,8 @@ import java.util.Optional;
  * #L%
  */
 
-import org.anchoranalysis.core.index.GetOperationFailedException;
 import org.anchoranalysis.core.name.MultiName;
-import org.anchoranalysis.feature.calc.results.ResultsVectorCollection;
+import org.anchoranalysis.feature.calc.results.ResultsVector;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.io.csv.GroupedResultsVectorCollection;
 import org.anchoranalysis.feature.list.NamedFeatureStore;
@@ -41,18 +40,22 @@ import org.anchoranalysis.io.output.bound.BoundIOContext;
 
 public abstract class SharedStateExportFeatures {
 
-	private GroupedResultsVectorCollection results;
+	private GroupedResultsVectorCollection groupedResults;
 	
-	public SharedStateExportFeatures( GroupedResultsVectorCollection results ) {
+	public SharedStateExportFeatures(GroupedResultsVectorCollection groupedResults) {
 		super();
-		this.results = results;
+		this.groupedResults = groupedResults;
 	}
 	
 	protected abstract FeatureNameList featureNames();
 
-	public ResultsVectorCollection resultsVectorForIdentifier(MultiName identifier) throws GetOperationFailedException {
-		return results.getOrCreateNew(identifier);
+	public void addResultsFor(MultiName identifier, ResultsVector rv) {
+		groupedResults.addResultsFor(identifier, rv);
 	}
+	
+	/*public ResultsVectorCollection resultsVectorForIdentifier(MultiName identifier) throws GetOperationFailedException {
+		return results.getOrCreateNew(identifier);
+	}*/
 
 	/**
 	 * Writes all the results that have been collected as a CSV file
@@ -68,7 +71,7 @@ public abstract class SharedStateExportFeatures {
 		boolean includeGroups,
 		BoundIOContext context
 	) throws AnchorIOException {
-		results.writeResultsForAllGroups(
+		groupedResults.writeResultsForAllGroups(
 			featureNames(),
 			featuresAggregate,
 			includeGroups,

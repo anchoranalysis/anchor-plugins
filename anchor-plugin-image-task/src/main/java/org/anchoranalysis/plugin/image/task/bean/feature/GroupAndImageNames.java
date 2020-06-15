@@ -58,7 +58,8 @@ class GroupAndImageNames implements MultiName {
 	}
 
 	@Override
-	public String getUniqueName() {
+	public String getAggregateKeyName() {
+		// On a high level, images combining to the same group can be combined
 		return groupName;
 	}
 
