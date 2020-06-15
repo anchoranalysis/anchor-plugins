@@ -88,7 +88,7 @@ public abstract class StackProviderWithBackground extends StackProvider {
 			if (chnlBackgroundMIP!=null) {
 				return chnlBackgroundMIP.create();
 			} else {
-				return chnlBackground.create().maxIntensityProj();
+				return chnlBackground.create().maxIntensityProjection();
 			}
 		}
 	}

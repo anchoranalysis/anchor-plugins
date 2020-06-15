@@ -35,6 +35,6 @@ public class ChnlProviderMeanIntensityProjection extends ChnlProviderOne {
 	
 	@Override
 	public Chnl createFromChnl(Chnl chnl) throws CreateException {
-		return chnl.meanIntensityProj();
+		return chnl.meanIntensityProjection();
 	}
 }

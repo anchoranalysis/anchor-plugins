@@ -193,7 +193,7 @@ public class ScaleTask extends RasterTask {
 				}
 				
 				stackCollection.addImageStack(chnlName, new Stack(chnlOut) );
-				stackCollectionMIP.addImageStack(chnlName, new Stack(chnlOut.maxIntensityProj()) );
+				stackCollectionMIP.addImageStack(chnlName, new Stack(chnlOut.maxIntensityProjection()) );
 				
 			} catch (CreateException e) {
 				throw new JobExecutionException(e);

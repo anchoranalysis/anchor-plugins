@@ -6,11 +6,9 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.feature.cache.calculation.FeatureCalculation;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.image.bean.interpolator.InterpolatorBeanLanczos;
 import org.anchoranalysis.image.bean.size.SizeXY;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.feature.stack.FeatureInputStack;
-import org.anchoranalysis.image.interpolator.Interpolator;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.plugin.opencv.MatConverter;
 import org.apache.commons.lang.builder.EqualsBuilder;
@@ -25,8 +23,6 @@ import org.opencv.core.MatOfFloat;
  *
  */
 class CalculateHOGDescriptor extends FeatureCalculation<float[], FeatureInputStack> {
-
-	private static final Interpolator INTERPOLATOR = new InterpolatorBeanLanczos().create();
 	
 	private Optional<SizeXY> resizeTo;
 	private HOGParameters params;
@@ -74,7 +70,7 @@ class CalculateHOGDescriptor extends FeatureCalculation<float[], FeatureInputSta
 		if (resizeTo.isPresent()) {
 			SizeXY size = resizeTo.get(); 
 			return stack.mapChnl( chnl->
-				chnl.resizeXY(size.getWidth(), size.getHeight(), INTERPOLATOR)
+				chnl.resizeXY(size.getWidth(), size.getHeight())
 			);
 		} else {
 			return stack;

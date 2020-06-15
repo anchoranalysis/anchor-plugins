@@ -35,6 +35,6 @@ public class ChnlProviderMIP extends ChnlProviderOne {
 
 	@Override
 	public Chnl createFromChnl(Chnl chnl) throws CreateException {
-		return chnl.maxIntensityProj();
+		return chnl.maxIntensityProjection();
 	}
 }
