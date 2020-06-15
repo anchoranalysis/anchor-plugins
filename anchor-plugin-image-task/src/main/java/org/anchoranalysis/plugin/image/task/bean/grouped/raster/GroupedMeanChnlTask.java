@@ -44,7 +44,7 @@ import org.anchoranalysis.plugin.image.task.bean.grouped.GroupedSharedState;
 import org.anchoranalysis.plugin.image.task.bean.grouped.GroupedStackTask;
 import org.anchoranalysis.plugin.image.task.grouped.ChnlSource;
 import org.anchoranalysis.plugin.image.task.grouped.ConsistentChnlChecker;
-import org.anchoranalysis.plugin.image.task.grouped.GroupMap;
+import org.anchoranalysis.plugin.image.task.grouped.GroupMapByName;
 import org.anchoranalysis.plugin.image.task.grouped.NamedChnl;
 
 
@@ -56,7 +56,7 @@ import org.anchoranalysis.plugin.image.task.grouped.NamedChnl;
 public class GroupedMeanChnlTask extends GroupedStackTask<Chnl,AggregateChnl> {
 
 	@Override
-	protected GroupMap<Chnl, AggregateChnl> createGroupMap(ConsistentChnlChecker chnlChecker) {
+	protected GroupMapByName<Chnl, AggregateChnl> createGroupMap(ConsistentChnlChecker chnlChecker) {
 		return new GroupedMeanChnlMap();
 	}
 	

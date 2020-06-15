@@ -3,8 +3,6 @@ package org.anchoranalysis.plugin.image.task.grouped;
 import java.util.Map.Entry;
 import java.util.Optional;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
 
 /*
  * #%L
@@ -33,27 +31,30 @@ import java.util.Map;
  */
 
 
-import org.anchoranalysis.core.collection.TreeMapCreate;
+import org.anchoranalysis.core.collection.MapCreate;
+import org.anchoranalysis.core.error.AnchorNeverOccursException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.functional.Operation;
-import org.anchoranalysis.core.index.GetOperationFailedException;
-import org.anchoranalysis.core.name.CombinedName;
 import org.anchoranalysis.core.name.MultiName;
-import org.anchoranalysis.core.name.SimpleName;
+import org.anchoranalysis.core.name.MultiNameFactory;
 import org.anchoranalysis.experiment.JobExecutionException;
 import org.anchoranalysis.io.output.bound.BoundIOContext;
+import org.anchoranalysis.io.output.bound.CacheSubdirectoryContext;
 
 /**
- * Groups together many items in an aggregate-structure
+ * Adds items to aggregate structures identified uniquely by a name, and allows these items to be later outputted.
+ * 
+ * <p>If any of the {@link MultiName} have a higher level aggregation-key, this is used to partition the output at the end into sub-directories.</p>
  * 
  * @author Owen Feehan
  *
  * @param <S> individual-item type
  * @param <T> aggregate-item type (combines many individual types)
  */
-public abstract class GroupMap<S,T> {
+public abstract class GroupMapByName<S,T> {
 
-	private TreeMapCreate<MultiName,T,GetOperationFailedException> groupMap;
+	private MapCreate<MultiName,T> map;
+	
 	private String nounT;
 
 	/**
@@ -61,9 +62,9 @@ public abstract class GroupMap<S,T> {
 	 * @param nounT a word to describe a single instance of T in user error messages
 	 * @param createEmpty
 	 */
-	public GroupMap(String nounT, Operation<T,GetOperationFailedException> createEmpty ) {
+	public GroupMapByName(String nounT, Operation<T,AnchorNeverOccursException> createEmpty ) {
 		super();
-		this.groupMap = new TreeMapCreate<>( createEmpty );
+		this.map = new MapCreate<>( createEmpty );
 		this.nounT = nounT;
 	}
 	
@@ -78,16 +79,14 @@ public abstract class GroupMap<S,T> {
 		S itemToAdd
 	) throws JobExecutionException {
 
-		MultiName identifier = createUniqueName(groupIdentifier, nonGroupIdentifier);
+		MultiName identifier = MultiNameFactory.create(groupIdentifier, nonGroupIdentifier);
 		
 		try {
-			T group = groupMap.getOrCreateNew(identifier);
-			addTo(itemToAdd, group);
-		} catch (GetOperationFailedException e) {
-			throw new JobExecutionException(
-				String.format("An error occurred creating a %s for: %s", nounT, identifier),
-				e
+			addTo(
+				itemToAdd,
+				map.getOrCreateNew(identifier)
 			);
+
 		} catch (OperationFailedException e) {
 			throw new JobExecutionException(
 				String.format("An error occurred combining the %s created for: %s", nounT, identifier),
@@ -109,35 +108,20 @@ public abstract class GroupMap<S,T> {
 	) throws IOException {
 		
 		// We wish to create a new output-manager only once for each primary key, so we store them in a hashmap
-		Map<String, BoundIOContext> mapOutputManagers = new HashMap<>();
-		
-		// The first-part of the CombinedName is the "group"
-		// The second-part of the CombinedName is the histogram-channel name
-		// We create a sub-folder for each first-part, and each channel into it
+		CacheSubdirectoryContext subdirectoryCache = new CacheSubdirectoryContext(context);
 		
 		// If there is one part-only, it is assumed that there is no group (for all items) and it is written without a subdirectory
 		// If there are two parts, it is assumed that the first-part is a group-name (a seperate subdirectory) and the second-part is written without a subdirectory 
-		for( Entry<MultiName,T> entry : groupMap.entrySet() ) {
+		for( Entry<MultiName,T> entry : map.entrySet() ) {
 		
-			BoundIOContext contextGroup = mapOutputManagers.computeIfAbsent(
-				entry.getKey().numParts()==1 ? "arbitrary_key" : entry.getKey().getPart(0),
-				primaryName -> contextForGroup(primaryName, entry.getKey().numParts()==2, context)
-			);
+			Optional<String> aggKey = entry.getKey().deriveAggregationKey(); 
 
 			writeGroupOutputInSubdirectory(
-				entry.getKey().getPart( entry.getKey().numParts()-1 ),
+				entry.getKey().nameWithoutAggregationKey(),
 				entry.getValue(),
 				chnlChecker,
-				contextGroup
+				subdirectoryCache.get(aggKey)
 			);
-		}
-	}
-	
-	private BoundIOContext contextForGroup(String primaryName, boolean includeGroupName, BoundIOContext context) {
-		if (includeGroupName) {
-			return context.subdirectory(primaryName);
-		} else {
-			return context;
 		}
 	}
 	
@@ -149,12 +133,4 @@ public abstract class GroupMap<S,T> {
 		ConsistentChnlChecker chnlChecker,
 		BoundIOContext context
 	) throws IOException;
-	
-	private static MultiName createUniqueName(Optional<String> groupIdentifier, String nonGroupIdentifier) {
-		return groupIdentifier.map( id->
-			(MultiName) new CombinedName(id, nonGroupIdentifier)
-		).orElseGet( ()->
-			new SimpleName(nonGroupIdentifier)
-		);
-	}
 }

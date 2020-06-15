@@ -206,7 +206,8 @@ public class ExportFeaturesObjMaskTask<T extends FeatureInput> extends ExportFea
 			String id = extractImageIdentifier(inputPath, context.isDebugEnabled());
 			
 			// Extract a group name
-			String groupName = extractGroupName(inputPath, context.isDebugEnabled());
+			// TODO change to use optional groups
+			String groupName = extractGroupName(inputPath, context.isDebugEnabled()).orElse("default");
 									
 			// For every objMaskCollection provider
 			for( NamedBean<ObjMaskProvider> ni : listObjMaskProvider) {
@@ -216,7 +217,7 @@ public class ExportFeaturesObjMaskTask<T extends FeatureInput> extends ExportFea
 					objsFromProvider(ni.getValue(), imageInitParams, context.getLogger()),
 					session,
 					nrgStack,
-					results -> sharedState.addResultsFor(rowName, results),
+					results -> sharedState.getGroupedResults().addResultsFor(rowName, results),
 					context.getLogger()
 				);
 			}

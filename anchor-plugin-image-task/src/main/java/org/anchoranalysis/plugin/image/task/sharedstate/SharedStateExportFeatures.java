@@ -28,8 +28,6 @@ import java.util.Optional;
  * #L%
  */
 
-import org.anchoranalysis.core.name.MultiName;
-import org.anchoranalysis.feature.calc.results.ResultsVector;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.io.csv.GroupedResultsVectorCollection;
 import org.anchoranalysis.feature.list.NamedFeatureStore;
@@ -40,22 +38,13 @@ import org.anchoranalysis.io.output.bound.BoundIOContext;
 
 public abstract class SharedStateExportFeatures {
 
-	private GroupedResultsVectorCollection groupedResults;
+	private final GroupedResultsVectorCollection groupedResults;
 	
 	public SharedStateExportFeatures(GroupedResultsVectorCollection groupedResults) {
-		super();
 		this.groupedResults = groupedResults;
 	}
 	
 	protected abstract FeatureNameList featureNames();
-
-	public void addResultsFor(MultiName identifier, ResultsVector rv) {
-		groupedResults.addResultsFor(identifier, rv);
-	}
-	
-	/*public ResultsVectorCollection resultsVectorForIdentifier(MultiName identifier) throws GetOperationFailedException {
-		return results.getOrCreateNew(identifier);
-	}*/
 
 	/**
 	 * Writes all the results that have been collected as a CSV file
@@ -77,5 +66,9 @@ public abstract class SharedStateExportFeatures {
 			includeGroups,
 			context
 		);
+	}
+
+	public GroupedResultsVectorCollection getGroupedResults() {
+		return groupedResults;
 	}
 }

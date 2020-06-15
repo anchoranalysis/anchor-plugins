@@ -51,7 +51,7 @@ import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
 import org.anchoranalysis.plugin.image.task.bean.selectchnls.SelectAll;
 import org.anchoranalysis.plugin.image.task.bean.selectchnls.SelectChnlsFromStacks;
 import org.anchoranalysis.plugin.image.task.grouped.ConsistentChnlChecker;
-import org.anchoranalysis.plugin.image.task.grouped.GroupMap;
+import org.anchoranalysis.plugin.image.task.grouped.GroupMapByName;
 
 /**
  * Base class for stacks that somehow are grouped-together
@@ -66,7 +66,7 @@ public abstract class GroupedStackTask<S,T> extends Task<ProvidesStackInput,Grou
 	// START BEAN PROPERTIES
 	/** If defined, translates a file-path into a group. If not-defined, all images are treated as part of the same group */
 	@BeanField @OptionalBean
-	private FilePathGenerator groupGenerator;	
+	private FilePathGenerator group;	
 	
 	@BeanField
 	private SelectChnlsFromStacks selectChnls = new SelectAll();
@@ -134,7 +134,7 @@ public abstract class GroupedStackTask<S,T> extends Task<ProvidesStackInput,Grou
 	/** An optional sub-directory where the group outputs are placed, to avoid placing them in the top-level output */
 	protected abstract Optional<String> subdirectoryForGroupOutputs();
 	
-	protected abstract GroupMap<S,T> createGroupMap( ConsistentChnlChecker chnlChecker );
+	protected abstract GroupMapByName<S,T> createGroupMap( ConsistentChnlChecker chnlChecker );
 	
 	protected abstract void processKeys(
 		NamedImgStackCollection store,
@@ -146,13 +146,13 @@ public abstract class GroupedStackTask<S,T> extends Task<ProvidesStackInput,Grou
 	private Optional<String> extractGroupName( Optional<Path> path, boolean debugEnabled ) throws JobExecutionException {
 
 		// 	Return an arbitrary group-name if there's no binding-path, or a group-generator is not defined		
-		if (groupGenerator==null || !path.isPresent()) {
+		if (group==null || !path.isPresent()) {
 			return Optional.empty();
 		}
 		
 		try {
 			return Optional.of(
-				groupGenerator.outFilePath( path.get(), debugEnabled ).toString()
+				group.outFilePath( path.get(), debugEnabled ).toString()
 			);
 		} catch (AnchorIOException e) {
 			throw new JobExecutionException(
@@ -175,14 +175,6 @@ public abstract class GroupedStackTask<S,T> extends Task<ProvidesStackInput,Grou
 		}
 		return stackCollection;
 	}
-		
-	public FilePathGenerator getGroupGenerator() {
-		return groupGenerator;
-	}
-
-	public void setGroupGenerator(FilePathGenerator groupGenerator) {
-		this.groupGenerator = groupGenerator;
-	}
 
 	public SelectChnlsFromStacks getSelectChnls() {
 		return selectChnls;
@@ -192,4 +184,11 @@ public abstract class GroupedStackTask<S,T> extends Task<ProvidesStackInput,Grou
 		this.selectChnls = selectChnls;
 	}
 
+	public FilePathGenerator getGroup() {
+		return group;
+	}
+
+	public void setGroup(FilePathGenerator group) {
+		this.group = group;
+	}
 }

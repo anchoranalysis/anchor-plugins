@@ -7,9 +7,9 @@ import org.anchoranalysis.image.histogram.Histogram;
 import org.anchoranalysis.image.histogram.HistogramArray;
 import org.anchoranalysis.io.output.bound.BoundIOContext;
 import org.anchoranalysis.plugin.image.task.grouped.ConsistentChnlChecker;
-import org.anchoranalysis.plugin.image.task.grouped.GroupMap;
+import org.anchoranalysis.plugin.image.task.grouped.GroupMapByName;
 
-class GroupedHistogramMap extends GroupMap<Histogram,Histogram> {
+class GroupedHistogramMap extends GroupMapByName<Histogram,Histogram> {
 	
 	private final GroupedHistogramWriter writer;
 	
