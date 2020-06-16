@@ -41,7 +41,7 @@ import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.histogram.Histogram;
 import org.anchoranalysis.image.histogram.HistogramArray;
 import org.anchoranalysis.image.objectmask.ObjectMask;
-import org.anchoranalysis.image.objectmask.ObjectMaskCollection;
+import org.anchoranalysis.image.objectmask.ObjectCollection;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 
 
@@ -140,7 +140,7 @@ public class ObjMaskCollectionRandomSampler {
 		private RandomNumberGenerator randomNumberGenerator;
 		
 		public ObjMaskCollectionSampler(
-			ObjectMaskCollection objMaskCollection,
+			ObjectCollection objMaskCollection,
 			Channel chnl,
 			RandomNumberGenerator randomNumberGenerator
 		) {
@@ -186,7 +186,7 @@ public class ObjMaskCollectionRandomSampler {
 	
 	
 	public static Histogram create(
-		ObjectMaskCollection omc,
+		ObjectCollection omc,
 		Channel chnl,
 		RandomNumberGenerator randomNumberGenerator,
 		int numSamples

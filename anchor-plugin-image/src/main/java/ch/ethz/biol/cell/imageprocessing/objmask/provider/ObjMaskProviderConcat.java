@@ -33,7 +33,7 @@ import java.util.List;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
-import org.anchoranalysis.image.objectmask.ObjectMaskCollection;
+import org.anchoranalysis.image.objectmask.ObjectCollection;
 
 public class ObjMaskProviderConcat extends ObjMaskProvider {
 
@@ -43,9 +43,9 @@ public class ObjMaskProviderConcat extends ObjMaskProvider {
 	// END BEAN PROPERTIES
 	
 	@Override
-	public ObjectMaskCollection create() throws CreateException {
+	public ObjectCollection create() throws CreateException {
 
-		ObjectMaskCollection out = new ObjectMaskCollection();
+		ObjectCollection out = new ObjectCollection();
 		
 		for( ObjMaskProvider omp : list) {
 			out.addAll( omp.create() );

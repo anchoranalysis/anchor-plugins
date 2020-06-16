@@ -7,7 +7,7 @@ import java.util.stream.Collectors;
 
 import org.anchoranalysis.image.convert.ByteConverter;
 import org.anchoranalysis.image.extent.BoundingBox;
-import org.anchoranalysis.image.objectmask.ObjectMaskCollection;
+import org.anchoranalysis.image.objectmask.ObjectCollection;
 import org.anchoranalysis.image.points.PointRange;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 
@@ -24,7 +24,7 @@ class CreateFromLabels {
 	 * @param minBBoxVolume
 	 * @return
 	 */
-	public static ObjectMaskCollection create(
+	public static ObjectCollection create(
 		VoxelBox<ByteBuffer> voxels,
 		int minLabel,
 		int maxLabel,
@@ -74,13 +74,13 @@ class CreateFromLabels {
 			.collect(Collectors.toList());
 	}
 	
-	private static ObjectMaskCollection createFromLabels(
+	private static ObjectCollection createFromLabels(
 		List<BoundingBox> bboxList,
 		VoxelBox<ByteBuffer> bufferAccess,
 		int smallVolumeThreshold
 	) {
 		
-		ObjectMaskCollection list = new ObjectMaskCollection();
+		ObjectCollection list = new ObjectCollection();
 		
 		int col = 0;
 		for (BoundingBox bbox : bboxList) {

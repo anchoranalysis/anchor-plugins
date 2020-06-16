@@ -28,7 +28,7 @@ package org.anchoranalysis.plugin.annotation.bean.comparison.assigner;
 
 import org.anchoranalysis.annotation.io.assignment.AssignmentObjMaskFactory;
 
-import org.anchoranalysis.annotation.io.assignment.AssignmentObjMask;
+import org.anchoranalysis.annotation.io.assignment.AssignmentOverlapFromPairs;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
@@ -42,7 +42,7 @@ import org.anchoranalysis.plugin.annotation.comparison.AnnotationGroup;
 import org.anchoranalysis.plugin.annotation.comparison.AnnotationGroupObjMask;
 import org.anchoranalysis.plugin.annotation.comparison.ObjsToCompare;
 
-public class FeatureCostAssigner extends AnnotationComparisonAssigner<AssignmentObjMask> {
+public class FeatureCostAssigner extends AnnotationComparisonAssigner<AssignmentOverlapFromPairs> {
 
 	// START BEAN PROPERTIES
 	@BeanField
@@ -59,7 +59,7 @@ public class FeatureCostAssigner extends AnnotationComparisonAssigner<Assignment
 	// END BEAN PROPERTIES
 	
 	@Override
-	public AssignmentObjMask createAssignment(
+	public AssignmentOverlapFromPairs createAssignment(
 		ObjsToCompare objsToCompare,
 		ImageDim dim,
 		boolean useMIP,
@@ -76,7 +76,7 @@ public class FeatureCostAssigner extends AnnotationComparisonAssigner<Assignment
 				useMIP
 			);
 			
-			AssignmentObjMask assignment = assignmentCreator.createAssignment(
+			AssignmentOverlapFromPairs assignment = assignmentCreator.createAssignment(
 				objsToCompare.getLeft(),
 				objsToCompare.getRight(),
 				maxCost,
@@ -124,7 +124,7 @@ public class FeatureCostAssigner extends AnnotationComparisonAssigner<Assignment
 	}
 
 	@Override
-	public AnnotationGroup<AssignmentObjMask> groupForKey(String key) {
+	public AnnotationGroup<AssignmentOverlapFromPairs> groupForKey(String key) {
 		return new AnnotationGroupObjMask(key);
 	}
 

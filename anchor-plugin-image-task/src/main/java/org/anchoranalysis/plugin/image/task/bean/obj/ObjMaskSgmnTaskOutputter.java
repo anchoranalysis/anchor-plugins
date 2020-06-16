@@ -33,7 +33,7 @@ import org.anchoranalysis.image.io.generator.raster.ChnlGenerator;
 import org.anchoranalysis.image.io.generator.raster.obj.ChnlMaskedWithObjGenerator;
 import org.anchoranalysis.image.io.generator.raster.obj.ObjAsBinaryChnlGenerator;
 import org.anchoranalysis.image.io.generator.raster.obj.rgb.RGBObjMaskGenerator;
-import org.anchoranalysis.image.objectmask.ObjectMaskCollection;
+import org.anchoranalysis.image.objectmask.ObjectCollection;
 import org.anchoranalysis.image.objectmask.properties.ObjMaskWithPropertiesCollection;
 import org.anchoranalysis.image.stack.DisplayStack;
 import org.anchoranalysis.io.bean.objmask.writer.RGBOutlineWriter;
@@ -54,13 +54,13 @@ class ObjMaskSgmnTaskOutputter {
 		);
 	}
 
-	public static void writeMaskOutputs( ObjectMaskCollection objs, Channel chnl, BoundOutputManagerRouteErrors outputManager ) {
+	public static void writeMaskOutputs( ObjectCollection objs, Channel chnl, BoundOutputManagerRouteErrors outputManager ) {
 		writeMaskChnlAsSubfolder(objs, chnl, outputManager);
 		writeMasksAsSubfolder(objs, chnl, outputManager);
 		writeOutline(objs, chnl, outputManager);		
 	}
 	
-	private static void writeMaskChnlAsSubfolder( ObjectMaskCollection objs, Channel chnl, BoundOutputManagerRouteErrors outputManager ) {
+	private static void writeMaskChnlAsSubfolder( ObjectCollection objs, Channel chnl, BoundOutputManagerRouteErrors outputManager ) {
 		// Write out the results as a subfolder
 		IterableGeneratorWriter.writeSubfolder(
 			outputManager,
@@ -72,7 +72,7 @@ class ObjMaskSgmnTaskOutputter {
 		);
 	}
 	
-	private static void writeMasksAsSubfolder( ObjectMaskCollection objs, Channel chnl, BoundOutputManagerRouteErrors outputManager ) {
+	private static void writeMasksAsSubfolder( ObjectCollection objs, Channel chnl, BoundOutputManagerRouteErrors outputManager ) {
 		// Write out the results as a subfolder
 		IterableGeneratorWriter.writeSubfolder(
 			outputManager,
@@ -84,7 +84,7 @@ class ObjMaskSgmnTaskOutputter {
 		);	
 	}
 	
-	private static void writeOutline( ObjectMaskCollection objs, Channel chnl, BoundOutputManagerRouteErrors outputManager ) {
+	private static void writeOutline( ObjectCollection objs, Channel chnl, BoundOutputManagerRouteErrors outputManager ) {
 		outputManager.getWriterCheckIfAllowed().write(
 			"outline",
 			() -> {

@@ -41,7 +41,7 @@ import org.anchoranalysis.image.feature.bean.FeatureStack;
 import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
 import org.anchoranalysis.image.feature.stack.FeatureInputStack;
 import org.anchoranalysis.image.init.ImageInitParams;
-import org.anchoranalysis.image.objectmask.ObjectMaskCollection;
+import org.anchoranalysis.image.objectmask.ObjectCollection;
 
 import cern.colt.list.DoubleArrayList;
 
@@ -57,7 +57,7 @@ public abstract class ObjMaskFeatureFromStack extends FeatureStack {
 	// END BEAN PROPERTIES
 	
 	// We cache the objsCollection as it's not dependent on individual parameters
-	private ObjectMaskCollection objsCollection;
+	private ObjectCollection objsCollection;
 	
 	@Override
 	public double calc(SessionInput<FeatureInputStack> input) throws FeatureCalcException {
@@ -79,7 +79,7 @@ public abstract class ObjMaskFeatureFromStack extends FeatureStack {
 	
 	protected abstract double deriveStatistic( DoubleArrayList featureVals );
 		
-	private ObjectMaskCollection createObjs( ImageInitParams params ) throws FeatureCalcException {
+	private ObjectCollection createObjs( ImageInitParams params ) throws FeatureCalcException {
 
 		try {
 			objs.initRecursive(params, getLogger() );
@@ -92,7 +92,7 @@ public abstract class ObjMaskFeatureFromStack extends FeatureStack {
 	private DoubleArrayList featureValsForObjs(
 		Feature<FeatureInputSingleObj> feature,
 		SessionInput<FeatureInputStack> input,
-		ObjectMaskCollection objsCollection
+		ObjectCollection objsCollection
 	) throws FeatureCalcException {
 		DoubleArrayList featureVals = new DoubleArrayList();
 		

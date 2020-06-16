@@ -40,7 +40,7 @@ import org.anchoranalysis.image.binary.BinaryChnl;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelBoxByte;
 import org.anchoranalysis.image.objectmask.ObjectMask;
-import org.anchoranalysis.image.objectmask.ObjectMaskCollection;
+import org.anchoranalysis.image.objectmask.ObjectCollection;
 import org.anchoranalysis.image.objectmask.factory.CreateFromConnectedComponentsFactory;
 import org.anchoranalysis.image.unitvalue.UnitValueException;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
@@ -70,7 +70,7 @@ public class ObjMaskProviderConnectedComponents extends ObjMaskProvider {
 	// END BEAN PROPERTIES
 
 	@Override
-	public ObjectMaskCollection create() throws CreateException {
+	public ObjectCollection create() throws CreateException {
 	
 		BinaryChnl bi = binaryChnl.create();
 		
@@ -99,14 +99,14 @@ public class ObjMaskProviderConnectedComponents extends ObjMaskProvider {
 		return new CreateFromConnectedComponentsFactory(bigNghb, minNumberVoxels);
 	}
 	
-	private ObjectMaskCollection createObjs3D( BinaryChnl bi, int minNumberVoxels ) throws CreateException {
+	private ObjectCollection createObjs3D( BinaryChnl bi, int minNumberVoxels ) throws CreateException {
 		CreateFromConnectedComponentsFactory createObjMasks = createFactory(minNumberVoxels);
 		return createObjMasks.createConnectedComponents(bi);
 	}
 	
-	private ObjectMaskCollection createObjsBySlice( BinaryChnl bi, int minNumberVoxels ) throws CreateException {
+	private ObjectCollection createObjsBySlice( BinaryChnl bi, int minNumberVoxels ) throws CreateException {
 		
-		ObjectMaskCollection out = new ObjectMaskCollection();
+		ObjectCollection out = new ObjectCollection();
 		CreateFromConnectedComponentsFactory createObjMasks = createFactory(minNumberVoxels);
 
 		for( int z=0; z<bi.getDimensions().getZ(); z++) {
@@ -122,12 +122,12 @@ public class ObjMaskProviderConnectedComponents extends ObjMaskProvider {
 		return out;
 	}
 	
-	private ObjectMaskCollection createForSlice(
+	private ObjectCollection createForSlice(
 		CreateFromConnectedComponentsFactory createObjMasks,
 		BinaryVoxelBox<ByteBuffer> bvb,
 		int z
 	) throws CreateException {
-		ObjectMaskCollection omc = createObjMasks.createConnectedComponents(bvb) ; 
+		ObjectCollection omc = createObjMasks.createConnectedComponents(bvb); 
 		for (ObjectMask om : omc) {
 			// respecify the z
 			om.shiftToZ(z);

@@ -29,13 +29,13 @@ package ch.ethz.biol.cell.mpp.nrg.feature.stack;
 import org.anchoranalysis.feature.cache.calculation.FeatureCalculation;
 import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
 import org.anchoranalysis.image.feature.stack.FeatureInputStack;
-import org.anchoranalysis.image.objectmask.ObjectMaskCollection;
+import org.anchoranalysis.image.objectmask.ObjectCollection;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 class CalculateInputFromStack extends FeatureCalculation<FeatureInputSingleObj, FeatureInputStack> {
 
-	private ObjectMaskCollection objs;
+	private ObjectCollection objs;
 	private int index;
 	
 	
@@ -45,7 +45,7 @@ class CalculateInputFromStack extends FeatureCalculation<FeatureInputSingleObj, 
 	 * @param objs the object-mask collection to calculate from (ignored in hash-coding and equality as assumed to be singular)
 	 * @param index index of particular object in objs to derive parameters for
 	 */
-	public CalculateInputFromStack(ObjectMaskCollection objs, int index) {
+	public CalculateInputFromStack(ObjectCollection objs, int index) {
 		super();
 		this.objs = objs;
 		this.index = index;

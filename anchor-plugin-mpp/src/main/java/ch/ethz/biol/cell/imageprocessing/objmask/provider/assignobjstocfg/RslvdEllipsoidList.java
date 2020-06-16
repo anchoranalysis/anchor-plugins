@@ -36,7 +36,7 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.objectmask.ObjectMask;
-import org.anchoranalysis.image.objectmask.ObjectMaskCollection;
+import org.anchoranalysis.image.objectmask.ObjectCollection;
 import org.anchoranalysis.image.objectmask.ops.ObjMaskMerger;
 import org.anchoranalysis.image.voxel.box.factory.VoxelBoxFactory;
 
@@ -167,8 +167,8 @@ public class RslvdEllipsoidList implements Iterable<RslvdEllipsoid> {
 	
 	
 	// Create merged objects for those included
-	public ObjectMaskCollection createMergedObjsForIncluded() throws CreateException {
-		ObjectMaskCollection objsOut = new ObjectMaskCollection();
+	public ObjectCollection createMergedObjsForIncluded() throws CreateException {
+		ObjectCollection objsOut = new ObjectCollection();
 		for( RslvdEllipsoid re : this ) {
 			
 			if (!re.isIncluded()) {
@@ -176,19 +176,11 @@ public class RslvdEllipsoidList implements Iterable<RslvdEllipsoid> {
 			}
 			
 			try {
-				ObjectMaskCollection objsAssigned = re.getAssignedObjs().createObjs();
-				
-				if (objsAssigned.size()>0) {
-					ObjectMask omMerged = ObjMaskMerger.merge( objsAssigned);
-					objsOut.add(omMerged);	
-				} else {
-					// Mark as excluded
-					// We add an empty object (just to preserve a 1-1 mapping between the inclthe correct total number)
-					objsOut.add(
-						new ObjectMask(
-							VoxelBoxFactory.instance().getByte().create(new Extent(1,1,1)))
-						);
-				}
+				objsOut.add(
+					deriveSingleObject(
+						re.getAssignedObjs().createObjs()
+					)		
+				);
 				
 			} catch (OperationFailedException e) {
 				throw new CreateException(e);
@@ -198,8 +190,7 @@ public class RslvdEllipsoidList implements Iterable<RslvdEllipsoid> {
 		}
 		return objsOut;
 	}
-	
-	
+		
 	public void excludeBorderXYObjects() {
 		for( RslvdEllipsoid re : this ) {
 			if( re.atBorderXY()) {
@@ -371,5 +362,19 @@ public class RslvdEllipsoidList implements Iterable<RslvdEllipsoid> {
 		}
 		
 		return assignedAtLeastOne;
+	}
+	
+	private static ObjectMask deriveSingleObject(ObjectCollection objsAssigned) throws OperationFailedException {
+		if (objsAssigned.size()>0) {
+			return ObjMaskMerger.merge(objsAssigned);
+		} else {
+			// Mark as excluded
+			// We add an empty object (just to preserve a 1-1 mapping with the correct total number)
+			return new ObjectMask(
+				VoxelBoxFactory.getByte().create(
+					new Extent(1,1,1)
+				)
+			);
+		}
 	}
 }

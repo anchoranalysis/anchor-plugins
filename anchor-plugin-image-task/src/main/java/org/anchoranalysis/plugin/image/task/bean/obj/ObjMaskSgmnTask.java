@@ -48,7 +48,7 @@ import org.anchoranalysis.image.io.RasterIOException;
 import org.anchoranalysis.image.io.input.NamedChnlsInput;
 import org.anchoranalysis.image.io.input.series.NamedChnlCollectionForSeries;
 import org.anchoranalysis.image.io.stack.StackCollectionOutputter;
-import org.anchoranalysis.image.objectmask.ObjectMaskCollection;
+import org.anchoranalysis.image.objectmask.ObjectCollection;
 import org.anchoranalysis.image.sgmn.SgmnFailedException;
 import org.anchoranalysis.image.stack.NamedImgStackCollection;
 import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
@@ -92,7 +92,7 @@ public class ObjMaskSgmnTask extends RasterTask {
 			
 			ObjMaskSgmnTaskOutputter.writeOriginal(context.getOutputManager(), chnl, outputNameOriginal);
 			
-			ObjectMaskCollection objs = sgmnFromStacks(stackCollection, context);
+			ObjectCollection objs = sgmnFromStacks(stackCollection, context);
 			
 			// Write different visualizations of the result
 			ObjMaskSgmnTaskOutputter.writeMaskOutputs(objs, chnl, context.getOutputManager());
@@ -104,7 +104,7 @@ public class ObjMaskSgmnTask extends RasterTask {
 		}
 	}
 	
-	private ObjectMaskCollection sgmnFromStacks(NamedImgStackCollection stackCollection, BoundIOContext context) throws OperationFailedException {
+	private ObjectCollection sgmnFromStacks(NamedImgStackCollection stackCollection, BoundIOContext context) throws OperationFailedException {
 		
 		SgmnObjMaskCollection sgmnDup = sgmn.duplicateBean();
 		assert( sgmnDup != null );

@@ -47,7 +47,7 @@ import org.anchoranalysis.image.bean.provider.ChnlProvider;
 import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
 import org.anchoranalysis.image.objectmask.ObjectMask;
-import org.anchoranalysis.image.objectmask.ObjectMaskCollection;
+import org.anchoranalysis.image.objectmask.ObjectCollection;
 
 import cern.colt.list.DoubleArrayList;
 import cern.jet.stat.Descriptive;
@@ -81,7 +81,7 @@ public class ObjMaskFilterFeatureRelationDiscardFeatureRatioLessThan extends Obj
 	// END BEAN PROPERTIES
 	
 	@Override
-	public void filter(ObjectMaskCollection objs, Optional<ImageDim> dim, Optional<ObjectMaskCollection> objsRejected)
+	public void filter(ObjectCollection objs, Optional<ImageDim> dim, Optional<ObjectCollection> objsRejected)
 			throws OperationFailedException {
 		
 		// Nothing to do if we don't have enough options
@@ -121,7 +121,7 @@ public class ObjMaskFilterFeatureRelationDiscardFeatureRatioLessThan extends Obj
 		}
 	}
 	
-	private void calculateVals( ObjectMaskCollection objs, DoubleArrayList featureValsOriginalOrder, DoubleArrayList featureValsSorted, FeatureCalculatorSingle<FeatureInputSingleObj> session ) throws OperationFailedException {
+	private void calculateVals( ObjectCollection objs, DoubleArrayList featureValsOriginalOrder, DoubleArrayList featureValsSorted, FeatureCalculatorSingle<FeatureInputSingleObj> session ) throws OperationFailedException {
 
 		for( ObjectMask om : objs ) {
 			double featureVal;
@@ -141,8 +141,8 @@ public class ObjMaskFilterFeatureRelationDiscardFeatureRatioLessThan extends Obj
 	}
 	
 	private void removeOutliers(
-		ObjectMaskCollection objs,
-		Optional<ObjectMaskCollection> objsRejected,
+		ObjectCollection objs,
+		Optional<ObjectCollection> objsRejected,
 		DoubleArrayList featureValsOriginalOrder,
 		DoubleArrayList featureValsSorted
 	) {
@@ -179,7 +179,7 @@ public class ObjMaskFilterFeatureRelationDiscardFeatureRatioLessThan extends Obj
 		}		
 	}
 	
-	private List<ObjectMask> listToRemove( ObjectMaskCollection objs, Optional<ObjectMaskCollection> objsRejected, DoubleArrayList featureValsOriginalOrder, double lowerLimit, double upperLimit ) {
+	private List<ObjectMask> listToRemove( ObjectCollection objs, Optional<ObjectCollection> objsRejected, DoubleArrayList featureValsOriginalOrder, double lowerLimit, double upperLimit ) {
 		List<ObjectMask> listToRemove = new ArrayList<>();
 		for(int i=0; i<objs.size(); i++) {
 			double featureVal = featureValsOriginalOrder.get(i);

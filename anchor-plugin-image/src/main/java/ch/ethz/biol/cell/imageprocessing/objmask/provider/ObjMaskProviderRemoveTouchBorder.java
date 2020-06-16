@@ -31,7 +31,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.objectmask.ObjectMask;
-import org.anchoranalysis.image.objectmask.ObjectMaskCollection;
+import org.anchoranalysis.image.objectmask.ObjectCollection;
 
 // Considers all possible pairs of objects in a provider, and removes intersecting pixels
 public class ObjMaskProviderRemoveTouchBorder extends ObjMaskProviderDimensions {
@@ -42,9 +42,9 @@ public class ObjMaskProviderRemoveTouchBorder extends ObjMaskProviderDimensions 
 	// END BEAN PROPERTIES
 	
 	@Override
-	public ObjectMaskCollection createFromObjs(ObjectMaskCollection objsIn) throws CreateException {
+	public ObjectCollection createFromObjs(ObjectCollection objsIn) throws CreateException {
 		
-		ObjectMaskCollection objsOut = new ObjectMaskCollection();
+		ObjectCollection objsOut = new ObjectCollection();
 		
 		ImageDim dims = createDim();
 		

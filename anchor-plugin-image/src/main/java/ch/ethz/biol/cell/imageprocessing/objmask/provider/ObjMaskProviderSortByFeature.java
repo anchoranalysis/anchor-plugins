@@ -40,7 +40,7 @@ import org.anchoranalysis.image.bean.provider.ObjMaskProviderOne;
 import org.anchoranalysis.image.feature.bean.evaluator.FeatureEvaluator;
 import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
 import org.anchoranalysis.image.objectmask.ObjectMask;
-import org.anchoranalysis.image.objectmask.ObjectMaskCollection;
+import org.anchoranalysis.image.objectmask.ObjectCollection;
 
 public class ObjMaskProviderSortByFeature extends ObjMaskProviderOne {
 
@@ -73,7 +73,7 @@ public class ObjMaskProviderSortByFeature extends ObjMaskProviderOne {
 	}
 	
 	@Override
-	public ObjectMaskCollection createFromObjs( ObjectMaskCollection objsCollection ) throws CreateException {
+	public ObjectCollection createFromObjs( ObjectCollection objsCollection ) throws CreateException {
 		
 		try {
 			FeatureCalculatorSingle<FeatureInputSingleObj> featureSession = featureEvaluator.createAndStartSession();
@@ -92,7 +92,7 @@ public class ObjMaskProviderSortByFeature extends ObjMaskProviderOne {
 			
 			Collections.sort(listToSort);
 					
-			ObjectMaskCollection objsOut = new ObjectMaskCollection();
+			ObjectCollection objsOut = new ObjectCollection();
 			for( ObjWithFeatureValue om : listToSort ) {
 				objsOut.add(om.getObjMask());
 			}

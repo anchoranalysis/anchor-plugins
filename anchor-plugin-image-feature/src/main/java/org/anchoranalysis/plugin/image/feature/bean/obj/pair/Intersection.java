@@ -76,7 +76,7 @@ public class Intersection extends FeatureDeriveFromPair {
 		return CalculateInputFromDelegateOption.calc(
 			input,
 			createCalculation(input),
-			delegate -> new CalculateIntersectionInput(delegate),
+			CalculateIntersectionInput::new,
 			getItem(),
 			cacheIntersectionName(),
 			emptyValue

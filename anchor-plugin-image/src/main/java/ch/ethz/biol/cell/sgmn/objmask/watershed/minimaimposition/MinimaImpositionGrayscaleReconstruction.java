@@ -39,7 +39,7 @@ import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.channel.factory.ChannelFactory;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.objectmask.ObjectMask;
-import org.anchoranalysis.image.objectmask.ObjectMaskCollection;
+import org.anchoranalysis.image.objectmask.ObjectCollection;
 import org.anchoranalysis.image.objectmask.ops.BinaryChnlFromObjs;
 import org.anchoranalysis.image.seed.SeedCollection;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
@@ -59,7 +59,10 @@ public class MinimaImpositionGrayscaleReconstruction extends MinimaImposition {
 			BinaryValuesByte maskBV,
 			VoxelBoxWrapper gradientImage) {
 		
-		VoxelBoxWrapper out = VoxelBoxFactory.instance().create( gradientImage.any().extent(), gradientImage.getVoxelDataType() );
+		VoxelBoxWrapper out = VoxelBoxFactory.instance().create(
+			gradientImage.any().extent(),
+			gradientImage.getVoxelDataType()
+		);
 		out.any().setAllPixelsTo( (int) gradientImage.getVoxelDataType().maxValue() );
 		
 		BoundingBox all = new BoundingBox(markerMaskVb.extent());
@@ -79,7 +82,7 @@ public class MinimaImpositionGrayscaleReconstruction extends MinimaImposition {
 		 
 		seeds.verifySeedsAreInside( chnl.getDimensions().getExtnt());
 		
-		ObjectMaskCollection masks = seeds.createMasks();
+		ObjectCollection masks = seeds.createMasks();
 				
 		masks.assertObjMasksAreInside( chnl.getDimensions().getExtnt() );
 				

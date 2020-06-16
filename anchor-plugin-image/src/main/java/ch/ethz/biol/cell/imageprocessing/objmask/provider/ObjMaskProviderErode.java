@@ -37,7 +37,7 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.objectmask.ObjectMask;
-import org.anchoranalysis.image.objectmask.ObjectMaskCollection;
+import org.anchoranalysis.image.objectmask.ObjectCollection;
 import org.anchoranalysis.image.objectmask.morph.MorphologicalErosion;
 import org.anchoranalysis.image.objectmask.morph.accept.AcceptIterationList;
 import org.anchoranalysis.image.objectmask.morph.accept.RejectIterationIfAllHigh;
@@ -71,9 +71,9 @@ public class ObjMaskProviderErode extends ObjMaskProviderDimensionsOptional {
 	}
 	
 	@Override
-	public ObjectMaskCollection createFromObjs(ObjectMaskCollection objsIn) throws CreateException {
+	public ObjectCollection createFromObjs(ObjectCollection objsIn) throws CreateException {
 		
-		ObjectMaskCollection objsOut = new ObjectMaskCollection();
+		ObjectCollection objsOut = new ObjectCollection();
 		
 		for( ObjectMask om : objsIn ) {
 			

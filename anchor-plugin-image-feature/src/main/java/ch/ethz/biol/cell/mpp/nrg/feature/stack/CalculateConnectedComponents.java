@@ -32,13 +32,13 @@ import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.binary.BinaryChnl;
 import org.anchoranalysis.image.binary.values.BinaryValues;
 import org.anchoranalysis.image.feature.stack.FeatureInputStack;
-import org.anchoranalysis.image.objectmask.ObjectMaskCollection;
+import org.anchoranalysis.image.objectmask.ObjectCollection;
 import org.anchoranalysis.image.objectmask.factory.CreateFromConnectedComponentsFactory;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
 
-public class CalculateConnectedComponents extends FeatureCalculation<ObjectMaskCollection, FeatureInputStack> {
+public class CalculateConnectedComponents extends FeatureCalculation<ObjectCollection, FeatureInputStack> {
 
 	private int nrgChnlIndex;
 		
@@ -48,7 +48,7 @@ public class CalculateConnectedComponents extends FeatureCalculation<ObjectMaskC
 	}
 
 	@Override
-	protected ObjectMaskCollection execute(FeatureInputStack input) throws FeatureCalcException {
+	protected ObjectCollection execute(FeatureInputStack input) throws FeatureCalcException {
 		
 		try {
 			BinaryChnl binaryImgChnl = new BinaryChnl(

@@ -44,7 +44,7 @@ import org.anchoranalysis.core.error.OptionalOperationUnsupportedException;
 import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
 import org.anchoranalysis.image.objectmask.ObjectMask;
-import org.anchoranalysis.image.objectmask.ObjectMaskCollection;
+import org.anchoranalysis.image.objectmask.ObjectCollection;
 import org.anchoranalysis.image.points.PointsFromObjMask;
 
 public class ObjAsPoints extends MarkProposer {
@@ -100,7 +100,7 @@ public class ObjAsPoints extends MarkProposer {
 		if (points==null) {
 			points = new ArrayList<List<Point3d>>();
 			
-			ObjectMaskCollection objsCollection = objs.create();
+			ObjectCollection objsCollection = objs.create();
 			for( ObjectMask om : objsCollection ) {
 				points.add(
 					PointsFromObjMask.pntsFromMaskDouble(om)

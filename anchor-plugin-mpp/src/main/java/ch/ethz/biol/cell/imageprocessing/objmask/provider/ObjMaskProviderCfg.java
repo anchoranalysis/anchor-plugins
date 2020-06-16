@@ -38,7 +38,7 @@ import org.anchoranalysis.image.bean.provider.ImageDimProvider;
 import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.extent.ImageDim;
-import org.anchoranalysis.image.objectmask.ObjectMaskCollection;
+import org.anchoranalysis.image.objectmask.ObjectCollection;
 
 import ch.ethz.biol.cell.imageprocessing.dim.provider.GuessDimFromInputImage;
 
@@ -60,7 +60,7 @@ public class ObjMaskProviderCfg extends ObjMaskProvider {
 	// END BEAN PROPERTIES
 
 	@Override
-	public ObjectMaskCollection create() throws CreateException {
+	public ObjectCollection create() throws CreateException {
 		
 		Cfg cfg = cfgProvider.create();
 		

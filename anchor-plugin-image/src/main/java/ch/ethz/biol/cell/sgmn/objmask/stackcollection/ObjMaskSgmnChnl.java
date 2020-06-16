@@ -37,7 +37,7 @@ import org.anchoranalysis.image.bean.sgmn.objmask.ObjMaskSgmn;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.experiment.bean.sgmn.SgmnObjMaskCollection;
 import org.anchoranalysis.image.experiment.identifiers.ImgStackIdentifiers;
-import org.anchoranalysis.image.objectmask.ObjectMaskCollection;
+import org.anchoranalysis.image.objectmask.ObjectCollection;
 import org.anchoranalysis.image.seed.SeedCollection;
 import org.anchoranalysis.image.sgmn.SgmnFailedException;
 import org.anchoranalysis.image.stack.NamedImgStackCollection;
@@ -57,9 +57,9 @@ public class ObjMaskSgmnChnl extends SgmnObjMaskCollection {
 	// END BEAN PROPERTIES
 
 	@Override
-	public ObjectMaskCollection sgmn(
+	public ObjectCollection sgmn(
 		NamedImgStackCollection stackCollection,
-		NamedProvider<ObjectMaskCollection> objMaskCollection,
+		NamedProvider<ObjectCollection> objMaskCollection,
 		Optional<SeedCollection> seeds,
 		RandomNumberGenerator re,
 		BoundIOContext context

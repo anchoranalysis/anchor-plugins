@@ -42,7 +42,7 @@ import org.anchoranalysis.core.random.RandomNumberGenerator;
 import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
 import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.objectmask.ObjectMask;
-import org.anchoranalysis.image.objectmask.ObjectMaskCollection;
+import org.anchoranalysis.image.objectmask.ObjectCollection;
 import org.anchoranalysis.image.points.PointsFromObjMask;
 
 /**
@@ -70,7 +70,7 @@ public class IncludeRandomObjs extends PointsProposer {
 		List<Point3i> out = new ArrayList<>();
 		
 		try {
-			ObjectMaskCollection objsCollection = objs.create();
+			ObjectCollection objsCollection = objs.create();
 			
 			for( ObjectMask om : objsCollection ) {
 				maybeAddToList(om, out, re);

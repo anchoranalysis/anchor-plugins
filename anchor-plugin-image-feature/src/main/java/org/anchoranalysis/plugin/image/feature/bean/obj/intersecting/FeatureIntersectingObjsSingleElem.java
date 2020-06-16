@@ -39,7 +39,7 @@ import org.anchoranalysis.feature.cache.calculation.ResolvedCalculation;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
 import org.anchoranalysis.image.feature.objmask.pair.FeatureInputPairObjs;
-import org.anchoranalysis.image.objectmask.ObjectMaskCollection;
+import org.anchoranalysis.image.objectmask.ObjectCollection;
 
 public abstract class FeatureIntersectingObjsSingleElem extends FeatureIntersectingObjs {
 
@@ -50,7 +50,7 @@ public abstract class FeatureIntersectingObjsSingleElem extends FeatureIntersect
 	// END BEAN PROPERTIES
 	
 	@Override
-	protected double valueFor(SessionInput<FeatureInputSingleObj> params, ResolvedCalculation<ObjectMaskCollection, FeatureInputSingleObj> intersecting)
+	protected double valueFor(SessionInput<FeatureInputSingleObj> params, ResolvedCalculation<ObjectCollection, FeatureInputSingleObj> intersecting)
 			throws FeatureCalcException {
 
 		return aggregateResults(
@@ -60,7 +60,7 @@ public abstract class FeatureIntersectingObjsSingleElem extends FeatureIntersect
 	
 	protected abstract double aggregateResults( List<Double> results );
 	
-	private List<Double> calcResults( SessionInput<FeatureInputSingleObj> paramsExst, ResolvedCalculation<ObjectMaskCollection, FeatureInputSingleObj> ccIntersecting ) throws FeatureCalcException {
+	private List<Double> calcResults( SessionInput<FeatureInputSingleObj> paramsExst, ResolvedCalculation<ObjectCollection, FeatureInputSingleObj> ccIntersecting ) throws FeatureCalcException {
 		
 		int size = paramsExst.calc(ccIntersecting).size();
 		

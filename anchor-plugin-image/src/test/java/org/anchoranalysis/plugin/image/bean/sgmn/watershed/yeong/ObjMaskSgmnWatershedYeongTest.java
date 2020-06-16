@@ -8,7 +8,7 @@ import org.anchoranalysis.image.binary.BinaryChnl;
 import org.anchoranalysis.image.binary.values.BinaryValues;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.objectmask.ObjectMask;
-import org.anchoranalysis.image.objectmask.ObjectMaskCollection;
+import org.anchoranalysis.image.objectmask.ObjectCollection;
 import org.anchoranalysis.image.sgmn.SgmnFailedException;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.test.TestDataLoadException;
@@ -51,13 +51,13 @@ public class ObjMaskSgmnWatershedYeongTest {
 			mask(path)
 		); 
 		
-		ObjectMaskCollection objsResult = sgmn.sgmn(
+		ObjectCollection objsResult = sgmn.sgmn(
 			chnl(PATH_CHNL_BLURRED),
 			mask,
 			Optional.empty()
 		);	
 					
-		ObjectMaskCollection objsExpected = loader.openObjsFromTestPath(pathObjsExpected);
+		ObjectCollection objsExpected = loader.openObjsFromTestPath(pathObjsExpected);
 		
 		assertTrue( objsExpected.equalsDeep(objsResult) );
 	}

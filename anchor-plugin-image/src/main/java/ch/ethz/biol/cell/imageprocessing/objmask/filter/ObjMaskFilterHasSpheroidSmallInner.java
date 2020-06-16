@@ -40,7 +40,7 @@ import org.anchoranalysis.image.bean.provider.ChnlProvider;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.objectmask.ObjectMask;
-import org.anchoranalysis.image.objectmask.ObjectMaskCollection;
+import org.anchoranalysis.image.objectmask.ObjectCollection;
 import org.anchoranalysis.image.objmask.match.ObjWithMatches;
 import org.anchoranalysis.plugin.image.intensity.IntensityMeanCalculator;
 
@@ -73,7 +73,7 @@ public class ObjMaskFilterHasSpheroidSmallInner extends ObjMaskFilter {
 	// END BEAN PROPERTIES
 	
 	@Override
-	public void filter(ObjectMaskCollection objs, Optional<ImageDim> dim, Optional<ObjectMaskCollection> objsRejected)
+	public void filter(ObjectCollection objs, Optional<ImageDim> dim, Optional<ObjectCollection> objsRejected)
 			throws OperationFailedException {
 		
 		List<ObjWithMatches> matchList = objMaskMatcherForContainedObjects.findMatch(objs);
@@ -178,7 +178,7 @@ public class ObjMaskFilterHasSpheroidSmallInner extends ObjMaskFilter {
 		}
 	}
 	
-	private ObjectMask findMaxVolumeObjAndCnt( ObjectMaskCollection objs ) {
+	private ObjectMask findMaxVolumeObjAndCnt( ObjectCollection objs ) {
 		
 		ObjectMask max = null;
 		int maxVolume = 0;

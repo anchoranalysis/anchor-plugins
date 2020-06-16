@@ -40,7 +40,7 @@ import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelBoxByte;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.objectmask.ObjectMask;
-import org.anchoranalysis.image.objectmask.ObjectMaskCollection;
+import org.anchoranalysis.image.objectmask.ObjectCollection;
 import org.anchoranalysis.image.objectmask.factory.CreateFromConnectedComponentsFactory;
 import org.anchoranalysis.image.sgmn.SgmnFailedException;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
@@ -128,7 +128,7 @@ public class SgmnObject extends BinarySgmn {
 		}		
 	}
 		
-	private static ObjectMaskCollection objsFromVoxelBox( BinaryVoxelBox<ByteBuffer> buffer ) throws SgmnFailedException {
+	private static ObjectCollection objsFromVoxelBox( BinaryVoxelBox<ByteBuffer> buffer ) throws SgmnFailedException {
 		try {
 			CreateFromConnectedComponentsFactory omcCreator = new CreateFromConnectedComponentsFactory();
 			return omcCreator.createConnectedComponents(buffer.duplicate() );

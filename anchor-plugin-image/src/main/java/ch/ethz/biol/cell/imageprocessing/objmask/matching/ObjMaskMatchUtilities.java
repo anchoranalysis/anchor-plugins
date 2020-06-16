@@ -31,12 +31,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.anchoranalysis.image.objectmask.ObjectMask;
-import org.anchoranalysis.image.objectmask.ObjectMaskCollection;
+import org.anchoranalysis.image.objectmask.ObjectCollection;
 import org.anchoranalysis.image.objmask.match.ObjWithMatches;
 
 public class ObjMaskMatchUtilities {
 	
-	public static List<ObjWithMatches> matchIntersectingObjects( ObjectMaskCollection sourceObjs, ObjectMaskCollection searchObjects ) {
+	public static List<ObjWithMatches> matchIntersectingObjects( ObjectCollection sourceObjs, ObjectCollection searchObjects ) {
 		
 		// Find matching seeds for each object
 		List<ObjWithMatches> list = new ArrayList<>(); 

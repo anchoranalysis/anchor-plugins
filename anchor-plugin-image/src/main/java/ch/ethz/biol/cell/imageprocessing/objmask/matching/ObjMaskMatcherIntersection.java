@@ -34,7 +34,7 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.bean.objmask.match.ObjMaskMatcher;
 import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
-import org.anchoranalysis.image.objectmask.ObjectMaskCollection;
+import org.anchoranalysis.image.objectmask.ObjectCollection;
 import org.anchoranalysis.image.objmask.match.ObjWithMatches;
 
 public class ObjMaskMatcherIntersection extends ObjMaskMatcher {
@@ -45,7 +45,7 @@ public class ObjMaskMatcherIntersection extends ObjMaskMatcher {
 	// END BEAN PROPERTIES
 	
 	@Override
-	public List<ObjWithMatches> findMatch(ObjectMaskCollection sourceObjs) throws OperationFailedException {
+	public List<ObjWithMatches> findMatch(ObjectCollection sourceObjs) throws OperationFailedException {
 
 		try {
 			return ObjMaskMatchUtilities.matchIntersectingObjects(

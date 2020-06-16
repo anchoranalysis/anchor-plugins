@@ -33,7 +33,7 @@ import org.anchoranalysis.core.geometry.PointConverter;
 import org.anchoranalysis.image.bean.provider.ObjMaskProviderOne;
 import org.anchoranalysis.image.contour.Contour;
 import org.anchoranalysis.image.objectmask.ObjectMask;
-import org.anchoranalysis.image.objectmask.ObjectMaskCollection;
+import org.anchoranalysis.image.objectmask.ObjectCollection;
 import org.anchoranalysis.image.objectmask.factory.CreateFromPointsFactory;
 
 import ch.ethz.biol.cell.imageprocessing.objmask.provider.smoothspline.ContourList;
@@ -63,9 +63,9 @@ public class ObjMaskProviderSplitContourSmoothingSpline extends ObjMaskProviderO
 	// END BEAN PROPERTIES
 	
 	@Override
-	public ObjectMaskCollection createFromObjs( ObjectMaskCollection in ) throws CreateException {
+	public ObjectCollection createFromObjs( ObjectCollection in ) throws CreateException {
 
-		ObjectMaskCollection out = new ObjectMaskCollection();
+		ObjectCollection out = new ObjectCollection();
 		
 		for( ObjectMask om : in ) {
 			splitContoursFromObj(om, out);
@@ -74,7 +74,7 @@ public class ObjMaskProviderSplitContourSmoothingSpline extends ObjMaskProviderO
 		return out;
 	}
 	
-	private void splitContoursFromObj( ObjectMask om, ObjectMaskCollection out ) throws CreateException {
+	private void splitContoursFromObj( ObjectMask om, ObjectCollection out ) throws CreateException {
 		
 		if (om.getBoundingBox().extent().getZ()>1) {
 			throw new CreateException("Only objs with z-slices > 1 are allowed");
@@ -89,7 +89,7 @@ public class ObjMaskProviderSplitContourSmoothingSpline extends ObjMaskProviderO
 		}		
 	}
 	
-	private void addContoursAsObjs( ContourList cl, ObjectMaskCollection out ) throws OperationFailedException {
+	private void addContoursAsObjs( ContourList cl, ObjectCollection out ) throws OperationFailedException {
 		for( Contour c : cl) {
 			try {
 				out.add(

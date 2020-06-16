@@ -41,7 +41,7 @@ import org.anchoranalysis.image.binary.BinaryChnl;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.objectmask.ObjectMask;
-import org.anchoranalysis.image.objectmask.ObjectMaskCollection;
+import org.anchoranalysis.image.objectmask.ObjectCollection;
 
 /**
  * Fills holes in an object. Existing obj-masks are overwritten (i.e. their memory buffers are replaced with filled-in pixels).
@@ -60,7 +60,7 @@ public class ObjMaskProviderFill extends ObjMaskProviderOne {
 	// END BEAN PROPERTIES
 	
 	@Override
-	public ObjectMaskCollection createFromObjs( ObjectMaskCollection objsCollection ) throws CreateException {
+	public ObjectCollection createFromObjs( ObjectCollection objsCollection ) throws CreateException {
 		
 		Optional<BinaryChnl> maskChnl = OptionalFactory.create(mask);
 		

@@ -34,26 +34,26 @@ import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorSingle;
 import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
 import org.anchoranalysis.image.objectmask.ObjectMask;
-import org.anchoranalysis.image.objectmask.ObjectMaskCollection;
+import org.anchoranalysis.image.objectmask.ObjectCollection;
 
 public class ObjMaskProviderFindMaxFeature extends ObjMaskProviderFindMaxFeatureBase {
 
 	@Override
-	public ObjectMaskCollection createFromObjs( ObjectMaskCollection objMaskCollection ) throws CreateException {
+	public ObjectCollection createFromObjs( ObjectCollection objMaskCollection ) throws CreateException {
 
 		Optional<ObjectMask> max = findMaxObj(
 			createSession(),
 			objMaskCollection
 		);
 		
-		ObjectMaskCollection out = new ObjectMaskCollection();
+		ObjectCollection out = new ObjectCollection();
 		max.ifPresent( obj->
 			out.add(obj)
 		);
 		return out;
 	}
 	
-	private Optional<ObjectMask> findMaxObj( FeatureCalculatorSingle<FeatureInputSingleObj> session, ObjectMaskCollection in ) throws CreateException {
+	private Optional<ObjectMask> findMaxObj( FeatureCalculatorSingle<FeatureInputSingleObj> session, ObjectCollection in ) throws CreateException {
 		
 		try {
 			ObjectMask max = null;

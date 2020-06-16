@@ -59,7 +59,7 @@ import org.anchoranalysis.image.io.generator.raster.bbox.ExtractedBBoxOnRGBObjMa
 import org.anchoranalysis.image.io.generator.raster.obj.ObjWithBoundingBoxGenerator;
 import org.anchoranalysis.image.io.generator.raster.obj.rgb.RGBObjMaskGenerator;
 import org.anchoranalysis.image.objectmask.ObjectMask;
-import org.anchoranalysis.image.objectmask.ObjectMaskCollection;
+import org.anchoranalysis.image.objectmask.ObjectCollection;
 import org.anchoranalysis.image.stack.NamedImgStackCollection;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.io.bean.objmask.writer.RGBOutlineWriter;
@@ -162,7 +162,7 @@ public class ExportObjectsAsCroppedImagesTask extends ExportObjectsBase<MultiInp
 				stackCollection.keys().iterator().next()
 			).getDimensions();
 			
-			ObjectMaskCollection objsZ = maybeExtendZObjs(
+			ObjectCollection objsZ = maybeExtendZObjs(
 				inputObjs(paramsInit, logger),
 				dim.getZ()
 			);
@@ -192,7 +192,7 @@ public class ExportObjectsAsCroppedImagesTask extends ExportObjectsBase<MultiInp
 	
 	private void outputGeneratorSeq(
 		IterableGenerator<ObjectMask> generator,
-		ObjectMaskCollection objs,
+		ObjectCollection objs,
 		BoundIOContext context
 	) throws CreateException {
 		GeneratorSequenceIncrementalRerouteErrors<ObjectMask> generatorSeq = createGeneratorSequence(
@@ -209,7 +209,7 @@ public class ExportObjectsAsCroppedImagesTask extends ExportObjectsBase<MultiInp
 		generatorSeq.end();
 	}
 	
-	private ObjectMaskCollection maybeExtendZObjs(ObjectMaskCollection objsCollection, int sizeZ) throws CreateException {
+	private ObjectCollection maybeExtendZObjs(ObjectCollection objsCollection, int sizeZ) throws CreateException {
 		
 		if (extendInZ) {
 			objsCollection = extendObjsInZ(objsCollection, sizeZ);
@@ -418,8 +418,8 @@ public class ExportObjectsAsCroppedImagesTask extends ExportObjectsBase<MultiInp
 		return writer;
 	}
 	
-	private static ObjectMaskCollection extendObjsInZ( ObjectMaskCollection objs, int sz ) {
-		ObjectMaskCollection out = new ObjectMaskCollection();
+	private static ObjectCollection extendObjsInZ( ObjectCollection objs, int sz ) {
+		ObjectCollection out = new ObjectCollection();
 		for( ObjectMask om : objs ) {
 			out.add( om.flattenZ().growToZ(sz) );
 		}

@@ -40,7 +40,7 @@ import org.anchoranalysis.image.convert.ByteConverter;
 import org.anchoranalysis.image.histogram.Histogram;
 import org.anchoranalysis.image.histogram.HistogramFactory;
 import org.anchoranalysis.image.objectmask.ObjectMask;
-import org.anchoranalysis.image.objectmask.ObjectMaskCollection;
+import org.anchoranalysis.image.objectmask.ObjectCollection;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 
 // Corrects a channel in the following way
@@ -56,7 +56,7 @@ public class ChnlProviderAdjustDifferenceToMedian extends ChnlProviderOneObjsSou
 	// END BEAN PROPERTIES
 	
 	@Override
-	protected Channel createFromChnl(Channel chnl, ObjectMaskCollection objsSource) throws CreateException {
+	protected Channel createFromChnl(Channel chnl, ObjectCollection objsSource) throws CreateException {
 	
 		Channel lookup = DimChecker.createSameSize(chnlLookup, "chnlLookup", chnl);
 		

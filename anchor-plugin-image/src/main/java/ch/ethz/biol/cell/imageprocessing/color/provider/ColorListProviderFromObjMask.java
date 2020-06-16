@@ -33,7 +33,7 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.bean.provider.ColorListProvider;
 import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
-import org.anchoranalysis.image.objectmask.ObjectMaskCollection;
+import org.anchoranalysis.image.objectmask.ObjectCollection;
 import org.anchoranalysis.io.bean.color.generator.ColorSetGenerator;
 
 public class ColorListProviderFromObjMask extends ColorListProvider {
@@ -49,7 +49,7 @@ public class ColorListProviderFromObjMask extends ColorListProvider {
 	@Override
 	public ColorList create() throws CreateException {
 
-		ObjectMaskCollection objsCollection;
+		ObjectCollection objsCollection;
 		try {
 			objsCollection = objs.create();
 		} catch (CreateException e) {

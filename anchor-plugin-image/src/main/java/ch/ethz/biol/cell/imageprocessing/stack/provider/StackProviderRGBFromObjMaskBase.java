@@ -4,7 +4,7 @@ import org.anchoranalysis.anchor.overlay.bean.objmask.writer.ObjMaskWriter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.color.ColorList;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.image.objectmask.ObjectMaskCollection;
+import org.anchoranalysis.image.objectmask.ObjectCollection;
 import org.anchoranalysis.image.stack.DisplayStack;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.io.bean.objmask.writer.RGBOutlineWriter;
@@ -25,7 +25,7 @@ public abstract class StackProviderRGBFromObjMaskBase extends StackProviderWithB
 	private boolean force2D = false;
 	// END BEAN PROPERTIES
 	
-	protected Stack createStack( ObjectMaskCollection objs, ColorList colors) throws CreateException {
+	protected Stack createStack( ObjectCollection objs, ColorList colors) throws CreateException {
 		return ColoredObjsStackCreator.create(
 			maybeFlatten(objs),
 			outline,
@@ -40,7 +40,7 @@ public abstract class StackProviderRGBFromObjMaskBase extends StackProviderWithB
 		return backgroundStack(!force2D);
 	}
 	
-	protected ObjectMaskCollection maybeFlatten( ObjectMaskCollection objs ) {
+	protected ObjectCollection maybeFlatten( ObjectCollection objs ) {
 		if (force2D) {
 			return objs.flattenZ();
 		} else {

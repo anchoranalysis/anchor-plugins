@@ -41,7 +41,7 @@ import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
 import org.anchoranalysis.image.feature.session.FeatureTableSession;
 import org.anchoranalysis.image.feature.session.NamedFeatureStoreSession;
 import org.anchoranalysis.image.objectmask.ObjectMask;
-import org.anchoranalysis.image.objectmask.ObjectMaskCollection;
+import org.anchoranalysis.image.objectmask.ObjectCollection;
 
 /**
  * Simply selects features directly from the list, and objects directly from the list passed.
@@ -62,7 +62,7 @@ public class Simple extends FeatureTableObjs<FeatureInputSingleObj> {
 	}
 
 	@Override
-	public List<FeatureInputSingleObj> createListInputs(ObjectMaskCollection objs,
+	public List<FeatureInputSingleObj> createListInputs(ObjectCollection objs,
 			NRGStackWithParams nrgStack, LogErrorReporter logErrorReporter) throws CreateException {
 
 		List<FeatureInputSingleObj> out = new ArrayList<>();

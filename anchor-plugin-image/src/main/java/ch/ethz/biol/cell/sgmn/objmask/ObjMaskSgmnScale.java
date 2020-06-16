@@ -40,7 +40,7 @@ import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.interpolator.Interpolator;
 import org.anchoranalysis.image.interpolator.InterpolatorFactory;
 import org.anchoranalysis.image.objectmask.ObjectMask;
-import org.anchoranalysis.image.objectmask.ObjectMaskCollection;
+import org.anchoranalysis.image.objectmask.ObjectCollection;
 import org.anchoranalysis.image.scale.ScaleFactor;
 import org.anchoranalysis.image.seed.SeedCollection;
 import org.anchoranalysis.image.sgmn.SgmnFailedException;
@@ -60,7 +60,7 @@ public class ObjMaskSgmnScale extends ObjMaskSgmnOne {
 	// END BEAN PROPERTIES
 	
 	@Override
-	public ObjectMaskCollection sgmn(Channel chnl, Optional<ObjectMask> mask, Optional<SeedCollection> seeds, ObjMaskSgmn sgmn) throws SgmnFailedException {
+	public ObjectCollection sgmn(Channel chnl, Optional<ObjectMask> mask, Optional<SeedCollection> seeds, ObjMaskSgmn sgmn) throws SgmnFailedException {
 
 		Interpolator interpolator = createInterpolator();
 		
@@ -98,7 +98,7 @@ public class ObjMaskSgmnScale extends ObjMaskSgmnOne {
 		}
 	}
 	
-	private ObjectMaskCollection scaleResultToOriginalScale(ObjectMaskCollection objs, ScaleFactor sf) throws SgmnFailedException {
+	private ObjectCollection scaleResultToOriginalScale(ObjectCollection objs, ScaleFactor sf) throws SgmnFailedException {
 		try {
 			objs.scale( sf.invert(), createInterpolator() );
 		} catch (OperationFailedException e) {

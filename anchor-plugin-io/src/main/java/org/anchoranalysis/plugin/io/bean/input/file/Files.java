@@ -66,7 +66,7 @@ public class Files extends InputManager<FileInput> {
 			Collection<File> files = getFileProvider().create(params);
 				
 			return descriptiveNameFromFile.descriptiveNamesForCheckUniqueness(files).stream().map(
-				df -> new FileInput(df)
+				FileInput::new
 			).collect( Collectors.toList() );
 		} catch (FileProviderException e) {
 			throw new AnchorIOException("Cannot find files", e);

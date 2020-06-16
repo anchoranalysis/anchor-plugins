@@ -31,7 +31,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
 import org.anchoranalysis.image.objectmask.ObjectMask;
-import org.anchoranalysis.image.objectmask.ObjectMaskCollection;
+import org.anchoranalysis.image.objectmask.ObjectCollection;
 import org.anchoranalysis.image.objectmask.ops.ObjMaskMerger;
 
 // Merges an object in each list item by item
@@ -49,16 +49,16 @@ public class ObjMaskProviderMergeItemByItem extends ObjMaskProvider {
 	// END BEAN PROPERTIES
 		
 	@Override
-	public ObjectMaskCollection create() throws CreateException {
+	public ObjectCollection create() throws CreateException {
 
-		ObjectMaskCollection objsCollection1 = objs1.create();
-		ObjectMaskCollection objsCollection2 = objs2.create();
+		ObjectCollection objsCollection1 = objs1.create();
+		ObjectCollection objsCollection2 = objs2.create();
 		
 		if (objsCollection1.size()!=objsCollection2.size()) {
 			throw new CreateException( String.format("Both objProviders must have the same number of items, currently %d and %d", objsCollection1.size(), objsCollection2.size() ));
 		}
 		
-		ObjectMaskCollection out = new ObjectMaskCollection();
+		ObjectCollection out = new ObjectCollection();
 		
 		for( int i=0; i<objsCollection1.size(); i++) {
 			ObjectMask om1 = objsCollection1.get(i);

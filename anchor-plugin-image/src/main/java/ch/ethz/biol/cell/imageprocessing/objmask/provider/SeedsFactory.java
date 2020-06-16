@@ -34,13 +34,13 @@ import org.anchoranalysis.core.geometry.ReadableTuple3i;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.objectmask.ObjectMask;
-import org.anchoranalysis.image.objectmask.ObjectMaskCollection;
+import org.anchoranalysis.image.objectmask.ObjectCollection;
 import org.anchoranalysis.image.seed.SeedCollection;
 import org.anchoranalysis.image.seed.SeedObjMask;
 
 class SeedsFactory {
 	
-	public static SeedCollection createSeedsWithoutMask( ObjectMaskCollection seeds ) {
+	public static SeedCollection createSeedsWithoutMask( ObjectCollection seeds ) {
 		// We create a collection of seeds localised appropriately
 		// NB: we simply change the object seeds, as it seemingly won't be used again!!!
 		SeedCollection seedsObj = new SeedCollection();
@@ -54,7 +54,7 @@ class SeedsFactory {
 	}
 	
 	public static SeedCollection createSeedsWithMask(
-		ObjectMaskCollection seeds,
+		ObjectCollection seeds,
 		ObjectMask containingMask,
 		ReadableTuple3i subtractFromCrnrMin,
 		ImageDim dim

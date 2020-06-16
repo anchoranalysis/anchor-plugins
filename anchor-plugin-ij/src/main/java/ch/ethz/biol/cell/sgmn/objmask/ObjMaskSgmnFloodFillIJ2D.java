@@ -38,7 +38,7 @@ import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.convert.IJWrap;
 import org.anchoranalysis.image.objectmask.ObjectMask;
-import org.anchoranalysis.image.objectmask.ObjectMaskCollection;
+import org.anchoranalysis.image.objectmask.ObjectCollection;
 import org.anchoranalysis.image.seed.SeedCollection;
 import org.anchoranalysis.image.sgmn.SgmnFailedException;
 
@@ -58,7 +58,7 @@ public class ObjMaskSgmnFloodFillIJ2D extends ObjMaskSgmn {
 	// END BEAN PROPERTIES
 	
 	@Override
-	public ObjectMaskCollection sgmn(
+	public ObjectCollection sgmn(
 		Channel chnl,
 		Optional<ObjectMask> mask,
 		Optional<SeedCollection> seeds
@@ -101,7 +101,7 @@ public class ObjMaskSgmnFloodFillIJ2D extends ObjMaskSgmn {
 	 * @param numLabels the number of objects, so that the label ids are a sequence (1,numLabels) inclusive. 
 	 * @return a derived collection of objs
 	 */
-	private ObjectMaskCollection objectsFromLabels( Channel chnl, int numLabels ) {
+	private ObjectCollection objectsFromLabels( Channel chnl, int numLabels ) {
 		return CreateFromLabels.create(
 			chnl.getVoxelBox().asByte(),
 			1,

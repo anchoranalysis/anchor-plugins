@@ -41,7 +41,7 @@ import org.anchoranalysis.image.bean.sgmn.objmask.ObjMaskSgmn;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.objectmask.ObjectMask;
-import org.anchoranalysis.image.objectmask.ObjectMaskCollection;
+import org.anchoranalysis.image.objectmask.ObjectCollection;
 import org.anchoranalysis.image.objectmask.factory.CreateFromEntireChnlFactory;
 import org.anchoranalysis.image.seed.SeedCollection;
 import org.anchoranalysis.image.sgmn.SgmnFailedException;
@@ -60,7 +60,7 @@ public class ObjMaskProviderSgmn extends ObjMaskProviderChnlSource {
 	// END BEAN PROPERTIES
 
 	@Override
-	protected ObjectMaskCollection createFromChnl(Channel chnlSrc) throws CreateException {
+	protected ObjectCollection createFromChnl(Channel chnlSrc) throws CreateException {
 
 		Optional<ObjectMask> maskAsObj = createMask();
 	
@@ -92,7 +92,7 @@ public class ObjMaskProviderSgmn extends ObjMaskProviderChnlSource {
 		);
 	}
 	
-	private static SeedCollection createSeeds(ObjectMaskCollection seeds, Optional<ObjectMask> maskAsObj, ImageDim dim) throws CreateException {
+	private static SeedCollection createSeeds(ObjectCollection seeds, Optional<ObjectMask> maskAsObj, ImageDim dim) throws CreateException {
 		return OptionalUtilities.map(
 			maskAsObj,
 			m -> SeedsFactory.createSeedsWithMask(

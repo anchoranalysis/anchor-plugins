@@ -33,7 +33,7 @@ import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.objectmask.ObjectMask;
-import org.anchoranalysis.image.objectmask.ObjectMaskCollection;
+import org.anchoranalysis.image.objectmask.ObjectCollection;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 
 class ObjMaskCollectionFixture {
@@ -57,8 +57,8 @@ class ObjMaskCollectionFixture {
 	 * @param maxNumObjs
 	 * @return
 	 */
-	public ObjectMaskCollection createMockObjs( int minNumObjs, int maxNumObjs ) {
-		ObjectMaskCollection out = new ObjectMaskCollection();
+	public ObjectCollection createMockObjs( int minNumObjs, int maxNumObjs ) {
+		ObjectCollection out = new ObjectCollection();
 		
 		int numObjs = randomMinMax( minNumObjs, maxNumObjs );
 		for( int i=0; i<numObjs; i++) {

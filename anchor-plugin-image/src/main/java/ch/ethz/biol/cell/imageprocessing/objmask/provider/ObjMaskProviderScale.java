@@ -33,7 +33,7 @@ import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.bean.scale.ScaleCalculator;
 import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.interpolator.InterpolatorFactory;
-import org.anchoranalysis.image.objectmask.ObjectMaskCollection;
+import org.anchoranalysis.image.objectmask.ObjectCollection;
 import org.anchoranalysis.image.scale.ScaleFactor;
 
 public class ObjMaskProviderScale extends ObjMaskProviderDimensions {
@@ -44,7 +44,7 @@ public class ObjMaskProviderScale extends ObjMaskProviderDimensions {
 	// END BEAN PROPERTIES
 	
 	@Override
-	public ObjectMaskCollection createFromObjs(ObjectMaskCollection objsCollection) throws CreateException {
+	public ObjectCollection createFromObjs(ObjectCollection objsCollection) throws CreateException {
 		
 		ImageDim dim = createDim();
 		

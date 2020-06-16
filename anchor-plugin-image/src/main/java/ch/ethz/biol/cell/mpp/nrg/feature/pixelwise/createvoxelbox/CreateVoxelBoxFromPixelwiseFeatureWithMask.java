@@ -72,7 +72,7 @@ public class CreateVoxelBoxFromPixelwiseFeatureWithMask {
 			Extent e = listVoxelBox.getFirstExtnt();
 			
 			// We make our index buffer
-			VoxelBox<ByteBuffer> vbOut = VoxelBoxFactory.instance().getByte().create(e);
+			VoxelBox<ByteBuffer> vbOut = VoxelBoxFactory.getByte().create(e);
 			
 			if (objMask!=null) {
 				setPixelsWithMask( vbOut, objMask, pixelScore );

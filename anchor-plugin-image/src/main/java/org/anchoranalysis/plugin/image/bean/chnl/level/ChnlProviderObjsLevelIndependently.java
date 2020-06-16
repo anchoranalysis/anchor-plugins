@@ -30,7 +30,7 @@ package org.anchoranalysis.plugin.image.bean.chnl.level;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.channel.Channel;
-import org.anchoranalysis.image.objectmask.ObjectMaskCollection;
+import org.anchoranalysis.image.objectmask.ObjectCollection;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 
 import ch.ethz.biol.cell.imageprocessing.chnl.provider.level.LevelResult;
@@ -46,7 +46,7 @@ public class ChnlProviderObjsLevelIndependently extends ChnlProviderLevel {
 	// END BEAN
 
 	@Override
-	protected Channel createFor(Channel chnlIntensity, ObjectMaskCollection objs, Channel chnlOutput) throws CreateException {
+	protected Channel createFor(Channel chnlIntensity, ObjectCollection objs, Channel chnlOutput) throws CreateException {
 
 		try {
 			LevelResultCollection lrc = LevelResultCollectionFactory.createCollection(

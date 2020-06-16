@@ -112,7 +112,7 @@ public class SgmnThrshldAgainstChnl extends BinarySgmn {
 		if (voxelBox.getVoxelDataType().equals( VoxelDataTypeUnsignedByte.instance )) {
 			return voxelBox.asByte();
 		} else {
-			return VoxelBoxFactory.instance().getByte().create( voxelBox.any().extent() );
+			return VoxelBoxFactory.getByte().create( voxelBox.any().extent() );
 		}
 	}
 	

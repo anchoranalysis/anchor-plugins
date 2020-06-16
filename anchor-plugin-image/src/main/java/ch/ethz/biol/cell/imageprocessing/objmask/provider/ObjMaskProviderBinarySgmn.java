@@ -37,7 +37,7 @@ import org.anchoranalysis.image.bean.sgmn.binary.BinarySgmnParameters;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.objectmask.ObjectMask;
-import org.anchoranalysis.image.objectmask.ObjectMaskCollection;
+import org.anchoranalysis.image.objectmask.ObjectCollection;
 import org.anchoranalysis.image.sgmn.SgmnFailedException;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.anchoranalysis.image.voxel.box.VoxelBoxWrapper;
@@ -50,9 +50,9 @@ public class ObjMaskProviderBinarySgmn extends ObjMaskProviderOneChnlSource {
 	// END BEAN PROPERTIES
 
 	@Override
-	protected ObjectMaskCollection createFromObjs(ObjectMaskCollection objsSrc, Channel chnlSrc) throws CreateException {
+	protected ObjectCollection createFromObjs(ObjectCollection objsSrc, Channel chnlSrc) throws CreateException {
 		
-		ObjectMaskCollection masksOut = new ObjectMaskCollection();
+		ObjectCollection masksOut = new ObjectCollection();
 		try {
 			
 			for( ObjectMask om : objsSrc ) {

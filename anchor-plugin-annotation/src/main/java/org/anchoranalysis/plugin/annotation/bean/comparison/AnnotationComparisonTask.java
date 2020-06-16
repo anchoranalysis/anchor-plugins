@@ -30,7 +30,7 @@ import java.util.Optional;
 
 
 import org.anchoranalysis.annotation.io.assignment.Assignment;
-import org.anchoranalysis.annotation.io.assignment.AssignmentObjMask;
+import org.anchoranalysis.annotation.io.assignment.AssignmentOverlapFromPairs;
 import org.anchoranalysis.annotation.io.assignment.generator.AssignmentGeneratorFactory;
 import org.anchoranalysis.annotation.io.assignment.generator.ColorPool;
 import org.anchoranalysis.bean.annotation.BeanField;
@@ -297,7 +297,7 @@ public class AnnotationComparisonTask<T extends Assignment> extends Task<Annotat
 			throws ExperimentExecutionException {
 
 		@SuppressWarnings("unchecked")
-		SharedState<AssignmentObjMask> sharedStateC = (SharedState<AssignmentObjMask>) sharedState;
+		SharedState<AssignmentOverlapFromPairs> sharedStateC = (SharedState<AssignmentOverlapFromPairs>) sharedState;
 		sharedStateC.getAssignmentCSV().end();
 
 		// Write group statistics

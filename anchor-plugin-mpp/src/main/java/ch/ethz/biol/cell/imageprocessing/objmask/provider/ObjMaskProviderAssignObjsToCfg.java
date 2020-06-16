@@ -42,7 +42,7 @@ import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.objectmask.ObjectMask;
-import org.anchoranalysis.image.objectmask.ObjectMaskCollection;
+import org.anchoranalysis.image.objectmask.ObjectCollection;
 
 import ch.ethz.biol.cell.imageprocessing.objmask.provider.assignobjstocfg.RslvdEllipsoid;
 import ch.ethz.biol.cell.imageprocessing.objmask.provider.assignobjstocfg.RslvdEllipsoidList;
@@ -76,7 +76,7 @@ public class ObjMaskProviderAssignObjsToCfg extends ObjMaskProviderDimensions {
 	private int regionID = 0;
 	
 	@Override
-	public ObjectMaskCollection createFromObjs( ObjectMaskCollection objsCollection ) throws CreateException {
+	public ObjectCollection createFromObjs( ObjectCollection objsCollection ) throws CreateException {
 		
 		Cfg cfg = cfgProvider.create();
 		ImageDim dim = createDim();
@@ -85,10 +85,10 @@ public class ObjMaskProviderAssignObjsToCfg extends ObjMaskProviderDimensions {
 		if (cfg.size()==0) {
 			// There are no ellipsoids to assign to, exit early making all objs unassigned
 			if (objsOutUnassigned!=null) {
-				ObjectMaskCollection objsOutUnassignedCollection = objsOutUnassigned.create();
+				ObjectCollection objsOutUnassignedCollection = objsOutUnassigned.create();
 				objsOutUnassignedCollection.addAll(objsCollection);
 			}
-			return new ObjectMaskCollection();
+			return new ObjectCollection();
 		}
 		
 		
@@ -133,7 +133,7 @@ public class ObjMaskProviderAssignObjsToCfg extends ObjMaskProviderDimensions {
 		}
 		
 		if (objsOutUnassigned!=null) {
-			ObjectMaskCollection objsOutUnassignedCollection = objsOutUnassigned.create();
+			ObjectCollection objsOutUnassignedCollection = objsOutUnassigned.create();
 			listObjs.addAllTo(objsOutUnassignedCollection);
 		}
 		
@@ -146,7 +146,7 @@ public class ObjMaskProviderAssignObjsToCfg extends ObjMaskProviderDimensions {
 		return listEllipsoids.createMergedObjsForIncluded();
 	}
 
-	private static RslvdObjMaskList createRslvdObjMaskList( ObjectMaskCollection objs ) {
+	private static RslvdObjMaskList createRslvdObjMaskList( ObjectCollection objs ) {
 		RslvdObjMaskList out = new RslvdObjMaskList();
 		for( ObjectMask om : objs ) {
 			out.add( new RslvdObjMask(om) );

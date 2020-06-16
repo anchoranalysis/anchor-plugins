@@ -57,7 +57,7 @@ import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
 import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
 import org.anchoranalysis.image.feature.session.FeatureTableSession;
 import org.anchoranalysis.image.init.ImageInitParams;
-import org.anchoranalysis.image.objectmask.ObjectMaskCollection;
+import org.anchoranalysis.image.objectmask.ObjectCollection;
 import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.output.bound.BoundIOContext;
 import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
@@ -229,7 +229,7 @@ public class ExportFeaturesObjMaskTask<T extends FeatureInput> extends ExportFea
 	
 	private void calculateFeaturesForProvider(
 		String id,
-		ObjectMaskCollection objs,
+		ObjectCollection objs,
 		FeatureTableSession<T> session,
 		NRGStackWithParams nrgStack,
 		Consumer<ResultsVector> resultsConsumer,
@@ -255,7 +255,7 @@ public class ExportFeaturesObjMaskTask<T extends FeatureInput> extends ExportFea
 		}
 	}
 	
-	private static ObjectMaskCollection objsFromProvider( ObjMaskProvider provider, ImageInitParams imageInitParams, LogErrorReporter logErrorReporter ) throws OperationFailedException {
+	private static ObjectCollection objsFromProvider( ObjMaskProvider provider, ImageInitParams imageInitParams, LogErrorReporter logErrorReporter ) throws OperationFailedException {
 
 		try {
 			ObjMaskProvider objMaskProviderLoc = provider.duplicateBean();

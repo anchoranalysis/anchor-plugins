@@ -34,7 +34,7 @@ import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.core.index.SetOperationFailedException;
 import org.anchoranalysis.image.index.rtree.ObjMaskCollectionRTree;
 import org.anchoranalysis.image.objectmask.ObjectMask;
-import org.anchoranalysis.image.objectmask.ObjectMaskCollection;
+import org.anchoranalysis.image.objectmask.ObjectCollection;
 import org.anchoranalysis.plugin.mpp.experiment.objs.csv.CSVRow;
 import org.apache.commons.lang.ArrayUtils;
 import org.w3c.dom.Document;
@@ -73,7 +73,7 @@ class Utilities {
 	 * @throws SetOperationFailedException
 	 */
 	private static ObjectMask findObjForPoint( ObjMaskCollectionRTree allObjs, Point3i pnt, int numVoxels ) throws OperationFailedException {
-		ObjectMaskCollection objs = allObjs.contains(pnt);
+		ObjectCollection objs = allObjs.contains(pnt);
 		
 //		if (objs.size()>1) {
 //			throw new SetOperationFailedException( String.format("More than one object contains point '%s'. Only one is allowed.", pnt) );

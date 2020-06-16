@@ -32,7 +32,7 @@ import org.anchoranalysis.core.color.ColorList;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.io.generator.raster.obj.rgb.RGBObjMaskGenerator;
-import org.anchoranalysis.image.objectmask.ObjectMaskCollection;
+import org.anchoranalysis.image.objectmask.ObjectCollection;
 import org.anchoranalysis.image.objectmask.properties.ObjMaskWithPropertiesCollection;
 import org.anchoranalysis.image.stack.DisplayStack;
 import org.anchoranalysis.image.stack.Stack;
@@ -59,7 +59,7 @@ public class ColoredObjsStackCreator {
 	 * @throws CreateException
 	 */
 	public static Stack create(
-		ObjectMaskCollection objs,
+		ObjectCollection objs,
 		boolean outline,
 		int outlineWidth,
 		boolean force2D,

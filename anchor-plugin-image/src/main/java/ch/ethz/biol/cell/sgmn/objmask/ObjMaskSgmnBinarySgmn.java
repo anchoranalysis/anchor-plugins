@@ -41,7 +41,7 @@ import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.channel.factory.ChannelFactory;
 import org.anchoranalysis.image.extent.ImageRes;
 import org.anchoranalysis.image.objectmask.ObjectMask;
-import org.anchoranalysis.image.objectmask.ObjectMaskCollection;
+import org.anchoranalysis.image.objectmask.ObjectCollection;
 import org.anchoranalysis.image.objectmask.factory.CreateFromConnectedComponentsFactory;
 import org.anchoranalysis.image.seed.SeedCollection;
 import org.anchoranalysis.image.sgmn.SgmnFailedException;
@@ -57,7 +57,7 @@ public class ObjMaskSgmnBinarySgmn extends ObjMaskSgmn {
 	// END BEAN PROPERTIES
 
 	@Override
-	public ObjectMaskCollection sgmn(
+	public ObjectCollection sgmn(
 		Channel chnl,
 		Optional<ObjectMask> mask,
 		Optional<SeedCollection> seeds
@@ -75,14 +75,14 @@ public class ObjMaskSgmnBinarySgmn extends ObjMaskSgmn {
 		return createFromBinaryVoxelBox(bvb,chnl.getDimensions().getRes(), mask);
 	}
 
-	private ObjectMaskCollection createFromBinaryVoxelBox( BinaryVoxelBox<ByteBuffer> bvb, ImageRes res, Optional<ObjectMask> omSrc ) throws SgmnFailedException {
+	private ObjectCollection createFromBinaryVoxelBox( BinaryVoxelBox<ByteBuffer> bvb, ImageRes res, Optional<ObjectMask> omSrc ) throws SgmnFailedException {
 		BinaryChnl bic = new BinaryChnl(
 			ChannelFactory.instance().create(bvb.getVoxelBox(), res),
 			bvb.getBinaryValues()
 		);
 		CreateFromConnectedComponentsFactory createObjMasks = new CreateFromConnectedComponentsFactory(minNumberVoxels);
 		
-		ObjectMaskCollection objsBinary;
+		ObjectCollection objsBinary;
 		try {
 			objsBinary = createObjMasks.createConnectedComponents(bic );
 		} catch (CreateException e) {

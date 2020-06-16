@@ -30,7 +30,7 @@ package ch.ethz.biol.cell.imageprocessing.chnl.provider;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.objectmask.ObjectMask;
-import org.anchoranalysis.image.objectmask.ObjectMaskCollection;
+import org.anchoranalysis.image.objectmask.ObjectCollection;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 
 // Assigns a unique id number to each objects
@@ -38,7 +38,7 @@ import org.anchoranalysis.image.voxel.box.VoxelBox;
 public class ChnlProviderIdentifyObjects extends ChnlProviderOneObjsSource {
 
 	@Override
-	protected Channel createFromChnl(Channel chnl, ObjectMaskCollection objsSource) throws CreateException {
+	protected Channel createFromChnl(Channel chnl, ObjectCollection objsSource) throws CreateException {
 
 		VoxelBox<?> vb = chnl.getVoxelBox().any();
 		

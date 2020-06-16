@@ -41,7 +41,7 @@ import org.anchoranalysis.image.init.ImageInitParams;
 import org.anchoranalysis.image.io.generator.raster.bbox.ExtractedBBoxGenerator;
 import org.anchoranalysis.image.io.generator.raster.obj.rgb.RGBObjMaskGeneratorCropped;
 import org.anchoranalysis.image.objectmask.ObjectMask;
-import org.anchoranalysis.image.objectmask.ObjectMaskCollection;
+import org.anchoranalysis.image.objectmask.ObjectCollection;
 import org.anchoranalysis.image.stack.DisplayStack;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.io.input.InputFromManager;
@@ -69,7 +69,7 @@ public abstract class ExportObjectsBase<T extends InputFromManager, S> extends T
 	private int paddingZ = 0;
 	// END BEAN PROPERTIES
 	
-	protected ObjectMaskCollection inputObjs( ImageInitParams so, LogErrorReporter logger ) throws CreateException, InitException {
+	protected ObjectCollection inputObjs( ImageInitParams so, LogErrorReporter logger ) throws CreateException, InitException {
 		ObjMaskProvider objsDup = objs.duplicateBean();
 		objsDup.initRecursive(so,logger);
 		return objsDup.create();

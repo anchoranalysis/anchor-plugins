@@ -42,7 +42,7 @@ import org.anchoranalysis.core.geometry.Point3f;
 import org.anchoranalysis.core.geometry.PointConverter;
 import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.objectmask.ObjectMask;
-import org.anchoranalysis.image.objectmask.ObjectMaskCollection;
+import org.anchoranalysis.image.objectmask.ObjectCollection;
 
 import ch.ethz.biol.cell.imageprocessing.binaryimgchnl.provider.ConvexHullUtilities;
 
@@ -65,7 +65,7 @@ public class CfgProviderPointsFitterFromObjs extends CfgProvider {
 		
 		ImageDim dim = pointsFitter.createDim();
 
-		ObjectMaskCollection objsCollection = pointsFitter.createObjs();
+		ObjectCollection objsCollection = pointsFitter.createObjs();
 		
 		Cfg cfgOut = new Cfg();
 		

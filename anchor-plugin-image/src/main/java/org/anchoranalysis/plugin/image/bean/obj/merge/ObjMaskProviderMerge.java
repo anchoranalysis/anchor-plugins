@@ -32,7 +32,7 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.feature.bean.evaluator.FeatureEvaluator;
 import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
-import org.anchoranalysis.image.objectmask.ObjectMaskCollection;
+import org.anchoranalysis.image.objectmask.ObjectCollection;
 import org.anchoranalysis.plugin.image.obj.merge.condition.IncreaseFeatureCondition;
 
 public class ObjMaskProviderMerge extends ObjMaskProviderMergeOptionalDistance {
@@ -46,7 +46,7 @@ public class ObjMaskProviderMerge extends ObjMaskProviderMergeOptionalDistance {
 	// END BEAN PROPERTIES
 
 	@Override
-	public ObjectMaskCollection createFromObjs( ObjectMaskCollection objsSource ) throws CreateException {
+	public ObjectCollection createFromObjs( ObjectCollection objsSource ) throws CreateException {
 		
 		try {
 			Merger merger = new Merger(

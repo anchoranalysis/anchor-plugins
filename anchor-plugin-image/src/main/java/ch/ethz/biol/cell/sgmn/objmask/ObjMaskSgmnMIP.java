@@ -38,7 +38,7 @@ import org.anchoranalysis.image.bean.sgmn.objmask.ObjMaskSgmnOne;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.objectmask.ObjectMask;
-import org.anchoranalysis.image.objectmask.ObjectMaskCollection;
+import org.anchoranalysis.image.objectmask.ObjectCollection;
 import org.anchoranalysis.image.objectmask.ops.ExtendObjsInto3DMask;
 import org.anchoranalysis.image.seed.SeedCollection;
 import org.anchoranalysis.image.sgmn.SgmnFailedException;
@@ -61,7 +61,7 @@ public class ObjMaskSgmnMIP extends ObjMaskSgmnOne {
 	// END BEAN PROPERTIES
 
 	@Override
-	public ObjectMaskCollection sgmn(Channel chnl, Optional<ObjectMask> objMask, Optional<SeedCollection> seeds, ObjMaskSgmn sgmn) throws SgmnFailedException {
+	public ObjectCollection sgmn(Channel chnl, Optional<ObjectMask> objMask, Optional<SeedCollection> seeds, ObjMaskSgmn sgmn) throws SgmnFailedException {
 		
 		if (objMask.isPresent()) {
 			throw new SgmnFailedException("An object-mask is not supported for this operation");
@@ -72,7 +72,7 @@ public class ObjMaskSgmnMIP extends ObjMaskSgmnOne {
 		// Collapse seeds in z direction
 		seeds.ifPresent(ObjMaskSgmnMIP::flattenSeedsInZ);
 		
-		ObjectMaskCollection objs = sgmn.sgmn(max, Optional.empty(), seeds);
+		ObjectCollection objs = sgmn.sgmn(max, Optional.empty(), seeds);
 		
 		if (isAny3d(objs)) {
 			throw new SgmnFailedException("A 3D object was returned from the initial segmentation. This must return only 2D objects");
@@ -84,7 +84,7 @@ public class ObjMaskSgmnMIP extends ObjMaskSgmnOne {
 		);
 	}
 	
-	private boolean isAny3d(ObjectMaskCollection objs) {
+	private boolean isAny3d(ObjectCollection objs) {
 		return objs.asList().stream().anyMatch(om
 			->om.getVoxelBox().extent().getZ() >1
 		);
