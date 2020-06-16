@@ -44,7 +44,7 @@ import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.extent.ImageRes;
 import org.anchoranalysis.image.objectmask.ObjectMask;
-import org.anchoranalysis.image.objectmask.ObjectMaskCollection;
+import org.anchoranalysis.image.objectmask.ObjectCollection;
 import org.anchoranalysis.image.objectmask.ops.ObjMaskMerger;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.anchoranalysis.image.voxel.box.factory.VoxelBoxFactory;
@@ -100,7 +100,7 @@ class Merger {
 	 * @param objs the objects to merge
 	 * @throws OperationFailedException
 	 */
-	public ObjectMaskCollection tryMerge( ObjectMaskCollection objs ) throws OperationFailedException {
+	public ObjectCollection tryMerge( ObjectCollection objs ) throws OperationFailedException {
 		
 		List<MergeParams> stack = new ArrayList<>();
 		MergeParams mergeParams = new MergeParams(0,0);
@@ -123,7 +123,7 @@ class Merger {
 	 * @param stack the entire list of future parameters to also be considered
 	 * @throws OperationFailedException
 	 */
-	private void tryMergeOnIndices( ObjectMaskCollection objs, MergeParams mergeParams, List<MergeParams> stack ) throws OperationFailedException {
+	private void tryMergeOnIndices( ObjectCollection objs, MergeParams mergeParams, List<MergeParams> stack ) throws OperationFailedException {
 		
 		try {
 			afterCondition.init(logger);
@@ -190,7 +190,7 @@ class Merger {
 		
 	private static ObjectMask createSinglePixelObjMask( Point3i pnt ) {
 		Extent e = new Extent(1,1,1);
-		VoxelBox<ByteBuffer> vb = VoxelBoxFactory.instance().getByte().create( e );
+		VoxelBox<ByteBuffer> vb = VoxelBoxFactory.getByte().create( e );
 		BinaryVoxelBox<ByteBuffer> bvb = new BinaryVoxelBoxByte(vb, BinaryValues.getDefault() );
 		bvb.setAllPixelsToOn();
 		BoundingBox bbox = new BoundingBox(pnt, e);

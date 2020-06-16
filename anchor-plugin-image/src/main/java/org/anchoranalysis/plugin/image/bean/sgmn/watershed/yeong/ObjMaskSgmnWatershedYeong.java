@@ -39,7 +39,7 @@ import org.anchoranalysis.image.bean.sgmn.objmask.ObjMaskSgmn;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.objectmask.ObjectMask;
-import org.anchoranalysis.image.objectmask.ObjectMaskCollection;
+import org.anchoranalysis.image.objectmask.ObjectCollection;
 import org.anchoranalysis.image.seed.SeedCollection;
 import org.anchoranalysis.image.sgmn.SgmnFailedException;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
@@ -79,14 +79,14 @@ public class ObjMaskSgmnWatershedYeong extends ObjMaskSgmn {
 	// END PROPERTIES
 	
 	@Override
-	public ObjectMaskCollection sgmn(Channel chnl, Optional<ObjectMask> mask,
+	public ObjectCollection sgmn(Channel chnl, Optional<ObjectMask> mask,
 			Optional<SeedCollection> seeds) throws SgmnFailedException {
 
 		EncodedVoxelBox matS = createS(chnl.getDimensions().getExtnt());
 		
 		Optional<MinimaStore> minimaStore = OptionalFactory.create(
 			exitWithMinima,
-			() -> new MinimaStore()
+			MinimaStore::new
 		);
 
 		if (seeds.isPresent()) {
@@ -116,7 +116,7 @@ public class ObjMaskSgmnWatershedYeong extends ObjMaskSgmn {
 	
 	/** Create 'S' matrix */
 	private EncodedVoxelBox createS(Extent extent) {
-		VoxelBox<IntBuffer> matSVoxelBox = VoxelBoxFactory.instance().getInt().create(extent);
+		VoxelBox<IntBuffer> matSVoxelBox = VoxelBoxFactory.getInt().create(extent);
 		return new EncodedVoxelBox(matSVoxelBox);
 	}
 	
@@ -143,7 +143,7 @@ public class ObjMaskSgmnWatershedYeong extends ObjMaskSgmn {
 		);
 	}
 	
-	private static ObjectMaskCollection createObjectsFromLabels( VoxelBox<IntBuffer> matS, Optional<ObjectMask> mask) throws CreateException {
+	private static ObjectCollection createObjectsFromLabels( VoxelBox<IntBuffer> matS, Optional<ObjectMask> mask) throws CreateException {
 		
 		final BoundingBoxMap bbm = new BoundingBoxMap();
 		

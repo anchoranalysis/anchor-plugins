@@ -31,7 +31,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
-import org.anchoranalysis.image.objectmask.ObjectMaskCollection;
+import org.anchoranalysis.image.objectmask.ObjectCollection;
 
 public class ObjMaskProviderReference extends ObjMaskProvider {
 
@@ -40,7 +40,7 @@ public class ObjMaskProviderReference extends ObjMaskProvider {
 	private String id = "";
 	// END BEAN PROPERTIES
 	
-	private ObjectMaskCollection objs;
+	private ObjectCollection objs;
 	
 	public ObjMaskProviderReference() {
 		
@@ -52,7 +52,7 @@ public class ObjMaskProviderReference extends ObjMaskProvider {
 	}
 
 	@Override
-	public ObjectMaskCollection create() throws CreateException {
+	public ObjectCollection create() throws CreateException {
 		if (objs==null) {
 			try {
 				objs = getSharedObjects().getObjMaskCollection().getException(id);

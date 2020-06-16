@@ -33,7 +33,7 @@ import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
 import org.anchoranalysis.image.binary.BinaryChnl;
 import org.anchoranalysis.image.binary.values.BinaryValues;
 import org.anchoranalysis.image.extent.ImageDim;
-import org.anchoranalysis.image.objectmask.ObjectMaskCollection;
+import org.anchoranalysis.image.objectmask.ObjectCollection;
 import org.anchoranalysis.image.objectmask.ops.BinaryChnlFromObjs;
 
 /** 
@@ -52,14 +52,14 @@ public class BinaryChnlProviderFromObjMasks extends BinaryChnlProviderDimSource 
 	@Override
 	protected BinaryChnl createFromSource(ImageDim dimSource) throws CreateException {
 
-		ObjectMaskCollection objCollection = objs.create();
+		ObjectCollection objCollection = objs.create();
 		if (objCollection==null) {
 			throw new CreateException("objMaskProvider returned null");
 		}
 		return create( objCollection, dimSource, invert );
 	}
 	
-	private static BinaryChnl create(  ObjectMaskCollection objs, ImageDim dim, boolean invert ) throws CreateException {
+	private static BinaryChnl create(  ObjectCollection objs, ImageDim dim, boolean invert ) throws CreateException {
 
 		BinaryValues bv = BinaryValues.getDefault();
 		
@@ -83,7 +83,7 @@ public class BinaryChnlProviderFromObjMasks extends BinaryChnlProviderDimSource 
 		this.invert = invert;
 	}
 	
-	private static BinaryChnl createChnlFromObjsMux( ObjectMaskCollection objs, ImageDim sd, BinaryValues outVal, boolean invert ) throws CreateException {
+	private static BinaryChnl createChnlFromObjsMux( ObjectCollection objs, ImageDim sd, BinaryValues outVal, boolean invert ) throws CreateException {
 		if (invert) {
 			return BinaryChnlFromObjs.createFromNotObjs(objs, sd, outVal);
 		} else {

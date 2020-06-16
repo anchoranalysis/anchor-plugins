@@ -37,7 +37,7 @@ import org.anchoranalysis.feature.session.calculator.FeatureCalculatorSingle;
 import org.anchoranalysis.image.bean.objmask.match.ObjMaskMatcher;
 import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
 import org.anchoranalysis.image.objectmask.ObjectMask;
-import org.anchoranalysis.image.objectmask.ObjectMaskCollection;
+import org.anchoranalysis.image.objectmask.ObjectCollection;
 import org.anchoranalysis.image.objmask.match.ObjWithMatches;
 
 // Returns a collection of each Max Object found in matches
@@ -49,11 +49,11 @@ public class ObjMaskProviderFindMaxFeatureInMatchedObjects extends ObjMaskProvid
 	// END BEAN PROPERTIES
 
 	@Override
-	public ObjectMaskCollection createFromObjs( ObjectMaskCollection in ) throws CreateException {
+	public ObjectCollection createFromObjs( ObjectCollection in ) throws CreateException {
 		
 		FeatureCalculatorSingle<FeatureInputSingleObj> session = createSession();
 
-		ObjectMaskCollection out = new ObjectMaskCollection();
+		ObjectCollection out = new ObjectCollection();
 		try {
 			List<ObjWithMatches> listMatches = objMaskMatcher.findMatch(in);
 	
@@ -71,7 +71,7 @@ public class ObjMaskProviderFindMaxFeatureInMatchedObjects extends ObjMaskProvid
 		return out;
 	}
 	
-	private ObjectMask findMax( FeatureCalculatorSingle<FeatureInputSingleObj> session, ObjectMaskCollection objs ) throws FeatureCalcException {
+	private ObjectMask findMax( FeatureCalculatorSingle<FeatureInputSingleObj> session, ObjectCollection objs ) throws FeatureCalcException {
 		ObjectMask max = null;
 		double maxVal = 0;
 		

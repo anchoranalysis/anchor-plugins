@@ -35,7 +35,7 @@ import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.convert.ImgLib2Wrap;
 import org.anchoranalysis.image.objectmask.ObjectMask;
-import org.anchoranalysis.image.objectmask.ObjectMaskCollection;
+import org.anchoranalysis.image.objectmask.ObjectCollection;
 import org.anchoranalysis.image.objectmask.factory.CreateFromPointsFactory;
 
 import ch.ethz.biol.cell.imageprocessing.objmask.provider.ObjMaskProviderChnlSource;
@@ -72,7 +72,7 @@ public class ObjMaskProviderMser extends ObjMaskProviderChnlSource {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	protected ObjectMaskCollection createFromChnl(Channel chnl) throws CreateException {
+	protected ObjectCollection createFromChnl(Channel chnl) throws CreateException {
 		
 		@SuppressWarnings("rawtypes")
 		Img img = ImgLib2Wrap.wrap( chnl.getVoxelBox() );
@@ -90,9 +90,9 @@ public class ObjMaskProviderMser extends ObjMaskProviderChnlSource {
 		return convertOutputToObjs( treeDarkToBright );
 	}
 	
-	private <T extends Type<T>> ObjectMaskCollection convertOutputToObjs( MserTree<T> tree ) throws CreateException {
+	private <T extends Type<T>> ObjectCollection convertOutputToObjs( MserTree<T> tree ) throws CreateException {
 		
-		ObjectMaskCollection out = new ObjectMaskCollection();
+		ObjectCollection out = new ObjectCollection();
 		for ( Mser<T> mser :  tree)	{
 			
 			List<Point3i> pnts = convertPixelPoints(mser);

@@ -38,7 +38,7 @@ import org.anchoranalysis.image.bean.sgmn.objmask.ObjMaskSgmn;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.channel.factory.ChannelFactory;
 import org.anchoranalysis.image.objectmask.ObjectMask;
-import org.anchoranalysis.image.objectmask.ObjectMaskCollection;
+import org.anchoranalysis.image.objectmask.ObjectCollection;
 import org.anchoranalysis.image.objmask.match.ObjWithMatches;
 import org.anchoranalysis.image.seed.SeedCollection;
 import org.anchoranalysis.image.sgmn.SgmnFailedException;
@@ -64,12 +64,12 @@ public class ObjMaskProviderSeededObjSgmn extends ObjMaskProviderChnlSource {
 	// END BEAN PROPERTIES
 	
 	@Override
-	protected ObjectMaskCollection createFromChnl(Channel chnlSrc) throws CreateException {
+	protected ObjectCollection createFromChnl(Channel chnlSrc) throws CreateException {
 		
-		ObjectMaskCollection seeds = objsSeeds.create();
+		ObjectCollection seeds = objsSeeds.create();
 		
 		if (objsSource!=null) {
-			ObjectMaskCollection sourceObjs = objsSource.create();
+			ObjectCollection sourceObjs = objsSource.create();
 			return createWithSourceObjs(
 				chnlSrc,
 				seeds,
@@ -81,10 +81,10 @@ public class ObjMaskProviderSeededObjSgmn extends ObjMaskProviderChnlSource {
 		}
 	}
 	
-	private static ObjectMaskCollection createWithSourceObjs(
+	private static ObjectCollection createWithSourceObjs(
 		Channel chnl,
-		ObjectMaskCollection seeds,
-		ObjectMaskCollection sourceObjs,
+		ObjectCollection seeds,
+		ObjectCollection sourceObjs,
 		ObjMaskSgmn sgmn
 	) throws CreateException {
 		
@@ -93,14 +93,14 @@ public class ObjMaskProviderSeededObjSgmn extends ObjMaskProviderChnlSource {
 		
 		List<ObjWithMatches> matchList = ObjMaskMatchUtilities.matchIntersectingObjects( sourceObjs, seeds );
 		
-		ObjectMaskCollection out = new ObjectMaskCollection();
+		ObjectCollection out = new ObjectCollection();
 		for( ObjWithMatches ows : matchList ) {
 			if( ows.numMatches() <= 1 ) {
 				out.add( ows.getSourceObj() );
 			} else {
 				
 				try {
-					ObjectMaskCollection objs = sgmn(
+					ObjectCollection objs = sgmn(
 						ows.getSourceObj(),
 						ows.getMatches(),
 						chnl,
@@ -116,9 +116,9 @@ public class ObjMaskProviderSeededObjSgmn extends ObjMaskProviderChnlSource {
 		return out;
 	}
 	
-	private static ObjectMaskCollection createWithoutSourceObjs(
+	private static ObjectCollection createWithoutSourceObjs(
 		Channel chnl,
-		ObjectMaskCollection seedsAsObjs,
+		ObjectCollection seedsAsObjs,
 		ObjMaskSgmn sgmn
 	) throws CreateException {
 		
@@ -137,9 +137,9 @@ public class ObjMaskProviderSeededObjSgmn extends ObjMaskProviderChnlSource {
 		
 		
 	// NB Objects in seeds are changed
-	private static ObjectMaskCollection sgmn(
+	private static ObjectCollection sgmn(
 		ObjectMask objMask,
-		ObjectMaskCollection seeds,
+		ObjectCollection seeds,
 		Channel chnl,
 		ObjMaskSgmn sgmn
 	) throws SgmnFailedException, CreateException {
@@ -158,7 +158,7 @@ public class ObjMaskProviderSeededObjSgmn extends ObjMaskProviderChnlSource {
 			chnl.getDimensions()
 		);
 		
-		ObjectMaskCollection sgmnObjs = sgmn.sgmn(
+		ObjectCollection sgmnObjs = sgmn.sgmn(
 			chnlObjLocal,
 			Optional.of(objMaskLocal),
 			Optional.of(seedsObj)

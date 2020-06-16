@@ -34,7 +34,7 @@ import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.objectmask.ObjectMask;
-import org.anchoranalysis.image.objectmask.ObjectMaskCollection;
+import org.anchoranalysis.image.objectmask.ObjectCollection;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.anchoranalysis.image.voxel.box.factory.VoxelBoxFactory;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
@@ -43,11 +43,11 @@ import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 public class ObjMaskProviderExpandZ extends ObjMaskProviderDimensions {
 
 	@Override
-	public ObjectMaskCollection createFromObjs(ObjectMaskCollection in) throws CreateException {
+	public ObjectCollection createFromObjs(ObjectCollection in) throws CreateException {
 		
 		ImageDim dim = createDim();
 		
-		ObjectMaskCollection out = new ObjectMaskCollection();
+		ObjectCollection out = new ObjectCollection();
 		
 		for( ObjectMask om : in ) {
 			
@@ -71,7 +71,7 @@ public class ObjMaskProviderExpandZ extends ObjMaskProviderDimensions {
 	}
 	
 	private static VoxelBox<ByteBuffer> createVoxelBoxOfDuplicatedPlanes( VoxelBuffer<ByteBuffer> planeIn, Extent extent ) {
-		VoxelBox<ByteBuffer> vbNew = VoxelBoxFactory.instance().getByte().create(extent);
+		VoxelBox<ByteBuffer> vbNew = VoxelBoxFactory.getByte().create(extent);
 		for( int z=0; z<extent.getZ(); z++) {
 			vbNew.setPixelsForPlane(z, planeIn);
 		}

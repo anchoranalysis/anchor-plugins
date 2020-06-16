@@ -31,7 +31,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import org.anchoranalysis.image.objectmask.ObjectMaskCollection;
+import org.anchoranalysis.image.objectmask.ObjectCollection;
 
 public class RslvdObjMaskList implements Iterable<RslvdObjMask> {
 	private List<RslvdObjMask> delegate;
@@ -48,7 +48,7 @@ public class RslvdObjMaskList implements Iterable<RslvdObjMask> {
 		return delegate.iterator();
 	}
 	
-	public void addAllTo( ObjectMaskCollection objsOut ) {
+	public void addAllTo( ObjectCollection objsOut ) {
 		for( RslvdObjMask rom : delegate ) {
 			objsOut.add( rom.getObjMask() );
 		}
@@ -58,8 +58,8 @@ public class RslvdObjMaskList implements Iterable<RslvdObjMask> {
 		return delegate.size();
 	}
 	
-	public ObjectMaskCollection createObjs() {
-		ObjectMaskCollection out = new ObjectMaskCollection();
+	public ObjectCollection createObjs() {
+		ObjectCollection out = new ObjectCollection();
 		for( RslvdObjMask rom : this) {
 			out.add(rom.getObjMask());
 		}

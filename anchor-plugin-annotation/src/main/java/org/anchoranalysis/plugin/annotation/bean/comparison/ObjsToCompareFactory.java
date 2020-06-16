@@ -36,7 +36,7 @@ import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.experiment.JobExecutionException;
 import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.io.input.ProvidesStackInput;
-import org.anchoranalysis.image.objectmask.ObjectMaskCollection;
+import org.anchoranalysis.image.objectmask.ObjectCollection;
 import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.output.bound.BoundIOContext;
 import org.anchoranalysis.plugin.annotation.comparison.AnnotationComparisonInput;
@@ -59,11 +59,11 @@ class ObjsToCompareFactory {
 		return OptionalUtilities.mapBoth(
 			createObjs(true, "leftObj", addAnnotation, input, dim, context),
 			createObjs(false,"rightObj", addAnnotation, input, dim, context),
-			(left, right) -> new ObjsToCompare(left, right)
+			ObjsToCompare::new
 		);
 	}
 	
-	private static Optional<ObjectMaskCollection> createObjs(
+	private static Optional<ObjectCollection> createObjs(
 		boolean left,
 		String objName,
 		IAddAnnotation<?> addAnnotation,
@@ -71,24 +71,24 @@ class ObjsToCompareFactory {
 		ImageDim dim,
 		BoundIOContext context
 	) throws JobExecutionException {
-		Findable<ObjectMaskCollection> findable = createFindable(left, input, dim, context.isDebugEnabled() );
+		Findable<ObjectCollection> findable = createFindable(left, input, dim, context.isDebugEnabled() );
 		return foundOrLogAddUnnannotated(findable, objName, addAnnotation, context.getLogger());
 	}
 	
-	private static Optional<ObjectMaskCollection> foundOrLogAddUnnannotated(
-		Findable<ObjectMaskCollection> objs,
+	private static Optional<ObjectCollection> foundOrLogAddUnnannotated(
+		Findable<ObjectCollection> objs,
 		String objName,
 		IAddAnnotation<?> addAnnotation,
 		LogErrorReporter logErrorReporter
 	) {
-		Optional<ObjectMaskCollection> found = objs.getFoundOrLog(objName, logErrorReporter );
+		Optional<ObjectCollection> found = objs.getFoundOrLog(objName, logErrorReporter );
 		if (!found.isPresent()) {
 			addAnnotation.addUnannotatedImage();
 		}
 		return found;
 	}
 
-	private static Findable<ObjectMaskCollection> createFindable(
+	private static Findable<ObjectCollection> createFindable(
 		boolean left,
 		AnnotationComparisonInput<ProvidesStackInput> input,
 		ImageDim dim,

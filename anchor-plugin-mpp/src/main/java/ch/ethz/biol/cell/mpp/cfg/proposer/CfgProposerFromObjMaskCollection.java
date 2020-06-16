@@ -46,7 +46,7 @@ import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
 import org.anchoranalysis.image.objectmask.ObjectMask;
-import org.anchoranalysis.image.objectmask.ObjectMaskCollection;
+import org.anchoranalysis.image.objectmask.ObjectCollection;
 import org.anchoranalysis.plugin.points.calculate.ellipsoid.EllipsoidFactory;
 
 public class CfgProposerFromObjMaskCollection extends CfgProposer {
@@ -78,7 +78,7 @@ public class CfgProposerFromObjMaskCollection extends CfgProposer {
 	@Override
 	public Optional<Cfg> propose(CfgGen cfgGen, ProposerContext context) throws ProposalAbnormalFailureException {
 
-		ObjectMaskCollection objsCollection;
+		ObjectCollection objsCollection;
 		try {
 			objsCollection = objs.create();
 		} catch (CreateException e) {

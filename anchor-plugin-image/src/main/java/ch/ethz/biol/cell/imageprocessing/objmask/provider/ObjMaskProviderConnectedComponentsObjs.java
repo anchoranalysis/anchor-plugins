@@ -33,7 +33,7 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.bean.provider.ObjMaskProviderOne;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
 import org.anchoranalysis.image.objectmask.ObjectMask;
-import org.anchoranalysis.image.objectmask.ObjectMaskCollection;
+import org.anchoranalysis.image.objectmask.ObjectCollection;
 import org.anchoranalysis.image.objectmask.factory.CreateFromConnectedComponentsFactory;
 
 /**
@@ -52,26 +52,26 @@ public class ObjMaskProviderConnectedComponentsObjs extends ObjMaskProviderOne {
 	// END BEAN PROPERTIES
 	
 	@Override
-	public ObjectMaskCollection createFromObjs(ObjectMaskCollection objsCollection) throws CreateException {
+	public ObjectCollection createFromObjs(ObjectCollection objsCollection) throws CreateException {
 		
-		ObjectMaskCollection out = new ObjectMaskCollection();
+		ObjectCollection out = new ObjectCollection();
 				
 		CreateFromConnectedComponentsFactory createObjMasks = new CreateFromConnectedComponentsFactory(bigNghb, 1);
 				
 		for( ObjectMask om : objsCollection ) {
-			ObjectMaskCollection omConnected = createObjs3D( om, createObjMasks );
+			ObjectCollection omConnected = createObjs3D( om, createObjMasks );
 			out.addAll(omConnected);
 		}
 		
 		return out;
 	}
 	
-	private ObjectMaskCollection createObjs3D(
+	private ObjectCollection createObjs3D(
 		ObjectMask omUnconnected,
 		CreateFromConnectedComponentsFactory createObjMasks
 	) throws CreateException {
 		
-		ObjectMaskCollection objs = createObjsFromMask( omUnconnected.binaryVoxelBox(), createObjMasks );
+		ObjectCollection objs = createObjsFromMask( omUnconnected.binaryVoxelBox(), createObjMasks );
 		
 		// Adjust the crnr of each object, by adding on the original starting point of our object-mask
 		for( ObjectMask omConnected : objs ) {
@@ -82,7 +82,7 @@ public class ObjMaskProviderConnectedComponentsObjs extends ObjMaskProviderOne {
 		return objs;
 	}
 	
-	private ObjectMaskCollection createObjsFromMask( BinaryVoxelBox<ByteBuffer> vb, CreateFromConnectedComponentsFactory createObjMasks ) throws CreateException {
+	private ObjectCollection createObjsFromMask( BinaryVoxelBox<ByteBuffer> vb, CreateFromConnectedComponentsFactory createObjMasks ) throws CreateException {
 		return createObjMasks.createConnectedComponents(vb );
 	}
 

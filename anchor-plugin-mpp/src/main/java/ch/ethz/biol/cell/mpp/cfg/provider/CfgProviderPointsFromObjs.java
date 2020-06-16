@@ -35,7 +35,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
 import org.anchoranalysis.image.objectmask.ObjectMask;
-import org.anchoranalysis.image.objectmask.ObjectMaskCollection;
+import org.anchoranalysis.image.objectmask.ObjectCollection;
 import org.anchoranalysis.image.points.PointsFromObjMask;
 
 public class CfgProviderPointsFromObjs extends CfgProvider {
@@ -50,7 +50,7 @@ public class CfgProviderPointsFromObjs extends CfgProvider {
 		return createMarksFromObjs( objs.create() );
 	}
 		
-	private static Cfg createMarksFromObjs( ObjectMaskCollection objsCollection ) throws CreateException {
+	private static Cfg createMarksFromObjs( ObjectCollection objsCollection ) throws CreateException {
 		
 		Cfg out = new Cfg();
 		

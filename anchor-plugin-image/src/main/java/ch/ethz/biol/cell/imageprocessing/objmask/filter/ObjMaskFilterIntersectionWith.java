@@ -35,7 +35,7 @@ import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
 import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.objectmask.ObjectMask;
-import org.anchoranalysis.image.objectmask.ObjectMaskCollection;
+import org.anchoranalysis.image.objectmask.ObjectCollection;
 
 public class ObjMaskFilterIntersectionWith extends ObjMaskFilterByObject {
 
@@ -44,7 +44,7 @@ public class ObjMaskFilterIntersectionWith extends ObjMaskFilterByObject {
 	private ObjMaskProvider objs;
 	// END BEAN PROPERTIES
 	
-	private ObjectMaskCollection intersectionSet;
+	private ObjectCollection intersectionSet;
 
 	@Override
 	protected void start() throws OperationFailedException {
@@ -57,7 +57,7 @@ public class ObjMaskFilterIntersectionWith extends ObjMaskFilterByObject {
 		
 	}
 
-	private static boolean insersects( ObjectMask om, ObjectMaskCollection set) {
+	private static boolean insersects( ObjectMask om, ObjectCollection set) {
 		
 		for( ObjectMask s : set ) {
 			

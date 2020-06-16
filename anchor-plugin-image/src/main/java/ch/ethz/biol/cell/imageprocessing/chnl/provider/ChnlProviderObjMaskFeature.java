@@ -47,7 +47,7 @@ import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.extent.IncorrectImageSizeException;
 import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
 import org.anchoranalysis.image.objectmask.ObjectMask;
-import org.anchoranalysis.image.objectmask.ObjectMaskCollection;
+import org.anchoranalysis.image.objectmask.ObjectCollection;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
 
 public class ChnlProviderObjMaskFeature extends ChnlProviderOneObjsSource {
@@ -67,7 +67,7 @@ public class ChnlProviderObjMaskFeature extends ChnlProviderOneObjsSource {
 	// END BEAN PROPERTIES
 	
 	@Override
-	protected Channel createFromChnl(Channel chnl, ObjectMaskCollection objsSource) throws CreateException {
+	protected Channel createFromChnl(Channel chnl, ObjectCollection objsSource) throws CreateException {
 
 		Feature<FeatureInputSingleObj> feature = featureProvider.create();
 		
@@ -118,7 +118,7 @@ public class ChnlProviderObjMaskFeature extends ChnlProviderOneObjsSource {
 	
 	private Channel createOutputChnl(
 		ImageDim dim,
-		ObjectMaskCollection objsSource,
+		ObjectCollection objsSource,
 		FeatureCalculatorSingle<FeatureInputSingleObj> session,
 		NRGStackWithParams nrgStackParams
 	) throws FeatureCalcException {

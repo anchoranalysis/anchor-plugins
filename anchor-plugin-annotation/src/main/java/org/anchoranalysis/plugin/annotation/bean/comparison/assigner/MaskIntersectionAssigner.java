@@ -30,7 +30,7 @@ import org.anchoranalysis.annotation.io.assignment.AssignmentMaskIntersection;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.objectmask.ObjectMask;
-import org.anchoranalysis.image.objectmask.ObjectMaskCollection;
+import org.anchoranalysis.image.objectmask.ObjectCollection;
 import org.anchoranalysis.io.output.bound.BoundIOContext;
 import org.anchoranalysis.plugin.annotation.comparison.AnnotationGroup;
 import org.anchoranalysis.plugin.annotation.comparison.ObjsToCompare;
@@ -52,7 +52,7 @@ public class MaskIntersectionAssigner extends AnnotationComparisonAssigner<Assig
 		);
 	}
 	
-	private static ObjectMask extractSingleObj( String dscr, ObjectMaskCollection objs ) throws CreateException {
+	private static ObjectMask extractSingleObj( String dscr, ObjectCollection objs ) throws CreateException {
 		if (objs.size()==0) {
 			throw new CreateException(
 				String.format("%s obj contains no objects. Exactly one must exist.", dscr )	

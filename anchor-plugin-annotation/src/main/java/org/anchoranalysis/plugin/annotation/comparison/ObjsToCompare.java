@@ -1,23 +1,23 @@
 package org.anchoranalysis.plugin.annotation.comparison;
 
-import org.anchoranalysis.image.objectmask.ObjectMaskCollection;
+import org.anchoranalysis.image.objectmask.ObjectCollection;
 
 public class ObjsToCompare {
 
-	private ObjectMaskCollection left;
-	private ObjectMaskCollection right;
+	private ObjectCollection left;
+	private ObjectCollection right;
 	
-	public ObjsToCompare(ObjectMaskCollection left, ObjectMaskCollection right) {
+	public ObjsToCompare(ObjectCollection left, ObjectCollection right) {
 		super();
 		this.left = left;
 		this.right = right;
 	}
 
-	public ObjectMaskCollection getLeft() {
+	public ObjectCollection getLeft() {
 		return left;
 	}
 
-	public ObjectMaskCollection getRight() {
+	public ObjectCollection getRight() {
 		return right;
 	}		
 }

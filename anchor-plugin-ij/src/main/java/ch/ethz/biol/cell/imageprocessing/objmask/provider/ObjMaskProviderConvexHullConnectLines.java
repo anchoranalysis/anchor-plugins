@@ -36,7 +36,7 @@ import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.core.geometry.PointConverter;
 import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.objectmask.ObjectMask;
-import org.anchoranalysis.image.objectmask.ObjectMaskCollection;
+import org.anchoranalysis.image.objectmask.ObjectCollection;
 
 import ch.ethz.biol.cell.imageprocessing.binaryimgchnl.provider.ConvexHullUtilities;
 
@@ -53,11 +53,11 @@ import ch.ethz.biol.cell.imageprocessing.binaryimgchnl.provider.ConvexHullUtilit
 public class ObjMaskProviderConvexHullConnectLines extends ObjMaskProviderDimensions {
 	
 	@Override
-	public ObjectMaskCollection createFromObjs( ObjectMaskCollection objsCollection ) throws CreateException {
+	public ObjectCollection createFromObjs( ObjectCollection objsCollection ) throws CreateException {
 
 		ImageDim dim = createDim();
 		
-		ObjectMaskCollection out = new ObjectMaskCollection();
+		ObjectCollection out = new ObjectCollection();
 		
 		for( ObjectMask obj : objsCollection ) {
 			out.add(

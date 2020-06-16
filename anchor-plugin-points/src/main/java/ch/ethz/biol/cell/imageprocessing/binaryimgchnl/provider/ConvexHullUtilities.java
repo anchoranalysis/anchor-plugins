@@ -34,7 +34,7 @@ import java.util.Optional;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.geometry.Point2i;
 import org.anchoranalysis.image.objectmask.ObjectMask;
-import org.anchoranalysis.image.objectmask.ObjectMaskCollection;
+import org.anchoranalysis.image.objectmask.ObjectCollection;
 import org.anchoranalysis.image.outline.FindOutline;
 import org.anchoranalysis.image.points.PointsFromBinaryVoxelBox;
 
@@ -62,7 +62,7 @@ public class ConvexHullUtilities {
 		return applyConvexHull ? convexHull2D(pts) : Optional.of(pts);
 	}
 
-	public static Optional<List<Point2i>> convexHullFromAllOutlines( ObjectMaskCollection objs, int minNumPnts ) throws CreateException {
+	public static Optional<List<Point2i>> convexHullFromAllOutlines( ObjectCollection objs, int minNumPnts ) throws CreateException {
 		
 		List<Point2i> pts = new ArrayList<>();
 			

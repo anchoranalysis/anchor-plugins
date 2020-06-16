@@ -35,7 +35,7 @@ import org.anchoranalysis.image.bean.sgmn.objmask.ObjMaskSgmn;
 import org.anchoranalysis.image.bean.sgmn.objmask.ObjMaskSgmnOne;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.objectmask.ObjectMask;
-import org.anchoranalysis.image.objectmask.ObjectMaskCollection;
+import org.anchoranalysis.image.objectmask.ObjectCollection;
 import org.anchoranalysis.image.seed.SeedCollection;
 import org.anchoranalysis.image.sgmn.SgmnFailedException;
 
@@ -51,7 +51,7 @@ public class ObjMaskSgmnMinimaImposition extends ObjMaskSgmnOne {
 	// END BEAN PROPERTIES
 
 	@Override
-	public ObjectMaskCollection sgmn(
+	public ObjectCollection sgmn(
 		Channel chnl,
 		Optional<ObjectMask> mask,
 		Optional<SeedCollection> seeds,
@@ -65,7 +65,7 @@ public class ObjMaskSgmnMinimaImposition extends ObjMaskSgmnOne {
 		try {
 			Channel chnlWithImposedMinima = chnlWithImposedMinima(chnl, seeds.get(), mask );
 			
-			ObjectMaskCollection omc = sgmn.sgmn(chnlWithImposedMinima, mask, seeds );
+			ObjectCollection omc = sgmn.sgmn(chnlWithImposedMinima, mask, seeds );
 			
 			return omc;
 			

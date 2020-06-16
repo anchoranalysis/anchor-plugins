@@ -34,7 +34,7 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.bean.sgmn.objmask.ObjMaskSgmn;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.objectmask.ObjectMask;
-import org.anchoranalysis.image.objectmask.ObjectMaskCollection;
+import org.anchoranalysis.image.objectmask.ObjectCollection;
 import org.anchoranalysis.image.sgmn.SgmnFailedException;
 
 public class ObjMaskProviderSgmnByObj extends ObjMaskProviderOneChnlSource {
@@ -45,9 +45,9 @@ public class ObjMaskProviderSgmnByObj extends ObjMaskProviderOneChnlSource {
 	// END BEAN PROPERTIES
 
 	@Override
-	public ObjectMaskCollection createFromObjs( ObjectMaskCollection objsSrc, Channel chnlToSgmn ) throws CreateException {
+	public ObjectCollection createFromObjs( ObjectCollection objsSrc, Channel chnlToSgmn ) throws CreateException {
 		
-		ObjectMaskCollection objsOut = new ObjectMaskCollection();
+		ObjectCollection objsOut = new ObjectCollection();
 		
 		for( ObjectMask om : objsSrc ) {
 			try {

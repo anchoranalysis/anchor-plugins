@@ -35,7 +35,7 @@ import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.graph.EdgeTypeWithVertices;
 import org.anchoranalysis.core.graph.GraphWithEdgeTypes;
 import org.anchoranalysis.image.extent.ImageRes;
-import org.anchoranalysis.image.objectmask.ObjectMaskCollection;
+import org.anchoranalysis.image.objectmask.ObjectCollection;
 import org.anchoranalysis.plugin.image.obj.merge.condition.UpdatableBeforeCondition;
 import org.anchoranalysis.plugin.image.obj.merge.priority.AssignPriority;
 import org.anchoranalysis.plugin.image.obj.merge.priority.PrioritisedVertex;
@@ -101,8 +101,8 @@ class NeighbourGraph {
 	
 
 	/** Creates an object-mask collection representing all the objects in the vertices */
-	public ObjectMaskCollection verticesAsObjects() {
-		ObjectMaskCollection out = new ObjectMaskCollection();
+	public ObjectCollection verticesAsObjects() {
+		ObjectCollection out = new ObjectCollection();
 		
 		for( ObjVertex omWithFeature : graph.vertexSet() ) {
 			out.add( omWithFeature.getObjMask() );

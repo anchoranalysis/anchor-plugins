@@ -68,7 +68,7 @@ public class GrayscaleReconstructionRobinson extends GrayscaleReconstructionByEr
 	private VoxelBoxWrapper reconstructionByDilation( VoxelBoxWrapper maskVb, VoxelBoxWrapper markerVb, Optional<ObjectMask> containingMask ) {
 		
 		// We use this to track if something has been finalized or not
-		VoxelBox<ByteBuffer> vbFinalized = VoxelBoxFactory.instance().getByte().create( markerVb.any().extent() );
+		VoxelBox<ByteBuffer> vbFinalized = VoxelBoxFactory.getByte().create( markerVb.any().extent() );
 		
 		
 		// TODO make more efficient

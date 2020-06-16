@@ -63,7 +63,7 @@ public abstract class DerivedObjMask extends FeatureObjMask {
 			createCachedCalculationForDerived(
 				input.resolver()
 			),
-			delegate -> new CalculateObjForDerived(delegate),
+			CalculateObjForDerived::new,
 			item,
 			cacheName,
 			emptyValue

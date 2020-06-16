@@ -39,10 +39,9 @@ import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelBoxInt;
 import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.objectmask.ObjectMask;
-import org.anchoranalysis.image.objectmask.ObjectMaskCollection;
+import org.anchoranalysis.image.objectmask.ObjectCollection;
 import org.anchoranalysis.image.objectmask.factory.CreateFromConnectedComponentsFactory;
 import org.anchoranalysis.image.voxel.box.BoundedVoxelBox;
-import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.anchoranalysis.image.voxel.box.factory.VoxelBoxFactory;
 
 public class ObjMaskProviderSplitByObjCollection extends ObjMaskProviderDimensions {
@@ -52,17 +51,20 @@ public class ObjMaskProviderSplitByObjCollection extends ObjMaskProviderDimensio
 	private ObjMaskProvider objsSplitBy;
 	// END BEAN PROPERTIES
 	
-	private ObjectMaskCollection splitObj( ObjectMask objToSplit, ObjectMaskCollection objsSplitBy, ImageDim dim ) throws OperationFailedException {
+	private ObjectCollection splitObj( ObjectMask objToSplit, ObjectCollection objsSplitBy, ImageDim dim ) throws OperationFailedException {
 		
-		ObjectMaskCollection out = new ObjectMaskCollection();
+		ObjectCollection out = new ObjectCollection();
 		
 		// We create a voxel buffer of the same size as objToSplit bounding box, and we write
 		//  a number for each obj in ObjsSplitBy
 		// Then we find connected components
 		
 		// Should be set to 0 by default
-		VoxelBox<IntBuffer> vbId = VoxelBoxFactory.instance().getInt().create( objToSplit.getBoundingBox().extent() );
-		BoundedVoxelBox<IntBuffer> boundedVbId = new BoundedVoxelBox<>( vbId );
+		BoundedVoxelBox<IntBuffer> boundedVbId = new BoundedVoxelBox<>(
+			VoxelBoxFactory.getInt().create(
+				objToSplit.getBoundingBox().extent()
+			)
+		);
 		
 		// Populate boundedVbId with id values
 		int cnt = 1;
@@ -84,9 +86,6 @@ public class ObjMaskProviderSplitByObjCollection extends ObjMaskProviderDimensio
 			boundedVbId.getVoxelBox().setPixelsCheckMask( intersect.get(), cnt++);
 		}
 		
-		//TempBoundOutputManager temp = new TempBoundOutputManager();
-		//temp.getBoundOutputManager().write("id", new VoxelBoxGenerator(boundedVbId.getVoxelBox()) );
-		
 		try {
 			for( int i=1; i<cnt; i++) {
 				
@@ -96,7 +95,7 @@ public class ObjMaskProviderSplitByObjCollection extends ObjMaskProviderDimensio
 				CreateFromConnectedComponentsFactory creator = new CreateFromConnectedComponentsFactory();
 				
 				BinaryVoxelBox<IntBuffer> bvb = new BinaryVoxelBoxInt(boundedVbId.getVoxelBox(), new BinaryValues(0, i));
-				ObjectMaskCollection omc = creator.create(bvb);
+				ObjectCollection omc = creator.create(bvb);
 				
 				// for every object we add the objToSplit Bounding Box crnr, to restore it to global co-ordinates
 				for( ObjectMask om : omc ) {
@@ -105,8 +104,6 @@ public class ObjMaskProviderSplitByObjCollection extends ObjMaskProviderDimensio
 					);
 					out.add(om);
 				}
-				
-				//out.addAll(omc);
 			}
 		} catch (CreateException e) {
 			throw new OperationFailedException(e);
@@ -117,18 +114,18 @@ public class ObjMaskProviderSplitByObjCollection extends ObjMaskProviderDimensio
 	}
 		
 	@Override
-	public ObjectMaskCollection createFromObjs(ObjectMaskCollection objsCollection) throws CreateException {
+	public ObjectCollection createFromObjs(ObjectCollection objsCollection) throws CreateException {
 		
-		ObjectMaskCollection objsSplitByCollection = objsSplitBy.create();
+		ObjectCollection objsSplitByCollection = objsSplitBy.create();
 
 		ImageDim dims = createDim();
 		
-		ObjectMaskCollection out = new ObjectMaskCollection();
+		ObjectCollection out = new ObjectCollection();
 		
 		for( ObjectMask om : objsCollection ) {
 			
 			// Find all object masks that could potentially intersect with the current oject
-			ObjectMaskCollection omcIntersecting = objsSplitByCollection.findObjsWithIntersectingBBox(om);
+			ObjectCollection omcIntersecting = objsSplitByCollection.findObjsWithIntersectingBBox(om);
 			
 			try {
 				out.addAll( splitObj(om, omcIntersecting, dims ) );

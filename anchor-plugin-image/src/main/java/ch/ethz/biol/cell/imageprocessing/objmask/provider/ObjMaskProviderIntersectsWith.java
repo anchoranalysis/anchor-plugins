@@ -30,7 +30,7 @@ package ch.ethz.biol.cell.imageprocessing.objmask.provider;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.objectmask.ObjectMask;
-import org.anchoranalysis.image.objectmask.ObjectMaskCollection;
+import org.anchoranalysis.image.objectmask.ObjectCollection;
 
 /**
  * Returns the only the objects from objMaskProvider that intersect
@@ -47,11 +47,11 @@ public class ObjMaskProviderIntersectsWith extends ObjMaskProviderContainer {
 	// END BEAN PROPERTIES
 	
 	@Override
-	public ObjectMaskCollection createFromObjs(ObjectMaskCollection objsCollection) throws CreateException {
+	public ObjectCollection createFromObjs(ObjectCollection objsCollection) throws CreateException {
 
-		ObjectMaskCollection objsCollectionContainer = containerRequired();
+		ObjectCollection objsCollectionContainer = containerRequired();
 		
-		ObjectMaskCollection out = new ObjectMaskCollection();
+		ObjectCollection out = new ObjectCollection();
 		
 		for( ObjectMask om : objsCollection ) {
 			
@@ -71,7 +71,7 @@ public class ObjMaskProviderIntersectsWith extends ObjMaskProviderContainer {
 		return out;
 	}
 	
-	private static boolean doesObjIntersect( ObjectMask om, ObjectMaskCollection container ) {
+	private static boolean doesObjIntersect( ObjectMask om, ObjectCollection container ) {
 		
 		for( ObjectMask omCompare : container ) {
 			if(om.hasIntersectingPixels(omCompare)) {

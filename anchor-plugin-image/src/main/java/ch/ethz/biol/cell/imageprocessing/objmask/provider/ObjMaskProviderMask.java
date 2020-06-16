@@ -33,7 +33,7 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.binary.BinaryChnl;
 import org.anchoranalysis.image.binary.logical.BinaryChnlAnd;
 import org.anchoranalysis.image.objectmask.ObjectMask;
-import org.anchoranalysis.image.objectmask.ObjectMaskCollection;
+import org.anchoranalysis.image.objectmask.ObjectCollection;
 
 /**
  * Applies a binary-mask to the object-collection possibly masking each individual object
@@ -47,7 +47,7 @@ import org.anchoranalysis.image.objectmask.ObjectMaskCollection;
 public class ObjMaskProviderMask extends ObjMaskProviderMaskBase {
 
 	@Override
-	protected ObjectMaskCollection createFromObjs(ObjectMaskCollection objsIn, BinaryChnl mask) throws CreateException {
+	protected ObjectCollection createFromObjs(ObjectCollection objsIn, BinaryChnl mask) throws CreateException {
 		for( ObjectMask om : objsIn ) {
 			applyMask(om, mask);
 		}

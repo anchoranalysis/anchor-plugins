@@ -34,7 +34,7 @@ import org.anchoranalysis.bean.annotation.NonNegative;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.objectmask.ObjectMask;
-import org.anchoranalysis.image.objectmask.ObjectMaskCollection;
+import org.anchoranalysis.image.objectmask.ObjectCollection;
 import org.anchoranalysis.image.objectmask.morph.MorphologicalDilation;
 
 public class ObjMaskProviderDilate extends ObjMaskProviderDimensionsOptional {
@@ -51,11 +51,11 @@ public class ObjMaskProviderDilate extends ObjMaskProviderDimensionsOptional {
 	// END BEAN PROPERTIES
 
 	@Override
-	public ObjectMaskCollection createFromObjs(ObjectMaskCollection objsIn) throws CreateException {
+	public ObjectCollection createFromObjs(ObjectCollection objsIn) throws CreateException {
 	
 		Optional<ImageDim> dim = createDims();
 				
-		ObjectMaskCollection objsOut = new ObjectMaskCollection();
+		ObjectCollection objsOut = new ObjectCollection();
 		
 		for( ObjectMask om : objsIn ) {
 

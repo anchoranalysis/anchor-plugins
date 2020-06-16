@@ -51,7 +51,7 @@ import org.anchoranalysis.image.feature.session.merged.MergedPairsFeatures;
 import org.anchoranalysis.image.feature.session.merged.MergedPairsSession;
 import org.anchoranalysis.image.feature.stack.FeatureInputStack;
 import org.anchoranalysis.image.objectmask.ObjectMask;
-import org.anchoranalysis.image.objectmask.ObjectMaskCollection;
+import org.anchoranalysis.image.objectmask.ObjectCollection;
 import org.anchoranalysis.image.voxel.nghb.CreateNghbGraph;
 
 /**
@@ -169,7 +169,7 @@ public class MergedPairs extends FeatureTableObjs<FeatureInputPairObjs> {
 	}
 	
 	@Override
-	public List<FeatureInputPairObjs> createListInputs(ObjectMaskCollection objs,
+	public List<FeatureInputPairObjs> createListInputs(ObjectCollection objs,
 			NRGStackWithParams nrgStack, LogErrorReporter logErrorReporter) throws CreateException {
 
 		List<FeatureInputPairObjs> out = new ArrayList<>();

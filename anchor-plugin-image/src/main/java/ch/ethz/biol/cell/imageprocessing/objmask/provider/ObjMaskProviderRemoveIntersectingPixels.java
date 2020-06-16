@@ -35,7 +35,7 @@ import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.objectmask.ObjectMask;
-import org.anchoranalysis.image.objectmask.ObjectMaskCollection;
+import org.anchoranalysis.image.objectmask.ObjectCollection;
 
 // Considers all possible pairs of objects in a provider, and removes intersecting pixels
 public class ObjMaskProviderRemoveIntersectingPixels extends ObjMaskProviderDimensions {
@@ -49,9 +49,9 @@ public class ObjMaskProviderRemoveIntersectingPixels extends ObjMaskProviderDime
 	// END BEAN PROPERTIES
 
 	@Override
-	public ObjectMaskCollection createFromObjs( ObjectMaskCollection objsCollection) throws CreateException {
+	public ObjectCollection createFromObjs( ObjectCollection objsCollection) throws CreateException {
 		
-		ObjectMaskCollection objsDup = objsCollection.duplicate();
+		ObjectCollection objsDup = objsCollection.duplicate();
 		
 		ImageDim dims = createDim();
 		

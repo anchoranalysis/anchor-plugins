@@ -5,7 +5,7 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.bean.provider.ChnlProviderOne;
 import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
 import org.anchoranalysis.image.channel.Channel;
-import org.anchoranalysis.image.objectmask.ObjectMaskCollection;
+import org.anchoranalysis.image.objectmask.ObjectCollection;
 
 public abstract class ChnlProviderOneObjsSource extends ChnlProviderOne {
 
@@ -22,7 +22,7 @@ public abstract class ChnlProviderOneObjsSource extends ChnlProviderOne {
 		);
 	}
 	
-	protected abstract Channel createFromChnl(Channel chnl, ObjectMaskCollection objsSource) throws CreateException;
+	protected abstract Channel createFromChnl(Channel chnl, ObjectCollection objsSource) throws CreateException;
 	
 	public ObjMaskProvider getObjs() {
 		return objs;

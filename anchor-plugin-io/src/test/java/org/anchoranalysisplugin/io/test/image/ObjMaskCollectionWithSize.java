@@ -1,12 +1,12 @@
 package org.anchoranalysisplugin.io.test.image;
 
-import org.anchoranalysis.image.objectmask.ObjectMaskCollection;
+import org.anchoranalysis.image.objectmask.ObjectCollection;
 
 class ObjMaskCollectionWithSize {
-	private ObjectMaskCollection objs;
+	private ObjectCollection objs;
 	private long size;
 	
-	public ObjMaskCollectionWithSize(ObjectMaskCollection objs, long size) {
+	public ObjMaskCollectionWithSize(ObjectCollection objs, long size) {
 		super();
 		this.objs = objs;
 		this.size = size;
@@ -16,7 +16,7 @@ class ObjMaskCollectionWithSize {
 		return ((double) size) / other.size;
 	}
 
-	public ObjectMaskCollection getObjs() {
+	public ObjectCollection getObjs() {
 		return objs;
 	}
 }

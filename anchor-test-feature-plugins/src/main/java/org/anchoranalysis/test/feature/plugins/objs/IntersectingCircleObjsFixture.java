@@ -28,7 +28,7 @@ package org.anchoranalysis.test.feature.plugins.objs;
 
 import org.anchoranalysis.core.geometry.Point2i;
 import org.anchoranalysis.image.objectmask.ObjectMask;
-import org.anchoranalysis.image.objectmask.ObjectMaskCollection;
+import org.anchoranalysis.image.objectmask.ObjectCollection;
 
 public class IntersectingCircleObjsFixture {
 
@@ -45,11 +45,11 @@ public class IntersectingCircleObjsFixture {
 	 *  @param numNotIntersecting the number of circles that do not intersect that should be produced
 	 *  @param boolean sameSize iff TRUE all circles have the same radius (INITIAL_RAIDUS), otherwise the radius gradually increments
 	 * */
-	public static ObjectMaskCollection generateIntersectingObjs( int numIntersecting, int numNotIntersecting, boolean sameSize ) {
+	public static ObjectCollection generateIntersectingObjs( int numIntersecting, int numNotIntersecting, boolean sameSize ) {
 	
 		int radius = INITIAL_RADIUS;
 		
-		ObjectMaskCollection out = new ObjectMaskCollection();
+		ObjectCollection out = new ObjectCollection();
 	
 		Point2i center = new Point2i( INITIAL_MARGIN + radius, INITIAL_MARGIN + radius);
 

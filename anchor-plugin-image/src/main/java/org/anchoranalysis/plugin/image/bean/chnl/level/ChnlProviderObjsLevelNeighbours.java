@@ -43,7 +43,7 @@ import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.graph.GraphWithEdgeTypes;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.histogram.Histogram;
-import org.anchoranalysis.image.objectmask.ObjectMaskCollection;
+import org.anchoranalysis.image.objectmask.ObjectCollection;
 import org.anchoranalysis.image.objectmask.ObjectMaskWithHistogram;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.anchoranalysis.image.voxel.nghb.CreateNghbGraph;
@@ -64,7 +64,7 @@ public class ChnlProviderObjsLevelNeighbours extends ChnlProviderLevel {
 	// END BEAN
 	
 	@Override
-	protected Channel createFor(Channel chnlIntensity, ObjectMaskCollection objs, Channel chnlOutput) throws CreateException {
+	protected Channel createFor(Channel chnlIntensity, ObjectCollection objs, Channel chnlOutput) throws CreateException {
 		try {
 			setAgainstNghb( chnlIntensity, chnlOutput, objs, nghbDist );
 			
@@ -135,7 +135,7 @@ public class ChnlProviderObjsLevelNeighbours extends ChnlProviderLevel {
 		return out;
 	}
 	
-	private void setAgainstNghb( Channel chnlIntensity, Channel chnlOutput, ObjectMaskCollection objMasks, int nghbDist ) throws OperationFailedException {
+	private void setAgainstNghb( Channel chnlIntensity, Channel chnlOutput, ObjectCollection objMasks, int nghbDist ) throws OperationFailedException {
 		
 		try {
 			CreateNghbGraph<ObjectMaskWithHistogram> graphCreator = new CreateNghbGraph<ObjectMaskWithHistogram>( false );
@@ -178,7 +178,7 @@ public class ChnlProviderObjsLevelNeighbours extends ChnlProviderLevel {
 		}
 	}
 	
-	private static List<ObjectMaskWithHistogram> addHistogramToList( ObjectMaskCollection objMasks, Channel chnlIntensity ) {
+	private static List<ObjectMaskWithHistogram> addHistogramToList( ObjectCollection objMasks, Channel chnlIntensity ) {
 		return objMasks.asList().stream().map(	om ->
 			{
 				try {

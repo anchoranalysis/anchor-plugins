@@ -35,21 +35,21 @@ import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.bean.objmask.filter.ObjMaskFilter;
 import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.objectmask.ObjectMask;
-import org.anchoranalysis.image.objectmask.ObjectMaskCollection;
+import org.anchoranalysis.image.objectmask.ObjectCollection;
 
 public class ObjMaskFilterOr extends ObjMaskFilterDerivedFromList {
 
 	@Override
 	public void filter(
-		ObjectMaskCollection objs,
+		ObjectCollection objs,
 		Optional<ImageDim> dim,
-		Optional<ObjectMaskCollection> objsRejected
+		Optional<ObjectCollection> objsRejected
 	) throws OperationFailedException {
 		
 		Set<ObjectMask> set = new HashSet<ObjectMask>();
 		
 		for (ObjMaskFilter indFilter : getList()) {
-			ObjectMaskCollection objsDup = objs.duplicate();
+			ObjectCollection objsDup = objs.duplicate();
 			indFilter.filter(objsDup, dim, objsRejected);
 			set.addAll(objsDup.asList());
 		}

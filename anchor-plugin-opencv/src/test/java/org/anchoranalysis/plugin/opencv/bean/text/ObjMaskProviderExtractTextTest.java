@@ -35,7 +35,7 @@ import org.anchoranalysis.image.bean.provider.stack.StackProviderHolder;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.io.input.ImageInitParamsFactory;
-import org.anchoranalysis.image.objectmask.ObjectMaskCollection;
+import org.anchoranalysis.image.objectmask.ObjectCollection;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.output.bound.BoundIOContext;
@@ -68,7 +68,7 @@ public class ObjMaskProviderExtractTextTest {
 		
 		ObjMaskProviderExtractText provider = createAndInitProvider("car.jpg");
 				
-		ObjectMaskCollection objs = provider.create();
+		ObjectCollection objs = provider.create();
 		
 		assertTrue( objs.size()==3 );
 		
@@ -77,7 +77,7 @@ public class ObjMaskProviderExtractTextTest {
 		assertBoxAtIndex(objs, 2, boxAt(392, 199, 29, 26) );
 	}
 	
-	private void assertBoxAtIndex( ObjectMaskCollection objs, int index, BoundingBox box  ) {
+	private void assertBoxAtIndex( ObjectCollection objs, int index, BoundingBox box  ) {
 		assertEquals(
 			"box at index " + index,
 			box,

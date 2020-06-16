@@ -42,7 +42,7 @@ import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.feature.bean.evaluator.FeatureEvaluator;
 import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
 import org.anchoranalysis.image.objectmask.ObjectMask;
-import org.anchoranalysis.image.objectmask.ObjectMaskCollection;
+import org.anchoranalysis.image.objectmask.ObjectCollection;
 import org.anchoranalysis.image.objmask.match.ObjWithMatches;
 
 // Relation must hold true for all associated objects
@@ -70,9 +70,9 @@ public class ObjMaskFilterFeatureRelationAssociatedObject extends ObjMaskFilter 
 	
 	@Override
 	public void filter(
-		ObjectMaskCollection objs,
+		ObjectCollection objs,
 		Optional<ImageDim> dim,
-		Optional<ObjectMaskCollection> objsRejected
+		Optional<ObjectCollection> objsRejected
 	) throws OperationFailedException {
 
 		start();
@@ -105,7 +105,7 @@ public class ObjMaskFilterFeatureRelationAssociatedObject extends ObjMaskFilter 
 		// TODO previously this is where we cleared the cache
 	}
 	
-	private boolean match(ObjectMask om, ObjectMaskCollection matches) throws FeatureCalcException {
+	private boolean match(ObjectMask om, ObjectCollection matches) throws FeatureCalcException {
 		double val = featureSession.calc(
 			new FeatureInputSingleObj(om)
 		);
@@ -124,7 +124,7 @@ public class ObjMaskFilterFeatureRelationAssociatedObject extends ObjMaskFilter 
 		}
 	}
 		
-	private boolean doesMatchAllAssociatedObjects( double val, ObjectMaskCollection matches ) throws FeatureCalcException {
+	private boolean doesMatchAllAssociatedObjects( double val, ObjectCollection matches ) throws FeatureCalcException {
 		
 		for( ObjectMask match : matches ) {
 			

@@ -38,7 +38,7 @@ import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.histogram.Histogram;
 import org.anchoranalysis.image.histogram.HistogramFactory;
 import org.anchoranalysis.image.objectmask.ObjectMask;
-import org.anchoranalysis.image.objectmask.ObjectMaskCollection;
+import org.anchoranalysis.image.objectmask.ObjectCollection;
 import org.anchoranalysis.image.objectmask.morph.MorphologicalDilation;
 
 public class LevelResultCollectionFactory {
@@ -47,7 +47,7 @@ public class LevelResultCollectionFactory {
 
 	public static LevelResultCollection createCollection(
 			Channel chnl,
-			ObjectMaskCollection objMasks,
+			ObjectCollection objMasks,
 			CalculateLevel calculateLevel,
 			int numDilations,
 			LogReporter logger
@@ -76,7 +76,7 @@ public class LevelResultCollectionFactory {
 				omForCalculateLevel = om;
 			}
 			
-			ObjectMaskCollection omcSingle = new ObjectMaskCollection(omForCalculateLevel);
+			ObjectCollection omcSingle = new ObjectCollection(omForCalculateLevel);
 			
 			Histogram h = HistogramFactory.create(chnl, omcSingle);
 			int level;

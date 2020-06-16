@@ -34,7 +34,7 @@ import org.anchoranalysis.core.index.SetOperationFailedException;
 import org.anchoranalysis.image.io.objs.GeneratorHDF5;
 import org.anchoranalysis.image.io.objs.GeneratorTIFFDirectory;
 import org.anchoranalysis.image.io.objs.ObjectMaskCollectionReader;
-import org.anchoranalysis.image.objectmask.ObjectMaskCollection;
+import org.anchoranalysis.image.objectmask.ObjectCollection;
 import org.anchoranalysis.io.deserializer.DeserializationFailedException;
 import org.anchoranalysis.io.generator.IterableGenerator;
 import org.anchoranalysis.io.output.bound.BindFailedException;
@@ -46,7 +46,7 @@ class HelperReadWriteObjs {
 
 	public static final String TEMPORARY_FOLDER_OUT = "objs";
 		
-	public static IterableGenerator<ObjectMaskCollection> generator( boolean hdf5, boolean compression ) {
+	public static IterableGenerator<ObjectCollection> generator( boolean hdf5, boolean compression ) {
 		if (hdf5) {
 			return new GeneratorHDF5(compression);
 		} else {
@@ -54,7 +54,7 @@ class HelperReadWriteObjs {
 		}
 	}
 	
-	public static void writeObjs( ObjectMaskCollection objs, Path path, IterableGenerator<ObjectMaskCollection> generator ) throws SetOperationFailedException, BindFailedException {
+	public static void writeObjs( ObjectCollection objs, Path path, IterableGenerator<ObjectCollection> generator ) throws SetOperationFailedException, BindFailedException {
 		generator.setIterableElement(objs);
 		
 		BoundOutputManagerRouteErrors outputManager = OutputManagerFixture.outputManagerForRouterErrors(path);
@@ -65,7 +65,7 @@ class HelperReadWriteObjs {
 		);
 	}
 	
-	public static ObjectMaskCollection readObjs(Path path) throws DeserializationFailedException {
+	public static ObjectCollection readObjs(Path path) throws DeserializationFailedException {
 		
 		TestReaderWriterUtilities.ensureRasterReader();
 

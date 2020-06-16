@@ -7,7 +7,7 @@ import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
 import org.anchoranalysis.image.bean.provider.ObjMaskProviderOne;
-import org.anchoranalysis.image.objectmask.ObjectMaskCollection;
+import org.anchoranalysis.image.objectmask.ObjectCollection;
 
 public abstract class ObjMaskProviderContainer extends ObjMaskProviderOne {
 
@@ -16,7 +16,7 @@ public abstract class ObjMaskProviderContainer extends ObjMaskProviderOne {
 	private ObjMaskProvider objsContainer;
 	// END BEAN PROPERTIES
 	
-	protected Optional<ObjectMaskCollection> containerOptional() throws CreateException {
+	protected Optional<ObjectCollection> containerOptional() throws CreateException {
 		if (objsContainer!=null) {
 			return Optional.of(
 				objsContainer.create()
@@ -26,7 +26,7 @@ public abstract class ObjMaskProviderContainer extends ObjMaskProviderOne {
 		}
 	}
 	
-	protected ObjectMaskCollection containerRequired() throws CreateException {
+	protected ObjectCollection containerRequired() throws CreateException {
 		return containerOptional().orElseThrow(
 			() -> new CreateException("An objsContainer must be defined for this provider")
 		);

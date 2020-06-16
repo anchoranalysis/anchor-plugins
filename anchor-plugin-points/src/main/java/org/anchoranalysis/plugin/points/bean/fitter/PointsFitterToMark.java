@@ -40,7 +40,7 @@ import org.anchoranalysis.core.geometry.Point3f;
 import org.anchoranalysis.image.bean.provider.ImageDimProvider;
 import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
 import org.anchoranalysis.image.extent.ImageDim;
-import org.anchoranalysis.image.objectmask.ObjectMaskCollection;
+import org.anchoranalysis.image.objectmask.ObjectCollection;
 
 public class PointsFitterToMark extends PointsBean<PointsFitterToMark> {
 
@@ -67,7 +67,7 @@ public class PointsFitterToMark extends PointsBean<PointsFitterToMark> {
 		}
 	}
 	
-	public ObjectMaskCollection createObjs() throws CreateException {
+	public ObjectCollection createObjs() throws CreateException {
 		return objs.create();
 	}
 	

@@ -15,7 +15,7 @@ class GroupedMeanChnlMap extends GroupMapByName<Channel,AggregateChnl> {
 	public GroupedMeanChnlMap() {
 		super(
 			"chnl",
-			() -> new AggregateChnl()
+			AggregateChnl::new
 		);
 	}
 

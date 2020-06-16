@@ -5,7 +5,7 @@ import static org.junit.Assert.assertEquals;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.log.LogErrorReporter;
-import org.anchoranalysis.image.objectmask.ObjectMaskCollection;
+import org.anchoranalysis.image.objectmask.ObjectCollection;
 import org.anchoranalysis.plugin.image.test.ProviderFixture;
 import org.anchoranalysis.test.LoggingFixture;
 import org.anchoranalysis.test.feature.plugins.mockfeature.MockFeatureWithCalculationFixture;
@@ -27,7 +27,7 @@ class MergeTestHelper {
 	 * 
 	 * <pre>The sizes of the 11 objects increase i.e. 81, 149, 253, 377, 529, ....., 1653, 1961
 	 */
-	public static final ObjectMaskCollection OBJS_LINEAR_INTERSECTING = IntersectingCircleObjsFixture.generateIntersectingObjs(
+	public static final ObjectCollection OBJS_LINEAR_INTERSECTING = IntersectingCircleObjsFixture.generateIntersectingObjs(
 		NUM_INTERSECTING,
 		NUM_NOT_INTERSECTING,
 		false
@@ -65,7 +65,7 @@ class MergeTestHelper {
 			expectedCalculationCount,
 			() -> {
 				try {
-					ObjectMaskCollection mergedObjs = provider.create();
+					ObjectCollection mergedObjs = provider.create();
 					assertEquals(
 						"final number of merged-objects",
 						expectedFinalMergeCount,

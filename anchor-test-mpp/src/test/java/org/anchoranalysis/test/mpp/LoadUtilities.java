@@ -30,7 +30,7 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.binary.BinaryChnl;
 import org.anchoranalysis.image.binary.values.BinaryValues;
 import org.anchoranalysis.image.objectmask.ObjectMask;
-import org.anchoranalysis.image.objectmask.ObjectMaskCollection;
+import org.anchoranalysis.image.objectmask.ObjectCollection;
 import org.anchoranalysis.image.objectmask.factory.CreateFromConnectedComponentsFactory;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.test.image.io.TestLoaderImageIO;
@@ -49,14 +49,14 @@ public class LoadUtilities {
 	private static ObjectMask largestObjFromStack( Stack stack ) throws CreateException {
 		
 		CreateFromConnectedComponentsFactory cc = new CreateFromConnectedComponentsFactory();
-		ObjectMaskCollection objs = cc.createConnectedComponents(
+		ObjectCollection objs = cc.createConnectedComponents(
 			new BinaryChnl( stack.getChnl(0), BinaryValues.getDefault())
 		);
 		
 		return findLargestObj(objs);
 	}
 	
-	private static ObjectMask findLargestObj( ObjectMaskCollection objs ) {
+	private static ObjectMask findLargestObj( ObjectCollection objs ) {
 		int maxSize = -1;
 		ObjectMask maxObj = null;
 		for( ObjectMask om : objs ) {

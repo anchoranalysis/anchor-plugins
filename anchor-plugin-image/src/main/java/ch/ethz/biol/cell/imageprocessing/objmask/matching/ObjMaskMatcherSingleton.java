@@ -36,7 +36,7 @@ import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.bean.objmask.match.ObjMaskMatcher;
 import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
 import org.anchoranalysis.image.objectmask.ObjectMask;
-import org.anchoranalysis.image.objectmask.ObjectMaskCollection;
+import org.anchoranalysis.image.objectmask.ObjectCollection;
 import org.anchoranalysis.image.objmask.match.ObjWithMatches;
 
 // Always matches a single object
@@ -48,10 +48,10 @@ public class ObjMaskMatcherSingleton extends ObjMaskMatcher {
 	// END BEAN PROPERTIES
 	
 	@Override
-	public List<ObjWithMatches> findMatch(ObjectMaskCollection sourceObjs)
+	public List<ObjWithMatches> findMatch(ObjectCollection sourceObjs)
 			throws OperationFailedException {
 
-		ObjectMaskCollection objsCollection;
+		ObjectCollection objsCollection;
 		try {
 			objsCollection = objs.create();
 		} catch (CreateException e) {
