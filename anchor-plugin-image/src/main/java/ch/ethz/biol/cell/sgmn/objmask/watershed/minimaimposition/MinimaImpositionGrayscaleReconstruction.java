@@ -35,12 +35,12 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.binary.BinaryChnl;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
-import org.anchoranalysis.image.chnl.Chnl;
-import org.anchoranalysis.image.chnl.factory.ChnlFactory;
+import org.anchoranalysis.image.channel.Channel;
+import org.anchoranalysis.image.channel.factory.ChannelFactory;
 import org.anchoranalysis.image.extent.BoundingBox;
-import org.anchoranalysis.image.objmask.ObjMask;
-import org.anchoranalysis.image.objmask.ObjMaskCollection;
-import org.anchoranalysis.image.objmask.ops.BinaryChnlFromObjs;
+import org.anchoranalysis.image.objectmask.ObjectMask;
+import org.anchoranalysis.image.objectmask.ObjectMaskCollection;
+import org.anchoranalysis.image.objectmask.ops.BinaryChnlFromObjs;
 import org.anchoranalysis.image.seed.SeedCollection;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.anchoranalysis.image.voxel.box.VoxelBoxWrapper;
@@ -70,7 +70,7 @@ public class MinimaImpositionGrayscaleReconstruction extends MinimaImposition {
 	
 	// containingMask can be null
 	@Override
-	public Chnl imposeMinima( Chnl chnl, SeedCollection seeds, Optional<ObjMask> containingMask ) throws OperationFailedException {
+	public Channel imposeMinima( Channel chnl, SeedCollection seeds, Optional<ObjectMask> containingMask ) throws OperationFailedException {
 		
 		if (seeds.size()<1) {
 			throw new OperationFailedException("There must be at least one seed");
@@ -79,7 +79,7 @@ public class MinimaImpositionGrayscaleReconstruction extends MinimaImposition {
 		 
 		seeds.verifySeedsAreInside( chnl.getDimensions().getExtnt());
 		
-		ObjMaskCollection masks = seeds.createMasks();
+		ObjectMaskCollection masks = seeds.createMasks();
 				
 		masks.assertObjMasksAreInside( chnl.getDimensions().getExtnt() );
 				
@@ -97,7 +97,7 @@ public class MinimaImpositionGrayscaleReconstruction extends MinimaImposition {
 		VoxelBoxWrapper vbIntensity = chnl.getVoxelBox();
 		
 		// We set the EDM to 0 at the points of the minima
-		for( ObjMask om : masks ) {
+		for( ObjectMask om : masks ) {
 			vbIntensity.any().setPixelsCheckMask(om, 0 );
 		}
 		
@@ -122,7 +122,7 @@ public class MinimaImpositionGrayscaleReconstruction extends MinimaImposition {
 			containingMask
 		);
 		
-		return ChnlFactory.instance().create(reconBuffer.any(), chnl.getDimensions().getRes() );
+		return ChannelFactory.instance().create(reconBuffer.any(), chnl.getDimensions().getRes() );
 	}
 
 	public GrayscaleReconstructionByErosion getGrayscaleReconstruction() {

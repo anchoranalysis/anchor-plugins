@@ -31,7 +31,7 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.file.Path;
 
-import org.anchoranalysis.image.chnl.Chnl;
+import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.io.bean.moviewriter.MovieWriter;
 import org.anchoranalysis.image.io.movie.MovieOutputHandle;
@@ -100,9 +100,9 @@ public class LociAVIWriter extends MovieWriter {
 			
 			//for (int c=0; c<3; c++) {
 				// Now we write the frame to our avi
-				Chnl imgChnlRed = stack.getChnl(0).duplicate();
-				Chnl imgChnlGreen = stack.getChnl(1).duplicate();
-				Chnl imgChnlBlue = stack.getChnl(2).duplicate();
+				Channel imgChnlRed = stack.getChnl(0).duplicate();
+				Channel imgChnlGreen = stack.getChnl(1).duplicate();
+				Channel imgChnlBlue = stack.getChnl(2).duplicate();
 				
 				ByteBuffer byteArrRed = imgChnlRed.getVoxelBox().asByte().getPlaneAccess().getPixelsForPlane(0).buffer();
 				ByteBuffer byteArrGreen = imgChnlGreen.getVoxelBox().asByte().getPlaneAccess().getPixelsForPlane(0).buffer();

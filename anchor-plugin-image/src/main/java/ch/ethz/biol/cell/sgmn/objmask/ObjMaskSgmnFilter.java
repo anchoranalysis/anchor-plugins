@@ -35,10 +35,10 @@ import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.bean.objmask.filter.ObjMaskFilter;
 import org.anchoranalysis.image.bean.sgmn.objmask.ObjMaskSgmn;
 import org.anchoranalysis.image.bean.sgmn.objmask.ObjMaskSgmnOne;
-import org.anchoranalysis.image.chnl.Chnl;
+import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.extent.ImageDim;
-import org.anchoranalysis.image.objmask.ObjMask;
-import org.anchoranalysis.image.objmask.ObjMaskCollection;
+import org.anchoranalysis.image.objectmask.ObjectMask;
+import org.anchoranalysis.image.objectmask.ObjectMaskCollection;
 import org.anchoranalysis.image.seed.SeedCollection;
 import org.anchoranalysis.image.sgmn.SgmnFailedException;
 
@@ -50,14 +50,14 @@ public class ObjMaskSgmnFilter extends ObjMaskSgmnOne {
 	// END BEAN PROPERTIES
 	
 	@Override
-	public ObjMaskCollection sgmn(Chnl chnl, Optional<ObjMask> objMask, Optional<SeedCollection> seeds, ObjMaskSgmn sgmn) throws SgmnFailedException {
+	public ObjectMaskCollection sgmn(Channel chnl, Optional<ObjectMask> objMask, Optional<SeedCollection> seeds, ObjMaskSgmn sgmn) throws SgmnFailedException {
 		return filterObjs(
 			sgmn.sgmn(chnl, objMask, seeds),
 			chnl.getDimensions()
 		);
 	}
 
-	private ObjMaskCollection filterObjs( ObjMaskCollection objs, ImageDim dim ) throws SgmnFailedException {
+	private ObjectMaskCollection filterObjs( ObjectMaskCollection objs, ImageDim dim ) throws SgmnFailedException {
 		try {
 			filter.filter(
 				objs,

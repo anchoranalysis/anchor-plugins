@@ -103,7 +103,7 @@ public abstract class GroupMapByName<S,T> {
 	 * @throws IOException if something goes wrong, or if includeGroupName is FALSE, but more than one group-names exist
 	 */
 	public void outputGroupedData(
-		ConsistentChnlChecker chnlChecker,
+		ConsistentChannelChecker chnlChecker,
 		BoundIOContext context
 	) throws IOException {
 		
@@ -130,7 +130,7 @@ public abstract class GroupMapByName<S,T> {
 	protected abstract void writeGroupOutputInSubdirectory(
 		String outputName,
 		T agg,
-		ConsistentChnlChecker chnlChecker,
+		ConsistentChannelChecker chnlChecker,
 		BoundIOContext context
 	) throws IOException;
 }

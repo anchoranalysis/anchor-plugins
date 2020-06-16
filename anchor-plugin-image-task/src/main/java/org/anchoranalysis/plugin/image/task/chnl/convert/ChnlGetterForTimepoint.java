@@ -28,7 +28,7 @@ package org.anchoranalysis.plugin.image.task.chnl.convert;
 
 import org.anchoranalysis.core.index.GetOperationFailedException;
 import org.anchoranalysis.core.progress.ProgressReporterNull;
-import org.anchoranalysis.image.chnl.Chnl;
+import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.io.chnl.ChnlGetter;
 
 public class ChnlGetterForTimepoint {
@@ -46,7 +46,7 @@ public class ChnlGetterForTimepoint {
 		return getter.hasChnl(chnlName);
 	}
 	
-	public Chnl getChnl(String chnlName) throws GetOperationFailedException {
+	public Channel getChnl(String chnlName) throws GetOperationFailedException {
 		return getter.getChnl(chnlName, t, ProgressReporterNull.get());
 	}
 }

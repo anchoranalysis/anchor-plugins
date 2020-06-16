@@ -39,7 +39,7 @@ import org.anchoranalysis.feature.cache.calculation.FeatureCalculation;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.feature.objmask.pair.FeatureDeriveFromPair;
 import org.anchoranalysis.image.feature.objmask.pair.FeatureInputPairObjs;
-import org.anchoranalysis.image.objmask.ObjMask;
+import org.anchoranalysis.image.objectmask.ObjectMask;
 import org.anchoranalysis.plugin.image.feature.obj.pair.CalculateIntersectionInput;
 import org.anchoranalysis.plugin.image.calculation.CalculatePairIntersectionCommutative;
 import org.anchoranalysis.plugin.image.feature.obj.pair.CalculateInputFromDelegateOption;
@@ -94,7 +94,7 @@ public class Intersection extends FeatureDeriveFromPair {
 		return new ChildCacheName(Intersection.class, id);
 	}
 
-	private FeatureCalculation<Optional<ObjMask>,FeatureInputPairObjs> createCalculation(SessionInput<FeatureInputPairObjs> input) throws FeatureCalcException {
+	private FeatureCalculation<Optional<ObjectMask>,FeatureInputPairObjs> createCalculation(SessionInput<FeatureInputPairObjs> input) throws FeatureCalcException {
 		try {
 			return CalculatePairIntersectionCommutative.createFromCache(
 				input,

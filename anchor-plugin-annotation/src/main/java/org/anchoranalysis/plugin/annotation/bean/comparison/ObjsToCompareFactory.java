@@ -36,7 +36,7 @@ import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.experiment.JobExecutionException;
 import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.io.input.ProvidesStackInput;
-import org.anchoranalysis.image.objmask.ObjMaskCollection;
+import org.anchoranalysis.image.objectmask.ObjectMaskCollection;
 import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.output.bound.BoundIOContext;
 import org.anchoranalysis.plugin.annotation.comparison.AnnotationComparisonInput;
@@ -63,7 +63,7 @@ class ObjsToCompareFactory {
 		);
 	}
 	
-	private static Optional<ObjMaskCollection> createObjs(
+	private static Optional<ObjectMaskCollection> createObjs(
 		boolean left,
 		String objName,
 		IAddAnnotation<?> addAnnotation,
@@ -71,24 +71,24 @@ class ObjsToCompareFactory {
 		ImageDim dim,
 		BoundIOContext context
 	) throws JobExecutionException {
-		Findable<ObjMaskCollection> findable = createFindable(left, input, dim, context.isDebugEnabled() );
+		Findable<ObjectMaskCollection> findable = createFindable(left, input, dim, context.isDebugEnabled() );
 		return foundOrLogAddUnnannotated(findable, objName, addAnnotation, context.getLogger());
 	}
 	
-	private static Optional<ObjMaskCollection> foundOrLogAddUnnannotated(
-		Findable<ObjMaskCollection> objs,
+	private static Optional<ObjectMaskCollection> foundOrLogAddUnnannotated(
+		Findable<ObjectMaskCollection> objs,
 		String objName,
 		IAddAnnotation<?> addAnnotation,
 		LogErrorReporter logErrorReporter
 	) {
-		Optional<ObjMaskCollection> found = objs.getFoundOrLog(objName, logErrorReporter );
+		Optional<ObjectMaskCollection> found = objs.getFoundOrLog(objName, logErrorReporter );
 		if (!found.isPresent()) {
 			addAnnotation.addUnannotatedImage();
 		}
 		return found;
 	}
 
-	private static Findable<ObjMaskCollection> createFindable(
+	private static Findable<ObjectMaskCollection> createFindable(
 		boolean left,
 		AnnotationComparisonInput<ProvidesStackInput> input,
 		ImageDim dim,

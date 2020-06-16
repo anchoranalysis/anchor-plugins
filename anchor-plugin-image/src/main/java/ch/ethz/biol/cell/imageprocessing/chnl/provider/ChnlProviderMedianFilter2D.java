@@ -33,7 +33,7 @@ import java.util.Iterator;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.bean.provider.ChnlProviderOne;
-import org.anchoranalysis.image.chnl.Chnl;
+import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.convert.ByteConverter;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
@@ -136,13 +136,13 @@ public class ChnlProviderMedianFilter2D extends ChnlProviderOne {
 	
 	
 	@Override
-	public Chnl createFromChnl( Chnl chnl ) throws CreateException {
+	public Channel createFromChnl( Channel chnl ) throws CreateException {
 		
 		VoxelBox<ByteBuffer> vb = chnl.getVoxelBox().asByte();
 		
 		RollingMultiSet set = new RollingMultiSet(kernelHalfWidth);
 				
-		Chnl dup = chnl.duplicate();
+		Channel dup = chnl.duplicate();
 		VoxelBox<ByteBuffer> vbDup = dup.getVoxelBox().asByte();
 		Extent e = dup.getDimensions().getExtnt();
 				

@@ -32,7 +32,7 @@ import org.anchoranalysis.core.index.GetOperationFailedException;
 import org.anchoranalysis.core.progress.ProgressReporter;
 import org.anchoranalysis.core.progress.ProgressReporterNull;
 import org.anchoranalysis.experiment.JobExecutionException;
-import org.anchoranalysis.image.chnl.Chnl;
+import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.experiment.bean.task.RasterTask;
 import org.anchoranalysis.image.extent.IncorrectImageSizeException;
 import org.anchoranalysis.image.io.RasterIOException;
@@ -116,9 +116,9 @@ public class MovieFromSlicesTask extends RasterTask {
 			
 			ProgressReporter progressReporter = ProgressReporterNull.get();
 			
-			Chnl red = ncc.getChnl("red", 0, progressReporter);
-			Chnl blue = ncc.getChnl("blue", 0, progressReporter);
-			Chnl green = ncc.getChnl("green", 0, progressReporter);
+			Channel red = ncc.getChnl("red", 0, progressReporter);
+			Channel blue = ncc.getChnl("blue", 0, progressReporter);
+			Channel green = ncc.getChnl("green", 0, progressReporter);
 			
 			//
 			if (!red.getDimensions().equals(blue.getDimensions()) || !blue.getDimensions().equals(green.getDimensions()) ) {

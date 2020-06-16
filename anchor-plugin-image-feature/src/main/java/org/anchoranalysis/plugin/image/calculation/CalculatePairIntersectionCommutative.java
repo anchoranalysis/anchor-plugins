@@ -36,8 +36,8 @@ import org.anchoranalysis.feature.cache.calculation.FeatureCalculation;
 import org.anchoranalysis.feature.cache.calculation.ResolvedCalculation;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.feature.objmask.pair.FeatureInputPairObjs;
-import org.anchoranalysis.image.objmask.ObjMask;
-import org.anchoranalysis.image.objmask.ops.ObjMaskMerger;
+import org.anchoranalysis.image.objectmask.ObjectMask;
+import org.anchoranalysis.image.objectmask.ops.ObjMaskMerger;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
@@ -55,12 +55,12 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
  * @author Owen Feehan
  *
  */
-public class CalculatePairIntersectionCommutative extends FeatureCalculation<Optional<ObjMask>,FeatureInputPairObjs> {
+public class CalculatePairIntersectionCommutative extends FeatureCalculation<Optional<ObjectMask>,FeatureInputPairObjs> {
 
-	private ResolvedCalculation<Optional<ObjMask>,FeatureInputPairObjs> ccFirstToSecond;
-	private ResolvedCalculation<Optional<ObjMask>,FeatureInputPairObjs> ccSecondToFirst;
+	private ResolvedCalculation<Optional<ObjectMask>,FeatureInputPairObjs> ccFirstToSecond;
+	private ResolvedCalculation<Optional<ObjectMask>,FeatureInputPairObjs> ccSecondToFirst;
 	
-	public static FeatureCalculation<Optional<ObjMask>,FeatureInputPairObjs> createFromCache(
+	public static FeatureCalculation<Optional<ObjectMask>,FeatureInputPairObjs> createFromCache(
 		SessionInput<FeatureInputPairObjs> cache,
 		ChildCacheName childDilation1,
 		ChildCacheName childDilation2,
@@ -71,18 +71,18 @@ public class CalculatePairIntersectionCommutative extends FeatureCalculation<Opt
 		
 		// We use two additional caches, for the calculations involving the single objects, as these can be expensive, and we want
 		//  them also cached
-		ResolvedCalculation<Optional<ObjMask>,FeatureInputPairObjs> ccFirstToSecond = CalculatePairIntersection.createFromCache(
+		ResolvedCalculation<Optional<ObjectMask>,FeatureInputPairObjs> ccFirstToSecond = CalculatePairIntersection.createFromCache(
 			cache, childDilation1, childDilation2, iterationsDilation, 0, do3D, iterationsErosion	
 		);
-		ResolvedCalculation<Optional<ObjMask>,FeatureInputPairObjs> ccSecondToFirst = CalculatePairIntersection.createFromCache(
+		ResolvedCalculation<Optional<ObjectMask>,FeatureInputPairObjs> ccSecondToFirst = CalculatePairIntersection.createFromCache(
 			cache, childDilation1, childDilation2, 0, iterationsDilation, do3D, iterationsErosion	
 		);
 		return new CalculatePairIntersectionCommutative(ccFirstToSecond, ccSecondToFirst);
 	}
 	
 	private CalculatePairIntersectionCommutative(
-		ResolvedCalculation<Optional<ObjMask>,FeatureInputPairObjs> ccFirstToSecond,
-		ResolvedCalculation<Optional<ObjMask>,FeatureInputPairObjs> ccSecondToFirst
+		ResolvedCalculation<Optional<ObjectMask>,FeatureInputPairObjs> ccFirstToSecond,
+		ResolvedCalculation<Optional<ObjectMask>,FeatureInputPairObjs> ccSecondToFirst
 	) {
 		super();
 		this.ccFirstToSecond = ccFirstToSecond;
@@ -90,10 +90,10 @@ public class CalculatePairIntersectionCommutative extends FeatureCalculation<Opt
 	}
 
 	@Override
-	protected Optional<ObjMask> execute(FeatureInputPairObjs input) throws FeatureCalcException {
+	protected Optional<ObjectMask> execute(FeatureInputPairObjs input) throws FeatureCalcException {
 		
-		Optional<ObjMask> omIntersection1 = ccFirstToSecond.getOrCalculate(input);
-		Optional<ObjMask> omIntersection2 = ccSecondToFirst.getOrCalculate(input);
+		Optional<ObjectMask> omIntersection1 = ccFirstToSecond.getOrCalculate(input);
+		Optional<ObjectMask> omIntersection2 = ccSecondToFirst.getOrCalculate(input);
 		
 		if (!omIntersection1.isPresent()) {
 			return omIntersection2;
@@ -106,7 +106,7 @@ public class CalculatePairIntersectionCommutative extends FeatureCalculation<Opt
 		assert(omIntersection1.get().hasPixelsGreaterThan(0));
 		assert(omIntersection2.get().hasPixelsGreaterThan(0));
 		
-		ObjMask merged = ObjMaskMerger.merge( omIntersection1.get(), omIntersection2.get() );
+		ObjectMask merged = ObjMaskMerger.merge( omIntersection1.get(), omIntersection2.get() );
 		
 		assert(merged.hasPixelsGreaterThan(0));
 		return Optional.of(merged);

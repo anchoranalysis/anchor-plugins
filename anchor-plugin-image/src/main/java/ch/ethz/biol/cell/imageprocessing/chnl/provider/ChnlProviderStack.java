@@ -31,7 +31,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.bean.provider.ChnlProvider;
 import org.anchoranalysis.image.bean.provider.stack.StackProvider;
-import org.anchoranalysis.image.chnl.Chnl;
+import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.stack.Stack;
 
 public class ChnlProviderStack extends ChnlProvider {
@@ -53,7 +53,7 @@ public class ChnlProviderStack extends ChnlProvider {
 	}
 
 	@Override
-	public Chnl create() throws CreateException {
+	public Channel create() throws CreateException {
 		
 		Stack in = stackProvider.create();
 		return in.getChnl(chnlIndex);

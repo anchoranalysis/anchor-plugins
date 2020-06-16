@@ -27,7 +27,7 @@ package org.anchoranalysis.plugin.image.feature.bean.obj.single.intensity;
  */
 
 import org.anchoranalysis.feature.cache.calculation.FeatureCalculation;
-import org.anchoranalysis.image.chnl.Chnl;
+import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.feature.histogram.FeatureInputHistogram;
 import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
 import org.anchoranalysis.image.histogram.Histogram;
@@ -39,7 +39,7 @@ class CalculateHistogramForNrgChnl extends FeatureCalculation<FeatureInputHistog
 
 	private boolean excludeZero = false;
 	private int nrgIndex;
-	private Chnl chnl;
+	private Channel chnl;
 
 	/**
 	 * Constructor
@@ -48,7 +48,7 @@ class CalculateHistogramForNrgChnl extends FeatureCalculation<FeatureInputHistog
 	 * @param nrgIndex an index uniquely identifying the channel
 	 * @param chnl the channel corresponding to nrgIndex
 	 */
-	public CalculateHistogramForNrgChnl(boolean excludeZero, int nrgIndex, Chnl chnl) {
+	public CalculateHistogramForNrgChnl(boolean excludeZero, int nrgIndex, Channel chnl) {
 		super();
 		this.excludeZero = excludeZero;
 		this.nrgIndex = nrgIndex;

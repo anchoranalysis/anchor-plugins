@@ -28,7 +28,7 @@ package org.anchoranalysis.plugin.image.task.bean.grouped;
 
 import java.util.function.Function;
 
-import org.anchoranalysis.plugin.image.task.grouped.ConsistentChnlChecker;
+import org.anchoranalysis.plugin.image.task.grouped.ConsistentChannelChecker;
 import org.anchoranalysis.plugin.image.task.grouped.GroupMapByName;
 
 /**
@@ -41,17 +41,17 @@ import org.anchoranalysis.plugin.image.task.grouped.GroupMapByName;
  */
 public class GroupedSharedState<S,T> {
 
-	private ConsistentChnlChecker chnlChecker = new ConsistentChnlChecker();
+	private ConsistentChannelChecker chnlChecker = new ConsistentChannelChecker();
 	
 	private GroupMapByName<S,T> groupMap;
 	
-	private Function<ConsistentChnlChecker,GroupMapByName<S,T>> createGroupMap;
+	private Function<ConsistentChannelChecker,GroupMapByName<S,T>> createGroupMap;
 	
-	public GroupedSharedState( Function<ConsistentChnlChecker,GroupMapByName<S,T>> createGroupMap ) {
+	public GroupedSharedState( Function<ConsistentChannelChecker,GroupMapByName<S,T>> createGroupMap ) {
 		this.createGroupMap = createGroupMap;
 	}
 	
-	public ConsistentChnlChecker getChnlChecker() {
+	public ConsistentChannelChecker getChnlChecker() {
 		return chnlChecker;
 	}
 

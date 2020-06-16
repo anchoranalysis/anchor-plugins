@@ -8,17 +8,17 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.Extent;
-import org.anchoranalysis.image.objmask.ObjMask;
+import org.anchoranalysis.image.objectmask.ObjectMask;
 
 class ExtendObjsInZHelper {
 
 	private ExtendObjsInZHelper() {}
 	
-	public static ObjMask createExtendedObj( ObjMask omFlat, ObjMask container, BoundingBox bbox, int zCent ) throws CreateException {
+	public static ObjectMask createExtendedObj( ObjectMask omFlat, ObjectMask container, BoundingBox bbox, int zCent ) throws CreateException {
 		
 		Extent extent = bbox.extent();
 		
-		ObjMask omNew = container.createSubmaskAlwaysNew(bbox);
+		ObjectMask omNew = container.createSubmaskAlwaysNew(bbox);
 		
 		ByteBuffer bbFlat = omFlat.getVoxelBox().getPixelsForPlane(0).buffer();
 				
@@ -33,7 +33,7 @@ class ExtendObjsInZHelper {
 		return omNew; 
 	}
 	
-	private static boolean extend( ByteBuffer bbFlat, Extent e, ObjMask omNew, ObjMask omFlat, int zLow, IntStream zRange ) {
+	private static boolean extend( ByteBuffer bbFlat, Extent e, ObjectMask omNew, ObjectMask omFlat, int zLow, IntStream zRange ) {
 		
 		boolean andMode = true;
 		boolean writtenOneSlice = false;

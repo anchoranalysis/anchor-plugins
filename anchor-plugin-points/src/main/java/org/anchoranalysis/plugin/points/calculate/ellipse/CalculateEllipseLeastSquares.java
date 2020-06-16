@@ -36,7 +36,7 @@ import org.anchoranalysis.feature.cache.calculation.FeatureCalculation;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.nrg.NRGStack;
 import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
-import org.anchoranalysis.image.objmask.ObjMask;
+import org.anchoranalysis.image.objectmask.ObjectMask;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
 import ch.ethz.biol.cell.mpp.mark.pointsfitter.LinearLeastSquaresEllipseFitter;
@@ -53,7 +53,7 @@ public class CalculateEllipseLeastSquares extends FeatureCalculation<ObjMaskAndE
 		);
 	}
 		
-	private static ObjMask extractEllipseSlice( ObjMask om ) throws CreateException {
+	private static ObjectMask extractEllipseSlice( ObjectMask om ) throws CreateException {
 		try {
 			int zSliceCenter = (int) om.centerOfGravity().getZ();
 			return om.extractSlice(zSliceCenter - om.getBoundingBox().getCrnrMin().getZ(), false);
@@ -69,7 +69,7 @@ public class CalculateEllipseLeastSquares extends FeatureCalculation<ObjMaskAndE
 		try {
 			NRGStack nrgStack = input.getNrgStackRequired().getNrgStack();
 			
-			ObjMask om = extractEllipseSlice( input.getObjMask() );
+			ObjectMask om = extractEllipseSlice( input.getObjMask() );
 			
 			// Shell Rad is arbitrary here for now
 			MarkEllipse mark = factory.create(om,nrgStack.getDimensions(), 0.2, nrgStack.getChnl(0) );

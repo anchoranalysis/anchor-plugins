@@ -35,8 +35,8 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.bean.objmask.match.ObjMaskMatcher;
 import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
-import org.anchoranalysis.image.objmask.ObjMask;
-import org.anchoranalysis.image.objmask.ObjMaskCollection;
+import org.anchoranalysis.image.objectmask.ObjectMask;
+import org.anchoranalysis.image.objectmask.ObjectMaskCollection;
 import org.anchoranalysis.image.objmask.match.ObjWithMatches;
 
 // Always matches a single object
@@ -48,10 +48,10 @@ public class ObjMaskMatcherSingleton extends ObjMaskMatcher {
 	// END BEAN PROPERTIES
 	
 	@Override
-	public List<ObjWithMatches> findMatch(ObjMaskCollection sourceObjs)
+	public List<ObjWithMatches> findMatch(ObjectMaskCollection sourceObjs)
 			throws OperationFailedException {
 
-		ObjMaskCollection objsCollection;
+		ObjectMaskCollection objsCollection;
 		try {
 			objsCollection = objs.create();
 		} catch (CreateException e) {
@@ -65,11 +65,11 @@ public class ObjMaskMatcherSingleton extends ObjMaskMatcher {
 			throw new OperationFailedException("More than one objects provided");
 		}
 		
-		ObjMask omMatch = objsCollection.get(0);
+		ObjectMask omMatch = objsCollection.get(0);
 		
 		ArrayList<ObjWithMatches> list = new ArrayList<>();
 		
-		for( ObjMask om : sourceObjs ) {
+		for( ObjectMask om : sourceObjs ) {
 			ObjWithMatches owm = new ObjWithMatches(om);
 			owm.getMatches().add(omMatch);
 			list.add( owm );

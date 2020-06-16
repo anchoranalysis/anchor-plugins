@@ -31,7 +31,7 @@ import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.feature.evaluator.PayloadCalculator;
-import org.anchoranalysis.image.objmask.ObjMask;
+import org.anchoranalysis.image.objectmask.ObjectMask;
 import org.anchoranalysis.plugin.image.obj.merge.ObjVertex;
 
 
@@ -56,7 +56,7 @@ public class AssignPriorityFromImprovement extends AssignPriority {
 	public PrioritisedVertex assignPriorityToEdge(
 		ObjVertex src,
 		ObjVertex dest,
-		ObjMask merged,
+		ObjectMask merged,
 		ErrorReporter errorReporter
 	) throws OperationFailedException
 	{
@@ -72,7 +72,7 @@ public class AssignPriorityFromImprovement extends AssignPriority {
 		return new PrioritisedVertex(merged,payloadMerge,improvement,true);
 	}
 	
-	private double calcPayload( PayloadCalculator payloadCalculator, ObjMask om ) throws OperationFailedException {
+	private double calcPayload( PayloadCalculator payloadCalculator, ObjectMask om ) throws OperationFailedException {
 		try {
 			return payloadCalculator.calc(om);
 		} catch (FeatureCalcException e) {

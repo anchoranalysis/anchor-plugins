@@ -36,7 +36,7 @@ import org.anchoranalysis.core.functional.OptionalUtilities;
 import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 import org.anchoranalysis.image.bean.provider.ChnlProvider;
 import org.anchoranalysis.image.bean.provider.ImageDimProvider;
-import org.anchoranalysis.image.chnl.Chnl;
+import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.init.ImageInitParams;
 import org.anchoranalysis.image.stack.Stack;
@@ -74,7 +74,7 @@ public class ImageDimProviderFromChnl extends ImageDimProvider {
 		return selectChnl().getDimensions();
 	}
 	
-	private Chnl selectChnl() throws CreateException {
+	private Channel selectChnl() throws CreateException {
 		
 		if (!id.isEmpty()) {
 			return selectChnlForId(id);
@@ -83,7 +83,7 @@ public class ImageDimProviderFromChnl extends ImageDimProvider {
 		return chnl.create();
 	}
 	
-	private Chnl selectChnlForId( String id ) throws CreateException {
+	private Channel selectChnlForId( String id ) throws CreateException {
 		
 		try {
 			return OptionalUtilities.orFlat(
@@ -103,7 +103,7 @@ public class ImageDimProviderFromChnl extends ImageDimProvider {
 		}
 	}
 	
-	private static Chnl firstChnl( Stack stack ) {
+	private static Channel firstChnl( Stack stack ) {
 		return stack.getChnl(0);
 	}
 

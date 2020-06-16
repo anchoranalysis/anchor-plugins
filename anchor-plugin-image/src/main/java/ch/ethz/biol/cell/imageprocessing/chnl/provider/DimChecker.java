@@ -30,12 +30,12 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.bean.provider.BinaryChnlProvider;
 import org.anchoranalysis.image.bean.provider.ChnlProvider;
 import org.anchoranalysis.image.binary.BinaryChnl;
-import org.anchoranalysis.image.chnl.Chnl;
+import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.extent.ImageDim;
 
 public class DimChecker {
 	
-	public static void check(Chnl chnl, BinaryChnl mask) throws CreateException {
+	public static void check(Channel chnl, BinaryChnl mask) throws CreateException {
 		if (!chnl.getDimensions().equals(mask.getDimensions())) {
 			throw new CreateException( String.format("chnl (%s) and mask (%s) must have the same dimensions", chnl.getDimensions().toString(), mask.getDimensions().toString() ) );
 		}
@@ -50,7 +50,7 @@ public class DimChecker {
 	 * @return the newly created channel
 	 * @throws CreateException
 	 */
-	public static void check(Chnl chnlToCheck, String chnlToCheckName, ImageDim dimFromChnl) throws CreateException {
+	public static void check(Channel chnlToCheck, String chnlToCheckName, ImageDim dimFromChnl) throws CreateException {
 		check(
 			chnlToCheck.getDimensions(),
 			chnlToCheckName,
@@ -85,9 +85,9 @@ public class DimChecker {
 	 * @return the newly created channel
 	 * @throws CreateException
 	 */
-	public static Chnl createSameSize(ChnlProvider provider, String providerName, Chnl chnlSameSize) throws CreateException {
+	public static Channel createSameSize(ChnlProvider provider, String providerName, Channel chnlSameSize) throws CreateException {
 		
-		Chnl chnlNew = provider.create();
+		Channel chnlNew = provider.create();
 		check(chnlNew, providerName, chnlSameSize.getDimensions());
 		return chnlNew;
 	}
@@ -102,7 +102,7 @@ public class DimChecker {
 	 * @return the newly created channel
 	 * @throws CreateException
 	 */
-	public static BinaryChnl createSameSize(BinaryChnlProvider provider, String providerName, Chnl chnlSameSize) throws CreateException {
+	public static BinaryChnl createSameSize(BinaryChnlProvider provider, String providerName, Channel chnlSameSize) throws CreateException {
 		
 		BinaryChnl chnlNew = provider.create();
 		check(chnlNew, providerName, chnlSameSize.getDimensions());

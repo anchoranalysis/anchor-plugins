@@ -38,7 +38,7 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 import org.anchoranalysis.image.bean.provider.BinaryChnlProvider;
-import org.anchoranalysis.image.chnl.Chnl;
+import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.convert.ByteConverter;
 import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
@@ -80,7 +80,7 @@ public class LineBoundCalculator extends BoundCalculator {
 		try {
 			//assert(stack!=null);
 			
-			Chnl outlineChnl = outlineProvider.create().getChnl();
+			Channel outlineChnl = outlineProvider.create().getChnl();
 			assert(outlineChnl!=null);
 			
 			proposerFailureDescription = proposerFailureDescription.add("LineBoundCalculator");
@@ -121,7 +121,7 @@ public class LineBoundCalculator extends BoundCalculator {
 		}
 	}
 	
-	private double maxReachablePoint( Chnl voxels, Point3d point, double xMarg, double yMarg, double zMarg, int maxPossiblePoint ) {
+	private double maxReachablePoint( Channel voxels, Point3d point, double xMarg, double yMarg, double zMarg, int maxPossiblePoint ) {
 		
 		VoxelBox<ByteBuffer> vb = voxels.getVoxelBox().asByte();
 		

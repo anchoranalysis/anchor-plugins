@@ -31,8 +31,8 @@ import java.util.stream.Collectors;
 
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.interpolator.InterpolatorFactory;
-import org.anchoranalysis.image.objmask.ObjMask;
-import org.anchoranalysis.image.objmask.ObjMaskCollection;
+import org.anchoranalysis.image.objectmask.ObjectMask;
+import org.anchoranalysis.image.objectmask.ObjectMaskCollection;
 import org.anchoranalysis.image.scale.ScaleFactor;
 import org.anchoranalysis.plugin.opencv.nonmaxima.WithConfidence;
 
@@ -44,8 +44,8 @@ import org.anchoranalysis.plugin.opencv.nonmaxima.WithConfidence;
  */
 class ScaleExtractObjs {
 
-	public static ObjMaskCollection apply( List<WithConfidence<ObjMask>> list, ScaleFactor sf ) {
-		ObjMaskCollection objs = extractObjs(list);
+	public static ObjectMaskCollection apply( List<WithConfidence<ObjectMask>> list, ScaleFactor sf ) {
+		ObjectMaskCollection objs = extractObjs(list);
 		
 		// Scale back to the needed original resolution
 		scaleObjs(objs, sf);
@@ -53,15 +53,15 @@ class ScaleExtractObjs {
 		return objs;
 	}
 	
-	private static ObjMaskCollection extractObjs( List<WithConfidence<ObjMask>> list ) {
-		return new ObjMaskCollection(
+	private static ObjectMaskCollection extractObjs( List<WithConfidence<ObjectMask>> list ) {
+		return new ObjectMaskCollection(
 			list.stream()
 				.map( wc->wc.getObj() )
 				.collect( Collectors.toList() )
 		);
 	}
 	
-	private static void scaleObjs( ObjMaskCollection objs, ScaleFactor sf ) {
+	private static void scaleObjs( ObjectMaskCollection objs, ScaleFactor sf ) {
 		try {
 			objs.scale(sf, InterpolatorFactory.getInstance().binaryResizing() );
 		} catch (OperationFailedException e) {

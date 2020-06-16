@@ -30,7 +30,7 @@ import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
-import org.anchoranalysis.image.objmask.ObjMask;
+import org.anchoranalysis.image.objectmask.ObjectMask;
 import org.anchoranalysis.test.image.NRGStackFixture;
 import org.anchoranalysis.test.image.obj.ObjMaskFixture;
 import org.junit.Before;
@@ -48,14 +48,14 @@ public class CalculateIncrementalOperationMapTest {
 	private NRGStackWithParams nrgStack = NRGStackFixture.create(true, true); 
 	
 	private FeatureInputSingleObj input = new FeatureInputSingleObj(
-		mock(ObjMask.class),
+		mock(ObjectMask.class),
 		nrgStack
 	);
 	
 	@Before
     public void setup() throws OperationFailedException {
 		// An arbitrary object
-		ObjMask om = new ObjMaskFixture(nrgStack.getDimensions()).create1();
+		ObjectMask om = new ObjMaskFixture(nrgStack.getDimensions()).create1();
 
 		when( mockMap.applyOperation(any(), any(), anyBoolean()) ).thenReturn( om );
     }

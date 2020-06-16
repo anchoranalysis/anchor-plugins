@@ -30,8 +30,8 @@ import java.nio.ByteBuffer;
 
 
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.image.chnl.Chnl;
-import org.anchoranalysis.image.chnl.factory.ChnlFactory;
+import org.anchoranalysis.image.channel.Channel;
+import org.anchoranalysis.image.channel.factory.ChannelFactory;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 import org.anchoranalysis.image.voxel.datatype.CombineTypes;
@@ -39,14 +39,14 @@ import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
 
 public class ChnlProviderMax extends ChnlProviderTwoVoxelMapping {
 	
-	public static Chnl createMax( Chnl chnl1, Chnl chnl2 ) throws CreateException {
+	public static Channel createMax( Channel chnl1, Channel chnl2 ) throws CreateException {
 		
 		if (!chnl1.getDimensions().equals(chnl2.getDimensions())) {
 			throw new CreateException("Dimensions of channels do not match");
 		}
 		
 		VoxelDataType combinedType = CombineTypes.combineTypes(chnl1.getVoxelDataType(), chnl2.getVoxelDataType());
-		Chnl chnlOut = ChnlFactory.instance().createEmptyInitialised( chnl1.getDimensions(), combinedType );
+		Channel chnlOut = ChannelFactory.instance().createEmptyInitialised( chnl1.getDimensions(), combinedType );
 		
 		setMaxInOutputVoxelBox(
 			chnlOut.getVoxelBox().asByte(),

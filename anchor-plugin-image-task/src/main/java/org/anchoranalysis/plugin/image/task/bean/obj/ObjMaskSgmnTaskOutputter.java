@@ -28,13 +28,13 @@ package org.anchoranalysis.plugin.image.task.bean.obj;
 
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.image.chnl.Chnl;
+import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.io.generator.raster.ChnlGenerator;
 import org.anchoranalysis.image.io.generator.raster.obj.ChnlMaskedWithObjGenerator;
 import org.anchoranalysis.image.io.generator.raster.obj.ObjAsBinaryChnlGenerator;
 import org.anchoranalysis.image.io.generator.raster.obj.rgb.RGBObjMaskGenerator;
-import org.anchoranalysis.image.objmask.ObjMaskCollection;
-import org.anchoranalysis.image.objmask.properties.ObjMaskWithPropertiesCollection;
+import org.anchoranalysis.image.objectmask.ObjectMaskCollection;
+import org.anchoranalysis.image.objectmask.properties.ObjMaskWithPropertiesCollection;
 import org.anchoranalysis.image.stack.DisplayStack;
 import org.anchoranalysis.io.bean.objmask.writer.RGBOutlineWriter;
 import org.anchoranalysis.io.generator.collection.IterableGeneratorWriter;
@@ -47,20 +47,20 @@ class ObjMaskSgmnTaskOutputter {
 		
 	}
 	
-	public static void writeOriginal( BoundOutputManagerRouteErrors outputManager, Chnl chnl, String outputName ) {
+	public static void writeOriginal( BoundOutputManagerRouteErrors outputManager, Channel chnl, String outputName ) {
 		outputManager.getWriterCheckIfAllowed().write(
 			outputName,
 			() -> new ChnlGenerator(chnl,"original")
 		);
 	}
 
-	public static void writeMaskOutputs( ObjMaskCollection objs, Chnl chnl, BoundOutputManagerRouteErrors outputManager ) {
+	public static void writeMaskOutputs( ObjectMaskCollection objs, Channel chnl, BoundOutputManagerRouteErrors outputManager ) {
 		writeMaskChnlAsSubfolder(objs, chnl, outputManager);
 		writeMasksAsSubfolder(objs, chnl, outputManager);
 		writeOutline(objs, chnl, outputManager);		
 	}
 	
-	private static void writeMaskChnlAsSubfolder( ObjMaskCollection objs, Chnl chnl, BoundOutputManagerRouteErrors outputManager ) {
+	private static void writeMaskChnlAsSubfolder( ObjectMaskCollection objs, Channel chnl, BoundOutputManagerRouteErrors outputManager ) {
 		// Write out the results as a subfolder
 		IterableGeneratorWriter.writeSubfolder(
 			outputManager,
@@ -72,7 +72,7 @@ class ObjMaskSgmnTaskOutputter {
 		);
 	}
 	
-	private static void writeMasksAsSubfolder( ObjMaskCollection objs, Chnl chnl, BoundOutputManagerRouteErrors outputManager ) {
+	private static void writeMasksAsSubfolder( ObjectMaskCollection objs, Channel chnl, BoundOutputManagerRouteErrors outputManager ) {
 		// Write out the results as a subfolder
 		IterableGeneratorWriter.writeSubfolder(
 			outputManager,
@@ -84,7 +84,7 @@ class ObjMaskSgmnTaskOutputter {
 		);	
 	}
 	
-	private static void writeOutline( ObjMaskCollection objs, Chnl chnl, BoundOutputManagerRouteErrors outputManager ) {
+	private static void writeOutline( ObjectMaskCollection objs, Channel chnl, BoundOutputManagerRouteErrors outputManager ) {
 		outputManager.getWriterCheckIfAllowed().write(
 			"outline",
 			() -> {

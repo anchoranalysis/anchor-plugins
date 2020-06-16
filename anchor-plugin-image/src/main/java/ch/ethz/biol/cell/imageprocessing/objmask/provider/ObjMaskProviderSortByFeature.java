@@ -39,8 +39,8 @@ import org.anchoranalysis.feature.session.calculator.FeatureCalculatorSingle;
 import org.anchoranalysis.image.bean.provider.ObjMaskProviderOne;
 import org.anchoranalysis.image.feature.bean.evaluator.FeatureEvaluator;
 import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
-import org.anchoranalysis.image.objmask.ObjMask;
-import org.anchoranalysis.image.objmask.ObjMaskCollection;
+import org.anchoranalysis.image.objectmask.ObjectMask;
+import org.anchoranalysis.image.objectmask.ObjectMaskCollection;
 
 public class ObjMaskProviderSortByFeature extends ObjMaskProviderOne {
 
@@ -51,10 +51,10 @@ public class ObjMaskProviderSortByFeature extends ObjMaskProviderOne {
 	
 	private static class ObjWithFeatureValue implements Comparable<ObjWithFeatureValue> {
 		
-		private ObjMask objMask;
+		private ObjectMask objMask;
 		private double featureVal;
 		
-		public ObjWithFeatureValue(ObjMask objMask, double featureVal) throws FeatureCalcException {
+		public ObjWithFeatureValue(ObjectMask objMask, double featureVal) throws FeatureCalcException {
 			super();
 			this.objMask = objMask;
 			this.featureVal = featureVal;
@@ -65,7 +65,7 @@ public class ObjMaskProviderSortByFeature extends ObjMaskProviderOne {
 			return Double.valueOf(o.featureVal).compareTo(featureVal);
 		}
 
-		public ObjMask getObjMask() {
+		public ObjectMask getObjMask() {
 			return objMask;
 		}
 
@@ -73,13 +73,13 @@ public class ObjMaskProviderSortByFeature extends ObjMaskProviderOne {
 	}
 	
 	@Override
-	public ObjMaskCollection createFromObjs( ObjMaskCollection objsCollection ) throws CreateException {
+	public ObjectMaskCollection createFromObjs( ObjectMaskCollection objsCollection ) throws CreateException {
 		
 		try {
 			FeatureCalculatorSingle<FeatureInputSingleObj> featureSession = featureEvaluator.createAndStartSession();
 			
 			List<ObjWithFeatureValue> listToSort = new ArrayList<>();
-			for( ObjMask om : objsCollection ) {
+			for( ObjectMask om : objsCollection ) {
 				try {
 					double featureVal = featureSession.calc(
 						new FeatureInputSingleObj(om)
@@ -92,7 +92,7 @@ public class ObjMaskProviderSortByFeature extends ObjMaskProviderOne {
 			
 			Collections.sort(listToSort);
 					
-			ObjMaskCollection objsOut = new ObjMaskCollection();
+			ObjectMaskCollection objsOut = new ObjectMaskCollection();
 			for( ObjWithFeatureValue om : listToSort ) {
 				objsOut.add(om.getObjMask());
 			}

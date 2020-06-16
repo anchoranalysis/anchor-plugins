@@ -34,9 +34,9 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.bean.objmask.filter.ObjMaskFilter;
 import org.anchoranalysis.image.binary.BinaryChnl;
-import org.anchoranalysis.image.objmask.ObjMask;
-import org.anchoranalysis.image.objmask.ObjMaskCollection;
-import org.anchoranalysis.image.objmask.factory.CreateFromEntireChnlFactory;
+import org.anchoranalysis.image.objectmask.ObjectMask;
+import org.anchoranalysis.image.objectmask.ObjectMaskCollection;
+import org.anchoranalysis.image.objectmask.factory.CreateFromEntireChnlFactory;
 
 // Treats the entire binaryimgchnl as an object, and sees if it passes an ObjMaskFilter
 public class BinaryChnlProviderObjMaskFilterAsChnl extends BinaryChnlProviderElseBase {
@@ -49,9 +49,9 @@ public class BinaryChnlProviderObjMaskFilterAsChnl extends BinaryChnlProviderEls
 	@Override
 	protected boolean condition(BinaryChnl chnl) throws CreateException {
 
-		ObjMask om = CreateFromEntireChnlFactory.createObjMask( chnl );
+		ObjectMask om = CreateFromEntireChnlFactory.createObjMask( chnl );
 		
-		ObjMaskCollection omc = new ObjMaskCollection(om);
+		ObjectMaskCollection omc = new ObjectMaskCollection(om);
 		
 		try {
 			objMaskFilter.filter(

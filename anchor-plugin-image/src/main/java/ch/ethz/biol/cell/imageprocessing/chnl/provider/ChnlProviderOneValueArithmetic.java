@@ -1,9 +1,9 @@
 package ch.ethz.biol.cell.imageprocessing.chnl.provider;
 
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.image.chnl.Chnl;
-import org.anchoranalysis.image.chnl.factory.ChnlFactoryByte;
-import org.anchoranalysis.image.chnl.factory.ChnlFactorySingleType;
+import org.anchoranalysis.image.channel.Channel;
+import org.anchoranalysis.image.channel.factory.ChannelFactoryByte;
+import org.anchoranalysis.image.channel.factory.ChannelFactorySingleType;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 
@@ -15,14 +15,14 @@ import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
  */
 public abstract class ChnlProviderOneValueArithmetic extends ChnlProviderOneValue {
 
-	private static final ChnlFactorySingleType FACTORY = new ChnlFactoryByte();
+	private static final ChannelFactorySingleType FACTORY = new ChannelFactoryByte();
 	
 	@Override
-	public Chnl createFromChnlValue(Chnl chnl, double value) throws CreateException {
+	public Channel createFromChnlValue(Channel chnl, double value) throws CreateException {
 		
 		int constant = (int) value;
 		
-		Chnl chnlOut = FACTORY.createEmptyInitialised( chnl.getDimensions() );
+		Channel chnlOut = FACTORY.createEmptyInitialised( chnl.getDimensions() );
 		
 		VoxelBox<?> vbIn = chnl.getVoxelBox().any();
 		VoxelBox<?> vbOut = chnlOut.getVoxelBox().any();

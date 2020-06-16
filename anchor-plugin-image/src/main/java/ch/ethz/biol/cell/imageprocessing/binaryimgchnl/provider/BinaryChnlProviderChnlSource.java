@@ -5,7 +5,7 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.bean.provider.BinaryChnlProvider;
 import org.anchoranalysis.image.bean.provider.ChnlProvider;
 import org.anchoranalysis.image.binary.BinaryChnl;
-import org.anchoranalysis.image.chnl.Chnl;
+import org.anchoranalysis.image.channel.Channel;
 
 public abstract class BinaryChnlProviderChnlSource extends BinaryChnlProvider {
 
@@ -21,7 +21,7 @@ public abstract class BinaryChnlProviderChnlSource extends BinaryChnlProvider {
 		);
 	}
 	
-	protected abstract BinaryChnl createFromSource(Chnl chnlSource) throws CreateException;
+	protected abstract BinaryChnl createFromSource(Channel chnlSource) throws CreateException;
 	
 	public ChnlProvider getChnl() {
 		return chnl;

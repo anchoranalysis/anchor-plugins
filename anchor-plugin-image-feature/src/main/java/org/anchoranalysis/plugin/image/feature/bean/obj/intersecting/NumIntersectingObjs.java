@@ -31,7 +31,7 @@ import org.anchoranalysis.feature.cache.calculation.ResolvedCalculation;
 
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
-import org.anchoranalysis.image.objmask.ObjMaskCollection;
+import org.anchoranalysis.image.objectmask.ObjectMaskCollection;
 
 public class NumIntersectingObjs extends FeatureIntersectingObjs {
 
@@ -41,7 +41,7 @@ public class NumIntersectingObjs extends FeatureIntersectingObjs {
 	// END BEAN PROPERTIES
 
 	@Override
-	protected double valueFor(SessionInput<FeatureInputSingleObj> params, ResolvedCalculation<ObjMaskCollection, FeatureInputSingleObj> intersecting)
+	protected double valueFor(SessionInput<FeatureInputSingleObj> params, ResolvedCalculation<ObjectMaskCollection, FeatureInputSingleObj> intersecting)
 			throws FeatureCalcException {
 		return params.calc(intersecting).size();
 	}

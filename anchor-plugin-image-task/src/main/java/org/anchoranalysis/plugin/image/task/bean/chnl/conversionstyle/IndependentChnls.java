@@ -31,7 +31,7 @@ import java.util.function.BiConsumer;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.index.GetOperationFailedException;
 import org.anchoranalysis.core.log.LogErrorReporter;
-import org.anchoranalysis.image.chnl.Chnl;
+import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.plugin.image.task.chnl.convert.ChnlGetterForTimepoint;
@@ -54,7 +54,7 @@ public class IndependentChnls extends ChnlConversionStyle {
 		for( String key : chnlNames ) {
 			
 			try {
-				Chnl chnl = chnlGetter.getChnl(key);
+				Channel chnl = chnlGetter.getChnl(key);
 				stacksOut.accept(
 					key,
 					new Stack(chnl)

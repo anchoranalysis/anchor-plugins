@@ -32,7 +32,7 @@ import java.util.List;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.bean.objmask.match.ObjMaskMatcher;
-import org.anchoranalysis.image.objmask.ObjMaskCollection;
+import org.anchoranalysis.image.objectmask.ObjectMaskCollection;
 import org.anchoranalysis.image.objmask.match.ObjWithMatches;
 
 // Matches to another object, and then uses that object to bridge to another
@@ -47,12 +47,12 @@ public class ObjMaskMatcherBridge extends ObjMaskMatcher {
 	// END BEAN PROPERTIES
 
 	@Override
-	public List<ObjWithMatches> findMatch(ObjMaskCollection sourceObjs)
+	public List<ObjWithMatches> findMatch(ObjectMaskCollection sourceObjs)
 			throws OperationFailedException {
 		
 		List<ObjWithMatches> bridgeMatches = bridgeMatcher.findMatch(sourceObjs);
 		
-		ObjMaskCollection bridgeObjs = new ObjMaskCollection();
+		ObjectMaskCollection bridgeObjs = new ObjectMaskCollection();
 		for( ObjWithMatches owm : bridgeMatches ) {
 			
 			if (owm.getMatches().size()==0) {

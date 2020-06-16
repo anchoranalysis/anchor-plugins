@@ -41,8 +41,8 @@ import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.extent.ImageRes;
 import org.anchoranalysis.image.feature.evaluator.PayloadCalculator;
-import org.anchoranalysis.image.objmask.ObjMask;
-import org.anchoranalysis.image.objmask.ObjMaskCollection;
+import org.anchoranalysis.image.objectmask.ObjectMask;
+import org.anchoranalysis.image.objectmask.ObjectMaskCollection;
 import org.anchoranalysis.plugin.image.obj.merge.condition.UpdatableBeforeCondition;
 import org.anchoranalysis.plugin.image.obj.merge.priority.AssignPriority;
 import org.anchoranalysis.plugin.image.obj.merge.priority.PrioritisedVertex;
@@ -97,7 +97,7 @@ public class MergeGraph {
 	}
 	
 	
-	public List<ObjVertex> addObjsToGraph( ObjMaskCollection objs ) throws OperationFailedException {
+	public List<ObjVertex> addObjsToGraph( ObjectMaskCollection objs ) throws OperationFailedException {
 		
 		List<ObjVertex> listAdded = new ArrayList<>();				
 		
@@ -171,11 +171,11 @@ public class MergeGraph {
 		logger.logDescription();
 	}
 
-	public ObjMaskCollection verticesAsObjects() {
+	public ObjectMaskCollection verticesAsObjects() {
 		return graph.verticesAsObjects();
 	}
 	
-	private ObjVertex createVertex( ObjMask obj ) throws OperationFailedException {
+	private ObjVertex createVertex( ObjectMask obj ) throws OperationFailedException {
 		try {
 			return new ObjVertex(
 				obj,

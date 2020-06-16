@@ -34,7 +34,7 @@ import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.feature.bean.objmask.pair.FeatureObjMaskPair;
 import org.anchoranalysis.image.feature.objmask.pair.FeatureInputPairObjs;
-import org.anchoranalysis.image.objmask.ObjMask;
+import org.anchoranalysis.image.objectmask.ObjectMask;
 import org.anchoranalysis.image.voxel.kernel.count.CountKernel;
 import org.anchoranalysis.image.voxel.kernel.count.CountKernelNghbMask;
 
@@ -71,7 +71,7 @@ public abstract class TouchingVoxels extends FeatureObjMaskPair {
 		);
 	}
 	
-	protected abstract double calcWithIntersection(ObjMask om1, ObjMask om2, BoundingBox bboxIntersect) throws FeatureCalcException;
+	protected abstract double calcWithIntersection(ObjectMask om1, ObjectMask om2, BoundingBox bboxIntersect) throws FeatureCalcException;
 	
 	/** The intersection of the bounding box of one mask with the (dilated by 1 bounding-box) of the other */
 	private Optional<BoundingBox> bboxIntersectDilated(SessionInput<FeatureInputPairObjs> input) throws FeatureCalcException {
@@ -80,7 +80,7 @@ public abstract class TouchingVoxels extends FeatureObjMaskPair {
 		);
 	}
 	
-	protected CountKernel createCountKernelMask( ObjMask om1, ObjMask om2Rel ) {
+	protected CountKernel createCountKernelMask( ObjectMask om1, ObjectMask om2Rel ) {
 		return new CountKernelNghbMask(do3D, om1.getBinaryValuesByte(), om2Rel, true );
 	}
 

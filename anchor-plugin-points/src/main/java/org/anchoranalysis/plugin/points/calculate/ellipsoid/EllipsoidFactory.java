@@ -38,7 +38,7 @@ import org.anchoranalysis.core.geometry.Point3f;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.core.geometry.PointConverter;
 import org.anchoranalysis.image.extent.ImageDim;
-import org.anchoranalysis.image.objmask.ObjMask;
+import org.anchoranalysis.image.objectmask.ObjectMask;
 import org.anchoranalysis.image.points.PointsFromObjMask;
 
 import ch.ethz.biol.cell.mpp.mark.pointsfitter.LinearLeastSquaresEllipsoidFitter;
@@ -55,7 +55,7 @@ public class EllipsoidFactory {
 	 * @return
 	 * @throws CreateException
 	 */
-	public static MarkEllipsoid createMarkEllipsoidLeastSquares( ObjMask om, ImageDim dim, boolean suppressZCovariance, double shellRad ) throws CreateException {
+	public static MarkEllipsoid createMarkEllipsoidLeastSquares( ObjectMask om, ImageDim dim, boolean suppressZCovariance, double shellRad ) throws CreateException {
 
 		return createMarkEllipsoidLeastSquares(
 			()->pntsFromMaskOutlineWrapped(om),
@@ -97,7 +97,7 @@ public class EllipsoidFactory {
 		return mark;
 	}
 	
-	private static List<Point3i> pntsFromMaskOutlineWrapped( ObjMask om ) throws CreateException {
+	private static List<Point3i> pntsFromMaskOutlineWrapped( ObjectMask om ) throws CreateException {
 		return PointsFromObjMask.pntsFromMaskOutline(om);
 	}
 	

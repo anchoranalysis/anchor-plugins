@@ -2,8 +2,8 @@ package org.anchoranalysis.plugin.image.obj.merge.priority;
 
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
-import org.anchoranalysis.image.objmask.ObjMask;
-import org.anchoranalysis.image.objmask.ops.ObjMaskMerger;
+import org.anchoranalysis.image.objectmask.ObjectMask;
+import org.anchoranalysis.image.objectmask.ops.ObjMaskMerger;
 import org.anchoranalysis.plugin.image.obj.merge.GraphLogger;
 import org.anchoranalysis.plugin.image.obj.merge.ObjVertex;
 
@@ -27,7 +27,7 @@ public abstract class AssignPriority {
 	) throws OperationFailedException {
 				
 		// Do merge
-		ObjMask merge = ObjMaskMerger.merge(
+		ObjectMask merge = ObjMaskMerger.merge(
 			src.getObjMask(),
 			dest.getObjMask()
 		);
@@ -55,7 +55,7 @@ public abstract class AssignPriority {
 	protected abstract PrioritisedVertex assignPriorityToEdge(
 		ObjVertex src,
 		ObjVertex dest,
-		ObjMask merge,
+		ObjectMask merge,
 		ErrorReporter errorReporter
 	) throws OperationFailedException;
 }

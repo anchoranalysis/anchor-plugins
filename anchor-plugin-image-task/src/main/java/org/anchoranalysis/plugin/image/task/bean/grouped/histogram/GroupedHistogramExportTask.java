@@ -43,8 +43,8 @@ import org.anchoranalysis.image.stack.NamedImgStackCollection;
 import org.anchoranalysis.io.output.bound.BoundIOContext;
 import org.anchoranalysis.plugin.image.task.bean.grouped.GroupedSharedState;
 import org.anchoranalysis.plugin.image.task.bean.grouped.GroupedStackTask;
-import org.anchoranalysis.plugin.image.task.grouped.ChnlSource;
-import org.anchoranalysis.plugin.image.task.grouped.ConsistentChnlChecker;
+import org.anchoranalysis.plugin.image.task.grouped.ChannelSource;
+import org.anchoranalysis.plugin.image.task.grouped.ConsistentChannelChecker;
 import org.anchoranalysis.plugin.image.task.grouped.GroupMapByName;
 import org.anchoranalysis.plugin.image.task.grouped.NamedChnl;
 
@@ -79,7 +79,7 @@ public class GroupedHistogramExportTask extends GroupedStackTask<Histogram,Histo
 	// END BEAN PROPERTIES
 
 	@Override
-	protected GroupMapByName<Histogram, Histogram> createGroupMap(ConsistentChnlChecker chnlChecker) {
+	protected GroupMapByName<Histogram, Histogram> createGroupMap(ConsistentChannelChecker chnlChecker) {
 		return new GroupedHistogramMap(
 			createWriter(),
 			(int) chnlChecker.getMaxValue() 
@@ -94,7 +94,7 @@ public class GroupedHistogramExportTask extends GroupedStackTask<Histogram,Histo
 		BoundIOContext context
 	) throws JobExecutionException {
 		
-		ChnlSource source = new ChnlSource( store, sharedState.getChnlChecker(), Optional.empty() );
+		ChannelSource source = new ChannelSource( store, sharedState.getChnlChecker(), Optional.empty() );
 		
 		HistogramExtracter histogramExtracter = new HistogramExtracter(
 			source,

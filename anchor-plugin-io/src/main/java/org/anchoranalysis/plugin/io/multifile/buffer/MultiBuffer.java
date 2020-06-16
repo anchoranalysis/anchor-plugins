@@ -2,34 +2,8 @@ package org.anchoranalysis.plugin.io.multifile.buffer;
 
 import java.util.Optional;
 
-/*-
- * #%L
- * anchor-plugin-io
- * %%
- * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
- * %%
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
- * 
- * The above copyright notice and this permission notice shall be included in
- * all copies or substantial portions of the Software.
- * 
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- * THE SOFTWARE.
- * #L%
- */
-
-import org.anchoranalysis.image.chnl.Chnl;
-import org.anchoranalysis.image.chnl.factory.ChnlFactory;
+import org.anchoranalysis.image.channel.Channel;
+import org.anchoranalysis.image.channel.factory.ChannelFactory;
 import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.extent.IncorrectImageSizeException;
 import org.anchoranalysis.image.stack.Stack;
@@ -58,7 +32,7 @@ class MultiBuffer {
 			
 	public void populateWithSpecifiedChnl(Stack stackForFile, int chnlNum, Optional<Integer> sliceNum, int timeIndex) {
 		// Specific Channel Number, but no specific Slice Number
-		Chnl chnl = stackForFile.getChnl(0);
+		Channel chnl = stackForFile.getChnl(0);
 		VoxelBox<?> vb = chnl.getVoxelBox().any();
 		
 		int chnlIndexRslvd = size.getRangeC().index(chnlNum);
@@ -77,7 +51,7 @@ class MultiBuffer {
 		int timeIndexRslvd = size.getRangeT().index(timeIndex);
 		
 		for( int c=0; c<stackForFile.getNumChnl(); c++ ) {
-			Chnl chnl = stackForFile.getChnl(c);
+			Channel chnl = stackForFile.getChnl(c);
 			copyFirstSliceForChnl(timeIndexRslvd, c, chnl.getVoxelBox().any(), sliceNum);
 		}
 	}
@@ -89,7 +63,7 @@ class MultiBuffer {
 		// No specific Channel Number, and no specific Slice Number
 		// Then we have to guess the channel
 		for( int c=0; c<stackForFile.getNumChnl(); c++ ) {
-			Chnl chnl = stackForFile.getChnl(c);
+			Channel chnl = stackForFile.getChnl(c);
 			copyAllSlicesForChnl(timeIndexRslvd, c, chnl.getVoxelBox().any() );
 		}	
 	}
@@ -100,7 +74,7 @@ class MultiBuffer {
 		
 		for( int c=0; c<size.getRangeC().getSize(); c++) {
 			
-			Chnl chnl = ChnlFactory.instance().createEmptyUninitialised(dim,dataType);
+			Channel chnl = ChannelFactory.instance().createEmptyUninitialised(dim,dataType);
 			copyAllBuffersTo(t, c, chnl.getVoxelBox());
 			
 			try {

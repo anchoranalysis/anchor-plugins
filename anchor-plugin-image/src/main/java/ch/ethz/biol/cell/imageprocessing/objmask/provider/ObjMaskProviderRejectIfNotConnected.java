@@ -30,8 +30,8 @@ package ch.ethz.biol.cell.imageprocessing.objmask.provider;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.bean.provider.ObjMaskProviderOne;
-import org.anchoranalysis.image.objmask.ObjMask;
-import org.anchoranalysis.image.objmask.ObjMaskCollection;
+import org.anchoranalysis.image.objectmask.ObjectMask;
+import org.anchoranalysis.image.objectmask.ObjectMaskCollection;
 
 /**
  * Rejects a set of objects, if any object is not fully connected (pixels form two or more seperate connected components)
@@ -42,9 +42,9 @@ import org.anchoranalysis.image.objmask.ObjMaskCollection;
 public class ObjMaskProviderRejectIfNotConnected extends ObjMaskProviderOne {
 
 	@Override
-	public ObjMaskCollection createFromObjs(ObjMaskCollection objsCollection) throws CreateException {
+	public ObjectMaskCollection createFromObjs(ObjectMaskCollection objsCollection) throws CreateException {
 		
-		for( ObjMask om : objsCollection ) {
+		for( ObjectMask om : objsCollection ) {
 			try {
 				if (!om.checkIfConnected()) {
 					throw new CreateException("At least one object is not connected");

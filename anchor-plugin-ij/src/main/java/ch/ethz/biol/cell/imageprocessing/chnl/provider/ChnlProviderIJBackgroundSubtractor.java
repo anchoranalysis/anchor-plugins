@@ -31,17 +31,17 @@ import ij.ImagePlus;
 import ij.plugin.filter.BackgroundSubtracter;
 
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.image.chnl.Chnl;
+import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.convert.IJWrap;
 
 public class ChnlProviderIJBackgroundSubtractor extends ChnlProviderFilterRadiusBase {
 	
 	@Override
-	protected Chnl createFromChnl(Chnl chnl, int radius) throws CreateException {
+	protected Channel createFromChnl(Channel chnl, int radius) throws CreateException {
 		return subtractBackground(chnl, radius, true);
 	}
 	
-	public static Chnl subtractBackground( Chnl chnl, int radius, boolean doPreSmooth ) throws CreateException {
+	public static Channel subtractBackground( Channel chnl, int radius, boolean doPreSmooth ) throws CreateException {
 		ImagePlus imp = IJWrap.createImagePlus(chnl);
 
 		BackgroundSubtracter plugin = new BackgroundSubtracter();

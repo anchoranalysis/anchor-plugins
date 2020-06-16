@@ -50,7 +50,7 @@ import org.anchoranalysis.io.output.bound.BoundIOContext;
 import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
 import org.anchoranalysis.plugin.image.task.bean.selectchnls.SelectAll;
 import org.anchoranalysis.plugin.image.task.bean.selectchnls.SelectChnlsFromStacks;
-import org.anchoranalysis.plugin.image.task.grouped.ConsistentChnlChecker;
+import org.anchoranalysis.plugin.image.task.grouped.ConsistentChannelChecker;
 import org.anchoranalysis.plugin.image.task.grouped.GroupMapByName;
 
 /**
@@ -134,7 +134,7 @@ public abstract class GroupedStackTask<S,T> extends Task<ProvidesStackInput,Grou
 	/** An optional sub-directory where the group outputs are placed, to avoid placing them in the top-level output */
 	protected abstract Optional<String> subdirectoryForGroupOutputs();
 	
-	protected abstract GroupMapByName<S,T> createGroupMap( ConsistentChnlChecker chnlChecker );
+	protected abstract GroupMapByName<S,T> createGroupMap( ConsistentChannelChecker chnlChecker );
 	
 	protected abstract void processKeys(
 		NamedImgStackCollection store,

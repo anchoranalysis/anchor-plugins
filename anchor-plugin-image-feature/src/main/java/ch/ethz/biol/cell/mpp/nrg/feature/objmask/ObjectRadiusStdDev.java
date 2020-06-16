@@ -39,7 +39,7 @@ import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.feature.bean.objmask.FeatureObjMask;
 import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
-import org.anchoranalysis.image.objmask.ObjMask;
+import org.anchoranalysis.image.objectmask.ObjectMask;
 import org.anchoranalysis.image.outline.FindOutline;
 import org.anchoranalysis.image.points.PointsFromBinaryVoxelBox;
 
@@ -57,7 +57,7 @@ public class ObjectRadiusStdDev extends FeatureObjMask {
 	@Override
 	public double calc(SessionInput<FeatureInputSingleObj> input) throws FeatureCalcException {
 		
-		ObjMask om = input.get().getObjMask();
+		ObjectMask om = input.get().getObjMask();
 		
 		// Get the outline
 		List<Point3i> pntsOutline = createMaskOutlineAsPoints(om, 1, false, false);
@@ -104,11 +104,11 @@ public class ObjectRadiusStdDev extends FeatureObjMask {
 		}
 	}
 
-	private static List<Point3i> createMaskOutlineAsPoints(ObjMask mask, int numberErosions, boolean erodeEdges, boolean do3D ) throws FeatureCalcException {
+	private static List<Point3i> createMaskOutlineAsPoints(ObjectMask mask, int numberErosions, boolean erodeEdges, boolean do3D ) throws FeatureCalcException {
 		try {
 			List<Point3i> ptsOutline = new ArrayList<Point3i>();
 			
-			ObjMask outline = FindOutline.outline(mask, 1, false, true);
+			ObjectMask outline = FindOutline.outline(mask, 1, false, true);
 			PointsFromBinaryVoxelBox.addPointsFromVoxelBox3D(
 				outline.binaryVoxelBox(),
 				outline.getBoundingBox().getCrnrMin(),

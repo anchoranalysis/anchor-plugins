@@ -30,7 +30,7 @@ package org.anchoranalysis.plugin.image.feature.bean.obj.single.intensity;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.image.chnl.Chnl;
+import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
 import ch.ethz.biol.cell.mpp.nrg.feature.objmask.ValueAndIndex;
 
@@ -45,7 +45,7 @@ public class IntensityMeanMaxSlice extends FeatureNrgChnl {
 	// END BEAN PROPERTIES
 	
 	@Override
-	protected double calcForChnl(SessionInput<FeatureInputSingleObj> input, Chnl chnl) throws FeatureCalcException {
+	protected double calcForChnl(SessionInput<FeatureInputSingleObj> input, Channel chnl) throws FeatureCalcException {
 
 		ValueAndIndex vai = StatsHelper.calcMaxSliceMean(
 			chnl,

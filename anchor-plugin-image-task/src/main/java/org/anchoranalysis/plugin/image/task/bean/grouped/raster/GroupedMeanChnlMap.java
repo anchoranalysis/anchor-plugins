@@ -3,14 +3,14 @@ package org.anchoranalysis.plugin.image.task.bean.grouped.raster;
 import java.io.IOException;
 
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.image.chnl.Chnl;
+import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.io.generator.raster.ChnlGenerator;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
 import org.anchoranalysis.io.output.bound.BoundIOContext;
-import org.anchoranalysis.plugin.image.task.grouped.ConsistentChnlChecker;
+import org.anchoranalysis.plugin.image.task.grouped.ConsistentChannelChecker;
 import org.anchoranalysis.plugin.image.task.grouped.GroupMapByName;
 
-class GroupedMeanChnlMap extends GroupMapByName<Chnl,AggregateChnl> {
+class GroupedMeanChnlMap extends GroupMapByName<Channel,AggregateChnl> {
 	
 	public GroupedMeanChnlMap() {
 		super(
@@ -20,7 +20,7 @@ class GroupedMeanChnlMap extends GroupMapByName<Chnl,AggregateChnl> {
 	}
 
 	@Override
-	protected void addTo(Chnl ind, AggregateChnl agg) throws OperationFailedException {
+	protected void addTo(Channel ind, AggregateChnl agg) throws OperationFailedException {
 		agg.addChnl(ind);
 	}
 
@@ -28,7 +28,7 @@ class GroupedMeanChnlMap extends GroupMapByName<Chnl,AggregateChnl> {
 	protected void writeGroupOutputInSubdirectory(
 		String outputName,
 		AggregateChnl agg,
-		ConsistentChnlChecker chnlChecker,
+		ConsistentChannelChecker chnlChecker,
 		BoundIOContext context
 	) throws IOException {
 
@@ -37,7 +37,7 @@ class GroupedMeanChnlMap extends GroupMapByName<Chnl,AggregateChnl> {
 		VoxelDataType outputType = chnlChecker.getChnlType();
 		
 		try {
-			Chnl mean = agg.createMeanChnl( outputType );
+			Channel mean = agg.createMeanChnl( outputType );
 			generator.setIterableElement(mean);
 			context.getOutputManager().getWriterAlwaysAllowed().write(
 				outputName,

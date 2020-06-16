@@ -34,8 +34,8 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.ImageDim;
-import org.anchoranalysis.image.objmask.ObjMask;
-import org.anchoranalysis.image.objmask.ObjMaskCollection;
+import org.anchoranalysis.image.objectmask.ObjectMask;
+import org.anchoranalysis.image.objectmask.ObjectMaskCollection;
 
 // Considers all possible pairs of objects in a provider, and removes intersecting pixels
 public class ObjMaskProviderRemoveIntersectingPixels extends ObjMaskProviderDimensions {
@@ -49,21 +49,21 @@ public class ObjMaskProviderRemoveIntersectingPixels extends ObjMaskProviderDime
 	// END BEAN PROPERTIES
 
 	@Override
-	public ObjMaskCollection createFromObjs( ObjMaskCollection objsCollection) throws CreateException {
+	public ObjectMaskCollection createFromObjs( ObjectMaskCollection objsCollection) throws CreateException {
 		
-		ObjMaskCollection objsDup = objsCollection.duplicate();
+		ObjectMaskCollection objsDup = objsCollection.duplicate();
 		
 		ImageDim dims = createDim();
 		
 		for( int i=0; i<objsCollection.size(); i++) {
 			
-			ObjMask omWrite = objsDup.get(i);
+			ObjectMask omWrite = objsDup.get(i);
 			
 			maybeErrorDisconnectedObjects( omWrite, "before" );
 			
 			for( int j=0; j<objsCollection.size(); j++) {
 				
-				ObjMask omRead = objsDup.get(j);
+				ObjectMask omRead = objsDup.get(j);
 				
 				if (i<j) {
 					removeIntersectingPixelsIfIntersects( omWrite, omRead, dims );
@@ -76,7 +76,7 @@ public class ObjMaskProviderRemoveIntersectingPixels extends ObjMaskProviderDime
 		return objsDup;
 	}
 	
-	private void removeIntersectingPixels( ObjMask omWrite, ObjMask omRead, BoundingBox intersection  ) {
+	private void removeIntersectingPixels( ObjectMask omWrite, ObjectMask omRead, BoundingBox intersection  ) {
 		
 		BoundingBox bboxRelWrite = new BoundingBox(
 			intersection.relPosTo( omWrite.getBoundingBox() ),
@@ -89,8 +89,8 @@ public class ObjMaskProviderRemoveIntersectingPixels extends ObjMaskProviderDime
 		);
 		
 		// TODO we can make this more efficient, as we only need to duplicate the intersection area
-		ObjMask omReadDup = omRead.duplicate();
-		ObjMask omWriteDup = omWrite.duplicate();
+		ObjectMask omReadDup = omRead.duplicate();
+		ObjectMask omWriteDup = omWrite.duplicate();
 		
 		omWrite.getVoxelBox().setPixelsCheckMask(
 			bboxRelWrite,
@@ -109,7 +109,7 @@ public class ObjMaskProviderRemoveIntersectingPixels extends ObjMaskProviderDime
 		);
 	}
 	
-	private void removeIntersectingPixelsIfIntersects( ObjMask omWrite, ObjMask omRead, ImageDim sd ) {
+	private void removeIntersectingPixelsIfIntersects( ObjectMask omWrite, ObjectMask omRead, ImageDim sd ) {
 
 		Optional<BoundingBox> intersection = omWrite.getBoundingBox().intersection().withInside(omRead.getBoundingBox(), sd.getExtnt() );
 				
@@ -124,7 +124,7 @@ public class ObjMaskProviderRemoveIntersectingPixels extends ObjMaskProviderDime
 		}
 	}
 		
-	private void maybeErrorDisconnectedObjects( ObjMask omWrite, String dscr ) throws CreateException {
+	private void maybeErrorDisconnectedObjects( ObjectMask omWrite, String dscr ) throws CreateException {
 		if (errorDisconnectedObjects) {
 			try {
 				if( !omWrite.checkIfConnected() ) {

@@ -34,7 +34,7 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.bean.objmask.match.ObjMaskMatcher;
 import org.anchoranalysis.image.bean.provider.ObjMaskProviderOne;
-import org.anchoranalysis.image.objmask.ObjMaskCollection;
+import org.anchoranalysis.image.objectmask.ObjectMaskCollection;
 import org.anchoranalysis.image.objmask.match.ObjWithMatches;
 
 public class ObjMaskProviderMatch extends ObjMaskProviderOne {
@@ -45,11 +45,11 @@ public class ObjMaskProviderMatch extends ObjMaskProviderOne {
 	// END BEAN PROPERTIES
 	
 	@Override
-	public ObjMaskCollection createFromObjs(ObjMaskCollection in) throws CreateException {
+	public ObjectMaskCollection createFromObjs(ObjectMaskCollection in) throws CreateException {
 		try {
 			List<ObjWithMatches> matches = objMaskMatcher.findMatch( in );
 			
-			ObjMaskCollection out = new ObjMaskCollection();
+			ObjectMaskCollection out = new ObjectMaskCollection();
 			for( ObjWithMatches owm : matches ) {
 				out.addAll( owm.getMatches() );
 			}

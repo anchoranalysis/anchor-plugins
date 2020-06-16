@@ -49,7 +49,7 @@ import org.anchoranalysis.image.feature.evaluator.PayloadCalculator;
 import org.anchoranalysis.image.feature.objmask.pair.FeatureInputPairObjs;
 import org.anchoranalysis.image.feature.session.merged.MergedPairsFeatures;
 import org.anchoranalysis.image.feature.session.merged.MergedPairsSession;
-import org.anchoranalysis.image.objmask.ObjMask;
+import org.anchoranalysis.image.objectmask.ObjectMask;
 import org.anchoranalysis.plugin.image.obj.merge.priority.AssignPriority;
 import org.anchoranalysis.plugin.image.obj.merge.priority.AssignPriorityFromPair;
 
@@ -82,7 +82,7 @@ public class ObjMaskProviderMergePair extends ObjMaskProviderMergeWithFeature {
 	@Override
 	protected PayloadCalculator createPayloadCalculator() {
 		// We don't care about evaluating single-features
-		return (ObjMask om) -> 0;
+		return (ObjectMask om) -> 0;
 	}
 	
 	@Override

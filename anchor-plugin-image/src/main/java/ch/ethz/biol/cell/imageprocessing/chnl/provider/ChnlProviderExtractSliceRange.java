@@ -35,8 +35,8 @@ import org.anchoranalysis.bean.annotation.Positive;
 import org.anchoranalysis.bean.error.BeanMisconfiguredException;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.bean.provider.ChnlProviderOne;
-import org.anchoranalysis.image.chnl.Chnl;
-import org.anchoranalysis.image.chnl.factory.ChnlFactoryByte;
+import org.anchoranalysis.image.channel.Channel;
+import org.anchoranalysis.image.channel.factory.ChannelFactoryByte;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
@@ -52,9 +52,9 @@ public class ChnlProviderExtractSliceRange extends ChnlProviderOne {
 	// END BEANS
 	
 	@Override
-	public Chnl createFromChnl(Chnl chnl) throws CreateException {
+	public Channel createFromChnl(Channel chnl) throws CreateException {
 		
-		ChnlFactoryByte factory = new ChnlFactoryByte();
+		ChannelFactoryByte factory = new ChannelFactoryByte();
 		
 		VoxelBox<ByteBuffer> vb = chnl.getVoxelBox().asByte();
 		
@@ -62,7 +62,7 @@ public class ChnlProviderExtractSliceRange extends ChnlProviderOne {
 			sliceEnd - sliceStart + 1
 		);
 		
-		Chnl chnlOut = factory.createEmptyInitialised( new ImageDim(e, chnl.getDimensions().getRes()) );
+		Channel chnlOut = factory.createEmptyInitialised( new ImageDim(e, chnl.getDimensions().getRes()) );
 		VoxelBox<ByteBuffer> vbOut = chnlOut.getVoxelBox().asByte();
 		
 		int volumeXY = vb.extent().getVolumeXY();

@@ -34,8 +34,8 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
 import org.anchoranalysis.image.extent.ImageDim;
-import org.anchoranalysis.image.objmask.ObjMask;
-import org.anchoranalysis.image.objmask.ObjMaskCollection;
+import org.anchoranalysis.image.objectmask.ObjectMask;
+import org.anchoranalysis.image.objectmask.ObjectMaskCollection;
 
 // Only accepts an object if it has greater (or EQUAL) intersection with objMaskProviderGreater than objMaskProviderLesser
 // So if an object intersects with neither, it still gets accepted, as both return 0
@@ -49,8 +49,8 @@ public class ObjMaskFilterGreaterIntersectionWith extends ObjMaskFilterByObject 
 	private ObjMaskProvider objsLesser;
 	// END BEAN PROPERTIES
 	
-	private ObjMaskCollection intersectionSetGreater;
-	private ObjMaskCollection intersectionSetLesser;
+	private ObjectMaskCollection intersectionSetGreater;
+	private ObjectMaskCollection intersectionSetLesser;
 
 	@Override
 	protected void start() throws OperationFailedException {
@@ -65,7 +65,7 @@ public class ObjMaskFilterGreaterIntersectionWith extends ObjMaskFilterByObject 
 	}
 	
 	@Override
-	protected boolean match(ObjMask om, Optional<ImageDim> dim)
+	protected boolean match(ObjectMask om, Optional<ImageDim> dim)
 			throws OperationFailedException {
 
 		int cntGreater =  intersectionSetGreater.countIntersectingPixels(om);

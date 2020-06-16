@@ -31,7 +31,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.binary.values.BinaryValues;
-import org.anchoranalysis.image.chnl.Chnl;
+import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.feature.bean.objmask.FeatureObjMask;
 import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
 
@@ -50,7 +50,7 @@ public class CountEqual extends FeatureObjMask {
 		
 		FeatureInputSingleObj inputSessionless = input.get();
 		
-		Chnl chnl = inputSessionless.getNrgStackRequired().getChnl(nrgIndex);
+		Channel chnl = inputSessionless.getNrgStackRequired().getChnl(nrgIndex);
 		return chnl.getVoxelBox().any().countEqualMask(value, inputSessionless.getObjMask());
 
 	}

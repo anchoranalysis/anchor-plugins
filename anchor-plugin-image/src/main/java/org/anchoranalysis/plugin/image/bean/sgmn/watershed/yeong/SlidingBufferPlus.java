@@ -3,7 +3,7 @@ package org.anchoranalysis.plugin.image.bean.sgmn.watershed.yeong;
 import java.util.Optional;
 
 import org.anchoranalysis.core.geometry.Point3i;
-import org.anchoranalysis.image.objmask.ObjMask;
+import org.anchoranalysis.image.objectmask.ObjectMask;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.anchoranalysis.image.voxel.buffer.SlidingBuffer;
 
@@ -24,7 +24,7 @@ final class SlidingBufferPlus {
 	private final EncodedVoxelBox matS;
 	private final Optional<MinimaStore> minimaStore;
 	
-	public SlidingBufferPlus(VoxelBox<?> vbImg, EncodedVoxelBox matS, Optional<ObjMask> mask, Optional<MinimaStore> minimaStore) {
+	public SlidingBufferPlus(VoxelBox<?> vbImg, EncodedVoxelBox matS, Optional<ObjectMask> mask, Optional<MinimaStore> minimaStore) {
 
 		this.matS = matS;
 		this.minimaStore = minimaStore;

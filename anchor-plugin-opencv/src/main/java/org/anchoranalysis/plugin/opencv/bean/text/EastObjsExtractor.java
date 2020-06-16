@@ -37,8 +37,8 @@ import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.extent.ImageRes;
-import org.anchoranalysis.image.objmask.ObjMask;
-import org.anchoranalysis.image.objmask.properties.ObjMaskWithProperties;
+import org.anchoranalysis.image.objectmask.ObjectMask;
+import org.anchoranalysis.image.objectmask.properties.ObjMaskWithProperties;
 import org.anchoranalysis.plugin.opencv.nonmaxima.WithConfidence;
 import org.opencv.core.Mat;
 
@@ -53,7 +53,7 @@ import org.opencv.core.Mat;
  */
 class EastObjsExtractor {
 
-	public static List<WithConfidence<ObjMask>> apply( Mat image, ImageRes res, double minConfidence, Path pathToEastModel ) {
+	public static List<WithConfidence<ObjectMask>> apply( Mat image, ImageRes res, double minConfidence, Path pathToEastModel ) {
 		List<WithConfidence<Mark>> listMarks = EastMarkExtractor.extractBoundingBoxes(
 			image,
 			minConfidence,
@@ -67,7 +67,7 @@ class EastObjsExtractor {
 		);
 	}
 	
-	private static List<WithConfidence<ObjMask>> convertMarksToObjMask(
+	private static List<WithConfidence<ObjectMask>> convertMarksToObjMask(
 		List<WithConfidence<Mark>> listMarks,
 		ImageDim dim
 	) {
@@ -89,14 +89,14 @@ class EastObjsExtractor {
 		return dims;
 	}
 	
-	private static WithConfidence<ObjMask> convertToObjMask( WithConfidence<Mark> wcMark, ImageDim dim ) {
+	private static WithConfidence<ObjectMask> convertToObjMask( WithConfidence<Mark> wcMark, ImageDim dim ) {
 		
 		ObjMaskWithProperties om = wcMark.getObj().calcMask(
 			dim,
 			RegionMapSingleton.instance().membershipWithFlagsForIndex(GlobalRegionIdentifiers.SUBMARK_INSIDE),
 			BinaryValuesByte.getDefault()
 		);
-		return new WithConfidence<ObjMask>(
+		return new WithConfidence<ObjectMask>(
 			om.getMask(),
 			wcMark.getConfidence()
 		);

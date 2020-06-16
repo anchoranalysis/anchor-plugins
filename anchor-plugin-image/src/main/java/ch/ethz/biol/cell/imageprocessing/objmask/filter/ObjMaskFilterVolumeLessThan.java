@@ -32,7 +32,7 @@ import java.util.Optional;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.extent.ImageDim;
-import org.anchoranalysis.image.objmask.ObjMask;
+import org.anchoranalysis.image.objectmask.ObjectMask;
 
 public class ObjMaskFilterVolumeLessThan extends ObjMaskFilterByObject {
 
@@ -47,7 +47,7 @@ public class ObjMaskFilterVolumeLessThan extends ObjMaskFilterByObject {
 	}
 
 	@Override
-	protected boolean match(ObjMask om, Optional<ImageDim> dim) {
+	protected boolean match(ObjectMask om, Optional<ImageDim> dim) {
 		return om.numPixelsLessThan( maxVolume+1 );
 	}
 

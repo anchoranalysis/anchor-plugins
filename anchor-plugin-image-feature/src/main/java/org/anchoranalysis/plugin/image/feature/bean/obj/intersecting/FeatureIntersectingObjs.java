@@ -36,7 +36,7 @@ import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.feature.bean.objmask.FeatureObjMaskSharedObjects;
 import org.anchoranalysis.image.feature.init.FeatureInitParamsSharedObjs;
 import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
-import org.anchoranalysis.image.objmask.ObjMaskCollection;
+import org.anchoranalysis.image.objectmask.ObjectMaskCollection;
 import org.anchoranalysis.plugin.image.feature.obj.intersecting.CalculateIntersectingObjs;
 
 public abstract class FeatureIntersectingObjs extends FeatureObjMaskSharedObjects {
@@ -53,7 +53,7 @@ public abstract class FeatureIntersectingObjs extends FeatureObjMaskSharedObject
 	private double valueNoObjects = Double.NaN;
 	// END BEAN PROPERTIES
 
-	private ObjMaskCollection searchObjs;
+	private ObjectMaskCollection searchObjs;
 	
 	@Override
 	public void beforeCalcCast(FeatureInitParamsSharedObjs params) throws InitException {
@@ -83,7 +83,7 @@ public abstract class FeatureIntersectingObjs extends FeatureObjMaskSharedObject
 	
 	protected abstract double valueFor(
 		SessionInput<FeatureInputSingleObj> params,
-		ResolvedCalculation<ObjMaskCollection, FeatureInputSingleObj> intersecting
+		ResolvedCalculation<ObjectMaskCollection, FeatureInputSingleObj> intersecting
 	) throws FeatureCalcException;
 	
 	public String getId() {
@@ -103,7 +103,7 @@ public abstract class FeatureIntersectingObjs extends FeatureObjMaskSharedObject
 		this.valueNoObjects = valueNoObjects;
 	}
 
-	protected ObjMaskCollection getSearchObjs() {
+	protected ObjectMaskCollection getSearchObjs() {
 		return searchObjs;
 	}
 

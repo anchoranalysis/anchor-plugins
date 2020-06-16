@@ -31,10 +31,10 @@ import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 import org.anchoranalysis.image.binary.BinaryChnl;
 import org.anchoranalysis.image.binary.values.BinaryValues;
-import org.anchoranalysis.image.chnl.Chnl;
+import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
 import org.anchoranalysis.image.feature.stack.FeatureInputStack;
-import org.anchoranalysis.image.objmask.ObjMask;
+import org.anchoranalysis.image.objectmask.ObjectMask;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
@@ -55,14 +55,14 @@ public class CalculateDeriveObjInput extends FeatureCalculation<FeatureInputSing
 		);
 	}
 	
-	private ObjMask extractObjMask(FeatureInputStack input) throws FeatureCalcException {
+	private ObjectMask extractObjMask(FeatureInputStack input) throws FeatureCalcException {
 		
 		NRGStackWithParams nrgStack = input.getNrgStackRequired();
 		
-		Chnl chnl = nrgStack.getChnl(nrgIndex);
+		Channel chnl = nrgStack.getChnl(nrgIndex);
 		BinaryChnl binary = new BinaryChnl(chnl, BinaryValues.getDefault());
 		
-		return new ObjMask( binary.binaryVoxelBox() );
+		return new ObjectMask( binary.binaryVoxelBox() );
 	}
 	
 	@Override

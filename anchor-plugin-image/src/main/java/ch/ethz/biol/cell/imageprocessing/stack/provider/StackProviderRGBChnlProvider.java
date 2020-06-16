@@ -35,8 +35,8 @@ import org.anchoranalysis.bean.error.BeanMisconfiguredException;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.bean.provider.ChnlProvider;
 import org.anchoranalysis.image.bean.provider.stack.StackProvider;
-import org.anchoranalysis.image.chnl.Chnl;
-import org.anchoranalysis.image.chnl.factory.ChnlFactory;
+import org.anchoranalysis.image.channel.Channel;
+import org.anchoranalysis.image.channel.factory.ChannelFactory;
 import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.extent.IncorrectImageSizeException;
 import org.anchoranalysis.image.stack.Stack;
@@ -65,7 +65,7 @@ public class StackProviderRGBChnlProvider extends StackProvider {
 		}
 	}	
 
-	private static ImageDim combineWithExisting( ImageDim existing, Chnl toCombine ) throws IncorrectImageSizeException {
+	private static ImageDim combineWithExisting( ImageDim existing, Channel toCombine ) throws IncorrectImageSizeException {
 		
 		if (toCombine==null) {
 			return existing;
@@ -82,7 +82,7 @@ public class StackProviderRGBChnlProvider extends StackProvider {
 		return existing;
 	}
 	
-	private static ImageDim createDimensions( Chnl chnlRed, Chnl chnlGreen, Chnl chnlBlue) throws IncorrectImageSizeException {
+	private static ImageDim createDimensions( Channel chnlRed, Channel chnlGreen, Channel chnlBlue) throws IncorrectImageSizeException {
 		
 		if (chnlRed==null && chnlGreen==null && chnlBlue==null) {
 			throw new IllegalArgumentException("All chnls are null");
@@ -95,10 +95,10 @@ public class StackProviderRGBChnlProvider extends StackProvider {
 		return sd;
 	}
 	
-	private static void addToStack( Stack stack, Chnl chnl, ImageDim dim, VoxelDataType outputChnlType ) throws IncorrectImageSizeException, CreateException {
+	private static void addToStack( Stack stack, Channel chnl, ImageDim dim, VoxelDataType outputChnlType ) throws IncorrectImageSizeException, CreateException {
 		
 		if (chnl==null) {
-			chnl = ChnlFactory.instance().createEmptyInitialised(dim, outputChnlType);
+			chnl = ChannelFactory.instance().createEmptyInitialised(dim, outputChnlType);
 		}
 		
 		if(!outputChnlType.equals(chnl.getVoxelDataType())) {
@@ -110,7 +110,7 @@ public class StackProviderRGBChnlProvider extends StackProvider {
 		stack.addChnl(chnl);
 	}
 	
-	private static String voxelDataTypeString( Chnl chnl ) {
+	private static String voxelDataTypeString( Channel chnl ) {
 		if (chnl!=null) {
 			return chnl.getVoxelDataType().toString();
 		} else {
@@ -119,13 +119,13 @@ public class StackProviderRGBChnlProvider extends StackProvider {
 	}
 	
 	// Chooses the output type of the data
-	private static VoxelDataType chooseOutputDataType( Chnl chnlRed, Chnl chnlGreen, Chnl chnlBlue) throws CreateException {
+	private static VoxelDataType chooseOutputDataType( Channel chnlRed, Channel chnlGreen, Channel chnlBlue) throws CreateException {
 		
 		VoxelDataType dataType = null;
 		
-		Chnl[] all = new Chnl[] { chnlRed, chnlGreen, chnlBlue };
+		Channel[] all = new Channel[] { chnlRed, chnlGreen, chnlBlue };
 		
-		for( Chnl c : all ) {
+		for( Channel c : all ) {
 			if (c==null) {
 				continue;
 			}
@@ -157,16 +157,16 @@ public class StackProviderRGBChnlProvider extends StackProvider {
 	@Override
 	public Stack create() throws CreateException {
 
-		Chnl chnlRed = red!=null ? red.create() : null;
-		Chnl chnlGreen = green!=null ? green.create() : null;
-		Chnl chnlBlue = blue!=null ? blue.create() : null;
+		Channel chnlRed = red!=null ? red.create() : null;
+		Channel chnlGreen = green!=null ? green.create() : null;
+		Channel chnlBlue = blue!=null ? blue.create() : null;
 		
 		VoxelDataType outputType = chooseOutputDataType(chnlRed,chnlGreen,chnlBlue);
 		
 		return createRGBStack( chnlRed, chnlGreen, chnlBlue, outputType );
 	}
 	
-	public static Stack createRGBStack( Chnl chnlRed, Chnl chnlGreen, Chnl chnlBlue, VoxelDataType outputType ) throws CreateException  {
+	public static Stack createRGBStack( Channel chnlRed, Channel chnlGreen, Channel chnlBlue, VoxelDataType outputType ) throws CreateException  {
 		try {
 			ImageDim sd = createDimensions(chnlRed, chnlGreen, chnlBlue);
 			

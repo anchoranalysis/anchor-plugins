@@ -33,7 +33,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.binary.BinaryChnl;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
-import org.anchoranalysis.image.chnl.Chnl;
+import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.convert.ByteConverter;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
@@ -46,7 +46,7 @@ public class ChnlProviderSubtractMean extends ChnlProviderOneMask {
 	// END BEAN PROPERTIES
 	
 	@Override
-	protected Chnl createFromMaskedChnl(Chnl chnl, BinaryChnl mask) throws CreateException {
+	protected Channel createFromMaskedChnl(Channel chnl, BinaryChnl mask) throws CreateException {
 
 		double mean = calculateMean(chnl, mask);
 		
@@ -61,7 +61,7 @@ public class ChnlProviderSubtractMean extends ChnlProviderOneMask {
 		return chnl;
 	}
 	
-	private double calculateMean( Chnl chnl, BinaryChnl mask ) throws CreateException {
+	private double calculateMean( Channel chnl, BinaryChnl mask ) throws CreateException {
 		
 		VoxelBox<ByteBuffer> vbMask = mask.getChnl().getVoxelBox().asByte();
 		VoxelBox<ByteBuffer> vbIntensity = chnl.getVoxelBox().asByte();
@@ -102,7 +102,7 @@ public class ChnlProviderSubtractMean extends ChnlProviderOneMask {
 	}
 	
 	
-	private void subtractMeanMask( Chnl chnl, BinaryChnl mask, int mean ) throws CreateException {
+	private void subtractMeanMask( Channel chnl, BinaryChnl mask, int mean ) throws CreateException {
 		
 		VoxelBox<ByteBuffer> vbMask = mask.getChnl().getVoxelBox().asByte();
 		VoxelBox<ByteBuffer> vbIntensity = chnl.getVoxelBox().asByte();
@@ -141,7 +141,7 @@ public class ChnlProviderSubtractMean extends ChnlProviderOneMask {
 	}
 	
 	
-	private void subtractMeanAll( Chnl chnl, int mean ) throws CreateException {
+	private void subtractMeanAll( Channel chnl, int mean ) throws CreateException {
 		
 		VoxelBox<ByteBuffer> vbIntensity = chnl.getVoxelBox().asByte();
 		

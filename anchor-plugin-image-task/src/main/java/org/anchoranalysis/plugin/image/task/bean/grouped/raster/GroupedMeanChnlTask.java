@@ -35,13 +35,13 @@ import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.experiment.JobExecutionException;
 import org.anchoranalysis.image.bean.size.SizeXY;
-import org.anchoranalysis.image.chnl.Chnl;
+import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.stack.NamedImgStackCollection;
 import org.anchoranalysis.io.output.bound.BoundIOContext;
 import org.anchoranalysis.plugin.image.task.bean.grouped.GroupedSharedState;
 import org.anchoranalysis.plugin.image.task.bean.grouped.GroupedStackTask;
-import org.anchoranalysis.plugin.image.task.grouped.ChnlSource;
-import org.anchoranalysis.plugin.image.task.grouped.ConsistentChnlChecker;
+import org.anchoranalysis.plugin.image.task.grouped.ChannelSource;
+import org.anchoranalysis.plugin.image.task.grouped.ConsistentChannelChecker;
 import org.anchoranalysis.plugin.image.task.grouped.GroupMapByName;
 import org.anchoranalysis.plugin.image.task.grouped.NamedChnl;
 
@@ -51,7 +51,7 @@ import org.anchoranalysis.plugin.image.task.grouped.NamedChnl;
  * 
  * @author Owen Feehan
   */
-public class GroupedMeanChnlTask extends GroupedStackTask<Chnl,AggregateChnl> {
+public class GroupedMeanChnlTask extends GroupedStackTask<Channel,AggregateChnl> {
 
 	// START BEAN PROPERTIES
 	/** If set, each channel is scaled to a specific size before the mean is calculated (useful for combining different sized images)*/
@@ -60,7 +60,7 @@ public class GroupedMeanChnlTask extends GroupedStackTask<Chnl,AggregateChnl> {
 	// END BEAN PROPERTIES
 	
 	@Override
-	protected GroupMapByName<Chnl, AggregateChnl> createGroupMap(ConsistentChnlChecker chnlChecker) {
+	protected GroupMapByName<Channel, AggregateChnl> createGroupMap(ConsistentChannelChecker chnlChecker) {
 		return new GroupedMeanChnlMap();
 	}
 	
@@ -68,11 +68,11 @@ public class GroupedMeanChnlTask extends GroupedStackTask<Chnl,AggregateChnl> {
 	protected void processKeys(
 		NamedImgStackCollection store,
 		Optional<String> groupName,
-		GroupedSharedState<Chnl,AggregateChnl> sharedState,
+		GroupedSharedState<Channel,AggregateChnl> sharedState,
 		BoundIOContext context
 	) throws JobExecutionException {
 
-		ChnlSource source = new ChnlSource(
+		ChannelSource source = new ChannelSource(
 			store,
 			sharedState.getChnlChecker(),
 			Optional.ofNullable(resizeTo)

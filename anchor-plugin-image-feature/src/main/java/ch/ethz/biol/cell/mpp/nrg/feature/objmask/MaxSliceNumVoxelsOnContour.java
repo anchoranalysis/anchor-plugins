@@ -36,7 +36,7 @@ import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
 import org.anchoranalysis.image.feature.bean.objmask.FeatureObjMask;
 import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
-import org.anchoranalysis.image.objmask.ObjMask;
+import org.anchoranalysis.image.objectmask.ObjectMask;
 import org.anchoranalysis.image.outline.FindOutline;
 
 public class MaxSliceNumVoxelsOnContour extends FeatureObjMask {
@@ -51,7 +51,7 @@ public class MaxSliceNumVoxelsOnContour extends FeatureObjMask {
 		return cnt;
 	}
 	
-	private static int sliceWithMaxNumVoxels( ObjMask om ) {
+	private static int sliceWithMaxNumVoxels( ObjectMask om ) {
 		
 		int max = 0;
 		int ind = 0;
@@ -78,7 +78,7 @@ public class MaxSliceNumVoxelsOnContour extends FeatureObjMask {
 			
 			int z = sliceWithMaxNumVoxels( params.getObjMask() );
 			
-			ObjMask omSlice = params.getObjMask().extractSlice(z, false);
+			ObjectMask omSlice = params.getObjMask().extractSlice(z, false);
 			BinaryVoxelBox<ByteBuffer> outlineSlice = FindOutline.outline(omSlice, 1, true, false ).binaryVoxelBox();
 			
 			return outlineSlice.countOn();

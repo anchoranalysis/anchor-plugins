@@ -41,8 +41,8 @@ import org.anchoranalysis.core.geometry.Point2i;
 import org.anchoranalysis.core.geometry.Point3f;
 import org.anchoranalysis.core.geometry.PointConverter;
 import org.anchoranalysis.image.extent.ImageDim;
-import org.anchoranalysis.image.objmask.ObjMask;
-import org.anchoranalysis.image.objmask.ObjMaskCollection;
+import org.anchoranalysis.image.objectmask.ObjectMask;
+import org.anchoranalysis.image.objectmask.ObjectMaskCollection;
 
 import ch.ethz.biol.cell.imageprocessing.binaryimgchnl.provider.ConvexHullUtilities;
 
@@ -65,11 +65,11 @@ public class CfgProviderPointsFitterFromObjs extends CfgProvider {
 		
 		ImageDim dim = pointsFitter.createDim();
 
-		ObjMaskCollection objsCollection = pointsFitter.createObjs();
+		ObjectMaskCollection objsCollection = pointsFitter.createObjs();
 		
 		Cfg cfgOut = new Cfg();
 		
-		for( ObjMask om : objsCollection ) {
+		for( ObjectMask om : objsCollection ) {
 			Optional<Mark> mark = createMarkFromObj(om,dim);
 			mark.ifPresent( m->
 				cfgOut.add( m )
@@ -79,7 +79,7 @@ public class CfgProviderPointsFitterFromObjs extends CfgProvider {
 		return cfgOut;
 	}
 	
-	private	Optional<Mark> createMarkFromObj( ObjMask om, ImageDim dim ) throws CreateException {	
+	private	Optional<Mark> createMarkFromObj( ObjectMask om, ImageDim dim ) throws CreateException {	
 		
 		Optional<List<Point2i>> pts = ConvexHullUtilities.extractPointsFromOutline(
 			om,

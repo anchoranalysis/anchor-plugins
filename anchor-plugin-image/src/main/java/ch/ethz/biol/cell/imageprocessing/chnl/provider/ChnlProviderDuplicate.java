@@ -29,12 +29,12 @@ package ch.ethz.biol.cell.imageprocessing.chnl.provider;
 
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.bean.provider.ChnlProviderOne;
-import org.anchoranalysis.image.chnl.Chnl;
+import org.anchoranalysis.image.channel.Channel;
 
 public class ChnlProviderDuplicate extends ChnlProviderOne {
 
 	@Override
-	protected Chnl createFromChnl(Chnl chnl) throws CreateException {
+	protected Channel createFromChnl(Channel chnl) throws CreateException {
 		return chnl.duplicate();
 	}
 

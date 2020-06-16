@@ -33,7 +33,7 @@ import org.anchoranalysis.feature.cache.calculation.FeatureCalculation;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
-import org.anchoranalysis.image.objmask.ObjMask;
+import org.anchoranalysis.image.objectmask.ObjectMask;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.anchoranalysis.image.voxel.kernel.ApplyKernel;
 import org.anchoranalysis.image.voxel.kernel.outline.OutlineKernel3;
@@ -58,7 +58,7 @@ public class CalculateOutlineNumVoxels extends FeatureCalculation<Integer,Featur
 		this.suppress3D = suppress3D;
 	}
 	
-	private static int calcSurfaceSize( ObjMask objMask, ImageDim dim, boolean mip, boolean suppress3D ) {
+	private static int calcSurfaceSize( ObjectMask objMask, ImageDim dim, boolean mip, boolean suppress3D ) {
 		
 		boolean do3D = (dim.getZ() > 1) && !suppress3D;
 		

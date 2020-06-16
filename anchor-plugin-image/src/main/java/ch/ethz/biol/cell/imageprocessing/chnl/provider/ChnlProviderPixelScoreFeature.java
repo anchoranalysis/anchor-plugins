@@ -41,7 +41,7 @@ import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.bean.provider.ChnlProvider;
 import org.anchoranalysis.image.bean.provider.ChnlProviderOne;
 import org.anchoranalysis.image.bean.provider.HistogramProvider;
-import org.anchoranalysis.image.chnl.Chnl;
+import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.feature.bean.pixelwise.PixelScore;
@@ -63,9 +63,9 @@ public class ChnlProviderPixelScoreFeature extends ChnlProviderOne {
 	// END BEAN PROPERTIES
 	
 	@Override
-	public Chnl createFromChnl(Chnl chnl) throws CreateException {
+	public Channel createFromChnl(Channel chnl) throws CreateException {
 		
-		List<Chnl> listAdditional = additionalChnls( chnl.getDimensions() );
+		List<Channel> listAdditional = additionalChnls( chnl.getDimensions() );
 		
 		try {
 			pixelScore.init(
@@ -93,7 +93,7 @@ public class ChnlProviderPixelScoreFeature extends ChnlProviderOne {
 	
 	private static void calcScoresIntoVoxelBox(
 		VoxelBoxWrapper vb,
-		List<Chnl> listAdditional,
+		List<Channel> listAdditional,
 		PixelScore pixelScore
 	) throws FeatureCalcException {
 		
@@ -105,7 +105,7 @@ public class ChnlProviderPixelScoreFeature extends ChnlProviderOne {
 			VoxelBuffer<?> bb = vb.any().getPixelsForPlane(z);
 			
 			for( int i=0; i<listAdditional.size(); i++) {
-				Chnl additional = listAdditional.get(i);
+				Channel additional = listAdditional.get(i);
 				arrByteBuffer[i] = additional.getVoxelBox().asByte().getPixelsForPlane(z).buffer();
 			}
 			
@@ -142,10 +142,10 @@ public class ChnlProviderPixelScoreFeature extends ChnlProviderOne {
 		return out;
 	}
 
-	private List<Chnl> additionalChnls( ImageDim dim ) throws CreateException {
-		List<Chnl> listAdditional = new ArrayList<>();
+	private List<Channel> additionalChnls( ImageDim dim ) throws CreateException {
+		List<Channel> listAdditional = new ArrayList<>();
 		for( ChnlProvider cp : listAdditionalChnlProviders ) {
-			Chnl chnlAdditional = cp.create();
+			Channel chnlAdditional = cp.create();
 			
 			if (!chnlAdditional.getDimensions().equals(dim)) {
 				throw new CreateException("Dimensions of additional channel are not equal to main channel");

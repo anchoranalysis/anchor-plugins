@@ -41,7 +41,7 @@ import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.feature.bean.pixelwise.PixelScore;
 import org.anchoranalysis.image.histogram.Histogram;
 import org.anchoranalysis.image.histogram.HistogramFactory;
-import org.anchoranalysis.image.objmask.ObjMask;
+import org.anchoranalysis.image.objectmask.ObjectMask;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.anchoranalysis.image.voxel.box.VoxelBoxList;
 import org.anchoranalysis.image.voxel.box.VoxelBoxWrapper;
@@ -63,7 +63,7 @@ public class CreateVoxelBoxFromPixelwiseFeatureWithMask {
 	}
 	
 	// objMask can be null
-	public VoxelBox<ByteBuffer> createVoxelBoxFromPixelScore( PixelScore pixelScore, ObjMask objMask ) throws CreateException {
+	public VoxelBox<ByteBuffer> createVoxelBoxFromPixelScore( PixelScore pixelScore, ObjectMask objMask ) throws CreateException {
 	
 		// Sets up the Feature
 		try {
@@ -87,7 +87,7 @@ public class CreateVoxelBoxFromPixelwiseFeatureWithMask {
 	}
 	
 	/** Initializes the pixel-score */
-	private void init( PixelScore pixelScore, ObjMask objMask ) throws InitException {
+	private void init( PixelScore pixelScore, ObjectMask objMask ) throws InitException {
 
 		pixelScore.init(
 			createHistograms(objMask),
@@ -95,7 +95,7 @@ public class CreateVoxelBoxFromPixelwiseFeatureWithMask {
 		);
 	}
 	
-	private List<Histogram> createHistograms(ObjMask mask) {
+	private List<Histogram> createHistograms(ObjectMask mask) {
 		List<Histogram> out = new ArrayList<>();
 
 		for( VoxelBoxWrapper voxelBox : listVoxelBox) {
@@ -135,7 +135,7 @@ public class CreateVoxelBoxFromPixelwiseFeatureWithMask {
 		}
 	}
 
-	private void setPixelsWithMask( VoxelBox<ByteBuffer> vbOut, ObjMask objMask, PixelScore pixelScore ) throws FeatureCalcException, InitException {
+	private void setPixelsWithMask( VoxelBox<ByteBuffer> vbOut, ObjectMask objMask, PixelScore pixelScore ) throws FeatureCalcException, InitException {
 		
 		byte maskOn = objMask.getBinaryValuesByte().getOnByte();
 		Extent e = vbOut.extent();

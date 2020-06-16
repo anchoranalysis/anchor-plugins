@@ -30,9 +30,9 @@ import java.nio.ByteBuffer;
 
 import org.anchoranalysis.core.geometry.ReadableTuple3i;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.image.chnl.Chnl;
+import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.extent.BoundingBox;
-import org.anchoranalysis.image.objmask.ObjMask;
+import org.anchoranalysis.image.objectmask.ObjectMask;
 import org.anchoranalysis.image.voxel.box.VoxelBoxWrapper;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 
@@ -40,11 +40,11 @@ public class IntensityMeanCalculator {
 
 	private IntensityMeanCalculator() {}
 	
-	public static double calcMeanIntensityObjMask( Chnl chnl, ObjMask om ) throws FeatureCalcException {
+	public static double calcMeanIntensityObjMask( Channel chnl, ObjectMask om ) throws FeatureCalcException {
 		return calcMeanIntensityObjMask(chnl, om, false);
 	}
 	
-	public static double calcMeanIntensityObjMask( Chnl chnl, ObjMask om, boolean excludeZero ) throws FeatureCalcException {
+	public static double calcMeanIntensityObjMask( Channel chnl, ObjectMask om, boolean excludeZero ) throws FeatureCalcException {
 		
 		if (!chnl.getDimensions().getExtnt().contains(om.getBoundingBox())) {
 			throw new FeatureCalcException(

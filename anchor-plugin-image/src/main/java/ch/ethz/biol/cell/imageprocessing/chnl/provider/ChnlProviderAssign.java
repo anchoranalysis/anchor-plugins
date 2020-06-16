@@ -31,10 +31,10 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.bean.provider.ChnlProvider;
 import org.anchoranalysis.image.binary.BinaryChnl;
-import org.anchoranalysis.image.chnl.Chnl;
+import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.extent.BoundingBox;
-import org.anchoranalysis.image.objmask.ObjMask;
-import org.anchoranalysis.image.objmask.factory.CreateFromEntireChnlFactory;
+import org.anchoranalysis.image.objectmask.ObjectMask;
+import org.anchoranalysis.image.objectmask.factory.CreateFromEntireChnlFactory;
 
 /**
  * Copies the pixels from chnlAssignFrom to chnl (possibly masking)
@@ -52,7 +52,7 @@ public class ChnlProviderAssign extends ChnlProviderOneMask {
 	// END BEAN PROPERTIES
 	
 	@Override
-	protected Chnl createFromMaskedChnl(Chnl chnlSrc, BinaryChnl binaryImgChnl) throws CreateException {
+	protected Channel createFromMaskedChnl(Channel chnlSrc, BinaryChnl binaryImgChnl) throws CreateException {
 				
 		assign(
 			chnlSrc,
@@ -63,9 +63,9 @@ public class ChnlProviderAssign extends ChnlProviderOneMask {
 		return chnlSrc;
 	}
 	
-	private void assign( Chnl chnlSrc, Chnl chnlAssignFrom, BinaryChnl mask) throws CreateException {
+	private void assign( Channel chnlSrc, Channel chnlAssignFrom, BinaryChnl mask) throws CreateException {
 		
-		ObjMask om = CreateFromEntireChnlFactory.createObjMask(mask);
+		ObjectMask om = CreateFromEntireChnlFactory.createObjMask(mask);
 		BoundingBox bbox = new BoundingBox( chnlSrc.getDimensions().getExtnt() );
 		
 		chnlAssignFrom.getVoxelBox().asByte().copyPixelsToCheckMask(

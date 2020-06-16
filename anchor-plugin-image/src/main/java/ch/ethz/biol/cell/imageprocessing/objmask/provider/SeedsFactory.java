@@ -33,18 +33,18 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.geometry.ReadableTuple3i;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.ImageDim;
-import org.anchoranalysis.image.objmask.ObjMask;
-import org.anchoranalysis.image.objmask.ObjMaskCollection;
+import org.anchoranalysis.image.objectmask.ObjectMask;
+import org.anchoranalysis.image.objectmask.ObjectMaskCollection;
 import org.anchoranalysis.image.seed.SeedCollection;
 import org.anchoranalysis.image.seed.SeedObjMask;
 
 class SeedsFactory {
 	
-	public static SeedCollection createSeedsWithoutMask( ObjMaskCollection seeds ) {
+	public static SeedCollection createSeedsWithoutMask( ObjectMaskCollection seeds ) {
 		// We create a collection of seeds localised appropriately
 		// NB: we simply change the object seeds, as it seemingly won't be used again!!!
 		SeedCollection seedsObj = new SeedCollection();
-		for( ObjMask om : seeds ) {
+		for( ObjectMask om : seeds ) {
 			seedsObj.add(
 				createSeed(om)
 			);
@@ -54,15 +54,15 @@ class SeedsFactory {
 	}
 	
 	public static SeedCollection createSeedsWithMask(
-		ObjMaskCollection seeds,
-		ObjMask containingMask,
+		ObjectMaskCollection seeds,
+		ObjectMask containingMask,
 		ReadableTuple3i subtractFromCrnrMin,
 		ImageDim dim
 	) throws CreateException {
 		// We create a collection of seeds localised appropriately
 		// NB: we simply change the object seeds, as it seemingly won't be used again!!!
 		SeedCollection seedsObj = new SeedCollection();
-		for( ObjMask om : seeds ) {
+		for( ObjectMask om : seeds ) {
 			seedsObj.add(
 				createSeedWithinMask(
 					om,
@@ -79,19 +79,19 @@ class SeedsFactory {
 		return seedsObj;
 	}
 	
-	private static SeedObjMask createSeed( ObjMask om ) {
+	private static SeedObjMask createSeed( ObjectMask om ) {
 		return new SeedObjMask(
 			om.duplicate()
 		);
 	}
 	
 	private static SeedObjMask createSeedWithinMask(
-		ObjMask om,
+		ObjectMask om,
 		BoundingBox containingBBox,
 		ReadableTuple3i subtractFromCrnrMin,
 		ImageDim dim
 	) throws CreateException {
-		ObjMask omSeedDup = om.duplicate();
+		ObjectMask omSeedDup = om.duplicate();
 		omSeedDup.shiftBackBy(subtractFromCrnrMin);
 		
 		// If a seed object is partially located outside an object, the above line might fail, so we should test

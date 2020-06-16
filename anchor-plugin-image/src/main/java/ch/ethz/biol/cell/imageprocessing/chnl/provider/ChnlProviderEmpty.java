@@ -30,8 +30,8 @@ package ch.ethz.biol.cell.imageprocessing.chnl.provider;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.bean.provider.ChnlProvider;
-import org.anchoranalysis.image.chnl.Chnl;
-import org.anchoranalysis.image.chnl.factory.ChnlFactory;
+import org.anchoranalysis.image.channel.Channel;
+import org.anchoranalysis.image.channel.factory.ChannelFactory;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.extent.ImageRes;
@@ -51,12 +51,12 @@ public class ChnlProviderEmpty extends ChnlProvider {
 	// END BEAN PROPERTIES
 
 	@Override
-	public Chnl create() throws CreateException {
+	public Channel create() throws CreateException {
 		ImageDim dim = new ImageDim(
 			new Extent(sx,sy,sz),
 			new ImageRes()
 		); 
-		return ChnlFactory.instance().createEmptyInitialised( dim, VoxelDataTypeUnsignedByte.instance );
+		return ChannelFactory.instance().createEmptyInitialised( dim, VoxelDataTypeUnsignedByte.instance );
 	}
 
 	public int getSx() {

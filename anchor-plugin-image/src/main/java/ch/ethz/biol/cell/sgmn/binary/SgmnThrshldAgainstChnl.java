@@ -38,9 +38,9 @@ import org.anchoranalysis.image.bean.sgmn.binary.BinarySgmnParameters;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelBoxByte;
-import org.anchoranalysis.image.chnl.Chnl;
+import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.extent.Extent;
-import org.anchoranalysis.image.objmask.ObjMask;
+import org.anchoranalysis.image.objectmask.ObjectMask;
 import org.anchoranalysis.image.sgmn.SgmnFailedException;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.anchoranalysis.image.voxel.box.VoxelBoxWrapper;
@@ -63,7 +63,7 @@ public class SgmnThrshldAgainstChnl extends BinarySgmn {
 	public BinaryVoxelBox<ByteBuffer> sgmn(
 		VoxelBoxWrapper voxelBox,
 		BinarySgmnParameters params,
-		Optional<ObjMask> objMask
+		Optional<ObjectMask> objMask
 	) throws SgmnFailedException {
 		
 		VoxelBox<?> voxelBoxIn = voxelBox.any();
@@ -81,7 +81,7 @@ public class SgmnThrshldAgainstChnl extends BinarySgmn {
 		return new BinaryVoxelBoxByte( voxelBoxOut, bvb.createInt() );
 	}
 	
-	private SliceThresholder createThresholder(Optional<ObjMask> objMask, BinaryValuesByte bvb) {
+	private SliceThresholder createThresholder(Optional<ObjectMask> objMask, BinaryValuesByte bvb) {
 		return objMask.map( om -> (SliceThresholder) new SliceThresholderMask(clearOutsideMask, om, bvb)).orElseGet( ()->
 			new SliceThresholderWithoutMask(bvb)
 		);
@@ -89,7 +89,7 @@ public class SgmnThrshldAgainstChnl extends BinarySgmn {
 	
 	private VoxelBox<?> createThresholdedVoxelBox(Extent voxelBoxExtent) throws SgmnFailedException {
 		
-		Chnl threshold;
+		Channel threshold;
 		try {
 			threshold = chnlThreshold.create();
 		} catch (CreateException e) {

@@ -27,8 +27,8 @@ package org.anchoranalysis.test.feature.plugins.objs;
  */
 
 import org.anchoranalysis.core.geometry.Point2i;
-import org.anchoranalysis.image.objmask.ObjMask;
-import org.anchoranalysis.image.objmask.ObjMaskCollection;
+import org.anchoranalysis.image.objectmask.ObjectMask;
+import org.anchoranalysis.image.objectmask.ObjectMaskCollection;
 
 public class IntersectingCircleObjsFixture {
 
@@ -45,11 +45,11 @@ public class IntersectingCircleObjsFixture {
 	 *  @param numNotIntersecting the number of circles that do not intersect that should be produced
 	 *  @param boolean sameSize iff TRUE all circles have the same radius (INITIAL_RAIDUS), otherwise the radius gradually increments
 	 * */
-	public static ObjMaskCollection generateIntersectingObjs( int numIntersecting, int numNotIntersecting, boolean sameSize ) {
+	public static ObjectMaskCollection generateIntersectingObjs( int numIntersecting, int numNotIntersecting, boolean sameSize ) {
 	
 		int radius = INITIAL_RADIUS;
 		
-		ObjMaskCollection out = new ObjMaskCollection();
+		ObjectMaskCollection out = new ObjectMaskCollection();
 	
 		Point2i center = new Point2i( INITIAL_MARGIN + radius, INITIAL_MARGIN + radius);
 
@@ -83,8 +83,8 @@ public class IntersectingCircleObjsFixture {
 		return out;
 	}
 	
-	private static ObjMask generateCircleAndShift(Point2i center, int radius, double factor) {
-		ObjMask om = CircleObjMaskFixture.circleAt(center, radius);
+	private static ObjectMask generateCircleAndShift(Point2i center, int radius, double factor) {
+		ObjectMask om = CircleObjMaskFixture.circleAt(center, radius);
 		shift(center, radius, factor);
 		return om;
 	}

@@ -29,8 +29,8 @@ package ch.ethz.biol.cell.imageprocessing.objmask.provider;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.image.objmask.ObjMask;
-import org.anchoranalysis.image.objmask.ObjMaskCollection;
+import org.anchoranalysis.image.objectmask.ObjectMask;
+import org.anchoranalysis.image.objectmask.ObjectMaskCollection;
 
 /**
  * Returns the only the objects from objMaskProvider that intersect
@@ -47,13 +47,13 @@ public class ObjMaskProviderIntersectsWith extends ObjMaskProviderContainer {
 	// END BEAN PROPERTIES
 	
 	@Override
-	public ObjMaskCollection createFromObjs(ObjMaskCollection objsCollection) throws CreateException {
+	public ObjectMaskCollection createFromObjs(ObjectMaskCollection objsCollection) throws CreateException {
 
-		ObjMaskCollection objsCollectionContainer = containerRequired();
+		ObjectMaskCollection objsCollectionContainer = containerRequired();
 		
-		ObjMaskCollection out = new ObjMaskCollection();
+		ObjectMaskCollection out = new ObjectMaskCollection();
 		
-		for( ObjMask om : objsCollection ) {
+		for( ObjectMask om : objsCollection ) {
 			
 			boolean intersection = doesObjIntersect(om,objsCollectionContainer);
 			
@@ -71,9 +71,9 @@ public class ObjMaskProviderIntersectsWith extends ObjMaskProviderContainer {
 		return out;
 	}
 	
-	private static boolean doesObjIntersect( ObjMask om, ObjMaskCollection container ) {
+	private static boolean doesObjIntersect( ObjectMask om, ObjectMaskCollection container ) {
 		
-		for( ObjMask omCompare : container ) {
+		for( ObjectMask omCompare : container ) {
 			if(om.hasIntersectingPixels(omCompare)) {
 				return true;
 			}

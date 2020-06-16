@@ -33,7 +33,7 @@ import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
 
 import org.anchoranalysis.feature.cache.calculation.FeatureCalculation;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.image.chnl.Chnl;
+import org.anchoranalysis.image.channel.Channel;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
@@ -60,7 +60,7 @@ public class OverlapCalculationMaskGlobal extends FeatureCalculation<Double,Feat
 		assert( mark1 != null );
 		assert( mark2 != null );
 		
-		Chnl chnl = input.getNrgStackRequired().getNrgStack().getChnl(nrgIndex);
+		Channel chnl = input.getNrgStackRequired().getNrgStack().getChnl(nrgIndex);
 		
 		return OverlapUtilities.overlapWithMaskGlobal(
 			mark1,

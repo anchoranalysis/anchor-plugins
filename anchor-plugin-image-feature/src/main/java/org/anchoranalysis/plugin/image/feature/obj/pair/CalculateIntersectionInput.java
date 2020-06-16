@@ -31,21 +31,21 @@ import java.util.Optional;
 import org.anchoranalysis.feature.cache.calculation.ResolvedCalculation;
 import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
 import org.anchoranalysis.image.feature.objmask.pair.FeatureInputPairObjs;
-import org.anchoranalysis.image.objmask.ObjMask;
+import org.anchoranalysis.image.objectmask.ObjectMask;
 
 public class CalculateIntersectionInput extends CalculateInputFromDelegateOption<
 	FeatureInputSingleObj,
 	FeatureInputPairObjs,
-	Optional<ObjMask>
+	Optional<ObjectMask>
 > {
-	public CalculateIntersectionInput(ResolvedCalculation<Optional<ObjMask>, FeatureInputPairObjs> ccIntersection) {
+	public CalculateIntersectionInput(ResolvedCalculation<Optional<ObjectMask>, FeatureInputPairObjs> ccIntersection) {
 		super(ccIntersection);
 	}
 
 	@Override
 	protected Optional<FeatureInputSingleObj> deriveFromDelegate(
 		FeatureInputPairObjs input,
-		Optional<ObjMask> delegate
+		Optional<ObjectMask> delegate
 	) {
 		if (!delegate.isPresent()) {
 			return Optional.empty();

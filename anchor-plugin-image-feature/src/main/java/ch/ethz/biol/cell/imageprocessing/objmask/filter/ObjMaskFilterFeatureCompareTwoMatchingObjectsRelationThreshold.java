@@ -42,8 +42,8 @@ import org.anchoranalysis.image.bean.objmask.match.ObjMaskMatcher;
 import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.feature.bean.evaluator.FeatureEvaluator;
 import org.anchoranalysis.image.feature.objmask.pair.FeatureInputPairObjs;
-import org.anchoranalysis.image.objmask.ObjMask;
-import org.anchoranalysis.image.objmask.ObjMaskCollection;
+import org.anchoranalysis.image.objectmask.ObjectMask;
+import org.anchoranalysis.image.objectmask.ObjectMaskCollection;
 import org.anchoranalysis.image.objmask.match.ObjWithMatches;
 
 // Evaluates a feature on the Source Object and exactly one Object that it matches
@@ -78,7 +78,7 @@ public class ObjMaskFilterFeatureCompareTwoMatchingObjectsRelationThreshold exte
 	}
 
 	@Override
-	public void filter(ObjMaskCollection objs, Optional<ImageDim> dim, Optional<ObjMaskCollection> objsRejected)
+	public void filter(ObjectMaskCollection objs, Optional<ImageDim> dim, Optional<ObjectMaskCollection> objsRejected)
 			throws OperationFailedException {
 
 		List<ObjWithMatches> matchList1 = objMaskMatcher1.findMatch(objs);
@@ -94,14 +94,14 @@ public class ObjMaskFilterFeatureCompareTwoMatchingObjectsRelationThreshold exte
 		try {
 			// Our results order should be preserved in the objMaskMatcher
 			
-			List<ObjMask> listToRemove = new ArrayList<>();
+			List<ObjectMask> listToRemove = new ArrayList<>();
 			
 			for( int i=0; i<objs.size(); i++ ) {
 				
 				ObjWithMatches objWithMatches1 = matchList1.get(i);  
 				
-				ObjMask match1 = objWithMatches1.getMatches().get(0);
-				ObjMask match2 = matchList2.get(i).getMatches().get(0);
+				ObjectMask match1 = objWithMatches1.getMatches().get(0);
+				ObjectMask match2 = matchList2.get(i).getMatches().get(0);
 								
 				double featureVal = featureSession.calc(
 					new FeatureInputPairObjs(match1, match2)
@@ -117,7 +117,7 @@ public class ObjMaskFilterFeatureCompareTwoMatchingObjectsRelationThreshold exte
 			}
 			
 			
-			for( ObjMask om : listToRemove ) {
+			for( ObjectMask om : listToRemove ) {
 				objs.remove(om);	
 			}
 			

@@ -33,20 +33,20 @@ import java.util.Optional;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.bean.objmask.filter.ObjMaskFilter;
 import org.anchoranalysis.image.extent.ImageDim;
-import org.anchoranalysis.image.objmask.ObjMask;
-import org.anchoranalysis.image.objmask.ObjMaskCollection;
+import org.anchoranalysis.image.objectmask.ObjectMask;
+import org.anchoranalysis.image.objectmask.ObjectMaskCollection;
 
 public abstract class ObjMaskFilterByObject extends ObjMaskFilter {
 
 	@Override
-	public void filter(ObjMaskCollection objs, Optional<ImageDim> dim, Optional<ObjMaskCollection> objsRejected) throws OperationFailedException {
+	public void filter(ObjectMaskCollection objs, Optional<ImageDim> dim, Optional<ObjectMaskCollection> objsRejected) throws OperationFailedException {
 
 		start();
 		
-		Iterator<ObjMask> itr=objs.iterator();
+		Iterator<ObjectMask> itr=objs.iterator();
 		while( itr.hasNext() ) {
 			
-			ObjMask om = itr.next();
+			ObjectMask om = itr.next();
 			if (!match(om,dim)) {
 				itr.remove();
 				
@@ -61,7 +61,7 @@ public abstract class ObjMaskFilterByObject extends ObjMaskFilter {
 	
 	protected abstract void start() throws OperationFailedException;
 	
-	protected abstract boolean match( ObjMask om, Optional<ImageDim> dim ) throws OperationFailedException;
+	protected abstract boolean match( ObjectMask om, Optional<ImageDim> dim ) throws OperationFailedException;
 	
 	protected abstract void end() throws OperationFailedException;
 

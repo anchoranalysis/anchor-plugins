@@ -36,13 +36,13 @@ import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedShort;
  * @author FEEHANO
  *
  */
-public class ConsistentChnlChecker {
+public class ConsistentChannelChecker {
 	
 	private long maxValue = 0;	// Unset
 	private VoxelDataType chnlType;
 	
 	/** Checks that a channel has the same type (max value) as the others */
-	public void checkChnlType( VoxelDataType chnlType ) throws SetOperationFailedException {
+	public void checkChannelType( VoxelDataType chnlType ) throws SetOperationFailedException {
 		long maxValueChnl = chnlType.maxValue();
 		if( !isMaxValueSet() ) {
 			setMaxValue(maxValueChnl);

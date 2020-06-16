@@ -6,9 +6,9 @@ import java.util.Optional;
 
 import org.anchoranalysis.image.binary.BinaryChnl;
 import org.anchoranalysis.image.binary.values.BinaryValues;
-import org.anchoranalysis.image.chnl.Chnl;
-import org.anchoranalysis.image.objmask.ObjMask;
-import org.anchoranalysis.image.objmask.ObjMaskCollection;
+import org.anchoranalysis.image.channel.Channel;
+import org.anchoranalysis.image.objectmask.ObjectMask;
+import org.anchoranalysis.image.objectmask.ObjectMaskCollection;
 import org.anchoranalysis.image.sgmn.SgmnFailedException;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.test.TestDataLoadException;
@@ -47,30 +47,30 @@ public class ObjMaskSgmnWatershedYeongTest {
 	private void sgmn( String pathObjsExpected, Optional<String> pathMask ) throws SgmnFailedException, TestDataLoadException, OutputWriteFailedException {
 		ObjMaskSgmnWatershedYeong sgmn = new ObjMaskSgmnWatershedYeong();
 		
-		Optional<ObjMask> mask = pathMask.map( path ->
+		Optional<ObjectMask> mask = pathMask.map( path ->
 			mask(path)
 		); 
 		
-		ObjMaskCollection objsResult = sgmn.sgmn(
+		ObjectMaskCollection objsResult = sgmn.sgmn(
 			chnl(PATH_CHNL_BLURRED),
 			mask,
 			Optional.empty()
 		);	
 					
-		ObjMaskCollection objsExpected = loader.openObjsFromTestPath(pathObjsExpected);
+		ObjectMaskCollection objsExpected = loader.openObjsFromTestPath(pathObjsExpected);
 		
 		assertTrue( objsExpected.equalsDeep(objsResult) );
 	}
 	
-	private ObjMask mask(String path) {
+	private ObjectMask mask(String path) {
 		BinaryChnl chnl = new BinaryChnl(
 			chnl(PATH_MASK),
 			BinaryValues.getDefault()
 		);
-		return new ObjMask(chnl.binaryVoxelBox());
+		return new ObjectMask(chnl.binaryVoxelBox());
 	}
 	
-	private Chnl chnl(String path) {
+	private Channel chnl(String path) {
 		return loader.openChnlFromTestPath(path);
 	}
 }

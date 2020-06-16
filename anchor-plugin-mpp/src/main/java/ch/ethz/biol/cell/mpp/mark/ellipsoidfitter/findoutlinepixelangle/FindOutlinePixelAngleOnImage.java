@@ -39,7 +39,7 @@ import org.anchoranalysis.image.bean.provider.BinaryChnlProvider;
 import org.anchoranalysis.image.bean.unitvalue.distance.UnitValueDistance;
 import org.anchoranalysis.image.binary.BinaryChnl;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
-import org.anchoranalysis.image.chnl.Chnl;
+import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.orientation.Orientation;
 import org.anchoranalysis.math.rotation.RotationMatrix;
@@ -56,7 +56,7 @@ public class FindOutlinePixelAngleOnImage extends FindOutlinePixelAngle {
 	// END BEANS
 	
 	private BinaryChnl binaryImage = null;
-	private Chnl chnl;
+	private Channel chnl;
 	
 	public FindOutlinePixelAngleOnImage() {
 	}

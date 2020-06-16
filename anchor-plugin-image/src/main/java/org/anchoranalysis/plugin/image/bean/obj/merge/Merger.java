@@ -35,6 +35,7 @@ import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.core.geometry.Point3i;
+import org.anchoranalysis.core.geometry.PointConverter;
 import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.image.binary.values.BinaryValues;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
@@ -42,9 +43,9 @@ import org.anchoranalysis.image.binary.voxel.BinaryVoxelBoxByte;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.extent.ImageRes;
-import org.anchoranalysis.image.objmask.ObjMask;
-import org.anchoranalysis.image.objmask.ObjMaskCollection;
-import org.anchoranalysis.image.objmask.ops.ObjMaskMerger;
+import org.anchoranalysis.image.objectmask.ObjectMask;
+import org.anchoranalysis.image.objectmask.ObjectMaskCollection;
+import org.anchoranalysis.image.objectmask.ops.ObjMaskMerger;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.anchoranalysis.image.voxel.box.factory.VoxelBoxFactory;
 import org.anchoranalysis.plugin.image.obj.merge.condition.AfterCondition;
@@ -99,7 +100,7 @@ class Merger {
 	 * @param objs the objects to merge
 	 * @throws OperationFailedException
 	 */
-	public ObjMaskCollection tryMerge( ObjMaskCollection objs ) throws OperationFailedException {
+	public ObjectMaskCollection tryMerge( ObjectMaskCollection objs ) throws OperationFailedException {
 		
 		List<MergeParams> stack = new ArrayList<>();
 		MergeParams mergeParams = new MergeParams(0,0);
@@ -122,7 +123,7 @@ class Merger {
 	 * @param stack the entire list of future parameters to also be considered
 	 * @throws OperationFailedException
 	 */
-	private void tryMergeOnIndices( ObjMaskCollection objs, MergeParams mergeParams, List<MergeParams> stack ) throws OperationFailedException {
+	private void tryMergeOnIndices( ObjectMaskCollection objs, MergeParams mergeParams, List<MergeParams> stack ) throws OperationFailedException {
 		
 		try {
 			afterCondition.init(logger);
@@ -137,10 +138,10 @@ class Merger {
 					continue;
 				}
 				
-				ObjMask omSrc = objs.get(i);
-				ObjMask omDest = objs.get(j);
+				ObjectMask omSrc = objs.get(i);
+				ObjectMask omDest = objs.get(j);
 				
-				Optional<ObjMask> omMerge = tryMerge( omSrc, omDest );
+				Optional<ObjectMask> omMerge = tryMerge( omSrc, omDest );
 				if (!omMerge.isPresent()) {
 					continue;
 				}
@@ -163,18 +164,19 @@ class Merger {
 		}
 	}
 
-	private Optional<ObjMask> tryMerge( ObjMask omSrc, ObjMask omDest ) throws OperationFailedException {
+	private Optional<ObjectMask> tryMerge( ObjectMask omSrc, ObjectMask omDest ) throws OperationFailedException {
 		
 		if(!beforeCondition.accept(omSrc, omDest, res)) {
 			return Optional.empty();
 		}
 		
 		// Do merge
-		ObjMask omMerge;
+		ObjectMask omMerge;
 		if (replaceWithMidpoint) {
-			Point3d pntNew = Point3d.midPointBetween( omSrc.getBoundingBox().midpoint(), omDest.getBoundingBox().midpoint() );
-			omMerge = createSinglePixelObjMask( new Point3i( pntNew ) );
-			
+			Point3i pntNew = PointConverter.intFromDouble(
+				Point3d.midPointBetween( omSrc.getBoundingBox().midpoint(), omDest.getBoundingBox().midpoint() )
+			);
+			omMerge = createSinglePixelObjMask(pntNew);
 		} else {
 			omMerge = ObjMaskMerger.merge(omSrc, omDest );
 		}
@@ -186,13 +188,13 @@ class Merger {
 		return Optional.of(omMerge);
 	}
 		
-	private static ObjMask createSinglePixelObjMask( Point3i pnt ) {
+	private static ObjectMask createSinglePixelObjMask( Point3i pnt ) {
 		Extent e = new Extent(1,1,1);
 		VoxelBox<ByteBuffer> vb = VoxelBoxFactory.instance().getByte().create( e );
 		BinaryVoxelBox<ByteBuffer> bvb = new BinaryVoxelBoxByte(vb, BinaryValues.getDefault() );
 		bvb.setAllPixelsToOn();
 		BoundingBox bbox = new BoundingBox(pnt, e);
 		
-		return new ObjMask( bbox, bvb );
+		return new ObjectMask( bbox, bvb );
 	}
 }

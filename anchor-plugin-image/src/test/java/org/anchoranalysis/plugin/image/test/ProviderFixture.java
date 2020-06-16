@@ -16,21 +16,21 @@ import org.anchoranalysis.image.bean.provider.BinaryChnlProvider;
 import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
 import org.anchoranalysis.image.binary.BinaryChnl;
 import org.anchoranalysis.image.init.ImageInitParams;
-import org.anchoranalysis.image.objmask.ObjMask;
-import org.anchoranalysis.image.objmask.ObjMaskCollection;
+import org.anchoranalysis.image.objectmask.ObjectMask;
+import org.anchoranalysis.image.objectmask.ObjectMaskCollection;
 import org.anchoranalysis.test.LoggingFixture;
 
 public class ProviderFixture {
 
 	private ProviderFixture() {}
 	
-	public static ObjMaskProvider providerFor(ObjMask obj) {
+	public static ObjMaskProvider providerFor(ObjectMask obj) {
 		return providerFor(
-			new ObjMaskCollection(obj)	
+			new ObjectMaskCollection(obj)	
 		);
 	}
 	
-	public static ObjMaskProvider providerFor(ObjMaskCollection objs) {
+	public static ObjMaskProvider providerFor(ObjectMaskCollection objs) {
 		ObjMaskProvider provider = mock(ObjMaskProvider.class);
 		try {
 			when(provider.create()).thenReturn(objs);

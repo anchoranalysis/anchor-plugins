@@ -88,12 +88,12 @@ public class BinaryChnlProviderBox extends BinaryChnlProviderOne {
 		BinaryValuesByte bvb = vb.getBinaryValues().createByte();
 		
 		Point3i pnt = new Point3i(0,0,0);
-		for( pnt.setZ(0); pnt.getZ()<extent.getZ(); pnt.incrZ() ) {
+		for( pnt.setZ(0); pnt.getZ()<extent.getZ(); pnt.incrementZ() ) {
 			
 			ByteBuffer buf = vb.getPixelsForPlane(pnt.getZ()).buffer();
 			
-			for( pnt.setY(0); pnt.getY()<extent.getY(); pnt.incrY() ) {
-				for( pnt.setX(0); pnt.getX()<extent.getX(); pnt.incrX() ) {
+			for( pnt.setY(0); pnt.getY()<extent.getY(); pnt.incrementY() ) {
+				for( pnt.setX(0); pnt.getX()<extent.getX(); pnt.incrementX() ) {
 				
 					int offset = extent.offset(pnt.getX(), pnt.getY());
 					if (buf.get(offset)==bvb.getOnByte()) {

@@ -31,8 +31,8 @@ import java.nio.ByteBuffer;
 
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.bean.provider.ChnlProviderThree;
-import org.anchoranalysis.image.chnl.Chnl;
-import org.anchoranalysis.image.chnl.factory.ChnlFactory;
+import org.anchoranalysis.image.channel.Channel;
+import org.anchoranalysis.image.channel.factory.ChannelFactory;
 import org.anchoranalysis.image.convert.ByteConverter;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
@@ -40,11 +40,11 @@ import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
 public class ChnlProviderMeanThree extends ChnlProviderThree {
 
 	@Override
-	protected Chnl process(Chnl chnl1, Chnl chnl2, Chnl chnl3) throws CreateException {
+	protected Channel process(Channel chnl1, Channel chnl2, Channel chnl3) throws CreateException {
 
 		checkDims(chnl1, chnl2, chnl3);
 		
-		Chnl chnlOut = ChnlFactory.instance().createEmptyInitialised(
+		Channel chnlOut = ChannelFactory.instance().createEmptyInitialised(
 			chnl1.getDimensions(),
 			VoxelDataTypeUnsignedByte.instance
 		);
@@ -94,7 +94,7 @@ public class ChnlProviderMeanThree extends ChnlProviderThree {
 		}
 	}
 	
-	private void checkDims(Chnl chnl1, Chnl chnl2, Chnl chnl3) throws CreateException {
+	private void checkDims(Channel chnl1, Channel chnl2, Channel chnl3) throws CreateException {
 		
 		if (!chnl1.getDimensions().equals(chnl2.getDimensions())) {
 			throw new CreateException("Dimensions of channels do not match");

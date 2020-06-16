@@ -39,8 +39,8 @@ import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.extent.Extent;
-import org.anchoranalysis.image.objmask.ObjMask;
-import org.anchoranalysis.image.objmask.properties.ObjMaskWithProperties;
+import org.anchoranalysis.image.objectmask.ObjectMask;
+import org.anchoranalysis.image.objectmask.properties.ObjMaskWithProperties;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.anchoranalysis.image.voxel.kernel.ApplyKernel;
 import org.anchoranalysis.image.voxel.kernel.outline.OutlineKernel3;
@@ -62,7 +62,7 @@ public class SurfaceSizeMaskNonZero extends FeatureSingleMemoRegion {
 	@Override
 	public double calc(SessionInput<FeatureInputSingleMemo> input) throws FeatureCalcException {
 
-		ObjMask om = createMask(input.get());
+		ObjectMask om = createMask(input.get());
 		int surfaceSize = estimateSurfaceSize(
 			input.get().getPxlPartMemo(),
 			om
@@ -74,7 +74,7 @@ public class SurfaceSizeMaskNonZero extends FeatureSingleMemoRegion {
 		);
 	}
 	
-	private ObjMask createMask(FeatureInputSingleMemo input) throws FeatureCalcException {
+	private ObjectMask createMask(FeatureInputSingleMemo input) throws FeatureCalcException {
 		ObjMaskWithProperties omWithProps = input.getPxlPartMemo().getMark().calcMask(
 			input.getDimensionsRequired(),
 			regionMap.membershipWithFlagsForIndex(getRegionID()),
@@ -83,7 +83,7 @@ public class SurfaceSizeMaskNonZero extends FeatureSingleMemoRegion {
 		return omWithProps.getMask();
 	}
 
-	private int estimateSurfaceSize(PxlMarkMemo pxlMarkMemo, ObjMask om) throws FeatureCalcException {
+	private int estimateSurfaceSize(PxlMarkMemo pxlMarkMemo, ObjectMask om) throws FeatureCalcException {
 		
 		VoxelBox<ByteBuffer> vbOutline = calcOutline(om, !suppressZ);
 		
@@ -103,7 +103,7 @@ public class SurfaceSizeMaskNonZero extends FeatureSingleMemoRegion {
 		}
 	}
 	
-	private static VoxelBox<ByteBuffer> calcOutline( ObjMask objMask, boolean useZ ) {
+	private static VoxelBox<ByteBuffer> calcOutline( ObjectMask objMask, boolean useZ ) {
 		OutlineKernel3 kernel = new OutlineKernel3( objMask.getBinaryValuesByte(), false, useZ );
 		return ApplyKernel.apply(kernel, objMask.getVoxelBox(), objMask.getBinaryValuesByte() );
 	}

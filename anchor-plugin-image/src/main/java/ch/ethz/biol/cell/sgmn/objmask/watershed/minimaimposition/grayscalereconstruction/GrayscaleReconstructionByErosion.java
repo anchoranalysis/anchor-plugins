@@ -32,11 +32,11 @@ import org.anchoranalysis.bean.AnchorBean;
 
 
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.image.objmask.ObjMask;
+import org.anchoranalysis.image.objectmask.ObjectMask;
 import org.anchoranalysis.image.voxel.box.VoxelBoxWrapper;
 
 public abstract class GrayscaleReconstructionByErosion extends AnchorBean<GrayscaleReconstructionByErosion> {
 	
 	// Reconstruction of maskImg from markerImg    mask<=markerImg  (but only inside containingMask)
-	public abstract VoxelBoxWrapper reconstruction( VoxelBoxWrapper mask, VoxelBoxWrapper marker, Optional<ObjMask> containingMask ) throws OperationFailedException;
+	public abstract VoxelBoxWrapper reconstruction( VoxelBoxWrapper mask, VoxelBoxWrapper marker, Optional<ObjectMask> containingMask ) throws OperationFailedException;
 }

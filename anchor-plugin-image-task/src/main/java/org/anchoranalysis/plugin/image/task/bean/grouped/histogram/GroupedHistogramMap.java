@@ -6,7 +6,7 @@ import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.histogram.Histogram;
 import org.anchoranalysis.image.histogram.HistogramArray;
 import org.anchoranalysis.io.output.bound.BoundIOContext;
-import org.anchoranalysis.plugin.image.task.grouped.ConsistentChnlChecker;
+import org.anchoranalysis.plugin.image.task.grouped.ConsistentChannelChecker;
 import org.anchoranalysis.plugin.image.task.grouped.GroupMapByName;
 
 class GroupedHistogramMap extends GroupMapByName<Histogram,Histogram> {
@@ -30,7 +30,7 @@ class GroupedHistogramMap extends GroupMapByName<Histogram,Histogram> {
 	protected void writeGroupOutputInSubdirectory(
 		String outputName,
 		Histogram agg,
-		ConsistentChnlChecker chnlChecker,
+		ConsistentChannelChecker chnlChecker,
 		BoundIOContext context
 	) throws IOException {
 		writer.writeHistogramToFile(

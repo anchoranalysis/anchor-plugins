@@ -35,7 +35,7 @@ import java.util.Optional;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
-import org.anchoranalysis.image.objmask.ObjMask;
+import org.anchoranalysis.image.objectmask.ObjectMask;
 import org.anchoranalysis.image.voxel.iterator.IterateVoxels;
 import org.anchoranalysis.image.voxel.iterator.changed.ProcessChangedPointAbsoluteMasked;
 import org.anchoranalysis.image.voxel.iterator.changed.ProcessVoxelNeighbour;
@@ -43,7 +43,6 @@ import org.anchoranalysis.image.voxel.iterator.changed.ProcessVoxelNeighbourFact
 import org.anchoranalysis.image.voxel.nghb.BigNghb;
 import org.anchoranalysis.image.voxel.nghb.Nghb;
 
-import ch.ethz.biol.cell.sgmn.objmask.ObjMaskChnlUtilities;
 import ch.ethz.biol.cell.sgmn.objmask.watershed.encoding.EncodedVoxelBox;
 
 class MakePlateauLowerComplete {
@@ -151,7 +150,7 @@ class MakePlateauLowerComplete {
 		
 		try {
 			// We create an objMask from the list of points
-			ObjMask om = ObjMaskChnlUtilities.createObjMaskFromPoints( plateau.getPtsInner() );
+			ObjectMask om = CreateObjectsFromPoints.create( plateau.getPtsInner() );
 			Nghb nghb = new BigNghb();
 
 			ProcessVoxelNeighbour<List<Point3i>> process = ProcessVoxelNeighbourFactory.withinMask(

@@ -40,7 +40,7 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.bean.provider.ColorListProvider;
 import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
-import org.anchoranalysis.image.objmask.ObjMaskCollection;
+import org.anchoranalysis.image.objectmask.ObjectMaskCollection;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.io.bean.color.generator.ColorSetGenerator;
 
@@ -63,7 +63,7 @@ public class StackProviderRGBFromObjMask extends StackProviderRGBFromObjMaskBase
 	@Override
 	public Stack create() throws CreateException {
 				
-		ObjMaskCollection objsCollection = objs.create();
+		ObjectMaskCollection objsCollection = objs.create();
 		return createStack(
 			objsCollection,
 			colors(objsCollection.size())

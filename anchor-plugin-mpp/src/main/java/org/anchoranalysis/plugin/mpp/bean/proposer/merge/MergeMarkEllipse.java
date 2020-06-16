@@ -83,7 +83,7 @@ public class MergeMarkEllipse extends MarkMergeProposer {
 	 private static Point3d generateMergedPos( Mark mark1, Mark mark2, double posTolerance, RandomNumberGenerator re, NRGStackWithParams nrgStack ) {
 			
     	Point3d pntNew = new Point3d(mark1.centerPoint());
-    	pntNew.sub( mark2.centerPoint() );
+    	pntNew.subtract( mark2.centerPoint() );
     	
     	// Gives us half way between the marks
     	
@@ -111,7 +111,7 @@ public class MergeMarkEllipse extends MarkMergeProposer {
 
 		// We get the relative vector between them
 		Point3d rel = new Point3d( pntA );
-		rel.sub( pntB );
+		rel.subtract( pntB );
 		
 		// Calculation an angle from this vector
 		return new Orientation2D( Math.atan2( rel.getY(), rel.getX() ) );
