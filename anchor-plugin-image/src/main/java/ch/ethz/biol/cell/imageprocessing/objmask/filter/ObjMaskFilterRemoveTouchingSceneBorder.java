@@ -33,7 +33,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.geometry.ReadableTuple3i;
 import org.anchoranalysis.image.extent.ImageDim;
-import org.anchoranalysis.image.objmask.ObjMask;
+import org.anchoranalysis.image.objectmask.ObjectMask;
 
 public class ObjMaskFilterRemoveTouchingSceneBorder extends ObjMaskFilterByObject {
 
@@ -48,7 +48,7 @@ public class ObjMaskFilterRemoveTouchingSceneBorder extends ObjMaskFilterByObjec
 	}
 
 	@Override
-	protected boolean match(ObjMask om, Optional<ImageDim> dim)
+	protected boolean match(ObjectMask om, Optional<ImageDim> dim)
 			throws OperationFailedException {
 		
 		if (!dim.isPresent()) {

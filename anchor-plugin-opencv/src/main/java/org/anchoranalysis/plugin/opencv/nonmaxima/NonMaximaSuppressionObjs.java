@@ -32,18 +32,18 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 import org.anchoranalysis.image.index.rtree.ObjMaskCollectionRTree;
-import org.anchoranalysis.image.objmask.ObjMask;
-import org.anchoranalysis.image.objmask.ObjMaskOverlap;
-import org.anchoranalysis.image.objmask.ops.ObjMaskMerger;
+import org.anchoranalysis.image.objectmask.ObjectMask;
+import org.anchoranalysis.image.objectmask.OverlapCalculator;
+import org.anchoranalysis.image.objectmask.ops.ObjMaskMerger;
 
 import com.google.common.base.Predicate;
 
-public class NonMaximaSuppressionObjs extends NonMaximaSuppression<ObjMask> {
+public class NonMaximaSuppressionObjs extends NonMaximaSuppression<ObjectMask> {
 	
 	private ObjMaskCollectionRTree rTree;
 	
 	@Override
-	protected void init(Collection<WithConfidence<ObjMask>> allProposals) {
+	protected void init(Collection<WithConfidence<ObjectMask>> allProposals) {
 		// NOTHING TO DO
 		rTree = new ObjMaskCollectionRTree(
 			removeWithConfidence(allProposals)
@@ -51,15 +51,15 @@ public class NonMaximaSuppressionObjs extends NonMaximaSuppression<ObjMask> {
 	}
 	
 	@Override
-	protected double overlapScoreFor(ObjMask item1, ObjMask item2) {
-		ObjMask merged = ObjMaskMerger.merge(item1, item2);
-		return ObjMaskOverlap.calcOverlapRatio(item1, item2, merged);
+	protected double overlapScoreFor(ObjectMask item1, ObjectMask item2) {
+		ObjectMask merged = ObjMaskMerger.merge(item1, item2);
+		return OverlapCalculator.calcOverlapRatio(item1, item2, merged);
 	}
 
 	@Override
-	protected Predicate<ObjMask> possibleOverlappingObjs(ObjMask src, Iterable<WithConfidence<ObjMask>> others) {
+	protected Predicate<ObjectMask> possibleOverlappingObjs(ObjectMask src, Iterable<WithConfidence<ObjectMask>> others) {
 		// All possible other masks as a hash-set
-		Set<ObjMask> possibleOthers = new HashSet<>( rTree.intersectsWith(src).asList() );
+		Set<ObjectMask> possibleOthers = new HashSet<>( rTree.intersectsWith(src).asList() );
 		return objToTest -> possibleOthers.contains(objToTest);
 	}
 

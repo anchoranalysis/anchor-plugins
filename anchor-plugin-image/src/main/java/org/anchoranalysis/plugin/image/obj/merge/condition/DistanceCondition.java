@@ -35,7 +35,7 @@ import org.anchoranalysis.core.log.LogReporter;
 import org.anchoranalysis.image.bean.unitvalue.distance.UnitValueDistance;
 import org.anchoranalysis.image.extent.BoundingBoxDistance;
 import org.anchoranalysis.image.extent.ImageRes;
-import org.anchoranalysis.image.objmask.ObjMask;
+import org.anchoranalysis.image.objectmask.ObjectMask;
 
 public class DistanceCondition implements BeforeCondition {
 
@@ -51,7 +51,7 @@ public class DistanceCondition implements BeforeCondition {
 	}
 
 	@Override
-	public boolean accept(ObjMask omSrc, ObjMask omDest, Optional<ImageRes> res) throws OperationFailedException {
+	public boolean accept(ObjectMask omSrc, ObjectMask omDest, Optional<ImageRes> res) throws OperationFailedException {
 		
 		// We impose a max dist condition if necessary
 		if (maxDist!=null) {
@@ -61,7 +61,7 @@ public class DistanceCondition implements BeforeCondition {
 		}
 	}
 	
-	private boolean isWithinMaxDist( ObjMask omSrc, ObjMask omDest, Optional<ImageRes> res ) throws OperationFailedException {
+	private boolean isWithinMaxDist( ObjectMask omSrc, ObjectMask omDest, Optional<ImageRes> res ) throws OperationFailedException {
 		
 		double dist = BoundingBoxDistance.distance( omSrc.getBoundingBox(), omDest.getBoundingBox(), !suppressZ );
 		

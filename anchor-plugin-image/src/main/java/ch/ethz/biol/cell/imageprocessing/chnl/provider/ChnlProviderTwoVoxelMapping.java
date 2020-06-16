@@ -4,8 +4,8 @@ import java.nio.ByteBuffer;
 
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.bean.provider.ChnlProviderTwo;
-import org.anchoranalysis.image.chnl.Chnl;
-import org.anchoranalysis.image.chnl.factory.ChnlFactory;
+import org.anchoranalysis.image.channel.Channel;
+import org.anchoranalysis.image.channel.factory.ChannelFactory;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
 
@@ -20,9 +20,9 @@ import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
 public abstract class ChnlProviderTwoVoxelMapping extends ChnlProviderTwo {
 
 	@Override
-	protected Chnl process(Chnl chnl1, Chnl chnl2) throws CreateException {
+	protected Channel process(Channel chnl1, Channel chnl2) throws CreateException {
 
-		Chnl chnlOut = ChnlFactory.instance().createEmptyInitialised(
+		Channel chnlOut = ChannelFactory.instance().createEmptyInitialised(
 			chnl1.getDimensions(),
 			VoxelDataTypeUnsignedByte.instance
 		);

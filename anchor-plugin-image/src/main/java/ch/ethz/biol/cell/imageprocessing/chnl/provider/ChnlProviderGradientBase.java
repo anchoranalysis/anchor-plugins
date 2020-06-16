@@ -29,11 +29,11 @@ package ch.ethz.biol.cell.imageprocessing.chnl.provider;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.bean.provider.ChnlProviderOne;
-import org.anchoranalysis.image.chnl.Chnl;
-import org.anchoranalysis.image.chnl.factory.ChnlFactory;
-import org.anchoranalysis.image.stack.region.chnlconverter.ChnlConverter;
-import org.anchoranalysis.image.stack.region.chnlconverter.ChnlConverterToUnsignedByte;
-import org.anchoranalysis.image.stack.region.chnlconverter.ChnlConverterToUnsignedShort;
+import org.anchoranalysis.image.channel.Channel;
+import org.anchoranalysis.image.channel.factory.ChannelFactory;
+import org.anchoranalysis.image.stack.region.chnlconverter.ChannelConverter;
+import org.anchoranalysis.image.stack.region.chnlconverter.ChannelConverterToUnsignedByte;
+import org.anchoranalysis.image.stack.region.chnlconverter.ChannelConverterToUnsignedShort;
 import org.anchoranalysis.image.stack.region.chnlconverter.ConversionPolicy;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeFloat;
 
@@ -55,10 +55,10 @@ public abstract class ChnlProviderGradientBase extends ChnlProviderOne {
 	// END BEAN
 	
 	@Override
-	public Chnl createFromChnl(Chnl chnlIn) throws CreateException {
+	public Channel createFromChnl(Channel chnlIn) throws CreateException {
 		
 		// The gradient is calculated on a float
-		Chnl chnlIntermediate = ChnlFactory.instance().createEmptyInitialised(
+		Channel chnlIntermediate = ChannelFactory.instance().createEmptyInitialised(
 			chnlIn.getDimensions(),
 			VoxelDataTypeFloat.instance
 		);
@@ -78,8 +78,8 @@ public abstract class ChnlProviderGradientBase extends ChnlProviderOne {
 	
 	protected abstract boolean[] createDimensionArr() throws CreateException;
 	
-	private Chnl convertToOutputType( Chnl chnlToConvert ) {
-		ChnlConverter<?> converter = outputShort ? new ChnlConverterToUnsignedShort() : new ChnlConverterToUnsignedByte();
+	private Channel convertToOutputType( Channel chnlToConvert ) {
+		ChannelConverter<?> converter = outputShort ? new ChannelConverterToUnsignedShort() : new ChannelConverterToUnsignedByte();
 		return converter.convert(chnlToConvert, ConversionPolicy.CHANGE_EXISTING_CHANNEL );
 	}
 	

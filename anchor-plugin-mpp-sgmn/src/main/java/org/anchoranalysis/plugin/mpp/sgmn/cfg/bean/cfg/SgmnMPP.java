@@ -51,7 +51,7 @@ import org.anchoranalysis.core.name.store.NamedProviderStore;
 import org.anchoranalysis.core.params.KeyValueParams;
 import org.anchoranalysis.core.random.RandomNumberGeneratorMersenne;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
-import org.anchoranalysis.image.objmask.ObjMaskCollection;
+import org.anchoranalysis.image.objectmask.ObjectMaskCollection;
 import org.anchoranalysis.image.sgmn.SgmnFailedException;
 import org.anchoranalysis.image.stack.DisplayStack;
 import org.anchoranalysis.image.stack.NamedImgStackCollection;
@@ -119,7 +119,7 @@ public class SgmnMPP extends CfgSgmn {
 	@Override
 	public Cfg sgmn(
 		NamedImgStackCollection stackCollection,
-		NamedProvider<ObjMaskCollection> objMaskCollection,
+		NamedProvider<ObjectMaskCollection> objMaskCollection,
 		Optional<KeyValueParams> keyValueParams,
 		BoundIOContext context
 	) throws SgmnFailedException {

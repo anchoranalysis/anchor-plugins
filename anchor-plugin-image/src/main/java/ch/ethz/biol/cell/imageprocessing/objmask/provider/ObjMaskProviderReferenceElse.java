@@ -33,7 +33,7 @@ import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
 import org.anchoranalysis.image.init.ImageInitParams;
-import org.anchoranalysis.image.objmask.ObjMaskCollection;
+import org.anchoranalysis.image.objectmask.ObjectMaskCollection;
 
 // Returns a reference if it exists, or else a different provider
 public class ObjMaskProviderReferenceElse extends ObjMaskProvider {
@@ -46,7 +46,7 @@ public class ObjMaskProviderReferenceElse extends ObjMaskProvider {
 	private ObjMaskProvider objsElse;
 	// END BEAN PROPERTIES
 	
-	private ObjMaskCollection objs;
+	private ObjectMaskCollection objs;
 	
 	@Override
 	public void onInit(ImageInitParams so)
@@ -59,7 +59,7 @@ public class ObjMaskProviderReferenceElse extends ObjMaskProvider {
 	}
 
 	@Override
-	public ObjMaskCollection create() throws CreateException {
+	public ObjectMaskCollection create() throws CreateException {
 		
 		if (objs!=null) {
 			return objs;

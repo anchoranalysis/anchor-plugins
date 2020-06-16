@@ -32,22 +32,22 @@ import org.anchoranalysis.anchor.mpp.regionmap.RegionMapSingleton;
 
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.extent.ImageDim;
-import org.anchoranalysis.image.objmask.ObjMask;
-import org.anchoranalysis.image.objmask.ops.ObjMaskMerger;
+import org.anchoranalysis.image.objectmask.ObjectMask;
+import org.anchoranalysis.image.objectmask.ops.ObjMaskMerger;
 
 class EllipticityCalculatorHelper {
 
-	public static double calc( ObjMask om, Mark mark, ImageDim dim ) {
-		ObjMask omCompare = maskCompare(mark, dim);
+	public static double calc( ObjectMask om, Mark mark, ImageDim dim ) {
+		ObjectMask omCompare = maskCompare(mark, dim);
 		return calc(om, omCompare);
 	}
 	
-	private static double calc( ObjMask om, ObjMask omCompare ) {
-		ObjMask omMerge = ObjMaskMerger.merge(om, omCompare );
+	private static double calc( ObjectMask om, ObjectMask omCompare ) {
+		ObjectMask omMerge = ObjMaskMerger.merge(om, omCompare );
 		return calcWithMerged(om, omCompare, omMerge);
 	}
 	
-	private static double calcWithMerged( ObjMask om, ObjMask omCompare, ObjMask omMerge ) {
+	private static double calcWithMerged( ObjectMask om, ObjectMask omCompare, ObjectMask omMerge ) {
 		int numPixelsCompare = omCompare.numPixels();
 		int numUnion = omMerge.numPixels();
 		
@@ -60,7 +60,7 @@ class EllipticityCalculatorHelper {
 		);
 	}
 		
-	private static ObjMask maskCompare(Mark mark, ImageDim dim) {
+	private static ObjectMask maskCompare(Mark mark, ImageDim dim) {
 		RegionMembershipWithFlags rm = RegionMapSingleton.instance().membershipWithFlagsForIndex(0);
 		assert( rm.getRegionID()==0 );
 		return mark.calcMask(dim, rm, BinaryValuesByte.getDefault() ).getMask();	

@@ -33,7 +33,7 @@ import java.util.Optional;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.progress.ProgressReporter;
-import org.anchoranalysis.image.chnl.Chnl;
+import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.extent.IncorrectImageSizeException;
 import org.anchoranalysis.image.io.RasterIOException;
@@ -189,7 +189,7 @@ public class FlattenAsChnl extends RasterReader {
 		/** Adds all channels from src-stack to dest-stack 
 		 * @throws IncorrectImageSizeException */
 		private static void addStack( Stack src, Stack dest ) throws IncorrectImageSizeException {
-			for( Chnl c: src ) {
+			for( Channel c: src ) {
 				dest.addChnl(c);
 			}
 		}

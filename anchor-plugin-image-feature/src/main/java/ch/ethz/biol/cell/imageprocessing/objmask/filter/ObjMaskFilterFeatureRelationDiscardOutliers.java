@@ -46,8 +46,8 @@ import org.anchoranalysis.image.bean.objmask.filter.ObjMaskFilter;
 import org.anchoranalysis.image.bean.provider.ChnlProvider;
 import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
-import org.anchoranalysis.image.objmask.ObjMask;
-import org.anchoranalysis.image.objmask.ObjMaskCollection;
+import org.anchoranalysis.image.objectmask.ObjectMask;
+import org.anchoranalysis.image.objectmask.ObjectMaskCollection;
 
 import cern.colt.list.DoubleArrayList;
 import cern.jet.stat.Descriptive;
@@ -74,7 +74,7 @@ public class ObjMaskFilterFeatureRelationDiscardOutliers extends ObjMaskFilter {
 	// END BEAN PROPERTIES
 	
 	@Override
-	public void filter(ObjMaskCollection objs, Optional<ImageDim> dim, Optional<ObjMaskCollection> objsRejected)
+	public void filter(ObjectMaskCollection objs, Optional<ImageDim> dim, Optional<ObjectMaskCollection> objsRejected)
 			throws OperationFailedException {
 
 		// Nothing to do if we don't have enough options
@@ -116,7 +116,7 @@ public class ObjMaskFilterFeatureRelationDiscardOutliers extends ObjMaskFilter {
 		// Now we calculate feature values for each object, and a standard deviation
 		DoubleArrayList featureValsSorted = new DoubleArrayList();
 		DoubleArrayList featureValsOriginalOrder = new DoubleArrayList();
-		for( ObjMask om : objs ) {
+		for( ObjectMask om : objs ) {
 			double featureVal;
 			try {
 				featureVal = session.calc(
@@ -142,13 +142,13 @@ public class ObjMaskFilterFeatureRelationDiscardOutliers extends ObjMaskFilter {
 			getLogger().getLogReporter().logFormatted("quantileVal(%f)=%f   minVal=%f", quantile,quantileVal, minVal);
 		}
 			
-		List<ObjMask> listToRemove = new ArrayList<>();
+		List<ObjectMask> listToRemove = new ArrayList<>();
 		for(int i=0; i<objs.size(); i++) {
 			double featureVal = featureValsOriginalOrder.get(i);
 			
 			if(featureVal<minVal) {
 				
-				ObjMask omRemove = objs.get(i);
+				ObjectMask omRemove = objs.get(i);
 				listToRemove.add( omRemove );
 				
 				if (objsRejected.isPresent()) {
@@ -167,7 +167,7 @@ public class ObjMaskFilterFeatureRelationDiscardOutliers extends ObjMaskFilter {
 		}
 		
 		// NOTE This could be expensive if we have a large amount of items in the list, better to use a sorted indexed approach
-		for( ObjMask om : listToRemove) {
+		for( ObjectMask om : listToRemove) {
 			objs.remove(om);
 		}
 	}

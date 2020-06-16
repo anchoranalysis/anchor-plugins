@@ -33,7 +33,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.geometry.Point3i;
-import org.anchoranalysis.image.objmask.ObjMaskCollection;
+import org.anchoranalysis.image.objectmask.ObjectMaskCollection;
 import org.anchoranalysis.image.points.PointRange;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 
@@ -58,8 +58,8 @@ final class BoundingBoxMap {
 		return index;
 	}
 
-	public ObjMaskCollection deriveObjects(	VoxelBox<IntBuffer> matS) throws OperationFailedException {
-		ObjMaskCollection out = new ObjMaskCollection();
+	public ObjectMaskCollection deriveObjects(	VoxelBox<IntBuffer> matS) throws OperationFailedException {
+		ObjectMaskCollection out = new ObjectMaskCollection();
 		for (int i=0; i<list.size(); i++) {
 			
 			PointRange pointRange = list.get(i);

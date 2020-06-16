@@ -35,9 +35,9 @@ import org.anchoranalysis.core.error.friendly.AnchorImpossibleSituationException
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.bean.provider.ChnlProviderOne;
 import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
-import org.anchoranalysis.image.chnl.Chnl;
-import org.anchoranalysis.image.objmask.ObjMask;
-import org.anchoranalysis.image.objmask.ObjMaskCollection;
+import org.anchoranalysis.image.channel.Channel;
+import org.anchoranalysis.image.objectmask.ObjectMask;
+import org.anchoranalysis.image.objectmask.ObjectMaskCollection;
 import org.anchoranalysis.image.objmask.match.ObjWithMatches;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 
@@ -56,12 +56,12 @@ public class ChnlProviderAssignFromIntersectingObjects extends ChnlProviderOne {
 	// END BEAN PROPERTIES
 	
 	@Override
-	public Chnl createFromChnl(Chnl chnl) throws CreateException {
+	public Channel createFromChnl(Channel chnl) throws CreateException {
 		
 		VoxelBox<?> vb = chnl.getVoxelBox().any();
 		
-		ObjMaskCollection objsSrcCollection = objsSource.create();
-		ObjMaskCollection objsTargetCollection = objsTarget.create();
+		ObjectMaskCollection objsSrcCollection = objsSource.create();
+		ObjectMaskCollection objsTargetCollection = objsTarget.create();
 
 		List<ObjWithMatches> matchList = matchIntersectingObjectsSingle( objsSrcCollection, objsTargetCollection );
 		for( ObjWithMatches own : matchList ) {
@@ -76,13 +76,13 @@ public class ChnlProviderAssignFromIntersectingObjects extends ChnlProviderOne {
 	
 	
 	// Matches each object in objsSrc against objsTarget ensuring that it is a one-to-one mapping
-	public static List<ObjWithMatches> matchIntersectingObjectsSingle( ObjMaskCollection objsSrc, ObjMaskCollection objsTarget ) {
+	public static List<ObjWithMatches> matchIntersectingObjectsSingle( ObjectMaskCollection objsSrc, ObjectMaskCollection objsTarget ) {
 		
 		List<ObjWithMatches> matchList = ObjMaskMatchUtilities.matchIntersectingObjects( objsSrc, objsTarget );
 		
 		for( ObjWithMatches own : matchList ) {
 			
-			ObjMask selectedObj = selectBestMatch( own.getSourceObj(), own.getMatches() );
+			ObjectMask selectedObj = selectBestMatch( own.getSourceObj(), own.getMatches() );
 			
 			// We make sure the object only matches this item
 			own.getMatches().clear();
@@ -92,7 +92,7 @@ public class ChnlProviderAssignFromIntersectingObjects extends ChnlProviderOne {
 		return matchList;
 	}
 	
-	private static ObjMask selectBestMatch( ObjMask source, ObjMaskCollection matches ) {
+	private static ObjectMask selectBestMatch( ObjectMask source, ObjectMaskCollection matches ) {
 		assert(matches.size()>0);
 		
 		if (matches.size()==1) {
@@ -100,8 +100,8 @@ public class ChnlProviderAssignFromIntersectingObjects extends ChnlProviderOne {
 		}
 		
 		int maxIntersection = -1;
-		ObjMask omMostIntersecting = null;
-		for( ObjMask om : matches) {
+		ObjectMask omMostIntersecting = null;
+		for( ObjectMask om : matches) {
 			int intersectingPixels = source.countIntersectingPixels(om);
 			if (intersectingPixels > maxIntersection) {
 				omMostIntersecting = om;
@@ -111,7 +111,7 @@ public class ChnlProviderAssignFromIntersectingObjects extends ChnlProviderOne {
 		return omMostIntersecting;
 	}
 
-	private int getValForMask( Chnl chnl, ObjMask om ) {
+	private int getValForMask( Channel chnl, ObjectMask om ) {
 		
 		VoxelBox<?> vb = chnl.getVoxelBox().any();
 		

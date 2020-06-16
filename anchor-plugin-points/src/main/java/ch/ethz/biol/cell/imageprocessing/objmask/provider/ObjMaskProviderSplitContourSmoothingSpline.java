@@ -32,9 +32,9 @@ import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.geometry.PointConverter;
 import org.anchoranalysis.image.bean.provider.ObjMaskProviderOne;
 import org.anchoranalysis.image.contour.Contour;
-import org.anchoranalysis.image.objmask.ObjMask;
-import org.anchoranalysis.image.objmask.ObjMaskCollection;
-import org.anchoranalysis.image.objmask.factory.CreateFromPointsFactory;
+import org.anchoranalysis.image.objectmask.ObjectMask;
+import org.anchoranalysis.image.objectmask.ObjectMaskCollection;
+import org.anchoranalysis.image.objectmask.factory.CreateFromPointsFactory;
 
 import ch.ethz.biol.cell.imageprocessing.objmask.provider.smoothspline.ContourList;
 import ch.ethz.biol.cell.imageprocessing.objmask.provider.smoothspline.SplitContourSmoothingSpline;
@@ -63,18 +63,18 @@ public class ObjMaskProviderSplitContourSmoothingSpline extends ObjMaskProviderO
 	// END BEAN PROPERTIES
 	
 	@Override
-	public ObjMaskCollection createFromObjs( ObjMaskCollection in ) throws CreateException {
+	public ObjectMaskCollection createFromObjs( ObjectMaskCollection in ) throws CreateException {
 
-		ObjMaskCollection out = new ObjMaskCollection();
+		ObjectMaskCollection out = new ObjectMaskCollection();
 		
-		for( ObjMask om : in ) {
+		for( ObjectMask om : in ) {
 			splitContoursFromObj(om, out);
 		}
 		
 		return out;
 	}
 	
-	private void splitContoursFromObj( ObjMask om, ObjMaskCollection out ) throws CreateException {
+	private void splitContoursFromObj( ObjectMask om, ObjectMaskCollection out ) throws CreateException {
 		
 		if (om.getBoundingBox().extent().getZ()>1) {
 			throw new CreateException("Only objs with z-slices > 1 are allowed");
@@ -89,7 +89,7 @@ public class ObjMaskProviderSplitContourSmoothingSpline extends ObjMaskProviderO
 		}		
 	}
 	
-	private void addContoursAsObjs( ContourList cl, ObjMaskCollection out ) throws OperationFailedException {
+	private void addContoursAsObjs( ContourList cl, ObjectMaskCollection out ) throws OperationFailedException {
 		for( Contour c : cl) {
 			try {
 				out.add(
@@ -125,7 +125,7 @@ public class ObjMaskProviderSplitContourSmoothingSpline extends ObjMaskProviderO
 		this.minNumPoints = minNumPoints;
 	}
 	
-	private static ObjMask createObjMaskFromContour( Contour c, boolean round ) throws CreateException {
+	private static ObjectMask createObjMaskFromContour( Contour c, boolean round ) throws CreateException {
 		return CreateFromPointsFactory.create(
 			PointConverter.convert3i(c.getPoints(), round)
 		);

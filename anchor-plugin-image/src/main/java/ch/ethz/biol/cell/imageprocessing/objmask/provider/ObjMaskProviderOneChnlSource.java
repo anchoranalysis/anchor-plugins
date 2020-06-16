@@ -4,8 +4,8 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.bean.provider.ChnlProvider;
 import org.anchoranalysis.image.bean.provider.ObjMaskProviderOne;
-import org.anchoranalysis.image.chnl.Chnl;
-import org.anchoranalysis.image.objmask.ObjMaskCollection;
+import org.anchoranalysis.image.channel.Channel;
+import org.anchoranalysis.image.objectmask.ObjectMaskCollection;
 
 public abstract class ObjMaskProviderOneChnlSource extends ObjMaskProviderOne {
 
@@ -15,7 +15,7 @@ public abstract class ObjMaskProviderOneChnlSource extends ObjMaskProviderOne {
 	// END BEAN PROPERTIES
 	
 	@Override
-	public ObjMaskCollection createFromObjs( ObjMaskCollection objsSrc ) throws CreateException {
+	public ObjectMaskCollection createFromObjs( ObjectMaskCollection objsSrc ) throws CreateException {
 
 		return createFromObjs(
 			objsSrc,
@@ -23,7 +23,7 @@ public abstract class ObjMaskProviderOneChnlSource extends ObjMaskProviderOne {
 		);
 	}
 	
-	protected abstract ObjMaskCollection createFromObjs( ObjMaskCollection objsSrc, Chnl chnlSrc ) throws CreateException;
+	protected abstract ObjectMaskCollection createFromObjs( ObjectMaskCollection objsSrc, Channel chnlSrc ) throws CreateException;
 
 	public ChnlProvider getChnl() {
 		return chnl;

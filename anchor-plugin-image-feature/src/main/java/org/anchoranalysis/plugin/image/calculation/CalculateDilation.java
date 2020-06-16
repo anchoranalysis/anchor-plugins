@@ -30,17 +30,17 @@ import org.anchoranalysis.feature.cache.calculation.CalculationResolver;
 import org.anchoranalysis.feature.cache.calculation.ResolvedCalculation;
 import org.anchoranalysis.feature.cache.calculation.ResolvedCalculationMap;
 import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
-import org.anchoranalysis.image.objmask.ObjMask;
+import org.anchoranalysis.image.objectmask.ObjectMask;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
 public class CalculateDilation extends CalculateObjMask {
 
-	public static ResolvedCalculation<ObjMask,FeatureInputSingleObj> createFromCache(
+	public static ResolvedCalculation<ObjectMask,FeatureInputSingleObj> createFromCache(
 		CalculationResolver<FeatureInputSingleObj> cache,
 		int iterations,
 		boolean do3D
 	) {
-		ResolvedCalculationMap<ObjMask,FeatureInputSingleObj,Integer> map = cache.search(
+		ResolvedCalculationMap<ObjectMask,FeatureInputSingleObj,Integer> map = cache.search(
 			new CalculateDilationMap(do3D)
 		);
 		
@@ -51,7 +51,7 @@ public class CalculateDilation extends CalculateObjMask {
 	
 	private CalculateDilation(
 		int iterations,
-		ResolvedCalculationMap<ObjMask,FeatureInputSingleObj,Integer> map
+		ResolvedCalculationMap<ObjectMask,FeatureInputSingleObj,Integer> map
 	) {
 		super(iterations,map);
 	}

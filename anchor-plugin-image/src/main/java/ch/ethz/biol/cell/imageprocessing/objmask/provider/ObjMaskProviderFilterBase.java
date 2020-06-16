@@ -10,7 +10,7 @@ import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.bean.objmask.filter.ObjMaskFilter;
 import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
 import org.anchoranalysis.image.extent.ImageDim;
-import org.anchoranalysis.image.objmask.ObjMaskCollection;
+import org.anchoranalysis.image.objectmask.ObjectMaskCollection;
 
 public abstract class ObjMaskProviderFilterBase extends ObjMaskProviderDimensionsOptional {
 
@@ -23,7 +23,7 @@ public abstract class ObjMaskProviderFilterBase extends ObjMaskProviderDimension
 	// END BEAN PROPERTIES
 	
 	@Override
-	public ObjMaskCollection createFromObjs(ObjMaskCollection in) throws CreateException {
+	public ObjectMaskCollection createFromObjs(ObjectMaskCollection in) throws CreateException {
 		return createFromObjs(
 			in,
 			OptionalFactory.create(objsRejected),
@@ -31,7 +31,7 @@ public abstract class ObjMaskProviderFilterBase extends ObjMaskProviderDimension
 		);
 	}
 	
-	protected void filter(ObjMaskCollection objs, Optional<ImageDim> dim, Optional<ObjMaskCollection> objsRejected) throws CreateException {
+	protected void filter(ObjectMaskCollection objs, Optional<ImageDim> dim, Optional<ObjectMaskCollection> objsRejected) throws CreateException {
 		try {
 			filter.filter(objs, dim, objsRejected);
 		} catch (OperationFailedException e) {
@@ -39,9 +39,9 @@ public abstract class ObjMaskProviderFilterBase extends ObjMaskProviderDimension
 		}
 	}
 	
-	protected abstract ObjMaskCollection createFromObjs(
-		ObjMaskCollection in,
-		Optional<ObjMaskCollection> omcRejected,
+	protected abstract ObjectMaskCollection createFromObjs(
+		ObjectMaskCollection in,
+		Optional<ObjectMaskCollection> omcRejected,
 		Optional<ImageDim> dim
 	) throws CreateException;
 

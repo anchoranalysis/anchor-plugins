@@ -1,7 +1,7 @@
 package ch.ethz.biol.cell.imageprocessing.chnl.provider;
 
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.image.chnl.Chnl;
+import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.convert.IJWrap;
 import org.anchoranalysis.image.voxel.box.VoxelBoxWrapper;
 
@@ -13,7 +13,7 @@ class RankFilterUtilities {
 	private RankFilterUtilities() {}
 	
 	/** Applies a 2D rank-filter independently to each z-slice */
-	public static Chnl applyEachSlice( Chnl chnl, int radius, int filterType ) throws CreateException {
+	public static Channel applyEachSlice( Channel chnl, int radius, int filterType ) throws CreateException {
 		
 		RankFilters rankFilters = new RankFilters();
 		

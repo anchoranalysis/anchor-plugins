@@ -28,14 +28,14 @@ package ch.ethz.biol.cell.imageprocessing.objmask.provider.assignobjstocfg;
 
 import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.core.geometry.Point3i;
-import org.anchoranalysis.image.objmask.ObjMask;
+import org.anchoranalysis.image.objectmask.ObjectMask;
 
 public class RslvdObjMask {
-	private ObjMask objMask;
+	private ObjectMask objMask;
 	private Point3d center;
 	private Point3i centerInt;
 	
-	public RslvdObjMask(ObjMask objMask) {
+	public RslvdObjMask(ObjectMask objMask) {
 		super();
 		this.objMask = objMask;
 		this.center = objMask.centerOfGravity();
@@ -56,7 +56,7 @@ public class RslvdObjMask {
 		return centerInt;
 	}
 
-	public ObjMask getObjMask() {
+	public ObjectMask getObjMask() {
 		return objMask;
 	}
 

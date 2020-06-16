@@ -30,7 +30,7 @@ package org.anchoranalysis.plugin.image.feature.bean.obj.pair.touching;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.extent.BoundingBox;
-import org.anchoranalysis.image.objmask.ObjMask;
+import org.anchoranalysis.image.objectmask.ObjectMask;
 import org.anchoranalysis.image.voxel.kernel.ApplyKernel;
 
 /**
@@ -52,10 +52,10 @@ import org.anchoranalysis.image.voxel.kernel.ApplyKernel;
 public class NumTouchingVoxelFaces extends TouchingVoxels {
 
 	@Override
-	protected double calcWithIntersection(ObjMask om1, ObjMask om2, BoundingBox bboxIntersect)
+	protected double calcWithIntersection(ObjectMask om1, ObjectMask om2, BoundingBox bboxIntersect)
 			throws FeatureCalcException {
 		
-		ObjMask om2Rel = RelativeUtilities.createRelMask( om2, om1 );
+		ObjectMask om2Rel = RelativeUtilities.createRelMask( om2, om1 );
 		
 		try {
 			return ApplyKernel.applyForCount(

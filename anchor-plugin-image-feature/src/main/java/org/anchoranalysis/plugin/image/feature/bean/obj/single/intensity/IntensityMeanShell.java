@@ -32,8 +32,8 @@ package org.anchoranalysis.plugin.image.feature.bean.obj.single.intensity;
 
 
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.image.chnl.Chnl;
-import org.anchoranalysis.image.objmask.ObjMask;
+import org.anchoranalysis.image.channel.Channel;
+import org.anchoranalysis.image.objectmask.ObjectMask;
 import org.anchoranalysis.plugin.image.intensity.IntensityMeanCalculator;
 
 /**
@@ -43,7 +43,7 @@ import org.anchoranalysis.plugin.image.intensity.IntensityMeanCalculator;
 public class IntensityMeanShell extends IntensityMeanShellBase {
 
 	@Override
-	protected double calcForShell(ObjMask om, Chnl chnl) throws FeatureCalcException {
+	protected double calcForShell(ObjectMask om, Channel chnl) throws FeatureCalcException {
 		return IntensityMeanCalculator.calcMeanIntensityObjMask(chnl, om );
 	}
 

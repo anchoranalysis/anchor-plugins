@@ -46,8 +46,9 @@ import org.anchoranalysis.image.bean.objmask.filter.ObjMaskFilter;
 import org.anchoranalysis.image.bean.provider.ChnlProvider;
 import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
-import org.anchoranalysis.image.objmask.ObjMask;
-import org.anchoranalysis.image.objmask.ObjMaskCollection;
+import org.anchoranalysis.image.objectmask.ObjectMask;
+import org.anchoranalysis.image.objectmask.ObjectMaskCollection;
+
 import cern.colt.list.DoubleArrayList;
 import cern.jet.stat.Descriptive;
 import ch.ethz.biol.cell.imageprocessing.binaryimgchnl.provider.NRGStackUtilities;
@@ -80,7 +81,7 @@ public class ObjMaskFilterFeatureRelationDiscardFeatureRatioLessThan extends Obj
 	// END BEAN PROPERTIES
 	
 	@Override
-	public void filter(ObjMaskCollection objs, Optional<ImageDim> dim, Optional<ObjMaskCollection> objsRejected)
+	public void filter(ObjectMaskCollection objs, Optional<ImageDim> dim, Optional<ObjectMaskCollection> objsRejected)
 			throws OperationFailedException {
 		
 		// Nothing to do if we don't have enough options
@@ -120,9 +121,9 @@ public class ObjMaskFilterFeatureRelationDiscardFeatureRatioLessThan extends Obj
 		}
 	}
 	
-	private void calculateVals( ObjMaskCollection objs, DoubleArrayList featureValsOriginalOrder, DoubleArrayList featureValsSorted, FeatureCalculatorSingle<FeatureInputSingleObj> session ) throws OperationFailedException {
+	private void calculateVals( ObjectMaskCollection objs, DoubleArrayList featureValsOriginalOrder, DoubleArrayList featureValsSorted, FeatureCalculatorSingle<FeatureInputSingleObj> session ) throws OperationFailedException {
 
-		for( ObjMask om : objs ) {
+		for( ObjectMask om : objs ) {
 			double featureVal;
 			try {
 				featureVal = session.calc(
@@ -140,8 +141,8 @@ public class ObjMaskFilterFeatureRelationDiscardFeatureRatioLessThan extends Obj
 	}
 	
 	private void removeOutliers(
-		ObjMaskCollection objs,
-		Optional<ObjMaskCollection> objsRejected,
+		ObjectMaskCollection objs,
+		Optional<ObjectMaskCollection> objsRejected,
 		DoubleArrayList featureValsOriginalOrder,
 		DoubleArrayList featureValsSorted
 	) {
@@ -166,25 +167,25 @@ public class ObjMaskFilterFeatureRelationDiscardFeatureRatioLessThan extends Obj
 			getLogger().getLogReporter().logFormatted("median=%f   mean=%f  stdDev=%f  lowerLimit=%f  upperLimit=%f", median, mean, stdDev, lowerLimit, upperLimit);
 		}
 		
-		List<ObjMask> listToRemove = listToRemove( objs, objsRejected, featureValsOriginalOrder, lowerLimit, upperLimit );
+		List<ObjectMask> listToRemove = listToRemove( objs, objsRejected, featureValsOriginalOrder, lowerLimit, upperLimit );
 	
 		if (getLogger()!=null) {
 			getLogger().getLogReporter().log("END DiscardOutliers");
 		}
 		
 		// NOTE This could be expensive if we have a large amount of items in the list, better to use a sorted indexed approach
-		for( ObjMask om : listToRemove) {
+		for( ObjectMask om : listToRemove) {
 			objs.remove(om);
 		}		
 	}
 	
-	private List<ObjMask> listToRemove( ObjMaskCollection objs, Optional<ObjMaskCollection> objsRejected, DoubleArrayList featureValsOriginalOrder, double lowerLimit, double upperLimit ) {
-		List<ObjMask> listToRemove = new ArrayList<>();
+	private List<ObjectMask> listToRemove( ObjectMaskCollection objs, Optional<ObjectMaskCollection> objsRejected, DoubleArrayList featureValsOriginalOrder, double lowerLimit, double upperLimit ) {
+		List<ObjectMask> listToRemove = new ArrayList<>();
 		for(int i=0; i<objs.size(); i++) {
 			double featureVal = featureValsOriginalOrder.get(i);
 			if(includeLowerSide && featureVal<lowerLimit) {
 				
-				ObjMask omRemove = objs.get(i);
+				ObjectMask omRemove = objs.get(i);
 				listToRemove.add( omRemove );
 				
 				if (objsRejected.isPresent()) {
@@ -197,7 +198,7 @@ public class ObjMaskFilterFeatureRelationDiscardFeatureRatioLessThan extends Obj
 				
 			} else if(includeHigherSide && featureVal>upperLimit) {
 
-				ObjMask omRemove = objs.get(i);
+				ObjectMask omRemove = objs.get(i);
 				listToRemove.add( omRemove );
 				
 				if (objsRejected.isPresent()) {

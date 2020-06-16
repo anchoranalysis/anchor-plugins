@@ -33,7 +33,7 @@ import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 import org.anchoranalysis.core.name.store.NamedProviderStore;
 import org.anchoranalysis.image.bean.provider.ImageDimProvider;
-import org.anchoranalysis.image.chnl.Chnl;
+import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.experiment.identifiers.ImgStackIdentifiers;
 import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.init.ImageInitParams;
@@ -96,7 +96,7 @@ public class GuessDimFromInputImage extends ImageDimProvider {
 			throw new CreateException(e);
 		}
 		
-		Chnl chnl = stack.getChnl(0);
+		Channel chnl = stack.getChnl(0);
 		if (chnl==null) {
 			throw new CreateException( String.format("Stack %s has no channels, so dimensions cannot be inferred.", keyThatExists));
 		}

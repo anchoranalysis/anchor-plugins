@@ -37,8 +37,8 @@ import java.util.logging.Logger;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.DefaultInstance;
 import org.anchoranalysis.bean.annotation.OptionalBean;
-import org.anchoranalysis.image.chnl.factory.ChnlFactorySingleType;
-import org.anchoranalysis.image.chnl.factory.ChnlFactoryByte;
+import org.anchoranalysis.image.channel.factory.ChannelFactoryByte;
+import org.anchoranalysis.image.channel.factory.ChannelFactorySingleType;
 import org.anchoranalysis.image.io.bean.chnl.map.ImgChnlMapCreator;
 import org.anchoranalysis.image.io.bean.rasterreader.RasterReader;
 import org.anchoranalysis.image.io.input.NamedChnlsInput;
@@ -106,7 +106,7 @@ public class GroupFiles extends InputManager<NamedChnlsInput> {
 	
 	private Logger log = Logger.getLogger(GroupFiles.class.getName());
 	
-	static ChnlFactorySingleType imgChnlFactoryByte = new ChnlFactoryByte();
+	static ChannelFactorySingleType imgChnlFactoryByte = new ChannelFactoryByte();
 	
 	@Override
 	public List<NamedChnlsInput> inputObjects(

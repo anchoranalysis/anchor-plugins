@@ -37,8 +37,8 @@ import org.anchoranalysis.image.bean.threshold.Thresholder;
 import org.anchoranalysis.image.binary.BinaryChnl;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
-import org.anchoranalysis.image.chnl.Chnl;
-import org.anchoranalysis.image.chnl.factory.ChnlFactory;
+import org.anchoranalysis.image.channel.Channel;
+import org.anchoranalysis.image.channel.factory.ChannelFactory;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
 
 public class BinaryChnlProviderThrshld extends BinaryChnlProviderChnlSource {
@@ -49,7 +49,7 @@ public class BinaryChnlProviderThrshld extends BinaryChnlProviderChnlSource {
 	// END BEAN
 
 	@Override
-	protected BinaryChnl createFromSource(Chnl chnlSource) throws CreateException {
+	protected BinaryChnl createFromSource(Channel chnlSource) throws CreateException {
 		BinaryValuesByte bvOut = BinaryValuesByte.getDefault();
 		try {
 			BinaryVoxelBox<ByteBuffer> bvb = thresholder.threshold(
@@ -61,7 +61,7 @@ public class BinaryChnlProviderThrshld extends BinaryChnlProviderChnlSource {
 			return new BinaryChnl(
 				bvb,
 				chnlSource.getDimensions().getRes(),
-				ChnlFactory.instance().get(VoxelDataTypeUnsignedByte.instance)
+				ChannelFactory.instance().get(VoxelDataTypeUnsignedByte.instance)
 			);
 		} catch (OperationFailedException e) {
 			throw new CreateException(e);

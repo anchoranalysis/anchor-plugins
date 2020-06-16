@@ -36,8 +36,8 @@ import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorSingle;
 import org.anchoranalysis.image.bean.objmask.match.ObjMaskMatcher;
 import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
-import org.anchoranalysis.image.objmask.ObjMask;
-import org.anchoranalysis.image.objmask.ObjMaskCollection;
+import org.anchoranalysis.image.objectmask.ObjectMask;
+import org.anchoranalysis.image.objectmask.ObjectMaskCollection;
 import org.anchoranalysis.image.objmask.match.ObjWithMatches;
 
 // Returns a collection of each Max Object found in matches
@@ -49,17 +49,17 @@ public class ObjMaskProviderFindMaxFeatureInMatchedObjects extends ObjMaskProvid
 	// END BEAN PROPERTIES
 
 	@Override
-	public ObjMaskCollection createFromObjs( ObjMaskCollection in ) throws CreateException {
+	public ObjectMaskCollection createFromObjs( ObjectMaskCollection in ) throws CreateException {
 		
 		FeatureCalculatorSingle<FeatureInputSingleObj> session = createSession();
 
-		ObjMaskCollection out = new ObjMaskCollection();
+		ObjectMaskCollection out = new ObjectMaskCollection();
 		try {
 			List<ObjWithMatches> listMatches = objMaskMatcher.findMatch(in);
 	
 			for( ObjWithMatches owm : listMatches ) {
 			
-				ObjMask max = findMax( session, owm.getMatches() );
+				ObjectMask max = findMax( session, owm.getMatches() );
 				if (max!=null) {
 					out.add(max);
 				}
@@ -71,11 +71,11 @@ public class ObjMaskProviderFindMaxFeatureInMatchedObjects extends ObjMaskProvid
 		return out;
 	}
 	
-	private ObjMask findMax( FeatureCalculatorSingle<FeatureInputSingleObj> session, ObjMaskCollection objs ) throws FeatureCalcException {
-		ObjMask max = null;
+	private ObjectMask findMax( FeatureCalculatorSingle<FeatureInputSingleObj> session, ObjectMaskCollection objs ) throws FeatureCalcException {
+		ObjectMask max = null;
 		double maxVal = 0;
 		
-		for( ObjMask om : objs ) {
+		for( ObjectMask om : objs ) {
 			
 			double featureVal = session.calc(
 				new FeatureInputSingleObj(om)

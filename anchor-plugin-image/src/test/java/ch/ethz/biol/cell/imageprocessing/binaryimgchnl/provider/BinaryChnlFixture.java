@@ -6,7 +6,7 @@ import org.anchoranalysis.image.binary.BinaryChnl;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelBoxFactory;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.Extent;
-import org.anchoranalysis.image.objmask.ObjMask;
+import org.anchoranalysis.image.objectmask.ObjectMask;
 import org.anchoranalysis.test.image.ChnlFixture;
 
 /**
@@ -47,8 +47,8 @@ class BinaryChnlFixture {
 	}
 	
 	/** Creates a rectangle (2d) or cuboid (3d) */
-	private static ObjMask createRectange( Point3i crnr, boolean do3D ) {
-		ObjMask om = new ObjMask(
+	private static ObjectMask createRectange( Point3i crnr, boolean do3D ) {
+		ObjectMask om = new ObjectMask(
 			new BoundingBox(
 				crnr,
 				new Extent(

@@ -30,7 +30,7 @@ package org.anchoranalysis.plugin.image.feature.bean.obj.pair.touching;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.extent.BoundingBox;
-import org.anchoranalysis.image.objmask.ObjMask;
+import org.anchoranalysis.image.objectmask.ObjectMask;
 import org.anchoranalysis.image.voxel.kernel.ApplyKernel;
 import org.anchoranalysis.image.voxel.kernel.count.CountKernelNghbMask;
 
@@ -49,7 +49,7 @@ import org.anchoranalysis.image.voxel.kernel.count.CountKernelNghbMask;
 public class NumTouchingVoxels extends TouchingVoxels {
 
 	@Override
-	protected double calcWithIntersection(ObjMask om1, ObjMask om2, BoundingBox bboxIntersect)
+	protected double calcWithIntersection(ObjectMask om1, ObjectMask om2, BoundingBox bboxIntersect)
 			throws FeatureCalcException {
 		// As this means of measuring the touching pixels can differ slightly depending on om1->om2 or om2->om1, it's done in both directions.
 		try {
@@ -63,14 +63,14 @@ public class NumTouchingVoxels extends TouchingVoxels {
 	}
 	
 
-	private int numTouchingFrom( ObjMask omSrc, ObjMask omDest, BoundingBox bboxIntersect ) throws OperationFailedException {
+	private int numTouchingFrom( ObjectMask omSrc, ObjectMask omDest, BoundingBox bboxIntersect ) throws OperationFailedException {
 		BoundingBox bboxIntersectRel = RelativeUtilities.createRelBBox(bboxIntersect, omSrc);
 		return calcNghbTouchingPixels( omSrc, omDest, bboxIntersectRel );
 	}
 		
-	private int calcNghbTouchingPixels( ObjMask omSrc, ObjMask omDest, BoundingBox bboxIntersectRel ) throws OperationFailedException {
+	private int calcNghbTouchingPixels( ObjectMask omSrc, ObjectMask omDest, BoundingBox bboxIntersectRel ) throws OperationFailedException {
 		
-		ObjMask omOtherDest = RelativeUtilities.createRelMask( omDest, omSrc );
+		ObjectMask omOtherDest = RelativeUtilities.createRelMask( omDest, omSrc );
 		
 		CountKernelNghbMask kernelMatch = new CountKernelNghbMask(
 			isDo3D(),

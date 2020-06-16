@@ -41,7 +41,7 @@ import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.experiment.bean.sgmn.SgmnObjMaskCollection;
 import org.anchoranalysis.image.experiment.identifiers.ImgStackIdentifiers;
 import org.anchoranalysis.image.extent.ImageDim;
-import org.anchoranalysis.image.objmask.ObjMaskCollection;
+import org.anchoranalysis.image.objectmask.ObjectMaskCollection;
 import org.anchoranalysis.image.seed.SeedCollection;
 import org.anchoranalysis.image.sgmn.SgmnFailedException;
 import org.anchoranalysis.image.stack.NamedImgStackCollection;
@@ -56,9 +56,9 @@ public class ObjMaskSgmnCfg extends SgmnObjMaskCollection {
 	// END BEAN PROPERTIES
 
 	@Override
-	public ObjMaskCollection sgmn(
+	public ObjectMaskCollection sgmn(
 		NamedImgStackCollection stackCollection,
-		NamedProvider<ObjMaskCollection> objMaskCollection,
+		NamedProvider<ObjectMaskCollection> objMaskCollection,
 		Optional<SeedCollection> seeds,
 		RandomNumberGenerator re,
 		BoundIOContext context

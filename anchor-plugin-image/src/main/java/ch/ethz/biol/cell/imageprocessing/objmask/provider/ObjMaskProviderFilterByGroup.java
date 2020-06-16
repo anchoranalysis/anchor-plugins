@@ -34,7 +34,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
 import org.anchoranalysis.image.extent.ImageDim;
-import org.anchoranalysis.image.objmask.ObjMaskCollection;
+import org.anchoranalysis.image.objectmask.ObjectMaskCollection;
 import org.anchoranalysis.image.objmask.match.ObjWithMatches;
 
 import ch.ethz.biol.cell.imageprocessing.objmask.matching.ObjMaskMatchUtilities;
@@ -48,16 +48,16 @@ public class ObjMaskProviderFilterByGroup extends ObjMaskProviderFilterBase {
 	// END BEAN PROPERTIES
 	
 	@Override
-	protected ObjMaskCollection createFromObjs(ObjMaskCollection in, Optional<ObjMaskCollection> omcRejected,
+	protected ObjectMaskCollection createFromObjs(ObjectMaskCollection in, Optional<ObjectMaskCollection> omcRejected,
 			Optional<ImageDim> dim) throws CreateException {
 
-		ObjMaskCollection inGroups = objsGrouped.create();
+		ObjectMaskCollection inGroups = objsGrouped.create();
 		List<ObjWithMatches> matchList = ObjMaskMatchUtilities.matchIntersectingObjects( inGroups, in );
 				
-		ObjMaskCollection out = new ObjMaskCollection();
+		ObjectMaskCollection out = new ObjectMaskCollection();
 		
 		for( ObjWithMatches wm : matchList ) {
-			ObjMaskCollection objs = wm.getMatches();
+			ObjectMaskCollection objs = wm.getMatches();
 			filter(objs, dim, omcRejected);
 			out.addAll( objs );
 		}

@@ -39,7 +39,7 @@ import org.anchoranalysis.feature.list.NamedFeatureStoreFactory;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
 import org.anchoranalysis.image.feature.session.FeatureTableSession;
-import org.anchoranalysis.image.objmask.ObjMaskCollection;
+import org.anchoranalysis.image.objectmask.ObjectMaskCollection;
 
 /**
  * A feature-table describing objects defined by columns (features) and rows (inputs).
@@ -64,7 +64,7 @@ public abstract class FeatureTableObjs<T extends FeatureInput> extends AnchorBea
 	public abstract FeatureTableSession<T> createFeatures( List<NamedBean<FeatureListProvider<FeatureInputSingleObj>>> list, NamedFeatureStoreFactory storeFactory, boolean suppressErrors ) throws CreateException, InitException;
 	
 	public abstract List<T> createListInputs(
-		ObjMaskCollection objs,
+		ObjectMaskCollection objs,
 		NRGStackWithParams nrgStack,
 		LogErrorReporter logErrorReporter
 	) throws CreateException;

@@ -29,12 +29,12 @@ package ch.ethz.biol.cell.imageprocessing.chnl.provider;
 
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.binary.BinaryChnl;
-import org.anchoranalysis.image.chnl.Chnl;
+import org.anchoranalysis.image.channel.Channel;
 
 public class ChnlProviderFromBinary extends ChnlProviderMask {
 
 	@Override
-	protected Chnl createFromMask(BinaryChnl mask) throws CreateException {
+	protected Channel createFromMask(BinaryChnl mask) throws CreateException {
 		return mask.getChnl();
 	}
 

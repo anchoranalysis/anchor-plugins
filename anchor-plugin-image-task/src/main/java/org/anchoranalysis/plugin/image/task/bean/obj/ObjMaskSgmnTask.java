@@ -40,7 +40,7 @@ import org.anchoranalysis.core.progress.ProgressReporter;
 import org.anchoranalysis.core.progress.ProgressReporterNull;
 import org.anchoranalysis.core.random.RandomNumberGeneratorMersenne;
 import org.anchoranalysis.experiment.JobExecutionException;
-import org.anchoranalysis.image.chnl.Chnl;
+import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.experiment.bean.sgmn.SgmnObjMaskCollection;
 import org.anchoranalysis.image.experiment.bean.task.RasterTask;
 import org.anchoranalysis.image.experiment.identifiers.ImgStackIdentifiers;
@@ -48,7 +48,7 @@ import org.anchoranalysis.image.io.RasterIOException;
 import org.anchoranalysis.image.io.input.NamedChnlsInput;
 import org.anchoranalysis.image.io.input.series.NamedChnlCollectionForSeries;
 import org.anchoranalysis.image.io.stack.StackCollectionOutputter;
-import org.anchoranalysis.image.objmask.ObjMaskCollection;
+import org.anchoranalysis.image.objectmask.ObjectMaskCollection;
 import org.anchoranalysis.image.sgmn.SgmnFailedException;
 import org.anchoranalysis.image.stack.NamedImgStackCollection;
 import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
@@ -88,11 +88,11 @@ public class ObjMaskSgmnTask extends RasterTask {
 				context.getModelDirectory()
 			);
 			
-			Chnl chnl = backgroundFromStacks(stackCollection);
+			Channel chnl = backgroundFromStacks(stackCollection);
 			
 			ObjMaskSgmnTaskOutputter.writeOriginal(context.getOutputManager(), chnl, outputNameOriginal);
 			
-			ObjMaskCollection objs = sgmnFromStacks(stackCollection, context);
+			ObjectMaskCollection objs = sgmnFromStacks(stackCollection, context);
 			
 			// Write different visualizations of the result
 			ObjMaskSgmnTaskOutputter.writeMaskOutputs(objs, chnl, context.getOutputManager());
@@ -104,7 +104,7 @@ public class ObjMaskSgmnTask extends RasterTask {
 		}
 	}
 	
-	private ObjMaskCollection sgmnFromStacks(NamedImgStackCollection stackCollection, BoundIOContext context) throws OperationFailedException {
+	private ObjectMaskCollection sgmnFromStacks(NamedImgStackCollection stackCollection, BoundIOContext context) throws OperationFailedException {
 		
 		SgmnObjMaskCollection sgmnDup = sgmn.duplicateBean();
 		assert( sgmnDup != null );
@@ -150,7 +150,7 @@ public class ObjMaskSgmnTask extends RasterTask {
 		return stackCollection;
 	}
 	
-	private static Chnl backgroundFromStacks( NamedImgStackCollection stackCollection ) throws NamedProviderGetException {
+	private static Channel backgroundFromStacks( NamedImgStackCollection stackCollection ) throws NamedProviderGetException {
 		return stackCollection.getException(ImgStackIdentifiers.INPUT_IMAGE).getChnl(0);
 	}
 	

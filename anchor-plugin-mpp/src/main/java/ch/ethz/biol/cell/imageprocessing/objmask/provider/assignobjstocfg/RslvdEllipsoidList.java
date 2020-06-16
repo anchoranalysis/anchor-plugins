@@ -35,9 +35,9 @@ import org.anchoranalysis.anchor.mpp.cfg.Cfg;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.extent.Extent;
-import org.anchoranalysis.image.objmask.ObjMask;
-import org.anchoranalysis.image.objmask.ObjMaskCollection;
-import org.anchoranalysis.image.objmask.ops.ObjMaskMerger;
+import org.anchoranalysis.image.objectmask.ObjectMask;
+import org.anchoranalysis.image.objectmask.ObjectMaskCollection;
+import org.anchoranalysis.image.objectmask.ops.ObjMaskMerger;
 import org.anchoranalysis.image.voxel.box.factory.VoxelBoxFactory;
 
 public class RslvdEllipsoidList implements Iterable<RslvdEllipsoid> {
@@ -167,8 +167,8 @@ public class RslvdEllipsoidList implements Iterable<RslvdEllipsoid> {
 	
 	
 	// Create merged objects for those included
-	public ObjMaskCollection createMergedObjsForIncluded() throws CreateException {
-		ObjMaskCollection objsOut = new ObjMaskCollection();
+	public ObjectMaskCollection createMergedObjsForIncluded() throws CreateException {
+		ObjectMaskCollection objsOut = new ObjectMaskCollection();
 		for( RslvdEllipsoid re : this ) {
 			
 			if (!re.isIncluded()) {
@@ -176,16 +176,16 @@ public class RslvdEllipsoidList implements Iterable<RslvdEllipsoid> {
 			}
 			
 			try {
-				ObjMaskCollection objsAssigned = re.getAssignedObjs().createObjs();
+				ObjectMaskCollection objsAssigned = re.getAssignedObjs().createObjs();
 				
 				if (objsAssigned.size()>0) {
-					ObjMask omMerged = ObjMaskMerger.merge( objsAssigned);
+					ObjectMask omMerged = ObjMaskMerger.merge( objsAssigned);
 					objsOut.add(omMerged);	
 				} else {
 					// Mark as excluded
 					// We add an empty object (just to preserve a 1-1 mapping between the inclthe correct total number)
 					objsOut.add(
-						new ObjMask(
+						new ObjectMask(
 							VoxelBoxFactory.instance().getByte().create(new Extent(1,1,1)))
 						);
 				}

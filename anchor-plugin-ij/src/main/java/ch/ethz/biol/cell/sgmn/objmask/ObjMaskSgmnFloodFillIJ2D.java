@@ -35,10 +35,10 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.bean.sgmn.objmask.ObjMaskSgmn;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
-import org.anchoranalysis.image.chnl.Chnl;
+import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.convert.IJWrap;
-import org.anchoranalysis.image.objmask.ObjMask;
-import org.anchoranalysis.image.objmask.ObjMaskCollection;
+import org.anchoranalysis.image.objectmask.ObjectMask;
+import org.anchoranalysis.image.objectmask.ObjectMaskCollection;
 import org.anchoranalysis.image.seed.SeedCollection;
 import org.anchoranalysis.image.sgmn.SgmnFailedException;
 
@@ -58,9 +58,9 @@ public class ObjMaskSgmnFloodFillIJ2D extends ObjMaskSgmn {
 	// END BEAN PROPERTIES
 	
 	@Override
-	public ObjMaskCollection sgmn(
-		Chnl chnl,
-		Optional<ObjMask> mask,
+	public ObjectMaskCollection sgmn(
+		Channel chnl,
+		Optional<ObjectMask> mask,
 		Optional<SeedCollection> seeds
 	) throws SgmnFailedException {
 		
@@ -88,7 +88,7 @@ public class ObjMaskSgmnFloodFillIJ2D extends ObjMaskSgmn {
 	 * @return the number of objects (so that the label ids are 1.... N) 
 	 * @throws OperationFailedException 
 	 **/
-	private int floodFillChnl( Chnl chnl ) throws OperationFailedException {
+	private int floodFillChnl( Channel chnl ) throws OperationFailedException {
 		BinaryValuesByte bv = BinaryValuesByte.getDefault();
 		ImageProcessor ip = IJWrap.imageProcessorByte(chnl.getVoxelBox().asByte().getPlaneAccess(), 0);
 		return FloodFillUtils.floodFill2D( ip, bv.getOnByte(), startingColor, minBoundingBoxVolumeVoxels );
@@ -101,9 +101,10 @@ public class ObjMaskSgmnFloodFillIJ2D extends ObjMaskSgmn {
 	 * @param numLabels the number of objects, so that the label ids are a sequence (1,numLabels) inclusive. 
 	 * @return a derived collection of objs
 	 */
-	private ObjMaskCollection objectsFromLabels( Chnl chnl, int numLabels ) {
-		return ObjMaskChnlUtilities.calcObjMaskFromLabelChnl(
+	private ObjectMaskCollection objectsFromLabels( Channel chnl, int numLabels ) {
+		return CreateFromLabels.create(
 			chnl.getVoxelBox().asByte(),
+			1,
 			numLabels,
 			minBoundingBoxVolumeVoxels
 		);

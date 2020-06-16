@@ -34,22 +34,22 @@ import java.util.Set;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.bean.objmask.filter.ObjMaskFilter;
 import org.anchoranalysis.image.extent.ImageDim;
-import org.anchoranalysis.image.objmask.ObjMask;
-import org.anchoranalysis.image.objmask.ObjMaskCollection;
+import org.anchoranalysis.image.objectmask.ObjectMask;
+import org.anchoranalysis.image.objectmask.ObjectMaskCollection;
 
 public class ObjMaskFilterOr extends ObjMaskFilterDerivedFromList {
 
 	@Override
 	public void filter(
-		ObjMaskCollection objs,
+		ObjectMaskCollection objs,
 		Optional<ImageDim> dim,
-		Optional<ObjMaskCollection> objsRejected
+		Optional<ObjectMaskCollection> objsRejected
 	) throws OperationFailedException {
 		
-		Set<ObjMask> set = new HashSet<ObjMask>();
+		Set<ObjectMask> set = new HashSet<ObjectMask>();
 		
 		for (ObjMaskFilter indFilter : getList()) {
-			ObjMaskCollection objsDup = objs.duplicate();
+			ObjectMaskCollection objsDup = objs.duplicate();
 			indFilter.filter(objsDup, dim, objsRejected);
 			set.addAll(objsDup.asList());
 		}

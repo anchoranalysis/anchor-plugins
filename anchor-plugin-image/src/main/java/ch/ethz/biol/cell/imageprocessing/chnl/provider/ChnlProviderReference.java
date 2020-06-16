@@ -31,7 +31,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 import org.anchoranalysis.image.bean.provider.ChnlProvider;
-import org.anchoranalysis.image.chnl.Chnl;
+import org.anchoranalysis.image.channel.Channel;
 
 public class ChnlProviderReference extends ChnlProvider {
 
@@ -46,7 +46,7 @@ public class ChnlProviderReference extends ChnlProvider {
 	private boolean duplicate=false;
 	// END BEAN PROPERTIES
 	
-	private Chnl chnl;
+	private Channel chnl;
 
 	public ChnlProviderReference() {
 		// Standard Bean Constructor
@@ -58,16 +58,16 @@ public class ChnlProviderReference extends ChnlProvider {
 	}
 
 	@Override
-	public Chnl create() throws CreateException {
+	public Channel create() throws CreateException {
 		if (chnl==null) {
 			chnl = createChnl();
 		}
 		return chnl;
 	}
 	
-	private Chnl createChnl() throws CreateException {
+	private Channel createChnl() throws CreateException {
 		try {
-			Chnl chnl = getSharedObjects().getChnlCollection().getException(id);
+			Channel chnl = getSharedObjects().getChnlCollection().getException(id);
 			
 			if (duplicate) {
 				return chnl.duplicate();

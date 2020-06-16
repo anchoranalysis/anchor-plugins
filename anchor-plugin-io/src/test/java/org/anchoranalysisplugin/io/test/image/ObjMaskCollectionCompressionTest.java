@@ -32,7 +32,7 @@ import static org.junit.Assert.assertTrue;
 import java.nio.file.Path;
 
 import org.anchoranalysis.core.index.SetOperationFailedException;
-import org.anchoranalysis.image.objmask.ObjMaskCollection;
+import org.anchoranalysis.image.objectmask.ObjectMaskCollection;
 import org.anchoranalysis.io.deserializer.DeserializationFailedException;
 import org.anchoranalysis.io.output.bound.BindFailedException;
 import org.anchoranalysis.test.TestLoader;
@@ -74,7 +74,7 @@ public class ObjMaskCollectionCompressionTest {
 	private ObjMaskCollectionWithSize calcUncompressed(String pathIn) {
 				
 		// Read the object, and write it again, this time compressed
-		ObjMaskCollection objs = testLoader.openObjsFromTestPath(pathIn);
+		ObjectMaskCollection objs = testLoader.openObjsFromTestPath(pathIn);
 		
 		long size = fileSizeBytes(
 			testLoader.getTestLoader().resolveTestPath(pathIn)
@@ -84,18 +84,18 @@ public class ObjMaskCollectionCompressionTest {
 	}
 
 	
-	private static ObjMaskCollectionWithSize calcCompressed( ObjMaskCollection objsUncompressed, Path root ) throws SetOperationFailedException, DeserializationFailedException, BindFailedException {
+	private static ObjMaskCollectionWithSize calcCompressed( ObjectMaskCollection objsUncompressed, Path root ) throws SetOperationFailedException, DeserializationFailedException, BindFailedException {
 		
 		Path pathOut = root.resolve(TEMPORARY_FOLDER_OUT+".h5");
 		
-		ObjMaskCollection objsCompressed = writeAndReadAgain( objsUncompressed, root, pathOut );
+		ObjectMaskCollection objsCompressed = writeAndReadAgain( objsUncompressed, root, pathOut );
 				
 		long size = fileSizeBytes( pathOut );
 		
 		return new ObjMaskCollectionWithSize( objsCompressed, size );
 	}
 	
-	private static ObjMaskCollection writeAndReadAgain( ObjMaskCollection objs, Path pathRoot, Path pathOut ) throws SetOperationFailedException, DeserializationFailedException, BindFailedException {
+	private static ObjectMaskCollection writeAndReadAgain( ObjectMaskCollection objs, Path pathRoot, Path pathOut ) throws SetOperationFailedException, DeserializationFailedException, BindFailedException {
 		// Write the objs to the file-system and read again
 		writeObjs(objs, pathRoot, generator(true,true) );
 		return readObjs(pathOut);		

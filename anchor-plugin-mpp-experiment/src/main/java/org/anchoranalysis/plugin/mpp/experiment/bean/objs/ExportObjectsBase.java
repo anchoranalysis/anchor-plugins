@@ -40,8 +40,8 @@ import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.init.ImageInitParams;
 import org.anchoranalysis.image.io.generator.raster.bbox.ExtractedBBoxGenerator;
 import org.anchoranalysis.image.io.generator.raster.obj.rgb.RGBObjMaskGeneratorCropped;
-import org.anchoranalysis.image.objmask.ObjMask;
-import org.anchoranalysis.image.objmask.ObjMaskCollection;
+import org.anchoranalysis.image.objectmask.ObjectMask;
+import org.anchoranalysis.image.objectmask.ObjectMaskCollection;
 import org.anchoranalysis.image.stack.DisplayStack;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.io.input.InputFromManager;
@@ -69,7 +69,7 @@ public abstract class ExportObjectsBase<T extends InputFromManager, S> extends T
 	private int paddingZ = 0;
 	// END BEAN PROPERTIES
 	
-	protected ObjMaskCollection inputObjs( ImageInitParams so, LogErrorReporter logger ) throws CreateException, InitException {
+	protected ObjectMaskCollection inputObjs( ImageInitParams so, LogErrorReporter logger ) throws CreateException, InitException {
 		ObjMaskProvider objsDup = objs.duplicateBean();
 		objsDup.initRecursive(so,logger);
 		return objsDup.create();
@@ -84,7 +84,7 @@ public abstract class ExportObjectsBase<T extends InputFromManager, S> extends T
 	 * @return either the exist object-mask (if no padding is to be added) or a padded object-mask
 	 * @throws OutputWriteFailedException
 	 */
-	protected ObjMask maybePadObjMask( ObjMask om, ImageDim dim ) throws OutputWriteFailedException {
+	protected ObjectMask maybePadObjMask( ObjectMask om, ImageDim dim ) throws OutputWriteFailedException {
 		
 		if (paddingXY==0 && paddingZ==0) {
 			return om;

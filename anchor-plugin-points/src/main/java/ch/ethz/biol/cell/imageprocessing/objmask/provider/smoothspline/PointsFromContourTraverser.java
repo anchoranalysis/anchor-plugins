@@ -31,13 +31,13 @@ import java.util.List;
 
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.geometry.Point3i;
-import org.anchoranalysis.image.objmask.ObjMask;
+import org.anchoranalysis.image.objectmask.ObjectMask;
 import org.anchoranalysis.image.outline.traverser.OutlineTraverser;
 
 public class PointsFromContourTraverser {
 
 	/** Extracts a list of points from the contour */
-	public static List<Point3i> pntsFromContour( ObjMask om ) throws OperationFailedException {
+	public static List<Point3i> pntsFromContour( ObjectMask om ) throws OperationFailedException {
 		
 		List<Point3i> ptsTraversed = new ArrayList<>();
 		

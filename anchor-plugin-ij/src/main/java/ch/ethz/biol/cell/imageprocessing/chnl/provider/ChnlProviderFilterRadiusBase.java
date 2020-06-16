@@ -4,7 +4,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.Positive;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.bean.provider.ChnlProviderOne;
-import org.anchoranalysis.image.chnl.Chnl;
+import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.convert.ImageUnitConverter;
 import org.anchoranalysis.image.extent.ImageDim;
 
@@ -20,14 +20,14 @@ public abstract class ChnlProviderFilterRadiusBase extends ChnlProviderOne {
 	// END BEAN PROPERTIES
 	
 	@Override
-	public Chnl createFromChnl(Chnl chnl) throws CreateException {
+	public Channel createFromChnl(Channel chnl) throws CreateException {
 		return createFromChnl(
 			chnl,
 			radiusInVoxels(chnl.getDimensions())
 		);
 	}
 	
-	protected abstract Chnl createFromChnl(Chnl chnl, int radius) throws CreateException;
+	protected abstract Channel createFromChnl(Channel chnl, int radius) throws CreateException;
 	
 	private int radiusInVoxels(ImageDim dim) {
 		if (radiusInMeters) {

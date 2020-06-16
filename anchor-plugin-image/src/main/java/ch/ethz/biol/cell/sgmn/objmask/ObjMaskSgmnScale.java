@@ -35,12 +35,12 @@ import org.anchoranalysis.core.functional.UnaryOperatorWithException;
 import org.anchoranalysis.image.bean.scale.ScaleCalculator;
 import org.anchoranalysis.image.bean.sgmn.objmask.ObjMaskSgmn;
 import org.anchoranalysis.image.bean.sgmn.objmask.ObjMaskSgmnOne;
-import org.anchoranalysis.image.chnl.Chnl;
+import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.interpolator.Interpolator;
 import org.anchoranalysis.image.interpolator.InterpolatorFactory;
-import org.anchoranalysis.image.objmask.ObjMask;
-import org.anchoranalysis.image.objmask.ObjMaskCollection;
+import org.anchoranalysis.image.objectmask.ObjectMask;
+import org.anchoranalysis.image.objectmask.ObjectMaskCollection;
 import org.anchoranalysis.image.scale.ScaleFactor;
 import org.anchoranalysis.image.seed.SeedCollection;
 import org.anchoranalysis.image.sgmn.SgmnFailedException;
@@ -60,14 +60,14 @@ public class ObjMaskSgmnScale extends ObjMaskSgmnOne {
 	// END BEAN PROPERTIES
 	
 	@Override
-	public ObjMaskCollection sgmn(Chnl chnl, Optional<ObjMask> mask, Optional<SeedCollection> seeds, ObjMaskSgmn sgmn) throws SgmnFailedException {
+	public ObjectMaskCollection sgmn(Channel chnl, Optional<ObjectMask> mask, Optional<SeedCollection> seeds, ObjMaskSgmn sgmn) throws SgmnFailedException {
 
 		Interpolator interpolator = createInterpolator();
 		
 		ScaleFactor sf = determineScaleFactor(chnl.getDimensions());
 		
 		// Scale input channel
-		Chnl chnlScaled = chnl.scaleXY( sf.getX(), sf.getY(), interpolator);
+		Channel chnlScaled = chnl.scaleXY( sf.getX(), sf.getY(), interpolator);
 		
 		// Scale seeds
 		seeds = mapScale(
@@ -98,7 +98,7 @@ public class ObjMaskSgmnScale extends ObjMaskSgmnOne {
 		}
 	}
 	
-	private ObjMaskCollection scaleResultToOriginalScale(ObjMaskCollection objs, ScaleFactor sf) throws SgmnFailedException {
+	private ObjectMaskCollection scaleResultToOriginalScale(ObjectMaskCollection objs, ScaleFactor sf) throws SgmnFailedException {
 		try {
 			objs.scale( sf.invert(), createInterpolator() );
 		} catch (OperationFailedException e) {

@@ -34,7 +34,7 @@ import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 import org.anchoranalysis.image.bean.provider.BinaryChnlProvider;
 import org.anchoranalysis.image.binary.BinaryChnl;
 import org.anchoranalysis.image.binary.values.BinaryValues;
-import org.anchoranalysis.image.chnl.Chnl;
+import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.init.ImageInitParams;
 
 public class BinaryChnlProviderStackReference extends BinaryChnlProvider {
@@ -47,7 +47,7 @@ public class BinaryChnlProviderStackReference extends BinaryChnlProvider {
 	private String stackProviderID;
 	// END BEAN PROPERTIES
 	
-	private Chnl chnl;
+	private Channel chnl;
 	
 	@Override
 	public void onInit(ImageInitParams so)

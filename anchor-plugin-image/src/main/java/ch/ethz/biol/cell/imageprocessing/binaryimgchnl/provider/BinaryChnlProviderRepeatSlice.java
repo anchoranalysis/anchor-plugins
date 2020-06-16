@@ -34,8 +34,8 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.bean.provider.BinaryChnlProviderOne;
 import org.anchoranalysis.image.bean.provider.ImageDimProvider;
 import org.anchoranalysis.image.binary.BinaryChnl;
-import org.anchoranalysis.image.chnl.Chnl;
-import org.anchoranalysis.image.chnl.factory.ChnlFactory;
+import org.anchoranalysis.image.channel.Channel;
+import org.anchoranalysis.image.channel.factory.ChannelFactory;
 import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
@@ -53,7 +53,7 @@ public class BinaryChnlProviderRepeatSlice extends BinaryChnlProviderOne {
 	@Override
 	public BinaryChnl createFromChnl(BinaryChnl chnl) throws CreateException {
 		
-		Chnl chnlIn = chnl.getChnl();
+		Channel chnlIn = chnl.getChnl();
 		VoxelBox<ByteBuffer> vbIn = chnlIn.getVoxelBox().asByte();
 		
 		ImageDim dimSource = dim.create();
@@ -62,7 +62,7 @@ public class BinaryChnlProviderRepeatSlice extends BinaryChnlProviderOne {
 			throw new CreateException("dims do not match");
 		}
 		
-		Chnl chnlOut = ChnlFactory.instance().createEmptyInitialised(dimSource, VoxelDataTypeUnsignedByte.instance);
+		Channel chnlOut = ChannelFactory.instance().createEmptyInitialised(dimSource, VoxelDataTypeUnsignedByte.instance);
 		VoxelBox<ByteBuffer> vbOut = chnlOut.getVoxelBox().asByte();
 
 		int volumeXY = vbIn.extent().getVolumeXY();

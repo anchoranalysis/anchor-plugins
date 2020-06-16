@@ -58,8 +58,8 @@ import org.anchoranalysis.image.io.generator.raster.bbox.ExtractedBBoxGenerator;
 import org.anchoranalysis.image.io.generator.raster.bbox.ExtractedBBoxOnRGBObjMaskGenerator;
 import org.anchoranalysis.image.io.generator.raster.obj.ObjWithBoundingBoxGenerator;
 import org.anchoranalysis.image.io.generator.raster.obj.rgb.RGBObjMaskGenerator;
-import org.anchoranalysis.image.objmask.ObjMask;
-import org.anchoranalysis.image.objmask.ObjMaskCollection;
+import org.anchoranalysis.image.objectmask.ObjectMask;
+import org.anchoranalysis.image.objectmask.ObjectMaskCollection;
 import org.anchoranalysis.image.stack.NamedImgStackCollection;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.io.bean.objmask.writer.RGBOutlineWriter;
@@ -162,7 +162,7 @@ public class ExportObjectsAsCroppedImagesTask extends ExportObjectsBase<MultiInp
 				stackCollection.keys().iterator().next()
 			).getDimensions();
 			
-			ObjMaskCollection objsZ = maybeExtendZObjs(
+			ObjectMaskCollection objsZ = maybeExtendZObjs(
 				inputObjs(paramsInit, logger),
 				dim.getZ()
 			);
@@ -191,25 +191,25 @@ public class ExportObjectsAsCroppedImagesTask extends ExportObjectsBase<MultiInp
 	}	
 	
 	private void outputGeneratorSeq(
-		IterableGenerator<ObjMask> generator,
-		ObjMaskCollection objs,
+		IterableGenerator<ObjectMask> generator,
+		ObjectMaskCollection objs,
 		BoundIOContext context
 	) throws CreateException {
-		GeneratorSequenceIncrementalRerouteErrors<ObjMask> generatorSeq = createGeneratorSequence(
+		GeneratorSequenceIncrementalRerouteErrors<ObjectMask> generatorSeq = createGeneratorSequence(
 			generator,
 			context
 		);
 		
 		generatorSeq.start();
 		
-		for(ObjMask om : objs) {
+		for(ObjectMask om : objs) {
 			generatorSeq.add(om);
 		}
 		
 		generatorSeq.end();
 	}
 	
-	private ObjMaskCollection maybeExtendZObjs(ObjMaskCollection objsCollection, int sizeZ) throws CreateException {
+	private ObjectMaskCollection maybeExtendZObjs(ObjectMaskCollection objsCollection, int sizeZ) throws CreateException {
 		
 		if (extendInZ) {
 			objsCollection = extendObjsInZ(objsCollection, sizeZ);
@@ -303,13 +303,13 @@ public class ExportObjectsAsCroppedImagesTask extends ExportObjectsBase<MultiInp
 	
 	
 	
-	private IterableGenerator<ObjMask> wrapBBoxGenerator( IterableGenerator<BoundingBox> generator, final boolean mip ) {
+	private IterableGenerator<ObjectMask> wrapBBoxGenerator( IterableGenerator<BoundingBox> generator, final boolean mip ) {
 		return new IterableGeneratorBridge<>(
 			generator,
-			new IObjectBridge<ObjMask, BoundingBox, AnchorNeverOccursException>() {
+			new IObjectBridge<ObjectMask, BoundingBox, AnchorNeverOccursException>() {
 
 				@Override
-				public BoundingBox bridgeElement(ObjMask sourceObject) {
+				public BoundingBox bridgeElement(ObjectMask sourceObject) {
 					if (mip) {
 						return sourceObject.getBoundingBox().flattenZ();
 					} else {
@@ -320,7 +320,7 @@ public class ExportObjectsAsCroppedImagesTask extends ExportObjectsBase<MultiInp
 		);
 	}
 	
-	private IterableGenerator<ObjMask> createRGBObjMaskGenerator(
+	private IterableGenerator<ObjectMask> createRGBObjMaskGenerator(
 		ExtractedBBoxGenerator generator,
 		ColorIndex colorIndex,
 		boolean mip
@@ -329,7 +329,7 @@ public class ExportObjectsAsCroppedImagesTask extends ExportObjectsBase<MultiInp
 		return new ExtractedBBoxOnRGBObjMaskGenerator(rgbObjMaskGenerator, generator, "rgbOutline", mip);
 	}
 	
-	private IterableGenerator<ObjMask> createGenerator(
+	private IterableGenerator<ObjectMask> createGenerator(
 		final ImageDim dim,
 		NamedImgStackCollection stackCollection,
 		NamedImgStackCollection stackCollectionMIP
@@ -337,7 +337,7 @@ public class ExportObjectsAsCroppedImagesTask extends ExportObjectsBase<MultiInp
 		
 		String manifestFunction = "rasterExtract";
 		
-		IterableCombinedListGenerator<ObjMask> out = new IterableCombinedListGenerator<>();
+		IterableCombinedListGenerator<ObjectMask> out = new IterableCombinedListGenerator<>();
 
 		out.add( "mask", new ObjWithBoundingBoxGenerator(dim.getRes()) );
 		
@@ -379,7 +379,7 @@ public class ExportObjectsAsCroppedImagesTask extends ExportObjectsBase<MultiInp
 
 		
 		// Maybe we need to change the objectMask to a padded version
-		IObjectBridge<ObjMask,ObjMask,OutputWriteFailedException> bridgeToMaybePad = om -> {
+		IObjectBridge<ObjectMask,ObjectMask,OutputWriteFailedException> bridgeToMaybePad = om -> {
 			if (keepEntireImage) {
 				return extractObjMaskKeepEntireImage(om, dim );
 			} else {
@@ -391,20 +391,20 @@ public class ExportObjectsAsCroppedImagesTask extends ExportObjectsBase<MultiInp
 	}
 	
 	
-	private static ObjMask extractObjMaskKeepEntireImage( ObjMask om, ImageDim dim ) throws OutputWriteFailedException {
+	private static ObjectMask extractObjMaskKeepEntireImage( ObjectMask om, ImageDim dim ) throws OutputWriteFailedException {
 		return BBoxUtilities.createObjMaskForBBox(
 			om,
 			new BoundingBox(dim.getExtnt())
 		);
 	}
 		
-	private GeneratorSequenceIncrementalRerouteErrors<ObjMask> createGeneratorSequence(
-		IterableGenerator<ObjMask> generator,
+	private GeneratorSequenceIncrementalRerouteErrors<ObjectMask> createGeneratorSequence(
+		IterableGenerator<ObjectMask> generator,
 		BoundIOContext context
 	) {
 		IndexableOutputNameStyle outputNameStyle = new IntegerPrefixOutputNameStyle("extractedObjs", 6);
 		
-		GeneratorSequenceIncrementalRerouteErrors<ObjMask> writer = new GeneratorSequenceIncrementalRerouteErrors<>(
+		GeneratorSequenceIncrementalRerouteErrors<ObjectMask> writer = new GeneratorSequenceIncrementalRerouteErrors<>(
 			new GeneratorSequenceIncrementalWriter<>(
 				context.getOutputManager().getDelegate(),
 				outputNameStyle.getOutputName(),
@@ -418,9 +418,9 @@ public class ExportObjectsAsCroppedImagesTask extends ExportObjectsBase<MultiInp
 		return writer;
 	}
 	
-	private static ObjMaskCollection extendObjsInZ( ObjMaskCollection objs, int sz ) {
-		ObjMaskCollection out = new ObjMaskCollection();
-		for( ObjMask om : objs ) {
+	private static ObjectMaskCollection extendObjsInZ( ObjectMaskCollection objs, int sz ) {
+		ObjectMaskCollection out = new ObjectMaskCollection();
+		for( ObjectMask om : objs ) {
 			out.add( om.flattenZ().growToZ(sz) );
 		}
 		return out;

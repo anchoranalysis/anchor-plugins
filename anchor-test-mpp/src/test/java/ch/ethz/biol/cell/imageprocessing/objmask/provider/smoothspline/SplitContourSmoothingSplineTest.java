@@ -29,7 +29,7 @@ package ch.ethz.biol.cell.imageprocessing.objmask.provider.smoothspline;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.index.SetOperationFailedException;
-import org.anchoranalysis.image.objmask.ObjMask;
+import org.anchoranalysis.image.objectmask.ObjectMask;
 import org.anchoranalysis.test.TestLoader;
 import org.anchoranalysis.test.image.io.TestLoaderImageIO;
 import org.anchoranalysis.test.mpp.LoadUtilities;
@@ -47,7 +47,7 @@ public class SplitContourSmoothingSplineTest {
 	@Test
 	public void test() throws CreateException, OperationFailedException, SetOperationFailedException {
 		
-		ObjMask contourIn = LoadUtilities.openLargestObjectBinaryFrom("01", testLoader);
+		ObjectMask contourIn = LoadUtilities.openLargestObjectBinaryFrom("01", testLoader);
 		
 		ContourList contours = SplitContourSmoothingSpline.apply(contourIn, 0.001, 0, 30);
 		

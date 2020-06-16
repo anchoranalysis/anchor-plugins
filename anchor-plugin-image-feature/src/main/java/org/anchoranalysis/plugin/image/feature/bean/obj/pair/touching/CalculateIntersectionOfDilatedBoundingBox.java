@@ -34,7 +34,7 @@ import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.feature.objmask.pair.FeatureInputPairObjs;
-import org.anchoranalysis.image.objmask.ObjMask;
+import org.anchoranalysis.image.objectmask.ObjectMask;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
@@ -73,7 +73,7 @@ class CalculateIntersectionOfDilatedBoundingBox extends FeatureCalculation<Optio
 		return new HashCodeBuilder().append(do3D).toHashCode();
 	}
 
-	private Optional<BoundingBox> findIntersectionOfDilatedBoundingBox( ObjMask om1, ObjMask om2, Extent extent) {
+	private Optional<BoundingBox> findIntersectionOfDilatedBoundingBox( ObjectMask om1, ObjectMask om2, Extent extent) {
 		
 		// Grow each bounding box
 		BoundingBox bbox1 = dilatedBoundingBoxFor(om1, extent);
@@ -83,7 +83,7 @@ class CalculateIntersectionOfDilatedBoundingBox extends FeatureCalculation<Optio
 		return bbox1.intersection().withInside(bbox2, extent);
 	}
 	
-	private BoundingBox dilatedBoundingBoxFor( ObjMask om, Extent extent ) {
+	private BoundingBox dilatedBoundingBoxFor( ObjectMask om, Extent extent ) {
 		return om.getVoxelBoxBounded().dilate(
 			do3D,
 			Optional.of(extent)

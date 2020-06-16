@@ -32,7 +32,7 @@ import java.util.List;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 import org.anchoranalysis.image.stack.Stack;
-import org.anchoranalysis.plugin.image.task.grouped.ChnlSource;
+import org.anchoranalysis.plugin.image.task.grouped.ChannelSource;
 import org.anchoranalysis.plugin.image.task.grouped.NamedChnl;
 
 /**
@@ -47,7 +47,7 @@ import org.anchoranalysis.plugin.image.task.grouped.NamedChnl;
 public class SelectAll extends SelectChnlsFromStacks {
 
 	@Override
-	public List<NamedChnl> selectChnls( ChnlSource source, boolean checkType ) throws OperationFailedException {
+	public List<NamedChnl> selectChnls( ChannelSource source, boolean checkType ) throws OperationFailedException {
 		
 		List<NamedChnl> out = new ArrayList<>();
 		
@@ -61,7 +61,7 @@ public class SelectAll extends SelectChnlsFromStacks {
 		return out;
 	}
 	
-	private List<NamedChnl> extractAllChnls( ChnlSource source, String stackName, boolean checkType ) throws OperationFailedException {
+	private List<NamedChnl> extractAllChnls( ChannelSource source, String stackName, boolean checkType ) throws OperationFailedException {
 		
 		try {
 			// We make a single histogram

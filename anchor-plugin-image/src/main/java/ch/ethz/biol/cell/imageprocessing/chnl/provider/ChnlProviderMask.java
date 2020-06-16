@@ -5,7 +5,7 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.bean.provider.BinaryChnlProvider;
 import org.anchoranalysis.image.bean.provider.ChnlProvider;
 import org.anchoranalysis.image.binary.BinaryChnl;
-import org.anchoranalysis.image.chnl.Chnl;
+import org.anchoranalysis.image.channel.Channel;
 
 /**
  * A base class for a {@link ChnlProvider} which also uses a binary-mask, but which doesn't use any other {@link ChnlProvider} as an input.
@@ -23,12 +23,12 @@ public abstract class ChnlProviderMask extends ChnlProvider {
 	// END BEAN PROPERTIES
 	
 	@Override
-	public Chnl create() throws CreateException {
+	public Channel create() throws CreateException {
 		BinaryChnl maskChnl = mask.create();
 		return createFromMask(maskChnl);
 	}
 	
-	protected abstract Chnl createFromMask(BinaryChnl mask) throws CreateException;
+	protected abstract Channel createFromMask(BinaryChnl mask) throws CreateException;
 
 	public BinaryChnlProvider getMask() {
 		return mask;

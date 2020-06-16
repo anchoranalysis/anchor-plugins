@@ -8,7 +8,7 @@ import org.anchoranalysis.core.error.reporter.ErrorReporter;
 import org.anchoranalysis.core.relation.RelationToValue;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorSingle;
 import org.anchoranalysis.image.feature.objmask.pair.FeatureInputPairObjs;
-import org.anchoranalysis.image.objmask.ObjMask;
+import org.anchoranalysis.image.objectmask.ObjectMask;
 import org.anchoranalysis.plugin.image.obj.merge.ObjVertex;
 
 
@@ -39,7 +39,7 @@ public class AssignPriorityFromPair extends AssignPriority {
 	public PrioritisedVertex assignPriorityToEdge(
 		ObjVertex src,
 		ObjVertex dest,
-		ObjMask merge,
+		ObjectMask merge,
 		ErrorReporter errorReporter
 	) throws OperationFailedException {
 
@@ -59,7 +59,7 @@ public class AssignPriorityFromPair extends AssignPriority {
 	private FeatureInputPairObjs createInput(
 		ObjVertex omSrcWithFeature,
 		ObjVertex omDestWithFeature,
-		ObjMask omMerge	
+		ObjectMask omMerge	
 	) {
 		return new FeatureInputPairObjs(
 			omSrcWithFeature.getObjMask(),

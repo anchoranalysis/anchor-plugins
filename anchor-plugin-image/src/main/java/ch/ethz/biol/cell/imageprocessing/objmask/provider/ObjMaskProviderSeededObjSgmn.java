@@ -35,10 +35,10 @@ import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
 import org.anchoranalysis.image.bean.sgmn.objmask.ObjMaskSgmn;
-import org.anchoranalysis.image.chnl.Chnl;
-import org.anchoranalysis.image.chnl.factory.ChnlFactory;
-import org.anchoranalysis.image.objmask.ObjMask;
-import org.anchoranalysis.image.objmask.ObjMaskCollection;
+import org.anchoranalysis.image.channel.Channel;
+import org.anchoranalysis.image.channel.factory.ChannelFactory;
+import org.anchoranalysis.image.objectmask.ObjectMask;
+import org.anchoranalysis.image.objectmask.ObjectMaskCollection;
 import org.anchoranalysis.image.objmask.match.ObjWithMatches;
 import org.anchoranalysis.image.seed.SeedCollection;
 import org.anchoranalysis.image.sgmn.SgmnFailedException;
@@ -64,12 +64,12 @@ public class ObjMaskProviderSeededObjSgmn extends ObjMaskProviderChnlSource {
 	// END BEAN PROPERTIES
 	
 	@Override
-	protected ObjMaskCollection createFromChnl(Chnl chnlSrc) throws CreateException {
+	protected ObjectMaskCollection createFromChnl(Channel chnlSrc) throws CreateException {
 		
-		ObjMaskCollection seeds = objsSeeds.create();
+		ObjectMaskCollection seeds = objsSeeds.create();
 		
 		if (objsSource!=null) {
-			ObjMaskCollection sourceObjs = objsSource.create();
+			ObjectMaskCollection sourceObjs = objsSource.create();
 			return createWithSourceObjs(
 				chnlSrc,
 				seeds,
@@ -81,10 +81,10 @@ public class ObjMaskProviderSeededObjSgmn extends ObjMaskProviderChnlSource {
 		}
 	}
 	
-	private static ObjMaskCollection createWithSourceObjs(
-		Chnl chnl,
-		ObjMaskCollection seeds,
-		ObjMaskCollection sourceObjs,
+	private static ObjectMaskCollection createWithSourceObjs(
+		Channel chnl,
+		ObjectMaskCollection seeds,
+		ObjectMaskCollection sourceObjs,
 		ObjMaskSgmn sgmn
 	) throws CreateException {
 		
@@ -93,14 +93,14 @@ public class ObjMaskProviderSeededObjSgmn extends ObjMaskProviderChnlSource {
 		
 		List<ObjWithMatches> matchList = ObjMaskMatchUtilities.matchIntersectingObjects( sourceObjs, seeds );
 		
-		ObjMaskCollection out = new ObjMaskCollection();
+		ObjectMaskCollection out = new ObjectMaskCollection();
 		for( ObjWithMatches ows : matchList ) {
 			if( ows.numMatches() <= 1 ) {
 				out.add( ows.getSourceObj() );
 			} else {
 				
 				try {
-					ObjMaskCollection objs = sgmn(
+					ObjectMaskCollection objs = sgmn(
 						ows.getSourceObj(),
 						ows.getMatches(),
 						chnl,
@@ -116,9 +116,9 @@ public class ObjMaskProviderSeededObjSgmn extends ObjMaskProviderChnlSource {
 		return out;
 	}
 	
-	private static ObjMaskCollection createWithoutSourceObjs(
-		Chnl chnl,
-		ObjMaskCollection seedsAsObjs,
+	private static ObjectMaskCollection createWithoutSourceObjs(
+		Channel chnl,
+		ObjectMaskCollection seedsAsObjs,
 		ObjMaskSgmn sgmn
 	) throws CreateException {
 		
@@ -137,19 +137,19 @@ public class ObjMaskProviderSeededObjSgmn extends ObjMaskProviderChnlSource {
 		
 		
 	// NB Objects in seeds are changed
-	private static ObjMaskCollection sgmn(
-		ObjMask objMask,
-		ObjMaskCollection seeds,
-		Chnl chnl,
+	private static ObjectMaskCollection sgmn(
+		ObjectMask objMask,
+		ObjectMaskCollection seeds,
+		Channel chnl,
 		ObjMaskSgmn sgmn
 	) throws SgmnFailedException, CreateException {
 		
 		// We make a channel just for the object
 		VoxelBox<?> vb = chnl.getVoxelBox().any().createBufferAlwaysNew( objMask.getBoundingBox() );
-		Chnl chnlObjLocal = ChnlFactory.instance().create(vb, chnl.getDimensions().getRes());
+		Channel chnlObjLocal = ChannelFactory.instance().create(vb, chnl.getDimensions().getRes());
 		
 		// We create a new ObjMask for the new channel
-		ObjMask objMaskLocal = new ObjMask( objMask.binaryVoxelBox() );
+		ObjectMask objMaskLocal = new ObjectMask( objMask.binaryVoxelBox() );
 		
 		SeedCollection seedsObj = SeedsFactory.createSeedsWithMask(
 			seeds,
@@ -158,14 +158,14 @@ public class ObjMaskProviderSeededObjSgmn extends ObjMaskProviderChnlSource {
 			chnl.getDimensions()
 		);
 		
-		ObjMaskCollection sgmnObjs = sgmn.sgmn(
+		ObjectMaskCollection sgmnObjs = sgmn.sgmn(
 			chnlObjLocal,
 			Optional.of(objMaskLocal),
 			Optional.of(seedsObj)
 		);
 		
 		// We shift each object back to were it belongs globally
-		for( ObjMask om : sgmnObjs ) {
+		for( ObjectMask om : sgmnObjs ) {
 			om.shiftBy( objMask.getBoundingBox().getCrnrMin() );
 		}
 		

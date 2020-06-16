@@ -27,7 +27,7 @@ package ch.ethz.biol.cell.imageprocessing.objmask.provider;
  */
 
 import java.nio.ByteBuffer;
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.anchoranalysis.core.error.OperationFailedException;
@@ -38,7 +38,7 @@ import org.anchoranalysis.core.geometry.ReadableTuple3i;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.Extent;
-import org.anchoranalysis.image.objmask.ObjMask;
+import org.anchoranalysis.image.objectmask.ObjectMask;
 import org.anchoranalysis.image.points.BoundingBoxFromPoints;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 
@@ -52,17 +52,14 @@ import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 class ObjMaskWalkShortestPath {
 
 	/** Walks a 4-connected line between two points, producing a minimal object-mask for both */
-	public static ObjMask walkLine( Point3d pnt1, Point3d pnt2 ) throws OperationFailedException {
-		
-		List<Point3i> list = new ArrayList<>();
-		list.add( new Point3i(pnt1) );
-		list.add( new Point3i(pnt2) );
-		
-		return walkLineInternal( list );
+	public static ObjectMask walkLine( Point3i pnt1, Point3i pnt2 ) throws OperationFailedException {
+		return walkLineInternal(
+			Arrays.asList(pnt1, pnt2)
+		);
 	}
 
 	/** Joins a series of points together by drawling a line between each success pair of points */
-	public static ObjMask walkLine( List<Point3d> pnts ) throws OperationFailedException {
+	public static ObjectMask walkLine( List<Point3d> pnts ) throws OperationFailedException {
 		
 		if (pnts.size()<2) {
 			throw new OperationFailedException(
@@ -77,13 +74,13 @@ class ObjMaskWalkShortestPath {
 	
 	
 	
-	private static ObjMask walkLineInternal( List<Point3i> pnts ) throws OperationFailedException {
+	private static ObjectMask walkLineInternal( List<Point3i> pnts ) throws OperationFailedException {
 				
 		checkCoplanar( pnts );
 		
 		BoundingBox bbox = BoundingBoxFromPoints.forList(pnts);
 		
-		ObjMask om = new ObjMask(bbox);
+		ObjectMask om = new ObjectMask(bbox);
 		
 		for( int i=0; i<(pnts.size()-1); i++ )  {
 		

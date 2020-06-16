@@ -32,9 +32,9 @@ import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.index.rtree.ObjMaskCollectionRTree;
-import org.anchoranalysis.image.objmask.ObjMask;
-import org.anchoranalysis.image.objmask.properties.ObjMaskWithProperties;
-import org.anchoranalysis.image.objmask.properties.ObjMaskWithPropertiesCollection;
+import org.anchoranalysis.image.objectmask.ObjectMask;
+import org.anchoranalysis.image.objectmask.properties.ObjMaskWithProperties;
+import org.anchoranalysis.image.objectmask.properties.ObjMaskWithPropertiesCollection;
 import org.anchoranalysis.plugin.mpp.experiment.objs.csv.CSVRow;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -97,7 +97,7 @@ public class Single extends ColumnDefinition {
 
 		ObjMaskWithPropertiesCollection objs = new ObjMaskWithPropertiesCollection();
 		
-		ObjMask obj = Utilities.findObjForCSVRow( allObjs, csvRow, indexPnt, indexNumPixels );
+		ObjectMask obj = Utilities.findObjForCSVRow( allObjs, csvRow, indexPnt, indexNumPixels );
 		
 		objs.add( new ObjMaskWithProperties(obj) );
 		return objs;

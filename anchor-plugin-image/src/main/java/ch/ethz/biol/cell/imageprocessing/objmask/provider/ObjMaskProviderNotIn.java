@@ -28,18 +28,18 @@ package ch.ethz.biol.cell.imageprocessing.objmask.provider;
 
 
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.image.objmask.ObjMask;
-import org.anchoranalysis.image.objmask.ObjMaskCollection;
+import org.anchoranalysis.image.objectmask.ObjectMask;
+import org.anchoranalysis.image.objectmask.ObjectMaskCollection;
 
 public class ObjMaskProviderNotIn extends ObjMaskProviderContainer {
 	
 	@Override
-	public ObjMaskCollection createFromObjs(ObjMaskCollection objsCollection) throws CreateException {
+	public ObjectMaskCollection createFromObjs(ObjectMaskCollection objsCollection) throws CreateException {
 		
-		ObjMaskCollection container = containerRequired();
+		ObjectMaskCollection container = containerRequired();
 		
-		ObjMaskCollection out = new ObjMaskCollection();
-		for( ObjMask om : objsCollection ) {
+		ObjectMaskCollection out = new ObjectMaskCollection();
+		for( ObjectMask om : objsCollection ) {
 			
 			if (!isObjIn(om,container)) {
 				out.add(om);
@@ -49,9 +49,9 @@ public class ObjMaskProviderNotIn extends ObjMaskProviderContainer {
 		return out;
 	}
 	
-	private static boolean isObjIn( ObjMask om, ObjMaskCollection container ) {
+	private static boolean isObjIn( ObjectMask om, ObjectMaskCollection container ) {
 		
-		for( ObjMask omCompare : container ) {
+		for( ObjectMask omCompare : container ) {
 			if(om.equals(omCompare)) {
 				return true;
 			}

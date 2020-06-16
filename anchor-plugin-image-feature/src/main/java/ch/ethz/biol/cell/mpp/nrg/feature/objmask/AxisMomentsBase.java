@@ -31,7 +31,7 @@ import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.feature.bean.objmask.FeatureObjMask;
 import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
-import org.anchoranalysis.image.objmask.ObjMask;
+import org.anchoranalysis.image.objectmask.ObjectMask;
 import org.anchoranalysis.math.moment.MomentsFromPointsCalculator;
 import org.anchoranalysis.points.moment.CalculateObjMaskPointsSecondMomentMatrix;
 
@@ -48,7 +48,7 @@ public abstract class AxisMomentsBase extends FeatureObjMask {
 		FeatureInputSingleObj params = input.get();
 		
 		// Max intensity projection of the input mask
-		ObjMask om = params.getObjMask();
+		ObjectMask om = params.getObjMask();
 
 		// If we have these few pixels, assume we are perfectly ellipsoid
 		if (om.numPixelsLessThan(12)) {

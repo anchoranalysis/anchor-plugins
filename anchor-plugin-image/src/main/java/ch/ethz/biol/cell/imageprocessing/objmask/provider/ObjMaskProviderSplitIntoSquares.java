@@ -36,8 +36,8 @@ import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.bean.provider.ObjMaskProviderOne;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.Extent;
-import org.anchoranalysis.image.objmask.ObjMask;
-import org.anchoranalysis.image.objmask.ObjMaskCollection;
+import org.anchoranalysis.image.objectmask.ObjectMask;
+import org.anchoranalysis.image.objectmask.ObjectMaskCollection;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.anchoranalysis.image.voxel.box.factory.VoxelBoxFactory;
 
@@ -54,10 +54,10 @@ public class ObjMaskProviderSplitIntoSquares extends ObjMaskProviderOne {
 	// END BEAN PROPERTIES
 	
 	@Override
-	public ObjMaskCollection createFromObjs(ObjMaskCollection objsCollection) throws CreateException {
+	public ObjectMaskCollection createFromObjs(ObjectMaskCollection objsCollection) throws CreateException {
 		
-		ObjMaskCollection out = new ObjMaskCollection();
-		for (ObjMask om : objsCollection) {
+		ObjectMaskCollection out = new ObjectMaskCollection();
+		for (ObjectMask om : objsCollection) {
 			out.addAll(
 				splitObj(
 					om,
@@ -71,9 +71,9 @@ public class ObjMaskProviderSplitIntoSquares extends ObjMaskProviderOne {
 	
 	// We want to add in any remaining space at the end into the last object, so we never have a rectangle
 	//  smaller than our squareSDize
-	public static ObjMaskCollection splitObj( ObjMask om, int squareSize, int minNumVoxels ) {
+	public static ObjectMaskCollection splitObj( ObjectMask om, int squareSize, int minNumVoxels ) {
 		
-		ObjMaskCollection out = new ObjMaskCollection();
+		ObjectMaskCollection out = new ObjectMaskCollection();
 		
 		Extent e = om.getBoundingBox().extent();
 		
@@ -137,7 +137,7 @@ public class ObjMaskProviderSplitIntoSquares extends ObjMaskProviderOne {
 				);
 				
 				out.add(
-					new ObjMask(srcBox, vbNew, om.getBinaryValuesByte())
+					new ObjectMask(srcBox, vbNew, om.getBinaryValuesByte())
 				);
 			}
 		}

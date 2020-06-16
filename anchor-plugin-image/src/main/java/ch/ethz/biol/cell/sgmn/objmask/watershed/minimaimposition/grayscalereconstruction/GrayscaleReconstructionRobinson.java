@@ -34,7 +34,7 @@ import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.core.geometry.ReadableTuple3i;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.extent.Extent;
-import org.anchoranalysis.image.objmask.ObjMask;
+import org.anchoranalysis.image.objectmask.ObjectMask;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.anchoranalysis.image.voxel.box.VoxelBoxWrapper;
 import org.anchoranalysis.image.voxel.box.factory.VoxelBoxFactory;
@@ -51,7 +51,7 @@ import ch.ethz.biol.cell.sgmn.objmask.watershed.encoding.PriorityQueueIndexRange
 public class GrayscaleReconstructionRobinson extends GrayscaleReconstructionByErosion {
 	
 	@Override
-	public VoxelBoxWrapper reconstruction( VoxelBoxWrapper maskVb, VoxelBoxWrapper markerVb, Optional<ObjMask> containingMask ) {
+	public VoxelBoxWrapper reconstruction( VoxelBoxWrapper maskVb, VoxelBoxWrapper markerVb, Optional<ObjectMask> containingMask ) {
 		
 		// We flip everything because what occurs is erosion by Dilation, whereas we want reconstruction by Erosion
 		markerVb.subtractFromMaxValue();
@@ -65,7 +65,7 @@ public class GrayscaleReconstructionRobinson extends GrayscaleReconstructionByEr
 
 	// we now have a markerForReconstruction in the same condition as the 'strong' condition in the Robison paper
 	// all pixels are either 0 or their final value (from chnl)
-	private VoxelBoxWrapper reconstructionByDilation( VoxelBoxWrapper maskVb, VoxelBoxWrapper markerVb, Optional<ObjMask> containingMask ) {
+	private VoxelBoxWrapper reconstructionByDilation( VoxelBoxWrapper maskVb, VoxelBoxWrapper markerVb, Optional<ObjectMask> containingMask ) {
 		
 		// We use this to track if something has been finalized or not
 		VoxelBox<ByteBuffer> vbFinalized = VoxelBoxFactory.instance().getByte().create( markerVb.any().extent() );
@@ -91,7 +91,7 @@ public class GrayscaleReconstructionRobinson extends GrayscaleReconstructionByEr
 		return markerVb;
 	}
 	
-	private void readFromQueueUntilEmpty( PriorityQueueIndexRangeDownhill<Point3i> queue, VoxelBox<?> markerVb, VoxelBox<?> maskVb, VoxelBox<ByteBuffer> vbFinalized, Optional<ObjMask> containingMask ) {
+	private void readFromQueueUntilEmpty( PriorityQueueIndexRangeDownhill<Point3i> queue, VoxelBox<?> markerVb, VoxelBox<?> maskVb, VoxelBox<ByteBuffer> vbFinalized, Optional<ObjectMask> containingMask ) {
 		
 		Extent extent = markerVb.extent();
 		
@@ -154,7 +154,7 @@ public class GrayscaleReconstructionRobinson extends GrayscaleReconstructionByEr
 	}
 	
 	
-	private void populateQueueFromNonZeroPixelsMask( PriorityQueueIndexRangeDownhill<Point3i> queue, VoxelBox<?> vb, VoxelBox<ByteBuffer> vbFinalized, ObjMask containingMask ) {
+	private void populateQueueFromNonZeroPixelsMask( PriorityQueueIndexRangeDownhill<Point3i> queue, VoxelBox<?> vb, VoxelBox<ByteBuffer> vbFinalized, ObjectMask containingMask ) {
 
 		ReadableTuple3i crnrPntMin = containingMask.getBoundingBox().getCrnrMin();
 		ReadableTuple3i crnrPntMax = containingMask.getBoundingBox().calcCrnrMax();

@@ -50,8 +50,8 @@ import org.anchoranalysis.image.feature.session.merged.MergedPairsInclude;
 import org.anchoranalysis.image.feature.session.merged.MergedPairsFeatures;
 import org.anchoranalysis.image.feature.session.merged.MergedPairsSession;
 import org.anchoranalysis.image.feature.stack.FeatureInputStack;
-import org.anchoranalysis.image.objmask.ObjMask;
-import org.anchoranalysis.image.objmask.ObjMaskCollection;
+import org.anchoranalysis.image.objectmask.ObjectMask;
+import org.anchoranalysis.image.objectmask.ObjectMaskCollection;
 import org.anchoranalysis.image.voxel.nghb.CreateNghbGraph;
 
 /**
@@ -169,14 +169,14 @@ public class MergedPairs extends FeatureTableObjs<FeatureInputPairObjs> {
 	}
 	
 	@Override
-	public List<FeatureInputPairObjs> createListInputs(ObjMaskCollection objs,
+	public List<FeatureInputPairObjs> createListInputs(ObjectMaskCollection objs,
 			NRGStackWithParams nrgStack, LogErrorReporter logErrorReporter) throws CreateException {
 
 		List<FeatureInputPairObjs> out = new ArrayList<>();
 		
 		// We create a neighbour-graph of our input objects
-		CreateNghbGraph<ObjMask> graphCreator = new CreateNghbGraph<ObjMask>( avoidOverlappingObjects );
-		GraphWithEdgeTypes<ObjMask,Integer> graphNghb = graphCreator.createGraphWithNumPixels(
+		CreateNghbGraph<ObjectMask> graphCreator = new CreateNghbGraph<ObjectMask>( avoidOverlappingObjects );
+		GraphWithEdgeTypes<ObjectMask,Integer> graphNghb = graphCreator.createGraphWithNumPixels(
 			objs.asList(),
 			v -> v,
 			nrgStack.getNrgStack().getDimensions().getExtnt(),
@@ -184,8 +184,8 @@ public class MergedPairs extends FeatureTableObjs<FeatureInputPairObjs> {
 		);
 		
 		// We iterate through every edge in the graph, edges can exist in both directions
-		Collection<EdgeTypeWithVertices<ObjMask,Integer>> edges = graphNghb.edgeSetUnique();
-		for( EdgeTypeWithVertices<ObjMask,Integer> e : edges ) {
+		Collection<EdgeTypeWithVertices<ObjectMask,Integer>> edges = graphNghb.edgeSetUnique();
+		for( EdgeTypeWithVertices<ObjectMask,Integer> e : edges ) {
 			
 			out.add(
 				new FeatureInputPairObjs(

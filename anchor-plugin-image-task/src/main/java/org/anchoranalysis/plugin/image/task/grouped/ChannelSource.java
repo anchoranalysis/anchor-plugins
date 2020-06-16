@@ -32,7 +32,7 @@ import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.index.SetOperationFailedException;
 import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 import org.anchoranalysis.image.bean.size.SizeXY;
-import org.anchoranalysis.image.chnl.Chnl;
+import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.stack.NamedImgStackCollection;
 import org.anchoranalysis.image.stack.Stack;
 
@@ -41,10 +41,10 @@ import org.anchoranalysis.image.stack.Stack;
  * 
  * <p>Checks may be applied to make sure all chnls have the same-type</p>
  **/
-public class ChnlSource {
+public class ChannelSource {
 
 	private final NamedImgStackCollection stackStore;
-	private final ConsistentChnlChecker chnlChecker;
+	private final ConsistentChannelChecker chnlChecker;
 	private final Optional<SizeXY> resizeTo;
 	
 	/**
@@ -54,9 +54,9 @@ public class ChnlSource {
 	 * @param chnlChecker
 	 * @param resizeTo optionally resizes all extracted channels in XY
 	 */
-	public ChnlSource(
+	public ChannelSource(
 		NamedImgStackCollection stackStore,
-		ConsistentChnlChecker chnlChecker,
+		ConsistentChannelChecker chnlChecker,
 		Optional<SizeXY> resizeTo
 	) {
 		super();
@@ -65,7 +65,7 @@ public class ChnlSource {
 		this.resizeTo = resizeTo;
 	}
 	
-	public Chnl extractChnl( String stackName, boolean checkType ) throws OperationFailedException {
+	public Channel extractChnl( String stackName, boolean checkType ) throws OperationFailedException {
 		
 		try {
 			// We make a single histogram
@@ -84,7 +84,7 @@ public class ChnlSource {
 		}
 	}
 	
-	public Chnl extractChnl( String stackName, boolean checkType, int index ) throws OperationFailedException {
+	public Channel extractChnl( String stackName, boolean checkType, int index ) throws OperationFailedException {
 	
 		try {
 			// We make a single histogram
@@ -99,12 +99,12 @@ public class ChnlSource {
 		}
 	}
 	
-	public Chnl extractChnl( Stack stack, boolean checkType, int index ) throws OperationFailedException {
+	public Channel extractChnl( Stack stack, boolean checkType, int index ) throws OperationFailedException {
 		try {
-			Chnl chnl = stack.getChnl(index);
+			Channel chnl = stack.getChnl(index);
 			
 			if (checkType) {
-				chnlChecker.checkChnlType(chnl.getVoxelDataType());
+				chnlChecker.checkChannelType(chnl.getVoxelDataType());
 			}
 			
 			return maybeResize(chnl);
@@ -116,7 +116,7 @@ public class ChnlSource {
 		}
 	}
 	
-	private Chnl maybeResize(Chnl chnl) {
+	private Channel maybeResize(Channel chnl) {
 		if (resizeTo.isPresent()) {
 			return chnl.resizeXY(resizeTo.get().getWidth(), resizeTo.get().getHeight());
 		} else {

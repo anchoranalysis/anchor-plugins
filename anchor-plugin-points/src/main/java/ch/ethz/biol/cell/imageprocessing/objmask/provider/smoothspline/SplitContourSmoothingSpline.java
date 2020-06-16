@@ -32,7 +32,7 @@ import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.geometry.Point3f;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.contour.Contour;
-import org.anchoranalysis.image.objmask.ObjMask;
+import org.anchoranalysis.image.objectmask.ObjectMask;
 import org.anchoranalysis.plugin.opencv.CVFindContours;
 
 import com.google.common.base.Function;
@@ -52,7 +52,7 @@ public class SplitContourSmoothingSpline {
 	 * @throws OperationFailedException
 	 */
 	public static ContourList apply(
-		ObjMask om,
+		ObjectMask om,
 		double rho,
 		int numLoopPoints,
 		int minNumPoints
@@ -66,7 +66,7 @@ public class SplitContourSmoothingSpline {
 	}
 	
 	private static ContourList traversePointsAndCallFitter(
-		ObjMask om,
+		ObjectMask om,
 		int minNumPoints,
 		FitSplinesExtract fitter
 	) throws OperationFailedException {

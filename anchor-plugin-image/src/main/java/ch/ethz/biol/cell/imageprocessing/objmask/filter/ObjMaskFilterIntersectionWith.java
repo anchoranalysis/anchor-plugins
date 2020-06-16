@@ -34,8 +34,8 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
 import org.anchoranalysis.image.extent.ImageDim;
-import org.anchoranalysis.image.objmask.ObjMask;
-import org.anchoranalysis.image.objmask.ObjMaskCollection;
+import org.anchoranalysis.image.objectmask.ObjectMask;
+import org.anchoranalysis.image.objectmask.ObjectMaskCollection;
 
 public class ObjMaskFilterIntersectionWith extends ObjMaskFilterByObject {
 
@@ -44,7 +44,7 @@ public class ObjMaskFilterIntersectionWith extends ObjMaskFilterByObject {
 	private ObjMaskProvider objs;
 	// END BEAN PROPERTIES
 	
-	private ObjMaskCollection intersectionSet;
+	private ObjectMaskCollection intersectionSet;
 
 	@Override
 	protected void start() throws OperationFailedException {
@@ -57,9 +57,9 @@ public class ObjMaskFilterIntersectionWith extends ObjMaskFilterByObject {
 		
 	}
 
-	private static boolean insersects( ObjMask om, ObjMaskCollection set) {
+	private static boolean insersects( ObjectMask om, ObjectMaskCollection set) {
 		
-		for( ObjMask s : set ) {
+		for( ObjectMask s : set ) {
 			
 			if (s.hasIntersectingPixels(om)) {
 				return true;
@@ -70,7 +70,7 @@ public class ObjMaskFilterIntersectionWith extends ObjMaskFilterByObject {
 	}
 	
 	@Override
-	protected boolean match(ObjMask om, Optional<ImageDim> dim)
+	protected boolean match(ObjectMask om, Optional<ImageDim> dim)
 			throws OperationFailedException {
 
 		return insersects(om, intersectionSet);

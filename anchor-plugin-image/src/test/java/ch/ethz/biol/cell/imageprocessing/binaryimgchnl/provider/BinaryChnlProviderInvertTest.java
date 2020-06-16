@@ -111,7 +111,7 @@ public class BinaryChnlProviderInvertTest {
 	
 	private static Point3i addHalfHeightInY(Point3i in) {
 		Point3i out = new Point3i(in);
-		out.incrY( HEIGHT/2 );
+		out.incrementY( HEIGHT/2 );
 		return out;
 	}
 }

@@ -36,10 +36,10 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.bean.sgmn.objmask.ObjMaskSgmn;
-import org.anchoranalysis.image.chnl.Chnl;
+import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.extent.Extent;
-import org.anchoranalysis.image.objmask.ObjMask;
-import org.anchoranalysis.image.objmask.ObjMaskCollection;
+import org.anchoranalysis.image.objectmask.ObjectMask;
+import org.anchoranalysis.image.objectmask.ObjectMaskCollection;
 import org.anchoranalysis.image.seed.SeedCollection;
 import org.anchoranalysis.image.sgmn.SgmnFailedException;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
@@ -79,7 +79,7 @@ public class ObjMaskSgmnWatershedYeong extends ObjMaskSgmn {
 	// END PROPERTIES
 	
 	@Override
-	public ObjMaskCollection sgmn(Chnl chnl, Optional<ObjMask> mask,
+	public ObjectMaskCollection sgmn(Channel chnl, Optional<ObjectMask> mask,
 			Optional<SeedCollection> seeds) throws SgmnFailedException {
 
 		EncodedVoxelBox matS = createS(chnl.getDimensions().getExtnt());
@@ -123,7 +123,7 @@ public class ObjMaskSgmnWatershedYeong extends ObjMaskSgmn {
 	private static void pointPixelsOrMarkAsMinima(
 		VoxelBox<?> vbImg,
 		EncodedVoxelBox matS,
-		Optional<ObjMask> mask,
+		Optional<ObjectMask> mask,
 		Optional<MinimaStore> minimaStore
 	) {
 		
@@ -135,7 +135,7 @@ public class ObjMaskSgmnWatershedYeong extends ObjMaskSgmn {
 		);
 	}
 	
-	private static void convertAllToConnectedComponents( EncodedVoxelBox matS, Optional<ObjMask> mask) {
+	private static void convertAllToConnectedComponents( EncodedVoxelBox matS, Optional<ObjectMask> mask) {
 		IterateVoxels.callEachPoint(
 			mask,
 			matS.getVoxelBox(),
@@ -143,7 +143,7 @@ public class ObjMaskSgmnWatershedYeong extends ObjMaskSgmn {
 		);
 	}
 	
-	private static ObjMaskCollection createObjectsFromLabels( VoxelBox<IntBuffer> matS, Optional<ObjMask> mask) throws CreateException {
+	private static ObjectMaskCollection createObjectsFromLabels( VoxelBox<IntBuffer> matS, Optional<ObjectMask> mask) throws CreateException {
 		
 		final BoundingBoxMap bbm = new BoundingBoxMap();
 		

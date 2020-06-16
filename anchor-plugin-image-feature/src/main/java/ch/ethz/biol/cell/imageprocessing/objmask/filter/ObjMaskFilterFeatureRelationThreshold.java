@@ -37,7 +37,7 @@ import org.anchoranalysis.feature.session.calculator.FeatureCalculatorSingle;
 import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.feature.bean.evaluator.FeatureEvaluator;
 import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
-import org.anchoranalysis.image.objmask.ObjMask;
+import org.anchoranalysis.image.objectmask.ObjectMask;
 
 public class ObjMaskFilterFeatureRelationThreshold extends ObjMaskFilterByObject {
 
@@ -73,7 +73,7 @@ public class ObjMaskFilterFeatureRelationThreshold extends ObjMaskFilterByObject
 	}
 
 	@Override
-	protected boolean match(ObjMask om, Optional<ImageDim> dim) throws OperationFailedException {
+	protected boolean match(ObjectMask om, Optional<ImageDim> dim) throws OperationFailedException {
 
 		double val;
 		try {

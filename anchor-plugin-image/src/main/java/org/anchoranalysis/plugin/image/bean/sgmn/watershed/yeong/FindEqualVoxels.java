@@ -31,7 +31,7 @@ import java.util.Optional;
 import java.util.Stack;
 
 import org.anchoranalysis.core.geometry.Point3i;
-import org.anchoranalysis.image.objmask.ObjMask;
+import org.anchoranalysis.image.objectmask.ObjectMask;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.anchoranalysis.image.voxel.buffer.SlidingBuffer;
 import org.anchoranalysis.image.voxel.iterator.IterateVoxels;
@@ -134,13 +134,13 @@ private static class PointTester extends ProcessVoxelNeighbourAbsoluteWithSlidin
 	private final VoxelBox<?> bufferValuesToFindEqual;
 	private final EncodedVoxelBox matS;
 	private final boolean do3D;
-	private final Optional<ObjMask> mask;
+	private final Optional<ObjectMask> mask;
 	
 	public FindEqualVoxels(
 		VoxelBox<?> bufferValuesToFindEqual,
 		EncodedVoxelBox temporaryMarkVisitedBuffer,
 		boolean do3D,
-		Optional<ObjMask> mask
+		Optional<ObjectMask> mask
 	) {
 		this.bufferValuesToFindEqual = bufferValuesToFindEqual;
 		this.matS = temporaryMarkVisitedBuffer;

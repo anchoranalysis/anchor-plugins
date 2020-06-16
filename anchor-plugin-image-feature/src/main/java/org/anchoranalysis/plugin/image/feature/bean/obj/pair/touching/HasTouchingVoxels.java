@@ -30,7 +30,7 @@ package org.anchoranalysis.plugin.image.feature.bean.obj.pair.touching;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.extent.BoundingBox;
-import org.anchoranalysis.image.objmask.ObjMask;
+import org.anchoranalysis.image.objectmask.ObjectMask;
 import org.anchoranalysis.image.voxel.kernel.ApplyKernel;
 import org.anchoranalysis.image.voxel.kernel.count.CountKernel;
 
@@ -47,7 +47,7 @@ import org.anchoranalysis.image.voxel.kernel.count.CountKernel;
 public class HasTouchingVoxels extends TouchingVoxels {
 
 	@Override
-	protected double calcWithIntersection(ObjMask om1, ObjMask om2, BoundingBox bboxIntersect)
+	protected double calcWithIntersection(ObjectMask om1, ObjectMask om2, BoundingBox bboxIntersect)
 			throws FeatureCalcException {
 		return convertToInt(
 			calculateHasTouchingRelative(
@@ -58,7 +58,7 @@ public class HasTouchingVoxels extends TouchingVoxels {
 		);
 	}
 
-	private boolean calculateHasTouchingRelative(ObjMask om1, ObjMask om2Rel, BoundingBox bboxIntersectRel) throws FeatureCalcException {
+	private boolean calculateHasTouchingRelative(ObjectMask om1, ObjectMask om2Rel, BoundingBox bboxIntersectRel) throws FeatureCalcException {
 		CountKernel kernelMatch = createCountKernelMask(om1, om2Rel);
 		try {
 			return ApplyKernel.applyUntilPositive(kernelMatch, om1.getVoxelBox(), bboxIntersectRel );

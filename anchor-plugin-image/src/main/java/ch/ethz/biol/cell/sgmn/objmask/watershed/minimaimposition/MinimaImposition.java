@@ -32,11 +32,11 @@ import org.anchoranalysis.bean.AnchorBean;
 
 
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.image.chnl.Chnl;
-import org.anchoranalysis.image.objmask.ObjMask;
+import org.anchoranalysis.image.channel.Channel;
+import org.anchoranalysis.image.objectmask.ObjectMask;
 import org.anchoranalysis.image.seed.SeedCollection;
 
 public abstract class MinimaImposition extends AnchorBean<MinimaImposition> {
 
-	public abstract Chnl imposeMinima( Chnl chnl, SeedCollection seeds, Optional<ObjMask> containingMask ) throws OperationFailedException;
+	public abstract Channel imposeMinima( Channel chnl, SeedCollection seeds, Optional<ObjectMask> containingMask ) throws OperationFailedException;
 }

@@ -40,8 +40,8 @@ import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
 import org.anchoranalysis.image.feature.session.FeatureTableSession;
 import org.anchoranalysis.image.feature.session.NamedFeatureStoreSession;
-import org.anchoranalysis.image.objmask.ObjMask;
-import org.anchoranalysis.image.objmask.ObjMaskCollection;
+import org.anchoranalysis.image.objectmask.ObjectMask;
+import org.anchoranalysis.image.objectmask.ObjectMaskCollection;
 
 /**
  * Simply selects features directly from the list, and objects directly from the list passed.
@@ -62,12 +62,12 @@ public class Simple extends FeatureTableObjs<FeatureInputSingleObj> {
 	}
 
 	@Override
-	public List<FeatureInputSingleObj> createListInputs(ObjMaskCollection objs,
+	public List<FeatureInputSingleObj> createListInputs(ObjectMaskCollection objs,
 			NRGStackWithParams nrgStack, LogErrorReporter logErrorReporter) throws CreateException {
 
 		List<FeatureInputSingleObj> out = new ArrayList<>();
 		
-		for( ObjMask om : objs ) {
+		for( ObjectMask om : objs ) {
 			checkObjInsideScene(om, nrgStack.getDimensions().getExtnt());
 
 			out.add(
@@ -78,7 +78,7 @@ public class Simple extends FeatureTableObjs<FeatureInputSingleObj> {
 		return out;
 	}
 	
-	private static void checkObjInsideScene( ObjMask om, Extent extent) throws CreateException {
+	private static void checkObjInsideScene( ObjectMask om, Extent extent) throws CreateException {
 		if (!extent.contains(om.getBoundingBox())) {
 			throw new CreateException(
 				String.format(

@@ -27,9 +27,8 @@ package ch.ethz.biol.cell.imageprocessing.objmask.provider;
  */
 
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.core.geometry.Point3i;
-import org.anchoranalysis.image.objmask.ObjMask;
+import org.anchoranalysis.image.objectmask.ObjectMask;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -45,10 +44,10 @@ public class ObjMaskShortestPathTest {
 	@Test
 	public void test() throws OperationFailedException {
 		
-		Point3d pnt1 = new Point3d(4.3,19.2,0);
-		Point3d pnt2 = new Point3d(11.3,3.54,0);
+		Point3i pnt1 = new Point3i(4,19,0);
+		Point3i pnt2 = new Point3i(11,3,0);
 		
-		ObjMask om = ObjMaskWalkShortestPath.walkLine(pnt1, pnt2);
+		ObjectMask om = ObjMaskWalkShortestPath.walkLine(pnt1, pnt2);
 				
 		assertTrue( om.binaryVoxelBox().countOn()==24 );
 		assertTrue( om.contains( new Point3i(4,19,0) ) );

@@ -1,7 +1,7 @@
 package ch.ethz.biol.cell.imageprocessing.chnl.provider;
 
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.image.chnl.Chnl;
+import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
@@ -9,7 +9,7 @@ import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 public abstract class ChnlProviderConditionallyWriteScalar extends ChnlProviderOneValue {
 	
 	@Override
-	public Chnl createFromChnlValue(Chnl chnl, double value) throws CreateException {
+	public Channel createFromChnlValue(Channel chnl, double value) throws CreateException {
 		processVoxelBox(
 			chnl.getVoxelBox().any(),
 			value

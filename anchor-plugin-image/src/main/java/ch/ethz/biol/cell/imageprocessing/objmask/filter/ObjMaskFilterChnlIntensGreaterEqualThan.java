@@ -35,9 +35,9 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.bean.provider.ChnlProvider;
 import org.anchoranalysis.image.bean.unitvalue.distance.UnitValueDistance;
-import org.anchoranalysis.image.chnl.Chnl;
+import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.extent.ImageDim;
-import org.anchoranalysis.image.objmask.ObjMask;
+import org.anchoranalysis.image.objectmask.ObjectMask;
 import org.anchoranalysis.image.orientation.DirectionVector;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
@@ -60,7 +60,7 @@ public class ObjMaskFilterChnlIntensGreaterEqualThan extends ObjMaskFilterByObje
 	@Override
 	protected void start() throws OperationFailedException {
 		
-		Chnl chnlSingleRegion;
+		Channel chnlSingleRegion;
 		try {
 			chnlSingleRegion = chnl.create();
 		} catch (CreateException e) {
@@ -71,7 +71,7 @@ public class ObjMaskFilterChnlIntensGreaterEqualThan extends ObjMaskFilterByObje
 	}
 
 	@Override
-	protected boolean match(ObjMask om, Optional<ImageDim> dim) throws OperationFailedException {
+	protected boolean match(ObjectMask om, Optional<ImageDim> dim) throws OperationFailedException {
 		
 		int thresholdRslv = threshold(dim);
 		

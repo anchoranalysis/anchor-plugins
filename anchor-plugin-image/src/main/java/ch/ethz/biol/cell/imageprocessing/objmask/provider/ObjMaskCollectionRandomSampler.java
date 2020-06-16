@@ -34,14 +34,14 @@ import java.util.List;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.random.RandomNumberGenerator;
-import org.anchoranalysis.image.chnl.Chnl;
+import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.convert.ByteConverter;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.histogram.Histogram;
 import org.anchoranalysis.image.histogram.HistogramArray;
-import org.anchoranalysis.image.objmask.ObjMask;
-import org.anchoranalysis.image.objmask.ObjMaskCollection;
+import org.anchoranalysis.image.objectmask.ObjectMask;
+import org.anchoranalysis.image.objectmask.ObjectMaskCollection;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 
 
@@ -50,14 +50,14 @@ public class ObjMaskCollectionRandomSampler {
 	
 	public static class ObjMaskSampler {
 		
-		private ObjMask objMask;
+		private ObjectMask objMask;
 		private int numPnts;
 		private RandomNumberGenerator randomNumberGenerator;
-		private Chnl chnl;
+		private Channel chnl;
 		
 		public ObjMaskSampler(
-			ObjMask objMask,
-			Chnl chnl,
+			ObjectMask objMask,
+			Channel chnl,
 			RandomNumberGenerator randomNumberGenerator,
 			int numPnts
 		) {
@@ -140,13 +140,13 @@ public class ObjMaskCollectionRandomSampler {
 		private RandomNumberGenerator randomNumberGenerator;
 		
 		public ObjMaskCollectionSampler(
-			ObjMaskCollection objMaskCollection,
-			Chnl chnl,
+			ObjectMaskCollection objMaskCollection,
+			Channel chnl,
 			RandomNumberGenerator randomNumberGenerator
 		) {
 			this.randomNumberGenerator = randomNumberGenerator;
 						
-			for( ObjMask om : objMaskCollection ) {
+			for( ObjectMask om : objMaskCollection ) {
 				int numPixels = om.numPixels();
 				if (numPixels>1) {
 					list.add( new ObjMaskSampler(om, chnl, randomNumberGenerator, numPixels) );
@@ -186,8 +186,8 @@ public class ObjMaskCollectionRandomSampler {
 	
 	
 	public static Histogram create(
-		ObjMaskCollection omc,
-		Chnl chnl,
+		ObjectMaskCollection omc,
+		Channel chnl,
 		RandomNumberGenerator randomNumberGenerator,
 		int numSamples
 	) throws CreateException {

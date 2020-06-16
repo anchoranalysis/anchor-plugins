@@ -41,8 +41,8 @@ import org.anchoranalysis.image.bean.objmask.match.ObjMaskMatcher;
 import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.feature.bean.evaluator.FeatureEvaluator;
 import org.anchoranalysis.image.feature.objmask.pair.FeatureInputPairObjs;
-import org.anchoranalysis.image.objmask.ObjMask;
-import org.anchoranalysis.image.objmask.ObjMaskCollection;
+import org.anchoranalysis.image.objectmask.ObjectMask;
+import org.anchoranalysis.image.objectmask.ObjectMaskCollection;
 import org.anchoranalysis.image.objmask.match.ObjWithMatches;
 
 // Evaluates a feature on the Source Object and exactly one Object that it matches
@@ -63,7 +63,7 @@ public class ObjMaskFilterFeatureMatchingObjectsRelationThreshold extends ObjMas
 	// END BEAN PROPERTIES
 	
 	@Override
-	public void filter(ObjMaskCollection objs, Optional<ImageDim> dim, Optional<ObjMaskCollection> objsRejected)
+	public void filter(ObjectMaskCollection objs, Optional<ImageDim> dim, Optional<ObjectMaskCollection> objsRejected)
 			throws OperationFailedException {
 
 		List<ObjWithMatches> matchList = objMaskMatcher.findMatch(objs);
@@ -84,7 +84,7 @@ public class ObjMaskFilterFeatureMatchingObjectsRelationThreshold extends ObjMas
 		
 			for( ObjWithMatches owm : matchList ) {
 				
-				for (ObjMask match : owm.getMatches()) {
+				for (ObjectMask match : owm.getMatches()) {
 					
 					double featureVal = session.calc(
 						new FeatureInputPairObjs(owm.getSourceObj(), match)

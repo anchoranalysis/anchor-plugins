@@ -31,8 +31,8 @@ import org.anchoranalysis.bean.shared.params.keyvalue.KeyValueParamsProvider;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.params.KeyValueParams;
 import org.anchoranalysis.image.bean.chnl.converter.ChnlConverterBean;
-import org.anchoranalysis.image.stack.region.chnlconverter.ChnlConverter;
-import org.anchoranalysis.image.stack.region.chnlconverter.ChnlConverterToUnsignedByteScaleByMinMaxValue;
+import org.anchoranalysis.image.stack.region.chnlconverter.ChannelConverter;
+import org.anchoranalysis.image.stack.region.chnlconverter.ChannelConverterToUnsignedByteScaleByMinMaxValue;
 
 /**
  * Scales by compressing a certain range of values into the 8-bit signal
@@ -60,7 +60,7 @@ public class ChnlConverterBeanScaleByKeyValueParams extends ChnlConverterBean {
 	// END BEAN PROPERTIES
 	
 	@Override
-	public ChnlConverter<?> createConverter() throws CreateException {
+	public ChannelConverter<?> createConverter() throws CreateException {
 		
 		KeyValueParams kvp = keyValueParamsProvider.create();
 		
@@ -69,7 +69,7 @@ public class ChnlConverterBeanScaleByKeyValueParams extends ChnlConverterBean {
 		
 		getLogger().getLogReporter().logFormatted("ChnlConverter: scale with min=%d max=%d%n", min, max);
 		
-		return new ChnlConverterToUnsignedByteScaleByMinMaxValue(min, max);
+		return new ChannelConverterToUnsignedByteScaleByMinMaxValue(min, max);
 	}
 	
 	private int getScaled( KeyValueParams kvp, String key, double scale ) throws CreateException {

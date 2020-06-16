@@ -1,6 +1,4 @@
-package ch.ethz.biol.cell.imageprocessing.objmask.provider;
-
-import java.util.Optional;
+package org.anchoranalysis.plugin.image.bean.sgmn.watershed.yeong;
 
 /*
  * #%L
@@ -29,48 +27,39 @@ import java.util.Optional;
  */
 
 
-import org.anchoranalysis.bean.annotation.BeanField;
+import java.util.List;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.image.bean.sgmn.objmask.ObjMaskSgmn;
-import org.anchoranalysis.image.channel.Channel;
+import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.objectmask.ObjectMask;
-import org.anchoranalysis.image.objectmask.ObjectMaskCollection;
-import org.anchoranalysis.image.sgmn.SgmnFailedException;
+import org.anchoranalysis.image.points.BoundingBoxFromPoints;
 
-public class ObjMaskProviderSgmnByObj extends ObjMaskProviderOneChnlSource {
+class CreateObjectsFromPoints {
 
-	// START BEAN PROPERTIES
-	@BeanField
-	private ObjMaskSgmn sgmn;
-	// END BEAN PROPERTIES
-
-	@Override
-	public ObjectMaskCollection createFromObjs( ObjectMaskCollection objsSrc, Channel chnlToSgmn ) throws CreateException {
+	private CreateObjectsFromPoints() {}
+	
+	// TODO Optimize by requiring sorted list of points and moving through the z-stacks sequentially
+	public static ObjectMask create( List<Point3i> points ) throws CreateException {
 		
-		ObjectMaskCollection objsOut = new ObjectMaskCollection();
-		
-		for( ObjectMask om : objsSrc ) {
-			try {
-				objsOut.addAll(
-					sgmn.sgmn(
-						chnlToSgmn,
-						Optional.of(om),
-						Optional.empty()
+		try {
+			ObjectMask om = new ObjectMask(
+				BoundingBoxFromPoints.forList(points)
+			);
+			
+			for( int i=0; i<points.size(); i++) {
+								
+				om.binaryVoxelBox().setHigh(
+					Point3i.immutableSubtract(
+						points.get(i),
+						om.getBoundingBox().getCrnrMin()
 					)
 				);
-			} catch (SgmnFailedException e) {
-				throw new CreateException(e);
 			}
+			
+			return om;
+			
+		} catch (OperationFailedException e) {
+			throw new CreateException(e);
 		}
-		
-		return objsOut;
-	}
-
-	public ObjMaskSgmn getSgmn() {
-		return sgmn;
-	}
-
-	public void setSgmn(ObjMaskSgmn sgmn) {
-		this.sgmn = sgmn;
 	}
 }

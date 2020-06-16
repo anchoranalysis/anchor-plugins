@@ -30,7 +30,7 @@ package ch.ethz.biol.cell.sgmn.objmask.watershed.encoding;
 import java.util.Optional;
 
 import org.anchoranalysis.core.geometry.Point3i;
-import org.anchoranalysis.image.objmask.ObjMask;
+import org.anchoranalysis.image.objectmask.ObjectMask;
 import org.anchoranalysis.image.voxel.buffer.SlidingBuffer;
 import org.anchoranalysis.image.voxel.iterator.IterateVoxels;
 import org.anchoranalysis.image.voxel.iterator.changed.ProcessVoxelNeighbour;
@@ -104,7 +104,7 @@ public final class SteepestCalc {
 	 * @param bigNghb iff true we use 8-Connectivity instead of 4, and 26-connectivity instead of 6 in 3D
 	 * @param mask
 	 */
-	public SteepestCalc( SlidingBuffer<?> rbb, WatershedEncoding encoder, boolean do3D, boolean bigNghb, Optional<ObjMask> mask ) {
+	public SteepestCalc( SlidingBuffer<?> rbb, WatershedEncoding encoder, boolean do3D, boolean bigNghb, Optional<ObjectMask> mask ) {
 		this.do3D = do3D;
 		this.process = ProcessVoxelNeighbourFactory.within(
 			mask,

@@ -31,8 +31,8 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.bean.provider.ObjMaskProviderOne;
-import org.anchoranalysis.image.objmask.ObjMask;
-import org.anchoranalysis.image.objmask.ObjMaskCollection;
+import org.anchoranalysis.image.objectmask.ObjectMask;
+import org.anchoranalysis.image.objectmask.ObjectMaskCollection;
 
 public class ObjMaskProviderExtractSlice extends ObjMaskProviderOne {
 
@@ -42,15 +42,15 @@ public class ObjMaskProviderExtractSlice extends ObjMaskProviderOne {
 	// END BEAN PROPERTIES
 
 	@Override
-	public ObjMaskCollection createFromObjs( ObjMaskCollection in ) throws CreateException {
+	public ObjectMaskCollection createFromObjs( ObjectMaskCollection in ) throws CreateException {
 		
-		ObjMaskCollection out = new ObjMaskCollection();
+		ObjectMaskCollection out = new ObjectMaskCollection();
 		
-		for( ObjMask om : in ) {
+		for( ObjectMask om : in ) {
 			
 			if (om.getBoundingBox().contains().z(slice)) {
 				try {
-					ObjMask omExtract = om.extractSlice(slice - om.getBoundingBox().getCrnrMin().getZ(), false); 
+					ObjectMask omExtract = om.extractSlice(slice - om.getBoundingBox().getCrnrMin().getZ(), false); 
 					out.add( omExtract );
 				} catch (OperationFailedException e) {
 					throw new CreateException(e);

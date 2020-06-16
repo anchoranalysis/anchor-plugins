@@ -34,7 +34,7 @@ import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.core.geometry.Tuple3i;
 import org.anchoranalysis.core.random.RandomNumberGenerator;
 import org.anchoranalysis.image.extent.ImageRes;
-import org.anchoranalysis.image.objmask.ObjMask;
+import org.anchoranalysis.image.objectmask.ObjectMask;
 
 // Breadth-first iteration of pixels
 public class VisitSchedulerMaxDistZ extends VisitScheduler {
@@ -76,7 +76,7 @@ public class VisitSchedulerMaxDistZ extends VisitScheduler {
 	}
 
 	@Override
-	public boolean considerVisit( Point3i pnt, int distAlongContour, ObjMask objMask ) {
+	public boolean considerVisit( Point3i pnt, int distAlongContour, ObjectMask objMask ) {
 		System.out.printf("root=%d,%d,%d   pnt=%d,%d,%d\n", root.getX(), root.getY(), root.getZ(), pnt.getX(), pnt.getY(), pnt.getZ() );
 		if (Math.abs(root.getZ()-pnt.getZ())>maxZRslv) {
 			return false;

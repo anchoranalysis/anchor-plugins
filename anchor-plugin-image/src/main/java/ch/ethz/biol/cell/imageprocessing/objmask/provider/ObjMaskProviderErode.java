@@ -36,12 +36,12 @@ import org.anchoranalysis.bean.error.BeanMisconfiguredException;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.extent.ImageDim;
-import org.anchoranalysis.image.objmask.ObjMask;
-import org.anchoranalysis.image.objmask.ObjMaskCollection;
-import org.anchoranalysis.image.objmask.morph.MorphologicalErosion;
-import org.anchoranalysis.image.objmask.morph.accept.AcceptIterationList;
-import org.anchoranalysis.image.objmask.morph.accept.RejectIterationIfAllHigh;
-import org.anchoranalysis.image.objmask.morph.accept.RejectIterationIfLowDisconnected;
+import org.anchoranalysis.image.objectmask.ObjectMask;
+import org.anchoranalysis.image.objectmask.ObjectMaskCollection;
+import org.anchoranalysis.image.objectmask.morph.MorphologicalErosion;
+import org.anchoranalysis.image.objectmask.morph.accept.AcceptIterationList;
+import org.anchoranalysis.image.objectmask.morph.accept.RejectIterationIfAllHigh;
+import org.anchoranalysis.image.objectmask.morph.accept.RejectIterationIfLowDisconnected;
 
 public class ObjMaskProviderErode extends ObjMaskProviderDimensionsOptional {
 	
@@ -71,11 +71,11 @@ public class ObjMaskProviderErode extends ObjMaskProviderDimensionsOptional {
 	}
 	
 	@Override
-	public ObjMaskCollection createFromObjs(ObjMaskCollection objsIn) throws CreateException {
+	public ObjectMaskCollection createFromObjs(ObjectMaskCollection objsIn) throws CreateException {
 		
-		ObjMaskCollection objsOut = new ObjMaskCollection();
+		ObjectMaskCollection objsOut = new ObjectMaskCollection();
 		
-		for( ObjMask om : objsIn ) {
+		for( ObjectMask om : objsIn ) {
 			
 			AcceptIterationList acceptConditionsDilation = new AcceptIterationList();
 			if (rejectIterationIfAllLow) {
@@ -85,7 +85,7 @@ public class ObjMaskProviderErode extends ObjMaskProviderDimensionsOptional {
 				acceptConditionsDilation.add( new RejectIterationIfLowDisconnected() );
 			}
 			
-			ObjMask omOut = MorphologicalErosion.createErodedObjMask(
+			ObjectMask omOut = MorphologicalErosion.createErodedObjMask(
 				om,
 				calcExtent(),
 				do3D,

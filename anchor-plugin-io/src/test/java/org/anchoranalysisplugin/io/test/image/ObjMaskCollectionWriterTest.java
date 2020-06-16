@@ -34,7 +34,7 @@ import java.nio.file.Path;
 
 import org.anchoranalysis.bean.xml.RegisterBeanFactories;
 import org.anchoranalysis.core.index.SetOperationFailedException;
-import org.anchoranalysis.image.objmask.ObjMaskCollection;
+import org.anchoranalysis.image.objectmask.ObjectMaskCollection;
 import org.anchoranalysis.io.deserializer.DeserializationFailedException;
 import org.anchoranalysis.io.output.bound.BindFailedException;
 import org.junit.Before;
@@ -74,10 +74,10 @@ public class ObjMaskCollectionWriterTest {
 	private void testWriteRead(boolean hdf5) throws SetOperationFailedException, DeserializationFailedException, BindFailedException {
 		Path path = folder.getRoot().toPath();
 		
-		ObjMaskCollection objs = fixture.createMockObjs(2, 7);
+		ObjectMaskCollection objs = fixture.createMockObjs(2, 7);
 		writeObjs(objs, path, generator(hdf5,false) );
 		
-		ObjMaskCollection objsRead = readObjs(
+		ObjectMaskCollection objsRead = readObjs(
 			outputPathExpected(hdf5, path)
 		);
 		

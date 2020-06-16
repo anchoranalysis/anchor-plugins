@@ -32,7 +32,7 @@ import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.feature.bean.objmask.FeatureObjMask;
 import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
-import org.anchoranalysis.image.objmask.ObjMask;
+import org.anchoranalysis.image.objectmask.ObjectMask;
 import org.anchoranalysis.plugin.points.calculate.ellipsoid.CalculateEllipsoidLeastSquares;
 
 public abstract class EllipsoidBase extends FeatureObjMask {
@@ -46,7 +46,7 @@ public abstract class EllipsoidBase extends FeatureObjMask {
 	@Override
 	public double calc(SessionInput<FeatureInputSingleObj> input) throws FeatureCalcException {
 		
-		ObjMask om = input.get().getObjMask();
+		ObjectMask om = input.get().getObjMask();
 		
 		// If we have these few pixels, assume we are perfectly ellipsoid
 		if (om.numPixelsLessThan(12)) {

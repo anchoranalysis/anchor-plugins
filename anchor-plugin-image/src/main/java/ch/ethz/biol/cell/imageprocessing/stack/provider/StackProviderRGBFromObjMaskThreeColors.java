@@ -41,8 +41,8 @@ import org.anchoranalysis.core.color.RGBColor;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
 import org.anchoranalysis.image.io.generator.raster.obj.rgb.RGBObjMaskGenerator;
-import org.anchoranalysis.image.objmask.ObjMaskCollection;
-import org.anchoranalysis.image.objmask.properties.ObjMaskWithPropertiesCollection;
+import org.anchoranalysis.image.objectmask.ObjectMaskCollection;
+import org.anchoranalysis.image.objectmask.properties.ObjMaskWithPropertiesCollection;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
@@ -75,7 +75,7 @@ public class StackProviderRGBFromObjMaskThreeColors extends StackProviderRGBFrom
 	@Override
 	public Stack create() throws CreateException {
 		
-		ObjMaskCollection objs = new ObjMaskCollection();
+		ObjectMaskCollection objs = new ObjectMaskCollection();
 		ColorList colors = new ColorList();
 		
 		addWithColor( objsRed, COLOR_RED, objs, colors );
@@ -98,11 +98,11 @@ public class StackProviderRGBFromObjMaskThreeColors extends StackProviderRGBFrom
 		}
 	}
 
-	private void addWithColor( ObjMaskProvider provider, RGBColor color, ObjMaskCollection objsOut, ColorList colorsInOut ) throws CreateException {
-		Optional<ObjMaskCollection> providerObjs = OptionalFactory.create(provider);
+	private void addWithColor( ObjMaskProvider provider, RGBColor color, ObjectMaskCollection objsOut, ColorList colorsInOut ) throws CreateException {
+		Optional<ObjectMaskCollection> providerObjs = OptionalFactory.create(provider);
 
 		if (providerObjs.isPresent()) {
-			ObjMaskCollection maybeFlattened = maybeFlatten(providerObjs.get()); 
+			ObjectMaskCollection maybeFlattened = maybeFlatten(providerObjs.get()); 
 			objsOut.addAll(maybeFlattened);
 			colorsInOut.addMultiple( color, maybeFlattened.size() );
 		}

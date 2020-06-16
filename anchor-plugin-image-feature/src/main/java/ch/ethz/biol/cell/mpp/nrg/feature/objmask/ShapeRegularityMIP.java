@@ -31,7 +31,7 @@ import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.feature.bean.objmask.FeatureObjMask;
 import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
-import org.anchoranalysis.image.objmask.ObjMask;
+import org.anchoranalysis.image.objectmask.ObjectMask;
 
 public class ShapeRegularityMIP extends FeatureObjMask {
 
@@ -39,7 +39,7 @@ public class ShapeRegularityMIP extends FeatureObjMask {
 	public double calc(SessionInput<FeatureInputSingleObj> input) throws FeatureCalcException {
 		
 		// Maximum-intensity projection of the mask
-		ObjMask om = input.get().getObjMask().duplicate().flattenZ();
+		ObjectMask om = input.get().getObjMask().duplicate().flattenZ();
 		
 		return ShapeRegularityCalculator.calcShapeRegularity(om);
 	}

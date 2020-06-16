@@ -33,8 +33,8 @@ import org.anchoranalysis.core.error.CreateException;
 
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.extent.Extent;
-import org.anchoranalysis.image.objmask.ObjMask;
-import org.anchoranalysis.image.objmask.morph.MorphologicalDilation;
+import org.anchoranalysis.image.objectmask.ObjectMask;
+import org.anchoranalysis.image.objectmask.morph.MorphologicalDilation;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 public class CalculateDilationMap extends CalculateIncrementalOperationMap {
@@ -48,7 +48,7 @@ public class CalculateDilationMap extends CalculateIncrementalOperationMap {
 	}
 
 	@Override
-	protected ObjMask applyOperation( ObjMask om, Extent extent, boolean do3D ) throws OperationFailedException {
+	protected ObjectMask applyOperation( ObjectMask om, Extent extent, boolean do3D ) throws OperationFailedException {
 		try {
 			return MorphologicalDilation.createDilatedObjMask(
 				om,

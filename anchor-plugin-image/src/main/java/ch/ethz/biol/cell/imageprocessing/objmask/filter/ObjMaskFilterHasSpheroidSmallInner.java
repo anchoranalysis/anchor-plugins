@@ -37,10 +37,10 @@ import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.bean.objmask.filter.ObjMaskFilter;
 import org.anchoranalysis.image.bean.objmask.match.ObjMaskMatcher;
 import org.anchoranalysis.image.bean.provider.ChnlProvider;
-import org.anchoranalysis.image.chnl.Chnl;
+import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.extent.ImageDim;
-import org.anchoranalysis.image.objmask.ObjMask;
-import org.anchoranalysis.image.objmask.ObjMaskCollection;
+import org.anchoranalysis.image.objectmask.ObjectMask;
+import org.anchoranalysis.image.objectmask.ObjectMaskCollection;
 import org.anchoranalysis.image.objmask.match.ObjWithMatches;
 import org.anchoranalysis.plugin.image.intensity.IntensityMeanCalculator;
 
@@ -73,12 +73,12 @@ public class ObjMaskFilterHasSpheroidSmallInner extends ObjMaskFilter {
 	// END BEAN PROPERTIES
 	
 	@Override
-	public void filter(ObjMaskCollection objs, Optional<ImageDim> dim, Optional<ObjMaskCollection> objsRejected)
+	public void filter(ObjectMaskCollection objs, Optional<ImageDim> dim, Optional<ObjectMaskCollection> objsRejected)
 			throws OperationFailedException {
 		
 		List<ObjWithMatches> matchList = objMaskMatcherForContainedObjects.findMatch(objs);
 		
-		Chnl intensity;
+		Channel intensity;
 		try {
 			intensity = chnlIntensity.create();
 		} catch (CreateException e) {
@@ -86,7 +86,7 @@ public class ObjMaskFilterHasSpheroidSmallInner extends ObjMaskFilter {
 		}
 		
 		
-		Chnl distance;
+		Channel distance;
 		try {
 			distance = chnlDistance.create();
 		} catch (CreateException e) {
@@ -105,9 +105,9 @@ public class ObjMaskFilterHasSpheroidSmallInner extends ObjMaskFilter {
 		}
 	}
 	
-	private boolean isSmallInner( ObjMask om, ObjMask omContainer, Chnl chnlIntensity, Chnl chnlDistance ) throws OperationFailedException {
+	private boolean isSmallInner( ObjectMask om, ObjectMask omContainer, Channel chnlIntensity, Channel chnlDistance ) throws OperationFailedException {
 		
-		ObjMask omInverse = omContainer.duplicate();
+		ObjectMask omInverse = omContainer.duplicate();
 		try {
 			omInverse.invertContainedMask(om);
 		} catch (OperationFailedException e) {
@@ -146,7 +146,7 @@ public class ObjMaskFilterHasSpheroidSmallInner extends ObjMaskFilter {
 		return true;
 	}
 	
-	private boolean sizeCheck(ObjMask om, ObjMask omContainer) throws OperationFailedException {
+	private boolean sizeCheck(ObjectMask om, ObjectMask omContainer) throws OperationFailedException {
 		int sizeSmall = om.numPixels();
 		int sizeContainer = omContainer.numPixels();
 		double sizeRatio = ((double) sizeSmall) / sizeContainer;
@@ -161,7 +161,7 @@ public class ObjMaskFilterHasSpheroidSmallInner extends ObjMaskFilter {
 		return true;
 	}
 	
-	private boolean distanceCheck(Chnl chnlDistance, ObjMask om, ObjMask omInverse) throws OperationFailedException {
+	private boolean distanceCheck(Channel chnlDistance, ObjectMask om, ObjectMask omInverse) throws OperationFailedException {
 		// Distance check
 		try{
 			// Calculate intensity of object
@@ -178,12 +178,12 @@ public class ObjMaskFilterHasSpheroidSmallInner extends ObjMaskFilter {
 		}
 	}
 	
-	private ObjMask findMaxVolumeObjAndCnt( ObjMaskCollection objs ) {
+	private ObjectMask findMaxVolumeObjAndCnt( ObjectMaskCollection objs ) {
 		
-		ObjMask max = null;
+		ObjectMask max = null;
 		int maxVolume = 0;
 		
-		for( ObjMask om : objs ) {
+		for( ObjectMask om : objs ) {
 			int vol = om.numPixels();
 			
 			if (max==null || vol>maxVolume ) {
@@ -194,14 +194,14 @@ public class ObjMaskFilterHasSpheroidSmallInner extends ObjMaskFilter {
 		return max;
 	}
 	
-	private boolean includeObj( ObjWithMatches owm, Chnl chnlIntensity, Chnl chnlDistance ) throws OperationFailedException {
+	private boolean includeObj( ObjWithMatches owm, Channel chnlIntensity, Channel chnlDistance ) throws OperationFailedException {
 		
 		if (owm.getMatches().size()==0) {
 			return true;
 		}
 		
 		// We only consider the largest of the segmented objects as a possibility
-		ObjMask biggestMatch = findMaxVolumeObjAndCnt( owm.getMatches() );
+		ObjectMask biggestMatch = findMaxVolumeObjAndCnt( owm.getMatches() );
 		
 		if (isSmallInner(biggestMatch, owm.getSourceObj(), chnlIntensity, chnlDistance)) {
 			return false;

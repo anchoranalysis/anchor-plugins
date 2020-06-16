@@ -36,14 +36,14 @@ import org.anchoranalysis.image.bean.sgmn.binary.BinarySgmnOne;
 import org.anchoranalysis.image.bean.sgmn.binary.BinarySgmnParameters;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
-import org.anchoranalysis.image.objmask.ObjMask;
+import org.anchoranalysis.image.objectmask.ObjectMask;
 import org.anchoranalysis.image.sgmn.SgmnFailedException;
 import org.anchoranalysis.image.voxel.box.VoxelBoxWrapper;
 
 public class SgmnInv extends BinarySgmnOne {
 
 	@Override
-	public BinaryVoxelBox<ByteBuffer> sgmnFromSgmn(VoxelBoxWrapper voxelBox, BinarySgmnParameters params, Optional<ObjMask> mask, BinarySgmn sgmn) throws SgmnFailedException {
+	public BinaryVoxelBox<ByteBuffer> sgmnFromSgmn(VoxelBoxWrapper voxelBox, BinarySgmnParameters params, Optional<ObjectMask> mask, BinarySgmn sgmn) throws SgmnFailedException {
 		
 		BinaryVoxelBox<ByteBuffer> vb = sgmn.sgmn(voxelBox, params, mask);
 		

@@ -41,7 +41,7 @@ import org.anchoranalysis.core.progress.OperationWithProgressReporter;
 import org.anchoranalysis.core.progress.ProgressReporter;
 import org.anchoranalysis.core.progress.ProgressReporterMultiple;
 import org.anchoranalysis.core.progress.ProgressReporterOneOfMany;
-import org.anchoranalysis.image.chnl.Chnl;
+import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.io.RasterIOException;
 import org.anchoranalysis.image.io.input.NamedChnlsInput;
 import org.anchoranalysis.image.io.input.series.NamedChnlCollectionForSeries;
@@ -159,7 +159,7 @@ public class ConvertNamedChnlsToStack extends InputManager<StackSequenceInput> {
 			
 				NamedChnlCollectionForSeries ncc = in.createChnlCollectionForSeries(seriesNum, new ProgressReporterOneOfMany(prm) );
 				prm.incrWorker();
-				Chnl chnl = ncc.getChnl(chnlName, timeIndex, new ProgressReporterOneOfMany(prm) );
+				Channel chnl = ncc.getChnl(chnlName, timeIndex, new ProgressReporterOneOfMany(prm) );
 				
 				TimeSequence ts = new TimeSequence();
 				ts.add( new Stack(chnl) );

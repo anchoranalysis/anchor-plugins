@@ -35,7 +35,7 @@ import org.anchoranalysis.image.bean.interpolator.InterpolatorBean;
 import org.anchoranalysis.image.bean.interpolator.InterpolatorBeanLanczos;
 import org.anchoranalysis.image.bean.provider.ChnlProviderOne;
 import org.anchoranalysis.image.bean.scale.ScaleCalculator;
-import org.anchoranalysis.image.chnl.Chnl;
+import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.interpolator.Interpolator;
 import org.anchoranalysis.image.scale.ScaleFactor;
 
@@ -50,7 +50,7 @@ public class ChnlProviderScale extends ChnlProviderOne {
 	// End BEAN PROPERTIES
 	
 	@Override
-	public Chnl createFromChnl(Chnl chnl) throws CreateException {
+	public Channel createFromChnl(Channel chnl) throws CreateException {
 		return scale(
 			chnl,
 			scaleCalculator,
@@ -59,7 +59,7 @@ public class ChnlProviderScale extends ChnlProviderOne {
 		);
 	}
 	
-	public static Chnl scale( Chnl chnl, ScaleCalculator scaleCalculator, Interpolator interpolator, LogReporter logger) throws CreateException {
+	public static Channel scale( Channel chnl, ScaleCalculator scaleCalculator, Interpolator interpolator, LogReporter logger) throws CreateException {
 		try {
 			logger.logFormatted("incoming Image Resolution: %s\n", chnl.getDimensions().getRes() );
 			
@@ -67,7 +67,7 @@ public class ChnlProviderScale extends ChnlProviderOne {
 			
 			logger.logFormatted("Scale Factor: %s\n", sf.toString() );
 			
-			Chnl chnlOut = chnl.scaleXY( sf.getX(), sf.getY(), interpolator);
+			Channel chnlOut = chnl.scaleXY( sf.getX(), sf.getY(), interpolator);
 			
 			logger.logFormatted("outgoing Image Resolution: %s\n", chnlOut.getDimensions().getRes() );
 			

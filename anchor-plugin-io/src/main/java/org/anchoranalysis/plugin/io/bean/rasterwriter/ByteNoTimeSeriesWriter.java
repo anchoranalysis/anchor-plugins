@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.file.Path;
 
-import org.anchoranalysis.image.chnl.Chnl;
+import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.io.RasterIOException;
 import org.anchoranalysis.image.io.bean.rasterwriter.RasterWriter;
 import org.anchoranalysis.image.io.generator.raster.series.ImgStackSeries;
@@ -84,7 +84,7 @@ public abstract class ByteNoTimeSeriesWriter extends RasterWriter {
 		
 		int cnt = 0;
 		for( int c=0; c<stack.getNumChnl(); c++) {
-			Chnl chnl = stack.getChnl(c);
+			Channel chnl = stack.getChnl(c);
 			VoxelBox<ByteBuffer> vb = chnl.getVoxelBox().asByte();
 			
 			for (int z=0; z<stack.getDimensions().getZ(); z++) {

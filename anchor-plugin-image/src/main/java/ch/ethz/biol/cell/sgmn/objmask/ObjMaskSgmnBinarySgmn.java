@@ -37,12 +37,12 @@ import org.anchoranalysis.image.bean.sgmn.binary.BinarySgmnParameters;
 import org.anchoranalysis.image.bean.sgmn.objmask.ObjMaskSgmn;
 import org.anchoranalysis.image.binary.BinaryChnl;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
-import org.anchoranalysis.image.chnl.Chnl;
-import org.anchoranalysis.image.chnl.factory.ChnlFactory;
+import org.anchoranalysis.image.channel.Channel;
+import org.anchoranalysis.image.channel.factory.ChannelFactory;
 import org.anchoranalysis.image.extent.ImageRes;
-import org.anchoranalysis.image.objmask.ObjMask;
-import org.anchoranalysis.image.objmask.ObjMaskCollection;
-import org.anchoranalysis.image.objmask.factory.CreateFromConnectedComponentsFactory;
+import org.anchoranalysis.image.objectmask.ObjectMask;
+import org.anchoranalysis.image.objectmask.ObjectMaskCollection;
+import org.anchoranalysis.image.objectmask.factory.CreateFromConnectedComponentsFactory;
 import org.anchoranalysis.image.seed.SeedCollection;
 import org.anchoranalysis.image.sgmn.SgmnFailedException;
 
@@ -57,9 +57,9 @@ public class ObjMaskSgmnBinarySgmn extends ObjMaskSgmn {
 	// END BEAN PROPERTIES
 
 	@Override
-	public ObjMaskCollection sgmn(
-		Chnl chnl,
-		Optional<ObjMask> mask,
+	public ObjectMaskCollection sgmn(
+		Channel chnl,
+		Optional<ObjectMask> mask,
 		Optional<SeedCollection> seeds
 	) throws SgmnFailedException {
 
@@ -75,14 +75,14 @@ public class ObjMaskSgmnBinarySgmn extends ObjMaskSgmn {
 		return createFromBinaryVoxelBox(bvb,chnl.getDimensions().getRes(), mask);
 	}
 
-	private ObjMaskCollection createFromBinaryVoxelBox( BinaryVoxelBox<ByteBuffer> bvb, ImageRes res, Optional<ObjMask> omSrc ) throws SgmnFailedException {
+	private ObjectMaskCollection createFromBinaryVoxelBox( BinaryVoxelBox<ByteBuffer> bvb, ImageRes res, Optional<ObjectMask> omSrc ) throws SgmnFailedException {
 		BinaryChnl bic = new BinaryChnl(
-			ChnlFactory.instance().create(bvb.getVoxelBox(), res),
+			ChannelFactory.instance().create(bvb.getVoxelBox(), res),
 			bvb.getBinaryValues()
 		);
 		CreateFromConnectedComponentsFactory createObjMasks = new CreateFromConnectedComponentsFactory(minNumberVoxels);
 		
-		ObjMaskCollection objsBinary;
+		ObjectMaskCollection objsBinary;
 		try {
 			objsBinary = createObjMasks.createConnectedComponents(bic );
 		} catch (CreateException e) {
@@ -90,7 +90,7 @@ public class ObjMaskSgmnBinarySgmn extends ObjMaskSgmn {
 		}
 		
 		if (omSrc.isPresent()) {
-			for (ObjMask om : objsBinary) {
+			for (ObjectMask om : objsBinary) {
 				om.shiftBy(omSrc.get().getBoundingBox().getCrnrMin());
 			}
 		}

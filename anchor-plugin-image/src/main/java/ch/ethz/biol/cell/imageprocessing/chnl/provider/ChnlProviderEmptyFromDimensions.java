@@ -28,8 +28,8 @@ package ch.ethz.biol.cell.imageprocessing.chnl.provider;
 
 
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.image.chnl.Chnl;
-import org.anchoranalysis.image.chnl.factory.ChnlFactory;
+import org.anchoranalysis.image.channel.Channel;
+import org.anchoranalysis.image.channel.factory.ChannelFactory;
 import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
@@ -46,11 +46,11 @@ public class ChnlProviderEmptyFromDimensions extends ChnlProviderDimSource {
 	// END BEAN PROPERTIES
 
 	@Override
-	protected Chnl createFromDim(ImageDim dim) {
+	protected Channel createFromDim(ImageDim dim) {
 
 		VoxelDataType typeOut = createShort ? VoxelDataTypeUnsignedShort.instance : VoxelDataTypeUnsignedByte.instance; 
 
-		Chnl chnlNew = ChnlFactory.instance().createEmptyInitialised(dim, typeOut);
+		Channel chnlNew = ChannelFactory.instance().createEmptyInitialised(dim, typeOut);
 		if (value!=0) {
 			chnlNew.getVoxelBox().any().setAllPixelsTo(value);
 		}

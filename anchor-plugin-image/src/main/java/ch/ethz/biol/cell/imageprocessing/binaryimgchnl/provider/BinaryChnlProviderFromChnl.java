@@ -30,12 +30,12 @@ package ch.ethz.biol.cell.imageprocessing.binaryimgchnl.provider;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.binary.BinaryChnl;
 import org.anchoranalysis.image.binary.values.BinaryValues;
-import org.anchoranalysis.image.chnl.Chnl;
+import org.anchoranalysis.image.channel.Channel;
 
 public class BinaryChnlProviderFromChnl extends BinaryChnlProviderChnlSource {
 
 	@Override
-	protected BinaryChnl createFromSource(Chnl chnlSource) throws CreateException {
+	protected BinaryChnl createFromSource(Channel chnlSource) throws CreateException {
 		return new BinaryChnl( chnlSource, BinaryValues.getDefault() );
 	}
 }

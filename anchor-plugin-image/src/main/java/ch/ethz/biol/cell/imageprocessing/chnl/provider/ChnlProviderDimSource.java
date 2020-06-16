@@ -4,7 +4,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.bean.provider.ChnlProvider;
 import org.anchoranalysis.image.bean.provider.ImageDimProvider;
-import org.anchoranalysis.image.chnl.Chnl;
+import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.extent.ImageDim;
 
 import ch.ethz.biol.cell.imageprocessing.dim.provider.GuessDimFromInputImage;
@@ -17,13 +17,13 @@ public abstract class ChnlProviderDimSource extends ChnlProvider {
 	// END BEAN PROPERTIES
 	
 	@Override
-	public Chnl create() throws CreateException {
+	public Channel create() throws CreateException {
 		return createFromDim(
 			dim.create()
 		);
 	}
 	
-	protected abstract Chnl createFromDim(ImageDim dim) throws CreateException;
+	protected abstract Channel createFromDim(ImageDim dim) throws CreateException;
 
 	public ImageDimProvider getDim() {
 		return dim;

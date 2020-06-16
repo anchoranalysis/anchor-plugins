@@ -38,11 +38,11 @@ import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.bean.provider.BinaryChnlProvider;
 import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
 import org.anchoranalysis.image.bean.sgmn.objmask.ObjMaskSgmn;
-import org.anchoranalysis.image.chnl.Chnl;
+import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.extent.ImageDim;
-import org.anchoranalysis.image.objmask.ObjMask;
-import org.anchoranalysis.image.objmask.ObjMaskCollection;
-import org.anchoranalysis.image.objmask.factory.CreateFromEntireChnlFactory;
+import org.anchoranalysis.image.objectmask.ObjectMask;
+import org.anchoranalysis.image.objectmask.ObjectMaskCollection;
+import org.anchoranalysis.image.objectmask.factory.CreateFromEntireChnlFactory;
 import org.anchoranalysis.image.seed.SeedCollection;
 import org.anchoranalysis.image.sgmn.SgmnFailedException;
 
@@ -60,9 +60,9 @@ public class ObjMaskProviderSgmn extends ObjMaskProviderChnlSource {
 	// END BEAN PROPERTIES
 
 	@Override
-	protected ObjMaskCollection createFromChnl(Chnl chnlSrc) throws CreateException {
+	protected ObjectMaskCollection createFromChnl(Channel chnlSrc) throws CreateException {
 
-		Optional<ObjMask> maskAsObj = createMask();
+		Optional<ObjectMask> maskAsObj = createMask();
 	
 		try {
 			return sgmn.sgmn(
@@ -75,13 +75,13 @@ public class ObjMaskProviderSgmn extends ObjMaskProviderChnlSource {
 		}
 	}
 	
-	private Optional<ObjMask> createMask() throws CreateException {
+	private Optional<ObjectMask> createMask() throws CreateException {
 		return OptionalFactory.create(mask).map(
 			CreateFromEntireChnlFactory::createObjMask
 		);
 	}
 	
-	private Optional<SeedCollection> createSeeds(ImageDim dim, Optional<ObjMask> maskAsObj) throws CreateException {
+	private Optional<SeedCollection> createSeeds(ImageDim dim, Optional<ObjectMask> maskAsObj) throws CreateException {
 		return OptionalUtilities.map(
 			OptionalFactory.create(objsSeeds),
 			objs-> createSeeds(
@@ -92,7 +92,7 @@ public class ObjMaskProviderSgmn extends ObjMaskProviderChnlSource {
 		);
 	}
 	
-	private static SeedCollection createSeeds(ObjMaskCollection seeds, Optional<ObjMask> maskAsObj, ImageDim dim) throws CreateException {
+	private static SeedCollection createSeeds(ObjectMaskCollection seeds, Optional<ObjectMask> maskAsObj, ImageDim dim) throws CreateException {
 		return OptionalUtilities.map(
 			maskAsObj,
 			m -> SeedsFactory.createSeedsWithMask(

@@ -29,8 +29,8 @@ package ch.ethz.biol.cell.imageprocessing.io.chnlconverter.bean;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.NonNegative;
 import org.anchoranalysis.image.bean.chnl.converter.ChnlConverterBean;
-import org.anchoranalysis.image.stack.region.chnlconverter.ChnlConverter;
-import org.anchoranalysis.image.stack.region.chnlconverter.ChnlConverterToUnsignedByteScaleByMinMaxValue;
+import org.anchoranalysis.image.stack.region.chnlconverter.ChannelConverter;
+import org.anchoranalysis.image.stack.region.chnlconverter.ChannelConverterToUnsignedByteScaleByMinMaxValue;
 
 /**
  * Scales by compressing a certain range of values into the 8-bit signal
@@ -47,8 +47,8 @@ public class ChnlConverterBeanScaleByMinMaxValue extends ChnlConverterBean {
 	private int max = -1;
 	
 	@Override
-	public ChnlConverter<?> createConverter() {
-		return new ChnlConverterToUnsignedByteScaleByMinMaxValue(min,max);
+	public ChannelConverter<?> createConverter() {
+		return new ChannelConverterToUnsignedByteScaleByMinMaxValue(min,max);
 	}
 
 	public int getMin() {

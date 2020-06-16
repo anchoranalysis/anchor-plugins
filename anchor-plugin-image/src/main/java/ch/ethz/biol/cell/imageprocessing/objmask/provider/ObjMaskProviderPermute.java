@@ -37,10 +37,10 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
 import org.anchoranalysis.image.bean.provider.ObjMaskProviderOne;
-import org.anchoranalysis.image.objmask.ObjMaskCollection;
+import org.anchoranalysis.image.objectmask.ObjectMaskCollection;
 
 /**
- * Permutes some changes over an {@link ObjMaskProvider} and collects all the results in an {@link ObjMaskCollection}
+ * Permutes some changes over an {@link ObjMaskProvider} and collects all the results in an {@link ObjectMaskCollection}
  * 
  * We deliberately do not inherit from {@link ObjMaskProviderOne} as we not using the {@link ObjMaskProvider} in the same way.
  * 
@@ -58,7 +58,7 @@ public class ObjMaskProviderPermute extends ObjMaskProvider {
 	// END BEAN PROPERTIES
 
 	@Override
-	public ObjMaskCollection create() throws CreateException {
+	public ObjectMaskCollection create() throws CreateException {
 				
 		try {
 			PermutationSetter ps = permuteProperty.createSetter(objs);
@@ -72,8 +72,8 @@ public class ObjMaskProviderPermute extends ObjMaskProvider {
 		}
 	}
 	
-	private ObjMaskCollection createPermutedObjs( PermutationSetter setter, Iterator<?> vals ) throws CreateException {
-		ObjMaskCollection out = new ObjMaskCollection();
+	private ObjectMaskCollection createPermutedObjs( PermutationSetter setter, Iterator<?> vals ) throws CreateException {
+		ObjectMaskCollection out = new ObjectMaskCollection();
 		try {
 			while( vals.hasNext() ) {
 				Object propVal = vals.next();

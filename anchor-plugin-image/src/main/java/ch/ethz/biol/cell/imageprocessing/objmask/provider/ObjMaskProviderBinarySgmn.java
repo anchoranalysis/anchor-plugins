@@ -35,9 +35,9 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.bean.sgmn.binary.BinarySgmn;
 import org.anchoranalysis.image.bean.sgmn.binary.BinarySgmnParameters;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
-import org.anchoranalysis.image.chnl.Chnl;
-import org.anchoranalysis.image.objmask.ObjMask;
-import org.anchoranalysis.image.objmask.ObjMaskCollection;
+import org.anchoranalysis.image.channel.Channel;
+import org.anchoranalysis.image.objectmask.ObjectMask;
+import org.anchoranalysis.image.objectmask.ObjectMaskCollection;
 import org.anchoranalysis.image.sgmn.SgmnFailedException;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.anchoranalysis.image.voxel.box.VoxelBoxWrapper;
@@ -50,23 +50,23 @@ public class ObjMaskProviderBinarySgmn extends ObjMaskProviderOneChnlSource {
 	// END BEAN PROPERTIES
 
 	@Override
-	protected ObjMaskCollection createFromObjs(ObjMaskCollection objsSrc, Chnl chnlSrc) throws CreateException {
+	protected ObjectMaskCollection createFromObjs(ObjectMaskCollection objsSrc, Channel chnlSrc) throws CreateException {
 		
-		ObjMaskCollection masksOut = new ObjMaskCollection();
+		ObjectMaskCollection masksOut = new ObjectMaskCollection();
 		try {
 			
-			for( ObjMask om : objsSrc ) {
+			for( ObjectMask om : objsSrc ) {
 				VoxelBox<?> vb = chnlSrc.getVoxelBox().any().createBufferAvoidNew(om.getBoundingBox() );
 				
 				BinaryVoxelBox<ByteBuffer> bvb = binarySgmn.sgmn(
 					new VoxelBoxWrapper(vb),
 					new BinarySgmnParameters(),
 					Optional.of(
-						new ObjMask( om.getVoxelBox())
+						new ObjectMask( om.getVoxelBox())
 					)
 				);
 				
-				ObjMask mask = new ObjMask( om.getBoundingBox(), bvb.getVoxelBox() );
+				ObjectMask mask = new ObjectMask( om.getBoundingBox(), bvb.getVoxelBox() );
 				mask.setBinaryValues( bvb.getBinaryValues() );
 				
 				masksOut.add(mask);

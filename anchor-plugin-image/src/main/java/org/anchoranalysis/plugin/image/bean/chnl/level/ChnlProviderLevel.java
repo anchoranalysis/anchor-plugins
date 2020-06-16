@@ -6,8 +6,8 @@ import org.anchoranalysis.image.bean.provider.ChnlProvider;
 import org.anchoranalysis.image.bean.provider.ChnlProviderOne;
 import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
 import org.anchoranalysis.image.bean.threshold.CalculateLevel;
-import org.anchoranalysis.image.chnl.Chnl;
-import org.anchoranalysis.image.objmask.ObjMaskCollection;
+import org.anchoranalysis.image.channel.Channel;
+import org.anchoranalysis.image.objectmask.ObjectMaskCollection;
 
 import ch.ethz.biol.cell.imageprocessing.chnl.provider.DimChecker;
 
@@ -26,7 +26,7 @@ public abstract class ChnlProviderLevel extends ChnlProviderOne {
 	// END BEAN PROPERTIES
 	
 	@Override
-	public Chnl createFromChnl(Chnl chnl) throws CreateException {
+	public Channel createFromChnl(Channel chnl) throws CreateException {
 				
 		return createFor(
 			chnl,
@@ -36,7 +36,7 @@ public abstract class ChnlProviderLevel extends ChnlProviderOne {
 		);
 	}
 	
-	protected abstract Chnl createFor( Chnl chnlIntensity, ObjMaskCollection objs, Chnl chnlOutput ) throws CreateException;
+	protected abstract Channel createFor( Channel chnlIntensity, ObjectMaskCollection objs, Channel chnlOutput ) throws CreateException;
 	
 	public ObjMaskProvider getObjs() {
 		return objs;
