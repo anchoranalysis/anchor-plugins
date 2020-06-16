@@ -27,8 +27,6 @@ package org.anchoranalysis.plugin.opencv.bean.text;
  */
 
 import java.util.List;
-import java.util.stream.Collectors;
-
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.interpolator.InterpolatorFactory;
 import org.anchoranalysis.image.objectmask.ObjectMask;
@@ -44,6 +42,8 @@ import org.anchoranalysis.plugin.opencv.nonmaxima.WithConfidence;
  */
 class ScaleExtractObjs {
 
+	private ScaleExtractObjs() {}
+	
 	public static ObjectCollection apply( List<WithConfidence<ObjectMask>> list, ScaleFactor sf ) {
 		ObjectCollection objs = extractObjs(list);
 		
@@ -55,9 +55,7 @@ class ScaleExtractObjs {
 	
 	private static ObjectCollection extractObjs( List<WithConfidence<ObjectMask>> list ) {
 		return new ObjectCollection(
-			list.stream()
-				.map( wc->wc.getObj() )
-				.collect( Collectors.toList() )
+			list.stream().map( WithConfidence::getObj )
 		);
 	}
 	

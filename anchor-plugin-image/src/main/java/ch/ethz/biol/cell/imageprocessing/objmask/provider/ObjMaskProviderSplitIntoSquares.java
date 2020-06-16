@@ -55,23 +55,12 @@ public class ObjMaskProviderSplitIntoSquares extends ObjMaskProviderOne {
 	
 	@Override
 	public ObjectCollection createFromObjs(ObjectCollection objsCollection) throws CreateException {
-		
-		ObjectCollection out = new ObjectCollection();
-		for (ObjectMask om : objsCollection) {
-			out.addAll(
-				splitObj(
-					om,
-					squareSize,
-					minNumVoxels
-				)
-			);
-		}
-		return out;
+		return objsCollection.flatMap(this::splitObj);
 	}
 	
 	// We want to add in any remaining space at the end into the last object, so we never have a rectangle
 	//  smaller than our squareSDize
-	public static ObjectCollection splitObj( ObjectMask om, int squareSize, int minNumVoxels ) {
+	private ObjectCollection splitObj( ObjectMask om ) {
 		
 		ObjectCollection out = new ObjectCollection();
 		

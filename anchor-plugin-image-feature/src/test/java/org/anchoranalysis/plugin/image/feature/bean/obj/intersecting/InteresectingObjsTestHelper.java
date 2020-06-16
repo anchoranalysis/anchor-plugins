@@ -160,7 +160,7 @@ class InteresectingObjsTestHelper {
 	/** Removes an object from the collection immutably */
 	private static ObjectCollection removeImmutable( ObjectCollection objs, int index ) {
 		ObjectCollection out = objs.duplicateShallow();
-		out.asList().remove(index);
+		out.remove(index);
 		return out;
 	}
 	

@@ -34,7 +34,6 @@ import org.anchoranalysis.bean.NamedBean;
 import org.anchoranalysis.bean.StringSet;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
-import org.anchoranalysis.core.bridge.IObjectBridge;
 import org.anchoranalysis.core.color.ColorIndex;
 import org.anchoranalysis.core.color.ColorList;
 import org.anchoranalysis.core.color.RGBColor;
@@ -42,6 +41,7 @@ import org.anchoranalysis.core.error.AnchorNeverOccursException;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.functional.FunctionWithException;
 import org.anchoranalysis.core.functional.IdentityOperation;
 import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.core.name.provider.NamedProviderGetException;
@@ -306,10 +306,10 @@ public class ExportObjectsAsCroppedImagesTask extends ExportObjectsBase<MultiInp
 	private IterableGenerator<ObjectMask> wrapBBoxGenerator( IterableGenerator<BoundingBox> generator, final boolean mip ) {
 		return new IterableGeneratorBridge<>(
 			generator,
-			new IObjectBridge<ObjectMask, BoundingBox, AnchorNeverOccursException>() {
+			new FunctionWithException<ObjectMask, BoundingBox, AnchorNeverOccursException>() {
 
 				@Override
-				public BoundingBox bridgeElement(ObjectMask sourceObject) {
+				public BoundingBox apply(ObjectMask sourceObject) {
 					if (mip) {
 						return sourceObject.getBoundingBox().flattenZ();
 					} else {
@@ -379,7 +379,7 @@ public class ExportObjectsAsCroppedImagesTask extends ExportObjectsBase<MultiInp
 
 		
 		// Maybe we need to change the objectMask to a padded version
-		IObjectBridge<ObjectMask,ObjectMask,OutputWriteFailedException> bridgeToMaybePad = om -> {
+		FunctionWithException<ObjectMask,ObjectMask,OutputWriteFailedException> bridgeToMaybePad = om -> {
 			if (keepEntireImage) {
 				return extractObjMaskKeepEntireImage(om, dim );
 			} else {

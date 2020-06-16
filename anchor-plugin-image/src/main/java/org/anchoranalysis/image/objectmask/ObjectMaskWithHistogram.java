@@ -1,10 +1,10 @@
-package ch.ethz.biol.cell.imageprocessing.objmask.filter;
+package org.anchoranalysis.image.objectmask;
 
-/*
+/*-
  * #%L
- * anchor-plugin-image
+ * anchor-image
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -26,38 +26,28 @@ package ch.ethz.biol.cell.imageprocessing.objmask.filter;
  * #L%
  */
 
+import org.anchoranalysis.core.error.CreateException;
+import org.anchoranalysis.image.channel.Channel;
+import org.anchoranalysis.image.histogram.Histogram;
+import org.anchoranalysis.image.histogram.HistogramFactory;
 
-import java.util.HashSet;
-import java.util.Optional;
-import java.util.Set;
-
-import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.image.bean.objmask.filter.ObjMaskFilter;
-import org.anchoranalysis.image.extent.ImageDim;
-import org.anchoranalysis.image.objectmask.ObjectMask;
-import org.anchoranalysis.image.objectmask.ObjectCollection;
-
-public class ObjMaskFilterOr extends ObjMaskFilterDerivedFromList {
-
-	@Override
-	public void filter(
-		ObjectCollection objs,
-		Optional<ImageDim> dim,
-		Optional<ObjectCollection> objsRejected
-	) throws OperationFailedException {
+public class ObjectMaskWithHistogram {
+	private ObjectMask objMask;
+	private Histogram histogram;
+	
+	public ObjectMaskWithHistogram(ObjectMask objMask, Channel chnl) throws CreateException {
+		super();
+		this.objMask = objMask;
+		this.histogram = HistogramFactory.create( chnl, objMask );
 		
-		Set<ObjectMask> set = new HashSet<ObjectMask>();
-		
-		for (ObjMaskFilter indFilter : getList()) {
-			
-			ObjectCollection objsDup = objs.duplicate();
-			
-			indFilter.filter(objsDup, dim, objsRejected);
-			
-			set.addAll(objsDup.asList());
-		}
-
-		objs.clear();
-		objs.addAll(set);
 	}
+
+	public ObjectMask getObjMask() {
+		return objMask;
+	}
+
+	public Histogram getHistogram() {
+		return histogram;
+	}
+
 }

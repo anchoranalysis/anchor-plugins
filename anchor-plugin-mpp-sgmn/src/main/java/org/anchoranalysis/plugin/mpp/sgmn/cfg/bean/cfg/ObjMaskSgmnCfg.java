@@ -79,7 +79,7 @@ public class ObjMaskSgmnCfg extends SgmnObjMaskCollection {
 				RegionMapSingleton.instance().membershipWithFlagsForIndex(GlobalRegionIdentifiers.SUBMARK_INSIDE),
 				BinaryValuesByte.getDefault(),
 				null
-			).collectionObjMask();
+			).withoutProperties();
 			
 		} catch (NamedProviderGetException e) {
 			throw new SgmnFailedException(e.summarize());

@@ -5,6 +5,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.color.ColorList;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.objectmask.ObjectCollection;
+import org.anchoranalysis.image.objectmask.ObjectMask;
 import org.anchoranalysis.image.stack.DisplayStack;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.io.bean.objmask.writer.RGBOutlineWriter;
@@ -42,7 +43,7 @@ public abstract class StackProviderRGBFromObjMaskBase extends StackProviderWithB
 	
 	protected ObjectCollection maybeFlatten( ObjectCollection objs ) {
 		if (force2D) {
-			return objs.flattenZ();
+			return objs.map(ObjectMask::flattenZ);
 		} else {
 			return objs;
 		}

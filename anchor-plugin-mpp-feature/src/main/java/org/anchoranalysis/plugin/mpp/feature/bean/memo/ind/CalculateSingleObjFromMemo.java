@@ -33,7 +33,7 @@ import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
 import org.anchoranalysis.image.objectmask.ObjectMask;
-import org.anchoranalysis.image.objectmask.properties.ObjMaskWithProperties;
+import org.anchoranalysis.image.objectmask.properties.ObjectWithProperties;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
@@ -57,7 +57,7 @@ class CalculateSingleObjFromMemo extends FeatureCalculation<FeatureInputSingleOb
 	}
 	
 	private ObjectMask calcMask(FeatureInputSingleMemo params) throws FeatureCalcException {
-		ObjMaskWithProperties om = params.getPxlPartMemo().getMark().calcMask(
+		ObjectWithProperties om = params.getPxlPartMemo().getMark().calcMask(
 			params.getDimensionsRequired(),
 			regionMap.membershipWithFlagsForIndex(index),
 			BinaryValuesByte.getDefault()
