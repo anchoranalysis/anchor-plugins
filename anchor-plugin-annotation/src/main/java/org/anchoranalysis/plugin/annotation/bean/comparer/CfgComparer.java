@@ -89,7 +89,7 @@ public class CfgComparer extends Comparer {
 			rm,
 			BinaryValuesByte.getDefault(),
 			null
-		).collectionObjMask();
+		).withoutProperties();
 		return new Found<>(mask);
 	}
 

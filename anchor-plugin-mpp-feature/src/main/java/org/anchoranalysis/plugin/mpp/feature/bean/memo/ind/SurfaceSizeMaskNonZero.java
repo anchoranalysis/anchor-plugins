@@ -40,7 +40,7 @@ import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.objectmask.ObjectMask;
-import org.anchoranalysis.image.objectmask.properties.ObjMaskWithProperties;
+import org.anchoranalysis.image.objectmask.properties.ObjectWithProperties;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.anchoranalysis.image.voxel.kernel.ApplyKernel;
 import org.anchoranalysis.image.voxel.kernel.outline.OutlineKernel3;
@@ -75,7 +75,7 @@ public class SurfaceSizeMaskNonZero extends FeatureSingleMemoRegion {
 	}
 	
 	private ObjectMask createMask(FeatureInputSingleMemo input) throws FeatureCalcException {
-		ObjMaskWithProperties omWithProps = input.getPxlPartMemo().getMark().calcMask(
+		ObjectWithProperties omWithProps = input.getPxlPartMemo().getMark().calcMask(
 			input.getDimensionsRequired(),
 			regionMap.membershipWithFlagsForIndex(getRegionID()),
 			BinaryValuesByte.getDefault()

@@ -33,8 +33,8 @@ import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.index.rtree.ObjMaskCollectionRTree;
 import org.anchoranalysis.image.objectmask.ObjectMask;
-import org.anchoranalysis.image.objectmask.properties.ObjMaskWithProperties;
-import org.anchoranalysis.image.objectmask.properties.ObjMaskWithPropertiesCollection;
+import org.anchoranalysis.image.objectmask.properties.ObjectWithProperties;
+import org.anchoranalysis.image.objectmask.properties.ObjectCollectionWithProperties;
 import org.anchoranalysis.plugin.mpp.experiment.objs.csv.CSVRow;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -90,16 +90,16 @@ public class Single extends ColumnDefinition {
 	}
 
 	@Override
-	public ObjMaskWithPropertiesCollection findObjsMatchingRow(CSVRow csvRow, ObjMaskCollectionRTree allObjs)
+	public ObjectCollectionWithProperties findObjsMatchingRow(CSVRow csvRow, ObjMaskCollectionRTree allObjs)
 			throws OperationFailedException {
 		
 		assert( indexNumPixels>= 0 );
 
-		ObjMaskWithPropertiesCollection objs = new ObjMaskWithPropertiesCollection();
+		ObjectCollectionWithProperties objs = new ObjectCollectionWithProperties();
 		
 		ObjectMask obj = Utilities.findObjForCSVRow( allObjs, csvRow, indexPnt, indexNumPixels );
 		
-		objs.add( new ObjMaskWithProperties(obj) );
+		objs.add( new ObjectWithProperties(obj) );
 		return objs;
 	}
 

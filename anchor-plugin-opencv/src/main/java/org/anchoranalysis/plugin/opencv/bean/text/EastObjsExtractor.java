@@ -38,7 +38,7 @@ import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.extent.ImageRes;
 import org.anchoranalysis.image.objectmask.ObjectMask;
-import org.anchoranalysis.image.objectmask.properties.ObjMaskWithProperties;
+import org.anchoranalysis.image.objectmask.properties.ObjectWithProperties;
 import org.anchoranalysis.plugin.opencv.nonmaxima.WithConfidence;
 import org.opencv.core.Mat;
 
@@ -91,7 +91,7 @@ class EastObjsExtractor {
 	
 	private static WithConfidence<ObjectMask> convertToObjMask( WithConfidence<Mark> wcMark, ImageDim dim ) {
 		
-		ObjMaskWithProperties om = wcMark.getObj().calcMask(
+		ObjectWithProperties om = wcMark.getObj().calcMask(
 			dim,
 			RegionMapSingleton.instance().membershipWithFlagsForIndex(GlobalRegionIdentifiers.SUBMARK_INSIDE),
 			BinaryValuesByte.getDefault()

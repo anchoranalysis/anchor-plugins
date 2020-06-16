@@ -33,7 +33,7 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.io.generator.raster.obj.rgb.RGBObjMaskGenerator;
 import org.anchoranalysis.image.objectmask.ObjectCollection;
-import org.anchoranalysis.image.objectmask.properties.ObjMaskWithPropertiesCollection;
+import org.anchoranalysis.image.objectmask.properties.ObjectCollectionWithProperties;
 import org.anchoranalysis.image.stack.DisplayStack;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.io.bean.color.generator.ColorSetGenerator;
@@ -77,7 +77,7 @@ public class ColoredObjsStackCreator {
 			
 			RGBObjMaskGenerator generator = new RGBObjMaskGenerator(
 				objMaskWriter,
-				new ObjMaskWithPropertiesCollection(objs),
+				new ObjectCollectionWithProperties(objs),
 				background,
 				colors
 			);

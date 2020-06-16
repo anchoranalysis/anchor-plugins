@@ -44,14 +44,12 @@ public class ObjMaskProviderFromBinaryChnl extends ObjMaskProvider {
 	
 	@Override
 	public ObjectCollection create() throws CreateException {
-
-		ObjectCollection omc = new ObjectCollection();
 		
 		BinaryChnl chnl = binaryChnl.create();
 		
-		omc.add( new ObjectMask( chnl.binaryVoxelBox() ) );
-		
-		return omc;
+		return new ObjectCollection(
+			new ObjectMask( chnl.binaryVoxelBox() )
+		);
 	}
 
 	public BinaryChnlProvider getBinaryChnl() {

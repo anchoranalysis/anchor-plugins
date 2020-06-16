@@ -29,7 +29,7 @@ package org.anchoranalysis.plugin.mpp.experiment.objs.csv;
 
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.index.rtree.ObjMaskCollectionRTree;
-import org.anchoranalysis.image.objectmask.properties.ObjMaskWithPropertiesCollection;
+import org.anchoranalysis.image.objectmask.properties.ObjectCollectionWithProperties;
 import org.anchoranalysis.plugin.mpp.experiment.bean.objs.columndefinition.ColumnDefinition;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -55,7 +55,7 @@ public class CSVRow {
 		this.columnDefinition = columnDefinition;
 	}
 
-	public ObjMaskWithPropertiesCollection findObjsMatchingRow( ObjMaskCollectionRTree allObjs ) throws OperationFailedException {
+	public ObjectCollectionWithProperties findObjsMatchingRow( ObjMaskCollectionRTree allObjs ) throws OperationFailedException {
 		return columnDefinition.findObjsMatchingRow(this, allObjs);
 	}
 	

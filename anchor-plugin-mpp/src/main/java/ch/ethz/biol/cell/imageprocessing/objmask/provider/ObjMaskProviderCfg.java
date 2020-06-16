@@ -71,7 +71,7 @@ public class ObjMaskProviderCfg extends ObjMaskProvider {
 			regionMap.membershipWithFlagsForIndex(regionID),
 			BinaryValuesByte.getDefault(),
 			null
-		).collectionObjMask();
+		).withoutProperties();
 	}
 
 	public CfgProvider getCfgProvider() {

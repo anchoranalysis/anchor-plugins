@@ -46,11 +46,9 @@ public class ObjMaskProviderConcat extends ObjMaskProvider {
 	public ObjectCollection create() throws CreateException {
 
 		ObjectCollection out = new ObjectCollection();
-		
 		for( ObjMaskProvider omp : list) {
 			out.addAll( omp.create() );
 		}
-		
 		return out;
 	}
 

@@ -30,7 +30,6 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
-
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.graph.EdgeTypeWithVertices;
 import org.anchoranalysis.core.graph.GraphWithEdgeTypes;
@@ -99,17 +98,14 @@ class NeighbourGraph {
 		return setOut;
 	}
 	
-
 	/** Creates an object-mask collection representing all the objects in the vertices */
 	public ObjectCollection verticesAsObjects() {
-		ObjectCollection out = new ObjectCollection();
-		
-		for( ObjVertex omWithFeature : graph.vertexSet() ) {
-			out.add( omWithFeature.getObjMask() );
-		}
-		return out;
+		return new ObjectCollection(
+			graph.vertexSet()
+				.stream()
+				.map(ObjVertex::getObjMask)
+		);
 	}
-	
 	
 	private void addNghbsToSet( ObjVertex vertex, Set<ObjVertex> setPossibleNghbs ) {
 		

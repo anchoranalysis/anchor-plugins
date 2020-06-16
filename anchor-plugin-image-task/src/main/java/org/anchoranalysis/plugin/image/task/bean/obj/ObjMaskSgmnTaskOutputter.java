@@ -34,7 +34,7 @@ import org.anchoranalysis.image.io.generator.raster.obj.ChnlMaskedWithObjGenerat
 import org.anchoranalysis.image.io.generator.raster.obj.ObjAsBinaryChnlGenerator;
 import org.anchoranalysis.image.io.generator.raster.obj.rgb.RGBObjMaskGenerator;
 import org.anchoranalysis.image.objectmask.ObjectCollection;
-import org.anchoranalysis.image.objectmask.properties.ObjMaskWithPropertiesCollection;
+import org.anchoranalysis.image.objectmask.properties.ObjectCollectionWithProperties;
 import org.anchoranalysis.image.stack.DisplayStack;
 import org.anchoranalysis.io.bean.objmask.writer.RGBOutlineWriter;
 import org.anchoranalysis.io.generator.collection.IterableGeneratorWriter;
@@ -91,7 +91,7 @@ class ObjMaskSgmnTaskOutputter {
 				try {
 					return new RGBObjMaskGenerator(
 						new RGBOutlineWriter(),
-						new ObjMaskWithPropertiesCollection(objs),
+						new ObjectCollectionWithProperties(objs),
 						DisplayStack.create(chnl),
 						outputManager.getOutputWriteSettings().genDefaultColorIndex(objs.size())
 					);

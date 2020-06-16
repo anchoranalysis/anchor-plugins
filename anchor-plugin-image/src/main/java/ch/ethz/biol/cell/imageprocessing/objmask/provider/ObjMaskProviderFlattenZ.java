@@ -36,13 +36,6 @@ public class ObjMaskProviderFlattenZ extends ObjMaskProviderOne {
 
 	@Override
 	public ObjectCollection createFromObjs( ObjectCollection in ) throws CreateException {
-		
-		ObjectCollection out = new ObjectCollection();
-		
-		for( ObjectMask om : in ) {
-			out.add( om.flattenZ() );
-		}
-		
-		return out;
+		return in.map( ObjectMask::flattenZ );
 	}
 }
