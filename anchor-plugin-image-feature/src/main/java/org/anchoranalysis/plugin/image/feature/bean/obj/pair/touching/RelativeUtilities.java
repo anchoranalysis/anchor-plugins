@@ -44,7 +44,7 @@ class RelativeUtilities {
 	 * 
 	 * @param box a bounding-box
 	 * @param omRelativeBase object to make the bounding-box relative to
-	 * @return a new bounding box with relative co-ordinates
+	 * @return a new bounding box with relative coordinates
 	 */
 	public static BoundingBox createRelBBox( BoundingBox box, ObjectMask omRelativeBase ) {
 		BoundingBox bboxIntersectRel = new BoundingBox(
@@ -62,8 +62,8 @@ class RelativeUtilities {
 	 * @return a new object with new bounding-box (but with identical memory used for the mask)
 	 */
 	public static ObjectMask createRelMask( ObjectMask om, ObjectMask omRelativeBase ) {
-		ObjectMask om2Rel = om.relMaskTo(omRelativeBase.getBoundingBox());
-		om2Rel.reflectThroughOrigin();
-		return om2Rel;
+		return om.relMaskTo(
+			omRelativeBase.getBoundingBox()
+		).mapBoundingBox(BoundingBox::reflectThroughOrigin);
 	}
 }

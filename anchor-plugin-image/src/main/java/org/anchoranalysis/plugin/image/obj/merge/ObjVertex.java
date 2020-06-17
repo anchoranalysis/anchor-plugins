@@ -30,7 +30,7 @@ public class ObjVertex {
 
 	public int numPixels() {
 		if (numPixels==-1) {
-			numPixels = om.numPixels();
+			numPixels = om.numVoxelsOn();
 		}
 		return numPixels;
 	}

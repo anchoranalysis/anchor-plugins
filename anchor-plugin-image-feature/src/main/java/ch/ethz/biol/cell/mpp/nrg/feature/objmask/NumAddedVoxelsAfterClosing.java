@@ -70,7 +70,7 @@ public class NumAddedVoxelsAfterClosing extends FeatureObjMask {
 			new CalculateNumVoxels(false)
 		);
 		
-		return omClosing.numPixels() - numVoxels;
+		return omClosing.numVoxelsOn() - numVoxels;
 	}
 
 	public int getIterations() {

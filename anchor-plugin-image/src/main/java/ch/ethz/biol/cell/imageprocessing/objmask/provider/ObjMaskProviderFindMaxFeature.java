@@ -46,11 +46,11 @@ public class ObjMaskProviderFindMaxFeature extends ObjMaskProviderFindMaxFeature
 			objMaskCollection
 		);
 		
-		ObjectCollection out = new ObjectCollection();
-		max.ifPresent( obj->
-			out.add(obj)
-		);
-		return out;
+		if (max.isPresent()) {
+			return new ObjectCollection(max.get());
+		} else {
+			return new ObjectCollection();
+		}
 	}
 	
 	private Optional<ObjectMask> findMaxObj( FeatureCalculatorSingle<FeatureInputSingleObj> session, ObjectCollection in ) throws CreateException {

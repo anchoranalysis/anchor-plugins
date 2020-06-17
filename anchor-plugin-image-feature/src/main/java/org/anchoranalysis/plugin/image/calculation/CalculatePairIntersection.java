@@ -40,7 +40,7 @@ import org.anchoranalysis.image.feature.objmask.pair.FeatureInputPairObjs;
 import org.anchoranalysis.image.feature.objmask.pair.CalculateInputFromPair.Extract;
 import org.anchoranalysis.image.objectmask.ObjectMask;
 import org.anchoranalysis.image.objectmask.morph.MorphologicalErosion;
-import org.anchoranalysis.image.objectmask.ops.ObjMaskMerger;
+import org.anchoranalysis.image.objectmask.ops.ObjectMaskMerger;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
@@ -176,7 +176,7 @@ public class CalculatePairIntersection extends FeatureCalculation<Optional<Objec
 		
 		// We merge the two masks, and then erode it, and use this as a mask on the input object
 		if (omMerged==null) {
-			omMerged = ObjMaskMerger.merge( params.getFirst(), params.getSecond() );
+			omMerged = ObjectMaskMerger.merge( params.getFirst(), params.getSecond() );
 		}
 		
 		ObjectMask omMergedEroded = MorphologicalErosion.createErodedObjMask(

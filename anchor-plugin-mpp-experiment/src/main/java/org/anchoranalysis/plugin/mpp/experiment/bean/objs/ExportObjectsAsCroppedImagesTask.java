@@ -419,11 +419,9 @@ public class ExportObjectsAsCroppedImagesTask extends ExportObjectsBase<MultiInp
 	}
 	
 	private static ObjectCollection extendObjsInZ( ObjectCollection objs, int sz ) {
-		ObjectCollection out = new ObjectCollection();
-		for( ObjectMask om : objs ) {
-			out.add( om.flattenZ().growToZ(sz) );
-		}
-		return out;
+		return objs.map( om->
+			om.flattenZ().growToZ(sz)
+		);
 	}
 
 	public StringSet getOutputRGBOutline() {

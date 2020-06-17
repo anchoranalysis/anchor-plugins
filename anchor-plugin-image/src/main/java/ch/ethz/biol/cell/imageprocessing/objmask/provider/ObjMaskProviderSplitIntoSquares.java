@@ -121,12 +121,12 @@ public class ObjMaskProviderSplitIntoSquares extends ObjMaskProviderOne {
 				}
 					
 				// Now we add our box to the collection
-				srcBox = srcBox.shiftBy(
+				BoundingBox shiftedBox = srcBox.shiftBy(
 					om.getBoundingBox().getCrnrMin()
 				);
 				
 				out.add(
-					new ObjectMask(srcBox, vbNew, om.getBinaryValuesByte())
+					new ObjectMask(shiftedBox, vbNew, om.getBinaryValuesByte())
 				);
 			}
 		}

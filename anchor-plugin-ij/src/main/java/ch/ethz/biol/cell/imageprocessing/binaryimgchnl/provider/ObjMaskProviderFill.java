@@ -77,7 +77,7 @@ public class ObjMaskProviderFill extends ObjMaskProviderOne {
 			
 			if (maskChnl.isPresent()) {
 				// Let's make an object for our mask
-				ObjectMask omMask = maskChnl.get().createMaskAvoidNew(om.getBoundingBox());
+				ObjectMask omMask = maskChnl.get().region(om.getBoundingBox(), true);
 				
 				BoundingBox bboxAll = new BoundingBox( bvb.extent() );
 				

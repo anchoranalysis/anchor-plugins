@@ -118,7 +118,7 @@ public class BinaryChnlProviderFill extends BinaryChnlProviderOne {
 			}
 			
 			if (maxVolume!=null) {
-				if (om.numPixels()>maxVolumeRslvd) {
+				if (om.numVoxelsOn()>maxVolumeRslvd) {
 					continue;
 				}
 			}

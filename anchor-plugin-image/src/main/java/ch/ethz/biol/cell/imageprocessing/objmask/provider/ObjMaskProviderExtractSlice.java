@@ -29,9 +29,7 @@ package ch.ethz.biol.cell.imageprocessing.objmask.provider;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.bean.provider.ObjMaskProviderOne;
-import org.anchoranalysis.image.objectmask.ObjectMask;
 import org.anchoranalysis.image.objectmask.ObjectCollection;
 
 public class ObjMaskProviderExtractSlice extends ObjMaskProviderOne {
@@ -43,22 +41,10 @@ public class ObjMaskProviderExtractSlice extends ObjMaskProviderOne {
 
 	@Override
 	public ObjectCollection createFromObjs( ObjectCollection in ) throws CreateException {
-		
-		ObjectCollection out = new ObjectCollection();
-		
-		for( ObjectMask om : in ) {
-			
-			if (om.getBoundingBox().contains().z(slice)) {
-				try {
-					ObjectMask omExtract = om.extractSlice(slice - om.getBoundingBox().getCrnrMin().getZ(), false); 
-					out.add( omExtract );
-				} catch (OperationFailedException e) {
-					throw new CreateException(e);
-				}
-			}
-		}
-		
-		return out;
+		return in.filterAndMap(
+			om -> om.getBoundingBox().contains().z(slice),
+			om -> om.extractSlice(slice - om.getBoundingBox().getCrnrMin().getZ(), false)
+		);
 	}
 
 	public int getSlice() {
@@ -68,5 +54,4 @@ public class ObjMaskProviderExtractSlice extends ObjMaskProviderOne {
 	public void setSlice(int slice) {
 		this.slice = slice;
 	}
-
 }

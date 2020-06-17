@@ -32,6 +32,7 @@ import java.util.Optional;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
+import org.anchoranalysis.core.geometry.ReadableTuple3i;
 import org.anchoranalysis.image.bean.sgmn.binary.BinarySgmn;
 import org.anchoranalysis.image.bean.sgmn.binary.BinarySgmnParameters;
 import org.anchoranalysis.image.bean.sgmn.objmask.ObjMaskSgmn;
@@ -72,30 +73,31 @@ public class ObjMaskSgmnBinarySgmn extends ObjMaskSgmn {
 			params,
 			mask
 		);
-		return createFromBinaryVoxelBox(bvb,chnl.getDimensions().getRes(), mask);
+		return createFromBinaryVoxelBox(
+			bvb,
+			chnl.getDimensions().getRes(),
+			mask.map( om->om.getBoundingBox().getCrnrMin() )
+		);
 	}
 
-	private ObjectCollection createFromBinaryVoxelBox( BinaryVoxelBox<ByteBuffer> bvb, ImageRes res, Optional<ObjectMask> omSrc ) throws SgmnFailedException {
+	private ObjectCollection createFromBinaryVoxelBox( BinaryVoxelBox<ByteBuffer> bvb, ImageRes res, Optional<ReadableTuple3i> maskShiftBy ) throws SgmnFailedException {
 		BinaryChnl bic = new BinaryChnl(
 			ChannelFactory.instance().create(bvb.getVoxelBox(), res),
 			bvb.getBinaryValues()
 		);
-		CreateFromConnectedComponentsFactory createObjMasks = new CreateFromConnectedComponentsFactory(minNumberVoxels);
-		
-		ObjectCollection objsBinary;
+		CreateFromConnectedComponentsFactory creator = new CreateFromConnectedComponentsFactory(minNumberVoxels);
 		try {
-			objsBinary = createObjMasks.createConnectedComponents(bic );
+			return maybeShiftObjs(
+				creator.createConnectedComponents(bic),
+				maskShiftBy
+			);
 		} catch (CreateException e) {
 			throw new SgmnFailedException(e);
 		}
-		
-		if (omSrc.isPresent()) {
-			for (ObjectMask om : objsBinary) {
-				om.shiftBy(omSrc.get().getBoundingBox().getCrnrMin());
-			}
-		}
-		
-		return objsBinary;
+	}
+	
+	private static ObjectCollection maybeShiftObjs( ObjectCollection objs, Optional<ReadableTuple3i> shiftByQuantity) {
+		return shiftByQuantity.map(objs::shiftBy).orElse(objs);
 	}
 	
 	public BinarySgmn getSgmn() {

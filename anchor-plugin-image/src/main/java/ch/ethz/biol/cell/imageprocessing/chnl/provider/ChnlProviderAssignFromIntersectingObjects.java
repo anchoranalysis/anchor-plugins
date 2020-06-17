@@ -115,7 +115,7 @@ public class ChnlProviderAssignFromIntersectingObjects extends ChnlProviderOne {
 		
 		VoxelBox<?> vb = chnl.getVoxelBox().any();
 		
-		Point3i pnt = om.findAnyPntOnMask().orElseThrow( ()->
+		Point3i pnt = om.findArbitraryOnVoxel().orElseThrow( ()->
 			new AnchorImpossibleSituationException()
 		);
 		int a = vb.getVoxel(pnt.getX(), pnt.getY(), pnt.getZ());

@@ -57,17 +57,11 @@ class StatsHelper {
 		
 		for( int z=0; z<om.getBoundingBox().extent().getZ(); z++ ) {
 			
-			ObjectMask omSlice;
-			try {
-				omSlice = om.extractSlice(z, true);
-			} catch (OperationFailedException e) {
-				throw new FeatureCalcException(e);
-			}
-			
+			ObjectMask omSlice = om.extractSlice(z, true);
+
 			// We adjust the z coordiante to point to the channel
-			omSlice.shiftToZ(
-				omSlice.getBoundingBox().getCrnrMin().getZ() + om.getBoundingBox().getCrnrMin().getZ()
-			);
+			int zTarget = omSlice.getBoundingBox().getCrnrMin().getZ() + om.getBoundingBox().getCrnrMin().getZ(); 
+			omSlice = omSlice.mapBoundingBox( bbox->bbox.shiftToZ(zTarget) );
 			
 			if (omSlice.hasPixelsGreaterThan(0)) {
 				double mean = IntensityMeanCalculator.calcMeanIntensityObjMask(chnl, omSlice, excludeZero);

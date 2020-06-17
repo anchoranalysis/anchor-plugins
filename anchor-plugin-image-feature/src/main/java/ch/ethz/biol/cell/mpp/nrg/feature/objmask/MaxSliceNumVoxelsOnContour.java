@@ -30,7 +30,6 @@ package ch.ethz.biol.cell.mpp.nrg.feature.objmask;
 import java.nio.ByteBuffer;
 
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
@@ -83,7 +82,7 @@ public class MaxSliceNumVoxelsOnContour extends FeatureObjMask {
 			
 			return outlineSlice.countOn();
 			
-		} catch (OperationFailedException | CreateException e) {
+		} catch (CreateException e) {
 			throw new FeatureCalcException(e);
 		}
 

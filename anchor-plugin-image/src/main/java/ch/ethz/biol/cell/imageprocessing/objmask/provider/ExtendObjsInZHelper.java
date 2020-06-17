@@ -18,7 +18,7 @@ class ExtendObjsInZHelper {
 		
 		Extent extent = bbox.extent();
 		
-		ObjectMask omNew = container.createSubmaskAlwaysNew(bbox);
+		ObjectMask omNew = container.region(bbox,false);
 		
 		ByteBuffer bbFlat = omFlat.getVoxelBox().getPixelsForPlane(0).buffer();
 				

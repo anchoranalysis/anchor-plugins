@@ -33,6 +33,7 @@ import java.util.Optional;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.geometry.ReadableTuple3i;
 import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
 import org.anchoranalysis.image.binary.values.BinaryValues;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
@@ -42,18 +43,45 @@ import org.anchoranalysis.image.objectmask.ObjectMask;
 import org.anchoranalysis.image.objectmask.ObjectCollection;
 import org.anchoranalysis.image.objectmask.factory.CreateFromConnectedComponentsFactory;
 import org.anchoranalysis.image.voxel.box.BoundedVoxelBox;
+import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.anchoranalysis.image.voxel.box.factory.VoxelBoxFactory;
 
 public class ObjMaskProviderSplitByObjCollection extends ObjMaskProviderDimensions {
 
+	private static final CreateFromConnectedComponentsFactory CONNECTED_COMPONENTS_CREATOR
+		= new CreateFromConnectedComponentsFactory();
+	
 	// START BEAN PROPERTIES
 	@BeanField
 	private ObjMaskProvider objsSplitBy;
 	// END BEAN PROPERTIES
+			
+	@Override
+	public ObjectCollection createFromObjs(ObjectCollection objsCollection) throws CreateException {
+		
+		ObjectCollection objsSplitByCollection = objsSplitBy.create();
+
+		ImageDim dims = createDim();
+		
+		try {
+			ObjectCollection out = new ObjectCollection();
+			for (ObjectMask om : objsCollection) {
+				// Find all object masks that could potentially intersect with the current oject
+				out.addAll(
+					splitObj(
+						om,
+						objsSplitByCollection.findObjsWithIntersectingBBox(om),
+						dims
+					)
+				);
+			}
+			return out;
+		} catch (OperationFailedException e) {
+			throw new CreateException(e);
+		}
+	}
 	
 	private ObjectCollection splitObj( ObjectMask objToSplit, ObjectCollection objsSplitBy, ImageDim dim ) throws OperationFailedException {
-		
-		ObjectCollection out = new ObjectCollection();
 		
 		// We create a voxel buffer of the same size as objToSplit bounding box, and we write
 		//  a number for each obj in ObjsSplitBy
@@ -80,60 +108,46 @@ public class ObjMaskProviderSplitByObjCollection extends ObjMaskProviderDimensio
 				continue;
 			}
 			
-			intersect.get().shiftBackBy(objToSplit.getBoundingBox().getCrnrMin());
+			ObjectMask intersectShifted = intersect.get().mapBoundingBox( bbox->
+				bbox.shiftBackBy(objToSplit.getBoundingBox().getCrnrMin())
+			); 
 			
 			// We make the intersection relative to objToSplit
-			boundedVbId.getVoxelBox().setPixelsCheckMask( intersect.get(), cnt++);
+			boundedVbId.getVoxelBox().setPixelsCheckMask(
+				intersectShifted,
+				cnt++
+			);
 		}
 		
 		try {
+			// Now we do a flood fill for each number, pretending it's a binary image of 0 and i
+			// The code will not change pixels that don't match ON
+			
+			ObjectCollection out = new ObjectCollection();
 			for( int i=1; i<cnt; i++) {
-				
-				// Now we do a flood fill for each number, pretending it's a binary image of 0 and i
-				// The code will not change pixels that don't match ON
-				
-				CreateFromConnectedComponentsFactory creator = new CreateFromConnectedComponentsFactory();
-				
-				BinaryVoxelBox<IntBuffer> bvb = new BinaryVoxelBoxInt(boundedVbId.getVoxelBox(), new BinaryValues(0, i));
-				ObjectCollection omc = creator.create(bvb);
-				
-				// for every object we add the objToSplit Bounding Box crnr, to restore it to global co-ordinates
-				for( ObjectMask om : omc ) {
-					om.shiftBy(
+				out.addAll(
+					createObjectForIndex(
+						i,
+						boundedVbId.getVoxelBox(),
 						objToSplit.getBoundingBox().getCrnrMin()
-					);
-					out.add(om);
-				}
+					)
+				);
 			}
+			return out;
 		} catch (CreateException e) {
 			throw new OperationFailedException(e);
 		}
-		
-		//out.add( objToSplit );
-		return out;
 	}
-		
-	@Override
-	public ObjectCollection createFromObjs(ObjectCollection objsCollection) throws CreateException {
-		
-		ObjectCollection objsSplitByCollection = objsSplitBy.create();
+	
+	/** Creates objects from all connected-components in a buffer with particular voxel values */
+	private static ObjectCollection createObjectForIndex( int voxelEqualTo, VoxelBox<IntBuffer> voxels, ReadableTuple3i shiftBy ) throws CreateException {
+		BinaryVoxelBox<IntBuffer> binaryVoxels = new BinaryVoxelBoxInt(
+			voxels,
+			new BinaryValues(0, voxelEqualTo)
+		);
 
-		ImageDim dims = createDim();
-		
-		ObjectCollection out = new ObjectCollection();
-		
-		for( ObjectMask om : objsCollection ) {
-			
-			// Find all object masks that could potentially intersect with the current oject
-			ObjectCollection omcIntersecting = objsSplitByCollection.findObjsWithIntersectingBBox(om);
-			
-			try {
-				out.addAll( splitObj(om, omcIntersecting, dims ) );
-			} catch (OperationFailedException e) {
-				throw new CreateException(e);
-			}
-		}
-		return out;
+		// for every object we add the objToSplit Bounding Box crnr, to restore it to global co-ordinates
+		return CONNECTED_COMPONENTS_CREATOR.create(binaryVoxels).shiftBy(shiftBy);
 	}
 
 	public ObjMaskProvider getObjsSplitBy() {

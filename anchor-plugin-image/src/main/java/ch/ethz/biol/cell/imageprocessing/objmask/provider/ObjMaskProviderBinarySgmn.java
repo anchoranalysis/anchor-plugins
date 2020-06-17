@@ -51,33 +51,27 @@ public class ObjMaskProviderBinarySgmn extends ObjMaskProviderOneChnlSource {
 
 	@Override
 	protected ObjectCollection createFromObjs(ObjectCollection objsSrc, Channel chnlSrc) throws CreateException {
-		
-		ObjectCollection masksOut = new ObjectCollection();
 		try {
-			
-			for( ObjectMask om : objsSrc ) {
-				VoxelBox<?> vb = chnlSrc.getVoxelBox().any().createBufferAvoidNew(om.getBoundingBox() );
-				
-				BinaryVoxelBox<ByteBuffer> bvb = binarySgmn.sgmn(
-					new VoxelBoxWrapper(vb),
-					new BinarySgmnParameters(),
-					Optional.of(
-						new ObjectMask( om.getVoxelBox())
-					)
-				);
-				
-				ObjectMask mask = new ObjectMask( om.getBoundingBox(), bvb.getVoxelBox() );
-				mask.setBinaryValues( bvb.getBinaryValues() );
-				
-				masksOut.add(mask);
-			}
-		
-		
+			return objsSrc.map( om->
+				sgmnObject(om, chnlSrc)
+			);
 		} catch (SgmnFailedException e) {
 			throw new CreateException(e);
 		}
+	}
+	
+	private ObjectMask sgmnObject(ObjectMask om, Channel chnlSrc) throws SgmnFailedException {
+		VoxelBox<?> vb = chnlSrc.getVoxelBox().any().region(om.getBoundingBox(),true);
 		
-		return masksOut;
+		BinaryVoxelBox<ByteBuffer> bvb = binarySgmn.sgmn(
+			new VoxelBoxWrapper(vb),
+			new BinarySgmnParameters(),
+			Optional.of(
+				new ObjectMask(om.getVoxelBox())
+			)
+		);
+				
+		return new ObjectMask(om.getBoundingBox(), bvb);	
 	}
 
 	public BinarySgmn getBinarySgmn() {

@@ -89,8 +89,8 @@ public class ObjMaskProviderSplitContourSmoothingSpline extends ObjMaskProviderO
 		}		
 	}
 	
-	private void addContoursAsObjs( ContourList cl, ObjectCollection out ) throws OperationFailedException {
-		for( Contour c : cl) {
+	private void addContoursAsObjs( ContourList contourList, ObjectCollection out ) throws OperationFailedException {
+		for( Contour c : contourList) {
 			try {
 				out.add(
 					createObjMaskFromContour(c, true)

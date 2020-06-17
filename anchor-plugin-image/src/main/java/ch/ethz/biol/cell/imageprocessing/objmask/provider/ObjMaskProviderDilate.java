@@ -52,24 +52,20 @@ public class ObjMaskProviderDilate extends ObjMaskProviderDimensionsOptional {
 
 	@Override
 	public ObjectCollection createFromObjs(ObjectCollection objsIn) throws CreateException {
-	
 		Optional<ImageDim> dim = createDims();
-				
-		ObjectCollection objsOut = new ObjectCollection();
-		
-		for( ObjectMask om : objsIn ) {
-
-			ObjectMask omGrown = MorphologicalDilation.createDilatedObjMask(
-				om,
-				dim.map(ImageDim::getExtnt),
-				do3D,
-				iterations,
-				bigNghb
-			);
-			assert( !dim.isPresent() || dim.get().contains( omGrown.getBoundingBox()) );
-			objsOut.add(omGrown);
-		}
-		return objsOut;
+		return objsIn.map( om->dilate(om,dim) );
+	}
+	
+	private ObjectMask dilate(ObjectMask om, Optional<ImageDim> dim) throws CreateException {
+		ObjectMask omGrown = MorphologicalDilation.createDilatedObjMask(
+			om,
+			dim.map(ImageDim::getExtnt),
+			do3D,
+			iterations,
+			bigNghb
+		);
+		assert( !dim.isPresent() || dim.get().contains( omGrown.getBoundingBox()) );
+		return omGrown;
 	}
 	
 	public boolean isDo3D() {

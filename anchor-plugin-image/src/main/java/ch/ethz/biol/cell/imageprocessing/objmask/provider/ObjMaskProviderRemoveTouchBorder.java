@@ -44,24 +44,19 @@ public class ObjMaskProviderRemoveTouchBorder extends ObjMaskProviderDimensions 
 	@Override
 	public ObjectCollection createFromObjs(ObjectCollection objsIn) throws CreateException {
 		
-		ObjectCollection objsOut = new ObjectCollection();
+		ImageDim dim = createDim();
 		
-		ImageDim dims = createDim();
-		
-		for(ObjectMask obj : objsIn) {
-			
-			if (useZ) {
-				if (!obj.getBoundingBox().atBorder(dims)) {
-					objsOut.add(obj);
-				}
-			} else {
-				if (!obj.getBoundingBox().atBorderXY(dims)) {
-					objsOut.add(obj);	
-				}
-			}
+		return objsIn.filter( obj->
+			!atBorder(obj, dim)
+		);
+	}
+	
+	private boolean atBorder(ObjectMask obj, ImageDim dim) {
+		if (useZ) {
+			return obj.getBoundingBox().atBorder(dim);
+		} else {
+			return obj.getBoundingBox().atBorderXY(dim);
 		}
-		
-		return objsOut;
 	}
 
 	public boolean isUseZ() {

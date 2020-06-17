@@ -35,28 +35,19 @@ public class ObjMaskProviderNotIn extends ObjMaskProviderContainer {
 	
 	@Override
 	public ObjectCollection createFromObjs(ObjectCollection objsCollection) throws CreateException {
-		
 		ObjectCollection container = containerRequired();
-		
-		ObjectCollection out = new ObjectCollection();
-		for( ObjectMask om : objsCollection ) {
-			
-			if (!isObjIn(om,container)) {
-				out.add(om);
-			}
-		}
-
-		return out;
+		return objsCollection.filter( om->
+			!isObjIn(om,container)
+		);
 	}
 	
 	private static boolean isObjIn( ObjectMask om, ObjectCollection container ) {
-		
+
 		for( ObjectMask omCompare : container ) {
 			if(om.equals(omCompare)) {
 				return true;
 			}
 		}
-		
 		return false;
 	}
 }
