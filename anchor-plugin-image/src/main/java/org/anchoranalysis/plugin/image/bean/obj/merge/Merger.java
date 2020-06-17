@@ -142,25 +142,28 @@ class Merger {
 				ObjectMask omDest = objs.get(j);
 				
 				Optional<ObjectMask> omMerge = tryMerge( omSrc, omDest );
-				if (!omMerge.isPresent()) {
-					continue;
+
+				if (omMerge.isPresent()) {
+					removeTwoIndices(objs, i,j);
+					objs.add(omMerge.get());
+					
+					int startPos = Math.max(i-1,0);
+					stack.add( new MergeParams(startPos, startPos) );
+					
+					// After a succesful merge, we don't try to merge again
+					break;
 				}
-				
-				if (i<j) {
-					objs.remove(j);
-					objs.remove(i);
-				} else {
-					objs.remove(i);
-					objs.remove(j);
-				}
-				
-				objs.add(omMerge.get());
-				
-				int startPos = Math.max(i-1,0);
-				stack.add( new MergeParams(startPos, startPos) );
-				
-				break;
 			}
+		}
+	}
+	
+	private static void removeTwoIndices(ObjectCollection objs, int i, int j) {
+		if (i<j) {
+			objs.remove(j);
+			objs.remove(i);
+		} else {
+			objs.remove(i);
+			objs.remove(j);
 		}
 	}
 

@@ -46,24 +46,23 @@ public class ObjMaskProviderSgmnByObj extends ObjMaskProviderOneChnlSource {
 
 	@Override
 	public ObjectCollection createFromObjs( ObjectCollection objsSrc, Channel chnlToSgmn ) throws CreateException {
-		
-		ObjectCollection objsOut = new ObjectCollection();
-		
-		for( ObjectMask om : objsSrc ) {
-			try {
-				objsOut.addAll(
-					sgmn.sgmn(
-						chnlToSgmn,
-						Optional.of(om),
-						Optional.empty()
-					)
-				);
-			} catch (SgmnFailedException e) {
-				throw new CreateException(e);
-			}
+		try {
+			return objsSrc.flatMapWithException(
+				SgmnFailedException.class,
+				om -> sgmnObject(om, chnlToSgmn)
+			);
+			
+		} catch (SgmnFailedException e) {
+			throw new CreateException(e);
 		}
-		
-		return objsOut;
+	}
+	
+	private ObjectCollection sgmnObject(ObjectMask om, Channel chnlToSgmn) throws SgmnFailedException {
+		return sgmn.sgmn(
+			chnlToSgmn,
+			Optional.of(om),
+			Optional.empty()
+		);
 	}
 
 	public ObjMaskSgmn getSgmn() {

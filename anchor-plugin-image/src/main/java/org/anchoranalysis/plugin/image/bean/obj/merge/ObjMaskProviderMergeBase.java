@@ -28,7 +28,6 @@ package org.anchoranalysis.plugin.image.bean.obj.merge;
 
 import java.util.List;
 import java.util.Optional;
-
 import org.anchoranalysis.bean.OptionalFactory;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
@@ -106,13 +105,14 @@ public abstract class ObjMaskProviderMergeBase extends ObjMaskProviderContainer 
 	}
 	
 	private static ObjectCollection mergeInContainer( MergeObjs merger, ObjectCollection objs, ObjectCollection containerObjs) throws OperationFailedException {
-						
-		List<ObjWithMatches> matchList = ObjMaskMatchUtilities.matchIntersectingObjects( containerObjs, objs );
+		
+		// All matched objects
+		List<ObjWithMatches> matchList = ObjMaskMatchUtilities.matchIntersectingObjects(containerObjs, objs);
 		
 		ObjectCollection out = new ObjectCollection();
 		for( ObjWithMatches owm : matchList ) {
 			out.addAll(
-				merger.mergeObjs( owm.getMatches() )
+				merger.mergeObjs(owm.getMatches())
 			);
 		}
 		return out;		

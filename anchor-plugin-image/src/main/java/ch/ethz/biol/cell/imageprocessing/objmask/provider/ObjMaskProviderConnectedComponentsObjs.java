@@ -53,17 +53,13 @@ public class ObjMaskProviderConnectedComponentsObjs extends ObjMaskProviderOne {
 	
 	@Override
 	public ObjectCollection createFromObjs(ObjectCollection objsCollection) throws CreateException {
-		
-		ObjectCollection out = new ObjectCollection();
 				
 		CreateFromConnectedComponentsFactory createObjMasks = new CreateFromConnectedComponentsFactory(bigNghb, 1);
-				
-		for( ObjectMask om : objsCollection ) {
-			ObjectCollection omConnected = createObjs3D( om, createObjMasks );
-			out.addAll(omConnected);
-		}
 		
-		return out;
+		return objsCollection.flatMapWithException(
+			CreateException.class,
+			om -> createObjs3D(om, createObjMasks)
+		);
 	}
 	
 	private ObjectCollection createObjs3D(
