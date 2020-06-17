@@ -1,4 +1,4 @@
-package ch.ethz.biol.cell.imageprocessing.objmask.filter;
+package org.anchoranalysis.plugin.image.bean.obj.filter.independent;
 
 import java.util.Optional;
 
@@ -35,64 +35,52 @@ import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
 import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.objectmask.ObjectMask;
+import org.anchoranalysis.plugin.image.bean.obj.filter.ObjectFilterPredicate;
 import org.anchoranalysis.image.objectmask.ObjectCollection;
 
-// Only accepts an object if it has greater (or EQUAL) intersection with objMaskProviderGreater than objMaskProviderLesser
-// So if an object intersects with neither, it still gets accepted, as both return 0
-public class ObjMaskFilterGreaterIntersectionWith extends ObjMaskFilterByObject {
+/**
+ * Keeps objects which intersects with ANY ONE of a collection of other objects.
+ * 
+ * @author Owen Feehan
+ *
+ */
+public class IntersectsWith extends ObjectFilterPredicate {
 
 	// START BEAN PROPERTIES
 	@BeanField
-	private ObjMaskProvider objsGreater;
-	
-	@BeanField
-	private ObjMaskProvider objsLesser;
+	private ObjMaskProvider objs;
 	// END BEAN PROPERTIES
 	
-	private ObjectCollection intersectionSetGreater;
-	private ObjectCollection intersectionSetLesser;
+	private ObjectCollection intersectWithAnyOneObjs;
 
 	@Override
-	protected void start() throws OperationFailedException {
-		
+	protected void start(Optional<ImageDim> dim, ObjectCollection objsToFilter) throws OperationFailedException {
+		super.start(dim, objsToFilter);
 		try {
-			intersectionSetGreater = objsGreater.create();
-			intersectionSetLesser = objsLesser.create();
-			
+			intersectWithAnyOneObjs = objs.create();
 		} catch (CreateException e) {
 			throw new OperationFailedException(e);
 		}
 	}
 	
 	@Override
-	protected boolean match(ObjectMask om, Optional<ImageDim> dim)
-			throws OperationFailedException {
-
-		int cntGreater =  intersectionSetGreater.countIntersectingPixels(om);
-		int cntLesser =  intersectionSetLesser.countIntersectingPixels(om);
-		
-		return cntGreater >= cntLesser;
+	protected boolean match(ObjectMask om, Optional<ImageDim> dim) throws OperationFailedException {
+		return intersectWithAnyOneObjs.stream().anyMatch(obj->
+			obj.hasIntersectingPixels(om)
+		);
 	}
 
 	@Override
 	protected void end() throws OperationFailedException {
-		intersectionSetGreater = null;
-		intersectionSetLesser = null;
+		super.end();
+		intersectWithAnyOneObjs = null;
 	}
 
-	public ObjMaskProvider getObjsGreater() {
-		return objsGreater;
-	}
-	
-	public void setObjsGreater(ObjMaskProvider objsGreater) {
-		this.objsGreater = objsGreater;
+	public ObjMaskProvider getObjs() {
+		return objs;
 	}
 
-	public ObjMaskProvider getObjsLesser() {
-		return objsLesser;
-	}
-	
-	public void setObjsLesser(ObjMaskProvider objsLesser) {
-		this.objsLesser = objsLesser;
+	public void setObjs(ObjMaskProvider objs) {
+		this.objs = objs;
 	}
 }

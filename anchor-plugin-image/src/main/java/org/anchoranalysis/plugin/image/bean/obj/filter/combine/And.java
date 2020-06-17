@@ -1,4 +1,4 @@
-package ch.ethz.biol.cell.imageprocessing.objmask.filter;
+package org.anchoranalysis.plugin.image.bean.obj.filter.combine;
 
 import java.util.Optional;
 
@@ -28,61 +28,24 @@ import java.util.Optional;
  * #L%
  */
 
-
-import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.geometry.ReadableTuple3i;
+import org.anchoranalysis.image.bean.objmask.filter.ObjectFilter;
 import org.anchoranalysis.image.extent.ImageDim;
-import org.anchoranalysis.image.objectmask.ObjectMask;
+import org.anchoranalysis.image.objectmask.ObjectCollection;
 
-public class ObjMaskFilterRemoveTouchingSceneBorder extends ObjMaskFilterByObject {
-
-	// START BEAN PROPERTIES
-	@BeanField
-	private boolean includeZ = false;
-	// END BEAN PROPERTIES
-	
-	@Override
-	protected void start() throws OperationFailedException {
-
-	}
+/**
+ * Applies multiples filter with logical AND i.e. an object must pass all objects in the list to remain.
+ * 
+ * @author Owen Feehan
+ *
+ */
+public class And extends ObjectFilterCombine {
 
 	@Override
-	protected boolean match(ObjectMask om, Optional<ImageDim> dim)
-			throws OperationFailedException {
+	public void filter(ObjectCollection objs, Optional<ImageDim> dim, Optional<ObjectCollection> objsRejected) throws OperationFailedException {
 		
-		if (!dim.isPresent()) {
-			throw new OperationFailedException("Image-dimensions are required for this operation");
+		for (ObjectFilter indFilter : getList()) {
+			indFilter.filter(objs, dim, objsRejected);
 		}
-		
-		if (om.getBoundingBox().atBorderXY(dim.get())) {
-			return false;
-		}
-		
-		if (includeZ) {
-			ReadableTuple3i crnrMin = om.getBoundingBox().getCrnrMin();
-			if (crnrMin.getZ()==0) {
-				return false;
-			}
-
-			ReadableTuple3i crnrMax = om.getBoundingBox().calcCrnrMax();
-			if (crnrMax.getZ()==(dim.get().getZ()-1)) {
-				return false;
-			}
-		}
-		return true;
 	}
-
-	@Override
-	protected void end() throws OperationFailedException {
-	}
-
-	public boolean isIncludeZ() {
-		return includeZ;
-	}
-
-	public void setIncludeZ(boolean includeZ) {
-		this.includeZ = includeZ;
-	}
-
 }

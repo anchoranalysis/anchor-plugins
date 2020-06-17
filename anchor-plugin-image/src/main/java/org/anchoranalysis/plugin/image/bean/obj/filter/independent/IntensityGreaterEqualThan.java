@@ -1,4 +1,4 @@
-package ch.ethz.biol.cell.imageprocessing.objmask.filter;
+package org.anchoranalysis.plugin.image.bean.obj.filter.independent;
 
 /*
  * #%L
@@ -37,14 +37,21 @@ import org.anchoranalysis.image.bean.provider.ChnlProvider;
 import org.anchoranalysis.image.bean.unitvalue.distance.UnitValueDistance;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.extent.ImageDim;
+import org.anchoranalysis.image.objectmask.ObjectCollection;
 import org.anchoranalysis.image.objectmask.ObjectMask;
 import org.anchoranalysis.image.orientation.DirectionVector;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
+import org.anchoranalysis.plugin.image.bean.obj.filter.ObjectFilterPredicate;
 
-// Only allows an ObjMask through if at least one of its voxels has an intensity value
-//   greater than or equal to a threshold value from the ChnlProvider
-public class ObjMaskFilterChnlIntensGreaterEqualThan extends ObjMaskFilterByObject {
+
+/**
+ * Only keep objects where at least one voxel (on a particular channel) has intensity greater or equal to a threshold.
+ * 
+ * @author Owen Feehan
+ *
+ */
+public class IntensityGreaterEqualThan extends ObjectFilterPredicate {
 
 	// START BEAN PROPERTIES
 	@BeanField
@@ -58,7 +65,7 @@ public class ObjMaskFilterChnlIntensGreaterEqualThan extends ObjMaskFilterByObje
 	private VoxelBox<?> vb;
 
 	@Override
-	protected void start() throws OperationFailedException {
+	protected void start(Optional<ImageDim> dim, ObjectCollection objsToFilter) throws OperationFailedException {
 		
 		Channel chnlSingleRegion;
 		try {

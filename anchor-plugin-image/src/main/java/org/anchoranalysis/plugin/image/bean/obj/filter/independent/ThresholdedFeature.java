@@ -1,4 +1,4 @@
-package ch.ethz.biol.cell.imageprocessing.objmask.filter;
+package org.anchoranalysis.plugin.image.bean.obj.filter.independent;
 
 import java.util.Optional;
 
@@ -30,16 +30,26 @@ import java.util.Optional;
 
 
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.bean.shared.relation.RelationBean;
 import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.relation.RelationToValue;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorSingle;
 import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.feature.bean.evaluator.FeatureEvaluator;
 import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
+import org.anchoranalysis.image.objectmask.ObjectCollection;
 import org.anchoranalysis.image.objectmask.ObjectMask;
+import org.anchoranalysis.plugin.image.bean.obj.filter.ObjectFilterRelation;
 
-public class ObjMaskFilterFeatureRelationThreshold extends ObjMaskFilterByObject {
+/**
+ * Only keeps objects whose feature-value satisfies a condition relative to a threshold.
+ * 
+ * <p>Specifically, <code>relation(featureValue,threshold)</code> must be true.
+ * 
+ * @author Owen Feehan
+ *
+ */
+public class ThresholdedFeature extends ObjectFilterRelation {
 
 	// START BEAN PROPERTIES
 	@BeanField
@@ -49,18 +59,14 @@ public class ObjMaskFilterFeatureRelationThreshold extends ObjMaskFilterByObject
 	private double threshold;
 	
 	@BeanField
-	private RelationBean relation;
-	
-	@BeanField
 	private boolean debug = true;
 	// END BEAN PROPERTIES
 	
 	private FeatureCalculatorSingle<FeatureInputSingleObj> featureSession = null;
 		
 	@Override
-	protected void start() throws OperationFailedException {
-		
-		//System.out.printf("ObjMaskFilterFeature start() this=%s\n", this);
+	protected void start(Optional<ImageDim> dim, ObjectCollection objsToFilter) throws OperationFailedException {
+		super.start(dim, objsToFilter);
 		
 		// This could be called many times, so we create a new feature session only on the first occasion
 		if (featureSession==null) {
@@ -73,7 +79,7 @@ public class ObjMaskFilterFeatureRelationThreshold extends ObjMaskFilterByObject
 	}
 
 	@Override
-	protected boolean match(ObjectMask om, Optional<ImageDim> dim) throws OperationFailedException {
+	protected boolean match(ObjectMask om, Optional<ImageDim> dim, RelationToValue relation) throws OperationFailedException {
 
 		double val;
 		try {
@@ -84,7 +90,7 @@ public class ObjMaskFilterFeatureRelationThreshold extends ObjMaskFilterByObject
 			throw new OperationFailedException(e);
 		}
 
-		boolean succ = (relation.create().isRelationToValueTrue(val, threshold));
+		boolean succ = (relation.isRelationToValueTrue(val, threshold));
 		
 		if(debug) {
 			if (succ) {
@@ -99,6 +105,7 @@ public class ObjMaskFilterFeatureRelationThreshold extends ObjMaskFilterByObject
 
 	@Override
 	protected void end() throws OperationFailedException {
+		super.end();
 		if (debug) {
 			getLogger().getLogReporter().log( String.format("END Feature Threshold") );
 		}
@@ -110,14 +117,6 @@ public class ObjMaskFilterFeatureRelationThreshold extends ObjMaskFilterByObject
 
 	public void setThreshold(double threshold) {
 		this.threshold = threshold;
-	}
-	
-	public RelationBean getRelation() {
-		return relation;
-	}
-
-	public void setRelation(RelationBean relation) {
-		this.relation = relation;
 	}
 
 	public FeatureEvaluator<FeatureInputSingleObj> getFeatureEvaluator() {
@@ -135,6 +134,5 @@ public class ObjMaskFilterFeatureRelationThreshold extends ObjMaskFilterByObject
 	public void setDebug(boolean debug) {
 		this.debug = debug;
 	}
-
 
 }

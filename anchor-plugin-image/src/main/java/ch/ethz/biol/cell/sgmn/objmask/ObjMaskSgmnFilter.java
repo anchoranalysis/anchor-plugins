@@ -32,7 +32,7 @@ import java.util.Optional;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.image.bean.objmask.filter.ObjMaskFilter;
+import org.anchoranalysis.image.bean.objmask.filter.ObjectFilter;
 import org.anchoranalysis.image.bean.sgmn.objmask.ObjMaskSgmn;
 import org.anchoranalysis.image.bean.sgmn.objmask.ObjMaskSgmnOne;
 import org.anchoranalysis.image.channel.Channel;
@@ -46,7 +46,7 @@ public class ObjMaskSgmnFilter extends ObjMaskSgmnOne {
 
 	// START BEAN PROPERTIES
 	@BeanField
-	private ObjMaskFilter filter = null;
+	private ObjectFilter filter = null;
 	// END BEAN PROPERTIES
 	
 	@Override
@@ -71,11 +71,11 @@ public class ObjMaskSgmnFilter extends ObjMaskSgmnOne {
 		return objs;
 	}
 
-	public ObjMaskFilter getFilter() {
+	public ObjectFilter getFilter() {
 		return filter;
 	}
 
-	public void setFilter(ObjMaskFilter filter) {
+	public void setFilter(ObjectFilter filter) {
 		this.filter = filter;
 	}
 }

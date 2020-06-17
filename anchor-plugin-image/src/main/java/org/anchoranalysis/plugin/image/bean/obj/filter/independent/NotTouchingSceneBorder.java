@@ -1,4 +1,6 @@
-package ch.ethz.biol.cell.imageprocessing.objmask.filter;
+package org.anchoranalysis.plugin.image.bean.obj.filter.independent;
+
+import java.util.Optional;
 
 /*
  * #%L
@@ -27,37 +29,58 @@ package ch.ethz.biol.cell.imageprocessing.objmask.filter;
  */
 
 
-import java.util.HashSet;
-import java.util.Optional;
-import java.util.Set;
-
+import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.image.bean.objmask.filter.ObjMaskFilter;
+import org.anchoranalysis.core.geometry.ReadableTuple3i;
 import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.objectmask.ObjectMask;
-import org.anchoranalysis.image.objectmask.ObjectCollection;
+import org.anchoranalysis.plugin.image.bean.obj.filter.ObjectFilterPredicate;
 
-public class ObjMaskFilterOr extends ObjMaskFilterDerivedFromList {
+/**
+ * Keeps only objects that are not adjacent to the scene-border (i.e. have a bounding-box on the very edge of the image)
+ * 
+ * @author Owen Feehan
+ *
+ */
+public class NotTouchingSceneBorder extends ObjectFilterPredicate {
+
+	// START BEAN PROPERTIES
+	@BeanField
+	private boolean includeZ = false;
+	// END BEAN PROPERTIES
 
 	@Override
-	public void filter(
-		ObjectCollection objs,
-		Optional<ImageDim> dim,
-		Optional<ObjectCollection> objsRejected
-	) throws OperationFailedException {
+	protected boolean match(ObjectMask om, Optional<ImageDim> dim)
+			throws OperationFailedException {
 		
-		Set<ObjectMask> set = new HashSet<ObjectMask>();
-		
-		for (ObjMaskFilter indFilter : getList()) {
-			
-			ObjectCollection objsDup = objs.duplicate();
-			
-			indFilter.filter(objsDup, dim, objsRejected);
-			
-			set.addAll(objsDup.asList());
+		if (!dim.isPresent()) {
+			throw new OperationFailedException("Image-dimensions are required for this operation");
 		}
+		
+		if (om.getBoundingBox().atBorderXY(dim.get())) {
+			return false;
+		}
+		
+		if (includeZ) {
+			ReadableTuple3i crnrMin = om.getBoundingBox().getCrnrMin();
+			if (crnrMin.getZ()==0) {
+				return false;
+			}
 
-		objs.clear();
-		objs.addAll(set);
+			ReadableTuple3i crnrMax = om.getBoundingBox().calcCrnrMax();
+			if (crnrMax.getZ()==(dim.get().getZ()-1)) {
+				return false;
+			}
+		}
+		return true;
 	}
+
+	public boolean isIncludeZ() {
+		return includeZ;
+	}
+
+	public void setIncludeZ(boolean includeZ) {
+		this.includeZ = includeZ;
+	}
+
 }

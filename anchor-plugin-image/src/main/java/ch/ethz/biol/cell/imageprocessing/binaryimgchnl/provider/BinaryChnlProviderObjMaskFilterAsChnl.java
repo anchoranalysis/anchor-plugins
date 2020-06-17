@@ -32,7 +32,7 @@ import java.util.Optional;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.image.bean.objmask.filter.ObjMaskFilter;
+import org.anchoranalysis.image.bean.objmask.filter.ObjectFilter;
 import org.anchoranalysis.image.binary.BinaryChnl;
 import org.anchoranalysis.image.objectmask.ObjectMask;
 import org.anchoranalysis.image.objectmask.ObjectCollection;
@@ -43,7 +43,7 @@ public class BinaryChnlProviderObjMaskFilterAsChnl extends BinaryChnlProviderEls
 
 	// START BEAN PROPERTIES
 	@BeanField
-	private ObjMaskFilter objMaskFilter;
+	private ObjectFilter objMaskFilter;
 	// END BEAN PROPERTIES
 
 	@Override
@@ -66,11 +66,11 @@ public class BinaryChnlProviderObjMaskFilterAsChnl extends BinaryChnlProviderEls
 		return omc.size()==1;
 	}
 
-	public ObjMaskFilter getObjMaskFilter() {
+	public ObjectFilter getObjMaskFilter() {
 		return objMaskFilter;
 	}
 
-	public void setObjMaskFilter(ObjMaskFilter objMaskFilter) {
+	public void setObjMaskFilter(ObjectFilter objMaskFilter) {
 		this.objMaskFilter = objMaskFilter;
 	}
 }
