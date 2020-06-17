@@ -145,7 +145,7 @@ public class ObjMaskProviderSeededObjSgmn extends ObjMaskProviderChnlSource {
 	) throws SgmnFailedException, CreateException {
 		
 		// We make a channel just for the object
-		VoxelBox<?> vb = chnl.getVoxelBox().any().createBufferAlwaysNew( objMask.getBoundingBox() );
+		VoxelBox<?> vb = chnl.getVoxelBox().any().region( objMask.getBoundingBox(), false);
 		Channel chnlObjLocal = ChannelFactory.instance().create(vb, chnl.getDimensions().getRes());
 		
 		// We create a new ObjMask for the new channel
@@ -165,11 +165,7 @@ public class ObjMaskProviderSeededObjSgmn extends ObjMaskProviderChnlSource {
 		);
 		
 		// We shift each object back to were it belongs globally
-		for( ObjectMask om : sgmnObjs ) {
-			om.shiftBy( objMask.getBoundingBox().getCrnrMin() );
-		}
-		
-		return sgmnObjs;
+		return sgmnObjs.shiftBy( objMask.getBoundingBox().getCrnrMin() );
 	}
 	
 	

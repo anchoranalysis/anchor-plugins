@@ -43,31 +43,28 @@ import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 public class ObjMaskProviderExpandZ extends ObjMaskProviderDimensions {
 
 	@Override
-	public ObjectCollection createFromObjs(ObjectCollection in) throws CreateException {
+	public ObjectCollection createFromObjs(ObjectCollection objs) throws CreateException {
 		
 		ImageDim dim = createDim();
-		
-		ObjectCollection out = new ObjectCollection();
-		
-		for( ObjectMask om : in ) {
-			
-			if (om.getBoundingBox().extent().getZ()!=1) {
-				throw new CreateException( String.format("Existing object has a z extent of %d. It must be 1", om.getBoundingBox().extent().getZ() ) );
-			}
-			
-			BoundingBox bboxNew = om.getBoundingBox().duplicateChangeExtentZ(dim.getZ());
-			
-			VoxelBox<ByteBuffer> vbNew = createVoxelBoxOfDuplicatedPlanes(
-				om.getVoxelBox().getPixelsForPlane(0),
-				bboxNew.extent()
-			);
-			
-			out.add(
-				new ObjectMask(bboxNew, vbNew, om.getBinaryValues())
-			);
+				
+		return objs.map( om->
+			expandZ(om,dim)
+		);
+	}
+	
+	private static ObjectMask expandZ( ObjectMask om, ImageDim dim ) throws CreateException {
+		if (om.getBoundingBox().extent().getZ()!=1) {
+			throw new CreateException( String.format("Existing object has a z extent of %d. It must be 1", om.getBoundingBox().extent().getZ() ) );
 		}
 		
-		return out;
+		BoundingBox bboxNew = om.getBoundingBox().duplicateChangeExtentZ(dim.getZ());
+		
+		VoxelBox<ByteBuffer> vbNew = createVoxelBoxOfDuplicatedPlanes(
+			om.getVoxelBox().getPixelsForPlane(0),
+			bboxNew.extent()
+		);
+		
+		return new ObjectMask(bboxNew, vbNew, om.getBinaryValues());
 	}
 	
 	private static VoxelBox<ByteBuffer> createVoxelBoxOfDuplicatedPlanes( VoxelBuffer<ByteBuffer> planeIn, Extent extent ) {

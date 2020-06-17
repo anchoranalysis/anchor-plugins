@@ -109,14 +109,14 @@ public class TraverseOutlineOnImage extends OutlinePixelsRetriever {
 		}
 		
 		try {
-			omFilled = createObjMaskForPoint(root, chnlFilled );
+			// Important, so we can use the contains function later
+			omFilled = createObjMaskForPoint(root, chnlFilled ).mapBoundingBox( bbox->
+				bbox.shiftTo( new Point3i(0,0,0) )
+			);
 		} catch (CreateException e) {
 			throw new TraverseOutlineException("Unable to create an object-mask for the filled object", e);
 		}
-		
-		// Important, so we can use the contains function later
-		omFilled.shiftTo( new Point3i(0,0,0) );
-		
+				
 		Point3i rootRelToMask = BoundingBox.relPosTo(root, omOutline.getBoundingBox().getCrnrMin());
 		try {
 			visitScheduler.afterCreateObjMask( rootRelToMask, chnlOutline.getDimensions().getRes(), re );
@@ -156,7 +156,7 @@ public class TraverseOutlineOnImage extends OutlinePixelsRetriever {
 			
 			assert( !box.extent().isEmpty() );
 			
-			return chnl.createMaskAlwaysNew(box);
+			return chnl.region(box,false);
 			
 		} catch (OperationFailedException e) {
 			throw new CreateException(e);

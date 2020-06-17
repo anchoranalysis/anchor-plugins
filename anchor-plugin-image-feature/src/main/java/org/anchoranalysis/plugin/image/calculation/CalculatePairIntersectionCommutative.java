@@ -37,7 +37,7 @@ import org.anchoranalysis.feature.cache.calculation.ResolvedCalculation;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.feature.objmask.pair.FeatureInputPairObjs;
 import org.anchoranalysis.image.objectmask.ObjectMask;
-import org.anchoranalysis.image.objectmask.ops.ObjMaskMerger;
+import org.anchoranalysis.image.objectmask.ops.ObjectMaskMerger;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
@@ -106,7 +106,7 @@ public class CalculatePairIntersectionCommutative extends FeatureCalculation<Opt
 		assert(omIntersection1.get().hasPixelsGreaterThan(0));
 		assert(omIntersection2.get().hasPixelsGreaterThan(0));
 		
-		ObjectMask merged = ObjMaskMerger.merge( omIntersection1.get(), omIntersection2.get() );
+		ObjectMask merged = ObjectMaskMerger.merge( omIntersection1.get(), omIntersection2.get() );
 		
 		assert(merged.hasPixelsGreaterThan(0));
 		return Optional.of(merged);

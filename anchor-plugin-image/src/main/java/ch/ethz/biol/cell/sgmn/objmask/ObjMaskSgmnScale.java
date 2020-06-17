@@ -98,13 +98,11 @@ public class ObjMaskSgmnScale extends ObjMaskSgmnOne {
 		}
 	}
 	
-	private ObjectCollection scaleResultToOriginalScale(ObjectCollection objs, ScaleFactor sf) throws SgmnFailedException {
-		try {
-			objs.scale( sf.invert(), createInterpolator() );
-		} catch (OperationFailedException e) {
-			throw new SgmnFailedException("Cannot scale objects", e);
-		}
-		return objs;
+	private ObjectCollection scaleResultToOriginalScale(ObjectCollection objs, ScaleFactor sf) {
+		return objs.scale(
+			sf.invert(),
+			createInterpolator()
+		);
 	}
 	
 	/**

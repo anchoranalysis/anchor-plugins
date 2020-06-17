@@ -28,6 +28,7 @@ package org.anchoranalysisplugin.io.test.image;
 
 import java.nio.ByteBuffer;
 import java.util.Random;
+import java.util.stream.IntStream;
 
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.extent.BoundingBox;
@@ -58,13 +59,14 @@ class ObjMaskCollectionFixture {
 	 * @return
 	 */
 	public ObjectCollection createMockObjs( int minNumObjs, int maxNumObjs ) {
-		ObjectCollection out = new ObjectCollection();
-		
+				
 		int numObjs = randomMinMax( minNumObjs, maxNumObjs );
-		for( int i=0; i<numObjs; i++) {
-			out.add(mockObj());
-		}
-		return out;
+		
+		return new ObjectCollection(
+			IntStream
+				.range(0,numObjs)
+				.mapToObj( i->mockObj() )	
+		);
 	}
 	
 	private ObjectMask mockObj() {

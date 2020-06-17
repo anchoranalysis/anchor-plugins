@@ -27,9 +27,7 @@ package ch.ethz.biol.cell.imageprocessing.objmask.provider;
  */
 
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.TreeSet;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
@@ -49,27 +47,26 @@ public class ObjMaskProviderSortByFeature extends ObjMaskProviderOne {
 	private FeatureEvaluator<FeatureInputSingleObj> featureEvaluator;
 	// END BEAN PROPERTIES
 	
-	private static class ObjWithFeatureValue implements Comparable<ObjWithFeatureValue> {
+	/** Associates a feature-value with an object so it can be sorted by the feature-value */
+	private static class ObjectWithFeatureValue implements Comparable<ObjectWithFeatureValue> {
 		
 		private ObjectMask objMask;
 		private double featureVal;
 		
-		public ObjWithFeatureValue(ObjectMask objMask, double featureVal) throws FeatureCalcException {
+		public ObjectWithFeatureValue(ObjectMask objMask, double featureVal) throws FeatureCalcException {
 			super();
 			this.objMask = objMask;
 			this.featureVal = featureVal;
 		}
 
 		@Override
-		public int compareTo(ObjWithFeatureValue o) {
+		public int compareTo(ObjectWithFeatureValue o) {
 			return Double.valueOf(o.featureVal).compareTo(featureVal);
 		}
 
-		public ObjectMask getObjMask() {
+		public ObjectMask get() {
 			return objMask;
 		}
-
-		
 	}
 	
 	@Override
@@ -78,26 +75,23 @@ public class ObjMaskProviderSortByFeature extends ObjMaskProviderOne {
 		try {
 			FeatureCalculatorSingle<FeatureInputSingleObj> featureSession = featureEvaluator.createAndStartSession();
 			
-			List<ObjWithFeatureValue> listToSort = new ArrayList<>();
+			TreeSet<ObjectWithFeatureValue> sorted = new TreeSet<>();
 			for( ObjectMask om : objsCollection ) {
 				try {
 					double featureVal = featureSession.calc(
 						new FeatureInputSingleObj(om)
 					);
-					listToSort.add( new ObjWithFeatureValue(om,featureVal) );
+					sorted.add(
+						new ObjectWithFeatureValue(om,featureVal)
+					);
 				} catch (FeatureCalcException e) {
 					throw new CreateException(e);
 				}
 			}
 			
-			Collections.sort(listToSort);
-					
-			ObjectCollection objsOut = new ObjectCollection();
-			for( ObjWithFeatureValue om : listToSort ) {
-				objsOut.add(om.getObjMask());
-			}
-			
-			return objsOut;
+			return new ObjectCollection(
+				sorted.stream().map(ObjectWithFeatureValue::get)
+			);
 			
 		} catch (OperationFailedException e) {
 			throw new CreateException(e);

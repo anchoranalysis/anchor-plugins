@@ -39,7 +39,6 @@ import org.anchoranalysis.image.bean.unitvalue.volume.UnitValueVolumeVoxels;
 import org.anchoranalysis.image.binary.BinaryChnl;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelBoxByte;
-import org.anchoranalysis.image.objectmask.ObjectMask;
 import org.anchoranalysis.image.objectmask.ObjectCollection;
 import org.anchoranalysis.image.objectmask.factory.CreateFromConnectedComponentsFactory;
 import org.anchoranalysis.image.unitvalue.UnitValueException;
@@ -127,12 +126,10 @@ public class ObjMaskProviderConnectedComponents extends ObjMaskProvider {
 		BinaryVoxelBox<ByteBuffer> bvb,
 		int z
 	) throws CreateException {
-		ObjectCollection omc = createObjMasks.createConnectedComponents(bvb); 
-		for (ObjectMask om : omc) {
-			// respecify the z
-			om.shiftToZ(z);
-		}
-		return omc;
+		// respecify the z
+		return createObjMasks.createConnectedComponents(bvb).mapBoundingBox( bbox->
+			bbox.shiftToZ(z)
+		);
 	}
 
 	public UnitValueAreaOrVolume getMinVolume() {

@@ -31,7 +31,6 @@ import org.anchoranalysis.anchor.mpp.mark.conic.MarkEllipse;
 
 
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.feature.cache.calculation.FeatureCalculation;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.nrg.NRGStack;
@@ -53,13 +52,9 @@ public class CalculateEllipseLeastSquares extends FeatureCalculation<ObjMaskAndE
 		);
 	}
 		
-	private static ObjectMask extractEllipseSlice( ObjectMask om ) throws CreateException {
-		try {
-			int zSliceCenter = (int) om.centerOfGravity().getZ();
-			return om.extractSlice(zSliceCenter - om.getBoundingBox().getCrnrMin().getZ(), false);
-		} catch (OperationFailedException e1) {
-			throw new CreateException(e1);
-		}
+	private static ObjectMask extractEllipseSlice( ObjectMask om ) {
+		int zSliceCenter = (int) om.centerOfGravity().getZ();
+		return om.extractSlice(zSliceCenter - om.getBoundingBox().getCrnrMin().getZ(), false);
 	}
 	
 

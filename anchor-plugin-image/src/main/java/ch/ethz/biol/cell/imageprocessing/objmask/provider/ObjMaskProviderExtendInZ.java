@@ -52,9 +52,10 @@ public class ObjMaskProviderExtendInZ extends ObjMaskProviderContainer {
 		
 		// For each obj we extend it into its container
 		ObjectCollection out = new ObjectCollection();
+		
 		for( ObjWithMatches owm : matchList ) {
-			
 			for( ObjectMask omOther : owm.getMatches() ) {
+				
 				out.add(
 					createExtendedObjMask(
 						omOther,
@@ -63,6 +64,7 @@ public class ObjMaskProviderExtendInZ extends ObjMaskProviderContainer {
 				);
 			}
 		}
+		
 		return out;
 	}
 		

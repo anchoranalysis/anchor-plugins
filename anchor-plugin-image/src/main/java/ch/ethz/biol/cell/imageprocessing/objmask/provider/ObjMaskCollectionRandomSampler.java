@@ -147,10 +147,10 @@ public class ObjMaskCollectionRandomSampler {
 			this.randomNumberGenerator = randomNumberGenerator;
 						
 			for( ObjectMask om : objMaskCollection ) {
-				int numPixels = om.numPixels();
+				int numPixels = om.numVoxelsOn();
 				if (numPixels>1) {
 					list.add( new ObjMaskSampler(om, chnl, randomNumberGenerator, numPixels) );
-					cnt += om.numPixels();
+					cnt += om.numVoxelsOn();
 				}
 			}
 		}

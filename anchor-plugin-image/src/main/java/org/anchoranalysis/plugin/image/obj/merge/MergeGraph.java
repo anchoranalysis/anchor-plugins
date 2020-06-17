@@ -152,8 +152,8 @@ public class MergeGraph {
 				// If we have equal values, we impose an arbitrary ordering
 				// so as to keep the output of the algorithm as deterministic as possible
 				int cmp = comparator.compare(
-					max.getEdge().getOmWithFeature().getObjMask().findAnyPntOnMask().get(),
-					edge.getOmWithFeature().getObjMask().findAnyPntOnMask().get()
+					max.getEdge().getOmWithFeature().getObjMask().findArbitraryOnVoxel().get(),
+					edge.getOmWithFeature().getObjMask().findArbitraryOnVoxel().get()
 				);
 				if (cmp>0) {
 					max = entry;

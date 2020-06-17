@@ -45,7 +45,7 @@ import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.extent.ImageRes;
 import org.anchoranalysis.image.objectmask.ObjectMask;
 import org.anchoranalysis.image.objectmask.ObjectCollection;
-import org.anchoranalysis.image.objectmask.ops.ObjMaskMerger;
+import org.anchoranalysis.image.objectmask.ops.ObjectMaskMerger;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.anchoranalysis.image.voxel.box.factory.VoxelBoxFactory;
 import org.anchoranalysis.plugin.image.obj.merge.condition.AfterCondition;
@@ -178,7 +178,7 @@ class Merger {
 			);
 			omMerge = createSinglePixelObjMask(pntNew);
 		} else {
-			omMerge = ObjMaskMerger.merge(omSrc, omDest );
+			omMerge = ObjectMaskMerger.merge(omSrc, omDest );
 		}
 
 		if(!afterCondition.accept(omSrc, omDest, omMerge, res)) {

@@ -1,5 +1,7 @@
 package ch.ethz.biol.cell.imageprocessing.objmask.provider;
 
+import java.util.stream.IntStream;
+
 /*
  * #%L
  * anchor-plugin-image
@@ -30,9 +32,8 @@ package ch.ethz.biol.cell.imageprocessing.objmask.provider;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
-import org.anchoranalysis.image.objectmask.ObjectMask;
 import org.anchoranalysis.image.objectmask.ObjectCollection;
-import org.anchoranalysis.image.objectmask.ops.ObjMaskMerger;
+import org.anchoranalysis.image.objectmask.ops.ObjectMaskMerger;
 
 // Merges an object in each list item by item
 //
@@ -51,23 +52,21 @@ public class ObjMaskProviderMergeItemByItem extends ObjMaskProvider {
 	@Override
 	public ObjectCollection create() throws CreateException {
 
-		ObjectCollection objsCollection1 = objs1.create();
-		ObjectCollection objsCollection2 = objs2.create();
+		ObjectCollection first = objs1.create();
+		ObjectCollection second = objs2.create();
 		
-		if (objsCollection1.size()!=objsCollection2.size()) {
-			throw new CreateException( String.format("Both objProviders must have the same number of items, currently %d and %d", objsCollection1.size(), objsCollection2.size() ));
+		if (first.size()!=second.size()) {
+			throw new CreateException( String.format("Both objProviders must have the same number of items, currently %d and %d", first.size(), second.size() ));
 		}
 		
-		ObjectCollection out = new ObjectCollection();
-		
-		for( int i=0; i<objsCollection1.size(); i++) {
-			ObjectMask om1 = objsCollection1.get(i);
-			ObjectMask om2 = objsCollection2.get(i);
-			
-			out.add( ObjMaskMerger.merge(om1, om2) );
-		}
-		
-		return out;
+		return new ObjectCollection(
+			IntStream.range(0, first.size()).mapToObj(index->
+				ObjectMaskMerger.merge(
+					first.get(index),
+					second.get(index)
+				)
+			)
+		);
 	}
 
 	public ObjMaskProvider getObjs1() {

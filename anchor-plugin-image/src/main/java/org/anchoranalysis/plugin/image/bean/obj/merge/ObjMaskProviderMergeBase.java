@@ -99,23 +99,21 @@ public abstract class ObjMaskProviderMergeBase extends ObjMaskProviderContainer 
 	}
 	
 	private static ObjectCollection mergeAll( MergeObjs merger, ObjectCollection objs) throws OperationFailedException {
-		ObjectCollection out = new ObjectCollection();
-		// We merge them all
-		ObjectCollection mergedObjs = merger.mergeObjs(objs);
-		out.addAll(mergedObjs);
-		return out;
+		// TODO is this extra ObjectCollection constructor needed?
+		return new ObjectCollection(
+			merger.mergeObjs(objs)	
+		);
 	}
 	
 	private static ObjectCollection mergeInContainer( MergeObjs merger, ObjectCollection objs, ObjectCollection containerObjs) throws OperationFailedException {
-		
-		ObjectCollection out = new ObjectCollection();
-				
+						
 		List<ObjWithMatches> matchList = ObjMaskMatchUtilities.matchIntersectingObjects( containerObjs, objs );
 		
+		ObjectCollection out = new ObjectCollection();
 		for( ObjWithMatches owm : matchList ) {
-
-			ObjectCollection mergedObjs = merger.mergeObjs( owm.getMatches() );
-			out.addAll( mergedObjs );
+			out.addAll(
+				merger.mergeObjs( owm.getMatches() )
+			);
 		}
 		return out;		
 	}

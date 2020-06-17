@@ -49,26 +49,21 @@ public class ObjMaskProviderIntersectsWith extends ObjMaskProviderContainer {
 	@Override
 	public ObjectCollection createFromObjs(ObjectCollection objsCollection) throws CreateException {
 
-		ObjectCollection objsCollectionContainer = containerRequired();
+		ObjectCollection objsContainer = containerRequired();
 		
-		ObjectCollection out = new ObjectCollection();
+		return objsCollection.filter( obj->
+			includeObj(obj,objsContainer)
+		);
+	}
+	
+	private boolean includeObj(ObjectMask obj, ObjectCollection objsContainer) {
+		boolean intersection = doesObjIntersect(obj,objsContainer);
 		
-		for( ObjectMask om : objsCollection ) {
-			
-			boolean intersection = doesObjIntersect(om,objsCollectionContainer);
-			
-			if (inverse) {
-				if (!intersection) {
-					out.add(om);
-				}				
-			} else {
-				if (intersection) {
-					out.add(om);
-				}
-			}
+		if (inverse) {
+			return !intersection;
+		} else {
+			return intersection;
 		}
-
-		return out;
 	}
 	
 	private static boolean doesObjIntersect( ObjectMask om, ObjectCollection container ) {

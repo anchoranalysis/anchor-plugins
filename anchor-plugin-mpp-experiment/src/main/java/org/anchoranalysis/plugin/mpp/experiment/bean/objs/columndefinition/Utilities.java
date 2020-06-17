@@ -86,7 +86,7 @@ class Utilities {
 //		return objs.get(0);
 		
 		for (ObjectMask om : objs) {
-			if (om.numPixels()==numVoxels) {
+			if (om.numVoxelsOn()==numVoxels) {
 				return om;
 			}
 		}

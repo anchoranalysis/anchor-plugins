@@ -59,11 +59,8 @@ public class RslvdObjMaskList implements Iterable<RslvdObjMask> {
 	}
 	
 	public ObjectCollection createObjs() {
-		ObjectCollection out = new ObjectCollection();
-		for( RslvdObjMask rom : this) {
-			out.add(rom.getObjMask());
-		}
-		return out;
+		return new ObjectCollection(
+			delegate.stream().map(RslvdObjMask::getObjMask)
+		);
 	}
-	
 }

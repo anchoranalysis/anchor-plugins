@@ -33,7 +33,7 @@ import org.anchoranalysis.anchor.mpp.regionmap.RegionMapSingleton;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.objectmask.ObjectMask;
-import org.anchoranalysis.image.objectmask.ops.ObjMaskMerger;
+import org.anchoranalysis.image.objectmask.ops.ObjectMaskMerger;
 
 class EllipticityCalculatorHelper {
 
@@ -43,13 +43,13 @@ class EllipticityCalculatorHelper {
 	}
 	
 	private static double calc( ObjectMask om, ObjectMask omCompare ) {
-		ObjectMask omMerge = ObjMaskMerger.merge(om, omCompare );
+		ObjectMask omMerge = ObjectMaskMerger.merge(om, omCompare );
 		return calcWithMerged(om, omCompare, omMerge);
 	}
 	
 	private static double calcWithMerged( ObjectMask om, ObjectMask omCompare, ObjectMask omMerge ) {
-		int numPixelsCompare = omCompare.numPixels();
-		int numUnion = omMerge.numPixels();
+		int numPixelsCompare = omCompare.numVoxelsOn();
+		int numUnion = omMerge.numVoxelsOn();
 		
 		// Interseting pixels
 		int numIntersection = om.countIntersectingPixels(omCompare);

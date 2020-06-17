@@ -73,30 +73,30 @@ public class ObjMaskProviderErode extends ObjMaskProviderDimensionsOptional {
 	@Override
 	public ObjectCollection createFromObjs(ObjectCollection objsIn) throws CreateException {
 		
-		ObjectCollection objsOut = new ObjectCollection();
+		Optional<Extent> extent = calcExtent();
+		return objsIn.map( om->
+			erode(om, extent)
+		);
+	}
+	
+	private ObjectMask erode(ObjectMask om, Optional<Extent> extent) throws CreateException {
 		
-		for( ObjectMask om : objsIn ) {
-			
-			AcceptIterationList acceptConditionsDilation = new AcceptIterationList();
-			if (rejectIterationIfAllLow) {
-				acceptConditionsDilation.add( new RejectIterationIfAllHigh() );
-			}
-			if (rejectIterationifDisconnected) {
-				acceptConditionsDilation.add( new RejectIterationIfLowDisconnected() );
-			}
-			
-			ObjectMask omOut = MorphologicalErosion.createErodedObjMask(
-				om,
-				calcExtent(),
-				do3D,
-				iterations,
-				outsideAtThreshold,
-				Optional.of(acceptConditionsDilation)
-			);
-			
-			objsOut.add(omOut);
+		AcceptIterationList acceptConditionsDilation = new AcceptIterationList();
+		if (rejectIterationIfAllLow) {
+			acceptConditionsDilation.add( new RejectIterationIfAllHigh() );
 		}
-		return objsOut;
+		if (rejectIterationifDisconnected) {
+			acceptConditionsDilation.add( new RejectIterationIfLowDisconnected() );
+		}
+		
+		return MorphologicalErosion.createErodedObjMask(
+			om,
+			extent,
+			do3D,
+			iterations,
+			outsideAtThreshold,
+			Optional.of(acceptConditionsDilation)
+		);
 	}
 	 
 	private Optional<Extent> calcExtent() throws CreateException {

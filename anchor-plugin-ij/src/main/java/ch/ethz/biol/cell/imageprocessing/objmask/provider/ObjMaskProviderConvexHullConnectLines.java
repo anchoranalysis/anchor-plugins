@@ -56,16 +56,7 @@ public class ObjMaskProviderConvexHullConnectLines extends ObjMaskProviderDimens
 	public ObjectCollection createFromObjs( ObjectCollection objsCollection ) throws CreateException {
 
 		ImageDim dim = createDim();
-		
-		ObjectCollection out = new ObjectCollection();
-		
-		for( ObjectMask obj : objsCollection ) {
-			out.add(
-				transform(obj, dim)
-			);
-		}
-		
-		return out;
+		return objsCollection.map( om->transform(om,dim) );
 	}
 	
 	private ObjectMask transform( ObjectMask obj, ImageDim sd ) throws CreateException {

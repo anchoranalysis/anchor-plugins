@@ -55,15 +55,11 @@ public class ObjMaskProviderScale extends ObjMaskProviderDimensions {
 			throw new CreateException(e);
 		}
 
-		try {
-			objsCollection.scale(
-				sf,
-				InterpolatorFactory.getInstance().binaryResizing()
-			);
-		} catch (OperationFailedException e) {
-			throw new CreateException(e);
-		}
-		return objsCollection;
+		return objsCollection.scale(
+			sf,
+			InterpolatorFactory.getInstance().binaryResizing()
+		);
+		
 	}
 	
 	public ScaleCalculator getScaleCalculator() {

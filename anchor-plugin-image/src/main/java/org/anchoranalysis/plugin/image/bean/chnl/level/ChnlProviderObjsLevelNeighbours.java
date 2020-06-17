@@ -34,8 +34,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.stream.Collectors;
-
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.Positive;
 import org.anchoranalysis.core.error.CreateException;
@@ -141,8 +139,8 @@ public class ChnlProviderObjsLevelNeighbours extends ChnlProviderLevel {
 			CreateNghbGraph<ObjectMaskWithHistogram> graphCreator = new CreateNghbGraph<ObjectMaskWithHistogram>( false );
 			
 			GraphWithEdgeTypes<ObjectMaskWithHistogram,Integer> graph = graphCreator.createGraphWithNumPixels(
-				addHistogramToList(objMasks, chnlIntensity),
-				(ObjectMaskWithHistogram vt) -> vt.getObjMask(),
+				objectsWithHistograms(objMasks, chnlIntensity),
+				ObjectMaskWithHistogram::getObjMask,
 				chnlIntensity.getDimensions().getExtnt(),
 				true
 			);
@@ -178,20 +176,14 @@ public class ChnlProviderObjsLevelNeighbours extends ChnlProviderLevel {
 		}
 	}
 	
-	private static List<ObjectMaskWithHistogram> addHistogramToList( ObjectCollection objMasks, Channel chnlIntensity ) {
-		return objMasks.stream().map(	om ->
-			{
-				try {
-					return new ObjectMaskWithHistogram(om,chnlIntensity);
-				} catch (CreateException e) {
-					throw new RuntimeException(e);
-				}
-			}
-		).collect( Collectors.toList() );	
+	private static List<ObjectMaskWithHistogram> objectsWithHistograms( ObjectCollection objMasks, Channel chnlIntensity ) {
+		return objMasks.mapAsList(om ->
+			new ObjectMaskWithHistogram(om,chnlIntensity)
+		);
 	}
 	
 	private int calcLevelCombinedHist( ObjectMaskWithHistogram om, Collection<ObjectMaskWithHistogram> vertices ) throws OperationFailedException {
-		Histogram histSum = createSumHistograms( om.getHistogram(),  collection( vertices ) );	
+		Histogram histSum = createSumHistograms( om.getHistogram(), collection(vertices) );	
 		return getCalculateLevel().calculateLevel(histSum);
 	}
 	

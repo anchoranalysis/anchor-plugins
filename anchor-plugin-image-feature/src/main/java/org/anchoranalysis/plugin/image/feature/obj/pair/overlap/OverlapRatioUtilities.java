@@ -64,8 +64,8 @@ public class OverlapRatioUtilities {
 	/** A denominator that is the maximum-volume of the two objects */
 	public static int denominatorMaxVolume(FeatureInputPairObjs params) {
 		return Math.max(
-			params.getFirst().numPixels(),
-			params.getSecond().numPixels()
+			params.getFirst().numVoxelsOn(),
+			params.getSecond().numVoxelsOn()
 		);
 	}
 }

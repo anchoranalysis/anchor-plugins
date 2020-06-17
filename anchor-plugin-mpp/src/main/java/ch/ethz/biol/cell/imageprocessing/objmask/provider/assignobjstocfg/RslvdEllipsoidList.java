@@ -37,7 +37,7 @@ import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.objectmask.ObjectMask;
 import org.anchoranalysis.image.objectmask.ObjectCollection;
-import org.anchoranalysis.image.objectmask.ops.ObjMaskMerger;
+import org.anchoranalysis.image.objectmask.ops.ObjectMaskMerger;
 import org.anchoranalysis.image.voxel.box.factory.VoxelBoxFactory;
 
 public class RslvdEllipsoidList implements Iterable<RslvdEllipsoid> {
@@ -366,7 +366,7 @@ public class RslvdEllipsoidList implements Iterable<RslvdEllipsoid> {
 	
 	private static ObjectMask deriveSingleObject(ObjectCollection objsAssigned) throws OperationFailedException {
 		if (objsAssigned.size()>0) {
-			return ObjMaskMerger.merge(objsAssigned);
+			return ObjectMaskMerger.merge(objsAssigned);
 		} else {
 			// Mark as excluded
 			// We add an empty object (just to preserve a 1-1 mapping with the correct total number)

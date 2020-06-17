@@ -30,13 +30,12 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import org.anchoranalysis.image.index.rtree.ObjMaskCollectionRTree;
 import org.anchoranalysis.image.objectmask.ObjectCollection;
 import org.anchoranalysis.image.objectmask.ObjectMask;
 import org.anchoranalysis.image.objectmask.OverlapCalculator;
-import org.anchoranalysis.image.objectmask.ops.ObjMaskMerger;
+import org.anchoranalysis.image.objectmask.ops.ObjectMaskMerger;
 
 import com.google.common.base.Predicate;
 
@@ -49,14 +48,14 @@ public class NonMaximaSuppressionObjs extends NonMaximaSuppression<ObjectMask> {
 		// NOTHING TO DO
 		rTree = new ObjMaskCollectionRTree(
 			new ObjectCollection(
-				removeConfidence(allProposals)
+				allProposals.stream().map(WithConfidence::getObj)
 			)
 		);
 	}
 	
 	@Override
 	protected double overlapScoreFor(ObjectMask item1, ObjectMask item2) {
-		ObjectMask merged = ObjMaskMerger.merge(item1, item2);
+		ObjectMask merged = ObjectMaskMerger.merge(item1, item2);
 		return OverlapCalculator.calcOverlapRatio(item1, item2, merged);
 	}
 
@@ -69,9 +68,5 @@ public class NonMaximaSuppressionObjs extends NonMaximaSuppression<ObjectMask> {
 			.collect(Collectors.toCollection(HashSet::new));
 
 		return objToTest -> possibleOthers.contains(objToTest);
-	}
-
-	private static <T> Stream<T> removeConfidence( Collection<WithConfidence<T>> collection ) {
-		return collection.stream().map(WithConfidence::getObj);
 	}
 }

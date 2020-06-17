@@ -74,12 +74,9 @@ public class ObjMaskProviderConnectedComponentsObjs extends ObjMaskProviderOne {
 		ObjectCollection objs = createObjsFromMask( omUnconnected.binaryVoxelBox(), createObjMasks );
 		
 		// Adjust the crnr of each object, by adding on the original starting point of our object-mask
-		for( ObjectMask omConnected : objs ) {
-			omConnected.shiftBy(
-				omUnconnected.getBoundingBox().getCrnrMin()
-			);
-		}
-		return objs;
+		return objs.shiftBy(
+			omUnconnected.getBoundingBox().getCrnrMin()
+		);
 	}
 	
 	private ObjectCollection createObjsFromMask( BinaryVoxelBox<ByteBuffer> vb, CreateFromConnectedComponentsFactory createObjMasks ) throws CreateException {
