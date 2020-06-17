@@ -31,9 +31,9 @@ public abstract class ObjMaskProviderFilterBase extends ObjMaskProviderDimension
 		);
 	}
 	
-	protected void filter(ObjectCollection objs, Optional<ImageDim> dim, Optional<ObjectCollection> objsRejected) throws CreateException {
+	protected ObjectCollection filter(ObjectCollection objs, Optional<ImageDim> dim, Optional<ObjectCollection> objsRejected) throws CreateException {
 		try {
-			filter.filter(objs, dim, objsRejected);
+			return filter.filter(objs, dim, objsRejected);
 		} catch (OperationFailedException e) {
 			throw new CreateException(e);
 		}

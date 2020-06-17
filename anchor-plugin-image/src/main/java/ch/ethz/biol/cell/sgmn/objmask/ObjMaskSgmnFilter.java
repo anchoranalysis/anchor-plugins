@@ -59,7 +59,7 @@ public class ObjMaskSgmnFilter extends ObjMaskSgmnOne {
 
 	private ObjectCollection filterObjs( ObjectCollection objs, ImageDim dim ) throws SgmnFailedException {
 		try {
-			filter.filter(
+			return filter.filter(
 				objs,
 				Optional.of(dim),
 				Optional.empty()
@@ -67,8 +67,6 @@ public class ObjMaskSgmnFilter extends ObjMaskSgmnOne {
 		} catch (OperationFailedException e) {
 			throw new SgmnFailedException(e);
 		}
-		
-		return objs;
 	}
 
 	public ObjectFilter getFilter() {

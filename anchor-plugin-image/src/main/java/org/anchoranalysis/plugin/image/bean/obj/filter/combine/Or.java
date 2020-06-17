@@ -46,24 +46,43 @@ import org.anchoranalysis.image.objectmask.ObjectCollection;
 public class Or extends ObjectFilterCombine {
 
 	@Override
-	public void filter(
-		ObjectCollection objs,
+	public ObjectCollection filter(
+		ObjectCollection objsToFilter,
 		Optional<ImageDim> dim,
 		Optional<ObjectCollection> objsRejected
 	) throws OperationFailedException {
+
+		// Stores any successful items in a set
+		Set<ObjectMask> setAccepted = findAcceptedObjs(objsToFilter, dim);
 		
-		Set<ObjectMask> set = new HashSet<ObjectMask>();
+		// Adds the rejected-objects
+		objsRejected.ifPresent( rejected-> 
+			rejected.addAll(
+				determineRejected(objsToFilter, setAccepted)		
+			)
+		);
+
+		// Creates the accepted-objects
+		return new ObjectCollection( setAccepted.stream() );
+	}
+	
+	/** Finds the accepted objects (i.e. objects that pass any one of the filters) */
+	private Set<ObjectMask> findAcceptedObjs(ObjectCollection objsToFilter, Optional<ImageDim> dim) throws OperationFailedException {
+		Set<ObjectMask> setAccepted = new HashSet<ObjectMask>();
 		
 		for (ObjectFilter indFilter : getList()) {
-			
-			ObjectCollection objsDup = objs.duplicate();
-			
-			indFilter.filter(objsDup, dim, objsRejected);
-			
-			set.addAll(objsDup.asList());
+			setAccepted.addAll(
+				indFilter.filter(objsToFilter, dim, Optional.empty()).asList()
+			);
 		}
-
-		objs.clear();
-		objs.addAll(set);
+		
+		return setAccepted;
+	}
+	
+	/** Determines which objects are rejected */
+	private static ObjectCollection determineRejected(ObjectCollection objsToFilter, Set<ObjectMask> setAccepted) {
+		return objsToFilter.filter( obj ->
+			!setAccepted.contains(obj)
+		);
 	}
 }
