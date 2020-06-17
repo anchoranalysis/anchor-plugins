@@ -51,19 +51,16 @@ public class BinaryChnlProviderObjMaskFilterAsChnl extends BinaryChnlProviderEls
 
 		ObjectMask om = CreateFromEntireChnlFactory.createObjMask( chnl );
 		
-		ObjectCollection omc = new ObjectCollection(om);
-		
 		try {
-			objMaskFilter.filter(
-				omc,
+			ObjectCollection omc = objMaskFilter.filter(
+				new ObjectCollection(om),
 				Optional.of(chnl.getDimensions()),
 				Optional.empty()
 			);
+			return omc.size()==1;
 		} catch (OperationFailedException e) {
 			throw new CreateException(e);
 		}
-		
-		return omc.size()==1;
 	}
 
 	public ObjectFilter getObjMaskFilter() {

@@ -45,20 +45,23 @@ import org.anchoranalysis.image.objectmask.ObjectCollection;
 public abstract class ObjectFilterPredicate extends ObjectFilter {
 
 	@Override
-	public void filter(ObjectCollection objsToFilter, Optional<ImageDim> dim, Optional<ObjectCollection> objsRejected) throws OperationFailedException {
+	public ObjectCollection filter(ObjectCollection objsToFilter, Optional<ImageDim> dim, Optional<ObjectCollection> objsRejected) throws OperationFailedException {
 
 		if (!precondition(objsToFilter)) {
-			return;
+			return objsToFilter;
 		}
 		
 		start(dim, objsToFilter);
 		
-		objsToFilter.remove(
+		ObjectCollection dup = new ObjectCollection(objsToFilter);
+		dup.remove(
 			om -> !match(om,dim),
 			objsRejected
 		);
 		
 		end();
+		
+		return dup;
 	}
 	
 	/** A precondition, which if evaluates to false, cancels the filter i.e. nothing is removed */

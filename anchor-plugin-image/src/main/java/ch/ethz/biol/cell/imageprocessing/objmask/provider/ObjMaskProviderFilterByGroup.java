@@ -32,6 +32,7 @@ import java.util.Optional;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
+import org.anchoranalysis.core.functional.FunctionalUtilities;
 import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
 import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.objectmask.ObjectCollection;
@@ -53,16 +54,14 @@ public class ObjMaskProviderFilterByGroup extends ObjMaskProviderFilterBase {
 
 		ObjectCollection inGroups = objsGrouped.create();
 		List<ObjWithMatches> matchList = ObjMaskMatchUtilities.matchIntersectingObjects( inGroups, in );
-				
-		ObjectCollection out = new ObjectCollection();
 		
-		for( ObjWithMatches wm : matchList ) {
-			ObjectCollection objs = wm.getMatches();
-			filter(objs, dim, omcRejected);
-			out.addAll( objs );
-		}
-
-		return out;
+		return new ObjectCollection(
+			FunctionalUtilities.flatMapWithException(
+				matchList.stream().map(ObjWithMatches::getMatches),
+				CreateException.class,
+				matches -> filter(matches, dim, omcRejected).asList() 
+			)
+		);
 	}
 	
 	public ObjMaskProvider getObjsGrouped() {
