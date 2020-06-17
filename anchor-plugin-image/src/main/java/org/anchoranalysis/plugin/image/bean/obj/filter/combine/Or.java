@@ -1,4 +1,4 @@
-package ch.ethz.biol.cell.imageprocessing.objmask.filter;
+package org.anchoranalysis.plugin.image.bean.obj.filter.combine;
 
 /*
  * #%L
@@ -27,42 +27,43 @@ package ch.ethz.biol.cell.imageprocessing.objmask.filter;
  */
 
 
-import java.util.Iterator;
+import java.util.HashSet;
 import java.util.Optional;
+import java.util.Set;
 
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.image.bean.objmask.filter.ObjMaskFilter;
+import org.anchoranalysis.image.bean.objmask.filter.ObjectFilter;
 import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.objectmask.ObjectMask;
 import org.anchoranalysis.image.objectmask.ObjectCollection;
 
-public abstract class ObjMaskFilterByObject extends ObjMaskFilter {
+/**
+ * Applies multiples filter with logical OR i.e. an object must pass any one of the filter steps to remain.
+ * 
+ * @author Owen Feehan
+ *
+ */
+public class Or extends ObjectFilterCombine {
 
 	@Override
-	public void filter(ObjectCollection objs, Optional<ImageDim> dim, Optional<ObjectCollection> objsRejected) throws OperationFailedException {
-
-		start();
+	public void filter(
+		ObjectCollection objs,
+		Optional<ImageDim> dim,
+		Optional<ObjectCollection> objsRejected
+	) throws OperationFailedException {
 		
-		Iterator<ObjectMask> itr=objs.iterator();
-		while( itr.hasNext() ) {
+		Set<ObjectMask> set = new HashSet<ObjectMask>();
+		
+		for (ObjectFilter indFilter : getList()) {
 			
-			ObjectMask om = itr.next();
-			if (!match(om,dim)) {
-				itr.remove();
-				
-				if (objsRejected.isPresent()) {
-					objsRejected.get().add(om);
-				}
-			}
+			ObjectCollection objsDup = objs.duplicate();
+			
+			indFilter.filter(objsDup, dim, objsRejected);
+			
+			set.addAll(objsDup.asList());
 		}
-		
-		end();
-	}
-	
-	protected abstract void start() throws OperationFailedException;
-	
-	protected abstract boolean match( ObjectMask om, Optional<ImageDim> dim ) throws OperationFailedException;
-	
-	protected abstract void end() throws OperationFailedException;
 
+		objs.clear();
+		objs.addAll(set);
+	}
 }

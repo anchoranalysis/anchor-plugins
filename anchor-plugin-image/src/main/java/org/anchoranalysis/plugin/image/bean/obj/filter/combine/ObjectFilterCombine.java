@@ -1,12 +1,13 @@
-package ch.ethz.biol.cell.imageprocessing.objmask.filter;
+package org.anchoranalysis.plugin.image.bean.obj.filter.combine;
 
-import java.util.Optional;
+import java.util.ArrayList;
+import java.util.List;
 
-/*
+/*-
  * #%L
  * anchor-plugin-image
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -28,41 +29,32 @@ import java.util.Optional;
  * #L%
  */
 
-
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.image.extent.ImageDim;
-import org.anchoranalysis.image.objectmask.ObjectMask;
+import org.anchoranalysis.image.bean.objmask.filter.ObjectFilter;
 
-public class ObjMaskFilterVolumeLessThan extends ObjMaskFilterByObject {
+
+/**
+ * A filter that combines other filters (in a list)
+ * 
+ * @author Owen Feehan
+ *
+ */
+public abstract class ObjectFilterCombine extends ObjectFilter {
 
 	// START BEAN PROPERTIES
+	/** A list of other filters from which the sub-classes implement filtering behaviour. */
 	@BeanField
-	private int maxVolume = 0;
+	private List<ObjectFilter> list = new ArrayList<>();
 	// END BEAN PROPERTIES
+
+	public List<ObjectFilter> getList() {
+		return list;
+	}
+
+	public void setList(List<ObjectFilter> list) {
+		this.list = list;
+	}
 	
-	@Override
-	protected void start() {
-
-	}
-
-	@Override
-	protected boolean match(ObjectMask om, Optional<ImageDim> dim) {
-		return om.numPixelsLessThan( maxVolume+1 );
-	}
-
-	public int getMaxVolume() {
-		return maxVolume;
-	}
-
-	public void setMaxVolume(int maxVolume) {
-		this.maxVolume = maxVolume;
-	}
-
-	@Override
-	protected void end() throws OperationFailedException {
-			
-	}
-
+	
 
 }

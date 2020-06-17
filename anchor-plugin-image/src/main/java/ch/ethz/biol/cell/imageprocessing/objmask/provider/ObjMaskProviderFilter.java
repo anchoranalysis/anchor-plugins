@@ -40,8 +40,7 @@ public class ObjMaskProviderFilter extends ObjMaskProviderFilterBase {
 	@Override
 	protected ObjectCollection createFromObjs(ObjectCollection in, Optional<ObjectCollection> omcRejected,
 			Optional<ImageDim> dim) throws CreateException {
-		ObjectCollection out = new ObjectCollection();
-		out.addAll( in );
+		ObjectCollection out = new ObjectCollection(in);
 		filter(out, dim, omcRejected);
 		return out;
 	}

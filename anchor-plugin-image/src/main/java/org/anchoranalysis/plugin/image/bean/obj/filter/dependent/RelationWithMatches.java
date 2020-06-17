@@ -1,4 +1,4 @@
-package ch.ethz.biol.cell.imageprocessing.objmask.filter;
+package org.anchoranalysis.plugin.image.bean.obj.filter.dependent;
 
 /*
  * #%L
@@ -28,15 +28,17 @@ package ch.ethz.biol.cell.imageprocessing.objmask.filter;
 
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
-import org.anchoranalysis.bean.shared.relation.RelationBean;
 import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.relation.RelationToValue;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorSingle;
-import org.anchoranalysis.image.bean.objmask.filter.ObjMaskFilter;
+import org.anchoranalysis.feature.session.calculator.cached.FeatureCalculatorCachedSingle;
 import org.anchoranalysis.image.bean.objmask.match.ObjMaskMatcher;
 import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.feature.bean.evaluator.FeatureEvaluator;
@@ -44,9 +46,15 @@ import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
 import org.anchoranalysis.image.objectmask.ObjectMask;
 import org.anchoranalysis.image.objectmask.ObjectCollection;
 import org.anchoranalysis.image.objmask.match.ObjWithMatches;
+import org.anchoranalysis.plugin.image.bean.obj.filter.ObjectFilterRelation;
 
-// Relation must hold true for all associated objects
-public class ObjMaskFilterFeatureRelationAssociatedObject extends ObjMaskFilter {
+/**
+ * Matches each object with others, and keeps only those where a relation holds true for all matches (in terms of features)
+ * 
+ * @author Owen Feehan
+ *
+ */
+public class RelationWithMatches extends ObjectFilterRelation {
 
 	// START BEAN PROPERTIES
 	@BeanField
@@ -58,73 +66,70 @@ public class ObjMaskFilterFeatureRelationAssociatedObject extends ObjMaskFilter 
 	@BeanField
 	private ObjMaskMatcher objMaskMatcher;
 	
+	/** Size of feature evaluation cache for featureEvaluatorMatch */
 	@BeanField
-	private RelationBean relation;
-	
-	@BeanField
-	private int cacheSize = 10;			// Cache uses on featureEvaluatorMatch so we don't have to repeatedly calculate on the same object
+	private int cacheSize = 50;
 	// END BEAN PROPERTIES
 	
 	private FeatureCalculatorSingle<FeatureInputSingleObj> evaluatorForMatch;
-	private FeatureCalculatorSingle<FeatureInputSingleObj> featureSession;
+	private FeatureCalculatorSingle<FeatureInputSingleObj> evaluatorForSource;
+	private Map<ObjectMask,ObjectCollection> matches;
+		
+	@Override
+	protected void start(Optional<ImageDim> dim, ObjectCollection objsToFilter) throws OperationFailedException {
+		super.start(dim, objsToFilter);
+
+		setupEvaluators();
+		
+		matches = createMatchesMap(
+			objMaskMatcher.findMatch(objsToFilter)
+		);
+		
+		// If any object has no matches, throw an exception
+		if (matches.values().stream().anyMatch(ObjectCollection::isEmpty)) {
+			throw new OperationFailedException("No matches found for at least one object");
+		}
+	}
+	
+	private void setupEvaluators() throws OperationFailedException {
+		
+		evaluatorForSource = featureEvaluator.createAndStartSession();
+
+		// Use a specific evaluator for matching if defined, otherwise reuse the existing evaluator
+		// and cache it so we don't have to repeatedly calculate on the same object
+		evaluatorForMatch = new FeatureCalculatorCachedSingle<>(
+			featureEvaluatorMatch!=null ? featureEvaluatorMatch.createAndStartSession() : evaluatorForSource,
+			false,
+			cacheSize
+		);
+		
+	}
 	
 	@Override
-	public void filter(
-		ObjectCollection objs,
-		Optional<ImageDim> dim,
-		Optional<ObjectCollection> objsRejected
-	) throws OperationFailedException {
-
-		start();
-				
-		List<ObjWithMatches> matchList = objMaskMatcher.findMatch(objs);
-		
-		for( ObjWithMatches owm : matchList ) {
-			if (owm.getMatches().size()==0) {
-				throw new OperationFailedException("No matching object found");
-			}
-		}
-	
+	protected boolean match(ObjectMask om, Optional<ImageDim> dim, RelationToValue relation) throws OperationFailedException {
 		try {
-			for( ObjWithMatches owm : matchList ) {
-				
-				if (!match(owm.getSourceObj(), owm.getMatches())) {
-					objs.remove(owm.getSourceObj());
-					
-					if (objsRejected.isPresent()) {
-						objsRejected.get().add(owm.getSourceObj());
-					}
-				}
-				
-			}
+			double val = evaluatorForSource.calc(
+				new FeatureInputSingleObj(om)
+			);
+			return doesMatchAllAssociatedObjects(
+				val,
+				matches.get(om),
+				relation
+			);
 		} catch (FeatureCalcException e) {
 			throw new OperationFailedException(e);
 		}
-		
-		// We free up calculations
-		// TODO previously this is where we cleared the cache
 	}
 	
-	private boolean match(ObjectMask om, ObjectCollection matches) throws FeatureCalcException {
-		double val = featureSession.calc(
-			new FeatureInputSingleObj(om)
-		);
-		return doesMatchAllAssociatedObjects(val,matches);
+	@Override
+	protected void end() throws OperationFailedException {
+		super.end();
+		evaluatorForMatch = null;
+		evaluatorForSource = null;
+		matches = null;
 	}
-	
-	private void start() throws OperationFailedException {
-
-		featureSession = featureEvaluator.createAndStartSession();
-
-		// TODO this previously used FeatureEvaluatorNrgStackCache and shoudld be cached. Now it isn't.
-		if (featureEvaluatorMatch!=null) {
-			evaluatorForMatch = featureEvaluatorMatch.createAndStartSession();
-		} else {
-			evaluatorForMatch = featureSession;
-		}
-	}
-		
-	private boolean doesMatchAllAssociatedObjects( double val, ObjectCollection matches ) throws FeatureCalcException {
+			
+	private boolean doesMatchAllAssociatedObjects( double val, ObjectCollection matches, RelationToValue relation ) throws FeatureCalcException {
 		
 		for( ObjectMask match : matches ) {
 			
@@ -132,21 +137,20 @@ public class ObjMaskFilterFeatureRelationAssociatedObject extends ObjMaskFilter 
 				new FeatureInputSingleObj(match)
 			);
 			
-			//System.out.printf("Matching %f against %f\n", val, valMatch);
-			
-			if (!relation.create().isRelationToValueTrue(val, valMatch)) {
+			if (!relation.isRelationToValueTrue(val, valMatch)) {
 				return false;
 			}
 		}
 		return true;
 	}
-
-	public RelationBean getRelation() {
-		return relation;
-	}
-
-	public void setRelation(RelationBean relation) {
-		this.relation = relation;
+	
+	private static Map<ObjectMask,ObjectCollection> createMatchesMap( List<ObjWithMatches> list ) {
+		return list.stream()
+	      .collect(Collectors.toMap(
+    		 ObjWithMatches::getSourceObj,
+    		 ObjWithMatches::getMatches
+    	  )
+    	);
 	}
 
 	public ObjMaskMatcher getObjMaskMatcher() {

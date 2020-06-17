@@ -1,4 +1,4 @@
-package ch.ethz.biol.cell.imageprocessing.objmask.filter;
+package org.anchoranalysis.plugin.image.bean.obj.filter.independent;
 
 import java.util.Optional;
 
@@ -31,50 +31,51 @@ import java.util.Optional;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.image.bean.objmask.filter.ObjMaskFilter;
+import org.anchoranalysis.core.relation.RelationToValue;
 import org.anchoranalysis.image.bean.unitvalue.volume.UnitValueVolume;
 import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.objectmask.ObjectCollection;
+import org.anchoranalysis.image.objectmask.ObjectMask;
 import org.anchoranalysis.image.unitvalue.UnitValueException;
+import org.anchoranalysis.plugin.image.bean.obj.filter.ObjectFilterRelation;
 
-public class ObjMaskFilterVolumeGreaterThan extends ObjMaskFilter {
+/**
+ * Only keeps objects whose feature-value satisfies a condition relative to a threshold.
+ * 
+ * <p>Specifically, <code>relation(volume,threshold)</code> must be true.
+ * 
+ * @author Owen Feehan
+ *
+ */
+public class ThresholdedVolume extends ObjectFilterRelation {
 
 	// START BEAN PROPERTIES
 	@BeanField
-	private UnitValueVolume minVolume;
+	private UnitValueVolume threshold;
 	// END BEAN PROPERTIES
 	
+	private int thresholdResolved;
+	
 	@Override
-	public void filter(ObjectCollection objs, Optional<ImageDim> dim, Optional<ObjectCollection> objsRejected) throws OperationFailedException {
+	protected void start(Optional<ImageDim> dim, ObjectCollection objsToFilter) throws OperationFailedException {
+		super.start(dim, objsToFilter);
+		thresholdResolved = resolveThreshold(dim);
+	}
 
-		if (!dim.isPresent()) {
-			throw new OperationFailedException("This operation requires image-resolution to be set");
-		}
-		
+	@Override
+	protected boolean match(ObjectMask om, Optional<ImageDim> dim, RelationToValue relation) {
+		return relation.isRelationToValueTrue( om.numVoxelsOn(), thresholdResolved);
+	}
+
+	private int resolveThreshold( Optional<ImageDim> dim ) throws OperationFailedException {
 		try {
-			objs.rmvNumPixelsLessThan(
-				thresholdNumPixels(dim),
-				objsRejected
+			return (int) Math.floor(
+				threshold.rslv(
+					dim.map(ImageDim::getRes)
+				)
 			);
 		} catch (UnitValueException e) {
 			throw new OperationFailedException(e);
 		}
 	}
-	
-	private int thresholdNumPixels( Optional<ImageDim> dim ) throws UnitValueException {
-		return (int) Math.floor(
-			minVolume.rslv(
-				dim.map(ImageDim::getRes)
-			)
-		);
-	}
-
-	public UnitValueVolume getMinVolume() {
-		return minVolume;
-	}
-
-	public void setMinVolume(UnitValueVolume minVolume) {
-		this.minVolume = minVolume;
-	}
-
 }

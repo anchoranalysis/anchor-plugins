@@ -1,6 +1,4 @@
-package ch.ethz.biol.cell.imageprocessing.objmask.filter;
-
-import java.util.Optional;
+package org.anchoranalysis.plugin.image.bean.obj.filter;
 
 /*
  * #%L
@@ -28,18 +26,55 @@ import java.util.Optional;
  * #L%
  */
 
+
+import java.util.Optional;
+
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.image.bean.objmask.filter.ObjMaskFilter;
+import org.anchoranalysis.image.bean.objmask.filter.ObjectFilter;
 import org.anchoranalysis.image.extent.ImageDim;
+import org.anchoranalysis.image.objectmask.ObjectMask;
+
 import org.anchoranalysis.image.objectmask.ObjectCollection;
 
-public class ObjMaskFilterAnd extends ObjMaskFilterDerivedFromList {
+/**
+ * Uses a predicate to make a decision whether to keep objects or not.
+ * 
+ * @author Owen Feehan
+ *
+ */
+public abstract class ObjectFilterPredicate extends ObjectFilter {
 
 	@Override
-	public void filter(ObjectCollection objs, Optional<ImageDim> dim, Optional<ObjectCollection> objsRejected) throws OperationFailedException {
-		
-		for (ObjMaskFilter indFilter : getList()) {
-			indFilter.filter(objs, dim, objsRejected);
+	public void filter(ObjectCollection objsToFilter, Optional<ImageDim> dim, Optional<ObjectCollection> objsRejected) throws OperationFailedException {
+
+		if (!precondition(objsToFilter)) {
+			return;
 		}
+		
+		start(dim, objsToFilter);
+		
+		objsToFilter.remove(
+			om -> !match(om,dim),
+			objsRejected
+		);
+		
+		end();
 	}
+	
+	/** A precondition, which if evaluates to false, cancels the filter i.e. nothing is removed */
+	protected boolean precondition(ObjectCollection objsToFilter) {
+		return true;
+	}
+	
+	protected void start(Optional<ImageDim> dim, ObjectCollection objsToFilter) throws OperationFailedException {
+		// Default implementation, nothing to do
+	}
+	
+	/** A predicate condition for an object to be kept in the collection */
+	protected abstract boolean match( ObjectMask om, Optional<ImageDim> dim ) throws OperationFailedException;
+	
+	protected void end() throws OperationFailedException {
+		// Default implementation, nothing to do
+	}
+
 }
