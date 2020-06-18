@@ -127,7 +127,7 @@ class SimulatedAnnealingHelper {
 		}
 		while( continueIterations(
 			optStep.getBest(),
-			iter++,			
+			++iter,			
 			termConditionAll,
 			assignMode.extractScoreSizeState(),
 			context.getLogger().getLogReporter()
@@ -186,7 +186,7 @@ class SimulatedAnnealingHelper {
 			// Propose a kernel
 			KernelWithID<S> kid = proposeKernel(
 				kernelProposer,
-				context.getKernelCalcContext().proposer().getRe(),
+				context.getKernelCalcContext().proposer().getRandomNumberGenerator(),
 				iter==0
 			);
 			

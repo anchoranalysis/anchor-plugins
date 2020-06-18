@@ -7,7 +7,7 @@ import org.anchoranalysis.anchor.mpp.bean.bound.RslvdBound;
 import org.anchoranalysis.anchor.mpp.bean.proposer.OrientationProposer;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.anchor.mpp.mark.MarkAbstractPosition;
-import org.anchoranalysis.anchor.mpp.proposer.error.ErrorNode;
+import org.anchoranalysis.anchor.mpp.proposer.ProposalAbnormalFailureException;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 import org.anchoranalysis.core.random.RandomNumberGenerator;
@@ -35,21 +35,18 @@ public class LongestExtentWithin extends OrientationProposer {
 	// END BEAN
 	
 	@Override
-	public Optional<Orientation> propose(Mark mark, ImageDim dim, RandomNumberGenerator re, ErrorNode errorNode ) {
-		
-		errorNode = errorNode.add("LongestExtentWithin");
+	public Optional<Orientation> propose(Mark mark, ImageDim dim, RandomNumberGenerator re ) throws ProposalAbnormalFailureException {
 		
 		try {
 			RslvdBound minMaxBound = getSharedObjects().getMarkBounds().calcMinMax(dim.getRes(), dim.getZ()>1 );
 			
-			OrientationList listOrientations = findAllOrientations( mark, minMaxBound, dim, errorNode);
+			OrientationList listOrientations = findAllOrientations(mark, minMaxBound, dim);
 			return Optional.of(
 				listOrientations.sample(re)
 			);
 			
 		} catch (NamedProviderGetException e) {
-			errorNode.add(e.toString());
-			return Optional.empty();
+			throw new ProposalAbnormalFailureException(e.summarize());
 		}
 	}
 
@@ -58,7 +55,7 @@ public class LongestExtentWithin extends OrientationProposer {
 		return testMark instanceof MarkAbstractPosition;
 	}
 	
-	private OrientationList findAllOrientations2D( Mark mark, RslvdBound minMaxBound, ImageDim dim, ErrorNode errorNode ) {
+	private OrientationList findAllOrientations2D(Mark mark, RslvdBound minMaxBound, ImageDim dim) throws ProposalAbnormalFailureException {
 		
 		double incrementRadians = (incrementDegrees / 180) * Math.PI;
 		
@@ -69,7 +66,7 @@ public class LongestExtentWithin extends OrientationProposer {
 		
 			Orientation orientation = new Orientation2D(angle);
 			
-			listOrientations.addOrientationIfUseful(orientation, mark, minMaxBound, dim, errorNode);
+			listOrientations.addOrientationIfUseful(orientation, mark, minMaxBound, dim);
 
 		}
 		
@@ -77,7 +74,7 @@ public class LongestExtentWithin extends OrientationProposer {
 	}
 	
 	
-	private OrientationList findAllOrientations3D( Mark mark, RslvdBound minMaxBound, ImageDim dim, ErrorNode errorNode ) {
+	private OrientationList findAllOrientations3D(Mark mark, RslvdBound minMaxBound, ImageDim dim) throws ProposalAbnormalFailureException {
 		
 		double incrementRadians = (incrementDegrees / 180) * Math.PI;
 		
@@ -87,13 +84,13 @@ public class LongestExtentWithin extends OrientationProposer {
 		for (double x=0; x < Math.PI; x += incrementRadians) {
 			for (double y=0; y < Math.PI; y += incrementRadians) {
 				for (double z=0; z < Math.PI; z += incrementRadians) {
-				
-					Orientation3DEulerAngles orientation = new Orientation3DEulerAngles();
-					orientation.setRotXRadians(x);
-					orientation.setRotYRadians(y);
-					orientation.setRotZRadians(z);
 					
-					listOrientations.addOrientationIfUseful(orientation, mark, minMaxBound, dim, errorNode);
+					listOrientations.addOrientationIfUseful(
+						new Orientation3DEulerAngles(x,y,z),
+						mark,
+						minMaxBound,
+						dim
+					);
 				}
 			}
 		}
@@ -102,12 +99,12 @@ public class LongestExtentWithin extends OrientationProposer {
 	}
 	
 	
-	private OrientationList findAllOrientations( Mark mark, RslvdBound minMaxBound, ImageDim dim, ErrorNode errorNode ) {
+	private OrientationList findAllOrientations(Mark mark, RslvdBound minMaxBound, ImageDim dim) throws ProposalAbnormalFailureException {
 		
 		if (dim.getZ()>1 && !rotateOnlyIn2DPlane) {
-			return findAllOrientations3D(mark, minMaxBound, dim, errorNode);
+			return findAllOrientations3D(mark, minMaxBound, dim);
 		} else {
-			return findAllOrientations2D(mark, minMaxBound, dim, errorNode);
+			return findAllOrientations2D(mark, minMaxBound, dim);
 		}
 	}
 	

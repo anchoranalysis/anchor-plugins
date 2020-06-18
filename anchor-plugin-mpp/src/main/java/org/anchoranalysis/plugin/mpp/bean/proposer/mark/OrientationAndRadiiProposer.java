@@ -5,8 +5,9 @@ import java.util.Optional;
 import org.anchoranalysis.anchor.mpp.bean.proposer.MarkProposer;
 import org.anchoranalysis.anchor.mpp.bean.proposer.OrientationProposer;
 import org.anchoranalysis.anchor.mpp.bean.proposer.radii.RadiiProposer;
-import org.anchoranalysis.anchor.mpp.mark.ISetMarksExplicit;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
+import org.anchoranalysis.anchor.mpp.mark.MarkConic;
+import org.anchoranalysis.anchor.mpp.proposer.ProposalAbnormalFailureException;
 import org.anchoranalysis.anchor.mpp.proposer.ProposerContext;
 import org.anchoranalysis.anchor.mpp.proposer.visualization.ICreateProposalVisualization;
 import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
@@ -40,10 +41,15 @@ import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.geometry.Point3d;
-import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 import org.anchoranalysis.image.orientation.Orientation;
 
-public class Radii extends MarkProposer {
+/**
+ * Proposes both an orientation and radii for a {@link MarkConic}
+ * 
+ * @author Owen Feehan
+ *
+ */
+public class OrientationAndRadiiProposer extends MarkProposer {
 
 	// BEAN PARAMETERS
 	@BeanField
@@ -53,16 +59,24 @@ public class Radii extends MarkProposer {
 	private OrientationProposer orientationProposer = null;
 	// END BEAN PARAMETERS
 
+	public OrientationAndRadiiProposer() {
+		// Standard Bean Constructor
+	}
+	
+	public OrientationAndRadiiProposer(RadiiProposer radiiProposer, OrientationProposer orientationProposer) {
+		this.radiiProposer = radiiProposer;
+		this.orientationProposer = orientationProposer;
+	}
+	
 	@Override
-	public boolean propose(PxlMarkMemo inputMark, ProposerContext context) {
+	public boolean propose(PxlMarkMemo inputMark, ProposerContext context) throws ProposalAbnormalFailureException {
 		
-		ISetMarksExplicit mark = (ISetMarksExplicit) inputMark.getMark();
+		MarkConic mark = (MarkConic) inputMark.getMark();
 		
 		Optional<Orientation> orientationNew = orientationProposer.propose(
 			inputMark.getMark(),
 			context.getDimensions(),
-			context.getRe(),
-			context.getErrorNode()
+			context.getRandomNumberGenerator()
 		);
 
 		if (!orientationNew.isPresent()) {
@@ -75,20 +89,12 @@ public class Radii extends MarkProposer {
 		
 		assert( context.getDimensions().contains( inputMark.getMark().centerPoint() ));
 		
-		Optional<Point3d> rad;
-		try {
-			rad = radiiProposer.propose(
-				inputMark.getMark().centerPoint(),
-				getSharedObjects().getMarkBounds(),
-				context.getRe(),
-				context.getDimensions(),
-				orientationNew.get(),
-				context.getErrorNode()
-			);
-		} catch (NamedProviderGetException e) {
-			context.getErrorNode().add(e.summarize().toString());
-			return false;
-		}
+		Optional<Point3d> rad = radiiProposer.propose(
+			inputMark.getMark().centerPoint(),
+			context.getRandomNumberGenerator(),
+			context.getDimensions(),
+			orientationNew.get()
+		);
 		
 		if (!rad.isPresent()) {
 			context.getErrorNode().add("radiiProposer returned null");
@@ -102,7 +108,7 @@ public class Radii extends MarkProposer {
 
 	@Override
 	public boolean isCompatibleWith(Mark testMark) {
-		return testMark instanceof ISetMarksExplicit;
+		return testMark instanceof MarkConic;
 	}
 
 	@Override

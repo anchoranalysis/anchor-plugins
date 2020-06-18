@@ -41,7 +41,7 @@ public class HOGFeatureTest {
 		
 		FeatureCalculatorSingle<FeatureInputStack> session = FeatureSession.with(
 			feature,
-			LoggingFixture.simpleLogErrorReporter()
+			LoggingFixture.suppressedLogErrorReporter()
 		);
 		return session.calc(
 			new FeatureInputStack(stack)

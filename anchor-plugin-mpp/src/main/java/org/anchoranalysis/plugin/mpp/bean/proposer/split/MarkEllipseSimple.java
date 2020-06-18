@@ -106,7 +106,7 @@ public class MarkEllipseSimple extends MarkSplitProposer {
 		
 		MarkEllipse markExstCast = (MarkEllipse) markExst.getMark();
 		
-		Point3d[] pntArr = createNewMarkPos(orientation, markExstCast, context.getRe(), context.getDimensions(), minRadScaleStart, minRadScaleEnd, wigglePos);
+		Point3d[] pntArr = createNewMarkPos(orientation, markExstCast, context.getRandomNumberGenerator(), context.getDimensions(), minRadScaleStart, minRadScaleEnd, wigglePos);
 		
 		if (pntArr==null) {
 			return null;

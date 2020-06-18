@@ -63,6 +63,14 @@ public class KernelInitialCfgNRG extends KernelIndependent<CfgNRGPixelized> {
 	
 	private Optional<Cfg> lastCfg;
 
+	public KernelInitialCfgNRG() {
+		// Standard bean constuctor
+	}
+	
+	public KernelInitialCfgNRG( CfgProposer cfgProposer ) {
+		this.cfgProposer = cfgProposer;
+	}
+	
 	@Override
 	public boolean isCompatibleWith(Mark testMark) {
 		return cfgProposer.isCompatibleWith(testMark);

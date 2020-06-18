@@ -61,9 +61,17 @@ public class KernelBirthPixelized extends KernelBirth<CfgNRGPixelized> {
 
 	// START BEAN PROPERTIES
 	@BeanField
-	private MarkProposer markProposer = null;
+	private MarkProposer markProposer;
 	// END BEAN PROPERTIES
 
+	public KernelBirthPixelized() {
+		// Standard bean constructor
+	}
+	
+	public KernelBirthPixelized(MarkProposer markProposer) {
+		this.markProposer = markProposer;
+	}
+	
 	@Override
 	protected Optional<Set<Mark>> proposeNewMarks(CfgNRGPixelized exst, int number, KernelCalcContext context) {
 		
@@ -77,10 +85,6 @@ public class KernelBirthPixelized extends KernelBirth<CfgNRGPixelized> {
 		return Optional.of(out);
 	}
 	
-	private Mark proposeNewMark(CfgNRGPixelized exst, KernelCalcContext context) {
-		return context.cfgGen().getCfgGen().newTemplateMark();
-	}
-	
 	@Override
 	protected Optional<CfgNRGPixelized> calcForNewMark(
 		CfgNRGPixelized exst,
@@ -91,6 +95,7 @@ public class KernelBirthPixelized extends KernelBirth<CfgNRGPixelized> {
 		ProposerContext propContext = context.proposer();
 		
 		Optional<CfgNRGPixelized> pixelized = Optional.of(exst);
+		
 		for( Mark m : listMarksNew ) {
 			pixelized = OptionalUtilities.flatMap( 
 				pixelized,
@@ -103,20 +108,15 @@ public class KernelBirthPixelized extends KernelBirth<CfgNRGPixelized> {
 
 	@Override
 	public void updateAfterAccpt(
-			ListUpdatableMarkSetCollection updatableMarkSetCollection, CfgNRGPixelized exst, CfgNRGPixelized accptd) throws UpdateMarkSetException {
+		ListUpdatableMarkSetCollection updatableMarkSetCollection,
+		CfgNRGPixelized exst,
+		CfgNRGPixelized accptd
+	) throws UpdateMarkSetException {
 		
 		for( Mark m : getMarkNew().get() ) {
 			PxlMarkMemo memo = accptd.getMemoForMark( m );
 			exst.addToUpdatablePairList( updatableMarkSetCollection, memo );
 		}
-	}
-	
-	public MarkProposer getMarkProposer() {
-		return markProposer;
-	}
-
-	public void setMarkProposer(MarkProposer markProposer) {
-		this.markProposer = markProposer;
 	}
 
 	@Override
@@ -169,4 +169,15 @@ public class KernelBirthPixelized extends KernelBirth<CfgNRGPixelized> {
 		return newNRG;		
 	}
 
+	public MarkProposer getMarkProposer() {
+		return markProposer;
+	}
+
+	public void setMarkProposer(MarkProposer markProposer) {
+		this.markProposer = markProposer;
+	}
+	
+	private Mark proposeNewMark(CfgNRGPixelized exst, KernelCalcContext context) {
+		return context.cfgGen().getCfgGen().newTemplateMark();
+	}
 }

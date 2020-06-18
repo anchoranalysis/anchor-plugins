@@ -30,7 +30,6 @@ import java.util.Optional;
 
 import org.anchoranalysis.anchor.mpp.bean.proposer.OrientationProposer;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
-import org.anchoranalysis.anchor.mpp.proposer.error.ErrorNode;
 import org.anchoranalysis.core.geometry.Vector3d;
 import org.anchoranalysis.core.random.RandomNumberGenerator;
 import org.anchoranalysis.image.extent.ImageDim;
@@ -40,7 +39,7 @@ import org.anchoranalysis.image.orientation.OrientationAxisAngle;
 public class RandomXY extends OrientationProposer {
 
 	@Override
-	public Optional<Orientation> propose(Mark mark,	ImageDim dim, RandomNumberGenerator re, ErrorNode proposerFailureDescription) {
+	public Optional<Orientation> propose(Mark mark,	ImageDim dim, RandomNumberGenerator re) {
 		OrientationAxisAngle orientation = new OrientationAxisAngle();
 		orientation.setAxis( new Vector3d(0,0,1) );
 		orientation.setAngle( re.nextDouble() * Math.PI * 2 );

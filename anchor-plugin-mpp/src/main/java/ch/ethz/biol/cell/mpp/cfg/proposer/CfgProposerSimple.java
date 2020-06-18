@@ -64,7 +64,7 @@ public class CfgProposerSimple extends CfgProposer {
 			num_pts = numMarks;
 		} else {
 		
-			Poisson p = context.getRe().generatePossion( cfgGen.getReferencePoissonIntensity() * context.getDimensions().getVolume() );
+			Poisson p = context.getRandomNumberGenerator().generatePossion( cfgGen.getReferencePoissonIntensity() * context.getDimensions().getVolume() );
 
 			//do {
 			num_pts = p.nextInt();

@@ -2,7 +2,7 @@ package org.anchoranalysis.plugin.mpp.feature.bean.mark.radii;
 
 import org.anchoranalysis.anchor.mpp.feature.bean.mark.FeatureMark;
 import org.anchoranalysis.anchor.mpp.feature.bean.mark.FeatureInputMark;
-import org.anchoranalysis.anchor.mpp.mark.MarkAbstractRadii;
+import org.anchoranalysis.anchor.mpp.mark.MarkConic;
 
 /*
  * #%L
@@ -51,7 +51,7 @@ public class RadiiRatio extends FeatureMark {
 	@Override
 	public double calc(SessionInput<FeatureInputMark> input) throws FeatureCalcException {
 		
-		MarkAbstractRadii markCast = (MarkAbstractRadii) input.get().getMark();
+		MarkConic markCast = (MarkConic) input.get().getMark();
 		
 		ImageRes sr = suppressRes ? uniformRes : input.get().getResRequired(); 
 		double[] radiiOrdered = markCast.radiiOrderedRslvd( sr );

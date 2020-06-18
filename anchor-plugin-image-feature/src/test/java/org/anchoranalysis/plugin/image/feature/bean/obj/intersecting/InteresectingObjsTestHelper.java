@@ -167,7 +167,7 @@ class InteresectingObjsTestHelper {
 	private static ImageInitParams createInitParams( ObjectCollection others ) throws OperationFailedException {
 		
 		SharedObjects so = new SharedObjects(
-			LoggingFixture.simpleLogErrorReporter()
+			LoggingFixture.suppressedLogErrorReporter()
 		);
 		
 		so.getOrCreate(ObjectCollection.class).add(ID, ()->others);

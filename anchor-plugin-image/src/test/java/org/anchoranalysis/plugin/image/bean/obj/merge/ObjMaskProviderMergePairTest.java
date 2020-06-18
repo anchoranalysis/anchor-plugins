@@ -76,7 +76,7 @@ public class ObjMaskProviderMergePairTest {
 	
 	private static ObjMaskProviderMergePair createMergePair( ObjectCollection objs, int threshold) throws CreateException {
 		
-		LogErrorReporter logger = LoggingFixture.simpleLogErrorReporter();
+		LogErrorReporter logger = LoggingFixture.suppressedLogErrorReporter();
 		
 		ObjMaskProviderMergePair provider = new ObjMaskProviderMergePair();
 		

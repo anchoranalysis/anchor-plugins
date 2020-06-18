@@ -3,7 +3,7 @@ package org.anchoranalysis.plugin.mpp.feature.bean.memo.ind;
 import org.anchoranalysis.anchor.mpp.feature.bean.nrg.elem.FeatureSingleMemo;
 import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputSingleMemo;
 import org.anchoranalysis.anchor.mpp.mark.GlobalRegionIdentifiers;
-import org.anchoranalysis.anchor.mpp.mark.MarkAbstractRadii;
+import org.anchoranalysis.anchor.mpp.mark.MarkConic;
 import org.anchoranalysis.feature.cache.SessionInput;
 
 /*-
@@ -41,7 +41,7 @@ public class BBoxRatio extends FeatureSingleMemo {
 	@Override
 	public double calc(SessionInput<FeatureInputSingleMemo> input) throws FeatureCalcException {
 		
-		MarkAbstractRadii markCast = (MarkAbstractRadii) input.get().getPxlPartMemo().getMark();
+		MarkConic markCast = (MarkConic) input.get().getPxlPartMemo().getMark();
 		
 		ImageDim dim = input.get().getDimensionsRequired();
 		

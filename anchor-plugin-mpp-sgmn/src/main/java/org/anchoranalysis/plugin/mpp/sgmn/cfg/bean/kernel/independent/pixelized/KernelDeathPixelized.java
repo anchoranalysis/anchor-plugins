@@ -1,5 +1,7 @@
 package org.anchoranalysis.plugin.mpp.sgmn.cfg.bean.kernel.independent.pixelized;
 
+import java.util.Optional;
+
 import org.anchoranalysis.anchor.mpp.feature.mark.ListUpdatableMarkSetCollection;
 import org.anchoranalysis.anchor.mpp.feature.nrg.cfg.CfgNRGPixelized;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
@@ -32,6 +34,7 @@ import org.anchoranalysis.anchor.mpp.mark.set.UpdateMarkSetException;
  */
 
 import org.anchoranalysis.anchor.mpp.proposer.ProposerContext;
+import org.anchoranalysis.core.functional.OptionalUtilities;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.mpp.sgmn.kernel.KernelCalcNRGException;
 import org.anchoranalysis.plugin.mpp.sgmn.cfg.bean.kernel.independent.KernelDeath;
@@ -44,27 +47,32 @@ public class KernelDeathPixelized extends KernelDeath<CfgNRGPixelized> {
 	private static final long serialVersionUID = 1L;
 
 	@Override
-	protected MarkAnd<Mark, CfgNRGPixelized> removeAndUpdateNrg(CfgNRGPixelized exst, ProposerContext context) throws KernelCalcNRGException {
+	protected Optional<MarkAnd<Mark, CfgNRGPixelized>> removeAndUpdateNrg(CfgNRGPixelized exst, ProposerContext context) throws KernelCalcNRGException {
 		return removeMarkAndUpdateNrg( exst, context );
 	}
 
 	@Override
 	public void updateAfterAccpt(ListUpdatableMarkSetCollection updatableMarkSetCollection, CfgNRGPixelized nrgExst,
 			CfgNRGPixelized nrgNew) throws UpdateMarkSetException {
-		nrgExst.rmvFromUpdatablePairList(updatableMarkSetCollection, getMarkRmv() );
+		OptionalUtilities.ifPresent(
+			getMarkRmv(),
+			mark -> nrgExst.rmvFromUpdatablePairList(updatableMarkSetCollection, mark)
+		);
 	}
 		
-	private static MarkAnd<Mark,CfgNRGPixelized> removeMarkAndUpdateNrg( CfgNRGPixelized exst, ProposerContext propContext ) throws KernelCalcNRGException {
+	private static Optional<MarkAnd<Mark,CfgNRGPixelized>> removeMarkAndUpdateNrg( CfgNRGPixelized exst, ProposerContext propContext ) throws KernelCalcNRGException {
 
 		int index = selectIndexToRmv( exst.getCfg(), propContext );
 		
 		if (index==-1) {
-			return new MarkAnd<>(null,null);
+			return Optional.empty();
 		}
 		
-		return new MarkAnd<>(
-			exst.getMemoForIndex(index).getMark(),
-			calcUpdatedNRGAfterRemoval(index, exst, propContext)
+		return Optional.of(
+			new MarkAnd<>(
+				exst.getMemoForIndex(index).getMark(),
+				calcUpdatedNRGAfterRemoval(index, exst, propContext)
+			)
 		);
 	}
 	

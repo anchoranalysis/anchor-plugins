@@ -2,7 +2,7 @@ package org.anchoranalysis.plugin.mpp.bean.proposer.radii;
 
 import java.util.Optional;
 
-import org.anchoranalysis.anchor.mpp.bean.bound.MarkBounds;
+import org.anchoranalysis.anchor.mpp.bean.bound.Bound;
 
 /*-
  * #%L
@@ -32,34 +32,69 @@ import org.anchoranalysis.anchor.mpp.bean.bound.MarkBounds;
 
 import org.anchoranalysis.anchor.mpp.bean.proposer.radii.RadiiProposer;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
-import org.anchoranalysis.anchor.mpp.mark.conic.EllipsoidRandomizer;
-import org.anchoranalysis.anchor.mpp.mark.conic.MarkEllipsoid;
-import org.anchoranalysis.anchor.mpp.mark.conic.bounds.EllipsoidBounds;
-import org.anchoranalysis.anchor.mpp.proposer.error.ErrorNode;
+import org.anchoranalysis.anchor.mpp.mark.MarkConic;
+import org.anchoranalysis.anchor.mpp.mark.conic.RadiiRandomizer;
+import org.anchoranalysis.anchor.mpp.proposer.ProposalAbnormalFailureException;
+import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.geometry.Point3d;
-import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 import org.anchoranalysis.core.random.RandomNumberGenerator;
 import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.orientation.Orientation;
 
-public class RandomEllipsoidBounds extends RadiiProposer {
+public class UniformRandomRadiiProposer extends RadiiProposer {
 
+	// START BEAN PROPERTIES
+	@BeanField
+	private Bound radiusBound;
+	
+	@BeanField
+	private boolean do3D = false;
+	// END BEAN PROPERTIES
+
+	public UniformRandomRadiiProposer() {
+		// Standard Bean Constructor
+	}
+	
+	public UniformRandomRadiiProposer(Bound radiusBound, boolean do3D) {
+		this.radiusBound = radiusBound;
+		this.do3D = do3D;
+	}
+	
 	@Override
-	public boolean isCompatibleWith(Mark testMark) {
-		return testMark instanceof MarkEllipsoid;
+	public Optional<Point3d> propose(
+		Point3d pos,
+		RandomNumberGenerator randomNumberGenerator,
+		ImageDim dim,
+		Orientation orientation
+	) throws ProposalAbnormalFailureException {
+		return Optional.of(
+			RadiiRandomizer.randomizeRadii(
+				radiusBound,
+				randomNumberGenerator,
+				dim.getRes(),
+				do3D
+			)
+		);
 	}
 
 	@Override
-	public Optional<Point3d> propose(Point3d pos, MarkBounds markBounds, RandomNumberGenerator re,
-			ImageDim bndScene, Orientation orientation,
-			ErrorNode errorNode) {
-		try {
-			return Optional.of(
-				EllipsoidRandomizer.randomizeRadii( (EllipsoidBounds) getSharedObjects().getMarkBounds(), re, bndScene.getRes() )
-			);
-		} catch (NamedProviderGetException e) {
-			errorNode.add(e.summarize().toString());
-			return Optional.empty();
-		}
+	public boolean isCompatibleWith(Mark testMark) {
+		return testMark instanceof MarkConic;
+	}
+	
+	public Bound getRadiusBound() {
+		return radiusBound;
+	}
+
+	public void setRadiusBound(Bound radiusBound) {
+		this.radiusBound = radiusBound;
+	}
+
+	public boolean isDo3D() {
+		return do3D;
+	}
+
+	public void setDo3D(boolean do3d) {
+		do3D = do3d;
 	}
 }

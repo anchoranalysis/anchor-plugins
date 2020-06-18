@@ -41,7 +41,7 @@ import org.anchoranalysis.mpp.sgmn.bean.optscheme.OptScheme;
 import org.anchoranalysis.mpp.sgmn.kernel.KernelCalcContext;
 import org.anchoranalysis.mpp.sgmn.kernel.KernelCalcNRGException;
 import org.anchoranalysis.mpp.sgmn.optscheme.ExtractScoreSize;
-import org.anchoranalysis.mpp.sgmn.optscheme.OptSchemeInitContext;
+import org.anchoranalysis.mpp.sgmn.optscheme.OptSchemeContext;
 import org.anchoranalysis.mpp.sgmn.optscheme.OptTerminatedEarlyException;
 import org.anchoranalysis.mpp.sgmn.optscheme.feedback.FeedbackReceiver;
 
@@ -70,7 +70,7 @@ public class OptSchemeUnifPerm<S> extends OptScheme<S,S> {
 		KernelProposer<S> kernelProposer,
 		ListUpdatableMarkSetCollection updatableMarkSetCollection,
 		FeedbackReceiver<S> feedbackReceiver,
-		OptSchemeInitContext initContext
+		OptSchemeContext initContext
 	) throws OptTerminatedEarlyException {
 		
 		S best = null;

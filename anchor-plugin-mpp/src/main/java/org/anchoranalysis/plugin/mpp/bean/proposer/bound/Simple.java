@@ -7,7 +7,8 @@ import org.anchoranalysis.anchor.mpp.bean.bound.RslvdBound;
 import org.anchoranalysis.anchor.mpp.bean.proposer.BoundProposer;
 import org.anchoranalysis.anchor.mpp.bound.BidirectionalBound;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
-import org.anchoranalysis.anchor.mpp.proposer.error.ErrorNode;
+import org.anchoranalysis.anchor.mpp.proposer.ProposalAbnormalFailureException;
+
 
 /*
  * #%L
@@ -37,6 +38,7 @@ import org.anchoranalysis.anchor.mpp.proposer.error.ErrorNode;
 
 
 import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.math.rotation.RotationMatrix;
@@ -54,9 +56,7 @@ public class Simple extends BoundProposer {
 	}
 
 	@Override
-	public Optional<BidirectionalBound> propose( Point3d pos, RotationMatrix orientation, ImageDim bndScene, RslvdBound minMaxBound, ErrorNode proposerFailureDescription ) {
-		
-		proposerFailureDescription = proposerFailureDescription.add("BoundProposerSimple");
+	public Optional<BidirectionalBound> propose( Point3d pos, RotationMatrix orientation, ImageDim bndScene, RslvdBound minMaxBound) throws ProposalAbnormalFailureException {
 		
 		// TODO, this should not occur in normal mode
 		// We associate a mark to describe the position and orientation
@@ -67,13 +67,16 @@ public class Simple extends BoundProposer {
 //		proposerFailureDescription.add( String.format("orientation=%s", orientation.toString() ), associatedMark );
 		
 		// We get better bounds for the particular rotation in the X-Direction
-		BidirectionalBound bothX = boundCalculator.calcBound(pos, orientation, proposerFailureDescription );
+		BidirectionalBound bothX;
+		try {
+			bothX = boundCalculator.calcBound(pos, orientation);
+		} catch (OperationFailedException e) {
+			throw new ProposalAbnormalFailureException(e);
+		}
 		
 		// We replace any nulls with our general bound
 		
 		if (bothX==null) {
-			//proposerFailureDescription.add( String.format("cannot calculate bound in direction %f", orientation2D.getAngleRadians()) );
-			proposerFailureDescription.addFormatted("cannot calculate bound in direction " + orientation.toString());
 			return Optional.empty();
 		}
 		

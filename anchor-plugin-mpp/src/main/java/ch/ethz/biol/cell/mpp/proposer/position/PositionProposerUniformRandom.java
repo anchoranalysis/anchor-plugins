@@ -46,9 +46,9 @@ public class PositionProposerUniformRandom extends PositionProposerBean {
 	@Override
 	public Optional<Point3d> propose(ProposerContext context) {
 		ImageDim bndScene = context.getDimensions();
-		double x = context.getRe().nextDouble() * bndScene.getX();
-		double y = context.getRe().nextDouble() * bndScene.getY();
-		double z = suppressZ ? 0 : context.getRe().nextDouble() * bndScene.getZ();
+		double x = context.getRandomNumberGenerator().nextDouble() * bndScene.getX();
+		double y = context.getRandomNumberGenerator().nextDouble() * bndScene.getY();
+		double z = suppressZ ? 0 : context.getRandomNumberGenerator().nextDouble() * bndScene.getZ();
 		return Optional.of(
 			new Point3d(x,y,z)
 		);

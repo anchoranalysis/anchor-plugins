@@ -1,10 +1,8 @@
-package org.anchoranalysis.plugin.mpp.bean.proposer.orientation;
+package org.anchoranalysis.plugin.mpp.bean.bound.mark;
 
-import java.util.Optional;
+import org.anchoranalysis.anchor.mpp.bean.bound.MarkBounds;
+import org.anchoranalysis.anchor.mpp.bean.provider.MarkBoundsProvider;
 
-import org.anchoranalysis.anchor.mpp.bean.proposer.OrientationProposer;
-import org.anchoranalysis.anchor.mpp.mark.Mark;
-import org.anchoranalysis.anchor.mpp.mark.conic.MarkEllipse;
 
 /*
  * #%L
@@ -34,40 +32,30 @@ import org.anchoranalysis.anchor.mpp.mark.conic.MarkEllipse;
 
 
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.random.RandomNumberGenerator;
-import org.anchoranalysis.image.extent.ImageDim;
-import org.anchoranalysis.image.orientation.Orientation;
-import org.anchoranalysis.image.orientation.Orientation2D;
+import org.anchoranalysis.core.error.CreateException;
+import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 
-public class AngleRotation extends OrientationProposer {
+public class MarkBoundsReference extends MarkBoundsProvider {
 
-	// START BEAN PROPERTIES
+	// Start BEAN
 	@BeanField
-	private double angleDegrees = 0;
-	// END BEAN PROPERTIES
-
+	private String id;
+	// End BEAN
+	
 	@Override
-	public Optional<Orientation> propose(Mark mark, ImageDim dim, RandomNumberGenerator re ) {
-		MarkEllipse markC = (MarkEllipse) mark;
-		
-		Orientation2D exstOrientation = (Orientation2D) markC.getOrientation();
-		
-		double angleRadians = (angleDegrees / 180) * Math.PI;
-		return Optional.of(
-			new Orientation2D( exstOrientation.getAngleRadians() + angleRadians )
-		);
+	public MarkBounds create() throws CreateException {
+		try {
+			return getSharedObjects().getMarkBoundsSet().getException(id);
+		} catch (NamedProviderGetException e) {
+			throw new CreateException(e.summarize());
+		}
 	}
 
-	public double getAngleDegrees() {
-		return angleDegrees;
+	public String getId() {
+		return id;
 	}
 
-	public void setAngleDegrees(double angleDegrees) {
-		this.angleDegrees = angleDegrees;
-	}
-
-	@Override
-	public boolean isCompatibleWith(Mark testMark) {
-		return testMark instanceof MarkEllipse;
+	public void setId(String id) {
+		this.id = id;
 	}
 }

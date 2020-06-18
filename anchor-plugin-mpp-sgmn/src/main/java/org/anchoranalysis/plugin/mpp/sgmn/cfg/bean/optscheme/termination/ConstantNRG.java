@@ -54,14 +54,7 @@ public class ConstantNRG extends TerminationCondition {
 	private double prevNRG = 0;
 	
 	private int rep = 0;
-	
-	
-	//private static Log log = LogFactory.getLog(ConstantNRG.class);
-	
-	public ConstantNRG() {
-		super();
-	}
-	
+		
 	@Override
 	public boolean continueIterations(int crntIter, double score, int size, LogReporter logReporter ) {
 		
@@ -99,7 +92,6 @@ public class ConstantNRG extends TerminationCondition {
 	public int getNumRep() {
 		return numRep;
 	}
-
 
 	public void setNumRep(int numRep) {
 		this.numRep = numRep;

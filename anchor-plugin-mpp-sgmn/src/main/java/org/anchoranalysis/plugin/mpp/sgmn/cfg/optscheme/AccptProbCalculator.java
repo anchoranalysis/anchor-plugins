@@ -44,6 +44,7 @@ public class AccptProbCalculator<T> {
 		super();
 		this.annealScheme = annealScheme;
 		this.extracter = extracter;
+		assert( extracter!=null );
 	}
 	
 	public double calcAccptProb( Kernel<?> kernel, Optional<T> crnt, T proposal, int iter, KernelCalcContext context ) {

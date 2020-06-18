@@ -32,11 +32,46 @@
 	</dependency>
 	
 	<dependency>
+	  <groupId>${project.groupId}</groupId>
+	  <artifactId>anchor-plugin-mpp</artifactId>
+	  <version>0.0.8-SNAPSHOT</version>
+	  <scope>test</scope>
+	</dependency>
+	
+	<dependency>
+	  <groupId>${project.groupId}</groupId>
+	  <artifactId>anchor-plugin-mpp-feature</artifactId>
+	  <version>0.0.8-SNAPSHOT</version>
+	  <scope>test</scope>
+	</dependency>
+	
+	 <dependency>
+	  <groupId>${project.groupId}</groupId>
+	  <artifactId>anchor-test-feature-plugins</artifactId>
+	  <version>0.0.4-SNAPSHOT</version>
+	  <scope>test</scope>
+	 </dependency>
+	 
+	 <dependency>
+	  <groupId>${project.groupId}</groupId>
+	  <artifactId>anchor-plugin-operator-feature</artifactId>
+  	  <version>0.0.1-SNAPSHOT</version>
+	  <scope>test</scope>
+	 </dependency>
+	
+	<dependency>
 	   <groupId>${project.groupId}</groupId>
 	   <artifactId>anchor-test-image</artifactId>
   	   <version>0.0.8-SNAPSHOT</version>
   	   <scope>test</scope>
   	</dependency>
+  	
+	<dependency>
+	   <groupId>${project.groupId}</groupId>
+	   <artifactId>anchor-test-experiment</artifactId>
+  	   <version>0.0.8-SNAPSHOT</version>
+  	   <scope>test</scope>
+  	</dependency>  	
 	
 </dependencies>  
 </project>

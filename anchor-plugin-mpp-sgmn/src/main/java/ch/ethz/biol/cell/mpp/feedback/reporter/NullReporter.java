@@ -32,31 +32,32 @@ import org.anchoranalysis.mpp.sgmn.optscheme.feedback.OptimizationFeedbackInitPa
 import org.anchoranalysis.mpp.sgmn.optscheme.feedback.ReporterException;
 import org.anchoranalysis.mpp.sgmn.optscheme.step.Reporting;
 
+/**
+ * Dummy reporter that takes no action.
+ * 
+ * @author Owen Feehan
+ *
+ * @param <T> reporter-type
+ */
 public class NullReporter<T> extends ReporterOptimizationStep<T> {
-
-	
-
-	// START BEAN PROPERTIES
-	
-	// END BEAN PROPERTIES
 	
 	@Override
 	public void reportBegin(OptimizationFeedbackInitParams<T> optInit) throws ReporterException {
-
+		// NOTHING TO DO
 	}
 
 	@Override
 	public void reportItr(Reporting<T> reporting) {
-		
+		// NOTHING TO DO		
 	}
 
 	@Override
 	public void reportNewBest(Reporting<T> reporting) {
-		
+		// NOTHING TO DO
 	}
 
 	@Override
 	public void reportEnd(OptimizationFeedbackEndParams<T> optStep) {
-		
+		// NOTHING TO DO
 	}
 }
