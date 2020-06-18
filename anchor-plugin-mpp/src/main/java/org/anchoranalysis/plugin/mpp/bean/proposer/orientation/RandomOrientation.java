@@ -2,7 +2,7 @@ package org.anchoranalysis.plugin.mpp.bean.proposer.orientation;
 
 import java.util.Optional;
 
-import org.anchoranalysis.anchor.mpp.bean.bound.OrientableBounds;
+
 
 /*-
  * #%L
@@ -32,34 +32,45 @@ import org.anchoranalysis.anchor.mpp.bean.bound.OrientableBounds;
 
 import org.anchoranalysis.anchor.mpp.bean.proposer.OrientationProposer;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
-import org.anchoranalysis.anchor.mpp.proposer.error.ErrorNode;
-import org.anchoranalysis.core.name.provider.NamedProviderGetException;
+import org.anchoranalysis.anchor.mpp.mark.conic.bounds.RotationBounds;
+import org.anchoranalysis.anchor.mpp.proposer.ProposalAbnormalFailureException;
+import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.random.RandomNumberGenerator;
 import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.orientation.Orientation;
 
-public class Random extends OrientationProposer {
+public class RandomOrientation extends OrientationProposer {
 
+	// START BEAN PROPERTIES
+	@BeanField
+	private RotationBounds bounds;
+	// END BEAN PROPERTIES
+	
+	public RandomOrientation() {
+		// Standard bean constructor
+	}
+	
+	public RandomOrientation(RotationBounds bounds) {
+		this.bounds = bounds;
+	}
+	
 	@Override
-	public Optional<Orientation> propose(Mark mark,	ImageDim dim, RandomNumberGenerator re, ErrorNode errorNode) {
-		
-		try {
-			if (getSharedObjects().getMarkBounds()==null || !(getSharedObjects().getMarkBounds() instanceof OrientableBounds) ) {
-				errorNode.add("markBounds must be non-null and of type OrientableBounds");
-				return Optional.empty();
-			}
-			
-			return Optional.of(
-				((OrientableBounds) getSharedObjects().getMarkBounds()).randomOrientation(re, dim.getRes())
-			);
-		} catch (NamedProviderGetException e) {
-			errorNode.add(e.summarize().toString());
-			return Optional.empty();
-		}
+	public Optional<Orientation> propose(Mark mark,	ImageDim dim, RandomNumberGenerator re) throws ProposalAbnormalFailureException {
+		return Optional.of(
+			bounds.randomOrientation(re, dim.getRes())
+		);
 	}
 
 	@Override
 	public boolean isCompatibleWith(Mark testMark) {
 		return true;
+	}
+
+	public RotationBounds getBounds() {
+		return bounds;
+	}
+
+	public void setBounds(RotationBounds bounds) {
+		this.bounds = bounds;
 	}
 }

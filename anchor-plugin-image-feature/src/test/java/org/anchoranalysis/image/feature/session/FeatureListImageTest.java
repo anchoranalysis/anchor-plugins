@@ -144,7 +144,7 @@ public class FeatureListImageTest {
 	private <T extends FeatureInput> FeatureCalculatorMulti<T> createAndStart( FeatureList<T> features ) throws FeatureCalcException {
 		return FeatureSession.with(
 			features,
-			LoggingFixture.simpleLogErrorReporter()
+			LoggingFixture.suppressedLogErrorReporter()
 		);
 	}
 	

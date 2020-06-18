@@ -7,7 +7,8 @@ import org.anchoranalysis.anchor.mpp.bean.bound.BoundCalculator;
 import org.anchoranalysis.anchor.mpp.bean.bound.RslvdBound;
 import org.anchoranalysis.anchor.mpp.bound.BidirectionalBound;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
-import org.anchoranalysis.anchor.mpp.proposer.error.ErrorNode;
+import org.anchoranalysis.anchor.mpp.proposer.ProposalAbnormalFailureException;
+import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.random.RandomNumberGenerator;
 import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.orientation.Orientation;
@@ -26,17 +27,20 @@ class OrientationList {
 		this.boundsRatio = boundsRatio;
 	}		
 	
-	public void addOrientationIfUseful( Orientation orientation, Mark mark, RslvdBound minMaxBound, ImageDim dim, ErrorNode errorNode ) {
+	public void addOrientationIfUseful(Orientation orientation, Mark mark, RslvdBound minMaxBound, ImageDim dim) throws ProposalAbnormalFailureException {
 		
-		BidirectionalBound bib = boundCalculator.calcBound( mark.centerPoint(), orientation.createRotationMatrix(), errorNode);
+		BidirectionalBound bib;
+		try {
+			bib = boundCalculator.calcBound( mark.centerPoint(), orientation.createRotationMatrix());
+		} catch (OperationFailedException e) {
+			throw new ProposalAbnormalFailureException(e);
+		}
 		
 		if (bib==null) {
-			errorNode.add("null bound");
 			return;
 		}
 		
 		if (bib.isUnboundedAtBothEnds()) {
-			errorNode.add("unbounded at both ends");
 			return;
 		}
 		
@@ -45,22 +49,18 @@ class OrientationList {
 			double max = bib.getMaxOfMax();
 			if (max < minMaxBound.getMax()) {
 				listOrientationsUnbounded.add(orientation);
-			} else {
-				errorNode.addFormatted("unbounded is above marks bound max (%f > %f)", max, minMaxBound.getMax());
 			}
 		}
 		
 		double rb = bib.ratioBounds(dim); 
 		
 		if (rb > boundsRatio) {
-			errorNode.addFormatted("outside bounds ratio (%f br=%f)",rb, boundsRatio);
 			return;
 		}
 		
 		double max = bib.getMaxOfMax();
 		
 		if (max > minMaxBound.getMax()) {
-			errorNode.addFormatted("above marks bound max (%f > %f)",max, minMaxBound.getMax());
 			return;
 		}
 		

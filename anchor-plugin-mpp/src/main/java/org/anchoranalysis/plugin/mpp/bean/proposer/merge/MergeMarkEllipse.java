@@ -4,8 +4,8 @@ import java.util.Optional;
 
 import org.anchoranalysis.anchor.mpp.bean.proposer.MarkMergeProposer;
 import org.anchoranalysis.anchor.mpp.bean.proposer.MarkProposer;
-import org.anchoranalysis.anchor.mpp.mark.ISetMarksExplicit;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
+import org.anchoranalysis.anchor.mpp.mark.MarkConic;
 import org.anchoranalysis.anchor.mpp.points.PointClipper;
 import org.anchoranalysis.anchor.mpp.proposer.ProposalAbnormalFailureException;
 import org.anchoranalysis.anchor.mpp.proposer.ProposerContext;
@@ -58,10 +58,10 @@ public class MergeMarkEllipse extends MarkMergeProposer {
 	public Optional<Mark> propose(PxlMarkMemo mark1, PxlMarkMemo mark2, ProposerContext context) throws ProposalAbnormalFailureException {
 		
 		PxlMarkMemo targetPmm = mark1.duplicateFresh();
-		ISetMarksExplicit target = (ISetMarksExplicit) targetPmm.getMark();
+		MarkConic target = (MarkConic) targetPmm.getMark();
 		
 		// We calculate a position for the mark
-		Point3d pos = generateMergedPos( mark1.getMark(), mark2.getMark(), mergedPosTolerance, context.getRe(), context.getNrgStack() );
+		Point3d pos = generateMergedPos( mark1.getMark(), mark2.getMark(), mergedPosTolerance, context.getRandomNumberGenerator(), context.getNrgStack() );
 		
 		target.setMarksExplicit(pos );
 		
@@ -119,7 +119,7 @@ public class MergeMarkEllipse extends MarkMergeProposer {
 	
 	@Override
 	public boolean isCompatibleWith(Mark testMark) {
-		return testMark instanceof ISetMarksExplicit && markProposer.isCompatibleWith(testMark);
+		return testMark instanceof MarkConic && markProposer.isCompatibleWith(testMark);
 	}
 
 	public double getMergedPosTolerance() {

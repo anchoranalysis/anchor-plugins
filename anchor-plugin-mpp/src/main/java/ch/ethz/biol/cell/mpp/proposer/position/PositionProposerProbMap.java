@@ -59,7 +59,7 @@ public class PositionProposerProbMap extends PositionProposerBean {
 	
 	@Override
 	public Optional<Point3d> propose(ProposerContext context) {
-		return probMap.sample( context.getRe() );
+		return probMap.sample( context.getRandomNumberGenerator() );
 	}
 
 	public String getProbMapID() {

@@ -2,10 +2,10 @@ package org.anchoranalysis.plugin.mpp.bean.proposer.radii;
 
 import java.util.Optional;
 
-import org.anchoranalysis.anchor.mpp.bean.bound.MarkBounds;
 import org.anchoranalysis.anchor.mpp.bean.proposer.radii.RadiiProposer;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
-import org.anchoranalysis.anchor.mpp.proposer.error.ErrorNode;
+import org.anchoranalysis.anchor.mpp.proposer.ProposalAbnormalFailureException;
+
 
 /*
  * #%L
@@ -49,31 +49,35 @@ public class RadiiProposerRepeat extends RadiiProposer {
 	@BeanField
 	private int maxIter = 20;
 	// END BEAN PROPERTIES
-		
-	@Override
-	public boolean isCompatibleWith(Mark testMark) {
-		return radiiProposer.isCompatibleWith(testMark);
-	}
 
 	@Override
-	public Optional<Point3d> propose(Point3d pos, MarkBounds markBounds,
-			RandomNumberGenerator re, ImageDim bndScene, Orientation orientation,
-			ErrorNode proposerFailureDescription) {
-
-		proposerFailureDescription = proposerFailureDescription.add("RadiiProposerRepeat");
+	public Optional<Point3d> propose(
+		Point3d pos,
+		RandomNumberGenerator randomNumberGenerator,
+		ImageDim dim,
+		Orientation orientation
+	) throws ProposalAbnormalFailureException {
 		
 		for (int i=0; i<maxIter; i++) {
-			Optional<Point3d> point = radiiProposer.propose(pos, markBounds, re, bndScene, orientation, proposerFailureDescription);
+			Optional<Point3d> point = radiiProposer.propose(
+				pos,
+				randomNumberGenerator,
+				dim,
+				orientation
+			);
 			if (point.isPresent()) {
 				return point;
 			}
 		}
 		
-		proposerFailureDescription.add("maxIter reached");
-		
 		return Optional.empty();
 	}
 
+	@Override
+	public boolean isCompatibleWith(Mark testMark) {
+		return radiiProposer.isCompatibleWith(testMark);
+	}
+	
 	public RadiiProposer getRadiiProposer() {
 		return radiiProposer;
 	}

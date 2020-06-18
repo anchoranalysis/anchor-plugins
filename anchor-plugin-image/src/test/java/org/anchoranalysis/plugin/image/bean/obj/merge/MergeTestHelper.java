@@ -52,7 +52,7 @@ class MergeTestHelper {
 		ObjMaskProviderMergeBase provider
 	) throws OperationFailedException {
 		
-		LogErrorReporter logger = LoggingFixture.simpleLogErrorReporter();
+		LogErrorReporter logger = LoggingFixture.suppressedLogErrorReporter();
 		
 		try {
 			ProviderFixture.initProvider(provider, logger);

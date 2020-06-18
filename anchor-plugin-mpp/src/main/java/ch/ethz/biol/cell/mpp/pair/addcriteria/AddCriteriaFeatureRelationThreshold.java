@@ -1,5 +1,7 @@
 package ch.ethz.biol.cell.mpp.pair.addcriteria;
 
+import java.util.Optional;
+
 import org.anchoranalysis.anchor.mpp.feature.addcriteria.AddCriteriaPair;
 import org.anchoranalysis.anchor.mpp.feature.addcriteria.IncludeMarksFailureException;
 import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputPairMemo;
@@ -64,7 +66,7 @@ public class AddCriteriaFeatureRelationThreshold extends AddCriteriaPair {
 		PxlMarkMemo mark1,
 		PxlMarkMemo mark2,
 		ImageDim dim,
-		FeatureCalculatorMulti<FeatureInputPairMemo> session,
+		Optional<FeatureCalculatorMulti<FeatureInputPairMemo>> session,
 		boolean do3D
 	) throws IncludeMarksFailureException {
 		
@@ -75,7 +77,9 @@ public class AddCriteriaFeatureRelationThreshold extends AddCriteriaPair {
 				new NRGStackWithParams(dim)
 			);
 			
-			double featureVal = session.calc(
+			double featureVal = session.orElseThrow( ()->
+				new IncludeMarksFailureException("No session exists")
+			).calc(
 				params,
 				new FeatureList<>(feature)
 			).get(0);
@@ -112,7 +116,9 @@ public class AddCriteriaFeatureRelationThreshold extends AddCriteriaPair {
 	}
 
 	@Override
-	public FeatureList<FeatureInputPairMemo> orderedListOfFeatures() {
-		return new FeatureList<>(feature);
+	public Optional<FeatureList<FeatureInputPairMemo>> orderedListOfFeatures() {
+		return Optional.of(
+			new FeatureList<>(feature)
+		);
 	}
 }

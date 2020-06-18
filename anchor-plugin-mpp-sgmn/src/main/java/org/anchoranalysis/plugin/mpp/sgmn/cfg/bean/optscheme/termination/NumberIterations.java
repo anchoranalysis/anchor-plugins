@@ -48,7 +48,7 @@ public class NumberIterations extends TerminationCondition {
 	
 	@Override
 	public boolean continueIterations(int crntIter, double score, int size, LogReporter logReporter) {
-		if (crntIter<=maxNumber) {
+		if (crntIter<maxNumber) {
 			return true;
 		} else {
 			logReporter.log("NumberIterations returned false");

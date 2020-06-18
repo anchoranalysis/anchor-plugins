@@ -47,24 +47,21 @@ public abstract class KernelDeath<T> extends KernelPosNeg<T> {
 	// START BEAN PROPERTIES
 	// END BEAN PROPERTIES
 	
-	private Mark markRmv;
+	private Optional<Mark> markRmv;
 	
 	@Override
 	public Optional<T> makeProposal(Optional<T> exst,KernelCalcContext context ) throws KernelCalcNRGException {
 
-		if (exst.isPresent()) {
+		if (!exst.isPresent()) {
 			return Optional.empty();
 		}
 		
-		MarkAnd<Mark,T> markNrg = removeAndUpdateNrg( exst.get(), context.proposer() );
-		markRmv = markNrg.getMark();
-		return Optional.of(
-			markNrg.getCfgNrg()
-		);
-		
+		Optional<MarkAnd<Mark,T>> markNrg = removeAndUpdateNrg( exst.get(), context.proposer() );
+		markRmv = markNrg.map(MarkAnd::getMark);
+		return markNrg.map(MarkAnd::getCfgNrg);
 	}
 	
-	protected abstract MarkAnd<Mark,T> removeAndUpdateNrg( T exst, ProposerContext context ) throws KernelCalcNRGException;
+	protected abstract Optional<MarkAnd<Mark,T>> removeAndUpdateNrg( T exst, ProposerContext context ) throws KernelCalcNRGException;
 	
 	@Override
 	public double calcAccptProb(int exstSize, int propSize,
@@ -86,8 +83,8 @@ public abstract class KernelDeath<T> extends KernelPosNeg<T> {
 	
 	@Override
 	public String dscrLast() {
-		if (markRmv!=null) {
-			return String.format("death(%d)", markRmv.getId() );
+		if (markRmv.isPresent()) {
+			return String.format("death(%d)", markRmv.get().getId() );
 		} else {
 			return "death";
 		}
@@ -95,8 +92,8 @@ public abstract class KernelDeath<T> extends KernelPosNeg<T> {
 	
 	@Override
 	public int[] changedMarkIDArray() {
-		if (markRmv!=null) {
-			return new int[]{ this.markRmv.getId() };	
+		if (markRmv.isPresent()) {
+			return new int[]{ this.markRmv.get().getId() };	
 		} else {
 			return new int[] {};
 		}
@@ -108,7 +105,7 @@ public abstract class KernelDeath<T> extends KernelPosNeg<T> {
 		return true;
 	}
 	
-	protected Mark getMarkRmv() {
+	protected Optional<Mark> getMarkRmv() {
 		return markRmv;
 	}
 	
@@ -120,7 +117,7 @@ public abstract class KernelDeath<T> extends KernelPosNeg<T> {
 		}
 				
 		// Random mark
-		return exst.randomIndex( propContext.getRe() );
+		return exst.randomIndex( propContext.getRandomNumberGenerator() );
 	}
 	
 	protected static class MarkAnd<S,T> {

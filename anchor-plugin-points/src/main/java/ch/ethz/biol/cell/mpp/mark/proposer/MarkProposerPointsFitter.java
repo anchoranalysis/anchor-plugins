@@ -37,6 +37,7 @@ import org.anchoranalysis.anchor.mpp.bean.points.fitter.PointsFitterException;
 import org.anchoranalysis.anchor.mpp.bean.proposer.MarkProposer;
 import org.anchoranalysis.anchor.mpp.bean.proposer.PointsProposer;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
+import org.anchoranalysis.anchor.mpp.proposer.ProposalAbnormalFailureException;
 import org.anchoranalysis.anchor.mpp.proposer.ProposerContext;
 import org.anchoranalysis.anchor.mpp.proposer.visualization.ICreateProposalVisualization;
 import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
@@ -69,7 +70,7 @@ public class MarkProposerPointsFitter extends MarkProposer {
 	}
 
 	@Override
-	public boolean propose(PxlMarkMemo inputMark, ProposerContext context) {
+	public boolean propose(PxlMarkMemo inputMark, ProposerContext context) throws ProposalAbnormalFailureException {
 		
 		inputMark.reset();
 		
@@ -80,7 +81,7 @@ public class MarkProposerPointsFitter extends MarkProposer {
 				pnt,
 				inputMark.getMark(),
 				context.getDimensions(),
-				context.getRe(),
+				context.getRandomNumberGenerator(),
 				context.getErrorNode().add("pointsProposer")
 			);
 			

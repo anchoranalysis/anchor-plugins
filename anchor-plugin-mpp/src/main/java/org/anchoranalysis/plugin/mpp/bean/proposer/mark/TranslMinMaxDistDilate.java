@@ -49,7 +49,7 @@ public class TranslMinMaxDistDilate extends MarkProposer {
 	private DistTo transl = new DistTo();
 	
 	@BeanField
-	private Radii radii = new Radii();
+	private OrientationAndRadiiProposer radii = new OrientationAndRadiiProposer();
 	// END BEAN PARAMETERS
 		
 	private MarkProposer delegate;

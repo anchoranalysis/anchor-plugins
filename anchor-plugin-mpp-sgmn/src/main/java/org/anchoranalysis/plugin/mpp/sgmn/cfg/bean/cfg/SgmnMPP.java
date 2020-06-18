@@ -65,7 +65,7 @@ import org.anchoranalysis.mpp.sgmn.bean.optscheme.OptScheme;
 import org.anchoranalysis.mpp.sgmn.bean.optscheme.feedback.FeedbackReceiverBean;
 import org.anchoranalysis.mpp.sgmn.bean.optscheme.termination.TriggerTerminationCondition;
 import org.anchoranalysis.mpp.sgmn.optscheme.DualStack;
-import org.anchoranalysis.mpp.sgmn.optscheme.OptSchemeInitContext;
+import org.anchoranalysis.mpp.sgmn.optscheme.OptSchemeContext;
 import org.anchoranalysis.mpp.sgmn.optscheme.OptTerminatedEarlyException;
 import org.anchoranalysis.plugin.mpp.sgmn.cfg.SgmnMPPState;
 
@@ -194,7 +194,7 @@ public class SgmnMPP extends CfgSgmn {
 				);
 			}
 					
-			OptSchemeInitContext initContext = new OptSchemeInitContext(
+			OptSchemeContext initContext = new OptSchemeContext(
 				"MPP Sgmn",
 				nrgSchemeShared,
 				dualStack,
@@ -225,7 +225,7 @@ public class SgmnMPP extends CfgSgmn {
 	private CfgWithNrgTotal findOpt(
 		DualStack dualStack,
 		ListUpdatableMarkSetCollection updatableMarkSetCollection,
-		OptSchemeInitContext initContext
+		OptSchemeContext initContext
 	) throws SgmnFailedException {
 		try {
 			CfgNRG cfgNRG = optScheme.findOpt(

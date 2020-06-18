@@ -98,7 +98,7 @@ public class KernelExchange extends KernelIndependent<CfgNRGPixelized> {
 		ProposerContext propContext = context.proposer(); 
 		
 		// Pick an element from the existing configuration
-		int index = exst.get().getCfg().randomIndex( propContext.getRe() );
+		int index = exst.get().getCfg().randomIndex( propContext.getRandomNumberGenerator() );
 		
 		markExst = exst.get().getCfg().get(index);
 		

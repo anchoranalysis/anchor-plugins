@@ -3,7 +3,7 @@ package ch.ethz.biol.cell.mpp.mark.check;
 import org.anchoranalysis.anchor.mpp.bean.regionmap.RegionMap;
 import org.anchoranalysis.anchor.mpp.feature.bean.mark.CheckMark;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
-import org.anchoranalysis.anchor.mpp.mark.MarkAbstractRadii;
+import org.anchoranalysis.anchor.mpp.mark.MarkConic;
 
 /*
  * #%L
@@ -44,13 +44,13 @@ public class RadiiMinRatio extends CheckMark {
 
 	@Override
 	public boolean isCompatibleWith(Mark testMark) {
-		return testMark instanceof MarkAbstractRadii;
+		return testMark instanceof MarkConic;
 	}
 
 	@Override
 	public boolean check(Mark mark, RegionMap regionMap, NRGStackWithParams nrgStack) {
 		
-		MarkAbstractRadii markCast = (MarkAbstractRadii) mark;
+		MarkConic markCast = (MarkConic) mark;
 		double[] radiiOrdered = markCast.radiiOrderedRslvd( nrgStack.getDimensions().getRes() );
 		
 		int len = radiiOrdered.length;

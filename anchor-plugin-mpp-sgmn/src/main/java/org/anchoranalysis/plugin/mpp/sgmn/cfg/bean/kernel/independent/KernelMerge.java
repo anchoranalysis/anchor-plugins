@@ -108,7 +108,7 @@ public class KernelMerge extends KernelPosNeg<CfgNRGPixelized> {
 		
 		ProposerContext propContext = context.proposer();
 		
-		pair = pairCollection.randomPairNonUniform( propContext.getRe() );
+		pair = pairCollection.randomPairNonUniform( propContext.getRandomNumberGenerator() );
 		if (pair==null) {
 			failedProposalType = FailedProposalType.NO_PAIRS;
 			markAdded = Optional.empty();

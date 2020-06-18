@@ -70,7 +70,7 @@ public class ProviderFixture {
 	
 	public static <T extends ImageBean<T>> T createInitMergePair( CreateProvider<T> funcCreate ) throws CreateException {
 		
-		LogErrorReporter logger = LoggingFixture.simpleLogErrorReporter();
+		LogErrorReporter logger = LoggingFixture.suppressedLogErrorReporter();
 		
 		T provider = funcCreate.create(logger);
 		ProviderFixture.initProvider(provider, logger);

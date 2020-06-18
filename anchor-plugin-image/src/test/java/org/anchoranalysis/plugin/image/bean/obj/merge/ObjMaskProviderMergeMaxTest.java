@@ -60,7 +60,7 @@ public class ObjMaskProviderMergeMaxTest {
 	
 	private static ObjMaskProviderMergeMax createMergeMax( ObjectCollection objs, Function<FeatureInputSingleObj,Double> calculationFunc ) throws CreateException {
 		
-		LogErrorReporter logger = LoggingFixture.simpleLogErrorReporter();
+		LogErrorReporter logger = LoggingFixture.suppressedLogErrorReporter();
 		
 		ObjMaskProviderMergeMax provider = new ObjMaskProviderMergeMax();
 		

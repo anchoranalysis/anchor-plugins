@@ -78,7 +78,7 @@ class ConsiderProposalHelper {
 			iter,
 			context.getKernelCalcContext()
 		);
-		double r = context.getKernelCalcContext().proposer().getRe().nextDouble();
+		double r = context.getKernelCalcContext().proposer().getRandomNumberGenerator().nextDouble();
 		
 		// check that the proposal actually contains a change
 		assert !Double.isNaN(accptProb);

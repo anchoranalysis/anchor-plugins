@@ -43,7 +43,7 @@ public class UniformRandom extends MarkFromCfgProposer {
 	@Override
 	public Optional<Mark> markFromCfg(Cfg cfg, ProposerContext context) {
 		// Let's take a mark at random
-		int index = cfg.randomIndex(context.getRe());
+		int index = cfg.randomIndex(context.getRandomNumberGenerator());
 		return Optional.of(
 			cfg.get( index )
 		);

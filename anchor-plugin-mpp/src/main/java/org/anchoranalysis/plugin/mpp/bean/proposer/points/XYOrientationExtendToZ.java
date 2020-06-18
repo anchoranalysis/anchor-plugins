@@ -36,6 +36,7 @@ import org.anchoranalysis.anchor.mpp.bean.proposer.PointsProposer;
 import org.anchoranalysis.anchor.mpp.bean.proposer.ScalarProposer;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.anchor.mpp.mark.points.MarkPointListFactory;
+import org.anchoranalysis.anchor.mpp.proposer.ProposalAbnormalFailureException;
 import org.anchoranalysis.anchor.mpp.proposer.error.ErrorNode;
 import org.anchoranalysis.anchor.mpp.proposer.visualization.CreateProposeVisualizationList;
 import org.anchoranalysis.anchor.mpp.proposer.visualization.ICreateProposalVisualization;
@@ -95,13 +96,12 @@ public class XYOrientationExtendToZ extends PointsProposer {
 	private List<Point3i> lastPntsAll;
 	
 	@Override
-	public Optional<List<Point3i>> propose(Point3d pnt, Mark mark, ImageDim dim, RandomNumberGenerator re, ErrorNode errorNode) {
+	public Optional<List<Point3i>> propose(Point3d pnt, Mark mark, ImageDim dim, RandomNumberGenerator re, ErrorNode errorNode) throws ProposalAbnormalFailureException {
 		pointsFromOrientationXYProposer.clearVisualizationState();
 		Optional<Orientation> orientation = orientationXYProposer.propose(
 			mark,
 			dim,
-			re,
-			errorNode.add("orientationProposer")
+			re
 		);
 		
 		return orientation.flatMap( or->
