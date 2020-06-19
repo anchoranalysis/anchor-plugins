@@ -39,9 +39,8 @@ import org.anchoranalysis.image.voxel.iterator.changed.ProcessVoxelNeighbour;
 import org.anchoranalysis.image.voxel.iterator.changed.ProcessVoxelNeighbourAbsoluteWithSlidingBuffer;
 import org.anchoranalysis.image.voxel.iterator.changed.ProcessVoxelNeighbourFactory;
 import org.anchoranalysis.image.voxel.nghb.BigNghb;
-
-import ch.ethz.biol.cell.sgmn.objmask.watershed.encoding.EncodedIntBuffer;
-import ch.ethz.biol.cell.sgmn.objmask.watershed.encoding.EncodedVoxelBox;
+import org.anchoranalysis.plugin.image.sgmn.watershed.encoding.EncodedIntBuffer;
+import org.anchoranalysis.plugin.image.sgmn.watershed.encoding.EncodedVoxelBox;
 
 final class FindEqualVoxels {
 	

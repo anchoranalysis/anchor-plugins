@@ -36,8 +36,7 @@ import org.anchoranalysis.image.seed.SeedCollection;
 import org.anchoranalysis.image.sgmn.SgmnFailedException;
 import org.anchoranalysis.image.voxel.iterator.IterateVoxels;
 import org.anchoranalysis.image.voxel.iterator.ProcessVoxel;
-
-import ch.ethz.biol.cell.sgmn.objmask.watershed.encoding.EncodedVoxelBox;
+import org.anchoranalysis.plugin.image.sgmn.watershed.encoding.EncodedVoxelBox;
 
 
 class MarkSeeds {

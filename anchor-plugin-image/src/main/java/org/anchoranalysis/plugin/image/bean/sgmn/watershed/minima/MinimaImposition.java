@@ -1,8 +1,12 @@
-package ch.ethz.biol.cell.imageprocessing.chnl.provider;
+package org.anchoranalysis.plugin.image.bean.sgmn.watershed.minima;
+
+import java.util.Optional;
+
+import org.anchoranalysis.bean.AnchorBean;
 
 /*
  * #%L
- * anchor-plugin-image
+ * anchor-image-bean
  * %%
  * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
  * %%
@@ -27,48 +31,12 @@ package ch.ethz.biol.cell.imageprocessing.chnl.provider;
  */
 
 
-import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.image.bean.provider.ChnlProvider;
-import org.anchoranalysis.image.bean.provider.ChnlProviderOne;
+import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.channel.Channel;
-import org.anchoranalysis.plugin.image.bean.params.KeyValueCondition;
+import org.anchoranalysis.image.objectmask.ObjectMask;
+import org.anchoranalysis.image.seed.SeedCollection;
 
-// If a param is equal to a particular value, do something
-public class ChnlProviderIfParamEquals extends ChnlProviderOne {
+public abstract class MinimaImposition extends AnchorBean<MinimaImposition> {
 
-	// START BEAN PROPERTIES
-	@BeanField
-	private KeyValueCondition condition;
-	// END BEAN PROPERTIES
-	
-	@BeanField
-	private ChnlProvider chnlElse;
-	// END BEAN PROPERTIES
-	
-	@Override
-	public Channel createFromChnl(Channel chnl) throws CreateException {
-		if(condition.isConditionTrue()) {
-			return chnl;
-		} else {
-			return chnlElse.create();
-		}
-	}
-
-	public ChnlProvider getChnlElse() {
-		return chnlElse;
-	}
-
-	public void setChnlElse(ChnlProvider chnlElse) {
-		this.chnlElse = chnlElse;
-	}
-
-	public KeyValueCondition getCondition() {
-		return condition;
-	}
-
-	public void setCondition(KeyValueCondition condition) {
-		this.condition = condition;
-	}
+	public abstract Channel imposeMinima( Channel chnl, SeedCollection seeds, Optional<ObjectMask> containingMask ) throws OperationFailedException;
 }
-

@@ -1,4 +1,4 @@
-package ch.ethz.biol.cell.imageprocessing.chnl.provider;
+package org.anchoranalysis.plugin.image.sgmn.watershed.encoding;
 
 /*
  * #%L
@@ -27,48 +27,32 @@ package ch.ethz.biol.cell.imageprocessing.chnl.provider;
  */
 
 
-import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.image.bean.provider.ChnlProvider;
-import org.anchoranalysis.image.bean.provider.ChnlProviderOne;
-import org.anchoranalysis.image.channel.Channel;
-import org.anchoranalysis.plugin.image.bean.params.KeyValueCondition;
+// Maps directions to chain codes
+public class ChainCodesDirection {
 
-// If a param is equal to a particular value, do something
-public class ChnlProviderIfParamEquals extends ChnlProviderOne {
+	// chain code 0
+	public static final int MAX_VALUE = 27;
 
-	// START BEAN PROPERTIES
-	@BeanField
-	private KeyValueCondition condition;
-	// END BEAN PROPERTIES
+	public ChainCodesDirection() {
+		
+	}
 	
-	@BeanField
-	private ChnlProvider chnlElse;
-	// END BEAN PROPERTIES
+	// x, y, z  are -1, 0 or 1, for 3^3 combinations
+	public int chainCode( int x, int y, int z ) {
+		return ((z+1) * 9) + ((y+1) * 3) + (x+1);
+	}
+
+	public int xFromChainCode( int chainCode ) {
+		return (chainCode % 3) -1;
+	}
 	
-	@Override
-	public Channel createFromChnl(Channel chnl) throws CreateException {
-		if(condition.isConditionTrue()) {
-			return chnl;
-		} else {
-			return chnlElse.create();
-		}
+	public int yFromChainCode( int chainCode ) {
+		return ((chainCode % 9) / 3) -1;
 	}
-
-	public ChnlProvider getChnlElse() {
-		return chnlElse;
+	
+	public int zFromChainCode( int chainCode ) {
+		return (chainCode / 9) - 1;
 	}
-
-	public void setChnlElse(ChnlProvider chnlElse) {
-		this.chnlElse = chnlElse;
-	}
-
-	public KeyValueCondition getCondition() {
-		return condition;
-	}
-
-	public void setCondition(KeyValueCondition condition) {
-		this.condition = condition;
-	}
+	
+	
 }
-

@@ -42,8 +42,7 @@ import org.anchoranalysis.image.voxel.iterator.changed.ProcessVoxelNeighbour;
 import org.anchoranalysis.image.voxel.iterator.changed.ProcessVoxelNeighbourFactory;
 import org.anchoranalysis.image.voxel.nghb.BigNghb;
 import org.anchoranalysis.image.voxel.nghb.Nghb;
-
-import ch.ethz.biol.cell.sgmn.objmask.watershed.encoding.EncodedVoxelBox;
+import org.anchoranalysis.plugin.image.sgmn.watershed.encoding.EncodedVoxelBox;
 
 class MakePlateauLowerComplete {
 

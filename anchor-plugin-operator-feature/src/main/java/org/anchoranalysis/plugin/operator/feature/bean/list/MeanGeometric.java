@@ -1,4 +1,10 @@
-package ch.ethz.biol.cell.imageprocessing.chnl.provider;
+package org.anchoranalysis.plugin.operator.feature.bean.list;
+
+import org.anchoranalysis.feature.bean.Feature;
+import org.anchoranalysis.feature.bean.operator.FeatureListElem;
+import org.anchoranalysis.feature.cache.SessionInput;
+import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.feature.input.FeatureInput;
 
 /*
  * #%L
@@ -27,48 +33,35 @@ package ch.ethz.biol.cell.imageprocessing.chnl.provider;
  */
 
 
-import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.image.bean.provider.ChnlProvider;
-import org.anchoranalysis.image.bean.provider.ChnlProviderOne;
-import org.anchoranalysis.image.channel.Channel;
-import org.anchoranalysis.plugin.image.bean.params.KeyValueCondition;
+import org.apache.commons.math3.stat.descriptive.moment.GeometricMean;
 
-// If a param is equal to a particular value, do something
-public class ChnlProviderIfParamEquals extends ChnlProviderOne {
 
-	// START BEAN PROPERTIES
-	@BeanField
-	private KeyValueCondition condition;
-	// END BEAN PROPERTIES
-	
-	@BeanField
-	private ChnlProvider chnlElse;
-	// END BEAN PROPERTIES
+// Geometric mean
+public class MeanGeometric<T extends FeatureInput> extends FeatureListElem<T> {
+
+	private GeometricMean meanCalculator = new GeometricMean();
 	
 	@Override
-	public Channel createFromChnl(Channel chnl) throws CreateException {
-		if(condition.isConditionTrue()) {
-			return chnl;
-		} else {
-			return chnlElse.create();
+	public double calc( SessionInput<T> input ) throws FeatureCalcException {
+		
+		double[] result = new double[ getList().size() ];
+		
+		for (int i=0; i<getList().size(); i++) {
+			Feature<T> elem = getList().get(i);
+			result[i] = input.calc(elem);
 		}
+		
+		return meanCalculator.evaluate(result);
 	}
-
-	public ChnlProvider getChnlElse() {
-		return chnlElse;
-	}
-
-	public void setChnlElse(ChnlProvider chnlElse) {
-		this.chnlElse = chnlElse;
-	}
-
-	public KeyValueCondition getCondition() {
-		return condition;
-	}
-
-	public void setCondition(KeyValueCondition condition) {
-		this.condition = condition;
+	
+	@Override
+	public String getDscrLong() {
+		StringBuilder sb = new StringBuilder();
+		sb.append("geo_mean(");
+		sb.append(
+			descriptionForList(",")
+		);
+		sb.append(")");
+		return sb.toString();
 	}
 }
-

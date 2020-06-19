@@ -42,7 +42,6 @@ import org.anchoranalysis.core.graph.GraphWithEdgeTypes;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.histogram.Histogram;
 import org.anchoranalysis.image.objectmask.ObjectCollection;
-import org.anchoranalysis.image.objectmask.ObjectMaskWithHistogram;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.anchoranalysis.image.voxel.nghb.CreateNghbGraph;
 

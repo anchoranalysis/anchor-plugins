@@ -1,10 +1,10 @@
-package ch.ethz.biol.cell.imageprocessing.binaryimgchnl.provider;
+package org.anchoranalysis.plugin.image.bean.chnl.level;
 
-/*
+/*-
  * #%L
- * anchor-plugin-image
+ * anchor-image
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -26,33 +26,27 @@ package ch.ethz.biol.cell.imageprocessing.binaryimgchnl.provider;
  * #L%
  */
 
+import org.anchoranalysis.image.channel.Channel;
+import org.anchoranalysis.image.histogram.Histogram;
+import org.anchoranalysis.image.histogram.HistogramFactory;
+import org.anchoranalysis.image.objectmask.ObjectMask;
 
-import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.image.binary.BinaryChnl;
-import org.anchoranalysis.plugin.image.bean.params.KeyValueCondition;
-
-// If a param is equal to a particular value, do soemthing
-public class BinaryChnlProviderIfParamEquals extends BinaryChnlProviderElseBase {
-
-	// START BEAN PROPERTIES
-	@BeanField
-	private KeyValueCondition condition;
-	// END BEAN PROPERTIES
+class ObjectMaskWithHistogram {
 	
-	@Override
-	protected boolean condition(BinaryChnl chnl) throws CreateException {
-		return condition.isConditionTrue();
+	private ObjectMask objMask;
+	private Histogram histogram;
+	
+	public ObjectMaskWithHistogram(ObjectMask objMask, Channel chnl) {
+		super();
+		this.objMask = objMask;
+		this.histogram = HistogramFactory.create( chnl, objMask );
 	}
 
-	public KeyValueCondition getCondition() {
-		return condition;
+	public ObjectMask getObjMask() {
+		return objMask;
 	}
 
-	public void setCondition(KeyValueCondition condition) {
-		this.condition = condition;
+	public Histogram getHistogram() {
+		return histogram;
 	}
-	
-	
 }
-
