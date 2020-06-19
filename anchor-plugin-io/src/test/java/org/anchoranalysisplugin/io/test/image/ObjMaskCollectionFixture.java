@@ -61,7 +61,7 @@ class ObjMaskCollectionFixture {
 				
 		int numObjs = randomMinMax( minNumObjs, maxNumObjs );
 		
-		return ObjectCollectionFactory.mapFromRange(0, numObjs, i->mockObj());
+		return ObjectCollectionFactory.fromRepeated(numObjs, this::mockObj);
 	}
 	
 	private ObjectMask mockObj() {

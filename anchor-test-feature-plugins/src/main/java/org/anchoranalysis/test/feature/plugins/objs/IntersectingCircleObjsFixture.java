@@ -86,8 +86,9 @@ public class IntersectingCircleObjsFixture {
 		}
 		
 		public ObjectCollection generateMultipleCircles(int numCircles, double factor) {
-			return ObjectCollectionFactory.mapFromRange(0, numCircles, index->
-				generateCircle(factor)
+			return ObjectCollectionFactory.fromRepeated(
+				numCircles,
+				()->generateCircle(factor)
 			);
 		}
 
