@@ -35,15 +35,22 @@ import org.anchoranalysis.image.bean.objmask.match.ObjMaskMatcher;
 import org.anchoranalysis.image.objectmask.ObjectCollection;
 import org.anchoranalysis.image.objmask.match.ObjWithMatches;
 
-// Matches to another object, and then uses that object to bridge to another
+/**
+ * Matches to another object, and then uses that object to bridge to another
+ * 
+ * @author Owen Feehan
+ *
+ */
 public class ObjMaskMatcherBridge extends ObjMaskMatcher {
 	
 	// START BEAN PROPERTIES
+	/** Used to match each input-object to an intermediary-object */
 	@BeanField
-	private ObjMaskMatcher bridgeMatcher;		// What we use as an intermediatery
-	
+	private ObjMaskMatcher bridgeMatcher;
+
+	/** Used to match each intermediary-object to a final-object*/
 	@BeanField
-	private ObjMaskMatcher objMaskMatcher;		// Final objMaskMatcher
+	private ObjMaskMatcher objMaskMatcher;
 	// END BEAN PROPERTIES
 
 	@Override
@@ -62,6 +69,8 @@ public class ObjMaskMatcherBridge extends ObjMaskMatcher {
 			if (owm.getMatches().size()>1) {
 				throw new OperationFailedException("At least one object has multiple matches. Only one is allowed.");
 			}
+			
+			bridgeObjs.addAll(owm.getMatches());
 		}
 		
 		return objMaskMatcher.findMatch(bridgeObjs);
