@@ -52,7 +52,7 @@ public class ObjMaskProviderBinarySgmn extends ObjMaskProviderOneChnlSource {
 	@Override
 	protected ObjectCollection createFromObjs(ObjectCollection objsSrc, Channel chnlSrc) throws CreateException {
 		try {
-			return objsSrc.map( om->
+			return objsSrc.stream().map( om->
 				sgmnObject(om, chnlSrc)
 			);
 		} catch (SgmnFailedException e) {

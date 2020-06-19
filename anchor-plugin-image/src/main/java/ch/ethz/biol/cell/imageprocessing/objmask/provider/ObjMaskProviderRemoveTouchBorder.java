@@ -46,7 +46,7 @@ public class ObjMaskProviderRemoveTouchBorder extends ObjMaskProviderDimensions 
 		
 		ImageDim dim = createDim();
 		
-		return objsIn.filter( obj->
+		return objsIn.stream().filter( obj->
 			!atBorder(obj, dim)
 		);
 	}

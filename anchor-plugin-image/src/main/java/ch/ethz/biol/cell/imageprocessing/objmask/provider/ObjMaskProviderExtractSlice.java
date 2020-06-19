@@ -41,7 +41,7 @@ public class ObjMaskProviderExtractSlice extends ObjMaskProviderOne {
 
 	@Override
 	public ObjectCollection createFromObjs( ObjectCollection in ) throws CreateException {
-		return in.filterAndMap(
+		return in.stream().filterAndMap(
 			om -> om.getBoundingBox().contains().z(slice),
 			om -> om.extractSlice(slice - om.getBoundingBox().getCrnrMin().getZ(), false)
 		);

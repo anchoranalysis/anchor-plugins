@@ -43,7 +43,7 @@ public abstract class StackProviderRGBFromObjMaskBase extends StackProviderWithB
 	
 	protected ObjectCollection maybeFlatten( ObjectCollection objs ) {
 		if (force2D) {
-			return objs.map(ObjectMask::flattenZ);
+			return objs.stream().map(ObjectMask::flattenZ);
 		} else {
 			return objs;
 		}

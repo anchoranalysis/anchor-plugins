@@ -64,7 +64,7 @@ public class ObjMaskProviderSplitByObjCollection extends ObjMaskProviderDimensio
 		ImageDim dim = createDim();
 		
 		try {
-			return objsCollection.flatMapWithException(
+			return objsCollection.stream().flatMapWithException(
 				OperationFailedException.class,
 				obj -> splitObj(
 					obj,

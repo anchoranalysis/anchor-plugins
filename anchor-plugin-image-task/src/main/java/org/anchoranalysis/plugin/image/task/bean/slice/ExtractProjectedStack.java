@@ -97,9 +97,7 @@ class ExtractProjectedStack {
 	}
 	
 	private static BoundingBox boxToProject( Point3i crnrPos, Extent eChnl, Extent eTrgt ) {
-		return new BoundingBox(crnrPos, eChnl).intersection().with( new BoundingBox(eTrgt) ).orElseThrow( ()-> 
-			new AnchorImpossibleSituationException()
-		);
+		return new BoundingBox(crnrPos, eChnl).intersection().with( new BoundingBox(eTrgt) ).orElseThrow(AnchorImpossibleSituationException::new);
 	}
 		
 	private static BoundingBox bboxSrc( BoundingBox bboxToProject, ImageDim sd ) {

@@ -53,7 +53,7 @@ public class ObjMaskProviderDilate extends ObjMaskProviderDimensionsOptional {
 	@Override
 	public ObjectCollection createFromObjs(ObjectCollection objsIn) throws CreateException {
 		Optional<ImageDim> dim = createDims();
-		return objsIn.map( om->dilate(om,dim) );
+		return objsIn.stream().map( om->dilate(om,dim) );
 	}
 	
 	private ObjectMask dilate(ObjectMask om, Optional<ImageDim> dim) throws CreateException {

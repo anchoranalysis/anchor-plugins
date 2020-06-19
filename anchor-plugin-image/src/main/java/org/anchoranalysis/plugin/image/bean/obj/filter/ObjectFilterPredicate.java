@@ -53,7 +53,7 @@ public abstract class ObjectFilterPredicate extends ObjectFilter {
 		
 		start(dim, objsToFilter);
 		
-		ObjectCollection dup = objsToFilter.filter(
+		ObjectCollection dup = objsToFilter.stream().filter(
 			om -> match(om,dim),
 			objsRejected
 		);

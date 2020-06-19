@@ -127,7 +127,7 @@ public class ObjMaskProviderConnectedComponents extends ObjMaskProvider {
 		int z
 	) throws CreateException {
 		// respecify the z
-		return createObjMasks.createConnectedComponents(bvb).mapBoundingBox( bbox->
+		return createObjMasks.createConnectedComponents(bvb).stream().mapBoundingBox( bbox->
 			bbox.shiftToZ(z)
 		);
 	}

@@ -47,7 +47,7 @@ public class ObjMaskProviderSgmnByObj extends ObjMaskProviderOneChnlSource {
 	@Override
 	public ObjectCollection createFromObjs( ObjectCollection objsSrc, Channel chnlToSgmn ) throws CreateException {
 		try {
-			return objsSrc.flatMapWithException(
+			return objsSrc.stream().flatMapWithException(
 				SgmnFailedException.class,
 				om -> sgmnObject(om, chnlToSgmn)
 			);

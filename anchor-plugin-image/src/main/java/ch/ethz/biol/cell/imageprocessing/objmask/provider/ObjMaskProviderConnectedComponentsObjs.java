@@ -56,7 +56,7 @@ public class ObjMaskProviderConnectedComponentsObjs extends ObjMaskProviderOne {
 				
 		CreateFromConnectedComponentsFactory createObjMasks = new CreateFromConnectedComponentsFactory(bigNghb, 1);
 		
-		return objsCollection.flatMapWithException(
+		return objsCollection.stream().flatMapWithException(
 			CreateException.class,
 			om -> createObjs3D(om, createObjMasks)
 		);

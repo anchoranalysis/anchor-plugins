@@ -36,7 +36,7 @@ public class ObjMaskProviderNotIn extends ObjMaskProviderContainer {
 	@Override
 	public ObjectCollection createFromObjs(ObjectCollection objsCollection) throws CreateException {
 		ObjectCollection container = containerRequired();
-		return objsCollection.filter( om->
+		return objsCollection.stream().filter( om->
 			!isObjIn(om,container)
 		);
 	}

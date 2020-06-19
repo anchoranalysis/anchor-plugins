@@ -28,11 +28,11 @@ package ch.ethz.biol.cell.imageprocessing.chnl.provider;
 
 
 import java.util.List;
+import java.util.stream.Stream;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.friendly.AnchorImpossibleSituationException;
-import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.bean.provider.ChnlProviderOne;
 import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
 import org.anchoranalysis.image.channel.Channel;
@@ -40,6 +40,7 @@ import org.anchoranalysis.image.objectmask.ObjectMask;
 import org.anchoranalysis.image.objectmask.ObjectCollection;
 import org.anchoranalysis.image.objmask.match.ObjWithMatches;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
+import org.apache.commons.math3.util.Pair;
 
 import ch.ethz.biol.cell.imageprocessing.objmask.matching.ObjMaskMatchUtilities;
 
@@ -60,36 +61,35 @@ public class ChnlProviderAssignFromIntersectingObjects extends ChnlProviderOne {
 		
 		VoxelBox<?> vb = chnl.getVoxelBox().any();
 		
-		ObjectCollection objsSrcCollection = objsSource.create();
-		ObjectCollection objsTargetCollection = objsTarget.create();
+		ObjectCollection source = objsSource.create();
+		ObjectCollection target = objsTarget.create();
 
-		List<ObjWithMatches> matchList = matchIntersectingObjectsSingle( objsSrcCollection, objsTargetCollection );
-		for( ObjWithMatches own : matchList ) {
-			
-			int level = getValForMask( chnl, own.getSourceObj() );
-			assert(own.getMatches().size()==1);
-			
-			vb.setPixelsCheckMask( own.getMatches().get(0), level);
-		}
+		streamIntersectingObjects(source, target).forEach(pair->
+			vb.setPixelsCheckMask(
+				pair.getSecond(),
+				getValForMask( chnl, pair.getFirst() )
+			)
+		);
 		return chnl;
 	}
-	
-	
-	// Matches each object in objsSrc against objsTarget ensuring that it is a one-to-one mapping
-	public static List<ObjWithMatches> matchIntersectingObjectsSingle( ObjectCollection objsSrc, ObjectCollection objsTarget ) {
 		
-		List<ObjWithMatches> matchList = ObjMaskMatchUtilities.matchIntersectingObjects( objsSrc, objsTarget );
+	/**
+	 * Matches each object in objsSrc against objsTarget ensuring that it is a one-to-one mapping
+	 * 
+	 * @param source
+	 * @param target
+	 * @return a pair with source object (left) and the matched object (right)
+	 */
+	private static Stream<Pair<ObjectMask,ObjectMask>> streamIntersectingObjects(ObjectCollection source, ObjectCollection target) {
 		
-		for( ObjWithMatches own : matchList ) {
-			
-			ObjectMask selectedObj = selectBestMatch( own.getSourceObj(), own.getMatches() );
-			
-			// We make sure the object only matches this item
-			own.getMatches().clear();
-			own.getMatches().add(selectedObj);
-		}
-		
-		return matchList;
+		List<ObjWithMatches> matchList = ObjMaskMatchUtilities.matchIntersectingObjects(source, target);
+				
+		return matchList.stream().map( owm->
+			new Pair<>(
+				owm.getSourceObj(),
+				selectBestMatch( owm.getSourceObj(), owm.getMatches() )
+			)
+		);
 	}
 	
 	private static ObjectMask selectBestMatch( ObjectMask source, ObjectCollection matches ) {
@@ -111,15 +111,13 @@ public class ChnlProviderAssignFromIntersectingObjects extends ChnlProviderOne {
 		return omMostIntersecting;
 	}
 
-	private int getValForMask( Channel chnl, ObjectMask om ) {
+	private static int getValForMask( Channel chnl, ObjectMask om ) {
 		
 		VoxelBox<?> vb = chnl.getVoxelBox().any();
-		
-		Point3i pnt = om.findArbitraryOnVoxel().orElseThrow( ()->
-			new AnchorImpossibleSituationException()
+ 
+		return vb.getVoxel(
+			om.findArbitraryOnVoxel().orElseThrow(AnchorImpossibleSituationException::new)
 		);
-		int a = vb.getVoxel(pnt.getX(), pnt.getY(), pnt.getZ());
-		return a;
 	}
 	
 	public ObjMaskProvider getObjsSource() {

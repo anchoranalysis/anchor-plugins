@@ -65,7 +65,7 @@ public class IntersectsWith extends ObjectFilterPredicate {
 	
 	@Override
 	protected boolean match(ObjectMask om, Optional<ImageDim> dim) throws OperationFailedException {
-		return intersectWithAnyOneObjs.anyMatch(obj->
+		return intersectWithAnyOneObjs.stream().anyMatch(obj->
 			obj.hasIntersectingPixels(om)
 		);
 	}

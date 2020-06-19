@@ -47,7 +47,7 @@ public class ObjMaskProviderExpandZ extends ObjMaskProviderDimensions {
 		
 		ImageDim dim = createDim();
 				
-		return objs.map( om->
+		return objs.stream().map( om->
 			expandZ(om,dim)
 		);
 	}
