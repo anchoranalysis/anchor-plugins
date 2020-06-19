@@ -2,8 +2,7 @@ package org.anchoranalysis.plugin.image.bean.sgmn.watershed.yeong;
 
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.voxel.iterator.ProcessVoxel;
-
-import ch.ethz.biol.cell.sgmn.objmask.watershed.encoding.EncodedIntBuffer;
+import org.anchoranalysis.plugin.image.sgmn.watershed.encoding.EncodedIntBuffer;
 
 final class PointPixelsOrMarkAsMinima implements ProcessVoxel {
 

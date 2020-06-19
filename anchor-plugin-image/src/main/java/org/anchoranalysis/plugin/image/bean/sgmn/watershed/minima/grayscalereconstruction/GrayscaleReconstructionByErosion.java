@@ -1,4 +1,8 @@
-package ch.ethz.biol.cell.imageprocessing.chnl.provider;
+package org.anchoranalysis.plugin.image.bean.sgmn.watershed.minima.grayscalereconstruction;
+
+import java.util.Optional;
+
+import org.anchoranalysis.bean.AnchorBean;
 
 /*
  * #%L
@@ -27,48 +31,12 @@ package ch.ethz.biol.cell.imageprocessing.chnl.provider;
  */
 
 
-import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.image.bean.provider.ChnlProvider;
-import org.anchoranalysis.image.bean.provider.ChnlProviderOne;
-import org.anchoranalysis.image.channel.Channel;
-import org.anchoranalysis.plugin.image.bean.params.KeyValueCondition;
+import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.image.objectmask.ObjectMask;
+import org.anchoranalysis.image.voxel.box.VoxelBoxWrapper;
 
-// If a param is equal to a particular value, do something
-public class ChnlProviderIfParamEquals extends ChnlProviderOne {
-
-	// START BEAN PROPERTIES
-	@BeanField
-	private KeyValueCondition condition;
-	// END BEAN PROPERTIES
+public abstract class GrayscaleReconstructionByErosion extends AnchorBean<GrayscaleReconstructionByErosion> {
 	
-	@BeanField
-	private ChnlProvider chnlElse;
-	// END BEAN PROPERTIES
-	
-	@Override
-	public Channel createFromChnl(Channel chnl) throws CreateException {
-		if(condition.isConditionTrue()) {
-			return chnl;
-		} else {
-			return chnlElse.create();
-		}
-	}
-
-	public ChnlProvider getChnlElse() {
-		return chnlElse;
-	}
-
-	public void setChnlElse(ChnlProvider chnlElse) {
-		this.chnlElse = chnlElse;
-	}
-
-	public KeyValueCondition getCondition() {
-		return condition;
-	}
-
-	public void setCondition(KeyValueCondition condition) {
-		this.condition = condition;
-	}
+	// Reconstruction of maskImg from markerImg    mask<=markerImg  (but only inside containingMask)
+	public abstract VoxelBoxWrapper reconstruction( VoxelBoxWrapper mask, VoxelBoxWrapper marker, Optional<ObjectMask> containingMask ) throws OperationFailedException;
 }
-

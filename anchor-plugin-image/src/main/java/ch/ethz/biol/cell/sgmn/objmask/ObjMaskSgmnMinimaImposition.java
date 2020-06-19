@@ -38,8 +38,7 @@ import org.anchoranalysis.image.objectmask.ObjectMask;
 import org.anchoranalysis.image.objectmask.ObjectCollection;
 import org.anchoranalysis.image.seed.SeedCollection;
 import org.anchoranalysis.image.sgmn.SgmnFailedException;
-
-import ch.ethz.biol.cell.sgmn.objmask.watershed.minimaimposition.MinimaImposition;
+import org.anchoranalysis.plugin.image.bean.sgmn.watershed.minima.MinimaImposition;
 
 
 // Imposes minima only in seed locations on the input channel, and performs the segmentation

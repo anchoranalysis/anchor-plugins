@@ -5,9 +5,8 @@ import java.nio.IntBuffer;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.voxel.iterator.ProcessVoxelSliceBuffer;
-
-import ch.ethz.biol.cell.sgmn.objmask.watershed.encoding.EncodedIntBuffer;
-import ch.ethz.biol.cell.sgmn.objmask.watershed.encoding.EncodedVoxelBox;
+import org.anchoranalysis.plugin.image.sgmn.watershed.encoding.EncodedIntBuffer;
+import org.anchoranalysis.plugin.image.sgmn.watershed.encoding.EncodedVoxelBox;
 
 final class ConvertAllToConnectedComponents implements ProcessVoxelSliceBuffer<IntBuffer> {
 	

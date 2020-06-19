@@ -6,10 +6,9 @@ import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.objectmask.ObjectMask;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.anchoranalysis.image.voxel.buffer.SlidingBuffer;
-
-import ch.ethz.biol.cell.sgmn.objmask.watershed.encoding.EncodedIntBuffer;
-import ch.ethz.biol.cell.sgmn.objmask.watershed.encoding.EncodedVoxelBox;
-import ch.ethz.biol.cell.sgmn.objmask.watershed.encoding.SteepestCalc;
+import org.anchoranalysis.plugin.image.sgmn.watershed.encoding.EncodedIntBuffer;
+import org.anchoranalysis.plugin.image.sgmn.watershed.encoding.EncodedVoxelBox;
+import org.anchoranalysis.plugin.image.sgmn.watershed.encoding.SteepestCalc;
 
 /** A sliding-buffer enhanced with other elements of internal state used to "visit" a pixel */
 final class SlidingBufferPlus {
