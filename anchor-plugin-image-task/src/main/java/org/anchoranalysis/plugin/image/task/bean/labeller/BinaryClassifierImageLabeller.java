@@ -50,7 +50,7 @@ import org.anchoranalysis.plugin.image.task.imagefeature.calculator.FeatureCalcu
 
 public class BinaryClassifierImageLabeller extends BinaryOutcomeImageLabeller<Object> {
 
-	private static final NamedFeatureStoreFactory STORE_FACTORY = new NamedFeatureStoreFactory();
+	private static final NamedFeatureStoreFactory STORE_FACTORY = NamedFeatureStoreFactory.bothNameAndParams();
 	
 	// START BEAN PROPERTIES
 	@BeanField @SkipInit

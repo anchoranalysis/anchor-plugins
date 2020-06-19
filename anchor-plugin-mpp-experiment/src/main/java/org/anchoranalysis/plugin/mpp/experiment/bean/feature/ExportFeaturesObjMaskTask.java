@@ -86,7 +86,7 @@ import org.anchoranalysis.plugin.image.task.sharedstate.SharedStateExportFeature
 **/
 public class ExportFeaturesObjMaskTask<T extends FeatureInput> extends ExportFeaturesTask<MultiInput,SharedStateExportFeaturesObjMask<T>> {
 
-	private static final NamedFeatureStoreFactory storeFactory = new NamedFeatureStoreFactory();
+	private static final NamedFeatureStoreFactory STORE_FACTORY = NamedFeatureStoreFactory.bothNameAndParams();
 	
 	// START BEAN PROPERTIES
 	@BeanField
@@ -124,7 +124,7 @@ public class ExportFeaturesObjMaskTask<T extends FeatureInput> extends ExportFea
 				new GroupedResultsVectorCollection("id","group","objSetName"),
 				table.createFeatures(
 					listFeaturesObjMask,
-					storeFactory,
+					STORE_FACTORY,
 					suppressErrors
 				)
 			);
