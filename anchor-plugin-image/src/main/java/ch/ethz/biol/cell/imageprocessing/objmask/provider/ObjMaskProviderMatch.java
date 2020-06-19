@@ -27,13 +27,13 @@ package ch.ethz.biol.cell.imageprocessing.objmask.provider;
  */
 
 
-import java.util.List;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.bean.objmask.match.ObjMaskMatcher;
 import org.anchoranalysis.image.bean.provider.ObjMaskProviderOne;
 import org.anchoranalysis.image.objectmask.ObjectCollection;
+import org.anchoranalysis.image.objectmask.ObjectCollectionFactory;
 import org.anchoranalysis.image.objmask.match.ObjWithMatches;
 
 public class ObjMaskProviderMatch extends ObjMaskProviderOne {
@@ -46,12 +46,9 @@ public class ObjMaskProviderMatch extends ObjMaskProviderOne {
 	@Override
 	public ObjectCollection createFromObjs(ObjectCollection in) throws CreateException {
 		try {
-			List<ObjWithMatches> matches = objMaskMatcher.findMatch(in);
-			
-			return new ObjectCollection(
-				matches.stream().flatMap(
-					objWithMatches->objWithMatches.getMatches().stream()
-				)
+			return ObjectCollectionFactory.flatMapFrom(
+				objMaskMatcher.findMatch(in),
+				ObjWithMatches::getMatches
 			);
 			
 		} catch (OperationFailedException e) {

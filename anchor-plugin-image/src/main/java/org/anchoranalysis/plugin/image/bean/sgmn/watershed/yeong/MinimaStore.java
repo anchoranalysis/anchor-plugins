@@ -33,6 +33,7 @@ import java.util.List;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.objectmask.ObjectCollection;
+import org.anchoranalysis.image.objectmask.ObjectCollectionFactory;
 
 // Stores minima points
 class MinimaStore {
@@ -53,15 +54,10 @@ class MinimaStore {
 	}
 	
 	public ObjectCollection createObjMasks() throws CreateException {
-		
-		ObjectCollection out = new ObjectCollection();
-		for( Minima m : list ) {
-  
-			out.add(
-				CreateObjectsFromPoints.create( m.getListPnts() )
-			);
-		}
-		return out;
+		return ObjectCollectionFactory.mapFrom(
+			list,
+			minima -> CreateObjectsFromPoints.create( minima.getListPnts() )
+		);
 	}
 	
 	public int size() {

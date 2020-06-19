@@ -35,6 +35,7 @@ import org.anchoranalysis.feature.session.calculator.FeatureCalculatorSingle;
 import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
 import org.anchoranalysis.image.objectmask.ObjectMask;
 import org.anchoranalysis.image.objectmask.ObjectCollection;
+import org.anchoranalysis.image.objectmask.ObjectCollectionFactory;
 
 public class ObjMaskProviderFindMaxFeature extends ObjMaskProviderFindMaxFeatureBase {
 
@@ -47,9 +48,9 @@ public class ObjMaskProviderFindMaxFeature extends ObjMaskProviderFindMaxFeature
 		);
 		
 		if (max.isPresent()) {
-			return new ObjectCollection(max.get());
+			return ObjectCollectionFactory.from(max.get());
 		} else {
-			return new ObjectCollection();
+			return ObjectCollectionFactory.empty();
 		}
 	}
 	

@@ -61,21 +61,17 @@ public class ObjMaskProviderSplitByObjCollection extends ObjMaskProviderDimensio
 		
 		ObjectCollection objsSplitByCollection = objsSplitBy.create();
 
-		ImageDim dims = createDim();
+		ImageDim dim = createDim();
 		
 		try {
-			ObjectCollection out = new ObjectCollection();
-			for (ObjectMask om : objsCollection) {
-				// Find all object masks that could potentially intersect with the current oject
-				out.addAll(
-					splitObj(
-						om,
-						objsSplitByCollection.findObjsWithIntersectingBBox(om),
-						dims
-					)
-				);
-			}
-			return out;
+			return objsCollection.flatMapWithException(
+				OperationFailedException.class,
+				obj -> splitObj(
+					obj,
+					objsSplitByCollection.findObjsWithIntersectingBBox(obj),
+					dim
+				)
+			);
 		} catch (OperationFailedException e) {
 			throw new CreateException(e);
 		}
@@ -134,6 +130,7 @@ public class ObjMaskProviderSplitByObjCollection extends ObjMaskProviderDimensio
 				);
 			}
 			return out;
+			
 		} catch (CreateException e) {
 			throw new OperationFailedException(e);
 		}

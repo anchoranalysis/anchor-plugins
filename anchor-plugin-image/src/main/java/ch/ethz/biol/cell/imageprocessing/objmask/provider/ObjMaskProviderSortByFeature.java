@@ -39,6 +39,7 @@ import org.anchoranalysis.image.feature.bean.evaluator.FeatureEvaluator;
 import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
 import org.anchoranalysis.image.objectmask.ObjectMask;
 import org.anchoranalysis.image.objectmask.ObjectCollection;
+import org.anchoranalysis.image.objectmask.ObjectCollectionFactory;
 
 public class ObjMaskProviderSortByFeature extends ObjMaskProviderOne {
 
@@ -89,8 +90,9 @@ public class ObjMaskProviderSortByFeature extends ObjMaskProviderOne {
 				}
 			}
 			
-			return new ObjectCollection(
-				sorted.stream().map(ObjectWithFeatureValue::get)
+			return ObjectCollectionFactory.mapFrom(
+				sorted,
+				ObjectWithFeatureValue::get
 			);
 			
 		} catch (OperationFailedException e) {

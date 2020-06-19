@@ -42,6 +42,7 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
 import org.anchoranalysis.image.io.generator.raster.obj.rgb.RGBObjMaskGenerator;
 import org.anchoranalysis.image.objectmask.ObjectCollection;
+import org.anchoranalysis.image.objectmask.ObjectCollectionFactory;
 import org.anchoranalysis.image.objectmask.properties.ObjectCollectionWithProperties;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
@@ -75,12 +76,13 @@ public class StackProviderRGBFromObjMaskThreeColors extends StackProviderRGBFrom
 	@Override
 	public Stack create() throws CreateException {
 		
-		ObjectCollection objs = new ObjectCollection();
 		ColorList colors = new ColorList();
 		
-		addWithColor( objsRed, COLOR_RED, objs, colors );
-		addWithColor( objsGreen, COLOR_GREEN, objs, colors );
-		addWithColor( objsBlue, COLOR_BLUE, objs, colors );
+		ObjectCollection objs = ObjectCollectionFactory.from(
+			addWithColor( objsRed, COLOR_RED, colors ),
+			addWithColor( objsGreen, COLOR_GREEN, colors ),
+			addWithColor( objsBlue, COLOR_BLUE, colors )
+		);
 		
 		ObjMaskWriter objMaskWriter = createWriter();  
 		
@@ -98,14 +100,16 @@ public class StackProviderRGBFromObjMaskThreeColors extends StackProviderRGBFrom
 		}
 	}
 
-	private void addWithColor( ObjMaskProvider provider, RGBColor color, ObjectCollection objsOut, ColorList colorsInOut ) throws CreateException {
-		Optional<ObjectCollection> providerObjs = OptionalFactory.create(provider);
-
-		if (providerObjs.isPresent()) {
-			ObjectCollection maybeFlattened = maybeFlatten(providerObjs.get()); 
-			objsOut.addAll(maybeFlattened);
-			colorsInOut.addMultiple( color, maybeFlattened.size() );
-		}
+	private Optional<ObjectCollection> addWithColor( ObjMaskProvider provider, RGBColor color, ColorList colors) throws CreateException {
+		// If objects were created, we add some corresponding colors
+		return OptionalFactory.create(provider).map(
+			objs -> maybeFlattenAddColor(objs, color, colors)
+		);
+	}
+	
+	private ObjectCollection maybeFlattenAddColor(ObjectCollection objs, RGBColor color, ColorList colors) {
+		colors.addMultiple(color, objs.size());
+		return maybeFlatten(objs);
 	}
 	
 	public ObjMaskProvider getObjsRed() {

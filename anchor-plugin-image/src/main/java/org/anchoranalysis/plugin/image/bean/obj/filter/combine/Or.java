@@ -36,6 +36,7 @@ import org.anchoranalysis.image.bean.objmask.filter.ObjectFilter;
 import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.objectmask.ObjectMask;
 import org.anchoranalysis.image.objectmask.ObjectCollection;
+import org.anchoranalysis.image.objectmask.ObjectCollectionFactory;
 
 /**
  * Applies multiples filter with logical OR i.e. an object must pass any one of the filter steps to remain.
@@ -63,7 +64,7 @@ public class Or extends ObjectFilterCombine {
 		);
 
 		// Creates the accepted-objects
-		return new ObjectCollection( setAccepted.stream() );
+		return ObjectCollectionFactory.fromSet(setAccepted);
 	}
 	
 	/** Finds the accepted objects (i.e. objects that pass any one of the filters) */

@@ -36,6 +36,7 @@ import org.anchoranalysis.image.bean.objmask.filter.ObjectFilter;
 import org.anchoranalysis.image.binary.BinaryChnl;
 import org.anchoranalysis.image.objectmask.ObjectMask;
 import org.anchoranalysis.image.objectmask.ObjectCollection;
+import org.anchoranalysis.image.objectmask.ObjectCollectionFactory;
 import org.anchoranalysis.image.objectmask.factory.CreateFromEntireChnlFactory;
 
 // Treats the entire binaryimgchnl as an object, and sees if it passes an ObjMaskFilter
@@ -53,7 +54,7 @@ public class BinaryChnlProviderObjMaskFilterAsChnl extends BinaryChnlProviderEls
 		
 		try {
 			ObjectCollection omc = objMaskFilter.filter(
-				new ObjectCollection(om),
+				ObjectCollectionFactory.from(om),
 				Optional.of(chnl.getDimensions()),
 				Optional.empty()
 			);

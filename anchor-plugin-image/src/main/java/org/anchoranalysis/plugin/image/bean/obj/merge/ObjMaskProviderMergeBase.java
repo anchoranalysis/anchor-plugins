@@ -26,8 +26,9 @@ package org.anchoranalysis.plugin.image.bean.obj.merge;
  * #L%
  */
 
-import java.util.List;
 import java.util.Optional;
+import java.util.stream.Stream;
+
 import org.anchoranalysis.bean.OptionalFactory;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
@@ -37,6 +38,7 @@ import org.anchoranalysis.image.bean.provider.ImageDimProvider;
 import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.extent.ImageRes;
 import org.anchoranalysis.image.objectmask.ObjectCollection;
+import org.anchoranalysis.image.objectmask.ObjectCollectionFactory;
 import org.anchoranalysis.image.objmask.match.ObjWithMatches;
 
 import ch.ethz.biol.cell.imageprocessing.objmask.matching.ObjMaskMatchUtilities;
@@ -99,7 +101,7 @@ public abstract class ObjMaskProviderMergeBase extends ObjMaskProviderContainer 
 	
 	private static ObjectCollection mergeAll( MergeObjs merger, ObjectCollection objs) throws OperationFailedException {
 		// TODO is this extra ObjectCollection constructor needed?
-		return new ObjectCollection(
+		return ObjectCollectionFactory.from(
 			merger.mergeObjs(objs)	
 		);
 	}
@@ -107,15 +109,16 @@ public abstract class ObjMaskProviderMergeBase extends ObjMaskProviderContainer 
 	private static ObjectCollection mergeInContainer( MergeObjs merger, ObjectCollection objs, ObjectCollection containerObjs) throws OperationFailedException {
 		
 		// All matched objects
-		List<ObjWithMatches> matchList = ObjMaskMatchUtilities.matchIntersectingObjects(containerObjs, objs);
-		
-		ObjectCollection out = new ObjectCollection();
-		for( ObjWithMatches owm : matchList ) {
-			out.addAll(
-				merger.mergeObjs(owm.getMatches())
-			);
-		}
-		return out;		
+		Stream<ObjectCollection> matchesStream = ObjMaskMatchUtilities
+				.matchIntersectingObjects(containerObjs, objs)
+				.stream()
+				.map(ObjWithMatches::getMatches);
+
+		return ObjectCollectionFactory.flatMapFrom(
+			matchesStream,
+			OperationFailedException.class,
+			merger::mergeObjs
+		);		
 	}
 
 	public ImageDimProvider getDim() {

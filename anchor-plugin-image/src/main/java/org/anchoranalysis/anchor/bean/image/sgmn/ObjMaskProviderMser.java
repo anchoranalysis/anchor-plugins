@@ -34,8 +34,8 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.convert.ImgLib2Wrap;
-import org.anchoranalysis.image.objectmask.ObjectMask;
 import org.anchoranalysis.image.objectmask.ObjectCollection;
+import org.anchoranalysis.image.objectmask.ObjectCollectionFactory;
 import org.anchoranalysis.image.objectmask.factory.CreateFromPointsFactory;
 
 import ch.ethz.biol.cell.imageprocessing.objmask.provider.ObjMaskProviderChnlSource;
@@ -91,16 +91,12 @@ public class ObjMaskProviderMser extends ObjMaskProviderChnlSource {
 	}
 	
 	private <T extends Type<T>> ObjectCollection convertOutputToObjs( MserTree<T> tree ) throws CreateException {
-		
-		ObjectCollection out = new ObjectCollection();
-		for ( Mser<T> mser :  tree)	{
-			
-			List<Point3i> pnts = convertPixelPoints(mser);
-			ObjectMask om = CreateFromPointsFactory.create(pnts);
-			out.add(om);
-		}
-				
-		return out;		
+		return ObjectCollectionFactory.mapFrom(
+			tree,
+			mser -> CreateFromPointsFactory.create(
+				convertPixelPoints(mser)
+			)
+		);		
 	}
 	
 	
