@@ -82,7 +82,7 @@ public class Or extends ObjectFilterCombine {
 	
 	/** Determines which objects are rejected */
 	private static ObjectCollection determineRejected(ObjectCollection objsToFilter, Set<ObjectMask> setAccepted) {
-		return objsToFilter.filter( obj ->
+		return objsToFilter.stream().filter( obj ->
 			!setAccepted.contains(obj)
 		);
 	}

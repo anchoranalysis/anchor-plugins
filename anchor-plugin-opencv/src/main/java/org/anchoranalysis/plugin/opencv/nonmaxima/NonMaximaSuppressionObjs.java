@@ -60,7 +60,7 @@ public class NonMaximaSuppressionObjs extends NonMaximaSuppression<ObjectMask> {
 	@Override
 	protected Predicate<ObjectMask> possibleOverlappingObjs(ObjectMask src, Iterable<WithConfidence<ObjectMask>> others) {
 		// All possible other masks as a hash-set
-		Set<ObjectMask> possibleOthers = rTree.intersectsWith(src).toSet();
+		Set<ObjectMask> possibleOthers = rTree.intersectsWith(src).stream().toSet();
 		return objToTest -> possibleOthers.contains(objToTest);
 	}
 }

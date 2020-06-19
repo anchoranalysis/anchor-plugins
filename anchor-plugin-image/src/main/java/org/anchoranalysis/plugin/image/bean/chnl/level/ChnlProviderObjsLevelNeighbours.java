@@ -177,7 +177,7 @@ public class ChnlProviderObjsLevelNeighbours extends ChnlProviderLevel {
 	}
 	
 	private static List<ObjectMaskWithHistogram> objectsWithHistograms( ObjectCollection objMasks, Channel chnlIntensity ) {
-		return objMasks.mapAsList(om ->
+		return objMasks.stream().mapAsList(om ->
 			new ObjectMaskWithHistogram(om,chnlIntensity)
 		);
 	}

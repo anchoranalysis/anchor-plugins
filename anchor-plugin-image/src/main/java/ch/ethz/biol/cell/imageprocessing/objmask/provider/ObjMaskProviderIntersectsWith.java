@@ -51,7 +51,7 @@ public class ObjMaskProviderIntersectsWith extends ObjMaskProviderContainer {
 
 		ObjectCollection objsContainer = containerRequired();
 		
-		return objsCollection.filter( obj->
+		return objsCollection.stream().filter( obj->
 			includeObj(obj,objsContainer)
 		);
 	}

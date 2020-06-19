@@ -74,7 +74,7 @@ public class ObjMaskProviderErode extends ObjMaskProviderDimensionsOptional {
 	public ObjectCollection createFromObjs(ObjectCollection objsIn) throws CreateException {
 		
 		Optional<Extent> extent = calcExtent();
-		return objsIn.map( om->
+		return objsIn.stream().map( om->
 			erode(om, extent)
 		);
 	}

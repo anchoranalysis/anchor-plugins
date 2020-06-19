@@ -36,6 +36,6 @@ public class ObjMaskProviderFlattenZ extends ObjMaskProviderOne {
 
 	@Override
 	public ObjectCollection createFromObjs( ObjectCollection in ) throws CreateException {
-		return in.map( ObjectMask::flattenZ );
+		return in.stream().map( ObjectMask::flattenZ );
 	}
 }

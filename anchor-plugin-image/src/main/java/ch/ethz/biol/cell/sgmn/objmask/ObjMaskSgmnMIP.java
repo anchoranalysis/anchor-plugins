@@ -85,7 +85,7 @@ public class ObjMaskSgmnMIP extends ObjMaskSgmnOne {
 	}
 	
 	private boolean isAny3d(ObjectCollection objs) {
-		return objs.anyMatch(om->
+		return objs.stream().anyMatch(om->
 			om.getVoxelBox().extent().getZ() >1
 		);
 	}

@@ -65,7 +65,7 @@ public class ObjMaskProviderSplitContourSmoothingSpline extends ObjMaskProviderO
 	
 	@Override
 	public ObjectCollection createFromObjs( ObjectCollection in ) throws CreateException {
-		return in.flatMapWithException(CreateException.class, this::splitContoursFromObj);
+		return in.stream().flatMapWithException(CreateException.class, this::splitContoursFromObj);
 	}
 	
 	private ObjectCollection splitContoursFromObj(ObjectMask om) throws CreateException {

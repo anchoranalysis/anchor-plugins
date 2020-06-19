@@ -419,7 +419,7 @@ public class ExportObjectsAsCroppedImagesTask extends ExportObjectsBase<MultiInp
 	}
 	
 	private static ObjectCollection extendObjsInZ( ObjectCollection objs, int sz ) {
-		return objs.map( om->
+		return objs.stream().map( om->
 			om.flattenZ().growToZ(sz)
 		);
 	}
