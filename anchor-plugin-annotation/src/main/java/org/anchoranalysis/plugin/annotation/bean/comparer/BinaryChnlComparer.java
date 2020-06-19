@@ -42,8 +42,8 @@ import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.io.RasterIOException;
 import org.anchoranalysis.image.io.bean.rasterreader.RasterReader;
 import org.anchoranalysis.image.io.bean.rasterreader.RasterReaderUtilities;
-import org.anchoranalysis.image.objectmask.ObjectMask;
 import org.anchoranalysis.image.objectmask.ObjectCollection;
+import org.anchoranalysis.image.objectmask.ObjectCollectionFactory;
 import org.anchoranalysis.io.bean.filepath.generator.FilePathGenerator;
 import org.anchoranalysis.io.error.AnchorIOException;
 
@@ -98,9 +98,7 @@ public class BinaryChnlComparer extends Comparer {
 	}
 	
 	private static ObjectCollection convertToObjs( BinaryChnl chnl ) {
-		return new ObjectCollection(
-			new ObjectMask( chnl.binaryVoxelBox() )
-		);
+		return ObjectCollectionFactory.from(chnl);
 	}
 	
 	public FilePathGenerator getFilePathGenerator() {

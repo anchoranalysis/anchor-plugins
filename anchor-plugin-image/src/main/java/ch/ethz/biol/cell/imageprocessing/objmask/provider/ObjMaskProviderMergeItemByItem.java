@@ -1,6 +1,6 @@
 package ch.ethz.biol.cell.imageprocessing.objmask.provider;
 
-import java.util.stream.IntStream;
+
 
 /*
  * #%L
@@ -33,6 +33,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
 import org.anchoranalysis.image.objectmask.ObjectCollection;
+import org.anchoranalysis.image.objectmask.ObjectCollectionFactory;
 import org.anchoranalysis.image.objectmask.ops.ObjectMaskMerger;
 
 // Merges an object in each list item by item
@@ -59,12 +60,12 @@ public class ObjMaskProviderMergeItemByItem extends ObjMaskProvider {
 			throw new CreateException( String.format("Both objProviders must have the same number of items, currently %d and %d", first.size(), second.size() ));
 		}
 		
-		return new ObjectCollection(
-			IntStream.range(0, first.size()).mapToObj(index->
-				ObjectMaskMerger.merge(
-					first.get(index),
-					second.get(index)
-				)
+		return ObjectCollectionFactory.mapFromRange(
+			0,
+			first.size(),
+			index->	ObjectMaskMerger.merge(
+				first.get(index),
+				second.get(index)
 			)
 		);
 	}

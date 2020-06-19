@@ -29,6 +29,7 @@ package org.anchoranalysis.test.feature.plugins.objs;
 import org.anchoranalysis.core.geometry.Point2i;
 import org.anchoranalysis.image.objectmask.ObjectMask;
 import org.anchoranalysis.image.objectmask.ObjectCollection;
+import org.anchoranalysis.image.objectmask.ObjectCollectionFactory;
 
 public class IntersectingCircleObjsFixture {
 
@@ -45,54 +46,64 @@ public class IntersectingCircleObjsFixture {
 	 *  @param numNotIntersecting the number of circles that do not intersect that should be produced
 	 *  @param boolean sameSize iff TRUE all circles have the same radius (INITIAL_RAIDUS), otherwise the radius gradually increments
 	 * */
-	public static ObjectCollection generateIntersectingObjs( int numIntersecting, int numNotIntersecting, boolean sameSize ) {
-	
-		int radius = INITIAL_RADIUS;
+	public static ObjectCollection generateIntersectingObjs(int numIntersecting, int numNotIntersecting, boolean sameSize) {
 		
-		ObjectCollection out = new ObjectCollection();
+		RunningCircleCreator running = new RunningCircleCreator(sameSize);
 	
-		Point2i center = new Point2i( INITIAL_MARGIN + radius, INITIAL_MARGIN + radius);
-
 		// Keep on generating circles of centers radius*1.5 apart, so that they intersect
-		for( int i=0; i<numIntersecting; i++) {
-			out.add(
-				generateCircleAndShift(center, radius, 1.5)
-			);
-			if (!sameSize) {
-				radius += RADIUS_INCR;
-			}
-		}
+		ObjectCollection first = running.generateMultipleCircles(numIntersecting, 1.5);
 		
 		// Shift another 1.5 to make sure there's no intersection between first set and second
-		shift(center, radius, 1.5);
-		
+		running.shift(1.5);
+
 		// Now generate at radius 3 apartment, so that they do not intersect
-		for( int i=0; i<numNotIntersecting; i++) {
-			out.add(
-				generateCircleAndShift(center, radius, 3)
+		ObjectCollection second = running.generateMultipleCircles(numNotIntersecting, 3);
+		
+		// Make sure we haven't generated so many we've run out of the scene
+		assert( CircleObjMaskFixture.sceneContains(running.getCenter()));
+		
+		return ObjectCollectionFactory.from(first, second);
+	}
+
+	/** Increments the center-point (and maybe the radius) as new circles are generated */
+	private static class RunningCircleCreator {
+		
+		private boolean sameSize;
+		
+		private int radius = INITIAL_RADIUS;
+		
+		private Point2i center = new Point2i( INITIAL_MARGIN + radius, INITIAL_MARGIN + radius);
+		
+		public RunningCircleCreator(boolean sameSize) {
+			super();
+			this.sameSize = sameSize;
+		}
+
+		public void shift(double factor) {
+			int shift = (int) (factor*radius);
+			center.incrX(shift);
+			center.incrY(shift);
+		}
+		
+		public ObjectCollection generateMultipleCircles(int numCircles, double factor) {
+			return ObjectCollectionFactory.mapFromRange(0, numCircles, index->
+				generateCircle(factor)
 			);
+		}
+
+		private ObjectMask generateCircle(double factor) {
+			ObjectMask om = CircleObjMaskFixture.circleAt(center, radius);
+			shift(factor);
 			
 			if (!sameSize) {
 				radius += RADIUS_INCR;
 			}
+			
+			return om;
 		}
-		
-		// Make sure we haven't generated so many we've run out of the scene
-		assert( CircleObjMaskFixture.sceneContains(center) );
-		
-		return out;
+
+		public Point2i getCenter() {
+			return center;
+		}
 	}
-	
-	private static ObjectMask generateCircleAndShift(Point2i center, int radius, double factor) {
-		ObjectMask om = CircleObjMaskFixture.circleAt(center, radius);
-		shift(center, radius, factor);
-		return om;
-	}
-	
-	private static void shift(Point2i center, int radius, double factor) {
-		int shift = (int) (factor*radius);
-		center.incrX(shift);
-		center.incrY(shift);
-	}
-	
 }

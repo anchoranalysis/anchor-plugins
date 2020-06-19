@@ -27,12 +27,9 @@ package org.anchoranalysis.plugin.opencv.nonmaxima;
  */
 
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.Set;
-import java.util.stream.Collectors;
-
 import org.anchoranalysis.image.index.rtree.ObjMaskCollectionRTree;
-import org.anchoranalysis.image.objectmask.ObjectCollection;
+import org.anchoranalysis.image.objectmask.ObjectCollectionFactory;
 import org.anchoranalysis.image.objectmask.ObjectMask;
 import org.anchoranalysis.image.objectmask.OverlapCalculator;
 import org.anchoranalysis.image.objectmask.ops.ObjectMaskMerger;
@@ -47,8 +44,9 @@ public class NonMaximaSuppressionObjs extends NonMaximaSuppression<ObjectMask> {
 	protected void init(Collection<WithConfidence<ObjectMask>> allProposals) {
 		// NOTHING TO DO
 		rTree = new ObjMaskCollectionRTree(
-			new ObjectCollection(
-				allProposals.stream().map(WithConfidence::getObj)
+			ObjectCollectionFactory.mapFrom(
+				allProposals,
+				WithConfidence::getObj
 			)
 		);
 	}
@@ -62,11 +60,7 @@ public class NonMaximaSuppressionObjs extends NonMaximaSuppression<ObjectMask> {
 	@Override
 	protected Predicate<ObjectMask> possibleOverlappingObjs(ObjectMask src, Iterable<WithConfidence<ObjectMask>> others) {
 		// All possible other masks as a hash-set
-		Set<ObjectMask> possibleOthers = rTree
-			.intersectsWith(src)
-			.stream()
-			.collect(Collectors.toCollection(HashSet::new));
-
+		Set<ObjectMask> possibleOthers = rTree.intersectsWith(src).toSet();
 		return objToTest -> possibleOthers.contains(objToTest);
 	}
 }

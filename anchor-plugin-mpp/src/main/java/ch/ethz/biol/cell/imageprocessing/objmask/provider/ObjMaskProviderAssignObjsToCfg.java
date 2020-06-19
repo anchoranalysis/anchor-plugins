@@ -43,6 +43,7 @@ import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.objectmask.ObjectMask;
 import org.anchoranalysis.image.objectmask.ObjectCollection;
+import org.anchoranalysis.image.objectmask.ObjectCollectionFactory;
 
 import ch.ethz.biol.cell.imageprocessing.objmask.provider.assignobjstocfg.RslvdEllipsoid;
 import ch.ethz.biol.cell.imageprocessing.objmask.provider.assignobjstocfg.RslvdEllipsoidList;
@@ -88,7 +89,7 @@ public class ObjMaskProviderAssignObjsToCfg extends ObjMaskProviderDimensions {
 				ObjectCollection objsOutUnassignedCollection = objsOutUnassigned.create();
 				objsOutUnassignedCollection.addAll(objsCollection);
 			}
-			return new ObjectCollection();
+			return ObjectCollectionFactory.empty();
 		}
 		
 		

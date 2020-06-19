@@ -18,6 +18,7 @@ import org.anchoranalysis.image.binary.BinaryChnl;
 import org.anchoranalysis.image.init.ImageInitParams;
 import org.anchoranalysis.image.objectmask.ObjectMask;
 import org.anchoranalysis.image.objectmask.ObjectCollection;
+import org.anchoranalysis.image.objectmask.ObjectCollectionFactory;
 import org.anchoranalysis.test.LoggingFixture;
 
 public class ProviderFixture {
@@ -26,7 +27,7 @@ public class ProviderFixture {
 	
 	public static ObjMaskProvider providerFor(ObjectMask obj) {
 		return providerFor(
-			new ObjectCollection(obj)	
+			ObjectCollectionFactory.from(obj)	
 		);
 	}
 	

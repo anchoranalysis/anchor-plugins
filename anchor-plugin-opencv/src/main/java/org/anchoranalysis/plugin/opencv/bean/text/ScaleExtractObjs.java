@@ -30,6 +30,7 @@ import java.util.List;
 import org.anchoranalysis.image.interpolator.InterpolatorFactory;
 import org.anchoranalysis.image.objectmask.ObjectMask;
 import org.anchoranalysis.image.objectmask.ObjectCollection;
+import org.anchoranalysis.image.objectmask.ObjectCollectionFactory;
 import org.anchoranalysis.image.scale.ScaleFactor;
 import org.anchoranalysis.plugin.opencv.nonmaxima.WithConfidence;
 
@@ -51,9 +52,7 @@ class ScaleExtractObjs {
 	}
 	
 	private static ObjectCollection extractObjs( List<WithConfidence<ObjectMask>> list ) {
-		return new ObjectCollection(
-			list.stream().map( WithConfidence::getObj )
-		);
+		return ObjectCollectionFactory.mapFrom(list, WithConfidence::getObj);
 	}
 	
 	private static ObjectCollection scaleObjs( ObjectCollection objs, ScaleFactor sf ) {

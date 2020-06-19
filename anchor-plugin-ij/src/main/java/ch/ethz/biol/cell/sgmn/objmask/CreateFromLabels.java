@@ -8,6 +8,7 @@ import java.util.stream.Collectors;
 import org.anchoranalysis.image.convert.ByteConverter;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.objectmask.ObjectCollection;
+import org.anchoranalysis.image.objectmask.ObjectCollectionFactory;
 import org.anchoranalysis.image.points.PointRange;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 
@@ -79,22 +80,10 @@ class CreateFromLabels {
 		VoxelBox<ByteBuffer> bufferAccess,
 		int smallVolumeThreshold
 	) {
-		
-		ObjectCollection list = new ObjectCollection();
-		
-		int col = 0;
-		for (BoundingBox bbox : bboxList) {
-			col++;
-			
-			if ( bbox.extent().getVolumeXY() < smallVolumeThreshold ) {
-				continue;
-			}
-			
-			list.add(
-				bufferAccess.equalMask(bbox, col)
-			);
-		}
-				
-		return list;
+		return ObjectCollectionFactory.filterAndMapFrom(
+			bboxList,
+			bbox -> bbox.extent().getVolumeXY() >= smallVolumeThreshold,
+			(bbox, col) -> bufferAccess.equalMask(bbox, col)		// Using index as the color value
+		);
 	}
 }

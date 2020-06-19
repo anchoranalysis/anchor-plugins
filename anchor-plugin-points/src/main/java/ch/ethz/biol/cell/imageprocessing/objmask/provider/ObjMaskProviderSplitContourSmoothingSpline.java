@@ -34,6 +34,7 @@ import org.anchoranalysis.image.bean.provider.ObjMaskProviderOne;
 import org.anchoranalysis.image.contour.Contour;
 import org.anchoranalysis.image.objectmask.ObjectMask;
 import org.anchoranalysis.image.objectmask.ObjectCollection;
+import org.anchoranalysis.image.objectmask.ObjectCollectionFactory;
 import org.anchoranalysis.image.objectmask.factory.CreateFromPointsFactory;
 
 import ch.ethz.biol.cell.imageprocessing.objmask.provider.smoothspline.ContourList;
@@ -64,40 +65,33 @@ public class ObjMaskProviderSplitContourSmoothingSpline extends ObjMaskProviderO
 	
 	@Override
 	public ObjectCollection createFromObjs( ObjectCollection in ) throws CreateException {
-
-		ObjectCollection out = new ObjectCollection();
-		
-		for( ObjectMask om : in ) {
-			splitContoursFromObj(om, out);
-		}
-		
-		return out;
+		return in.flatMapWithException(CreateException.class, this::splitContoursFromObj);
 	}
 	
-	private void splitContoursFromObj( ObjectMask om, ObjectCollection out ) throws CreateException {
+	private ObjectCollection splitContoursFromObj(ObjectMask om) throws CreateException {
 		
 		if (om.getBoundingBox().extent().getZ()>1) {
 			throw new CreateException("Only objs with z-slices > 1 are allowed");
 		}
 		
 		try {
-			ContourList cl = SplitContourSmoothingSpline.apply(om, smoothingFactor, numLoopPoints, minNumPoints);
-			addContoursAsObjs( cl, out );
+			return contoursAsObjs(
+				SplitContourSmoothingSpline.apply(om, smoothingFactor, numLoopPoints, minNumPoints)
+			);
 			
 		} catch (OperationFailedException e) {
 			throw new CreateException(e);
 		}		
 	}
 	
-	private void addContoursAsObjs( ContourList contourList, ObjectCollection out ) throws OperationFailedException {
-		for( Contour c : contourList) {
-			try {
-				out.add(
-					createObjMaskFromContour(c, true)
-				);
-			} catch (CreateException e) {
-				throw new OperationFailedException(e);
-			}
+	private ObjectCollection contoursAsObjs( ContourList contourList ) throws OperationFailedException {
+		try {
+			return ObjectCollectionFactory.mapFrom(
+				contourList,
+				contour -> createObjMaskFromContour(contour, true)
+			);
+		} catch (CreateException e) {
+			throw new OperationFailedException(e);
 		}
 	}
 

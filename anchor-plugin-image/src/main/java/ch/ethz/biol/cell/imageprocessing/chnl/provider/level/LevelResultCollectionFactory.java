@@ -76,9 +76,7 @@ public class LevelResultCollectionFactory {
 				omForCalculateLevel = om;
 			}
 			
-			ObjectCollection omcSingle = new ObjectCollection(omForCalculateLevel);
-			
-			Histogram h = HistogramFactory.create(chnl, omcSingle);
+			Histogram h = HistogramFactory.create(chnl,	omForCalculateLevel);
 			int level;
 			try {
 				level = calculateLevel.calculateLevel(h);

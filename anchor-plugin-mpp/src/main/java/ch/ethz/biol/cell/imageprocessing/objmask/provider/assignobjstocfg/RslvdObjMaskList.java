@@ -32,6 +32,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.anchoranalysis.image.objectmask.ObjectCollection;
+import org.anchoranalysis.image.objectmask.ObjectCollectionFactory;
 
 public class RslvdObjMaskList implements Iterable<RslvdObjMask> {
 	private List<RslvdObjMask> delegate;
@@ -59,8 +60,6 @@ public class RslvdObjMaskList implements Iterable<RslvdObjMask> {
 	}
 	
 	public ObjectCollection createObjs() {
-		return new ObjectCollection(
-			delegate.stream().map(RslvdObjMask::getObjMask)
-		);
+		return ObjectCollectionFactory.mapFrom(delegate, RslvdObjMask::getObjMask);
 	}
 }
