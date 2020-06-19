@@ -28,6 +28,7 @@ package ch.ethz.biol.cell.imageprocessing.objmask.provider;
 
 
 import java.util.List;
+import java.util.Optional;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
@@ -38,6 +39,7 @@ import org.anchoranalysis.image.bean.objmask.match.ObjMaskMatcher;
 import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
 import org.anchoranalysis.image.objectmask.ObjectMask;
 import org.anchoranalysis.image.objectmask.ObjectCollection;
+import org.anchoranalysis.image.objectmask.ObjectCollectionFactory;
 import org.anchoranalysis.image.objmask.match.ObjWithMatches;
 
 // Returns a collection of each Max Object found in matches
@@ -53,26 +55,21 @@ public class ObjMaskProviderFindMaxFeatureInMatchedObjects extends ObjMaskProvid
 		
 		FeatureCalculatorSingle<FeatureInputSingleObj> session = createSession();
 
-		ObjectCollection out = new ObjectCollection();
 		try {
 			List<ObjWithMatches> listMatches = objMaskMatcher.findMatch(in);
-	
-			for( ObjWithMatches owm : listMatches ) {
+
+			return ObjectCollectionFactory.mapFromOptional(
+				listMatches,
+				owm -> findMax(session, owm.getMatches()) 
+			);
 			
-				ObjectMask max = findMax( session, owm.getMatches() );
-				if (max!=null) {
-					out.add(max);
-				}
-			}
 		} catch (OperationFailedException | FeatureCalcException e) {
 			throw new CreateException(e);
 		}
-		
-		return out;
 	}
 	
-	private ObjectMask findMax( FeatureCalculatorSingle<FeatureInputSingleObj> session, ObjectCollection objs ) throws FeatureCalcException {
-		ObjectMask max = null;
+	private Optional<ObjectMask> findMax( FeatureCalculatorSingle<FeatureInputSingleObj> session, ObjectCollection objs ) throws FeatureCalcException {
+		Optional<ObjectMask> max = Optional.empty();
 		double maxVal = 0;
 		
 		for( ObjectMask om : objs ) {
@@ -81,8 +78,8 @@ public class ObjMaskProviderFindMaxFeatureInMatchedObjects extends ObjMaskProvid
 				new FeatureInputSingleObj(om)
 			);
 			
-			if (max==null || featureVal>maxVal) {
-				max = om;
+			if (!max.isPresent() || featureVal>maxVal) {
+				max = Optional.of(om);
 				maxVal = featureVal;
 			}
 		}

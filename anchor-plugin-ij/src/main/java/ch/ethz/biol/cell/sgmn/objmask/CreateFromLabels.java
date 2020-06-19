@@ -80,7 +80,7 @@ class CreateFromLabels {
 		VoxelBox<ByteBuffer> bufferAccess,
 		int smallVolumeThreshold
 	) {
-		return ObjectCollectionFactory.filterAndMapFrom(
+		return ObjectCollectionFactory.filterAndMapWithIndexFrom(
 			bboxList,
 			bbox -> bbox.extent().getVolumeXY() >= smallVolumeThreshold,
 			(bbox, col) -> bufferAccess.equalMask(bbox, col)		// Using index as the color value

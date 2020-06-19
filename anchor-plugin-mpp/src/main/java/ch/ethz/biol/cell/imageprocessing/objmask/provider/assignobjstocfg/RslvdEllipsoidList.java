@@ -37,6 +37,7 @@ import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.objectmask.ObjectMask;
 import org.anchoranalysis.image.objectmask.ObjectCollection;
+import org.anchoranalysis.image.objectmask.ObjectCollectionFactory;
 import org.anchoranalysis.image.objectmask.ops.ObjectMaskMerger;
 import org.anchoranalysis.image.voxel.box.factory.VoxelBoxFactory;
 
@@ -164,31 +165,20 @@ public class RslvdEllipsoidList implements Iterable<RslvdEllipsoid> {
 			}
 		}
 	}
-	
-	
-	// Create merged objects for those included
+		
+	/** Create merged objects for those included */
 	public ObjectCollection createMergedObjsForIncluded() throws CreateException {
-		ObjectCollection objsOut = new ObjectCollection();
-		for( RslvdEllipsoid re : this ) {
-			
-			if (!re.isIncluded()) {
-				continue;
-			}
-			
-			try {
-				objsOut.add(
-					deriveSingleObject(
-						re.getAssignedObjs().createObjs()
-					)		
-				);
-				
-			} catch (OperationFailedException e) {
-				throw new CreateException(e);
-			}
-			
-			
+		try {
+			return ObjectCollectionFactory.filterAndMapFrom(
+				this,
+				RslvdEllipsoid::isIncluded,
+				re -> deriveSingleObject(
+					re.getAssignedObjs().createObjs()
+				)
+			);
+		} catch (OperationFailedException e) {
+			throw new CreateException(e);
 		}
-		return objsOut;
 	}
 		
 	public void excludeBorderXYObjects() {
