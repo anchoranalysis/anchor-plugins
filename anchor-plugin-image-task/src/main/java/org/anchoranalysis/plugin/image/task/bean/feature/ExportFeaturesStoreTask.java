@@ -68,7 +68,7 @@ import org.anchoranalysis.plugin.image.task.sharedstate.SharedStateExportFeature
  */
 public abstract class ExportFeaturesStoreTask<T extends InputFromManager, S extends FeatureInput> extends ExportFeaturesTask<T,SharedStateExportFeaturesWithStore<S>> {
 
-	private static final NamedFeatureStoreFactory storeFactory = NamedFeatureStoreFactory.factoryParamsOnly();
+	private static final NamedFeatureStoreFactory STORE_FACTORY = NamedFeatureStoreFactory.factoryParamsOnly();
 	
 	// START BEAN PROPERTIES
 	@BeanField @NonEmpty
@@ -92,7 +92,7 @@ public abstract class ExportFeaturesStoreTask<T extends InputFromManager, S exte
 			throws ExperimentExecutionException {
 		try {
 			return new SharedStateExportFeaturesWithStore<>(
-				storeFactory.createNamedFeatureList(listFeatures),
+				STORE_FACTORY.createNamedFeatureList(listFeatures),
 				new GroupedResultsVectorCollection(
 					"group",
 					firstResultHeader
