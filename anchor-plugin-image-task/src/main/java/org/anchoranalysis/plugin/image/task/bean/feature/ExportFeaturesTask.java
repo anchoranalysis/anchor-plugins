@@ -59,7 +59,7 @@ import org.anchoranalysis.plugin.image.task.sharedstate.SharedStateExportFeature
  */
 public abstract class ExportFeaturesTask<T extends InputFromManager, S extends SharedStateExportFeatures> extends Task<T,S> {
 
-	private static final NamedFeatureStoreFactory storeFactoryAggregate = new NamedFeatureStoreFactory();
+	private static final NamedFeatureStoreFactory STORE_FACTORY_AGGREGATE = NamedFeatureStoreFactory.bothNameAndParams();
 	
 	// START BEAN
 	/**
@@ -110,7 +110,7 @@ public abstract class ExportFeaturesTask<T extends InputFromManager, S extends S
 		try {
 			Optional<NamedFeatureStore<FeatureInputResults>> featuresAggregate = OptionalUtilities.map(
 				Optional.ofNullable(listFeaturesAggregate),
-				storeFactoryAggregate::createNamedFeatureList
+				STORE_FACTORY_AGGREGATE::createNamedFeatureList
 			);
 			
 			sharedState.writeFeaturesAsCSVForAllGroups(
