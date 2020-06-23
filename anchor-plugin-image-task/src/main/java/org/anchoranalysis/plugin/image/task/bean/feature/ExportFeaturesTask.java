@@ -117,14 +117,14 @@ public abstract class ExportFeaturesTask<T extends InputFromManager, S extends S
 	) throws ExperimentExecutionException {
 		
 		try {
-			sharedState.getGroupedResults().close();
+			sharedState.closeAnyOpenIO();
 			
 			Optional<NamedFeatureStore<FeatureInputResults>> featuresAggregate = OptionalUtilities.map(
 				Optional.ofNullable(listFeaturesAggregate),
 				STORE_FACTORY_AGGREGATE::createNamedFeatureList
 			);
 			
-			sharedState.writeFeaturesAsCSVForAllGroups(
+			sharedState.writeGroupedResults(
 				featuresAggregate,
 				includeGroupInExperiment(),
 				context

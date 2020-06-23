@@ -108,14 +108,6 @@ public abstract class ExportFeaturesStoreTask<T extends InputFromManager, S exte
 			throw new ExperimentExecutionException(e);
 		}
 	}
-	
-	private String[] headersForGroup() {
-		if (isGroupGeneratorDefined()) {
-			return new String[]{"group"};
-		} else {
-			return new String[]{};
-		}
-	}
 
 	@Override
 	public void doJobOnInputObject( InputBound<T,SharedStateExportFeaturesWithStore<S>> params ) throws JobExecutionException {
@@ -127,7 +119,7 @@ public abstract class ExportFeaturesStoreTask<T extends InputFromManager, S exte
 				params.context()
 			);
 			
-			params.getSharedState().getGroupedResults().addResultsFor(
+			params.getSharedState().addResultsFor(
 				identifierFor( params.getInputObject() ),
 				results
 			);
@@ -168,5 +160,13 @@ public abstract class ExportFeaturesStoreTask<T extends InputFromManager, S exte
 	public void setListFeatures(
 			List<NamedBean<FeatureListProvider<S>>> listFeatures) {
 		this.listFeatures = listFeatures;
+	}
+	
+	private String[] headersForGroup() {
+		if (isGroupGeneratorDefined()) {
+			return new String[]{"group"};
+		} else {
+			return new String[]{};
+		}
 	}
 }

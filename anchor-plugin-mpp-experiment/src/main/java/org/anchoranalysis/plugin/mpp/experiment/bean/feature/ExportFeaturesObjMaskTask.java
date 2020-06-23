@@ -30,21 +30,18 @@ package org.anchoranalysis.plugin.mpp.experiment.bean.feature;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.function.BiConsumer;
 import org.anchoranalysis.bean.NamedBean;
 import org.anchoranalysis.bean.annotation.AllowEmpty;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
 import org.anchoranalysis.experiment.JobExecutionException;
 import org.anchoranalysis.experiment.task.InputTypesExpected;
 import org.anchoranalysis.experiment.task.InputBound;
 import org.anchoranalysis.experiment.task.ParametersExperiment;
 import org.anchoranalysis.feature.bean.list.FeatureListProvider;
-import org.anchoranalysis.feature.calc.results.ResultsVector;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.io.csv.MetadataHeaders;
 import org.anchoranalysis.feature.io.csv.StringLabelsForCsvRow;
@@ -66,7 +63,6 @@ import org.anchoranalysis.mpp.io.input.MultiInput;
 import org.anchoranalysis.mpp.sgmn.bean.define.DefineOutputterMPPWithNrg;
 import org.anchoranalysis.plugin.image.feature.bean.obj.table.FeatureTableObjs;
 import org.anchoranalysis.plugin.image.task.bean.feature.ExportFeaturesTask;
-import org.anchoranalysis.plugin.image.task.sharedstate.SharedStateExportFeatures;
 
 
 /** 
@@ -219,13 +215,19 @@ public class ExportFeaturesObjMaskTask<T extends FeatureInput> extends ExportFea
 		} catch (InitException e) {
 			throw new OperationFailedException(e);
 		}
-					
+		
+		FeatureCalculator<T> calculator = new FeatureCalculator<>(
+			table,
+			input.getSharedState(),
+			suppressErrors,
+			context.getLogger()
+		);
 		processAllProviders(
 			input.getInputObject(),
 			session,
 			imageInit,
 			nrgStack,
-			input.getSharedState(),
+			calculator,
 			context
 		);
 		
@@ -239,7 +241,7 @@ public class ExportFeaturesObjMaskTask<T extends FeatureInput> extends ExportFea
 		FeatureTableSession<T> session,
 		ImageInitParams imageInitParams,
 		NRGStackWithParams nrgStack,
-		SharedStateExportFeatures sharedState,
+		FeatureCalculator<T> calculator,
 		BoundIOContext context		
 	) throws OperationFailedException {
 		try {
@@ -249,28 +251,34 @@ public class ExportFeaturesObjMaskTask<T extends FeatureInput> extends ExportFea
 				input.pathForBindingRequired(),
 				context.isDebugEnabled()
 			);
-									
+			
 			// For every objMaskCollection provider
-			for( NamedBean<ObjMaskProvider> ni : listObjMaskProvider) {
-				calculateFeaturesForProvider(
-					objsFromProvider(ni.getValue(), imageInitParams, context.getLogger()),
+			for(NamedBean<ObjMaskProvider> ni : listObjMaskProvider) {
+				calculator.processProvider(
+					ni.getValue(),
 					session,
+					imageInitParams,
 					nrgStack,
-					(results,objName) -> sharedState.getGroupedResults().addResultsFor(
-						new StringLabelsForCsvRow(
-							Optional.of(
-								new String[]{id, objName}
-							),
-							createGroupName(groupGeneratorName, ni.getName())
-						),
-						results
-					),
-					context.getLogger()
+					objName -> identifierFor(id, objName, groupGeneratorName, ni.getName())
 				);
 			}
 		} catch (AnchorIOException e) {
 			throw new OperationFailedException(e);
 		}
+	}
+	
+	private StringLabelsForCsvRow identifierFor(
+		String descriptiveName,
+		String objName,
+		Optional<String> groupGeneratorName,
+		String providerName
+	) {
+		return new StringLabelsForCsvRow(
+			Optional.of(
+				new String[]{descriptiveName, objName}
+			),
+			createGroupName(groupGeneratorName, providerName)
+		);
 	}
 	
 	private Optional<MultiName> createGroupName( Optional<String> groupGeneratorName, String providerName ) {
@@ -286,47 +294,6 @@ public class ExportFeaturesObjMaskTask<T extends FeatureInput> extends ExportFea
 			}
 		} else {
 			return groupGeneratorName.map(SimpleName::new);
-		}
-	}
-		
-	private void calculateFeaturesForProvider(
-		ObjectCollection objs,
-		FeatureTableSession<T> session,
-		NRGStackWithParams nrgStack,
-		BiConsumer<ResultsVector,String> resultsConsumer,
-		LogErrorReporter logErrorReporter
-	) throws OperationFailedException {
-		try {
-			List<T> listParams = table.createListInputs(
-				objs,
-				nrgStack,
-				logErrorReporter
-			);
-			
-			FeatureCalculator.calculateManyFeaturesInto(
-				session,
-				listParams,
-				resultsConsumer,
-				suppressErrors,
-				logErrorReporter
-			);
-		} catch (CreateException | OperationFailedException e) {
-			throw new OperationFailedException(e);
-		}
-	}
-	
-	private static ObjectCollection objsFromProvider( ObjMaskProvider provider, ImageInitParams imageInitParams, LogErrorReporter logErrorReporter ) throws OperationFailedException {
-
-		try {
-			ObjMaskProvider objMaskProviderLoc = provider.duplicateBean();
-			
-			// Initialise
-			objMaskProviderLoc.initRecursive(imageInitParams, logErrorReporter);
-	
-			return objMaskProviderLoc.create(); 
-			
-		} catch (InitException | CreateException e) {
-			throw new OperationFailedException(e);
 		}
 	}
 
