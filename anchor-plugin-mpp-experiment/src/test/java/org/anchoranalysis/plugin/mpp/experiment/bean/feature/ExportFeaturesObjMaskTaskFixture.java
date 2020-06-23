@@ -34,14 +34,9 @@ import org.anchoranalysis.bean.NamedBean;
 import org.anchoranalysis.bean.error.BeanMisconfiguredException;
 import org.anchoranalysis.bean.xml.RegisterBeanFactories;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.nrg.NRGStack;
-import org.anchoranalysis.feature.resultsvectorcollection.FeatureInputResults;
 import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
-import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
-import org.anchoranalysis.image.feature.objmask.pair.FeatureInputPairObjs;
-import org.anchoranalysis.image.feature.stack.FeatureInputStack;
 import org.anchoranalysis.io.bean.filepath.generator.FilePathGeneratorConstant;
 import org.anchoranalysis.plugin.image.feature.bean.obj.table.FeatureTableObjs;
 import org.anchoranalysis.plugin.image.feature.bean.obj.table.MergedPairs;
@@ -52,26 +47,11 @@ import org.anchoranalysis.test.image.NRGStackFixture;
 import ch.ethz.biol.cell.imageprocessing.objmask.provider.ObjMaskProviderReference;
 
 class ExportFeaturesObjMaskTaskFixture {
-
-	private static final String PATH_FEATURES_SINGLE_DEFAULT = "singleFeatures.xml";
-	private static final String PATH_FEATURES_PAIR_DEFAULT = "pairFeatures.xml";
-	private static final String PATH_FEATURES_IMAGE_DEFAULT = "imageFeatures.xml";
-	private static final String PATH_FEATURES_SHARED_DEFAULT = "sharedFeatures.xml";
-	private static final String PATH_FEATURES_AGGREGATED_DEFAULT = "aggregatedFeatures.xml";
 	
 	private NRGStack nrgStack = createNRGStack(true);
 	private FeatureTableObjs<?> flexiFeatureTable = new Simple();
 	
-	/** The "single" and "pair" and "image" features in use.*/
-	private LoadFeatureListProviderFixture<FeatureInputSingleObj> singleFeatures;
-	private LoadFeatureListProviderFixture<FeatureInputPairObjs> pairFeatures;
-	private LoadFeatureListProviderFixture<FeatureInputStack> imageFeatures;
-	
-	/** The features used for the shared-feature set */
-	private LoadFeatureListProviderFixture<FeatureInput> sharedFeatures;
-	
-	/** The features used for aggregating results */
-	private LoadFeatureListProviderFixture<FeatureInputResults> aggregatedFeatures;
+	private final ExportFeaturesObjMaskFeatureLoader featureLoader;
 	
 	/**
 	 * Constructor
@@ -85,11 +65,7 @@ class ExportFeaturesObjMaskTaskFixture {
 	 */
 	public ExportFeaturesObjMaskTaskFixture(TestLoader loader) throws CreateException {
 		this.nrgStack = createNRGStack(true);
-		this.singleFeatures = new LoadFeatureListProviderFixture<>(loader, PATH_FEATURES_SINGLE_DEFAULT);
-		this.pairFeatures = new LoadFeatureListProviderFixture<>(loader, PATH_FEATURES_PAIR_DEFAULT);
-		this.imageFeatures = new LoadFeatureListProviderFixture<>(loader, PATH_FEATURES_IMAGE_DEFAULT);
-		this.sharedFeatures = new LoadFeatureListProviderFixture<>(loader, PATH_FEATURES_SHARED_DEFAULT);
-		this.aggregatedFeatures = new LoadFeatureListProviderFixture<>(loader, PATH_FEATURES_AGGREGATED_DEFAULT);
+		this.featureLoader = new ExportFeaturesObjMaskFeatureLoader(loader);
 	}
 	
 	/** 
@@ -100,56 +76,17 @@ class ExportFeaturesObjMaskTaskFixture {
 	}
 	
 	/** 
-	 * Additionally include a shell feature in the "single" features
-	 *  
-	 * @throws CreateException */
-	public void useAlternativeFileAsSingle(String alternativeFileName) throws CreateException {
-		singleFeatures.useAlternativeXMLList(alternativeFileName);
-	}
-	
-	/** 
-	 * Additionally include a shell feature in the "single" features
-	 *  
-	 * @throws CreateException */
-	public void useAlternativeFileAsShared(String alternativeFileName) throws CreateException {
-		sharedFeatures.useAlternativeXMLList(alternativeFileName);
-	}
-	
-	/** 
-	 * Uses this feature instead of whatever list has been loaded for the single-features
-	 * 
-	 * <p>It does not initialize the feature.</p>
-	 * */
-	public void useInsteadAsSingleFeature( Feature<FeatureInputSingleObj> feature ) {
-		singleFeatures.useSingleFeature(feature);
-	}
-
-	/** 
-	 * Uses this feature instead of whatever list has been loaded for the pair-features
-	 * 
-	 * <p>It does not initialize the feature.</p>
-	 * */
-	public void useInsteadAsPairFeature( Feature<FeatureInputPairObjs> feature ) {
-		pairFeatures.useSingleFeature(feature);
-	}
-	
-	/** 
-	 * Uses this feature instead of whatever list has been loaded for the pair-features
-	 * 
-	 * <p>It does not initialize the feature.</p>
-	 * */
-	public void useInsteadAsImageFeature( Feature<FeatureInputStack> feature ) {
-		imageFeatures.useSingleFeature(feature);
-	}
-	
-	/** 
 	 * Change to use Merged-Pairs mode rather than Simple mode
 	 *
 	 * @param includeFeaturesInPair iff TRUE "pair" features are populated in merged-pair mode
 	 * @throws CreateException 
 	 **/
-	public void changeToMergedPairs(boolean includeFeaturesInPair, boolean includeImageFeatures) throws CreateException {
+	public void changeToMergedPairs(boolean includeFeaturesInPair, boolean includeImageFeatures) {
 		flexiFeatureTable = createMergedPairs(includeFeaturesInPair, includeImageFeatures);
+	}
+	
+	public ExportFeaturesObjMaskFeatureLoader featureLoader() {
+		return featureLoader;
 	}
 	
 	public NRGStack getNrgStack() {
@@ -160,16 +97,12 @@ class ExportFeaturesObjMaskTaskFixture {
 	public <T extends FeatureInput> ExportFeaturesObjMaskTask<T> createTask() throws CreateException {
 				
 		ExportFeaturesObjMaskTask<T> task = new ExportFeaturesObjMaskTask<>();
-		task.setListFeaturesObjMask(
-			singleFeatures.asListNamedBeansProvider()
-		);
-		task.setListFeaturesAggregate(
-			aggregatedFeatures.asListNamedBeansProvider()
-		);
+		task.setListFeaturesObjMask(featureLoader.single());
+		task.setListFeaturesAggregate(featureLoader.aggregated());
 		task.setDefine(
 			DefineFixture.create(
 				nrgStack,
-				Optional.of(sharedFeatures.asListNamedBeansProvider())
+				Optional.of(featureLoader.shared())
 			)		
 		);
 		task.setGroup( new FilePathGeneratorConstant("arbitraryGroup") );
@@ -193,19 +126,14 @@ class ExportFeaturesObjMaskTaskFixture {
 		);
 	}
 
-	private MergedPairs createMergedPairs(boolean includeFeaturesInPair, boolean includeImageFeatures) throws CreateException {
+	private MergedPairs createMergedPairs(boolean includeFeaturesInPair, boolean includeImageFeatures) {
 		MergedPairs mergedPairs = new MergedPairs();
 		if (includeFeaturesInPair) {
-			mergedPairs.setListFeaturesPair(
-				pairFeatures.asListNamedBeansProvider()
-			);
+			mergedPairs.setListFeaturesPair(featureLoader.pair());
 		}
 		if (includeImageFeatures) {
-			mergedPairs.setListFeaturesImage(
-				imageFeatures.asListNamedBeansProvider()
-			);
+			mergedPairs.setListFeaturesImage(featureLoader.image());
 		}
-		
 		return mergedPairs;
 	}
 	
