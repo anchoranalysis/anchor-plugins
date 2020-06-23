@@ -35,9 +35,9 @@ import org.anchoranalysis.core.collection.MapCreate;
 import org.anchoranalysis.core.error.AnchorNeverOccursException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.functional.Operation;
-import org.anchoranalysis.core.name.MultiName;
-import org.anchoranalysis.core.name.MultiNameFactory;
 import org.anchoranalysis.experiment.JobExecutionException;
+import org.anchoranalysis.feature.io.csv.name.MultiName;
+import org.anchoranalysis.feature.io.csv.name.MultiNameFactory;
 import org.anchoranalysis.io.output.bound.BoundIOContext;
 import org.anchoranalysis.io.output.bound.CacheSubdirectoryContext;
 
@@ -114,13 +114,13 @@ public abstract class GroupMapByName<S,T> {
 		// If there are two parts, it is assumed that the first-part is a group-name (a seperate subdirectory) and the second-part is written without a subdirectory 
 		for( Entry<MultiName,T> entry : map.entrySet() ) {
 		
-			Optional<String> aggKey = entry.getKey().deriveAggregationKey(); 
+			MultiName name = entry.getKey();
 
 			writeGroupOutputInSubdirectory(
-				entry.getKey().nameWithoutAggregationKey(),
+				name.filePart(),
 				entry.getValue(),
 				chnlChecker,
-				subdirectoryCache.get(aggKey)
+				subdirectoryCache.get(name.directoryPart())
 			);
 		}
 	}

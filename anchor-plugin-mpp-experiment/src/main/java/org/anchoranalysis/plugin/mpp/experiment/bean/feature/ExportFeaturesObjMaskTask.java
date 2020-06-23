@@ -27,12 +27,10 @@ package org.anchoranalysis.plugin.mpp.experiment.bean.feature;
  */
 
 
-import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.function.Consumer;
-
+import java.util.function.BiConsumer;
 import org.anchoranalysis.bean.NamedBean;
 import org.anchoranalysis.bean.annotation.AllowEmpty;
 import org.anchoranalysis.bean.annotation.BeanField;
@@ -40,8 +38,6 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.log.LogErrorReporter;
-import org.anchoranalysis.core.name.CombinedName;
-import org.anchoranalysis.core.name.MultiName;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
 import org.anchoranalysis.experiment.JobExecutionException;
 import org.anchoranalysis.experiment.task.InputTypesExpected;
@@ -50,6 +46,11 @@ import org.anchoranalysis.experiment.task.ParametersExperiment;
 import org.anchoranalysis.feature.bean.list.FeatureListProvider;
 import org.anchoranalysis.feature.calc.results.ResultsVector;
 import org.anchoranalysis.feature.input.FeatureInput;
+import org.anchoranalysis.feature.io.csv.MetadataHeaders;
+import org.anchoranalysis.feature.io.csv.StringLabelsForCsvRow;
+import org.anchoranalysis.feature.io.csv.name.CombinedName;
+import org.anchoranalysis.feature.io.csv.name.MultiName;
+import org.anchoranalysis.feature.io.csv.name.SimpleName;
 import org.anchoranalysis.feature.io.csv.GroupedResultsVectorCollection;
 import org.anchoranalysis.feature.list.NamedFeatureStoreFactory;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
@@ -68,21 +69,31 @@ import org.anchoranalysis.plugin.image.task.bean.feature.ExportFeaturesTask;
 import org.anchoranalysis.plugin.image.task.sharedstate.SharedStateExportFeatures;
 
 
-/** Calculates feature on a 'grouped' set of objects
- 
-   1. All files are aggregated into groups (with the name of the ObjMaskProvider added to the end)
-   2. For each image file, the NamedDefinitions are applied and an ObjMaskCollection is extracted
-   3. These objects are added to the appropriate ObjMaskCollection associated with each group
-   4. ReportFeatures are calculated on each group, and exported as a properties file
-   
-   csvAll  		one csv file where each row is an object
-   csvAgg  		one csv file where each row is a group (with aggregated features of the objects within)
-   csvGroup 	a csv file per group, where each row is an object
-   
-   @param T the feature input-type supported by the FlexiFeatureTable
-   
-   TODO does this need to be a MultiInput and dependent on MPP? Can it be moved to anchor-plugin-image-task??
-   
+/** 
+ * Calculates features for each object in a collection.
+ *
+ *  <ol>
+ *  <li>All files are aggregated into groups (with the name of the ObjMaskProvider added to the end)</li>
+ *  <li>For each image file, the <code>define</code> is applied and an {@link ObjectCollection} is extracted</li>
+ *  <li>These objects are added to the appropriate {@link ObjectCollection} associated with each group</li>
+ *  <li>Various exports may occur with either the features for each object (or aggregated features for the groups)</li>
+ *  </ol>
+ *  
+ *  <div>
+ *  These exports are:
+ *  <table>
+ *  <tr><td>features</td><td>a single csv file where each row is an object</td></tr>
+ *  <tr><td>featuresAggregated</td><td>a single csv file where each row is a group (with aggregated features of the objects within)</td></tr>
+ *  <tr><td>featuresGroup</td><td>a csv file per group, where each row is an object</td></tr>
+ *  </table>
+ *  </div>
+ *  
+ *  <p>Note unlike other export-tasks, the group here is not only what is returned by the <code>group</code> generator
+ *  in the super-class, but also includes the name of the {@link ObjMaskProvider} if there is more than one.</p>
+ *  
+ *  TODO does this need to be a MultiInput and dependent on MPP? Can it be moved to anchor-plugin-image-task??
+ *  
+ *  @param T the feature input-type supported by the FlexiFeatureTable
 **/
 public class ExportFeaturesObjMaskTask<T extends FeatureInput> extends ExportFeaturesTask<MultiInput,SharedStateExportFeaturesObjMask<T>> {
 
@@ -111,7 +122,6 @@ public class ExportFeaturesObjMaskTask<T extends FeatureInput> extends ExportFea
 	@BeanField
 	private boolean suppressErrors = false;
 	//END BEAN PROPERTIES
-
 	
 	@Override
 	public SharedStateExportFeaturesObjMask<T> beforeAnyJobIsExecuted(
@@ -120,18 +130,52 @@ public class ExportFeaturesObjMaskTask<T extends FeatureInput> extends ExportFea
 	) throws ExperimentExecutionException {
 		
 		try {
+			FeatureTableSession<T> session = table.createFeatures(
+				listFeaturesObjMask,
+				STORE_FACTORY,
+				suppressErrors
+			); 
 			return new SharedStateExportFeaturesObjMask<>(
-				new GroupedResultsVectorCollection("id","group","objSetName"),
-				table.createFeatures(
-					listFeaturesObjMask,
-					STORE_FACTORY,
-					suppressErrors
-				)
+				new GroupedResultsVectorCollection(
+					new MetadataHeaders(
+						headersForGroup(),
+						new String[]{"image", "unique_pixel_in_object"}
+					),
+					session.createFeatureNames(),
+					params.context()
+				),
+				session
 			);
 			
-		} catch (CreateException | InitException e) {
+		} catch (CreateException | InitException | AnchorIOException e) {
 			throw new ExperimentExecutionException(e);
 		}
+	}
+	
+	private boolean moreThanOneProvider() {
+		return listObjMaskProvider.size()>1;
+	}
+	
+	private String[] headersForGroup() {
+		if (isGroupGeneratorDefined()) {
+			if (moreThanOneProvider()) {
+				return new String[]{"group", "object_collection"};
+			} else {
+				return new String[]{"group"};
+			}
+		} else {
+			if (moreThanOneProvider()) {
+				return new String[]{"object_collection"};
+			} else {
+				return new String[]{};
+			}
+		}
+	}
+
+	/** If either a group-generator is defined or there's more than one provider, then groups should be included */
+	@Override
+	protected boolean includeGroupInExperiment() {
+		return super.isGroupGeneratorDefined() || moreThanOneProvider();
 	}
 	
 	@Override
@@ -176,18 +220,14 @@ public class ExportFeaturesObjMaskTask<T extends FeatureInput> extends ExportFea
 			throw new OperationFailedException(e);
 		}
 					
-		try {
-			processAllProviders(
-				input.getInputObject().pathForBindingRequired(),
-				session,
-				imageInit,
-				nrgStack,
-				input.getSharedState(),
-				context
-			);
-		} catch (AnchorIOException e) {
-			throw new OperationFailedException(e);
-		}
+		processAllProviders(
+			input.getInputObject(),
+			session,
+			imageInit,
+			nrgStack,
+			input.getSharedState(),
+			context
+		);
 		
 		// Arbitrary, we need a return-type
 		return 0;
@@ -195,7 +235,7 @@ public class ExportFeaturesObjMaskTask<T extends FeatureInput> extends ExportFea
 
 	
 	private void processAllProviders(
-		Path inputPath,
+		MultiInput input,
 		FeatureTableSession<T> session,
 		ImageInitParams imageInitParams,
 		NRGStackWithParams nrgStack,
@@ -203,21 +243,28 @@ public class ExportFeaturesObjMaskTask<T extends FeatureInput> extends ExportFea
 		BoundIOContext context		
 	) throws OperationFailedException {
 		try {
-			String id = extractImageIdentifier(inputPath, context.isDebugEnabled());
+			String id = input.descriptiveName();
 			
-			// Extract a group name
-			// TODO change to use optional groups
-			String groupName = extractGroupName(inputPath, context.isDebugEnabled()).orElse("default");
+			Optional<String> groupGeneratorName = extractGroupNameFromGenerator(
+				input.pathForBindingRequired(),
+				context.isDebugEnabled()
+			);
 									
 			// For every objMaskCollection provider
 			for( NamedBean<ObjMaskProvider> ni : listObjMaskProvider) {
-				MultiName rowName = new CombinedName( groupName, ni.getName() ); 
 				calculateFeaturesForProvider(
-					id,
 					objsFromProvider(ni.getValue(), imageInitParams, context.getLogger()),
 					session,
 					nrgStack,
-					results -> sharedState.getGroupedResults().addResultsFor(rowName, results),
+					(results,objName) -> sharedState.getGroupedResults().addResultsFor(
+						new StringLabelsForCsvRow(
+							Optional.of(
+								new String[]{id, objName}
+							),
+							createGroupName(groupGeneratorName, ni.getName())
+						),
+						results
+					),
 					context.getLogger()
 				);
 			}
@@ -226,13 +273,27 @@ public class ExportFeaturesObjMaskTask<T extends FeatureInput> extends ExportFea
 		}
 	}
 	
-	
+	private Optional<MultiName> createGroupName( Optional<String> groupGeneratorName, String providerName ) {
+		if (moreThanOneProvider()) {
+			if (groupGeneratorName.isPresent()) {
+				return Optional.of(
+					new CombinedName(groupGeneratorName.get(), providerName)
+				);
+			} else {
+				return Optional.of(
+					new SimpleName(providerName)
+				);
+			}
+		} else {
+			return groupGeneratorName.map(SimpleName::new);
+		}
+	}
+		
 	private void calculateFeaturesForProvider(
-		String id,
 		ObjectCollection objs,
 		FeatureTableSession<T> session,
 		NRGStackWithParams nrgStack,
-		Consumer<ResultsVector> resultsConsumer,
+		BiConsumer<ResultsVector,String> resultsConsumer,
 		LogErrorReporter logErrorReporter
 	) throws OperationFailedException {
 		try {
@@ -243,7 +304,6 @@ public class ExportFeaturesObjMaskTask<T extends FeatureInput> extends ExportFea
 			);
 			
 			FeatureCalculator.calculateManyFeaturesInto(
-				id,
 				session,
 				listParams,
 				resultsConsumer,

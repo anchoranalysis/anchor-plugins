@@ -31,7 +31,6 @@ import org.anchoranalysis.feature.input.FeatureInput;
 
 
 import org.anchoranalysis.feature.io.csv.GroupedResultsVectorCollection;
-import org.anchoranalysis.feature.name.FeatureNameList;
 import org.anchoranalysis.image.feature.session.FeatureTableSession;
 import org.anchoranalysis.plugin.image.task.sharedstate.SharedStateExportFeatures;
 
@@ -45,10 +44,5 @@ class SharedStateExportFeaturesObjMask<T extends FeatureInput> extends SharedSta
 	}
 	public FeatureTableSession<T> getSession() {
 		return session;
-	}
-	
-	@Override
-	protected FeatureNameList featureNames() {
-		return session.createFeatureNames();
 	}
 }

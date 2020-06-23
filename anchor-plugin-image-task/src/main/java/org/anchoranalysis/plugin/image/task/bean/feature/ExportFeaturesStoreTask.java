@@ -37,8 +37,6 @@ import org.anchoranalysis.bean.annotation.NonEmpty;
 import org.anchoranalysis.bean.error.BeanDuplicateException;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.name.MultiName;
-import org.anchoranalysis.core.name.MultiNameFactory;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
 import org.anchoranalysis.experiment.JobExecutionException;
 import org.anchoranalysis.experiment.task.InputBound;
@@ -47,6 +45,9 @@ import org.anchoranalysis.feature.bean.list.FeatureListProvider;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.calc.results.ResultsVector;
 import org.anchoranalysis.feature.input.FeatureInput;
+import org.anchoranalysis.feature.io.csv.MetadataHeaders;
+import org.anchoranalysis.feature.io.csv.StringLabelsForCsvRow;
+import org.anchoranalysis.feature.io.csv.name.SimpleName;
 import org.anchoranalysis.feature.io.csv.GroupedResultsVectorCollection;
 import org.anchoranalysis.feature.list.NamedFeatureStore;
 import org.anchoranalysis.feature.list.NamedFeatureStoreFactory;
@@ -91,15 +92,28 @@ public abstract class ExportFeaturesStoreTask<T extends InputFromManager, S exte
 	public SharedStateExportFeaturesWithStore<S> beforeAnyJobIsExecuted(BoundOutputManagerRouteErrors outputManager, ParametersExperiment params)
 			throws ExperimentExecutionException {
 		try {
+			NamedFeatureStore<S> featureStore = STORE_FACTORY.createNamedFeatureList(listFeatures); 
 			return new SharedStateExportFeaturesWithStore<>(
-				STORE_FACTORY.createNamedFeatureList(listFeatures),
+				featureStore,
 				new GroupedResultsVectorCollection(
-					"group",
-					firstResultHeader
+					new MetadataHeaders(
+						headersForGroup(),
+						new String[]{firstResultHeader}
+					),
+					featureStore.createFeatureNames(),
+					params.context()
 				)
 			);
-		} catch (CreateException e) {
+		} catch (CreateException | AnchorIOException e) {
 			throw new ExperimentExecutionException(e);
+		}
+	}
+	
+	private String[] headersForGroup() {
+		if (isGroupGeneratorDefined()) {
+			return new String[]{"group"};
+		} else {
+			return new String[]{};
 		}
 	}
 
@@ -129,18 +143,19 @@ public abstract class ExportFeaturesStoreTask<T extends InputFromManager, S exte
 		BoundIOContext context
 	) throws FeatureCalcException;
 	
-	private MultiName identifierFor( T inputObject ) throws OperationFailedException {
+	private StringLabelsForCsvRow identifierFor( T inputObject ) throws OperationFailedException {
 		
 		try {
 			Path inputPath = inputObject.pathForBinding().orElseThrow( ()->
 				new OperationFailedException("A binding path is required to be associated with each input for this algorithm, but is not")
 			);
-			
-			Optional<String> groupName = extractGroupName(inputPath, false); 
-			return MultiNameFactory.create(
-				groupName,
-				extractImageIdentifier(inputPath, false)
-			);		
+
+			return new StringLabelsForCsvRow(
+				Optional.of(
+					new String[]{inputObject.descriptiveName()}
+				),
+				extractGroupNameFromGenerator(inputPath, false).map(SimpleName::new)
+			);
 		} catch (AnchorIOException e) {
 			throw new OperationFailedException(e);
 		}

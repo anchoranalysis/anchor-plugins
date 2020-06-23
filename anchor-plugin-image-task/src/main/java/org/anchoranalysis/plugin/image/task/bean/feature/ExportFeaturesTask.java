@@ -1,5 +1,7 @@
 package org.anchoranalysis.plugin.image.task.bean.feature;
 
+import java.io.IOException;
+
 /*-
  * #%L
  * anchor-plugin-image-task
@@ -92,13 +94,20 @@ public abstract class ExportFeaturesTask<T extends InputFromManager, S extends S
 		);
 	}
 	
-	/** Determines the group name corresponding to an inputPath */
-	protected Optional<String> extractGroupName( Path inputPath, boolean debugMode ) throws AnchorIOException {
+	/** Determines the group name corresponding to an inputPath and the group-generator */
+	protected Optional<String> extractGroupNameFromGenerator( Path inputPath, boolean debugMode ) throws AnchorIOException {
 		return filePathAsIdentifier(
 			Optional.ofNullable(group),
 			inputPath,
 			debugMode
 		);
+	}
+	
+	/** Iff true, group columns are added to the CSV exports, and other group exports may occur in sub-directories */
+	protected abstract boolean includeGroupInExperiment();
+	
+	protected boolean isGroupGeneratorDefined() {
+		return group!=null;
 	}
 	
 	@Override
@@ -108,6 +117,8 @@ public abstract class ExportFeaturesTask<T extends InputFromManager, S extends S
 	) throws ExperimentExecutionException {
 		
 		try {
+			sharedState.getGroupedResults().close();
+			
 			Optional<NamedFeatureStore<FeatureInputResults>> featuresAggregate = OptionalUtilities.map(
 				Optional.ofNullable(listFeaturesAggregate),
 				STORE_FACTORY_AGGREGATE::createNamedFeatureList
@@ -115,15 +126,19 @@ public abstract class ExportFeaturesTask<T extends InputFromManager, S extends S
 			
 			sharedState.writeFeaturesAsCSVForAllGroups(
 				featuresAggregate,
-				group != null,
+				includeGroupInExperiment(),
 				context
 			);
-		} catch (AnchorIOException | CreateException e) {
+		} catch (AnchorIOException | CreateException | IOException e) {
 			throw new ExperimentExecutionException(e);
 		}
 	}
-	
-	private static Optional<String> filePathAsIdentifier( Optional<FilePathGenerator> generator, Path path, boolean debugMode ) throws AnchorIOException {
+		
+	private static Optional<String> filePathAsIdentifier(
+		Optional<FilePathGenerator> generator,
+		Path path,
+		boolean debugMode
+	) throws AnchorIOException {
 		return OptionalUtilities.map(
 			generator,
 			gen-> FilePathToUnixStyleConverter.toStringUnixStyle(

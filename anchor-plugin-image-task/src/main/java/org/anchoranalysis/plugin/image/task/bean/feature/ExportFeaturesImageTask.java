@@ -61,7 +61,12 @@ public class ExportFeaturesImageTask extends ExportFeaturesStoreTask<ProvidesSta
 	public InputTypesExpected inputTypesExpected() {
 		return new InputTypesExpected(ProvidesStackInput.class);
 	}
-		
+	
+	@Override
+	protected boolean includeGroupInExperiment() {
+		return isGroupGeneratorDefined();
+	}
+	
 	@Override
 	protected ResultsVector calcResultsVectorForInputObject(
 		ProvidesStackInput inputObject,

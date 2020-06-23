@@ -30,7 +30,6 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.io.csv.GroupedResultsVectorCollection;
 import org.anchoranalysis.feature.list.NamedFeatureStore;
-import org.anchoranalysis.feature.name.FeatureNameList;
 
 public class SharedStateExportFeaturesWithStore<T extends FeatureInput> extends SharedStateExportFeatures {
 	
@@ -46,10 +45,5 @@ public class SharedStateExportFeaturesWithStore<T extends FeatureInput> extends 
 	
 	public NamedFeatureStore<T> getFeatureStore() {
 		return featureStore;
-	}
-
-	@Override
-	protected FeatureNameList featureNames() {
-		return featureStore.createFeatureNames();
 	}
 }

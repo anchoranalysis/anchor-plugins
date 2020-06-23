@@ -27,8 +27,7 @@ package org.anchoranalysis.plugin.mpp.experiment.bean.feature;
  */
 
 import java.util.List;
-import java.util.function.Consumer;
-
+import java.util.function.BiConsumer;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
@@ -43,17 +42,18 @@ class FeatureCalculator {
 	 * 
 	 * The stored-results also have an additional first-column with the ID.
 	 * 
-	 * @param groupId  		group-identifier
-	 * @param objectId  	identifier of object (guaranteed to be unique)
+	 * @param session for calculating features
 	 * @param listInputs 	a list of parameters. Each parameters creates a new result (e.g. a new row in a feature-table)
 	 * @param resultsConsumer called with the results
+	 * @param extractIdentifier extracts an identifier from each object that is calculated
+	 * @param suppressErrors iff TRUE no exceptions are thrown when an error occurs, but rather a message is written to the log
+	 * @param logger the log
 	 * @throws OperationFailedException
 	 */
 	public static <T extends FeatureInput> void calculateManyFeaturesInto(
-		String objectId,
 		FeatureTableSession<T> session,
 		List<T> listInputs,
-		Consumer<ResultsVector> resultsConsumer,
+		BiConsumer<ResultsVector,String> resultsConsumer,
 		boolean suppressErrors,
 		LogErrorReporter logger
 	) throws OperationFailedException {
@@ -66,8 +66,10 @@ class FeatureCalculator {
 				logger.getLogReporter().logFormatted("Calculating input %d of %d: %s", i+1, listInputs.size(), input.toString() );
 				
 				ResultsVector rv = suppressErrors ? session.calcSuppressErrors(input, logger.getErrorReporter()) : session.calc(input);
-				rv.setIdentifier(objectId);
-				resultsConsumer.accept( rv );
+				resultsConsumer.accept(
+					rv,
+					session.uniqueIdentifierFor(input)
+				);
 			}
 			
 		} catch (FeatureCalcException e) {

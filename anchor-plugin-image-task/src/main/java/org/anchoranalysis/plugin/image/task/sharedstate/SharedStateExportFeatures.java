@@ -31,11 +31,16 @@ import java.util.Optional;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.io.csv.GroupedResultsVectorCollection;
 import org.anchoranalysis.feature.list.NamedFeatureStore;
-import org.anchoranalysis.feature.name.FeatureNameList;
 import org.anchoranalysis.feature.resultsvectorcollection.FeatureInputResults;
 import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.output.bound.BoundIOContext;
 
+
+/**
+ * Shared-state for an export-features class
+ * 
+ * @author Owen Feehan
+ */
 public abstract class SharedStateExportFeatures {
 
 	private final GroupedResultsVectorCollection groupedResults;
@@ -43,8 +48,6 @@ public abstract class SharedStateExportFeatures {
 	public SharedStateExportFeatures(GroupedResultsVectorCollection groupedResults) {
 		this.groupedResults = groupedResults;
 	}
-	
-	protected abstract FeatureNameList featureNames();
 
 	/**
 	 * Writes all the results that have been collected as a CSV file
@@ -61,7 +64,6 @@ public abstract class SharedStateExportFeatures {
 		BoundIOContext context
 	) throws AnchorIOException {
 		groupedResults.writeResultsForAllGroups(
-			featureNames(),
 			featuresAggregate,
 			includeGroups,
 			context
