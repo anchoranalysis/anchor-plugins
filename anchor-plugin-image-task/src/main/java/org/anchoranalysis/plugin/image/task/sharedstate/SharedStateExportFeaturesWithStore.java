@@ -29,17 +29,27 @@ package org.anchoranalysis.plugin.image.task.sharedstate;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.io.csv.GroupedResultsVectorCollection;
+import org.anchoranalysis.feature.io.csv.MetadataHeaders;
 import org.anchoranalysis.feature.list.NamedFeatureStore;
+import org.anchoranalysis.io.error.AnchorIOException;
+import org.anchoranalysis.io.output.bound.BoundIOContext;
 
 public class SharedStateExportFeaturesWithStore<T extends FeatureInput> extends SharedStateExportFeatures {
 	
 	private NamedFeatureStore<T> featureStore;
 	
 	public SharedStateExportFeaturesWithStore(
+		MetadataHeaders metadataHeaders,
 		NamedFeatureStore<T> featureStore,
-		GroupedResultsVectorCollection groupResults
-	) throws CreateException {
-		super( groupResults );
+		BoundIOContext context
+	) throws CreateException, AnchorIOException {
+		super(
+			new GroupedResultsVectorCollection(
+				metadataHeaders,
+				featureStore.createFeatureNames(),
+				context
+			)		
+		);
 		this.featureStore = featureStore;
 	}
 	

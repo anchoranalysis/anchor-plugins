@@ -37,10 +37,15 @@ import org.anchoranalysis.bean.NamedBean;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.core.error.CreateException;
+import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.functional.OptionalUtilities;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
+import org.anchoranalysis.experiment.JobExecutionException;
+import org.anchoranalysis.experiment.task.InputBound;
+import org.anchoranalysis.experiment.task.ParametersExperiment;
 import org.anchoranalysis.experiment.task.Task;
 import org.anchoranalysis.feature.bean.list.FeatureListProvider;
+import org.anchoranalysis.feature.io.csv.MetadataHeaders;
 import org.anchoranalysis.feature.list.NamedFeatureStore;
 import org.anchoranalysis.feature.list.NamedFeatureStoreFactory;
 import org.anchoranalysis.feature.resultsvectorcollection.FeatureInputResults;
@@ -49,6 +54,7 @@ import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.filepath.FilePathToUnixStyleConverter;
 import org.anchoranalysis.io.input.InputFromManager;
 import org.anchoranalysis.io.output.bound.BoundIOContext;
+import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
 import org.anchoranalysis.plugin.image.task.sharedstate.SharedStateExportFeatures;
 
 /**
@@ -80,36 +86,31 @@ public abstract class ExportFeaturesTask<T extends InputFromManager, S extends S
 	// END BEAN
 	
 	@Override
-	public boolean hasVeryQuickPerInputExecution() {
-		return false;
+	public S beforeAnyJobIsExecuted(BoundOutputManagerRouteErrors outputManager, ParametersExperiment params)
+			throws ExperimentExecutionException {
+		try {
+			return createSharedState(
+				createMetadataHeaders(),
+				params.context()
+			);
+		} catch (CreateException e) {
+			throw new ExperimentExecutionException(e);
+		}
 	}
 	
-	/** Determines the unique image name from an inputPath */
-	protected String extractImageIdentifier( Path inputPath, boolean debugMode ) throws AnchorIOException {
-		return filePathAsIdentifier(
-			Optional.ofNullable(id),
-			inputPath,
-			debugMode,
-			path-> FilePathToUnixStyleConverter.toStringUnixStyle(path)
-		);
+	@Override
+	public void doJobOnInputObject(InputBound<T,S> input) throws JobExecutionException {
+		try {
+			Optional<String> groupName = extractGroupNameFromGenerator(
+				input.getInputObject().pathForBindingRequired(),
+				input.context().isDebugEnabled()
+			);
+			calcAllResultsForInput(input, groupName);
+		} catch (OperationFailedException | AnchorIOException e) {
+			throw new JobExecutionException(e);
+		}
 	}
-	
-	/** Determines the group name corresponding to an inputPath and the group-generator */
-	protected Optional<String> extractGroupNameFromGenerator( Path inputPath, boolean debugMode ) throws AnchorIOException {
-		return filePathAsIdentifier(
-			Optional.ofNullable(group),
-			inputPath,
-			debugMode
-		);
-	}
-	
-	/** Iff true, group columns are added to the CSV exports, and other group exports may occur in sub-directories */
-	protected abstract boolean includeGroupInExperiment();
-	
-	protected boolean isGroupGeneratorDefined() {
-		return group!=null;
-	}
-	
+		
 	@Override
 	public void afterAllJobsAreExecuted(
 			S sharedState,
@@ -126,14 +127,52 @@ public abstract class ExportFeaturesTask<T extends InputFromManager, S extends S
 			
 			sharedState.writeGroupedResults(
 				featuresAggregate,
-				includeGroupInExperiment(),
+				includeGroupInExperiment( isGroupGeneratorDefined() ),
 				context
 			);
 		} catch (AnchorIOException | CreateException | IOException e) {
 			throw new ExperimentExecutionException(e);
 		}
 	}
-		
+	
+	@Override
+	public boolean hasVeryQuickPerInputExecution() {
+		return false;
+	}
+
+	/** Determines the unique image name from an inputPath */
+	protected String extractImageIdentifier( Path inputPath, boolean debugMode ) throws AnchorIOException {
+		return filePathAsIdentifier(
+			Optional.ofNullable(id),
+			inputPath,
+			debugMode,
+			path-> FilePathToUnixStyleConverter.toStringUnixStyle(path)
+		);
+	}
+	
+	protected abstract S createSharedState( MetadataHeaders metadataHeaders, BoundIOContext context) throws CreateException;
+	
+	/** Iff true, group columns are added to the CSV exports, and other group exports may occur in sub-directories 
+	 * @param groupGeneratorDefined TODO*/
+	protected abstract boolean includeGroupInExperiment(boolean groupGeneratorDefined);
+	
+	protected abstract String[] headersForResults();
+	
+	protected abstract String[] headersForGroup(boolean groupGeneratorDefined);
+
+	protected abstract void calcAllResultsForInput(InputBound<T,S> input, Optional<String> groupGeneratorName) throws OperationFailedException;
+	
+	private MetadataHeaders createMetadataHeaders() {
+		return new MetadataHeaders(
+			headersForGroup( isGroupGeneratorDefined() ),
+			headersForResults()
+		);
+	}
+
+	private boolean isGroupGeneratorDefined() {
+		return group!=null;
+	}
+	
 	private static Optional<String> filePathAsIdentifier(
 		Optional<FilePathGenerator> generator,
 		Path path,
@@ -152,7 +191,16 @@ public abstract class ExportFeaturesTask<T extends InputFromManager, S extends S
 			alternative.apply(path)
 		);
 	}
-
+	
+	/** Determines the group name corresponding to an inputPath and the group-generator */
+	private Optional<String> extractGroupNameFromGenerator(Path inputPath, boolean debugMode) throws AnchorIOException {
+		return filePathAsIdentifier(
+			Optional.ofNullable(group),
+			inputPath,
+			debugMode
+		);
+	}
+	
 	public List<NamedBean<FeatureListProvider<FeatureInputResults>>> getListFeaturesAggregate() {
 		return listFeaturesAggregate;
 	}

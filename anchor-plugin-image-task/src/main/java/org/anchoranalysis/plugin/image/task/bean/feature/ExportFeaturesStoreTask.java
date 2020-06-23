@@ -26,34 +26,27 @@ package org.anchoranalysis.plugin.image.task.bean.feature;
  * #L%
  */
 
-import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-
 import org.anchoranalysis.bean.NamedBean;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.NonEmpty;
 import org.anchoranalysis.bean.error.BeanDuplicateException;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.experiment.ExperimentExecutionException;
-import org.anchoranalysis.experiment.JobExecutionException;
 import org.anchoranalysis.experiment.task.InputBound;
-import org.anchoranalysis.experiment.task.ParametersExperiment;
 import org.anchoranalysis.feature.bean.list.FeatureListProvider;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.calc.results.ResultsVector;
 import org.anchoranalysis.feature.input.FeatureInput;
-import org.anchoranalysis.feature.io.csv.MetadataHeaders;
 import org.anchoranalysis.feature.io.csv.StringLabelsForCsvRow;
 import org.anchoranalysis.feature.io.csv.name.SimpleName;
-import org.anchoranalysis.feature.io.csv.GroupedResultsVectorCollection;
+import org.anchoranalysis.feature.io.csv.MetadataHeaders;
 import org.anchoranalysis.feature.list.NamedFeatureStore;
 import org.anchoranalysis.feature.list.NamedFeatureStoreFactory;
 import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.input.InputFromManager;
-import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
 import org.anchoranalysis.io.output.bound.BoundIOContext;
 import org.anchoranalysis.plugin.image.task.sharedstate.SharedStateExportFeaturesWithStore;
 
@@ -87,45 +80,55 @@ public abstract class ExportFeaturesStoreTask<T extends InputFromManager, S exte
 		super();
 		this.firstResultHeader = firstResultHeader;
 	}	
-
+	
 	@Override
-	public SharedStateExportFeaturesWithStore<S> beforeAnyJobIsExecuted(BoundOutputManagerRouteErrors outputManager, ParametersExperiment params)
-			throws ExperimentExecutionException {
+	protected SharedStateExportFeaturesWithStore<S> createSharedState( MetadataHeaders metadataHeaders, BoundIOContext context) throws CreateException {
 		try {
-			NamedFeatureStore<S> featureStore = STORE_FACTORY.createNamedFeatureList(listFeatures); 
+			NamedFeatureStore<S> featureStore = STORE_FACTORY.createNamedFeatureList(listFeatures);
+			
 			return new SharedStateExportFeaturesWithStore<>(
+				metadataHeaders,
 				featureStore,
-				new GroupedResultsVectorCollection(
-					new MetadataHeaders(
-						headersForGroup(),
-						new String[]{firstResultHeader}
-					),
-					featureStore.createFeatureNames(),
-					params.context()
-				)
+				context
 			);
-		} catch (CreateException | AnchorIOException e) {
-			throw new ExperimentExecutionException(e);
+		} catch (AnchorIOException e) {
+			throw new CreateException(e);
 		}
 	}
-
+	
 	@Override
-	public void doJobOnInputObject( InputBound<T,SharedStateExportFeaturesWithStore<S>> params ) throws JobExecutionException {
-		
+	protected String[] headersForResults() {
+		return new String[]{firstResultHeader};
+	}
+	
+	@Override
+	protected String[] headersForGroup(boolean groupGeneratorDefined) {
+		if (groupGeneratorDefined) {
+			return new String[]{"group"};
+		} else {
+			return new String[]{};
+		}
+	}
+	
+	@Override
+	protected void calcAllResultsForInput(
+		InputBound<T,SharedStateExportFeaturesWithStore<S>> input,
+		Optional<String> groupGeneratorName
+	) throws OperationFailedException {
 		try {
 			ResultsVector results = calcResultsVectorForInputObject(
-				params.getInputObject(),
-				params.getSharedState().getFeatureStore(),
-				params.context()
+				input.getInputObject(),
+				input.getSharedState().getFeatureStore(),
+				input.context()
 			);
 			
-			params.getSharedState().addResultsFor(
-				identifierFor( params.getInputObject() ),
+			input.getSharedState().addResultsFor(
+				identifierFor(input.getInputObject().descriptiveName(), groupGeneratorName),
 				results
 			);
 			
-		} catch (OperationFailedException | BeanDuplicateException | FeatureCalcException e) {
-			throw new JobExecutionException(e);
+		} catch (BeanDuplicateException | FeatureCalcException e) {
+			throw new OperationFailedException(e);
 		}
 	}
 	
@@ -135,22 +138,13 @@ public abstract class ExportFeaturesStoreTask<T extends InputFromManager, S exte
 		BoundIOContext context
 	) throws FeatureCalcException;
 	
-	private StringLabelsForCsvRow identifierFor( T inputObject ) throws OperationFailedException {
-		
-		try {
-			Path inputPath = inputObject.pathForBinding().orElseThrow( ()->
-				new OperationFailedException("A binding path is required to be associated with each input for this algorithm, but is not")
-			);
-
-			return new StringLabelsForCsvRow(
-				Optional.of(
-					new String[]{inputObject.descriptiveName()}
-				),
-				extractGroupNameFromGenerator(inputPath, false).map(SimpleName::new)
-			);
-		} catch (AnchorIOException e) {
-			throw new OperationFailedException(e);
-		}
+	private static StringLabelsForCsvRow identifierFor(String descriptiveName, Optional<String> groupGeneratorName) throws OperationFailedException {
+		return new StringLabelsForCsvRow(
+			Optional.of(
+				new String[]{descriptiveName}
+			),
+			groupGeneratorName.map(SimpleName::new)
+		);
 	}
 	
 	public List<NamedBean<FeatureListProvider<S>>> getListFeatures() {
@@ -160,13 +154,5 @@ public abstract class ExportFeaturesStoreTask<T extends InputFromManager, S exte
 	public void setListFeatures(
 			List<NamedBean<FeatureListProvider<S>>> listFeatures) {
 		this.listFeatures = listFeatures;
-	}
-	
-	private String[] headersForGroup() {
-		if (isGroupGeneratorDefined()) {
-			return new String[]{"group"};
-		} else {
-			return new String[]{};
-		}
 	}
 }

@@ -31,15 +31,24 @@ import org.anchoranalysis.feature.input.FeatureInput;
 
 
 import org.anchoranalysis.feature.io.csv.GroupedResultsVectorCollection;
+import org.anchoranalysis.feature.io.csv.MetadataHeaders;
 import org.anchoranalysis.image.feature.session.FeatureTableSession;
+import org.anchoranalysis.io.error.AnchorIOException;
+import org.anchoranalysis.io.output.bound.BoundIOContext;
 import org.anchoranalysis.plugin.image.task.sharedstate.SharedStateExportFeatures;
 
 class SharedStateExportFeaturesObjMask<T extends FeatureInput> extends SharedStateExportFeatures {
 	
 	private FeatureTableSession<T> session;
 	
-	public SharedStateExportFeaturesObjMask( GroupedResultsVectorCollection groupMap, FeatureTableSession<T> session ) {
-		super( groupMap );
+	public SharedStateExportFeaturesObjMask( MetadataHeaders metadataHeaders, FeatureTableSession<T> session, BoundIOContext context ) throws AnchorIOException {
+		super( 
+			new GroupedResultsVectorCollection(
+				metadataHeaders,
+				session.createFeatureNames(),
+				context
+			)		
+		);
 		this.session = session;
 	}
 	public FeatureTableSession<T> getSession() {
