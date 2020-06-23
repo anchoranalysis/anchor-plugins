@@ -37,10 +37,12 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.nrg.NRGStack;
+import org.anchoranalysis.feature.resultsvectorcollection.FeatureInputResults;
 import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
 import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
 import org.anchoranalysis.image.feature.objmask.pair.FeatureInputPairObjs;
 import org.anchoranalysis.image.feature.stack.FeatureInputStack;
+import org.anchoranalysis.io.bean.filepath.generator.FilePathGeneratorConstant;
 import org.anchoranalysis.plugin.image.feature.bean.obj.table.FeatureTableObjs;
 import org.anchoranalysis.plugin.image.feature.bean.obj.table.MergedPairs;
 import org.anchoranalysis.plugin.image.feature.bean.obj.table.Simple;
@@ -55,6 +57,7 @@ class ExportFeaturesObjMaskTaskFixture {
 	private static final String PATH_FEATURES_PAIR_DEFAULT = "pairFeatures.xml";
 	private static final String PATH_FEATURES_IMAGE_DEFAULT = "imageFeatures.xml";
 	private static final String PATH_FEATURES_SHARED_DEFAULT = "sharedFeatures.xml";
+	private static final String PATH_FEATURES_AGGREGATED_DEFAULT = "aggregatedFeatures.xml";
 	
 	private NRGStack nrgStack = createNRGStack(true);
 	private FeatureTableObjs<?> flexiFeatureTable = new Simple();
@@ -66,6 +69,9 @@ class ExportFeaturesObjMaskTaskFixture {
 	
 	/** The features used for the shared-feature set */
 	private LoadFeatureListProviderFixture<FeatureInput> sharedFeatures;
+	
+	/** The features used for aggregating results */
+	private LoadFeatureListProviderFixture<FeatureInputResults> aggregatedFeatures;
 	
 	/**
 	 * Constructor
@@ -83,6 +89,7 @@ class ExportFeaturesObjMaskTaskFixture {
 		this.pairFeatures = new LoadFeatureListProviderFixture<>(loader, PATH_FEATURES_PAIR_DEFAULT);
 		this.imageFeatures = new LoadFeatureListProviderFixture<>(loader, PATH_FEATURES_IMAGE_DEFAULT);
 		this.sharedFeatures = new LoadFeatureListProviderFixture<>(loader, PATH_FEATURES_SHARED_DEFAULT);
+		this.aggregatedFeatures = new LoadFeatureListProviderFixture<>(loader, PATH_FEATURES_AGGREGATED_DEFAULT);
 	}
 	
 	/** 
@@ -156,12 +163,16 @@ class ExportFeaturesObjMaskTaskFixture {
 		task.setListFeaturesObjMask(
 			singleFeatures.asListNamedBeansProvider()
 		);
+		task.setListFeaturesAggregate(
+			aggregatedFeatures.asListNamedBeansProvider()
+		);
 		task.setDefine(
 			DefineFixture.create(
 				nrgStack,
 				Optional.of(sharedFeatures.asListNamedBeansProvider())
 			)		
 		);
+		task.setGroup( new FilePathGeneratorConstant("arbitraryGroup") );
 		task.setTable( (FeatureTableObjs<T>) flexiFeatureTable);
 		task.setListObjMaskProvider(
 			createObjProviders(MultiInputFixture.OBJS_NAME)

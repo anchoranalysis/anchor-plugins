@@ -58,7 +58,7 @@ public class Simple extends FeatureTableObjs<FeatureInputSingleObj> {
 			boolean suppressErrors
 	) throws CreateException {
 		NamedFeatureStore<FeatureInputSingleObj> namedFeatures = storeFactory.createNamedFeatureList(list);
-		return new NamedFeatureStoreSession<>(namedFeatures);
+		return new NamedFeatureStoreSession(namedFeatures);
 	}
 
 	@Override

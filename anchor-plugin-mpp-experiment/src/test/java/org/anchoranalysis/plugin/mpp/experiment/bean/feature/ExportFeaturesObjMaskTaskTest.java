@@ -78,14 +78,16 @@ public class ExportFeaturesObjMaskTaskTest {
 	private static final String OUTPUT_DIR_IRRELEVANT = "irrelevant/";
 	
 	private static final String[] OUTPUTS_TO_COMPARE = {
-		"csvAgg.csv",
-		"csvAll.csv",
-		"arbitraryPath/objsTest/csvGroup.csv",
+		"featuresAggregated.csv",
+		"features.csv",
+		"grouped/arbitraryGroup/featuresGroup.csv",
 		"stackCollection/input.tif",
 		"nrgStack/nrgStack_00.tif",
+		"nrgStack/nrgStack_01.tif",
+		"nrgStack/nrgStack_02.tif",
 		"manifest.ser.xml",
 		"nrgStackParams.xml",
-		"arbitraryPath/objsTest/paramsGroupAgg.xml",
+		"grouped/arbitraryGroup/featuresAggregatedGroup.xml",
 		"objMaskCollection/objsTest.h5"
 	};
 		

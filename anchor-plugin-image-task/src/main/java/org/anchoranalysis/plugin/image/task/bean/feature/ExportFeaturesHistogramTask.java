@@ -87,7 +87,12 @@ public class ExportFeaturesHistogramTask extends ExportFeaturesStoreTask<FileInp
 	public InputTypesExpected inputTypesExpected() {
 		return new InputTypesExpected(FileInput.class);
 	}
-		
+	
+	@Override
+	protected boolean includeGroupInExperiment() {
+		return isGroupGeneratorDefined();
+	}
+	
 	@Override
 	protected ResultsVector calcResultsVectorForInputObject(
 		FileInput inputObject,
@@ -178,4 +183,5 @@ public class ExportFeaturesHistogramTask extends ExportFeaturesStoreTask<FileInp
 	public void setHistogramProvider(HistogramProvider histogramProvider) {
 		this.histogramProvider = histogramProvider;
 	}
+
 }
