@@ -27,15 +27,78 @@ package org.anchoranalysis.plugin.mpp.experiment.bean.feature;
  */
 
 import java.util.List;
-import java.util.function.BiConsumer;
+import java.util.function.Function;
+
+import org.anchoranalysis.core.error.CreateException;
+import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.calc.results.ResultsVector;
 import org.anchoranalysis.feature.input.FeatureInput;
+import org.anchoranalysis.feature.io.csv.StringLabelsForCsvRow;
+import org.anchoranalysis.feature.nrg.NRGStackWithParams;
+import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
 import org.anchoranalysis.image.feature.session.FeatureTableSession;
+import org.anchoranalysis.image.init.ImageInitParams;
+import org.anchoranalysis.image.objectmask.ObjectCollection;
+import org.anchoranalysis.plugin.image.feature.bean.obj.table.FeatureTableObjs;
+import org.anchoranalysis.plugin.image.task.sharedstate.SharedStateExportFeatures;
 
-class FeatureCalculator {
+class FeatureCalculator<T extends FeatureInput> {
+
+	private FeatureTableObjs<T> table;
+	private SharedStateExportFeatures sharedState;
+	private boolean suppressErrors;
+	private LogErrorReporter logger;
+	
+	public FeatureCalculator(FeatureTableObjs<T> table, SharedStateExportFeatures sharedState, boolean suppressErrors, LogErrorReporter logger) {
+		super();
+		this.table = table;
+		this.sharedState = sharedState;
+		this.suppressErrors = suppressErrors;
+		this.logger = logger;
+	}
+	
+	public void processProvider(
+		ObjMaskProvider provider,
+		FeatureTableSession<T> session,
+		ImageInitParams imageInitParams,
+		NRGStackWithParams nrgStack,
+		Function<String, StringLabelsForCsvRow> identifierFromObjName
+	) throws OperationFailedException {
+		calculateFeaturesForProvider(
+			objsFromProvider(provider, imageInitParams, logger),
+			session,
+			nrgStack,
+			identifierFromObjName
+		);		
+	}
+	
+	private void calculateFeaturesForProvider(
+		ObjectCollection objs,
+		FeatureTableSession<T> session,
+		NRGStackWithParams nrgStack,
+		Function<String, StringLabelsForCsvRow> identifierFromObjName
+	) throws OperationFailedException {
+		try {
+			List<T> listParams = table.createListInputs(
+				objs,
+				nrgStack,
+				logger
+			);
+			
+			calculateManyFeaturesInto(
+				session,
+				listParams,
+				identifierFromObjName,
+				suppressErrors,
+				logger
+			);
+		} catch (CreateException | OperationFailedException e) {
+			throw new OperationFailedException(e);
+		}
+	}
 	
 	/**
 	 * Calculates a bunch of features with an objectID (unique) and a groupID and adds them to the stored-results
@@ -50,10 +113,10 @@ class FeatureCalculator {
 	 * @param logger the log
 	 * @throws OperationFailedException
 	 */
-	public static <T extends FeatureInput> void calculateManyFeaturesInto(
+	private void calculateManyFeaturesInto(
 		FeatureTableSession<T> session,
 		List<T> listInputs,
-		BiConsumer<ResultsVector,String> resultsConsumer,
+		Function<String, StringLabelsForCsvRow> identifierFromObjName,
 		boolean suppressErrors,
 		LogErrorReporter logger
 	) throws OperationFailedException {
@@ -66,13 +129,29 @@ class FeatureCalculator {
 				logger.getLogReporter().logFormatted("Calculating input %d of %d: %s", i+1, listInputs.size(), input.toString() );
 				
 				ResultsVector rv = suppressErrors ? session.calcSuppressErrors(input, logger.getErrorReporter()) : session.calc(input);
-				resultsConsumer.accept(
-					rv,
-					session.uniqueIdentifierFor(input)
+				String objName = session.uniqueIdentifierFor(input);
+				sharedState.addResultsFor(
+					identifierFromObjName.apply(objName),
+					rv
 				);
 			}
 			
 		} catch (FeatureCalcException e) {
+			throw new OperationFailedException(e);
+		}
+	}
+	
+	private static ObjectCollection objsFromProvider( ObjMaskProvider provider, ImageInitParams imageInitParams, LogErrorReporter logErrorReporter ) throws OperationFailedException {
+
+		try {
+			ObjMaskProvider objMaskProviderLoc = provider.duplicateBean();
+			
+			// Initialise
+			objMaskProviderLoc.initRecursive(imageInitParams, logErrorReporter);
+	
+			return objMaskProviderLoc.create(); 
+			
+		} catch (InitException | CreateException e) {
 			throw new OperationFailedException(e);
 		}
 	}
