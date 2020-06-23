@@ -47,15 +47,26 @@ import org.anchoranalysis.plugin.image.task.sharedstate.SharedStateExportFeature
 
 class FeatureCalculator<T extends FeatureInput> {
 
-	private FeatureTableObjs<T> table;
-	private SharedStateExportFeatures sharedState;
-	private boolean suppressErrors;
-	private LogErrorReporter logger;
+	private final FeatureTableObjs<T> table;
+	private final SharedStateExportFeatures sharedState;
+	private final ImageInitParams imageInitParams;
+	private final NRGStackWithParams nrgStack;
+	private final boolean suppressErrors;
+	private final LogErrorReporter logger;
 	
-	public FeatureCalculator(FeatureTableObjs<T> table, SharedStateExportFeatures sharedState, boolean suppressErrors, LogErrorReporter logger) {
+	public FeatureCalculator(
+		FeatureTableObjs<T> table,
+		SharedStateExportFeatures sharedState,
+		ImageInitParams imageInitParams,
+		NRGStackWithParams nrgStack,
+		boolean suppressErrors,
+		LogErrorReporter logger
+	) {
 		super();
 		this.table = table;
 		this.sharedState = sharedState;
+		this.imageInitParams = imageInitParams;
+		this.nrgStack = nrgStack;
 		this.suppressErrors = suppressErrors;
 		this.logger = logger;
 	}
@@ -63,8 +74,6 @@ class FeatureCalculator<T extends FeatureInput> {
 	public void processProvider(
 		ObjMaskProvider provider,
 		FeatureTableSession<T> session,
-		ImageInitParams imageInitParams,
-		NRGStackWithParams nrgStack,
 		Function<String, StringLabelsForCsvRow> identifierFromObjName
 	) throws OperationFailedException {
 		calculateFeaturesForProvider(

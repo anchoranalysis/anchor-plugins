@@ -89,8 +89,8 @@ public class ExportFeaturesHistogramTask extends ExportFeaturesStoreTask<FileInp
 	}
 	
 	@Override
-	protected boolean includeGroupInExperiment() {
-		return isGroupGeneratorDefined();
+	protected boolean includeGroupInExperiment(boolean groupGeneratorDefined) {
+		return groupGeneratorDefined;
 	}
 	
 	@Override
