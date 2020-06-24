@@ -2,6 +2,8 @@ package org.anchoranalysis.plugin.mpp.sgmn.cfg.bean.optscheme;
 
 
 
+import java.util.Optional;
+
 import org.anchoranalysis.anchor.mpp.feature.mark.ListUpdatableMarkSetCollection;
 
 /*
@@ -39,7 +41,7 @@ import org.anchoranalysis.mpp.sgmn.bean.optscheme.OptScheme;
 import org.anchoranalysis.mpp.sgmn.kernel.KernelCalcContext;
 import org.anchoranalysis.mpp.sgmn.kernel.KernelCalcNRGException;
 import org.anchoranalysis.mpp.sgmn.optscheme.ExtractScoreSize;
-import org.anchoranalysis.mpp.sgmn.optscheme.OptSchemeInitContext;
+import org.anchoranalysis.mpp.sgmn.optscheme.OptSchemeContext;
 import org.anchoranalysis.mpp.sgmn.optscheme.OptTerminatedEarlyException;
 import org.anchoranalysis.mpp.sgmn.optscheme.feedback.FeedbackReceiver;
 
@@ -68,7 +70,7 @@ public class OptSchemeUnifPerm<S> extends OptScheme<S,S> {
 		KernelProposer<S> kernelProposer,
 		ListUpdatableMarkSetCollection updatableMarkSetCollection,
 		FeedbackReceiver<S> feedbackReceiver,
-		OptSchemeInitContext initContext
+		OptSchemeContext initContext
 	) throws OptTerminatedEarlyException {
 		
 		S best = null;
@@ -79,15 +81,18 @@ public class OptSchemeUnifPerm<S> extends OptScheme<S,S> {
 			kernelProposer.initBeforeCalc(context);
 			
 			for( int i=0; i<this.numItr; i++) {
-				S cfgNRG = kernelProposer.getInitialKernel().makeProposal(null, context);
+				Optional<S> cfgNRG = kernelProposer.getInitialKernel().makeProposal(
+					Optional.empty(),
+					context
+				);
 				
-				if (cfgNRG==null) {
+				if (!cfgNRG.isPresent()) {
 					continue;
 				}
 				
 				// We find the maximum
-				if( best==null || extractScore(cfgNRG) > extractScore(best) ) {
-					best = cfgNRG;
+				if( best==null || extractScore(cfgNRG.get()) > extractScore(best) ) {
+					best = cfgNRG.get();
 				}
 			}
 		} catch (KernelCalcNRGException | InitException e) {

@@ -27,6 +27,7 @@ package org.anchoranalysis.plugin.io.bean.chnl.map;
  */
 
 import java.util.List;
+import java.util.Optional;
 
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.io.bean.chnl.map.ImgChnlMapCreator;
@@ -39,14 +40,14 @@ public class ImgChnlMapFromMetadata extends ImgChnlMapCreator {
 	@Override
 	public ImgChnlMap createMap(OpenedRaster openedRaster) throws CreateException {
 
-		List<String> names = openedRaster.channelNames();
-		if (names == null) {
+		Optional<List<String>> names = openedRaster.channelNames();
+		if (!names.isPresent()) {
 			throw new CreateException("No channels names are associated with the openedRaster");
 		}
 
 		ImgChnlMap map = new ImgChnlMap();
-		for (int i = 0; i < names.size(); i++) {
-			map.add(new ImgChnlMapEntry(names.get(i), i));
+		for (int i = 0; i < names.get().size(); i++) {
+			map.add(new ImgChnlMapEntry(names.get().get(i), i));
 		}
 
 		return map;

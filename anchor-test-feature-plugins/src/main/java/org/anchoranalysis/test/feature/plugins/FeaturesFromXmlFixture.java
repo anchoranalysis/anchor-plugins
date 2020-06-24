@@ -42,8 +42,7 @@ import org.anchoranalysis.test.TestLoader;
 
 public class FeaturesFromXmlFixture {
 	
-	private FeaturesFromXmlFixture() {
-	}
+	private FeaturesFromXmlFixture() {}
 	
 	public static <T extends FeatureInput> FeatureList<T> createFeatureList(String xmlPath, TestLoader loader) throws CreateException {
 		Path pathStatic = loader.resolveTestPath(xmlPath);

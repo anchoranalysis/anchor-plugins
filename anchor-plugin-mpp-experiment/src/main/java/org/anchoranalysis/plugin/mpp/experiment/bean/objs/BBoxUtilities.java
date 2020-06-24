@@ -30,27 +30,27 @@ import java.nio.ByteBuffer;
 
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.extent.BoundingBox;
-import org.anchoranalysis.image.objmask.ObjMask;
+import org.anchoranalysis.image.objectmask.ObjectMask;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.anchoranalysis.image.voxel.box.factory.VoxelBoxFactory;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
 class BBoxUtilities {
 
-	public static ObjMask createObjMaskForBBox( ObjMask om, BoundingBox maybeBiggerBBox ) throws OutputWriteFailedException {
+	public static ObjectMask createObjMaskForBBox( ObjectMask om, BoundingBox maybeBiggerBBox ) throws OutputWriteFailedException {
 
 		assert(maybeBiggerBBox!=null);
 		if (!om.getBoundingBox().equals(maybeBiggerBBox)) {
-			VoxelBox<ByteBuffer> vbLarge = VoxelBoxFactory.instance().getByte().create( maybeBiggerBBox.extent() );
+			VoxelBox<ByteBuffer> vbLarge = VoxelBoxFactory.getByte().create( maybeBiggerBBox.extent() );
 			
 			BoundingBox bbLocal = om.getBoundingBox().relPosToBox(maybeBiggerBBox);
 			
-			ObjMask omRel = new ObjMask( bbLocal, om.binaryVoxelBox() );
+			ObjectMask omRel = new ObjectMask( bbLocal, om.binaryVoxelBox() );
 
 			BinaryValuesByte bvb = BinaryValuesByte.getDefault();
 			vbLarge.setPixelsCheckMask(omRel, bvb.getOnByte() );
 			
-			return new ObjMask( maybeBiggerBBox, vbLarge, bvb );
+			return new ObjectMask( maybeBiggerBBox, vbLarge, bvb );
 		} else {
 			return om;
 		}

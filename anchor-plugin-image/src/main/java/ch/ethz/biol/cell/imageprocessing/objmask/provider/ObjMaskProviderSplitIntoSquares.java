@@ -28,6 +28,7 @@ package ch.ethz.biol.cell.imageprocessing.objmask.provider;
 
 
 import java.nio.ByteBuffer;
+import java.util.Optional;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.Positive;
@@ -36,8 +37,8 @@ import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.bean.provider.ObjMaskProviderOne;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.Extent;
-import org.anchoranalysis.image.objmask.ObjMask;
-import org.anchoranalysis.image.objmask.ObjMaskCollection;
+import org.anchoranalysis.image.objectmask.ObjectMask;
+import org.anchoranalysis.image.objectmask.ObjectCollection;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.anchoranalysis.image.voxel.box.factory.VoxelBoxFactory;
 
@@ -54,26 +55,15 @@ public class ObjMaskProviderSplitIntoSquares extends ObjMaskProviderOne {
 	// END BEAN PROPERTIES
 	
 	@Override
-	public ObjMaskCollection createFromObjs(ObjMaskCollection objsCollection) throws CreateException {
-		
-		ObjMaskCollection out = new ObjMaskCollection();
-		for (ObjMask om : objsCollection) {
-			out.addAll(
-				splitObj(
-					om,
-					squareSize,
-					minNumVoxels
-				)
-			);
-		}
-		return out;
+	public ObjectCollection createFromObjs(ObjectCollection objsCollection) throws CreateException {
+		return objsCollection.stream().flatMap(this::splitObj);
 	}
 	
 	// We want to add in any remaining space at the end into the last object, so we never have a rectangle
 	//  smaller than our squareSDize
-	public static ObjMaskCollection splitObj( ObjMask om, int squareSize, int minNumVoxels ) {
+	private ObjectCollection splitObj( ObjectMask om ) {
 		
-		ObjMaskCollection out = new ObjMaskCollection();
+		ObjectCollection out = new ObjectCollection();
 		
 		Extent e = om.getBoundingBox().extent();
 		
@@ -106,45 +96,58 @@ public class ObjMaskProviderSplitIntoSquares extends ObjMaskProviderOne {
 				if (x==(numX-1)) {
 					endX = Math.min(endX+squareSize,e.getX());
 				}				
-			
-				int extentX = endX-startX;
 				
-				Extent extentNew = new Extent(extentX,extentY,om.getVoxelBox().extent().getZ());
-				BoundingBox srcBox = new BoundingBox(
-					new Point3i(startX,startY,0),
-					extentNew
-				);
-				
-				VoxelBox<ByteBuffer> vbNew = VoxelBoxFactory.instance().getByte().create(extentNew);
-				
-				om.getVoxelBox().copyPixelsTo(srcBox, vbNew, new BoundingBox(extentNew));
-				
-				// We only add the square if there's at least one voxel in it
-				if (minNumVoxels==1) {
-					if (!vbNew.hasEqualTo(om.getBinaryValues().getOnInt())) {
-						continue;
-					}
-				} else {
-					int cntOn = vbNew.countEqual(om.getBinaryValues().getOnInt());
-					if (cntOn<minNumVoxels) {
-						continue;
-					}
-				}
-					
-				// Now we add our box to the collection
-				srcBox = srcBox.shiftBy(
-					om.getBoundingBox().getCrnrMin()
-				);
-				
-				out.add(
-					new ObjMask(srcBox, vbNew, om.getBinaryValuesByte())
-				);
+				createSquare(om, startX, startY, endX-startX, extentY).ifPresent(out::add);
 			}
 		}
 		
 		return out;
 	}
-
+	
+	private Optional<ObjectMask> createSquare(ObjectMask objToSplit, int startX, int startY, int extentX, int extentY) {
+		
+		Extent extentNew = new Extent(
+			extentX,
+			extentY,
+			objToSplit.getVoxelBox().extent().getZ()
+		);
+		BoundingBox srcBox = new BoundingBox(
+			new Point3i(startX,startY,0),
+			extentNew
+		);
+		
+		// A voxel-box for the new square
+		VoxelBox<ByteBuffer> vbNew = VoxelBoxFactory.getByte().create(extentNew);
+		
+		// Copy in mask-values from the source
+		objToSplit.getVoxelBox().copyPixelsTo(srcBox, vbNew, new BoundingBox(extentNew));
+		
+		// We only add the square if there's at least one voxel in it
+		if (!acceptSquare(vbNew,objToSplit.getBinaryValues().getOnInt())) {
+			return Optional.empty();
+		}
+		
+		return Optional.of(
+			new ObjectMask(
+					srcBox.shiftBy(
+					objToSplit.getBoundingBox().getCrnrMin()
+				),
+				vbNew,
+				objToSplit.getBinaryValuesByte()
+			)
+		);
+	}
+	
+	private boolean acceptSquare(VoxelBox<ByteBuffer> vbNew, int maskOnValue) {
+		// We only add the square if there's at least one voxel in it
+		if (minNumVoxels==1) {
+			return vbNew.hasEqualTo(maskOnValue);
+		} else {
+			int cntOn = vbNew.countEqual(maskOnValue);
+			return (cntOn>=minNumVoxels);
+		}
+	}
+	
 	public int getSquareSize() {
 		return squareSize;
 	}

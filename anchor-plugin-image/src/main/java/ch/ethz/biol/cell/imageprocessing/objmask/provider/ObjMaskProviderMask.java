@@ -32,8 +32,8 @@ package ch.ethz.biol.cell.imageprocessing.objmask.provider;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.binary.BinaryChnl;
 import org.anchoranalysis.image.binary.logical.BinaryChnlAnd;
-import org.anchoranalysis.image.objmask.ObjMask;
-import org.anchoranalysis.image.objmask.ObjMaskCollection;
+import org.anchoranalysis.image.objectmask.ObjectMask;
+import org.anchoranalysis.image.objectmask.ObjectCollection;
 
 /**
  * Applies a binary-mask to the object-collection possibly masking each individual object
@@ -47,17 +47,17 @@ import org.anchoranalysis.image.objmask.ObjMaskCollection;
 public class ObjMaskProviderMask extends ObjMaskProviderMaskBase {
 
 	@Override
-	protected ObjMaskCollection createFromObjs(ObjMaskCollection objsIn, BinaryChnl mask) throws CreateException {
-		for( ObjMask om : objsIn ) {
+	protected ObjectCollection createFromObjs(ObjectCollection objsIn, BinaryChnl mask) throws CreateException {
+		for( ObjectMask om : objsIn ) {
 			applyMask(om, mask);
 		}
 		return objsIn;
 	}
 	
-	private static void applyMask( ObjMask om, BinaryChnl mask ) throws CreateException {
+	private static void applyMask( ObjectMask om, BinaryChnl mask ) throws CreateException {
 		
-		// Just the portion of the mask that matches the obunding box of our object
-		ObjMask maskObj = mask.createMaskAvoidNew(om.getBoundingBox());
+		// Just the portion of the mask that matches the bounding box of our object
+		ObjectMask maskObj = mask.region(om.getBoundingBox(), true);
 		
 		BinaryChnlAnd.apply(
 			om.binaryVoxelBox().getVoxelBox(),

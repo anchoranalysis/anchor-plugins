@@ -41,8 +41,9 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.extent.ImageDim;
-import org.anchoranalysis.image.objmask.ObjMask;
-import org.anchoranalysis.image.objmask.ObjMaskCollection;
+import org.anchoranalysis.image.objectmask.ObjectMask;
+import org.anchoranalysis.image.objectmask.ObjectCollection;
+import org.anchoranalysis.image.objectmask.ObjectCollectionFactory;
 
 import ch.ethz.biol.cell.imageprocessing.objmask.provider.assignobjstocfg.RslvdEllipsoid;
 import ch.ethz.biol.cell.imageprocessing.objmask.provider.assignobjstocfg.RslvdEllipsoidList;
@@ -76,7 +77,7 @@ public class ObjMaskProviderAssignObjsToCfg extends ObjMaskProviderDimensions {
 	private int regionID = 0;
 	
 	@Override
-	public ObjMaskCollection createFromObjs( ObjMaskCollection objsCollection ) throws CreateException {
+	public ObjectCollection createFromObjs( ObjectCollection objsCollection ) throws CreateException {
 		
 		Cfg cfg = cfgProvider.create();
 		ImageDim dim = createDim();
@@ -85,10 +86,10 @@ public class ObjMaskProviderAssignObjsToCfg extends ObjMaskProviderDimensions {
 		if (cfg.size()==0) {
 			// There are no ellipsoids to assign to, exit early making all objs unassigned
 			if (objsOutUnassigned!=null) {
-				ObjMaskCollection objsOutUnassignedCollection = objsOutUnassigned.create();
+				ObjectCollection objsOutUnassignedCollection = objsOutUnassigned.create();
 				objsOutUnassignedCollection.addAll(objsCollection);
 			}
-			return new ObjMaskCollection();
+			return ObjectCollectionFactory.empty();
 		}
 		
 		
@@ -133,7 +134,7 @@ public class ObjMaskProviderAssignObjsToCfg extends ObjMaskProviderDimensions {
 		}
 		
 		if (objsOutUnassigned!=null) {
-			ObjMaskCollection objsOutUnassignedCollection = objsOutUnassigned.create();
+			ObjectCollection objsOutUnassignedCollection = objsOutUnassigned.create();
 			listObjs.addAllTo(objsOutUnassignedCollection);
 		}
 		
@@ -146,9 +147,9 @@ public class ObjMaskProviderAssignObjsToCfg extends ObjMaskProviderDimensions {
 		return listEllipsoids.createMergedObjsForIncluded();
 	}
 
-	private static RslvdObjMaskList createRslvdObjMaskList( ObjMaskCollection objs ) {
+	private static RslvdObjMaskList createRslvdObjMaskList( ObjectCollection objs ) {
 		RslvdObjMaskList out = new RslvdObjMaskList();
-		for( ObjMask om : objs ) {
+		for( ObjectMask om : objs ) {
 			out.add( new RslvdObjMask(om) );
 		}
 		return out;

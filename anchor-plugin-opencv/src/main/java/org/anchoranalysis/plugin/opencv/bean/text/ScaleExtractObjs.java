@@ -27,12 +27,10 @@ package org.anchoranalysis.plugin.opencv.bean.text;
  */
 
 import java.util.List;
-import java.util.stream.Collectors;
-
-import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.interpolator.InterpolatorFactory;
-import org.anchoranalysis.image.objmask.ObjMask;
-import org.anchoranalysis.image.objmask.ObjMaskCollection;
+import org.anchoranalysis.image.objectmask.ObjectMask;
+import org.anchoranalysis.image.objectmask.ObjectCollection;
+import org.anchoranalysis.image.objectmask.ObjectCollectionFactory;
 import org.anchoranalysis.image.scale.ScaleFactor;
 import org.anchoranalysis.plugin.opencv.nonmaxima.WithConfidence;
 
@@ -44,28 +42,20 @@ import org.anchoranalysis.plugin.opencv.nonmaxima.WithConfidence;
  */
 class ScaleExtractObjs {
 
-	public static ObjMaskCollection apply( List<WithConfidence<ObjMask>> list, ScaleFactor sf ) {
-		ObjMaskCollection objs = extractObjs(list);
+	private ScaleExtractObjs() {}
+	
+	public static ObjectCollection apply( List<WithConfidence<ObjectMask>> list, ScaleFactor sf ) {
+		ObjectCollection objs = extractObjs(list);
 		
 		// Scale back to the needed original resolution
-		scaleObjs(objs, sf);
-		
-		return objs;
+		return scaleObjs(objs, sf);
 	}
 	
-	private static ObjMaskCollection extractObjs( List<WithConfidence<ObjMask>> list ) {
-		return new ObjMaskCollection(
-			list.stream()
-				.map( wc->wc.getObj() )
-				.collect( Collectors.toList() )
-		);
+	private static ObjectCollection extractObjs( List<WithConfidence<ObjectMask>> list ) {
+		return ObjectCollectionFactory.mapFrom(list, WithConfidence::getObj);
 	}
 	
-	private static void scaleObjs( ObjMaskCollection objs, ScaleFactor sf ) {
-		try {
-			objs.scale(sf, InterpolatorFactory.getInstance().binaryResizing() );
-		} catch (OperationFailedException e) {
-			assert(false);
-		}
+	private static ObjectCollection scaleObjs( ObjectCollection objs, ScaleFactor sf ) {
+		return objs.scale(sf, InterpolatorFactory.getInstance().binaryResizing() );
 	}
 }

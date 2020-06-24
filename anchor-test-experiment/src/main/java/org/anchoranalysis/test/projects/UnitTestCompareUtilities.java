@@ -1,5 +1,7 @@
 package org.anchoranalysis.test.projects;
 
+import java.util.Optional;
+
 import org.anchoranalysis.test.TestLoader;
 import org.anchoranalysis.test.image.DualComparer;
 
@@ -58,8 +60,12 @@ public class UnitTestCompareUtilities {
 		
 		el.runExperiment(
 			createPathExperiment(experimentName),
-			createPathReplacementInput(pathTestDataFolder),
-			createPathReplacementOutput(pathTestDataFolder)
+			Optional.of(
+				createPathReplacementInput(pathTestDataFolder)
+			),
+			Optional.of(
+				createPathReplacementOutput(pathTestDataFolder)
+			)
 		);
 		
 		String pathOutput = createPathOutput(experimentIdentifierOutput);
@@ -104,8 +110,12 @@ public class UnitTestCompareUtilities {
 		
 		TestLoader testLoaderTemp = el.runExperimentInTemporaryFolder(
 			createPathExperiment(experimentName),
-			createPathReplacementInput(pathTestDataFolder),
-			createPathReplacementOutput(pathTestDataFolder),
+			Optional.of(
+				createPathReplacementInput(pathTestDataFolder)
+			),
+			Optional.of(
+				createPathReplacementOutput(pathTestDataFolder)
+			),
 			folderTemp,
 			subdirectories
 		);

@@ -28,10 +28,12 @@ package org.anchoranalysis.plugin.io.multifile;
 
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
+import java.util.stream.Stream;
 
 import org.anchoranalysis.core.functional.OptionalUtilities;
 
@@ -41,7 +43,7 @@ public class ParsedFilePathBag implements Iterable<FileDetails> {
 
 	// chnlNum and sliceNum can be null, indicating that we don't know the values
 	public void add( FileDetails fileDetails ) {
-		list.add( fileDetails );
+		list.add(fileDetails);
 	}
 
 	public Iterator<FileDetails> iterator() {
@@ -49,57 +51,35 @@ public class ParsedFilePathBag implements Iterable<FileDetails> {
 	}
 	
 	public Optional<IntegerRange> rangeChnlNum() {
-		return range( fd -> fd.getChnlNum() );
+		return range(FileDetails::getChnlNum);
 	}
 	
 	public Optional<IntegerRange> rangeSliceNum() {
-		return range( fd -> fd.getSliceNum() );
+		return range(FileDetails::getSliceNum);
 	}
 	
 	public Optional<IntegerRange> rangeTimeIndex() {
-		return range( fd -> fd.getTimeIndex() );
+		return range(FileDetails::getTimeIndex);
 	}
 		
 	private Optional<IntegerRange> range( Function<FileDetails,Optional<Integer>> func ) {
 		return OptionalUtilities.mapBoth(
-			getMin( func ),
-			getMax( func ),
-			(min, max) -> new IntegerRange(min, max)
+			getMin(func),
+			getMax(func),
+			IntegerRange::new
 		);
 	}
 	
 	private Optional<Integer> getMax( Function<FileDetails,Optional<Integer>> func ) {
-		
-		Optional<Integer> max = Optional.empty();
-		for (FileDetails fd : list) {
-			Optional<Integer> val = func.apply(fd); 
-			
-			if (!val.isPresent()) {
-				continue;
-			}
-			
-			if (!max.isPresent() || val.get()>max.get()) {
-				max = val;
-			}
-		}
-		return max;
+		return fileDetailsStream(func).max(Comparator.naturalOrder());
 	}
 	
 	public Optional<Integer> getMin( Function<FileDetails,Optional<Integer>> func ) {
-		
-		Optional<Integer> min = Optional.empty();
-		for (FileDetails fd : list) {
-			Optional<Integer> val = func.apply(fd);
-			
-			if (!val.isPresent()) {
-				continue;
-			}
-			
-			if (!min.isPresent() || val.get() < min.get()) {
-				min = val;
-			}
-		}
-		return min;
+		return fileDetailsStream(func).min(Comparator.naturalOrder());
+	}
+	
+	private Stream<Integer> fileDetailsStream( Function<FileDetails,Optional<Integer>> func ) {
+		return list.stream().map(func).filter(Optional::isPresent).map(Optional::get);
 	}
 
 	public int size() {

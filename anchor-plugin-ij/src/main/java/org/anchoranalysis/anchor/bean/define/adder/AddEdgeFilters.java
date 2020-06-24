@@ -1,5 +1,7 @@
 package org.anchoranalysis.anchor.bean.define.adder;
 
+
+
 /*-
  * #%L
  * anchor-plugin-ij
@@ -225,5 +227,4 @@ public class AddEdgeFilters extends DefineAdderWithPrefixBean {
 	public void setGaussian(boolean gaussian) {
 		this.gaussian = gaussian;
 	}
-
 }

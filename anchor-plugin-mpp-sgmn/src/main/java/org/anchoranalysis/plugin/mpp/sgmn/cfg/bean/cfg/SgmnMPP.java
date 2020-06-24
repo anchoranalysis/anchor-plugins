@@ -51,7 +51,7 @@ import org.anchoranalysis.core.name.store.NamedProviderStore;
 import org.anchoranalysis.core.params.KeyValueParams;
 import org.anchoranalysis.core.random.RandomNumberGeneratorMersenne;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
-import org.anchoranalysis.image.objmask.ObjMaskCollection;
+import org.anchoranalysis.image.objectmask.ObjectCollection;
 import org.anchoranalysis.image.sgmn.SgmnFailedException;
 import org.anchoranalysis.image.stack.DisplayStack;
 import org.anchoranalysis.image.stack.NamedImgStackCollection;
@@ -65,7 +65,7 @@ import org.anchoranalysis.mpp.sgmn.bean.optscheme.OptScheme;
 import org.anchoranalysis.mpp.sgmn.bean.optscheme.feedback.FeedbackReceiverBean;
 import org.anchoranalysis.mpp.sgmn.bean.optscheme.termination.TriggerTerminationCondition;
 import org.anchoranalysis.mpp.sgmn.optscheme.DualStack;
-import org.anchoranalysis.mpp.sgmn.optscheme.OptSchemeInitContext;
+import org.anchoranalysis.mpp.sgmn.optscheme.OptSchemeContext;
 import org.anchoranalysis.mpp.sgmn.optscheme.OptTerminatedEarlyException;
 import org.anchoranalysis.plugin.mpp.sgmn.cfg.SgmnMPPState;
 
@@ -119,7 +119,7 @@ public class SgmnMPP extends CfgSgmn {
 	@Override
 	public Cfg sgmn(
 		NamedImgStackCollection stackCollection,
-		NamedProvider<ObjMaskCollection> objMaskCollection,
+		NamedProvider<ObjectCollection> objMaskCollection,
 		Optional<KeyValueParams> keyValueParams,
 		BoundIOContext context
 	) throws SgmnFailedException {
@@ -194,7 +194,7 @@ public class SgmnMPP extends CfgSgmn {
 				);
 			}
 					
-			OptSchemeInitContext initContext = new OptSchemeInitContext(
+			OptSchemeContext initContext = new OptSchemeContext(
 				"MPP Sgmn",
 				nrgSchemeShared,
 				dualStack,
@@ -225,7 +225,7 @@ public class SgmnMPP extends CfgSgmn {
 	private CfgWithNrgTotal findOpt(
 		DualStack dualStack,
 		ListUpdatableMarkSetCollection updatableMarkSetCollection,
-		OptSchemeInitContext initContext
+		OptSchemeContext initContext
 	) throws SgmnFailedException {
 		try {
 			CfgNRG cfgNRG = optScheme.findOpt(

@@ -1,5 +1,7 @@
 package org.anchoranalysis.plugin.mpp.sgmn.cfg.bean.optscheme.kernelbridge;
 
+import java.util.Optional;
+
 /*-
  * #%L
  * anchor-plugin-mpp-sgmn
@@ -29,7 +31,7 @@ package org.anchoranalysis.plugin.mpp.sgmn.cfg.bean.optscheme.kernelbridge;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.mpp.sgmn.transformer.StateTransformer;
 import org.anchoranalysis.mpp.sgmn.transformer.StateTransformerBean;
-import org.anchoranalysis.plugin.mpp.sgmn.cfg.bean.optscheme.mode.TransformIfNotNull;
+import org.anchoranalysis.plugin.mpp.sgmn.cfg.bean.optscheme.mode.TransformMapOptional;
 
 public class KernelStateBridgeTransformer<U,T> extends KernelStateBridge<U, T> {
 
@@ -43,13 +45,13 @@ public class KernelStateBridgeTransformer<U,T> extends KernelStateBridge<U, T> {
 	// END BEAN PROPERTIES
 	
 	@Override
-	public StateTransformer<U, T> kernelToState() {
-		return new TransformIfNotNull<>(transformerKernelToState);
+	public StateTransformer<Optional<U>, Optional<T>> kernelToState() {
+		return new TransformMapOptional<>(transformerKernelToState);
 	}
 
 	@Override
-	public StateTransformer<T, U> stateToKernel() {
-		return new TransformIfNotNull<>(transformerStateToKernel);
+	public StateTransformer<Optional<T>, Optional<U>> stateToKernel() {
+		return new TransformMapOptional<>(transformerStateToKernel);
 	}
 
 	public StateTransformerBean<U, T> getTransformerKernelToState() {

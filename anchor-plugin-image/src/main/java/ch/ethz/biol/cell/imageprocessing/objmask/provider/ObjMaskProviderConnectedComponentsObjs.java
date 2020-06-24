@@ -32,9 +32,9 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.bean.provider.ObjMaskProviderOne;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
-import org.anchoranalysis.image.objmask.ObjMask;
-import org.anchoranalysis.image.objmask.ObjMaskCollection;
-import org.anchoranalysis.image.objmask.factory.CreateFromConnectedComponentsFactory;
+import org.anchoranalysis.image.objectmask.ObjectMask;
+import org.anchoranalysis.image.objectmask.ObjectCollection;
+import org.anchoranalysis.image.objectmask.factory.CreateFromConnectedComponentsFactory;
 
 /**
  * Ensures each obj in a collection is a connected-component, decomposing it if necessary
@@ -52,37 +52,30 @@ public class ObjMaskProviderConnectedComponentsObjs extends ObjMaskProviderOne {
 	// END BEAN PROPERTIES
 	
 	@Override
-	public ObjMaskCollection createFromObjs(ObjMaskCollection objsCollection) throws CreateException {
-		
-		ObjMaskCollection out = new ObjMaskCollection();
+	public ObjectCollection createFromObjs(ObjectCollection objsCollection) throws CreateException {
 				
 		CreateFromConnectedComponentsFactory createObjMasks = new CreateFromConnectedComponentsFactory(bigNghb, 1);
-				
-		for( ObjMask om : objsCollection ) {
-			ObjMaskCollection omConnected = createObjs3D( om, createObjMasks );
-			out.addAll(omConnected);
-		}
 		
-		return out;
+		return objsCollection.stream().flatMapWithException(
+			CreateException.class,
+			om -> createObjs3D(om, createObjMasks)
+		);
 	}
 	
-	private ObjMaskCollection createObjs3D(
-		ObjMask omUnconnected,
+	private ObjectCollection createObjs3D(
+		ObjectMask omUnconnected,
 		CreateFromConnectedComponentsFactory createObjMasks
 	) throws CreateException {
 		
-		ObjMaskCollection objs = createObjsFromMask( omUnconnected.binaryVoxelBox(), createObjMasks );
+		ObjectCollection objs = createObjsFromMask( omUnconnected.binaryVoxelBox(), createObjMasks );
 		
 		// Adjust the crnr of each object, by adding on the original starting point of our object-mask
-		for( ObjMask omConnected : objs ) {
-			omConnected.shiftBy(
-				omUnconnected.getBoundingBox().getCrnrMin()
-			);
-		}
-		return objs;
+		return objs.shiftBy(
+			omUnconnected.getBoundingBox().getCrnrMin()
+		);
 	}
 	
-	private ObjMaskCollection createObjsFromMask( BinaryVoxelBox<ByteBuffer> vb, CreateFromConnectedComponentsFactory createObjMasks ) throws CreateException {
+	private ObjectCollection createObjsFromMask( BinaryVoxelBox<ByteBuffer> vb, CreateFromConnectedComponentsFactory createObjMasks ) throws CreateException {
 		return createObjMasks.createConnectedComponents(vb );
 	}
 

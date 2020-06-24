@@ -31,9 +31,8 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.bean.provider.BinaryChnlProvider;
 import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
-import org.anchoranalysis.image.binary.BinaryChnl;
-import org.anchoranalysis.image.objmask.ObjMask;
-import org.anchoranalysis.image.objmask.ObjMaskCollection;
+import org.anchoranalysis.image.objectmask.ObjectCollection;
+import org.anchoranalysis.image.objectmask.ObjectCollectionFactory;
 
 public class ObjMaskProviderFromBinaryChnl extends ObjMaskProvider {
 
@@ -43,15 +42,10 @@ public class ObjMaskProviderFromBinaryChnl extends ObjMaskProvider {
 	// END BEAN PROPERTIES
 	
 	@Override
-	public ObjMaskCollection create() throws CreateException {
-
-		ObjMaskCollection omc = new ObjMaskCollection();
-		
-		BinaryChnl chnl = binaryChnl.create();
-		
-		omc.add( new ObjMask( chnl.binaryVoxelBox() ) );
-		
-		return omc;
+	public ObjectCollection create() throws CreateException {
+		return ObjectCollectionFactory.from(
+			binaryChnl.create()
+		);
 	}
 
 	public BinaryChnlProvider getBinaryChnl() {

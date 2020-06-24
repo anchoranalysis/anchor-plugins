@@ -32,8 +32,8 @@ import java.util.List;
 import org.anchoranalysis.bean.NamedBean;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.image.chnl.Chnl;
-import org.anchoranalysis.plugin.image.task.grouped.ChnlSource;
+import org.anchoranalysis.image.channel.Channel;
+import org.anchoranalysis.plugin.image.task.grouped.ChannelSource;
 import org.anchoranalysis.plugin.image.task.grouped.NamedChnl;
 
 import ch.ethz.biol.cell.imageprocessing.chnl.provider.ChnlProviderStackReference;
@@ -53,7 +53,7 @@ public class SelectSpecificAndRename extends SelectChnlsFromStacks {
 	// END BEAN PROPERTIES
 
 	@Override
-	public List<NamedChnl> selectChnls( ChnlSource source, boolean checkType ) throws OperationFailedException {
+	public List<NamedChnl> selectChnls( ChannelSource source, boolean checkType ) throws OperationFailedException {
 		
 		List<NamedChnl> out = new ArrayList<>();
 		
@@ -67,11 +67,11 @@ public class SelectSpecificAndRename extends SelectChnlsFromStacks {
 		return out;
 	}
 	
-	private static NamedChnl chnlFromRef( NamedBean<ChnlProviderStackReference> nb, ChnlSource source, boolean checkType ) throws OperationFailedException {
+	private static NamedChnl chnlFromRef( NamedBean<ChnlProviderStackReference> nb, ChannelSource source, boolean checkType ) throws OperationFailedException {
 		
 		ChnlProviderStackReference ref = nb.getItem();
 		
-		Chnl chnl = source.extractChnl(
+		Channel chnl = source.extractChnl(
 			ref.getStackProviderID(),
 			checkType,
 			ref.getChnlIndex()

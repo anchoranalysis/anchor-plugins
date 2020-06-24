@@ -28,7 +28,6 @@ package anchor.plugin.ij.task;
 
 
 import java.nio.ByteBuffer;
-
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
@@ -36,15 +35,15 @@ import org.anchoranalysis.core.index.GetOperationFailedException;
 import org.anchoranalysis.core.progress.ProgressReporter;
 import org.anchoranalysis.core.progress.ProgressReporterNull;
 import org.anchoranalysis.experiment.JobExecutionException;
-import org.anchoranalysis.image.chnl.Chnl;
+import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.experiment.bean.task.RasterTask;
 import org.anchoranalysis.image.experiment.identifiers.ImgStackIdentifiers;
 import org.anchoranalysis.image.io.RasterIOException;
 import org.anchoranalysis.image.io.generator.raster.ChnlGenerator;
 import org.anchoranalysis.image.io.input.NamedChnlsInput;
 import org.anchoranalysis.image.io.input.series.NamedChnlCollectionForSeries;
-import org.anchoranalysis.image.stack.region.chnlconverter.ChnlConverter;
-import org.anchoranalysis.image.stack.region.chnlconverter.ChnlConverterToUnsignedByte;
+import org.anchoranalysis.image.stack.region.chnlconverter.ChannelConverter;
+import org.anchoranalysis.image.stack.region.chnlconverter.ChannelConverterToUnsignedByte;
 import org.anchoranalysis.image.stack.region.chnlconverter.ConversionPolicy;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
@@ -83,9 +82,13 @@ public class BackgroundSubtractShortTask extends RasterTask {
 		try {
 			NamedChnlCollectionForSeries ncc = inputObject.createChnlCollectionForSeries(0, progressReporter );
 			
-			Chnl inputImage = ncc.getChnlOrNull(ImgStackIdentifiers.INPUT_IMAGE, 0, progressReporter);
+			Channel inputImage = ncc.getChnl(ImgStackIdentifiers.INPUT_IMAGE, 0, progressReporter);
 			
-			Chnl bgSubOut = ChnlProviderIJBackgroundSubtractor.subtractBackground(inputImage, radius, false );
+			Channel bgSubOut = ChnlProviderIJBackgroundSubtractor.subtractBackground(
+				inputImage,
+				radius,
+				false
+			);
 			VoxelBox<?> vbSubOut = bgSubOut.getVoxelBox().any();
 			
 			double maxPixel = vbSubOut.ceilOfMaxPixel();
@@ -97,8 +100,8 @@ public class BackgroundSubtractShortTask extends RasterTask {
 				vbSubOut.multiplyBy(scaleRatio);
 			}
 			
-			ChnlConverter<ByteBuffer> converter = new ChnlConverterToUnsignedByte();
-			Chnl chnlOut = converter.convert(bgSubOut,ConversionPolicy.CHANGE_EXISTING_CHANNEL);
+			ChannelConverter<ByteBuffer> converter = new ChannelConverterToUnsignedByte();
+			Channel chnlOut = converter.convert(bgSubOut,ConversionPolicy.CHANGE_EXISTING_CHANNEL);
 			
 			context.getOutputManager().getWriterCheckIfAllowed().write(
 				"bgsub",

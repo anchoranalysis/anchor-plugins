@@ -29,23 +29,23 @@ package ch.ethz.biol.cell.mpp.nrg.feature.stack;
 import org.anchoranalysis.feature.cache.calculation.ResolvedCalculation;
 import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
 import org.anchoranalysis.image.feature.stack.FeatureInputStack;
-import org.anchoranalysis.image.objmask.ObjMaskCollection;
+import org.anchoranalysis.image.objectmask.ObjectCollection;
 import org.anchoranalysis.plugin.image.feature.obj.pair.CalculateInputFromDelegate;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
-public class CalculateDeriveObjFromCollection extends CalculateInputFromDelegate<FeatureInputSingleObj, FeatureInputStack, ObjMaskCollection> {
+public class CalculateDeriveObjFromCollection extends CalculateInputFromDelegate<FeatureInputSingleObj, FeatureInputStack, ObjectCollection> {
 
 	private int index;
 
-	public CalculateDeriveObjFromCollection(ResolvedCalculation<ObjMaskCollection, FeatureInputStack> ccDelegate,
+	public CalculateDeriveObjFromCollection(ResolvedCalculation<ObjectCollection, FeatureInputStack> ccDelegate,
 			int index) {
 		super(ccDelegate);
 		this.index = index;
 	}
 
 	@Override
-	protected FeatureInputSingleObj deriveFromDelegate(FeatureInputStack input, ObjMaskCollection delegate) {
+	protected FeatureInputSingleObj deriveFromDelegate(FeatureInputStack input, ObjectCollection delegate) {
 		return new FeatureInputSingleObj(
 			delegate.get(index),
 			input.getNrgStackOptional()

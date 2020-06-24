@@ -1,5 +1,7 @@
 package org.anchoranalysis.plugin.mpp.sgmn.cfg.bean.optscheme;
 
+import java.util.Optional;
+
 import org.anchoranalysis.anchor.mpp.mark.set.UpdateMarkSetException;
 
 /*-
@@ -46,7 +48,7 @@ class ConsiderProposalHelper {
 	) throws UpdateMarkSetException {
 		
 		// If the kernel could not propose a new CfgNRG, then we treat this step as rejected
-		if (optStep.hasProposal()) {
+		if (optStep.getProposal().isPresent()) {
 			considerProposal(
 				optStep,
 				iter,
@@ -67,29 +69,31 @@ class ConsiderProposalHelper {
 		TransformationContext context
 	) throws UpdateMarkSetException {
 		
-		T crnt = optStep.getCrnt().orElseThrow( ()->
-			new UpdateMarkSetException("No current item is defined in the optimization")
-		);
+		Optional<T> crnt = optStep.getCrnt();
 		
 		double accptProb = accptProbCalculator.calcAccptProb(
 			optStep.getKernel().getKernel(),
 			crnt,
-			optStep.getProposal(),
+			optStep.getProposal().get(),
 			iter,
 			context.getKernelCalcContext()
 		);
-		double r = context.getKernelCalcContext().proposer().getRe().nextDouble();
+		double r = context.getKernelCalcContext().proposer().getRandomNumberGenerator().nextDouble();
 		
 		// check that the proposal actually contains a change
 		assert !Double.isNaN(accptProb);
 		
 		if (r <= accptProb || !optStep.getBest().isPresent() ) {
+		
+			if (crnt.isPresent()) {
+				assert( !crnt.get().equals(optStep.getProposal().get()) );
+			}
 			
 			// We inform the kernels that we've accepted a CfgNRG
 			kernelUpdater.kernelAccepted(
 				optStep.getKernel().getKernel(),
 				crnt,
-				optStep.getProposal(),
+				optStep.getProposal().get(),
 				context
 			);
 			

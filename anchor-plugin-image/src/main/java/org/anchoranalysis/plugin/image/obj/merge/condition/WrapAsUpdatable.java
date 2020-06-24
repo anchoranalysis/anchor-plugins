@@ -30,7 +30,7 @@ import java.util.Optional;
 
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.extent.ImageRes;
-import org.anchoranalysis.image.objmask.ObjMask;
+import org.anchoranalysis.image.objectmask.ObjectMask;
 
 /**
  * Wraps a BeforeCondition as an UpdatableBefoerCondition
@@ -43,7 +43,7 @@ public class WrapAsUpdatable implements UpdatableBeforeCondition {
 	private BeforeCondition beforeCondition;
 	
 	// TEMPORARILY UPDATED
-	private ObjMask omSrc;
+	private ObjectMask omSrc;
 	private Optional<ImageRes> res;
 	
 	public WrapAsUpdatable(BeforeCondition beforeCondition) {
@@ -52,13 +52,13 @@ public class WrapAsUpdatable implements UpdatableBeforeCondition {
 	}
 
 	@Override
-	public void updateSrcObj(ObjMask omSrc, Optional<ImageRes> res) throws OperationFailedException {
+	public void updateSrcObj(ObjectMask omSrc, Optional<ImageRes> res) throws OperationFailedException {
 		this.omSrc = omSrc;
 		this.res = res;
 	}
 
 	@Override
-	public boolean accept(ObjMask omDest) throws OperationFailedException {
+	public boolean accept(ObjectMask omDest) throws OperationFailedException {
 		return beforeCondition.accept(omSrc, omDest, res);
 	}
 }

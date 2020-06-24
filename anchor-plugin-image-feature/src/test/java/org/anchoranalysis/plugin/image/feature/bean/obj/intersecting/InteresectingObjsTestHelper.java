@@ -36,8 +36,8 @@ import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
 import org.anchoranalysis.image.init.ImageInitParams;
 import org.anchoranalysis.image.io.input.ImageInitParamsFactory;
-import org.anchoranalysis.image.objmask.ObjMask;
-import org.anchoranalysis.image.objmask.ObjMaskCollection;
+import org.anchoranalysis.image.objectmask.ObjectMask;
+import org.anchoranalysis.image.objectmask.ObjectCollection;
 import org.anchoranalysis.test.LoggingFixture;
 import org.anchoranalysis.test.feature.plugins.FeatureTestCalculator;
 import org.anchoranalysis.test.feature.plugins.objs.CircleObjMaskFixture;
@@ -76,7 +76,7 @@ class InteresectingObjsTestHelper {
 		int expectedLast
 	) throws OperationFailedException, FeatureCalcException, InitException {
 		
-		ObjMaskCollection objs = IntersectingCircleObjsFixture.generateIntersectingObjs(
+		ObjectCollection objs = IntersectingCircleObjsFixture.generateIntersectingObjs(
 			numInteresecting,
 			numNotIteresecting,
 			sameSize
@@ -137,14 +137,14 @@ class InteresectingObjsTestHelper {
 	private static void assertFeatureIndexInt(
 		String message,
 		FeatureIntersectingObjs feature,
-		ObjMaskCollection objs,
+		ObjectCollection objs,
 		int index,
 		int expectedResult
 	) throws OperationFailedException, FeatureCalcException, InitException {
 		
 		// We take the second object in the collection, as one that should intersect with 2 others
-		ObjMask om = objs.get(index);
-		ObjMaskCollection others = removeImmutable(objs, index);
+		ObjectMask om = objs.get(index);
+		ObjectCollection others = removeImmutable(objs, index);
 				
 		// We take the final objection the collection , as one
 		
@@ -158,19 +158,19 @@ class InteresectingObjsTestHelper {
 	}
 	
 	/** Removes an object from the collection immutably */
-	private static ObjMaskCollection removeImmutable( ObjMaskCollection objs, int index ) {
-		ObjMaskCollection out = objs.duplicateShallow();
-		out.asList().remove(index);
+	private static ObjectCollection removeImmutable( ObjectCollection objs, int index ) {
+		ObjectCollection out = objs.duplicateShallow();
+		out.remove(index);
 		return out;
 	}
 	
-	private static ImageInitParams createInitParams( ObjMaskCollection others ) throws OperationFailedException {
+	private static ImageInitParams createInitParams( ObjectCollection others ) throws OperationFailedException {
 		
 		SharedObjects so = new SharedObjects(
-			LoggingFixture.simpleLogErrorReporter()
+			LoggingFixture.suppressedLogErrorReporter()
 		);
 		
-		so.getOrCreate(ObjMaskCollection.class).add(ID, ()->others);
+		so.getOrCreate(ObjectCollection.class).add(ID, ()->others);
 		
 		return ImageInitParamsFactory.create(
 			so,

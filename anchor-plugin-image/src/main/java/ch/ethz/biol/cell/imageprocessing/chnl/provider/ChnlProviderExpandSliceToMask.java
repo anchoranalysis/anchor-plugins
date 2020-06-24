@@ -32,8 +32,8 @@ import java.nio.ByteBuffer;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.bean.provider.ChnlProvider;
-import org.anchoranalysis.image.chnl.Chnl;
-import org.anchoranalysis.image.chnl.factory.ChnlFactory;
+import org.anchoranalysis.image.channel.Channel;
+import org.anchoranalysis.image.channel.factory.ChannelFactory;
 import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.anchoranalysis.image.voxel.buffer.VoxelBufferByte;
@@ -53,11 +53,11 @@ public class ChnlProviderExpandSliceToMask extends ChnlProvider {
 	// END BEAN PROPERTIES
 	
 	@Override
-	public Chnl create() throws CreateException {
+	public Channel create() throws CreateException {
 		
 		ImageDim sdTarget = chnlTargetDimensions.create().getDimensions();
 		
-		Chnl slice = chnlSlice.create();
+		Channel slice = chnlSlice.create();
 
 		checkDimensions(
 			slice.getDimensions(),
@@ -83,9 +83,9 @@ public class ChnlProviderExpandSliceToMask extends ChnlProvider {
 		}
 	}
 	
-	private Chnl createExpandedChnl(ImageDim sdTarget, VoxelBox<ByteBuffer> vbSlice) {
+	private Channel createExpandedChnl(ImageDim sdTarget, VoxelBox<ByteBuffer> vbSlice) {
 		
-		Chnl chnl = ChnlFactory.instance().createEmptyUninitialised(
+		Channel chnl = ChannelFactory.instance().createEmptyUninitialised(
 			sdTarget,
 			VoxelDataTypeUnsignedByte.instance
 		);

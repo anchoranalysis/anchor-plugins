@@ -33,16 +33,13 @@ import java.util.Optional;
 
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.extent.ImageDim;
-import org.anchoranalysis.image.objmask.ObjMaskCollection;
+import org.anchoranalysis.image.objectmask.ObjectCollection;
 
 public class ObjMaskProviderFilter extends ObjMaskProviderFilterBase {
 
 	@Override
-	protected ObjMaskCollection createFromObjs(ObjMaskCollection in, Optional<ObjMaskCollection> omcRejected,
+	protected ObjectCollection createFromObjs(ObjectCollection in, Optional<ObjectCollection> omcRejected,
 			Optional<ImageDim> dim) throws CreateException {
-		ObjMaskCollection out = new ObjMaskCollection();
-		out.addAll( in );
-		filter(out, dim, omcRejected);
-		return out;
+		return filter(in, dim, omcRejected);
 	}
 }

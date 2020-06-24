@@ -28,6 +28,10 @@ package ch.ethz.biol.cell.imageprocessing.objmask.provider;
 
 
 import java.util.Iterator;
+import java.util.Spliterator;
+import java.util.Spliterators;
+import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.permute.property.PermuteProperty;
@@ -37,10 +41,11 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
 import org.anchoranalysis.image.bean.provider.ObjMaskProviderOne;
-import org.anchoranalysis.image.objmask.ObjMaskCollection;
+import org.anchoranalysis.image.objectmask.ObjectCollection;
+import org.anchoranalysis.image.objectmask.ObjectCollectionFactory;
 
 /**
- * Permutes some changes over an {@link ObjMaskProvider} and collects all the results in an {@link ObjMaskCollection}
+ * Permutes some changes over an {@link ObjMaskProvider} and collects all the results in an {@link ObjectCollection}
  * 
  * We deliberately do not inherit from {@link ObjMaskProviderOne} as we not using the {@link ObjMaskProvider} in the same way.
  * 
@@ -58,46 +63,45 @@ public class ObjMaskProviderPermute extends ObjMaskProvider {
 	// END BEAN PROPERTIES
 
 	@Override
-	public ObjMaskCollection create() throws CreateException {
+	public ObjectCollection create() throws CreateException {
 				
 		try {
 			PermutationSetter ps = permuteProperty.createSetter(objs);
 			
 			return createPermutedObjs(
 				ps,
-				permuteProperty.propertyValues()	
+				streamFromIterator( permuteProperty.propertyValues() )
 			);
 		} catch (PermutationSetterException e1) {
 			throw new CreateException("Cannot create a permutation setter", e1);
 		}
 	}
 	
-	private ObjMaskCollection createPermutedObjs( PermutationSetter setter, Iterator<?> vals ) throws CreateException {
-		ObjMaskCollection out = new ObjMaskCollection();
+	private ObjectCollection createPermutedObjs( PermutationSetter setter, Stream<?> propVals ) throws CreateException {
+		return ObjectCollectionFactory.flatMapFrom(
+			propVals,
+			CreateException.class,
+			propVal -> objsForPermutation(setter, propVal)
+		);
+	}
+	
+	private ObjectCollection objsForPermutation(PermutationSetter setter, Object propVal) throws CreateException {
+		// We permute a duplicate, so as to keep the original values
+		ObjMaskProvider provider = objs.duplicateBean();
 		try {
-			while( vals.hasNext() ) {
-				Object propVal = vals.next();
-				assert(propVal!=null);
-		
-				// We permute a duplicate, so as to keep the original values
-				ObjMaskProvider provider = objs.duplicateBean();
-				setter.setPermutation(provider, propVal);
-
-				// We init after the permutation, as we might be changing a reference
-				provider.initRecursive( getSharedObjects(), getLogger() );
-
-				out.addAll(
-					provider.create()
-				);
-			}
-			
+			setter.setPermutation(provider, propVal);
 		} catch (PermutationSetterException e) {
 			throw new CreateException("Cannot set permutation on an object-mask-provider", e);
+		}
+		
+		// We init after the permutation, as we might be changing a reference
+		try {
+			provider.initRecursive( getSharedObjects(), getLogger() );
 		} catch (InitException e) {
 			throw new CreateException(e);
 		}
-		
-		return out;
+
+		return provider.create();
 	}
 
 	public ObjMaskProvider getObjs() {
@@ -114,5 +118,13 @@ public class ObjMaskProviderPermute extends ObjMaskProvider {
 
 	public void setPermuteProperty(PermuteProperty<?> permuteProperty) {
 		this.permuteProperty = permuteProperty;
+	}
+	
+	/** Converts an iterator to a stream */
+	private static <T> Stream<T> streamFromIterator(Iterator<T> iterator) {
+		return StreamSupport.stream(
+            Spliterators.spliteratorUnknownSize(iterator,Spliterator.ORDERED),
+            false
+        );
 	}
 }

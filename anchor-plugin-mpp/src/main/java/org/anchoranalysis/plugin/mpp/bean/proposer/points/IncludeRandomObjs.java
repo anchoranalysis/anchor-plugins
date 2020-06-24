@@ -41,8 +41,8 @@ import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.core.random.RandomNumberGenerator;
 import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
 import org.anchoranalysis.image.extent.ImageDim;
-import org.anchoranalysis.image.objmask.ObjMask;
-import org.anchoranalysis.image.objmask.ObjMaskCollection;
+import org.anchoranalysis.image.objectmask.ObjectMask;
+import org.anchoranalysis.image.objectmask.ObjectCollection;
 import org.anchoranalysis.image.points.PointsFromObjMask;
 
 /**
@@ -70,9 +70,9 @@ public class IncludeRandomObjs extends PointsProposer {
 		List<Point3i> out = new ArrayList<>();
 		
 		try {
-			ObjMaskCollection objsCollection = objs.create();
+			ObjectCollection objsCollection = objs.create();
 			
-			for( ObjMask om : objsCollection ) {
+			for( ObjectMask om : objsCollection ) {
 				maybeAddToList(om, out, re);
 			}
 						
@@ -97,7 +97,7 @@ public class IncludeRandomObjs extends PointsProposer {
 		this.objs = objs;
 	}
 	
-	private static void maybeAddToList( ObjMask om, List<Point3i> out, RandomNumberGenerator re ) throws CreateException {
+	private static void maybeAddToList( ObjectMask om, List<Point3i> out, RandomNumberGenerator re ) throws CreateException {
 		if (re.nextDouble() > 0.5) {
 			out.addAll(
 				PointsFromObjMask.pntsFromMask(om)

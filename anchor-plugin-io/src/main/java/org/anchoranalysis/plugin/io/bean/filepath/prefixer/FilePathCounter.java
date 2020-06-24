@@ -30,7 +30,6 @@ package org.anchoranalysis.plugin.io.bean.filepath.prefixer;
 import java.nio.file.Path;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.io.bean.filepath.prefixer.PathWithDescription;
-import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.filepath.prefixer.FilePathPrefix;
 
 public class FilePathCounter extends FilePathPrefixerAvoidResolve {
@@ -51,7 +50,7 @@ public class FilePathCounter extends FilePathPrefixerAvoidResolve {
 	}
 
 	@Override
-	protected FilePathPrefix outFilePrefixFromPath(PathWithDescription input, Path root) throws AnchorIOException {
+	protected FilePathPrefix outFilePrefixFromPath(PathWithDescription input, Path root) {
 		Path combinedDir = root.resolve( identifier(cnt++) );
 		return new FilePathPrefix(combinedDir);
 	}

@@ -32,45 +32,43 @@ import java.util.Optional;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.image.bean.objmask.filter.ObjMaskFilter;
+import org.anchoranalysis.image.bean.objmask.filter.ObjectFilter;
 import org.anchoranalysis.image.binary.BinaryChnl;
-import org.anchoranalysis.image.objmask.ObjMask;
-import org.anchoranalysis.image.objmask.ObjMaskCollection;
-import org.anchoranalysis.image.objmask.factory.CreateFromEntireChnlFactory;
+import org.anchoranalysis.image.objectmask.ObjectMask;
+import org.anchoranalysis.image.objectmask.ObjectCollection;
+import org.anchoranalysis.image.objectmask.ObjectCollectionFactory;
+import org.anchoranalysis.image.objectmask.factory.CreateFromEntireChnlFactory;
 
 // Treats the entire binaryimgchnl as an object, and sees if it passes an ObjMaskFilter
 public class BinaryChnlProviderObjMaskFilterAsChnl extends BinaryChnlProviderElseBase {
 
 	// START BEAN PROPERTIES
 	@BeanField
-	private ObjMaskFilter objMaskFilter;
+	private ObjectFilter objMaskFilter;
 	// END BEAN PROPERTIES
 
 	@Override
 	protected boolean condition(BinaryChnl chnl) throws CreateException {
 
-		ObjMask om = CreateFromEntireChnlFactory.createObjMask( chnl );
-		
-		ObjMaskCollection omc = new ObjMaskCollection(om);
+		ObjectMask om = CreateFromEntireChnlFactory.createObjMask( chnl );
 		
 		try {
-			objMaskFilter.filter(
-				omc,
+			ObjectCollection omc = objMaskFilter.filter(
+				ObjectCollectionFactory.from(om),
 				Optional.of(chnl.getDimensions()),
 				Optional.empty()
 			);
+			return omc.size()==1;
 		} catch (OperationFailedException e) {
 			throw new CreateException(e);
 		}
-		
-		return omc.size()==1;
 	}
 
-	public ObjMaskFilter getObjMaskFilter() {
+	public ObjectFilter getObjMaskFilter() {
 		return objMaskFilter;
 	}
 
-	public void setObjMaskFilter(ObjMaskFilter objMaskFilter) {
+	public void setObjMaskFilter(ObjectFilter objMaskFilter) {
 		this.objMaskFilter = objMaskFilter;
 	}
 }

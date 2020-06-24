@@ -33,8 +33,8 @@ import java.util.List;
 
 import org.anchoranalysis.annotation.io.assignment.ObjMaskCollectionDistanceMatrix;
 import org.anchoranalysis.core.text.TypedValue;
-import org.anchoranalysis.image.objmask.ObjMask;
-import org.anchoranalysis.image.objmask.ObjMaskCollection;
+import org.anchoranalysis.image.objectmask.ObjectMask;
+import org.anchoranalysis.image.objectmask.ObjectCollection;
 import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.generator.csv.CSVGenerator;
 import org.anchoranalysis.io.output.bean.OutputWriteSettings;
@@ -93,10 +93,10 @@ class ObjMaskCollectionDistanceMatrixGenerator extends CSVGenerator {
 	
 	
 	// A description of each object in a collection
-	private static List<String> dscrFromObjMaskCollection( ObjMaskCollection objs ) {
+	private static List<String> dscrFromObjMaskCollection( ObjectCollection objs ) {
 		List<String> out = new ArrayList<String>();
 		
-		for( ObjMask om : objs ) {
+		for( ObjectMask om : objs ) {
 			String dscr = om.centerOfGravity().toString();
 			out.add( dscr );
 		}

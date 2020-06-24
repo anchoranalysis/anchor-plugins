@@ -30,10 +30,10 @@ import java.util.function.Function;
 
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.image.chnl.Chnl;
+import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.histogram.Histogram;
 import org.anchoranalysis.image.histogram.HistogramFactory;
-import org.anchoranalysis.image.objmask.ObjMask;
+import org.anchoranalysis.image.objectmask.ObjectMask;
 import org.anchoranalysis.image.voxel.statistics.VoxelStatisticsFromHistogram;
 import org.anchoranalysis.plugin.image.intensity.IntensityMeanCalculator;
 
@@ -50,24 +50,18 @@ class StatsHelper {
 	 * @return
 	 * @throws FeatureCalcException
 	 */
-	public static ValueAndIndex calcMaxSliceMean( Chnl chnl, ObjMask om, boolean excludeZero ) throws FeatureCalcException {
+	public static ValueAndIndex calcMaxSliceMean( Channel chnl, ObjectMask om, boolean excludeZero ) throws FeatureCalcException {
 		
 		double max = Double.NEGATIVE_INFINITY;
 		int index = -1;
 		
 		for( int z=0; z<om.getBoundingBox().extent().getZ(); z++ ) {
 			
-			ObjMask omSlice;
-			try {
-				omSlice = om.extractSlice(z, true);
-			} catch (OperationFailedException e) {
-				throw new FeatureCalcException(e);
-			}
-			
+			ObjectMask omSlice = om.extractSlice(z, true);
+
 			// We adjust the z coordiante to point to the channel
-			omSlice.shiftToZ(
-				omSlice.getBoundingBox().getCrnrMin().getZ() + om.getBoundingBox().getCrnrMin().getZ()
-			);
+			int zTarget = omSlice.getBoundingBox().getCrnrMin().getZ() + om.getBoundingBox().getCrnrMin().getZ(); 
+			omSlice = omSlice.mapBoundingBox( bbox->bbox.shiftToZ(zTarget) );
 			
 			if (omSlice.hasPixelsGreaterThan(0)) {
 				double mean = IntensityMeanCalculator.calcMeanIntensityObjMask(chnl, omSlice, excludeZero);
@@ -95,7 +89,7 @@ class StatsHelper {
 	 * @return
 	 * @throws OperationFailedException 
 	 */
-	public static double calcMeanNumPixels( Chnl chnl, ObjMask om, int numPixels, boolean highest ) throws OperationFailedException {
+	public static double calcMeanNumPixels( Channel chnl, ObjectMask om, int numPixels, boolean highest ) throws OperationFailedException {
 		
 		Histogram h = HistogramFactory.create(chnl, om);
 		
@@ -106,8 +100,8 @@ class StatsHelper {
 
 	
 	public static double calcStatistic(
-		Chnl chnl,
-		ObjMask objMask,
+		Channel chnl,
+		ObjectMask objMask,
 		boolean ignoreZero,
 		double emptyValue,
 		Function<VoxelStatisticsFromHistogram,Double> funcExtractStatistic

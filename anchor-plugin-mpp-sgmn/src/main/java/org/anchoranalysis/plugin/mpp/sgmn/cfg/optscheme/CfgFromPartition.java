@@ -27,10 +27,9 @@ package org.anchoranalysis.plugin.mpp.sgmn.cfg.optscheme;
  */
 
 import org.anchoranalysis.anchor.mpp.cfg.Cfg;
-import org.anchoranalysis.anchor.mpp.mark.Mark;
 
 /**
- * A cfg extracted from a Partition of Cfgs
+ * A subset of a cfg (as extracted during a partition)
  * 
  * @author FEEHANO
  *
@@ -39,9 +38,9 @@ public class CfgFromPartition {
 
 	private Cfg cfg;
 	
-	private PartitionMarks<Mark> partition;
+	private PartitionedCfg partition;
 	
-	public CfgFromPartition(Cfg cfg, PartitionMarks<Mark> partition) {
+	public CfgFromPartition(Cfg cfg, PartitionedCfg partition) {
 		super();
 		assert(cfg!=null);
 		this.cfg = cfg;
@@ -57,7 +56,7 @@ public class CfgFromPartition {
 		return new CfgFromPartition( cfg, partition );
 	}
 
-	public PartitionMarks<Mark> getPartition() {
+	public PartitionedCfg getPartition() {
 		return partition;
 	}
 }

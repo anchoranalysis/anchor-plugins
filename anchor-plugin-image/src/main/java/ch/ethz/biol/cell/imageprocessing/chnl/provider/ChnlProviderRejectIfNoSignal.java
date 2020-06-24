@@ -30,7 +30,7 @@ package ch.ethz.biol.cell.imageprocessing.chnl.provider;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.bean.provider.ChnlProviderOne;
-import org.anchoranalysis.image.chnl.Chnl;
+import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.histogram.Histogram;
 import org.anchoranalysis.image.histogram.HistogramFactory;
 
@@ -45,7 +45,7 @@ public class ChnlProviderRejectIfNoSignal extends ChnlProviderOne {
 	// END BEANS
 
 	@Override
-	public Chnl createFromChnl(Chnl chnl) throws CreateException {
+	public Channel createFromChnl(Channel chnl) throws CreateException {
 		
 		Histogram h = HistogramFactory.create( chnl );
 		

@@ -28,10 +28,10 @@ package org.anchoranalysis.plugin.annotation.comparison;
 
 import java.util.List;
 
-import org.anchoranalysis.annotation.io.assignment.AssignmentObjMask;
+import org.anchoranalysis.annotation.io.assignment.AssignmentOverlapFromPairs;
 import org.anchoranalysis.core.text.TypedValue;
 
-public class AnnotationGroupObjMask extends AnnotationGroup<AssignmentObjMask> {
+public class AnnotationGroupObjMask extends AnnotationGroup<AssignmentOverlapFromPairs> {
 	
 	private int cntMatched = 0;
 	private int cntUnmatchedLeft = 0;
@@ -46,7 +46,7 @@ public class AnnotationGroupObjMask extends AnnotationGroup<AssignmentObjMask> {
 	}
 	
 	@Override
-	public void addAcceptedAnnotation( AssignmentObjMask assignment ) {
+	public void addAcceptedAnnotation( AssignmentOverlapFromPairs assignment ) {
 		super.addAcceptedAnnotation(assignment);
 		cntMatched += assignment.numPaired();
 		cntUnmatchedLeft += assignment.numUnassigned(true);

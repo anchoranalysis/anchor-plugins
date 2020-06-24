@@ -29,7 +29,7 @@ package org.anchoranalysis.plugin.image.feature.bean.obj.single.intensity;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.image.chnl.Chnl;
+import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.feature.bean.objmask.FeatureObjMask;
 import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
 
@@ -49,11 +49,11 @@ public abstract class FeatureNrgChnl extends FeatureObjMask {
 	@Override
 	public double calc(SessionInput<FeatureInputSingleObj> input) throws FeatureCalcException {
 		
-		Chnl chnl = input.get().getNrgStackRequired().getChnl(nrgIndex);
+		Channel chnl = input.get().getNrgStackRequired().getChnl(nrgIndex);
 		return calcForChnl(input, chnl);
 	}
 	
-	protected abstract double calcForChnl( SessionInput<FeatureInputSingleObj> input, Chnl chnl ) throws FeatureCalcException;
+	protected abstract double calcForChnl( SessionInput<FeatureInputSingleObj> input, Channel chnl ) throws FeatureCalcException;
 	
 	public int getNrgIndex() {
 		return nrgIndex;

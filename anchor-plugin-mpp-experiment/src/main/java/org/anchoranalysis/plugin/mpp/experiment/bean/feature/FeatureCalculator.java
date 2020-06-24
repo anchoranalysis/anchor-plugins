@@ -27,40 +27,110 @@ package org.anchoranalysis.plugin.mpp.experiment.bean.feature;
  */
 
 import java.util.List;
+import java.util.function.Function;
 
+import org.anchoranalysis.core.error.CreateException;
+import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.calc.results.ResultsVector;
-import org.anchoranalysis.feature.calc.results.ResultsVectorCollection;
 import org.anchoranalysis.feature.input.FeatureInput;
+import org.anchoranalysis.feature.io.csv.StringLabelsForCsvRow;
+import org.anchoranalysis.feature.nrg.NRGStackWithParams;
+import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
 import org.anchoranalysis.image.feature.session.FeatureTableSession;
+import org.anchoranalysis.image.init.ImageInitParams;
+import org.anchoranalysis.image.objectmask.ObjectCollection;
+import org.anchoranalysis.plugin.image.feature.bean.obj.table.FeatureTableObjs;
+import org.anchoranalysis.plugin.image.task.sharedstate.SharedStateExportFeatures;
 
-class FeatureCalculator {
+class FeatureCalculator<T extends FeatureInput> {
+
+	private final FeatureTableObjs<T> table;
+	private final SharedStateExportFeatures sharedState;
+	private final ImageInitParams imageInitParams;
+	private final NRGStackWithParams nrgStack;
+	private final boolean suppressErrors;
+	private final LogErrorReporter logger;
+	
+	public FeatureCalculator(
+		FeatureTableObjs<T> table,
+		SharedStateExportFeatures sharedState,
+		ImageInitParams imageInitParams,
+		NRGStackWithParams nrgStack,
+		boolean suppressErrors,
+		LogErrorReporter logger
+	) {
+		super();
+		this.table = table;
+		this.sharedState = sharedState;
+		this.imageInitParams = imageInitParams;
+		this.nrgStack = nrgStack;
+		this.suppressErrors = suppressErrors;
+		this.logger = logger;
+	}
+	
+	public void processProvider(
+		ObjMaskProvider provider,
+		FeatureTableSession<T> session,
+		Function<String, StringLabelsForCsvRow> identifierFromObjName
+	) throws OperationFailedException {
+		calculateFeaturesForProvider(
+			objsFromProvider(provider, imageInitParams, logger),
+			session,
+			nrgStack,
+			identifierFromObjName
+		);		
+	}
+	
+	private void calculateFeaturesForProvider(
+		ObjectCollection objs,
+		FeatureTableSession<T> session,
+		NRGStackWithParams nrgStack,
+		Function<String, StringLabelsForCsvRow> identifierFromObjName
+	) throws OperationFailedException {
+		try {
+			List<T> listParams = table.createListInputs(
+				objs,
+				nrgStack,
+				logger
+			);
+			
+			calculateManyFeaturesInto(
+				session,
+				listParams,
+				identifierFromObjName,
+				suppressErrors,
+				logger
+			);
+		} catch (CreateException | OperationFailedException e) {
+			throw new OperationFailedException(e);
+		}
+	}
 	
 	/**
 	 * Calculates a bunch of features with an objectID (unique) and a groupID and adds them to the stored-results
 	 * 
 	 * The stored-results also have an additional first-column with the ID.
 	 * 
-	 * @param groupId  		group-identifier
-	 * @param objectId  	identifier of object (guaranteed to be unique)
+	 * @param session for calculating features
 	 * @param listInputs 	a list of parameters. Each parameters creates a new result (e.g. a new row in a feature-table)
-	 * @param resultsDestination where the result-calculations are placed
+	 * @param resultsConsumer called with the results
+	 * @param extractIdentifier extracts an identifier from each object that is calculated
+	 * @param suppressErrors iff TRUE no exceptions are thrown when an error occurs, but rather a message is written to the log
+	 * @param logger the log
 	 * @throws OperationFailedException
 	 */
-	public static <T extends FeatureInput> void calculateManyFeaturesInto(
-		String objectId,
+	private void calculateManyFeaturesInto(
 		FeatureTableSession<T> session,
 		List<T> listInputs,
-		ResultsVectorCollection resultsDestination,
+		Function<String, StringLabelsForCsvRow> identifierFromObjName,
 		boolean suppressErrors,
 		LogErrorReporter logger
 	) throws OperationFailedException {
 
 		try {
-			assert(resultsDestination!=null);
-			
 			for(int i=0; i<listInputs.size(); i++ ) {
 				
 				T input = listInputs.get(i);
@@ -68,11 +138,29 @@ class FeatureCalculator {
 				logger.getLogReporter().logFormatted("Calculating input %d of %d: %s", i+1, listInputs.size(), input.toString() );
 				
 				ResultsVector rv = suppressErrors ? session.calcSuppressErrors(input, logger.getErrorReporter()) : session.calc(input);
-				rv.setIdentifier(objectId);
-				resultsDestination.add( rv );
+				String objName = session.uniqueIdentifierFor(input);
+				sharedState.addResultsFor(
+					identifierFromObjName.apply(objName),
+					rv
+				);
 			}
 			
 		} catch (FeatureCalcException e) {
+			throw new OperationFailedException(e);
+		}
+	}
+	
+	private static ObjectCollection objsFromProvider( ObjMaskProvider provider, ImageInitParams imageInitParams, LogErrorReporter logErrorReporter ) throws OperationFailedException {
+
+		try {
+			ObjMaskProvider objMaskProviderLoc = provider.duplicateBean();
+			
+			// Initialise
+			objMaskProviderLoc.initRecursive(imageInitParams, logErrorReporter);
+	
+			return objMaskProviderLoc.create(); 
+			
+		} catch (InitException | CreateException e) {
 			throw new OperationFailedException(e);
 		}
 	}

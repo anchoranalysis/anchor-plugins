@@ -31,7 +31,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.bean.provider.ChnlProviderOne;
-import org.anchoranalysis.image.chnl.Chnl;
+import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.histogram.Histogram;
 import org.anchoranalysis.image.histogram.HistogramFactory;
@@ -47,7 +47,7 @@ public class ChnlProviderHistogramStretch extends ChnlProviderOne {
 	// END BEAN PROPERTIES
 	
 	@Override
-	public Chnl createFromChnl( Chnl chnl ) throws CreateException {
+	public Channel createFromChnl( Channel chnl ) throws CreateException {
 		try {
 			histogramStretch( chnl, quantile );
 			return chnl;
@@ -56,7 +56,7 @@ public class ChnlProviderHistogramStretch extends ChnlProviderOne {
 		}
 	}
 	
-	private static void histogramStretch( Chnl chnl, double quantile ) throws OperationFailedException {
+	private static void histogramStretch( Channel chnl, double quantile ) throws OperationFailedException {
 		
 		VoxelBoxWrapper vb = chnl.getVoxelBox();
 		

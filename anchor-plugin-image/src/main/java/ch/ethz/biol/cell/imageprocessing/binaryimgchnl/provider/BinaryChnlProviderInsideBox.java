@@ -31,8 +31,8 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.image.binary.BinaryChnl;
 import org.anchoranalysis.image.binary.values.BinaryValues;
-import org.anchoranalysis.image.chnl.Chnl;
-import org.anchoranalysis.image.chnl.factory.ChnlFactory;
+import org.anchoranalysis.image.channel.Channel;
+import org.anchoranalysis.image.channel.factory.ChannelFactory;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
@@ -72,7 +72,7 @@ public class BinaryChnlProviderInsideBox extends BinaryChnlProviderDimSource {
 	
 	@Override
 	protected BinaryChnl createFromSource(ImageDim dimSource) throws CreateException {
-		Chnl chnl = ChnlFactory.instance().createEmptyInitialised(
+		Channel chnl = ChannelFactory.instance().createEmptyInitialised(
 			dimSource,
 			VoxelDataTypeUnsignedByte.instance
 		);
@@ -82,7 +82,7 @@ public class BinaryChnlProviderInsideBox extends BinaryChnlProviderDimSource {
 		return createBinaryChnl(bbox, chnl);
 	}
 	
-	private static BinaryChnl createBinaryChnl( BoundingBox bbox, Chnl chnl ) {
+	private static BinaryChnl createBinaryChnl( BoundingBox bbox, Channel chnl ) {
 		BinaryValues bv = BinaryValues.getDefault();
 		chnl.getVoxelBox().any().setPixelsTo(bbox, bv.getOnInt() );
 		return new BinaryChnl(chnl, bv); 

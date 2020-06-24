@@ -29,20 +29,13 @@ package ch.ethz.biol.cell.imageprocessing.objmask.provider;
 
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.bean.provider.ObjMaskProviderOne;
-import org.anchoranalysis.image.objmask.ObjMask;
-import org.anchoranalysis.image.objmask.ObjMaskCollection;
+import org.anchoranalysis.image.objectmask.ObjectMask;
+import org.anchoranalysis.image.objectmask.ObjectCollection;
 
 public class ObjMaskProviderFlattenZ extends ObjMaskProviderOne {
 
 	@Override
-	public ObjMaskCollection createFromObjs( ObjMaskCollection in ) throws CreateException {
-		
-		ObjMaskCollection out = new ObjMaskCollection();
-		
-		for( ObjMask om : in ) {
-			out.add( om.flattenZ() );
-		}
-		
-		return out;
+	public ObjectCollection createFromObjs( ObjectCollection in ) throws CreateException {
+		return in.stream().map( ObjectMask::flattenZ );
 	}
 }

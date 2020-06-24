@@ -30,21 +30,21 @@ package ch.ethz.biol.cell.imageprocessing.objmask.matching;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.anchoranalysis.image.objmask.ObjMask;
-import org.anchoranalysis.image.objmask.ObjMaskCollection;
+import org.anchoranalysis.image.objectmask.ObjectMask;
+import org.anchoranalysis.image.objectmask.ObjectCollection;
 import org.anchoranalysis.image.objmask.match.ObjWithMatches;
 
 public class ObjMaskMatchUtilities {
 	
-	public static List<ObjWithMatches> matchIntersectingObjects( ObjMaskCollection sourceObjs, ObjMaskCollection searchObjects ) {
+	public static List<ObjWithMatches> matchIntersectingObjects( ObjectCollection sourceObjs, ObjectCollection searchObjects ) {
 		
 		// Find matching seeds for each object
 		List<ObjWithMatches> list = new ArrayList<>(); 
-		for( ObjMask om : sourceObjs ) {
+		for( ObjectMask om : sourceObjs ) {
 			
 			ObjWithMatches sws = new ObjWithMatches(om);
 			
-			for( ObjMask seed : searchObjects ) {
+			for( ObjectMask seed : searchObjects ) {
 				if (om.hasIntersectingPixels(seed)) {
 					sws.addSeed(seed);
 				}

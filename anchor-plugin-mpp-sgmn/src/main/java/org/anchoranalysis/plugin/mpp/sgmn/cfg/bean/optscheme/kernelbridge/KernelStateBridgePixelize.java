@@ -1,5 +1,7 @@
 package org.anchoranalysis.plugin.mpp.sgmn.cfg.bean.optscheme.kernelbridge;
 
+import java.util.Optional;
+
 import org.anchoranalysis.anchor.mpp.feature.nrg.cfg.CfgNRGPixelized;
 
 /*-
@@ -33,7 +35,7 @@ import org.anchoranalysis.mpp.sgmn.transformer.StateTransformer;
 import org.anchoranalysis.mpp.sgmn.transformer.StateTransformerBean;
 import org.anchoranalysis.plugin.mpp.sgmn.cfg.bean.cfg.pixelized.PixelizeWithTransform;
 import org.anchoranalysis.plugin.mpp.sgmn.cfg.bean.cfg.pixelized.RetrieveSourceFromPixelized;
-import org.anchoranalysis.plugin.mpp.sgmn.cfg.bean.optscheme.mode.TransformIfNotNull;
+import org.anchoranalysis.plugin.mpp.sgmn.cfg.bean.optscheme.mode.TransformMapOptional;
 import org.anchoranalysis.plugin.mpp.sgmn.cfg.optscheme.ToPixelized;
 
 /**
@@ -52,15 +54,15 @@ public class KernelStateBridgePixelize<T> extends KernelStateBridge<T, ToPixeliz
 	// END BEAN PROPERTIES
 
 	@Override
-	public StateTransformer<T, ToPixelized<T>> kernelToState() {
-		return new TransformIfNotNull<>( 
+	public StateTransformer<Optional<T>, Optional<ToPixelized<T>>> kernelToState() {
+		return new TransformMapOptional<>( 
 			new PixelizeWithTransform<>(transformer)
 		);
 	}
 
 	@Override
-	public StateTransformer<ToPixelized<T>, T> stateToKernel() {
-		return new TransformIfNotNull<>( 
+	public StateTransformer<Optional<ToPixelized<T>>, Optional<T>> stateToKernel() {
+		return new TransformMapOptional<>( 
 			new RetrieveSourceFromPixelized<>()
 		);
 	}

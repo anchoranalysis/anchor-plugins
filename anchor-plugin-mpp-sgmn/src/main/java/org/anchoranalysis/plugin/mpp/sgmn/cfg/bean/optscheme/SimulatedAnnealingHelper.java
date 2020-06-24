@@ -127,7 +127,7 @@ class SimulatedAnnealingHelper {
 		}
 		while( continueIterations(
 			optStep.getBest(),
-			iter++,			
+			++iter,			
 			termConditionAll,
 			assignMode.extractScoreSizeState(),
 			context.getLogger().getLogReporter()
@@ -180,13 +180,13 @@ class SimulatedAnnealingHelper {
 		ListUpdatableMarkSetCollection updatableMarkSetCollection,
 		AccptProbCalculator<T> accptProbCalc,
 		KernelAssigner<S,T> kernelAssigner,
-		StateTransformer<T,S> funcExtractForUpdate
+		StateTransformer<Optional<T>,Optional<S>> funcExtractForUpdate
 	) throws OptTerminatedEarlyException {
 		try {
 			// Propose a kernel
 			KernelWithID<S> kid = proposeKernel(
 				kernelProposer,
-				context.getKernelCalcContext().proposer().getRe(),
+				context.getKernelCalcContext().proposer().getRandomNumberGenerator(),
 				iter==0
 			);
 			

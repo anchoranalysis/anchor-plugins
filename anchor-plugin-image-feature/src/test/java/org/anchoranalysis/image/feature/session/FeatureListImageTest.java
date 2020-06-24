@@ -43,7 +43,7 @@ import org.anchoranalysis.feature.session.calculator.FeatureCalculatorMulti;
 import org.anchoranalysis.image.feature.histogram.FeatureInputHistogram;
 import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
 import org.anchoranalysis.image.histogram.Histogram;
-import org.anchoranalysis.image.objmask.ObjMask;
+import org.anchoranalysis.image.objectmask.ObjectMask;
 import org.anchoranalysis.test.LoggingFixture;
 import org.anchoranalysis.test.TestLoader;
 import org.anchoranalysis.test.feature.ConstantsInListFixture;
@@ -144,7 +144,7 @@ public class FeatureListImageTest {
 	private <T extends FeatureInput> FeatureCalculatorMulti<T> createAndStart( FeatureList<T> features ) throws FeatureCalcException {
 		return FeatureSession.with(
 			features,
-			LoggingFixture.simpleLogErrorReporter()
+			LoggingFixture.suppressedLogErrorReporter()
 		);
 	}
 	
@@ -174,9 +174,7 @@ public class FeatureListImageTest {
 		);
 	}
 	
-	private static FeatureInputSingleObj createParams( ObjMask om ) throws CreateException {
-		FeatureInputSingleObj params = new FeatureInputSingleObj(om);
-		params.setNrgStack(NRG_STACK);
-		return params;
+	private static FeatureInputSingleObj createParams( ObjectMask om ) throws CreateException {
+		return new FeatureInputSingleObj(om, NRG_STACK);
 	}
 }

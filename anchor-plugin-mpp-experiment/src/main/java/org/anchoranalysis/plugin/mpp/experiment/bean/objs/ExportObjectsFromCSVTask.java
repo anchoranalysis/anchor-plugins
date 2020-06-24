@@ -52,7 +52,7 @@ import org.anchoranalysis.image.index.rtree.ObjMaskCollectionRTree;
 import org.anchoranalysis.image.init.ImageInitParams;
 import org.anchoranalysis.image.io.generator.raster.RasterGenerator;
 import org.anchoranalysis.image.io.generator.raster.obj.rgb.RGBObjMaskGeneratorCropped;
-import org.anchoranalysis.image.objmask.properties.ObjMaskWithPropertiesCollection;
+import org.anchoranalysis.image.objectmask.properties.ObjectCollectionWithProperties;
 import org.anchoranalysis.image.stack.DisplayStack;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.io.bean.filepath.generator.FilePathGenerator;
@@ -301,7 +301,7 @@ public class ExportObjectsFromCSVTask extends ExportObjectsBase<FromCSVInputObje
 			this.element = element;
 			
 			try {
-				ObjMaskWithPropertiesCollection objs = element.findObjsMatchingRow( allObjs );
+				ObjectCollectionWithProperties objs = element.findObjsMatchingRow( allObjs );
 				delegate.setIterableElement(objs);
 				
 			} catch (OperationFailedException e) {

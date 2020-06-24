@@ -1,5 +1,7 @@
 package anchor.mpp.bean.define.adder;
 
+
+
 /*-
  * #%L
  * anchor-plugin-mpp
@@ -105,7 +107,7 @@ public class VisualizeOnBackground extends DefineAdderBean {
 			throw new BeanXmlException(e);
 		}
 	}
-	
+		
 	private Define fromDelegate() throws BeanXmlException {
 		Define def = new Define();
 		add.addTo(def);

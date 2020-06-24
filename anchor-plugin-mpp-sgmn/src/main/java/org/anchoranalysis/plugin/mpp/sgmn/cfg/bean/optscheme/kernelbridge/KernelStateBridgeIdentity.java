@@ -1,5 +1,7 @@
 package org.anchoranalysis.plugin.mpp.sgmn.cfg.bean.optscheme.kernelbridge;
 
+import java.util.Optional;
+
 /*-
  * #%L
  * anchor-plugin-mpp-sgmn
@@ -38,12 +40,12 @@ import org.anchoranalysis.mpp.sgmn.transformer.StateTransformer;
 public class KernelStateBridgeIdentity<T> extends KernelStateBridge<T, T> {
 
 	@Override
-	public StateTransformer<T, T> kernelToState() {
+	public StateTransformer<Optional<T>, Optional<T>> kernelToState() {
 		return stateToKernel();
 	}
 
 	@Override
-	public StateTransformer<T, T> stateToKernel() {
+	public StateTransformer<Optional<T>, Optional<T>> stateToKernel() {
 		return (a,context)->a;
 	}
 

@@ -36,7 +36,8 @@ import org.anchoranalysis.plugin.mpp.sgmn.cfg.bean.optscheme.kernelbridge.Kernel
 import org.anchoranalysis.plugin.mpp.sgmn.cfg.bean.optscheme.statereporter.StateReporterIdentity;
 import org.anchoranalysis.plugin.mpp.sgmn.cfg.optscheme.AccptProbCalculator;
 
-/** Directly assigns a CfgNRG for every optimisation step 
+/** 
+ * Directly assigns a CfgNRG for every optimisation step 
  * 
  *  @param S state-type for optimization
  * */
@@ -46,6 +47,14 @@ public class DirectAssignMode<S> extends AssignMode<S,S,S> {
 	@BeanField
 	private ExtractScoreSize<S> extractScoreSize;
 	// END BEAN PROPERTIES
+	
+	public DirectAssignMode() {
+		// Standard bean constructor
+	}
+	
+	public DirectAssignMode(ExtractScoreSize<S> extractScoreSize) {
+		this.extractScoreSize = extractScoreSize;
+	}
 	
 	public AccptProbCalculator<S> probCalculator(AnnealScheme annealScheme) {
 		return new AccptProbCalculator<S>(

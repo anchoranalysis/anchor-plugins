@@ -42,7 +42,7 @@ import org.anchoranalysis.core.log.LogReporter;
 import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
 import org.anchoranalysis.image.extent.ImageRes;
 import org.anchoranalysis.image.feature.evaluator.PayloadCalculator;
-import org.anchoranalysis.image.objmask.ObjMaskCollection;
+import org.anchoranalysis.image.objectmask.ObjectCollection;
 import org.anchoranalysis.plugin.image.obj.merge.MergeGraph;
 import org.anchoranalysis.plugin.image.obj.merge.ObjVertex;
 import org.anchoranalysis.plugin.image.obj.merge.condition.AndCondition;
@@ -72,9 +72,9 @@ public abstract class ObjMaskProviderMergeWithFeature extends ObjMaskProviderMer
 	// END BEAN PROPERTIES
 		
 	@Override
-	public ObjMaskCollection createFromObjs(ObjMaskCollection objsSource) throws CreateException {
+	public ObjectCollection createFromObjs(ObjectCollection objsSource) throws CreateException {
 		
-		Optional<ObjMaskCollection> saveObjs = OptionalFactory.create(objsSave);
+		Optional<ObjectCollection> saveObjs = OptionalFactory.create(objsSave);
 		saveObjs.ifPresent( so
 			->so.addAll(objsSource)
 		);
@@ -83,7 +83,7 @@ public abstract class ObjMaskProviderMergeWithFeature extends ObjMaskProviderMer
 		getLogger().getLogReporter().logFormatted("There are %d input objects", objsSource.size() );
 		
 		try {
-			ObjMaskCollection merged = mergeMultiplex(
+			ObjectCollection merged = mergeMultiplex(
 				objsSource,
 				a -> mergeConnectedComponents( a, saveObjs )
 			);
@@ -118,7 +118,7 @@ public abstract class ObjMaskProviderMergeWithFeature extends ObjMaskProviderMer
 	 * @return
 	 * @throws OperationFailedException
 	 */
-	private ObjMaskCollection mergeConnectedComponents( ObjMaskCollection objs, Optional<ObjMaskCollection> saveObjs ) throws OperationFailedException {
+	private ObjectCollection mergeConnectedComponents( ObjectCollection objs, Optional<ObjectCollection> saveObjs ) throws OperationFailedException {
 		
 		LogReporter logger = getLogger().getLogReporter();
 		
@@ -154,7 +154,7 @@ public abstract class ObjMaskProviderMergeWithFeature extends ObjMaskProviderMer
 	 * @return
 	 * @throws OperationFailedException
 	 */
-	private boolean tryMerge( MergeGraph graph, Optional<ObjMaskCollection> saveObjs ) throws OperationFailedException {
+	private boolean tryMerge( MergeGraph graph, Optional<ObjectCollection> saveObjs ) throws OperationFailedException {
 		
 		// Find the edge with the best improvement
 		EdgeTypeWithVertices<ObjVertex,PrioritisedVertex> edgeToMerge = graph.findMaxPriority();
@@ -177,7 +177,7 @@ public abstract class ObjMaskProviderMergeWithFeature extends ObjMaskProviderMer
 	}
 	
 	private MergeGraph createGraph(
-		ObjMaskCollection objs,
+		ObjectCollection objs,
 		Optional<ImageRes> res
 	) throws CreateException {
 			

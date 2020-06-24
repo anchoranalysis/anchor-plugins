@@ -33,7 +33,7 @@ import java.util.Collection;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.io.bean.input.InputManagerParams;
 import org.anchoranalysis.io.bean.provider.file.FileProviderWithDirectory;
-import org.anchoranalysis.io.error.AnchorIOException;
+import org.anchoranalysis.io.error.FileProviderException;
 import org.anchoranalysis.io.params.InputContextParams;
 
 public class SortAlphabeticallyWithDirectory extends FileProviderWithDirectory {
@@ -44,7 +44,7 @@ public class SortAlphabeticallyWithDirectory extends FileProviderWithDirectory {
 	// END BEAN PROPERTIES
 	
 	@Override
-	public Collection<File> matchingFilesForDirectory( Path directory, InputManagerParams params ) throws AnchorIOException {
+	public Collection<File> matchingFilesForDirectory( Path directory, InputManagerParams params ) throws FileProviderException {
 		return SortUtilities.sortFiles(
 			fileProvider.matchingFilesForDirectory(directory, params)
 		);

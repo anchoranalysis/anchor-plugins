@@ -33,11 +33,11 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.image.bean.threshold.CalculateLevel;
-import org.anchoranalysis.image.chnl.Chnl;
-import org.anchoranalysis.image.chnl.factory.ChnlFactory;
+import org.anchoranalysis.image.channel.Channel;
+import org.anchoranalysis.image.channel.factory.ChannelFactory;
 import org.anchoranalysis.image.convert.ByteConverter;
 import org.anchoranalysis.image.extent.Extent;
-import org.anchoranalysis.image.objmask.ObjMaskCollection;
+import org.anchoranalysis.image.objectmask.ObjectCollection;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
 
@@ -56,7 +56,7 @@ public class ChnlProviderConnectedComponentScore extends ChnlProviderOneObjsSour
 	// END BEAN PROPERTIES
 	
 	@Override
-	protected Chnl createFromChnl(Chnl chnl, ObjMaskCollection objsSource) throws CreateException {
+	protected Channel createFromChnl(Channel chnl, ObjectCollection objsSource) throws CreateException {
 	
 		LevelResultCollection lrc = LevelResultCollectionFactory.createCollection(
 			chnl,
@@ -66,7 +66,7 @@ public class ChnlProviderConnectedComponentScore extends ChnlProviderOneObjsSour
 			getLogger().getLogReporter()
 		);
 		
-		Chnl chnlOut = ChnlFactory.instance().createEmptyInitialised( chnl.getDimensions(), VoxelDataTypeUnsignedByte.instance );
+		Channel chnlOut = ChannelFactory.instance().createEmptyInitialised( chnl.getDimensions(), VoxelDataTypeUnsignedByte.instance );
 		
 		populateChnl( chnl, chnlOut, lrc );
 
@@ -99,7 +99,7 @@ public class ChnlProviderConnectedComponentScore extends ChnlProviderOneObjsSour
 		return (int) (div*mult);
 	}
 	
-	private void populateChnl( Chnl regionIn, Chnl regionOut, LevelResultCollection lrc ) {
+	private void populateChnl( Channel regionIn, Channel regionOut, LevelResultCollection lrc ) {
 		
 		VoxelBox<ByteBuffer> vbIn = regionIn.getVoxelBox().asByte();
 		VoxelBox<ByteBuffer> vbOut = regionOut.getVoxelBox().asByte();

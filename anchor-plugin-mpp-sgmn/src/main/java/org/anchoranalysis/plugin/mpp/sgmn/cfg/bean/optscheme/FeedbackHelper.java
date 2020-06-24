@@ -29,7 +29,7 @@ package org.anchoranalysis.plugin.mpp.sgmn.cfg.bean.optscheme;
 import org.anchoranalysis.core.log.LogReporter;
 import org.anchoranalysis.mpp.sgmn.kernel.proposer.WeightedKernelList;
 import org.anchoranalysis.mpp.sgmn.optscheme.ExtractScoreSize;
-import org.anchoranalysis.mpp.sgmn.optscheme.OptSchemeInitContext;
+import org.anchoranalysis.mpp.sgmn.optscheme.OptSchemeContext;
 import org.anchoranalysis.mpp.sgmn.optscheme.feedback.FeedbackReceiver;
 import org.anchoranalysis.mpp.sgmn.optscheme.feedback.OptimizationFeedbackEndParams;
 import org.anchoranalysis.mpp.sgmn.optscheme.feedback.OptimizationFeedbackInitParams;
@@ -38,7 +38,7 @@ class FeedbackHelper {
 
 	public static <T> FeedbackGenerator<T> createInitFeedbackGenerator(
 		FeedbackReceiver<T> feedbackReceiver,
-		OptSchemeInitContext initContext,
+		OptSchemeContext initContext,
 		WeightedKernelList<?> allKernelFactories,
 		ExtractScoreSize<T> extractScoreSize
 	) {
@@ -59,7 +59,7 @@ class FeedbackHelper {
 	public static <T> void endWithFinalFeedback(
 		FeedbackGenerator<T> feedbackGenerator,
 		T state,
-		OptSchemeInitContext initContext
+		OptSchemeContext initContext
 	) {
 		OptimizationFeedbackEndParams<T> optEndParams = feedbackEndParams(
 			state,
@@ -68,7 +68,7 @@ class FeedbackHelper {
 		feedbackGenerator.end( optEndParams );
 	}
 	
-	private static <T> OptimizationFeedbackInitParams<T> feedbackInitParams( OptSchemeInitContext initContext, WeightedKernelList<?> allKernelFactories ) {
+	private static <T> OptimizationFeedbackInitParams<T> feedbackInitParams( OptSchemeContext initContext, WeightedKernelList<?> allKernelFactories ) {
 		OptimizationFeedbackInitParams<T> feedbackParams = new OptimizationFeedbackInitParams<>();
 		feedbackParams.setInitContext(initContext);
 		feedbackParams.setKernelFactoryList( allKernelFactories );

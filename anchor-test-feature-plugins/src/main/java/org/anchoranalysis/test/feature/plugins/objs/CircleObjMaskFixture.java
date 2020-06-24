@@ -35,7 +35,7 @@ import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.extent.ImageDim;
-import org.anchoranalysis.image.objmask.ObjMask;
+import org.anchoranalysis.image.objectmask.ObjectMask;
 
 public class CircleObjMaskFixture {
 
@@ -43,7 +43,7 @@ public class CircleObjMaskFixture {
 		new Extent(800, 600, 1)
 	);
 	
-	public static ObjMask circleAt( Point2i center, double radius ) {
+	public static ObjectMask circleAt( Point2i center, double radius ) {
 		MarkCircle mark = new MarkCircle();
 		mark.setPos( PointConverter.doubleFromInt(center) );
 		mark.setRadius(radius);

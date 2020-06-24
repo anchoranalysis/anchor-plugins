@@ -32,9 +32,9 @@ import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.index.rtree.ObjMaskCollectionRTree;
-import org.anchoranalysis.image.objmask.ObjMask;
-import org.anchoranalysis.image.objmask.properties.ObjMaskWithProperties;
-import org.anchoranalysis.image.objmask.properties.ObjMaskWithPropertiesCollection;
+import org.anchoranalysis.image.objectmask.ObjectMask;
+import org.anchoranalysis.image.objectmask.properties.ObjectWithProperties;
+import org.anchoranalysis.image.objectmask.properties.ObjectCollectionWithProperties;
 import org.anchoranalysis.plugin.mpp.experiment.objs.csv.CSVRow;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -119,12 +119,12 @@ public class Pairwise extends ColumnDefinition {
 
 	
 	@Override
-	public ObjMaskWithPropertiesCollection findObjsMatchingRow( CSVRow csvRow, ObjMaskCollectionRTree allObjs ) throws OperationFailedException {
+	public ObjectCollectionWithProperties findObjsMatchingRow( CSVRow csvRow, ObjMaskCollectionRTree allObjs ) throws OperationFailedException {
 		
-		ObjMaskWithPropertiesCollection objs = new ObjMaskWithPropertiesCollection();
+		ObjectCollectionWithProperties objs = new ObjectCollectionWithProperties();
 		
-		ObjMask obj1 = Utilities.findObjForCSVRow( allObjs, csvRow, indexFirstPnt, indexFirstNumPixels );
-		ObjMask obj2 = Utilities.findObjForCSVRow( allObjs, csvRow, indexSecondPnt, indexSecondNumPixels );
+		ObjectMask obj1 = Utilities.findObjForCSVRow( allObjs, csvRow, indexFirstPnt, indexFirstNumPixels );
+		ObjectMask obj2 = Utilities.findObjForCSVRow( allObjs, csvRow, indexSecondPnt, indexSecondNumPixels );
 		
 		if (obj1==obj2) {
 			throw new OperationFailedException(
@@ -135,8 +135,8 @@ public class Pairwise extends ColumnDefinition {
 			);
 		}
 		
-		objs.add( new ObjMaskWithProperties(obj1) );
-		objs.add( new ObjMaskWithProperties(obj2) );
+		objs.add( new ObjectWithProperties(obj1) );
+		objs.add( new ObjectWithProperties(obj2) );
 		return objs;
 	}
 	

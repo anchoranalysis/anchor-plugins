@@ -3,7 +3,7 @@ package ch.ethz.biol.cell.mpp.bound;
 import org.anchoranalysis.anchor.mpp.bean.bound.BoundCalculator;
 import org.anchoranalysis.anchor.mpp.bean.bound.RslvdBound;
 import org.anchoranalysis.anchor.mpp.bound.BidirectionalBound;
-import org.anchoranalysis.anchor.mpp.proposer.error.ErrorNode;
+
 
 /*
  * #%L
@@ -44,7 +44,7 @@ public class ConstantBoundGenerator extends BoundCalculator {
 	// END BEAN PROPERTIES
 	
 	public ConstantBoundGenerator() {
-		
+		// Standardbean constructor
 	}
 	
 	public ConstantBoundGenerator(RslvdBound constantBound) {
@@ -53,10 +53,7 @@ public class ConstantBoundGenerator extends BoundCalculator {
 	}
 	
 	@Override
-	public BidirectionalBound calcBound(Point3d point, RotationMatrix rotMatrix, ErrorNode proposerFailureDescription) {
-		
-		proposerFailureDescription = proposerFailureDescription.add("ConstantBoundGenerator");
-		
+	public BidirectionalBound calcBound(Point3d point, RotationMatrix rotMatrix) {
 		BidirectionalBound bib = new BidirectionalBound();
 		bib.setForward( constantBound );
 		bib.setReverse( constantBound );

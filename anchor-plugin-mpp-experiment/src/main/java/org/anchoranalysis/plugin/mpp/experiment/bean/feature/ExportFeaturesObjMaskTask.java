@@ -27,64 +27,68 @@ package org.anchoranalysis.plugin.mpp.experiment.bean.feature;
  */
 
 
-import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-
 import org.anchoranalysis.bean.NamedBean;
-import org.anchoranalysis.bean.annotation.AllowEmpty;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.index.GetOperationFailedException;
-import org.anchoranalysis.core.log.LogErrorReporter;
-import org.anchoranalysis.core.name.CombinedName;
-import org.anchoranalysis.core.name.MultiName;
-import org.anchoranalysis.experiment.ExperimentExecutionException;
-import org.anchoranalysis.experiment.JobExecutionException;
 import org.anchoranalysis.experiment.task.InputTypesExpected;
 import org.anchoranalysis.experiment.task.InputBound;
-import org.anchoranalysis.experiment.task.ParametersExperiment;
 import org.anchoranalysis.feature.bean.list.FeatureListProvider;
-import org.anchoranalysis.feature.calc.results.ResultsVectorCollection;
 import org.anchoranalysis.feature.input.FeatureInput;
-import org.anchoranalysis.feature.io.csv.GroupedResultsVectorCollection;
+import org.anchoranalysis.feature.io.csv.MetadataHeaders;
+import org.anchoranalysis.feature.io.csv.StringLabelsForCsvRow;
+import org.anchoranalysis.feature.io.csv.name.CombinedName;
+import org.anchoranalysis.feature.io.csv.name.MultiName;
+import org.anchoranalysis.feature.io.csv.name.SimpleName;
+import org.anchoranalysis.feature.list.NamedFeatureStoreFactory;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
 import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
 import org.anchoranalysis.image.feature.session.FeatureTableSession;
 import org.anchoranalysis.image.init.ImageInitParams;
-import org.anchoranalysis.image.objmask.ObjMaskCollection;
+import org.anchoranalysis.image.objectmask.ObjectCollection;
 import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.output.bound.BoundIOContext;
-import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
 import org.anchoranalysis.mpp.io.input.MultiInput;
 import org.anchoranalysis.mpp.sgmn.bean.define.DefineOutputterMPPWithNrg;
 import org.anchoranalysis.plugin.image.feature.bean.obj.table.FeatureTableObjs;
 import org.anchoranalysis.plugin.image.task.bean.feature.ExportFeaturesTask;
-import org.anchoranalysis.plugin.image.task.sharedstate.SharedStateExportFeatures;
 
 
-/** Calculates feature on a 'grouped' set of objects
- 
-   1. All files are aggregated into groups (with the name of the ObjMaskProvider added to the end)
-   2. For each image file, the NamedDefinitions are applied and an ObjMaskCollection is extracted
-   3. These objects are added to the appropriate ObjMaskCollection associated with each group
-   4. ReportFeatures are calculated on each group, and exported as a properties file
-   
-   csvAll  		one csv file where each row is an object
-   csvAgg  		one csv file where each row is a group (with aggregated features of the objects within)
-   csvGroup 	a csv file per group, where each row is an object
-   
-   @param T the feature input-type supported by the FlexiFeatureTable
-   
-   TODO does this need to be a MultiInput and dependent on MPP? Can it be moved to anchor-plugin-image-task??
-   
+/** 
+ * Calculates features for each object in a collection.
+ *
+ *  <ol>
+ *  <li>All files are aggregated into groups (with the name of the ObjMaskProvider added to the end)</li>
+ *  <li>For each image file, the <code>define</code> is applied and an {@link ObjectCollection} is extracted</li>
+ *  <li>These objects are added to the appropriate {@link ObjectCollection} associated with each group</li>
+ *  <li>Various exports may occur with either the features for each object (or aggregated features for the groups)</li>
+ *  </ol>
+ *  
+ *  <div>
+ *  These exports are:
+ *  <table>
+ *  <tr><td>features</td><td>a single csv file where each row is an object</td></tr>
+ *  <tr><td>featuresAggregated</td><td>a single csv file where each row is a group (with aggregated features of the objects within)</td></tr>
+ *  <tr><td>featuresGroup</td><td>a csv file per group, where each row is an object</td></tr>
+ *  </table>
+ *  </div>
+ *  
+ *  <p>Note unlike other export-tasks, the group here is not only what is returned by the <code>group</code> generator
+ *  in the super-class, but also includes the name of the {@link ObjMaskProvider} if there is more than one.</p>
+ *  
+ *  TODO does this need to be a MultiInput and dependent on MPP? Can it be moved to anchor-plugin-image-task??
+ *  
+ *  @param T the feature input-type supported by the FlexiFeatureTable
 **/
 public class ExportFeaturesObjMaskTask<T extends FeatureInput> extends ExportFeaturesTask<MultiInput,SharedStateExportFeaturesObjMask<T>> {
 
+	private static final NamedFeatureStoreFactory STORE_FACTORY = NamedFeatureStoreFactory.bothNameAndParams();
+	
 	// START BEAN PROPERTIES
 	@BeanField
 	private DefineOutputterMPPWithNrg define = new DefineOutputterMPPWithNrg();
@@ -98,62 +102,158 @@ public class ExportFeaturesObjMaskTask<T extends FeatureInput> extends ExportFea
 	@BeanField
 	private FeatureTableObjs<T> table;
 	
-	/**
-	 * If non-empty, A keyValueParams is treated as part of the nrgStack 
-	 */
-	@BeanField @AllowEmpty
-	private String nrgParamsName = "";
-	
-	// START BEAN PROPERTIES
 	@BeanField
 	private boolean suppressErrors = false;
 	//END BEAN PROPERTIES
 
-	
-	@Override
-	public SharedStateExportFeaturesObjMask<T> beforeAnyJobIsExecuted(
-			BoundOutputManagerRouteErrors outputManager,
-			ParametersExperiment params
-	) throws ExperimentExecutionException {
-		
-		try {
-			return new SharedStateExportFeaturesObjMask<>(
-				new GroupedResultsVectorCollection("id","group","objSetName"),
-				table.createFeatures(listFeaturesObjMask, suppressErrors)
-			);
-			
-		} catch (CreateException | InitException e) {
-			throw new ExperimentExecutionException(e);
-		}
-	}
-	
 	@Override
 	public InputTypesExpected inputTypesExpected() {
 		return new InputTypesExpected(MultiInput.class);
 	}
+	
+	@Override
+	protected SharedStateExportFeaturesObjMask<T> createSharedState( MetadataHeaders metadataHeaders, BoundIOContext context) throws CreateException {
+		try {
+			FeatureTableSession<T> session = table.createFeatures(
+				listFeaturesObjMask,
+				STORE_FACTORY,
+				suppressErrors
+			); 
+			return new SharedStateExportFeaturesObjMask<>(
+				metadataHeaders,
+				session,
+				context
+			);
+			
+		} catch (InitException | AnchorIOException e) {
+			throw new CreateException(e);
+		}
+	}
 
 	@Override
-	public void doJobOnInputObject(	InputBound<MultiInput,SharedStateExportFeaturesObjMask<T>> input ) throws JobExecutionException {
-		
-		try {
-			define.processInput(
-				input.getInputObject(),
-				input.context(),
-				(initParams, nrgStack) -> calculateFeaturesForImage(input, initParams, nrgStack) 
-			);
-						
-		} catch (OperationFailedException e) {
-			throw new JobExecutionException(e);
+	protected void calcAllResultsForInput(
+		InputBound<MultiInput,SharedStateExportFeaturesObjMask<T>> input,
+		Optional<String> groupGeneratorName
+	) throws OperationFailedException {
+		define.processInput(
+			input.getInputObject(),
+			input.context(),
+			(initParams, nrgStack) -> calculateFeaturesForImage(input, groupGeneratorName, initParams, nrgStack) 
+		);
+	}
+
+	@Override
+	protected String[] headersForResults() {
+		return new String[]{"image", "unique_pixel_in_object"};
+	}
+	
+	@Override
+	protected String[] headersForGroup(boolean groupGeneratorDefined) {
+		boolean moreThanOneProvider = moreThanOneProvider();
+		if (groupGeneratorDefined) {
+			if (moreThanOneProvider) {
+				return new String[]{"group", "object_collection"};
+			} else {
+				return new String[]{"group"};
+			}
+		} else {
+			if (moreThanOneProvider) {
+				return new String[]{"object_collection"};
+			} else {
+				return new String[]{};
+			}
 		}
+	}
+
+	/** If either a group-generator is defined or there's more than one provider, then groups should be included */
+	@Override
+	protected boolean includeGroupInExperiment(boolean groupGeneratorDefined) {
+		return groupGeneratorDefined || moreThanOneProvider();
+	}
+	
+	private boolean moreThanOneProvider() {
+		return listObjMaskProvider.size()>1;
 	}
 	
 	private int calculateFeaturesForImage(
 		InputBound<MultiInput,SharedStateExportFeaturesObjMask<T>> input,
+		Optional<String> groupGeneratorName,
 		ImageInitParams imageInit,
 		NRGStackWithParams nrgStack
 	) throws OperationFailedException {
 		
-		BoundIOContext context = input.context();
+		FeatureTableSession<T> session = duplicateAndStartSession(input, imageInit, nrgStack);
+		FeatureCalculator<T> calculator = new FeatureCalculator<>(
+			table,
+			input.getSharedState(),
+			imageInit,
+			nrgStack,
+			suppressErrors,
+			input.context().getLogger()
+		);
+		processAllProviders(
+			input.getInputObject().descriptiveName(),
+			groupGeneratorName,
+			session,
+			calculator
+		);
+		
+		// Arbitrary, we need a return-type
+		return 0;
+	}
+	
+	private void processAllProviders(
+		String descriptiveName,
+		Optional<String> groupGeneratorName,
+		FeatureTableSession<T> session,
+		FeatureCalculator<T> calculator
+	) throws OperationFailedException {
+		
+		// For every objMaskCollection provider
+		for(NamedBean<ObjMaskProvider> ni : listObjMaskProvider) {
+			calculator.processProvider(
+				ni.getValue(),
+				session,
+				objName -> identifierFor(descriptiveName, objName, groupGeneratorName, ni.getName())
+			);
+		}
+	}
+	
+	private StringLabelsForCsvRow identifierFor(
+		String descriptiveName,
+		String objName,
+		Optional<String> groupGeneratorName,
+		String providerName
+	) {
+		return new StringLabelsForCsvRow(
+			Optional.of(
+				new String[]{descriptiveName, objName}
+			),
+			createGroupName(groupGeneratorName, providerName)
+		);
+	}
+	
+	private Optional<MultiName> createGroupName( Optional<String> groupGeneratorName, String providerName ) {
+		if (moreThanOneProvider()) {
+			if (groupGeneratorName.isPresent()) {
+				return Optional.of(
+					new CombinedName(groupGeneratorName.get(), providerName)
+				);
+			} else {
+				return Optional.of(
+					new SimpleName(providerName)
+				);
+			}
+		} else {
+			return groupGeneratorName.map(SimpleName::new);
+		}
+	}
+
+	private FeatureTableSession<T> duplicateAndStartSession(
+		InputBound<MultiInput,SharedStateExportFeaturesObjMask<T>> input,
+		ImageInitParams imageInit,
+		NRGStackWithParams nrgStack
+	) throws OperationFailedException {
 		
 		// Create a duplicated featureStore for this image, as we want separate features on this thread,
 		//  so they are thread-safe, for parallel execution
@@ -163,105 +263,15 @@ public class ExportFeaturesObjMaskTask<T extends FeatureInput> extends ExportFea
 			session.start(
 				imageInit,
 				Optional.of(nrgStack),
-				context.getLogger()
+				input.context().getLogger()
 			);
 		} catch (InitException e) {
 			throw new OperationFailedException(e);
 		}
-					
-		try {
-			processAllProviders(
-				input.getInputObject().pathForBindingRequired(),
-				session,
-				imageInit,
-				nrgStack,
-				input.getSharedState(),
-				context
-			);
-		} catch (AnchorIOException e) {
-			throw new OperationFailedException(e);
-		}
 		
-		// Arbitrary, we need a return-type
-		return 0;
-	}
-
-	
-	private void processAllProviders(
-		Path inputPath,
-		FeatureTableSession<T> session,
-		ImageInitParams imageInitParams,
-		NRGStackWithParams nrgStack,
-		SharedStateExportFeatures sharedState,
-		BoundIOContext context		
-	) throws OperationFailedException {
-		try {
-			String id = extractImageIdentifier(inputPath, context.isDebugEnabled());
-			
-			// Extract a group name
-			String groupName = extractGroupName(inputPath, context.isDebugEnabled());
-									
-			// For every objMaskCollection provider
-			for( NamedBean<ObjMaskProvider> ni : listObjMaskProvider) {
-				MultiName rowName = new CombinedName( groupName, ni.getName() ); 
-				calculateFeaturesForProvider(
-					id,
-					objsFromProvider(ni.getValue(), imageInitParams, context.getLogger()),
-					session,
-					nrgStack,
-					sharedState.resultsVectorForIdentifier(rowName),
-					context.getLogger()
-				);
-			}
-		} catch (AnchorIOException | GetOperationFailedException e) {
-			throw new OperationFailedException(e);
-		}
+		return session;
 	}
 	
-	
-	private void calculateFeaturesForProvider(
-		String id,
-		ObjMaskCollection objs,
-		FeatureTableSession<T> session,
-		NRGStackWithParams nrgStack,
-		ResultsVectorCollection resultsDestination,
-		LogErrorReporter logErrorReporter
-	) throws OperationFailedException {
-		try {
-			List<T> listParams = table.createListInputs(
-				objs,
-				nrgStack,
-				logErrorReporter
-			);
-			
-			FeatureCalculator.calculateManyFeaturesInto(
-				id,
-				session,
-				listParams,
-				resultsDestination,
-				suppressErrors,
-				logErrorReporter
-			);
-		} catch (CreateException | OperationFailedException e) {
-			throw new OperationFailedException(e);
-		}
-	}
-	
-	private static ObjMaskCollection objsFromProvider( ObjMaskProvider provider, ImageInitParams imageInitParams, LogErrorReporter logErrorReporter ) throws OperationFailedException {
-
-		try {
-			ObjMaskProvider objMaskProviderLoc = provider.duplicateBean();
-			
-			// Initialise
-			objMaskProviderLoc.initRecursive(imageInitParams, logErrorReporter);
-	
-			return objMaskProviderLoc.create(); 
-			
-		} catch (InitException | CreateException e) {
-			throw new OperationFailedException(e);
-		}
-	}
-
 	public List<NamedBean<FeatureListProvider<FeatureInputSingleObj>>> getListFeaturesObjMask() {
 		return listFeaturesObjMask;
 	}
@@ -278,14 +288,6 @@ public class ExportFeaturesObjMaskTask<T extends FeatureInput> extends ExportFea
 	public void setListObjMaskProvider(
 			List<NamedBean<ObjMaskProvider>> listObjMaskProvider) {
 		this.listObjMaskProvider = listObjMaskProvider;
-	}
-
-	public String getNrgParamsName() {
-		return nrgParamsName;
-	}
-
-	public void setNrgParamsName(String nrgParamsName) {
-		this.nrgParamsName = nrgParamsName;
 	}
 
 	public boolean isSuppressErrors() {

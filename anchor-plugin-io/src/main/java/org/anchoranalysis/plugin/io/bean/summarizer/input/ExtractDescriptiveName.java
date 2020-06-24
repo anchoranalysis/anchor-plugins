@@ -1,5 +1,7 @@
 package org.anchoranalysis.plugin.io.bean.summarizer.input;
 
+import java.util.Optional;
+
 /*-
  * #%L
  * anchor-plugin-io
@@ -31,8 +33,10 @@ import org.anchoranalysis.io.input.InputFromManager;
 public class ExtractDescriptiveName<T extends InputFromManager> extends SummarizerInputFromManager<T, String> {
 
 	@Override
-	protected String extractFrom(T input) {
-		return input.descriptiveName();
+	protected Optional<String> extractFrom(T input) {
+		return Optional.of(
+			input.descriptiveName()
+		);
 	}
 
 	

@@ -32,7 +32,7 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorSingle;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorSingleChangeInput;
-import org.anchoranalysis.image.chnl.Chnl;
+import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
 
 public class NRGStackUtilities {
@@ -41,7 +41,7 @@ public class NRGStackUtilities {
 	
 	public static FeatureCalculatorSingle<FeatureInputSingleObj> maybeAddNrgStack(
 		FeatureCalculatorSingle<FeatureInputSingleObj> session,
-		Optional<Chnl> chnl
+		Optional<Channel> chnl
 	) throws CreateException {
 		
 		if (chnl.isPresent()) {
@@ -56,7 +56,7 @@ public class NRGStackUtilities {
 	
 	public static FeatureCalculatorSingle<FeatureInputSingleObj> addNrgStack(
 		FeatureCalculatorSingle<FeatureInputSingleObj> session,
-		Chnl chnl
+		Channel chnl
 	) throws CreateException {
 		
 		// Make sure an NRG stack is added to each params that are called

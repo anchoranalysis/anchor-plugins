@@ -27,8 +27,8 @@ package org.anchoranalysis.plugin.image.task.bean.grouped.raster;
  */
 
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.image.chnl.Chnl;
-import org.anchoranalysis.image.chnl.factory.ChnlFactory;
+import org.anchoranalysis.image.channel.Channel;
+import org.anchoranalysis.image.channel.factory.ChannelFactory;
 import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedInt;
@@ -37,13 +37,13 @@ import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedInt;
 class AggregateChnl {
 	
 	// We create only when we have the first channel, so dimensions can then be determined
-	private Chnl raster = null;
+	private Channel raster = null;
 	private int cnt = 0;
 	
 	public AggregateChnl() {
 	}
 	
-	public synchronized void addChnl( Chnl chnl ) throws OperationFailedException {
+	public synchronized void addChnl( Channel chnl ) throws OperationFailedException {
 		
 		createRasterIfNecessary( chnl.getDimensions() );
 		
@@ -68,13 +68,13 @@ class AggregateChnl {
 	 * @return
 	 * @throws OperationFailedException 
 	 */
-	public Chnl createMeanChnl( VoxelDataType outputType ) throws OperationFailedException {
+	public Channel createMeanChnl( VoxelDataType outputType ) throws OperationFailedException {
 		
 		if (cnt==0) {
 			throw new OperationFailedException("No channels have been added, so cannot create mean");
 		}
 		
-		Chnl chnlOut = ChnlFactory.instance().createEmptyInitialised( raster.getDimensions(), outputType );
+		Channel chnlOut = ChannelFactory.instance().createEmptyInitialised( raster.getDimensions(), outputType );
 		
 		VoxelBoxArithmetic.divide( raster.getVoxelBox().asInt(), cnt, chnlOut.getVoxelBox(), outputType );
 				
@@ -83,7 +83,7 @@ class AggregateChnl {
 		
 	private void createRasterIfNecessary(ImageDim dim) {
 		if (raster==null) {
-			this.raster = ChnlFactory.instance().createEmptyInitialised(
+			this.raster = ChannelFactory.instance().createEmptyInitialised(
 				dim,
 				VoxelDataTypeUnsignedInt.instance
 			);	

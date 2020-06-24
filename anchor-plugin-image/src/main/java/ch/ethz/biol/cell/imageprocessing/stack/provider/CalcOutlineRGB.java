@@ -29,9 +29,9 @@ package ch.ethz.biol.cell.imageprocessing.stack.provider;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.image.binary.BinaryChnl;
-import org.anchoranalysis.image.chnl.Chnl;
-import org.anchoranalysis.image.objmask.ObjMask;
-import org.anchoranalysis.image.objmask.factory.CreateFromEntireChnlFactory;
+import org.anchoranalysis.image.channel.Channel;
+import org.anchoranalysis.image.objectmask.ObjectMask;
+import org.anchoranalysis.image.objectmask.factory.CreateFromEntireChnlFactory;
 import org.anchoranalysis.image.stack.DisplayStack;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
@@ -60,7 +60,7 @@ class CalcOutlineRGB {
 	public static Stack apply(
 		BinaryChnl outline,
 		DisplayStack background,
-		Chnl blueToAssign,
+		Channel blueToAssign,
 		boolean createShort	
 	) throws CreateException, InitException {
 		
@@ -88,10 +88,10 @@ class CalcOutlineRGB {
 	
 	public static Stack apply(
 		BinaryChnl outline,
-		Chnl backgroundRed,
-		Chnl backgroundGreen,
-		Chnl backgroundBlue,
-		Chnl blueToAssign,
+		Channel backgroundRed,
+		Channel backgroundGreen,
+		Channel backgroundBlue,
+		Channel blueToAssign,
 		boolean createShort
 	) throws CreateException, InitException {
 
@@ -101,13 +101,13 @@ class CalcOutlineRGB {
 		// We zero the pixels on the background and blue that are on our outline
 		zeroPixels(
 			outline,
-			new Chnl[]{ backgroundBlue, backgroundGreen, blueToAssign }
+			new Channel[]{ backgroundBlue, backgroundGreen, blueToAssign }
 		);
 
 		VoxelDataType outputType = createShort ? VoxelDataTypeUnsignedShort.instance : VoxelDataTypeUnsignedByte.instance;
 		
-		Chnl chnlGreen = imposeOutlineOnChnl(outline, backgroundGreen, outputType);
-		Chnl chnlBlue = MaxChnls.apply( backgroundBlue, blueToAssign, outputType );
+		Channel chnlGreen = imposeOutlineOnChnl(outline, backgroundGreen, outputType);
+		Channel chnlBlue = MaxChnls.apply( backgroundBlue, blueToAssign, outputType );
 		
 		return StackProviderRGBChnlProvider.createRGBStack(
 			backgroundRed,
@@ -117,9 +117,9 @@ class CalcOutlineRGB {
 		);
 	}
 	
-	private static Chnl imposeOutlineOnChnl(
+	private static Channel imposeOutlineOnChnl(
 		BinaryChnl outline,
-		Chnl chnl,
+		Channel chnl,
 		VoxelDataType outputType
 	) throws CreateException {
 				
@@ -133,9 +133,9 @@ class CalcOutlineRGB {
 		);
 	}
 	
-	private static void zeroPixels( BinaryChnl outline, Chnl[] chnlArr ) throws CreateException {
-		ObjMask omOutline = CreateFromEntireChnlFactory.createObjMask(outline);
-		for( Chnl chnl : chnlArr ) {
+	private static void zeroPixels( BinaryChnl outline, Channel[] chnlArr ) throws CreateException {
+		ObjectMask omOutline = CreateFromEntireChnlFactory.createObjMask(outline);
+		for( Channel chnl : chnlArr ) {
 			chnl.getVoxelBox().any().setPixelsCheckMask(omOutline, 0);
 		}
 	}

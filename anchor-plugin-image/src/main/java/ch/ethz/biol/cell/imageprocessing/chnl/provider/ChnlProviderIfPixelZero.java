@@ -31,8 +31,8 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.bean.provider.ChnlProvider;
 import org.anchoranalysis.image.bean.provider.ChnlProviderOne;
-import org.anchoranalysis.image.chnl.Chnl;
-import org.anchoranalysis.image.chnl.factory.ChnlFactory;
+import org.anchoranalysis.image.channel.Channel;
+import org.anchoranalysis.image.channel.factory.ChannelFactory;
 import org.anchoranalysis.image.voxel.box.VoxelBoxWrapper;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 import org.anchoranalysis.image.voxel.datatype.CombineTypes;
@@ -62,9 +62,9 @@ public class ChnlProviderIfPixelZero extends ChnlProviderOne {
 	// END BEAN PROPERTIES
 	
 	@Override
-	public Chnl createFromChnl(Chnl chnl) throws CreateException {
+	public Channel createFromChnl(Channel chnl) throws CreateException {
 		
-		Chnl ifZero = DimChecker.createSameSize(chnlIfPixelZero, "chnlIfPixelZero", chnl);
+		Channel ifZero = DimChecker.createSameSize(chnlIfPixelZero, "chnlIfPixelZero", chnl);
 		
 		VoxelDataType combinedType = CombineTypes.combineTypes(chnl.getVoxelDataType(), ifZero.getVoxelDataType());
 
@@ -91,9 +91,9 @@ public class ChnlProviderIfPixelZero extends ChnlProviderOne {
 	 * @return a newly created merged channel according to the above rules
 	 * @throws CreateException
 	 */
-	public static Chnl mergeViaZeroCheck( Chnl chnl, Chnl chnlIfPixelZero, VoxelDataType combinedType, double multFactorIfNonZero ) throws CreateException {
+	public static Channel mergeViaZeroCheck( Channel chnl, Channel chnlIfPixelZero, VoxelDataType combinedType, double multFactorIfNonZero ) throws CreateException {
 		
-		Chnl chnlOut = ChnlFactory.instance().createEmptyInitialised(
+		Channel chnlOut = ChannelFactory.instance().createEmptyInitialised(
 			chnl.getDimensions(),
 			combinedType
 		);

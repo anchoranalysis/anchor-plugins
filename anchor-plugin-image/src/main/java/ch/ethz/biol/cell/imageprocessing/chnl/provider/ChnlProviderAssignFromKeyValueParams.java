@@ -34,7 +34,7 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 import org.anchoranalysis.core.params.KeyValueParams;
 import org.anchoranalysis.image.bean.provider.ChnlProviderOne;
-import org.anchoranalysis.image.chnl.Chnl;
+import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 
 public class ChnlProviderAssignFromKeyValueParams extends ChnlProviderOne {
@@ -48,7 +48,7 @@ public class ChnlProviderAssignFromKeyValueParams extends ChnlProviderOne {
 	// END BEAN PROPERTIES
 	
 	@Override
-	public Chnl createFromChnl(Chnl chnl) throws CreateException {
+	public Channel createFromChnl(Channel chnl) throws CreateException {
 		
 		KeyValueParams params;
 		try {

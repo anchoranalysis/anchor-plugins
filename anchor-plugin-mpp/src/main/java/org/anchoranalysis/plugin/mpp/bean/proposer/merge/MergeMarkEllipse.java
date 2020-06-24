@@ -1,9 +1,11 @@
 package org.anchoranalysis.plugin.mpp.bean.proposer.merge;
 
+import java.util.Optional;
+
 import org.anchoranalysis.anchor.mpp.bean.proposer.MarkMergeProposer;
 import org.anchoranalysis.anchor.mpp.bean.proposer.MarkProposer;
-import org.anchoranalysis.anchor.mpp.mark.ISetMarksExplicit;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
+import org.anchoranalysis.anchor.mpp.mark.MarkConic;
 import org.anchoranalysis.anchor.mpp.points.PointClipper;
 import org.anchoranalysis.anchor.mpp.proposer.ProposalAbnormalFailureException;
 import org.anchoranalysis.anchor.mpp.proposer.ProposerContext;
@@ -53,25 +55,27 @@ public class MergeMarkEllipse extends MarkMergeProposer {
 	// END BEAN
 	
 	@Override
-	public Mark propose(PxlMarkMemo mark1, PxlMarkMemo mark2, ProposerContext context) throws ProposalAbnormalFailureException {
+	public Optional<Mark> propose(PxlMarkMemo mark1, PxlMarkMemo mark2, ProposerContext context) throws ProposalAbnormalFailureException {
 		
 		PxlMarkMemo targetPmm = mark1.duplicateFresh();
-		ISetMarksExplicit target = (ISetMarksExplicit) targetPmm.getMark();
+		MarkConic target = (MarkConic) targetPmm.getMark();
 		
 		// We calculate a position for the mark
-		Point3d pos = generateMergedPos( mark1.getMark(), mark2.getMark(), mergedPosTolerance, context.getRe(), context.getNrgStack() );
+		Point3d pos = generateMergedPos( mark1.getMark(), mark2.getMark(), mergedPosTolerance, context.getRandomNumberGenerator(), context.getNrgStack() );
 		
 		target.setMarksExplicit(pos );
 		
 		try {
 			if (!markProposer.propose(targetPmm, context)) {
-				return null;
+				return Optional.empty();
 			}
 		} catch (ProposalAbnormalFailureException e) {
 			throw new ProposalAbnormalFailureException("Failed to propose mark", e);
 		}
 		
-		return targetPmm.getMark();
+		return Optional.of(
+			targetPmm.getMark()
+		);
 	}
 	
 	
@@ -79,7 +83,7 @@ public class MergeMarkEllipse extends MarkMergeProposer {
 	 private static Point3d generateMergedPos( Mark mark1, Mark mark2, double posTolerance, RandomNumberGenerator re, NRGStackWithParams nrgStack ) {
 			
     	Point3d pntNew = new Point3d(mark1.centerPoint());
-    	pntNew.sub( mark2.centerPoint() );
+    	pntNew.subtract( mark2.centerPoint() );
     	
     	// Gives us half way between the marks
     	
@@ -107,7 +111,7 @@ public class MergeMarkEllipse extends MarkMergeProposer {
 
 		// We get the relative vector between them
 		Point3d rel = new Point3d( pntA );
-		rel.sub( pntB );
+		rel.subtract( pntB );
 		
 		// Calculation an angle from this vector
 		return new Orientation2D( Math.atan2( rel.getY(), rel.getX() ) );
@@ -115,7 +119,7 @@ public class MergeMarkEllipse extends MarkMergeProposer {
 	
 	@Override
 	public boolean isCompatibleWith(Mark testMark) {
-		return testMark instanceof ISetMarksExplicit && markProposer.isCompatibleWith(testMark);
+		return testMark instanceof MarkConic && markProposer.isCompatibleWith(testMark);
 	}
 
 	public double getMergedPosTolerance() {

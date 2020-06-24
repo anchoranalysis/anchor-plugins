@@ -31,20 +31,20 @@ import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.experiment.JobExecutionException;
 import org.anchoranalysis.image.binary.BinaryChnl;
 import org.anchoranalysis.image.binary.values.BinaryValues;
-import org.anchoranalysis.image.chnl.Chnl;
+import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.histogram.Histogram;
 import org.anchoranalysis.image.histogram.HistogramFactory;
-import org.anchoranalysis.plugin.image.task.grouped.ChnlSource;
+import org.anchoranalysis.plugin.image.task.grouped.ChannelSource;
 
 /** Extracts a histogram from an image for a given key */
 class HistogramExtracter {
 
-	private ChnlSource source;
+	private ChannelSource source;
 	private String keyMask;
 	private int maskValue;
 		
 	public HistogramExtracter(
-		ChnlSource source,
+		ChannelSource source,
 		String keyMask,
 		int maskValue 
 	) throws JobExecutionException {
@@ -54,7 +54,7 @@ class HistogramExtracter {
 		this.maskValue = maskValue;
 	}
 	
-	public Histogram extractFrom( Chnl chnl ) throws JobExecutionException {
+	public Histogram extractFrom( Channel chnl ) throws JobExecutionException {
 		
 		try {
 			if (!keyMask.isEmpty()) {
@@ -71,7 +71,7 @@ class HistogramExtracter {
 		
 	private BinaryChnl extractMask( String stackName ) throws JobExecutionException {
 		try {
-			Chnl chnl = source.extractChnl(stackName, false);
+			Channel chnl = source.extractChnl(stackName, false);
 			return new BinaryChnl(chnl, createMaskBinaryValues() );
 			
 		} catch (OperationFailedException e) {

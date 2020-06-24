@@ -31,7 +31,8 @@ package org.anchoranalysis.plugin.io.bean.rasterwriter;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
-import org.anchoranalysis.image.chnl.Chnl;
+
+import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.io.RasterIOException;
 import org.anchoranalysis.image.stack.Stack;
 import loci.formats.FormatException;
@@ -66,9 +67,9 @@ public class BioformatsWriter extends ByteNoTimeSeriesWriter {
 	@Override
 	protected void writeRGB( IFormatWriter writer, Stack stack ) throws FormatException, IOException, RasterIOException {
 			
-		Chnl chnlRed = stack.getChnl(0);
-		Chnl chnlGreen = stack.getChnl(1);
-		Chnl chnlBlue = stack.getChnl(2);
+		Channel chnlRed = stack.getChnl(0);
+		Channel chnlGreen = stack.getChnl(1);
+		Channel chnlBlue = stack.getChnl(2);
 		
 		int cap = chnlRed.getVoxelBox().any().extent().getVolumeXY();
 		int cap3 = cap * 3;

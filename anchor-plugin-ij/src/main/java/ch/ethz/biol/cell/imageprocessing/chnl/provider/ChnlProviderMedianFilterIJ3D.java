@@ -31,13 +31,13 @@ import ij.ImagePlus;
 
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.bean.provider.ChnlProviderOne;
-import org.anchoranalysis.image.chnl.Chnl;
+import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.convert.IJWrap;
 
 public class ChnlProviderMedianFilterIJ3D extends ChnlProviderOne {
 	
 	@Override
-	public Chnl createFromChnl(Chnl chnl) throws CreateException {
+	public Channel createFromChnl(Channel chnl) throws CreateException {
 		ImagePlus imp = IJWrap.createImagePlus(chnl);
 		
 		Hybrid_3D_Median_Filter plugin = new Hybrid_3D_Median_Filter();

@@ -33,7 +33,7 @@ import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.feature.bean.objmask.FeatureObjMask;
 import org.anchoranalysis.image.feature.objmask.CalculateNumVoxels;
 import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
-import org.anchoranalysis.image.objmask.ObjMask;
+import org.anchoranalysis.image.objectmask.ObjectMask;
 import org.anchoranalysis.plugin.image.calculation.CalculateClosing;
 
 /**
@@ -58,7 +58,7 @@ public class NumAddedVoxelsAfterClosing extends FeatureObjMask {
 	@Override
 	public double calc(SessionInput<FeatureInputSingleObj> input) throws FeatureCalcException {
 
-		ObjMask omClosing = input.calc(
+		ObjectMask omClosing = input.calc(
 			CalculateClosing.createFromCache(
 				input.resolver(),
 				iterations,
@@ -70,7 +70,7 @@ public class NumAddedVoxelsAfterClosing extends FeatureObjMask {
 			new CalculateNumVoxels(false)
 		);
 		
-		return omClosing.numPixels() - numVoxels;
+		return omClosing.numVoxelsOn() - numVoxels;
 	}
 
 	public int getIterations() {

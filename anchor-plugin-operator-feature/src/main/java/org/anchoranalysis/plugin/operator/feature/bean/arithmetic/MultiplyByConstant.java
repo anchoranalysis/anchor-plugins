@@ -34,7 +34,7 @@ import org.anchoranalysis.plugin.operator.feature.bean.FeatureGenericWithValue;
 public class MultiplyByConstant<T extends FeatureInput> extends FeatureGenericWithValue<T> {
 
 	public MultiplyByConstant() {
-		
+		// Standard Bean Constructor
 	}
 	
 	public MultiplyByConstant( Feature<T> feature, double value ) {

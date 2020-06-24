@@ -32,27 +32,34 @@ import java.util.List;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.bean.objmask.match.ObjMaskMatcher;
-import org.anchoranalysis.image.objmask.ObjMaskCollection;
+import org.anchoranalysis.image.objectmask.ObjectCollection;
 import org.anchoranalysis.image.objmask.match.ObjWithMatches;
 
-// Matches to another object, and then uses that object to bridge to another
+/**
+ * Matches to another object, and then uses that object to bridge to another
+ * 
+ * @author Owen Feehan
+ *
+ */
 public class ObjMaskMatcherBridge extends ObjMaskMatcher {
 	
 	// START BEAN PROPERTIES
+	/** Used to match each input-object to an intermediary-object */
 	@BeanField
-	private ObjMaskMatcher bridgeMatcher;		// What we use as an intermediatery
-	
+	private ObjMaskMatcher bridgeMatcher;
+
+	/** Used to match each intermediary-object to a final-object*/
 	@BeanField
-	private ObjMaskMatcher objMaskMatcher;		// Final objMaskMatcher
+	private ObjMaskMatcher objMaskMatcher;
 	// END BEAN PROPERTIES
 
 	@Override
-	public List<ObjWithMatches> findMatch(ObjMaskCollection sourceObjs)
+	public List<ObjWithMatches> findMatch(ObjectCollection sourceObjs)
 			throws OperationFailedException {
 		
 		List<ObjWithMatches> bridgeMatches = bridgeMatcher.findMatch(sourceObjs);
 		
-		ObjMaskCollection bridgeObjs = new ObjMaskCollection();
+		ObjectCollection bridgeObjs = new ObjectCollection();
 		for( ObjWithMatches owm : bridgeMatches ) {
 			
 			if (owm.getMatches().size()==0) {
@@ -62,6 +69,8 @@ public class ObjMaskMatcherBridge extends ObjMaskMatcher {
 			if (owm.getMatches().size()>1) {
 				throw new OperationFailedException("At least one object has multiple matches. Only one is allowed.");
 			}
+			
+			bridgeObjs.addAll(owm.getMatches());
 		}
 		
 		return objMaskMatcher.findMatch(bridgeObjs);

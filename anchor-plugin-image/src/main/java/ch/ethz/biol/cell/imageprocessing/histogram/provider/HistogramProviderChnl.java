@@ -33,7 +33,7 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.bean.provider.BinaryChnlProvider;
 import org.anchoranalysis.image.bean.provider.ChnlProvider;
 import org.anchoranalysis.image.bean.provider.HistogramProvider;
-import org.anchoranalysis.image.chnl.Chnl;
+import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.histogram.Histogram;
 import org.anchoranalysis.image.histogram.HistogramFactory;
 
@@ -50,7 +50,7 @@ public class HistogramProviderChnl extends HistogramProvider {
 	@Override
 	public Histogram create() throws CreateException {
 
-		Chnl chnlIn = chnl.create();
+		Channel chnlIn = chnl.create();
 		
 		if (mask!=null) {
 			return HistogramFactory.create(

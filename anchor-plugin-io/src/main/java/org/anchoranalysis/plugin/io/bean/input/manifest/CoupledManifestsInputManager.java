@@ -40,6 +40,7 @@ import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.io.bean.provider.file.FileProvider;
 import org.anchoranalysis.io.deserializer.DeserializationFailedException;
 import org.anchoranalysis.io.error.AnchorIOException;
+import org.anchoranalysis.io.error.FileProviderException;
 import org.anchoranalysis.io.bean.input.InputManager;
 import org.anchoranalysis.io.bean.input.InputManagerParams;
 import org.anchoranalysis.io.manifest.deserializer.CachedManifestDeserializer;
@@ -96,16 +97,16 @@ public class CoupledManifestsInputManager extends InputManager<ManifestCouplingD
 			
 			// Uncoupled file manifests
 			if (manifestInputFileSet!=null) {
-				definition.addUncoupledFiles( manifestInputFileSet.matchingFiles(params), manifestDeserializer );
+				definition.addUncoupledFiles( manifestInputFileSet.create(params), manifestDeserializer );
 			}
 			
 			if (manifestExperimentInputFileSet!=null) {
-				Collection<File> matchingFiles = manifestExperimentInputFileSet.matchingFiles(params);
+				Collection<File> matchingFiles = manifestExperimentInputFileSet.create(params);
 				definition.addManifestExperimentFileSet(  matchingFiles, manifestDeserializer );	
 			}
 	
 			return definition;
-		} catch (AnchorIOException e) {
+		} catch (FileProviderException e) {
 			throw new DeserializationFailedException("Cannot find files to deserialize", e);
 		} catch (OperationFailedException e) {
 			throw new DeserializationFailedException("Cannot added uncoupled-files to the manifest", e);

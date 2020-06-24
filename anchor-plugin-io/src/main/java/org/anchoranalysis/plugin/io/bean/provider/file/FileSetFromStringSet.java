@@ -38,7 +38,6 @@ import org.anchoranalysis.bean.StringSet;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.io.bean.input.InputManagerParams;
 import org.anchoranalysis.io.bean.provider.file.FileProviderWithDirectoryString;
-import org.anchoranalysis.io.error.AnchorIOException;
 
 public class FileSetFromStringSet extends FileProviderWithDirectoryString {
 
@@ -47,7 +46,7 @@ public class FileSetFromStringSet extends FileProviderWithDirectoryString {
 	private StringSet filePaths;
 	// END BEAN PROPERTIES
 	
-	public Collection<File> matchingFilesForDirectory( Path directory, InputManagerParams params ) throws AnchorIOException {
+	public Collection<File> matchingFilesForDirectory( Path directory, InputManagerParams params ) {
 		
 		List<File> files = new ArrayList<>();
 		

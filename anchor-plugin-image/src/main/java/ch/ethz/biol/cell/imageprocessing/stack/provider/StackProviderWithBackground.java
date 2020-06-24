@@ -33,7 +33,7 @@ import org.anchoranalysis.bean.error.BeanMisconfiguredException;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.bean.provider.ChnlProvider;
 import org.anchoranalysis.image.bean.provider.stack.StackProvider;
-import org.anchoranalysis.image.chnl.Chnl;
+import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.stack.DisplayStack;
 
 public abstract class StackProviderWithBackground extends StackProvider {
@@ -80,7 +80,7 @@ public abstract class StackProviderWithBackground extends StackProvider {
 		}
 	}
 
-	private Chnl backgroundChnl(boolean do3D) throws CreateException {
+	private Channel backgroundChnl(boolean do3D) throws CreateException {
 		if (do3D) {
 			return chnlBackground.create();
 		} else {
@@ -88,7 +88,7 @@ public abstract class StackProviderWithBackground extends StackProvider {
 			if (chnlBackgroundMIP!=null) {
 				return chnlBackgroundMIP.create();
 			} else {
-				return chnlBackground.create().maxIntensityProj();
+				return chnlBackground.create().maxIntensityProjection();
 			}
 		}
 	}

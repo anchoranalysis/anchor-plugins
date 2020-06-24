@@ -35,7 +35,7 @@ import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelBoxByte;
 import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
 import org.anchoranalysis.image.feature.stack.FeatureInputStack;
-import org.anchoranalysis.image.objmask.ObjMask;
+import org.anchoranalysis.image.objectmask.ObjectMask;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.anchoranalysis.image.voxel.datatype.IncorrectVoxelDataTypeException;
 import org.apache.commons.lang.builder.EqualsBuilder;
@@ -56,7 +56,7 @@ public class CalculateBinaryChnlInput extends FeatureCalculation<FeatureInputSin
 		BinaryVoxelBox<ByteBuffer> bvb = binaryVoxelBox(chnl);
 		
 		return new FeatureInputSingleObj(
-			new ObjMask(bvb),
+			new ObjectMask(bvb),
 			input.getNrgStackOptional()
 		);
 	}

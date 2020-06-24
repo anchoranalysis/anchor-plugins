@@ -31,7 +31,7 @@ import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.cache.ChildCacheName;
 import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.image.chnl.Chnl;
+import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.feature.histogram.FeatureInputHistogram;
 import org.anchoranalysis.image.feature.histogram.Mean;
 import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
@@ -55,7 +55,7 @@ public class Intensity extends FeatureNrgChnl {
 	// END BEAN PROEPRTIES
 	
 	@Override
-	protected double calcForChnl(SessionInput<FeatureInputSingleObj> input, Chnl chnl) throws FeatureCalcException {
+	protected double calcForChnl(SessionInput<FeatureInputSingleObj> input, Channel chnl) throws FeatureCalcException {
 		return input.forChild().calc(
 			item,
 			new CalculateHistogramForNrgChnl(excludeZero, getNrgIndex(), chnl),

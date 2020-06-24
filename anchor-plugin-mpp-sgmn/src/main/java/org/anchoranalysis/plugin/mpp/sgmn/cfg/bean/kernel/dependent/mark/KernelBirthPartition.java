@@ -26,7 +26,7 @@ package org.anchoranalysis.plugin.mpp.sgmn.cfg.bean.kernel.dependent.mark;
  * #L%
  */
 
-import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 
 import org.anchoranalysis.anchor.mpp.cfg.Cfg;
@@ -37,8 +37,16 @@ import org.anchoranalysis.mpp.sgmn.kernel.KernelCalcContext;
 import org.anchoranalysis.mpp.sgmn.kernel.KernelCalcNRGException;
 import org.anchoranalysis.plugin.mpp.sgmn.cfg.bean.kernel.independent.KernelBirth;
 import org.anchoranalysis.plugin.mpp.sgmn.cfg.optscheme.CfgFromPartition;
-import org.apache.commons.collections.CollectionUtils;
 
+
+/**
+ * Proposes new marks ONLY if they haven't already been proposed and accepted.
+ * 
+ * <p>As an example, this is like sampling WITHOUT replacement.</p>
+ * 
+ * @author Owen Feehan
+ *
+ */
 public class KernelBirthPartition extends KernelBirth<CfgFromPartition> {
 
 	/**
@@ -47,31 +55,18 @@ public class KernelBirthPartition extends KernelBirth<CfgFromPartition> {
 	private static final long serialVersionUID = 1L;
 
 	@Override
-	public boolean isCompatibleWith(Mark testMark) {
-		return true;
-	}
-
-	@Override
-	protected Set<Mark> proposeNewMarks(CfgFromPartition exst, int number, KernelCalcContext context) {
+	protected Optional<Set<Mark>> proposeNewMarks(CfgFromPartition exst, int number, KernelCalcContext context) {
 		assert( exst!= null);
 		assert( exst.getPartition()!= null);
-		
-		Mark[] arr = new Mark[number];
-		
-		
-		if (exst.getPartition().sampleAvailable(context.proposer(), number, arr)) {
-			return convertArrToSet(arr);
-		} else {
-			return null;
-		}
+		return exst.getPartition().sampleFromAvailable(context.proposer(), number);
 	}
 	
 	@Override
-	protected CfgFromPartition calcForNewMark(CfgFromPartition exst, Set<Mark> listMarksNew, KernelCalcContext context)
+	protected Optional<CfgFromPartition> calcForNewMark(CfgFromPartition exst, Set<Mark> listMarksNew, KernelCalcContext context)
 			throws KernelCalcNRGException {
 
 		if (listMarksNew==null || listMarksNew.size()==0) {
-			return null;
+			return Optional.empty();
 		}
 		
 		Cfg cfg = exst.getCfg();
@@ -79,26 +74,27 @@ public class KernelBirthPartition extends KernelBirth<CfgFromPartition> {
 			cfg = calcUpdatedCfg(cfg, m);
 		}
 		
-		return exst.copyChange(cfg);
+		return Optional.of(
+			exst.copyChange(cfg)
+		);
 	}
 
 	@Override
 	public void updateAfterAccpt(ListUpdatableMarkSetCollection updatableMarkSetCollection, CfgFromPartition nrgExst,
 			CfgFromPartition nrgNew) throws UpdateMarkSetException {
-		if (getMarkNew()!=null) {
-			nrgNew.getPartition().moveAvailableToAccepted( getMarkNew() );
+		if (getMarkNew().isPresent()) {
+			nrgNew.getPartition().moveAvailableToAccepted( getMarkNew().get() );
 		}
 	}
 
+	@Override
+	public boolean isCompatibleWith(Mark testMark) {
+		return true;
+	}
+	
 	private static Cfg calcUpdatedCfg( Cfg exst, Mark mark ) throws KernelCalcNRGException {
 		Cfg newCfg = exst.shallowCopy();
 		newCfg.add(mark);
 		return newCfg;
-	}
-		
-	private static Set<Mark> convertArrToSet( Mark[] arr ) {
-		Set<Mark> set = new HashSet<Mark>();
-		CollectionUtils.addAll(set, arr);
-		return set;
 	}
 }

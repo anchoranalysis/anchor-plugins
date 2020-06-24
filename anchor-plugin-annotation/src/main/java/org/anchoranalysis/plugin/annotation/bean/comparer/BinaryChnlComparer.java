@@ -42,8 +42,8 @@ import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.io.RasterIOException;
 import org.anchoranalysis.image.io.bean.rasterreader.RasterReader;
 import org.anchoranalysis.image.io.bean.rasterreader.RasterReaderUtilities;
-import org.anchoranalysis.image.objmask.ObjMask;
-import org.anchoranalysis.image.objmask.ObjMaskCollection;
+import org.anchoranalysis.image.objectmask.ObjectCollection;
+import org.anchoranalysis.image.objectmask.ObjectCollectionFactory;
 import org.anchoranalysis.io.bean.filepath.generator.FilePathGenerator;
 import org.anchoranalysis.io.error.AnchorIOException;
 
@@ -65,7 +65,7 @@ public class BinaryChnlComparer extends Comparer {
 	}
 	
 	@Override
-	public Findable<ObjMaskCollection> createObjs(Path filePathSource, ImageDim dim, boolean debugMode) throws CreateException {
+	public Findable<ObjectCollection> createObjs(Path filePathSource, ImageDim dim, boolean debugMode) throws CreateException {
 		
 		try {
 			Path maskPath = filePathGenerator.outFilePath(filePathSource, debugMode);
@@ -97,10 +97,8 @@ public class BinaryChnlComparer extends Comparer {
 		}
 	}
 	
-	private static ObjMaskCollection convertToObjs( BinaryChnl chnl ) {
-		return new ObjMaskCollection(
-			new ObjMask( chnl.binaryVoxelBox() )
-		);
+	private static ObjectCollection convertToObjs( BinaryChnl chnl ) {
+		return ObjectCollectionFactory.from(chnl);
 	}
 	
 	public FilePathGenerator getFilePathGenerator() {

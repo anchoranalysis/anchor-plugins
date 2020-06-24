@@ -1,5 +1,31 @@
 package ch.ethz.biol.cell.imageprocessing.binaryimgchnl.provider;
 
+/*-
+ * #%L
+ * anchor-plugin-image
+ * %%
+ * Copyright (C) 2010 - 2020 Owen Feehan
+ * %%
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ * 
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ * #L%
+ */
+
 import java.nio.ByteBuffer;
 import java.util.Optional;
 
@@ -13,10 +39,10 @@ import org.anchoranalysis.image.bean.sgmn.binary.BinarySgmn;
 import org.anchoranalysis.image.bean.sgmn.binary.BinarySgmnParameters;
 import org.anchoranalysis.image.binary.BinaryChnl;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
-import org.anchoranalysis.image.chnl.Chnl;
-import org.anchoranalysis.image.chnl.factory.ChnlFactory;
+import org.anchoranalysis.image.channel.Channel;
+import org.anchoranalysis.image.channel.factory.ChannelFactory;
 import org.anchoranalysis.image.extent.ImageDim;
-import org.anchoranalysis.image.objmask.ObjMask;
+import org.anchoranalysis.image.objectmask.ObjectMask;
 import org.anchoranalysis.image.sgmn.SgmnFailedException;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
 
@@ -34,16 +60,16 @@ public class BinaryChnlProviderSgmn extends BinaryChnlProviderChnlSource {
 	// END BEAN PROPERTIES
 	
 	@Override
-	protected BinaryChnl createFromSource(Chnl chnlSource) throws CreateException {
+	protected BinaryChnl createFromSource(Channel chnlSource) throws CreateException {
 		return new BinaryChnl(
 				sgmnResult(chnlSource),
 				chnlSource.getDimensions().getRes(),
-				ChnlFactory.instance().get(VoxelDataTypeUnsignedByte.instance)
+				ChannelFactory.instance().get(VoxelDataTypeUnsignedByte.instance)
 			);
 	}
 	
-	private BinaryVoxelBox<ByteBuffer> sgmnResult(Chnl chnl) throws CreateException {
-		Optional<ObjMask> omMask = mask(chnl.getDimensions());
+	private BinaryVoxelBox<ByteBuffer> sgmnResult(Channel chnl) throws CreateException {
+		Optional<ObjectMask> omMask = mask(chnl.getDimensions());
 		
 		BinarySgmnParameters params = createParams(chnl.getDimensions()); 
 
@@ -62,10 +88,10 @@ public class BinaryChnlProviderSgmn extends BinaryChnlProviderChnlSource {
 		);
 	}
 	
-	private Optional<ObjMask> mask(ImageDim dim) throws CreateException {
+	private Optional<ObjectMask> mask(ImageDim dim) throws CreateException {
 		Optional<BinaryChnl> maskChnl = ChnlProviderNullableCreator.createOptionalCheckSize(mask, "mask", dim);
 		return maskChnl.map( chnl->
-			new ObjMask(chnl.binaryVoxelBox())
+			new ObjectMask(chnl.binaryVoxelBox())
 		);
 	}
 

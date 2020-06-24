@@ -27,14 +27,14 @@ package ch.ethz.biol.cell.imageprocessing.io.chnlconverter.bean;
  */
 
 import org.anchoranalysis.image.bean.chnl.converter.ChnlConverterBean;
-import org.anchoranalysis.image.stack.region.chnlconverter.ChnlConverter;
-import org.anchoranalysis.image.stack.region.chnlconverter.ChnlConverterToUnsignedByte;
+import org.anchoranalysis.image.stack.region.chnlconverter.ChannelConverter;
+import org.anchoranalysis.image.stack.region.chnlconverter.ChannelConverterToUnsignedByte;
 import org.anchoranalysis.image.stack.region.chnlconverter.voxelbox.VoxelBoxConverterToByteScaleByType;
 
 public class ChnlConverterBeanToByteScaleByType extends ChnlConverterBean {
 
 	@Override
-	public ChnlConverter<?> createConverter() {
-		return new ChnlConverterToUnsignedByte( new VoxelBoxConverterToByteScaleByType() );
+	public ChannelConverter<?> createConverter() {
+		return new ChannelConverterToUnsignedByte( new VoxelBoxConverterToByteScaleByType() );
 	}
 }

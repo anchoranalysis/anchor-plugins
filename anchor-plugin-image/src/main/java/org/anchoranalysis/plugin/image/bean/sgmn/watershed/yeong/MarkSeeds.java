@@ -30,21 +30,20 @@ package org.anchoranalysis.plugin.image.bean.sgmn.watershed.yeong;
 import java.util.Optional;
 
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.image.objmask.ObjMask;
+import org.anchoranalysis.image.objectmask.ObjectMask;
 import org.anchoranalysis.image.seed.Seed;
 import org.anchoranalysis.image.seed.SeedCollection;
 import org.anchoranalysis.image.sgmn.SgmnFailedException;
 import org.anchoranalysis.image.voxel.iterator.IterateVoxels;
 import org.anchoranalysis.image.voxel.iterator.ProcessVoxel;
-
-import ch.ethz.biol.cell.sgmn.objmask.watershed.encoding.EncodedVoxelBox;
+import org.anchoranalysis.plugin.image.sgmn.watershed.encoding.EncodedVoxelBox;
 
 
 class MarkSeeds {
 		
 	private MarkSeeds() {}
 
-	public static void apply( SeedCollection seeds, EncodedVoxelBox matS, Optional<MinimaStore> minimaStore, Optional<ObjMask> containingMask ) throws SgmnFailedException {
+	public static void apply( SeedCollection seeds, EncodedVoxelBox matS, Optional<MinimaStore> minimaStore, Optional<ObjectMask> containingMask ) throws SgmnFailedException {
 			
 		if (containingMask.isPresent() && !matS.extent().equals(containingMask.get().getBoundingBox().extent())) {
 			throw new SgmnFailedException("Extnt of matS does not match containingMask");
@@ -52,7 +51,7 @@ class MarkSeeds {
 		
 		for( Seed s : seeds ) {
 			
-			ObjMask mask = s.createMask();
+			ObjectMask mask = s.createMask();
 			
 			throwExceptionIfNotConnected(mask);
 		
@@ -69,7 +68,7 @@ class MarkSeeds {
 		return pnt -> ccWriter.writePoint(pnt);
 	}
 	
-	private static void throwExceptionIfNotConnected( ObjMask obj ) throws SgmnFailedException {
+	private static void throwExceptionIfNotConnected( ObjectMask obj ) throws SgmnFailedException {
 		try {
 			if (!obj.checkIfConnected()) {
 				throw new SgmnFailedException("Seed must be a single connected-component");

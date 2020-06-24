@@ -45,7 +45,7 @@ public class AppendHistogram extends FilePathBaseAppendToManagerWithFileID {
 	protected String createOutPathString() throws BeanMisconfiguredException {
 		return String.format(
 			"%s/%s",
-			firstPartWithDataset(),
+			firstPartWithCustomMiddle("/grouped/"),
 			getFileId()
 		);
 	}

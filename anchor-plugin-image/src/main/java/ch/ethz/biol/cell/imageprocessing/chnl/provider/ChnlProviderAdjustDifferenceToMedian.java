@@ -35,12 +35,12 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.geometry.ReadableTuple3i;
 import org.anchoranalysis.image.bean.provider.ChnlProvider;
-import org.anchoranalysis.image.chnl.Chnl;
+import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.convert.ByteConverter;
 import org.anchoranalysis.image.histogram.Histogram;
 import org.anchoranalysis.image.histogram.HistogramFactory;
-import org.anchoranalysis.image.objmask.ObjMask;
-import org.anchoranalysis.image.objmask.ObjMaskCollection;
+import org.anchoranalysis.image.objectmask.ObjectMask;
+import org.anchoranalysis.image.objectmask.ObjectCollection;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 
 // Corrects a channel in the following way
@@ -56,12 +56,12 @@ public class ChnlProviderAdjustDifferenceToMedian extends ChnlProviderOneObjsSou
 	// END BEAN PROPERTIES
 	
 	@Override
-	protected Chnl createFromChnl(Chnl chnl, ObjMaskCollection objsSource) throws CreateException {
+	protected Channel createFromChnl(Channel chnl, ObjectCollection objsSource) throws CreateException {
 	
-		Chnl lookup = DimChecker.createSameSize(chnlLookup, "chnlLookup", chnl);
+		Channel lookup = DimChecker.createSameSize(chnlLookup, "chnlLookup", chnl);
 		
 		try {
-			for( ObjMask om : objsSource ) {
+			for( ObjectMask om : objsSource ) {
 				Histogram h = HistogramFactory.create(
 					lookup.getVoxelBox(),
 					Optional.of(om)
@@ -78,7 +78,7 @@ public class ChnlProviderAdjustDifferenceToMedian extends ChnlProviderOneObjsSou
 		}
 	}
 	
-	private void adjustObj( ObjMask om, Chnl chnl, Chnl chnlLookup, int objMedian ) {
+	private void adjustObj( ObjectMask om, Channel chnl, Channel chnlLookup, int objMedian ) {
 		
 		ReadableTuple3i crnrMin = om.getBoundingBox().getCrnrMin();
 		ReadableTuple3i crnrMax = om.getBoundingBox().calcCrnrMax();

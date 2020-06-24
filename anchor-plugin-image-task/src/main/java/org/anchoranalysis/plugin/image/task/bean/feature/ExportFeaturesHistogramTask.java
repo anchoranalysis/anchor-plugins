@@ -27,7 +27,6 @@ package org.anchoranalysis.plugin.image.task.bean.feature;
  */
 
 import java.io.File;
-import java.io.IOException;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.bean.error.BeanDuplicateException;
@@ -51,6 +50,7 @@ import org.anchoranalysis.image.histogram.Histogram;
 import org.anchoranalysis.image.init.ImageInitParams;
 import org.anchoranalysis.image.io.histogram.HistogramCSVReader;
 import org.anchoranalysis.image.io.input.ImageInitParamsFactory;
+import org.anchoranalysis.io.csv.reader.CSVReaderException;
 import org.anchoranalysis.io.input.FileInput;
 import org.anchoranalysis.io.output.bound.BoundIOContext;
 
@@ -87,7 +87,12 @@ public class ExportFeaturesHistogramTask extends ExportFeaturesStoreTask<FileInp
 	public InputTypesExpected inputTypesExpected() {
 		return new InputTypesExpected(FileInput.class);
 	}
-		
+	
+	@Override
+	protected boolean includeGroupInExperiment(boolean groupGeneratorDefined) {
+		return groupGeneratorDefined;
+	}
+	
 	@Override
 	protected ResultsVector calcResultsVectorForInputObject(
 		FileInput inputObject,
@@ -118,7 +123,7 @@ public class ExportFeaturesHistogramTask extends ExportFeaturesStoreTask<FileInp
 		
 			return rv;
 			
-		} catch (IOException | BeanDuplicateException | InitException | OperationFailedException e) {
+		} catch (CSVReaderException | BeanDuplicateException | InitException | OperationFailedException e) {
 			throw new FeatureCalcException(e);
 		}
 	}
@@ -161,11 +166,11 @@ public class ExportFeaturesHistogramTask extends ExportFeaturesStoreTask<FileInp
 		);
 	}
 
-	private static Histogram readHistogramFromCsv( FileInput input ) throws IOException {
+	private static Histogram readHistogramFromCsv( FileInput input ) throws CSVReaderException {
 		File file = input.getFile();
 		
 		if (!file.getName().endsWith(".csv") && !file.getName().endsWith(".CSV")) {
-			throw new IOException("This task expects a .CSV file encoding a histogram as input. The file path must end with .csv or .CSV");
+			throw new CSVReaderException("This task expects a .CSV file encoding a histogram as input. The file path must end with .csv or .CSV");
 		}
 		
 		return HistogramCSVReader.readHistogramFromFile( file.toPath() );
@@ -178,4 +183,5 @@ public class ExportFeaturesHistogramTask extends ExportFeaturesStoreTask<FileInp
 	public void setHistogramProvider(HistogramProvider histogramProvider) {
 		this.histogramProvider = histogramProvider;
 	}
+
 }

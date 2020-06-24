@@ -37,10 +37,10 @@ import org.anchoranalysis.feature.session.FeatureSession;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorSingle;
 import org.anchoranalysis.image.bean.provider.BinaryChnlProvider;
 import org.anchoranalysis.image.binary.BinaryChnl;
-import org.anchoranalysis.image.chnl.Chnl;
+import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
-import org.anchoranalysis.image.objmask.ObjMask;
-import org.anchoranalysis.image.objmask.factory.CreateFromEntireChnlFactory;
+import org.anchoranalysis.image.objectmask.ObjectMask;
+import org.anchoranalysis.image.objectmask.factory.CreateFromEntireChnlFactory;
 
 // Treats the entire binaryimgchnl as an object, and sees if it passes an ObjMaskFilter
 public class BinaryChnlProviderObjMaskRelateFeatures extends BinaryChnlProviderChnlSource {
@@ -63,12 +63,12 @@ public class BinaryChnlProviderObjMaskRelateFeatures extends BinaryChnlProviderC
 	// END BEAN PROPERTIES
 	
 	@Override
-	protected BinaryChnl createFromSource(Chnl chnlSource) throws CreateException {
+	protected BinaryChnl createFromSource(Channel chnlSource) throws CreateException {
 
 		BinaryChnl chnlMain = binaryChnlMain.create();
 		
-		ObjMask omMain = CreateFromEntireChnlFactory.createObjMask( chnlMain );
-		ObjMask omCompareTo = CreateFromEntireChnlFactory.createObjMask(
+		ObjectMask omMain = CreateFromEntireChnlFactory.createObjMask( chnlMain );
+		ObjectMask omCompareTo = CreateFromEntireChnlFactory.createObjMask(
 			binaryChnlCompareTo.create()
 		);
 			
@@ -95,7 +95,7 @@ public class BinaryChnlProviderObjMaskRelateFeatures extends BinaryChnlProviderC
 		}
 	}
 	
-	private BinaryChnl calcRelation( ObjMask omMain, ObjMask omCompareTo, BinaryChnl chnlMain, FeatureCalculatorSingle<FeatureInputSingleObj> session ) throws CreateException {
+	private BinaryChnl calcRelation( ObjectMask omMain, ObjectMask omCompareTo, BinaryChnl chnlMain, FeatureCalculatorSingle<FeatureInputSingleObj> session ) throws CreateException {
 		try {
 			double valMain = session.calc(
 				new FeatureInputSingleObj(omMain)

@@ -33,13 +33,12 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.bean.sgmn.objmask.ObjMaskSgmn;
 import org.anchoranalysis.image.bean.sgmn.objmask.ObjMaskSgmnOne;
-import org.anchoranalysis.image.chnl.Chnl;
-import org.anchoranalysis.image.objmask.ObjMask;
-import org.anchoranalysis.image.objmask.ObjMaskCollection;
+import org.anchoranalysis.image.channel.Channel;
+import org.anchoranalysis.image.objectmask.ObjectMask;
+import org.anchoranalysis.image.objectmask.ObjectCollection;
 import org.anchoranalysis.image.seed.SeedCollection;
 import org.anchoranalysis.image.sgmn.SgmnFailedException;
-
-import ch.ethz.biol.cell.sgmn.objmask.watershed.minimaimposition.MinimaImposition;
+import org.anchoranalysis.plugin.image.bean.sgmn.watershed.minima.MinimaImposition;
 
 
 // Imposes minima only in seed locations on the input channel, and performs the segmentation
@@ -51,9 +50,9 @@ public class ObjMaskSgmnMinimaImposition extends ObjMaskSgmnOne {
 	// END BEAN PROPERTIES
 
 	@Override
-	public ObjMaskCollection sgmn(
-		Chnl chnl,
-		Optional<ObjMask> mask,
+	public ObjectCollection sgmn(
+		Channel chnl,
+		Optional<ObjectMask> mask,
 		Optional<SeedCollection> seeds,
 		ObjMaskSgmn sgmn
 	) throws SgmnFailedException {
@@ -63,9 +62,9 @@ public class ObjMaskSgmnMinimaImposition extends ObjMaskSgmnOne {
 		}
 				
 		try {
-			Chnl chnlWithImposedMinima = chnlWithImposedMinima(chnl, seeds.get(), mask );
+			Channel chnlWithImposedMinima = chnlWithImposedMinima(chnl, seeds.get(), mask );
 			
-			ObjMaskCollection omc = sgmn.sgmn(chnlWithImposedMinima, mask, seeds );
+			ObjectCollection omc = sgmn.sgmn(chnlWithImposedMinima, mask, seeds );
 			
 			return omc;
 			
@@ -74,7 +73,7 @@ public class ObjMaskSgmnMinimaImposition extends ObjMaskSgmnOne {
 		}
 	}
 	
-	private Chnl chnlWithImposedMinima(Chnl chnl, SeedCollection seeds, Optional<ObjMask> objMask) throws OperationFailedException {
+	private Channel chnlWithImposedMinima(Channel chnl, SeedCollection seeds, Optional<ObjectMask> objMask) throws OperationFailedException {
 		if (seeds.size()>0) {
 			return minimaImposition.imposeMinima(chnl, seeds, objMask);
 		} else {

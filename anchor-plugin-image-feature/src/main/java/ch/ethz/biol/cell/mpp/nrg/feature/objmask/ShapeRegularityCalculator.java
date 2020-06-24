@@ -26,14 +26,14 @@ package ch.ethz.biol.cell.mpp.nrg.feature.objmask;
  * #L%
  */
 
-import org.anchoranalysis.image.objmask.ObjMask;
+import org.anchoranalysis.image.objectmask.ObjectMask;
 
 class ShapeRegularityCalculator {
 
 	private ShapeRegularityCalculator() {}
 	
-	public static double calcShapeRegularity( ObjMask om ) {
-		double area = om.numPixels();
+	public static double calcShapeRegularity( ObjectMask om ) {
+		double area = om.numVoxelsOn();
 		int perimeter = NumBorderVoxels.numBorderPixels(
 			om,
 			false,

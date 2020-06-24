@@ -32,7 +32,7 @@ import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.feature.bean.objmask.FeatureObjMask;
 import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
-import org.anchoranalysis.image.objmask.ObjMask;
+import org.anchoranalysis.image.objectmask.ObjectMask;
 import org.anchoranalysis.image.voxel.kernel.ApplyKernel;
 import org.anchoranalysis.image.voxel.kernel.outline.OutlineKernel3;
 
@@ -52,11 +52,11 @@ public class NumBorderVoxels extends FeatureObjMask {
 	@Override
 	public double calc(SessionInput<FeatureInputSingleObj> input) throws FeatureCalcException {
 
-		ObjMask om = input.get().getObjMask();
+		ObjectMask om = input.get().getObjMask();
 		return (double) numBorderPixels(om, ignoreAtThreshold, outsideAtThreshold, do3D);
 	}
 	
-	public static int numBorderPixels( ObjMask om, boolean ignoreAtThreshold, boolean outsideAtThreshold, boolean do3D ) {
+	public static int numBorderPixels( ObjectMask om, boolean ignoreAtThreshold, boolean outsideAtThreshold, boolean do3D ) {
 		OutlineKernel3 kernel = new OutlineKernel3(om.getBinaryValuesByte(), outsideAtThreshold, do3D, ignoreAtThreshold);
 		return (int) ApplyKernel.applyForCount(kernel, om.getVoxelBox());
 	}

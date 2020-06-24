@@ -39,7 +39,7 @@ import org.anchoranalysis.image.bean.sgmn.binary.BinarySgmn;
 import org.anchoranalysis.image.bean.sgmn.binary.BinarySgmnParameters;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
 import org.anchoranalysis.image.extent.BoundingBox;
-import org.anchoranalysis.image.objmask.ObjMask;
+import org.anchoranalysis.image.objectmask.ObjectMask;
 import org.anchoranalysis.image.sgmn.SgmnFailedException;
 import org.anchoranalysis.image.voxel.box.VoxelBoxWrapper;
 
@@ -60,13 +60,13 @@ public class SgmnSequence extends BinarySgmn {
 
 	@Override
 	public BinaryVoxelBox<ByteBuffer> sgmn(VoxelBoxWrapper voxelBox,
-			BinarySgmnParameters params, Optional<ObjMask> mask) throws SgmnFailedException {
+			BinarySgmnParameters params, Optional<ObjectMask> mask) throws SgmnFailedException {
 		
 		BinaryVoxelBox<ByteBuffer> out = null;
 		
 		// A bounding-box capturing what part of the scene is being segmented
 		BoundingBox bbox = mask.map(
-			ObjMask::getBoundingBox
+			ObjectMask::getBoundingBox
 		).orElseGet( ()->
 			new BoundingBox(
 				voxelBox.any().extent()
@@ -74,14 +74,14 @@ public class SgmnSequence extends BinarySgmn {
 		);
 		
 		// A mask that evolves as we move through each segmentation to be increasingly smaller.
-		Optional<ObjMask> evolvingMask = mask;
+		Optional<ObjectMask> evolvingMask = mask;
 		for( BinarySgmn sgmn : listSgmn) {
 			
 			BinaryVoxelBox<ByteBuffer> outNew = sgmn.sgmn(voxelBox, params, evolvingMask);
 			
 			out = outNew;
 			evolvingMask = Optional.of(
-				new ObjMask(bbox, outNew)
+				new ObjectMask(bbox, outNew)
 			);
 		}
 		

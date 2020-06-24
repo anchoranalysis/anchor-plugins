@@ -39,9 +39,9 @@ import org.anchoranalysis.image.binary.values.BinaryValues;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelBoxByte;
 import org.anchoranalysis.image.extent.BoundingBox;
-import org.anchoranalysis.image.objmask.ObjMask;
-import org.anchoranalysis.image.objmask.ObjMaskCollection;
-import org.anchoranalysis.image.objmask.factory.CreateFromConnectedComponentsFactory;
+import org.anchoranalysis.image.objectmask.ObjectMask;
+import org.anchoranalysis.image.objectmask.ObjectCollection;
+import org.anchoranalysis.image.objectmask.factory.CreateFromConnectedComponentsFactory;
 import org.anchoranalysis.image.sgmn.SgmnFailedException;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.anchoranalysis.image.voxel.box.VoxelBoxWrapper;
@@ -71,7 +71,7 @@ public class SgmnObject extends BinarySgmn {
 	public BinaryVoxelBox<ByteBuffer> sgmn(
 		VoxelBoxWrapper voxelBoxIn,
 		BinarySgmnParameters params,
-		Optional<ObjMask> mask
+		Optional<ObjectMask> mask
 	) throws SgmnFailedException {
 	
 		if (mask.isPresent()) {
@@ -100,7 +100,7 @@ public class SgmnObject extends BinarySgmn {
 		BinarySgmnParameters params
 	) throws SgmnFailedException {
 
-		for( ObjMask obj : objsFromVoxelBox(voxelBox)) {
+		for( ObjectMask obj : objsFromVoxelBox(voxelBox)) {
 			
 			if (!obj.numPixelsLessThan(minNumPixelsImageSgmn)) {
 				
@@ -128,7 +128,7 @@ public class SgmnObject extends BinarySgmn {
 		}		
 	}
 		
-	private static ObjMaskCollection objsFromVoxelBox( BinaryVoxelBox<ByteBuffer> buffer ) throws SgmnFailedException {
+	private static ObjectCollection objsFromVoxelBox( BinaryVoxelBox<ByteBuffer> buffer ) throws SgmnFailedException {
 		try {
 			CreateFromConnectedComponentsFactory omcCreator = new CreateFromConnectedComponentsFactory();
 			return omcCreator.createConnectedComponents(buffer.duplicate() );

@@ -33,8 +33,8 @@ import java.util.Optional;
 
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.geometry.Point2i;
-import org.anchoranalysis.image.objmask.ObjMask;
-import org.anchoranalysis.image.objmask.ObjMaskCollection;
+import org.anchoranalysis.image.objectmask.ObjectMask;
+import org.anchoranalysis.image.objectmask.ObjectCollection;
 import org.anchoranalysis.image.outline.FindOutline;
 import org.anchoranalysis.image.points.PointsFromBinaryVoxelBox;
 
@@ -50,7 +50,7 @@ public class ConvexHullUtilities {
 	 * @return a list of the points iif the minimum threshold is fulfilled
 	 * @throws CreateException
 	 */
-	public static Optional<List<Point2i>> extractPointsFromOutline( ObjMask obj, int minNumPnts, boolean applyConvexHull ) throws CreateException {
+	public static Optional<List<Point2i>> extractPointsFromOutline( ObjectMask obj, int minNumPnts, boolean applyConvexHull ) throws CreateException {
 
 		List<Point2i> pts = new ArrayList<>();
 		addPointsFromObjOutline(obj, pts);
@@ -62,11 +62,11 @@ public class ConvexHullUtilities {
 		return applyConvexHull ? convexHull2D(pts) : Optional.of(pts);
 	}
 
-	public static Optional<List<Point2i>> convexHullFromAllOutlines( ObjMaskCollection objs, int minNumPnts ) throws CreateException {
+	public static Optional<List<Point2i>> convexHullFromAllOutlines( ObjectCollection objs, int minNumPnts ) throws CreateException {
 		
 		List<Point2i> pts = new ArrayList<>();
 			
-		for( ObjMask om : objs ) {
+		for( ObjectMask om : objs ) {
 			addPointsFromObjOutline(om, pts);
 		}
 		
@@ -177,8 +177,8 @@ public class ConvexHullUtilities {
 		return p1;
 	}
 		
-	public static void addPointsFromObjOutline( ObjMask obj, List<Point2i> pts) throws CreateException {
-		ObjMask outline = FindOutline.outline(obj, 1, true, false);
+	public static void addPointsFromObjOutline( ObjectMask obj, List<Point2i> pts) throws CreateException {
+		ObjectMask outline = FindOutline.outline(obj, 1, true, false);
 		PointsFromBinaryVoxelBox.addPointsFromVoxelBox(
 			outline.binaryVoxelBox(),
 			outline.getBoundingBox().getCrnrMin(),

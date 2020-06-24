@@ -39,7 +39,7 @@ import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.bean.provider.BinaryChnlProvider;
 import org.anchoranalysis.image.binary.BinaryChnl;
-import org.anchoranalysis.image.chnl.Chnl;
+import org.anchoranalysis.image.channel.Channel;
 
 // Rejects a proposal if its centre is not found on a particular prob map
 public class RejectProposalCentreOutside extends MarkProposerOne {
@@ -83,7 +83,7 @@ public class RejectProposalCentreOutside extends MarkProposerOne {
 		return true;
 	}
 	
-	private static int getVoxelFromChnl(Chnl raster, int x, int y, int z) {
+	private static int getVoxelFromChnl(Channel raster, int x, int y, int z) {
 		Point3i pnt = new Point3i(x,y,z);
 		return raster.getVoxelBox().asByte().getVoxel(pnt.getX(), pnt.getY(), pnt.getZ());
 	}

@@ -32,13 +32,13 @@ import java.util.Optional;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.image.bean.objmask.filter.ObjMaskFilter;
+import org.anchoranalysis.image.bean.objmask.filter.ObjectFilter;
 import org.anchoranalysis.image.bean.sgmn.objmask.ObjMaskSgmn;
 import org.anchoranalysis.image.bean.sgmn.objmask.ObjMaskSgmnOne;
-import org.anchoranalysis.image.chnl.Chnl;
+import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.extent.ImageDim;
-import org.anchoranalysis.image.objmask.ObjMask;
-import org.anchoranalysis.image.objmask.ObjMaskCollection;
+import org.anchoranalysis.image.objectmask.ObjectMask;
+import org.anchoranalysis.image.objectmask.ObjectCollection;
 import org.anchoranalysis.image.seed.SeedCollection;
 import org.anchoranalysis.image.sgmn.SgmnFailedException;
 
@@ -46,20 +46,20 @@ public class ObjMaskSgmnFilter extends ObjMaskSgmnOne {
 
 	// START BEAN PROPERTIES
 	@BeanField
-	private ObjMaskFilter filter = null;
+	private ObjectFilter filter = null;
 	// END BEAN PROPERTIES
 	
 	@Override
-	public ObjMaskCollection sgmn(Chnl chnl, Optional<ObjMask> objMask, Optional<SeedCollection> seeds, ObjMaskSgmn sgmn) throws SgmnFailedException {
+	public ObjectCollection sgmn(Channel chnl, Optional<ObjectMask> objMask, Optional<SeedCollection> seeds, ObjMaskSgmn sgmn) throws SgmnFailedException {
 		return filterObjs(
 			sgmn.sgmn(chnl, objMask, seeds),
 			chnl.getDimensions()
 		);
 	}
 
-	private ObjMaskCollection filterObjs( ObjMaskCollection objs, ImageDim dim ) throws SgmnFailedException {
+	private ObjectCollection filterObjs( ObjectCollection objs, ImageDim dim ) throws SgmnFailedException {
 		try {
-			filter.filter(
+			return filter.filter(
 				objs,
 				Optional.of(dim),
 				Optional.empty()
@@ -67,15 +67,13 @@ public class ObjMaskSgmnFilter extends ObjMaskSgmnOne {
 		} catch (OperationFailedException e) {
 			throw new SgmnFailedException(e);
 		}
-		
-		return objs;
 	}
 
-	public ObjMaskFilter getFilter() {
+	public ObjectFilter getFilter() {
 		return filter;
 	}
 
-	public void setFilter(ObjMaskFilter filter) {
+	public void setFilter(ObjectFilter filter) {
 		this.filter = filter;
 	}
 }

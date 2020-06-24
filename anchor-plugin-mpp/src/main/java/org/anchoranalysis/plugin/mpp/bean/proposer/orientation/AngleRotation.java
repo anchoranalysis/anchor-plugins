@@ -5,7 +5,6 @@ import java.util.Optional;
 import org.anchoranalysis.anchor.mpp.bean.proposer.OrientationProposer;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.anchor.mpp.mark.conic.MarkEllipse;
-import org.anchoranalysis.anchor.mpp.proposer.error.ErrorNode;
 
 /*
  * #%L
@@ -48,7 +47,7 @@ public class AngleRotation extends OrientationProposer {
 	// END BEAN PROPERTIES
 
 	@Override
-	public Optional<Orientation> propose(Mark mark, ImageDim dim, RandomNumberGenerator re, ErrorNode proposerFailureDescription ) {
+	public Optional<Orientation> propose(Mark mark, ImageDim dim, RandomNumberGenerator re ) {
 		MarkEllipse markC = (MarkEllipse) mark;
 		
 		Orientation2D exstOrientation = (Orientation2D) markC.getOrientation();

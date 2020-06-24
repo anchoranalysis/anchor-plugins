@@ -36,12 +36,12 @@ import org.anchoranalysis.bean.error.BeanMisconfiguredException;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.extent.ImageDim;
-import org.anchoranalysis.image.objmask.ObjMask;
-import org.anchoranalysis.image.objmask.ObjMaskCollection;
-import org.anchoranalysis.image.objmask.morph.MorphologicalErosion;
-import org.anchoranalysis.image.objmask.morph.accept.AcceptIterationList;
-import org.anchoranalysis.image.objmask.morph.accept.RejectIterationIfAllHigh;
-import org.anchoranalysis.image.objmask.morph.accept.RejectIterationIfLowDisconnected;
+import org.anchoranalysis.image.objectmask.ObjectMask;
+import org.anchoranalysis.image.objectmask.ObjectCollection;
+import org.anchoranalysis.image.objectmask.morph.MorphologicalErosion;
+import org.anchoranalysis.image.objectmask.morph.accept.AcceptIterationList;
+import org.anchoranalysis.image.objectmask.morph.accept.RejectIterationIfAllHigh;
+import org.anchoranalysis.image.objectmask.morph.accept.RejectIterationIfLowDisconnected;
 
 public class ObjMaskProviderErode extends ObjMaskProviderDimensionsOptional {
 	
@@ -71,32 +71,32 @@ public class ObjMaskProviderErode extends ObjMaskProviderDimensionsOptional {
 	}
 	
 	@Override
-	public ObjMaskCollection createFromObjs(ObjMaskCollection objsIn) throws CreateException {
+	public ObjectCollection createFromObjs(ObjectCollection objsIn) throws CreateException {
 		
-		ObjMaskCollection objsOut = new ObjMaskCollection();
+		Optional<Extent> extent = calcExtent();
+		return objsIn.stream().map( om->
+			erode(om, extent)
+		);
+	}
+	
+	private ObjectMask erode(ObjectMask om, Optional<Extent> extent) throws CreateException {
 		
-		for( ObjMask om : objsIn ) {
-			
-			AcceptIterationList acceptConditionsDilation = new AcceptIterationList();
-			if (rejectIterationIfAllLow) {
-				acceptConditionsDilation.add( new RejectIterationIfAllHigh() );
-			}
-			if (rejectIterationifDisconnected) {
-				acceptConditionsDilation.add( new RejectIterationIfLowDisconnected() );
-			}
-			
-			ObjMask omOut = MorphologicalErosion.createErodedObjMask(
-				om,
-				calcExtent(),
-				do3D,
-				iterations,
-				outsideAtThreshold,
-				Optional.of(acceptConditionsDilation)
-			);
-			
-			objsOut.add(omOut);
+		AcceptIterationList acceptConditionsDilation = new AcceptIterationList();
+		if (rejectIterationIfAllLow) {
+			acceptConditionsDilation.add( new RejectIterationIfAllHigh() );
 		}
-		return objsOut;
+		if (rejectIterationifDisconnected) {
+			acceptConditionsDilation.add( new RejectIterationIfLowDisconnected() );
+		}
+		
+		return MorphologicalErosion.createErodedObjMask(
+			om,
+			extent,
+			do3D,
+			iterations,
+			outsideAtThreshold,
+			Optional.of(acceptConditionsDilation)
+		);
 	}
 	 
 	private Optional<Extent> calcExtent() throws CreateException {

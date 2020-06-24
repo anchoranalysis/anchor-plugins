@@ -34,8 +34,8 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.bean.provider.ChnlProviderOne;
 import org.anchoranalysis.image.bean.provider.HistogramProvider;
-import org.anchoranalysis.image.chnl.Chnl;
-import org.anchoranalysis.image.chnl.factory.ChnlFactory;
+import org.anchoranalysis.image.channel.Channel;
+import org.anchoranalysis.image.channel.factory.ChannelFactory;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.histogram.Histogram;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
@@ -56,7 +56,7 @@ public class ChnlProviderZScore extends ChnlProviderOne {
 	// END BEAN PROPERTIES
 	
 	@Override
-	public Chnl createFromChnl( Chnl chnl ) throws CreateException {
+	public Channel createFromChnl( Channel chnl ) throws CreateException {
 		
 		Histogram hist = histogram.create();
 		
@@ -73,13 +73,13 @@ public class ChnlProviderZScore extends ChnlProviderOne {
 			throw new CreateException("An occurred calculating the mean or std-dev of a channel's histogram");
 		}
 		
-		return ChnlFactory.instance().create(out, chnl.getDimensions().getRes());
+		return ChannelFactory.instance().create(out, chnl.getDimensions().getRes());
 	}
 	
 	private void transformBufferToZScore(
 		double histMean,
 		double histStdDev,
-		Chnl chnl,
+		Channel chnl,
 		VoxelBox<ByteBuffer> out
 	) {
 		

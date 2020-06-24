@@ -1,10 +1,13 @@
 package org.anchoranalysis.plugin.mpp.bean.proposer.bound;
 
+import java.util.Optional;
+
 import org.anchoranalysis.anchor.mpp.bean.bound.RslvdBound;
 import org.anchoranalysis.anchor.mpp.bean.proposer.BoundProposer;
 import org.anchoranalysis.anchor.mpp.bound.BidirectionalBound;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
-import org.anchoranalysis.anchor.mpp.proposer.error.ErrorNode;
+import org.anchoranalysis.anchor.mpp.proposer.ProposalAbnormalFailureException;
+
 
 /*
  * #%L
@@ -60,25 +63,24 @@ public class CloseFit extends BoundProposer {
 	}
 
 	@Override
-	public BidirectionalBound propose(Point3d pos, RotationMatrix orientation,
-			ImageDim bndScene, RslvdBound minMaxBound, ErrorNode proposerFailureDescription) {
-
-		proposerFailureDescription = proposerFailureDescription.add("BoundProposerCloseFit");
+	public Optional<BidirectionalBound> propose(Point3d pos, RotationMatrix orientation,
+			ImageDim bndScene, RslvdBound minMaxBound) throws ProposalAbnormalFailureException {
 		
 		// Our delegate bound is what is our normal best guess on the bounds
-		BidirectionalBound delegateBound = calcDelegate(pos, orientation, bndScene, minMaxBound, proposerFailureDescription);
-		if (delegateBound==null) {
-			return null;
+		Optional<BidirectionalBound> delegateBound = calcDelegate(pos, orientation, bndScene, minMaxBound);
+		if (!delegateBound.isPresent()) {
+			return Optional.empty();
 		}
-		
-		proposerFailureDescription.add("delegateBound=" + delegateBound.toString());
 
 		// But we try to get a new better set of bounds, basedup on a 'close fit' criteria
-		BidirectionalBound bothNew = proposeBoundCloseFit(pos, bndScene, minMaxBound, delegateBound, proposerFailureDescription );
+		BidirectionalBound bothNew = proposeBoundCloseFit(
+			pos,
+			bndScene,
+			minMaxBound,
+			delegateBound.get()
+		);
 		
-		proposerFailureDescription.add("delegateBoundAfterCloseFit=" + bothNew.toString());
-		
-		return bothNew;
+		return Optional.of(bothNew);
 	}
 
 	public BoundProposer getBoundProposer() {
@@ -93,16 +95,7 @@ public class CloseFit extends BoundProposer {
 	//   but only if the existing bounds aren't at the max
 	//
 	// We effectively assume with symmetrical bounds around
-	private BidirectionalBound proposeBoundCloseFit(Point3d pos, ImageDim bndScene, RslvdBound minMaxBound, BidirectionalBound boundAxis, ErrorNode proposerFailureDescription ) {
-		
-		/*if (boundAxis.getForward()==null || boundAxis.getReverse()==null) {
-			proposerFailureDescription.add("One of the bound axes is null");
-			return null;
-		}*/
-		
-		/*double max = boundAxis.getMinOfMax();
-		
-		RslvdBound bu = new RslvdBound( max - edgeDevInside, max + edgeDevOutside).intersect(minMaxBound);*/
+	private BidirectionalBound proposeBoundCloseFit(Point3d pos, ImageDim bndScene, RslvdBound minMaxBound, BidirectionalBound boundAxis) {
 		
 		BidirectionalBound bothNew = new BidirectionalBound();
 		
@@ -125,16 +118,8 @@ public class CloseFit extends BoundProposer {
 		}
 	}
 
-	
-	private BidirectionalBound calcDelegate( Point3d pos, RotationMatrix orientation, ImageDim bndScene, RslvdBound minMaxBound, ErrorNode proposerFailureDescription ) {
-		
-		BidirectionalBound bothX = getBoundProposer().propose(pos, orientation, bndScene, minMaxBound, proposerFailureDescription);
-		
-		if (bothX==null) {
-			return null;
-		}
-
-		return bothX;
+	private Optional<BidirectionalBound> calcDelegate( Point3d pos, RotationMatrix orientation, ImageDim bndScene, RslvdBound minMaxBound) throws ProposalAbnormalFailureException {
+		return getBoundProposer().propose(pos, orientation, bndScene, minMaxBound);
 	}
 
 	public UnitValueDistance getEdgeDevOutside() {

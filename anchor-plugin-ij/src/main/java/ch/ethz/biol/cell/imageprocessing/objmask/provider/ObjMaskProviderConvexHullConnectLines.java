@@ -35,8 +35,8 @@ import org.anchoranalysis.core.geometry.Point2i;
 import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.core.geometry.PointConverter;
 import org.anchoranalysis.image.extent.ImageDim;
-import org.anchoranalysis.image.objmask.ObjMask;
-import org.anchoranalysis.image.objmask.ObjMaskCollection;
+import org.anchoranalysis.image.objectmask.ObjectMask;
+import org.anchoranalysis.image.objectmask.ObjectCollection;
 
 import ch.ethz.biol.cell.imageprocessing.binaryimgchnl.provider.ConvexHullUtilities;
 
@@ -53,22 +53,13 @@ import ch.ethz.biol.cell.imageprocessing.binaryimgchnl.provider.ConvexHullUtilit
 public class ObjMaskProviderConvexHullConnectLines extends ObjMaskProviderDimensions {
 	
 	@Override
-	public ObjMaskCollection createFromObjs( ObjMaskCollection objsCollection ) throws CreateException {
+	public ObjectCollection createFromObjs( ObjectCollection objsCollection ) throws CreateException {
 
 		ImageDim dim = createDim();
-		
-		ObjMaskCollection out = new ObjMaskCollection();
-		
-		for( ObjMask obj : objsCollection ) {
-			out.add(
-				transform(obj, dim)
-			);
-		}
-		
-		return out;
+		return objsCollection.stream().map( om->transform(om,dim) );
 	}
 	
-	private ObjMask transform( ObjMask obj, ImageDim sd ) throws CreateException {
+	private ObjectMask transform( ObjectMask obj, ImageDim sd ) throws CreateException {
 		
 		Optional<List<Point2i>> pntsConvexHull = ConvexHullUtilities.extractPointsFromOutline(obj, 1, true);
 		

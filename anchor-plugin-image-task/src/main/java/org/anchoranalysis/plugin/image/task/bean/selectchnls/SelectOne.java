@@ -31,8 +31,8 @@ import java.util.List;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.image.chnl.Chnl;
-import org.anchoranalysis.plugin.image.task.grouped.ChnlSource;
+import org.anchoranalysis.image.channel.Channel;
+import org.anchoranalysis.plugin.image.task.grouped.ChannelSource;
 import org.anchoranalysis.plugin.image.task.grouped.NamedChnl;
 
 /**
@@ -53,8 +53,8 @@ public class SelectOne extends SelectChnlsFromStacks {
 	// END BEAN FIELDS
 	
 	@Override
-	public List<NamedChnl> selectChnls(ChnlSource source, boolean checkType) throws OperationFailedException {
-		Chnl chnl = source.extractChnl(stackName, checkType, chnlIndex);
+	public List<NamedChnl> selectChnls(ChannelSource source, boolean checkType) throws OperationFailedException {
+		Channel chnl = source.extractChnl(stackName, checkType, chnlIndex);
 		
 		List<NamedChnl> out = new ArrayList<>();
 		out.add( 

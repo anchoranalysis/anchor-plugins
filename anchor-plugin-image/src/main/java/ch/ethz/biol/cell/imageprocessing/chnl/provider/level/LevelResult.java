@@ -28,15 +28,15 @@ package ch.ethz.biol.cell.imageprocessing.chnl.provider.level;
 
 import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.image.histogram.Histogram;
-import org.anchoranalysis.image.objmask.ObjMask;
+import org.anchoranalysis.image.objectmask.ObjectMask;
 
 public class LevelResult {
 	
 	private int level;
-	private ObjMask objMask;
+	private ObjectMask objMask;
 	private Histogram histogram;
 	
-	public LevelResult(int level, ObjMask objMask, Histogram histogram) {
+	public LevelResult(int level, ObjectMask objMask, Histogram histogram) {
 		super();
 		this.level = level;
 		this.objMask = objMask;
@@ -51,7 +51,7 @@ public class LevelResult {
 		return level;
 	}
 
-	public ObjMask getObjMask() {
+	public ObjectMask getObjMask() {
 		return objMask;
 	}
 

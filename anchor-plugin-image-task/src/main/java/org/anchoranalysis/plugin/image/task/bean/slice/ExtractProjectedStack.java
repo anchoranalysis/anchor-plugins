@@ -29,8 +29,8 @@ import org.anchoranalysis.core.error.friendly.AnchorImpossibleSituationException
  */
 
 import org.anchoranalysis.core.geometry.Point3i;
-import org.anchoranalysis.image.chnl.Chnl;
-import org.anchoranalysis.image.chnl.factory.ChnlFactory;
+import org.anchoranalysis.image.channel.Channel;
+import org.anchoranalysis.image.channel.factory.ChannelFactory;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.extent.ImageDim;
@@ -56,7 +56,7 @@ class ExtractProjectedStack {
 		this.height = height;
 	}
 	
-	public Stack extractAndProjectStack( Chnl red, Chnl green, Chnl blue, int z ) throws IncorrectImageSizeException {
+	public Stack extractAndProjectStack( Channel red, Channel green, Channel blue, int z ) throws IncorrectImageSizeException {
 		Stack stack = new Stack();
 		extractAndProjectChnl( red, z, stack );
 		extractAndProjectChnl( green, z, stack );
@@ -64,14 +64,14 @@ class ExtractProjectedStack {
 		return stack;
 	}
 	
-	private void extractAndProjectChnl(	Chnl chnl,int z,	Stack stack	) throws IncorrectImageSizeException {
-		Chnl chnlProjected = createProjectedChnl(
+	private void extractAndProjectChnl(	Channel chnl,int z,	Stack stack	) throws IncorrectImageSizeException {
+		Channel chnlProjected = createProjectedChnl(
 			chnl.extractSlice(z)
 		);
 		stack.addChnl(chnlProjected);
 	}
 	
-	private Chnl createProjectedChnl( Chnl chnlIn ) {
+	private Channel createProjectedChnl( Channel chnlIn ) {
 		
 		// Then the mode is off
 		if (width==-1 || height==-1 || (chnlIn.getDimensions().getX()==width && chnlIn.getDimensions().getY()==height) ) {
@@ -97,9 +97,7 @@ class ExtractProjectedStack {
 	}
 	
 	private static BoundingBox boxToProject( Point3i crnrPos, Extent eChnl, Extent eTrgt ) {
-		return new BoundingBox(crnrPos, eChnl).intersection().with( new BoundingBox(eTrgt) ).orElseThrow( ()-> 
-			new AnchorImpossibleSituationException()
-		);
+		return new BoundingBox(crnrPos, eChnl).intersection().with( new BoundingBox(eTrgt) ).orElseThrow(AnchorImpossibleSituationException::new);
 	}
 		
 	private static BoundingBox bboxSrc( BoundingBox bboxToProject, ImageDim sd ) {
@@ -124,9 +122,9 @@ class ExtractProjectedStack {
 		return srcCrnrPos;
 	}
 	
-	private Chnl copyPixels( BoundingBox bboxSrc, BoundingBox bboxToProject, Chnl chnl, Extent eOut ) {
+	private Channel copyPixels( BoundingBox bboxSrc, BoundingBox bboxToProject, Channel chnl, Extent eOut ) {
 		
-		Chnl chnlOut = ChnlFactory.instance().createEmptyInitialised(
+		Channel chnlOut = ChannelFactory.instance().createEmptyInitialised(
 			new ImageDim(
 				eOut,
 				chnl.getDimensions().getRes()

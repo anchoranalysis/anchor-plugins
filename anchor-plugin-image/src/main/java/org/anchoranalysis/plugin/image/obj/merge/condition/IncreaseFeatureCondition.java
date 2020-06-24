@@ -36,7 +36,7 @@ import org.anchoranalysis.feature.session.calculator.FeatureCalculatorSingle;
 import org.anchoranalysis.image.extent.ImageRes;
 import org.anchoranalysis.image.feature.bean.evaluator.FeatureEvaluator;
 import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
-import org.anchoranalysis.image.objmask.ObjMask;
+import org.anchoranalysis.image.objectmask.ObjectMask;
 
 public class IncreaseFeatureCondition implements AfterCondition {
 
@@ -65,7 +65,7 @@ public class IncreaseFeatureCondition implements AfterCondition {
 	}
 
 	@Override
-	public boolean accept(ObjMask omSrc, ObjMask omDest, ObjMask omMerged, Optional<ImageRes> res) throws OperationFailedException {
+	public boolean accept(ObjectMask omSrc, ObjectMask omDest, ObjectMask omMerged, Optional<ImageRes> res) throws OperationFailedException {
 		
 		if (session!=null) {
 			return doesIncreaseFeatureValueForBoth(omSrc, omDest, omMerged);
@@ -74,7 +74,7 @@ public class IncreaseFeatureCondition implements AfterCondition {
 		}
 	}
 	
-	private boolean doesIncreaseFeatureValueForBoth( ObjMask omSrc, ObjMask omDest, ObjMask omMerge ) throws OperationFailedException {
+	private boolean doesIncreaseFeatureValueForBoth( ObjectMask omSrc, ObjectMask omDest, ObjectMask omMerge ) throws OperationFailedException {
 		
 		// Feature source
 		try {
@@ -90,7 +90,7 @@ public class IncreaseFeatureCondition implements AfterCondition {
 		}		
 	}
 	
-	private double calc(ObjMask om) throws FeatureCalcException {
+	private double calc(ObjectMask om) throws FeatureCalcException {
 		return session.calc(
 			new FeatureInputSingleObj(om)
 		);

@@ -110,7 +110,7 @@ public class FeatureTestCalculator {
 			feature,
 			initParams,
 			new SharedFeatureMulti(),
-			LoggingFixture.simpleLogErrorReporter()
+			LoggingFixture.suppressedLogErrorReporter()
 		);
 		
 		return calculator.calc(params);
