@@ -32,6 +32,7 @@ import java.util.Optional;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
+import org.anchoranalysis.image.bean.nonbean.error.UnitValueException;
 import org.anchoranalysis.image.bean.provider.BinaryChnlProvider;
 import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
 import org.anchoranalysis.image.bean.unitvalue.areavolume.UnitValueAreaOrVolume;
@@ -41,7 +42,6 @@ import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelBoxByte;
 import org.anchoranalysis.image.objectmask.ObjectCollection;
 import org.anchoranalysis.image.objectmask.factory.CreateFromConnectedComponentsFactory;
-import org.anchoranalysis.image.unitvalue.UnitValueException;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.apache.commons.lang.time.StopWatch;
 

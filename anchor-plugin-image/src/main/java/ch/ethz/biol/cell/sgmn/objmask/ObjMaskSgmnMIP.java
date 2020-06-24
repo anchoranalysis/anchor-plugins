@@ -31,6 +31,7 @@ import java.nio.ByteBuffer;
 import java.util.Optional;
 
 import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.image.bean.nonbean.error.SgmnFailedException;
 import org.anchoranalysis.image.bean.sgmn.binary.BinarySgmn;
 import org.anchoranalysis.image.bean.sgmn.binary.BinarySgmnParameters;
 import org.anchoranalysis.image.bean.sgmn.objmask.ObjMaskSgmn;
@@ -41,7 +42,6 @@ import org.anchoranalysis.image.objectmask.ObjectMask;
 import org.anchoranalysis.image.objectmask.ObjectCollection;
 import org.anchoranalysis.image.objectmask.ops.ExtendObjsInto3DMask;
 import org.anchoranalysis.image.seed.SeedCollection;
-import org.anchoranalysis.image.sgmn.SgmnFailedException;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.anchoranalysis.image.voxel.box.VoxelBoxWrapper;
 

@@ -29,10 +29,10 @@ package ch.ethz.biol.cell.imageprocessing.chnl.provider;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.name.provider.NamedProviderGetException;
+import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
 import org.anchoranalysis.image.bean.provider.ChnlProvider;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.experiment.identifiers.ImgStackIdentifiers;
-import org.anchoranalysis.image.init.ImageInitParams;
 import org.anchoranalysis.image.stack.Stack;
 
 // Simply returns the inputStack

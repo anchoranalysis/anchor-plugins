@@ -30,10 +30,10 @@ package org.anchoranalysis.plugin.image.bean.sgmn.watershed.yeong;
 import java.util.Optional;
 
 import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.image.bean.nonbean.error.SgmnFailedException;
 import org.anchoranalysis.image.objectmask.ObjectMask;
 import org.anchoranalysis.image.seed.Seed;
 import org.anchoranalysis.image.seed.SeedCollection;
-import org.anchoranalysis.image.sgmn.SgmnFailedException;
 import org.anchoranalysis.image.voxel.iterator.IterateVoxels;
 import org.anchoranalysis.image.voxel.iterator.ProcessVoxel;
 import org.anchoranalysis.plugin.image.sgmn.watershed.encoding.EncodedVoxelBox;

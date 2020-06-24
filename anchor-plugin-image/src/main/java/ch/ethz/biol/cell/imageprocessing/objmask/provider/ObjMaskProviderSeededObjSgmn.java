@@ -33,6 +33,7 @@ import java.util.Optional;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.core.error.CreateException;
+import org.anchoranalysis.image.bean.nonbean.error.SgmnFailedException;
 import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
 import org.anchoranalysis.image.bean.sgmn.objmask.ObjMaskSgmn;
 import org.anchoranalysis.image.channel.Channel;
@@ -41,7 +42,6 @@ import org.anchoranalysis.image.objectmask.ObjectMask;
 import org.anchoranalysis.image.objectmask.MatchedObject;
 import org.anchoranalysis.image.objectmask.ObjectCollection;
 import org.anchoranalysis.image.seed.SeedCollection;
-import org.anchoranalysis.image.sgmn.SgmnFailedException;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 
 import ch.ethz.biol.cell.imageprocessing.objmask.matching.ObjMaskMatchUtilities;

@@ -33,6 +33,7 @@ import java.util.Optional;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.geometry.ReadableTuple3i;
+import org.anchoranalysis.image.bean.nonbean.error.SgmnFailedException;
 import org.anchoranalysis.image.bean.sgmn.binary.BinarySgmn;
 import org.anchoranalysis.image.bean.sgmn.binary.BinarySgmnParameters;
 import org.anchoranalysis.image.bean.sgmn.objmask.ObjMaskSgmn;
@@ -45,7 +46,6 @@ import org.anchoranalysis.image.objectmask.ObjectMask;
 import org.anchoranalysis.image.objectmask.ObjectCollection;
 import org.anchoranalysis.image.objectmask.factory.CreateFromConnectedComponentsFactory;
 import org.anchoranalysis.image.seed.SeedCollection;
-import org.anchoranalysis.image.sgmn.SgmnFailedException;
 
 public class ObjMaskSgmnBinarySgmn extends ObjMaskSgmn {
 

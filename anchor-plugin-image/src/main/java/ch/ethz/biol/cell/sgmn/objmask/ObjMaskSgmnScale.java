@@ -32,6 +32,7 @@ import java.util.Optional;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.functional.UnaryOperatorWithException;
+import org.anchoranalysis.image.bean.nonbean.error.SgmnFailedException;
 import org.anchoranalysis.image.bean.scale.ScaleCalculator;
 import org.anchoranalysis.image.bean.sgmn.objmask.ObjMaskSgmn;
 import org.anchoranalysis.image.bean.sgmn.objmask.ObjMaskSgmnOne;
@@ -43,7 +44,6 @@ import org.anchoranalysis.image.objectmask.ObjectMask;
 import org.anchoranalysis.image.objectmask.ObjectCollection;
 import org.anchoranalysis.image.scale.ScaleFactor;
 import org.anchoranalysis.image.seed.SeedCollection;
-import org.anchoranalysis.image.sgmn.SgmnFailedException;
 
 
 public class ObjMaskSgmnScale extends ObjMaskSgmnOne {

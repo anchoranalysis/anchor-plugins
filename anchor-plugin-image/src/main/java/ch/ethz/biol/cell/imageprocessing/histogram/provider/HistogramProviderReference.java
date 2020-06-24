@@ -30,9 +30,9 @@ package ch.ethz.biol.cell.imageprocessing.histogram.provider;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.name.provider.NamedProviderGetException;
+import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
 import org.anchoranalysis.image.bean.provider.HistogramProvider;
 import org.anchoranalysis.image.histogram.Histogram;
-import org.anchoranalysis.image.init.ImageInitParams;
 
 public class HistogramProviderReference extends HistogramProvider {
 

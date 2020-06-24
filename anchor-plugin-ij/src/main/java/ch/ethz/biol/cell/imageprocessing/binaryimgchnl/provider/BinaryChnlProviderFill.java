@@ -33,6 +33,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.image.bean.nonbean.error.UnitValueException;
 import org.anchoranalysis.image.bean.provider.BinaryChnlProviderOne;
 import org.anchoranalysis.image.bean.unitvalue.areavolume.UnitValueAreaOrVolume;
 import org.anchoranalysis.image.binary.BinaryChnl;
@@ -44,7 +45,6 @@ import org.anchoranalysis.image.objectmask.ObjectMask;
 import org.anchoranalysis.image.objectmask.ObjectCollection;
 import org.anchoranalysis.image.objectmask.factory.CreateFromConnectedComponentsFactory;
 import org.anchoranalysis.image.objectmask.ops.BinaryChnlFromObjs;
-import org.anchoranalysis.image.unitvalue.UnitValueException;
 
 public class BinaryChnlProviderFill extends BinaryChnlProviderOne {
 

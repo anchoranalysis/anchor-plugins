@@ -28,9 +28,9 @@ package ch.ethz.biol.cell.imageprocessing.stack.provider;
 
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.name.provider.NamedProviderGetException;
+import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
 import org.anchoranalysis.image.bean.provider.stack.StackProvider;
 import org.anchoranalysis.image.experiment.identifiers.ImgStackIdentifiers;
-import org.anchoranalysis.image.init.ImageInitParams;
 import org.anchoranalysis.image.stack.Stack;
 
 // Simply returns the inputStack
