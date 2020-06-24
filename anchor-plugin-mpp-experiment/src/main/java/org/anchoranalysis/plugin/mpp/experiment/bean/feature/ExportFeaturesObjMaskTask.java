@@ -181,8 +181,6 @@ public class ExportFeaturesObjMaskTask<T extends FeatureInput> extends ExportFea
 		ImageInitParams imageInit,
 		NRGStackWithParams nrgStack
 	) throws OperationFailedException {
-
-		BoundIOContext context = input.context();
 		
 		FeatureTableSession<T> session = duplicateAndStartSession(input, imageInit, nrgStack);
 		FeatureCalculator<T> calculator = new FeatureCalculator<>(
@@ -191,7 +189,7 @@ public class ExportFeaturesObjMaskTask<T extends FeatureInput> extends ExportFea
 			imageInit,
 			nrgStack,
 			suppressErrors,
-			context.getLogger()
+			input.context().getLogger()
 		);
 		processAllProviders(
 			input.getInputObject().descriptiveName(),
