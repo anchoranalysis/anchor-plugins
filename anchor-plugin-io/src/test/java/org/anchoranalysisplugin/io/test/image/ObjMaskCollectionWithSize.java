@@ -2,9 +2,9 @@ package org.anchoranalysisplugin.io.test.image;
 
 /*-
  * #%L
- * anchor-test-image
+ * anchor-plugin-io
  * %%
- * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2010 - 2020 Owen Feehan
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -26,13 +26,13 @@ package org.anchoranalysisplugin.io.test.image;
  * #L%
  */
 
-import org.anchoranalysis.image.objmask.ObjMaskCollection;
+import org.anchoranalysis.image.objectmask.ObjectCollection;
 
 class ObjMaskCollectionWithSize {
-	private ObjMaskCollection objs;
+	private ObjectCollection objs;
 	private long size;
 	
-	public ObjMaskCollectionWithSize(ObjMaskCollection objs, long size) {
+	public ObjMaskCollectionWithSize(ObjectCollection objs, long size) {
 		super();
 		this.objs = objs;
 		this.size = size;
@@ -42,7 +42,7 @@ class ObjMaskCollectionWithSize {
 		return ((double) size) / other.size;
 	}
 
-	public ObjMaskCollection getObjs() {
+	public ObjectCollection getObjs() {
 		return objs;
 	}
 }

@@ -35,7 +35,7 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.log.LogReporter;
 import org.anchoranalysis.image.binary.BinaryChnl;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
-import org.anchoranalysis.image.chnl.Chnl;
+import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 
@@ -71,7 +71,7 @@ public class BinaryChnlProviderConvexHull3D extends ConvexHullBase {
 		}
 				
 		// we write the vertices to the outline
-		Chnl out = outline.getChnl();
+		Channel out = outline.getChnl();
 		VoxelBox<ByteBuffer> vbOut = out.getVoxelBox().asByte();
 				
 		vbOut.setAllPixelsTo(outline.getBinaryValues().getOffInt());

@@ -37,8 +37,8 @@ import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.bean.provider.BinaryChnlProvider;
 import org.anchoranalysis.image.bean.provider.ChnlProvider;
 import org.anchoranalysis.image.binary.BinaryChnl;
-import org.anchoranalysis.image.chnl.Chnl;
-import org.anchoranalysis.image.chnl.factory.ChnlFactory;
+import org.anchoranalysis.image.channel.Channel;
+import org.anchoranalysis.image.channel.factory.ChannelFactory;
 import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
@@ -85,20 +85,20 @@ public class StackProviderOutlineRGB extends StackProviderWithBackground {
 		}
 	}
 	
-	private Chnl createBlue(boolean do3D, ImageDim dim) throws CreateException {
-		Chnl chnlBlue = createBlueMaybeProvider(dim);
+	private Channel createBlue(boolean do3D, ImageDim dim) throws CreateException {
+		Channel chnlBlue = createBlueMaybeProvider(dim);
 		if (do3D) {
 			return chnlBlue;
 		} else {
-			return chnlBlue.maxIntensityProj();
+			return chnlBlue.maxIntensityProjection();
 		}
 	}
 	
-	private Chnl createBlueMaybeProvider(ImageDim dim) throws CreateException {
+	private Channel createBlueMaybeProvider(ImageDim dim) throws CreateException {
 		if (chnlBlue!=null) {
 			return chnlBlue.create();
 		} else {
-			return ChnlFactory.instance().createEmptyInitialised(dim, VoxelDataTypeUnsignedByte.instance);
+			return ChannelFactory.instance().createEmptyInitialised(dim, VoxelDataTypeUnsignedByte.instance);
 		}
 	}
 	

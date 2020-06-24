@@ -4,7 +4,7 @@ package org.anchoranalysis.plugin.image.task.grouped;
  * #%L
  * anchor-plugin-image-task
  * %%
- * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2010 - 2020 Owen Feehan
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -26,14 +26,14 @@ package org.anchoranalysis.plugin.image.task.grouped;
  * #L%
  */
 
-import org.anchoranalysis.image.chnl.Chnl;
+import org.anchoranalysis.image.channel.Channel;
 
 public class NamedChnl {
 
 	private String name;
-	private Chnl chnl;
+	private Channel chnl;
 	
-	public NamedChnl(String name, Chnl chnl) {
+	public NamedChnl(String name, Channel chnl) {
 		super();
 		this.name = name;
 		this.chnl = chnl;
@@ -43,7 +43,7 @@ public class NamedChnl {
 		return name;
 	}
 
-	public Chnl getChnl() {
+	public Channel getChnl() {
 		return chnl;
 	}	
 	

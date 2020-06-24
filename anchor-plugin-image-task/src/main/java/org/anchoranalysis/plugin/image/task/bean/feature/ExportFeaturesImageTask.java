@@ -2,6 +2,8 @@ package org.anchoranalysis.plugin.image.task.bean.feature;
 
 
 
+import java.util.Optional;
+
 /*
  * #%L
  * anchor-plugin-image-task
@@ -30,6 +32,7 @@ package org.anchoranalysis.plugin.image.task.bean.feature;
 
 
 import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.experiment.task.InputTypesExpected;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
@@ -46,7 +49,7 @@ import org.anchoranalysis.plugin.image.task.imagefeature.calculator.FeatureCalcu
 public class ExportFeaturesImageTask extends ExportFeaturesStoreTask<ProvidesStackInput,FeatureInputStack> {
 
 	// START BEAN PROPERTIES
-	@BeanField
+	@BeanField @OptionalBean
 	private StackProvider nrgStackProvider;
 	// END BEAN PROPERTIES
 	
@@ -58,7 +61,12 @@ public class ExportFeaturesImageTask extends ExportFeaturesStoreTask<ProvidesSta
 	public InputTypesExpected inputTypesExpected() {
 		return new InputTypesExpected(ProvidesStackInput.class);
 	}
-		
+	
+	@Override
+	protected boolean includeGroupInExperiment(boolean groupGeneratorDefined) {
+		return groupGeneratorDefined;
+	}
+	
 	@Override
 	protected ResultsVector calcResultsVectorForInputObject(
 		ProvidesStackInput inputObject,
@@ -69,7 +77,9 @@ public class ExportFeaturesImageTask extends ExportFeaturesStoreTask<ProvidesSta
 		try {
 			FeatureCalculatorStackInputFromStore featCalc = new FeatureCalculatorStackInputFromStore(
 				inputObject,
-				getNrgStackProvider(),
+				Optional.ofNullable(
+					getNrgStackProvider()
+				),
 				featureStore,
 				context
 			);

@@ -28,6 +28,7 @@ package org.anchoranalysis.plugin.io.multifile;
 
 
 import java.util.List;
+import java.util.Optional;
 
 import org.anchoranalysis.core.progress.ProgressReporter;
 import org.anchoranalysis.core.progress.ProgressReporterNull;
@@ -81,8 +82,8 @@ public class MultiFileReaderOpenedRaster extends OpenedRaster {
 	}
 
 	@Override
-	public List<String> channelNames() {
-		return null;
+	public Optional<List<String>> channelNames() {
+		return Optional.empty();
 	}
 
 

@@ -27,20 +27,20 @@ package ch.ethz.biol.cell.imageprocessing.stack.provider;
  */
 
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.image.chnl.Chnl;
-import org.anchoranalysis.image.stack.region.chnlconverter.ChnlConverterMulti;
+import org.anchoranalysis.image.channel.Channel;
+import org.anchoranalysis.image.stack.region.chnlconverter.ChannelConverterMulti;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
 
 import ch.ethz.biol.cell.imageprocessing.chnl.provider.ChnlProviderMax;
 
 class MaxChnls {
 
-	public static Chnl apply( Chnl chnl1, Chnl chnl2, VoxelDataType outputType ) throws CreateException {
-		Chnl max = maxChnls(chnl1, chnl2);
+	public static Channel apply( Channel chnl1, Channel chnl2, VoxelDataType outputType ) throws CreateException {
+		Channel max = maxChnls(chnl1, chnl2);
 		return convert(max, outputType );
 	}
 	
-	private static Chnl maxChnls( Chnl chnl1, Chnl chnl2 ) throws CreateException {
+	private static Channel maxChnls( Channel chnl1, Channel chnl2 ) throws CreateException {
 		if (chnl2!=null) {
 			return ChnlProviderMax.createMax(chnl1, chnl2);
 		} else {
@@ -49,8 +49,8 @@ class MaxChnls {
 	}
 	
 	
-	private static Chnl convert( Chnl chnl, VoxelDataType outputType ) {
-		ChnlConverterMulti chnlConverter = new ChnlConverterMulti();
+	private static Channel convert( Channel chnl, VoxelDataType outputType ) {
+		ChannelConverterMulti chnlConverter = new ChannelConverterMulti();
 		return chnlConverter.convert(chnl, outputType);
 	}
 }

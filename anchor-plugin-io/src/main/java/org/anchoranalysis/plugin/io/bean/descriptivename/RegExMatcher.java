@@ -47,7 +47,7 @@ public class RegExMatcher extends DescriptiveNameFromFileIndependent {
 		return regEx.match(filePath)
 			.map( RegExMatcher::buildStrFromComponents )
 			.orElse(
-				String.format("regEx match failed on %s", filePath)
+				String.format("descriptive-name regEx match failed on %s", filePath)
 			);
 	}
 	

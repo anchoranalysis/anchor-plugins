@@ -32,8 +32,8 @@ import java.nio.ByteBuffer;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.bean.provider.ChnlProvider;
-import org.anchoranalysis.image.chnl.Chnl;
-import org.anchoranalysis.image.chnl.factory.ChnlFactory;
+import org.anchoranalysis.image.channel.Channel;
+import org.anchoranalysis.image.channel.factory.ChannelFactory;
 import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
@@ -48,9 +48,9 @@ public class ChnlProviderExpandSliceToStack extends ChnlProviderDimSource {
 	// END BEAN PROPERTIES
 	
 	@Override
-	protected Chnl createFromDim(ImageDim dim) throws CreateException {
+	protected Channel createFromDim(ImageDim dim) throws CreateException {
 				
-		Chnl chnl = slice.create();
+		Channel chnl = slice.create();
 		
 		ImageDim sdSrc = chnl.getDimensions();
 		
@@ -61,7 +61,7 @@ public class ChnlProviderExpandSliceToStack extends ChnlProviderDimSource {
 			throw new CreateException("y dimension is not equal");
 		}
 		
-		Chnl chnlOut = ChnlFactory.instance().createEmptyUninitialised(dim, VoxelDataTypeUnsignedByte.instance);
+		Channel chnlOut = ChannelFactory.instance().createEmptyUninitialised(dim, VoxelDataTypeUnsignedByte.instance);
 		
 		VoxelBox<ByteBuffer> vbSlice = chnl.getVoxelBox().asByte(); 
 		VoxelBox<ByteBuffer> vbOut = chnlOut.getVoxelBox().asByte();

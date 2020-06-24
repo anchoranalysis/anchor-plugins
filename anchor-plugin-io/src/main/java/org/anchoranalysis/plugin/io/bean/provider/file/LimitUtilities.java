@@ -30,11 +30,11 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import org.anchoranalysis.io.error.AnchorIOException;
-
 class LimitUtilities {
 
-	public static Collection<File> apply( Collection<File> filesIn, int maxNumItems ) throws AnchorIOException {
+	private LimitUtilities() {}
+	
+	public static Collection<File> apply( Collection<File> filesIn, int maxNumItems ) {
 		
 		ArrayList<File> filesOut = new ArrayList<>();
 		

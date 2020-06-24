@@ -39,7 +39,7 @@ import org.anchoranalysis.mpp.sgmn.bean.optscheme.OptScheme;
 import org.anchoranalysis.mpp.sgmn.bean.optscheme.termination.TerminationCondition;
 import org.anchoranalysis.mpp.sgmn.bean.optscheme.termination.TerminationConditionListOr;
 import org.anchoranalysis.mpp.sgmn.kernel.CfgGenContext;
-import org.anchoranalysis.mpp.sgmn.optscheme.OptSchemeInitContext;
+import org.anchoranalysis.mpp.sgmn.optscheme.OptSchemeContext;
 import org.anchoranalysis.mpp.sgmn.optscheme.OptTerminatedEarlyException;
 import org.anchoranalysis.mpp.sgmn.optscheme.feedback.FeedbackReceiver;
 import org.anchoranalysis.mpp.sgmn.transformer.TransformationContext;
@@ -78,7 +78,7 @@ public class OptSchemeSimulatedAnnealing<S,T,U> extends OptScheme<S,U> {
 		KernelProposer<U> kernelProposer,
 		ListUpdatableMarkSetCollection updatableMarkSetCollection,
 		FeedbackReceiver<S> feedbackReceiver,
-		OptSchemeInitContext initContext
+		OptSchemeContext initContext
 	) throws OptTerminatedEarlyException {
 		
 		CfgGenContext cfgGenContext = initContext.cfgGenContext();
@@ -116,7 +116,7 @@ public class OptSchemeSimulatedAnnealing<S,T,U> extends OptScheme<S,U> {
 		}
 	}
 		
-	private TerminationCondition createTermCondition( OptSchemeInitContext initContext ) {
+	private TerminationCondition createTermCondition( OptSchemeContext initContext ) {
 		TerminationCondition termConditionAll = new TerminationConditionListOr(
 			termCondition,
 			initContext.getTriggerTerminationCondition()

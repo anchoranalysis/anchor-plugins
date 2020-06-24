@@ -36,7 +36,8 @@ import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.feature.bean.FeatureStack;
 import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
 import org.anchoranalysis.image.feature.stack.FeatureInputStack;
-import org.anchoranalysis.image.objmask.ObjMaskCollection;
+import org.anchoranalysis.image.objectmask.ObjectCollection;
+
 import cern.colt.list.DoubleArrayList;
 import cern.jet.stat.Descriptive;
 
@@ -54,7 +55,7 @@ public class MedianConnectedComponentFeature extends FeatureStack {
 	@Override
 	public double calc(SessionInput<FeatureInputStack> input) throws FeatureCalcException {
 
-		ResolvedCalculation<ObjMaskCollection, FeatureInputStack> ccObjs = input.resolver().search(
+		ResolvedCalculation<ObjectCollection, FeatureInputStack> ccObjs = input.resolver().search(
 			new CalculateConnectedComponents(nrgChnlIndex)
 		);
 		

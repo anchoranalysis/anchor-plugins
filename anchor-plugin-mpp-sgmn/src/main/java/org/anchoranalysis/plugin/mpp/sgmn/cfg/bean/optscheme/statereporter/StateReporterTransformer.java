@@ -1,5 +1,7 @@
 package org.anchoranalysis.plugin.mpp.sgmn.cfg.bean.optscheme.statereporter;
 
+import java.util.Optional;
+
 /*-
  * #%L
  * anchor-plugin-mpp-sgmn
@@ -31,9 +33,9 @@ import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.mpp.sgmn.optscheme.StateReporter;
 import org.anchoranalysis.mpp.sgmn.transformer.StateTransformer;
 import org.anchoranalysis.mpp.sgmn.transformer.StateTransformerBean;
-import org.anchoranalysis.plugin.mpp.sgmn.cfg.bean.optscheme.mode.TransformIfNotNull;
+import org.anchoranalysis.plugin.mpp.sgmn.cfg.bean.optscheme.mode.TransformMapOptional;
 
-public class StateReporterTransformer<T,S> extends StateReporter<T, S> {
+public class StateReporterTransformer<T,S> extends StateReporter<Optional<T>, Optional<S>> {
 
 	// START BEAN PROPERTIES
 	@BeanField
@@ -44,18 +46,15 @@ public class StateReporterTransformer<T,S> extends StateReporter<T, S> {
 	// END BEAN PROPERTIES
 
 	@Override
-	public StateTransformer<T, S> primaryReport() {
-		return new TransformIfNotNull<>(transformerPrimary);
+	public StateTransformer<Optional<T>, Optional<S>> primaryReport() {
+		return new TransformMapOptional<>(transformerPrimary);
 	}
-
-	@Override
-	public boolean hasSecondaryReport() {
-		return transformerSecondary!=null;
-	}	
 	
 	@Override
-	public StateTransformer<T, S> secondaryReport() {
-		return new TransformIfNotNull<>(transformerSecondary);
+	public Optional<StateTransformer<Optional<T>, Optional<S>>> secondaryReport() {
+		return Optional.of(
+			new TransformMapOptional<>(transformerSecondary)
+		);
 	}
 
 	public StateTransformerBean<T, S> getTransformerPrimary() {

@@ -31,8 +31,8 @@ import java.nio.ByteBuffer;
 
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.binary.BinaryChnl;
-import org.anchoranalysis.image.chnl.Chnl;
-import org.anchoranalysis.image.chnl.factory.ChnlFactory;
+import org.anchoranalysis.image.channel.Channel;
+import org.anchoranalysis.image.channel.factory.ChannelFactory;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 
@@ -47,11 +47,11 @@ import org.anchoranalysis.image.voxel.box.VoxelBox;
 public class ChnlProviderMaskOut extends ChnlProviderOneMask {
 	
 	@Override
-	protected Chnl createFromMaskedChnl(Chnl chnl, BinaryChnl mask) throws CreateException {
+	protected Channel createFromMaskedChnl(Channel chnl, BinaryChnl mask) throws CreateException {
 
 		VoxelBox<ByteBuffer> vbMask = mask.getChnl().getVoxelBox().asByte();
 		
-		Chnl chnlOut = ChnlFactory.instance().createEmptyInitialised( chnl.getDimensions(), chnl.getVoxelDataType() );
+		Channel chnlOut = ChannelFactory.instance().createEmptyInitialised( chnl.getDimensions(), chnl.getVoxelDataType() );
 				
 		BoundingBox bbox = new BoundingBox( chnlOut.getDimensions().getExtnt() );
 		chnl.getVoxelBox().copyPixelsToCheckMask(

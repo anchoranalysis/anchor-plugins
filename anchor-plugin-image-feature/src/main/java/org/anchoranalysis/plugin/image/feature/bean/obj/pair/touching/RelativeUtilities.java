@@ -27,7 +27,7 @@ package org.anchoranalysis.plugin.image.feature.bean.obj.pair.touching;
  */
 
 import org.anchoranalysis.image.extent.BoundingBox;
-import org.anchoranalysis.image.objmask.ObjMask;
+import org.anchoranalysis.image.objectmask.ObjectMask;
 
 /**
  * Calculates objects/bounding boxes relative to others
@@ -44,9 +44,9 @@ class RelativeUtilities {
 	 * 
 	 * @param box a bounding-box
 	 * @param omRelativeBase object to make the bounding-box relative to
-	 * @return a new bounding box with relative co-ordinates
+	 * @return a new bounding box with relative coordinates
 	 */
-	public static BoundingBox createRelBBox( BoundingBox box, ObjMask omRelativeBase ) {
+	public static BoundingBox createRelBBox( BoundingBox box, ObjectMask omRelativeBase ) {
 		BoundingBox bboxIntersectRel = new BoundingBox(
 			box.relPosTo(omRelativeBase.getBoundingBox()),
 			box.extent()
@@ -61,9 +61,9 @@ class RelativeUtilities {
 	 * @param omRelativeBase the other object to use as a base to make om relative to
 	 * @return a new object with new bounding-box (but with identical memory used for the mask)
 	 */
-	public static ObjMask createRelMask( ObjMask om, ObjMask omRelativeBase ) {
-		ObjMask om2Rel = om.relMaskTo(omRelativeBase.getBoundingBox());
-		om2Rel.reflectThroughOrigin();
-		return om2Rel;
+	public static ObjectMask createRelMask( ObjectMask om, ObjectMask omRelativeBase ) {
+		return om.relMaskTo(
+			omRelativeBase.getBoundingBox()
+		).mapBoundingBox(BoundingBox::reflectThroughOrigin);
 	}
 }

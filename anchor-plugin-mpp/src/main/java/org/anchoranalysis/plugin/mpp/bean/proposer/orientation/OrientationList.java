@@ -1,5 +1,31 @@
 package org.anchoranalysis.plugin.mpp.bean.proposer.orientation;
 
+/*-
+ * #%L
+ * anchor-plugin-mpp
+ * %%
+ * Copyright (C) 2010 - 2020 Owen Feehan
+ * %%
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ * 
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ * #L%
+ */
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -7,7 +33,8 @@ import org.anchoranalysis.anchor.mpp.bean.bound.BoundCalculator;
 import org.anchoranalysis.anchor.mpp.bean.bound.RslvdBound;
 import org.anchoranalysis.anchor.mpp.bound.BidirectionalBound;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
-import org.anchoranalysis.anchor.mpp.proposer.error.ErrorNode;
+import org.anchoranalysis.anchor.mpp.proposer.ProposalAbnormalFailureException;
+import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.random.RandomNumberGenerator;
 import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.orientation.Orientation;
@@ -26,17 +53,20 @@ class OrientationList {
 		this.boundsRatio = boundsRatio;
 	}		
 	
-	public void addOrientationIfUseful( Orientation orientation, Mark mark, RslvdBound minMaxBound, ImageDim dim, ErrorNode errorNode ) {
+	public void addOrientationIfUseful(Orientation orientation, Mark mark, RslvdBound minMaxBound, ImageDim dim) throws ProposalAbnormalFailureException {
 		
-		BidirectionalBound bib = boundCalculator.calcBound( mark.centerPoint(), orientation.createRotationMatrix(), errorNode);
+		BidirectionalBound bib;
+		try {
+			bib = boundCalculator.calcBound( mark.centerPoint(), orientation.createRotationMatrix());
+		} catch (OperationFailedException e) {
+			throw new ProposalAbnormalFailureException(e);
+		}
 		
 		if (bib==null) {
-			errorNode.add("null bound");
 			return;
 		}
 		
 		if (bib.isUnboundedAtBothEnds()) {
-			errorNode.add("unbounded at both ends");
 			return;
 		}
 		
@@ -45,22 +75,18 @@ class OrientationList {
 			double max = bib.getMaxOfMax();
 			if (max < minMaxBound.getMax()) {
 				listOrientationsUnbounded.add(orientation);
-			} else {
-				errorNode.addFormatted("unbounded is above marks bound max (%f > %f)", max, minMaxBound.getMax());
 			}
 		}
 		
 		double rb = bib.ratioBounds(dim); 
 		
 		if (rb > boundsRatio) {
-			errorNode.addFormatted("outside bounds ratio (%f br=%f)",rb, boundsRatio);
 			return;
 		}
 		
 		double max = bib.getMaxOfMax();
 		
 		if (max > minMaxBound.getMax()) {
-			errorNode.addFormatted("above marks bound max (%f > %f)",max, minMaxBound.getMax());
 			return;
 		}
 		

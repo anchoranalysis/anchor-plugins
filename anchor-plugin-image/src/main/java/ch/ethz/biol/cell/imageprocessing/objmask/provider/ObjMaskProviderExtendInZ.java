@@ -33,8 +33,8 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.geometry.ReadableTuple3i;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.Extent;
-import org.anchoranalysis.image.objmask.ObjMask;
-import org.anchoranalysis.image.objmask.ObjMaskCollection;
+import org.anchoranalysis.image.objectmask.ObjectMask;
+import org.anchoranalysis.image.objectmask.ObjectCollection;
 import org.anchoranalysis.image.objmask.match.ObjWithMatches;
 
 import ch.ethz.biol.cell.imageprocessing.objmask.matching.ObjMaskMatchUtilities;
@@ -43,7 +43,7 @@ import ch.ethz.biol.cell.imageprocessing.objmask.matching.ObjMaskMatchUtilities;
 public class ObjMaskProviderExtendInZ extends ObjMaskProviderContainer {
 
 	@Override
-	public ObjMaskCollection createFromObjs(ObjMaskCollection objsSource) throws CreateException {
+	public ObjectCollection createFromObjs(ObjectCollection objsSource) throws CreateException {
 			
 		List<ObjWithMatches> matchList = ObjMaskMatchUtilities.matchIntersectingObjects(
 			containerRequired(),
@@ -51,10 +51,11 @@ public class ObjMaskProviderExtendInZ extends ObjMaskProviderContainer {
 		);
 		
 		// For each obj we extend it into its container
-		ObjMaskCollection out = new ObjMaskCollection();
+		ObjectCollection out = new ObjectCollection();
+		
 		for( ObjWithMatches owm : matchList ) {
-			
-			for( ObjMask omOther : owm.getMatches() ) {
+			for( ObjectMask omOther : owm.getMatches() ) {
+				
 				out.add(
 					createExtendedObjMask(
 						omOther,
@@ -63,12 +64,13 @@ public class ObjMaskProviderExtendInZ extends ObjMaskProviderContainer {
 				);
 			}
 		}
+		
 		return out;
 	}
 		
-	private static ObjMask createExtendedObjMask(ObjMask om, ObjMask container) throws CreateException {
+	private static ObjectMask createExtendedObjMask(ObjectMask om, ObjectMask container) throws CreateException {
 		
-		ObjMask omFlat = om.flattenZ();
+		ObjectMask omFlat = om.flattenZ();
 
 		int zCent = (int) om.centerOfGravity().getZ();
 
@@ -80,7 +82,7 @@ public class ObjMaskProviderExtendInZ extends ObjMaskProviderContainer {
 		return ExtendObjsInZHelper.createExtendedObj(omFlat, container, bbox, zCent);
 	}
 	
-	private static BoundingBox potentialZExpansion( ObjMask omFlat, ObjMask container ) throws CreateException {
+	private static BoundingBox potentialZExpansion( ObjectMask omFlat, ObjectMask container ) throws CreateException {
 		
 		int zLow = container.getBoundingBox().getCrnrMin().getZ();
 		int zHigh = container.getBoundingBox().calcCrnrMax().getZ();

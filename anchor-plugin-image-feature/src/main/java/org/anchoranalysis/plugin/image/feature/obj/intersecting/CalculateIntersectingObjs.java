@@ -29,7 +29,7 @@ package org.anchoranalysis.plugin.image.feature.obj.intersecting;
 import org.anchoranalysis.feature.cache.calculation.FeatureCalculation;
 import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
 import org.anchoranalysis.image.index.rtree.ObjMaskCollectionRTree;
-import org.anchoranalysis.image.objmask.ObjMaskCollection;
+import org.anchoranalysis.image.objectmask.ObjectCollection;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
@@ -39,10 +39,10 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
  * @author owen
  *
  */
-public class CalculateIntersectingObjs extends FeatureCalculation<ObjMaskCollection, FeatureInputSingleObj> {
+public class CalculateIntersectingObjs extends FeatureCalculation<ObjectCollection, FeatureInputSingleObj> {
 
 	private String id;
-	private ObjMaskCollection searchObjs;
+	private ObjectCollection searchObjs;
 		
 	/**
 	 * Constructor
@@ -50,14 +50,14 @@ public class CalculateIntersectingObjs extends FeatureCalculation<ObjMaskCollect
 	 * @param id a unique ID that maps 1 to 1 to searchObjs (and is therefore sufficient to uniquely hashcode)
 	 * @param searchObjs the objects corresponding to id
 	 */
-	public CalculateIntersectingObjs(String id, ObjMaskCollection searchObjs ) {
+	public CalculateIntersectingObjs(String id, ObjectCollection searchObjs ) {
 		super();
 		this.id = id;
 		this.searchObjs = searchObjs;
 	}
 
 	@Override
-	protected ObjMaskCollection execute(FeatureInputSingleObj params) {
+	protected ObjectCollection execute(FeatureInputSingleObj params) {
 
 		ObjMaskCollectionRTree bboxRTree = new ObjMaskCollectionRTree( searchObjs );
 		return bboxRTree.intersectsWith( params.getObjMask() );

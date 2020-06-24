@@ -40,7 +40,7 @@ import org.anchoranalysis.image.bean.threshold.ThresholderGlobal;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.extent.ImageRes;
-import org.anchoranalysis.image.objmask.ObjMask;
+import org.anchoranalysis.image.objectmask.ObjectMask;
 import org.anchoranalysis.image.sgmn.SgmnFailedException;
 import org.anchoranalysis.image.voxel.box.VoxelBoxWrapper;
 import org.anchoranalysis.plugin.image.bean.histogram.threshold.Constant;
@@ -61,7 +61,7 @@ public class SgmnThrshldAboveMinBound extends BinarySgmn {
 
 	@Override
 	public BinaryVoxelBox<ByteBuffer> sgmn(VoxelBoxWrapper voxelBox,
-			BinarySgmnParameters params, Optional<ObjMask> mask) throws SgmnFailedException {
+			BinarySgmnParameters params, Optional<ObjectMask> mask) throws SgmnFailedException {
 		
 		setUpDelegate(
 			voxelBox.any().extent(),

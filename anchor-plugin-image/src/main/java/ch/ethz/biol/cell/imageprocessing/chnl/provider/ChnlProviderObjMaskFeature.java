@@ -41,13 +41,13 @@ import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 import org.anchoranalysis.feature.session.FeatureSession;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorSingle;
 import org.anchoranalysis.image.bean.provider.ChnlProvider;
-import org.anchoranalysis.image.chnl.Chnl;
-import org.anchoranalysis.image.chnl.factory.ChnlFactory;
+import org.anchoranalysis.image.channel.Channel;
+import org.anchoranalysis.image.channel.factory.ChannelFactory;
 import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.extent.IncorrectImageSizeException;
 import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
-import org.anchoranalysis.image.objmask.ObjMask;
-import org.anchoranalysis.image.objmask.ObjMaskCollection;
+import org.anchoranalysis.image.objectmask.ObjectMask;
+import org.anchoranalysis.image.objectmask.ObjectCollection;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
 
 public class ChnlProviderObjMaskFeature extends ChnlProviderOneObjsSource {
@@ -67,7 +67,7 @@ public class ChnlProviderObjMaskFeature extends ChnlProviderOneObjsSource {
 	// END BEAN PROPERTIES
 	
 	@Override
-	protected Chnl createFromChnl(Chnl chnl, ObjMaskCollection objsSource) throws CreateException {
+	protected Channel createFromChnl(Channel chnl, ObjectCollection objsSource) throws CreateException {
 
 		Feature<FeatureInputSingleObj> feature = featureProvider.create();
 		
@@ -86,12 +86,12 @@ public class ChnlProviderObjMaskFeature extends ChnlProviderOneObjsSource {
 		}
 	}
 	
-	private NRGStack createNrgStack(Chnl chnl) throws CreateException {
+	private NRGStack createNrgStack(Channel chnl) throws CreateException {
 		NRGStack nrgStack = new NRGStack(chnl);
 		
 		// add other channels
 		for( ChnlProvider cp : listAdditionalChnlProviders ) {
-			Chnl chnlAdditional = cp.create();
+			Channel chnlAdditional = cp.create();
 			
 			if (!chnlAdditional.getDimensions().equals(chnl.getDimensions())) {
 				throw new CreateException("Dimensions of additional channel are not equal to main channel");
@@ -116,15 +116,15 @@ public class ChnlProviderObjMaskFeature extends ChnlProviderOneObjsSource {
 		);
 	}
 	
-	private Chnl createOutputChnl(
+	private Channel createOutputChnl(
 		ImageDim dim,
-		ObjMaskCollection objsSource,
+		ObjectCollection objsSource,
 		FeatureCalculatorSingle<FeatureInputSingleObj> session,
 		NRGStackWithParams nrgStackParams
 	) throws FeatureCalcException {
-		Chnl chnlOut = ChnlFactory.instance().createEmptyInitialised( dim, VoxelDataTypeUnsignedByte.instance );
+		Channel chnlOut = ChannelFactory.instance().createEmptyInitialised( dim, VoxelDataTypeUnsignedByte.instance );
 		chnlOut.getVoxelBox().any().setAllPixelsTo( valueNoObject );
-		for( ObjMask om : objsSource ) {
+		for( ObjectMask om : objsSource ) {
 
 			double featVal = session.calc(
 				new FeatureInputSingleObj(om, nrgStackParams)

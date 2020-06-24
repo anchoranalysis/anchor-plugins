@@ -1,5 +1,7 @@
 package org.anchoranalysis.plugin.mpp.bean.proposer.merge;
 
+import java.util.Optional;
+
 /*-
  * #%L
  * anchor-plugin-mpp
@@ -52,8 +54,7 @@ public class MarkMergeProposerReference extends MarkMergeProposer {
 			delegate = getSharedObjects().getMarkMergeProposerSet().getException(id);
 		} catch (NamedProviderGetException e) {
 			throw new InitException(
-				String.format("Cannot find referenced markSplitProposer '%s'", id),
-				e.summarize()
+				String.format("Cannot find referenced markSplitProposer '%s': %s", id, e.summarize().toString() )
 			);
 		}
 	}
@@ -64,7 +65,7 @@ public class MarkMergeProposerReference extends MarkMergeProposer {
 	}
 
 	@Override
-	public Mark propose(PxlMarkMemo mark1, PxlMarkMemo mark2, ProposerContext context) throws ProposalAbnormalFailureException {
+	public Optional<Mark> propose(PxlMarkMemo mark1, PxlMarkMemo mark2, ProposerContext context) throws ProposalAbnormalFailureException {
 		return delegate.propose(mark1, mark2, context);
 	}
 

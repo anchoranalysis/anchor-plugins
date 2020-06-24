@@ -48,7 +48,7 @@ import org.anchoranalysis.experiment.task.InputTypesExpected;
 import org.anchoranalysis.experiment.task.InputBound;
 import org.anchoranalysis.experiment.task.ParametersExperiment;
 import org.anchoranalysis.experiment.task.Task;
-import org.anchoranalysis.image.objmask.ObjMaskCollection;
+import org.anchoranalysis.image.objectmask.ObjectCollection;
 import org.anchoranalysis.image.sgmn.SgmnFailedException;
 import org.anchoranalysis.image.stack.DisplayStack;
 import org.anchoranalysis.image.stack.NamedImgStackCollection;
@@ -89,7 +89,7 @@ public class CfgSgmnTask extends Task<MultiInput,ExperimentState>{
 		try {
 			NamedImgStackCollection stackCollection = stacksFromInput(inputObject);
 			
-			NamedProviderStore<ObjMaskCollection> objs = objsFromInput(inputObject, logErrorReporter);
+			NamedProviderStore<ObjectCollection> objs = objsFromInput(inputObject, logErrorReporter);
 					
 			Optional<KeyValueParams> keyValueParams = keyValueParamsFromInput(inputObject, logErrorReporter);
 			
@@ -147,8 +147,8 @@ public class CfgSgmnTask extends Task<MultiInput,ExperimentState>{
 	}
 	
 	
-	private NamedProviderStore<ObjMaskCollection> objsFromInput( MultiInput inputObject, LogErrorReporter logErrorReporter ) throws OperationFailedException {
-		NamedProviderStore<ObjMaskCollection> objMaskCollectionStore = new LazyEvaluationStore<>(logErrorReporter, "objMaskCollection");
+	private NamedProviderStore<ObjectCollection> objsFromInput( MultiInput inputObject, LogErrorReporter logErrorReporter ) throws OperationFailedException {
+		NamedProviderStore<ObjectCollection> objMaskCollectionStore = new LazyEvaluationStore<>(logErrorReporter, "objMaskCollection");
 		inputObject.objs().addToStore(objMaskCollectionStore);
 		return objMaskCollectionStore;
 	}

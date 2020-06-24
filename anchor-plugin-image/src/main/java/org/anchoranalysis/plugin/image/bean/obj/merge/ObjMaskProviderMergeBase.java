@@ -26,8 +26,8 @@ package org.anchoranalysis.plugin.image.bean.obj.merge;
  * #L%
  */
 
-import java.util.List;
 import java.util.Optional;
+import java.util.stream.Stream;
 
 import org.anchoranalysis.bean.OptionalFactory;
 import org.anchoranalysis.bean.annotation.BeanField;
@@ -37,7 +37,8 @@ import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.bean.provider.ImageDimProvider;
 import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.extent.ImageRes;
-import org.anchoranalysis.image.objmask.ObjMaskCollection;
+import org.anchoranalysis.image.objectmask.ObjectCollection;
+import org.anchoranalysis.image.objectmask.ObjectCollectionFactory;
 import org.anchoranalysis.image.objmask.match.ObjWithMatches;
 
 import ch.ethz.biol.cell.imageprocessing.objmask.matching.ObjMaskMatchUtilities;
@@ -54,7 +55,7 @@ public abstract class ObjMaskProviderMergeBase extends ObjMaskProviderContainer 
 	
 	@FunctionalInterface
 	protected static interface MergeObjs {
-		ObjMaskCollection mergeObjs( ObjMaskCollection objs ) throws OperationFailedException;
+		ObjectCollection mergeObjs( ObjectCollection objs ) throws OperationFailedException;
 	}
 		
 	protected Optional<ImageRes> calcResOptional() throws OperationFailedException {
@@ -81,13 +82,13 @@ public abstract class ObjMaskProviderMergeBase extends ObjMaskProviderContainer 
 	 * @return
 	 * @throws OperationFailedException
 	 */
-	protected ObjMaskCollection mergeMultiplex( ObjMaskCollection objs, MergeObjs mergeFunc ) throws OperationFailedException {
+	protected ObjectCollection mergeMultiplex( ObjectCollection objs, MergeObjs mergeFunc ) throws OperationFailedException {
 		
 		// To avoid changing the original
-		ObjMaskCollection objsToMerge = objs.duplicateShallow();
+		ObjectCollection objsToMerge = objs.duplicateShallow();
 
 		try {
-			Optional<ObjMaskCollection> container = containerOptional();
+			Optional<ObjectCollection> container = containerOptional();
 			if (container.isPresent()) {
 				return mergeInContainer(mergeFunc, objsToMerge, container.get());
 			} else {
@@ -98,26 +99,26 @@ public abstract class ObjMaskProviderMergeBase extends ObjMaskProviderContainer 
 		}
 	}
 	
-	private static ObjMaskCollection mergeAll( MergeObjs merger, ObjMaskCollection objs) throws OperationFailedException {
-		ObjMaskCollection out = new ObjMaskCollection();
-		// We merge them all
-		ObjMaskCollection mergedObjs = merger.mergeObjs(objs);
-		out.addAll(mergedObjs);
-		return out;
+	private static ObjectCollection mergeAll( MergeObjs merger, ObjectCollection objs) throws OperationFailedException {
+		// TODO is this extra ObjectCollection constructor needed?
+		return ObjectCollectionFactory.from(
+			merger.mergeObjs(objs)	
+		);
 	}
 	
-	private static ObjMaskCollection mergeInContainer( MergeObjs merger, ObjMaskCollection objs, ObjMaskCollection containerObjs) throws OperationFailedException {
+	private static ObjectCollection mergeInContainer( MergeObjs merger, ObjectCollection objs, ObjectCollection containerObjs) throws OperationFailedException {
 		
-		ObjMaskCollection out = new ObjMaskCollection();
-				
-		List<ObjWithMatches> matchList = ObjMaskMatchUtilities.matchIntersectingObjects( containerObjs, objs );
-		
-		for( ObjWithMatches owm : matchList ) {
+		// All matched objects
+		Stream<ObjectCollection> matchesStream = ObjMaskMatchUtilities
+				.matchIntersectingObjects(containerObjs, objs)
+				.stream()
+				.map(ObjWithMatches::getMatches);
 
-			ObjMaskCollection mergedObjs = merger.mergeObjs( owm.getMatches() );
-			out.addAll( mergedObjs );
-		}
-		return out;		
+		return ObjectCollectionFactory.flatMapFrom(
+			matchesStream,
+			OperationFailedException.class,
+			merger::mergeObjs
+		);		
 	}
 
 	public ImageDimProvider getDim() {

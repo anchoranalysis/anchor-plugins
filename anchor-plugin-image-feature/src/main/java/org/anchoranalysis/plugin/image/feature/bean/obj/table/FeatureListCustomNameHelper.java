@@ -47,7 +47,11 @@ import org.anchoranalysis.feature.list.NamedFeatureStoreFactory;
  */
 class FeatureListCustomNameHelper {
 
-	private FeatureListCustomNameHelper() {}
+	private final NamedFeatureStoreFactory storeFactory;
+	
+	public FeatureListCustomNameHelper(NamedFeatureStoreFactory storeFactory) {
+		this.storeFactory = storeFactory;
+	}
 	
 	/**
 	 * Duplicates features and sets a custom-name based upon the named-bean
@@ -57,11 +61,11 @@ class FeatureListCustomNameHelper {
 	 * @return a simple feature-list of duplicated beans with derived custom-names set
 	 * @throws OperationFailedException
 	 */
-	public static <T extends FeatureInput> FeatureList<T> copyFeaturesCreateCustomName(
+	public <T extends FeatureInput> FeatureList<T> copyFeaturesCreateCustomName(
 		List<NamedBean<FeatureListProvider<T>>> features
 	) throws OperationFailedException {
 		try {
-			NamedFeatureStore<T> featuresNamed = NamedFeatureStoreFactory.createNamedFeatureList(features);
+			NamedFeatureStore<T> featuresNamed = storeFactory.createNamedFeatureList(features);
 			return copyFeaturesCreateCustomName(featuresNamed);
 			
 		} catch (CreateException e) {

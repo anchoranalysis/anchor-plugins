@@ -1,5 +1,7 @@
 package org.anchoranalysis.plugin.mpp.sgmn.cfg.bean.kernel.independent;
 
+import java.util.Optional;
+
 import org.anchoranalysis.anchor.mpp.bean.proposer.MarkProposer;
 import org.anchoranalysis.anchor.mpp.feature.mark.ListUpdatableMarkSetCollection;
 import org.anchoranalysis.anchor.mpp.feature.nrg.cfg.CfgNRGPixelized;
@@ -59,9 +61,6 @@ public class KernelExchange extends KernelIndependent<CfgNRGPixelized> {
 	private Mark markExst;
 	private Mark markNew;
 	
-	public KernelExchange() {
-	}
-	
 	@Override
 	public double calcAccptProb( int exstSize, int propSize, double poisson_intens, ImageDim scene_size, double densityRatio ) {
 		return Math.min(1.0, densityRatio );
@@ -90,16 +89,18 @@ public class KernelExchange extends KernelIndependent<CfgNRGPixelized> {
 	}
 	
 	@Override
-	public CfgNRGPixelized makeProposal(
-		CfgNRGPixelized exst,
-		KernelCalcContext context) throws KernelCalcNRGException {
+	public Optional<CfgNRGPixelized> makeProposal(Optional<CfgNRGPixelized> exst, KernelCalcContext context) throws KernelCalcNRGException {
 
+		if (exst.isPresent()) {
+			return Optional.empty();
+		}
+		
 		ProposerContext propContext = context.proposer(); 
 		
 		// Pick an element from the existing configuration
-		int index = exst.getCfg().randomIndex( propContext.getRe() );
+		int index = exst.get().getCfg().randomIndex( propContext.getRandomNumberGenerator() );
 		
-		markExst = exst.getCfg().get(index);
+		markExst = exst.get().getCfg().get(index);
 		
 		// We copy the particular mark in question
 		markNew = markExst.duplicate();
@@ -118,11 +119,11 @@ public class KernelExchange extends KernelIndependent<CfgNRGPixelized> {
 		}
 		
 		if (!succ) {
-			return null;
+			return Optional.empty();
 		}
 
 		// We calculate a new NRG by exchanging our marks
-		CfgNRGPixelized newNRG = exst.shallowCopy();
+		CfgNRGPixelized newNRG = exst.get().shallowCopy();
 		try {
 			newNRG.exchange(index, pmmMarkNew, propContext.getNrgStack() );
 		} catch (FeatureCalcException e) {
@@ -132,7 +133,7 @@ public class KernelExchange extends KernelIndependent<CfgNRGPixelized> {
 			);
 		}
 		
-		return newNRG;
+		return Optional.of(newNRG);
 	}
 
 	@Override

@@ -109,7 +109,7 @@ public class PatternSpanTest {
 	}
 	
 	private static List<File> filesFromStrs( String[] paths ) {
-		return Arrays.stream(paths).map( str -> new File(str) ).collect( Collectors.toList() );
+		return Arrays.stream(paths).map(File::new).collect( Collectors.toList() );
 	}
 	
 	private static void assertIndexEquals( List<DescriptiveFile> ret, int index, String expected ) {

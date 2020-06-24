@@ -33,9 +33,9 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.NonNegative;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.extent.ImageDim;
-import org.anchoranalysis.image.objmask.ObjMask;
-import org.anchoranalysis.image.objmask.ObjMaskCollection;
-import org.anchoranalysis.image.objmask.morph.MorphologicalDilation;
+import org.anchoranalysis.image.objectmask.ObjectMask;
+import org.anchoranalysis.image.objectmask.ObjectCollection;
+import org.anchoranalysis.image.objectmask.morph.MorphologicalDilation;
 
 public class ObjMaskProviderDilate extends ObjMaskProviderDimensionsOptional {
 	
@@ -51,25 +51,21 @@ public class ObjMaskProviderDilate extends ObjMaskProviderDimensionsOptional {
 	// END BEAN PROPERTIES
 
 	@Override
-	public ObjMaskCollection createFromObjs(ObjMaskCollection objsIn) throws CreateException {
-	
+	public ObjectCollection createFromObjs(ObjectCollection objsIn) throws CreateException {
 		Optional<ImageDim> dim = createDims();
-				
-		ObjMaskCollection objsOut = new ObjMaskCollection();
-		
-		for( ObjMask om : objsIn ) {
-
-			ObjMask omGrown = MorphologicalDilation.createDilatedObjMask(
-				om,
-				dim.map(ImageDim::getExtnt),
-				do3D,
-				iterations,
-				bigNghb
-			);
-			assert( !dim.isPresent() || dim.get().contains( omGrown.getBoundingBox()) );
-			objsOut.add(omGrown);
-		}
-		return objsOut;
+		return objsIn.stream().map( om->dilate(om,dim) );
+	}
+	
+	private ObjectMask dilate(ObjectMask om, Optional<ImageDim> dim) throws CreateException {
+		ObjectMask omGrown = MorphologicalDilation.createDilatedObjMask(
+			om,
+			dim.map(ImageDim::getExtnt),
+			do3D,
+			iterations,
+			bigNghb
+		);
+		assert( !dim.isPresent() || dim.get().contains( omGrown.getBoundingBox()) );
+		return omGrown;
 	}
 	
 	public boolean isDo3D() {

@@ -33,7 +33,7 @@ import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.core.geometry.Tuple3i;
 import org.anchoranalysis.core.random.RandomNumberGenerator;
 import org.anchoranalysis.image.extent.ImageRes;
-import org.anchoranalysis.image.objmask.ObjMask;
+import org.anchoranalysis.image.objectmask.ObjectMask;
 
 public abstract class VisitScheduler extends NullParamsBean<VisitScheduler> {
 
@@ -43,7 +43,7 @@ public abstract class VisitScheduler extends NullParamsBean<VisitScheduler> {
 	
 	public abstract void afterCreateObjMask(Point3i root, ImageRes res, RandomNumberGenerator re) throws InitException;
 	
-	public abstract boolean considerVisit( Point3i pnt, int distAlongContour, ObjMask objMask );
+	public abstract boolean considerVisit( Point3i pnt, int distAlongContour, ObjectMask objMask );
 	
 	
 }

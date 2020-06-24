@@ -28,9 +28,9 @@ package ch.ethz.biol.cell.imageprocessing.chnl.provider;
 
 
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.image.chnl.Chnl;
-import org.anchoranalysis.image.objmask.ObjMask;
-import org.anchoranalysis.image.objmask.ObjMaskCollection;
+import org.anchoranalysis.image.channel.Channel;
+import org.anchoranalysis.image.objectmask.ObjectMask;
+import org.anchoranalysis.image.objectmask.ObjectCollection;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 
 // Assigns a unique id number to each objects
@@ -38,7 +38,7 @@ import org.anchoranalysis.image.voxel.box.VoxelBox;
 public class ChnlProviderIdentifyObjects extends ChnlProviderOneObjsSource {
 
 	@Override
-	protected Chnl createFromChnl(Chnl chnl, ObjMaskCollection objsSource) throws CreateException {
+	protected Channel createFromChnl(Channel chnl, ObjectCollection objsSource) throws CreateException {
 
 		VoxelBox<?> vb = chnl.getVoxelBox().any();
 		
@@ -51,7 +51,7 @@ public class ChnlProviderIdentifyObjects extends ChnlProviderOneObjsSource {
 		vb.setAllPixelsTo(0);
 		
 		int index = 1;
-		for(ObjMask om : objsSource) {
+		for(ObjectMask om : objsSource) {
 			vb.setPixelsCheckMask(om, index++);
 		}
 		

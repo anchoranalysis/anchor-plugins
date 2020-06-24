@@ -35,11 +35,12 @@ import org.anchoranalysis.image.bean.provider.stack.StackProviderHolder;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.io.input.ImageInitParamsFactory;
-import org.anchoranalysis.image.objmask.ObjMaskCollection;
+import org.anchoranalysis.image.objectmask.ObjectCollection;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.output.bound.BoundIOContext;
 import org.anchoranalysis.test.TestLoader;
+import org.anchoranalysis.test.image.BoundIOContextFixture;
 import org.anchoranalysis.test.image.io.TestLoaderImageIO;
 import org.junit.Test;
 import static org.junit.Assert.assertTrue;
@@ -67,7 +68,7 @@ public class ObjMaskProviderExtractTextTest {
 		
 		ObjMaskProviderExtractText provider = createAndInitProvider("car.jpg");
 				
-		ObjMaskCollection objs = provider.create();
+		ObjectCollection objs = provider.create();
 		
 		assertTrue( objs.size()==3 );
 		
@@ -76,7 +77,7 @@ public class ObjMaskProviderExtractTextTest {
 		assertBoxAtIndex(objs, 2, boxAt(392, 199, 29, 26) );
 	}
 	
-	private void assertBoxAtIndex( ObjMaskCollection objs, int index, BoundingBox box  ) {
+	private void assertBoxAtIndex( ObjectCollection objs, int index, BoundingBox box  ) {
 		assertEquals(
 			"box at index " + index,
 			box,
@@ -93,7 +94,7 @@ public class ObjMaskProviderExtractTextTest {
 		
 		initProvider(
 			provider,
-			BoundContextFixture.withSimpleLogger(
+			BoundIOContextFixture.withSuppressedLogger(
 				testLoader.getTestLoader().getRoot()
 			)
 		);

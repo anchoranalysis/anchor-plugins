@@ -37,20 +37,20 @@ import org.anchoranalysis.feature.cache.calculation.ResolvedCalculationMap;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
-import org.anchoranalysis.image.objmask.ObjMask;
-import org.anchoranalysis.image.objmask.morph.MorphologicalErosion;
+import org.anchoranalysis.image.objectmask.ObjectMask;
+import org.anchoranalysis.image.objectmask.morph.MorphologicalErosion;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
-public class CalculateClosing extends FeatureCalculation<ObjMask,FeatureInputSingleObj> {
+public class CalculateClosing extends FeatureCalculation<ObjectMask,FeatureInputSingleObj> {
 
 	private int iterations;
-	private ResolvedCalculationMap<ObjMask,FeatureInputSingleObj,Integer> mapDilation;
+	private ResolvedCalculationMap<ObjectMask,FeatureInputSingleObj,Integer> mapDilation;
 	private boolean do3D;
 	
 	private CalculateClosing(
 		int iterations,
-		ResolvedCalculationMap<ObjMask,FeatureInputSingleObj,Integer> mapDilation,
+		ResolvedCalculationMap<ObjectMask,FeatureInputSingleObj,Integer> mapDilation,
 		boolean do3D
 	) {
 		this.iterations = iterations;
@@ -64,12 +64,12 @@ public class CalculateClosing extends FeatureCalculation<ObjMask,FeatureInputSin
 		this.do3D = src.do3D;
 	}
 	
-	public static ResolvedCalculation<ObjMask,FeatureInputSingleObj> createFromCache(
+	public static ResolvedCalculation<ObjectMask,FeatureInputSingleObj> createFromCache(
 		CalculationResolver<FeatureInputSingleObj> cache,
 		int iterations,
 		boolean do3D
 	) {
-		ResolvedCalculationMap<ObjMask,FeatureInputSingleObj,Integer> map = cache.search(
+		ResolvedCalculationMap<ObjectMask,FeatureInputSingleObj,Integer> map = cache.search(
 			new CalculateDilationMap(do3D)
 		);
 		
@@ -79,12 +79,12 @@ public class CalculateClosing extends FeatureCalculation<ObjMask,FeatureInputSin
 	}
 
 	@Override
-	protected ObjMask execute(FeatureInputSingleObj params) throws FeatureCalcException {
+	protected ObjectMask execute(FeatureInputSingleObj params) throws FeatureCalcException {
 		
 		try {
-			ObjMask omDilated = mapDilation.getOrCalculate(params, iterations);
+			ObjectMask omDilated = mapDilation.getOrCalculate(params, iterations);
 			
-			ObjMask omEroded = MorphologicalErosion.createErodedObjMask(
+			ObjectMask omEroded = MorphologicalErosion.createErodedObjMask(
 				omDilated,
 				params.getDimensionsOptional().map(ImageDim::getExtnt),
 				do3D,

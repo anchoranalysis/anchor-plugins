@@ -41,7 +41,7 @@ import org.anchoranalysis.experiment.JobExecutionException;
 import org.anchoranalysis.image.bean.scale.ScaleCalculator;
 import org.anchoranalysis.image.binary.BinaryChnl;
 import org.anchoranalysis.image.binary.values.BinaryValues;
-import org.anchoranalysis.image.chnl.Chnl;
+import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.experiment.bean.task.RasterTask;
 import org.anchoranalysis.image.init.ImageInitParams;
 import org.anchoranalysis.image.interpolator.InterpolatorFactory;
@@ -177,9 +177,9 @@ public class ScaleTask extends RasterTask {
 			}
 			
 			try {
-				Chnl chnlIn = so.getStackCollection().getException(chnlName).getChnl(0);
+				Channel chnlIn = so.getStackCollection().getException(chnlName).getChnl(0);
 				
-				Chnl chnlOut;
+				Channel chnlOut;
 				if (forceBinary) {
 					BinaryChnl binaryImg = new BinaryChnl(chnlIn, BinaryValues.getDefault() );
 					chnlOut = BinaryChnlProviderScaleXY.scale(binaryImg, scaleCalculator, InterpolatorFactory.getInstance().binaryResizing()).getChnl();
@@ -193,7 +193,7 @@ public class ScaleTask extends RasterTask {
 				}
 				
 				stackCollection.addImageStack(chnlName, new Stack(chnlOut) );
-				stackCollectionMIP.addImageStack(chnlName, new Stack(chnlOut.maxIntensityProj()) );
+				stackCollectionMIP.addImageStack(chnlName, new Stack(chnlOut.maxIntensityProjection()) );
 				
 			} catch (CreateException e) {
 				throw new JobExecutionException(e);

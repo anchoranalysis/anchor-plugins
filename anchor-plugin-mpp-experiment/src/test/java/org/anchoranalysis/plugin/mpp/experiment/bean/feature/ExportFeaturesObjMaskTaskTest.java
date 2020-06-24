@@ -40,7 +40,11 @@ import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
+
 import static org.mockito.Mockito.*;
+
+import java.util.function.Consumer;
+import static org.anchoranalysis.plugin.mpp.experiment.bean.feature.ExportFeaturesObjMaskOutputter.*;
 
 import ch.ethz.biol.cell.mpp.nrg.feature.stack.SceneWidth;
 
@@ -58,36 +62,7 @@ public class ExportFeaturesObjMaskTaskTest {
 	private static TestLoader loader;
 	private ExportFeaturesObjMaskTaskFixture taskFixture;
 	
-	private static final String SINGLE_FEATURES_WITH_SHELL = "singleFeaturesWithShell.xml";
-
-	private static final String SINGLE_FEATURES_REFERENCE_WITH_INCLUDE = "referenceWithInclude.xml";
-	private static final String SINGLE_FEATURES_REFERENCE_SHARED = "referenceWithShared.xml";
-	
 	private static final String RELATIVE_PATH_SAVED_RESULTS = "expectedOutput/exportFeaturesObjMask/";
-	
-	// Saved output locations for particular tests
-	private static final String OUTPUT_DIR_SIMPLE_1 = "simple01/";
-	private static final String OUTPUT_DIR_MERGED_1 = "mergedPairs01/";
-	private static final String OUTPUT_DIR_MERGED_2 = "mergedPairs02/";
-	private static final String OUTPUT_DIR_MERGED_3 = "mergedPairs03/";
-	private static final String OUTPUT_DIR_IMAGE_CACHE = "imageCache/";
-	private static final String OUTPUT_DIR_SIMPLE_WITH_REFERENCE = "simpleWithReference/";
-	
-	// Used for tests where we expect an exception to be thrown, and thus never to actually be compared
-	// It doesn't physically exist
-	private static final String OUTPUT_DIR_IRRELEVANT = "irrelevant/";
-	
-	private static final String[] OUTPUTS_TO_COMPARE = {
-		"csvAgg.csv",
-		"csvAll.csv",
-		"arbitraryPath/objsTest/csvGroup.csv",
-		"stackCollection/input.tif",
-		"nrgStack/nrgStack_00.tif",
-		"manifest.ser.xml",
-		"nrgStackParams.xml",
-		"arbitraryPath/objsTest/paramsGroupAgg.xml",
-		"objMaskCollection/objsTest.h5"
-	};
 		
 	@Rule
 	public TemporaryFolder folder = new TemporaryFolder();
@@ -106,42 +81,58 @@ public class ExportFeaturesObjMaskTaskTest {
 	@Test(expected=OperationFailedException.class)
 	public void testSimpleSmall() throws OperationFailedException {
 		// The saved directory is irrelevant because an exception is thrown
-		taskFixture.useSmallNRGInstead();
-		testOnTask(OUTPUT_DIR_IRRELEVANT);
+		testOnTask(
+			OUTPUT_DIR_IRRELEVANT,
+			fixture -> fixture.useSmallNRGInstead()
+		);
 	}
 	
 	@Test
 	public void testSimpleLarge() throws OperationFailedException {
-		testOnTask(OUTPUT_DIR_SIMPLE_1);
+		testOnTask(
+			OUTPUT_DIR_SIMPLE_1,
+			fixture -> {}	// Change nothing
+		);
 	}
 	
 	@Test(expected=OperationFailedException.class)
 	public void testMergedSmall() throws OperationFailedException, CreateException {
 		// The saved directory is irrelevant because an exception is thrown
-		taskFixture.useSmallNRGInstead();
-		taskFixture.changeToMergedPairs(false, false);
-		testOnTask(OUTPUT_DIR_IRRELEVANT);
+		testOnTask(
+			OUTPUT_DIR_IRRELEVANT,
+			fixture -> {
+				fixture.useSmallNRGInstead();
+				fixture.changeToMergedPairs(false, false);		
+			}
+		);
 	}
 	
 	@Test
 	public void testMergedLarge() throws OperationFailedException, CreateException {
-		taskFixture.changeToMergedPairs(false, false);
-		testOnTask(OUTPUT_DIR_MERGED_1);
+		testOnTask(
+			OUTPUT_DIR_MERGED_1,
+			fixture -> fixture.changeToMergedPairs(false, false) 
+		);
 	}
 	
 	@Test
 	public void testMergedLargeWithPairs() throws OperationFailedException, CreateException {
-		taskFixture.useAlternativeFileAsSingle(SINGLE_FEATURES_WITH_SHELL);
-		taskFixture.changeToMergedPairs(true, false);
-		testOnTask(OUTPUT_DIR_MERGED_2);
+		testOnTask(
+			OUTPUT_DIR_MERGED_2,
+			fixture -> {
+				fixture.featureLoader().changeSingleToShellFeatures();
+				fixture.changeToMergedPairs(true, false);		
+			}
+		);
 	}
 	
 	@Test
 	public void testMergedLargeWithImage() throws OperationFailedException, CreateException {
-		taskFixture.changeToMergedPairs(false, true);
-		testOnTask(OUTPUT_DIR_MERGED_3);
+		testOnTask(
+			OUTPUT_DIR_MERGED_3,
+			fixture -> fixture.changeToMergedPairs(false, true) 
+		);
 	}
-	
 	
 	/**
 	 * Tests that the image-features are cached, and not repeatedly-calculated for the same image.
@@ -158,10 +149,13 @@ public class ExportFeaturesObjMaskTaskTest {
 		// To make sure we keep on using the spy, even after an expected duplication()
 		when(feature.duplicateBean()).thenReturn(feature);
 		
-		taskFixture.useInsteadAsImageFeature(feature);
-		taskFixture.changeToMergedPairs(false, true);
-		
-		testOnTask(OUTPUT_DIR_IMAGE_CACHE);
+		testOnTask(
+			OUTPUT_DIR_IMAGE_CACHE,
+			fixture -> {
+				fixture.featureLoader().changeImageTo(feature);
+				fixture.changeToMergedPairs(false, true);		
+			}
+		);
 		
 		// If caching is working, then the feature should be calculated exactly once
 		verify(feature, times(1)).calc(any());
@@ -195,8 +189,8 @@ public class ExportFeaturesObjMaskTaskTest {
 		
 		Feature<FeatureInputSingleObj> feature = MockFeatureWithCalculationFixture.createMockFeatureWithCalculation();
 		
-		taskFixture.useInsteadAsSingleFeature(feature);
-		taskFixture.useInsteadAsPairFeature(
+		taskFixture.featureLoader().changeSingleTo(feature);
+		taskFixture.featureLoader().changePairTo(
 			// This produces the same result as the feature calculated on the left-object
 			new First(feature)	
 		);
@@ -214,19 +208,25 @@ public class ExportFeaturesObjMaskTaskTest {
 	/** Calculate with a reference to another feature included in the list */
 	@Test
 	public void testSimpleLargeWithIncludedReference() throws OperationFailedException, CreateException {
-		// DISABLED UNTIL CODE IS FINISHED
-		taskFixture.useAlternativeFileAsSingle(SINGLE_FEATURES_REFERENCE_WITH_INCLUDE);
-		testOnTask(OUTPUT_DIR_SIMPLE_WITH_REFERENCE);
+		testOnTask(
+			OUTPUT_DIR_SIMPLE_WITH_REFERENCE,
+			fixture -> fixture.featureLoader().changeSingleToReferenceWithInclude() 
+		);
 	}
 	
 	/** Calculate with a reference to a feature that exists among the shared features */
 	@Test
 	public void testSimpleLargeWithSharedReference() throws OperationFailedException, CreateException {
-		// DISABLED UNTIL CODE IS FINISHED
-		taskFixture.useAlternativeFileAsSingle(SINGLE_FEATURES_REFERENCE_SHARED);
-		testOnTask(OUTPUT_DIR_SIMPLE_WITH_REFERENCE);
+		testOnTask(
+			OUTPUT_DIR_SIMPLE_WITH_REFERENCE,
+			fixture -> fixture.featureLoader().changeSingleToReferenceShared()
+		);
 	}
 	
+	private void testOnTask( String outputDir, Consumer<ExportFeaturesObjMaskTaskFixture> changeFixture) throws OperationFailedException {
+		changeFixture.accept(taskFixture);
+		testOnTask(outputDir);
+	}
 	
 	/**
 	 * Runs a test to check if the results of ExportFeaturesObjMaskTask correspond to saved-values

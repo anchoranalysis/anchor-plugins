@@ -27,7 +27,6 @@ package org.anchoranalysis.plugin.io.bean.task;
  */
 
 
-import java.io.IOException;
 import java.nio.file.Path;
 import java.util.Optional;
 
@@ -40,6 +39,7 @@ import org.anchoranalysis.experiment.task.ParametersExperiment;
 import org.anchoranalysis.experiment.task.Task;
 import org.anchoranalysis.io.csv.reader.CSVReaderByLine;
 import org.anchoranalysis.io.csv.reader.CSVReaderByLine.ReadByLine;
+import org.anchoranalysis.io.csv.reader.CSVReaderException;
 import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.input.FileInput;
 import org.anchoranalysis.io.output.bound.BoundIOContext;
@@ -117,7 +117,7 @@ public class CombineCSVTask extends Task<FileInput,CSVWriter> {
 				addWithName.addNonTransposed( readByLine );
 			}
 		
-		} catch (IOException e) {
+		} catch (CSVReaderException e) {
 			throw new JobExecutionException(e);
 		}
 	}

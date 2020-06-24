@@ -140,7 +140,7 @@ public class MarkEllipsoidLongestAxis extends MarkSplitProposer {
 		OrientationRadius or = calcOrientationRadius(markC, matrix);
 		
 		// We pick a random point between the 0.25 + 0.75 parts of the radius
-		double ratio = 0.25 + (context.getRe().nextDouble() * 0.5); 
+		double ratio = 0.25 + (context.getRandomNumberGenerator().nextDouble() * 0.5); 
 		
 		double d = or.getRadius() * ratio;
 		

@@ -7,7 +7,7 @@ import org.anchoranalysis.anchor.mpp.bean.proposer.OrientationProposer;
 import org.anchoranalysis.anchor.mpp.bound.BidirectionalBound;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.anchor.mpp.mark.MarkAbstractPosition;
-import org.anchoranalysis.anchor.mpp.proposer.error.ErrorNode;
+import org.anchoranalysis.anchor.mpp.proposer.ProposalAbnormalFailureException;
 
 /*
  * #%L
@@ -37,6 +37,7 @@ import org.anchoranalysis.anchor.mpp.proposer.error.ErrorNode;
 
 
 import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.random.RandomNumberGenerator;
 import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.orientation.Orientation;
@@ -53,7 +54,7 @@ public class LongestExtent extends OrientationProposer {
 	// END BEAN
 	
 	@Override
-	public Optional<Orientation> propose(Mark mark, ImageDim dim, RandomNumberGenerator re, ErrorNode proposerFailureDescription ) {
+	public Optional<Orientation> propose(Mark mark, ImageDim dim, RandomNumberGenerator re ) throws ProposalAbnormalFailureException {
 		
 		MarkAbstractPosition markC = (MarkAbstractPosition) mark;
 		
@@ -65,7 +66,14 @@ public class LongestExtent extends OrientationProposer {
 		// We loop through every positive angle and pick the one with the greatest extent
 		for (double angle=0; angle < Math.PI; angle += incrementRadians) {
 		
-			BidirectionalBound bib = boundCalculator.calcBound( markC.getPos(), new Orientation2D( angle ).createRotationMatrix(), null);
+			BidirectionalBound bib;
+			
+			try {
+				bib = boundCalculator.calcBound( markC.getPos(), new Orientation2D( angle ).createRotationMatrix());
+			} catch (OperationFailedException e) {
+				throw new ProposalAbnormalFailureException(e);
+			}
+			
 			double max = bib.getMaxOfMax();
 			
 			if (max>maxExtent) {

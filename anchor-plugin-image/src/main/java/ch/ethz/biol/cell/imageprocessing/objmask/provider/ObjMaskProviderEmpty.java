@@ -28,13 +28,14 @@ package ch.ethz.biol.cell.imageprocessing.objmask.provider;
 
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
-import org.anchoranalysis.image.objmask.ObjMaskCollection;
+import org.anchoranalysis.image.objectmask.ObjectCollection;
+import org.anchoranalysis.image.objectmask.ObjectCollectionFactory;
 
 public class ObjMaskProviderEmpty extends ObjMaskProvider {
 
 	@Override
-	public ObjMaskCollection create() throws CreateException {
-		return new ObjMaskCollection();
+	public ObjectCollection create() throws CreateException {
+		return ObjectCollectionFactory.empty();
 	}
 
 }

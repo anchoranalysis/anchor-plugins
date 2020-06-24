@@ -29,8 +29,8 @@ package ch.ethz.biol.cell.imageprocessing.binaryimgchnl.provider;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.image.bean.provider.KeyValueCondition;
 import org.anchoranalysis.image.binary.BinaryChnl;
+import org.anchoranalysis.plugin.image.bean.params.KeyValueCondition;
 
 // If a param is equal to a particular value, do soemthing
 public class BinaryChnlProviderIfParamEquals extends BinaryChnlProviderElseBase {

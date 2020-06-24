@@ -1,5 +1,7 @@
 package ch.ethz.biol.cell.mpp.cfg.proposer;
 
+import java.util.Optional;
+
 import org.anchoranalysis.anchor.mpp.bean.cfg.CfgGen;
 import org.anchoranalysis.anchor.mpp.bean.proposer.CfgProposer;
 import org.anchoranalysis.anchor.mpp.cfg.Cfg;
@@ -43,8 +45,8 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
-import org.anchoranalysis.image.objmask.ObjMask;
-import org.anchoranalysis.image.objmask.ObjMaskCollection;
+import org.anchoranalysis.image.objectmask.ObjectMask;
+import org.anchoranalysis.image.objectmask.ObjectCollection;
 import org.anchoranalysis.plugin.points.calculate.ellipsoid.EllipsoidFactory;
 
 public class CfgProposerFromObjMaskCollection extends CfgProposer {
@@ -68,16 +70,15 @@ public class CfgProposerFromObjMaskCollection extends CfgProposer {
 		return testMark instanceof MarkEllipsoid;
 	}
 
-	private MarkEllipsoid createFromObjMask( ObjMask om, NRGStackWithParams nrgStack ) throws CreateException {
+	private MarkEllipsoid createFromObjMask( ObjectMask om, NRGStackWithParams nrgStack ) throws CreateException {
 		MarkEllipsoid me = EllipsoidFactory.createMarkEllipsoidLeastSquares( om , nrgStack.getDimensions(), suppressZCovariance, shellRad );
 		return me;
 	}
 	
 	@Override
-	public Cfg propose(CfgGen cfgGen, ProposerContext context) throws ProposalAbnormalFailureException {
+	public Optional<Cfg> propose(CfgGen cfgGen, ProposerContext context) throws ProposalAbnormalFailureException {
 
-
-		ObjMaskCollection objsCollection;
+		ObjectCollection objsCollection;
 		try {
 			objsCollection = objs.create();
 		} catch (CreateException e) {
@@ -95,7 +96,7 @@ public class CfgProposerFromObjMaskCollection extends CfgProposer {
 		}
 
 		try {
-			for( ObjMask om : objsCollection ) {
+			for( ObjectMask om : objsCollection ) {
 				Mark mark = createFromObjMask(om, context.getNrgStack());
 				mark.setId( cfgGen.idAndIncrement() );
 				
@@ -112,7 +113,7 @@ public class CfgProposerFromObjMaskCollection extends CfgProposer {
 				checkMark.end();
 			}
 			
-			return cfg;
+			return Optional.of(cfg);
 			
 		} catch (CreateException e) {
 			throw new ProposalAbnormalFailureException("Failed to create a mark from the obj-mask", e);

@@ -31,7 +31,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.anchoranalysis.core.text.TypedValue;
-import org.anchoranalysis.feature.io.csv.TableCSVGenerator;
+import org.anchoranalysis.feature.io.csv.writer.TableCSVGenerator;
 import org.anchoranalysis.io.output.csv.CSVWriter;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 

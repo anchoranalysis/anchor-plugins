@@ -4,7 +4,7 @@ package org.anchoranalysis.plugin.image.obj.merge;
  * #%L
  * anchor-plugin-image
  * %%
- * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2010 - 2020 Owen Feehan
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -26,7 +26,7 @@ package org.anchoranalysis.plugin.image.obj.merge;
  * #L%
  */
 
-import org.anchoranalysis.image.objmask.ObjMask;
+import org.anchoranalysis.image.objectmask.ObjectMask;
 
 
 /**
@@ -37,17 +37,17 @@ import org.anchoranalysis.image.objmask.ObjMask;
  */
 public class ObjVertex {
 	
-	private ObjMask om;
+	private ObjectMask om;
 	private double payload;
 	private int numPixels = -1;	// We calculate it when we need to
 	
-	public ObjVertex(ObjMask om, double featureVal) {
+	public ObjVertex(ObjectMask om, double featureVal) {
 		super();
 		this.om = om;
 		this.payload = featureVal;
 	}
 	
-	public ObjMask getObjMask() {
+	public ObjectMask getObjMask() {
 		return om;
 	}
 	public double getPayload() {
@@ -56,7 +56,7 @@ public class ObjVertex {
 
 	public int numPixels() {
 		if (numPixels==-1) {
-			numPixels = om.numPixels();
+			numPixels = om.numVoxelsOn();
 		}
 		return numPixels;
 	}

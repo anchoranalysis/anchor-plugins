@@ -1,6 +1,7 @@
 package ch.ethz.biol.cell.mpp.nrg.feature.objmask;
 
 import java.nio.ByteBuffer;
+import java.util.Optional;
 
 /*
  * #%L
@@ -38,7 +39,7 @@ import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.feature.bean.objmask.FeatureObjMask;
 import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
-import org.anchoranalysis.image.objmask.ObjMask;
+import org.anchoranalysis.image.objectmask.ObjectMask;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 
 /**
@@ -77,15 +78,10 @@ public class ArbitraryInsidePoint extends FeatureObjMask {
 				
 		AxisType axisType = AxisTypeConverter.createFromString(axis);
 		
-		Point3i arbPoint = calcArbitraryPointWithinMask(
-			input.get().getObjMask()
-		);
-	
-		if (arbPoint==null) {
-			return emptyValue;
-		}
-		
-		return arbPoint.getValueByDimension(axisType);
+		Optional<Point3i> arbPoint = input.get().getObjMask().findArbitraryOnVoxel();
+		return arbPoint.map( pnt->
+			(double) pnt.getValueByDimension(axisType)
+		).orElse(emptyValue);
 	}
 
 	public String getAxis() {
@@ -103,44 +99,4 @@ public class ArbitraryInsidePoint extends FeatureObjMask {
 	public void setEmptyValue(double emptyValue) {
 		this.emptyValue = emptyValue;
 	}
-	
-	// A deterministic way of getting a single-point that is always within the object mask
-	//   as the centre-of-gravity is not guaranteed to be
-	private static Point3i calcArbitraryPointWithinMask( ObjMask om ) {
-		
-		// First we try the mid point of the bounding box
-		Point3i midPoint = om.getBoundingBox().centerOfGravity();
-		if (om.contains(midPoint)) {
-			return midPoint;
-		}
-		
-		byte maskOn = om.binaryVoxelBox().getBinaryValues().createByte().getOnByte();
-		
-		VoxelBox<ByteBuffer> vb = om.getVoxelBox();
-		
-		for( int z=0; z<vb.extent().getZ(); z++ ) {
-			
-			ByteBuffer bb = vb.getPixelsForPlane(z).buffer();
-			
-			int offset = 0;
-			for( int y=0; y<vb.extent().getY(); y++ ) {
-				for( int x=0; x<vb.extent().getX(); x++ ) {
-				
-					if( bb.get(offset)==maskOn) {
-						return new Point3i(
-							x + om.getBoundingBox().getCrnrMin().getX(),
-							y + om.getBoundingBox().getCrnrMin().getY(),
-							z + om.getBoundingBox().getCrnrMin().getZ()
-						);
-					}
-					
-					offset++;
-				}
-			}
-		}
-		
-		// If there are no on points
-		return null;
-	}
-
 }

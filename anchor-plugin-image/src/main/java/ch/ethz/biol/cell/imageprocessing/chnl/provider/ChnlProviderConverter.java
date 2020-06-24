@@ -31,8 +31,8 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.bean.chnl.converter.ChnlConverterBean;
 import org.anchoranalysis.image.bean.provider.ChnlProviderOne;
-import org.anchoranalysis.image.chnl.Chnl;
-import org.anchoranalysis.image.stack.region.chnlconverter.ChnlConverter;
+import org.anchoranalysis.image.channel.Channel;
+import org.anchoranalysis.image.stack.region.chnlconverter.ChannelConverter;
 import org.anchoranalysis.image.stack.region.chnlconverter.ConversionPolicy;
 
 // Converts a chnl by applying a ChnlConverter. Does not need a histogram
@@ -47,11 +47,11 @@ public class ChnlProviderConverter extends ChnlProviderOne {
 	// END BEAN PROPERTIES
 	
 	@Override
-	public Chnl createFromChnl( Chnl chnl ) throws CreateException {
+	public Channel createFromChnl( Channel chnl ) throws CreateException {
 
 		assert(chnl!=null);
 
-		ChnlConverter<?> converter = chnlConverter.createConverter();
+		ChannelConverter<?> converter = chnlConverter.createConverter();
 		
 		ConversionPolicy conversionPolicy = changeExisting ? ConversionPolicy.CHANGE_EXISTING_CHANNEL : ConversionPolicy.DO_NOT_CHANGE_EXISTING;
 		chnl = converter.convert(chnl, conversionPolicy );

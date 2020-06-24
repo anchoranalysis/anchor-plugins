@@ -1,5 +1,7 @@
 package org.anchoranalysis.plugin.image.task.bean.feature;
 
+import java.io.IOException;
+
 /*-
  * #%L
  * anchor-plugin-image-task
@@ -27,7 +29,6 @@ package org.anchoranalysis.plugin.image.task.bean.feature;
  */
 
 import java.nio.file.Path;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
@@ -36,10 +37,15 @@ import org.anchoranalysis.bean.NamedBean;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.core.error.CreateException;
+import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.functional.OptionalUtilities;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
+import org.anchoranalysis.experiment.JobExecutionException;
+import org.anchoranalysis.experiment.task.InputBound;
+import org.anchoranalysis.experiment.task.ParametersExperiment;
 import org.anchoranalysis.experiment.task.Task;
 import org.anchoranalysis.feature.bean.list.FeatureListProvider;
+import org.anchoranalysis.feature.io.csv.MetadataHeaders;
 import org.anchoranalysis.feature.list.NamedFeatureStore;
 import org.anchoranalysis.feature.list.NamedFeatureStoreFactory;
 import org.anchoranalysis.feature.resultsvectorcollection.FeatureInputResults;
@@ -48,6 +54,7 @@ import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.filepath.FilePathToUnixStyleConverter;
 import org.anchoranalysis.io.input.InputFromManager;
 import org.anchoranalysis.io.output.bound.BoundIOContext;
+import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
 import org.anchoranalysis.plugin.image.task.sharedstate.SharedStateExportFeatures;
 
 /**
@@ -60,48 +67,50 @@ import org.anchoranalysis.plugin.image.task.sharedstate.SharedStateExportFeature
  */
 public abstract class ExportFeaturesTask<T extends InputFromManager, S extends SharedStateExportFeatures> extends Task<T,S> {
 
+	private static final NamedFeatureStoreFactory STORE_FACTORY_AGGREGATE = NamedFeatureStoreFactory.bothNameAndParams();
+	
 	// START BEAN
 	/**
 	 * If non-null this file-path is used to determine the group of the file
 	 * If null, the filename is used
 	 */
 	@BeanField @OptionalBean
-	private FilePathGenerator groupGenerator;	// Translates an input file name to its group
+	private FilePathGenerator group;	// Translates an input file name to its group
 		
 	@BeanField @OptionalBean
-	private FilePathGenerator idGenerator;	// Translates an input file name to a unique ID
+	private FilePathGenerator id;	// Translates an input file name to a unique ID
 	
 	/** Features applied to each group to aggregate values (takes FeatureResultsVectorCollection) */
 	@BeanField @OptionalBean
-	private List<NamedBean<FeatureListProvider<FeatureInputResults>>> listFeaturesAggregate = new ArrayList<>();
+	private List<NamedBean<FeatureListProvider<FeatureInputResults>>> listFeaturesAggregate;
 	// END BEAN
 	
 	@Override
-	public boolean hasVeryQuickPerInputExecution() {
-		return false;
+	public S beforeAnyJobIsExecuted(BoundOutputManagerRouteErrors outputManager, ParametersExperiment params)
+			throws ExperimentExecutionException {
+		try {
+			return createSharedState(
+				createMetadataHeaders(),
+				params.context()
+			);
+		} catch (CreateException e) {
+			throw new ExperimentExecutionException(e);
+		}
 	}
 	
-	/** Determines the unique image name from an inputPath */
-	protected String extractImageIdentifier( Path inputPath, boolean debugMode ) throws AnchorIOException {
-		return filePathAsIdentifier(
-			Optional.ofNullable(idGenerator),
-			inputPath,
-			debugMode,
-			path->path
-		);
+	@Override
+	public void doJobOnInputObject(InputBound<T,S> input) throws JobExecutionException {
+		try {
+			Optional<String> groupName = extractGroupNameFromGenerator(
+				input.getInputObject().pathForBindingRequired(),
+				input.context().isDebugEnabled()
+			);
+			calcAllResultsForInput(input, groupName);
+		} catch (OperationFailedException | AnchorIOException e) {
+			throw new JobExecutionException(e);
+		}
 	}
-	
-	/** Determines the group name corresponding to an inputPath */
-	protected String extractGroupName( Path inputPath, boolean debugMode ) throws AnchorIOException {
-		return filePathAsIdentifier(
-			Optional.ofNullable(groupGenerator),
-			inputPath,
-			debugMode,
-			path->path.getFileName()
-		);
-	}
-	
-	
+		
 	@Override
 	public void afterAllJobsAreExecuted(
 			S sharedState,
@@ -109,47 +118,89 @@ public abstract class ExportFeaturesTask<T extends InputFromManager, S extends S
 	) throws ExperimentExecutionException {
 		
 		try {
+			sharedState.closeAnyOpenIO();
+			
 			Optional<NamedFeatureStore<FeatureInputResults>> featuresAggregate = OptionalUtilities.map(
 				Optional.ofNullable(listFeaturesAggregate),
-				list-> NamedFeatureStoreFactory.createNamedFeatureList(list)
+				STORE_FACTORY_AGGREGATE::createNamedFeatureList
 			);
 			
-			sharedState.writeFeaturesAsCSVForAllGroups(featuresAggregate, context);
-		} catch (AnchorIOException | CreateException e) {
+			sharedState.writeGroupedResults(
+				featuresAggregate,
+				includeGroupInExperiment( isGroupGeneratorDefined() ),
+				context
+			);
+		} catch (AnchorIOException | CreateException | IOException e) {
 			throw new ExperimentExecutionException(e);
 		}
 	}
 	
-	private static String filePathAsIdentifier( Optional<FilePathGenerator> generator, Path path, boolean debugMode, Function<Path,Path> alternative ) throws AnchorIOException {
-		Path out = determinePath(generator, path, debugMode, alternative);
-		return FilePathToUnixStyleConverter.toStringUnixStyle(out);
-	}
-	
-	private static Path determinePath( Optional<FilePathGenerator> generator, Path path, boolean debugMode, Function<Path,Path> alternative ) throws AnchorIOException {
-		if (generator.isPresent()) {
-			return generator.get().outFilePath(path, debugMode );
-		} else {
-			return alternative.apply(path);
-		}
-	}
-	
-	public FilePathGenerator getGroupGenerator() {
-		return groupGenerator;
+	@Override
+	public boolean hasVeryQuickPerInputExecution() {
+		return false;
 	}
 
-	public void setGroupGenerator(FilePathGenerator groupGenerator) {
-		this.groupGenerator = groupGenerator;
+	/** Determines the unique image name from an inputPath */
+	protected String extractImageIdentifier( Path inputPath, boolean debugMode ) throws AnchorIOException {
+		return filePathAsIdentifier(
+			Optional.ofNullable(id),
+			inputPath,
+			debugMode,
+			path-> FilePathToUnixStyleConverter.toStringUnixStyle(path)
+		);
 	}
 	
-	public FilePathGenerator getIdGenerator() {
-		return idGenerator;
+	protected abstract S createSharedState( MetadataHeaders metadataHeaders, BoundIOContext context) throws CreateException;
+	
+	/** Iff true, group columns are added to the CSV exports, and other group exports may occur in sub-directories 
+	 * @param groupGeneratorDefined TODO*/
+	protected abstract boolean includeGroupInExperiment(boolean groupGeneratorDefined);
+	
+	protected abstract String[] headersForResults();
+	
+	protected abstract String[] headersForGroup(boolean groupGeneratorDefined);
+
+	protected abstract void calcAllResultsForInput(InputBound<T,S> input, Optional<String> groupGeneratorName) throws OperationFailedException;
+	
+	private MetadataHeaders createMetadataHeaders() {
+		return new MetadataHeaders(
+			headersForGroup( isGroupGeneratorDefined() ),
+			headersForResults()
+		);
 	}
 
-	public void setIdGenerator(FilePathGenerator idGenerator) {
-		this.idGenerator = idGenerator;
+	private boolean isGroupGeneratorDefined() {
+		return group!=null;
 	}
 	
-
+	private static Optional<String> filePathAsIdentifier(
+		Optional<FilePathGenerator> generator,
+		Path path,
+		boolean debugMode
+	) throws AnchorIOException {
+		return OptionalUtilities.map(
+			generator,
+			gen-> FilePathToUnixStyleConverter.toStringUnixStyle(
+				gen.outFilePath(path, debugMode)
+			)
+		);
+	}
+	
+	private static String filePathAsIdentifier( Optional<FilePathGenerator> generator, Path path, boolean debugMode, Function<Path,String> alternative ) throws AnchorIOException {
+		return filePathAsIdentifier(generator, path, debugMode).orElseGet( ()->
+			alternative.apply(path)
+		);
+	}
+	
+	/** Determines the group name corresponding to an inputPath and the group-generator */
+	private Optional<String> extractGroupNameFromGenerator(Path inputPath, boolean debugMode) throws AnchorIOException {
+		return filePathAsIdentifier(
+			Optional.ofNullable(group),
+			inputPath,
+			debugMode
+		);
+	}
+	
 	public List<NamedBean<FeatureListProvider<FeatureInputResults>>> getListFeaturesAggregate() {
 		return listFeaturesAggregate;
 	}
@@ -157,5 +208,21 @@ public abstract class ExportFeaturesTask<T extends InputFromManager, S extends S
 	public void setListFeaturesAggregate(
 			List<NamedBean<FeatureListProvider<FeatureInputResults>>> listFeaturesAggregate) {
 		this.listFeaturesAggregate = listFeaturesAggregate;
+	}
+
+	public FilePathGenerator getGroup() {
+		return group;
+	}
+
+	public void setGroup(FilePathGenerator group) {
+		this.group = group;
+	}
+
+	public FilePathGenerator getId() {
+		return id;
+	}
+
+	public void setId(FilePathGenerator id) {
+		this.id = id;
 	}
 }

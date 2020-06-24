@@ -37,7 +37,7 @@ import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.core.geometry.Tuple3i;
 import org.anchoranalysis.core.random.RandomNumberGenerator;
 import org.anchoranalysis.image.extent.ImageRes;
-import org.anchoranalysis.image.objmask.ObjMask;
+import org.anchoranalysis.image.objectmask.ObjectMask;
 
 public class VisitSchedulerAnd extends VisitScheduler {
 
@@ -92,7 +92,7 @@ public class VisitSchedulerAnd extends VisitScheduler {
 	}
 
 	@Override
-	public boolean considerVisit(Point3i pnt, int distAlongContour, ObjMask objMask) {
+	public boolean considerVisit(Point3i pnt, int distAlongContour, ObjectMask objMask) {
 		for( VisitScheduler vs : list ) {
 			if (!vs.considerVisit(pnt, distAlongContour, objMask)) {
 				return false;

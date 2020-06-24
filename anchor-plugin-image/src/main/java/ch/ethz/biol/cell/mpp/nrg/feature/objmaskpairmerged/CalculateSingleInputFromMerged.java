@@ -32,13 +32,13 @@ import org.anchoranalysis.feature.cache.ChildCacheName;
 import org.anchoranalysis.feature.cache.calculation.FeatureCalculation;
 import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
 import org.anchoranalysis.image.feature.objmask.pair.FeatureInputPairObjs;
-import org.anchoranalysis.image.objmask.ObjMask;
+import org.anchoranalysis.image.objectmask.ObjectMask;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 class CalculateSingleInputFromMerged extends FeatureCalculation<FeatureInputSingleObj, FeatureInputPairObjs> {
 
-	private Function<FeatureInputPairObjs, ObjMask> extractObjFunc;
+	private Function<FeatureInputPairObjs, ObjectMask> extractObjFunc;
 	private ChildCacheName uniqueIDForFunction;
 	
 	
@@ -50,7 +50,7 @@ class CalculateSingleInputFromMerged extends FeatureCalculation<FeatureInputSing
 	 * @param extractObjFunc this function is used for extracting a particular object from the FeatureObjMaskPairMergedParams
 	 * @param uniqueIDForFunction so as to avoid relying on hashCode() and equals() on extractObjFunc, this field is used as a unique ID instead for each type of lambda
 	 */
-	public CalculateSingleInputFromMerged(Function<FeatureInputPairObjs, ObjMask> extractObjFunc,
+	public CalculateSingleInputFromMerged(Function<FeatureInputPairObjs, ObjectMask> extractObjFunc,
 			ChildCacheName uniqueIDForFunction) {
 		super();
 		this.extractObjFunc = extractObjFunc;
@@ -60,7 +60,7 @@ class CalculateSingleInputFromMerged extends FeatureCalculation<FeatureInputSing
 	@Override
 	protected FeatureInputSingleObj execute(FeatureInputPairObjs input) {
 		
-		ObjMask omSelected = extractObjFunc.apply(input);
+		ObjectMask omSelected = extractObjFunc.apply(input);
 		
 		FeatureInputSingleObj paramsNew = new FeatureInputSingleObj( omSelected );
 		paramsNew.setNrgStack( input.getNrgStackOptional() );

@@ -32,7 +32,7 @@ import org.anchoranalysis.bean.error.BeanMisconfiguredException;
 import org.anchoranalysis.bean.shared.regex.RegEx;
 import org.anchoranalysis.io.bean.filepath.prefixer.FilePathPrefixer;
 import org.anchoranalysis.io.bean.filepath.prefixer.PathWithDescription;
-import org.anchoranalysis.io.error.AnchorIOException;
+import org.anchoranalysis.io.error.FilePathPrefixerException;
 import org.anchoranalysis.io.filepath.prefixer.FilePathPrefix;
 import org.anchoranalysis.io.filepath.prefixer.FilePathPrefixerParams;
 import org.anchoranalysis.plugin.io.bean.filepath.prefixer.FilePathPrefixerAvoidResolve;
@@ -73,8 +73,7 @@ public class FilePathPrefixerExperimentStructure extends FilePathPrefixer {
 	}
 
 	@Override
-	public FilePathPrefix outFilePrefix(PathWithDescription input, String experimentIdentifier, FilePathPrefixerParams context)
-			throws AnchorIOException {
+	public FilePathPrefix outFilePrefix(PathWithDescription input, String experimentIdentifier, FilePathPrefixerParams context)	throws FilePathPrefixerException {
 
 		createDelegateIfNeeded();
 		
@@ -82,14 +81,14 @@ public class FilePathPrefixerExperimentStructure extends FilePathPrefixer {
 	}
 
 	@Override
-	public FilePathPrefix rootFolderPrefix(String experimentIdentifier, FilePathPrefixerParams context) throws AnchorIOException {
+	public FilePathPrefix rootFolderPrefix(String experimentIdentifier, FilePathPrefixerParams context) throws FilePathPrefixerException {
 
 		createDelegateIfNeeded();
 		
 		return delegate.rootFolderPrefix(experimentIdentifier, context);
 	}
 
-	private void createDelegateIfNeeded() throws AnchorIOException {
+	private void createDelegateIfNeeded() throws FilePathPrefixerException {
 		
 		if (delegate!=null) {
 			// Nothing to do
@@ -103,7 +102,7 @@ public class FilePathPrefixerExperimentStructure extends FilePathPrefixer {
 		try {
 			this.delegate.checkMisconfigured(defaultInstances);
 		} catch (BeanMisconfiguredException e) {
-			throw new AnchorIOException("Bean is misconfigured", e);
+			throw new FilePathPrefixerException(e);
 		}
 	}
 	

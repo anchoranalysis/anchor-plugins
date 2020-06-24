@@ -35,7 +35,7 @@ import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.geometry.Point3f;
 import org.anchoranalysis.core.geometry.ReadableTuple3i;
 import org.anchoranalysis.image.contour.Contour;
-import org.anchoranalysis.image.objmask.ObjMask;
+import org.anchoranalysis.image.objectmask.ObjectMask;
 import org.opencv.core.Mat;
 import org.opencv.core.MatOfPoint;
 import org.opencv.core.Point;
@@ -48,7 +48,7 @@ public class CVFindContours {
 		CVInit.alwaysExecuteBeforeCallingLibrary();
 	}
 	
-	public static List<Contour> contourForObjMask( ObjMask om, int minNumPoints ) throws OperationFailedException {
+	public static List<Contour> contourForObjMask( ObjectMask om, int minNumPoints ) throws OperationFailedException {
 		
 		try {
 			// We clone ss the source image is modified by the algorithm according to OpenCV docs

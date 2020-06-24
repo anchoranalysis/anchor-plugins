@@ -38,9 +38,9 @@ import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.feature.objmask.pair.FeatureInputPairObjs;
 import org.anchoranalysis.image.feature.objmask.pair.CalculateInputFromPair.Extract;
-import org.anchoranalysis.image.objmask.ObjMask;
-import org.anchoranalysis.image.objmask.morph.MorphologicalErosion;
-import org.anchoranalysis.image.objmask.ops.ObjMaskMerger;
+import org.anchoranalysis.image.objectmask.ObjectMask;
+import org.anchoranalysis.image.objectmask.morph.MorphologicalErosion;
+import org.anchoranalysis.image.objectmask.ops.ObjectMaskMerger;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
@@ -56,15 +56,15 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
  * @author Owen Feehan
  *
  */
-public class CalculatePairIntersection extends FeatureCalculation<Optional<ObjMask>,FeatureInputPairObjs> {
+public class CalculatePairIntersection extends FeatureCalculation<Optional<ObjectMask>,FeatureInputPairObjs> {
 
 	private boolean do3D;
 	private int iterationsErosion;
 	
-	private ResolvedCalculation<ObjMask,FeatureInputPairObjs> left;
-	private ResolvedCalculation<ObjMask,FeatureInputPairObjs> right;
+	private ResolvedCalculation<ObjectMask,FeatureInputPairObjs> left;
+	private ResolvedCalculation<ObjectMask,FeatureInputPairObjs> right;
 	
-	public static ResolvedCalculation<Optional<ObjMask>,FeatureInputPairObjs> createFromCache(
+	public static ResolvedCalculation<Optional<ObjectMask>,FeatureInputPairObjs> createFromCache(
 		SessionInput<FeatureInputPairObjs> cache,
 		ChildCacheName cacheChildName1,
 		ChildCacheName cacheChildName2,
@@ -107,8 +107,8 @@ public class CalculatePairIntersection extends FeatureCalculation<Optional<ObjMa
 	private CalculatePairIntersection(
 		boolean do3D,
 		int iterationsErosion,
-		ResolvedCalculation<ObjMask,FeatureInputPairObjs> left,
-		ResolvedCalculation<ObjMask,FeatureInputPairObjs> right
+		ResolvedCalculation<ObjectMask,FeatureInputPairObjs> left,
+		ResolvedCalculation<ObjectMask,FeatureInputPairObjs> right
 	) {
 		super();
 		this.iterationsErosion = iterationsErosion;
@@ -118,14 +118,14 @@ public class CalculatePairIntersection extends FeatureCalculation<Optional<ObjMa
 	}
 
 	@Override
-	protected Optional<ObjMask> execute( FeatureInputPairObjs input ) throws FeatureCalcException {
+	protected Optional<ObjectMask> execute( FeatureInputPairObjs input ) throws FeatureCalcException {
 	
 		ImageDim dim = input.getDimensionsRequired();
 				
-		ObjMask om1Dilated = left.getOrCalculate(input);
-		ObjMask om2Dilated = right.getOrCalculate(input);
+		ObjectMask om1Dilated = left.getOrCalculate(input);
+		ObjectMask om2Dilated = right.getOrCalculate(input);
 		
-		Optional<ObjMask> omIntersection = om1Dilated.intersect(om2Dilated, dim );
+		Optional<ObjectMask> omIntersection = om1Dilated.intersect(om2Dilated, dim );
 				
 		if (!omIntersection.isPresent()) {
 			return Optional.empty();
@@ -170,16 +170,16 @@ public class CalculatePairIntersection extends FeatureCalculation<Optional<ObjMa
 			.toHashCode();
 	}
 	
-	private Optional<ObjMask> erode( FeatureInputPairObjs params, ObjMask omIntersection, ImageDim dim ) throws CreateException {
+	private Optional<ObjectMask> erode( FeatureInputPairObjs params, ObjectMask omIntersection, ImageDim dim ) throws CreateException {
 
-		ObjMask omMerged = params.getMerged();
+		ObjectMask omMerged = params.getMerged();
 		
 		// We merge the two masks, and then erode it, and use this as a mask on the input object
 		if (omMerged==null) {
-			omMerged = ObjMaskMerger.merge( params.getFirst(), params.getSecond() );
+			omMerged = ObjectMaskMerger.merge( params.getFirst(), params.getSecond() );
 		}
 		
-		ObjMask omMergedEroded = MorphologicalErosion.createErodedObjMask(
+		ObjectMask omMergedEroded = MorphologicalErosion.createErodedObjMask(
 			omMerged,
 			Optional.of(dim.getExtnt()),
 			do3D,
@@ -188,7 +188,7 @@ public class CalculatePairIntersection extends FeatureCalculation<Optional<ObjMa
 			Optional.empty()
 		);
 		
-		Optional<ObjMask> omIntersect = omIntersection.intersect(omMergedEroded, dim);
+		Optional<ObjectMask> omIntersect = omIntersection.intersect(omMergedEroded, dim);
 		omIntersect.ifPresent( om-> { assert( om.hasPixelsGreaterThan(0) ); });
 		return omIntersect;
 	}

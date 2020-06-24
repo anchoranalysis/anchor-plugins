@@ -34,20 +34,20 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.log.LogReporter;
 import org.anchoranalysis.image.bean.threshold.CalculateLevel;
-import org.anchoranalysis.image.chnl.Chnl;
+import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.histogram.Histogram;
 import org.anchoranalysis.image.histogram.HistogramFactory;
-import org.anchoranalysis.image.objmask.ObjMask;
-import org.anchoranalysis.image.objmask.ObjMaskCollection;
-import org.anchoranalysis.image.objmask.morph.MorphologicalDilation;
+import org.anchoranalysis.image.objectmask.ObjectMask;
+import org.anchoranalysis.image.objectmask.ObjectCollection;
+import org.anchoranalysis.image.objectmask.morph.MorphologicalDilation;
 
 public class LevelResultCollectionFactory {
 	
 	private LevelResultCollectionFactory() {}
 
 	public static LevelResultCollection createCollection(
-			Chnl chnl,
-			ObjMaskCollection objMasks,
+			Channel chnl,
+			ObjectCollection objMasks,
 			CalculateLevel calculateLevel,
 			int numDilations,
 			LogReporter logger
@@ -55,9 +55,9 @@ public class LevelResultCollectionFactory {
 		
 		LevelResultCollection all = new LevelResultCollection(); 
 		
-		for( ObjMask om : objMasks ) {
+		for( ObjectMask om : objMasks ) {
 			
-			ObjMask omForCalculateLevel;
+			ObjectMask omForCalculateLevel;
 			
 			logger.logFormatted("Creating level result %s", om.centerOfGravity().toString() );
 			
@@ -76,9 +76,7 @@ public class LevelResultCollectionFactory {
 				omForCalculateLevel = om;
 			}
 			
-			ObjMaskCollection omcSingle = new ObjMaskCollection(omForCalculateLevel);
-			
-			Histogram h = HistogramFactory.create(chnl, omcSingle);
+			Histogram h = HistogramFactory.create(chnl,	omForCalculateLevel);
 			int level;
 			try {
 				level = calculateLevel.calculateLevel(h);

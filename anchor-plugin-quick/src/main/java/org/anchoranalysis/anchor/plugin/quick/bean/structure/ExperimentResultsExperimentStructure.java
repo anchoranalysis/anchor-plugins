@@ -38,7 +38,7 @@ import org.anchoranalysis.io.bean.input.InputManagerParams;
 import org.anchoranalysis.io.bean.provider.file.FileProvider;
 import org.anchoranalysis.io.bean.provider.file.FileProviderWithDirectory;
 import org.anchoranalysis.io.bean.provider.file.SearchDirectory;
-import org.anchoranalysis.io.error.AnchorIOException;
+import org.anchoranalysis.io.error.FileProviderException;
 import org.anchoranalysis.plugin.io.bean.provider.file.Rooted;
 
 /**
@@ -182,8 +182,8 @@ public class ExperimentResultsExperimentStructure extends FileProvider {
 	}
 		
 	@Override
-	public Collection<File> matchingFiles(InputManagerParams params) throws AnchorIOException {
-		return delegate.matchingFiles(params);
+	public Collection<File> create(InputManagerParams params) throws FileProviderException {
+		return delegate.create(params);
 	}
 
 	public String getExperimentType() {

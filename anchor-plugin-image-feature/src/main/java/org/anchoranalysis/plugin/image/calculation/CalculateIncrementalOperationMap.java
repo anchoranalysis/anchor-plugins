@@ -31,12 +31,12 @@ import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
-import org.anchoranalysis.image.objmask.ObjMask;
+import org.anchoranalysis.image.objectmask.ObjectMask;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
 public abstract class CalculateIncrementalOperationMap extends CacheableCalculationMapHash<
-	ObjMask,
+	ObjectMask,
 	FeatureInputSingleObj,
 	Integer,
 	FeatureCalcException
@@ -54,7 +54,7 @@ public abstract class CalculateIncrementalOperationMap extends CacheableCalculat
 	}
 	
 	@Override
-	protected ObjMask execute(FeatureInputSingleObj params, Integer key)
+	protected ObjectMask execute(FeatureInputSingleObj params, Integer key)
 			throws FeatureCalcException {
 		Extent extent = params.getDimensionsRequired().getExtnt();
 
@@ -65,12 +65,12 @@ public abstract class CalculateIncrementalOperationMap extends CacheableCalculat
 		int lowestExistingKey = findHighestExistingKey( key - 1 );
 		
 		
-		ObjMask omIn = lowestExistingKey!=0 ? getOrNull(lowestExistingKey) : params.getObjMask();
+		ObjectMask omIn = lowestExistingKey!=0 ? getOrNull(lowestExistingKey) : params.getObjMask();
 		
 		try {
 			for( int i=(lowestExistingKey+1); i<=key; i++ ) {
 				
-				ObjMask omNext = applyOperation( omIn, extent, do3D );
+				ObjectMask omNext = applyOperation( omIn, extent, do3D );
 				
 				// save in cache, as long as it's not the final one, as this will save after the function executes
 				if (i!=key) {
@@ -101,7 +101,7 @@ public abstract class CalculateIncrementalOperationMap extends CacheableCalculat
 		return 0;
 	}
 	
-	protected abstract ObjMask applyOperation( ObjMask om, Extent extent, boolean do3D ) throws OperationFailedException;
+	protected abstract ObjectMask applyOperation( ObjectMask om, Extent extent, boolean do3D ) throws OperationFailedException;
 	
 	@Override
 	public int hashCode() {

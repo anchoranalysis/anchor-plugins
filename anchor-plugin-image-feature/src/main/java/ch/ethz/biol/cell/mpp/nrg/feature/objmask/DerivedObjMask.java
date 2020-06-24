@@ -40,7 +40,7 @@ import org.anchoranalysis.feature.cache.calculation.FeatureCalculation;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.feature.bean.objmask.FeatureObjMask;
 import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
-import org.anchoranalysis.image.objmask.ObjMask;
+import org.anchoranalysis.image.objectmask.ObjectMask;
 import org.anchoranalysis.plugin.image.feature.obj.pair.CalculateInputFromDelegateOption;
 
 public abstract class DerivedObjMask extends FeatureObjMask {
@@ -63,14 +63,14 @@ public abstract class DerivedObjMask extends FeatureObjMask {
 			createCachedCalculationForDerived(
 				input.resolver()
 			),
-			delegate -> new CalculateObjForDerived(delegate),
+			CalculateObjForDerived::new,
 			item,
 			cacheName,
 			emptyValue
 		);
 	}
 		
-	protected abstract FeatureCalculation<ObjMask,FeatureInputSingleObj> createCachedCalculationForDerived( CalculationResolver<FeatureInputSingleObj> session ) throws FeatureCalcException;
+	protected abstract FeatureCalculation<ObjectMask,FeatureInputSingleObj> createCachedCalculationForDerived( CalculationResolver<FeatureInputSingleObj> session ) throws FeatureCalcException;
 	
 	protected abstract ChildCacheName cacheName();
 	

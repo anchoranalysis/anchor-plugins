@@ -1,5 +1,7 @@
 package org.anchoranalysis.plugin.mpp.sgmn.cfg.optscheme;
 
+import java.util.Optional;
+
 /*-
  * #%L
  * anchor-plugin-mpp-sgmn
@@ -42,15 +44,16 @@ public class AccptProbCalculator<T> {
 		super();
 		this.annealScheme = annealScheme;
 		this.extracter = extracter;
+		assert( extracter!=null );
 	}
 	
-	public double calcAccptProb( Kernel<?> kernel, T crnt, T proposal, int iter, KernelCalcContext context ) {
+	public double calcAccptProb( Kernel<?> kernel, Optional<T> crnt, T proposal, int iter, KernelCalcContext context ) {
 		return kernel.calcAccptProb(
 			sizeOrZero(crnt),
-			sizeOrZero(proposal),
+			sizeOrZero(Optional.of(proposal)),
 			context.cfgGen().getCfgGen().getReferencePoissonIntensity(),
 			context.proposer().getDimensions(),
-			calcDensityRatio(crnt, proposal, iter)
+			calcDensityRatio(crnt, Optional.of(proposal), iter)
 		);
 	}
 
@@ -58,19 +61,21 @@ public class AccptProbCalculator<T> {
 		return extracter::extractScore;
 	}
 	
-	private int sizeOrZero( T crnt ) {
-		return crnt != null ? extracter.extractSize(crnt) : 0;
+	private int sizeOrZero( Optional<T> crnt ) {
+		return crnt.map( c->
+			extracter.extractSize(c)
+		).orElse(0);
 	}
 
-	private double calcDensityRatio( T crnt, T proposal, int iter ) {
+	private double calcDensityRatio( Optional<T> crnt, Optional<T> proposal, int iter ) {
 		
-		if (proposal==null || crnt==null) {
+		if (!proposal.isPresent() || !crnt.isPresent()) {
 			return Double.NaN;
 		}
 		
 		return annealScheme.calcDensityRatio(
-			extracter.extractScore(proposal),
-			extracter.extractScore(crnt),
+			extracter.extractScore(proposal.get()),
+			extracter.extractScore(crnt.get()),
 			iter
 		);				
 	}

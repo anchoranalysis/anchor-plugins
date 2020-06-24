@@ -41,12 +41,12 @@ import org.anchoranalysis.image.bean.provider.BinaryChnlProvider;
 import org.anchoranalysis.image.bean.provider.ChnlProvider;
 import org.anchoranalysis.image.bean.provider.HistogramProvider;
 import org.anchoranalysis.image.binary.BinaryChnl;
-import org.anchoranalysis.image.chnl.Chnl;
-import org.anchoranalysis.image.chnl.factory.ChnlFactoryByte;
+import org.anchoranalysis.image.channel.Channel;
+import org.anchoranalysis.image.channel.factory.ChannelFactoryByte;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.feature.bean.pixelwise.PixelScore;
 import org.anchoranalysis.image.histogram.Histogram;
-import org.anchoranalysis.image.objmask.ObjMask;
+import org.anchoranalysis.image.objectmask.ObjectMask;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.anchoranalysis.image.voxel.box.VoxelBoxList;
 import org.anchoranalysis.image.voxel.box.VoxelBoxWrapper;
@@ -80,7 +80,7 @@ public class ChnlProviderPixelScore extends ChnlProvider {
 	private KeyValueParamsProvider keyValueParamsProvider;
 	// END BEAN PROPERTIES
 	
-	private VoxelBoxList createVoxelBoxList( Chnl chnlIntensity ) throws CreateException {
+	private VoxelBoxList createVoxelBoxList( Channel chnlIntensity ) throws CreateException {
 		
 		VoxelBoxList listOut = new VoxelBoxList();
 		
@@ -97,15 +97,15 @@ public class ChnlProviderPixelScore extends ChnlProvider {
 	}
 	
 	
-	private ObjMask createMaskOrNull() throws CreateException {
+	private ObjectMask createMaskOrNull() throws CreateException {
 		if (mask==null) {
 			return null;
 		}
 		
 		BinaryChnl binaryChnlMask = mask.create();
-		Chnl chnlMask = binaryChnlMask.getChnl();
+		Channel chnlMask = binaryChnlMask.getChnl();
 		
-		return new ObjMask(
+		return new ObjectMask(
 			new BoundingBox( chnlMask.getDimensions().getExtnt()),
 			chnlMask.getVoxelBox().asByte(),
 			binaryChnlMask.getBinaryValues()
@@ -113,9 +113,9 @@ public class ChnlProviderPixelScore extends ChnlProvider {
 	}
 	
 	@Override
-	public Chnl create() throws CreateException {
+	public Channel create() throws CreateException {
 		
-		Chnl chnlIntensity = intensityProvider.create();
+		Channel chnlIntensity = intensityProvider.create();
 				
 		VoxelBoxList listVb = createVoxelBoxList( chnlIntensity);
 		List<Histogram> listHistExtra = ProviderBeanUtilities.listFromBeans(listHistogramProviderExtra);
@@ -127,7 +127,7 @@ public class ChnlProviderPixelScore extends ChnlProvider {
 			kpv = Optional.empty();
 		}
 
-		ObjMask objMask = createMaskOrNull();
+		ObjectMask objMask = createMaskOrNull();
 		
 		VoxelBox<ByteBuffer> vbPixelScore;
 		if (objMask!=null) {
@@ -149,7 +149,7 @@ public class ChnlProviderPixelScore extends ChnlProvider {
 			vbPixelScore = creator.createVoxelBoxFromPixelScore(pixelScore, getLogger() );
 		}
 		
-		return new ChnlFactoryByte().create(vbPixelScore, chnlIntensity.getDimensions().getRes());
+		return new ChannelFactoryByte().create(vbPixelScore, chnlIntensity.getDimensions().getRes());
 	}
 	
 	public ChnlProvider getIntensityProvider() {

@@ -101,9 +101,9 @@ public abstract class SummarizeTask<T extends InputFromManager,S> extends Task<T
 			log.logFormatted("An input-directory has been set as %s", eea.getInputDirectory() );
 		}
 		
-		if (eea.hasOutputDirectory()) {
-			log.logFormatted("An output-directory has been set as %s", eea.getOutputDirectory() );
-		}
+		eea.getOutputDirectory().ifPresent( dir->
+			log.logFormatted("An output-directory has been set as %s", dir )
+		);
 	}
 
 	public Summarizer<S> getSummarizer() {

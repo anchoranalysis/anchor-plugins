@@ -7,6 +7,7 @@ import org.anchoranalysis.anchor.mpp.bean.proposer.MarkProposer;
 import org.anchoranalysis.anchor.mpp.bound.BidirectionalBound;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.anchor.mpp.mark.conic.MarkEllipse;
+import org.anchoranalysis.anchor.mpp.proposer.ProposalAbnormalFailureException;
 import org.anchoranalysis.anchor.mpp.proposer.ProposerContext;
 import org.anchoranalysis.anchor.mpp.proposer.visualization.ICreateProposalVisualization;
 import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
@@ -39,6 +40,7 @@ import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
 
 
 import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.image.orientation.Orientation2D;
 
@@ -53,7 +55,7 @@ public class PositionWalk extends MarkProposer {
 	// END BEAN
 
 	@Override
-	public boolean propose(PxlMarkMemo inputMark, ProposerContext context) {
+	public boolean propose(PxlMarkMemo inputMark, ProposerContext context) throws ProposalAbnormalFailureException {
 
 		MarkEllipse inputMarkCast = (MarkEllipse) inputMark.getMark();
 		
@@ -65,12 +67,16 @@ public class PositionWalk extends MarkProposer {
 		int numIter = 10;
 		for (int i=0; i<numIter; i++) {
 			
-			double angle = context.getRe().nextDouble() * Math.PI * 2;
-			BidirectionalBound bib = boundCalculator.calcBound(
-				pnt,
-				new Orientation2D(angle).createRotationMatrix(),
-				context.getErrorNode()
-			);
+			double angle = context.getRandomNumberGenerator().nextDouble() * Math.PI * 2;
+			BidirectionalBound bib;
+			try {
+				bib = boundCalculator.calcBound(
+					pnt,
+					new Orientation2D(angle).createRotationMatrix()
+				);
+			} catch (OperationFailedException e) {
+				throw new ProposalAbnormalFailureException(e);
+			}
 			
 			if (bib==null || bib.isUnbounded()) {
 				continue;

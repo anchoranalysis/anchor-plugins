@@ -35,9 +35,9 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.bean.sgmn.binary.BinarySgmn;
 import org.anchoranalysis.image.bean.sgmn.binary.BinarySgmnParameters;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
-import org.anchoranalysis.image.chnl.Chnl;
-import org.anchoranalysis.image.objmask.ObjMask;
-import org.anchoranalysis.image.objmask.ObjMaskCollection;
+import org.anchoranalysis.image.channel.Channel;
+import org.anchoranalysis.image.objectmask.ObjectMask;
+import org.anchoranalysis.image.objectmask.ObjectCollection;
 import org.anchoranalysis.image.sgmn.SgmnFailedException;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.anchoranalysis.image.voxel.box.VoxelBoxWrapper;
@@ -50,34 +50,28 @@ public class ObjMaskProviderBinarySgmn extends ObjMaskProviderOneChnlSource {
 	// END BEAN PROPERTIES
 
 	@Override
-	protected ObjMaskCollection createFromObjs(ObjMaskCollection objsSrc, Chnl chnlSrc) throws CreateException {
-		
-		ObjMaskCollection masksOut = new ObjMaskCollection();
+	protected ObjectCollection createFromObjs(ObjectCollection objsSrc, Channel chnlSrc) throws CreateException {
 		try {
-			
-			for( ObjMask om : objsSrc ) {
-				VoxelBox<?> vb = chnlSrc.getVoxelBox().any().createBufferAvoidNew(om.getBoundingBox() );
-				
-				BinaryVoxelBox<ByteBuffer> bvb = binarySgmn.sgmn(
-					new VoxelBoxWrapper(vb),
-					new BinarySgmnParameters(),
-					Optional.of(
-						new ObjMask( om.getVoxelBox())
-					)
-				);
-				
-				ObjMask mask = new ObjMask( om.getBoundingBox(), bvb.getVoxelBox() );
-				mask.setBinaryValues( bvb.getBinaryValues() );
-				
-				masksOut.add(mask);
-			}
-		
-		
+			return objsSrc.stream().map( om->
+				sgmnObject(om, chnlSrc)
+			);
 		} catch (SgmnFailedException e) {
 			throw new CreateException(e);
 		}
+	}
+	
+	private ObjectMask sgmnObject(ObjectMask om, Channel chnlSrc) throws SgmnFailedException {
+		VoxelBox<?> vb = chnlSrc.getVoxelBox().any().region(om.getBoundingBox(),true);
 		
-		return masksOut;
+		BinaryVoxelBox<ByteBuffer> bvb = binarySgmn.sgmn(
+			new VoxelBoxWrapper(vb),
+			new BinarySgmnParameters(),
+			Optional.of(
+				new ObjectMask(om.getVoxelBox())
+			)
+		);
+				
+		return new ObjectMask(om.getBoundingBox(), bvb);	
 	}
 
 	public BinarySgmn getBinarySgmn() {

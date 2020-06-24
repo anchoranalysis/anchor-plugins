@@ -31,7 +31,7 @@ import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.binary.BinaryChnl;
 import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
 import org.anchoranalysis.image.feature.objmask.pair.FeatureInputPairObjs;
-import org.anchoranalysis.image.objmask.ObjMask;
+import org.anchoranalysis.image.objectmask.ObjectMask;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 public class CalculatePairInput extends FeatureCalculation<FeatureInputPairObjs, FeatureInputSingleObj> {
@@ -46,7 +46,7 @@ public class CalculatePairInput extends FeatureCalculation<FeatureInputPairObjs,
 	@Override
 	protected FeatureInputPairObjs execute(FeatureInputSingleObj input) throws FeatureCalcException {
 
-		ObjMask objFromBinary = new ObjMask(
+		ObjectMask objFromBinary = new ObjectMask(
 			chnl.binaryVoxelBox()
 		);
 		

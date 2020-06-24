@@ -30,7 +30,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.bean.provider.stack.StackProviderOne;
-import org.anchoranalysis.image.chnl.Chnl;
+import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.convert.IJWrap;
 import org.anchoranalysis.image.stack.Stack;
 
@@ -93,7 +93,7 @@ public class StackProviderMontageFromSlices extends StackProviderOne {
 		}
 	}
 	
-	private Chnl montageChnl( Chnl in, int colsCalc, int rowsCalc, int firstSliceCalc, int lastSliceCalc ) throws OperationFailedException {
+	private Channel montageChnl( Channel in, int colsCalc, int rowsCalc, int firstSliceCalc, int lastSliceCalc ) throws OperationFailedException {
 		try {
 			ImagePlus imp = IJWrap.createImagePlus( in );
 

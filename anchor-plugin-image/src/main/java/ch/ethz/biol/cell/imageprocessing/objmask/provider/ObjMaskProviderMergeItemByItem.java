@@ -1,5 +1,7 @@
 package ch.ethz.biol.cell.imageprocessing.objmask.provider;
 
+
+
 /*
  * #%L
  * anchor-plugin-image
@@ -30,9 +32,9 @@ package ch.ethz.biol.cell.imageprocessing.objmask.provider;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
-import org.anchoranalysis.image.objmask.ObjMask;
-import org.anchoranalysis.image.objmask.ObjMaskCollection;
-import org.anchoranalysis.image.objmask.ops.ObjMaskMerger;
+import org.anchoranalysis.image.objectmask.ObjectCollection;
+import org.anchoranalysis.image.objectmask.ObjectCollectionFactory;
+import org.anchoranalysis.image.objectmask.ops.ObjectMaskMerger;
 
 // Merges an object in each list item by item
 //
@@ -49,25 +51,23 @@ public class ObjMaskProviderMergeItemByItem extends ObjMaskProvider {
 	// END BEAN PROPERTIES
 		
 	@Override
-	public ObjMaskCollection create() throws CreateException {
+	public ObjectCollection create() throws CreateException {
 
-		ObjMaskCollection objsCollection1 = objs1.create();
-		ObjMaskCollection objsCollection2 = objs2.create();
+		ObjectCollection first = objs1.create();
+		ObjectCollection second = objs2.create();
 		
-		if (objsCollection1.size()!=objsCollection2.size()) {
-			throw new CreateException( String.format("Both objProviders must have the same number of items, currently %d and %d", objsCollection1.size(), objsCollection2.size() ));
+		if (first.size()!=second.size()) {
+			throw new CreateException( String.format("Both objProviders must have the same number of items, currently %d and %d", first.size(), second.size() ));
 		}
 		
-		ObjMaskCollection out = new ObjMaskCollection();
-		
-		for( int i=0; i<objsCollection1.size(); i++) {
-			ObjMask om1 = objsCollection1.get(i);
-			ObjMask om2 = objsCollection2.get(i);
-			
-			out.add( ObjMaskMerger.merge(om1, om2) );
-		}
-		
-		return out;
+		return ObjectCollectionFactory.mapFromRange(
+			0,
+			first.size(),
+			index->	ObjectMaskMerger.merge(
+				first.get(index),
+				second.get(index)
+			)
+		);
 	}
 
 	public ObjMaskProvider getObjs1() {

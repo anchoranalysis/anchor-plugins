@@ -1,12 +1,10 @@
 package org.anchoranalysis.plugin.points.calculate.ellipse;
 
-import org.anchoranalysis.anchor.mpp.mark.conic.MarkEllipse;
-
 /*-
  * #%L
  * anchor-plugin-points
  * %%
- * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2010 - 2020 Owen Feehan
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -28,23 +26,24 @@ import org.anchoranalysis.anchor.mpp.mark.conic.MarkEllipse;
  * #L%
  */
 
-import org.anchoranalysis.image.objmask.ObjMask;
+import org.anchoranalysis.anchor.mpp.mark.conic.MarkEllipse;
+import org.anchoranalysis.image.objectmask.ObjectMask;
 
 public class ObjMaskAndEllipse {
 
-	private ObjMask objMask;
+	private ObjectMask objMask;
 	private MarkEllipse mark;
 		
-	public ObjMaskAndEllipse(ObjMask objMask, MarkEllipse mark) {
+	public ObjMaskAndEllipse(ObjectMask objMask, MarkEllipse mark) {
 		super();
 		this.objMask = objMask;
 		this.mark = mark;
 	}
 	
-	public ObjMask getObjMask() {
+	public ObjectMask getObjMask() {
 		return objMask;
 	}
-	public void setObjMask(ObjMask objMask) {
+	public void setObjMask(ObjectMask objMask) {
 		this.objMask = objMask;
 	}
 	public MarkEllipse getMark() {

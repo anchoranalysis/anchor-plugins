@@ -4,7 +4,7 @@ package org.anchoranalysis.plugin.annotation.comparison;
  * #%L
  * anchor-plugin-annotation
  * %%
- * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2010 - 2020 Owen Feehan
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -26,24 +26,24 @@ package org.anchoranalysis.plugin.annotation.comparison;
  * #L%
  */
 
-import org.anchoranalysis.image.objmask.ObjMaskCollection;
+import org.anchoranalysis.image.objectmask.ObjectCollection;
 
 public class ObjsToCompare {
 
-	private ObjMaskCollection left;
-	private ObjMaskCollection right;
+	private ObjectCollection left;
+	private ObjectCollection right;
 	
-	public ObjsToCompare(ObjMaskCollection left, ObjMaskCollection right) {
+	public ObjsToCompare(ObjectCollection left, ObjectCollection right) {
 		super();
 		this.left = left;
 		this.right = right;
 	}
 
-	public ObjMaskCollection getLeft() {
+	public ObjectCollection getLeft() {
 		return left;
 	}
 
-	public ObjMaskCollection getRight() {
+	public ObjectCollection getRight() {
 		return right;
 	}		
 }

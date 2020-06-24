@@ -36,12 +36,12 @@ import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
 import org.anchoranalysis.image.feature.objmask.pair.CalculateInputFromPair;
 import org.anchoranalysis.image.feature.objmask.pair.FeatureInputPairObjs;
 import org.anchoranalysis.image.feature.objmask.pair.CalculateInputFromPair.Extract;
-import org.anchoranalysis.image.objmask.ObjMask;
+import org.anchoranalysis.image.objectmask.ObjectMask;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
 /** Calculates a dilated-object from a pair */
-class CalculateDilatedFromPair extends FeatureCalculation<ObjMask, FeatureInputPairObjs> {
+class CalculateDilatedFromPair extends FeatureCalculation<ObjectMask, FeatureInputPairObjs> {
 
 	
 	private ResolvedCalculation<FeatureInputSingleObj, FeatureInputPairObjs> calcInput;
@@ -74,7 +74,7 @@ class CalculateDilatedFromPair extends FeatureCalculation<ObjMask, FeatureInputP
 
 
 	@Override
-	protected ObjMask execute(FeatureInputPairObjs input) throws FeatureCalcException {
+	protected ObjectMask execute(FeatureInputPairObjs input) throws FeatureCalcException {
 
 		// Input for calculaitng dilation
 		FeatureInputSingleObj inputSingle = calcInput.getOrCalculate(input); 

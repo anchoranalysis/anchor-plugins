@@ -40,8 +40,8 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.extent.ImageDim;
-import org.anchoranalysis.image.objmask.ObjMaskCollection;
-import org.anchoranalysis.image.objmask.properties.ObjMaskWithPropertiesCollection;
+import org.anchoranalysis.image.objectmask.ObjectCollection;
+import org.anchoranalysis.image.objectmask.properties.ObjectCollectionWithProperties;
 import org.anchoranalysis.io.bean.filepath.generator.FilePathGenerator;
 import org.anchoranalysis.io.error.AnchorIOException;
 
@@ -57,7 +57,7 @@ public class AnnotationCfgComparer extends Comparer {
 	}
 	
 	@Override
-	public Findable<ObjMaskCollection> createObjs(Path filePathSource, ImageDim dim, boolean debugMode) throws CreateException {
+	public Findable<ObjectCollection> createObjs(Path filePathSource, ImageDim dim, boolean debugMode) throws CreateException {
 
 		Path filePath;
 		try {
@@ -82,13 +82,13 @@ public class AnnotationCfgComparer extends Comparer {
 			return new NotFound<>(filePath, "The annotation is NOT accepted");
 		}
 		
-		ObjMaskWithPropertiesCollection omwp = annotation.get().getCfg().calcMask(
+		ObjectCollectionWithProperties omwp = annotation.get().getCfg().calcMask(
 			dim,
 			annotation.get().getRegionMap().membershipWithFlagsForIndex(annotation.get().getRegionID()),
 			BinaryValuesByte.getDefault(),
 			null
 		); 
-		return new Found<>(omwp.collectionObjMask());
+		return new Found<>(omwp.withoutProperties());
 	}
 
 	public FilePathGenerator getFilePathGenerator() {

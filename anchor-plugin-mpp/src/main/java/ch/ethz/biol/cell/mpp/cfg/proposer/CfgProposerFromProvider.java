@@ -1,5 +1,7 @@
 package ch.ethz.biol.cell.mpp.cfg.proposer;
 
+import java.util.Optional;
+
 import org.anchoranalysis.anchor.mpp.bean.cfg.CfgGen;
 import org.anchoranalysis.anchor.mpp.bean.cfg.CfgProvider;
 import org.anchoranalysis.anchor.mpp.bean.proposer.CfgProposer;
@@ -50,9 +52,11 @@ public class CfgProposerFromProvider extends CfgProposer {
 	}
 
 	@Override
-	public Cfg propose(CfgGen cfgGen, ProposerContext context) throws ProposalAbnormalFailureException {
+	public Optional<Cfg> propose(CfgGen cfgGen, ProposerContext context) throws ProposalAbnormalFailureException {
 		try {
-			return cfgProvider.create();
+			return Optional.of(
+				cfgProvider.create()
+			);
 		} catch (CreateException e) {
 			throw new ProposalAbnormalFailureException(e);
 		}

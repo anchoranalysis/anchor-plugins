@@ -32,8 +32,8 @@ package org.anchoranalysis.plugin.image.feature.bean.obj.single.intensity;
 
 
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.image.chnl.Chnl;
-import org.anchoranalysis.image.objmask.ObjMask;
+import org.anchoranalysis.image.channel.Channel;
+import org.anchoranalysis.image.objectmask.ObjectMask;
 
 import ch.ethz.biol.cell.mpp.nrg.feature.objmask.ValueAndIndex;
 
@@ -44,7 +44,7 @@ import ch.ethz.biol.cell.mpp.nrg.feature.objmask.ValueAndIndex;
 public class IntensityMeanShellMaxSlice extends IntensityMeanShellBase {
 
 	@Override
-	protected double calcForShell(ObjMask om, Chnl chnl) throws FeatureCalcException {
+	protected double calcForShell(ObjectMask om, Channel chnl) throws FeatureCalcException {
 				
 		ValueAndIndex vai = StatsHelper.calcMaxSliceMean(chnl, om, false );
 		

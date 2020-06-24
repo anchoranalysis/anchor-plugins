@@ -33,7 +33,7 @@ import java.util.List;
 
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.extent.Extent;
-import org.anchoranalysis.image.objmask.ObjMask;
+import org.anchoranalysis.image.objectmask.ObjectMask;
 import org.anchoranalysis.math.moment.MomentsFromPointsCalculator;
 
 import cern.colt.matrix.DoubleFactory2D;
@@ -61,7 +61,7 @@ class MomentsFromObjMask {
 	 * @param suppressZ whether we ignore the z-dimension
 	 * @return a matrix containing the second-moments
 	 */
-	public static MomentsFromPointsCalculator apply( ObjMask om, boolean suppressZ  ) {
+	public static MomentsFromPointsCalculator apply( ObjectMask om, boolean suppressZ  ) {
 		return new MomentsFromPointsCalculator(
 			createPointMatrixFromObjMaskPixelPositions(om),
 			suppressZ,
@@ -75,7 +75,7 @@ class MomentsFromObjMask {
 	 * @param om
 	 * @return
 	 */
-	private static DoubleMatrix2D createPointMatrixFromObjMaskPixelPositions( ObjMask om ) {
+	private static DoubleMatrix2D createPointMatrixFromObjMaskPixelPositions( ObjectMask om ) {
 		
 		List<Point3i> listPts = new ArrayList<>();
 		

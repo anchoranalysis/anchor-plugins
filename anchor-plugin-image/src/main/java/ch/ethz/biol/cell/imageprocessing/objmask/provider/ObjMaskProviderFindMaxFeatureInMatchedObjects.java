@@ -28,6 +28,7 @@ package ch.ethz.biol.cell.imageprocessing.objmask.provider;
 
 
 import java.util.List;
+import java.util.Optional;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
@@ -36,8 +37,9 @@ import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorSingle;
 import org.anchoranalysis.image.bean.objmask.match.ObjMaskMatcher;
 import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
-import org.anchoranalysis.image.objmask.ObjMask;
-import org.anchoranalysis.image.objmask.ObjMaskCollection;
+import org.anchoranalysis.image.objectmask.ObjectMask;
+import org.anchoranalysis.image.objectmask.ObjectCollection;
+import org.anchoranalysis.image.objectmask.ObjectCollectionFactory;
 import org.anchoranalysis.image.objmask.match.ObjWithMatches;
 
 // Returns a collection of each Max Object found in matches
@@ -49,40 +51,35 @@ public class ObjMaskProviderFindMaxFeatureInMatchedObjects extends ObjMaskProvid
 	// END BEAN PROPERTIES
 
 	@Override
-	public ObjMaskCollection createFromObjs( ObjMaskCollection in ) throws CreateException {
+	public ObjectCollection createFromObjs( ObjectCollection in ) throws CreateException {
 		
 		FeatureCalculatorSingle<FeatureInputSingleObj> session = createSession();
 
-		ObjMaskCollection out = new ObjMaskCollection();
 		try {
 			List<ObjWithMatches> listMatches = objMaskMatcher.findMatch(in);
-	
-			for( ObjWithMatches owm : listMatches ) {
+
+			return ObjectCollectionFactory.mapFromOptional(
+				listMatches,
+				owm -> findMax(session, owm.getMatches()) 
+			);
 			
-				ObjMask max = findMax( session, owm.getMatches() );
-				if (max!=null) {
-					out.add(max);
-				}
-			}
 		} catch (OperationFailedException | FeatureCalcException e) {
 			throw new CreateException(e);
 		}
-		
-		return out;
 	}
 	
-	private ObjMask findMax( FeatureCalculatorSingle<FeatureInputSingleObj> session, ObjMaskCollection objs ) throws FeatureCalcException {
-		ObjMask max = null;
+	private Optional<ObjectMask> findMax( FeatureCalculatorSingle<FeatureInputSingleObj> session, ObjectCollection objs ) throws FeatureCalcException {
+		Optional<ObjectMask> max = Optional.empty();
 		double maxVal = 0;
 		
-		for( ObjMask om : objs ) {
+		for( ObjectMask om : objs ) {
 			
 			double featureVal = session.calc(
 				new FeatureInputSingleObj(om)
 			);
 			
-			if (max==null || featureVal>maxVal) {
-				max = om;
+			if (!max.isPresent() || featureVal>maxVal) {
+				max = Optional.of(om);
 				maxVal = featureVal;
 			}
 		}

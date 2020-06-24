@@ -1,5 +1,7 @@
 package org.anchoranalysis.plugin.mpp.sgmn.cfg.bean.kernel.independent;
 
+import java.util.Optional;
+
 import org.anchoranalysis.anchor.mpp.bean.proposer.CfgProposer;
 import org.anchoranalysis.anchor.mpp.cfg.Cfg;
 import org.anchoranalysis.anchor.mpp.feature.mark.ListUpdatableMarkSetCollection;
@@ -42,7 +44,7 @@ import org.anchoranalysis.mpp.sgmn.kernel.KernelCalcNRGException;
 import org.anchoranalysis.plugin.mpp.sgmn.cfg.bean.mark.extractweight.ConstantWeight;
 import org.anchoranalysis.plugin.mpp.sgmn.cfg.bean.mark.extractweight.ExtractWeightFromMark;
 import org.anchoranalysis.plugin.mpp.sgmn.cfg.optscheme.CfgFromPartition;
-import org.anchoranalysis.plugin.mpp.sgmn.cfg.optscheme.PartitionMarks;
+import org.anchoranalysis.plugin.mpp.sgmn.cfg.optscheme.PartitionedCfg;
 
 public class KernelInitialCfgFromPartition extends KernelIndependent<CfgFromPartition> {
 
@@ -61,28 +63,27 @@ public class KernelInitialCfgFromPartition extends KernelIndependent<CfgFromPart
 	
 	private Cfg lastCfg;
 	
-	public KernelInitialCfgFromPartition() {
-	}
-
 	@Override
 	public boolean isCompatibleWith(Mark testMark) {
 		return cfgProposer.isCompatibleWith(testMark);
 	}
 
 	@Override
-	public CfgFromPartition makeProposal(CfgFromPartition exst, KernelCalcContext context ) throws KernelCalcNRGException {
+	public Optional<CfgFromPartition> makeProposal(Optional<CfgFromPartition> exst, KernelCalcContext context ) throws KernelCalcNRGException {
 		
-		Cfg cfg = InitCfgUtilities.propose(cfgProposer, context);
+		Optional<Cfg> cfg = InitCfgUtilities.propose(cfgProposer, context);
 		
-		if (cfg==null) {
-			return null;
+		if (!cfg.isPresent()) {
+			return Optional.empty();
 		}
 		
-		this.lastCfg = cfg;
+		this.lastCfg = cfg.get();
 		
-		return new CfgFromPartition(
-			new Cfg(),
-			createPartition(cfg)
+		return Optional.of(
+			new CfgFromPartition(
+				new Cfg(),
+				createPartition(cfg.get())
+			)
 		);
 	}
 
@@ -124,9 +125,9 @@ public class KernelInitialCfgFromPartition extends KernelIndependent<CfgFromPart
 		this.extractWeight = extractWeight;
 	}
 		
-	private PartitionMarks<Mark> createPartition( Cfg cfg ) {
-		return new PartitionMarks<Mark>(
-			cfg.getMarks(),
+	private PartitionedCfg createPartition( Cfg cfg ) {
+		return new PartitionedCfg(
+			cfg,
 			mark-> extractWeight.weightFor(mark)
 		);
 	}

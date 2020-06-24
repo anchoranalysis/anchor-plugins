@@ -1,5 +1,7 @@
 package org.anchoranalysis.plugin.mpp.sgmn.cfg.bean.kernel.independent;
 
+import java.util.Optional;
+
 import org.anchoranalysis.anchor.mpp.cfg.Cfg;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
 
@@ -45,22 +47,21 @@ public abstract class KernelDeath<T> extends KernelPosNeg<T> {
 	// START BEAN PROPERTIES
 	// END BEAN PROPERTIES
 	
-	private Mark markRmv;
-	
-	public KernelDeath() {
-	}
+	private Optional<Mark> markRmv;
 	
 	@Override
-	public T makeProposal(T exst,
-			KernelCalcContext context ) throws KernelCalcNRGException {
+	public Optional<T> makeProposal(Optional<T> exst,KernelCalcContext context ) throws KernelCalcNRGException {
 
-		MarkAnd<Mark,T> markNrg = removeAndUpdateNrg( exst, context.proposer() );
-		markRmv = markNrg.getMark();
-		return markNrg.getCfgNrg();
+		if (!exst.isPresent()) {
+			return Optional.empty();
+		}
 		
+		Optional<MarkAnd<Mark,T>> markNrg = removeAndUpdateNrg( exst.get(), context.proposer() );
+		markRmv = markNrg.map(MarkAnd::getMark);
+		return markNrg.map(MarkAnd::getCfgNrg);
 	}
 	
-	protected abstract MarkAnd<Mark,T> removeAndUpdateNrg( T exst, ProposerContext context ) throws KernelCalcNRGException;
+	protected abstract Optional<MarkAnd<Mark,T>> removeAndUpdateNrg( T exst, ProposerContext context ) throws KernelCalcNRGException;
 	
 	@Override
 	public double calcAccptProb(int exstSize, int propSize,
@@ -82,8 +83,8 @@ public abstract class KernelDeath<T> extends KernelPosNeg<T> {
 	
 	@Override
 	public String dscrLast() {
-		if (markRmv!=null) {
-			return String.format("death(%d)", markRmv.getId() );
+		if (markRmv.isPresent()) {
+			return String.format("death(%d)", markRmv.get().getId() );
 		} else {
 			return "death";
 		}
@@ -91,8 +92,8 @@ public abstract class KernelDeath<T> extends KernelPosNeg<T> {
 	
 	@Override
 	public int[] changedMarkIDArray() {
-		if (markRmv!=null) {
-			return new int[]{ this.markRmv.getId() };	
+		if (markRmv.isPresent()) {
+			return new int[]{ this.markRmv.get().getId() };	
 		} else {
 			return new int[] {};
 		}
@@ -104,7 +105,7 @@ public abstract class KernelDeath<T> extends KernelPosNeg<T> {
 		return true;
 	}
 	
-	protected Mark getMarkRmv() {
+	protected Optional<Mark> getMarkRmv() {
 		return markRmv;
 	}
 	
@@ -116,7 +117,7 @@ public abstract class KernelDeath<T> extends KernelPosNeg<T> {
 		}
 				
 		// Random mark
-		return exst.randomIndex( propContext.getRe() );
+		return exst.randomIndex( propContext.getRandomNumberGenerator() );
 	}
 	
 	protected static class MarkAnd<S,T> {

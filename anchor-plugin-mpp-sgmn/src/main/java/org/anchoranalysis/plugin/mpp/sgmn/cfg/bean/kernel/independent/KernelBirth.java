@@ -1,9 +1,12 @@
 package org.anchoranalysis.plugin.mpp.sgmn.cfg.bean.kernel.independent;
 
+import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.core.functional.OptionalUtilities;
 import org.anchoranalysis.image.extent.ImageDim;
 
 /*
@@ -38,6 +41,14 @@ import org.anchoranalysis.mpp.sgmn.bean.kernel.KernelPosNeg;
 import org.anchoranalysis.mpp.sgmn.kernel.KernelCalcContext;
 import org.anchoranalysis.mpp.sgmn.kernel.KernelCalcNRGException;
 
+
+/**
+ * Adds a new mark (a "birth") to create a proposal
+ * 
+ * @author Owen Feehan
+ *
+ * @param <T> proposal-type
+ */
 public abstract class KernelBirth<T> extends KernelPosNeg<T> {
 
 	/**
@@ -45,32 +56,31 @@ public abstract class KernelBirth<T> extends KernelPosNeg<T> {
 	 */
 	private static final long serialVersionUID = -3031519899206383216L;
 	
-	private Set<Mark> setMarksNew;
+	private Optional<Set<Mark>> setMarksNew;
 	
 	// START BEAN PROPERTIES
 	/** Total number of births */
 	@BeanField
 	private int repeats = 1;
 	// END BEAN PROPERTIES
-	
-	public KernelBirth() {
-	}
-	
+
 	@Override
-	public T makeProposal(T exst, KernelCalcContext context ) throws KernelCalcNRGException {
+	public Optional<T> makeProposal(Optional<T> exst, KernelCalcContext context ) throws KernelCalcNRGException {
 		
-		setMarksNew = proposeNewMarks(exst, repeats, context);
-		
-		if (setMarksNew==null) {
-			return null;
+		if (!exst.isPresent()) {
+			return Optional.empty();
 		}
 		
-		return calcForNewMark(exst, setMarksNew, context);
+		setMarksNew = proposeNewMarks(exst.get(), repeats, context);;
+		return OptionalUtilities.flatMap(
+			setMarksNew,
+			set -> calcForNewMark(exst.get(), set, context)
+		);
 	}
 		
-	protected abstract Set<Mark> proposeNewMarks( T exst, int number, KernelCalcContext context );
+	protected abstract Optional<Set<Mark>> proposeNewMarks( T exst, int number, KernelCalcContext context );
 	
-	protected abstract T calcForNewMark( T exst, Set<Mark> listMarksNew, KernelCalcContext context ) throws KernelCalcNRGException;
+	protected abstract Optional<T> calcForNewMark( T exst, Set<Mark> listMarksNew, KernelCalcContext context ) throws KernelCalcNRGException;
 	
 	@Override
 	public double calcAccptProb(int exstSize, int propSize,
@@ -90,15 +100,19 @@ public abstract class KernelBirth<T> extends KernelPosNeg<T> {
 	
 	@Override
 	public String dscrLast() {
-		return String.format("birth_%d(%s)", repeats, idStr(setMarksNew) );
+		return String.format(
+			"birth_%d(%s)",
+			repeats,
+			idStr(setMarksNew.get())
+		);
 	}
 
 	@Override
 	public int[] changedMarkIDArray() {
-		return idArr(setMarksNew);
+		return idArr(setMarksNew.get());
 	}
 
-	protected Set<Mark> getMarkNew() {
+	protected Optional<Set<Mark>> getMarkNew() {
 		return setMarksNew;
 	}
 	
@@ -111,19 +125,12 @@ public abstract class KernelBirth<T> extends KernelPosNeg<T> {
 	}
 	
 	private static String idStr( Set<Mark> list ) {
-		StringBuilder sb = new StringBuilder();
-		
-		boolean first = true;
-		for( Mark m : list) {
-			if (first) {
-				first = false;
-			} else {
-				sb.append(", ");
-			}
-			sb.append( m.getId() );
-		}
-		
-		return sb.toString();
+		return String.join(
+			", ",
+			list.stream().map( mark ->
+				Integer.toString( mark.getId())
+			).collect( Collectors.toList() )
+		);
 	}
 	
 	private static int[] idArr( Set<Mark> set ) {

@@ -28,14 +28,12 @@ package ch.ethz.biol.cell.mpp.mark.ellipsoidfitter.outlinepixelsretriever.visits
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.InitException;
-import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.core.geometry.Point3i;
-import org.anchoranalysis.core.geometry.PointConverter;
 import org.anchoranalysis.core.geometry.Tuple3i;
 import org.anchoranalysis.core.random.RandomNumberGenerator;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.ImageRes;
-import org.anchoranalysis.image.objmask.ObjMask;
+import org.anchoranalysis.image.objectmask.ObjectMask;
 
 // Breadth-first iteration of pixels
 public class VisitSchedulerMaxDist extends VisitScheduler {
@@ -76,7 +74,7 @@ public class VisitSchedulerMaxDist extends VisitScheduler {
 	}
 
 	@Override
-	public boolean considerVisit( Point3i pnt, int distAlongContour, ObjMask objMask ) {
+	public boolean considerVisit( Point3i pnt, int distAlongContour, ObjectMask objMask ) {
 		
 		if (distToRoot(pnt)>=maxDistSq) {
 			return false;
@@ -91,16 +89,11 @@ public class VisitSchedulerMaxDist extends VisitScheduler {
 	
 	public static BoundingBox createBoxAroundPoint( Point3i pnt, Tuple3i width ) {
 		
-		Point3d widthD = new Point3d( width );
-		
 		// We create a raster around the point, maxDist*2 in both directions, so long as it doesn't escape the region
-		Point3d min = PointConverter.doubleFromInt(pnt);
-		min.sub(widthD);
-		
-		Point3d max = PointConverter.doubleFromInt(pnt);
-		max.add(widthD);
-		
-		return new BoundingBox(min, max);
+		return new BoundingBox(
+			Point3i.immutableSubtract(pnt, width),
+			Point3i.immutableAdd(pnt, width)
+		);
 	}
 	
 	public double getMaxDist() {

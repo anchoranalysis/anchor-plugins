@@ -29,10 +29,9 @@ package org.anchoranalysis.plugin.opencv;
 import java.nio.ByteBuffer;
 
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.image.chnl.Chnl;
-import org.anchoranalysis.image.convert.ByteConverter;
+import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.extent.Extent;
-import org.anchoranalysis.image.objmask.ObjMask;
+import org.anchoranalysis.image.objectmask.ObjectMask;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
@@ -41,7 +40,9 @@ import org.opencv.core.Mat;
 
 public class MatConverter {
 
-	public static Mat fromObjMask( ObjMask om ) throws CreateException {
+	private MatConverter() {}
+	
+	public static Mat fromObjMask( ObjectMask om ) throws CreateException {
 		Extent e = om.getBoundingBox().extent(); 
 		if (e.getZ()>1) {
 			throw new CreateException("Objects with more than 1 z-stack are not supported for OpenCV to Mat conversion (at the moment)");
@@ -83,7 +84,7 @@ public class MatConverter {
 		matToRGB( mat, stack.getChnl(0), stack.getChnl(1), stack.getChnl(2) );
 	}
 	
-	private static Mat makeGrayscale( Chnl chnl ) throws CreateException {
+	private static Mat makeGrayscale( Channel chnl ) throws CreateException {
 		if (chnl.getVoxelDataType().equals(VoxelDataTypeUnsignedByte.instance)) {
 			
 			// DEBUG
@@ -99,37 +100,12 @@ public class MatConverter {
 		
 		assert(vb.extent().getZ())==1;
 		
-		
-		
 		Mat mat = createEmptyMat( vb.extent(), CvType.CV_8UC1 );
 		mat.put(0, 0, vb.getPixelsForPlane(0).buffer().array() );
-		
-		// TODO
-		//System.out.printf("NumPixels>100 (Mat) = %d%n", cntMoreThan(mat,100) );
-		
 		return mat;
 	}
 	
-	@SuppressWarnings("unused")
-	private static int cntMoreThan( Mat mat, int thrshld ) {
-				
-		int c = 0;
-		
-		int size = (int) mat.size().area();
-		
-		byte[] arr = new byte[ size ];
-		mat.get(0, 0, arr);
-		
-		for( int i=0; i<size; i++ ) {
-			if( ByteConverter.unsignedByteToInt(arr[i]) > thrshld ) {
-				c++;
-			}
-		}
-
-		return c;
-	}
-	
-	private static Mat matFromRGB( Chnl chnlRed, Chnl chnlGreen, Chnl chnlBlue ) {
+	private static Mat matFromRGB( Channel chnlRed, Channel chnlGreen, Channel chnlBlue ) {
 		
 		Extent e = chnlRed.getDimensions().getExtnt(); 
 		assert(e.getZ())==1;
@@ -161,7 +137,7 @@ public class MatConverter {
 	}
 
 	
-	private static void matToRGB( Mat mat, Chnl chnlRed, Chnl chnlGreen, Chnl chnlBlue ) {
+	private static void matToRGB( Mat mat, Channel chnlRed, Channel chnlGreen, Channel chnlBlue ) {
 		
 		Extent e = chnlRed.getDimensions().getExtnt(); 
 		assert(e.getZ())==1;
@@ -188,7 +164,7 @@ public class MatConverter {
 		assert( !blue.hasRemaining() );
 	}
 	
-	private static ByteBuffer bufferFromChnl( Chnl chnl ) {
+	private static ByteBuffer bufferFromChnl( Channel chnl ) {
 		return chnl.getVoxelBox().asByte().getPixelsForPlane(0).buffer();
 	}
 	

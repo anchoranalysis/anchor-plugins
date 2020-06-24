@@ -26,35 +26,34 @@ package org.anchoranalysis.plugin.image.task.sharedstate;
  * #L%
  */
 
-import java.util.List;
-
-import org.anchoranalysis.bean.NamedBean;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.feature.bean.list.FeatureListProvider;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.io.csv.GroupedResultsVectorCollection;
+import org.anchoranalysis.feature.io.csv.MetadataHeaders;
 import org.anchoranalysis.feature.list.NamedFeatureStore;
-import org.anchoranalysis.feature.list.NamedFeatureStoreFactory;
-import org.anchoranalysis.feature.name.FeatureNameList;
+import org.anchoranalysis.io.error.AnchorIOException;
+import org.anchoranalysis.io.output.bound.BoundIOContext;
 
 public class SharedStateExportFeaturesWithStore<T extends FeatureInput> extends SharedStateExportFeatures {
 	
 	private NamedFeatureStore<T> featureStore;
 	
 	public SharedStateExportFeaturesWithStore(
-		List<NamedBean<FeatureListProvider<T>>> listFeatureListProvider,
-		GroupedResultsVectorCollection groupResults
-	) throws CreateException {
-		super( groupResults );
-		this.featureStore = NamedFeatureStoreFactory.createNamedFeatureList(listFeatureListProvider);
+		MetadataHeaders metadataHeaders,
+		NamedFeatureStore<T> featureStore,
+		BoundIOContext context
+	) throws CreateException, AnchorIOException {
+		super(
+			new GroupedResultsVectorCollection(
+				metadataHeaders,
+				featureStore.createFeatureNames(),
+				context
+			)		
+		);
+		this.featureStore = featureStore;
 	}
 	
 	public NamedFeatureStore<T> getFeatureStore() {
 		return featureStore;
-	}
-
-	@Override
-	protected FeatureNameList featureNames() {
-		return featureStore.createFeatureNames();
 	}
 }

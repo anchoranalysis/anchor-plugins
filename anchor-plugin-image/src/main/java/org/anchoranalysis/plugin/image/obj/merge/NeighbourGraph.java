@@ -30,12 +30,12 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
-
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.graph.EdgeTypeWithVertices;
 import org.anchoranalysis.core.graph.GraphWithEdgeTypes;
 import org.anchoranalysis.image.extent.ImageRes;
-import org.anchoranalysis.image.objmask.ObjMaskCollection;
+import org.anchoranalysis.image.objectmask.ObjectCollection;
+import org.anchoranalysis.image.objectmask.ObjectCollectionFactory;
 import org.anchoranalysis.plugin.image.obj.merge.condition.UpdatableBeforeCondition;
 import org.anchoranalysis.plugin.image.obj.merge.priority.AssignPriority;
 import org.anchoranalysis.plugin.image.obj.merge.priority.PrioritisedVertex;
@@ -99,17 +99,13 @@ class NeighbourGraph {
 		return setOut;
 	}
 	
-
 	/** Creates an object-mask collection representing all the objects in the vertices */
-	public ObjMaskCollection verticesAsObjects() {
-		ObjMaskCollection out = new ObjMaskCollection();
-		
-		for( ObjVertex omWithFeature : graph.vertexSet() ) {
-			out.add( omWithFeature.getObjMask() );
-		}
-		return out;
+	public ObjectCollection verticesAsObjects() {
+		return ObjectCollectionFactory.mapFrom(
+			graph.vertexSet(),
+			ObjVertex::getObjMask
+		);
 	}
-	
 	
 	private void addNghbsToSet( ObjVertex vertex, Set<ObjVertex> setPossibleNghbs ) {
 		

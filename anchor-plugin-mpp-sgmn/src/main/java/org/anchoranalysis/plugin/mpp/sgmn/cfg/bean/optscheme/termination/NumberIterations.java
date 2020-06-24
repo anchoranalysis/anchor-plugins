@@ -39,12 +39,16 @@ public class NumberIterations extends TerminationCondition {
 	// END BEAN PROPERTIES
 	
 	public NumberIterations() {
-		super();
+		// Standard Bean Constructor
+	}
+	
+	public NumberIterations(int maxNumber) {
+		this.maxNumber = maxNumber;
 	}
 	
 	@Override
 	public boolean continueIterations(int crntIter, double score, int size, LogReporter logReporter) {
-		if (crntIter<=maxNumber) {
+		if (crntIter<maxNumber) {
 			return true;
 		} else {
 			logReporter.log("NumberIterations returned false");

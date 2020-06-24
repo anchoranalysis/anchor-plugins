@@ -46,7 +46,12 @@ public class KernelProposerOptionSingle<T> extends KernelProposerOption<T>  {
 	// END BEAN PROPERTIES
 	
 	public KernelProposerOptionSingle() {
-		
+		// STANDARD BEAN CONSTRUCTOR
+	}
+	
+	public KernelProposerOptionSingle( Kernel<T> kernel, double weight ) {
+		this.kernel = kernel;
+		this.weight = weight;
 	}
 	
 	public double getWeight() {

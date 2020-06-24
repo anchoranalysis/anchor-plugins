@@ -38,6 +38,7 @@ import org.anchoranalysis.io.bean.input.InputManager;
 import org.anchoranalysis.io.bean.input.InputManagerParams;
 import org.anchoranalysis.io.bean.provider.file.FileProvider;
 import org.anchoranalysis.io.error.AnchorIOException;
+import org.anchoranalysis.io.error.FileProviderException;
 import org.anchoranalysis.io.input.FileInput;
 import org.anchoranalysis.plugin.io.bean.descriptivename.RemoveExtensions;
 import org.anchoranalysis.plugin.io.bean.descriptivename.patternspan.PatternSpan;
@@ -61,12 +62,15 @@ public class Files extends InputManager<FileInput> {
 
 	@Override
 	public List<FileInput> inputObjects(InputManagerParams params) throws AnchorIOException {
-		
-		Collection<File> files = getFileProvider().matchingFiles(params);
-			
-		return descriptiveNameFromFile.descriptiveNamesForCheckUniqueness(files).stream().map(
-			df -> new FileInput(df)
-		).collect( Collectors.toList() );
+		try {
+			Collection<File> files = getFileProvider().create(params);
+				
+			return descriptiveNameFromFile.descriptiveNamesForCheckUniqueness(files).stream().map(
+				FileInput::new
+			).collect( Collectors.toList() );
+		} catch (FileProviderException e) {
+			throw new AnchorIOException("Cannot find files", e);
+		}
 	}
 	
 	public FileProvider getFileProvider() {

@@ -33,7 +33,7 @@ import java.util.Optional;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.geometry.Point2i;
 import org.anchoranalysis.image.binary.BinaryChnl;
-import org.anchoranalysis.image.chnl.Chnl;
+import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.points.PointsFromBinaryChnl;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 
@@ -48,7 +48,7 @@ public class BinaryChnlProviderConvexHull2D extends ConvexHullBase {
 		Optional<List<Point2i>> pntsConvexHull = ConvexHullUtilities.convexHull2D(extPnts);
 				
 		// we write the vertices to the outline
-		Chnl out = outline.getChnl();
+		Channel out = outline.getChnl();
 		VoxelBox<?> vbOut = out.getVoxelBox().any();
 		
 		vbOut.setAllPixelsTo(

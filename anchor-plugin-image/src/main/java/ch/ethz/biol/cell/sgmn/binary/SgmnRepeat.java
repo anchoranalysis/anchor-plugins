@@ -36,7 +36,7 @@ import org.anchoranalysis.image.bean.sgmn.binary.BinarySgmn;
 import org.anchoranalysis.image.bean.sgmn.binary.BinarySgmnOne;
 import org.anchoranalysis.image.bean.sgmn.binary.BinarySgmnParameters;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
-import org.anchoranalysis.image.objmask.ObjMask;
+import org.anchoranalysis.image.objectmask.ObjectMask;
 import org.anchoranalysis.image.sgmn.SgmnFailedException;
 import org.anchoranalysis.image.voxel.box.VoxelBoxWrapper;
 
@@ -51,7 +51,7 @@ public class SgmnRepeat extends BinarySgmnOne {
 	public BinaryVoxelBox<ByteBuffer> sgmnFromSgmn(
 		VoxelBoxWrapper voxelBox,
 		BinarySgmnParameters params,
-		Optional<ObjMask> mask,
+		Optional<ObjectMask> mask,
 		BinarySgmn sgmn
 	) throws SgmnFailedException {
 		
@@ -69,7 +69,7 @@ public class SgmnRepeat extends BinarySgmnOne {
 			
 			// Increasingly tightens the obj-mask used for the segmentation
 			mask = Optional.of(
-				mask.isPresent() ? new ObjMask(mask.get().getBoundingBox(), outNew) : new ObjMask(outNew)
+				mask.isPresent() ? new ObjectMask(mask.get().getBoundingBox(), outNew) : new ObjectMask(outNew)
 			);
 		}
 		

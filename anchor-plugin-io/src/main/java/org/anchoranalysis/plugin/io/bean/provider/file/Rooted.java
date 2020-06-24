@@ -38,6 +38,7 @@ import org.anchoranalysis.io.bean.input.InputManagerParams;
 import org.anchoranalysis.io.bean.provider.file.FileProvider;
 import org.anchoranalysis.io.bean.provider.file.FileProviderWithDirectory;
 import org.anchoranalysis.io.error.AnchorIOException;
+import org.anchoranalysis.io.error.FileProviderException;
 import org.anchoranalysis.plugin.io.filepath.RootedFilePathUtilities;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -70,7 +71,7 @@ public class Rooted extends FileProvider {
 	private static Log log = LogFactory.getLog(Rooted.class);
 	
 	@Override
-	public Collection<File> matchingFiles(InputManagerParams params) throws AnchorIOException {
+	public Collection<File> create(InputManagerParams params) throws FileProviderException {
 		
 		try {
 			log.debug( String.format("matchingFiles() old directory '%s'\n", fileProvider.getDirectoryAsPath(params.getInputContext()) ));
@@ -93,7 +94,7 @@ public class Rooted extends FileProvider {
 			}
 			
 			if (!dirNewExists) {
-				throw new AnchorIOException(
+				throw new FileProviderException(
 				  String.format("Path %s' does not exist", dirNew)
 				);
 			}
@@ -102,8 +103,8 @@ public class Rooted extends FileProvider {
 			
 			return fileProvider.matchingFilesForDirectory(dirNew, params);
 			
-		} catch (BeanDuplicateException e) {
-			throw new AnchorIOException("Cannot duplicate bean", e);
+		} catch (BeanDuplicateException | AnchorIOException e) {
+			throw new FileProviderException(e);
 		}
 	}
 

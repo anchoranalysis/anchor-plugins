@@ -28,12 +28,12 @@ package org.anchoranalysisplugin.io.test.image;
 
 import java.nio.ByteBuffer;
 import java.util.Random;
-
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.Extent;
-import org.anchoranalysis.image.objmask.ObjMask;
-import org.anchoranalysis.image.objmask.ObjMaskCollection;
+import org.anchoranalysis.image.objectmask.ObjectMask;
+import org.anchoranalysis.image.objectmask.ObjectCollection;
+import org.anchoranalysis.image.objectmask.ObjectCollectionFactory;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 
 class ObjMaskCollectionFixture {
@@ -57,25 +57,22 @@ class ObjMaskCollectionFixture {
 	 * @param maxNumObjs
 	 * @return
 	 */
-	public ObjMaskCollection createMockObjs( int minNumObjs, int maxNumObjs ) {
-		ObjMaskCollection out = new ObjMaskCollection();
-		
+	public ObjectCollection createMockObjs( int minNumObjs, int maxNumObjs ) {
+				
 		int numObjs = randomMinMax( minNumObjs, maxNumObjs );
-		for( int i=0; i<numObjs; i++) {
-			out.add(mockObj());
-		}
-		return out;
+		
+		return ObjectCollectionFactory.fromRepeated(numObjs, this::mockObj);
 	}
 	
-	private ObjMask mockObj() {
+	private ObjectMask mockObj() {
 		Extent e = randomExtnt();
 		Point3i crnr = randomCrnr(e);
 		return mockObj(crnr, e);
 	}
 		
-	private ObjMask mockObj( Point3i crnr, Extent e ) {
+	private ObjectMask mockObj( Point3i crnr, Extent e ) {
 		
-		ObjMask om = new ObjMask(
+		ObjectMask om = new ObjectMask(
 			new BoundingBox(crnr, e)
 		);
 		

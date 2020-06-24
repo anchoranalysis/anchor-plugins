@@ -32,9 +32,9 @@ import java.util.Optional;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.bean.sgmn.objmask.ObjMaskSgmn;
-import org.anchoranalysis.image.chnl.Chnl;
-import org.anchoranalysis.image.objmask.ObjMask;
-import org.anchoranalysis.image.objmask.ObjMaskCollection;
+import org.anchoranalysis.image.channel.Channel;
+import org.anchoranalysis.image.objectmask.ObjectMask;
+import org.anchoranalysis.image.objectmask.ObjectCollection;
 import org.anchoranalysis.image.sgmn.SgmnFailedException;
 
 public class ObjMaskProviderSgmnByObj extends ObjMaskProviderOneChnlSource {
@@ -45,25 +45,24 @@ public class ObjMaskProviderSgmnByObj extends ObjMaskProviderOneChnlSource {
 	// END BEAN PROPERTIES
 
 	@Override
-	public ObjMaskCollection createFromObjs( ObjMaskCollection objsSrc, Chnl chnlToSgmn ) throws CreateException {
-		
-		ObjMaskCollection objsOut = new ObjMaskCollection();
-		
-		for( ObjMask om : objsSrc ) {
-			try {
-				objsOut.addAll(
-					sgmn.sgmn(
-						chnlToSgmn,
-						Optional.of(om),
-						Optional.empty()
-					)
-				);
-			} catch (SgmnFailedException e) {
-				throw new CreateException(e);
-			}
+	public ObjectCollection createFromObjs( ObjectCollection objsSrc, Channel chnlToSgmn ) throws CreateException {
+		try {
+			return objsSrc.stream().flatMapWithException(
+				SgmnFailedException.class,
+				om -> sgmnObject(om, chnlToSgmn)
+			);
+			
+		} catch (SgmnFailedException e) {
+			throw new CreateException(e);
 		}
-		
-		return objsOut;
+	}
+	
+	private ObjectCollection sgmnObject(ObjectMask om, Channel chnlToSgmn) throws SgmnFailedException {
+		return sgmn.sgmn(
+			chnlToSgmn,
+			Optional.of(om),
+			Optional.empty()
+		);
 	}
 
 	public ObjMaskSgmn getSgmn() {

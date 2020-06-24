@@ -32,11 +32,11 @@ import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.image.extent.ImageRes;
-import org.anchoranalysis.image.objmask.ObjMask;
+import org.anchoranalysis.image.objectmask.ObjectMask;
 
 public interface AfterCondition {
 	
 	void init(LogErrorReporter logger) throws InitException;
 	
-	boolean accept(ObjMask omSrc, ObjMask omDest, ObjMask omMerged, Optional<ImageRes> res) throws OperationFailedException;
+	boolean accept(ObjectMask omSrc, ObjectMask omDest, ObjectMask omMerged, Optional<ImageRes> res) throws OperationFailedException;
 }

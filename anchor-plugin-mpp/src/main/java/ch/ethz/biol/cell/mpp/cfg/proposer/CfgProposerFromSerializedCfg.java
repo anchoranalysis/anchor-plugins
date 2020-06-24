@@ -2,6 +2,7 @@ package ch.ethz.biol.cell.mpp.cfg.proposer;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Optional;
 
 import org.anchoranalysis.anchor.mpp.bean.cfg.CfgGen;
 import org.anchoranalysis.anchor.mpp.bean.proposer.CfgProposer;
@@ -55,7 +56,7 @@ public class CfgProposerFromSerializedCfg extends CfgProposer {
 	}
 
 	@Override
-	public Cfg propose(CfgGen cfgGen, ProposerContext context) {
+	public Optional<Cfg> propose(CfgGen cfgGen, ProposerContext context) {
 		
 		ObjectInputStreamDeserializer<Cfg> deserializer = new ObjectInputStreamDeserializer<>();
 		try {
@@ -65,10 +66,10 @@ public class CfgProposerFromSerializedCfg extends CfgProposer {
 			// We apply any corrections after deserialization, as the contents of the mark might change, but the deserialized versions will not
 			// TODO apply corrections
 			
-			return deserializedCfg;
+			return Optional.of(deserializedCfg);
 		} catch (DeserializationFailedException e) {
 			//errorNode.add( String.format("Exception when deserializing: %s", e.toString()) );
-			return null;
+			return Optional.empty();
 		}
 	}
 

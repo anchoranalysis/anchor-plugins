@@ -33,11 +33,11 @@ import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.extent.ImageRes;
-import org.anchoranalysis.image.objmask.ObjMask;
+import org.anchoranalysis.image.objectmask.ObjectMask;
 
 public class RslvdEllipsoid {
 	private MarkEllipsoid mark;
-	private ObjMask objMask;
+	private ObjectMask objMask;
 	private boolean include;
 	private RslvdObjMaskList assignedObjs = new RslvdObjMaskList();
 	private double maxRadius;
@@ -90,7 +90,7 @@ public class RslvdEllipsoid {
 		return mark;
 	}
 
-	public ObjMask getObjMask() {
+	public ObjectMask getObjMask() {
 		return objMask;
 	}
 

@@ -34,7 +34,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.Positive;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.bean.provider.ChnlProviderOne;
-import org.anchoranalysis.image.chnl.Chnl;
+import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.convert.IJWrap;
 import org.anchoranalysis.image.voxel.box.VoxelBoxWrapper;
 
@@ -46,7 +46,7 @@ public class ChnlProviderGaussianBlurIJ extends ChnlProviderOne {
 	// END BEAN PROPERTIES
 
 	@SuppressWarnings("deprecation")
-	private Chnl blur( Chnl chnl ) {
+	private Channel blur( Channel chnl ) {
 		
 		GaussianBlur gb = new GaussianBlur();
 
@@ -62,7 +62,7 @@ public class ChnlProviderGaussianBlurIJ extends ChnlProviderOne {
 	}
 	
 	@Override
-	public Chnl createFromChnl(Chnl chnl) throws CreateException {
+	public Channel createFromChnl(Channel chnl) throws CreateException {
 		return blur(chnl);
 	}
 

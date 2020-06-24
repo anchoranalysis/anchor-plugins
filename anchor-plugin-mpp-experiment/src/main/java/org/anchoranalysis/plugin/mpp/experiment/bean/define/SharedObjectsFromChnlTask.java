@@ -2,6 +2,8 @@ package org.anchoranalysis.plugin.mpp.experiment.bean.define;
 
 
 
+import java.util.Optional;
+
 /*
  * #%L
  * anchor-plugin-mpp-experiment
@@ -35,7 +37,7 @@ import org.anchoranalysis.core.error.reporter.ErrorReporter;
 import org.anchoranalysis.core.index.GetOperationFailedException;
 import org.anchoranalysis.core.progress.ProgressReporterNull;
 import org.anchoranalysis.experiment.JobExecutionException;
-import org.anchoranalysis.image.chnl.Chnl;
+import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.experiment.bean.task.RasterTask;
 import org.anchoranalysis.image.experiment.identifiers.ImgStackIdentifiers;
 import org.anchoranalysis.image.io.RasterIOException;
@@ -72,13 +74,13 @@ public class SharedObjectsFromChnlTask extends RasterTask {
 		}
 		
 		try {
-			Chnl inputImage = ncc.getChnlOrNull(ImgStackIdentifiers.INPUT_IMAGE, 0, ProgressReporterNull.get());
-			if (inputImage!=null) {
+			Optional<Channel> inputImage = ncc.getChnlOrNull(ImgStackIdentifiers.INPUT_IMAGE, 0, ProgressReporterNull.get());
+			inputImage.ifPresent( image ->
 				context.getOutputManager().getWriterCheckIfAllowed().write(
 					outputNameOriginal,
-					() -> new ChnlGenerator(inputImage,"original")
-				);
-			}
+					() -> new ChnlGenerator(image,"original")
+				)
+			);
 
 			define.processInput(ncc, context);
 						

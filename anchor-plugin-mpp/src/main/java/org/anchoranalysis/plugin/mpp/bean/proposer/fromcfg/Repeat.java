@@ -1,5 +1,7 @@
 package org.anchoranalysis.plugin.mpp.bean.proposer.fromcfg;
 
+import java.util.Optional;
+
 import org.anchoranalysis.anchor.mpp.bean.proposer.MarkFromCfgProposer;
 import org.anchoranalysis.anchor.mpp.cfg.Cfg;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
@@ -51,20 +53,20 @@ public class Repeat extends MarkFromCfgProposer {
 	}
 
 	@Override
-	public Mark markFromCfg(Cfg cfg, ProposerContext context) throws ProposalAbnormalFailureException {
+	public Optional<Mark> markFromCfg(Cfg cfg, ProposerContext context) throws ProposalAbnormalFailureException {
 		
 		context.addErrorLevel("MarkFromCfgProposerRepeat");
 		
 		for (int i=0; i<maxIter; i++) {
-			Mark m = markFromCfgProposer.markFromCfg(cfg, context);
-			if (m!=null) {
-				return m;
+			Optional<Mark> mark = markFromCfgProposer.markFromCfg(cfg, context);
+			if (mark.isPresent()) {
+				return mark;
 			}
 		}
 		
 		context.getErrorNode().add("maxIter reached");
 		
-		return null;
+		return Optional.empty();
 	}
 
 	public MarkFromCfgProposer getMarkFromCfgProposer() {

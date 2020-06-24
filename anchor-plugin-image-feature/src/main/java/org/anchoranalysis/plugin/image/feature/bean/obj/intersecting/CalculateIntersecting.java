@@ -29,22 +29,22 @@ package org.anchoranalysis.plugin.image.feature.bean.obj.intersecting;
 import org.anchoranalysis.feature.cache.calculation.ResolvedCalculation;
 import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
 import org.anchoranalysis.image.feature.objmask.pair.FeatureInputPairObjs;
-import org.anchoranalysis.image.objmask.ObjMaskCollection;
+import org.anchoranalysis.image.objectmask.ObjectCollection;
 import org.anchoranalysis.plugin.image.feature.obj.pair.CalculateInputFromDelegate;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
-public class CalculateIntersecting extends CalculateInputFromDelegate<FeatureInputPairObjs, FeatureInputSingleObj, ObjMaskCollection> {
+public class CalculateIntersecting extends CalculateInputFromDelegate<FeatureInputPairObjs, FeatureInputSingleObj, ObjectCollection> {
 
 	private int index;
 	
-	public CalculateIntersecting(ResolvedCalculation<ObjMaskCollection, FeatureInputSingleObj> intersecting, int index) {
+	public CalculateIntersecting(ResolvedCalculation<ObjectCollection, FeatureInputSingleObj> intersecting, int index) {
 		super(intersecting);
 		this.index = index;
 	}
 	
 	@Override
-	protected FeatureInputPairObjs deriveFromDelegate(FeatureInputSingleObj input, ObjMaskCollection delegate) {
+	protected FeatureInputPairObjs deriveFromDelegate(FeatureInputSingleObj input, ObjectCollection delegate) {
 		return new FeatureInputPairObjs(
 			input.getObjMask(),
 			delegate.get(index),

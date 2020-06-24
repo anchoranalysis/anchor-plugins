@@ -31,8 +31,8 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.bean.provider.ChnlProvider;
 import org.anchoranalysis.image.bean.provider.ChnlProviderOne;
-import org.anchoranalysis.image.bean.provider.KeyValueCondition;
-import org.anchoranalysis.image.chnl.Chnl;
+import org.anchoranalysis.image.channel.Channel;
+import org.anchoranalysis.plugin.image.bean.params.KeyValueCondition;
 
 // If a param is equal to a particular value, do something
 public class ChnlProviderIfParamEquals extends ChnlProviderOne {
@@ -47,7 +47,7 @@ public class ChnlProviderIfParamEquals extends ChnlProviderOne {
 	// END BEAN PROPERTIES
 	
 	@Override
-	public Chnl createFromChnl(Chnl chnl) throws CreateException {
+	public Channel createFromChnl(Channel chnl) throws CreateException {
 		if(condition.isConditionTrue()) {
 			return chnl;
 		} else {

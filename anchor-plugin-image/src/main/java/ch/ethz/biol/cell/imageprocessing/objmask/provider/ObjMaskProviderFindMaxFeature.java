@@ -33,33 +33,34 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorSingle;
 import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
-import org.anchoranalysis.image.objmask.ObjMask;
-import org.anchoranalysis.image.objmask.ObjMaskCollection;
+import org.anchoranalysis.image.objectmask.ObjectMask;
+import org.anchoranalysis.image.objectmask.ObjectCollection;
+import org.anchoranalysis.image.objectmask.ObjectCollectionFactory;
 
 public class ObjMaskProviderFindMaxFeature extends ObjMaskProviderFindMaxFeatureBase {
 
 	@Override
-	public ObjMaskCollection createFromObjs( ObjMaskCollection objMaskCollection ) throws CreateException {
+	public ObjectCollection createFromObjs( ObjectCollection objMaskCollection ) throws CreateException {
 
-		Optional<ObjMask> max = findMaxObj(
+		Optional<ObjectMask> max = findMaxObj(
 			createSession(),
 			objMaskCollection
 		);
 		
-		ObjMaskCollection out = new ObjMaskCollection();
-		max.ifPresent( obj->
-			out.add(obj)
-		);
-		return out;
+		if (max.isPresent()) {
+			return ObjectCollectionFactory.from(max.get());
+		} else {
+			return ObjectCollectionFactory.empty();
+		}
 	}
 	
-	private Optional<ObjMask> findMaxObj( FeatureCalculatorSingle<FeatureInputSingleObj> session, ObjMaskCollection in ) throws CreateException {
+	private Optional<ObjectMask> findMaxObj( FeatureCalculatorSingle<FeatureInputSingleObj> session, ObjectCollection in ) throws CreateException {
 		
 		try {
-			ObjMask max = null;
+			ObjectMask max = null;
 			
 			double maxVal = 0;
-			for( ObjMask om : in ) {
+			for( ObjectMask om : in ) {
 				
 				double featureVal = session.calc(
 					new FeatureInputSingleObj(om)

@@ -31,18 +31,18 @@ import org.anchoranalysis.feature.cache.calculation.FeatureCalculation;
 import org.anchoranalysis.feature.cache.calculation.ResolvedCalculationMap;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
-import org.anchoranalysis.image.objmask.ObjMask;
+import org.anchoranalysis.image.objectmask.ObjectMask;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
-public abstract class CalculateObjMask extends FeatureCalculation<ObjMask,FeatureInputSingleObj> {
+public abstract class CalculateObjMask extends FeatureCalculation<ObjectMask,FeatureInputSingleObj> {
 
-	private ResolvedCalculationMap<ObjMask,FeatureInputSingleObj,Integer> map;
+	private ResolvedCalculationMap<ObjectMask,FeatureInputSingleObj,Integer> map;
 	private int iterations;
 
 	protected CalculateObjMask(
 		int iterations,
-		ResolvedCalculationMap<ObjMask,FeatureInputSingleObj,Integer> map
+		ResolvedCalculationMap<ObjectMask,FeatureInputSingleObj,Integer> map
 	) {
 		super();
 		this.iterations = iterations;
@@ -55,7 +55,7 @@ public abstract class CalculateObjMask extends FeatureCalculation<ObjMask,Featur
 	}
 
 	@Override
-	protected ObjMask execute( FeatureInputSingleObj params ) throws FeatureCalcException {
+	protected ObjectMask execute( FeatureInputSingleObj params ) throws FeatureCalcException {
 		
 		if (iterations==0) {
 			return params.getObjMask();

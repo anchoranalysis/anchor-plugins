@@ -1,5 +1,7 @@
 package org.anchoranalysis.plugin.mpp.sgmn.cfg.bean.kernel.independent;
 
+import java.util.Optional;
+
 import org.anchoranalysis.anchor.mpp.bean.init.MPPInitParams;
 import org.anchoranalysis.anchor.mpp.bean.proposer.MarkMergeProposer;
 import org.anchoranalysis.anchor.mpp.bean.regionmap.RegionMap;
@@ -68,7 +70,7 @@ public class KernelMerge extends KernelPosNeg<CfgNRGPixelized> {
 	// END BEAN PROPERTIES
 
 	private Pair<Mark> pair;
-	private Mark markAdded;
+	private Optional<Mark> markAdded;
 	
 	private enum FailedProposalType {
 		NO_PAIRS,
@@ -98,27 +100,31 @@ public class KernelMerge extends KernelPosNeg<CfgNRGPixelized> {
 	}
 	
 	@Override
-	public CfgNRGPixelized makeProposal(CfgNRGPixelized exst, KernelCalcContext context) throws KernelCalcNRGException {
+	public Optional<CfgNRGPixelized> makeProposal(Optional<CfgNRGPixelized> exst, KernelCalcContext context) throws KernelCalcNRGException {
+		
+		if (exst.isPresent()) {
+			return Optional.empty();
+		}
 		
 		ProposerContext propContext = context.proposer();
 		
-		pair = pairCollection.randomPairNonUniform( propContext.getRe() );
+		pair = pairCollection.randomPairNonUniform( propContext.getRandomNumberGenerator() );
 		if (pair==null) {
 			failedProposalType = FailedProposalType.NO_PAIRS;
-			markAdded = null;
+			markAdded = Optional.empty();
 			propContext.getErrorNode().add("cannot generate pair");
-			return null;
+			return Optional.empty();
 		}
 		
-		PxlMarkMemo pmmSrc = exst.getMemoForMark(pair.getSource());
-		PxlMarkMemo pmmDest = exst.getMemoForMark(pair.getDestination());
+		PxlMarkMemo pmmSrc = exst.get().getMemoForMark(pair.getSource());
+		PxlMarkMemo pmmDest = exst.get().getMemoForMark(pair.getDestination());
 				
 		// How and why does this happen?
 		if (pmmSrc==null||pmmDest==null) {
 			pair = null;
-			markAdded = null;
+			markAdded = Optional.empty();
 			failedProposalType = FailedProposalType.CANNOT_GENERATE_MERGE;
-			return null;
+			return Optional.empty();
 		}
 		
 		try {
@@ -135,23 +141,28 @@ public class KernelMerge extends KernelPosNeg<CfgNRGPixelized> {
 		}				
 		
 		// If we can't generate a successful merge, we cancel the kernel
-		if (markAdded==null) {
+		if (!markAdded.isPresent()) {
 			pair = null;
 			markAdded = null;
 			failedProposalType = FailedProposalType.CANNOT_GENERATE_MERGE;
-			return null;
+			return Optional.empty();
 		}
 		
-		markAdded.setId( context.cfgGen().getCfgGen().idAndIncrement() );
+		markAdded.get().setId(
+			context.cfgGen().getCfgGen().idAndIncrement()
+		);
 
-		return createCfgNRG(
-			exst,
-			propContext.getNrgStack(),
-			propContext.getRegionMap()
+		return Optional.of(
+			createCfgNRG(
+				markAdded.get(),
+				exst.get(),
+				propContext.getNrgStack(),
+				propContext.getRegionMap()
+			)
 		);
 	}
 	
-	private CfgNRGPixelized createCfgNRG(CfgNRGPixelized exst, NRGStackWithParams nrgStack, RegionMap regionMap ) throws KernelCalcNRGException {
+	private CfgNRGPixelized createCfgNRG(Mark mark, CfgNRGPixelized exst, NRGStackWithParams nrgStack, RegionMap regionMap ) throws KernelCalcNRGException {
 		
 		// we need to get indexes for each mark (well make this tidier)
 		int srcIndex = exst.getCfg().indexOf( pair.getSource() );
@@ -171,7 +182,11 @@ public class KernelMerge extends KernelPosNeg<CfgNRGPixelized> {
 			);
 		}
 		
-		PxlMarkMemo pmm = PxlMarkMemoFactory.create( markAdded, nrgStack.getNrgStack(), regionMap );
+		PxlMarkMemo pmm = PxlMarkMemoFactory.create(
+			mark,
+			nrgStack.getNrgStack(),
+			regionMap
+		);
 		
 		try {
 			newNRG.add( pmm, nrgStack.getNrgStack() );
@@ -216,7 +231,7 @@ public class KernelMerge extends KernelPosNeg<CfgNRGPixelized> {
 			memoList.remove(rmvIndex2);
 		}
 		
-		PxlMarkMemo memoAdded = accptd.getMemoForMark( markAdded );
+		PxlMarkMemo memoAdded = accptd.getMemoForMark( markAdded.get() );
 		
 		// Should always find one
 		assert memoAdded!=null;
@@ -227,7 +242,12 @@ public class KernelMerge extends KernelPosNeg<CfgNRGPixelized> {
 	@Override
 	public String dscrLast() {
 		if (pair != null && pair.getSource()!=null && pair.getDestination() !=null) {
-			return String.format("merge %d and %d into %d", pair.getSource().getId(), pair.getDestination().getId(), markAdded.getId() );
+			return String.format(
+				"merge %d and %d into %d",
+				pair.getSource().getId(),
+				pair.getDestination().getId(),
+				markAdded.map(Mark::getId).orElse(-1)
+			);
 		} else {
 			return "merge";
 		}
@@ -235,7 +255,11 @@ public class KernelMerge extends KernelPosNeg<CfgNRGPixelized> {
 	
 	@Override
 	public int[] changedMarkIDArray() {
-		return new int[]{ pair.getSource().getId(), pair.getDestination().getId(), markAdded.getId() };
+		return new int[]{
+			pair.getSource().getId(),
+			pair.getDestination().getId(),
+			markAdded.map(Mark::getId).orElse(-1)
+		};
 	}
 
 

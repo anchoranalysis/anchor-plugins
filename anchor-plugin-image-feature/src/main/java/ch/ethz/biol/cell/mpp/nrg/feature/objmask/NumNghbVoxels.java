@@ -37,7 +37,7 @@ import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelBoxByte;
 import org.anchoranalysis.image.feature.bean.objmask.FeatureObjMask;
 import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
-import org.anchoranalysis.image.objmask.ObjMask;
+import org.anchoranalysis.image.objectmask.ObjectMask;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.anchoranalysis.image.voxel.datatype.IncorrectVoxelDataTypeException;
 import org.anchoranalysis.image.voxel.kernel.ApplyKernel;
@@ -68,7 +68,7 @@ public class NumNghbVoxels extends FeatureObjMask {
 
 		FeatureInputSingleObj inputSessionless = input.get();
 		
-		ObjMask om = inputSessionless.getObjMask();
+		ObjectMask om = inputSessionless.getObjMask();
 		
 		VoxelBox<ByteBuffer> vb;
 		try {

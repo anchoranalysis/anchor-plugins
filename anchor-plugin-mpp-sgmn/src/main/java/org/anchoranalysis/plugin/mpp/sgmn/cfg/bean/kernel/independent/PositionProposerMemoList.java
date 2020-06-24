@@ -97,12 +97,12 @@ class PositionProposerMemoList implements PositionProposer {
 			
 			// We keep randomly picking a memo from the list 
 			// And randomly taking positions until we find a position that matches
-			int pmmIndex = (int) (context.getRe().nextDouble() * listPxlMarkMemo.size());
+			int pmmIndex = (int) (context.getRandomNumberGenerator().nextDouble() * listPxlMarkMemo.size());
 			PxlMarkMemo pmm = listPxlMarkMemo.get(pmmIndex);
 			PxlMark pm = pmm.doOperation();
 			
 			BoundingBox bbox = pm.getBoundingBox(regionID);
-			pnt = randomPosition(bbox, context.getRe());
+			pnt = randomPosition(bbox, context.getRandomNumberGenerator());
 			
 			int relX = (int) pnt.getX() - bbox.getCrnrMin().getX();
 			int relY = (int) pnt.getY() - bbox.getCrnrMin().getY();

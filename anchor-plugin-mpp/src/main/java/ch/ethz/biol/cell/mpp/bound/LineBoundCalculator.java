@@ -32,13 +32,13 @@ import java.nio.ByteBuffer;
 import org.anchoranalysis.anchor.mpp.bean.bound.BoundCalculator;
 import org.anchoranalysis.anchor.mpp.bean.bound.RslvdBound;
 import org.anchoranalysis.anchor.mpp.bound.BidirectionalBound;
-import org.anchoranalysis.anchor.mpp.proposer.error.ErrorNode;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
+import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 import org.anchoranalysis.image.bean.provider.BinaryChnlProvider;
-import org.anchoranalysis.image.chnl.Chnl;
+import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.convert.ByteConverter;
 import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
@@ -50,15 +50,47 @@ public class LineBoundCalculator extends BoundCalculator {
 	@BeanField
 	private BinaryChnlProvider outlineProvider;
 	// END BEAN PROPERTIES
-		
-	//private RslvdBound minMax;
-	//private ImgStack stack;
 
 	private double extra = 0;
-	
-	
+
 	public LineBoundCalculator() {
 		super();
+	}
+	
+	@Override
+	public BidirectionalBound calcBound(Point3d point, RotationMatrix rotMatrix) throws OperationFailedException {
+		
+		try {
+			Channel outlineChnl = outlineProvider.create().getChnl();
+			assert(outlineChnl!=null);
+			
+			RslvdBound minMax = getSharedObjects().getMarkBounds().calcMinMax( outlineChnl.getDimensions().getRes(), rotMatrix.getNumDim() >= 3 );
+					
+			int maxPossiblePoint = (int) Math.ceil( minMax.getMax() );
+			
+			double xMarg = rotMatrix.getMatrix().get(0,0);
+			double yMarg = rotMatrix.getMatrix().get(1,0);
+			double zMarg = rotMatrix.getNumDim() >= 3 ? rotMatrix.getMatrix().get(2,0) : 0;
+			
+			// This is 2D Type of code
+			double maxReachedFwd = maxReachablePoint( outlineChnl, point, xMarg, yMarg, zMarg, maxPossiblePoint );
+			double maxReachedRvrs = maxReachablePoint( outlineChnl, point, -1 * xMarg, -1 * yMarg, -1 * zMarg, maxPossiblePoint );
+			
+			double min = minMax.getMin();
+			
+			RslvdBound boundFwd = createBoundForDirection(min, maxReachedFwd );
+			RslvdBound boundRvrs = createBoundForDirection(min, maxReachedRvrs );
+			
+			BidirectionalBound bi = new BidirectionalBound();
+			bi.setForward(boundFwd);
+			bi.setReverse(boundRvrs);
+			return bi;
+			
+		} catch( CreateException e ) {
+			throw new OperationFailedException(e);
+		} catch (NamedProviderGetException e) {
+			throw new OperationFailedException(e.summarize());
+		}
 	}
 
 	private static RslvdBound createBoundForDirection( double min, double maxDirection ) {
@@ -74,54 +106,7 @@ public class LineBoundCalculator extends BoundCalculator {
 		}
 	}
 	
-	@Override
-	public BidirectionalBound calcBound(Point3d point, RotationMatrix rotMatrix, ErrorNode proposerFailureDescription) {
-		
-		try {
-			//assert(stack!=null);
-			
-			Chnl outlineChnl = outlineProvider.create().getChnl();
-			assert(outlineChnl!=null);
-			
-			proposerFailureDescription = proposerFailureDescription.add("LineBoundCalculator");
-			
-			RslvdBound minMax = getSharedObjects().getMarkBounds().calcMinMax( outlineChnl.getDimensions().getRes(), rotMatrix.getNumDim() >= 3 );
-					
-			int maxPossiblePoint = (int) Math.ceil( minMax.getMax() );
-			
-			double xMarg = rotMatrix.getMatrix().get(0,0);
-			double yMarg = rotMatrix.getMatrix().get(1,0);
-			double zMarg = rotMatrix.getNumDim() >= 3 ? rotMatrix.getMatrix().get(2,0) : 0;
-			
-			// This is 2D Type of code
-			double maxReachedFwd = maxReachablePoint( outlineChnl, point, xMarg, yMarg, zMarg, maxPossiblePoint );
-			double maxReachedRvrs = maxReachablePoint( outlineChnl, point, -1 * xMarg, -1 * yMarg, -1 * zMarg, maxPossiblePoint );
-			
-			//System.out.printf("Max-reached-forward=%f   Max-reached-negative=%f\n", maxReachedFwd, maxReachedRvrs);
-			
-			double min = minMax.getMin();
-			
-			RslvdBound boundFwd = createBoundForDirection(min, maxReachedFwd );
-			RslvdBound boundRvrs = createBoundForDirection(min, maxReachedRvrs );
-			
-			BidirectionalBound bi = new BidirectionalBound();
-			bi.setForward(boundFwd);
-			bi.setReverse(boundRvrs);
-			
-			proposerFailureDescription.addFormatted("forward bound: %s", boundFwd);
-			proposerFailureDescription.addFormatted("reverse bound: %s", boundRvrs);
-			
-			return bi;
-		} catch( CreateException e ) {
-			proposerFailureDescription.add(e);
-			return null;
-		} catch (NamedProviderGetException e) {
-			proposerFailureDescription.add(e.summarize().toString());
-			return null;
-		}
-	}
-	
-	private double maxReachablePoint( Chnl voxels, Point3d point, double xMarg, double yMarg, double zMarg, int maxPossiblePoint ) {
+	private double maxReachablePoint( Channel voxels, Point3d point, double xMarg, double yMarg, double zMarg, int maxPossiblePoint ) {
 		
 		VoxelBox<ByteBuffer> vb = voxels.getVoxelBox().asByte();
 		

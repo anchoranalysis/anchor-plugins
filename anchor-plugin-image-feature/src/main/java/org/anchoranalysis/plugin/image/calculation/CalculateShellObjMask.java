@@ -36,24 +36,24 @@ import org.anchoranalysis.feature.cache.calculation.ResolvedCalculation;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
-import org.anchoranalysis.image.objmask.ObjMask;
-import org.anchoranalysis.image.objmask.morph.MorphologicalErosion;
+import org.anchoranalysis.image.objectmask.ObjectMask;
+import org.anchoranalysis.image.objectmask.morph.MorphologicalErosion;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
 
-public class CalculateShellObjMask extends FeatureCalculation<ObjMask,FeatureInputSingleObj> {
+public class CalculateShellObjMask extends FeatureCalculation<ObjectMask,FeatureInputSingleObj> {
 
 	private int iterationsErosionSecond;
 	private boolean do3D;
 	private boolean inverse;
 
-	private ResolvedCalculation<ObjMask,FeatureInputSingleObj> ccDilation;
-	private ResolvedCalculation<ObjMask,FeatureInputSingleObj> ccErosion;
+	private ResolvedCalculation<ObjectMask,FeatureInputSingleObj> ccDilation;
+	private ResolvedCalculation<ObjectMask,FeatureInputSingleObj> ccErosion;
 			
 	private CalculateShellObjMask(
-		ResolvedCalculation<ObjMask,FeatureInputSingleObj> ccDilation,
-		ResolvedCalculation<ObjMask,FeatureInputSingleObj> ccErosion,
+		ResolvedCalculation<ObjectMask,FeatureInputSingleObj> ccDilation,
+		ResolvedCalculation<ObjectMask,FeatureInputSingleObj> ccErosion,
 		int iterationsErosionSecond,
 		boolean do3D,
 		boolean inverse
@@ -103,7 +103,7 @@ public class CalculateShellObjMask extends FeatureCalculation<ObjMask,FeatureInp
 	}
 	
 	
-	public static FeatureCalculation<ObjMask,FeatureInputSingleObj> createFromCache(
+	public static FeatureCalculation<ObjectMask,FeatureInputSingleObj> createFromCache(
 		CalculationResolver<FeatureInputSingleObj> params,
 		int iterationsDilation,
 		int iterationsErosion,
@@ -111,10 +111,10 @@ public class CalculateShellObjMask extends FeatureCalculation<ObjMask,FeatureInp
 		boolean do3D,
 		boolean inverse
 	) throws FeatureCalcException {
-		ResolvedCalculation<ObjMask,FeatureInputSingleObj> ccDilation = CalculateDilation.createFromCache(
+		ResolvedCalculation<ObjectMask,FeatureInputSingleObj> ccDilation = CalculateDilation.createFromCache(
 			params, iterationsDilation, do3D	
 		);
-		ResolvedCalculation<ObjMask,FeatureInputSingleObj> ccErosion = CalculateErosion.createFromCacheRslvd(
+		ResolvedCalculation<ObjectMask,FeatureInputSingleObj> ccErosion = CalculateErosion.createFromCacheRslvd(
 			params, iterationsErosion, do3D
 		);
 	
@@ -128,17 +128,17 @@ public class CalculateShellObjMask extends FeatureCalculation<ObjMask,FeatureInp
 	}
 
 	@Override
-	protected ObjMask execute( FeatureInputSingleObj input ) throws FeatureCalcException {
+	protected ObjectMask execute( FeatureInputSingleObj input ) throws FeatureCalcException {
 	
 		ImageDim sd = input.getDimensionsRequired();
 		
-		ObjMask om = input.getObjMask();
-		ObjMask omShell = createShellObjMask( input, om, ccDilation, ccErosion, iterationsErosionSecond, do3D );
+		ObjectMask om = input.getObjMask();
+		ObjectMask omShell = createShellObjMask( input, om, ccDilation, ccErosion, iterationsErosionSecond, do3D );
 		
 		if (inverse) {
-			ObjMask omDup = om.duplicate();
+			ObjectMask omDup = om.duplicate();
 			
-			Optional<ObjMask> omShellIntersected = omShell.intersect( omDup, sd );
+			Optional<ObjectMask> omShellIntersected = omShell.intersect( omDup, sd );
 			omShellIntersected.ifPresent( shellIntersected ->
 				omDup.binaryVoxelBox().setPixelsCheckMaskOff(
 					shellIntersected.relMaskTo(omDup.getBoundingBox())
@@ -151,18 +151,18 @@ public class CalculateShellObjMask extends FeatureCalculation<ObjMask,FeatureInp
 		}
 	}
 	
-	private static ObjMask createShellObjMask(
+	private static ObjectMask createShellObjMask(
 		FeatureInputSingleObj input,
-		ObjMask om,
-		ResolvedCalculation<ObjMask,FeatureInputSingleObj> ccDilation,
-		ResolvedCalculation<ObjMask,FeatureInputSingleObj> ccErosion,
+		ObjectMask om,
+		ResolvedCalculation<ObjectMask,FeatureInputSingleObj> ccDilation,
+		ResolvedCalculation<ObjectMask,FeatureInputSingleObj> ccErosion,
 		int iterationsErosionSecond,
 		boolean do3D
 	) throws FeatureCalcException {
 
-		ObjMask omDilated = ccDilation.getOrCalculate(input).duplicate();
+		ObjectMask omDilated = ccDilation.getOrCalculate(input).duplicate();
 		
-		ObjMask omEroded = ccErosion.getOrCalculate(input);
+		ObjectMask omEroded = ccErosion.getOrCalculate(input);
 		
 		assert( omDilated.getBoundingBox().contains().box(omEroded.getBoundingBox()) );
 		
@@ -183,7 +183,7 @@ public class CalculateShellObjMask extends FeatureCalculation<ObjMask,FeatureInp
 			throw new FeatureCalcException(e);
 		}
 		
-		ObjMask relMask = omEroded.relMaskTo( omDilated.getBoundingBox() );
+		ObjectMask relMask = omEroded.relMaskTo( omDilated.getBoundingBox() );
 		
 		omDilated.binaryVoxelBox().setPixelsCheckMaskOff( relMask );
 	

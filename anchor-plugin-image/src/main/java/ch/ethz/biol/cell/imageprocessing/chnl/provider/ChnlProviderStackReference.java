@@ -31,7 +31,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 import org.anchoranalysis.image.bean.provider.ChnlProvider;
-import org.anchoranalysis.image.chnl.Chnl;
+import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.stack.Stack;
 
 public class ChnlProviderStackReference extends ChnlProvider {
@@ -44,10 +44,10 @@ public class ChnlProviderStackReference extends ChnlProvider {
 	private String stackProviderID;
 	// END
 	
-	private Chnl chnl;
+	private Channel chnl;
 
 	@Override
-	public Chnl create() throws CreateException {
+	public Channel create() throws CreateException {
 		
 		try {
 			if (chnl==null) {
@@ -82,11 +82,11 @@ public class ChnlProviderStackReference extends ChnlProvider {
 		this.stackProviderID = stackProviderID;
 	}
 
-	public Chnl getChnl() {
+	public Channel getChnl() {
 		return chnl;
 	}
 
-	public void setChnl(Chnl chnl) {
+	public void setChnl(Channel chnl) {
 		this.chnl = chnl;
 	}
 

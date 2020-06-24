@@ -37,10 +37,10 @@ import org.anchoranalysis.feature.cache.calculation.FeatureCalculation;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.nrg.NRGStack;
 import org.anchoranalysis.image.binary.values.BinaryValues;
-import org.anchoranalysis.image.chnl.Chnl;
+import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
-import org.anchoranalysis.image.objmask.ObjMask;
+import org.anchoranalysis.image.objectmask.ObjectMask;
 import org.anchoranalysis.plugin.image.calculation.CalculateShellObjMask;
 
 /**
@@ -86,13 +86,13 @@ public abstract class IntensityMeanShellBase extends FeatureNrgChnl {
 	}
 	
 	@Override
-	protected double calcForChnl(SessionInput<FeatureInputSingleObj> input, Chnl chnl) throws FeatureCalcException {
+	protected double calcForChnl(SessionInput<FeatureInputSingleObj> input, Channel chnl) throws FeatureCalcException {
 
-		ObjMask om = createShell(input);
+		ObjectMask om = createShell(input);
 		
 		if (nrgIndexMask!=-1) {
 			// If an NRG mask is defined...
-			Optional<ObjMask> omIntersected = intersectWithNRGMask(
+			Optional<ObjectMask> omIntersected = intersectWithNRGMask(
 				om,
 				input.get().getNrgStackRequired().getNrgStack()
 			);
@@ -107,8 +107,8 @@ public abstract class IntensityMeanShellBase extends FeatureNrgChnl {
 		return calcForShell(om,	chnl);
 	}
 	
-	private ObjMask createShell( SessionInput<FeatureInputSingleObj> input ) throws FeatureCalcException {
-		FeatureCalculation<ObjMask,FeatureInputSingleObj> ccShellObjMask = CalculateShellObjMask.createFromCache(
+	private ObjectMask createShell( SessionInput<FeatureInputSingleObj> input ) throws FeatureCalcException {
+		FeatureCalculation<ObjectMask,FeatureInputSingleObj> ccShellObjMask = CalculateShellObjMask.createFromCache(
 			input.resolver(),
 			iterationsDilation,
 			getIterationsErosion(),
@@ -120,17 +120,17 @@ public abstract class IntensityMeanShellBase extends FeatureNrgChnl {
 		return input.calc(ccShellObjMask);
 	}
 	
-	private Optional<ObjMask> intersectWithNRGMask( ObjMask om, NRGStack nrgStack ) throws FeatureCalcException {
+	private Optional<ObjectMask> intersectWithNRGMask( ObjectMask om, NRGStack nrgStack ) throws FeatureCalcException {
 		return om.intersect(
 			createNrgMask(nrgStack),
 			nrgStack.getDimensions()
 		);
 	}
 	
-	protected abstract double calcForShell( ObjMask shell, Chnl chnl) throws FeatureCalcException;
+	protected abstract double calcForShell( ObjectMask shell, Channel chnl) throws FeatureCalcException;
 
-	private ObjMask createNrgMask( NRGStack nrgStack ) throws FeatureCalcException {
-		return new ObjMask(
+	private ObjectMask createNrgMask( NRGStack nrgStack ) throws FeatureCalcException {
+		return new ObjectMask(
 			new BoundingBox( nrgStack.getDimensions().getExtnt() ),
 			nrgStack.getChnl(nrgIndexMask).getVoxelBox().asByte(),
 			inverseMask ? BinaryValues.getDefault().createInverted() : BinaryValues.getDefault()

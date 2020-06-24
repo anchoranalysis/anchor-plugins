@@ -38,7 +38,7 @@ import org.anchoranalysis.core.random.RandomNumberGenerator;
 import org.anchoranalysis.image.bean.provider.BinaryChnlProvider;
 import org.anchoranalysis.image.binary.BinaryChnl;
 import org.anchoranalysis.image.extent.BoundingBox;
-import org.anchoranalysis.image.objmask.ObjMask;
+import org.anchoranalysis.image.objectmask.ObjectMask;
 import org.anchoranalysis.image.outline.traverser.OutlineTraverser;
 
 import ch.ethz.biol.cell.mpp.mark.ellipsoidfitter.outlinepixelsretriever.visitscheduler.VisitScheduler;
@@ -64,8 +64,8 @@ public class TraverseOutlineOnImage extends OutlinePixelsRetriever {
 	private boolean useZ = true;
 	// END BEAN
 	
-	private ObjMask omFilled;		// Not-changed as traversal occurs
-	private ObjMask omOutline;		// Changed as traversal occurs (visited pixels are removed)
+	private ObjectMask omFilled;		// Not-changed as traversal occurs
+	private ObjectMask omOutline;		// Changed as traversal occurs (visited pixels are removed)
 	
 	public TraverseOutlineOnImage() {
 		super();
@@ -109,14 +109,14 @@ public class TraverseOutlineOnImage extends OutlinePixelsRetriever {
 		}
 		
 		try {
-			omFilled = createObjMaskForPoint(root, chnlFilled );
+			// Important, so we can use the contains function later
+			omFilled = createObjMaskForPoint(root, chnlFilled ).mapBoundingBox( bbox->
+				bbox.shiftTo( new Point3i(0,0,0) )
+			);
 		} catch (CreateException e) {
 			throw new TraverseOutlineException("Unable to create an object-mask for the filled object", e);
 		}
-		
-		// Important, so we can use the contains function later
-		omFilled.shiftTo( new Point3i(0,0,0) );
-		
+				
 		Point3i rootRelToMask = BoundingBox.relPosTo(root, omOutline.getBoundingBox().getCrnrMin());
 		try {
 			visitScheduler.afterCreateObjMask( rootRelToMask, chnlOutline.getDimensions().getRes(), re );
@@ -139,7 +139,7 @@ public class TraverseOutlineOnImage extends OutlinePixelsRetriever {
 		}
 	}
 	
-	private ObjMask createObjMaskForPoint( Point3i root, BinaryChnl chnl ) throws CreateException {
+	private ObjectMask createObjMaskForPoint( Point3i root, BinaryChnl chnl ) throws CreateException {
 				
 		try {
 			Tuple3i maxDist = visitScheduler.maxDistFromRootPoint(chnl.getDimensions().getRes()) ;
@@ -156,7 +156,7 @@ public class TraverseOutlineOnImage extends OutlinePixelsRetriever {
 			
 			assert( !box.extent().isEmpty() );
 			
-			return chnl.createMaskAlwaysNew(box);
+			return chnl.region(box,false);
 			
 		} catch (OperationFailedException e) {
 			throw new CreateException(e);

@@ -49,7 +49,7 @@ import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
  */
 public class MockFeatureWithCalculationFixture {
 
-	public final static Function<FeatureInputSingleObj,Double> DEFAULT_FUNC_NUM_PIXELS = input -> (double) input.getObjMask().numPixels();
+	public final static Function<FeatureInputSingleObj,Double> DEFAULT_FUNC_NUM_PIXELS = input -> (double) input.getObjMask().numVoxelsOn();
 	
 	@FunctionalInterface
 	public interface RunnableWithException<E extends Throwable> {

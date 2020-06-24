@@ -1,5 +1,7 @@
 package org.anchoranalysis.plugin.mpp.bean.proposer.fromcfg;
 
+import java.util.Optional;
+
 /*-
  * #%L
  * anchor-plugin-mpp
@@ -39,10 +41,11 @@ public class UniformRandom extends MarkFromCfgProposer {
 	}
 
 	@Override
-	public Mark markFromCfg(Cfg cfg, ProposerContext context) {
+	public Optional<Mark> markFromCfg(Cfg cfg, ProposerContext context) {
 		// Let's take a mark at random
-		int index = cfg.randomIndex(context.getRe());
-		return cfg.get( index );
+		int index = cfg.randomIndex(context.getRandomNumberGenerator());
+		return Optional.of(
+			cfg.get( index )
+		);
 	}
-
 }

@@ -36,8 +36,8 @@ import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
 import org.anchoranalysis.image.bean.provider.stack.StackProvider;
 import org.anchoranalysis.image.extent.Extent;
-import org.anchoranalysis.image.objmask.ObjMask;
-import org.anchoranalysis.image.objmask.ObjMaskCollection;
+import org.anchoranalysis.image.objectmask.ObjectMask;
+import org.anchoranalysis.image.objectmask.ObjectCollection;
 import org.anchoranalysis.image.scale.ScaleFactor;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.plugin.opencv.CVInit;
@@ -90,7 +90,7 @@ public class ObjMaskProviderExtractText extends ObjMaskProvider {
 	private static final int MAX_SCALE_FACTOR = (720/EAST_EXTENT.getY());
 	
 	@Override
-	public ObjMaskCollection create() throws CreateException {
+	public ObjectCollection create() throws CreateException {
 		
 		Stack stack = createInput();
 				
@@ -101,7 +101,7 @@ public class ObjMaskProviderExtractText extends ObjMaskProvider {
 		);
 		
 		// Convert marks to object-masks
-		List<WithConfidence<ObjMask>> objsWithConfidence = EastObjsExtractor.apply(
+		List<WithConfidence<ObjectMask>> objsWithConfidence = EastObjsExtractor.apply(
 			pair.getFirst(),
 			stack.getDimensions().getRes(),
 			minConfidence,
@@ -154,7 +154,7 @@ public class ObjMaskProviderExtractText extends ObjMaskProvider {
 		return stack;
 	}
 	
-	private List<WithConfidence<ObjMask>> maybeFilterList( List<WithConfidence<ObjMask>> list ) {
+	private List<WithConfidence<ObjectMask>> maybeFilterList( List<WithConfidence<ObjectMask>> list ) {
 		if (suppressNonMaxima) {
 			return new NonMaximaSuppressionObjs().apply(
 				list,

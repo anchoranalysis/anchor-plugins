@@ -1,5 +1,7 @@
 package ch.ethz.biol.cell.mpp.cfg.proposer;
 
+import java.util.Optional;
+
 import org.anchoranalysis.anchor.mpp.bean.cfg.CfgGen;
 import org.anchoranalysis.anchor.mpp.bean.proposer.CfgProposer;
 import org.anchoranalysis.anchor.mpp.bean.proposer.MarkProposer;
@@ -51,22 +53,18 @@ public class CfgProposerSimple extends CfgProposer {
 	private int numMarks = -1;	// if positive, then we use this as the definitive number of marks 
 	// END BEAN
 	
-	public CfgProposerSimple() {
-		super();
-	}
-	
 	// Generates a random configuration
 	//   * Number of objects is decided by a Poisson distribution
 	//	 * The location and attributes of marks are uniformly distributed
 	@Override
-	public Cfg propose( CfgGen cfgGen, ProposerContext context) throws ProposalAbnormalFailureException {
+	public Optional<Cfg> propose( CfgGen cfgGen, ProposerContext context) throws ProposalAbnormalFailureException {
 
 		int num_pts;
 		if (numMarks>0) {
 			num_pts = numMarks;
 		} else {
 		
-			Poisson p = context.getRe().generatePossion( cfgGen.getReferencePoissonIntensity() * context.getDimensions().getVolume() );
+			Poisson p = context.getRandomNumberGenerator().generatePossion( cfgGen.getReferencePoissonIntensity() * context.getDimensions().getVolume() );
 
 			//do {
 			num_pts = p.nextInt();
@@ -79,7 +77,7 @@ public class CfgProposerSimple extends CfgProposer {
 
 	// Generates a random configuration for a given number of points
 	//	 * The location and attributes of marks are uniformly distributed
-	private Cfg genInitRndCfgForNumPts( int num_pts, CfgGen cfgGen, ProposerContext context ) throws ProposalAbnormalFailureException {
+	private Optional<Cfg> genInitRndCfgForNumPts( int num_pts, CfgGen cfgGen, ProposerContext context ) throws ProposalAbnormalFailureException {
 		
 		Cfg cfg = new Cfg();
 		
@@ -96,7 +94,7 @@ public class CfgProposerSimple extends CfgProposer {
 			pmm = null;
 		}
 		
-		return cfg;
+		return Optional.of(cfg);
 	}
 
 	@Override

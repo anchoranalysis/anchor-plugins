@@ -40,10 +40,10 @@ import org.anchoranalysis.image.binary.logical.BinaryChnlAnd;
 import org.anchoranalysis.image.binary.logical.BinaryChnlOr;
 import org.anchoranalysis.image.binary.values.BinaryValues;
 import org.anchoranalysis.image.extent.ImageDim;
-import org.anchoranalysis.image.objmask.ObjMask;
-import org.anchoranalysis.image.objmask.ObjMaskCollection;
-import org.anchoranalysis.image.objmask.factory.CreateFromConnectedComponentsFactory;
-import org.anchoranalysis.image.objmask.ops.BinaryChnlFromObjs;
+import org.anchoranalysis.image.objectmask.ObjectMask;
+import org.anchoranalysis.image.objectmask.ObjectCollection;
+import org.anchoranalysis.image.objectmask.factory.CreateFromConnectedComponentsFactory;
+import org.anchoranalysis.image.objectmask.ops.BinaryChnlFromObjs;
 import org.anchoranalysis.image.unitvalue.UnitValueException;
 
 public class BinaryChnlProviderFill extends BinaryChnlProviderOne {
@@ -63,7 +63,7 @@ public class BinaryChnlProviderFill extends BinaryChnlProviderOne {
 		BinaryChnl bicDup = fillChnl(bic);
 		
 		BinaryValues bvOut = BinaryValues.getDefault();
-		ObjMaskCollection omcFiltered = filterObjsFromBinaryImage(bicDup);
+		ObjectCollection omcFiltered = filterObjsFromBinaryImage(bicDup);
 		return fillHoles(omcFiltered, bic, bic.getDimensions(), bvOut);
 	}
 	
@@ -84,18 +84,18 @@ public class BinaryChnlProviderFill extends BinaryChnlProviderOne {
 	}
 	
 	
-	private ObjMaskCollection filterObjsFromBinaryImage( BinaryChnl bi ) throws CreateException {
+	private ObjectCollection filterObjsFromBinaryImage( BinaryChnl bi ) throws CreateException {
 		
 		CreateFromConnectedComponentsFactory createObjMasks = new CreateFromConnectedComponentsFactory();
 		
-		ObjMaskCollection omc = createObjMasks.createConnectedComponents(bi) ;
+		ObjectCollection omc = createObjMasks.createConnectedComponents(bi) ;
 				
 		return filterObjs(omc, bi.getDimensions());
 	}
 	
-	private ObjMaskCollection filterObjs( ObjMaskCollection omc, ImageDim sd ) throws CreateException {
+	private ObjectCollection filterObjs( ObjectCollection omc, ImageDim sd ) throws CreateException {
 		
-		ObjMaskCollection out = new ObjMaskCollection();
+		ObjectCollection out = new ObjectCollection();
 		
 		double maxVolumeRslvd = 0;
 		if (maxVolume!=null) {
@@ -108,7 +108,7 @@ public class BinaryChnlProviderFill extends BinaryChnlProviderOne {
 			}				
 		}
 				 
-		for (ObjMask om : omc) {
+		for (ObjectMask om : omc) {
 			
 			if (skipAtBorder) {
 				// It's not allowed touch the border
@@ -118,7 +118,7 @@ public class BinaryChnlProviderFill extends BinaryChnlProviderOne {
 			}
 			
 			if (maxVolume!=null) {
-				if (om.numPixels()>maxVolumeRslvd) {
+				if (om.numVoxelsOn()>maxVolumeRslvd) {
 					continue;
 				}
 			}
@@ -128,7 +128,7 @@ public class BinaryChnlProviderFill extends BinaryChnlProviderOne {
 		return out;
 	}
 	
-	private static BinaryChnl fillHoles( ObjMaskCollection filled, BinaryChnl src, ImageDim sd, BinaryValues bvOut ) throws CreateException {
+	private static BinaryChnl fillHoles( ObjectCollection filled, BinaryChnl src, ImageDim sd, BinaryValues bvOut ) throws CreateException {
 		BinaryChnl bcSelected = BinaryChnlFromObjs.createFromObjs(filled, sd, bvOut);
 		BinaryChnlOr.binaryOr(bcSelected,src);
 		return bcSelected;

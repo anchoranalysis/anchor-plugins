@@ -27,6 +27,7 @@ package org.anchoranalysis.plugin.mpp.sgmn.cfg.bean.kernel.independent.pixelized
  */
 
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 
 import org.anchoranalysis.anchor.mpp.bean.proposer.MarkProposer;
@@ -38,11 +39,19 @@ import org.anchoranalysis.anchor.mpp.proposer.ProposalAbnormalFailureException;
 import org.anchoranalysis.anchor.mpp.proposer.ProposerContext;
 import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
 import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.core.functional.OptionalUtilities;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.mpp.sgmn.kernel.KernelCalcContext;
 import org.anchoranalysis.mpp.sgmn.kernel.KernelCalcNRGException;
 import org.anchoranalysis.plugin.mpp.sgmn.cfg.bean.kernel.independent.KernelBirth;
 
+/**
+ * 
+ * <p>As an example, this is like sampling WITH replacement.</p>
+ * 
+ * @author Owen Feehan
+ *
+ */
 public class KernelBirthPixelized extends KernelBirth<CfgNRGPixelized> {
 
 	/**
@@ -52,36 +61,19 @@ public class KernelBirthPixelized extends KernelBirth<CfgNRGPixelized> {
 
 	// START BEAN PROPERTIES
 	@BeanField
-	private MarkProposer markProposer = null;
+	private MarkProposer markProposer;
 	// END BEAN PROPERTIES
 
-	@Override
-	public void updateAfterAccpt(
-			ListUpdatableMarkSetCollection updatableMarkSetCollection, CfgNRGPixelized exst, CfgNRGPixelized accptd) throws UpdateMarkSetException {
-		
-		for( Mark m : getMarkNew() ) {
-			PxlMarkMemo memo = accptd.getMemoForMark( m );
-			exst.addToUpdatablePairList( updatableMarkSetCollection, memo );
-		}
+	public KernelBirthPixelized() {
+		// Standard bean constructor
 	}
 	
-	public MarkProposer getMarkProposer() {
-		return markProposer;
-	}
-
-	public void setMarkProposer(MarkProposer markProposer) {
+	public KernelBirthPixelized(MarkProposer markProposer) {
 		this.markProposer = markProposer;
 	}
-
-	@Override
-	public boolean isCompatibleWith(Mark testMark) {
-		return markProposer.isCompatibleWith(testMark);
-	}
 	
-	
-
 	@Override
-	protected Set<Mark> proposeNewMarks(CfgNRGPixelized exst, int number, KernelCalcContext context) {
+	protected Optional<Set<Mark>> proposeNewMarks(CfgNRGPixelized exst, int number, KernelCalcContext context) {
 		
 		Set<Mark> out = new HashSet<>();
 		for( int i=0; i<number; i++) {
@@ -90,36 +82,59 @@ public class KernelBirthPixelized extends KernelBirth<CfgNRGPixelized> {
 				out.add(m);
 			}
 		}
-		return out;
-	}
-	
-	private Mark proposeNewMark(CfgNRGPixelized exst, KernelCalcContext context) {
-		return context.cfgGen().getCfgGen().newTemplateMark();
+		return Optional.of(out);
 	}
 	
 	@Override
-	protected CfgNRGPixelized calcForNewMark( CfgNRGPixelized exst, Set<Mark> listMarksNew, KernelCalcContext context ) throws KernelCalcNRGException {
+	protected Optional<CfgNRGPixelized> calcForNewMark(
+		CfgNRGPixelized exst,
+		Set<Mark> listMarksNew,
+		KernelCalcContext context
+	) throws KernelCalcNRGException {
 		
 		ProposerContext propContext = context.proposer();
 		
-		CfgNRGPixelized pixelized = exst;
+		Optional<CfgNRGPixelized> pixelized = Optional.of(exst);
+		
 		for( Mark m : listMarksNew ) {
-			pixelized = proposeAndUpdate(pixelized, m, propContext);
-			
+			pixelized = OptionalUtilities.flatMap( 
+				pixelized,
+				p -> proposeAndUpdate(p, m, propContext)
+			);
 		}
 						
 		return pixelized;		
 	}
+
+	@Override
+	public void updateAfterAccpt(
+		ListUpdatableMarkSetCollection updatableMarkSetCollection,
+		CfgNRGPixelized exst,
+		CfgNRGPixelized accptd
+	) throws UpdateMarkSetException {
+		
+		for( Mark m : getMarkNew().get() ) {
+			PxlMarkMemo memo = accptd.getMemoForMark( m );
+			exst.addToUpdatablePairList( updatableMarkSetCollection, memo );
+		}
+	}
+
+	@Override
+	public boolean isCompatibleWith(Mark testMark) {
+		return markProposer.isCompatibleWith(testMark);
+	}
 	
-	private CfgNRGPixelized proposeAndUpdate( CfgNRGPixelized exst, Mark markNew, ProposerContext propContext) throws KernelCalcNRGException {
+	private Optional<CfgNRGPixelized> proposeAndUpdate( CfgNRGPixelized exst, Mark markNew, ProposerContext propContext) throws KernelCalcNRGException {
 
 		PxlMarkMemo pmmMarkNew = propContext.create(markNew );
 		
 		if (!applyMarkProposer(pmmMarkNew, propContext)) {
-			return null;
+			return Optional.empty();
 		}
 				
-		return calcUpdatedNRG(exst, pmmMarkNew, propContext);	
+		return Optional.of(
+			calcUpdatedNRG(exst, pmmMarkNew, propContext)
+		);
 	}
 	
 	private boolean applyMarkProposer( PxlMarkMemo pmmMarkNew, ProposerContext context ) throws KernelCalcNRGException {
@@ -154,4 +169,15 @@ public class KernelBirthPixelized extends KernelBirth<CfgNRGPixelized> {
 		return newNRG;		
 	}
 
+	public MarkProposer getMarkProposer() {
+		return markProposer;
+	}
+
+	public void setMarkProposer(MarkProposer markProposer) {
+		this.markProposer = markProposer;
+	}
+	
+	private Mark proposeNewMark(CfgNRGPixelized exst, KernelCalcContext context) {
+		return context.cfgGen().getCfgGen().newTemplateMark();
+	}
 }

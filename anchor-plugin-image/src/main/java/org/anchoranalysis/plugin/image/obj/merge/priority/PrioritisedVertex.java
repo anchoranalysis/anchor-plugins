@@ -4,7 +4,7 @@ package org.anchoranalysis.plugin.image.obj.merge.priority;
  * #%L
  * anchor-plugin-image
  * %%
- * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2010 - 2020 Owen Feehan
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -26,7 +26,7 @@ package org.anchoranalysis.plugin.image.obj.merge.priority;
  * #L%
  */
 
-import org.anchoranalysis.image.objmask.ObjMask;
+import org.anchoranalysis.image.objectmask.ObjectMask;
 import org.anchoranalysis.plugin.image.obj.merge.ObjVertex;
 
 
@@ -52,7 +52,7 @@ public class PrioritisedVertex {
 	 * @param priority a priority to determine the order of merges (higher value implies greater priority)
 	 * @param considerForMerge iff FALSE, these two objects object may not be merged, and priority is irrelevant.
 	 */
-	public PrioritisedVertex( ObjMask obj, double payload, double priority, boolean considerForMerge ) {
+	public PrioritisedVertex( ObjectMask obj, double payload, double priority, boolean considerForMerge ) {
 		this.vertex = new ObjVertex(obj, payload);
 		this.priority = priority;
 		this.considerForMerge = considerForMerge;

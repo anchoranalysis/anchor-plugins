@@ -32,11 +32,9 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
-import org.anchoranalysis.io.error.AnchorIOException;
-
 class SortUtilities {
 	
-	public static Collection<File> sortFiles( Collection<File> files ) throws AnchorIOException {
+	public static Collection<File> sortFiles( Collection<File> files ) {
 		List<File> out = new ArrayList<>();
 		out.addAll(files);
 		Collections.sort(out);

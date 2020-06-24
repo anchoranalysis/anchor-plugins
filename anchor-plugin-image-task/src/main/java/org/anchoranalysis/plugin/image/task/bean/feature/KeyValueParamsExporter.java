@@ -36,7 +36,7 @@ import org.anchoranalysis.io.generator.serialized.KeyValueParamsGenerator;
 import org.anchoranalysis.io.output.bound.BoundIOContext;
 import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
 
-/** Exports a ResultVector as a KeyValueParmas */
+/** Exports a ResultVector as a KeyValueParams */
 class KeyValueParamsExporter {
 
 	public static void export( FeatureNameList featureNames, ResultsVector rv, BoundIOContext context ) {

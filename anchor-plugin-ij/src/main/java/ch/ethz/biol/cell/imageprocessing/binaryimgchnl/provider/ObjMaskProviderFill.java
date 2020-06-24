@@ -40,8 +40,8 @@ import org.anchoranalysis.image.bean.provider.ObjMaskProviderOne;
 import org.anchoranalysis.image.binary.BinaryChnl;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
 import org.anchoranalysis.image.extent.BoundingBox;
-import org.anchoranalysis.image.objmask.ObjMask;
-import org.anchoranalysis.image.objmask.ObjMaskCollection;
+import org.anchoranalysis.image.objectmask.ObjectMask;
+import org.anchoranalysis.image.objectmask.ObjectCollection;
 
 /**
  * Fills holes in an object. Existing obj-masks are overwritten (i.e. their memory buffers are replaced with filled-in pixels).
@@ -60,11 +60,11 @@ public class ObjMaskProviderFill extends ObjMaskProviderOne {
 	// END BEAN PROPERTIES
 	
 	@Override
-	public ObjMaskCollection createFromObjs( ObjMaskCollection objsCollection ) throws CreateException {
+	public ObjectCollection createFromObjs( ObjectCollection objsCollection ) throws CreateException {
 		
 		Optional<BinaryChnl> maskChnl = OptionalFactory.create(mask);
 		
-		for( ObjMask om : objsCollection ) {
+		for( ObjectMask om : objsCollection ) {
 			BinaryVoxelBox<ByteBuffer> bvb = om.binaryVoxelBox();
 			
 			
@@ -77,7 +77,7 @@ public class ObjMaskProviderFill extends ObjMaskProviderOne {
 			
 			if (maskChnl.isPresent()) {
 				// Let's make an object for our mask
-				ObjMask omMask = maskChnl.get().createMaskAvoidNew(om.getBoundingBox());
+				ObjectMask omMask = maskChnl.get().region(om.getBoundingBox(), true);
 				
 				BoundingBox bboxAll = new BoundingBox( bvb.extent() );
 				
