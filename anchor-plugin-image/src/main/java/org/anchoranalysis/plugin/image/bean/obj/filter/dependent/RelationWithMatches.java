@@ -44,8 +44,8 @@ import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.feature.bean.evaluator.FeatureEvaluator;
 import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
 import org.anchoranalysis.image.objectmask.ObjectMask;
+import org.anchoranalysis.image.objectmask.MatchedObject;
 import org.anchoranalysis.image.objectmask.ObjectCollection;
-import org.anchoranalysis.image.objmask.match.ObjWithMatches;
 import org.anchoranalysis.plugin.image.bean.obj.filter.ObjectFilterRelation;
 
 /**
@@ -144,11 +144,11 @@ public class RelationWithMatches extends ObjectFilterRelation {
 		return true;
 	}
 	
-	private static Map<ObjectMask,ObjectCollection> createMatchesMap( List<ObjWithMatches> list ) {
+	private static Map<ObjectMask,ObjectCollection> createMatchesMap( List<MatchedObject> list ) {
 		return list.stream()
 	      .collect(Collectors.toMap(
-    		 ObjWithMatches::getSourceObj,
-    		 ObjWithMatches::getMatches
+    		 MatchedObject::getSourceObj,
+    		 MatchedObject::getMatches
     	  )
     	);
 	}

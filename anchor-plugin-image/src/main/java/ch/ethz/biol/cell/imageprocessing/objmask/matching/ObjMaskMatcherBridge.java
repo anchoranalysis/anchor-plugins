@@ -32,8 +32,8 @@ import java.util.List;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.bean.objmask.match.ObjMaskMatcher;
+import org.anchoranalysis.image.objectmask.MatchedObject;
 import org.anchoranalysis.image.objectmask.ObjectCollection;
-import org.anchoranalysis.image.objmask.match.ObjWithMatches;
 
 /**
  * Matches to another object, and then uses that object to bridge to another
@@ -54,13 +54,13 @@ public class ObjMaskMatcherBridge extends ObjMaskMatcher {
 	// END BEAN PROPERTIES
 
 	@Override
-	public List<ObjWithMatches> findMatch(ObjectCollection sourceObjs)
+	public List<MatchedObject> findMatch(ObjectCollection sourceObjs)
 			throws OperationFailedException {
 		
-		List<ObjWithMatches> bridgeMatches = bridgeMatcher.findMatch(sourceObjs);
+		List<MatchedObject> bridgeMatches = bridgeMatcher.findMatch(sourceObjs);
 		
 		ObjectCollection bridgeObjs = new ObjectCollection();
-		for( ObjWithMatches owm : bridgeMatches ) {
+		for( MatchedObject owm : bridgeMatches ) {
 			
 			if (owm.getMatches().size()==0) {
 				throw new OperationFailedException("At least one object has no match. One is needed");

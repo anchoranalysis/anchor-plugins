@@ -34,8 +34,8 @@ import org.anchoranalysis.core.geometry.ReadableTuple3i;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.objectmask.ObjectMask;
+import org.anchoranalysis.image.objectmask.MatchedObject;
 import org.anchoranalysis.image.objectmask.ObjectCollection;
-import org.anchoranalysis.image.objmask.match.ObjWithMatches;
 
 import ch.ethz.biol.cell.imageprocessing.objmask.matching.ObjMaskMatchUtilities;
 
@@ -45,7 +45,7 @@ public class ObjMaskProviderExtendInZ extends ObjMaskProviderContainer {
 	@Override
 	public ObjectCollection createFromObjs(ObjectCollection objsSource) throws CreateException {
 			
-		List<ObjWithMatches> matchList = ObjMaskMatchUtilities.matchIntersectingObjects(
+		List<MatchedObject> matchList = ObjMaskMatchUtilities.matchIntersectingObjects(
 			containerRequired(),
 			objsSource.duplicate()	// Duplicated so as to avoid cahanging the original
 		);
@@ -53,7 +53,7 @@ public class ObjMaskProviderExtendInZ extends ObjMaskProviderContainer {
 		// For each obj we extend it into its container
 		ObjectCollection out = new ObjectCollection();
 		
-		for( ObjWithMatches owm : matchList ) {
+		for( MatchedObject owm : matchList ) {
 			for( ObjectMask omOther : owm.getMatches() ) {
 				
 				out.add(

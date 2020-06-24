@@ -37,8 +37,8 @@ import org.anchoranalysis.image.bean.provider.ChnlProviderOne;
 import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.objectmask.ObjectMask;
+import org.anchoranalysis.image.objectmask.MatchedObject;
 import org.anchoranalysis.image.objectmask.ObjectCollection;
-import org.anchoranalysis.image.objmask.match.ObjWithMatches;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.apache.commons.math3.util.Pair;
 
@@ -82,7 +82,7 @@ public class ChnlProviderAssignFromIntersectingObjects extends ChnlProviderOne {
 	 */
 	private static Stream<Pair<ObjectMask,ObjectMask>> streamIntersectingObjects(ObjectCollection source, ObjectCollection target) {
 		
-		List<ObjWithMatches> matchList = ObjMaskMatchUtilities.matchIntersectingObjects(source, target);
+		List<MatchedObject> matchList = ObjMaskMatchUtilities.matchIntersectingObjects(source, target);
 				
 		return matchList.stream().map( owm->
 			new Pair<>(

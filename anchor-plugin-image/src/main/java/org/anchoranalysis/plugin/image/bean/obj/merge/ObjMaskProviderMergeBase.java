@@ -37,9 +37,9 @@ import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.bean.provider.ImageDimProvider;
 import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.extent.ImageRes;
+import org.anchoranalysis.image.objectmask.MatchedObject;
 import org.anchoranalysis.image.objectmask.ObjectCollection;
 import org.anchoranalysis.image.objectmask.ObjectCollectionFactory;
-import org.anchoranalysis.image.objmask.match.ObjWithMatches;
 
 import ch.ethz.biol.cell.imageprocessing.objmask.matching.ObjMaskMatchUtilities;
 import ch.ethz.biol.cell.imageprocessing.objmask.provider.ObjMaskProviderContainer;
@@ -112,7 +112,7 @@ public abstract class ObjMaskProviderMergeBase extends ObjMaskProviderContainer 
 		Stream<ObjectCollection> matchesStream = ObjMaskMatchUtilities
 				.matchIntersectingObjects(containerObjs, objs)
 				.stream()
-				.map(ObjWithMatches::getMatches);
+				.map(MatchedObject::getMatches);
 
 		return ObjectCollectionFactory.flatMapFrom(
 			matchesStream,
