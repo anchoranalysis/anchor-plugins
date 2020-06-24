@@ -32,9 +32,9 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.bean.objmask.match.ObjMaskMatcher;
 import org.anchoranalysis.image.bean.provider.ObjMaskProviderOne;
+import org.anchoranalysis.image.objectmask.MatchedObject;
 import org.anchoranalysis.image.objectmask.ObjectCollection;
 import org.anchoranalysis.image.objectmask.ObjectCollectionFactory;
-import org.anchoranalysis.image.objmask.match.ObjWithMatches;
 
 public class ObjMaskProviderMatch extends ObjMaskProviderOne {
 
@@ -48,7 +48,7 @@ public class ObjMaskProviderMatch extends ObjMaskProviderOne {
 		try {
 			return ObjectCollectionFactory.flatMapFrom(
 				objMaskMatcher.findMatch(in),
-				ObjWithMatches::getMatches
+				MatchedObject::getMatches
 			);
 			
 		} catch (OperationFailedException e) {

@@ -38,8 +38,8 @@ import org.anchoranalysis.image.bean.sgmn.objmask.ObjMaskSgmn;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.channel.factory.ChannelFactory;
 import org.anchoranalysis.image.objectmask.ObjectMask;
+import org.anchoranalysis.image.objectmask.MatchedObject;
 import org.anchoranalysis.image.objectmask.ObjectCollection;
-import org.anchoranalysis.image.objmask.match.ObjWithMatches;
 import org.anchoranalysis.image.seed.SeedCollection;
 import org.anchoranalysis.image.sgmn.SgmnFailedException;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
@@ -91,10 +91,10 @@ public class ObjMaskProviderSeededObjSgmn extends ObjMaskProviderChnlSource {
 		assert(seeds!=null);
 		assert(sourceObjs!=null);
 		
-		List<ObjWithMatches> matchList = ObjMaskMatchUtilities.matchIntersectingObjects( sourceObjs, seeds );
+		List<MatchedObject> matchList = ObjMaskMatchUtilities.matchIntersectingObjects( sourceObjs, seeds );
 		
 		ObjectCollection out = new ObjectCollection();
-		for( ObjWithMatches ows : matchList ) {
+		for( MatchedObject ows : matchList ) {
 			if( ows.numMatches() <= 1 ) {
 				out.add( ows.getSourceObj() );
 			} else {

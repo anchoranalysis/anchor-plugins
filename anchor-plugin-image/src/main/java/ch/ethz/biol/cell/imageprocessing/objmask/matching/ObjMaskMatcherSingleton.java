@@ -27,19 +27,23 @@ package ch.ethz.biol.cell.imageprocessing.objmask.matching;
  */
 
 
-import java.util.ArrayList;
 import java.util.List;
-
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.bean.objmask.match.ObjMaskMatcher;
 import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
 import org.anchoranalysis.image.objectmask.ObjectMask;
+import org.anchoranalysis.image.objectmask.MatchedObject;
 import org.anchoranalysis.image.objectmask.ObjectCollection;
-import org.anchoranalysis.image.objmask.match.ObjWithMatches;
+import org.anchoranalysis.image.objectmask.ObjectCollectionFactory;
 
-// Always matches a single object
+/**
+ * Specifies a single object that will always be the "match" for whatever source object.
+ * 
+ * @author Owen Feehan
+ *
+ */
 public class ObjMaskMatcherSingleton extends ObjMaskMatcher {
 
 	// START BEAN PROPERTIES
@@ -48,9 +52,19 @@ public class ObjMaskMatcherSingleton extends ObjMaskMatcher {
 	// END BEAN PROPERTIES
 	
 	@Override
-	public List<ObjWithMatches> findMatch(ObjectCollection sourceObjs)
-			throws OperationFailedException {
+	public List<MatchedObject> findMatch(ObjectCollection sourceObjs) throws OperationFailedException {
 
+		ObjectMask omMatch = determineMatch();
+		
+		return sourceObjs.stream().mapAsList(
+			om -> new MatchedObject(
+				om,
+				ObjectCollectionFactory.from(omMatch)
+			) 
+		);
+	}
+	
+	private ObjectMask determineMatch() throws OperationFailedException {
 		ObjectCollection objsCollection;
 		try {
 			objsCollection = objs.create();
@@ -65,17 +79,7 @@ public class ObjMaskMatcherSingleton extends ObjMaskMatcher {
 			throw new OperationFailedException("More than one objects provided");
 		}
 		
-		ObjectMask omMatch = objsCollection.get(0);
-		
-		ArrayList<ObjWithMatches> list = new ArrayList<>();
-		
-		for( ObjectMask om : sourceObjs ) {
-			ObjWithMatches owm = new ObjWithMatches(om);
-			owm.getMatches().add(omMatch);
-			list.add( owm );
-		}
-		
-		return list;
+		return objsCollection.get(0);
 	}
 
 	public ObjMaskProvider getObjs() {
