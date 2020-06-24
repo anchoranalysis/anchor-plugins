@@ -37,8 +37,8 @@ import org.anchoranalysis.anchor.mpp.mark.Mark;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
+import org.anchoranalysis.image.bean.nonbean.error.UnitValueException;
 import org.anchoranalysis.image.bean.unitvalue.volume.UnitValueVolume;
-import org.anchoranalysis.image.unitvalue.UnitValueException;
 
 public class VolumeMin extends CheckMark {
 

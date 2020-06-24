@@ -31,6 +31,7 @@ import java.util.Optional;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
+import org.anchoranalysis.image.bean.nonbean.error.UnitValueException;
 import org.anchoranalysis.image.bean.provider.BinaryChnlProviderOne;
 import org.anchoranalysis.image.bean.unitvalue.volume.UnitValueVolume;
 import org.anchoranalysis.image.binary.BinaryChnl;
@@ -38,7 +39,6 @@ import org.anchoranalysis.image.binary.values.BinaryValues;
 import org.anchoranalysis.image.objectmask.ObjectCollection;
 import org.anchoranalysis.image.objectmask.factory.CreateFromConnectedComponentsFactory;
 import org.anchoranalysis.image.objectmask.ops.BinaryChnlFromObjs;
-import org.anchoranalysis.image.unitvalue.UnitValueException;
 
 public class BinaryChnlProviderMinVolumeFilter extends BinaryChnlProviderOne {
 
