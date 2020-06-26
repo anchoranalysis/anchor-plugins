@@ -88,13 +88,13 @@ public class MergedPairs extends FeatureTableObjs<FeatureInputPairObjs> {
 	 * Additional features that are processed on the pair of images (i.e. First+Second as a pair)
 	 */
 	@BeanField
-	private List<NamedBean<FeatureListProvider<FeatureInputPairObjs>>> listFeaturesPair = new ArrayList<>();
+	private List<NamedBean<FeatureListProvider<FeatureInputPairObjs>>> featuresPair = new ArrayList<>();
 	
 	/**
 	 * Additional features that only depend on the image, so do not need to be replicated for every object.
 	 */
 	@BeanField
-	private List<NamedBean<FeatureListProvider<FeatureInputStack>>> listFeaturesImage = new ArrayList<>();
+	private List<NamedBean<FeatureListProvider<FeatureInputStack>>> featuresImage = new ArrayList<>();
 	
 	/**
 	 * Include features for the First-object of the pair
@@ -150,9 +150,9 @@ public class MergedPairs extends FeatureTableObjs<FeatureInputPairObjs> {
 			FeatureListCustomNameHelper helper = new FeatureListCustomNameHelper(storeFactory);
 			
 			MergedPairsFeatures features = new MergedPairsFeatures(
-				helper.copyFeaturesCreateCustomName(listFeaturesImage),
+				helper.copyFeaturesCreateCustomName(featuresImage),
 				helper.copyFeaturesCreateCustomName(list),
-				helper.copyFeaturesCreateCustomName(listFeaturesPair)
+				helper.copyFeaturesCreateCustomName(featuresPair)
 			);
 			
 			return new MergedPairsSession(
@@ -225,29 +225,6 @@ public class MergedPairs extends FeatureTableObjs<FeatureInputPairObjs> {
 		this.includeMerged = includeMerged;
 	}
 
-
-	public List<NamedBean<FeatureListProvider<FeatureInputPairObjs>>> getListFeaturesPair() {
-		return listFeaturesPair;
-	}
-
-
-	public void setListFeaturesPair(
-			List<NamedBean<FeatureListProvider<FeatureInputPairObjs>>> listFeaturesPair) {
-		this.listFeaturesPair = listFeaturesPair;
-	}
-
-
-	public List<NamedBean<FeatureListProvider<FeatureInputStack>>> getListFeaturesImage() {
-		return listFeaturesImage;
-	}
-
-
-	public void setListFeaturesImage(
-			List<NamedBean<FeatureListProvider<FeatureInputStack>>> listFeaturesImage) {
-		this.listFeaturesImage = listFeaturesImage;
-	}
-
-
 	public boolean isAvoidOverlappingObjects() {
 		return avoidOverlappingObjects;
 	}
@@ -285,6 +262,22 @@ public class MergedPairs extends FeatureTableObjs<FeatureInputPairObjs> {
 
 	public void setDo3D(boolean do3D) {
 		this.do3D = do3D;
+	}
+
+	public List<NamedBean<FeatureListProvider<FeatureInputPairObjs>>> getFeaturesPair() {
+		return featuresPair;
+	}
+
+	public void setFeaturesPair(List<NamedBean<FeatureListProvider<FeatureInputPairObjs>>> featuresPair) {
+		this.featuresPair = featuresPair;
+	}
+
+	public List<NamedBean<FeatureListProvider<FeatureInputStack>>> getFeaturesImage() {
+		return featuresImage;
+	}
+
+	public void setFeaturesImage(List<NamedBean<FeatureListProvider<FeatureInputStack>>> featuresImage) {
+		this.featuresImage = featuresImage;
 	}
 
 
