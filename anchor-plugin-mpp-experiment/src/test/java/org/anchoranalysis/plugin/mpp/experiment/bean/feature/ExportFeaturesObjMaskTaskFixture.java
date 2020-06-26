@@ -97,8 +97,8 @@ class ExportFeaturesObjMaskTaskFixture {
 	public <T extends FeatureInput> ExportFeaturesObjMaskTask<T> createTask() throws CreateException {
 				
 		ExportFeaturesObjMaskTask<T> task = new ExportFeaturesObjMaskTask<>();
-		task.setListFeaturesObjMask(featureLoader.single());
-		task.setListFeaturesAggregate(featureLoader.aggregated());
+		task.setFeatures(featureLoader.single());
+		task.setFeaturesAggregate(featureLoader.aggregated());
 		task.setDefine(
 			DefineFixture.create(
 				nrgStack,
@@ -129,10 +129,10 @@ class ExportFeaturesObjMaskTaskFixture {
 	private MergedPairs createMergedPairs(boolean includeFeaturesInPair, boolean includeImageFeatures) {
 		MergedPairs mergedPairs = new MergedPairs();
 		if (includeFeaturesInPair) {
-			mergedPairs.setListFeaturesPair(featureLoader.pair());
+			mergedPairs.setFeaturesPair(featureLoader.pair());
 		}
 		if (includeImageFeatures) {
-			mergedPairs.setListFeaturesImage(featureLoader.image());
+			mergedPairs.setFeaturesImage(featureLoader.image());
 		}
 		return mergedPairs;
 	}

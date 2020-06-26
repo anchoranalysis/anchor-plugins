@@ -29,12 +29,14 @@ import java.io.IOException;
  */
 
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
 
 import org.anchoranalysis.bean.NamedBean;
 import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.bean.annotation.NonEmpty;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
@@ -45,6 +47,7 @@ import org.anchoranalysis.experiment.task.InputBound;
 import org.anchoranalysis.experiment.task.ParametersExperiment;
 import org.anchoranalysis.experiment.task.Task;
 import org.anchoranalysis.feature.bean.list.FeatureListProvider;
+import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.io.csv.MetadataHeaders;
 import org.anchoranalysis.feature.list.NamedFeatureStore;
 import org.anchoranalysis.feature.list.NamedFeatureStoreFactory;
@@ -55,6 +58,7 @@ import org.anchoranalysis.io.filepath.FilePathToUnixStyleConverter;
 import org.anchoranalysis.io.input.InputFromManager;
 import org.anchoranalysis.io.output.bound.BoundIOContext;
 import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
+import org.anchoranalysis.plugin.image.task.feature.GenerateHeadersForCSV;
 import org.anchoranalysis.plugin.image.task.sharedstate.SharedStateExportFeatures;
 
 /**
@@ -62,27 +66,33 @@ import org.anchoranalysis.plugin.image.task.sharedstate.SharedStateExportFeature
  * 
  * @author FEEHANO
  *
- * @param <T> See Task
- * @param <S> See Task
+ * @param <T> See {@link Task}
+ * @param <S> See {@link Task}
+ * @param <U> feature-input type for {@link features} bean-field
  */
-public abstract class ExportFeaturesTask<T extends InputFromManager, S extends SharedStateExportFeatures> extends Task<T,S> {
+public abstract class ExportFeaturesTask<T extends InputFromManager, S extends SharedStateExportFeatures, U extends FeatureInput> extends Task<T,S> {
 
 	private static final NamedFeatureStoreFactory STORE_FACTORY_AGGREGATE = NamedFeatureStoreFactory.bothNameAndParams();
 	
 	// START BEAN
 	/**
 	 * If non-null this file-path is used to determine the group of the file
-	 * If null, the filename is used
+	 * If null, no group is included.
 	 */
 	@BeanField @OptionalBean
-	private FilePathGenerator group;	// Translates an input file name to its group
-		
+	private FilePathGenerator group;
+	
+	/** Translates an input file name to a unique ID */
 	@BeanField @OptionalBean
-	private FilePathGenerator id;	// Translates an input file name to a unique ID
+	private FilePathGenerator id;
+	
+	/** The features to be exported (after possibly some manipulation or augmentation) */
+	@BeanField @NonEmpty
+	private List<NamedBean<FeatureListProvider<U>>> features = new ArrayList<>();
 	
 	/** Features applied to each group to aggregate values (takes FeatureResultsVectorCollection) */
 	@BeanField @OptionalBean
-	private List<NamedBean<FeatureListProvider<FeatureInputResults>>> listFeaturesAggregate;
+	private List<NamedBean<FeatureListProvider<FeatureInputResults>>> featuresAggregate;
 	// END BEAN
 	
 	@Override
@@ -90,7 +100,8 @@ public abstract class ExportFeaturesTask<T extends InputFromManager, S extends S
 			throws ExperimentExecutionException {
 		try {
 			return createSharedState(
-				createMetadataHeaders(),
+				headers().createMetadataHeaders(isGroupGeneratorDefined()),
+				features,
 				params.context()
 			);
 		} catch (CreateException e) {
@@ -121,7 +132,7 @@ public abstract class ExportFeaturesTask<T extends InputFromManager, S extends S
 			sharedState.closeAnyOpenIO();
 			
 			Optional<NamedFeatureStore<FeatureInputResults>> featuresAggregate = OptionalUtilities.map(
-				Optional.ofNullable(listFeaturesAggregate),
+				featuresAggregateAsOption(),
 				STORE_FACTORY_AGGREGATE::createNamedFeatureList
 			);
 			
@@ -146,28 +157,23 @@ public abstract class ExportFeaturesTask<T extends InputFromManager, S extends S
 			Optional.ofNullable(id),
 			inputPath,
 			debugMode,
-			path-> FilePathToUnixStyleConverter.toStringUnixStyle(path)
+			FilePathToUnixStyleConverter::toStringUnixStyle
 		);
 	}
 	
-	protected abstract S createSharedState( MetadataHeaders metadataHeaders, BoundIOContext context) throws CreateException;
+	protected abstract S createSharedState(
+		MetadataHeaders metadataHeaders,
+		List<NamedBean<FeatureListProvider<U>>> features,
+		BoundIOContext context
+	) throws CreateException;
 	
 	/** Iff true, group columns are added to the CSV exports, and other group exports may occur in sub-directories 
 	 * @param groupGeneratorDefined TODO*/
 	protected abstract boolean includeGroupInExperiment(boolean groupGeneratorDefined);
-	
-	protected abstract String[] headersForResults();
-	
-	protected abstract String[] headersForGroup(boolean groupGeneratorDefined);
 
-	protected abstract void calcAllResultsForInput(InputBound<T,S> input, Optional<String> groupGeneratorName) throws OperationFailedException;
+	protected abstract GenerateHeadersForCSV headers();
 	
-	private MetadataHeaders createMetadataHeaders() {
-		return new MetadataHeaders(
-			headersForGroup( isGroupGeneratorDefined() ),
-			headersForResults()
-		);
-	}
+	protected abstract void calcAllResultsForInput(InputBound<T,S> input, Optional<String> groupGeneratorName) throws OperationFailedException;
 
 	private boolean isGroupGeneratorDefined() {
 		return group!=null;
@@ -200,15 +206,6 @@ public abstract class ExportFeaturesTask<T extends InputFromManager, S extends S
 			debugMode
 		);
 	}
-	
-	public List<NamedBean<FeatureListProvider<FeatureInputResults>>> getListFeaturesAggregate() {
-		return listFeaturesAggregate;
-	}
-
-	public void setListFeaturesAggregate(
-			List<NamedBean<FeatureListProvider<FeatureInputResults>>> listFeaturesAggregate) {
-		this.listFeaturesAggregate = listFeaturesAggregate;
-	}
 
 	public FilePathGenerator getGroup() {
 		return group;
@@ -224,5 +221,25 @@ public abstract class ExportFeaturesTask<T extends InputFromManager, S extends S
 
 	public void setId(FilePathGenerator id) {
 		this.id = id;
+	}
+
+	public List<NamedBean<FeatureListProvider<U>>> getFeatures() {
+		return features;
+	}
+
+	public void setFeatures(List<NamedBean<FeatureListProvider<U>>> features) {
+		this.features = features;
+	}
+
+	public List<NamedBean<FeatureListProvider<FeatureInputResults>>> getFeaturesAggregate() {
+		return featuresAggregate;
+	}
+
+	public void setFeaturesAggregate(List<NamedBean<FeatureListProvider<FeatureInputResults>>> featuresAggregate) {
+		this.featuresAggregate = featuresAggregate;
+	}
+	
+	private Optional<List<NamedBean<FeatureListProvider<FeatureInputResults>>>> featuresAggregateAsOption() {
+		return Optional.ofNullable(featuresAggregate);
 	}
 }

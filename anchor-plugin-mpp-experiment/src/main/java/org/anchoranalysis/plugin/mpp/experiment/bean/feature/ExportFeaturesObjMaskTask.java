@@ -57,6 +57,7 @@ import org.anchoranalysis.mpp.io.input.MultiInput;
 import org.anchoranalysis.mpp.sgmn.bean.define.DefineOutputterMPPWithNrg;
 import org.anchoranalysis.plugin.image.feature.bean.obj.table.FeatureTableObjs;
 import org.anchoranalysis.plugin.image.task.bean.feature.ExportFeaturesTask;
+import org.anchoranalysis.plugin.image.task.feature.GenerateHeadersForCSV;
 
 
 /** 
@@ -85,16 +86,13 @@ import org.anchoranalysis.plugin.image.task.bean.feature.ExportFeaturesTask;
  *  
  *  @param T the feature input-type supported by the FlexiFeatureTable
 **/
-public class ExportFeaturesObjMaskTask<T extends FeatureInput> extends ExportFeaturesTask<MultiInput,SharedStateExportFeaturesObjMask<T>> {
+public class ExportFeaturesObjMaskTask<T extends FeatureInput> extends ExportFeaturesTask<MultiInput,SharedStateExportFeaturesObjMask<T>,FeatureInputSingleObj> {
 
 	private static final NamedFeatureStoreFactory STORE_FACTORY = NamedFeatureStoreFactory.bothNameAndParams();
 	
 	// START BEAN PROPERTIES
 	@BeanField
 	private DefineOutputterMPPWithNrg define = new DefineOutputterMPPWithNrg();
-	
-	@BeanField
-	private List<NamedBean<FeatureListProvider<FeatureInputSingleObj>>> listFeaturesObjMask = new ArrayList<>();
 	
 	@BeanField
 	private List<NamedBean<ObjMaskProvider>> listObjMaskProvider = new ArrayList<>();
@@ -112,10 +110,10 @@ public class ExportFeaturesObjMaskTask<T extends FeatureInput> extends ExportFea
 	}
 	
 	@Override
-	protected SharedStateExportFeaturesObjMask<T> createSharedState( MetadataHeaders metadataHeaders, BoundIOContext context) throws CreateException {
+	protected SharedStateExportFeaturesObjMask<T> createSharedState( MetadataHeaders metadataHeaders, List<NamedBean<FeatureListProvider<FeatureInputSingleObj>>> features, BoundIOContext context) throws CreateException {
 		try {
 			FeatureTableSession<T> session = table.createFeatures(
-				listFeaturesObjMask,
+				features,
 				STORE_FACTORY,
 				suppressErrors
 			); 
@@ -141,28 +139,13 @@ public class ExportFeaturesObjMaskTask<T extends FeatureInput> extends ExportFea
 			(initParams, nrgStack) -> calculateFeaturesForImage(input, groupGeneratorName, initParams, nrgStack) 
 		);
 	}
-
-	@Override
-	protected String[] headersForResults() {
-		return new String[]{"image", "unique_pixel_in_object"};
-	}
 	
 	@Override
-	protected String[] headersForGroup(boolean groupGeneratorDefined) {
-		boolean moreThanOneProvider = moreThanOneProvider();
-		if (groupGeneratorDefined) {
-			if (moreThanOneProvider) {
-				return new String[]{"group", "object_collection"};
-			} else {
-				return new String[]{"group"};
-			}
-		} else {
-			if (moreThanOneProvider) {
-				return new String[]{"object_collection"};
-			} else {
-				return new String[]{};
-			}
-		}
+	protected GenerateHeadersForCSV headers() {
+		return new GenerateHeadersForCSV(
+			new String[]{"image", "unique_pixel_in_object"},
+			moreThanOneProvider() ? Optional.of("object_collection") : Optional.empty()
+		);
 	}
 
 	/** If either a group-generator is defined or there's more than one provider, then groups should be included */
@@ -270,15 +253,6 @@ public class ExportFeaturesObjMaskTask<T extends FeatureInput> extends ExportFea
 		}
 		
 		return session;
-	}
-	
-	public List<NamedBean<FeatureListProvider<FeatureInputSingleObj>>> getListFeaturesObjMask() {
-		return listFeaturesObjMask;
-	}
-
-	public void setListFeaturesObjMask(
-			List<NamedBean<FeatureListProvider<FeatureInputSingleObj>>> listFeaturesObjMask) {
-		this.listFeaturesObjMask = listFeaturesObjMask;
 	}
 
 	public List<NamedBean<ObjMaskProvider>> getListObjMaskProvider() {

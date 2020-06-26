@@ -1,5 +1,7 @@
 package org.anchoranalysis.plugin.image.task.bean.feature;
 
+import java.util.List;
+
 /*-
  * #%L
  * anchor-plugin-image-task
@@ -26,12 +28,9 @@ package org.anchoranalysis.plugin.image.task.bean.feature;
  * #L%
  */
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
+
 import org.anchoranalysis.bean.NamedBean;
-import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.bean.annotation.NonEmpty;
 import org.anchoranalysis.bean.error.BeanDuplicateException;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
@@ -48,6 +47,7 @@ import org.anchoranalysis.feature.list.NamedFeatureStoreFactory;
 import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.input.InputFromManager;
 import org.anchoranalysis.io.output.bound.BoundIOContext;
+import org.anchoranalysis.plugin.image.task.feature.GenerateHeadersForCSV;
 import org.anchoranalysis.plugin.image.task.sharedstate.SharedStateExportFeaturesWithStore;
 
 /**
@@ -57,17 +57,12 @@ import org.anchoranalysis.plugin.image.task.sharedstate.SharedStateExportFeature
  * @author FEEHANO
  * 
  * @param T input-manager type
- * @param S feature-params type
+ * @param S feature-input type
  *
  */
-public abstract class ExportFeaturesStoreTask<T extends InputFromManager, S extends FeatureInput> extends ExportFeaturesTask<T,SharedStateExportFeaturesWithStore<S>> {
+public abstract class ExportFeaturesStoreTask<T extends InputFromManager, S extends FeatureInput> extends ExportFeaturesTask<T,SharedStateExportFeaturesWithStore<S>,S> {
 
 	private static final NamedFeatureStoreFactory STORE_FACTORY = NamedFeatureStoreFactory.factoryParamsOnly();
-	
-	// START BEAN PROPERTIES
-	@BeanField @NonEmpty
-	private List<NamedBean<FeatureListProvider<S>>> listFeatures = new ArrayList<>();
-	// END BEAN PROPERTIES
 	
 	private String firstResultHeader;
 
@@ -82,9 +77,9 @@ public abstract class ExportFeaturesStoreTask<T extends InputFromManager, S exte
 	}	
 	
 	@Override
-	protected SharedStateExportFeaturesWithStore<S> createSharedState( MetadataHeaders metadataHeaders, BoundIOContext context) throws CreateException {
+	protected SharedStateExportFeaturesWithStore<S> createSharedState( MetadataHeaders metadataHeaders, List<NamedBean<FeatureListProvider<S>>> features, BoundIOContext context) throws CreateException {
 		try {
-			NamedFeatureStore<S> featureStore = STORE_FACTORY.createNamedFeatureList(listFeatures);
+			NamedFeatureStore<S> featureStore = STORE_FACTORY.createNamedFeatureList(features);
 			
 			return new SharedStateExportFeaturesWithStore<>(
 				metadataHeaders,
@@ -97,18 +92,12 @@ public abstract class ExportFeaturesStoreTask<T extends InputFromManager, S exte
 	}
 	
 	@Override
-	protected String[] headersForResults() {
-		return new String[]{firstResultHeader};
-	}
-	
-	@Override
-	protected String[] headersForGroup(boolean groupGeneratorDefined) {
-		if (groupGeneratorDefined) {
-			return new String[]{"group"};
-		} else {
-			return new String[]{};
-		}
-	}
+	protected GenerateHeadersForCSV headers() {
+		return new GenerateHeadersForCSV(
+			new String[]{firstResultHeader},
+			Optional.empty()
+		);
+	}	
 	
 	@Override
 	protected void calcAllResultsForInput(
@@ -145,14 +134,5 @@ public abstract class ExportFeaturesStoreTask<T extends InputFromManager, S exte
 			),
 			groupGeneratorName.map(SimpleName::new)
 		);
-	}
-	
-	public List<NamedBean<FeatureListProvider<S>>> getListFeatures() {
-		return listFeatures;
-	}
-
-	public void setListFeatures(
-			List<NamedBean<FeatureListProvider<S>>> listFeatures) {
-		this.listFeatures = listFeatures;
 	}
 }
