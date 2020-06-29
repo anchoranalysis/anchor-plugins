@@ -56,7 +56,7 @@ public class ObjMaskMatcherSingleton extends ObjMaskMatcher {
 
 		ObjectMask omMatch = determineMatch();
 		
-		return sourceObjs.stream().mapAsList(
+		return sourceObjs.stream().mapToList(
 			om -> new MatchedObject(
 				om,
 				ObjectCollectionFactory.from(omMatch)

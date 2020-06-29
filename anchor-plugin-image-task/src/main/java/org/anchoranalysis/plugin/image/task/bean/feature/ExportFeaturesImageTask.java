@@ -35,14 +35,16 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.experiment.task.InputTypesExpected;
+import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.calc.results.ResultsVector;
-import org.anchoranalysis.feature.list.NamedFeatureStore;
+import org.anchoranalysis.feature.name.FeatureNameList;
+import org.anchoranalysis.feature.session.calculator.FeatureCalculatorMulti;
 import org.anchoranalysis.image.bean.provider.stack.StackProvider;
 import org.anchoranalysis.image.feature.stack.FeatureInputStack;
 import org.anchoranalysis.image.io.input.ProvidesStackInput;
 import org.anchoranalysis.io.output.bound.BoundIOContext;
-import org.anchoranalysis.plugin.image.task.imagefeature.calculator.FeatureCalculatorStackInputFromStore;
+import org.anchoranalysis.plugin.image.task.imagefeature.calculator.FeatureCalculatorFromProviderFactory;
 
 
 /** Calculates a feature on each image **/
@@ -70,22 +72,29 @@ public class ExportFeaturesImageTask extends ExportFeaturesStoreTask<ProvidesSta
 	@Override
 	protected ResultsVector calcResultsVectorForInputObject(
 		ProvidesStackInput inputObject,
-		NamedFeatureStore<FeatureInputStack> featureStore,
+		FeatureList<FeatureInputStack> features,
+		FeatureNameList featureNames,
 		BoundIOContext context
 	) throws FeatureCalcException {
-
+		return createCalculator(inputObject, features, context).calc(
+			new FeatureInputStack()
+		);
+	}
+	
+	private FeatureCalculatorMulti<FeatureInputStack> createCalculator(
+		ProvidesStackInput inputObject,
+		FeatureList<FeatureInputStack> features,
+		BoundIOContext context
+	) throws FeatureCalcException {
 		try {
-			FeatureCalculatorStackInputFromStore featCalc = new FeatureCalculatorStackInputFromStore(
+			FeatureCalculatorFromProviderFactory<FeatureInputStack> featCalc = new FeatureCalculatorFromProviderFactory<>(
 				inputObject,
 				Optional.ofNullable(
 					getNrgStackProvider()
 				),
-				featureStore,
 				context
 			);
-			
-			return featCalc.calcAllInStore();
-			
+			return featCalc.calculatorForAll(features);
 		} catch (OperationFailedException e) {
 			throw new FeatureCalcException(e);
 		}

@@ -27,7 +27,6 @@ package org.anchoranalysis.plugin.image.feature.bean.obj.table;
  */
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
@@ -45,10 +44,10 @@ import org.anchoranalysis.feature.list.NamedFeatureStoreFactory;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
 import org.anchoranalysis.image.feature.objmask.pair.FeatureInputPairObjs;
-import org.anchoranalysis.image.feature.session.FeatureTableSession;
+import org.anchoranalysis.image.feature.session.FeatureTableCalculator;
 import org.anchoranalysis.image.feature.session.merged.MergedPairsInclude;
 import org.anchoranalysis.image.feature.session.merged.MergedPairsFeatures;
-import org.anchoranalysis.image.feature.session.merged.MergedPairsSession;
+import org.anchoranalysis.image.feature.session.merged.FeatureCalculatorMergedPairs;
 import org.anchoranalysis.image.feature.stack.FeatureInputStack;
 import org.anchoranalysis.image.objectmask.ObjectMask;
 import org.anchoranalysis.image.objectmask.ObjectCollection;
@@ -126,21 +125,12 @@ public class MergedPairs extends FeatureTableObjs<FeatureInputPairObjs> {
 	@BeanField
 	private StringSet ignoreFeaturePrefixes = new StringSet();
 	
-	/**
-	 * Checks if the Pairwise-inverse features are the same in both directions
-	 * 
-	 * This slows down calculations, but can provide a useful sanity check (e.g. where all features
-	 * don't depend on the order of {@link org.anchoranalysis.image.feature.bean.objmask.pair.FeatureObjMaskPair}
-	 */
-	@BeanField
-	private boolean checkInverse = false;
-	
 	@BeanField
 	private boolean do3D = true;
 	// END BEAN PROPERTIES
 	
 	@Override
-	public FeatureTableSession<FeatureInputPairObjs> createFeatures(
+	public FeatureTableCalculator<FeatureInputPairObjs> createFeatures(
 		List<NamedBean<FeatureListProvider<FeatureInputSingleObj>>> list,
 		NamedFeatureStoreFactory storeFactory,
 		boolean suppressErrors
@@ -155,11 +145,10 @@ public class MergedPairs extends FeatureTableObjs<FeatureInputPairObjs> {
 				helper.copyFeaturesCreateCustomName(featuresPair)
 			);
 			
-			return new MergedPairsSession(
+			return new FeatureCalculatorMergedPairs(
 				features,
 				new MergedPairsInclude(includeFirst, includeSecond, includeMerged),				
 				ignoreFeaturePrefixes.set(),
-				checkInverse,
 				suppressErrors
 			);
 			
@@ -184,9 +173,7 @@ public class MergedPairs extends FeatureTableObjs<FeatureInputPairObjs> {
 		);
 		
 		// We iterate through every edge in the graph, edges can exist in both directions
-		Collection<EdgeTypeWithVertices<ObjectMask,Integer>> edges = graphNghb.edgeSetUnique();
-		for( EdgeTypeWithVertices<ObjectMask,Integer> e : edges ) {
-			
+		for( EdgeTypeWithVertices<ObjectMask,Integer> e : graphNghb.edgeSetUnique() ) {
 			out.add(
 				new FeatureInputPairObjs(
 					e.getNode1(),
@@ -199,7 +186,13 @@ public class MergedPairs extends FeatureTableObjs<FeatureInputPairObjs> {
 		return out;
 	}
 
-	
+	@Override
+	public String uniqueIdentifierFor(FeatureInputPairObjs input) {
+		return UniqueIdentifierUtilities.forObjectPair(
+			input.getFirst(),
+			input.getSecond()
+		);
+	}
 	
 	public boolean isIncludeFirst() {
 		return includeFirst;
@@ -233,17 +226,6 @@ public class MergedPairs extends FeatureTableObjs<FeatureInputPairObjs> {
 	public void setAvoidOverlappingObjects(boolean avoidOverlappingObjects) {
 		this.avoidOverlappingObjects = avoidOverlappingObjects;
 	}
-
-
-	public boolean isCheckInverse() {
-		return checkInverse;
-	}
-
-
-	public void setCheckInverse(boolean checkInverse) {
-		this.checkInverse = checkInverse;
-	}
-
 
 	public StringSet getIgnoreFeaturePrefixes() {
 		return ignoreFeaturePrefixes;
@@ -279,8 +261,4 @@ public class MergedPairs extends FeatureTableObjs<FeatureInputPairObjs> {
 	public void setFeaturesImage(List<NamedBean<FeatureListProvider<FeatureInputStack>>> featuresImage) {
 		this.featuresImage = featuresImage;
 	}
-
-
-
-
 }

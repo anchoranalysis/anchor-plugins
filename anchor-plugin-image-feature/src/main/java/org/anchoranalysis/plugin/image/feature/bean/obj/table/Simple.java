@@ -26,20 +26,18 @@ package org.anchoranalysis.plugin.image.feature.bean.obj.table;
  * #L%
  */
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.anchoranalysis.bean.NamedBean;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.feature.bean.list.FeatureListProvider;
-import org.anchoranalysis.feature.list.NamedFeatureStore;
 import org.anchoranalysis.feature.list.NamedFeatureStoreFactory;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
-import org.anchoranalysis.image.feature.session.FeatureTableSession;
-import org.anchoranalysis.image.feature.session.NamedFeatureStoreSession;
+import org.anchoranalysis.image.feature.session.FeatureTableCalculator;
+import org.anchoranalysis.image.feature.session.SingleObjTableSession;
 import org.anchoranalysis.image.objectmask.ObjectMask;
 import org.anchoranalysis.image.objectmask.ObjectCollection;
 
@@ -52,41 +50,42 @@ import org.anchoranalysis.image.objectmask.ObjectCollection;
 public class Simple extends FeatureTableObjs<FeatureInputSingleObj> {
 
 	@Override
-	public FeatureTableSession<FeatureInputSingleObj> createFeatures(
+	public FeatureTableCalculator<FeatureInputSingleObj> createFeatures(
 			List<NamedBean<FeatureListProvider<FeatureInputSingleObj>>> list,
 			NamedFeatureStoreFactory storeFactory,
 			boolean suppressErrors
 	) throws CreateException {
-		NamedFeatureStore<FeatureInputSingleObj> namedFeatures = storeFactory.createNamedFeatureList(list);
-		return new NamedFeatureStoreSession(namedFeatures);
+		return new SingleObjTableSession(
+			storeFactory.createNamedFeatureList(list)
+		);
+	}
+	
+	@Override
+	public String uniqueIdentifierFor(FeatureInputSingleObj input) {
+		return UniqueIdentifierUtilities.forObject(input.getObjMask());
 	}
 
 	@Override
 	public List<FeatureInputSingleObj> createListInputs(ObjectCollection objs,
 			NRGStackWithParams nrgStack, LogErrorReporter logErrorReporter) throws CreateException {
-
-		List<FeatureInputSingleObj> out = new ArrayList<>();
-		
-		for( ObjectMask om : objs ) {
-			checkObjInsideScene(om, nrgStack.getDimensions().getExtnt());
-
-			out.add(
-				new FeatureInputSingleObj(om, nrgStack)
-			);
-		}
-		
-		return out;
+		return objs.stream().mapToList(obj ->
+			new FeatureInputSingleObj(
+				checkObjInsideScene(obj, nrgStack.getDimensions().getExtnt()),
+				nrgStack
+			) 
+		);
 	}
 	
-	private static void checkObjInsideScene( ObjectMask om, Extent extent) throws CreateException {
-		if (!extent.contains(om.getBoundingBox())) {
+	private ObjectMask checkObjInsideScene( ObjectMask obj, Extent extent) throws CreateException {
+		if (!extent.contains(obj.getBoundingBox())) {
 			throw new CreateException(
 				String.format(
 					"Object is not (perhaps fully) contained inside the scene: %s is not in %s",
-					om.getBoundingBox(),
+					obj.getBoundingBox(),
 					extent
 				)
 			);
 		}
+		return obj;
 	}
 }

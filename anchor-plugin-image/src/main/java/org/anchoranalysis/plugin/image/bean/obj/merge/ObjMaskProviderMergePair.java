@@ -48,7 +48,7 @@ import org.anchoranalysis.image.feature.bean.evaluator.FeatureEvaluatorNrgStack;
 import org.anchoranalysis.image.feature.evaluator.PayloadCalculator;
 import org.anchoranalysis.image.feature.objmask.pair.FeatureInputPairObjs;
 import org.anchoranalysis.image.feature.session.merged.MergedPairsFeatures;
-import org.anchoranalysis.image.feature.session.merged.MergedPairsSession;
+import org.anchoranalysis.image.feature.session.merged.FeatureCalculatorMergedPairs;
 import org.anchoranalysis.image.objectmask.ObjectMask;
 import org.anchoranalysis.plugin.image.obj.merge.priority.AssignPriority;
 import org.anchoranalysis.plugin.image.obj.merge.priority.AssignPriorityFromPair;
@@ -107,7 +107,7 @@ public class ObjMaskProviderMergePair extends ObjMaskProviderMergeWithFeature {
 		try {
 			Optional<NRGStackWithParams> nrgStack = featureEvaluatorMerge.nrgStack();
 			
-			MergedPairsSession session = new MergedPairsSession(
+			FeatureCalculatorMergedPairs session = new FeatureCalculatorMergedPairs(
 				new MergedPairsFeatures(
 					new FeatureList<>( featureEvaluatorMerge.getFeatureProvider().create() )
 				)

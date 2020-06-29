@@ -1,4 +1,4 @@
-package org.anchoranalysis.plugin.image.task.bean.grouped;
+package org.anchoranalysis.plugin.image.task.grouped;
 
 /*-
  * #%L
@@ -27,9 +27,6 @@ package org.anchoranalysis.plugin.image.task.bean.grouped;
  */
 
 import java.util.function.Function;
-
-import org.anchoranalysis.plugin.image.task.grouped.ConsistentChannelChecker;
-import org.anchoranalysis.plugin.image.task.grouped.GroupMapByName;
 
 /**
  * Commonality between shared state for gouped export tasks

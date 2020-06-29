@@ -2,6 +2,7 @@ package org.anchoranalysis.plugin.image.task.sharedstate;
 
 import java.io.IOException;
 import java.util.Optional;
+import java.util.function.Supplier;
 
 import org.anchoranalysis.feature.calc.results.ResultsVector;
 
@@ -33,8 +34,10 @@ import org.anchoranalysis.feature.calc.results.ResultsVector;
 
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.io.csv.GroupedResultsVectorCollection;
+import org.anchoranalysis.feature.io.csv.MetadataHeaders;
 import org.anchoranalysis.feature.io.csv.StringLabelsForCsvRow;
 import org.anchoranalysis.feature.list.NamedFeatureStore;
+import org.anchoranalysis.feature.name.FeatureNameList;
 import org.anchoranalysis.feature.resultsvectorcollection.FeatureInputResults;
 import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.output.bound.BoundIOContext;
@@ -43,14 +46,19 @@ import org.anchoranalysis.io.output.bound.BoundIOContext;
 /**
  * Shared-state for an export-features class
  * 
+ * @param <S> a source-of-features that is duplicated for each new thread (to prevent any concurrency issues)
  * @author Owen Feehan
  */
-public abstract class SharedStateExportFeatures {
+public class SharedStateExportFeatures<S> {
 
 	private final GroupedResultsVectorCollection groupedResults;
+	private final FeatureNameList featureNames;
+	private final Supplier<S> featureSourceSupplier;
 	
-	public SharedStateExportFeatures(GroupedResultsVectorCollection groupedResults) {
-		this.groupedResults = groupedResults;
+	public SharedStateExportFeatures(MetadataHeaders metadataHeaders, FeatureNameList featureNames, Supplier<S> featureSourceSupplier, BoundIOContext context) throws AnchorIOException {
+		this.featureNames = featureNames;
+		this.featureSourceSupplier = featureSourceSupplier;
+		this.groupedResults = new GroupedResultsVectorCollection(metadataHeaders, featureNames, context);
 	}
 	
 	public void addResultsFor( StringLabelsForCsvRow labels, ResultsVector results) {
@@ -77,8 +85,16 @@ public abstract class SharedStateExportFeatures {
 			context
 		);
 	}
+	
+	public S duplicateForNewThread() {
+		return featureSourceSupplier.get();
+	}	
 
 	public void closeAnyOpenIO() throws IOException {
 		groupedResults.close();
+	}
+
+	public FeatureNameList getFeatureNames() {
+		return featureNames;
 	}
 }

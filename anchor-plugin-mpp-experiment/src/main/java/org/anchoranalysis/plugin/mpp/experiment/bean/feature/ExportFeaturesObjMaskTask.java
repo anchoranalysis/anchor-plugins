@@ -30,14 +30,17 @@ package org.anchoranalysis.plugin.mpp.experiment.bean.feature;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.BiConsumer;
+
 import org.anchoranalysis.bean.NamedBean;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.experiment.task.InputTypesExpected;
-import org.anchoranalysis.experiment.task.InputBound;
 import org.anchoranalysis.feature.bean.list.FeatureListProvider;
+import org.anchoranalysis.feature.calc.results.ResultsVector;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.io.csv.MetadataHeaders;
 import org.anchoranalysis.feature.io.csv.StringLabelsForCsvRow;
@@ -45,11 +48,13 @@ import org.anchoranalysis.feature.io.csv.name.CombinedName;
 import org.anchoranalysis.feature.io.csv.name.MultiName;
 import org.anchoranalysis.feature.io.csv.name.SimpleName;
 import org.anchoranalysis.feature.list.NamedFeatureStoreFactory;
+import org.anchoranalysis.feature.name.FeatureNameList;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
+import org.anchoranalysis.feature.session.calculator.FeatureCalculatorMulti;
 import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
 import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
 import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
-import org.anchoranalysis.image.feature.session.FeatureTableSession;
+import org.anchoranalysis.image.feature.session.FeatureTableCalculator;
 import org.anchoranalysis.image.objectmask.ObjectCollection;
 import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.output.bound.BoundIOContext;
@@ -58,6 +63,7 @@ import org.anchoranalysis.mpp.sgmn.bean.define.DefineOutputterMPPWithNrg;
 import org.anchoranalysis.plugin.image.feature.bean.obj.table.FeatureTableObjs;
 import org.anchoranalysis.plugin.image.task.bean.feature.ExportFeaturesTask;
 import org.anchoranalysis.plugin.image.task.feature.GenerateHeadersForCSV;
+import org.anchoranalysis.plugin.image.task.sharedstate.SharedStateExportFeatures;
 
 
 /** 
@@ -86,7 +92,7 @@ import org.anchoranalysis.plugin.image.task.feature.GenerateHeadersForCSV;
  *  
  *  @param T the feature input-type supported by the FlexiFeatureTable
 **/
-public class ExportFeaturesObjMaskTask<T extends FeatureInput> extends ExportFeaturesTask<MultiInput,SharedStateExportFeaturesObjMask<T>,FeatureInputSingleObj> {
+public class ExportFeaturesObjMaskTask<T extends FeatureInput> extends ExportFeaturesTask<MultiInput,FeatureTableCalculator<T>,FeatureInputSingleObj> {
 
 	private static final NamedFeatureStoreFactory STORE_FACTORY = NamedFeatureStoreFactory.bothNameAndParams();
 	
@@ -110,19 +116,19 @@ public class ExportFeaturesObjMaskTask<T extends FeatureInput> extends ExportFea
 	}
 	
 	@Override
-	protected SharedStateExportFeaturesObjMask<T> createSharedState( MetadataHeaders metadataHeaders, List<NamedBean<FeatureListProvider<FeatureInputSingleObj>>> features, BoundIOContext context) throws CreateException {
+	protected SharedStateExportFeatures<FeatureTableCalculator<T>> createSharedState( MetadataHeaders metadataHeaders, List<NamedBean<FeatureListProvider<FeatureInputSingleObj>>> features, BoundIOContext context) throws CreateException {
 		try {
-			FeatureTableSession<T> session = table.createFeatures(
+			FeatureTableCalculator<T> tableCalculator = table.createFeatures(
 				features,
 				STORE_FACTORY,
 				suppressErrors
-			); 
-			return new SharedStateExportFeaturesObjMask<>(
+			);
+			return new SharedStateExportFeatures<>(
 				metadataHeaders,
-				session,
+				tableCalculator.createFeatureNames(),
+				() -> tableCalculator.duplicateForNewThread(),
 				context
 			);
-			
 		} catch (InitException | AnchorIOException e) {
 			throw new CreateException(e);
 		}
@@ -130,13 +136,25 @@ public class ExportFeaturesObjMaskTask<T extends FeatureInput> extends ExportFea
 
 	@Override
 	protected void calcAllResultsForInput(
-		InputBound<MultiInput,SharedStateExportFeaturesObjMask<T>> input,
-		Optional<String> groupGeneratorName
+		MultiInput input,
+		BiConsumer<StringLabelsForCsvRow,ResultsVector> addResultsFor,
+		FeatureTableCalculator<T> featureSourceSupplier,
+		FeatureNameList featureNames,
+		Optional<String> groupGeneratorName,
+		BoundIOContext context
 	) throws OperationFailedException {
 		define.processInput(
-			input.getInputObject(),
-			input.context(),
-			(initParams, nrgStack) -> calculateFeaturesForImage(input, groupGeneratorName, initParams, nrgStack) 
+			input,
+			context,
+			(initParams, nrgStack) -> calculateFeaturesForImage(
+				input.descriptiveName(),
+				featureSourceSupplier,
+				addResultsFor,
+				groupGeneratorName,
+				initParams,
+				nrgStack,
+				context.getLogger()
+			) 
 		);
 	}
 	
@@ -159,45 +177,75 @@ public class ExportFeaturesObjMaskTask<T extends FeatureInput> extends ExportFea
 	}
 	
 	private int calculateFeaturesForImage(
-		InputBound<MultiInput,SharedStateExportFeaturesObjMask<T>> input,
+		String descriptiveName,
+		FeatureTableCalculator<T> calculator,
+		BiConsumer<StringLabelsForCsvRow,ResultsVector> addResultsFor,
 		Optional<String> groupGeneratorName,
 		ImageInitParams imageInit,
-		NRGStackWithParams nrgStack
+		NRGStackWithParams nrgStack,
+		LogErrorReporter logger
 	) throws OperationFailedException {
 		
-		FeatureTableSession<T> session = duplicateAndStartSession(input, imageInit, nrgStack);
-		FeatureCalculator<T> calculator = new FeatureCalculator<>(
+		CalculateFeaturesFromProvider<T> fromProviderCalculator = new CalculateFeaturesFromProvider<>(
 			table,
-			input.getSharedState(),
+			startCalculator(
+				calculator,
+				imageInit,
+				nrgStack,
+				logger
+			),
+			addResultsFor,
 			imageInit,
 			nrgStack,
 			suppressErrors,
-			input.context().getLogger()
+			logger
 		);
 		processAllProviders(
-			input.getInputObject().descriptiveName(),
+			descriptiveName,
 			groupGeneratorName,
-			session,
-			calculator
+			fromProviderCalculator
 		);
 		
 		// Arbitrary, we need a return-type
 		return 0;
 	}
 	
+	private FeatureCalculatorMulti<T> startCalculator(
+		FeatureTableCalculator<T> calculator,
+		ImageInitParams imageInit,
+		NRGStackWithParams nrgStack,
+		LogErrorReporter logger
+	) throws OperationFailedException {
+		
+		try {
+			calculator.start(
+				imageInit,
+				Optional.of(nrgStack),
+				logger
+			);
+		} catch (InitException e) {
+			throw new OperationFailedException(e);
+		}
+		
+		return calculator;
+	}
+	
 	private void processAllProviders(
 		String descriptiveName,
 		Optional<String> groupGeneratorName,
-		FeatureTableSession<T> session,
-		FeatureCalculator<T> calculator
+		CalculateFeaturesFromProvider<T> calculator
 	) throws OperationFailedException {
 		
 		// For every objMaskCollection provider
 		for(NamedBean<ObjMaskProvider> ni : listObjMaskProvider) {
 			calculator.processProvider(
 				ni.getValue(),
-				session,
-				objName -> identifierFor(descriptiveName, objName, groupGeneratorName, ni.getName())
+				input -> identifierFor(
+					descriptiveName,
+					table.uniqueIdentifierFor(input),
+					groupGeneratorName,
+					ni.getName()
+				)
 			);
 		}
 	}
@@ -230,29 +278,6 @@ public class ExportFeaturesObjMaskTask<T extends FeatureInput> extends ExportFea
 		} else {
 			return groupGeneratorName.map(SimpleName::new);
 		}
-	}
-
-	private FeatureTableSession<T> duplicateAndStartSession(
-		InputBound<MultiInput,SharedStateExportFeaturesObjMask<T>> input,
-		ImageInitParams imageInit,
-		NRGStackWithParams nrgStack
-	) throws OperationFailedException {
-		
-		// Create a duplicated featureStore for this image, as we want separate features on this thread,
-		//  so they are thread-safe, for parallel execution
-		FeatureTableSession<T> session = input.getSharedState().getSession().duplicateForNewThread();
-		
-		try {
-			session.start(
-				imageInit,
-				Optional.of(nrgStack),
-				input.context().getLogger()
-			);
-		} catch (InitException e) {
-			throw new OperationFailedException(e);
-		}
-		
-		return session;
 	}
 
 	public List<NamedBean<ObjMaskProvider>> getListObjMaskProvider() {
