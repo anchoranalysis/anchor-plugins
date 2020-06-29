@@ -118,14 +118,11 @@ public class FeatureListProviderPermute<S, T extends FeatureInput> extends Featu
 
 	private FeatureList<T> createInitialList( Feature<T> feature ) throws CreateException {
 		try {
-			FeatureList<T> flInput = new FeatureList<>();
-			
 			// We add our item to fl as the 'input' item, knowing there's at least one permutation
 			Feature<T> itemDup = feature.duplicateBean();
 			itemDup.setCustomName("");  // Doesn't matter, as will be replaced by next permutation
-			flInput.add(itemDup);
 			
-			return flInput;
+			return new FeatureList<>(itemDup);
 			
 		} catch (BeanDuplicateException e) {
 			throw new CreateException(e);
