@@ -32,8 +32,8 @@ import org.anchoranalysis.bean.NamedBean;
 import org.anchoranalysis.bean.error.BeanDuplicateException;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.list.FeatureList;
+import org.anchoranalysis.feature.bean.list.FeatureListFactory;
 import org.anchoranalysis.feature.bean.list.FeatureListProvider;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.list.NamedFeatureStore;
@@ -74,20 +74,15 @@ class FeatureListCustomNameHelper {
 	}
 
 	private static <T extends FeatureInput> FeatureList<T> copyFeaturesCreateCustomName( NamedFeatureStore<T> features ) throws OperationFailedException {
-		
-		FeatureList<T> out = new FeatureList<>();
 		try {
-			// First features
-			for( int i=0; i<features.size(); i++ ) {
-				NamedBean<Feature<T>> ni = features.get(i);
-				
-				Feature<T> featureAdd = ni.getValue().duplicateBean();
-				featureAdd.setCustomName( ni.getName() );					
-				out.add(featureAdd);
-			}
+			return FeatureListFactory.mapFrom(
+				features,
+				ni -> ni.getValue().duplicateChangeName( ni.getName() )
+			);
+			
 		} catch (BeanDuplicateException e) {
 			throw new OperationFailedException(e);
 		}
-		return out;
+		
 	}
 }

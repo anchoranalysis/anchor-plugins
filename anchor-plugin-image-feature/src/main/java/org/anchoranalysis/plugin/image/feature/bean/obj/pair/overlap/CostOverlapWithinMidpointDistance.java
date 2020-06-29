@@ -114,7 +114,7 @@ public class CostOverlapWithinMidpointDistance extends FeatureObjMaskPair {
 	// We measure the euclidian distance between centre-points
 	private double calcMaxDist( Point3d cog1, Point3d cog2, Optional<ImageRes> res ) throws OperationFailedException {
 		DirectionVector vec = DirectionVector.createBetweenTwoPoints( cog1, cog2 );
-		 return maxDistance.rslv(res, vec);
+		return maxDistance.rslv(res, vec);
 	}
 
 	public UnitValueDistance getMaxDistance() {

@@ -29,6 +29,7 @@ import java.util.Optional;
  */
 
 import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.core.axis.AxisType;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.geometry.Point3i;
@@ -37,7 +38,6 @@ import org.anchoranalysis.core.random.RandomNumberGenerator;
 import org.anchoranalysis.image.bean.unitvalue.distance.UnitValueDistance;
 import org.anchoranalysis.image.extent.ImageRes;
 import org.anchoranalysis.image.objectmask.ObjectMask;
-import org.anchoranalysis.image.orientation.DirectionVector;
 
 // Breadth-first iteration of pixels
 public class VisitSchedulerMaxDistSep extends VisitScheduler {
@@ -82,9 +82,9 @@ public class VisitSchedulerMaxDistSep extends VisitScheduler {
 		try {
 			Optional<ImageRes> resOpt = Optional.of(res);
 			
-			maxXRslv = maxDistX.rslv(resOpt, new DirectionVector(1,0,0) );
-			maxYRslv = maxDistY.rslv(resOpt, new DirectionVector(0,1,0) );
-			maxZRslv = maxDistZ.rslv(resOpt, new DirectionVector(0,0,1) );
+			maxXRslv = maxDistX.rslvForAxis(resOpt, AxisType.X);
+			maxYRslv = maxDistY.rslvForAxis(resOpt, AxisType.Y);
+			maxZRslv = maxDistZ.rslvForAxis(resOpt, AxisType.Z);
 		
 			this.root = root;
 			

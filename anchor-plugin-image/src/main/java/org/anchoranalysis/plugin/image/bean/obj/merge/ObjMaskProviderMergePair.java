@@ -35,7 +35,7 @@ import org.anchoranalysis.bean.shared.relation.RelationBean;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.feature.bean.list.FeatureList;
+import org.anchoranalysis.feature.bean.list.FeatureListFactory;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.input.FeatureInputNRGStack;
 import org.anchoranalysis.feature.input.FeatureInputNull;
@@ -109,7 +109,7 @@ public class ObjMaskProviderMergePair extends ObjMaskProviderMergeWithFeature {
 			
 			FeatureCalculatorMergedPairs session = new FeatureCalculatorMergedPairs(
 				new MergedPairsFeatures(
-					new FeatureList<>( featureEvaluatorMerge.getFeatureProvider().create() )
+					FeatureListFactory.fromProvider( featureEvaluatorMerge.getFeatureProvider() )
 				)
 			);
 			session.start(

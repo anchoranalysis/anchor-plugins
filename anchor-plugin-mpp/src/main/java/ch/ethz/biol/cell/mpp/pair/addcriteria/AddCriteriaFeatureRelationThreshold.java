@@ -38,6 +38,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.shared.relation.RelationBean;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.list.FeatureList;
+import org.anchoranalysis.feature.bean.list.FeatureListFactory;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorMulti;
@@ -81,7 +82,7 @@ public class AddCriteriaFeatureRelationThreshold extends AddCriteriaPair {
 				new IncludeMarksFailureException("No session exists")
 			).calc(
 				params,
-				new FeatureList<>(feature)
+				FeatureListFactory.from(feature)
 			).get(0);
 			
 			return relation.create().isRelationToValueTrue(featureVal, threshold);
@@ -118,7 +119,7 @@ public class AddCriteriaFeatureRelationThreshold extends AddCriteriaPair {
 	@Override
 	public Optional<FeatureList<FeatureInputPairMemo>> orderedListOfFeatures() {
 		return Optional.of(
-			new FeatureList<>(feature)
+			FeatureListFactory.from(feature)
 		);
 	}
 }
