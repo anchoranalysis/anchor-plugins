@@ -29,6 +29,7 @@ package org.anchoranalysis.plugin.image.feature.bean.obj.table;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Function;
 
 import org.anchoranalysis.bean.NamedBean;
 import org.anchoranalysis.bean.StringSet;
@@ -167,7 +168,7 @@ public class MergedPairs extends FeatureTableObjs<FeatureInputPairObjs> {
 		CreateNghbGraph<ObjectMask> graphCreator = new CreateNghbGraph<ObjectMask>( avoidOverlappingObjects );
 		GraphWithEdgeTypes<ObjectMask,Integer> graphNghb = graphCreator.createGraphWithNumPixels(
 			objs.asList(),
-			v -> v,
+			Function.identity(),
 			nrgStack.getNrgStack().getDimensions().getExtnt(),
 			do3D
 		);
