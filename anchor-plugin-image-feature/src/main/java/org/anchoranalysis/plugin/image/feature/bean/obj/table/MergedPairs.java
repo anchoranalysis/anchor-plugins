@@ -52,7 +52,7 @@ import org.anchoranalysis.image.feature.session.merged.FeatureCalculatorMergedPa
 import org.anchoranalysis.image.feature.stack.FeatureInputStack;
 import org.anchoranalysis.image.objectmask.ObjectMask;
 import org.anchoranalysis.image.objectmask.ObjectCollection;
-import org.anchoranalysis.image.voxel.nghb.CreateNghbGraph;
+import org.anchoranalysis.image.voxel.nghb.CreateNeighborGraph;
 
 /**
  * Creates a set of features, that creates pairs of neighbouring-objects and applies a mixture of single-object features
@@ -165,7 +165,7 @@ public class MergedPairs extends FeatureTableObjs<FeatureInputPairObjs> {
 		List<FeatureInputPairObjs> out = new ArrayList<>();
 		
 		// We create a neighbour-graph of our input objects
-		CreateNghbGraph<ObjectMask> graphCreator = new CreateNghbGraph<ObjectMask>( avoidOverlappingObjects );
+		CreateNeighborGraph<ObjectMask> graphCreator = new CreateNeighborGraph<ObjectMask>( avoidOverlappingObjects );
 		GraphWithEdgeTypes<ObjectMask,Integer> graphNghb = graphCreator.createGraphWithNumPixels(
 			objs.asList(),
 			Function.identity(),
