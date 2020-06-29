@@ -1,5 +1,7 @@
 package org.anchoranalysis.plugin.mpp.sgmn.cfg.bean.optscheme;
 
+
+
 /*-
  * #%L
  * anchor-plugin-mpp-sgmn
@@ -26,17 +28,17 @@ package org.anchoranalysis.plugin.mpp.sgmn.cfg.bean.optscheme;
  * #L%
  */
 
-import java.util.Arrays;
-
 import org.anchoranalysis.anchor.mpp.feature.addcriteria.BBoxIntersection;
-import org.anchoranalysis.anchor.mpp.feature.bean.nrgscheme.NRGScheme;
+import org.anchoranalysis.anchor.mpp.feature.nrg.scheme.NRGScheme;
 import org.anchoranalysis.anchor.mpp.feature.nrg.scheme.NRGSchemeWithSharedFeatures;
+import org.anchoranalysis.anchor.mpp.regionmap.RegionMapSingleton;
+import org.anchoranalysis.core.error.CreateException;
+import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.shared.SharedFeatureMulti;
 import org.anchoranalysis.plugin.mpp.feature.bean.memo.ind.Size;
 import org.anchoranalysis.plugin.mpp.feature.bean.memo.pair.overlap.OverlapNumVoxels;
 import org.anchoranalysis.plugin.operator.feature.bean.arithmetic.MultiplyByConstant;
 import org.anchoranalysis.test.LoggingFixture;
-import org.anchoranalysis.test.bean.BeanTestChecker;
 
 public class NRGSchemeFixture {
 	
@@ -54,25 +56,24 @@ public class NRGSchemeFixture {
 	 * 
 	 * @param weightOverlap a positive integer indicating how much to penalize the overlapping voxels by, the higher the greater the penalty.
 	 * @return
+	 * @throws CreateException 
 	 */
-	public static NRGSchemeWithSharedFeatures sizeMinusWeightedOverlap( double weightOverlap ) {
-		
-		NRGScheme scheme = new NRGScheme();
-		scheme.setElemInd(
-			Arrays.asList( new Size() )
-		);
-		scheme.setElemPair(
-			Arrays.asList( new MultiplyByConstant<>(new OverlapNumVoxels(),-1 * weightOverlap) )
-		);
-		
-		scheme.setPairAddCriteria( new BBoxIntersection() );
-		BeanTestChecker.check(scheme);
-		
+	public static NRGSchemeWithSharedFeatures sizeMinusWeightedOverlap( double weightOverlap ) throws CreateException {
 		return new NRGSchemeWithSharedFeatures(
-			scheme,
+			createNRGScheme(weightOverlap),
 			new SharedFeatureMulti(),
 			10,
 			LoggingFixture.suppressedLogErrorReporter()
 		);		
+	}
+	
+	private static NRGScheme createNRGScheme(double weightOverlap) throws CreateException {
+		return new NRGScheme(
+			new FeatureList<>( new Size() ),
+			new FeatureList<>( new MultiplyByConstant<>(new OverlapNumVoxels(),-1 * weightOverlap) ),
+			new FeatureList<>(),
+			RegionMapSingleton.instance(),
+			new BBoxIntersection()
+		);
 	}
 }
