@@ -65,19 +65,24 @@ public abstract class FeatureListProviderAggregate extends FeatureListProvider<F
 		FeatureList<FeatureInputPairObjs> out = new FeatureList<>(); 
 		
 		for( Feature<FeatureInputSingleObj> featExst : in ) {
-			
-			Feature<FeatureInputPairObjs> featOut = createAggregateFeature(
-				new First( featExst.duplicateBean() ),
-				new Second( featExst.duplicateBean() ),
-				new Merged( featExst.duplicateBean() )
-			);
-			
-			FeatureListProviderPrependName.setNewNameOnFeature(featOut, featExst.getFriendlyName(), prependString);
-			
-			out.add( featOut );
+			out.add( createFeatureFor(featExst) );
 		}
 		
 		return out;
+	}
+	
+	private Feature<FeatureInputPairObjs> createFeatureFor(Feature<FeatureInputSingleObj> featExst) {
+		Feature<FeatureInputPairObjs> featOut = createAggregateFeature(
+			new First( featExst.duplicateBean() ),
+			new Second( featExst.duplicateBean() ),
+			new Merged( featExst.duplicateBean() )
+		);
+		FeatureListProviderPrependName.setNewNameOnFeature(
+			featOut,
+			featExst.getFriendlyName(),
+			prependString
+		);
+		return featOut;
 	}
 	
 	protected abstract Feature<FeatureInputPairObjs> createAggregateFeature(
@@ -85,8 +90,6 @@ public abstract class FeatureListProviderAggregate extends FeatureListProvider<F
 		Feature<FeatureInputPairObjs> featSecond,
 		Feature<FeatureInputPairObjs> featMerged
 	);
-	
-
 
 	public String getPrependString() {
 		return prependString;
@@ -103,7 +106,4 @@ public abstract class FeatureListProviderAggregate extends FeatureListProvider<F
 	public void setItem(FeatureListProvider<FeatureInputSingleObj> item) {
 		this.item = item;
 	}
-
-
-
 }
