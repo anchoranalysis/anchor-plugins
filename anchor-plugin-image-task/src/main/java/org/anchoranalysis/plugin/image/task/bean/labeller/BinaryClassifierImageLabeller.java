@@ -35,22 +35,17 @@ import org.anchoranalysis.bean.NamedBean;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.NonEmpty;
 import org.anchoranalysis.bean.annotation.SkipInit;
-import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.feature.bean.list.FeatureListProvider;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.feature.list.NamedFeatureStore;
-import org.anchoranalysis.feature.list.NamedFeatureStoreFactory;
 import org.anchoranalysis.image.bean.provider.stack.StackProvider;
 import org.anchoranalysis.image.feature.stack.FeatureInputStack;
 import org.anchoranalysis.image.io.input.ProvidesStackInput;
 import org.anchoranalysis.io.output.bound.BoundIOContext;
-import org.anchoranalysis.plugin.image.task.imagefeature.calculator.FeatureCalculatorStackInputFromStore;
+import org.anchoranalysis.plugin.image.task.imagefeature.calculator.FeatureCalculatorFromProviderFactory;
 
 public class BinaryClassifierImageLabeller extends BinaryOutcomeImageLabeller<Object> {
-
-	private static final NamedFeatureStoreFactory STORE_FACTORY = NamedFeatureStoreFactory.bothNameAndParams();
 	
 	// START BEAN PROPERTIES
 	@BeanField @SkipInit
@@ -76,18 +71,18 @@ public class BinaryClassifierImageLabeller extends BinaryOutcomeImageLabeller<Ob
 	) throws OperationFailedException {
 		
 		try {
-			NamedFeatureStore<FeatureInputStack> featureStore = STORE_FACTORY.createNamedFeatureList(listFeatures);
-			
-			FeatureCalculatorStackInputFromStore featureCalculator = new FeatureCalculatorStackInputFromStore(
+			FeatureCalculatorFromProviderFactory<FeatureInputStack> featureCalculator = new FeatureCalculatorFromProviderFactory<>(
 				input,
 				Optional.of(
 					getNrgStackProvider()
 				),
-				featureStore,
 				context
 			);
 			
-			double classificationVal = featureCalculator.calcSingleFromProvider(classifierProvider,"classifierProvider");
+			double classificationVal = featureCalculator.calculatorSingleFromProvider(
+				classifierProvider,
+				"classifierProvider"
+			).calc( new FeatureInputStack() );
 	
 			context.getLogReporter().logFormatted("Classification value = %f", classificationVal);
 					
@@ -97,7 +92,7 @@ public class BinaryClassifierImageLabeller extends BinaryOutcomeImageLabeller<Ob
 			
 			return classificationString(classificationPositive);
 			
-		} catch (FeatureCalcException | CreateException e) {
+		} catch (FeatureCalcException e) {
 			throw new OperationFailedException(e);
 		}
 	}

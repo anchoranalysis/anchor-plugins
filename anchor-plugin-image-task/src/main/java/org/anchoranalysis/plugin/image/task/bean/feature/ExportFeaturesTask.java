@@ -32,6 +32,7 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.BiConsumer;
 import java.util.function.Function;
 
 import org.anchoranalysis.bean.NamedBean;
@@ -47,10 +48,13 @@ import org.anchoranalysis.experiment.task.InputBound;
 import org.anchoranalysis.experiment.task.ParametersExperiment;
 import org.anchoranalysis.experiment.task.Task;
 import org.anchoranalysis.feature.bean.list.FeatureListProvider;
+import org.anchoranalysis.feature.calc.results.ResultsVector;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.io.csv.MetadataHeaders;
+import org.anchoranalysis.feature.io.csv.StringLabelsForCsvRow;
 import org.anchoranalysis.feature.list.NamedFeatureStore;
 import org.anchoranalysis.feature.list.NamedFeatureStoreFactory;
+import org.anchoranalysis.feature.name.FeatureNameList;
 import org.anchoranalysis.feature.resultsvectorcollection.FeatureInputResults;
 import org.anchoranalysis.io.bean.filepath.generator.FilePathGenerator;
 import org.anchoranalysis.io.error.AnchorIOException;
@@ -67,10 +71,10 @@ import org.anchoranalysis.plugin.image.task.sharedstate.SharedStateExportFeature
  * @author FEEHANO
  *
  * @param <T> See {@link Task}
- * @param <S> See {@link Task}
+ * @param <S> a source-of-features that is duplicated for each new thread (to prevent any concurrency issues)
  * @param <U> feature-input type for {@link features} bean-field
  */
-public abstract class ExportFeaturesTask<T extends InputFromManager, S extends SharedStateExportFeatures, U extends FeatureInput> extends Task<T,S> {
+public abstract class ExportFeaturesTask<T extends InputFromManager, S, U extends FeatureInput> extends Task<T,SharedStateExportFeatures<S>> {
 
 	private static final NamedFeatureStoreFactory STORE_FACTORY_AGGREGATE = NamedFeatureStoreFactory.bothNameAndParams();
 	
@@ -96,7 +100,7 @@ public abstract class ExportFeaturesTask<T extends InputFromManager, S extends S
 	// END BEAN
 	
 	@Override
-	public S beforeAnyJobIsExecuted(BoundOutputManagerRouteErrors outputManager, ParametersExperiment params)
+	public SharedStateExportFeatures<S> beforeAnyJobIsExecuted(BoundOutputManagerRouteErrors outputManager, ParametersExperiment params)
 			throws ExperimentExecutionException {
 		try {
 			return createSharedState(
@@ -110,13 +114,20 @@ public abstract class ExportFeaturesTask<T extends InputFromManager, S extends S
 	}
 	
 	@Override
-	public void doJobOnInputObject(InputBound<T,S> input) throws JobExecutionException {
+	public void doJobOnInputObject(InputBound<T,SharedStateExportFeatures<S>> input) throws JobExecutionException {
 		try {
 			Optional<String> groupName = extractGroupNameFromGenerator(
 				input.getInputObject().pathForBindingRequired(),
 				input.context().isDebugEnabled()
 			);
-			calcAllResultsForInput(input, groupName);
+			calcAllResultsForInput(
+				input.getInputObject(),
+				input.getSharedState()::addResultsFor,
+				input.getSharedState().duplicateForNewThread(),
+				input.getSharedState().getFeatureNames(),
+				groupName,
+				input.context()
+			);
 		} catch (OperationFailedException | AnchorIOException e) {
 			throw new JobExecutionException(e);
 		}
@@ -124,7 +135,7 @@ public abstract class ExportFeaturesTask<T extends InputFromManager, S extends S
 		
 	@Override
 	public void afterAllJobsAreExecuted(
-			S sharedState,
+			SharedStateExportFeatures<S> sharedState,
 			BoundIOContext context
 	) throws ExperimentExecutionException {
 		
@@ -161,7 +172,7 @@ public abstract class ExportFeaturesTask<T extends InputFromManager, S extends S
 		);
 	}
 	
-	protected abstract S createSharedState(
+	protected abstract SharedStateExportFeatures<S> createSharedState(
 		MetadataHeaders metadataHeaders,
 		List<NamedBean<FeatureListProvider<U>>> features,
 		BoundIOContext context
@@ -173,7 +184,14 @@ public abstract class ExportFeaturesTask<T extends InputFromManager, S extends S
 
 	protected abstract GenerateHeadersForCSV headers();
 	
-	protected abstract void calcAllResultsForInput(InputBound<T,S> input, Optional<String> groupGeneratorName) throws OperationFailedException;
+	protected abstract void calcAllResultsForInput(
+		T input,
+		BiConsumer<StringLabelsForCsvRow,ResultsVector> addResultsFor,
+		S featureSource,
+		FeatureNameList featureNames,
+		Optional<String> groupGeneratorName,
+		BoundIOContext context
+	) throws OperationFailedException;
 
 	private boolean isGroupGeneratorDefined() {
 		return group!=null;

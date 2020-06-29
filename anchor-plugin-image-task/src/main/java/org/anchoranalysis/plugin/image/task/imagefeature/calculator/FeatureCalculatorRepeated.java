@@ -43,9 +43,9 @@ public class FeatureCalculatorRepeated {
 			inputObject,
 			context
 		);
-		return HelperInit.extractStack(
-			paramsInit,
+		return ExtractFromProvider.extractStack(
 			nrgStackProvider,
+			paramsInit,
 			context.getLogger()
 		);
 	}

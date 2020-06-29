@@ -40,7 +40,7 @@ public class ObjMaskMatchUtilities {
 	public static List<MatchedObject> matchIntersectingObjects( ObjectCollection sourceObjs, ObjectCollection searchObjects ) {
 		
 		// Find matching seeds for each object
-		return sourceObjs.stream().mapAsList(objSource->
+		return sourceObjs.stream().mapToList(objSource->
 			new MatchedObject(
 				objSource,
 				searchObjectsThatIntersectWith(searchObjects, objSource)

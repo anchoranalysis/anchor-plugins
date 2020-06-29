@@ -27,6 +27,8 @@ package org.anchoranalysis.plugin.image.task.bean.feature;
  */
 
 import java.io.File;
+import java.util.Optional;
+
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.bean.error.BeanDuplicateException;
@@ -40,7 +42,7 @@ import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.calc.FeatureInitParams;
 import org.anchoranalysis.feature.calc.results.ResultsVector;
-import org.anchoranalysis.feature.list.NamedFeatureStore;
+import org.anchoranalysis.feature.name.FeatureNameList;
 import org.anchoranalysis.feature.session.FeatureSession;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorMulti;
 import org.anchoranalysis.feature.shared.SharedFeaturesInitParams;
@@ -96,7 +98,8 @@ public class ExportFeaturesHistogramTask extends ExportFeaturesStoreTask<FileInp
 	@Override
 	protected ResultsVector calcResultsVectorForInputObject(
 		FileInput inputObject,
-		NamedFeatureStore<FeatureInputHistogram> featureStore,
+		FeatureList<FeatureInputHistogram> features,
+		FeatureNameList featureNames,
 		BoundIOContext context
 	) throws FeatureCalcException {
 
@@ -108,22 +111,19 @@ public class ExportFeaturesHistogramTask extends ExportFeaturesStoreTask<FileInp
 				hist = filterHistogramFromProvider(hist, context);
 			}
 			
-			ResultsVector rv = calcFeatures(
-				hist,
-				featureStore.deepCopy().listFeatures(),
+			ResultsVector rv = createCalculator(
+				features,
 				context.getLogger()
+			).calc(
+				new FeatureInputHistogram(hist, Optional.empty())
 			);
 			
 			// Exports results as a KeyValueParams
-			KeyValueParamsExporter.export(
-				featureStore.createFeatureNames(),
-				rv,
-				context
-			);
+			KeyValueParamsExporter.export(featureNames,	rv,	context);
 		
 			return rv;
 			
-		} catch (CSVReaderException | BeanDuplicateException | InitException | OperationFailedException e) {
+		} catch (CSVReaderException | BeanDuplicateException | OperationFailedException e) {
 			throw new FeatureCalcException(e);
 		}
 	}
@@ -147,30 +147,27 @@ public class ExportFeaturesHistogramTask extends ExportFeaturesStoreTask<FileInp
 	private ImageInitParams createImageInitParmas( Histogram inputtedHist, BoundIOContext context ) throws OperationFailedException {
 		// Create a shared-objects and initialise
 		ImageInitParams paramsInit = ImageInitParamsFactory.create(context);
-		paramsInit.getHistogramCollection().add(HISTOGRAM_INPUT_NAME_IN_PROVIDER, new IdentityOperation<>(inputtedHist) );
+		paramsInit.getHistogramCollection().add(
+			HISTOGRAM_INPUT_NAME_IN_PROVIDER,
+			new IdentityOperation<>(inputtedHist)
+		);
 		return paramsInit;
 	}
 
-	private ResultsVector calcFeatures( Histogram hist, FeatureList<FeatureInputHistogram> features, LogErrorReporter logErrorReporter ) throws InitException, FeatureCalcException {
-		SharedFeaturesInitParams initParams = SharedFeaturesInitParams.create( logErrorReporter );
-		
-		 FeatureCalculatorMulti<FeatureInputHistogram> session = FeatureSession.with(
+	private FeatureCalculatorMulti<FeatureInputHistogram> createCalculator(FeatureList<FeatureInputHistogram> features, LogErrorReporter logger) throws FeatureCalcException {
+		 return FeatureSession.with(
 			features,
 			new FeatureInitParams(),
-			initParams.getSharedFeatureSet(),
-			logErrorReporter
-		);
-		
-		return session.calc(
-			new FeatureInputHistogram(hist, null)
+			SharedFeaturesInitParams.create(logger).getSharedFeatureSet(),
+			logger
 		);
 	}
 
 	private static Histogram readHistogramFromCsv( FileInput input ) throws CSVReaderException {
 		File file = input.getFile();
 		
-		if (!file.getName().endsWith(".csv") && !file.getName().endsWith(".CSV")) {
-			throw new CSVReaderException("This task expects a .CSV file encoding a histogram as input. The file path must end with .csv or .CSV");
+		if (!file.getName().toLowerCase().endsWith(".csv")) {
+			throw new CSVReaderException("This task expects a CSV fule encoding a histogram as input. The file path must end with .csv");
 		}
 		
 		return HistogramCSVReader.readHistogramFromFile( file.toPath() );

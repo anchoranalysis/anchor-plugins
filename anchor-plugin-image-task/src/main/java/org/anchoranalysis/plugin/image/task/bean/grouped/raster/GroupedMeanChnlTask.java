@@ -38,11 +38,11 @@ import org.anchoranalysis.image.bean.size.SizeXY;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.stack.NamedImgStackCollection;
 import org.anchoranalysis.io.output.bound.BoundIOContext;
-import org.anchoranalysis.plugin.image.task.bean.grouped.GroupedSharedState;
 import org.anchoranalysis.plugin.image.task.bean.grouped.GroupedStackTask;
 import org.anchoranalysis.plugin.image.task.grouped.ChannelSource;
 import org.anchoranalysis.plugin.image.task.grouped.ConsistentChannelChecker;
 import org.anchoranalysis.plugin.image.task.grouped.GroupMapByName;
+import org.anchoranalysis.plugin.image.task.grouped.GroupedSharedState;
 import org.anchoranalysis.plugin.image.task.grouped.NamedChnl;
 
 

@@ -27,6 +27,7 @@ package org.anchoranalysis.plugin.mpp.experiment.bean.feature;
  */
 
 import java.util.List;
+import java.util.function.BiConsumer;
 import java.util.function.Function;
 
 import org.anchoranalysis.core.error.CreateException;
@@ -38,25 +39,26 @@ import org.anchoranalysis.feature.calc.results.ResultsVector;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.io.csv.StringLabelsForCsvRow;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
+import org.anchoranalysis.feature.session.calculator.FeatureCalculatorMulti;
 import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
 import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
-import org.anchoranalysis.image.feature.session.FeatureTableSession;
 import org.anchoranalysis.image.objectmask.ObjectCollection;
 import org.anchoranalysis.plugin.image.feature.bean.obj.table.FeatureTableObjs;
-import org.anchoranalysis.plugin.image.task.sharedstate.SharedStateExportFeatures;
 
-class FeatureCalculator<T extends FeatureInput> {
+class CalculateFeaturesFromProvider<T extends FeatureInput> {
 
 	private final FeatureTableObjs<T> table;
-	private final SharedStateExportFeatures sharedState;
+	private final FeatureCalculatorMulti<T> calculator;
+	private final BiConsumer<StringLabelsForCsvRow,ResultsVector> addResultsFor;
 	private final ImageInitParams imageInitParams;
 	private final NRGStackWithParams nrgStack;
 	private final boolean suppressErrors;
 	private final LogErrorReporter logger;
 	
-	public FeatureCalculator(
+	public CalculateFeaturesFromProvider(
 		FeatureTableObjs<T> table,
-		SharedStateExportFeatures sharedState,
+		FeatureCalculatorMulti<T> calculator,
+		BiConsumer<StringLabelsForCsvRow,ResultsVector> addResultsFor,
 		ImageInitParams imageInitParams,
 		NRGStackWithParams nrgStack,
 		boolean suppressErrors,
@@ -64,7 +66,8 @@ class FeatureCalculator<T extends FeatureInput> {
 	) {
 		super();
 		this.table = table;
-		this.sharedState = sharedState;
+		this.calculator = calculator;
+		this.addResultsFor = addResultsFor;
 		this.imageInitParams = imageInitParams;
 		this.nrgStack = nrgStack;
 		this.suppressErrors = suppressErrors;
@@ -73,22 +76,19 @@ class FeatureCalculator<T extends FeatureInput> {
 	
 	public void processProvider(
 		ObjMaskProvider provider,
-		FeatureTableSession<T> session,
-		Function<String, StringLabelsForCsvRow> identifierFromObjName
+		Function<T, StringLabelsForCsvRow> identifierFromInput
 	) throws OperationFailedException {
 		calculateFeaturesForProvider(
 			objsFromProvider(provider, imageInitParams, logger),
-			session,
 			nrgStack,
-			identifierFromObjName
+			identifierFromInput
 		);		
 	}
 	
 	private void calculateFeaturesForProvider(
 		ObjectCollection objs,
-		FeatureTableSession<T> session,
 		NRGStackWithParams nrgStack,
-		Function<String, StringLabelsForCsvRow> identifierFromObjName
+		Function<T, StringLabelsForCsvRow> identifierFromInput
 	) throws OperationFailedException {
 		try {
 			List<T> listParams = table.createListInputs(
@@ -98,9 +98,8 @@ class FeatureCalculator<T extends FeatureInput> {
 			);
 			
 			calculateManyFeaturesInto(
-				session,
 				listParams,
-				identifierFromObjName,
+				identifierFromInput,
 				suppressErrors,
 				logger
 			);
@@ -123,9 +122,8 @@ class FeatureCalculator<T extends FeatureInput> {
 	 * @throws OperationFailedException
 	 */
 	private void calculateManyFeaturesInto(
-		FeatureTableSession<T> session,
 		List<T> listInputs,
-		Function<String, StringLabelsForCsvRow> identifierFromObjName,
+		Function<T, StringLabelsForCsvRow> identifierFromObjName,
 		boolean suppressErrors,
 		LogErrorReporter logger
 	) throws OperationFailedException {
@@ -137,11 +135,9 @@ class FeatureCalculator<T extends FeatureInput> {
 			
 				logger.getLogReporter().logFormatted("Calculating input %d of %d: %s", i+1, listInputs.size(), input.toString() );
 				
-				ResultsVector rv = suppressErrors ? session.calcSuppressErrors(input, logger.getErrorReporter()) : session.calc(input);
-				String objName = session.uniqueIdentifierFor(input);
-				sharedState.addResultsFor(
-					identifierFromObjName.apply(objName),
-					rv
+				addResultsFor.accept(
+					identifierFromObjName.apply(input),
+					calculator.calc(input, logger.getErrorReporter(), suppressErrors)
 				);
 			}
 			

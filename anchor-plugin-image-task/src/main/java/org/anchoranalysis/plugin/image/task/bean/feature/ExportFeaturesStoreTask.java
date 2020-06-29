@@ -29,12 +29,13 @@ import java.util.List;
  */
 
 import java.util.Optional;
+import java.util.function.BiConsumer;
 
 import org.anchoranalysis.bean.NamedBean;
 import org.anchoranalysis.bean.error.BeanDuplicateException;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.experiment.task.InputBound;
+import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.bean.list.FeatureListProvider;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.calc.results.ResultsVector;
@@ -44,11 +45,12 @@ import org.anchoranalysis.feature.io.csv.name.SimpleName;
 import org.anchoranalysis.feature.io.csv.MetadataHeaders;
 import org.anchoranalysis.feature.list.NamedFeatureStore;
 import org.anchoranalysis.feature.list.NamedFeatureStoreFactory;
+import org.anchoranalysis.feature.name.FeatureNameList;
 import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.input.InputFromManager;
 import org.anchoranalysis.io.output.bound.BoundIOContext;
 import org.anchoranalysis.plugin.image.task.feature.GenerateHeadersForCSV;
-import org.anchoranalysis.plugin.image.task.sharedstate.SharedStateExportFeaturesWithStore;
+import org.anchoranalysis.plugin.image.task.sharedstate.SharedStateExportFeatures;
 
 /**
  * Base class for exporting features, where features are calculated per-image
@@ -60,7 +62,7 @@ import org.anchoranalysis.plugin.image.task.sharedstate.SharedStateExportFeature
  * @param S feature-input type
  *
  */
-public abstract class ExportFeaturesStoreTask<T extends InputFromManager, S extends FeatureInput> extends ExportFeaturesTask<T,SharedStateExportFeaturesWithStore<S>,S> {
+public abstract class ExportFeaturesStoreTask<T extends InputFromManager, S extends FeatureInput> extends ExportFeaturesTask<T,FeatureList<S>,S> {
 
 	private static final NamedFeatureStoreFactory STORE_FACTORY = NamedFeatureStoreFactory.factoryParamsOnly();
 	
@@ -77,13 +79,13 @@ public abstract class ExportFeaturesStoreTask<T extends InputFromManager, S exte
 	}	
 	
 	@Override
-	protected SharedStateExportFeaturesWithStore<S> createSharedState( MetadataHeaders metadataHeaders, List<NamedBean<FeatureListProvider<S>>> features, BoundIOContext context) throws CreateException {
+	protected SharedStateExportFeatures<FeatureList<S>> createSharedState( MetadataHeaders metadataHeaders, List<NamedBean<FeatureListProvider<S>>> features, BoundIOContext context) throws CreateException {
 		try {
-			NamedFeatureStore<S> featureStore = STORE_FACTORY.createNamedFeatureList(features);
-			
-			return new SharedStateExportFeaturesWithStore<>(
+			NamedFeatureStore<S> store = STORE_FACTORY.createNamedFeatureList(features); 
+			return new SharedStateExportFeatures<>(
 				metadataHeaders,
-				featureStore,
+				store.createFeatureNames(),
+				()->store.deepCopy().listFeatures(),
 				context
 			);
 		} catch (AnchorIOException e) {
@@ -101,18 +103,23 @@ public abstract class ExportFeaturesStoreTask<T extends InputFromManager, S exte
 	
 	@Override
 	protected void calcAllResultsForInput(
-		InputBound<T,SharedStateExportFeaturesWithStore<S>> input,
-		Optional<String> groupGeneratorName
+		T input,
+		BiConsumer<StringLabelsForCsvRow,ResultsVector> addResultsFor,
+		FeatureList<S> featureSourceSupplier,
+		FeatureNameList featureNames,
+		Optional<String> groupGeneratorName,
+		BoundIOContext context
 	) throws OperationFailedException {
 		try {
 			ResultsVector results = calcResultsVectorForInputObject(
-				input.getInputObject(),
-				input.getSharedState().getFeatureStore(),
-				input.context()
+				input,
+				featureSourceSupplier,
+				featureNames,
+				context
 			);
 			
-			input.getSharedState().addResultsFor(
-				identifierFor(input.getInputObject().descriptiveName(), groupGeneratorName),
+			addResultsFor.accept(
+				identifierFor(input.descriptiveName(), groupGeneratorName),
 				results
 			);
 			
@@ -123,7 +130,8 @@ public abstract class ExportFeaturesStoreTask<T extends InputFromManager, S exte
 	
 	protected abstract ResultsVector calcResultsVectorForInputObject(
 		T inputObject,
-		NamedFeatureStore<S> featureStore,
+		FeatureList<S> features,
+		FeatureNameList featureNames,
 		BoundIOContext context
 	) throws FeatureCalcException;
 	

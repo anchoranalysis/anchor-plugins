@@ -38,7 +38,7 @@ import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.list.NamedFeatureStoreFactory;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
-import org.anchoranalysis.image.feature.session.FeatureTableSession;
+import org.anchoranalysis.image.feature.session.FeatureTableCalculator;
 import org.anchoranalysis.image.objectmask.ObjectCollection;
 
 /**
@@ -61,7 +61,10 @@ public abstract class FeatureTableObjs<T extends FeatureInput> extends AnchorBea
 	 * @return
 	 * @throws CreateException
 	 */
-	public abstract FeatureTableSession<T> createFeatures( List<NamedBean<FeatureListProvider<FeatureInputSingleObj>>> list, NamedFeatureStoreFactory storeFactory, boolean suppressErrors ) throws CreateException, InitException;
+	public abstract FeatureTableCalculator<T> createFeatures( List<NamedBean<FeatureListProvider<FeatureInputSingleObj>>> list, NamedFeatureStoreFactory storeFactory, boolean suppressErrors ) throws CreateException, InitException;
+		
+	/** Generates a unique identifier for a particular input */
+	public abstract String uniqueIdentifierFor(T input);
 	
 	public abstract List<T> createListInputs(
 		ObjectCollection objs,
