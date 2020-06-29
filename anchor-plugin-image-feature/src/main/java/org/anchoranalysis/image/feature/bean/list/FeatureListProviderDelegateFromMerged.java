@@ -68,22 +68,21 @@ public class FeatureListProviderDelegateFromMerged extends FeatureListProvider<F
 	@Override
 	public FeatureList<FeatureInputPairObjs> create() throws CreateException {
 
-		FeatureList<FeatureInputSingleObj> in = item.create();
 		FeatureList<FeatureInputPairObjs> out = new FeatureList<>(); 
-		
-		for( Feature<FeatureInputSingleObj> featExst : in ) {
-			
-			Feature<FeatureInputSingleObj> featExstDup = featExst.duplicateBean();
-			
-			FeatureDeriveFromPair featDelegate = createNewDelegateFeature();
-			featDelegate.setItem(featExstDup);
-			
-			FeatureListProviderPrependName.setNewNameOnFeature(featDelegate, featExstDup.getFriendlyName(), prependString);
-			
-			out.add( featDelegate );
+		for(Feature<FeatureInputSingleObj> featExst : item.create()) {
+			out.add( pairFromSingle(featExst) );
 		}
-		
 		return out;
+	}
+	
+	private FeatureDeriveFromPair pairFromSingle(Feature<FeatureInputSingleObj> featExst) throws CreateException {
+		Feature<FeatureInputSingleObj> featExstDup = featExst.duplicateBean();
+		
+		FeatureDeriveFromPair featDelegate = createNewDelegateFeature();
+		featDelegate.setItem(featExstDup);
+		
+		FeatureListProviderPrependName.setNewNameOnFeature(featDelegate, featExstDup.getFriendlyName(), prependString);
+		return featDelegate;
 	}
 	
 
