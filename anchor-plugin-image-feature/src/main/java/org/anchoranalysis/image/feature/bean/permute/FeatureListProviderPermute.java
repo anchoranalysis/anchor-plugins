@@ -75,7 +75,7 @@ public class FeatureListProviderPermute<S, T extends FeatureInput> extends Featu
 		FeatureList<T> flInput = createInitialList(feature);
 		
 		// Create many copies of 'item' with properties adjusted
-		List<Feature<T>> fl = flInput;
+		List<Feature<T>> fl = flInput.asList();
 		for( PermuteProperty<S> pp : listPermuteProperty ) {
 			
 			try {

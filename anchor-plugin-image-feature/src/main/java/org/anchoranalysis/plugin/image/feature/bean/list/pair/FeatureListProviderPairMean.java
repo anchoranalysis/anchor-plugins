@@ -1,4 +1,4 @@
-package org.anchoranalysis.image.feature.bean.list;
+package org.anchoranalysis.plugin.image.feature.bean.list.pair;
 
 /*-
  * #%L
@@ -27,6 +27,7 @@ package org.anchoranalysis.image.feature.bean.list;
  */
 
 import org.anchoranalysis.feature.bean.operator.FeatureListElem;
+import org.anchoranalysis.image.feature.bean.list.FeatureListProviderAggregatePair;
 import org.anchoranalysis.image.feature.objmask.pair.FeatureInputPairObjs;
 import org.anchoranalysis.plugin.operator.feature.bean.list.Mean;
 
