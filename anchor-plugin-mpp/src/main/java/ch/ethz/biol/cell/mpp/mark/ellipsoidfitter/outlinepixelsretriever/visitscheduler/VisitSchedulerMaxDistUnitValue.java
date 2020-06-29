@@ -29,6 +29,7 @@ import java.util.Optional;
  */
 
 import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.core.axis.AxisType;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.error.friendly.AnchorFriendlyRuntimeException;
@@ -38,7 +39,6 @@ import org.anchoranalysis.core.random.RandomNumberGenerator;
 import org.anchoranalysis.image.bean.unitvalue.distance.UnitValueDistance;
 import org.anchoranalysis.image.extent.ImageRes;
 import org.anchoranalysis.image.objectmask.ObjectMask;
-import org.anchoranalysis.image.orientation.DirectionVector;
 
 // Breadth-first iteration of pixels
 public class VisitSchedulerMaxDistUnitValue extends VisitScheduler {
@@ -67,13 +67,17 @@ public class VisitSchedulerMaxDistUnitValue extends VisitScheduler {
 	
 	@Override
 	public Tuple3i maxDistFromRootPoint(ImageRes res) throws OperationFailedException {
-		
-		Optional<ImageRes> resOpt = Optional.of(res);
-
-		int distX = (int) Math.ceil( maxDist.rslv(resOpt, new DirectionVector(1,0,0)) );
-		int distY = (int) Math.ceil( maxDist.rslv(resOpt, new DirectionVector(0,1,0)) );
-		int distZ = (int) Math.ceil( maxDist.rslv(resOpt, new DirectionVector(0,0,1)) );
-		return new Point3i(distX,distY,distZ);
+		return new Point3i(
+			distForAxis(AxisType.X, res),
+			distForAxis(AxisType.Y, res),
+			distForAxis(AxisType.Z, res)
+		);
+	}
+	
+	private int distForAxis(AxisType axis, ImageRes res) throws OperationFailedException {
+		return (int) Math.ceil(
+			maxDist.rslvForAxis(Optional.of(res), axis)
+		);
 	}
 	
 	@Override

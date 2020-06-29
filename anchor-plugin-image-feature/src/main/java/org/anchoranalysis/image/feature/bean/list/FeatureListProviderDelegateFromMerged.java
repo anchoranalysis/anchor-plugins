@@ -67,12 +67,7 @@ public class FeatureListProviderDelegateFromMerged extends FeatureListProvider<F
 
 	@Override
 	public FeatureList<FeatureInputPairObjs> create() throws CreateException {
-
-		FeatureList<FeatureInputPairObjs> out = new FeatureList<>(); 
-		for(Feature<FeatureInputSingleObj> featExst : item.create()) {
-			out.add( pairFromSingle(featExst) );
-		}
-		return out;
+		return item.create().map(this::pairFromSingle);
 	}
 	
 	private FeatureDeriveFromPair pairFromSingle(Feature<FeatureInputSingleObj> featExst) throws CreateException {

@@ -60,15 +60,7 @@ public abstract class FeatureListProviderAggregate extends FeatureListProvider<F
 	
 	@Override
 	public FeatureList<FeatureInputPairObjs> create() throws CreateException {
-
-		FeatureList<FeatureInputSingleObj> in = item.create();
-		FeatureList<FeatureInputPairObjs> out = new FeatureList<>(); 
-		
-		for( Feature<FeatureInputSingleObj> featExst : in ) {
-			out.add( createFeatureFor(featExst) );
-		}
-		
-		return out;
+		return item.create().map(this::createFeatureFor);
 	}
 	
 	private Feature<FeatureInputPairObjs> createFeatureFor(Feature<FeatureInputSingleObj> featExst) {

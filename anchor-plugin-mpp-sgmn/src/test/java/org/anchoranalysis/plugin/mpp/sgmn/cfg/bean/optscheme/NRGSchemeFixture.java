@@ -33,7 +33,7 @@ import org.anchoranalysis.anchor.mpp.feature.nrg.scheme.NRGScheme;
 import org.anchoranalysis.anchor.mpp.feature.nrg.scheme.NRGSchemeWithSharedFeatures;
 import org.anchoranalysis.anchor.mpp.regionmap.RegionMapSingleton;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.feature.bean.list.FeatureList;
+import org.anchoranalysis.feature.bean.list.FeatureListFactory;
 import org.anchoranalysis.feature.shared.SharedFeatureMulti;
 import org.anchoranalysis.plugin.mpp.feature.bean.memo.ind.Size;
 import org.anchoranalysis.plugin.mpp.feature.bean.memo.pair.overlap.OverlapNumVoxels;
@@ -69,9 +69,9 @@ public class NRGSchemeFixture {
 	
 	private static NRGScheme createNRGScheme(double weightOverlap) throws CreateException {
 		return new NRGScheme(
-			new FeatureList<>( new Size() ),
-			new FeatureList<>( new MultiplyByConstant<>(new OverlapNumVoxels(),-1 * weightOverlap) ),
-			new FeatureList<>(),
+			FeatureListFactory.from( new Size() ),
+			FeatureListFactory.from( new MultiplyByConstant<>(new OverlapNumVoxels(),-1 * weightOverlap) ),
+			FeatureListFactory.empty(),
 			RegionMapSingleton.instance(),
 			new BBoxIntersection()
 		);

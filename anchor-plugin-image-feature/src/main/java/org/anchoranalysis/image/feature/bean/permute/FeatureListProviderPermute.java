@@ -44,6 +44,7 @@ import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.list.FeatureList;
+import org.anchoranalysis.feature.bean.list.FeatureListFactory;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.shared.SharedFeaturesInitParams;
 
@@ -72,20 +73,18 @@ public class FeatureListProviderPermute<S, T extends FeatureInput> extends Featu
 	@Override
 	protected FeatureList<T> createPermutedFeaturesFor( Feature<T> feature ) throws CreateException {
 		
-		FeatureList<T> flInput = createInitialList(feature);
-		
 		// Create many copies of 'item' with properties adjusted
-		List<Feature<T>> fl = flInput.asList();
+		List<Feature<T>> list = createInitialList(feature).asList();
 		for( PermuteProperty<S> pp : listPermuteProperty ) {
 			
 			try {
 				PermutationSetter permutationSetter = pp.createSetter(feature);
 				
-				fl = new ApplyPermutations<Feature<T>>(
-					(a) -> a.getCustomName(),
-					(a,s) -> a.setCustomName(s)
+				list = new ApplyPermutations<Feature<T>>(
+					Feature::getCustomName,
+					(feat,name) -> feat.setCustomName(name)
 				).applyPermutationsToCreateDuplicates(
-					fl,
+					list,
 					pp,
 					permutationSetter
 				);
@@ -97,7 +96,7 @@ public class FeatureListProviderPermute<S, T extends FeatureInput> extends Featu
 			}
 		}
 				
-		return new FeatureList<>(fl);
+		return FeatureListFactory.wrapReuse(list);
 	}
 
 	@Override
@@ -118,15 +117,18 @@ public class FeatureListProviderPermute<S, T extends FeatureInput> extends Featu
 
 	private FeatureList<T> createInitialList( Feature<T> feature ) throws CreateException {
 		try {
-			// We add our item to fl as the 'input' item, knowing there's at least one permutation
-			Feature<T> itemDup = feature.duplicateBean();
-			itemDup.setCustomName("");  // Doesn't matter, as will be replaced by next permutation
-			
-			return new FeatureList<>(itemDup);
-			
+			return FeatureListFactory.from(
+				duplicateAndRemoveName(feature)
+			);
 		} catch (BeanDuplicateException e) {
 			throw new CreateException(e);
 		}
+	}
+	
+	private Feature<T> duplicateAndRemoveName( Feature<T> feature ) {
+		// We add our item to fl as the 'input' item, knowing there's at least one permutation
+		// The named doesn't matter, as will be replaced by next permutation
+		return feature.duplicateChangeName(""); 
 	}
 	
 	public StringSet getReferencesFeatureListCreator() {

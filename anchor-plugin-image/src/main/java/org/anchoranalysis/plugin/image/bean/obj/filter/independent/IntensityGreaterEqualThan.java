@@ -31,6 +31,7 @@ import java.nio.ByteBuffer;
 import java.util.Optional;
 
 import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.core.axis.AxisType;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.bean.provider.ChnlProvider;
@@ -39,7 +40,6 @@ import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.objectmask.ObjectCollection;
 import org.anchoranalysis.image.objectmask.ObjectMask;
-import org.anchoranalysis.image.orientation.DirectionVector;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 import org.anchoranalysis.plugin.image.bean.obj.filter.ObjectFilterPredicate;
@@ -117,9 +117,9 @@ public class IntensityGreaterEqualThan extends ObjectFilterPredicate {
 
 	private int threshold(Optional<ImageDim> dim) throws OperationFailedException {
 		return (int) Math.ceil(
-			threshold.rslv(
+			threshold.rslvForAxis(
 				dim.map(ImageDim::getRes),
-				new DirectionVector(1.0, 0, 0)
+				AxisType.X
 			)
 		);
 	}

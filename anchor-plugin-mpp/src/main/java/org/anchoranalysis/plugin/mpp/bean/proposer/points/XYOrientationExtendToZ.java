@@ -42,6 +42,7 @@ import org.anchoranalysis.anchor.mpp.proposer.visualization.CreateProposeVisuali
 import org.anchoranalysis.anchor.mpp.proposer.visualization.ICreateProposalVisualization;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
+import org.anchoranalysis.core.axis.AxisType;
 import org.anchoranalysis.core.color.RGBColor;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
@@ -54,7 +55,6 @@ import org.anchoranalysis.image.bean.unitvalue.distance.UnitValueDistanceVoxels;
 import org.anchoranalysis.image.binary.BinaryChnl;
 import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.extent.ImageRes;
-import org.anchoranalysis.image.orientation.DirectionVector;
 import org.anchoranalysis.image.orientation.Orientation;
 import org.anchoranalysis.plugin.mpp.bean.proposer.points.fromorientation.PointsFromOrientationProposer;
 
@@ -158,9 +158,9 @@ public class XYOrientationExtendToZ extends PointsProposer {
 	
 	private int skipZDist(ImageRes res) throws OperationFailedException {
 		int skipZDist = (int) Math.round(
-			distanceZEndIfEmpty.rslv(
+			distanceZEndIfEmpty.rslvForAxis(
 				Optional.of(res),
-				new DirectionVector(0, 0, 1.0)
+				AxisType.Z
 			)
 		);
 		// TODO fix. Why this constant?
