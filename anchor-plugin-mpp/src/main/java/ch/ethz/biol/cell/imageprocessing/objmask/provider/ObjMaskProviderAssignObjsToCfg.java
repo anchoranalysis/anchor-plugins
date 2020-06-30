@@ -86,8 +86,7 @@ public class ObjMaskProviderAssignObjsToCfg extends ObjMaskProviderDimensions {
 		if (cfg.size()==0) {
 			// There are no ellipsoids to assign to, exit early making all objs unassigned
 			if (objsOutUnassigned!=null) {
-				ObjectCollection objsOutUnassignedCollection = objsOutUnassigned.create();
-				objsOutUnassignedCollection.addAll(objsCollection);
+				objsOutUnassigned.create().addAll(objsCollection);
 			}
 			return ObjectCollectionFactory.empty();
 		}

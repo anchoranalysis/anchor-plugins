@@ -29,6 +29,7 @@ package org.anchoranalysis.plugin.opencv.bean.feature;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.feature.bean.list.FeatureList;
+import org.anchoranalysis.feature.bean.list.FeatureListFactory;
 import org.anchoranalysis.feature.bean.list.FeatureListProvider;
 import org.anchoranalysis.image.bean.size.SizeXY;
 import org.anchoranalysis.image.feature.stack.FeatureInputStack;
@@ -57,16 +58,11 @@ public class HOGDescriptor extends FeatureListProvider<FeatureInputStack> {
 	
 	@Override
 	public FeatureList<FeatureInputStack> create() throws CreateException {
-
-		FeatureList<FeatureInputStack> out = new FeatureList<>();
-		
-		int sizeDescriptor = params.sizeDescriptor( resizeTo.asExtent() );
-		for( int i=0; i<sizeDescriptor; i++) {
-			out.add(
-				featureFor(i)
-			);
-		}
-		return out;
+		return FeatureListFactory.mapFromRange(
+			0,
+			params.sizeDescriptor( resizeTo.asExtent() ),
+			this::featureFor
+		);
 	}
 	
 	private HOGFeature featureFor(int index) {

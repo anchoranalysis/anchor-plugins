@@ -41,6 +41,7 @@ import org.anchoranalysis.image.channel.factory.ChannelFactory;
 import org.anchoranalysis.image.objectmask.ObjectMask;
 import org.anchoranalysis.image.objectmask.MatchedObject;
 import org.anchoranalysis.image.objectmask.ObjectCollection;
+import org.anchoranalysis.image.objectmask.ObjectCollectionFactory;
 import org.anchoranalysis.image.seed.SeedCollection;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 
@@ -91,29 +92,30 @@ public class ObjMaskProviderSeededObjSgmn extends ObjMaskProviderChnlSource {
 		assert(seeds!=null);
 		assert(sourceObjs!=null);
 		
-		List<MatchedObject> matchList = ObjMaskMatchUtilities.matchIntersectingObjects( sourceObjs, seeds );
-		
-		ObjectCollection out = new ObjectCollection();
-		for( MatchedObject ows : matchList ) {
-			if( ows.numMatches() <= 1 ) {
-				out.add( ows.getSourceObj() );
-			} else {
-				
-				try {
-					ObjectCollection objs = sgmn(
-						ows.getSourceObj(),
-						ows.getMatches(),
-						chnl,
-						sgmn
-					);
-					
-					out.addAll( objs );
-				} catch (SgmnFailedException e) {
-					throw new CreateException(e);
-				}
+		List<MatchedObject> matchList = ObjMaskMatchUtilities.matchIntersectingObjects(sourceObjs, seeds);
+
+		return ObjectCollectionFactory.flatMapFrom(
+			matchList.stream(),
+			CreateException.class,
+			ows -> sgmnIfMoreThanOne(ows, chnl, sgmn)
+		);
+	}
+	
+	private static ObjectCollection sgmnIfMoreThanOne(MatchedObject ows, Channel chnl, ObjMaskSgmn sgmn) throws CreateException {
+		if(ows.numMatches() <= 1) {
+			return ObjectCollectionFactory.from( ows.getSourceObj() );
+		} else {
+			try {
+				return sgmn(
+					ows.getSourceObj(),
+					ows.getMatches(),
+					chnl,
+					sgmn
+				);
+			} catch (SgmnFailedException e) {
+				throw new CreateException(e);
 			}
 		}
-		return out;
 	}
 	
 	private static ObjectCollection createWithoutSourceObjs(

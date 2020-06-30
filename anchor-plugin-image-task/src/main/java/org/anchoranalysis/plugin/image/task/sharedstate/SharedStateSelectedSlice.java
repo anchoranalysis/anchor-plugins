@@ -26,9 +26,10 @@ package org.anchoranalysis.plugin.image.task.sharedstate;
  * #L%
  */
 
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Stream;
 
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.text.TypedValue;
@@ -57,20 +58,20 @@ public class SharedStateSelectedSlice {
 	}
 	
 	public synchronized void writeRow( String name, int selectedSliceIndex, double featureOptima ) {
-		List<TypedValue> row = new ArrayList<>();
-		row.add( new TypedValue(name) );
-		row.add( new TypedValue(selectedSliceIndex) );
-		row.add( new TypedValue(featureOptima, 7) );
+		List<TypedValue> row = Arrays.asList(
+			new TypedValue(name),
+			new TypedValue(selectedSliceIndex),
+			new TypedValue(featureOptima, 7)
+		);
 		this.csvWriter.ifPresent( writer->
 			writer.addRow(row)
 		);
 	}
 	
 	private static FeatureNameList createFeatureNames() {
-		FeatureNameList featNames = new FeatureNameList();
-		featNames.add("sliceIndex");
-		featNames.add("featureOptima");
-		return featNames;
+		return new FeatureNameList(
+			Stream.of("sliceIndex","featureOptima")
+		);
 	}
 
 	public void close() {
