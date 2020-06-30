@@ -30,7 +30,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.geometry.PointConverter;
-import org.anchoranalysis.image.bean.provider.ObjMaskProviderOne;
+import org.anchoranalysis.image.bean.provider.ObjectCollectionProviderOne;
 import org.anchoranalysis.image.contour.Contour;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectCollectionFactory;
@@ -49,7 +49,7 @@ import ch.ethz.biol.cell.imageprocessing.objmask.provider.smoothspline.SplitCont
  * @author feehano
  *
  */
-public class ObjMaskProviderSplitContourSmoothingSpline extends ObjMaskProviderOne {
+public class ObjMaskProviderSplitContourSmoothingSpline extends ObjectCollectionProviderOne {
 
 	// START BEAN PROPERTIES
 	@BeanField

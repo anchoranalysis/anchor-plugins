@@ -37,7 +37,7 @@ import org.anchoranalysis.core.functional.OptionalUtilities;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.bean.nonbean.error.SgmnFailedException;
 import org.anchoranalysis.image.bean.provider.BinaryChnlProvider;
-import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
+import org.anchoranalysis.image.bean.provider.ObjectCollectionProvider;
 import org.anchoranalysis.image.bean.segmentation.object.ObjectSegmentation;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.extent.ImageDimensions;
@@ -56,7 +56,7 @@ public class ObjMaskProviderSgmn extends ObjMaskProviderChnlSource {
 	private ObjectSegmentation sgmn;
 	
 	@BeanField @OptionalBean
-	private ObjMaskProvider objsSeeds;
+	private ObjectCollectionProvider objsSeeds;
 	// END BEAN PROPERTIES
 
 	@Override
@@ -114,11 +114,11 @@ public class ObjMaskProviderSgmn extends ObjMaskProviderChnlSource {
 		this.sgmn = sgmn;
 	}
 
-	public ObjMaskProvider getObjsSeeds() {
+	public ObjectCollectionProvider getObjsSeeds() {
 		return objsSeeds;
 	}
 
-	public void setObjsSeeds(ObjMaskProvider objsSeeds) {
+	public void setObjsSeeds(ObjectCollectionProvider objsSeeds) {
 		this.objsSeeds = objsSeeds;
 	}
 

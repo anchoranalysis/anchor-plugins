@@ -34,7 +34,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.Positive;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.geometry.Point3i;
-import org.anchoranalysis.image.bean.provider.ObjMaskProviderOne;
+import org.anchoranalysis.image.bean.provider.ObjectCollectionProviderOne;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.object.ObjectCollection;
@@ -44,7 +44,7 @@ import org.anchoranalysis.image.voxel.box.factory.VoxelBoxFactory;
 
 // Chops objects up into squares (or mostly squares, sometimes rectangles at the very end)
 // Only chops in X and Y, Z is unaffected
-public class ObjMaskProviderSplitIntoSquares extends ObjMaskProviderOne {
+public class ObjMaskProviderSplitIntoSquares extends ObjectCollectionProviderOne {
 
 	// START BEAN PROPERTIES
 	@BeanField @Positive

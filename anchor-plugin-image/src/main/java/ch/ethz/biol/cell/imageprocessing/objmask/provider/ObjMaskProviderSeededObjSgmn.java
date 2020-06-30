@@ -34,7 +34,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.bean.nonbean.error.SgmnFailedException;
-import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
+import org.anchoranalysis.image.bean.provider.ObjectCollectionProvider;
 import org.anchoranalysis.image.bean.segmentation.object.ObjectSegmentation;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.channel.factory.ChannelFactory;
@@ -55,10 +55,10 @@ public class ObjMaskProviderSeededObjSgmn extends ObjMaskProviderChnlSource {
 
 	// START BEAN PROPERTIES
 	@BeanField @OptionalBean
-	private ObjMaskProvider objsSource;
+	private ObjectCollectionProvider objsSource;
 	
 	@BeanField
-	private ObjMaskProvider objsSeeds;
+	private ObjectCollectionProvider objsSeeds;
 	
 	@BeanField
 	private ObjectSegmentation sgmn;
@@ -180,22 +180,22 @@ public class ObjMaskProviderSeededObjSgmn extends ObjMaskProviderChnlSource {
 		this.sgmn = sgmn;
 	}
 
-	public ObjMaskProvider getObjsSeeds() {
+	public ObjectCollectionProvider getObjsSeeds() {
 		return objsSeeds;
 	}
 
 
-	public void setObjsSeeds(ObjMaskProvider objsSeeds) {
+	public void setObjsSeeds(ObjectCollectionProvider objsSeeds) {
 		this.objsSeeds = objsSeeds;
 	}
 
 
-	public ObjMaskProvider getObjsSource() {
+	public ObjectCollectionProvider getObjsSource() {
 		return objsSource;
 	}
 
 
-	public void setObjsSource(ObjMaskProvider objsSource) {
+	public void setObjsSource(ObjectCollectionProvider objsSource) {
 		this.objsSource = objsSource;
 	}
 }

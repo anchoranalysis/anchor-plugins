@@ -32,7 +32,7 @@ import java.util.Optional;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
+import org.anchoranalysis.image.bean.provider.ObjectCollectionProvider;
 import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.object.MatchedObject;
 import org.anchoranalysis.image.object.ObjectCollection;
@@ -45,7 +45,7 @@ public class ObjMaskProviderFilterByGroup extends ObjMaskProviderFilterBase {
 
 	// START BEAN PROPERTIES
 	@BeanField
-	private ObjMaskProvider objsGrouped;
+	private ObjectCollectionProvider objsGrouped;
 	// END BEAN PROPERTIES
 	
 	@Override
@@ -62,11 +62,11 @@ public class ObjMaskProviderFilterByGroup extends ObjMaskProviderFilterBase {
 		);
 	}
 	
-	public ObjMaskProvider getObjsGrouped() {
+	public ObjectCollectionProvider getObjsGrouped() {
 		return objsGrouped;
 	}
 
-	public void setObjsGrouped(ObjMaskProvider objsGrouped) {
+	public void setObjsGrouped(ObjectCollectionProvider objsGrouped) {
 		this.objsGrouped = objsGrouped;
 	}
 }

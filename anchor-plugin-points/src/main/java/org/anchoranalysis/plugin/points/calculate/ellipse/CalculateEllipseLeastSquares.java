@@ -64,7 +64,7 @@ public class CalculateEllipseLeastSquares extends FeatureCalculation<ObjMaskAndE
 		try {
 			NRGStack nrgStack = input.getNrgStackRequired().getNrgStack();
 			
-			ObjectMask om = extractEllipseSlice( input.getObjMask() );
+			ObjectMask om = extractEllipseSlice( input.getObjectMask() );
 			
 			// Shell Rad is arbitrary here for now
 			MarkEllipse mark = factory.create(om,nrgStack.getDimensions(), 0.2, nrgStack.getChnl(0) );

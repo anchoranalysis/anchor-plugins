@@ -39,7 +39,7 @@ import org.anchoranalysis.core.color.ColorList;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.bean.provider.ColorListProvider;
-import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
+import org.anchoranalysis.image.bean.provider.ObjectCollectionProvider;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.io.bean.color.generator.ColorSetGenerator;
@@ -50,7 +50,7 @@ public class StackProviderRGBFromObjMask extends StackProviderRGBFromObjMaskBase
 
 	// START BEAN PROPERTIES
 	@BeanField
-	private ObjMaskProvider objs;
+	private ObjectCollectionProvider objs;
 	
 	@BeanField @OptionalBean
 	private ColorListProvider colorListProvider;	// If null, uses the colorListGenerator below
@@ -84,11 +84,11 @@ public class StackProviderRGBFromObjMask extends StackProviderRGBFromObjMaskBase
 		return colorList.get();
 	}
 
-	public ObjMaskProvider getObjs() {
+	public ObjectCollectionProvider getObjs() {
 		return objs;
 	}
 
-	public void setObjs(ObjMaskProvider objs) {
+	public void setObjs(ObjectCollectionProvider objs) {
 		this.objs = objs;
 	}
 

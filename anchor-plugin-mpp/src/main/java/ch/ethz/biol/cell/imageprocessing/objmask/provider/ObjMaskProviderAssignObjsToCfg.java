@@ -38,7 +38,7 @@ import org.anchoranalysis.anchor.mpp.regionmap.RegionMapSingleton;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
+import org.anchoranalysis.image.bean.provider.ObjectCollectionProvider;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.object.ObjectCollection;
@@ -70,7 +70,7 @@ public class ObjMaskProviderAssignObjsToCfg extends ObjMaskProviderDimensions {
 	private CfgProvider cfgProviderOutExcluded = null;		// OPTIONAL. Adds all excluded marks
 	
 	@BeanField @OptionalBean
-	private ObjMaskProvider objsOutUnassigned = null;	// Optional. All the objects not assigned anywhere at the end
+	private ObjectCollectionProvider objsOutUnassigned = null;	// Optional. All the objects not assigned anywhere at the end
 	// END BEAN PROPERTIES
 	
 	private RegionMap regionMap = RegionMapSingleton.instance();
@@ -209,11 +209,11 @@ public class ObjMaskProviderAssignObjsToCfg extends ObjMaskProviderDimensions {
 		this.maxDist = maxDist;
 	}
 
-	public ObjMaskProvider getObjsOutUnassigned() {
+	public ObjectCollectionProvider getObjsOutUnassigned() {
 		return objsOutUnassigned;
 	}
 
-	public void setObjsOutUnassigned(ObjMaskProvider objsOutUnassigned) {
+	public void setObjsOutUnassigned(ObjectCollectionProvider objsOutUnassigned) {
 		this.objsOutUnassigned = objsOutUnassigned;
 	}
 }

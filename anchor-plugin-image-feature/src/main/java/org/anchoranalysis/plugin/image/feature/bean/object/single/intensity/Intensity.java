@@ -35,7 +35,6 @@ import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.feature.histogram.FeatureInputHistogram;
 import org.anchoranalysis.image.feature.histogram.Mean;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
-import org.anchoranalysis.plugin.image.feature.object.calculation.single.CalculateHistogramForNrgChnl;
 
 /**
  * Derives a histogram for an object against one channel from the NRG-stack, and applies a {@link org.anchoranalysis.image.feature.bean.FeatureHistogram} to it.

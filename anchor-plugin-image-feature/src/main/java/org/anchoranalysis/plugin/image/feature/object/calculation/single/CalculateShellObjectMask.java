@@ -134,7 +134,7 @@ public class CalculateShellObjectMask extends FeatureCalculation<ObjectMask,Feat
 	
 		ImageDimensions sd = input.getDimensionsRequired();
 		
-		ObjectMask om = input.getObjMask();
+		ObjectMask om = input.getObjectMask();
 		ObjectMask omShell = createShellObjMask( input, om, ccDilation, ccErosion, iterationsErosionSecond, do3D );
 		
 		if (inverse) {

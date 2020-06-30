@@ -33,7 +33,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.bean.object.ObjectMatcher;
-import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
+import org.anchoranalysis.image.bean.provider.ObjectCollectionProvider;
 import org.anchoranalysis.image.object.MatchedObject;
 import org.anchoranalysis.image.object.ObjectCollection;
 
@@ -41,7 +41,7 @@ public class ObjMaskMatcherIntersection extends ObjectMatcher {
 	
 	// START BEAN PROPERTIES
 	@BeanField
-	private ObjMaskProvider objs;
+	private ObjectCollectionProvider objs;
 	// END BEAN PROPERTIES
 	
 	@Override
@@ -58,11 +58,11 @@ public class ObjMaskMatcherIntersection extends ObjectMatcher {
 		}
 	}
 	
-	public ObjMaskProvider getObjs() {
+	public ObjectCollectionProvider getObjs() {
 		return objs;
 	}
 
-	public void setObjs(ObjMaskProvider objs) {
+	public void setObjs(ObjectCollectionProvider objs) {
 		this.objs = objs;
 	}
 }

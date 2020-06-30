@@ -32,7 +32,7 @@ import java.util.Optional;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
+import org.anchoranalysis.image.bean.provider.ObjectCollectionProvider;
 import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectMask;
@@ -50,10 +50,10 @@ public class GreaterIntersectionWith extends ObjectFilterPredicate {
 
 	// START BEAN PROPERTIES
 	@BeanField
-	private ObjMaskProvider objsGreater;
+	private ObjectCollectionProvider objsGreater;
 	
 	@BeanField
-	private ObjMaskProvider objsLesser;
+	private ObjectCollectionProvider objsLesser;
 	// END BEAN PROPERTIES
 	
 	private ObjectCollection intersectionGreater;
@@ -88,19 +88,19 @@ public class GreaterIntersectionWith extends ObjectFilterPredicate {
 		intersectionLesser = null;
 	}
 
-	public ObjMaskProvider getObjsGreater() {
+	public ObjectCollectionProvider getObjsGreater() {
 		return objsGreater;
 	}
 	
-	public void setObjsGreater(ObjMaskProvider objsGreater) {
+	public void setObjsGreater(ObjectCollectionProvider objsGreater) {
 		this.objsGreater = objsGreater;
 	}
 
-	public ObjMaskProvider getObjsLesser() {
+	public ObjectCollectionProvider getObjsLesser() {
 		return objsLesser;
 	}
 	
-	public void setObjsLesser(ObjMaskProvider objsLesser) {
+	public void setObjsLesser(ObjectCollectionProvider objsLesser) {
 		this.objsLesser = objsLesser;
 	}
 }

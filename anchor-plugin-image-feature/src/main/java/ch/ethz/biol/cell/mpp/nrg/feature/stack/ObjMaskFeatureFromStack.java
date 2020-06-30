@@ -37,7 +37,7 @@ import org.anchoranalysis.feature.cache.ChildCacheName;
 import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
-import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
+import org.anchoranalysis.image.bean.provider.ObjectCollectionProvider;
 import org.anchoranalysis.image.feature.bean.FeatureStack;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.feature.stack.FeatureInputStack;
@@ -53,7 +53,7 @@ public abstract class ObjMaskFeatureFromStack extends FeatureStack {
 	
 	@BeanField
 	@SkipInit
-	private ObjMaskProvider objs;
+	private ObjectCollectionProvider objs;
 	// END BEAN PROPERTIES
 	
 	// We cache the objsCollection as it's not dependent on individual parameters
@@ -125,12 +125,12 @@ public abstract class ObjMaskFeatureFromStack extends FeatureStack {
 	}
 
 
-	public ObjMaskProvider getObjs() {
+	public ObjectCollectionProvider getObjs() {
 		return objs;
 	}
 
 
-	public void setObjs(ObjMaskProvider objs) {
+	public void setObjs(ObjectCollectionProvider objs) {
 		this.objs = objs;
 	}
 }

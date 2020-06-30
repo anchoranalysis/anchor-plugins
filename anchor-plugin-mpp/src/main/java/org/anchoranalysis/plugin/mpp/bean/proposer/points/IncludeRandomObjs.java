@@ -39,7 +39,7 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.core.random.RandomNumberGenerator;
-import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
+import org.anchoranalysis.image.bean.provider.ObjectCollectionProvider;
 import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectMask;
@@ -56,7 +56,7 @@ public class IncludeRandomObjs extends PointsProposer {
 
 	// START BEAN PROPERTIES
 	@BeanField
-	private ObjMaskProvider objs;
+	private ObjectCollectionProvider objs;
 	// END BEAN PROPERTIES
 	
 	@Override
@@ -89,11 +89,11 @@ public class IncludeRandomObjs extends PointsProposer {
 		return null;
 	}
 
-	public ObjMaskProvider getObjs() {
+	public ObjectCollectionProvider getObjs() {
 		return objs;
 	}
 
-	public void setObjs(ObjMaskProvider objs) {
+	public void setObjs(ObjectCollectionProvider objs) {
 		this.objs = objs;
 	}
 	

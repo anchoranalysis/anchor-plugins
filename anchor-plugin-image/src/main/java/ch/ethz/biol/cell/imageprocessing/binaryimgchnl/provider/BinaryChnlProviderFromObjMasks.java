@@ -29,7 +29,7 @@ package ch.ethz.biol.cell.imageprocessing.binaryimgchnl.provider;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
+import org.anchoranalysis.image.bean.provider.ObjectCollectionProvider;
 import org.anchoranalysis.image.binary.BinaryChnl;
 import org.anchoranalysis.image.binary.values.BinaryValues;
 import org.anchoranalysis.image.extent.ImageDimensions;
@@ -43,7 +43,7 @@ public class BinaryChnlProviderFromObjMasks extends BinaryChnlProviderDimSource 
 
 	// START BEAN
 	@BeanField
-	private ObjMaskProvider objs;
+	private ObjectCollectionProvider objs;
 	
 	@BeanField
 	private boolean invert = false;
@@ -67,11 +67,11 @@ public class BinaryChnlProviderFromObjMasks extends BinaryChnlProviderDimSource 
 		return new BinaryChnl(maskedImage.getChnl(), bv);	
 	}
 
-	public ObjMaskProvider getObjs() {
+	public ObjectCollectionProvider getObjs() {
 		return objs;
 	}
 
-	public void setObjs(ObjMaskProvider objs) {
+	public void setObjs(ObjectCollectionProvider objs) {
 		this.objs = objs;
 	}
 

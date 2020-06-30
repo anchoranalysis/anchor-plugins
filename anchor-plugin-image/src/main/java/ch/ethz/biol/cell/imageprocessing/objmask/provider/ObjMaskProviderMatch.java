@@ -31,12 +31,12 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.bean.object.ObjectMatcher;
-import org.anchoranalysis.image.bean.provider.ObjMaskProviderOne;
+import org.anchoranalysis.image.bean.provider.ObjectCollectionProviderOne;
 import org.anchoranalysis.image.object.MatchedObject;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectCollectionFactory;
 
-public class ObjMaskProviderMatch extends ObjMaskProviderOne {
+public class ObjMaskProviderMatch extends ObjectCollectionProviderOne {
 
 	// START BEAN PROPERTIES
 	@BeanField

@@ -40,7 +40,7 @@ import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.image.bean.ImageBean;
 import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
 import org.anchoranalysis.image.bean.provider.BinaryChnlProvider;
-import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
+import org.anchoranalysis.image.bean.provider.ObjectCollectionProvider;
 import org.anchoranalysis.image.binary.BinaryChnl;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectCollectionFactory;
@@ -51,14 +51,14 @@ public class ProviderFixture {
 
 	private ProviderFixture() {}
 	
-	public static ObjMaskProvider providerFor(ObjectMask obj) {
+	public static ObjectCollectionProvider providerFor(ObjectMask obj) {
 		return providerFor(
 			ObjectCollectionFactory.from(obj)	
 		);
 	}
 	
-	public static ObjMaskProvider providerFor(ObjectCollection objs) {
-		ObjMaskProvider provider = mock(ObjMaskProvider.class);
+	public static ObjectCollectionProvider providerFor(ObjectCollection objs) {
+		ObjectCollectionProvider provider = mock(ObjectCollectionProvider.class);
 		try {
 			when(provider.create()).thenReturn(objs);
 		} catch (CreateException e) {

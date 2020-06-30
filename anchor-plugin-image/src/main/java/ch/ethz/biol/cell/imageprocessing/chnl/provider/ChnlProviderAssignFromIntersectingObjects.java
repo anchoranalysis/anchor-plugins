@@ -34,7 +34,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.friendly.AnchorImpossibleSituationException;
 import org.anchoranalysis.image.bean.provider.ChnlProviderOne;
-import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
+import org.anchoranalysis.image.bean.provider.ObjectCollectionProvider;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.object.MatchedObject;
 import org.anchoranalysis.image.object.ObjectCollection;
@@ -50,10 +50,10 @@ public class ChnlProviderAssignFromIntersectingObjects extends ChnlProviderOne {
 
 	// START BEAN PROPERTIES
 	@BeanField
-	private ObjMaskProvider objsSource;
+	private ObjectCollectionProvider objsSource;
 	
 	@BeanField
-	private ObjMaskProvider objsTarget;
+	private ObjectCollectionProvider objsTarget;
 	// END BEAN PROPERTIES
 	
 	@Override
@@ -120,19 +120,19 @@ public class ChnlProviderAssignFromIntersectingObjects extends ChnlProviderOne {
 		);
 	}
 	
-	public ObjMaskProvider getObjsSource() {
+	public ObjectCollectionProvider getObjsSource() {
 		return objsSource;
 	}
 
-	public void setObjsSource(ObjMaskProvider objsSource) {
+	public void setObjsSource(ObjectCollectionProvider objsSource) {
 		this.objsSource = objsSource;
 	}
 
-	public ObjMaskProvider getObjsTarget() {
+	public ObjectCollectionProvider getObjsTarget() {
 		return objsTarget;
 	}
 
-	public void setObjsTarget(ObjMaskProvider objsTarget) {
+	public void setObjsTarget(ObjectCollectionProvider objsTarget) {
 		this.objsTarget = objsTarget;
 	}
 }

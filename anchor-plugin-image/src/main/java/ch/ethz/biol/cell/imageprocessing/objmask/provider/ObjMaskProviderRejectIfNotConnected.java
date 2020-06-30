@@ -29,7 +29,7 @@ package ch.ethz.biol.cell.imageprocessing.objmask.provider;
 
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.image.bean.provider.ObjMaskProviderOne;
+import org.anchoranalysis.image.bean.provider.ObjectCollectionProviderOne;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectMask;
 
@@ -39,7 +39,7 @@ import org.anchoranalysis.image.object.ObjectMask;
  * @author Owen Feehan
  *
  */
-public class ObjMaskProviderRejectIfNotConnected extends ObjMaskProviderOne {
+public class ObjMaskProviderRejectIfNotConnected extends ObjectCollectionProviderOne {
 
 	@Override
 	public ObjectCollection createFromObjs(ObjectCollection objsCollection) throws CreateException {

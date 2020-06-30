@@ -30,11 +30,11 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorSingle;
-import org.anchoranalysis.image.bean.provider.ObjMaskProviderOne;
+import org.anchoranalysis.image.bean.provider.ObjectCollectionProviderOne;
 import org.anchoranalysis.image.feature.bean.evaluator.FeatureEvaluator;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 
-public abstract class ObjMaskProviderFindMaxFeatureBase extends ObjMaskProviderOne {
+public abstract class ObjMaskProviderFindMaxFeatureBase extends ObjectCollectionProviderOne {
 
 	// START BEAN PROPERTIES
 	@BeanField
