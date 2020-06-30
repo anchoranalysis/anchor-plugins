@@ -36,18 +36,18 @@ import org.anchoranalysis.bean.BeanInstanceMap;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.bean.error.BeanMisconfiguredException;
 import org.anchoranalysis.image.bean.nonbean.error.SgmnFailedException;
-import org.anchoranalysis.image.bean.sgmn.binary.BinarySgmn;
-import org.anchoranalysis.image.bean.sgmn.binary.BinarySgmnParameters;
+import org.anchoranalysis.image.bean.nonbean.parameters.BinarySegmentationParameters;
+import org.anchoranalysis.image.bean.segmentation.binary.BinarySegmentation;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
 import org.anchoranalysis.image.extent.BoundingBox;
-import org.anchoranalysis.image.objectmask.ObjectMask;
+import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.voxel.box.VoxelBoxWrapper;
 
-public class SgmnSequence extends BinarySgmn {
+public class SgmnSequence extends BinarySegmentation {
 
 	// START BEAN PROPERTIES
 	@OptionalBean
-	private List<BinarySgmn> listSgmn = new ArrayList<>();
+	private List<BinarySegmentation> listSgmn = new ArrayList<>();
 	// END BEAN PROPERTIES
 	
 	@Override
@@ -60,7 +60,7 @@ public class SgmnSequence extends BinarySgmn {
 
 	@Override
 	public BinaryVoxelBox<ByteBuffer> sgmn(VoxelBoxWrapper voxelBox,
-			BinarySgmnParameters params, Optional<ObjectMask> mask) throws SgmnFailedException {
+			BinarySegmentationParameters params, Optional<ObjectMask> mask) throws SgmnFailedException {
 		
 		BinaryVoxelBox<ByteBuffer> out = null;
 		
@@ -75,7 +75,7 @@ public class SgmnSequence extends BinarySgmn {
 		
 		// A mask that evolves as we move through each segmentation to be increasingly smaller.
 		Optional<ObjectMask> evolvingMask = mask;
-		for( BinarySgmn sgmn : listSgmn) {
+		for( BinarySegmentation sgmn : listSgmn) {
 			
 			BinaryVoxelBox<ByteBuffer> outNew = sgmn.sgmn(voxelBox, params, evolvingMask);
 			
@@ -90,11 +90,11 @@ public class SgmnSequence extends BinarySgmn {
 		return out;
 	}
 
-	public List<BinarySgmn> getListSgmn() {
+	public List<BinarySegmentation> getListSgmn() {
 		return listSgmn;
 	}
 
-	public void setListSgmn(List<BinarySgmn> listSgmn) {
+	public void setListSgmn(List<BinarySegmentation> listSgmn) {
 		this.listSgmn = listSgmn;
 	}
 }

@@ -39,7 +39,7 @@ import org.anchoranalysis.anchor.mpp.proposer.ProposalAbnormalFailureException;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.random.RandomNumberGenerator;
-import org.anchoranalysis.image.extent.ImageDim;
+import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.orientation.Orientation;
 import org.anchoranalysis.image.orientation.Orientation2D;
 
@@ -54,7 +54,7 @@ public class LongestExtent extends OrientationProposer {
 	// END BEAN
 	
 	@Override
-	public Optional<Orientation> propose(Mark mark, ImageDim dim, RandomNumberGenerator re ) throws ProposalAbnormalFailureException {
+	public Optional<Orientation> propose(Mark mark, ImageDimensions dim, RandomNumberGenerator re ) throws ProposalAbnormalFailureException {
 		
 		MarkAbstractPosition markC = (MarkAbstractPosition) mark;
 		

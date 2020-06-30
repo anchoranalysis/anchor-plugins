@@ -29,7 +29,7 @@ package ch.ethz.biol.cell.mpp.nrg.feature.objmask;
 import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.extent.BoundingBox;
-import org.anchoranalysis.image.extent.ImageDim;
+import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.feature.bean.object.single.FeatureSingleObject;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 
@@ -52,5 +52,5 @@ public abstract class AtBorderBase extends FeatureSingleObject {
 		);
 	}
 	
-	protected abstract boolean isBoundingBoxAtBorder( BoundingBox boundingBox, ImageDim dim );
+	protected abstract boolean isBoundingBoxAtBorder( BoundingBox boundingBox, ImageDimensions dim );
 }

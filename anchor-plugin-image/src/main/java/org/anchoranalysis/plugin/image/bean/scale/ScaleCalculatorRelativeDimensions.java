@@ -33,7 +33,7 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.bean.provider.ImageDimProvider;
 import org.anchoranalysis.image.bean.scale.ScaleCalculator;
-import org.anchoranalysis.image.extent.ImageDim;
+import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.scale.ScaleFactor;
 import org.anchoranalysis.image.scale.ScaleFactorUtilities;
 
@@ -48,10 +48,10 @@ public class ScaleCalculatorRelativeDimensions extends ScaleCalculator {
 	// END BEAN PROPERTIES
 
 	@Override
-	public ScaleFactor calc(ImageDim srcDim)
+	public ScaleFactor calc(ImageDimensions srcDim)
 			throws OperationFailedException {
 		
-		ImageDim sdSource = srcDim;
+		ImageDimensions sdSource = srcDim;
 		if (dimSource!=null) {
 			try {
 				sdSource = dimSource.create();

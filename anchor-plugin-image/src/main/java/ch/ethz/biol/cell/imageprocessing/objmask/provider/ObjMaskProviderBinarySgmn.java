@@ -33,12 +33,12 @@ import java.util.Optional;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.bean.nonbean.error.SgmnFailedException;
-import org.anchoranalysis.image.bean.sgmn.binary.BinarySgmn;
-import org.anchoranalysis.image.bean.sgmn.binary.BinarySgmnParameters;
+import org.anchoranalysis.image.bean.nonbean.parameters.BinarySegmentationParameters;
+import org.anchoranalysis.image.bean.segmentation.binary.BinarySegmentation;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
 import org.anchoranalysis.image.channel.Channel;
-import org.anchoranalysis.image.objectmask.ObjectMask;
-import org.anchoranalysis.image.objectmask.ObjectCollection;
+import org.anchoranalysis.image.object.ObjectCollection;
+import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.anchoranalysis.image.voxel.box.VoxelBoxWrapper;
 
@@ -46,7 +46,7 @@ public class ObjMaskProviderBinarySgmn extends ObjMaskProviderOneChnlSource {
 
 	// START BEAN PROPERTIES
 	@BeanField
-	private BinarySgmn binarySgmn;
+	private BinarySegmentation binarySgmn;
 	// END BEAN PROPERTIES
 
 	@Override
@@ -65,7 +65,7 @@ public class ObjMaskProviderBinarySgmn extends ObjMaskProviderOneChnlSource {
 		
 		BinaryVoxelBox<ByteBuffer> bvb = binarySgmn.sgmn(
 			new VoxelBoxWrapper(vb),
-			new BinarySgmnParameters(),
+			new BinarySegmentationParameters(),
 			Optional.of(
 				new ObjectMask(om.getVoxelBox())
 			)
@@ -74,11 +74,11 @@ public class ObjMaskProviderBinarySgmn extends ObjMaskProviderOneChnlSource {
 		return new ObjectMask(om.getBoundingBox(), bvb);	
 	}
 
-	public BinarySgmn getBinarySgmn() {
+	public BinarySegmentation getBinarySgmn() {
 		return binarySgmn;
 	}
 
-	public void setBinarySgmn(BinarySgmn binarySgmn) {
+	public void setBinarySgmn(BinarySegmentation binarySgmn) {
 		this.binarySgmn = binarySgmn;
 	}
 }

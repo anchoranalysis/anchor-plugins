@@ -33,16 +33,16 @@ import java.util.Optional;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.bean.nonbean.error.SgmnFailedException;
-import org.anchoranalysis.image.bean.objmask.filter.ObjectFilter;
-import org.anchoranalysis.image.bean.sgmn.objmask.ObjMaskSgmn;
-import org.anchoranalysis.image.bean.sgmn.objmask.ObjMaskSgmnOne;
+import org.anchoranalysis.image.bean.object.ObjectFilter;
+import org.anchoranalysis.image.bean.segmentation.object.ObjectSegmentation;
+import org.anchoranalysis.image.bean.segmentation.object.ObjectSegmentationOne;
 import org.anchoranalysis.image.channel.Channel;
-import org.anchoranalysis.image.extent.ImageDim;
-import org.anchoranalysis.image.objectmask.ObjectMask;
-import org.anchoranalysis.image.objectmask.ObjectCollection;
+import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.image.object.ObjectCollection;
+import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.seed.SeedCollection;
 
-public class ObjMaskSgmnFilter extends ObjMaskSgmnOne {
+public class ObjMaskSgmnFilter extends ObjectSegmentationOne {
 
 	// START BEAN PROPERTIES
 	@BeanField
@@ -50,14 +50,14 @@ public class ObjMaskSgmnFilter extends ObjMaskSgmnOne {
 	// END BEAN PROPERTIES
 	
 	@Override
-	public ObjectCollection sgmn(Channel chnl, Optional<ObjectMask> objMask, Optional<SeedCollection> seeds, ObjMaskSgmn sgmn) throws SgmnFailedException {
+	public ObjectCollection sgmn(Channel chnl, Optional<ObjectMask> objMask, Optional<SeedCollection> seeds, ObjectSegmentation sgmn) throws SgmnFailedException {
 		return filterObjs(
 			sgmn.sgmn(chnl, objMask, seeds),
 			chnl.getDimensions()
 		);
 	}
 
-	private ObjectCollection filterObjs( ObjectCollection objs, ImageDim dim ) throws SgmnFailedException {
+	private ObjectCollection filterObjs( ObjectCollection objs, ImageDimensions dim ) throws SgmnFailedException {
 		try {
 			return filter.filter(
 				objs,

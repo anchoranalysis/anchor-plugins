@@ -34,7 +34,7 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.Extent;
-import org.anchoranalysis.image.objectmask.ObjectMask;
+import org.anchoranalysis.image.object.ObjectMask;
 
 class ExtendObjsInZHelper {
 
@@ -48,8 +48,8 @@ class ExtendObjsInZHelper {
 		
 		ByteBuffer bbFlat = omFlat.getVoxelBox().getPixelsForPlane(0).buffer();
 				
-		int zLow = bbox.getCrnrMin().getZ();
-		int zHigh = bbox.calcCrnrMax().getZ();
+		int zLow = bbox.getCornerMin().getZ();
+		int zHigh = bbox.calcCornerMax().getZ();
 		
 		if (zCent>zHigh) { zCent = zHigh; }
 		if (zCent<zLow) { zCent = zLow; }

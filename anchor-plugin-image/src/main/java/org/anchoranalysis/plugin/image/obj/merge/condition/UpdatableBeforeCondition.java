@@ -29,8 +29,8 @@ import java.util.Optional;
  */
 
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.image.extent.ImageRes;
-import org.anchoranalysis.image.objectmask.ObjectMask;
+import org.anchoranalysis.image.extent.ImageResolution;
+import org.anchoranalysis.image.object.ObjectMask;
 
 
 /**
@@ -47,7 +47,7 @@ import org.anchoranalysis.image.objectmask.ObjectMask;
  */
 public interface UpdatableBeforeCondition {
 	
-	void updateSrcObj(ObjectMask omSrc, Optional<ImageRes> res) throws OperationFailedException;
+	void updateSrcObj(ObjectMask omSrc, Optional<ImageResolution> res) throws OperationFailedException;
 	
 	boolean accept(ObjectMask omDest) throws OperationFailedException;
 }

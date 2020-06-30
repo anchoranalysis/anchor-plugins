@@ -39,7 +39,7 @@ import org.anchoranalysis.feature.cache.calculation.FeatureCalculation;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.feature.bean.object.pair.FeatureDeriveFromPair;
 import org.anchoranalysis.image.feature.object.input.FeatureInputPairObjects;
-import org.anchoranalysis.image.objectmask.ObjectMask;
+import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.plugin.image.feature.object.calculation.delegate.CalculateInputFromDelegateOption;
 import org.anchoranalysis.plugin.image.feature.object.calculation.pair.CalculateIntersectionInput;
 import org.anchoranalysis.plugin.image.feature.object.calculation.pair.CalculatePairIntersectionCommutative;

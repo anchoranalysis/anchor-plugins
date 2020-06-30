@@ -37,8 +37,8 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.bean.provider.ImageDimProvider;
 import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
-import org.anchoranalysis.image.extent.ImageDim;
-import org.anchoranalysis.image.objectmask.ObjectCollection;
+import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.image.object.ObjectCollection;
 
 import ch.ethz.biol.cell.imageprocessing.dim.provider.GuessDimFromInputImage;
 
@@ -64,7 +64,7 @@ public class ObjMaskProviderCfg extends ObjMaskProvider {
 		
 		Cfg cfg = cfgProvider.create();
 		
-		ImageDim dims = dim.create();
+		ImageDimensions dims = dim.create();
 		
 		return cfg.calcMask(
 			dims,

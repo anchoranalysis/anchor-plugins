@@ -33,11 +33,9 @@ import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.histogram.Histogram;
 import org.anchoranalysis.image.histogram.HistogramFactory;
-import org.anchoranalysis.image.objectmask.ObjectMask;
+import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.voxel.statistics.VoxelStatisticsFromHistogram;
 import org.anchoranalysis.plugin.image.intensity.IntensityMeanCalculator;
-
-import ch.ethz.biol.cell.mpp.nrg.feature.objmask.ValueAndIndex;
 
 class StatsHelper {
 
@@ -60,7 +58,7 @@ class StatsHelper {
 			ObjectMask omSlice = om.extractSlice(z, true);
 
 			// We adjust the z coordiante to point to the channel
-			int zTarget = omSlice.getBoundingBox().getCrnrMin().getZ() + om.getBoundingBox().getCrnrMin().getZ(); 
+			int zTarget = omSlice.getBoundingBox().getCornerMin().getZ() + om.getBoundingBox().getCornerMin().getZ(); 
 			omSlice = omSlice.mapBoundingBox( bbox->bbox.shiftToZ(zTarget) );
 			
 			if (omSlice.hasPixelsGreaterThan(0)) {

@@ -29,9 +29,9 @@ package ch.ethz.biol.cell.imageprocessing.objmask.provider;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.image.extent.ImageDim;
-import org.anchoranalysis.image.objectmask.ObjectMask;
-import org.anchoranalysis.image.objectmask.ObjectCollection;
+import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.image.object.ObjectCollection;
+import org.anchoranalysis.image.object.ObjectMask;
 
 // Considers all possible pairs of objects in a provider, and removes intersecting pixels
 public class ObjMaskProviderRemoveTouchBorder extends ObjMaskProviderDimensions {
@@ -44,14 +44,14 @@ public class ObjMaskProviderRemoveTouchBorder extends ObjMaskProviderDimensions 
 	@Override
 	public ObjectCollection createFromObjs(ObjectCollection objsIn) throws CreateException {
 		
-		ImageDim dim = createDim();
+		ImageDimensions dim = createDim();
 		
 		return objsIn.stream().filter( obj->
 			!atBorder(obj, dim)
 		);
 	}
 	
-	private boolean atBorder(ObjectMask obj, ImageDim dim) {
+	private boolean atBorder(ObjectMask obj, ImageDimensions dim) {
 		if (useZ) {
 			return obj.getBoundingBox().atBorder(dim);
 		} else {

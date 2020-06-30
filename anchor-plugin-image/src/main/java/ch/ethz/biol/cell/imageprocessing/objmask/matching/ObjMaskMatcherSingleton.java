@@ -31,12 +31,12 @@ import java.util.List;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.image.bean.objmask.match.ObjMaskMatcher;
+import org.anchoranalysis.image.bean.object.ObjectMatcher;
 import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
-import org.anchoranalysis.image.objectmask.ObjectMask;
-import org.anchoranalysis.image.objectmask.MatchedObject;
-import org.anchoranalysis.image.objectmask.ObjectCollection;
-import org.anchoranalysis.image.objectmask.ObjectCollectionFactory;
+import org.anchoranalysis.image.object.MatchedObject;
+import org.anchoranalysis.image.object.ObjectCollection;
+import org.anchoranalysis.image.object.ObjectCollectionFactory;
+import org.anchoranalysis.image.object.ObjectMask;
 
 /**
  * Specifies a single object that will always be the "match" for whatever source object.
@@ -44,7 +44,7 @@ import org.anchoranalysis.image.objectmask.ObjectCollectionFactory;
  * @author Owen Feehan
  *
  */
-public class ObjMaskMatcherSingleton extends ObjMaskMatcher {
+public class ObjMaskMatcherSingleton extends ObjectMatcher {
 
 	// START BEAN PROPERTIES
 	@BeanField

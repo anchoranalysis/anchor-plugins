@@ -34,23 +34,23 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.bean.nonbean.error.SgmnFailedException;
+import org.anchoranalysis.image.bean.nonbean.parameters.BinarySegmentationParameters;
 import org.anchoranalysis.image.bean.provider.BinaryChnlProvider;
 import org.anchoranalysis.image.bean.provider.HistogramProvider;
-import org.anchoranalysis.image.bean.sgmn.binary.BinarySgmn;
-import org.anchoranalysis.image.bean.sgmn.binary.BinarySgmnParameters;
+import org.anchoranalysis.image.bean.segmentation.binary.BinarySegmentation;
 import org.anchoranalysis.image.binary.BinaryChnl;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.channel.factory.ChannelFactory;
-import org.anchoranalysis.image.extent.ImageDim;
-import org.anchoranalysis.image.objectmask.ObjectMask;
+import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
 
 public class BinaryChnlProviderSgmn extends BinaryChnlProviderChnlSource {
 
 	// START BEAN PROPERTIES
 	@BeanField
-	private BinarySgmn sgmn;
+	private BinarySegmentation sgmn;
 	
 	@BeanField @OptionalBean 
 	private HistogramProvider histogramProvider;
@@ -71,7 +71,7 @@ public class BinaryChnlProviderSgmn extends BinaryChnlProviderChnlSource {
 	private BinaryVoxelBox<ByteBuffer> sgmnResult(Channel chnl) throws CreateException {
 		Optional<ObjectMask> omMask = mask(chnl.getDimensions());
 		
-		BinarySgmnParameters params = createParams(chnl.getDimensions()); 
+		BinarySegmentationParameters params = createParams(chnl.getDimensions()); 
 
 		try {
 			return sgmn.sgmn(chnl.getVoxelBox(), params, omMask);
@@ -81,25 +81,25 @@ public class BinaryChnlProviderSgmn extends BinaryChnlProviderChnlSource {
 		}
 	}
 
-	private BinarySgmnParameters createParams(ImageDim dim) throws CreateException {
-		return new BinarySgmnParameters(
+	private BinarySegmentationParameters createParams(ImageDimensions dim) throws CreateException {
+		return new BinarySegmentationParameters(
 			dim.getRes(),
 			OptionalFactory.create(histogramProvider)
 		);
 	}
 	
-	private Optional<ObjectMask> mask(ImageDim dim) throws CreateException {
+	private Optional<ObjectMask> mask(ImageDimensions dim) throws CreateException {
 		Optional<BinaryChnl> maskChnl = ChnlProviderNullableCreator.createOptionalCheckSize(mask, "mask", dim);
 		return maskChnl.map( chnl->
 			new ObjectMask(chnl.binaryVoxelBox())
 		);
 	}
 
-	public BinarySgmn getSgmn() {
+	public BinarySegmentation getSgmn() {
 		return sgmn;
 	}
 
-	public void setSgmn(BinarySgmn sgmn) {
+	public void setSgmn(BinarySegmentation sgmn) {
 		this.sgmn = sgmn;
 	}
 

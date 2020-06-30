@@ -34,7 +34,7 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.bean.provider.ChnlProvider;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.channel.factory.ChannelFactory;
-import org.anchoranalysis.image.extent.ImageDim;
+import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
@@ -48,11 +48,11 @@ public class ChnlProviderExpandSliceToStack extends ChnlProviderDimSource {
 	// END BEAN PROPERTIES
 	
 	@Override
-	protected Channel createFromDim(ImageDim dim) throws CreateException {
+	protected Channel createFromDim(ImageDimensions dim) throws CreateException {
 				
 		Channel chnl = slice.create();
 		
-		ImageDim sdSrc = chnl.getDimensions();
+		ImageDimensions sdSrc = chnl.getDimensions();
 		
 		if (sdSrc.getX()!=dim.getX()) {
 			throw new CreateException("x dimension is not equal");

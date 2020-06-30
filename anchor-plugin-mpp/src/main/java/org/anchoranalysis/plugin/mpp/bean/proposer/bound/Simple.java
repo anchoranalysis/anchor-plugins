@@ -40,7 +40,7 @@ import org.anchoranalysis.anchor.mpp.proposer.ProposalAbnormalFailureException;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.geometry.Point3d;
-import org.anchoranalysis.image.extent.ImageDim;
+import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.math.rotation.RotationMatrix;
 
 public class Simple extends BoundProposer {
@@ -56,7 +56,7 @@ public class Simple extends BoundProposer {
 	}
 
 	@Override
-	public Optional<BidirectionalBound> propose( Point3d pos, RotationMatrix orientation, ImageDim bndScene, RslvdBound minMaxBound) throws ProposalAbnormalFailureException {
+	public Optional<BidirectionalBound> propose( Point3d pos, RotationMatrix orientation, ImageDimensions bndScene, RslvdBound minMaxBound) throws ProposalAbnormalFailureException {
 		
 		// TODO, this should not occur in normal mode
 		// We associate a mark to describe the position and orientation

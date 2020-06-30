@@ -28,13 +28,13 @@ package ch.ethz.biol.cell.mpp.nrg.feature.stack;
 
 
 import org.anchoranalysis.core.axis.AxisType;
-import org.anchoranalysis.image.extent.ImageDim;
+import org.anchoranalysis.image.extent.ImageDimensions;
 
 
 public class ResolutionExtent extends FeatureStackForAxis {
 
 	@Override
-	protected double calcForAxis(ImageDim dim, AxisType axis) {
+	protected double calcForAxis(ImageDimensions dim, AxisType axis) {
 		return dim.getRes().getValueByDimension(axis);
 	}
 }

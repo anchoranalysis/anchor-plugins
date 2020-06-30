@@ -29,7 +29,7 @@ package ch.ethz.biol.cell.mpp.nrg.feature.stack;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.axis.AxisType;
 import org.anchoranalysis.core.axis.AxisTypeConverter;
-import org.anchoranalysis.image.extent.ImageDim;
+import org.anchoranalysis.image.extent.ImageDimensions;
 
 public abstract class FeatureStackForAxis extends FeatureStackFromDimensions {
 
@@ -39,14 +39,14 @@ public abstract class FeatureStackForAxis extends FeatureStackFromDimensions {
 	// END BEAN PARAMETERS
 
 	@Override
-	protected double calcFromDims(ImageDim dim) {
+	protected double calcFromDims(ImageDimensions dim) {
 		return calcForAxis(
 			dim,
 			AxisTypeConverter.createFromString(axis)
 		);
 	}
 	
-	protected abstract double calcForAxis( ImageDim dim, AxisType axis );
+	protected abstract double calcForAxis( ImageDimensions dim, AxisType axis );
 	
 	@Override
 	public String getParamDscr() {

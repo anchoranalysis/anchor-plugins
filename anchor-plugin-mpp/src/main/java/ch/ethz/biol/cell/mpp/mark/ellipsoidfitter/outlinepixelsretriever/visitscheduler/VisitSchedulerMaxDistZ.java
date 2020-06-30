@@ -33,8 +33,8 @@ import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.core.geometry.Tuple3i;
 import org.anchoranalysis.core.random.RandomNumberGenerator;
-import org.anchoranalysis.image.extent.ImageRes;
-import org.anchoranalysis.image.objectmask.ObjectMask;
+import org.anchoranalysis.image.extent.ImageResolution;
+import org.anchoranalysis.image.object.ObjectMask;
 
 // Breadth-first iteration of pixels
 public class VisitSchedulerMaxDistZ extends VisitScheduler {
@@ -52,7 +52,7 @@ public class VisitSchedulerMaxDistZ extends VisitScheduler {
 	}
 	
 	@Override
-	public void beforeCreateObjMask(RandomNumberGenerator re, ImageRes res)
+	public void beforeCreateObjMask(RandomNumberGenerator re, ImageResolution res)
 			throws InitException {
 		try {
 			maxZRslv = maxDistProposer.propose(re, res);
@@ -63,7 +63,7 @@ public class VisitSchedulerMaxDistZ extends VisitScheduler {
 	}
 	
 	@Override
-	public Tuple3i maxDistFromRootPoint(ImageRes res) {
+	public Tuple3i maxDistFromRootPoint(ImageResolution res) {
 		int distZ = (int) Math.ceil(maxZRslv);
 		
 		// Arbitrarily large numbers
@@ -71,7 +71,7 @@ public class VisitSchedulerMaxDistZ extends VisitScheduler {
 	}
 	
 	@Override
-	public void afterCreateObjMask(Point3i root, ImageRes res, RandomNumberGenerator re) {
+	public void afterCreateObjMask(Point3i root, ImageResolution res, RandomNumberGenerator re) {
 		this.root = root;
 	}
 

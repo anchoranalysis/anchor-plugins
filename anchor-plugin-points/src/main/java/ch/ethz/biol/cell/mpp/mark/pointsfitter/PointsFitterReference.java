@@ -38,7 +38,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.geometry.Point3f;
 import org.anchoranalysis.core.name.provider.NamedProviderGetException;
-import org.anchoranalysis.image.extent.ImageDim;
+import org.anchoranalysis.image.extent.ImageDimensions;
 
 public class PointsFitterReference extends PointsFitter {
 
@@ -66,7 +66,7 @@ public class PointsFitterReference extends PointsFitter {
 	}
 
 	@Override
-	public void fit(List<Point3f> points, Mark mark, ImageDim dim)
+	public void fit(List<Point3f> points, Mark mark, ImageDimensions dim)
 			throws PointsFitterException, InsufficientPointsException {
 		pointsFitter.fit(points, mark, dim);
 	}

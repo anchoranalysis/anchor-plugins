@@ -40,9 +40,9 @@ import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.geometry.Point2i;
 import org.anchoranalysis.core.geometry.Point3f;
 import org.anchoranalysis.core.geometry.PointConverter;
-import org.anchoranalysis.image.extent.ImageDim;
-import org.anchoranalysis.image.objectmask.ObjectMask;
-import org.anchoranalysis.image.objectmask.ObjectCollection;
+import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.image.object.ObjectCollection;
+import org.anchoranalysis.image.object.ObjectMask;
 
 import ch.ethz.biol.cell.imageprocessing.binaryimgchnl.provider.ConvexHullUtilities;
 
@@ -63,7 +63,7 @@ public class CfgProviderPointsFitterFromObjs extends CfgProvider {
 	@Override
 	public Cfg create() throws CreateException {
 		
-		ImageDim dim = pointsFitter.createDim();
+		ImageDimensions dim = pointsFitter.createDim();
 
 		ObjectCollection objsCollection = pointsFitter.createObjs();
 		
@@ -79,7 +79,7 @@ public class CfgProviderPointsFitterFromObjs extends CfgProvider {
 		return cfgOut;
 	}
 	
-	private	Optional<Mark> createMarkFromObj( ObjectMask om, ImageDim dim ) throws CreateException {	
+	private	Optional<Mark> createMarkFromObj( ObjectMask om, ImageDimensions dim ) throws CreateException {	
 		
 		Optional<List<Point2i>> pts = ConvexHullUtilities.extractPointsFromOutline(
 			om,
@@ -97,7 +97,7 @@ public class CfgProviderPointsFitterFromObjs extends CfgProvider {
 		}
 	}
 	
-	private Mark fitToMark( List<Point3f> pntsToFit, ImageDim dim) throws CreateException {
+	private Mark fitToMark( List<Point3f> pntsToFit, ImageDimensions dim) throws CreateException {
 
 		Mark markOut = markFactory.create();
 		

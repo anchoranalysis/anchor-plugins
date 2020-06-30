@@ -28,22 +28,23 @@ package org.anchoranalysis.plugin.opencv.nonmaxima;
 
 import java.util.Collection;
 import java.util.Set;
-import org.anchoranalysis.image.index.rtree.ObjMaskCollectionRTree;
-import org.anchoranalysis.image.objectmask.ObjectCollectionFactory;
-import org.anchoranalysis.image.objectmask.ObjectMask;
-import org.anchoranalysis.image.objectmask.OverlapCalculator;
-import org.anchoranalysis.image.objectmask.ops.ObjectMaskMerger;
+
+import org.anchoranalysis.image.index.ObjectCollectionRTree;
+import org.anchoranalysis.image.object.ObjectCollectionFactory;
+import org.anchoranalysis.image.object.ObjectMask;
+import org.anchoranalysis.image.object.OverlapCalculator;
+import org.anchoranalysis.image.object.ops.ObjectMaskMerger;
 
 import com.google.common.base.Predicate;
 
 public class NonMaximaSuppressionObjs extends NonMaximaSuppression<ObjectMask> {
 	
-	private ObjMaskCollectionRTree rTree;
+	private ObjectCollectionRTree rTree;
 	
 	@Override
 	protected void init(Collection<WithConfidence<ObjectMask>> allProposals) {
 		// NOTHING TO DO
-		rTree = new ObjMaskCollectionRTree(
+		rTree = new ObjectCollectionRTree(
 			ObjectCollectionFactory.mapFrom(
 				allProposals,
 				WithConfidence::getObj

@@ -53,13 +53,13 @@ import org.anchoranalysis.experiment.task.ParametersExperiment;
 import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
 import org.anchoranalysis.image.bean.provider.stack.StackProvider;
 import org.anchoranalysis.image.extent.BoundingBox;
-import org.anchoranalysis.image.extent.ImageDim;
+import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.io.generator.raster.bbox.ExtractedBBoxGenerator;
 import org.anchoranalysis.image.io.generator.raster.bbox.ExtractedBBoxOnRGBObjMaskGenerator;
 import org.anchoranalysis.image.io.generator.raster.obj.ObjWithBoundingBoxGenerator;
 import org.anchoranalysis.image.io.generator.raster.obj.rgb.RGBObjMaskGenerator;
-import org.anchoranalysis.image.objectmask.ObjectMask;
-import org.anchoranalysis.image.objectmask.ObjectCollection;
+import org.anchoranalysis.image.object.ObjectCollection;
+import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.stack.NamedImgStackCollection;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.io.bean.objmask.writer.RGBOutlineWriter;
@@ -158,7 +158,7 @@ public class ExportObjectsAsCroppedImagesTask extends ExportObjectsBase<MultiInp
 				return;
 			}
 			
-			ImageDim dim = stackCollection.getException(
+			ImageDimensions dim = stackCollection.getException(
 				stackCollection.keys().iterator().next()
 			).getDimensions();
 			
@@ -221,7 +221,7 @@ public class ExportObjectsAsCroppedImagesTask extends ExportObjectsBase<MultiInp
 
 	private NamedImgStackCollection createStackCollection( ImageInitParams so, LogErrorReporter logger ) throws CreateException {
 		// Get named image stack collection
-		ImageDim dim = null;
+		ImageDimensions dim = null;
 		NamedImgStackCollection stackCollection = new NamedImgStackCollection();
 			
 			
@@ -265,7 +265,7 @@ public class ExportObjectsAsCroppedImagesTask extends ExportObjectsBase<MultiInp
 	
 	private NamedImgStackCollection createStackCollectionMIP( ImageInitParams so, LogErrorReporter logger ) throws CreateException {
 		// Get named image stack collection
-		ImageDim dim = null;
+		ImageDimensions dim = null;
 		NamedImgStackCollection stackCollection = new NamedImgStackCollection();
 			
 			
@@ -330,7 +330,7 @@ public class ExportObjectsAsCroppedImagesTask extends ExportObjectsBase<MultiInp
 	}
 	
 	private IterableGenerator<ObjectMask> createGenerator(
-		final ImageDim dim,
+		final ImageDimensions dim,
 		NamedImgStackCollection stackCollection,
 		NamedImgStackCollection stackCollectionMIP
 	) throws CreateException {
@@ -391,7 +391,7 @@ public class ExportObjectsAsCroppedImagesTask extends ExportObjectsBase<MultiInp
 	}
 	
 	
-	private static ObjectMask extractObjMaskKeepEntireImage( ObjectMask om, ImageDim dim ) throws OutputWriteFailedException {
+	private static ObjectMask extractObjMaskKeepEntireImage( ObjectMask om, ImageDimensions dim ) throws OutputWriteFailedException {
 		return BBoxUtilities.createObjMaskForBBox(
 			om,
 			new BoundingBox(dim.getExtnt())

@@ -29,7 +29,7 @@ package org.anchoranalysis.plugin.image.bean.sgmn.watershed.yeong;
 import java.util.Optional;
 
 import org.anchoranalysis.core.geometry.Point3i;
-import org.anchoranalysis.image.objectmask.ObjectMask;
+import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.anchoranalysis.image.voxel.buffer.SlidingBuffer;
 import org.anchoranalysis.plugin.image.sgmn.watershed.encoding.EncodedIntBuffer;

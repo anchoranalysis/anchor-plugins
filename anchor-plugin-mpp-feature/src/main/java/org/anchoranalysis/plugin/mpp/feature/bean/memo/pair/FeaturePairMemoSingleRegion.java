@@ -37,7 +37,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.extent.BoundingBox;
-import org.anchoranalysis.image.extent.ImageDim;
+import org.anchoranalysis.image.extent.ImageDimensions;
 
 import ch.ethz.biol.cell.mpp.nrg.cachedcalculation.OverlapCalculation;
 
@@ -55,7 +55,7 @@ public abstract class FeaturePairMemoSingleRegion extends FeaturePairMemo {
 	}
 	
 	protected BoundingBox bbox(FeatureInputPairMemo input, Function<FeatureInputPairMemo,PxlMarkMemo> funcExtract) throws FeatureCalcException {
-		ImageDim sd = input.getDimensionsRequired();
+		ImageDimensions sd = input.getDimensionsRequired();
 		return funcExtract.apply(input).getMark().bbox(
 			sd,
 			getRegionID()

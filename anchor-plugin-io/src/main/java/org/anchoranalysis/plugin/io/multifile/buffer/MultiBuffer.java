@@ -30,7 +30,7 @@ import java.util.Optional;
 
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.channel.factory.ChannelFactory;
-import org.anchoranalysis.image.extent.ImageDim;
+import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.extent.IncorrectImageSizeException;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
@@ -94,7 +94,7 @@ class MultiBuffer {
 		}	
 	}
 
-	public Stack createStackForIndex( int t, ImageDim dim, VoxelDataType dataType) {
+	public Stack createStackForIndex( int t, ImageDimensions dim, VoxelDataType dataType) {
 		
 		Stack stack = new Stack();
 		

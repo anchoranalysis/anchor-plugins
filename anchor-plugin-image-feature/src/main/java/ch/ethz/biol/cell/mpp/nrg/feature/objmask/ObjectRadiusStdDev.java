@@ -39,7 +39,7 @@ import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.feature.bean.object.single.FeatureSingleObject;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
-import org.anchoranalysis.image.objectmask.ObjectMask;
+import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.outline.FindOutline;
 import org.anchoranalysis.image.points.PointsFromBinaryVoxelBox;
 
@@ -111,7 +111,7 @@ public class ObjectRadiusStdDev extends FeatureSingleObject {
 			ObjectMask outline = FindOutline.outline(mask, 1, false, true);
 			PointsFromBinaryVoxelBox.addPointsFromVoxelBox3D(
 				outline.binaryVoxelBox(),
-				outline.getBoundingBox().getCrnrMin(),
+				outline.getBoundingBox().getCornerMin(),
 				ptsOutline
 			);
 			

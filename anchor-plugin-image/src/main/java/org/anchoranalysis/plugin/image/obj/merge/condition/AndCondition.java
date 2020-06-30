@@ -29,8 +29,8 @@ import java.util.Optional;
  */
 
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.image.extent.ImageRes;
-import org.anchoranalysis.image.objectmask.ObjectMask;
+import org.anchoranalysis.image.extent.ImageResolution;
+import org.anchoranalysis.image.object.ObjectMask;
 
 /** Combines two UpdatableBeforeConditions as LOGICAL ANDs */
 public class AndCondition implements UpdatableBeforeCondition {
@@ -45,7 +45,7 @@ public class AndCondition implements UpdatableBeforeCondition {
 	}
 
 	@Override
-	public void updateSrcObj(ObjectMask omSrc, Optional<ImageRes> res) throws OperationFailedException {
+	public void updateSrcObj(ObjectMask omSrc, Optional<ImageResolution> res) throws OperationFailedException {
 		cond1.updateSrcObj(omSrc, res);
 		cond2.updateSrcObj(omSrc, res);
 	}

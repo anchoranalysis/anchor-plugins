@@ -38,7 +38,7 @@ import org.anchoranalysis.core.random.RandomNumberGenerator;
 import org.anchoranalysis.image.bean.provider.BinaryChnlProvider;
 import org.anchoranalysis.image.binary.BinaryChnl;
 import org.anchoranalysis.image.extent.BoundingBox;
-import org.anchoranalysis.image.objectmask.ObjectMask;
+import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.outline.traverser.OutlineTraverser;
 
 import ch.ethz.biol.cell.mpp.mark.ellipsoidfitter.outlinepixelsretriever.visitscheduler.VisitScheduler;
@@ -117,7 +117,7 @@ public class TraverseOutlineOnImage extends OutlinePixelsRetriever {
 			throw new TraverseOutlineException("Unable to create an object-mask for the filled object", e);
 		}
 				
-		Point3i rootRelToMask = BoundingBox.relPosTo(root, omOutline.getBoundingBox().getCrnrMin());
+		Point3i rootRelToMask = BoundingBox.relPosTo(root, omOutline.getBoundingBox().getCornerMin());
 		try {
 			visitScheduler.afterCreateObjMask( rootRelToMask, chnlOutline.getDimensions().getRes(), re );
 		} catch (InitException e) {

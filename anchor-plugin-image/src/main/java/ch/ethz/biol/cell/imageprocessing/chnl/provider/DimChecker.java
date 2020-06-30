@@ -31,7 +31,7 @@ import org.anchoranalysis.image.bean.provider.BinaryChnlProvider;
 import org.anchoranalysis.image.bean.provider.ChnlProvider;
 import org.anchoranalysis.image.binary.BinaryChnl;
 import org.anchoranalysis.image.channel.Channel;
-import org.anchoranalysis.image.extent.ImageDim;
+import org.anchoranalysis.image.extent.ImageDimensions;
 
 public class DimChecker {
 	
@@ -50,7 +50,7 @@ public class DimChecker {
 	 * @return the newly created channel
 	 * @throws CreateException
 	 */
-	public static void check(Channel chnlToCheck, String chnlToCheckName, ImageDim dimFromChnl) throws CreateException {
+	public static void check(Channel chnlToCheck, String chnlToCheckName, ImageDimensions dimFromChnl) throws CreateException {
 		check(
 			chnlToCheck.getDimensions(),
 			chnlToCheckName,
@@ -68,7 +68,7 @@ public class DimChecker {
 	 * @return the newly created channel
 	 * @throws CreateException
 	 */
-	public static void check(BinaryChnl chnlToCheck, String chnlToCheckName, ImageDim dimFromChnl) throws CreateException {
+	public static void check(BinaryChnl chnlToCheck, String chnlToCheckName, ImageDimensions dimFromChnl) throws CreateException {
 		check(
 			chnlToCheck.getDimensions(),
 			chnlToCheckName,
@@ -109,7 +109,7 @@ public class DimChecker {
 		return chnlNew;
 	}
 	
-	private static void check(ImageDim dimToCheck, String chnlToCheckName, ImageDim dimFromChnl) throws CreateException {
+	private static void check(ImageDimensions dimToCheck, String chnlToCheckName, ImageDimensions dimFromChnl) throws CreateException {
 		if (!dimFromChnl.equals(dimToCheck)) {
 			throw new CreateException(
 				String.format(

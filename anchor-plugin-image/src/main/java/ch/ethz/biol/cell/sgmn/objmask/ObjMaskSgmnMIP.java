@@ -32,15 +32,15 @@ import java.util.Optional;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.image.bean.nonbean.error.SgmnFailedException;
-import org.anchoranalysis.image.bean.sgmn.binary.BinarySgmn;
-import org.anchoranalysis.image.bean.sgmn.binary.BinarySgmnParameters;
-import org.anchoranalysis.image.bean.sgmn.objmask.ObjMaskSgmn;
-import org.anchoranalysis.image.bean.sgmn.objmask.ObjMaskSgmnOne;
+import org.anchoranalysis.image.bean.nonbean.parameters.BinarySegmentationParameters;
+import org.anchoranalysis.image.bean.segmentation.binary.BinarySegmentation;
+import org.anchoranalysis.image.bean.segmentation.object.ObjectSegmentation;
+import org.anchoranalysis.image.bean.segmentation.object.ObjectSegmentationOne;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
 import org.anchoranalysis.image.channel.Channel;
-import org.anchoranalysis.image.objectmask.ObjectMask;
-import org.anchoranalysis.image.objectmask.ObjectCollection;
-import org.anchoranalysis.image.objectmask.ops.ExtendObjsInto3DMask;
+import org.anchoranalysis.image.object.ObjectCollection;
+import org.anchoranalysis.image.object.ObjectMask;
+import org.anchoranalysis.image.object.ops.ExtendObjsInto3DMask;
 import org.anchoranalysis.image.seed.SeedCollection;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.anchoranalysis.image.voxel.box.VoxelBoxWrapper;
@@ -53,15 +53,15 @@ import org.anchoranalysis.image.voxel.box.VoxelBoxWrapper;
  * @author Owen Feehan
  *
  */
-public class ObjMaskSgmnMIP extends ObjMaskSgmnOne {
+public class ObjMaskSgmnMIP extends ObjectSegmentationOne {
 
 	// START BEAN PROPERTIES
 	@BeanField
-	private BinarySgmn sgmnStack;
+	private BinarySegmentation sgmnStack;
 	// END BEAN PROPERTIES
 
 	@Override
-	public ObjectCollection sgmn(Channel chnl, Optional<ObjectMask> objMask, Optional<SeedCollection> seeds, ObjMaskSgmn sgmn) throws SgmnFailedException {
+	public ObjectCollection sgmn(Channel chnl, Optional<ObjectMask> objMask, Optional<SeedCollection> seeds, ObjectSegmentation sgmn) throws SgmnFailedException {
 		
 		if (objMask.isPresent()) {
 			throw new SgmnFailedException("An object-mask is not supported for this operation");
@@ -91,7 +91,7 @@ public class ObjMaskSgmnMIP extends ObjMaskSgmnOne {
 	}
 	
 	private BinaryVoxelBox<ByteBuffer> binarySgmn(Channel chnl) throws SgmnFailedException {
-		BinarySgmnParameters params = new BinarySgmnParameters(
+		BinarySegmentationParameters params = new BinarySegmentationParameters(
 			chnl.getDimensions().getRes()
 		);
 		
@@ -111,11 +111,11 @@ public class ObjMaskSgmnMIP extends ObjMaskSgmnOne {
 		return seedsDup;
 	}
 
-	public BinarySgmn getSgmnStack() {
+	public BinarySegmentation getSgmnStack() {
 		return sgmnStack;
 	}
 
-	public void setSgmnStack(BinarySgmn sgmnStack) {
+	public void setSgmnStack(BinarySegmentation sgmnStack) {
 		this.sgmnStack = sgmnStack;
 	}
 }

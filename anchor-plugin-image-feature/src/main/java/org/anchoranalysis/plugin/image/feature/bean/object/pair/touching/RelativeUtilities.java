@@ -27,7 +27,7 @@ package org.anchoranalysis.plugin.image.feature.bean.object.pair.touching;
  */
 
 import org.anchoranalysis.image.extent.BoundingBox;
-import org.anchoranalysis.image.objectmask.ObjectMask;
+import org.anchoranalysis.image.object.ObjectMask;
 
 /**
  * Calculates objects/bounding boxes relative to others

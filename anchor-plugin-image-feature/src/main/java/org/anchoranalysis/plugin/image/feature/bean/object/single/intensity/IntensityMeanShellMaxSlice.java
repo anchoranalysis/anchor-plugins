@@ -33,9 +33,7 @@ package org.anchoranalysis.plugin.image.feature.bean.object.single.intensity;
 
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.channel.Channel;
-import org.anchoranalysis.image.objectmask.ObjectMask;
-
-import ch.ethz.biol.cell.mpp.nrg.feature.objmask.ValueAndIndex;
+import org.anchoranalysis.image.object.ObjectMask;
 
 /**
  * Constructs a 'shell' around an object by a number of dilation/erosion operations (not including the original object mask)

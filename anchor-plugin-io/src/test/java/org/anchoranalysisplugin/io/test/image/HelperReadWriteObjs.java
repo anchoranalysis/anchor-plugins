@@ -34,7 +34,7 @@ import org.anchoranalysis.core.index.SetOperationFailedException;
 import org.anchoranalysis.image.io.objs.GeneratorHDF5;
 import org.anchoranalysis.image.io.objs.GeneratorTIFFDirectory;
 import org.anchoranalysis.image.io.objs.ObjectMaskCollectionReader;
-import org.anchoranalysis.image.objectmask.ObjectCollection;
+import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.io.deserializer.DeserializationFailedException;
 import org.anchoranalysis.io.generator.IterableGenerator;
 import org.anchoranalysis.io.output.bound.BindFailedException;

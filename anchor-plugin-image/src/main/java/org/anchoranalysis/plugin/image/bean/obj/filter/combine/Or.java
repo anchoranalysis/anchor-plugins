@@ -32,11 +32,11 @@ import java.util.Optional;
 import java.util.Set;
 
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.image.bean.objmask.filter.ObjectFilter;
-import org.anchoranalysis.image.extent.ImageDim;
-import org.anchoranalysis.image.objectmask.ObjectMask;
-import org.anchoranalysis.image.objectmask.ObjectCollection;
-import org.anchoranalysis.image.objectmask.ObjectCollectionFactory;
+import org.anchoranalysis.image.bean.object.ObjectFilter;
+import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.image.object.ObjectCollection;
+import org.anchoranalysis.image.object.ObjectCollectionFactory;
+import org.anchoranalysis.image.object.ObjectMask;
 
 /**
  * Applies multiples filter with logical OR i.e. an object must pass any one of the filter steps to remain.
@@ -49,7 +49,7 @@ public class Or extends ObjectFilterCombine {
 	@Override
 	public ObjectCollection filter(
 		ObjectCollection objsToFilter,
-		Optional<ImageDim> dim,
+		Optional<ImageDimensions> dim,
 		Optional<ObjectCollection> objsRejected
 	) throws OperationFailedException {
 
@@ -68,7 +68,7 @@ public class Or extends ObjectFilterCombine {
 	}
 	
 	/** Finds the accepted objects (i.e. objects that pass any one of the filters) */
-	private Set<ObjectMask> findAcceptedObjs(ObjectCollection objsToFilter, Optional<ImageDim> dim) throws OperationFailedException {
+	private Set<ObjectMask> findAcceptedObjs(ObjectCollection objsToFilter, Optional<ImageDimensions> dim) throws OperationFailedException {
 		Set<ObjectMask> setAccepted = new HashSet<ObjectMask>();
 		
 		for (ObjectFilter indFilter : getList()) {

@@ -36,7 +36,7 @@ import org.anchoranalysis.anchor.mpp.mark.conic.bounds.RotationBounds;
 import org.anchoranalysis.anchor.mpp.proposer.ProposalAbnormalFailureException;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.random.RandomNumberGenerator;
-import org.anchoranalysis.image.extent.ImageDim;
+import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.orientation.Orientation;
 
 public class RandomOrientation extends OrientationProposer {
@@ -55,7 +55,7 @@ public class RandomOrientation extends OrientationProposer {
 	}
 	
 	@Override
-	public Optional<Orientation> propose(Mark mark,	ImageDim dim, RandomNumberGenerator re) throws ProposalAbnormalFailureException {
+	public Optional<Orientation> propose(Mark mark,	ImageDimensions dim, RandomNumberGenerator re) throws ProposalAbnormalFailureException {
 		return Optional.of(
 			bounds.randomOrientation(re, dim.getRes())
 		);

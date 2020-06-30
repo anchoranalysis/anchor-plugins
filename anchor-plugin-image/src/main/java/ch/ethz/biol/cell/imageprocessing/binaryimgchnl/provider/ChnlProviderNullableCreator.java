@@ -34,7 +34,7 @@ import org.anchoranalysis.image.bean.provider.BinaryChnlProvider;
 import org.anchoranalysis.image.bean.provider.ChnlProvider;
 import org.anchoranalysis.image.binary.BinaryChnl;
 import org.anchoranalysis.image.channel.Channel;
-import org.anchoranalysis.image.extent.ImageDim;
+import org.anchoranalysis.image.extent.ImageDimensions;
 
 import ch.ethz.biol.cell.imageprocessing.chnl.provider.DimChecker;
 
@@ -48,7 +48,7 @@ class ChnlProviderNullableCreator {
 
 	private ChnlProviderNullableCreator() {}
 	
-	public static Optional<Channel> createOptionalCheckSize(ChnlProvider chnlProvider, String chnlProviderName, ImageDim dim) throws CreateException {
+	public static Optional<Channel> createOptionalCheckSize(ChnlProvider chnlProvider, String chnlProviderName, ImageDimensions dim) throws CreateException {
 		Optional<Channel> chnl = OptionalFactory.create(chnlProvider);
 		if (chnl.isPresent()) {
 			DimChecker.check(chnl.get(), chnlProviderName, dim);
@@ -56,7 +56,7 @@ class ChnlProviderNullableCreator {
 		return chnl;
 	}
 	
-	public static Optional<BinaryChnl> createOptionalCheckSize(BinaryChnlProvider chnlProvider, String chnlProviderName, ImageDim dim) throws CreateException {
+	public static Optional<BinaryChnl> createOptionalCheckSize(BinaryChnlProvider chnlProvider, String chnlProviderName, ImageDimensions dim) throws CreateException {
 		Optional<BinaryChnl> chnl = OptionalFactory.create(chnlProvider);
 		if (chnl.isPresent()) {
 			DimChecker.check(chnl.get(), chnlProviderName, dim);

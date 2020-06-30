@@ -33,8 +33,6 @@ import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 
-import ch.ethz.biol.cell.mpp.nrg.feature.objmask.ValueAndIndex;
-
 public class IntensityMeanMaxSlice extends FeatureNrgChnl {
 
 	// START BEAN PROPERTIES

@@ -33,10 +33,10 @@ import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorSingle;
-import org.anchoranalysis.image.extent.ImageRes;
+import org.anchoranalysis.image.extent.ImageResolution;
 import org.anchoranalysis.image.feature.bean.evaluator.FeatureEvaluator;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
-import org.anchoranalysis.image.objectmask.ObjectMask;
+import org.anchoranalysis.image.object.ObjectMask;
 
 public class IncreaseFeatureCondition implements AfterCondition {
 
@@ -65,7 +65,7 @@ public class IncreaseFeatureCondition implements AfterCondition {
 	}
 
 	@Override
-	public boolean accept(ObjectMask omSrc, ObjectMask omDest, ObjectMask omMerged, Optional<ImageRes> res) throws OperationFailedException {
+	public boolean accept(ObjectMask omSrc, ObjectMask omDest, ObjectMask omMerged, Optional<ImageResolution> res) throws OperationFailedException {
 		
 		if (session!=null) {
 			return doesIncreaseFeatureValueForBoth(omSrc, omDest, omMerged);

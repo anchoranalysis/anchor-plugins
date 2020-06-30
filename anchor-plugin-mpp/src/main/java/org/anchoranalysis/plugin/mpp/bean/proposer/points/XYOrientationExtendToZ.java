@@ -53,8 +53,8 @@ import org.anchoranalysis.image.bean.provider.BinaryChnlProvider;
 import org.anchoranalysis.image.bean.unitvalue.distance.UnitValueDistance;
 import org.anchoranalysis.image.bean.unitvalue.distance.UnitValueDistanceVoxels;
 import org.anchoranalysis.image.binary.BinaryChnl;
-import org.anchoranalysis.image.extent.ImageDim;
-import org.anchoranalysis.image.extent.ImageRes;
+import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.image.extent.ImageResolution;
 import org.anchoranalysis.image.orientation.Orientation;
 import org.anchoranalysis.plugin.mpp.bean.proposer.points.fromorientation.PointsFromOrientationProposer;
 
@@ -96,7 +96,7 @@ public class XYOrientationExtendToZ extends PointsProposer {
 	private List<Point3i> lastPntsAll;
 	
 	@Override
-	public Optional<List<Point3i>> propose(Point3d pnt, Mark mark, ImageDim dim, RandomNumberGenerator re, ErrorNode errorNode) throws ProposalAbnormalFailureException {
+	public Optional<List<Point3i>> propose(Point3d pnt, Mark mark, ImageDimensions dim, RandomNumberGenerator re, ErrorNode errorNode) throws ProposalAbnormalFailureException {
 		pointsFromOrientationXYProposer.clearVisualizationState();
 		Optional<Orientation> orientation = orientationXYProposer.propose(
 			mark,
@@ -126,7 +126,7 @@ public class XYOrientationExtendToZ extends PointsProposer {
 		return list;
 	}
 	
-	private Optional<List<Point3i>> proposeFromOrientation(Orientation orientation, Point3d pnt, ImageDim dim, RandomNumberGenerator re, ErrorNode errorNode) {
+	private Optional<List<Point3i>> proposeFromOrientation(Orientation orientation, Point3d pnt, ImageDimensions dim, RandomNumberGenerator re, ErrorNode errorNode) {
 		try {
 			List<List<Point3i>> pntsXY = getPointsFromOrientationXYProposer().calcPoints( pnt, orientation, dim.getZ()>1, re, forwardDirectionOnly );
 
@@ -148,7 +148,7 @@ public class XYOrientationExtendToZ extends PointsProposer {
 		}
 	}
 	
-	private int maxZDist(RandomNumberGenerator re, ImageRes res) throws OperationFailedException {
+	private int maxZDist(RandomNumberGenerator re, ImageResolution res) throws OperationFailedException {
 		int maxZDist = (int) Math.round(
 			maxDistanceZ.propose(re, res)
 		);
@@ -156,7 +156,7 @@ public class XYOrientationExtendToZ extends PointsProposer {
 		return maxZDist;
 	}
 	
-	private int skipZDist(ImageRes res) throws OperationFailedException {
+	private int skipZDist(ImageResolution res) throws OperationFailedException {
 		int skipZDist = (int) Math.round(
 			distanceZEndIfEmpty.rslvForAxis(
 				Optional.of(res),

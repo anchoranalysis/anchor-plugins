@@ -31,9 +31,9 @@ import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.feature.bean.object.single.FeatureSingleObject;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
-import org.anchoranalysis.image.objectmask.ObjectMask;
+import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.math.moment.MomentsFromPointsCalculator;
-import org.anchoranalysis.points.moment.CalculateObjMaskPointsSecondMomentMatrix;
+import org.anchoranalysis.plugin.image.feature.object.calculation.single.moment.CalculateObjMaskPointsSecondMomentMatrix;
 
 public abstract class AxisMomentsBase extends FeatureSingleObject {
 

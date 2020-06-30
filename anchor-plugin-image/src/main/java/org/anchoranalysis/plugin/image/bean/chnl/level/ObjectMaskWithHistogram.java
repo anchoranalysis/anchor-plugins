@@ -29,7 +29,7 @@ package org.anchoranalysis.plugin.image.bean.chnl.level;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.histogram.Histogram;
 import org.anchoranalysis.image.histogram.HistogramFactory;
-import org.anchoranalysis.image.objectmask.ObjectMask;
+import org.anchoranalysis.image.object.ObjectMask;
 
 class ObjectMaskWithHistogram {
 	

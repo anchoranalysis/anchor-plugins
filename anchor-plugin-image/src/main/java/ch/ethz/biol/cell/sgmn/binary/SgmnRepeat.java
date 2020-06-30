@@ -33,14 +33,14 @@ import java.util.Optional;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.Positive;
 import org.anchoranalysis.image.bean.nonbean.error.SgmnFailedException;
-import org.anchoranalysis.image.bean.sgmn.binary.BinarySgmn;
-import org.anchoranalysis.image.bean.sgmn.binary.BinarySgmnOne;
-import org.anchoranalysis.image.bean.sgmn.binary.BinarySgmnParameters;
+import org.anchoranalysis.image.bean.nonbean.parameters.BinarySegmentationParameters;
+import org.anchoranalysis.image.bean.segmentation.binary.BinarySegmentation;
+import org.anchoranalysis.image.bean.segmentation.binary.BinarySegmentationOne;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
-import org.anchoranalysis.image.objectmask.ObjectMask;
+import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.voxel.box.VoxelBoxWrapper;
 
-public class SgmnRepeat extends BinarySgmnOne {
+public class SgmnRepeat extends BinarySegmentationOne {
 
 	// START BEAN PROPERTIES
 	@BeanField @Positive
@@ -50,9 +50,9 @@ public class SgmnRepeat extends BinarySgmnOne {
 	@Override
 	public BinaryVoxelBox<ByteBuffer> sgmnFromSgmn(
 		VoxelBoxWrapper voxelBox,
-		BinarySgmnParameters params,
+		BinarySegmentationParameters params,
 		Optional<ObjectMask> mask,
-		BinarySgmn sgmn
+		BinarySegmentation sgmn
 	) throws SgmnFailedException {
 		
 		BinaryVoxelBox<ByteBuffer> outOld = null;

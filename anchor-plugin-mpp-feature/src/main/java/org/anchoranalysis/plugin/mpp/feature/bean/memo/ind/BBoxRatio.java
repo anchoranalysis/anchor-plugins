@@ -34,7 +34,7 @@ import org.anchoranalysis.feature.cache.SessionInput;
 
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.extent.BoundingBox;
-import org.anchoranalysis.image.extent.ImageDim;
+import org.anchoranalysis.image.extent.ImageDimensions;
 
 public class BBoxRatio extends FeatureSingleMemo {
 
@@ -43,7 +43,7 @@ public class BBoxRatio extends FeatureSingleMemo {
 		
 		MarkConic markCast = (MarkConic) input.get().getPxlPartMemo().getMark();
 		
-		ImageDim dim = input.get().getDimensionsRequired();
+		ImageDimensions dim = input.get().getDimensionsRequired();
 		
 		BoundingBox bb = markCast.bbox(dim, GlobalRegionIdentifiers.SUBMARK_INSIDE );
 		

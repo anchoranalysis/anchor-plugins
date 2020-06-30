@@ -33,8 +33,8 @@ import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.feature.bean.object.single.FeatureSingleObject;
 import org.anchoranalysis.image.feature.object.calculation.CalculateNumVoxels;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
-import org.anchoranalysis.image.objectmask.ObjectMask;
-import org.anchoranalysis.plugin.image.feature.object.calculation.single.CalculateClosing;
+import org.anchoranalysis.image.object.ObjectMask;
+import org.anchoranalysis.plugin.image.feature.object.calculation.single.morphological.CalculateClosing;
 
 /**
  * Performs a morphological opening operation on the object-mask. Then calculates the ratio of:

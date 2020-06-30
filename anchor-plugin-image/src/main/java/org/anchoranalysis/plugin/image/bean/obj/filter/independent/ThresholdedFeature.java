@@ -34,11 +34,11 @@ import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.relation.RelationToValue;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorSingle;
-import org.anchoranalysis.image.extent.ImageDim;
+import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.feature.bean.evaluator.FeatureEvaluator;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
-import org.anchoranalysis.image.objectmask.ObjectCollection;
-import org.anchoranalysis.image.objectmask.ObjectMask;
+import org.anchoranalysis.image.object.ObjectCollection;
+import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.plugin.image.bean.obj.filter.ObjectFilterRelation;
 
 /**
@@ -65,7 +65,7 @@ public class ThresholdedFeature extends ObjectFilterRelation {
 	private FeatureCalculatorSingle<FeatureInputSingleObject> featureSession = null;
 		
 	@Override
-	protected void start(Optional<ImageDim> dim, ObjectCollection objsToFilter) throws OperationFailedException {
+	protected void start(Optional<ImageDimensions> dim, ObjectCollection objsToFilter) throws OperationFailedException {
 		super.start(dim, objsToFilter);
 		
 		// This could be called many times, so we create a new feature session only on the first occasion
@@ -79,7 +79,7 @@ public class ThresholdedFeature extends ObjectFilterRelation {
 	}
 
 	@Override
-	protected boolean match(ObjectMask om, Optional<ImageDim> dim, RelationToValue relation) throws OperationFailedException {
+	protected boolean match(ObjectMask om, Optional<ImageDimensions> dim, RelationToValue relation) throws OperationFailedException {
 
 		double val;
 		try {

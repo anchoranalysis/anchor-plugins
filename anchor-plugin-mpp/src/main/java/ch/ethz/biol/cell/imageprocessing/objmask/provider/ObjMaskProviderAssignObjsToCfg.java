@@ -40,10 +40,10 @@ import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
-import org.anchoranalysis.image.extent.ImageDim;
-import org.anchoranalysis.image.objectmask.ObjectMask;
-import org.anchoranalysis.image.objectmask.ObjectCollection;
-import org.anchoranalysis.image.objectmask.ObjectCollectionFactory;
+import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.image.object.ObjectCollection;
+import org.anchoranalysis.image.object.ObjectCollectionFactory;
+import org.anchoranalysis.image.object.ObjectMask;
 
 import ch.ethz.biol.cell.imageprocessing.objmask.provider.assignobjstocfg.RslvdEllipsoid;
 import ch.ethz.biol.cell.imageprocessing.objmask.provider.assignobjstocfg.RslvdEllipsoidList;
@@ -80,7 +80,7 @@ public class ObjMaskProviderAssignObjsToCfg extends ObjMaskProviderDimensions {
 	public ObjectCollection createFromObjs( ObjectCollection objsCollection ) throws CreateException {
 		
 		Cfg cfg = cfgProvider.create();
-		ImageDim dim = createDim();
+		ImageDimensions dim = createDim();
 		
 		// EXIT EARLY when there are no ellipsoids
 		if (cfg.size()==0) {
@@ -154,7 +154,7 @@ public class ObjMaskProviderAssignObjsToCfg extends ObjMaskProviderDimensions {
 		return out;
 	}
 		
-	private static RslvdEllipsoidList createRslvdEllipsoidList( Cfg cfg, ImageDim dim, RegionMembershipWithFlags rm, BinaryValuesByte bvb ) throws CreateException {
+	private static RslvdEllipsoidList createRslvdEllipsoidList( Cfg cfg, ImageDimensions dim, RegionMembershipWithFlags rm, BinaryValuesByte bvb ) throws CreateException {
 		RslvdEllipsoidList out = new RslvdEllipsoidList();
 		
 		for( Mark m : cfg ) {

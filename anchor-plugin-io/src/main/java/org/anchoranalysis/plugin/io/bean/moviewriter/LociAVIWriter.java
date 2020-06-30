@@ -32,7 +32,7 @@ import java.nio.ByteBuffer;
 import java.nio.file.Path;
 
 import org.anchoranalysis.image.channel.Channel;
-import org.anchoranalysis.image.extent.ImageDim;
+import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.io.bean.moviewriter.MovieWriter;
 import org.anchoranalysis.image.io.movie.MovieOutputHandle;
 import org.anchoranalysis.image.stack.rgb.RGBStack;
@@ -59,7 +59,7 @@ public class LociAVIWriter extends MovieWriter {
 
 		private AVIWriter writer;
 		
-		public void init( Path filePath, ImageDim dim, int numFrames, int numChnl, int framesPerSecond ) throws IOException {
+		public void init( Path filePath, ImageDimensions dim, int numFrames, int numChnl, int framesPerSecond ) throws IOException {
 		
 			int pixelType = FormatTools.UINT8;
 			
@@ -96,7 +96,7 @@ public class LociAVIWriter extends MovieWriter {
 					throw new IOException("Only unsigned 8-bit stacks are supported");
 				}
 			
-				ImageDim sd = stack.getChnl(0).getDimensions();
+				ImageDimensions sd = stack.getChnl(0).getDimensions();
 			
 			//for (int c=0; c<3; c++) {
 				// Now we write the frame to our avi
@@ -143,7 +143,7 @@ public class LociAVIWriter extends MovieWriter {
 	}
 
 	@Override
-	public MovieOutputHandle writeMovie(Path filePath, ImageDim dim, int numFrames, int numChnl, int framesPerSecond ) throws IOException {
+	public MovieOutputHandle writeMovie(Path filePath, ImageDimensions dim, int numFrames, int numChnl, int framesPerSecond ) throws IOException {
 		
 		OpenOutput out = new OpenOutput();
 		out.init( filePath, dim, numFrames, numChnl, framesPerSecond );
@@ -151,7 +151,7 @@ public class LociAVIWriter extends MovieWriter {
 	}
 	
 	
-	private static IMetadata createMetadata( ImageDim sd, int num_chnl, int pixelType, int t ) throws EnumerationException, ServiceException, DependencyException {
+	private static IMetadata createMetadata( ImageDimensions sd, int num_chnl, int pixelType, int t ) throws EnumerationException, ServiceException, DependencyException {
 		
 		ServiceFactory factory = new ServiceFactory();
 	    OMEXMLService service = factory.getInstance(OMEXMLService.class);

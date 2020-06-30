@@ -44,7 +44,7 @@ import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 import org.anchoranalysis.feature.session.FeatureSession;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorMulti;
-import org.anchoranalysis.image.extent.ImageDim;
+import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.test.LoggingFixture;
 import org.anchoranalysis.test.feature.ConstantsInListFixture;
 import org.anchoranalysis.test.feature.plugins.ResultsVectorTestUtilities;
@@ -55,7 +55,7 @@ import org.junit.Test;
 public class FeatureListMPPTest {
 	
 	private static final NRGStackWithParams nrgStack = NRGStackFixture.create(false,true);
-	private static final ImageDim DIM = nrgStack.getDimensions();
+	private static final ImageDimensions DIM = nrgStack.getDimensions();
 	
 	@Before
     public void setUp() {

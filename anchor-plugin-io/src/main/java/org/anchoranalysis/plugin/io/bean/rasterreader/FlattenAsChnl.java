@@ -34,7 +34,7 @@ import java.util.Optional;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.progress.ProgressReporter;
 import org.anchoranalysis.image.channel.Channel;
-import org.anchoranalysis.image.extent.ImageDim;
+import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.extent.IncorrectImageSizeException;
 import org.anchoranalysis.image.io.RasterIOException;
 import org.anchoranalysis.image.io.bean.rasterreader.RasterReader;
@@ -148,7 +148,7 @@ public class FlattenAsChnl extends RasterReader {
 		}
 
 		@Override
-		public ImageDim dim(int seriesIndex) throws RasterIOException {
+		public ImageDimensions dim(int seriesIndex) throws RasterIOException {
 			return delegate.dim(seriesIndex);
 		}
 

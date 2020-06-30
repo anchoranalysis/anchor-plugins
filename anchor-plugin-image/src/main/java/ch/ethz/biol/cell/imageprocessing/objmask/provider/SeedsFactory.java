@@ -32,9 +32,9 @@ package ch.ethz.biol.cell.imageprocessing.objmask.provider;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.geometry.ReadableTuple3i;
 import org.anchoranalysis.image.extent.BoundingBox;
-import org.anchoranalysis.image.extent.ImageDim;
-import org.anchoranalysis.image.objectmask.ObjectMask;
-import org.anchoranalysis.image.objectmask.ObjectCollection;
+import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.image.object.ObjectCollection;
+import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.seed.SeedCollection;
 import org.anchoranalysis.image.seed.SeedObjMask;
 
@@ -59,7 +59,7 @@ class SeedsFactory {
 		ObjectCollection seeds,
 		ObjectMask containingMask,
 		ReadableTuple3i subtractFromCrnrMin,
-		ImageDim dim
+		ImageDimensions dim
 	) throws CreateException {
 		// We create a collection of seeds localised appropriately
 		// NB: we simply change the object seeds, as it seemingly won't be used again!!!
@@ -91,7 +91,7 @@ class SeedsFactory {
 		ObjectMask om,
 		BoundingBox containingBBox,
 		ReadableTuple3i subtractFromCrnrMin,
-		ImageDim dim
+		ImageDimensions dim
 	) throws CreateException {
 		
 		ObjectMask seed = om.mapBoundingBox( bbox->
@@ -104,7 +104,7 @@ class SeedsFactory {
 		);
 	}
 	
-	private static ObjectMask ensureInsideContainer( ObjectMask seed, BoundingBox containingBBox, ImageDim dim ) throws CreateException {
+	private static ObjectMask ensureInsideContainer( ObjectMask seed, BoundingBox containingBBox, ImageDimensions dim ) throws CreateException {
 		if (!containingBBox.contains().box( seed.getBoundingBox())) {
 			// We only take the part of the seed object that intersects with our bbox
 			BoundingBox bboxIntersect = containingBBox

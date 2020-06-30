@@ -33,7 +33,7 @@ import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.channel.factory.ChannelFactory;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.Extent;
-import org.anchoranalysis.image.extent.ImageDim;
+import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.extent.IncorrectImageSizeException;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
@@ -88,7 +88,7 @@ class ExtractProjectedStack {
 		}
 	}
 	
-	private static Point3i createTarget( ImageDim sd, Extent e ) {
+	private static Point3i createTarget( ImageDimensions sd, Extent e ) {
 		Point3i crnrPos = new Point3i();
 		crnrPos.setX( (e.getX() - sd.getX()) / 2);
 		crnrPos.setY( (e.getY() - sd.getY()) / 2);
@@ -100,12 +100,12 @@ class ExtractProjectedStack {
 		return new BoundingBox(crnrPos, eChnl).intersection().with( new BoundingBox(eTrgt) ).orElseThrow(AnchorImpossibleSituationException::new);
 	}
 		
-	private static BoundingBox bboxSrc( BoundingBox bboxToProject, ImageDim sd ) {
+	private static BoundingBox bboxSrc( BoundingBox bboxToProject, ImageDimensions sd ) {
 		Point3i srcCrnrPos = createSrcCrnrPos(bboxToProject, sd);
 		return new BoundingBox(srcCrnrPos, bboxToProject.extent() );
 	}
 	
-	private static Point3i createSrcCrnrPos( BoundingBox bboxToProject, ImageDim sd ) {
+	private static Point3i createSrcCrnrPos( BoundingBox bboxToProject, ImageDimensions sd ) {
 		Point3i srcCrnrPos = new Point3i(0,0,0);
 		
 		if (bboxToProject.extent().getX() < sd.getX()) {
@@ -125,7 +125,7 @@ class ExtractProjectedStack {
 	private Channel copyPixels( BoundingBox bboxSrc, BoundingBox bboxToProject, Channel chnl, Extent eOut ) {
 		
 		Channel chnlOut = ChannelFactory.instance().createEmptyInitialised(
-			new ImageDim(
+			new ImageDimensions(
 				eOut,
 				chnl.getDimensions().getRes()
 			),

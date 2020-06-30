@@ -71,8 +71,8 @@ class PointsFromInsideHelper {
 		int successiveEmptySlices = -1;
 			
 		Extent e = vb.extent();
-		ReadableTuple3i crnrMin = bbox.getCrnrMin();
-		ReadableTuple3i crnrMax = bbox.calcCrnrMax();
+		ReadableTuple3i crnrMin = bbox.getCornerMin();
+		ReadableTuple3i crnrMax = bbox.calcCornerMax();
 		
 		
 		for( int z=startZ; z<=crnrMax.getZ(); z++) {

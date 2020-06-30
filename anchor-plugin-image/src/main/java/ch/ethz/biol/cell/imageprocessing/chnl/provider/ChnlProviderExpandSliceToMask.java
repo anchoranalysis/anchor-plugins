@@ -34,7 +34,7 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.bean.provider.ChnlProvider;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.channel.factory.ChannelFactory;
-import org.anchoranalysis.image.extent.ImageDim;
+import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.anchoranalysis.image.voxel.buffer.VoxelBufferByte;
 import org.anchoranalysis.image.voxel.datatype.IncorrectVoxelDataTypeException;
@@ -55,7 +55,7 @@ public class ChnlProviderExpandSliceToMask extends ChnlProvider {
 	@Override
 	public Channel create() throws CreateException {
 		
-		ImageDim sdTarget = chnlTargetDimensions.create().getDimensions();
+		ImageDimensions sdTarget = chnlTargetDimensions.create().getDimensions();
 		
 		Channel slice = chnlSlice.create();
 
@@ -74,7 +74,7 @@ public class ChnlProviderExpandSliceToMask extends ChnlProvider {
 		}
 	}
 	
-	private static void checkDimensions(ImageDim dimSrc, ImageDim dimTarget) throws CreateException {
+	private static void checkDimensions(ImageDimensions dimSrc, ImageDimensions dimTarget) throws CreateException {
 		if (dimSrc.getX()!=dimTarget.getX()) {
 			throw new CreateException("x dimension is not equal");
 		}
@@ -83,7 +83,7 @@ public class ChnlProviderExpandSliceToMask extends ChnlProvider {
 		}
 	}
 	
-	private Channel createExpandedChnl(ImageDim sdTarget, VoxelBox<ByteBuffer> vbSlice) {
+	private Channel createExpandedChnl(ImageDimensions sdTarget, VoxelBox<ByteBuffer> vbSlice) {
 		
 		Channel chnl = ChannelFactory.instance().createEmptyUninitialised(
 			sdTarget,

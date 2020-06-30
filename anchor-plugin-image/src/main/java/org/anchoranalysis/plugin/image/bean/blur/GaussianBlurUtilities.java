@@ -26,7 +26,7 @@ package org.anchoranalysis.plugin.image.bean.blur;
  * #L%
  */
 
-import org.anchoranalysis.image.extent.ImageRes;
+import org.anchoranalysis.image.extent.ImageResolution;
 
 import net.imglib2.algorithm.gauss3.Gauss3;
 import net.imglib2.exception.IncompatibleTypeException;
@@ -50,7 +50,7 @@ class GaussianBlurUtilities {
 	 */
 	public static <T extends NumericType<T>> void applyBlur(
 		Img<? extends RealType<?>> img,
-		ImageRes sr,
+		ImageResolution sr,
 		double[] sigma
 	) throws IncompatibleTypeException {
 		

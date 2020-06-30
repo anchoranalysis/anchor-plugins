@@ -36,7 +36,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.core.geometry.Point3f;
 import org.anchoranalysis.image.extent.BoundingBox;
-import org.anchoranalysis.image.extent.ImageDim;
+import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.orientation.Orientation;
 import org.anchoranalysis.image.orientation.OrientationRotationMatrix;
 import org.anchoranalysis.math.rotation.RotationMatrix;
@@ -208,7 +208,7 @@ public class LinearLeastSquaresEllipsoidFitter extends ConicFitterBase {
 	}
 	
 	@Override
-	public void fit(List<Point3f> points, Mark mark, ImageDim dim)
+	public void fit(List<Point3f> points, Mark mark, ImageDimensions dim)
 			throws PointsFitterException {
 		
 		DoubleMatrix2D matD = createDesignMatrixWithOnes(points, (float) getSubtractRadii() );
@@ -365,7 +365,7 @@ public class LinearLeastSquaresEllipsoidFitter extends ConicFitterBase {
 		return maxIndex;
 	}
 	
-	private static void applyFitResultToMark( FitResult fitResult, Mark mark, ImageDim sceneDim, double shellRad ) throws PointsFitterException {
+	private static void applyFitResultToMark( FitResult fitResult, Mark mark, ImageDimensions sceneDim, double shellRad ) throws PointsFitterException {
 		RotationMatrix rotMatrix = new RotationMatrix( fitResult.getRotMatrix() );
 		fitResult.setRotMatrix( fitResult.getRotMatrix() );
 		

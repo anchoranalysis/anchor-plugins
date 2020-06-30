@@ -33,9 +33,9 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.geometry.ReadableTuple3i;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.Extent;
-import org.anchoranalysis.image.objectmask.ObjectMask;
-import org.anchoranalysis.image.objectmask.MatchedObject;
-import org.anchoranalysis.image.objectmask.ObjectCollection;
+import org.anchoranalysis.image.object.MatchedObject;
+import org.anchoranalysis.image.object.ObjectCollection;
+import org.anchoranalysis.image.object.ObjectMask;
 
 import ch.ethz.biol.cell.imageprocessing.objmask.matching.ObjMaskMatchUtilities;
 
@@ -84,13 +84,13 @@ public class ObjMaskProviderExtendInZ extends ObjMaskProviderContainer {
 	
 	private static BoundingBox potentialZExpansion( ObjectMask omFlat, ObjectMask container ) throws CreateException {
 		
-		int zLow = container.getBoundingBox().getCrnrMin().getZ();
-		int zHigh = container.getBoundingBox().calcCrnrMax().getZ();
+		int zLow = container.getBoundingBox().getCornerMin().getZ();
+		int zHigh = container.getBoundingBox().calcCornerMax().getZ();
 		
 		Extent e = omFlat.getBoundingBox().extent().duplicateChangeZ(
 			zHigh-zLow+1
 		);
-		ReadableTuple3i crnrMin = omFlat.getBoundingBox().getCrnrMin().duplicateChangeZ(zLow);
+		ReadableTuple3i crnrMin = omFlat.getBoundingBox().getCornerMin().duplicateChangeZ(zLow);
 		
 		return new BoundingBox( crnrMin, e ).intersection().with( container.getBoundingBox() ).orElseThrow( ()->
 			new CreateException("Bounding boxes don't intersect")	

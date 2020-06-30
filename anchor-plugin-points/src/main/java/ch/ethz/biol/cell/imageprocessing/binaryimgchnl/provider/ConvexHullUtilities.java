@@ -33,8 +33,8 @@ import java.util.Optional;
 
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.geometry.Point2i;
-import org.anchoranalysis.image.objectmask.ObjectMask;
-import org.anchoranalysis.image.objectmask.ObjectCollection;
+import org.anchoranalysis.image.object.ObjectCollection;
+import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.outline.FindOutline;
 import org.anchoranalysis.image.points.PointsFromBinaryVoxelBox;
 
@@ -181,7 +181,7 @@ public class ConvexHullUtilities {
 		ObjectMask outline = FindOutline.outline(obj, 1, true, false);
 		PointsFromBinaryVoxelBox.addPointsFromVoxelBox(
 			outline.binaryVoxelBox(),
-			outline.getBoundingBox().getCrnrMin(),
+			outline.getBoundingBox().getCornerMin(),
 			pts
 		);
 	}

@@ -35,12 +35,12 @@ import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.cache.calculation.FeatureCalculation;
 import org.anchoranalysis.feature.cache.calculation.ResolvedCalculation;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.image.extent.ImageDim;
+import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.feature.object.calculation.CalculateInputFromPair.Extract;
 import org.anchoranalysis.image.feature.object.input.FeatureInputPairObjects;
-import org.anchoranalysis.image.objectmask.ObjectMask;
-import org.anchoranalysis.image.objectmask.morph.MorphologicalErosion;
-import org.anchoranalysis.image.objectmask.ops.ObjectMaskMerger;
+import org.anchoranalysis.image.object.ObjectMask;
+import org.anchoranalysis.image.object.morph.MorphologicalErosion;
+import org.anchoranalysis.image.object.ops.ObjectMaskMerger;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
@@ -120,7 +120,7 @@ public class CalculatePairIntersection extends FeatureCalculation<Optional<Objec
 	@Override
 	protected Optional<ObjectMask> execute( FeatureInputPairObjects input ) throws FeatureCalcException {
 	
-		ImageDim dim = input.getDimensionsRequired();
+		ImageDimensions dim = input.getDimensionsRequired();
 				
 		ObjectMask om1Dilated = left.getOrCalculate(input);
 		ObjectMask om2Dilated = right.getOrCalculate(input);
@@ -170,7 +170,7 @@ public class CalculatePairIntersection extends FeatureCalculation<Optional<Objec
 			.toHashCode();
 	}
 	
-	private Optional<ObjectMask> erode( FeatureInputPairObjects params, ObjectMask omIntersection, ImageDim dim ) throws CreateException {
+	private Optional<ObjectMask> erode( FeatureInputPairObjects params, ObjectMask omIntersection, ImageDimensions dim ) throws CreateException {
 
 		ObjectMask omMerged = params.getMerged();
 		

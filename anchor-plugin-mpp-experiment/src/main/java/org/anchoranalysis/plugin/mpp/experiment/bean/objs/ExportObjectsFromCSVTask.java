@@ -49,10 +49,10 @@ import org.anchoranalysis.experiment.task.InputBound;
 import org.anchoranalysis.experiment.task.ParametersExperiment;
 import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
 import org.anchoranalysis.image.bean.provider.stack.StackProvider;
-import org.anchoranalysis.image.index.rtree.ObjMaskCollectionRTree;
+import org.anchoranalysis.image.index.ObjectCollectionRTree;
 import org.anchoranalysis.image.io.generator.raster.RasterGenerator;
 import org.anchoranalysis.image.io.generator.raster.obj.rgb.RGBObjMaskGeneratorCropped;
-import org.anchoranalysis.image.objectmask.properties.ObjectCollectionWithProperties;
+import org.anchoranalysis.image.object.properties.ObjectCollectionWithProperties;
 import org.anchoranalysis.image.stack.DisplayStack;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.io.bean.filepath.generator.FilePathGenerator;
@@ -197,7 +197,7 @@ public class ExportObjectsFromCSVTask extends ExportObjectsBase<FromCSVInputObje
 		try {
 			DisplayStack background = createBackgroundStack(imageInit, context.getLogger() );
 			
-			ObjMaskCollectionRTree objs = new ObjMaskCollectionRTree(
+			ObjectCollectionRTree objs = new ObjectCollectionRTree(
 				inputObjs(
 					imageInit,
 					context.getLogger()
@@ -223,7 +223,7 @@ public class ExportObjectsFromCSVTask extends ExportObjectsBase<FromCSVInputObje
 		}
 	}
 	
-	private void outputGroup(String label, Collection<CSVRow> rows, ObjMaskCollectionRTree objs, DisplayStack background, BoundOutputManagerRouteErrors outputManager ) throws OutputWriteFailedException {
+	private void outputGroup(String label, Collection<CSVRow> rows, ObjectCollectionRTree objs, DisplayStack background, BoundOutputManagerRouteErrors outputManager ) throws OutputWriteFailedException {
 		
 		outputManager.getWriterAlwaysAllowed().write(
 			label,
@@ -237,7 +237,7 @@ public class ExportObjectsFromCSVTask extends ExportObjectsBase<FromCSVInputObje
 		);
 	}
 	
-	private SubfolderGenerator<CSVRow,Collection<CSVRow>> createGenerator( String label, Collection<CSVRow> rows, ObjMaskCollectionRTree objs, DisplayStack background) throws SetOperationFailedException {
+	private SubfolderGenerator<CSVRow,Collection<CSVRow>> createGenerator( String label, Collection<CSVRow> rows, ObjectCollectionRTree objs, DisplayStack background) throws SetOperationFailedException {
 		RGBOutlineWriter outlineWriter = new RGBOutlineWriter(1);
 		outlineWriter.setForce2D(true);
 				
@@ -263,9 +263,9 @@ public class ExportObjectsFromCSVTask extends ExportObjectsBase<FromCSVInputObje
 		/**
 		 * All objects associated with the image.
 		 */
-		private ObjMaskCollectionRTree allObjs;
+		private ObjectCollectionRTree allObjs;
 		
-		public CSVRowRGBOutlineGenerator( ObjMaskWriter objMaskWriter, ObjMaskCollectionRTree allObjs, DisplayStack background, RGBColor colorFirst, RGBColor colorSecond ) {
+		public CSVRowRGBOutlineGenerator( ObjMaskWriter objMaskWriter, ObjectCollectionRTree allObjs, DisplayStack background, RGBColor colorFirst, RGBColor colorSecond ) {
 			this.allObjs = allObjs;
 			
 			ColorList colorList = new ColorList();

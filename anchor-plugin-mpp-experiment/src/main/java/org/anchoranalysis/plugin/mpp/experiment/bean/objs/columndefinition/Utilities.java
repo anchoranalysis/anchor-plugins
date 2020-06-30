@@ -32,9 +32,9 @@ import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.core.index.SetOperationFailedException;
-import org.anchoranalysis.image.index.rtree.ObjMaskCollectionRTree;
-import org.anchoranalysis.image.objectmask.ObjectMask;
-import org.anchoranalysis.image.objectmask.ObjectCollection;
+import org.anchoranalysis.image.index.ObjectCollectionRTree;
+import org.anchoranalysis.image.object.ObjectCollection;
+import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.plugin.mpp.experiment.objs.csv.CSVRow;
 import org.apache.commons.lang.ArrayUtils;
 import org.w3c.dom.Document;
@@ -72,7 +72,7 @@ class Utilities {
 	 * @return the object if found, or NULL otherwise
 	 * @throws SetOperationFailedException
 	 */
-	private static ObjectMask findObjForPoint( ObjMaskCollectionRTree allObjs, Point3i pnt, int numVoxels ) throws OperationFailedException {
+	private static ObjectMask findObjForPoint( ObjectCollectionRTree allObjs, Point3i pnt, int numVoxels ) throws OperationFailedException {
 		ObjectCollection objs = allObjs.contains(pnt);
 		
 //		if (objs.size()>1) {
@@ -96,7 +96,7 @@ class Utilities {
 		);
 	}
 	
-	static ObjectMask findObjForCSVRow( ObjMaskCollectionRTree allObjs, CSVRow csvRow, int indexPnt[], int indexNumPixels ) throws OperationFailedException {
+	static ObjectMask findObjForCSVRow( ObjectCollectionRTree allObjs, CSVRow csvRow, int indexPnt[], int indexNumPixels ) throws OperationFailedException {
 		
 		String[] line = csvRow.getLine();
 		

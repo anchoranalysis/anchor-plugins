@@ -40,7 +40,7 @@ import org.anchoranalysis.image.bean.unitvalue.distance.UnitValueDistance;
 import org.anchoranalysis.image.binary.BinaryChnl;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.channel.Channel;
-import org.anchoranalysis.image.extent.ImageDim;
+import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.orientation.Orientation;
 import org.anchoranalysis.math.rotation.RotationMatrix;
 
@@ -117,7 +117,7 @@ public class FindOutlinePixelAngleOnImage extends FindOutlinePixelAngle {
 				}
 			}
 			
-			ImageDim sd = binaryImage.getDimensions();
+			ImageDimensions sd = binaryImage.getDimensions();
 			if (!sd.contains(pnt)) {
 				return null;
 			}
@@ -157,7 +157,7 @@ public class FindOutlinePixelAngleOnImage extends FindOutlinePixelAngle {
 	
 
 	
-	private boolean pntIsOutlineVal( double x, double y, double z, ImageDim sd, BinaryValuesByte bvb ) {
+	private boolean pntIsOutlineVal( double x, double y, double z, ImageDimensions sd, BinaryValuesByte bvb ) {
 		
 		if (!sd.contains( new Point3d(x,y,z) )) {
 			return false;

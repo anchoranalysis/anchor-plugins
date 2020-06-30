@@ -37,9 +37,9 @@ import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.bean.provider.ChnlProvider;
 import org.anchoranalysis.image.bean.unitvalue.distance.UnitValueDistance;
 import org.anchoranalysis.image.channel.Channel;
-import org.anchoranalysis.image.extent.ImageDim;
-import org.anchoranalysis.image.objectmask.ObjectCollection;
-import org.anchoranalysis.image.objectmask.ObjectMask;
+import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.image.object.ObjectCollection;
+import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 import org.anchoranalysis.plugin.image.bean.obj.filter.ObjectFilterPredicate;
@@ -65,7 +65,7 @@ public class IntensityGreaterEqualThan extends ObjectFilterPredicate {
 	private VoxelBox<?> vb;
 
 	@Override
-	protected void start(Optional<ImageDim> dim, ObjectCollection objsToFilter) throws OperationFailedException {
+	protected void start(Optional<ImageDimensions> dim, ObjectCollection objsToFilter) throws OperationFailedException {
 		
 		Channel chnlSingleRegion;
 		try {
@@ -78,7 +78,7 @@ public class IntensityGreaterEqualThan extends ObjectFilterPredicate {
 	}
 
 	@Override
-	protected boolean match(ObjectMask om, Optional<ImageDim> dim) throws OperationFailedException {
+	protected boolean match(ObjectMask om, Optional<ImageDimensions> dim) throws OperationFailedException {
 		
 		int thresholdRslv = threshold(dim);
 		
@@ -86,7 +86,7 @@ public class IntensityGreaterEqualThan extends ObjectFilterPredicate {
 			
 			ByteBuffer bb = om.getVoxelBox().getPixelsForPlane(z).buffer();
 			
-			int z1 = z + om.getBoundingBox().getCrnrMin().getZ();
+			int z1 = z + om.getBoundingBox().getCornerMin().getZ();
 			VoxelBuffer<?> bbChnl = vb.getPixelsForPlane(z1);
 			
 			for( int y=0; y<om.getBoundingBox().extent().getY(); y++) {
@@ -95,8 +95,8 @@ public class IntensityGreaterEqualThan extends ObjectFilterPredicate {
 					int offset = om.getBoundingBox().extent().offset(x, y);
 					if( bb.get(offset)==om.getBinaryValuesByte().getOnByte() ) {
 						
-						int y1 = y + om.getBoundingBox().getCrnrMin().getY();
-						int x1 = x + om.getBoundingBox().getCrnrMin().getX();
+						int y1 = y + om.getBoundingBox().getCornerMin().getY();
+						int x1 = x + om.getBoundingBox().getCornerMin().getX();
 						
 						int offsetGlobal = vb.extent().offset(x1,y1);
 						
@@ -115,10 +115,10 @@ public class IntensityGreaterEqualThan extends ObjectFilterPredicate {
 		return false;
 	}
 
-	private int threshold(Optional<ImageDim> dim) throws OperationFailedException {
+	private int threshold(Optional<ImageDimensions> dim) throws OperationFailedException {
 		return (int) Math.ceil(
 			threshold.rslvForAxis(
-				dim.map(ImageDim::getRes),
+				dim.map(ImageDimensions::getRes),
 				AxisType.X
 			)
 		);

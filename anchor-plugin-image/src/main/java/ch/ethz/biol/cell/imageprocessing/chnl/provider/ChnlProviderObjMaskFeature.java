@@ -43,11 +43,11 @@ import org.anchoranalysis.feature.session.calculator.FeatureCalculatorSingle;
 import org.anchoranalysis.image.bean.provider.ChnlProvider;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.channel.factory.ChannelFactory;
-import org.anchoranalysis.image.extent.ImageDim;
+import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.extent.IncorrectImageSizeException;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
-import org.anchoranalysis.image.objectmask.ObjectMask;
-import org.anchoranalysis.image.objectmask.ObjectCollection;
+import org.anchoranalysis.image.object.ObjectCollection;
+import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
 
 public class ChnlProviderObjMaskFeature extends ChnlProviderOneObjsSource {
@@ -117,7 +117,7 @@ public class ChnlProviderObjMaskFeature extends ChnlProviderOneObjsSource {
 	}
 	
 	private Channel createOutputChnl(
-		ImageDim dim,
+		ImageDimensions dim,
 		ObjectCollection objsSource,
 		FeatureCalculatorSingle<FeatureInputSingleObject> session,
 		NRGStackWithParams nrgStackParams

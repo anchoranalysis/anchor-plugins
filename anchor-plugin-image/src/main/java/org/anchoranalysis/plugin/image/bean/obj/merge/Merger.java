@@ -42,10 +42,10 @@ import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelBoxByte;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.Extent;
-import org.anchoranalysis.image.extent.ImageRes;
-import org.anchoranalysis.image.objectmask.ObjectMask;
-import org.anchoranalysis.image.objectmask.ObjectCollection;
-import org.anchoranalysis.image.objectmask.ops.ObjectMaskMerger;
+import org.anchoranalysis.image.extent.ImageResolution;
+import org.anchoranalysis.image.object.ObjectCollection;
+import org.anchoranalysis.image.object.ObjectMask;
+import org.anchoranalysis.image.object.ops.ObjectMaskMerger;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.anchoranalysis.image.voxel.box.factory.VoxelBoxFactory;
 import org.anchoranalysis.plugin.image.obj.merge.condition.AfterCondition;
@@ -62,7 +62,7 @@ class Merger {
 	
 	private BeforeCondition beforeCondition;
 	private AfterCondition afterCondition;
-	private Optional<ImageRes> res;
+	private Optional<ImageResolution> res;
 	private boolean replaceWithMidpoint;
 	private LogErrorReporter logger;
 	
@@ -85,7 +85,7 @@ class Merger {
 		}
 	}
 	
-	public Merger(boolean replaceWithMidpoint, BeforeCondition beforeCondition, AfterCondition afterCondition, Optional<ImageRes> res, LogErrorReporter logger) {
+	public Merger(boolean replaceWithMidpoint, BeforeCondition beforeCondition, AfterCondition afterCondition, Optional<ImageResolution> res, LogErrorReporter logger) {
 		super();
 		this.beforeCondition = beforeCondition;
 		this.afterCondition = afterCondition;

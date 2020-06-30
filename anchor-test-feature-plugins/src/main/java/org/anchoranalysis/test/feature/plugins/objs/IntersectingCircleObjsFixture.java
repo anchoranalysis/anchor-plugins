@@ -27,9 +27,9 @@ package org.anchoranalysis.test.feature.plugins.objs;
  */
 
 import org.anchoranalysis.core.geometry.Point2i;
-import org.anchoranalysis.image.objectmask.ObjectMask;
-import org.anchoranalysis.image.objectmask.ObjectCollection;
-import org.anchoranalysis.image.objectmask.ObjectCollectionFactory;
+import org.anchoranalysis.image.object.ObjectCollection;
+import org.anchoranalysis.image.object.ObjectCollectionFactory;
+import org.anchoranalysis.image.object.ObjectMask;
 
 public class IntersectingCircleObjsFixture {
 

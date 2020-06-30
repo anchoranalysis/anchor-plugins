@@ -34,19 +34,19 @@ import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.functional.UnaryOperatorWithException;
 import org.anchoranalysis.image.bean.nonbean.error.SgmnFailedException;
 import org.anchoranalysis.image.bean.scale.ScaleCalculator;
-import org.anchoranalysis.image.bean.sgmn.objmask.ObjMaskSgmn;
-import org.anchoranalysis.image.bean.sgmn.objmask.ObjMaskSgmnOne;
+import org.anchoranalysis.image.bean.segmentation.object.ObjectSegmentation;
+import org.anchoranalysis.image.bean.segmentation.object.ObjectSegmentationOne;
 import org.anchoranalysis.image.channel.Channel;
-import org.anchoranalysis.image.extent.ImageDim;
+import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.interpolator.Interpolator;
 import org.anchoranalysis.image.interpolator.InterpolatorFactory;
-import org.anchoranalysis.image.objectmask.ObjectMask;
-import org.anchoranalysis.image.objectmask.ObjectCollection;
+import org.anchoranalysis.image.object.ObjectCollection;
+import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.scale.ScaleFactor;
 import org.anchoranalysis.image.seed.SeedCollection;
 
 
-public class ObjMaskSgmnScale extends ObjMaskSgmnOne {
+public class ObjMaskSgmnScale extends ObjectSegmentationOne {
 
 	// START BEAN PROPERTIES
 	@BeanField
@@ -60,7 +60,7 @@ public class ObjMaskSgmnScale extends ObjMaskSgmnOne {
 	// END BEAN PROPERTIES
 	
 	@Override
-	public ObjectCollection sgmn(Channel chnl, Optional<ObjectMask> mask, Optional<SeedCollection> seeds, ObjMaskSgmn sgmn) throws SgmnFailedException {
+	public ObjectCollection sgmn(Channel chnl, Optional<ObjectMask> mask, Optional<SeedCollection> seeds, ObjectSegmentation sgmn) throws SgmnFailedException {
 
 		Interpolator interpolator = createInterpolator();
 		
@@ -90,7 +90,7 @@ public class ObjMaskSgmnScale extends ObjMaskSgmnOne {
 		);
 	}
 	
-	private ScaleFactor determineScaleFactor( ImageDim dim ) throws SgmnFailedException {
+	private ScaleFactor determineScaleFactor( ImageDimensions dim ) throws SgmnFailedException {
 		try {
 			return scaleCalculator.calc(dim);
 		} catch (OperationFailedException e) {

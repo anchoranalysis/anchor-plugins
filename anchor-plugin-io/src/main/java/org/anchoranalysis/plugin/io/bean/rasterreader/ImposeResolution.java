@@ -31,7 +31,7 @@ import java.util.Optional;
 
 
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.image.extent.ImageRes;
+import org.anchoranalysis.image.extent.ImageResolution;
 import org.anchoranalysis.image.io.RasterIOException;
 import org.anchoranalysis.image.io.bean.rasterreader.RasterReader;
 import org.anchoranalysis.image.io.rasterreader.OpenedRaster;
@@ -65,9 +65,9 @@ public class ImposeResolution extends RasterReader {
 		}
 
 		@Override
-		public Optional<ImageRes> maybeUpdatedResolution(ImageRes res) throws RasterIOException {
+		public Optional<ImageResolution> maybeUpdatedResolution(ImageResolution res) throws RasterIOException {
 			return Optional.of(
-				new ImageRes(
+				new ImageResolution(
 					resX,
 					resY,
 					keepZ ? res.getZ() : resZ

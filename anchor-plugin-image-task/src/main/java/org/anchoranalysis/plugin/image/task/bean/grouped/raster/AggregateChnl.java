@@ -29,7 +29,7 @@ package org.anchoranalysis.plugin.image.task.bean.grouped.raster;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.channel.factory.ChannelFactory;
-import org.anchoranalysis.image.extent.ImageDim;
+import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedInt;
 
@@ -81,7 +81,7 @@ class AggregateChnl {
 		return chnlOut;
 	}
 		
-	private void createRasterIfNecessary(ImageDim dim) {
+	private void createRasterIfNecessary(ImageDimensions dim) {
 		if (raster==null) {
 			this.raster = ChannelFactory.instance().createEmptyInitialised(
 				dim,

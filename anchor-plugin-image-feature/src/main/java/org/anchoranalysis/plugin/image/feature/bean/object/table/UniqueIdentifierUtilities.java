@@ -1,7 +1,7 @@
 package org.anchoranalysis.plugin.image.feature.bean.object.table;
 
 import org.anchoranalysis.core.geometry.Point3i;
-import org.anchoranalysis.image.objectmask.ObjectMask;
+import org.anchoranalysis.image.object.ObjectMask;
 
 /**
  * Generates unique identifiers for object-masks

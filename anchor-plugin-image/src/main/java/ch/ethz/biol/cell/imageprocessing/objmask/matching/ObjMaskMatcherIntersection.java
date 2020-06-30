@@ -32,12 +32,12 @@ import java.util.List;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.image.bean.objmask.match.ObjMaskMatcher;
+import org.anchoranalysis.image.bean.object.ObjectMatcher;
 import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
-import org.anchoranalysis.image.objectmask.MatchedObject;
-import org.anchoranalysis.image.objectmask.ObjectCollection;
+import org.anchoranalysis.image.object.MatchedObject;
+import org.anchoranalysis.image.object.ObjectCollection;
 
-public class ObjMaskMatcherIntersection extends ObjMaskMatcher {
+public class ObjMaskMatcherIntersection extends ObjectMatcher {
 	
 	// START BEAN PROPERTIES
 	@BeanField
