@@ -33,7 +33,7 @@ package org.anchoranalysis.plugin.image.feature.bean.obj.intersecting;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.plugin.image.feature.bean.object.collection.intersecting.NumIntersectingObjs;
+import org.anchoranalysis.plugin.image.feature.bean.object.collection.intersecting.NumberIntersectingObjects;
 import org.junit.Test;
 
 public class NumIntersectingObjsTest {
@@ -57,7 +57,7 @@ public class NumIntersectingObjsTest {
 	private void testForSpecificExpectedValues( String messagePrefix, boolean sameSize ) throws OperationFailedException, FeatureCalcException, InitException {
 		InteresectingObjsTestHelper.testPositions(
 			messagePrefix,
-			new NumIntersectingObjs(),
+			new NumberIntersectingObjects(),
 			sameSize,
 			EXPECTED_FIRST,
 			EXPECTED_SECOND,

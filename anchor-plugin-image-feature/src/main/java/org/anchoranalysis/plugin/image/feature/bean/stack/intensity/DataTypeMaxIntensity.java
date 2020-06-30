@@ -1,10 +1,10 @@
-package ch.ethz.biol.cell.mpp.nrg.feature.objmask;
+package org.anchoranalysis.plugin.image.feature.bean.stack.intensity;
 
-/*
+/*-
  * #%L
- * anchor-plugin-image
+ * anchor-plugin-image-feature
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -26,72 +26,22 @@ package ch.ethz.biol.cell.mpp.nrg.feature.objmask;
  * #L%
  */
 
-
-import org.anchoranalysis.bean.annotation.AllowEmpty;
-import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.input.FeatureInputNRGStack;
 import org.anchoranalysis.image.feature.bean.FeatureNRGStack;
 
 /**
- * Same behaviour as NRGParam, except uses an id composed of three parts that are concatenated
+ * The maximum-intensity allowed by the data-type of the stack (e.g. 255 for unsigned 8-bit).
+ * 
+ * <p>Note this is NOT the actual max-intensity seen in the stack, rather the theoretical max of the data-type.</p>
  * 
  * @author Owen Feehan
  *
  */
-public class NRGParamThree extends FeatureNRGStack {
+public class DataTypeMaxIntensity extends FeatureNRGStack {
 
-	// START BEAN PROPERTIES
-	@BeanField @AllowEmpty
-	private String idLeft;
-	
-	@BeanField @AllowEmpty
-	private String idMiddle;
-	
-	@BeanField @AllowEmpty
-	private String idRight;
-	// END BEAN PROPERTIES
-	
-	private String createID() {
-		StringBuilder sb = new StringBuilder();
-		sb.append(idLeft);
-		sb.append(idMiddle);
-		sb.append(idRight);
-		return sb.toString();
-	}
-	
 	@Override
 	public double calcForInput(FeatureInputNRGStack params) throws FeatureCalcException {
-		String id = createID();
-		return NRGParam.calcForPropertyID(params, id);
-	}
-
-	public String getIdLeft() {
-		return idLeft;
-	}
-
-	public void setIdLeft(String idLeft) {
-		this.idLeft = idLeft;
-	}
-
-	public String getIdMiddle() {
-		return idMiddle;
-	}
-
-	public void setIdMiddle(String idMiddle) {
-		this.idMiddle = idMiddle;
-	}
-
-	public String getIdRight() {
-		return idRight;
-	}
-
-	public void setIdRight(String idRight) {
-		this.idRight = idRight;
-	}
-
-	@Override
-	public String getParamDscr() {
-		return String.format("%s %s %s", idLeft, idMiddle, idRight);
+		return (double) params.getNrgStackRequired().getChnl(0).getVoxelDataType().maxValue();
 	}
 }

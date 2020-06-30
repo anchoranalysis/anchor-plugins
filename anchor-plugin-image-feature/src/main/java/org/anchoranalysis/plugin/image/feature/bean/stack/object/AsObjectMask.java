@@ -1,8 +1,8 @@
-package ch.ethz.biol.cell.mpp.nrg.feature.objmask;
+package org.anchoranalysis.plugin.image.feature.bean.stack.object;
 
 /*
  * #%L
- * anchor-plugin-image
+ * anchor-plugin-image-feature
  * %%
  * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
  * %%
@@ -27,71 +27,56 @@ package ch.ethz.biol.cell.mpp.nrg.feature.objmask;
  */
 
 
-import org.anchoranalysis.bean.annotation.AllowEmpty;
 import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.feature.bean.Feature;
+import org.anchoranalysis.feature.cache.ChildCacheName;
+import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.feature.input.FeatureInputNRGStack;
-import org.anchoranalysis.image.feature.bean.FeatureNRGStack;
+import org.anchoranalysis.image.feature.bean.stack.FeatureStack;
+import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
+import org.anchoranalysis.image.feature.stack.FeatureInputStack;
 
 /**
- * Same behaviour as NRGParam, except uses an id composed of three parts that are concatenated
+ * Treats a channel as an object-mask, assuming binary values of 0 and 255
+ * and calls an object-mask feature
  * 
- * @author Owen Feehan
+ * @author FEEHANO
  *
  */
-public class NRGParamThree extends FeatureNRGStack {
+public class AsObjectMask extends FeatureStack {
 
 	// START BEAN PROPERTIES
-	@BeanField @AllowEmpty
-	private String idLeft;
+	@BeanField
+	private Feature<FeatureInputSingleObject> item;
 	
-	@BeanField @AllowEmpty
-	private String idMiddle;
-	
-	@BeanField @AllowEmpty
-	private String idRight;
+	@BeanField
+	/** The channel that that forms the binary mask */
+	private int nrgIndex = 0;
 	// END BEAN PROPERTIES
 	
-	private String createID() {
-		StringBuilder sb = new StringBuilder();
-		sb.append(idLeft);
-		sb.append(idMiddle);
-		sb.append(idRight);
-		return sb.toString();
-	}
-	
 	@Override
-	public double calcForInput(FeatureInputNRGStack params) throws FeatureCalcException {
-		String id = createID();
-		return NRGParam.calcForPropertyID(params, id);
+	public double calc(SessionInput<FeatureInputStack> input) throws FeatureCalcException {
+		
+		return input.forChild().calc(
+			item,
+			new CalculateDeriveObjectInput(nrgIndex),
+			new ChildCacheName(AsObjectMask.class, nrgIndex)
+		);
 	}
 
-	public String getIdLeft() {
-		return idLeft;
+	public Feature<FeatureInputSingleObject> getItem() {
+		return item;
 	}
 
-	public void setIdLeft(String idLeft) {
-		this.idLeft = idLeft;
+	public void setItem(Feature<FeatureInputSingleObject> item) {
+		this.item = item;
 	}
 
-	public String getIdMiddle() {
-		return idMiddle;
+	public int getNrgIndex() {
+		return nrgIndex;
 	}
 
-	public void setIdMiddle(String idMiddle) {
-		this.idMiddle = idMiddle;
-	}
-
-	public String getIdRight() {
-		return idRight;
-	}
-
-	public void setIdRight(String idRight) {
-		this.idRight = idRight;
-	}
-
-	@Override
-	public String getParamDscr() {
-		return String.format("%s %s %s", idLeft, idMiddle, idRight);
+	public void setNrgIndex(int nrgIndex) {
+		this.nrgIndex = nrgIndex;
 	}
 }

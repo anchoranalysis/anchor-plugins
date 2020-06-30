@@ -33,6 +33,7 @@ import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.feature.bean.object.pair.First;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
+import org.anchoranalysis.plugin.image.feature.bean.stack.dimensions.Extent;
 import org.anchoranalysis.test.TestLoader;
 import org.anchoranalysis.test.feature.plugins.mockfeature.MockFeatureWithCalculationFixture;
 import org.junit.Before;
@@ -45,8 +46,6 @@ import static org.mockito.Mockito.*;
 
 import java.util.function.Consumer;
 import static org.anchoranalysis.plugin.mpp.experiment.bean.feature.ExportFeaturesObjMaskOutputter.*;
-
-import ch.ethz.biol.cell.mpp.nrg.feature.stack.SceneWidth;
 
 /**
  * Tests running {#link ExportFeaturesObjMaskTask} on a single input
@@ -144,7 +143,7 @@ public class ExportFeaturesObjMaskTaskTest {
 	@Test
 	public void testCachingImageFeatures() throws OperationFailedException, CreateException, FeatureCalcException {
 		
-		SceneWidth feature = spy(SceneWidth.class);
+		Extent feature = spy(Extent.class);
 		
 		// To make sure we keep on using the spy, even after an expected duplication()
 		when(feature.duplicateBean()).thenReturn(feature);
