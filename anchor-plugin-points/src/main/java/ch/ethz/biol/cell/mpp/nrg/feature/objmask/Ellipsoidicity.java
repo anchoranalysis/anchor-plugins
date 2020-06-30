@@ -30,12 +30,12 @@ import org.anchoranalysis.anchor.mpp.mark.conic.MarkEllipsoid;
 
 
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
+import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 
 public class Ellipsoidicity extends EllipsoidBase {
 
 	@Override
-	protected double calc(FeatureInputSingleObj input, MarkEllipsoid me) throws FeatureCalcException {
+	protected double calc(FeatureInputSingleObject input, MarkEllipsoid me) throws FeatureCalcException {
 		
 		return EllipticityCalculatorHelper.calc(
 			input.getObjMask(),

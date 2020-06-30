@@ -30,10 +30,10 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.cache.calculation.FeatureCalculation;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.image.feature.bean.objmask.FeatureObjMask;
-import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
+import org.anchoranalysis.image.feature.bean.object.single.FeatureSingleObject;
+import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 
-public abstract class SurfaceNumVoxelsBase extends FeatureObjMask {
+public abstract class SurfaceNumVoxelsBase extends FeatureSingleObject {
 
 	// START BEAN PROPERTIES
 	@BeanField
@@ -44,13 +44,13 @@ public abstract class SurfaceNumVoxelsBase extends FeatureObjMask {
 	/// END BEAN PROPERTIES
 	
 	@Override
-	public double calc(SessionInput<FeatureInputSingleObj> input) throws FeatureCalcException {
+	public double calc(SessionInput<FeatureInputSingleObject> input) throws FeatureCalcException {
 		return input.calc(
 			createParams(mip, suppress3D)		
 		);
 	}
 	
-	protected abstract FeatureCalculation<Integer,FeatureInputSingleObj> createParams(boolean mip, boolean suppress3d);
+	protected abstract FeatureCalculation<Integer,FeatureInputSingleObject> createParams(boolean mip, boolean suppress3d);
 
 	public boolean isMip() {
 		return mip;

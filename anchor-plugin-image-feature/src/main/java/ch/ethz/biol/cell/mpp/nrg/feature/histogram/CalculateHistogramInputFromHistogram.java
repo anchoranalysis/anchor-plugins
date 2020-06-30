@@ -31,7 +31,7 @@ import org.anchoranalysis.feature.cache.calculation.FeatureCalculation;
 import org.anchoranalysis.feature.cache.calculation.ResolvedCalculation;
 import org.anchoranalysis.image.feature.histogram.FeatureInputHistogram;
 import org.anchoranalysis.image.histogram.Histogram;
-import org.anchoranalysis.plugin.image.feature.obj.pair.CalculateInputFromDelegate;
+import org.anchoranalysis.plugin.image.feature.object.calculation.delegate.CalculateInputFromDelegate;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 

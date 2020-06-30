@@ -29,6 +29,8 @@ package org.anchoranalysis.plugin.image.feature.bean.obj.intersecting;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.plugin.image.feature.bean.object.collection.intersecting.FeatureIntersectingObjs;
+import org.anchoranalysis.plugin.image.feature.bean.object.collection.intersecting.MinFeatureIntersectingObjsAboveThreshold;
 import org.junit.Test;
 
 public class MinFeatureIntersectingObjsAboveThresholdTest {

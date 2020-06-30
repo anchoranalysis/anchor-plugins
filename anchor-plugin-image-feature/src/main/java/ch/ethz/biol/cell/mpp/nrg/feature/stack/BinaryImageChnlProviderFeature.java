@@ -39,14 +39,14 @@ import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
 import org.anchoranalysis.image.bean.provider.BinaryChnlProvider;
 import org.anchoranalysis.image.binary.BinaryChnl;
 import org.anchoranalysis.image.feature.init.FeatureInitParamsSharedObjs;
-import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
+import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.feature.stack.FeatureInputStack;
 
 public class BinaryImageChnlProviderFeature extends FeatureStackSharedObjects {
 
 	// START BEAN PROPERTIES
 	@BeanField
-	private Feature<FeatureInputSingleObj> item;
+	private Feature<FeatureInputSingleObject> item;
 	
 	@BeanField
 	@SkipInit
@@ -79,11 +79,11 @@ public class BinaryImageChnlProviderFeature extends FeatureStackSharedObjects {
 		);
 	}
 
-	public Feature<FeatureInputSingleObj> getItem() {
+	public Feature<FeatureInputSingleObject> getItem() {
 		return item;
 	}
 
-	public void setItem(Feature<FeatureInputSingleObj> item) {
+	public void setItem(Feature<FeatureInputSingleObject> item) {
 		this.item = item;
 	}
 

@@ -27,13 +27,13 @@ package ch.ethz.biol.cell.mpp.nrg.feature.stack;
  */
 
 import org.anchoranalysis.feature.cache.calculation.FeatureCalculation;
-import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
+import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.feature.stack.FeatureInputStack;
 import org.anchoranalysis.image.objectmask.ObjectCollection;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
-class CalculateInputFromStack extends FeatureCalculation<FeatureInputSingleObj, FeatureInputStack> {
+class CalculateInputFromStack extends FeatureCalculation<FeatureInputSingleObject, FeatureInputStack> {
 
 	private ObjectCollection objs;
 	private int index;
@@ -52,8 +52,8 @@ class CalculateInputFromStack extends FeatureCalculation<FeatureInputSingleObj, 
 	}
 
 	@Override
-	protected FeatureInputSingleObj execute(FeatureInputStack input) {
-		return new FeatureInputSingleObj(
+	protected FeatureInputSingleObject execute(FeatureInputStack input) {
+		return new FeatureInputSingleObject(
 			objs.get(index),
 			input.getNrgStackOptional()
 		);

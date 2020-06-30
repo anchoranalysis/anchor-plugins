@@ -34,7 +34,7 @@ import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.cache.calculation.ResolvedCalculation;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.feature.bean.FeatureStack;
-import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
+import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.feature.stack.FeatureInputStack;
 import org.anchoranalysis.image.objectmask.ObjectCollection;
 
@@ -46,7 +46,7 @@ public class MedianConnectedComponentFeature extends FeatureStack {
 
 	// START BEAN PROPERTIES
 	@BeanField
-	private Feature<FeatureInputSingleObj> item;
+	private Feature<FeatureInputSingleObject> item;
 	
 	@BeanField
 	private int nrgChnlIndex = 0;
@@ -86,11 +86,11 @@ public class MedianConnectedComponentFeature extends FeatureStack {
 		);
 	}
 
-	public Feature<FeatureInputSingleObj> getItem() {
+	public Feature<FeatureInputSingleObject> getItem() {
 		return item;
 	}
 
-	public void setItem(Feature<FeatureInputSingleObj> item) {
+	public void setItem(Feature<FeatureInputSingleObject> item) {
 		this.item = item;
 	}
 

@@ -46,7 +46,7 @@ import org.anchoranalysis.feature.session.calculator.FeatureCalculatorSingleFrom
 import org.anchoranalysis.image.feature.bean.evaluator.FeatureEvaluator;
 import org.anchoranalysis.image.feature.bean.evaluator.FeatureEvaluatorNrgStack;
 import org.anchoranalysis.image.feature.evaluator.PayloadCalculator;
-import org.anchoranalysis.image.feature.objmask.pair.FeatureInputPairObjs;
+import org.anchoranalysis.image.feature.object.input.FeatureInputPairObjects;
 import org.anchoranalysis.image.feature.session.merged.MergedPairsFeatures;
 import org.anchoranalysis.image.feature.session.merged.FeatureCalculatorMergedPairs;
 import org.anchoranalysis.image.objectmask.ObjectMask;
@@ -76,7 +76,7 @@ public class ObjMaskProviderMergePair extends ObjMaskProviderMergeWithFeature {
 	private RelationBean relation = new GreaterThanEqualToBean();
 	
 	@BeanField
-	private FeatureEvaluatorNrgStack<FeatureInputPairObjs> featureEvaluatorMerge;
+	private FeatureEvaluatorNrgStack<FeatureInputPairObjects> featureEvaluatorMerge;
 	// END BEAN PROPERTIES
 
 	@Override
@@ -103,7 +103,7 @@ public class ObjMaskProviderMergePair extends ObjMaskProviderMergeWithFeature {
 		}
 	}
 	
-	private FeatureCalculatorSingle<FeatureInputPairObjs> createCalculatorForPairs() throws CreateException {
+	private FeatureCalculatorSingle<FeatureInputPairObjects> createCalculatorForPairs() throws CreateException {
 		try {
 			Optional<NRGStackWithParams> nrgStack = featureEvaluatorMerge.nrgStack();
 			
@@ -164,11 +164,11 @@ public class ObjMaskProviderMergePair extends ObjMaskProviderMergeWithFeature {
 		return true;
 	}
 
-	public FeatureEvaluatorNrgStack<FeatureInputPairObjs> getFeatureEvaluatorMerge() {
+	public FeatureEvaluatorNrgStack<FeatureInputPairObjects> getFeatureEvaluatorMerge() {
 		return featureEvaluatorMerge;
 	}
 
-	public void setFeatureEvaluatorMerge(FeatureEvaluatorNrgStack<FeatureInputPairObjs> featureEvaluatorMerge) {
+	public void setFeatureEvaluatorMerge(FeatureEvaluatorNrgStack<FeatureInputPairObjects> featureEvaluatorMerge) {
 		this.featureEvaluatorMerge = featureEvaluatorMerge;
 	}
 }

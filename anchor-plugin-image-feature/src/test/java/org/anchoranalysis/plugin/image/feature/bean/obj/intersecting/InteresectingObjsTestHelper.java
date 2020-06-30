@@ -34,9 +34,10 @@ import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.name.store.SharedObjects;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
-import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
+import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.io.input.ImageInitParamsFactory;
 import org.anchoranalysis.image.objectmask.ObjectMask;
+import org.anchoranalysis.plugin.image.feature.bean.object.collection.intersecting.FeatureIntersectingObjs;
 import org.anchoranalysis.image.objectmask.ObjectCollection;
 import org.anchoranalysis.test.LoggingFixture;
 import org.anchoranalysis.test.feature.plugins.FeatureTestCalculator;
@@ -151,7 +152,7 @@ class InteresectingObjsTestHelper {
 		FeatureTestCalculator.assertIntResult(
 			message,
 			addId(feature),
-			new FeatureInputSingleObj(om, CircleObjMaskFixture.nrgStack()),
+			new FeatureInputSingleObject(om, CircleObjMaskFixture.nrgStack()),
 			Optional.of(createInitParams(others)),
 			expectedResult
 		);		

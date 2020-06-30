@@ -30,11 +30,11 @@ package ch.ethz.biol.cell.mpp.nrg.feature.objmask;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.image.feature.bean.objmask.FeatureObjMask;
-import org.anchoranalysis.image.feature.objmask.CalculateNumVoxels;
-import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
+import org.anchoranalysis.image.feature.bean.object.single.FeatureSingleObject;
+import org.anchoranalysis.image.feature.object.calculation.CalculateNumVoxels;
+import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.objectmask.ObjectMask;
-import org.anchoranalysis.plugin.image.calculation.CalculateClosing;
+import org.anchoranalysis.plugin.image.feature.object.calculation.single.CalculateClosing;
 
 /**
  * Performs a morphological opening operation on the object-mask. Then calculates the ratio of:
@@ -45,7 +45,7 @@ import org.anchoranalysis.plugin.image.calculation.CalculateClosing;
  * @author Owen Feehan
  *
  */
-public class NumAddedVoxelsAfterClosing extends FeatureObjMask {
+public class NumAddedVoxelsAfterClosing extends FeatureSingleObject {
 
 	// START BEAN PROPERTIES
 	@BeanField
@@ -56,7 +56,7 @@ public class NumAddedVoxelsAfterClosing extends FeatureObjMask {
 	// END BEAN PROPERTIES
 	
 	@Override
-	public double calc(SessionInput<FeatureInputSingleObj> input) throws FeatureCalcException {
+	public double calc(SessionInput<FeatureInputSingleObject> input) throws FeatureCalcException {
 
 		ObjectMask omClosing = input.calc(
 			CalculateClosing.createFromCache(

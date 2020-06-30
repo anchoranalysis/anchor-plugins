@@ -34,8 +34,8 @@ import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.list.FeatureListProvider;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.resultsvectorcollection.FeatureInputResults;
-import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
-import org.anchoranalysis.image.feature.objmask.pair.FeatureInputPairObjs;
+import org.anchoranalysis.image.feature.object.input.FeatureInputPairObjects;
+import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.feature.stack.FeatureInputStack;
 import org.anchoranalysis.test.TestLoader;
 
@@ -43,8 +43,8 @@ import org.anchoranalysis.test.TestLoader;
 class ExportFeaturesObjMaskFeatureLoader {
 
 	/** The "single" and "pair" and "image" features in use.*/
-	private LoadFeatureListProviderFixture<FeatureInputSingleObj> single;
-	private LoadFeatureListProviderFixture<FeatureInputPairObjs> pair;
+	private LoadFeatureListProviderFixture<FeatureInputSingleObject> single;
+	private LoadFeatureListProviderFixture<FeatureInputPairObjects> pair;
 	private LoadFeatureListProviderFixture<FeatureInputStack> image;
 	
 	/** The features used for the shared-feature set */
@@ -62,11 +62,11 @@ class ExportFeaturesObjMaskFeatureLoader {
 		this.aggregated = new LoadFeatureListProviderFixture<>(loader, "aggregatedFeatures.xml");
 	}
 	
-	public List<NamedBean<FeatureListProvider<FeatureInputSingleObj>>> single() {
+	public List<NamedBean<FeatureListProvider<FeatureInputSingleObject>>> single() {
 		return single.asListNamedBeansProvider();
 	}
 	
-	public List<NamedBean<FeatureListProvider<FeatureInputPairObjs>>> pair() {
+	public List<NamedBean<FeatureListProvider<FeatureInputPairObjects>>> pair() {
 		return pair.asListNamedBeansProvider();
 	}
 	
@@ -99,7 +99,7 @@ class ExportFeaturesObjMaskFeatureLoader {
 	 * 
 	 * <p>It does not initialize the feature.</p>
 	 * */
-	public void changeSingleTo( Feature<FeatureInputSingleObj> feature ) {
+	public void changeSingleTo( Feature<FeatureInputSingleObject> feature ) {
 		single.useSingleFeature(feature);
 	}
 
@@ -108,7 +108,7 @@ class ExportFeaturesObjMaskFeatureLoader {
 	 * 
 	 * <p>It does not initialize the feature.</p>
 	 * */
-	public void changePairTo( Feature<FeatureInputPairObjs> feature ) {
+	public void changePairTo( Feature<FeatureInputPairObjects> feature ) {
 		pair.useSingleFeature(feature);
 	}
 	

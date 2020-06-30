@@ -32,9 +32,9 @@ import org.anchoranalysis.feature.cache.ChildCacheName;
 import org.anchoranalysis.feature.cache.calculation.CalculationResolver;
 import org.anchoranalysis.feature.cache.calculation.FeatureCalculation;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
+import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.objectmask.ObjectMask;
-import org.anchoranalysis.plugin.image.calculation.CalculateShellObjMask;
+import org.anchoranalysis.plugin.image.feature.object.calculation.single.CalculateShellObjMask;
 
 public class Shell extends DerivedObjMask {
 
@@ -50,7 +50,7 @@ public class Shell extends DerivedObjMask {
 	// END BEAN PROPERTIES
 	
 	@Override
-	protected FeatureCalculation<ObjectMask,FeatureInputSingleObj> createCachedCalculationForDerived( CalculationResolver<FeatureInputSingleObj> session) throws FeatureCalcException {
+	protected FeatureCalculation<ObjectMask,FeatureInputSingleObject> createCachedCalculationForDerived( CalculationResolver<FeatureInputSingleObject> session) throws FeatureCalcException {
 		return CalculateShellObjMask.createFromCache(
 			session,
 			iterationsDilation,

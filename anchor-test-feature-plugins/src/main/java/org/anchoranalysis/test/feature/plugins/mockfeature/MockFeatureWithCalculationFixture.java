@@ -33,7 +33,7 @@ import java.util.function.Function;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.input.FeatureInput;
-import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
+import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 
 
 /**
@@ -49,7 +49,7 @@ import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
  */
 public class MockFeatureWithCalculationFixture {
 
-	public final static Function<FeatureInputSingleObj,Double> DEFAULT_FUNC_NUM_PIXELS = input -> (double) input.getObjMask().numVoxelsOn();
+	public final static Function<FeatureInputSingleObject,Double> DEFAULT_FUNC_NUM_PIXELS = input -> (double) input.getObjMask().numVoxelsOn();
 	
 	@FunctionalInterface
 	public interface RunnableWithException<E extends Throwable> {
@@ -96,7 +96,7 @@ public class MockFeatureWithCalculationFixture {
 	 * Creates a mock-feature (using a mock-FeatureCalculation under the hood) which counts the number of pixels in an object 
 	 * @return the mock-feature
 	 */
-	public static Feature<FeatureInputSingleObj> createMockFeatureWithCalculation() {
+	public static Feature<FeatureInputSingleObject> createMockFeatureWithCalculation() {
 		return createMockFeatureWithCalculation(DEFAULT_FUNC_NUM_PIXELS);
 	}
 	

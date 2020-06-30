@@ -30,20 +30,20 @@ package ch.ethz.biol.cell.mpp.nrg.feature.objmask;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.image.feature.bean.objmask.FeatureObjMask;
-import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
+import org.anchoranalysis.image.feature.bean.object.single.FeatureSingleObject;
+import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 import org.anchoranalysis.math.moment.EigenvalueAndVector;
 import org.anchoranalysis.math.moment.MomentsFromPointsCalculator;
 import org.anchoranalysis.points.moment.CalculateObjMaskPointsSecondMomentMatrix;
 
-public abstract class ObjMaskPointsSpecificEigenvalueBase extends FeatureObjMask {
+public abstract class ObjMaskPointsSpecificEigenvalueBase extends FeatureSingleObject {
 
 	// START BEAN PROPERTIES
 	@BeanField
 	private int eigenvalueIndex = 0;
 	// END BEAN PROPERTIES
 		
-	protected EigenvalueAndVector calcSpecificEigenvector( SessionInput<FeatureInputSingleObj> params ) throws FeatureCalcException {
+	protected EigenvalueAndVector calcSpecificEigenvector( SessionInput<FeatureInputSingleObject> params ) throws FeatureCalcException {
 		
 		MomentsFromPointsCalculator mm = params.calc(
 			new CalculateObjMaskPointsSecondMomentMatrix(false)			

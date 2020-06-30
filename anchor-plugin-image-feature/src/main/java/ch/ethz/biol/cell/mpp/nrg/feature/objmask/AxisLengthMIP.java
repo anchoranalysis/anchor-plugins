@@ -28,14 +28,14 @@ package ch.ethz.biol.cell.mpp.nrg.feature.objmask;
 
 
 import org.anchoranalysis.feature.cache.calculation.FeatureCalculation;
-import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
+import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 import org.anchoranalysis.math.moment.MomentsFromPointsCalculator;
 import org.anchoranalysis.points.moment.CalculateObjMaskSecondMomentMatrixMIP;
 
 public class AxisLengthMIP extends AxisLengthBase {
 	
 	@Override
-	protected FeatureCalculation<MomentsFromPointsCalculator, FeatureInputSingleObj> momentsCalculator() {
+	protected FeatureCalculation<MomentsFromPointsCalculator, FeatureInputSingleObject> momentsCalculator() {
 		// Justification
 		// http://stackoverflow.com/questions/1711784/computing-object-statistics-from-the-second-central-moments
 		// http://en.wikipedia.org/wiki/Image_moment

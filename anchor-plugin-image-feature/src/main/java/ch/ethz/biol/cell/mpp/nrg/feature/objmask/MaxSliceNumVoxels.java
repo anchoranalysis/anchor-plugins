@@ -31,10 +31,10 @@ import java.nio.ByteBuffer;
 
 import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.image.feature.bean.objmask.FeatureObjMask;
-import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
+import org.anchoranalysis.image.feature.bean.object.single.FeatureSingleObject;
+import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 
-public class MaxSliceNumVoxels extends FeatureObjMask {
+public class MaxSliceNumVoxels extends FeatureSingleObject {
 
 	private static int cntForByteBuffer( ByteBuffer bb, byte equalVal ) {
 		int cnt = 0;
@@ -47,9 +47,9 @@ public class MaxSliceNumVoxels extends FeatureObjMask {
 	}
 	
 	@Override
-	public double calc(SessionInput<FeatureInputSingleObj> input) throws FeatureCalcException {
+	public double calc(SessionInput<FeatureInputSingleObject> input) throws FeatureCalcException {
 		
-		FeatureInputSingleObj params = input.get();
+		FeatureInputSingleObject params = input.get();
 		
 		int max = 0;
 		

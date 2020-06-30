@@ -28,12 +28,12 @@ package org.anchoranalysis.points.moment;
 
 
 import org.anchoranalysis.feature.cache.calculation.FeatureCalculation;
-import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
+import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 import org.anchoranalysis.math.moment.MomentsFromPointsCalculator;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
-public class CalculateObjMaskPointsSecondMomentMatrix extends FeatureCalculation<MomentsFromPointsCalculator,FeatureInputSingleObj> {
+public class CalculateObjMaskPointsSecondMomentMatrix extends FeatureCalculation<MomentsFromPointsCalculator,FeatureInputSingleObject> {
 
 	private boolean suppressZ;
 		
@@ -43,7 +43,7 @@ public class CalculateObjMaskPointsSecondMomentMatrix extends FeatureCalculation
 	}
 
 	@Override
-	protected MomentsFromPointsCalculator execute( FeatureInputSingleObj params ) {
+	protected MomentsFromPointsCalculator execute( FeatureInputSingleObject params ) {
 		return MomentsFromObjMask.apply(params.getObjMask(),suppressZ);
 	}
 	

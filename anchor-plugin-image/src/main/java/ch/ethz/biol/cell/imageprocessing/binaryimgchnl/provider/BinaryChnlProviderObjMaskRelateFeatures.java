@@ -38,7 +38,7 @@ import org.anchoranalysis.feature.session.calculator.FeatureCalculatorSingle;
 import org.anchoranalysis.image.bean.provider.BinaryChnlProvider;
 import org.anchoranalysis.image.binary.BinaryChnl;
 import org.anchoranalysis.image.channel.Channel;
-import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
+import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.objectmask.ObjectMask;
 import org.anchoranalysis.image.objectmask.factory.CreateFromEntireChnlFactory;
 
@@ -56,7 +56,7 @@ public class BinaryChnlProviderObjMaskRelateFeatures extends BinaryChnlProviderC
 	private BinaryChnlProvider binaryChnlElse;
 	
 	@BeanField
-	private FeatureProvider<FeatureInputSingleObj> featureProvider;
+	private FeatureProvider<FeatureInputSingleObject> featureProvider;
 	
 	@BeanField
 	private RelationBean relation;
@@ -72,7 +72,7 @@ public class BinaryChnlProviderObjMaskRelateFeatures extends BinaryChnlProviderC
 			binaryChnlCompareTo.create()
 		);
 			
-		FeatureCalculatorSingle<FeatureInputSingleObj> session = createSession();
+		FeatureCalculatorSingle<FeatureInputSingleObject> session = createSession();
 		
 		return calcRelation(
 			omMain,
@@ -82,7 +82,7 @@ public class BinaryChnlProviderObjMaskRelateFeatures extends BinaryChnlProviderC
 		);
 	}
 	
-	private FeatureCalculatorSingle<FeatureInputSingleObj> createSession() throws CreateException {
+	private FeatureCalculatorSingle<FeatureInputSingleObject> createSession() throws CreateException {
 		try {
 			return FeatureSession.with(
 				featureProvider.create(),
@@ -95,13 +95,13 @@ public class BinaryChnlProviderObjMaskRelateFeatures extends BinaryChnlProviderC
 		}
 	}
 	
-	private BinaryChnl calcRelation( ObjectMask omMain, ObjectMask omCompareTo, BinaryChnl chnlMain, FeatureCalculatorSingle<FeatureInputSingleObj> session ) throws CreateException {
+	private BinaryChnl calcRelation( ObjectMask omMain, ObjectMask omCompareTo, BinaryChnl chnlMain, FeatureCalculatorSingle<FeatureInputSingleObject> session ) throws CreateException {
 		try {
 			double valMain = session.calc(
-				new FeatureInputSingleObj(omMain)
+				new FeatureInputSingleObject(omMain)
 			);
 			double valCompareTo = session.calc(
-				new FeatureInputSingleObj(omCompareTo)
+				new FeatureInputSingleObject(omCompareTo)
 			);
 			
 			if (relation.create().isRelationToValueTrue(valMain, valCompareTo)) {
@@ -114,11 +114,11 @@ public class BinaryChnlProviderObjMaskRelateFeatures extends BinaryChnlProviderC
 		}
 	}
 
-	public FeatureProvider<FeatureInputSingleObj> getFeatureProvider() {
+	public FeatureProvider<FeatureInputSingleObject> getFeatureProvider() {
 		return featureProvider;
 	}
 
-	public void setFeatureProvider(FeatureProvider<FeatureInputSingleObj> featureProvider) {
+	public void setFeatureProvider(FeatureProvider<FeatureInputSingleObject> featureProvider) {
 		this.featureProvider = featureProvider;
 	}
 

@@ -53,14 +53,14 @@ import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorMulti;
 import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
 import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
-import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
+import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.feature.session.FeatureTableCalculator;
 import org.anchoranalysis.image.objectmask.ObjectCollection;
 import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.output.bound.BoundIOContext;
 import org.anchoranalysis.mpp.io.input.MultiInput;
 import org.anchoranalysis.mpp.sgmn.bean.define.DefineOutputterMPPWithNrg;
-import org.anchoranalysis.plugin.image.feature.bean.obj.table.FeatureTableObjs;
+import org.anchoranalysis.plugin.image.feature.bean.object.table.FeatureTableObjects;
 import org.anchoranalysis.plugin.image.task.bean.feature.ExportFeaturesTask;
 import org.anchoranalysis.plugin.image.task.feature.GenerateHeadersForCSV;
 import org.anchoranalysis.plugin.image.task.sharedstate.SharedStateExportFeatures;
@@ -92,7 +92,7 @@ import org.anchoranalysis.plugin.image.task.sharedstate.SharedStateExportFeature
  *  
  *  @param T the feature input-type supported by the FlexiFeatureTable
 **/
-public class ExportFeaturesObjMaskTask<T extends FeatureInput> extends ExportFeaturesTask<MultiInput,FeatureTableCalculator<T>,FeatureInputSingleObj> {
+public class ExportFeaturesObjMaskTask<T extends FeatureInput> extends ExportFeaturesTask<MultiInput,FeatureTableCalculator<T>,FeatureInputSingleObject> {
 
 	private static final NamedFeatureStoreFactory STORE_FACTORY = NamedFeatureStoreFactory.bothNameAndParams();
 	
@@ -104,7 +104,7 @@ public class ExportFeaturesObjMaskTask<T extends FeatureInput> extends ExportFea
 	private List<NamedBean<ObjMaskProvider>> listObjMaskProvider = new ArrayList<>();
 	
 	@BeanField
-	private FeatureTableObjs<T> table;
+	private FeatureTableObjects<T> table;
 	
 	@BeanField
 	private boolean suppressErrors = false;
@@ -116,7 +116,7 @@ public class ExportFeaturesObjMaskTask<T extends FeatureInput> extends ExportFea
 	}
 	
 	@Override
-	protected SharedStateExportFeatures<FeatureTableCalculator<T>> createSharedState( MetadataHeaders metadataHeaders, List<NamedBean<FeatureListProvider<FeatureInputSingleObj>>> features, BoundIOContext context) throws CreateException {
+	protected SharedStateExportFeatures<FeatureTableCalculator<T>> createSharedState( MetadataHeaders metadataHeaders, List<NamedBean<FeatureListProvider<FeatureInputSingleObject>>> features, BoundIOContext context) throws CreateException {
 		try {
 			FeatureTableCalculator<T> tableCalculator = table.createFeatures(
 				features,
@@ -305,11 +305,11 @@ public class ExportFeaturesObjMaskTask<T extends FeatureInput> extends ExportFea
 		this.define = define;
 	}
 
-	public FeatureTableObjs<T> getTable() {
+	public FeatureTableObjects<T> getTable() {
 		return table;
 	}
 
-	public void setTable(FeatureTableObjs<T> table) {
+	public void setTable(FeatureTableObjects<T> table) {
 		this.table = table;
 	}
 }
