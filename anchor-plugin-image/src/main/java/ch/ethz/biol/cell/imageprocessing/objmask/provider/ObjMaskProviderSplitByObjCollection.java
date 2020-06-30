@@ -41,6 +41,7 @@ import org.anchoranalysis.image.binary.voxel.BinaryVoxelBoxInt;
 import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.objectmask.ObjectMask;
 import org.anchoranalysis.image.objectmask.ObjectCollection;
+import org.anchoranalysis.image.objectmask.ObjectCollectionFactory;
 import org.anchoranalysis.image.objectmask.factory.CreateFromConnectedComponentsFactory;
 import org.anchoranalysis.image.voxel.box.BoundedVoxelBox;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
@@ -118,18 +119,16 @@ public class ObjMaskProviderSplitByObjCollection extends ObjMaskProviderDimensio
 		try {
 			// Now we do a flood fill for each number, pretending it's a binary image of 0 and i
 			// The code will not change pixels that don't match ON
-			
-			ObjectCollection out = new ObjectCollection();
-			for( int i=1; i<cnt; i++) {
-				out.addAll(
-					createObjectForIndex(
-						i,
-						boundedVbId.getVoxelBox(),
-						objToSplit.getBoundingBox().getCrnrMin()
-					)
-				);
-			}
-			return out;
+			return ObjectCollectionFactory.flatMapFromRange(
+				1,
+				cnt,
+				CreateException.class,
+				i -> createObjectForIndex(
+					i,
+					boundedVbId.getVoxelBox(),
+					objToSplit.getBoundingBox().getCrnrMin()
+				)
+			);
 			
 		} catch (CreateException e) {
 			throw new OperationFailedException(e);

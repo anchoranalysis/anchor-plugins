@@ -41,8 +41,8 @@ import org.anchoranalysis.image.binary.BinaryChnl;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelBoxByte;
 import org.anchoranalysis.image.objectmask.ObjectCollection;
+import org.anchoranalysis.image.objectmask.ObjectCollectionFactory;
 import org.anchoranalysis.image.objectmask.factory.CreateFromConnectedComponentsFactory;
-import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.apache.commons.lang.time.StopWatch;
 
 /**
@@ -103,22 +103,27 @@ public class ObjMaskProviderConnectedComponents extends ObjMaskProvider {
 		return createObjMasks.createConnectedComponents(bi);
 	}
 	
-	private ObjectCollection createObjsBySlice( BinaryChnl bi, int minNumberVoxels ) throws CreateException {
+	private ObjectCollection createObjsBySlice(BinaryChnl chnl, int minNumberVoxels) throws CreateException {
 		
-		ObjectCollection out = new ObjectCollection();
 		CreateFromConnectedComponentsFactory createObjMasks = createFactory(minNumberVoxels);
-
-		for( int z=0; z<bi.getDimensions().getZ(); z++) {
-		
-			VoxelBox<ByteBuffer> vb = bi.getVoxelBox().extractSlice(z);
-			BinaryVoxelBox<ByteBuffer> bvb = new BinaryVoxelBoxByte(vb,bi.getBinaryValues());
-			
-			out.addAll(
-				createForSlice(createObjMasks, bvb, z)
-			);
-		}
-		
-		return out;
+	
+		return ObjectCollectionFactory.flatMapFromRange(
+			0,
+			chnl.getDimensions().getZ(),
+			CreateException.class,
+			z -> createForSlice(
+				createObjMasks,
+				createBinaryVoxelBox(chnl, z),
+				z
+			)
+		);
+	}
+	
+	private static BinaryVoxelBox<ByteBuffer> createBinaryVoxelBox(BinaryChnl chnl, int z) {
+		return new BinaryVoxelBoxByte(
+			chnl.getVoxelBox().extractSlice(z),
+			chnl.getBinaryValues()
+		);
 	}
 	
 	private ObjectCollection createForSlice(
