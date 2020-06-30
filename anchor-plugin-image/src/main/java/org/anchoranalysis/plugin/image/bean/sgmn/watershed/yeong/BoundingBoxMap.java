@@ -61,24 +61,7 @@ final class BoundingBoxMap {
 		return index;
 	}
 
-	public ObjectCollection deriveObjects(	VoxelBox<IntBuffer> matS) throws OperationFailedException {
-		
-		ObjectCollection out = new ObjectCollection();
-		for (int i=0; i<list.size(); i++) {
-			
-			PointRange pointRange = list.get(i);
-			
-			if(pointRange==null) {
-				continue;
-			}
-			
-			out.add(
-				matS.equalMask(
-					pointRange.deriveBoundingBox(),
-					i+1
-				)
-			);
-		}
+	public ObjectCollection deriveObjects(VoxelBox<IntBuffer> matS) throws OperationFailedException {
 		return ObjectCollectionFactory.filterAndMapWithIndexFrom(
 			list,
 			pointRange -> pointRange!=null,
