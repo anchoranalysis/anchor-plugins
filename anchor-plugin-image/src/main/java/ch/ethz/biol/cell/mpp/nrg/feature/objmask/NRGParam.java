@@ -53,8 +53,7 @@ public class NRGParam extends FeatureNRGStack {
 	}
 	
 	@Override
-	public double calcCast(FeatureInputNRGStack params)
-			throws FeatureCalcException {
+	public double calcForInput(FeatureInputNRGStack params) throws FeatureCalcException {
 		return calcForPropertyID( params, id );
 	}
 	

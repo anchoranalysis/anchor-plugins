@@ -36,7 +36,6 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.input.FeatureInputNRGStack;
-
 import ch.ethz.biol.cell.mpp.nrg.feature.objmask.NRGParamThree;
 
 /**

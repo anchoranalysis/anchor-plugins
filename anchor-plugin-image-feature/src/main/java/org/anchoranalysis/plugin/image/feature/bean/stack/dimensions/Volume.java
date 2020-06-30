@@ -1,12 +1,10 @@
-package org.anchoranalysis.plugin.image.feature.bean.object.collection.intersecting;
+package org.anchoranalysis.plugin.image.feature.bean.stack.dimensions;
 
-import java.util.List;
-
-/*
+/*-
  * #%L
  * anchor-plugin-image-feature
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -28,34 +26,18 @@ import java.util.List;
  * #L%
  */
 
+import org.anchoranalysis.image.extent.ImageDimensions;
 
 /**
- * 1. Finds all objs from an ObjMaskCollection whose bounding-boxes intersect with a particular obj.
- * 2. Calculates a pairwise-feature
- * 3. Returns the maximum 
+ * Calculates the volume (x, y and z dimensions) of the scene from the dimensions
  * 
  * @author Owen Feehan
  *
  */
-public class MinFeatureIntersectingObjsAboveThreshold extends FeatureIntersectingObjectsThreshold {
+public class Volume extends FromDimensionsBase {
 
 	@Override
-	protected double aggregateResults(List<Double> results) {
-		
-		double minVal = Double.POSITIVE_INFINITY;
-		
-		// We loop through each intersecting bounding box, and take the one with the highest feature-value
-		for( double val : results) {
-			
-			if (val>=getThreshold() && val<minVal) {
-				minVal = val;
-			}
-		}
-		
-		if (minVal==Double.POSITIVE_INFINITY) {
-			return getValueNoObjects();
-		}
-		
-		return minVal;
+	protected double calcFromDims(ImageDimensions dim) {
+		return dim.getVolume();
 	}
 }

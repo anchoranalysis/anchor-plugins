@@ -3,9 +3,9 @@ package org.anchoranalysis.plugin.image.feature.bean.obj.intersecting;
 import org.anchoranalysis.image.feature.bean.object.pair.FeaturePairObjects;
 import org.anchoranalysis.image.feature.bean.object.pair.First;
 import org.anchoranalysis.image.feature.bean.object.single.NumberVoxels;
-import org.anchoranalysis.plugin.image.feature.bean.object.collection.intersecting.FeatureIntersectingObjs;
-import org.anchoranalysis.plugin.image.feature.bean.object.collection.intersecting.FeatureIntersectingObjsSingleElem;
-import org.anchoranalysis.plugin.image.feature.bean.object.collection.intersecting.FeatureIntersectingObjsThreshold;
+import org.anchoranalysis.plugin.image.feature.bean.object.collection.intersecting.FeatureIntersectingObjects;
+import org.anchoranalysis.plugin.image.feature.bean.object.collection.intersecting.FeatureIntersectingObjectsSingleElement;
+import org.anchoranalysis.plugin.image.feature.bean.object.collection.intersecting.FeatureIntersectingObjectsThreshold;
 
 class FeatureHelper {
 
@@ -24,7 +24,7 @@ class FeatureHelper {
 	 * 
 	 * @return
 	 */
-	public static FeatureIntersectingObjs createWithThreshold( FeatureIntersectingObjsThreshold feature ) {
+	public static FeatureIntersectingObjects createWithThreshold( FeatureIntersectingObjectsThreshold feature ) {
 		feature.setThreshold( 90 );
 		return createWithFeature(feature);
 	}
@@ -35,7 +35,7 @@ class FeatureHelper {
 	 * @param feature feature to set new pair featore on as property
 	 * @return feature with the proprty changed
 	 */
-	public static FeatureIntersectingObjs createWithFeature( FeatureIntersectingObjsSingleElem feature ) {
+	public static FeatureIntersectingObjects createWithFeature( FeatureIntersectingObjectsSingleElement feature ) {
 		feature.setItem( createPairFeature() );
 		feature.setValueNoObjects(VALUE_NO_OBJECTS);
 		return feature;

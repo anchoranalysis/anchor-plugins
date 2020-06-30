@@ -38,7 +38,7 @@ import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.io.input.ImageInitParamsFactory;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectMask;
-import org.anchoranalysis.plugin.image.feature.bean.object.collection.intersecting.FeatureIntersectingObjs;
+import org.anchoranalysis.plugin.image.feature.bean.object.collection.intersecting.FeatureIntersectingObjects;
 import org.anchoranalysis.test.LoggingFixture;
 import org.anchoranalysis.test.feature.plugins.FeatureTestCalculator;
 import org.anchoranalysis.test.feature.plugins.objs.CircleObjMaskFixture;
@@ -69,7 +69,7 @@ class InteresectingObjsTestHelper {
 	 */
 	public static void testPositions(
 		String messagePrefix,			
-		FeatureIntersectingObjs feature,
+		FeatureIntersectingObjects feature,
 		boolean sameSize,
 		int expectedFirst,
 		int expectedSecond,
@@ -137,7 +137,7 @@ class InteresectingObjsTestHelper {
 	 **/
 	private static void assertFeatureIndexInt(
 		String message,
-		FeatureIntersectingObjs feature,
+		FeatureIntersectingObjects feature,
 		ObjectCollection objs,
 		int index,
 		int expectedResult
@@ -179,7 +179,7 @@ class InteresectingObjsTestHelper {
 		);
 	}
 	
-	private static FeatureIntersectingObjs addId( FeatureIntersectingObjs feature ) {
+	private static FeatureIntersectingObjects addId( FeatureIntersectingObjects feature ) {
 		feature.setId(ID);
 		return feature;
 	}

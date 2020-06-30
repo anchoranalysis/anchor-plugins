@@ -1,6 +1,4 @@
-package org.anchoranalysis.plugin.image.feature.bean.object.collection.intersecting;
-
-import java.util.List;
+package org.anchoranalysis.plugin.image.feature.bean.stack.dimensions;
 
 /*
  * #%L
@@ -29,33 +27,14 @@ import java.util.List;
  */
 
 
-/**
- * 1. Finds all objs from an ObjMaskCollection whose bounding-boxes intersect with a particular obj.
- * 2. Calculates a pairwise-feature
- * 3. Returns the maximum 
- * 
- * @author Owen Feehan
- *
- */
-public class MinFeatureIntersectingObjsAboveThreshold extends FeatureIntersectingObjectsThreshold {
+import org.anchoranalysis.core.axis.AxisType;
+import org.anchoranalysis.image.extent.ImageDimensions;
+
+
+public class Extent extends ForSpecificAxis {
 
 	@Override
-	protected double aggregateResults(List<Double> results) {
-		
-		double minVal = Double.POSITIVE_INFINITY;
-		
-		// We loop through each intersecting bounding box, and take the one with the highest feature-value
-		for( double val : results) {
-			
-			if (val>=getThreshold() && val<minVal) {
-				minVal = val;
-			}
-		}
-		
-		if (minVal==Double.POSITIVE_INFINITY) {
-			return getValueNoObjects();
-		}
-		
-		return minVal;
+	protected double calcForAxis(ImageDimensions dim, AxisType axis) {
+		return dim.getExtnt().getValueByDimension(axis);
 	}
 }
