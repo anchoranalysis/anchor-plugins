@@ -31,17 +31,17 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.shared.params.keyvalue.KeyValueParamsProvider;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.params.KeyValueParams;
-import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
+import org.anchoranalysis.image.bean.provider.ObjectCollectionProvider;
 import org.anchoranalysis.image.object.ObjectCollection;
 
-public class ObjMaskProviderIfParamEqual extends ObjMaskProvider {
+public class ObjMaskProviderIfParamEqual extends ObjectCollectionProvider {
 
 	// START BEAN PROPERTIES
 	@BeanField
-	private ObjMaskProvider objsEqual;
+	private ObjectCollectionProvider objsEqual;
 	
 	@BeanField
-	private ObjMaskProvider objsNotEqual;
+	private ObjectCollectionProvider objsNotEqual;
 	
 	@BeanField
 	private KeyValueParamsProvider keyValueParamsProvider;
@@ -100,19 +100,19 @@ public class ObjMaskProviderIfParamEqual extends ObjMaskProvider {
 		this.value = value;
 	}
 
-	public ObjMaskProvider getObjsEqual() {
+	public ObjectCollectionProvider getObjsEqual() {
 		return objsEqual;
 	}
 
-	public void setObjsEqual(ObjMaskProvider objsEqual) {
+	public void setObjsEqual(ObjectCollectionProvider objsEqual) {
 		this.objsEqual = objsEqual;
 	}
 
-	public ObjMaskProvider getObjsNotEqual() {
+	public ObjectCollectionProvider getObjsNotEqual() {
 		return objsNotEqual;
 	}
 
-	public void setObjsNotEqual(ObjMaskProvider objsNotEqual) {
+	public void setObjsNotEqual(ObjectCollectionProvider objsNotEqual) {
 		this.objsNotEqual = objsNotEqual;
 	}
 

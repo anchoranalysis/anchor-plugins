@@ -46,7 +46,7 @@ public class CalculateIntersecting extends CalculateInputFromDelegate<FeatureInp
 	@Override
 	protected FeatureInputPairObjects deriveFromDelegate(FeatureInputSingleObject input, ObjectCollection delegate) {
 		return new FeatureInputPairObjects(
-			input.getObjMask(),
+			input.getObjectMask(),
 			delegate.get(index),
 			input.getNrgStackOptional()
 		);

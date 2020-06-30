@@ -31,15 +31,15 @@ import java.util.Optional;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
-import org.anchoranalysis.image.bean.provider.ObjMaskProviderOne;
+import org.anchoranalysis.image.bean.provider.ObjectCollectionProvider;
+import org.anchoranalysis.image.bean.provider.ObjectCollectionProviderOne;
 import org.anchoranalysis.image.object.ObjectCollection;
 
-public abstract class ObjMaskProviderContainer extends ObjMaskProviderOne {
+public abstract class ObjMaskProviderContainer extends ObjectCollectionProviderOne {
 
 	// START BEAN PROPERTIES
 	@BeanField @OptionalBean
-	private ObjMaskProvider objsContainer;
+	private ObjectCollectionProvider objsContainer;
 	// END BEAN PROPERTIES
 	
 	protected Optional<ObjectCollection> containerOptional() throws CreateException {
@@ -58,11 +58,11 @@ public abstract class ObjMaskProviderContainer extends ObjMaskProviderOne {
 		);
 	}
 	
-	public ObjMaskProvider getObjsContainer() {
+	public ObjectCollectionProvider getObjsContainer() {
 		return objsContainer;
 	}
 
-	public void setObjsContainer(ObjMaskProvider objsContainer) {
+	public void setObjsContainer(ObjectCollectionProvider objsContainer) {
 		this.objsContainer = objsContainer;
 	}
 }

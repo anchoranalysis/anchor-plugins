@@ -36,7 +36,7 @@ import org.anchoranalysis.bean.xml.RegisterBeanFactories;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.nrg.NRGStack;
-import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
+import org.anchoranalysis.image.bean.provider.ObjectCollectionProvider;
 import org.anchoranalysis.io.bean.filepath.generator.FilePathGeneratorConstant;
 import org.anchoranalysis.plugin.image.feature.bean.object.table.FeatureTableObjects;
 import org.anchoranalysis.plugin.image.feature.bean.object.table.MergedPairs;
@@ -120,7 +120,7 @@ class ExportFeaturesObjMaskTaskFixture {
 		return task;
 	}
 		
-	private static List<NamedBean<ObjMaskProvider>> createObjProviders(String objsName) {
+	private static List<NamedBean<ObjectCollectionProvider>> createObjProviders(String objsName) {
 		return Arrays.asList(
 			new NamedBean<>(objsName, new ObjMaskProviderReference(objsName))	
 		);

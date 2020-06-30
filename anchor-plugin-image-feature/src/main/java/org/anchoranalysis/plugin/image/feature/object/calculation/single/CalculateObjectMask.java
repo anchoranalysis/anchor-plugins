@@ -58,7 +58,7 @@ public abstract class CalculateObjectMask extends FeatureCalculation<ObjectMask,
 	protected ObjectMask execute( FeatureInputSingleObject params ) throws FeatureCalcException {
 		
 		if (iterations==0) {
-			return params.getObjMask();
+			return params.getObjectMask();
 		}
 		
 		return map.getOrCalculate(params, iterations);

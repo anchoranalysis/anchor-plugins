@@ -33,7 +33,7 @@ import java.util.List;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
+import org.anchoranalysis.image.bean.provider.ObjectCollectionProvider;
 import org.anchoranalysis.image.bean.provider.stack.StackProvider;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.object.ObjectCollection;
@@ -56,7 +56,7 @@ import org.opencv.core.Mat;
  * @author owen
  *
  */
-public class ObjMaskProviderExtractText extends ObjMaskProvider {
+public class ObjMaskProviderExtractText extends ObjectCollectionProvider {
 
 	static {
 		CVInit.alwaysExecuteBeforeCallingLibrary();

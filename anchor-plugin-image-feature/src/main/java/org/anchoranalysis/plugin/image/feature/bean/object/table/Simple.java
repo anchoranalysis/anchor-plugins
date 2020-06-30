@@ -62,7 +62,7 @@ public class Simple extends FeatureTableObjects<FeatureInputSingleObject> {
 	
 	@Override
 	public String uniqueIdentifierFor(FeatureInputSingleObject input) {
-		return UniqueIdentifierUtilities.forObject(input.getObjMask());
+		return UniqueIdentifierUtilities.forObject(input.getObjectMask());
 	}
 
 	@Override

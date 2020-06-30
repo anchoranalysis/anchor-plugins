@@ -30,10 +30,10 @@ package ch.ethz.biol.cell.imageprocessing.objmask.provider;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.name.provider.NamedProviderGetException;
-import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
+import org.anchoranalysis.image.bean.provider.ObjectCollectionProvider;
 import org.anchoranalysis.image.object.ObjectCollection;
 
-public class ObjMaskProviderReference extends ObjMaskProvider {
+public class ObjMaskProviderReference extends ObjectCollectionProvider {
 
 	// START BEAN PROPERTIES
 	@BeanField

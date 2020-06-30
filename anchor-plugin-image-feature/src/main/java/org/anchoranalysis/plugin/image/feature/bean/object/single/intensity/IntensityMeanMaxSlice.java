@@ -48,7 +48,7 @@ public class IntensityMeanMaxSlice extends FeatureNrgChnl {
 
 		ValueAndIndex vai = StatsHelper.calcMaxSliceMean(
 			chnl,
-			input.get().getObjMask(),
+			input.get().getObjectMask(),
 			excludeZero
 		);
 		

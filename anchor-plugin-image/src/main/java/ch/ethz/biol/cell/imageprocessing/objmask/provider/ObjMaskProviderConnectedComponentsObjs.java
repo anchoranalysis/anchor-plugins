@@ -30,7 +30,7 @@ import java.nio.ByteBuffer;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.image.bean.provider.ObjMaskProviderOne;
+import org.anchoranalysis.image.bean.provider.ObjectCollectionProviderOne;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectMask;
@@ -43,7 +43,7 @@ import org.anchoranalysis.image.object.factory.CreateFromConnectedComponentsFact
  * @author FEEHANO
  *
  */
-public class ObjMaskProviderConnectedComponentsObjs extends ObjMaskProviderOne {
+public class ObjMaskProviderConnectedComponentsObjs extends ObjectCollectionProviderOne {
 
 	// START BEAN PROPERTIES
 	/** if TRUE, uses 8 neighbourhood instead of 4, and similarly in 3d */

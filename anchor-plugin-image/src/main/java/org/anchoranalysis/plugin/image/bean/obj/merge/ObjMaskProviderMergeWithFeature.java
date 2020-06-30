@@ -39,7 +39,7 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.graph.EdgeTypeWithVertices;
 import org.anchoranalysis.core.log.LogReporter;
-import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
+import org.anchoranalysis.image.bean.provider.ObjectCollectionProvider;
 import org.anchoranalysis.image.extent.ImageResolution;
 import org.anchoranalysis.image.feature.evaluator.PayloadCalculator;
 import org.anchoranalysis.image.object.ObjectCollection;
@@ -68,7 +68,7 @@ public abstract class ObjMaskProviderMergeWithFeature extends ObjMaskProviderMer
 	 * Saves all objects that are inputs to the merge, outputs from the merge, or intermediate merges along the way
 	 */
 	@BeanField @OptionalBean
-	private ObjMaskProvider objsSave;
+	private ObjectCollectionProvider objsSave;
 	// END BEAN PROPERTIES
 		
 	@Override
@@ -217,11 +217,11 @@ public abstract class ObjMaskProviderMergeWithFeature extends ObjMaskProviderMer
 		this.requireBBoxNeighbours = requireBBoxNeighbours;
 	}
 
-	public ObjMaskProvider getObjsSave() {
+	public ObjectCollectionProvider getObjsSave() {
 		return objsSave;
 	}
 
-	public void setObjsSave(ObjMaskProvider objsSave) {
+	public void setObjsSave(ObjectCollectionProvider objsSave) {
 		this.objsSave = objsSave;
 	}
 

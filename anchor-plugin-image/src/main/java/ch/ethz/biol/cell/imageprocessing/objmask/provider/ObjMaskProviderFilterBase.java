@@ -34,7 +34,7 @@ import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.bean.object.ObjectFilter;
-import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
+import org.anchoranalysis.image.bean.provider.ObjectCollectionProvider;
 import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.object.ObjectCollection;
 
@@ -45,7 +45,7 @@ public abstract class ObjMaskProviderFilterBase extends ObjMaskProviderDimension
 	private ObjectFilter filter;
 	
 	@BeanField @OptionalBean
-	private ObjMaskProvider objsRejected;	// The rejected objects are put here (OPTIONAL)
+	private ObjectCollectionProvider objsRejected;	// The rejected objects are put here (OPTIONAL)
 	// END BEAN PROPERTIES
 	
 	@Override
@@ -72,11 +72,11 @@ public abstract class ObjMaskProviderFilterBase extends ObjMaskProviderDimension
 	) throws CreateException;
 
 
-	public ObjMaskProvider getObjsRejected() {
+	public ObjectCollectionProvider getObjsRejected() {
 		return objsRejected;
 	}
 
-	public void setObjsRejected(ObjMaskProvider objsRejected) {
+	public void setObjsRejected(ObjectCollectionProvider objsRejected) {
 		this.objsRejected = objsRejected;
 	}
 

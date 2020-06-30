@@ -34,8 +34,6 @@ import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.bean.threshold.CalculateLevel;
 import org.anchoranalysis.image.feature.bean.FeatureHistogram;
 import org.anchoranalysis.image.feature.histogram.FeatureInputHistogram;
-import org.anchoranalysis.plugin.image.feature.histogram.calculation.CalculateHistogramInputFromHistogram;
-import org.anchoranalysis.plugin.image.feature.histogram.calculation.CalculateOtsuThresholdedHistogram;
 
 /**
  * Thresholds the histogram (using a weightedOtsu) and then applies
@@ -60,7 +58,7 @@ public class ThresholdHistogram extends FeatureHistogram {
 		
 		return input.forChild().calc(
 			item,
-			new CalculateHistogramInputFromHistogram(
+			new CalculateHistogramInput(
 				new CalculateOtsuThresholdedHistogram(calculateLevel, getLogger()),
 				input.resolver()
 			),

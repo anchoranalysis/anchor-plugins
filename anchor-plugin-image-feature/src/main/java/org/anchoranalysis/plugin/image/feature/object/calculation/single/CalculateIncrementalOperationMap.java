@@ -65,7 +65,7 @@ public abstract class CalculateIncrementalOperationMap extends CacheableCalculat
 		int lowestExistingKey = findHighestExistingKey( key - 1 );
 		
 		
-		ObjectMask omIn = lowestExistingKey!=0 ? getOrNull(lowestExistingKey) : params.getObjMask();
+		ObjectMask omIn = lowestExistingKey!=0 ? getOrNull(lowestExistingKey) : params.getObjectMask();
 		
 		try {
 			for( int i=(lowestExistingKey+1); i<=key; i++ ) {

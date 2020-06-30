@@ -40,7 +40,6 @@ import org.anchoranalysis.image.feature.bean.object.collection.FeatureObjectColl
 import org.anchoranalysis.image.feature.bean.object.pair.FeaturePairObjects;
 import org.anchoranalysis.image.feature.init.FeatureInitParamsSharedObjs;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
-import org.anchoranalysis.plugin.image.feature.object.calculation.pair.CalculatePairInput;
 
 /**
  * Creates an object from the binary-mask from a binaryImgChnlProvider and evaluates a feature

@@ -46,7 +46,7 @@ public abstract class EllipsoidBase extends FeatureSingleObject {
 	@Override
 	public double calc(SessionInput<FeatureInputSingleObject> input) throws FeatureCalcException {
 		
-		ObjectMask om = input.get().getObjMask();
+		ObjectMask om = input.get().getObjectMask();
 		
 		// If we have these few pixels, assume we are perfectly ellipsoid
 		if (om.numPixelsLessThan(12)) {

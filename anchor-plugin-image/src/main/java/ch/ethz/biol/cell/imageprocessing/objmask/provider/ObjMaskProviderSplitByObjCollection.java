@@ -34,7 +34,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.geometry.ReadableTuple3i;
-import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
+import org.anchoranalysis.image.bean.provider.ObjectCollectionProvider;
 import org.anchoranalysis.image.binary.values.BinaryValues;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelBoxInt;
@@ -54,7 +54,7 @@ public class ObjMaskProviderSplitByObjCollection extends ObjMaskProviderDimensio
 	
 	// START BEAN PROPERTIES
 	@BeanField
-	private ObjMaskProvider objsSplitBy;
+	private ObjectCollectionProvider objsSplitBy;
 	// END BEAN PROPERTIES
 			
 	@Override
@@ -146,11 +146,11 @@ public class ObjMaskProviderSplitByObjCollection extends ObjMaskProviderDimensio
 		return CONNECTED_COMPONENTS_CREATOR.create(binaryVoxels).shiftBy(shiftBy);
 	}
 
-	public ObjMaskProvider getObjsSplitBy() {
+	public ObjectCollectionProvider getObjsSplitBy() {
 		return objsSplitBy;
 	}
 
-	public void setObjsSplitBy(ObjMaskProvider objsSplitBy) {
+	public void setObjsSplitBy(ObjectCollectionProvider objsSplitBy) {
 		this.objsSplitBy = objsSplitBy;
 	}
 

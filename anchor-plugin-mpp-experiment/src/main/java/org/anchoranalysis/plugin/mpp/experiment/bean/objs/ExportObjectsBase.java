@@ -35,7 +35,7 @@ import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.experiment.task.Task;
 import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
-import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
+import org.anchoranalysis.image.bean.provider.ObjectCollectionProvider;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.io.generator.raster.bbox.ExtractedBBoxGenerator;
@@ -54,7 +54,7 @@ public abstract class ExportObjectsBase<T extends InputFromManager, S> extends T
 	 * The objects that are matched against the points
 	 */
 	@BeanField
-	private ObjMaskProvider objs;
+	private ObjectCollectionProvider objs;
 	
 	/**
 	 * Padding placed on each side of the outputted image (if it's within the image) in XY directions
@@ -70,7 +70,7 @@ public abstract class ExportObjectsBase<T extends InputFromManager, S> extends T
 	// END BEAN PROPERTIES
 	
 	protected ObjectCollection inputObjs( ImageInitParams so, LogErrorReporter logger ) throws CreateException, InitException {
-		ObjMaskProvider objsDup = objs.duplicateBean();
+		ObjectCollectionProvider objsDup = objs.duplicateBean();
 		objsDup.initRecursive(so,logger);
 		return objsDup.create();
 	}
@@ -120,11 +120,11 @@ public abstract class ExportObjectsBase<T extends InputFromManager, S> extends T
 		return delegate;
 	}
 	
-	public ObjMaskProvider getObjs() {
+	public ObjectCollectionProvider getObjs() {
 		return objs;
 	}
 
-	public void setObjs(ObjMaskProvider objs) {
+	public void setObjs(ObjectCollectionProvider objs) {
 		this.objs = objs;
 	}
 

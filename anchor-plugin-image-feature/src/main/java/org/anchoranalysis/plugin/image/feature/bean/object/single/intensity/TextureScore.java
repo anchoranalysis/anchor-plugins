@@ -52,7 +52,7 @@ public class TextureScore extends FeatureNrgChnl {
 	@Override
 	protected double calcForChnl(SessionInput<FeatureInputSingleObject> input, Channel chnl) throws FeatureCalcException {
 
-		ObjectMask om = input.get().getObjMask();
+		ObjectMask om = input.get().getObjectMask();
 		Channel chnlGradient = input.get().getNrgStackRequired().getChnl(nrgIndexGradient);
 		
 		return scoreFromMeans(

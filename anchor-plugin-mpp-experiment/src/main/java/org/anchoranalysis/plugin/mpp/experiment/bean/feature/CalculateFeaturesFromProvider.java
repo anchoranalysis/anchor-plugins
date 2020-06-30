@@ -41,7 +41,7 @@ import org.anchoranalysis.feature.io.csv.StringLabelsForCsvRow;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorMulti;
 import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
-import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
+import org.anchoranalysis.image.bean.provider.ObjectCollectionProvider;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.plugin.image.feature.bean.object.table.FeatureTableObjects;
 
@@ -75,7 +75,7 @@ class CalculateFeaturesFromProvider<T extends FeatureInput> {
 	}
 	
 	public void processProvider(
-		ObjMaskProvider provider,
+		ObjectCollectionProvider provider,
 		Function<T, StringLabelsForCsvRow> identifierFromInput
 	) throws OperationFailedException {
 		calculateFeaturesForProvider(
@@ -146,10 +146,10 @@ class CalculateFeaturesFromProvider<T extends FeatureInput> {
 		}
 	}
 	
-	private static ObjectCollection objsFromProvider( ObjMaskProvider provider, ImageInitParams imageInitParams, LogErrorReporter logErrorReporter ) throws OperationFailedException {
+	private static ObjectCollection objsFromProvider( ObjectCollectionProvider provider, ImageInitParams imageInitParams, LogErrorReporter logErrorReporter ) throws OperationFailedException {
 
 		try {
-			ObjMaskProvider objMaskProviderLoc = provider.duplicateBean();
+			ObjectCollectionProvider objMaskProviderLoc = provider.duplicateBean();
 			
 			// Initialise
 			objMaskProviderLoc.initRecursive(imageInitParams, logErrorReporter);

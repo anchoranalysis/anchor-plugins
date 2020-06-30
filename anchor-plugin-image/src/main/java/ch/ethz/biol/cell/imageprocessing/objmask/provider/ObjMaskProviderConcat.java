@@ -32,27 +32,27 @@ import java.util.List;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
+import org.anchoranalysis.image.bean.provider.ObjectCollectionProvider;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectCollectionFactory;
 
-public class ObjMaskProviderConcat extends ObjMaskProvider {
+public class ObjMaskProviderConcat extends ObjectCollectionProvider {
 
 	// START BEAN PROPERTIES
 	@BeanField
-	private List<ObjMaskProvider> list = new ArrayList<>();
+	private List<ObjectCollectionProvider> list = new ArrayList<>();
 	// END BEAN PROPERTIES
 	
 	@Override
 	public ObjectCollection create() throws CreateException {
-		return ObjectCollectionFactory.flatMapFrom(list.stream(), CreateException.class, ObjMaskProvider::create);
+		return ObjectCollectionFactory.flatMapFrom(list.stream(), CreateException.class, ObjectCollectionProvider::create);
 	}
 
-	public List<ObjMaskProvider> getList() {
+	public List<ObjectCollectionProvider> getList() {
 		return list;
 	}
 
-	public void setList(List<ObjMaskProvider> list) {
+	public void setList(List<ObjectCollectionProvider> list) {
 		this.list = list;
 	}
 

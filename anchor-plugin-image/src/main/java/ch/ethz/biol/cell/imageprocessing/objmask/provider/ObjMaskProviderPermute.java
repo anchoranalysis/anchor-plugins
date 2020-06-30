@@ -39,24 +39,24 @@ import org.anchoranalysis.bean.permute.setter.PermutationSetter;
 import org.anchoranalysis.bean.permute.setter.PermutationSetterException;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
-import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
-import org.anchoranalysis.image.bean.provider.ObjMaskProviderOne;
+import org.anchoranalysis.image.bean.provider.ObjectCollectionProvider;
+import org.anchoranalysis.image.bean.provider.ObjectCollectionProviderOne;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectCollectionFactory;
 
 /**
- * Permutes some changes over an {@link ObjMaskProvider} and collects all the results in an {@link ObjectCollection}
+ * Permutes some changes over an {@link ObjectCollectionProvider} and collects all the results in an {@link ObjectCollection}
  * 
- * We deliberately do not inherit from {@link ObjMaskProviderOne} as we not using the {@link ObjMaskProvider} in the same way.
+ * We deliberately do not inherit from {@link ObjectCollectionProviderOne} as we not using the {@link ObjectCollectionProvider} in the same way.
  * 
  * @author Owen Feehan
  *
  */
-public class ObjMaskProviderPermute extends ObjMaskProvider {
+public class ObjMaskProviderPermute extends ObjectCollectionProvider {
 
 	// START BEAN PROPERTIES
 	@BeanField
-	private ObjMaskProvider objs;
+	private ObjectCollectionProvider objs;
 	
 	@BeanField
 	private PermuteProperty<?> permuteProperty;
@@ -87,7 +87,7 @@ public class ObjMaskProviderPermute extends ObjMaskProvider {
 	
 	private ObjectCollection objsForPermutation(PermutationSetter setter, Object propVal) throws CreateException {
 		// We permute a duplicate, so as to keep the original values
-		ObjMaskProvider provider = objs.duplicateBean();
+		ObjectCollectionProvider provider = objs.duplicateBean();
 		try {
 			setter.setPermutation(provider, propVal);
 		} catch (PermutationSetterException e) {
@@ -104,11 +104,11 @@ public class ObjMaskProviderPermute extends ObjMaskProvider {
 		return provider.create();
 	}
 
-	public ObjMaskProvider getObjs() {
+	public ObjectCollectionProvider getObjs() {
 		return objs;
 	}
 
-	public void setObjs(ObjMaskProvider objs) {
+	public void setObjs(ObjectCollectionProvider objs) {
 		this.objs = objs;
 	}
 

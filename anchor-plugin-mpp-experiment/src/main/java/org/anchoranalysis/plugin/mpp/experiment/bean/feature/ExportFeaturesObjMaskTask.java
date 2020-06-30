@@ -52,7 +52,7 @@ import org.anchoranalysis.feature.name.FeatureNameList;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorMulti;
 import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
-import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
+import org.anchoranalysis.image.bean.provider.ObjectCollectionProvider;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.feature.session.FeatureTableCalculator;
 import org.anchoranalysis.image.object.ObjectCollection;
@@ -86,7 +86,7 @@ import org.anchoranalysis.plugin.image.task.sharedstate.SharedStateExportFeature
  *  </div>
  *  
  *  <p>Note unlike other export-tasks, the group here is not only what is returned by the <code>group</code> generator
- *  in the super-class, but also includes the name of the {@link ObjMaskProvider} if there is more than one.</p>
+ *  in the super-class, but also includes the name of the {@link ObjectCollectionProvider} if there is more than one.</p>
  *  
  *  TODO does this need to be a MultiInput and dependent on MPP? Can it be moved to anchor-plugin-image-task??
  *  
@@ -101,7 +101,7 @@ public class ExportFeaturesObjMaskTask<T extends FeatureInput> extends ExportFea
 	private DefineOutputterMPPWithNrg define = new DefineOutputterMPPWithNrg();
 	
 	@BeanField
-	private List<NamedBean<ObjMaskProvider>> listObjMaskProvider = new ArrayList<>();
+	private List<NamedBean<ObjectCollectionProvider>> listObjMaskProvider = new ArrayList<>();
 	
 	@BeanField
 	private FeatureTableObjects<T> table;
@@ -237,7 +237,7 @@ public class ExportFeaturesObjMaskTask<T extends FeatureInput> extends ExportFea
 	) throws OperationFailedException {
 		
 		// For every objMaskCollection provider
-		for(NamedBean<ObjMaskProvider> ni : listObjMaskProvider) {
+		for(NamedBean<ObjectCollectionProvider> ni : listObjMaskProvider) {
 			calculator.processProvider(
 				ni.getValue(),
 				input -> identifierFor(
@@ -280,12 +280,12 @@ public class ExportFeaturesObjMaskTask<T extends FeatureInput> extends ExportFea
 		}
 	}
 
-	public List<NamedBean<ObjMaskProvider>> getListObjMaskProvider() {
+	public List<NamedBean<ObjectCollectionProvider>> getListObjMaskProvider() {
 		return listObjMaskProvider;
 	}
 
 	public void setListObjMaskProvider(
-			List<NamedBean<ObjMaskProvider>> listObjMaskProvider) {
+			List<NamedBean<ObjectCollectionProvider>> listObjMaskProvider) {
 		this.listObjMaskProvider = listObjMaskProvider;
 	}
 

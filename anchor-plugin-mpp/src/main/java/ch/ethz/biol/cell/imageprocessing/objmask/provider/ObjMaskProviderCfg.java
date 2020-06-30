@@ -35,7 +35,7 @@ import org.anchoranalysis.anchor.mpp.regionmap.RegionMapSingleton;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.bean.provider.ImageDimProvider;
-import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
+import org.anchoranalysis.image.bean.provider.ObjectCollectionProvider;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.object.ObjectCollection;
@@ -43,7 +43,7 @@ import org.anchoranalysis.image.object.ObjectCollection;
 import ch.ethz.biol.cell.imageprocessing.dim.provider.GuessDimFromInputImage;
 
 // Creates some object masks from a cfg
-public class ObjMaskProviderCfg extends ObjMaskProvider {
+public class ObjMaskProviderCfg extends ObjectCollectionProvider {
 
 	// START BEAN PROPERTIES
 	@BeanField
