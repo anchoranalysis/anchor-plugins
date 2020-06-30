@@ -35,15 +35,15 @@ import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.binary.values.BinaryValues;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelBoxByte;
-import org.anchoranalysis.image.feature.bean.objmask.FeatureObjMask;
-import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
+import org.anchoranalysis.image.feature.bean.object.single.FeatureSingleObject;
+import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.objectmask.ObjectMask;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.anchoranalysis.image.voxel.datatype.IncorrectVoxelDataTypeException;
 import org.anchoranalysis.image.voxel.kernel.ApplyKernel;
 import org.anchoranalysis.image.voxel.kernel.outline.OutlineKernel3NghbMatchValue;
 
-public class NumNghbVoxels extends FeatureObjMask {
+public class NumNghbVoxels extends FeatureSingleObject {
 
 	// START BEAN PROPERTIES
 	@BeanField
@@ -64,9 +64,9 @@ public class NumNghbVoxels extends FeatureObjMask {
 	}
 	
 	@Override
-	public double calc(SessionInput<FeatureInputSingleObj> input) throws FeatureCalcException {
+	public double calc(SessionInput<FeatureInputSingleObject> input) throws FeatureCalcException {
 
-		FeatureInputSingleObj inputSessionless = input.get();
+		FeatureInputSingleObject inputSessionless = input.get();
 		
 		ObjectMask om = inputSessionless.getObjMask();
 		

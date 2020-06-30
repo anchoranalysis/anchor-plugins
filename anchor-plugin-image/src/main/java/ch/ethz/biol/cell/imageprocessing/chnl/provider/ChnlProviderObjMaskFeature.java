@@ -45,7 +45,7 @@ import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.channel.factory.ChannelFactory;
 import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.extent.IncorrectImageSizeException;
-import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
+import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.objectmask.ObjectMask;
 import org.anchoranalysis.image.objectmask.ObjectCollection;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
@@ -57,7 +57,7 @@ public class ChnlProviderObjMaskFeature extends ChnlProviderOneObjsSource {
 	private int valueNoObject = 0;
 	
 	@BeanField
-	private FeatureProvider<FeatureInputSingleObj> featureProvider;
+	private FeatureProvider<FeatureInputSingleObject> featureProvider;
 	
 	@BeanField
 	private List<ChnlProvider> listAdditionalChnlProviders = new ArrayList<>();
@@ -69,7 +69,7 @@ public class ChnlProviderObjMaskFeature extends ChnlProviderOneObjsSource {
 	@Override
 	protected Channel createFromChnl(Channel chnl, ObjectCollection objsSource) throws CreateException {
 
-		Feature<FeatureInputSingleObj> feature = featureProvider.create();
+		Feature<FeatureInputSingleObject> feature = featureProvider.create();
 		
 		try {
 			NRGStack nrgStack = createNrgStack(chnl);
@@ -107,7 +107,7 @@ public class ChnlProviderObjMaskFeature extends ChnlProviderOneObjsSource {
 		return nrgStack;
 	}
 	
-	private FeatureCalculatorSingle<FeatureInputSingleObj> createSession(Feature<FeatureInputSingleObj> feature) throws FeatureCalcException {
+	private FeatureCalculatorSingle<FeatureInputSingleObject> createSession(Feature<FeatureInputSingleObject> feature) throws FeatureCalcException {
 		return FeatureSession.with(
 			feature,
 			new FeatureInitParams(),
@@ -119,7 +119,7 @@ public class ChnlProviderObjMaskFeature extends ChnlProviderOneObjsSource {
 	private Channel createOutputChnl(
 		ImageDim dim,
 		ObjectCollection objsSource,
-		FeatureCalculatorSingle<FeatureInputSingleObj> session,
+		FeatureCalculatorSingle<FeatureInputSingleObject> session,
 		NRGStackWithParams nrgStackParams
 	) throws FeatureCalcException {
 		Channel chnlOut = ChannelFactory.instance().createEmptyInitialised( dim, VoxelDataTypeUnsignedByte.instance );
@@ -127,7 +127,7 @@ public class ChnlProviderObjMaskFeature extends ChnlProviderOneObjsSource {
 		for( ObjectMask om : objsSource ) {
 
 			double featVal = session.calc(
-				new FeatureInputSingleObj(om, nrgStackParams)
+				new FeatureInputSingleObject(om, nrgStackParams)
 			);
 			chnlOut.getVoxelBox().any().setPixelsCheckMask(om, (int) (factor*featVal) );
 		}
@@ -135,11 +135,11 @@ public class ChnlProviderObjMaskFeature extends ChnlProviderOneObjsSource {
 		return chnlOut;		
 	}
 
-	public FeatureProvider<FeatureInputSingleObj> getFeatureProvider() {
+	public FeatureProvider<FeatureInputSingleObject> getFeatureProvider() {
 		return featureProvider;
 	}
 
-	public void setFeatureProvider(FeatureProvider<FeatureInputSingleObj> featureProvider) {
+	public void setFeatureProvider(FeatureProvider<FeatureInputSingleObject> featureProvider) {
 		this.featureProvider = featureProvider;
 	}
 

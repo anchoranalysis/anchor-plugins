@@ -34,13 +34,13 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.feature.cache.calculation.FeatureCalculation;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.nrg.NRGStack;
-import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
+import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.objectmask.ObjectMask;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
 import ch.ethz.biol.cell.mpp.mark.pointsfitter.LinearLeastSquaresEllipseFitter;
 
-public class CalculateEllipseLeastSquares extends FeatureCalculation<ObjMaskAndEllipse, FeatureInputSingleObj> {
+public class CalculateEllipseLeastSquares extends FeatureCalculation<ObjMaskAndEllipse, FeatureInputSingleObject> {
 
 	private EllipseFactory factory;
 	
@@ -59,7 +59,7 @@ public class CalculateEllipseLeastSquares extends FeatureCalculation<ObjMaskAndE
 	
 
 	@Override
-	protected ObjMaskAndEllipse execute( FeatureInputSingleObj input ) throws FeatureCalcException {
+	protected ObjMaskAndEllipse execute( FeatureInputSingleObject input ) throws FeatureCalcException {
 		
 		try {
 			NRGStack nrgStack = input.getNrgStackRequired().getNrgStack();

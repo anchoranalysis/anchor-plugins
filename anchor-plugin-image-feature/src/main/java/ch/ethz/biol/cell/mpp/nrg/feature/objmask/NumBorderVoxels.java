@@ -30,13 +30,13 @@ package ch.ethz.biol.cell.mpp.nrg.feature.objmask;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.image.feature.bean.objmask.FeatureObjMask;
-import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
+import org.anchoranalysis.image.feature.bean.object.single.FeatureSingleObject;
+import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.objectmask.ObjectMask;
 import org.anchoranalysis.image.voxel.kernel.ApplyKernel;
 import org.anchoranalysis.image.voxel.kernel.outline.OutlineKernel3;
 
-public class NumBorderVoxels extends FeatureObjMask {
+public class NumBorderVoxels extends FeatureSingleObject {
 
 	// START BEAN PROPERTIES
 	@BeanField
@@ -50,7 +50,7 @@ public class NumBorderVoxels extends FeatureObjMask {
 	// END BEAN PROPERTIES
 	
 	@Override
-	public double calc(SessionInput<FeatureInputSingleObj> input) throws FeatureCalcException {
+	public double calc(SessionInput<FeatureInputSingleObject> input) throws FeatureCalcException {
 
 		ObjectMask om = input.get().getObjMask();
 		return (double) numBorderPixels(om, ignoreAtThreshold, outsideAtThreshold, do3D);

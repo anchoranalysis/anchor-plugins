@@ -31,7 +31,7 @@ import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.feature.bean.evaluator.FeatureEvaluator;
-import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
+import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.objectmask.ObjectCollection;
 import org.anchoranalysis.plugin.image.obj.merge.condition.IncreaseFeatureCondition;
 
@@ -42,7 +42,7 @@ public class ObjMaskProviderMerge extends ObjMaskProviderMergeOptionalDistance {
 	private boolean replaceWithMidpoint = false;
 	
 	@BeanField @OptionalBean
-	private FeatureEvaluator<FeatureInputSingleObj> featureEvaluator;
+	private FeatureEvaluator<FeatureInputSingleObject> featureEvaluator;
 	// END BEAN PROPERTIES
 
 	@Override
@@ -67,11 +67,11 @@ public class ObjMaskProviderMerge extends ObjMaskProviderMergeOptionalDistance {
 		}
 	}
 	
-	public FeatureEvaluator<FeatureInputSingleObj> getFeatureEvaluator() {
+	public FeatureEvaluator<FeatureInputSingleObject> getFeatureEvaluator() {
 		return featureEvaluator;
 	}
 
-	public void setFeatureEvaluator(FeatureEvaluator<FeatureInputSingleObj> featureEvaluator) {
+	public void setFeatureEvaluator(FeatureEvaluator<FeatureInputSingleObject> featureEvaluator) {
 		this.featureEvaluator = featureEvaluator;
 	}
 

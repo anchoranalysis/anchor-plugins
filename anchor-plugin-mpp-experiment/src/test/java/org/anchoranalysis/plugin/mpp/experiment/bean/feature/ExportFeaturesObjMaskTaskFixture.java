@@ -38,9 +38,9 @@ import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.nrg.NRGStack;
 import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
 import org.anchoranalysis.io.bean.filepath.generator.FilePathGeneratorConstant;
-import org.anchoranalysis.plugin.image.feature.bean.obj.table.FeatureTableObjs;
-import org.anchoranalysis.plugin.image.feature.bean.obj.table.MergedPairs;
-import org.anchoranalysis.plugin.image.feature.bean.obj.table.Simple;
+import org.anchoranalysis.plugin.image.feature.bean.object.table.FeatureTableObjects;
+import org.anchoranalysis.plugin.image.feature.bean.object.table.MergedPairs;
+import org.anchoranalysis.plugin.image.feature.bean.object.table.Simple;
 import org.anchoranalysis.test.TestLoader;
 import org.anchoranalysis.test.image.NRGStackFixture;
 
@@ -49,7 +49,7 @@ import ch.ethz.biol.cell.imageprocessing.objmask.provider.ObjMaskProviderReferen
 class ExportFeaturesObjMaskTaskFixture {
 	
 	private NRGStack nrgStack = createNRGStack(true);
-	private FeatureTableObjs<?> flexiFeatureTable = new Simple();
+	private FeatureTableObjects<?> flexiFeatureTable = new Simple();
 	
 	private final ExportFeaturesObjMaskFeatureLoader featureLoader;
 	
@@ -106,7 +106,7 @@ class ExportFeaturesObjMaskTaskFixture {
 			)		
 		);
 		task.setGroup( new FilePathGeneratorConstant("arbitraryGroup") );
-		task.setTable( (FeatureTableObjs<T>) flexiFeatureTable);
+		task.setTable( (FeatureTableObjects<T>) flexiFeatureTable);
 		task.setListObjMaskProvider(
 			createObjProviders(MultiInputFixture.OBJS_NAME)
 		);

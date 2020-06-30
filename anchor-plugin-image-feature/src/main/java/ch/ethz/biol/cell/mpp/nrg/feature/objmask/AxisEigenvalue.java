@@ -29,12 +29,12 @@ import org.anchoranalysis.feature.cache.SessionInput;
  */
 
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
+import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 
 public class AxisEigenvalue extends ObjMaskPointsSpecificEigenvalueBase {
 
 	@Override
-	public double calc(SessionInput<FeatureInputSingleObj> input) throws FeatureCalcException {
+	public double calc(SessionInput<FeatureInputSingleObject> input) throws FeatureCalcException {
 		return calcSpecificEigenvector(input).getEigenvalue();
 	}
 }

@@ -37,8 +37,8 @@ import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.image.feature.bean.objmask.FeatureObjMask;
-import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
+import org.anchoranalysis.image.feature.bean.object.single.FeatureSingleObject;
+import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.objectmask.ObjectMask;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 
@@ -51,7 +51,7 @@ import org.anchoranalysis.image.voxel.box.VoxelBox;
  *
  */
 @SuppressWarnings("unused")
-public class ArbitraryInsidePoint extends FeatureObjMask {
+public class ArbitraryInsidePoint extends FeatureSingleObject {
 
 	/**
 	 * 
@@ -74,7 +74,7 @@ public class ArbitraryInsidePoint extends FeatureObjMask {
 	}
 	
 	@Override
-	public double calc(SessionInput<FeatureInputSingleObj> input) throws FeatureCalcException {
+	public double calc(SessionInput<FeatureInputSingleObject> input) throws FeatureCalcException {
 				
 		AxisType axisType = AxisTypeConverter.createFromString(axis);
 		

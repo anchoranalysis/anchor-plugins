@@ -36,7 +36,7 @@ import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorSingle;
 import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.feature.bean.evaluator.FeatureEvaluator;
-import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
+import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.objectmask.ObjectMask;
 import org.anchoranalysis.plugin.image.bean.obj.filter.ObjectFilterPredicate;
 import org.anchoranalysis.image.objectmask.ObjectCollection;
@@ -54,7 +54,7 @@ public class DiscardOutliers extends ObjectFilterPredicate {
 
 	// START BEAN PROPERTIES
 	@BeanField
-	private FeatureEvaluator<FeatureInputSingleObj> featureEvaluator;
+	private FeatureEvaluator<FeatureInputSingleObject> featureEvaluator;
 	
 	@BeanField
 	private double quantile;
@@ -118,13 +118,13 @@ public class DiscardOutliers extends ObjectFilterPredicate {
 		}
 	}	
 
-	private static DoubleArrayList calcFeatures( ObjectCollection objs, FeatureCalculatorSingle<FeatureInputSingleObj> calculator ) throws OperationFailedException {
+	private static DoubleArrayList calcFeatures( ObjectCollection objs, FeatureCalculatorSingle<FeatureInputSingleObject> calculator ) throws OperationFailedException {
 		DoubleArrayList featureVals = new DoubleArrayList();
 		for( ObjectMask om : objs ) {
 			try {
 				featureVals.add(
 					calculator.calc(
-						new FeatureInputSingleObj(om)
+						new FeatureInputSingleObject(om)
 					)
 				);
 			} catch (FeatureCalcException e) {
@@ -178,11 +178,11 @@ public class DiscardOutliers extends ObjectFilterPredicate {
 		this.minRatio = minRatio;
 	}
 
-	public FeatureEvaluator<FeatureInputSingleObj> getFeatureEvaluator() {
+	public FeatureEvaluator<FeatureInputSingleObject> getFeatureEvaluator() {
 		return featureEvaluator;
 	}
 
-	public void setFeatureEvaluator(FeatureEvaluator<FeatureInputSingleObj> featureEvaluator) {
+	public void setFeatureEvaluator(FeatureEvaluator<FeatureInputSingleObject> featureEvaluator) {
 		this.featureEvaluator = featureEvaluator;
 	}
 }

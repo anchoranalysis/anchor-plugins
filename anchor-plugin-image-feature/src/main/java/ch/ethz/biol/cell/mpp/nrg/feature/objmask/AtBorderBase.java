@@ -30,13 +30,13 @@ import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.ImageDim;
-import org.anchoranalysis.image.feature.bean.objmask.FeatureObjMask;
-import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
+import org.anchoranalysis.image.feature.bean.object.single.FeatureSingleObject;
+import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 
-public abstract class AtBorderBase extends FeatureObjMask {
+public abstract class AtBorderBase extends FeatureSingleObject {
 
 	@Override
-	public double calc(SessionInput<FeatureInputSingleObj> input) throws FeatureCalcException {
+	public double calc(SessionInput<FeatureInputSingleObject> input) throws FeatureCalcException {
 		
 		if (isInputAtBorder(input.get())) {
 			return 1.0;
@@ -45,7 +45,7 @@ public abstract class AtBorderBase extends FeatureObjMask {
 		}
 	}
 	
-	private boolean isInputAtBorder( FeatureInputSingleObj input ) throws FeatureCalcException {
+	private boolean isInputAtBorder( FeatureInputSingleObject input ) throws FeatureCalcException {
 		return isBoundingBoxAtBorder(
 			input.getObjMask().getBoundingBox(),
 			input.getDimensionsRequired()

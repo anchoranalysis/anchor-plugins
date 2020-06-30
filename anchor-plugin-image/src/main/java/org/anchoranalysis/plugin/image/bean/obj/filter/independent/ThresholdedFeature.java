@@ -36,7 +36,7 @@ import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorSingle;
 import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.feature.bean.evaluator.FeatureEvaluator;
-import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
+import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.objectmask.ObjectCollection;
 import org.anchoranalysis.image.objectmask.ObjectMask;
 import org.anchoranalysis.plugin.image.bean.obj.filter.ObjectFilterRelation;
@@ -53,7 +53,7 @@ public class ThresholdedFeature extends ObjectFilterRelation {
 
 	// START BEAN PROPERTIES
 	@BeanField
-	private FeatureEvaluator<FeatureInputSingleObj> featureEvaluator;
+	private FeatureEvaluator<FeatureInputSingleObject> featureEvaluator;
 	
 	@BeanField
 	private double threshold;
@@ -62,7 +62,7 @@ public class ThresholdedFeature extends ObjectFilterRelation {
 	private boolean debug = true;
 	// END BEAN PROPERTIES
 	
-	private FeatureCalculatorSingle<FeatureInputSingleObj> featureSession = null;
+	private FeatureCalculatorSingle<FeatureInputSingleObject> featureSession = null;
 		
 	@Override
 	protected void start(Optional<ImageDim> dim, ObjectCollection objsToFilter) throws OperationFailedException {
@@ -84,7 +84,7 @@ public class ThresholdedFeature extends ObjectFilterRelation {
 		double val;
 		try {
 			val = featureSession.calc(
-				new FeatureInputSingleObj(om)
+				new FeatureInputSingleObject(om)
 			);
 		} catch (FeatureCalcException e) {
 			throw new OperationFailedException(e);
@@ -119,11 +119,11 @@ public class ThresholdedFeature extends ObjectFilterRelation {
 		this.threshold = threshold;
 	}
 
-	public FeatureEvaluator<FeatureInputSingleObj> getFeatureEvaluator() {
+	public FeatureEvaluator<FeatureInputSingleObject> getFeatureEvaluator() {
 		return featureEvaluator;
 	}
 
-	public void setFeatureEvaluator(FeatureEvaluator<FeatureInputSingleObj> featureEvaluator) {
+	public void setFeatureEvaluator(FeatureEvaluator<FeatureInputSingleObject> featureEvaluator) {
 		this.featureEvaluator = featureEvaluator;
 	}
 

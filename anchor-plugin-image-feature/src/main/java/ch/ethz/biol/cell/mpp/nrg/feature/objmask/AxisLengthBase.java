@@ -30,11 +30,11 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.cache.calculation.FeatureCalculation;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.image.feature.bean.objmask.FeatureObjMask;
-import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
+import org.anchoranalysis.image.feature.bean.object.single.FeatureSingleObject;
+import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 import org.anchoranalysis.math.moment.MomentsFromPointsCalculator;
 
-public abstract class AxisLengthBase extends FeatureObjMask {
+public abstract class AxisLengthBase extends FeatureSingleObject {
 
 	// START BEAN PROPERTIES
 	@BeanField
@@ -42,15 +42,15 @@ public abstract class AxisLengthBase extends FeatureObjMask {
 	// END BEAN PROPERTIES
 	
 	@Override
-	public double calc(SessionInput<FeatureInputSingleObj> input) throws FeatureCalcException {
+	public double calc(SessionInput<FeatureInputSingleObject> input) throws FeatureCalcException {
 		
-		assert( input.get() instanceof FeatureInputSingleObj );
+		assert( input.get() instanceof FeatureInputSingleObject );
 		return calcAxisLength( input, index);
 	}
 
-	protected abstract FeatureCalculation<MomentsFromPointsCalculator,FeatureInputSingleObj> momentsCalculator();
+	protected abstract FeatureCalculation<MomentsFromPointsCalculator,FeatureInputSingleObject> momentsCalculator();
 	
-	private double calcAxisLength( SessionInput<FeatureInputSingleObj> input, int index ) throws FeatureCalcException {
+	private double calcAxisLength( SessionInput<FeatureInputSingleObject> input, int index ) throws FeatureCalcException {
 		
 		if (!input.get().getObjMask().hasPixelsGreaterThan(0)) {
 			return Double.NaN;

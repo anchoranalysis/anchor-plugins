@@ -30,14 +30,14 @@ package ch.ethz.biol.cell.mpp.nrg.feature.objmask;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.image.feature.bean.objmask.FeatureObjMask;
-import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
+import org.anchoranalysis.image.feature.bean.object.single.FeatureSingleObject;
+import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.objectmask.ObjectMask;
 
-public class ShapeRegularityCenterSlice extends FeatureObjMask {
+public class ShapeRegularityCenterSlice extends FeatureSingleObject {
 
 	@Override
-	public double calc(SessionInput<FeatureInputSingleObj> input) throws FeatureCalcException {
+	public double calc(SessionInput<FeatureInputSingleObject> input) throws FeatureCalcException {
 				
 		try {
 			ObjectMask omSlice = centerSlice(

@@ -31,13 +31,13 @@ import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputSingleMemo;
 import org.anchoranalysis.feature.cache.calculation.FeatureCalculation;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
-import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
+import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.objectmask.ObjectMask;
 import org.anchoranalysis.image.objectmask.properties.ObjectWithProperties;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
-class CalculateSingleObjFromMemo extends FeatureCalculation<FeatureInputSingleObj, FeatureInputSingleMemo> {
+class CalculateSingleObjFromMemo extends FeatureCalculation<FeatureInputSingleObject, FeatureInputSingleMemo> {
 
 	private RegionMap regionMap;
 	private int index;
@@ -49,8 +49,8 @@ class CalculateSingleObjFromMemo extends FeatureCalculation<FeatureInputSingleOb
 	}
 
 	@Override
-	protected FeatureInputSingleObj execute(FeatureInputSingleMemo input) throws FeatureCalcException {
-		return new FeatureInputSingleObj(
+	protected FeatureInputSingleObject execute(FeatureInputSingleMemo input) throws FeatureCalcException {
+		return new FeatureInputSingleObject(
 			calcMask(input),
 			input.getNrgStackOptional()
 		);

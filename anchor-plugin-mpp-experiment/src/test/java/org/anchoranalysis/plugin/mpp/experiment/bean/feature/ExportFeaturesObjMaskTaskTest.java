@@ -31,8 +31,8 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
-import org.anchoranalysis.image.feature.objmask.pair.impl.First;
+import org.anchoranalysis.image.feature.bean.object.pair.First;
+import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 import org.anchoranalysis.test.TestLoader;
 import org.anchoranalysis.test.feature.plugins.mockfeature.MockFeatureWithCalculationFixture;
 import org.junit.Before;
@@ -187,7 +187,7 @@ public class ExportFeaturesObjMaskTaskTest {
 	@Test
 	public void testRepeatedCalculationInSingleAndPair() throws OperationFailedException, CreateException {
 		
-		Feature<FeatureInputSingleObj> feature = MockFeatureWithCalculationFixture.createMockFeatureWithCalculation();
+		Feature<FeatureInputSingleObject> feature = MockFeatureWithCalculationFixture.createMockFeatureWithCalculation();
 		
 		taskFixture.featureLoader().changeSingleTo(feature);
 		taskFixture.featureLoader().changePairTo(

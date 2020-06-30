@@ -29,28 +29,28 @@ package ch.ethz.biol.cell.mpp.nrg.feature.objmask;
 import java.util.Optional;
 
 import org.anchoranalysis.feature.cache.calculation.ResolvedCalculation;
-import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
+import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.objectmask.ObjectMask;
-import org.anchoranalysis.plugin.image.feature.obj.pair.CalculateInputFromDelegateOption;
+import org.anchoranalysis.plugin.image.feature.object.calculation.delegate.CalculateInputFromDelegateOption;
 
 public class CalculateObjForDerived extends CalculateInputFromDelegateOption<
-	FeatureInputSingleObj,
-	FeatureInputSingleObj,
+	FeatureInputSingleObject,
+	FeatureInputSingleObject,
 	ObjectMask
 > {
-	public CalculateObjForDerived(ResolvedCalculation<ObjectMask, FeatureInputSingleObj> ccDerived) {
+	public CalculateObjForDerived(ResolvedCalculation<ObjectMask, FeatureInputSingleObject> ccDerived) {
 		super(ccDerived);
 	}
 
 	@Override
-	protected Optional<FeatureInputSingleObj> deriveFromDelegate(FeatureInputSingleObj input, ObjectMask delegate) {
+	protected Optional<FeatureInputSingleObject> deriveFromDelegate(FeatureInputSingleObject input, ObjectMask delegate) {
 		
 		if (delegate==null || !delegate.hasPixelsGreaterThan(0)) {
 			return Optional.empty();
 		}
 		
 		return Optional.of(
-			new FeatureInputSingleObj( delegate, input.getNrgStackOptional() )
+			new FeatureInputSingleObject( delegate, input.getNrgStackOptional() )
 		);
 	}
 }

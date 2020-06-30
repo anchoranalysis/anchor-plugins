@@ -39,7 +39,7 @@ import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
 import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
 import org.anchoranalysis.image.feature.bean.FeatureStack;
-import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
+import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.feature.stack.FeatureInputStack;
 import org.anchoranalysis.image.objectmask.ObjectCollection;
 
@@ -49,7 +49,7 @@ public abstract class ObjMaskFeatureFromStack extends FeatureStack {
 
 	// START BEAN PROPERTIES
 	@BeanField
-	private Feature<FeatureInputSingleObj> item;
+	private Feature<FeatureInputSingleObject> item;
 	
 	@BeanField
 	@SkipInit
@@ -90,7 +90,7 @@ public abstract class ObjMaskFeatureFromStack extends FeatureStack {
 	}
 
 	private DoubleArrayList featureValsForObjs(
-		Feature<FeatureInputSingleObj> feature,
+		Feature<FeatureInputSingleObject> feature,
 		SessionInput<FeatureInputStack> input,
 		ObjectCollection objsCollection
 	) throws FeatureCalcException {
@@ -116,11 +116,11 @@ public abstract class ObjMaskFeatureFromStack extends FeatureStack {
 		);
 	}
 	
-	public Feature<FeatureInputSingleObj> getItem() {
+	public Feature<FeatureInputSingleObject> getItem() {
 		return item;
 	}
 
-	public void setItem(Feature<FeatureInputSingleObj> item) {
+	public void setItem(Feature<FeatureInputSingleObject> item) {
 		this.item = item;
 	}
 

@@ -29,13 +29,13 @@ package ch.ethz.biol.cell.mpp.nrg.feature.objmask;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.image.feature.bean.objmask.FeatureObjMask;
-import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
+import org.anchoranalysis.image.feature.bean.object.single.FeatureSingleObject;
+import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.objectmask.ObjectMask;
 import org.anchoranalysis.math.moment.MomentsFromPointsCalculator;
 import org.anchoranalysis.points.moment.CalculateObjMaskPointsSecondMomentMatrix;
 
-public abstract class AxisMomentsBase extends FeatureObjMask {
+public abstract class AxisMomentsBase extends FeatureSingleObject {
 
 	// START BEAN PROPERTIES
 	@BeanField
@@ -43,9 +43,9 @@ public abstract class AxisMomentsBase extends FeatureObjMask {
 	// END BEAN PROPERTIES
 	
 	@Override
-	public double calc(SessionInput<FeatureInputSingleObj> input) throws FeatureCalcException {
+	public double calc(SessionInput<FeatureInputSingleObject> input) throws FeatureCalcException {
 		
-		FeatureInputSingleObj params = input.get();
+		FeatureInputSingleObject params = input.get();
 		
 		// Max intensity projection of the input mask
 		ObjectMask om = params.getObjMask();
@@ -61,7 +61,7 @@ public abstract class AxisMomentsBase extends FeatureObjMask {
 	
 	protected abstract double calcFromMoments( MomentsFromPointsCalculator moments ) throws FeatureCalcException;
 	
-	private MomentsFromPointsCalculator calcMoments(SessionInput<FeatureInputSingleObj> input) throws FeatureCalcException {
+	private MomentsFromPointsCalculator calcMoments(SessionInput<FeatureInputSingleObject> input) throws FeatureCalcException {
 		MomentsFromPointsCalculator moments = input.calc(
 			new CalculateObjMaskPointsSecondMomentMatrix(suppressZCovariance)	
 		);

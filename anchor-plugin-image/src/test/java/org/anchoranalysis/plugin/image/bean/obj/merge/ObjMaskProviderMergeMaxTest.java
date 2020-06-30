@@ -34,7 +34,7 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.log.LogErrorReporter;
-import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
+import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.objectmask.ObjectCollection;
 import org.anchoranalysis.plugin.image.test.ProviderFixture;
 import org.anchoranalysis.test.LoggingFixture;
@@ -75,7 +75,7 @@ public class ObjMaskProviderMergeMaxTest {
 		);
 	}
 	
-	private void testLinear( int expectedCntMerged, int expectedFeatureCalcCount, Function<FeatureInputSingleObj,Double> calculationFunc ) throws OperationFailedException, CreateException {
+	private void testLinear( int expectedCntMerged, int expectedFeatureCalcCount, Function<FeatureInputSingleObject,Double> calculationFunc ) throws OperationFailedException, CreateException {
 		MergeTestHelper.testProviderOn(
 			expectedCntMerged,
 			expectedFeatureCalcCount,
@@ -84,7 +84,7 @@ public class ObjMaskProviderMergeMaxTest {
 		);
 	}
 	
-	private static ObjMaskProviderMergeMax createMergeMax( ObjectCollection objs, Function<FeatureInputSingleObj,Double> calculationFunc ) throws CreateException {
+	private static ObjMaskProviderMergeMax createMergeMax( ObjectCollection objs, Function<FeatureInputSingleObject,Double> calculationFunc ) throws CreateException {
 		
 		LogErrorReporter logger = LoggingFixture.suppressedLogErrorReporter();
 		
@@ -104,7 +104,7 @@ public class ObjMaskProviderMergeMaxTest {
 	}
 	
 	/** Merges if the number-of-pixels becomes closer to 900 */
-	private static Double convergeTo900( FeatureInputSingleObj input ) {
+	private static Double convergeTo900( FeatureInputSingleObject input ) {
 		int diff = 900 - input.getObjMask().numVoxelsOn();
 		return (double) -1 * Math.abs(diff);
 	}

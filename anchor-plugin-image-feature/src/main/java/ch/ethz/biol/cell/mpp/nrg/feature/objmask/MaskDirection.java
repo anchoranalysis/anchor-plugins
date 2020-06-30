@@ -30,7 +30,7 @@ package ch.ethz.biol.cell.mpp.nrg.feature.objmask;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
+import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 
 public class MaskDirection extends ObjMaskPointsSpecificEigenvalueBase {
 
@@ -40,7 +40,7 @@ public class MaskDirection extends ObjMaskPointsSpecificEigenvalueBase {
 	// END BEAN PROPERTIES
 
 	@Override
-	public double calc(SessionInput<FeatureInputSingleObj> input) throws FeatureCalcException {
+	public double calc(SessionInput<FeatureInputSingleObject> input) throws FeatureCalcException {
 		return calcSpecificEigenvector(input).getEigenvector().get(eigenvectorIndex);
 	}
 

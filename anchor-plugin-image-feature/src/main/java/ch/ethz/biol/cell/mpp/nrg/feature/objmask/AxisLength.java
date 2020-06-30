@@ -28,7 +28,7 @@ package ch.ethz.biol.cell.mpp.nrg.feature.objmask;
 
 
 import org.anchoranalysis.feature.cache.calculation.FeatureCalculation;
-import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
+import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 import org.anchoranalysis.math.moment.MomentsFromPointsCalculator;
 import org.anchoranalysis.points.moment.CalculateObjMaskPointsSecondMomentMatrix;
 
@@ -42,7 +42,7 @@ public class AxisLength extends AxisLengthBase {
 	
 
 	@Override
-	protected FeatureCalculation<MomentsFromPointsCalculator, FeatureInputSingleObj> momentsCalculator() {
+	protected FeatureCalculation<MomentsFromPointsCalculator, FeatureInputSingleObject> momentsCalculator() {
 		return new CalculateObjMaskPointsSecondMomentMatrix(false);
 	}
 }

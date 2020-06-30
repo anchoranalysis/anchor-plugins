@@ -32,10 +32,10 @@ import org.anchoranalysis.core.geometry.ReadableTuple3i;
 import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.extent.BoundingBox;
-import org.anchoranalysis.image.feature.bean.objmask.FeatureObjMask;
-import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
+import org.anchoranalysis.image.feature.bean.object.single.FeatureSingleObject;
+import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 
-public abstract class BoundingBoxAxisBase extends FeatureObjMask {
+public abstract class BoundingBoxAxisBase extends FeatureSingleObject {
 
 	// START BEAN PARAMETERS
 	@BeanField
@@ -43,9 +43,9 @@ public abstract class BoundingBoxAxisBase extends FeatureObjMask {
 	// END BEAN PARAMETERS
 	
 	@Override
-	public double calc( SessionInput<FeatureInputSingleObj> input ) throws FeatureCalcException {
+	public double calc( SessionInput<FeatureInputSingleObject> input ) throws FeatureCalcException {
 		
-		FeatureInputSingleObj inputSessionless = input.get();
+		FeatureInputSingleObject inputSessionless = input.get();
 		
 		ReadableTuple3i pnt = extractTupleForBoundingBox(
 			inputSessionless.getObjMask().getBoundingBox()

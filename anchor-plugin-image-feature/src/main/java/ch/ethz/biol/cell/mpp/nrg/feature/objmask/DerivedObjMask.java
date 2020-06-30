@@ -38,23 +38,23 @@ import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.cache.calculation.CalculationResolver;
 import org.anchoranalysis.feature.cache.calculation.FeatureCalculation;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.image.feature.bean.objmask.FeatureObjMask;
-import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
+import org.anchoranalysis.image.feature.bean.object.single.FeatureSingleObject;
+import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.objectmask.ObjectMask;
-import org.anchoranalysis.plugin.image.feature.obj.pair.CalculateInputFromDelegateOption;
+import org.anchoranalysis.plugin.image.feature.object.calculation.delegate.CalculateInputFromDelegateOption;
 
-public abstract class DerivedObjMask extends FeatureObjMask {
+public abstract class DerivedObjMask extends FeatureSingleObject {
 
 	// START BEAN PROPERTIES
 	@BeanField
 	private double emptyValue = 255;
 	
 	@BeanField
-	private Feature<FeatureInputSingleObj> item;
+	private Feature<FeatureInputSingleObject> item;
 	// END BEAN PROPERTIES
 
 	@Override
-	public double calc(SessionInput<FeatureInputSingleObj> input) throws FeatureCalcException {
+	public double calc(SessionInput<FeatureInputSingleObject> input) throws FeatureCalcException {
 
 		ChildCacheName cacheName = cacheName();
 		
@@ -70,7 +70,7 @@ public abstract class DerivedObjMask extends FeatureObjMask {
 		);
 	}
 		
-	protected abstract FeatureCalculation<ObjectMask,FeatureInputSingleObj> createCachedCalculationForDerived( CalculationResolver<FeatureInputSingleObj> session ) throws FeatureCalcException;
+	protected abstract FeatureCalculation<ObjectMask,FeatureInputSingleObject> createCachedCalculationForDerived( CalculationResolver<FeatureInputSingleObject> session ) throws FeatureCalcException;
 	
 	protected abstract ChildCacheName cacheName();
 	
@@ -82,11 +82,11 @@ public abstract class DerivedObjMask extends FeatureObjMask {
 		this.emptyValue = emptyValue;
 	}
 
-	public Feature<FeatureInputSingleObj> getItem() {
+	public Feature<FeatureInputSingleObject> getItem() {
 		return item;
 	}
 
-	public void setItem(Feature<FeatureInputSingleObj> item) {
+	public void setItem(Feature<FeatureInputSingleObject> item) {
 		this.item = item;
 	}
 }

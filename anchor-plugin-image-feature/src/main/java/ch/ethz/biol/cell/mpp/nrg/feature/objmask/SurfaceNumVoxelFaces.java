@@ -27,8 +27,8 @@ package ch.ethz.biol.cell.mpp.nrg.feature.objmask;
  */
 
 import org.anchoranalysis.feature.cache.calculation.FeatureCalculation;
-import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
-import org.anchoranalysis.plugin.image.calculation.CalculateOutlineNumVoxelFaces;
+import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
+import org.anchoranalysis.plugin.image.feature.object.calculation.single.CalculateOutlineNumVoxelFaces;
 
 /**
  * The number of voxel-faces along the surface (the faces of each voxel that touch outside)
@@ -39,7 +39,7 @@ import org.anchoranalysis.plugin.image.calculation.CalculateOutlineNumVoxelFaces
 public class SurfaceNumVoxelFaces extends SurfaceNumVoxelsBase {
 
 	@Override
-	protected FeatureCalculation<Integer, FeatureInputSingleObj> createParams(boolean mip, boolean suppress3d) {
+	protected FeatureCalculation<Integer, FeatureInputSingleObject> createParams(boolean mip, boolean suppress3d) {
 		return new CalculateOutlineNumVoxelFaces(mip, suppress3d);
 	}
 }

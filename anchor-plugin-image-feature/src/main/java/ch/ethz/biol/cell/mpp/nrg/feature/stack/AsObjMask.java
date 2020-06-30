@@ -33,7 +33,7 @@ import org.anchoranalysis.feature.cache.ChildCacheName;
 import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.feature.bean.FeatureStack;
-import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
+import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.feature.stack.FeatureInputStack;
 
 /**
@@ -47,7 +47,7 @@ public class AsObjMask extends FeatureStack {
 
 	// START BEAN PROPERTIES
 	@BeanField
-	private Feature<FeatureInputSingleObj> item;
+	private Feature<FeatureInputSingleObject> item;
 	
 	@BeanField
 	/** The channel that that forms the binary mask */
@@ -64,11 +64,11 @@ public class AsObjMask extends FeatureStack {
 		);
 	}
 
-	public Feature<FeatureInputSingleObj> getItem() {
+	public Feature<FeatureInputSingleObject> getItem() {
 		return item;
 	}
 
-	public void setItem(Feature<FeatureInputSingleObj> item) {
+	public void setItem(Feature<FeatureInputSingleObject> item) {
 		this.item = item;
 	}
 

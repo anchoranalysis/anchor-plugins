@@ -37,10 +37,8 @@ import org.anchoranalysis.image.feature.histogram.FeatureInputHistogram;
 import org.anchoranalysis.image.feature.histogram.Mean;
 import org.anchoranalysis.image.feature.stack.FeatureInputStack;
 import org.anchoranalysis.image.histogram.Histogram;
-import org.anchoranalysis.plugin.image.feature.bean.obj.single.intensity.CalculateDeriveHistogramInput;
-
-import ch.ethz.biol.cell.mpp.nrg.feature.stack.cachedcalculation.CalculateHistogram;
-import ch.ethz.biol.cell.mpp.nrg.feature.stack.cachedcalculation.CalculateHistogramMasked;
+import org.anchoranalysis.plugin.image.feature.stack.calculation.CalculateHistogram;
+import org.anchoranalysis.plugin.image.feature.stack.calculation.CalculateHistogramMasked;
 
 /**
  * The intensity of a particular channel of the stack, by default the mean-intensity.
