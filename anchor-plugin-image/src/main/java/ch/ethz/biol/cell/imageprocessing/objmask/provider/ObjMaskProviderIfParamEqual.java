@@ -32,7 +32,7 @@ import org.anchoranalysis.bean.shared.params.keyvalue.KeyValueParamsProvider;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.params.KeyValueParams;
 import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
-import org.anchoranalysis.image.objectmask.ObjectCollection;
+import org.anchoranalysis.image.object.ObjectCollection;
 
 public class ObjMaskProviderIfParamEqual extends ObjMaskProvider {
 

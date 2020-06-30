@@ -34,7 +34,7 @@ import java.util.Optional;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.index.SetOperationFailedException;
-import org.anchoranalysis.image.extent.ImageDim;
+import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.io.bean.moviewriter.MovieWriter;
 import org.anchoranalysis.image.io.movie.MovieOutputHandle;
 import org.anchoranalysis.image.stack.Stack;
@@ -78,7 +78,7 @@ class GeneratorSequenceMovieWriter<GeneratorType> implements GeneratorSequenceNo
 	
 
 
-	private Optional<MovieOutputHandle> initOnFirstAdd( ImageDim dim, int numFrames ) throws InitException {
+	private Optional<MovieOutputHandle> initOnFirstAdd( ImageDimensions dim, int numFrames ) throws InitException {
 		
 		// Assume we are incrementing + 1
 		
@@ -104,7 +104,7 @@ class GeneratorSequenceMovieWriter<GeneratorType> implements GeneratorSequenceNo
 		}
 	}
 	
-	private static Optional<MovieOutputHandle> writeMovie( BoundOutputManager outputManager, OutputNameStyle outputNameStyle, ImageDim dim, int numFrames, int numChnl, int framesPerSecond ) throws OutputWriteFailedException {
+	private static Optional<MovieOutputHandle> writeMovie( BoundOutputManager outputManager, OutputNameStyle outputNameStyle, ImageDimensions dim, int numFrames, int numChnl, int framesPerSecond ) throws OutputWriteFailedException {
 		
 		MovieWriter movieWriter = (MovieWriter) outputManager.getOutputWriteSettings().getWriterInstance(MovieWriter.class);
 		

@@ -42,7 +42,7 @@ import org.anchoranalysis.feature.bean.list.FeatureListFactory;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorMulti;
-import org.anchoranalysis.image.extent.ImageDim;
+import org.anchoranalysis.image.extent.ImageDimensions;
 
 public class AddCriteriaFeatureRelationThreshold extends AddCriteriaPair {
 	
@@ -66,7 +66,7 @@ public class AddCriteriaFeatureRelationThreshold extends AddCriteriaPair {
 	public boolean includeMarks(
 		PxlMarkMemo mark1,
 		PxlMarkMemo mark2,
-		ImageDim dim,
+		ImageDimensions dim,
 		Optional<FeatureCalculatorMulti<FeatureInputPairMemo>> session,
 		boolean do3D
 	) throws IncludeMarksFailureException {

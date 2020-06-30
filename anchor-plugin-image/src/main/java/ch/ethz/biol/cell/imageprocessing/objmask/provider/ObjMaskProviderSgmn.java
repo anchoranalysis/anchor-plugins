@@ -38,12 +38,12 @@ import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.bean.nonbean.error.SgmnFailedException;
 import org.anchoranalysis.image.bean.provider.BinaryChnlProvider;
 import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
-import org.anchoranalysis.image.bean.sgmn.objmask.ObjMaskSgmn;
+import org.anchoranalysis.image.bean.segmentation.object.ObjectSegmentation;
 import org.anchoranalysis.image.channel.Channel;
-import org.anchoranalysis.image.extent.ImageDim;
-import org.anchoranalysis.image.objectmask.ObjectMask;
-import org.anchoranalysis.image.objectmask.ObjectCollection;
-import org.anchoranalysis.image.objectmask.factory.CreateFromEntireChnlFactory;
+import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.image.object.ObjectCollection;
+import org.anchoranalysis.image.object.ObjectMask;
+import org.anchoranalysis.image.object.factory.CreateFromEntireChnlFactory;
 import org.anchoranalysis.image.seed.SeedCollection;
 
 public class ObjMaskProviderSgmn extends ObjMaskProviderChnlSource {
@@ -53,7 +53,7 @@ public class ObjMaskProviderSgmn extends ObjMaskProviderChnlSource {
 	private BinaryChnlProvider mask;
 	
 	@BeanField
-	private ObjMaskSgmn sgmn;
+	private ObjectSegmentation sgmn;
 	
 	@BeanField @OptionalBean
 	private ObjMaskProvider objsSeeds;
@@ -81,7 +81,7 @@ public class ObjMaskProviderSgmn extends ObjMaskProviderChnlSource {
 		);
 	}
 	
-	private Optional<SeedCollection> createSeeds(ImageDim dim, Optional<ObjectMask> maskAsObj) throws CreateException {
+	private Optional<SeedCollection> createSeeds(ImageDimensions dim, Optional<ObjectMask> maskAsObj) throws CreateException {
 		return OptionalUtilities.map(
 			OptionalFactory.create(objsSeeds),
 			objs-> createSeeds(
@@ -92,7 +92,7 @@ public class ObjMaskProviderSgmn extends ObjMaskProviderChnlSource {
 		);
 	}
 	
-	private static SeedCollection createSeeds(ObjectCollection seeds, Optional<ObjectMask> maskAsObj, ImageDim dim) throws CreateException {
+	private static SeedCollection createSeeds(ObjectCollection seeds, Optional<ObjectMask> maskAsObj, ImageDimensions dim) throws CreateException {
 		return OptionalUtilities.map(
 			maskAsObj,
 			m -> SeedsFactory.createSeedsWithMask(
@@ -106,11 +106,11 @@ public class ObjMaskProviderSgmn extends ObjMaskProviderChnlSource {
 		);
 	}
 
-	public ObjMaskSgmn getSgmn() {
+	public ObjectSegmentation getSgmn() {
 		return sgmn;
 	}
 
-	public void setSgmn(ObjMaskSgmn sgmn) {
+	public void setSgmn(ObjectSegmentation sgmn) {
 		this.sgmn = sgmn;
 	}
 

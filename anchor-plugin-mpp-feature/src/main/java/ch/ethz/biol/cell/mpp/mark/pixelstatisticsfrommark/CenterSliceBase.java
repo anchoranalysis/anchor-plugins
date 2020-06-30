@@ -31,13 +31,13 @@ import org.anchoranalysis.anchor.mpp.mark.MarkAbstractPosition;
 import org.anchoranalysis.anchor.mpp.pxlmark.PxlMark;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.extent.BoundingBox;
-import org.anchoranalysis.image.extent.ImageDim;
+import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.voxel.statistics.VoxelStatistics;
 
 public abstract class CenterSliceBase extends IndexedRegionBase {
 
 	@Override
-	protected VoxelStatistics createStatisticsFor(PxlMark pm, Mark mark, ImageDim dim) throws CreateException {
+	protected VoxelStatistics createStatisticsFor(PxlMark pm, Mark mark, ImageDimensions dim) throws CreateException {
 		
 		BoundingBox bbox = boundingBoxForRegion(pm);
 		
@@ -58,8 +58,8 @@ public abstract class CenterSliceBase extends IndexedRegionBase {
 		
 		MarkAbstractPosition mark = (MarkAbstractPosition) markUncasted;
 		
-		return (int) Math.round(mark.getPos().getZ()) - bbox.getCrnrMin().getZ();
+		return (int) Math.round(mark.getPos().getZ()) - bbox.getCornerMin().getZ();
 	}
 	
-	protected abstract VoxelStatistics createStatisticsForBBox(PxlMark pm, ImageDim dim, BoundingBox bbox, int zCenter);
+	protected abstract VoxelStatistics createStatisticsForBBox(PxlMark pm, ImageDimensions dim, BoundingBox bbox, int zCenter);
 }

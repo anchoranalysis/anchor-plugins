@@ -33,10 +33,10 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
-import org.anchoranalysis.image.extent.ImageDim;
-import org.anchoranalysis.image.objectmask.ObjectMask;
+import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.image.object.ObjectCollection;
+import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.plugin.image.bean.obj.filter.ObjectFilterPredicate;
-import org.anchoranalysis.image.objectmask.ObjectCollection;
 
 /**
  * Only accepts an object if it has greater (or EQUAL) intersection with objMaskProviderGreater than objMaskProviderLesser
@@ -60,7 +60,7 @@ public class GreaterIntersectionWith extends ObjectFilterPredicate {
 	private ObjectCollection intersectionLesser;
 
 	@Override
-	protected void start(Optional<ImageDim> dim, ObjectCollection objsToFilter) throws OperationFailedException {
+	protected void start(Optional<ImageDimensions> dim, ObjectCollection objsToFilter) throws OperationFailedException {
 		super.start(dim, objsToFilter);
 		try {
 			intersectionGreater = objsGreater.create();
@@ -72,7 +72,7 @@ public class GreaterIntersectionWith extends ObjectFilterPredicate {
 	}
 	
 	@Override
-	protected boolean match(ObjectMask om, Optional<ImageDim> dim)
+	protected boolean match(ObjectMask om, Optional<ImageDimensions> dim)
 			throws OperationFailedException {
 
 		int cntGreater =  intersectionGreater.countIntersectingPixels(om);

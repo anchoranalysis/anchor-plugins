@@ -43,7 +43,7 @@ import org.anchoranalysis.image.bean.provider.ChnlProviderOne;
 import org.anchoranalysis.image.bean.provider.HistogramProvider;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.extent.Extent;
-import org.anchoranalysis.image.extent.ImageDim;
+import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.feature.bean.pixelwise.PixelScore;
 import org.anchoranalysis.image.histogram.Histogram;
 import org.anchoranalysis.image.voxel.box.VoxelBoxWrapper;
@@ -142,7 +142,7 @@ public class ChnlProviderPixelScoreFeature extends ChnlProviderOne {
 		return out;
 	}
 
-	private List<Channel> additionalChnls( ImageDim dim ) throws CreateException {
+	private List<Channel> additionalChnls( ImageDimensions dim ) throws CreateException {
 		List<Channel> listAdditional = new ArrayList<>();
 		for( ChnlProvider cp : listAdditionalChnlProviders ) {
 			Channel chnlAdditional = cp.create();

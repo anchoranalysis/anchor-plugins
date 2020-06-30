@@ -41,7 +41,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.geometry.Point2d;
 import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.core.random.RandomNumberGenerator;
-import org.anchoranalysis.image.extent.ImageDim;
+import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.orientation.Orientation2D;
 import org.anchoranalysis.math.rotation.RotationMatrix;
 
@@ -152,7 +152,7 @@ public class MarkEllipseSimple extends MarkSplitProposer {
 	}
 	
 	
-	public static Point3d[] createNewMarkPos( Orientation2D orientation, MarkEllipse markExst, RandomNumberGenerator re, ImageDim sd, double minRadScaleStart, double minRadScaleEnd, boolean wigglePos ) {
+	public static Point3d[] createNewMarkPos( Orientation2D orientation, MarkEllipse markExst, RandomNumberGenerator re, ImageDimensions sd, double minRadScaleStart, double minRadScaleEnd, boolean wigglePos ) {
 		
 		double interval = minRadScaleEnd-minRadScaleStart;
 		

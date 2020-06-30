@@ -34,7 +34,7 @@ import org.anchoranalysis.anchor.mpp.proposer.ProposerContext;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.geometry.Point3d;
-import org.anchoranalysis.image.extent.ImageDim;
+import org.anchoranalysis.image.extent.ImageDimensions;
 
 public class PositionProposerUniformRandom extends PositionProposerBean {
 
@@ -45,7 +45,7 @@ public class PositionProposerUniformRandom extends PositionProposerBean {
 	
 	@Override
 	public Optional<Point3d> propose(ProposerContext context) {
-		ImageDim bndScene = context.getDimensions();
+		ImageDimensions bndScene = context.getDimensions();
 		double x = context.getRandomNumberGenerator().nextDouble() * bndScene.getX();
 		double y = context.getRandomNumberGenerator().nextDouble() * bndScene.getY();
 		double z = suppressZ ? 0 : context.getRandomNumberGenerator().nextDouble() * bndScene.getZ();

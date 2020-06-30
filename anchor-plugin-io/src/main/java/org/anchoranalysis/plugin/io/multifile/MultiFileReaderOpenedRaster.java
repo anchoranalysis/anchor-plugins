@@ -32,7 +32,7 @@ import java.util.Optional;
 
 import org.anchoranalysis.core.progress.ProgressReporter;
 import org.anchoranalysis.core.progress.ProgressReporterNull;
-import org.anchoranalysis.image.extent.ImageDim;
+import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.io.RasterIOException;
 import org.anchoranalysis.image.io.bean.rasterreader.RasterReader;
 import org.anchoranalysis.image.io.rasterreader.OpenedRaster;
@@ -134,7 +134,7 @@ public class MultiFileReaderOpenedRaster extends OpenedRaster {
 
 
 	@Override
-	public ImageDim dim(int seriesIndex) throws RasterIOException {
+	public ImageDimensions dim(int seriesIndex) throws RasterIOException {
 		throw new RasterIOException("MultiFileReader doesn't support this operation");
 	}
 

@@ -37,7 +37,7 @@ import org.anchoranalysis.image.bean.provider.ChnlProvider;
 import org.anchoranalysis.image.bean.provider.stack.StackProvider;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.channel.factory.ChannelFactory;
-import org.anchoranalysis.image.extent.ImageDim;
+import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.extent.IncorrectImageSizeException;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
@@ -65,7 +65,7 @@ public class StackProviderRGBChnlProvider extends StackProvider {
 		}
 	}	
 
-	private static ImageDim combineWithExisting( ImageDim existing, Channel toCombine ) throws IncorrectImageSizeException {
+	private static ImageDimensions combineWithExisting( ImageDimensions existing, Channel toCombine ) throws IncorrectImageSizeException {
 		
 		if (toCombine==null) {
 			return existing;
@@ -82,20 +82,20 @@ public class StackProviderRGBChnlProvider extends StackProvider {
 		return existing;
 	}
 	
-	private static ImageDim createDimensions( Channel chnlRed, Channel chnlGreen, Channel chnlBlue) throws IncorrectImageSizeException {
+	private static ImageDimensions createDimensions( Channel chnlRed, Channel chnlGreen, Channel chnlBlue) throws IncorrectImageSizeException {
 		
 		if (chnlRed==null && chnlGreen==null && chnlBlue==null) {
 			throw new IllegalArgumentException("All chnls are null");
 		}
 		
-		ImageDim sd = null;
+		ImageDimensions sd = null;
 		sd = combineWithExisting( sd, chnlRed );
 		sd = combineWithExisting( sd, chnlGreen );
 		sd = combineWithExisting( sd, chnlBlue );
 		return sd;
 	}
 	
-	private static void addToStack( Stack stack, Channel chnl, ImageDim dim, VoxelDataType outputChnlType ) throws IncorrectImageSizeException, CreateException {
+	private static void addToStack( Stack stack, Channel chnl, ImageDimensions dim, VoxelDataType outputChnlType ) throws IncorrectImageSizeException, CreateException {
 		
 		if (chnl==null) {
 			chnl = ChannelFactory.instance().createEmptyInitialised(dim, outputChnlType);
@@ -168,7 +168,7 @@ public class StackProviderRGBChnlProvider extends StackProvider {
 	
 	public static Stack createRGBStack( Channel chnlRed, Channel chnlGreen, Channel chnlBlue, VoxelDataType outputType ) throws CreateException  {
 		try {
-			ImageDim sd = createDimensions(chnlRed, chnlGreen, chnlBlue);
+			ImageDimensions sd = createDimensions(chnlRed, chnlGreen, chnlBlue);
 			
 			Stack out = new Stack();
 			addToStack( out, chnlRed, sd, outputType );

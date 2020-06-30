@@ -38,8 +38,8 @@ import org.anchoranalysis.core.axis.AxisTypeConverter;
 import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.extent.BoundingBox;
-import org.anchoranalysis.image.extent.ImageDim;
-import org.anchoranalysis.image.extent.ImageRes;
+import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.image.extent.ImageResolution;
 import org.anchoranalysis.image.orientation.DirectionVector;
 import org.anchoranalysis.plugin.mpp.feature.bean.unit.UnitConverter;
 
@@ -56,7 +56,7 @@ public class BoundingBoxExtent extends FeatureMarkRegion {
 	@Override
 	public double calc(SessionInput<FeatureInputMark> input) throws FeatureCalcException {
 		
-		ImageDim dim = input.get().getDimensionsRequired();
+		ImageDimensions dim = input.get().getDimensionsRequired();
 		
 		BoundingBox bbox = input.get().getMark().bbox(
 			dim,
@@ -70,7 +70,7 @@ public class BoundingBoxExtent extends FeatureMarkRegion {
 		);
 	}
 	
-	private double rslvDistance(BoundingBox bbox, Optional<ImageRes> res, AxisType axisType) throws FeatureCalcException {
+	private double rslvDistance(BoundingBox bbox, Optional<ImageResolution> res, AxisType axisType) throws FeatureCalcException {
 		return unit.rslvDistance(
 			bbox.extent().getValueByDimension(axisType),
 			res,

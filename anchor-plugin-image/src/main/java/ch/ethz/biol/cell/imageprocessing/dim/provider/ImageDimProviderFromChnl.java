@@ -38,7 +38,7 @@ import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
 import org.anchoranalysis.image.bean.provider.ChnlProvider;
 import org.anchoranalysis.image.bean.provider.ImageDimProvider;
 import org.anchoranalysis.image.channel.Channel;
-import org.anchoranalysis.image.extent.ImageDim;
+import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.stack.Stack;
 
 
@@ -70,7 +70,7 @@ public class ImageDimProviderFromChnl extends ImageDimProvider {
 	}
 	
 	@Override
-	public ImageDim create() throws CreateException {
+	public ImageDimensions create() throws CreateException {
 		return selectChnl().getDimensions();
 	}
 	

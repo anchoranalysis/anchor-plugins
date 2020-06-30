@@ -33,7 +33,7 @@ import java.util.Optional;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
 import org.anchoranalysis.core.progress.ProgressReporter;
-import org.anchoranalysis.image.extent.ImageDim;
+import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.io.RasterIOException;
 import org.anchoranalysis.image.io.bean.chnl.map.ImgChnlMapCreator;
 import org.anchoranalysis.image.io.chnl.map.ImgChnlMap;
@@ -74,7 +74,7 @@ class GroupingInput extends NamedChnlsInput {
 	}
 
 	@Override
-	public ImageDim dim(int seriesIndex) throws RasterIOException {
+	public ImageDimensions dim(int seriesIndex) throws RasterIOException {
 		return openedRaster.dim(seriesIndex);
 	}
 	

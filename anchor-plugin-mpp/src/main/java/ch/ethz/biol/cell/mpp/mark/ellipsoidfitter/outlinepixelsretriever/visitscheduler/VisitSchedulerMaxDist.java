@@ -32,8 +32,8 @@ import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.core.geometry.Tuple3i;
 import org.anchoranalysis.core.random.RandomNumberGenerator;
 import org.anchoranalysis.image.extent.BoundingBox;
-import org.anchoranalysis.image.extent.ImageRes;
-import org.anchoranalysis.image.objectmask.ObjectMask;
+import org.anchoranalysis.image.extent.ImageResolution;
+import org.anchoranalysis.image.object.ObjectMask;
 
 // Breadth-first iteration of pixels
 public class VisitSchedulerMaxDist extends VisitScheduler {
@@ -45,7 +45,7 @@ public class VisitSchedulerMaxDist extends VisitScheduler {
 	
 	private Point3i root;
 	
-	private ImageRes res;
+	private ImageResolution res;
 	
 	private double maxDistSq;
 	
@@ -55,19 +55,19 @@ public class VisitSchedulerMaxDist extends VisitScheduler {
 	
 
 	@Override
-	public void beforeCreateObjMask(RandomNumberGenerator re, ImageRes res)
+	public void beforeCreateObjMask(RandomNumberGenerator re, ImageResolution res)
 			throws InitException {
 				
 	}
 	
 	@Override
-	public Tuple3i maxDistFromRootPoint(ImageRes res) {
+	public Tuple3i maxDistFromRootPoint(ImageResolution res) {
 		int maxDist = (int) Math.ceil(this.maxDist);
 		return new Point3i(maxDist,maxDist,maxDist);
 	}
 	
 	@Override
-	public void afterCreateObjMask(Point3i root, ImageRes res, RandomNumberGenerator re) {
+	public void afterCreateObjMask(Point3i root, ImageResolution res, RandomNumberGenerator re) {
 		this.root = root;
 		this.res = res;
 		this.maxDistSq = Math.pow(maxDist,2);

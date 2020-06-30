@@ -30,7 +30,7 @@ package ch.ethz.biol.cell.mpp.nrg.feature.objmask;
 import org.anchoranalysis.feature.cache.calculation.FeatureCalculation;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 import org.anchoranalysis.math.moment.MomentsFromPointsCalculator;
-import org.anchoranalysis.points.moment.CalculateObjMaskPointsSecondMomentMatrix;
+import org.anchoranalysis.plugin.image.feature.object.calculation.single.moment.CalculateObjMaskPointsSecondMomentMatrix;
 
 /**
  * Width of an axis

@@ -37,7 +37,7 @@ import org.anchoranalysis.core.error.reporter.ErrorReporter;
 import org.anchoranalysis.core.functional.Operation;
 import org.anchoranalysis.core.index.GetOperationFailedException;
 import org.anchoranalysis.core.progress.ProgressReporter;
-import org.anchoranalysis.image.extent.ImageDim;
+import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.io.RasterIOException;
 import org.anchoranalysis.image.io.bean.rasterreader.RasterReader;
 import org.anchoranalysis.image.io.input.NamedChnlsInputPart;
@@ -78,7 +78,7 @@ class AppendPart<T extends Buffer> extends NamedChnlsInputPart {
 	
 
 	@Override
-	public ImageDim dim(int seriesIndex) throws RasterIOException {
+	public ImageDimensions dim(int seriesIndex) throws RasterIOException {
 		return delegate.dim(seriesIndex);
 	}
 

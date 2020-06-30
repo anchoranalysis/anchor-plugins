@@ -33,8 +33,8 @@ import org.anchoranalysis.feature.cache.calculation.CalculationResolver;
 import org.anchoranalysis.feature.cache.calculation.FeatureCalculation;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
-import org.anchoranalysis.image.objectmask.ObjectMask;
-import org.anchoranalysis.plugin.image.feature.object.calculation.single.CalculateShellObjMask;
+import org.anchoranalysis.image.object.ObjectMask;
+import org.anchoranalysis.plugin.image.feature.object.calculation.single.CalculateShellObjectMask;
 
 public class Shell extends DerivedObjMask {
 
@@ -51,7 +51,7 @@ public class Shell extends DerivedObjMask {
 	
 	@Override
 	protected FeatureCalculation<ObjectMask,FeatureInputSingleObject> createCachedCalculationForDerived( CalculationResolver<FeatureInputSingleObject> session) throws FeatureCalcException {
-		return CalculateShellObjMask.createFromCache(
+		return CalculateShellObjectMask.createFromCache(
 			session,
 			iterationsDilation,
 			iterationsErosion,

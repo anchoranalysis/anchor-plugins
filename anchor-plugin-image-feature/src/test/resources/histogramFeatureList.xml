@@ -2,32 +2,32 @@
 <bean config-class="org.anchoranalysis.feature.bean.list.FeatureListProviderDefine">
 	<list config-class="java.util.List" config-factory="list">
 	
-		<item config-class="ch.ethz.biol.cell.mpp.nrg.feature.histogram.Count">
+		<item config-class="org.anchoranalysis.plugin.image.feature.bean.histogram.statistic.Count">
 			<threshold config-class="org.anchoranalysis.bean.shared.relation.threshold.RelationToConstant" threshold="20">
 				<relation config-class="org.anchoranalysis.bean.shared.relation.GreaterThanEqualToBean"/>
 			</threshold>
 		</item>
 		
-		<item config-class="ch.ethz.biol.cell.mpp.nrg.feature.histogram.Count">
+		<item config-class="org.anchoranalysis.plugin.image.feature.bean.histogram.statistic.Count">
 			<threshold config-class="org.anchoranalysis.bean.shared.relation.threshold.RelationToConstant" threshold="60">
 				<relation config-class="org.anchoranalysis.bean.shared.relation.GreaterThanEqualToBean"/>
 			</threshold>
 		</item>
 		
-		<item config-class="ch.ethz.biol.cell.mpp.nrg.feature.histogram.Count">
+		<item config-class="org.anchoranalysis.plugin.image.feature.bean.histogram.statistic.Count">
 			<threshold config-class="org.anchoranalysis.bean.shared.relation.threshold.RelationToConstant" threshold="190">
 				<relation config-class="org.anchoranalysis.bean.shared.relation.GreaterThanEqualToBean"/>
 			</threshold>
 		</item>
 		
-		<item config-class="ch.ethz.biol.cell.mpp.nrg.feature.histogram.Quantile" quantile="0.3"/>
+		<item config-class="org.anchoranalysis.plugin.image.feature.bean.histogram.statistic.Quantile" quantile="0.3"/>
 		
-		<item config-class="ch.ethz.biol.cell.mpp.nrg.feature.histogram.Quantile" quantile="0.7"/>
+		<item config-class="org.anchoranalysis.plugin.image.feature.bean.histogram.statistic.Quantile" quantile="0.7"/>
 		
 		<item config-class="org.anchoranalysis.plugin.operator.feature.bean.arithmetic.Divide">
 			<list config-class="java.util.List" config-factory="list">
-				<item config-class="ch.ethz.biol.cell.mpp.nrg.feature.histogram.Quantile" quantile="0.5"/>
-				<item config-class="ch.ethz.biol.cell.mpp.nrg.feature.histogram.Count"/>
+				<item config-class="org.anchoranalysis.plugin.image.feature.bean.histogram.statistic.Quantile" quantile="0.5"/>
+				<item config-class="org.anchoranalysis.plugin.image.feature.bean.histogram.statistic.Count"/>
 			</list>
 		</item>
 	</list>

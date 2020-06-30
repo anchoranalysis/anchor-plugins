@@ -37,8 +37,8 @@ import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.bean.provider.ObjMaskProviderOne;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.Extent;
-import org.anchoranalysis.image.objectmask.ObjectMask;
-import org.anchoranalysis.image.objectmask.ObjectCollection;
+import org.anchoranalysis.image.object.ObjectCollection;
+import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.anchoranalysis.image.voxel.box.factory.VoxelBoxFactory;
 
@@ -130,7 +130,7 @@ public class ObjMaskProviderSplitIntoSquares extends ObjMaskProviderOne {
 		return Optional.of(
 			new ObjectMask(
 					srcBox.shiftBy(
-					objToSplit.getBoundingBox().getCrnrMin()
+					objToSplit.getBoundingBox().getCornerMin()
 				),
 				vbNew,
 				objToSplit.getBinaryValuesByte()

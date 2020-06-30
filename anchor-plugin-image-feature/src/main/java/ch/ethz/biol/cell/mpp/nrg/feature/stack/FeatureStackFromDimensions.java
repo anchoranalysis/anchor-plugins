@@ -28,7 +28,7 @@ package ch.ethz.biol.cell.mpp.nrg.feature.stack;
 
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.input.FeatureInputNRGStack;
-import org.anchoranalysis.image.extent.ImageDim;
+import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.feature.bean.FeatureNRGStack;
 
 public abstract class FeatureStackFromDimensions extends FeatureNRGStack {
@@ -41,5 +41,5 @@ public abstract class FeatureStackFromDimensions extends FeatureNRGStack {
 		);
 	}
 	
-	protected abstract double calcFromDims( ImageDim dim );
+	protected abstract double calcFromDims( ImageDimensions dim );
 }

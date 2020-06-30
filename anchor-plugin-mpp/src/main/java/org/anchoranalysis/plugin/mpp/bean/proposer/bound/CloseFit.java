@@ -40,8 +40,8 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.image.bean.unitvalue.distance.UnitValueDistance;
 import org.anchoranalysis.image.bean.unitvalue.distance.UnitValueDistanceVoxels;
-import org.anchoranalysis.image.extent.ImageDim;
-import org.anchoranalysis.image.extent.ImageRes;
+import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.image.extent.ImageResolution;
 import org.anchoranalysis.math.rotation.RotationMatrix;
 
 public class CloseFit extends BoundProposer {
@@ -64,7 +64,7 @@ public class CloseFit extends BoundProposer {
 
 	@Override
 	public Optional<BidirectionalBound> propose(Point3d pos, RotationMatrix orientation,
-			ImageDim bndScene, RslvdBound minMaxBound) throws ProposalAbnormalFailureException {
+			ImageDimensions bndScene, RslvdBound minMaxBound) throws ProposalAbnormalFailureException {
 		
 		// Our delegate bound is what is our normal best guess on the bounds
 		Optional<BidirectionalBound> delegateBound = calcDelegate(pos, orientation, bndScene, minMaxBound);
@@ -95,7 +95,7 @@ public class CloseFit extends BoundProposer {
 	//   but only if the existing bounds aren't at the max
 	//
 	// We effectively assume with symmetrical bounds around
-	private BidirectionalBound proposeBoundCloseFit(Point3d pos, ImageDim bndScene, RslvdBound minMaxBound, BidirectionalBound boundAxis) {
+	private BidirectionalBound proposeBoundCloseFit(Point3d pos, ImageDimensions bndScene, RslvdBound minMaxBound, BidirectionalBound boundAxis) {
 		
 		BidirectionalBound bothNew = new BidirectionalBound();
 		
@@ -105,7 +105,7 @@ public class CloseFit extends BoundProposer {
 	}
 	
 	// We create the closefit, preserving null if we have no idea where the bound lies
-	private RslvdBound createCloseFitBound( RslvdBound exst, RslvdBound minMaxBound, ImageRes res ) {
+	private RslvdBound createCloseFitBound( RslvdBound exst, RslvdBound minMaxBound, ImageResolution res ) {
 
 		double edgeDevInsideRslv = 1;
 		double edgeDevOutsideRslv = 1;
@@ -118,7 +118,7 @@ public class CloseFit extends BoundProposer {
 		}
 	}
 
-	private Optional<BidirectionalBound> calcDelegate( Point3d pos, RotationMatrix orientation, ImageDim bndScene, RslvdBound minMaxBound) throws ProposalAbnormalFailureException {
+	private Optional<BidirectionalBound> calcDelegate( Point3d pos, RotationMatrix orientation, ImageDimensions bndScene, RslvdBound minMaxBound) throws ProposalAbnormalFailureException {
 		return getBoundProposer().propose(pos, orientation, bndScene, minMaxBound);
 	}
 

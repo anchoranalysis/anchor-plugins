@@ -32,9 +32,9 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.bean.provider.ObjMaskProviderOne;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
-import org.anchoranalysis.image.objectmask.ObjectMask;
-import org.anchoranalysis.image.objectmask.ObjectCollection;
-import org.anchoranalysis.image.objectmask.factory.CreateFromConnectedComponentsFactory;
+import org.anchoranalysis.image.object.ObjectCollection;
+import org.anchoranalysis.image.object.ObjectMask;
+import org.anchoranalysis.image.object.factory.CreateFromConnectedComponentsFactory;
 
 /**
  * Ensures each obj in a collection is a connected-component, decomposing it if necessary
@@ -71,7 +71,7 @@ public class ObjMaskProviderConnectedComponentsObjs extends ObjMaskProviderOne {
 		
 		// Adjust the crnr of each object, by adding on the original starting point of our object-mask
 		return objs.shiftBy(
-			omUnconnected.getBoundingBox().getCrnrMin()
+			omUnconnected.getBoundingBox().getCornerMin()
 		);
 	}
 	

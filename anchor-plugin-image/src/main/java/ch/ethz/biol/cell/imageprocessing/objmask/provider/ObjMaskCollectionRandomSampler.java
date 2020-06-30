@@ -40,8 +40,8 @@ import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.histogram.Histogram;
 import org.anchoranalysis.image.histogram.HistogramArray;
-import org.anchoranalysis.image.objectmask.ObjectMask;
-import org.anchoranalysis.image.objectmask.ObjectCollection;
+import org.anchoranalysis.image.object.ObjectCollection;
+import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 
 
@@ -107,8 +107,8 @@ public class ObjMaskCollectionRandomSampler {
 					//System.out.println("accepted");
 					
 					
-					int indexXYGlob = eGlob.offset(bbox.getCrnrMin().getX()+xIndex, bbox.getCrnrMin().getY()+yIndex);
-					int indexZGlob = zIndex+bbox.getCrnrMin().getZ();	
+					int indexXYGlob = eGlob.offset(bbox.getCornerMin().getX()+xIndex, bbox.getCornerMin().getY()+yIndex);
+					int indexZGlob = zIndex+bbox.getCornerMin().getZ();	
 					
 					
 					return ByteConverter.unsignedByteToInt(

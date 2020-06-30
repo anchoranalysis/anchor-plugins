@@ -43,7 +43,7 @@ import org.anchoranalysis.feature.session.calculator.FeatureCalculatorMulti;
 import org.anchoranalysis.image.feature.histogram.FeatureInputHistogram;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.histogram.Histogram;
-import org.anchoranalysis.image.objectmask.ObjectMask;
+import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.test.LoggingFixture;
 import org.anchoranalysis.test.TestLoader;
 import org.anchoranalysis.test.feature.ConstantsInListFixture;

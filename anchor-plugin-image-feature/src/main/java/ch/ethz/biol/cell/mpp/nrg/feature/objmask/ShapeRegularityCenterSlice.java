@@ -32,7 +32,7 @@ import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.feature.bean.object.single.FeatureSingleObject;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
-import org.anchoranalysis.image.objectmask.ObjectMask;
+import org.anchoranalysis.image.object.ObjectMask;
 
 public class ShapeRegularityCenterSlice extends FeatureSingleObject {
 
@@ -54,7 +54,7 @@ public class ShapeRegularityCenterSlice extends FeatureSingleObject {
 	private ObjectMask centerSlice( ObjectMask om ) throws OperationFailedException {
 		int zSliceCenter = (int) om.centerOfGravity().getZ();
 		return  om.extractSlice(
-			zSliceCenter - om.getBoundingBox().getCrnrMin().getZ(),
+			zSliceCenter - om.getBoundingBox().getCornerMin().getZ(),
 			false
 		);
 	}

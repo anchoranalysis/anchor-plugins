@@ -39,8 +39,8 @@ import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.geometry.Point3f;
 import org.anchoranalysis.image.bean.provider.ImageDimProvider;
 import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
-import org.anchoranalysis.image.extent.ImageDim;
-import org.anchoranalysis.image.objectmask.ObjectCollection;
+import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.image.object.ObjectCollection;
 
 public class PointsFitterToMark extends PointsBean<PointsFitterToMark> {
 
@@ -59,7 +59,7 @@ public class PointsFitterToMark extends PointsBean<PointsFitterToMark> {
 	private ObjMaskProvider objs;
 	// END BEAN PROPERTIES
 	
-	public void fitPointsToMark( List<Point3f> pntsForFitter, Mark mark, ImageDim dim) throws OperationFailedException {
+	public void fitPointsToMark( List<Point3f> pntsForFitter, Mark mark, ImageDimensions dim) throws OperationFailedException {
 		try {
 			pointsFitter.fit( pntsForFitter, mark, dim );
 		} catch (PointsFitterException | InsufficientPointsException e) {
@@ -71,7 +71,7 @@ public class PointsFitterToMark extends PointsBean<PointsFitterToMark> {
 		return objs.create();
 	}
 	
-	public ImageDim createDim() throws CreateException {
+	public ImageDimensions createDim() throws CreateException {
 		return dim.create();
 	}
 		

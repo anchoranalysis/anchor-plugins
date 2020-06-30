@@ -32,7 +32,7 @@ import org.anchoranalysis.anchor.mpp.mark.Mark;
  */
 
 import org.anchoranalysis.anchor.mpp.proposer.ProposerContext;
-import org.anchoranalysis.image.extent.ImageDim;
+import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.mpp.sgmn.bean.kernel.KernelPosNeg;
 import org.anchoranalysis.mpp.sgmn.kernel.KernelCalcContext;
 import org.anchoranalysis.mpp.sgmn.kernel.KernelCalcNRGException;
@@ -65,7 +65,7 @@ public abstract class KernelDeath<T> extends KernelPosNeg<T> {
 	
 	@Override
 	public double calcAccptProb(int exstSize, int propSize,
-			double poissonIntens, ImageDim sceneSize, double densityRatio) {
+			double poissonIntens, ImageDimensions sceneSize, double densityRatio) {
 
 		if (exstSize<=1) {
 			return Math.min(1.0, densityRatio);

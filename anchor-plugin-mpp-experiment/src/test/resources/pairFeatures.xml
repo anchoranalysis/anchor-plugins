@@ -31,10 +31,10 @@
 					<item config-class="org.anchoranalysis.plugin.operator.feature.bean.list.Mean">
 						<list config-class="java.util.List" config-factory="list">
 							<item config-class="org.anchoranalysis.image.feature.objmask.pair.impl.First">
-								<item config-class="ch.ethz.biol.cell.mpp.nrg.feature.objmask.SurfaceNumVoxelFaces"/>
+								<item config-class="org.anchoranalysis.plugin.image.feature.object.calculation.single.surface.SurfaceNumberVoxelFaces"/>
 							</item>
 							<item config-class="org.anchoranalysis.image.feature.objmask.pair.impl.Second">
-								<item config-class="ch.ethz.biol.cell.mpp.nrg.feature.objmask.SurfaceNumVoxelFaces"/>
+								<item config-class="org.anchoranalysis.plugin.image.feature.object.calculation.single.surface.SurfaceNumberVoxelFaces"/>
 							</item>
 						</list>
 					</item>
@@ -52,10 +52,10 @@
 					<item config-class="org.anchoranalysis.plugin.operator.feature.bean.list.Maximum">
 						<list config-class="java.util.List" config-factory="list">
 							<item config-class="org.anchoranalysis.image.feature.objmask.pair.impl.First">
-								<item config-class="ch.ethz.biol.cell.mpp.nrg.feature.objmask.SurfaceNumVoxelFaces"/>
+								<item config-class="org.anchoranalysis.plugin.image.feature.object.calculation.single.surface.SurfaceNumberVoxelFaces"/>
 							</item>
 							<item config-class="org.anchoranalysis.image.feature.objmask.pair.impl.Second">
-								<item config-class="ch.ethz.biol.cell.mpp.nrg.feature.objmask.SurfaceNumVoxelFaces"/>
+								<item config-class="org.anchoranalysis.plugin.image.feature.object.calculation.single.surface.SurfaceNumberVoxelFaces"/>
 							</item>
 						</list>
 					</item>
@@ -72,10 +72,10 @@
 					<item config-class="org.anchoranalysis.plugin.operator.feature.bean.list.Minimum">
 						<list config-class="java.util.List" config-factory="list">
 							<item config-class="org.anchoranalysis.image.feature.objmask.pair.impl.First">
-								<item config-class="ch.ethz.biol.cell.mpp.nrg.feature.objmask.SurfaceNumVoxelFaces"/>
+								<item config-class="org.anchoranalysis.plugin.image.feature.object.calculation.single.surface.SurfaceNumberVoxelFaces"/>
 							</item>
 							<item config-class="org.anchoranalysis.image.feature.objmask.pair.impl.Second">
-								<item config-class="ch.ethz.biol.cell.mpp.nrg.feature.objmask.SurfaceNumVoxelFaces"/>
+								<item config-class="org.anchoranalysis.plugin.image.feature.object.calculation.single.surface.SurfaceNumberVoxelFaces"/>
 							</item>
 						</list>
 					</item>
@@ -186,7 +186,7 @@
 		<item config-class="org.anchoranalysis.plugin.image.feature.bean.list.permute.PermuteFeature">
 			<feature customName="objectEdgeIntersectionIntensityMedian" config-class="org.anchoranalysis.plugin.image.feature.bean.object.pair.Intersection" iterationsDilation="2" iterationsErosion="2" emptyValue="5000" do3D="false">
 				<item config-class="org.anchoranalysis.plugin.image.feature.bean.object.single.intensity.Intensity" nrgIndex="0">
-					<item config-class="ch.ethz.biol.cell.mpp.nrg.feature.histogram.Median"/>
+					<item config-class="org.anchoranalysis.plugin.image.feature.bean.histogram.statistic.Median"/>
 				</item>
 			</feature>
 			<listPermuteProperty config-class="java.util.List" config-factory="list">

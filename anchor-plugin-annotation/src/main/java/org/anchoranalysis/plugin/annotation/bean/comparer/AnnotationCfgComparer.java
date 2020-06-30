@@ -39,9 +39,9 @@ import org.anchoranalysis.annotation.mark.MarkAnnotation;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
-import org.anchoranalysis.image.extent.ImageDim;
-import org.anchoranalysis.image.objectmask.ObjectCollection;
-import org.anchoranalysis.image.objectmask.properties.ObjectCollectionWithProperties;
+import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.image.object.ObjectCollection;
+import org.anchoranalysis.image.object.properties.ObjectCollectionWithProperties;
 import org.anchoranalysis.io.bean.filepath.generator.FilePathGenerator;
 import org.anchoranalysis.io.error.AnchorIOException;
 
@@ -57,7 +57,7 @@ public class AnnotationCfgComparer extends Comparer {
 	}
 	
 	@Override
-	public Findable<ObjectCollection> createObjs(Path filePathSource, ImageDim dim, boolean debugMode) throws CreateException {
+	public Findable<ObjectCollection> createObjs(Path filePathSource, ImageDimensions dim, boolean debugMode) throws CreateException {
 
 		Path filePath;
 		try {

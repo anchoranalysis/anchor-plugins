@@ -29,7 +29,7 @@ package org.anchoranalysis.plugin.image.feature.bean.object.collection.intersect
 import org.anchoranalysis.feature.cache.calculation.ResolvedCalculation;
 import org.anchoranalysis.image.feature.object.input.FeatureInputPairObjects;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
-import org.anchoranalysis.image.objectmask.ObjectCollection;
+import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.plugin.image.feature.object.calculation.delegate.CalculateInputFromDelegate;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;

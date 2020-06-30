@@ -26,14 +26,14 @@ package org.anchoranalysis.plugin.io.bean.summarizer.image;
  * #L%
  */
 
-import org.anchoranalysis.image.extent.ImageDim;
+import org.anchoranalysis.image.extent.ImageDimensions;
 
 // Wrap with a nicer toString() representation
 class WrappedImageDim implements Comparable<WrappedImageDim> {
 	
-	private ImageDim dim;
+	private ImageDimensions dim;
 	
-	public WrappedImageDim(ImageDim dim) {
+	public WrappedImageDim(ImageDimensions dim) {
 		super();
 		this.dim = dim;
 	}

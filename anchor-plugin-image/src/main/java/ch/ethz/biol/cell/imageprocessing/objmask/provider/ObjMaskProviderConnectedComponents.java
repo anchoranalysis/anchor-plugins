@@ -40,9 +40,9 @@ import org.anchoranalysis.image.bean.unitvalue.volume.UnitValueVolumeVoxels;
 import org.anchoranalysis.image.binary.BinaryChnl;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelBoxByte;
-import org.anchoranalysis.image.objectmask.ObjectCollection;
-import org.anchoranalysis.image.objectmask.ObjectCollectionFactory;
-import org.anchoranalysis.image.objectmask.factory.CreateFromConnectedComponentsFactory;
+import org.anchoranalysis.image.object.ObjectCollection;
+import org.anchoranalysis.image.object.ObjectCollectionFactory;
+import org.anchoranalysis.image.object.factory.CreateFromConnectedComponentsFactory;
 import org.apache.commons.lang.time.StopWatch;
 
 /**

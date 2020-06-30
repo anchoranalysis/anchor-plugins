@@ -32,13 +32,13 @@ import org.anchoranalysis.image.binary.BinaryChnl;
 import org.anchoranalysis.image.binary.values.BinaryValues;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.channel.factory.ChannelFactory;
-import org.anchoranalysis.image.extent.ImageDim;
+import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
 
 public class BinaryChnlProviderAll extends BinaryChnlProviderDimSource {
 
 	@Override
-	protected BinaryChnl createFromSource(ImageDim dimSource) throws CreateException {
+	protected BinaryChnl createFromSource(ImageDimensions dimSource) throws CreateException {
 				
 		Channel chnl = ChannelFactory.instance().createEmptyInitialised(
 			dimSource,

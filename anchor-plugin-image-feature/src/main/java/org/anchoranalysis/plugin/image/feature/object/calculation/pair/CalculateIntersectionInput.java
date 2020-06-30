@@ -31,7 +31,7 @@ import java.util.Optional;
 import org.anchoranalysis.feature.cache.calculation.ResolvedCalculation;
 import org.anchoranalysis.image.feature.object.input.FeatureInputPairObjects;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
-import org.anchoranalysis.image.objectmask.ObjectMask;
+import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.plugin.image.feature.object.calculation.delegate.CalculateInputFromDelegateOption;
 
 public class CalculateIntersectionInput extends CalculateInputFromDelegateOption<

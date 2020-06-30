@@ -33,8 +33,8 @@ import org.anchoranalysis.image.bean.provider.ChnlProvider;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.channel.factory.ChannelFactory;
 import org.anchoranalysis.image.extent.Extent;
-import org.anchoranalysis.image.extent.ImageDim;
-import org.anchoranalysis.image.extent.ImageRes;
+import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.image.extent.ImageResolution;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
 
 public class ChnlProviderEmpty extends ChnlProvider {
@@ -52,9 +52,9 @@ public class ChnlProviderEmpty extends ChnlProvider {
 
 	@Override
 	public Channel create() throws CreateException {
-		ImageDim dim = new ImageDim(
+		ImageDimensions dim = new ImageDimensions(
 			new Extent(sx,sy,sz),
-			new ImageRes()
+			new ImageResolution()
 		); 
 		return ChannelFactory.instance().createEmptyInitialised( dim, VoxelDataTypeUnsignedByte.instance );
 	}

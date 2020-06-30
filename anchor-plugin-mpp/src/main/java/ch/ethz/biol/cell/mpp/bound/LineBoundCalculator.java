@@ -40,7 +40,7 @@ import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 import org.anchoranalysis.image.bean.provider.BinaryChnlProvider;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.convert.ByteConverter;
-import org.anchoranalysis.image.extent.ImageDim;
+import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.anchoranalysis.math.rotation.RotationMatrix;
 
@@ -130,7 +130,7 @@ public class LineBoundCalculator extends BoundCalculator {
 			int yInt = (int)( point.getY() + y );
 			int zInt = (int)( point.getZ() + z );
 			
-			ImageDim sd = voxels.getDimensions();
+			ImageDimensions sd = voxels.getDimensions();
 			if (xInt >= sd.getX() || xInt < 0 ) {
 				return -1; //maxPossiblePoint;
 			}

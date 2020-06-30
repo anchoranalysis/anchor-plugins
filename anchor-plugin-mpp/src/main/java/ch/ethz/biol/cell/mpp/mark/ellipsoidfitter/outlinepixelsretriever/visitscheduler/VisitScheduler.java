@@ -32,16 +32,16 @@ import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.core.geometry.Tuple3i;
 import org.anchoranalysis.core.random.RandomNumberGenerator;
-import org.anchoranalysis.image.extent.ImageRes;
-import org.anchoranalysis.image.objectmask.ObjectMask;
+import org.anchoranalysis.image.extent.ImageResolution;
+import org.anchoranalysis.image.object.ObjectMask;
 
 public abstract class VisitScheduler extends NullParamsBean<VisitScheduler> {
 
-	public abstract Tuple3i maxDistFromRootPoint(ImageRes res) throws OperationFailedException;
+	public abstract Tuple3i maxDistFromRootPoint(ImageResolution res) throws OperationFailedException;
 	
-	public abstract void beforeCreateObjMask(RandomNumberGenerator re, ImageRes res) throws InitException;
+	public abstract void beforeCreateObjMask(RandomNumberGenerator re, ImageResolution res) throws InitException;
 	
-	public abstract void afterCreateObjMask(Point3i root, ImageRes res, RandomNumberGenerator re) throws InitException;
+	public abstract void afterCreateObjMask(Point3i root, ImageResolution res, RandomNumberGenerator re) throws InitException;
 	
 	public abstract boolean considerVisit( Point3i pnt, int distAlongContour, ObjectMask objMask );
 	

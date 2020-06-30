@@ -34,7 +34,7 @@ import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.feature.bean.object.pair.FeaturePairObjects;
 import org.anchoranalysis.image.feature.object.input.FeatureInputPairObjects;
-import org.anchoranalysis.image.objectmask.ObjectMask;
+import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.voxel.kernel.count.CountKernel;
 import org.anchoranalysis.image.voxel.kernel.count.CountKernelNghbMask;
 

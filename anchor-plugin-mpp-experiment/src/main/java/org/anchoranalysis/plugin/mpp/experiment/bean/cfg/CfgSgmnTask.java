@@ -49,7 +49,7 @@ import org.anchoranalysis.experiment.task.InputBound;
 import org.anchoranalysis.experiment.task.ParametersExperiment;
 import org.anchoranalysis.experiment.task.Task;
 import org.anchoranalysis.image.bean.nonbean.error.SgmnFailedException;
-import org.anchoranalysis.image.objectmask.ObjectCollection;
+import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.stack.DisplayStack;
 import org.anchoranalysis.image.stack.NamedImgStackCollection;
 import org.anchoranalysis.image.stack.wrap.WrapStackAsTimeSequenceStore;

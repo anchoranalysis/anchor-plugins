@@ -29,7 +29,7 @@ package ch.ethz.biol.cell.imageprocessing.objmask.provider.smoothspline;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.index.SetOperationFailedException;
-import org.anchoranalysis.image.objectmask.ObjectMask;
+import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.test.TestLoader;
 import org.anchoranalysis.test.image.io.TestLoaderImageIO;
 import org.anchoranalysis.test.mpp.LoadUtilities;

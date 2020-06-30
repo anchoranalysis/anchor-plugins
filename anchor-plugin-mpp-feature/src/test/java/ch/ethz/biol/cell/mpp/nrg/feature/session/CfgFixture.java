@@ -28,13 +28,13 @@ import org.anchoranalysis.anchor.mpp.cfg.Cfg;
  * #L%
  */
 
-import org.anchoranalysis.image.extent.ImageDim;
+import org.anchoranalysis.image.extent.ImageDimensions;
 
 public class CfgFixture {
 
 	private MarkFixture markFixture;
 	
-	public CfgFixture( ImageDim dim ) {
+	public CfgFixture( ImageDimensions dim ) {
 		this.markFixture = new MarkFixture(dim);
 	}
 	

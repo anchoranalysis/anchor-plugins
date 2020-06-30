@@ -26,12 +26,12 @@ package ch.ethz.biol.cell.mpp.nrg.feature.stack;
  * #L%
  */
 
-import org.anchoranalysis.image.extent.ImageDim;
+import org.anchoranalysis.image.extent.ImageDimensions;
 
 public class DimensionXYArea extends FeatureStackFromDimensions {
 
 	@Override
-	protected double calcFromDims(ImageDim dim) {
+	protected double calcFromDims(ImageDimensions dim) {
 		return dim.getVolumeXY();
 	}
 

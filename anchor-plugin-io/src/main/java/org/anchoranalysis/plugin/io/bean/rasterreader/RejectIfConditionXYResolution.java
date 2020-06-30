@@ -35,7 +35,7 @@ import org.anchoranalysis.bean.annotation.DefaultInstance;
 import org.anchoranalysis.bean.annotation.NonNegative;
 import org.anchoranalysis.bean.shared.relation.RelationBean;
 import org.anchoranalysis.core.relation.RelationToValue;
-import org.anchoranalysis.image.extent.ImageRes;
+import org.anchoranalysis.image.extent.ImageResolution;
 import org.anchoranalysis.image.io.RasterIOException;
 import org.anchoranalysis.image.io.bean.rasterreader.RasterReader;
 import org.anchoranalysis.image.io.rasterreader.OpenedRaster;
@@ -72,7 +72,7 @@ public class RejectIfConditionXYResolution extends RasterReader {
 		}
 
 		@Override
-		public Optional<ImageRes> maybeUpdatedResolution(ImageRes res) throws RasterIOException {
+		public Optional<ImageResolution> maybeUpdatedResolution(ImageResolution res) throws RasterIOException {
 			
 			if (res.getX()!=res.getY()) {
 				throw new RasterIOException("X and Y pixel-sizes are different. They must be equal");

@@ -40,8 +40,8 @@ import org.anchoranalysis.image.binary.values.BinaryValues;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
-import org.anchoranalysis.image.objectmask.ObjectMask;
-import org.anchoranalysis.plugin.image.feature.object.calculation.single.CalculateShellObjMask;
+import org.anchoranalysis.image.object.ObjectMask;
+import org.anchoranalysis.plugin.image.feature.object.calculation.single.CalculateShellObjectMask;
 
 /**
  * Constructs a shell around an object-mask using a standard dilation and erosion process
@@ -108,7 +108,7 @@ public abstract class IntensityMeanShellBase extends FeatureNrgChnl {
 	}
 	
 	private ObjectMask createShell( SessionInput<FeatureInputSingleObject> input ) throws FeatureCalcException {
-		FeatureCalculation<ObjectMask,FeatureInputSingleObject> ccShellObjMask = CalculateShellObjMask.createFromCache(
+		FeatureCalculation<ObjectMask,FeatureInputSingleObject> ccShellObjMask = CalculateShellObjectMask.createFromCache(
 			input.resolver(),
 			iterationsDilation,
 			getIterationsErosion(),

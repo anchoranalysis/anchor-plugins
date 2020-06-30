@@ -42,7 +42,7 @@ import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
-import org.anchoranalysis.image.objectmask.ObjectMask;
+import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 import org.apache.commons.lang.builder.EqualsBuilder;
@@ -96,7 +96,7 @@ public class CalculateGradientFromMultipleChnls extends FeatureCalculation<List<
 		
 		for( int z=0; z<eMask.getZ(); z++) {
 			
-			VoxelBuffer<?> bb = vb.getPixelsForPlane(z + bbox.getCrnrMin().getZ() );
+			VoxelBuffer<?> bb = vb.getPixelsForPlane(z + bbox.getCornerMin().getZ() );
 			VoxelBuffer<ByteBuffer> bbMask = bvb.getPixelsForPlane(z);
 			
 			for( int y=0; y<eMask.getY(); y++) {
@@ -106,7 +106,7 @@ public class CalculateGradientFromMultipleChnls extends FeatureCalculation<List<
 					
 					if (bbMask.buffer().get(offsetMask)==bvbMask.getOnByte()) {
 					
-						int offset = e.offset(x + bbox.getCrnrMin().getX(), y + bbox.getCrnrMin().getY());
+						int offset = e.offset(x + bbox.getCornerMin().getX(), y + bbox.getCornerMin().getY());
 						
 						int gradVal = bb.getInt(offset) - subtractConstant;
 						

@@ -33,7 +33,7 @@ import org.anchoranalysis.anchor.mpp.mark.set.UpdateMarkSetException;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.functional.OptionalUtilities;
-import org.anchoranalysis.image.extent.ImageDim;
+import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.mpp.sgmn.bean.kernel.Kernel;
 import org.anchoranalysis.mpp.sgmn.bean.kernel.KernelPosNeg;
 import org.anchoranalysis.mpp.sgmn.kernel.KernelCalcContext;
@@ -88,7 +88,7 @@ public abstract class KernelReplace<T> extends KernelPosNeg<T> {
 	}
 
 	@Override
-	public double calcAccptProb(int exstSize, int propSize, double poissonIntens, ImageDim sceneSize,
+	public double calcAccptProb(int exstSize, int propSize, double poissonIntens, ImageDimensions sceneSize,
 			double densityRatio) {
 		return Math.min( densityRatio, 1.0 );
 	}

@@ -30,7 +30,7 @@ import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
-import org.anchoranalysis.image.objectmask.ObjectMask;
+import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.plugin.image.feature.object.calculation.single.CalculateIncrementalOperationMap;
 import org.anchoranalysis.test.image.NRGStackFixture;
 import org.anchoranalysis.test.image.obj.ObjMaskFixture;

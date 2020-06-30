@@ -35,7 +35,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.shared.relation.threshold.RelationToThreshold;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.extent.BoundingBox;
-import org.anchoranalysis.image.extent.ImageDim;
+import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.voxel.statistics.VoxelStatistics;
 
 public class GreatestAreaSlice extends IndexedRegionBase {
@@ -46,7 +46,7 @@ public class GreatestAreaSlice extends IndexedRegionBase {
 	// END BEAN PROPERTIES
 
 	@Override
-	protected VoxelStatistics createStatisticsFor(PxlMark pm, Mark mark, ImageDim dim) throws CreateException {
+	protected VoxelStatistics createStatisticsFor(PxlMark pm, Mark mark, ImageDimensions dim) throws CreateException {
 
 		BoundingBox bbox = boundingBoxForRegion(pm);
 		

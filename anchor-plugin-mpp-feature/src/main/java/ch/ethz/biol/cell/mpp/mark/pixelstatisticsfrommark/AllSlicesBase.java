@@ -30,7 +30,7 @@ import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.anchor.mpp.pxlmark.PxlMark;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.image.extent.ImageDim;
+import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.voxel.statistics.VoxelStatistics;
 
 public abstract class AllSlicesBase extends IndexedRegionBase {
@@ -44,7 +44,7 @@ public abstract class AllSlicesBase extends IndexedRegionBase {
 	// END BEAN PROPERTIES
 
 	@Override
-	protected VoxelStatistics createStatisticsFor(PxlMark pm, Mark mark, ImageDim dim) throws CreateException {
+	protected VoxelStatistics createStatisticsFor(PxlMark pm, Mark mark, ImageDimensions dim) throws CreateException {
 		return extractFromPxlMark(pm);
 	}
 	

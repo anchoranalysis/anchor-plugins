@@ -39,13 +39,13 @@ import org.anchoranalysis.core.relation.RelationToValue;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorSingle;
 import org.anchoranalysis.feature.session.calculator.cached.FeatureCalculatorCachedSingle;
-import org.anchoranalysis.image.bean.objmask.match.ObjMaskMatcher;
-import org.anchoranalysis.image.extent.ImageDim;
+import org.anchoranalysis.image.bean.object.ObjectMatcher;
+import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.feature.bean.evaluator.FeatureEvaluator;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
-import org.anchoranalysis.image.objectmask.ObjectMask;
-import org.anchoranalysis.image.objectmask.MatchedObject;
-import org.anchoranalysis.image.objectmask.ObjectCollection;
+import org.anchoranalysis.image.object.MatchedObject;
+import org.anchoranalysis.image.object.ObjectCollection;
+import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.plugin.image.bean.obj.filter.ObjectFilterRelation;
 
 /**
@@ -64,7 +64,7 @@ public class RelationWithMatches extends ObjectFilterRelation {
 	private FeatureEvaluator<FeatureInputSingleObject> featureEvaluatorMatch;		// Optionally uses a different evaluator for the matched objects
 	
 	@BeanField
-	private ObjMaskMatcher objMaskMatcher;
+	private ObjectMatcher objMaskMatcher;
 	
 	/** Size of feature evaluation cache for featureEvaluatorMatch */
 	@BeanField
@@ -76,7 +76,7 @@ public class RelationWithMatches extends ObjectFilterRelation {
 	private Map<ObjectMask,ObjectCollection> matches;
 		
 	@Override
-	protected void start(Optional<ImageDim> dim, ObjectCollection objsToFilter) throws OperationFailedException {
+	protected void start(Optional<ImageDimensions> dim, ObjectCollection objsToFilter) throws OperationFailedException {
 		super.start(dim, objsToFilter);
 
 		setupEvaluators();
@@ -106,7 +106,7 @@ public class RelationWithMatches extends ObjectFilterRelation {
 	}
 	
 	@Override
-	protected boolean match(ObjectMask om, Optional<ImageDim> dim, RelationToValue relation) throws OperationFailedException {
+	protected boolean match(ObjectMask om, Optional<ImageDimensions> dim, RelationToValue relation) throws OperationFailedException {
 		try {
 			double val = evaluatorForSource.calc(
 				new FeatureInputSingleObject(om)
@@ -153,11 +153,11 @@ public class RelationWithMatches extends ObjectFilterRelation {
     	);
 	}
 
-	public ObjMaskMatcher getObjMaskMatcher() {
+	public ObjectMatcher getObjMaskMatcher() {
 		return objMaskMatcher;
 	}
 
-	public void setObjMaskMatcher(ObjMaskMatcher objMaskMatcher) {
+	public void setObjMaskMatcher(ObjectMatcher objMaskMatcher) {
 		this.objMaskMatcher = objMaskMatcher;
 	}
 

@@ -35,19 +35,19 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorSingle;
-import org.anchoranalysis.image.bean.objmask.match.ObjMaskMatcher;
+import org.anchoranalysis.image.bean.object.ObjectMatcher;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
-import org.anchoranalysis.image.objectmask.ObjectMask;
-import org.anchoranalysis.image.objectmask.MatchedObject;
-import org.anchoranalysis.image.objectmask.ObjectCollection;
-import org.anchoranalysis.image.objectmask.ObjectCollectionFactory;
+import org.anchoranalysis.image.object.MatchedObject;
+import org.anchoranalysis.image.object.ObjectCollection;
+import org.anchoranalysis.image.object.ObjectCollectionFactory;
+import org.anchoranalysis.image.object.ObjectMask;
 
 // Returns a collection of each Max Object found in matches
 public class ObjMaskProviderFindMaxFeatureInMatchedObjects extends ObjMaskProviderFindMaxFeatureBase {
 
 	// START BEAN PROPERTIES
 	@BeanField
-	private ObjMaskMatcher objMaskMatcher;
+	private ObjectMatcher objMaskMatcher;
 	// END BEAN PROPERTIES
 
 	@Override
@@ -87,11 +87,11 @@ public class ObjMaskProviderFindMaxFeatureInMatchedObjects extends ObjMaskProvid
 		return max;
 	}
 
-	public ObjMaskMatcher getObjMaskMatcher() {
+	public ObjectMatcher getObjMaskMatcher() {
 		return objMaskMatcher;
 	}
 
-	public void setObjMaskMatcher(ObjMaskMatcher objMaskMatcher) {
+	public void setObjMaskMatcher(ObjectMatcher objMaskMatcher) {
 		this.objMaskMatcher = objMaskMatcher;
 	}
 }

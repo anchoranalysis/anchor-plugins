@@ -29,12 +29,12 @@ package ch.ethz.biol.cell.mpp.nrg.feature.objmask;
  */
 
 import org.anchoranalysis.image.extent.BoundingBox;
-import org.anchoranalysis.image.extent.ImageDim;
+import org.anchoranalysis.image.extent.ImageDimensions;
 
 public class AtBorderXY extends AtBorderBase {
 
 	@Override
-	protected boolean isBoundingBoxAtBorder(BoundingBox boundingBox, ImageDim dim) {
+	protected boolean isBoundingBoxAtBorder(BoundingBox boundingBox, ImageDimensions dim) {
 		return boundingBox.atBorderXY(dim);
 	}
 }

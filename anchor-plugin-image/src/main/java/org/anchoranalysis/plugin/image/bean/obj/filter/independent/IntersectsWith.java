@@ -33,10 +33,10 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
-import org.anchoranalysis.image.extent.ImageDim;
-import org.anchoranalysis.image.objectmask.ObjectMask;
+import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.image.object.ObjectCollection;
+import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.plugin.image.bean.obj.filter.ObjectFilterPredicate;
-import org.anchoranalysis.image.objectmask.ObjectCollection;
 
 /**
  * Keeps objects which intersects with ANY ONE of a collection of other objects.
@@ -54,7 +54,7 @@ public class IntersectsWith extends ObjectFilterPredicate {
 	private ObjectCollection intersectWithAnyOneObjs;
 
 	@Override
-	protected void start(Optional<ImageDim> dim, ObjectCollection objsToFilter) throws OperationFailedException {
+	protected void start(Optional<ImageDimensions> dim, ObjectCollection objsToFilter) throws OperationFailedException {
 		super.start(dim, objsToFilter);
 		try {
 			intersectWithAnyOneObjs = objs.create();
@@ -64,7 +64,7 @@ public class IntersectsWith extends ObjectFilterPredicate {
 	}
 	
 	@Override
-	protected boolean match(ObjectMask om, Optional<ImageDim> dim) throws OperationFailedException {
+	protected boolean match(ObjectMask om, Optional<ImageDimensions> dim) throws OperationFailedException {
 		return intersectWithAnyOneObjs.stream().anyMatch(obj->
 			obj.hasIntersectingPixels(om)
 		);

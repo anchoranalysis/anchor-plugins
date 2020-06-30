@@ -45,7 +45,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.functional.OptionalUtilities;
-import org.anchoranalysis.image.extent.ImageDim;
+import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.mpp.sgmn.bean.kernel.KernelPosNeg;
 import org.anchoranalysis.mpp.sgmn.kernel.KernelCalcContext;
 import org.anchoranalysis.mpp.sgmn.kernel.KernelCalcNRGException;
@@ -154,7 +154,7 @@ public class KernelBirthAndKill extends KernelPosNeg<CfgNRGPixelized> {
 	
 	@Override
 	public double calcAccptProb(int exstSize, int propSize,
-			double poisson_intens, ImageDim scene_size, double densityRatio) {
+			double poisson_intens, ImageDimensions scene_size, double densityRatio) {
 		
         double num = getProbNeg() * scene_size.getVolume() * poisson_intens;
         double dem = getProbPos() * propSize;

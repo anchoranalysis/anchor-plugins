@@ -50,8 +50,8 @@ import org.anchoranalysis.image.feature.session.merged.MergedPairsInclude;
 import org.anchoranalysis.image.feature.session.merged.MergedPairsFeatures;
 import org.anchoranalysis.image.feature.session.merged.FeatureCalculatorMergedPairs;
 import org.anchoranalysis.image.feature.stack.FeatureInputStack;
-import org.anchoranalysis.image.objectmask.ObjectMask;
-import org.anchoranalysis.image.objectmask.ObjectCollection;
+import org.anchoranalysis.image.object.ObjectCollection;
+import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.voxel.nghb.CreateNeighborGraph;
 
 /**

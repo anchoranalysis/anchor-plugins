@@ -31,7 +31,7 @@ import java.util.List;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.geometry.Point3i;
-import org.anchoranalysis.image.objectmask.ObjectMask;
+import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.points.BoundingBoxFromPoints;
 
 class CreateObjectsFromPoints {
@@ -51,7 +51,7 @@ class CreateObjectsFromPoints {
 				om.binaryVoxelBox().setHigh(
 					Point3i.immutableSubtract(
 						points.get(i),
-						om.getBoundingBox().getCrnrMin()
+						om.getBoundingBox().getCornerMin()
 					)
 				);
 			}

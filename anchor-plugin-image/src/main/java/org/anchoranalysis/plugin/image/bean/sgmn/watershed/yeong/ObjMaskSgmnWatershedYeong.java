@@ -36,11 +36,11 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.bean.nonbean.error.SgmnFailedException;
-import org.anchoranalysis.image.bean.sgmn.objmask.ObjMaskSgmn;
+import org.anchoranalysis.image.bean.segmentation.object.ObjectSegmentation;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.extent.Extent;
-import org.anchoranalysis.image.objectmask.ObjectMask;
-import org.anchoranalysis.image.objectmask.ObjectCollection;
+import org.anchoranalysis.image.object.ObjectCollection;
+import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.seed.SeedCollection;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.anchoranalysis.image.voxel.box.factory.VoxelBoxFactory;
@@ -69,7 +69,7 @@ import org.anchoranalysis.plugin.image.sgmn.watershed.encoding.EncodedVoxelBox;
  * 
  * @author Owen Feehan
  */
-public class ObjMaskSgmnWatershedYeong extends ObjMaskSgmn {
+public class ObjMaskSgmnWatershedYeong extends ObjectSegmentation {
 
 	// START PROPERTIES
 	// Exits and just returns the minima. NB TODO There is probably a more efficient way to find the minima. This is a quick fix

@@ -40,8 +40,8 @@ import org.anchoranalysis.core.random.RandomNumberGenerator;
 import org.anchoranalysis.image.binary.values.BinaryValues;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
-import org.anchoranalysis.image.extent.ImageRes;
-import org.anchoranalysis.image.objectmask.ObjectMask;
+import org.anchoranalysis.image.extent.ImageResolution;
+import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 
 @SuppressWarnings("unused")
@@ -55,18 +55,18 @@ public class VisitSchedulerConvexAboutRoot extends VisitScheduler {
 	private Point3i root;
 	
 	@Override
-	public Tuple3i maxDistFromRootPoint(ImageRes res) {
+	public Tuple3i maxDistFromRootPoint(ImageResolution res) {
 		return null;
 	}
 
 	@Override
-	public void beforeCreateObjMask(RandomNumberGenerator re, ImageRes res)
+	public void beforeCreateObjMask(RandomNumberGenerator re, ImageResolution res)
 			throws InitException {
 
 	}
 
 	@Override
-	public void afterCreateObjMask(Point3i root, ImageRes res, RandomNumberGenerator re) throws InitException {
+	public void afterCreateObjMask(Point3i root, ImageResolution res, RandomNumberGenerator re) throws InitException {
 		this.root = root;
 	}
 

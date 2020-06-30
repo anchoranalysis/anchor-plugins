@@ -33,21 +33,21 @@ import java.util.Optional;
 import org.anchoranalysis.anchor.mpp.bean.bound.MarkBounds;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.image.bean.nonbean.error.SgmnFailedException;
-import org.anchoranalysis.image.bean.sgmn.binary.BinarySgmn;
-import org.anchoranalysis.image.bean.sgmn.binary.BinarySgmnParameters;
-import org.anchoranalysis.image.bean.sgmn.binary.BinarySgmnThrshld;
+import org.anchoranalysis.image.bean.nonbean.parameters.BinarySegmentationParameters;
+import org.anchoranalysis.image.bean.segmentation.binary.BinarySegmentation;
+import org.anchoranalysis.image.bean.segmentation.binary.BinarySegmentationThreshold;
 import org.anchoranalysis.image.bean.threshold.CalculateLevel;
 import org.anchoranalysis.image.bean.threshold.ThresholderGlobal;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
 import org.anchoranalysis.image.extent.Extent;
-import org.anchoranalysis.image.extent.ImageRes;
-import org.anchoranalysis.image.objectmask.ObjectMask;
+import org.anchoranalysis.image.extent.ImageResolution;
+import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.voxel.box.VoxelBoxWrapper;
 import org.anchoranalysis.plugin.image.bean.histogram.threshold.Constant;
 
 // Performs a thresholding that accepts only channel values with intensities
 //   greater than the minimum bound
-public class SgmnThrshldAboveMinBound extends BinarySgmn {
+public class SgmnThrshldAboveMinBound extends BinarySegmentation {
 
 	// START BEAN PROPERTIES
 	@BeanField
@@ -57,11 +57,11 @@ public class SgmnThrshldAboveMinBound extends BinarySgmn {
 	private MarkBounds markBounds;
 	// END BEAN PROPERTIES
 	
-	private BinarySgmnThrshld delegate = new BinarySgmnThrshld();
+	private BinarySegmentationThreshold delegate = new BinarySegmentationThreshold();
 
 	@Override
 	public BinaryVoxelBox<ByteBuffer> sgmn(VoxelBoxWrapper voxelBox,
-			BinarySgmnParameters params, Optional<ObjectMask> mask) throws SgmnFailedException {
+			BinarySegmentationParameters params, Optional<ObjectMask> mask) throws SgmnFailedException {
 		
 		setUpDelegate(
 			voxelBox.any().extent(),
@@ -73,7 +73,7 @@ public class SgmnThrshldAboveMinBound extends BinarySgmn {
 		return delegate.sgmn(voxelBox, params, mask);
 	}
 	
-	private void setUpDelegate( Extent e, ImageRes res ) {
+	private void setUpDelegate( Extent e, ImageResolution res ) {
 		double minBound = markBounds.getMinRslvd( res, e.getZ()>1 && !suppress3D );
 
 		int threshold = (int) Math.floor(minBound);

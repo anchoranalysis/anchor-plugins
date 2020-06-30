@@ -28,7 +28,7 @@ package ch.ethz.biol.cell.imageprocessing.objmask.provider.assignobjstocfg;
 
 import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.core.geometry.Point3i;
-import org.anchoranalysis.image.objectmask.ObjectMask;
+import org.anchoranalysis.image.object.ObjectMask;
 
 public class RslvdObjMask {
 	private ObjectMask objMask;

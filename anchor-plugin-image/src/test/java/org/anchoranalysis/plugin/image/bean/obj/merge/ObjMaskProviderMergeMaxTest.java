@@ -35,7 +35,7 @@ import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
-import org.anchoranalysis.image.objectmask.ObjectCollection;
+import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.plugin.image.test.ProviderFixture;
 import org.anchoranalysis.test.LoggingFixture;
 import org.anchoranalysis.test.feature.plugins.mockfeature.MockFeatureWithCalculationFixture;

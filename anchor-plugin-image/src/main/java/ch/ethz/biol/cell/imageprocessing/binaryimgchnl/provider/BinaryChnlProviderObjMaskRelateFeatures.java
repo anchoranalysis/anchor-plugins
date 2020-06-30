@@ -39,8 +39,8 @@ import org.anchoranalysis.image.bean.provider.BinaryChnlProvider;
 import org.anchoranalysis.image.binary.BinaryChnl;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
-import org.anchoranalysis.image.objectmask.ObjectMask;
-import org.anchoranalysis.image.objectmask.factory.CreateFromEntireChnlFactory;
+import org.anchoranalysis.image.object.ObjectMask;
+import org.anchoranalysis.image.object.factory.CreateFromEntireChnlFactory;
 
 // Treats the entire binaryimgchnl as an object, and sees if it passes an ObjMaskFilter
 public class BinaryChnlProviderObjMaskRelateFeatures extends BinaryChnlProviderChnlSource {

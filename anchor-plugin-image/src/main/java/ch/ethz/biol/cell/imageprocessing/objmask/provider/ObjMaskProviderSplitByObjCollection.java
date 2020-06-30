@@ -38,11 +38,11 @@ import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
 import org.anchoranalysis.image.binary.values.BinaryValues;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelBoxInt;
-import org.anchoranalysis.image.extent.ImageDim;
-import org.anchoranalysis.image.objectmask.ObjectMask;
-import org.anchoranalysis.image.objectmask.ObjectCollection;
-import org.anchoranalysis.image.objectmask.ObjectCollectionFactory;
-import org.anchoranalysis.image.objectmask.factory.CreateFromConnectedComponentsFactory;
+import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.image.object.ObjectCollection;
+import org.anchoranalysis.image.object.ObjectCollectionFactory;
+import org.anchoranalysis.image.object.ObjectMask;
+import org.anchoranalysis.image.object.factory.CreateFromConnectedComponentsFactory;
 import org.anchoranalysis.image.voxel.box.BoundedVoxelBox;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.anchoranalysis.image.voxel.box.factory.VoxelBoxFactory;
@@ -62,7 +62,7 @@ public class ObjMaskProviderSplitByObjCollection extends ObjMaskProviderDimensio
 		
 		ObjectCollection objsSplitByCollection = objsSplitBy.create();
 
-		ImageDim dim = createDim();
+		ImageDimensions dim = createDim();
 		
 		try {
 			return objsCollection.stream().flatMapWithException(
@@ -78,7 +78,7 @@ public class ObjMaskProviderSplitByObjCollection extends ObjMaskProviderDimensio
 		}
 	}
 	
-	private ObjectCollection splitObj( ObjectMask objToSplit, ObjectCollection objsSplitBy, ImageDim dim ) throws OperationFailedException {
+	private ObjectCollection splitObj( ObjectMask objToSplit, ObjectCollection objsSplitBy, ImageDimensions dim ) throws OperationFailedException {
 		
 		// We create a voxel buffer of the same size as objToSplit bounding box, and we write
 		//  a number for each obj in ObjsSplitBy
@@ -106,7 +106,7 @@ public class ObjMaskProviderSplitByObjCollection extends ObjMaskProviderDimensio
 			}
 			
 			ObjectMask intersectShifted = intersect.get().mapBoundingBox( bbox->
-				bbox.shiftBackBy(objToSplit.getBoundingBox().getCrnrMin())
+				bbox.shiftBackBy(objToSplit.getBoundingBox().getCornerMin())
 			); 
 			
 			// We make the intersection relative to objToSplit
@@ -126,7 +126,7 @@ public class ObjMaskProviderSplitByObjCollection extends ObjMaskProviderDimensio
 				i -> createObjectForIndex(
 					i,
 					boundedVbId.getVoxelBox(),
-					objToSplit.getBoundingBox().getCrnrMin()
+					objToSplit.getBoundingBox().getCornerMin()
 				)
 			);
 			

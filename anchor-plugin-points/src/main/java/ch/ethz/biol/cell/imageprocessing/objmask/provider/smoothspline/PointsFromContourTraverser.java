@@ -31,7 +31,7 @@ import java.util.List;
 
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.geometry.Point3i;
-import org.anchoranalysis.image.objectmask.ObjectMask;
+import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.outline.traverser.OutlineTraverser;
 
 public class PointsFromContourTraverser {

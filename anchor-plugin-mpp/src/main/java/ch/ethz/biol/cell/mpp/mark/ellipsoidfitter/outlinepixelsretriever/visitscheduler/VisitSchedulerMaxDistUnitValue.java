@@ -37,8 +37,8 @@ import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.core.geometry.Tuple3i;
 import org.anchoranalysis.core.random.RandomNumberGenerator;
 import org.anchoranalysis.image.bean.unitvalue.distance.UnitValueDistance;
-import org.anchoranalysis.image.extent.ImageRes;
-import org.anchoranalysis.image.objectmask.ObjectMask;
+import org.anchoranalysis.image.extent.ImageResolution;
+import org.anchoranalysis.image.object.ObjectMask;
 
 // Breadth-first iteration of pixels
 public class VisitSchedulerMaxDistUnitValue extends VisitScheduler {
@@ -50,7 +50,7 @@ public class VisitSchedulerMaxDistUnitValue extends VisitScheduler {
 	
 	private Point3i root;
 	
-	private ImageRes res;
+	private ImageResolution res;
 	
 	
 	
@@ -60,13 +60,13 @@ public class VisitSchedulerMaxDistUnitValue extends VisitScheduler {
 
 	
 	@Override
-	public void beforeCreateObjMask(RandomNumberGenerator re, ImageRes res)
+	public void beforeCreateObjMask(RandomNumberGenerator re, ImageResolution res)
 			throws InitException {
 			
 	}
 	
 	@Override
-	public Tuple3i maxDistFromRootPoint(ImageRes res) throws OperationFailedException {
+	public Tuple3i maxDistFromRootPoint(ImageResolution res) throws OperationFailedException {
 		return new Point3i(
 			distForAxis(AxisType.X, res),
 			distForAxis(AxisType.Y, res),
@@ -74,14 +74,14 @@ public class VisitSchedulerMaxDistUnitValue extends VisitScheduler {
 		);
 	}
 	
-	private int distForAxis(AxisType axis, ImageRes res) throws OperationFailedException {
+	private int distForAxis(AxisType axis, ImageResolution res) throws OperationFailedException {
 		return (int) Math.ceil(
 			maxDist.rslvForAxis(Optional.of(res), axis)
 		);
 	}
 	
 	@Override
-	public void afterCreateObjMask(Point3i root, ImageRes res, RandomNumberGenerator re) {
+	public void afterCreateObjMask(Point3i root, ImageResolution res, RandomNumberGenerator re) {
 		this.res = res;
 		this.root = root;
 	}

@@ -7,7 +7,7 @@ import java.util.stream.Collectors;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.functional.OptionalUtilities;
-import org.anchoranalysis.image.extent.ImageDim;
+import org.anchoranalysis.image.extent.ImageDimensions;
 
 /*
  * #%L
@@ -84,7 +84,7 @@ public abstract class KernelBirth<T> extends KernelPosNeg<T> {
 	
 	@Override
 	public double calcAccptProb(int exstSize, int propSize,
-			double poisson_intens, ImageDim scene_size, double densityRatio) {
+			double poisson_intens, ImageDimensions scene_size, double densityRatio) {
 		
         double num = getProbNeg() * scene_size.getVolume() * poisson_intens;
         double dem = getProbPos() * propSize;

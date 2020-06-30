@@ -34,7 +34,7 @@ import ome.xml.model.enums.EnumerationException;
 import ome.xml.model.enums.PixelType;
 import ome.xml.model.primitives.PositiveInteger;
 
-import org.anchoranalysis.image.extent.ImageDim;
+import org.anchoranalysis.image.extent.ImageDimensions;
 
 import loci.common.services.DependencyException;
 import loci.common.services.ServiceException;
@@ -46,7 +46,7 @@ import loci.formats.services.OMEXMLService;
 class MetadataUtilities {
 
 	// NOTE: Tidy up exceptions later
-	public static IMetadata createMetadata( ImageDim sd, int num_chnl, PixelType pixelType, boolean makeRGB, boolean pretendSeries ) throws EnumerationException, ServiceException, DependencyException {
+	public static IMetadata createMetadata( ImageDimensions sd, int num_chnl, PixelType pixelType, boolean makeRGB, boolean pretendSeries ) throws EnumerationException, ServiceException, DependencyException {
 		
 		ServiceFactory factory = new ServiceFactory();
 	    OMEXMLService service = factory.getInstance(OMEXMLService.class);

@@ -30,7 +30,7 @@ package org.anchoranalysis.plugin.image.bean.chnl.level;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.channel.Channel;
-import org.anchoranalysis.image.objectmask.ObjectCollection;
+import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 
 import ch.ethz.biol.cell.imageprocessing.chnl.provider.level.LevelResult;

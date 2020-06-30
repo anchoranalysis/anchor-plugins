@@ -28,8 +28,8 @@ package org.anchoranalysis.plugin.image.feature.object.calculation.collection;
 
 import org.anchoranalysis.feature.cache.calculation.FeatureCalculation;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
-import org.anchoranalysis.image.index.rtree.ObjMaskCollectionRTree;
-import org.anchoranalysis.image.objectmask.ObjectCollection;
+import org.anchoranalysis.image.index.ObjectCollectionRTree;
+import org.anchoranalysis.image.object.ObjectCollection;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
@@ -59,7 +59,7 @@ public class CalculateIntersectingObjs extends FeatureCalculation<ObjectCollecti
 	@Override
 	protected ObjectCollection execute(FeatureInputSingleObject params) {
 
-		ObjMaskCollectionRTree bboxRTree = new ObjMaskCollectionRTree( searchObjs );
+		ObjectCollectionRTree bboxRTree = new ObjectCollectionRTree( searchObjs );
 		return bboxRTree.intersectsWith( params.getObjMask() );
 	}
 

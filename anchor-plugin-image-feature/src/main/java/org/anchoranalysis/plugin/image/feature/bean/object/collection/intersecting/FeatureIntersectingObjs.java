@@ -36,7 +36,7 @@ import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.feature.bean.object.collection.FeatureObjectCollectionShared;
 import org.anchoranalysis.image.feature.init.FeatureInitParamsSharedObjs;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
-import org.anchoranalysis.image.objectmask.ObjectCollection;
+import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.plugin.image.feature.object.calculation.collection.CalculateIntersectingObjs;
 
 public abstract class FeatureIntersectingObjs extends FeatureObjectCollectionShared {

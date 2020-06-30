@@ -32,10 +32,10 @@ import java.util.Optional;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.NonNegative;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.image.extent.ImageDim;
-import org.anchoranalysis.image.objectmask.ObjectMask;
-import org.anchoranalysis.image.objectmask.ObjectCollection;
-import org.anchoranalysis.image.objectmask.morph.MorphologicalDilation;
+import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.image.object.ObjectCollection;
+import org.anchoranalysis.image.object.ObjectMask;
+import org.anchoranalysis.image.object.morph.MorphologicalDilation;
 
 public class ObjMaskProviderDilate extends ObjMaskProviderDimensionsOptional {
 	
@@ -52,14 +52,14 @@ public class ObjMaskProviderDilate extends ObjMaskProviderDimensionsOptional {
 
 	@Override
 	public ObjectCollection createFromObjs(ObjectCollection objsIn) throws CreateException {
-		Optional<ImageDim> dim = createDims();
+		Optional<ImageDimensions> dim = createDims();
 		return objsIn.stream().map( om->dilate(om,dim) );
 	}
 	
-	private ObjectMask dilate(ObjectMask om, Optional<ImageDim> dim) throws CreateException {
+	private ObjectMask dilate(ObjectMask om, Optional<ImageDimensions> dim) throws CreateException {
 		ObjectMask omGrown = MorphologicalDilation.createDilatedObjMask(
 			om,
-			dim.map(ImageDim::getExtnt),
+			dim.map(ImageDimensions::getExtnt),
 			do3D,
 			iterations,
 			bigNghb

@@ -30,7 +30,7 @@ import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.log.LogReporter;
 import org.anchoranalysis.image.convert.ImgLib2Wrap;
 import org.anchoranalysis.image.extent.Extent;
-import org.anchoranalysis.image.extent.ImageDim;
+import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.voxel.box.VoxelBoxWrapper;
 
 /**
@@ -42,7 +42,7 @@ import org.anchoranalysis.image.voxel.box.VoxelBoxWrapper;
 public class BlurGaussianEachSlice2D extends BlurStrategy {
 
 	@Override
-	public void blur( VoxelBoxWrapper voxelBox, ImageDim dim, LogReporter logger ) throws OperationFailedException {
+	public void blur( VoxelBoxWrapper voxelBox, ImageDimensions dim, LogReporter logger ) throws OperationFailedException {
 		
 		double sigma = calcSigma(dim, logger);
 		

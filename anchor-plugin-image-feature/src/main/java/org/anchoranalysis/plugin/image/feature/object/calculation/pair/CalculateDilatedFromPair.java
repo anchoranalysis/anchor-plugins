@@ -36,8 +36,8 @@ import org.anchoranalysis.image.feature.object.calculation.CalculateInputFromPai
 import org.anchoranalysis.image.feature.object.calculation.CalculateInputFromPair.Extract;
 import org.anchoranalysis.image.feature.object.input.FeatureInputPairObjects;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
-import org.anchoranalysis.image.objectmask.ObjectMask;
-import org.anchoranalysis.plugin.image.feature.object.calculation.single.CalculateDilation;
+import org.anchoranalysis.image.object.ObjectMask;
+import org.anchoranalysis.plugin.image.feature.object.calculation.single.morphological.CalculateDilation;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 

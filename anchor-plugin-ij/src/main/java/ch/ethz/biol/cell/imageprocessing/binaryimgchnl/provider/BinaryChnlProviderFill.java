@@ -40,11 +40,11 @@ import org.anchoranalysis.image.binary.BinaryChnl;
 import org.anchoranalysis.image.binary.logical.BinaryChnlAnd;
 import org.anchoranalysis.image.binary.logical.BinaryChnlOr;
 import org.anchoranalysis.image.binary.values.BinaryValues;
-import org.anchoranalysis.image.extent.ImageDim;
-import org.anchoranalysis.image.objectmask.ObjectMask;
-import org.anchoranalysis.image.objectmask.ObjectCollection;
-import org.anchoranalysis.image.objectmask.factory.CreateFromConnectedComponentsFactory;
-import org.anchoranalysis.image.objectmask.ops.BinaryChnlFromObjs;
+import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.image.object.ObjectCollection;
+import org.anchoranalysis.image.object.ObjectMask;
+import org.anchoranalysis.image.object.factory.CreateFromConnectedComponentsFactory;
+import org.anchoranalysis.image.object.ops.BinaryChnlFromObjs;
 
 public class BinaryChnlProviderFill extends BinaryChnlProviderOne {
 
@@ -93,7 +93,7 @@ public class BinaryChnlProviderFill extends BinaryChnlProviderOne {
 		return filterObjs(omc, bi.getDimensions());
 	}
 	
-	private ObjectCollection filterObjs( ObjectCollection omc, ImageDim sd ) throws CreateException {
+	private ObjectCollection filterObjs( ObjectCollection omc, ImageDimensions sd ) throws CreateException {
 		
 		ObjectCollection out = new ObjectCollection();
 		
@@ -128,7 +128,7 @@ public class BinaryChnlProviderFill extends BinaryChnlProviderOne {
 		return out;
 	}
 	
-	private static BinaryChnl fillHoles( ObjectCollection filled, BinaryChnl src, ImageDim sd, BinaryValues bvOut ) throws CreateException {
+	private static BinaryChnl fillHoles( ObjectCollection filled, BinaryChnl src, ImageDimensions sd, BinaryValues bvOut ) throws CreateException {
 		BinaryChnl bcSelected = BinaryChnlFromObjs.createFromObjs(filled, sd, bvOut);
 		BinaryChnlOr.binaryOr(bcSelected,src);
 		return bcSelected;

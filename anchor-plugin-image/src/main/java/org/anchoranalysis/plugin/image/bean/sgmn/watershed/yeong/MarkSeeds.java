@@ -31,7 +31,7 @@ import java.util.Optional;
 
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.bean.nonbean.error.SgmnFailedException;
-import org.anchoranalysis.image.objectmask.ObjectMask;
+import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.seed.Seed;
 import org.anchoranalysis.image.seed.SeedCollection;
 import org.anchoranalysis.image.voxel.iterator.IterateVoxels;

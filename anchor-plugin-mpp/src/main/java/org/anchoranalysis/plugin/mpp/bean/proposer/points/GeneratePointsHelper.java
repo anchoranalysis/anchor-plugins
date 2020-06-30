@@ -37,7 +37,7 @@ import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.binary.BinaryChnl;
 import org.anchoranalysis.image.extent.BoundingBox;
-import org.anchoranalysis.image.extent.ImageDim;
+import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.points.BoundingBoxFromPoints;
 import org.anchoranalysis.image.points.PointsFromBinaryChnl;
 
@@ -52,7 +52,7 @@ class GeneratePointsHelper {
 		int skipZDist,
 		BinaryChnl chnl,
 		Optional<BinaryChnl> chnlFilled,
-		ImageDim dim,
+		ImageDimensions dim,
 		int forceMinZSize
 	) throws OperationFailedException {
 		
@@ -80,12 +80,12 @@ class GeneratePointsHelper {
 	}
 	
 	
-	private static List<Point3i> extendedPoints( List<Point3i> pntsAlongContour, Point3d pntRoot, PointListForConvex pl, int maxZDist, int skipZDist, BinaryChnl chnl, Optional<BinaryChnl> chnlFilled, ImageDim sceneDim ) throws OperationFailedException, CreateException {
+	private static List<Point3i> extendedPoints( List<Point3i> pntsAlongContour, Point3d pntRoot, PointListForConvex pl, int maxZDist, int skipZDist, BinaryChnl chnl, Optional<BinaryChnl> chnlFilled, ImageDimensions sceneDim ) throws OperationFailedException, CreateException {
 		
 		BoundingBox bbox = BoundingBoxFromPoints.forList(pntsAlongContour);
 
-		int zLow = Math.max(0, bbox.getCrnrMin().getZ()-maxZDist );
-		int zHigh = Math.min(sceneDim.getZ(), bbox.getCrnrMin().getZ()+maxZDist );
+		int zLow = Math.max(0, bbox.getCornerMin().getZ()-maxZDist );
+		int zHigh = Math.min(sceneDim.getZ(), bbox.getCornerMin().getZ()+maxZDist );
 
 		if (!chnlFilled.isPresent()) {
 			return PointsFromBinaryChnl.pointsFromChnlInsideBox(

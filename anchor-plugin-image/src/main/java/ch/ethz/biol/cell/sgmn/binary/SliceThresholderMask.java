@@ -31,7 +31,7 @@ import java.nio.ByteBuffer;
 import org.anchoranalysis.core.geometry.ReadableTuple3i;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.extent.Extent;
-import org.anchoranalysis.image.objectmask.ObjectMask;
+import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 
@@ -46,8 +46,8 @@ final class SliceThresholderMask extends SliceThresholder {
 		super(bvb);
 		this.clearOutsideMask = clearOutsideMask;
 		this.objMask = objMask;
-		this.crnrMin = objMask.getBoundingBox().getCrnrMin();
-		this.crnrMax = objMask.getBoundingBox().calcCrnrMax();
+		this.crnrMin = objMask.getBoundingBox().getCornerMin();
+		this.crnrMax = objMask.getBoundingBox().calcCornerMax();
 	}
 	
 	@Override

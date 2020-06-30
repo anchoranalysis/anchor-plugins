@@ -36,7 +36,7 @@ import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
 import org.anchoranalysis.image.bean.provider.ImageDimProvider;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.experiment.identifiers.ImgStackIdentifiers;
-import org.anchoranalysis.image.extent.ImageDim;
+import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.stack.Stack;
 
 
@@ -50,7 +50,7 @@ import org.anchoranalysis.image.stack.Stack;
  */
 public class GuessDimFromInputImage extends ImageDimProvider {
 
-	private ImageDim dim;
+	private ImageDimensions dim;
 	
 	public GuessDimFromInputImage() {
 	}
@@ -62,7 +62,7 @@ public class GuessDimFromInputImage extends ImageDimProvider {
 	}
 
 	@Override
-	public ImageDim create() throws CreateException {
+	public ImageDimensions create() throws CreateException {
 
 		if (dim==null) {
 			dim = takeDimFromStackCollection( getSharedObjects().getStackCollection() );
@@ -71,7 +71,7 @@ public class GuessDimFromInputImage extends ImageDimProvider {
 		return dim;
 	}
 	
-	private ImageDim takeDimFromStackCollection( NamedProviderStore<Stack> stackCollection ) throws CreateException {
+	private ImageDimensions takeDimFromStackCollection( NamedProviderStore<Stack> stackCollection ) throws CreateException {
 		
 		Set<String> keys = stackCollection.keys();
 		
@@ -88,7 +88,7 @@ public class GuessDimFromInputImage extends ImageDimProvider {
 	}
 	
 	/** Takes the ImageDim from a particular stack in the collection */
-	private ImageDim takeDimFromSpecificStack( NamedProviderStore<Stack> stackCollection, String keyThatExists ) throws CreateException {
+	private ImageDimensions takeDimFromSpecificStack( NamedProviderStore<Stack> stackCollection, String keyThatExists ) throws CreateException {
 		Stack stack;
 		try {
 			stack = getSharedObjects().getStackCollection().getException(keyThatExists);

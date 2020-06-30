@@ -33,7 +33,7 @@ import org.anchoranalysis.bean.AnchorBean;
 
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.channel.Channel;
-import org.anchoranalysis.image.objectmask.ObjectMask;
+import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.seed.SeedCollection;
 
 public abstract class MinimaImposition extends AnchorBean<MinimaImposition> {

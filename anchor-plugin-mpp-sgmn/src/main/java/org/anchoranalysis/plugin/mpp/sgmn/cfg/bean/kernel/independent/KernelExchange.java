@@ -41,7 +41,7 @@ import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.image.extent.ImageDim;
+import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.mpp.sgmn.bean.kernel.KernelIndependent;
 import org.anchoranalysis.mpp.sgmn.kernel.KernelCalcContext;
 import org.anchoranalysis.mpp.sgmn.kernel.KernelCalcNRGException;
@@ -62,7 +62,7 @@ public class KernelExchange extends KernelIndependent<CfgNRGPixelized> {
 	private Mark markNew;
 	
 	@Override
-	public double calcAccptProb( int exstSize, int propSize, double poisson_intens, ImageDim scene_size, double densityRatio ) {
+	public double calcAccptProb( int exstSize, int propSize, double poisson_intens, ImageDimensions scene_size, double densityRatio ) {
 		return Math.min(1.0, densityRatio );
 	}
 

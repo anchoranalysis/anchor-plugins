@@ -36,9 +36,9 @@ import org.anchoranalysis.image.bean.provider.BinaryChnlProviderOne;
 import org.anchoranalysis.image.bean.unitvalue.volume.UnitValueVolume;
 import org.anchoranalysis.image.binary.BinaryChnl;
 import org.anchoranalysis.image.binary.values.BinaryValues;
-import org.anchoranalysis.image.objectmask.ObjectCollection;
-import org.anchoranalysis.image.objectmask.factory.CreateFromConnectedComponentsFactory;
-import org.anchoranalysis.image.objectmask.ops.BinaryChnlFromObjs;
+import org.anchoranalysis.image.object.ObjectCollection;
+import org.anchoranalysis.image.object.factory.CreateFromConnectedComponentsFactory;
+import org.anchoranalysis.image.object.ops.BinaryChnlFromObjs;
 
 public class BinaryChnlProviderMinVolumeFilter extends BinaryChnlProviderOne {
 

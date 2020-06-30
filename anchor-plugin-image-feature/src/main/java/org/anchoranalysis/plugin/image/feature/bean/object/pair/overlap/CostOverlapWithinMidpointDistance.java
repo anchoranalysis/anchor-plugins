@@ -35,7 +35,7 @@ import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.bean.unitvalue.distance.UnitValueDistance;
-import org.anchoranalysis.image.extent.ImageRes;
+import org.anchoranalysis.image.extent.ImageResolution;
 import org.anchoranalysis.image.feature.bean.object.pair.FeaturePairObjects;
 import org.anchoranalysis.image.feature.object.input.FeatureInputPairObjects;
 import org.anchoranalysis.image.orientation.DirectionVector;
@@ -111,7 +111,7 @@ public class CostOverlapWithinMidpointDistance extends FeaturePairObjects {
 	}
 
 	// We measure the euclidian distance between centre-points
-	private double calcMaxDist( Point3d cog1, Point3d cog2, Optional<ImageRes> res ) throws OperationFailedException {
+	private double calcMaxDist( Point3d cog1, Point3d cog2, Optional<ImageResolution> res ) throws OperationFailedException {
 		DirectionVector vec = DirectionVector.createBetweenTwoPoints( cog1, cog2 );
 		return maxDistance.rslv(res, vec);
 	}
