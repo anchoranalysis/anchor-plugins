@@ -50,11 +50,6 @@ import org.anchoranalysis.mpp.sgmn.kernel.KernelCalcNRGException;
  * @param <T> proposal-type
  */
 public abstract class KernelBirth<T> extends KernelPosNeg<T> {
-
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -3031519899206383216L;
 	
 	private Optional<Set<Mark>> setMarksNew;
 	

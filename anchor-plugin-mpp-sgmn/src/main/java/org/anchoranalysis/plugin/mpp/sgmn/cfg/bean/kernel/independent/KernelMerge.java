@@ -56,11 +56,6 @@ import org.anchoranalysis.mpp.sgmn.kernel.KernelCalcNRGException;
 
 public class KernelMerge extends KernelPosNeg<CfgNRGPixelized> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 5751099600940897752L;
-
 	// START BEAN PROPERTIES
 	@BeanField
 	private MarkMergeProposer mergeMarkProposer = null;
@@ -102,7 +97,7 @@ public class KernelMerge extends KernelPosNeg<CfgNRGPixelized> {
 	@Override
 	public Optional<CfgNRGPixelized> makeProposal(Optional<CfgNRGPixelized> exst, KernelCalcContext context) throws KernelCalcNRGException {
 		
-		if (exst.isPresent()) {
+		if (!exst.isPresent()) {
 			return Optional.empty();
 		}
 		
@@ -143,7 +138,6 @@ public class KernelMerge extends KernelPosNeg<CfgNRGPixelized> {
 		// If we can't generate a successful merge, we cancel the kernel
 		if (!markAdded.isPresent()) {
 			pair = null;
-			markAdded = null;
 			failedProposalType = FailedProposalType.CANNOT_GENERATE_MERGE;
 			return Optional.empty();
 		}

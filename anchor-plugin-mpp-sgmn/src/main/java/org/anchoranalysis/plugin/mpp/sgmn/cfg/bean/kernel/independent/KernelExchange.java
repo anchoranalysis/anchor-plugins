@@ -48,11 +48,6 @@ import org.anchoranalysis.mpp.sgmn.kernel.KernelCalcNRGException;
 
 public class KernelExchange extends KernelIndependent<CfgNRGPixelized> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 175391639916706075L;
-
 	// START BEAN PROPERTIES
 	@BeanField
 	private MarkProposer markProposer = null;
@@ -91,7 +86,7 @@ public class KernelExchange extends KernelIndependent<CfgNRGPixelized> {
 	@Override
 	public Optional<CfgNRGPixelized> makeProposal(Optional<CfgNRGPixelized> exst, KernelCalcContext context) throws KernelCalcNRGException {
 
-		if (exst.isPresent()) {
+		if (!exst.isPresent()) {
 			return Optional.empty();
 		}
 		

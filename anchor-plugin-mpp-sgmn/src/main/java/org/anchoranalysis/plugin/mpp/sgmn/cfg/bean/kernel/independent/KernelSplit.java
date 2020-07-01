@@ -51,14 +51,6 @@ import org.anchoranalysis.mpp.sgmn.kernel.KernelCalcNRGException;
 
 public class KernelSplit extends KernelPosNeg<CfgNRGPixelized> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -2994479857672199038L;
-	/**
-	 * 
-	 */
-
 	// START BEAN
 	@BeanField
 	private MarkSplitProposer splitProposer = null;
@@ -74,7 +66,7 @@ public class KernelSplit extends KernelPosNeg<CfgNRGPixelized> {
 	@Override
 	public Optional<CfgNRGPixelized> makeProposal(Optional<CfgNRGPixelized> exst, KernelCalcContext context ) throws KernelCalcNRGException {
 		
-		if (exst.isPresent()) {
+		if (!exst.isPresent()) {
 			return Optional.empty();
 		}
 		

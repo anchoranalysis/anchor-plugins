@@ -49,11 +49,6 @@ import org.anchoranalysis.plugin.mpp.sgmn.cfg.optscheme.CfgFromPartition;
  */
 public class KernelBirthPartition extends KernelBirth<CfgFromPartition> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	@Override
 	protected Optional<Set<Mark>> proposeNewMarks(CfgFromPartition exst, int number, KernelCalcContext context) {
 		assert( exst!= null);

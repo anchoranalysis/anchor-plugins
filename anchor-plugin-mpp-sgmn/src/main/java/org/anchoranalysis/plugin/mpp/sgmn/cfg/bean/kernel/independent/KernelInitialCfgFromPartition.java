@@ -47,11 +47,6 @@ import org.anchoranalysis.plugin.mpp.sgmn.cfg.optscheme.CfgFromPartition;
 import org.anchoranalysis.plugin.mpp.sgmn.cfg.optscheme.PartitionedCfg;
 
 public class KernelInitialCfgFromPartition extends KernelIndependent<CfgFromPartition> {
-
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -8499354370753415454L;
 	
 	// START BEAN LIST
 	@BeanField
