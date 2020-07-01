@@ -2,7 +2,7 @@ package ch.ethz.biol.cell.imageprocessing.stack.provider;
 
 /*
  * #%L
- * anchor-graph
+ * anchor-plot
  * %%
  * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
  * %%
@@ -30,10 +30,10 @@ package ch.ethz.biol.cell.imageprocessing.stack.provider;
 import java.util.Iterator;
 import java.util.Optional;
 
-import org.anchoranalysis.anchor.graph.AxisLimits;
-import org.anchoranalysis.anchor.graph.GraphInstance;
-import org.anchoranalysis.anchor.graph.bean.colorscheme.GraphColorScheme;
-import org.anchoranalysis.anchor.graph.index.LinePlot;
+import org.anchoranalysis.anchor.plot.AxisLimits;
+import org.anchoranalysis.anchor.plot.GraphInstance;
+import org.anchoranalysis.anchor.plot.bean.colorscheme.GraphColorScheme;
+import org.anchoranalysis.anchor.plot.index.LinePlot;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
 
