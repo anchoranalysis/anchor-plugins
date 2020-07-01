@@ -38,14 +38,6 @@ import org.anchoranalysis.mpp.sgmn.kernel.KernelCalcContext;
 import org.anchoranalysis.mpp.sgmn.kernel.KernelCalcNRGException;
 
 public abstract class KernelDeath<T> extends KernelPosNeg<T> {
-
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -4340179658462435312L;
-	
-	// START BEAN PROPERTIES
-	// END BEAN PROPERTIES
 	
 	private Optional<Mark> markRmv;
 	

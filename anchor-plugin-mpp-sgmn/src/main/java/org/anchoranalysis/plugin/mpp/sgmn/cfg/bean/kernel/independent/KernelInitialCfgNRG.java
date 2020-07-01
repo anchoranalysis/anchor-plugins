@@ -50,11 +50,6 @@ import org.anchoranalysis.mpp.sgmn.kernel.KernelCalcNRGException;
 import org.anchoranalysis.plugin.mpp.sgmn.cfg.optscheme.CfgNRGPixelizedUtilities;
 
 public class KernelInitialCfgNRG extends KernelIndependent<CfgNRGPixelized> {
-
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -8499354370753415454L;
 	
 	// START BEAN LIST
 	@BeanField

@@ -41,11 +41,6 @@ import org.anchoranalysis.plugin.mpp.sgmn.cfg.optscheme.CfgFromPartition;
 
 public class KernelDeathPartition extends KernelDeath<CfgFromPartition> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	@Override
 	protected Optional<MarkAnd<Mark, CfgFromPartition>> removeAndUpdateNrg(CfgFromPartition exst, ProposerContext context)
 			throws KernelCalcNRGException {

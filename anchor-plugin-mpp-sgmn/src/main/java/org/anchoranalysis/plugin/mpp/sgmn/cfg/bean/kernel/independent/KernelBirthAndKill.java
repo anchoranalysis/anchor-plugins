@@ -51,11 +51,6 @@ import org.anchoranalysis.mpp.sgmn.kernel.KernelCalcContext;
 import org.anchoranalysis.mpp.sgmn.kernel.KernelCalcNRGException;
 
 public class KernelBirthAndKill extends KernelPosNeg<CfgNRGPixelized> {
-	
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 5973179354519885659L;
 
 	// START BEANS
 	@BeanField
@@ -80,7 +75,7 @@ public class KernelBirthAndKill extends KernelPosNeg<CfgNRGPixelized> {
 	@Override
 	public Optional<CfgNRGPixelized> makeProposal(Optional<CfgNRGPixelized> exst, KernelCalcContext context) throws KernelCalcNRGException {
 
-		if (exst.isPresent()) {
+		if (!exst.isPresent()) {
 			return Optional.empty();
 		}
 		

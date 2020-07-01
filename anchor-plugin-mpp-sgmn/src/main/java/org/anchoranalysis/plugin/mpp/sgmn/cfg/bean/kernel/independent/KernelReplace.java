@@ -42,10 +42,6 @@ import org.apache.commons.lang.ArrayUtils;
 
 public abstract class KernelReplace<T> extends KernelPosNeg<T> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
 	private KernelBirth<T> kernelBirth;
 	private KernelDeath<T> kernelDeath;
 	

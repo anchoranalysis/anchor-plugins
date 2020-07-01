@@ -41,11 +41,6 @@ import org.anchoranalysis.plugin.mpp.sgmn.cfg.bean.kernel.independent.KernelDeat
 
 public class KernelDeathPixelized extends KernelDeath<CfgNRGPixelized> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	@Override
 	protected Optional<MarkAnd<Mark, CfgNRGPixelized>> removeAndUpdateNrg(CfgNRGPixelized exst, ProposerContext context) throws KernelCalcNRGException {
 		return removeMarkAndUpdateNrg( exst, context );

@@ -54,11 +54,6 @@ import org.anchoranalysis.plugin.mpp.sgmn.cfg.bean.kernel.independent.KernelBirt
  */
 public class KernelBirthPixelized extends KernelBirth<CfgNRGPixelized> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	// START BEAN PROPERTIES
 	@BeanField
 	private MarkProposer markProposer;
