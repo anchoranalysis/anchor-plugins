@@ -83,12 +83,6 @@ public class AnnotationComparisonTask<T extends Assignment> extends Task<Annotat
 	private int outlineWidth = 1;
 	
 	@BeanField
-	private String nameLeft = "annotation";
-	
-	@BeanField
-	private String nameRight = "result";
-	
-	@BeanField
 	private AnnotationComparisonAssigner<T> assigner;
 	
 	@BeanField
@@ -278,8 +272,7 @@ public class AnnotationComparisonTask<T extends Assignment> extends Task<Annotat
 				assignment,
 				colorPool,
 				useMIP,
-				inputObject.getNameLeft()!=null ? inputObject.getNameLeft() : nameLeft,
-				inputObject.getNameRight()!=null ? inputObject.getNameRight() : nameRight,
+				inputObject.getNames(),
 				outlineWidth,
 				assigner.moreThanOneObj()
 			)
@@ -362,22 +355,6 @@ public class AnnotationComparisonTask<T extends Assignment> extends Task<Annotat
 
 	public void setAssigner(AnnotationComparisonAssigner<T> assigner) {
 		this.assigner = assigner;
-	}
-
-	public String getNameLeft() {
-		return nameLeft;
-	}
-
-	public void setNameLeft(String nameLeft) {
-		this.nameLeft = nameLeft;
-	}
-
-	public String getNameRight() {
-		return nameRight;
-	}
-
-	public void setNameRight(String nameRight) {
-		this.nameRight = nameRight;
 	}
 
 	public boolean isReplaceMatchesWithSolids() {
