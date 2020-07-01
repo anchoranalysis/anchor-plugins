@@ -32,12 +32,14 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Optional;
 
 import org.anchoranalysis.bean.NamedBean;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.DefaultInstance;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.core.cache.CachedOperation;
+import org.anchoranalysis.core.functional.FunctionalUtilities;
 import org.anchoranalysis.core.progress.ProgressReporter;
 import org.anchoranalysis.core.progress.ProgressReporterMultiple;
 import org.anchoranalysis.core.progress.ProgressReporterOneOfMany;
@@ -100,38 +102,29 @@ public class NamedChnlsAppend extends NamedChnlsBase {
 	}
 	
 	private List<NamedChnlsInputPart> createOutList( List<NamedChnlsInputPart> listTemp, ProgressReporter progressReporter, boolean debugMode ) throws AnchorIOException {
-
-		progressReporter.setMin(0);
-		progressReporter.setMax( listTemp.size() );
-		progressReporter.open();
-		
-		try {
-		
-			List<NamedChnlsInputPart> outList = new ArrayList<>();
-			for( int i=0; i<listTemp.size(); i++) {
-				
-				NamedChnlsInputPart ncc = listTemp.get(i);
-				
-				if (ignoreFileNotFoundAppend) {
-					
-					try {
-						outList.add( append(ncc, debugMode) );		
-					} catch ( AnchorIOException e) {
-						
-					}
-					
-				} else {
-					outList.add( append(ncc, debugMode) );	
-				}
-				
-				progressReporter.update(i);
-			}
-			return outList;
+		return FunctionalUtilities.mapListOptionalWithProgress(
+			listTemp,
+			progressReporter,
+			ncc -> maybeAppend(ncc,debugMode)
+		);
+	}
+	
+	private Optional<NamedChnlsInputPart> maybeAppend( final NamedChnlsInputPart ncc, boolean debugMode ) throws AnchorIOException {
+		if (ignoreFileNotFoundAppend) {
 			
-		} finally {
-			progressReporter.close();
+			try {
+				return Optional.of(
+					append(ncc,debugMode)
+				);
+			} catch (AnchorIOException e) {
+				return Optional.empty();
+			}
+			
+		} else {
+			return Optional.of(
+				append(ncc, debugMode)
+			);
 		}
-		
 	}
 	
 	// We assume all the input files are single channel images

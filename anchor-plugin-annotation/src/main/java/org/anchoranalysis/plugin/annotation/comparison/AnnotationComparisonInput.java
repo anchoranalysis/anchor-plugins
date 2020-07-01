@@ -34,27 +34,21 @@ import org.anchoranalysis.annotation.io.bean.comparer.Comparer;
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
 import org.anchoranalysis.image.io.bean.rasterreader.RasterReader;
 import org.anchoranalysis.io.input.InputFromManager;
+import org.apache.commons.lang3.tuple.Pair;
 
 public class AnnotationComparisonInput<T extends InputFromManager> implements InputFromManager {
 
-	private T inputObject;
-	
-	private Comparer comparerLeft;
-	private Comparer comparerRight;
-	
-	private String nameLeft;
-	private String nameRight;
-
-	private RasterReader rasterReader;
+	private final T inputObject;
+	private final Pair<Comparer,Comparer> comparers;
+	private final Pair<String,String> names;
+	private final RasterReader rasterReader;
 	
 	// Names are allowed be null, to indicate they are not defined
-	public AnnotationComparisonInput(T inputObject, Comparer comparerLeft, Comparer comparerRight, String nameLeft, String nameRight, RasterReader rasterReader) {
+	public AnnotationComparisonInput(T inputObject, Pair<Comparer,Comparer> comparers, Pair<String,String> names, RasterReader rasterReader) {
 		super();
 		this.inputObject = inputObject;
-		this.comparerLeft = comparerLeft;
-		this.comparerRight = comparerRight;
-		this.nameLeft = nameLeft;
-		this.nameRight = nameRight;
+		this.comparers = comparers;
+		this.names = names;
 		this.rasterReader = rasterReader;
 	}
 
@@ -71,9 +65,9 @@ public class AnnotationComparisonInput<T extends InputFromManager> implements In
 	// Uses a boolean flag to multiplex between comparerLeft and comparerRight
 	public Comparer getComparerMultiplex( boolean left ) {
 		if (left) {
-			return comparerLeft;
+			return comparers.getLeft();
 		} else {
-			return comparerRight;
+			return comparers.getRight();
 		}
 	}
 
@@ -86,39 +80,15 @@ public class AnnotationComparisonInput<T extends InputFromManager> implements In
 		return inputObject;
 	}
 
-	public void setInputObject(T inputObject) {
-		this.inputObject = inputObject;
+	public Pair<String,String> getNames() {
+		return names;
 	}
 
-	public String getNameLeft() {
-		return nameLeft;
-	}
-	
-	public String getNameRight() {
-		return nameRight;
-	}
-
-	public Comparer getComparerLeft() {
-		return comparerLeft;
-	}
-
-	public void setComparerLeft(Comparer comparerLeft) {
-		this.comparerLeft = comparerLeft;
-	}
-
-	public Comparer getComparerRight() {
-		return comparerRight;
-	}
-
-	public void setComparerRight(Comparer comparerRight) {
-		this.comparerRight = comparerRight;
+	public Pair<Comparer,Comparer> getComparers() {
+		return comparers;
 	}
 
 	public RasterReader getRasterReader() {
 		return rasterReader;
-	}
-
-	public void setRasterReader(RasterReader rasterReader) {
-		this.rasterReader = rasterReader;
 	}
 }
