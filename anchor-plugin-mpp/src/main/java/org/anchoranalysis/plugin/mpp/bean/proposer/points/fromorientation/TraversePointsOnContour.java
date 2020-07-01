@@ -44,8 +44,8 @@ import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.core.random.RandomNumberGenerator;
 import org.anchoranalysis.image.orientation.Orientation;
+import org.anchoranalysis.plugin.mpp.bean.proposer.points.onoutline.FindPointOnOutline;
 
-import ch.ethz.biol.cell.mpp.mark.ellipsoidfitter.findoutlinepixelangle.FindOutlinePixelAngle;
 import ch.ethz.biol.cell.mpp.mark.ellipsoidfitter.outlinepixelsretriever.OutlinePixelsRetriever;
 import ch.ethz.biol.cell.mpp.mark.ellipsoidfitter.outlinepixelsretriever.TraverseOutlineException;
 
@@ -53,7 +53,7 @@ public class TraversePointsOnContour extends PointsFromOrientationProposer {
 
 	// START BEAN PROPERTIES
 	@BeanField
-	private FindOutlinePixelAngle findOutlinePixelAngle;
+	private FindPointOnOutline findOutlinePixelAngle;
 	
 	@BeanField
 	private OutlinePixelsRetriever outlinePixelsRetriever;
@@ -104,7 +104,7 @@ public class TraversePointsOnContour extends PointsFromOrientationProposer {
 		return combinedLists;
 	}
 	
-	private Point3d addPointsFromOrientation( Point3d centrePoint, Orientation orientation, FindOutlinePixelAngle find, OutlinePixelsRetriever traverseOutline, List<Point3i> listOut, String desc, RandomNumberGenerator re ) throws TraverseOutlineException {
+	private Point3d addPointsFromOrientation( Point3d centrePoint, Orientation orientation, FindPointOnOutline find, OutlinePixelsRetriever traverseOutline, List<Point3i> listOut, String desc, RandomNumberGenerator re ) throws TraverseOutlineException {
 		
 		try {
 			Point3d found_point = find.pointOnOutline( centrePoint, orientation );
@@ -123,11 +123,11 @@ public class TraversePointsOnContour extends PointsFromOrientationProposer {
 		}
 	}
 
-	public FindOutlinePixelAngle getFindOutlinePixelAngle() {
+	public FindPointOnOutline getFindOutlinePixelAngle() {
 		return findOutlinePixelAngle;
 	}
 
-	public void setFindOutlinePixelAngle(FindOutlinePixelAngle findOutlinePixelAngle) {
+	public void setFindOutlinePixelAngle(FindPointOnOutline findOutlinePixelAngle) {
 		this.findOutlinePixelAngle = findOutlinePixelAngle;
 	}
 

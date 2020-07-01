@@ -39,8 +39,7 @@ import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
 
 
 import org.anchoranalysis.bean.annotation.BeanField;
-
-import ch.ethz.biol.cell.mpp.mark.distance.MarkDistanceAbstractPosition;
+import org.anchoranalysis.plugin.mpp.bean.mark.distance.MarkDistanceAbstractPosition;
 
 public class TranslMinMaxDistDilate extends MarkProposer {
 
