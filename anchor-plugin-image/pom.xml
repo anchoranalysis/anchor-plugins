@@ -79,7 +79,7 @@
 	</dependency>	
 	<dependency>
 	  <groupId>${project.groupId}</groupId>
-	  <artifactId>anchor-graph</artifactId>
+	  <artifactId>anchor-plot</artifactId>
 	  <version>0.0.8-SNAPSHOT</version>
 	</dependency>
 	
