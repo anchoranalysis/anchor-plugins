@@ -26,10 +26,10 @@ package org.anchoranalysis.plugin.mpp.experiment.bean.feature;
  * #L%
  */
 
-/** Helpful routines and constants related to outputting for {@link ExportFeaturesObjMaskTaskTest} */
-class ExportFeaturesObjMaskOutputter {
+/** Helpful routines and constants related to outputting for {@link ExportFeaturesTaskTest} */
+class ExportOutputter {
 
-	private ExportFeaturesObjMaskOutputter() {}
+	private ExportOutputter() {}
 	
 	// Saved output locations for particular tests
 	public static final String OUTPUT_DIR_SIMPLE_1 = "simple01/";

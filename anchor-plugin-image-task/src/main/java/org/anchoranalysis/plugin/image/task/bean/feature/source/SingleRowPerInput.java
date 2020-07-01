@@ -1,4 +1,4 @@
-package org.anchoranalysis.plugin.image.task.bean.feature;
+package org.anchoranalysis.plugin.image.task.bean.feature.source;
 
 import java.util.List;
 
@@ -50,11 +50,10 @@ import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.input.InputFromManager;
 import org.anchoranalysis.io.output.bound.BoundIOContext;
 import org.anchoranalysis.plugin.image.task.feature.GenerateHeadersForCSV;
-import org.anchoranalysis.plugin.image.task.sharedstate.SharedStateExportFeatures;
+import org.anchoranalysis.plugin.image.task.feature.SharedStateExportFeatures;
 
 /**
- * Base class for exporting features, where features are calculated per-image
- *   using a NamedFeatureStore
+ * Base class for exporting features, where features are calculated per-image using a NamedFeatureStore
  *   
  * @author FEEHANO
  * 
@@ -62,7 +61,7 @@ import org.anchoranalysis.plugin.image.task.sharedstate.SharedStateExportFeature
  * @param S feature-input type
  *
  */
-public abstract class ExportFeaturesStoreTask<T extends InputFromManager, S extends FeatureInput> extends ExportFeaturesTask<T,FeatureList<S>,S> {
+public abstract class SingleRowPerInput<T extends InputFromManager, S extends FeatureInput> extends FeatureSource<T,FeatureList<S>,S> {
 
 	private static final NamedFeatureStoreFactory STORE_FACTORY = NamedFeatureStoreFactory.factoryParamsOnly();
 	
@@ -73,13 +72,13 @@ public abstract class ExportFeaturesStoreTask<T extends InputFromManager, S exte
 	 * 
 	 * @param firstResultHeader the first column-name in the CSV file that is outputted
 	 */
-	public ExportFeaturesStoreTask(String firstResultHeader) {
+	public SingleRowPerInput(String firstResultHeader) {
 		super();
 		this.firstResultHeader = firstResultHeader;
 	}	
 	
 	@Override
-	protected SharedStateExportFeatures<FeatureList<S>> createSharedState( MetadataHeaders metadataHeaders, List<NamedBean<FeatureListProvider<S>>> features, BoundIOContext context) throws CreateException {
+	public SharedStateExportFeatures<FeatureList<S>> createSharedState( MetadataHeaders metadataHeaders, List<NamedBean<FeatureListProvider<S>>> features, BoundIOContext context) throws CreateException {
 		try {
 			NamedFeatureStore<S> store = STORE_FACTORY.createNamedFeatureList(features); 
 			return new SharedStateExportFeatures<>(
@@ -94,7 +93,7 @@ public abstract class ExportFeaturesStoreTask<T extends InputFromManager, S exte
 	}
 	
 	@Override
-	protected GenerateHeadersForCSV headers() {
+	public GenerateHeadersForCSV headers() {
 		return new GenerateHeadersForCSV(
 			new String[]{firstResultHeader},
 			Optional.empty()
@@ -102,7 +101,7 @@ public abstract class ExportFeaturesStoreTask<T extends InputFromManager, S exte
 	}	
 	
 	@Override
-	protected void calcAllResultsForInput(
+	public void calcAllResultsForInput(
 		T input,
 		BiConsumer<StringLabelsForCsvRow,ResultsVector> addResultsFor,
 		FeatureList<S> featureSourceSupplier,

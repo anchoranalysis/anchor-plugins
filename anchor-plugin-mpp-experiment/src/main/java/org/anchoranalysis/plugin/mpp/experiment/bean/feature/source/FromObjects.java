@@ -1,31 +1,4 @@
-package org.anchoranalysis.plugin.mpp.experiment.bean.feature;
-
-/*
- * #%L
- * anchor-plugin-mpp-experiment
- * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
- * %%
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
- * 
- * The above copyright notice and this permission notice shall be included in
- * all copies or substantial portions of the Software.
- * 
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- * THE SOFTWARE.
- * #L%
- */
-
+package org.anchoranalysis.plugin.mpp.experiment.bean.feature.source;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -61,38 +34,27 @@ import org.anchoranalysis.io.output.bound.BoundIOContext;
 import org.anchoranalysis.mpp.io.input.MultiInput;
 import org.anchoranalysis.mpp.sgmn.bean.define.DefineOutputterMPPWithNrg;
 import org.anchoranalysis.plugin.image.feature.bean.object.table.FeatureTableObjects;
-import org.anchoranalysis.plugin.image.task.bean.feature.ExportFeaturesTask;
+import org.anchoranalysis.plugin.image.task.bean.feature.source.FeatureSource;
 import org.anchoranalysis.plugin.image.task.feature.GenerateHeadersForCSV;
-import org.anchoranalysis.plugin.image.task.sharedstate.SharedStateExportFeatures;
-
+import org.anchoranalysis.plugin.image.task.feature.SharedStateExportFeatures;
 
 /** 
- * Calculates features for each object in a collection.
+ * Extracts features for each object in a collection.
  *
  *  <ol>
- *  <li>All files are aggregated into groups (with the name of the ObjMaskProvider added to the end)</li>
- *  <li>For each image file, the <code>define</code> is applied and an {@link ObjectCollection} is extracted</li>
+ *  <li>All input are aggregated into groups (with the name of the ObjMaskProvider added to the end)</li>
+ *  <li>For each input, the <code>define</code> is applied and one or more {@link ObjectCollection} are extracted</li>
  *  <li>These objects are added to the appropriate {@link ObjectCollection} associated with each group</li>
- *  <li>Various exports may occur with either the features for each object (or aggregated features for the groups)</li>
  *  </ol>
  *  
- *  <div>
- *  These exports are:
- *  <table>
- *  <tr><td>features</td><td>a single csv file where each row is an object</td></tr>
- *  <tr><td>featuresAggregated</td><td>a single csv file where each row is a group (with aggregated features of the objects within)</td></tr>
- *  <tr><td>featuresGroup</td><td>a csv file per group, where each row is an object</td></tr>
- *  </table>
- *  </div>
- *  
- *  <p>Note unlike other export-tasks, the group here is not only what is returned by the <code>group</code> generator
+ *  <p>Note unlike other feature-sources, the group here is not only what is returned by the <code>group</code> generator
  *  in the super-class, but also includes the name of the {@link ObjectCollectionProvider} if there is more than one.</p>
  *  
  *  TODO does this need to be a MultiInput and dependent on MPP? Can it be moved to anchor-plugin-image-task??
  *  
- *  @param T the feature input-type supported by the FlexiFeatureTable
+ *  @param <T> the feature input-type supported by the FlexiFeatureTable
 **/
-public class ExportFeaturesObjMaskTask<T extends FeatureInput> extends ExportFeaturesTask<MultiInput,FeatureTableCalculator<T>,FeatureInputSingleObject> {
+public class FromObjects<T extends FeatureInput> extends FeatureSource<MultiInput,FeatureTableCalculator<T>,FeatureInputSingleObject> {
 
 	private static final NamedFeatureStoreFactory STORE_FACTORY = NamedFeatureStoreFactory.bothNameAndParams();
 	
@@ -116,7 +78,7 @@ public class ExportFeaturesObjMaskTask<T extends FeatureInput> extends ExportFea
 	}
 	
 	@Override
-	protected SharedStateExportFeatures<FeatureTableCalculator<T>> createSharedState( MetadataHeaders metadataHeaders, List<NamedBean<FeatureListProvider<FeatureInputSingleObject>>> features, BoundIOContext context) throws CreateException {
+	public SharedStateExportFeatures<FeatureTableCalculator<T>> createSharedState( MetadataHeaders metadataHeaders, List<NamedBean<FeatureListProvider<FeatureInputSingleObject>>> features, BoundIOContext context) throws CreateException {
 		try {
 			FeatureTableCalculator<T> tableCalculator = table.createFeatures(
 				features,
@@ -135,7 +97,7 @@ public class ExportFeaturesObjMaskTask<T extends FeatureInput> extends ExportFea
 	}
 
 	@Override
-	protected void calcAllResultsForInput(
+	public void calcAllResultsForInput(
 		MultiInput input,
 		BiConsumer<StringLabelsForCsvRow,ResultsVector> addResultsFor,
 		FeatureTableCalculator<T> featureSourceSupplier,
@@ -159,7 +121,7 @@ public class ExportFeaturesObjMaskTask<T extends FeatureInput> extends ExportFea
 	}
 	
 	@Override
-	protected GenerateHeadersForCSV headers() {
+	public GenerateHeadersForCSV headers() {
 		return new GenerateHeadersForCSV(
 			new String[]{"image", "unique_pixel_in_object"},
 			moreThanOneProvider() ? Optional.of("object_collection") : Optional.empty()
@@ -168,7 +130,7 @@ public class ExportFeaturesObjMaskTask<T extends FeatureInput> extends ExportFea
 
 	/** If either a group-generator is defined or there's more than one provider, then groups should be included */
 	@Override
-	protected boolean includeGroupInExperiment(boolean groupGeneratorDefined) {
+	public boolean includeGroupInExperiment(boolean groupGeneratorDefined) {
 		return groupGeneratorDefined || moreThanOneProvider();
 	}
 	

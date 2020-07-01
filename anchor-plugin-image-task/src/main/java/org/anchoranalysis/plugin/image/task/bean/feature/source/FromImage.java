@@ -1,4 +1,4 @@
-package org.anchoranalysis.plugin.image.task.bean.feature;
+package org.anchoranalysis.plugin.image.task.bean.feature.source;
 
 
 
@@ -47,15 +47,18 @@ import org.anchoranalysis.io.output.bound.BoundIOContext;
 import org.anchoranalysis.plugin.image.task.imagefeature.calculator.FeatureCalculatorFromProviderFactory;
 
 
-/** Calculates a feature on each image **/
-public class ExportFeaturesImageTask extends ExportFeaturesStoreTask<ProvidesStackInput,FeatureInputStack> {
+/** 
+ * Each image produces one row of features
+ * 
+ ***/
+public class FromImage extends SingleRowPerInput<ProvidesStackInput,FeatureInputStack> {
 
 	// START BEAN PROPERTIES
 	@BeanField @OptionalBean
 	private StackProvider nrgStackProvider;
 	// END BEAN PROPERTIES
 	
-	public ExportFeaturesImageTask() {
+	public FromImage() {
 		super("image");
 	}
 	
@@ -65,7 +68,7 @@ public class ExportFeaturesImageTask extends ExportFeaturesStoreTask<ProvidesSta
 	}
 	
 	@Override
-	protected boolean includeGroupInExperiment(boolean groupGeneratorDefined) {
+	public boolean includeGroupInExperiment(boolean groupGeneratorDefined) {
 		return groupGeneratorDefined;
 	}
 	

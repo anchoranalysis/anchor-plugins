@@ -1,4 +1,4 @@
-package org.anchoranalysis.plugin.mpp.experiment.bean.feature;
+package org.anchoranalysis.plugin.mpp.experiment.bean.feature.source;
 
 /*-
  * #%L

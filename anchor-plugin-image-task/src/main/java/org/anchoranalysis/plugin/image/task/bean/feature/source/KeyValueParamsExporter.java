@@ -1,4 +1,4 @@
-package org.anchoranalysis.plugin.image.task.bean.feature;
+package org.anchoranalysis.plugin.image.task.bean.feature.source;
 
 import java.util.Optional;
 
@@ -64,7 +64,7 @@ class KeyValueParamsExporter {
 				kv.put(key, val.get() );	
 			} else {
 				// Then an error happened and we report it
-				logErrorReporter.getErrorReporter().recordError(ExportFeaturesHistogramTask.class, rv.getException(i) );
+				logErrorReporter.getErrorReporter().recordError(FromHistogram.class, rv.getException(i) );
 				kv.put(key, Double.NaN);
 			}
 		}

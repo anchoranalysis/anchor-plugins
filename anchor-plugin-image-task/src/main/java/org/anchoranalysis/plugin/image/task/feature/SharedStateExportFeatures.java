@@ -1,4 +1,4 @@
-package org.anchoranalysis.plugin.image.task.sharedstate;
+package org.anchoranalysis.plugin.image.task.feature;
 
 import java.io.IOException;
 import java.util.Optional;
