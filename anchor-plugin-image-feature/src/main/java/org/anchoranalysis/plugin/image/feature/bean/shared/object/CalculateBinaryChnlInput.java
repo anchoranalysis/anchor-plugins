@@ -1,4 +1,4 @@
-package org.anchoranalysis.plugin.image.feature.bean.stack.shared;
+package org.anchoranalysis.plugin.image.feature.bean.shared.object;
 
 /*-
  * #%L
@@ -30,20 +30,20 @@ import java.nio.ByteBuffer;
 
 import org.anchoranalysis.feature.cache.calculation.FeatureCalculation;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.feature.input.FeatureInputNRG;
 import org.anchoranalysis.image.binary.BinaryChnl;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelBoxByte;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
-import org.anchoranalysis.image.feature.stack.FeatureInputStack;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.anchoranalysis.image.voxel.datatype.IncorrectVoxelDataTypeException;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
-class CalculateBinaryChnlInput extends FeatureCalculation<FeatureInputSingleObject, FeatureInputStack> {
+class CalculateBinaryChnlInput<T extends FeatureInputNRG> extends FeatureCalculation<FeatureInputSingleObject, T> {
 
-	private BinaryChnl chnl;
+	private final BinaryChnl chnl;
 		
 	public CalculateBinaryChnlInput(BinaryChnl chnl) {
 		super();
@@ -51,7 +51,7 @@ class CalculateBinaryChnlInput extends FeatureCalculation<FeatureInputSingleObje
 	}
 
 	@Override
-	protected FeatureInputSingleObject execute(FeatureInputStack input) throws FeatureCalcException {
+	protected FeatureInputSingleObject execute(T input) throws FeatureCalcException {
 		
 		BinaryVoxelBox<ByteBuffer> bvb = binaryVoxelBox(chnl);
 		
@@ -75,7 +75,8 @@ class CalculateBinaryChnlInput extends FeatureCalculation<FeatureInputSingleObje
 	@Override
 	public boolean equals(Object obj) {
 		 if(obj instanceof CalculateBinaryChnlInput){
-			 final CalculateBinaryChnlInput other = (CalculateBinaryChnlInput) obj;
+			 @SuppressWarnings("unchecked")
+			final CalculateBinaryChnlInput<T> other = (CalculateBinaryChnlInput<T>) obj;
 		        return new EqualsBuilder()
 		            .append(chnl, other.chnl)
 		            .isEquals();

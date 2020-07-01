@@ -1,4 +1,4 @@
-package org.anchoranalysis.plugin.image.feature.bean.object.collection.intersecting;
+package org.anchoranalysis.plugin.image.feature.bean.shared.object;
 
 /*
  * #%L
@@ -28,82 +28,64 @@ package org.anchoranalysis.plugin.image.feature.bean.object.collection.intersect
 
 
 import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.bean.annotation.SkipInit;
+import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
-import org.anchoranalysis.core.name.provider.NamedProviderGetException;
-import org.anchoranalysis.feature.cache.SessionInput;
-import org.anchoranalysis.feature.cache.calculation.ResolvedCalculation;
+import org.anchoranalysis.feature.bean.Feature;
+import org.anchoranalysis.feature.cache.ChildCacheName;
+import org.anchoranalysis.feature.cache.calculation.CalcForChild;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.image.feature.bean.object.collection.FeatureObjectCollectionShared;
+import org.anchoranalysis.feature.input.FeatureInputNRG;
+import org.anchoranalysis.image.bean.provider.BinaryChnlProvider;
+import org.anchoranalysis.image.binary.BinaryChnl;
 import org.anchoranalysis.image.feature.init.FeatureInitParamsShared;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
-import org.anchoranalysis.image.object.ObjectCollection;
 
-public abstract class FeatureIntersectingObjects extends FeatureObjectCollectionShared {
+/**
+ * Calculate a feature, treating a binary-channel as a single-object on the nrg-stack
+ * @author Owen Feehan
+ *
+ */
+public class BinaryChannelAsSingleObject<T extends FeatureInputNRG> extends FeatureSingleObjectFromShared<T> {
 
-	
 	// START BEAN PROPERTIES
-	/**
-	 * ID for the particular ObjMaskCollection
-	 */
 	@BeanField
-	private String id="";
-	
-	@BeanField
-	private double valueNoObjects = Double.NaN;
+	@SkipInit
+	private BinaryChnlProvider binaryChnl;
 	// END BEAN PROPERTIES
-
-	private ObjectCollection searchObjs;
+	
+	private BinaryChnl chnl;
 	
 	@Override
 	public void beforeCalcCast(FeatureInitParamsShared params) throws InitException {
-	
-		try {
-			this.searchObjs = params.getSharedObjects().getObjMaskCollection().getException(id);
-		} catch (NamedProviderGetException e) {
-			throw new InitException(e.summarize());
-		};
-	}
-	
-	@Override
-	public double calc(SessionInput<FeatureInputSingleObject> input)
-			throws FeatureCalcException {
+		super.beforeCalcCast(params);
 
-		if (getSearchObjs().size()==0) {
-			return getValueNoObjects();
-		}
+		binaryChnl.initRecursive(
+			params.getSharedObjects(),
+			getLogger()
+		);
 		
-		return valueFor(
-			input,
-			input.resolver().search(
-				new CalculateIntersectingObjs(id, searchObjs)
-			)
+		try {
+			chnl = binaryChnl.create();
+		} catch (CreateException e) {
+			throw new InitException(e);
+		}
+	}
+
+	@Override
+	protected double calc(CalcForChild<T> calcForChild, Feature<FeatureInputSingleObject> featureForSingleObject) throws FeatureCalcException {
+		return calcForChild.calc(
+			featureForSingleObject,
+			new CalculateBinaryChnlInput<>(chnl),
+			new ChildCacheName(BinaryChannelAsSingleObject.class, chnl.hashCode())
 		);
 	}
-	
-	protected abstract double valueFor(
-		SessionInput<FeatureInputSingleObject> params,
-		ResolvedCalculation<ObjectCollection, FeatureInputSingleObject> intersecting
-	) throws FeatureCalcException;
-	
-	public String getId() {
-		return id;
+
+	public BinaryChnlProvider getBinaryChnl() {
+		return binaryChnl;
 	}
 
-	public void setId(String id) {
-		this.id = id;
+	public void setBinaryChnl(BinaryChnlProvider binaryChnl) {
+		this.binaryChnl = binaryChnl;
 	}
-
-	public double getValueNoObjects() {
-		return valueNoObjects;
-	}
-
-
-	public void setValueNoObjects(double valueNoObjects) {
-		this.valueNoObjects = valueNoObjects;
-	}
-
-	protected ObjectCollection getSearchObjs() {
-		return searchObjs;
-	}
-
 }

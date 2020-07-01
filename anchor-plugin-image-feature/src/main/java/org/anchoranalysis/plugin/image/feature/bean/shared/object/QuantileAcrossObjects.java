@@ -1,8 +1,8 @@
-package ch.ethz.biol.cell.mpp.nrg.feature.objmask;
+package org.anchoranalysis.plugin.image.feature.bean.shared.object;
 
 /*
  * #%L
- * anchor-plugin-image
+ * anchor-plugin-image-feature
  * %%
  * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
  * %%
@@ -28,50 +28,35 @@ package ch.ethz.biol.cell.mpp.nrg.feature.objmask;
 
 
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.feature.input.FeatureInputNRGStack;
-import org.anchoranalysis.image.feature.bean.FeatureNRGStack;
+import org.anchoranalysis.feature.input.FeatureInputNRG;
 
-public class NRGParam extends FeatureNRGStack {
+import cern.colt.list.DoubleArrayList;
+import cern.jet.stat.Descriptive;
+
+/**
+ * Calculates the quantile of a feature applied to each connected component
+ * 
+ * @author Owen Feehan
+ * @param <T> feature-input
+ */
+public class QuantileAcrossObjects<T extends FeatureInputNRG> extends ObjectAggregationBase<T> {
 
 	// START BEAN PROPERTIES
 	@BeanField
-	private String id;
+	private double quantile = 0.5;
 	// END BEAN PROPERTIES
-	
-	static double calcForPropertyID( FeatureInputNRGStack params, String id ) throws FeatureCalcException {
-		
-		double val = calcWithMaybeNaN(params, id);
-		
-		if (Double.isNaN(val)) {
-			throw new FeatureCalcException(
-				String.format("Cannot find key: %s", id)	
-			);
-		}
-		
-		return val;
-	}
-	
-	@Override
-	public double calcForInput(FeatureInputNRGStack params) throws FeatureCalcException {
-		return calcForPropertyID( params, id );
-	}
-	
-	private static double calcWithMaybeNaN( FeatureInputNRGStack input, String id ) throws FeatureCalcException {
-		return input.getParamsRequired().getPropertyAsDouble(id);
-	}
-
-	public String getId() {
-		return id;
-	}
-
-	public void setId(String id) {
-		this.id = id;
-	}
 
 	@Override
-	public String getParamDscr() {
-		return id;
+	protected double deriveStatistic(DoubleArrayList featureVals) {
+		featureVals.sort();
+		return Descriptive.quantile(featureVals, quantile);
 	}
 
+	public double getQuantile() {
+		return quantile;
+	}
+
+	public void setQuantile(double quantile) {
+		this.quantile = quantile;
+	}
 }

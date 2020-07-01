@@ -34,7 +34,7 @@ import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.bean.list.FeatureListProvider;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.calc.FeatureInitParams;
-import org.anchoranalysis.feature.input.FeatureInputNRGStack;
+import org.anchoranalysis.feature.input.FeatureInputNRG;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 import org.anchoranalysis.feature.session.FeatureSession;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorMulti;
@@ -55,7 +55,7 @@ import org.anchoranalysis.io.output.bound.BoundIOContext;
  *
  * @param <T> feature-input-type
  */
-public class FeatureCalculatorFromProviderFactory<T extends FeatureInputNRGStack> {
+public class FeatureCalculatorFromProviderFactory<T extends FeatureInputNRG> {
 	
 	private final ImageInitParams initParams;
 	private final NRGStackWithParams nrgStack;

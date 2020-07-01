@@ -1,10 +1,12 @@
-package org.anchoranalysis.plugin.image.feature.bean.object.collection.intersecting;
+package org.anchoranalysis.plugin.image.feature.bean.nrg.dimensions;
+
+import org.anchoranalysis.feature.input.FeatureInputNRG;
 
 /*-
  * #%L
  * anchor-plugin-image-feature
  * %%
- * Copyright (C) 2010 - 2020 Owen Feehan
+ * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -26,23 +28,19 @@ package org.anchoranalysis.plugin.image.feature.bean.object.collection.intersect
  * #L%
  */
 
-import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.image.extent.ImageDimensions;
 
-public abstract class FeatureIntersectingObjectsThreshold extends FeatureIntersectingObjectsSingleElement {
+/**
+ * Area of the stack (XY dimensions only, Z dimension is not considered)
+ * 
+ * @author Owen Feehan
+ * @param <T> feature-input-type
+ *
+ */
+public class Area<T extends FeatureInputNRG> extends FromDimensionsBase<T> {
 
-	// START BEAN PROPERTIES
-	/**
-	 * Only considers values greater or equal to the threshold
-	 */
-	@BeanField
-	private double threshold = 0.0;
-	// END BEAN PROPERTIES
-	
-	public double getThreshold() {
-		return threshold;
-	}
-
-	public void setThreshold(double threshold) {
-		this.threshold = threshold;
+	@Override
+	protected double calcFromDims(ImageDimensions dim) {
+		return dim.getVolumeXY();
 	}
 }

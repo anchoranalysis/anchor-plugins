@@ -1,4 +1,4 @@
-package org.anchoranalysis.plugin.image.feature.bean.stack.shared;
+package org.anchoranalysis.plugin.image.feature.bean.object.single.shared;
 
 /*-
  * #%L
@@ -27,56 +27,43 @@ package org.anchoranalysis.plugin.image.feature.bean.stack.shared;
  */
 
 import org.anchoranalysis.feature.cache.calculation.FeatureCalculation;
+import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.image.binary.BinaryChnl;
+import org.anchoranalysis.image.feature.object.input.FeatureInputPairObjects;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
-import org.anchoranalysis.image.feature.stack.FeatureInputStack;
-import org.anchoranalysis.image.object.ObjectCollection;
-import org.apache.commons.lang.builder.EqualsBuilder;
+import org.anchoranalysis.image.object.ObjectMask;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
-class CalculateInputFromStack extends FeatureCalculation<FeatureInputSingleObject, FeatureInputStack> {
+class CalculatePairInput extends FeatureCalculation<FeatureInputPairObjects, FeatureInputSingleObject> {
 
-	private final ObjectCollection objs;
-	private final int index;
-	
-	
-	/**
-	 * Constructor
-	 * 
-	 * @param objs the object-mask collection to calculate from (ignored in hash-coding and equality as assumed to be singular)
-	 * @param index index of particular object in objs to derive parameters for
-	 */
-	public CalculateInputFromStack(ObjectCollection objs, int index) {
+	private BinaryChnl chnl;
+		
+	public CalculatePairInput(BinaryChnl chnl) {
 		super();
-		this.objs = objs;
-		this.index = index;
+		this.chnl = chnl;
 	}
 
 	@Override
-	protected FeatureInputSingleObject execute(FeatureInputStack input) {
-		return new FeatureInputSingleObject(
-			objs.get(index),
+	protected FeatureInputPairObjects execute(FeatureInputSingleObject input) throws FeatureCalcException {
+
+		ObjectMask objFromBinary = new ObjectMask(
+			chnl.binaryVoxelBox()
+		);
+		
+		return new FeatureInputPairObjects(
+			input.getObjectMask(),
+			objFromBinary,
 			input.getNrgStackOptional()
 		);
 	}
-
+	
 	@Override
-	public boolean equals(Object obj) {
-		if (obj == null) { return false; }
-		if (obj == this) { return true; }
-		if (obj.getClass() != getClass()) {
-			return false;
-		}
-		CalculateInputFromStack rhs = (CalculateInputFromStack) obj;
-		return new EqualsBuilder()
-             .append(index, rhs.index)
-             .isEquals();
+	public boolean equals(Object other) {
+		return other instanceof CalculatePairInput;
 	}
 
 	@Override
 	public int hashCode() {
-		return new HashCodeBuilder()
-			.append(index)
-			.toHashCode();
+		return new HashCodeBuilder().toHashCode();
 	}
-
 }

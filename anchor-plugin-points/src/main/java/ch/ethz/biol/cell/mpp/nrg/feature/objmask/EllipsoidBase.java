@@ -38,9 +38,9 @@ import org.anchoranalysis.plugin.points.calculate.ellipsoid.CalculateEllipsoidLe
 public abstract class EllipsoidBase extends FeatureSingleObject {
 
 	// START BEAN PROPERTIES
-	/** Iff true, Supresses covariance in the z-direction. */
+	/** Iff true, supresses covariance in the z-direction. */
 	@BeanField
-	private boolean suppressZCovariance = false;
+	private boolean suppressZ = false;
 	// END BEAN PROPERTIES
 	
 	@Override
@@ -55,19 +55,19 @@ public abstract class EllipsoidBase extends FeatureSingleObject {
 		
 		MarkEllipsoid me = CalculateEllipsoidLeastSquares.createFromCache(
 			input,
-			suppressZCovariance
+			suppressZ
 		);
 		
 		return calc(input.get(), me);
 	}
 	
 	protected abstract double calc(FeatureInputSingleObject input, MarkEllipsoid me) throws FeatureCalcException;
-	
-	public boolean isSuppressZCovariance() {
-		return suppressZCovariance;
+
+	public boolean isSuppressZ() {
+		return suppressZ;
 	}
 
-	public void setSuppressZCovariance(boolean suppressZCovariance) {
-		this.suppressZCovariance = suppressZCovariance;
+	public void setSuppressZ(boolean suppressZ) {
+		this.suppressZ = suppressZ;
 	}
 }

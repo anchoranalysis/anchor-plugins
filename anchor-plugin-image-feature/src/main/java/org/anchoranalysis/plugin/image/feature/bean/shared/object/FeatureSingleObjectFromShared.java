@@ -1,10 +1,17 @@
-package org.anchoranalysis.plugin.operator.feature.bean;
+package org.anchoranalysis.plugin.image.feature.bean.shared.object;
 
-/*
+import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.feature.bean.Feature;
+import org.anchoranalysis.feature.cache.SessionInput;
+import org.anchoranalysis.feature.cache.calculation.CalcForChild;
+import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.feature.input.FeatureInputNRG;
+
+/*-
  * #%L
- * anchor-feature
+ * anchor-plugin-image-feature
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -26,57 +33,42 @@ package org.anchoranalysis.plugin.operator.feature.bean;
  * #L%
  */
 
-
-import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.params.KeyValueParams;
-import org.anchoranalysis.feature.bean.Feature;
-import org.anchoranalysis.feature.cache.SessionInput;
-import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.feature.input.FeatureInputParams;
 import org.anchoranalysis.feature.input.descriptor.FeatureInputDescriptor;
-import org.anchoranalysis.feature.input.descriptor.FeatureInputParamsDescriptor;
+import org.anchoranalysis.image.feature.bean.FeatureShared;
+import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
+import org.anchoranalysis.image.feature.stack.nrg.FeatureInputNRGStackDescriptor;
 
 /**
- * Extracts a key-value-param as a double
- * 
- * <p>This differs from {@link org.anchoranalysis.plugin.image.feature.bean.stack.ParamFromCollection} which reads
- * the parameter from a collection in the shared-objects, rather than from the nrg-stack.</p>
+ * Calculates as object-masks from entities in shared, using the feature-input only for a nrg-stack.
  * 
  * @author Owen Feehan
  *
- * @param <T> feature-input type
+ * @param <T> feature-input
  */
-public class Param<T extends FeatureInputParams> extends Feature<T> {
+public abstract class FeatureSingleObjectFromShared<T extends FeatureInputNRG> extends FeatureShared<T> {
 
 	// START BEAN PROPERTIES
 	@BeanField
-	private String key;
+	private Feature<FeatureInputSingleObject> item;
 	// END BEAN PROPERTIES
 	
 	@Override
 	public double calc(SessionInput<T> input) throws FeatureCalcException {
-		
-		KeyValueParams kvp = input.get().getParamsRequired();
-		
-		if (kvp.containsKey(key)) {
-			return kvp.getPropertyAsDouble(key);
-		} else {
-			throw new FeatureCalcException(
-				String.format("Param '%s' is missing", key)	
-			);
-		}
+		return calc(input.forChild(), item);
 	}
-
+	
+	protected abstract double calc(CalcForChild<T> calcForChild, Feature<FeatureInputSingleObject> featureForSingleObject) throws FeatureCalcException;
+	
 	@Override
 	public FeatureInputDescriptor inputDescriptor() {
-		return FeatureInputParamsDescriptor.instance;
+		return FeatureInputNRGStackDescriptor.instance;
+	}
+	
+	public Feature<FeatureInputSingleObject> getItem() {
+		return item;
 	}
 
-	public String getKey() {
-		return key;
-	}
-
-	public void setKey(String key) {
-		this.key = key;
+	public void setItem(Feature<FeatureInputSingleObject> item) {
+		this.item = item;
 	}
 }

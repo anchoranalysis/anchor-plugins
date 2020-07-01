@@ -35,8 +35,9 @@ import org.anchoranalysis.bean.permute.property.PermutePropertySequenceInteger;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.list.FeatureList;
-import org.anchoranalysis.feature.input.FeatureInputNRGStack;
-import ch.ethz.biol.cell.mpp.nrg.feature.objmask.NRGParamThree;
+import org.anchoranalysis.feature.input.FeatureInputNRG;
+import org.anchoranalysis.feature.input.FeatureInputParams;
+import org.anchoranalysis.plugin.operator.feature.bean.Param;
 
 /**
  * Permutes a property on a feature with a sequence of integers.
@@ -44,7 +45,7 @@ import ch.ethz.biol.cell.mpp.nrg.feature.objmask.NRGParamThree;
  * @author Owen Feehan
  *
  */
-public abstract class PermuteFeatureSequenceInteger extends PermuteFeatureBase<FeatureInputNRGStack> {
+public abstract class PermuteFeatureSequenceInteger extends PermuteFeatureBase<FeatureInputNRG> {
 
 	// START BEAN PROPERTIES
 	@BeanField
@@ -64,8 +65,8 @@ public abstract class PermuteFeatureSequenceInteger extends PermuteFeatureBase<F
 	}
 		
 	@Override
-	protected FeatureList<FeatureInputNRGStack> createPermutedFeaturesFor(Feature<FeatureInputNRGStack> feature) throws CreateException {
-		PermuteFeature<Integer,FeatureInputNRGStack> delegate = createDelegate(feature);
+	protected FeatureList<FeatureInputNRG> createPermutedFeaturesFor(Feature<FeatureInputNRG> feature) throws CreateException {
+		PermuteFeature<Integer,FeatureInputNRG> delegate = createDelegate(feature);
 		
 		configurePermutePropertyOnDelegate(delegate);
 		try {
@@ -77,28 +78,33 @@ public abstract class PermuteFeatureSequenceInteger extends PermuteFeatureBase<F
 		return delegate.create();
 	}
 	
-	protected abstract PermuteFeature<Integer,FeatureInputNRGStack> createDelegate(Feature<FeatureInputNRGStack> feature) throws CreateException;
+	protected abstract PermuteFeature<Integer,FeatureInputNRG> createDelegate(Feature<FeatureInputNRG> feature) throws CreateException;
 	
 	protected abstract PermutePropertySequenceInteger configurePermuteProperty( PermutePropertySequenceInteger permuteProperty );
 	
-	protected Feature<FeatureInputNRGStack> createNRGParam(
+	protected <T extends FeatureInputParams> Feature<T> createNRGParam(
 		String suffix,
 		boolean appendNumber
 	) {
-		NRGParamThree paramMean = new NRGParamThree();
-		paramMean.setIdLeft(paramPrefix);
-		if (appendNumber) {
-			paramMean.setIdMiddle(
-				Integer.toString(permuteProperty.getSequence().getStart())
-			);
-		} else {
-			paramMean.setIdMiddle("");
-		}
-		paramMean.setIdRight(suffix);
+		Param<T> paramMean = new Param<>();
+		paramMean.setKey(
+			buildKey(suffix, appendNumber)
+		);
 		return paramMean;
 	}
+	
+	private String buildKey(String suffix, boolean appendNumber) {
+		StringBuilder sb = new StringBuilder(paramPrefix);
+		if (appendNumber) {
+			sb.append(
+				Integer.toString(permuteProperty.getSequence().getStart())
+			);
+		}
+		sb.append(suffix);
+		return sb.toString();
+	}
 
-	private void configurePermutePropertyOnDelegate( PermuteFeature<Integer,FeatureInputNRGStack> delegate ) {
+	private void configurePermutePropertyOnDelegate( PermuteFeature<Integer,FeatureInputNRG> delegate ) {
 		PermutePropertySequenceInteger permutePropertyConfigured = configurePermuteProperty(
 			(PermutePropertySequenceInteger) permuteProperty.duplicateBean()
 		);

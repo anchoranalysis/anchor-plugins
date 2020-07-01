@@ -33,7 +33,8 @@ import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.feature.bean.object.pair.First;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
-import org.anchoranalysis.plugin.image.feature.bean.stack.dimensions.Extent;
+import org.anchoranalysis.image.feature.stack.FeatureInputStack;
+import org.anchoranalysis.plugin.image.feature.bean.nrg.dimensions.Extent;
 import org.anchoranalysis.test.TestLoader;
 import org.anchoranalysis.test.feature.plugins.mockfeature.MockFeatureWithCalculationFixture;
 import org.junit.Before;
@@ -143,7 +144,8 @@ public class ExportFeaturesTaskTest {
 	@Test
 	public void testCachingImageFeatures() throws OperationFailedException, CreateException, FeatureCalcException {
 		
-		Extent feature = spy(Extent.class);
+		@SuppressWarnings("unchecked")
+		Extent<FeatureInputStack> feature = (Extent<FeatureInputStack>) spy(Extent.class);
 		
 		// To make sure we keep on using the spy, even after an expected duplication()
 		when(feature.duplicateBean()).thenReturn(feature);

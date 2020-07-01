@@ -37,7 +37,7 @@ import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.feature.bean.list.FeatureListFactory;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.feature.input.FeatureInputNRGStack;
+import org.anchoranalysis.feature.input.FeatureInputNRG;
 import org.anchoranalysis.feature.input.FeatureInputNull;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorSingle;
@@ -128,7 +128,7 @@ public class ObjMaskProviderMergePair extends ObjMaskProviderMergeWithFeature {
 		}
 	}
 	
-	private static <T extends FeatureInputNRGStack> FeatureCalculatorSingle<T> maybeWrapWithNRGStack(
+	private static <T extends FeatureInputNRG> FeatureCalculatorSingle<T> maybeWrapWithNRGStack(
 		FeatureCalculatorSingle<T> calculator,
 		Optional<NRGStackWithParams> nrgStack
 	) {

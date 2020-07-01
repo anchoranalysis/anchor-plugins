@@ -1,4 +1,4 @@
-package org.anchoranalysis.plugin.image.feature.bean.stack.shared;
+package org.anchoranalysis.plugin.image.feature.bean.nrg.dimensions;
 
 /*
  * #%L
@@ -27,16 +27,22 @@ package org.anchoranalysis.plugin.image.feature.bean.stack.shared;
  */
 
 
-import cern.colt.list.DoubleArrayList;
-import cern.jet.stat.Descriptive;
+import org.anchoranalysis.core.axis.AxisType;
+import org.anchoranalysis.feature.input.FeatureInputNRG;
+import org.anchoranalysis.image.extent.ImageDimensions;
+
 
 /**
- * Calculates the mean of a feature applied to each connected component
- **/
-public class MeanAcrossObjects extends ObjectAggregationBase {
+ * Width/height/depth of nrg-stack in pixels depending on axis
+ * 
+ * @author Owen Feehan
+ *
+ * @param <T> feature-input-type
+ */
+public class Extent<T extends FeatureInputNRG> extends ForSpecificAxis<T> {
 
 	@Override
-	protected double deriveStatistic(DoubleArrayList featureVals) {
-		return Descriptive.mean(featureVals);
+	protected double calcForAxis(ImageDimensions dim, AxisType axis) {
+		return dim.getExtnt().getValueByDimension(axis);
 	}
 }
