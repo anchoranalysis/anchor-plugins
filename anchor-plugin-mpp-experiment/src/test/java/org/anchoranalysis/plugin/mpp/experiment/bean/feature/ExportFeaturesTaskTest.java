@@ -45,10 +45,10 @@ import org.junit.rules.TemporaryFolder;
 import static org.mockito.Mockito.*;
 
 import java.util.function.Consumer;
-import static org.anchoranalysis.plugin.mpp.experiment.bean.feature.ExportFeaturesObjMaskOutputter.*;
+import static org.anchoranalysis.plugin.mpp.experiment.bean.feature.ExportOutputter.*;
 
 /**
- * Tests running {#link ExportFeaturesObjMaskTask} on a single input
+ * Tests running {#link ExportFeaturesTask} on objects (both single and pairs)
  * 
  * <p>Two types of NRG stack are supported: big and small</p>
  * <p>For the small NRG stack, some of the object-masks are outside the scene size</p>
@@ -56,10 +56,10 @@ import static org.anchoranalysis.plugin.mpp.experiment.bean.feature.ExportFeatur
  * @author owen
  *
  */
-public class ExportFeaturesObjMaskTaskTest {
+public class ExportFeaturesTaskTest {
 	
 	private static TestLoader loader;
-	private ExportFeaturesObjMaskTaskFixture taskFixture;
+	private TaskFixture taskFixture;
 	
 	private static final String RELATIVE_PATH_SAVED_RESULTS = "expectedOutput/exportFeaturesObjMask/";
 		
@@ -74,7 +74,7 @@ public class ExportFeaturesObjMaskTaskTest {
 	
 	@Before
 	public void setupTest() throws CreateException {
-		taskFixture = new ExportFeaturesObjMaskTaskFixture(loader);
+		taskFixture = new TaskFixture(loader);
 	}
 	
 	@Test(expected=OperationFailedException.class)
@@ -222,7 +222,7 @@ public class ExportFeaturesObjMaskTaskTest {
 		);
 	}
 	
-	private void testOnTask( String outputDir, Consumer<ExportFeaturesObjMaskTaskFixture> changeFixture) throws OperationFailedException {
+	private void testOnTask( String outputDir, Consumer<TaskFixture> changeFixture) throws OperationFailedException {
 		changeFixture.accept(taskFixture);
 		testOnTask(outputDir);
 	}

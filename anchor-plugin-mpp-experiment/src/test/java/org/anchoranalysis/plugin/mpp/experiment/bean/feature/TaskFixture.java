@@ -37,21 +37,26 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.nrg.NRGStack;
 import org.anchoranalysis.image.bean.provider.ObjectCollectionProvider;
+import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
+import org.anchoranalysis.image.feature.session.FeatureTableCalculator;
 import org.anchoranalysis.io.bean.filepath.generator.FilePathGeneratorConstant;
+import org.anchoranalysis.mpp.io.input.MultiInput;
 import org.anchoranalysis.plugin.image.feature.bean.object.table.FeatureTableObjects;
 import org.anchoranalysis.plugin.image.feature.bean.object.table.MergedPairs;
 import org.anchoranalysis.plugin.image.feature.bean.object.table.Simple;
+import org.anchoranalysis.plugin.image.task.bean.ExportFeaturesTask;
+import org.anchoranalysis.plugin.mpp.experiment.bean.feature.source.FromObjects;
 import org.anchoranalysis.test.TestLoader;
 import org.anchoranalysis.test.image.NRGStackFixture;
 
 import ch.ethz.biol.cell.imageprocessing.objmask.provider.ObjMaskProviderReference;
 
-class ExportFeaturesObjMaskTaskFixture {
+class TaskFixture {
 	
 	private NRGStack nrgStack = createNRGStack(true);
 	private FeatureTableObjects<?> flexiFeatureTable = new Simple();
 	
-	private final ExportFeaturesObjMaskFeatureLoader featureLoader;
+	private final ExportObjectsFeatureLoader featureLoader;
 	
 	/**
 	 * Constructor
@@ -63,9 +68,9 @@ class ExportFeaturesObjMaskTaskFixture {
 	 * @param loader
 	 * @throws CreateException 
 	 */
-	public ExportFeaturesObjMaskTaskFixture(TestLoader loader) throws CreateException {
+	public TaskFixture(TestLoader loader) throws CreateException {
 		this.nrgStack = createNRGStack(true);
-		this.featureLoader = new ExportFeaturesObjMaskFeatureLoader(loader);
+		this.featureLoader = new ExportObjectsFeatureLoader(loader);
 	}
 	
 	/** 
@@ -85,7 +90,7 @@ class ExportFeaturesObjMaskTaskFixture {
 		flexiFeatureTable = createMergedPairs(includeFeaturesInPair, includeImageFeatures);
 	}
 	
-	public ExportFeaturesObjMaskFeatureLoader featureLoader() {
+	public ExportObjectsFeatureLoader featureLoader() {
 		return featureLoader;
 	}
 	
@@ -93,24 +98,14 @@ class ExportFeaturesObjMaskTaskFixture {
 		return nrgStack;
 	}
 	
-	@SuppressWarnings("unchecked")
-	public <T extends FeatureInput> ExportFeaturesObjMaskTask<T> createTask() throws CreateException {
-				
-		ExportFeaturesObjMaskTask<T> task = new ExportFeaturesObjMaskTask<>();
+	public <T extends FeatureInput> ExportFeaturesTask<MultiInput,FeatureTableCalculator<T>,FeatureInputSingleObject> createTask() throws CreateException {
+		
+		ExportFeaturesTask<MultiInput,FeatureTableCalculator<T>,FeatureInputSingleObject> task = new ExportFeaturesTask<>();
+		task.setSource( createSource() );
 		task.setFeatures(featureLoader.single());
 		task.setFeaturesAggregate(featureLoader.aggregated());
-		task.setDefine(
-			DefineFixture.create(
-				nrgStack,
-				Optional.of(featureLoader.shared())
-			)		
-		);
 		task.setGroup( new FilePathGeneratorConstant("arbitraryGroup") );
-		task.setTable( (FeatureTableObjects<T>) flexiFeatureTable);
-		task.setListObjMaskProvider(
-			createObjProviders(MultiInputFixture.OBJS_NAME)
-		);
-		
+				
 		try {
 			task.checkMisconfigured( RegisterBeanFactories.getDefaultInstances() );
 		} catch (BeanMisconfiguredException e) {
@@ -118,6 +113,22 @@ class ExportFeaturesObjMaskTaskFixture {
 		}
 		
 		return task;
+	}
+	
+	@SuppressWarnings("unchecked")
+	private <T extends FeatureInput> FromObjects<T> createSource() throws CreateException {
+		FromObjects<T> source = new FromObjects<>();
+		source.setDefine(
+			DefineFixture.create(
+				nrgStack,
+				Optional.of(featureLoader.shared())
+			)		
+		);
+		source.setTable( (FeatureTableObjects<T>) flexiFeatureTable);
+		source.setListObjMaskProvider(
+			createObjProviders(MultiInputFixture.OBJS_NAME)
+		);
+		return source;
 	}
 		
 	private static List<NamedBean<ObjectCollectionProvider>> createObjProviders(String objsName) {

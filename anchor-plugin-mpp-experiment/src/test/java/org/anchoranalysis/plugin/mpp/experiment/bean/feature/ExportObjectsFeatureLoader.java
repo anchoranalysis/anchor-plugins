@@ -39,8 +39,8 @@ import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.feature.stack.FeatureInputStack;
 import org.anchoranalysis.test.TestLoader;
 
-/** Loads features for {@link ExportFeaturesObjMaskTaskFixture */
-class ExportFeaturesObjMaskFeatureLoader {
+/** Loads features for {@link TaskFixture */
+class ExportObjectsFeatureLoader {
 
 	/** The "single" and "pair" and "image" features in use.*/
 	private LoadFeatureListProviderFixture<FeatureInputSingleObject> single;
@@ -53,7 +53,7 @@ class ExportFeaturesObjMaskFeatureLoader {
 	/** The features used for aggregating results */
 	private LoadFeatureListProviderFixture<FeatureInputResults> aggregated;
 	
-	public ExportFeaturesObjMaskFeatureLoader(TestLoader loader) {
+	public ExportObjectsFeatureLoader(TestLoader loader) {
 		super();
 		this.single = new LoadFeatureListProviderFixture<>(loader, "singleFeatures.xml");
 		this.pair = new LoadFeatureListProviderFixture<>(loader, "pairFeatures.xml");

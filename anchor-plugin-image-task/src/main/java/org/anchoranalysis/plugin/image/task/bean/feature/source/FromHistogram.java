@@ -1,4 +1,4 @@
-package org.anchoranalysis.plugin.image.task.bean.feature;
+package org.anchoranalysis.plugin.image.task.bean.feature.source;
 
 /*-
  * #%L
@@ -57,14 +57,14 @@ import org.anchoranalysis.io.input.FileInput;
 import org.anchoranalysis.io.output.bound.BoundIOContext;
 
 /**
- * 1. Reads a histogram from a CSV file
- * 2. Extracts some features (FeatureHistogram)
- * 3. Writes each feature in a KeyValueParams XML model
+ * Each input-file describes a histogram that produces one row of features.
+ * 
+ * <p>Optionally, additionally extracted features are written in a XML model.</p>
  * 
  * @author FEEHANO
  *
  */
-public class ExportFeaturesHistogramTask extends ExportFeaturesStoreTask<FileInput,FeatureInputHistogram> {
+public class FromHistogram extends SingleRowPerInput<FileInput,FeatureInputHistogram> {
 
 	/** The name of the input histogram made available to histogramProvider */
 	private static final String HISTOGRAM_INPUT_NAME_IN_PROVIDER = "input";
@@ -81,7 +81,7 @@ public class ExportFeaturesHistogramTask extends ExportFeaturesStoreTask<FileInp
 	private HistogramProvider histogramProvider;
 	// END BEAN PROPERTIES
 
-	public ExportFeaturesHistogramTask() {
+	public FromHistogram() {
 		super("histogram");
 	}
 	
@@ -91,7 +91,7 @@ public class ExportFeaturesHistogramTask extends ExportFeaturesStoreTask<FileInp
 	}
 	
 	@Override
-	protected boolean includeGroupInExperiment(boolean groupGeneratorDefined) {
+	public boolean includeGroupInExperiment(boolean groupGeneratorDefined) {
 		return groupGeneratorDefined;
 	}
 	
@@ -180,5 +180,4 @@ public class ExportFeaturesHistogramTask extends ExportFeaturesStoreTask<FileInp
 	public void setHistogramProvider(HistogramProvider histogramProvider) {
 		this.histogramProvider = histogramProvider;
 	}
-
 }

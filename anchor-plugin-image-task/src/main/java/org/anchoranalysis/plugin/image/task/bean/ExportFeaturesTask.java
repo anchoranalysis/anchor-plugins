@@ -1,4 +1,4 @@
-package org.anchoranalysis.plugin.image.task.bean.feature;
+package org.anchoranalysis.plugin.image.task.bean;
 
 import java.io.IOException;
 
@@ -32,9 +32,6 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.function.BiConsumer;
-import java.util.function.Function;
-
 import org.anchoranalysis.bean.NamedBean;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.NonEmpty;
@@ -45,16 +42,13 @@ import org.anchoranalysis.core.functional.OptionalUtilities;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
 import org.anchoranalysis.experiment.JobExecutionException;
 import org.anchoranalysis.experiment.task.InputBound;
+import org.anchoranalysis.experiment.task.InputTypesExpected;
 import org.anchoranalysis.experiment.task.ParametersExperiment;
 import org.anchoranalysis.experiment.task.Task;
 import org.anchoranalysis.feature.bean.list.FeatureListProvider;
-import org.anchoranalysis.feature.calc.results.ResultsVector;
 import org.anchoranalysis.feature.input.FeatureInput;
-import org.anchoranalysis.feature.io.csv.MetadataHeaders;
-import org.anchoranalysis.feature.io.csv.StringLabelsForCsvRow;
 import org.anchoranalysis.feature.list.NamedFeatureStore;
 import org.anchoranalysis.feature.list.NamedFeatureStoreFactory;
-import org.anchoranalysis.feature.name.FeatureNameList;
 import org.anchoranalysis.feature.resultsvectorcollection.FeatureInputResults;
 import org.anchoranalysis.io.bean.filepath.generator.FilePathGenerator;
 import org.anchoranalysis.io.error.AnchorIOException;
@@ -62,23 +56,38 @@ import org.anchoranalysis.io.filepath.FilePathToUnixStyleConverter;
 import org.anchoranalysis.io.input.InputFromManager;
 import org.anchoranalysis.io.output.bound.BoundIOContext;
 import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
-import org.anchoranalysis.plugin.image.task.feature.GenerateHeadersForCSV;
-import org.anchoranalysis.plugin.image.task.sharedstate.SharedStateExportFeatures;
+import org.anchoranalysis.plugin.image.task.bean.feature.source.FeatureSource;
+import org.anchoranalysis.plugin.image.task.feature.SharedStateExportFeatures;
 
 /**
- * Base class for tasks that calculate features and export them as a CSV
+ * Calculates features and exports them as a CSV
  * 
+ * <p>Aggregated-features (based upon a certain grouping) can also be calculated.</p> 
+ * 
+ *  <div>
+ *  Types of exports are:
+ *  <table>
+ *  <tr><td>features</td><td>a single csv file where each row is an object</td></tr>
+ *  <tr><td>featuresAggregated</td><td>a single csv file where each row is a group (with aggregated features of the objects within)</td></tr>
+ *  <tr><td>featuresGroup</td><td>a csv file per group, where each row is an object</td></tr>
+ *  </table>
+ *  </div>
+ *  
  * @author FEEHANO
  *
  * @param <T> See {@link Task}
  * @param <S> a source-of-features that is duplicated for each new thread (to prevent any concurrency issues)
  * @param <U> feature-input type for {@link features} bean-field
  */
-public abstract class ExportFeaturesTask<T extends InputFromManager, S, U extends FeatureInput> extends Task<T,SharedStateExportFeatures<S>> {
+public class ExportFeaturesTask<T extends InputFromManager, S, U extends FeatureInput> extends Task<T,SharedStateExportFeatures<S>> {
 
 	private static final NamedFeatureStoreFactory STORE_FACTORY_AGGREGATE = NamedFeatureStoreFactory.bothNameAndParams();
 	
 	// START BEAN
+	/** Source of feature-values to be exported */
+	@BeanField
+	private FeatureSource<T,S,U> source;
+	
 	/**
 	 * If non-null this file-path is used to determine the group of the file
 	 * If null, no group is included.
@@ -103,8 +112,8 @@ public abstract class ExportFeaturesTask<T extends InputFromManager, S, U extend
 	public SharedStateExportFeatures<S> beforeAnyJobIsExecuted(BoundOutputManagerRouteErrors outputManager, ParametersExperiment params)
 			throws ExperimentExecutionException {
 		try {
-			return createSharedState(
-				headers().createMetadataHeaders(isGroupGeneratorDefined()),
+			return source.createSharedState(
+				source.headers().createMetadataHeaders(isGroupGeneratorDefined()),
 				features,
 				params.context()
 			);
@@ -120,7 +129,7 @@ public abstract class ExportFeaturesTask<T extends InputFromManager, S, U extend
 				input.getInputObject().pathForBindingRequired(),
 				input.context().isDebugEnabled()
 			);
-			calcAllResultsForInput(
+			source.calcAllResultsForInput(
 				input.getInputObject(),
 				input.getSharedState()::addResultsFor,
 				input.getSharedState().duplicateForNewThread(),
@@ -149,7 +158,7 @@ public abstract class ExportFeaturesTask<T extends InputFromManager, S, U extend
 			
 			sharedState.writeGroupedResults(
 				featuresAggregate,
-				includeGroupInExperiment( isGroupGeneratorDefined() ),
+				source.includeGroupInExperiment( isGroupGeneratorDefined() ),
 				context
 			);
 		} catch (AnchorIOException | CreateException | IOException e) {
@@ -161,38 +170,12 @@ public abstract class ExportFeaturesTask<T extends InputFromManager, S, U extend
 	public boolean hasVeryQuickPerInputExecution() {
 		return false;
 	}
-
-	/** Determines the unique image name from an inputPath */
-	protected String extractImageIdentifier( Path inputPath, boolean debugMode ) throws AnchorIOException {
-		return filePathAsIdentifier(
-			Optional.ofNullable(id),
-			inputPath,
-			debugMode,
-			FilePathToUnixStyleConverter::toStringUnixStyle
-		);
+	
+	@Override
+	public InputTypesExpected inputTypesExpected() {
+		return source.inputTypesExpected();
 	}
 	
-	protected abstract SharedStateExportFeatures<S> createSharedState(
-		MetadataHeaders metadataHeaders,
-		List<NamedBean<FeatureListProvider<U>>> features,
-		BoundIOContext context
-	) throws CreateException;
-	
-	/** Iff true, group columns are added to the CSV exports, and other group exports may occur in sub-directories 
-	 * @param groupGeneratorDefined TODO*/
-	protected abstract boolean includeGroupInExperiment(boolean groupGeneratorDefined);
-
-	protected abstract GenerateHeadersForCSV headers();
-	
-	protected abstract void calcAllResultsForInput(
-		T input,
-		BiConsumer<StringLabelsForCsvRow,ResultsVector> addResultsFor,
-		S featureSource,
-		FeatureNameList featureNames,
-		Optional<String> groupGeneratorName,
-		BoundIOContext context
-	) throws OperationFailedException;
-
 	private boolean isGroupGeneratorDefined() {
 		return group!=null;
 	}
@@ -207,12 +190,6 @@ public abstract class ExportFeaturesTask<T extends InputFromManager, S, U extend
 			gen-> FilePathToUnixStyleConverter.toStringUnixStyle(
 				gen.outFilePath(path, debugMode)
 			)
-		);
-	}
-	
-	private static String filePathAsIdentifier( Optional<FilePathGenerator> generator, Path path, boolean debugMode, Function<Path,String> alternative ) throws AnchorIOException {
-		return filePathAsIdentifier(generator, path, debugMode).orElseGet( ()->
-			alternative.apply(path)
 		);
 	}
 	
@@ -259,5 +236,13 @@ public abstract class ExportFeaturesTask<T extends InputFromManager, S, U extend
 	
 	private Optional<List<NamedBean<FeatureListProvider<FeatureInputResults>>>> featuresAggregateAsOption() {
 		return Optional.ofNullable(featuresAggregate);
+	}
+
+	public FeatureSource<T, S, U> getSource() {
+		return source;
+	}
+
+	public void setSource(FeatureSource<T, S, U> source) {
+		this.source = source;
 	}
 }
