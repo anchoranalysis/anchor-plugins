@@ -83,7 +83,7 @@ public class MinimaImpositionGrayscaleReconstruction extends MinimaImposition {
 		
 		ObjectCollection masks = seeds.createMasks();
 				
-		masks.assertObjMasksAreInside( chnl.getDimensions().getExtnt() );
+		assert( masks.objectsAreAllInside( chnl.getDimensions().getExtnt() ) );
 				
 		// We need 255 for the landini algorithms to work
 		BinaryChnl markerMask;

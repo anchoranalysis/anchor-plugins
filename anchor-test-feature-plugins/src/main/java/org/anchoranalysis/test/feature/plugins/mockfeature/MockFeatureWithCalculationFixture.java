@@ -52,7 +52,7 @@ public class MockFeatureWithCalculationFixture {
 	public final static Function<FeatureInputSingleObject,Double> DEFAULT_FUNC_NUM_PIXELS = input -> (double) input.getObjectMask().numVoxelsOn();
 	
 	@FunctionalInterface
-	public interface RunnableWithException<E extends Throwable> {
+	public interface RunnableWithException<E extends Exception> {
 	    public void run() throws E;
 	}
 	
