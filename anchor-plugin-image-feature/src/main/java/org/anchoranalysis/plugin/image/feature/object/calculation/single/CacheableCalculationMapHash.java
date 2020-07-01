@@ -46,7 +46,7 @@ public abstract class CacheableCalculationMapHash<
 	S,
 	T extends FeatureInput,
 	U,
-	E extends Throwable
+	E extends Exception
 > extends CacheableCalculationMap<S,T,U,E> {
 
 	/**
