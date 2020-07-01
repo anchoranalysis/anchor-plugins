@@ -1,10 +1,12 @@
-package org.anchoranalysis.plugin.image.feature.bean.stack.dimensions;
+package org.anchoranalysis.plugin.image.feature.bean.object.single.shared.intersecting;
 
-/*-
+import java.util.List;
+
+/*
  * #%L
  * anchor-plugin-image-feature
  * %%
- * Copyright (C) 2010 - 2020 Owen Feehan
+ * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -26,38 +28,34 @@ package org.anchoranalysis.plugin.image.feature.bean.stack.dimensions;
  * #L%
  */
 
-import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.axis.AxisType;
-import org.anchoranalysis.core.axis.AxisTypeConverter;
-import org.anchoranalysis.image.extent.ImageDimensions;
 
-public abstract class ForSpecificAxis extends FromDimensionsBase {
-
-	// START BEAN PARAMETERS
-	@BeanField
-	private String axis = "x";
-	// END BEAN PARAMETERS
+/**
+ * 1. Finds all objs from an ObjMaskCollection whose bounding-boxes intersect with a particular obj.
+ * 2. Calculates a pairwise-feature
+ * 3. Returns the maximum 
+ * 
+ * @author Owen Feehan
+ *
+ */
+public class MinFeatureIntersectingObjsAboveThreshold extends FeatureIntersectingObjectsThreshold {
 
 	@Override
-	protected double calcFromDims(ImageDimensions dim) {
-		return calcForAxis(
-			dim,
-			AxisTypeConverter.createFromString(axis)
-		);
-	}
-	
-	protected abstract double calcForAxis( ImageDimensions dim, AxisType axis );
-	
-	@Override
-	public String getParamDscr() {
-		return String.format("%s", axis);
-	}
-
-	public String getAxis() {
-		return axis;
-	}
-
-	public void setAxis(String axis) {
-		this.axis = axis;
+	protected double aggregateResults(List<Double> results) {
+		
+		double minVal = Double.POSITIVE_INFINITY;
+		
+		// We loop through each intersecting bounding box, and take the one with the highest feature-value
+		for( double val : results) {
+			
+			if (val>=getThreshold() && val<minVal) {
+				minVal = val;
+			}
+		}
+		
+		if (minVal==Double.POSITIVE_INFINITY) {
+			return getValueNoObjects();
+		}
+		
+		return minVal;
 	}
 }

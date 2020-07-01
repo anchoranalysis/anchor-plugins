@@ -1,4 +1,6 @@
-package org.anchoranalysis.plugin.image.feature.bean.stack.shared;
+package org.anchoranalysis.plugin.image.feature.bean.shared.object;
+
+import org.anchoranalysis.feature.input.FeatureInputNRG;
 
 /*
  * #%L
@@ -27,36 +29,18 @@ package org.anchoranalysis.plugin.image.feature.bean.stack.shared;
  */
 
 
-import org.anchoranalysis.bean.annotation.BeanField;
-
 import cern.colt.list.DoubleArrayList;
 import cern.jet.stat.Descriptive;
 
 /**
- * Calculates the quantile of a feature applied to each connected component
+ * Calculates the mean of a feature applied to each connected component
  * 
- * @author Owen Feehan
- *
- */
-public class QuantileAcrossObjects extends ObjectAggregationBase {
-
-	// START BEAN PROPERTIES
-	@BeanField
-	private double quantile = 0.5;
-	// END BEAN PROPERTIES
+ * @param <T> feature-input
+ **/
+public class MeanAcrossObjects<T extends FeatureInputNRG> extends ObjectAggregationBase<T> {
 
 	@Override
 	protected double deriveStatistic(DoubleArrayList featureVals) {
-		featureVals.sort();
-		return Descriptive.quantile(featureVals, quantile);
-	}
-
-	public double getQuantile() {
-		return quantile;
-	}
-
-
-	public void setQuantile(double quantile) {
-		this.quantile = quantile;
+		return Descriptive.mean(featureVals);
 	}
 }

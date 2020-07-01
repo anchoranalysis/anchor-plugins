@@ -1,4 +1,4 @@
-package org.anchoranalysis.plugin.image.feature.bean.object.collection;
+package org.anchoranalysis.plugin.image.feature.bean.nrg.dimensions;
 
 /*-
  * #%L
@@ -26,44 +26,46 @@ package org.anchoranalysis.plugin.image.feature.bean.object.collection;
  * #L%
  */
 
-import org.anchoranalysis.feature.cache.calculation.FeatureCalculation;
-import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.image.binary.BinaryChnl;
-import org.anchoranalysis.image.feature.object.input.FeatureInputPairObjects;
-import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
-import org.anchoranalysis.image.object.ObjectMask;
-import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.core.axis.AxisType;
+import org.anchoranalysis.core.axis.AxisTypeConverter;
+import org.anchoranalysis.feature.input.FeatureInputNRG;
+import org.anchoranalysis.image.extent.ImageDimensions;
 
-class CalculatePairInput extends FeatureCalculation<FeatureInputPairObjects, FeatureInputSingleObject> {
+/**
+ * Dimensions-calculation for one specific axis only.
+ * 
+ * @author Owen Feehan
+ *
+ * @param <T> feature-input-type
+ */
+public abstract class ForSpecificAxis<T extends FeatureInputNRG> extends FromDimensionsBase<T> {
 
-	private BinaryChnl chnl;
-		
-	public CalculatePairInput(BinaryChnl chnl) {
-		super();
-		this.chnl = chnl;
-	}
+	// START BEAN PARAMETERS
+	@BeanField
+	private String axis = "x";
+	// END BEAN PARAMETERS
 
 	@Override
-	protected FeatureInputPairObjects execute(FeatureInputSingleObject input) throws FeatureCalcException {
-
-		ObjectMask objFromBinary = new ObjectMask(
-			chnl.binaryVoxelBox()
-		);
-		
-		return new FeatureInputPairObjects(
-			input.getObjectMask(),
-			objFromBinary,
-			input.getNrgStackOptional()
+	protected double calcFromDims(ImageDimensions dim) {
+		return calcForAxis(
+			dim,
+			AxisTypeConverter.createFromString(axis)
 		);
 	}
 	
+	protected abstract double calcForAxis( ImageDimensions dim, AxisType axis );
+	
 	@Override
-	public boolean equals(Object other) {
-		return other instanceof CalculatePairInput;
+	public String getParamDscr() {
+		return String.format("%s", axis);
 	}
 
-	@Override
-	public int hashCode() {
-		return new HashCodeBuilder().toHashCode();
+	public String getAxis() {
+		return axis;
+	}
+
+	public void setAxis(String axis) {
+		this.axis = axis;
 	}
 }

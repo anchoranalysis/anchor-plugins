@@ -1,4 +1,7 @@
-package org.anchoranalysis.plugin.image.feature.bean.stack.dimensions;
+package org.anchoranalysis.plugin.image.feature.bean.object.single.shared.intersecting;
+
+import java.util.Comparator;
+import java.util.List;
 
 /*-
  * #%L
@@ -26,17 +29,19 @@ package org.anchoranalysis.plugin.image.feature.bean.stack.dimensions;
  * #L%
  */
 
-import org.anchoranalysis.image.extent.ImageDimensions;
-
 /**
- * Area of the stack (XY dimensions only, Z dimension is not considered)
+ * 1. Finds all objs from an ObjMaskCollection whose bounding-boxes intersect with a particular obj.
+ * 2. Calculates a pairwise-feature
+ * 3. Returns the maximum 
+ * 
  * @author Owen Feehan
  *
  */
-public class Area extends FromDimensionsBase {
+public class MaxFeatureIntersectingObjects extends FeatureIntersectingObjectsSingleElement {
 
 	@Override
-	protected double calcFromDims(ImageDimensions dim) {
-		return dim.getVolumeXY();
+	protected double aggregateResults(List<Double> results) {
+		return results.stream().max( Comparator.comparing(Double::valueOf) ).orElse( getValueNoObjects() );
 	}
+
 }

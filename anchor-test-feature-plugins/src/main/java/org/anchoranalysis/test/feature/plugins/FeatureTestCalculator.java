@@ -80,11 +80,9 @@ public class FeatureTestCalculator {
 	}
 	
 	private static FeatureInitParams createInitParams( Optional<ImageInitParams> imageInit ) {
-		Optional<FeatureInitParams> mapped = imageInit.map( params->
-			new FeatureInitParamsShared(params)
-		);
+		Optional<FeatureInitParams> mapped = imageInit.map(FeatureInitParamsShared::new);
 		return mapped.orElse(
-			new FeatureInitParams()	
+			new FeatureInitParams()
 		);
 	}
 

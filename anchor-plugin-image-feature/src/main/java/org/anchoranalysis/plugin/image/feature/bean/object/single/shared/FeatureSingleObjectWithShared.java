@@ -1,12 +1,10 @@
-package org.anchoranalysis.plugin.image.feature.bean.object.collection.intersecting;
+package org.anchoranalysis.plugin.image.feature.bean.object.single.shared;
 
-import java.util.List;
-
-/*
+/*-
  * #%L
- * anchor-plugin-image-feature
+ * anchor-image-feature
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -29,29 +27,24 @@ import java.util.List;
  */
 
 
+
+
+
+import org.anchoranalysis.feature.input.descriptor.FeatureInputDescriptor;
+import org.anchoranalysis.image.feature.bean.FeatureShared;
+import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
+import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObjectDescriptor;
+
 /**
- * 1. Finds all objs from an ObjMaskCollection whose bounding-boxes intersect with a particular obj.
- * 2. Calculates a pairwise-feature
- * 3. Returns the maximum 
+ * A feature that requires shared-objects during intialization
  * 
- * @author Owen Feehan
+ * @author owen
  *
  */
-public class NumIntersectingObjectsAboveThreshold extends FeatureIntersectingObjectsThreshold {
+public abstract class FeatureSingleObjectWithShared extends FeatureShared<FeatureInputSingleObject> {
 
 	@Override
-	protected double aggregateResults(List<Double> results) {
-		
-		int cnt = 0;
-		
-		// We loop through each intersecting bounding box, and take the one with the highest feature-value
-		for( double val : results ) {
-			
-			if (val>=getThreshold()) {
-				cnt++;
-			}
-		}
-				
-		return cnt;
+	public FeatureInputDescriptor inputDescriptor() {
+		return FeatureInputSingleObjectDescriptor.instance;
 	}
 }

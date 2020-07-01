@@ -1,4 +1,4 @@
-package org.anchoranalysis.plugin.image.feature.bean.stack.shared;
+package org.anchoranalysis.plugin.image.feature.bean.object.single.shared;
 
 /*
  * #%L
@@ -31,30 +31,30 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.SkipInit;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
-import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.cache.ChildCacheName;
 import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.bean.provider.BinaryChnlProvider;
 import org.anchoranalysis.image.binary.BinaryChnl;
-import org.anchoranalysis.image.feature.bean.stack.FeatureStackShared;
+import org.anchoranalysis.image.feature.bean.object.pair.FeaturePairObjects;
 import org.anchoranalysis.image.feature.init.FeatureInitParamsShared;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
-import org.anchoranalysis.image.feature.stack.FeatureInputStack;
 
 /**
- * Calculate a feature, treating a binary-channel as a single-object on the nrg-stack
+ * Evaluates the object as a pair-feature together with the binary-mask from the shard objects.
+ * 
  * @author Owen Feehan
  *
  */
-public class BinaryChnlAsSingleObject extends FeatureStackShared {
+public class PairedWithBinaryChannel extends FeatureSingleObjectWithShared {
 
 	// START BEAN PROPERTIES
 	@BeanField
-	private Feature<FeatureInputSingleObject> item;
+	private FeaturePairObjects item;
 	
-	@BeanField
-	@SkipInit
+	// This cannot be initialized in the normal way, as Feature isn't contained in a Shared-Objects
+	// container. So instead it's initialized at a later point.
+	@BeanField @SkipInit
 	private BinaryChnlProvider binaryChnl;
 	// END BEAN PROPERTIES
 	
@@ -63,11 +63,8 @@ public class BinaryChnlAsSingleObject extends FeatureStackShared {
 	@Override
 	public void beforeCalcCast(FeatureInitParamsShared params) throws InitException {
 		super.beforeCalcCast(params);
-
-		binaryChnl.initRecursive(
-			params.getSharedObjects(),
-			getLogger()
-		);
+		assert( getLogger()!=null );
+		binaryChnl.initRecursive(params.getSharedObjects(), getLogger() );
 		
 		try {
 			chnl = binaryChnl.create();
@@ -75,22 +72,21 @@ public class BinaryChnlAsSingleObject extends FeatureStackShared {
 			throw new InitException(e);
 		}
 	}
-		
+	
 	@Override
-	public double calc(SessionInput<FeatureInputStack> input) throws FeatureCalcException {
-
+	public double calc(SessionInput<FeatureInputSingleObject> input) throws FeatureCalcException {
 		return input.forChild().calc(
 			item,
-			new CalculateBinaryChnlInput(chnl),
-			new ChildCacheName(BinaryChnlAsSingleObject.class, chnl.hashCode())
+			new CalculatePairInput(chnl),
+			new ChildCacheName(PairedWithBinaryChannel.class, chnl.hashCode())
 		);
 	}
 
-	public Feature<FeatureInputSingleObject> getItem() {
+	public FeaturePairObjects getItem() {
 		return item;
 	}
 
-	public void setItem(Feature<FeatureInputSingleObject> item) {
+	public void setItem(FeaturePairObjects item) {
 		this.item = item;
 	}
 

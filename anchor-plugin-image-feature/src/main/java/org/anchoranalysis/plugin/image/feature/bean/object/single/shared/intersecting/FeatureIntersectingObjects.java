@@ -1,4 +1,4 @@
-package org.anchoranalysis.plugin.image.feature.bean.object.collection;
+package org.anchoranalysis.plugin.image.feature.bean.object.single.shared.intersecting;
 
 /*
  * #%L
@@ -28,74 +28,82 @@ package org.anchoranalysis.plugin.image.feature.bean.object.collection;
 
 
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.bean.annotation.SkipInit;
-import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
-import org.anchoranalysis.feature.cache.ChildCacheName;
+import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 import org.anchoranalysis.feature.cache.SessionInput;
+import org.anchoranalysis.feature.cache.calculation.ResolvedCalculation;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.image.bean.provider.BinaryChnlProvider;
-import org.anchoranalysis.image.binary.BinaryChnl;
-import org.anchoranalysis.image.feature.bean.object.collection.FeatureObjectCollectionShared;
-import org.anchoranalysis.image.feature.bean.object.pair.FeaturePairObjects;
 import org.anchoranalysis.image.feature.init.FeatureInitParamsShared;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
+import org.anchoranalysis.image.object.ObjectCollection;
+import org.anchoranalysis.plugin.image.feature.bean.object.single.shared.FeatureSingleObjectWithShared;
 
-/**
- * Creates an object from the binary-mask from a binaryImgChnlProvider and evaluates a feature
- * 
- * @author Owen Feehan
- *
- */
-public class FromBinaryChannel extends FeatureObjectCollectionShared {
+public abstract class FeatureIntersectingObjects extends FeatureSingleObjectWithShared {
 
+	
 	// START BEAN PROPERTIES
+	/**
+	 * ID for the particular ObjMaskCollection
+	 */
 	@BeanField
-	private FeaturePairObjects item;
+	private String id="";
 	
-	// This cannot be initialized in the normal way, as Feature isn't contained in a Shared-Objects
-	// container. So instead it's initialized at a later point.
-	@BeanField @SkipInit
-	private BinaryChnlProvider binaryChnl;
+	@BeanField
+	private double valueNoObjects = Double.NaN;
 	// END BEAN PROPERTIES
-	
-	private BinaryChnl chnl;
+
+	private ObjectCollection searchObjs;
 	
 	@Override
 	public void beforeCalcCast(FeatureInitParamsShared params) throws InitException {
-		super.beforeCalcCast(params);
-		assert( getLogger()!=null );
-		binaryChnl.initRecursive(params.getSharedObjects(), getLogger() );
-		
+	
 		try {
-			chnl = binaryChnl.create();
-		} catch (CreateException e) {
-			throw new InitException(e);
-		}
+			this.searchObjs = params.getSharedObjects().getObjMaskCollection().getException(id);
+		} catch (NamedProviderGetException e) {
+			throw new InitException(e.summarize());
+		};
 	}
 	
 	@Override
-	public double calc(SessionInput<FeatureInputSingleObject> input) throws FeatureCalcException {
-		return input.forChild().calc(
-			item,
-			new CalculatePairInput(chnl),
-			new ChildCacheName(FromBinaryChannel.class, chnl.hashCode())
+	public double calc(SessionInput<FeatureInputSingleObject> input)
+			throws FeatureCalcException {
+
+		if (getSearchObjs().size()==0) {
+			return getValueNoObjects();
+		}
+		
+		return valueFor(
+			input,
+			input.resolver().search(
+				new CalculateIntersectingObjs(id, searchObjs)
+			)
 		);
 	}
-
-	public FeaturePairObjects getItem() {
-		return item;
+	
+	protected abstract double valueFor(
+		SessionInput<FeatureInputSingleObject> params,
+		ResolvedCalculation<ObjectCollection, FeatureInputSingleObject> intersecting
+	) throws FeatureCalcException;
+	
+	public String getId() {
+		return id;
 	}
 
-	public void setItem(FeaturePairObjects item) {
-		this.item = item;
+	public void setId(String id) {
+		this.id = id;
 	}
 
-	public BinaryChnlProvider getBinaryChnl() {
-		return binaryChnl;
+	public double getValueNoObjects() {
+		return valueNoObjects;
 	}
 
-	public void setBinaryChnl(BinaryChnlProvider binaryChnl) {
-		this.binaryChnl = binaryChnl;
+
+	public void setValueNoObjects(double valueNoObjects) {
+		this.valueNoObjects = valueNoObjects;
 	}
+
+	protected ObjectCollection getSearchObjs() {
+		return searchObjs;
+	}
+
 }

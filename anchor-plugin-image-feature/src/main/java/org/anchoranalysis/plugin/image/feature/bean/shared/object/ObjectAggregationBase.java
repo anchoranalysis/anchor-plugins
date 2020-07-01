@@ -1,6 +1,6 @@
-package org.anchoranalysis.plugin.image.feature.bean.stack.shared;
+package org.anchoranalysis.plugin.image.feature.bean.shared.object;
 
-import java.util.Optional;
+
 
 /*-
  * #%L
@@ -34,13 +34,12 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.cache.ChildCacheName;
-import org.anchoranalysis.feature.cache.SessionInput;
+import org.anchoranalysis.feature.cache.calculation.CalcForChild;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
+import org.anchoranalysis.feature.input.FeatureInputNRG;
 import org.anchoranalysis.image.bean.provider.ObjectCollectionProvider;
-import org.anchoranalysis.image.feature.bean.stack.FeatureStackShared;
+import org.anchoranalysis.image.feature.init.FeatureInitParamsShared;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
-import org.anchoranalysis.image.feature.stack.FeatureInputStack;
 import org.anchoranalysis.image.object.ObjectCollection;
 
 import cern.colt.list.DoubleArrayList;
@@ -49,14 +48,11 @@ import cern.colt.list.DoubleArrayList;
  * Calculates a feature for a set of objects using this stack as a NRG-stack, and aggregates.
  * 
  * @author Owen Feehan
- *
+ * @param <T> feature-input
  */
-public abstract class ObjectAggregationBase extends FeatureStackShared {
+public abstract class ObjectAggregationBase<T extends FeatureInputNRG> extends FeatureSingleObjectFromShared<T> {
 
 	// START BEAN PROPERTIES
-	@BeanField
-	private Feature<FeatureInputSingleObject> item;
-	
 	@BeanField
 	@SkipInit
 	private ObjectCollectionProvider objs;
@@ -66,38 +62,35 @@ public abstract class ObjectAggregationBase extends FeatureStackShared {
 	private ObjectCollection objsCollection;
 	
 	@Override
-	public double calc(SessionInput<FeatureInputStack> input) throws FeatureCalcException {
-		
-		Optional<ImageInitParams> sharedObjs = input.get().getSharedObjs();
-		
-		if (!sharedObjs.isPresent()) {
-			throw new FeatureCalcException("No ImageInitParams are associated with the FeatureStackParams but they are required");
-		}
-		
+	public void beforeCalcCast(FeatureInitParamsShared params) throws InitException {
+		objs.initRecursive(params.getSharedObjects(), getLogger() );
+	}
+	
+	@Override
+	protected double calc(CalcForChild<T> calcForChild, Feature<FeatureInputSingleObject> featureForSingleObject) throws FeatureCalcException {
+
 		if (objsCollection==null) {
-			objsCollection = createObjs(sharedObjs.get());
+			objsCollection = createObjs();
 		}
 	
 		return deriveStatistic(
-			featureValsForObjs(item, input, objsCollection)
+			featureValsForObjs(featureForSingleObject, calcForChild, objsCollection)
 		);
 	}
 	
 	protected abstract double deriveStatistic( DoubleArrayList featureVals );
 		
-	private ObjectCollection createObjs( ImageInitParams params ) throws FeatureCalcException {
-
+	private ObjectCollection createObjs() throws FeatureCalcException {
 		try {
-			objs.initRecursive(params, getLogger() );
 			return objs.create();
-		} catch (CreateException | InitException e) {
+		} catch (CreateException e) {
 			throw new FeatureCalcException(e);
 		}
 	}
 
 	private DoubleArrayList featureValsForObjs(
 		Feature<FeatureInputSingleObject> feature,
-		SessionInput<FeatureInputStack> input,
+		CalcForChild<T> calcForChild,
 		ObjectCollection objsCollection
 	) throws FeatureCalcException {
 		DoubleArrayList featureVals = new DoubleArrayList();
@@ -105,9 +98,9 @@ public abstract class ObjectAggregationBase extends FeatureStackShared {
 		// Calculate a feature on each obj mask
 		for( int i=0; i<objsCollection.size(); i++) {
 
-			double val = input.forChild().calc(
+			double val = calcForChild.calc(
 				feature,
-				new CalculateInputFromStack(objsCollection, i),
+				new CalculateInputFromStack<>(objsCollection, i),
 				cacheName(i)
 			);
 			featureVals.add(val);
@@ -121,20 +114,10 @@ public abstract class ObjectAggregationBase extends FeatureStackShared {
 			index + "_" + objsCollection.hashCode()
 		);
 	}
-	
-	public Feature<FeatureInputSingleObject> getItem() {
-		return item;
-	}
-
-	public void setItem(Feature<FeatureInputSingleObject> item) {
-		this.item = item;
-	}
-
 
 	public ObjectCollectionProvider getObjs() {
 		return objs;
 	}
-
 
 	public void setObjs(ObjectCollectionProvider objs) {
 		this.objs = objs;

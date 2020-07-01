@@ -1,6 +1,6 @@
-package org.anchoranalysis.plugin.image.feature.bean.stack.dimensions;
+package org.anchoranalysis.plugin.image.feature.bean.nrg.dimensions;
 
-import org.anchoranalysis.feature.cache.SessionInput;
+
 
 /*-
  * #%L
@@ -29,16 +29,22 @@ import org.anchoranalysis.feature.cache.SessionInput;
  */
 
 import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.feature.input.FeatureInputNRG;
 import org.anchoranalysis.image.extent.ImageDimensions;
-import org.anchoranalysis.image.feature.bean.stack.FeatureStack;
-import org.anchoranalysis.image.feature.stack.FeatureInputStack;
+import org.anchoranalysis.image.feature.bean.FeatureNRGStack;
 
-public abstract class FromDimensionsBase extends FeatureStack {
-	
+/**
+ * 
+ * @author Owen Feehan
+ *
+ * @param <T> feature-input-type
+ */
+public abstract class FromDimensionsBase<T extends FeatureInputNRG> extends FeatureNRGStack<T> {
+		
 	@Override
-	public double calc(SessionInput<FeatureInputStack> input) throws FeatureCalcException {
+	public double calcForInput( FeatureInputNRG input ) throws FeatureCalcException {
 		return calcFromDims(
-			input.get().getDimensionsRequired()
+			input.getDimensionsRequired()
 		);
 	}
 	

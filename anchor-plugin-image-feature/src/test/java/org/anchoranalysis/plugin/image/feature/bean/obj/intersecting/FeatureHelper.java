@@ -29,9 +29,9 @@ package org.anchoranalysis.plugin.image.feature.bean.obj.intersecting;
 import org.anchoranalysis.image.feature.bean.object.pair.FeaturePairObjects;
 import org.anchoranalysis.image.feature.bean.object.pair.First;
 import org.anchoranalysis.image.feature.bean.object.single.NumberVoxels;
-import org.anchoranalysis.plugin.image.feature.bean.object.collection.intersecting.FeatureIntersectingObjects;
-import org.anchoranalysis.plugin.image.feature.bean.object.collection.intersecting.FeatureIntersectingObjectsSingleElement;
-import org.anchoranalysis.plugin.image.feature.bean.object.collection.intersecting.FeatureIntersectingObjectsThreshold;
+import org.anchoranalysis.plugin.image.feature.bean.object.single.shared.intersecting.FeatureIntersectingObjects;
+import org.anchoranalysis.plugin.image.feature.bean.object.single.shared.intersecting.FeatureIntersectingObjectsSingleElement;
+import org.anchoranalysis.plugin.image.feature.bean.object.single.shared.intersecting.FeatureIntersectingObjectsThreshold;
 
 class FeatureHelper {
 

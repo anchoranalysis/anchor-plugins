@@ -1,4 +1,4 @@
-package org.anchoranalysis.plugin.image.feature.bean.object.collection.intersecting;
+package org.anchoranalysis.plugin.image.feature.bean.shared.object;
 
 /*-
  * #%L
@@ -27,58 +27,63 @@ package org.anchoranalysis.plugin.image.feature.bean.object.collection.intersect
  */
 
 import org.anchoranalysis.feature.cache.calculation.FeatureCalculation;
+import org.anchoranalysis.feature.input.FeatureInputNRG;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
-import org.anchoranalysis.image.index.ObjectCollectionRTree;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.apache.commons.lang.builder.EqualsBuilder;
-import org.apache.commons.lang.builder.HashCodeBuilder;
-
+import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 /**
- * Calculates the intersecting set of objects from a particular collection (represted by an id) and the object-mask in the params
- * @author owen
+ * Calculates an input for a single-object with an optional NRG-stack from the feature-input
+ * 
+ * @author Owen Feehan
  *
+ * @param <T> feature-input
  */
-class CalculateIntersectingObjs extends FeatureCalculation<ObjectCollection, FeatureInputSingleObject> {
+class CalculateInputFromStack<T extends FeatureInputNRG> extends FeatureCalculation<FeatureInputSingleObject, T> {
 
-	private String id;
-	private ObjectCollection searchObjs;
-		
+	private final ObjectCollection objs;
+	private final int index;
+	
+	
 	/**
 	 * Constructor
 	 * 
-	 * @param id a unique ID that maps 1 to 1 to searchObjs (and is therefore sufficient to uniquely hashcode)
-	 * @param searchObjs the objects corresponding to id
+	 * @param objs the object-mask collection to calculate from (ignored in hash-coding and equality as assumed to be singular)
+	 * @param index index of particular object in objs to derive parameters for
 	 */
-	public CalculateIntersectingObjs(String id, ObjectCollection searchObjs ) {
+	public CalculateInputFromStack(ObjectCollection objs, int index) {
 		super();
-		this.id = id;
-		this.searchObjs = searchObjs;
+		this.objs = objs;
+		this.index = index;
 	}
 
 	@Override
-	protected ObjectCollection execute(FeatureInputSingleObject params) {
-
-		ObjectCollectionRTree bboxRTree = new ObjectCollectionRTree( searchObjs );
-		return bboxRTree.intersectsWith( params.getObjectMask() );
+	protected FeatureInputSingleObject execute(T input) {
+		return new FeatureInputSingleObject(
+			objs.get(index),
+			input.getNrgStackOptional()
+		);
 	}
 
 	@Override
 	public boolean equals(Object obj) {
-		 if(obj instanceof CalculateIntersectingObjs){
-			 final CalculateIntersectingObjs other = (CalculateIntersectingObjs) obj;
-		        return new EqualsBuilder()
-		            .append(id, other.id)
-		            .isEquals();
-	    } else{
-	        return false;
-	    }
+		if (obj == null) { return false; }
+		if (obj == this) { return true; }
+		if (obj.getClass() != getClass()) {
+			return false;
+		}
+		@SuppressWarnings("unchecked")
+		CalculateInputFromStack<T> rhs = (CalculateInputFromStack<T>) obj;
+		return new EqualsBuilder()
+             .append(index, rhs.index)
+             .isEquals();
 	}
 
 	@Override
 	public int hashCode() {
 		return new HashCodeBuilder()
-			.append(id)
+			.append(index)
 			.toHashCode();
 	}
 

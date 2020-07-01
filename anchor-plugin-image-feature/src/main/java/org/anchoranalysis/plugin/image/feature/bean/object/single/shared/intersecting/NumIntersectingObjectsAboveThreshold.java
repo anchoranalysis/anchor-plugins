@@ -1,4 +1,6 @@
-package org.anchoranalysis.plugin.image.feature.bean.stack.dimensions;
+package org.anchoranalysis.plugin.image.feature.bean.object.single.shared.intersecting;
+
+import java.util.List;
 
 /*
  * #%L
@@ -27,14 +29,29 @@ package org.anchoranalysis.plugin.image.feature.bean.stack.dimensions;
  */
 
 
-import org.anchoranalysis.core.axis.AxisType;
-import org.anchoranalysis.image.extent.ImageDimensions;
-
-
-public class VoxelPhysicalSize extends ForSpecificAxis {
+/**
+ * 1. Finds all objs from an ObjMaskCollection whose bounding-boxes intersect with a particular obj.
+ * 2. Calculates a pairwise-feature
+ * 3. Returns the maximum 
+ * 
+ * @author Owen Feehan
+ *
+ */
+public class NumIntersectingObjectsAboveThreshold extends FeatureIntersectingObjectsThreshold {
 
 	@Override
-	protected double calcForAxis(ImageDimensions dim, AxisType axis) {
-		return dim.getRes().getValueByDimension(axis);
+	protected double aggregateResults(List<Double> results) {
+		
+		int cnt = 0;
+		
+		// We loop through each intersecting bounding box, and take the one with the highest feature-value
+		for( double val : results ) {
+			
+			if (val>=getThreshold()) {
+				cnt++;
+			}
+		}
+				
+		return cnt;
 	}
 }

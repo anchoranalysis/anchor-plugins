@@ -1,4 +1,4 @@
-package org.anchoranalysis.plugin.image.feature.bean.object.collection.intersecting;
+package org.anchoranalysis.plugin.image.feature.bean.object.single.shared.intersecting;
 
 /*-
  * #%L

@@ -1,7 +1,6 @@
-package org.anchoranalysis.plugin.image.feature.bean.object.collection.intersecting;
+package org.anchoranalysis.plugin.image.feature.bean.nrg.dimensions;
 
-import org.anchoranalysis.feature.cache.SessionInput;
-import org.anchoranalysis.feature.cache.calculation.ResolvedCalculation;
+import org.anchoranalysis.feature.input.FeatureInputNRG;
 
 /*-
  * #%L
@@ -29,21 +28,19 @@ import org.anchoranalysis.feature.cache.calculation.ResolvedCalculation;
  * #L%
  */
 
-import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
-import org.anchoranalysis.image.object.ObjectCollection;
+import org.anchoranalysis.image.extent.ImageDimensions;
 
-public class NumberIntersectingObjects extends FeatureIntersectingObjects {
-
-	
-
-	// START BEAN PROPERTIES
-	// END BEAN PROPERTIES
+/**
+ * Calculates the volume (x, y and z dimensions) of the scene from the dimensions
+ * 
+ * @author Owen Feehan
+ * @param <T> feature-input-type
+ *
+ */
+public class Volume<T extends FeatureInputNRG> extends FromDimensionsBase<T> {
 
 	@Override
-	protected double valueFor(SessionInput<FeatureInputSingleObject> params, ResolvedCalculation<ObjectCollection, FeatureInputSingleObject> intersecting)
-			throws FeatureCalcException {
-		return params.calc(intersecting).size();
+	protected double calcFromDims(ImageDimensions dim) {
+		return dim.getVolume();
 	}
-
 }

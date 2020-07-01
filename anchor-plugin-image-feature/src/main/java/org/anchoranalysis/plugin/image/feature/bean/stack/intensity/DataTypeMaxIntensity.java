@@ -27,7 +27,7 @@ package org.anchoranalysis.plugin.image.feature.bean.stack.intensity;
  */
 
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.feature.input.FeatureInputNRGStack;
+import org.anchoranalysis.feature.input.FeatureInputNRG;
 import org.anchoranalysis.image.feature.bean.FeatureNRGStack;
 
 /**
@@ -36,12 +36,12 @@ import org.anchoranalysis.image.feature.bean.FeatureNRGStack;
  * <p>Note this is NOT the actual max-intensity seen in the stack, rather the theoretical max of the data-type.</p>
  * 
  * @author Owen Feehan
- *
+ * @param <T> feature-input-type
  */
-public class DataTypeMaxIntensity extends FeatureNRGStack {
+public class DataTypeMaxIntensity<T extends FeatureInputNRG> extends FeatureNRGStack<T> {
 
 	@Override
-	public double calcForInput(FeatureInputNRGStack params) throws FeatureCalcException {
+	public double calcForInput(FeatureInputNRG params) throws FeatureCalcException {
 		return (double) params.getNrgStackRequired().getChnl(0).getVoxelDataType().maxValue();
 	}
 }
