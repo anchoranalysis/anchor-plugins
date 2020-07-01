@@ -36,7 +36,7 @@ import org.anchoranalysis.bean.shared.regex.RegEx;
 import org.anchoranalysis.io.bean.input.InputManagerParams;
 import org.anchoranalysis.io.bean.provider.file.FileProvider;
 import org.anchoranalysis.io.error.FileProviderException;
-import org.anchoranalysis.io.filepath.FilePathNormalizer;
+import org.anchoranalysis.io.filepath.FilePathToUnixStyleConverter;
 
 // Removes one or more files if they match a regex
 public class FileProviderRemove extends FileProvider {
@@ -60,7 +60,7 @@ public class FileProviderRemove extends FileProvider {
 		while( itr.hasNext() ) {
 			File f = itr.next();
 			
-			String normalizedPath = FilePathNormalizer.normalizeFilePath( f.toString() );
+			String normalizedPath = FilePathToUnixStyleConverter.toStringUnixStyle(f.toPath());
 			if (regEx.hasMatch(normalizedPath)) {
 				itr.remove();
 			}
