@@ -2,6 +2,7 @@ package org.anchoranalysis.plugin.mpp.feature.bean.memo.ind;
 
 import org.anchoranalysis.anchor.mpp.feature.bean.nrg.elem.FeatureSingleMemo;
 import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputSingleMemo;
+import org.anchoranalysis.anchor.mpp.mark.MarkRegion;
 
 /*
  * #%L
@@ -37,8 +38,6 @@ import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.feature.histogram.FeatureInputHistogram;
 import org.anchoranalysis.image.feature.histogram.Mean;
-
-import ch.ethz.biol.cell.mpp.mark.pixelstatisticsfrommark.MarkRegion;
 
 public class Intensity extends FeatureSingleMemo {
 
