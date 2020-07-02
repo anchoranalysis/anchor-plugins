@@ -101,10 +101,10 @@ public abstract class PermuteFirstSecondOrder extends PermuteFeatureSequenceInte
 		FeatureStatScore<FeatureInputNRG> featureScore = factory.create();
 		featureScore.setItem(feature);
 		featureScore.setItemMean(
-			createNRGParam("_fitted_normal_mean",paramPrefixAppendNumber)
+			createParam("_fitted_normal_mean",paramPrefixAppendNumber)
 		);
 		featureScore.setItemStdDev(
-			createNRGParam("_fitted_normal_sd",paramPrefixAppendNumber)
+			createParam("_fitted_normal_sd",paramPrefixAppendNumber)
 		);
 		return featureScore;
 	}
@@ -116,8 +116,8 @@ public abstract class PermuteFirstSecondOrder extends PermuteFeatureSequenceInte
 		}
 		
 		if (paramPrefixAppendNumber) {
-			permuteProperty.getAdditionalPropertyPaths().add("item.item.itemMean.idMiddle");
-			permuteProperty.getAdditionalPropertyPaths().add("item.item.itemStdDev.idMiddle");
+			permuteProperty.getAdditionalPropertyPaths().add("item.item.itemMean.key");
+			permuteProperty.getAdditionalPropertyPaths().add("item.item.itemStdDev.key");
 		}
 		
 		permuteProperty.setPropertyPath(

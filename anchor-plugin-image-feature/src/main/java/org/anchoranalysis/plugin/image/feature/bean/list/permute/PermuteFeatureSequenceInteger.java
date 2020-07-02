@@ -82,26 +82,23 @@ public abstract class PermuteFeatureSequenceInteger extends PermuteFeatureBase<F
 	
 	protected abstract PermutePropertySequenceInteger configurePermuteProperty( PermutePropertySequenceInteger permuteProperty );
 	
-	protected <T extends FeatureInputParams> Feature<T> createNRGParam(
+	protected <T extends FeatureInputParams> Feature<T> createParam(
 		String suffix,
 		boolean appendNumber
 	) {
-		Param<T> paramMean = new Param<>();
-		paramMean.setKey(
-			buildKey(suffix, appendNumber)
-		);
-		return paramMean;
+		Param<T> param = new Param<>();
+		param.setKeyPrefix(paramPrefix);
+		param.setKey( sequenceNumberOrEmpty(appendNumber) );
+		param.setKeySuffix(suffix);
+		return param;
 	}
 	
-	private String buildKey(String suffix, boolean appendNumber) {
-		StringBuilder sb = new StringBuilder(paramPrefix);
+	private String sequenceNumberOrEmpty(boolean appendNumber) {
 		if (appendNumber) {
-			sb.append(
-				Integer.toString(permuteProperty.getSequence().getStart())
-			);
+			return Integer.toString(permuteProperty.getSequence().getStart());
+		} else {
+			return "";
 		}
-		sb.append(suffix);
-		return sb.toString();
 	}
 
 	private void configurePermutePropertyOnDelegate( PermuteFeature<Integer,FeatureInputNRG> delegate ) {

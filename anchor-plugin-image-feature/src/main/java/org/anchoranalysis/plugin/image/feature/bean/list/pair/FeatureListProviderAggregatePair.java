@@ -28,6 +28,7 @@ package org.anchoranalysis.plugin.image.feature.bean.list.pair;
 
 
 import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.bean.annotation.SkipInit;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.list.FeatureList;
@@ -63,7 +64,7 @@ public abstract class FeatureListProviderAggregatePair extends FeatureListProvid
 	private String prependString;
 	
 	/** Method for reducing all pairs into a single value e.g. Mean, Max, Min etc. */
-	@BeanField
+	@BeanField @SkipInit
 	private FeatureListElem<FeatureInputPairObjects> reduce = new Mean<>();
 	// END BEAN PROPERTIES
 	

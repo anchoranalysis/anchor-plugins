@@ -39,7 +39,7 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
  * @author owen
  *
  */
-class CalculateIntersectingObjs extends FeatureCalculation<ObjectCollection, FeatureInputSingleObject> {
+class CalculateIntersectingObjects extends FeatureCalculation<ObjectCollection, FeatureInputSingleObject> {
 
 	private String id;
 	private ObjectCollection searchObjs;
@@ -50,7 +50,7 @@ class CalculateIntersectingObjs extends FeatureCalculation<ObjectCollection, Fea
 	 * @param id a unique ID that maps 1 to 1 to searchObjs (and is therefore sufficient to uniquely hashcode)
 	 * @param searchObjs the objects corresponding to id
 	 */
-	public CalculateIntersectingObjs(String id, ObjectCollection searchObjs ) {
+	public CalculateIntersectingObjects(String id, ObjectCollection searchObjs) {
 		super();
 		this.id = id;
 		this.searchObjs = searchObjs;
@@ -65,8 +65,8 @@ class CalculateIntersectingObjs extends FeatureCalculation<ObjectCollection, Fea
 
 	@Override
 	public boolean equals(Object obj) {
-		 if(obj instanceof CalculateIntersectingObjs){
-			 final CalculateIntersectingObjs other = (CalculateIntersectingObjs) obj;
+		 if(obj instanceof CalculateIntersectingObjects){
+			 final CalculateIntersectingObjects other = (CalculateIntersectingObjects) obj;
 		        return new EqualsBuilder()
 		            .append(id, other.id)
 		            .isEquals();

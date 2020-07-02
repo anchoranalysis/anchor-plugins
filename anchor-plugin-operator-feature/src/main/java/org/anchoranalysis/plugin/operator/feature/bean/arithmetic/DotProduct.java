@@ -88,20 +88,10 @@ public class DotProduct<T extends FeatureInput> extends Feature<T> {
 	@Override
 	public void addAdditionallyUsedFeatures(FeatureList<FeatureInput> out) {
 		super.addAdditionallyUsedFeatures(out);
-		addUpcast( out, vector1.getX() );
-		addUpcast( out, vector1.getY() );
-		addUpcast( out, vector1.getZ() );
-		
-		addUpcast( out, vector2.getX() );
-		addUpcast( out, vector2.getY() );
-		addUpcast( out, vector2.getZ() );
+		out.addAll( vector1.allFeatures() );
+		out.addAll( vector2.allFeatures() );
 	}
 	
-	private void addUpcast( FeatureList<FeatureInput> list, Feature<T> feature ) {
-		list.add( feature.upcast() );
-	}
-
-
 	public VectorFromFeature<T> getVector1() {
 		return vector1;
 	}
