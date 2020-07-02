@@ -34,6 +34,7 @@ import org.anchoranalysis.anchor.mpp.bean.points.fitter.PointsFitter;
 import org.anchoranalysis.anchor.mpp.bean.points.fitter.PointsFitterException;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.bean.annotation.Positive;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.geometry.Point3f;
@@ -52,8 +53,8 @@ public class PointsFitterToMark extends PointsBean<PointsFitterToMark> {
 	private ImageDimProvider dim;
 	
 	/** If an object has fewer points than before being fitted, we ignore */
-	@BeanField
-	private int minNumPnts = 0;
+	@BeanField @Positive
+	private int minNumPnts = 1;
 	
 	@BeanField
 	private ObjectCollectionProvider objs;

@@ -35,6 +35,8 @@ import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.geometry.Point3d;
+import org.anchoranalysis.core.geometry.Point3i;
+import org.anchoranalysis.core.geometry.PointConverter;
 import org.anchoranalysis.image.bean.provider.BinaryChnlProvider;
 import org.anchoranalysis.image.bean.unitvalue.distance.UnitValueDistance;
 import org.anchoranalysis.image.binary.BinaryChnl;
@@ -62,8 +64,7 @@ public class FindPointOnOutlineWalk extends FindPointOnOutline {
 	private Channel chnl;
 	
 	@Override
-	public Point3d pointOnOutline(Point3d centrePoint,
-			Orientation orientation) throws OperationFailedException {
+	public Optional<Point3i> pointOnOutline(Point3d centrePoint, Orientation orientation) throws OperationFailedException {
 		
 		// The first time, we establish the binaryImage 
 		if (binaryImage==null) {
@@ -85,18 +86,20 @@ public class FindPointOnOutlineWalk extends FindPointOnOutline {
 		
 		boolean is3d = rotMatrix.getNumDim() >= 3;
 		
-		double xMarg = rotMatrix.getMatrix().get(0,0);
-		double yMarg = rotMatrix.getMatrix().get(1,0);
-		double zMarg = is3d ? rotMatrix.getMatrix().get(2,0) : 0;
+		Point3d marg = new Point3d(
+			rotMatrix.getMatrix().get(0,0),
+			rotMatrix.getMatrix().get(1,0),
+			is3d ? rotMatrix.getMatrix().get(2,0) : 0
+		);
 		
 		BinaryValuesByte bvb = binaryImage.getBinaryValues().createByte();
 		
-		Point3d pnt = new Point3d(centrePoint.getX(),centrePoint.getY(),centrePoint.getZ());
+		Point3d pntDouble = new Point3d(centrePoint);
 		while (true) {
 			
-			pnt.setX( pnt.getX() + xMarg );
-			pnt.setY( pnt.getY() + yMarg );
-			pnt.setZ( pnt.getZ() + zMarg );
+			pntDouble.increment(marg);
+			
+			Point3i pnt = PointConverter.intFromDouble(pntDouble);
 
 			// We do check
 			if (maxDistance!=null) {
@@ -109,62 +112,76 @@ public class FindPointOnOutlineWalk extends FindPointOnOutline {
 						binaryImage.getDimensions().getRes()
 					),
 					centrePoint,
-					pnt
+					pntDouble
 				);
-				double dist = binaryImage.getDimensions().getRes().distZRel(centrePoint, pnt);
+				double dist = binaryImage.getDimensions().getRes().distZRel(centrePoint, pntDouble);
 				if (dist>maxDistRslv) {
-					return null;
+					return Optional.empty();
 				}
 			}
 			
 			ImageDimensions sd = binaryImage.getDimensions();
 			if (!sd.contains(pnt)) {
-				return null;
+				return Optional.empty();
 			}
 			
-			if ( pntIsOutlineVal(pnt.getX(), pnt.getY(), pnt.getZ(), sd, bvb) ) {
-				return pnt;
+			// TODO replace what follows with a call to IterateVoxels.callEachPointInNghb 
+			
+			if ( pntIsOutlineVal(pnt, sd, bvb) ) {
+				return Optional.of(pnt);
 			}
 			
-			if ( pntIsOutlineVal(pnt.getX()+1, pnt.getY(), pnt.getZ(), sd, bvb) ) {
-				return new Point3d(pnt.getX()+1,pnt.getY(),pnt.getZ());
+			pnt.incrementX();
+			
+			if ( pntIsOutlineVal(pnt, sd, bvb) ) {
+				return Optional.of(pnt);
 			}
 			
-			if ( pntIsOutlineVal(pnt.getX()-1, pnt.getY(), pnt.getZ(), sd, bvb) ) {
-				return new Point3d(pnt.getX()-1,pnt.getY(),pnt.getZ());
+			pnt.decrementX(2);
+			
+			if ( pntIsOutlineVal(pnt, sd, bvb) ) {
+				return Optional.of(pnt);
 			}
 			
-			if ( pntIsOutlineVal(pnt.getX(), pnt.getY()-1, pnt.getZ(), sd, bvb) ) {
-				return new Point3d(pnt.getX(),pnt.getY()-1,pnt.getZ());
+			pnt.incrementX();
+			pnt.decrementY();
+			
+			if ( pntIsOutlineVal(pnt, sd, bvb) ) {
+				return Optional.of(pnt);
 			}
 			
-			if ( pntIsOutlineVal(pnt.getX(), pnt.getY()+1, pnt.getZ(), sd, bvb) ) {
-				return new Point3d(pnt.getX(),pnt.getY()+1,pnt.getZ());
+			pnt.incrementY(2);
+			
+			if ( pntIsOutlineVal(pnt, sd, bvb) ) {
+				return Optional.of(pnt);
 			}
+			
+			pnt.decrementY();
 			
 			if (is3d) {
-				if ( pntIsOutlineVal(pnt.getX(), pnt.getY(), pnt.getZ()-1, sd, bvb) ) {
-					return new Point3d(pnt.getX(),pnt.getY(),pnt.getZ()-1);
+				pnt.decrementZ();
+				if ( pntIsOutlineVal(pnt, sd, bvb) ) {
+					return Optional.of(pnt);
 				}
 				
-				if ( pntIsOutlineVal(pnt.getX(), pnt.getY(), pnt.getZ()+1, sd, bvb) ) {
-					return new Point3d(pnt.getX(),pnt.getY(),pnt.getZ()+1);
+				pnt.incrementZ(2);
+				if ( pntIsOutlineVal(pnt, sd, bvb) ) {
+					return Optional.of(pnt);
 				}
 			}
 		}
-
 	}
-	
-
-	
-	private boolean pntIsOutlineVal( double x, double y, double z, ImageDimensions sd, BinaryValuesByte bvb ) {
 		
-		if (!sd.contains( new Point3d(x,y,z) )) {
+	private boolean pntIsOutlineVal( Point3i pnt, ImageDimensions sd, BinaryValuesByte bvb ) {
+		
+		if (!sd.contains(pnt)) {
 			return false;
 		}
 
-		ByteBuffer bb = chnl.getVoxelBox().asByte().getPixelsForPlane( (int) z).buffer();
-		return bb.get( sd.offset( (int) x, (int) y ) )== bvb.getOnByte();
+		ByteBuffer bb = chnl.getVoxelBox().asByte().getPixelsForPlane(
+			pnt.getZ()
+		).buffer();
+		return bb.get(sd.offsetSlice(pnt))== bvb.getOnByte();
 	}
 
 	public UnitValueDistance getMaxDistance() {

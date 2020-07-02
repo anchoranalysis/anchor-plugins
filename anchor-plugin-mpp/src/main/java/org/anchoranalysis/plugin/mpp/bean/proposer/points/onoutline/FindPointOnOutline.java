@@ -1,5 +1,7 @@
 package org.anchoranalysis.plugin.mpp.bean.proposer.points.onoutline;
 
+import java.util.Optional;
+
 import org.anchoranalysis.bean.NullParamsBean;
 
 /*
@@ -32,6 +34,7 @@ import org.anchoranalysis.bean.NullParamsBean;
 
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.geometry.Point3d;
+import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.orientation.Orientation;
 
 /**
@@ -40,5 +43,5 @@ import org.anchoranalysis.image.orientation.Orientation;
  **/
 public abstract class FindPointOnOutline extends NullParamsBean<FindPointOnOutline> {
 
-	public abstract Point3d pointOnOutline( Point3d centrePoint, Orientation orientation ) throws OperationFailedException;
+	public abstract Optional<Point3i> pointOnOutline( Point3d centrePoint, Orientation orientation ) throws OperationFailedException;
 }

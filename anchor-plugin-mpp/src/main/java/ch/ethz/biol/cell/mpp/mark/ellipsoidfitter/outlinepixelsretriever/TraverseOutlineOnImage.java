@@ -38,6 +38,8 @@ import org.anchoranalysis.core.random.RandomNumberGenerator;
 import org.anchoranalysis.image.bean.provider.BinaryChnlProvider;
 import org.anchoranalysis.image.binary.BinaryChnl;
 import org.anchoranalysis.image.extent.BoundingBox;
+import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.image.extent.ImageResolution;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.outline.traverser.OutlineTraverser;
 
@@ -67,63 +69,83 @@ public class TraverseOutlineOnImage extends OutlinePixelsRetriever {
 	private ObjectMask omFilled;		// Not-changed as traversal occurs
 	private ObjectMask omOutline;		// Changed as traversal occurs (visited pixels are removed)
 	
-	public TraverseOutlineOnImage() {
-		super();
-	}
-	
 	@Override
 	public void traverse( Point3i root, List<Point3i> listOut, RandomNumberGenerator re ) throws TraverseOutlineException {
 		
-		BinaryChnl chnlOutline;
-
-		try {
-			chnlOutline = binaryChnlOutline.create();
-		} catch (CreateException e) {
-			throw new TraverseOutlineException("Unable to create binaryImgChnlProviderOutline", e);
-		}
-
+		BinaryChnl chnlOutline = createOutline();
+		BinaryChnl chnlFilled = createFilled();
 		
-		BinaryChnl chnlFilled;
-		try {
-			chnlFilled = binaryChnlFilled.create(); 
-		} catch (CreateException e) {
-			throw new TraverseOutlineException("Unable to create binaryImgChnlProviderFilled", e);
-		}
-		
-		if (!chnlOutline.getDimensions().equals(chnlFilled.getDimensions())) {
-			throw new TraverseOutlineException( String.format("Dimensions %s and %s are not equal", chnlOutline.getDimensions(), chnlFilled.getDimensions()) );
-		}
+		checkDimensions(chnlOutline.getDimensions(), chnlFilled.getDimensions());
 		
 		useZ = useZ && (chnlOutline.getDimensions().getZ() > 1);
 		
+		callBefore(chnlOutline.getDimensions().getRes(), re);
+		
+		omOutline = createObjMaskForPoint(root, chnlOutline);
+			
+		omFilled = objectForFilled(root, chnlFilled);
+		callAfter(root, chnlOutline.getDimensions().getRes(), re);
+		traverseOutline(root, listOut);
+	}
+	
+	private BinaryChnl createOutline() throws TraverseOutlineException {
 		try {
-			visitScheduler.beforeCreateObjMask(re, chnlOutline.getDimensions().getRes());
+			return binaryChnlOutline.create();
+		} catch (CreateException e) {
+			throw new TraverseOutlineException("Unable to create binaryImgChnlProviderOutline", e);
+		}
+	}
+	
+	private BinaryChnl createFilled() throws TraverseOutlineException {
+		try {
+			return binaryChnlFilled.create(); 
+		} catch (CreateException e) {
+			throw new TraverseOutlineException("Unable to create binaryImgChnlProviderFilled", e);
+		}
+	}
+	
+	private void checkDimensions(ImageDimensions dimOutline, ImageDimensions dimFilled) throws TraverseOutlineException {
+		if (!dimOutline.equals(dimFilled)) {
+			throw new TraverseOutlineException(
+				String.format("Dimensions %s and %s are not equal", dimOutline, dimFilled)
+			);
+		}
+	}
+	
+	private void callBefore(ImageResolution res, RandomNumberGenerator re) throws TraverseOutlineException {
+		try {
+			visitScheduler.beforeCreateObjMask(re, res);
 		} catch (InitException e1) {
 			throw new TraverseOutlineException("Failure to call beforeCreateObjMask on visitScheduler", e1);
 		}
-		
+	}
+	
+	
+	private ObjectMask objectForFilled(Point3i root, BinaryChnl chnlFilled) throws TraverseOutlineException {
+		// Important, so we can use the contains function later
+		return createObjMaskForPoint(root, chnlFilled ).mapBoundingBox( bbox->
+			bbox.shiftTo( new Point3i(0,0,0) )
+		);
+	}
+	
+	private void callAfter(
+		Point3i root,
+		ImageResolution res,
+		RandomNumberGenerator re
+	) throws TraverseOutlineException {
+		Point3i rootRelToMask = BoundingBox.relPosTo(
+			root,
+			omOutline.getBoundingBox()
+			.getCornerMin()
+		);
 		try {
-			omOutline = createObjMaskForPoint(root, chnlOutline );
-		} catch (CreateException e) {
-			throw new TraverseOutlineException("Unable to create an object-mask for the outline", e);
-		}
-		
-		try {
-			// Important, so we can use the contains function later
-			omFilled = createObjMaskForPoint(root, chnlFilled ).mapBoundingBox( bbox->
-				bbox.shiftTo( new Point3i(0,0,0) )
-			);
-		} catch (CreateException e) {
-			throw new TraverseOutlineException("Unable to create an object-mask for the filled object", e);
-		}
-				
-		Point3i rootRelToMask = BoundingBox.relPosTo(root, omOutline.getBoundingBox().getCornerMin());
-		try {
-			visitScheduler.afterCreateObjMask( rootRelToMask, chnlOutline.getDimensions().getRes(), re );
+			visitScheduler.afterCreateObjMask(rootRelToMask, res, re);
 		} catch (InitException e) {
 			throw new TraverseOutlineException("Cannot call afterCreateObjMask on visitScheduler", e);
 		}
-		
+	}
+	
+	private void traverseOutline(Point3i root, List<Point3i> listOut) throws TraverseOutlineException {
 		try {
 			new OutlineTraverser(
 				omOutline,
@@ -136,10 +158,10 @@ public class TraverseOutlineOnImage extends OutlinePixelsRetriever {
 			);
 		} catch (OperationFailedException e) {
 			throw new TraverseOutlineException("Cannot traverse outline", e);
-		}
+		}		
 	}
 	
-	private ObjectMask createObjMaskForPoint( Point3i root, BinaryChnl chnl ) throws CreateException {
+	private ObjectMask createObjMaskForPoint( Point3i root, BinaryChnl chnl ) throws TraverseOutlineException {
 				
 		try {
 			Tuple3i maxDist = visitScheduler.maxDistFromRootPoint(chnl.getDimensions().getRes()) ;
@@ -158,8 +180,8 @@ public class TraverseOutlineOnImage extends OutlinePixelsRetriever {
 			
 			return chnl.region(box,false);
 			
-		} catch (OperationFailedException e) {
-			throw new CreateException(e);
+		} catch (OperationFailedException | CreateException e) {
+			throw new TraverseOutlineException("Unable to create an object-mask for the outline", e);
 		}
 	}
 

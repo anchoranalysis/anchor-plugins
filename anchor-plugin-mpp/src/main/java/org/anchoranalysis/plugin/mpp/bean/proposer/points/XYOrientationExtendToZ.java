@@ -39,7 +39,7 @@ import org.anchoranalysis.anchor.mpp.mark.points.MarkPointListFactory;
 import org.anchoranalysis.anchor.mpp.proposer.ProposalAbnormalFailureException;
 import org.anchoranalysis.anchor.mpp.proposer.error.ErrorNode;
 import org.anchoranalysis.anchor.mpp.proposer.visualization.CreateProposeVisualizationList;
-import org.anchoranalysis.anchor.mpp.proposer.visualization.ICreateProposalVisualization;
+import org.anchoranalysis.anchor.mpp.proposer.visualization.CreateProposalVisualization;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.core.axis.AxisType;
@@ -110,7 +110,7 @@ public class XYOrientationExtendToZ extends PointsProposer {
 	}
 
 	@Override
-	public ICreateProposalVisualization proposalVisualization(boolean detailed) {
+	public CreateProposalVisualization proposalVisualization(boolean detailed) {
 		
 		CreateProposeVisualizationList list = new CreateProposeVisualizationList();
 		list.add( pointsFromOrientationXYProposer.proposalVisualization(detailed) );

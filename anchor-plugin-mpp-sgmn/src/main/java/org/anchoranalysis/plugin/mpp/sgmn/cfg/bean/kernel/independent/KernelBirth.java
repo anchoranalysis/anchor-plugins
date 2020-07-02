@@ -51,7 +51,7 @@ import org.anchoranalysis.mpp.sgmn.kernel.KernelCalcNRGException;
  */
 public abstract class KernelBirth<T> extends KernelPosNeg<T> {
 	
-	private Optional<Set<Mark>> setMarksNew;
+	private Optional<Set<Mark>> setMarksNew = Optional.empty();
 	
 	// START BEAN PROPERTIES
 	/** Total number of births */
@@ -104,7 +104,7 @@ public abstract class KernelBirth<T> extends KernelPosNeg<T> {
 
 	@Override
 	public int[] changedMarkIDArray() {
-		return idArr(setMarksNew.get());
+		return setMarksNew.map(KernelBirth::idArr).orElse( new int[]{} );
 	}
 
 	protected Optional<Set<Mark>> getMarkNew() {

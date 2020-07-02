@@ -53,18 +53,14 @@ public abstract class KernelReplace<T> extends KernelPosNeg<T> {
 	// END BEAN PROPERTIES
 	
 	private boolean hasBeenInit = false;
-	
-	public KernelReplace() {
-		super();
-	}
 
 	/** Must be called before makeProposal */
 	protected void init(KernelBirth<T> kernelBirth, KernelDeath<T> kernelDeath) {
 		this.kernelBirth = kernelBirth;
 		this.kernelDeath = kernelDeath;
+		assert(kernelDeath!=null);
 		hasBeenInit = true;
 	}
-
 	
 	@Override
 	public Optional<T> makeProposal(Optional<T> exst, KernelCalcContext context) throws KernelCalcNRGException {
@@ -91,6 +87,8 @@ public abstract class KernelReplace<T> extends KernelPosNeg<T> {
 
 	@Override
 	public String dscrLast() {
+		assert(hasBeenInit);
+		assert(kernelDeath!=null);
 		return String.format("replace_%d(%s->%s)", birthRepeats, changedID(kernelDeath), changedID(kernelBirth)  );
 	}
 

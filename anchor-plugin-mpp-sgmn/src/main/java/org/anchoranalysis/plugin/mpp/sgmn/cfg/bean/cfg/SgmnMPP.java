@@ -106,10 +106,6 @@ public class SgmnMPP extends CfgSgmn {
 	
 	private NRGSchemeWithSharedFeatures nrgSchemeShared;
 	
-	public SgmnMPP() {
-		super();
-	}
-	
 	@Override
 	public SgmnMPPState createExperimentState() {
 		return new SgmnMPPState(kernelProposer,define.getDefine());
@@ -153,16 +149,12 @@ public class SgmnMPP extends CfgSgmn {
 	) throws OperationFailedException {
 		try {
 			init( mppInit, context.getLogger() );
-			
-			/*NRGStackWithParams nrgStack = SgmnMPPHelper.createNRGStack(
-				soMPP.getImage().getStackCollection(),
-				keyValueParams.orElse( new KeyValueParams() )
-			);*/
+
 			SgmnMPPHelper.writeStacks( mppInit.getImage(), nrgStack, context );
 			
 			context.getLogReporter().log("Distinct number of probMap = " + updatableMarkSetCollection.numProbMap() );
 			
-			// We initialise the feedback recev
+			// We initialize the feedback receiver
 			feedbackReceiver.initRecursive(mppInit, context.getLogger());
 			
 			MemoryUtilities.logMemoryUsage("Before findOpt (before cleanup)", context.getLogReporter());

@@ -29,9 +29,11 @@ package ch.ethz.biol.cell.imageprocessing.binaryimgchnl.provider;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import org.anchoranalysis.core.error.CreateException;
+import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.geometry.Point2i;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectMask;
@@ -41,59 +43,54 @@ import org.anchoranalysis.image.points.PointsFromBinaryVoxelBox;
 // Strongly influenced by http://rsb.info.nih.gov/ij/macros/ConvexHull.txt
 public class ConvexHullUtilities {
 
+	private static final int DEFAULT_MIN_NUM_POINTS = 5;
+	
+	private ConvexHullUtilities() {}
+	
 	/**
-	 * Extract points from the outline and maybe apply a convex-hull to filter them
-	 * 
-	 * @param obj object to extract points from
-	 * @param minNumPnts a minimum of number of points (before ant convex hull filtering) that must be found, otherwise no list is returned at all
-	 * @param applyConvexHull iff TRUE the points are filtered by the convex-hull operation
-	 * @return a list of the points iif the minimum threshold is fulfilled
-	 * @throws CreateException
+	 * Like {@link #convexHull2D(List, int)} but uses a default minimum number of points.
 	 */
-	public static Optional<List<Point2i>> extractPointsFromOutline( ObjectMask obj, int minNumPnts, boolean applyConvexHull ) throws CreateException {
-
-		List<Point2i> pts = new ArrayList<>();
-		addPointsFromObjOutline(obj, pts);
-		
-		if (pts.size()<minNumPnts) {
-			return Optional.empty();
-		}
-		
-		return applyConvexHull ? convexHull2D(pts) : Optional.of(pts);
-	}
-
-	public static Optional<List<Point2i>> convexHullFromAllOutlines( ObjectCollection objs, int minNumPnts ) throws CreateException {
-		
-		List<Point2i> pts = new ArrayList<>();
-			
-		for( ObjectMask om : objs ) {
-			addPointsFromObjOutline(om, pts);
-		}
-		
-		if (pts.size()<minNumPnts) {
-			return Optional.empty();
-		}
-		
-		return convexHull2D(pts);
+	public static List<Point2i> convexHull2D(List<Point2i> points) throws OperationFailedException {
+		return convexHull2D(points, DEFAULT_MIN_NUM_POINTS);
 	}
 	
-	// Gift wrap algorithm
-	public static Optional<List<Point2i>> convexHull2D( List<Point2i> pntsIn ) {
-		
-		if (pntsIn.size()==0) {
-			return Optional.of(
-				new ArrayList<>()
-			);
+	/**
+	 * Apply a convex-hull algorithm to filter a set of points.
+	 * 
+	 * <p>Note the algorithm will return the input-points if there are too few points.</p>
+	 * 
+	 * @param points points to filter
+	 * @param minNumPnts a minimum of number of points (before any convex hull filtering) that must be found.
+	 * @return the filtered points on convex-hull iff the minimum number of points exists, otherwise the input points unchanged.
+	 * @throws OperationFailedException if the count variable becomes too high during calculation
+	 */
+	public static List<Point2i> convexHull2D(List<Point2i> points, int minNumberPoints) throws OperationFailedException {
+		if (points.size()>=minNumberPoints) {
+			List<Point2i> filtered = filterPointsGiftWrap(points);
+			
+			if (filtered.size()>0) {
+				return filtered;
+			} else {
+				// If there are 0 points, this is considered a failure and the input points are returned
+				return points;
+			}
+		} else {
+			// If there are too few input-points, the input points are returned
+			return points;
 		}
+	}
+	
+	/** "Gift wrap" algorithm for convex-hull */
+	private static List<Point2i> filterPointsGiftWrap(List<Point2i> points) throws OperationFailedException {
 		
 		int xbase = 0;
 		int ybase = 0;
 		
-		int[] xx = new int[pntsIn.size()];
-		int[] yy = new int[pntsIn.size()];
+		int[] xx = new int[points.size()];
+		int[] yy = new int[points.size()];
 		int n2 = 0;
 		
-		int p1 = calculateStartingIndex( pntsIn );
+		int p1 = calculateStartingIndex( points );
 		
 		
 		int pstart = p1;
@@ -101,41 +98,41 @@ public class ConvexHullUtilities {
 		
 		int count = 0;
 		do {
-			x1 = pntsIn.get(p1).getX();
-			y1 = pntsIn.get(p1).getY();
+			x1 = points.get(p1).getX();
+			y1 = points.get(p1).getY();
 			p2 = p1+1;
 			
-			if (p2==pntsIn.size()) {
+			if (p2==points.size()) {
 				p2=0;
 			}
 			
-			x2 = pntsIn.get(p2).getX();
-			y2 = pntsIn.get(p2).getY();
+			x2 = points.get(p2).getX();
+			y2 = points.get(p2).getY();
 			p3 = p2+1;
 			
-			if (p3==pntsIn.size()) {
+			if (p3==points.size()) {
 				p3=0;
 			}
 		
 			int determinate;
 			do {
-				x3 = pntsIn.get(p3).getX();
-				y3 = pntsIn.get(p3).getY();
+				x3 = points.get(p3).getX();
+				y3 = points.get(p3).getY();
 				determinate = x1*(y2-y3)-y1*(x2-x3)+(y3*x2-y2*x3);
 				if (determinate>0)
 					{x2=x3; y2=y3; p2=p3;}
 				p3 += 1;
-				if (p3==pntsIn.size()) p3 = 0;
+				if (p3==points.size()) p3 = 0;
 			} while (p3!=p1);
 			
-			if (n2<pntsIn.size()) { 
+			if (n2<points.size()) { 
 				xx[n2] = xbase + x1;
 				yy[n2] = ybase + y1;
 				n2++;
 			} else {
 				count++;
 				if (count>10) {
-					return Optional.empty();
+					throw new OperationFailedException("Count variable is too high, cannot calculate convex-hull");
 				}
 			}
 			
@@ -143,15 +140,26 @@ public class ConvexHullUtilities {
 			
 		} while (p1!=pstart);
 		
-		
-		
 		// n2 is number of points out
-		List<Point2i> out = new ArrayList<>();
-		for( int i=0; i<n2; i++) {
-			out.add( new Point2i(xx[i], yy[i]) );
-		}
+		return IntStream.range(0, n2).mapToObj(index ->
+			new Point2i(xx[index], yy[index])
+		).collect( Collectors.toList() );
+	}
 
-		return Optional.of(out);
+	public static List<Point2i> pointsOnAllOutlines(ObjectCollection objs) throws OperationFailedException {
+		List<Point2i> points = new ArrayList<>();
+		
+		for(ObjectMask om : objs) {
+			addPointsFromObjOutline(om, points);
+		}
+		
+		return points;
+	}
+	
+	public static List<Point2i> pointsOnOutline(ObjectMask obj) throws OperationFailedException {
+		List<Point2i> points = new ArrayList<>();
+		addPointsFromObjOutline(obj, points);
+		return points;
 	}
 	
 	private static int calculateStartingIndex( List<Point2i> pntsIn ) {
@@ -176,14 +184,17 @@ public class ConvexHullUtilities {
 		}
 		return p1;
 	}
-		
-	public static void addPointsFromObjOutline( ObjectMask obj, List<Point2i> pts) throws CreateException {
-		ObjectMask outline = FindOutline.outline(obj, 1, true, false);
-		PointsFromBinaryVoxelBox.addPointsFromVoxelBox(
-			outline.binaryVoxelBox(),
-			outline.getBoundingBox().getCornerMin(),
-			pts
-		);
-	}
 	
+	private static void addPointsFromObjOutline(ObjectMask obj, List<Point2i> points) throws OperationFailedException {
+		try {
+			ObjectMask outline = FindOutline.outline(obj, 1, true, false);
+			PointsFromBinaryVoxelBox.addPointsFromVoxelBox(
+				outline.binaryVoxelBox(),
+				outline.getBoundingBox().getCornerMin(),
+				points
+			);
+		} catch (CreateException e) {
+			throw new OperationFailedException(e);
+		}
+	}
 }
