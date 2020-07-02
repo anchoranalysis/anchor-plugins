@@ -27,8 +27,6 @@ package ch.ethz.biol.cell.imageprocessing.objmask.provider;
  */
 
 import java.util.List;
-import java.util.Optional;
-
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.geometry.Point2i;
@@ -60,16 +58,17 @@ public class ObjMaskProviderConvexHullConnectLines extends ObjMaskProviderDimens
 	}
 	
 	private ObjectMask transform( ObjectMask obj, ImageDimensions sd ) throws CreateException {
-		
-		Optional<List<Point2i>> pntsConvexHull = ConvexHullUtilities.extractPointsFromOutline(obj, 1, true);
-		
-		if (!pntsConvexHull.isPresent() || pntsConvexHull.get().size()<=1) {
-			return obj;
-		}
-		
-		List<Point3d> pnts3d = PointConverter.convert2i_3d(pntsConvexHull.get());
-
 		try {
+			List<Point2i> pntsConvexHull = ConvexHullUtilities.convexHull2D(
+				ConvexHullUtilities.pointsOnOutline(obj)
+			);
+			
+			if (pntsConvexHull.size()<=1) {
+				return obj;
+			}
+			
+			List<Point3d> pnts3d = PointConverter.convert2i_3d(pntsConvexHull);
+			
 			return ObjMaskWalkShortestPath.walkLine( pnts3d );
 		} catch (OperationFailedException e) {
 			throw new CreateException(e);

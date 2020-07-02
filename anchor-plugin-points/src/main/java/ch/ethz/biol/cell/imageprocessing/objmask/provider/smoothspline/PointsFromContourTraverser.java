@@ -35,8 +35,10 @@ import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.outline.traverser.OutlineTraverser;
 
 public class PointsFromContourTraverser {
+	
+	private PointsFromContourTraverser() {}
 
-	/** Extracts a list of points from the contour */
+	/** Extracts a list of points from the outline (contour) of the object-mask */
 	public static List<Point3i> pntsFromContour( ObjectMask om ) throws OperationFailedException {
 		
 		List<Point3i> ptsTraversed = new ArrayList<>();

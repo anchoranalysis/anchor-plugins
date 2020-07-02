@@ -30,21 +30,18 @@ package org.anchoranalysis.plugin.mpp.bean.proposer.points.fromorientation;
 import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
-import org.anchoranalysis.anchor.mpp.cfg.ColoredCfg;
-import org.anchoranalysis.anchor.mpp.mark.MarkLineSegment;
-import org.anchoranalysis.anchor.mpp.mark.conic.MarkConicFactory;
-import org.anchoranalysis.anchor.mpp.mark.points.MarkPointListFactory;
-import org.anchoranalysis.anchor.mpp.proposer.visualization.ICreateProposalVisualization;
+import org.anchoranalysis.anchor.mpp.proposer.visualization.CreateProposalVisualization;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
-import org.anchoranalysis.core.color.RGBColor;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.core.random.RandomNumberGenerator;
 import org.anchoranalysis.image.orientation.Orientation;
 import org.anchoranalysis.plugin.mpp.bean.proposer.points.onoutline.FindPointOnOutline;
+import static org.anchoranalysis.plugin.mpp.bean.proposer.points.fromorientation.VisualizationUtilities.*;
 
 import ch.ethz.biol.cell.mpp.mark.ellipsoidfitter.outlinepixelsretriever.OutlinePixelsRetriever;
 import ch.ethz.biol.cell.mpp.mark.ellipsoidfitter.outlinepixelsretriever.TraverseOutlineException;
@@ -65,12 +62,8 @@ public class TraversePointsOnContour extends PointsFromOrientationProposer {
 	private boolean do3D;
 	private List<Point3i> lastPntsForward = new ArrayList<>();
 	private List<Point3i> lastPntsReverse = new ArrayList<>();
-	private Point3d forwardCentrePoint;
-	private Point3d reverseCentrePoint;
-	
-	public TraversePointsOnContour() {
-		super();
-	}
+	private Optional<Point3i> forwardCentrePoint;
+	private Optional<Point3i> reverseCentrePoint;
 	
 	// Calculates the points in both directions
 	@Override
@@ -104,19 +97,20 @@ public class TraversePointsOnContour extends PointsFromOrientationProposer {
 		return combinedLists;
 	}
 	
-	private Point3d addPointsFromOrientation( Point3d centrePoint, Orientation orientation, FindPointOnOutline find, OutlinePixelsRetriever traverseOutline, List<Point3i> listOut, String desc, RandomNumberGenerator re ) throws TraverseOutlineException {
+	private Optional<Point3i> addPointsFromOrientation( Point3d centrePoint, Orientation orientation, FindPointOnOutline find, OutlinePixelsRetriever traverseOutline, List<Point3i> listOut, String desc, RandomNumberGenerator re ) throws TraverseOutlineException {
 		
 		try {
-			Point3d found_point = find.pointOnOutline( centrePoint, orientation );
+			Optional<Point3i> foundPoint = find.pointOnOutline( centrePoint, orientation );
 			
-			if (found_point!=null) {
+			if (foundPoint.isPresent()) {
 				traverseOutline.traverse(
-					new Point3i( (int) found_point.getX(), (int) found_point.getY(), (int) found_point.getZ()),
+					foundPoint.get(),
 					listOut,
 					re
 				);
 			}
-			return found_point;
+			
+			return foundPoint;
 			
 		} catch (OperationFailedException e) {
 			throw new TraverseOutlineException("Unable to add points from orientation", e);
@@ -140,34 +134,15 @@ public class TraversePointsOnContour extends PointsFromOrientationProposer {
 		this.outlinePixelsRetriever = outlinePixelsRetriever;
 	}
 
-	public ICreateProposalVisualization proposalVisualization(final boolean detailed) {
-		return new ICreateProposalVisualization() {
+	public CreateProposalVisualization proposalVisualization(boolean detailed) {
+		return cfg -> {
+			maybeAddPoints(cfg, lastPntsForward, Color.CYAN);
+			maybeAddPoints(cfg, lastPntsReverse, Color.YELLOW);
 			
-			@Override
-			public void addToCfg(ColoredCfg cfg) {
-				if (lastPntsForward!=null&& lastPntsForward.size()>0) {
-					cfg.addChangeID( MarkPointListFactory.createMarkFromPoints3i(lastPntsForward), new RGBColor(Color.CYAN) );
-				}
-				
-				if (lastPntsReverse!=null && lastPntsReverse.size()>0) {
-					cfg.addChangeID( MarkPointListFactory.createMarkFromPoints3i(lastPntsReverse), new RGBColor(Color.YELLOW) );
-				}
-				
-				if (detailed) {
-					if (forwardCentrePoint!=null) {
-						cfg.addChangeID( MarkConicFactory.createMarkFromPoint3d(forwardCentrePoint,1,do3D), new RGBColor(Color.MAGENTA) );
-					}
-					
-					if (reverseCentrePoint!=null) {
-						cfg.addChangeID( MarkConicFactory.createMarkFromPoint3d(reverseCentrePoint,1,do3D), new RGBColor(Color.MAGENTA) );
-					}
-					
-					if (forwardCentrePoint!=null && reverseCentrePoint!=null) {
-						MarkLineSegment mls = new MarkLineSegment();
-						mls.setPoints(forwardCentrePoint, reverseCentrePoint);
-						cfg.addChangeID( mls, new RGBColor(Color.ORANGE) );
-					}
-				}
+			if (detailed) {
+				maybeAddConic(cfg, forwardCentrePoint, Color.MAGENTA, do3D);
+				maybeAddConic(cfg, reverseCentrePoint, Color.MAGENTA, do3D);
+				maybeAddLineSegment(cfg, forwardCentrePoint, reverseCentrePoint, Color.ORANGE);
 			}
 		};
 	}
@@ -176,8 +151,8 @@ public class TraversePointsOnContour extends PointsFromOrientationProposer {
 	public void clearVisualizationState() {
 		lastPntsForward.clear();
 		lastPntsReverse.clear();
-		forwardCentrePoint=null;
-		reverseCentrePoint=null;
+		forwardCentrePoint=Optional.empty();
+		reverseCentrePoint=Optional.empty();
 	}
 
 	public OutlinePixelsRetriever getOutlinePixelsRetrieverReverse() {

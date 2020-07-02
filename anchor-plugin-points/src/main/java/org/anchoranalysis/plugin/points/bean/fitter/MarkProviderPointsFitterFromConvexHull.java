@@ -68,16 +68,16 @@ public class MarkProviderPointsFitterFromConvexHull extends MarkProvider {
 	@Override
 	public Optional<Mark> create() throws CreateException {
 
-		Optional<List<Point3f>> pntsForFitter = pointsForFitter();
+		List<Point3f> pntsForFitter = pointsForFitter();
 		Optional<Mark> mark = markProvider.create();
 		
-		if (!mark.isPresent() || !pntsForFitter.isPresent()) {
+		if (!mark.isPresent()) {
 			return Optional.empty();
 		}
 		
 		try {
 			pointsFitter.fitPointsToMark(
-				pntsForFitter.get(),
+				pntsForFitter,
 				mark.get(),
 				pointsFitter.createDim()
 			);
@@ -89,7 +89,7 @@ public class MarkProviderPointsFitterFromConvexHull extends MarkProvider {
 			// We perform a check that a minimum % of pnts are inside a particular region
 			double ratioInside = ratioPointsInsideRegion(
 				mark.get(),
-				pntsForFitter.get(),
+				pntsForFitter,
 				regionMap,
 				regionID
 			);
@@ -119,13 +119,20 @@ public class MarkProviderPointsFitterFromConvexHull extends MarkProvider {
 		return ((double) cnt) / pnts.size();
 	}
 	
-	private Optional<List<Point3f>> pointsForFitter() throws CreateException {
+	private List<Point3f> pointsForFitter() throws CreateException {
 		
-		Optional<List<Point2i>> selectedPoints = ConvexHullUtilities.convexHullFromAllOutlines(
-			pointsFitter.createObjs(),
-			pointsFitter.getMinNumPnts()
-		);
-		return selectedPoints.map(PointConverter::convert2i_3f);
+		try {
+			List<Point2i> selectedPoints = ConvexHullUtilities.convexHull2D(
+				ConvexHullUtilities.pointsOnAllOutlines(
+					pointsFitter.createObjs()
+				),
+				pointsFitter.getMinNumPnts()
+			);
+			return PointConverter.convert2i_3f(selectedPoints);
+			
+		} catch (OperationFailedException e) {
+			throw new CreateException(e);
+		}
 	}
 	
 	public MarkProvider getMarkProvider() {

@@ -39,7 +39,7 @@ import org.anchoranalysis.mpp.sgmn.kernel.KernelCalcNRGException;
 
 public abstract class KernelDeath<T> extends KernelPosNeg<T> {
 	
-	private Optional<Mark> markRmv;
+	private Optional<Mark> markRmv = Optional.empty();
 	
 	@Override
 	public Optional<T> makeProposal(Optional<T> exst,KernelCalcContext context ) throws KernelCalcNRGException {

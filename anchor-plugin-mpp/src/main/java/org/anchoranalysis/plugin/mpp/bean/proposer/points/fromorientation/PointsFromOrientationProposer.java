@@ -29,7 +29,7 @@ package org.anchoranalysis.plugin.mpp.bean.proposer.points.fromorientation;
 
 import java.util.List;
 
-import org.anchoranalysis.anchor.mpp.proposer.visualization.ICreateProposalVisualization;
+import org.anchoranalysis.anchor.mpp.proposer.visualization.CreateProposalVisualization;
 import org.anchoranalysis.bean.NullParamsBean;
 import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.core.geometry.Point3i;
@@ -40,7 +40,7 @@ import ch.ethz.biol.cell.mpp.mark.ellipsoidfitter.outlinepixelsretriever.Travers
 
 public abstract class PointsFromOrientationProposer extends NullParamsBean<PointsFromOrientationProposer> {
 
-	public abstract ICreateProposalVisualization proposalVisualization(boolean detailed);
+	public abstract CreateProposalVisualization proposalVisualization(boolean detailed);
 	
 	public abstract void clearVisualizationState();
 	

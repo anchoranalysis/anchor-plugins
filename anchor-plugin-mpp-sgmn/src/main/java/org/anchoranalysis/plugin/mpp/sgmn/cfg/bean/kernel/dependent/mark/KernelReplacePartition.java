@@ -45,7 +45,7 @@ public class KernelReplacePartition extends KernelReplace<CfgFromPartition> {
 	@Override
 	public Optional<CfgFromPartition> makeProposal(Optional<CfgFromPartition> exst, KernelCalcContext context) throws KernelCalcNRGException {
 
-		if (exst.isPresent()) {
+		if (!exst.isPresent()) {
 			return Optional.empty();
 		}
 		

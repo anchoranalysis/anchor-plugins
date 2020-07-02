@@ -33,7 +33,7 @@ import java.util.Optional;
 import org.anchoranalysis.anchor.mpp.bean.proposer.PointsProposer;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.anchor.mpp.proposer.error.ErrorNode;
-import org.anchoranalysis.anchor.mpp.proposer.visualization.ICreateProposalVisualization;
+import org.anchoranalysis.anchor.mpp.proposer.visualization.CreateProposalVisualization;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.geometry.Point3d;
@@ -85,7 +85,7 @@ public class IncludeRandomObjs extends PointsProposer {
 	}
 	
 	@Override
-	public ICreateProposalVisualization proposalVisualization(boolean detailed) {
+	public CreateProposalVisualization proposalVisualization(boolean detailed) {
 		return null;
 	}
 
