@@ -73,7 +73,7 @@ public class PermuteDivideByParam extends PermuteFeatureSequenceInteger {
 		featureScore.setList(
 			Arrays.asList(
 				feature,
-				createNRGParam(
+				createParam(
 					"_median",
 					false
 				)	

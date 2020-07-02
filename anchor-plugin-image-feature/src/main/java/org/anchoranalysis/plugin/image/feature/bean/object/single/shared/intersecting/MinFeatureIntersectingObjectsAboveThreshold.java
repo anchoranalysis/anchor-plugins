@@ -37,21 +37,25 @@ import java.util.List;
  * @author Owen Feehan
  *
  */
-public class NumIntersectingObjectsAboveThreshold extends FeatureIntersectingObjectsThreshold {
+public class MinFeatureIntersectingObjectsAboveThreshold extends FeatureIntersectingObjectsThreshold {
 
 	@Override
 	protected double aggregateResults(List<Double> results) {
 		
-		int cnt = 0;
+		double minVal = Double.POSITIVE_INFINITY;
 		
 		// We loop through each intersecting bounding box, and take the one with the highest feature-value
-		for( double val : results ) {
+		for( double val : results) {
 			
-			if (val>=getThreshold()) {
-				cnt++;
+			if (val>=getThreshold() && val<minVal) {
+				minVal = val;
 			}
 		}
-				
-		return cnt;
+		
+		if (minVal==Double.POSITIVE_INFINITY) {
+			return getValueNoObjects();
+		}
+		
+		return minVal;
 	}
 }

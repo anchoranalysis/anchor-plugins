@@ -75,7 +75,7 @@ public abstract class FeatureIntersectingObjects extends FeatureSingleObjectWith
 		return valueFor(
 			input,
 			input.resolver().search(
-				new CalculateIntersectingObjs(id, searchObjs)
+				new CalculateIntersectingObjects(id, searchObjs)
 			)
 		);
 	}
