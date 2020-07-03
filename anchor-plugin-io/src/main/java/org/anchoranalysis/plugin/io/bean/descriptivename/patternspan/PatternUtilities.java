@@ -28,6 +28,10 @@ package org.anchoranalysis.plugin.io.bean.descriptivename.patternspan;
 
 import com.owenfeehan.pathpatternfinder.patternelements.PatternElement;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
 class PatternUtilities {
 	
 	/** 

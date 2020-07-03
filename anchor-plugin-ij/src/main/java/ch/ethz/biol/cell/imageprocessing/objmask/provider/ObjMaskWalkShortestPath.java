@@ -42,6 +42,9 @@ import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.points.BoundingBoxFromPoints;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
 /** Traces out the shortest-path (a line) between two points in an object-mask.
  * 
  *  This ensures the two points are connected (4/6 neighbourhood)
@@ -49,6 +52,7 @@ import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
  * @author feehano
  *
  */
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
 class ObjMaskWalkShortestPath {
 
 	/** Walks a 4-connected line between two points, producing a minimal object-mask for both */

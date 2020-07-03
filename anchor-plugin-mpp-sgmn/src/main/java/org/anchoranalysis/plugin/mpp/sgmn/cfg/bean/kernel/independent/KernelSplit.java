@@ -60,9 +60,8 @@ public class KernelSplit extends KernelPosNeg<CfgNRGPixelized> {
 	private MarkFromCfgProposer markFromCfgProposer = null;
 	// END BEAN
 	
-	private transient int markExstIndex;
-	private transient Optional<Mark> markExst;
-	private transient Optional<PairPxlMarkMemo> pairNew;
+	private Optional<Mark> markExst;
+	private Optional<PairPxlMarkMemo> pairNew;
 
 	@Override
 	public Optional<CfgNRGPixelized> makeProposal(Optional<CfgNRGPixelized> exst, KernelCalcContext context ) throws KernelCalcNRGException {
@@ -89,7 +88,7 @@ public class KernelSplit extends KernelPosNeg<CfgNRGPixelized> {
 			return Optional.empty();
 		}
 		
-		this.markExstIndex = exst.get().getCfg().indexOf( markExst.get() );
+		int markExstIndex = exst.get().getCfg().indexOf( markExst.get() );
 		PxlMarkMemo pmmMarkExst = exst.get().getMemoForIndex(markExstIndex);
 		
 		try {
@@ -161,7 +160,7 @@ public class KernelSplit extends KernelPosNeg<CfgNRGPixelized> {
 	
 	@Override
 	public double calcAccptProb(int exstSize, int propSize,
-			double poisson_intens, ImageDimensions scene_size, double densityRatio) {
+			double poissonIntensity, ImageDimensions dim, double densityRatio) {
 		return densityRatio;
 	}
 

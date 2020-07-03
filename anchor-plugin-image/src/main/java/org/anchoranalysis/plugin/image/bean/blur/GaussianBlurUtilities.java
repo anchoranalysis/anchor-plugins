@@ -28,6 +28,8 @@ package org.anchoranalysis.plugin.image.bean.blur;
 
 import org.anchoranalysis.image.extent.ImageResolution;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import net.imglib2.algorithm.gauss3.Gauss3;
 import net.imglib2.exception.IncompatibleTypeException;
 import net.imglib2.img.Img;
@@ -35,6 +37,7 @@ import net.imglib2.type.numeric.NumericType;
 import net.imglib2.type.numeric.RealType;
 import net.imglib2.view.Views;
 
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
 class GaussianBlurUtilities {
 
 	/**

@@ -41,7 +41,11 @@ import org.opencv.core.MatOfPoint;
 import org.opencv.core.Point;
 import org.opencv.imgproc.Imgproc;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
 /** Wrapper around Open CV's findContours function */
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
 public class CVFindContours {
 
 	static {

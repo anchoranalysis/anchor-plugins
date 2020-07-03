@@ -39,7 +39,10 @@ import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedShort;
 
 import ch.ethz.biol.cell.imageprocessing.chnl.provider.ChnlProviderIfPixelZero;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
 class CalcOutlineRGB {
 
 

@@ -35,6 +35,10 @@ import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.object.ops.ObjectMaskMerger;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
 class EllipticityCalculatorHelper {
 
 	public static double calc( ObjectMask om, Mark mark, ImageDimensions dim ) {

@@ -35,6 +35,10 @@ import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.core.text.TypedValue;
 import org.anchoranalysis.io.bean.report.feature.ReportFeature;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
 class ReportFeatureUtilities {
 
 	public static <T> List<String> genHeaderNames( List<? extends ReportFeature<T>> list, LogErrorReporter logger )	{

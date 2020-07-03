@@ -34,6 +34,10 @@ import org.anchoranalysis.test.image.DualComparer;
 
 import org.junit.rules.TemporaryFolder;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
 public class UnitTestCompareUtilities {
 
 	/**

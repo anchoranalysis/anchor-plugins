@@ -36,7 +36,11 @@ import org.anchoranalysis.io.generator.serialized.KeyValueParamsGenerator;
 import org.anchoranalysis.io.output.bound.BoundIOContext;
 import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
 /** Exports a ResultVector as a KeyValueParams */
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
 class KeyValueParamsExporter {
 
 	public static void export( FeatureNameList featureNames, ResultsVector rv, BoundIOContext context ) {

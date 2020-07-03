@@ -37,6 +37,10 @@ import org.anchoranalysis.plugin.io.bean.input.file.Files;
 import org.anchoranalysis.plugin.io.bean.input.filter.FilterCsvColumn;
 import org.anchoranalysis.plugin.io.bean.provider.file.Rooted;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
 class InputManagerFactory {
 	
 	// Like createFiles, but maybe also wraps it in a filter

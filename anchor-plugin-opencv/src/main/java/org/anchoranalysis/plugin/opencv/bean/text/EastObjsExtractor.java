@@ -42,6 +42,9 @@ import org.anchoranalysis.image.object.properties.ObjectWithProperties;
 import org.anchoranalysis.plugin.opencv.nonmaxima.WithConfidence;
 import org.opencv.core.Mat;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
 
 /**
  * Extracts object-masks representing text regions from an image
@@ -51,6 +54,7 @@ import org.opencv.core.Mat;
  * @author owen
  *
  */
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
 class EastObjsExtractor {
 
 	public static List<WithConfidence<ObjectMask>> apply( Mat image, ImageResolution res, double minConfidence, Path pathToEastModel ) {

@@ -40,7 +40,10 @@ import loci.formats.in.TiffReader;
 import loci.formats.meta.MetadataRetrieve;
 import loci.formats.out.TiffWriter;
 import loci.formats.services.OMEXMLService;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
 class CopyTIFFAndCompress {
 
 	public static void apply( String source, Path destination ) throws OperationFailedException {

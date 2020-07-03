@@ -58,6 +58,10 @@ import org.anchoranalysis.plugin.mpp.sgmn.cfg.kernel.updater.KernelUpdaterSimple
 import org.anchoranalysis.plugin.mpp.sgmn.cfg.optscheme.AccptProbCalculator;
 import org.apache.commons.lang.time.StopWatch;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
 class SimulatedAnnealingHelper {
 	
 	

@@ -29,10 +29,8 @@ import java.util.Set;
  */
 
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 import org.anchoranalysis.core.name.store.NamedProviderStore;
-import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
 import org.anchoranalysis.image.bean.provider.ImageDimProvider;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.experiment.identifiers.ImgStackIdentifiers;
@@ -51,15 +49,6 @@ import org.anchoranalysis.image.stack.Stack;
 public class GuessDimFromInputImage extends ImageDimProvider {
 
 	private ImageDimensions dim;
-	
-	public GuessDimFromInputImage() {
-	}
-	
-	
-	@Override
-	public void onInit(ImageInitParams so) throws InitException {
-		super.onInit(so);
-	}
 
 	@Override
 	public ImageDimensions create() throws CreateException {

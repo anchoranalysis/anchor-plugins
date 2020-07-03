@@ -40,6 +40,10 @@ import org.apache.commons.lang.ArrayUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
 class Utilities {
 
 	static int findHeaderIndex( String[] headers, String columnName ) throws InitException {
@@ -52,11 +56,11 @@ class Utilities {
 	
 	
 	static Point3i pntFromLine( String[] line, int indices[] ) {
-		Point3i out = new Point3i();
-		out.setX( intFromLine( line, indices[0] ));
-		out.setY( intFromLine( line, indices[1] ));
-		out.setZ( intFromLine( line, indices[2] ));
-		return out;
+		return new Point3i(
+			intFromLine(line, indices[0]),
+			intFromLine(line, indices[1]),
+			intFromLine(line, indices[2])
+		);
 	}
 	
 	static int intFromLine( String[] line, int index ) {

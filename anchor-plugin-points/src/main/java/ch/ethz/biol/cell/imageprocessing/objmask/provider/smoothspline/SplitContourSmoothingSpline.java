@@ -37,8 +37,11 @@ import org.anchoranalysis.plugin.opencv.CVFindContours;
 
 import com.google.common.base.Function;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import umontreal.ssj.functionfit.SmoothingCubicSpline;
 
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
 public class SplitContourSmoothingSpline {
 	
 	/**

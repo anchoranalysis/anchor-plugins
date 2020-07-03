@@ -35,7 +35,10 @@ import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.object.ObjectMask;
 
 import ch.ethz.biol.cell.mpp.mark.MarkPolygon;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
 public class ObjMaskPolygonCreator {
 
 	/** Given a list of points that define a polygon, extract a corresponding object-mask */

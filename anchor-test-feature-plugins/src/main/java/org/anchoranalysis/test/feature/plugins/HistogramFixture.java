@@ -29,6 +29,10 @@ package org.anchoranalysis.test.feature.plugins;
 import org.anchoranalysis.image.histogram.Histogram;
 import org.anchoranalysis.image.histogram.HistogramArray;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
 public class HistogramFixture {
 
 	private static int MAX_VAL = 255;

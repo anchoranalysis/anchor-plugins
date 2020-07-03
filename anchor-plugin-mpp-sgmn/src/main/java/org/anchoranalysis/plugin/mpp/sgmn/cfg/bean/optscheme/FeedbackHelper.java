@@ -34,6 +34,10 @@ import org.anchoranalysis.mpp.sgmn.optscheme.feedback.FeedbackReceiver;
 import org.anchoranalysis.mpp.sgmn.optscheme.feedback.OptimizationFeedbackEndParams;
 import org.anchoranalysis.mpp.sgmn.optscheme.feedback.OptimizationFeedbackInitParams;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
 class FeedbackHelper {
 
 	public static <T> FeedbackGenerator<T> createInitFeedbackGenerator(
