@@ -159,8 +159,11 @@ public class ExperimentLauncherFromShell {
 			executor.execute(shellCmd, resultHandler);
 			resultHandler.waitFor();
 			
-		} catch (IOException | InterruptedException e) {
+		} catch (IOException e) {
 			throw new TestDataLoadException(e);
+		} catch (InterruptedException e) {
+			// Restore interrupted state
+			Thread.currentThread().interrupt();
 		}
 	}
 	

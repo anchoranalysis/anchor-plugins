@@ -33,12 +33,9 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.logging.Logger;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.DefaultInstance;
 import org.anchoranalysis.bean.annotation.OptionalBean;
-import org.anchoranalysis.image.channel.factory.ChannelFactoryByte;
-import org.anchoranalysis.image.channel.factory.ChannelFactorySingleType;
 import org.anchoranalysis.image.io.bean.chnl.map.ImgChnlMapCreator;
 import org.anchoranalysis.image.io.bean.rasterreader.RasterReader;
 import org.anchoranalysis.image.io.input.NamedChnlsInput;
@@ -104,10 +101,6 @@ public class GroupFiles extends InputManager<NamedChnlsInput> {
 	private CheckParsedFilePathBag checkParsedFilePathBag;
 	// END BEANS
 	
-	private Logger log = Logger.getLogger(GroupFiles.class.getName());
-	
-	static ChannelFactorySingleType imgChnlFactoryByte = new ChannelFactoryByte();
-	
 	@Override
 	public List<NamedChnlsInput> inputObjects(
 			InputManagerParams params)
@@ -132,15 +125,12 @@ public class GroupFiles extends InputManager<NamedChnlsInput> {
 					filePathParser.getTimeIndex()
 				);
 				map.add(filePathParser.getKey(), fd);		
-				log.finer( String.format("Parse SUCC Input file: %s could be parsed", path) );
 			} else {
 				if (requireAllFilesMatch) {
 					throw new AnchorIOException( String.format("File %s did not match parser", path) );
 				}
-				log.finer( String.format("Parse FAIL Input file: %s couldn't be parsed", path) );	
 			}
 		}
-
 		return listFromMap(map);
 	}
 	

@@ -77,7 +77,7 @@ public class LongestExtentWithin extends OrientationProposer {
 		return testMark instanceof MarkAbstractPosition;
 	}
 	
-	private OrientationList findAllOrientations2D(Mark mark, RslvdBound minMaxBound, ImageDimensions dim) throws ProposalAbnormalFailureException {
+	private OrientationList findAllOrientations2D(Mark mark, RslvdBound minMaxBound) throws ProposalAbnormalFailureException {
 		
 		double incrementRadians = (incrementDegrees / 180) * Math.PI;
 		
@@ -88,7 +88,7 @@ public class LongestExtentWithin extends OrientationProposer {
 		
 			Orientation orientation = new Orientation2D(angle);
 			
-			listOrientations.addOrientationIfUseful(orientation, mark, minMaxBound, dim);
+			listOrientations.addOrientationIfUseful(orientation, mark, minMaxBound);
 
 		}
 		
@@ -96,7 +96,7 @@ public class LongestExtentWithin extends OrientationProposer {
 	}
 	
 	
-	private OrientationList findAllOrientations3D(Mark mark, RslvdBound minMaxBound, ImageDimensions dim) throws ProposalAbnormalFailureException {
+	private OrientationList findAllOrientations3D(Mark mark, RslvdBound minMaxBound) throws ProposalAbnormalFailureException {
 		
 		double incrementRadians = (incrementDegrees / 180) * Math.PI;
 		
@@ -110,8 +110,7 @@ public class LongestExtentWithin extends OrientationProposer {
 					listOrientations.addOrientationIfUseful(
 						new Orientation3DEulerAngles(x,y,z),
 						mark,
-						minMaxBound,
-						dim
+						minMaxBound
 					);
 				}
 			}
@@ -124,9 +123,9 @@ public class LongestExtentWithin extends OrientationProposer {
 	private OrientationList findAllOrientations(Mark mark, RslvdBound minMaxBound, ImageDimensions dim) throws ProposalAbnormalFailureException {
 		
 		if (dim.getZ()>1 && !rotateOnlyIn2DPlane) {
-			return findAllOrientations3D(mark, minMaxBound, dim);
+			return findAllOrientations3D(mark, minMaxBound);
 		} else {
-			return findAllOrientations2D(mark, minMaxBound, dim);
+			return findAllOrientations2D(mark, minMaxBound);
 		}
 	}
 	

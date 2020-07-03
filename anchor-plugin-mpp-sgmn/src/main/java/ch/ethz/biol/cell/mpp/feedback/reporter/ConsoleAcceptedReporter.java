@@ -28,19 +28,20 @@ import java.util.Optional;
  * #L%
  */
 
-import java.util.function.Function;
+import java.util.function.ToDoubleFunction;
+import java.util.function.ToIntFunction;
 
 import org.anchoranalysis.anchor.mpp.feature.nrg.cfg.CfgNRG;
 import org.anchoranalysis.anchor.mpp.feature.nrg.cfg.CfgNRGPixelized;
 import org.anchoranalysis.core.log.LogErrorReporter;
-import org.anchoranalysis.mpp.sgmn.bean.optscheme.feedback.ReporterOptimizationStep;
+import org.anchoranalysis.mpp.sgmn.bean.optscheme.feedback.FeedbackReceiverBean;
 import org.anchoranalysis.mpp.sgmn.optscheme.feedback.OptimizationFeedbackEndParams;
 import org.anchoranalysis.mpp.sgmn.optscheme.feedback.OptimizationFeedbackInitParams;
 import org.anchoranalysis.mpp.sgmn.optscheme.feedback.ReporterException;
 import org.anchoranalysis.mpp.sgmn.optscheme.step.Reporting;
 
 
-public class ConsoleAcceptedReporter extends ReporterOptimizationStep<CfgNRGPixelized> {
+public class ConsoleAcceptedReporter extends FeedbackReceiverBean<CfgNRGPixelized> {
 
 	private LogErrorReporter logger;
 	
@@ -62,24 +63,24 @@ public class ConsoleAcceptedReporter extends ReporterOptimizationStep<CfgNRGPixe
 				"itr=%5d  size=%3d  nrg=%e  best_nrg=%e   kernel=%s",
 				reporting.getIter(),
 				extractStatInt(reporting.getCfgNRGAfterOptional(), a->a.getCfg().size() ),
-				extractStatDbl(reporting.getCfgNRGAfterOptional(), a->a.getNrgTotal() ),
-				extractStatDbl(reporting.getBest(), a->a.getNrgTotal() ),
+				extractStatDbl(reporting.getCfgNRGAfterOptional(), CfgNRG::getNrgTotal ),
+				extractStatDbl(reporting.getBest(), CfgNRG::getNrgTotal ),
 				reporting.getKernel().getDescription()
 			);
 		}
 	}
 	
-	private static double extractStatDbl( Optional<CfgNRGPixelized> cfgNRG, Function<CfgNRG,Double> func ) {
+	private static double extractStatDbl( Optional<CfgNRGPixelized> cfgNRG, ToDoubleFunction<CfgNRG> func ) {
 		if (cfgNRG.isPresent()) {
-			return func.apply( cfgNRG.get().getCfgNRG() );
+			return func.applyAsDouble( cfgNRG.get().getCfgNRG() );
 		} else {
 			return Double.NaN;
 		}
 	}
 	
-	private static int extractStatInt( Optional<CfgNRGPixelized> cfgNRG, Function<CfgNRG,Integer> func ) {
+	private static int extractStatInt( Optional<CfgNRGPixelized> cfgNRG, ToIntFunction<CfgNRG> func ) {
 		if (cfgNRG.isPresent()) {
-			return func.apply( cfgNRG.get().getCfgNRG() );
+			return func.applyAsInt( cfgNRG.get().getCfgNRG() );
 		} else {
 			return Integer.MIN_VALUE;
 		}

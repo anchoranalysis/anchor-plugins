@@ -81,21 +81,15 @@ public class PositionWalk extends MarkProposer {
 			if (bib==null || bib.isUnbounded()) {
 				continue;
 			}
-			
-			double rb = bib.ratioBounds(context.getDimensions()); 
-			if (rb > boundsRatio) {
+
+			if (bib.ratioBounds() > boundsRatio) {
 				continue;
 			}
 			
-			if (bib.getReverse().get().getMax() > bib.getForward().get().getMax()) {
+			if (bib.getReverse().get().getMax() > bib.getForward().get().getMax()) {	// NOSONAR
 				angle = angle + Math.PI;
 			}
-			
-			// Now we walk a unit pixel towards the max in this orientation
-			//Orientation2D orientation = new Orientation2D(angle);
-			//DoubleMatrix2D mat = orientation.createRotationMatrix();
-			
-			
+						
 			double xNew = pnt.getX() + Math.cos(angle);
 			double yNew = pnt.getY() + Math.sin(angle);
 			

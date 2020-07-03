@@ -101,7 +101,6 @@ class MapPart extends NamedChnlsInputPart {
 	@Override
 	public boolean hasChnl( String chnlName ) throws RasterIOException {
 		return chnlMap().keySet().contains(chnlName);
-		//chnlMap.get(chnlName)!=-1;
 	}
 	
 	// Where most of our time is being taken up when opening a raster
@@ -132,9 +131,7 @@ class MapPart extends NamedChnlsInputPart {
 	@Override
 	public List<Path> pathForBindingForAllChannels() {
 		ArrayList<Path> out = new ArrayList<>();
-		pathForBinding().ifPresent( path->
-			out.add(path)
-		);
+		pathForBinding().ifPresent(out::add);
 		return out;
 	}
 

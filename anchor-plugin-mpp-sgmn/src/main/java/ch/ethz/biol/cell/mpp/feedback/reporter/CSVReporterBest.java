@@ -34,20 +34,15 @@ import org.anchoranalysis.core.functional.OptionalUtilities;
 import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.io.output.file.FileOutput;
-import org.anchoranalysis.mpp.sgmn.bean.optscheme.feedback.ReporterOptimizationStep;
+import org.anchoranalysis.mpp.sgmn.bean.optscheme.feedback.FeedbackReceiverBean;
 import org.anchoranalysis.mpp.sgmn.optscheme.feedback.OptimizationFeedbackEndParams;
 import org.anchoranalysis.mpp.sgmn.optscheme.feedback.OptimizationFeedbackInitParams;
 import org.anchoranalysis.mpp.sgmn.optscheme.feedback.ReporterException;
 import org.anchoranalysis.mpp.sgmn.optscheme.step.Reporting;
 
-public class CSVReporterBest extends ReporterOptimizationStep<CfgNRGPixelized> {
+public class CSVReporterBest extends FeedbackReceiverBean<CfgNRGPixelized> {
 
 	private Optional<FileOutput> csvOutput;
-	
-	// Constructor
-	public CSVReporterBest() {
-		super();
-	}
 	
 	@Override
 	public void reportItr( Reporting<CfgNRGPixelized> reporting ) {
@@ -72,13 +67,7 @@ public class CSVReporterBest extends ReporterOptimizationStep<CfgNRGPixelized> {
 	public void reportBegin( OptimizationFeedbackInitParams<CfgNRGPixelized> initParams ) throws ReporterException {
 
 		try {
-			// This can return NULL if the output isn't allowed
-			try {
-				this.csvOutput = CSVReporterUtilities.createFileOutputFor("csvStatsBest", initParams, "event_aggregate_stats");
-			} catch (OutputWriteFailedException e) {
-				throw new ReporterException(e);
-			} 
-			
+			this.csvOutput = createOutput(initParams);
 			OptionalUtilities.ifPresent(
 				csvOutput,
 				output-> {
@@ -89,8 +78,6 @@ public class CSVReporterBest extends ReporterOptimizationStep<CfgNRGPixelized> {
 		} catch (AnchorIOException e) {
 			throw new ReporterException(e);
 		}
-
-		
 	}
 
 	@Override
@@ -98,5 +85,13 @@ public class CSVReporterBest extends ReporterOptimizationStep<CfgNRGPixelized> {
 		csvOutput.ifPresent( output->
 			output.getWriter().close()
 		);
+	}
+	
+	private Optional<FileOutput> createOutput(OptimizationFeedbackInitParams<CfgNRGPixelized> initParams) throws ReporterException {
+		try {
+			return CSVReporterUtilities.createFileOutputFor("csvStatsBest", initParams, "event_aggregate_stats");
+		} catch (OutputWriteFailedException e) {
+			throw new ReporterException(e);
+		} 
 	}
 }
