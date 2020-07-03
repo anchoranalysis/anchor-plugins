@@ -70,7 +70,7 @@ public class KernelBirthAndKill extends KernelPosNeg<CfgNRGPixelized> {
 	private Mark markNew;
 	private Mark markNewAdditional;
 	
-	private transient List<PxlMarkMemo> toKill;
+	private List<PxlMarkMemo> toKill;
 	
 	@Override
 	public Optional<CfgNRGPixelized> makeProposal(Optional<CfgNRGPixelized> exst, KernelCalcContext context) throws KernelCalcNRGException {
@@ -109,7 +109,7 @@ public class KernelBirthAndKill extends KernelPosNeg<CfgNRGPixelized> {
 				
 		return OptionalUtilities.map(
 			pmmAdditional,
-			pmm -> KernelBirthAndKillHelper.calcUpdatedNRG(exst.get(), memoNew, pmm, toKill, context, propContext)
+			pmm -> KernelBirthAndKillHelper.calcUpdatedNRG(exst.get(), memoNew, pmm, toKill, propContext)
 		);
 	}
 	
@@ -135,10 +135,7 @@ public class KernelBirthAndKill extends KernelPosNeg<CfgNRGPixelized> {
 	private boolean proposeMark( PxlMarkMemo memoNew, ProposerContext context )
 			throws KernelCalcNRGException {
 		try {
-			if (!markProposer.propose(memoNew, context)) {
-				return false;
-			}
-			return true;
+			return markProposer.propose(memoNew, context);
 		} catch (ProposalAbnormalFailureException e) {
 			throw new KernelCalcNRGException(
 				"Failed to propose a mark due to abnormal exception%n%s%n",
@@ -149,9 +146,9 @@ public class KernelBirthAndKill extends KernelPosNeg<CfgNRGPixelized> {
 	
 	@Override
 	public double calcAccptProb(int exstSize, int propSize,
-			double poisson_intens, ImageDimensions scene_size, double densityRatio) {
+			double poissonIntensity, ImageDimensions sceneSize, double densityRatio) {
 		
-        double num = getProbNeg() * scene_size.getVolume() * poisson_intens;
+        double num = getProbNeg() * sceneSize.getVolume() * poissonIntensity;
         double dem = getProbPos() * propSize;
         
         assert num>0;

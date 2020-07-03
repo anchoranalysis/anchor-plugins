@@ -29,15 +29,17 @@ package org.anchoranalysis.plugin.image.feature.bean.object.pair.touching;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.object.ObjectMask;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
 /**
  * Calculates objects/bounding boxes relative to others
  * 
  * @author owen
  *
  */
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
 class RelativeUtilities {
-	
-	private RelativeUtilities() {}
 
 	/**
 	 * Changes (immutably) the coordinates of a bounding-box to make them relative to another object

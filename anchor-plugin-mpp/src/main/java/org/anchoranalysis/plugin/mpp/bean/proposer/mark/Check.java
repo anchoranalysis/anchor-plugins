@@ -88,6 +88,7 @@ public class Check extends MarkProposerOne {
 		return true;
 	}
 
+	@Override
 	public Optional<CreateProposalVisualization> proposalVisualization(boolean detailed) {
 		if (lastFailedMark!=null) {
 			return Optional.of( cfg ->

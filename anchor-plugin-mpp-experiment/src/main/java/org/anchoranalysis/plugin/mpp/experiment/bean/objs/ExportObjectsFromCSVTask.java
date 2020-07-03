@@ -30,6 +30,7 @@ import java.nio.file.Path;
 import java.util.Collection;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Stream;
 
 import org.anchoranalysis.anchor.overlay.bean.objmask.writer.ObjMaskWriter;
 import org.anchoranalysis.bean.annotation.BeanField;
@@ -42,6 +43,7 @@ import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.index.GetOperationFailedException;
 import org.anchoranalysis.core.index.SetOperationFailedException;
 import org.anchoranalysis.core.log.LogErrorReporter;
+import org.anchoranalysis.core.name.value.SimpleNameValue;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
 import org.anchoranalysis.experiment.JobExecutionException;
 import org.anchoranalysis.experiment.task.InputTypesExpected;
@@ -177,7 +179,7 @@ public class ExportObjectsFromCSVTask extends ExportObjectsBase<FromCSVInputObje
 				context
 			);
 			
-		} catch (GetOperationFailedException | OperationFailedException | AnchorIOException | OutputWriteFailedException | CreateException e) {
+		} catch (GetOperationFailedException | OperationFailedException | AnchorIOException | CreateException e) {
 			throw new JobExecutionException(e);
 		}
 	}
@@ -192,7 +194,7 @@ public class ExportObjectsFromCSVTask extends ExportObjectsBase<FromCSVInputObje
 		MapGroupToRow mapGroup,
 		Set<String> groupNameSet,
 		BoundIOContext context
-	) throws OperationFailedException, OutputWriteFailedException {
+	) throws OperationFailedException {
 		
 		try {
 			DisplayStack background = createBackgroundStack(imageInit, context.getLogger() );
@@ -210,7 +212,7 @@ public class ExportObjectsFromCSVTask extends ExportObjectsBase<FromCSVInputObje
 				
 				Collection<CSVRow> rows = mapGroup.get(groupName);
 				
-				if (rows==null || rows.size()==0) {
+				if (rows==null || rows.isEmpty()) {
 					context.getLogReporter().logFormatted("No matching rows for group '%s'", groupName);
 					continue;
 				}
@@ -223,7 +225,7 @@ public class ExportObjectsFromCSVTask extends ExportObjectsBase<FromCSVInputObje
 		}
 	}
 	
-	private void outputGroup(String label, Collection<CSVRow> rows, ObjectCollectionRTree objs, DisplayStack background, BoundOutputManagerRouteErrors outputManager ) throws OutputWriteFailedException {
+	private void outputGroup(String label, Collection<CSVRow> rows, ObjectCollectionRTree objs, DisplayStack background, BoundOutputManagerRouteErrors outputManager ) {
 		
 		outputManager.getWriterAlwaysAllowed().write(
 			label,
@@ -241,9 +243,18 @@ public class ExportObjectsFromCSVTask extends ExportObjectsBase<FromCSVInputObje
 		RGBOutlineWriter outlineWriter = new RGBOutlineWriter(1);
 		outlineWriter.setForce2D(true);
 				
-		IterableCombinedListGenerator<CSVRow> listGenerator = new IterableCombinedListGenerator<>();
-		listGenerator.add(label, new CSVRowRGBOutlineGenerator( outlineWriter, objs, background, colorFirst, colorSecond ) );
-		listGenerator.add("idXML", new CSVRowXMLGenerator() );
+		IterableCombinedListGenerator<CSVRow> listGenerator = new IterableCombinedListGenerator<>(
+			Stream.of(
+				new SimpleNameValue<>(
+					label,
+					new CSVRowRGBOutlineGenerator(outlineWriter, objs, background, colorFirst, colorSecond)
+				),
+				new SimpleNameValue<>(
+					"idXML",
+					new CSVRowXMLGenerator()
+				)	
+			)
+		);
 		
 		// Output the group
 		SubfolderGenerator<CSVRow,Collection<CSVRow>> subFolderGenerator = new SubfolderGenerator<>(

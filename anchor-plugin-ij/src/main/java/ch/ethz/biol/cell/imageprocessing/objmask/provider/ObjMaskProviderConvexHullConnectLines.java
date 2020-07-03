@@ -67,7 +67,7 @@ public class ObjMaskProviderConvexHullConnectLines extends ObjMaskProviderDimens
 				return obj;
 			}
 			
-			List<Point3d> pnts3d = PointConverter.convert2i_3d(pntsConvexHull);
+			List<Point3d> pnts3d = PointConverter.convert2iTo3d(pntsConvexHull);
 			
 			return ObjMaskWalkShortestPath.walkLine( pnts3d );
 		} catch (OperationFailedException e) {

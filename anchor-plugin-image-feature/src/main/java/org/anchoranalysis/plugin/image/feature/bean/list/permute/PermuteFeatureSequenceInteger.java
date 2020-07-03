@@ -35,7 +35,6 @@ import org.anchoranalysis.bean.permute.property.PermutePropertySequenceInteger;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.list.FeatureList;
-import org.anchoranalysis.feature.input.FeatureInputNRG;
 import org.anchoranalysis.feature.input.FeatureInputParams;
 import org.anchoranalysis.plugin.operator.feature.bean.Param;
 
@@ -43,9 +42,9 @@ import org.anchoranalysis.plugin.operator.feature.bean.Param;
  * Permutes a property on a feature with a sequence of integers.
  * 
  * @author Owen Feehan
- *
+ * @param <T> feature-input
  */
-public abstract class PermuteFeatureSequenceInteger extends PermuteFeatureBase<FeatureInputNRG> {
+public abstract class PermuteFeatureSequenceInteger<T extends FeatureInputParams> extends PermuteFeatureBase<T> {
 
 	// START BEAN PROPERTIES
 	@BeanField
@@ -65,8 +64,8 @@ public abstract class PermuteFeatureSequenceInteger extends PermuteFeatureBase<F
 	}
 		
 	@Override
-	protected FeatureList<FeatureInputNRG> createPermutedFeaturesFor(Feature<FeatureInputNRG> feature) throws CreateException {
-		PermuteFeature<Integer,FeatureInputNRG> delegate = createDelegate(feature);
+	protected FeatureList<T> createPermutedFeaturesFor(Feature<T> feature) throws CreateException {
+		PermuteFeature<Integer,T> delegate = createDelegate(feature);
 		
 		configurePermutePropertyOnDelegate(delegate);
 		try {
@@ -78,11 +77,11 @@ public abstract class PermuteFeatureSequenceInteger extends PermuteFeatureBase<F
 		return delegate.create();
 	}
 	
-	protected abstract PermuteFeature<Integer,FeatureInputNRG> createDelegate(Feature<FeatureInputNRG> feature) throws CreateException;
+	protected abstract PermuteFeature<Integer,T> createDelegate(Feature<T> feature) throws CreateException;
 	
 	protected abstract PermutePropertySequenceInteger configurePermuteProperty( PermutePropertySequenceInteger permuteProperty );
 	
-	protected <T extends FeatureInputParams> Feature<T> createParam(
+	protected Feature<T> createParam(
 		String suffix,
 		boolean appendNumber
 	) {
@@ -101,7 +100,7 @@ public abstract class PermuteFeatureSequenceInteger extends PermuteFeatureBase<F
 		}
 	}
 
-	private void configurePermutePropertyOnDelegate( PermuteFeature<Integer,FeatureInputNRG> delegate ) {
+	private void configurePermutePropertyOnDelegate( PermuteFeature<Integer,T> delegate ) {
 		PermutePropertySequenceInteger permutePropertyConfigured = configurePermuteProperty(
 			(PermutePropertySequenceInteger) permuteProperty.duplicateBean()
 		);

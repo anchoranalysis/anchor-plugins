@@ -33,9 +33,11 @@ import java.util.List;
 import org.anchoranalysis.bean.Provider;
 import org.anchoranalysis.core.error.CreateException;
 
-class ProviderBeanUtilities {
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
-	private ProviderBeanUtilities() {}
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
+class ProviderBeanUtilities {
 	
 	/**
 	 * Creates a list of ProviderType from Beans

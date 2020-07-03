@@ -31,7 +31,6 @@ import java.nio.ByteBuffer;
 import java.util.Optional;
 
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.binary.BinaryChnl;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
@@ -76,7 +75,6 @@ public class MinimaImpositionGrayscaleReconstruction extends MinimaImposition {
 		
 		if (seeds.size()<1) {
 			throw new OperationFailedException("There must be at least one seed");
-			//return chnlBef;
 		}
 		 
 		seeds.verifySeedsAreInside( chnl.getDimensions().getExtnt());
@@ -86,12 +84,7 @@ public class MinimaImpositionGrayscaleReconstruction extends MinimaImposition {
 		assert( masks.objectsAreAllInside( chnl.getDimensions().getExtnt() ) );
 				
 		// We need 255 for the landini algorithms to work
-		BinaryChnl markerMask;
-		try {
-			markerMask = BinaryChnlFromObjs.createFromObjs(masks, chnl.getDimensions(), masks.getFirstBinaryValues() );
-		} catch (CreateException e) {
-			throw new OperationFailedException(e);
-		}
+		BinaryChnl markerMask = BinaryChnlFromObjs.createFromObjs(masks, chnl.getDimensions(), masks.getFirstBinaryValues() );
 
 		// We duplicate the channel so we are not manipulating the original
 		chnl = chnl.duplicate();

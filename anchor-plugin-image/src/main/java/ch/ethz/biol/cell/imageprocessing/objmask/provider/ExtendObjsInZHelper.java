@@ -36,9 +36,11 @@ import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.object.ObjectMask;
 
-class ExtendObjsInZHelper {
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
-	private ExtendObjsInZHelper() {}
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
+class ExtendObjsInZHelper {
 	
 	public static ObjectMask createExtendedObj( ObjectMask omFlat, ObjectMask container, BoundingBox bbox, int zCent ) throws CreateException {
 		
@@ -90,7 +92,7 @@ class ExtendObjsInZHelper {
 			} else {
 				setBufferLow( e.getVolumeXY(), bbExst, omNew.getBinaryValuesByte() );
 			}
-		};
+		}
 		
 		return writtenOneSlice;
 	}

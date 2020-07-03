@@ -33,7 +33,7 @@ import org.anchoranalysis.bean.StringSet;
 import org.anchoranalysis.bean.permute.property.PermutePropertySequenceInteger;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.feature.bean.Feature;
-import org.anchoranalysis.feature.input.FeatureInputNRG;
+import org.anchoranalysis.feature.input.FeatureInputParams;
 import org.anchoranalysis.plugin.operator.feature.bean.arithmetic.Divide;
 
 /**
@@ -42,12 +42,12 @@ import org.anchoranalysis.plugin.operator.feature.bean.arithmetic.Divide;
  * @author Owen Feehan
  * @param T feature-input
  */
-public class PermuteDivideByParam extends PermuteFeatureSequenceInteger {
+public class PermuteDivideByParam<T extends FeatureInputParams> extends PermuteFeatureSequenceInteger<T> {
 	
 	@Override
-	protected PermuteFeature<Integer,FeatureInputNRG> createDelegate(Feature<FeatureInputNRG> feature) throws CreateException {
+	protected PermuteFeature<Integer,T> createDelegate(Feature<T> feature) throws CreateException {
 		
-		PermuteFeature<Integer,FeatureInputNRG> delegate = new PermuteFeature<>();
+		PermuteFeature<Integer,T> delegate = new PermuteFeature<>();
 		
 		// Wrap our feature in a Divide
 		delegate.setFeature(
@@ -68,8 +68,8 @@ public class PermuteDivideByParam extends PermuteFeatureSequenceInteger {
 		return permuteProperty;
 	}
 	
-	private Feature<FeatureInputNRG> wrapInDivide( Feature<FeatureInputNRG> feature ) {
-		Divide<FeatureInputNRG> featureScore = new Divide<>();
+	private Feature<T> wrapInDivide( Feature<T> feature ) {
+		Divide<T> featureScore = new Divide<>();
 		featureScore.setList(
 			Arrays.asList(
 				feature,

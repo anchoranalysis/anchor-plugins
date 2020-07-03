@@ -33,9 +33,11 @@ import org.anchoranalysis.image.object.MatchedObject;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectMask;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
 public class ObjMaskMatchUtilities {
-	
-	private ObjMaskMatchUtilities() {}
 	
 	public static List<MatchedObject> matchIntersectingObjects( ObjectCollection sourceObjs, ObjectCollection searchObjects ) {
 		
@@ -49,8 +51,6 @@ public class ObjMaskMatchUtilities {
 	}
 	
 	private static ObjectCollection searchObjectsThatIntersectWith(ObjectCollection searchObjects, ObjectMask objToIntersectWith) {
-		return searchObjects.stream().filter( obj->
-			objToIntersectWith.hasIntersectingPixels(obj)
-		);
+		return searchObjects.stream().filter(objToIntersectWith::hasIntersectingPixels);
 	}
 }

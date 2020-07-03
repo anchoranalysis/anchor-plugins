@@ -29,15 +29,17 @@ package org.anchoranalysis.plugin.image.feature.bean.object.table;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.object.ObjectMask;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
 /**
  * Generates unique identifiers for object-masks
  * 
  * @author Owen Feehan
  *
  */
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
 class UniqueIdentifierUtilities {
-
-	private UniqueIdentifierUtilities() {}
 	
 	/**
 	 * Generates a unique identifier (unique within a particular collection) for an object based upon

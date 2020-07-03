@@ -36,7 +36,6 @@ import org.anchoranalysis.experiment.log.ConsoleLogReporter;
 import org.anchoranalysis.io.manifest.ManifestRecorder;
 import org.anchoranalysis.io.manifest.ManifestRecorderFile;
 import org.anchoranalysis.io.manifest.finder.FinderSerializedObject;
-import org.anchoranalysis.io.manifest.reportfeature.ReportFeatureForManifest;
 
 public class CfgSizeFromManifest extends ReportFeatureForManifest {
 
@@ -44,7 +43,7 @@ public class CfgSizeFromManifest extends ReportFeatureForManifest {
 	public String genFeatureStrFor(ManifestRecorderFile obj, LogErrorReporter logger)
 			throws OperationFailedException {
 
-		FinderSerializedObject<Cfg> finder = new FinderSerializedObject<Cfg>(
+		FinderSerializedObject<Cfg> finder = new FinderSerializedObject<>(
 			"cfg",
 			new ErrorReporterIntoLog(new ConsoleLogReporter())
 		);

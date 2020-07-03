@@ -37,9 +37,11 @@ import org.anchoranalysis.anchor.mpp.proposer.ProposerContext;
 import org.anchoranalysis.mpp.sgmn.kernel.KernelCalcContext;
 import org.anchoranalysis.mpp.sgmn.kernel.KernelCalcNRGException;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
 class InitCfgUtilities {
-	
-	private InitCfgUtilities() {}
 	
 	public static Optional<Cfg> propose( CfgProposer cfgProposer, KernelCalcContext context ) throws KernelCalcNRGException {
 		ProposerContext propContext = context.proposer();

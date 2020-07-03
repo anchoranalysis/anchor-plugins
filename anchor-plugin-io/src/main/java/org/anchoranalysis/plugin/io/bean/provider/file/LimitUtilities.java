@@ -30,9 +30,11 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
 
-class LimitUtilities {
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
-	private LimitUtilities() {}
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
+class LimitUtilities {
 	
 	public static Collection<File> apply( Collection<File> filesIn, int maxNumItems ) {
 		

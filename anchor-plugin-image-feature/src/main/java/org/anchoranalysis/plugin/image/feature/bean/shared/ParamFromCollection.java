@@ -99,6 +99,6 @@ public class ParamFromCollection<T extends FeatureInput> extends FeatureShared<T
 	
 	@Override
 	public FeatureInputDescriptor inputDescriptor() {
-		return FeatureInputGenericDescriptor.instance;
+		return FeatureInputGenericDescriptor.INSTANCE;
 	}
 }

@@ -128,7 +128,7 @@ public class MarkProviderPointsFitterFromConvexHull extends MarkProvider {
 				),
 				pointsFitter.getMinNumPnts()
 			);
-			return PointConverter.convert2i_3f(selectedPoints);
+			return PointConverter.convert2iTo3f(selectedPoints);
 			
 		} catch (OperationFailedException e) {
 			throw new CreateException(e);

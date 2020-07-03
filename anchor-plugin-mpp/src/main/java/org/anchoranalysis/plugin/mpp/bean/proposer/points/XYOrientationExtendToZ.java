@@ -83,9 +83,6 @@ public class XYOrientationExtendToZ extends PointsProposer {
 	private int minNumSlices = 3;
 	
 	@BeanField
-	private int forceMinZSize = 1;
-	
-	@BeanField
 	private boolean forwardDirectionOnly = false;
 	
 	// If we reach this amount of slices without adding a point, we consider our job over
@@ -116,7 +113,7 @@ public class XYOrientationExtendToZ extends PointsProposer {
 		list.add( pointsFromOrientationXYProposer.proposalVisualization(detailed) );
 
 		list.add( cfg -> {
-			if (lastPntsAll!=null && lastPntsAll.size()>0) {
+			if (lastPntsAll!=null && !lastPntsAll.isEmpty()) {
 				cfg.addChangeID(
 					MarkPointListFactory.createMarkFromPoints3i(lastPntsAll),
 					new RGBColor(Color.ORANGE)
@@ -137,8 +134,7 @@ public class XYOrientationExtendToZ extends PointsProposer {
 				skipZDist(dim.getRes()),
 				binaryChnl.create(),
 				chnlFilled(),
-				dim,
-				forceMinZSize
+				dim
 			);
 			return Optional.of(lastPntsAll);
 			
@@ -157,15 +153,12 @@ public class XYOrientationExtendToZ extends PointsProposer {
 	}
 	
 	private int skipZDist(ImageResolution res) throws OperationFailedException {
-		int skipZDist = (int) Math.round(
+		return (int) Math.round(
 			distanceZEndIfEmpty.rslvForAxis(
 				Optional.of(res),
 				AxisType.Z
 			)
 		);
-		// TODO fix. Why this constant?
-		skipZDist = 100;
-		return skipZDist;
 	}
 	
 	private Optional<BinaryChnl> chnlFilled() throws CreateException {
@@ -191,14 +184,6 @@ public class XYOrientationExtendToZ extends PointsProposer {
 
 	public void setMinNumSlices(int minNumSlices) {
 		this.minNumSlices = minNumSlices;
-	}
-
-	public int getForceMinZSize() {
-		return forceMinZSize;
-	}
-
-	public void setForceMinZSize(int forceMinZSize) {
-		this.forceMinZSize = forceMinZSize;
 	}
 
 	public ScalarProposer getMaxDistanceZ() {

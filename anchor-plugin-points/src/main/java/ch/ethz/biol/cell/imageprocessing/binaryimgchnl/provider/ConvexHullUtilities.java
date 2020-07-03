@@ -40,12 +40,14 @@ import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.outline.FindOutline;
 import org.anchoranalysis.image.points.PointsFromBinaryVoxelBox;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
 // Strongly influenced by http://rsb.info.nih.gov/ij/macros/ConvexHull.txt
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
 public class ConvexHullUtilities {
 
 	private static final int DEFAULT_MIN_NUM_POINTS = 5;
-	
-	private ConvexHullUtilities() {}
 	
 	/**
 	 * Like {@link #convexHull2D(List, int)} but uses a default minimum number of points.
@@ -68,7 +70,7 @@ public class ConvexHullUtilities {
 		if (points.size()>=minNumberPoints) {
 			List<Point2i> filtered = filterPointsGiftWrap(points);
 			
-			if (filtered.size()>0) {
+			if (!filtered.isEmpty()) {
 				return filtered;
 			} else {
 				// If there are 0 points, this is considered a failure and the input points are returned
@@ -94,20 +96,21 @@ public class ConvexHullUtilities {
 		
 		
 		int pstart = p1;
-		int x1, y1, x2, y2, x3, y3, p2, p3;
+		int p2;
+		int p3;
 		
 		int count = 0;
 		do {
-			x1 = points.get(p1).getX();
-			y1 = points.get(p1).getY();
+			int x1 = points.get(p1).getX();
+			int y1 = points.get(p1).getY();
 			p2 = p1+1;
 			
 			if (p2==points.size()) {
 				p2=0;
 			}
 			
-			x2 = points.get(p2).getX();
-			y2 = points.get(p2).getY();
+			int x2 = points.get(p2).getX();
+			int y2 = points.get(p2).getY();
 			p3 = p2+1;
 			
 			if (p3==points.size()) {
@@ -116,8 +119,8 @@ public class ConvexHullUtilities {
 		
 			int determinate;
 			do {
-				x3 = points.get(p3).getX();
-				y3 = points.get(p3).getY();
+				int x3 = points.get(p3).getX();
+				int y3 = points.get(p3).getY();
 				determinate = x1*(y2-y3)-y1*(x2-x3)+(y3*x2-y2*x3);
 				if (determinate>0)
 					{x2=x3; y2=y3; p2=p3;}
@@ -141,7 +144,11 @@ public class ConvexHullUtilities {
 		} while (p1!=pstart);
 		
 		// n2 is number of points out
-		return IntStream.range(0, n2).mapToObj(index ->
+		return createPointsList(n2, xx, yy);
+	}
+	
+	private static List<Point2i> createPointsList(int numPoints, int[] xx, int[] yy) {
+		return IntStream.range(0, numPoints).mapToObj(index ->
 			new Point2i(xx[index], yy[index])
 		).collect( Collectors.toList() );
 	}
@@ -165,11 +172,13 @@ public class ConvexHullUtilities {
 	private static int calculateStartingIndex( List<Point2i> pntsIn ) {
 		
 		int smallestY = Integer.MAX_VALUE;
-		int x, y;
+		int x;
+		int y;
 		for (int i=0; i<pntsIn.size(); i++) {
 			y = pntsIn.get(i).getY();
-			if (y<smallestY)
-			smallestY = y;
+			if (y<smallestY) {
+				smallestY = y;
+			}
 		}
 		
 		int smallestX = Integer.MAX_VALUE;

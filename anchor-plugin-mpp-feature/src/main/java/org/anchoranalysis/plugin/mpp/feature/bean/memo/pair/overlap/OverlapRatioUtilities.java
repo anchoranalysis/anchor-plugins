@@ -26,21 +26,21 @@ package org.anchoranalysis.plugin.mpp.feature.bean.memo.pair.overlap;
  * #L%
  */
 
-import java.util.function.BiFunction;
+import java.util.function.LongBinaryOperator;
 
 import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
-import org.anchoranalysis.feature.calc.FeatureCalcException;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
 class OverlapRatioUtilities {
-	
-	private OverlapRatioUtilities() {}
 
 	/** Returns {@link Math::max} or {@link Math::min} depending on a flag */
-	public static BiFunction<Long,Long,Long> maxOrMin( boolean useMax ) {
+	public static LongBinaryOperator maxOrMin( boolean useMax ) {
 		return useMax ? Math::max : Math::min;
 	}
 	
-	public static double calcOverlapRatio( PxlMarkMemo obj1, PxlMarkMemo obj2, double overlap, int regionID, boolean mip, BiFunction<Long,Long,Long> funcAgg ) throws FeatureCalcException {
+	public static double calcOverlapRatio( PxlMarkMemo obj1, PxlMarkMemo obj2, double overlap, int regionID, boolean mip, LongBinaryOperator funcAgg ) {
 		
 		if (overlap==0.0) {
 			return 0.0;
@@ -59,10 +59,10 @@ class OverlapRatioUtilities {
 		}
 	}
 	
-	private static double calcVolumeAgg(PxlMarkMemo obj1, PxlMarkMemo obj2, int regionID, BiFunction<Long,Long,Long> funcAgg) throws FeatureCalcException {
+	private static double calcVolumeAgg(PxlMarkMemo obj1, PxlMarkMemo obj2, int regionID, LongBinaryOperator funcAgg) {
 		long size1 = sizeFromMemo(obj1, regionID);
 		long size2 = sizeFromMemo(obj2, regionID);
-		return funcAgg.apply(size1, size2);
+		return funcAgg.applyAsLong(size1, size2);
 	}
 	
 	private static long sizeFromMemo( PxlMarkMemo obj, int regionID ) {
