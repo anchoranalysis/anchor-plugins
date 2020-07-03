@@ -111,13 +111,8 @@ public class MarkProposerPointsFitter extends MarkProposer {
 	}
 	
 	@Override
-	public Optional<CreateProposalVisualization> proposalVisualization(final boolean detailed) {
-		return Optional.of(	cfg -> {
-			CreateProposalVisualization pv = pointsProposer.proposalVisualization(detailed); 
-			if (pv!=null) {
-				pv.addToCfg(cfg);
-			}
-		});
+	public Optional<CreateProposalVisualization> proposalVisualization(boolean detailed) {
+		return pointsProposer.proposalVisualization(detailed);
 	}
 	
 	public PointsProposer getPointsProposer() {

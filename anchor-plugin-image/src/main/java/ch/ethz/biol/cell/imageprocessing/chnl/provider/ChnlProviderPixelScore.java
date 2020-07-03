@@ -97,18 +97,20 @@ public class ChnlProviderPixelScore extends ChnlProvider {
 	}
 	
 	
-	private ObjectMask createMaskOrNull() throws CreateException {
+	private Optional<ObjectMask> createMaskOrNull() throws CreateException {
 		if (mask==null) {
-			return null;
+			return Optional.empty();
 		}
 		
 		BinaryChnl binaryChnlMask = mask.create();
 		Channel chnlMask = binaryChnlMask.getChnl();
 		
-		return new ObjectMask(
-			new BoundingBox( chnlMask.getDimensions().getExtnt()),
-			chnlMask.getVoxelBox().asByte(),
-			binaryChnlMask.getBinaryValues()
+		return Optional.of(
+			new ObjectMask(
+				new BoundingBox( chnlMask.getDimensions().getExtnt()),
+				chnlMask.getVoxelBox().asByte(),
+				binaryChnlMask.getBinaryValues()
+			)
 		);
 	}
 	
@@ -127,17 +129,17 @@ public class ChnlProviderPixelScore extends ChnlProvider {
 			kpv = Optional.empty();
 		}
 
-		ObjectMask objMask = createMaskOrNull();
+		Optional<ObjectMask> objMask = createMaskOrNull();
 		
 		VoxelBox<ByteBuffer> vbPixelScore;
-		if (objMask!=null) {
+		if (objMask.isPresent()) {
 			CreateVoxelBoxFromPixelwiseFeatureWithMask creator = new CreateVoxelBoxFromPixelwiseFeatureWithMask(
 				listVb,
 				kpv,
 				listHistExtra
 			);
 			
-			vbPixelScore = creator.createVoxelBoxFromPixelScore(pixelScore, objMask);
+			vbPixelScore = creator.createVoxelBoxFromPixelScore(pixelScore, objMask.get());
 			
 		} else {
 			CreateVoxelBoxFromPixelwiseFeature creator = new CreateVoxelBoxFromPixelwiseFeature(

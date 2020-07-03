@@ -1,5 +1,7 @@
 package org.anchoranalysis.plugin.mpp.bean.proposer.split;
 
+import java.util.Optional;
+
 import org.anchoranalysis.anchor.mpp.bean.cfg.CfgGen;
 import org.anchoranalysis.anchor.mpp.bean.proposer.MarkProposer;
 import org.anchoranalysis.anchor.mpp.bean.proposer.MarkSplitProposer;
@@ -130,7 +132,7 @@ public class MarkEllipsoidLongestAxis extends MarkSplitProposer {
 	}
 	
 	@Override
-	public PairPxlMarkMemo propose(PxlMarkMemo mark, ProposerContext context, CfgGen cfgGen) throws ProposalAbnormalFailureException {
+	public Optional<PairPxlMarkMemo> propose(PxlMarkMemo mark, ProposerContext context, CfgGen cfgGen) throws ProposalAbnormalFailureException {
 		
 		MarkEllipsoid markC = (MarkEllipsoid) mark.getMark();
 		
@@ -168,7 +170,7 @@ public class MarkEllipsoidLongestAxis extends MarkSplitProposer {
 		try {
 			if( !markProposer.propose(memo1, context) ) {
 				context.getErrorNode().add("Cannot create mark1");
-				return null;
+				return Optional.empty();
 			}
 		} catch (ProposalAbnormalFailureException e) {
 			throw new ProposalAbnormalFailureException("Failed to create mark1", e);
@@ -185,13 +187,15 @@ public class MarkEllipsoidLongestAxis extends MarkSplitProposer {
 		try {
 			if( !markProposer.propose(memo2, context) ) {
 				context.getErrorNode().add("Cannot create mark2");
-				return null;
+				return Optional.empty();
 			}
 		} catch (ProposalAbnormalFailureException e) {
 			throw new ProposalAbnormalFailureException("Failed to create mark2", e);
 		}
 		
-		return new PairPxlMarkMemo(memo1,memo2);
+		return Optional.of(
+			new PairPxlMarkMemo(memo1,memo2)
+		);
 	}
 
 	public MarkProposer getMarkProposer() {

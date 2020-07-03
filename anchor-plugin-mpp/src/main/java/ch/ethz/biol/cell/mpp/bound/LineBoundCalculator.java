@@ -28,6 +28,7 @@ package ch.ethz.biol.cell.mpp.bound;
 
 
 import java.nio.ByteBuffer;
+import java.util.Optional;
 
 import org.anchoranalysis.anchor.mpp.bean.bound.BoundCalculator;
 import org.anchoranalysis.anchor.mpp.bean.bound.RslvdBound;
@@ -36,6 +37,8 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.geometry.Point3d;
+import org.anchoranalysis.core.geometry.Point3i;
+import org.anchoranalysis.core.geometry.PointConverter;
 import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 import org.anchoranalysis.image.bean.provider.BinaryChnlProvider;
 import org.anchoranalysis.image.channel.Channel;
@@ -68,23 +71,23 @@ public class LineBoundCalculator extends BoundCalculator {
 					
 			int maxPossiblePoint = (int) Math.ceil( minMax.getMax() );
 			
-			double xMarg = rotMatrix.getMatrix().get(0,0);
-			double yMarg = rotMatrix.getMatrix().get(1,0);
-			double zMarg = rotMatrix.getNumDim() >= 3 ? rotMatrix.getMatrix().get(2,0) : 0;
+			Point3d marg = new Point3d(
+				rotMatrix.getMatrix().get(0,0),
+				rotMatrix.getMatrix().get(1,0),
+				rotMatrix.getNumDim() >= 3 ? rotMatrix.getMatrix().get(2,0) : 0
+			);
+			Point3d margInverse = Point3d.immutableScale(marg, -1);
 			
 			// This is 2D Type of code
-			double maxReachedFwd = maxReachablePoint( outlineChnl, point, xMarg, yMarg, zMarg, maxPossiblePoint );
-			double maxReachedRvrs = maxReachablePoint( outlineChnl, point, -1 * xMarg, -1 * yMarg, -1 * zMarg, maxPossiblePoint );
+			double maxReachedFwd = maxReachablePoint(outlineChnl, point, marg, maxPossiblePoint );
+			double maxReachedRvrs = maxReachablePoint( outlineChnl, point, margInverse, maxPossiblePoint );
 			
 			double min = minMax.getMin();
 			
-			RslvdBound boundFwd = createBoundForDirection(min, maxReachedFwd );
-			RslvdBound boundRvrs = createBoundForDirection(min, maxReachedRvrs );
-			
-			BidirectionalBound bi = new BidirectionalBound();
-			bi.setForward(boundFwd);
-			bi.setReverse(boundRvrs);
-			return bi;
+			return new BidirectionalBound(
+				createBoundForDirection(min, maxReachedFwd),
+				createBoundForDirection(min, maxReachedRvrs)
+			);
 			
 		} catch( CreateException e ) {
 			throw new OperationFailedException(e);
@@ -93,20 +96,22 @@ public class LineBoundCalculator extends BoundCalculator {
 		}
 	}
 
-	private static RslvdBound createBoundForDirection( double min, double maxDirection ) {
+	private static Optional<RslvdBound> createBoundForDirection( double min, double maxDirection ) {
 		
 		if (maxDirection==-1 || min==-1) {
-			return null;
+			return Optional.empty();
 		}
 		
 		if (min <= maxDirection) {
-			return new RslvdBound(min, maxDirection);	
+			return Optional.of(
+				new RslvdBound(min, maxDirection)
+			);
 		} else {
-			return null;
+			return Optional.empty();
 		}
 	}
 	
-	private double maxReachablePoint( Channel voxels, Point3d point, double xMarg, double yMarg, double zMarg, int maxPossiblePoint ) {
+	private double maxReachablePoint( Channel voxels, Point3d point, Point3d marg, int maxPossiblePoint ) {
 		
 		VoxelBox<ByteBuffer> vb = voxels.getVoxelBox().asByte();
 		
@@ -115,78 +120,53 @@ public class LineBoundCalculator extends BoundCalculator {
 		
 		int zPrev = 0;
 		arr = vb.getPlaneAccess().getPixelsForPlane(zPrev).buffer();
-		
-		double x = 0;
-		double y = 0;
-		double z = 0;
+
+		Point3d runningDbl = new Point3d();
 		
 		for( int i=1; i<maxPossiblePoint; i++) {
+			runningDbl.add(marg);
 			
-			x += xMarg;
-			y += yMarg;
-			z += zMarg;
-			
-			int xInt = (int)( point.getX() + x );
-			int yInt = (int)( point.getY() + y );
-			int zInt = (int)( point.getZ() + z );
+			Point3i runningInt = PointConverter.intFromDouble( 
+				Point3d.immutableAdd(
+					point,
+					runningDbl
+				)
+			);
 			
 			ImageDimensions sd = voxels.getDimensions();
-			if (xInt >= sd.getX() || xInt < 0 ) {
-				return -1; //maxPossiblePoint;
-			}
-			if (yInt >= sd.getY() || yInt < 0) {
+			if (sd.contains(runningInt)) {
 				return -1; //maxPossiblePoint;
 			}
 			
-			if (zInt >= sd.getZ() || zInt < 0) {
-				return -1; //maxPossiblePoint;
-			}
-
-			
-			if (zInt!=zPrev) {
-				zPrev = zInt;
+			if (runningInt.getZ()!=zPrev) {
+				zPrev = runningInt.getZ();
 				arr = vb.getPlaneAccess().getPixelsForPlane(zPrev).buffer();
 			}
 			
-			int index = sd.offset(xInt, yInt);
+			int index = sd.offsetSlice(runningInt);
 			int v = ByteConverter.unsignedByteToInt(arr.get(index));	
 				
 			if (v>0) {
 				// We calculate how far we have travelled in total
-				//double sqrt = Math.pow( Math.pow(x, 2.0) + Math.pow(y, 2.0), 0.5 );
-				//return sqrt;
-				//return extra+i;
-				return extra + normZMag(x,y,z, voxels.getDimensions().getRes().getZRelRes() );
+				return extra + normZMag(runningDbl, voxels.getDimensions().getRes().getZRelRes() );
 			}
 		}
 		return -1;
 	}
 
 	
-	private double normZMag( double x, double y, double z, double zMult ) {
-		double dx = x;
-		double dy = y;
-		double dz = z * zMult;
+	private double normZMag( Point3d pnt, double zMult ) {
+		double dx = pnt.getX();
+		double dy = pnt.getY();
+		double dz = pnt.getZ() * zMult;
 		return Math.sqrt( (dx*dx) + (dy*dy) + (dz*dz) );
 	}
-	
-//	private double euclidDistZMag( Point3d point1, Point3d point2, double zMult ) {
-//		double dx = point1.x - point2.x;
-//		double dy = point1.y - point2.y;
-//		double dz = (point1.z - point2.z) * zMult;
-//		return Math.sqrt( (dx*dx) + (dy*dy) + (dz*dz) );
-//	}
-
 
 	@Override
 	public boolean paramsEquals(Object other) {
-		
 		if (!(other instanceof LineBoundCalculator)) {
 			return false;
 		}
-		
-		//LineBoundCalculator otherC = (LineBoundCalculator) other;
-		
 		return true;
 	}
 

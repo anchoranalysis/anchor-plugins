@@ -26,7 +26,6 @@ package org.anchoranalysis.plugin.image.task.bean.labeller;
  * #L%
  */
 
-import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -35,8 +34,8 @@ import org.anchoranalysis.bean.NamedBean;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.NonEmpty;
 import org.anchoranalysis.bean.annotation.SkipInit;
-import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.experiment.task.NoSharedState;
 import org.anchoranalysis.feature.bean.list.FeatureListProvider;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.bean.provider.stack.StackProvider;
@@ -45,7 +44,7 @@ import org.anchoranalysis.image.io.input.ProvidesStackInput;
 import org.anchoranalysis.io.output.bound.BoundIOContext;
 import org.anchoranalysis.plugin.image.task.imagefeature.calculator.FeatureCalculatorFromProviderFactory;
 
-public class BinaryClassifierImageLabeller extends BinaryOutcomeImageLabeller<Object> {
+public class BinaryClassifierImageLabeller extends BinaryOutcomeImageLabeller {
 	
 	// START BEAN PROPERTIES
 	@BeanField @SkipInit
@@ -57,15 +56,10 @@ public class BinaryClassifierImageLabeller extends BinaryOutcomeImageLabeller<Ob
 	@BeanField
 	private StackProvider nrgStackProvider;
 	// END BEAN PROPERTIES
-
-	@Override
-	public Object init( Path pathForBinding ) throws InitException {
-		return null;
-	}
 	
 	@Override
 	public String labelFor(
-		Object initParams,
+		NoSharedState sharedState,
 		ProvidesStackInput input,
 		BoundIOContext context
 	) throws OperationFailedException {

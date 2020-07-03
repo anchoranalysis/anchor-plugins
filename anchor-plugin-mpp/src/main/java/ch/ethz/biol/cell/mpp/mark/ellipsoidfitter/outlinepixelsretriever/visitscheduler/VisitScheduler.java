@@ -1,5 +1,7 @@
 package ch.ethz.biol.cell.mpp.mark.ellipsoidfitter.outlinepixelsretriever.visitscheduler;
 
+import java.util.Optional;
+
 /*-
  * #%L
  * anchor-plugin-mpp
@@ -37,13 +39,11 @@ import org.anchoranalysis.image.object.ObjectMask;
 
 public abstract class VisitScheduler extends NullParamsBean<VisitScheduler> {
 
-	public abstract Tuple3i maxDistFromRootPoint(ImageResolution res) throws OperationFailedException;
+	public abstract Optional<Tuple3i> maxDistFromRootPoint(ImageResolution res) throws OperationFailedException;
 	
 	public abstract void beforeCreateObjMask(RandomNumberGenerator re, ImageResolution res) throws InitException;
 	
 	public abstract void afterCreateObjMask(Point3i root, ImageResolution res, RandomNumberGenerator re) throws InitException;
 	
 	public abstract boolean considerVisit( Point3i pnt, int distAlongContour, ObjectMask objMask );
-	
-	
 }

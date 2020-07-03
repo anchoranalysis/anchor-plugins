@@ -71,14 +71,14 @@ public class ImageLabellerStringMap<T> extends ImageLabeller<ImageLabellerString
 	}
 
 	@Override
-	public String labelFor(ImageLabellerStringMapInitParams<T> initParams, ProvidesStackInput input, BoundIOContext context)
+	public String labelFor(ImageLabellerStringMapInitParams<T> sharedState, ProvidesStackInput input, BoundIOContext context)
 			throws OperationFailedException {
 		String firstId = filter.labelFor(
-			initParams.getInitParams(),
+			sharedState.getInitParams(),
 			input,
 			context
 		);
-		return initParams.getMap().get(firstId);
+		return sharedState.getMap().get(firstId);
 	}
 
 	public StringMap getMap() {

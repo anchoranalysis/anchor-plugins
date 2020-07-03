@@ -105,6 +105,6 @@ class PointProcessor extends ProcessVoxelNeighbourAbsoluteWithSlidingBuffer<Obje
 
 	@Override
 	public Integer collectResult() {
-		return null;	// Arbitrary value as no result exists (instead buffers are changed during the iteration)
+		return -1;	// Arbitrary value as no result exists (instead buffers are changed during the iteration)
 	}
 }

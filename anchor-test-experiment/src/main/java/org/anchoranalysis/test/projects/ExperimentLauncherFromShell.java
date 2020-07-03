@@ -241,7 +241,7 @@ public class ExperimentLauncherFromShell {
 		
 	
 	/**
-	 * Resolves a path if it's non-null, otherwise return null
+	 * Resolves a path iff it's defined.
 	 * 
 	 * @param testPath path to resolve
 	 * @return resolved path or null

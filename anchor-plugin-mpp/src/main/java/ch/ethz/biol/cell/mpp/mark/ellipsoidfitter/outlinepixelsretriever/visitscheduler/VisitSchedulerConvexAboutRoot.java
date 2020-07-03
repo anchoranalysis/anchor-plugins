@@ -28,35 +28,27 @@ package ch.ethz.biol.cell.mpp.mark.ellipsoidfitter.outlinepixelsretriever.visits
 
 
 import java.nio.ByteBuffer;
+import java.util.Optional;
 
-import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.core.geometry.PointConverter;
 import org.anchoranalysis.core.geometry.Tuple3i;
-import org.anchoranalysis.core.name.store.SharedObjects;
 import org.anchoranalysis.core.random.RandomNumberGenerator;
 import org.anchoranalysis.image.binary.values.BinaryValues;
-import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
 import org.anchoranalysis.image.extent.ImageResolution;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 
-@SuppressWarnings("unused")
 public class VisitSchedulerConvexAboutRoot extends VisitScheduler {
-
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
 
 	private Point3i root;
 	
 	@Override
-	public Tuple3i maxDistFromRootPoint(ImageResolution res) {
-		return null;
+	public Optional<Tuple3i> maxDistFromRootPoint(ImageResolution res) {
+		return Optional.empty();
 	}
 
 	@Override

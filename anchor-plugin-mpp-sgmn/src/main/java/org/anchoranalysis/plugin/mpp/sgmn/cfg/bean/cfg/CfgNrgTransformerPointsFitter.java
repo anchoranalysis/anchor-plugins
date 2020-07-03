@@ -1,5 +1,7 @@
 package org.anchoranalysis.plugin.mpp.sgmn.cfg.bean.cfg;
 
+import java.util.Optional;
+
 import org.anchoranalysis.anchor.mpp.bean.points.CreateMarkFromPoints;
 import org.anchoranalysis.anchor.mpp.cfg.Cfg;
 import org.anchoranalysis.anchor.mpp.feature.nrg.cfg.CfgNRGPixelized;
@@ -48,7 +50,7 @@ public class CfgNrgTransformerPointsFitter extends StateTransformerBean<Cfg,CfgN
 	@Override
 	public CfgNRGPixelized transform(Cfg in, TransformationContext context) throws OperationFailedException {
 			
-		Mark mark = createMark.fitMarkToPointsFromCfg( in, context.getDimensions() );
+		Optional<Mark> mark = createMark.fitMarkToPointsFromCfg( in, context.getDimensions() );
 		
 		// If we cannot create a mark, there is no proposal
 		Cfg cfg = wrapMark(mark);
@@ -72,11 +74,9 @@ public class CfgNrgTransformerPointsFitter extends StateTransformerBean<Cfg,CfgN
 		this.createMark = createMark;
 	}
 	
-	private static Cfg wrapMark( Mark mark ) {
+	private static Cfg wrapMark( Optional<Mark> mark ) {
 		Cfg cfg = new Cfg();
-		if (mark!=null) {
-			cfg.add(mark);
-		}
+		mark.ifPresent(cfg::add);
 		return cfg;
 	}
 }

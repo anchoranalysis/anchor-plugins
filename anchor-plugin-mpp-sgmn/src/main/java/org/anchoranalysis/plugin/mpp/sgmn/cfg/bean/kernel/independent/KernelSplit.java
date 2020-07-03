@@ -1,6 +1,7 @@
 package org.anchoranalysis.plugin.mpp.sgmn.cfg.bean.kernel.independent;
 
 import java.util.Optional;
+import java.util.stream.Stream;
 
 import org.anchoranalysis.anchor.mpp.bean.proposer.MarkFromCfgProposer;
 import org.anchoranalysis.anchor.mpp.bean.proposer.MarkSplitProposer;
@@ -61,7 +62,7 @@ public class KernelSplit extends KernelPosNeg<CfgNRGPixelized> {
 	
 	private transient int markExstIndex;
 	private transient Optional<Mark> markExst;
-	private transient PairPxlMarkMemo pairNew;
+	private transient Optional<PairPxlMarkMemo> pairNew;
 
 	@Override
 	public Optional<CfgNRGPixelized> makeProposal(Optional<CfgNRGPixelized> exst, KernelCalcContext context ) throws KernelCalcNRGException {
@@ -83,8 +84,8 @@ public class KernelSplit extends KernelPosNeg<CfgNRGPixelized> {
 		
 		if (!markExst.isPresent()) {
 			propContext.getErrorNode().add("cannot find an existing mark to split");
-			pairNew = null;
-			markExst = null;
+			pairNew = Optional.empty();
+			markExst = Optional.empty();
 			return Optional.empty();
 		}
 		
@@ -105,12 +106,17 @@ public class KernelSplit extends KernelPosNeg<CfgNRGPixelized> {
 			);
 		}
 		
-		if (pairNew==null) {
+		if (!pairNew.isPresent()) {
 			return Optional.empty();
 		}
 		
 		return Optional.of(
-			createCfgNRG( exst.get(), propContext.getNrgStack().getNrgStack() )
+			createCfgNRG(
+				exst.get(),
+				propContext.getNrgStack().getNrgStack(),
+				pairNew.get(),
+				markExstIndex
+			)
 		);
 	}
 
@@ -120,10 +126,13 @@ public class KernelSplit extends KernelPosNeg<CfgNRGPixelized> {
 	public boolean isCompatibleWith(Mark testMark) {
 		return splitProposer.isCompatibleWith(testMark) && markFromCfgProposer.isCompatibleWith(testMark);
 	}
-	
-	
-	
-	protected CfgNRGPixelized createCfgNRG(CfgNRGPixelized exst, NRGStack nrgStack ) throws KernelCalcNRGException {
+		
+	private static CfgNRGPixelized createCfgNRG(
+		CfgNRGPixelized exst,
+		NRGStack nrgStack,
+		PairPxlMarkMemo pair,
+		int markExstIndex
+	) throws KernelCalcNRGException {
 		
 		// We calculate a new NRG by exchanging our marks
 		CfgNRGPixelized newNRG = exst.shallowCopy();
@@ -137,8 +146,8 @@ public class KernelSplit extends KernelPosNeg<CfgNRGPixelized> {
 		}
 		
 		try {
-			newNRG.add( pairNew.getSource(), nrgStack );
-			newNRG.add( pairNew.getDestination(), nrgStack );
+			newNRG.add( pair.getSource(), nrgStack );
+			newNRG.add( pair.getDestination(), nrgStack );
 		} catch (FeatureCalcException e) {
 			throw new KernelCalcNRGException(
 				"Cannot add source and destination",
@@ -158,12 +167,12 @@ public class KernelSplit extends KernelPosNeg<CfgNRGPixelized> {
 
 	@Override
 	public String dscrLast() {
-		if (markExst.isPresent() && pairNew !=null && pairNew.getSource()!=null && pairNew.getDestination()!=null) {
+		if (markExst.isPresent() && pairNew.isPresent()) {
 			return String.format(
 				"%s %d into %d into %d", getBeanName(),
 				markExst.get().getId(),
-				pairNew.getSource().getMark().getId(),
-				pairNew.getDestination().getMark().getId()
+				pairNew.get().getSource().getMark().getId(),
+				pairNew.get().getDestination().getMark().getId()
 			);
 		} else {
 			return getBeanName();
@@ -182,7 +191,7 @@ public class KernelSplit extends KernelPosNeg<CfgNRGPixelized> {
 		updatableMarkSetCollection.rmv( memoList, memoExst );
 		memoList.remove( memoExst );
 		
-		PxlMarkMemo memoAdded1 = pairNew.getSource();
+		PxlMarkMemo memoAdded1 = pairNew.get().getSource();
 		
 		// Should always find one
 		assert memoAdded1!=null;
@@ -190,7 +199,7 @@ public class KernelSplit extends KernelPosNeg<CfgNRGPixelized> {
 		
 		memoList.add(memoAdded1);
 		
-		PxlMarkMemo memoAdded2 = pairNew.getDestination();
+		PxlMarkMemo memoAdded2 = pairNew.get().getDestination();
 		assert memoAdded2!=null;
 		
 		updatableMarkSetCollection.add(memoList, memoAdded2 );
@@ -198,11 +207,14 @@ public class KernelSplit extends KernelPosNeg<CfgNRGPixelized> {
 
 	@Override
 	public int[] changedMarkIDArray() {
-		return new int[]{
-			markExst.get().getId(),
-			pairNew.getSource().getMark().getId(),
-			pairNew.getDestination().getMark().getId()
-		};
+		Stream<Optional<Mark>> stream = Stream.of(
+			markExst,
+			pairNew.map( pmm->pmm.getSource().getMark() ),
+			pairNew.map( pmm->pmm.getDestination().getMark() )
+		);
+		return stream.filter(Optional::isPresent)
+			.mapToInt(opt -> opt.get().getId() )
+			.toArray();
 	}
 
 	public MarkSplitProposer getSplitProposer() {

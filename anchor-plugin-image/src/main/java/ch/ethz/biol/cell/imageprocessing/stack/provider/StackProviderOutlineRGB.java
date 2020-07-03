@@ -103,12 +103,6 @@ public class StackProviderOutlineRGB extends StackProviderWithBackground {
 	}
 	
 	private BinaryChnl calcOutline( BinaryChnl mask ) throws OperationFailedException {
-		
-		// If we pass a null, return a null
-		if (mask==null) {
-			return null;
-		}
-		
 		BinaryChnl maskIn = mip ? mask.maxIntensityProj() : mask.duplicate(); 
 		
 		// We calculate outline of mask

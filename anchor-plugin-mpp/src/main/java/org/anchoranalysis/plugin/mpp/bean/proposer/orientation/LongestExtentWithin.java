@@ -65,11 +65,7 @@ public class LongestExtentWithin extends OrientationProposer {
 		
 		try {
 			RslvdBound minMaxBound = getSharedObjects().getMarkBounds().calcMinMax(dim.getRes(), dim.getZ()>1 );
-			
-			OrientationList listOrientations = findAllOrientations(mark, minMaxBound, dim);
-			return Optional.of(
-				listOrientations.sample(re)
-			);
+			return findAllOrientations(mark, minMaxBound, dim).sample(re);
 			
 		} catch (NamedProviderGetException e) {
 			throw new ProposalAbnormalFailureException(e.summarize());
