@@ -180,7 +180,7 @@ class EastMarkExtractor {
 		
 		return new Pair<>(
 			scoresReshaped,
-			new Extent(numCols, numRows, 0)
+			new Extent(numCols, numRows, 1)
 		);
 	}
 	
