@@ -37,7 +37,6 @@ import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.core.color.ColorIndex;
 import org.anchoranalysis.core.color.ColorList;
 import org.anchoranalysis.core.color.RGBColor;
-import org.anchoranalysis.core.error.AnchorNeverOccursException;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.error.OperationFailedException;
@@ -45,6 +44,7 @@ import org.anchoranalysis.core.functional.FunctionWithException;
 import org.anchoranalysis.core.functional.IdentityOperation;
 import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.core.name.provider.NamedProviderGetException;
+import org.anchoranalysis.core.name.value.SimpleNameValue;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
 import org.anchoranalysis.experiment.JobExecutionException;
 import org.anchoranalysis.experiment.task.InputTypesExpected;
@@ -154,7 +154,7 @@ public class ExportObjectsAsCroppedImagesTask extends ExportObjectsBase<MultiInp
 			NamedImgStackCollection stackCollection = createStackCollection(paramsInit, logger);
 			NamedImgStackCollection stackCollectionMIP = createStackCollectionMIP(paramsInit, logger);
 			
-			if (stackCollection.keys().size()==0) {
+			if (stackCollection.keys().isEmpty()) {
 				// Nothing to do
 				return;
 			}
@@ -189,13 +189,14 @@ public class ExportObjectsAsCroppedImagesTask extends ExportObjectsBase<MultiInp
 
 	@Override
 	public void afterAllJobsAreExecuted(NoSharedState sharedState, BoundIOContext context) throws ExperimentExecutionException {
+		// NOTHING TO DO
 	}	
 	
 	private void outputGeneratorSeq(
 		IterableGenerator<ObjectMask> generator,
 		ObjectCollection objs,
 		BoundIOContext context
-	) throws CreateException {
+	) {
 		GeneratorSequenceIncrementalRerouteErrors<ObjectMask> generatorSeq = createGeneratorSequence(
 			generator,
 			context
@@ -210,7 +211,7 @@ public class ExportObjectsAsCroppedImagesTask extends ExportObjectsBase<MultiInp
 		generatorSeq.end();
 	}
 	
-	private ObjectCollection maybeExtendZObjs(ObjectCollection objsCollection, int sizeZ) throws CreateException {
+	private ObjectCollection maybeExtendZObjs(ObjectCollection objsCollection, int sizeZ) {
 		
 		if (extendInZ) {
 			objsCollection = extendObjsInZ(objsCollection, sizeZ);
@@ -302,23 +303,19 @@ public class ExportObjectsAsCroppedImagesTask extends ExportObjectsBase<MultiInp
 		return stackCollection;			
 	}
 	
-	
-	
-	private IterableGenerator<ObjectMask> wrapBBoxGenerator( IterableGenerator<BoundingBox> generator, final boolean mip ) {
+	private static IterableGenerator<ObjectMask> wrapBBoxGenerator( IterableGenerator<BoundingBox> generator, final boolean mip ) {
 		return new IterableGeneratorBridge<>(
 			generator,
-			new FunctionWithException<ObjectMask, BoundingBox, AnchorNeverOccursException>() {
-
-				@Override
-				public BoundingBox apply(ObjectMask sourceObject) {
-					if (mip) {
-						return sourceObject.getBoundingBox().flattenZ();
-					} else {
-						return sourceObject.getBoundingBox();
-					}
-				}
-			}
+			sourceObject -> boundingBoxFromObject(sourceObject, mip)
 		);
+	}
+	
+	private static BoundingBox boundingBoxFromObject(ObjectMask object, boolean mip) {
+		if (mip) {
+			return object.getBoundingBox().flattenZ();
+		} else {
+			return object.getBoundingBox();
+		}
 	}
 	
 	private IterableGenerator<ObjectMask> createRGBObjMaskGenerator(
@@ -338,9 +335,12 @@ public class ExportObjectsAsCroppedImagesTask extends ExportObjectsBase<MultiInp
 		
 		String manifestFunction = "rasterExtract";
 		
-		IterableCombinedListGenerator<ObjectMask> out = new IterableCombinedListGenerator<>();
-
-		out.add( "mask", new ObjWithBoundingBoxGenerator(dim.getRes()) );
+		IterableCombinedListGenerator<ObjectMask> out = new IterableCombinedListGenerator<>(
+			new SimpleNameValue<>(
+				"mask",
+				new ObjWithBoundingBoxGenerator(dim.getRes())
+			)
+		);
 		
 		try {
 			for( String key : stackCollection.keys() ) {
@@ -405,7 +405,7 @@ public class ExportObjectsAsCroppedImagesTask extends ExportObjectsBase<MultiInp
 	) {
 		IndexableOutputNameStyle outputNameStyle = new IntegerPrefixOutputNameStyle("extractedObjs", 6);
 		
-		GeneratorSequenceIncrementalRerouteErrors<ObjectMask> writer = new GeneratorSequenceIncrementalRerouteErrors<>(
+		return new GeneratorSequenceIncrementalRerouteErrors<>(
 			new GeneratorSequenceIncrementalWriter<>(
 				context.getOutputManager().getDelegate(),
 				outputNameStyle.getOutputName(),
@@ -416,7 +416,6 @@ public class ExportObjectsAsCroppedImagesTask extends ExportObjectsBase<MultiInp
 			),
 			context.getErrorReporter()
 		);
-		return writer;
 	}
 	
 	private static ObjectCollection extendObjsInZ( ObjectCollection objs, int sz ) {

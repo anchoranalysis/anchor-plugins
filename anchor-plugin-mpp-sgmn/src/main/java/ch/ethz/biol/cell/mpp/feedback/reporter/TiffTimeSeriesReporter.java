@@ -117,5 +117,6 @@ public class TiffTimeSeriesReporter extends PeriodicSubfolderReporter<CfgNRG> {
 
 	@Override
 	public void reportNewBest(Reporting<CfgNRGPixelized> reporting) {
+		// NOTHING TO DO
 	}
 }

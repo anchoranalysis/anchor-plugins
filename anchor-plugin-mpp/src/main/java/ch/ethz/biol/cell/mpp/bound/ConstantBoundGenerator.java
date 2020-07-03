@@ -38,15 +38,15 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.math.rotation.RotationMatrix;
 
+import lombok.NoArgsConstructor;
+
+@NoArgsConstructor
 public class ConstantBoundGenerator extends BoundCalculator {
 
 	// START BEAN PROPERTIES
 	@BeanField
 	private RslvdBound constantBound;
 	// END BEAN PROPERTIES
-	
-	/** Standard bean constructor */
-	public ConstantBoundGenerator() {}
 	
 	public ConstantBoundGenerator(RslvdBound constantBound) {
 		super();

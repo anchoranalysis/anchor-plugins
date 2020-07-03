@@ -53,6 +53,6 @@ public class MockFeatureWithCalculation extends Feature<FeatureInput> {
 
 	@Override
 	public FeatureInputDescriptor inputDescriptor() {
-		return FeatureInputGenericDescriptor.instance;
+		return FeatureInputGenericDescriptor.INSTANCE;
 	}
 }

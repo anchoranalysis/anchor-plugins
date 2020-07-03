@@ -86,7 +86,7 @@ public class CfgProviderPointsFitterFromObjs extends CfgProvider {
 			}
 			
 			return fitToMark(
-				PointConverter.convert2i_3f(points),
+				PointConverter.convert2iTo3f(points),
 				dim
 			);
 			

@@ -33,12 +33,12 @@ import org.anchoranalysis.bean.permute.property.PermutePropertySequenceInteger;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.input.FeatureInput;
-import org.anchoranalysis.feature.input.FeatureInputNRG;
+import org.anchoranalysis.feature.input.FeatureInputParams;
 import org.anchoranalysis.plugin.operator.feature.bean.arithmetic.MultiplyByConstant;
 import org.anchoranalysis.plugin.operator.feature.bean.range.IfOutsideRange;
 import org.anchoranalysis.plugin.operator.feature.bean.score.FeatureStatScore;
 
-public abstract class PermuteFirstSecondOrder extends PermuteFeatureSequenceInteger {
+public abstract class PermuteFirstSecondOrder<T extends FeatureInputParams> extends PermuteFeatureSequenceInteger<T> {
 
 	// START BEAN PROPERTIES
 	/**
@@ -48,7 +48,7 @@ public abstract class PermuteFirstSecondOrder extends PermuteFeatureSequenceInte
 	private boolean paramPrefixAppendNumber = true;
 	// END BEAN PROPERTIES
 	
-	private CreateFirstSecondOrder<FeatureInputNRG> factory;
+	private CreateFirstSecondOrder<T> factory;
 	private double minRange;
 	private double maxRange;
 	
@@ -57,7 +57,7 @@ public abstract class PermuteFirstSecondOrder extends PermuteFeatureSequenceInte
 		FeatureStatScore<T> create();
 	}
 
-	public PermuteFirstSecondOrder(CreateFirstSecondOrder<FeatureInputNRG> factory, double minRange, double maxRange ) {
+	public PermuteFirstSecondOrder(CreateFirstSecondOrder<T> factory, double minRange, double maxRange ) {
 		super();
 		this.factory = factory;
 		this.minRange = minRange;
@@ -65,12 +65,12 @@ public abstract class PermuteFirstSecondOrder extends PermuteFeatureSequenceInte
 	}
 	
 	@Override
-	protected PermuteFeature<Integer,FeatureInputNRG> createDelegate(Feature<FeatureInputNRG> feature) throws CreateException {
+	protected PermuteFeature<Integer,T> createDelegate(Feature<T> feature) throws CreateException {
 		
-		PermuteFeature<Integer, FeatureInputNRG> delegate = new PermuteFeature<>();
+		PermuteFeature<Integer, T> delegate = new PermuteFeature<>();
 		
 		// Wrap our feature in a gaussian score
-		Feature<FeatureInputNRG> featureScore = feature.duplicateBean();
+		Feature<T> featureScore = feature.duplicateBean();
 		featureScore = wrapInScore(featureScore);
 		featureScore = wrapWithMultiplyByConstant(featureScore);
 		featureScore = wrapWithMinMaxRange(featureScore);
@@ -80,15 +80,15 @@ public abstract class PermuteFirstSecondOrder extends PermuteFeatureSequenceInte
 	}
 	
 
-	private static Feature<FeatureInputNRG> wrapWithMultiplyByConstant( Feature<FeatureInputNRG> feature ) {
-		MultiplyByConstant<FeatureInputNRG> out = new MultiplyByConstant<>();
+	private Feature<T> wrapWithMultiplyByConstant( Feature<T> feature ) {
+		MultiplyByConstant<T> out = new MultiplyByConstant<>();
 		out.setItem(feature);
 		out.setValue(1);
 		return out;
 	}
 
-	private Feature<FeatureInputNRG> wrapWithMinMaxRange( Feature<FeatureInputNRG> feature ) {
-		IfOutsideRange<FeatureInputNRG> out = new IfOutsideRange<>();
+	private Feature<T> wrapWithMinMaxRange( Feature<T> feature ) {
+		IfOutsideRange<T> out = new IfOutsideRange<>();
 		out.setItem(feature);
 		out.setMin(minRange);
 		out.setMax(maxRange);
@@ -97,8 +97,8 @@ public abstract class PermuteFirstSecondOrder extends PermuteFeatureSequenceInte
 		return out;
 	}
 		
-	private Feature<FeatureInputNRG> wrapInScore( Feature<FeatureInputNRG> feature ) {
-		FeatureStatScore<FeatureInputNRG> featureScore = factory.create();
+	private Feature<T> wrapInScore( Feature<T> feature ) {
+		FeatureStatScore<T> featureScore = factory.create();
 		featureScore.setItem(feature);
 		featureScore.setItemMean(
 			createParam("_fitted_normal_mean",paramPrefixAppendNumber)

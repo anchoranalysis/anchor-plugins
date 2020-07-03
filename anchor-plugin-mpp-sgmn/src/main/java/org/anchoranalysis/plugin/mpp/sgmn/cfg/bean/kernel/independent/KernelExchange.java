@@ -57,7 +57,13 @@ public class KernelExchange extends KernelIndependent<CfgNRGPixelized> {
 	private Mark markNew;
 	
 	@Override
-	public double calcAccptProb( int exstSize, int propSize, double poisson_intens, ImageDimensions scene_size, double densityRatio ) {
+	public double calcAccptProb(
+		int exstSize,
+		int propSize,
+		double poissonIntensity,
+		ImageDimensions sceneSize,
+		double densityRatio
+	) {
 		return Math.min(1.0, densityRatio );
 	}
 

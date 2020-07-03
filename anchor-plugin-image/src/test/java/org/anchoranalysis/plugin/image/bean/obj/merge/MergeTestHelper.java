@@ -37,6 +37,10 @@ import org.anchoranalysis.test.LoggingFixture;
 import org.anchoranalysis.test.feature.plugins.mockfeature.MockFeatureWithCalculationFixture;
 import org.anchoranalysis.test.feature.plugins.objs.IntersectingCircleObjsFixture;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
 class MergeTestHelper {
 
 	private static final int NUM_INTERSECTING = 8;
@@ -58,8 +62,6 @@ class MergeTestHelper {
 		NUM_NOT_INTERSECTING,
 		false
 	);
-	
-	private MergeTestHelper() {}
 	
 	/**
 	 * Tests the initialization and execution of a provider of object-masks that results in a number of merged-objects

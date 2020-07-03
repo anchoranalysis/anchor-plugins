@@ -1,5 +1,7 @@
 package org.anchoranalysis.plugin.image.feature.bean.list.permute;
 
+import org.anchoranalysis.feature.input.FeatureInputParams;
+
 /*-
  * #%L
  * anchor-plugin-image-feature
@@ -34,7 +36,7 @@ import org.anchoranalysis.plugin.operator.feature.bean.score.ZScore;
  * @author Owen Feehan
  *
  */
-public class PermuteZScore extends PermuteFirstSecondOrder {
+public class PermuteZScore<T extends FeatureInputParams> extends PermuteFirstSecondOrder<T> {
 
 	public PermuteZScore() {
 		super(

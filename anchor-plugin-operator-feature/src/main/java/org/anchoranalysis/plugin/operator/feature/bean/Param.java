@@ -104,7 +104,7 @@ public class Param<T extends FeatureInputParams> extends Feature<T> {
 
 	@Override
 	public FeatureInputDescriptor inputDescriptor() {
-		return FeatureInputParamsDescriptor.instance;
+		return FeatureInputParamsDescriptor.INSTANCE;
 	}
 
 	public String getKey() {

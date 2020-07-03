@@ -1,6 +1,6 @@
 package org.anchoranalysis.plugin.mpp.feature.bean.memo.pair.overlap;
 
-import java.util.function.BiFunction;
+import java.util.function.LongBinaryOperator;
 
 /*-
  * #%L
@@ -68,9 +68,8 @@ public abstract class OverlapMaskBase extends FeaturePairMemoSingleRegion {
 		PxlMarkMemo obj2,
 		int regionID,
 		RelationBean relationToThreshold,
-		BiFunction<Long,Long,Long> statFunc
-	) throws FeatureCalcException {
-		
+		LongBinaryOperator statFunc
+	) {
 		return calcVolumeStat(
 			obj1,
 			obj2,
@@ -85,12 +84,12 @@ public abstract class OverlapMaskBase extends FeaturePairMemoSingleRegion {
 		PxlMarkMemo obj2,
 		int regionID,
 		RelationBean relationToThreshold,
-		BiFunction<Long,Long,Long> statFunc
-	) throws FeatureCalcException {
+		LongBinaryOperator statFunc
+	) {
 		
 		long size1 = sizeForObj(obj1, regionID, relationToThreshold);
 		long size2 = sizeForObj(obj2, regionID, relationToThreshold);
-		return statFunc.apply(size1, size2);
+		return statFunc.applyAsLong(size1, size2);
 	}
 	
 	private long sizeForObj( PxlMarkMemo obj, int regionID, RelationBean relationToThreshold) {

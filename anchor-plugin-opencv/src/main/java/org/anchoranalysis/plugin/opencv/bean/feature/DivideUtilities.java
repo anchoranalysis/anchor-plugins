@@ -26,18 +26,20 @@ package org.anchoranalysis.plugin.opencv.bean.feature;
  * #L%
  */
 
-import java.util.function.Function;
+import java.util.function.ToIntFunction;
 
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.bean.size.SizeXY;
 
-class DivideUtilities {
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
-	private DivideUtilities() {}
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
+class DivideUtilities {
 	
 	/** Integer division of a value extracted by another value extracted */
-	public static int divide(SizeXY big, SizeXY divider, Function<SizeXY,Integer> func ) {
-		return func.apply(big) / func.apply(divider);
+	public static int divide(SizeXY big, SizeXY divider, ToIntFunction<SizeXY> func ) {
+		return func.applyAsInt(big) / func.applyAsInt(divider);
 	}
 		
 	public static void checkDivisibleBy(SizeXY biggerNumber, SizeXY divisor, String biggerText, String divisorText) throws FeatureCalcException {
