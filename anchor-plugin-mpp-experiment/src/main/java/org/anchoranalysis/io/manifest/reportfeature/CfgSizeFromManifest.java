@@ -52,7 +52,7 @@ public class CfgSizeFromManifest extends ReportFeatureForManifest {
 		ManifestRecorder manifest = obj.doOperation();
 		
 		if (!finder.doFind( manifest )) {
-			throw new OperationFailedException( String.format("Cannot find cfg in manifest") );
+			throw new OperationFailedException("Cannot find cfg in manifest");
 		}
 		
 		try {
