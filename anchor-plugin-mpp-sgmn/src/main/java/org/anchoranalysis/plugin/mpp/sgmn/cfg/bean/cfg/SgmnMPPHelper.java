@@ -53,6 +53,10 @@ import org.anchoranalysis.mpp.io.output.NRGStackWriter;
 import org.anchoranalysis.mpp.io.output.StackOutputKeys;
 import org.anchoranalysis.mpp.sgmn.bean.kernel.proposer.KernelProposer;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
 class SgmnMPPHelper {
 
 	public static void writeStacks(

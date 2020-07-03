@@ -30,6 +30,10 @@ import java.util.Optional;
 
 import java.util.regex.Matcher;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
 class ExtractGroup {
 
 	public static Optional<String> extractStr( int groupID, Matcher matcher, String failureGroupDescription ) {

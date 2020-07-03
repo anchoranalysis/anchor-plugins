@@ -40,9 +40,6 @@ class AggregateChnl {
 	private Channel raster = null;
 	private int cnt = 0;
 	
-	public AggregateChnl() {
-	}
-	
 	public synchronized void addChnl( Channel chnl ) throws OperationFailedException {
 		
 		createRasterIfNecessary( chnl.getDimensions() );

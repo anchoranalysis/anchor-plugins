@@ -52,6 +52,10 @@ import org.anchoranalysis.mpp.io.cfg.generator.CfgMIPGenerator;
 import org.anchoranalysis.mpp.io.cfg.generator.CfgMaskCollectionDifferentValuesGenerator;
 import org.anchoranalysis.mpp.sgmn.optscheme.DualStack;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
 class SgmnMPPOutputter {
 	
 	public static void outputResults(

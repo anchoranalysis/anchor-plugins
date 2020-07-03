@@ -118,32 +118,12 @@ public class EllipseStandardFormConverter {
 	    cern.jet.math.Functions F = cern.jet.math.Functions.functions;
 	    
 	    double U1_norm = Math.pow( a.norm2(U1), 0.5);
-	    U1.assign( F.div(U1_norm) );
-	        
-
-	    //double theta = Math.atan((-2 * a12)/(1*(a22 - a11)))/2;
+	    U1.assign( F.div(U1_norm) );		// NOSONAR
 
 	    // Angle with major axis
 	    U2 = DoubleFactory1D.dense.make(2);
 	    U2.set(0, -1 * U1.get(1) );
 	    U2.set(1, U1.get(0) );
-
-	    /*DoubleMatrix1D out = DoubleFactory1D.dense.make(13);
-	    out.set(0,k1);
-	    out.set(1,k2);
-	    out.set(2,axis_major);
-	    out.set(3,axis_minor);
-	    out.set(4,Math.cos(theta));
-	    out.set(5,Math.sin(theta));
-	    out.set(6,Math.tan(theta));
-	    out.set(7,U2.get(0));
-	    out.set(8,U2.get(1));
-	    out.set(9,U2.get(1)  / U2.get(0));
-	    out.set(10,U1.get(0));
-	    out.set(11,U1.get(1));
-	    out.set(12,U1.get(1)  / U1.get(0));*/
-	    
-	    //return out;
 	}
 
 	public double getCenterPointX() {
@@ -182,15 +162,6 @@ public class EllipseStandardFormConverter {
 			return Math.atan( val );
 		}
 	}
-	
-	/*public static double atan2HandlingNan( double val1, double val2 ) {
-		// If val is NAN then we return PI/2
-		if (Double.isNaN(val)) {
-			return (Math.PI/2);
-		} else {
-			return Math.atan2( val1, val2 )
-		}
-	}*/
 	
 	public double getMajorAxisSlope() {
 		return U2.get(1) / U2.get(0);

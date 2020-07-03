@@ -31,7 +31,11 @@ import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.input.FeatureInput;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
 /** Tests that consider two possibilities: positive and negative */
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
 public class FeatureTestCalculatorDuo {
 
 	public static <T extends FeatureInput> void assertDoubleResult(

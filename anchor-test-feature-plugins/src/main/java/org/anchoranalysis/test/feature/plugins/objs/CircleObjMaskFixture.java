@@ -37,6 +37,10 @@ import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.object.ObjectMask;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
 public class CircleObjMaskFixture {
 
 	private static ImageDimensions DIMS = new ImageDimensions(

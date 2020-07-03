@@ -30,11 +30,15 @@ import java.util.function.Supplier;
 
 import org.anchoranalysis.image.feature.object.input.FeatureInputPairObjects;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
 /**
  * Calculates overlap-ratios or the denominator used for that ratio
  * @author owen
  *
  */
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
 class OverlapRatioUtilities {
 
 	/** Calculates the overlap of two objects relative to the maximum-volume denominator */

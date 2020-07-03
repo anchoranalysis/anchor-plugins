@@ -29,6 +29,10 @@ package org.anchoranalysis.plugin.image.obj.merge.condition;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.extent.BoundingBox;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
 class GrowUtilities {
 
 	private static Point3i subExtnt = new Point3i(1,1,1);

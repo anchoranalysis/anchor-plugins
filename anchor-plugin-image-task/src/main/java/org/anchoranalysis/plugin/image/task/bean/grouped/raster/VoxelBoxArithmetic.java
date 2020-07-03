@@ -39,6 +39,10 @@ import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedShort;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
 class VoxelBoxArithmetic {
 
 	public static void divide( VoxelBox<IntBuffer> vb, int cnt, VoxelBoxWrapper out, VoxelDataType outputType ) throws OperationFailedException {

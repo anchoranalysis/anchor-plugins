@@ -129,7 +129,7 @@ public class ObjMaskProviderRemoveIntersectingPixels extends ObjMaskProviderDime
 			try {
 				if( !omWrite.checkIfConnected() ) {
 					throw new CreateException(
-						String.format("Obj %s becomes disconnected %s removing intersecting-pixels\n", omWrite, dscr )	
+						String.format("Obj %s becomes disconnected %s removing intersecting-pixels%n", omWrite, dscr )	
 					);
 				}
 			} catch (OperationFailedException e) {

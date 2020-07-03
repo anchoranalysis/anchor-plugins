@@ -37,6 +37,10 @@ import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.mpp.sgmn.kernel.KernelCalcContext;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
 public class CfgNRGPixelizedUtilities {
 	
 	public static CfgNRGPixelized createFromCfg(

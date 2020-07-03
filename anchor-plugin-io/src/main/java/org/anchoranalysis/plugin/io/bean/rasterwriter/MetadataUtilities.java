@@ -42,7 +42,10 @@ import loci.common.services.ServiceFactory;
 import loci.formats.FormatTools;
 import loci.formats.meta.IMetadata;
 import loci.formats.services.OMEXMLService;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
 class MetadataUtilities {
 
 	// NOTE: Tidy up exceptions later
@@ -59,9 +62,7 @@ class MetadataUtilities {
 	    meta.setImageID( String.format("Image:%d",seriesNum), seriesNum);
 	    meta.setPixelsID( String.format("Pixels:%d",seriesNum),seriesNum);
 	    meta.setPixelsBinDataBigEndian(Boolean.TRUE, seriesNum, 0);
-	    //meta.setPixelsDimensionOrder(DimensionOrder.XYCZT, seriesNum);
 	    meta.setPixelsDimensionOrder(DimensionOrder.XYZTC, seriesNum);
-	    //FormatTools.getPixelTypeString(pixelType)
 	    meta.setPixelsType( pixelType, seriesNum);
 	    meta.setPixelsSizeC(new PositiveInteger( num_chnl ), seriesNum);
 	    

@@ -33,6 +33,10 @@ import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.feature.bean.pixelwise.PixelScore;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
 class BufferUtilities {
 
 	public static void putScoreForOffset(

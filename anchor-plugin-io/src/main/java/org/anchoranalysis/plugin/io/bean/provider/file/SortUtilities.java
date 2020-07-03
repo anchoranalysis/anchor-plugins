@@ -32,6 +32,10 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
 class SortUtilities {
 	
 	public static Collection<File> sortFiles( Collection<File> files ) {
