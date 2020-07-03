@@ -62,7 +62,7 @@ public class BinaryChnlProviderRepeatSlice extends BinaryChnlProviderOne {
 			throw new CreateException("dims do not match");
 		}
 		
-		Channel chnlOut = ChannelFactory.instance().createEmptyInitialised(dimSource, VoxelDataTypeUnsignedByte.instance);
+		Channel chnlOut = ChannelFactory.instance().createEmptyInitialised(dimSource, VoxelDataTypeUnsignedByte.INSTANCE);
 		VoxelBox<ByteBuffer> vbOut = chnlOut.getVoxelBox().asByte();
 
 		int volumeXY = vbIn.extent().getVolumeXY();

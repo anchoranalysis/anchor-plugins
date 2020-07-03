@@ -147,7 +147,7 @@ public class StackProviderRGBChnlProvider extends StackProvider {
 		
 		// If we have no channels, then default to unsigned 8-bit
 		if (dataType==null) {
-			dataType = VoxelDataTypeUnsignedByte.instance;
+			dataType = VoxelDataTypeUnsignedByte.INSTANCE;
 		}
 		
 		return dataType;

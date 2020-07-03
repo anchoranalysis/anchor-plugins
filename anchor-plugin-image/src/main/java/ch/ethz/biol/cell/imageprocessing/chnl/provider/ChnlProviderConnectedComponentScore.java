@@ -66,7 +66,7 @@ public class ChnlProviderConnectedComponentScore extends ChnlProviderOneObjsSour
 			getLogger().getLogReporter()
 		);
 		
-		Channel chnlOut = ChannelFactory.instance().createEmptyInitialised( chnl.getDimensions(), VoxelDataTypeUnsignedByte.instance );
+		Channel chnlOut = ChannelFactory.instance().createEmptyInitialised( chnl.getDimensions(), VoxelDataTypeUnsignedByte.INSTANCE );
 		
 		populateChnl( chnl, chnlOut, lrc );
 

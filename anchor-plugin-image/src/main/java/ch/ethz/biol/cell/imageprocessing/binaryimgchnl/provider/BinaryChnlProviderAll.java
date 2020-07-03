@@ -42,7 +42,7 @@ public class BinaryChnlProviderAll extends BinaryChnlProviderDimSource {
 				
 		Channel chnl = ChannelFactory.instance().createEmptyInitialised(
 			dimSource,
-			VoxelDataTypeUnsignedByte.instance
+			VoxelDataTypeUnsignedByte.INSTANCE
 		);
 		
 		BinaryChnl bic = new BinaryChnl(chnl, BinaryValues.getDefault());

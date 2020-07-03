@@ -53,7 +53,7 @@ import loci.formats.services.OMEXMLService;
 
 public class LociAVIWriter extends MovieWriter {
 
-	private static class OpenOutput extends MovieOutputHandle {
+	private static class OpenOutput implements MovieOutputHandle {
 
 		private int indexIncr = 0;
 
@@ -69,16 +69,9 @@ public class LociAVIWriter extends MovieWriter {
 			
 			try {
 				writer.setMetadataRetrieve( createMetadata(dim, 3, pixelType, numFrames) );
-			
 				writer.setId( filePath.toString() );
 				
-			} catch (EnumerationException e) {
-				throw new IOException(e);
-			} catch (ServiceException e) {
-				throw new IOException(e);
-			} catch (DependencyException e) {
-				throw new IOException(e);
-			} catch (FormatException e) {
+			} catch (EnumerationException | ServiceException | DependencyException | FormatException e) {
 				throw new IOException(e);
 			}
 		}
@@ -91,53 +84,39 @@ public class LociAVIWriter extends MovieWriter {
 		@Override
 		public void add(RGBStack stack) throws IOException {
 			
-				// We only support unsigned byte stacks for now
-				if (!stack.allChnlsHaveType(VoxelDataTypeUnsignedByte.instance)) {
-					throw new IOException("Only unsigned 8-bit stacks are supported");
-				}
+			// We only support unsigned byte stacks for now
+			if (!stack.allChnlsHaveType(VoxelDataTypeUnsignedByte.INSTANCE)) {
+				throw new IOException("Only unsigned 8-bit stacks are supported");
+			}
+		
+			ImageDimensions sd = stack.getChnl(0).getDimensions();
+		
+			// Now we write the frame to our avi
+			Channel imgChnlRed = stack.getChnl(0).duplicate();
+			Channel imgChnlGreen = stack.getChnl(1).duplicate();
+			Channel imgChnlBlue = stack.getChnl(2).duplicate();
 			
-				ImageDimensions sd = stack.getChnl(0).getDimensions();
+			ByteBuffer byteArrRed = imgChnlRed.getVoxelBox().asByte().getPlaneAccess().getPixelsForPlane(0).buffer();
+			ByteBuffer byteArrGreen = imgChnlGreen.getVoxelBox().asByte().getPlaneAccess().getPixelsForPlane(0).buffer();
+			ByteBuffer byteArrBlue = imgChnlBlue.getVoxelBox().asByte().getPlaneAccess().getPixelsForPlane(0).buffer();
 			
-			//for (int c=0; c<3; c++) {
-				// Now we write the frame to our avi
-				Channel imgChnlRed = stack.getChnl(0).duplicate();
-				Channel imgChnlGreen = stack.getChnl(1).duplicate();
-				Channel imgChnlBlue = stack.getChnl(2).duplicate();
-				
-				ByteBuffer byteArrRed = imgChnlRed.getVoxelBox().asByte().getPlaneAccess().getPixelsForPlane(0).buffer();
-				ByteBuffer byteArrGreen = imgChnlGreen.getVoxelBox().asByte().getPlaneAccess().getPixelsForPlane(0).buffer();
-				ByteBuffer byteArrBlue = imgChnlBlue.getVoxelBox().asByte().getPlaneAccess().getPixelsForPlane(0).buffer();
-				
-				ByteBuffer byteArrCmb = ByteBuffer.allocate( byteArrRed.capacity() * 3 );
-				
-				while (byteArrRed.hasRemaining()) {
-					assert( byteArrGreen.hasRemaining() );
-					assert( byteArrBlue.hasRemaining() );
-					
-					byteArrCmb.put( byteArrRed.get() );
-					byteArrCmb.put( byteArrGreen.get() );
-					byteArrCmb.put( byteArrBlue.get() );
-				}
-				assert( !byteArrRed.hasRemaining() );
-				
-				/*for (int i=0; i<byteArrGreen.length; i++) {
-					byteArrCmb[cnt++] = byteArrGreen[i];
-				}
-				
-				for (int i=0; i<byteArrBlue.length; i++) {
-					byteArrCmb[cnt++] = byteArrBlue[i];
-				}*/
-				
-				try {
-					writer.saveBytes(indexIncr++, byteArrCmb.array(), 0, 0, sd.getX(), sd.getY() );
-				} catch (FormatException e) {
-					throw new IOException(e);
-				} catch (IOException e) {
-					throw new IOException(e);
-				}
-			//}
+			ByteBuffer byteArrCmb = ByteBuffer.allocate( byteArrRed.capacity() * 3 );
 			
+			while (byteArrRed.hasRemaining()) {
+				assert( byteArrGreen.hasRemaining() );
+				assert( byteArrBlue.hasRemaining() );
+				
+				byteArrCmb.put( byteArrRed.get() );
+				byteArrCmb.put( byteArrGreen.get() );
+				byteArrCmb.put( byteArrBlue.get() );
+			}
+			assert( !byteArrRed.hasRemaining() );
 			
+			try {
+				writer.saveBytes(indexIncr++, byteArrCmb.array(), 0, 0, sd.getX(), sd.getY() );
+			} catch (FormatException | IOException e) {
+				throw new IOException(e);
+			}
 		}
 		
 	}

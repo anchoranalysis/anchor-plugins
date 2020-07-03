@@ -104,7 +104,7 @@ class CalcOutlineRGB {
 			new Channel[]{ backgroundBlue, backgroundGreen, blueToAssign }
 		);
 
-		VoxelDataType outputType = createShort ? VoxelDataTypeUnsignedShort.instance : VoxelDataTypeUnsignedByte.instance;
+		VoxelDataType outputType = createShort ? VoxelDataTypeUnsignedShort.INSTANCE : VoxelDataTypeUnsignedByte.INSTANCE;
 		
 		Channel chnlGreen = imposeOutlineOnChnl(outline, backgroundGreen, outputType);
 		Channel chnlBlue = MaxChnls.apply( backgroundBlue, blueToAssign, outputType );

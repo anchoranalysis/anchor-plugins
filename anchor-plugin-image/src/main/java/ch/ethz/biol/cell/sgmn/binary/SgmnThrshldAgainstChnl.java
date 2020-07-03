@@ -109,7 +109,7 @@ public class SgmnThrshldAgainstChnl extends BinarySegmentation {
 	// Otherwise, we create a new binary voxelbox buffer
 	private VoxelBox<ByteBuffer> createOutputChnl( VoxelBoxWrapper voxelBox ) {
 		
-		if (voxelBox.getVoxelDataType().equals( VoxelDataTypeUnsignedByte.instance )) {
+		if (voxelBox.getVoxelDataType().equals( VoxelDataTypeUnsignedByte.INSTANCE )) {
 			return voxelBox.asByte();
 		} else {
 			return VoxelBoxFactory.getByte().create( voxelBox.any().extent() );

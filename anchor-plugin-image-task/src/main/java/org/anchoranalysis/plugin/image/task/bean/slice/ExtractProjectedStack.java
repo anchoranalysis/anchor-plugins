@@ -129,7 +129,7 @@ class ExtractProjectedStack {
 				eOut,
 				chnl.getDimensions().getRes()
 			),
-			VoxelDataTypeUnsignedByte.instance
+			VoxelDataTypeUnsignedByte.INSTANCE
 		);
 		chnl.getVoxelBox().asByte().copyPixelsTo(bboxSrc, chnlOut.getVoxelBox().asByte(), bboxToProject);
 		return chnlOut;		

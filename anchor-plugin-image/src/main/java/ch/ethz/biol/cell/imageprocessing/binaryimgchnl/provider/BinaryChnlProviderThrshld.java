@@ -61,7 +61,7 @@ public class BinaryChnlProviderThrshld extends BinaryChnlProviderChnlSource {
 			return new BinaryChnl(
 				bvb,
 				chnlSource.getDimensions().getRes(),
-				ChannelFactory.instance().get(VoxelDataTypeUnsignedByte.instance)
+				ChannelFactory.instance().get(VoxelDataTypeUnsignedByte.INSTANCE)
 			);
 		} catch (OperationFailedException e) {
 			throw new CreateException(e);

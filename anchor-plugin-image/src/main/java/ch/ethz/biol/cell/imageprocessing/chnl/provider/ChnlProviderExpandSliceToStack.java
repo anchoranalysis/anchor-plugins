@@ -61,7 +61,7 @@ public class ChnlProviderExpandSliceToStack extends ChnlProviderDimSource {
 			throw new CreateException("y dimension is not equal");
 		}
 		
-		Channel chnlOut = ChannelFactory.instance().createEmptyUninitialised(dim, VoxelDataTypeUnsignedByte.instance);
+		Channel chnlOut = ChannelFactory.instance().createEmptyUninitialised(dim, VoxelDataTypeUnsignedByte.INSTANCE);
 		
 		VoxelBox<ByteBuffer> vbSlice = chnl.getVoxelBox().asByte(); 
 		VoxelBox<ByteBuffer> vbOut = chnlOut.getVoxelBox().asByte();

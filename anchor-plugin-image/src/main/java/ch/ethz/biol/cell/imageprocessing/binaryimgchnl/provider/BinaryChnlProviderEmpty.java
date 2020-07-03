@@ -48,7 +48,7 @@ public class BinaryChnlProviderEmpty extends BinaryChnlProviderDimSource {
 	
 	@Override
 	protected BinaryChnl createFromSource(ImageDimensions dimSource) throws CreateException {
-		Channel chnl = ChannelFactory.instance().createEmptyInitialised(dimSource, VoxelDataTypeUnsignedByte.instance);
+		Channel chnl = ChannelFactory.instance().createEmptyInitialised(dimSource, VoxelDataTypeUnsignedByte.INSTANCE);
 
 		BinaryValues bvOut = BinaryValues.getDefault();
 		 
