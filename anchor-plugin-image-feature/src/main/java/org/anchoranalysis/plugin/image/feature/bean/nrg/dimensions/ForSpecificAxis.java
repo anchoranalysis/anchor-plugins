@@ -32,6 +32,9 @@ import org.anchoranalysis.core.axis.AxisTypeConverter;
 import org.anchoranalysis.feature.input.FeatureInputNRG;
 import org.anchoranalysis.image.extent.ImageDimensions;
 
+import lombok.Getter;
+import lombok.Setter;
+
 /**
  * Dimensions-calculation for one specific axis only.
  * 
@@ -42,7 +45,7 @@ import org.anchoranalysis.image.extent.ImageDimensions;
 public abstract class ForSpecificAxis<T extends FeatureInputNRG> extends FromDimensionsBase<T> {
 
 	// START BEAN PARAMETERS
-	@BeanField
+	@BeanField @Getter @Setter
 	private String axis = "x";
 	// END BEAN PARAMETERS
 
@@ -59,13 +62,5 @@ public abstract class ForSpecificAxis<T extends FeatureInputNRG> extends FromDim
 	@Override
 	public String getParamDscr() {
 		return String.format("%s", axis);
-	}
-
-	public String getAxis() {
-		return axis;
-	}
-
-	public void setAxis(String axis) {
-		this.axis = axis;
 	}
 }
