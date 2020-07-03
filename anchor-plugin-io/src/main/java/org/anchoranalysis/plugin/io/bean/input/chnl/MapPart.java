@@ -28,7 +28,6 @@ package org.anchoranalysis.plugin.io.bean.input.chnl;
 
 
 import java.io.File;
-import java.nio.Buffer;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
@@ -56,10 +55,8 @@ import org.anchoranalysis.io.input.FileInput;
  * It can be used together with {@link AppendPart} where are additional channels are added.
  * 
  * @author Owen Feehan
- *
- * @param <T> voxel data-type buffer
  */
-class MapPart<T extends Buffer> extends NamedChnlsInputPart {
+class MapPart extends NamedChnlsInputPart {
 
 	private FileInput delegate;
 	private RasterReader rasterReader;

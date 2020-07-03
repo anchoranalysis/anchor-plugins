@@ -28,7 +28,6 @@ package org.anchoranalysis.plugin.io.bean.input.chnl;
 
 
 import java.io.File;
-import java.nio.Buffer;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.Optional;
@@ -54,7 +53,7 @@ import org.anchoranalysis.io.error.AnchorIOException;
  *
  * @param <T> voxel data-type buffer
  */
-class AppendPart<T extends Buffer> extends NamedChnlsInputPart {
+class AppendPart extends NamedChnlsInputPart {
 
 	private NamedChnlsInputPart delegate;
 	private AdditionalChnl additionalChnl;

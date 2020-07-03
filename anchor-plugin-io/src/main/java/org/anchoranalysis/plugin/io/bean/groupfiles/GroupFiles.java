@@ -155,19 +155,22 @@ public class GroupFiles extends InputManager<NamedChnlsInput> {
 			assert(bag!=null);
 			
 			// If we have a condition to check against
-			if (checkParsedFilePathBag!=null) {
-				if (!checkParsedFilePathBag.accept(bag)) {
-					continue;
-				}
+			if (checkParsedFilePathBag!=null && !checkParsedFilePathBag.accept(bag)) {
+				continue;
 			}
 						
-			MultiFileReaderOpenedRaster or = new MultiFileReaderOpenedRaster( rasterReader, bag );
-			files.add( Paths.get(key).toFile() );
-			openedRasters.add( or );
+			files.add(
+				Paths.get(key).toFile()
+			);
+			openedRasters.add(
+				new MultiFileReaderOpenedRaster( rasterReader, bag )
+			);
 		}
-				
-		List<DescriptiveFile> descriptiveNames = descriptiveNameFromFile.descriptiveNamesForCheckUniqueness(files);
-		return zipIntoGrouping(descriptiveNames, openedRasters);		
+
+		return zipIntoGrouping(
+			descriptiveNameFromFile.descriptiveNamesForCheckUniqueness(files),
+			openedRasters
+		);		
 	}
 
 	private List<NamedChnlsInput> zipIntoGrouping(List<DescriptiveFile> df, List<MultiFileReaderOpenedRaster> or) {
@@ -179,7 +182,11 @@ public class GroupFiles extends InputManager<NamedChnlsInput> {
 		while (it1.hasNext() && it2.hasNext()) {
 			DescriptiveFile d = it1.next();
 			result.add(
-					new GroupingInput(d.getFile().toPath(), it2.next(),imgChnlMapCreator, d.getDescriptiveName())
+					new GroupingInput(
+						d.getFile().toPath(),
+						it2.next(),
+						imgChnlMapCreator
+					)
 			);
 		}
 		return result;

@@ -60,9 +60,8 @@ class GroupingInput extends NamedChnlsInput {
 
 	// The root object that is used to provide the descriptiveName and pathForBinding
 	//
-	public GroupingInput( Path virtualPath, MultiFileReaderOpenedRaster mfor, ImgChnlMapCreator chnlMapCreator, String descriptiveName ) {
+	public GroupingInput( Path virtualPath, MultiFileReaderOpenedRaster mfor, ImgChnlMapCreator chnlMapCreator) {
 		super();
-		assert(virtualPath!=null);
 		this.virtualPath = virtualPath;
 		this.openedRaster = mfor;
 		this.chnlMapCreator = chnlMapCreator;
