@@ -241,12 +241,12 @@ public class ExportObjectsFromCSVTask extends ExportObjectsBase<FromCSVInputObje
 		RGBOutlineWriter outlineWriter = new RGBOutlineWriter(1);
 		outlineWriter.setForce2D(true);
 				
-		IterableCombinedListGenerator<CSVRow> listGenerator = new IterableCombinedListGenerator<CSVRow>();
+		IterableCombinedListGenerator<CSVRow> listGenerator = new IterableCombinedListGenerator<>();
 		listGenerator.add(label, new CSVRowRGBOutlineGenerator( outlineWriter, objs, background, colorFirst, colorSecond ) );
 		listGenerator.add("idXML", new CSVRowXMLGenerator() );
 		
 		// Output the group
-		SubfolderGenerator<CSVRow,Collection<CSVRow>> subFolderGenerator = new SubfolderGenerator<CSVRow,Collection<CSVRow>>(
+		SubfolderGenerator<CSVRow,Collection<CSVRow>> subFolderGenerator = new SubfolderGenerator<>(
 			listGenerator,
 			"pair"
 		);

@@ -42,7 +42,6 @@ class GroupedMultiplexOutputManagers {
 		map = new TreeMap<>();
 		
 		for( String key : groups ) {
-			
 			map.put(
 				key,
 				baseOutputManager.resolveFolder(key)

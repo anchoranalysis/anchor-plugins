@@ -78,14 +78,12 @@ public class TiffTimeSeriesReporter extends PeriodicSubfolderReporter<CfgNRG> {
 		
 		// This no longer needs to be combined, it's a legacy of when a HTML reporter was attached
 		//   cleaning up woould be nice
-		IterableCombinedListGenerator<CfgNRG> iterableCombined = new IterableCombinedListGenerator<>();
-		iterableCombined.add(
+		IterableCombinedListGenerator<CfgNRG> iterableCombined = new IterableCombinedListGenerator<>(
 			new IterableGeneratorBridge<>(
 				iterableRaster,
 				sourceObject -> addColor(sourceObject.getCfg(), initParams)
-			)
+			)	
 		);
-
 		
 		try {
 			init( iterableCombined );
