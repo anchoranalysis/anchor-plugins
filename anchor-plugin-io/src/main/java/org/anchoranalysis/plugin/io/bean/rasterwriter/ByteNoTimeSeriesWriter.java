@@ -53,15 +53,12 @@ import ome.xml.model.enums.PixelType;
 public abstract class ByteNoTimeSeriesWriter extends RasterWriter {
 
 	@Override
-	public void writeTimeSeriesStackByte(ImgStackSeries<ByteBuffer> stackSeries,
-			Path filePath, boolean makeRGB)
-			throws RasterIOException {
+	public void writeTimeSeriesStackByte(ImgStackSeries stackSeries, Path filePath, boolean makeRGB) throws RasterIOException {
 		throw new RasterIOException("Writing time-series is unsupported by this " + RasterWriter.class.getSimpleName());
 	}
 		
 	@Override
-	public void writeStackShort(Stack stack, Path filePath,
-			boolean makeRGB) throws RasterIOException {
+	public void writeStackShort(Stack stack, Path filePath,	boolean makeRGB) throws RasterIOException {
 		throw new RasterIOException("Writing ShortBuffer stack not yet implemented for this writer");
 	}
 	
