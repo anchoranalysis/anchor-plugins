@@ -56,7 +56,7 @@ public class ChnlProviderEmpty extends ChnlProvider {
 			new Extent(sx,sy,sz),
 			new ImageResolution()
 		); 
-		return ChannelFactory.instance().createEmptyInitialised( dim, VoxelDataTypeUnsignedByte.instance );
+		return ChannelFactory.instance().createEmptyInitialised( dim, VoxelDataTypeUnsignedByte.INSTANCE );
 	}
 
 	public int getSx() {

@@ -87,7 +87,7 @@ public class ChnlProviderExpandSliceToMask extends ChnlProvider {
 		
 		Channel chnl = ChannelFactory.instance().createEmptyUninitialised(
 			sdTarget,
-			VoxelDataTypeUnsignedByte.instance
+			VoxelDataTypeUnsignedByte.INSTANCE
 		);
 		
 		VoxelBox<ByteBuffer> vbOut = chnl.getVoxelBox().asByte();

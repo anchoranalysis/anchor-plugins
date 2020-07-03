@@ -64,7 +64,7 @@ public class BinaryChnlProviderSgmn extends BinaryChnlProviderChnlSource {
 		return new BinaryChnl(
 				sgmnResult(chnlSource),
 				chnlSource.getDimensions().getRes(),
-				ChannelFactory.instance().get(VoxelDataTypeUnsignedByte.instance)
+				ChannelFactory.instance().get(VoxelDataTypeUnsignedByte.INSTANCE)
 			);
 	}
 	

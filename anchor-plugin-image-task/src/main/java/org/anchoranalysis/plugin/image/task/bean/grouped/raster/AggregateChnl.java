@@ -85,7 +85,7 @@ class AggregateChnl {
 		if (raster==null) {
 			this.raster = ChannelFactory.instance().createEmptyInitialised(
 				dim,
-				VoxelDataTypeUnsignedInt.instance
+				VoxelDataTypeUnsignedInt.INSTANCE
 			);	
 		}
 	}

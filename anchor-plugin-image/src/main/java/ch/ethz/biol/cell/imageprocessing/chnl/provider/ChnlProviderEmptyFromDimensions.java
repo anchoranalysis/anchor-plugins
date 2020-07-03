@@ -48,7 +48,7 @@ public class ChnlProviderEmptyFromDimensions extends ChnlProviderDimSource {
 	@Override
 	protected Channel createFromDim(ImageDimensions dim) {
 
-		VoxelDataType typeOut = createShort ? VoxelDataTypeUnsignedShort.instance : VoxelDataTypeUnsignedByte.instance; 
+		VoxelDataType typeOut = createShort ? VoxelDataTypeUnsignedShort.INSTANCE : VoxelDataTypeUnsignedByte.INSTANCE; 
 
 		Channel chnlNew = ChannelFactory.instance().createEmptyInitialised(dim, typeOut);
 		if (value!=0) {

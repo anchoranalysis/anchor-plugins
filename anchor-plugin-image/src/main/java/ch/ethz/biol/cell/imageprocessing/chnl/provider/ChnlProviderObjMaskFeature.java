@@ -122,7 +122,7 @@ public class ChnlProviderObjMaskFeature extends ChnlProviderOneObjsSource {
 		FeatureCalculatorSingle<FeatureInputSingleObject> session,
 		NRGStackWithParams nrgStackParams
 	) throws FeatureCalcException {
-		Channel chnlOut = ChannelFactory.instance().createEmptyInitialised( dim, VoxelDataTypeUnsignedByte.instance );
+		Channel chnlOut = ChannelFactory.instance().createEmptyInitialised( dim, VoxelDataTypeUnsignedByte.INSTANCE );
 		chnlOut.getVoxelBox().any().setAllPixelsTo( valueNoObject );
 		for( ObjectMask om : objsSource ) {
 

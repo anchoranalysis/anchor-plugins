@@ -67,10 +67,6 @@ public final class SteepestCalc {
 			
 			int gValNghb = getInt(xChange, yChange);
 			
-			// TODO check if it's okay these values exist?
-			//assert( gValNghb!= WatershedEncoding.CODE_UNVISITED );
-			//assert( gValNghb!= WatershedEncoding.CODE_TEMPORARY );
-			
 			if (gValNghb==sourceVal) {
 				steepestDrctn = WatershedEncoding.CODE_PLATEAU;
 				return true;
