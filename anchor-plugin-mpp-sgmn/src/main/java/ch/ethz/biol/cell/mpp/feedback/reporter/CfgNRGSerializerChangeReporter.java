@@ -43,14 +43,14 @@ import org.anchoranalysis.io.namestyle.IndexableOutputNameStyle;
 import org.anchoranalysis.io.namestyle.IntegerSuffixOutputNameStyle;
 import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
-import org.anchoranalysis.mpp.sgmn.bean.optscheme.feedback.ReporterOptimizationStep;
+import org.anchoranalysis.mpp.sgmn.bean.optscheme.feedback.FeedbackReceiverBean;
 import org.anchoranalysis.mpp.sgmn.optscheme.feedback.OptimizationFeedbackEndParams;
 import org.anchoranalysis.mpp.sgmn.optscheme.feedback.OptimizationFeedbackInitParams;
 import org.anchoranalysis.mpp.sgmn.optscheme.feedback.ReporterException;
 import org.anchoranalysis.mpp.sgmn.optscheme.step.Reporting;
 
 
-public class CfgNRGSerializerChangeReporter extends ReporterOptimizationStep<CfgNRGPixelized> {
+public class CfgNRGSerializerChangeReporter extends FeedbackReceiverBean<CfgNRGPixelized> {
 
 	// START BEAN PARAMETERS
 	@BeanField
@@ -66,8 +66,6 @@ public class CfgNRGSerializerChangeReporter extends ReporterOptimizationStep<Cfg
 	private boolean best = false;
 	// END BEAN PARAMETERS
 	
-	private BoundOutputManagerRouteErrors outputManager;
-	
 	private GeneratorSequenceNonIncrementalWriter<CfgNRG> sequenceWriter;
 	
 	private ChangeSequenceType sequenceType;
@@ -77,7 +75,7 @@ public class CfgNRGSerializerChangeReporter extends ReporterOptimizationStep<Cfg
 	@Override
 	public void reportBegin(OptimizationFeedbackInitParams<CfgNRGPixelized> initParams) throws ReporterException {
 		
-		outputManager = initParams.getInitContext().getOutputManager();
+		BoundOutputManagerRouteErrors outputManager = initParams.getInitContext().getOutputManager();
 		
 		sequenceType = new ChangeSequenceType();
 		
@@ -129,12 +127,10 @@ public class CfgNRGSerializerChangeReporter extends ReporterOptimizationStep<Cfg
 			return;
 		}
 		
-		if (sequenceWriter.isOn()) {
-			if (lastOptimizationStep!=null) {
-				sequenceType.setMaximumIndex(
-					lastOptimizationStep.getIter()
-				);
-			}
+		if (sequenceWriter.isOn() && lastOptimizationStep!=null) {
+			sequenceType.setMaximumIndex(
+				lastOptimizationStep.getIter()
+			);
 		}
 		
 		try {

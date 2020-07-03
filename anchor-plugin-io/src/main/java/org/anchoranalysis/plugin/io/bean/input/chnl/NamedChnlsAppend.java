@@ -141,7 +141,7 @@ public class NamedChnlsAppend extends NamedChnlsBase {
 			// Delayed-calculation of the appending path as it can be a bit expensive when multiplied by so many items
 			CachedOperation<Path,AnchorIOException> outPath = new OperationOutFilePath(
 				ni,
-				()->ncc.pathForBinding(),
+				ncc::pathForBinding,
 				debugMode
 			);
 			
