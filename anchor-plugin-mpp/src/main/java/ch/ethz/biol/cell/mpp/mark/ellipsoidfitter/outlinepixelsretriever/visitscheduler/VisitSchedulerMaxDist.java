@@ -1,5 +1,7 @@
 package ch.ethz.biol.cell.mpp.mark.ellipsoidfitter.outlinepixelsretriever.visitscheduler;
 
+import java.util.Optional;
+
 /*-
  * #%L
  * anchor-plugin-mpp
@@ -61,9 +63,11 @@ public class VisitSchedulerMaxDist extends VisitScheduler {
 	}
 	
 	@Override
-	public Tuple3i maxDistFromRootPoint(ImageResolution res) {
+	public Optional<Tuple3i> maxDistFromRootPoint(ImageResolution res) {
 		int maxDist = (int) Math.ceil(this.maxDist);
-		return new Point3i(maxDist,maxDist,maxDist);
+		return Optional.of(
+			new Point3i(maxDist,maxDist,maxDist)
+		);
 	}
 	
 	@Override

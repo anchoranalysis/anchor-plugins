@@ -110,7 +110,7 @@ public class XYOrientationExtendToZ extends PointsProposer {
 	}
 
 	@Override
-	public CreateProposalVisualization proposalVisualization(boolean detailed) {
+	public Optional<CreateProposalVisualization> proposalVisualization(boolean detailed) {
 		
 		CreateProposeVisualizationList list = new CreateProposeVisualizationList();
 		list.add( pointsFromOrientationXYProposer.proposalVisualization(detailed) );
@@ -123,7 +123,7 @@ public class XYOrientationExtendToZ extends PointsProposer {
 				);
 			}
 		});
-		return list;
+		return Optional.of(list);
 	}
 	
 	private Optional<List<Point3i>> proposeFromOrientation(Orientation orientation, Point3d pnt, ImageDimensions dim, RandomNumberGenerator re, ErrorNode errorNode) {

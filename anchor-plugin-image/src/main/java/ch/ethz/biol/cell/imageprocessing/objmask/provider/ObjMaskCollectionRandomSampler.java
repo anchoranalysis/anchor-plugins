@@ -33,6 +33,7 @@ import java.util.List;
 
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.error.friendly.AnchorImpossibleSituationException;
 import org.anchoranalysis.core.random.RandomNumberGenerator;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.convert.ByteConverter;
@@ -175,8 +176,7 @@ public class ObjMaskCollectionRandomSampler {
 				//ind++;
 			}
 			
-			assert false;
-			return null;
+			throw new AnchorImpossibleSituationException();
 		}
 
 		public int size() {

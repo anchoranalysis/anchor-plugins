@@ -29,6 +29,7 @@ package ch.ethz.biol.cell.mpp.mark.ellipsoidfitter.outlinepixelsretriever.visits
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.InitException;
@@ -47,25 +48,27 @@ public class VisitSchedulerAnd extends VisitScheduler {
 	// END BEAN PROPERTIES
 	
 	@Override
-	public Tuple3i maxDistFromRootPoint(ImageResolution res) throws OperationFailedException {
+	public Optional<Tuple3i> maxDistFromRootPoint(ImageResolution res) throws OperationFailedException {
 		
-		Point3i maxDist = null;
+		Optional<Tuple3i> maxDist = Optional.empty();
 		
 		for( VisitScheduler vs : list ) {
 			
-			Tuple3i d = vs.maxDistFromRootPoint(res);
+			Optional<Tuple3i> dist = vs.maxDistFromRootPoint(res);
 			
 			// Skip if it doesn't return a maxDist
-			if (d==null) {
+			if (!dist.isPresent()) {
 				continue;
 			}
 			
-			if (maxDist==null) {
-				maxDist = new Point3i(d);
+			if (!maxDist.isPresent()) {
+				maxDist = Optional.of(
+					new Point3i(dist.get())
+				);
 			} else {
-				maxDist.setX( Math.min( maxDist.getX(), d.getX() ));
-				maxDist.setY( Math.min( maxDist.getY(), d.getY() ));
-				maxDist.setZ( Math.min( maxDist.getZ(), d.getZ() ));
+				maxDist = Optional.of(
+					maxDist.get().min(dist.get())
+				);
 			}
 		}
 		

@@ -1,5 +1,7 @@
 package org.anchoranalysis.plugin.mpp.bean.proposer.split;
 
+import java.util.Optional;
+
 import org.anchoranalysis.anchor.mpp.bean.cfg.CfgGen;
 import org.anchoranalysis.anchor.mpp.bean.init.MPPInitParams;
 import org.anchoranalysis.anchor.mpp.bean.proposer.MarkSplitProposer;
@@ -73,7 +75,7 @@ public class MarkSplitProposerReference extends MarkSplitProposer {
 	}
 
 	@Override
-	public PairPxlMarkMemo propose(PxlMarkMemo mark, ProposerContext context, CfgGen cfgGen) throws ProposalAbnormalFailureException {
+	public Optional<PairPxlMarkMemo> propose(PxlMarkMemo mark, ProposerContext context, CfgGen cfgGen) throws ProposalAbnormalFailureException {
 		return delegate.propose(mark, context, cfgGen);
 	}
 }

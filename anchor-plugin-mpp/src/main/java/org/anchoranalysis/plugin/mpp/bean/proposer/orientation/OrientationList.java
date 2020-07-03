@@ -28,6 +28,7 @@ package org.anchoranalysis.plugin.mpp.bean.proposer.orientation;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.anchoranalysis.anchor.mpp.bean.bound.BoundCalculator;
 import org.anchoranalysis.anchor.mpp.bean.bound.RslvdBound;
@@ -100,14 +101,27 @@ class OrientationList {
 	// We adopt the following priority
 	//		If there are orientations within the Bounds Ratio, WE SAMPLE UNIFORMLY FROM THEM
 	//		If not, and there are unbounded orientations, WE SAMPLE UNIFORMLY FROM THEM
-	public Orientation sample( RandomNumberGenerator re ) {
+	public Optional<Orientation> sample( RandomNumberGenerator re ) {
 
 		if (listOrientationsWithinBoundsRatio.size()>0) {
-			return listOrientationsWithinBoundsRatio.get( (int) (re.nextDouble() * listOrientationsWithinBoundsRatio.size()) );
+			return Optional.of(
+				sampleFromList(listOrientationsWithinBoundsRatio,re)
+			);
 		} else if (listOrientationsUnbounded.size()>0) {
-			return listOrientationsUnbounded.get( (int) (re.nextDouble() * listOrientationsUnbounded.size()) );
+			return Optional.of(
+				sampleFromList(listOrientationsUnbounded,re)
+			);
 		} else {
-			return null;
+			return Optional.empty();
 		}
+	}
+	
+	private static Orientation sampleFromList(
+		List<Orientation> listOrientations,
+		RandomNumberGenerator re
+	) {
+		return listOrientations.get(
+			(int) (re.nextDouble() * listOrientations.size())
+		);
 	}
 }

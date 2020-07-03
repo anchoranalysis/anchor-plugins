@@ -69,11 +69,14 @@ public class VisitSchedulerMaxDistSep extends VisitScheduler {
 	}
 	
 	@Override
-	public Tuple3i maxDistFromRootPoint(ImageResolution res) {
-		int distX = (int) Math.ceil(maxXRslv);
-		int distY = (int) Math.ceil(maxYRslv);
-		int distZ = (int) Math.ceil(maxZRslv);
-		return new Point3i(distX,distY,distZ);
+	public Optional<Tuple3i> maxDistFromRootPoint(ImageResolution res) {
+		return Optional.of(
+			new Point3i(
+				(int) Math.ceil(maxXRslv),
+				(int) Math.ceil(maxYRslv),
+				(int) Math.ceil(maxZRslv)
+			)
+		);
 	}
 	
 	@Override

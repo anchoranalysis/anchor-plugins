@@ -87,7 +87,7 @@ public class PositionWalk extends MarkProposer {
 				continue;
 			}
 			
-			if (bib.getReverse().getMax() > bib.getForward().getMax()) {
+			if (bib.getReverse().get().getMax() > bib.getForward().get().getMax()) {
 				angle = angle + Math.PI;
 			}
 			

@@ -44,11 +44,11 @@ import org.junit.Test;
 
 public class ObjMaskSgmnWatershedYeongTest {
 
-	private final static String PATH_CHNL_BLURRED = "chnlInBlurred.tif";
-	private final static String PATH_MASK = "mask.tif";
+	private static final String PATH_CHNL_BLURRED = "chnlInBlurred.tif";
+	private static final String PATH_MASK = "mask.tif";
 	
-	private final static String PATH_EXPECTED_NO_MASKS_NO_SEEDS = "blurredResult_noMasks_noSeeds.h5";
-	private final static String PATH_EXPECTED_MASKS_NO_SEEDS = "blurredResult_masks_noSeeds.h5";
+	private static final String PATH_EXPECTED_NO_MASKS_NO_SEEDS = "blurredResult_noMasks_noSeeds.h5";
+	private static final String PATH_EXPECTED_MASKS_NO_SEEDS = "blurredResult_masks_noSeeds.h5";
 	
 	private TestLoaderImageIO loader = new TestLoaderImageIO(
 		TestLoader.createFromMavenWorkingDir("watershed01/")

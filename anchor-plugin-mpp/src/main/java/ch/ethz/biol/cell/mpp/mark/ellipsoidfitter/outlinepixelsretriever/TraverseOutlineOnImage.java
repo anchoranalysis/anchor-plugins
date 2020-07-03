@@ -164,10 +164,9 @@ public class TraverseOutlineOnImage extends OutlinePixelsRetriever {
 	private ObjectMask createObjMaskForPoint( Point3i root, BinaryChnl chnl ) throws TraverseOutlineException {
 				
 		try {
-			Tuple3i maxDist = visitScheduler.maxDistFromRootPoint(chnl.getDimensions().getRes()) ;
-			if (maxDist==null) {
-				throw new CreateException("A null maxDist is not supported");
-			}
+			Tuple3i maxDist = visitScheduler.maxDistFromRootPoint(chnl.getDimensions().getRes()).orElseThrow( ()->
+				new CreateException("An undefined maxDist is not supported")
+			);
 			BoundingBox box = VisitSchedulerMaxDist.createBoxAroundPoint(root, maxDist );
 			
 			// We make sure the box is within our scene boundaries

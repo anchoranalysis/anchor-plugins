@@ -49,34 +49,21 @@ public class VisitSchedulerMaxDistUnitValue extends VisitScheduler {
 	// END BEAN PROPERTIES
 	
 	private Point3i root;
-	
 	private ImageResolution res;
-	
-	
-	
-	public VisitSchedulerMaxDistUnitValue() {
-		super();
-	}
-
-	
+		
 	@Override
-	public void beforeCreateObjMask(RandomNumberGenerator re, ImageResolution res)
-			throws InitException {
-			
+	public void beforeCreateObjMask(RandomNumberGenerator re, ImageResolution res) throws InitException {
+		// NOTHING TO DO
 	}
 	
 	@Override
-	public Tuple3i maxDistFromRootPoint(ImageResolution res) throws OperationFailedException {
-		return new Point3i(
-			distForAxis(AxisType.X, res),
-			distForAxis(AxisType.Y, res),
-			distForAxis(AxisType.Z, res)
-		);
-	}
-	
-	private int distForAxis(AxisType axis, ImageResolution res) throws OperationFailedException {
-		return (int) Math.ceil(
-			maxDist.rslvForAxis(Optional.of(res), axis)
+	public Optional<Tuple3i> maxDistFromRootPoint(ImageResolution res) throws OperationFailedException {
+		return Optional.of(
+			new Point3i(
+				distForAxis(AxisType.X, res),
+				distForAxis(AxisType.Y, res),
+				distForAxis(AxisType.Z, res)
+			)
 		);
 	}
 	
@@ -103,10 +90,6 @@ public class VisitSchedulerMaxDistUnitValue extends VisitScheduler {
 			throw new AnchorFriendlyRuntimeException(e);
 		}
 	}
-	
-	private double distToRoot( Point3i pnt ) {
-		 return res.distance(root, pnt);
-	}
 
 	public UnitValueDistance getMaxDist() {
 		return maxDist;
@@ -115,5 +98,14 @@ public class VisitSchedulerMaxDistUnitValue extends VisitScheduler {
 	public void setMaxDist(UnitValueDistance maxDist) {
 		this.maxDist = maxDist;
 	}
-
+	
+	private double distToRoot( Point3i pnt ) {
+		 return res.distance(root, pnt);
+	}
+	
+	private int distForAxis(AxisType axis, ImageResolution res) throws OperationFailedException {
+		return (int) Math.ceil(
+			maxDist.rslvForAxis(Optional.of(res), axis)
+		);
+	}
 }

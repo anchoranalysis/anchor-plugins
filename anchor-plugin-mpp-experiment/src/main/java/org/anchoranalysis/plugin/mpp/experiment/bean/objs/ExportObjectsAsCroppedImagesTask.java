@@ -48,6 +48,7 @@ import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
 import org.anchoranalysis.experiment.JobExecutionException;
 import org.anchoranalysis.experiment.task.InputTypesExpected;
+import org.anchoranalysis.experiment.task.NoSharedState;
 import org.anchoranalysis.experiment.task.InputBound;
 import org.anchoranalysis.experiment.task.ParametersExperiment;
 import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
@@ -85,7 +86,7 @@ import org.anchoranalysis.mpp.sgmn.bean.define.DefineOutputterMPP;
  * @author owen
  *
  */
-public class ExportObjectsAsCroppedImagesTask extends ExportObjectsBase<MultiInput,Object> {
+public class ExportObjectsAsCroppedImagesTask extends ExportObjectsBase<MultiInput,NoSharedState> {
 
 	// START BEAN PROPERTIES
 	@BeanField
@@ -117,7 +118,7 @@ public class ExportObjectsAsCroppedImagesTask extends ExportObjectsBase<MultiInp
 	// END BEAN PROPERTIES
 
 	@Override
-	public void doJobOnInputObject(	InputBound<MultiInput,Object> params)	throws JobExecutionException {
+	public void doJobOnInputObject(	InputBound<MultiInput,NoSharedState> params)	throws JobExecutionException {
 		
 		BoundIOContext context = params.context();
 		
@@ -180,14 +181,14 @@ public class ExportObjectsAsCroppedImagesTask extends ExportObjectsBase<MultiInp
 	}
 	
 	@Override
-	public Object beforeAnyJobIsExecuted(BoundOutputManagerRouteErrors outputManager, ParametersExperiment params)
+	public NoSharedState beforeAnyJobIsExecuted(BoundOutputManagerRouteErrors outputManager, ParametersExperiment params)
 			throws ExperimentExecutionException {
-		return null;
+		return NoSharedState.INSTANCE;
 	}
 
 
 	@Override
-	public void afterAllJobsAreExecuted(Object sharedState,	BoundIOContext context) throws ExperimentExecutionException {
+	public void afterAllJobsAreExecuted(NoSharedState sharedState, BoundIOContext context) throws ExperimentExecutionException {
 	}	
 	
 	private void outputGeneratorSeq(

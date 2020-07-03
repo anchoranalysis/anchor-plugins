@@ -29,6 +29,7 @@ package ch.ethz.biol.cell.mpp.mark.ellipsoidfitter.outlinepixelsretriever.visits
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.InitException;
@@ -50,7 +51,7 @@ public class VisitSchedulerUniformSample extends VisitScheduler {
 	private VisitScheduler selected;
 	
 	@Override
-	public Tuple3i maxDistFromRootPoint(ImageResolution res) throws OperationFailedException {
+	public Optional<Tuple3i> maxDistFromRootPoint(ImageResolution res) throws OperationFailedException {
 		return selected.maxDistFromRootPoint(res);
 	}
 	

@@ -85,8 +85,8 @@ public class IncludeRandomObjs extends PointsProposer {
 	}
 	
 	@Override
-	public CreateProposalVisualization proposalVisualization(boolean detailed) {
-		return null;
+	public Optional<CreateProposalVisualization> proposalVisualization(boolean detailed) {
+		return Optional.empty();
 	}
 
 	public ObjectCollectionProvider getObjs() {
