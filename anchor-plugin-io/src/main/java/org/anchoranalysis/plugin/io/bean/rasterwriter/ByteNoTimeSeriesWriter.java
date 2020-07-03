@@ -103,7 +103,7 @@ public abstract class ByteNoTimeSeriesWriter extends RasterWriter {
 	
 	protected abstract void writeRGB( IFormatWriter writer, Stack stack ) throws FormatException, IOException, RasterIOException;
 	
-	private static void writeSeperateChnl( IFormatWriter writer, Stack stack ) throws FormatException, IOException, RasterIOException {
+	private static void writeSeperateChnl( IFormatWriter writer, Stack stack ) throws FormatException, IOException {
 		
 		int cnt = 0;
 		for( int c=0; c<stack.getNumChnl(); c++) {

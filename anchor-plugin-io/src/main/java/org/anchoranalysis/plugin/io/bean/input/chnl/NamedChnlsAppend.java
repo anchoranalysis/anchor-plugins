@@ -157,7 +157,7 @@ public class NamedChnlsAppend extends NamedChnlsBase {
 				}
 			}
 			
-			out = new AppendPart<>(
+			out = new AppendPart(
 				out,
 				ni.getName(),
 				0,

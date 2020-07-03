@@ -67,7 +67,14 @@ public class NamedChnls extends NamedChnlsBase {
 		
 		Iterator<FileInput> itrFiles = fileInput.inputObjects(params).iterator();
 		while( itrFiles.hasNext() ) {
-			listOut.add( new MapPart<>(itrFiles.next(), getRasterReader(), imgChnlMapCreator, useLastSeriesIndexOnly ));
+			listOut.add(
+				new MapPart(
+					itrFiles.next(),
+					getRasterReader(),
+					imgChnlMapCreator,
+					useLastSeriesIndexOnly
+				)
+			);
 		}
 	
 		return listOut;
