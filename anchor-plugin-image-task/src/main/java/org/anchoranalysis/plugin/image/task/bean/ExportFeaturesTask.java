@@ -59,6 +59,9 @@ import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
 import org.anchoranalysis.plugin.image.task.bean.feature.source.FeatureSource;
 import org.anchoranalysis.plugin.image.task.feature.SharedStateExportFeatures;
 
+import lombok.Getter;
+import lombok.Setter;
+
 /**
  * Calculates features and exports them as a CSV
  * 
@@ -85,26 +88,26 @@ public class ExportFeaturesTask<T extends InputFromManager, S, U extends Feature
 	
 	// START BEAN
 	/** Source of feature-values to be exported */
-	@BeanField
+	@BeanField @Getter @Setter
 	private FeatureSource<T,S,U> source;
 	
 	/**
 	 * If non-null this file-path is used to determine the group of the file
 	 * If null, no group is included.
 	 */
-	@BeanField @OptionalBean
+	@BeanField @OptionalBean @Getter @Setter
 	private FilePathGenerator group;
 	
 	/** Translates an input file name to a unique ID */
-	@BeanField @OptionalBean
+	@BeanField @OptionalBean @Getter @Setter
 	private FilePathGenerator id;
 	
 	/** The features to be exported (after possibly some manipulation or augmentation) */
-	@BeanField @NonEmpty
+	@BeanField @NonEmpty @Getter @Setter
 	private List<NamedBean<FeatureListProvider<U>>> features = new ArrayList<>();
 	
 	/** Features applied to each group to aggregate values (takes FeatureResultsVectorCollection) */
-	@BeanField @OptionalBean
+	@BeanField @OptionalBean @Getter @Setter
 	private List<NamedBean<FeatureListProvider<FeatureInputResults>>> featuresAggregate;
 	// END BEAN
 	
@@ -201,48 +204,8 @@ public class ExportFeaturesTask<T extends InputFromManager, S, U extends Feature
 			debugMode
 		);
 	}
-
-	public FilePathGenerator getGroup() {
-		return group;
-	}
-
-	public void setGroup(FilePathGenerator group) {
-		this.group = group;
-	}
-
-	public FilePathGenerator getId() {
-		return id;
-	}
-
-	public void setId(FilePathGenerator id) {
-		this.id = id;
-	}
-
-	public List<NamedBean<FeatureListProvider<U>>> getFeatures() {
-		return features;
-	}
-
-	public void setFeatures(List<NamedBean<FeatureListProvider<U>>> features) {
-		this.features = features;
-	}
-
-	public List<NamedBean<FeatureListProvider<FeatureInputResults>>> getFeaturesAggregate() {
-		return featuresAggregate;
-	}
-
-	public void setFeaturesAggregate(List<NamedBean<FeatureListProvider<FeatureInputResults>>> featuresAggregate) {
-		this.featuresAggregate = featuresAggregate;
-	}
 	
 	private Optional<List<NamedBean<FeatureListProvider<FeatureInputResults>>>> featuresAggregateAsOption() {
 		return Optional.ofNullable(featuresAggregate);
-	}
-
-	public FeatureSource<T, S, U> getSource() {
-		return source;
-	}
-
-	public void setSource(FeatureSource<T, S, U> source) {
-		this.source = source;
 	}
 }
