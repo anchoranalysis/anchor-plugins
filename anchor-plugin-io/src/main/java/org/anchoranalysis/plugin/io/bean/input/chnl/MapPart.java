@@ -116,7 +116,7 @@ class MapPart<T extends Buffer> extends NamedChnlsInputPart {
 			seriesNum = openedRaster().numSeries()-1;
 		}
 		
-		NamedChnlCollectionForSeriesConcatenate<T> out = new NamedChnlCollectionForSeriesConcatenate<>();
+		NamedChnlCollectionForSeriesConcatenate out = new NamedChnlCollectionForSeriesConcatenate();
 		out.add(
 			new NamedChnlCollectionForSeriesMap(
 				openedRaster(),

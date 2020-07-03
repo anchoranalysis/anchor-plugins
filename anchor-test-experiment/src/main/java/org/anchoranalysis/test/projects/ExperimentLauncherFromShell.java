@@ -91,7 +91,7 @@ public class ExperimentLauncherFromShell {
 			String pathCombined = Paths.get(pathProperty)
 					.resolve("bin/" + anchorCommand)
 					.toString();
-			System.out.printf("Testing with path: %s (%s)\n", pathCombined, pathProperty);
+			System.out.printf("Testing with path: %s (%s)%n", pathCombined, pathProperty);
 			return pathCombined;
 		}
 	}
@@ -148,7 +148,7 @@ public class ExperimentLauncherFromShell {
 			resolve(testPathToOutput)
 		);
 		
-		System.out.printf("Shell command: %s\n", shellCmd.toString());
+		System.out.printf("Shell command: %s%n", shellCmd.toString());
 		
 		try {
 			DefaultExecutor executor = new DefaultExecutor();
