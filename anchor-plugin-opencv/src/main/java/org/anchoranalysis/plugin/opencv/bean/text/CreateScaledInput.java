@@ -70,7 +70,7 @@ class CreateScaledInput {
 		return new Extent(
 			mat.cols(),
 			mat.rows(),
-			0
+			1
 		);
 	}
 	
