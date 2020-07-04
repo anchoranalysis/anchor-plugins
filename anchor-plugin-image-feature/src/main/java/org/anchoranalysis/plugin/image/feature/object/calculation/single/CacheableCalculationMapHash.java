@@ -52,7 +52,7 @@ public abstract class CacheableCalculationMapHash<
 	/**
 	 * Caches our results for different Keys
 	 */
-	private transient Map<U,S> cache;
+	private Map<U,S> cache;
 	
 	
 	/**
@@ -60,7 +60,7 @@ public abstract class CacheableCalculationMapHash<
 	 * @param cacheSize cache-size to use for the keys
 	 */
 	public CacheableCalculationMapHash( int cacheSize ) {
-		cache = new HashMap<U,S>();
+		cache = new HashMap<>();
 	}
 
 	/**
@@ -104,7 +104,7 @@ public abstract class CacheableCalculationMapHash<
 	 * @throws FeatureCalcException 
 	 * @throws GetOperationFailedException 
 	 */
-	protected S getOrNull( U key ) throws E {
+	protected S getOrNull( U key ) {
 		return cache.get(key);
 	}
 	

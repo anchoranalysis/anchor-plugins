@@ -31,6 +31,10 @@ import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectCollectionFactory;
 import org.anchoranalysis.image.object.ObjectMask;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
 public class IntersectingCircleObjsFixture {
 
 	private static final int INITIAL_MARGIN = 5;

@@ -28,7 +28,7 @@ package org.anchoranalysis.test.feature.plugins.mockfeature;
 
 import static org.junit.Assert.assertEquals;
 
-import java.util.function.Function;
+import java.util.function.ToDoubleFunction;
 
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.feature.bean.Feature;
@@ -49,7 +49,7 @@ import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
  */
 public class MockFeatureWithCalculationFixture {
 
-	public static final Function<FeatureInputSingleObject,Double> DEFAULT_FUNC_NUM_PIXELS = input -> (double) input.getObjectMask().numVoxelsOn();
+	public static final ToDoubleFunction<FeatureInputSingleObject> DEFAULT_FUNC_NUM_PIXELS = input -> (double) input.getObjectMask().numVoxelsOn();
 	
 	@FunctionalInterface
 	public interface RunnableWithException<E extends Exception> {
@@ -108,9 +108,9 @@ public class MockFeatureWithCalculationFixture {
 	 * @return the feature
 	 */
 	@SuppressWarnings("unchecked")
-	public static <T extends FeatureInput> Feature<T> createMockFeatureWithCalculation(Function<T,Double> funcCalculation) {
+	public static <T extends FeatureInput> Feature<T> createMockFeatureWithCalculation(ToDoubleFunction<T> funcCalculation) {
 		synchronized(MockCalculation.class) {
-			MockCalculation.funcCalculation = (Function<FeatureInput,Double>) funcCalculation;
+			MockCalculation.funcCalculation = (ToDoubleFunction<FeatureInput>) funcCalculation;
 			return (Feature<T>) new MockFeatureWithCalculation();
 		}
 	}

@@ -26,7 +26,7 @@ package org.anchoranalysis.plugin.image.bean.obj.merge;
  * #L%
  */
 
-import java.util.function.Function;
+import java.util.function.ToDoubleFunction;
 
 import org.anchoranalysis.bean.error.BeanMisconfiguredException;
 import org.anchoranalysis.bean.xml.RegisterBeanFactories;
@@ -75,7 +75,7 @@ public class ObjMaskProviderMergeMaxTest {
 		);
 	}
 	
-	private void testLinear( int expectedCntMerged, int expectedFeatureCalcCount, Function<FeatureInputSingleObject,Double> calculationFunc ) throws OperationFailedException, CreateException {
+	private void testLinear( int expectedCntMerged, int expectedFeatureCalcCount, ToDoubleFunction<FeatureInputSingleObject> calculationFunc ) throws OperationFailedException, CreateException {
 		MergeTestHelper.testProviderOn(
 			expectedCntMerged,
 			expectedFeatureCalcCount,
@@ -84,7 +84,7 @@ public class ObjMaskProviderMergeMaxTest {
 		);
 	}
 	
-	private static ObjMaskProviderMergeMax createMergeMax( ObjectCollection objs, Function<FeatureInputSingleObject,Double> calculationFunc ) throws CreateException {
+	private static ObjMaskProviderMergeMax createMergeMax( ObjectCollection objs, ToDoubleFunction<FeatureInputSingleObject> calculationFunc ) throws CreateException {
 		
 		LogErrorReporter logger = LoggingFixture.suppressedLogErrorReporter();
 		

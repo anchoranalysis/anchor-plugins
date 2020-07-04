@@ -93,7 +93,7 @@ public abstract class FilePathPrefixerAvoidResolve extends FilePathPrefixer {
 	 * @return a prefixer
 	 */
 	public FilePathPrefix rootFolderPrefixAvoidResolve( String experimentIdentifier )  {
-		String folder = new String( getOutPathPrefix() + File.separator + experimentIdentifier + File.separator );
+		String folder = getOutPathPrefix() + File.separator + experimentIdentifier + File.separator;
 		return new FilePathPrefix( Paths.get(folder) );
 	}
 	
