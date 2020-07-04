@@ -63,8 +63,12 @@ public abstract class FeatureSource<T extends InputFromManager, S, U extends Fea
 		BoundIOContext context
 	) throws CreateException;
 	
-	/** Iff true, group columns are added to the CSV exports, and other group exports may occur in sub-directories 
-	 * @param groupGeneratorDefined TODO*/
+	/** 
+	 * Iff true, group columns are added to the CSV exports, and other group exports may occur in sub-directories 
+	 * 
+	 * @param groupGeneratorDefined has a group-generator been defined for this experiment?
+	 * @return true iff a group-generator has been defined
+	 */
 	public abstract boolean includeGroupInExperiment(boolean groupGeneratorDefined);
 
 	public abstract GenerateHeadersForCSV headers();

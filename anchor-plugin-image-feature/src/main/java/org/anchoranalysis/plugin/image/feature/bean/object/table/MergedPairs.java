@@ -32,7 +32,6 @@ import java.util.Optional;
 import java.util.function.Function;
 
 import org.anchoranalysis.bean.NamedBean;
-import org.anchoranalysis.bean.StringSet;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.error.BeanDuplicateException;
 import org.anchoranalysis.core.error.CreateException;
@@ -53,6 +52,9 @@ import org.anchoranalysis.image.feature.stack.FeatureInputStack;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.voxel.nghb.CreateNeighborGraph;
+
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * Creates a set of features, that creates pairs of neighbouring-objects and applies a mixture of single-object features
@@ -87,46 +89,40 @@ public class MergedPairs extends FeatureTableObjects<FeatureInputPairObjects> {
 	/**
 	 * Additional features that are processed on the pair of images (i.e. First+Second as a pair)
 	 */
-	@BeanField
+	@BeanField @Getter @Setter
 	private List<NamedBean<FeatureListProvider<FeatureInputPairObjects>>> featuresPair = new ArrayList<>();
 	
 	/**
 	 * Additional features that only depend on the image, so do not need to be replicated for every object.
 	 */
-	@BeanField
+	@BeanField @Getter @Setter
 	private List<NamedBean<FeatureListProvider<FeatureInputStack>>> featuresImage = new ArrayList<>();
 	
 	/**
 	 * Include features for the First-object of the pair
 	 */
-	@BeanField
+	@BeanField @Getter @Setter
 	private boolean includeFirst = true;
 
 	/**
 	 * Include features for the Second-object of the pair
 	 */
-	@BeanField
+	@BeanField @Getter @Setter
 	private boolean includeSecond = true;
 	
 	/**
 	 * Include features for the Merged-object of the pair
 	 */
-	@BeanField
+	@BeanField @Getter @Setter
 	private boolean includeMerged = true;
 	
 	/**
 	 * If true, no overlapping objects are treated as pairs
 	 */
-	@BeanField
+	@BeanField @Getter @Setter
 	private boolean avoidOverlappingObjects = false;
 	
-	/**
-	 * Strings that are removed from the beginning of features.
-	 */
-	@BeanField
-	private StringSet ignoreFeaturePrefixes = new StringSet();
-	
-	@BeanField
+	@BeanField @Getter @Setter
 	private boolean do3D = true;
 	// END BEAN PROPERTIES
 	
@@ -149,7 +145,6 @@ public class MergedPairs extends FeatureTableObjects<FeatureInputPairObjects> {
 			return new FeatureCalculatorMergedPairs(
 				features,
 				new MergedPairsInclude(includeFirst, includeSecond, includeMerged),				
-				ignoreFeaturePrefixes.set(),
 				suppressErrors
 			);
 			
@@ -193,73 +188,5 @@ public class MergedPairs extends FeatureTableObjects<FeatureInputPairObjects> {
 			input.getFirst(),
 			input.getSecond()
 		);
-	}
-	
-	public boolean isIncludeFirst() {
-		return includeFirst;
-	}
-
-	public void setIncludeFirst(boolean includeFirst) {
-		this.includeFirst = includeFirst;
-	}
-
-	public boolean isIncludeSecond() {
-		return includeSecond;
-	}
-
-	public void setIncludeSecond(boolean includeSecond) {
-		this.includeSecond = includeSecond;
-	}
-
-	public boolean isIncludeMerged() {
-		return includeMerged;
-	}
-
-	public void setIncludeMerged(boolean includeMerged) {
-		this.includeMerged = includeMerged;
-	}
-
-	public boolean isAvoidOverlappingObjects() {
-		return avoidOverlappingObjects;
-	}
-
-
-	public void setAvoidOverlappingObjects(boolean avoidOverlappingObjects) {
-		this.avoidOverlappingObjects = avoidOverlappingObjects;
-	}
-
-	public StringSet getIgnoreFeaturePrefixes() {
-		return ignoreFeaturePrefixes;
-	}
-
-
-	public void setIgnoreFeaturePrefixes(StringSet ignoreFeaturePrefixes) {
-		this.ignoreFeaturePrefixes = ignoreFeaturePrefixes;
-	}
-
-
-	public boolean isDo3D() {
-		return do3D;
-	}
-
-
-	public void setDo3D(boolean do3D) {
-		this.do3D = do3D;
-	}
-
-	public List<NamedBean<FeatureListProvider<FeatureInputPairObjects>>> getFeaturesPair() {
-		return featuresPair;
-	}
-
-	public void setFeaturesPair(List<NamedBean<FeatureListProvider<FeatureInputPairObjects>>> featuresPair) {
-		this.featuresPair = featuresPair;
-	}
-
-	public List<NamedBean<FeatureListProvider<FeatureInputStack>>> getFeaturesImage() {
-		return featuresImage;
-	}
-
-	public void setFeaturesImage(List<NamedBean<FeatureListProvider<FeatureInputStack>>> featuresImage) {
-		this.featuresImage = featuresImage;
 	}
 }

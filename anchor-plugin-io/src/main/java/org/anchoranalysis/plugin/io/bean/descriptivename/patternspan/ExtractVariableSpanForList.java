@@ -94,7 +94,7 @@ class ExtractVariableSpanForList {
 		
 		// Find the index of the last forward-slash (or second-last if the final character is a forward-slash)
 		String strMinusOne = str.substring( 0, str.length()-1 );
-		int finalIndex = strMinusOne.lastIndexOf("/");
+		int finalIndex = strMinusOne.lastIndexOf('/');
 		return str.substring(finalIndex+1);
 	}
 }
