@@ -39,7 +39,7 @@ import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.feature.stack.FeatureInputStack;
 import org.anchoranalysis.test.TestLoader;
 
-/** Loads features for {@link TaskFixture */
+/** Loads features-lists of different types from particular XML files */
 class ExportObjectsFeatureLoader {
 
 	/** The "single" and "pair" and "image" features in use.*/

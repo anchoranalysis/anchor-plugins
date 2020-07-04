@@ -39,32 +39,30 @@ public abstract class CopyFilesNaming {
 	/**
 	 * Returns the output path (destination to to be copied to) for a given single file
 	 * 
-	 * @param sourceDir
-	 * @param destDir
-	 * @param file
-	 * @param iter
+	 * @param sourceDir source-directory
+	 * @param destDir destination-directory
+	 * @param file file to be copied
+	 * @param index an increasing sequence of numbers for each file beginning at 0
 	 * @return the absolute-path. if empty, the file should be skipped.
-	 * @throws AnchorIOException TODO
+	 * @throws AnchorIOException
 	 */
-	public Optional<Path> destinationPath(Path sourceDir, Path destDir, File file, int iter) throws AnchorIOException {
+	public Optional<Path> destinationPath(Path sourceDir, Path destDir, File file, int index) throws AnchorIOException {
 		
-		Optional<Path> remainder = destinationPathRelative( sourceDir, destDir, file, iter );
-		return remainder.map(r->
-			destDir.resolve(r)
-		);
+		Optional<Path> remainder = destinationPathRelative( sourceDir, destDir, file, index );
+		return remainder.map(destDir::resolve);
 	}
 	
 	/**
-	 * Calculates the relative-output path (to be appended to destDir
+	 * Calculates the relative-output path (to be appended to destDir)
 	 * 
-	 * @param sourceDir
-	 * @param destDir
-	 * @param file
-	 * @param iter
+	 * @param sourceDir source-directory
+	 * @param destDir destination-directory
+	 * @param file file to be copied
+	 * @param index an increasing sequence of numbers for each file beginning at 0
 	 * @return the relative-path. if empty, the file should be skipped.
-	 * @throws AnchorIOException TODO
+	 * @throws AnchorIOException
 	 */
-	public abstract Optional<Path> destinationPathRelative(Path sourceDir, Path destDir, File file, int iter) throws AnchorIOException;
+	public abstract Optional<Path> destinationPathRelative(Path sourceDir, Path destDir, File file, int index) throws AnchorIOException;
 	
 	public abstract void afterCopying(Path destDir, boolean dummyMode) throws AnchorIOException;
 }

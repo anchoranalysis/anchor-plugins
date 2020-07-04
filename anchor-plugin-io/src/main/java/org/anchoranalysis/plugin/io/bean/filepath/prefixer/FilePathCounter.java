@@ -32,18 +32,21 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.io.bean.filepath.prefixer.PathWithDescription;
 import org.anchoranalysis.io.filepath.prefixer.FilePathPrefix;
 
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+@NoArgsConstructor
 public class FilePathCounter extends FilePathPrefixerAvoidResolve {
 
+	// TODO this counter should be initialized in a proper way, and not using
+	// a bean-wide variable
 	private int cnt = 0;
 	
 	// START BEAN PROPERTIES
-	@BeanField
+	@BeanField @Getter @Setter
 	private int numLeadingZeros = 4;
 	// END BEAN PROPERTIES
-	
-	public FilePathCounter() {
-		// BEAN CONSTRUCTOR
-	}
 	
 	public FilePathCounter( String outPathPrefix ) {
 		super(outPathPrefix);
@@ -58,13 +61,5 @@ public class FilePathCounter extends FilePathPrefixerAvoidResolve {
 	private String identifier(int index) {
 		String formatSpecifier = "%0" + numLeadingZeros + "d";
 		return String.format( formatSpecifier, index );
-	}
-	
-	public int getNumLeadingZeros() {
-		return numLeadingZeros;
-	}
-
-	public void setNumLeadingZeros(int numLeadingZeros) {
-		this.numLeadingZeros = numLeadingZeros;
 	}
 }

@@ -53,7 +53,7 @@ import org.anchoranalysis.plugin.image.task.feature.SharedStateExportFeatures;
  *
  * @param <T> input-type from which one or more rows of features are derived
  * @param <S> featureSourceSupplier that is duplicated for each new thread (to prevent any concurrency issues)
- * @param <U> feature-input type for {@link features} bean-field
+ * @param <U> feature-input type for {code features} bean-field
  */
 public abstract class FeatureSource<T extends InputFromManager, S, U extends FeatureInput> extends AnchorBean<FeatureSource<T,S,U>> {
 

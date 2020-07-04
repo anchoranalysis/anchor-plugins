@@ -42,7 +42,7 @@ import org.anchoranalysis.image.feature.object.input.FeatureInputPairObjects;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 
 /**
- * Embeds each feature in a {@link FromExisting} feature (multiplexing first, second or merge) and prepends with a string.
+ * Embeds each feature in a {@link FeatureDeriveFromPair} feature (<i>first</i>, <i>second</i> or <i>merge</i>) and prepends with a string.
  * 
  * @author Owen Feehan
  *

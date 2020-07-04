@@ -41,7 +41,14 @@ public class IntegerRange {
 		this.size = maxNum - deduct + 1;
 	}
 	
-	/** Maps an original integer to it's index from (0..size] */ 
+	/** 
+	 * Maps an original integer to it's index from (0..size]
+	 * 
+	 * <p>Note that no error-checking occurs to ensure value is within range.</p>
+	 * 
+	 * @param value within range
+	 * @return the index of the value in the range 
+	 * */ 
 	public int index( int val ) {
 		return val-deduct;
 	}

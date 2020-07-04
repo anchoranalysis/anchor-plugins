@@ -29,7 +29,6 @@ import java.io.File;
  */
 
 
-import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
@@ -92,7 +91,6 @@ public abstract class FilePathPrefixerAvoidResolve extends FilePathPrefixer {
 	 * 
 	 * @param experimentIdentifier an identifier for the experiment
 	 * @return a prefixer
-	 * @throws IOException
 	 */
 	public FilePathPrefix rootFolderPrefixAvoidResolve( String experimentIdentifier )  {
 		String folder = new String( getOutPathPrefix() + File.separator + experimentIdentifier + File.separator );
@@ -105,7 +103,7 @@ public abstract class FilePathPrefixerAvoidResolve extends FilePathPrefixer {
 	 * @param pathIn an input-path to match against
 	 * @param experimentIdentifier an identifier for the experiment
 	 * @return a prefixer
-	 * @throws AnchorIOException TODO
+	 * @throws FilePathPrefixerException
 	 */
 	public FilePathPrefix outFilePrefixAvoidResolve( PathWithDescription input, String experimentIdentifier ) throws FilePathPrefixerException {
 		return outFilePrefixFromPath(

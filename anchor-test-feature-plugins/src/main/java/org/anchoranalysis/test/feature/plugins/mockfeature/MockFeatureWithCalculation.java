@@ -34,7 +34,7 @@ import org.anchoranalysis.feature.input.descriptor.FeatureInputDescriptor;
 import org.anchoranalysis.feature.input.descriptor.FeatureInputGenericDescriptor;
 
 /**
- * A feature that returns the number-of-voxels in an object by using a {@link MockCalculation} internally
+ * A feature that returns the number-of-voxels in an object by using am internal mock-calculation.
  * 
  * @author Owen Feehan
  *

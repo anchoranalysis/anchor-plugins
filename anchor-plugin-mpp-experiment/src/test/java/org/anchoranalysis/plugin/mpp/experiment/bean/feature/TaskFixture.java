@@ -84,7 +84,6 @@ class TaskFixture {
 	 * Change to use Merged-Pairs mode rather than Simple mode
 	 *
 	 * @param includeFeaturesInPair iff TRUE "pair" features are populated in merged-pair mode
-	 * @throws CreateException 
 	 **/
 	public void changeToMergedPairs(boolean includeFeaturesInPair, boolean includeImageFeatures) {
 		flexiFeatureTable = createMergedPairs(includeFeaturesInPair, includeImageFeatures);
