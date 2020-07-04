@@ -39,10 +39,13 @@ import org.anchoranalysis.io.filepath.prefixer.FilePathDifferenceFromFolderPath;
 import org.anchoranalysis.io.filepath.prefixer.FilePathPrefix;
 import org.apache.commons.io.FilenameUtils;
 
+import lombok.Getter;
+import lombok.Setter;
+
 /**
  * Reuses the directories between a path and its root to form the output - and also the filename.
- * 
- *  <p>e.g. for a path=<pre>/a/b/c/d/e.tif</pre> and root=<pre>/a/b</pre> then the prefix would be <pre>c/d/e/</p>
+ * <p>
+ * e.g. for a path=<pre>/a/b/c/d/e.tif</pre> and root=<pre>/a/b</pre> then the prefix would be <pre>c/d/e/</pre>
  *  
  * @author owen
  *
@@ -51,34 +54,33 @@ public class DirectoryStructure extends FilePathPrefixerAvoidResolve {
 
 	// START BEAN PROPERTIES
 	/** If false, the folders are ignored, and only the file-name is used in the output */
-	@BeanField
+	@BeanField @Getter @Setter
 	private boolean includeFolders = true;
 	
-	@BeanField @AllowEmpty
+	@BeanField @AllowEmpty @Getter @Setter
 	private String inPathPrefix = "";
 	// END BEAN PROPERTIES
 
 	@Override
 	protected FilePathPrefix outFilePrefixFromPath(PathWithDescription input, Path root) throws FilePathPrefixerException {
-		// We strip the incoming path of it's extension
-		Path pathInRemoved = Paths.get( FilenameUtils.removeExtension( input.getPath().toString() ) );
 		
-		FilePathDifferenceFromFolderPath ff = difference(pathInRemoved);
-				
-		Path outFolderPath = root;
+		FilePathDifferenceFromFolderPath difference = calcDifferenceToPrefix(
+			removeExtension(input.getPath())
+		);
 		
-		if (includeFolders && ff.getFolder()!=null) {
-			outFolderPath = outFolderPath.resolve( ff.getFolder() );
-		}
-		
-		if (ff.getFilename()!=null) {
-			outFolderPath = outFolderPath.resolve( ff.getFilename() );
-		}
-		
-		return new FilePathPrefix( outFolderPath );
+		return new FilePathPrefix(
+			buildOutPath(root,difference)
+		);
 	}
 	
-	private FilePathDifferenceFromFolderPath difference(Path pathInRemoved) throws FilePathPrefixerException {
+	private static Path removeExtension(Path withExtension) {
+		String pathWithExtension = withExtension.toString();
+		return Paths.get(
+			FilenameUtils.removeExtension(pathWithExtension)
+		);
+	}
+	
+	private FilePathDifferenceFromFolderPath calcDifferenceToPrefix(Path pathInRemoved) throws FilePathPrefixerException {
 		try {
 			FilePathDifferenceFromFolderPath ff = new FilePathDifferenceFromFolderPath();
 			ff.init(
@@ -90,21 +92,18 @@ public class DirectoryStructure extends FilePathPrefixerAvoidResolve {
 			throw new FilePathPrefixerException(e);
 		}
 	}
-
-	public boolean isIncludeFolders() {
-		return includeFolders;
-	}
-
-	public void setIncludeFolders(boolean includeFolders) {
-		this.includeFolders = includeFolders;
-	}
 	
-	
-	public String getInPathPrefix() {
-		return inPathPrefix;
-	}
-
-	public void setInPathPrefix(String inPathPrefix) {
-		this.inPathPrefix = inPathPrefix;
+	private Path buildOutPath(Path root, FilePathDifferenceFromFolderPath ff) {
+		Path outFolderPath = root;
+		
+		if (includeFolders && ff.getFolder()!=null) {
+			outFolderPath = outFolderPath.resolve( ff.getFolder() );
+		}
+		
+		if (ff.getFilename()!=null) {
+			outFolderPath = outFolderPath.resolve( ff.getFilename() );
+		}
+		
+		return outFolderPath;
 	}
 }

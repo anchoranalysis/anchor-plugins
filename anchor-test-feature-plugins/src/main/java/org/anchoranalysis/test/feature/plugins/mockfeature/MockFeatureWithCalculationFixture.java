@@ -57,11 +57,11 @@ public class MockFeatureWithCalculationFixture {
 	}
 	
 	/**
-	 * Executes an operation, and afterwards asserts an expected number of times the {@link MockCalculation.execute()} method was called.
+	 * Executes an operation, and afterwards asserts an expected number of times certain internal methods are called on a mock-calculation.
 	 * 
-	 * @param expectedCntCalc the expected number of calls to {@link Feature.calc()}
-	 * @param expectedCntExecute the expected number of calls to {@link MockCalculation.execute()}
-	 * @param operation an operation, typically involving {@link MockCalculation}
+	 * @param expectedCntCalc the expected number of calls to {@link Feature#calc}
+	 * @param expectedCntExecute the expected number of calls to {@code execute()} on the mock-calculation.
+	 * @param operation an operation, typically involving the mock-calculation.
 	 * @throws OperationFailedException
 	 */
 	public static void executeAndAssertCnt(

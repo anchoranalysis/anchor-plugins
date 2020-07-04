@@ -45,8 +45,7 @@ class ExtractVariableSpanForList {
 	 * 
 	 * <p> If any of descriptive-names are blank, then add on a bit of the constant portion to all names to make it non-blank</p>
 	 * @param files files
-	 * @param pattern extracted-pattern
-	 * @param elseName fallback if it's still empty after operation
+	 * @param extractVariableSpan extracted-pattern
 	 * @return
 	 */
 	public static List<DescriptiveFile> listExtract(Collection<File> files, ExtractVariableSpan extractVariableSpan) {

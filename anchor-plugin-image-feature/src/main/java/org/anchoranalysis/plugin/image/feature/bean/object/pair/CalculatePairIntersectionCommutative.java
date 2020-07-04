@@ -44,13 +44,12 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
 /**
  * Finds the intersection between the dilated versions of two objects (and then performs some erosion)
  * 
- * 1. Each object-mask is dilated by (determined by iterationsDilation)
- * 2. The intersection is found
- * 3. Then erosion occurs (determined by iterationsErosion) 
- * 
- * This is commutative:  f(a,b)==f(b,a)
- * 
- * See {@link CalculatePairIntersection
+ * <li>Each object-mask is dilated by (determined by iterationsDilation)
+ * <li>The intersection is found
+ * <li>Then erosion occurs (determined by iterationsErosion) 
+ * <p>
+ * This is commutative:  {@code f(a,b)==f(b,a)}
+ * <p>
  * 
  * @author Owen Feehan
  *

@@ -94,7 +94,7 @@ class ExtractVariableSpan {
 	 * Extracts the spanning-portion from a particular file, ensuring it has UNIX-style path
 	 * 
 	 * @param file
-	 * @return
+	 * @return the spanning-portion of the file-path.
 	 */
 	public String extractSpanPortionFor(File file) {
 		return FilePathToUnixStyleConverter.toStringUnixStyle(

@@ -80,7 +80,7 @@ import lombok.Setter;
  *
  * @param <T> See {@link Task}
  * @param <S> a source-of-features that is duplicated for each new thread (to prevent any concurrency issues)
- * @param <U> feature-input type for {@link features} bean-field
+ * @param <U> feature-input type for {@code features} bean-field
  */
 public class ExportFeaturesTask<T extends InputFromManager, S, U extends FeatureInput> extends Task<T,SharedStateExportFeatures<S>> {
 

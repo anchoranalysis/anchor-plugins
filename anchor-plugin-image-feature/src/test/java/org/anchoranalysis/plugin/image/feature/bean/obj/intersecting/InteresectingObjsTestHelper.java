@@ -125,7 +125,7 @@ class InteresectingObjsTestHelper {
 	/** 
 	 * Asserts a result after extracting object at index i from a collection, and using the remainder as the object-collection
 	 * 
-	 * @param descriptive-message for test
+	 * @param message descriptive-message for test
 	 * @param feature feature to calculate on params to form value
 	 * @param objs object-collection used to determine parameter for feature (single object removed at index) and the remainder that form a set of objects to intersect with
 	 * @param index index of object in collection to remove and use as parameter

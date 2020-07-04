@@ -61,8 +61,9 @@ class AggregateChnl {
 
 	
 	/**
-	 * Create a channel with the mean-value of all the aggregated channels 
-	 * @return
+	 * Create a channel with the mean-value of all the aggregated channels
+	 *  
+	 * @return the channel with newly created voxel-box
 	 * @throws OperationFailedException 
 	 */
 	public Channel createMeanChnl( VoxelDataType outputType ) throws OperationFailedException {

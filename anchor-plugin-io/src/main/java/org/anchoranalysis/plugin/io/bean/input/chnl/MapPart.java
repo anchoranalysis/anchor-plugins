@@ -49,10 +49,9 @@ import org.anchoranalysis.image.io.rasterreader.OpenedRaster;
 import org.anchoranalysis.io.input.FileInput;
 
 /**
- * Provides a set of channels as an input, each of which has a name. The standard implementation
- *   of {@link NamedChnlsInputPart}.
- *   
- * It can be used together with {@link AppendPart} where are additional channels are added.
+ * Provides a set of channels as an input, each of which has a name.
+ * 
+ * <p>The standard implementation of {@link NamedChnlsInputPart}
  * 
  * @author Owen Feehan
  */
