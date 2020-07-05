@@ -87,8 +87,8 @@ class GeneratePointsHelper {
 		
 		BoundingBox bbox = BoundingBoxFromPoints.forList(pntsAlongContour);
 
-		int zLow = Math.max(0, bbox.getCornerMin().getZ()-maxZDist );
-		int zHigh = Math.min(sceneDim.getZ(), bbox.getCornerMin().getZ()+maxZDist );
+		int zLow = Math.max(0, bbox.cornerMin().getZ()-maxZDist );
+		int zHigh = Math.min(sceneDim.getZ(), bbox.cornerMin().getZ()+maxZDist );
 
 		if (chnlFilled.isPresent()) {
 			return PointsFromInsideHelper.convexOnly(

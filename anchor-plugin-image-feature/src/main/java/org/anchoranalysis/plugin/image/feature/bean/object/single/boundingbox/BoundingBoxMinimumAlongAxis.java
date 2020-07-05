@@ -36,7 +36,7 @@ public class BoundingBoxMinimumAlongAxis extends BoundingBoxAlongAxisBase {
 
 	@Override
 	protected ReadableTuple3i extractTupleForBoundingBox(BoundingBox bbox) {
-		return bbox.getCornerMin();
+		return bbox.cornerMin();
 	}
 
 }

@@ -62,7 +62,7 @@ class StatsHelper {
 			ObjectMask omSlice = om.extractSlice(z, true);
 
 			// We adjust the z coordiante to point to the channel
-			int zTarget = omSlice.getBoundingBox().getCornerMin().getZ() + om.getBoundingBox().getCornerMin().getZ(); 
+			int zTarget = omSlice.getBoundingBox().cornerMin().getZ() + om.getBoundingBox().cornerMin().getZ(); 
 			omSlice = omSlice.mapBoundingBox( bbox->bbox.shiftToZ(zTarget) );
 			
 			if (omSlice.hasPixelsGreaterThan(0)) {

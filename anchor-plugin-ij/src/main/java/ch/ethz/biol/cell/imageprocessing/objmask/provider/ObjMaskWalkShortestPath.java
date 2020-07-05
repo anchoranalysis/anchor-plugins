@@ -93,12 +93,12 @@ class ObjMaskWalkShortestPath {
 			assert(pnt1.getZ()==pnt2.getZ());
 			
 			drawLineOnVoxelBuffer(
-				om.binaryVoxelBox().getVoxelBox().getPixelsForPlane(pnt1.getZ() - bbox.getCornerMin().getZ()),
+				om.binaryVoxelBox().getVoxelBox().getPixelsForPlane(pnt1.getZ() - bbox.cornerMin().getZ()),
 				om.binaryVoxelBox().getVoxelBox().extent(),
 				om.binaryVoxelBox().getBinaryValues().createByte(),
 				pnt1,
 				pnt2,
-				bbox.getCornerMin()
+				bbox.cornerMin()
 			);
 		}
 				

@@ -35,7 +35,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 
-import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.io.deserializer.DeserializationFailedException;
 import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.input.InputFromManager;
@@ -61,7 +61,11 @@ public class ManifestCouplingDefinition implements InputFromManager {
 		return listCoupledManifests.size();
 	}
 	
-	public void addUncoupledFiles( Collection<File> allFiles, ManifestDeserializer manifestDeserializer ) throws OperationFailedException {
+	public void addUncoupledFiles(
+		Collection<File> allFiles,
+		ManifestDeserializer manifestDeserializer,
+		LogErrorReporter logger
+	) {
 		
 		for( File file : allFiles) {
 			
@@ -70,16 +74,21 @@ public class ManifestCouplingDefinition implements InputFromManager {
 				continue;
 			}
 			
-			ManifestRecorderFile manifestRecorder = new ManifestRecorderFile(file, manifestDeserializer);
-			try {
-				listCoupledManifests.add( new CoupledManifests(null,manifestRecorder,3) );
-			} catch (AnchorIOException e) {
-				throw new OperationFailedException("Cannot add a coupled-manifest due to an error", e);
-			}
+			ManifestRecorderFile manifestRecorder = new ManifestRecorderFile(
+				file,
+				manifestDeserializer
+			);
+			listCoupledManifests.add(
+				new CoupledManifests(manifestRecorder, 3, logger)
+			);
 		}	
 	}
 	
-	public void addManifestExperimentFileSet( Collection<File> matchingFiles, ManifestDeserializer manifestDeserializer ) throws DeserializationFailedException {
+	public void addManifestExperimentFileSet(
+		Collection<File> matchingFiles,
+		ManifestDeserializer manifestDeserializer,
+		LogErrorReporter logger
+	) throws DeserializationFailedException {
 			
 		for( File experimentFile : matchingFiles) {
 			// We deserialize each experimental manifest
@@ -95,13 +104,17 @@ public class ManifestCouplingDefinition implements InputFromManager {
 			// For each experiment folder, we look for a manifest
 			for( FolderWrite folderWrite : finderExperimentFileFolders.getList()) {
 				
-				String manifestPath = String.format("%s%s%s", folderWrite.calcPath(), File.separator, "manifest.ser");
-				File file = new File(manifestPath);
-				
-				ManifestRecorderFile manifestRecorderFile = new ManifestRecorderFile(file, manifestDeserializer);	
+				ManifestRecorderFile manifestRecorderFile = new ManifestRecorderFile(
+					fileForFolder(folderWrite),
+					manifestDeserializer
+				);	
 				CoupledManifests cm;
 				try {
-					cm = new CoupledManifests(manifestExperimentRecorder, manifestRecorderFile);
+					cm = new CoupledManifests(
+						manifestExperimentRecorder,
+						manifestRecorderFile,
+						logger
+					);
 				} catch (AnchorIOException e) {
 					throw new DeserializationFailedException(e);
 				}
@@ -110,6 +123,12 @@ public class ManifestCouplingDefinition implements InputFromManager {
 			}
 			
 		}
+	}
+	
+	private static File fileForFolder(FolderWrite folderWrite) {
+		return new File(
+			String.format("%s%s%s", folderWrite.calcPath(), File.separator, "manifest.ser")
+		);
 	}
 	
 	public Iterator<CoupledManifests> iteratorCoupledManifestsFor( ManifestRecorder experimentalRecorder ) {

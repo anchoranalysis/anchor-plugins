@@ -36,6 +36,7 @@ import java.util.List;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.DefaultInstance;
 import org.anchoranalysis.bean.annotation.OptionalBean;
+import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.image.io.bean.chnl.map.ImgChnlMapCreator;
 import org.anchoranalysis.image.io.bean.rasterreader.RasterReader;
 import org.anchoranalysis.image.io.input.NamedChnlsInput;
@@ -131,10 +132,10 @@ public class GroupFiles extends InputManager<NamedChnlsInput> {
 				}
 			}
 		}
-		return listFromMap(map);
+		return listFromMap(map, params.getLogger());
 	}
 	
-	private List<NamedChnlsInput> listFromMap( GroupFilesMap map ) throws AnchorIOException {
+	private List<NamedChnlsInput> listFromMap( GroupFilesMap map, LogErrorReporter logger ) throws AnchorIOException {
 		
 		List<File> files = new ArrayList<>();
 		List<MultiFileReaderOpenedRaster> openedRasters = new ArrayList<>(); 
@@ -158,7 +159,7 @@ public class GroupFiles extends InputManager<NamedChnlsInput> {
 		}
 
 		return zipIntoGrouping(
-			descriptiveNameFromFile.descriptiveNamesForCheckUniqueness(files),
+			descriptiveNameFromFile.descriptiveNamesForCheckUniqueness(files, logger),
 			openedRasters
 		);		
 	}

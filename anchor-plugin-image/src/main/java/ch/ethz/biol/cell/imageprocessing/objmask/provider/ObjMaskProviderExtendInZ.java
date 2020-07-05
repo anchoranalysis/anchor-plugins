@@ -84,13 +84,13 @@ public class ObjMaskProviderExtendInZ extends ObjMaskProviderContainer {
 	
 	private static BoundingBox potentialZExpansion( ObjectMask omFlat, ObjectMask container ) throws CreateException {
 		
-		int zLow = container.getBoundingBox().getCornerMin().getZ();
+		int zLow = container.getBoundingBox().cornerMin().getZ();
 		int zHigh = container.getBoundingBox().calcCornerMax().getZ();
 		
 		Extent e = omFlat.getBoundingBox().extent().duplicateChangeZ(
 			zHigh-zLow+1
 		);
-		ReadableTuple3i crnrMin = omFlat.getBoundingBox().getCornerMin().duplicateChangeZ(zLow);
+		ReadableTuple3i crnrMin = omFlat.getBoundingBox().cornerMin().duplicateChangeZ(zLow);
 		
 		return new BoundingBox( crnrMin, e ).intersection().with( container.getBoundingBox() ).orElseThrow( ()->
 			new CreateException("Bounding boxes don't intersect")	

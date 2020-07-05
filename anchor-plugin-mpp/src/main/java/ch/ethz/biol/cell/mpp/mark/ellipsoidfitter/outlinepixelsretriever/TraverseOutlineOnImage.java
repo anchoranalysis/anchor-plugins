@@ -136,7 +136,7 @@ public class TraverseOutlineOnImage extends OutlinePixelsRetriever {
 		Point3i rootRelToMask = BoundingBox.relPosTo(
 			root,
 			omOutline.getBoundingBox()
-			.getCornerMin()
+			.cornerMin()
 		);
 		try {
 			visitScheduler.afterCreateObjMask(rootRelToMask, res, re);

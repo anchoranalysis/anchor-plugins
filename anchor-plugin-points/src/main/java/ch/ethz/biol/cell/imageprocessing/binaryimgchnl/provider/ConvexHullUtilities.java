@@ -199,7 +199,7 @@ public class ConvexHullUtilities {
 			ObjectMask outline = FindOutline.outline(obj, 1, true, false);
 			PointsFromBinaryVoxelBox.addPointsFromVoxelBox(
 				outline.binaryVoxelBox(),
-				outline.getBoundingBox().getCornerMin(),
+				outline.getBoundingBox().cornerMin(),
 				points
 			);
 		} catch (CreateException e) {

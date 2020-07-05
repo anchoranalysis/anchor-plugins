@@ -58,7 +58,7 @@ public abstract class CenterSliceBase extends IndexedRegionBase {
 		
 		MarkAbstractPosition mark = (MarkAbstractPosition) markUncasted;
 		
-		return (int) Math.round(mark.getPos().getZ()) - bbox.getCornerMin().getZ();
+		return (int) Math.round(mark.getPos().getZ()) - bbox.cornerMin().getZ();
 	}
 	
 	protected abstract VoxelStatistics createStatisticsForBBox(PxlMark pm, ImageDimensions dim, BoundingBox bbox, int zCenter);

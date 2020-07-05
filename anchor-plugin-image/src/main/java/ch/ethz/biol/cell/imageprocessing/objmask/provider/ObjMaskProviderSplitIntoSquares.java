@@ -130,7 +130,7 @@ public class ObjMaskProviderSplitIntoSquares extends ObjectCollectionProviderOne
 		return Optional.of(
 			new ObjectMask(
 					srcBox.shiftBy(
-					objToSplit.getBoundingBox().getCornerMin()
+					objToSplit.getBoundingBox().cornerMin()
 				),
 				vbNew,
 				objToSplit.getBinaryValuesByte()

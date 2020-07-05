@@ -96,7 +96,7 @@ class CalculateGradientFromMultipleChnls extends FeatureCalculation<List<Point3d
 		
 		for( int z=0; z<eMask.getZ(); z++) {
 			
-			VoxelBuffer<?> bb = vb.getPixelsForPlane(z + bbox.getCornerMin().getZ() );
+			VoxelBuffer<?> bb = vb.getPixelsForPlane(z + bbox.cornerMin().getZ() );
 			VoxelBuffer<ByteBuffer> bbMask = bvb.getPixelsForPlane(z);
 			
 			for( int y=0; y<eMask.getY(); y++) {
@@ -106,7 +106,7 @@ class CalculateGradientFromMultipleChnls extends FeatureCalculation<List<Point3d
 					
 					if (bbMask.buffer().get(offsetMask)==bvbMask.getOnByte()) {
 					
-						int offset = e.offset(x + bbox.getCornerMin().getX(), y + bbox.getCornerMin().getY());
+						int offset = e.offset(x + bbox.cornerMin().getX(), y + bbox.cornerMin().getY());
 						
 						int gradVal = bb.getInt(offset) - subtractConstant;
 						

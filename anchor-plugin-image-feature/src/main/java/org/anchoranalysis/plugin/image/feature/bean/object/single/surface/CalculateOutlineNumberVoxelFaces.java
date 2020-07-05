@@ -66,13 +66,13 @@ class CalculateOutlineNumberVoxelFaces extends FeatureCalculation<Integer,Featur
 		
 		if (do3D && mip) {
 			// If we're in 3D mode AND MIP mode, then we get a maximum intensity projection
-			CountKernel kernel = new CountKernelNghbIgnoreOutsideScene(false, objMask.getBinaryValuesByte(), true, dim.getExtnt(), objMask.getBoundingBox().getCornerMin() );
+			CountKernel kernel = new CountKernelNghbIgnoreOutsideScene(false, objMask.getBinaryValuesByte(), true, dim.getExtnt(), objMask.getBoundingBox().cornerMin() );
 			
 			VoxelBox<ByteBuffer> mipVb = objMask.getVoxelBox().maxIntensityProj();
 			return ApplyKernel.applyForCount(kernel, mipVb );
 			
 		} else {
-			CountKernel kernel = new CountKernelNghbIgnoreOutsideScene(do3D, objMask.getBinaryValuesByte(), true, dim.getExtnt(), objMask.getBoundingBox().getCornerMin() );
+			CountKernel kernel = new CountKernelNghbIgnoreOutsideScene(do3D, objMask.getBinaryValuesByte(), true, dim.getExtnt(), objMask.getBoundingBox().cornerMin() );
 			return ApplyKernel.applyForCount(kernel, objMask.getVoxelBox() );
 		}
 	}

@@ -51,7 +51,7 @@ class CreateObjectsFromPoints {
 				om.binaryVoxelBox().setHigh(
 					Point3i.immutableSubtract(
 						points.get(i),
-						om.getBoundingBox().getCornerMin()
+						om.getBoundingBox().cornerMin()
 					)
 				);
 			}

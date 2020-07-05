@@ -54,7 +54,7 @@ public class CalculateEllipseLeastSquares extends FeatureCalculation<ObjMaskAndE
 		
 	private static ObjectMask extractEllipseSlice( ObjectMask om ) {
 		int zSliceCenter = (int) om.centerOfGravity().getZ();
-		return om.extractSlice(zSliceCenter - om.getBoundingBox().getCornerMin().getZ(), false);
+		return om.extractSlice(zSliceCenter - om.getBoundingBox().cornerMin().getZ(), false);
 	}
 	
 

@@ -54,7 +54,7 @@ public class ShapeRegularityCenterSlice extends FeatureSingleObject {
 	private ObjectMask centerSlice( ObjectMask om ) throws OperationFailedException {
 		int zSliceCenter = (int) om.centerOfGravity().getZ();
 		return  om.extractSlice(
-			zSliceCenter - om.getBoundingBox().getCornerMin().getZ(),
+			zSliceCenter - om.getBoundingBox().cornerMin().getZ(),
 			false
 		);
 	}
