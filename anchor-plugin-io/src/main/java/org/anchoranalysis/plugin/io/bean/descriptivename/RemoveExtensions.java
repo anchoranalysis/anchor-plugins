@@ -49,7 +49,7 @@ import org.apache.commons.io.FilenameUtils;
  * <p>As an exception, the extension can be retained if there is more than one file with the same descriptive-name</p>
  * <p>To check if the extension has already been removed upstream, a check occurs if the path ends with the descriptive-name</p>
  * 
- * @author owen
+ * @author Owen Feehan
  *
  */
 public class RemoveExtensions extends DescriptiveNameFromFile {

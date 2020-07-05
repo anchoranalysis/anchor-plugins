@@ -38,7 +38,7 @@ import org.anchoranalysis.plugin.image.task.grouped.NamedChnl;
 /**
  * Selects one specific channel from a set of stacks
  * 
- * @author FEEHANO
+ * @author Owen Feehan
  *
  */
 public class SelectOne extends SelectChnlsFromStacks {

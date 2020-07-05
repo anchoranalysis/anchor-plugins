@@ -42,7 +42,7 @@ import ch.ethz.biol.cell.imageprocessing.chnl.provider.ChnlProviderStackReferenc
 /**
  * Selects a specific set of channels from stacks, each identified by a stack-name and channel index
  * 
- * @author FEEHANO
+ * @author Owen Feehan
  *
  */
 public class SelectSpecificAndRename extends SelectChnlsFromStacks {

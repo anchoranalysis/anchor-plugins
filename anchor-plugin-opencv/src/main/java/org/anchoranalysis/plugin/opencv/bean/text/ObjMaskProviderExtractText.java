@@ -53,7 +53,7 @@ import org.opencv.core.Mat;
  * <p>Particular thanks to <a href="https://www.pyimagesearch.com/2018/08/20/opencv-text-detection-east-text-detector/">Adrian Rosebrock</a>
  * whose tutorial was useful in applying this model</p>
  * 
- * @author owen
+ * @author Owen Feehan
  *
  */
 public class ObjMaskProviderExtractText extends ObjectCollectionProvider {

@@ -33,7 +33,7 @@ import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedShort;
 /**
  * Checks that the histograms created from channels all have the same data type, res, max-value etc.
  * 
- * @author FEEHANO
+ * @author Owen Feehan
  *
  */
 public class ConsistentChannelChecker {

@@ -47,7 +47,7 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
  * 
  * @see {#link org.anchoranalysis.image.bean.threshold.calculatelevel.Otsu}
  * 
- * @author owen
+ * @author Owen Feehan
  *
  */
 public class OtsuWeighted extends CalculateLevel {

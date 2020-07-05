@@ -33,7 +33,7 @@ package org.anchoranalysis.plugin.image.bean.histogram.threshold;
 /**
  * Calculates a level from the first delegate and if less than a threshold, recalculates from a second delegate.
  * 
- * @author owen
+ * @author Owen Feehan
  *
  */
 public class IfLessThan extends CalculateLevelRelativeToThreshold {

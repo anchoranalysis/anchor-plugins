@@ -37,7 +37,7 @@ import org.anchoranalysis.io.output.bound.BoundIOContext;
 
 /**
  * 
- * @author FEEHANO
+ * @author Owen Feehan
  *
  * @param <T> shared-state
  */

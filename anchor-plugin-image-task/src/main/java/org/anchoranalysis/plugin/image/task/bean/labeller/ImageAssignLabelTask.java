@@ -56,7 +56,7 @@ import org.anchoranalysis.plugin.image.task.sharedstate.SharedStateFilteredImage
  *   1. copies each image into directory corresponding to the label (e.g. "positive", "negative)
  *   2. creates a single CSV file where each row is an image-label correspondence
  * 
- * @author FEEHANO
+ * @author Owen Feehan
  *
  * @param T type of init-params associated with the filter
  */

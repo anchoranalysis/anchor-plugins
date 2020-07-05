@@ -40,7 +40,7 @@ import org.anchoranalysis.image.voxel.statistics.VoxelStatistics;
 /**
  * {@link MarkRegion} with a region and an index
  * 
- * @author owen
+ * @author Owen Feehan
  *
  */
 public abstract class IndexedRegionBase extends MarkRegion {

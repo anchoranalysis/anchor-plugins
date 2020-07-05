@@ -130,7 +130,7 @@ public class LociAVIWriter extends MovieWriter {
 	}
 	
 	
-	private static IMetadata createMetadata( ImageDimensions sd, int num_chnl, int pixelType, int t ) throws EnumerationException, ServiceException, DependencyException {
+	private static IMetadata createMetadata( ImageDimensions sd, int numChnl, int pixelType, int t ) throws EnumerationException, ServiceException, DependencyException {
 		
 		ServiceFactory factory = new ServiceFactory();
 	    OMEXMLService service = factory.getInstance(OMEXMLService.class);
@@ -149,7 +149,7 @@ public class LociAVIWriter extends MovieWriter {
 	    meta.setPixelsSizeX(new PositiveInteger( sd.getX() ), seriesNum);
 	    meta.setPixelsSizeY(new PositiveInteger( sd.getY() ), seriesNum);
 	    meta.setPixelsSizeZ(new PositiveInteger( sd.getZ() ), seriesNum);
-	    meta.setPixelsSizeC(new PositiveInteger( num_chnl ), seriesNum);
+	    meta.setPixelsSizeC(new PositiveInteger( numChnl ), seriesNum);
 	    meta.setPixelsSizeT(new PositiveInteger(t), seriesNum);
 	    
 	  //  meta.setPixelsPhysicalSizeX( new Double(sd.getX()) , seriesNum);
@@ -168,10 +168,10 @@ public class LociAVIWriter extends MovieWriter {
 	    //meta.setPixelsPhysicalSizeX( sd.XRes, 0);
 	    //meta.setPixelsPhysicalSizeY( sd.YRes, 0);
 	    //meta.setPixelsPhysicalSizeZ( sd.ZRes, 0);
-	    // for (int i=0; i<num_chnl; i++) {
-		    for (int i=0; i<num_chnl; i++) {
+	    // for (int i=0; i<numChnl; i++) {
+		    for (int i=0; i<numChnl; i++) {
 		    	meta.setChannelID( String.format("Channel:%d:%d",z,i),z, i);
-		    	meta.setChannelSamplesPerPixel(new PositiveInteger(num_chnl), z, i);
+		    	meta.setChannelSamplesPerPixel(new PositiveInteger(numChnl), z, i);
 			}
 	    //}
 		

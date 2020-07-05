@@ -36,7 +36,7 @@ import org.anchoranalysis.io.error.AnchorIOException;
 /**
  * A regular expression substitution (replaceAll) is applied to the relative-path
  *   
- * @author FEEHANO
+ * @author Owen Feehan
  *
  */
 public class ApplyRegExSubstitution extends CopyFilesNamingOneRegEx {

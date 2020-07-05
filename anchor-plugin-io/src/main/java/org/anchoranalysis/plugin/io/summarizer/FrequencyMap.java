@@ -36,7 +36,7 @@ import java.util.Map.Entry;
 /**
  * Counts the frequency of certain strings, and describes the contents in human language.
  * 
- * @author owen
+ * @author Owen Feehan
  * @param T key-type (should have .toString() representation that is meaningful to humans)
  */
 public class FrequencyMap<T> {

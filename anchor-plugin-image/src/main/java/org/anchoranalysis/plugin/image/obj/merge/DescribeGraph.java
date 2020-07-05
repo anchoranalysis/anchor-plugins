@@ -32,7 +32,7 @@ import org.anchoranalysis.plugin.image.obj.merge.priority.PrioritisedVertex;
 /**
  * Logs descriptions of the graph
  * 
- * @author FEEHANO
+ * @author Owen Feehan
  *
  */
 public class DescribeGraph {

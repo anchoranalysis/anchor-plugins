@@ -33,7 +33,7 @@ import org.anchoranalysis.core.error.OperationFailedException;
  * Multiplexes between two summarizers depending on the total number of count
  * 
  * <p>If the count is greater than a threshold, one summarizer is used, if not another</p>
- * @author owen
+ * @author Owen Feehan
  *
  * @param <T> type of element to be summarized
  */

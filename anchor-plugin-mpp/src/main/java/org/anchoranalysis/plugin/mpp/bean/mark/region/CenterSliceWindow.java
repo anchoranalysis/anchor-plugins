@@ -41,7 +41,7 @@ import org.anchoranalysis.image.voxel.statistics.VoxelStatisticsCombined;
  * 
  * <p>So total size =  2*windowSize + 1 (clipped to the bounding box)</p>
  * 
- * @author owen
+ * @author Owen Feehan
  *
  */
 public class CenterSliceWindow extends CenterSliceBase {

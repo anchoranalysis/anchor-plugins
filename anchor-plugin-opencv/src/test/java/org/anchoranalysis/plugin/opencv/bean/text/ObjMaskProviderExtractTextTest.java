@@ -54,7 +54,7 @@ import static org.junit.Assert.assertEquals;
  * in the models/ directory of the Anchor distribution. This is as it's difficult to determine a path to the models/
  * directory at test-time</p>
  * 
- * @author owen
+ * @author Owen Feehan
  *
  */
 public class ObjMaskProviderExtractTextTest {

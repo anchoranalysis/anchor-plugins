@@ -55,7 +55,7 @@ import org.anchoranalysis.plugin.image.obj.merge.condition.BeforeCondition;
 /**
  * Naieve merge algorithm
  * 
- * @author FEEHANO
+ * @author Owen Feehan
  *
  */
 class Merger {

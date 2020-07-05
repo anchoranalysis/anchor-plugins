@@ -35,7 +35,7 @@ import org.anchoranalysis.image.object.ObjectMask;
 /**
  * Wraps a BeforeCondition as an UpdatableBefoerCondition
  * 
- * @author FEEHANO
+ * @author Owen Feehan
  *
  */
 public class WrapAsUpdatable implements UpdatableBeforeCondition {

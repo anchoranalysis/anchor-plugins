@@ -31,7 +31,7 @@ import org.anchoranalysis.anchor.mpp.feature.nrg.cfg.CfgNRGPixelized;
 /**
  * A transformation of one CfgNRGPixelized into another
  * 
- * @author FEEHANO
+ * @author Owen Feehan
  *
  */
 public class DualCfgNRGPixelized {

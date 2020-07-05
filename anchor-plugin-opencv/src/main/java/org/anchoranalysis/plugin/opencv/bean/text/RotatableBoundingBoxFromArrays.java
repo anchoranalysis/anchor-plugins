@@ -43,7 +43,7 @@ import lombok.NoArgsConstructor;
 /**
  * Extracts a bounding box from arrays returned by the EAST deep-CNN model.
  * 
- * @author owen
+ * @author Owen Feehan
  *
  */
 @NoArgsConstructor(access=AccessLevel.PRIVATE)

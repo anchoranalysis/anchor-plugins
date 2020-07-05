@@ -42,7 +42,7 @@ import org.anchoranalysis.image.object.ObjectMask;
  * This allows additional (costly) operations to occur after Step 1, that can be repeatedly used
  * in Step 2 e.g. growing object-masks to check for neighbouring objects
  * 
- * @author FEEHANO
+ * @author Owen Feehan
  *
  */
 public interface UpdatableBeforeCondition {

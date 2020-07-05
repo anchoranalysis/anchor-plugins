@@ -155,6 +155,6 @@ class ContourListGenerator extends RasterGenerator implements IterableObjectGene
 	}
 	
 	private static MarkPointList createMarkForContour(Contour c, boolean round ) {
-		return MarkPointListFactory.createMarkFromPoints3f( c.getPoints(), round);
+		return MarkPointListFactory.createMarkFromPoints3f( c.getPoints());
 	}
 }

@@ -33,7 +33,7 @@ import org.anchoranalysis.mpp.sgmn.transformer.StateTransformer;
 /**
  * No transformation occurs as Kernel and State are the same type
  * 
- * @author FEEHANO
+ * @author Owen Feehan
  *
  * @param <T>
  */

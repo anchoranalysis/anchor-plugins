@@ -35,7 +35,7 @@ import org.anchoranalysis.plugin.io.summarizer.FrequencyMap;
 /**
  * Summarzes {@link NamedChnlsInput} in different ways
  * 
- * @author owen
+ * @author Owen Feehan
  *
  * @param <T> type used for summary in frequency-map
  */

@@ -50,7 +50,7 @@ import org.anchoranalysis.image.stack.TimeSequence;
  *   1. a constant number of chnls
  *   2. a constant number of frames
  *    
- * @author FEEHANO
+ * @author Owen Feehan
  *
  */
 public class FlattenAsChnl extends RasterReader {

@@ -50,7 +50,7 @@ import lombok.NoArgsConstructor;
 /**
  * Maybe writes two raster visualizations of the cfg, one solid, and one with an outline
  *   
- * @author owen
+ * @author Owen Feehan
  *
  */
 @NoArgsConstructor(access=AccessLevel.PRIVATE)

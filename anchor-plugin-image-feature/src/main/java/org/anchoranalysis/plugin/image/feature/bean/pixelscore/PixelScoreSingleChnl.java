@@ -33,7 +33,7 @@ import org.anchoranalysis.image.feature.bean.pixelwise.PixelScore;
 /**
  * A score that is calculated on a single channel only
  * 
- * @author owen
+ * @author Owen Feehan
  *
  */
 public abstract class PixelScoreSingleChnl extends PixelScore {

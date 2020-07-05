@@ -39,7 +39,7 @@ import org.anchoranalysis.plugin.mpp.sgmn.cfg.bean.optscheme.kernelbridge.Kernel
 
 /**
  * 
- * @author FEEHANO
+ * @author Owen Feehan
  *
  * @param <S> Optimization state
  * @param <T> Knerel type

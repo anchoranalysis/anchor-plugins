@@ -31,7 +31,7 @@ import java.util.function.Function;
 /**
  * Commonality between shared state for gouped export tasks
  * 
- * @author FEEHANO
+ * @author Owen Feehan
  *
  * @param <S> individual-type
  * @param <T> aggregate-type

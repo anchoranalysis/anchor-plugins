@@ -221,7 +221,7 @@ class SimulatedAnnealingHelper {
 	
 	private static <S> KernelWithID<S> proposeKernel( KernelProposer<S> kernelProposer, RandomNumberGenerator re, boolean firstStep ) {
 		if (firstStep) {
-			return kernelProposer.initialKernel(re);
+			return kernelProposer.initialKernel();
 		} else {
 			return kernelProposer.proposeKernel(re);
 		}

@@ -38,7 +38,7 @@ import org.anchoranalysis.image.histogram.Histogram;
 /**
  * This assumes the histograms correspond to the nrg channels exactly (in terms of indexing)
  * 
- * @author owen
+ * @author Owen Feehan
  *
  */
 public class PixelScoreNormalizeByMax extends PixelScoreSingleChnl {

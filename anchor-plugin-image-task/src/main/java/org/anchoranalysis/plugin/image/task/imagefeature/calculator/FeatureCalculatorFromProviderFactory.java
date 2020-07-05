@@ -51,7 +51,7 @@ import org.anchoranalysis.io.output.bound.BoundIOContext;
 /**
  * Calculates feature or feature values, adding a nrgStack (optionally) from either provider or the input-stack
  *   
- * @author FEEHANO
+ * @author Owen Feehan
  *
  * @param <T> feature-input-type
  */

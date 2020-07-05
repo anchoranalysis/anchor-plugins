@@ -48,7 +48,7 @@ import net.imglib2.type.Type;
 /**
  * Applies the MSER algorithm from imglib2
  * 
- * @author FEEHANO
+ * @author Owen Feehan
  *
  */
 public class ObjMaskProviderMser extends ObjMaskProviderChnlSource {

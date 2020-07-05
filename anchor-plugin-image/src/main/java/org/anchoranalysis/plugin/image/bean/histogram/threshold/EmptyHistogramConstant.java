@@ -34,7 +34,7 @@ import org.anchoranalysis.image.histogram.Histogram;
 
 /**
  * Specifies a constant if a histogram is empty, otherwise delegates to another {#link org.anchoranalysis.image.bean.threshold.CalculateLevel}
- * @author owen
+ * @author Owen Feehan
  *
  */
 public class EmptyHistogramConstant extends CalculateLevelOne {

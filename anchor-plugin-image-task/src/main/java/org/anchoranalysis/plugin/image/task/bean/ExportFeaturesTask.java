@@ -74,7 +74,7 @@ import lombok.Setter;
  * <tr><td>featuresGroup</td><td>a csv file per group, where each row is an object</td></tr>
  * </table>
  *   
- * @author FEEHANO
+ * @author Owen Feehan
  *
  * @param <T> See {@link Task}
  * @param <S> a source-of-features that is duplicated for each new thread (to prevent any concurrency issues)

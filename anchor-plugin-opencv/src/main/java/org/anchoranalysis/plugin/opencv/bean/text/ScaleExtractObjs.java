@@ -37,7 +37,7 @@ import org.anchoranalysis.plugin.opencv.nonmaxima.WithConfidence;
 /**
  * Extracts and object-mask from the list and scales
  * 
- * @author owen
+ * @author Owen Feehan
  *
  */
 class ScaleExtractObjs {

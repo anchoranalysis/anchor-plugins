@@ -35,7 +35,7 @@ import org.anchoranalysis.image.stack.region.chnlconverter.ChannelConverterToUns
 /**
  * Scales by compressing a certain range of values into the 8-bit signal
  * 
- * @author FEEHANO
+ * @author Owen Feehan
  *
  */
 public class ChnlConverterBeanScaleByMinMaxValue extends ChnlConverterBean {

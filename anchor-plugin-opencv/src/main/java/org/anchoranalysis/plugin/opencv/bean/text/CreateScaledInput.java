@@ -44,7 +44,7 @@ import lombok.NoArgsConstructor;
 /**
  * Creates a scaled-version of a stack to use as input
  * 
- * @author owen
+ * @author Owen Feehan
  *
  */
 @NoArgsConstructor(access=AccessLevel.PRIVATE)

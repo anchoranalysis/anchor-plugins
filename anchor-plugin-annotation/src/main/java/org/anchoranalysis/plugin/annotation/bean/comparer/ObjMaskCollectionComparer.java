@@ -49,7 +49,7 @@ import org.anchoranalysis.io.error.AnchorIOException;
  * 
  * <p>If it doesn't exist at the specified path, then it returns null</p>
  * 
- * @author owen
+ * @author Owen Feehan
  *
  */
 public class ObjMaskCollectionComparer extends Comparer {
