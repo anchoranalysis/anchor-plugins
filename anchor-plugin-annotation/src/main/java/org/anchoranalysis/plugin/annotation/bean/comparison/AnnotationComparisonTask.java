@@ -37,7 +37,6 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.functional.OptionalUtilities;
-import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 import org.anchoranalysis.core.progress.ProgressReporterNull;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
@@ -98,7 +97,7 @@ public class AnnotationComparisonTask<T extends Assignment> extends Task<Annotat
 	
 		try {
 			CSVAssignment assignmentCSV = new CSVAssignment(outputManager,"byImage",hasDescriptiveSplit(),maxSplitGroups);
-			return new SharedState<T>(
+			return new SharedState<>(
 				assignmentCSV,
 				numLevelsGrouping,
 				key -> assigner.groupForKey(key)
@@ -113,7 +112,6 @@ public class AnnotationComparisonTask<T extends Assignment> extends Task<Annotat
 		InputBound<AnnotationComparisonInput<ProvidesStackInput>,SharedState<T>> params
 	) throws JobExecutionException {
 
-		LogErrorReporter logErrorReporter = params.getLogger();
 		AnnotationComparisonInput<ProvidesStackInput> input = params.getInputObject();
 		
 		// Create the background
@@ -136,11 +134,13 @@ public class AnnotationComparisonTask<T extends Assignment> extends Task<Annotat
 			return;
 		}
 
-		try {
-			writeRGBOutlineStack("rgbOutline", params.getOutputManager(), input, assignment.get(), background);
-		} catch (OperationFailedException e) {
-			logErrorReporter.getErrorReporter().recordError(AnnotationComparisonTask.class, e);
-		}
+		writeRGBOutlineStack(
+			"rgbOutline",
+			params.getOutputManager(),
+			input,
+			assignment.get(),
+			background
+		);
 	}
 	
 	private Optional<Assignment> compareAndUpdate(
@@ -252,7 +252,7 @@ public class AnnotationComparisonTask<T extends Assignment> extends Task<Annotat
 		AnnotationComparisonInput<ProvidesStackInput> inputObject,
 		Assignment assignment,
 		DisplayStack background
-	) throws OperationFailedException {
+	) {
 		
 		if (!outputManager.isOutputAllowed(outputName)) {
 			return;

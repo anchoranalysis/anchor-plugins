@@ -56,6 +56,9 @@ import org.anchoranalysis.io.bean.input.InputManager;
 import org.anchoranalysis.io.input.InputFromManager;
 import org.anchoranalysis.io.output.bean.OutputManager;
 
+import lombok.Getter;
+import lombok.Setter;
+
 // 
 
 /**
@@ -71,40 +74,40 @@ import org.anchoranalysis.io.output.bean.OutputManager;
 public class QuickMultiDatasetExperiment<T extends InputFromManager, S> extends Experiment implements IReplaceInputManager, IReplaceOutputManager {
 
 	// START BEAN PROPERTIES
-	@BeanField
+	@BeanField @Getter @Setter
 	private String folderDataset;
 	
-	@BeanField
+	@BeanField @Getter @Setter
 	private StringSet datasets;
 	
 	// Optionally, can specify a specific dataset for debugging. Overrides default behaviour in debug-mode and uses this instead.
-	@BeanField @AllowEmpty
+	@BeanField @AllowEmpty @Getter @Setter
 	private String datasetSpecific = "";
 	
-	@BeanField
+	@BeanField @Getter @Setter
 	private String beanExtension = ".xml";
 	
 	/** Relative path to a logReporter for the experiment in gneeral*/
-	@BeanField
+	@BeanField @Getter @Setter
 	private String logReporterExperimentPath = "";
 	
 	/** Relative path to a logReporter for a specific task */
-	@BeanField
+	@BeanField @Getter @Setter
 	private String logReporterTaskPath = "";
 	
-	@BeanField
+	@BeanField   @Getter @Setter
 	private String output;
 	
-	@BeanField @AllowEmpty
+	@BeanField @AllowEmpty @Getter @Setter
 	private String identifierSuffix = "";
 	
-	@BeanField
+	@BeanField  @Getter @Setter
 	private int maxNumProcessors=100;
 	
-	@BeanField
-	private boolean supressExceptions=true;
+	@BeanField  @Getter @Setter
+	private boolean suppressExceptions=true;
 	
-	@BeanField
+	@BeanField @Getter @Setter
 	private Task<T,S> task;
 	// END BEAN PROPERTIES
 	
@@ -146,7 +149,6 @@ public class QuickMultiDatasetExperiment<T extends InputFromManager, S> extends 
 	public void replaceOutputManager(OutputManager outputManager) throws OperationFailedException {
 		delegate.setOutput(outputManager);
 	}
-	
 
 	@Override
 	public void doExperiment(ExperimentExecutionArguments expArgs)
@@ -166,6 +168,12 @@ public class QuickMultiDatasetExperiment<T extends InputFromManager, S> extends 
 		}
 		
 		executeAllDatasets( expArgs);
+	}
+	
+	@Override
+	public boolean useDetailedLogging() {
+		// Always use detailed logging
+		return true;
 	}
 	
 	private void executeAllDatasets( ExperimentExecutionArguments expArgs ) throws ExperimentExecutionException {
@@ -205,12 +213,10 @@ public class QuickMultiDatasetExperiment<T extends InputFromManager, S> extends 
 			return false;
 		}		
 	}
-	
-	
 
 	/*** Decides which datasets to run the experiment on 
 	 * @throws ExperimentExecutionException */
-	private Collection<String> selectDatasets(boolean isDebugEnabled) throws ExperimentExecutionException {
+	private Collection<String> selectDatasets(boolean isDebugEnabled) {
 		
 		// Easy decision when there's no debugging involved
 		if (isDebugEnabled) {
@@ -242,118 +248,11 @@ public class QuickMultiDatasetExperiment<T extends InputFromManager, S> extends 
 		);
 	}
 	
-	public String getFolderDataset() {
-		return folderDataset;
-	}
-
-	public void setFolderDataset(String folderDataset) {
-		this.folderDataset = folderDataset;
-	}
-
-	public String getDatasetSpecific() {
-		return datasetSpecific;
-	}
-
-	public void setDatasetSpecific(String datasetSpecific) {
-		this.datasetSpecific = datasetSpecific;
-	}
-
-	public String getBeanExtension() {
-		return beanExtension;
-	}
-
-	public void setBeanExtension(String beanExtension) {
-		this.beanExtension = beanExtension;
-	}
-
-	public String getLogReporterPath() {
-		return logReporterExperimentPath;
-	}
-
-	public void setLogReporterPath(String logReporterPath) {
-		this.logReporterExperimentPath = logReporterPath;
-	}
-
-	public String getOutput() {
-		return output;
-	}
-
-
-	public void setOutput(String output) {
-		this.output = output;
-	}
-
-
-	public String getIdentifierSuffix() {
-		return identifierSuffix;
-	}
-
-
-	public void setIdentifierSuffix(String identifierSuffix) {
-		this.identifierSuffix = identifierSuffix;
-	}
-
-
-	public StringSet getDatasets() {
-		return datasets;
-	}
-
-
-	public void setDatasets(StringSet datasets) {
-		this.datasets = datasets;
-	}
-
-	public int getMaxNumProcessors() {
-		return maxNumProcessors;
-	}
-
-	public void setMaxNumProcessors(int maxNumProcessors) {
-		this.maxNumProcessors = maxNumProcessors;
-	}
-
-	public boolean isSupressExceptions() {
-		return supressExceptions;
-	}
-
-	public void setSupressExceptions(boolean supressExceptions) {
-		this.supressExceptions = supressExceptions;
-	}
-
-	public Task<T, S> getTask() {
-		return task;
-	}
-
-	public void setTask(Task<T, S> task) {
-		this.task = task;
-	}
-	
 	private JobProcessor<T,S> createProcessor() {
 		DebugDependentProcessor<T, S> processor = new DebugDependentProcessor<>();
 		processor.setMaxNumProcessors(maxNumProcessors);
-		processor.setSupressExceptions(supressExceptions);
+		processor.setSuppressExceptions(suppressExceptions);
 		processor.setTask( task.duplicateBean() );
 		return processor;
-	}
-
-	public String getLogReporterExperimentPath() {
-		return logReporterExperimentPath;
-	}
-
-	public void setLogReporterExperimentPath(String logReporterExperimentPath) {
-		this.logReporterExperimentPath = logReporterExperimentPath;
-	}
-
-	public String getLogReporterTaskPath() {
-		return logReporterTaskPath;
-	}
-
-	public void setLogReporterTaskPath(String logReporterTaskPath) {
-		this.logReporterTaskPath = logReporterTaskPath;
-	}
-
-	@Override
-	public boolean useDetailedLogging() {
-		// Always use detailed logging
-		return true;
 	}
 }

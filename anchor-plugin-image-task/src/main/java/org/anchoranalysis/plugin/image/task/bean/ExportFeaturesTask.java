@@ -64,18 +64,16 @@ import lombok.Setter;
 
 /**
  * Calculates features and exports them as a CSV
- * 
- * <p>Aggregated-features (based upon a certain grouping) can also be calculated.</p> 
- * 
- *  <div>
- *  Types of exports are:
- *  <table>
- *  <tr><td>features</td><td>a single csv file where each row is an object</td></tr>
- *  <tr><td>featuresAggregated</td><td>a single csv file where each row is a group (with aggregated features of the objects within)</td></tr>
- *  <tr><td>featuresGroup</td><td>a csv file per group, where each row is an object</td></tr>
- *  </table>
- *  </div>
- *  
+ * <p>
+ * <Aggregated-features (based upon a certain grouping) can also be calculated. 
+ * <p>
+ * Types of exports are:
+ * <table>
+ * <tr><td>features</td><td>a single csv file where each row is an object</td></tr>
+ * <tr><td>featuresAggregated</td><td>a single csv file where each row is a group (with aggregated features of the objects within)</td></tr>
+ * <tr><td>featuresGroup</td><td>a csv file per group, where each row is an object</td></tr>
+ * </table>
+ *   
  * @author FEEHANO
  *
  * @param <T> See {@link Task}
@@ -153,14 +151,8 @@ public class ExportFeaturesTask<T extends InputFromManager, S, U extends Feature
 		
 		try {
 			sharedState.closeAnyOpenIO();
-			
-			Optional<NamedFeatureStore<FeatureInputResults>> featuresAggregate = OptionalUtilities.map(
-				featuresAggregateAsOption(),
-				STORE_FACTORY_AGGREGATE::createNamedFeatureList
-			);
-			
 			sharedState.writeGroupedResults(
-				featuresAggregate,
+				featuresAggregateAsStore(),
 				source.includeGroupInExperiment( isGroupGeneratorDefined() ),
 				context
 			);
@@ -205,7 +197,10 @@ public class ExportFeaturesTask<T extends InputFromManager, S, U extends Feature
 		);
 	}
 	
-	private Optional<List<NamedBean<FeatureListProvider<FeatureInputResults>>>> featuresAggregateAsOption() {
-		return Optional.ofNullable(featuresAggregate);
+	private Optional<NamedFeatureStore<FeatureInputResults>> featuresAggregateAsStore() throws CreateException {
+		return OptionalUtilities.map(
+			Optional.ofNullable(featuresAggregate),
+			STORE_FACTORY_AGGREGATE::createNamedFeatureList
+		);
 	}
 }

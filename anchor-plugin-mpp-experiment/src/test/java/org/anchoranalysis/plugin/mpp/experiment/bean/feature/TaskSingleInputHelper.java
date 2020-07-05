@@ -139,12 +139,11 @@ class TaskSingleInputHelper {
 			);
 			
 			boolean successful = task.executeJob(
-				createParamsUnbound(
+				new ParametersUnbound<>(
+					paramsExp,
 					input,
 					sharedState,
-					paramsExp,
-					bom.getDelegate(),
-					pathForOutputs
+					false
 				)
 			);
 			
@@ -155,26 +154,6 @@ class TaskSingleInputHelper {
 			throw new OperationFailedException(e);
 		}
 	}
-	
-	
-	private static <T extends InputFromManager, S> ParametersUnbound<T, S> createParamsUnbound(
-			T input,
-			S sharedState,
-			ParametersExperiment paramsExp,
-			BoundOutputManager outputManager,
-			Path pathTempFolder
-		) throws AnchorIOException {
-
-					
-			ParametersUnbound<T, S> paramsUnbound = new ParametersUnbound<>(
-				paramsExp
-			);
-			paramsUnbound.setInputObject( input );
-			paramsUnbound.setSharedState( sharedState );
-			paramsUnbound.setSupressExceptions(false);
-			return paramsUnbound;
-		}
-
 	
 	private static ParametersExperiment createParametersExperiment( Path pathTempFolder, BoundOutputManager outputManager, StatefulLogReporter logReporter ) throws AnchorIOException {
 		ParametersExperiment params = new ParametersExperiment(

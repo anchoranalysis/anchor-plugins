@@ -151,10 +151,10 @@ public class ExportObjectsFromCSVTask extends ExportObjectsBase<FromCSVInputObje
 		BoundIOContext context = input.context();
 		
 		try {
-			FromCSVSharedState ss = input.getSharedState();
-			
-			// TODO maybe move IndexedCSVRows shared-state inside input-object?
-			IndexedCSVRows groupedRows = ss.getIndexedRowsOrCreate( inputObject.getCsvFilePath(), columnDefinition );
+			IndexedCSVRows groupedRows = input.getSharedState().getIndexedRowsOrCreate(
+				inputObject.getCsvFilePath(),
+				columnDefinition
+			);
 			
 			// We look for rows that match our File ID
 			String fileID = idStringForPath(

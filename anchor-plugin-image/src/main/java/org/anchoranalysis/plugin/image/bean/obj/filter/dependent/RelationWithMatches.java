@@ -99,7 +99,6 @@ public class RelationWithMatches extends ObjectFilterRelation {
 		// and cache it so we don't have to repeatedly calculate on the same object
 		evaluatorForMatch = new FeatureCalculatorCachedSingle<>(
 			featureEvaluatorMatch!=null ? featureEvaluatorMatch.createAndStartSession() : evaluatorForSource,
-			false,
 			cacheSize
 		);
 		
