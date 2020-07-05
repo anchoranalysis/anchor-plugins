@@ -3,7 +3,7 @@ package org.anchoranalysis.plugin.mpp.sgmn.cfg.optscheme;
 import org.anchoranalysis.anchor.mpp.cfg.Cfg;
 import org.anchoranalysis.anchor.mpp.feature.nrg.cfg.CfgNRG;
 import org.anchoranalysis.anchor.mpp.feature.nrg.cfg.CfgNRGPixelized;
-import org.anchoranalysis.anchor.mpp.feature.nrg.cfg.CfgWithNrgTotal;
+import org.anchoranalysis.anchor.mpp.feature.nrg.cfg.CfgWithNRGTotal;
 
 /*-
  * #%L
@@ -41,26 +41,22 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
 @NoArgsConstructor(access=AccessLevel.PRIVATE)
-public class CfgNRGPixelizedUtilities {
+public class CfgNRGPixelizedFactory {
 	
 	public static CfgNRGPixelized createFromCfg(
 		Cfg cfg,
 		KernelCalcContext context,
 		LogErrorReporter logger
 	) throws CreateException {
-		
-		CfgNRGPixelized cfgNRGInit = new CfgNRGPixelized(
-			new CfgNRG( new CfgWithNrgTotal(cfg, context.getNrgScheme())),
-			logger
-		);
 		try {
-			cfgNRGInit.init(
+			return new CfgNRGPixelized(
+				new CfgNRG( new CfgWithNRGTotal(cfg, context.getNrgScheme())),
 				context.proposer().getNrgStack(),
-				context.getNrgScheme().getSharedFeatures()
-			);
+				context.getNrgScheme().getSharedFeatures(),
+				logger
+			);			
 		} catch (FeatureCalcException | InitException e ) {
 			throw new CreateException(e);
 		}
-		return cfgNRGInit;
 	}
 }

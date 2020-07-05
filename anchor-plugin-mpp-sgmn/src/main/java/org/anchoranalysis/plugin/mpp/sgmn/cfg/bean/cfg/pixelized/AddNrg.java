@@ -33,14 +33,14 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.mpp.sgmn.transformer.StateTransformerBean;
 import org.anchoranalysis.mpp.sgmn.transformer.TransformationContext;
-import org.anchoranalysis.plugin.mpp.sgmn.cfg.optscheme.CfgNRGPixelizedUtilities;
+import org.anchoranalysis.plugin.mpp.sgmn.cfg.optscheme.CfgNRGPixelizedFactory;
 
 public class AddNrg extends StateTransformerBean<Cfg,CfgNRGPixelized> {
 
 	@Override
 	public CfgNRGPixelized transform(Cfg in, TransformationContext context) throws OperationFailedException {
 		try {
-			return CfgNRGPixelizedUtilities.createFromCfg(
+			return CfgNRGPixelizedFactory.createFromCfg(
 				in,
 				context.getKernelCalcContext(),
 				context.getLogger()

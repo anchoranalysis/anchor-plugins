@@ -33,7 +33,6 @@ import org.anchoranalysis.anchor.mpp.feature.nrg.cfg.CfgNRGPixelized;
 
 import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.manifest.ManifestDescription;
-import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.io.output.file.FileOutput;
 import org.anchoranalysis.io.output.file.FileOutputFromManager;
 import org.anchoranalysis.mpp.sgmn.bean.optscheme.feedback.ReporterAgg;
@@ -54,18 +53,14 @@ public final class TextFileReporter extends ReporterAgg<CfgNRGPixelized> impleme
 	
 	@Override
 	public void aggStart( OptimizationFeedbackInitParams<CfgNRGPixelized> initParams, Aggregator agg ) throws AggregatorException {
-		try {
-			fileOutput = FileOutputFromManager.create(
-				"txt",
-				Optional.of(
-					new ManifestDescription("text","event_log")
-				),
-				initParams.getInitContext().getOutputManager().getDelegate(),
-				"eventLog"
-			);
-		} catch (OutputWriteFailedException e) {
-			throw new AggregatorException(e);
-		}
+		fileOutput = FileOutputFromManager.create(
+			"txt",
+			Optional.of(
+				new ManifestDescription("text","event_log")
+			),
+			initParams.getInitContext().getOutputManager().getDelegate(),
+			"eventLog"
+		);
 	}
 	
 	@Override
@@ -115,7 +110,7 @@ public final class TextFileReporter extends ReporterAgg<CfgNRGPixelized> impleme
 	
 	@Override
 	public void aggEnd( Aggregator agg ) {
-		
+		// NOTHING TO DO
 	}
 	
 	@Override

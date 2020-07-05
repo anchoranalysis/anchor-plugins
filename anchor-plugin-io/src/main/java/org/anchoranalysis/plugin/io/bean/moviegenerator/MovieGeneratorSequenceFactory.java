@@ -43,9 +43,9 @@ public class MovieGeneratorSequenceFactory extends GeneratorSequenceFactory {
 	// END BEAN PROPERTIES
 	
 	@Override
-	public <GeneratorType> GeneratorSequenceNonIncremental<GeneratorType> createGeneratorSequenceNonIncremental(
+	public <T> GeneratorSequenceNonIncremental<T> createGeneratorSequenceNonIncremental(
 			BoundOutputManagerRouteErrors outputManager, String outputName,
-			IterableObjectGenerator<GeneratorType, Stack> generator) {
+			IterableObjectGenerator<T, Stack> generator) {
 
 		return new GeneratorSequenceMovieWriter<>(
 			outputManager.getDelegate(),

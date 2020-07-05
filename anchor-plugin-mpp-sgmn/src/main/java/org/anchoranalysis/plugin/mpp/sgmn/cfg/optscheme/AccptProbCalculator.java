@@ -28,25 +28,23 @@ import java.util.Optional;
  * #L%
  */
 
-import java.util.function.Function;
+import java.util.function.ToDoubleFunction;
 
 import org.anchoranalysis.anchor.mpp.bean.anneal.AnnealScheme;
 import org.anchoranalysis.mpp.sgmn.bean.kernel.Kernel;
 import org.anchoranalysis.mpp.sgmn.kernel.KernelCalcContext;
 import org.anchoranalysis.mpp.sgmn.optscheme.ExtractScoreSize;
 
+import lombok.RequiredArgsConstructor;
+
+@RequiredArgsConstructor
 public class AccptProbCalculator<T> {
 
-	private AnnealScheme annealScheme;
-	private ExtractScoreSize<T> extracter;
-	
-	public AccptProbCalculator(	AnnealScheme annealScheme, ExtractScoreSize<T> extracter ) {
-		super();
-		this.annealScheme = annealScheme;
-		this.extracter = extracter;
-		assert( extracter!=null );
-	}
-	
+	// START REQUIRED ARGUMENTS
+	private final AnnealScheme annealScheme;
+	private final ExtractScoreSize<T> extracter;
+	// END REQUIRED ARGUMENTS
+		
 	public double calcAccptProb( Kernel<?> kernel, Optional<T> crnt, T proposal, int iter, KernelCalcContext context ) {
 		return kernel.calcAccptProb(
 			sizeOrZero(crnt),
@@ -57,14 +55,12 @@ public class AccptProbCalculator<T> {
 		);
 	}
 
-	public Function<T, Double> getFuncScore() {
+	public ToDoubleFunction<T> getFuncScore() {
 		return extracter::extractScore;
 	}
 	
 	private int sizeOrZero( Optional<T> crnt ) {
-		return crnt.map( c->
-			extracter.extractSize(c)
-		).orElse(0);
+		return crnt.map(extracter::extractSize).orElse(0);
 	}
 
 	private double calcDensityRatio( Optional<T> crnt, Optional<T> proposal, int iter ) {

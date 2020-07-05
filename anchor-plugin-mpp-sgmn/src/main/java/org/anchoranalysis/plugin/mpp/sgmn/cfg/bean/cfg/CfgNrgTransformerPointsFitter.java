@@ -38,7 +38,7 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.mpp.sgmn.transformer.StateTransformerBean;
 import org.anchoranalysis.mpp.sgmn.transformer.TransformationContext;
-import org.anchoranalysis.plugin.mpp.sgmn.cfg.optscheme.CfgNRGPixelizedUtilities;
+import org.anchoranalysis.plugin.mpp.sgmn.cfg.optscheme.CfgNRGPixelizedFactory;
 
 public class CfgNrgTransformerPointsFitter extends StateTransformerBean<Cfg,CfgNRGPixelized> {
 
@@ -56,7 +56,7 @@ public class CfgNrgTransformerPointsFitter extends StateTransformerBean<Cfg,CfgN
 		Cfg cfg = wrapMark(mark);
 		
 		try {
-			return CfgNRGPixelizedUtilities.createFromCfg(
+			return CfgNRGPixelizedFactory.createFromCfg(
 				cfg,
 				context.getKernelCalcContext(),
 				context.getLogger()
