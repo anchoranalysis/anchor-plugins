@@ -71,7 +71,7 @@ public class ObjMaskProviderConnectedComponentsObjs extends ObjectCollectionProv
 		
 		// Adjust the crnr of each object, by adding on the original starting point of our object-mask
 		return objs.shiftBy(
-			omUnconnected.getBoundingBox().getCornerMin()
+			omUnconnected.getBoundingBox().cornerMin()
 		);
 	}
 	

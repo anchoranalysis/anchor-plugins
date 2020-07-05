@@ -62,7 +62,7 @@ public class NotTouchingSceneBorder extends ObjectFilterPredicate {
 		}
 		
 		if (includeZ) {
-			ReadableTuple3i crnrMin = om.getBoundingBox().getCornerMin();
+			ReadableTuple3i crnrMin = om.getBoundingBox().cornerMin();
 			if (crnrMin.getZ()==0) {
 				return false;
 			}

@@ -80,7 +80,7 @@ public class ChnlProviderAdjustDifferenceToMedian extends ChnlProviderOneObjsSou
 	
 	private void adjustObj( ObjectMask om, Channel chnl, Channel chnlLookup, int objMedian ) {
 		
-		ReadableTuple3i crnrMin = om.getBoundingBox().getCornerMin();
+		ReadableTuple3i crnrMin = om.getBoundingBox().cornerMin();
 		ReadableTuple3i crnrMax = om.getBoundingBox().calcCornerMax();
 		
 		VoxelBox<ByteBuffer> vb = chnl.getVoxelBox().asByte();

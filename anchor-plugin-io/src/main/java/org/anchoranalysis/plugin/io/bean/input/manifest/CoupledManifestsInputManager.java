@@ -27,8 +27,6 @@ package org.anchoranalysis.plugin.io.bean.input.manifest;
  */
 
 
-import java.io.File;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
@@ -36,7 +34,6 @@ import org.anchoranalysis.bean.BeanInstanceMap;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.bean.error.BeanMisconfiguredException;
-import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.io.bean.provider.file.FileProvider;
 import org.anchoranalysis.io.deserializer.DeserializationFailedException;
 import org.anchoranalysis.io.error.AnchorIOException;
@@ -48,16 +45,19 @@ import org.anchoranalysis.io.manifest.deserializer.ManifestDeserializer;
 import org.anchoranalysis.io.manifest.deserializer.SimpleManifestDeserializer;
 import org.anchoranalysis.plugin.io.manifest.ManifestCouplingDefinition;
 
+import lombok.Getter;
+import lombok.Setter;
+
 public class CoupledManifestsInputManager extends InputManager<ManifestCouplingDefinition> {
 
 	// START BEAN PROPERTIES
-	@BeanField @OptionalBean
+	@BeanField @OptionalBean @Getter @Setter
 	private FileProvider manifestInputFileSet;
 	
-	@BeanField @OptionalBean
+	@BeanField @OptionalBean @Getter @Setter
 	private FileProvider manifestExperimentInputFileSet;
 	
-	@BeanField
+	@BeanField @Getter @Setter
 	private ManifestDeserializer manifestDeserializer;
 	// END BEAN PROPERTIES
 	
@@ -97,42 +97,25 @@ public class CoupledManifestsInputManager extends InputManager<ManifestCouplingD
 			
 			// Uncoupled file manifests
 			if (manifestInputFileSet!=null) {
-				definition.addUncoupledFiles( manifestInputFileSet.create(params), manifestDeserializer );
+				definition.addUncoupledFiles(
+					manifestInputFileSet.create(params),
+					manifestDeserializer,
+					params.getLogger()
+				);
 			}
 			
 			if (manifestExperimentInputFileSet!=null) {
-				Collection<File> matchingFiles = manifestExperimentInputFileSet.create(params);
-				definition.addManifestExperimentFileSet(  matchingFiles, manifestDeserializer );	
+				definition.addManifestExperimentFileSet(
+					manifestExperimentInputFileSet.create(params),
+					manifestDeserializer,
+					params.getLogger()
+				);	
 			}
 	
 			return definition;
 		} catch (FileProviderException e) {
 			throw new DeserializationFailedException("Cannot find files to deserialize", e);
-		} catch (OperationFailedException e) {
-			throw new DeserializationFailedException("Cannot added uncoupled-files to the manifest", e);
 		}
-	}
-
-	public FileProvider getManifestInputFileSet() {
-		return manifestInputFileSet;
-	}
-	public void setManifestInputFileSet(FileProvider manifestInputFileSet) {
-		this.manifestInputFileSet = manifestInputFileSet;
-	}
-	public ManifestDeserializer getManifestDeserializer() {
-		return manifestDeserializer;
-	}
-	public void setManifestDeserializer(ManifestDeserializer manifestDeserializer) {
-		this.manifestDeserializer = manifestDeserializer;
-	}
-
-	public FileProvider getManifestExperimentInputFileSet() {
-		return manifestExperimentInputFileSet;
-	}
-
-	public void setManifestExperimentInputFileSet(
-			FileProvider manifestExperimentInputFileSet) {
-		this.manifestExperimentInputFileSet = manifestExperimentInputFileSet;
 	}
 
 	@Override

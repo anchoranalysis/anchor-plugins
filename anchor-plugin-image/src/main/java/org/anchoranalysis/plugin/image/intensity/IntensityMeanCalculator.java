@@ -60,7 +60,7 @@ public class IntensityMeanCalculator {
 		
 		BoundingBox bbox = om.getBoundingBox();
 		
-		ReadableTuple3i crnrMin = bbox.getCornerMin();
+		ReadableTuple3i crnrMin = bbox.cornerMin();
 		ReadableTuple3i crnrMax = bbox.calcCornerMax();
 		
 		double sum = 0.0;

@@ -64,7 +64,7 @@ public class CVFindContours {
 			List<MatOfPoint> contours = new ArrayList<>();
 			Imgproc.findContours(mat, contours, new Mat(), Imgproc.RETR_EXTERNAL, Imgproc.CHAIN_APPROX_NONE );
 			
-			return convertMatOfPoint( contours, om.getBoundingBox().getCornerMin() );
+			return convertMatOfPoint( contours, om.getBoundingBox().cornerMin() );
 						
 		} catch (CreateException e) {
 			throw new OperationFailedException(e);

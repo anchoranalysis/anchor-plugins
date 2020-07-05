@@ -86,7 +86,7 @@ public class IntensityGreaterEqualThan extends ObjectFilterPredicate {
 			
 			ByteBuffer bb = om.getVoxelBox().getPixelsForPlane(z).buffer();
 			
-			int z1 = z + om.getBoundingBox().getCornerMin().getZ();
+			int z1 = z + om.getBoundingBox().cornerMin().getZ();
 			VoxelBuffer<?> bbChnl = vb.getPixelsForPlane(z1);
 			
 			for( int y=0; y<om.getBoundingBox().extent().getY(); y++) {
@@ -95,8 +95,8 @@ public class IntensityGreaterEqualThan extends ObjectFilterPredicate {
 					int offset = om.getBoundingBox().extent().offset(x, y);
 					if( bb.get(offset)==om.getBinaryValuesByte().getOnByte() ) {
 						
-						int y1 = y + om.getBoundingBox().getCornerMin().getY();
-						int x1 = x + om.getBoundingBox().getCornerMin().getX();
+						int y1 = y + om.getBoundingBox().cornerMin().getY();
+						int x1 = x + om.getBoundingBox().cornerMin().getX();
 						
 						int offsetGlobal = vb.extent().offset(x1,y1);
 						

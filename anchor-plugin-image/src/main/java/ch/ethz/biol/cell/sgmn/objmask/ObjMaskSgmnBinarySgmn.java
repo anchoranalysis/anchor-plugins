@@ -76,7 +76,7 @@ public class ObjMaskSgmnBinarySgmn extends ObjectSegmentation {
 		return createFromBinaryVoxelBox(
 			bvb,
 			chnl.getDimensions().getRes(),
-			mask.map( om->om.getBoundingBox().getCornerMin() )
+			mask.map( om->om.getBoundingBox().cornerMin() )
 		);
 	}
 

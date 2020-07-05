@@ -155,7 +155,7 @@ public class GrayscaleReconstructionRobinson extends GrayscaleReconstructionByEr
 	
 	private void populateQueueFromNonZeroPixelsMask( PriorityQueueIndexRangeDownhill<Point3i> queue, VoxelBox<?> vb, VoxelBox<ByteBuffer> vbFinalized, ObjectMask containingMask ) {
 
-		ReadableTuple3i crnrPntMin = containingMask.getBoundingBox().getCornerMin();
+		ReadableTuple3i crnrPntMin = containingMask.getBoundingBox().cornerMin();
 		ReadableTuple3i crnrPntMax = containingMask.getBoundingBox().calcCornerMax();
 		
 		byte maskOn = containingMask.getBinaryValuesByte().getOnByte(); 

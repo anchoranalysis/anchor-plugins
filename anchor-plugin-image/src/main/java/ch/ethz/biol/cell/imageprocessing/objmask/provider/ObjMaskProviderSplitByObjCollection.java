@@ -106,7 +106,7 @@ public class ObjMaskProviderSplitByObjCollection extends ObjMaskProviderDimensio
 			}
 			
 			ObjectMask intersectShifted = intersect.get().mapBoundingBox( bbox->
-				bbox.shiftBackBy(objToSplit.getBoundingBox().getCornerMin())
+				bbox.shiftBackBy(objToSplit.getBoundingBox().cornerMin())
 			); 
 			
 			// We make the intersection relative to objToSplit
@@ -126,7 +126,7 @@ public class ObjMaskProviderSplitByObjCollection extends ObjMaskProviderDimensio
 				i -> createObjectForIndex(
 					i,
 					boundedVbId.getVoxelBox(),
-					objToSplit.getBoundingBox().getCornerMin()
+					objToSplit.getBoundingBox().cornerMin()
 				)
 			);
 			

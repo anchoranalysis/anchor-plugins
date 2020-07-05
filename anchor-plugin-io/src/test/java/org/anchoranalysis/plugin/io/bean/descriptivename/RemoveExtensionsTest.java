@@ -32,12 +32,16 @@ import java.io.File;
 import java.util.Arrays;
 import java.util.List;
 
+import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.input.descriptivename.DescriptiveFile;
+import org.anchoranalysis.test.LoggingFixture;
 import org.junit.Test;
 
 public class RemoveExtensionsTest {
 
+	private static final LogErrorReporter LOGGER = LoggingFixture.suppressedLogErrorReporter();
+	
 	@Test
 	public void testPreserveExt() throws AnchorIOException {
 
@@ -72,7 +76,10 @@ public class RemoveExtensionsTest {
 		assertEquals( "Gray", nameFor(df,1) );
 	}
 	
-	private List<DescriptiveFile> applyTest( boolean preserveExtension, List<File> files ) throws AnchorIOException {
+	private List<DescriptiveFile> applyTest(
+		boolean preserveExtension,
+		List<File> files
+	) throws AnchorIOException {
 		RemoveExtensions re = new RemoveExtensions();
 		
 		// The normalize-path is a simple descriptive-name that reuses the existing
@@ -81,7 +88,7 @@ public class RemoveExtensionsTest {
 		re.setDescriptiveName( new NormalizedPath() );
 		
 		re.setPreserveExtensionIfDuplicate(preserveExtension);
-		return re.descriptiveNamesForCheckUniqueness(files);
+		return re.descriptiveNamesForCheckUniqueness(files, LOGGER);
 	}
 	
 	private static List<File> listOfFiles() {

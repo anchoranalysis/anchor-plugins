@@ -156,7 +156,7 @@ public class ObjMaskProviderSeededObjSgmn extends ObjMaskProviderChnlSource {
 		SeedCollection seedsObj = SeedsFactory.createSeedsWithMask(
 			seeds,
 			objMaskLocal,
-			objMask.getBoundingBox().getCornerMin(),
+			objMask.getBoundingBox().cornerMin(),
 			chnl.getDimensions()
 		);
 		
@@ -167,7 +167,7 @@ public class ObjMaskProviderSeededObjSgmn extends ObjMaskProviderChnlSource {
 		);
 		
 		// We shift each object back to were it belongs globally
-		return sgmnObjs.shiftBy( objMask.getBoundingBox().getCornerMin() );
+		return sgmnObjs.shiftBy( objMask.getBoundingBox().cornerMin() );
 	}
 	
 	

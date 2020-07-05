@@ -50,7 +50,7 @@ class ExtendObjsInZHelper {
 		
 		ByteBuffer bbFlat = omFlat.getVoxelBox().getPixelsForPlane(0).buffer();
 				
-		int zLow = bbox.getCornerMin().getZ();
+		int zLow = bbox.cornerMin().getZ();
 		int zHigh = bbox.calcCornerMax().getZ();
 		
 		if (zCent>zHigh) { zCent = zHigh; }

@@ -36,6 +36,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.io.bean.descriptivename.DescriptiveNameFromFile;
 import org.anchoranalysis.io.filepath.FilePathToUnixStyleConverter;
 import org.anchoranalysis.io.input.descriptivename.DescriptiveFile;
@@ -71,9 +72,9 @@ public class RemoveExtensions extends DescriptiveNameFromFile {
 	}
 	
 	@Override
-	public List<DescriptiveFile> descriptiveNamesFor(Collection<File> files, String elseName) {
+	public List<DescriptiveFile> descriptiveNamesFor(Collection<File> files, String elseName, LogErrorReporter logger) {
 		
-		List<DescriptiveFile> df = descriptiveName.descriptiveNamesFor(files, elseName);
+		List<DescriptiveFile> df = descriptiveName.descriptiveNamesFor(files, elseName, logger);
 		
 		if (preserveExtensionIfDuplicate) {
 			return considerDuplicates(df, elseName);
@@ -89,7 +90,7 @@ public class RemoveExtensions extends DescriptiveNameFromFile {
 		// A count for each file, based upon the uniqueness of the description
 		Map<String,Long> countedWithoutExt = dfWithoutExt.stream().collect(
 			Collectors.groupingBy(
-				d -> d.getDescriptiveName(),
+				DescriptiveFile::getDescriptiveName,
 				Collectors.counting()
 			)
 		);

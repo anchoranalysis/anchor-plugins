@@ -141,7 +141,7 @@ public class CreateVoxelBoxFromPixelwiseFeatureWithMask {
 		Extent e = vbOut.extent();
 		Extent eMask = objMask.binaryVoxelBox().extent();
 		
-		ReadableTuple3i crnrMin = objMask.getBoundingBox().getCornerMin();
+		ReadableTuple3i crnrMin = objMask.getBoundingBox().cornerMin();
 		ReadableTuple3i crnrMax = objMask.getBoundingBox().calcCornerMax();
 		
 		for( int z=crnrMin.getZ();z<=crnrMax.getZ(); z++) {

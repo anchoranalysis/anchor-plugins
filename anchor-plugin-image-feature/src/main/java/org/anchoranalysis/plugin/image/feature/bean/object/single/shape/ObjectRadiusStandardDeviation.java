@@ -111,7 +111,7 @@ public class ObjectRadiusStandardDeviation extends FeatureSingleObject {
 			ObjectMask outline = FindOutline.outline(mask, 1, false, true);
 			PointsFromBinaryVoxelBox.addPointsFromVoxelBox3D(
 				outline.binaryVoxelBox(),
-				outline.getBoundingBox().getCornerMin(),
+				outline.getBoundingBox().cornerMin(),
 				ptsOutline
 			);
 			

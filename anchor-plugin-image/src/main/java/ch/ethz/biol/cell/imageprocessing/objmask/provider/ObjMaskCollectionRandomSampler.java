@@ -111,8 +111,8 @@ public class ObjMaskCollectionRandomSampler {
 					//System.out.println("accepted");
 					
 					
-					int indexXYGlob = eGlob.offset(bbox.getCornerMin().getX()+xIndex, bbox.getCornerMin().getY()+yIndex);
-					int indexZGlob = zIndex+bbox.getCornerMin().getZ();	
+					int indexXYGlob = eGlob.offset(bbox.cornerMin().getX()+xIndex, bbox.cornerMin().getY()+yIndex);
+					int indexZGlob = zIndex+bbox.cornerMin().getZ();	
 					
 					
 					return ByteConverter.unsignedByteToInt(
