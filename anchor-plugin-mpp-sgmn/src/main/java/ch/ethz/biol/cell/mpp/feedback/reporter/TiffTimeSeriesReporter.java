@@ -4,7 +4,6 @@ import java.util.Optional;
 
 import org.anchoranalysis.anchor.mpp.cfg.Cfg;
 import org.anchoranalysis.anchor.mpp.cfg.ColoredCfg;
-import org.anchoranalysis.anchor.mpp.feature.bean.nrgscheme.NRGScheme;
 import org.anchoranalysis.anchor.mpp.feature.nrg.cfg.CfgNRG;
 import org.anchoranalysis.anchor.mpp.feature.nrg.cfg.CfgNRGPixelized;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
@@ -62,9 +61,6 @@ public class TiffTimeSeriesReporter extends PeriodicSubfolderReporter<CfgNRG> {
 	// START Bean Properties
 	@BeanField
 	private int numColors = 20;
-	
-	@BeanField
-	private NRGScheme extraFeatures = new NRGScheme();
 	// END Bean Properties
 	
 	private ColorIndex colorIndex;
@@ -82,14 +78,12 @@ public class TiffTimeSeriesReporter extends PeriodicSubfolderReporter<CfgNRG> {
 		
 		// This no longer needs to be combined, it's a legacy of when a HTML reporter was attached
 		//   cleaning up woould be nice
-		IterableCombinedListGenerator<CfgNRG> iterableCombined = new IterableCombinedListGenerator<>();
-		iterableCombined.add(
+		IterableCombinedListGenerator<CfgNRG> iterableCombined = new IterableCombinedListGenerator<>(
 			new IterableGeneratorBridge<>(
 				iterableRaster,
 				sourceObject -> addColor(sourceObject.getCfg(), initParams)
-			)
+			)	
 		);
-
 		
 		try {
 			init( iterableCombined );
@@ -117,22 +111,12 @@ public class TiffTimeSeriesReporter extends PeriodicSubfolderReporter<CfgNRG> {
 		return numColors;
 	}
 
-
 	public void setNumColors(int numColors) {
 		this.numColors = numColors;
 	}
 
-
-	public NRGScheme getExtraFeatures() {
-		return extraFeatures;
-	}
-
-
-	public void setExtraFeatures(NRGScheme extraFeatures) {
-		this.extraFeatures = extraFeatures;
-	}
-
 	@Override
 	public void reportNewBest(Reporting<CfgNRGPixelized> reporting) {
+		// NOTHING TO DO
 	}
 }

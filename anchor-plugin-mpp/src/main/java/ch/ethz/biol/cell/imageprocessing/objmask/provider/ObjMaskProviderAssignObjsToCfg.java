@@ -38,12 +38,12 @@ import org.anchoranalysis.anchor.mpp.regionmap.RegionMapSingleton;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
+import org.anchoranalysis.image.bean.provider.ObjectCollectionProvider;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
-import org.anchoranalysis.image.extent.ImageDim;
-import org.anchoranalysis.image.objectmask.ObjectMask;
-import org.anchoranalysis.image.objectmask.ObjectCollection;
-import org.anchoranalysis.image.objectmask.ObjectCollectionFactory;
+import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.image.object.ObjectCollection;
+import org.anchoranalysis.image.object.ObjectCollectionFactory;
+import org.anchoranalysis.image.object.ObjectMask;
 
 import ch.ethz.biol.cell.imageprocessing.objmask.provider.assignobjstocfg.RslvdEllipsoid;
 import ch.ethz.biol.cell.imageprocessing.objmask.provider.assignobjstocfg.RslvdEllipsoidList;
@@ -70,7 +70,7 @@ public class ObjMaskProviderAssignObjsToCfg extends ObjMaskProviderDimensions {
 	private CfgProvider cfgProviderOutExcluded = null;		// OPTIONAL. Adds all excluded marks
 	
 	@BeanField @OptionalBean
-	private ObjMaskProvider objsOutUnassigned = null;	// Optional. All the objects not assigned anywhere at the end
+	private ObjectCollectionProvider objsOutUnassigned = null;	// Optional. All the objects not assigned anywhere at the end
 	// END BEAN PROPERTIES
 	
 	private RegionMap regionMap = RegionMapSingleton.instance();
@@ -80,14 +80,13 @@ public class ObjMaskProviderAssignObjsToCfg extends ObjMaskProviderDimensions {
 	public ObjectCollection createFromObjs( ObjectCollection objsCollection ) throws CreateException {
 		
 		Cfg cfg = cfgProvider.create();
-		ImageDim dim = createDim();
+		ImageDimensions dim = createDim();
 		
 		// EXIT EARLY when there are no ellipsoids
 		if (cfg.size()==0) {
 			// There are no ellipsoids to assign to, exit early making all objs unassigned
 			if (objsOutUnassigned!=null) {
-				ObjectCollection objsOutUnassignedCollection = objsOutUnassigned.create();
-				objsOutUnassignedCollection.addAll(objsCollection);
+				objsOutUnassigned.create().addAll(objsCollection);
 			}
 			return ObjectCollectionFactory.empty();
 		}
@@ -155,7 +154,7 @@ public class ObjMaskProviderAssignObjsToCfg extends ObjMaskProviderDimensions {
 		return out;
 	}
 		
-	private static RslvdEllipsoidList createRslvdEllipsoidList( Cfg cfg, ImageDim dim, RegionMembershipWithFlags rm, BinaryValuesByte bvb ) throws CreateException {
+	private static RslvdEllipsoidList createRslvdEllipsoidList( Cfg cfg, ImageDimensions dim, RegionMembershipWithFlags rm, BinaryValuesByte bvb ) throws CreateException {
 		RslvdEllipsoidList out = new RslvdEllipsoidList();
 		
 		for( Mark m : cfg ) {
@@ -210,11 +209,11 @@ public class ObjMaskProviderAssignObjsToCfg extends ObjMaskProviderDimensions {
 		this.maxDist = maxDist;
 	}
 
-	public ObjMaskProvider getObjsOutUnassigned() {
+	public ObjectCollectionProvider getObjsOutUnassigned() {
 		return objsOutUnassigned;
 	}
 
-	public void setObjsOutUnassigned(ObjMaskProvider objsOutUnassigned) {
+	public void setObjsOutUnassigned(ObjectCollectionProvider objsOutUnassigned) {
 		this.objsOutUnassigned = objsOutUnassigned;
 	}
 }

@@ -39,11 +39,11 @@ import org.anchoranalysis.bean.error.BeanMisconfiguredException;
 import org.anchoranalysis.core.color.ColorList;
 import org.anchoranalysis.core.color.RGBColor;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
+import org.anchoranalysis.image.bean.provider.ObjectCollectionProvider;
 import org.anchoranalysis.image.io.generator.raster.obj.rgb.RGBObjMaskGenerator;
-import org.anchoranalysis.image.objectmask.ObjectCollection;
-import org.anchoranalysis.image.objectmask.ObjectCollectionFactory;
-import org.anchoranalysis.image.objectmask.properties.ObjectCollectionWithProperties;
+import org.anchoranalysis.image.object.ObjectCollection;
+import org.anchoranalysis.image.object.ObjectCollectionFactory;
+import org.anchoranalysis.image.object.properties.ObjectCollectionWithProperties;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
@@ -55,13 +55,13 @@ public class StackProviderRGBFromObjMaskThreeColors extends StackProviderRGBFrom
 		
 	// START BEAN PROPERTIES
 	@BeanField @OptionalBean
-	private ObjMaskProvider objsRed;
+	private ObjectCollectionProvider objsRed;
 	
 	@BeanField @OptionalBean
-	private ObjMaskProvider objsBlue;
+	private ObjectCollectionProvider objsBlue;
 	
 	@BeanField @OptionalBean
-	private ObjMaskProvider objsGreen;
+	private ObjectCollectionProvider objsGreen;
 	// END BEAN PROPERTIES
 
 	@Override
@@ -100,7 +100,7 @@ public class StackProviderRGBFromObjMaskThreeColors extends StackProviderRGBFrom
 		}
 	}
 
-	private Optional<ObjectCollection> addWithColor( ObjMaskProvider provider, RGBColor color, ColorList colors) throws CreateException {
+	private Optional<ObjectCollection> addWithColor( ObjectCollectionProvider provider, RGBColor color, ColorList colors) throws CreateException {
 		// If objects were created, we add some corresponding colors
 		return OptionalFactory.create(provider).map(
 			objs -> maybeFlattenAddColor(objs, color, colors)
@@ -112,32 +112,32 @@ public class StackProviderRGBFromObjMaskThreeColors extends StackProviderRGBFrom
 		return maybeFlatten(objs);
 	}
 	
-	public ObjMaskProvider getObjsRed() {
+	public ObjectCollectionProvider getObjsRed() {
 		return objsRed;
 	}
 
 
-	public void setObjsRed(ObjMaskProvider objsRed) {
+	public void setObjsRed(ObjectCollectionProvider objsRed) {
 		this.objsRed = objsRed;
 	}
 
 
-	public ObjMaskProvider getObjsBlue() {
+	public ObjectCollectionProvider getObjsBlue() {
 		return objsBlue;
 	}
 
 
-	public void setObjsBlue(ObjMaskProvider objsBlue) {
+	public void setObjsBlue(ObjectCollectionProvider objsBlue) {
 		this.objsBlue = objsBlue;
 	}
 
 
-	public ObjMaskProvider getObjsGreen() {
+	public ObjectCollectionProvider getObjsGreen() {
 		return objsGreen;
 	}
 
 
-	public void setObjsGreen(ObjMaskProvider objsGreen) {
+	public void setObjsGreen(ObjectCollectionProvider objsGreen) {
 		this.objsGreen = objsGreen;
 	}
 }

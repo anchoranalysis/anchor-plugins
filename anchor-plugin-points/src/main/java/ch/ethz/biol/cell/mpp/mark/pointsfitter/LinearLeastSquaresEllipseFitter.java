@@ -43,7 +43,7 @@ import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.geometry.Point2d;
 import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.core.geometry.Point3f;
-import org.anchoranalysis.image.extent.ImageDim;
+import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.orientation.Orientation2D;
 
 import cern.colt.matrix.DoubleFactory1D;
@@ -79,7 +79,7 @@ public class LinearLeastSquaresEllipseFitter extends ConicFitterBase {
 	
 	
 	@Override
-	public void fit(List<Point3f> points, Mark mark, ImageDim dim)
+	public void fit(List<Point3f> points, Mark mark, ImageDimensions dim)
 			throws PointsFitterException, InsufficientPointsException {
 		
 		List<Point2D_F64> pntsConvert = new ArrayList<>();
@@ -106,7 +106,7 @@ public class LinearLeastSquaresEllipseFitter extends ConicFitterBase {
 		applyCoefficientsToMark(fittedResult, mark, dim);
 	}
 	
-	private void applyCoefficientsToMark( EllipseQuadratic_F64 fittedResult, Mark mark, ImageDim dim ) throws PointsFitterException {
+	private void applyCoefficientsToMark( EllipseQuadratic_F64 fittedResult, Mark mark, ImageDimensions dim ) throws PointsFitterException {
 		
 		//double div = fittedResult.f / -1; 
 		

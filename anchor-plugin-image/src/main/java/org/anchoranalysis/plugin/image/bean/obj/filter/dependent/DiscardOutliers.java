@@ -34,12 +34,12 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorSingle;
-import org.anchoranalysis.image.extent.ImageDim;
+import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.feature.bean.evaluator.FeatureEvaluator;
-import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
-import org.anchoranalysis.image.objectmask.ObjectMask;
+import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
+import org.anchoranalysis.image.object.ObjectCollection;
+import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.plugin.image.bean.obj.filter.ObjectFilterPredicate;
-import org.anchoranalysis.image.objectmask.ObjectCollection;
 
 import cern.colt.list.DoubleArrayList;
 import cern.jet.stat.Descriptive;
@@ -54,7 +54,7 @@ public class DiscardOutliers extends ObjectFilterPredicate {
 
 	// START BEAN PROPERTIES
 	@BeanField
-	private FeatureEvaluator<FeatureInputSingleObj> featureEvaluator;
+	private FeatureEvaluator<FeatureInputSingleObject> featureEvaluator;
 	
 	@BeanField
 	private double quantile;
@@ -79,7 +79,7 @@ public class DiscardOutliers extends ObjectFilterPredicate {
 	}
 
 	@Override
-	protected void start(Optional<ImageDim> dim, ObjectCollection objsToFilter) throws OperationFailedException {
+	protected void start(Optional<ImageDimensions> dim, ObjectCollection objsToFilter) throws OperationFailedException {
 		super.start(dim, objsToFilter);
 		
 		// Now we calculate feature values for each object, and a standard deviation
@@ -97,7 +97,7 @@ public class DiscardOutliers extends ObjectFilterPredicate {
 	}
 
 	@Override
-	protected boolean match(ObjectMask om, Optional<ImageDim> dim) throws OperationFailedException {
+	protected boolean match(ObjectMask om, Optional<ImageDimensions> dim) throws OperationFailedException {
 
 		double featureVal = featureMap.get(om);
 		boolean matched = featureVal>=minVal; 
@@ -118,13 +118,13 @@ public class DiscardOutliers extends ObjectFilterPredicate {
 		}
 	}	
 
-	private static DoubleArrayList calcFeatures( ObjectCollection objs, FeatureCalculatorSingle<FeatureInputSingleObj> calculator ) throws OperationFailedException {
+	private static DoubleArrayList calcFeatures( ObjectCollection objs, FeatureCalculatorSingle<FeatureInputSingleObject> calculator ) throws OperationFailedException {
 		DoubleArrayList featureVals = new DoubleArrayList();
 		for( ObjectMask om : objs ) {
 			try {
 				featureVals.add(
 					calculator.calc(
-						new FeatureInputSingleObj(om)
+						new FeatureInputSingleObject(om)
 					)
 				);
 			} catch (FeatureCalcException e) {
@@ -178,11 +178,11 @@ public class DiscardOutliers extends ObjectFilterPredicate {
 		this.minRatio = minRatio;
 	}
 
-	public FeatureEvaluator<FeatureInputSingleObj> getFeatureEvaluator() {
+	public FeatureEvaluator<FeatureInputSingleObject> getFeatureEvaluator() {
 		return featureEvaluator;
 	}
 
-	public void setFeatureEvaluator(FeatureEvaluator<FeatureInputSingleObj> featureEvaluator) {
+	public void setFeatureEvaluator(FeatureEvaluator<FeatureInputSingleObject> featureEvaluator) {
 		this.featureEvaluator = featureEvaluator;
 	}
 }

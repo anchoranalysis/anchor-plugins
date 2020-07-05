@@ -38,7 +38,7 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
 /**
  * A constant value for thresholding
  * 
- * @author owen
+ * @author Owen Feehan
  *
  */
 public class Constant extends CalculateLevel {

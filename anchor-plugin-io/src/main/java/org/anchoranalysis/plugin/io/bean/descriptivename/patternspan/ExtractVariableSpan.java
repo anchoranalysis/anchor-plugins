@@ -42,7 +42,7 @@ import com.owenfeehan.pathpatternfinder.patternelements.PatternElement;
  * 
  * <p>The spanning part should contain all variable elements, and optionally adjacent (or in between) constant elements</p>
  * 
- * @author owen
+ * @author Owen Feehan
  *
  */
 class ExtractVariableSpan {
@@ -94,7 +94,7 @@ class ExtractVariableSpan {
 	 * Extracts the spanning-portion from a particular file, ensuring it has UNIX-style path
 	 * 
 	 * @param file
-	 * @return
+	 * @return the spanning-portion of the file-path.
 	 */
 	public String extractSpanPortionFor(File file) {
 		return FilePathToUnixStyleConverter.toStringUnixStyle(

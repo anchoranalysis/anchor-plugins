@@ -30,7 +30,7 @@ import java.util.Map;
 
 /**
  * 
- * @author FEEHANO
+ * @author Owen Feehan
  *
  * @param <T> type of the initParams contained within (delegate
  */

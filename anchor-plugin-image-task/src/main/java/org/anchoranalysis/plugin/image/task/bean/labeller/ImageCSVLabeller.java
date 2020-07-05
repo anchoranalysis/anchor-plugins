@@ -75,9 +75,9 @@ public class ImageCSVLabeller extends ImageLabeller<ImageCSVLabellerInitParams> 
 	}
 
 	@Override
-	public String labelFor(ImageCSVLabellerInitParams initParams, ProvidesStackInput input, BoundIOContext context)
+	public String labelFor(ImageCSVLabellerInitParams sharedState, ProvidesStackInput input, BoundIOContext context)
 			throws OperationFailedException {
-		String label = initParams.getLabelMap().get(
+		String label = sharedState.getLabelMap().get(
 			input.descriptiveName()
 		);
 		

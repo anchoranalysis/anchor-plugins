@@ -100,17 +100,15 @@ public class ReportFeaturesMulti extends Task<MultiInput,CSVWriter> {
 			return;
 		}
 		
-		BoundIOContext context = input.context();
-		
 		try {
 			define.processInputMPP(
 				input.getInputObject(),
-				context,
+				input.context(),
 				soMPP -> writeFeaturesIntoReporter(
 					soMPP,
 					writer,
 					input.getInputObject().descriptiveName(),
-					context.getLogger()
+					input.getLogger()
 				)
 			);
 		

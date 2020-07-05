@@ -46,7 +46,7 @@ import org.anchoranalysis.image.io.rasterreader.OpenedRaster;
  * <li>chnl-%d where %d is the index of the channel</li>
  * </ol>
  * 
- * @author owen
+ * @author Owen Feehan
  *
  */
 public class ImgChnlMapAutoname extends ImgChnlMapCreator {

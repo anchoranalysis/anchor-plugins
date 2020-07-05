@@ -29,7 +29,7 @@ package org.anchoranalysis.plugin.annotation.bean.comparison.assigner;
 import org.anchoranalysis.annotation.io.assignment.Assignment;
 import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.image.extent.ImageDim;
+import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.io.output.bound.BoundIOContext;
 import org.anchoranalysis.plugin.annotation.comparison.AnnotationGroup;
 import org.anchoranalysis.plugin.annotation.comparison.ObjsToCompare;
@@ -38,7 +38,7 @@ public abstract class AnnotationComparisonAssigner<T extends Assignment> extends
 
 	public abstract T createAssignment(
 		ObjsToCompare objsToCompare,
-		ImageDim dim,
+		ImageDimensions dim,
 		boolean useMIP,
 		BoundIOContext context
 	) throws CreateException;

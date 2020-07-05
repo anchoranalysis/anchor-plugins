@@ -31,16 +31,15 @@ import java.nio.ByteBuffer;
 import java.util.Optional;
 
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.binary.BinaryChnl;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.channel.factory.ChannelFactory;
 import org.anchoranalysis.image.extent.BoundingBox;
-import org.anchoranalysis.image.objectmask.ObjectMask;
-import org.anchoranalysis.image.objectmask.ObjectCollection;
-import org.anchoranalysis.image.objectmask.ops.BinaryChnlFromObjs;
+import org.anchoranalysis.image.object.ObjectCollection;
+import org.anchoranalysis.image.object.ObjectMask;
+import org.anchoranalysis.image.object.ops.BinaryChnlFromObjs;
 import org.anchoranalysis.image.seed.SeedCollection;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.anchoranalysis.image.voxel.box.VoxelBoxWrapper;
@@ -76,22 +75,16 @@ public class MinimaImpositionGrayscaleReconstruction extends MinimaImposition {
 		
 		if (seeds.size()<1) {
 			throw new OperationFailedException("There must be at least one seed");
-			//return chnlBef;
 		}
 		 
 		seeds.verifySeedsAreInside( chnl.getDimensions().getExtnt());
 		
 		ObjectCollection masks = seeds.createMasks();
 				
-		masks.assertObjMasksAreInside( chnl.getDimensions().getExtnt() );
+		assert( masks.objectsAreAllInside( chnl.getDimensions().getExtnt() ) );
 				
 		// We need 255 for the landini algorithms to work
-		BinaryChnl markerMask;
-		try {
-			markerMask = BinaryChnlFromObjs.createFromObjs(masks, chnl.getDimensions(), masks.getFirstBinaryValues() );
-		} catch (CreateException e) {
-			throw new OperationFailedException(e);
-		}
+		BinaryChnl markerMask = BinaryChnlFromObjs.createFromObjs(masks, chnl.getDimensions(), masks.getFirstBinaryValues() );
 
 		// We duplicate the channel so we are not manipulating the original
 		chnl = chnl.duplicate();

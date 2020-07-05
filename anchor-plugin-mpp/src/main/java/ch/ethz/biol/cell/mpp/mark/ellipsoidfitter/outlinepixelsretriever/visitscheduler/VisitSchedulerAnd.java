@@ -29,6 +29,7 @@ package ch.ethz.biol.cell.mpp.mark.ellipsoidfitter.outlinepixelsretriever.visits
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.InitException;
@@ -36,8 +37,8 @@ import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.core.geometry.Tuple3i;
 import org.anchoranalysis.core.random.RandomNumberGenerator;
-import org.anchoranalysis.image.extent.ImageRes;
-import org.anchoranalysis.image.objectmask.ObjectMask;
+import org.anchoranalysis.image.extent.ImageResolution;
+import org.anchoranalysis.image.object.ObjectMask;
 
 public class VisitSchedulerAnd extends VisitScheduler {
 
@@ -47,25 +48,27 @@ public class VisitSchedulerAnd extends VisitScheduler {
 	// END BEAN PROPERTIES
 	
 	@Override
-	public Tuple3i maxDistFromRootPoint(ImageRes res) throws OperationFailedException {
+	public Optional<Tuple3i> maxDistFromRootPoint(ImageResolution res) throws OperationFailedException {
 		
-		Point3i maxDist = null;
+		Optional<Tuple3i> maxDist = Optional.empty();
 		
 		for( VisitScheduler vs : list ) {
 			
-			Tuple3i d = vs.maxDistFromRootPoint(res);
+			Optional<Tuple3i> dist = vs.maxDistFromRootPoint(res);
 			
 			// Skip if it doesn't return a maxDist
-			if (d==null) {
+			if (!dist.isPresent()) {
 				continue;
 			}
 			
-			if (maxDist==null) {
-				maxDist = new Point3i(d);
+			if (!maxDist.isPresent()) {
+				maxDist = Optional.of(
+					new Point3i(dist.get())
+				);
 			} else {
-				maxDist.setX( Math.min( maxDist.getX(), d.getX() ));
-				maxDist.setY( Math.min( maxDist.getY(), d.getY() ));
-				maxDist.setZ( Math.min( maxDist.getZ(), d.getZ() ));
+				maxDist = Optional.of(
+					maxDist.get().min(dist.get())
+				);
 			}
 		}
 		
@@ -73,7 +76,7 @@ public class VisitSchedulerAnd extends VisitScheduler {
 	}
 
 	@Override
-	public void beforeCreateObjMask(RandomNumberGenerator re, ImageRes res)
+	public void beforeCreateObjMask(RandomNumberGenerator re, ImageResolution res)
 			throws InitException {
 		
 		for( VisitScheduler vs : list ) {
@@ -83,7 +86,7 @@ public class VisitSchedulerAnd extends VisitScheduler {
 	}
 
 	@Override
-	public void afterCreateObjMask(Point3i root, ImageRes res, RandomNumberGenerator re) throws InitException {
+	public void afterCreateObjMask(Point3i root, ImageResolution res, RandomNumberGenerator re) throws InitException {
 		
 		for( VisitScheduler vs : list ) {
 			vs.afterCreateObjMask(root, res, re);

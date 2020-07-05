@@ -26,7 +26,7 @@ package org.anchoranalysis.plugin.image.obj.merge;
  * #L%
  */
 
-import org.anchoranalysis.image.objectmask.ObjectMask;
+import org.anchoranalysis.image.object.ObjectMask;
 
 
 /**

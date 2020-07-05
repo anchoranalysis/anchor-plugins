@@ -27,7 +27,7 @@ package org.anchoranalysis.plugin.io.bean.summarizer.image;
  */
 
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.image.extent.ImageDim;
+import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.io.RasterIOException;
 import org.anchoranalysis.image.io.input.NamedChnlsInput;
 
@@ -46,7 +46,7 @@ public class ImageSize extends SummarizerNamedChnls<WrappedImageDim> {
 			int numSeries = img.numSeries();
 			for( int i=0; i<numSeries; i++ ) {
 			
-				ImageDim dim = img.dim(0);
+				ImageDimensions dim = img.dim(0);
 				incrCount( new WrappedImageDim(dim) );
 			}
 			

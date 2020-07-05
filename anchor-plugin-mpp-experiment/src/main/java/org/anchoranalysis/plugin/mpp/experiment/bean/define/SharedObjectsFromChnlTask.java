@@ -46,12 +46,16 @@ import org.anchoranalysis.image.io.input.NamedChnlsInput;
 import org.anchoranalysis.image.io.input.series.NamedChnlCollectionForSeries;
 import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
 import org.anchoranalysis.mpp.sgmn.bean.define.DefineOutputterMPP;
+
+import lombok.Getter;
+import lombok.Setter;
+
 import org.anchoranalysis.io.output.bound.BoundIOContext;
 
 public class SharedObjectsFromChnlTask extends RasterTask {
 
 	// START BEAN PROPERTIES
-	@BeanField
+	@BeanField @Getter @Setter
 	private DefineOutputterMPP define;
 	
 	@BeanField
@@ -92,26 +96,18 @@ public class SharedObjectsFromChnlTask extends RasterTask {
 	@Override
 	public void startSeries(BoundOutputManagerRouteErrors outputManager,
 			ErrorReporter errorReporter) throws JobExecutionException {
+		// NOTHING TO DO
 	}
 
 
 	@Override
 	public void endSeries(BoundOutputManagerRouteErrors outputManager)
 			throws JobExecutionException {
-	
+		// NOTHING TO DO		
 	}
 
 	@Override
 	public boolean hasVeryQuickPerInputExecution() {
 		return false;
 	}
-	
-	public DefineOutputterMPP getDefine() {
-		return define;
-	}
-
-	public void setDefine(DefineOutputterMPP define) {
-		this.define = define;
-	}
-
 }

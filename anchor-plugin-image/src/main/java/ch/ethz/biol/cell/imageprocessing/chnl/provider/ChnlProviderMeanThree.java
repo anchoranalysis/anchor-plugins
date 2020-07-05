@@ -46,7 +46,7 @@ public class ChnlProviderMeanThree extends ChnlProviderThree {
 		
 		Channel chnlOut = ChannelFactory.instance().createEmptyInitialised(
 			chnl1.getDimensions(),
-			VoxelDataTypeUnsignedByte.instance
+			VoxelDataTypeUnsignedByte.INSTANCE
 		);
 		
 		processVoxelBox(

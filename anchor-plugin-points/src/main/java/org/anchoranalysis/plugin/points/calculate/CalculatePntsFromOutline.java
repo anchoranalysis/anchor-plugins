@@ -33,17 +33,17 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.feature.cache.calculation.FeatureCalculation;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
+import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.points.PointsFromObjMask;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
-public class CalculatePntsFromOutline extends FeatureCalculation<List<Point3i>, FeatureInputSingleObj> {
+public class CalculatePntsFromOutline extends FeatureCalculation<List<Point3i>, FeatureInputSingleObject> {
 
 	@Override
-	protected List<Point3i> execute(FeatureInputSingleObj params) throws FeatureCalcException {
+	protected List<Point3i> execute(FeatureInputSingleObject params) throws FeatureCalcException {
 		try {
 			return PointsFromObjMask.pntsFromMaskOutline(
-				params.getObjMask()
+				params.getObjectMask()
 			);
 		} catch (CreateException e) {
 			throw new FeatureCalcException(e);

@@ -31,7 +31,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 
 /**
  * An append CSV and corresponding match value
- * @author FEEHANO
+ * @author Owen Feehan
  *
  */
 public class MatchedAppendCsv extends AnchorBean<MatchedAppendCsv> {

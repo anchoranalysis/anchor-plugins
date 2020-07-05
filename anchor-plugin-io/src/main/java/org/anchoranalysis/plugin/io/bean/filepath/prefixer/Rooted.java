@@ -46,7 +46,7 @@ import org.apache.log4j.Logger;
  * 
  * <p>A root is a path that is mapped via a unique-name in a settings file to a directory</p>
  *  
- * @author owen
+ * @author Owen Feehan
  *
  */
 public class Rooted extends FilePathPrefixer {

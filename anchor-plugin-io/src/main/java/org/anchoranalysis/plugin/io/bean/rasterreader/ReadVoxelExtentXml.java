@@ -31,7 +31,7 @@ import java.nio.file.Path;
 import java.util.Optional;
 
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.image.extent.ImageRes;
+import org.anchoranalysis.image.extent.ImageResolution;
 import org.anchoranalysis.image.io.RasterIOException;
 import org.anchoranalysis.image.io.bean.rasterreader.RasterReader;
 import org.anchoranalysis.image.io.rasterreader.OpenedRaster;
@@ -59,10 +59,10 @@ public class ReadVoxelExtentXml extends RasterReader {
 	 * @return the scene res if the metadata file exists and was parsed. null otherwise.
 	 * @throws RasterIOException
 	 */
-	public static Optional<ImageRes> readMetadata( Path filepath, boolean acceptNoResolution ) throws RasterIOException {
+	public static Optional<ImageResolution> readMetadata( Path filepath, boolean acceptNoResolution ) throws RasterIOException {
 		
 		// How we try to open the metadata
-		Optional<ImageRes> res = null;
+		Optional<ImageResolution> res = null;
 		File fileMeta = new File( filepath.toString() + ".xml" );
 		  
 		if( fileMeta.exists() ) {
@@ -82,7 +82,7 @@ public class ReadVoxelExtentXml extends RasterReader {
 		
 		OpenedRaster delegate = rasterReader.openFile(filepath);
 		
-		Optional<ImageRes> sr = readMetadata(filepath, acceptNoResolution);
+		Optional<ImageResolution> sr = readMetadata(filepath, acceptNoResolution);
 		
 		return new OpenedRasterAlterDimensions(
 			delegate,

@@ -33,14 +33,16 @@ package org.anchoranalysis.plugin.image.feature.bean.obj.intersecting;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.plugin.image.feature.bean.object.single.shared.intersecting.FeatureIntersectingObjects;
+import org.anchoranalysis.plugin.image.feature.bean.object.single.shared.intersecting.NumberIntersectingObjectsAboveThreshold;
 import org.junit.Test;
 
 public class NumIntersectingObjsAboveThresholdTest {
 		
 	private static final int EXPECTED_REJECTED_UNDER_THRESHOLD = 0;
 	
-	private static final FeatureIntersectingObjs FEATURE = FeatureHelper.createWithThreshold(
-		new NumIntersectingObjsAboveThreshold()
+	private static final FeatureIntersectingObjects FEATURE = FeatureHelper.createWithThreshold(
+		new NumberIntersectingObjectsAboveThreshold()
 	); 
 	
 	@Test

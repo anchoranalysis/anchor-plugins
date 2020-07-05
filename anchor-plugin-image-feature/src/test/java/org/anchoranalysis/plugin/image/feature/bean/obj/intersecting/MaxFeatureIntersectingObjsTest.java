@@ -29,12 +29,14 @@ package org.anchoranalysis.plugin.image.feature.bean.obj.intersecting;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.plugin.image.feature.bean.object.single.shared.intersecting.FeatureIntersectingObjects;
+import org.anchoranalysis.plugin.image.feature.bean.object.single.shared.intersecting.MaxFeatureIntersectingObjects;
 import org.junit.Test;
 
 public class MaxFeatureIntersectingObjsTest {
 	
-	private static final FeatureIntersectingObjs FEATURE = FeatureHelper.createWithFeature(
-		new MaxFeatureIntersectingObjs()
+	private static final FeatureIntersectingObjects FEATURE = FeatureHelper.createWithFeature(
+		new MaxFeatureIntersectingObjects()
 	); 
 	
 	/**

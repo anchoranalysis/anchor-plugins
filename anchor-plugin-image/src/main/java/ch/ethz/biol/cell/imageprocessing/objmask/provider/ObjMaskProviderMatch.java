@@ -30,17 +30,17 @@ package ch.ethz.biol.cell.imageprocessing.objmask.provider;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.image.bean.objmask.match.ObjMaskMatcher;
-import org.anchoranalysis.image.bean.provider.ObjMaskProviderOne;
-import org.anchoranalysis.image.objectmask.ObjectCollection;
-import org.anchoranalysis.image.objectmask.ObjectCollectionFactory;
-import org.anchoranalysis.image.objmask.match.ObjWithMatches;
+import org.anchoranalysis.image.bean.object.ObjectMatcher;
+import org.anchoranalysis.image.bean.provider.ObjectCollectionProviderOne;
+import org.anchoranalysis.image.object.MatchedObject;
+import org.anchoranalysis.image.object.ObjectCollection;
+import org.anchoranalysis.image.object.ObjectCollectionFactory;
 
-public class ObjMaskProviderMatch extends ObjMaskProviderOne {
+public class ObjMaskProviderMatch extends ObjectCollectionProviderOne {
 
 	// START BEAN PROPERTIES
 	@BeanField
-	private ObjMaskMatcher objMaskMatcher;
+	private ObjectMatcher objMaskMatcher;
 	// END BEAN PROPERTIES
 	
 	@Override
@@ -48,7 +48,7 @@ public class ObjMaskProviderMatch extends ObjMaskProviderOne {
 		try {
 			return ObjectCollectionFactory.flatMapFrom(
 				objMaskMatcher.findMatch(in),
-				ObjWithMatches::getMatches
+				MatchedObject::getMatches
 			);
 			
 		} catch (OperationFailedException e) {
@@ -56,11 +56,11 @@ public class ObjMaskProviderMatch extends ObjMaskProviderOne {
 		}
 	}
 
-	public ObjMaskMatcher getObjMaskMatcher() {
+	public ObjectMatcher getObjMaskMatcher() {
 		return objMaskMatcher;
 	}
 
-	public void setObjMaskMatcher(ObjMaskMatcher objMaskMatcher) {
+	public void setObjMaskMatcher(ObjectMatcher objMaskMatcher) {
 		this.objMaskMatcher = objMaskMatcher;
 	}
 }

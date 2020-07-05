@@ -37,15 +37,15 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.experiment.JobExecutionException;
-import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
+import org.anchoranalysis.image.bean.provider.ObjectCollectionProvider;
 import org.anchoranalysis.image.histogram.Histogram;
 import org.anchoranalysis.image.stack.NamedImgStackCollection;
 import org.anchoranalysis.io.output.bound.BoundIOContext;
-import org.anchoranalysis.plugin.image.task.bean.grouped.GroupedSharedState;
 import org.anchoranalysis.plugin.image.task.bean.grouped.GroupedStackTask;
 import org.anchoranalysis.plugin.image.task.grouped.ChannelSource;
 import org.anchoranalysis.plugin.image.task.grouped.ConsistentChannelChecker;
 import org.anchoranalysis.plugin.image.task.grouped.GroupMapByName;
+import org.anchoranalysis.plugin.image.task.grouped.GroupedSharedState;
 import org.anchoranalysis.plugin.image.task.grouped.NamedChnl;
 
 
@@ -64,7 +64,7 @@ public class GroupedHistogramExportTask extends GroupedStackTask<Histogram,Histo
 	private boolean writeImageHistograms = true;	// If enabled writes a histogram for each image, as well as the group
 	
 	@BeanField @OptionalBean
-	private ObjMaskProvider objs;		// Optional
+	private ObjectCollectionProvider objs;		// Optional
 	
 	/** If defined, this stack is used as a mask over the values which are fed into the histogram */
 	@BeanField @AllowEmpty
@@ -166,12 +166,12 @@ public class GroupedHistogramExportTask extends GroupedStackTask<Histogram,Histo
 		this.writeImageHistograms = writeImageHistograms;
 	}
 
-	public ObjMaskProvider getObjs() {
+	public ObjectCollectionProvider getObjs() {
 		return objs;
 	}
 
 
-	public void setObjs(ObjMaskProvider objs) {
+	public void setObjs(ObjectCollectionProvider objs) {
 		this.objs = objs;
 	}
 

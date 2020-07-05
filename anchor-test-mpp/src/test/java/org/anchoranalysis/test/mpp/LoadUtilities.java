@@ -29,9 +29,9 @@ package org.anchoranalysis.test.mpp;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.binary.BinaryChnl;
 import org.anchoranalysis.image.binary.values.BinaryValues;
-import org.anchoranalysis.image.objectmask.ObjectMask;
-import org.anchoranalysis.image.objectmask.ObjectCollection;
-import org.anchoranalysis.image.objectmask.factory.CreateFromConnectedComponentsFactory;
+import org.anchoranalysis.image.object.ObjectCollection;
+import org.anchoranalysis.image.object.ObjectMask;
+import org.anchoranalysis.image.object.factory.CreateFromConnectedComponentsFactory;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.test.image.io.TestLoaderImageIO;
 

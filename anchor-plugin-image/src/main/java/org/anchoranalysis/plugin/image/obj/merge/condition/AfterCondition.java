@@ -31,12 +31,12 @@ import java.util.Optional;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.log.LogErrorReporter;
-import org.anchoranalysis.image.extent.ImageRes;
-import org.anchoranalysis.image.objectmask.ObjectMask;
+import org.anchoranalysis.image.extent.ImageResolution;
+import org.anchoranalysis.image.object.ObjectMask;
 
 public interface AfterCondition {
 	
 	void init(LogErrorReporter logger) throws InitException;
 	
-	boolean accept(ObjectMask omSrc, ObjectMask omDest, ObjectMask omMerged, Optional<ImageRes> res) throws OperationFailedException;
+	boolean accept(ObjectMask omSrc, ObjectMask omDest, ObjectMask omMerged, Optional<ImageResolution> res) throws OperationFailedException;
 }

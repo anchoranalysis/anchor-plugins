@@ -32,17 +32,17 @@ import java.util.Optional;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
+import org.anchoranalysis.image.bean.nonbean.error.UnitValueException;
 import org.anchoranalysis.image.bean.provider.BinaryChnlProvider;
-import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
+import org.anchoranalysis.image.bean.provider.ObjectCollectionProvider;
 import org.anchoranalysis.image.bean.unitvalue.areavolume.UnitValueAreaOrVolume;
 import org.anchoranalysis.image.bean.unitvalue.volume.UnitValueVolumeVoxels;
 import org.anchoranalysis.image.binary.BinaryChnl;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelBoxByte;
-import org.anchoranalysis.image.objectmask.ObjectCollection;
-import org.anchoranalysis.image.objectmask.factory.CreateFromConnectedComponentsFactory;
-import org.anchoranalysis.image.unitvalue.UnitValueException;
-import org.anchoranalysis.image.voxel.box.VoxelBox;
+import org.anchoranalysis.image.object.ObjectCollection;
+import org.anchoranalysis.image.object.ObjectCollectionFactory;
+import org.anchoranalysis.image.object.factory.CreateFromConnectedComponentsFactory;
 import org.apache.commons.lang.time.StopWatch;
 
 /**
@@ -51,7 +51,7 @@ import org.apache.commons.lang.time.StopWatch;
  * @author feehano
  *
  */
-public class ObjMaskProviderConnectedComponents extends ObjMaskProvider {
+public class ObjMaskProviderConnectedComponents extends ObjectCollectionProvider {
 
 	// START BEAN PROPERTIES
 	@BeanField
@@ -103,22 +103,27 @@ public class ObjMaskProviderConnectedComponents extends ObjMaskProvider {
 		return createObjMasks.createConnectedComponents(bi);
 	}
 	
-	private ObjectCollection createObjsBySlice( BinaryChnl bi, int minNumberVoxels ) throws CreateException {
+	private ObjectCollection createObjsBySlice(BinaryChnl chnl, int minNumberVoxels) throws CreateException {
 		
-		ObjectCollection out = new ObjectCollection();
 		CreateFromConnectedComponentsFactory createObjMasks = createFactory(minNumberVoxels);
-
-		for( int z=0; z<bi.getDimensions().getZ(); z++) {
-		
-			VoxelBox<ByteBuffer> vb = bi.getVoxelBox().extractSlice(z);
-			BinaryVoxelBox<ByteBuffer> bvb = new BinaryVoxelBoxByte(vb,bi.getBinaryValues());
-			
-			out.addAll(
-				createForSlice(createObjMasks, bvb, z)
-			);
-		}
-		
-		return out;
+	
+		return ObjectCollectionFactory.flatMapFromRange(
+			0,
+			chnl.getDimensions().getZ(),
+			CreateException.class,
+			z -> createForSlice(
+				createObjMasks,
+				createBinaryVoxelBox(chnl, z),
+				z
+			)
+		);
+	}
+	
+	private static BinaryVoxelBox<ByteBuffer> createBinaryVoxelBox(BinaryChnl chnl, int z) {
+		return new BinaryVoxelBoxByte(
+			chnl.getVoxelBox().extractSlice(z),
+			chnl.getBinaryValues()
+		);
 	}
 	
 	private ObjectCollection createForSlice(

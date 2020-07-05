@@ -31,8 +31,8 @@ import java.util.List;
 import java.util.Optional;
 
 import org.anchoranalysis.core.progress.ProgressReporter;
-import org.anchoranalysis.image.extent.ImageDim;
-import org.anchoranalysis.image.extent.ImageRes;
+import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.image.extent.ImageResolution;
 import org.anchoranalysis.image.io.RasterIOException;
 import org.anchoranalysis.image.io.rasterreader.OpenedRaster;
 import org.anchoranalysis.image.stack.Stack;
@@ -53,7 +53,7 @@ class OpenedRasterAlterDimensions extends OpenedRaster {
 		 * @return a new image resolution or empty if no change should occur
 		 * @throws RasterIOException
 		 */
-		Optional<ImageRes> maybeUpdatedResolution( ImageRes res ) throws RasterIOException;
+		Optional<ImageResolution> maybeUpdatedResolution( ImageResolution res ) throws RasterIOException;
 	}
 	
 	public OpenedRasterAlterDimensions(OpenedRaster delegate, ConsiderUpdatedImageRes processor ) {
@@ -74,7 +74,7 @@ class OpenedRasterAlterDimensions extends OpenedRaster {
 		TimeSequence ts = delegate.open(seriesIndex, progressReporter);
 		
 		for( Stack stack : ts ) {
-			Optional<ImageRes> res = processor.maybeUpdatedResolution( stack.getDimensions().getRes() );
+			Optional<ImageResolution> res = processor.maybeUpdatedResolution( stack.getDimensions().getRes() );
 			res.ifPresent( r->
 				stack.updateResolution(r)
 			);
@@ -93,11 +93,11 @@ class OpenedRasterAlterDimensions extends OpenedRaster {
 	}
 
 	@Override
-	public ImageDim dim(int seriesIndex) throws RasterIOException {
+	public ImageDimensions dim(int seriesIndex) throws RasterIOException {
 		
-		ImageDim sd = delegate.dim(seriesIndex);
+		ImageDimensions sd = delegate.dim(seriesIndex);
 		
-		Optional<ImageRes> res = processor.maybeUpdatedResolution(sd.getRes());
+		Optional<ImageResolution> res = processor.maybeUpdatedResolution(sd.getRes());
 		
 		if (res.isPresent()) {
 			return sd.duplicateChangeRes(res.get());

@@ -34,7 +34,7 @@ import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.core.geometry.ReadableTuple3i;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.extent.Extent;
-import org.anchoranalysis.image.objectmask.ObjectMask;
+import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.anchoranalysis.image.voxel.box.VoxelBoxWrapper;
 import org.anchoranalysis.image.voxel.box.factory.VoxelBoxFactory;
@@ -155,8 +155,8 @@ public class GrayscaleReconstructionRobinson extends GrayscaleReconstructionByEr
 	
 	private void populateQueueFromNonZeroPixelsMask( PriorityQueueIndexRangeDownhill<Point3i> queue, VoxelBox<?> vb, VoxelBox<ByteBuffer> vbFinalized, ObjectMask containingMask ) {
 
-		ReadableTuple3i crnrPntMin = containingMask.getBoundingBox().getCrnrMin();
-		ReadableTuple3i crnrPntMax = containingMask.getBoundingBox().calcCrnrMax();
+		ReadableTuple3i crnrPntMin = containingMask.getBoundingBox().cornerMin();
+		ReadableTuple3i crnrPntMax = containingMask.getBoundingBox().calcCornerMax();
 		
 		byte maskOn = containingMask.getBinaryValuesByte().getOnByte(); 
 				

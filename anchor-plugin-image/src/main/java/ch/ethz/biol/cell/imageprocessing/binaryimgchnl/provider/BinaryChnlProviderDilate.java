@@ -37,7 +37,7 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.binary.BinaryChnl;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
 import org.anchoranalysis.image.extent.IncorrectImageSizeException;
-import org.anchoranalysis.image.objectmask.morph.MorphologicalDilation;
+import org.anchoranalysis.image.object.morph.MorphologicalDilation;
 
 
 /**

@@ -29,19 +29,19 @@ package ch.ethz.biol.cell.imageprocessing.objmask.provider;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.bean.provider.ImageDimProvider;
-import org.anchoranalysis.image.bean.provider.ObjMaskProviderOne;
-import org.anchoranalysis.image.extent.ImageDim;
+import org.anchoranalysis.image.bean.provider.ObjectCollectionProviderOne;
+import org.anchoranalysis.image.extent.ImageDimensions;
 
 import ch.ethz.biol.cell.imageprocessing.dim.provider.GuessDimFromInputImage;
 
-public abstract class ObjMaskProviderDimensions extends ObjMaskProviderOne {
+public abstract class ObjMaskProviderDimensions extends ObjectCollectionProviderOne {
 
 	// START BEAN PROPERTIES
 	@BeanField
 	private ImageDimProvider dim = new GuessDimFromInputImage();
 	// END BEAN PROPERTIES
 	
-	protected ImageDim createDim() throws CreateException {
+	protected ImageDimensions createDim() throws CreateException {
 		return dim.create();
 	}
 

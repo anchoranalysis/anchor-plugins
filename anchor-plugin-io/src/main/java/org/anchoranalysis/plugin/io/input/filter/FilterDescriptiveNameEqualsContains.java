@@ -36,7 +36,7 @@ import org.anchoranalysis.io.input.InputFromManager;
 /**
  * Filters a list of input-objects by the descriptive name
  * 
- * @author owen
+ * @author Owen Feehan
  *
  */
 public class FilterDescriptiveNameEqualsContains {

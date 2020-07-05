@@ -35,6 +35,7 @@ import org.anchoranalysis.annotation.io.bean.comparer.Comparer;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.DefaultInstance;
 import org.anchoranalysis.core.error.CreateException;
+import org.anchoranalysis.core.functional.FunctionalUtilities;
 import org.anchoranalysis.core.progress.ProgressReporter;
 import org.anchoranalysis.core.progress.ProgressReporterMultiple;
 import org.anchoranalysis.core.progress.ProgressReporterOneOfMany;
@@ -44,6 +45,7 @@ import org.anchoranalysis.io.bean.input.InputManagerParams;
 import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.input.InputFromManager;
 import org.anchoranalysis.plugin.annotation.comparison.AnnotationComparisonInput;
+import org.apache.commons.lang3.tuple.Pair;
 
 public class AnnotationComparisonInputManager<T extends InputFromManager> extends InputManager<AnnotationComparisonInput<T>> {
 
@@ -130,36 +132,16 @@ public class AnnotationComparisonInputManager<T extends InputFromManager> extend
 	}
 	
 	private List<AnnotationComparisonInput<T>> createListInputWithAnnotationPath( List<T> listInputObjects, ProgressReporter progressReporter ) throws CreateException {
-		List<AnnotationComparisonInput<T>> outList = new ArrayList<>();
-
-		progressReporter.setMin( 0 );
-		progressReporter.setMax( listInputObjects.size() );
-		progressReporter.open();
-		
-		try {
-			for(int i=0; i<listInputObjects.size(); i++) {
-				
-				T item = listInputObjects.get(i);
-				
-				AnnotationComparisonInput<T> aci =
-					new AnnotationComparisonInput<>(
-						item,
-						comparerLeft,
-						comparerRight,
-						nameLeft,
-						nameRight,
-						rasterReader
-					);
-				
-				outList.add( aci );
-				
-				progressReporter.update(i);
-			}
-		} finally {
-			progressReporter.close();
-		}
-		
-		return outList;
+		return FunctionalUtilities.mapListWithProgress(
+			listInputObjects,
+			progressReporter,
+			input -> new AnnotationComparisonInput<>(
+				input,
+				Pair.of(comparerLeft,comparerRight),
+				Pair.of(nameLeft,nameRight),
+				rasterReader
+			)
+		);
 	}
 
 	public String getNameLeft() {

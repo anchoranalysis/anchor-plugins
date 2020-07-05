@@ -39,7 +39,7 @@ import org.anchoranalysis.image.histogram.HistogramArray;
 /**
  * Clips the input-histogram to a certain maximum value, and then delegates the calculate-level.
  * 
- * @author owen
+ * @author Owen Feehan
  *
  */
 public class ClipHistogramMax extends CalculateLevelOne {

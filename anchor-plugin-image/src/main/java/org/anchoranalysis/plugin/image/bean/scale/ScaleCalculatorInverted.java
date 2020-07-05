@@ -30,7 +30,7 @@ package org.anchoranalysis.plugin.image.bean.scale;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.bean.scale.ScaleCalculator;
-import org.anchoranalysis.image.extent.ImageDim;
+import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.scale.ScaleFactor;
 
 public class ScaleCalculatorInverted extends ScaleCalculator {
@@ -41,7 +41,7 @@ public class ScaleCalculatorInverted extends ScaleCalculator {
 	// END BEAN PROPERTIES
 	
 	@Override
-	public ScaleFactor calc(ImageDim srcDim)
+	public ScaleFactor calc(ImageDimensions srcDim)
 			throws OperationFailedException {
 
 		ScaleFactor sf = scaleCalculator.calc(srcDim);

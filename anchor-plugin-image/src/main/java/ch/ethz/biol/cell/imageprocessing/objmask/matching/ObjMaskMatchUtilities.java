@@ -27,31 +27,30 @@ package ch.ethz.biol.cell.imageprocessing.objmask.matching;
  */
 
 
-import java.util.ArrayList;
 import java.util.List;
 
-import org.anchoranalysis.image.objectmask.ObjectMask;
-import org.anchoranalysis.image.objectmask.ObjectCollection;
-import org.anchoranalysis.image.objmask.match.ObjWithMatches;
+import org.anchoranalysis.image.object.MatchedObject;
+import org.anchoranalysis.image.object.ObjectCollection;
+import org.anchoranalysis.image.object.ObjectMask;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
 public class ObjMaskMatchUtilities {
 	
-	public static List<ObjWithMatches> matchIntersectingObjects( ObjectCollection sourceObjs, ObjectCollection searchObjects ) {
+	public static List<MatchedObject> matchIntersectingObjects( ObjectCollection sourceObjs, ObjectCollection searchObjects ) {
 		
 		// Find matching seeds for each object
-		List<ObjWithMatches> list = new ArrayList<>(); 
-		for( ObjectMask om : sourceObjs ) {
-			
-			ObjWithMatches sws = new ObjWithMatches(om);
-			
-			for( ObjectMask seed : searchObjects ) {
-				if (om.hasIntersectingPixels(seed)) {
-					sws.addSeed(seed);
-				}
-				
-			}
-			list.add(sws);
-		}
-		return list;
+		return sourceObjs.stream().mapToList(objSource->
+			new MatchedObject(
+				objSource,
+				searchObjectsThatIntersectWith(searchObjects, objSource)
+			)
+		);
+	}
+	
+	private static ObjectCollection searchObjectsThatIntersectWith(ObjectCollection searchObjects, ObjectMask objToIntersectWith) {
+		return searchObjects.stream().filter(objToIntersectWith::hasIntersectingPixels);
 	}
 }

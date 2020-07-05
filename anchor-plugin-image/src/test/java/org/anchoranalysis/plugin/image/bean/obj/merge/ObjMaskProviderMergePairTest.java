@@ -37,9 +37,9 @@ import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.operator.Constant;
-import org.anchoranalysis.image.feature.objmask.pair.FeatureInputPairObjs;
-import org.anchoranalysis.image.feature.objmask.pair.impl.Minimum;
-import org.anchoranalysis.image.objectmask.ObjectCollection;
+import org.anchoranalysis.image.feature.bean.object.pair.Minimum;
+import org.anchoranalysis.image.feature.object.input.FeatureInputPairObjects;
+import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.plugin.image.test.ProviderFixture;
 import org.anchoranalysis.test.LoggingFixture;
 import org.anchoranalysis.test.feature.plugins.mockfeature.MockFeatureWithCalculationFixture;
@@ -80,7 +80,7 @@ public class ObjMaskProviderMergePairTest {
 		
 		ObjMaskProviderMergePair provider = new ObjMaskProviderMergePair();
 		
-		Feature<FeatureInputPairObjs> feature = new Minimum(
+		Feature<FeatureInputPairObjects> feature = new Minimum(
 			MockFeatureWithCalculationFixture.createMockFeatureWithCalculation()
 		); 
 		

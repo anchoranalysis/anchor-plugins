@@ -29,6 +29,7 @@ package ch.ethz.biol.cell.mpp.mark.ellipsoidfitter.outlinepixelsretriever.visits
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.InitException;
@@ -36,8 +37,8 @@ import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.core.geometry.Tuple3i;
 import org.anchoranalysis.core.random.RandomNumberGenerator;
-import org.anchoranalysis.image.extent.ImageRes;
-import org.anchoranalysis.image.objectmask.ObjectMask;
+import org.anchoranalysis.image.extent.ImageResolution;
+import org.anchoranalysis.image.object.ObjectMask;
 
 
 public class VisitSchedulerUniformSample extends VisitScheduler {
@@ -50,12 +51,12 @@ public class VisitSchedulerUniformSample extends VisitScheduler {
 	private VisitScheduler selected;
 	
 	@Override
-	public Tuple3i maxDistFromRootPoint(ImageRes res) throws OperationFailedException {
+	public Optional<Tuple3i> maxDistFromRootPoint(ImageResolution res) throws OperationFailedException {
 		return selected.maxDistFromRootPoint(res);
 	}
 	
 	@Override
-	public void beforeCreateObjMask(RandomNumberGenerator re, ImageRes res)
+	public void beforeCreateObjMask(RandomNumberGenerator re, ImageResolution res)
 			throws InitException {
 		int rand = (int) (re.nextDouble() * list.size());
 		selected = list.get(rand);
@@ -63,7 +64,7 @@ public class VisitSchedulerUniformSample extends VisitScheduler {
 	}
 	
 	@Override
-	public void afterCreateObjMask(Point3i root, ImageRes res, RandomNumberGenerator re) throws InitException {
+	public void afterCreateObjMask(Point3i root, ImageResolution res, RandomNumberGenerator re) throws InitException {
 		selected.afterCreateObjMask(root, res, re);
 	}
 

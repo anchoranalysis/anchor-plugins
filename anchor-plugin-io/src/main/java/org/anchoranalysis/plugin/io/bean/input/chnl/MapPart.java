@@ -28,7 +28,6 @@ package org.anchoranalysis.plugin.io.bean.input.chnl;
 
 
 import java.io.File;
-import java.nio.Buffer;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
@@ -37,7 +36,7 @@ import java.util.Optional;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
 import org.anchoranalysis.core.progress.ProgressReporter;
-import org.anchoranalysis.image.extent.ImageDim;
+import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.io.RasterIOException;
 import org.anchoranalysis.image.io.bean.chnl.map.ImgChnlMapCreator;
 import org.anchoranalysis.image.io.bean.rasterreader.RasterReader;
@@ -50,16 +49,13 @@ import org.anchoranalysis.image.io.rasterreader.OpenedRaster;
 import org.anchoranalysis.io.input.FileInput;
 
 /**
- * Provides a set of channels as an input, each of which has a name. The standard implementation
- *   of {@link NamedChnlsInputPart}.
- *   
- * It can be used together with {@link AppendPart} where are additional channels are added.
+ * Provides a set of channels as an input, each of which has a name.
+ * 
+ * <p>The standard implementation of {@link NamedChnlsInputPart}
  * 
  * @author Owen Feehan
- *
- * @param <T> voxel data-type buffer
  */
-class MapPart<T extends Buffer> extends NamedChnlsInputPart {
+class MapPart extends NamedChnlsInputPart {
 
 	private FileInput delegate;
 	private RasterReader rasterReader;
@@ -88,7 +84,7 @@ class MapPart<T extends Buffer> extends NamedChnlsInputPart {
 	}
 	
 	@Override
-	public ImageDim dim( int seriesIndex ) throws RasterIOException {
+	public ImageDimensions dim( int seriesIndex ) throws RasterIOException {
 		return openedRaster().dim(seriesIndex);
 	}
 
@@ -104,7 +100,6 @@ class MapPart<T extends Buffer> extends NamedChnlsInputPart {
 	@Override
 	public boolean hasChnl( String chnlName ) throws RasterIOException {
 		return chnlMap().keySet().contains(chnlName);
-		//chnlMap.get(chnlName)!=-1;
 	}
 	
 	// Where most of our time is being taken up when opening a raster
@@ -116,7 +111,7 @@ class MapPart<T extends Buffer> extends NamedChnlsInputPart {
 			seriesNum = openedRaster().numSeries()-1;
 		}
 		
-		NamedChnlCollectionForSeriesConcatenate<T> out = new NamedChnlCollectionForSeriesConcatenate<>();
+		NamedChnlCollectionForSeriesConcatenate out = new NamedChnlCollectionForSeriesConcatenate();
 		out.add(
 			new NamedChnlCollectionForSeriesMap(
 				openedRaster(),
@@ -135,9 +130,7 @@ class MapPart<T extends Buffer> extends NamedChnlsInputPart {
 	@Override
 	public List<Path> pathForBindingForAllChannels() {
 		ArrayList<Path> out = new ArrayList<>();
-		pathForBinding().ifPresent( path->
-			out.add(path)
-		);
+		pathForBinding().ifPresent(out::add);
 		return out;
 	}
 

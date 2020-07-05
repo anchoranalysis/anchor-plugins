@@ -31,7 +31,7 @@ import org.anchoranalysis.anchor.mpp.cfg.Cfg;
 /**
  * A subset of a cfg (as extracted during a partition)
  * 
- * @author FEEHANO
+ * @author Owen Feehan
  *
  */
 public class CfgFromPartition {

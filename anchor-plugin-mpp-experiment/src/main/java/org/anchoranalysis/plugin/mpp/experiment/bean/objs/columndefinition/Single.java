@@ -31,10 +31,10 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.geometry.Point3i;
-import org.anchoranalysis.image.index.rtree.ObjMaskCollectionRTree;
-import org.anchoranalysis.image.objectmask.ObjectMask;
-import org.anchoranalysis.image.objectmask.properties.ObjectWithProperties;
-import org.anchoranalysis.image.objectmask.properties.ObjectCollectionWithProperties;
+import org.anchoranalysis.image.index.ObjectCollectionRTree;
+import org.anchoranalysis.image.object.ObjectMask;
+import org.anchoranalysis.image.object.properties.ObjectCollectionWithProperties;
+import org.anchoranalysis.image.object.properties.ObjectWithProperties;
 import org.anchoranalysis.plugin.mpp.experiment.objs.csv.CSVRow;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -90,7 +90,7 @@ public class Single extends ColumnDefinition {
 	}
 
 	@Override
-	public ObjectCollectionWithProperties findObjsMatchingRow(CSVRow csvRow, ObjMaskCollectionRTree allObjs)
+	public ObjectCollectionWithProperties findObjsMatchingRow(CSVRow csvRow, ObjectCollectionRTree allObjs)
 			throws OperationFailedException {
 		
 		assert( indexNumPixels>= 0 );

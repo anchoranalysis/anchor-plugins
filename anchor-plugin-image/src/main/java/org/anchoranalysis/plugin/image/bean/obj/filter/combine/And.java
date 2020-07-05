@@ -29,9 +29,9 @@ import java.util.Optional;
  */
 
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.image.bean.objmask.filter.ObjectFilter;
-import org.anchoranalysis.image.extent.ImageDim;
-import org.anchoranalysis.image.objectmask.ObjectCollection;
+import org.anchoranalysis.image.bean.object.ObjectFilter;
+import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.image.object.ObjectCollection;
 
 /**
  * Applies multiples filter with logical AND i.e. an object must pass all objects in the list to remain.
@@ -42,7 +42,7 @@ import org.anchoranalysis.image.objectmask.ObjectCollection;
 public class And extends ObjectFilterCombine {
 
 	@Override
-	public ObjectCollection filter(ObjectCollection objs, Optional<ImageDim> dim, Optional<ObjectCollection> objsRejected) throws OperationFailedException {
+	public ObjectCollection filter(ObjectCollection objs, Optional<ImageDimensions> dim, Optional<ObjectCollection> objsRejected) throws OperationFailedException {
 		
 		ObjectCollection running = objs;
 		

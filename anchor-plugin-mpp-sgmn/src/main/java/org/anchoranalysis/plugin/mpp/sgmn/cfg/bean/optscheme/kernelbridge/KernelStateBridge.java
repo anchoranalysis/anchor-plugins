@@ -35,7 +35,7 @@ import org.anchoranalysis.mpp.sgmn.transformer.StateTransformer;
 /**
  * Transforms a kernel-to-state and vice versa
  * 
- * @author FEEHANO
+ * @author Owen Feehan
  *
  * @param <U> kernel-type
  * @param <T> state-type

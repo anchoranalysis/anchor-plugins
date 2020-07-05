@@ -36,7 +36,7 @@ import org.anchoranalysis.anchor.mpp.mark.conic.RadiiRandomizer;
 import org.anchoranalysis.anchor.mpp.mark.conic.MarkEllipsoid;
 import org.anchoranalysis.anchor.mpp.mark.conic.bounds.RotationBounds3D;
 import org.anchoranalysis.anchor.mpp.proposer.ProposerContext;
-import org.anchoranalysis.anchor.mpp.proposer.visualization.ICreateProposalVisualization;
+import org.anchoranalysis.anchor.mpp.proposer.visualization.CreateProposalVisualization;
 import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.geometry.Point3d;
@@ -81,7 +81,7 @@ public class EllipsoidOrientationRadii extends MarkProposer {
 	}
 	
 	@Override
-	public Optional<ICreateProposalVisualization> proposalVisualization(boolean detailed) {
+	public Optional<CreateProposalVisualization> proposalVisualization(boolean detailed) {
 		return Optional.empty();
 	}
 

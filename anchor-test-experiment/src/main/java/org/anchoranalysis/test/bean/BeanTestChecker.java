@@ -65,7 +65,7 @@ public class BeanTestChecker {
 	}
 
 	/** 
-	 * Checks if a bean has all necessary items like {@link check} and also initializes the bean
+	 * Checks if a bean has all necessary items as with {@link #check} and also initializes the bean
 	 * 
 	 * @param <T> bean-type
 	 * @param <P> initialization-parameters-type accepted by the bean

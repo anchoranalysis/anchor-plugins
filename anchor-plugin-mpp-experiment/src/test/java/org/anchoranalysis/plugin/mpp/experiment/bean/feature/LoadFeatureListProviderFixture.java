@@ -75,8 +75,12 @@ class LoadFeatureListProviderFixture<T extends FeatureInput> {
 		this.defaultPath = defaultPathToXml;
 	}
 	
-	/** Additionally include a shell feature in the "single" features 
-	 * @throws CreateException */
+	/** 
+	 * Additionally include a shell feature in the "single" features
+	 * 
+	 * @param alternativePathToXml
+	 * 
+	 */ 
 	public void useAlternativeXMLList( String alternativePathToXml ) {
 		features = Optional.of(
 			loadFeatures(loader, alternativePathToXml)

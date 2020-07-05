@@ -32,6 +32,7 @@ package org.anchoranalysis.plugin.io.manifest;
 import java.nio.file.Path;
 import java.util.Optional;
 
+import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.filepath.prefixer.FilePathDifferenceFromFolderPath;
 import org.anchoranalysis.io.input.InputFromManager;
@@ -39,59 +40,67 @@ import org.anchoranalysis.io.manifest.ManifestRecorder;
 import org.anchoranalysis.io.manifest.ManifestRecorderFile;
 import org.anchoranalysis.plugin.io.bean.descriptivename.LastFolders;
 
+import lombok.Getter;
+
 // A file manifest together with the overall manifest for the experiment
 public class CoupledManifests implements InputFromManager {
+
+	@Getter
+	private final Optional<ManifestRecorder> experimentManifest;
 	
-	private ManifestRecorder experimentManifest;
-	private ManifestRecorderFile fileManifest;
-	private String name;
+	@Getter
+	private final ManifestRecorderFile fileManifest;
+	
+	private final String name;
 	
 	public CoupledManifests(
-			ManifestRecorder experimentManifest,
-			ManifestRecorderFile fileManifest) throws AnchorIOException {
+		ManifestRecorder experimentManifest,
+		ManifestRecorderFile fileManifest,
+		LogErrorReporter logger
+	) throws AnchorIOException {
 		super();
-		this.experimentManifest = experimentManifest;
+		this.experimentManifest = Optional.of(experimentManifest);
 		this.fileManifest = fileManifest;
-		assert(experimentManifest!=null);
-		name = generateName();
+		name = generateName(logger);
 	}
 	
 	public CoupledManifests(
-			ManifestRecorder experimentManifest, ManifestRecorderFile fileManifest, int numFoldersInDescription ) throws AnchorIOException {
+		ManifestRecorderFile fileManifest,
+		int numFoldersInDescription,
+		LogErrorReporter logger
+	) {
 		super();
-		this.experimentManifest = experimentManifest;
+		this.experimentManifest = Optional.empty();
 		this.fileManifest = fileManifest;
-		name = generateNameFromFolders(numFoldersInDescription);
-	}
-
-	public ManifestRecorder getExperimentManifest() {
-		return experimentManifest;
-	}
-
-	public ManifestRecorderFile getFileManifest() {
-		return fileManifest;
+		name = generateNameFromFolders(numFoldersInDescription,logger);
 	}
 	
-	private String generateName() throws AnchorIOException {
+	private String generateName(LogErrorReporter logger) throws AnchorIOException {
 			
-		if (experimentManifest==null) {
-			return generateNameFromFolders(0);
+		if (experimentManifest.isPresent()) {
+			Path experimentRootFolder = getExperimentManifest().get().getRootFolder().calcPath();
+			
+			FilePathDifferenceFromFolderPath ff = new FilePathDifferenceFromFolderPath();
+			ff.init(experimentRootFolder,fileManifest.getRootPath());
+			return ff.getRemainderCombined().toString();
+			
+		} else {
+			return generateNameFromFolders(0, logger);
 		}
-		
-		//String fileRootFolder = getFileManifest().getRootFolder().calcPath();
-		Path experimentRootFolder = getExperimentManifest().getRootFolder().calcPath();
-		
-		FilePathDifferenceFromFolderPath ff = new FilePathDifferenceFromFolderPath();
-		ff.init(experimentRootFolder,fileManifest.getRootPath());
-
-		return ff.getRemainderCombined().toString();
 	}
 	
-	private String generateNameFromFolders( int numFoldersInDescription ) throws AnchorIOException {
+	private String generateNameFromFolders(
+		int numFoldersInDescription,
+		LogErrorReporter logger
+	) {
 		LastFolders dnff = new LastFolders();
 		dnff.setNumFoldersInDescription(numFoldersInDescription);
 		dnff.setRemoveExtensionInDescription(false);
-		return dnff.descriptiveNameFor( fileManifest.getRootPath().toFile(), "<unknown>" ).getDescriptiveName();
+		return dnff.descriptiveNameFor(
+			fileManifest.getRootPath().toFile(),
+			"<unknown>",
+			logger
+		).getDescriptiveName();
 	}
 
 	@Override

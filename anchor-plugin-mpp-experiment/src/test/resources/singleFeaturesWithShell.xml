@@ -7,7 +7,7 @@
 	
 	<item config-class="org.anchoranalysis.bean.NamedBean" name="objectShellMeanIntensity4MaxSliceMask">
 		<item config-class="org.anchoranalysis.feature.bean.list.FeatureListProviderDefineSingle">
-			<item config-class="org.anchoranalysis.plugin.image.feature.bean.obj.single.intensity.IntensityMeanShellMaxSlice" iterationsDilation="4" nrgIndex="0" nrgIndexMask="1"/>
+			<item config-class="org.anchoranalysis.plugin.image.feature.bean.object.single.intensity.IntensityMeanShellMaxSlice" iterationsDilation="4" nrgIndex="0" nrgIndexMask="1"/>
 		</item>
 	</item>	
 	

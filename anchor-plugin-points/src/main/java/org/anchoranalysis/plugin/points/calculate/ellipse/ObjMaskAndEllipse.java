@@ -27,7 +27,7 @@ package org.anchoranalysis.plugin.points.calculate.ellipse;
  */
 
 import org.anchoranalysis.anchor.mpp.mark.conic.MarkEllipse;
-import org.anchoranalysis.image.objectmask.ObjectMask;
+import org.anchoranalysis.image.object.ObjectMask;
 
 public class ObjMaskAndEllipse {
 

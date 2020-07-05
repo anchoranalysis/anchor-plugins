@@ -76,37 +76,41 @@ public class ChnlProviderIfPixelZero extends ChnlProviderOne {
 	 * Creates a new channel which is a merged version of two input channels according to rules.
 	 * 
 	 * <ul>
-	 * <li>If the pixel in <pre>chnl</pre> is non-zero, then the corresponding output is <pre>chnl * multFactorIfNonZero</pre></li>
-	 * <li>If the pixel in <pre>chnl</pre> is zero, then the corresponding output is <pre>chnlIfPixelZero</pre>
+	 * <li>If the pixel in {@code chnl} is non-zero, then the corresponding output is {@code chnl * multFactorIfNonZero}
+	 * <li>If the pixel in {@code chnl} is zero, then the corresponding output is {@code chnlIfPixelZero}
 	 * </ul>
 	 * 
-	 * <p>Assumes the two channels are of the same size, but does not check.</p>
+	 * <p>Assumes the two channels are of the same size, but does not check.
 	 * 
-	 * <p>Neither channel's input is changed. The operation is <b>immutable</b>.</p>
+	 * <p>Neither channel's input is changed. The operation is <i>immutable</i>.
 	 * 
-	 * @param chnl the channel that is checked to be zero/non-zero, and whose pixels form the output (maybe multipled) if non-zero
-	 * @param chnlIfPixelZero the channel that forms the output if {@link chnl} is zero
+	 * @param channel the channel that is checked to be zero/non-zero, and whose pixels form the output (maybe multipled) if non-zero
+	 * @param channelIfPixelZero the channel that forms the output if {@code chnl} is zero
 	 * @param combinedType the type to use for the newly created channel
 	 * @param multFactorIfNonZero the multiplication factor to apply on non-zero pixels
 	 * @return a newly created merged channel according to the above rules
-	 * @throws CreateException
 	 */
-	public static Channel mergeViaZeroCheck( Channel chnl, Channel chnlIfPixelZero, VoxelDataType combinedType, double multFactorIfNonZero ) throws CreateException {
+	public static Channel mergeViaZeroCheck(
+		Channel channel,
+		Channel channelIfPixelZero,
+		VoxelDataType combinedType,
+		double multFactorIfNonZero
+	) {
 		
-		Channel chnlOut = ChannelFactory.instance().createEmptyInitialised(
-			chnl.getDimensions(),
+		Channel channelOut = ChannelFactory.instance().createEmptyInitialised(
+			channel.getDimensions(),
 			combinedType
 		);
 		
 		// We know these are all the same types from the logic above, so we can safetly cast
 		processVoxelBox(
-			chnlOut.getVoxelBox(),
-			chnl.getVoxelBox(),
-			chnlIfPixelZero.getVoxelBox(),
+			channelOut.getVoxelBox(),
+			channel.getVoxelBox(),
+			channelIfPixelZero.getVoxelBox(),
 			multFactorIfNonZero
 		);
 		
-		return chnlOut;
+		return channelOut;
 	}
 
 	private static void processVoxelBox( VoxelBoxWrapper vbOut, VoxelBoxWrapper vbIn, VoxelBoxWrapper vbIfZero, double multFactorIfNonZero ) {

@@ -31,12 +31,16 @@ import static org.junit.Assert.assertEquals;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.log.LogErrorReporter;
-import org.anchoranalysis.image.objectmask.ObjectCollection;
+import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.plugin.image.test.ProviderFixture;
 import org.anchoranalysis.test.LoggingFixture;
 import org.anchoranalysis.test.feature.plugins.mockfeature.MockFeatureWithCalculationFixture;
 import org.anchoranalysis.test.feature.plugins.objs.IntersectingCircleObjsFixture;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
 class MergeTestHelper {
 
 	private static final int NUM_INTERSECTING = 8;
@@ -58,8 +62,6 @@ class MergeTestHelper {
 		NUM_NOT_INTERSECTING,
 		false
 	);
-	
-	private MergeTestHelper() {}
 	
 	/**
 	 * Tests the initialization and execution of a provider of object-masks that results in a number of merged-objects

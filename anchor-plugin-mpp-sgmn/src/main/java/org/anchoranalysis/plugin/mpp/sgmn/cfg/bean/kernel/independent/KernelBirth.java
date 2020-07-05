@@ -7,7 +7,7 @@ import java.util.stream.Collectors;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.functional.OptionalUtilities;
-import org.anchoranalysis.image.extent.ImageDim;
+import org.anchoranalysis.image.extent.ImageDimensions;
 
 /*
  * #%L
@@ -50,13 +50,8 @@ import org.anchoranalysis.mpp.sgmn.kernel.KernelCalcNRGException;
  * @param <T> proposal-type
  */
 public abstract class KernelBirth<T> extends KernelPosNeg<T> {
-
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -3031519899206383216L;
 	
-	private Optional<Set<Mark>> setMarksNew;
+	private Optional<Set<Mark>> setMarksNew = Optional.empty();
 	
 	// START BEAN PROPERTIES
 	/** Total number of births */
@@ -84,7 +79,7 @@ public abstract class KernelBirth<T> extends KernelPosNeg<T> {
 	
 	@Override
 	public double calcAccptProb(int exstSize, int propSize,
-			double poisson_intens, ImageDim scene_size, double densityRatio) {
+			double poisson_intens, ImageDimensions scene_size, double densityRatio) {
 		
         double num = getProbNeg() * scene_size.getVolume() * poisson_intens;
         double dem = getProbPos() * propSize;
@@ -109,7 +104,7 @@ public abstract class KernelBirth<T> extends KernelPosNeg<T> {
 
 	@Override
 	public int[] changedMarkIDArray() {
-		return idArr(setMarksNew.get());
+		return setMarksNew.map(KernelBirth::idArr).orElse( new int[]{} );
 	}
 
 	protected Optional<Set<Mark>> getMarkNew() {

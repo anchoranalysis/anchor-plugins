@@ -31,7 +31,7 @@ import org.anchoranalysis.core.error.OperationFailedException;
 /**
  * Adds an individual-item to an aggregate-item
  * 
- * @author FEEHANO
+ * @author Owen Feehan
  *
  * @param <S> individual-item type
  * @param <T> aggregate-item type (comines many individual types)

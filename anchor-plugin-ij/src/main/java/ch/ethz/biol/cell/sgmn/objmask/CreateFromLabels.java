@@ -33,8 +33,8 @@ import java.util.stream.Collectors;
 
 import org.anchoranalysis.image.convert.ByteConverter;
 import org.anchoranalysis.image.extent.BoundingBox;
-import org.anchoranalysis.image.objectmask.ObjectCollection;
-import org.anchoranalysis.image.objectmask.ObjectCollectionFactory;
+import org.anchoranalysis.image.object.ObjectCollection;
+import org.anchoranalysis.image.object.ObjectCollectionFactory;
 import org.anchoranalysis.image.points.PointRange;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 

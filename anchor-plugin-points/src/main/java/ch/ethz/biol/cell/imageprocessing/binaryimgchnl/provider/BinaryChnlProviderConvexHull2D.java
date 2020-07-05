@@ -28,35 +28,51 @@ package ch.ethz.biol.cell.imageprocessing.binaryimgchnl.provider;
 
 
 import java.util.List;
-import java.util.Optional;
-
 import org.anchoranalysis.core.error.CreateException;
+import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.geometry.Point2i;
 import org.anchoranalysis.image.binary.BinaryChnl;
-import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.points.PointsFromBinaryChnl;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 
 
 // USES Gift wrap algorithm taken from FIJI PolygonRoi.java
-public class BinaryChnlProviderConvexHull2D extends ConvexHullBase {
 
+/**
+ * Sets particular voxels to high only if they exist on the convex-hull of the outline of a mask.
+ * 
+ * <p>All other voxels are low.</p>
+ * 
+ * @author Owen Feehan
+ *
+ */
+public class BinaryChnlProviderConvexHull2D extends ConvexHullBase {
+	
 	@Override
-	protected BinaryChnl createFromChnl(BinaryChnl chnlIn, BinaryChnl outline) throws CreateException {
-		List<Point2i> extPnts = PointsFromBinaryChnl.pointsFromChnl2D(outline);
+	protected BinaryChnl createFromChnl(BinaryChnl mask, BinaryChnl outline) throws CreateException {
+		try {
+			List<Point2i> pointsOnConvexHull = ConvexHullUtilities.convexHull2D(
+				PointsFromBinaryChnl.pointsFromChnl2D(outline)
+			);
+	
+			// Reuse the channel-created for the outline, to output the results
+			changeMaskToShowPointsOnly(outline,pointsOnConvexHull);
+			return outline;
+		} catch (OperationFailedException e) {
+			throw new CreateException(e);
+		}
+	}
+	
+	private void changeMaskToShowPointsOnly(BinaryChnl mask, List<Point2i> points) {
+		VoxelBox<?> voxels = mask.getChnl().getVoxelBox().any();
+
+		int on = mask.getBinaryValues().getOnInt();
+		int off = mask.getBinaryValues().getOffInt(); 
 		
-		Optional<List<Point2i>> pntsConvexHull = ConvexHullUtilities.convexHull2D(extPnts);
-				
-		// we write the vertices to the outline
-		Channel out = outline.getChnl();
-		VoxelBox<?> vbOut = out.getVoxelBox().any();
-		
-		vbOut.setAllPixelsTo(
-			outline.getBinaryValues().getOffInt()
+		voxels.setAllPixelsTo(off);
+
+		points.forEach( pnt->
+			voxels.setVoxel( pnt.getX(), pnt.getY(), 0, on)
 		);
-		pntsConvexHull.ifPresent(pnts->pnts.forEach( pnt->
-			vbOut.setVoxel( pnt.getX(), pnt.getY(), 0, outline.getBinaryValues().getOnInt() )
-		));
-		return outline;
 	}
 }

@@ -65,7 +65,10 @@ public class Files extends InputManager<FileInput> {
 		try {
 			Collection<File> files = getFileProvider().create(params);
 				
-			return descriptiveNameFromFile.descriptiveNamesForCheckUniqueness(files).stream().map(
+			return descriptiveNameFromFile.descriptiveNamesForCheckUniqueness(
+				files,
+				params.getLogger()
+			).stream().map(
 				FileInput::new
 			).collect( Collectors.toList() );
 		} catch (FileProviderException e) {

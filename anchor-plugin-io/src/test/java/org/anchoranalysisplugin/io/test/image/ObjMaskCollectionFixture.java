@@ -31,9 +31,9 @@ import java.util.Random;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.Extent;
-import org.anchoranalysis.image.objectmask.ObjectMask;
-import org.anchoranalysis.image.objectmask.ObjectCollection;
-import org.anchoranalysis.image.objectmask.ObjectCollectionFactory;
+import org.anchoranalysis.image.object.ObjectCollection;
+import org.anchoranalysis.image.object.ObjectCollectionFactory;
+import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 
 class ObjMaskCollectionFixture {

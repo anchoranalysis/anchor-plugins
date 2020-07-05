@@ -32,8 +32,8 @@ import org.anchoranalysis.core.color.ColorList;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.io.generator.raster.obj.rgb.RGBObjMaskGenerator;
-import org.anchoranalysis.image.objectmask.ObjectCollection;
-import org.anchoranalysis.image.objectmask.properties.ObjectCollectionWithProperties;
+import org.anchoranalysis.image.object.ObjectCollection;
+import org.anchoranalysis.image.object.properties.ObjectCollectionWithProperties;
 import org.anchoranalysis.image.stack.DisplayStack;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.io.bean.color.generator.ColorSetGenerator;
@@ -43,6 +43,10 @@ import org.anchoranalysis.io.bean.objmask.writer.RGBOutlineWriter;
 import org.anchoranalysis.io.bean.objmask.writer.RGBSolidWriter;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
 public class ColoredObjsStackCreator {
 
 	public static final ColorSetGenerator DEFAULT_COLOR_SET_GENERATOR = new ShuffleColorSetGenerator( new HSBColorSetGenerator() );

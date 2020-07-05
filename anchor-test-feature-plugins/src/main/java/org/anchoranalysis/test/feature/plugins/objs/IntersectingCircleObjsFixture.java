@@ -27,10 +27,14 @@ package org.anchoranalysis.test.feature.plugins.objs;
  */
 
 import org.anchoranalysis.core.geometry.Point2i;
-import org.anchoranalysis.image.objectmask.ObjectMask;
-import org.anchoranalysis.image.objectmask.ObjectCollection;
-import org.anchoranalysis.image.objectmask.ObjectCollectionFactory;
+import org.anchoranalysis.image.object.ObjectCollection;
+import org.anchoranalysis.image.object.ObjectCollectionFactory;
+import org.anchoranalysis.image.object.ObjectMask;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
 public class IntersectingCircleObjsFixture {
 
 	private static final int INITIAL_MARGIN = 5;
@@ -44,7 +48,7 @@ public class IntersectingCircleObjsFixture {
 	 * 
 	 *  @param numIntersecting the number of circles that intersect that should be produced
 	 *  @param numNotIntersecting the number of circles that do not intersect that should be produced
-	 *  @param boolean sameSize iff TRUE all circles have the same radius (INITIAL_RAIDUS), otherwise the radius gradually increments
+	 *  @param sameSize iff TRUE all circles have the same radius (INITIAL_RAIDUS), otherwise the radius gradually increments
 	 * */
 	public static ObjectCollection generateIntersectingObjs(int numIntersecting, int numNotIntersecting, boolean sameSize) {
 		

@@ -42,7 +42,7 @@ import org.anchoranalysis.io.filepath.prefixer.FilePathPrefix;
  * 
  * <p>Groups (i.e. parentheses) in the regular expression each form a directory in the output</p>
  * 
- * @author owen
+ * @author Owen Feehan
  *
  */
 public class PathRegEx extends FilePathPrefixerAvoidResolve {

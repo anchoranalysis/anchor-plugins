@@ -33,11 +33,12 @@ import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.name.store.SharedObjects;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
-import org.anchoranalysis.image.init.ImageInitParams;
+import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
+import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.io.input.ImageInitParamsFactory;
-import org.anchoranalysis.image.objectmask.ObjectMask;
-import org.anchoranalysis.image.objectmask.ObjectCollection;
+import org.anchoranalysis.image.object.ObjectCollection;
+import org.anchoranalysis.image.object.ObjectMask;
+import org.anchoranalysis.plugin.image.feature.bean.object.single.shared.intersecting.FeatureIntersectingObjects;
 import org.anchoranalysis.test.LoggingFixture;
 import org.anchoranalysis.test.feature.plugins.FeatureTestCalculator;
 import org.anchoranalysis.test.feature.plugins.objs.CircleObjMaskFixture;
@@ -68,7 +69,7 @@ class InteresectingObjsTestHelper {
 	 */
 	public static void testPositions(
 		String messagePrefix,			
-		FeatureIntersectingObjs feature,
+		FeatureIntersectingObjects feature,
 		boolean sameSize,
 		int expectedFirst,
 		int expectedSecond,
@@ -124,7 +125,7 @@ class InteresectingObjsTestHelper {
 	/** 
 	 * Asserts a result after extracting object at index i from a collection, and using the remainder as the object-collection
 	 * 
-	 * @param descriptive-message for test
+	 * @param message descriptive-message for test
 	 * @param feature feature to calculate on params to form value
 	 * @param objs object-collection used to determine parameter for feature (single object removed at index) and the remainder that form a set of objects to intersect with
 	 * @param index index of object in collection to remove and use as parameter
@@ -136,7 +137,7 @@ class InteresectingObjsTestHelper {
 	 **/
 	private static void assertFeatureIndexInt(
 		String message,
-		FeatureIntersectingObjs feature,
+		FeatureIntersectingObjects feature,
 		ObjectCollection objs,
 		int index,
 		int expectedResult
@@ -151,7 +152,7 @@ class InteresectingObjsTestHelper {
 		FeatureTestCalculator.assertIntResult(
 			message,
 			addId(feature),
-			new FeatureInputSingleObj(om, CircleObjMaskFixture.nrgStack()),
+			new FeatureInputSingleObject(om, CircleObjMaskFixture.nrgStack()),
 			Optional.of(createInitParams(others)),
 			expectedResult
 		);		
@@ -178,7 +179,7 @@ class InteresectingObjsTestHelper {
 		);
 	}
 	
-	private static FeatureIntersectingObjs addId( FeatureIntersectingObjs feature ) {
+	private static FeatureIntersectingObjects addId( FeatureIntersectingObjects feature ) {
 		feature.setId(ID);
 		return feature;
 	}

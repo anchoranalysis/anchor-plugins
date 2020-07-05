@@ -31,7 +31,7 @@ import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.feature.evaluator.PayloadCalculator;
-import org.anchoranalysis.image.objectmask.ObjectMask;
+import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.plugin.image.obj.merge.ObjVertex;
 
 

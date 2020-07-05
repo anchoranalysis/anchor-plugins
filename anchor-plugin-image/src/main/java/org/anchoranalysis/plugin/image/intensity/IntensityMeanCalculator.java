@@ -32,7 +32,7 @@ import org.anchoranalysis.core.geometry.ReadableTuple3i;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.extent.BoundingBox;
-import org.anchoranalysis.image.objectmask.ObjectMask;
+import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.voxel.box.VoxelBoxWrapper;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 
@@ -60,8 +60,8 @@ public class IntensityMeanCalculator {
 		
 		BoundingBox bbox = om.getBoundingBox();
 		
-		ReadableTuple3i crnrMin = bbox.getCrnrMin();
-		ReadableTuple3i crnrMax = bbox.calcCrnrMax();
+		ReadableTuple3i crnrMin = bbox.cornerMin();
+		ReadableTuple3i crnrMax = bbox.calcCornerMax();
 		
 		double sum = 0.0;
 		int cnt = 0;

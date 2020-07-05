@@ -33,16 +33,16 @@ import java.util.Optional;
 import org.anchoranalysis.anchor.mpp.bean.proposer.PointsProposer;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.anchor.mpp.proposer.error.ErrorNode;
-import org.anchoranalysis.anchor.mpp.proposer.visualization.ICreateProposalVisualization;
+import org.anchoranalysis.anchor.mpp.proposer.visualization.CreateProposalVisualization;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.core.random.RandomNumberGenerator;
-import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
-import org.anchoranalysis.image.extent.ImageDim;
-import org.anchoranalysis.image.objectmask.ObjectMask;
-import org.anchoranalysis.image.objectmask.ObjectCollection;
+import org.anchoranalysis.image.bean.provider.ObjectCollectionProvider;
+import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.image.object.ObjectCollection;
+import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.points.PointsFromObjMask;
 
 /**
@@ -56,7 +56,7 @@ public class IncludeRandomObjs extends PointsProposer {
 
 	// START BEAN PROPERTIES
 	@BeanField
-	private ObjMaskProvider objs;
+	private ObjectCollectionProvider objs;
 	// END BEAN PROPERTIES
 	
 	@Override
@@ -65,7 +65,7 @@ public class IncludeRandomObjs extends PointsProposer {
 	}
 
 	@Override
-	public Optional<List<Point3i>> propose(Point3d pnt, Mark mark, ImageDim dim, RandomNumberGenerator re, ErrorNode errorNode) {
+	public Optional<List<Point3i>> propose(Point3d pnt, Mark mark, ImageDimensions dim, RandomNumberGenerator re, ErrorNode errorNode) {
 
 		List<Point3i> out = new ArrayList<>();
 		
@@ -85,15 +85,15 @@ public class IncludeRandomObjs extends PointsProposer {
 	}
 	
 	@Override
-	public ICreateProposalVisualization proposalVisualization(boolean detailed) {
-		return null;
+	public Optional<CreateProposalVisualization> proposalVisualization(boolean detailed) {
+		return Optional.empty();
 	}
 
-	public ObjMaskProvider getObjs() {
+	public ObjectCollectionProvider getObjs() {
 		return objs;
 	}
 
-	public void setObjs(ObjMaskProvider objs) {
+	public void setObjs(ObjectCollectionProvider objs) {
 		this.objs = objs;
 	}
 	

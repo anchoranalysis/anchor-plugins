@@ -47,7 +47,7 @@ import org.opencv.imgproc.Imgproc;
  * TODO: find a way to use the same allocated memory in both the Java structures
  *   and the OpenCV structures
  *   
- * @author FEEHANO
+ * @author Owen Feehan
  *
  */
 public abstract class StackProviderCVColorConverter extends StackProviderOne {

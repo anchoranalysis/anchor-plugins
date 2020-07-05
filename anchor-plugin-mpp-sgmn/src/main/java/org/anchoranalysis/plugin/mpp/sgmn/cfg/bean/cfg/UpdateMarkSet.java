@@ -4,10 +4,9 @@ import org.anchoranalysis.anchor.mpp.bean.init.MPPInitParams;
 import org.anchoranalysis.anchor.mpp.feature.mark.ListUpdatableMarkSetCollection;
 import org.anchoranalysis.anchor.mpp.feature.mark.MemoList;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
-import org.anchoranalysis.anchor.mpp.mark.set.UpdatableMarkSet;
 import org.anchoranalysis.anchor.mpp.pair.Pair;
 import org.anchoranalysis.anchor.mpp.pair.PairCollection;
-import org.anchoranalysis.anchor.mpp.probmap.ProbMap;
+
 
 /*-
  * #%L
@@ -59,7 +58,6 @@ class UpdateMarkSet {
 	
 	public void apply() throws OperationFailedException {
 		makePairsUpdatable();
-		makeProbMapsUpdatable();
 	}
 	
 	private void makePairsUpdatable() throws OperationFailedException {
@@ -76,23 +74,4 @@ class UpdateMarkSet {
 			throw new OperationFailedException(e.summarize());
 		}
 	}
-			
-	private void makeProbMapsUpdatable() throws OperationFailedException {
-		
-		try {
-			for( String key : psoImage.getProbMapSet().keys()  ) {
-				ProbMap probMap = psoImage.getProbMapSet().getException(key);
-				
-				UpdatableMarkSet updater = probMap.updater(); 
-				if (updater!=null) { 
-					updater.initUpdatableMarkSet( new MemoList(), nrgStack, logger, psoImage.getFeature().getSharedFeatureSet() );
-					updatableMarkSetCollection.add( updater );
-				}
-			}
-		} catch (InitException e) {
-			throw new OperationFailedException(e);
-		} catch (NamedProviderGetException e) {
-			throw new OperationFailedException(e.summarize());
-		}
-	}	
 }

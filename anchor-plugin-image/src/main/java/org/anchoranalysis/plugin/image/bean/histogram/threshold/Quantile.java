@@ -39,7 +39,7 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
  * 
  * <p>By default, it calculates the median i.e. quantile of 0.5</p>
  * 
- * @author owen
+ * @author Owen Feehan
  *
  */
 public class Quantile extends CalculateLevel {

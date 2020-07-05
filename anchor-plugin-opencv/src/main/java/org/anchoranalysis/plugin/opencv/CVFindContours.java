@@ -35,13 +35,17 @@ import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.geometry.Point3f;
 import org.anchoranalysis.core.geometry.ReadableTuple3i;
 import org.anchoranalysis.image.contour.Contour;
-import org.anchoranalysis.image.objectmask.ObjectMask;
+import org.anchoranalysis.image.object.ObjectMask;
 import org.opencv.core.Mat;
 import org.opencv.core.MatOfPoint;
 import org.opencv.core.Point;
 import org.opencv.imgproc.Imgproc;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
 /** Wrapper around Open CV's findContours function */
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
 public class CVFindContours {
 
 	static {
@@ -60,7 +64,7 @@ public class CVFindContours {
 			List<MatOfPoint> contours = new ArrayList<>();
 			Imgproc.findContours(mat, contours, new Mat(), Imgproc.RETR_EXTERNAL, Imgproc.CHAIN_APPROX_NONE );
 			
-			return convertMatOfPoint( contours, om.getBoundingBox().getCrnrMin() );
+			return convertMatOfPoint( contours, om.getBoundingBox().cornerMin() );
 						
 		} catch (CreateException e) {
 			throw new OperationFailedException(e);

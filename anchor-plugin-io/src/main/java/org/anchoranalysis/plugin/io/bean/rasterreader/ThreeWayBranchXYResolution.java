@@ -30,7 +30,7 @@ import java.nio.file.Path;
 
 
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.image.extent.ImageDim;
+import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.io.RasterIOException;
 import org.anchoranalysis.image.io.bean.rasterreader.RasterReader;
 import org.anchoranalysis.image.io.rasterreader.OpenedRaster;
@@ -74,7 +74,7 @@ public class ThreeWayBranchXYResolution extends RasterReader {
 		
 		OpenedRaster orInput = rasterReaderInput.openFile(filepath);
 		
-		ImageDim sd = orInput.dim(0);
+		ImageDimensions sd = orInput.dim(0);
 		
 		if (Math.abs(sd.getRes().getX()-sd.getRes().getY())>1e-12) {
 			throw new RasterIOException(

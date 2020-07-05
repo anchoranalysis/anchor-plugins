@@ -33,8 +33,8 @@ import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
 import org.anchoranalysis.core.relation.RelationToValue;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorSingle;
-import org.anchoranalysis.image.feature.objmask.pair.FeatureInputPairObjs;
-import org.anchoranalysis.image.objectmask.ObjectMask;
+import org.anchoranalysis.image.feature.object.input.FeatureInputPairObjects;
+import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.plugin.image.obj.merge.ObjVertex;
 
 
@@ -48,10 +48,10 @@ public class AssignPriorityFromPair extends AssignPriority {
 
 	private double threshold;
 	private RelationToValue relation;
-	private FeatureCalculatorSingle<FeatureInputPairObjs> featureCalculator;
+	private FeatureCalculatorSingle<FeatureInputPairObjects> featureCalculator;
 			
 	public AssignPriorityFromPair(
-		FeatureCalculatorSingle<FeatureInputPairObjs> featureCalculator,
+		FeatureCalculatorSingle<FeatureInputPairObjects> featureCalculator,
 		double threshold,
 		RelationToValue relation
 	) throws InitException {
@@ -82,12 +82,12 @@ public class AssignPriorityFromPair extends AssignPriority {
 		);
 	}
 	
-	private FeatureInputPairObjs createInput(
+	private FeatureInputPairObjects createInput(
 		ObjVertex omSrcWithFeature,
 		ObjVertex omDestWithFeature,
 		ObjectMask omMerge	
 	) {
-		return new FeatureInputPairObjs(
+		return new FeatureInputPairObjects(
 			omSrcWithFeature.getObjMask(),
 			omDestWithFeature.getObjMask(),
 			Optional.empty(),

@@ -41,6 +41,10 @@ import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
 class PointsFromInsideHelper {
 
 	// TODO horribly long, refactor
@@ -71,8 +75,8 @@ class PointsFromInsideHelper {
 		int successiveEmptySlices = -1;
 			
 		Extent e = vb.extent();
-		ReadableTuple3i crnrMin = bbox.getCrnrMin();
-		ReadableTuple3i crnrMax = bbox.calcCrnrMax();
+		ReadableTuple3i crnrMin = bbox.cornerMin();
+		ReadableTuple3i crnrMax = bbox.calcCornerMax();
 		
 		
 		for( int z=startZ; z<=crnrMax.getZ(); z++) {

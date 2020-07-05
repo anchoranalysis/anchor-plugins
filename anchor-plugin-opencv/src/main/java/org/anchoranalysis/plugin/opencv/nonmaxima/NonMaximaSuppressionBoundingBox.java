@@ -36,7 +36,7 @@ import com.google.common.base.Predicate;
 /**
  * Non-maxima suppression for axis-aligned bounding-boxes using an Intersection over Union score.
  * 
- * @author owen
+ * @author Owen Feehan
  *
  */
 public class NonMaximaSuppressionBoundingBox extends NonMaximaSuppression<BoundingBox> {

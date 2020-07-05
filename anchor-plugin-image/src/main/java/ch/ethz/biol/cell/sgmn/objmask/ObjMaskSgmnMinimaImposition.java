@@ -31,18 +31,18 @@ import java.util.Optional;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.image.bean.sgmn.objmask.ObjMaskSgmn;
-import org.anchoranalysis.image.bean.sgmn.objmask.ObjMaskSgmnOne;
+import org.anchoranalysis.image.bean.nonbean.error.SgmnFailedException;
+import org.anchoranalysis.image.bean.segmentation.object.ObjectSegmentation;
+import org.anchoranalysis.image.bean.segmentation.object.ObjectSegmentationOne;
 import org.anchoranalysis.image.channel.Channel;
-import org.anchoranalysis.image.objectmask.ObjectMask;
-import org.anchoranalysis.image.objectmask.ObjectCollection;
+import org.anchoranalysis.image.object.ObjectCollection;
+import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.seed.SeedCollection;
-import org.anchoranalysis.image.sgmn.SgmnFailedException;
 import org.anchoranalysis.plugin.image.bean.sgmn.watershed.minima.MinimaImposition;
 
 
 // Imposes minima only in seed locations on the input channel, and performs the segmentation
-public class ObjMaskSgmnMinimaImposition extends ObjMaskSgmnOne {
+public class ObjMaskSgmnMinimaImposition extends ObjectSegmentationOne {
 
 	// START BEAN PROPERTIES
 	@BeanField
@@ -54,7 +54,7 @@ public class ObjMaskSgmnMinimaImposition extends ObjMaskSgmnOne {
 		Channel chnl,
 		Optional<ObjectMask> mask,
 		Optional<SeedCollection> seeds,
-		ObjMaskSgmn sgmn
+		ObjectSegmentation sgmn
 	) throws SgmnFailedException {
 
 		if (!seeds.isPresent()) {

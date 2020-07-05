@@ -41,9 +41,9 @@ import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.graph.GraphWithEdgeTypes;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.histogram.Histogram;
-import org.anchoranalysis.image.objectmask.ObjectCollection;
+import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
-import org.anchoranalysis.image.voxel.nghb.CreateNghbGraph;
+import org.anchoranalysis.image.voxel.nghb.CreateNeighborGraph;
 
 /*
  *  Calculates a threshold-level for each object collectively based on other objects
@@ -135,7 +135,7 @@ public class ChnlProviderObjsLevelNeighbours extends ChnlProviderLevel {
 	private void setAgainstNghb( Channel chnlIntensity, Channel chnlOutput, ObjectCollection objMasks, int nghbDist ) throws OperationFailedException {
 		
 		try {
-			CreateNghbGraph<ObjectMaskWithHistogram> graphCreator = new CreateNghbGraph<ObjectMaskWithHistogram>( false );
+			CreateNeighborGraph<ObjectMaskWithHistogram> graphCreator = new CreateNeighborGraph<ObjectMaskWithHistogram>( false );
 			
 			GraphWithEdgeTypes<ObjectMaskWithHistogram,Integer> graph = graphCreator.createGraphWithNumPixels(
 				objectsWithHistograms(objMasks, chnlIntensity),
@@ -176,7 +176,7 @@ public class ChnlProviderObjsLevelNeighbours extends ChnlProviderLevel {
 	}
 	
 	private static List<ObjectMaskWithHistogram> objectsWithHistograms( ObjectCollection objMasks, Channel chnlIntensity ) {
-		return objMasks.stream().mapAsList(om ->
+		return objMasks.stream().mapToList(om ->
 			new ObjectMaskWithHistogram(om,chnlIntensity)
 		);
 	}

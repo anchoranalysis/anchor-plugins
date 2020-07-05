@@ -39,9 +39,10 @@ import org.anchoranalysis.anchor.mpp.mark.points.MarkPointListFactory;
 import org.anchoranalysis.anchor.mpp.proposer.ProposalAbnormalFailureException;
 import org.anchoranalysis.anchor.mpp.proposer.error.ErrorNode;
 import org.anchoranalysis.anchor.mpp.proposer.visualization.CreateProposeVisualizationList;
-import org.anchoranalysis.anchor.mpp.proposer.visualization.ICreateProposalVisualization;
+import org.anchoranalysis.anchor.mpp.proposer.visualization.CreateProposalVisualization;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
+import org.anchoranalysis.core.axis.AxisType;
 import org.anchoranalysis.core.color.RGBColor;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
@@ -52,9 +53,8 @@ import org.anchoranalysis.image.bean.provider.BinaryChnlProvider;
 import org.anchoranalysis.image.bean.unitvalue.distance.UnitValueDistance;
 import org.anchoranalysis.image.bean.unitvalue.distance.UnitValueDistanceVoxels;
 import org.anchoranalysis.image.binary.BinaryChnl;
-import org.anchoranalysis.image.extent.ImageDim;
-import org.anchoranalysis.image.extent.ImageRes;
-import org.anchoranalysis.image.orientation.DirectionVector;
+import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.image.extent.ImageResolution;
 import org.anchoranalysis.image.orientation.Orientation;
 import org.anchoranalysis.plugin.mpp.bean.proposer.points.fromorientation.PointsFromOrientationProposer;
 
@@ -83,9 +83,6 @@ public class XYOrientationExtendToZ extends PointsProposer {
 	private int minNumSlices = 3;
 	
 	@BeanField
-	private int forceMinZSize = 1;
-	
-	@BeanField
 	private boolean forwardDirectionOnly = false;
 	
 	// If we reach this amount of slices without adding a point, we consider our job over
@@ -96,7 +93,7 @@ public class XYOrientationExtendToZ extends PointsProposer {
 	private List<Point3i> lastPntsAll;
 	
 	@Override
-	public Optional<List<Point3i>> propose(Point3d pnt, Mark mark, ImageDim dim, RandomNumberGenerator re, ErrorNode errorNode) throws ProposalAbnormalFailureException {
+	public Optional<List<Point3i>> propose(Point3d pnt, Mark mark, ImageDimensions dim, RandomNumberGenerator re, ErrorNode errorNode) throws ProposalAbnormalFailureException {
 		pointsFromOrientationXYProposer.clearVisualizationState();
 		Optional<Orientation> orientation = orientationXYProposer.propose(
 			mark,
@@ -110,23 +107,23 @@ public class XYOrientationExtendToZ extends PointsProposer {
 	}
 
 	@Override
-	public ICreateProposalVisualization proposalVisualization(boolean detailed) {
+	public Optional<CreateProposalVisualization> proposalVisualization(boolean detailed) {
 		
 		CreateProposeVisualizationList list = new CreateProposeVisualizationList();
 		list.add( pointsFromOrientationXYProposer.proposalVisualization(detailed) );
 
 		list.add( cfg -> {
-			if (lastPntsAll!=null && lastPntsAll.size()>0) {
+			if (lastPntsAll!=null && !lastPntsAll.isEmpty()) {
 				cfg.addChangeID(
 					MarkPointListFactory.createMarkFromPoints3i(lastPntsAll),
 					new RGBColor(Color.ORANGE)
 				);
 			}
 		});
-		return list;
+		return Optional.of(list);
 	}
 	
-	private Optional<List<Point3i>> proposeFromOrientation(Orientation orientation, Point3d pnt, ImageDim dim, RandomNumberGenerator re, ErrorNode errorNode) {
+	private Optional<List<Point3i>> proposeFromOrientation(Orientation orientation, Point3d pnt, ImageDimensions dim, RandomNumberGenerator re, ErrorNode errorNode) {
 		try {
 			List<List<Point3i>> pntsXY = getPointsFromOrientationXYProposer().calcPoints( pnt, orientation, dim.getZ()>1, re, forwardDirectionOnly );
 
@@ -137,8 +134,7 @@ public class XYOrientationExtendToZ extends PointsProposer {
 				skipZDist(dim.getRes()),
 				binaryChnl.create(),
 				chnlFilled(),
-				dim,
-				forceMinZSize
+				dim
 			);
 			return Optional.of(lastPntsAll);
 			
@@ -148,7 +144,7 @@ public class XYOrientationExtendToZ extends PointsProposer {
 		}
 	}
 	
-	private int maxZDist(RandomNumberGenerator re, ImageRes res) throws OperationFailedException {
+	private int maxZDist(RandomNumberGenerator re, ImageResolution res) throws OperationFailedException {
 		int maxZDist = (int) Math.round(
 			maxDistanceZ.propose(re, res)
 		);
@@ -156,16 +152,13 @@ public class XYOrientationExtendToZ extends PointsProposer {
 		return maxZDist;
 	}
 	
-	private int skipZDist(ImageRes res) throws OperationFailedException {
-		int skipZDist = (int) Math.round(
-			distanceZEndIfEmpty.rslv(
+	private int skipZDist(ImageResolution res) throws OperationFailedException {
+		return (int) Math.round(
+			distanceZEndIfEmpty.rslvForAxis(
 				Optional.of(res),
-				new DirectionVector(0, 0, 1.0)
+				AxisType.Z
 			)
 		);
-		// TODO fix. Why this constant?
-		skipZDist = 100;
-		return skipZDist;
 	}
 	
 	private Optional<BinaryChnl> chnlFilled() throws CreateException {
@@ -191,14 +184,6 @@ public class XYOrientationExtendToZ extends PointsProposer {
 
 	public void setMinNumSlices(int minNumSlices) {
 		this.minNumSlices = minNumSlices;
-	}
-
-	public int getForceMinZSize() {
-		return forceMinZSize;
-	}
-
-	public void setForceMinZSize(int forceMinZSize) {
-		this.forceMinZSize = forceMinZSize;
 	}
 
 	public ScalarProposer getMaxDistanceZ() {

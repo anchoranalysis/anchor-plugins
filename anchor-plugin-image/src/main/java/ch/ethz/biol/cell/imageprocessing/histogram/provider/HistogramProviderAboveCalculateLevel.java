@@ -37,7 +37,7 @@ import org.anchoranalysis.plugin.image.intensity.HistogramThresholder;
 /**
  * Thresholds a histogram using a CalculateLevel keeping only the values greater equal than the threshold
  * 
- * @author FEEHANO
+ * @author Owen Feehan
  *
  */
 public class HistogramProviderAboveCalculateLevel extends HistogramProviderOne {

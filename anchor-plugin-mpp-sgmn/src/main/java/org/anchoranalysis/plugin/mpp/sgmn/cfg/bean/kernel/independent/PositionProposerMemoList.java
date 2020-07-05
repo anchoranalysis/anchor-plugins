@@ -64,9 +64,9 @@ class PositionProposerMemoList implements PositionProposer {
 		
 		Extent extent = bbox.extent();
 		
-		int x = bbox.getCrnrMin().getX() + (int) (re.nextDouble() * extent.getX() );
-		int y = bbox.getCrnrMin().getY() + (int) (re.nextDouble() * extent.getY() );
-		int z = bbox.getCrnrMin().getZ() + (int) (re.nextDouble() * extent.getZ() );
+		int x = bbox.cornerMin().getX() + (int) (re.nextDouble() * extent.getX() );
+		int y = bbox.cornerMin().getY() + (int) (re.nextDouble() * extent.getY() );
+		int z = bbox.cornerMin().getZ() + (int) (re.nextDouble() * extent.getZ() );
 		
 		return new Point3d(x,y,z);
 	}
@@ -104,9 +104,9 @@ class PositionProposerMemoList implements PositionProposer {
 			BoundingBox bbox = pm.getBoundingBox(regionID);
 			pnt = randomPosition(bbox, context.getRandomNumberGenerator());
 			
-			int relX = (int) pnt.getX() - bbox.getCrnrMin().getX();
-			int relY = (int) pnt.getY() - bbox.getCrnrMin().getY();
-			int relZ = (int) pnt.getZ() - bbox.getCrnrMin().getZ();
+			int relX = (int) pnt.getX() - bbox.cornerMin().getX();
+			int relY = (int) pnt.getY() - bbox.cornerMin().getY();
+			int relZ = (int) pnt.getZ() - bbox.cornerMin().getZ();
 			
 			byte membershipExst = pm.getVoxelBox().getPixelsForPlane(relZ).get( bbox.extent().offset(relX, relY) );
 			

@@ -45,6 +45,10 @@ import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.mpp.sgmn.kernel.KernelCalcContext;
 import org.anchoranalysis.mpp.sgmn.kernel.KernelCalcNRGException;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
 class KernelBirthAndKillHelper {
 	
 	public static PxlMarkMemo makeAdditionalBirth(
@@ -71,9 +75,7 @@ class KernelBirthAndKillHelper {
 			pmmAdditional = propContext.create(markNewAdditional);
 					
 			try {
-				if (!markProposerAdditionalBirth.propose( pmmAdditional, context.proposer()) ) {
-					markNewAdditional = null;
-				}
+				markProposerAdditionalBirth.propose( pmmAdditional, context.proposer());
 			} catch (ProposalAbnormalFailureException e) {
 				throw new KernelCalcNRGException(
 					"Failed to propose an additional-mark due to abnormal exception",
@@ -92,7 +94,7 @@ class KernelBirthAndKillHelper {
 		double overlapRatioThreshold
 	) throws OperationFailedException {
 		
-		List<PxlMarkMemo> outList = new ArrayList<PxlMarkMemo>();
+		List<PxlMarkMemo> outList = new ArrayList<>();
 		
 		// We always measure overlap in terms of the object being added
 		long numPixelsNew = memoNew.doOperation().statisticsForAllSlices(0, regionID).size();
@@ -109,17 +111,17 @@ class KernelBirthAndKillHelper {
 				continue;
 			}
 			
-			double overlap_ratio = Math.max( overlap / numPixelsNew, overlap / numPixelsExst );
+			double overlapRatio = Math.max( overlap / numPixelsNew, overlap / numPixelsExst );
 			
-			if (Double.isNaN(overlap_ratio)) {
+			if (Double.isNaN(overlapRatio)) {
 				throw new OperationFailedException( "Kill objects has NaN" );
 			}
 			
-			if (Double.isInfinite(overlap_ratio)) {
+			if (Double.isInfinite(overlapRatio)) {
 				throw new OperationFailedException( "Kill objects has Infinite" );
 			}
 			
-			if (overlap_ratio > overlapRatioThreshold) {
+			if (overlapRatio > overlapRatioThreshold) {
 				
 				outList.add( memoExst );
 			}
@@ -132,7 +134,6 @@ class KernelBirthAndKillHelper {
 		PxlMarkMemo memoNew,
 		PxlMarkMemo pmmAdditional,	// Can be NULL
 		List<PxlMarkMemo> toKill,
-		KernelCalcContext context,
 		ProposerContext propContext
 	) throws KernelCalcNRGException {
 

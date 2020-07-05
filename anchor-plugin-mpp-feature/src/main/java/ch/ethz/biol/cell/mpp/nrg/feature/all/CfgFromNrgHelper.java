@@ -30,6 +30,10 @@ import org.anchoranalysis.anchor.mpp.cfg.Cfg;
 import org.anchoranalysis.anchor.mpp.feature.mark.MemoCollection;
 import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
 public class CfgFromNrgHelper {
 	
 	public static Cfg cfgFromNrg( MemoCollection list ) {

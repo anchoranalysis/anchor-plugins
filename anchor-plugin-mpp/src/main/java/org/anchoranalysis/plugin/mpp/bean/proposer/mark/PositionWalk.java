@@ -9,7 +9,7 @@ import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.anchor.mpp.mark.conic.MarkEllipse;
 import org.anchoranalysis.anchor.mpp.proposer.ProposalAbnormalFailureException;
 import org.anchoranalysis.anchor.mpp.proposer.ProposerContext;
-import org.anchoranalysis.anchor.mpp.proposer.visualization.ICreateProposalVisualization;
+import org.anchoranalysis.anchor.mpp.proposer.visualization.CreateProposalVisualization;
 import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
 
 /*
@@ -81,21 +81,15 @@ public class PositionWalk extends MarkProposer {
 			if (bib==null || bib.isUnbounded()) {
 				continue;
 			}
-			
-			double rb = bib.ratioBounds(context.getDimensions()); 
-			if (rb > boundsRatio) {
+
+			if (bib.ratioBounds() > boundsRatio) {
 				continue;
 			}
 			
-			if (bib.getReverse().getMax() > bib.getForward().getMax()) {
+			if (bib.getReverse().get().getMax() > bib.getForward().get().getMax()) {	// NOSONAR
 				angle = angle + Math.PI;
 			}
-			
-			// Now we walk a unit pixel towards the max in this orientation
-			//Orientation2D orientation = new Orientation2D(angle);
-			//DoubleMatrix2D mat = orientation.createRotationMatrix();
-			
-			
+						
 			double xNew = pnt.getX() + Math.cos(angle);
 			double yNew = pnt.getY() + Math.sin(angle);
 			
@@ -115,7 +109,7 @@ public class PositionWalk extends MarkProposer {
 	}
 	
 	@Override
-	public Optional<ICreateProposalVisualization> proposalVisualization(boolean detailed) {
+	public Optional<CreateProposalVisualization> proposalVisualization(boolean detailed) {
 		return Optional.empty();
 	}
 	

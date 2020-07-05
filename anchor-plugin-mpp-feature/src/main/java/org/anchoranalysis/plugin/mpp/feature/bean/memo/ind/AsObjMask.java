@@ -38,9 +38,9 @@ import org.anchoranalysis.feature.cache.ChildCacheName;
 import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.input.descriptor.FeatureInputDescriptor;
-import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
+import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 
-public class AsObjMask extends FeatureSingleElem<FeatureInputSingleMemo,FeatureInputSingleObj> {
+public class AsObjMask extends FeatureSingleElem<FeatureInputSingleMemo,FeatureInputSingleObject> {
 
 	// START BEAN PROPERTIES
 	@BeanField

@@ -32,11 +32,11 @@ import java.util.Optional;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
-import org.anchoranalysis.image.extent.ImageDim;
-import org.anchoranalysis.image.objectmask.ObjectCollection;
-import org.anchoranalysis.image.objectmask.ObjectCollectionFactory;
-import org.anchoranalysis.image.objmask.match.ObjWithMatches;
+import org.anchoranalysis.image.bean.provider.ObjectCollectionProvider;
+import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.image.object.MatchedObject;
+import org.anchoranalysis.image.object.ObjectCollection;
+import org.anchoranalysis.image.object.ObjectCollectionFactory;
 
 import ch.ethz.biol.cell.imageprocessing.objmask.matching.ObjMaskMatchUtilities;
 
@@ -45,28 +45,28 @@ public class ObjMaskProviderFilterByGroup extends ObjMaskProviderFilterBase {
 
 	// START BEAN PROPERTIES
 	@BeanField
-	private ObjMaskProvider objsGrouped;
+	private ObjectCollectionProvider objsGrouped;
 	// END BEAN PROPERTIES
 	
 	@Override
 	protected ObjectCollection createFromObjs(ObjectCollection in, Optional<ObjectCollection> omcRejected,
-			Optional<ImageDim> dim) throws CreateException {
+			Optional<ImageDimensions> dim) throws CreateException {
 
 		ObjectCollection inGroups = objsGrouped.create();
-		List<ObjWithMatches> matchList = ObjMaskMatchUtilities.matchIntersectingObjects( inGroups, in );
+		List<MatchedObject> matchList = ObjMaskMatchUtilities.matchIntersectingObjects( inGroups, in );
 		
 		return ObjectCollectionFactory.flatMapFromCollection(
-			matchList.stream().map(ObjWithMatches::getMatches),
+			matchList.stream().map(MatchedObject::getMatches),
 			CreateException.class,
 			matches -> filter(matches, dim, omcRejected).asList() 
 		);
 	}
 	
-	public ObjMaskProvider getObjsGrouped() {
+	public ObjectCollectionProvider getObjsGrouped() {
 		return objsGrouped;
 	}
 
-	public void setObjsGrouped(ObjMaskProvider objsGrouped) {
+	public void setObjsGrouped(ObjectCollectionProvider objsGrouped) {
 		this.objsGrouped = objsGrouped;
 	}
 }

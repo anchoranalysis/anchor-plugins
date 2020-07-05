@@ -26,7 +26,7 @@ package org.anchoranalysis.plugin.annotation.comparison;
  * #L%
  */
 
-import org.anchoranalysis.image.objectmask.ObjectCollection;
+import org.anchoranalysis.image.object.ObjectCollection;
 
 public class ObjsToCompare {
 

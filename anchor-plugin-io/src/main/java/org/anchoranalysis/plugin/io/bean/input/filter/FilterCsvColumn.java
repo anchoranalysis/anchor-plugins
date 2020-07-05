@@ -46,7 +46,7 @@ import org.anchoranalysis.io.input.InputFromManager;
  *   
  * Each entry from the delegated input-manager must map 1 to 1 to rows in the CSV file
  * 
- * @author FEEHANO
+ * @author Owen Feehan
  *
  * @param <T> InputType
  */

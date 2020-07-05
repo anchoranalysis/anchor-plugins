@@ -34,7 +34,7 @@ import org.anchoranalysis.anchor.mpp.bean.proposer.MarkProposer;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.anchor.mpp.proposer.ProposalAbnormalFailureException;
 import org.anchoranalysis.anchor.mpp.proposer.ProposerContext;
-import org.anchoranalysis.anchor.mpp.proposer.visualization.ICreateProposalVisualization;
+import org.anchoranalysis.anchor.mpp.proposer.visualization.CreateProposalVisualization;
 import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.NonEmpty;
@@ -65,13 +65,13 @@ public abstract class MarkProposerFromList extends MarkProposer {
 	}
 	
 	@Override
-	public Optional<ICreateProposalVisualization> proposalVisualization(boolean detailed) {
+	public Optional<CreateProposalVisualization> proposalVisualization(boolean detailed) {
 		return proposalVisualization(detailed, list);
 	}
 
 	protected abstract boolean propose(PxlMarkMemo inputMark, ProposerContext context, List<MarkProposer> markProposerList) throws ProposalAbnormalFailureException;
 	
-	protected abstract Optional<ICreateProposalVisualization> proposalVisualization(boolean detailed, List<MarkProposer> markProposerList);
+	protected abstract Optional<CreateProposalVisualization> proposalVisualization(boolean detailed, List<MarkProposer> markProposerList);
 
 	public List<MarkProposer> getList() {
 		return list;

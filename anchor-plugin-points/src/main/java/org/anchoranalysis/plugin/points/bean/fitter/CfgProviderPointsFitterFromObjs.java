@@ -40,9 +40,8 @@ import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.geometry.Point2i;
 import org.anchoranalysis.core.geometry.Point3f;
 import org.anchoranalysis.core.geometry.PointConverter;
-import org.anchoranalysis.image.extent.ImageDim;
-import org.anchoranalysis.image.objectmask.ObjectMask;
-import org.anchoranalysis.image.objectmask.ObjectCollection;
+import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.image.object.ObjectMask;
 
 import ch.ethz.biol.cell.imageprocessing.binaryimgchnl.provider.ConvexHullUtilities;
 
@@ -58,56 +57,80 @@ public class CfgProviderPointsFitterFromObjs extends CfgProvider {
 	/** If true, Reduces the set of points by applying a convex-hull operation */
 	@BeanField
 	private boolean convexHull = true;
+	
+	/** If true, if too few points exist to make a mark, or otherwise a fitting errors, it is simply not included (with only a log error)
+	 *  If false, an exception is thrown
+	 * */
+	@BeanField
+	private boolean ignoreFittingFailure = true;
 	// END BEAN PROPERTIES
 	
 	@Override
 	public Cfg create() throws CreateException {
 		
-		ImageDim dim = pointsFitter.createDim();
+		ImageDimensions dim = pointsFitter.createDim();
 
-		ObjectCollection objsCollection = pointsFitter.createObjs();
-		
-		Cfg cfgOut = new Cfg();
-		
-		for( ObjectMask om : objsCollection ) {
-			Optional<Mark> mark = createMarkFromObj(om,dim);
-			mark.ifPresent( m->
-				cfgOut.add( m )
-			);
-		}
-
-		return cfgOut;
+		return new Cfg(
+			pointsFitter.createObjs().stream().mapToListOptional(
+				obj -> createMarkFromObj(obj,dim)
+			)
+		);
 	}
 	
-	private	Optional<Mark> createMarkFromObj( ObjectMask om, ImageDim dim ) throws CreateException {	
-		
-		Optional<List<Point2i>> pts = ConvexHullUtilities.extractPointsFromOutline(
-			om,
-			pointsFitter.getMinNumPnts(),
-			convexHull
-		);
-		
-		if (pts.isPresent()) {
-			List<Point3f> ptsConverted = PointConverter.convert2i_3f(pts.get()); 
-			return Optional.of( 
-				fitToMark(ptsConverted, dim)
+	private	Optional<Mark> createMarkFromObj(ObjectMask om, ImageDimensions dim) throws CreateException {	
+		try {
+			List<Point2i> points = maybeApplyConvexHull(om);
+			
+			if (points.size()==0) {
+				return handleFittingFailure("There are 0 points to fit with.");
+			}
+			
+			return fitToMark(
+				PointConverter.convert2iTo3f(points),
+				dim
+			);
+			
+		} catch (OperationFailedException e) {
+			throw new CreateException(e);
+		}
+	}
+	
+	private List<Point2i> maybeApplyConvexHull(ObjectMask om) throws OperationFailedException {
+		List<Point2i> points = ConvexHullUtilities.pointsOnOutline(om);
+		if (convexHull) {
+			return ConvexHullUtilities.convexHull2D(
+				points,
+				pointsFitter.getMinNumPnts()
 			);
 		} else {
-			return Optional.empty();
+			return points;
 		}
 	}
 	
-	private Mark fitToMark( List<Point3f> pntsToFit, ImageDim dim) throws CreateException {
+	private Optional<Mark> fitToMark( List<Point3f> pntsToFit, ImageDimensions dim) throws CreateException {
 
 		Mark markOut = markFactory.create();
 		
 		try {
 			pointsFitter.fitPointsToMark( pntsToFit, markOut, dim );
+			return Optional.of(markOut);
 		} catch (OperationFailedException e) {
-			throw new CreateException(e);
+			return handleFittingFailure( e.friendlyMessage() );
 		}
+	}
 		
-		return markOut;		
+	private Optional<Mark> handleFittingFailure(String errorMsg) throws CreateException {
+		if (ignoreFittingFailure) {
+			getLogger().getLogReporter().logFormatted(
+				"Ignoring mark due to a fitting error. %s",
+				errorMsg
+			);
+			return Optional.empty();
+		} else {
+			throw new CreateException(
+				String.format("Cannot create mark from points due to fitting error.%n%s", errorMsg)
+			);
+		}
 	}
 
 	public MarkFactory getMarkFactory() {
@@ -132,5 +155,13 @@ public class CfgProviderPointsFitterFromObjs extends CfgProvider {
 
 	public void setPointsFitter(PointsFitterToMark pointsFitter) {
 		this.pointsFitter = pointsFitter;
+	}
+
+	public boolean isIgnoreFittingFailure() {
+		return ignoreFittingFailure;
+	}
+
+	public void setIgnoreFittingFailure(boolean ignoreFittingFailure) {
+		this.ignoreFittingFailure = ignoreFittingFailure;
 	}
 }

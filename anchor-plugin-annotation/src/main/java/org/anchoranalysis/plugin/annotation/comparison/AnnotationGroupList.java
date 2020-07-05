@@ -38,10 +38,6 @@ public class AnnotationGroupList<T extends Assignment> implements Iterable<Annot
 
 	private List<AnnotationGroup<T>> delegate = new ArrayList<>();
 	
-	public AnnotationGroupList() {
-		
-	}
-	
 	public AnnotationGroup<T> first() {
 		return delegate.get(0);
 	}

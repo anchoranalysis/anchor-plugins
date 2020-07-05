@@ -34,9 +34,9 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.shared.SharedFeaturesInitParams;
-import org.anchoranalysis.image.extent.ImageDim;
+import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.feature.bean.evaluator.FeatureEvaluatorSimple;
-import org.anchoranalysis.image.feature.objmask.pair.FeatureInputPairObjs;
+import org.anchoranalysis.image.feature.object.input.FeatureInputPairObjects;
 import org.anchoranalysis.io.output.bound.BoundIOContext;
 import org.anchoranalysis.plugin.annotation.comparison.AnnotationGroup;
 import org.anchoranalysis.plugin.annotation.comparison.AnnotationGroupObjMask;
@@ -46,7 +46,7 @@ public class FeatureCostAssigner extends AnnotationComparisonAssigner<Assignment
 
 	// START BEAN PROPERTIES
 	@BeanField
-	private FeatureEvaluatorSimple<FeatureInputPairObjs> featureEvaluator;
+	private FeatureEvaluatorSimple<FeatureInputPairObjects> featureEvaluator;
 		
 	@BeanField
 	private double maxCost = 1.0;
@@ -61,7 +61,7 @@ public class FeatureCostAssigner extends AnnotationComparisonAssigner<Assignment
 	@Override
 	public AssignmentOverlapFromPairs createAssignment(
 		ObjsToCompare objsToCompare,
-		ImageDim dim,
+		ImageDimensions dim,
 		boolean useMIP,
 		BoundIOContext context
 	) throws CreateException {
@@ -99,11 +99,11 @@ public class FeatureCostAssigner extends AnnotationComparisonAssigner<Assignment
 		}
 	}
 
-	public FeatureEvaluatorSimple<FeatureInputPairObjs> getFeatureEvaluator() {
+	public FeatureEvaluatorSimple<FeatureInputPairObjects> getFeatureEvaluator() {
 		return featureEvaluator;
 	}
 
-	public void setFeatureEvaluator(FeatureEvaluatorSimple<FeatureInputPairObjs> featureEvaluator) {
+	public void setFeatureEvaluator(FeatureEvaluatorSimple<FeatureInputPairObjects> featureEvaluator) {
 		this.featureEvaluator = featureEvaluator;
 	}
 

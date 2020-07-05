@@ -29,7 +29,7 @@ package org.anchoranalysis.plugin.image.task.bean.grouped.raster;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.channel.factory.ChannelFactory;
-import org.anchoranalysis.image.extent.ImageDim;
+import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedInt;
 
@@ -39,9 +39,6 @@ class AggregateChnl {
 	// We create only when we have the first channel, so dimensions can then be determined
 	private Channel raster = null;
 	private int cnt = 0;
-	
-	public AggregateChnl() {
-	}
 	
 	public synchronized void addChnl( Channel chnl ) throws OperationFailedException {
 		
@@ -64,8 +61,9 @@ class AggregateChnl {
 
 	
 	/**
-	 * Create a channel with the mean-value of all the aggregated channels 
-	 * @return
+	 * Create a channel with the mean-value of all the aggregated channels
+	 *  
+	 * @return the channel with newly created voxel-box
 	 * @throws OperationFailedException 
 	 */
 	public Channel createMeanChnl( VoxelDataType outputType ) throws OperationFailedException {
@@ -81,11 +79,11 @@ class AggregateChnl {
 		return chnlOut;
 	}
 		
-	private void createRasterIfNecessary(ImageDim dim) {
+	private void createRasterIfNecessary(ImageDimensions dim) {
 		if (raster==null) {
 			this.raster = ChannelFactory.instance().createEmptyInitialised(
 				dim,
-				VoxelDataTypeUnsignedInt.instance
+				VoxelDataTypeUnsignedInt.INSTANCE
 			);	
 		}
 	}

@@ -38,8 +38,8 @@ import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.session.FeatureSession;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorSingle;
 import org.anchoranalysis.feature.shared.SharedFeatureMulti;
-import org.anchoranalysis.image.feature.init.FeatureInitParamsSharedObjs;
-import org.anchoranalysis.image.init.ImageInitParams;
+import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
+import org.anchoranalysis.image.feature.init.FeatureInitParamsShared;
 import org.anchoranalysis.test.LoggingFixture;
 
 
@@ -80,11 +80,9 @@ public class FeatureTestCalculator {
 	}
 	
 	private static FeatureInitParams createInitParams( Optional<ImageInitParams> imageInit ) {
-		Optional<FeatureInitParams> mapped = imageInit.map( params->
-			new FeatureInitParamsSharedObjs(params)
-		);
+		Optional<FeatureInitParams> mapped = imageInit.map(FeatureInitParamsShared::new);
 		return mapped.orElse(
-			new FeatureInitParams()	
+			new FeatureInitParams()
 		);
 	}
 

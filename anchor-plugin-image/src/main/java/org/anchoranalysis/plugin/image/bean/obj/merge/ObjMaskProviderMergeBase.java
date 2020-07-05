@@ -35,11 +35,11 @@ import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.bean.provider.ImageDimProvider;
-import org.anchoranalysis.image.extent.ImageDim;
-import org.anchoranalysis.image.extent.ImageRes;
-import org.anchoranalysis.image.objectmask.ObjectCollection;
-import org.anchoranalysis.image.objectmask.ObjectCollectionFactory;
-import org.anchoranalysis.image.objmask.match.ObjWithMatches;
+import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.image.extent.ImageResolution;
+import org.anchoranalysis.image.object.MatchedObject;
+import org.anchoranalysis.image.object.ObjectCollection;
+import org.anchoranalysis.image.object.ObjectCollectionFactory;
 
 import ch.ethz.biol.cell.imageprocessing.objmask.matching.ObjMaskMatchUtilities;
 import ch.ethz.biol.cell.imageprocessing.objmask.provider.ObjMaskProviderContainer;
@@ -58,17 +58,17 @@ public abstract class ObjMaskProviderMergeBase extends ObjMaskProviderContainer 
 		ObjectCollection mergeObjs( ObjectCollection objs ) throws OperationFailedException;
 	}
 		
-	protected Optional<ImageRes> calcResOptional() throws OperationFailedException {
+	protected Optional<ImageResolution> calcResOptional() throws OperationFailedException {
 		try {
 			return OptionalFactory.create(dim).map(
-				ImageDim::getRes
+				ImageDimensions::getRes
 			);
 		} catch (CreateException e) {
 			throw new OperationFailedException(e);
 		}
 	}
 	
-	protected ImageRes calcResRequired() throws OperationFailedException {
+	protected ImageResolution calcResRequired() throws OperationFailedException {
 		return calcResOptional().orElseThrow( ()->
 			new OperationFailedException("This algorithm requires an image-resolution to be set via resProvider")
 		);
@@ -112,7 +112,7 @@ public abstract class ObjMaskProviderMergeBase extends ObjMaskProviderContainer 
 		Stream<ObjectCollection> matchesStream = ObjMaskMatchUtilities
 				.matchIntersectingObjects(containerObjs, objs)
 				.stream()
-				.map(ObjWithMatches::getMatches);
+				.map(MatchedObject::getMatches);
 
 		return ObjectCollectionFactory.flatMapFrom(
 			matchesStream,

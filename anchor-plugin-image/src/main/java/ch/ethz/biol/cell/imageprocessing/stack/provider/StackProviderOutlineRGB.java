@@ -39,7 +39,7 @@ import org.anchoranalysis.image.bean.provider.ChnlProvider;
 import org.anchoranalysis.image.binary.BinaryChnl;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.channel.factory.ChannelFactory;
-import org.anchoranalysis.image.extent.ImageDim;
+import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
 
@@ -85,7 +85,7 @@ public class StackProviderOutlineRGB extends StackProviderWithBackground {
 		}
 	}
 	
-	private Channel createBlue(boolean do3D, ImageDim dim) throws CreateException {
+	private Channel createBlue(boolean do3D, ImageDimensions dim) throws CreateException {
 		Channel chnlBlue = createBlueMaybeProvider(dim);
 		if (do3D) {
 			return chnlBlue;
@@ -94,21 +94,15 @@ public class StackProviderOutlineRGB extends StackProviderWithBackground {
 		}
 	}
 	
-	private Channel createBlueMaybeProvider(ImageDim dim) throws CreateException {
+	private Channel createBlueMaybeProvider(ImageDimensions dim) throws CreateException {
 		if (chnlBlue!=null) {
 			return chnlBlue.create();
 		} else {
-			return ChannelFactory.instance().createEmptyInitialised(dim, VoxelDataTypeUnsignedByte.instance);
+			return ChannelFactory.instance().createEmptyInitialised(dim, VoxelDataTypeUnsignedByte.INSTANCE);
 		}
 	}
 	
 	private BinaryChnl calcOutline( BinaryChnl mask ) throws OperationFailedException {
-		
-		// If we pass a null, return a null
-		if (mask==null) {
-			return null;
-		}
-		
 		BinaryChnl maskIn = mip ? mask.maxIntensityProj() : mask.duplicate(); 
 		
 		// We calculate outline of mask

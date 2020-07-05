@@ -29,6 +29,7 @@ import java.util.Optional;
  */
 
 import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.core.axis.AxisType;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.error.friendly.AnchorFriendlyRuntimeException;
@@ -36,9 +37,8 @@ import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.core.geometry.Tuple3i;
 import org.anchoranalysis.core.random.RandomNumberGenerator;
 import org.anchoranalysis.image.bean.unitvalue.distance.UnitValueDistance;
-import org.anchoranalysis.image.extent.ImageRes;
-import org.anchoranalysis.image.objectmask.ObjectMask;
-import org.anchoranalysis.image.orientation.DirectionVector;
+import org.anchoranalysis.image.extent.ImageResolution;
+import org.anchoranalysis.image.object.ObjectMask;
 
 // Breadth-first iteration of pixels
 public class VisitSchedulerMaxDistUnitValue extends VisitScheduler {
@@ -49,35 +49,26 @@ public class VisitSchedulerMaxDistUnitValue extends VisitScheduler {
 	// END BEAN PROPERTIES
 	
 	private Point3i root;
-	
-	private ImageRes res;
-	
-	
-	
-	public VisitSchedulerMaxDistUnitValue() {
-		super();
-	}
-
-	
-	@Override
-	public void beforeCreateObjMask(RandomNumberGenerator re, ImageRes res)
-			throws InitException {
-			
-	}
-	
-	@Override
-	public Tuple3i maxDistFromRootPoint(ImageRes res) throws OperationFailedException {
+	private ImageResolution res;
 		
-		Optional<ImageRes> resOpt = Optional.of(res);
-
-		int distX = (int) Math.ceil( maxDist.rslv(resOpt, new DirectionVector(1,0,0)) );
-		int distY = (int) Math.ceil( maxDist.rslv(resOpt, new DirectionVector(0,1,0)) );
-		int distZ = (int) Math.ceil( maxDist.rslv(resOpt, new DirectionVector(0,0,1)) );
-		return new Point3i(distX,distY,distZ);
+	@Override
+	public void beforeCreateObjMask(RandomNumberGenerator re, ImageResolution res) throws InitException {
+		// NOTHING TO DO
 	}
 	
 	@Override
-	public void afterCreateObjMask(Point3i root, ImageRes res, RandomNumberGenerator re) {
+	public Optional<Tuple3i> maxDistFromRootPoint(ImageResolution res) throws OperationFailedException {
+		return Optional.of(
+			new Point3i(
+				distForAxis(AxisType.X, res),
+				distForAxis(AxisType.Y, res),
+				distForAxis(AxisType.Z, res)
+			)
+		);
+	}
+	
+	@Override
+	public void afterCreateObjMask(Point3i root, ImageResolution res, RandomNumberGenerator re) {
 		this.res = res;
 		this.root = root;
 	}
@@ -99,10 +90,6 @@ public class VisitSchedulerMaxDistUnitValue extends VisitScheduler {
 			throw new AnchorFriendlyRuntimeException(e);
 		}
 	}
-	
-	private double distToRoot( Point3i pnt ) {
-		 return res.distance(root, pnt);
-	}
 
 	public UnitValueDistance getMaxDist() {
 		return maxDist;
@@ -111,5 +98,14 @@ public class VisitSchedulerMaxDistUnitValue extends VisitScheduler {
 	public void setMaxDist(UnitValueDistance maxDist) {
 		this.maxDist = maxDist;
 	}
-
+	
+	private double distToRoot( Point3i pnt ) {
+		 return res.distance(root, pnt);
+	}
+	
+	private int distForAxis(AxisType axis, ImageResolution res) throws OperationFailedException {
+		return (int) Math.ceil(
+			maxDist.rslvForAxis(Optional.of(res), axis)
+		);
+	}
 }

@@ -41,9 +41,9 @@ import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 import org.anchoranalysis.feature.session.FeatureSession;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorMulti;
 import org.anchoranalysis.image.feature.histogram.FeatureInputHistogram;
-import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
+import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.histogram.Histogram;
-import org.anchoranalysis.image.objectmask.ObjectMask;
+import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.test.LoggingFixture;
 import org.anchoranalysis.test.TestLoader;
 import org.anchoranalysis.test.feature.ConstantsInListFixture;
@@ -56,7 +56,7 @@ import org.junit.Test;
 
 /**
  * This test is located inm this package, as it uses BeanXML in resources that depends on plugins in this module
- * @author owen
+ * @author Owen Feehan
  *
  */
 public class FeatureListImageTest {
@@ -108,7 +108,7 @@ public class FeatureListImageTest {
 	@Test
 	public void testImage() throws InitException, FeatureCalcException, CreateException {
 		
-		FeatureCalculatorMulti<FeatureInputSingleObj> session = createAndStart(
+		FeatureCalculatorMulti<FeatureInputSingleObject> session = createAndStart(
 			objMaskFeatures(loader)
 		);
 		
@@ -161,7 +161,7 @@ public class FeatureListImageTest {
 	 *  
 	 * @throws CreateException 
 	 * */
-	private static FeatureList<FeatureInputSingleObj> objMaskFeatures( TestLoader loader ) throws CreateException {
+	private static FeatureList<FeatureInputSingleObject> objMaskFeatures( TestLoader loader ) throws CreateException {
 		return FeaturesFromXmlFixture.createFeatureList("objMaskFeatureList.xml", loader);
 	}
 
@@ -174,7 +174,7 @@ public class FeatureListImageTest {
 		);
 	}
 	
-	private static FeatureInputSingleObj createParams( ObjectMask om ) throws CreateException {
-		return new FeatureInputSingleObj(om, NRG_STACK);
+	private static FeatureInputSingleObject createParams( ObjectMask om ) throws CreateException {
+		return new FeatureInputSingleObject(om, NRG_STACK);
 	}
 }

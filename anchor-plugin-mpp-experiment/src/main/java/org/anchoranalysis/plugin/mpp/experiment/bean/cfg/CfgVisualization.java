@@ -43,13 +43,17 @@ import org.anchoranalysis.io.output.writer.WriterRouterErrors;
 import org.anchoranalysis.mpp.io.cfg.ColoredCfgWithDisplayStack;
 import org.anchoranalysis.mpp.io.cfg.generator.CfgGenerator;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
 
 /**
  * Maybe writes two raster visualizations of the cfg, one solid, and one with an outline
  *   
- * @author owen
+ * @author Owen Feehan
  *
  */
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
 class CfgVisualization {
 
 	public static void write( Cfg cfg, BoundOutputManagerRouteErrors outputManager, DisplayStack backgroundStack ) throws OperationFailedException {

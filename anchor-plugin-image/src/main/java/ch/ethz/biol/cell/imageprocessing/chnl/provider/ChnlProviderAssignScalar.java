@@ -31,8 +31,8 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.binary.BinaryChnl;
 import org.anchoranalysis.image.channel.Channel;
-import org.anchoranalysis.image.objectmask.ObjectMask;
-import org.anchoranalysis.image.objectmask.factory.CreateFromEntireChnlFactory;
+import org.anchoranalysis.image.object.ObjectMask;
+import org.anchoranalysis.image.object.factory.CreateFromEntireChnlFactory;
 
 /** Assigns a scalar to the portion of the image covered by a mask */
 public class ChnlProviderAssignScalar extends ChnlProviderOneMask {

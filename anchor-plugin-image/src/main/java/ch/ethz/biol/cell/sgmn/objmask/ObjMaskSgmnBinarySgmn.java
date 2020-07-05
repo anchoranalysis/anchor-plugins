@@ -33,25 +33,25 @@ import java.util.Optional;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.geometry.ReadableTuple3i;
-import org.anchoranalysis.image.bean.sgmn.binary.BinarySgmn;
-import org.anchoranalysis.image.bean.sgmn.binary.BinarySgmnParameters;
-import org.anchoranalysis.image.bean.sgmn.objmask.ObjMaskSgmn;
+import org.anchoranalysis.image.bean.nonbean.error.SgmnFailedException;
+import org.anchoranalysis.image.bean.nonbean.parameters.BinarySegmentationParameters;
+import org.anchoranalysis.image.bean.segmentation.binary.BinarySegmentation;
+import org.anchoranalysis.image.bean.segmentation.object.ObjectSegmentation;
 import org.anchoranalysis.image.binary.BinaryChnl;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.channel.factory.ChannelFactory;
-import org.anchoranalysis.image.extent.ImageRes;
-import org.anchoranalysis.image.objectmask.ObjectMask;
-import org.anchoranalysis.image.objectmask.ObjectCollection;
-import org.anchoranalysis.image.objectmask.factory.CreateFromConnectedComponentsFactory;
+import org.anchoranalysis.image.extent.ImageResolution;
+import org.anchoranalysis.image.object.ObjectCollection;
+import org.anchoranalysis.image.object.ObjectMask;
+import org.anchoranalysis.image.object.factory.CreateFromConnectedComponentsFactory;
 import org.anchoranalysis.image.seed.SeedCollection;
-import org.anchoranalysis.image.sgmn.SgmnFailedException;
 
-public class ObjMaskSgmnBinarySgmn extends ObjMaskSgmn {
+public class ObjMaskSgmnBinarySgmn extends ObjectSegmentation {
 
 	// START BEAN PROPERTIES
 	@BeanField
-	private BinarySgmn sgmn;
+	private BinarySegmentation sgmn;
 	
 	@BeanField
 	private int minNumberVoxels = 1;
@@ -64,7 +64,7 @@ public class ObjMaskSgmnBinarySgmn extends ObjMaskSgmn {
 		Optional<SeedCollection> seeds
 	) throws SgmnFailedException {
 
-		BinarySgmnParameters params = new BinarySgmnParameters(
+		BinarySegmentationParameters params = new BinarySegmentationParameters(
 			chnl.getDimensions().getRes()
 		);
 		
@@ -76,11 +76,11 @@ public class ObjMaskSgmnBinarySgmn extends ObjMaskSgmn {
 		return createFromBinaryVoxelBox(
 			bvb,
 			chnl.getDimensions().getRes(),
-			mask.map( om->om.getBoundingBox().getCrnrMin() )
+			mask.map( om->om.getBoundingBox().cornerMin() )
 		);
 	}
 
-	private ObjectCollection createFromBinaryVoxelBox( BinaryVoxelBox<ByteBuffer> bvb, ImageRes res, Optional<ReadableTuple3i> maskShiftBy ) throws SgmnFailedException {
+	private ObjectCollection createFromBinaryVoxelBox( BinaryVoxelBox<ByteBuffer> bvb, ImageResolution res, Optional<ReadableTuple3i> maskShiftBy ) throws SgmnFailedException {
 		BinaryChnl bic = new BinaryChnl(
 			ChannelFactory.instance().create(bvb.getVoxelBox(), res),
 			bvb.getBinaryValues()
@@ -100,11 +100,11 @@ public class ObjMaskSgmnBinarySgmn extends ObjMaskSgmn {
 		return shiftByQuantity.map(objs::shiftBy).orElse(objs);
 	}
 	
-	public BinarySgmn getSgmn() {
+	public BinarySegmentation getSgmn() {
 		return sgmn;
 	}
 
-	public void setSgmn(BinarySgmn sgmn) {
+	public void setSgmn(BinarySegmentation sgmn) {
 		this.sgmn = sgmn;
 	}
 	public int getMinNumberVoxels() {

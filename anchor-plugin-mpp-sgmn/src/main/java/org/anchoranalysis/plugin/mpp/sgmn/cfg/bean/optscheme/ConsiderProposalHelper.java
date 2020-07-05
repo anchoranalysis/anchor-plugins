@@ -36,6 +36,10 @@ import org.anchoranalysis.mpp.sgmn.transformer.TransformationContext;
 import org.anchoranalysis.plugin.mpp.sgmn.cfg.kernel.updater.KernelUpdater;
 import org.anchoranalysis.plugin.mpp.sgmn.cfg.optscheme.AccptProbCalculator;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
 class ConsiderProposalHelper {
 
 	public static <S,T> void maybeAcceptProposal(
@@ -51,6 +55,7 @@ class ConsiderProposalHelper {
 		if (optStep.getProposal().isPresent()) {
 			considerProposal(
 				optStep,
+				optStep.getProposal().get(),
 				iter,
 				accptProbCalculator,
 				kernelUpdater,
@@ -63,6 +68,7 @@ class ConsiderProposalHelper {
 	
 	private static <S,T> void considerProposal(
 		OptimizationStep<S,T> optStep,
+		T proposal,
 		int iter,
 		AccptProbCalculator<T> accptProbCalculator,
 		KernelUpdater<S,T> kernelUpdater,
@@ -74,7 +80,7 @@ class ConsiderProposalHelper {
 		double accptProb = accptProbCalculator.calcAccptProb(
 			optStep.getKernel().getKernel(),
 			crnt,
-			optStep.getProposal().get(),
+			proposal,
 			iter,
 			context.getKernelCalcContext()
 		);
@@ -86,14 +92,14 @@ class ConsiderProposalHelper {
 		if (r <= accptProb || !optStep.getBest().isPresent() ) {
 		
 			if (crnt.isPresent()) {
-				assert( !crnt.get().equals(optStep.getProposal().get()) );
+				assert( !crnt.get().equals(proposal) );
 			}
 			
 			// We inform the kernels that we've accepted a CfgNRG
 			kernelUpdater.kernelAccepted(
 				optStep.getKernel().getKernel(),
 				crnt,
-				optStep.getProposal().get(),
+				proposal,
 				context
 			);
 			

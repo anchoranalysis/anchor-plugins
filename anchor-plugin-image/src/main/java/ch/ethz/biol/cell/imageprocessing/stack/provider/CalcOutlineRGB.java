@@ -30,8 +30,8 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.image.binary.BinaryChnl;
 import org.anchoranalysis.image.channel.Channel;
-import org.anchoranalysis.image.objectmask.ObjectMask;
-import org.anchoranalysis.image.objectmask.factory.CreateFromEntireChnlFactory;
+import org.anchoranalysis.image.object.ObjectMask;
+import org.anchoranalysis.image.object.factory.CreateFromEntireChnlFactory;
 import org.anchoranalysis.image.stack.DisplayStack;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
@@ -39,7 +39,10 @@ import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedShort;
 
 import ch.ethz.biol.cell.imageprocessing.chnl.provider.ChnlProviderIfPixelZero;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
 class CalcOutlineRGB {
 
 
@@ -104,7 +107,7 @@ class CalcOutlineRGB {
 			new Channel[]{ backgroundBlue, backgroundGreen, blueToAssign }
 		);
 
-		VoxelDataType outputType = createShort ? VoxelDataTypeUnsignedShort.instance : VoxelDataTypeUnsignedByte.instance;
+		VoxelDataType outputType = createShort ? VoxelDataTypeUnsignedShort.INSTANCE : VoxelDataTypeUnsignedByte.INSTANCE;
 		
 		Channel chnlGreen = imposeOutlineOnChnl(outline, backgroundGreen, outputType);
 		Channel chnlBlue = MaxChnls.apply( backgroundBlue, blueToAssign, outputType );

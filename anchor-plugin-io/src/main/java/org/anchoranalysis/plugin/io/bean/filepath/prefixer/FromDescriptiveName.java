@@ -35,7 +35,7 @@ import org.anchoranalysis.io.filepath.prefixer.FilePathPrefix;
 
 /**
  * The prefixer uses a combination of a out-path-prefix and the descriptive-name of inputs to create an output prefix
- * @author owen
+ * @author Owen Feehan
  *
  */
 public class FromDescriptiveName extends FilePathPrefixerAvoidResolve {

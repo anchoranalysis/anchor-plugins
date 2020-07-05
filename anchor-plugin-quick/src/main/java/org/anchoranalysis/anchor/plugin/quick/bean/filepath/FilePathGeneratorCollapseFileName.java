@@ -36,7 +36,7 @@ import org.apache.commons.io.FilenameUtils;
 
 /**
  * Takes a file-path of form  somedir/somename.ext  and converts to somedir.ext
- * @author FEEHANO
+ * @author Owen Feehan
  *
  */
 public class FilePathGeneratorCollapseFileName extends FilePathGenerator {

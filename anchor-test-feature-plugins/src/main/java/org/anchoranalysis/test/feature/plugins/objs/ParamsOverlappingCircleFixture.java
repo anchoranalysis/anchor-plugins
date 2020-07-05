@@ -1,9 +1,5 @@
 package org.anchoranalysis.test.feature.plugins.objs;
 
-import java.util.Optional;
-
-import org.anchoranalysis.core.geometry.Point2i;
-
 /*-
  * #%L
  * anchor-test-feature-plugins
@@ -30,7 +26,10 @@ import org.anchoranalysis.core.geometry.Point2i;
  * #L%
  */
 
-import org.anchoranalysis.image.feature.objmask.pair.FeatureInputPairObjs;
+import java.util.Optional;
+
+import org.anchoranalysis.core.geometry.Point2i;
+import org.anchoranalysis.image.feature.object.input.FeatureInputPairObjects;
 
 public class ParamsOverlappingCircleFixture {
 	
@@ -47,7 +46,7 @@ public class ParamsOverlappingCircleFixture {
 	 * @param sameSize iff TRUE the object-masks are the same size, otherwise not
 	 * @return the params populated with the two masks
 	 */
-	public static FeatureInputPairObjs twoOverlappingCircles( boolean sameSize ) {
+	public static FeatureInputPairObjects twoOverlappingCircles( boolean sameSize ) {
 		return twoCircles(
 			10,
 			0,
@@ -62,7 +61,7 @@ public class ParamsOverlappingCircleFixture {
 	 * @param sameSize iff TRUE the object-masks are the same size, otherwise not
 	 * @return the params populated with the two masks
 	 */
-	public static FeatureInputPairObjs twoNonOverlappingCircles( boolean sameSize) {
+	public static FeatureInputPairObjects twoNonOverlappingCircles( boolean sameSize) {
 		return twoCircles(
 			0,
 			(DEFAULT_CIRCLE_RADIUS*3),
@@ -72,13 +71,13 @@ public class ParamsOverlappingCircleFixture {
 	}
 	
 	
-	private static FeatureInputPairObjs twoCircles(
+	private static FeatureInputPairObjects twoCircles(
 		int shiftPositionX,
 		int shiftPositionY,
 		boolean sameSize,
 		int extraRadius
 	) {
-		return new FeatureInputPairObjs(
+		return new FeatureInputPairObjects(
 			CircleObjMaskFixture.circleAt(
 				position(0,0),
 				DEFAULT_CIRCLE_RADIUS

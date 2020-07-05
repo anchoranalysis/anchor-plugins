@@ -33,6 +33,7 @@ import java.util.List;
 
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.error.friendly.AnchorImpossibleSituationException;
 import org.anchoranalysis.core.random.RandomNumberGenerator;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.convert.ByteConverter;
@@ -40,11 +41,14 @@ import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.histogram.Histogram;
 import org.anchoranalysis.image.histogram.HistogramArray;
-import org.anchoranalysis.image.objectmask.ObjectMask;
-import org.anchoranalysis.image.objectmask.ObjectCollection;
+import org.anchoranalysis.image.object.ObjectCollection;
+import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
 public class ObjMaskCollectionRandomSampler {
 
 	
@@ -107,8 +111,8 @@ public class ObjMaskCollectionRandomSampler {
 					//System.out.println("accepted");
 					
 					
-					int indexXYGlob = eGlob.offset(bbox.getCrnrMin().getX()+xIndex, bbox.getCrnrMin().getY()+yIndex);
-					int indexZGlob = zIndex+bbox.getCrnrMin().getZ();	
+					int indexXYGlob = eGlob.offset(bbox.cornerMin().getX()+xIndex, bbox.cornerMin().getY()+yIndex);
+					int indexZGlob = zIndex+bbox.cornerMin().getZ();	
 					
 					
 					return ByteConverter.unsignedByteToInt(
@@ -175,8 +179,7 @@ public class ObjMaskCollectionRandomSampler {
 				//ind++;
 			}
 			
-			assert false;
-			return null;
+			throw new AnchorImpossibleSituationException();
 		}
 
 		public int size() {

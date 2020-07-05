@@ -43,18 +43,13 @@ import org.anchoranalysis.anchor.mpp.proposer.ProposerContext;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.functional.OptionalUtilities;
-import org.anchoranalysis.image.extent.ImageDim;
+import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.mpp.sgmn.bean.kernel.KernelIndependent;
 import org.anchoranalysis.mpp.sgmn.kernel.KernelCalcContext;
 import org.anchoranalysis.mpp.sgmn.kernel.KernelCalcNRGException;
-import org.anchoranalysis.plugin.mpp.sgmn.cfg.optscheme.CfgNRGPixelizedUtilities;
+import org.anchoranalysis.plugin.mpp.sgmn.cfg.optscheme.CfgNRGPixelizedFactory;
 
 public class KernelInitialCfgNRG extends KernelIndependent<CfgNRGPixelized> {
-
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -8499354370753415454L;
 	
 	// START BEAN LIST
 	@BeanField
@@ -91,7 +86,7 @@ public class KernelInitialCfgNRG extends KernelIndependent<CfgNRGPixelized> {
 		try {
 			return OptionalUtilities.map(
 				cfg,
-				c -> CfgNRGPixelizedUtilities.createFromCfg(c, context, getLogger())
+				c -> CfgNRGPixelizedFactory.createFromCfg(c, context, getLogger())
 			);
 		} catch (CreateException e) {
 			throw new KernelCalcNRGException("Cannot create CfgNRGPixelized", e);
@@ -111,7 +106,7 @@ public class KernelInitialCfgNRG extends KernelIndependent<CfgNRGPixelized> {
 
 	@Override
 	public double calcAccptProb(int exstSize, int propSize,
-			double poisson_intens, ImageDim scene_size, double densityRatio) {
+			double poisson_intens, ImageDimensions scene_size, double densityRatio) {
 		// We always accept
 		return 1;
 	}

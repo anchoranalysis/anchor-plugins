@@ -28,6 +28,7 @@ package org.anchoranalysis.plugin.mpp.bean.proposer.orientation;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.anchoranalysis.anchor.mpp.bean.bound.BoundCalculator;
 import org.anchoranalysis.anchor.mpp.bean.bound.RslvdBound;
@@ -36,7 +37,6 @@ import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.anchor.mpp.proposer.ProposalAbnormalFailureException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.random.RandomNumberGenerator;
-import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.orientation.Orientation;
 
 class OrientationList {
@@ -53,7 +53,7 @@ class OrientationList {
 		this.boundsRatio = boundsRatio;
 	}		
 	
-	public void addOrientationIfUseful(Orientation orientation, Mark mark, RslvdBound minMaxBound, ImageDim dim) throws ProposalAbnormalFailureException {
+	public void addOrientationIfUseful(Orientation orientation, Mark mark, RslvdBound minMaxBound) throws ProposalAbnormalFailureException {
 		
 		BidirectionalBound bib;
 		try {
@@ -78,9 +78,7 @@ class OrientationList {
 			}
 		}
 		
-		double rb = bib.ratioBounds(dim); 
-		
-		if (rb > boundsRatio) {
+		if (bib.ratioBounds() > boundsRatio) {
 			return;
 		}
 		
@@ -100,14 +98,27 @@ class OrientationList {
 	// We adopt the following priority
 	//		If there are orientations within the Bounds Ratio, WE SAMPLE UNIFORMLY FROM THEM
 	//		If not, and there are unbounded orientations, WE SAMPLE UNIFORMLY FROM THEM
-	public Orientation sample( RandomNumberGenerator re ) {
+	public Optional<Orientation> sample( RandomNumberGenerator re ) {
 
-		if (listOrientationsWithinBoundsRatio.size()>0) {
-			return listOrientationsWithinBoundsRatio.get( (int) (re.nextDouble() * listOrientationsWithinBoundsRatio.size()) );
-		} else if (listOrientationsUnbounded.size()>0) {
-			return listOrientationsUnbounded.get( (int) (re.nextDouble() * listOrientationsUnbounded.size()) );
+		if (!listOrientationsWithinBoundsRatio.isEmpty()) {
+			return Optional.of(
+				sampleFromList(listOrientationsWithinBoundsRatio,re)
+			);
+		} else if (!listOrientationsUnbounded.isEmpty()) {
+			return Optional.of(
+				sampleFromList(listOrientationsUnbounded,re)
+			);
 		} else {
-			return null;
+			return Optional.empty();
 		}
+	}
+	
+	private static Orientation sampleFromList(
+		List<Orientation> listOrientations,
+		RandomNumberGenerator re
+	) {
+		return listOrientations.get(
+			(int) (re.nextDouble() * listOrientations.size())
+		);
 	}
 }

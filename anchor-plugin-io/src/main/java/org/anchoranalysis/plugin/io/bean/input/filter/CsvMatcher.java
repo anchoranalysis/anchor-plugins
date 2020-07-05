@@ -33,8 +33,13 @@ import java.util.TreeSet;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.io.csv.reader.CSVReaderByLine;
 import org.anchoranalysis.io.csv.reader.CSVReaderByLine.ReadByLine;
+
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
 import org.anchoranalysis.io.csv.reader.CSVReaderException;
 
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
 class CsvMatcher {
 
 	public static Set<String> rowsFromCsvThatMatch( Path path, String match, int numRowsExpected ) throws CSVReaderException {

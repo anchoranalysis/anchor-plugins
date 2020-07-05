@@ -30,11 +30,15 @@ import java.nio.ByteBuffer;
 
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.extent.BoundingBox;
-import org.anchoranalysis.image.objectmask.ObjectMask;
+import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.anchoranalysis.image.voxel.box.factory.VoxelBoxFactory;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
 class BBoxUtilities {
 
 	public static ObjectMask createObjMaskForBBox( ObjectMask om, BoundingBox maybeBiggerBBox ) throws OutputWriteFailedException {

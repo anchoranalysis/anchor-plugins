@@ -47,21 +47,22 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
  * 
  * @see {#link org.anchoranalysis.image.bean.threshold.calculatelevel.Otsu}
  * 
- * @author owen
+ * @author Owen Feehan
  *
  */
 public class OtsuWeighted extends CalculateLevel {
 
 	// START BEAN PROPERTIES
 	@BeanField
-	private double weightForeground = 1.0;
+	private double weightForeground;
 	
 	@BeanField
-	private double weightBackground = 1.0;
+	private double weightBackground;
 	// END BEAN PROPERTIES
 
 	public OtsuWeighted() {
-		
+		this.weightForeground = 1.0;
+		this.weightBackground = 1.0;
 	}
 
 	public OtsuWeighted(double weightForeground, double weightBackground) {

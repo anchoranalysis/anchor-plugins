@@ -41,7 +41,7 @@ import org.anchoranalysis.plugin.mpp.sgmn.cfg.optscheme.ToPixelized;
 /**
  * State takes the form of ToPixelized<T> derived from the Kernel
  * 
- * @author FEEHANO
+ * @author Owen Feehan
  *
  * @param <U>
  * @param <T>

@@ -38,12 +38,12 @@ import org.anchoranalysis.core.name.provider.NamedProvider;
 import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 import org.anchoranalysis.core.progress.ProgressReporterNull;
 import org.anchoranalysis.experiment.JobExecutionException;
+import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
 import org.anchoranalysis.image.bean.scale.ScaleCalculator;
 import org.anchoranalysis.image.binary.BinaryChnl;
 import org.anchoranalysis.image.binary.values.BinaryValues;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.experiment.bean.task.RasterTask;
-import org.anchoranalysis.image.init.ImageInitParams;
 import org.anchoranalysis.image.interpolator.InterpolatorFactory;
 import org.anchoranalysis.image.io.RasterIOException;
 import org.anchoranalysis.image.io.input.ImageInitParamsFactory;
@@ -83,7 +83,7 @@ public class ScaleTask extends RasterTask {
 	@Override
 	public void startSeries(BoundOutputManagerRouteErrors outputManager,
 			ErrorReporter errorReporter) throws JobExecutionException {
-		
+		// NOTHING TO DO
 	}
 
 	@Override
@@ -207,6 +207,7 @@ public class ScaleTask extends RasterTask {
 	@Override
 	public void endSeries(BoundOutputManagerRouteErrors outputManager)
 			throws JobExecutionException {
+		// NOTHING TO DO
 	}
 
 	public ScaleCalculator getScaleCalculator() {

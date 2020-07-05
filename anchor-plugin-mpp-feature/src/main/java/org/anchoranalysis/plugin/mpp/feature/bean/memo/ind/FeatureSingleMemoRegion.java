@@ -32,7 +32,7 @@ import org.anchoranalysis.anchor.mpp.feature.bean.nrg.elem.FeatureSingleMemo;
 import org.anchoranalysis.anchor.mpp.mark.GlobalRegionIdentifiers;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.image.extent.ImageRes;
+import org.anchoranalysis.image.extent.ImageResolution;
 import org.anchoranalysis.plugin.mpp.feature.bean.unit.UnitConverter;
 
 public abstract class FeatureSingleMemoRegion extends FeatureSingleMemo {
@@ -61,11 +61,11 @@ public abstract class FeatureSingleMemoRegion extends FeatureSingleMemo {
 		this.unit = unit;
 	}
 
-	protected double rslvVolume(double value, Optional<ImageRes> res) throws FeatureCalcException {
+	protected double rslvVolume(double value, Optional<ImageResolution> res) throws FeatureCalcException {
 		return unit.rslvVolume(value, res);
 	}
 
-	protected double rslvArea(double value, Optional<ImageRes> res) throws FeatureCalcException {
+	protected double rslvArea(double value, Optional<ImageResolution> res) throws FeatureCalcException {
 		return unit.rslvArea(value, res);
 	}
 }

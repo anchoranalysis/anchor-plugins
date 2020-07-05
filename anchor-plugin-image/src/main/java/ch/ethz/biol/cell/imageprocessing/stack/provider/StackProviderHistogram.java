@@ -31,8 +31,8 @@ import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.anchoranalysis.anchor.graph.GraphInstance;
-import org.anchoranalysis.anchor.graph.io.GraphOutputter;
+import org.anchoranalysis.anchor.plot.GraphInstance;
+import org.anchoranalysis.anchor.plot.io.GraphOutputter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.Positive;
 import org.anchoranalysis.core.error.CreateException;

@@ -39,13 +39,17 @@ import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedShort;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
 class VoxelBoxArithmetic {
 
 	public static void divide( VoxelBox<IntBuffer> vb, int cnt, VoxelBoxWrapper out, VoxelDataType outputType ) throws OperationFailedException {
 		
-		if (outputType.equals(VoxelDataTypeUnsignedShort.instance)) {
+		if (outputType.equals(VoxelDataTypeUnsignedShort.INSTANCE)) {
 			divideValueShort( vb, cnt, out.asShort() );
-		} else if (outputType.equals(VoxelDataTypeUnsignedByte.instance)) {
+		} else if (outputType.equals(VoxelDataTypeUnsignedByte.INSTANCE)) {
 			divideValueByte( vb, cnt, out.asByte() );
 		} else {
 			throwUnsupportedDataTypeException(outputType);
@@ -56,9 +60,9 @@ class VoxelBoxArithmetic {
 		
 	public static void add( VoxelBox<IntBuffer> vb, VoxelBoxWrapper toAdd, VoxelDataType toAddType ) throws OperationFailedException {
 
-		if (toAddType.equals(VoxelDataTypeUnsignedShort.instance)) {
+		if (toAddType.equals(VoxelDataTypeUnsignedShort.INSTANCE)) {
 			addShort(vb, toAdd.asShort() );
-		} else if (toAddType.equals(VoxelDataTypeUnsignedByte.instance)) {
+		} else if (toAddType.equals(VoxelDataTypeUnsignedByte.INSTANCE)) {
 			addByte(vb, toAdd.asByte() );
 		} else {
 			throwUnsupportedDataTypeException(toAddType);

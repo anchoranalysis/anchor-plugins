@@ -33,8 +33,8 @@ import java.util.List;
 
 import org.anchoranalysis.annotation.io.assignment.ObjMaskCollectionDistanceMatrix;
 import org.anchoranalysis.core.text.TypedValue;
-import org.anchoranalysis.image.objectmask.ObjectMask;
-import org.anchoranalysis.image.objectmask.ObjectCollection;
+import org.anchoranalysis.image.object.ObjectCollection;
+import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.generator.csv.CSVGenerator;
 import org.anchoranalysis.io.output.bean.OutputWriteSettings;

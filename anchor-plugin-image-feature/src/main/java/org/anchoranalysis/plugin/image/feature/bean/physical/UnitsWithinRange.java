@@ -31,11 +31,11 @@ import java.util.Optional;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.input.FeatureInputWithRes;
+import org.anchoranalysis.image.bean.nonbean.error.UnitValueException;
 import org.anchoranalysis.image.bean.unitvalue.areavolume.UnitValueAreaOrVolume;
 import org.anchoranalysis.image.bean.unitvalue.volume.UnitValueVolumeVoxels;
-import org.anchoranalysis.image.extent.ImageRes;
+import org.anchoranalysis.image.extent.ImageResolution;
 import org.anchoranalysis.image.feature.bean.physical.FeatureSingleElemWithRes;
-import org.anchoranalysis.image.unitvalue.UnitValueException;
 
 /**
  * Checks if a value lies within a range defined by units (a minimum and maximum boundary)
@@ -74,10 +74,10 @@ public class UnitsWithinRange<T extends FeatureInputWithRes> extends FeatureSing
 	// END BEAN PROPERTIES
 	
 	@Override
-	protected double calcWithRes( double value, ImageRes res ) throws FeatureCalcException {
+	protected double calcWithRes( double value, ImageResolution res ) throws FeatureCalcException {
 		
 		try {
-			Optional<ImageRes> resOpt = Optional.of(res);
+			Optional<ImageResolution> resOpt = Optional.of(res);
 			double minVoxels = min.rslv(resOpt);
 			double maxVoxels = max.rslv(resOpt);
 					

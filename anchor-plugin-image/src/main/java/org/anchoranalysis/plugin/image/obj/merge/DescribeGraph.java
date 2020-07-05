@@ -32,7 +32,7 @@ import org.anchoranalysis.plugin.image.obj.merge.priority.PrioritisedVertex;
 /**
  * Logs descriptions of the graph
  * 
- * @author FEEHANO
+ * @author Owen Feehan
  *
  */
 public class DescribeGraph {
@@ -128,7 +128,7 @@ public class DescribeGraph {
 		sb.append("START Vertices\n");
 		for( ObjVertex vertex : graph.vertexSet() ) {
 			sb.append(
-				String.format("%s (%f)\n", vertex.getObjMask().centerOfGravity(), vertex.getPayload())
+				String.format("%s (%f)%n", vertex.getObjMask().centerOfGravity(), vertex.getPayload())
 			);
 		}
 		sb.append("END Vertices\n");

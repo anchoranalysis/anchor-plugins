@@ -35,12 +35,15 @@ import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.anchor.mpp.regionmap.RegionMapSingleton;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.extent.Extent;
-import org.anchoranalysis.image.extent.ImageDim;
-import org.anchoranalysis.image.extent.ImageRes;
-import org.anchoranalysis.image.objectmask.ObjectMask;
-import org.anchoranalysis.image.objectmask.properties.ObjectWithProperties;
+import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.image.extent.ImageResolution;
+import org.anchoranalysis.image.object.ObjectMask;
+import org.anchoranalysis.image.object.properties.ObjectWithProperties;
 import org.anchoranalysis.plugin.opencv.nonmaxima.WithConfidence;
 import org.opencv.core.Mat;
+
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
 
 /**
@@ -48,12 +51,13 @@ import org.opencv.core.Mat;
  * 
  * <p>Each object-mask represented rotated-bounding box and is associated with a confidence score</p>
  * 
- * @author owen
+ * @author Owen Feehan
  *
  */
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
 class EastObjsExtractor {
 
-	public static List<WithConfidence<ObjectMask>> apply( Mat image, ImageRes res, double minConfidence, Path pathToEastModel ) {
+	public static List<WithConfidence<ObjectMask>> apply( Mat image, ImageResolution res, double minConfidence, Path pathToEastModel ) {
 		List<WithConfidence<Mark>> listMarks = EastMarkExtractor.extractBoundingBoxes(
 			image,
 			minConfidence,
@@ -69,19 +73,19 @@ class EastObjsExtractor {
 	
 	private static List<WithConfidence<ObjectMask>> convertMarksToObjMask(
 		List<WithConfidence<Mark>> listMarks,
-		ImageDim dim
+		ImageDimensions dim
 	) {
 		return listMarks.stream()
 				.map( wc -> convertToObjMask(wc, dim) )
 				.collect( Collectors.toList() );
 	}
 		
-	private static ImageDim dimsForMat( Mat mat, ImageRes res ) {
+	private static ImageDimensions dimsForMat( Mat mat, ImageResolution res ) {
 		
 		int width = (int) mat.size().width;
 		int height = (int) mat.size().height;
 		
-		ImageDim dims = new ImageDim(
+		ImageDimensions dims = new ImageDimensions(
 			new Extent(width, height, 1),
 			res
 		);
@@ -89,7 +93,7 @@ class EastObjsExtractor {
 		return dims;
 	}
 	
-	private static WithConfidence<ObjectMask> convertToObjMask( WithConfidence<Mark> wcMark, ImageDim dim ) {
+	private static WithConfidence<ObjectMask> convertToObjMask( WithConfidence<Mark> wcMark, ImageDimensions dim ) {
 		
 		ObjectWithProperties om = wcMark.getObj().calcMask(
 			dim,

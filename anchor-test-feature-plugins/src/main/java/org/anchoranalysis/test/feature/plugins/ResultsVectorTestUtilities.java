@@ -30,6 +30,10 @@ import static org.junit.Assert.assertTrue;
 
 import org.anchoranalysis.feature.calc.results.ResultsVector;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
 public class ResultsVectorTestUtilities {
 
 	private static double eps = 1e-16;

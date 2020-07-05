@@ -41,8 +41,8 @@ import org.anchoranalysis.experiment.task.InputTypesExpected;
 import org.anchoranalysis.experiment.task.InputBound;
 import org.anchoranalysis.experiment.task.ParametersExperiment;
 import org.anchoranalysis.experiment.task.Task;
+import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
 import org.anchoranalysis.image.bean.provider.stack.StackProvider;
-import org.anchoranalysis.image.init.ImageInitParams;
 import org.anchoranalysis.image.io.generator.raster.StackGenerator;
 import org.anchoranalysis.image.io.input.ProvidesStackInput;
 import org.anchoranalysis.image.io.input.StackInputInitParamsCreator;
@@ -56,7 +56,7 @@ import org.anchoranalysis.plugin.image.task.sharedstate.SharedStateFilteredImage
  *   1. copies each image into directory corresponding to the label (e.g. "positive", "negative)
  *   2. creates a single CSV file where each row is an image-label correspondence
  * 
- * @author FEEHANO
+ * @author Owen Feehan
  *
  * @param T type of init-params associated with the filter
  */

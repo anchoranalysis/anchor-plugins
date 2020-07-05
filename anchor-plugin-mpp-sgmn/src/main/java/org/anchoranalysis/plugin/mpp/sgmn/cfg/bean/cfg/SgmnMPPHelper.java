@@ -2,9 +2,9 @@ package org.anchoranalysis.plugin.mpp.sgmn.cfg.bean.cfg;
 
 import org.anchoranalysis.anchor.mpp.bean.cfg.CfgGen;
 import org.anchoranalysis.anchor.mpp.bean.init.MPPInitParams;
-import org.anchoranalysis.anchor.mpp.feature.bean.nrgscheme.NRGScheme;
 import org.anchoranalysis.anchor.mpp.feature.bean.nrgscheme.NRGSchemeCreator;
 import org.anchoranalysis.anchor.mpp.feature.nrg.cfg.CfgNRGPixelized;
+import org.anchoranalysis.anchor.mpp.feature.nrg.scheme.NRGScheme;
 import org.anchoranalysis.anchor.mpp.feature.nrg.scheme.NRGSchemeWithSharedFeatures;
 
 /*-
@@ -42,9 +42,9 @@ import org.anchoranalysis.core.params.KeyValueParams;
 import org.anchoranalysis.feature.nrg.NRGStack;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 import org.anchoranalysis.feature.shared.SharedFeaturesInitParams;
+import org.anchoranalysis.image.bean.nonbean.init.CreateCombinedStack;
+import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
 import org.anchoranalysis.image.experiment.identifiers.ImgStackIdentifiers;
-import org.anchoranalysis.image.init.CreateCombinedStack;
-import org.anchoranalysis.image.init.ImageInitParams;
 import org.anchoranalysis.image.io.stack.StackCollectionOutputter;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.io.output.bound.BoundIOContext;
@@ -53,6 +53,10 @@ import org.anchoranalysis.mpp.io.output.NRGStackWriter;
 import org.anchoranalysis.mpp.io.output.StackOutputKeys;
 import org.anchoranalysis.mpp.sgmn.bean.kernel.proposer.KernelProposer;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
 class SgmnMPPHelper {
 
 	public static void writeStacks(

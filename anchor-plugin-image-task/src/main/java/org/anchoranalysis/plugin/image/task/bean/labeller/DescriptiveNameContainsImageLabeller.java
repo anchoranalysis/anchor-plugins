@@ -26,15 +26,13 @@ package org.anchoranalysis.plugin.image.task.bean.labeller;
  * #L%
  */
 
-import java.nio.file.Path;
-
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.experiment.task.NoSharedState;
 import org.anchoranalysis.image.io.input.ProvidesStackInput;
 import org.anchoranalysis.io.output.bound.BoundIOContext;
 
-public class DescriptiveNameContainsImageLabeller extends BinaryOutcomeImageLabeller<Object> {
+public class DescriptiveNameContainsImageLabeller extends BinaryOutcomeImageLabeller {
 
 	// START BEAN PROPERTIES
 	@BeanField
@@ -42,14 +40,10 @@ public class DescriptiveNameContainsImageLabeller extends BinaryOutcomeImageLabe
 	// END BEAN PROPERTIES
 	
 	@Override
-	public Object init( Path pathForBinding ) throws InitException {
-		// DO NOTHING
-		return null;
-	}
-	
-	@Override
-	public String labelFor(Object initParams, ProvidesStackInput input, BoundIOContext context) throws OperationFailedException {
-		return classificationString(input.descriptiveName().contains(contains));
+	public String labelFor(NoSharedState sharedState, ProvidesStackInput input, BoundIOContext context) throws OperationFailedException {
+		return classificationString(
+			input.descriptiveName().contains(contains)
+		);
 	}
 
 	public String getContains() {

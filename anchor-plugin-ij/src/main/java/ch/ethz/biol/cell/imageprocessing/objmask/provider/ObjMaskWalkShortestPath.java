@@ -38,9 +38,12 @@ import org.anchoranalysis.core.geometry.ReadableTuple3i;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.Extent;
-import org.anchoranalysis.image.objectmask.ObjectMask;
+import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.points.BoundingBoxFromPoints;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
+
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
 /** Traces out the shortest-path (a line) between two points in an object-mask.
  * 
@@ -49,6 +52,7 @@ import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
  * @author feehano
  *
  */
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
 class ObjMaskWalkShortestPath {
 
 	/** Walks a 4-connected line between two points, producing a minimal object-mask for both */
@@ -89,12 +93,12 @@ class ObjMaskWalkShortestPath {
 			assert(pnt1.getZ()==pnt2.getZ());
 			
 			drawLineOnVoxelBuffer(
-				om.binaryVoxelBox().getVoxelBox().getPixelsForPlane(pnt1.getZ() - bbox.getCrnrMin().getZ()),
+				om.binaryVoxelBox().getVoxelBox().getPixelsForPlane(pnt1.getZ() - bbox.cornerMin().getZ()),
 				om.binaryVoxelBox().getVoxelBox().extent(),
 				om.binaryVoxelBox().getBinaryValues().createByte(),
 				pnt1,
 				pnt2,
-				bbox.getCrnrMin()
+				bbox.cornerMin()
 			);
 		}
 				

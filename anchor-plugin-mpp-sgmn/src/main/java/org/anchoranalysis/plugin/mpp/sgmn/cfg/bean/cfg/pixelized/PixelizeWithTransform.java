@@ -37,7 +37,7 @@ import org.anchoranalysis.plugin.mpp.sgmn.cfg.optscheme.ToPixelized;
 
 /**
  * Converts a Cfg to a CfgToPixelized using a transformer
- * @author FEEHANO
+ * @author Owen Feehan
  *
  */
 public class PixelizeWithTransform<T> extends StateTransformerBean<T,ToPixelized<T>> {

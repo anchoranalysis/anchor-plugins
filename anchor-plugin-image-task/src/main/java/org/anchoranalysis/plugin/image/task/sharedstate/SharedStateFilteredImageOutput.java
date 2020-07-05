@@ -45,7 +45,7 @@ import org.anchoranalysis.plugin.image.task.bean.labeller.ImageLabeller;
 
 /**
  * 
- * @author FEEHANO
+ * @author Owen Feehan
  *
  * @param <T> type of init-params for the ImageFilter
  */

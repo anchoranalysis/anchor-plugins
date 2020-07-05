@@ -33,15 +33,16 @@ import java.util.Optional;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
-import org.anchoranalysis.image.bean.sgmn.objmask.ObjMaskSgmn;
+import org.anchoranalysis.image.bean.nonbean.error.SgmnFailedException;
+import org.anchoranalysis.image.bean.provider.ObjectCollectionProvider;
+import org.anchoranalysis.image.bean.segmentation.object.ObjectSegmentation;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.channel.factory.ChannelFactory;
-import org.anchoranalysis.image.objectmask.ObjectMask;
-import org.anchoranalysis.image.objectmask.ObjectCollection;
-import org.anchoranalysis.image.objmask.match.ObjWithMatches;
+import org.anchoranalysis.image.object.MatchedObject;
+import org.anchoranalysis.image.object.ObjectCollection;
+import org.anchoranalysis.image.object.ObjectCollectionFactory;
+import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.seed.SeedCollection;
-import org.anchoranalysis.image.sgmn.SgmnFailedException;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 
 import ch.ethz.biol.cell.imageprocessing.objmask.matching.ObjMaskMatchUtilities;
@@ -54,13 +55,13 @@ public class ObjMaskProviderSeededObjSgmn extends ObjMaskProviderChnlSource {
 
 	// START BEAN PROPERTIES
 	@BeanField @OptionalBean
-	private ObjMaskProvider objsSource;
+	private ObjectCollectionProvider objsSource;
 	
 	@BeanField
-	private ObjMaskProvider objsSeeds;
+	private ObjectCollectionProvider objsSeeds;
 	
 	@BeanField
-	private ObjMaskSgmn sgmn;
+	private ObjectSegmentation sgmn;
 	// END BEAN PROPERTIES
 	
 	@Override
@@ -85,41 +86,42 @@ public class ObjMaskProviderSeededObjSgmn extends ObjMaskProviderChnlSource {
 		Channel chnl,
 		ObjectCollection seeds,
 		ObjectCollection sourceObjs,
-		ObjMaskSgmn sgmn
+		ObjectSegmentation sgmn
 	) throws CreateException {
 		
 		assert(seeds!=null);
 		assert(sourceObjs!=null);
 		
-		List<ObjWithMatches> matchList = ObjMaskMatchUtilities.matchIntersectingObjects( sourceObjs, seeds );
-		
-		ObjectCollection out = new ObjectCollection();
-		for( ObjWithMatches ows : matchList ) {
-			if( ows.numMatches() <= 1 ) {
-				out.add( ows.getSourceObj() );
-			} else {
-				
-				try {
-					ObjectCollection objs = sgmn(
-						ows.getSourceObj(),
-						ows.getMatches(),
-						chnl,
-						sgmn
-					);
-					
-					out.addAll( objs );
-				} catch (SgmnFailedException e) {
-					throw new CreateException(e);
-				}
+		List<MatchedObject> matchList = ObjMaskMatchUtilities.matchIntersectingObjects(sourceObjs, seeds);
+
+		return ObjectCollectionFactory.flatMapFrom(
+			matchList.stream(),
+			CreateException.class,
+			ows -> sgmnIfMoreThanOne(ows, chnl, sgmn)
+		);
+	}
+	
+	private static ObjectCollection sgmnIfMoreThanOne(MatchedObject ows, Channel chnl, ObjectSegmentation sgmn) throws CreateException {
+		if(ows.numMatches() <= 1) {
+			return ObjectCollectionFactory.from( ows.getSourceObj() );
+		} else {
+			try {
+				return sgmn(
+					ows.getSourceObj(),
+					ows.getMatches(),
+					chnl,
+					sgmn
+				);
+			} catch (SgmnFailedException e) {
+				throw new CreateException(e);
 			}
 		}
-		return out;
 	}
 	
 	private static ObjectCollection createWithoutSourceObjs(
 		Channel chnl,
 		ObjectCollection seedsAsObjs,
-		ObjMaskSgmn sgmn
+		ObjectSegmentation sgmn
 	) throws CreateException {
 		
 		SeedCollection seeds = SeedsFactory.createSeedsWithoutMask(seedsAsObjs);
@@ -141,7 +143,7 @@ public class ObjMaskProviderSeededObjSgmn extends ObjMaskProviderChnlSource {
 		ObjectMask objMask,
 		ObjectCollection seeds,
 		Channel chnl,
-		ObjMaskSgmn sgmn
+		ObjectSegmentation sgmn
 	) throws SgmnFailedException, CreateException {
 		
 		// We make a channel just for the object
@@ -154,7 +156,7 @@ public class ObjMaskProviderSeededObjSgmn extends ObjMaskProviderChnlSource {
 		SeedCollection seedsObj = SeedsFactory.createSeedsWithMask(
 			seeds,
 			objMaskLocal,
-			objMask.getBoundingBox().getCrnrMin(),
+			objMask.getBoundingBox().cornerMin(),
 			chnl.getDimensions()
 		);
 		
@@ -165,35 +167,35 @@ public class ObjMaskProviderSeededObjSgmn extends ObjMaskProviderChnlSource {
 		);
 		
 		// We shift each object back to were it belongs globally
-		return sgmnObjs.shiftBy( objMask.getBoundingBox().getCrnrMin() );
+		return sgmnObjs.shiftBy( objMask.getBoundingBox().cornerMin() );
 	}
 	
 	
 
-	public ObjMaskSgmn getSgmn() {
+	public ObjectSegmentation getSgmn() {
 		return sgmn;
 	}
 
-	public void setSgmn(ObjMaskSgmn sgmn) {
+	public void setSgmn(ObjectSegmentation sgmn) {
 		this.sgmn = sgmn;
 	}
 
-	public ObjMaskProvider getObjsSeeds() {
+	public ObjectCollectionProvider getObjsSeeds() {
 		return objsSeeds;
 	}
 
 
-	public void setObjsSeeds(ObjMaskProvider objsSeeds) {
+	public void setObjsSeeds(ObjectCollectionProvider objsSeeds) {
 		this.objsSeeds = objsSeeds;
 	}
 
 
-	public ObjMaskProvider getObjsSource() {
+	public ObjectCollectionProvider getObjsSource() {
 		return objsSource;
 	}
 
 
-	public void setObjsSource(ObjMaskProvider objsSource) {
+	public void setObjsSource(ObjectCollectionProvider objsSource) {
 		this.objsSource = objsSource;
 	}
 }

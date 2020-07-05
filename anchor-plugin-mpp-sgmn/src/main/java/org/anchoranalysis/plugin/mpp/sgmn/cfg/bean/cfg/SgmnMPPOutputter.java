@@ -6,7 +6,7 @@ import org.anchoranalysis.anchor.mpp.bean.regionmap.RegionMembershipWithFlags;
 import org.anchoranalysis.anchor.mpp.cfg.Cfg;
 import org.anchoranalysis.anchor.mpp.cfg.ColoredCfg;
 import org.anchoranalysis.anchor.mpp.feature.nrg.cfg.CfgNRG;
-import org.anchoranalysis.anchor.mpp.feature.nrg.cfg.CfgWithNrgTotal;
+import org.anchoranalysis.anchor.mpp.feature.nrg.cfg.CfgWithNRGTotal;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.anchor.overlay.Overlay;
 import org.anchoranalysis.anchor.overlay.bean.objmask.writer.ObjMaskWriter;
@@ -52,6 +52,10 @@ import org.anchoranalysis.mpp.io.cfg.generator.CfgMIPGenerator;
 import org.anchoranalysis.mpp.io.cfg.generator.CfgMaskCollectionDifferentValuesGenerator;
 import org.anchoranalysis.mpp.sgmn.optscheme.DualStack;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
 class SgmnMPPOutputter {
 	
 	public static void outputResults(
@@ -134,7 +138,7 @@ class SgmnMPPOutputter {
 		);
 	}
 	
-	private static void outputCfgSize( CfgWithNrgTotal cfgNRG, WriterRouterErrors writer, LogErrorReporter logger ) {
+	private static void outputCfgSize( CfgWithNRGTotal cfgNRG, WriterRouterErrors writer, LogErrorReporter logger ) {
 		writer.write(
 			"cfgSize",
 			() -> new StringGenerator( String.format("%d", cfgNRG.getCfg().size() ) )

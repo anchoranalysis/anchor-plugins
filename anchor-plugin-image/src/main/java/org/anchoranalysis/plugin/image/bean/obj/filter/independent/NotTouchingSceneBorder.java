@@ -32,8 +32,8 @@ import java.util.Optional;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.geometry.ReadableTuple3i;
-import org.anchoranalysis.image.extent.ImageDim;
-import org.anchoranalysis.image.objectmask.ObjectMask;
+import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.plugin.image.bean.obj.filter.ObjectFilterPredicate;
 
 /**
@@ -50,7 +50,7 @@ public class NotTouchingSceneBorder extends ObjectFilterPredicate {
 	// END BEAN PROPERTIES
 
 	@Override
-	protected boolean match(ObjectMask om, Optional<ImageDim> dim)
+	protected boolean match(ObjectMask om, Optional<ImageDimensions> dim)
 			throws OperationFailedException {
 		
 		if (!dim.isPresent()) {
@@ -62,12 +62,12 @@ public class NotTouchingSceneBorder extends ObjectFilterPredicate {
 		}
 		
 		if (includeZ) {
-			ReadableTuple3i crnrMin = om.getBoundingBox().getCrnrMin();
+			ReadableTuple3i crnrMin = om.getBoundingBox().cornerMin();
 			if (crnrMin.getZ()==0) {
 				return false;
 			}
 
-			ReadableTuple3i crnrMax = om.getBoundingBox().calcCrnrMax();
+			ReadableTuple3i crnrMax = om.getBoundingBox().calcCornerMax();
 			if (crnrMax.getZ()==(dim.get().getZ()-1)) {
 				return false;
 			}

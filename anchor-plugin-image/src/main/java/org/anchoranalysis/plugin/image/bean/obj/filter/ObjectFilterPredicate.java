@@ -30,11 +30,10 @@ package org.anchoranalysis.plugin.image.bean.obj.filter;
 import java.util.Optional;
 
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.image.bean.objmask.filter.ObjectFilter;
-import org.anchoranalysis.image.extent.ImageDim;
-import org.anchoranalysis.image.objectmask.ObjectMask;
-
-import org.anchoranalysis.image.objectmask.ObjectCollection;
+import org.anchoranalysis.image.bean.object.ObjectFilter;
+import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.image.object.ObjectCollection;
+import org.anchoranalysis.image.object.ObjectMask;
 
 /**
  * Uses a predicate to make a decision whether to keep objects or not.
@@ -45,7 +44,7 @@ import org.anchoranalysis.image.objectmask.ObjectCollection;
 public abstract class ObjectFilterPredicate extends ObjectFilter {
 
 	@Override
-	public ObjectCollection filter(ObjectCollection objsToFilter, Optional<ImageDim> dim, Optional<ObjectCollection> objsRejected) throws OperationFailedException {
+	public ObjectCollection filter(ObjectCollection objsToFilter, Optional<ImageDimensions> dim, Optional<ObjectCollection> objsRejected) throws OperationFailedException {
 
 		if (!precondition(objsToFilter)) {
 			return objsToFilter;
@@ -68,12 +67,12 @@ public abstract class ObjectFilterPredicate extends ObjectFilter {
 		return true;
 	}
 	
-	protected void start(Optional<ImageDim> dim, ObjectCollection objsToFilter) throws OperationFailedException {
+	protected void start(Optional<ImageDimensions> dim, ObjectCollection objsToFilter) throws OperationFailedException {
 		// Default implementation, nothing to do
 	}
 	
 	/** A predicate condition for an object to be kept in the collection */
-	protected abstract boolean match( ObjectMask om, Optional<ImageDim> dim ) throws OperationFailedException;
+	protected abstract boolean match( ObjectMask om, Optional<ImageDimensions> dim ) throws OperationFailedException;
 	
 	protected void end() throws OperationFailedException {
 		// Default implementation, nothing to do
