@@ -9,7 +9,7 @@ import org.anchoranalysis.anchor.mpp.feature.bean.nrgscheme.NRGSchemeCreator;
 import org.anchoranalysis.anchor.mpp.feature.mark.ListUpdatableMarkSetCollection;
 import org.anchoranalysis.anchor.mpp.feature.nrg.cfg.CfgNRG;
 import org.anchoranalysis.anchor.mpp.feature.nrg.cfg.CfgNRGPixelized;
-import org.anchoranalysis.anchor.mpp.feature.nrg.cfg.CfgWithNrgTotal;
+import org.anchoranalysis.anchor.mpp.feature.nrg.cfg.CfgWithNRGTotal;
 import org.anchoranalysis.anchor.mpp.feature.nrg.scheme.NRGSchemeWithSharedFeatures;
 import org.anchoranalysis.anchor.mpp.mark.GlobalRegionIdentifiers;
 
@@ -196,7 +196,7 @@ public class SgmnMPP extends CfgSgmn {
 				cfgGen
 			);
 			
-			CfgWithNrgTotal cfgNRG = findOpt(dualStack,	updatableMarkSetCollection,	initContext);
+			CfgWithNRGTotal cfgNRG = findOpt(dualStack,	updatableMarkSetCollection,	initContext);
 			return cfgNRG.getCfg().deepCopy();
 			
 		} catch (InitException | CreateException | SgmnFailedException e) {
@@ -214,7 +214,7 @@ public class SgmnMPP extends CfgSgmn {
 	}
 	
 	// TODO integrate params with OptSchemeInitContext
-	private CfgWithNrgTotal findOpt(
+	private CfgWithNRGTotal findOpt(
 		DualStack dualStack,
 		ListUpdatableMarkSetCollection updatableMarkSetCollection,
 		OptSchemeContext initContext

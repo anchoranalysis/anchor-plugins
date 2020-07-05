@@ -31,7 +31,6 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.util.Optional;
 
-import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.index.SetOperationFailedException;
 import org.anchoranalysis.image.extent.ImageDimensions;
@@ -48,11 +47,17 @@ import org.anchoranalysis.io.output.bound.BoundOutputManager;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
 
-class GeneratorSequenceMovieWriter<GeneratorType> implements GeneratorSequenceNonIncremental<GeneratorType> {
+/**
+ * 
+ * @author Owen Feehan
+ *
+ * @param <T> generator-type
+ */
+class GeneratorSequenceMovieWriter<T> implements GeneratorSequenceNonIncremental<T> {
 
 	private BoundOutputManager outputManager = null;
 	
-	private IterableObjectGenerator<GeneratorType,Stack> iterableGenerator;
+	private IterableObjectGenerator<T,Stack> iterableGenerator;
 	
 	private boolean firstAdd = true;
 	
@@ -67,29 +72,19 @@ class GeneratorSequenceMovieWriter<GeneratorType> implements GeneratorSequenceNo
 	private Optional<MovieOutputHandle> movieOutputHandle;
 	
 	// Automatically create a ManifestDescription for the folder from the Generator
-	public GeneratorSequenceMovieWriter( BoundOutputManager outputManager, OutputNameStyle outputName, IterableObjectGenerator<GeneratorType,Stack> iterableGenerator, int framesPerSecond ) {
+	public GeneratorSequenceMovieWriter( BoundOutputManager outputManager, OutputNameStyle outputName, IterableObjectGenerator<T,Stack> iterableGenerator, int framesPerSecond ) {
 		this.outputManager = outputManager;
 		this.iterableGenerator = iterableGenerator;
 		this.outputName = outputName;
 		this.framesPerSecond = framesPerSecond;
 	}
-	
-	
-	
-
 
 	private Optional<MovieOutputHandle> initOnFirstAdd( ImageDimensions dim, int numFrames ) throws InitException {
-		
 		// Assume we are incrementing + 1
-		
 		// we fix this later
-		
 		// We calculate the number of frames from the sequenceType
 		
-		
-		
 		try {
-			//String filePath = outputManager.writeGenerateFilename( outputName.getOutputName(), writer.getDefaultFileExt(), null, "", "", "");
 			return writeMovie(
 				outputManager,
 				outputName,
@@ -161,7 +156,7 @@ class GeneratorSequenceMovieWriter<GeneratorType> implements GeneratorSequenceNo
 	}
 
 	@Override
-	public void add(GeneratorType element, String index)
+	public void add(T element, String index)
 			throws OutputWriteFailedException {
 
 		try {
@@ -175,7 +170,7 @@ class GeneratorSequenceMovieWriter<GeneratorType> implements GeneratorSequenceNo
 			RGBStack stack = new RGBStack( iterableGenerator.getGenerator().generate() );
 			
 			// We delay the initialisation of subFolder until the first iteration and we have a valid generator
-			if (firstAdd==true) {
+			if (firstAdd) {
 				movieOutputHandle = initOnFirstAdd( stack.getChnl(0).getDimensions(), totalNumAdd );
 				firstAdd = false;
 			}
@@ -192,7 +187,7 @@ class GeneratorSequenceMovieWriter<GeneratorType> implements GeneratorSequenceNo
 		
 			movieOutputHandle.get().add(stack);
 
-		} catch (IOException | SequenceTypeException | InitException | SetOperationFailedException | CreateException e) {
+		} catch (IOException | SequenceTypeException | InitException | SetOperationFailedException e) {
 			throw new OutputWriteFailedException(e);
 		}
 		

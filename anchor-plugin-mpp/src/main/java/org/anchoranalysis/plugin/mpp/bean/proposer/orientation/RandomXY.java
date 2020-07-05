@@ -40,10 +40,12 @@ public class RandomXY extends OrientationProposer {
 
 	@Override
 	public Optional<Orientation> propose(Mark mark,	ImageDimensions dim, RandomNumberGenerator re) {
-		OrientationAxisAngle orientation = new OrientationAxisAngle();
-		orientation.setAxis( new Vector3d(0,0,1) );
-		orientation.setAngle( re.nextDouble() * Math.PI * 2 );
-		return Optional.of(orientation);
+		return Optional.of(
+			new OrientationAxisAngle(
+				new Vector3d(0,0,1),
+				re.nextDouble() * Math.PI * 2
+			)
+		);
 	}
 
 	@Override

@@ -47,7 +47,7 @@ import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.mpp.sgmn.bean.kernel.KernelIndependent;
 import org.anchoranalysis.mpp.sgmn.kernel.KernelCalcContext;
 import org.anchoranalysis.mpp.sgmn.kernel.KernelCalcNRGException;
-import org.anchoranalysis.plugin.mpp.sgmn.cfg.optscheme.CfgNRGPixelizedUtilities;
+import org.anchoranalysis.plugin.mpp.sgmn.cfg.optscheme.CfgNRGPixelizedFactory;
 
 public class KernelInitialCfgNRG extends KernelIndependent<CfgNRGPixelized> {
 	
@@ -86,7 +86,7 @@ public class KernelInitialCfgNRG extends KernelIndependent<CfgNRGPixelized> {
 		try {
 			return OptionalUtilities.map(
 				cfg,
-				c -> CfgNRGPixelizedUtilities.createFromCfg(c, context, getLogger())
+				c -> CfgNRGPixelizedFactory.createFromCfg(c, context, getLogger())
 			);
 		} catch (CreateException e) {
 			throw new KernelCalcNRGException("Cannot create CfgNRGPixelized", e);

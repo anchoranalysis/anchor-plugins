@@ -98,7 +98,7 @@ public class MarkPolygon extends MarkAbstractPointList {
 	}
 
 	@Override
-	public void scale(double mult_factor) throws OptionalOperationUnsupportedException {
+	public void scale(double multFactor) throws OptionalOperationUnsupportedException {
 		throw new OptionalOperationUnsupportedException("Not supported");
 	}
 
