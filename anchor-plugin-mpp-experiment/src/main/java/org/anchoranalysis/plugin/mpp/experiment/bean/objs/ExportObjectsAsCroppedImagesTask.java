@@ -83,7 +83,7 @@ import org.anchoranalysis.mpp.sgmn.bean.define.DefineOutputterMPP;
  * 
  * <p>Specifically, a bounding-box is placed around an object-mask, maybe padded and extended, and this is shown</p>
  * 
- * @author owen
+ * @author Owen Feehan
  *
  */
 public class ExportObjectsAsCroppedImagesTask extends ExportObjectsBase<MultiInput,NoSharedState> {

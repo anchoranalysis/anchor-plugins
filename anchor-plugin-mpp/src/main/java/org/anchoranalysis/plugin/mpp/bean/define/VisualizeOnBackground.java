@@ -58,7 +58,7 @@ import ch.ethz.biol.cell.mpp.cfg.provider.CfgProviderReference;
  * Adds a visualization for all binary-masks and ObjMaskCollections that are added
  *  using a particular background
  *  
- * @author FEEHANO
+ * @author Owen Feehan
  *
  */
 public class VisualizeOnBackground extends DefineAdderBean {

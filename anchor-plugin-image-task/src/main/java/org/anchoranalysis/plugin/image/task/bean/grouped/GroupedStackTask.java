@@ -57,7 +57,7 @@ import org.anchoranalysis.plugin.image.task.grouped.GroupedSharedState;
 /**
  * Base class for stacks that somehow are grouped-together
  * 
- * @author FEEHANO
+ * @author Owen Feehan
  *
  * @param <S> individual-type
  * @param <T> aggregate-type

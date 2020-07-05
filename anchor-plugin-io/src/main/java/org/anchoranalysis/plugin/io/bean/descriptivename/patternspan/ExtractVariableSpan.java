@@ -42,7 +42,7 @@ import com.owenfeehan.pathpatternfinder.patternelements.PatternElement;
  * 
  * <p>The spanning part should contain all variable elements, and optionally adjacent (or in between) constant elements</p>
  * 
- * @author owen
+ * @author Owen Feehan
  *
  */
 class ExtractVariableSpan {

@@ -42,7 +42,7 @@ import org.anchoranalysis.image.voxel.kernel.count.CountKernelNghbMask;
 /**
  * Base class for features that calculate touching with a dilated bounding box intersection
  * 
- * @author owen
+ * @author Owen Feehan
  *
  */
 public abstract class TouchingVoxels extends FeaturePairObjects {

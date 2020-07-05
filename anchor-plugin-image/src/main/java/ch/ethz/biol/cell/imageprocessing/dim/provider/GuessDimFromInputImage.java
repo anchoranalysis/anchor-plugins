@@ -43,7 +43,7 @@ import org.anchoranalysis.image.stack.Stack;
  * 
  * <p>Otherwise throws an exception indicating they should be set explicitly.</p>
  * 
- * @author owen
+ * @author Owen Feehan
  *
  */
 public class GuessDimFromInputImage extends ImageDimProvider {

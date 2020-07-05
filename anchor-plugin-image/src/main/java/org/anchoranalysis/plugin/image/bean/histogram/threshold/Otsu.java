@@ -43,7 +43,7 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
  * 
  * <@see <a href="https://en.wikipedia.org/wiki/Otsu%27s_method>Otsu's method on wikipedia</a>.</p>
  * 
- * @author owen
+ * @author Owen Feehan
  *
  */
 public class Otsu extends CalculateLevel {

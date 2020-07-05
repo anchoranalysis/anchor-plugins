@@ -32,7 +32,7 @@ import com.owenfeehan.pathpatternfinder.patternelements.PatternElement;
 /**
  * Selects which elements to extract from a pattern
  * 
- * @author owen
+ * @author Owen Feehan
  *
  */
 class SelectSpanToExtract {

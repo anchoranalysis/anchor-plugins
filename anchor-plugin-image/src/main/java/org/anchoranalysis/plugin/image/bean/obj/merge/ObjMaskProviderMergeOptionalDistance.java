@@ -37,7 +37,7 @@ import org.anchoranalysis.plugin.image.obj.merge.condition.DistanceCondition;
 /**
  * An ObjMaskProviderMergeBase that optionally imposes a maximum-distance requirement between objects that are possibly merged
  *   
- * @author FEEHANO
+ * @author Owen Feehan
  *
  */
 public abstract class ObjMaskProviderMergeOptionalDistance extends ObjMaskProviderMergeBase {

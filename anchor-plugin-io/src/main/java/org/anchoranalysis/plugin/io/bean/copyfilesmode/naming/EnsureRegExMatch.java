@@ -35,7 +35,7 @@ import org.anchoranalysis.io.error.AnchorIOException;
 /**
  * Rejects files that fail to match a particular regular-expression
  * 
- * @author FEEHANO
+ * @author Owen Feehan
  *
  */
 public class EnsureRegExMatch extends CopyFilesNamingOneRegEx {

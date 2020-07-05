@@ -41,7 +41,7 @@ import org.anchoranalysis.plugin.io.input.filter.FilterDescriptiveNameEqualsCont
  * 
  * <p>Either or both <i>equals</i> or <i>contains</i> conditions are possible</p>
  * 
- * @author FEEHANO
+ * @author Owen Feehan
  *
  * @param <T> input-type
  */

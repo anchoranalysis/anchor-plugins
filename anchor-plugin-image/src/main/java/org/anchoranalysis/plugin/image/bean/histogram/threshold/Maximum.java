@@ -35,7 +35,7 @@ import org.anchoranalysis.image.histogram.Histogram;
 /**
  * The maximum value of one or more {#link org.anchoranalysis.image.bean.threshold.CalculateLevel}
  * 
- * @author owen
+ * @author Owen Feehan
  *
  */
 public class Maximum extends CalculateLevelListBase {

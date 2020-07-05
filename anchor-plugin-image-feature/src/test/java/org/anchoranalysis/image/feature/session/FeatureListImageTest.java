@@ -56,7 +56,7 @@ import org.junit.Test;
 
 /**
  * This test is located inm this package, as it uses BeanXML in resources that depends on plugins in this module
- * @author owen
+ * @author Owen Feehan
  *
  */
 public class FeatureListImageTest {

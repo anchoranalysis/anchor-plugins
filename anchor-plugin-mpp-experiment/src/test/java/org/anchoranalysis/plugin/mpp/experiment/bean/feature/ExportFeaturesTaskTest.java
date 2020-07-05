@@ -54,7 +54,7 @@ import static org.anchoranalysis.plugin.mpp.experiment.bean.feature.ExportOutput
  * <p>Two types of NRG stack are supported: big and small</p>
  * <p>For the small NRG stack, some of the object-masks are outside the scene size</p>
  * 
- * @author owen
+ * @author Owen Feehan
  *
  */
 public class ExportFeaturesTaskTest {

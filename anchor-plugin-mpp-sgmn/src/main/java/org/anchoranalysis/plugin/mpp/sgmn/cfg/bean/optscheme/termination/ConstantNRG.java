@@ -36,7 +36,7 @@ import org.anchoranalysis.mpp.sgmn.bean.optscheme.termination.TerminationConditi
  * 
  * TODO consider renaming to ConstantScore
  * 
- * @author FEEHANO
+ * @author Owen Feehan
  *
  */
 public class ConstantNRG extends TerminationCondition {

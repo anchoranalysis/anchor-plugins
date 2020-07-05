@@ -49,7 +49,7 @@ import lombok.NoArgsConstructor;
 class MetadataUtilities {
 
 	// NOTE: Tidy up exceptions later
-	public static IMetadata createMetadata( ImageDimensions sd, int num_chnl, PixelType pixelType, boolean makeRGB, boolean pretendSeries ) throws EnumerationException, ServiceException, DependencyException {
+	public static IMetadata createMetadata( ImageDimensions sd, int numChnl, PixelType pixelType, boolean makeRGB, boolean pretendSeries ) throws EnumerationException, ServiceException, DependencyException {
 		
 		ServiceFactory factory = new ServiceFactory();
 	    OMEXMLService service = factory.getInstance(OMEXMLService.class);
@@ -64,7 +64,7 @@ class MetadataUtilities {
 	    meta.setPixelsBinDataBigEndian(Boolean.TRUE, seriesNum, 0);
 	    meta.setPixelsDimensionOrder(DimensionOrder.XYZTC, seriesNum);
 	    meta.setPixelsType( pixelType, seriesNum);
-	    meta.setPixelsSizeC(new PositiveInteger( num_chnl ), seriesNum);
+	    meta.setPixelsSizeC(new PositiveInteger( numChnl ), seriesNum);
 	    
 	    meta.setPixelsSizeX(new PositiveInteger( sd.getX() ), seriesNum);
 	    meta.setPixelsSizeY(new PositiveInteger( sd.getY() ), seriesNum);

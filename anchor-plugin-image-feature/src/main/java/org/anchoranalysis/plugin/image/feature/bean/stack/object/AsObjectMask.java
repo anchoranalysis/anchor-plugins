@@ -40,7 +40,7 @@ import org.anchoranalysis.image.feature.stack.FeatureInputStack;
  * Treats a channel as an object-mask, assuming binary values of 0 and 255
  * and calls an object-mask feature
  * 
- * @author FEEHANO
+ * @author Owen Feehan
  *
  */
 public class AsObjectMask extends FeatureStack {

@@ -55,7 +55,7 @@ import org.anchoranalysis.plugin.image.task.feature.SharedStateExportFeatures;
 /**
  * Base class for exporting features, where features are calculated per-image using a NamedFeatureStore
  *   
- * @author FEEHANO
+ * @author Owen Feehan
  * 
  * @param T input-manager type
  * @param S feature-input type

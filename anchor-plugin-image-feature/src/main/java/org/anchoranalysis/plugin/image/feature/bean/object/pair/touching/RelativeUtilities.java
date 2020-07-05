@@ -35,7 +35,7 @@ import lombok.NoArgsConstructor;
 /**
  * Calculates objects/bounding boxes relative to others
  * 
- * @author owen
+ * @author Owen Feehan
  *
  */
 @NoArgsConstructor(access=AccessLevel.PRIVATE)

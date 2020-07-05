@@ -40,7 +40,7 @@ import org.anchoranalysis.image.object.factory.CreateFromConnectedComponentsFact
  * Ensures each obj in a collection is a connected-component, decomposing it if necessary
  *  into multiple objects
  * 
- * @author FEEHANO
+ * @author Owen Feehan
  *
  */
 public class ObjMaskProviderConnectedComponentsObjs extends ObjectCollectionProviderOne {

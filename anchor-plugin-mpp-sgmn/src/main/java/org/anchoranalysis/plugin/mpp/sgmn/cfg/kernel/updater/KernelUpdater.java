@@ -35,7 +35,7 @@ import org.anchoranalysis.mpp.sgmn.transformer.TransformationContext;
 
 /**
  * 
- * @author FEEHANO
+ * @author Owen Feehan
  *
  * @param <S> kernel type
  * @param <T> state-type

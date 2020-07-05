@@ -42,7 +42,7 @@ import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
  * Takes three RGB channels and projects them into a canvas of width/height in the form
  *   of a new RGB stack
  *   
- * @author FEEHANO
+ * @author Owen Feehan
  *
  */
 class ExtractProjectedStack {

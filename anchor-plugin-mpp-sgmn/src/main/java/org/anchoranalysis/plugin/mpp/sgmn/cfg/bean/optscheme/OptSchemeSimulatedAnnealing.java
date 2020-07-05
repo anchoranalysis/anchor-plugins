@@ -48,7 +48,7 @@ import org.anchoranalysis.plugin.mpp.sgmn.cfg.bean.optscheme.mode.AssignMode;
 /**
  * Finds an optima using a simulated-annealing approach
  * 
- * @author FEEHANO
+ * @author Owen Feehan
  *
  * @param <S> state returned from algorithm, and reported to the outside world
  * @param <T> state used internally during optimization

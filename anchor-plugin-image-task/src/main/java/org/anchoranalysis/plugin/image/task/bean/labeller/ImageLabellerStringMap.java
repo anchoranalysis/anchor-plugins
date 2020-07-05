@@ -41,7 +41,7 @@ import org.anchoranalysis.plugin.image.task.labeller.ImageLabellerStringMapInitP
 /**
  * Maps one set of labels to another
  * 
- * @author FEEHANO
+ * @author Owen Feehan
  *
  * @param T the init-param-type of filter that is the delegate
  */

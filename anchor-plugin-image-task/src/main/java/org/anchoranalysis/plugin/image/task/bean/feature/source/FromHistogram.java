@@ -61,7 +61,7 @@ import org.anchoranalysis.io.output.bound.BoundIOContext;
  * 
  * <p>Optionally, additionally extracted features are written in a XML model.</p>
  * 
- * @author FEEHANO
+ * @author Owen Feehan
  *
  */
 public class FromHistogram extends SingleRowPerInput<FileInput,FeatureInputHistogram> {

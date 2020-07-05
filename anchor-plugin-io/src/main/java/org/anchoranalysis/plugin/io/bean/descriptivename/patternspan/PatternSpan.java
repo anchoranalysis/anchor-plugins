@@ -47,7 +47,7 @@ import com.owenfeehan.pathpatternfinder.patternelements.PatternElement;
  * from the first variable to the last-variable as the
  * descriptive-name
  * 
- * @author owen
+ * @author Owen Feehan
  */
 public class PatternSpan extends DescriptiveNameFromFile {
 

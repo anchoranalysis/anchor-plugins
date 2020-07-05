@@ -38,7 +38,7 @@ import org.anchoranalysis.image.histogram.Histogram;
  * 
  * Note that this is NOT SYMMETRIC behaviour with HistogramProviderAbove
  * 
- * @author FEEHANO
+ * @author Owen Feehan
  *
  */
 public class HistogramProviderBelow extends HistogramProviderOne {

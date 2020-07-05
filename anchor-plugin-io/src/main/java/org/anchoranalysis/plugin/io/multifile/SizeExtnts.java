@@ -34,7 +34,7 @@ import org.anchoranalysis.image.stack.Stack;
 /**
  * Remembers the different sizes among the files
  * 
- * @author FEEHANO
+ * @author Owen Feehan
  *
  */
 public class SizeExtnts {

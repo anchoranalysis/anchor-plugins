@@ -51,7 +51,7 @@ import lombok.NoArgsConstructor;
  * 
  * <p>Each object-mask represented rotated-bounding box and is associated with a confidence score</p>
  * 
- * @author owen
+ * @author Owen Feehan
  *
  */
 @NoArgsConstructor(access=AccessLevel.PRIVATE)

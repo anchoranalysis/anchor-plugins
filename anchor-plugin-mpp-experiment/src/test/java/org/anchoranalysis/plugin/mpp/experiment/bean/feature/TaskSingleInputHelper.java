@@ -57,7 +57,7 @@ import org.anchoranalysis.test.image.io.OutputManagerFixture;
 /**
  * Executes a task on a single-input outputting into a specific directory
  * 
- * @author owen
+ * @author Owen Feehan
  *
  */
 class TaskSingleInputHelper {

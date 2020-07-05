@@ -40,7 +40,7 @@ import org.anchoranalysis.plugin.io.input.filter.FilterDescriptiveNameEqualsCont
 /**
  * Filters a list of inputs when in debug-mode
  * 
- * @author owen
+ * @author Owen Feehan
  *
  * @param <T> input-type
  */

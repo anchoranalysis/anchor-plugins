@@ -46,7 +46,7 @@ import com.google.common.base.Predicate;
  * 
  * @param T the type-of-object to which the algorithm applies
  * 
- * @author owen
+ * @author Owen Feehan
  *
  */
 public abstract class NonMaximaSuppression<T> {

@@ -36,7 +36,7 @@ import org.anchoranalysis.mpp.io.bean.input.MultiInputManager;
 
 /**
  * A stack from a stack-collection
- * @author FEEHANO
+ * @author Owen Feehan
  *
  */
 public class AppendStack extends FilePathBaseAppendToManagerWithFileID {

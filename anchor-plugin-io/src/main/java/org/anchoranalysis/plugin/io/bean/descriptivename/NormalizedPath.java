@@ -35,7 +35,7 @@ import org.anchoranalysis.io.filepath.FilePathToUnixStyleConverter;
 /**
  * Uses the normalized path (always with forward slashes) of each file as it's descriptive-name
  * 
- * @author owen
+ * @author Owen Feehan
  *
  */
 public class NormalizedPath extends DescriptiveNameFromFileIndependent {

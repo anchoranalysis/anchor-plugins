@@ -31,7 +31,7 @@ import org.anchoranalysis.image.feature.object.input.FeatureInputPairObjects;
 /**
  * Overlap ratio to the maximum number of pixels
  * 
- * @author owen
+ * @author Owen Feehan
  *
  */
 public class OverlapRelativeToMaxVolume extends OverlapRelative {

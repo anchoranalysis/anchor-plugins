@@ -35,7 +35,7 @@ import lombok.NoArgsConstructor;
 
 /**
  * Calculates overlap-ratios or the denominator used for that ratio
- * @author owen
+ * @author Owen Feehan
  *
  */
 @NoArgsConstructor(access=AccessLevel.PRIVATE)

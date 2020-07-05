@@ -38,7 +38,7 @@ import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObjectDes
 /**
  * A feature that requires shared-objects during intialization
  * 
- * @author owen
+ * @author Owen Feehan
  *
  */
 public abstract class FeatureSingleObjectWithShared extends FeatureShared<FeatureInputSingleObject> {

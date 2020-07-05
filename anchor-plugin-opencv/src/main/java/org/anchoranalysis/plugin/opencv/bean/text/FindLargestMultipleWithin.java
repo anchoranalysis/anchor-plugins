@@ -34,7 +34,7 @@ import org.anchoranalysis.image.scale.ScaleFactorUtilities;
 /**
  * Finds largest multiple of an Extent without being larger than another extent
  * 
- * @author owen
+ * @author Owen Feehan
  *
  */
 class FindLargestMultipleWithin {

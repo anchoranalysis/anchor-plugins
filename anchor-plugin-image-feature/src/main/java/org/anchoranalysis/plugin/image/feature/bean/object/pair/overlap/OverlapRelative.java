@@ -35,7 +35,7 @@ import org.anchoranalysis.image.feature.object.input.FeatureInputPairObjects;
 /**
  * Expresses the number of intersecting pixels between two objects as a ratio to something else (denominator)
  * 
- * @author owen
+ * @author Owen Feehan
  *
  */
 public abstract class OverlapRelative extends FeaturePairObjects {

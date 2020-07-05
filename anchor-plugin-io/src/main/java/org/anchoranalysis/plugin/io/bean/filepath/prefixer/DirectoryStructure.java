@@ -47,7 +47,7 @@ import lombok.Setter;
  * <p>
  * e.g. for a path=<pre>/a/b/c/d/e.tif</pre> and root=<pre>/a/b</pre> then the prefix would be <pre>c/d/e/</pre>
  *  
- * @author owen
+ * @author Owen Feehan
  *
  */
 public class DirectoryStructure extends FilePathPrefixerAvoidResolve {

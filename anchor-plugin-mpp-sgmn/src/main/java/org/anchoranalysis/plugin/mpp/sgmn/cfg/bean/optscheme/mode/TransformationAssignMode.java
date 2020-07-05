@@ -43,7 +43,7 @@ import org.anchoranalysis.plugin.mpp.sgmn.cfg.optscheme.AccptProbCalculator;
  *   
  * The final transformation, as well as what's "reported" out use the TRANSFORMED (S) version
  * 
- * @author FEEHANO
+ * @author Owen Feehan
  *
  */
 public class TransformationAssignMode<S,T,U> extends AssignMode<S,T,U> {

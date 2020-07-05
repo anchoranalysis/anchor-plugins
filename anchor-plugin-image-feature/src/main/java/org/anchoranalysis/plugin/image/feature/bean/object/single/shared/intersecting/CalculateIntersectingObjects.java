@@ -36,7 +36,7 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
 
 /**
  * Calculates the intersecting set of objects from a particular collection (represted by an id) and the object-mask in the params
- * @author owen
+ * @author Owen Feehan
  *
  */
 class CalculateIntersectingObjects extends FeatureCalculation<ObjectCollection, FeatureInputSingleObject> {

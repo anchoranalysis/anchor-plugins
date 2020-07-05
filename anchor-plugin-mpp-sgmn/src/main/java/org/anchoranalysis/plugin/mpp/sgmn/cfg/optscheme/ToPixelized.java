@@ -31,7 +31,7 @@ import org.anchoranalysis.anchor.mpp.feature.nrg.cfg.CfgNRGPixelized;
 /**
  * Before and after state, when a src is coverted in a CfgNRGPixelized
  * 
- * @author FEEHANO
+ * @author Owen Feehan
  *
  */
 public class ToPixelized<T> {
