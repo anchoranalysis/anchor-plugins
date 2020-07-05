@@ -119,14 +119,11 @@ public class ExportObjectsAsCroppedImagesTask extends ExportObjectsBase<MultiInp
 
 	@Override
 	public void doJobOnInputObject(	InputBound<MultiInput,NoSharedState> params)	throws JobExecutionException {
-		
-		BoundIOContext context = params.context();
-		
 		try {
 			define.processInputImage(
 				params.getInputObject(),
 				params.context(),
-				paramsInit -> outputObjs(paramsInit, context)
+				paramsInit -> outputObjs(paramsInit, params.context())
 			);
 			
 		} catch (OperationFailedException e) {

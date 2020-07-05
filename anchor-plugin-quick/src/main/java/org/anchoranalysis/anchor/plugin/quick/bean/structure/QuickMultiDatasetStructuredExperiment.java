@@ -39,28 +39,33 @@ import org.anchoranalysis.experiment.ExperimentExecutionException;
 import org.anchoranalysis.experiment.bean.Experiment;
 import org.anchoranalysis.experiment.io.IReplaceInputManager;
 import org.anchoranalysis.experiment.io.IReplaceOutputManager;
-import org.anchoranalysis.experiment.task.Task;
 import org.anchoranalysis.io.bean.input.InputManager;
 import org.anchoranalysis.io.input.InputFromManager;
 import org.anchoranalysis.io.output.bean.OutputManager;
 import org.apache.commons.configuration.XMLConfiguration;
 import org.apache.commons.lang.StringUtils;
 
+import lombok.Getter;
+import lombok.Setter;
+
 /**
- * Similar to QuickMultiDatasetStructuredExperiment put sets the include paths according to expectations
- *   of a certain directory structure
- *   
+ * Similar to {@link QuickMultiDatasetStructuredExperiment} put sets properties according to an expected directory structure.
+ * <p>
+ * <pre>  
  *   Project Directory/
- *      Experiments/			-> where Experiments are stored
- *      Experiments/include/	-> where a logReporterExperiment.xml and logReporterTask.xml can be found
- *      Filesets/				-> where Filesets are stored
- *      IO/OutputManager/		-> where OutputManagers are stored
- *   
- *	It also assumes a certain naming structure for the xml files in each, based upon an experiment-type parameter $1.
- *		Filesets/For$1/		(the first letter of $1 is capitalized)
+ *      Experiments/			# where Experiments are stored
+ *      Experiments/include/	# where a logReporterExperiment.xml and logReporterTask.xml can be found
+ *      Filesets/				# where Filesets are stored
+ *      IO/OutputManager/		# where OutputManagers are stored
+ * </pre>
+ * <p>
+ * It also assumes a certain naming structure for the xml files in each, based upon an experiment-type parameter $1.
+ * <pre>
+ *		Filesets/For$1/		# the first letter of $1 is capitalized)
  *		IO/OutputManager/$1.xml
- *
- *	This allows many parameters of QuickMultiDatasetStructuredExperiment to be easily set
+ * </pre>
+ * <p>
+ *	his allows many parameters of {@link QuickMultiDatasetStructuredExperiment} to be easily set.
  */
 public class QuickMultiDatasetStructuredExperiment<T extends InputFromManager,S> extends Experiment implements IReplaceInputManager, IReplaceOutputManager {
 
@@ -70,11 +75,11 @@ public class QuickMultiDatasetStructuredExperiment<T extends InputFromManager,S>
 	 *  0 implies that the file is directly in Experiments/ 
 	 *  1 implies that the file is in Experiments/SOMESUBDIR/ etc.
 	 * */
-	@BeanField
+	@BeanField @Getter @Setter
 	private int directoryDistance = 0;
 	
 	/** The value of $1 (see comment above) in naming-structure. It should be in camel-case typically. */
-	@BeanField
+	@BeanField @Getter @Setter
 	private String experimentType;
 	// END BEAN PROPERTIES
 			
@@ -84,7 +89,7 @@ public class QuickMultiDatasetStructuredExperiment<T extends InputFromManager,S>
 	private boolean populatedDelegate = false;
 	
 	public QuickMultiDatasetStructuredExperiment() {
-		delegate = new QuickMultiDatasetExperiment<T,S>();
+		delegate = new QuickMultiDatasetExperiment<>();
 	}
 
 	@Override
@@ -100,8 +105,7 @@ public class QuickMultiDatasetStructuredExperiment<T extends InputFromManager,S>
 	}
 	
 	private void populateDelegateIfNeeded() {
-		if (populatedDelegate==false) {
-
+		if (!populatedDelegate) {
 			delegate.setFolderDataset( folderDataset() );
 			delegate.setOutput( output() );
 			delegate.setLogReporterExperimentPath( logReporterPath("Experiment") );
@@ -176,14 +180,6 @@ public class QuickMultiDatasetStructuredExperiment<T extends InputFromManager,S>
 		return delegate.useDetailedLogging();
 	}
 
-	public String getExperimentType() {
-		return experimentType;
-	}
-
-	public void setExperimentType(String experimentType) {
-		this.experimentType = experimentType;
-	}
-
 	public String getDatasetSpecific() {
 		return delegate.getDatasetSpecific();
 	}
@@ -224,27 +220,11 @@ public class QuickMultiDatasetStructuredExperiment<T extends InputFromManager,S>
 		delegate.setMaxNumProcessors(maxNumProcessors);
 	}
 
-	public boolean isSupressExceptions() {
-		return delegate.isSupressExceptions();
+	public boolean isSuppressExceptions() {
+		return delegate.isSuppressExceptions();
 	}
 
-	public void setSupressExceptions(boolean supressExceptions) {
-		delegate.setSupressExceptions(supressExceptions);
-	}
-
-	public Task<T, S> getTask() {
-		return delegate.getTask();
-	}
-
-	public void setTask(Task<T, S> task) {
-		delegate.setTask(task);
-	}
-
-	public int getDirectoryDistance() {
-		return directoryDistance;
-	}
-
-	public void setDirectoryDistance(int directoryDistance) {
-		this.directoryDistance = directoryDistance;
+	public void setSuppressExceptions(boolean suppressExceptions) {
+		delegate.setSuppressExceptions(suppressExceptions);
 	}
 }
