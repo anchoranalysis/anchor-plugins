@@ -37,7 +37,7 @@ import org.anchoranalysis.anchor.mpp.mark.set.UpdateMarkSetException;
 
 
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.image.extent.ImageDim;
+import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.mpp.sgmn.bean.kernel.KernelIndependent;
 import org.anchoranalysis.mpp.sgmn.kernel.KernelCalcContext;
 import org.anchoranalysis.mpp.sgmn.kernel.KernelCalcNRGException;
@@ -47,11 +47,6 @@ import org.anchoranalysis.plugin.mpp.sgmn.cfg.optscheme.CfgFromPartition;
 import org.anchoranalysis.plugin.mpp.sgmn.cfg.optscheme.PartitionedCfg;
 
 public class KernelInitialCfgFromPartition extends KernelIndependent<CfgFromPartition> {
-
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -8499354370753415454L;
 	
 	// START BEAN LIST
 	@BeanField
@@ -89,7 +84,7 @@ public class KernelInitialCfgFromPartition extends KernelIndependent<CfgFromPart
 
 	@Override
 	public double calcAccptProb(int exstSize, int propSize,
-			double poisson_intens, ImageDim scene_size, double densityRatio) {
+			double poisson_intens, ImageDimensions scene_size, double densityRatio) {
 		// We always accept
 		return 1;
 	}

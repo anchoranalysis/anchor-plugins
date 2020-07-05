@@ -35,7 +35,7 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.params.KeyValueParams;
 import org.anchoranalysis.core.random.RandomNumberGenerator;
-import org.anchoranalysis.image.extent.ImageRes;
+import org.anchoranalysis.image.extent.ImageResolution;
 
 import cern.jet.random.Normal;
 
@@ -56,7 +56,7 @@ public class GaussianSamplerFromParams extends ScalarProposer {
 	// END BEAN PROPERTIES
 	
 	@Override
-	public double propose( RandomNumberGenerator re, ImageRes res ) throws OperationFailedException {
+	public double propose( RandomNumberGenerator re, ImageResolution res ) throws OperationFailedException {
 		
 		try {
 			KeyValueParams kvp = keyValueParamsProvider.create();

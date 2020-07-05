@@ -41,7 +41,7 @@ import org.anchoranalysis.plugin.image.task.grouped.NamedChnl;
  * If a stack has a single-channel, it it uses this name as an output
  * If a stack has multiple channels, this name is used but suffixed with a number of each channel (00, 01 etc.)
  * 
- * @author FEEHANO
+ * @author Owen Feehan
  *
  */
 public class SelectAll extends SelectChnlsFromStacks {

@@ -94,7 +94,7 @@ public class BinaryChnlProviderIJBinary extends BinaryChnlProviderOne {
 			return new BinaryChnl(
 				bvbOut,
 				binaryChnl.getDimensions().getRes(),
-				ChannelFactory.instance().get( VoxelDataTypeUnsignedByte.instance )
+				ChannelFactory.instance().get( VoxelDataTypeUnsignedByte.INSTANCE )
 			);
 		} catch (OperationFailedException e) {
 			throw new CreateException(e);

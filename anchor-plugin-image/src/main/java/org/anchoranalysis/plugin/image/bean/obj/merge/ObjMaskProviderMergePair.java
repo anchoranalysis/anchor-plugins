@@ -35,9 +35,9 @@ import org.anchoranalysis.bean.shared.relation.RelationBean;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.feature.bean.list.FeatureList;
+import org.anchoranalysis.feature.bean.list.FeatureListFactory;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.feature.input.FeatureInputNRGStack;
+import org.anchoranalysis.feature.input.FeatureInputNRG;
 import org.anchoranalysis.feature.input.FeatureInputNull;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorSingle;
@@ -46,10 +46,10 @@ import org.anchoranalysis.feature.session.calculator.FeatureCalculatorSingleFrom
 import org.anchoranalysis.image.feature.bean.evaluator.FeatureEvaluator;
 import org.anchoranalysis.image.feature.bean.evaluator.FeatureEvaluatorNrgStack;
 import org.anchoranalysis.image.feature.evaluator.PayloadCalculator;
-import org.anchoranalysis.image.feature.objmask.pair.FeatureInputPairObjs;
+import org.anchoranalysis.image.feature.object.input.FeatureInputPairObjects;
 import org.anchoranalysis.image.feature.session.merged.MergedPairsFeatures;
-import org.anchoranalysis.image.feature.session.merged.MergedPairsSession;
-import org.anchoranalysis.image.objectmask.ObjectMask;
+import org.anchoranalysis.image.object.ObjectMask;
+import org.anchoranalysis.image.feature.session.merged.FeatureCalculatorMergedPairs;
 import org.anchoranalysis.plugin.image.obj.merge.priority.AssignPriority;
 import org.anchoranalysis.plugin.image.obj.merge.priority.AssignPriorityFromPair;
 
@@ -76,7 +76,7 @@ public class ObjMaskProviderMergePair extends ObjMaskProviderMergeWithFeature {
 	private RelationBean relation = new GreaterThanEqualToBean();
 	
 	@BeanField
-	private FeatureEvaluatorNrgStack<FeatureInputPairObjs> featureEvaluatorMerge;
+	private FeatureEvaluatorNrgStack<FeatureInputPairObjects> featureEvaluatorMerge;
 	// END BEAN PROPERTIES
 
 	@Override
@@ -103,13 +103,13 @@ public class ObjMaskProviderMergePair extends ObjMaskProviderMergeWithFeature {
 		}
 	}
 	
-	private FeatureCalculatorSingle<FeatureInputPairObjs> createCalculatorForPairs() throws CreateException {
+	private FeatureCalculatorSingle<FeatureInputPairObjects> createCalculatorForPairs() throws CreateException {
 		try {
 			Optional<NRGStackWithParams> nrgStack = featureEvaluatorMerge.nrgStack();
 			
-			MergedPairsSession session = new MergedPairsSession(
+			FeatureCalculatorMergedPairs session = new FeatureCalculatorMergedPairs(
 				new MergedPairsFeatures(
-					new FeatureList<>( featureEvaluatorMerge.getFeatureProvider().create() )
+					FeatureListFactory.fromProvider( featureEvaluatorMerge.getFeatureProvider() )
 				)
 			);
 			session.start(
@@ -128,7 +128,7 @@ public class ObjMaskProviderMergePair extends ObjMaskProviderMergeWithFeature {
 		}
 	}
 	
-	private static <T extends FeatureInputNRGStack> FeatureCalculatorSingle<T> maybeWrapWithNRGStack(
+	private static <T extends FeatureInputNRG> FeatureCalculatorSingle<T> maybeWrapWithNRGStack(
 		FeatureCalculatorSingle<T> calculator,
 		Optional<NRGStackWithParams> nrgStack
 	) {
@@ -164,11 +164,11 @@ public class ObjMaskProviderMergePair extends ObjMaskProviderMergeWithFeature {
 		return true;
 	}
 
-	public FeatureEvaluatorNrgStack<FeatureInputPairObjs> getFeatureEvaluatorMerge() {
+	public FeatureEvaluatorNrgStack<FeatureInputPairObjects> getFeatureEvaluatorMerge() {
 		return featureEvaluatorMerge;
 	}
 
-	public void setFeatureEvaluatorMerge(FeatureEvaluatorNrgStack<FeatureInputPairObjs> featureEvaluatorMerge) {
+	public void setFeatureEvaluatorMerge(FeatureEvaluatorNrgStack<FeatureInputPairObjects> featureEvaluatorMerge) {
 		this.featureEvaluatorMerge = featureEvaluatorMerge;
 	}
 }

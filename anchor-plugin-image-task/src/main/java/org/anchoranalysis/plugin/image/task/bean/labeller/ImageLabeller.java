@@ -37,9 +37,9 @@ import org.anchoranalysis.io.output.bound.BoundIOContext;
 
 /**
  * 
- * @author FEEHANO
+ * @author Owen Feehan
  *
- * @param <T> Init-params
+ * @param <T> shared-state
  */
 public abstract class ImageLabeller<T> extends AnchorBean<ImageLabeller<T>> {
 
@@ -55,10 +55,10 @@ public abstract class ImageLabeller<T> extends AnchorBean<ImageLabeller<T>> {
 	public abstract Set<String> allLabels(T params);
 	
 	/** Determines a particular group-identifier for an input 
-	 * @param initParams TODO
+	 * @param sharedState TODO
 	 * @param modelDir TODO*/
 	public abstract String labelFor(
-		T initParams,
+		T sharedState,
 		ProvidesStackInput input,
 		BoundIOContext context
 	) throws OperationFailedException;

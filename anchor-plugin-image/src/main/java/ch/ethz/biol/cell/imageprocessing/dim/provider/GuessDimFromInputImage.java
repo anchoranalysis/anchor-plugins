@@ -29,14 +29,12 @@ import java.util.Set;
  */
 
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 import org.anchoranalysis.core.name.store.NamedProviderStore;
 import org.anchoranalysis.image.bean.provider.ImageDimProvider;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.experiment.identifiers.ImgStackIdentifiers;
-import org.anchoranalysis.image.extent.ImageDim;
-import org.anchoranalysis.image.init.ImageInitParams;
+import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.stack.Stack;
 
 
@@ -45,24 +43,15 @@ import org.anchoranalysis.image.stack.Stack;
  * 
  * <p>Otherwise throws an exception indicating they should be set explicitly.</p>
  * 
- * @author owen
+ * @author Owen Feehan
  *
  */
 public class GuessDimFromInputImage extends ImageDimProvider {
 
-	private ImageDim dim;
-	
-	public GuessDimFromInputImage() {
-	}
-	
-	
-	@Override
-	public void onInit(ImageInitParams so) throws InitException {
-		super.onInit(so);
-	}
+	private ImageDimensions dim;
 
 	@Override
-	public ImageDim create() throws CreateException {
+	public ImageDimensions create() throws CreateException {
 
 		if (dim==null) {
 			dim = takeDimFromStackCollection( getSharedObjects().getStackCollection() );
@@ -71,7 +60,7 @@ public class GuessDimFromInputImage extends ImageDimProvider {
 		return dim;
 	}
 	
-	private ImageDim takeDimFromStackCollection( NamedProviderStore<Stack> stackCollection ) throws CreateException {
+	private ImageDimensions takeDimFromStackCollection( NamedProviderStore<Stack> stackCollection ) throws CreateException {
 		
 		Set<String> keys = stackCollection.keys();
 		
@@ -88,7 +77,7 @@ public class GuessDimFromInputImage extends ImageDimProvider {
 	}
 	
 	/** Takes the ImageDim from a particular stack in the collection */
-	private ImageDim takeDimFromSpecificStack( NamedProviderStore<Stack> stackCollection, String keyThatExists ) throws CreateException {
+	private ImageDimensions takeDimFromSpecificStack( NamedProviderStore<Stack> stackCollection, String keyThatExists ) throws CreateException {
 		Stack stack;
 		try {
 			stack = getSharedObjects().getStackCollection().getException(keyThatExists);

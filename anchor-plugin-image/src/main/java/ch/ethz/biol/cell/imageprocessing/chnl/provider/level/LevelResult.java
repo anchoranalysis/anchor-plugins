@@ -28,7 +28,7 @@ package ch.ethz.biol.cell.imageprocessing.chnl.provider.level;
 
 import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.image.histogram.Histogram;
-import org.anchoranalysis.image.objectmask.ObjectMask;
+import org.anchoranalysis.image.object.ObjectMask;
 
 public class LevelResult {
 	

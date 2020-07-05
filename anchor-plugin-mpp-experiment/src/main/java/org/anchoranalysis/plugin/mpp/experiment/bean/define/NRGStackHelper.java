@@ -32,13 +32,15 @@ import org.anchoranalysis.core.functional.OptionalUtilities;
 import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 import org.anchoranalysis.core.params.KeyValueParams;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
-import org.anchoranalysis.image.init.ImageInitParams;
+import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
 import org.anchoranalysis.io.output.bound.BoundIOContext;
 import org.anchoranalysis.mpp.io.output.NRGStackWriter;
 
-class NRGStackHelper {
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
-	private NRGStackHelper() {}
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
+class NRGStackHelper {
 		
 	// TODO make this more elegant in the design We make a special exception for writing our nrgStacks
 	public static void writeNRGStackParams( ImageInitParams soImage, Optional<String> nrgParamsName, BoundIOContext context ) {
@@ -49,9 +51,7 @@ class NRGStackHelper {
 				KeyValueParams params = OptionalUtilities.flatMap(
 					nrgParamsName,
 					paramsName -> soImage.getParams().getNamedKeyValueParamsCollection().getOptional( paramsName )
-				).orElseGet( ()->
-					new KeyValueParams()
-				);
+				).orElseGet(KeyValueParams::new);
 					
 				NRGStackWriter.writeNRGStack(
 					new NRGStackWithParams(

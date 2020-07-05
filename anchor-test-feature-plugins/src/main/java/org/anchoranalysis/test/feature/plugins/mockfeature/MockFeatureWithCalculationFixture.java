@@ -28,12 +28,12 @@ package org.anchoranalysis.test.feature.plugins.mockfeature;
 
 import static org.junit.Assert.assertEquals;
 
-import java.util.function.Function;
+import java.util.function.ToDoubleFunction;
 
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.input.FeatureInput;
-import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
+import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 
 
 /**
@@ -49,19 +49,19 @@ import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
  */
 public class MockFeatureWithCalculationFixture {
 
-	public final static Function<FeatureInputSingleObj,Double> DEFAULT_FUNC_NUM_PIXELS = input -> (double) input.getObjMask().numVoxelsOn();
+	public static final ToDoubleFunction<FeatureInputSingleObject> DEFAULT_FUNC_NUM_PIXELS = input -> (double) input.getObjectMask().numVoxelsOn();
 	
 	@FunctionalInterface
-	public interface RunnableWithException<E extends Throwable> {
+	public interface RunnableWithException<E extends Exception> {
 	    public void run() throws E;
 	}
 	
 	/**
-	 * Executes an operation, and afterwards asserts an expected number of times the {@link MockCalculation.execute()} method was called.
+	 * Executes an operation, and afterwards asserts an expected number of times certain internal methods are called on a mock-calculation.
 	 * 
-	 * @param expectedCntCalc the expected number of calls to {@link Feature.calc()}
-	 * @param expectedCntExecute the expected number of calls to {@link MockCalculation.execute()}
-	 * @param operation an operation, typically involving {@link MockCalculation}
+	 * @param expectedCntCalc the expected number of calls to {@link Feature#calc}
+	 * @param expectedCntExecute the expected number of calls to {@code execute()} on the mock-calculation.
+	 * @param operation an operation, typically involving the mock-calculation.
 	 * @throws OperationFailedException
 	 */
 	public static void executeAndAssertCnt(
@@ -96,7 +96,7 @@ public class MockFeatureWithCalculationFixture {
 	 * Creates a mock-feature (using a mock-FeatureCalculation under the hood) which counts the number of pixels in an object 
 	 * @return the mock-feature
 	 */
-	public static Feature<FeatureInputSingleObj> createMockFeatureWithCalculation() {
+	public static Feature<FeatureInputSingleObject> createMockFeatureWithCalculation() {
 		return createMockFeatureWithCalculation(DEFAULT_FUNC_NUM_PIXELS);
 	}
 	
@@ -108,9 +108,9 @@ public class MockFeatureWithCalculationFixture {
 	 * @return the feature
 	 */
 	@SuppressWarnings("unchecked")
-	public static <T extends FeatureInput> Feature<T> createMockFeatureWithCalculation(Function<T,Double> funcCalculation) {
+	public static <T extends FeatureInput> Feature<T> createMockFeatureWithCalculation(ToDoubleFunction<T> funcCalculation) {
 		synchronized(MockCalculation.class) {
-			MockCalculation.funcCalculation = (Function<FeatureInput,Double>) funcCalculation;
+			MockCalculation.funcCalculation = (ToDoubleFunction<FeatureInput>) funcCalculation;
 			return (Feature<T>) new MockFeatureWithCalculation();
 		}
 	}

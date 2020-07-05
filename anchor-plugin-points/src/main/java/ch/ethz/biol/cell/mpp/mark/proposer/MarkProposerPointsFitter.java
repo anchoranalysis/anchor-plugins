@@ -39,7 +39,7 @@ import org.anchoranalysis.anchor.mpp.bean.proposer.PointsProposer;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.anchor.mpp.proposer.ProposalAbnormalFailureException;
 import org.anchoranalysis.anchor.mpp.proposer.ProposerContext;
-import org.anchoranalysis.anchor.mpp.proposer.visualization.ICreateProposalVisualization;
+import org.anchoranalysis.anchor.mpp.proposer.visualization.CreateProposalVisualization;
 import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.geometry.Point3d;
@@ -111,13 +111,8 @@ public class MarkProposerPointsFitter extends MarkProposer {
 	}
 	
 	@Override
-	public Optional<ICreateProposalVisualization> proposalVisualization(final boolean detailed) {
-		return Optional.of(	cfg -> {
-			ICreateProposalVisualization pv = pointsProposer.proposalVisualization(detailed); 
-			if (pv!=null) {
-				pv.addToCfg(cfg);
-			}
-		});
+	public Optional<CreateProposalVisualization> proposalVisualization(boolean detailed) {
+		return pointsProposer.proposalVisualization(detailed);
 	}
 	
 	public PointsProposer getPointsProposer() {

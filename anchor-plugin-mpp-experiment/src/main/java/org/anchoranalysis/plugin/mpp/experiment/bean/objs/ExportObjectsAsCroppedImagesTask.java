@@ -37,7 +37,6 @@ import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.core.color.ColorIndex;
 import org.anchoranalysis.core.color.ColorList;
 import org.anchoranalysis.core.color.RGBColor;
-import org.anchoranalysis.core.error.AnchorNeverOccursException;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.error.OperationFailedException;
@@ -45,21 +44,23 @@ import org.anchoranalysis.core.functional.FunctionWithException;
 import org.anchoranalysis.core.functional.IdentityOperation;
 import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.core.name.provider.NamedProviderGetException;
+import org.anchoranalysis.core.name.value.SimpleNameValue;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
 import org.anchoranalysis.experiment.JobExecutionException;
 import org.anchoranalysis.experiment.task.InputTypesExpected;
+import org.anchoranalysis.experiment.task.NoSharedState;
 import org.anchoranalysis.experiment.task.InputBound;
 import org.anchoranalysis.experiment.task.ParametersExperiment;
+import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
 import org.anchoranalysis.image.bean.provider.stack.StackProvider;
 import org.anchoranalysis.image.extent.BoundingBox;
-import org.anchoranalysis.image.extent.ImageDim;
-import org.anchoranalysis.image.init.ImageInitParams;
+import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.io.generator.raster.bbox.ExtractedBBoxGenerator;
 import org.anchoranalysis.image.io.generator.raster.bbox.ExtractedBBoxOnRGBObjMaskGenerator;
 import org.anchoranalysis.image.io.generator.raster.obj.ObjWithBoundingBoxGenerator;
 import org.anchoranalysis.image.io.generator.raster.obj.rgb.RGBObjMaskGenerator;
-import org.anchoranalysis.image.objectmask.ObjectMask;
-import org.anchoranalysis.image.objectmask.ObjectCollection;
+import org.anchoranalysis.image.object.ObjectCollection;
+import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.stack.NamedImgStackCollection;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.io.bean.objmask.writer.RGBOutlineWriter;
@@ -82,10 +83,10 @@ import org.anchoranalysis.mpp.sgmn.bean.define.DefineOutputterMPP;
  * 
  * <p>Specifically, a bounding-box is placed around an object-mask, maybe padded and extended, and this is shown</p>
  * 
- * @author owen
+ * @author Owen Feehan
  *
  */
-public class ExportObjectsAsCroppedImagesTask extends ExportObjectsBase<MultiInput,Object> {
+public class ExportObjectsAsCroppedImagesTask extends ExportObjectsBase<MultiInput,NoSharedState> {
 
 	// START BEAN PROPERTIES
 	@BeanField
@@ -117,15 +118,12 @@ public class ExportObjectsAsCroppedImagesTask extends ExportObjectsBase<MultiInp
 	// END BEAN PROPERTIES
 
 	@Override
-	public void doJobOnInputObject(	InputBound<MultiInput,Object> params)	throws JobExecutionException {
-		
-		BoundIOContext context = params.context();
-		
+	public void doJobOnInputObject(	InputBound<MultiInput,NoSharedState> params)	throws JobExecutionException {
 		try {
 			define.processInputImage(
 				params.getInputObject(),
 				params.context(),
-				paramsInit -> outputObjs(paramsInit, context)
+				paramsInit -> outputObjs(paramsInit, params.context())
 			);
 			
 		} catch (OperationFailedException e) {
@@ -153,12 +151,12 @@ public class ExportObjectsAsCroppedImagesTask extends ExportObjectsBase<MultiInp
 			NamedImgStackCollection stackCollection = createStackCollection(paramsInit, logger);
 			NamedImgStackCollection stackCollectionMIP = createStackCollectionMIP(paramsInit, logger);
 			
-			if (stackCollection.keys().size()==0) {
+			if (stackCollection.keys().isEmpty()) {
 				// Nothing to do
 				return;
 			}
 			
-			ImageDim dim = stackCollection.getException(
+			ImageDimensions dim = stackCollection.getException(
 				stackCollection.keys().iterator().next()
 			).getDimensions();
 			
@@ -180,21 +178,22 @@ public class ExportObjectsAsCroppedImagesTask extends ExportObjectsBase<MultiInp
 	}
 	
 	@Override
-	public Object beforeAnyJobIsExecuted(BoundOutputManagerRouteErrors outputManager, ParametersExperiment params)
+	public NoSharedState beforeAnyJobIsExecuted(BoundOutputManagerRouteErrors outputManager, ParametersExperiment params)
 			throws ExperimentExecutionException {
-		return null;
+		return NoSharedState.INSTANCE;
 	}
 
 
 	@Override
-	public void afterAllJobsAreExecuted(Object sharedState,	BoundIOContext context) throws ExperimentExecutionException {
+	public void afterAllJobsAreExecuted(NoSharedState sharedState, BoundIOContext context) throws ExperimentExecutionException {
+		// NOTHING TO DO
 	}	
 	
 	private void outputGeneratorSeq(
 		IterableGenerator<ObjectMask> generator,
 		ObjectCollection objs,
 		BoundIOContext context
-	) throws CreateException {
+	) {
 		GeneratorSequenceIncrementalRerouteErrors<ObjectMask> generatorSeq = createGeneratorSequence(
 			generator,
 			context
@@ -209,7 +208,7 @@ public class ExportObjectsAsCroppedImagesTask extends ExportObjectsBase<MultiInp
 		generatorSeq.end();
 	}
 	
-	private ObjectCollection maybeExtendZObjs(ObjectCollection objsCollection, int sizeZ) throws CreateException {
+	private ObjectCollection maybeExtendZObjs(ObjectCollection objsCollection, int sizeZ) {
 		
 		if (extendInZ) {
 			objsCollection = extendObjsInZ(objsCollection, sizeZ);
@@ -221,7 +220,7 @@ public class ExportObjectsAsCroppedImagesTask extends ExportObjectsBase<MultiInp
 
 	private NamedImgStackCollection createStackCollection( ImageInitParams so, LogErrorReporter logger ) throws CreateException {
 		// Get named image stack collection
-		ImageDim dim = null;
+		ImageDimensions dim = null;
 		NamedImgStackCollection stackCollection = new NamedImgStackCollection();
 			
 			
@@ -265,7 +264,7 @@ public class ExportObjectsAsCroppedImagesTask extends ExportObjectsBase<MultiInp
 	
 	private NamedImgStackCollection createStackCollectionMIP( ImageInitParams so, LogErrorReporter logger ) throws CreateException {
 		// Get named image stack collection
-		ImageDim dim = null;
+		ImageDimensions dim = null;
 		NamedImgStackCollection stackCollection = new NamedImgStackCollection();
 			
 			
@@ -301,23 +300,19 @@ public class ExportObjectsAsCroppedImagesTask extends ExportObjectsBase<MultiInp
 		return stackCollection;			
 	}
 	
-	
-	
-	private IterableGenerator<ObjectMask> wrapBBoxGenerator( IterableGenerator<BoundingBox> generator, final boolean mip ) {
+	private static IterableGenerator<ObjectMask> wrapBBoxGenerator( IterableGenerator<BoundingBox> generator, final boolean mip ) {
 		return new IterableGeneratorBridge<>(
 			generator,
-			new FunctionWithException<ObjectMask, BoundingBox, AnchorNeverOccursException>() {
-
-				@Override
-				public BoundingBox apply(ObjectMask sourceObject) {
-					if (mip) {
-						return sourceObject.getBoundingBox().flattenZ();
-					} else {
-						return sourceObject.getBoundingBox();
-					}
-				}
-			}
+			sourceObject -> boundingBoxFromObject(sourceObject, mip)
 		);
+	}
+	
+	private static BoundingBox boundingBoxFromObject(ObjectMask object, boolean mip) {
+		if (mip) {
+			return object.getBoundingBox().flattenZ();
+		} else {
+			return object.getBoundingBox();
+		}
 	}
 	
 	private IterableGenerator<ObjectMask> createRGBObjMaskGenerator(
@@ -330,16 +325,19 @@ public class ExportObjectsAsCroppedImagesTask extends ExportObjectsBase<MultiInp
 	}
 	
 	private IterableGenerator<ObjectMask> createGenerator(
-		final ImageDim dim,
+		final ImageDimensions dim,
 		NamedImgStackCollection stackCollection,
 		NamedImgStackCollection stackCollectionMIP
 	) throws CreateException {
 		
 		String manifestFunction = "rasterExtract";
 		
-		IterableCombinedListGenerator<ObjectMask> out = new IterableCombinedListGenerator<>();
-
-		out.add( "mask", new ObjWithBoundingBoxGenerator(dim.getRes()) );
+		IterableCombinedListGenerator<ObjectMask> out = new IterableCombinedListGenerator<>(
+			new SimpleNameValue<>(
+				"mask",
+				new ObjWithBoundingBoxGenerator(dim.getRes())
+			)
+		);
 		
 		try {
 			for( String key : stackCollection.keys() ) {
@@ -391,7 +389,7 @@ public class ExportObjectsAsCroppedImagesTask extends ExportObjectsBase<MultiInp
 	}
 	
 	
-	private static ObjectMask extractObjMaskKeepEntireImage( ObjectMask om, ImageDim dim ) throws OutputWriteFailedException {
+	private static ObjectMask extractObjMaskKeepEntireImage( ObjectMask om, ImageDimensions dim ) throws OutputWriteFailedException {
 		return BBoxUtilities.createObjMaskForBBox(
 			om,
 			new BoundingBox(dim.getExtnt())
@@ -404,7 +402,7 @@ public class ExportObjectsAsCroppedImagesTask extends ExportObjectsBase<MultiInp
 	) {
 		IndexableOutputNameStyle outputNameStyle = new IntegerPrefixOutputNameStyle("extractedObjs", 6);
 		
-		GeneratorSequenceIncrementalRerouteErrors<ObjectMask> writer = new GeneratorSequenceIncrementalRerouteErrors<>(
+		return new GeneratorSequenceIncrementalRerouteErrors<>(
 			new GeneratorSequenceIncrementalWriter<>(
 				context.getOutputManager().getDelegate(),
 				outputNameStyle.getOutputName(),
@@ -415,7 +413,6 @@ public class ExportObjectsAsCroppedImagesTask extends ExportObjectsBase<MultiInp
 			),
 			context.getErrorReporter()
 		);
-		return writer;
 	}
 	
 	private static ObjectCollection extendObjsInZ( ObjectCollection objs, int sz ) {

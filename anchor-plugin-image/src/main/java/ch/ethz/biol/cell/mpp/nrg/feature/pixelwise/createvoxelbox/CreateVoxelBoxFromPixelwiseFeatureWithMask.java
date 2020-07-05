@@ -41,7 +41,7 @@ import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.feature.bean.pixelwise.PixelScore;
 import org.anchoranalysis.image.histogram.Histogram;
 import org.anchoranalysis.image.histogram.HistogramFactory;
-import org.anchoranalysis.image.objectmask.ObjectMask;
+import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.anchoranalysis.image.voxel.box.VoxelBoxList;
 import org.anchoranalysis.image.voxel.box.VoxelBoxWrapper;
@@ -141,8 +141,8 @@ public class CreateVoxelBoxFromPixelwiseFeatureWithMask {
 		Extent e = vbOut.extent();
 		Extent eMask = objMask.binaryVoxelBox().extent();
 		
-		ReadableTuple3i crnrMin = objMask.getBoundingBox().getCrnrMin();
-		ReadableTuple3i crnrMax = objMask.getBoundingBox().calcCrnrMax();
+		ReadableTuple3i crnrMin = objMask.getBoundingBox().cornerMin();
+		ReadableTuple3i crnrMax = objMask.getBoundingBox().calcCornerMax();
 		
 		for( int z=crnrMin.getZ();z<=crnrMax.getZ(); z++) {
 			

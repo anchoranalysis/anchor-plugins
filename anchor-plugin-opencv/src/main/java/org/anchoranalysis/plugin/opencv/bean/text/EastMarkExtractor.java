@@ -40,6 +40,10 @@ import org.opencv.core.Scalar;
 import org.opencv.dnn.Dnn;
 import org.opencv.dnn.Net;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
 class EastMarkExtractor {
 
 	private static final Scalar MEAN_SUBTRACTION_CONSTANTS = new Scalar(123.68, 116.78, 103.94); 
@@ -180,7 +184,7 @@ class EastMarkExtractor {
 		
 		return new Pair<>(
 			scoresReshaped,
-			new Extent(numCols, numRows, 0)
+			new Extent(numCols, numRows, 1)
 		);
 	}
 	

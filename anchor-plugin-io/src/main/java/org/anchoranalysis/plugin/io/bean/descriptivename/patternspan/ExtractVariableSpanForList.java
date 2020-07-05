@@ -34,6 +34,10 @@ import java.util.stream.Collectors;
 import org.anchoranalysis.io.filepath.FilePathToUnixStyleConverter;
 import org.anchoranalysis.io.input.descriptivename.DescriptiveFile;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
 class ExtractVariableSpanForList {
 
 	/**
@@ -41,8 +45,7 @@ class ExtractVariableSpanForList {
 	 * 
 	 * <p> If any of descriptive-names are blank, then add on a bit of the constant portion to all names to make it non-blank</p>
 	 * @param files files
-	 * @param pattern extracted-pattern
-	 * @param elseName fallback if it's still empty after operation
+	 * @param extractVariableSpan extracted-pattern
 	 * @return
 	 */
 	public static List<DescriptiveFile> listExtract(Collection<File> files, ExtractVariableSpan extractVariableSpan) {
@@ -91,7 +94,7 @@ class ExtractVariableSpanForList {
 		
 		// Find the index of the last forward-slash (or second-last if the final character is a forward-slash)
 		String strMinusOne = str.substring( 0, str.length()-1 );
-		int finalIndex = strMinusOne.lastIndexOf("/");
+		int finalIndex = strMinusOne.lastIndexOf('/');
 		return str.substring(finalIndex+1);
 	}
 }

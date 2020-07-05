@@ -62,7 +62,7 @@ import org.anchoranalysis.plugin.image.task.sharedstate.SharedStateSelectedSlice
  * 
  * Expects a second-level output "stack" to determine which slices are outputted or not
  * 
- * @author FEEHANO
+ * @author Owen Feehan
  *
  */
 public class ExtractSingleSliceTask extends Task<NamedChnlsInput,SharedStateSelectedSlice> {

@@ -29,12 +29,12 @@ package ch.ethz.biol.cell.imageprocessing.binaryimgchnl.provider;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
+import org.anchoranalysis.image.bean.provider.ObjectCollectionProvider;
 import org.anchoranalysis.image.binary.BinaryChnl;
 import org.anchoranalysis.image.binary.values.BinaryValues;
-import org.anchoranalysis.image.extent.ImageDim;
-import org.anchoranalysis.image.objectmask.ObjectCollection;
-import org.anchoranalysis.image.objectmask.ops.BinaryChnlFromObjs;
+import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.image.object.ObjectCollection;
+import org.anchoranalysis.image.object.ops.BinaryChnlFromObjs;
 
 /** 
  * Creates a BinaryImgChannel from a collection of object masks
@@ -43,14 +43,14 @@ public class BinaryChnlProviderFromObjMasks extends BinaryChnlProviderDimSource 
 
 	// START BEAN
 	@BeanField
-	private ObjMaskProvider objs;
+	private ObjectCollectionProvider objs;
 	
 	@BeanField
 	private boolean invert = false;
 	// END BEAN
 
 	@Override
-	protected BinaryChnl createFromSource(ImageDim dimSource) throws CreateException {
+	protected BinaryChnl createFromSource(ImageDimensions dimSource) throws CreateException {
 
 		ObjectCollection objCollection = objs.create();
 		if (objCollection==null) {
@@ -59,7 +59,7 @@ public class BinaryChnlProviderFromObjMasks extends BinaryChnlProviderDimSource 
 		return create( objCollection, dimSource, invert );
 	}
 	
-	private static BinaryChnl create(  ObjectCollection objs, ImageDim dim, boolean invert ) throws CreateException {
+	private static BinaryChnl create(  ObjectCollection objs, ImageDimensions dim, boolean invert ) throws CreateException {
 
 		BinaryValues bv = BinaryValues.getDefault();
 		
@@ -67,11 +67,11 @@ public class BinaryChnlProviderFromObjMasks extends BinaryChnlProviderDimSource 
 		return new BinaryChnl(maskedImage.getChnl(), bv);	
 	}
 
-	public ObjMaskProvider getObjs() {
+	public ObjectCollectionProvider getObjs() {
 		return objs;
 	}
 
-	public void setObjs(ObjMaskProvider objs) {
+	public void setObjs(ObjectCollectionProvider objs) {
 		this.objs = objs;
 	}
 
@@ -83,7 +83,7 @@ public class BinaryChnlProviderFromObjMasks extends BinaryChnlProviderDimSource 
 		this.invert = invert;
 	}
 	
-	private static BinaryChnl createChnlFromObjsMux( ObjectCollection objs, ImageDim sd, BinaryValues outVal, boolean invert ) throws CreateException {
+	private static BinaryChnl createChnlFromObjsMux( ObjectCollection objs, ImageDimensions sd, BinaryValues outVal, boolean invert ) throws CreateException {
 		if (invert) {
 			return BinaryChnlFromObjs.createFromNotObjs(objs, sd, outVal);
 		} else {

@@ -34,8 +34,8 @@ import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.core.log.LogReporter;
 import org.anchoranalysis.image.bean.unitvalue.distance.UnitValueDistance;
 import org.anchoranalysis.image.extent.BoundingBoxDistance;
-import org.anchoranalysis.image.extent.ImageRes;
-import org.anchoranalysis.image.objectmask.ObjectMask;
+import org.anchoranalysis.image.extent.ImageResolution;
+import org.anchoranalysis.image.object.ObjectMask;
 
 public class DistanceCondition implements BeforeCondition {
 
@@ -51,7 +51,7 @@ public class DistanceCondition implements BeforeCondition {
 	}
 
 	@Override
-	public boolean accept(ObjectMask omSrc, ObjectMask omDest, Optional<ImageRes> res) throws OperationFailedException {
+	public boolean accept(ObjectMask omSrc, ObjectMask omDest, Optional<ImageResolution> res) throws OperationFailedException {
 		
 		// We impose a max dist condition if necessary
 		if (maxDist!=null) {
@@ -61,7 +61,7 @@ public class DistanceCondition implements BeforeCondition {
 		}
 	}
 	
-	private boolean isWithinMaxDist( ObjectMask omSrc, ObjectMask omDest, Optional<ImageRes> res ) throws OperationFailedException {
+	private boolean isWithinMaxDist( ObjectMask omSrc, ObjectMask omDest, Optional<ImageResolution> res ) throws OperationFailedException {
 		
 		double dist = BoundingBoxDistance.distance( omSrc.getBoundingBox(), omDest.getBoundingBox(), !suppressZ );
 		
@@ -87,7 +87,7 @@ public class DistanceCondition implements BeforeCondition {
 		}
 	}
 	
-	private double rslvDist( Optional<ImageRes> res, Point3d pnt1, Point3d pnt2 ) throws OperationFailedException {
+	private double rslvDist( Optional<ImageResolution> res, Point3d pnt1, Point3d pnt2 ) throws OperationFailedException {
 		if (suppressZ) {
 			return maxDist.rslv(res, new Point3d(pnt1.getX(),pnt1.getY(),0), new Point3d(pnt2.getX(),pnt2.getY(),0) );
 		} else {

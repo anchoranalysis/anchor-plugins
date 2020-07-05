@@ -37,12 +37,16 @@ import org.anchoranalysis.core.geometry.PointConverter;
 import org.anchoranalysis.image.orientation.Orientation2D;
 import org.anchoranalysis.math.rotation.RotationMatrix;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
 /**
  * Extracts a bounding box from arrays returned by the EAST deep-CNN model.
  * 
- * @author owen
+ * @author Owen Feehan
  *
  */
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
 class RotatableBoundingBoxFromArrays {
 
 	/**

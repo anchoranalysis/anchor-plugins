@@ -26,7 +26,7 @@ package org.anchoranalysisplugin.io.test.image;
  * #L%
  */
 
-import org.anchoranalysis.image.objectmask.ObjectCollection;
+import org.anchoranalysis.image.object.ObjectCollection;
 
 class ObjMaskCollectionWithSize {
 	private ObjectCollection objs;

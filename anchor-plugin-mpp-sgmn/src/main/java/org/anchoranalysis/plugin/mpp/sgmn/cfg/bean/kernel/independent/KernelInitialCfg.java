@@ -37,17 +37,12 @@ import org.anchoranalysis.anchor.mpp.mark.set.UpdateMarkSetException;
 
 
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.image.extent.ImageDim;
+import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.mpp.sgmn.bean.kernel.KernelIndependent;
 import org.anchoranalysis.mpp.sgmn.kernel.KernelCalcContext;
 import org.anchoranalysis.mpp.sgmn.kernel.KernelCalcNRGException;
 
 public class KernelInitialCfg extends KernelIndependent<Cfg> {
-
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -8499354370753415454L;
 	
 	// START BEAN LIST
 	@BeanField
@@ -69,7 +64,7 @@ public class KernelInitialCfg extends KernelIndependent<Cfg> {
 
 	@Override
 	public double calcAccptProb(int exstSize, int propSize,
-			double poisson_intens, ImageDim scene_size, double densityRatio) {
+			double poisson_intens, ImageDimensions scene_size, double densityRatio) {
 		// We always accept
 		return 1;
 	}

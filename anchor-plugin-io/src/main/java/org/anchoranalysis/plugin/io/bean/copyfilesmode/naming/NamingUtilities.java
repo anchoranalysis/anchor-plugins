@@ -32,6 +32,10 @@ import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.filepath.FilePathToUnixStyleConverter;
 import org.anchoranalysis.io.filepath.prefixer.FilePathDifferenceFromFolderPath;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
 class NamingUtilities {
 	
 	public static Path filePathDiff( Path baseFolderPath, Path filePath) throws AnchorIOException {

@@ -44,25 +44,28 @@ import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
-import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
-import org.anchoranalysis.image.objectmask.ObjectMask;
-import org.anchoranalysis.image.objectmask.ObjectCollection;
+import org.anchoranalysis.image.bean.provider.ObjectCollectionProvider;
+import org.anchoranalysis.image.object.ObjectCollection;
+import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.plugin.points.calculate.ellipsoid.EllipsoidFactory;
+
+import lombok.Getter;
+import lombok.Setter;
 
 public class CfgProposerFromObjMaskCollection extends CfgProposer {
 
 	// START BEAN PROPERTIES
-	@BeanField
-	private ObjMaskProvider objs;
+	@BeanField @Getter @Setter
+	private ObjectCollectionProvider objs;
 	
-	@BeanField
+	@BeanField @Getter @Setter
 	private boolean suppressZCovariance = false;
 	
-	@BeanField
+	@BeanField  @Getter @Setter
 	private double shellRad = 0.2;
 	
-	@BeanField @OptionalBean
-	private CheckMark checkMark = null;
+	@BeanField @OptionalBean @Getter @Setter
+	private CheckMark checkMark;
 	// END BEAN PROPERTIES
 	
 	@Override
@@ -71,8 +74,7 @@ public class CfgProposerFromObjMaskCollection extends CfgProposer {
 	}
 
 	private MarkEllipsoid createFromObjMask( ObjectMask om, NRGStackWithParams nrgStack ) throws CreateException {
-		MarkEllipsoid me = EllipsoidFactory.createMarkEllipsoidLeastSquares( om , nrgStack.getDimensions(), suppressZCovariance, shellRad );
-		return me;
+		return EllipsoidFactory.createMarkEllipsoidLeastSquares( om , nrgStack.getDimensions(), suppressZCovariance, shellRad );
 	}
 	
 	@Override
@@ -100,10 +102,8 @@ public class CfgProposerFromObjMaskCollection extends CfgProposer {
 				Mark mark = createFromObjMask(om, context.getNrgStack());
 				mark.setId( cfgGen.idAndIncrement() );
 				
-				if (checkMark!=null) {
-					if (!checkMark.check(mark, context.getRegionMap(), context.getNrgStack())) {
-						continue;
-					}
+				if (checkMark!=null && !checkMark.check(mark, context.getRegionMap(), context.getNrgStack())) {
+					continue;
 				}
 				
 				cfg.add( mark );
@@ -120,37 +120,5 @@ public class CfgProposerFromObjMaskCollection extends CfgProposer {
 		} catch (CheckException e) {
 			throw new ProposalAbnormalFailureException("A failure occurred while checking the mark", e);
 		}
-	}
-
-	public boolean isSuppressZCovariance() {
-		return suppressZCovariance;
-	}
-
-	public void setSuppressZCovariance(boolean suppressZCovariance) {
-		this.suppressZCovariance = suppressZCovariance;
-	}
-
-	public ObjMaskProvider getObjs() {
-		return objs;
-	}
-
-	public void setObjs(ObjMaskProvider objs) {
-		this.objs = objs;
-	}
-
-	public double getShellRad() {
-		return shellRad;
-	}
-
-	public void setShellRad(double shellRad) {
-		this.shellRad = shellRad;
-	}
-
-	public CheckMark getCheckMark() {
-		return checkMark;
-	}
-
-	public void setCheckMark(CheckMark checkMark) {
-		this.checkMark = checkMark;
 	}
 }

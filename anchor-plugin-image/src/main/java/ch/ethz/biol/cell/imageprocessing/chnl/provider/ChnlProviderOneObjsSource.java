@@ -29,15 +29,15 @@ package ch.ethz.biol.cell.imageprocessing.chnl.provider;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.bean.provider.ChnlProviderOne;
-import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
+import org.anchoranalysis.image.bean.provider.ObjectCollectionProvider;
 import org.anchoranalysis.image.channel.Channel;
-import org.anchoranalysis.image.objectmask.ObjectCollection;
+import org.anchoranalysis.image.object.ObjectCollection;
 
 public abstract class ChnlProviderOneObjsSource extends ChnlProviderOne {
 
 	// START BEAN PROPERTIES
 	@BeanField
-	private ObjMaskProvider objs;
+	private ObjectCollectionProvider objs;
 	// END BEAN PROPERTIES
 
 	@Override
@@ -50,11 +50,11 @@ public abstract class ChnlProviderOneObjsSource extends ChnlProviderOne {
 	
 	protected abstract Channel createFromChnl(Channel chnl, ObjectCollection objsSource) throws CreateException;
 	
-	public ObjMaskProvider getObjs() {
+	public ObjectCollectionProvider getObjs() {
 		return objs;
 	}
 
-	public void setObjs(ObjMaskProvider objs) {
+	public void setObjs(ObjectCollectionProvider objs) {
 		this.objs = objs;
 	}
 }

@@ -31,19 +31,19 @@ import org.anchoranalysis.anchor.mpp.bean.points.fitter.InsufficientPointsExcept
 
 import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.image.feature.bean.objmask.FeatureObjMask;
-import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
-import org.anchoranalysis.image.objectmask.ObjectMask;
+import org.anchoranalysis.image.feature.bean.object.single.FeatureSingleObject;
+import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
+import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.plugin.points.calculate.ellipse.CalculateEllipseLeastSquares;
 import org.anchoranalysis.plugin.points.calculate.ellipse.ObjMaskAndEllipse;
 
 // Calculates the ellipticity of a objMask (on the COG slice if it's a zstack)
-public class Ellipticity extends FeatureObjMask {
+public class Ellipticity extends FeatureSingleObject {
 
 	@Override
-	public double calc(SessionInput<FeatureInputSingleObj> input) throws FeatureCalcException {
+	public double calc(SessionInput<FeatureInputSingleObject> input) throws FeatureCalcException {
 		
-		FeatureInputSingleObj inputSessionless = input.get();
+		FeatureInputSingleObject inputSessionless = input.get();
 		
 		ObjMaskAndEllipse both;
 		try {

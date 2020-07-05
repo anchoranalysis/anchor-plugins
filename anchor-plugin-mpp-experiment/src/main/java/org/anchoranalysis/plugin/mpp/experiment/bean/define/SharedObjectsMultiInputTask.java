@@ -40,7 +40,7 @@ import org.anchoranalysis.experiment.bean.task.TaskWithoutSharedState;
 import org.anchoranalysis.experiment.task.InputTypesExpected;
 import org.anchoranalysis.experiment.task.NoSharedState;
 import org.anchoranalysis.experiment.task.InputBound;
-import org.anchoranalysis.image.init.ImageInitParams;
+import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
 import org.anchoranalysis.image.io.bean.feature.OutputFeatureTable;
 import org.anchoranalysis.image.stack.NamedImgStackCollection;
 import org.anchoranalysis.io.output.bound.BoundIOContext;

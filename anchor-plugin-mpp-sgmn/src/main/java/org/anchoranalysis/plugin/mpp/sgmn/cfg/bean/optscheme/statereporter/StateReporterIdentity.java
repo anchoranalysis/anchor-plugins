@@ -34,7 +34,7 @@ import org.anchoranalysis.mpp.sgmn.transformer.StateTransformer;
 /**
  * Assumes the state is reported without any transformation
  * 
- * @author FEEHANO
+ * @author Owen Feehan
  *
  * @param <T>
  */

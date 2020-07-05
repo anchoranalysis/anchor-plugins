@@ -34,14 +34,15 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.geometry.ReadableTuple3i;
-import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
+import org.anchoranalysis.image.bean.provider.ObjectCollectionProvider;
 import org.anchoranalysis.image.binary.values.BinaryValues;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelBoxInt;
-import org.anchoranalysis.image.extent.ImageDim;
-import org.anchoranalysis.image.objectmask.ObjectMask;
-import org.anchoranalysis.image.objectmask.ObjectCollection;
-import org.anchoranalysis.image.objectmask.factory.CreateFromConnectedComponentsFactory;
+import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.image.object.ObjectCollection;
+import org.anchoranalysis.image.object.ObjectCollectionFactory;
+import org.anchoranalysis.image.object.ObjectMask;
+import org.anchoranalysis.image.object.factory.CreateFromConnectedComponentsFactory;
 import org.anchoranalysis.image.voxel.box.BoundedVoxelBox;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.anchoranalysis.image.voxel.box.factory.VoxelBoxFactory;
@@ -53,7 +54,7 @@ public class ObjMaskProviderSplitByObjCollection extends ObjMaskProviderDimensio
 	
 	// START BEAN PROPERTIES
 	@BeanField
-	private ObjMaskProvider objsSplitBy;
+	private ObjectCollectionProvider objsSplitBy;
 	// END BEAN PROPERTIES
 			
 	@Override
@@ -61,7 +62,7 @@ public class ObjMaskProviderSplitByObjCollection extends ObjMaskProviderDimensio
 		
 		ObjectCollection objsSplitByCollection = objsSplitBy.create();
 
-		ImageDim dim = createDim();
+		ImageDimensions dim = createDim();
 		
 		try {
 			return objsCollection.stream().flatMapWithException(
@@ -77,7 +78,7 @@ public class ObjMaskProviderSplitByObjCollection extends ObjMaskProviderDimensio
 		}
 	}
 	
-	private ObjectCollection splitObj( ObjectMask objToSplit, ObjectCollection objsSplitBy, ImageDim dim ) throws OperationFailedException {
+	private ObjectCollection splitObj( ObjectMask objToSplit, ObjectCollection objsSplitBy, ImageDimensions dim ) throws OperationFailedException {
 		
 		// We create a voxel buffer of the same size as objToSplit bounding box, and we write
 		//  a number for each obj in ObjsSplitBy
@@ -105,7 +106,7 @@ public class ObjMaskProviderSplitByObjCollection extends ObjMaskProviderDimensio
 			}
 			
 			ObjectMask intersectShifted = intersect.get().mapBoundingBox( bbox->
-				bbox.shiftBackBy(objToSplit.getBoundingBox().getCrnrMin())
+				bbox.shiftBackBy(objToSplit.getBoundingBox().cornerMin())
 			); 
 			
 			// We make the intersection relative to objToSplit
@@ -118,18 +119,16 @@ public class ObjMaskProviderSplitByObjCollection extends ObjMaskProviderDimensio
 		try {
 			// Now we do a flood fill for each number, pretending it's a binary image of 0 and i
 			// The code will not change pixels that don't match ON
-			
-			ObjectCollection out = new ObjectCollection();
-			for( int i=1; i<cnt; i++) {
-				out.addAll(
-					createObjectForIndex(
-						i,
-						boundedVbId.getVoxelBox(),
-						objToSplit.getBoundingBox().getCrnrMin()
-					)
-				);
-			}
-			return out;
+			return ObjectCollectionFactory.flatMapFromRange(
+				1,
+				cnt,
+				CreateException.class,
+				i -> createObjectForIndex(
+					i,
+					boundedVbId.getVoxelBox(),
+					objToSplit.getBoundingBox().cornerMin()
+				)
+			);
 			
 		} catch (CreateException e) {
 			throw new OperationFailedException(e);
@@ -147,11 +146,11 @@ public class ObjMaskProviderSplitByObjCollection extends ObjMaskProviderDimensio
 		return CONNECTED_COMPONENTS_CREATOR.create(binaryVoxels).shiftBy(shiftBy);
 	}
 
-	public ObjMaskProvider getObjsSplitBy() {
+	public ObjectCollectionProvider getObjsSplitBy() {
 		return objsSplitBy;
 	}
 
-	public void setObjsSplitBy(ObjMaskProvider objsSplitBy) {
+	public void setObjsSplitBy(ObjectCollectionProvider objsSplitBy) {
 		this.objsSplitBy = objsSplitBy;
 	}
 

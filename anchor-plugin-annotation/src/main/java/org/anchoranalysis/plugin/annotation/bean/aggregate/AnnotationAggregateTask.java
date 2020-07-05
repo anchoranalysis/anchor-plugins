@@ -45,7 +45,7 @@ import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
 /**
  * Aggregates many per-image annotations together in form of a CSV file
  * 
- * @author FEEHANO
+ * @author Owen Feehan
  *
  */
 public class AnnotationAggregateTask<S extends AnnotatorStrategy> extends Task<AnnotationWithStrategy<S>,AggregateSharedState> {

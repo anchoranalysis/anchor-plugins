@@ -34,14 +34,14 @@ import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.experiment.task.Task;
-import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
+import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
+import org.anchoranalysis.image.bean.provider.ObjectCollectionProvider;
 import org.anchoranalysis.image.extent.BoundingBox;
-import org.anchoranalysis.image.extent.ImageDim;
-import org.anchoranalysis.image.init.ImageInitParams;
+import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.io.generator.raster.bbox.ExtractedBBoxGenerator;
 import org.anchoranalysis.image.io.generator.raster.obj.rgb.RGBObjMaskGeneratorCropped;
-import org.anchoranalysis.image.objectmask.ObjectMask;
-import org.anchoranalysis.image.objectmask.ObjectCollection;
+import org.anchoranalysis.image.object.ObjectCollection;
+import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.stack.DisplayStack;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.io.input.InputFromManager;
@@ -54,7 +54,7 @@ public abstract class ExportObjectsBase<T extends InputFromManager, S> extends T
 	 * The objects that are matched against the points
 	 */
 	@BeanField
-	private ObjMaskProvider objs;
+	private ObjectCollectionProvider objs;
 	
 	/**
 	 * Padding placed on each side of the outputted image (if it's within the image) in XY directions
@@ -70,7 +70,7 @@ public abstract class ExportObjectsBase<T extends InputFromManager, S> extends T
 	// END BEAN PROPERTIES
 	
 	protected ObjectCollection inputObjs( ImageInitParams so, LogErrorReporter logger ) throws CreateException, InitException {
-		ObjMaskProvider objsDup = objs.duplicateBean();
+		ObjectCollectionProvider objsDup = objs.duplicateBean();
 		objsDup.initRecursive(so,logger);
 		return objsDup.create();
 	}
@@ -84,7 +84,7 @@ public abstract class ExportObjectsBase<T extends InputFromManager, S> extends T
 	 * @return either the exist object-mask (if no padding is to be added) or a padded object-mask
 	 * @throws OutputWriteFailedException
 	 */
-	protected ObjectMask maybePadObjMask( ObjectMask om, ImageDim dim ) throws OutputWriteFailedException {
+	protected ObjectMask maybePadObjMask( ObjectMask om, ImageDimensions dim ) throws OutputWriteFailedException {
 		
 		if (paddingXY==0 && paddingZ==0) {
 			return om;
@@ -120,11 +120,11 @@ public abstract class ExportObjectsBase<T extends InputFromManager, S> extends T
 		return delegate;
 	}
 	
-	public ObjMaskProvider getObjs() {
+	public ObjectCollectionProvider getObjs() {
 		return objs;
 	}
 
-	public void setObjs(ObjMaskProvider objs) {
+	public void setObjs(ObjectCollectionProvider objs) {
 		this.objs = objs;
 	}
 

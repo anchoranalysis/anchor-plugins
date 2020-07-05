@@ -32,7 +32,7 @@ import org.anchoranalysis.core.error.OperationFailedException;
 /**
  * Creates a string where each line is an element (the string representation thereof)
  * 
- * @author owen
+ * @author Owen Feehan
  *
  * @param <T> type of entity to summarize (its string representation is taken)
  */

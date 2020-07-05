@@ -28,7 +28,6 @@ package org.anchoranalysis.plugin.io.bean.input.chnl;
 
 
 import java.io.File;
-import java.nio.Buffer;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.Optional;
@@ -37,7 +36,7 @@ import org.anchoranalysis.core.error.reporter.ErrorReporter;
 import org.anchoranalysis.core.functional.Operation;
 import org.anchoranalysis.core.index.GetOperationFailedException;
 import org.anchoranalysis.core.progress.ProgressReporter;
-import org.anchoranalysis.image.extent.ImageDim;
+import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.io.RasterIOException;
 import org.anchoranalysis.image.io.bean.rasterreader.RasterReader;
 import org.anchoranalysis.image.io.input.NamedChnlsInputPart;
@@ -54,7 +53,7 @@ import org.anchoranalysis.io.error.AnchorIOException;
  *
  * @param <T> voxel data-type buffer
  */
-class AppendPart<T extends Buffer> extends NamedChnlsInputPart {
+class AppendPart extends NamedChnlsInputPart {
 
 	private NamedChnlsInputPart delegate;
 	private AdditionalChnl additionalChnl;
@@ -78,7 +77,7 @@ class AppendPart<T extends Buffer> extends NamedChnlsInputPart {
 	
 
 	@Override
-	public ImageDim dim(int seriesIndex) throws RasterIOException {
+	public ImageDimensions dim(int seriesIndex) throws RasterIOException {
 		return delegate.dim(seriesIndex);
 	}
 
@@ -99,7 +98,7 @@ class AppendPart<T extends Buffer> extends NamedChnlsInputPart {
 		
 		openRasterIfNecessary();
 		
-		NamedChnlCollectionForSeriesConcatenate<T> out = new NamedChnlCollectionForSeriesConcatenate<T>();
+		NamedChnlCollectionForSeriesConcatenate out = new NamedChnlCollectionForSeriesConcatenate();
 		out.add( exst );
 		out.add(
 			new NamedChnlCollectionForSeriesMap(

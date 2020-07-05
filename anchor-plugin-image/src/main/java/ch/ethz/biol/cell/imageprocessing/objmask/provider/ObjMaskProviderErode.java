@@ -35,13 +35,13 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.error.BeanMisconfiguredException;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.extent.Extent;
-import org.anchoranalysis.image.extent.ImageDim;
-import org.anchoranalysis.image.objectmask.ObjectMask;
-import org.anchoranalysis.image.objectmask.ObjectCollection;
-import org.anchoranalysis.image.objectmask.morph.MorphologicalErosion;
-import org.anchoranalysis.image.objectmask.morph.accept.AcceptIterationList;
-import org.anchoranalysis.image.objectmask.morph.accept.RejectIterationIfAllHigh;
-import org.anchoranalysis.image.objectmask.morph.accept.RejectIterationIfLowDisconnected;
+import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.image.object.ObjectCollection;
+import org.anchoranalysis.image.object.ObjectMask;
+import org.anchoranalysis.image.object.morph.MorphologicalErosion;
+import org.anchoranalysis.image.object.morph.accept.AcceptIterationList;
+import org.anchoranalysis.image.object.morph.accept.RejectIterationIfAllHigh;
+import org.anchoranalysis.image.object.morph.accept.RejectIterationIfLowDisconnected;
 
 public class ObjMaskProviderErode extends ObjMaskProviderDimensionsOptional {
 	
@@ -101,7 +101,7 @@ public class ObjMaskProviderErode extends ObjMaskProviderDimensionsOptional {
 	 
 	private Optional<Extent> calcExtent() throws CreateException {
 		return createDims().map(
-			ImageDim::getExtnt	
+			ImageDimensions::getExtnt	
 		);
 	}
 

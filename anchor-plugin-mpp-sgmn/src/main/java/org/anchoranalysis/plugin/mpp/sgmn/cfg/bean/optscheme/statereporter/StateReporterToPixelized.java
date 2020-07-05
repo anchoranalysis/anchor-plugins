@@ -44,7 +44,7 @@ import org.anchoranalysis.plugin.mpp.sgmn.cfg.optscheme.ToPixelized;
  * Assumes we are interested in CfgNRGPixelized as reporting type, and our optimization-state
  *   is in the form ToPixelized<T>
  *   
- * @author FEEHANO
+ * @author Owen Feehan
  *
  * @param <T>
  */

@@ -39,7 +39,7 @@ import org.anchoranalysis.plugin.io.bean.summarizer.Summarizer;
  * 
  * <p>Can be used to (effectively) convert summarization from an InputFromManager to another type</p>
  * 
- * @author owen
+ * @author Owen Feehan
  *
  * @param <T> input-type for input-manager
  * @param <S> type of entity extracted from input-type for summarization

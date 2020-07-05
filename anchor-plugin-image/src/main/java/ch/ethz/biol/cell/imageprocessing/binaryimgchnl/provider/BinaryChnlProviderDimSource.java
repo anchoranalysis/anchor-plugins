@@ -31,7 +31,7 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.bean.provider.BinaryChnlProvider;
 import org.anchoranalysis.image.bean.provider.ImageDimProvider;
 import org.anchoranalysis.image.binary.BinaryChnl;
-import org.anchoranalysis.image.extent.ImageDim;
+import org.anchoranalysis.image.extent.ImageDimensions;
 
 import ch.ethz.biol.cell.imageprocessing.dim.provider.GuessDimFromInputImage;
 
@@ -49,7 +49,7 @@ public abstract class BinaryChnlProviderDimSource extends BinaryChnlProvider {
 		);
 	}
 	
-	protected abstract BinaryChnl createFromSource(ImageDim dimSource) throws CreateException;
+	protected abstract BinaryChnl createFromSource(ImageDimensions dimSource) throws CreateException;
 
 	public ImageDimProvider getDim() {
 		return dim;

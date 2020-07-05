@@ -9,7 +9,7 @@ import org.anchoranalysis.anchor.mpp.feature.bean.nrgscheme.NRGSchemeCreator;
 import org.anchoranalysis.anchor.mpp.feature.mark.ListUpdatableMarkSetCollection;
 import org.anchoranalysis.anchor.mpp.feature.nrg.cfg.CfgNRG;
 import org.anchoranalysis.anchor.mpp.feature.nrg.cfg.CfgNRGPixelized;
-import org.anchoranalysis.anchor.mpp.feature.nrg.cfg.CfgWithNrgTotal;
+import org.anchoranalysis.anchor.mpp.feature.nrg.cfg.CfgWithNRGTotal;
 import org.anchoranalysis.anchor.mpp.feature.nrg.scheme.NRGSchemeWithSharedFeatures;
 import org.anchoranalysis.anchor.mpp.mark.GlobalRegionIdentifiers;
 
@@ -51,8 +51,8 @@ import org.anchoranalysis.core.name.store.NamedProviderStore;
 import org.anchoranalysis.core.params.KeyValueParams;
 import org.anchoranalysis.core.random.RandomNumberGeneratorMersenne;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
-import org.anchoranalysis.image.objectmask.ObjectCollection;
-import org.anchoranalysis.image.sgmn.SgmnFailedException;
+import org.anchoranalysis.image.bean.nonbean.error.SgmnFailedException;
+import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.stack.DisplayStack;
 import org.anchoranalysis.image.stack.NamedImgStackCollection;
 import org.anchoranalysis.image.stack.Stack;
@@ -106,10 +106,6 @@ public class SgmnMPP extends CfgSgmn {
 	
 	private NRGSchemeWithSharedFeatures nrgSchemeShared;
 	
-	public SgmnMPP() {
-		super();
-	}
-	
 	@Override
 	public SgmnMPPState createExperimentState() {
 		return new SgmnMPPState(kernelProposer,define.getDefine());
@@ -153,16 +149,12 @@ public class SgmnMPP extends CfgSgmn {
 	) throws OperationFailedException {
 		try {
 			init( mppInit, context.getLogger() );
-			
-			/*NRGStackWithParams nrgStack = SgmnMPPHelper.createNRGStack(
-				soMPP.getImage().getStackCollection(),
-				keyValueParams.orElse( new KeyValueParams() )
-			);*/
+
 			SgmnMPPHelper.writeStacks( mppInit.getImage(), nrgStack, context );
 			
 			context.getLogReporter().log("Distinct number of probMap = " + updatableMarkSetCollection.numProbMap() );
 			
-			// We initialise the feedback recev
+			// We initialize the feedback receiver
 			feedbackReceiver.initRecursive(mppInit, context.getLogger());
 			
 			MemoryUtilities.logMemoryUsage("Before findOpt (before cleanup)", context.getLogReporter());
@@ -204,7 +196,7 @@ public class SgmnMPP extends CfgSgmn {
 				cfgGen
 			);
 			
-			CfgWithNrgTotal cfgNRG = findOpt(dualStack,	updatableMarkSetCollection,	initContext);
+			CfgWithNRGTotal cfgNRG = findOpt(dualStack,	updatableMarkSetCollection,	initContext);
 			return cfgNRG.getCfg().deepCopy();
 			
 		} catch (InitException | CreateException | SgmnFailedException e) {
@@ -222,7 +214,7 @@ public class SgmnMPP extends CfgSgmn {
 	}
 	
 	// TODO integrate params with OptSchemeInitContext
-	private CfgWithNrgTotal findOpt(
+	private CfgWithNRGTotal findOpt(
 		DualStack dualStack,
 		ListUpdatableMarkSetCollection updatableMarkSetCollection,
 		OptSchemeContext initContext

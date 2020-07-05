@@ -27,16 +27,14 @@ package ch.ethz.biol.cell.imageprocessing.objmask.provider;
  */
 
 import java.util.List;
-import java.util.Optional;
-
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.geometry.Point2i;
 import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.core.geometry.PointConverter;
-import org.anchoranalysis.image.extent.ImageDim;
-import org.anchoranalysis.image.objectmask.ObjectMask;
-import org.anchoranalysis.image.objectmask.ObjectCollection;
+import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.image.object.ObjectCollection;
+import org.anchoranalysis.image.object.ObjectMask;
 
 import ch.ethz.biol.cell.imageprocessing.binaryimgchnl.provider.ConvexHullUtilities;
 
@@ -55,21 +53,22 @@ public class ObjMaskProviderConvexHullConnectLines extends ObjMaskProviderDimens
 	@Override
 	public ObjectCollection createFromObjs( ObjectCollection objsCollection ) throws CreateException {
 
-		ImageDim dim = createDim();
+		ImageDimensions dim = createDim();
 		return objsCollection.stream().map( om->transform(om,dim) );
 	}
 	
-	private ObjectMask transform( ObjectMask obj, ImageDim sd ) throws CreateException {
-		
-		Optional<List<Point2i>> pntsConvexHull = ConvexHullUtilities.extractPointsFromOutline(obj, 1, true);
-		
-		if (!pntsConvexHull.isPresent() || pntsConvexHull.get().size()<=1) {
-			return obj;
-		}
-		
-		List<Point3d> pnts3d = PointConverter.convert2i_3d(pntsConvexHull.get());
-
+	private ObjectMask transform( ObjectMask obj, ImageDimensions sd ) throws CreateException {
 		try {
+			List<Point2i> pntsConvexHull = ConvexHullUtilities.convexHull2D(
+				ConvexHullUtilities.pointsOnOutline(obj)
+			);
+			
+			if (pntsConvexHull.size()<=1) {
+				return obj;
+			}
+			
+			List<Point3d> pnts3d = PointConverter.convert2iTo3d(pntsConvexHull);
+			
 			return ObjMaskWalkShortestPath.walkLine( pnts3d );
 		} catch (OperationFailedException e) {
 			throw new CreateException(e);

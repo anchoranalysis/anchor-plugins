@@ -45,7 +45,7 @@ import org.anchoranalysis.feature.calc.FeatureInitParams;
 import org.anchoranalysis.feature.session.FeatureSession;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorSingle;
 import org.anchoranalysis.image.bean.provider.ImageDimProvider;
-import org.anchoranalysis.image.extent.ImageDim;
+import org.anchoranalysis.image.extent.ImageDimensions;
 
 import ch.ethz.biol.cell.imageprocessing.dim.provider.GuessDimFromInputImage;
 
@@ -92,7 +92,7 @@ public class MarkProviderRequireFeatureRelationThreshold extends MarkProvider {
 		return relation.create().isRelationToValueTrue(featureVal, threshold);
 	}
 	
-	private Optional<ImageDim> dimensions() throws CreateException {
+	private Optional<ImageDimensions> dimensions() throws CreateException {
 		if (dim!=null) {
 			return Optional.of(
 				dim.create()

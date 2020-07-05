@@ -31,15 +31,18 @@ import java.util.List;
 import org.anchoranalysis.anchor.mpp.regionmap.RegionMapSingleton;
 import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
-import org.anchoranalysis.image.extent.ImageDim;
-import org.anchoranalysis.image.objectmask.ObjectMask;
+import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.image.object.ObjectMask;
 
 import ch.ethz.biol.cell.mpp.mark.MarkPolygon;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
 public class ObjMaskPolygonCreator {
 
 	/** Given a list of points that define a polygon, extract a corresponding object-mask */
-	public static ObjectMask create( List<Point3d> pnts3d, ImageDim sd ) {
+	public static ObjectMask create( List<Point3d> pnts3d, ImageDimensions sd ) {
 
 		// Add each point to a MarkPolygon
 		MarkPolygon polygon = polygonForPoints(pnts3d);

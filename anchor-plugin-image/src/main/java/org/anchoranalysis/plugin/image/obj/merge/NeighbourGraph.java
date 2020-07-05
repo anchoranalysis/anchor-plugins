@@ -33,9 +33,9 @@ import java.util.Set;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.graph.EdgeTypeWithVertices;
 import org.anchoranalysis.core.graph.GraphWithEdgeTypes;
-import org.anchoranalysis.image.extent.ImageRes;
-import org.anchoranalysis.image.objectmask.ObjectCollection;
-import org.anchoranalysis.image.objectmask.ObjectCollectionFactory;
+import org.anchoranalysis.image.extent.ImageResolution;
+import org.anchoranalysis.image.object.ObjectCollection;
+import org.anchoranalysis.image.object.ObjectCollectionFactory;
 import org.anchoranalysis.plugin.image.obj.merge.condition.UpdatableBeforeCondition;
 import org.anchoranalysis.plugin.image.obj.merge.priority.AssignPriority;
 import org.anchoranalysis.plugin.image.obj.merge.priority.PrioritisedVertex;
@@ -47,7 +47,7 @@ import org.anchoranalysis.plugin.image.obj.merge.priority.PrioritisedVertex;
 class NeighbourGraph {
 	
 	private UpdatableBeforeCondition beforeCondition;
-	private Optional<ImageRes> res;
+	private Optional<ImageResolution> res;
 	
 	private GraphWithEdgeTypes<ObjVertex, PrioritisedVertex> graph = new GraphWithEdgeTypes<>(true);
 	
@@ -58,7 +58,7 @@ class NeighbourGraph {
 	 * @param imageRes
 	 * @param prioritizer
 	 */
-	public NeighbourGraph(UpdatableBeforeCondition beforeCondition, Optional<ImageRes> imageRes) {
+	public NeighbourGraph(UpdatableBeforeCondition beforeCondition, Optional<ImageResolution> imageRes) {
 		super();
 		this.beforeCondition = beforeCondition;
 		this.res = imageRes;

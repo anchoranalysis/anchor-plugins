@@ -31,9 +31,9 @@ import java.util.List;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.image.bean.objmask.match.ObjMaskMatcher;
-import org.anchoranalysis.image.objectmask.ObjectCollection;
-import org.anchoranalysis.image.objmask.match.ObjWithMatches;
+import org.anchoranalysis.image.bean.object.ObjectMatcher;
+import org.anchoranalysis.image.object.MatchedObject;
+import org.anchoranalysis.image.object.ObjectCollection;
 
 /**
  * Matches to another object, and then uses that object to bridge to another
@@ -41,26 +41,26 @@ import org.anchoranalysis.image.objmask.match.ObjWithMatches;
  * @author Owen Feehan
  *
  */
-public class ObjMaskMatcherBridge extends ObjMaskMatcher {
+public class ObjMaskMatcherBridge extends ObjectMatcher {
 	
 	// START BEAN PROPERTIES
 	/** Used to match each input-object to an intermediary-object */
 	@BeanField
-	private ObjMaskMatcher bridgeMatcher;
+	private ObjectMatcher bridgeMatcher;
 
 	/** Used to match each intermediary-object to a final-object*/
 	@BeanField
-	private ObjMaskMatcher objMaskMatcher;
+	private ObjectMatcher objMaskMatcher;
 	// END BEAN PROPERTIES
 
 	@Override
-	public List<ObjWithMatches> findMatch(ObjectCollection sourceObjs)
+	public List<MatchedObject> findMatch(ObjectCollection sourceObjs)
 			throws OperationFailedException {
 		
-		List<ObjWithMatches> bridgeMatches = bridgeMatcher.findMatch(sourceObjs);
+		List<MatchedObject> bridgeMatches = bridgeMatcher.findMatch(sourceObjs);
 		
 		ObjectCollection bridgeObjs = new ObjectCollection();
-		for( ObjWithMatches owm : bridgeMatches ) {
+		for( MatchedObject owm : bridgeMatches ) {
 			
 			if (owm.getMatches().size()==0) {
 				throw new OperationFailedException("At least one object has no match. One is needed");
@@ -76,19 +76,19 @@ public class ObjMaskMatcherBridge extends ObjMaskMatcher {
 		return objMaskMatcher.findMatch(bridgeObjs);
 	}
 	
-	public ObjMaskMatcher getBridgeMatcher() {
+	public ObjectMatcher getBridgeMatcher() {
 		return bridgeMatcher;
 	}
 
-	public void setBridgeMatcher(ObjMaskMatcher bridgeMatcher) {
+	public void setBridgeMatcher(ObjectMatcher bridgeMatcher) {
 		this.bridgeMatcher = bridgeMatcher;
 	}
 
-	public ObjMaskMatcher getObjMaskMatcher() {
+	public ObjectMatcher getObjMaskMatcher() {
 		return objMaskMatcher;
 	}
 
-	public void setObjMaskMatcher(ObjMaskMatcher objMaskMatcher) {
+	public void setObjMaskMatcher(ObjectMatcher objMaskMatcher) {
 		this.objMaskMatcher = objMaskMatcher;
 	}
 }

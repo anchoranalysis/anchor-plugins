@@ -32,7 +32,7 @@ import org.anchoranalysis.bean.AnchorBean;
 
 
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.image.objectmask.ObjectMask;
+import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.voxel.box.VoxelBoxWrapper;
 
 public abstract class GrayscaleReconstructionByErosion extends AnchorBean<GrayscaleReconstructionByErosion> {

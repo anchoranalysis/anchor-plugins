@@ -30,18 +30,18 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorSingle;
-import org.anchoranalysis.image.bean.provider.ObjMaskProviderOne;
+import org.anchoranalysis.image.bean.provider.ObjectCollectionProviderOne;
 import org.anchoranalysis.image.feature.bean.evaluator.FeatureEvaluator;
-import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
+import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 
-public abstract class ObjMaskProviderFindMaxFeatureBase extends ObjMaskProviderOne {
+public abstract class ObjMaskProviderFindMaxFeatureBase extends ObjectCollectionProviderOne {
 
 	// START BEAN PROPERTIES
 	@BeanField
-	private FeatureEvaluator<FeatureInputSingleObj> featureEvaluator;
+	private FeatureEvaluator<FeatureInputSingleObject> featureEvaluator;
 	// END BEAN PROPERTIES
 	
-	protected FeatureCalculatorSingle<FeatureInputSingleObj> createSession() throws CreateException {
+	protected FeatureCalculatorSingle<FeatureInputSingleObject> createSession() throws CreateException {
 		try {
 			return featureEvaluator.createAndStartSession();
 		} catch (OperationFailedException e) {
@@ -49,11 +49,11 @@ public abstract class ObjMaskProviderFindMaxFeatureBase extends ObjMaskProviderO
 		}
 	}
 
-	public FeatureEvaluator<FeatureInputSingleObj> getFeatureEvaluator() {
+	public FeatureEvaluator<FeatureInputSingleObject> getFeatureEvaluator() {
 		return featureEvaluator;
 	}
 
-	public void setFeatureEvaluator(FeatureEvaluator<FeatureInputSingleObj> featureEvaluator) {
+	public void setFeatureEvaluator(FeatureEvaluator<FeatureInputSingleObject> featureEvaluator) {
 		this.featureEvaluator = featureEvaluator;
 	}
 }

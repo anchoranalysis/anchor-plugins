@@ -26,7 +26,7 @@ package org.anchoranalysis.plugin.image.bean.obj.merge;
  * #L%
  */
 
-import java.util.function.Function;
+import java.util.function.ToDoubleFunction;
 
 import org.anchoranalysis.bean.error.BeanMisconfiguredException;
 import org.anchoranalysis.bean.xml.RegisterBeanFactories;
@@ -34,8 +34,8 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.log.LogErrorReporter;
-import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
-import org.anchoranalysis.image.objectmask.ObjectCollection;
+import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
+import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.plugin.image.test.ProviderFixture;
 import org.anchoranalysis.test.LoggingFixture;
 import org.anchoranalysis.test.feature.plugins.mockfeature.MockFeatureWithCalculationFixture;
@@ -75,7 +75,7 @@ public class ObjMaskProviderMergeMaxTest {
 		);
 	}
 	
-	private void testLinear( int expectedCntMerged, int expectedFeatureCalcCount, Function<FeatureInputSingleObj,Double> calculationFunc ) throws OperationFailedException, CreateException {
+	private void testLinear( int expectedCntMerged, int expectedFeatureCalcCount, ToDoubleFunction<FeatureInputSingleObject> calculationFunc ) throws OperationFailedException, CreateException {
 		MergeTestHelper.testProviderOn(
 			expectedCntMerged,
 			expectedFeatureCalcCount,
@@ -84,7 +84,7 @@ public class ObjMaskProviderMergeMaxTest {
 		);
 	}
 	
-	private static ObjMaskProviderMergeMax createMergeMax( ObjectCollection objs, Function<FeatureInputSingleObj,Double> calculationFunc ) throws CreateException {
+	private static ObjMaskProviderMergeMax createMergeMax( ObjectCollection objs, ToDoubleFunction<FeatureInputSingleObject> calculationFunc ) throws CreateException {
 		
 		LogErrorReporter logger = LoggingFixture.suppressedLogErrorReporter();
 		
@@ -104,8 +104,8 @@ public class ObjMaskProviderMergeMaxTest {
 	}
 	
 	/** Merges if the number-of-pixels becomes closer to 900 */
-	private static Double convergeTo900( FeatureInputSingleObj input ) {
-		int diff = 900 - input.getObjMask().numVoxelsOn();
+	private static Double convergeTo900( FeatureInputSingleObject input ) {
+		int diff = 900 - input.getObjectMask().numVoxelsOn();
 		return (double) -1 * Math.abs(diff);
 	}
 }

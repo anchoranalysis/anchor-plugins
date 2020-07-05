@@ -35,7 +35,7 @@ import org.anchoranalysis.io.error.AnchorIOException;
 /**
  * Removes any whitespace characters from the path
  * 
- * @author FEEHANO
+ * @author Owen Feehan
  *
  */
 public class RemoveWhitespace extends CopyFilesNamingOne {

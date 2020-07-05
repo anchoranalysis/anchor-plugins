@@ -36,22 +36,22 @@ import org.anchoranalysis.anchor.mpp.mark.points.MarkPointList;
 import org.anchoranalysis.anchor.mpp.mark.points.MarkPointListFactory;
 import org.anchoranalysis.anchor.mpp.proposer.ProposalAbnormalFailureException;
 import org.anchoranalysis.anchor.mpp.proposer.ProposerContext;
-import org.anchoranalysis.anchor.mpp.proposer.visualization.ICreateProposalVisualization;
+import org.anchoranalysis.anchor.mpp.proposer.visualization.CreateProposalVisualization;
 import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OptionalOperationUnsupportedException;
 import org.anchoranalysis.core.geometry.Point3d;
-import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
-import org.anchoranalysis.image.objectmask.ObjectMask;
-import org.anchoranalysis.image.objectmask.ObjectCollection;
+import org.anchoranalysis.image.bean.provider.ObjectCollectionProvider;
+import org.anchoranalysis.image.object.ObjectCollection;
+import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.points.PointsFromObjMask;
 
 public class ObjAsPoints extends MarkProposer {
 
 	// START BEAN PROPERTIES
 	@BeanField
-	private ObjMaskProvider objs;
+	private ObjectCollectionProvider objs;
 	// END BEAN PROPERTIES
 
 	private List<List<Point3d>> points = null;
@@ -92,7 +92,7 @@ public class ObjAsPoints extends MarkProposer {
 	}
 
 	@Override
-	public Optional<ICreateProposalVisualization> proposalVisualization(boolean detailed) {
+	public Optional<CreateProposalVisualization> proposalVisualization(boolean detailed) {
 		return Optional.empty();
 	}
 	
@@ -109,11 +109,11 @@ public class ObjAsPoints extends MarkProposer {
 		}
 	}
 
-	public ObjMaskProvider getObjs() {
+	public ObjectCollectionProvider getObjs() {
 		return objs;
 	}
 
-	public void setObjs(ObjMaskProvider objs) {
+	public void setObjs(ObjectCollectionProvider objs) {
 		this.objs = objs;
 	}
 

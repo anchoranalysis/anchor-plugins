@@ -34,11 +34,13 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.Extent;
-import org.anchoranalysis.image.objectmask.ObjectMask;
+import org.anchoranalysis.image.object.ObjectMask;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
 class ExtendObjsInZHelper {
-
-	private ExtendObjsInZHelper() {}
 	
 	public static ObjectMask createExtendedObj( ObjectMask omFlat, ObjectMask container, BoundingBox bbox, int zCent ) throws CreateException {
 		
@@ -48,8 +50,8 @@ class ExtendObjsInZHelper {
 		
 		ByteBuffer bbFlat = omFlat.getVoxelBox().getPixelsForPlane(0).buffer();
 				
-		int zLow = bbox.getCrnrMin().getZ();
-		int zHigh = bbox.calcCrnrMax().getZ();
+		int zLow = bbox.cornerMin().getZ();
+		int zHigh = bbox.calcCornerMax().getZ();
 		
 		if (zCent>zHigh) { zCent = zHigh; }
 		if (zCent<zLow) { zCent = zLow; }
@@ -90,7 +92,7 @@ class ExtendObjsInZHelper {
 			} else {
 				setBufferLow( e.getVolumeXY(), bbExst, omNew.getBinaryValuesByte() );
 			}
-		};
+		}
 		
 		return writtenOneSlice;
 	}

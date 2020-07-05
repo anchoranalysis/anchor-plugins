@@ -30,15 +30,15 @@ import java.util.function.Function;
 
 import org.anchoranalysis.feature.cache.ChildCacheName;
 import org.anchoranalysis.feature.cache.calculation.FeatureCalculation;
-import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
-import org.anchoranalysis.image.feature.objmask.pair.FeatureInputPairObjs;
-import org.anchoranalysis.image.objectmask.ObjectMask;
+import org.anchoranalysis.image.feature.object.input.FeatureInputPairObjects;
+import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
+import org.anchoranalysis.image.object.ObjectMask;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
-class CalculateSingleInputFromMerged extends FeatureCalculation<FeatureInputSingleObj, FeatureInputPairObjs> {
+class CalculateSingleInputFromMerged extends FeatureCalculation<FeatureInputSingleObject, FeatureInputPairObjects> {
 
-	private Function<FeatureInputPairObjs, ObjectMask> extractObjFunc;
+	private Function<FeatureInputPairObjects, ObjectMask> extractObjFunc;
 	private ChildCacheName uniqueIDForFunction;
 	
 	
@@ -50,7 +50,7 @@ class CalculateSingleInputFromMerged extends FeatureCalculation<FeatureInputSing
 	 * @param extractObjFunc this function is used for extracting a particular object from the FeatureObjMaskPairMergedParams
 	 * @param uniqueIDForFunction so as to avoid relying on hashCode() and equals() on extractObjFunc, this field is used as a unique ID instead for each type of lambda
 	 */
-	public CalculateSingleInputFromMerged(Function<FeatureInputPairObjs, ObjectMask> extractObjFunc,
+	public CalculateSingleInputFromMerged(Function<FeatureInputPairObjects, ObjectMask> extractObjFunc,
 			ChildCacheName uniqueIDForFunction) {
 		super();
 		this.extractObjFunc = extractObjFunc;
@@ -58,13 +58,13 @@ class CalculateSingleInputFromMerged extends FeatureCalculation<FeatureInputSing
 	}
 
 	@Override
-	protected FeatureInputSingleObj execute(FeatureInputPairObjs input) {
+	protected FeatureInputSingleObject execute(FeatureInputPairObjects input) {
 		
 		ObjectMask omSelected = extractObjFunc.apply(input);
 		
-		FeatureInputSingleObj paramsNew = new FeatureInputSingleObj( omSelected );
+		FeatureInputSingleObject paramsNew = new FeatureInputSingleObject( omSelected );
 		paramsNew.setNrgStack( input.getNrgStackOptional() );
-		assert( paramsNew instanceof FeatureInputSingleObj);
+		assert( paramsNew instanceof FeatureInputSingleObject);
 		return paramsNew;
 	}
 

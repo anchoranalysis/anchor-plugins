@@ -52,11 +52,12 @@ import org.anchoranalysis.plugin.image.task.bean.selectchnls.SelectAll;
 import org.anchoranalysis.plugin.image.task.bean.selectchnls.SelectChnlsFromStacks;
 import org.anchoranalysis.plugin.image.task.grouped.ConsistentChannelChecker;
 import org.anchoranalysis.plugin.image.task.grouped.GroupMapByName;
+import org.anchoranalysis.plugin.image.task.grouped.GroupedSharedState;
 
 /**
  * Base class for stacks that somehow are grouped-together
  * 
- * @author FEEHANO
+ * @author Owen Feehan
  *
  * @param <S> individual-type
  * @param <T> aggregate-type

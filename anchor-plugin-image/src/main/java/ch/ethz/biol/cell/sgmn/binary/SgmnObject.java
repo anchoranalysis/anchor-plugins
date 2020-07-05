@@ -33,16 +33,16 @@ import java.util.Optional;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.Positive;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.image.bean.sgmn.binary.BinarySgmn;
-import org.anchoranalysis.image.bean.sgmn.binary.BinarySgmnParameters;
+import org.anchoranalysis.image.bean.nonbean.error.SgmnFailedException;
+import org.anchoranalysis.image.bean.nonbean.parameters.BinarySegmentationParameters;
+import org.anchoranalysis.image.bean.segmentation.binary.BinarySegmentation;
 import org.anchoranalysis.image.binary.values.BinaryValues;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelBoxByte;
 import org.anchoranalysis.image.extent.BoundingBox;
-import org.anchoranalysis.image.objectmask.ObjectMask;
-import org.anchoranalysis.image.objectmask.ObjectCollection;
-import org.anchoranalysis.image.objectmask.factory.CreateFromConnectedComponentsFactory;
-import org.anchoranalysis.image.sgmn.SgmnFailedException;
+import org.anchoranalysis.image.object.ObjectCollection;
+import org.anchoranalysis.image.object.ObjectMask;
+import org.anchoranalysis.image.object.factory.CreateFromConnectedComponentsFactory;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.anchoranalysis.image.voxel.box.VoxelBoxWrapper;
 
@@ -52,16 +52,16 @@ import org.anchoranalysis.image.voxel.box.VoxelBoxWrapper;
 //   seperately on each object, setting all pixels not contained
 //   within the object to black
 // WE SHOULD DELETE THIS
-public class SgmnObject extends BinarySgmn {
+public class SgmnObject extends BinarySegmentation {
 
 	// START BEANS
 	/** The Thresholder applied on the whole image */
 	@BeanField
-	private BinarySgmn imageSgmn;
+	private BinarySegmentation imageSgmn;
 	
 	/** The Thresholder applied on the local object */
 	@BeanField
-	private BinarySgmn objectSgmn;
+	private BinarySegmentation objectSgmn;
 	
 	@BeanField @Positive
 	private int minNumPixelsImageSgmn = 100;
@@ -70,7 +70,7 @@ public class SgmnObject extends BinarySgmn {
 	@Override
 	public BinaryVoxelBox<ByteBuffer> sgmn(
 		VoxelBoxWrapper voxelBoxIn,
-		BinarySgmnParameters params,
+		BinarySegmentationParameters params,
 		Optional<ObjectMask> mask
 	) throws SgmnFailedException {
 	
@@ -97,7 +97,7 @@ public class SgmnObject extends BinarySgmn {
 	private void sgmnByObj(
 		BinaryVoxelBox<ByteBuffer> voxelBox,
 		VoxelBoxWrapper orig,
-		BinarySgmnParameters params
+		BinarySegmentationParameters params
 	) throws SgmnFailedException {
 
 		for( ObjectMask obj : objsFromVoxelBox(voxelBox)) {
@@ -146,22 +146,22 @@ public class SgmnObject extends BinarySgmn {
 		this.minNumPixelsImageSgmn = minNumPixelsImageSgmn;
 	}
 	
-	public BinarySgmn getImageSgmn() {
+	public BinarySegmentation getImageSgmn() {
 		return imageSgmn;
 	}
 
 
-	public void setImageSgmn(BinarySgmn imageSgmn) {
+	public void setImageSgmn(BinarySegmentation imageSgmn) {
 		this.imageSgmn = imageSgmn;
 	}
 
 
-	public BinarySgmn getObjectSgmn() {
+	public BinarySegmentation getObjectSgmn() {
 		return objectSgmn;
 	}
 
 
-	public void setObjectSgmn(BinarySgmn objectSgmn) {
+	public void setObjectSgmn(BinarySegmentation objectSgmn) {
 		this.objectSgmn = objectSgmn;
 	}
 }

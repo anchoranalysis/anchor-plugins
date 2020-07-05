@@ -32,10 +32,10 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.bean.provider.ImageDimProvider;
-import org.anchoranalysis.image.bean.provider.ObjMaskProviderOne;
-import org.anchoranalysis.image.extent.ImageDim;
+import org.anchoranalysis.image.bean.provider.ObjectCollectionProviderOne;
+import org.anchoranalysis.image.extent.ImageDimensions;
 
-public abstract class ObjMaskProviderDimensionsOptional extends ObjMaskProviderOne {
+public abstract class ObjMaskProviderDimensionsOptional extends ObjectCollectionProviderOne {
 
 	// START BEAN PROPERTIES
 	@BeanField @OptionalBean
@@ -43,7 +43,7 @@ public abstract class ObjMaskProviderDimensionsOptional extends ObjMaskProviderO
 	// END BEAN PROPERTIES
 	
 	/** Returns the dimensions or NULL if none are provided */
-	protected Optional<ImageDim> createDims() throws CreateException {
+	protected Optional<ImageDimensions> createDims() throws CreateException {
 		if (dim!=null) {
 			return Optional.of(
 				dim.create()

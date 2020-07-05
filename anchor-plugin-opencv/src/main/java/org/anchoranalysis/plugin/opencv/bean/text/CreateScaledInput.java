@@ -37,13 +37,17 @@ import org.opencv.core.Mat;
 import org.opencv.core.Size;
 import org.opencv.imgproc.Imgproc;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
 
 /**
  * Creates a scaled-version of a stack to use as input
  * 
- * @author owen
+ * @author Owen Feehan
  *
  */
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
 class CreateScaledInput {
 
 	/** Returns a scaled-down version of the stack, and a scale-factor that would return it to original size */
@@ -70,7 +74,7 @@ class CreateScaledInput {
 		return new Extent(
 			mat.cols(),
 			mat.rows(),
-			0
+			1
 		);
 	}
 	

@@ -36,6 +36,10 @@ import org.anchoranalysis.io.output.file.FileOutput;
 import org.anchoranalysis.io.output.file.FileOutputFromManager;
 import org.anchoranalysis.mpp.sgmn.optscheme.feedback.OptimizationFeedbackInitParams;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
 public class CSVReporterUtilities {
 
 	public static Optional<FileOutput> createFileOutputFor(

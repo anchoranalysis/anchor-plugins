@@ -32,10 +32,10 @@ import java.util.Optional;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorSingle;
-import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
-import org.anchoranalysis.image.objectmask.ObjectMask;
-import org.anchoranalysis.image.objectmask.ObjectCollection;
-import org.anchoranalysis.image.objectmask.ObjectCollectionFactory;
+import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
+import org.anchoranalysis.image.object.ObjectCollection;
+import org.anchoranalysis.image.object.ObjectCollectionFactory;
+import org.anchoranalysis.image.object.ObjectMask;
 
 public class ObjMaskProviderFindMaxFeature extends ObjMaskProviderFindMaxFeatureBase {
 
@@ -54,7 +54,7 @@ public class ObjMaskProviderFindMaxFeature extends ObjMaskProviderFindMaxFeature
 		}
 	}
 	
-	private Optional<ObjectMask> findMaxObj( FeatureCalculatorSingle<FeatureInputSingleObj> session, ObjectCollection in ) throws CreateException {
+	private Optional<ObjectMask> findMaxObj( FeatureCalculatorSingle<FeatureInputSingleObject> session, ObjectCollection in ) throws CreateException {
 		
 		try {
 			ObjectMask max = null;
@@ -63,7 +63,7 @@ public class ObjMaskProviderFindMaxFeature extends ObjMaskProviderFindMaxFeature
 			for( ObjectMask om : in ) {
 				
 				double featureVal = session.calc(
-					new FeatureInputSingleObj(om)
+					new FeatureInputSingleObject(om)
 				);
 				
 				if (max==null || featureVal>maxVal) {

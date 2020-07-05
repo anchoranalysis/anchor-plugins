@@ -31,17 +31,17 @@ import java.util.Optional;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.image.bean.sgmn.objmask.ObjMaskSgmn;
+import org.anchoranalysis.image.bean.nonbean.error.SgmnFailedException;
+import org.anchoranalysis.image.bean.segmentation.object.ObjectSegmentation;
 import org.anchoranalysis.image.channel.Channel;
-import org.anchoranalysis.image.objectmask.ObjectMask;
-import org.anchoranalysis.image.objectmask.ObjectCollection;
-import org.anchoranalysis.image.sgmn.SgmnFailedException;
+import org.anchoranalysis.image.object.ObjectCollection;
+import org.anchoranalysis.image.object.ObjectMask;
 
 public class ObjMaskProviderSgmnByObj extends ObjMaskProviderOneChnlSource {
 
 	// START BEAN PROPERTIES
 	@BeanField
-	private ObjMaskSgmn sgmn;
+	private ObjectSegmentation sgmn;
 	// END BEAN PROPERTIES
 
 	@Override
@@ -65,11 +65,11 @@ public class ObjMaskProviderSgmnByObj extends ObjMaskProviderOneChnlSource {
 		);
 	}
 
-	public ObjMaskSgmn getSgmn() {
+	public ObjectSegmentation getSgmn() {
 		return sgmn;
 	}
 
-	public void setSgmn(ObjMaskSgmn sgmn) {
+	public void setSgmn(ObjectSegmentation sgmn) {
 		this.sgmn = sgmn;
 	}
 }

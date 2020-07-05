@@ -31,9 +31,9 @@ import java.util.Optional;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.extent.BoundingBox;
-import org.anchoranalysis.image.extent.ImageRes;
-import org.anchoranalysis.image.objectmask.ObjectMask;
-import org.anchoranalysis.image.objectmask.morph.MorphologicalDilation;
+import org.anchoranalysis.image.extent.ImageResolution;
+import org.anchoranalysis.image.object.ObjectMask;
+import org.anchoranalysis.image.object.morph.MorphologicalDilation;
 
 /**
  * A condition placed to determien if two objects could be potential neighbours are not (i.e. potential candidates for merging)
@@ -67,7 +67,7 @@ public class NeighbourhoodCond implements UpdatableBeforeCondition {
 	}
 
 	@Override
-	public void updateSrcObj(ObjectMask omSrc, Optional<ImageRes> res) throws OperationFailedException {
+	public void updateSrcObj(ObjectMask omSrc, Optional<ImageResolution> res) throws OperationFailedException {
 
 		bboxSrcGrown = requireBBoxNeighbours ? bboxGrown( omSrc ) : null;
 		

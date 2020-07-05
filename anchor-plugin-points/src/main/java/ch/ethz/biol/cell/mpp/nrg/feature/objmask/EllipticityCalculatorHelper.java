@@ -31,13 +31,17 @@ import org.anchoranalysis.anchor.mpp.regionmap.RegionMapSingleton;
  */
 
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
-import org.anchoranalysis.image.extent.ImageDim;
-import org.anchoranalysis.image.objectmask.ObjectMask;
-import org.anchoranalysis.image.objectmask.ops.ObjectMaskMerger;
+import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.image.object.ObjectMask;
+import org.anchoranalysis.image.object.ops.ObjectMaskMerger;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
 class EllipticityCalculatorHelper {
 
-	public static double calc( ObjectMask om, Mark mark, ImageDim dim ) {
+	public static double calc( ObjectMask om, Mark mark, ImageDimensions dim ) {
 		ObjectMask omCompare = maskCompare(mark, dim);
 		return calc(om, omCompare);
 	}
@@ -60,7 +64,7 @@ class EllipticityCalculatorHelper {
 		);
 	}
 		
-	private static ObjectMask maskCompare(Mark mark, ImageDim dim) {
+	private static ObjectMask maskCompare(Mark mark, ImageDimensions dim) {
 		RegionMembershipWithFlags rm = RegionMapSingleton.instance().membershipWithFlagsForIndex(0);
 		assert( rm.getRegionID()==0 );
 		return mark.calcMask(dim, rm, BinaryValuesByte.getDefault() ).getMask();	

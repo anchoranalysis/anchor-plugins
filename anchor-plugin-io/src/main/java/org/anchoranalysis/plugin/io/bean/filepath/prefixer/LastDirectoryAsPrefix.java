@@ -39,7 +39,7 @@ import org.anchoranalysis.io.filepath.prefixer.FilePathPrefix;
  * 
  * <p>e.g. <pre>/a/b/c/d/e/somename.tif</pre> instead becomes <pre>/a/b/c/d/e_somename.tif</pre></p>
  * 
- *  * @author owen
+ *  * @author Owen Feehan
  *
  */
 public class LastDirectoryAsPrefix extends FilePathPrefixerAvoidResolve {

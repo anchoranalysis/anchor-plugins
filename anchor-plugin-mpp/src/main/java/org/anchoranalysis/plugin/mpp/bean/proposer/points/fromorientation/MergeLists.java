@@ -30,7 +30,7 @@ package org.anchoranalysis.plugin.mpp.bean.proposer.points.fromorientation;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.anchoranalysis.anchor.mpp.proposer.visualization.ICreateProposalVisualization;
+import org.anchoranalysis.anchor.mpp.proposer.visualization.CreateProposalVisualization;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.core.geometry.Point3i;
@@ -47,7 +47,7 @@ public class MergeLists extends PointsFromOrientationProposer {
 	// END BEAN PROPERTIEs
 
 	@Override
-	public ICreateProposalVisualization proposalVisualization(boolean detailed) {
+	public CreateProposalVisualization proposalVisualization(boolean detailed) {
 		return pointsFromOrientationProposer.proposalVisualization(detailed);
 	}
 

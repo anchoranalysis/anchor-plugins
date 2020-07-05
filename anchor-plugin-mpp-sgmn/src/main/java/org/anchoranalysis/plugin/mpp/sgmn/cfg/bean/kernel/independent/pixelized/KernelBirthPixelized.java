@@ -54,11 +54,6 @@ import org.anchoranalysis.plugin.mpp.sgmn.cfg.bean.kernel.independent.KernelBirt
  */
 public class KernelBirthPixelized extends KernelBirth<CfgNRGPixelized> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	// START BEAN PROPERTIES
 	@BeanField
 	private MarkProposer markProposer;
@@ -77,10 +72,9 @@ public class KernelBirthPixelized extends KernelBirth<CfgNRGPixelized> {
 		
 		Set<Mark> out = new HashSet<>();
 		for( int i=0; i<number; i++) {
-			Mark m = proposeNewMark(exst, context);
-			if (m!=null) {
-				out.add(m);
-			}
+			out.add(
+				proposeNewMark(context)
+			);
 		}
 		return Optional.of(out);
 	}
@@ -139,10 +133,7 @@ public class KernelBirthPixelized extends KernelBirth<CfgNRGPixelized> {
 	
 	private boolean applyMarkProposer( PxlMarkMemo pmmMarkNew, ProposerContext context ) throws KernelCalcNRGException {
 		try {
-			if ( !markProposer.propose(pmmMarkNew, context) ) {
-				return false;
-			}
-			return true;
+			return markProposer.propose(pmmMarkNew, context);
 		} catch (ProposalAbnormalFailureException e) {
 			throw new KernelCalcNRGException(
 				"Failed to propose a mark due to abnormal exception",
@@ -177,7 +168,7 @@ public class KernelBirthPixelized extends KernelBirth<CfgNRGPixelized> {
 		this.markProposer = markProposer;
 	}
 	
-	private Mark proposeNewMark(CfgNRGPixelized exst, KernelCalcContext context) {
+	private Mark proposeNewMark(KernelCalcContext context) {
 		return context.cfgGen().getCfgGen().newTemplateMark();
 	}
 }

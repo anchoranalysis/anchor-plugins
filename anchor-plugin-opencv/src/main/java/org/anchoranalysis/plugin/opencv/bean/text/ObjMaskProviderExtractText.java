@@ -33,11 +33,11 @@ import java.util.List;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
+import org.anchoranalysis.image.bean.provider.ObjectCollectionProvider;
 import org.anchoranalysis.image.bean.provider.stack.StackProvider;
 import org.anchoranalysis.image.extent.Extent;
-import org.anchoranalysis.image.objectmask.ObjectMask;
-import org.anchoranalysis.image.objectmask.ObjectCollection;
+import org.anchoranalysis.image.object.ObjectCollection;
+import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.scale.ScaleFactor;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.plugin.opencv.CVInit;
@@ -53,10 +53,10 @@ import org.opencv.core.Mat;
  * <p>Particular thanks to <a href="https://www.pyimagesearch.com/2018/08/20/opencv-text-detection-east-text-detector/">Adrian Rosebrock</a>
  * whose tutorial was useful in applying this model</p>
  * 
- * @author owen
+ * @author Owen Feehan
  *
  */
-public class ObjMaskProviderExtractText extends ObjMaskProvider {
+public class ObjMaskProviderExtractText extends ObjectCollectionProvider {
 
 	static {
 		CVInit.alwaysExecuteBeforeCallingLibrary();
@@ -81,7 +81,7 @@ public class ObjMaskProviderExtractText extends ObjMaskProvider {
 	// END BEAN PROPERTIES
 	
 	/** Only exact integral multiples of this size in each dimension can be accepted as input */
-	private static final Extent EAST_EXTENT = new Extent(32,32,0);
+	private static final Extent EAST_EXTENT = new Extent(32,32,1);
 	
 	/** As the EAST detector was designed to work with originally 1280x720 pixel images approximately
 	 *   we don't allow dramatically higher resolutions that this, so text objects remain roughly

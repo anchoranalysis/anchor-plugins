@@ -33,7 +33,7 @@ import java.util.Optional;
 import org.anchoranalysis.anchor.mpp.bean.proposer.MarkProposer;
 import org.anchoranalysis.anchor.mpp.proposer.ProposalAbnormalFailureException;
 import org.anchoranalysis.anchor.mpp.proposer.ProposerContext;
-import org.anchoranalysis.anchor.mpp.proposer.visualization.ICreateProposalVisualization;
+import org.anchoranalysis.anchor.mpp.proposer.visualization.CreateProposalVisualization;
 import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
 
 public class OrderedList extends MarkProposerFromList {
@@ -50,7 +50,7 @@ public class OrderedList extends MarkProposerFromList {
 	}
 
 	@Override
-	protected Optional<ICreateProposalVisualization> proposalVisualization(boolean detailed,
+	protected Optional<CreateProposalVisualization> proposalVisualization(boolean detailed,
 			List<MarkProposer> markProposerList) {
 		return Optional.empty();
 	}

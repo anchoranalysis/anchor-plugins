@@ -31,19 +31,19 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.name.provider.NamedProviderGetException;
-import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
-import org.anchoranalysis.image.init.ImageInitParams;
-import org.anchoranalysis.image.objectmask.ObjectCollection;
+import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
+import org.anchoranalysis.image.bean.provider.ObjectCollectionProvider;
+import org.anchoranalysis.image.object.ObjectCollection;
 
 // Returns a reference if it exists, or else a different provider
-public class ObjMaskProviderReferenceElse extends ObjMaskProvider {
+public class ObjMaskProviderReferenceElse extends ObjectCollectionProvider {
 
 	// START BEAN PROPERTIES
 	@BeanField
 	private String id = "";
 	
 	@BeanField
-	private ObjMaskProvider objsElse;
+	private ObjectCollectionProvider objsElse;
 	// END BEAN PROPERTIES
 	
 	private ObjectCollection objs;
@@ -76,11 +76,11 @@ public class ObjMaskProviderReferenceElse extends ObjMaskProvider {
 		this.id = id;
 	}
 
-	public ObjMaskProvider getObjsElse() {
+	public ObjectCollectionProvider getObjsElse() {
 		return objsElse;
 	}
 
-	public void setObjsElse(ObjMaskProvider objsElse) {
+	public void setObjsElse(ObjectCollectionProvider objsElse) {
 		this.objsElse = objsElse;
 	}
 

@@ -32,13 +32,16 @@ import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.geometry.Point3f;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.contour.Contour;
-import org.anchoranalysis.image.objectmask.ObjectMask;
+import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.plugin.opencv.CVFindContours;
 
 import com.google.common.base.Function;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import umontreal.ssj.functionfit.SmoothingCubicSpline;
 
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
 public class SplitContourSmoothingSpline {
 	
 	/**

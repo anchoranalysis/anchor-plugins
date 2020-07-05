@@ -39,8 +39,8 @@ import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.convert.ByteConverter;
 import org.anchoranalysis.image.histogram.Histogram;
 import org.anchoranalysis.image.histogram.HistogramFactory;
-import org.anchoranalysis.image.objectmask.ObjectMask;
-import org.anchoranalysis.image.objectmask.ObjectCollection;
+import org.anchoranalysis.image.object.ObjectCollection;
+import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 
 // Corrects a channel in the following way
@@ -80,8 +80,8 @@ public class ChnlProviderAdjustDifferenceToMedian extends ChnlProviderOneObjsSou
 	
 	private void adjustObj( ObjectMask om, Channel chnl, Channel chnlLookup, int objMedian ) {
 		
-		ReadableTuple3i crnrMin = om.getBoundingBox().getCrnrMin();
-		ReadableTuple3i crnrMax = om.getBoundingBox().calcCrnrMax();
+		ReadableTuple3i crnrMin = om.getBoundingBox().cornerMin();
+		ReadableTuple3i crnrMax = om.getBoundingBox().calcCornerMax();
 		
 		VoxelBox<ByteBuffer> vb = chnl.getVoxelBox().asByte();
 		VoxelBox<ByteBuffer> vbLookup = chnlLookup.getVoxelBox().asByte();

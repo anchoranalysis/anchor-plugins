@@ -35,28 +35,28 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorSingle;
-import org.anchoranalysis.image.bean.objmask.match.ObjMaskMatcher;
-import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
-import org.anchoranalysis.image.objectmask.ObjectMask;
-import org.anchoranalysis.image.objectmask.ObjectCollection;
-import org.anchoranalysis.image.objectmask.ObjectCollectionFactory;
-import org.anchoranalysis.image.objmask.match.ObjWithMatches;
+import org.anchoranalysis.image.bean.object.ObjectMatcher;
+import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
+import org.anchoranalysis.image.object.MatchedObject;
+import org.anchoranalysis.image.object.ObjectCollection;
+import org.anchoranalysis.image.object.ObjectCollectionFactory;
+import org.anchoranalysis.image.object.ObjectMask;
 
 // Returns a collection of each Max Object found in matches
 public class ObjMaskProviderFindMaxFeatureInMatchedObjects extends ObjMaskProviderFindMaxFeatureBase {
 
 	// START BEAN PROPERTIES
 	@BeanField
-	private ObjMaskMatcher objMaskMatcher;
+	private ObjectMatcher objMaskMatcher;
 	// END BEAN PROPERTIES
 
 	@Override
 	public ObjectCollection createFromObjs( ObjectCollection in ) throws CreateException {
 		
-		FeatureCalculatorSingle<FeatureInputSingleObj> session = createSession();
+		FeatureCalculatorSingle<FeatureInputSingleObject> session = createSession();
 
 		try {
-			List<ObjWithMatches> listMatches = objMaskMatcher.findMatch(in);
+			List<MatchedObject> listMatches = objMaskMatcher.findMatch(in);
 
 			return ObjectCollectionFactory.mapFromOptional(
 				listMatches,
@@ -68,14 +68,14 @@ public class ObjMaskProviderFindMaxFeatureInMatchedObjects extends ObjMaskProvid
 		}
 	}
 	
-	private Optional<ObjectMask> findMax( FeatureCalculatorSingle<FeatureInputSingleObj> session, ObjectCollection objs ) throws FeatureCalcException {
+	private Optional<ObjectMask> findMax( FeatureCalculatorSingle<FeatureInputSingleObject> session, ObjectCollection objs ) throws FeatureCalcException {
 		Optional<ObjectMask> max = Optional.empty();
 		double maxVal = 0;
 		
 		for( ObjectMask om : objs ) {
 			
 			double featureVal = session.calc(
-				new FeatureInputSingleObj(om)
+				new FeatureInputSingleObject(om)
 			);
 			
 			if (!max.isPresent() || featureVal>maxVal) {
@@ -87,11 +87,11 @@ public class ObjMaskProviderFindMaxFeatureInMatchedObjects extends ObjMaskProvid
 		return max;
 	}
 
-	public ObjMaskMatcher getObjMaskMatcher() {
+	public ObjectMatcher getObjMaskMatcher() {
 		return objMaskMatcher;
 	}
 
-	public void setObjMaskMatcher(ObjMaskMatcher objMaskMatcher) {
+	public void setObjMaskMatcher(ObjectMatcher objMaskMatcher) {
 		this.objMaskMatcher = objMaskMatcher;
 	}
 }

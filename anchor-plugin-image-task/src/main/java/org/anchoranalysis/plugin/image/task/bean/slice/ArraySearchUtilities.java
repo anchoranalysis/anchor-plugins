@@ -1,5 +1,8 @@
 package org.anchoranalysis.plugin.image.task.bean.slice;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
 /*-
  * #%L
  * anchor-plugin-image-task
@@ -26,6 +29,7 @@ package org.anchoranalysis.plugin.image.task.bean.slice;
  * #L%
  */
 
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
 class ArraySearchUtilities {
 
 	public static int findIndexOfMaximum( double[] arr ) {

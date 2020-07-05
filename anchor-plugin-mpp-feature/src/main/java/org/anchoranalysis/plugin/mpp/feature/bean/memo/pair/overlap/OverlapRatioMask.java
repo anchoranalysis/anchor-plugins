@@ -56,8 +56,7 @@ public class OverlapRatioMask extends OverlapMaskBase {
 			inputSessionless.getObj1(),
 			inputSessionless.getObj2(),
 			overlap,
-			getRegionID(),
-			false
+			getRegionID()
 		);
 	}
 	
@@ -65,8 +64,7 @@ public class OverlapRatioMask extends OverlapMaskBase {
 		PxlMarkMemo obj1,
 		PxlMarkMemo obj2,
 		double overlap,
-		int regionID,
-		boolean mip
+		int regionID
 	) throws FeatureCalcException {
 
 		if (overlap==0.0) {

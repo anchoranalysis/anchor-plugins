@@ -32,7 +32,10 @@ import org.anchoranalysis.image.stack.region.chnlconverter.ChannelConverterMulti
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
 
 import ch.ethz.biol.cell.imageprocessing.chnl.provider.ChnlProviderMax;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
 class MaxChnls {
 
 	public static Channel apply( Channel chnl1, Channel chnl2, VoxelDataType outputType ) throws CreateException {

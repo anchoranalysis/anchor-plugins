@@ -26,9 +26,12 @@ package org.anchoranalysis.plugin.image.feature.bean.obj.intersecting;
  * #L%
  */
 
-import org.anchoranalysis.image.feature.bean.objmask.NumVoxels;
-import org.anchoranalysis.image.feature.bean.objmask.pair.FeatureObjMaskPair;
-import org.anchoranalysis.image.feature.objmask.pair.impl.First;
+import org.anchoranalysis.image.feature.bean.object.pair.FeaturePairObjects;
+import org.anchoranalysis.image.feature.bean.object.pair.First;
+import org.anchoranalysis.image.feature.bean.object.single.NumberVoxels;
+import org.anchoranalysis.plugin.image.feature.bean.object.single.shared.intersecting.FeatureIntersectingObjects;
+import org.anchoranalysis.plugin.image.feature.bean.object.single.shared.intersecting.FeatureIntersectingObjectsSingleElement;
+import org.anchoranalysis.plugin.image.feature.bean.object.single.shared.intersecting.FeatureIntersectingObjectsThreshold;
 
 class FeatureHelper {
 
@@ -47,7 +50,7 @@ class FeatureHelper {
 	 * 
 	 * @return
 	 */
-	public static FeatureIntersectingObjs createWithThreshold( FeatureIntersectingObjsThreshold feature ) {
+	public static FeatureIntersectingObjects createWithThreshold( FeatureIntersectingObjectsThreshold feature ) {
 		feature.setThreshold( 90 );
 		return createWithFeature(feature);
 	}
@@ -58,15 +61,15 @@ class FeatureHelper {
 	 * @param feature feature to set new pair featore on as property
 	 * @return feature with the proprty changed
 	 */
-	public static FeatureIntersectingObjs createWithFeature( FeatureIntersectingObjsSingleElem feature ) {
+	public static FeatureIntersectingObjects createWithFeature( FeatureIntersectingObjectsSingleElement feature ) {
 		feature.setItem( createPairFeature() );
 		feature.setValueNoObjects(VALUE_NO_OBJECTS);
 		return feature;
 	}
 	
-	private static FeatureObjMaskPair createPairFeature() {
+	private static FeaturePairObjects createPairFeature() {
 		return new First(
-			new NumVoxels()
+			new NumberVoxels()
 		);
 	}
 }

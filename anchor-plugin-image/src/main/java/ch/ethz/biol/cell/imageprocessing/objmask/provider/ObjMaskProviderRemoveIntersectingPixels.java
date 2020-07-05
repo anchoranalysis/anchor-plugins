@@ -33,9 +33,9 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.extent.BoundingBox;
-import org.anchoranalysis.image.extent.ImageDim;
-import org.anchoranalysis.image.objectmask.ObjectMask;
-import org.anchoranalysis.image.objectmask.ObjectCollection;
+import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.image.object.ObjectCollection;
+import org.anchoranalysis.image.object.ObjectMask;
 
 // Considers all possible pairs of objects in a provider, and removes intersecting pixels
 public class ObjMaskProviderRemoveIntersectingPixels extends ObjMaskProviderDimensions {
@@ -53,7 +53,7 @@ public class ObjMaskProviderRemoveIntersectingPixels extends ObjMaskProviderDime
 		
 		ObjectCollection objsDup = objsCollection.duplicate();
 		
-		ImageDim dims = createDim();
+		ImageDimensions dims = createDim();
 		
 		for( int i=0; i<objsCollection.size(); i++) {
 			
@@ -109,7 +109,7 @@ public class ObjMaskProviderRemoveIntersectingPixels extends ObjMaskProviderDime
 		);
 	}
 	
-	private void removeIntersectingPixelsIfIntersects( ObjectMask omWrite, ObjectMask omRead, ImageDim sd ) {
+	private void removeIntersectingPixelsIfIntersects( ObjectMask omWrite, ObjectMask omRead, ImageDimensions sd ) {
 
 		Optional<BoundingBox> intersection = omWrite.getBoundingBox().intersection().withInside(omRead.getBoundingBox(), sd.getExtnt() );
 				
@@ -129,7 +129,7 @@ public class ObjMaskProviderRemoveIntersectingPixels extends ObjMaskProviderDime
 			try {
 				if( !omWrite.checkIfConnected() ) {
 					throw new CreateException(
-						String.format("Obj %s becomes disconnected %s removing intersecting-pixels\n", omWrite, dscr )	
+						String.format("Obj %s becomes disconnected %s removing intersecting-pixels%n", omWrite, dscr )	
 					);
 				}
 			} catch (OperationFailedException e) {

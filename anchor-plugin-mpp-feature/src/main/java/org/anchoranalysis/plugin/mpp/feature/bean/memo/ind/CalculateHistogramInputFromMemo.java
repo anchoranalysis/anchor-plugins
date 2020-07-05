@@ -1,6 +1,7 @@
 package org.anchoranalysis.plugin.mpp.feature.bean.memo.ind;
 
 import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputSingleMemo;
+import org.anchoranalysis.anchor.mpp.mark.MarkRegion;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 
@@ -35,7 +36,6 @@ import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.feature.histogram.FeatureInputHistogram;
 import org.anchoranalysis.image.histogram.Histogram;
 import org.anchoranalysis.image.voxel.statistics.VoxelStatistics;
-import ch.ethz.biol.cell.mpp.mark.pixelstatisticsfrommark.MarkRegion;
 
 class CalculateHistogramInputFromMemo extends FeatureCalculation<FeatureInputHistogram, FeatureInputSingleMemo> {
 

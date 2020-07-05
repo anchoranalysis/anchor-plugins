@@ -49,17 +49,12 @@ import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
-import org.anchoranalysis.image.extent.ImageDim;
+import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.mpp.sgmn.bean.kernel.KernelPosNeg;
 import org.anchoranalysis.mpp.sgmn.kernel.KernelCalcContext;
 import org.anchoranalysis.mpp.sgmn.kernel.KernelCalcNRGException;
 
 public class KernelMerge extends KernelPosNeg<CfgNRGPixelized> {
-
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 5751099600940897752L;
 
 	// START BEAN PROPERTIES
 	@BeanField
@@ -102,13 +97,13 @@ public class KernelMerge extends KernelPosNeg<CfgNRGPixelized> {
 	@Override
 	public Optional<CfgNRGPixelized> makeProposal(Optional<CfgNRGPixelized> exst, KernelCalcContext context) throws KernelCalcNRGException {
 		
-		if (exst.isPresent()) {
+		if (!exst.isPresent()) {
 			return Optional.empty();
 		}
 		
 		ProposerContext propContext = context.proposer();
 		
-		pair = pairCollection.randomPairNonUniform( propContext.getRandomNumberGenerator() );
+		pair = pairCollection.sampleRandomPairNonUniform( propContext.getRandomNumberGenerator() );
 		if (pair==null) {
 			failedProposalType = FailedProposalType.NO_PAIRS;
 			markAdded = Optional.empty();
@@ -143,7 +138,6 @@ public class KernelMerge extends KernelPosNeg<CfgNRGPixelized> {
 		// If we can't generate a successful merge, we cancel the kernel
 		if (!markAdded.isPresent()) {
 			pair = null;
-			markAdded = null;
 			failedProposalType = FailedProposalType.CANNOT_GENERATE_MERGE;
 			return Optional.empty();
 		}
@@ -200,7 +194,7 @@ public class KernelMerge extends KernelPosNeg<CfgNRGPixelized> {
 	
 	@Override
 	public double calcAccptProb(int exstSize, int propSize,
-			double poisson_intens, ImageDim scene_size, double densityRatio) {
+			double poisson_intens, ImageDimensions scene_size, double densityRatio) {
 		return densityRatio;
 	}
 	

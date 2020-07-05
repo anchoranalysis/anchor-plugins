@@ -1,5 +1,7 @@
 package ch.ethz.biol.cell.mpp.bound;
 
+import java.util.Optional;
+
 import org.anchoranalysis.anchor.mpp.bean.bound.BoundCalculator;
 import org.anchoranalysis.anchor.mpp.bean.bound.RslvdBound;
 import org.anchoranalysis.anchor.mpp.bound.BidirectionalBound;
@@ -36,16 +38,15 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.math.rotation.RotationMatrix;
 
+import lombok.NoArgsConstructor;
+
+@NoArgsConstructor
 public class ConstantBoundGenerator extends BoundCalculator {
 
 	// START BEAN PROPERTIES
 	@BeanField
 	private RslvdBound constantBound;
 	// END BEAN PROPERTIES
-	
-	public ConstantBoundGenerator() {
-		// Standardbean constructor
-	}
 	
 	public ConstantBoundGenerator(RslvdBound constantBound) {
 		super();
@@ -54,10 +55,10 @@ public class ConstantBoundGenerator extends BoundCalculator {
 	
 	@Override
 	public BidirectionalBound calcBound(Point3d point, RotationMatrix rotMatrix) {
-		BidirectionalBound bib = new BidirectionalBound();
-		bib.setForward( constantBound );
-		bib.setReverse( constantBound );
-		return bib;
+		return new BidirectionalBound(
+			Optional.of(constantBound),
+			Optional.of(constantBound)
+		);
 	}
 
 	@Override

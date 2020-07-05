@@ -36,11 +36,6 @@ import org.anchoranalysis.plugin.mpp.sgmn.cfg.bean.kernel.independent.KernelRepl
 import org.anchoranalysis.plugin.mpp.sgmn.cfg.optscheme.CfgFromPartition;
 
 public class KernelReplacePartition extends KernelReplace<CfgFromPartition> {
-
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
 	
 	@Override
 	public boolean isCompatibleWith(Mark testMark) {
@@ -50,7 +45,7 @@ public class KernelReplacePartition extends KernelReplace<CfgFromPartition> {
 	@Override
 	public Optional<CfgFromPartition> makeProposal(Optional<CfgFromPartition> exst, KernelCalcContext context) throws KernelCalcNRGException {
 
-		if (exst.isPresent()) {
+		if (!exst.isPresent()) {
 			return Optional.empty();
 		}
 		

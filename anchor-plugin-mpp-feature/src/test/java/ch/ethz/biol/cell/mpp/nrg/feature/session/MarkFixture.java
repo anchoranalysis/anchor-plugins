@@ -30,14 +30,14 @@ import org.anchoranalysis.anchor.mpp.mark.conic.MarkEllipsoid;
  */
 
 import org.anchoranalysis.core.geometry.Point3d;
-import org.anchoranalysis.image.extent.ImageDim;
+import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.orientation.Orientation3DEulerAngles;
 
 public class MarkFixture {
 
-	private ImageDim dim;
+	private ImageDimensions dim;
 	
-	public MarkFixture( ImageDim dim ) {
+	public MarkFixture( ImageDimensions dim ) {
 		this.dim = dim;
 	}
 	

@@ -34,25 +34,31 @@ import org.anchoranalysis.feature.input.descriptor.FeatureInputDescriptor;
 import org.anchoranalysis.feature.input.descriptor.FeatureInputGenericDescriptor;
 
 /**
- * A feature that returns the number-of-voxels in an object by using a {@link MockCalculation} internally
+ * A feature that returns the number-of-voxels in an object by using am internal mock-calculation.
+ * <p>
+ * Warning! Method calls are counted via ugly static variable implementation.
  * 
  * @author Owen Feehan
  *
  */
 public class MockFeatureWithCalculation extends Feature<FeatureInput> {
 	
-	// Incremented every calc executed is called
+	/** 
+	 * Records a count of the number of calls to {@link #calc}
+	 * <p>
+	 * It is incremented every time {@link #calc} is called.
+	 */
 	static int cntCalcCalled = 0;
 	
 	@Override
 	protected double calc(SessionInput<FeatureInput> input) throws FeatureCalcException {
-		cntCalcCalled++;
+		cntCalcCalled++;										// NOSONAR
 		MockCalculation calculation = new MockCalculation();
 		return input.calc( calculation );	
 	}
 
 	@Override
 	public FeatureInputDescriptor inputDescriptor() {
-		return FeatureInputGenericDescriptor.instance;
+		return FeatureInputGenericDescriptor.INSTANCE;
 	}
 }

@@ -4,20 +4,20 @@
 
 	<item config-class="org.anchoranalysis.bean.NamedBean" name="numTouchingVoxels">
 		<item config-class="org.anchoranalysis.feature.bean.list.FeatureListProviderDefineSingle">
-			<item config-class="org.anchoranalysis.plugin.image.feature.bean.obj.pair.touching.NumTouchingVoxels"/>
+			<item config-class="org.anchoranalysis.plugin.image.feature.bean.object.pair.touching.NumTouchingVoxels"/>
 		</item>			
 	</item>
 	
 	<item config-class="org.anchoranalysis.bean.NamedBean" name="numTouchingVoxelFaces">
 		<item config-class="org.anchoranalysis.feature.bean.list.FeatureListProviderDefineSingle">
-			<item config-class="org.anchoranalysis.plugin.image.feature.bean.obj.pair.touching.NumTouchingVoxelFaces"/>
+			<item config-class="org.anchoranalysis.plugin.image.feature.bean.object.pair.touching.NumTouchingVoxelFaces"/>
 		</item>			
 	</item>
 	
 	<item config-class="org.anchoranalysis.bean.NamedBean" name="areTouching">
 		<item config-class="org.anchoranalysis.feature.bean.list.FeatureListProviderDefineSingle">
 			<item config-class="org.anchoranalysis.plugin.operator.feature.bean.range.CompareWithRange" min="0.5" max="0.5" belowMinValue="0" aboveMaxValue="1">
-				<item config-class="org.anchoranalysis.plugin.image.feature.bean.obj.pair.touching.NumTouchingVoxels"/>
+				<item config-class="org.anchoranalysis.plugin.image.feature.bean.object.pair.touching.NumTouchingVoxels"/>
 			</item>
 		</item>			
 	</item>
@@ -27,14 +27,14 @@
 		<item config-class="org.anchoranalysis.feature.bean.list.FeatureListProviderDefineSingle">
 			<item avoidDivideByZero="true" config-class="org.anchoranalysis.plugin.operator.feature.bean.arithmetic.Divide">
 				<list config-class="java.util.List" config-factory="list">
-					<item config-class="org.anchoranalysis.plugin.image.feature.bean.obj.pair.touching.NumTouchingVoxelFaces"/>
+					<item config-class="org.anchoranalysis.plugin.image.feature.bean.object.pair.touching.NumTouchingVoxelFaces"/>
 					<item config-class="org.anchoranalysis.plugin.operator.feature.bean.list.Mean">
 						<list config-class="java.util.List" config-factory="list">
-							<item config-class="org.anchoranalysis.image.feature.objmask.pair.impl.First">
-								<item config-class="ch.ethz.biol.cell.mpp.nrg.feature.objmask.SurfaceNumVoxelFaces"/>
+							<item config-class="org.anchoranalysis.image.feature.bean.object.pair.First">
+								<item config-class="org.anchoranalysis.plugin.image.feature.bean.object.single.surface.SurfaceNumberVoxelFaces"/>
 							</item>
-							<item config-class="org.anchoranalysis.image.feature.objmask.pair.impl.Second">
-								<item config-class="ch.ethz.biol.cell.mpp.nrg.feature.objmask.SurfaceNumVoxelFaces"/>
+							<item config-class="org.anchoranalysis.image.feature.bean.object.pair.Second">
+								<item config-class="org.anchoranalysis.plugin.image.feature.bean.object.single.surface.SurfaceNumberVoxelFaces"/>
 							</item>
 						</list>
 					</item>
@@ -48,14 +48,14 @@
 		<item config-class="org.anchoranalysis.feature.bean.list.FeatureListProviderDefineSingle">
 			<item avoidDivideByZero="true" config-class="org.anchoranalysis.plugin.operator.feature.bean.arithmetic.Divide">
 				<list config-class="java.util.List" config-factory="list">
-					<item config-class="org.anchoranalysis.plugin.image.feature.bean.obj.pair.touching.NumTouchingVoxelFaces"/>
+					<item config-class="org.anchoranalysis.plugin.image.feature.bean.object.pair.touching.NumTouchingVoxelFaces"/>
 					<item config-class="org.anchoranalysis.plugin.operator.feature.bean.list.Maximum">
 						<list config-class="java.util.List" config-factory="list">
-							<item config-class="org.anchoranalysis.image.feature.objmask.pair.impl.First">
-								<item config-class="ch.ethz.biol.cell.mpp.nrg.feature.objmask.SurfaceNumVoxelFaces"/>
+							<item config-class="org.anchoranalysis.image.feature.bean.object.pair.First">
+								<item config-class="org.anchoranalysis.plugin.image.feature.bean.object.single.surface.SurfaceNumberVoxelFaces"/>
 							</item>
-							<item config-class="org.anchoranalysis.image.feature.objmask.pair.impl.Second">
-								<item config-class="ch.ethz.biol.cell.mpp.nrg.feature.objmask.SurfaceNumVoxelFaces"/>
+							<item config-class="org.anchoranalysis.image.feature.bean.object.pair.Second">
+								<item config-class="org.anchoranalysis.plugin.image.feature.bean.object.single.surface.SurfaceNumberVoxelFaces"/>
 							</item>
 						</list>
 					</item>
@@ -68,14 +68,14 @@
 		<item config-class="org.anchoranalysis.feature.bean.list.FeatureListProviderDefineSingle">
 			<item avoidDivideByZero="true" config-class="org.anchoranalysis.plugin.operator.feature.bean.arithmetic.Divide">
 				<list config-class="java.util.List" config-factory="list">
-					<item config-class="org.anchoranalysis.plugin.image.feature.bean.obj.pair.touching.NumTouchingVoxelFaces"/>
+					<item config-class="org.anchoranalysis.plugin.image.feature.bean.object.pair.touching.NumTouchingVoxelFaces"/>
 					<item config-class="org.anchoranalysis.plugin.operator.feature.bean.list.Minimum">
 						<list config-class="java.util.List" config-factory="list">
-							<item config-class="org.anchoranalysis.image.feature.objmask.pair.impl.First">
-								<item config-class="ch.ethz.biol.cell.mpp.nrg.feature.objmask.SurfaceNumVoxelFaces"/>
+							<item config-class="org.anchoranalysis.image.feature.bean.object.pair.First">
+								<item config-class="org.anchoranalysis.plugin.image.feature.bean.object.single.surface.SurfaceNumberVoxelFaces"/>
 							</item>
-							<item config-class="org.anchoranalysis.image.feature.objmask.pair.impl.Second">
-								<item config-class="ch.ethz.biol.cell.mpp.nrg.feature.objmask.SurfaceNumVoxelFaces"/>
+							<item config-class="org.anchoranalysis.image.feature.bean.object.pair.Second">
+								<item config-class="org.anchoranalysis.plugin.image.feature.bean.object.single.surface.SurfaceNumberVoxelFaces"/>
 							</item>
 						</list>
 					</item>
@@ -87,9 +87,9 @@
 	
 
 	<item config-class="org.anchoranalysis.bean.NamedBean" name="objectEdgeIntersectionIntensityMaxSlice">
-		<item config-class="org.anchoranalysis.image.feature.bean.permute.FeatureListProviderPermute">
-			<feature config-class="org.anchoranalysis.plugin.image.feature.bean.obj.pair.Intersection" iterationsDilation="2" iterationsErosion="2" emptyValue="5000" do3D="false">
-				<item nrgIndex="2" config-class="org.anchoranalysis.plugin.image.feature.bean.obj.single.intensity.IntensityMeanMaxSlice"/>
+		<item config-class="org.anchoranalysis.plugin.image.feature.bean.list.permute.PermuteFeature">
+			<feature config-class="org.anchoranalysis.plugin.image.feature.bean.object.pair.Intersection" iterationsDilation="2" iterationsErosion="2" emptyValue="5000" do3D="false">
+				<item nrgIndex="2" config-class="org.anchoranalysis.plugin.image.feature.bean.object.single.intensity.IntensityMeanMaxSlice"/>
 			</feature>
 			<listPermuteProperty config-class="java.util.List" config-factory="list">
 				<item config-class="org.anchoranalysis.bean.permute.property.PermutePropertySequenceInteger" propertyPath="iterationsDilation">
@@ -100,9 +100,9 @@
 	</item>	
 
 	<item config-class="org.anchoranalysis.bean.NamedBean" name="objectEdgeIntersectionIntensity">
-		<item config-class="org.anchoranalysis.image.feature.bean.permute.FeatureListProviderPermute">
-			<feature config-class="org.anchoranalysis.plugin.image.feature.bean.obj.pair.Intersection" iterationsDilation="2" iterationsErosion="2" emptyValue="5000" do3D="false">
-				<item config-class="org.anchoranalysis.plugin.image.feature.bean.obj.single.intensity.Intensity" nrgIndex="2"/>
+		<item config-class="org.anchoranalysis.plugin.image.feature.bean.list.permute.PermuteFeature">
+			<feature config-class="org.anchoranalysis.plugin.image.feature.bean.object.pair.Intersection" iterationsDilation="2" iterationsErosion="2" emptyValue="5000" do3D="false">
+				<item config-class="org.anchoranalysis.plugin.image.feature.bean.object.single.intensity.Intensity" nrgIndex="2"/>
 			</feature>
 			<listPermuteProperty config-class="java.util.List" config-factory="list">
 				<item config-class="org.anchoranalysis.bean.permute.property.PermutePropertySequenceInteger" propertyPath="iterationsDilation">
@@ -113,9 +113,9 @@
 	</item>
 	
 	<item config-class="org.anchoranalysis.bean.NamedBean" name="objectEdgeIntersectionIntensityMagnitude">
-		<item config-class="org.anchoranalysis.image.feature.bean.permute.FeatureListProviderPermute">
-			<feature config-class="org.anchoranalysis.plugin.image.feature.bean.obj.pair.Intersection" iterationsDilation="2" iterationsErosion="2" emptyValue="5000" do3D="false">
-				<item config-class="org.anchoranalysis.plugin.image.feature.bean.obj.single.intensity.IntensityGradientMeanMagnitudeFromMultiple" nrgIndexX="0" nrgIndexY="1" nrgIndexZ="2" subtractConstant="32768"/>
+		<item config-class="org.anchoranalysis.plugin.image.feature.bean.list.permute.PermuteFeature">
+			<feature config-class="org.anchoranalysis.plugin.image.feature.bean.object.pair.Intersection" iterationsDilation="2" iterationsErosion="2" emptyValue="5000" do3D="false">
+				<item config-class="org.anchoranalysis.plugin.image.feature.bean.object.single.intensity.gradient.GradientMagnitude" nrgIndexX="0" nrgIndexY="1" nrgIndexZ="2" subtractConstant="32768"/>
 			</feature>
 			<listPermuteProperty config-class="java.util.List" config-factory="list">
 				<item config-class="org.anchoranalysis.bean.permute.property.PermutePropertySequenceInteger" propertyPath="iterationsDilation">
@@ -130,15 +130,15 @@
 	
 	
 	<item config-class="org.anchoranalysis.bean.NamedBean" name="objectEdgeIntersectionIntensityMagnitudeNormInner">
-		<item config-class="org.anchoranalysis.image.feature.bean.permute.FeatureListProviderPermute">
+		<item config-class="org.anchoranalysis.plugin.image.feature.bean.list.permute.PermuteFeature">
 			<feature avoidDivideByZero="true" config-class="org.anchoranalysis.plugin.operator.feature.bean.arithmetic.Divide">
 				<list config-class="java.util.List" config-factory="list">
-					<item config-class="org.anchoranalysis.plugin.image.feature.bean.obj.pair.Intersection" iterationsDilation="2" iterationsErosion="2" emptyValue="5000" do3D="false">
-						<item config-class="org.anchoranalysis.plugin.image.feature.bean.obj.single.intensity.IntensityGradientMeanMagnitudeFromMultiple" nrgIndexX="0" nrgIndexY="1" nrgIndexZ="2" subtractConstant="32768"/>
+					<item config-class="org.anchoranalysis.plugin.image.feature.bean.object.pair.Intersection" iterationsDilation="2" iterationsErosion="2" emptyValue="5000" do3D="false">
+						<item config-class="org.anchoranalysis.plugin.image.feature.bean.object.single.intensity.gradient.GradientMagnitude" nrgIndexX="0" nrgIndexY="1" nrgIndexZ="2" subtractConstant="32768"/>
 					</item>
-					<item customName="edgeIntensityInner" config-class="org.anchoranalysis.image.feature.objmask.pair.impl.Merged">
-						<item config-class="ch.ethz.biol.cell.mpp.nrg.feature.objmask.Erode" iterations="2" do3D="true" emptyValue="-5000">
-							<item config-class="org.anchoranalysis.plugin.image.feature.bean.obj.single.intensity.IntensityGradientMeanMagnitudeFromMultiple" nrgIndexX="0" nrgIndexY="1" nrgIndexZ="2" subtractConstant="32768"/>
+					<item customName="edgeIntensityInner" config-class="org.anchoranalysis.image.feature.bean.object.pair.Merged">
+						<item config-class="org.anchoranalysis.plugin.image.feature.bean.object.single.morphological.Erode" iterations="2" do3D="true" emptyValue="-5000">
+							<item config-class="org.anchoranalysis.plugin.image.feature.bean.object.single.intensity.gradient.GradientMagnitude" nrgIndexX="0" nrgIndexY="1" nrgIndexZ="2" subtractConstant="32768"/>
 						</item>				
 					</item>
 				</list>
@@ -156,15 +156,15 @@
 	
 	<!--  Keep -->
 	<item config-class="org.anchoranalysis.bean.NamedBean" name="objectEdgeIntersectionIntensityMagnitudeNormShell">
-		<item config-class="org.anchoranalysis.image.feature.bean.permute.FeatureListProviderPermute">
+		<item config-class="org.anchoranalysis.plugin.image.feature.bean.list.permute.PermuteFeature">
 			<feature avoidDivideByZero="true" config-class="org.anchoranalysis.plugin.operator.feature.bean.arithmetic.Divide">
 				<list config-class="java.util.List" config-factory="list">
-					<item config-class="org.anchoranalysis.plugin.image.feature.bean.obj.pair.Intersection" iterationsDilation="2" iterationsErosion="2" emptyValue="5000" do3D="false">
-						<item config-class="org.anchoranalysis.plugin.image.feature.bean.obj.single.intensity.IntensityGradientMeanMagnitudeFromMultiple" nrgIndexX="0" nrgIndexY="1" nrgIndexZ="2" subtractConstant="32768"/>
+					<item config-class="org.anchoranalysis.plugin.image.feature.bean.object.pair.Intersection" iterationsDilation="2" iterationsErosion="2" emptyValue="5000" do3D="false">
+						<item config-class="org.anchoranalysis.plugin.image.feature.bean.object.single.intensity.gradient.GradientMagnitude" nrgIndexX="0" nrgIndexY="1" nrgIndexZ="2" subtractConstant="32768"/>
 					</item>
-					<item customName="edgeIntensityShell" config-class="org.anchoranalysis.image.feature.objmask.pair.impl.Merged">
-						<item config-class="ch.ethz.biol.cell.mpp.nrg.feature.objmask.Shell" iterationsDilation="2" iterationsErosion="2" do3D="true" emptyValue="-5000">
-							<item config-class="org.anchoranalysis.plugin.image.feature.bean.obj.single.intensity.IntensityGradientMeanMagnitudeFromMultiple" nrgIndexX="0" nrgIndexY="1" nrgIndexZ="2" subtractConstant="32768"/>
+					<item customName="edgeIntensityShell" config-class="org.anchoranalysis.image.feature.bean.object.pair.Merged">
+						<item config-class="org.anchoranalysis.plugin.image.feature.bean.object.single.morphological.Shell" iterationsDilation="2" iterationsErosion="2" do3D="true" emptyValue="-5000">
+							<item config-class="org.anchoranalysis.plugin.image.feature.bean.object.single.intensity.gradient.GradientMagnitude" nrgIndexX="0" nrgIndexY="1" nrgIndexZ="2" subtractConstant="32768"/>
 						</item>				
 					</item>
 				</list>
@@ -183,10 +183,10 @@
 
 	
 	<item config-class="org.anchoranalysis.bean.NamedBean" name="objectEdgeIntersectionIntensityMedian">
-		<item config-class="org.anchoranalysis.image.feature.bean.permute.FeatureListProviderPermute">
-			<feature customName="objectEdgeIntersectionIntensityMedian" config-class="org.anchoranalysis.plugin.image.feature.bean.obj.pair.Intersection" iterationsDilation="2" iterationsErosion="2" emptyValue="5000" do3D="false">
-				<item config-class="org.anchoranalysis.plugin.image.feature.bean.obj.single.intensity.Intensity" nrgIndex="0">
-					<item config-class="ch.ethz.biol.cell.mpp.nrg.feature.histogram.Median"/>
+		<item config-class="org.anchoranalysis.plugin.image.feature.bean.list.permute.PermuteFeature">
+			<feature customName="objectEdgeIntersectionIntensityMedian" config-class="org.anchoranalysis.plugin.image.feature.bean.object.pair.Intersection" iterationsDilation="2" iterationsErosion="2" emptyValue="5000" do3D="false">
+				<item config-class="org.anchoranalysis.plugin.image.feature.bean.object.single.intensity.Intensity" nrgIndex="0">
+					<item config-class="org.anchoranalysis.plugin.image.feature.bean.histogram.statistic.Median"/>
 				</item>
 			</feature>
 			<listPermuteProperty config-class="java.util.List" config-factory="list">
@@ -198,9 +198,9 @@
 	</item>
 	
 	<item config-class="org.anchoranalysis.bean.NamedBean" name="objectEdgeIntersectionIntensityMaxSlice3D">
-		<item config-class="org.anchoranalysis.image.feature.bean.permute.FeatureListProviderPermute">
-			<feature customName="objectEdgeIntersectionIntensity3D" config-class="org.anchoranalysis.plugin.image.feature.bean.obj.pair.Intersection" iterationsDilation="2" iterationsErosion="2" emptyValue="5000" do3D="true">
-				<item nrgIndex="2" config-class="org.anchoranalysis.plugin.image.feature.bean.obj.single.intensity.IntensityMeanMaxSlice"/>
+		<item config-class="org.anchoranalysis.plugin.image.feature.bean.list.permute.PermuteFeature">
+			<feature customName="objectEdgeIntersectionIntensity3D" config-class="org.anchoranalysis.plugin.image.feature.bean.object.pair.Intersection" iterationsDilation="2" iterationsErosion="2" emptyValue="5000" do3D="true">
+				<item nrgIndex="2" config-class="org.anchoranalysis.plugin.image.feature.bean.object.single.intensity.IntensityMeanMaxSlice"/>
 			</feature>
 			<listPermuteProperty config-class="java.util.List" config-factory="list">
 				<item config-class="org.anchoranalysis.bean.permute.property.PermutePropertySequenceInteger" propertyPath="iterationsDilation">
@@ -212,9 +212,9 @@
 
 
 	<item config-class="org.anchoranalysis.bean.NamedBean" name="objectEdgeIntersectionIntensity3D">
-		<item config-class="org.anchoranalysis.image.feature.bean.permute.FeatureListProviderPermute">
-			<feature customName="objectEdgeIntersectionIntensity3D" config-class="org.anchoranalysis.plugin.image.feature.bean.obj.pair.Intersection" iterationsDilation="2" iterationsErosion="2" emptyValue="5000" do3D="true">
-				<item config-class="org.anchoranalysis.plugin.image.feature.bean.obj.single.intensity.Intensity" nrgIndex="2"/>
+		<item config-class="org.anchoranalysis.plugin.image.feature.bean.list.permute.PermuteFeature">
+			<feature customName="objectEdgeIntersectionIntensity3D" config-class="org.anchoranalysis.plugin.image.feature.bean.object.pair.Intersection" iterationsDilation="2" iterationsErosion="2" emptyValue="5000" do3D="true">
+				<item config-class="org.anchoranalysis.plugin.image.feature.bean.object.single.intensity.Intensity" nrgIndex="2"/>
 			</feature>
 			<listPermuteProperty config-class="java.util.List" config-factory="list">
 				<item config-class="org.anchoranalysis.bean.permute.property.PermutePropertySequenceInteger" propertyPath="iterationsDilation">

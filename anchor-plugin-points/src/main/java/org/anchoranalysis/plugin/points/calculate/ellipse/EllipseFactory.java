@@ -38,8 +38,8 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.geometry.Point3f;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.channel.Channel;
-import org.anchoranalysis.image.extent.ImageDim;
-import org.anchoranalysis.image.objectmask.ObjectMask;
+import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.points.PointsFromObjMask;
 
 import ch.ethz.biol.cell.mpp.mark.pointsfitter.ConicFitterBase;
@@ -55,7 +55,7 @@ class EllipseFactory {
 		this.pointsFitter = pointsFitter;
 	}
 	
-	public MarkEllipse create( ObjectMask om, ImageDim dim, double shellRad, Channel chnl ) throws CreateException, InsufficientPointsException {
+	public MarkEllipse create( ObjectMask om, ImageDimensions dim, double shellRad, Channel chnl ) throws CreateException, InsufficientPointsException {
 
 		pointsFitter.setShellRad(shellRad);
 		
@@ -70,7 +70,7 @@ class EllipseFactory {
 		return createEllipse(pts, dim);
 	}
 	
-	private MarkEllipse createEllipse(Set<Point3i> pts, ImageDim dim) throws InsufficientPointsException, CreateException {
+	private MarkEllipse createEllipse(Set<Point3i> pts, ImageDimensions dim) throws InsufficientPointsException, CreateException {
 		
 		MarkEllipse mark = new MarkEllipse();
 		

@@ -33,7 +33,7 @@ import org.anchoranalysis.io.error.AnchorIOException;
 public class PathFromGenerator {
 
 	/** The debug-mode for everything that isn't the main input */
-	private final static boolean DEBUG_MODE_NON_INPUT = false;
+	private static final boolean DEBUG_MODE_NON_INPUT = false;
 	
 	private PathFromGenerator() {}
 	

@@ -28,7 +28,7 @@ package ch.ethz.biol.cell.imageprocessing.objmask.provider;
 
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.geometry.Point3i;
-import org.anchoranalysis.image.objectmask.ObjectMask;
+import org.anchoranalysis.image.object.ObjectMask;
 import org.junit.Before;
 import org.junit.Test;
 

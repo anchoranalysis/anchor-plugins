@@ -63,7 +63,9 @@ public class KernelUpdaterSimple<S,T> extends KernelUpdater<S,T> {
 				crnt,
 				c -> funcExtractCfgNRG.transform(crnt, context)
 			);
-			S proposedConv = funcExtractCfgNRG.transform(Optional.of(proposed), context).get();
+			S proposedConv = funcExtractCfgNRG.transform(Optional.of(proposed), context).orElseThrow( ()->
+				new UpdateMarkSetException("Transform returned empty, which is not allowed")
+			);
 			
 			updateAfterAccept(kernel, crntConv, proposedConv);
 			

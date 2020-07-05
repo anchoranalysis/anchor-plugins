@@ -35,10 +35,10 @@ import org.anchoranalysis.anchor.mpp.cfg.Cfg;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.extent.Extent;
-import org.anchoranalysis.image.objectmask.ObjectMask;
-import org.anchoranalysis.image.objectmask.ObjectCollection;
-import org.anchoranalysis.image.objectmask.ObjectCollectionFactory;
-import org.anchoranalysis.image.objectmask.ops.ObjectMaskMerger;
+import org.anchoranalysis.image.object.ObjectCollection;
+import org.anchoranalysis.image.object.ObjectCollectionFactory;
+import org.anchoranalysis.image.object.ObjectMask;
+import org.anchoranalysis.image.object.ops.ObjectMaskMerger;
 import org.anchoranalysis.image.voxel.box.factory.VoxelBoxFactory;
 
 public class RslvdEllipsoidList implements Iterable<RslvdEllipsoid> {

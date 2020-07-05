@@ -32,7 +32,7 @@ import java.nio.ByteBuffer;
 import java.nio.file.Path;
 
 import org.anchoranalysis.image.channel.Channel;
-import org.anchoranalysis.image.extent.ImageDim;
+import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.io.bean.moviewriter.MovieWriter;
 import org.anchoranalysis.image.io.movie.MovieOutputHandle;
 import org.anchoranalysis.image.stack.rgb.RGBStack;
@@ -53,13 +53,13 @@ import loci.formats.services.OMEXMLService;
 
 public class LociAVIWriter extends MovieWriter {
 
-	private static class OpenOutput extends MovieOutputHandle {
+	private static class OpenOutput implements MovieOutputHandle {
 
 		private int indexIncr = 0;
 
 		private AVIWriter writer;
 		
-		public void init( Path filePath, ImageDim dim, int numFrames, int numChnl, int framesPerSecond ) throws IOException {
+		public void init( Path filePath, ImageDimensions dim, int numFrames, int numChnl, int framesPerSecond ) throws IOException {
 		
 			int pixelType = FormatTools.UINT8;
 			
@@ -69,16 +69,9 @@ public class LociAVIWriter extends MovieWriter {
 			
 			try {
 				writer.setMetadataRetrieve( createMetadata(dim, 3, pixelType, numFrames) );
-			
 				writer.setId( filePath.toString() );
 				
-			} catch (EnumerationException e) {
-				throw new IOException(e);
-			} catch (ServiceException e) {
-				throw new IOException(e);
-			} catch (DependencyException e) {
-				throw new IOException(e);
-			} catch (FormatException e) {
+			} catch (EnumerationException | ServiceException | DependencyException | FormatException e) {
 				throw new IOException(e);
 			}
 		}
@@ -91,59 +84,45 @@ public class LociAVIWriter extends MovieWriter {
 		@Override
 		public void add(RGBStack stack) throws IOException {
 			
-				// We only support unsigned byte stacks for now
-				if (!stack.allChnlsHaveType(VoxelDataTypeUnsignedByte.instance)) {
-					throw new IOException("Only unsigned 8-bit stacks are supported");
-				}
+			// We only support unsigned byte stacks for now
+			if (!stack.allChnlsHaveType(VoxelDataTypeUnsignedByte.INSTANCE)) {
+				throw new IOException("Only unsigned 8-bit stacks are supported");
+			}
+		
+			ImageDimensions sd = stack.getChnl(0).getDimensions();
+		
+			// Now we write the frame to our avi
+			Channel imgChnlRed = stack.getChnl(0).duplicate();
+			Channel imgChnlGreen = stack.getChnl(1).duplicate();
+			Channel imgChnlBlue = stack.getChnl(2).duplicate();
 			
-				ImageDim sd = stack.getChnl(0).getDimensions();
+			ByteBuffer byteArrRed = imgChnlRed.getVoxelBox().asByte().getPlaneAccess().getPixelsForPlane(0).buffer();
+			ByteBuffer byteArrGreen = imgChnlGreen.getVoxelBox().asByte().getPlaneAccess().getPixelsForPlane(0).buffer();
+			ByteBuffer byteArrBlue = imgChnlBlue.getVoxelBox().asByte().getPlaneAccess().getPixelsForPlane(0).buffer();
 			
-			//for (int c=0; c<3; c++) {
-				// Now we write the frame to our avi
-				Channel imgChnlRed = stack.getChnl(0).duplicate();
-				Channel imgChnlGreen = stack.getChnl(1).duplicate();
-				Channel imgChnlBlue = stack.getChnl(2).duplicate();
-				
-				ByteBuffer byteArrRed = imgChnlRed.getVoxelBox().asByte().getPlaneAccess().getPixelsForPlane(0).buffer();
-				ByteBuffer byteArrGreen = imgChnlGreen.getVoxelBox().asByte().getPlaneAccess().getPixelsForPlane(0).buffer();
-				ByteBuffer byteArrBlue = imgChnlBlue.getVoxelBox().asByte().getPlaneAccess().getPixelsForPlane(0).buffer();
-				
-				ByteBuffer byteArrCmb = ByteBuffer.allocate( byteArrRed.capacity() * 3 );
-				
-				while (byteArrRed.hasRemaining()) {
-					assert( byteArrGreen.hasRemaining() );
-					assert( byteArrBlue.hasRemaining() );
-					
-					byteArrCmb.put( byteArrRed.get() );
-					byteArrCmb.put( byteArrGreen.get() );
-					byteArrCmb.put( byteArrBlue.get() );
-				}
-				assert( !byteArrRed.hasRemaining() );
-				
-				/*for (int i=0; i<byteArrGreen.length; i++) {
-					byteArrCmb[cnt++] = byteArrGreen[i];
-				}
-				
-				for (int i=0; i<byteArrBlue.length; i++) {
-					byteArrCmb[cnt++] = byteArrBlue[i];
-				}*/
-				
-				try {
-					writer.saveBytes(indexIncr++, byteArrCmb.array(), 0, 0, sd.getX(), sd.getY() );
-				} catch (FormatException e) {
-					throw new IOException(e);
-				} catch (IOException e) {
-					throw new IOException(e);
-				}
-			//}
+			ByteBuffer byteArrCmb = ByteBuffer.allocate( byteArrRed.capacity() * 3 );
 			
+			while (byteArrRed.hasRemaining()) {
+				assert( byteArrGreen.hasRemaining() );
+				assert( byteArrBlue.hasRemaining() );
+				
+				byteArrCmb.put( byteArrRed.get() );
+				byteArrCmb.put( byteArrGreen.get() );
+				byteArrCmb.put( byteArrBlue.get() );
+			}
+			assert( !byteArrRed.hasRemaining() );
 			
+			try {
+				writer.saveBytes(indexIncr++, byteArrCmb.array(), 0, 0, sd.getX(), sd.getY() );
+			} catch (FormatException | IOException e) {
+				throw new IOException(e);
+			}
 		}
 		
 	}
 
 	@Override
-	public MovieOutputHandle writeMovie(Path filePath, ImageDim dim, int numFrames, int numChnl, int framesPerSecond ) throws IOException {
+	public MovieOutputHandle writeMovie(Path filePath, ImageDimensions dim, int numFrames, int numChnl, int framesPerSecond ) throws IOException {
 		
 		OpenOutput out = new OpenOutput();
 		out.init( filePath, dim, numFrames, numChnl, framesPerSecond );
@@ -151,7 +130,7 @@ public class LociAVIWriter extends MovieWriter {
 	}
 	
 	
-	private static IMetadata createMetadata( ImageDim sd, int num_chnl, int pixelType, int t ) throws EnumerationException, ServiceException, DependencyException {
+	private static IMetadata createMetadata( ImageDimensions sd, int numChnl, int pixelType, int t ) throws EnumerationException, ServiceException, DependencyException {
 		
 		ServiceFactory factory = new ServiceFactory();
 	    OMEXMLService service = factory.getInstance(OMEXMLService.class);
@@ -170,7 +149,7 @@ public class LociAVIWriter extends MovieWriter {
 	    meta.setPixelsSizeX(new PositiveInteger( sd.getX() ), seriesNum);
 	    meta.setPixelsSizeY(new PositiveInteger( sd.getY() ), seriesNum);
 	    meta.setPixelsSizeZ(new PositiveInteger( sd.getZ() ), seriesNum);
-	    meta.setPixelsSizeC(new PositiveInteger( num_chnl ), seriesNum);
+	    meta.setPixelsSizeC(new PositiveInteger( numChnl ), seriesNum);
 	    meta.setPixelsSizeT(new PositiveInteger(t), seriesNum);
 	    
 	  //  meta.setPixelsPhysicalSizeX( new Double(sd.getX()) , seriesNum);
@@ -189,10 +168,10 @@ public class LociAVIWriter extends MovieWriter {
 	    //meta.setPixelsPhysicalSizeX( sd.XRes, 0);
 	    //meta.setPixelsPhysicalSizeY( sd.YRes, 0);
 	    //meta.setPixelsPhysicalSizeZ( sd.ZRes, 0);
-	    // for (int i=0; i<num_chnl; i++) {
-		    for (int i=0; i<num_chnl; i++) {
+	    // for (int i=0; i<numChnl; i++) {
+		    for (int i=0; i<numChnl; i++) {
 		    	meta.setChannelID( String.format("Channel:%d:%d",z,i),z, i);
-		    	meta.setChannelSamplesPerPixel(new PositiveInteger(num_chnl), z, i);
+		    	meta.setChannelSamplesPerPixel(new PositiveInteger(numChnl), z, i);
 			}
 	    //}
 		

@@ -34,12 +34,16 @@ import org.anchoranalysis.core.geometry.PointConverter;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.extent.Extent;
-import org.anchoranalysis.image.extent.ImageDim;
-import org.anchoranalysis.image.objectmask.ObjectMask;
+import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.image.object.ObjectMask;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
 public class CircleObjMaskFixture {
 
-	private static ImageDim DIMS = new ImageDim(
+	private static ImageDimensions DIMS = new ImageDimensions(
 		new Extent(800, 600, 1)
 	);
 	

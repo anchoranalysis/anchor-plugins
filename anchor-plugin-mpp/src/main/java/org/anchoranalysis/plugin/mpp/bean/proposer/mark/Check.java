@@ -36,7 +36,7 @@ import org.anchoranalysis.anchor.mpp.feature.error.CheckException;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.anchor.mpp.proposer.ProposalAbnormalFailureException;
 import org.anchoranalysis.anchor.mpp.proposer.ProposerContext;
-import org.anchoranalysis.anchor.mpp.proposer.visualization.ICreateProposalVisualization;
+import org.anchoranalysis.anchor.mpp.proposer.visualization.CreateProposalVisualization;
 import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.color.RGBColor;
@@ -88,7 +88,8 @@ public class Check extends MarkProposerOne {
 		return true;
 	}
 
-	public Optional<ICreateProposalVisualization> proposalVisualization(boolean detailed) {
+	@Override
+	public Optional<CreateProposalVisualization> proposalVisualization(boolean detailed) {
 		if (lastFailedMark!=null) {
 			return Optional.of( cfg ->
 				cfg.addChangeID(

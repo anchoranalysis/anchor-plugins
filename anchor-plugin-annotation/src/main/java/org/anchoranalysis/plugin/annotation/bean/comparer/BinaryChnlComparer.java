@@ -38,12 +38,12 @@ import org.anchoranalysis.bean.annotation.DefaultInstance;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.binary.BinaryChnl;
 import org.anchoranalysis.image.binary.values.BinaryValues;
-import org.anchoranalysis.image.extent.ImageDim;
+import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.io.RasterIOException;
 import org.anchoranalysis.image.io.bean.rasterreader.RasterReader;
 import org.anchoranalysis.image.io.bean.rasterreader.RasterReaderUtilities;
-import org.anchoranalysis.image.objectmask.ObjectCollection;
-import org.anchoranalysis.image.objectmask.ObjectCollectionFactory;
+import org.anchoranalysis.image.object.ObjectCollection;
+import org.anchoranalysis.image.object.ObjectCollectionFactory;
 import org.anchoranalysis.io.bean.filepath.generator.FilePathGenerator;
 import org.anchoranalysis.io.error.AnchorIOException;
 
@@ -65,7 +65,7 @@ public class BinaryChnlComparer extends Comparer {
 	}
 	
 	@Override
-	public Findable<ObjectCollection> createObjs(Path filePathSource, ImageDim dim, boolean debugMode) throws CreateException {
+	public Findable<ObjectCollection> createObjs(Path filePathSource, ImageDimensions dim, boolean debugMode) throws CreateException {
 		
 		try {
 			Path maskPath = filePathGenerator.outFilePath(filePathSource, debugMode);

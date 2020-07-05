@@ -35,11 +35,16 @@ import org.anchoranalysis.io.bean.input.InputManager;
 import org.anchoranalysis.io.input.FileInput;
 import org.anchoranalysis.plugin.io.bean.chnl.map.ImgChnlMapDefine;
 import org.anchoranalysis.plugin.io.bean.input.chnl.NamedChnls;
+
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
 import org.anchoranalysis.image.io.bean.chnl.map.ImgChnlMapCreator;
 import org.anchoranalysis.image.io.bean.chnl.map.ImgChnlMapEntry;
 import org.anchoranalysis.image.io.bean.rasterreader.RasterReader;
 
 /** Helps in creating NamedChnls */
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
 class NamedChnlsCreator {
 
 	public static NamedChnls create(

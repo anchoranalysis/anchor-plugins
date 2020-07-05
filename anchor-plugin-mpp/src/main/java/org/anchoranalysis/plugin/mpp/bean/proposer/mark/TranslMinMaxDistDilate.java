@@ -8,7 +8,7 @@ import org.anchoranalysis.anchor.mpp.bean.proposer.radii.RadiiProposer;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.anchor.mpp.proposer.ProposalAbnormalFailureException;
 import org.anchoranalysis.anchor.mpp.proposer.ProposerContext;
-import org.anchoranalysis.anchor.mpp.proposer.visualization.ICreateProposalVisualization;
+import org.anchoranalysis.anchor.mpp.proposer.visualization.CreateProposalVisualization;
 import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
 
 /*
@@ -39,8 +39,7 @@ import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
 
 
 import org.anchoranalysis.bean.annotation.BeanField;
-
-import ch.ethz.biol.cell.mpp.mark.distance.MarkDistanceAbstractPosition;
+import org.anchoranalysis.plugin.mpp.bean.mark.distance.MarkDistanceAbstractPosition;
 
 public class TranslMinMaxDistDilate extends MarkProposer {
 
@@ -124,7 +123,7 @@ public class TranslMinMaxDistDilate extends MarkProposer {
 	}
 
 	@Override
-	public Optional<ICreateProposalVisualization> proposalVisualization(boolean detailed) {
+	public Optional<CreateProposalVisualization> proposalVisualization(boolean detailed) {
 		return delegate.proposalVisualization(detailed);
 	}
 }

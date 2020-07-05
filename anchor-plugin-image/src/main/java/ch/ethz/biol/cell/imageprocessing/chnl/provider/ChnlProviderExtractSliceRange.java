@@ -38,7 +38,7 @@ import org.anchoranalysis.image.bean.provider.ChnlProviderOne;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.channel.factory.ChannelFactoryByte;
 import org.anchoranalysis.image.extent.Extent;
-import org.anchoranalysis.image.extent.ImageDim;
+import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 
 public class ChnlProviderExtractSliceRange extends ChnlProviderOne {
@@ -62,7 +62,7 @@ public class ChnlProviderExtractSliceRange extends ChnlProviderOne {
 			sliceEnd - sliceStart + 1
 		);
 		
-		Channel chnlOut = factory.createEmptyInitialised( new ImageDim(e, chnl.getDimensions().getRes()) );
+		Channel chnlOut = factory.createEmptyInitialised( new ImageDimensions(e, chnl.getDimensions().getRes()) );
 		VoxelBox<ByteBuffer> vbOut = chnlOut.getVoxelBox().asByte();
 		
 		int volumeXY = vb.extent().getVolumeXY();

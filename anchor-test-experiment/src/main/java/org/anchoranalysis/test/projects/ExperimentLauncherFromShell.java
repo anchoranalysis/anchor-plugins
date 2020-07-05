@@ -91,7 +91,7 @@ public class ExperimentLauncherFromShell {
 			String pathCombined = Paths.get(pathProperty)
 					.resolve("bin/" + anchorCommand)
 					.toString();
-			System.out.printf("Testing with path: %s (%s)\n", pathCombined, pathProperty);
+			System.out.printf("Testing with path: %s (%s)%n", pathCombined, pathProperty);	// NOSONAR
 			return pathCombined;
 		}
 	}
@@ -148,7 +148,7 @@ public class ExperimentLauncherFromShell {
 			resolve(testPathToOutput)
 		);
 		
-		System.out.printf("Shell command: %s\n", shellCmd.toString());
+		System.out.printf("Shell command: %s%n", shellCmd.toString());	// NOSONAR
 		
 		try {
 			DefaultExecutor executor = new DefaultExecutor();
@@ -159,8 +159,11 @@ public class ExperimentLauncherFromShell {
 			executor.execute(shellCmd, resultHandler);
 			resultHandler.waitFor();
 			
-		} catch (IOException | InterruptedException e) {
+		} catch (IOException e) {
 			throw new TestDataLoadException(e);
+		} catch (InterruptedException e) {
+			// Restore interrupted state
+			Thread.currentThread().interrupt();
 		}
 	}
 	
@@ -241,7 +244,7 @@ public class ExperimentLauncherFromShell {
 		
 	
 	/**
-	 * Resolves a path if it's non-null, otherwise return null
+	 * Resolves a path iff it's defined.
 	 * 
 	 * @param testPath path to resolve
 	 * @return resolved path or null

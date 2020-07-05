@@ -31,23 +31,23 @@ package ch.ethz.biol.cell.imageprocessing.objmask.provider;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
-import org.anchoranalysis.image.objectmask.ObjectCollection;
-import org.anchoranalysis.image.objectmask.ObjectCollectionFactory;
-import org.anchoranalysis.image.objectmask.ops.ObjectMaskMerger;
+import org.anchoranalysis.image.bean.provider.ObjectCollectionProvider;
+import org.anchoranalysis.image.object.ObjectCollection;
+import org.anchoranalysis.image.object.ObjectCollectionFactory;
+import org.anchoranalysis.image.object.ops.ObjectMaskMerger;
 
 // Merges an object in each list item by item
 //
 // Requires each provider to return the same number of items
 //
-public class ObjMaskProviderMergeItemByItem extends ObjMaskProvider {
+public class ObjMaskProviderMergeItemByItem extends ObjectCollectionProvider {
 
 	// START BEAN PROPERTIES
 	@BeanField
-	private ObjMaskProvider objs1;
+	private ObjectCollectionProvider objs1;
 	
 	@BeanField
-	private ObjMaskProvider objs2;
+	private ObjectCollectionProvider objs2;
 	// END BEAN PROPERTIES
 		
 	@Override
@@ -70,19 +70,19 @@ public class ObjMaskProviderMergeItemByItem extends ObjMaskProvider {
 		);
 	}
 
-	public ObjMaskProvider getObjs1() {
+	public ObjectCollectionProvider getObjs1() {
 		return objs1;
 	}
 
-	public void setObjs1(ObjMaskProvider objs1) {
+	public void setObjs1(ObjectCollectionProvider objs1) {
 		this.objs1 = objs1;
 	}
 
-	public ObjMaskProvider getObjs2() {
+	public ObjectCollectionProvider getObjs2() {
 		return objs2;
 	}
 
-	public void setObjs2(ObjMaskProvider objs2) {
+	public void setObjs2(ObjectCollectionProvider objs2) {
 		this.objs2 = objs2;
 	}
 

@@ -33,9 +33,9 @@ import org.anchoranalysis.bean.shared.relation.GreaterThanEqualToBean;
 import org.anchoranalysis.bean.shared.relation.RelationBean;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.relation.RelationToValue;
-import org.anchoranalysis.image.extent.ImageDim;
-import org.anchoranalysis.image.objectmask.ObjectCollection;
-import org.anchoranalysis.image.objectmask.ObjectMask;
+import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.image.object.ObjectCollection;
+import org.anchoranalysis.image.object.ObjectMask;
 
 /**
  * An independent object-filter that uses a relation in its predicate.
@@ -53,16 +53,16 @@ public abstract class ObjectFilterRelation extends ObjectFilterPredicate {
 	private RelationToValue relationResolved;
 	
 	@Override
-	protected void start(Optional<ImageDim> dim, ObjectCollection objsToFilter) throws OperationFailedException {
+	protected void start(Optional<ImageDimensions> dim, ObjectCollection objsToFilter) throws OperationFailedException {
 		relationResolved = relation.create();
 	}
 	
 	@Override
-	protected boolean match(ObjectMask om, Optional<ImageDim> dim) throws OperationFailedException {
+	protected boolean match(ObjectMask om, Optional<ImageDimensions> dim) throws OperationFailedException {
 		return match(om, dim, relationResolved);
 	}
 	
-	protected abstract boolean match(ObjectMask om, Optional<ImageDim> dim, RelationToValue relation) throws OperationFailedException;
+	protected abstract boolean match(ObjectMask om, Optional<ImageDimensions> dim, RelationToValue relation) throws OperationFailedException;
 
 	@Override
 	protected void end() throws OperationFailedException {

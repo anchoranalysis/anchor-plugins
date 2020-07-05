@@ -1,5 +1,7 @@
 package ch.ethz.biol.cell.mpp.mark.ellipsoidfitter.outlinepixelsretriever.visitscheduler;
 
+import java.util.Optional;
+
 /*-
  * #%L
  * anchor-plugin-mpp
@@ -33,8 +35,8 @@ import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.core.geometry.Tuple3i;
 import org.anchoranalysis.core.random.RandomNumberGenerator;
-import org.anchoranalysis.image.extent.ImageRes;
-import org.anchoranalysis.image.objectmask.ObjectMask;
+import org.anchoranalysis.image.extent.ImageResolution;
+import org.anchoranalysis.image.object.ObjectMask;
 
 // Breadth-first iteration of pixels
 public class VisitSchedulerMaxDistanceAlongContour extends VisitScheduler {
@@ -51,7 +53,7 @@ public class VisitSchedulerMaxDistanceAlongContour extends VisitScheduler {
 	}
 
 	@Override
-	public void beforeCreateObjMask(RandomNumberGenerator re, ImageRes res)
+	public void beforeCreateObjMask(RandomNumberGenerator re, ImageResolution res)
 			throws InitException {
 		try {
 			maxDist = maxDistanceProposer.propose(re, res);
@@ -63,16 +65,17 @@ public class VisitSchedulerMaxDistanceAlongContour extends VisitScheduler {
 	}
 	
 	@Override
-	public Tuple3i maxDistFromRootPoint(ImageRes res) {
+	public Optional<Tuple3i> maxDistFromRootPoint(ImageResolution res) {
 		int maxDistInt = (int) Math.ceil(this.maxDist);
 		assert(maxDistInt>0);
-		return new Point3i(maxDistInt,maxDistInt,maxDistInt);
+		return Optional.of(
+			new Point3i(maxDistInt,maxDistInt,maxDistInt)
+		);
 	}
 	
 	@Override
-	public void afterCreateObjMask(Point3i root, ImageRes res, RandomNumberGenerator re) throws InitException {
-		
-		
+	public void afterCreateObjMask(Point3i root, ImageResolution res, RandomNumberGenerator re) throws InitException {
+		// NOTHING TO DO
 	}
 
 	@Override

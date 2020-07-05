@@ -32,7 +32,7 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.bean.provider.ChnlProvider;
 import org.anchoranalysis.image.bean.provider.stack.StackProvider;
 import org.anchoranalysis.image.channel.Channel;
-import org.anchoranalysis.image.extent.ImageDim;
+import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.extent.IncorrectImageSizeException;
 import org.anchoranalysis.image.stack.Stack;
 
@@ -43,7 +43,7 @@ public class StackProviderRGBSingleChnlProvider extends StackProvider {
 	private ChnlProvider chnl;
 	// END BEAN PROPERTIES
 	
-	private void addToStack( Stack stack, Channel chnl, ImageDim dim ) throws IncorrectImageSizeException {
+	private void addToStack( Stack stack, Channel chnl, ImageDimensions dim ) throws IncorrectImageSizeException {
 		stack.addChnl(
 			chnl.duplicate()
 		);
@@ -54,7 +54,7 @@ public class StackProviderRGBSingleChnlProvider extends StackProvider {
 
 		Channel chnlIn = chnl.create();
 		
-		ImageDim sd = chnlIn.getDimensions();
+		ImageDimensions sd = chnlIn.getDimensions();
 		
 		try {
 			Stack out = new Stack();

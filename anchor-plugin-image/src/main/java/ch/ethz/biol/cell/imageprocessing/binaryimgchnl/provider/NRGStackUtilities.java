@@ -28,21 +28,22 @@ import java.util.Optional;
  * #L%
  */
 
-import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorSingle;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorSingleChangeInput;
 import org.anchoranalysis.image.channel.Channel;
-import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
+import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
 public class NRGStackUtilities {
-
-	private NRGStackUtilities() {}
 	
-	public static FeatureCalculatorSingle<FeatureInputSingleObj> maybeAddNrgStack(
-		FeatureCalculatorSingle<FeatureInputSingleObj> session,
+	public static FeatureCalculatorSingle<FeatureInputSingleObject> maybeAddNrgStack(
+		FeatureCalculatorSingle<FeatureInputSingleObject> session,
 		Optional<Channel> chnl
-	) throws CreateException {
+	) {
 		
 		if (chnl.isPresent()) {
 			return addNrgStack(
@@ -54,10 +55,10 @@ public class NRGStackUtilities {
 		}
 	}
 	
-	public static FeatureCalculatorSingle<FeatureInputSingleObj> addNrgStack(
-		FeatureCalculatorSingle<FeatureInputSingleObj> session,
+	public static FeatureCalculatorSingle<FeatureInputSingleObject> addNrgStack(
+		FeatureCalculatorSingle<FeatureInputSingleObject> session,
 		Channel chnl
-	) throws CreateException {
+	) {
 		
 		// Make sure an NRG stack is added to each params that are called
 		NRGStackWithParams nrgStack = new NRGStackWithParams(chnl); 

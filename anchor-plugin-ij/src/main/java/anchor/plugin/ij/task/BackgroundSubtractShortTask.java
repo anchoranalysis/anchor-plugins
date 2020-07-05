@@ -69,7 +69,7 @@ public class BackgroundSubtractShortTask extends RasterTask {
 	@Override
 	public void startSeries(BoundOutputManagerRouteErrors outputManager,
 			ErrorReporter errorReporter) throws JobExecutionException {
-		
+		// NOTHING TO DO
 	}
 
 	@Override
@@ -116,7 +116,7 @@ public class BackgroundSubtractShortTask extends RasterTask {
 	@Override
 	public void endSeries(BoundOutputManagerRouteErrors outputManager)
 			throws JobExecutionException {
-		
+		// NOTHING TO DO
 	}
 
 	public int getRadius() {

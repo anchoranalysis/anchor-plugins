@@ -34,13 +34,13 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.feature.cache.calculation.FeatureCalculation;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.nrg.NRGStack;
-import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
-import org.anchoranalysis.image.objectmask.ObjectMask;
+import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
+import org.anchoranalysis.image.object.ObjectMask;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
 import ch.ethz.biol.cell.mpp.mark.pointsfitter.LinearLeastSquaresEllipseFitter;
 
-public class CalculateEllipseLeastSquares extends FeatureCalculation<ObjMaskAndEllipse, FeatureInputSingleObj> {
+public class CalculateEllipseLeastSquares extends FeatureCalculation<ObjMaskAndEllipse, FeatureInputSingleObject> {
 
 	private EllipseFactory factory;
 	
@@ -54,17 +54,17 @@ public class CalculateEllipseLeastSquares extends FeatureCalculation<ObjMaskAndE
 		
 	private static ObjectMask extractEllipseSlice( ObjectMask om ) {
 		int zSliceCenter = (int) om.centerOfGravity().getZ();
-		return om.extractSlice(zSliceCenter - om.getBoundingBox().getCrnrMin().getZ(), false);
+		return om.extractSlice(zSliceCenter - om.getBoundingBox().cornerMin().getZ(), false);
 	}
 	
 
 	@Override
-	protected ObjMaskAndEllipse execute( FeatureInputSingleObj input ) throws FeatureCalcException {
+	protected ObjMaskAndEllipse execute( FeatureInputSingleObject input ) throws FeatureCalcException {
 		
 		try {
 			NRGStack nrgStack = input.getNrgStackRequired().getNrgStack();
 			
-			ObjectMask om = extractEllipseSlice( input.getObjMask() );
+			ObjectMask om = extractEllipseSlice( input.getObjectMask() );
 			
 			// Shell Rad is arbitrary here for now
 			MarkEllipse mark = factory.create(om,nrgStack.getDimensions(), 0.2, nrgStack.getChnl(0) );

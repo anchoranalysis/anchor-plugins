@@ -32,7 +32,7 @@ import org.anchoranalysis.image.feature.bean.evaluator.FeatureEvaluator;
  */
 
 import org.anchoranalysis.image.feature.evaluator.PayloadCalculator;
-import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
+import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 import org.anchoranalysis.plugin.image.obj.merge.priority.AssignPriority;
 import org.anchoranalysis.plugin.image.obj.merge.priority.AssignPriorityFromImprovement;
 
@@ -48,17 +48,17 @@ public class ObjMaskProviderMergeMax extends ObjMaskProviderMergeWithFeature {
 
 	// START BEAN PROPERTIES
 	@BeanField
-	private FeatureEvaluator<FeatureInputSingleObj> featureEvaluator;
+	private FeatureEvaluator<FeatureInputSingleObject> featureEvaluator;
 	// END BEAN PROPERTIES
 	
 	@Override
 	protected PayloadCalculator createPayloadCalculator() throws OperationFailedException {
 		
-		FeatureCalculatorSingle<FeatureInputSingleObj> calculator = featureEvaluator.createAndStartSession();
+		FeatureCalculatorSingle<FeatureInputSingleObject> calculator = featureEvaluator.createAndStartSession();
 		
 		return om -> {
 			return calculator.calc(
-				new FeatureInputSingleObj(om)
+				new FeatureInputSingleObject(om)
 			);
 		};
 	}
@@ -75,11 +75,11 @@ public class ObjMaskProviderMergeMax extends ObjMaskProviderMergeWithFeature {
 		return true;
 	}
 	
-	public FeatureEvaluator<FeatureInputSingleObj> getFeatureEvaluator() {
+	public FeatureEvaluator<FeatureInputSingleObject> getFeatureEvaluator() {
 		return featureEvaluator;
 	}
 
-	public void setFeatureEvaluator(FeatureEvaluator<FeatureInputSingleObj> featureEvaluator) {
+	public void setFeatureEvaluator(FeatureEvaluator<FeatureInputSingleObject> featureEvaluator) {
 		this.featureEvaluator = featureEvaluator;
 	}
 }

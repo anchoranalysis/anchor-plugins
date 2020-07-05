@@ -34,18 +34,18 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorSingle;
-import org.anchoranalysis.image.bean.provider.ObjMaskProviderOne;
+import org.anchoranalysis.image.bean.provider.ObjectCollectionProviderOne;
 import org.anchoranalysis.image.feature.bean.evaluator.FeatureEvaluator;
-import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
-import org.anchoranalysis.image.objectmask.ObjectMask;
-import org.anchoranalysis.image.objectmask.ObjectCollection;
-import org.anchoranalysis.image.objectmask.ObjectCollectionFactory;
+import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
+import org.anchoranalysis.image.object.ObjectCollection;
+import org.anchoranalysis.image.object.ObjectCollectionFactory;
+import org.anchoranalysis.image.object.ObjectMask;
 
-public class ObjMaskProviderSortByFeature extends ObjMaskProviderOne {
+public class ObjMaskProviderSortByFeature extends ObjectCollectionProviderOne {
 
 	// START BEAN PROPERTIES
 	@BeanField
-	private FeatureEvaluator<FeatureInputSingleObj> featureEvaluator;
+	private FeatureEvaluator<FeatureInputSingleObject> featureEvaluator;
 	// END BEAN PROPERTIES
 	
 	/** Associates a feature-value with an object so it can be sorted by the feature-value */
@@ -74,13 +74,13 @@ public class ObjMaskProviderSortByFeature extends ObjMaskProviderOne {
 	public ObjectCollection createFromObjs( ObjectCollection objsCollection ) throws CreateException {
 		
 		try {
-			FeatureCalculatorSingle<FeatureInputSingleObj> featureSession = featureEvaluator.createAndStartSession();
+			FeatureCalculatorSingle<FeatureInputSingleObject> featureSession = featureEvaluator.createAndStartSession();
 			
 			TreeSet<ObjectWithFeatureValue> sorted = new TreeSet<>();
 			for( ObjectMask om : objsCollection ) {
 				try {
 					double featureVal = featureSession.calc(
-						new FeatureInputSingleObj(om)
+						new FeatureInputSingleObject(om)
 					);
 					sorted.add(
 						new ObjectWithFeatureValue(om,featureVal)
@@ -100,11 +100,11 @@ public class ObjMaskProviderSortByFeature extends ObjMaskProviderOne {
 		}
 	}
 
-	public FeatureEvaluator<FeatureInputSingleObj> getFeatureEvaluator() {
+	public FeatureEvaluator<FeatureInputSingleObject> getFeatureEvaluator() {
 		return featureEvaluator;
 	}
 
-	public void setFeatureEvaluator(FeatureEvaluator<FeatureInputSingleObj> featureEvaluator) {
+	public void setFeatureEvaluator(FeatureEvaluator<FeatureInputSingleObject> featureEvaluator) {
 		this.featureEvaluator = featureEvaluator;
 	}
 }

@@ -30,20 +30,20 @@ import java.nio.ByteBuffer;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.image.bean.provider.ObjMaskProviderOne;
+import org.anchoranalysis.image.bean.provider.ObjectCollectionProviderOne;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
-import org.anchoranalysis.image.objectmask.ObjectMask;
-import org.anchoranalysis.image.objectmask.ObjectCollection;
-import org.anchoranalysis.image.objectmask.factory.CreateFromConnectedComponentsFactory;
+import org.anchoranalysis.image.object.ObjectCollection;
+import org.anchoranalysis.image.object.ObjectMask;
+import org.anchoranalysis.image.object.factory.CreateFromConnectedComponentsFactory;
 
 /**
  * Ensures each obj in a collection is a connected-component, decomposing it if necessary
  *  into multiple objects
  * 
- * @author FEEHANO
+ * @author Owen Feehan
  *
  */
-public class ObjMaskProviderConnectedComponentsObjs extends ObjMaskProviderOne {
+public class ObjMaskProviderConnectedComponentsObjs extends ObjectCollectionProviderOne {
 
 	// START BEAN PROPERTIES
 	/** if TRUE, uses 8 neighbourhood instead of 4, and similarly in 3d */
@@ -71,7 +71,7 @@ public class ObjMaskProviderConnectedComponentsObjs extends ObjMaskProviderOne {
 		
 		// Adjust the crnr of each object, by adding on the original starting point of our object-mask
 		return objs.shiftBy(
-			omUnconnected.getBoundingBox().getCrnrMin()
+			omUnconnected.getBoundingBox().cornerMin()
 		);
 	}
 	

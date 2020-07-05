@@ -34,7 +34,7 @@ import ome.xml.model.enums.EnumerationException;
 import ome.xml.model.enums.PixelType;
 import ome.xml.model.primitives.PositiveInteger;
 
-import org.anchoranalysis.image.extent.ImageDim;
+import org.anchoranalysis.image.extent.ImageDimensions;
 
 import loci.common.services.DependencyException;
 import loci.common.services.ServiceException;
@@ -42,11 +42,14 @@ import loci.common.services.ServiceFactory;
 import loci.formats.FormatTools;
 import loci.formats.meta.IMetadata;
 import loci.formats.services.OMEXMLService;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
 class MetadataUtilities {
 
 	// NOTE: Tidy up exceptions later
-	public static IMetadata createMetadata( ImageDim sd, int num_chnl, PixelType pixelType, boolean makeRGB, boolean pretendSeries ) throws EnumerationException, ServiceException, DependencyException {
+	public static IMetadata createMetadata( ImageDimensions sd, int numChnl, PixelType pixelType, boolean makeRGB, boolean pretendSeries ) throws EnumerationException, ServiceException, DependencyException {
 		
 		ServiceFactory factory = new ServiceFactory();
 	    OMEXMLService service = factory.getInstance(OMEXMLService.class);
@@ -59,11 +62,9 @@ class MetadataUtilities {
 	    meta.setImageID( String.format("Image:%d",seriesNum), seriesNum);
 	    meta.setPixelsID( String.format("Pixels:%d",seriesNum),seriesNum);
 	    meta.setPixelsBinDataBigEndian(Boolean.TRUE, seriesNum, 0);
-	    //meta.setPixelsDimensionOrder(DimensionOrder.XYCZT, seriesNum);
 	    meta.setPixelsDimensionOrder(DimensionOrder.XYZTC, seriesNum);
-	    //FormatTools.getPixelTypeString(pixelType)
 	    meta.setPixelsType( pixelType, seriesNum);
-	    meta.setPixelsSizeC(new PositiveInteger( num_chnl ), seriesNum);
+	    meta.setPixelsSizeC(new PositiveInteger( numChnl ), seriesNum);
 	    
 	    meta.setPixelsSizeX(new PositiveInteger( sd.getX() ), seriesNum);
 	    meta.setPixelsSizeY(new PositiveInteger( sd.getY() ), seriesNum);

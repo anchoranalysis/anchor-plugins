@@ -39,13 +39,13 @@ import org.anchoranalysis.core.relation.RelationToValue;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorSingle;
 import org.anchoranalysis.feature.session.calculator.cached.FeatureCalculatorCachedSingle;
-import org.anchoranalysis.image.bean.objmask.match.ObjMaskMatcher;
-import org.anchoranalysis.image.extent.ImageDim;
+import org.anchoranalysis.image.bean.object.ObjectMatcher;
+import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.feature.bean.evaluator.FeatureEvaluator;
-import org.anchoranalysis.image.feature.objmask.FeatureInputSingleObj;
-import org.anchoranalysis.image.objectmask.ObjectMask;
-import org.anchoranalysis.image.objectmask.ObjectCollection;
-import org.anchoranalysis.image.objmask.match.ObjWithMatches;
+import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
+import org.anchoranalysis.image.object.MatchedObject;
+import org.anchoranalysis.image.object.ObjectCollection;
+import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.plugin.image.bean.obj.filter.ObjectFilterRelation;
 
 /**
@@ -58,25 +58,25 @@ public class RelationWithMatches extends ObjectFilterRelation {
 
 	// START BEAN PROPERTIES
 	@BeanField
-	private FeatureEvaluator<FeatureInputSingleObj> featureEvaluator;
+	private FeatureEvaluator<FeatureInputSingleObject> featureEvaluator;
 	
 	@BeanField @OptionalBean
-	private FeatureEvaluator<FeatureInputSingleObj> featureEvaluatorMatch;		// Optionally uses a different evaluator for the matched objects
+	private FeatureEvaluator<FeatureInputSingleObject> featureEvaluatorMatch;		// Optionally uses a different evaluator for the matched objects
 	
 	@BeanField
-	private ObjMaskMatcher objMaskMatcher;
+	private ObjectMatcher objMaskMatcher;
 	
 	/** Size of feature evaluation cache for featureEvaluatorMatch */
 	@BeanField
 	private int cacheSize = 50;
 	// END BEAN PROPERTIES
 	
-	private FeatureCalculatorSingle<FeatureInputSingleObj> evaluatorForMatch;
-	private FeatureCalculatorSingle<FeatureInputSingleObj> evaluatorForSource;
+	private FeatureCalculatorSingle<FeatureInputSingleObject> evaluatorForMatch;
+	private FeatureCalculatorSingle<FeatureInputSingleObject> evaluatorForSource;
 	private Map<ObjectMask,ObjectCollection> matches;
 		
 	@Override
-	protected void start(Optional<ImageDim> dim, ObjectCollection objsToFilter) throws OperationFailedException {
+	protected void start(Optional<ImageDimensions> dim, ObjectCollection objsToFilter) throws OperationFailedException {
 		super.start(dim, objsToFilter);
 
 		setupEvaluators();
@@ -99,17 +99,16 @@ public class RelationWithMatches extends ObjectFilterRelation {
 		// and cache it so we don't have to repeatedly calculate on the same object
 		evaluatorForMatch = new FeatureCalculatorCachedSingle<>(
 			featureEvaluatorMatch!=null ? featureEvaluatorMatch.createAndStartSession() : evaluatorForSource,
-			false,
 			cacheSize
 		);
 		
 	}
 	
 	@Override
-	protected boolean match(ObjectMask om, Optional<ImageDim> dim, RelationToValue relation) throws OperationFailedException {
+	protected boolean match(ObjectMask om, Optional<ImageDimensions> dim, RelationToValue relation) throws OperationFailedException {
 		try {
 			double val = evaluatorForSource.calc(
-				new FeatureInputSingleObj(om)
+				new FeatureInputSingleObject(om)
 			);
 			return doesMatchAllAssociatedObjects(
 				val,
@@ -134,7 +133,7 @@ public class RelationWithMatches extends ObjectFilterRelation {
 		for( ObjectMask match : matches ) {
 			
 			double valMatch = evaluatorForMatch.calc(
-				new FeatureInputSingleObj(match)
+				new FeatureInputSingleObject(match)
 			);
 			
 			if (!relation.isRelationToValueTrue(val, valMatch)) {
@@ -144,20 +143,20 @@ public class RelationWithMatches extends ObjectFilterRelation {
 		return true;
 	}
 	
-	private static Map<ObjectMask,ObjectCollection> createMatchesMap( List<ObjWithMatches> list ) {
+	private static Map<ObjectMask,ObjectCollection> createMatchesMap( List<MatchedObject> list ) {
 		return list.stream()
 	      .collect(Collectors.toMap(
-    		 ObjWithMatches::getSourceObj,
-    		 ObjWithMatches::getMatches
+    		 MatchedObject::getSourceObj,
+    		 MatchedObject::getMatches
     	  )
     	);
 	}
 
-	public ObjMaskMatcher getObjMaskMatcher() {
+	public ObjectMatcher getObjMaskMatcher() {
 		return objMaskMatcher;
 	}
 
-	public void setObjMaskMatcher(ObjMaskMatcher objMaskMatcher) {
+	public void setObjMaskMatcher(ObjectMatcher objMaskMatcher) {
 		this.objMaskMatcher = objMaskMatcher;
 	}
 
@@ -169,20 +168,20 @@ public class RelationWithMatches extends ObjectFilterRelation {
 		this.cacheSize = cacheSize;
 	}
 
-	public FeatureEvaluator<FeatureInputSingleObj> getFeatureEvaluator() {
+	public FeatureEvaluator<FeatureInputSingleObject> getFeatureEvaluator() {
 		return featureEvaluator;
 	}
 
-	public void setFeatureEvaluator(FeatureEvaluator<FeatureInputSingleObj> featureEvaluator) {
+	public void setFeatureEvaluator(FeatureEvaluator<FeatureInputSingleObject> featureEvaluator) {
 		this.featureEvaluator = featureEvaluator;
 	}
 
-	public FeatureEvaluator<FeatureInputSingleObj> getFeatureEvaluatorMatch() {
+	public FeatureEvaluator<FeatureInputSingleObject> getFeatureEvaluatorMatch() {
 		return featureEvaluatorMatch;
 	}
 
 	public void setFeatureEvaluatorMatch(
-			FeatureEvaluator<FeatureInputSingleObj> featureEvaluatorMatch) {
+			FeatureEvaluator<FeatureInputSingleObject> featureEvaluatorMatch) {
 		this.featureEvaluatorMatch = featureEvaluatorMatch;
 	}
 }

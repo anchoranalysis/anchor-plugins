@@ -34,11 +34,11 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.friendly.AnchorImpossibleSituationException;
 import org.anchoranalysis.image.bean.provider.ChnlProviderOne;
-import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
+import org.anchoranalysis.image.bean.provider.ObjectCollectionProvider;
 import org.anchoranalysis.image.channel.Channel;
-import org.anchoranalysis.image.objectmask.ObjectMask;
-import org.anchoranalysis.image.objectmask.ObjectCollection;
-import org.anchoranalysis.image.objmask.match.ObjWithMatches;
+import org.anchoranalysis.image.object.MatchedObject;
+import org.anchoranalysis.image.object.ObjectCollection;
+import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.apache.commons.math3.util.Pair;
 
@@ -50,10 +50,10 @@ public class ChnlProviderAssignFromIntersectingObjects extends ChnlProviderOne {
 
 	// START BEAN PROPERTIES
 	@BeanField
-	private ObjMaskProvider objsSource;
+	private ObjectCollectionProvider objsSource;
 	
 	@BeanField
-	private ObjMaskProvider objsTarget;
+	private ObjectCollectionProvider objsTarget;
 	// END BEAN PROPERTIES
 	
 	@Override
@@ -82,7 +82,7 @@ public class ChnlProviderAssignFromIntersectingObjects extends ChnlProviderOne {
 	 */
 	private static Stream<Pair<ObjectMask,ObjectMask>> streamIntersectingObjects(ObjectCollection source, ObjectCollection target) {
 		
-		List<ObjWithMatches> matchList = ObjMaskMatchUtilities.matchIntersectingObjects(source, target);
+		List<MatchedObject> matchList = ObjMaskMatchUtilities.matchIntersectingObjects(source, target);
 				
 		return matchList.stream().map( owm->
 			new Pair<>(
@@ -120,19 +120,19 @@ public class ChnlProviderAssignFromIntersectingObjects extends ChnlProviderOne {
 		);
 	}
 	
-	public ObjMaskProvider getObjsSource() {
+	public ObjectCollectionProvider getObjsSource() {
 		return objsSource;
 	}
 
-	public void setObjsSource(ObjMaskProvider objsSource) {
+	public void setObjsSource(ObjectCollectionProvider objsSource) {
 		this.objsSource = objsSource;
 	}
 
-	public ObjMaskProvider getObjsTarget() {
+	public ObjectCollectionProvider getObjsTarget() {
 		return objsTarget;
 	}
 
-	public void setObjsTarget(ObjMaskProvider objsTarget) {
+	public void setObjsTarget(ObjectCollectionProvider objsTarget) {
 		this.objsTarget = objsTarget;
 	}
 }

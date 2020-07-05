@@ -36,7 +36,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.unit.SpatialConversionUtilities;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.convert.ImageUnitConverter;
-import org.anchoranalysis.image.extent.ImageRes;
+import org.anchoranalysis.image.extent.ImageResolution;
 import org.anchoranalysis.image.orientation.DirectionVector;
 
 /**
@@ -64,7 +64,7 @@ public class UnitConverter extends AnchorBean<UnitConverter> {
 	 * @return distance expressed in desired units
 	 * @throws FeatureCalcException
 	 */
-	public double rslvDistance( double value, Optional<ImageRes> res, DirectionVector dirVector ) throws FeatureCalcException {
+	public double rslvDistance( double value, Optional<ImageResolution> res, DirectionVector dirVector ) throws FeatureCalcException {
 		
 		// If we aren't doing anything physical, we can just return the current value
 		if (isNonPhysical(res)) {
@@ -86,7 +86,7 @@ public class UnitConverter extends AnchorBean<UnitConverter> {
 	 * @return volume expressed in desired units
 	 * @throws FeatureCalcException
 	 */
-	public double rslvVolume( double value, Optional<ImageRes> res ) throws FeatureCalcException {
+	public double rslvVolume( double value, Optional<ImageResolution> res ) throws FeatureCalcException {
 		
 		// If we aren't doing anything physical, we can just return the current value
 		if (isNonPhysical(res)) {
@@ -107,7 +107,7 @@ public class UnitConverter extends AnchorBean<UnitConverter> {
 	 * @return area expressed in desired units
 	 * @throws FeatureCalcException
 	 */
-	public double rslvArea( double value, Optional<ImageRes> res ) throws FeatureCalcException {
+	public double rslvArea( double value, Optional<ImageResolution> res ) throws FeatureCalcException {
 		
 		// If we aren't doing anything physical, we can just return the current value
 		if (isNonPhysical(res)) {
@@ -126,7 +126,7 @@ public class UnitConverter extends AnchorBean<UnitConverter> {
 	 *  @throws FeatureCalcException if physical is set, but the resolution is not
 	 *  @return true iff the target-units for conversion are non-physical
 	 * */
-	private boolean isNonPhysical( Optional<ImageRes> res ) throws FeatureCalcException {
+	private boolean isNonPhysical( Optional<ImageResolution> res ) throws FeatureCalcException {
 		if (physical) {
 			checkResIsPresent(res);
 			return false;
@@ -135,7 +135,7 @@ public class UnitConverter extends AnchorBean<UnitConverter> {
 		}
 	}
 	
-	private void checkResIsPresent( Optional<ImageRes> res ) throws FeatureCalcException {
+	private void checkResIsPresent( Optional<ImageResolution> res ) throws FeatureCalcException {
 		if (!res.isPresent()) {
 			throw new FeatureCalcException("Image-resolution is required for conversions to physical units, but it is not specified");
 		}

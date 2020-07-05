@@ -35,8 +35,8 @@ import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.core.index.SetOperationFailedException;
 import org.anchoranalysis.image.contour.Contour;
-import org.anchoranalysis.image.objectmask.ObjectMask;
-import org.anchoranalysis.image.outline.traverser.contiguouspath.PointsListNghbUtilities;
+import org.anchoranalysis.image.object.ObjectMask;
+import org.anchoranalysis.image.outline.traverser.contiguouspath.PointsListNeighborUtilities;
 import org.anchoranalysis.plugin.opencv.CVFindContours;
 import org.anchoranalysis.test.TestLoader;
 import org.anchoranalysis.test.image.io.TestLoaderImageIO;
@@ -65,14 +65,14 @@ public class PointsFromContourTraverserTest {
 		for( Contour c : contours ) {
 			List<Point3i> pts = c.pointsDiscrete();
 			assertTrue( areFirstLastNghb(pts) );
-			assertTrue( PointsListNghbUtilities.areNghbDistinct(pts) );
-			assertTrue( PointsListNghbUtilities.areAllPointsInBigNghb(pts) );
+			assertTrue( PointsListNeighborUtilities.areNghbDistinct(pts) );
+			assertTrue( PointsListNeighborUtilities.areAllPointsInBigNghb(pts) );
 		}
 	}
 		
 	private static boolean areFirstLastNghb( List<Point3i> pts ) {
 		Point3i first = pts.get(0);
 		Point3i last = pts.get( pts.size() -1 );
-		return PointsListNghbUtilities.arePointsNghb(first, last );		
+		return PointsListNeighborUtilities.arePointsNghb(first, last );		
 	}
 }

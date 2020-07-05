@@ -32,6 +32,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.io.bean.descriptivename.DescriptiveNameFromFile;
 import org.anchoranalysis.io.input.descriptivename.DescriptiveFile;
 import org.apache.commons.io.FilenameUtils;
@@ -46,12 +47,12 @@ import com.owenfeehan.pathpatternfinder.patternelements.PatternElement;
  * from the first variable to the last-variable as the
  * descriptive-name
  * 
- * @author owen
+ * @author Owen Feehan
  */
 public class PatternSpan extends DescriptiveNameFromFile {
 
 	@Override
-	public List<DescriptiveFile> descriptiveNamesFor(Collection<File> files, String elseName) {
+	public List<DescriptiveFile> descriptiveNamesFor(Collection<File> files, String elseName, LogErrorReporter logger) {
 	
 		// Convert to list
 		List<Path> paths = listConvertToPath(files);

@@ -40,7 +40,7 @@ import org.anchoranalysis.plugin.mpp.sgmn.cfg.optscheme.AccptProbCalculator;
 /**
  * How assignments and other decisions are made in the SimulatedAnnealing optimizaton
  * 
- * @author FEEHANO
+ * @author Owen Feehan
  *
  * @param <S> reporting back type
  * @param <T> state-type for optimization

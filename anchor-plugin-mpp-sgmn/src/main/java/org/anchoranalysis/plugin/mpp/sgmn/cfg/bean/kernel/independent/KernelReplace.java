@@ -33,7 +33,7 @@ import org.anchoranalysis.anchor.mpp.mark.set.UpdateMarkSetException;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.functional.OptionalUtilities;
-import org.anchoranalysis.image.extent.ImageDim;
+import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.mpp.sgmn.bean.kernel.Kernel;
 import org.anchoranalysis.mpp.sgmn.bean.kernel.KernelPosNeg;
 import org.anchoranalysis.mpp.sgmn.kernel.KernelCalcContext;
@@ -42,10 +42,6 @@ import org.apache.commons.lang.ArrayUtils;
 
 public abstract class KernelReplace<T> extends KernelPosNeg<T> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
 	private KernelBirth<T> kernelBirth;
 	private KernelDeath<T> kernelDeath;
 	
@@ -57,18 +53,14 @@ public abstract class KernelReplace<T> extends KernelPosNeg<T> {
 	// END BEAN PROPERTIES
 	
 	private boolean hasBeenInit = false;
-	
-	public KernelReplace() {
-		super();
-	}
 
 	/** Must be called before makeProposal */
 	protected void init(KernelBirth<T> kernelBirth, KernelDeath<T> kernelDeath) {
 		this.kernelBirth = kernelBirth;
 		this.kernelDeath = kernelDeath;
+		assert(kernelDeath!=null);
 		hasBeenInit = true;
 	}
-
 	
 	@Override
 	public Optional<T> makeProposal(Optional<T> exst, KernelCalcContext context) throws KernelCalcNRGException {
@@ -88,13 +80,15 @@ public abstract class KernelReplace<T> extends KernelPosNeg<T> {
 	}
 
 	@Override
-	public double calcAccptProb(int exstSize, int propSize, double poissonIntens, ImageDim sceneSize,
+	public double calcAccptProb(int exstSize, int propSize, double poissonIntens, ImageDimensions sceneSize,
 			double densityRatio) {
 		return Math.min( densityRatio, 1.0 );
 	}
 
 	@Override
 	public String dscrLast() {
+		assert(hasBeenInit);
+		assert(kernelDeath!=null);
 		return String.format("replace_%d(%s->%s)", birthRepeats, changedID(kernelDeath), changedID(kernelBirth)  );
 	}
 

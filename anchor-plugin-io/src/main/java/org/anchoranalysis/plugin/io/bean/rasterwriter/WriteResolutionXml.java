@@ -26,12 +26,11 @@ package org.anchoranalysis.plugin.io.bean.rasterwriter;
  * #L%
  */
 
-import java.nio.ByteBuffer;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.image.extent.ImageRes;
+import org.anchoranalysis.image.extent.ImageResolution;
 import org.anchoranalysis.image.io.RasterIOException;
 import org.anchoranalysis.image.io.bean.rasterwriter.RasterWriter;
 import org.anchoranalysis.image.io.generator.raster.series.ImgStackSeries;
@@ -72,14 +71,14 @@ public class WriteResolutionXml extends RasterWriter {
 	}
 
 	@Override
-	public void writeTimeSeriesStackByte(ImgStackSeries<ByteBuffer> stackSeries, Path filePath, boolean makeRGB) throws RasterIOException {
+	public void writeTimeSeriesStackByte(ImgStackSeries stackSeries, Path filePath, boolean makeRGB) throws RasterIOException {
 		writer.writeTimeSeriesStackByte(stackSeries, filePath, makeRGB);
 
 		// We assume all the stacks in the series have the same dimension, and write only one metadata file
 		writeResolutionXml( filePath, stackSeries.get(0).getDimensions().getRes() );
 	}
 	
-	private void writeResolutionXml( Path filePath, ImageRes res ) throws RasterIOException {
+	private void writeResolutionXml( Path filePath, ImageResolution res ) throws RasterIOException {
 		Path pathOut = Paths.get( filePath.toString() + ".xml" );
 		AnchorMetadataXml.writeResolutionXml( pathOut, res );		
 	}

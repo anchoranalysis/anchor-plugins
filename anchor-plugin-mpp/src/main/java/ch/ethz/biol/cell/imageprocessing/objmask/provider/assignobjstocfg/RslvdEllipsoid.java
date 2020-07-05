@@ -31,9 +31,9 @@ import org.anchoranalysis.anchor.mpp.mark.conic.MarkEllipsoid;
 
 import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
-import org.anchoranalysis.image.extent.ImageDim;
-import org.anchoranalysis.image.extent.ImageRes;
-import org.anchoranalysis.image.objectmask.ObjectMask;
+import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.image.extent.ImageResolution;
+import org.anchoranalysis.image.object.ObjectMask;
 
 public class RslvdEllipsoid {
 	private MarkEllipsoid mark;
@@ -41,16 +41,16 @@ public class RslvdEllipsoid {
 	private boolean include;
 	private RslvdObjMaskList assignedObjs = new RslvdObjMaskList();
 	private double maxRadius;
-	private ImageDim dim;
+	private ImageDimensions dim;
 	
-	public RslvdEllipsoid(MarkEllipsoid mark, ImageDim dim, RegionMembershipWithFlags rm, BinaryValuesByte bvb ) {
+	public RslvdEllipsoid(MarkEllipsoid mark, ImageDimensions dim, RegionMembershipWithFlags rm, BinaryValuesByte bvb ) {
 		super();
 		this.mark = mark;
 		this.objMask = mark.calcMask(dim, rm, bvb).getMask();
 		this.include = true;
 		this.dim = dim;
 		
-		ImageRes res = dim.getRes();
+		ImageResolution res = dim.getRes();
 		double maxRes = threeWayMax( res.getX(), res.getY(), res.getZ() );
 		
 		Point3d radii = mark.getRadii();

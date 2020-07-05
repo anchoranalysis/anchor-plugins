@@ -32,9 +32,9 @@ import java.nio.ByteBuffer;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.Extent;
-import org.anchoranalysis.image.extent.ImageDim;
-import org.anchoranalysis.image.objectmask.ObjectMask;
-import org.anchoranalysis.image.objectmask.ObjectCollection;
+import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.image.object.ObjectCollection;
+import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.anchoranalysis.image.voxel.box.factory.VoxelBoxFactory;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
@@ -45,14 +45,14 @@ public class ObjMaskProviderExpandZ extends ObjMaskProviderDimensions {
 	@Override
 	public ObjectCollection createFromObjs(ObjectCollection objs) throws CreateException {
 		
-		ImageDim dim = createDim();
+		ImageDimensions dim = createDim();
 				
 		return objs.stream().map( om->
 			expandZ(om,dim)
 		);
 	}
 	
-	private static ObjectMask expandZ( ObjectMask om, ImageDim dim ) throws CreateException {
+	private static ObjectMask expandZ( ObjectMask om, ImageDimensions dim ) throws CreateException {
 		if (om.getBoundingBox().extent().getZ()!=1) {
 			throw new CreateException( String.format("Existing object has a z extent of %d. It must be 1", om.getBoundingBox().extent().getZ() ) );
 		}

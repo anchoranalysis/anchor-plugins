@@ -30,7 +30,7 @@ package org.anchoranalysis.plugin.image.bean.scale;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.bean.scale.ScaleCalculator;
-import org.anchoranalysis.image.extent.ImageDim;
+import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.scale.ScaleFactor;
 
 public class ScaleCalculatorMinXYRes extends ScaleCalculator {
@@ -41,7 +41,7 @@ public class ScaleCalculatorMinXYRes extends ScaleCalculator {
 	// STOP BEAN PROPERTIES
 	
 	@Override
-	public ScaleFactor calc(ImageDim srcDim) throws OperationFailedException {
+	public ScaleFactor calc(ImageDimensions srcDim) throws OperationFailedException {
 
 		// If there is no resolution information we cannot scale
 		if (srcDim.getRes().getX()==0 || srcDim.getRes().getY()==0) {
