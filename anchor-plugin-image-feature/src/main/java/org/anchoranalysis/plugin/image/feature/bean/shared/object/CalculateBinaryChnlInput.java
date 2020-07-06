@@ -38,12 +38,8 @@ import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.anchoranalysis.image.voxel.datatype.IncorrectVoxelDataTypeException;
-import org.apache.commons.lang.builder.EqualsBuilder;
-import org.apache.commons.lang3.builder.HashCodeBuilder;
-
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
-import lombok.Value;
 
 @AllArgsConstructor @EqualsAndHashCode(callSuper=false)
 class CalculateBinaryChnlInput<T extends FeatureInputNRG> extends FeatureCalculation<FeatureInputSingleObject, T> {

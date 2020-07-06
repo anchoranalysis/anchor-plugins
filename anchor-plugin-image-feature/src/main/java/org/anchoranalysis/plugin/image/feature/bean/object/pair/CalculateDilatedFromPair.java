@@ -43,7 +43,6 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
 
 /** Calculates a dilated-object from a pair */
 class CalculateDilatedFromPair extends FeatureCalculation<ObjectMask, FeatureInputPairObjects> {
-
 	
 	private ResolvedCalculation<FeatureInputSingleObject, FeatureInputPairObjects> calcInput;
 
