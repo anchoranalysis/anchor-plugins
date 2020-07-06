@@ -161,7 +161,7 @@ public class QuickExperiment<S> extends Experiment {
 		Path pathFolderOut = BeanPathUtilities.pathRelativeToBean(this, folderOutput);
 		
 		OutputManagerStack outputManager = new OutputManagerStack();
-		outputManager.setDelExistingFolder(true);
+		outputManager.setSilentlyDeleteExisting(true);
 		outputManager.setOutputEnabled( outputEnabled );
 		outputManager.setObjMaskCollectionOutputEnabled( objMaskCollectionOutputEnabled );
 		outputManager.setStackCollectionOutputEnabled( stackCollectionOutputEnabled );
