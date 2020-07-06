@@ -33,7 +33,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.log.LogErrorReporter;
+import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.core.text.TypedValue;
 import org.anchoranalysis.experiment.JobExecutionException;
 import org.anchoranalysis.experiment.bean.task.TaskWithoutSharedState;
@@ -64,7 +64,7 @@ public class ReportFeaturesManifest extends TaskWithoutSharedState<ManifestCoupl
 	@Override
 	public void doJobOnInputObject(InputBound<ManifestCouplingDefinition,NoSharedState> params ) throws JobExecutionException {
 		
-		LogErrorReporter logErrorReporter = params.getLogger();
+		Logger logger = params.getLogger();
 		ManifestCouplingDefinition input = params.getInputObject();
 		BoundOutputManagerRouteErrors outputManager = params.getOutputManager();
 		
@@ -82,7 +82,7 @@ public class ReportFeaturesManifest extends TaskWithoutSharedState<ManifestCoupl
 			}
 			
 			writer.get().writeHeaders(
-				ReportFeatureUtilities.genHeaderNames( listReportFeatures, logErrorReporter )
+				ReportFeatureUtilities.genHeaderNames( listReportFeatures, logger )
 			);
 
 			
@@ -94,7 +94,7 @@ public class ReportFeaturesManifest extends TaskWithoutSharedState<ManifestCoupl
 				List<TypedValue> rowElements = ReportFeatureUtilities.genElementList(
 					listReportFeatures,
 					mr.getFileManifest(),
-					logErrorReporter
+					logger
 				); 
 
 				try {

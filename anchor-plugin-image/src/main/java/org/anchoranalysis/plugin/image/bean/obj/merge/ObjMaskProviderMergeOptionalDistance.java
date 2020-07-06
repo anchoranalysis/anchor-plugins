@@ -52,7 +52,7 @@ public abstract class ObjMaskProviderMergeOptionalDistance extends ObjMaskProvid
 	// END BEAN FIELDS
 	
 	protected BeforeCondition maybeDistanceCondition() {
-		return new DistanceCondition(getMaxDist(), suppressZ, getLogger().getLogReporter() );
+		return new DistanceCondition(getMaxDist(), suppressZ, getLogger().messageLogger() );
 	}
 
 	public void setMaxDist(UnitValueDistance maxDist) {

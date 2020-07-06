@@ -49,7 +49,7 @@ public final class MaxSliceArea extends FeatureSingleMemoRegion {
 			input.get().getResOptional()
 		);
 		
-		getLogger().getLogReporter().logFormatted("MaxSliceArea = %f\n", retVal);
+		getLogger().messageLogger().logFormatted("MaxSliceArea = %f\n", retVal);
 		return retVal;
 	}
 

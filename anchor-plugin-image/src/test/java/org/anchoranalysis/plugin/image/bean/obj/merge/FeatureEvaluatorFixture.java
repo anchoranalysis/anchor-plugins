@@ -28,7 +28,7 @@ package org.anchoranalysis.plugin.image.bean.obj.merge;
 
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
-import org.anchoranalysis.core.log.LogErrorReporter;
+import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.shared.SharedFeaturesInitParams;
@@ -39,7 +39,7 @@ class FeatureEvaluatorFixture {
 	
 	private FeatureEvaluatorFixture() {}
 	
-	public static <T extends FeatureInput> FeatureEvaluatorNrgStack<T> createNrg( Feature<T> feature, LogErrorReporter logger ) throws CreateException {
+	public static <T extends FeatureInput> FeatureEvaluatorNrgStack<T> createNrg( Feature<T> feature, Logger logger ) throws CreateException {
 		FeatureEvaluatorNrgStack<T> eval = new FeatureEvaluatorNrgStack<>();
 		eval.setFeatureProvider(
 			ProviderFixture.providerFor( feature )

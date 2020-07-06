@@ -29,7 +29,7 @@ package org.anchoranalysis.plugin.mpp.sgmn.cfg.bean.optscheme.termination;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.Positive;
-import org.anchoranalysis.core.log.LogReporter;
+import org.anchoranalysis.core.log.MessageLogger;
 import org.anchoranalysis.mpp.sgmn.bean.optscheme.termination.TerminationCondition;
 
 /**
@@ -56,7 +56,7 @@ public class ConstantNRG extends TerminationCondition {
 	private int rep = 0;
 		
 	@Override
-	public boolean continueIterations(int crntIter, double score, int size, LogReporter logReporter ) {
+	public boolean continueIterations(int crntIter, double score, int size, MessageLogger logger ) {
 		
 		// We increase our repetition counter, if the energy total is identical to the last time
 		if (Math.abs( score - prevNRG) < this.tolerance ) {
@@ -70,7 +70,7 @@ public class ConstantNRG extends TerminationCondition {
 		if (rep < numRep) {
 			return true;
 		} else {
-			logReporter.logFormatted("ConstantNRG returned false at iter=%d", crntIter );
+			logger.logFormatted("ConstantNRG returned false at iter=%d", crntIter );
 			return false;
 		}
 	}

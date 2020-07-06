@@ -32,7 +32,7 @@ import org.anchoranalysis.core.color.ColorList;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.geometry.Point3i;
-import org.anchoranalysis.core.log.LogErrorReporter;
+import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.experiment.task.Task;
 import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
 import org.anchoranalysis.image.bean.provider.ObjectCollectionProvider;
@@ -69,7 +69,7 @@ public abstract class ExportObjectsBase<T extends InputFromManager, S> extends T
 	private int paddingZ = 0;
 	// END BEAN PROPERTIES
 	
-	protected ObjectCollection inputObjs( ImageInitParams so, LogErrorReporter logger ) throws CreateException, InitException {
+	protected ObjectCollection inputObjs( ImageInitParams so, Logger logger ) throws CreateException, InitException {
 		ObjectCollectionProvider objsDup = objs.duplicateBean();
 		objsDup.initRecursive(so,logger);
 		return objsDup.create();

@@ -1,7 +1,7 @@
 package ch.ethz.biol.cell.mpp.feedback.reporter;
 
 import org.anchoranalysis.anchor.mpp.feature.nrg.cfg.CfgNRGPixelized;
-import org.anchoranalysis.core.log.LogReporter;
+import org.anchoranalysis.core.log.MessageLogger;
 import org.anchoranalysis.mpp.sgmn.bean.optscheme.feedback.ReporterAgg;
 import org.anchoranalysis.mpp.sgmn.optscheme.feedback.OptimizationFeedbackEndParams;
 import org.anchoranalysis.mpp.sgmn.optscheme.feedback.OptimizationFeedbackInitParams;
@@ -47,7 +47,7 @@ public final class OptimizationStepLogReporter extends ReporterAgg<CfgNRGPixeliz
 	
 	private StopWatch timer = null;
 	
-	private LogReporter logReporter;
+	private MessageLogger logger;
 	
 	// Constructor
 	public OptimizationStepLogReporter() {
@@ -57,7 +57,7 @@ public final class OptimizationStepLogReporter extends ReporterAgg<CfgNRGPixeliz
 	@Override
 	public void reportNewBest( Reporting<CfgNRGPixelized> reporting ) throws ReporterException {
 		
-		logReporter.logFormatted(
+		logger.logFormatted(
 			"*** itr=%d  size=%d  best_nrg=%e  kernel=%s",
 			reporting.getIter(),
 			reporting.getCfgNRGAfter().getCfg().size(),
@@ -69,7 +69,7 @@ public final class OptimizationStepLogReporter extends ReporterAgg<CfgNRGPixeliz
 	@Override
 	public void aggReport( Reporting<CfgNRGPixelized> reporting, Aggregator agg ) {
 
-		logReporter.logFormatted(
+		logger.logFormatted(
 			"itr=%d  time=%e  tpi=%e  %s",
 			reporting.getIter(),
 			((double) timer.getTime()) / 1000,
@@ -110,7 +110,7 @@ public final class OptimizationStepLogReporter extends ReporterAgg<CfgNRGPixeliz
 		timer = new StopWatch();
 		timer.start();
 		
-		logReporter = initParams.getInitContext().getLogger().getLogReporter();
+		logger = initParams.getInitContext().getLogger().messageLogger();
 	}
 	
 	@Override

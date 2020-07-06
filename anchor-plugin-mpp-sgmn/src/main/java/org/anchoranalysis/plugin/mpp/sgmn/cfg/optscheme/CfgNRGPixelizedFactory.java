@@ -33,7 +33,7 @@ import org.anchoranalysis.anchor.mpp.feature.nrg.cfg.CfgWithNRGTotal;
 
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
-import org.anchoranalysis.core.log.LogErrorReporter;
+import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.mpp.sgmn.kernel.KernelCalcContext;
 
@@ -46,7 +46,7 @@ public class CfgNRGPixelizedFactory {
 	public static CfgNRGPixelized createFromCfg(
 		Cfg cfg,
 		KernelCalcContext context,
-		LogErrorReporter logger
+		Logger logger
 	) throws CreateException {
 		try {
 			return new CfgNRGPixelized(

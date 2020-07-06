@@ -74,7 +74,7 @@ public class ThresholdedFeature extends ObjectFilterRelation {
 		}
 		
 		if (debug) {
-			getLogger().getLogReporter().log( String.format("START Feature Threshold") );
+			getLogger().messageLogger().log( String.format("START Feature Threshold") );
 		}
 	}
 
@@ -94,9 +94,9 @@ public class ThresholdedFeature extends ObjectFilterRelation {
 		
 		if(debug) {
 			if (succ) {
-				getLogger().getLogReporter().logFormatted("%s\tVal=%f\tthreshold=%f\t  (Accepted)", om.centerOfGravity(), val, threshold);
+				getLogger().messageLogger().logFormatted("%s\tVal=%f\tthreshold=%f\t  (Accepted)", om.centerOfGravity(), val, threshold);
 			} else {
-				getLogger().getLogReporter().logFormatted("%s\tVal=%f\tthreshold=%f", om.centerOfGravity(), val, threshold);
+				getLogger().messageLogger().logFormatted("%s\tVal=%f\tthreshold=%f", om.centerOfGravity(), val, threshold);
 			}
 		}
 		
@@ -107,7 +107,7 @@ public class ThresholdedFeature extends ObjectFilterRelation {
 	protected void end() throws OperationFailedException {
 		super.end();
 		if (debug) {
-			getLogger().getLogReporter().log( String.format("END Feature Threshold") );
+			getLogger().messageLogger().log( String.format("END Feature Threshold") );
 		}
 	}
 

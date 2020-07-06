@@ -31,7 +31,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.log.LogErrorReporter;
+import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.core.text.TypedValue;
 import org.anchoranalysis.io.bean.report.feature.ReportFeature;
 
@@ -41,7 +41,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access=AccessLevel.PRIVATE)
 class ReportFeatureUtilities {
 
-	public static <T> List<String> genHeaderNames( List<? extends ReportFeature<T>> list, LogErrorReporter logger )	{
+	public static <T> List<String> genHeaderNames( List<? extends ReportFeature<T>> list, Logger logger )	{
 		
 		// Create a list of headers
 		List<String> headerNames = new ArrayList<>();
@@ -51,14 +51,14 @@ class ReportFeatureUtilities {
 				name = feat.genTitleStr();
 			} catch (OperationFailedException e) {
 				name = "error";
-				logger.getErrorReporter().recordError(ReportFeatureUtilities.class, e);
+				logger.errorReporter().recordError(ReportFeatureUtilities.class, e);
 			}
 			headerNames.add( name );
 		}
 		return headerNames;
 	}
 	
-	public static <T> List<TypedValue> genElementList( List<? extends ReportFeature<T>> list, T obj, LogErrorReporter logger ) {
+	public static <T> List<TypedValue> genElementList( List<? extends ReportFeature<T>> list, T obj, Logger logger ) {
 		
 		List<TypedValue> rowElements = new ArrayList<>();
 		
@@ -68,7 +68,7 @@ class ReportFeatureUtilities {
 				value = feat.genFeatureStrFor( obj, logger );
 			} catch (OperationFailedException e) {
 				value = "error";
-				logger.getErrorReporter().recordError(ReportFeatureUtilities.class, e);
+				logger.errorReporter().recordError(ReportFeatureUtilities.class, e);
 			}
 
 			rowElements.add( new TypedValue(value, feat.isNumeric()) );

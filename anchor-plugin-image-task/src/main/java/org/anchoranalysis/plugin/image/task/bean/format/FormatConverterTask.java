@@ -34,7 +34,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
-import org.anchoranalysis.core.log.LogErrorReporter;
+import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.core.progress.ProgressReporterConsole;
 import org.anchoranalysis.core.progress.ProgressReporterNull;
 import org.anchoranalysis.experiment.JobExecutionException;
@@ -151,13 +151,13 @@ public class FormatConverterTask extends RasterTask {
 		}
 	}
 	
-	private void convertEachTimepoint( int seriesIndex, Set<String> chnlNames, int numSeries, int sizeT, ChnlGetter chnlGetter, LogErrorReporter logErrorReporter ) throws AnchorIOException {
+	private void convertEachTimepoint( int seriesIndex, Set<String> chnlNames, int numSeries, int sizeT, ChnlGetter chnlGetter, Logger logger ) throws AnchorIOException {
 		
 		for( int t=0; t<sizeT; t++) {
 		
 			CalcOutputName calcOutputName = new CalcOutputName(seriesIndex, numSeries, t, sizeT, suppressSeries);
 			
-			logErrorReporter.getLogReporter().logFormatted("Starting time-point: %d", t);
+			logger.messageLogger().logFormatted("Starting time-point: %d", t);
 			
 			ChnlGetterForTimepoint getterForTimepoint = new ChnlGetterForTimepoint(chnlGetter, t);
 			
@@ -165,10 +165,10 @@ public class FormatConverterTask extends RasterTask {
 				chnlNames,
 				getterForTimepoint,
 				(name,stack) -> addStackToOutput(name, stack, calcOutputName),
-				logErrorReporter
+				logger
 			);
 			
-			logErrorReporter.getLogReporter().logFormatted("Ending time-point: %d", t);
+			logger.messageLogger().logFormatted("Ending time-point: %d", t);
 		}
 		
 	}

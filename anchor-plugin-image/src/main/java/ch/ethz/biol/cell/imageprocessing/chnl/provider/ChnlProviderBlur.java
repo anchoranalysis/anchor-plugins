@@ -57,7 +57,7 @@ public class ChnlProviderBlur extends ChnlProviderOne {
 			strategy.blur(
 				chnl.getVoxelBox(),
 				chnl.getDimensions(),
-				getLogger().getLogReporter()
+				getLogger().messageLogger()
 			);
 		} catch (OperationFailedException e) {
 			throw new CreateException(e);

@@ -29,7 +29,7 @@ package org.anchoranalysis.plugin.image.task.imagefeature.calculator;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.log.LogErrorReporter;
+import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.bean.list.FeatureListProvider;
@@ -44,7 +44,7 @@ class ExtractFromProvider {
 	
 	private ExtractFromProvider() {}
 	
-	public static NRGStackWithParams extractStack( StackProvider nrgStackProvider, ImageInitParams initParams, LogErrorReporter logger ) throws OperationFailedException {
+	public static NRGStackWithParams extractStack( StackProvider nrgStackProvider, ImageInitParams initParams, Logger logger ) throws OperationFailedException {
 		
 		try {
 			// Extract the NRG stack
@@ -62,7 +62,7 @@ class ExtractFromProvider {
 		FeatureListProvider<T> featureProvider,
 		String featureProviderName,
 		SharedFeaturesInitParams initParams,
-		LogErrorReporter logger
+		Logger logger
 	) throws FeatureCalcException {
 
 		try {

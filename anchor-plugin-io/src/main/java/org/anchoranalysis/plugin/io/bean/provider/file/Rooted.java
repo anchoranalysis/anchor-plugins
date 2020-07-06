@@ -28,7 +28,6 @@ package org.anchoranalysis.plugin.io.bean.provider.file;
 
 
 import java.io.File;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Collection;
 
@@ -85,12 +84,18 @@ public class Rooted extends FileProvider {
 				disableDebugMode
 			);
 
-			boolean dirNewExists = Files.exists(dirNew); 
+			boolean dirNewExists = dirNew.toFile().exists(); 
 					
-			// As a special behaviour, if the debug folder doesn't exist, we try and again with the non-debug folder
+			// As a special behaviour, if the debug folder doesn't exist
+			// we try and again with the non-debug folder
 			if (params.isDebugModeActivated() && !dirNewExists) {
-				dirNew = RootedFilePathUtilities.determineNewPath( dirOrig, rootName, false, disableDebugMode );
-				dirNewExists = Files.exists(dirNew);
+				dirNew = RootedFilePathUtilities.determineNewPath(
+					dirOrig,
+					rootName,
+					false,
+					disableDebugMode
+				);
+				dirNewExists = dirNew.toFile().exists();
 			}
 			
 			if (!dirNewExists) {

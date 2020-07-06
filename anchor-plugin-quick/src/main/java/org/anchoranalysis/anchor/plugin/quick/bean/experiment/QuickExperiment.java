@@ -42,7 +42,7 @@ import org.anchoranalysis.experiment.ExperimentExecutionException;
 import org.anchoranalysis.experiment.bean.Experiment;
 import org.anchoranalysis.experiment.bean.identifier.ExperimentIdentifierConstant;
 import org.anchoranalysis.experiment.bean.io.InputOutputExperiment;
-import org.anchoranalysis.experiment.bean.logreporter.ConsoleLogReporterBean;
+import org.anchoranalysis.experiment.bean.log.ToConsole;
 import org.anchoranalysis.experiment.bean.processor.SequentialProcessor;
 import org.anchoranalysis.experiment.task.Task;
 import org.anchoranalysis.io.bean.provider.file.SearchDirectory;
@@ -187,7 +187,7 @@ public class QuickExperiment<S> extends Experiment {
 	}
 	
 	@Override
-	public void doExperiment(ExperimentExecutionArguments expArgs)
+	public void doExperiment(ExperimentExecutionArguments arguments)
 			throws ExperimentExecutionException {
 		delegate.associateXml( getXMLConfiguration() );
 		
@@ -209,7 +209,7 @@ public class QuickExperiment<S> extends Experiment {
 			delegate.setInput( createInputManagerImageFile(fs) );
 			
 			try {
-				delegate.setOutput( createOutputManager(fs.getDirectoryAsPathEnsureAbsolute( expArgs.createInputContext() )) );
+				delegate.setOutput( createOutputManager(fs.getDirectoryAsPathEnsureAbsolute( arguments.createInputContext() )) );
 				
 			} catch (IOException e) {
 				throw new ExperimentExecutionException(e);
@@ -217,7 +217,7 @@ public class QuickExperiment<S> extends Experiment {
 		}
 		
 		// Log Reporter
-		delegate.setLogReporterExperiment( new ConsoleLogReporterBean() );
+		delegate.setLoggerExperiment( new ToConsole() );
 		
 		
 		// Task
@@ -231,7 +231,7 @@ public class QuickExperiment<S> extends Experiment {
 			throw new ExperimentExecutionException(e);
 		}
 		
-		delegate.doExperiment(expArgs);
+		delegate.doExperiment(arguments);
 	}
 
 	@Override

@@ -34,7 +34,7 @@ import java.util.Optional;
 
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
-import org.anchoranalysis.core.log.LogErrorReporter;
+import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.core.params.KeyValueParams;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.extent.Extent;
@@ -62,7 +62,7 @@ public class CreateVoxelBoxFromPixelwiseFeature {
 	}
 	
 	// objMask can be null
-	public VoxelBox<ByteBuffer> createVoxelBoxFromPixelScore( PixelScore pixelScore, LogErrorReporter logger ) throws CreateException {
+	public VoxelBox<ByteBuffer> createVoxelBoxFromPixelScore( PixelScore pixelScore, Logger logger ) throws CreateException {
 	
 		// Sets up the Feature
 		try {
@@ -78,7 +78,7 @@ public class CreateVoxelBoxFromPixelwiseFeature {
 		}
 	}
 	
-	private void setPixels( VoxelBox<ByteBuffer> vbOut, PixelScore pixelScore, LogErrorReporter logErrorReporter ) throws FeatureCalcException, InitException {
+	private void setPixels( VoxelBox<ByteBuffer> vbOut, PixelScore pixelScore, Logger logger ) throws FeatureCalcException, InitException {
 		
 		pixelScore.init(
 			createHistograms(),

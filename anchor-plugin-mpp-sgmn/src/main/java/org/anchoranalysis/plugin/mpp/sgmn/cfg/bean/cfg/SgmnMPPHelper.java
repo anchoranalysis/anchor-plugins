@@ -35,7 +35,7 @@ import org.anchoranalysis.anchor.mpp.feature.nrg.scheme.NRGSchemeWithSharedFeatu
 
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
-import org.anchoranalysis.core.log.LogErrorReporter;
+import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.core.name.provider.NamedProvider;
 import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 import org.anchoranalysis.core.params.KeyValueParams;
@@ -85,7 +85,7 @@ class SgmnMPPHelper {
 		NRGSchemeCreator nrgSchemeCreator,
 		int nrgSchemeIndCacheSize,
 		SharedFeaturesInitParams featureInit,
-		LogErrorReporter logger
+		Logger logger
 	) throws InitException {
 		
 		nrgSchemeCreator.initRecursive(featureInit, logger);
@@ -115,7 +115,7 @@ class SgmnMPPHelper {
 		}
 	}
 	
-	public static void initKernelProposers( KernelProposer<CfgNRGPixelized> kernelProposer, CfgGen cfgGen, MPPInitParams soMPP, LogErrorReporter logger ) throws InitException {
+	public static void initKernelProposers( KernelProposer<CfgNRGPixelized> kernelProposer, CfgGen cfgGen, MPPInitParams soMPP, Logger logger ) throws InitException {
 		// The initial initiation to establish the kernelProposer
 		kernelProposer.init();
 		kernelProposer.initWithProposerSharedObjects( soMPP, logger );

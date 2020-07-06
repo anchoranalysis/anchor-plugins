@@ -35,7 +35,7 @@ import org.anchoranalysis.anchor.mpp.bean.init.MPPInitParams;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.log.LogErrorReporter;
+import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.core.text.TypedValue;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
 import org.anchoranalysis.experiment.JobExecutionException;
@@ -118,7 +118,7 @@ public class ReportFeaturesMulti extends Task<MultiInput,CSVWriter> {
 		}
 	}
 	
-	private void writeFeaturesIntoReporter(MPPInitParams soMPP, CSVWriter writer, String inputDescriptiveName, LogErrorReporter logger) {
+	private void writeFeaturesIntoReporter(MPPInitParams soMPP, CSVWriter writer, String inputDescriptiveName, Logger logger) {
 		List<TypedValue> rowElements = ReportFeatureUtilities.genElementList(
 			listReportFeatures,
 			soMPP,

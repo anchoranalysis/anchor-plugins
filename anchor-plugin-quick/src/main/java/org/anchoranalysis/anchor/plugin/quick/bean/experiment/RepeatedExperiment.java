@@ -32,7 +32,7 @@ import org.anchoranalysis.experiment.ExperimentExecutionArguments;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
 import org.anchoranalysis.experiment.bean.identifier.ExperimentIdentifier;
 import org.anchoranalysis.experiment.bean.io.InputOutputExperiment;
-import org.anchoranalysis.experiment.bean.logreporter.LogReporterBean;
+import org.anchoranalysis.experiment.bean.log.LoggingDestination;
 import org.anchoranalysis.experiment.bean.processor.JobProcessor;
 import org.anchoranalysis.io.bean.input.InputManager;
 import org.anchoranalysis.io.input.InputFromManager;
@@ -96,16 +96,12 @@ class RepeatedExperiment<T extends InputFromManager,S> {
 		}
 	}
 
-	public void setOutputNameConfigCopy(String outputNameConfigCopy) {
-		delegate.setOutputNameConfigCopy(outputNameConfigCopy);
-	}
-
-	public void setLogReporterExperiment(LogReporterBean logReporter) {
-		delegate.setLogReporterExperiment(logReporter);
+	public void setLoggerExperiment(LoggingDestination logger) {
+		delegate.setLoggerExperiment(logger);
 	}
 	
-	public void setLogReporterTask(LogReporterBean logReporter) {
-		delegate.setLogReporterTask(logReporter);
+	public void setLoggerTask(LoggingDestination logger) {
+		delegate.setLoggerTask(logger);
 	}
 	
 	public void setOutput(OutputManager output) {
