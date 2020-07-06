@@ -72,8 +72,7 @@ class CalculatePairIntersection extends FeatureCalculation<Optional<ObjectMask>,
 		int iterations2,
 		boolean do3D,
 		int iterationsErosion
-	) throws CreateException {
-		
+	) {
 		// We use two additional caches, for the calculations involving the single objects, as these can be expensive, and we want
 		//  them also cached
 		return cache.resolver().search(
@@ -81,7 +80,7 @@ class CalculatePairIntersection extends FeatureCalculation<Optional<ObjectMask>,
 				do3D,
 				iterationsErosion,
 				cache.resolver().search(
-					new CalculateDilatedFromPair(
+					CalculateDilatedFromPair.createFromCache(
 						cache.resolver(),
 						cache.forChild(),
 						Extract.FIRST,
@@ -91,7 +90,7 @@ class CalculatePairIntersection extends FeatureCalculation<Optional<ObjectMask>,
 					)
 				),
 				cache.resolver().search(
-					new CalculateDilatedFromPair(
+					CalculateDilatedFromPair.createFromCache(
 						cache.resolver(),
 						cache.forChild(),
 						Extract.SECOND,

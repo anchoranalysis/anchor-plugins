@@ -38,28 +38,27 @@ import org.anchoranalysis.feature.cache.calculation.ResolvedCalculation;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 import org.anchoranalysis.plugin.points.calculate.CalculatePntsFromOutline;
-import org.apache.commons.lang.builder.EqualsBuilder;
-import org.apache.commons.lang.builder.HashCodeBuilder;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
 
+@AllArgsConstructor(access = AccessLevel.PRIVATE) @EqualsAndHashCode(callSuper=false)
 public class CalculateEllipsoidLeastSquares extends FeatureCalculation<MarkEllipsoid,FeatureInputSingleObject> {
 
-	private boolean suppressZCovariance;
-	
-	private transient ResolvedCalculation<List<Point3i>,FeatureInputSingleObject> ccPnts;
-		
-	private CalculateEllipsoidLeastSquares(boolean suppressZCovariance, ResolvedCalculation<List<Point3i>,FeatureInputSingleObject> ccPnts) {
-		super();
-		this.suppressZCovariance = suppressZCovariance;
-		this.ccPnts = ccPnts;
-	}
-	
+	private final boolean suppressZCovariance;
+	private final ResolvedCalculation<List<Point3i>,FeatureInputSingleObject> ccPnts;
+
 	public static MarkEllipsoid createFromCache(SessionInput<FeatureInputSingleObject> input, boolean suppressZCovariance ) throws FeatureCalcException {
 		
-		ResolvedCalculation<List<Point3i>,FeatureInputSingleObject> ccPnts = input.resolver().search( new CalculatePntsFromOutline() );
-		
-		ResolvedCalculation<MarkEllipsoid,FeatureInputSingleObject> ccEllipsoid = input.resolver().search(
-			new CalculateEllipsoidLeastSquares(suppressZCovariance, ccPnts )
+		ResolvedCalculation<List<Point3i>,FeatureInputSingleObject> ccPnts = input.resolver().search(
+			new CalculatePntsFromOutline()
 		);
+		
+		ResolvedCalculation<MarkEllipsoid,FeatureInputSingleObject> ccEllipsoid = input
+			.resolver()
+			.search(
+				new CalculateEllipsoidLeastSquares(suppressZCovariance, ccPnts )
+			);
 		return input.calc(ccEllipsoid);
 	}
 	
@@ -77,23 +76,5 @@ public class CalculateEllipsoidLeastSquares extends FeatureCalculation<MarkEllip
 		} catch (CreateException e) {
 			throw new FeatureCalcException(e);
 		}
-	}
-
-	@Override
-	public boolean equals(final Object obj){
-	    if(obj instanceof CalculateEllipsoidLeastSquares){
-	        final CalculateEllipsoidLeastSquares other = (CalculateEllipsoidLeastSquares) obj;
-	        return new EqualsBuilder()
-	            .append(suppressZCovariance, other.suppressZCovariance)
-	            .append(ccPnts, other.ccPnts)
-	            .isEquals();
-	    } else{
-	        return false;
-	    }
-	}
-	
-	@Override
-	public int hashCode() {
-		return new HashCodeBuilder().append(suppressZCovariance).append(ccPnts).toHashCode();
 	}
 }
