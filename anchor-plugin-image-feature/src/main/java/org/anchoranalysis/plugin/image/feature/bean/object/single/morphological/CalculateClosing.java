@@ -35,16 +35,11 @@ import org.anchoranalysis.feature.cache.calculation.FeatureCalculation;
 import org.anchoranalysis.feature.cache.calculation.ResolvedCalculation;
 import org.anchoranalysis.feature.cache.calculation.ResolvedCalculationMap;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.image.binary.BinaryChnl;
 import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.object.morph.MorphologicalErosion;
-import org.anchoranalysis.plugin.image.feature.bean.shared.object.CalculateBinaryChnlInput;
 import org.anchoranalysis.plugin.image.feature.object.calculation.single.morphological.CalculateDilationMap;
-import org.apache.commons.lang.builder.EqualsBuilder;
-import org.apache.commons.lang.builder.HashCodeBuilder;
-
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;

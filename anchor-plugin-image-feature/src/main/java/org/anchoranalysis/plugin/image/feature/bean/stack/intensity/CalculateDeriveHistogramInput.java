@@ -33,11 +33,13 @@ import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.feature.histogram.FeatureInputHistogram;
 import org.anchoranalysis.image.feature.stack.FeatureInputStack;
 import org.anchoranalysis.image.histogram.Histogram;
-import org.apache.commons.lang.builder.EqualsBuilder;
+import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
 
+@AllArgsConstructor @EqualsAndHashCode(callSuper=false)
 class CalculateDeriveHistogramInput extends FeatureCalculation<FeatureInputHistogram, FeatureInputStack> {
 
-	private ResolvedCalculation<Histogram, FeatureInputStack> histogramCalculation;
+	private final ResolvedCalculation<Histogram, FeatureInputStack> histogramCalculation;
 
 	public CalculateDeriveHistogramInput(
 		FeatureCalculation<Histogram, FeatureInputStack> histogramCalculation,
@@ -47,11 +49,6 @@ class CalculateDeriveHistogramInput extends FeatureCalculation<FeatureInputHisto
 			resolver.search(histogramCalculation)
 		);
 	}
-	
-	public CalculateDeriveHistogramInput(ResolvedCalculation<Histogram, FeatureInputStack> histogramCalculation) {
-		super();
-		this.histogramCalculation = histogramCalculation;
-	}
 
 	@Override
 	protected FeatureInputHistogram execute(FeatureInputStack input) throws FeatureCalcException {
@@ -59,23 +56,5 @@ class CalculateDeriveHistogramInput extends FeatureCalculation<FeatureInputHisto
 			histogramCalculation.getOrCalculate(input),
 			input.getResOptional()
 		);
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (obj == null) { return false; }
-		if (obj == this) { return true; }
-		if (obj.getClass() != getClass()) {
-			return false;
-		}
-		CalculateDeriveHistogramInput rhs = (CalculateDeriveHistogramInput) obj;
-		return new EqualsBuilder()
-             .append(histogramCalculation, rhs.histogramCalculation)
-             .isEquals();
-	}
-
-	@Override
-	public int hashCode() {
-		return histogramCalculation.hashCode();
 	}
 }

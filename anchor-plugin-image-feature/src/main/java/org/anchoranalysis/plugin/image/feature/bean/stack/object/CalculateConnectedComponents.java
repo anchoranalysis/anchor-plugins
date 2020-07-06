@@ -34,18 +34,14 @@ import org.anchoranalysis.image.binary.values.BinaryValues;
 import org.anchoranalysis.image.feature.stack.FeatureInputStack;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.factory.CreateFromConnectedComponentsFactory;
-import org.apache.commons.lang.builder.EqualsBuilder;
-import org.apache.commons.lang.builder.HashCodeBuilder;
+import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
 
 
+@AllArgsConstructor @EqualsAndHashCode(callSuper=false)
 class CalculateConnectedComponents extends FeatureCalculation<ObjectCollection, FeatureInputStack> {
 
-	private int nrgChnlIndex;
-		
-	public CalculateConnectedComponents(int nrgChnlIndex) {
-		super();
-		this.nrgChnlIndex = nrgChnlIndex;
-	}
+	private final int nrgChnlIndex;
 
 	@Override
 	protected ObjectCollection execute(FeatureInputStack input) throws FeatureCalcException {
@@ -62,25 +58,5 @@ class CalculateConnectedComponents extends FeatureCalculation<ObjectCollection, 
 		} catch (CreateException e) {
 			throw new FeatureCalcException(e);
 		}
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (obj == null) { return false; }
-		if (obj == this) { return true; }
-		if (obj.getClass() != getClass()) {
-			return false;
-		}
-		CalculateConnectedComponents rhs = (CalculateConnectedComponents) obj;
-		return new EqualsBuilder()
-             .append(nrgChnlIndex, rhs.nrgChnlIndex)
-             .isEquals();
-	}
-
-	@Override
-	public int hashCode() {
-		return new HashCodeBuilder()
-			.append(nrgChnlIndex)
-			.toHashCode();
 	}
 }
