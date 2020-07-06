@@ -74,7 +74,7 @@ public class Rooted extends FileProvider {
 	public Collection<File> create(InputManagerParams params) throws FileProviderException {
 		
 		try {
-			log.debug( String.format("matchingFiles() old directory '%s'\n", fileProvider.getDirectoryAsPath(params.getInputContext()) ));
+			log.debug( String.format("matchingFiles() old directory '%s'%n", fileProvider.getDirectoryAsPath(params.getInputContext()) ));
 			
 			Path dirOrig = fileProvider.getDirectoryAsPath(params.getInputContext());
 	

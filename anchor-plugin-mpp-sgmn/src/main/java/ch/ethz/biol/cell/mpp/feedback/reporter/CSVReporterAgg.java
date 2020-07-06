@@ -131,7 +131,7 @@ public class CSVReporterAgg extends ReporterAgg<CfgNRGPixelized> implements IAgg
 	
 	@Override
 	public void aggEnd( Aggregator agg ) {
-		
+		// NOTHING TO DO
 	}
 
 	@Override
@@ -143,6 +143,7 @@ public class CSVReporterAgg extends ReporterAgg<CfgNRGPixelized> implements IAgg
 
 	@Override
 	public void reportNewBest(Reporting<CfgNRGPixelized> reporting) {
+		// NOTHING TO DO
 	}
 		
 	private static double toSeconds( long time ) {

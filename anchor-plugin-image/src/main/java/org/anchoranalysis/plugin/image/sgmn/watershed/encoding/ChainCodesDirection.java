@@ -1,5 +1,10 @@
 package org.anchoranalysis.plugin.image.sgmn.watershed.encoding;
 
+import org.anchoranalysis.core.geometry.Point3i;
+
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
 /*
  * #%L
  * anchor-plugin-image
@@ -27,32 +32,48 @@ package org.anchoranalysis.plugin.image.sgmn.watershed.encoding;
  */
 
 
-// Maps directions to chain codes
+/**
+ * Maps directions to chain codes
+ * 
+ * @author Owen Feehan
+ *
+ */
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
 public class ChainCodesDirection {
 
-	// chain code 0
+	// Corresponds to code 0
 	public static final int MAX_VALUE = 27;
-
-	public ChainCodesDirection() {
 		
+	/**
+	 * Decodes a chain-code into a point
+	 * 
+	 * TODO is it a good idea to cache the creation of chain codes, to avoid work on the heap? There is a finite number.
+	 * 
+	 * @param chainCode the chain-code
+	 * @return a new point (always newly created) for the given chain-code.
+	 */
+	public static Point3i decode(int chainCode) {
+		return new Point3i(
+			ChainCodesDirection.xFromChainCode(chainCode),
+			ChainCodesDirection.yFromChainCode(chainCode),
+			ChainCodesDirection.zFromChainCode(chainCode)
+		);
 	}
 	
 	// x, y, z  are -1, 0 or 1, for 3^3 combinations
-	public int chainCode( int x, int y, int z ) {
+	public static int chainCode( int x, int y, int z ) {
 		return ((z+1) * 9) + ((y+1) * 3) + (x+1);
 	}
 
-	public int xFromChainCode( int chainCode ) {
+	public static int xFromChainCode( int chainCode ) {
 		return (chainCode % 3) -1;
 	}
 	
-	public int yFromChainCode( int chainCode ) {
+	public static int yFromChainCode( int chainCode ) {
 		return ((chainCode % 9) / 3) -1;
 	}
 	
-	public int zFromChainCode( int chainCode ) {
+	public static int zFromChainCode( int chainCode ) {
 		return (chainCode / 9) - 1;
 	}
-	
-	
 }

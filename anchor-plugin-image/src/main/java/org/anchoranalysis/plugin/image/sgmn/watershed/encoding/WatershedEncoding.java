@@ -34,8 +34,6 @@ import org.anchoranalysis.core.geometry.Point3i;
 //   * 27 Directions representing [-1,0,-1]X[-1,0,-1]X[-1,0,-1]
 //   * A sequence of connected components IDs starting at 0
 public class WatershedEncoding implements IEncodeDirection {
-
-	private ChainCodesDirection chainCodes = new ChainCodesDirection();
 	
 	public static final int CODE_UNVISITED = 0;
 	public static final int CODE_TEMPORARY = 1;
@@ -47,7 +45,7 @@ public class WatershedEncoding implements IEncodeDirection {
 	
 	@Override
 	public int encodeDirection( int x, int y, int z ) {
-		return chainCodes.chainCode(x, y, z) + START_CHAIN_CODE_RANGE;
+		return ChainCodesDirection.chainCode(x, y, z) + START_CHAIN_CODE_RANGE;
 	}
 	
 	/**
@@ -59,16 +57,11 @@ public class WatershedEncoding implements IEncodeDirection {
 	 * @return a new point (always newly created) for the given chain-code.
 	 */
 	public Point3i chainCodes(int chainCode) {
-		int chainCodeSubbed = chainCode - START_CHAIN_CODE_RANGE;
-		return new Point3i(
-			chainCodes.xFromChainCode(chainCodeSubbed),
-			chainCodes.yFromChainCode(chainCodeSubbed),
-			chainCodes.zFromChainCode(chainCodeSubbed)
-		);
+		return ChainCodesDirection.decode(chainCode - START_CHAIN_CODE_RANGE);
 	}
 	
-	public int encodeConnectedComponentID( int connected_component_id ) {
-		return connected_component_id + END_CHAIN_CODE_RANGE; 
+	public int encodeConnectedComponentID( int connectedComponentID ) {
+		return connectedComponentID + END_CHAIN_CODE_RANGE; 
 	}
 	
 	public boolean isDirectionChainCode( int code ) {

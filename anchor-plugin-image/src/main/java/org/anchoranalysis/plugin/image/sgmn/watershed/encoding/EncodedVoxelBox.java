@@ -37,67 +37,62 @@ import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 
+import lombok.Getter;
+
 public final class EncodedVoxelBox {
 
-	private final VoxelBox<IntBuffer> delegate;
+	@Getter
+	private final VoxelBox<IntBuffer> voxelBox;
 	
+	@Getter
 	private final WatershedEncoding encoding;
 
 	public EncodedVoxelBox(VoxelBox<IntBuffer> voxelBox) {
 		super();
 		this.encoding = new WatershedEncoding();
-		this.delegate = voxelBox;
-	}
-
-	public VoxelBox<IntBuffer> getVoxelBox() {
-		return delegate;
-	}
-
-	public Extent extent() {
-		return delegate.extent();
+		this.voxelBox = voxelBox;
 	}
 	
-	// TODO optimize
-	public void setPoint( Point3i pnt, int code ) {
-		int offset = delegate.extent().offset( pnt.getX(), pnt.getY() );
-		IntBuffer bbS = delegate.getPixelsForPlane( pnt.getZ() ).buffer();
+	public void setPoint(Point3i point, int code) {
+		int offset = voxelBox.extent().offset( point.getX(), point.getY() );
+		IntBuffer bbS = voxelBox.getPixelsForPlane( point.getZ() ).buffer();
 		bbS.put(offset, code );		
 	}
 
-	// TODO optimize	
-	public void setPointConnectedComponentID( Point3i pnt, int connectedComponentID ) {
-		
-		int code = encoding.encodeConnectedComponentID(connectedComponentID);
-		setPoint(pnt,code);
+	public void setPointConnectedComponentID( Point3i point, int connectedComponentID ) {
+		setPoint(
+			point,
+			encoding.encodeConnectedComponentID(connectedComponentID)
+		);
 	}
 	
-	// TODO optimize	
-	public void setPointDirection( Point3i pnt, int xChange, int yChange, int zChange ) {
-		
-		int code = encoding.encodeDirection(xChange, yChange, zChange);
-		setPoint(pnt,code);
+	public void setPointDirection( Point3i point, int xChange, int yChange, int zChange ) {
+		setPoint(
+			point,
+			encoding.encodeDirection(xChange, yChange, zChange)
+		);
 	}
 	
-	// Points a list of points, at the first point
-	public void pointListAtFirst( List<Point3i> points ) {
+	/**
+	 * Sets all points in a list, to point at the first point (the root point) in the list
+	 * 
+	 * @param points the list
+	 */
+	public void pointListAtFirstPoint( List<Point3i> points ) {
 		
 		Point3i rootPoint = points.get(0);
-		int rootPointOffsetEncoded = encoding.encodeConnectedComponentID( delegate.extent().offset(rootPoint) );
-		
+		int rootPointOffsetEncoded = encoding.encodeConnectedComponentID(
+			voxelBox.extent().offset(rootPoint)
+		);
 		setPoint( rootPoint, rootPointOffsetEncoded );
-
+		
 		for (int i=1; i<points.size(); i++ ) {
-			Point3i pnt = points.get(i);
-			setPoint( pnt, rootPointOffsetEncoded );
+			setPoint( points.get(i), rootPointOffsetEncoded );
 		}
 	}
 
-	public WatershedEncoding getEncoding() {
-		return encoding;
-	}
-
 	public EncodedIntBuffer getPixelsForPlane(int z) {
-		return new EncodedIntBuffer( delegate.getPixelsForPlane(z).buffer(), encoding );
+		return new EncodedIntBuffer( voxelBox.getPixelsForPlane(z).buffer(), encoding );
 	}
 	
 	public boolean hasTemporary() {
@@ -155,21 +150,13 @@ public final class EncodedVoxelBox {
 				}
 			}
 		}
-		
-//		System.out.print("START ");
-//		for( Integer id : setOut) {
-//			System.out.print(id);
-//			System.out.print(" ");
-//		}
-//		System.out.print(" END\n");
-		
 		return setOut;
 	}
 	
 	// Returns the CODED final index (global)
 	public int calculateConnectedComponentID(Point3i pnt, int firstChainCode ) {
 		
-		Extent e = delegate.extent();
+		Extent e = voxelBox.extent();
 		
 		int crntChainCode = firstChainCode;
 		
@@ -177,9 +164,10 @@ public final class EncodedVoxelBox {
 			// Get local index from global index
 			pnt = addDirectionFromChainCode(pnt, crntChainCode);
 			
-			assert( e.contains(pnt));
+			assert( e.contains(pnt));	// NOSONAR
+			
 			// Replace with intelligence slices buffer?
-			int nextVal = delegate.getPixelsForPlane(
+			int nextVal = voxelBox.getPixelsForPlane(
 				pnt.getZ()
 			).buffer().get(
 				e.offsetSlice(pnt)
@@ -207,13 +195,13 @@ public final class EncodedVoxelBox {
 	/**
 	 * Adds a direction to a point from a chain-code, without altering the incoming point
 	 * 
-	 * @param pnt an input-point that is unchanged (immutable)
+	 * @param point an input-point that is unchanged (immutable)
 	 * @param chainCode a chain-code from which to decode a direction, which is added to pnt
 	 * @return a new point which is the sum of pnt and the decoded-direction
 	 */
-	private Point3i addDirectionFromChainCode(Point3i pnt, int chainCode) {
+	private Point3i addDirectionFromChainCode(Point3i point, int chainCode) {
 		Point3i out = encoding.chainCodes(chainCode);
-		out.add(pnt);
+		out.add(point);
 		return out;
 	}
 	
@@ -239,5 +227,9 @@ public final class EncodedVoxelBox {
 
 	public boolean isConnectedComponentIDCode(int code) {
 		return encoding.isConnectedComponentIDCode(code);
+	}
+	
+	public Extent extent() {
+		return voxelBox.extent();
 	}
 }
