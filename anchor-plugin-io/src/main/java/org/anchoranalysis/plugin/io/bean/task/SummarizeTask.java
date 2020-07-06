@@ -28,7 +28,7 @@ package org.anchoranalysis.plugin.io.bean.task;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.log.LogReporter;
+import org.anchoranalysis.core.log.MessageLogger;
 import org.anchoranalysis.experiment.ExperimentExecutionArguments;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
 import org.anchoranalysis.experiment.JobExecutionException;
@@ -55,7 +55,7 @@ public abstract class SummarizeTask<T extends InputFromManager,S> extends Task<T
 
 		if (params.isDetailedLogging()) {
 			summarizeExperimentArguments(
-				params.getLogReporterExperiment(),
+				params.getLoggerExperiment(),
 				params.getExperimentArguments()
 			);
 		}
@@ -95,7 +95,7 @@ public abstract class SummarizeTask<T extends InputFromManager,S> extends Task<T
 	// Extract object for summary
 	protected abstract S extractObjectForSummary( T input );
 		
-	private void summarizeExperimentArguments( LogReporter log, ExperimentExecutionArguments eea ) {
+	private void summarizeExperimentArguments( MessageLogger log, ExperimentExecutionArguments eea ) {
 		
 		if (eea.hasInputDirectory()) {
 			log.logFormatted("An input-directory has been set as %s", eea.getInputDirectory() );

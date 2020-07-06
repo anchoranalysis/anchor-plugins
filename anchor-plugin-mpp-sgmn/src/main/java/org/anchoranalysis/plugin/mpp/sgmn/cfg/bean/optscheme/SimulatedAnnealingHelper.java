@@ -37,7 +37,7 @@ import org.anchoranalysis.anchor.mpp.proposer.error.ProposerFailureDescription;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.index.GetOperationFailedException;
-import org.anchoranalysis.core.log.LogReporter;
+import org.anchoranalysis.core.log.MessageLogger;
 import org.anchoranalysis.core.random.RandomNumberGenerator;
 import org.anchoranalysis.mpp.sgmn.bean.kernel.proposer.KernelProposer;
 import org.anchoranalysis.mpp.sgmn.bean.optscheme.termination.TerminationCondition;
@@ -134,7 +134,7 @@ class SimulatedAnnealingHelper {
 			++iter,			
 			termConditionAll,
 			assignMode.extractScoreSizeState(),
-			context.getLogger().getLogReporter()
+			context.getLogger().messageLogger()
 		));
 		
 		// We decrement the iterator to reflect its final state
@@ -152,7 +152,7 @@ class SimulatedAnnealingHelper {
 		int iter,
 		TerminationCondition termConditionAll,
 		ExtractScoreSize<T> extractScoreSize,
-		LogReporter logger
+		MessageLogger logger
 	) {
 		if (!state.isPresent()) {
 			return true;

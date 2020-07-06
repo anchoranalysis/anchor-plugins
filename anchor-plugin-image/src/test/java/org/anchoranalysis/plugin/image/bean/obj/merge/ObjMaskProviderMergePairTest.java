@@ -34,7 +34,7 @@ import org.anchoranalysis.bean.xml.RegisterBeanFactories;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.log.LogErrorReporter;
+import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.operator.Constant;
 import org.anchoranalysis.image.feature.bean.object.pair.Minimum;
@@ -76,7 +76,7 @@ public class ObjMaskProviderMergePairTest {
 	
 	private static ObjMaskProviderMergePair createMergePair( ObjectCollection objs, int threshold) throws CreateException {
 		
-		LogErrorReporter logger = LoggingFixture.suppressedLogErrorReporter();
+		Logger logger = LoggingFixture.suppressedLogErrorReporter();
 		
 		ObjMaskProviderMergePair provider = new ObjMaskProviderMergePair();
 		

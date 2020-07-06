@@ -38,7 +38,7 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.graph.EdgeTypeWithVertices;
 import org.anchoranalysis.core.graph.GraphWithEdgeTypes;
-import org.anchoranalysis.core.log.LogErrorReporter;
+import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.feature.bean.list.FeatureListProvider;
 import org.anchoranalysis.feature.list.NamedFeatureStoreFactory;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
@@ -155,7 +155,7 @@ public class MergedPairs extends FeatureTableObjects<FeatureInputPairObjects> {
 	
 	@Override
 	public List<FeatureInputPairObjects> createListInputs(ObjectCollection objs,
-			NRGStackWithParams nrgStack, LogErrorReporter logErrorReporter) throws CreateException {
+			NRGStackWithParams nrgStack, Logger logger) throws CreateException {
 
 		List<FeatureInputPairObjects> out = new ArrayList<>();
 		

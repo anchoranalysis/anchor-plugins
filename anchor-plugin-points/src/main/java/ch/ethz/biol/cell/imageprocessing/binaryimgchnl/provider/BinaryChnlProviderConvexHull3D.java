@@ -32,7 +32,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.core.log.LogReporter;
+import org.anchoranalysis.core.log.MessageLogger;
 import org.anchoranalysis.image.binary.BinaryChnl;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.channel.Channel;
@@ -46,7 +46,7 @@ public class BinaryChnlProviderConvexHull3D extends ConvexHullBase {
 
 	@Override
 	protected BinaryChnl createFromChnl(BinaryChnl chnlIn, BinaryChnl outline) throws CreateException {
-		LogReporter logger = getLogger().getLogReporter();
+		MessageLogger logger = getLogger().messageLogger();
 		List<Point3d> extPnts = pointsFromChnl(outline);
 		
 		Point3d[] pntArr = extPnts.toArray( new Point3d[]{} );

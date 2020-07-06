@@ -54,7 +54,7 @@ import lombok.Setter;
  * <pre>  
  *   Project Directory/
  *      Experiments/			# where Experiments are stored
- *      Experiments/include/	# where a logReporterExperiment.xml and logReporterTask.xml can be found
+ *      Experiments/include/	# where a loggerExperiment.xml and loggerTask.xml can be found
  *      Filesets/				# where Filesets are stored
  *      IO/OutputManager/		# where OutputManagers are stored
  * </pre>
@@ -108,8 +108,8 @@ public class QuickMultiDatasetStructuredExperiment<T extends InputFromManager,S>
 		if (!populatedDelegate) {
 			delegate.setFolderDataset( folderDataset() );
 			delegate.setOutput( output() );
-			delegate.setLogReporterExperimentPath( logReporterPath("Experiment") );
-			delegate.setLogReporterTaskPath( logReporterPath("Task") );
+			delegate.setLoggerExperimentPath( loggerPath("Experiment") );
+			delegate.setLoggerTaskPath( loggerPath("Task") );
 
 			populatedDelegate = true;
 		}
@@ -131,9 +131,9 @@ public class QuickMultiDatasetStructuredExperiment<T extends InputFromManager,S>
 		);
 	}
 	
-	private String logReporterPath( String suffix ) {
+	private String loggerPath( String suffix ) {
 		return String.format(
-			"%s/include/logReporter%s.xml",
+			"%s/include/logger%s.xml",
 			pathPrefix(),
 			StringUtils.capitalize(suffix)
 		);
@@ -170,9 +170,9 @@ public class QuickMultiDatasetStructuredExperiment<T extends InputFromManager,S>
 	}
 
 	@Override
-	public void doExperiment(ExperimentExecutionArguments expArgs) throws ExperimentExecutionException {
+	public void doExperiment(ExperimentExecutionArguments arguments) throws ExperimentExecutionException {
 		populateDelegateIfNeeded();
-		delegate.doExperiment(expArgs);
+		delegate.doExperiment(arguments);
 	}
 
 	@Override

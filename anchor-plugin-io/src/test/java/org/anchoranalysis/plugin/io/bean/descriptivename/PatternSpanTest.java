@@ -33,7 +33,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.anchoranalysis.core.log.LogErrorReporter;
+import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.input.descriptivename.DescriptiveFile;
 import org.anchoranalysis.plugin.io.bean.descriptivename.patternspan.PatternSpan;
@@ -42,7 +42,7 @@ import org.junit.Test;
 
 public class PatternSpanTest {
 
-	private final static LogErrorReporter LOGGER = LoggingFixture.suppressedLogErrorReporter();
+	private final static Logger LOGGER = LoggingFixture.suppressedLogErrorReporter();
 	
 	@Test
 	public void testSimple() throws AnchorIOException {

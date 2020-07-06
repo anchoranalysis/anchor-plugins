@@ -152,13 +152,13 @@ public class ChnlProviderObjsLevelNeighbours extends ChnlProviderLevel {
 			Collection<ObjectMaskWithHistogram> objs = graph.vertexSet();
 			for( ObjectMaskWithHistogram om : objs ) {
 		
-				getLogger().getLogReporter().logFormatted("Setting for %s against neighbourhood", om.getObjMask().centerOfGravity() );
+				getLogger().messageLogger().logFormatted("Setting for %s against neighbourhood", om.getObjMask().centerOfGravity() );
 				
 				// Get the neighbours of the current object
 				Collection<ObjectMaskWithHistogram> vertices = verticesWithinDist(graph, om, nghbDist);
 				
 				for( ObjectMaskWithHistogram nghb : vertices ) {
-					getLogger().getLogReporter().logFormatted("Including neighbour %s", nghb.getObjMask().centerOfGravity() );
+					getLogger().messageLogger().logFormatted("Including neighbour %s", nghb.getObjMask().centerOfGravity() );
 				}
 				
 				// Level calculated from combined histograms
@@ -166,7 +166,7 @@ public class ChnlProviderObjsLevelNeighbours extends ChnlProviderLevel {
 				
 				vbOutput.setPixelsCheckMask(om.getObjMask(), level);
 				
-				getLogger().getLogReporter().logFormatted("Setting threshold %d at %s", level, om.getObjMask().centerOfGravity() );
+				getLogger().messageLogger().logFormatted("Setting threshold %d at %s", level, om.getObjMask().centerOfGravity() );
 				mapLevel.put(om, level);
 			}
 

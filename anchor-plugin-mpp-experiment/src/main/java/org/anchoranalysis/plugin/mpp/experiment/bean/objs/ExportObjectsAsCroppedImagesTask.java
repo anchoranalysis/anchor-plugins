@@ -42,7 +42,7 @@ import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.functional.FunctionWithException;
 import org.anchoranalysis.core.functional.IdentityOperation;
-import org.anchoranalysis.core.log.LogErrorReporter;
+import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 import org.anchoranalysis.core.name.value.SimpleNameValue;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
@@ -146,7 +146,7 @@ public class ExportObjectsAsCroppedImagesTask extends ExportObjectsBase<MultiInp
 	private void outputObjs( ImageInitParams paramsInit, BoundIOContext context ) throws OperationFailedException {
 		
 		try {
-			LogErrorReporter logger = context.getLogger();
+			Logger logger = context.getLogger();
 			
 			NamedImgStackCollection stackCollection = createStackCollection(paramsInit, logger);
 			NamedImgStackCollection stackCollectionMIP = createStackCollectionMIP(paramsInit, logger);
@@ -218,7 +218,7 @@ public class ExportObjectsAsCroppedImagesTask extends ExportObjectsBase<MultiInp
 	}
 	
 
-	private NamedImgStackCollection createStackCollection( ImageInitParams so, LogErrorReporter logger ) throws CreateException {
+	private NamedImgStackCollection createStackCollection( ImageInitParams so, Logger logger ) throws CreateException {
 		// Get named image stack collection
 		ImageDimensions dim = null;
 		NamedImgStackCollection stackCollection = new NamedImgStackCollection();
@@ -231,7 +231,7 @@ public class ExportObjectsAsCroppedImagesTask extends ExportObjectsBase<MultiInp
 			} catch (InitException e) {
 				// NB if we cannot create a particular channel provider, we simply skip.  We use this as a means to provide for channels
 				//  that might not always be present
-				logger.getErrorReporter().recordError(ExportObjectsAsCroppedImagesTask.class,e);
+				logger.errorReporter().recordError(ExportObjectsAsCroppedImagesTask.class,e);
 				continue;
 			}
 			
@@ -262,7 +262,7 @@ public class ExportObjectsAsCroppedImagesTask extends ExportObjectsBase<MultiInp
 	
 	
 	
-	private NamedImgStackCollection createStackCollectionMIP( ImageInitParams so, LogErrorReporter logger ) throws CreateException {
+	private NamedImgStackCollection createStackCollectionMIP( ImageInitParams so, Logger logger ) throws CreateException {
 		// Get named image stack collection
 		ImageDimensions dim = null;
 		NamedImgStackCollection stackCollection = new NamedImgStackCollection();

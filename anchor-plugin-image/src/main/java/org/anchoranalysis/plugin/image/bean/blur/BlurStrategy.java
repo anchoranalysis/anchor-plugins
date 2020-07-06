@@ -30,7 +30,7 @@ import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.Positive;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.log.LogReporter;
+import org.anchoranalysis.core.log.MessageLogger;
 import org.anchoranalysis.image.convert.ImageUnitConverter;
 import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.voxel.box.VoxelBoxWrapper;
@@ -51,9 +51,9 @@ public abstract class BlurStrategy extends AnchorBean<BlurStrategy> {
 	private boolean sigmaInMeters = false;	// Treats sigma if it's microns
 	// END BEAN PROPERTIES
 	
-	public abstract void blur( VoxelBoxWrapper voxelBox, ImageDimensions dim, LogReporter logger ) throws OperationFailedException;
+	public abstract void blur( VoxelBoxWrapper voxelBox, ImageDimensions dim, MessageLogger logger ) throws OperationFailedException;
 	
-	protected double calcSigma( ImageDimensions dim, LogReporter logger ) throws OperationFailedException {
+	protected double calcSigma( ImageDimensions dim, MessageLogger logger ) throws OperationFailedException {
 		
 		double sigmaToUse = sigma;
 		

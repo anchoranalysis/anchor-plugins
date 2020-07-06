@@ -33,7 +33,7 @@ import org.anchoranalysis.bean.xml.RegisterBeanFactories;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.log.LogErrorReporter;
+import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.plugin.image.test.ProviderFixture;
@@ -86,7 +86,7 @@ public class ObjMaskProviderMergeMaxTest {
 	
 	private static ObjMaskProviderMergeMax createMergeMax( ObjectCollection objs, ToDoubleFunction<FeatureInputSingleObject> calculationFunc ) throws CreateException {
 		
-		LogErrorReporter logger = LoggingFixture.suppressedLogErrorReporter();
+		Logger logger = LoggingFixture.suppressedLogErrorReporter();
 		
 		ObjMaskProviderMergeMax provider = new ObjMaskProviderMergeMax();
 		

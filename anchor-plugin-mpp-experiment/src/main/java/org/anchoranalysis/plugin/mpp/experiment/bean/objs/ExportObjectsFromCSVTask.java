@@ -42,7 +42,7 @@ import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.index.GetOperationFailedException;
 import org.anchoranalysis.core.index.SetOperationFailedException;
-import org.anchoranalysis.core.log.LogErrorReporter;
+import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.core.name.value.SimpleNameValue;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
 import org.anchoranalysis.experiment.JobExecutionException;
@@ -124,7 +124,7 @@ public class ExportObjectsFromCSVTask extends ExportObjectsBase<FromCSVInputObje
 		return false;
 	}
 	
-	private DisplayStack createBackgroundStack( ImageInitParams so, LogErrorReporter logger ) throws CreateException, InitException {
+	private DisplayStack createBackgroundStack( ImageInitParams so, Logger logger ) throws CreateException, InitException {
 		// Get our background-stack and objects. We duplicate to avoid threading issues
 		StackProvider stackProviderDup = stackProvider.duplicateBean();
 		stackProviderDup.initRecursive(so,logger);

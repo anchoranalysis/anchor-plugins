@@ -33,7 +33,7 @@ import org.anchoranalysis.bean.init.InitializableBean;
 import org.anchoranalysis.bean.init.params.BeanInitParams;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.error.friendly.AnchorFriendlyRuntimeException;
-import org.anchoranalysis.core.log.LogErrorReporter;
+import org.anchoranalysis.core.log.Logger;
 
 /**
  * Checks to see if a bean has been misconfigured, when created manually in tests
@@ -76,7 +76,7 @@ public class BeanTestChecker {
 	public static <T extends InitializableBean<?,P>,P extends BeanInitParams> T checkAndInit(
 		T bean,
 		P params,
-		LogErrorReporter logger
+		Logger logger
 	) {
 		check(bean);
 		try {

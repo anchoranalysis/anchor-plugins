@@ -34,7 +34,7 @@ import org.anchoranalysis.anchor.mpp.bean.proposer.MarkProposer;
 import org.anchoranalysis.anchor.mpp.feature.nrg.cfg.CfgNRGPixelized;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
-import org.anchoranalysis.core.log.LogErrorReporter;
+import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.io.output.bound.BoundIOContext;
 import org.anchoranalysis.mpp.io.input.MPPInitParamsFactory;
 import org.anchoranalysis.mpp.sgmn.bean.kernel.Kernel;
@@ -97,7 +97,7 @@ class KernelProposerFixture {
 		return proposer;
 	}
 	
-	private static KernelInitialCfgNRG createInitialKernel(MPPInitParams params, LogErrorReporter logger) {
+	private static KernelInitialCfgNRG createInitialKernel(MPPInitParams params, Logger logger) {
 		return BeanTestChecker.checkAndInit(
 			new KernelInitialCfgNRG( new CfgProposerEmpty() ),
 			params,
@@ -108,7 +108,7 @@ class KernelProposerFixture {
 	private static KernelBirthPixelized createBirthKernel(
 		MarkProposer markProposer,
 		MPPInitParams initParams,
-		LogErrorReporter logger
+		Logger logger
 	) {
 		return BeanTestChecker.checkAndInit(
 			new KernelBirthPixelized(markProposer),

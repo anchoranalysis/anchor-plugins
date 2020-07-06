@@ -29,7 +29,7 @@ package org.anchoranalysis.plugin.image.feature.bean.histogram.threshold;
 import org.anchoranalysis.bean.init.params.NullInitParams;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.log.LogErrorReporter;
+import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.feature.cache.calculation.FeatureCalculation;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.bean.threshold.CalculateLevel;
@@ -43,9 +43,9 @@ class CalculateOtsuThresholdedHistogram extends FeatureCalculation<Histogram, Fe
 
 	private CalculateLevel calculateLevel;
 	
-	private LogErrorReporter logger;
+	private Logger logger;
 	
-	public CalculateOtsuThresholdedHistogram(CalculateLevel calculateLevel, LogErrorReporter logger ) {
+	public CalculateOtsuThresholdedHistogram(CalculateLevel calculateLevel, Logger logger ) {
 		super();
 		this.calculateLevel = calculateLevel;
 		this.logger = logger;

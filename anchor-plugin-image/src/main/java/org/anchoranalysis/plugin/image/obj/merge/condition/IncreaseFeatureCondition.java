@@ -30,7 +30,7 @@ import java.util.Optional;
 
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.log.LogErrorReporter;
+import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorSingle;
 import org.anchoranalysis.image.extent.ImageResolution;
@@ -50,7 +50,7 @@ public class IncreaseFeatureCondition implements AfterCondition {
 	}
 
 	@Override
-	public void init(LogErrorReporter logger) throws InitException {
+	public void init(Logger logger) throws InitException {
 		
 		if (featureEvaluator!=null) {
 			try {

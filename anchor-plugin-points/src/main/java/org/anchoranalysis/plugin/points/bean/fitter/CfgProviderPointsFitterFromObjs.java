@@ -121,7 +121,7 @@ public class CfgProviderPointsFitterFromObjs extends CfgProvider {
 		
 	private Optional<Mark> handleFittingFailure(String errorMsg) throws CreateException {
 		if (ignoreFittingFailure) {
-			getLogger().getLogReporter().logFormatted(
+			getLogger().messageLogger().logFormatted(
 				"Ignoring mark due to a fitting error. %s",
 				errorMsg
 			);

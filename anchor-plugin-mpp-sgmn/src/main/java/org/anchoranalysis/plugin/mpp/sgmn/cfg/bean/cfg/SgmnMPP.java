@@ -44,7 +44,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.log.LogErrorReporter;
+import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.core.memory.MemoryUtilities;
 import org.anchoranalysis.core.name.provider.NamedProvider;
 import org.anchoranalysis.core.name.store.NamedProviderStore;
@@ -173,7 +173,7 @@ public class SgmnMPP extends CfgSgmn {
 			// THIS SHOULD BE THE POINT AT WHICH WE LET PsoImage go out of scope, and everything in it, which isn't being used
 			//   can be garbage collected.  This will reduce memory usage for the rest of the algorithm, where hopefully
 			//   only what is needed will be kept
-			MemoryUtilities.logMemoryUsage("Before findOpt (after clean up)", context.getLogger().getLogReporter() );
+			MemoryUtilities.logMemoryUsage("Before findOpt (after clean up)", context.getLogger().messageLogger() );
 			
 			if (exitBeforeOpt) {
 				return new Cfg();
@@ -204,7 +204,7 @@ public class SgmnMPP extends CfgSgmn {
 		}
 	}
 		
-	private void init( MPPInitParams soMPP, LogErrorReporter logger ) throws InitException {
+	private void init( MPPInitParams soMPP, Logger logger ) throws InitException {
 		cfgGen.initRecursive( logger );
 		
 		nrgSchemeShared = SgmnMPPHelper.initNRG( nrgSchemeCreator, nrgSchemeIndCacheSize, soMPP.getFeature(), logger );

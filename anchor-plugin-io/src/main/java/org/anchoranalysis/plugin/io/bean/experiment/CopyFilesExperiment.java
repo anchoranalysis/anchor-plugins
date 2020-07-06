@@ -36,7 +36,7 @@ import java.util.Optional;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.log.LogErrorReporter;
+import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.core.progress.ProgressReporter;
 import org.anchoranalysis.core.progress.ProgressReporterConsole;
 import org.anchoranalysis.core.progress.ProgressReporterNull;
@@ -44,7 +44,7 @@ import org.anchoranalysis.experiment.ExperimentExecutionArguments;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
 import org.anchoranalysis.experiment.bean.Experiment;
 import org.anchoranalysis.experiment.bean.identifier.ExperimentIdentifier;
-import org.anchoranalysis.experiment.log.ConsoleLogReporter;
+import org.anchoranalysis.experiment.log.ConsoleMessageLogger;
 import org.anchoranalysis.io.bean.input.InputManagerParams;
 import org.anchoranalysis.io.bean.provider.file.FileProvider;
 import org.anchoranalysis.io.error.AnchorIOException;
@@ -56,45 +56,52 @@ import org.anchoranalysis.plugin.io.bean.copyfilesmode.naming.PreserveName;
 import org.anchoranalysis.plugin.io.bean.filepath.FilePath;
 import org.apache.commons.io.FileUtils;
 
+import lombok.Getter;
+import lombok.Setter;
+
 public class CopyFilesExperiment extends Experiment {
 	
 	// START BEAN PROPERTIES
-	@BeanField
+	@BeanField @Getter @Setter
 	private FileProvider fileProvider;
 	
-	@BeanField
+	@BeanField @Getter @Setter
 	private FilePath sourceFolderPath;
 	
-	@BeanField
+	@BeanField @Getter @Setter
 	private FilePath destinationFolderPath;
 	
-	@BeanField
+	@BeanField @Getter @Setter
 	private boolean dummyMode = false;
 	
-	@BeanField
+	@BeanField @Getter @Setter
 	private CopyFilesMethod copyFilesMethod = new SimpleCopy();
 	
-	@BeanField
+	@BeanField @Getter @Setter
 	private CopyFilesNaming copyFilesNaming = new PreserveName();
 	
-	@BeanField
+	@BeanField @Getter @Setter
 	private ExperimentIdentifier experimentIdentifier = null;
 	
-	@BeanField
+	@BeanField @Getter @Setter
 	private boolean delExistingFolder = true;
 	// END BEAN PROPERTIES
 	
 	@Override
-	public void doExperiment(ExperimentExecutionArguments expArgs)
-			throws ExperimentExecutionException {
-		
-		System.out.print("Reading files: ");
+	public void doExperiment(ExperimentExecutionArguments arguments) throws ExperimentExecutionException {
 		
 		try {
+			Path destination = destinationFolderPath.path(arguments.isDebugEnabled());
+
+			// Create an output-manager for the destination (for logging)
+			
+			
+			System.out.print("Reading files: ");
+			
 			doCopying(
-				findMatchingFiles(expArgs),
-				sourceFolderPath.path(expArgs.isDebugEnabled()),
-				destinationFolderPath.path(expArgs.isDebugEnabled())
+				findMatchingFiles(arguments),
+				sourceFolderPath.path(arguments.isDebugEnabled()),
+				destination
 			);
 			
 		} catch (AnchorIOException e) {
@@ -181,7 +188,7 @@ public class CopyFilesExperiment extends Experiment {
 				new InputManagerParams(
 					expArgs.createInputContext(),
 					new ProgressReporterConsole(5),
-					new LogErrorReporter( new ConsoleLogReporter() )	// Print errors to the screen
+					new Logger( new ConsoleMessageLogger() )	// Print errors to the screen
 				)
 			);
 		} catch (FileProviderException e) {
@@ -192,79 +199,5 @@ public class CopyFilesExperiment extends Experiment {
 		
 		assert(files!=null);
 		return files;
-	}
-		
-	public FileProvider getFileProvider() {
-		return fileProvider;
-	}
-
-	public void setFileProvider(FileProvider fileProvider) {
-		this.fileProvider = fileProvider;
-	}
-
-	public boolean isDummyMode() {
-		return dummyMode;
-	}
-
-	public void setDummyMode(boolean dummyMode) {
-		this.dummyMode = dummyMode;
-	}
-
-	public ExperimentIdentifier getExperimentIdentifier() {
-		return experimentIdentifier;
-	}
-
-	public void setExperimentIdentifier(ExperimentIdentifier experimentIdentifier) {
-		this.experimentIdentifier = experimentIdentifier;
-	}
-
-
-	public FilePath getSourceFolderPath() {
-		return sourceFolderPath;
-	}
-
-
-	public void setSourceFolderPath(FilePath sourceFolderPath) {
-		this.sourceFolderPath = sourceFolderPath;
-	}
-
-
-	public FilePath getDestinationFolderPath() {
-		return destinationFolderPath;
-	}
-
-
-	public void setDestinationFolderPath(FilePath destinationFolderPath) {
-		this.destinationFolderPath = destinationFolderPath;
-	}
-
-
-	public CopyFilesNaming getCopyFilesNaming() {
-		return copyFilesNaming;
-	}
-
-
-	public void setCopyFilesNaming(CopyFilesNaming copyFilesNaming) {
-		this.copyFilesNaming = copyFilesNaming;
-	}
-
-
-	public CopyFilesMethod getCopyFilesMethod() {
-		return copyFilesMethod;
-	}
-
-
-	public void setCopyFilesMethod(CopyFilesMethod copyFilesMethod) {
-		this.copyFilesMethod = copyFilesMethod;
-	}
-
-
-	public boolean isDelExistingFolder() {
-		return delExistingFolder;
-	}
-
-
-	public void setDelExistingFolder(boolean delExistingFolder) {
-		this.delExistingFolder = delExistingFolder;
 	}
 }

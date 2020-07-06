@@ -26,7 +26,7 @@ package org.anchoranalysis.plugin.mpp.sgmn.cfg.bean.optscheme;
  * #L%
  */
 
-import org.anchoranalysis.core.log.LogReporter;
+import org.anchoranalysis.core.log.MessageLogger;
 import org.anchoranalysis.mpp.sgmn.kernel.proposer.WeightedKernelList;
 import org.anchoranalysis.mpp.sgmn.optscheme.ExtractScoreSize;
 import org.anchoranalysis.mpp.sgmn.optscheme.OptSchemeContext;
@@ -49,7 +49,7 @@ class FeedbackHelper {
 		
 		FeedbackGenerator<T> feedbackGenerator = new FeedbackGenerator<T>(
 			feedbackReceiver,
-			initContext.getLogger().getErrorReporter()
+			initContext.getLogger().errorReporter()
 		);
 		
 		feedbackGenerator.begin(
@@ -67,7 +67,7 @@ class FeedbackHelper {
 	) {
 		OptimizationFeedbackEndParams<T> optEndParams = feedbackEndParams(
 			state,
-			initContext.getLogger().getLogReporter()
+			initContext.getLogger().messageLogger()
 		);
 		feedbackGenerator.end( optEndParams );
 	}
@@ -79,7 +79,7 @@ class FeedbackHelper {
 		return feedbackParams;
 	}
 		
-	private static <T> OptimizationFeedbackEndParams<T> feedbackEndParams( T state, LogReporter logger ) {
+	private static <T> OptimizationFeedbackEndParams<T> feedbackEndParams( T state, MessageLogger logger ) {
 		OptimizationFeedbackEndParams<T> optEndParams = new OptimizationFeedbackEndParams<>();
 		optEndParams.setState( state );
 		optEndParams.setLogReporter( logger );

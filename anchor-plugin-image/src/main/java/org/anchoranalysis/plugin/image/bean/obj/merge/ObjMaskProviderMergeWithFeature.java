@@ -38,7 +38,7 @@ import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.graph.EdgeTypeWithVertices;
-import org.anchoranalysis.core.log.LogReporter;
+import org.anchoranalysis.core.log.MessageLogger;
 import org.anchoranalysis.image.bean.provider.ObjectCollectionProvider;
 import org.anchoranalysis.image.extent.ImageResolution;
 import org.anchoranalysis.image.feature.evaluator.PayloadCalculator;
@@ -80,7 +80,7 @@ public abstract class ObjMaskProviderMergeWithFeature extends ObjMaskProviderMer
 		);
 
 
-		getLogger().getLogReporter().logFormatted("There are %d input objects", objsSource.size() );
+		getLogger().messageLogger().logFormatted("There are %d input objects", objsSource.size() );
 		
 		try {
 			ObjectCollection merged = mergeMultiplex(
@@ -88,7 +88,7 @@ public abstract class ObjMaskProviderMergeWithFeature extends ObjMaskProviderMer
 				a -> mergeConnectedComponents( a, saveObjs )
 			);
 					
-			getLogger().getLogReporter().logFormatted("There are %d final objects", merged.size() );
+			getLogger().messageLogger().logFormatted("There are %d final objects", merged.size() );
 			
 			return merged;
 			
@@ -120,7 +120,7 @@ public abstract class ObjMaskProviderMergeWithFeature extends ObjMaskProviderMer
 	 */
 	private ObjectCollection mergeConnectedComponents( ObjectCollection objs, Optional<ObjectCollection> saveObjs ) throws OperationFailedException {
 		
-		LogReporter logger = getLogger().getLogReporter();
+		MessageLogger logger = getLogger().messageLogger();
 		
 		MergeGraph graph;
 		try {
@@ -169,9 +169,8 @@ public abstract class ObjMaskProviderMergeWithFeature extends ObjMaskProviderMer
 				edgeToMerge.getEdge().getOmWithFeature().getObjMask() 
 			)
 		);
-
 		
-		graph.merge(edgeToMerge,getLogger());
+		graph.merge(edgeToMerge);
 
 		return true;
 	}

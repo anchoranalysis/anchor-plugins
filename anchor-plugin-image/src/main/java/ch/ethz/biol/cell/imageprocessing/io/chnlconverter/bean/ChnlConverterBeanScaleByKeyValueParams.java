@@ -67,7 +67,7 @@ public class ChnlConverterBeanScaleByKeyValueParams extends ChnlConverterBean {
 		int min = getScaled( kvp, keyLower, scaleLower );
 		int max = getScaled( kvp, keyUpper, scaleUpper ); 
 		
-		getLogger().getLogReporter().logFormatted("ChnlConverter: scale with min=%d max=%d%n", min, max);
+		getLogger().messageLogger().logFormatted("ChnlConverter: scale with min=%d max=%d%n", min, max);
 		
 		return new ChannelConverterToUnsignedByteScaleByMinMaxValue(min, max);
 	}
@@ -82,7 +82,7 @@ public class ChnlConverterBeanScaleByKeyValueParams extends ChnlConverterBean {
 		
 		double val = kvp.getPropertyAsDouble(key);
 		
-		getLogger().getLogReporter().logFormatted("%f * %f = %f", val, scale, val*scale);
+		getLogger().messageLogger().logFormatted("%f * %f = %f", val, scale, val*scale);
 		
 		return (int) Math.round(val * scale );
 	}

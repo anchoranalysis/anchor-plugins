@@ -54,7 +54,7 @@ public class ChnlProviderObjsLevelIndependently extends ChnlProviderLevel {
 				objs,
 				getCalculateLevel(),
 				numDilations,
-				getLogger().getLogReporter()
+				getLogger().messageLogger()
 			);
 			
 			VoxelBox<?> vbOutput = chnlOutput.getVoxelBox().any(); 

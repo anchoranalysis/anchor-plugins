@@ -70,7 +70,7 @@ class NeighbourGraph {
 	 * 
 	 * @param om an object already in the graph
 	 * @param possibleNghbs other vertices in the graph that are possibly neighbours
-	 * @param logErrorReporter
+	 * @param logger
 	 * @throws OperationFailedException
 	 */
 	public void addVertex(

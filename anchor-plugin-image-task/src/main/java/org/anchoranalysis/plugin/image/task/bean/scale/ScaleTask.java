@@ -188,7 +188,7 @@ public class ScaleTask extends RasterTask {
 						chnlIn,
 						scaleCalculator,
 						InterpolatorFactory.getInstance().rasterResizing(),
-						context.getLogger().getLogReporter()
+						context.getLogger().messageLogger()
 					);
 				}
 				

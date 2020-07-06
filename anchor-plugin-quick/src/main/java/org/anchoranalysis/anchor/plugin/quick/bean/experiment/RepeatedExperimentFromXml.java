@@ -38,7 +38,7 @@ import org.anchoranalysis.bean.xml.factory.BeanPathUtilities;
 import org.anchoranalysis.experiment.ExperimentExecutionArguments;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
 import org.anchoranalysis.experiment.bean.identifier.ExperimentIdentifier;
-import org.anchoranalysis.experiment.bean.logreporter.LogReporterBean;
+import org.anchoranalysis.experiment.bean.log.LoggingDestination;
 import org.anchoranalysis.experiment.bean.processor.JobProcessor;
 import org.anchoranalysis.io.bean.input.InputManager;
 import org.anchoranalysis.io.input.InputFromManager;
@@ -67,16 +67,16 @@ class RepeatedExperimentFromXml<T extends InputFromManager,S> {
 	}
 	
 	/** First method called ONCE after the constructor */
-	public void firstLocalise( Path beanLocalPath, String logReporterPathExperiment, String logReporterPathTask, String output ) throws BeanMisconfiguredException {
+	public void firstLocalise( Path beanLocalPath, String loggerPathExperiment, String loggerPathTask, String output ) throws BeanMisconfiguredException {
 		
 		this.beanLocalPath = beanLocalPath;
 		
 		// We create these other beans, before we check the configuration. This is a bit hacky
-		delegate.setLogReporterExperiment(
-			extractLogReporterBean(logReporterPathExperiment)
+		delegate.setLoggerExperiment(
+			extractLogReporterBean(loggerPathExperiment)
 		);
-		delegate.setLogReporterTask(
-			extractLogReporterBean(logReporterPathTask)
+		delegate.setLoggerTask(
+			extractLogReporterBean(loggerPathTask)
 		);
 
 		delegate.setOutput(
@@ -129,7 +129,7 @@ class RepeatedExperimentFromXml<T extends InputFromManager,S> {
 		delegate.setOutput(output);
 	}
 		
-	public LogReporterBean extractLogReporterBean( String relativePath ) {
+	public LoggingDestination extractLogReporterBean( String relativePath ) {
 		return extractBean(relativePath, "LogReporterBean");
 	}
 	
