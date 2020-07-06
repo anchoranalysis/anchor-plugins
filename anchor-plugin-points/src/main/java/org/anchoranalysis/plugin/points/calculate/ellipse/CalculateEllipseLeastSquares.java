@@ -36,27 +36,21 @@ import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.nrg.NRGStack;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.object.ObjectMask;
-import org.apache.commons.lang.builder.HashCodeBuilder;
 
 import ch.ethz.biol.cell.mpp.mark.pointsfitter.LinearLeastSquaresEllipseFitter;
+import lombok.EqualsAndHashCode;
 
+@EqualsAndHashCode(callSuper = false)
 public class CalculateEllipseLeastSquares extends FeatureCalculation<ObjMaskAndEllipse, FeatureInputSingleObject> {
 
+	@EqualsAndHashCode.Exclude
 	private EllipseFactory factory;
 	
 	public CalculateEllipseLeastSquares() {
-		super();
-		
 		factory = new EllipseFactory(
 			new LinearLeastSquaresEllipseFitter()
 		);
 	}
-		
-	private static ObjectMask extractEllipseSlice( ObjectMask om ) {
-		int zSliceCenter = (int) om.centerOfGravity().getZ();
-		return om.extractSlice(zSliceCenter - om.getBoundingBox().cornerMin().getZ(), false);
-	}
-	
 
 	@Override
 	protected ObjMaskAndEllipse execute( FeatureInputSingleObject input ) throws FeatureCalcException {
@@ -75,17 +69,8 @@ public class CalculateEllipseLeastSquares extends FeatureCalculation<ObjMaskAndE
 		}
 	}
 	
-	@Override
-	public boolean equals(final Object obj){
-	    if(obj instanceof CalculateEllipseLeastSquares){
-	        return true;
-	    } else{
-	        return false;
-	    }
-	}
-
-	@Override
-	public int hashCode() {
-		return new HashCodeBuilder().toHashCode();
+	private static ObjectMask extractEllipseSlice( ObjectMask om ) {
+		int zSliceCenter = (int) om.centerOfGravity().getZ();
+		return om.extractSlice(zSliceCenter - om.getBoundingBox().cornerMin().getZ(), false);
 	}
 }

@@ -38,22 +38,25 @@ import org.anchoranalysis.image.feature.object.input.FeatureInputPairObjects;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.plugin.image.feature.object.calculation.single.morphological.CalculateDilation;
-import org.apache.commons.lang.builder.EqualsBuilder;
-import org.apache.commons.lang.builder.HashCodeBuilder;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
 
 /** Calculates a dilated-object from a pair */
+@AllArgsConstructor(access=AccessLevel.PRIVATE) @EqualsAndHashCode(callSuper = false)
 class CalculateDilatedFromPair extends FeatureCalculation<ObjectMask, FeatureInputPairObjects> {
 	
-	private ResolvedCalculation<FeatureInputSingleObject, FeatureInputPairObjects> calcInput;
-
 	// Not included in hash-coding as its assumed to be singular
+	@EqualsAndHashCode.Exclude
 	private CalcForChild<FeatureInputPairObjects> resolverForChild;
+
+	private ResolvedCalculation<FeatureInputSingleObject, FeatureInputPairObjects> calcInput;
 	private Extract extract;
 	private ChildCacheName childCacheName;
 	private int iterations;
 	private boolean do3D;
 	
-	public CalculateDilatedFromPair(
+	public static FeatureCalculation<ObjectMask, FeatureInputPairObjects> createFromCache(
 		CalculationResolver<FeatureInputPairObjects> resolver,
 		CalcForChild<FeatureInputPairObjects> calcForChild,
 		Extract extract,
@@ -61,59 +64,28 @@ class CalculateDilatedFromPair extends FeatureCalculation<ObjectMask, FeatureInp
 		int iterations,
 		boolean do3D
 	) {
-		super();
-		this.calcInput = resolver.search(
-			new CalculateInputFromPair(extract)
+		return new CalculateDilatedFromPair(
+			calcForChild,
+			resolver.search(
+				new CalculateInputFromPair(extract)
+			),
+			extract,
+			childCacheName,
+			iterations,
+			do3D
 		);
-		this.resolverForChild = calcForChild;
-		this.extract = extract;
-		this.childCacheName = childCacheName;
-		this.iterations = iterations;
-		this.do3D = do3D;
 	}
-
 
 	@Override
 	protected ObjectMask execute(FeatureInputPairObjects input) throws FeatureCalcException {
-
-		// Input for calculaitng dilation
-		FeatureInputSingleObject inputSingle = calcInput.getOrCalculate(input); 
-		
 		return resolverForChild.calc(
 			childCacheName,
-			inputSingle,
+			calcInput.getOrCalculate(input),
 			resolver -> CalculateDilation.createFromCache(
 				resolver,
 				iterations,
 				do3D
 			)
 		);
-	}
-	
-	@Override
-	public boolean equals(final Object obj){
-	    if(obj instanceof CalculateDilatedFromPair){
-	        final CalculateDilatedFromPair other = (CalculateDilatedFromPair) obj;
-	        return new EqualsBuilder()
-	            .append(calcInput, other.calcInput)
-	            .append(extract, other.extract)
-	            .append(childCacheName, other.childCacheName)
-	            .append(iterations, other.iterations)
-	            .append(do3D, other.do3D)
-	            .isEquals();
-	    } else{
-	        return false;
-	    }
-	}
-	
-	@Override
-	public int hashCode() {
-		return new HashCodeBuilder()
-			.append(calcInput)
-			.append(extract)
-			.append(childCacheName)
-			.append(iterations)
-			.append(do3D)
-			.toHashCode();
 	}
 }
