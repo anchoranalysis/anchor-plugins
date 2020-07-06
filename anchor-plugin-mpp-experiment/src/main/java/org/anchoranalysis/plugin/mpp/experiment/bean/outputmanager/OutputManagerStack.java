@@ -33,25 +33,32 @@ import org.anchoranalysis.io.output.bean.allowed.NoOutputAllowed;
 import org.anchoranalysis.io.output.bean.allowed.OutputAllowed;
 import org.anchoranalysis.mpp.io.output.StackOutputKeys;
 
+import lombok.Getter;
+import lombok.Setter;
+
 public class OutputManagerStack extends OutputManagerWithPrefixer {
 	
 	// BEAN PROPERTIES
-	@BeanField
-	private OutputAllowed outputEnabled = new AllOutputAllowed();		// What outputs are allowed and not allowed
+	/** What's allowed or not - highest level outputs */
+	@BeanField @Getter @Setter
+	private OutputAllowed outputEnabled = new AllOutputAllowed();
 	
-	@BeanField
-	private OutputAllowed stackCollectionOutputEnabled = new AllOutputAllowed();	// If we output a stackCollection, what's allowed and not
+	/** What's allowed or not when outputting stacks */
+	@BeanField @Getter @Setter
+	private OutputAllowed stackCollectionOutputEnabled = new AllOutputAllowed();
 	
-	@BeanField
-	private OutputAllowed cfgCollectionOutputEnabled = new AllOutputAllowed();	// If we output a cfgCollection, what's allowed and not
+	/** What's allowed or not when outputting configurations */
+	@BeanField @Getter @Setter
+	private OutputAllowed cfgCollectionOutputEnabled = new AllOutputAllowed();
 	
-	@BeanField
-	private OutputAllowed objMaskCollectionOutputEnabled = new AllOutputAllowed();	// If we output a objMaskCollection, what's allowed and not
+	/** What's allowed or not when outputting object-collections */
+	@BeanField @Getter @Setter
+	private OutputAllowed objMaskCollectionOutputEnabled = new AllOutputAllowed();
 	
-	@BeanField
-	private OutputAllowed histogramCollectionOutputEnabled = new AllOutputAllowed();	// If we output a objMaskCollection, what's allowed and not
+	/** What's allowed or not when outputting histograms */
+	@BeanField @Getter @Setter
+	private OutputAllowed histogramCollectionOutputEnabled = new AllOutputAllowed(); 
 	// END BEAN PROPERTIES
-
 
 	@Override
 	public OutputAllowed outputAllowedSecondLevel(String key) {
@@ -73,60 +80,4 @@ public class OutputManagerStack extends OutputManagerWithPrefixer {
 	public boolean isOutputAllowed( String outputName ) {
 		return outputEnabled.isOutputAllowed(outputName);
 	}
-	
-
-
-	public OutputAllowed getOutputEnabled() {
-		return outputEnabled;
-	}
-
-
-	public void setOutputEnabled(OutputAllowed outputEnabled) {
-		this.outputEnabled = outputEnabled;
-	}
-
-	public OutputAllowed getStackCollectionOutputEnabled() {
-		return stackCollectionOutputEnabled;
-	}
-
-
-	public void setStackCollectionOutputEnabled(
-			OutputAllowed stackCollectionOutputEnabled) {
-		this.stackCollectionOutputEnabled = stackCollectionOutputEnabled;
-	}
-
-
-	public OutputAllowed getCfgCollectionOutputEnabled() {
-		return cfgCollectionOutputEnabled;
-	}
-
-
-	public void setCfgCollectionOutputEnabled(
-			OutputAllowed cfgCollectionOutputEnabled) {
-		this.cfgCollectionOutputEnabled = cfgCollectionOutputEnabled;
-	}
-
-
-	public OutputAllowed getObjMaskCollectionOutputEnabled() {
-		return objMaskCollectionOutputEnabled;
-	}
-
-
-	public void setObjMaskCollectionOutputEnabled(
-			OutputAllowed objMaskCollectionOutputEnabled) {
-		this.objMaskCollectionOutputEnabled = objMaskCollectionOutputEnabled;
-	}
-
-
-	public OutputAllowed getHistogramCollectionOutputEnabled() {
-		return histogramCollectionOutputEnabled;
-	}
-
-
-	public void setHistogramCollectionOutputEnabled(
-			OutputAllowed histogramCollectionOutputEnabled) {
-		this.histogramCollectionOutputEnabled = histogramCollectionOutputEnabled;
-	}
-	// END BEAN getters and setters
-
 }
