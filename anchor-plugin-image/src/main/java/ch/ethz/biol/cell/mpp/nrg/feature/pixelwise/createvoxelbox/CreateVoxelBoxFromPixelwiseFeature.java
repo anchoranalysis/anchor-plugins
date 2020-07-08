@@ -66,7 +66,7 @@ public class CreateVoxelBoxFromPixelwiseFeature {
 	
 		// Sets up the Feature
 		try {
-			Extent e = listVoxelBox.getFirstExtnt();
+			Extent e = listVoxelBox.getFirstExtent();
 			
 			// We make our index buffer
 			VoxelBox<ByteBuffer> vbOut = VoxelBoxFactory.getByte().create(e);

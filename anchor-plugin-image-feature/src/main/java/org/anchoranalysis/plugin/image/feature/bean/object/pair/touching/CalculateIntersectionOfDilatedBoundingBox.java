@@ -52,7 +52,7 @@ class CalculateIntersectionOfDilatedBoundingBox extends FeatureCalculation<Optio
 		return findIntersectionOfDilatedBoundingBox(
 			input.getFirst(),
 			input.getSecond(),
-			input.getDimensionsRequired().getExtnt()
+			input.getDimensionsRequired().getExtent()
 		);
 	}
 	

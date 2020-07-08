@@ -56,7 +56,7 @@ public class SurfaceSizeMaskNonZero extends FeatureSingleMemoRegion {
 	private RegionMap regionMap = RegionMapSingleton.instance();
 	
 	@BeanField
-	private boolean suppressZ = false;;
+	private boolean suppressZ = false;
 	// END BEAN PROPERTIES
 
 	@Override

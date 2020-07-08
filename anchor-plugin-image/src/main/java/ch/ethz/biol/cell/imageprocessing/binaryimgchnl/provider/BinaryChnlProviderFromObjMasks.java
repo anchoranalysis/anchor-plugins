@@ -83,7 +83,7 @@ public class BinaryChnlProviderFromObjMasks extends BinaryChnlProviderDimSource 
 		this.invert = invert;
 	}
 	
-	private static BinaryChnl createChnlFromObjsMux( ObjectCollection objs, ImageDimensions sd, BinaryValues outVal, boolean invert ) throws CreateException {
+	private static BinaryChnl createChnlFromObjsMux( ObjectCollection objs, ImageDimensions sd, BinaryValues outVal, boolean invert ) {
 		if (invert) {
 			return BinaryChnlFromObjs.createFromNotObjs(objs, sd, outVal);
 		} else {

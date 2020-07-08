@@ -144,7 +144,7 @@ public class ChnlProviderMedianFilter2D extends ChnlProviderOne {
 				
 		Channel dup = chnl.duplicate();
 		VoxelBox<ByteBuffer> vbDup = dup.getVoxelBox().asByte();
-		Extent e = dup.getDimensions().getExtnt();
+		Extent e = dup.getDimensions().getExtent();
 				
 		for (int z=0; z<e.getZ(); z++) {
 			

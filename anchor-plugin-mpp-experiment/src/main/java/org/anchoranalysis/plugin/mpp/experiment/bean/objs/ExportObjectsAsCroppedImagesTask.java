@@ -319,7 +319,7 @@ public class ExportObjectsAsCroppedImagesTask extends ExportObjectsBase<MultiInp
 		ExtractedBBoxGenerator generator,
 		ColorIndex colorIndex,
 		boolean mip
-	) throws CreateException {
+	) {
 		RGBObjMaskGenerator rgbObjMaskGenerator = new RGBObjMaskGenerator( new RGBOutlineWriter(outlineWidth), colorIndex);
 		return new ExtractedBBoxOnRGBObjMaskGenerator(rgbObjMaskGenerator, generator, "rgbOutline", mip);
 	}
@@ -392,7 +392,7 @@ public class ExportObjectsAsCroppedImagesTask extends ExportObjectsBase<MultiInp
 	private static ObjectMask extractObjMaskKeepEntireImage( ObjectMask om, ImageDimensions dim ) throws OutputWriteFailedException {
 		return BBoxUtilities.createObjMaskForBBox(
 			om,
-			new BoundingBox(dim.getExtnt())
+			new BoundingBox(dim.getExtent())
 		);
 	}
 		

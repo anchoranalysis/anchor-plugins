@@ -71,7 +71,7 @@ public class StackProviderOutlineRGB extends StackProviderWithBackground {
 		BinaryChnl maskChnl = mask.create();
 				
 		try {
-			boolean do3D = mip!=true || maskChnl.getDimensions().getZ()==1;
+			boolean do3D = !mip || maskChnl.getDimensions().getZ()==1;
 			
 			return CalcOutlineRGB.apply(
 				calcOutline(maskChnl),
@@ -80,7 +80,7 @@ public class StackProviderOutlineRGB extends StackProviderWithBackground {
 				createShort
 			);
 			
-		} catch (InitException | OperationFailedException e) {
+		} catch (OperationFailedException e) {
 			throw new CreateException(e);
 		}
 	}

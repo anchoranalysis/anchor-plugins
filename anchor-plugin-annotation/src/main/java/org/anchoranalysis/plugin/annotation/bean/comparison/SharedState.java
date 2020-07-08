@@ -51,7 +51,7 @@ class SharedState<T extends Assignment> {
 		
 		groupsMap = new HashMap[numLevelsGrouping];
 		for( int i=0; i<numLevelsGrouping; i++) {
-			groupsMap[i] = new HashMap<String, AnnotationGroup<T>>();
+			groupsMap[i] = new HashMap<>();
 		}
 		
 		groupAll = funcCreateGroup.apply("all");

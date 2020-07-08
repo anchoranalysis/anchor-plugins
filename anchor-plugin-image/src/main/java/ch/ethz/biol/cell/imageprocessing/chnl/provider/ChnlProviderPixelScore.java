@@ -107,7 +107,7 @@ public class ChnlProviderPixelScore extends ChnlProvider {
 		
 		return Optional.of(
 			new ObjectMask(
-				new BoundingBox( chnlMask.getDimensions().getExtnt()),
+				new BoundingBox( chnlMask.getDimensions().getExtent()),
 				chnlMask.getVoxelBox().asByte(),
 				binaryChnlMask.getBinaryValues()
 			)

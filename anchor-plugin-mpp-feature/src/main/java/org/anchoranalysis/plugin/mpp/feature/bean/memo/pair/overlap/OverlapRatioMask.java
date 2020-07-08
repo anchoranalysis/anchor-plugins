@@ -65,7 +65,7 @@ public class OverlapRatioMask extends OverlapMaskBase {
 		PxlMarkMemo obj2,
 		double overlap,
 		int regionID
-	) throws FeatureCalcException {
+	) {
 
 		if (overlap==0.0) {
 			return 0.0;

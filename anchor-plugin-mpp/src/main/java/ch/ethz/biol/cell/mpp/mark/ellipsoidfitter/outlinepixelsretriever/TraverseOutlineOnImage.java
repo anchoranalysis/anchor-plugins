@@ -38,33 +38,35 @@ import org.anchoranalysis.core.random.RandomNumberGenerator;
 import org.anchoranalysis.image.bean.provider.BinaryChnlProvider;
 import org.anchoranalysis.image.binary.BinaryChnl;
 import org.anchoranalysis.image.extent.BoundingBox;
+import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.extent.ImageResolution;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.outline.traverser.OutlineTraverser;
 
 import ch.ethz.biol.cell.mpp.mark.ellipsoidfitter.outlinepixelsretriever.visitscheduler.VisitScheduler;
-import ch.ethz.biol.cell.mpp.mark.ellipsoidfitter.outlinepixelsretriever.visitscheduler.VisitSchedulerMaxDist;
+import lombok.Getter;
+import lombok.Setter;
 
 // Traverses a pixel location
 public class TraverseOutlineOnImage extends OutlinePixelsRetriever {
 
-	// START BEAN
-	@BeanField
+	// START BEAN PROPERTIES
+	@BeanField @Getter @Setter
 	private VisitScheduler visitScheduler;
 	
-	@BeanField
+	@BeanField @Getter @Setter
 	private boolean nghb8 = true;
 	
-	@BeanField
+	@BeanField @Getter @Setter
 	private BinaryChnlProvider binaryChnlOutline;
 	
-	@BeanField
+	@BeanField @Getter @Setter
 	private BinaryChnlProvider binaryChnlFilled;
 	
-	@BeanField
+	@BeanField @Getter @Setter
 	private boolean useZ = true;
-	// END BEAN
+	// END BEAN PROPERTIES
 	
 	private ObjectMask omFilled;		// Not-changed as traversal occurs
 	private ObjectMask omOutline;		// Changed as traversal occurs (visited pixels are removed)
@@ -167,14 +169,16 @@ public class TraverseOutlineOnImage extends OutlinePixelsRetriever {
 			Tuple3i maxDist = visitScheduler.maxDistFromRootPoint(chnl.getDimensions().getRes()).orElseThrow( ()->
 				new CreateException("An undefined maxDist is not supported")
 			);
-			BoundingBox box = VisitSchedulerMaxDist.createBoxAroundPoint(root, maxDist );
 			
 			// We make sure the box is within our scene boundaries
-			box = box.clipTo( chnl.getDimensions().getExtnt() );
+			BoundingBox box = createBoxAroundPoint(
+				root,
+				maxDist,
+				chnl.getDimensions().getExtent()
+			);
 			
 			// This is our final intersection box, that we use for traversing and memorizing pixels
 			//  that we have already visited
-			
 			assert( !box.extent().isEmpty() );
 			
 			return chnl.region(box,false);
@@ -183,44 +187,13 @@ public class TraverseOutlineOnImage extends OutlinePixelsRetriever {
 			throw new TraverseOutlineException("Unable to create an object-mask for the outline", e);
 		}
 	}
-
-	public boolean isNghb8() {
-		return nghb8;
-	}
-
-	public void setNghb8(boolean nghb8) {
-		this.nghb8 = nghb8;
-	}
-
-	public VisitScheduler getVisitScheduler() {
-		return visitScheduler;
-	}
-
-	public void setVisitScheduler(VisitScheduler visitScheduler) {
-		this.visitScheduler = visitScheduler;
-	}
-
-	public boolean isUseZ() {
-		return useZ;
-	}
-
-	public void setUseZ(boolean useZ) {
-		this.useZ = useZ;
-	}
-
-	public BinaryChnlProvider getBinaryChnlOutline() {
-		return binaryChnlOutline;
-	}
-
-	public void setBinaryChnlOutline(BinaryChnlProvider binaryChnlOutline) {
-		this.binaryChnlOutline = binaryChnlOutline;
-	}
-
-	public BinaryChnlProvider getBinaryChnlFilled() {
-		return binaryChnlFilled;
-	}
-
-	public void setBinaryChnlFilled(BinaryChnlProvider binaryChnlFilled) {
-		this.binaryChnlFilled = binaryChnlFilled;
+	
+	private static BoundingBox createBoxAroundPoint(Point3i pnt, Tuple3i width, Extent clipTo) {
+		// We create a raster around the point, maxDist*2 in both directions, so long as it doesn't escape the region
+		BoundingBox box = new BoundingBox(
+			Point3i.immutableSubtract(pnt, width),
+			Point3i.immutableAdd(pnt, width)
+		);
+		return box.clipTo(clipTo);
 	}
 }

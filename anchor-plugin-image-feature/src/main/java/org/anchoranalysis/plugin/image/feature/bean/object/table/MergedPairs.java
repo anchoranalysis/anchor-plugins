@@ -164,7 +164,7 @@ public class MergedPairs extends FeatureTableObjects<FeatureInputPairObjects> {
 		GraphWithEdgeTypes<ObjectMask,Integer> graphNghb = graphCreator.createGraphWithNumPixels(
 			objs.asList(),
 			Function.identity(),
-			nrgStack.getNrgStack().getDimensions().getExtnt(),
+			nrgStack.getNrgStack().getDimensions().getExtent(),
 			do3D
 		);
 		

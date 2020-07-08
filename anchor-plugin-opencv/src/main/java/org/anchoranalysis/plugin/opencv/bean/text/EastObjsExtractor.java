@@ -85,12 +85,10 @@ class EastObjsExtractor {
 		int width = (int) mat.size().width;
 		int height = (int) mat.size().height;
 		
-		ImageDimensions dims = new ImageDimensions(
+		return new ImageDimensions(
 			new Extent(width, height, 1),
 			res
 		);
-		
-		return dims;
 	}
 	
 	private static WithConfidence<ObjectMask> convertToObjMask( WithConfidence<Mark> wcMark, ImageDimensions dim ) {
@@ -100,7 +98,7 @@ class EastObjsExtractor {
 			RegionMapSingleton.instance().membershipWithFlagsForIndex(GlobalRegionIdentifiers.SUBMARK_INSIDE),
 			BinaryValuesByte.getDefault()
 		);
-		return new WithConfidence<ObjectMask>(
+		return new WithConfidence<>(
 			om.getMask(),
 			wcMark.getConfidence()
 		);

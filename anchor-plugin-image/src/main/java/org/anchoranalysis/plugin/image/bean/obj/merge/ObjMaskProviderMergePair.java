@@ -98,7 +98,7 @@ public class ObjMaskProviderMergePair extends ObjMaskProviderMergeWithFeature {
 				relation.create()
 			);
 			
-		} catch (FeatureCalcException | InitException | CreateException e) {
+		} catch (FeatureCalcException | CreateException e) {
 			throw new OperationFailedException(e);
 		}
 	}

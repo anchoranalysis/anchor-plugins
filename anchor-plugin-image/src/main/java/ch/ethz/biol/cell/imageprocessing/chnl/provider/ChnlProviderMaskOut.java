@@ -53,7 +53,7 @@ public class ChnlProviderMaskOut extends ChnlProviderOneMask {
 		
 		Channel chnlOut = ChannelFactory.instance().createEmptyInitialised( chnl.getDimensions(), chnl.getVoxelDataType() );
 				
-		BoundingBox bbox = new BoundingBox( chnlOut.getDimensions().getExtnt() );
+		BoundingBox bbox = new BoundingBox( chnlOut.getDimensions().getExtent() );
 		chnl.getVoxelBox().copyPixelsToCheckMask(
 			bbox,
 			chnlOut.getVoxelBox(),

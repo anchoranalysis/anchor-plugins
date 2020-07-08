@@ -109,18 +109,14 @@ public class BinaryChnlProviderFill extends BinaryChnlProviderOne {
 		}
 				 
 		for (ObjectMask om : omc) {
-			
-			if (skipAtBorder) {
-				// It's not allowed touch the border
-				if (om.getBoundingBox().atBorderXY(sd)) {
-					continue;
-				}
+
+			// It's not allowed touch the border
+			if (skipAtBorder && om.getBoundingBox().atBorderXY(sd)) {
+				continue;
 			}
 			
-			if (maxVolume!=null) {
-				if (om.numVoxelsOn()>maxVolumeRslvd) {
-					continue;
-				}
+			if (maxVolume!=null && om.numVoxelsOn()>maxVolumeRslvd) {
+				continue;
 			}
 			
 			out.add(om);
@@ -128,7 +124,7 @@ public class BinaryChnlProviderFill extends BinaryChnlProviderOne {
 		return out;
 	}
 	
-	private static BinaryChnl fillHoles( ObjectCollection filled, BinaryChnl src, ImageDimensions sd, BinaryValues bvOut ) throws CreateException {
+	private static BinaryChnl fillHoles( ObjectCollection filled, BinaryChnl src, ImageDimensions sd, BinaryValues bvOut ) {
 		BinaryChnl bcSelected = BinaryChnlFromObjs.createFromObjs(filled, sd, bvOut);
 		BinaryChnlOr.binaryOr(bcSelected,src);
 		return bcSelected;

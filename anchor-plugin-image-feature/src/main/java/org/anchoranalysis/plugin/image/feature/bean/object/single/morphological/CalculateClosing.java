@@ -73,7 +73,7 @@ class CalculateClosing extends FeatureCalculation<ObjectMask,FeatureInputSingleO
 			
 			return MorphologicalErosion.createErodedObjMask(
 				omDilated,
-				params.getDimensionsOptional().map(ImageDimensions::getExtnt),
+				params.getDimensionsOptional().map(ImageDimensions::getExtent),
 				do3D,
 				iterations,
 				false,

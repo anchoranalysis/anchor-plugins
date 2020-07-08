@@ -75,8 +75,8 @@ public class ChnlProviderHistogramStretch extends ChnlProviderOne {
 	
 	private static void changeVoxels(VoxelBox<?> vb, double rangeMin, double rangeMax) {
 		
-		double rangeExtnt = rangeMax-rangeMin;
-		double rangeMult = 255/rangeExtnt;
+		double rangeExtent = rangeMax-rangeMin;
+		double rangeMult = 255/rangeExtent;
 		
 		Extent e = vb.extent();
 		for( int z=0; z<e.getZ(); z++) {

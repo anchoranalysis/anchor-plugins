@@ -77,11 +77,11 @@ public class MinimaImpositionGrayscaleReconstruction extends MinimaImposition {
 			throw new OperationFailedException("There must be at least one seed");
 		}
 		 
-		seeds.verifySeedsAreInside( chnl.getDimensions().getExtnt());
+		seeds.verifySeedsAreInside( chnl.getDimensions().getExtent());
 		
 		ObjectCollection masks = seeds.createMasks();
 				
-		assert( masks.objectsAreAllInside( chnl.getDimensions().getExtnt() ) );
+		assert( masks.objectsAreAllInside( chnl.getDimensions().getExtent() ) );
 				
 		// We need 255 for the landini algorithms to work
 		BinaryChnl markerMask = BinaryChnlFromObjs.createFromObjs(masks, chnl.getDimensions(), masks.getFirstBinaryValues() );

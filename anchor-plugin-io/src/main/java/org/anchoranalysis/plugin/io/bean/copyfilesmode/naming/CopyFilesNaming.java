@@ -32,9 +32,9 @@ import java.util.Optional;
 
 import org.anchoranalysis.io.error.AnchorIOException;
 
-public abstract class CopyFilesNaming {
+public interface CopyFilesNaming {
 	
-	public abstract void beforeCopying(Path destDir, int totalNumFiles);
+	void beforeCopying(Path destDir, int totalNumFiles);
 	
 	/**
 	 * Returns the output path (destination to to be copied to) for a given single file
@@ -46,7 +46,7 @@ public abstract class CopyFilesNaming {
 	 * @return the absolute-path. if empty, the file should be skipped.
 	 * @throws AnchorIOException
 	 */
-	public Optional<Path> destinationPath(Path sourceDir, Path destDir, File file, int index) throws AnchorIOException {
+	default Optional<Path> destinationPath(Path sourceDir, Path destDir, File file, int index) throws AnchorIOException {
 		
 		Optional<Path> remainder = destinationPathRelative( sourceDir, destDir, file, index );
 		return remainder.map(destDir::resolve);
@@ -62,7 +62,7 @@ public abstract class CopyFilesNaming {
 	 * @return the relative-path. if empty, the file should be skipped.
 	 * @throws AnchorIOException
 	 */
-	public abstract Optional<Path> destinationPathRelative(Path sourceDir, Path destDir, File file, int index) throws AnchorIOException;
+	Optional<Path> destinationPathRelative(Path sourceDir, Path destDir, File file, int index) throws AnchorIOException;
 	
-	public abstract void afterCopying(Path destDir, boolean dummyMode) throws AnchorIOException;
+	void afterCopying(Path destDir, boolean dummyMode) throws AnchorIOException;
 }

@@ -67,7 +67,7 @@ public class PermuteFeature<S, T extends FeatureInput> extends PermuteFeatureBas
 	private StringSet referencesFeatureListCreator;	// Makes sure a particular feature list creator is evaluated
 	
 	@BeanField @NonEmpty
-	private List<PermuteProperty<S>> listPermuteProperty = new ArrayList<PermuteProperty<S>>();
+	private List<PermuteProperty<S>> listPermuteProperty = new ArrayList<>();
 	// END BEAN PROPERTIES
 		
 	@Override

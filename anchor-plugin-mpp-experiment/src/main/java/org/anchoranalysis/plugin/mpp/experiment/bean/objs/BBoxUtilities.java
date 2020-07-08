@@ -42,8 +42,6 @@ import lombok.NoArgsConstructor;
 class BBoxUtilities {
 
 	public static ObjectMask createObjMaskForBBox( ObjectMask om, BoundingBox maybeBiggerBBox ) throws OutputWriteFailedException {
-
-		assert(maybeBiggerBBox!=null);
 		if (!om.getBoundingBox().equals(maybeBiggerBBox)) {
 			VoxelBox<ByteBuffer> vbLarge = VoxelBoxFactory.getByte().create( maybeBiggerBBox.extent() );
 			

@@ -30,7 +30,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 import org.anchoranalysis.bean.BeanInstanceMap;
-import org.anchoranalysis.bean.error.BeanMisconfiguredException;
 import org.anchoranalysis.bean.error.BeanStrangeException;
 import org.anchoranalysis.bean.xml.BeanXmlLoader;
 import org.anchoranalysis.bean.xml.error.BeanXmlException;
@@ -67,7 +66,7 @@ class RepeatedExperimentFromXml<T extends InputFromManager,S> {
 	}
 	
 	/** First method called ONCE after the constructor */
-	public void firstLocalise( Path beanLocalPath, String loggerPathExperiment, String loggerPathTask, String output ) throws BeanMisconfiguredException {
+	public void firstLocalise( Path beanLocalPath, String loggerPathExperiment, String loggerPathTask, String output ) {
 		
 		this.beanLocalPath = beanLocalPath;
 		

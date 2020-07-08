@@ -75,7 +75,7 @@ public class RslvdEllipsoidList implements Iterable<RslvdEllipsoid> {
 					// Mark both as not-included 
 					re.setAsExcluded();
 					
-					if (foundMultiple==false) {
+					if (!foundMultiple) {
 						delegate.get(foundIndex).setAsExcluded();
 						foundMultiple = true;
 					}
@@ -109,7 +109,7 @@ public class RslvdEllipsoidList implements Iterable<RslvdEllipsoid> {
 					// Mark both as not-included 
 					re.setAsExcluded();
 					
-					if (foundMultiple==false) {
+					if (!foundMultiple) {
 						delegate.get(foundIndex).setAsExcluded();
 						foundMultiple = true;
 					}
@@ -329,17 +329,14 @@ public class RslvdEllipsoidList implements Iterable<RslvdEllipsoid> {
 			DistWithIndex distWithIndex = indexWithMinDist( rom );
 			assert( distWithIndex!=null );
 			
-			if (maxDist>0.0) {
+			if (maxDist>0.0 && distWithIndex.getDist()>maxDist) {
 				// Skip if we have more than our maxDist
-				if (distWithIndex.getDist()>maxDist) {
-					continue;
-				}
+				continue;
 			}
 			
 			// We don't assign straight-away, as it would distort the measurements, so we s
 			
 			// Simply assign to this object then
-			//listEllipsoids.assignTo(rom, index);
 			assignedAtLeastOne = true;
 			listForAssignment.add( new RslvdObjMaskForAssignment(rom, distWithIndex.getIndex()) );
 			

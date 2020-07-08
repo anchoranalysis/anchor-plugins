@@ -47,10 +47,13 @@ import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.points.PointsFromObjMask;
 
+import lombok.Getter;
+import lombok.Setter;
+
 public class ObjAsPoints extends MarkProposer {
 
 	// START BEAN PROPERTIES
-	@BeanField
+	@BeanField @Getter @Setter
 	private ObjectCollectionProvider objs;
 	// END BEAN PROPERTIES
 
@@ -98,7 +101,7 @@ public class ObjAsPoints extends MarkProposer {
 	
 	private void createObjsIfNecessary() throws CreateException {
 		if (points==null) {
-			points = new ArrayList<List<Point3d>>();
+			points = new ArrayList<>();
 			
 			ObjectCollection objsCollection = objs.create();
 			for( ObjectMask om : objsCollection ) {
@@ -108,13 +111,4 @@ public class ObjAsPoints extends MarkProposer {
 			}
 		}
 	}
-
-	public ObjectCollectionProvider getObjs() {
-		return objs;
-	}
-
-	public void setObjs(ObjectCollectionProvider objs) {
-		this.objs = objs;
-	}
-
 }

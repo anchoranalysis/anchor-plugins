@@ -89,7 +89,7 @@ public class TraversePointsOnContour extends PointsFromOrientationProposer {
 			throw new TraverseOutlineException("Cannot find outline point");
 		}
 		
-		List<List<Point3i>> combinedLists = new ArrayList<List<Point3i>>();
+		List<List<Point3i>> combinedLists = new ArrayList<>();
 		combinedLists.add(lastPntsForward);
 		if (!forwardDirectionOnly) {
 			combinedLists.add(lastPntsReverse);

@@ -70,7 +70,7 @@ public class ReadVoxelExtentXml extends RasterReader {
 				AnchorMetadataXml.readResolutionXml( fileMeta )
 			);
 		} else {
-			if (acceptNoResolution==false) {
+			if (!acceptNoResolution) {
 				throw new RasterIOException( String.format("Resolution metadata is required for '%s'", filepath) );
 			}
 		}

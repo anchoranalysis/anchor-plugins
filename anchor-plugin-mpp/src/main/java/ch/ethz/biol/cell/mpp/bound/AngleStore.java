@@ -29,15 +29,20 @@ package ch.ethz.biol.cell.mpp.bound;
 
 import java.util.HashMap;
 
-class AngleStore<StoreType> {
-	
-	private int precisionMultiplier;
-	
-	private HashMap<Integer,StoreType> map = new HashMap<>(); 
+import lombok.RequiredArgsConstructor;
 
-	public AngleStore( int precisionMultiplier ) {
-		this.precisionMultiplier = precisionMultiplier;
-	}
+/**
+ * 
+ * @author Owen Feehan
+ *
+ * @param <T> store-type
+ */
+@RequiredArgsConstructor
+class AngleStore<T> {
+	
+	private final int precisionMultiplier;
+	
+	private HashMap<Integer,T> map = new HashMap<>(); 
 	
 	public int cnvrtToIndex( double angle ) {
 		return (int) (angle * precisionMultiplier);
@@ -48,11 +53,11 @@ class AngleStore<StoreType> {
 		return dbl / precisionMultiplier;
 	}
 	
-	public StoreType get( int index ) {
+	public T get( int index ) {
 		return map.get( index );
 	}
 	
-	public void put( int index, StoreType item ) {
+	public void put( int index, T item ) {
 		map.put( index, item );
 	}
 	

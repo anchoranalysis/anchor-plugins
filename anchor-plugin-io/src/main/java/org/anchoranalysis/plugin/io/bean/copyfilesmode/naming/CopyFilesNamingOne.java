@@ -34,7 +34,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.functional.OptionalUtilities;
 import org.anchoranalysis.io.error.AnchorIOException;
 
-public abstract class CopyFilesNamingOne extends CopyFilesNaming {
+public abstract class CopyFilesNamingOne implements CopyFilesNaming {
 
 	// START BEAN PROPERTIES
 	@BeanField

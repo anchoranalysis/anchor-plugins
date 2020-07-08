@@ -61,7 +61,7 @@ public abstract class FeatureIntersectingObjects extends FeatureSingleObjectWith
 			this.searchObjs = params.getSharedObjects().getObjMaskCollection().getException(id);
 		} catch (NamedProviderGetException e) {
 			throw new InitException(e.summarize());
-		};
+		}
 	}
 	
 	@Override

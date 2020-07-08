@@ -70,7 +70,7 @@ public class Simple extends FeatureTableObjects<FeatureInputSingleObject> {
 			NRGStackWithParams nrgStack, Logger logger) throws CreateException {
 		return objs.stream().mapToList(obj ->
 			new FeatureInputSingleObject(
-				checkObjInsideScene(obj, nrgStack.getDimensions().getExtnt()),
+				checkObjInsideScene(obj, nrgStack.getDimensions().getExtent()),
 				nrgStack
 			) 
 		);

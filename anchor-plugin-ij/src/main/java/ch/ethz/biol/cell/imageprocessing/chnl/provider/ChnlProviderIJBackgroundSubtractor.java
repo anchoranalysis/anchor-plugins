@@ -41,7 +41,7 @@ public class ChnlProviderIJBackgroundSubtractor extends ChnlProviderFilterRadius
 		return subtractBackground(chnl, radius, true);
 	}
 	
-	public static Channel subtractBackground( Channel chnl, int radius, boolean doPreSmooth ) throws CreateException {
+	public static Channel subtractBackground( Channel chnl, int radius, boolean doPreSmooth ) {
 		ImagePlus imp = IJWrap.createImagePlus(chnl);
 
 		BackgroundSubtracter plugin = new BackgroundSubtracter();

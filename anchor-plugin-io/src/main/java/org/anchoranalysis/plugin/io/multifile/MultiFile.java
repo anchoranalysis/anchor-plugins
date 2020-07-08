@@ -38,7 +38,7 @@ import org.anchoranalysis.plugin.io.multifile.buffer.MultiBufferSized;
 // We try to guess these parameters from the fileBag, and if not, from after we add the first image
 class MultiFile {
 	
-	private SizeExtnts size;
+	private SizeExtents size;
 	
 	private DataTypeChecker dataTypeChecker = new DataTypeChecker();
 	
@@ -48,7 +48,7 @@ class MultiFile {
 	
 	public MultiFile( ParsedFilePathBag fileBag ) {
 		super();
-		size = new SizeExtnts(fileBag);
+		size = new SizeExtents(fileBag);
 	}
 
 	public void add( Stack stackForFile, Optional<Integer> chnlNum, Optional<Integer> sliceNum, Optional<Integer> timeIndex, Path filePath ) throws RasterIOException {
@@ -58,7 +58,7 @@ class MultiFile {
 		if( buffers==null) {
 			buffers = new MultiBufferSized( stackForFile, size );
 		}
-		assert( size.hasNecessaryExtnts() );
+		assert( size.hasNecessaryExtents() );
 		
 		checkChnlNum(stackForFile, chnlNum, filePath);
 		checkSliceNum(stackForFile, sliceNum, filePath);

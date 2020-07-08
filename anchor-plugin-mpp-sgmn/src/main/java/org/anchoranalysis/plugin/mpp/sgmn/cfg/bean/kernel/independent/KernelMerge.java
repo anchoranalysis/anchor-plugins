@@ -75,7 +75,7 @@ public class KernelMerge extends KernelPosNeg<CfgNRGPixelized> {
 	@SuppressWarnings("unused")
 	private FailedProposalType failedProposalType;
 	
-	private transient PairCollection<Pair<Mark>> pairCollection;
+	private PairCollection<Pair<Mark>> pairCollection;
 
 	@Override
 	public void onInit(MPPInitParams pso) throws InitException {

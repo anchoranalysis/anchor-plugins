@@ -107,10 +107,10 @@ public class MatConverter {
 	
 	private static Mat matFromRGB( Channel chnlRed, Channel chnlGreen, Channel chnlBlue ) {
 		
-		Extent e = chnlRed.getDimensions().getExtnt(); 
+		Extent e = chnlRed.getDimensions().getExtent(); 
 		assert(e.getZ())==1;
 		
-		Mat mat = createEmptyMat( chnlRed.getDimensions().getExtnt(), CvType.CV_8UC3 );
+		Mat mat = createEmptyMat( chnlRed.getDimensions().getExtent(), CvType.CV_8UC3 );
 		
 		ByteBuffer red = bufferFromChnl(chnlRed);
 		ByteBuffer green = bufferFromChnl(chnlGreen);
@@ -139,7 +139,7 @@ public class MatConverter {
 	
 	private static void matToRGB( Mat mat, Channel chnlRed, Channel chnlGreen, Channel chnlBlue ) {
 		
-		Extent e = chnlRed.getDimensions().getExtnt(); 
+		Extent e = chnlRed.getDimensions().getExtent(); 
 		assert(e.getZ())==1;
 		
 		ByteBuffer red = bufferFromChnl(chnlRed);

@@ -97,7 +97,7 @@ public class IncludeRandomObjs extends PointsProposer {
 		this.objs = objs;
 	}
 	
-	private static void maybeAddToList( ObjectMask om, List<Point3i> out, RandomNumberGenerator re ) throws CreateException {
+	private static void maybeAddToList( ObjectMask om, List<Point3i> out, RandomNumberGenerator re ) {
 		if (re.nextDouble() > 0.5) {
 			out.addAll(
 				PointsFromObjMask.pntsFromMask(om)

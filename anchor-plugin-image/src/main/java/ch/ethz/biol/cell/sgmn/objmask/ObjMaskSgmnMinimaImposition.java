@@ -40,12 +40,15 @@ import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.seed.SeedCollection;
 import org.anchoranalysis.plugin.image.bean.sgmn.watershed.minima.MinimaImposition;
 
+import lombok.Getter;
+import lombok.Setter;
+
 
 // Imposes minima only in seed locations on the input channel, and performs the segmentation
 public class ObjMaskSgmnMinimaImposition extends ObjectSegmentationOne {
 
 	// START BEAN PROPERTIES
-	@BeanField
+	@BeanField @Getter @Setter
 	private MinimaImposition minimaImposition;
 	// END BEAN PROPERTIES
 
@@ -62,11 +65,11 @@ public class ObjMaskSgmnMinimaImposition extends ObjectSegmentationOne {
 		}
 				
 		try {
-			Channel chnlWithImposedMinima = chnlWithImposedMinima(chnl, seeds.get(), mask );
-			
-			ObjectCollection omc = sgmn.sgmn(chnlWithImposedMinima, mask, seeds );
-			
-			return omc;
+			return sgmn.sgmn(
+				chnlWithImposedMinima(chnl, seeds.get(), mask),
+				mask,
+				seeds
+			);
 			
 		} catch (OperationFailedException e) {
 			throw new SgmnFailedException(e);
@@ -74,18 +77,10 @@ public class ObjMaskSgmnMinimaImposition extends ObjectSegmentationOne {
 	}
 	
 	private Channel chnlWithImposedMinima(Channel chnl, SeedCollection seeds, Optional<ObjectMask> objMask) throws OperationFailedException {
-		if (seeds.size()>0) {
+		if (!seeds.isEmpty()) {
 			return minimaImposition.imposeMinima(chnl, seeds, objMask);
 		} else {
 			return chnl;
 		}
-	}
-
-	public MinimaImposition getMinimaImposition() {
-		return minimaImposition;
-	}
-
-	public void setMinimaImposition(MinimaImposition minimaImposition) {
-		this.minimaImposition = minimaImposition;
 	}
 }

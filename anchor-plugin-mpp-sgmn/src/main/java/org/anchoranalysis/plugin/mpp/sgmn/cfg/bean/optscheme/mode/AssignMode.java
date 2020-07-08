@@ -51,7 +51,7 @@ public abstract class AssignMode<S,T,U> extends AnchorBean<AssignMode<S,T,U>> {
 	public abstract AccptProbCalculator<T> probCalculator( AnnealScheme annealScheme );
 	
 	public KernelAssigner<U,T> kernelAssigner(TransformationContext tc) {
-		return new KernelAssignerCalcNRGFromKernel<U,T>(
+		return new KernelAssignerCalcNRGFromKernel<>(
 			kernelStateBridge()
 		);
 	}

@@ -135,12 +135,12 @@ public class ChnlProviderObjsLevelNeighbours extends ChnlProviderLevel {
 	private void setAgainstNghb( Channel chnlIntensity, Channel chnlOutput, ObjectCollection objMasks, int nghbDist ) throws OperationFailedException {
 		
 		try {
-			CreateNeighborGraph<ObjectMaskWithHistogram> graphCreator = new CreateNeighborGraph<ObjectMaskWithHistogram>( false );
+			CreateNeighborGraph<ObjectMaskWithHistogram> graphCreator = new CreateNeighborGraph<>( false );
 			
 			GraphWithEdgeTypes<ObjectMaskWithHistogram,Integer> graph = graphCreator.createGraphWithNumPixels(
 				objectsWithHistograms(objMasks, chnlIntensity),
 				ObjectMaskWithHistogram::getObjMask,
-				chnlIntensity.getDimensions().getExtnt(),
+				chnlIntensity.getDimensions().getExtent(),
 				true
 			);
 			

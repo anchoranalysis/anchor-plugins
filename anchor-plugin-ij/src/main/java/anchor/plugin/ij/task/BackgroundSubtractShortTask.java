@@ -29,7 +29,6 @@ package anchor.plugin.ij.task;
 
 import java.nio.ByteBuffer;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
 import org.anchoranalysis.core.index.GetOperationFailedException;
 import org.anchoranalysis.core.progress.ProgressReporter;
@@ -108,7 +107,7 @@ public class BackgroundSubtractShortTask extends RasterTask {
 				() -> new ChnlGenerator(chnlOut, "imgChnl")
 			);
 			
-		} catch (RasterIOException | CreateException | GetOperationFailedException e) {
+		} catch (RasterIOException | GetOperationFailedException e) {
 			throw new JobExecutionException(e);
 		}
 	}

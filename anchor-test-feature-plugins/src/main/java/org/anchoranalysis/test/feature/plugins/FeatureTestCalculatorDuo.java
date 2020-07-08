@@ -26,7 +26,6 @@ package org.anchoranalysis.test.feature.plugins;
  * #L%
  */
 
-import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.input.FeatureInput;
@@ -45,7 +44,7 @@ public class FeatureTestCalculatorDuo {
 		T paramsNegative,
 		double expectedResultPositive,
 		double expectedResultNegative
-	) throws FeatureCalcException, InitException {
+	) throws FeatureCalcException {
 		FeatureTestCalculator.assertDoubleResult(
 			positiveMessage(message),
 			feature,
@@ -67,7 +66,7 @@ public class FeatureTestCalculatorDuo {
 		T paramsNegative,
 		int expectedResultPositive,
 		int expectedResultNegative
-	) throws FeatureCalcException, InitException {
+	) throws FeatureCalcException {
 		FeatureTestCalculator.assertIntResult(
 			positiveMessage(message),
 			feature,

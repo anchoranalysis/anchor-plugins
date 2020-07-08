@@ -34,13 +34,12 @@ import org.apache.commons.io.FilenameUtils;
 /** Remembers each unique extension, and associated count */
 public class ExtensionCount extends Summarizer<Path> {
 
-	private static String NO_EXTENSION = "NO_EXTENSION";
+	private static final String NO_EXTENSION = "NO_EXTENSION";
 	
 	private FrequencyMap<String> map = new FrequencyMap<>();
 	
 	@Override
 	public void add( Path fullFilePath ) {
-		assert(fullFilePath!=null);
 		
 		String extension = FilenameUtils.getExtension(
 			fullFilePath.toString()

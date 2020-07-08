@@ -31,13 +31,16 @@ import java.util.Optional;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.stack.Stack;
 
+
 /**
  * Remembers the different sizes among the files
+ * <p>
+ * It assumes numbering in ranges begins from 0 inclusive.
  * 
  * @author Owen Feehan
  *
  */
-public class SizeExtnts {
+public class SizeExtents {
 	
 	private Optional<IntegerRange> rangeZ;
 	private Optional<IntegerRange> rangeC;
@@ -47,13 +50,13 @@ public class SizeExtnts {
 	private Integer sizeY = null;
 	
 	// Assumes numbering starts from 0
-	public SizeExtnts( ParsedFilePathBag fileBag ) {
+	public SizeExtents( ParsedFilePathBag fileBag ) {
 		this.rangeZ = fileBag.rangeSliceNum();
 		this.rangeC = fileBag.rangeChnlNum();
 		this.rangeT = fileBag.rangeTimeIndex();
 	}
 	
-	public boolean hasNecessaryExtnts() {
+	public boolean hasNecessaryExtents() {
 		return rangeC.isPresent() && rangeZ.isPresent() && rangeT.isPresent();
 	}
 	
@@ -87,7 +90,7 @@ public class SizeExtnts {
 	}
 	
 
-	public Extent toExtnt() {
+	public Extent toExtent() {
 		 return new Extent(
 			sizeX,
 			sizeY,

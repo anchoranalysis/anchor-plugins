@@ -50,7 +50,7 @@ public class CfgProviderPointsFromObjs extends CfgProvider {
 		return createMarksFromObjs( objs.create() );
 	}
 		
-	private static Cfg createMarksFromObjs( ObjectCollection objsCollection ) throws CreateException {
+	private static Cfg createMarksFromObjs( ObjectCollection objsCollection ) {
 		
 		Cfg out = new Cfg();
 		

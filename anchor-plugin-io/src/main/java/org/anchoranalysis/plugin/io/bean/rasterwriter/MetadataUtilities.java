@@ -30,7 +30,6 @@ package org.anchoranalysis.plugin.io.bean.rasterwriter;
 import ome.units.UNITS;
 import ome.units.quantity.Length;
 import ome.xml.model.enums.DimensionOrder;
-import ome.xml.model.enums.EnumerationException;
 import ome.xml.model.enums.PixelType;
 import ome.xml.model.primitives.PositiveInteger;
 
@@ -49,7 +48,7 @@ import lombok.NoArgsConstructor;
 class MetadataUtilities {
 
 	// NOTE: Tidy up exceptions later
-	public static IMetadata createMetadata( ImageDimensions sd, int numChnl, PixelType pixelType, boolean makeRGB, boolean pretendSeries ) throws EnumerationException, ServiceException, DependencyException {
+	public static IMetadata createMetadata( ImageDimensions sd, int numChnl, PixelType pixelType, boolean makeRGB, boolean pretendSeries ) throws ServiceException, DependencyException {
 		
 		ServiceFactory factory = new ServiceFactory();
 	    OMEXMLService service = factory.getInstance(OMEXMLService.class);

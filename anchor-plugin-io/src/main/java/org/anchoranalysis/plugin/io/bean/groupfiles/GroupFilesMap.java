@@ -42,7 +42,7 @@ import org.anchoranalysis.plugin.io.multifile.ParsedFilePathBag;
  */
 class GroupFilesMap {
 	
-	private Map<String,ParsedFilePathBag> delegate = new HashMap<String,ParsedFilePathBag>();
+	private Map<String,ParsedFilePathBag> delegate = new HashMap<>();
 
 	public void add( String key, FileDetails fd ) {
 		

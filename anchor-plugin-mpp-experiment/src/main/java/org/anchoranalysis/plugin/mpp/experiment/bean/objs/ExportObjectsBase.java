@@ -92,7 +92,7 @@ public abstract class ExportObjectsBase<T extends InputFromManager, S> extends T
 		
 		BoundingBox bboxToExtract = om.getBoundingBox().growBy(
 			new Point3i(paddingXY, paddingXY, paddingZ),
-			dim.getExtnt()
+			dim.getExtent()
 		);
 		
 		return BBoxUtilities.createObjMaskForBBox( om, bboxToExtract );

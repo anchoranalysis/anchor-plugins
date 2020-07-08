@@ -66,7 +66,7 @@ public abstract class KernelBirth<T> extends KernelPosNeg<T> {
 			return Optional.empty();
 		}
 		
-		setMarksNew = proposeNewMarks(exst.get(), repeats, context);;
+		setMarksNew = proposeNewMarks(exst.get(), repeats, context);
 		return OptionalUtilities.flatMap(
 			setMarksNew,
 			set -> calcForNewMark(exst.get(), set, context)
