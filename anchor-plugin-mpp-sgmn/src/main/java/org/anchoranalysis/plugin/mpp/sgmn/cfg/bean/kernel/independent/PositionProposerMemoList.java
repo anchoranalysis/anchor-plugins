@@ -29,6 +29,7 @@ package org.anchoranalysis.plugin.mpp.sgmn.cfg.bean.kernel.independent;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.function.ToIntFunction;
 
 import org.anchoranalysis.anchor.mpp.bean.regionmap.RegionMembership;
 import org.anchoranalysis.anchor.mpp.mark.GlobalRegionIdentifiers;
@@ -38,9 +39,11 @@ import org.anchoranalysis.anchor.mpp.proposer.ProposerContext;
 import org.anchoranalysis.anchor.mpp.pxlmark.PxlMark;
 import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
 import org.anchoranalysis.core.geometry.Point3d;
+import org.anchoranalysis.core.geometry.Point3i;
+import org.anchoranalysis.core.geometry.PointConverter;
+import org.anchoranalysis.core.geometry.ReadableTuple3i;
 import org.anchoranalysis.core.random.RandomNumberGenerator;
 import org.anchoranalysis.image.extent.BoundingBox;
-import org.anchoranalysis.image.extent.Extent;
 
 import lombok.RequiredArgsConstructor;
 
@@ -49,76 +52,85 @@ import lombok.RequiredArgsConstructor;
 // NOT INTENDED TO BE IN A CONFIG FILE
 @RequiredArgsConstructor
 class PositionProposerMemoList implements PositionProposer {
-
+	
+	private static final int MAX_NUM_TRIES = 20;
+	
 	private final List<PxlMarkMemo> listPxlMarkMemo;
 	private final Mark markBlock;
-	
-	private static Point3d randomPosition( BoundingBox bbox, RandomNumberGenerator re ) {
-		
-		Extent extent = bbox.extent();
-		
-		int x = bbox.cornerMin().getX() + (int) (re.nextDouble() * extent.getX() );
-		int y = bbox.cornerMin().getY() + (int) (re.nextDouble() * extent.getY() );
-		int z = bbox.cornerMin().getZ() + (int) (re.nextDouble() * extent.getZ() );
-		
-		return new Point3d(x,y,z);
-	}
 
 	@Override
 	public Optional<Point3d> propose(ProposerContext context) {
 		
 		RegionMembership rm = context.getRegionMap().membershipForIndex(GlobalRegionIdentifiers.SUBMARK_INSIDE);
 		
-		byte flags = rm.flags();
-		
 		if (listPxlMarkMemo.isEmpty()) {
 			return Optional.empty();
 		}
 		
 		// ASSUMES a single channel
-		
-		int numTries = 20;
-
-		Point3d pnt;
-		
-		int i = 0;
-		while(true) {
-		
-			if (i++==numTries) {
-				return Optional.empty();
-			}
+		for(int i=0; i<MAX_NUM_TRIES; i++) {
 			
 			// We keep randomly picking a memo from the list 
 			// And randomly taking positions until we find a position that matches
-			int pmmIndex = (int) (context.getRandomNumberGenerator().nextDouble() * listPxlMarkMemo.size());
-			PxlMarkMemo pmm = listPxlMarkMemo.get(pmmIndex);
-			PxlMark pm = pmm.doOperation();
+			PxlMark pm = randomMemo(context).doOperation();
 			
 			BoundingBox bbox = pm.getBoundingBox();
-			pnt = randomPosition(bbox, context.getRandomNumberGenerator());
 			
-			int relX = (int) pnt.getX() - bbox.cornerMin().getX();
-			int relY = (int) pnt.getY() - bbox.cornerMin().getY();
-			int relZ = (int) pnt.getZ() - bbox.cornerMin().getZ();
-			
-			byte membershipExst = pm.getVoxelBox().getPixelsForPlane(relZ).get( bbox.extent().offset(relX, relY) );
-			
-			// If it's not inside our mark, then we don't consider it
-			if (!rm.isMemberFlag(membershipExst, flags)) {
-				continue;
+			Point3d pnt = randomPosition(bbox, context.getRandomNumberGenerator());
+					
+			if (insideRelevantRegion(pm, rm, pnt, bbox)) {
+				return Optional.of(pnt);
 			}
-			
-			byte membership = markBlock.evalPntInside(pnt);
-			
-			// If it's inside our block mark, then we don't consider it
-			if (rm.isMemberFlag(membership, flags)) {
-				continue;
-			}
-			
-			break;
 		}
 
-		return Optional.of(pnt);
-							
+		return Optional.empty();
+	}
+	
+	private boolean insideRelevantRegion( PxlMark pm, RegionMembership rm, Point3d pnt, BoundingBox bbox) {
+				
+		byte flags = rm.flags();
+				
+		Point3i rel = Point3i.immutableSubtract(
+			PointConverter.intFromDouble(pnt),
+			bbox.cornerMin()
+		);
+		
+		byte membershipExst = pm.getVoxelBox().getPixelsForPlane(rel.getZ()).get(
+			bbox.extent().offsetSlice(rel)
+		);
+		
+		// If it's not inside our mark, then we don't consider it
+		if (!rm.isMemberFlag(membershipExst, flags)) {
+			return false;
+		}
+		
+		byte membership = markBlock.evalPntInside(pnt);
+		
+		// If it's inside our block mark, then we don't consider it
+		return !rm.isMemberFlag(membership, flags);
+	}
+	
+	private PxlMarkMemo randomMemo(ProposerContext context) {
+		return listPxlMarkMemo.get(
+			(int) (context.getRandomNumberGenerator().nextDouble() * listPxlMarkMemo.size())
+		);
+	}
+		
+	private static Point3d randomPosition( BoundingBox bbox, RandomNumberGenerator re ) {
+		return new Point3d(
+			randomFromExtent(bbox, re, ReadableTuple3i::getX),
+			randomFromExtent(bbox, re, ReadableTuple3i::getY),
+			randomFromExtent(bbox, re, ReadableTuple3i::getZ)
+		);
+	}
+	
+	private static int randomFromExtent( BoundingBox bbox, RandomNumberGenerator re, ToIntFunction<ReadableTuple3i> extract ) {
+		int corner = extract.applyAsInt(
+			bbox.cornerMin()
+		);
+		double randomPointWithinExtent = re.nextDouble() * extract.applyAsInt(
+			bbox.extent().asTuple()
+		); 
+		return corner + (int) randomPointWithinExtent;
 	}
 }
