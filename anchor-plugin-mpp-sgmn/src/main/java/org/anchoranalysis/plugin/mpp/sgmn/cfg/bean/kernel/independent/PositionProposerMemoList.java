@@ -42,23 +42,16 @@ import org.anchoranalysis.core.random.RandomNumberGenerator;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.Extent;
 
+import lombok.RequiredArgsConstructor;
+
 
 // Proposes a position from somewhere in a list of Memos, with some extra conditions
 // NOT INTENDED TO BE IN A CONFIG FILE
+@RequiredArgsConstructor
 class PositionProposerMemoList implements PositionProposer {
 
-	private Mark markBlock;
-	
-	private List<PxlMarkMemo> listPxlMarkMemo;
-	private int regionID;
-	
-	
-	public PositionProposerMemoList(List<PxlMarkMemo> listPxlMarkMemo, int regionID, Mark markBlock) {
-		super();
-		this.listPxlMarkMemo = listPxlMarkMemo;
-		this.regionID = regionID;
-		this.markBlock = markBlock;
-	}
+	private final List<PxlMarkMemo> listPxlMarkMemo;
+	private final Mark markBlock;
 	
 	private static Point3d randomPosition( BoundingBox bbox, RandomNumberGenerator re ) {
 		
@@ -78,7 +71,7 @@ class PositionProposerMemoList implements PositionProposer {
 		
 		byte flags = rm.flags();
 		
-		if (listPxlMarkMemo.size()==0) {
+		if (listPxlMarkMemo.isEmpty()) {
 			return Optional.empty();
 		}
 		
@@ -101,7 +94,7 @@ class PositionProposerMemoList implements PositionProposer {
 			PxlMarkMemo pmm = listPxlMarkMemo.get(pmmIndex);
 			PxlMark pm = pmm.doOperation();
 			
-			BoundingBox bbox = pm.getBoundingBox(regionID);
+			BoundingBox bbox = pm.getBoundingBox();
 			pnt = randomPosition(bbox, context.getRandomNumberGenerator());
 			
 			int relX = (int) pnt.getX() - bbox.cornerMin().getX();

@@ -33,9 +33,10 @@ import java.util.Optional;
 import ij.Prefs;
 import ij.plugin.filter.Binary;
 import ij.process.ImageProcessor;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.bean.threshold.Thresholder;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
@@ -46,22 +47,18 @@ import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.voxel.box.VoxelBoxWrapper;
 import org.anchoranalysis.image.voxel.box.thresholder.VoxelBoxThresholder;
 
+@NoArgsConstructor @AllArgsConstructor
 public class ThresholderSimpleFillHoles2D extends Thresholder {
+	
+	static {
+		Prefs.blackBackground = true;
+	}
 	
 	// START BEAN PROPERTIES
 	/** Intensity for thresholding */
 	@BeanField
 	private int minIntensity = -1;
 	// END BEAN PROPERTIES
-
-	public ThresholderSimpleFillHoles2D() {
-		// Standard bean constructor
-	}
-	
-	public ThresholderSimpleFillHoles2D(int minIntensity) {
-		super();
-		this.minIntensity = minIntensity;
-	}
 
 	@Override
 	public BinaryVoxelBox<ByteBuffer> threshold(
@@ -74,15 +71,8 @@ public class ThresholderSimpleFillHoles2D extends Thresholder {
 		if (mask.isPresent()) {
 			throw new OperationFailedException("A mask is not supported for this operation");
 		}
-		
-		Prefs.blackBackground = true;
-		
-		BinaryVoxelBox<ByteBuffer> thresholded;
-		try {
-			thresholded = VoxelBoxThresholder.thresholdForLevel(inputBuffer, minIntensity, bvOut, mask, false);
-		} catch (CreateException e) {
-			throw new OperationFailedException(e);
-		}
+				
+		BinaryVoxelBox<ByteBuffer> thresholded = VoxelBoxThresholder.thresholdForLevel(inputBuffer, minIntensity, bvOut, mask, false);
 		
 		Binary binaryPlugin = new Binary();
 		binaryPlugin.setup("fill", null);

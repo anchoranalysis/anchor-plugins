@@ -89,7 +89,7 @@ public class CopyFilesExperiment extends Experiment {
 	private ExperimentIdentifier experimentIdentifier = null;
 	
 	@BeanField @Getter @Setter
-	private boolean delExistingFolder = true;
+	private boolean silentlyDeleteExisting = true;
 	
 	@BeanField @Getter @Setter
 	private LoggingDestination log = new ToConsole();
@@ -97,20 +97,10 @@ public class CopyFilesExperiment extends Experiment {
 	
 	@Override
 	public void doExperiment(ExperimentExecutionArguments arguments) throws ExperimentExecutionException {
-			
-		Path destination;
-		try {
-			destination = destinationFolderPath.path(arguments.isDebugEnabled());
-		} catch (AnchorIOException exc) {
-			throw new ExperimentExecutionException("Cannot determine destination directory", exc);
-		}
 
-		// Create an output-manager for the destination (for logging)
-		StatefulMessageLogger logger = log.createWithConsoleFallback(
-			new BoundOutputManager(destination, delExistingFolder),
-			arguments,
-			false
-		);
+		// Determine a destination for the output, and create a corresponding logger
+		Path destination = determineDestination(arguments.isDebugEnabled());
+		StatefulMessageLogger logger = createLoggerFor(destination, arguments);
 		
 		logger.log("Reading files: ");
 		
@@ -128,6 +118,22 @@ public class CopyFilesExperiment extends Experiment {
 		}				
 	}
 	
+	private Path determineDestination(boolean debugEnabled) throws ExperimentExecutionException {
+		try {
+			return destinationFolderPath.path(debugEnabled);
+		} catch (AnchorIOException exc) {
+			throw new ExperimentExecutionException("Cannot determine destination directory", exc);
+		}
+	}
+	
+	private StatefulMessageLogger createLoggerFor(Path destination, ExperimentExecutionArguments arguments) {
+		return log.createWithConsoleFallback(
+			new BoundOutputManager(destination, silentlyDeleteExisting),
+			arguments,
+			false
+		);
+	}
+	
 	@Override
 	public boolean useDetailedLogging() {
 		return true;
@@ -139,7 +145,7 @@ public class CopyFilesExperiment extends Experiment {
 		
 		if (!dummyMode) {
 			logger.log("Copying files: ");
-			if (delExistingFolder) {
+			if (silentlyDeleteExisting) {
 				FileUtils.deleteQuietly( destPath.toFile() );
 			}
 			destPath.toFile().mkdirs();

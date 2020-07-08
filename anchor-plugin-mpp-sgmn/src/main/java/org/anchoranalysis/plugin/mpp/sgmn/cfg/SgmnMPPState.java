@@ -39,7 +39,7 @@ import org.anchoranalysis.mpp.sgmn.bean.cfg.ExperimentState;
 import org.anchoranalysis.mpp.sgmn.bean.kernel.proposer.KernelProposer;
 
 // State that only needs to be initialized once can be shared across many calls to the algoritm 
-public class SgmnMPPState extends ExperimentState {
+public class SgmnMPPState implements ExperimentState {
 		
 	private KernelProposer<CfgNRGPixelized> kernelProposer;
 	private Define define;

@@ -37,19 +37,24 @@ import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.voxel.statistics.VoxelStatistics;
 
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
+
 /**
  * {@link MarkRegion} with a region and an index
  * 
  * @author Owen Feehan
  *
  */
+@EqualsAndHashCode(callSuper=false)
 public abstract class IndexedRegionBase extends MarkRegion {
 
 	// START BEAN PROPERTIES
-	@BeanField
+	@BeanField @Getter @Setter
 	private int index = 0;
 	
-	@BeanField
+	@BeanField @Getter @Setter
 	private int regionID = GlobalRegionIdentifiers.SUBMARK_INSIDE;
 	// END BEAN PROPERTIES
 	
@@ -71,48 +76,7 @@ public abstract class IndexedRegionBase extends MarkRegion {
 	}
 	
 	protected BoundingBox boundingBoxForRegion( PxlMark pm ) {
-		return pm.getBoundingBox(regionID);
-	}
-			
-	public int getIndex() {
-		return index;
-	}
-
-	public void setIndex(int index) {
-		this.index = index;
-	}
-
-	public int getRegionID() {
-		return regionID;
-	}
-
-	public void setRegionID(int regionID) {
-		this.regionID = regionID;
-	}
-
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + index;
-		result = prime * result + regionID;
-		return result;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		IndexedRegionBase other = (IndexedRegionBase) obj;
-		if (index != other.index)
-			return false;
-		if (regionID != other.regionID)
-			return false;
-		return true;
+		return pm.getBoundingBox();
 	}
 
 	@Override

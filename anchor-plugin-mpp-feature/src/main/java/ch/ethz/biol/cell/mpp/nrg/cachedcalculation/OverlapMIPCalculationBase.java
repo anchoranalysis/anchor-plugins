@@ -57,7 +57,7 @@ public abstract class OverlapMIPCalculationBase extends FeatureCalculation<Doubl
 		PxlMark pm1 = mark1.doOperation();
 		PxlMark pm2 = mark2.doOperation();
 		
-		if (!pm1.getBoundingBoxMIP(regionID).intersection().existsWith(pm2.getBoundingBoxMIP(regionID))) {
+		if (!pm1.getBoundingBoxMIP().intersection().existsWith(pm2.getBoundingBoxMIP())) {
 			return 0.0;
 		}
 		

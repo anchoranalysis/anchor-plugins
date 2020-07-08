@@ -33,11 +33,11 @@ import ij.process.FloatProcessor;
 import java.nio.FloatBuffer;
 
 import org.anchoranalysis.image.extent.Extent;
-import org.anchoranalysis.image.voxel.box.pixelsforplane.IPixelsForPlane;
+import org.anchoranalysis.image.voxel.box.pixelsforplane.PixelsForPlane;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 import org.anchoranalysis.image.voxel.buffer.VoxelBufferFloat;
 
-public class PixelsFromFloatProcessor implements IPixelsForPlane<FloatBuffer> {
+public class PixelsFromFloatProcessor implements PixelsForPlane<FloatBuffer> {
 	
 	private FloatProcessor bp;
 	private Extent extent;

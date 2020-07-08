@@ -62,7 +62,7 @@ class KernelBirthAndKillHelper {
 		
 		PxlMarkMemo pmmAdditional = null;
 					
-		PositionProposerMemoList pp = new PositionProposerMemoList( toKill, regionID, markNew );
+		PositionProposerMemoList pp = new PositionProposerMemoList( toKill, markNew );
 		
 		ProposerContext propContext = context.proposer();
 		

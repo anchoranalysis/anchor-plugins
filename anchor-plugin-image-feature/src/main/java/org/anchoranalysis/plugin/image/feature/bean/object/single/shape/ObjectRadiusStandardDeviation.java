@@ -32,7 +32,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.feature.cache.SessionInput;
@@ -105,20 +104,17 @@ public class ObjectRadiusStandardDeviation extends FeatureSingleObject {
 	}
 
 	private static List<Point3i> createMaskOutlineAsPoints(ObjectMask mask, int numberErosions, boolean erodeEdges, boolean do3D ) throws FeatureCalcException {
-		try {
-			List<Point3i> ptsOutline = new ArrayList<Point3i>();
+
+		List<Point3i> ptsOutline = new ArrayList<>();
 			
-			ObjectMask outline = FindOutline.outline(mask, 1, false, true);
-			PointsFromBinaryVoxelBox.addPointsFromVoxelBox3D(
-				outline.binaryVoxelBox(),
-				outline.getBoundingBox().cornerMin(),
-				ptsOutline
-			);
-			
-			return ptsOutline;
-		} catch (CreateException e) {
-			throw new FeatureCalcException(e);
-		}
+		ObjectMask outline = FindOutline.outline(mask, 1, false, true);
+		PointsFromBinaryVoxelBox.addPointsFromVoxelBox3D(
+			outline.binaryVoxelBox(),
+			outline.getBoundingBox().cornerMin(),
+			ptsOutline
+		);
+		
+		return ptsOutline;
 	}
 
 	public boolean isCov() {
