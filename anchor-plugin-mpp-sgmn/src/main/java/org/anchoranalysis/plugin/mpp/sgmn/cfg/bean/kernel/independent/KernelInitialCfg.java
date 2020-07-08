@@ -79,7 +79,7 @@ public class KernelInitialCfg extends KernelIndependent<Cfg> {
 
 	@Override
 	public void updateAfterAccpt(ListUpdatableMarkSetCollection updatableMarkSetCollection, Cfg exst, Cfg accptd) throws UpdateMarkSetException {
-
+		// NOTHING TO DO
 	}
 
 	@Override

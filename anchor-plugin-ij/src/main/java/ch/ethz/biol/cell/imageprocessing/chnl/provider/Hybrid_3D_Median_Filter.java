@@ -111,7 +111,7 @@ class Hybrid_3D_Median_Filter implements PlugInFilter{
 		//imp2.show();
 	 }
 
-    public ImagePlus Hybrid3dMedianizer(ImagePlus imp){
+    public ImagePlus Hybrid3dMedianizer(ImagePlus imp){	// NOSONAR
 		@SuppressWarnings("unused")
 		ImagePlus imp3;
 		int m = stack.getWidth();
@@ -121,32 +121,32 @@ class Hybrid_3D_Median_Filter implements PlugInFilter{
 		int dimension = m*n;
 		int stacksize = stack.getSize();
 	
-		short beforeslice[];
-		short thisslice[];
-		short afterslice[];
-		short newslice[];
+		short beforeslice[];	// NOSONAR
+		short thisslice[];		// NOSONAR
+		short afterslice[];		// NOSONAR
+		short newslice[];		// NOSONAR
 	
-		byte beforeslice8[];
-		byte thisslice8[];
-		byte afterslice8[];
-		byte newslice8[];
+		byte beforeslice8[];	// NOSONAR
+		byte thisslice8[];		// NOSONAR
+		byte afterslice8[];		// NOSONAR
+		byte newslice8[];		// NOSONAR
 	
 		if(atebit){//8bit scenario
-		    beforeslice8 = new byte[dimension];
-		    thisslice8 = new byte[dimension];
-		    afterslice8 = new byte[dimension];
-		    newslice8 = new byte[dimension];
+		    beforeslice8 = new byte[dimension];		// NOSONAR
+		    thisslice8 = new byte[dimension];		// NOSONAR
+		    afterslice8 = new byte[dimension];		// NOSONAR
+		    newslice8 = new byte[dimension];		// NOSONAR
 		}
 		else{//16bit scenario
-		    beforeslice = new short[dimension];
-		    thisslice = new short[dimension];
-		    afterslice = new short[dimension];
-		    newslice = new short[dimension];
+		    beforeslice = new short[dimension];		// NOSONAR
+		    thisslice = new short[dimension];		// NOSONAR
+		    afterslice = new short[dimension];		// NOSONAR
+		    newslice = new short[dimension];		// NOSONAR
 		}
-		double dubbeforeslice[] = new double[dimension];
-		double dubthisslice[] = new double[dimension];
-		double dubafterslice[] = new double[dimension];
-		double filteredslice[] = new double[dimension];
+		double dubbeforeslice[] = new double[dimension];	// NOSONAR
+		double dubthisslice[] = new double[dimension];		// NOSONAR
+		double dubafterslice[] = new double[dimension];		// NOSONAR
+		double filteredslice[] = new double[dimension];		// NOSONAR
 	
 		double marraythisP[] = new double[5];
 		double marraythisX[] = new double[5];

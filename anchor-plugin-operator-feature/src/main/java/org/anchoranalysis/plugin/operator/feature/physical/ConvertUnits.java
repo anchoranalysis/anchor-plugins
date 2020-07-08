@@ -35,37 +35,20 @@ import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.input.FeatureInput;
 
+import lombok.Getter;
+import lombok.Setter;
+
 // 
 public class ConvertUnits<T extends FeatureInput> extends FeatureGenericSingleElem<T> {
 
 	// START BEAN PROPERTIES
-	@BeanField @AllowEmpty
+	@BeanField @AllowEmpty @Getter @Setter
 	private String unitTypeFrom = "";
 	
-	@BeanField @AllowEmpty
+	@BeanField @AllowEmpty @Getter @Setter
 	private String unitTypeTo = "";
 	// END BEAN PROPERTIES
-
-	public ConvertUnits() {
-		
-	}
-
-	public String getUnitTypeTo() {
-		return unitTypeTo;
-	}
-
-	public void setUnitTypeTo(String unitTypeTo) {
-		this.unitTypeTo = unitTypeTo;
-	}
-
-	public String getUnitTypeFrom() {
-		return unitTypeFrom;
-	}
-
-	public void setUnitTypeFrom(String unitTypeFrom) {
-		this.unitTypeFrom = unitTypeFrom;
-	}
-
+	
 	@Override
 	protected double calc(SessionInput<T> input) throws FeatureCalcException {
 		

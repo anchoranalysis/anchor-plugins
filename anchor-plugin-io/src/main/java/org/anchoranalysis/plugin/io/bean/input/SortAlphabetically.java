@@ -29,7 +29,6 @@ package org.anchoranalysis.plugin.io.bean.input;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 
@@ -63,13 +62,10 @@ public class SortAlphabetically<T extends InputFromManager> extends InputManager
 			list.add( itr.next() );
 		}
 		
-		Comparator<T> comparator = new Comparator<T>() {
-			@Override
-			public int compare(T o1, T o2) {
-				return o1.descriptiveName().compareTo(o2.descriptiveName());
-			}
-		};
-		Collections.sort(list, comparator);
+		Collections.sort(
+			list,
+			(T o1, T o2) -> o1.descriptiveName().compareTo(o2.descriptiveName()) 
+		);
 		
 		return list;
 	}

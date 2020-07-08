@@ -36,6 +36,10 @@ import org.anchoranalysis.image.io.input.ProvidesStackInput;
 import org.anchoranalysis.image.io.input.StackInputInitParamsCreator;
 import org.anchoranalysis.io.output.bound.BoundIOContext;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
 public class FeatureCalculatorRepeated {
 	
 	public static NRGStackWithParams extractStack( ProvidesStackInput inputObject, StackProvider nrgStackProvider, BoundIOContext context ) throws OperationFailedException {

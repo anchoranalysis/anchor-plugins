@@ -36,9 +36,6 @@ import org.anchoranalysis.mpp.sgmn.optscheme.step.Reporting;
 
 public class KernelIterDescriptionSerializerPeriodicReporter extends ObjectSerializerPeriodicReporter<KernelIterDescription> {
 
-	// BEAN PARAMETERS
-	// END BEAN PARAMETERS
-	
 	public KernelIterDescriptionSerializerPeriodicReporter() {
 		super("kernelIterDescription");
 	}
@@ -46,7 +43,7 @@ public class KernelIterDescriptionSerializerPeriodicReporter extends ObjectSeria
 	@Override
 	protected Optional<KernelIterDescription> generateIterableElement( Reporting<CfgNRGPixelized> reporting ) {
 		return Optional.of(
-				new KernelIterDescription(
+			new KernelIterDescription(
 				reporting.getKernel(),
 				reporting.isAccptd(),
 				reporting.getProposal().isPresent(),
@@ -60,5 +57,6 @@ public class KernelIterDescriptionSerializerPeriodicReporter extends ObjectSeria
 
 	@Override
 	public void reportNewBest(Reporting<CfgNRGPixelized> reporting) {
+		// NOTHING TO DO
 	}
 }

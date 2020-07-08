@@ -217,30 +217,30 @@ public class LinearLeastSquaresEllipsoidFitter extends ConicFitterBase {
 		
 		DoubleMatrix2D matC = createConstraintMatrix();
 		
-		DoubleMatrix2D matC_1_Inv = algebra.inverse( matC.viewPart(0, 0, 6, 6) );
+		DoubleMatrix2D matCInverse = algebra.inverse( matC.viewPart(0, 0, 6, 6) );
 		
-		DoubleMatrix2D matS_11 = matS.viewPart(0, 0, 6, 6);
-		DoubleMatrix2D matS_12 = matS.viewPart(0, 6, 6, 4);
-		DoubleMatrix2D matS_21 = matS.viewPart(6, 0, 4, 6);
-		DoubleMatrix2D matS_22 = matS.viewPart(6, 6, 4, 4);
+		DoubleMatrix2D matS11 = matS.viewPart(0, 0, 6, 6);
+		DoubleMatrix2D matS12 = matS.viewPart(0, 6, 6, 4);
+		DoubleMatrix2D matS21 = matS.viewPart(6, 0, 4, 6);
+		DoubleMatrix2D matS22 = matS.viewPart(6, 6, 4, 4);
 		
-		DoubleMatrix2D matS_22_Inv;
-		if (new Algebra().det(matS_22)>1e-9) {
-			matS_22_Inv = algebra.inverse(matS_22);
+		DoubleMatrix2D matS22Inv;
+		if (new Algebra().det(matS22)>1e-9) {
+			matS22Inv = algebra.inverse(matS22);
 		} else {
 			// Otherwise we calculate a pseudo-inverse and of matS_22 and assign it to matS_22_inv
-			matS_22_Inv = pesudoInverse(matS_22);
+			matS22Inv = pesudoInverse(matS22);
 		}
 		
 		
-		matS_22_Inv.assign( Functions.mult(-1) );
+		matS22Inv.assign( Functions.mult(-1) );
 		
 		// Solve generalized eigenvalue/eigenvector problem
-		DoubleMatrix2D mult1 = matS_22_Inv.zMult(matS_21, null);
-		DoubleMatrix2D mult2 = matS_12.zMult( mult1, null);
-				mult2.assign( matS_11, Functions.plus );
+		DoubleMatrix2D mult1 = matS22Inv.zMult(matS21, null);
+		DoubleMatrix2D mult2 = matS12.zMult( mult1, null);
+				mult2.assign( matS11, Functions.plus );
 		
-		DoubleMatrix2D mult3 = matC_1_Inv.zMult(mult2, null);
+		DoubleMatrix2D mult3 = matCInverse.zMult(mult2, null);
 		
 		EigenvalueDecomposition e = new EigenvalueDecomposition(mult3); 
 		
@@ -273,9 +273,7 @@ public class LinearLeastSquaresEllipsoidFitter extends ConicFitterBase {
 		DoubleMatrix2D second = DoubleFactory2D.dense.make( 3, 1 );
 		second.viewColumn(0).assign( v2.viewPart(0, 3) );
 		
-		DoubleMatrix2D center = matrixLeftDivide(first, second);
-		
-		return center;
+		return matrixLeftDivide(first, second);
 	}
 	
 	

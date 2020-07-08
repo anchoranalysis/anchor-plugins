@@ -55,8 +55,8 @@ class FeedbackGenerator<T> {
 
 	public void begin( OptimizationFeedbackInitParams<T> initParams, ExtractScoreSize<T> extracter ) {
 	
-		this.periodTriggerBank = new PeriodTriggerBank<T>();
-		this.aggregateTriggerBank = new AggregateTriggerBank<T>(extracter);
+		this.periodTriggerBank = new PeriodTriggerBank<>();
+		this.aggregateTriggerBank = new AggregateTriggerBank<>(extracter);
 		
 		initParams.setPeriodTriggerBank( periodTriggerBank );
 		initParams.setAggregateTriggerBank( aggregateTriggerBank );
@@ -65,9 +65,7 @@ class FeedbackGenerator<T> {
 			feedbackReceiver.reportBegin( initParams );
 	
 			aggregateTriggerBank.start(initParams);
-		} catch (AggregatorException e) {
-			errorReporter.recordError(FeedbackGenerator.class, e);
-		} catch (ReporterException e) {
+		} catch (AggregatorException | ReporterException e) {
 			errorReporter.recordError(FeedbackGenerator.class, e);
 		}
 		periodTriggerBank.reset();

@@ -50,20 +50,14 @@ public class EllipsoidMaxAreaIntersectingPlane extends FeatureMarkDirection {
 		
 		normalToPlane.normalize();
 		Point3d beta = rotMatrix.calcRotatedPoint( new Point3d(normalToPlane) );
-		
-		double beta_1 = beta.getX();
-		double beta_2 = beta.getY();
-		double beta_3 = beta.getZ();
-		
-		double beta_1_sq = Math.pow(beta_1, 2);
-		double beta_2_sq = Math.pow(beta_2, 2);
-		double beta_3_sq = Math.pow(beta_3, 2);
+			
+		double beta1Squared = Math.pow(beta.getX(), 2);
+		double beta2Squared = Math.pow(beta.getY(), 2);
+		double beta3Squared = Math.pow(beta.getZ(), 2);
 		
 		
-		double P_t = Math.sqrt((Math.pow(radii[0],2) * beta_1_sq) + (Math.pow(radii[1],2) * beta_2_sq) + (Math.pow(radii[2],2) * beta_3_sq)); 
+		double pt = Math.sqrt((Math.pow(radii[0],2) * beta1Squared) + (Math.pow(radii[1],2) * beta2Squared) + (Math.pow(radii[2],2) * beta3Squared)); 
 
-		double area_center = (Math.PI * radii[0] * radii[1] * radii[2]) / P_t;
-		
-		return area_center;
+		return (Math.PI * radii[0] * radii[1] * radii[2]) / pt;
 	}
 }

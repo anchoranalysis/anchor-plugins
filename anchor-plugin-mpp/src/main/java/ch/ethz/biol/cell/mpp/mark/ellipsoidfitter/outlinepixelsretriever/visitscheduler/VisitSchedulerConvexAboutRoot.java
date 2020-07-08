@@ -54,7 +54,7 @@ public class VisitSchedulerConvexAboutRoot extends VisitScheduler {
 	@Override
 	public void beforeCreateObjMask(RandomNumberGenerator re, ImageResolution res)
 			throws InitException {
-
+		// NOTHING TO DO
 	}
 
 	@Override

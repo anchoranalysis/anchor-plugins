@@ -38,13 +38,12 @@ import org.anchoranalysis.mpp.sgmn.optscheme.feedback.aggregate.IAggregateReceiv
 import org.anchoranalysis.mpp.sgmn.optscheme.step.Reporting;
 import org.apache.commons.lang.time.StopWatch;
 
+import lombok.NoArgsConstructor;
+
+@NoArgsConstructor
 public final class ConsoleAggReporter extends ReporterAgg<CfgNRGPixelized> implements IAggregateReceiver<CfgNRGPixelized> {
 	
 	private StopWatch timer = null;
-	
-	public ConsoleAggReporter() {
-		// Standard Bean Constructor
-	}
 	
 	public ConsoleAggReporter(double aggIntervalLog10) {
 		super(aggIntervalLog10);
@@ -52,6 +51,7 @@ public final class ConsoleAggReporter extends ReporterAgg<CfgNRGPixelized> imple
 	
 	@Override
 	public void aggStart( OptimizationFeedbackInitParams<CfgNRGPixelized> initParams, Aggregator agg ) throws AggregatorException {
+		// NOTHING TO DO
 	}
 	
 	@Override
@@ -63,7 +63,7 @@ public final class ConsoleAggReporter extends ReporterAgg<CfgNRGPixelized> imple
 
 	@Override
 	public void aggReport( Reporting<CfgNRGPixelized> reporting, Aggregator agg ) {
-		System.out.printf(
+		System.out.printf(		// NOSONAR
 			"itr=%d  time=%e  tpi=%e   %s%n",
 			reporting.getIter(),
 			((double) timer.getTime()) / 1000,
@@ -85,7 +85,7 @@ public final class ConsoleAggReporter extends ReporterAgg<CfgNRGPixelized> imple
 	
 	@Override
 	public void aggEnd( Aggregator agg ) {
-		
+		// NOTHING TO DO
 	}
 	
 	@Override
@@ -97,6 +97,6 @@ public final class ConsoleAggReporter extends ReporterAgg<CfgNRGPixelized> imple
 	public void reportEnd( OptimizationFeedbackEndParams<CfgNRGPixelized> optStep ) {
 		super.reportEnd( optStep );
 		timer.stop();
-		System.out.printf( "Optimization time took %e s%n", ((double) timer.getTime()) / 1000 );
+		System.out.printf( "Optimization time took %e s%n", ((double) timer.getTime()) / 1000 );	// NOSONAR
 	}
 }
