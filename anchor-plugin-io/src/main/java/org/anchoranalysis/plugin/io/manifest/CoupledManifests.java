@@ -34,7 +34,7 @@ import java.util.Optional;
 
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.io.error.AnchorIOException;
-import org.anchoranalysis.io.filepath.prefixer.FilePathDifferenceFromFolderPath;
+import org.anchoranalysis.io.filepath.prefixer.PathDifferenceFromBase;
 import org.anchoranalysis.io.input.InputFromManager;
 import org.anchoranalysis.io.manifest.ManifestRecorder;
 import org.anchoranalysis.io.manifest.ManifestRecorderFile;
@@ -79,10 +79,9 @@ public class CoupledManifests implements InputFromManager {
 			
 		if (experimentManifest.isPresent()) {
 			Path experimentRootFolder = getExperimentManifest().get().getRootFolder().calcPath();
-			
-			FilePathDifferenceFromFolderPath ff = new FilePathDifferenceFromFolderPath();
-			ff.init(experimentRootFolder,fileManifest.getRootPath());
-			return ff.getRemainderCombined().toString();
+
+			 PathDifferenceFromBase ff = PathDifferenceFromBase.differenceFrom(experimentRootFolder,fileManifest.getRootPath());
+			return ff.combined().toString();
 			
 		} else {
 			return generateNameFromFolders(0, logger);

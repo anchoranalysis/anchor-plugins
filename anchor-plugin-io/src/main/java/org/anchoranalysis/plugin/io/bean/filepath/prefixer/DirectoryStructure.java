@@ -35,7 +35,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.io.bean.filepath.prefixer.PathWithDescription;
 import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.error.FilePathPrefixerException;
-import org.anchoranalysis.io.filepath.prefixer.FilePathDifferenceFromFolderPath;
+import org.anchoranalysis.io.filepath.prefixer.PathDifferenceFromBase;
 import org.anchoranalysis.io.filepath.prefixer.FilePathPrefix;
 import org.apache.commons.io.FilenameUtils;
 
@@ -64,7 +64,7 @@ public class DirectoryStructure extends FilePathPrefixerAvoidResolve {
 	@Override
 	protected FilePathPrefix outFilePrefixFromPath(PathWithDescription input, Path root) throws FilePathPrefixerException {
 		
-		FilePathDifferenceFromFolderPath difference = calcDifferenceToPrefix(
+		PathDifferenceFromBase difference = calcDifferenceToPrefix(
 			removeExtension(input.getPath())
 		);
 		
@@ -80,30 +80,22 @@ public class DirectoryStructure extends FilePathPrefixerAvoidResolve {
 		);
 	}
 	
-	private FilePathDifferenceFromFolderPath calcDifferenceToPrefix(Path pathInRemoved) throws FilePathPrefixerException {
+	private PathDifferenceFromBase calcDifferenceToPrefix(Path pathInRemoved) throws FilePathPrefixerException {
 		try {
-			FilePathDifferenceFromFolderPath ff = new FilePathDifferenceFromFolderPath();
-			ff.init(
+			 return PathDifferenceFromBase.differenceFrom(
 				Paths.get(inPathPrefix),
 				pathInRemoved
 			);
-			return ff;
 		} catch (AnchorIOException e) {
 			throw new FilePathPrefixerException(e);
 		}
 	}
 	
-	private Path buildOutPath(Path root, FilePathDifferenceFromFolderPath ff) {
-		Path outFolderPath = root;
-		
-		if (includeFolders && ff.getFolder()!=null) {
-			outFolderPath = outFolderPath.resolve( ff.getFolder() );
+	private Path buildOutPath(Path root, PathDifferenceFromBase ff) {
+		if (includeFolders) {
+			return root.resolve( ff.combined() );
+		} else {
+			return root.resolve( ff.getFilename() );
 		}
-		
-		if (ff.getFilename()!=null) {
-			outFolderPath = outFolderPath.resolve( ff.getFilename() );
-		}
-		
-		return outFolderPath;
 	}
 }
