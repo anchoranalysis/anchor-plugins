@@ -37,6 +37,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.log.Logger;
+import org.anchoranalysis.core.log.MessageLogger;
 import org.anchoranalysis.core.progress.ProgressReporter;
 import org.anchoranalysis.core.progress.ProgressReporterConsole;
 import org.anchoranalysis.core.progress.ProgressReporterNull;
@@ -44,11 +45,15 @@ import org.anchoranalysis.experiment.ExperimentExecutionArguments;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
 import org.anchoranalysis.experiment.bean.Experiment;
 import org.anchoranalysis.experiment.bean.identifier.ExperimentIdentifier;
+import org.anchoranalysis.experiment.bean.log.LoggingDestination;
+import org.anchoranalysis.experiment.bean.log.ToConsole;
 import org.anchoranalysis.experiment.log.ConsoleMessageLogger;
+import org.anchoranalysis.experiment.log.reporter.StatefulMessageLogger;
 import org.anchoranalysis.io.bean.input.InputManagerParams;
 import org.anchoranalysis.io.bean.provider.file.FileProvider;
 import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.error.FileProviderException;
+import org.anchoranalysis.io.output.bound.BoundOutputManager;
 import org.anchoranalysis.plugin.io.bean.copyfilesmode.copymethod.CopyFilesMethod;
 import org.anchoranalysis.plugin.io.bean.copyfilesmode.copymethod.SimpleCopy;
 import org.anchoranalysis.plugin.io.bean.copyfilesmode.naming.CopyFilesNaming;
@@ -85,28 +90,42 @@ public class CopyFilesExperiment extends Experiment {
 	
 	@BeanField @Getter @Setter
 	private boolean delExistingFolder = true;
+	
+	@BeanField @Getter @Setter
+	private LoggingDestination log = new ToConsole();
 	// END BEAN PROPERTIES
 	
 	@Override
 	public void doExperiment(ExperimentExecutionArguments arguments) throws ExperimentExecutionException {
+			
+		Path destination;
+		try {
+			destination = destinationFolderPath.path(arguments.isDebugEnabled());
+		} catch (AnchorIOException exc) {
+			throw new ExperimentExecutionException("Cannot determine destination directory", exc);
+		}
+
+		// Create an output-manager for the destination (for logging)
+		StatefulMessageLogger logger = log.createWithConsoleFallback(
+			new BoundOutputManager(destination, delExistingFolder),
+			arguments,
+			false
+		);
+		
+		logger.log("Reading files: ");
 		
 		try {
-			Path destination = destinationFolderPath.path(arguments.isDebugEnabled());
-
-			// Create an output-manager for the destination (for logging)
-			
-			
-			System.out.print("Reading files: ");
-			
 			doCopying(
 				findMatchingFiles(arguments),
 				sourceFolderPath.path(arguments.isDebugEnabled()),
-				destination
+				destination,
+				logger
 			);
-			
+			logger.close(true);
 		} catch (AnchorIOException e) {
+			logger.close(false);
 			throw new ExperimentExecutionException(e);
-		}
+		}				
 	}
 	
 	@Override
@@ -114,12 +133,12 @@ public class CopyFilesExperiment extends Experiment {
 		return true;
 	}
 	
-	private void doCopying( Collection<File> files, Path sourcePath, Path destPath) throws ExperimentExecutionException {
+	private void doCopying( Collection<File> files, Path sourcePath, Path destPath, MessageLogger logger) throws ExperimentExecutionException {
 		
 		ProgressReporter progressReporter = createProgressReporter(files.size());
 		
 		if (!dummyMode) {
-			System.out.print("Copying files: ");
+			logger.log("Copying files: ");
 			if (delExistingFolder) {
 				FileUtils.deleteQuietly( destPath.toFile() );
 			}
@@ -133,7 +152,7 @@ public class CopyFilesExperiment extends Experiment {
 			
 			int i = 0;
 			for( File f : files) {
-				copyFile(sourcePath, destPath, f, i++, progressReporter);
+				copyFile(sourcePath, destPath, f, i++, progressReporter, logger);
 			}
 			
 			copyFilesNaming.afterCopying(destPath, dummyMode);
@@ -152,21 +171,33 @@ public class CopyFilesExperiment extends Experiment {
 		return progressReporter;
 	}
 	
-	private void copyFile( Path sourcePath, Path destPath, File file, int iter, ProgressReporter progressReporter ) throws OperationFailedException {
+	private void copyFile(
+		Path sourcePath,
+		Path destPath,
+		File file,
+		int iter,
+		ProgressReporter progressReporter,
+		MessageLogger logger
+	) throws OperationFailedException {
 
 		try {
-			Optional<Path> destination = copyFilesNaming.destinationPath(sourcePath, destPath, file, iter);
+			Optional<Path> destination = copyFilesNaming.destinationPath(
+				sourcePath,
+				destPath,
+				file,
+				iter
+			);
 			
 			// Skip any files with a NULL destinationPath
 			if (!destination.isPresent()) {
 				if (dummyMode) {
-					System.out.printf("Skipping %s%n", file.getPath() );
+					logger.logFormatted("Skipping %s%n", file.getPath() );
 				}
 				return;
 			}
 			
 			if (dummyMode) {
-				System.out.printf("Copying %s to %s%n", file.getPath(), destination.toString() );		
+				logger.logFormatted("Copying %s to %s%n", file.getPath(), destination.toString() );		
 			} else {
 				copyFilesMethod.createDestinationFile(
 					file.toPath(),
@@ -182,9 +213,8 @@ public class CopyFilesExperiment extends Experiment {
 	}
 	
 	private Collection<File> findMatchingFiles(ExperimentExecutionArguments expArgs) throws ExperimentExecutionException {
-		Collection<File> files;
 		try {
-			files = fileProvider.create(
+			return fileProvider.create(
 				new InputManagerParams(
 					expArgs.createInputContext(),
 					new ProgressReporterConsole(5),
@@ -196,8 +226,5 @@ public class CopyFilesExperiment extends Experiment {
 		} catch (IOException e) {
 			throw new ExperimentExecutionException("Cannot create input context", e);
 		}
-		
-		assert(files!=null);
-		return files;
 	}
 }

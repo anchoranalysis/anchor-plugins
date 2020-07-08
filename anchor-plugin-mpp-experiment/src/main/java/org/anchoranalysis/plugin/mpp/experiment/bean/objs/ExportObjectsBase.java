@@ -98,7 +98,7 @@ public abstract class ExportObjectsBase<T extends InputFromManager, S> extends T
 		return BBoxUtilities.createObjMaskForBBox( om, bboxToExtract );
 	}
 		
-	protected ExtractedBBoxGenerator createBBoxGeneratorForStack( Stack stack, String manifestFunction ) throws CreateException {
+	protected ExtractedBBoxGenerator createBBoxGeneratorForStack( Stack stack, String manifestFunction ) {
 		ExtractedBBoxGenerator generator = new ExtractedBBoxGenerator(stack, manifestFunction);
 		generator.setPaddingXY(paddingXY);
 		generator.setPaddingZ(paddingZ);

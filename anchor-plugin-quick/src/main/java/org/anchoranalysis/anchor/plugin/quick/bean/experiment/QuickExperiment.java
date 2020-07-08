@@ -217,7 +217,7 @@ public class QuickExperiment<S> extends Experiment {
 		}
 		
 		// Log Reporter
-		delegate.setLoggerExperiment( new ToConsole() );
+		delegate.setLogExperiment( new ToConsole() );
 		
 		
 		// Task
