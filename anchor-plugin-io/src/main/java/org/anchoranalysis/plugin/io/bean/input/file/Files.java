@@ -43,6 +43,10 @@ import org.anchoranalysis.io.input.FileInput;
 import org.anchoranalysis.plugin.io.bean.descriptivename.RemoveExtensions;
 import org.anchoranalysis.plugin.io.bean.descriptivename.patternspan.PatternSpan;
 
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 
 /**
  * File-paths 
@@ -50,16 +54,21 @@ import org.anchoranalysis.plugin.io.bean.descriptivename.patternspan.PatternSpan
  * @author Owen Feehan
  *
  */
+@NoArgsConstructor
 public class Files extends InputManager<FileInput> {
 
 	// START BEAN PROPERTIES
-	@BeanField
-	private FileProvider fileProvider = null;
+	@BeanField @Getter @Setter
+	private FileProvider fileProvider;
 	
-	@BeanField
+	@BeanField @Getter @Setter
 	private DescriptiveNameFromFile descriptiveNameFromFile = new RemoveExtensions( new PatternSpan() );
 	// END BEAN PROPERTIES
 
+	public Files(FileProvider fileProvider) {
+		this.fileProvider = fileProvider;
+	}
+	
 	@Override
 	public List<FileInput> inputObjects(InputManagerParams params) throws AnchorIOException {
 		try {
@@ -74,22 +83,5 @@ public class Files extends InputManager<FileInput> {
 		} catch (FileProviderException e) {
 			throw new AnchorIOException("Cannot find files", e);
 		}
-	}
-	
-	public FileProvider getFileProvider() {
-		return fileProvider;
-	}
-
-	public void setFileProvider(FileProvider fileSet) {
-		this.fileProvider = fileSet;
-	}
-
-	public DescriptiveNameFromFile getDescriptiveNameFromFile() {
-		return descriptiveNameFromFile;
-	}
-
-	public void setDescriptiveNameFromFile(
-			DescriptiveNameFromFile descriptiveNameFromFile) {
-		this.descriptiveNameFromFile = descriptiveNameFromFile;
 	}
 }

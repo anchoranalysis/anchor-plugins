@@ -55,7 +55,7 @@ class Utilities {
 	}
 	
 	
-	static Point3i pntFromLine( String[] line, int indices[] ) {
+	static Point3i pntFromLine( String[] line, int[] indices ) {
 		return new Point3i(
 			intFromLine(line, indices[0]),
 			intFromLine(line, indices[1]),
@@ -77,17 +77,8 @@ class Utilities {
 	 * @throws SetOperationFailedException
 	 */
 	private static ObjectMask findObjForPoint( ObjectCollectionRTree allObjs, Point3i pnt, int numVoxels ) throws OperationFailedException {
+
 		ObjectCollection objs = allObjs.contains(pnt);
-		
-//		if (objs.size()>1) {
-//			throw new SetOperationFailedException( String.format("More than one object contains point '%s'. Only one is allowed.", pnt) );
-//		}
-//		
-//		if (objs.size()==0) {
-//			throw new SetOperationFailedException( String.format("No object contain contains point '%s'", pnt) );
-//		}
-//		
-//		return objs.get(0);
 		
 		for (ObjectMask om : objs) {
 			if (om.numVoxelsOn()==numVoxels) {
@@ -100,26 +91,26 @@ class Utilities {
 		);
 	}
 	
-	static ObjectMask findObjForCSVRow( ObjectCollectionRTree allObjs, CSVRow csvRow, int indexPnt[], int indexNumPixels ) throws OperationFailedException {
+	static ObjectMask findObjForCSVRow( ObjectCollectionRTree allObjs, CSVRow csvRow, int[] indexPnt, int indexNumPixels ) throws OperationFailedException {
 		
 		String[] line = csvRow.getLine();
-		
-		int numPixels = Utilities.intFromLine(line,indexNumPixels);
-		
-		Point3i pnt = Utilities.pntFromLine(line,indexPnt);			
 	
-		return Utilities.findObjForPoint( allObjs, pnt, numPixels );
+		return findObjForPoint(
+			allObjs,
+			pntFromLine(line,indexPnt),
+			intFromLine(line,indexNumPixels)
+		);
 	}
 	
-	static String describeObject( CSVRow csvRow, int indexPnt[], int indexNumPixels ) {
+	static String describeObject( CSVRow csvRow, int[] indexPnt, int indexNumPixels ) {
 		
 		String[] line = csvRow.getLine();
 		
-		int numPixels = Utilities.intFromLine(line,indexNumPixels);
-		
-		Point3i pnt = Utilities.pntFromLine(line,indexPnt);		
-		
-		return String.format("%s (numVoxels=%d)", pnt, numPixels);
+		return String.format(
+			"%s (numVoxels=%d)",
+			pntFromLine(line,indexPnt),
+			intFromLine(line,indexNumPixels)
+		);
 	}
 	
 	static void addInteger( String elementName, int val, Element parent, Document doc ) {

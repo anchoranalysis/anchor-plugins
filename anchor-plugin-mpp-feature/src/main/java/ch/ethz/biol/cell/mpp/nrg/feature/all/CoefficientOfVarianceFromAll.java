@@ -60,7 +60,7 @@ public class CoefficientOfVarianceFromAll extends FeatureAllMemo {
 	
 	private double calcStatistic( SessionInput<FeatureInputAllMemo> input, MemoCollection memoMarks ) throws FeatureCalcException {
 		
-		double vals[] = new double[memoMarks.size()];
+		double[] vals = new double[memoMarks.size()];
 				
 		double mean = calcForEachItem(input, memoMarks, vals);
 		
@@ -72,7 +72,7 @@ public class CoefficientOfVarianceFromAll extends FeatureAllMemo {
 	}
 	
 	/** Calculates the feature on each mark separately, populating vals, and returns the mean */
-	private double calcForEachItem( SessionInput<FeatureInputAllMemo> input, MemoCollection memoMarks, double vals[] ) throws FeatureCalcException {
+	private double calcForEachItem( SessionInput<FeatureInputAllMemo> input, MemoCollection memoMarks, double[] vals ) throws FeatureCalcException {
 		
 		double sum = 0.0;		
 		
@@ -93,7 +93,7 @@ public class CoefficientOfVarianceFromAll extends FeatureAllMemo {
 		return sum / memoMarks.size();
 	}
 	
-	private static double stdDev( double vals[], double mean ) {
+	private static double stdDev( double[] vals, double mean ) {
 		double sumSqDiff = 0.0;
 		for( int i=0; i<vals.length; i++) {
 			double diff = vals[i] - mean;

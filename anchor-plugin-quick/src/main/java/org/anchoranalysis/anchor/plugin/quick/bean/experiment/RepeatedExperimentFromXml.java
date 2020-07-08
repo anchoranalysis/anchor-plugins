@@ -136,7 +136,7 @@ class RepeatedExperimentFromXml<T extends InputFromManager,S> {
 	private <U> U extractBean(String relativePath, String friendlyName) {
 		Path path = getCombinedPath(relativePath);
 		try {
-			U bean = BeanXmlLoader.loadBean(path);
+			U bean = BeanXmlLoader.loadBean(path);	// NOSONAR
 			return bean;
 		} catch (BeanXmlException e) {
 			throw new BeanStrangeException(

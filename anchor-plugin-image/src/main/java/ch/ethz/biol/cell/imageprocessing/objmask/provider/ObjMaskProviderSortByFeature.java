@@ -54,7 +54,7 @@ public class ObjMaskProviderSortByFeature extends ObjectCollectionProviderOne {
 		private ObjectMask objMask;
 		private double featureVal;
 		
-		public ObjectWithFeatureValue(ObjectMask objMask, double featureVal) throws FeatureCalcException {
+		public ObjectWithFeatureValue(ObjectMask objMask, double featureVal) {
 			super();
 			this.objMask = objMask;
 			this.featureVal = featureVal;

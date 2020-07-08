@@ -41,17 +41,23 @@ import org.apache.commons.lang.time.StopWatch;
 
 public final class OptimizationStepLogReporter extends ReporterAgg<CfgNRGPixelized> implements IAggregateReceiver<CfgNRGPixelized> {
 
-	// START BEANS
-	
-	// END BEANS
-	
-	private StopWatch timer = null;
-	
+	private StopWatch timer;
 	private MessageLogger logger;
+		
+	@Override
+	public void reportBegin( OptimizationFeedbackInitParams<CfgNRGPixelized> initParams ) throws ReporterException {
+		
+		super.reportBegin( initParams );
+		
+		timer = new StopWatch();
+		timer.start();
+		
+		logger = initParams.getInitContext().getLogger().messageLogger();
+	}
 	
-	// Constructor
-	public OptimizationStepLogReporter() {
-		super();
+	@Override
+	public void aggStart( OptimizationFeedbackInitParams<CfgNRGPixelized> initParams, Aggregator agg ) {
+		// NOTHING TO DO
 	}
 	
 	@Override
@@ -80,7 +86,7 @@ public final class OptimizationStepLogReporter extends ReporterAgg<CfgNRGPixeliz
 	
 	@Override
 	public void aggEnd( Aggregator agg ) {
-		
+		// NOTHING TO DO
 	}
 
 
@@ -101,20 +107,4 @@ public final class OptimizationStepLogReporter extends ReporterAgg<CfgNRGPixeliz
 		return this;
 	}
 	
-	
-	@Override
-	public void reportBegin( OptimizationFeedbackInitParams<CfgNRGPixelized> initParams ) throws ReporterException {
-		
-		super.reportBegin( initParams );
-		
-		timer = new StopWatch();
-		timer.start();
-		
-		logger = initParams.getInitContext().getLogger().messageLogger();
-	}
-	
-	@Override
-	public void aggStart( OptimizationFeedbackInitParams<CfgNRGPixelized> initParams, Aggregator agg ) {
-		
-	}
 }

@@ -67,18 +67,19 @@ public class Log4JReporter extends ReporterAgg<CfgNRGPixelized> implements IAggr
 
 	@Override
 	public void aggStart( OptimizationFeedbackInitParams<CfgNRGPixelized> initParams, Aggregator agg ) {
-		
+		// NOTHING TO DO
 	}
 	
 	@Override
 	public void aggReport( Reporting<CfgNRGPixelized> reporting, Aggregator agg ) {
-		String out = String.format("itr=%d  %s", reporting.getIter(), agg.toString() );
-		log.info( out );
+		log.info(
+			String.format("itr=%d  %s", reporting.getIter(), agg.toString())
+		);
 	}
 	
 	@Override
 	public void aggEnd( Aggregator agg ) {
-		
+		// NOTHING TO DO		
 	}
 
 }

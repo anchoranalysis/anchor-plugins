@@ -28,10 +28,13 @@ package ch.ethz.biol.cell.imageprocessing.io.objmask;
 
 
 import ij.process.ImageProcessor;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.convert.ByteConverter;
 
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
 public class FloodFillUtils {
 
 	// works on a single plane, returns highest color value assigned

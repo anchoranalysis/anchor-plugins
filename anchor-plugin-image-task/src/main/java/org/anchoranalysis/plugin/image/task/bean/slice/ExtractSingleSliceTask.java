@@ -202,7 +202,7 @@ public class ExtractSingleSliceTask extends Task<NamedChnlsInput,SharedStateSele
 				logger
 			);
 			
-			double results[] = new double[nrgStack.getDimensions().getZ()];
+			double[] results = new double[nrgStack.getDimensions().getZ()];
 			
 			// Extract each slice, and calculate feature
 			for (int z=0; z<nrgStack.getDimensions().getZ(); z++) {

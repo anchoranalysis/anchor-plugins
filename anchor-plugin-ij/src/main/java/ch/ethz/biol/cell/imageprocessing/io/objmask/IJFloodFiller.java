@@ -120,7 +120,7 @@ public class IJFloodFiller {
 			x = popx(); 
 			if (x==-1) return true;
 			y = popy();
-			int x1 = x; int x2 = x;
+			int x1 = x; int x2 = x;	// NOSONAR
 			if(ip.getPixel(x1,y)==color){ 
 				while (ip.getPixel(x1,y)==color && x1>=0) x1--; // find start of scan-line
 				x1++;
@@ -186,7 +186,7 @@ public class IJFloodFiller {
 			if (x ==-1) return;
 			y = popy();
 			if (!inParticle(x,y,level1,level2)) continue;
-			int x1 = x; int x2 = x;
+			int x1 = x; int x2 = x;	// NOSONAR
 			while (inParticle(x1,y,level1,level2) && x1>=0) x1--; // find start of scan-line
 			x1++;
 			while (inParticle(x2,y,level1,level2) && x2<width) x2++;  // find end of scan-line                 

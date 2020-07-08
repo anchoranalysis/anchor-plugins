@@ -75,7 +75,7 @@ public class Intensity extends FeatureNrgChnl {
 	private ChildCacheName cacheName() {
 		return new ChildCacheName(
 			Intensity.class,
-			String.valueOf(excludeZero) + "_" + String.valueOf(getNrgIndex())
+			String.valueOf(excludeZero) + "_" + getNrgIndex()
 		);
 	}
 }
