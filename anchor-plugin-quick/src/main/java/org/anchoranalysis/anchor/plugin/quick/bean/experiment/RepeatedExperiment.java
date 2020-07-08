@@ -96,12 +96,12 @@ class RepeatedExperiment<T extends InputFromManager,S> {
 		}
 	}
 
-	public void setLoggerExperiment(LoggingDestination logger) {
-		delegate.setLoggerExperiment(logger);
+	public void setLogExperiment(LoggingDestination logger) {
+		delegate.setLogExperiment(logger);
 	}
 	
-	public void setLoggerTask(LoggingDestination logger) {
-		delegate.setLoggerTask(logger);
+	public void setLogTask(LoggingDestination logger) {
+		delegate.setLogTask(logger);
 	}
 	
 	public void setOutput(OutputManager output) {

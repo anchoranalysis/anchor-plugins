@@ -72,10 +72,10 @@ class RepeatedExperimentFromXml<T extends InputFromManager,S> {
 		this.beanLocalPath = beanLocalPath;
 		
 		// We create these other beans, before we check the configuration. This is a bit hacky
-		delegate.setLoggerExperiment(
+		delegate.setLogExperiment(
 			extractLogReporterBean(loggerPathExperiment)
 		);
-		delegate.setLoggerTask(
+		delegate.setLogTask(
 			extractLogReporterBean(loggerPathTask)
 		);
 
