@@ -40,28 +40,29 @@ import org.anchoranalysis.feature.bean.list.FeatureListProvider;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.test.TestLoader;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
 public class FeaturesFromXmlFixture {
-	
-	private FeaturesFromXmlFixture() {}
 	
 	public static <T extends FeatureInput> FeatureList<T> createFeatureList(String xmlPath, TestLoader loader) throws CreateException {
 		Path pathStatic = loader.resolveTestPath(xmlPath);
 		try {
 			FeatureListProvider<T> provider = BeanXmlLoader.loadBean( pathStatic );
 			FeatureList<T> features = provider.create();
-			assertTrue( features.size() > 0 );	
+			assertTrue(!features.isEmpty());	
 			return features;
 		} catch (BeanXmlException e) {
 			throw new CreateException(e);
 		}
-		
 	}
 	
 	public static <T extends FeatureInput> List<NamedBean<FeatureListProvider<T>>> createNamedFeatureProviders(String xmlPath, TestLoader loader) throws CreateException {
 		Path pathStatic = loader.resolveTestPath(xmlPath);
 		try {
 			List<NamedBean<FeatureListProvider<T>>> list = BeanXmlLoader.loadBean( pathStatic );
-			assertTrue( list.size() > 0 );	
+			assertTrue(!list.isEmpty());	
 			return list;
 		} catch (BeanXmlException e) {
 			throw new CreateException(e);

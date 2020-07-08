@@ -30,7 +30,6 @@ import static org.junit.Assert.assertEquals;
 
 import java.util.Optional;
 
-import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.calc.FeatureInitParams;
@@ -49,11 +48,11 @@ public class FeatureTestCalculator {
 		
 	}
 	
-	public static <T extends FeatureInput> void assertDoubleResult( String message, Feature<T> feature, T params, double expectedResult ) throws FeatureCalcException, InitException {
+	public static <T extends FeatureInput> void assertDoubleResult( String message, Feature<T> feature, T params, double expectedResult ) throws FeatureCalcException {
 		assertDoubleResult(message, feature, params, Optional.empty(), expectedResult);
 	}
 	
-	public static <T extends FeatureInput> void assertIntResult( String message, Feature<T> feature, T params, int expectedResult ) throws FeatureCalcException, InitException {
+	public static <T extends FeatureInput> void assertIntResult( String message, Feature<T> feature, T params, int expectedResult ) throws FeatureCalcException {
 		assertIntResult(message, feature, params, Optional.empty(), expectedResult);
 	}
 	
