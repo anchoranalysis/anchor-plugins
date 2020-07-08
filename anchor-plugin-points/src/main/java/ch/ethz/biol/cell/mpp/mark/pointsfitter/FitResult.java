@@ -1,6 +1,13 @@
 package ch.ethz.biol.cell.mpp.mark.pointsfitter;
 
+import org.anchoranalysis.anchor.mpp.bean.points.fitter.PointsFitterException;
+import org.anchoranalysis.anchor.mpp.mark.conic.MarkEllipsoid;
 import org.anchoranalysis.core.geometry.Point3d;
+import org.anchoranalysis.image.extent.BoundingBox;
+import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.image.orientation.Orientation;
+import org.anchoranalysis.image.orientation.OrientationRotationMatrix;
+import org.anchoranalysis.math.rotation.RotationMatrix;
 
 /*
  * #%L
@@ -30,7 +37,9 @@ import org.anchoranalysis.core.geometry.Point3d;
 
 
 import cern.colt.matrix.DoubleMatrix2D;
+import lombok.Data;
 
+@Data
 public class FitResult {
 	
 	private Point3d centrePnt;
@@ -39,35 +48,23 @@ public class FitResult {
 	private double radiusZ;
 	private DoubleMatrix2D rotMatrix;
 	
-	public Point3d getCentrePnt() {
-		return centrePnt;
-	}
-	public void setCentrePnt(Point3d centrePnt) {
-		this.centrePnt = centrePnt;
-	}
-	public double getRadiusX() {
-		return radiusX;
-	}
-	public void setRadiusX(double radiusX) {
-		this.radiusX = radiusX;
-	}
-	public double getRadiusY() {
-		return radiusY;
-	}
-	public void setRadiusY(double radiusY) {
-		this.radiusY = radiusY;
-	}
-	public double getRadiusZ() {
-		return radiusZ;
-	}
-	public void setRadiusZ(double radiusZ) {
-		this.radiusZ = radiusZ;
-	}
-	public DoubleMatrix2D getRotMatrix() {
-		return rotMatrix;
-	}
-	public void setRotMatrix(DoubleMatrix2D rotMatrix) {
-		this.rotMatrix = rotMatrix;
+	public void applyFitResultToMark( MarkEllipsoid mark, ImageDimensions sceneDim, double shellRad ) throws PointsFitterException {
+
+		Orientation orientation = new OrientationRotationMatrix(
+			new RotationMatrix(rotMatrix)
+		); 
+		
+		mark.setShellRad( shellRad );
+		mark.setMarksExplicit(
+			centrePnt,
+			orientation,
+			radiiAsPoint()
+		);
+		
+		BoundingBox bbox = mark.bboxAllRegions(sceneDim);
+		if (bbox.extent().getX()<1||bbox.extent().getY()<1||bbox.extent().getZ()<1) {
+			throw new PointsFitterException("Ellipsoid is outside scene");
+		}
 	}
 	
 	public void applyRadiiSubtractScale( double subtract, double scale ) {
@@ -83,4 +80,7 @@ public class FitResult {
 		radiusZ = Math.max(radiusZ, minRadius);
 	}
 	
+	private Point3d radiiAsPoint() {
+		return new Point3d(radiusX, radiusY, radiusZ);
+	}
 }

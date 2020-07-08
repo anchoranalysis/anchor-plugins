@@ -37,6 +37,10 @@ import org.anchoranalysis.image.extent.Extent;
 import org.opencv.core.Size;
 import org.opencv.objdetect.HOGDescriptor;
 
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
+
 
 /**
  * Parameters for calculating a HOG Descriptor covering window-size, block-size etc.
@@ -44,27 +48,33 @@ import org.opencv.objdetect.HOGDescriptor;
  * @author Owen Feehan
  *
  */
+@EqualsAndHashCode(callSuper = false)
 public class HOGParameters extends AnchorBean<HOGParameters> {
-
+	
+	private static final String BLOCK_SIZE = "block-size";
+	private static final String BLOCK_STRIDE = "block-stride";
+	private static final String IMAGE_SIZE = "image-size";
+	private static final String CELL_SIZE = "cell-size";
+	
 	// START BEAN PROPERTIES
 	/** The window-size as per OpenCV implementation. If not specified, the window is set to be the same size as the (possibly resized) image.*/
-	@BeanField @OptionalBean
+	@BeanField @OptionalBean @Getter @Setter
 	private SizeXY windowSize;
 
 	/** The block-size as per OpenCV implementation (identical default-size)*/
-	@BeanField
+	@BeanField @Getter @Setter
 	private SizeXY blockSize = new SizeXY(16,16);
 	
 	/** The block-stride as per OpenCV implementation (identical default-size)*/
-	@BeanField
+	@BeanField @Getter @Setter
 	private SizeXY blockStride = new SizeXY(8,8);
 	
 	/** The cell-size as per OpenCV implementation (identical default-size)*/
-	@BeanField
+	@BeanField @Getter @Setter
 	private SizeXY cellSize = new SizeXY(8,8);
 	
 	/** The number of bins in each histogram for a cell */
-	@BeanField
+	@BeanField @Getter @Setter
 	private int numBins = 9;
 	// END BEAN PROPERTIES
 	
@@ -118,10 +128,10 @@ public class HOGParameters extends AnchorBean<HOGParameters> {
 				
 		SizeXY extentAsSize = new SizeXY(extent);
 		
-		DivideUtilities.checkDivisibleBy(extentAsSize, blockSize, "image-size", "block-size");
-		DivideUtilities.checkDivisibleBy(blockSize, cellSize, "block-size", "cell-size");
-		DivideUtilities.checkDivisibleBy(blockSize, blockStride, "block-size", "block-stride");
-		DivideUtilities.checkDivisibleBy(blockStride, cellSize, "block-stride", "cell-size");
+		DivideUtilities.checkDivisibleBy(extentAsSize, blockSize, IMAGE_SIZE, BLOCK_SIZE);
+		DivideUtilities.checkDivisibleBy(blockSize, cellSize, BLOCK_SIZE, CELL_SIZE);
+		DivideUtilities.checkDivisibleBy(blockSize, blockStride, BLOCK_SIZE, BLOCK_STRIDE);
+		DivideUtilities.checkDivisibleBy(blockStride, cellSize, BLOCK_STRIDE, CELL_SIZE);
 		
 		if (windowSize!=null) {
 			if (extent.getX() < windowSize.getWidth()) {
@@ -133,46 +143,6 @@ public class HOGParameters extends AnchorBean<HOGParameters> {
 		}
 	}
 	
-	public SizeXY getWindowSize() {
-		return windowSize;
-	}
-
-	public void setWindowSize(SizeXY windowSize) {
-		this.windowSize = windowSize;
-	}
-	
-	public int getNumBins() {
-		return numBins;
-	}
-
-	public void setNumBins(int numBins) {
-		this.numBins = numBins;
-	}
-
-	public SizeXY getBlockSize() {
-		return blockSize;
-	}
-
-	public void setBlockSize(SizeXY blockSize) {
-		this.blockSize = blockSize;
-	}
-
-	public SizeXY getBlockStride() {
-		return blockStride;
-	}
-
-	public void setBlockStride(SizeXY blockStride) {
-		this.blockStride = blockStride;
-	}
-
-	public SizeXY getCellSize() {
-		return cellSize;
-	}
-
-	public void setCellSize(SizeXY cellSize) {
-		this.cellSize = cellSize;
-	}
-
 	private static int numberSlidingWindowsFor(Size size, Size subtractFromSize, SizeXY addToSize, SizeXY stride) {
 		
 		int timesX = DivideUtilities.ceilDiv(
@@ -187,9 +157,6 @@ public class HOGParameters extends AnchorBean<HOGParameters> {
 		
 		return timesX * timesY;
 	}
-	
-	
-
 	
 	/** Convert to OpenCV Size class */
 	private static Size convertOr(Optional<SizeXY> in, Extent imageSize) {
@@ -206,51 +173,5 @@ public class HOGParameters extends AnchorBean<HOGParameters> {
 	
 	private static Size sizeFor(SizeXY size) {
 		return new Size(size.getWidth(), size.getHeight());
-	}
-
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((blockSize == null) ? 0 : blockSize.hashCode());
-		result = prime * result + ((blockStride == null) ? 0 : blockStride.hashCode());
-		result = prime * result + ((cellSize == null) ? 0 : cellSize.hashCode());
-		result = prime * result + numBins;
-		result = prime * result + ((windowSize == null) ? 0 : windowSize.hashCode());
-		return result;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		HOGParameters other = (HOGParameters) obj;
-		if (blockSize == null) {
-			if (other.blockSize != null)
-				return false;
-		} else if (!blockSize.equals(other.blockSize))
-			return false;
-		if (blockStride == null) {
-			if (other.blockStride != null)
-				return false;
-		} else if (!blockStride.equals(other.blockStride))
-			return false;
-		if (cellSize == null) {
-			if (other.cellSize != null)
-				return false;
-		} else if (!cellSize.equals(other.cellSize))
-			return false;
-		if (numBins != other.numBins)
-			return false;
-		if (windowSize == null) {
-			if (other.windowSize != null)
-				return false;
-		} else if (!windowSize.equals(other.windowSize))
-			return false;
-		return true;
 	}
 }

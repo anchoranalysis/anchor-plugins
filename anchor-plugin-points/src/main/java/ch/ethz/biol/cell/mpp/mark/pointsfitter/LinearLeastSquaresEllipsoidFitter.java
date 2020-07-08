@@ -44,172 +44,43 @@ import org.anchoranalysis.math.rotation.RotationMatrix;
 import cern.colt.matrix.DoubleFactory2D;
 import cern.colt.matrix.DoubleMatrix1D;
 import cern.colt.matrix.DoubleMatrix2D;
-import cern.colt.matrix.linalg.Algebra;
 import cern.colt.matrix.linalg.EigenvalueDecomposition;
-import cern.colt.matrix.linalg.SingularValueDecomposition;
 import cern.jet.math.Functions;
+import lombok.Getter;
+import lombok.Setter;
 
-//
-// Based upon the approach of Li and Griffiths in 'Least Squares Ellipsoid Specific Fitting' (2004)
-//
-//
-// generalized eigenvalues in wolfram
-// http://reference.wolfram.com/legacy/applications/anm/GeneralizedEigenvalueProblem/9.1.html
-// ellipsoid_fit matlab function
-// http://planetmath.org/EigenvalueProblem
-// http://planetmath.org/node/4028
-//http://en.wikipedia.org/wiki/Quadric
-//
-// To convert back into normal ellipsoid form
-// http://www.mathworks.com/matlabcentral/fileexchange/45356-fitting-quadratic-curves-and-surfaces/content/ellipsoid_im2ex.m
-//
+/**
+ * Fits an ellipsoid to points using a linear least squares approach
+ * <p>
+ * Specifically the approach of Li and Griffiths in 'Least Squares Ellipsoid Specific Fitting' (2004) is employed.
+ * <p>
+ * Some references
+ * <ul>
+ * <li><a href="http://reference.wolfram.com/legacy/applications/anm/GeneralizedEigenvalueProblem/9.1.html">generalized eigenvalues in wolfram</a>
+ * <li><a href="https://ch.mathworks.com/matlabcentral/fileexchange/24693-ellipsoid-fit">ellipsoid_fit matlab function</a>
+ * <li><a href="https://ch.mathworks.com/matlabcentral/fileexchange/45356-fitting-quadratic-curves-and-surfaces">To convert back into normal ellipsoid form</a>
+ * </ul>
+ * 
+ * @author Owen Feehan
+ *
+ */
 public class LinearLeastSquaresEllipsoidFitter extends ConicFitterBase {
 
 	// START BEAN
-	@BeanField
+	@BeanField @Getter @Setter
 	private double minRadius = 0.55;
 	
-	@BeanField
+	@BeanField @Getter @Setter
 	private boolean suppressZCovariance = false;
 	// END BEAN
 	
-	private Algebra algebra = new Algebra();
-	
-	private double machineEpsilon;
-	
-	public LinearLeastSquaresEllipsoidFitter() {
-		super();
-		machineEpsilon = calculateMachineEpsilonFloat();
-	}
-	
-
-	private static float calculateMachineEpsilonFloat() {
-        float machEps = 1.0f;
- 
-        do
-           machEps /= 2.0f;
-        while ((float) (1.0 + (machEps / 2.0)) != 1.0);
- 
-        return machEps;
-    }
-	
-	public DoubleMatrix2D createConstraintMatrix() {
-	
-		DoubleMatrix2D mat = DoubleFactory2D.dense.make( 10, 10 );
-		for( int i=0; i<6; i++) {
-			mat.set(i, i, -1);
-		}
-		mat.set(0, 1, 1);
-		mat.set(0, 2, 1);
-		mat.set(1, 0, 1);
-		mat.set(1, 2, 1);
-		mat.set(2, 0, 1);
-		mat.set(2, 1, 1);
-		return mat;
-	}
-
 	@Override
 	public boolean isCompatibleWith(Mark testMark) {
 		return testMark instanceof MarkEllipsoid;
 	}
 	
-	static FitResult createFitResultFromMatrixAandCenter( DoubleMatrix2D matrixA, DoubleMatrix2D matrixCenter, boolean suppressZCovariance ) throws PointsFitterException {
-
-		DoubleMatrix2D matrixR = createMatrixR( matrixA, matrixCenter  );
-		
-		FitResult fitResult = new FitResult();
-		{
-			double divVal = matrixR.get(3, 3) * -1;
-			DoubleMatrix2D e = matrixR.viewPart(0, 0, 3, 3);
-			
-			e.assign( cern.jet.math.Functions.div(divVal) );
-			
-			if (suppressZCovariance) {
-				e.set(2, 0, 0);
-				e.set(2, 1, 0);
-				e.set(0, 2, 0);
-				e.set(1, 2, 0);
-			}
-			
-			EigenvalueDecomposition evd;
-			try {
-				evd = new EigenvalueDecomposition( e );
-			} catch (ArrayIndexOutOfBoundsException e1) {
-				throw new PointsFitterException( String.format("Cannot init EigenValueDecomposition with arg='%s'",e.toString()));
-			}
-			
-			// Math.abs
-			fitResult.setRadiusX( Math.sqrt( 1/ Math.abs(evd.getD().get(0, 0))));
-			fitResult.setRadiusY( Math.sqrt( 1/ Math.abs(evd.getD().get(1, 1))));
-			fitResult.setRadiusZ( Math.sqrt( 1/ Math.abs(evd.getD().get(2, 2))));
-			
-			fitResult.setCentrePnt( new Point3d(
-				matrixCenter.get(0, 0),
-				matrixCenter.get(1, 0),
-				matrixCenter.get(2, 0)
-			) );
-			
-			fitResult.setRotMatrix( evd.getV() );
-			
-			assert( !Double.isNaN(fitResult.getRadiusX()) );
-			assert( !Double.isNaN(fitResult.getRadiusY()) );
-			assert( !Double.isNaN(fitResult.getRadiusZ()) );
-			assert( fitResult.getRadiusX() > 0 );
-			assert( fitResult.getRadiusY() > 0 );
-			assert( fitResult.getRadiusZ() > 0 );
-			
-			
-		}
-		return fitResult;
-	}
-
-	private static DoubleMatrix2D createMatrixR( DoubleMatrix2D matrixA, DoubleMatrix2D matrixCenter ) {
-		
-		DoubleMatrix2D matrixT = DoubleFactory2D.dense.identity(4);
-		
-		matrixT.set(3, 0, matrixCenter.get(0, 0) );
-		matrixT.set(3, 1, matrixCenter.get(1, 0) );
-		matrixT.set(3, 2, matrixCenter.get(2, 0) );
-		
-		return matrixT.zMult(matrixA, null).zMult(matrixT.viewDice(), null);
-	}
-	
-	// Calculates the pseudoInverse of a diagonal matrix
-	// NOTE Changes the existing matrix inplace
-	private DoubleMatrix2D pesudoInverseDiag( DoubleMatrix2D mat ) {
-		
-		double maxVal = Double.MIN_VALUE;
-		for( int i=0; i<mat.columns(); i++) {
-			double val = mat.get(i, i);	
-			if (val>maxVal) {
-				maxVal = val;
-			}
-		}
-		
-		double tol = machineEpsilon * Math.max( mat.columns(), mat.rows() ) * maxVal;
-			
-		for( int i=0; i<mat.columns(); i++) {
-			double val = mat.get(i, i);
-			if (val>tol) {
-				mat.set(i,i, 1/val);
-			} else {
-				mat.set(i,i, 0);
-			}
-		}
-		return mat;
-	}
-	
-	// Calculates Moore-Penrose pseudoinverse
-	// Uses instructions (SVD approach) in:
-	//  http://en.wikipedia.org/wiki/Moore%E2%80%93Penrose_pseudoinverse
-	private DoubleMatrix2D pesudoInverse( DoubleMatrix2D mat ) {
-		SingularValueDecomposition svd = new SingularValueDecomposition(mat);
-		return svd.getV().zMult(pesudoInverseDiag(svd.getS()), null).zMult( svd.getU().viewDice(), null );
-	}
-	
 	@Override
-	public void fit(List<Point3f> points, Mark mark, ImageDimensions dim)
-			throws PointsFitterException {
+	public void fit(List<Point3f> points, Mark mark, ImageDimensions dim) throws PointsFitterException {
 		
 		DoubleMatrix2D matD = createDesignMatrixWithOnes(points, (float) getSubtractRadii() );
 		
@@ -217,31 +88,31 @@ public class LinearLeastSquaresEllipsoidFitter extends ConicFitterBase {
 		
 		DoubleMatrix2D matC = createConstraintMatrix();
 		
-		DoubleMatrix2D matCInverse = algebra.inverse( matC.viewPart(0, 0, 6, 6) );
+		DoubleMatrix2D matCInverse = InverseHelper.inverseFor( matC.viewPart(0, 0, 6, 6) );
 		
 		DoubleMatrix2D matS11 = matS.viewPart(0, 0, 6, 6);
 		DoubleMatrix2D matS12 = matS.viewPart(0, 6, 6, 4);
 		DoubleMatrix2D matS21 = matS.viewPart(6, 0, 4, 6);
 		DoubleMatrix2D matS22 = matS.viewPart(6, 6, 4, 4);
 		
-		DoubleMatrix2D matS22Inv;
-		if (new Algebra().det(matS22)>1e-9) {
-			matS22Inv = algebra.inverse(matS22);
-		} else {
-			// Otherwise we calculate a pseudo-inverse and of matS_22 and assign it to matS_22_inv
-			matS22Inv = pesudoInverse(matS22);
-		}
-		
-		
+		DoubleMatrix2D matS22Inv = InverseHelper.inverseFor(matS22);
 		matS22Inv.assign( Functions.mult(-1) );
 		
 		// Solve generalized eigenvalue/eigenvector problem
 		DoubleMatrix2D mult1 = matS22Inv.zMult(matS21, null);
 		DoubleMatrix2D mult2 = matS12.zMult( mult1, null);
-				mult2.assign( matS11, Functions.plus );
+		mult2.assign( matS11, Functions.plus );
 		
 		DoubleMatrix2D mult3 = matCInverse.zMult(mult2, null);
 		
+		createFitResultFromDecomposition(mult1,mult3).applyFitResultToMark(
+			(MarkEllipsoid) mark,
+			dim,
+			getShellRad()
+		);
+	}
+	
+	private FitResult createFitResultFromDecomposition(DoubleMatrix2D mult1, DoubleMatrix2D mult3) throws PointsFitterException {
 		EigenvalueDecomposition e = new EigenvalueDecomposition(mult3); 
 		
 		int index = getEigenVectorIndex( e.getRealEigenvalues() );
@@ -250,22 +121,24 @@ public class LinearLeastSquaresEllipsoidFitter extends ConicFitterBase {
 		}
 		
 		DoubleMatrix1D v1 = e.getV().viewColumn(index);
-		
 		DoubleMatrix1D v2 = mult1.zMult(v1, null);
+		return createFitResult(v1,v2);
+	}
+	
+	private FitResult createFitResult(DoubleMatrix1D v1, DoubleMatrix1D v2) throws PointsFitterException {
 		
 		DoubleMatrix2D matA = createMatrixA(v1, v2);
 		
-		DoubleMatrix2D matCenter = createMatrixCenter(matA, v2);
-		
-		FitResult fitResult = createFitResultFromMatrixAandCenter(matA, matCenter, suppressZCovariance);
-
+		FitResult fitResult = EllipsoidFitHelper.createFitResultFromMatrixAandCenter(
+			matA,
+			createMatrixCenter(matA, v2),
+			suppressZCovariance
+		);
 		fitResult.applyRadiiSubtractScale( getSubtractRadii(), getScaleRadii() );
 		fitResult.imposeMinimumRadius( minRadius );
-		
-		applyFitResultToMark( fitResult, mark, dim, getShellRad() );
+		return fitResult;
 	}
-	
-	
+		
 	private static DoubleMatrix2D createMatrixCenter( DoubleMatrix2D matrixA, DoubleMatrix1D v2 ) throws PointsFitterException {
 		
 		DoubleMatrix2D first = matrixA.viewPart(0,0,3,3).copy().assign( cern.jet.math.Functions.mult(-1) );
@@ -275,9 +148,8 @@ public class LinearLeastSquaresEllipsoidFitter extends ConicFitterBase {
 		
 		return matrixLeftDivide(first, second);
 	}
-	
-	
-	protected static DoubleMatrix2D createDesignMatrixWithOnes( List<Point3f> points, float inputPointShift ) {
+		
+	private static DoubleMatrix2D createDesignMatrixWithOnes( List<Point3f> points, float inputPointShift ) {
 		
 		// The columns are as follows: x^2 xy y^2 x y 1
 		DoubleMatrix2D matrix = DoubleFactory2D.dense.make( points.size(), 10 ); 
@@ -363,40 +235,18 @@ public class LinearLeastSquaresEllipsoidFitter extends ConicFitterBase {
 		return maxIndex;
 	}
 	
-	private static void applyFitResultToMark( FitResult fitResult, Mark mark, ImageDimensions sceneDim, double shellRad ) throws PointsFitterException {
-		RotationMatrix rotMatrix = new RotationMatrix( fitResult.getRotMatrix() );
-		fitResult.setRotMatrix( fitResult.getRotMatrix() );
+	private static DoubleMatrix2D createConstraintMatrix() {
 		
-		//System.out.printf("vecDir=%s\n", vecDir);
-		Orientation orientation = new OrientationRotationMatrix( rotMatrix ); 
-		
-		MarkEllipsoid markEll = (MarkEllipsoid) mark;
-		markEll.setShellRad( shellRad );
-		markEll.setMarksExplicit( fitResult.getCentrePnt(), orientation, new Point3d(fitResult.getRadiusX(),fitResult.getRadiusY(),fitResult.getRadiusZ()) );
-
-		
-		BoundingBox bbox = markEll.bboxAllRegions(sceneDim);
-		if (bbox.extent().getX()<1||bbox.extent().getY()<1||bbox.extent().getZ()<1) {
-			throw new PointsFitterException("Ellipsoid is outside scene");
+		DoubleMatrix2D mat = DoubleFactory2D.dense.make( 10, 10 );
+		for( int i=0; i<6; i++) {
+			mat.set(i, i, -1);
 		}
+		mat.set(0, 1, 1);
+		mat.set(0, 2, 1);
+		mat.set(1, 0, 1);
+		mat.set(1, 2, 1);
+		mat.set(2, 0, 1);
+		mat.set(2, 1, 1);
+		return mat;
 	}
-
-
-	public double getMinRadius() {
-		return minRadius;
-	}
-
-	public void setMinRadius(double minRadius) {
-		this.minRadius = minRadius;
-	}
-
-	public boolean isSuppressZCovariance() {
-		return suppressZCovariance;
-	}
-
-
-	public void setSuppressZCovariance(boolean suppressZCovariance) {
-		this.suppressZCovariance = suppressZCovariance;
-	}
-
 }
