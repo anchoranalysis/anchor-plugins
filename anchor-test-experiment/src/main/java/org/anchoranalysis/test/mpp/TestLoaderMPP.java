@@ -43,12 +43,12 @@ public class TestLoaderMPP {
 		this.delegate = testLoader;
 	}
 	
-	public Cfg openCfgFromTestPath( String testPath ) throws TestDataLoadException {
+	public Cfg openCfgFromTestPath( String testPath ) {
 		Path filePath = delegate.resolveTestPath( testPath);
 		return openCfgFromFilePath(filePath);
 	}
 	
-	public static Cfg openCfgFromFilePath( Path filePath ) throws TestDataLoadException {
+	public static Cfg openCfgFromFilePath( Path filePath ) {
 		
 		CfgDeserializer deserializer = new CfgDeserializer();
 		try {

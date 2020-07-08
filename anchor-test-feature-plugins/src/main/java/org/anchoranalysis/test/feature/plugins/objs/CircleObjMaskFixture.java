@@ -43,7 +43,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access=AccessLevel.PRIVATE)
 public class CircleObjMaskFixture {
 
-	private static ImageDimensions DIMS = new ImageDimensions(
+	private static final ImageDimensions DIMS = new ImageDimensions(
 		new Extent(800, 600, 1)
 	);
 	
