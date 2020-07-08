@@ -44,6 +44,9 @@ import org.anchoranalysis.image.bean.provider.ObjectCollectionProviderOne;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectCollectionFactory;
 
+import lombok.Getter;
+import lombok.Setter;
+
 /**
  * Permutes some changes over an {@link ObjectCollectionProvider} and collects all the results in an {@link ObjectCollection}
  * 
@@ -55,10 +58,10 @@ import org.anchoranalysis.image.object.ObjectCollectionFactory;
 public class ObjMaskProviderPermute extends ObjectCollectionProvider {
 
 	// START BEAN PROPERTIES
-	@BeanField
+	@BeanField @Getter @Setter
 	private ObjectCollectionProvider objs;
 	
-	@BeanField
+	@BeanField @Getter @Setter
 	private PermuteProperty<?> permuteProperty;
 	// END BEAN PROPERTIES
 
@@ -102,22 +105,6 @@ public class ObjMaskProviderPermute extends ObjectCollectionProvider {
 		}
 
 		return provider.create();
-	}
-
-	public ObjectCollectionProvider getObjs() {
-		return objs;
-	}
-
-	public void setObjs(ObjectCollectionProvider objs) {
-		this.objs = objs;
-	}
-
-	public PermuteProperty<?> getPermuteProperty() {
-		return permuteProperty;
-	}
-
-	public void setPermuteProperty(PermuteProperty<?> permuteProperty) {
-		this.permuteProperty = permuteProperty;
 	}
 	
 	/** Converts an iterator to a stream */
