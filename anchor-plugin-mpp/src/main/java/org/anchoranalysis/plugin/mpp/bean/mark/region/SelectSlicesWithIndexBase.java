@@ -47,7 +47,7 @@ public abstract class SelectSlicesWithIndexBase extends SelectSlicesBase {
 	
 	protected abstract VoxelStatistics extractFromPxlMark( PxlMark pm ) throws CreateException;
 
-	protected VoxelStatistics statisticsForAllSlices( PxlMark pm, boolean useNonZeroIndex ) throws CreateException {
+	protected VoxelStatistics statisticsForAllSlices( PxlMark pm, boolean useNonZeroIndex ) {
 		return pm.statisticsForAllSlicesMaskSlice(
 			useNonZeroIndex ? indexNonZero : getIndex(),
 			getRegionID(),

@@ -84,7 +84,7 @@ public class BinaryChnlProviderConvexHull3D extends ConvexHullBase {
 	}
 
 	// We use it here as it uses the quickHull3D Point3d primitive
-	private static List<Point3d> pointsFromChnl( BinaryChnl chnl ) throws CreateException {
+	private static List<Point3d> pointsFromChnl( BinaryChnl chnl ) {
 		
 		List<Point3d> listOut = new ArrayList<>();
 		

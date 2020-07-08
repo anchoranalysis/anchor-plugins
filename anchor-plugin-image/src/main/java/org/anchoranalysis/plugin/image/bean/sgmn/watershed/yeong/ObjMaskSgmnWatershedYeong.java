@@ -81,7 +81,7 @@ public class ObjMaskSgmnWatershedYeong extends ObjectSegmentation {
 	public ObjectCollection sgmn(Channel chnl, Optional<ObjectMask> mask,
 			Optional<SeedCollection> seeds) throws SgmnFailedException {
 
-		EncodedVoxelBox matS = createS(chnl.getDimensions().getExtnt());
+		EncodedVoxelBox matS = createS(chnl.getDimensions().getExtent());
 		
 		Optional<MinimaStore> minimaStore = OptionalFactory.create(
 			exitWithMinima,

@@ -251,7 +251,7 @@ class Hybrid_3D_Median_Filter implements PlugInFilter{
 		    if(win!=null && !win.running){ //wsr
 			IJ.beep();
 			quit=true; 
-			IJ.showMessage(new String("3d Hybrid Median Filter aborted.\nNo output will be generated.")); 
+			IJ.showMessage("3d Hybrid Median Filter aborted.\nNo output will be generated."); 
 			return imp2;
 		    }
 		}
@@ -260,39 +260,39 @@ class Hybrid_3D_Median_Filter implements PlugInFilter{
 		return imp2;
 	}
 	    
-    private static double median(double array[]){
+    private static double median(double[] array){
 		Arrays.sort(array);
 		int len = array.length;
 		if(len%2==0)return((array[(len/2)-1]+array[len/2])/2);
 		else return array[((len-1)/2)];
     }
     
-    private short[] double2short(double array[]){
-		short shortarray[] = new short[array.length];
+    private short[] double2short(double[] array){
+		short[] shortarray = new short[array.length];
 		for(int j=0;j<array.length;++j){
 		    shortarray[j] = (short)array[j];
 		}
 		return shortarray;
     }
     
-    private double[] short2double(short array[]){
-		double doublearray[] = new double[array.length];
+    private double[] short2double(short[] array){
+		double[] doublearray = new double[array.length];
 		for(int j=0;j<array.length;++j){
 		    doublearray[j] = (double)(0xffff & array[j]);
 		}
 		return doublearray;
     }
     
-    private byte[] double2byte(double array[]){
-		byte bytearray[] = new byte[array.length];
+    private byte[] double2byte(double[] array){
+		byte[] bytearray = new byte[array.length];
 		for(int j=0;j<array.length;++j){
 		    bytearray[j] = (byte)array[j];
 		}
 		return bytearray;
     }
     
-    private double[] byte2double(byte array[]){
-		double doublearray[] = new double[array.length];
+    private double[] byte2double(byte[] array){
+		double[] doublearray = new double[array.length];
 		for(int j=0;j<array.length;++j){
 		    doublearray[j] = (double)(0xff & array[j]);
 		}

@@ -65,6 +65,6 @@ public class TextFileCfgReporter extends PeriodicSubfolderReporter<Cfg> {
 
 	@Override
 	public void reportNewBest(Reporting<CfgNRGPixelized> reporting) {
-		
+		// NOTHING TO DO
 	}
 }

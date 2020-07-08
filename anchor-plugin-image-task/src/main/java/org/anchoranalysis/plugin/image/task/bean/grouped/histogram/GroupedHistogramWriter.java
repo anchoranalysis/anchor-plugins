@@ -1,6 +1,6 @@
 package org.anchoranalysis.plugin.image.task.bean.grouped.histogram;
 
-import java.io.IOException;
+
 
 
 /*-
@@ -42,7 +42,7 @@ class GroupedHistogramWriter {
 		generator.setIgnoreZeros(ignoreZeros);
 	}
 	
-	public void writeHistogramToFile( Histogram hist, String outputName, BoundIOContext context ) throws IOException {
+	public void writeHistogramToFile( Histogram hist, String outputName, BoundIOContext context ) {
 		generator.setIterableElement(hist);
 		
 		context.getOutputManager().getWriterCheckIfAllowed().write(

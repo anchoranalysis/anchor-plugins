@@ -30,7 +30,6 @@ import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.core.geometry.ReadableTuple3i;
@@ -55,7 +54,7 @@ class PointsFromInsideHelper {
 		Point3d pntRoot,
 		PointListForConvex pntsConvexRoot,
 		int skipAfterSuccessiveEmptySlices
-	) throws CreateException {
+	) {
 
 		assert( chnl.getDimensions().contains(bbox) );
 	

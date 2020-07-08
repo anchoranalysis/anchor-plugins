@@ -2,7 +2,6 @@ package org.anchoranalysis.plugin.image.task.bean.grouped.histogram;
 
 
 
-import java.io.IOException;
 import java.util.Optional;
 
 /*
@@ -131,15 +130,11 @@ public class GroupedHistogramExportTask extends GroupedStackTask<Histogram,Histo
 		
 		if (writeImageHistograms) {
 			// We keep histogram as private member variable so it is thread-safe
-			try {
-				createWriter().writeHistogramToFile(
-					hist,
-					chnl.getName(),
-					context
-				);
-			} catch (IOException e) {
-				throw new JobExecutionException(e);
-			}
+			createWriter().writeHistogramToFile(
+				hist,
+				chnl.getName(),
+				context
+			);
 		}
 		
 		groupMap.add(

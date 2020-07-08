@@ -103,11 +103,11 @@ public class ObjectRadiusStandardDeviation extends FeatureSingleObject {
 		}
 	}
 
-	private static List<Point3i> createMaskOutlineAsPoints(ObjectMask mask, int numberErosions, boolean erodeEdges, boolean do3D ) throws FeatureCalcException {
+	private static List<Point3i> createMaskOutlineAsPoints(ObjectMask mask, int numberErosions, boolean erodeEdges, boolean do3D ) {
 
 		List<Point3i> ptsOutline = new ArrayList<>();
 			
-		ObjectMask outline = FindOutline.outline(mask, 1, false, true);
+		ObjectMask outline = FindOutline.outline(mask, numberErosions, false, true);
 		PointsFromBinaryVoxelBox.addPointsFromVoxelBox3D(
 			outline.binaryVoxelBox(),
 			outline.getBoundingBox().cornerMin(),

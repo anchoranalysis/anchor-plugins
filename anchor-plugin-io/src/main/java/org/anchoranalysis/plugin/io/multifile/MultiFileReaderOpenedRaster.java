@@ -54,7 +54,7 @@ public class MultiFileReaderOpenedRaster extends OpenedRaster {
 		this.rasterReader = rasterReader;
 	}
 	
-	private MultiFile createMultiFileMemo( ProgressReporter progressReporter) throws RasterIOException {
+	private MultiFile getOrCreateMemo( ProgressReporter progressReporter) throws RasterIOException {
 		if (multiFile==null) {
 			multiFile = new MultiFile(fileBag);
 			addDetailsFromBag(multiFile, 0, progressReporter );
@@ -74,7 +74,7 @@ public class MultiFileReaderOpenedRaster extends OpenedRaster {
 
 		try {
 			progressReporter.open();
-			return createMultiFileMemo(progressReporter).createSequence();
+			return getOrCreateMemo(progressReporter).createSequence();
 			
 		} finally {
 			progressReporter.close();
@@ -89,23 +89,21 @@ public class MultiFileReaderOpenedRaster extends OpenedRaster {
 
 	@Override
 	public int numChnl() throws RasterIOException {
+		MultiFile memo = getOrCreateMemo( ProgressReporterNull.get() );
 		
-		MultiFile multiFile = createMultiFileMemo( ProgressReporterNull.get() );
-		
-		if (!multiFile.numChnlDefined()) {
+		if (!memo.numChnlDefined()) {
 			throw new RasterIOException("Number of chnl is not defined");
 		}
 		
-		return multiFile.numChnl();
+		return memo.numChnl();
 	}
 	
 	
 
 	@Override
 	public int bitDepth() throws RasterIOException {
-		
-		MultiFile multiFile = createMultiFileMemo( ProgressReporterNull.get() );
-		return multiFile.dataType().numBits();
+		MultiFile memo = getOrCreateMemo( ProgressReporterNull.get() );
+		return memo.dataType().numBits();
 	}
 	
 
@@ -117,7 +115,7 @@ public class MultiFileReaderOpenedRaster extends OpenedRaster {
 	@Override
 	public int numFrames() throws RasterIOException {
 		
-		MultiFile multiFile = createMultiFileMemo( ProgressReporterNull.get() );
+		MultiFile multiFile = getOrCreateMemo( ProgressReporterNull.get() );
 		
 		if (!multiFile.numFramesDefined()) {
 			throw new RasterIOException("Number of frames is not defined");
@@ -129,7 +127,7 @@ public class MultiFileReaderOpenedRaster extends OpenedRaster {
 
 	@Override
 	public void close() throws RasterIOException {
-
+		// NOTHING TO DO
 	}
 
 
@@ -137,7 +135,6 @@ public class MultiFileReaderOpenedRaster extends OpenedRaster {
 	public ImageDimensions dim(int seriesIndex) throws RasterIOException {
 		throw new RasterIOException("MultiFileReader doesn't support this operation");
 	}
-
 	
 	private void addDetailsFromBag( MultiFile multiFile, int seriesIndex, ProgressReporter progressReporter ) throws RasterIOException {
 		

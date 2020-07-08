@@ -95,7 +95,7 @@ public class BinaryChnlProviderInsideBox extends BinaryChnlProviderDimSource {
 		);
 		
 		// Make sure box is inside channel
-		return bbox.clipTo( sd.getExtnt() );
+		return bbox.clipTo( sd.getExtent() );
 	}
 
 	public int getMinX() {

@@ -93,14 +93,12 @@ class SgmnMPPHelper {
 		try {
 			NRGScheme nrgScheme = nrgSchemeCreator.create();
 			
-			NRGSchemeWithSharedFeatures nrgSchemeShared = new NRGSchemeWithSharedFeatures(
+			return new NRGSchemeWithSharedFeatures(
 				nrgScheme,
 				featureInit.getSharedFeatureSet(),
 				nrgSchemeIndCacheSize,
 				logger
 			);
-			
-			return nrgSchemeShared;
 		} catch (CreateException e) {
 			throw new InitException(e);
 		}

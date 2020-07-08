@@ -54,7 +54,7 @@ public class ObjMaskProviderMask extends ObjMaskProviderMaskBase {
 		return objsIn;
 	}
 	
-	private static void applyMask( ObjectMask om, BinaryChnl mask ) throws CreateException {
+	private static void applyMask( ObjectMask om, BinaryChnl mask ) {
 		
 		// Just the portion of the mask that matches the bounding box of our object
 		ObjectMask maskObj = mask.region(om.getBoundingBox(), true);

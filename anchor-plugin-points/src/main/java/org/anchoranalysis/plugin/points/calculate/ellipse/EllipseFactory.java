@@ -46,7 +46,7 @@ import ch.ethz.biol.cell.mpp.mark.pointsfitter.ConicFitterBase;
 
 class EllipseFactory {
 
-	private static int MIN_NUMBER_POINTS = 10;
+	private static final int MIN_NUMBER_POINTS = 10;
 	
 	private ConicFitterBase pointsFitter;
 		

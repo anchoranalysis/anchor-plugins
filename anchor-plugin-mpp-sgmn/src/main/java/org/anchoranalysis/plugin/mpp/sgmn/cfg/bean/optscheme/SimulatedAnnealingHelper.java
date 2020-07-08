@@ -194,7 +194,7 @@ class SimulatedAnnealingHelper {
 				iter==0
 			);
 			
-			KernelUpdater<S,T> kernelUpdater = new KernelUpdaterSimple<S,T>(
+			KernelUpdater<S,T> kernelUpdater = new KernelUpdaterSimple<>(
 				updatableMarkSetCollection,
 				kernelProposer.getAllKernelFactories(),
 				funcExtractForUpdate
@@ -263,7 +263,7 @@ class SimulatedAnnealingHelper {
 	}
 	
 	private static <S,T> KernelAssigner<S,T> createAssigner( KernelAssigner<S,T> kernelAssigner, ErrorNode error ) {
-		return new KernelAssignerAddErrorLevel<S,T>( kernelAssigner, error );	
+		return new KernelAssignerAddErrorLevel<>( kernelAssigner, error );	
 	}
 		
 	private static void assignExecutionTime( OptimizationStep<?,?> optStep, StopWatch timer ) {

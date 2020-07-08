@@ -54,16 +54,12 @@ public class GaussianScore<T extends FeatureInput> extends FeatureStatScore<T> {
 	@Override
 	protected double deriveScore(double featureValue, double mean, Operation<Double,FeatureCalcException> stdDev) throws FeatureCalcException {
 		
-		if (ignoreHigherSide) {
-			if (featureValue>mean) {
-				return 1.0;
-			}
+		if (ignoreHigherSide && featureValue>mean) {
+			return 1.0;
 		}
 		
-		if (ignoreLowerSide) {
-			if (featureValue<mean) {
-				return 1.0;
-			}
+		if (ignoreLowerSide && featureValue<mean) {
+			return 1.0;
 		}
 		
 		return GaussianScoreCalculator.calc(

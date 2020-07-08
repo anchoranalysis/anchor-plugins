@@ -73,7 +73,7 @@ public class BinaryChnlProviderInvert extends BinaryChnlProviderOne {
 		return chnl;
 	}
 		
-	private void invertWithMask( BinaryChnl chnl, BinaryChnl mask ) throws CreateException {
+	private void invertWithMask( BinaryChnl chnl, BinaryChnl mask ) {
 
 		BinaryValuesByte bvb = chnl.getBinaryValues().createByte();
 		final byte byteOn = bvb.getOnByte();

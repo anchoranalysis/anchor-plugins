@@ -48,8 +48,8 @@ public class MarkPolygon extends MarkAbstractPointList {
 	 */
 	private static final long serialVersionUID = 1718294470056379145L;
 	
-	private static byte FLAG_OUTSIDE = RegionMembershipUtilities.flagForNoRegion();
-	private static byte FLAG_SUBMARK_INSIDE = RegionMembershipUtilities.flagForRegion( GlobalRegionIdentifiers.SUBMARK_INSIDE );
+	private static final byte FLAG_OUTSIDE = RegionMembershipUtilities.flagForNoRegion();
+	private static final byte FLAG_SUBMARK_INSIDE = RegionMembershipUtilities.flagForRegion( GlobalRegionIdentifiers.SUBMARK_INSIDE );
 	
 	private PolygonRoi polygon;
 	

@@ -66,8 +66,8 @@ public class ScaleCalculatorRelativeDimensions extends ScaleCalculator {
 		
 		try {
 			return ScaleFactorUtilities.calcRelativeScale(
-				sdSource.getExtnt(),
-				dimTarget.create().getExtnt()
+				sdSource.getExtent(),
+				dimTarget.create().getExtent()
 			);
 		} catch (CreateException e) {
 			throw new OperationFailedException(e);

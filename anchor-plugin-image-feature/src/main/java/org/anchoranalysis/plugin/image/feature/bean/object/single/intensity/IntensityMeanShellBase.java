@@ -129,9 +129,9 @@ public abstract class IntensityMeanShellBase extends FeatureNrgChnl {
 	
 	protected abstract double calcForShell( ObjectMask shell, Channel chnl) throws FeatureCalcException;
 
-	private ObjectMask createNrgMask( NRGStack nrgStack ) throws FeatureCalcException {
+	private ObjectMask createNrgMask( NRGStack nrgStack ) {
 		return new ObjectMask(
-			new BoundingBox( nrgStack.getDimensions().getExtnt() ),
+			new BoundingBox( nrgStack.getDimensions().getExtent() ),
 			nrgStack.getChnl(nrgIndexMask).getVoxelBox().asByte(),
 			inverseMask ? BinaryValues.getDefault().createInverted() : BinaryValues.getDefault()
 		);

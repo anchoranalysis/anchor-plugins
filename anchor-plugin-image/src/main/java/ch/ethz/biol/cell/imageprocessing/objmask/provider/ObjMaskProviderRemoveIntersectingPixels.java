@@ -111,7 +111,7 @@ public class ObjMaskProviderRemoveIntersectingPixels extends ObjMaskProviderDime
 	
 	private void removeIntersectingPixelsIfIntersects( ObjectMask omWrite, ObjectMask omRead, ImageDimensions sd ) {
 
-		Optional<BoundingBox> intersection = omWrite.getBoundingBox().intersection().withInside(omRead.getBoundingBox(), sd.getExtnt() );
+		Optional<BoundingBox> intersection = omWrite.getBoundingBox().intersection().withInside(omRead.getBoundingBox(), sd.getExtent() );
 				
 		// We check if their bounding boxes intersect
 		if(intersection.isPresent()) {

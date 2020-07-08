@@ -34,6 +34,9 @@ import org.anchoranalysis.mpp.sgmn.optscheme.StateReporter;
 import org.anchoranalysis.plugin.mpp.sgmn.cfg.bean.optscheme.kernelbridge.KernelStateBridge;
 import org.anchoranalysis.plugin.mpp.sgmn.cfg.optscheme.AccptProbCalculator;
 
+import lombok.Getter;
+import lombok.Setter;
+
 
 /**
  * Applies a transformation to the kernel-type U to calculate the NRG used as the primary readout during optimization
@@ -49,22 +52,22 @@ import org.anchoranalysis.plugin.mpp.sgmn.cfg.optscheme.AccptProbCalculator;
 public class TransformationAssignMode<S,T,U> extends AssignMode<S,T,U> {
 
 	// START BEAN PROPERTIES
-	@BeanField
+	@BeanField @Getter @Setter
 	private KernelStateBridge<U, T> kernelStateBridge;
 	
-	@BeanField
+	@BeanField @Getter @Setter
 	private StateReporter<T,S> stateReporter;
 	
-	@BeanField
+	@BeanField @Getter @Setter
 	private ExtractScoreSize<S> extractScoreSizeReport;
 	
-	@BeanField
+	@BeanField @Getter @Setter
 	private ExtractScoreSize<T> extractScoreSizeState;
 	// END BEAN PROPERTIES
 	
 	@Override
 	public AccptProbCalculator<T> probCalculator(AnnealScheme annealScheme) {
-		return new AccptProbCalculator<T>(
+		return new AccptProbCalculator<>(
 			annealScheme,
 			extractScoreSizeState
 		);
@@ -74,13 +77,11 @@ public class TransformationAssignMode<S,T,U> extends AssignMode<S,T,U> {
 	public KernelStateBridge<U, T> kernelStateBridge() {
 		return kernelStateBridge;
 	}
-	
 
 	@Override
 	public StateReporter<T,S> stateReporter() {
 		return stateReporter;
 	}
-
 	
 	@Override
 	public ExtractScoreSize<S> extractScoreSizeReport() {
@@ -90,41 +91,5 @@ public class TransformationAssignMode<S,T,U> extends AssignMode<S,T,U> {
 	@Override
 	public ExtractScoreSize<T> extractScoreSizeState() {
 		return extractScoreSizeState;
-	}
-	
-	
-	
-	public ExtractScoreSize<S> getExtractScoreSizeReport() {
-		return extractScoreSizeReport;
-	}
-
-	public void setExtractScoreSizeReport(ExtractScoreSize<S> extractScoreSizeReport) {
-		this.extractScoreSizeReport = extractScoreSizeReport;
-	}
-
-	public ExtractScoreSize<T> getExtractScoreSizeState() {
-		return extractScoreSizeState;
-	}
-
-	public void setExtractScoreSizeState(ExtractScoreSize<T> extractScoreSizeState) {
-		this.extractScoreSizeState = extractScoreSizeState;
-	}
-
-
-	public KernelStateBridge<U, T> getKernelStateBridge() {
-		return kernelStateBridge;
-	}
-
-
-	public void setKernelStateBridge(KernelStateBridge<U, T> kernelStateBridge) {
-		this.kernelStateBridge = kernelStateBridge;
-	}
-
-	public StateReporter<T,S> getStateReporter() {
-		return stateReporter;
-	}
-
-	public void setStateReporter(StateReporter<T,S> stateReporter) {
-		this.stateReporter = stateReporter;
 	}
 }

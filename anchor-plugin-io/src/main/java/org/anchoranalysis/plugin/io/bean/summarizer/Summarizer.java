@@ -44,5 +44,5 @@ public abstract class Summarizer<T> extends AnchorBean<Summarizer<T>> {
 	/** Returns a string summarizing this item
 	 * @return
 	 */
-	public abstract String describe() throws OperationFailedException;;
+	public abstract String describe() throws OperationFailedException;
 }

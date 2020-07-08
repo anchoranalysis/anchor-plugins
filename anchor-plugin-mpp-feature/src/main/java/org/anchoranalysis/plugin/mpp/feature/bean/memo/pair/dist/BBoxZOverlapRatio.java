@@ -77,12 +77,12 @@ public class BBoxZOverlapRatio extends FeaturePairMemoSingleRegion {
 	
 	private double calcOverlap(BoundingBox bbox1, BoundingBox bbox2, ImageDimensions dim) {
 		
-		Optional<BoundingBox> bboxOverlap = bbox1.intersection().withInside(bbox2, dim.getExtnt());
+		Optional<BoundingBox> bboxOverlap = bbox1.intersection().withInside(bbox2, dim.getExtent());
 		if (!bboxOverlap.isPresent()) {
 			return 0;
 		}
 		
-		int minExtntZ = Math.min(
+		int minExtentZ = Math.min(
 			zFor(bbox1),
 			zFor(bbox2)
 		);
@@ -90,7 +90,7 @@ public class BBoxZOverlapRatio extends FeaturePairMemoSingleRegion {
 		double overlapZ = (double) zFor(bboxOverlap.get());
 		
 		if (normalize) {
-			return overlapZ / minExtntZ;
+			return overlapZ / minExtentZ;
 		} else {
 			return overlapZ;
 		}		

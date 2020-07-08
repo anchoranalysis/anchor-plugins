@@ -91,7 +91,7 @@ class NeighbourGraph {
 	
 	/** Get a set of all neighbouring vertices of the vertices on a particular edge (not including the vertices associated with the edge) */
 	public Set<ObjVertex> neighbourNodesFor( EdgeTypeWithVertices<ObjVertex,PrioritisedVertex> edge ) {
-		Set<ObjVertex> setOut = new HashSet<ObjVertex>();
+		Set<ObjVertex> setOut = new HashSet<>();
 		addNghbsToSet( edge.getNode1(), setOut );
 		addNghbsToSet( edge.getNode2(), setOut );
 		setOut.remove( edge.getNode1() );

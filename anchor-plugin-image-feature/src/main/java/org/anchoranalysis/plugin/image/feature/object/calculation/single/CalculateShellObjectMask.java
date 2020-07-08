@@ -112,7 +112,7 @@ public class CalculateShellObjectMask extends FeatureCalculation<ObjectMask,Feat
 		int iterationsErosionSecond,
 		boolean do3D,
 		boolean inverse
-	) throws FeatureCalcException {
+	) {
 		ResolvedCalculation<ObjectMask,FeatureInputSingleObject> ccDilation = CalculateDilation.createFromCache(
 			params, iterationsDilation, do3D	
 		);

@@ -33,40 +33,35 @@ import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.core.geometry.Tuple3i;
 import org.anchoranalysis.core.random.RandomNumberGenerator;
-import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.ImageResolution;
 import org.anchoranalysis.image.object.ObjectMask;
+
+import lombok.Getter;
+import lombok.Setter;
 
 // Breadth-first iteration of pixels
 public class VisitSchedulerMaxDist extends VisitScheduler {
 
 	// START BEAN PROPERTIES
-	@BeanField
-	private double maxDist;
+	@BeanField @Getter @Setter
+	private double maxDistance;
 	// END BEAN PROPERTIES
 	
 	private Point3i root;
-	
 	private ImageResolution res;
-	
 	private double maxDistSq;
-	
-	public VisitSchedulerMaxDist() {
-		super();
-	}
-	
 
 	@Override
 	public void beforeCreateObjMask(RandomNumberGenerator re, ImageResolution res)
 			throws InitException {
-				
+		// NOTHING TO DO
 	}
 	
 	@Override
 	public Optional<Tuple3i> maxDistFromRootPoint(ImageResolution res) {
-		int maxDist = (int) Math.ceil(this.maxDist);
+		int distance = (int) Math.ceil(this.maxDistance);
 		return Optional.of(
-			new Point3i(maxDist,maxDist,maxDist)
+			new Point3i(distance,distance,distance)
 		);
 	}
 	
@@ -74,37 +69,15 @@ public class VisitSchedulerMaxDist extends VisitScheduler {
 	public void afterCreateObjMask(Point3i root, ImageResolution res, RandomNumberGenerator re) {
 		this.root = root;
 		this.res = res;
-		this.maxDistSq = Math.pow(maxDist,2);
+		this.maxDistSq = Math.pow(maxDistance,2);
 	}
 
 	@Override
 	public boolean considerVisit( Point3i pnt, int distAlongContour, ObjectMask objMask ) {
-		
-		if (distToRoot(pnt)>=maxDistSq) {
-			return false;
-		}
-
-		return true;
+		return distToRoot(pnt) < maxDistSq;
 	}
 	
 	private double distToRoot( Point3i pnt ) {
 		 return res.distSqZRel(root, pnt);
-	}
-	
-	public static BoundingBox createBoxAroundPoint( Point3i pnt, Tuple3i width ) {
-		
-		// We create a raster around the point, maxDist*2 in both directions, so long as it doesn't escape the region
-		return new BoundingBox(
-			Point3i.immutableSubtract(pnt, width),
-			Point3i.immutableAdd(pnt, width)
-		);
-	}
-	
-	public double getMaxDist() {
-		return maxDist;
-	}
-
-	public void setMaxDist(double maxDist) {
-		this.maxDist = maxDist;
 	}
 }

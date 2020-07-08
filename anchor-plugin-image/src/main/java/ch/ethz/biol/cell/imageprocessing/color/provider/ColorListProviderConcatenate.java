@@ -35,20 +35,15 @@ import org.anchoranalysis.core.color.ColorList;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.bean.provider.ColorListProvider;
 
+import lombok.Getter;
+import lombok.Setter;
+
 public class ColorListProviderConcatenate extends ColorListProvider {
 
 	// START BEAN PROPERTIES
-	@BeanField
-	private List<ColorListProvider> list = new ArrayList<ColorListProvider>();
+	@BeanField @Getter @Setter
+	private List<ColorListProvider> list = new ArrayList<>();
 	// END BEAN PROPERTIES
-	
-	public List<ColorListProvider> getList() {
-		return list;
-	}
-
-	public void setList(List<ColorListProvider> list) {
-		this.list = list;
-	}
 
 	@Override
 	public ColorList create() throws CreateException {

@@ -180,7 +180,7 @@ class CalculatePairIntersection extends FeatureCalculation<Optional<ObjectMask>,
 		
 		ObjectMask omMergedEroded = MorphologicalErosion.createErodedObjMask(
 			omMerged,
-			Optional.of(dim.getExtnt()),
+			Optional.of(dim.getExtent()),
 			do3D,
 			iterationsErosion,
 			true,

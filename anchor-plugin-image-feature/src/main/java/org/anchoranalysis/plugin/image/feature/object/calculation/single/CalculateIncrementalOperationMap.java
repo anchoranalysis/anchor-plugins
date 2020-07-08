@@ -56,7 +56,7 @@ public abstract class CalculateIncrementalOperationMap extends CacheableCalculat
 	@Override
 	protected ObjectMask execute(FeatureInputSingleObject params, Integer key)
 			throws FeatureCalcException {
-		Extent extent = params.getDimensionsRequired().getExtnt();
+		Extent extent = params.getDimensionsRequired().getExtent();
 
 		if (key==0) {
 			throw new FeatureCalcException("Key must be > 0");

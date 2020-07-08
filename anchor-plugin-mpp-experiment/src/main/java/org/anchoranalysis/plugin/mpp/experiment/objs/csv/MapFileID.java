@@ -41,10 +41,10 @@ import java.util.Set;
 class MapFileID {
 	
 	// Maps the fileID to a further map
-	private Map<String,MapGroupToRow> delegate = new HashMap<String,MapGroupToRow>();
+	private Map<String,MapGroupToRow> delegate = new HashMap<>();
 	
 	// Maintains a set of all groups used
-	private Set<String> setGroups = new HashSet<String>();
+	private Set<String> setGroups = new HashSet<>();
 
 	public void put( String fileID, String groupID, CSVRow row ) {
 		setGroups.add(groupID);

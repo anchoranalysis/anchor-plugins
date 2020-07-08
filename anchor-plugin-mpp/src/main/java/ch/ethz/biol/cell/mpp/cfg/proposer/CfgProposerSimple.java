@@ -77,21 +77,19 @@ public class CfgProposerSimple extends CfgProposer {
 
 	// Generates a random configuration for a given number of points
 	//	 * The location and attributes of marks are uniformly distributed
-	private Optional<Cfg> genInitRndCfgForNumPts( int num_pts, CfgGen cfgGen, ProposerContext context ) throws ProposalAbnormalFailureException {
+	private Optional<Cfg> genInitRndCfgForNumPts( int numPoints, CfgGen cfgGen, ProposerContext context ) throws ProposalAbnormalFailureException {
 		
 		Cfg cfg = new Cfg();
 		
-		for (int i=0; i<num_pts; i++) {
-			Mark m = cfgGen.newTemplateMark();
+		for (int i=0; i<numPoints; i++) {
+			Mark mark = cfgGen.newTemplateMark();
 			
-			PxlMarkMemo pmm = context.create(m );
+			PxlMarkMemo pmm = context.create(mark);
 			
 			// If the proposal fails, we don't bother trying another
 			if (markProposer.propose(pmm, context )) {
-				cfg.add( m );	
+				cfg.add(mark);	
 			}
-			
-			pmm = null;
 		}
 		
 		return Optional.of(cfg);

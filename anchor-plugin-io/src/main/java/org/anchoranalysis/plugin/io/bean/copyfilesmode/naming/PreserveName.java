@@ -32,7 +32,7 @@ import java.util.Optional;
 
 import org.anchoranalysis.io.error.AnchorIOException;
 
-public class PreserveName extends CopyFilesNaming {
+public class PreserveName implements CopyFilesNaming {
 
 	@Override
 	public void beforeCopying(Path destDir, int totalNumFiles) {

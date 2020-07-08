@@ -97,7 +97,7 @@ public class ObjMaskProviderExtractText extends ObjectCollectionProvider {
 		// Scales the input to the largest acceptable-extent
 		Pair<Mat,ScaleFactor> pair = CreateScaledInput.apply(
 			stack,
-			findLargestExtent( stack.getDimensions().getExtnt() )
+			findLargestExtent( stack.getDimensions().getExtent() )
 		);
 		
 		// Convert marks to object-masks

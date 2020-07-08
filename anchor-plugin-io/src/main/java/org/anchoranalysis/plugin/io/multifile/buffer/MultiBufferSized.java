@@ -32,7 +32,7 @@ import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.image.stack.TimeSequence;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
-import org.anchoranalysis.plugin.io.multifile.SizeExtnts;
+import org.anchoranalysis.plugin.io.multifile.SizeExtents;
 
 public class MultiBufferSized {
 
@@ -40,10 +40,10 @@ public class MultiBufferSized {
 	private int sizeT;
 	private MultiBuffer buffers;
 	
-	public MultiBufferSized( Stack stack, SizeExtnts size ) {
+	public MultiBufferSized( Stack stack, SizeExtents size ) {
 		buffers = new MultiBuffer( stack, size );
 		dim = new ImageDimensions(
-			size.toExtnt(),
+			size.toExtent(),
 			stack.getDimensions().getRes()
 		);
 		sizeT = size.getRangeT().getSize();

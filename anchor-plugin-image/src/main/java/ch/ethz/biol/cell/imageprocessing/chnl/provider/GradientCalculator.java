@@ -82,10 +82,7 @@ class GradientCalculator {
 
 	 * @throws CreateException
 	 */
-	public void calculateGradient(
-		VoxelBoxWrapper signalIn,
-		VoxelBox<FloatBuffer> gradientOut
-	) throws CreateException {
+	public void calculateGradient(VoxelBoxWrapper signalIn, VoxelBox<FloatBuffer> gradientOut) {
 		
 		calcGradientImgLib2(
 			ImgLib2Wrap.wrap(signalIn),				// Input channel

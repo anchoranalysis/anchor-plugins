@@ -39,7 +39,7 @@ import org.anchoranalysis.mpp.sgmn.kernel.proposer.WeightedKernelList;
 import org.anchoranalysis.mpp.sgmn.transformer.StateTransformer;
 import org.anchoranalysis.mpp.sgmn.transformer.TransformationContext;
 
-public class KernelUpdaterSimple<S,T> extends KernelUpdater<S,T> {
+public class KernelUpdaterSimple<S,T> implements KernelUpdater<S,T> {
 
 	private ListUpdatableMarkSetCollection updatableMarkSetCollection;
 	private WeightedKernelList<S> allKernels;
