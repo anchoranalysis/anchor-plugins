@@ -182,6 +182,16 @@ class TaskSingleInputHelper {
 		).thenReturn(
 			createStatefulLogReporter()
 		);
+		when(
+			logger.createWithLogFallback(
+				any(),
+				any(),
+				any(),
+				anyBoolean()
+			)
+		).thenReturn(
+			createStatefulLogReporter()
+		);
 		return logger;
 	}
 	
