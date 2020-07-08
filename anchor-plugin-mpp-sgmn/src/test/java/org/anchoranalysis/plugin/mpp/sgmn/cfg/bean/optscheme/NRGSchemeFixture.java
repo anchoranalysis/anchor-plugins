@@ -70,7 +70,12 @@ public class NRGSchemeFixture {
 	private static NRGScheme createNRGScheme(double weightOverlap) throws CreateException {
 		return new NRGScheme(
 			FeatureListFactory.from( new Size() ),
-			FeatureListFactory.from( new MultiplyByConstant<>(new OverlapNumVoxels(),-1 * weightOverlap) ),
+			FeatureListFactory.from(
+				new MultiplyByConstant<>(
+					new OverlapNumVoxels(),
+					-1 * weightOverlap
+				)
+			),
 			FeatureListFactory.empty(),
 			RegionMapSingleton.instance(),
 			new BBoxIntersection()

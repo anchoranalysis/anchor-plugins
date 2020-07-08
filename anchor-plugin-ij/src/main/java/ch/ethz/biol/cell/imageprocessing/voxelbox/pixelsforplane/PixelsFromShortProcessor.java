@@ -32,11 +32,11 @@ import ij.process.ShortProcessor;
 import java.nio.ShortBuffer;
 
 import org.anchoranalysis.image.extent.Extent;
-import org.anchoranalysis.image.voxel.box.pixelsforplane.IPixelsForPlane;
+import org.anchoranalysis.image.voxel.box.pixelsforplane.PixelsForPlane;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 import org.anchoranalysis.image.voxel.buffer.VoxelBufferShort;
 
-public class PixelsFromShortProcessor implements IPixelsForPlane<ShortBuffer> {
+public class PixelsFromShortProcessor implements PixelsForPlane<ShortBuffer> {
 	
 	private ShortProcessor processor;
 	private Extent extent;

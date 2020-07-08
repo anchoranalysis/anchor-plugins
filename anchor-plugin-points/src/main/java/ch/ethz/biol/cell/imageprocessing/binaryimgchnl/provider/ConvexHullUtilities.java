@@ -32,7 +32,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.geometry.Point2i;
 import org.anchoranalysis.image.object.ObjectCollection;
@@ -195,15 +194,11 @@ public class ConvexHullUtilities {
 	}
 	
 	private static void addPointsFromObjOutline(ObjectMask obj, List<Point2i> points) throws OperationFailedException {
-		try {
-			ObjectMask outline = FindOutline.outline(obj, 1, true, false);
-			PointsFromBinaryVoxelBox.addPointsFromVoxelBox(
-				outline.binaryVoxelBox(),
-				outline.getBoundingBox().cornerMin(),
-				points
-			);
-		} catch (CreateException e) {
-			throw new OperationFailedException(e);
-		}
+		ObjectMask outline = FindOutline.outline(obj, 1, true, false);
+		PointsFromBinaryVoxelBox.addPointsFromVoxelBox(
+			outline.binaryVoxelBox(),
+			outline.getBoundingBox().cornerMin(),
+			points
+		);
 	}
 }

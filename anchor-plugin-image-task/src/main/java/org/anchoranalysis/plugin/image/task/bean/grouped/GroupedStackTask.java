@@ -46,6 +46,8 @@ import org.anchoranalysis.image.stack.NamedImgStackCollection;
 import org.anchoranalysis.image.stack.wrap.WrapStackAsTimeSequenceStore;
 import org.anchoranalysis.io.bean.filepath.generator.FilePathGenerator;
 import org.anchoranalysis.io.error.AnchorIOException;
+import org.anchoranalysis.io.manifest.ManifestFolderDescription;
+import org.anchoranalysis.io.manifest.sequencetype.SetSequenceType;
 import org.anchoranalysis.io.output.bound.BoundIOContext;
 import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
 import org.anchoranalysis.plugin.image.task.bean.selectchnls.SelectAll;
@@ -64,6 +66,12 @@ import org.anchoranalysis.plugin.image.task.grouped.GroupedSharedState;
  */
 public abstract class GroupedStackTask<S,T> extends Task<ProvidesStackInput,GroupedSharedState<S,T>> {
 
+	private static final ManifestFolderDescription MANIFEST_DESCRIPTION_GROUP_FOLDER = new ManifestFolderDescription(
+		"groupedFolder",
+		"groupedStack",
+		new SetSequenceType()
+	);
+	
 	// START BEAN PROPERTIES
 	/** If defined, translates a file-path into a group. If not-defined, all images are treated as part of the same group */
 	@BeanField @OptionalBean
@@ -88,9 +96,7 @@ public abstract class GroupedStackTask<S,T> extends Task<ProvidesStackInput,Grou
 		BoundOutputManagerRouteErrors outputManager,
 		ParametersExperiment params
 	) throws ExperimentExecutionException {
-		return new GroupedSharedState<S,T>(
-			chnlChecker -> createGroupMap(chnlChecker)
-		);
+		return new GroupedSharedState<>(this::createGroupMap);
 	}
 		
 	@Override
@@ -124,7 +130,10 @@ public abstract class GroupedStackTask<S,T> extends Task<ProvidesStackInput,Grou
 		try {
 			sharedState.getGroupMap().outputGroupedData(
 				sharedState.getChnlChecker(),
-				context.maybeSubdirectory(subdirectoryForGroupOutputs())
+				context.maybeSubdirectory(
+					subdirectoryForGroupOutputs(),
+					MANIFEST_DESCRIPTION_GROUP_FOLDER
+				)
 			);
 	
 		} catch (IOException e) {
