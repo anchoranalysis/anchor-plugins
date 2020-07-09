@@ -65,7 +65,7 @@ class MarkSeeds {
 	
 	private static ProcessVoxel createPointProcessor(EncodedVoxelBox matS, Optional<MinimaStore> minimaStore ) {
 		ConnectedComponentWriter ccWriter = new ConnectedComponentWriter(matS, minimaStore);
-		return pnt -> ccWriter.writePoint(pnt);
+		return ccWriter::writePoint;
 	}
 	
 	private static void throwExceptionIfNotConnected( ObjectMask obj ) throws SgmnFailedException {

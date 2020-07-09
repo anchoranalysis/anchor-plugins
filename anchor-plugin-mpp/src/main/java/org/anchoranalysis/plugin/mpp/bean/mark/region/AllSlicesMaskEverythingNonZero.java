@@ -38,12 +38,15 @@ import org.anchoranalysis.image.histogram.Histogram;
 import org.anchoranalysis.image.voxel.statistics.VoxelStatistics;
 import org.anchoranalysis.image.voxel.statistics.VoxelStatisticsFromHistogram;
 
+import lombok.EqualsAndHashCode;
+
 /** 
  * Only takes pixels where indexNonZero has a nonzero pixel 
  * 
  * <p>This involves a trick where we count how many pixels exist in our mask and we take the 
  * highest num-pixels to match this from our initial histogram</p>
  */
+@EqualsAndHashCode(callSuper = true)
 public class AllSlicesMaskEverythingNonZero extends SelectSlicesWithIndexBase {
 
 	@Override

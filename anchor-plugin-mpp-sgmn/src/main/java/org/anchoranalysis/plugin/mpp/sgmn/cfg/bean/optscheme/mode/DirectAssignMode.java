@@ -57,7 +57,7 @@ public class DirectAssignMode<S> extends AssignMode<S,S,S> {
 	}
 	
 	public AccptProbCalculator<S> probCalculator(AnnealScheme annealScheme) {
-		return new AccptProbCalculator<S>(
+		return new AccptProbCalculator<>(
 			annealScheme,
 			extractScoreSize
 		);

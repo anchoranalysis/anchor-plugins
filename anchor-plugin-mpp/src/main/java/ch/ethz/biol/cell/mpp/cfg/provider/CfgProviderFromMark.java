@@ -50,9 +50,7 @@ public class CfgProviderFromMark extends CfgProvider {
 		Cfg cfg = new Cfg();
 		
 		Optional<Mark> mark = markProvider.create();
-		mark.ifPresent( m->
-			cfg.add(m)
-		);
+		mark.ifPresent(cfg::add);
 		return cfg;
 	}
 

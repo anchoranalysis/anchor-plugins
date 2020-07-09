@@ -97,9 +97,7 @@ public class CombineCSVTask extends Task<FileInput,CSVWriter> {
 	public void doJobOnInputObject(InputBound<FileInput,CSVWriter> params) throws JobExecutionException {
 		
 		FileInput inputObject = params.getInputObject();
-		
-		
-		CSVWriter writer = (CSVWriter) params.getSharedState();
+		CSVWriter writer = params.getSharedState();
 		
 		if (writer==null || !writer.isOutputEnabled()) {
 			return;

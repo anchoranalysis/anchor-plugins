@@ -47,7 +47,7 @@ class FeedbackHelper {
 		ExtractScoreSize<T> extractScoreSize
 	) {
 		
-		FeedbackGenerator<T> feedbackGenerator = new FeedbackGenerator<T>(
+		FeedbackGenerator<T> feedbackGenerator = new FeedbackGenerator<>(
 			feedbackReceiver,
 			initContext.getLogger().errorReporter()
 		);

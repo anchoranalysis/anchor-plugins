@@ -62,12 +62,7 @@ public class EllipseBoundsCheck extends CheckMark {
 				return false;
 			}
 			
-			if (me.getRadii().getY() > maxBound) {
-				return false;
-			}
-			
-			return true;
-			
+			return me.getRadii().getY() <= maxBound;
 		} catch (NamedProviderGetException e) {
 			throw new CheckException("Cannot establish bounds", e.summarize());
 		}

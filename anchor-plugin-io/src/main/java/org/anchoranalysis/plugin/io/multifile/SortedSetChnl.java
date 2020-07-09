@@ -30,17 +30,17 @@ package org.anchoranalysis.plugin.io.multifile;
 import java.util.Iterator;
 import java.util.TreeMap;
 
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+
+@RequiredArgsConstructor @EqualsAndHashCode
 public class SortedSetChnl implements Comparable<SortedSetChnl>, Iterable<SortedSetSlice>  {
 
+	@Getter
 	private int chnlNum;
 	
-	private TreeMap<Integer,SortedSetSlice> slices = null;
-
-	public SortedSetChnl(int chnlNum) {
-		super();
-		this.chnlNum = chnlNum;
-		this.slices = new TreeMap<>();
-	}
+	private TreeMap<Integer,SortedSetSlice> slices = new TreeMap<>();
 
 	public int numSlices() {
 		return this.slices.size();
@@ -73,19 +73,8 @@ public class SortedSetChnl implements Comparable<SortedSetChnl>, Iterable<Sorted
 		}
 	}
 
-
 	@Override
 	public Iterator<SortedSetSlice> iterator() {
 		return slices.values().iterator();
-	}
-
-
-	public int getChnlNum() {
-		return chnlNum;
-	}
-
-
-	public void setChnlNum(int chnlNum) {
-		this.chnlNum = chnlNum;
 	}
 }

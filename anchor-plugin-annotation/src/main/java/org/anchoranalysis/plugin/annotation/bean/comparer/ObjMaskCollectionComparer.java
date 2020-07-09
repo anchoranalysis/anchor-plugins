@@ -27,7 +27,6 @@ package org.anchoranalysis.plugin.annotation.bean.comparer;
  */
 
 
-import java.nio.file.Files;
 import java.nio.file.Path;
 
 import org.anchoranalysis.annotation.io.bean.comparer.Comparer;
@@ -69,7 +68,7 @@ public class ObjMaskCollectionComparer extends Comparer {
 		try {
 			Path objsPath = filePathGenerator.outFilePath(filePathSource, debugMode);
 			
-			if (!Files.exists(objsPath)) {
+			if (!objsPath.toFile().exists()) {
 				return new NotFound<>(objsPath, "No objects exist");
 			}
 			

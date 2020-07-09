@@ -67,24 +67,24 @@ public class EllipsoidAxisRatio extends FeatureMarkDirection {
 	
 	private QuadraticRoots solveEquation( double[] radii, Point3d beta ) throws FeatureCalcException {
 		
-		double a_1 = Math.pow(radii[0], -2);
-		double a_2 = Math.pow(radii[1], -2);
-		double a_3 = Math.pow(radii[2], -2);
+		double a1 = Math.pow(radii[0], -2);
+		double a2 = Math.pow(radii[1], -2);
+		double a3 = Math.pow(radii[2], -2);
 				
-		double beta_1 = beta.getX();
-		double beta_2 = beta.getY();
-		double beta_3 = beta.getZ();
+		double beta1 = beta.getX();
+		double beta2 = beta.getY();
+		double beta3 = beta.getZ();
 		
-		double beta_1_sq = Math.pow(beta_1, 2);
-		double beta_2_sq = Math.pow(beta_2, 2);
-		double beta_3_sq = Math.pow(beta_3, 2);
+		double beta1Squared = Math.pow(beta1, 2);
+		double beta2Squared = Math.pow(beta2, 2);
+		double beta3Squared = Math.pow(beta3, 2);
 		
-		double eq_xsquared = (a_2 * a_3 * beta_1_sq) + (a_1 * a_3 * beta_2_sq )+ (a_1 * a_2 * beta_3_sq);
-		double eq_x = -1 * (((a_2 + a_3) * beta_1_sq) + ((a_1 + a_3) * beta_2_sq) + ((a_1 + a_2) * beta_3_sq));
+		double eqXSquared = (a2 * a3 * beta1Squared) + (a1 * a3 * beta2Squared )+ (a1 * a2 * beta3Squared);
+		double eqX = -1 * (((a2 + a3) * beta1Squared) + ((a1 + a3) * beta2Squared) + ((a1 + a2) * beta3Squared));
 		double eq = 1;
 
 		try {
-			return QuadraticEquationSolver.solveQuadraticEquation(eq_xsquared, eq_x, eq);
+			return QuadraticEquationSolver.solveQuadraticEquation(eqXSquared, eqX, eq);
 		} catch (OperationFailedException e) {
 			throw new FeatureCalcException(e);
 		}

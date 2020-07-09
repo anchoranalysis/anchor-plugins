@@ -62,7 +62,6 @@ public class IndependentChnls extends ChnlConversionStyle {
 			} catch (GetOperationFailedException e) {
 				if (ignoreMissingChnl) {
 					logger.messageLogger().logFormatted("Cannot open channel '%s'. Ignoring.", key);
-					continue;
 				} else {
 					throw new AnchorIOException( String.format("Cannot open channel '%s'.", key), e );
 				}

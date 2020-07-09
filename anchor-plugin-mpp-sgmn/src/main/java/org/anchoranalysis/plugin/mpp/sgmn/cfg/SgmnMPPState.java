@@ -65,19 +65,6 @@ public class SgmnMPPState implements ExperimentState {
 	// We just need any single kernel proposer to write out
 	@Override
 	public void outputAfterAllTasksAreExecuted( BoundOutputManagerRouteErrors outputManager ) {
-
-// TODO tidy up comments
-//			assert( nrgScheme!=null);
-//			assert( sharedFeatureList!=null);
-			
-//			if (nrgScheme!=null) {
-//				outputManager.write("nrgScheme", new XStreamGenerator<Object>(nrgScheme, "nrgScheme"));
-//			}
-			
-//			if (sharedFeatureList!=null) {
-//				outputManager.write("sharedFeatureList", new XStreamGenerator<Object>(sharedFeatureList, "sharedFeatureList"));
-//			}
-			
 			outputManager.getWriterCheckIfAllowed().write(
 				"kernelProposer",
 				() -> new XStreamGenerator<Object>(

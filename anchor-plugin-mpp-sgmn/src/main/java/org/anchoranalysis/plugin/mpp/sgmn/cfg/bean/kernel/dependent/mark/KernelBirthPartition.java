@@ -60,7 +60,7 @@ public class KernelBirthPartition extends KernelBirth<CfgFromPartition> {
 	protected Optional<CfgFromPartition> calcForNewMark(CfgFromPartition exst, Set<Mark> listMarksNew, KernelCalcContext context)
 			throws KernelCalcNRGException {
 
-		if (listMarksNew==null || listMarksNew.size()==0) {
+		if (listMarksNew==null || listMarksNew.isEmpty()) {
 			return Optional.empty();
 		}
 		
@@ -87,7 +87,7 @@ public class KernelBirthPartition extends KernelBirth<CfgFromPartition> {
 		return true;
 	}
 	
-	private static Cfg calcUpdatedCfg( Cfg exst, Mark mark ) throws KernelCalcNRGException {
+	private static Cfg calcUpdatedCfg( Cfg exst, Mark mark ) {
 		Cfg newCfg = exst.shallowCopy();
 		newCfg.add(mark);
 		return newCfg;

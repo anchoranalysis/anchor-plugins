@@ -40,6 +40,8 @@ import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 
+import com.google.common.base.Preconditions;
+
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
@@ -55,20 +57,16 @@ class PointsFromInsideHelper {
 		PointListForConvex pntsConvexRoot,
 		int skipAfterSuccessiveEmptySlices
 	) {
-
-		assert( chnl.getDimensions().contains(bbox) );
+		Preconditions.checkArgument( chnl.getDimensions().contains(bbox) );
 	
 		int startZ = (int) Math.floor(pntRoot.getZ());
-		
-		
+	
 		BinaryVoxelBox<ByteBuffer> binaryVoxelBox = chnlFilled.binaryVoxelBox();
 		
 		List<Point3i> listOut = new ArrayList<>();
 		
 		BinaryValuesByte bvb = chnl.getBinaryValues().createByte();
-		
-		VoxelBox<ByteBuffer> vb = chnl.getChnl().getVoxelBox().asByte();
-		
+		VoxelBox<ByteBuffer> vb = chnl.getChannel().getVoxelBox().asByte();
 		
 		// Stays as -1 until we reach a non-empty slice
 		int successiveEmptySlices = -1;
@@ -76,7 +74,6 @@ class PointsFromInsideHelper {
 		Extent e = vb.extent();
 		ReadableTuple3i crnrMin = bbox.cornerMin();
 		ReadableTuple3i crnrMax = bbox.calcCornerMax();
-		
 		
 		for( int z=startZ; z<=crnrMax.getZ(); z++) {
 			
@@ -90,16 +87,10 @@ class PointsFromInsideHelper {
 					if (bb.get(offset)==bvb.getOnByte()) {
 						
 						Point3i pnt = new Point3i(x,y,z); 
-						
-						//System.out.printf("For %s: ",pnt);
 						if( pntsConvexRoot.convexWithAtLeastOnePoint(pnt, binaryVoxelBox)) {
-							//System.out.printf(" passed\n");
 							addedToSlice = true;
 							listOut.add( pnt );
-						} else {
-							//System.out.printf(" failed\n");
 						}
-
 					}
 					
 				}
@@ -136,7 +127,6 @@ class PointsFromInsideHelper {
 						
 						Point3i pnt = new Point3i(x,y,z);
 						
-						//System.out.printf("For %s: ",pnt);
 						if( pntsConvexRoot.convexWithAtLeastOnePoint(pnt, binaryVoxelBox)) {
 							addedToSlice = true;
 							listOut.add( pnt );
@@ -158,8 +148,6 @@ class PointsFromInsideHelper {
 				
 			}
 		}
-		
-		
 		return listOut;
 	}
 }

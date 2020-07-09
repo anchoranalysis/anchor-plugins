@@ -66,7 +66,7 @@ public class BinaryChnlProviderInvert extends BinaryChnlProviderOne {
 			BinaryChnlInverter.invertChnl( chnl );
 		} else {
 			return new BinaryChnl(
-				chnl.getChnl(),
+				chnl.getChannel(),
 				chnl.getBinaryValues().createInverted()
 			);			
 		}

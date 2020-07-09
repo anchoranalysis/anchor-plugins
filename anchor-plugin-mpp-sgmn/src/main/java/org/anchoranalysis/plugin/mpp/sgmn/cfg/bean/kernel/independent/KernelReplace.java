@@ -131,7 +131,7 @@ public abstract class KernelReplace<T> extends KernelPosNeg<T> {
 		return sb.toString();
 	}
 	
-	private static <S> int[] makeArray( int[] first, int[] second ) {
+	private static int[] makeArray( int[] first, int[] second ) {
 		
 		if (first!=null) {
 			

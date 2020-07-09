@@ -48,7 +48,7 @@ public class CentrePosOnBinaryChnl extends CheckMarkBinaryChnl {
 		return isPointOnBinaryChnl(
 			mark.centerPoint(),
 			nrgStack,
-			pnt -> derivePoint(pnt)
+			this::derivePoint
 		);
 	}
 	

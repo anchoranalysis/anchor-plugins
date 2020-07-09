@@ -36,23 +36,17 @@ import org.anchoranalysis.image.histogram.Histogram;
 import org.anchoranalysis.image.histogram.HistogramFactory;
 import org.anchoranalysis.plugin.image.task.grouped.ChannelSource;
 
-/** Extracts a histogram from an image for a given key */
+import lombok.AllArgsConstructor;
+
+/** 
+ * Extracts a histogram from an image for a given key
+ **/
+@AllArgsConstructor
 class HistogramExtracter {
 
-	private ChannelSource source;
-	private String keyMask;
-	private int maskValue;
-		
-	public HistogramExtracter(
-		ChannelSource source,
-		String keyMask,
-		int maskValue 
-	) throws JobExecutionException {
-		super();
-		this.source = source;
-		this.keyMask = keyMask;
-		this.maskValue = maskValue;
-	}
+	private final ChannelSource source;
+	private final String keyMask;
+	private final int maskValue;
 	
 	public Histogram extractFrom( Channel chnl ) throws JobExecutionException {
 		

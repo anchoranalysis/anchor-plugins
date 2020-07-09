@@ -47,25 +47,28 @@ import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.io.input.InputFromManager;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
+import lombok.Getter;
+import lombok.Setter;
+
 public abstract class ExportObjectsBase<T extends InputFromManager, S> extends Task<T,S> {
 
 	// START BEAN PROPERTIES
 	/**
 	 * The objects that are matched against the points
 	 */
-	@BeanField
+	@BeanField @Getter @Setter
 	private ObjectCollectionProvider objs;
 	
 	/**
 	 * Padding placed on each side of the outputted image (if it's within the image) in XY directions
 	 */
-	@BeanField
+	@BeanField @Getter @Setter
 	private int paddingXY = 0;
 	
 	/**
 	 * Padding placed on each side of the outputted image (if it's within the image) in Z direction
 	 */
-	@BeanField
+	@BeanField @Getter @Setter
 	private int paddingZ = 0;
 	// END BEAN PROPERTIES
 	
@@ -74,8 +77,7 @@ public abstract class ExportObjectsBase<T extends InputFromManager, S> extends T
 		objsDup.initRecursive(so,logger);
 		return objsDup.create();
 	}
-	
-	
+		
 	/**
 	 * Adds padding (if set) to an object-mask
 	 * 
@@ -118,29 +120,5 @@ public abstract class ExportObjectsBase<T extends InputFromManager, S> extends T
 		delegate.setPaddingXY(paddingXY);
 		delegate.setPaddingZ(paddingZ);
 		return delegate;
-	}
-	
-	public ObjectCollectionProvider getObjs() {
-		return objs;
-	}
-
-	public void setObjs(ObjectCollectionProvider objs) {
-		this.objs = objs;
-	}
-
-	public int getPaddingXY() {
-		return paddingXY;
-	}
-
-	public void setPaddingXY(int paddingXY) {
-		this.paddingXY = paddingXY;
-	}
-
-	public int getPaddingZ() {
-		return paddingZ;
-	}
-
-	public void setPaddingZ(int paddingZ) {
-		this.paddingZ = paddingZ;
 	}
 }

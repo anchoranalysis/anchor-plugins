@@ -120,7 +120,7 @@ public abstract class IntensityMeanShellBase extends FeatureNrgChnl {
 		return input.calc(ccShellObjMask);
 	}
 	
-	private Optional<ObjectMask> intersectWithNRGMask( ObjectMask om, NRGStack nrgStack ) throws FeatureCalcException {
+	private Optional<ObjectMask> intersectWithNRGMask( ObjectMask om, NRGStack nrgStack ) {
 		return om.intersect(
 			createNrgMask(nrgStack),
 			nrgStack.getDimensions()

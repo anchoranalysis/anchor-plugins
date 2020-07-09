@@ -74,7 +74,7 @@ public final class ConsoleAggReporter extends ReporterAgg<CfgNRGPixelized> imple
 	
 	@Override
 	public void reportNewBest( Reporting<CfgNRGPixelized> reporting ) throws ReporterException {
-		System.out.printf(
+		System.out.printf(		// NOSONAR
 			"*** itr=%d  size=%d  best_nrg=%e  kernel=%s%n",
 			reporting.getIter(),
 			reporting.getCfgNRGAfter().getCfg().size(),

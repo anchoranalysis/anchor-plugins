@@ -64,8 +64,7 @@ public class ChnlProviderAssignFromKeyValueParams extends ChnlProviderOne {
 			throw new CreateException( String.format("Cannot find key '%s'",key) );
 		}
 		
-		double value = Double.valueOf( params.getProperty(key) );
-		byte valueByte = (byte) value;
+		byte valueByte = (byte) Double.parseDouble( params.getProperty(key) );
 		
 		VoxelBox<ByteBuffer> vb = chnl.getVoxelBox().asByte();
 

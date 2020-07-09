@@ -48,6 +48,8 @@ import org.anchoranalysis.image.io.input.series.NamedChnlCollectionForSeriesMap;
 import org.anchoranalysis.image.io.rasterreader.OpenedRaster;
 import org.anchoranalysis.io.input.FileInput;
 
+import lombok.RequiredArgsConstructor;
+
 /**
  * Provides a set of channels as an input, each of which has a name.
  * 
@@ -55,33 +57,23 @@ import org.anchoranalysis.io.input.FileInput;
  * 
  * @author Owen Feehan
  */
+@RequiredArgsConstructor
 class MapPart extends NamedChnlsInputPart {
 
-	private FileInput delegate;
-	private RasterReader rasterReader;
-	private ImgChnlMapCreator chnlMapCreator;
+	// START REQUIRED ARGUMENTS
+	private final FileInput delegate;
+	private final RasterReader rasterReader;
+	private final ImgChnlMapCreator chnlMapCreator;
 	
-	private ImgChnlMap chnlMap;
+	/** This is to correct for a problem with formats such as czi where the seriesIndex doesn't indicate
+	 *   the total number of series but rather is incremented with each acquisition, so for our purposes
+	 *   we treat it as if its 0 */
+	private final boolean useLastSeriesIndexOnly;
+	// END REQUIRED ARGUMENTS
 	
 	// We cache a certain amount of stacks read for particular series
 	private OpenedRaster openedRasterMemo = null;
-	
-	// This is to correct for a problem with formats such as czi where the seriesIndex doesn't indicate
-	//   the total number of series but rather is incremented with each acquisition, so for our purposes
-	//   we treat it as if its 0
-	private boolean useLastSeriesIndexOnly = false;
-
-	// The root object that is used to provide the descriptiveName and pathForBinding
-	//
-	public MapPart(FileInput delegate, RasterReader rasterReader,
-			ImgChnlMapCreator chnlMapCreator, boolean useLastSeriesIndexOnly ) {
-		super();
-		assert( rasterReader != null );
-		this.delegate = delegate;
-		this.rasterReader = rasterReader;
-		this.chnlMapCreator = chnlMapCreator;
-		this.useLastSeriesIndexOnly = useLastSeriesIndexOnly;
-	}
+	private ImgChnlMap chnlMap = null;
 	
 	@Override
 	public ImageDimensions dim( int seriesIndex ) throws RasterIOException {

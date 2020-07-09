@@ -40,7 +40,6 @@ import org.anchoranalysis.core.color.RGBColor;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.functional.FunctionWithException;
 import org.anchoranalysis.core.functional.IdentityOperation;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.core.name.provider.NamedProviderGetException;
@@ -77,6 +76,9 @@ import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.mpp.io.input.MultiInput;
 import org.anchoranalysis.mpp.sgmn.bean.define.DefineOutputterMPP;
 
+import lombok.Getter;
+import lombok.Setter;
+
 
 /**
  * Exports a cropped image for each object-mask showing its context iwthin an image
@@ -89,31 +91,31 @@ import org.anchoranalysis.mpp.sgmn.bean.define.DefineOutputterMPP;
 public class ExportObjectsAsCroppedImagesTask extends ExportObjectsBase<MultiInput,NoSharedState> {
 
 	// START BEAN PROPERTIES
-	@BeanField
+	@BeanField @Getter @Setter
 	private DefineOutputterMPP define;
 	
-	@BeanField @OptionalBean
+	@BeanField @OptionalBean @Getter @Setter
 	private List<NamedBean<StackProvider>> listStackProvider = new ArrayList<>();	// The channels we apply the masks to - all assumed to be of same dimension
 	
-	@BeanField @OptionalBean
+	@BeanField @OptionalBean @Getter @Setter
 	private List<NamedBean<StackProvider>> listStackProviderMIP = new ArrayList<>();	// The channels we apply the masks to - all assumed to be of same dimension
 	
-	@BeanField
+	@BeanField @Getter @Setter
 	private StringSet outputRGBOutline = new StringSet();
 	
-	@BeanField
+	@BeanField @Getter @Setter
 	private StringSet outputRGBOutlineMIP = new StringSet();
 	
-	@BeanField
+	@BeanField @Getter @Setter
 	private int outlineWidth = 1;
 	
-	@BeanField
+	@BeanField @Getter @Setter
 	private boolean extendInZ = false;	// Extends the objects in z-dimension (uses maximum intensity for the segmentation, but in all slices)
 	
 	/**
 	 * If true, rather than writing out a bounding-box around the object mask, the entire image is written
 	 */
-	@BeanField
+	@BeanField @Getter @Setter
 	private boolean keepEntireImage = false;
 	// END BEAN PROPERTIES
 
@@ -346,7 +348,10 @@ public class ExportObjectsAsCroppedImagesTask extends ExportObjectsBase<MultiInp
 				
 				ExtractedBBoxGenerator generatorBBox = createBBoxGeneratorForStack(stack, manifestFunction ); 
 							
-				out.add( key, wrapBBoxGenerator(generatorBBox,false) );
+				out.add(
+					key,
+					wrapBBoxGenerator(generatorBBox,false)
+				);
 				
 				if (outputRGBOutline.contains(key)) {
 					out.add( key + "_RGBOutline", createRGBObjMaskGenerator(generatorBBox, new ColorList( new RGBColor(Color.GREEN) ), false) );
@@ -377,15 +382,16 @@ public class ExportObjectsAsCroppedImagesTask extends ExportObjectsBase<MultiInp
 
 		
 		// Maybe we need to change the objectMask to a padded version
-		FunctionWithException<ObjectMask,ObjectMask,OutputWriteFailedException> bridgeToMaybePad = om -> {
-			if (keepEntireImage) {
-				return extractObjMaskKeepEntireImage(om, dim );
-			} else {
-				return maybePadObjMask(om, dim );
+		return new IterableGeneratorBridge<>(
+			out,
+			om -> {
+				if (keepEntireImage) {
+					return extractObjMaskKeepEntireImage(om, dim);
+				} else {
+					return maybePadObjMask(om, dim);
+				}
 			}
-		};
-
-		return new IterableGeneratorBridge<>(out, bridgeToMaybePad);
+		);
 	}
 	
 	
@@ -419,74 +425,5 @@ public class ExportObjectsAsCroppedImagesTask extends ExportObjectsBase<MultiInp
 		return objs.stream().map( om->
 			om.flattenZ().growToZ(sz)
 		);
-	}
-
-	public StringSet getOutputRGBOutline() {
-		return outputRGBOutline;
-	}
-
-
-	public void setOutputRGBOutline(StringSet outputRGBOutline) {
-		this.outputRGBOutline = outputRGBOutline;
-	}
-
-
-	public StringSet getOutputRGBOutlineMIP() {
-		return outputRGBOutlineMIP;
-	}
-
-
-	public void setOutputRGBOutlineMIP(StringSet outputRGBOutlineMIP) {
-		this.outputRGBOutlineMIP = outputRGBOutlineMIP;
-	}
-
-
-	public boolean isExtendInZ() {
-		return extendInZ;
-	}
-
-
-	public void setExtendInZ(boolean extendInZ) {
-		this.extendInZ = extendInZ;
-	}
-
-
-	public List<NamedBean<StackProvider>> getListStackProviderMIP() {
-		return listStackProviderMIP;
-	}
-
-
-	public void setListStackProviderMIP(
-			List<NamedBean<StackProvider>> listStackProviderMIP) {
-		this.listStackProviderMIP = listStackProviderMIP;
-	}
-
-
-	public List<NamedBean<StackProvider>> getListStackProvider() {
-		return listStackProvider;
-	}
-
-
-	public void setListStackProvider(
-			List<NamedBean<StackProvider>> listStackProvider) {
-		this.listStackProvider = listStackProvider;
-	}
-
-	public boolean isKeepEntireImage() {
-		return keepEntireImage;
-	}
-
-	public void setKeepEntireImage(boolean keepEntireImage) {
-		this.keepEntireImage = keepEntireImage;
-	}
-
-
-	public DefineOutputterMPP getDefine() {
-		return define;
-	}
-
-
-	public void setDefine(DefineOutputterMPP define) {
-		this.define = define;
 	}
 }

@@ -68,7 +68,7 @@ public class MergeLists extends PointsFromOrientationProposer {
 			combinedList.addAll(list);
 		}
 		
-		List<List<Point3i>> listOfListsNew = new ArrayList<List<Point3i>>();
+		List<List<Point3i>> listOfListsNew = new ArrayList<>();
 		listOfListsNew.add( combinedList );
 		return listOfListsNew;
 	}

@@ -36,6 +36,10 @@ import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.voxel.statistics.VoxelStatistics;
 import org.anchoranalysis.image.voxel.statistics.VoxelStatisticsCombined;
 
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
+
 /**
  * Like {#link ch.ethz.biol.cell.mpp.mark.pixelstatisticsfrommark.CenterSlice} but considers more than one slice, specifically centerSlice+- windowSize
  * 
@@ -44,10 +48,11 @@ import org.anchoranalysis.image.voxel.statistics.VoxelStatisticsCombined;
  * @author Owen Feehan
  *
  */
+@EqualsAndHashCode(callSuper=true)
 public class CenterSliceWindow extends CenterSliceBase {
 
 	// START BEAN PROPERTIES
-	@BeanField
+	@BeanField @Getter @Setter
 	private int windowSize = 0;
 	// END BEAN PROPERTIES
 	
@@ -80,36 +85,6 @@ public class CenterSliceWindow extends CenterSliceBase {
 			);
 		}
 		return out;
-	}
-
-	public int getWindowSize() {
-		return windowSize;
-	}
-
-	public void setWindowSize(int windowSize) {
-		this.windowSize = windowSize;
-	}
-
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = super.hashCode();
-		result = prime * result + windowSize;
-		return result;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (!super.equals(obj))
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		CenterSliceWindow other = (CenterSliceWindow) obj;
-		if (windowSize != other.windowSize)
-			return false;
-		return true;
 	}
 
 	@Override

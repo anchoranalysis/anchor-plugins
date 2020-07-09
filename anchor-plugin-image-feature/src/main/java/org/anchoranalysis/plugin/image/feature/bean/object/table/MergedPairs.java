@@ -160,7 +160,7 @@ public class MergedPairs extends FeatureTableObjects<FeatureInputPairObjects> {
 		List<FeatureInputPairObjects> out = new ArrayList<>();
 		
 		// We create a neighbour-graph of our input objects
-		CreateNeighborGraph<ObjectMask> graphCreator = new CreateNeighborGraph<ObjectMask>( avoidOverlappingObjects );
+		CreateNeighborGraph<ObjectMask> graphCreator = new CreateNeighborGraph<>( avoidOverlappingObjects );
 		GraphWithEdgeTypes<ObjectMask,Integer> graphNghb = graphCreator.createGraphWithNumPixels(
 			objs.asList(),
 			Function.identity(),

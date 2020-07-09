@@ -56,11 +56,9 @@ public class ObjMaskProviderMergeMax extends ObjMaskProviderMergeWithFeature {
 		
 		FeatureCalculatorSingle<FeatureInputSingleObject> calculator = featureEvaluator.createAndStartSession();
 		
-		return om -> {
-			return calculator.calc(
-				new FeatureInputSingleObject(om)
-			);
-		};
+		return om -> calculator.calc(
+			new FeatureInputSingleObject(om)
+		);
 	}
 	
 	@Override

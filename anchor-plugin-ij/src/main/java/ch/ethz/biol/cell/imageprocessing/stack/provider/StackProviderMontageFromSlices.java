@@ -93,7 +93,7 @@ public class StackProviderMontageFromSlices extends StackProviderOne {
 		}
 	}
 	
-	private Channel montageChnl( Channel in, int colsCalc, int rowsCalc, int firstSliceCalc, int lastSliceCalc ) throws OperationFailedException {
+	private Channel montageChnl( Channel in, int colsCalc, int rowsCalc, int firstSliceCalc, int lastSliceCalc ) {
 
 		ImagePlus imp = IJWrap.createImagePlus( in );
 

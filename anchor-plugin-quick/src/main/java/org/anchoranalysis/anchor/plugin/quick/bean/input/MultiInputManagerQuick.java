@@ -161,7 +161,7 @@ public class MultiInputManagerQuick extends MultiInputManagerBase {
 			filterFilesCsv
 		);
 		
-		if (stackAsChnl || additionalChnls.size()>0) {
+		if (stackAsChnl || !additionalChnls.isEmpty()) {
 			// Then we treat the main raster as comprising of multiple independent channels
 			//  and each are presented separately to the MultiInput as stacks
 			//

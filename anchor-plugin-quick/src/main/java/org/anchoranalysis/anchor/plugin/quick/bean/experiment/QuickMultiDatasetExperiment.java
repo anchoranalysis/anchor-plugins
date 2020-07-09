@@ -176,7 +176,7 @@ public class QuickMultiDatasetExperiment<T extends InputFromManager, S> extends 
 		return true;
 	}
 	
-	private void executeAllDatasets( ExperimentExecutionArguments expArgs ) throws ExperimentExecutionException {
+	private void executeAllDatasets( ExperimentExecutionArguments expArgs ) {
 		Logger reporter = new Logger( new ConsoleMessageLogger() );
 		
 		MonitoredSequentialExecutor<String> serialExecutor = new MonitoredSequentialExecutor<>(

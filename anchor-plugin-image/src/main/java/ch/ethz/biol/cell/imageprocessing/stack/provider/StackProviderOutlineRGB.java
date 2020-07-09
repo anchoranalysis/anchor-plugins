@@ -86,11 +86,11 @@ public class StackProviderOutlineRGB extends StackProviderWithBackground {
 	}
 	
 	private Channel createBlue(boolean do3D, ImageDimensions dim) throws CreateException {
-		Channel chnlBlue = createBlueMaybeProvider(dim);
+		Channel blue = createBlueMaybeProvider(dim);
 		if (do3D) {
-			return chnlBlue;
+			return blue;
 		} else {
-			return chnlBlue.maxIntensityProjection();
+			return blue.maxIntensityProjection();
 		}
 	}
 	

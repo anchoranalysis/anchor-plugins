@@ -57,10 +57,7 @@ public class ObjMaskProviderMerge extends ObjMaskProviderMergeOptionalDistance {
 				getLogger()
 			);
 			
-			return mergeMultiplex(
-				objsSource,
-				a -> merger.tryMerge( a )
-			);
+			return mergeMultiplex(objsSource, merger::tryMerge);
 			
 		} catch (OperationFailedException e) {
 			throw new CreateException(e);

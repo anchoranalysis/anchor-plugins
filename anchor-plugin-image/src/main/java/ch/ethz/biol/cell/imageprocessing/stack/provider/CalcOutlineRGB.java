@@ -122,10 +122,10 @@ class CalcOutlineRGB {
 	
 	private static Channel imposeOutlineOnChnl(BinaryChnl outline, Channel chnl,VoxelDataType outputType) {
 				
-		double multFact = (double) outputType.maxValue() / outline.getChnl().getVoxelDataType().maxValue();
+		double multFact = (double) outputType.maxValue() / outline.getChannel().getVoxelDataType().maxValue();
 		
 		return ChnlProviderIfPixelZero.mergeViaZeroCheck(
-			outline.getChnl(),
+			outline.getChannel(),
 			chnl,
 			outputType,
 			multFact

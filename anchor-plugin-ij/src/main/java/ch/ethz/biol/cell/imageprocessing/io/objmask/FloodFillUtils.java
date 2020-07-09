@@ -43,14 +43,10 @@ public class FloodFillUtils {
 		
 		int posValAsInt = ByteConverter.unsignedByteToInt(posValByte);
 		
-		//ImageProcessor ip = voxelBox.imageProcessor(0);
-		
 		int sx = ip.getWidth();
 		int sy = ip.getHeight();
 		
 		IJFloodFiller ff = new IJFloodFiller( ip );
-		
-		//ByteBuffer pixels = voxelBox.getPlaneAccess().getPixelsForPlane(0); 
 		
 		// Color, we use colors other than our posval at a posVal
 		int c = startingCol - 1;
@@ -67,16 +63,14 @@ public class FloodFillUtils {
 					}
 					
 					ip.setColor( c );
-					//ip.setValue( ++c );
-					int filledPixels = ff.fill(x, y);
 					
+					int filledPixels = ff.fill(x, y);
 					if (filledPixels < minVol) {
 						ip.setColor( 0 );
 						int replaceNum = ff.fill(x, y);
 						assert( filledPixels==replaceNum );
 						c--;
 					}
-					//System.out.printf("filledPixels=%d\n", filledPixels);
 				}
 			}
 		}

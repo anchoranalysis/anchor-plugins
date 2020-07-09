@@ -28,7 +28,6 @@ package org.anchoranalysis.io.manifest.reportfeature;
 
 
 import java.io.IOException;
-import java.nio.file.Files;
 import java.nio.file.Path;
 
 import org.anchoranalysis.core.error.OperationFailedException;
@@ -44,7 +43,7 @@ public class TextFileAsIntegerFromPath extends ReportFeatureForManifestFileBase 
 
 		Path executionTimePath = obj.getRootPath().resolve( getFileName() + ".txt" );
 		
-		if (Files.exists(executionTimePath)) {
+		if (executionTimePath.toFile().exists()) {
 			String execTime;
 			try {
 				execTime = FinderFileAsText.readFile(executionTimePath);

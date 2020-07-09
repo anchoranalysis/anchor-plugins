@@ -71,32 +71,11 @@ public class AddCriteriaDistanceTo extends AddCriteriaPair {
 				mark1.getMark().centerPoint(),
 				mark2.getMark().centerPoint()
 			);
-			
-			if (d < thresholdVal) {
-				return true;
-			} else {
-				return false;
-			}
+			return d < thresholdVal;
 			
 		} catch (OperationFailedException e) {
 			throw new IncludeMarksFailureException(e);
 		}
-	}
-
-	@Override
-	public boolean paramsEquals(Object other) {
-		
-		if (!(other instanceof AddCriteriaDistanceTo)) {
-			return false;
-		}
-		
-		AddCriteriaDistanceTo obj = (AddCriteriaDistanceTo) other;
-		
-		if (threshold!=obj.threshold) {
-			return false;
-		}
-		
-		return true;
 	}
 
 	@Override

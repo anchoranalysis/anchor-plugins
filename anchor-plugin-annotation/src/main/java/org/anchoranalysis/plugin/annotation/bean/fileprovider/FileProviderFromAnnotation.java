@@ -52,7 +52,7 @@ public class FileProviderFromAnnotation<T extends AnnotatorStrategy> extends Fil
 	@Override
 	public Collection<File> create(InputManagerParams params) throws FileProviderException {
 
-		List<File> filesOut = new ArrayList<File>();
+		List<File> filesOut = new ArrayList<>();
 		
 		try {
 			List<AnnotationWithStrategy<T>> list = annotationInputManager.inputObjects(params);

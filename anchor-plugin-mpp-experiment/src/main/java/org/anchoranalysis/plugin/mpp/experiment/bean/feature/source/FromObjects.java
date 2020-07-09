@@ -114,7 +114,7 @@ public class FromObjects<T extends FeatureInput> extends FeatureSource<MultiInpu
 			return new SharedStateExportFeatures<>(
 				metadataHeaders,
 				tableCalculator.createFeatureNames(),
-				() -> tableCalculator.duplicateForNewThread(),
+				tableCalculator::duplicateForNewThread,
 				context
 			);
 		} catch (InitException | AnchorIOException e) {

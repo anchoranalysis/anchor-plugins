@@ -127,7 +127,7 @@ class GradientCalculator {
  		while (in.hasNext()) {
 			in.fwd();
 
-			// Position neighborhood cursor;
+			// Position neighborhood cursor
 			ra.setPosition( in );
 
 			// Position output cursor

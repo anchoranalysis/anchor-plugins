@@ -27,6 +27,7 @@ package ch.ethz.biol.cell.imageprocessing.objmask.provider.smoothspline;
  */
 
 import java.util.List;
+import java.util.function.Function;
 
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.geometry.Point3f;
@@ -34,8 +35,6 @@ import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.contour.Contour;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.plugin.opencv.CVFindContours;
-
-import com.google.common.base.Function;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
@@ -123,21 +122,21 @@ public class SplitContourSmoothingSpline {
 		int numExtraPoints,
 		ContourList out
 	) {
-		
 		if (numExtraPoints > ptsExtra.size()) {
 			numExtraPoints = ptsExtra.size();
 		}
 		
-		//List<Point2i> pts = PointsUtilities.pointsFromChnl2D( om.binaryVoxelBox() );
 		double[] u = integerSequence(ptsToFit.size() + numExtraPoints);
-		double[] x = extractFromPoint(ptsToFit, a->a.getX(), ptsExtra, numExtraPoints );
-		double[] y = extractFromPoint(ptsToFit, a->a.getY(), ptsExtra, numExtraPoints );
+		double[] x = extractFromPoint(ptsToFit, Point3i::getX, ptsExtra, numExtraPoints );
+		double[] y = extractFromPoint(ptsToFit, Point3i::getY, ptsExtra, numExtraPoints );
 		
 		// We use two smoothing splines with respect to artificial parameter u (just an integer sequence)
-		SmoothingCubicSpline splineX = new SmoothingCubicSpline(u, x, rho);
-		SmoothingCubicSpline splineY = new SmoothingCubicSpline(u, y, rho);
-		
-		extractSplitContour(splineX, splineY, u.length, out);
+		extractSplitContour(
+			new SmoothingCubicSpline(u, x, rho),
+			new SmoothingCubicSpline(u, y, rho),
+			u.length,
+			out
+		);
 	}
 
 	
@@ -170,7 +169,13 @@ public class SplitContourSmoothingSpline {
 			}
 			prevDer = der;
 						
-			c.getPoints().add( new Point3f((float) xEval, (float) yEval, 0.0f ) );
+			c.getPoints().add(
+				new Point3f(
+					(float) xEval,
+					(float) yEval,
+					0.0f
+				)
+			);
 			
 			z += step;
 		}

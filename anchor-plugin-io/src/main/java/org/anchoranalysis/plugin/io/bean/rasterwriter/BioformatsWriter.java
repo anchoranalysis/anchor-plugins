@@ -84,8 +84,7 @@ public class BioformatsWriter extends ByteNoTimeSeriesWriter {
 			merged.put( red );	
 			merged.put( green );
 			merged.put( blue );					
-			
-			//writer.saveBytes(z, red.array() );
+
 			writer.saveBytes(z, merged.array() );
 			
 		}

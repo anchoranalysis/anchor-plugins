@@ -53,9 +53,10 @@ public class NumTouchingVoxels extends TouchingVoxels {
 			throws FeatureCalcException {
 		// As this means of measuring the touching pixels can differ slightly depending on om1->om2 or om2->om1, it's done in both directions.
 		try {
-			int numTouching_1to2 = numTouchingFrom(om1, om2, bboxIntersect);
-			int numTouching_2to1 = numTouchingFrom(om2, om1, bboxIntersect);
-			return Math.max(numTouching_1to2, numTouching_2to1);
+			return Math.max(
+				numTouchingFrom(om1, om2, bboxIntersect),
+				numTouchingFrom(om2, om1, bboxIntersect)
+			);
 			
 		} catch (OperationFailedException e) {
 			throw new FeatureCalcException(e);
