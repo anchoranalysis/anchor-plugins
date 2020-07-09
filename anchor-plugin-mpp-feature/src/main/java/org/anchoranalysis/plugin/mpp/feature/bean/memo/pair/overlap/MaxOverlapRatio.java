@@ -34,7 +34,7 @@ import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.plugin.mpp.feature.bean.memo.pair.FeaturePairMemoSingleRegion;
 
-import ch.ethz.biol.cell.mpp.nrg.cachedcalculation.OverlapCalculation;
+import ch.ethz.biol.cell.mpp.nrg.cachedcalculation.CalculateOverlap;
 
 public class MaxOverlapRatio extends FeaturePairMemoSingleRegion {
 
@@ -71,7 +71,7 @@ public class MaxOverlapRatio extends FeaturePairMemoSingleRegion {
 			params.getObj1(),
 			params.getObj2(),
 			input.calc(
-				new OverlapCalculation( getRegionID() )
+				new CalculateOverlap( getRegionID() )
 			),
 			getRegionID(),
 			false,

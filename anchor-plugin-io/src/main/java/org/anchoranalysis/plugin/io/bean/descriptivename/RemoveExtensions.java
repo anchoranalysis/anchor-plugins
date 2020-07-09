@@ -36,11 +36,16 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.core.functional.FunctionalUtilities;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.io.bean.descriptivename.DescriptiveNameFromFile;
 import org.anchoranalysis.io.filepath.FilePathToUnixStyleConverter;
 import org.anchoranalysis.io.input.descriptivename.DescriptiveFile;
 import org.apache.commons.io.FilenameUtils;
+
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 
 /**
@@ -52,20 +57,17 @@ import org.apache.commons.io.FilenameUtils;
  * @author Owen Feehan
  *
  */
+@NoArgsConstructor
 public class RemoveExtensions extends DescriptiveNameFromFile {
 	
 	// START BEAN PROPERTIES
-	@BeanField
+	@BeanField @Getter @Setter
 	private DescriptiveNameFromFile descriptiveName;
 
 	/** Keeps the extension if the file-name (without the extension) becomes duplicated with another */
-	@BeanField
+	@BeanField @Getter @Setter
 	private boolean preserveExtensionIfDuplicate = true;
 	// END BEAN PROPERTIES
-
-	public RemoveExtensions() {
-		
-	}
 	
 	public RemoveExtensions(DescriptiveNameFromFile descriptiveName) {
 		this.descriptiveName = descriptiveName;
@@ -122,22 +124,14 @@ public class RemoveExtensions extends DescriptiveNameFromFile {
 			);
 			
 		}
-		
 		return out;
 	}
 	
-	private static List<DescriptiveFile> removeExt( List<DescriptiveFile> df, String elseName ) {
-		return df.stream()
-			.map( descriptiveName -> maybeRemoveExtension(descriptiveName,elseName) )
-			.collect( Collectors.toList() );
-	}
-
-	public DescriptiveNameFromFile getDescriptiveName() {
-		return descriptiveName;
-	}
-
-	public void setDescriptiveName(DescriptiveNameFromFile descriptiveName) {
-		this.descriptiveName = descriptiveName;
+	private static List<DescriptiveFile> removeExt( List<DescriptiveFile> files, String elseName ) {
+		return FunctionalUtilities.mapToList(
+			files,
+			descriptiveName -> maybeRemoveExtension(descriptiveName,elseName)
+		);
 	}
 	
 	private static DescriptiveFile maybeRemoveExtension( DescriptiveFile df, String elseName) {
@@ -180,13 +174,5 @@ public class RemoveExtensions extends DescriptiveNameFromFile {
 		} else {
 			return fileNamePartRemoved;
 		}
-	}
-
-	public boolean isPreserveExtensionIfDuplicate() {
-		return preserveExtensionIfDuplicate;
-	}
-
-	public void setPreserveExtensionIfDuplicate(boolean preserveExtensionIfDuplicate) {
-		this.preserveExtensionIfDuplicate = preserveExtensionIfDuplicate;
 	}
 }

@@ -32,6 +32,10 @@ import org.anchoranalysis.feature.cache.calculation.ResolvedCalculation;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.input.FeatureInput;
 
+import lombok.AccessLevel;
+import lombok.EqualsAndHashCode;
+import lombok.RequiredArgsConstructor;
+
 /**
  * A base class for Cached-Calculations that generate a Params for feature-calculation using an existing "delegate" calculation
  * 
@@ -50,18 +54,13 @@ import org.anchoranalysis.feature.input.FeatureInput;
  * @param <U> delegate-type of CachedCalculation
  * 
  */
+@RequiredArgsConstructor(access=AccessLevel.PROTECTED) @EqualsAndHashCode(callSuper=false)
 public abstract class CalculateInputFromDelegate<S, T extends FeatureInput, U> extends FeatureCalculation<S, T> {
 
-	private ResolvedCalculation<U, T> ccDelegate;
-
-	protected CalculateInputFromDelegate(ResolvedCalculation<U, T> ccDelegate) {
-		super();
-		this.ccDelegate = ccDelegate;
-	}
+	private final ResolvedCalculation<U, T> ccDelegate;
 	
 	protected CalculateInputFromDelegate(FeatureCalculation<U, T> ccDelegate, CalculationResolver<T> cache) {
-		super();
-		this.ccDelegate = cache.search(ccDelegate);
+		this( cache.search(ccDelegate) );
 	}
 
 	@Override

@@ -38,7 +38,7 @@ import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.voxel.statistics.VoxelStatistics;
 import org.anchoranalysis.plugin.mpp.feature.bean.memo.pair.FeaturePairMemoSingleRegion;
 
-import ch.ethz.biol.cell.mpp.nrg.cachedcalculation.OverlapCalculationMaskGlobal;
+import ch.ethz.biol.cell.mpp.nrg.cachedcalculation.CalculateOverlapMask;
 
 public abstract class OverlapMaskBase extends FeaturePairMemoSingleRegion {
 
@@ -52,14 +52,14 @@ public abstract class OverlapMaskBase extends FeaturePairMemoSingleRegion {
 	
 	protected double overlapWithGlobalMask( SessionInput<FeatureInputPairMemo> params ) throws FeatureCalcException {
 		return params.calc(
-			new OverlapCalculationMaskGlobal(getRegionID(), getNrgIndex(), (byte) getMaskValue())
+			new CalculateOverlapMask(getRegionID(), getNrgIndex(), (byte) getMaskValue())
 		);
 	}
 	
 	@Override
 	protected double overlappingNumVoxels( SessionInput<FeatureInputPairMemo> input) throws FeatureCalcException {
 		return input.calc(
-			new OverlapCalculationMaskGlobal(getRegionID(), nrgIndex, (byte) maskValue)
+			new CalculateOverlapMask(getRegionID(), nrgIndex, (byte) maskValue)
 		);
 	}
 

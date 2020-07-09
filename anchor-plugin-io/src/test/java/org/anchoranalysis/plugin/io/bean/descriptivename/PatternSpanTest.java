@@ -29,10 +29,8 @@ package org.anchoranalysis.plugin.io.bean.descriptivename;
 import static org.junit.Assert.*;
 
 import java.io.File;
-import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
-
+import org.anchoranalysis.core.functional.FunctionalUtilities;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.input.descriptivename.DescriptiveFile;
@@ -113,7 +111,7 @@ public class PatternSpanTest {
 	}
 	
 	private static List<File> filesFromStrs( String[] paths ) {
-		return Arrays.stream(paths).map(File::new).collect( Collectors.toList() );
+		return FunctionalUtilities.mapToList(paths, File::new);
 	}
 	
 	private static void assertIndexEquals( List<DescriptiveFile> ret, int index, String expected ) {

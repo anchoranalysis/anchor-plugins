@@ -32,8 +32,9 @@ import org.anchoranalysis.feature.cache.calculation.ResolvedCalculationMap;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.plugin.image.feature.object.calculation.single.CalculateObjectMask;
-import org.apache.commons.lang.builder.HashCodeBuilder;
+import lombok.EqualsAndHashCode;
 
+@EqualsAndHashCode(callSuper=true)
 public class CalculateDilation extends CalculateObjectMask {
 
 	public static ResolvedCalculation<ObjectMask,FeatureInputSingleObject> createFromCache(
@@ -55,23 +56,5 @@ public class CalculateDilation extends CalculateObjectMask {
 		ResolvedCalculationMap<ObjectMask,FeatureInputSingleObject,Integer> map
 	) {
 		super(iterations,map);
-	}
-	
-	private CalculateDilation( CalculateObjectMask src ) {
-		super(src);
-	}
-
-	@Override
-	public boolean equals(final Object obj){
-	    if(obj instanceof CalculateDilation){
-	        return super.equals(obj);
-	    } else{
-	        return false;
-	    }
-	}
-
-	@Override
-	public int hashCode() {
-		return new HashCodeBuilder().appendSuper( super.hashCode() ).hashCode();
 	}
 }

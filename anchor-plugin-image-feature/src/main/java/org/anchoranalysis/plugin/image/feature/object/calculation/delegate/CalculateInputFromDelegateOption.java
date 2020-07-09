@@ -37,8 +37,7 @@ import org.anchoranalysis.feature.cache.calculation.FeatureCalculation;
 import org.anchoranalysis.feature.cache.calculation.ResolvedCalculation;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.input.FeatureInput;
-import org.apache.commons.lang.builder.EqualsBuilder;
-import org.apache.commons.lang.builder.HashCodeBuilder;
+import lombok.EqualsAndHashCode;
 
 /**
  * Like {@link #CalculateParamsFromDelegateOption(CacheableCalculation) except assumes optional return value and no parameters
@@ -49,6 +48,7 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
  * @param <T> feature input-type as input to cached-calculations
  * @param <U> delegate-type of CachedCalculation
  */
+@EqualsAndHashCode(callSuper=true)
 public abstract class CalculateInputFromDelegateOption<S extends FeatureInput, T extends FeatureInput, U> extends CalculateInputFromDelegate<Optional<S>, T, U> {
 	
 	/**
@@ -102,26 +102,4 @@ public abstract class CalculateInputFromDelegateOption<S extends FeatureInput, T
 			cacheName
 		);
 	}
-	
-	@SuppressWarnings("unchecked")
-	@Override
-	public boolean equals(Object obj) {
-		if (obj == null) { return false; }
-		if (obj == this) { return true; }
-		if (obj.getClass() != getClass()) {
-			return false;
-		}
-		CalculateInputFromDelegateOption<S,T,U> rhs = (CalculateInputFromDelegateOption<S,T,U>) obj;
-		return new EqualsBuilder()
-             .append(getDelegate(), rhs.getDelegate())
-             .isEquals();
-	}
-
-	@Override
-	public int hashCode() {
-		return new HashCodeBuilder()
-			.append(getDelegate())
-			.toHashCode();
-	}
-
 }

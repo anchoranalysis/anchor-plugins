@@ -28,10 +28,9 @@ package org.anchoranalysis.plugin.io.bean.input.stack;
 
 
 import java.util.List;
-import java.util.stream.Collectors;
-
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.DefaultInstance;
+import org.anchoranalysis.core.functional.FunctionalUtilities;
 import org.anchoranalysis.image.io.bean.rasterreader.RasterReader;
 import org.anchoranalysis.io.bean.input.InputManager;
 import org.anchoranalysis.io.bean.input.InputManagerParams;
@@ -70,8 +69,9 @@ public class Stacks extends InputManager<StackSequenceInput> {
 
 	@Override
 	public List<StackSequenceInput> inputObjects(InputManagerParams params)	throws AnchorIOException {
-		return fileInput.inputObjects(params).stream().map( file->
-			new StackCollectionFromFilesInputObject(file, getRasterReader(), useLastSeriesIndexOnly )
-		).collect( Collectors.toList() );
+		return FunctionalUtilities.mapToList(
+			fileInput.inputObjects(params),
+			file-> new StackCollectionFromFilesInputObject(file, getRasterReader(), useLastSeriesIndexOnly)
+		);
 	}
 }

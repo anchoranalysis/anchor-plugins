@@ -32,7 +32,7 @@ import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.plugin.mpp.feature.bean.memo.pair.FeaturePairMemoSingleRegion;
 
-import ch.ethz.biol.cell.mpp.nrg.cachedcalculation.OverlapMIPRatioCalculation;
+import ch.ethz.biol.cell.mpp.nrg.cachedcalculation.CalculateOverlapMIPRatio;
 
 public abstract class OverlapMIPBase extends FeaturePairMemoSingleRegion {
 
@@ -45,7 +45,7 @@ public abstract class OverlapMIPBase extends FeaturePairMemoSingleRegion {
 	protected double overlappingNumVoxels(SessionInput<FeatureInputPairMemo> input) throws FeatureCalcException {
 		if (mip) {
 			return input.calc(
-				new OverlapMIPRatioCalculation( getRegionID() )
+				new CalculateOverlapMIPRatio( getRegionID() )
 			);
 		} else {
 			return super.overlappingNumVoxels(input);

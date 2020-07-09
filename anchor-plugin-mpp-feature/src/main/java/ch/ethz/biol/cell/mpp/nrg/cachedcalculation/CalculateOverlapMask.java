@@ -34,31 +34,21 @@ import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
 import org.anchoranalysis.feature.cache.calculation.FeatureCalculation;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.channel.Channel;
-import org.apache.commons.lang.builder.EqualsBuilder;
-import org.apache.commons.lang.builder.HashCodeBuilder;
+import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
 
-public class OverlapCalculationMaskGlobal extends FeatureCalculation<Double,FeatureInputPairMemo> {
+@AllArgsConstructor @EqualsAndHashCode(callSuper=false)
+public class CalculateOverlapMask extends FeatureCalculation<Double,FeatureInputPairMemo> {
 
-	private int regionID;
-	private int nrgIndex;
-	private byte maskOnValue;
-		
-	// Constructor
-	public OverlapCalculationMaskGlobal( int regionID, int nrgIndex, byte maskOnValue ) {
-		super();
-		this.regionID = regionID;
-		this.nrgIndex = nrgIndex;
-		this.maskOnValue = maskOnValue;
-	}
-
+	private final int regionID;
+	private final int nrgIndex;
+	private final byte maskOnValue;
+	
 	@Override
 	protected Double execute( FeatureInputPairMemo input ) throws FeatureCalcException {
 		
 		PxlMarkMemo mark1 = input.getObj1();
 		PxlMarkMemo mark2 = input.getObj2();
-		
-		assert( mark1 != null );
-		assert( mark2 != null );
 		
 		Channel chnl = input.getNrgStackRequired().getNrgStack().getChnl(nrgIndex);
 		
@@ -69,28 +59,5 @@ public class OverlapCalculationMaskGlobal extends FeatureCalculation<Double,Feat
 			chnl.getVoxelBox().asByte(),
 			maskOnValue
 		);
-	}
-	
-	@Override
-	public boolean equals(final Object obj){
-	    if(obj instanceof OverlapCalculationMaskGlobal){
-	        final OverlapCalculationMaskGlobal other = (OverlapCalculationMaskGlobal) obj;
-	        return new EqualsBuilder()
-	            .append(regionID, other.regionID)
-	            .append(nrgIndex, other.nrgIndex)
-	            .append(maskOnValue, other.maskOnValue)
-	            .isEquals();
-	    } else{
-	        return false;
-	    }
-	}
-	
-	@Override
-	public int hashCode() {
-		return new HashCodeBuilder()
-			.append(regionID)
-			.append(nrgIndex)
-			.append(maskOnValue)
-			.toHashCode();
 	}
 }

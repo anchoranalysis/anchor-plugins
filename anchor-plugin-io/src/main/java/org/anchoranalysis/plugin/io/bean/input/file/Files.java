@@ -30,9 +30,8 @@ package org.anchoranalysis.plugin.io.bean.input.file;
 import java.io.File;
 import java.util.Collection;
 import java.util.List;
-import java.util.stream.Collectors;
-
 import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.core.functional.FunctionalUtilities;
 import org.anchoranalysis.io.bean.descriptivename.DescriptiveNameFromFile;
 import org.anchoranalysis.io.bean.input.InputManager;
 import org.anchoranalysis.io.bean.input.InputManagerParams;
@@ -74,12 +73,10 @@ public class Files extends InputManager<FileInput> {
 		try {
 			Collection<File> files = getFileProvider().create(params);
 				
-			return descriptiveNameFromFile.descriptiveNamesForCheckUniqueness(
-				files,
-				params.getLogger()
-			).stream().map(
+			return FunctionalUtilities.mapToList( 
+				descriptiveNameFromFile.descriptiveNamesForCheckUniqueness(files, params.getLogger()),
 				FileInput::new
-			).collect( Collectors.toList() );
+			);
 		} catch (FileProviderException e) {
 			throw new AnchorIOException("Cannot find files", e);
 		}

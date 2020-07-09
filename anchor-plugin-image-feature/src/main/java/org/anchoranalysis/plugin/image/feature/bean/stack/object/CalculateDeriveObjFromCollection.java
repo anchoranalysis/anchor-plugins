@@ -31,12 +31,12 @@ import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.feature.stack.FeatureInputStack;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.plugin.image.feature.object.calculation.delegate.CalculateInputFromDelegate;
-import org.apache.commons.lang.builder.EqualsBuilder;
-import org.apache.commons.lang3.builder.HashCodeBuilder;
+import lombok.EqualsAndHashCode;
 
+@EqualsAndHashCode(callSuper=true)
 class CalculateDeriveObjFromCollection extends CalculateInputFromDelegate<FeatureInputSingleObject, FeatureInputStack, ObjectCollection> {
 
-	private int index;
+	private final int index;
 
 	public CalculateDeriveObjFromCollection(ResolvedCalculation<ObjectCollection, FeatureInputStack> ccDelegate,
 			int index) {
@@ -51,25 +51,4 @@ class CalculateDeriveObjFromCollection extends CalculateInputFromDelegate<Featur
 			input.getNrgStackOptional()
 		);
 	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (obj == null) { return false; }
-		if (obj == this) { return true; }
-		if (obj.getClass() != getClass()) {
-			return false;
-		}
-		CalculateDeriveObjFromCollection rhs = (CalculateDeriveObjFromCollection) obj;
-		return new EqualsBuilder()
-             .append(index, rhs.index)
-             .isEquals();
-	}
-
-	@Override
-	public int hashCode() {
-		return new HashCodeBuilder()
-			.append(index)
-			.toHashCode();
-	}
-
 }

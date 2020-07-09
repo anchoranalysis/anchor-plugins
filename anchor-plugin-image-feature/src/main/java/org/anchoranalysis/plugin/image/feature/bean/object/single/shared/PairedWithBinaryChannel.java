@@ -40,6 +40,9 @@ import org.anchoranalysis.image.feature.bean.object.pair.FeaturePairObjects;
 import org.anchoranalysis.image.feature.init.FeatureInitParamsShared;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 
+import lombok.Getter;
+import lombok.Setter;
+
 /**
  * Evaluates the object as a pair-feature together with the binary-mask from the shard objects.
  * 
@@ -49,12 +52,12 @@ import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 public class PairedWithBinaryChannel extends FeatureSingleObjectWithShared {
 
 	// START BEAN PROPERTIES
-	@BeanField
+	@BeanField @Getter @Setter
 	private FeaturePairObjects item;
 	
 	// This cannot be initialized in the normal way, as Feature isn't contained in a Shared-Objects
 	// container. So instead it's initialized at a later point.
-	@BeanField @SkipInit
+	@BeanField @SkipInit @Getter @Setter
 	private BinaryChnlProvider binaryChnl;
 	// END BEAN PROPERTIES
 	
@@ -80,21 +83,5 @@ public class PairedWithBinaryChannel extends FeatureSingleObjectWithShared {
 			new CalculatePairInput(chnl),
 			new ChildCacheName(PairedWithBinaryChannel.class, chnl.hashCode())
 		);
-	}
-
-	public FeaturePairObjects getItem() {
-		return item;
-	}
-
-	public void setItem(FeaturePairObjects item) {
-		this.item = item;
-	}
-
-	public BinaryChnlProvider getBinaryChnl() {
-		return binaryChnl;
-	}
-
-	public void setBinaryChnl(BinaryChnlProvider binaryChnl) {
-		this.binaryChnl = binaryChnl;
 	}
 }

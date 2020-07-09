@@ -36,36 +36,27 @@ import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.feature.stack.FeatureInputStack;
 import org.anchoranalysis.image.histogram.Histogram;
 import org.anchoranalysis.image.histogram.HistogramFactory;
-import org.apache.commons.lang.builder.EqualsBuilder;
-import org.apache.commons.lang.builder.HashCodeBuilder;
+import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
 
 /** Calculated a histogram for a specific region on a channel, as identified by a mask in another channel */
+@AllArgsConstructor @EqualsAndHashCode(callSuper=false)
 public class CalculateHistogramMasked extends FeatureCalculation<Histogram, FeatureInputStack> {
 
-	private int nrgIndexSignal;
-	private int nrgIndexMask;
+	/** the index in the nrg-stack of the channel part of whose signal will form a histogram */
+	private final int nrgIndexSignal;
 	
-	/**
-	 * Constructor
-	 * 
-	 * @param nrgIndexSignal the index in the nrg-stack of the channel part of whose signal will form a histogram
-	 * @param nrgIndexMask the index in the nrg-stack of a channel which is a binary mask (0=off, 255=on)
-	 */
-	public CalculateHistogramMasked( int nrgIndexSignal, int nrgIndexMask ) {
-		super();
-		this.nrgIndexSignal = nrgIndexSignal;
-		this.nrgIndexMask = nrgIndexMask;
-	}
+	/** the index in the nrg-stack of a channel which is a binary mask (0=off, 255=on) */
+	private final int nrgIndexMask;
 
 	@Override
 	protected Histogram execute( FeatureInputStack input ) throws FeatureCalcException {
 
 		try {
 			NRGStack nrgStack = input.getNrgStackRequired().getNrgStack();
-			Channel chnl = extractChnl(nrgStack);
 			
 			return HistogramFactory.create(
-				chnl,
+				extractChnl(nrgStack),
 				extractMask(nrgStack)
 			);
 			
@@ -74,28 +65,7 @@ public class CalculateHistogramMasked extends FeatureCalculation<Histogram, Feat
 		}
 	}
 	
-	@Override
-	public boolean equals(final Object obj){
-	    if(obj instanceof CalculateHistogramMasked){
-	    	final CalculateHistogramMasked other = (CalculateHistogramMasked) obj;
-	        return new EqualsBuilder()
-	            .append(nrgIndexSignal, other.nrgIndexSignal)
-	            .append(nrgIndexMask, other.nrgIndexMask)
-	            .isEquals();
-	    } else{
-	        return false;
-	    }
-	}
-
-	@Override
-	public int hashCode() {
-		return new HashCodeBuilder()
-				.append(nrgIndexSignal)
-				.append(nrgIndexMask)				
-				.toHashCode();
-	}
-	
-	private Channel extractChnl( NRGStack nrgStack ) throws FeatureCalcException {
+	private Channel extractChnl( NRGStack nrgStack ) {
 		return nrgStack.getChnl(nrgIndexSignal);
 	}
 	
