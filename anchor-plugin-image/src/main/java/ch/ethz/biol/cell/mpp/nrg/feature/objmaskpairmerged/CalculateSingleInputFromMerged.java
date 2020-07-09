@@ -33,29 +33,18 @@ import org.anchoranalysis.feature.cache.calculation.FeatureCalculation;
 import org.anchoranalysis.image.feature.object.input.FeatureInputPairObjects;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.object.ObjectMask;
-import org.apache.commons.lang.builder.EqualsBuilder;
-import org.apache.commons.lang3.builder.HashCodeBuilder;
 
+import lombok.EqualsAndHashCode;
+import lombok.RequiredArgsConstructor;
+
+@RequiredArgsConstructor @EqualsAndHashCode(callSuper=false)
 class CalculateSingleInputFromMerged extends FeatureCalculation<FeatureInputSingleObject, FeatureInputPairObjects> {
 
-	private Function<FeatureInputPairObjects, ObjectMask> extractObjFunc;
-	private ChildCacheName uniqueIDForFunction;
+	/** this function is used for extracting a particular object from the FeatureObjMaskPairMergedParams */
+	private final Function<FeatureInputPairObjects, ObjectMask> extractObjFunc;
 	
-	
-	/**
-	 * Constructor
-	 *
-	 * <p>uniqueIDForFunction should be a constant unique for each different extractObjFunc</p>
-	 * 
-	 * @param extractObjFunc this function is used for extracting a particular object from the FeatureObjMaskPairMergedParams
-	 * @param uniqueIDForFunction so as to avoid relying on hashCode() and equals() on extractObjFunc, this field is used as a unique ID instead for each type of lambda
-	 */
-	public CalculateSingleInputFromMerged(Function<FeatureInputPairObjects, ObjectMask> extractObjFunc,
-			ChildCacheName uniqueIDForFunction) {
-		super();
-		this.extractObjFunc = extractObjFunc;
-		this.uniqueIDForFunction = uniqueIDForFunction;
-	}
+	/** so as to avoid relying on hashCode() and equals() on extractObjFunc, this field is used as a unique ID instead for each type of lambda */
+	private final ChildCacheName uniqueIDForFunction;
 
 	@Override
 	protected FeatureInputSingleObject execute(FeatureInputPairObjects input) {
@@ -66,25 +55,5 @@ class CalculateSingleInputFromMerged extends FeatureCalculation<FeatureInputSing
 		paramsNew.setNrgStack( input.getNrgStackOptional() );
 		assert( paramsNew instanceof FeatureInputSingleObject);
 		return paramsNew;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (obj == null) { return false; }
-		if (obj == this) { return true; }
-		if (obj.getClass() != getClass()) {
-			return false;
-		}
-		CalculateSingleInputFromMerged rhs = (CalculateSingleInputFromMerged) obj;
-		return new EqualsBuilder()
-             .append(uniqueIDForFunction, rhs.uniqueIDForFunction)
-             .isEquals();
-	}
-
-	@Override
-	public int hashCode() {
-		return new HashCodeBuilder()
-			.append(uniqueIDForFunction)
-			.toHashCode();
 	}
 }

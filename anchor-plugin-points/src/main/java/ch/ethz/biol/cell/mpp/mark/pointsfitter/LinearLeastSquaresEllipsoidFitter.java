@@ -35,7 +35,6 @@ import org.anchoranalysis.anchor.mpp.mark.conic.MarkEllipsoid;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.geometry.Point3f;
 import org.anchoranalysis.image.extent.ImageDimensions;
-import cern.colt.matrix.DoubleFactory2D;
 import cern.colt.matrix.DoubleMatrix1D;
 import cern.colt.matrix.DoubleMatrix2D;
 import cern.colt.matrix.linalg.EigenvalueDecomposition;
@@ -60,13 +59,13 @@ import lombok.Setter;
  */
 public class LinearLeastSquaresEllipsoidFitter extends ConicFitterBase {
 
-	// START BEAN
+	// START BEAN PROPERTIES
 	@BeanField @Getter @Setter
 	private double minRadius = 0.55;
 	
 	@BeanField @Getter @Setter
 	private boolean suppressZCovariance = false;
-	// END BEAN
+	// END BEAN PROPERTIES
 	
 	@Override
 	public boolean isCompatibleWith(Mark testMark) {
@@ -75,15 +74,24 @@ public class LinearLeastSquaresEllipsoidFitter extends ConicFitterBase {
 	
 	@Override
 	public void fit(List<Point3f> points, Mark mark, ImageDimensions dim) throws PointsFitterException {
+
+		DoubleMatrix2D matCInverse = InverseHelper.inverseFor(
+			MatrixCreator.createConstraintMatrix().viewPart(0, 0, 6, 6)
+		);
 		
-		DoubleMatrix2D matD = createDesignMatrixWithOnes(points, (float) getSubtractRadii() );
+		DoubleMatrix2D matD = MatrixCreator.createDesignMatrixWithOnes(points, (float) getSubtractRadii() );
 		
-		DoubleMatrix2D matS = matD.viewDice().zMult( matD, null);
+		DoubleMatrix2D matS = matD.viewDice().zMult(matD, null);
 		
-		DoubleMatrix2D matC = createConstraintMatrix();
-		
-		DoubleMatrix2D matCInverse = InverseHelper.inverseFor( matC.viewPart(0, 0, 6, 6) );
-		
+		createFitResultFromMatS(matS, matCInverse).applyFitResultToMark(
+			(MarkEllipsoid) mark,
+			dim,
+			getShellRad()
+		);
+	}
+	
+	private FitResult createFitResultFromMatS(DoubleMatrix2D matS, DoubleMatrix2D matCInverse) throws PointsFitterException {
+		// We index regions in this matrix using the same terminology as the paper s_11, s_12 etc.
 		DoubleMatrix2D matS11 = matS.viewPart(0, 0, 6, 6);
 		DoubleMatrix2D matS12 = matS.viewPart(0, 6, 6, 4);
 		DoubleMatrix2D matS21 = matS.viewPart(6, 0, 4, 6);
@@ -94,22 +102,27 @@ public class LinearLeastSquaresEllipsoidFitter extends ConicFitterBase {
 		
 		// Solve generalized eigenvalue/eigenvector problem
 		DoubleMatrix2D mult1 = matS22Inv.zMult(matS21, null);
+		
+		DoubleMatrix2D mult3 = createMult3(
+			mult1,
+			matCInverse,
+			matS11,
+			matS12
+		);
+		
+		return createFitResultFromDecomposition(mult1,mult3);
+	}
+	
+	private DoubleMatrix2D createMult3(DoubleMatrix2D mult1, DoubleMatrix2D matCInverse, DoubleMatrix2D matS11, DoubleMatrix2D matS12) {
 		DoubleMatrix2D mult2 = matS12.zMult( mult1, null);
 		mult2.assign( matS11, Functions.plus );
-		
-		DoubleMatrix2D mult3 = matCInverse.zMult(mult2, null);
-		
-		createFitResultFromDecomposition(mult1,mult3).applyFitResultToMark(
-			(MarkEllipsoid) mark,
-			dim,
-			getShellRad()
-		);
+		return matCInverse.zMult(mult2, null);		
 	}
 	
 	private FitResult createFitResultFromDecomposition(DoubleMatrix2D mult1, DoubleMatrix2D mult3) throws PointsFitterException {
 		EigenvalueDecomposition e = new EigenvalueDecomposition(mult3); 
 		
-		int index = getEigenVectorIndex( e.getRealEigenvalues() );
+		int index = selectEigenVector( e.getRealEigenvalues() );
 		if (index==-1) {
 			throw new PointsFitterException("Cannot find suitable eigen-value");
 		}
@@ -121,126 +134,38 @@ public class LinearLeastSquaresEllipsoidFitter extends ConicFitterBase {
 	
 	private FitResult createFitResult(DoubleMatrix1D v1, DoubleMatrix1D v2) throws PointsFitterException {
 		
-		DoubleMatrix2D matA = createMatrixA(v1, v2);
+		DoubleMatrix2D matA = MatrixCreator.createMatrixA(v1, v2);
 		
 		FitResult fitResult = EllipsoidFitHelper.createFitResultFromMatrixAandCenter(
 			matA,
-			createMatrixCenter(matA, v2),
+			MatrixCreator.createMatrixCenter(matA, v2),
 			suppressZCovariance
 		);
 		fitResult.applyRadiiSubtractScale( getSubtractRadii(), getScaleRadii() );
 		fitResult.imposeMinimumRadius( minRadius );
 		return fitResult;
 	}
-		
-	private static DoubleMatrix2D createMatrixCenter( DoubleMatrix2D matrixA, DoubleMatrix1D v2 ) throws PointsFitterException {
-		
-		DoubleMatrix2D first = matrixA.viewPart(0,0,3,3).copy().assign( cern.jet.math.Functions.mult(-1) );
-		
-		DoubleMatrix2D second = DoubleFactory2D.dense.make( 3, 1 );
-		second.viewColumn(0).assign( v2.viewPart(0, 3) );
-		
-		return matrixLeftDivide(first, second);
-	}
-		
-	private static DoubleMatrix2D createDesignMatrixWithOnes( List<Point3f> points, float inputPointShift ) {
-		
-		// The columns are as follows: x^2 xy y^2 x y 1
-		DoubleMatrix2D matrix = DoubleFactory2D.dense.make( points.size(), 10 ); 
-		
-		for( int i=0; i<points.size(); i++) {
-			Point3f pnt = points.get(i);
 			
-			float x = pnt.getX() + inputPointShift;
-			float y = pnt.getY() + inputPointShift;
-			float z = pnt.getZ() + inputPointShift;
-			
-			matrix.set(i, 0, Math.pow( x, 2) );	// xx
-			matrix.set(i, 1, Math.pow( y, 2) );	// yy
-			matrix.set(i, 2, Math.pow( z, 2) );	// zz
-			
-			matrix.set(i, 3, 2 * y * z );	// 2yz
-			matrix.set(i, 4, 2 * x * z );	// 2xz
-			matrix.set(i, 5, 2 * x * y );	// 2xy
-			
-			matrix.set(i, 6, 2 * x );	// 2x
-			matrix.set(i, 7, 2 * y );	// 2y
-			matrix.set(i, 8, 2 * z );	// 2z
-			
-			matrix.set(i, 9, 1 );	// 1
-		}
-		
-		return matrix;
-	}
-	
-	
-	private static DoubleMatrix2D createMatrixA( DoubleMatrix1D v1, DoubleMatrix1D v2 ) {
-		
-		DoubleMatrix2D m = DoubleFactory2D.dense.make(4, 4);
-		
-		// Diagonals
-		m.set(0, 0, v1.get(0) );	// xx
-		m.set(1, 1, v1.get(1) );	// yy
-		m.set(2, 2, v1.get(2) );	// zz
-		m.set(3, 3, v2.get(3) );
-		
-		m.set(1, 0, v1.get(5) );	// 2xy
-		m.set(0, 1, v1.get(5) );	// 2xy
-		
-		m.set(2, 0, v1.get(4) );	// 2xz
-		m.set(0, 2, v1.get(4) );	// 2xz 
-		
-		m.set(3, 0, v2.get(0) );	// 2x
-		m.set(0, 3, v2.get(0) );	// 2x
-		
-		m.set(1, 2, v1.get(3) );	// 2yz
-		m.set(2, 1, v1.get(3) );	// 2yz
-		
-		m.set(1, 3, v2.get(1) );	// 2y
-		m.set(3, 1, v2.get(1) );	// 2y
-		
-		m.set(2, 3, v2.get(2) );	// 2z
-		m.set(3, 2, v2.get(2) );	// 2z
-		
-		return m;
-	}
-	
-	// From the paper
-	// In most cases there should be only a single positive eigen value, which we take
-	// But in other situations we take the vector with the largest eigenvalue
-	private int getEigenVectorIndex( DoubleMatrix1D evals ) {
-		
-		// Find a negative if we can
-		for( int i=0; i<evals.size(); i++) {
-			if( evals.get(i)>0) {
-				return i;
-			}
-		}
+	/** 
+	 * Selects which eigen vector to use, using the method from the Li and Griffiths paper. 
+	 * <p>
+	 * In most cases there should be only a single positive eigen value, which we take
+	 * But in other situations we take the vector with the largest eigenvalue
+	 * 
+	 * @param  eigenvalues matrix containing eigen-values
+	 * @return index of which eigen-vector to use
+	 **/
+	private int selectEigenVector( DoubleMatrix1D eigenvalues ) {
 		
 		int maxIndex = -1;
 		double maxValue = 0;
-		for( int i=0; i<evals.size(); i++) {
-			double val = evals.get(i);
+		for( int i=0; i<eigenvalues.size(); i++) {
+			double val = eigenvalues.get(i);
 			if (i==0 || val > maxValue) {
 				maxValue = val;
 				maxIndex = i;
 			}
 		}
 		return maxIndex;
-	}
-	
-	private static DoubleMatrix2D createConstraintMatrix() {
-		
-		DoubleMatrix2D mat = DoubleFactory2D.dense.make( 10, 10 );
-		for( int i=0; i<6; i++) {
-			mat.set(i, i, -1);
-		}
-		mat.set(0, 1, 1);
-		mat.set(0, 2, 1);
-		mat.set(1, 0, 1);
-		mat.set(1, 2, 1);
-		mat.set(2, 0, 1);
-		mat.set(2, 1, 1);
-		return mat;
 	}
 }

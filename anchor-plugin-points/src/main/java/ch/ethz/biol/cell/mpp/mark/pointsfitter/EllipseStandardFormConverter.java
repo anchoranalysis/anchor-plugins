@@ -1,5 +1,7 @@
 package ch.ethz.biol.cell.mpp.mark.pointsfitter;
 
+import org.anchoranalysis.core.error.CreateException;
+
 /*-
  * #%L
  * anchor-plugin-points
@@ -26,7 +28,6 @@ package ch.ethz.biol.cell.mpp.mark.pointsfitter;
  * #L%
  */
 
-import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.geometry.Point2d;
 
 import cern.colt.matrix.DoubleFactory1D;
@@ -73,12 +74,13 @@ public class EllipseStandardFormConverter {
 	/** Vector of direction of major axis */
 	private DoubleMatrix1D directionMajor; 
 
-	public EllipseStandardFormConverter( DoubleMatrix1D matrix ) {
+	public EllipseStandardFormConverter( DoubleMatrix1D matrix ) throws CreateException {
 		this.matrix = matrix;
+		convert();
 	}
 	
 	@SuppressWarnings("static-access")
-	public void convert() throws OperationFailedException {
+	private void convert() throws CreateException {
 		
 		double a11 = matrix.get(0);
 	    double a12 = matrix.get(1) / 2;
@@ -88,7 +90,7 @@ public class EllipseStandardFormConverter {
 	    double c = matrix.get(5);
 	    
 	    if (a11 * a22 - Math.pow(a12,2.0)<=0 ) {
-	    	throw new OperationFailedException("Not an ellipse");
+	    	throw new CreateException("Not an ellipse");
 	    }
 	    
 	    // STEP 1 (Centre)

@@ -32,18 +32,14 @@ import org.anchoranalysis.anchor.mpp.overlap.MaxIntensityProjectionPair;
 import org.anchoranalysis.anchor.mpp.pxlmark.PxlMark;
 import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
 import org.anchoranalysis.feature.cache.calculation.FeatureCalculation;
-import org.apache.commons.lang.builder.EqualsBuilder;
-import org.apache.commons.lang.builder.HashCodeBuilder;
 
-public abstract class OverlapMIPCalculationBase extends FeatureCalculation<Double, FeatureInputPairMemo> {
+import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
 
-	private int regionID;
+@AllArgsConstructor @EqualsAndHashCode(callSuper=false)
+public abstract class CalculateOverlapMIPBase extends FeatureCalculation<Double, FeatureInputPairMemo> {
 
-	// Constructor
-	public OverlapMIPCalculationBase( int regionID ) {
-		super();
-		this.regionID = regionID;
-	}
+	private final int regionID;
 
 	@Override
 	protected Double execute( FeatureInputPairMemo params ) {
@@ -73,22 +69,8 @@ public abstract class OverlapMIPCalculationBase extends FeatureCalculation<Doubl
 		
 		return calculateOverlapResult(overlap, pair);
 	}
-		
-	protected int regionIDHashCode() {
-		return new HashCodeBuilder().append(regionID).toHashCode();
-	}
 	
 	protected abstract Double calculateOverlapResult( double overlap, MaxIntensityProjectionPair pair);
-	
-	protected boolean isRegionIDEqual(OverlapMIPCalculationBase other) {
-		 return new EqualsBuilder()
-            .append(regionID, other.regionID)
-            .isEquals();
-	}
-	
-	protected int getRegionID() {
-		return regionID;
-	}
 		
 	private RegionMembershipWithFlags regionMembershipForMark( PxlMarkMemo mark ) {
 		return mark.getRegionMap().membershipWithFlagsForIndex(regionID);

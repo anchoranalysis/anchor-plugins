@@ -31,9 +31,9 @@ import org.anchoranalysis.image.feature.object.input.FeatureInputPairObjects;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.plugin.image.feature.object.calculation.delegate.CalculateInputFromDelegate;
-import org.apache.commons.lang.builder.EqualsBuilder;
-import org.apache.commons.lang3.builder.HashCodeBuilder;
+import lombok.EqualsAndHashCode;
 
+@EqualsAndHashCode(callSuper=true)
 public class CalculateIntersecting extends CalculateInputFromDelegate<FeatureInputPairObjects, FeatureInputSingleObject, ObjectCollection> {
 
 	private int index;
@@ -50,27 +50,5 @@ public class CalculateIntersecting extends CalculateInputFromDelegate<FeatureInp
 			delegate.get(index),
 			input.getNrgStackOptional()
 		);
-	}
-	
-	@Override
-	public boolean equals(Object obj) {
-		if (obj == null) { return false; }
-		if (obj == this) { return true; }
-		if (obj.getClass() != getClass()) {
-			return false;
-		}
-		CalculateIntersecting rhs = (CalculateIntersecting) obj;
-		return new EqualsBuilder()
-             .append(index, rhs.index)
-             .append(getDelegate(), rhs.getDelegate())
-             .isEquals();
-	}
-
-	@Override
-	public int hashCode() {
-		return new HashCodeBuilder()
-			.append(index)
-			.append(getDelegate())
-			.toHashCode();
 	}
 }

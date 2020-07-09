@@ -30,11 +30,10 @@ package org.anchoranalysis.plugin.io.bean.input.stack;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
-
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
+import org.anchoranalysis.core.functional.FunctionalUtilities;
 import org.anchoranalysis.core.index.GetOperationFailedException;
 import org.anchoranalysis.core.name.store.NamedProviderStore;
 import org.anchoranalysis.core.progress.OperationWithProgressReporter;
@@ -173,7 +172,10 @@ public class ConvertNamedChnlsToStack extends InputManager<StackSequenceInput> {
 	@Override
 	public List<StackSequenceInput> inputObjects(InputManagerParams params)
 			throws AnchorIOException {
-		return input.inputObjects(params).stream().map( this::convert ).collect( Collectors.toList() );
+		return FunctionalUtilities.mapToList(
+			input.inputObjects(params),
+			this::convert
+		);
 	}
 	
 	private StackSequenceInput convert( NamedChnlsInput in ) {

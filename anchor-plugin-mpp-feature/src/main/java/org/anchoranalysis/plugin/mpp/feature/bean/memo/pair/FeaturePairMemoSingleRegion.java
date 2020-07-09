@@ -39,7 +39,7 @@ import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.ImageDimensions;
 
-import ch.ethz.biol.cell.mpp.nrg.cachedcalculation.OverlapCalculation;
+import ch.ethz.biol.cell.mpp.nrg.cachedcalculation.CalculateOverlap;
 
 public abstract class FeaturePairMemoSingleRegion extends FeaturePairMemo {
 
@@ -50,7 +50,7 @@ public abstract class FeaturePairMemoSingleRegion extends FeaturePairMemo {
 	
 	protected double overlappingNumVoxels( SessionInput<FeatureInputPairMemo> input) throws FeatureCalcException {
 		return input.calc(
-			new OverlapCalculation(regionID)
+			new CalculateOverlap(regionID)
 		);
 	}
 	

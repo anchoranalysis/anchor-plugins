@@ -32,7 +32,6 @@ import java.util.Optional;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.Positive;
-import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.feature.cache.ChildCacheName;
 import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.cache.calculation.FeatureCalculation;
@@ -91,18 +90,14 @@ public class Intersection extends FeatureDeriveFromPair {
 		return new ChildCacheName(Intersection.class, id);
 	}
 
-	private FeatureCalculation<Optional<ObjectMask>,FeatureInputPairObjects> createCalculation(SessionInput<FeatureInputPairObjects> input) throws FeatureCalcException {
-		try {
-			return CalculatePairIntersectionCommutative.createFromCache(
-				input,
-				CACHE_NAME_FIRST,
-				CACHE_NAME_SECOND,
-				iterationsDilation,
-				iterationsErosion,
-				do3D
-			);
-		} catch (CreateException e) {
-			throw new FeatureCalcException(e);
-		}
+	private FeatureCalculation<Optional<ObjectMask>,FeatureInputPairObjects> createCalculation(SessionInput<FeatureInputPairObjects> input) {
+		return CalculatePairIntersectionCommutative.createFromCache(
+			input,
+			CACHE_NAME_FIRST,
+			CACHE_NAME_SECOND,
+			iterationsDilation,
+			iterationsErosion,
+			do3D
+		);
 	}
 }

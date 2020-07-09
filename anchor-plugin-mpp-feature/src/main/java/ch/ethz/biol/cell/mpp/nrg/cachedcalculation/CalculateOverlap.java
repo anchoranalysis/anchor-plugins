@@ -1,6 +1,7 @@
 package ch.ethz.biol.cell.mpp.nrg.cachedcalculation;
 
-import org.anchoranalysis.anchor.mpp.overlap.MaxIntensityProjectionPair;
+import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputPairMemo;
+import org.anchoranalysis.anchor.mpp.overlap.OverlapUtilities;
 
 
 /*
@@ -29,30 +30,22 @@ import org.anchoranalysis.anchor.mpp.overlap.MaxIntensityProjectionPair;
  * #L%
  */
 
-public class OverlapMIPCalculation extends OverlapMIPCalculationBase {
 
-	// Constructor
-	public OverlapMIPCalculation( int regionID ) {
-		super(regionID);
-	}
+import org.anchoranalysis.feature.cache.calculation.FeatureCalculation;
+import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
+
+@AllArgsConstructor @EqualsAndHashCode(callSuper=false)
+public class CalculateOverlap extends FeatureCalculation<Double,FeatureInputPairMemo> {
+
+	private final int regionID;
 	
 	@Override
-	public boolean equals(final Object obj){
-	    if(obj instanceof OverlapMIPCalculation){
-	        return isRegionIDEqual( (OverlapMIPCalculation) obj );
-	    } else{
-	        return false;
-	    }
+	protected Double execute( FeatureInputPairMemo params ) {
+		return OverlapUtilities.overlapWith(
+			params.getObj1(),
+			params.getObj2(),
+			regionID
+		);
 	}
-
-	@Override
-	public int hashCode() {
-		return regionIDHashCode();
-	}
-	
-	@Override
-	protected Double calculateOverlapResult(double overlap, MaxIntensityProjectionPair pair) {
-		return overlap;
-	}
-
 }

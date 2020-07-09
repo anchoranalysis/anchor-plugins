@@ -34,20 +34,15 @@ import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.object.properties.ObjectWithProperties;
-import org.apache.commons.lang.builder.EqualsBuilder;
-import org.apache.commons.lang3.builder.HashCodeBuilder;
+import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
 
+@AllArgsConstructor @EqualsAndHashCode(callSuper=false)
 class CalculateSingleObjFromMemo extends FeatureCalculation<FeatureInputSingleObject, FeatureInputSingleMemo> {
 
-	private RegionMap regionMap;
-	private int index;
-		
-	public CalculateSingleObjFromMemo(RegionMap regionMap, int index) {
-		super();
-		this.regionMap = regionMap;
-		this.index = index;
-	}
-
+	private final RegionMap regionMap;
+	private final int index;
+	
 	@Override
 	protected FeatureInputSingleObject execute(FeatureInputSingleMemo input) throws FeatureCalcException {
 		return new FeatureInputSingleObject(
@@ -63,27 +58,5 @@ class CalculateSingleObjFromMemo extends FeatureCalculation<FeatureInputSingleOb
 			BinaryValuesByte.getDefault()
 		);
 		return om.getMask();
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (obj == null) { return false; }
-		if (obj == this) { return true; }
-		if (obj.getClass() != getClass()) {
-			return false;
-		}
-		CalculateSingleObjFromMemo rhs = (CalculateSingleObjFromMemo) obj;
-		return new EqualsBuilder()
-             .append(regionMap, rhs.regionMap)
-             .append(index, rhs.index)
-             .isEquals();
-	}
-
-	@Override
-	public int hashCode() {
-		return new HashCodeBuilder()
-			.append(index)
-			.append(regionMap)
-			.toHashCode();
 	}
 }

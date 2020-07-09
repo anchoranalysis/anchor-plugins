@@ -28,11 +28,10 @@ package org.anchoranalysis.plugin.opencv.bean.text;
 
 import java.nio.file.Path;
 import java.util.List;
-import java.util.stream.Collectors;
-
 import org.anchoranalysis.anchor.mpp.mark.GlobalRegionIdentifiers;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.anchor.mpp.regionmap.RegionMapSingleton;
+import org.anchoranalysis.core.functional.FunctionalUtilities;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.extent.ImageDimensions;
@@ -75,9 +74,9 @@ class EastObjsExtractor {
 		List<WithConfidence<Mark>> listMarks,
 		ImageDimensions dim
 	) {
-		return listMarks.stream()
-				.map( wc -> convertToObjMask(wc, dim) )
-				.collect( Collectors.toList() );
+		return FunctionalUtilities.mapToList(listMarks, wc->
+			convertToObjMask(wc, dim)
+		);
 	}
 		
 	private static ImageDimensions dimsForMat( Mat mat, ImageResolution res ) {

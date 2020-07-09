@@ -37,28 +37,23 @@ import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.anchoranalysis.image.voxel.kernel.ApplyKernel;
 import org.anchoranalysis.image.voxel.kernel.outline.OutlineKernel3;
-import org.apache.commons.lang.builder.EqualsBuilder;
-import org.apache.commons.lang.builder.HashCodeBuilder;
+import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
 
+@AllArgsConstructor @EqualsAndHashCode(callSuper = false)
 class CalculateOutlineNumberVoxels extends FeatureCalculation<Integer,FeatureInputSingleObject> {
 
 	/**
 	 * Whether to calculate the outline on a MIP
 	 */
-	private boolean mip=false;
+	private boolean mip;
 	
 	/**
-	 * Whether to suppress 3D calculations (only consider XY neighbours). Doesn't make sense if mip=TRUE, and will then be ignroed.
+	 * Whether to suppress 3D calculations (only consider XY neighbours). Doesn't make sense if mip=TRUE, and will then be ignored.
 	 */
-	private boolean suppress3D=false;
-			
-	public CalculateOutlineNumberVoxels(boolean mip, boolean suppress3D) {
-		super();
-		this.mip = mip;
-		this.suppress3D = suppress3D;
-	}
-	
-	private static int calcSurfaceSize( ObjectMask objMask, ImageDimensions dim, boolean mip, boolean suppress3D ) {
+	private boolean suppress3D;
+		
+	private static int calcSurfaceSize(ObjectMask objMask, ImageDimensions dim, boolean mip, boolean suppress3D) {
 		
 		boolean do3D = (dim.getZ() > 1) && !suppress3D;
 		
@@ -75,29 +70,9 @@ class CalculateOutlineNumberVoxels extends FeatureCalculation<Integer,FeatureInp
 			return ApplyKernel.applyForCount(kernel, objMask.getVoxelBox() );
 		}
 	}
-	
 
 	@Override
-	protected Integer execute(FeatureInputSingleObject input)	throws FeatureCalcException {
+	protected Integer execute(FeatureInputSingleObject input) throws FeatureCalcException {
 		return calcSurfaceSize(input.getObjectMask(), input.getDimensionsRequired(), mip, suppress3D);
 	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if(obj instanceof CalculateOutlineNumberVoxels){
-	        final CalculateOutlineNumberVoxels other = (CalculateOutlineNumberVoxels) obj;
-	        return new EqualsBuilder()
-	            .append(mip, other.mip)
-	            .append(suppress3D, other.suppress3D)
-	            .isEquals();
-	    } else{
-	        return false;
-	    }
-	}
-
-	@Override
-	public int hashCode() {
-		return new HashCodeBuilder().append(mip).append(suppress3D).toHashCode();
-	}
-	
 }

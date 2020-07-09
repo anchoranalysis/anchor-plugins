@@ -37,16 +37,14 @@ import org.anchoranalysis.image.feature.histogram.FeatureInputHistogram;
 import org.anchoranalysis.image.histogram.Histogram;
 import org.anchoranalysis.image.voxel.statistics.VoxelStatistics;
 
+import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
+
+@AllArgsConstructor @EqualsAndHashCode(callSuper=false)
 class CalculateHistogramInputFromMemo extends FeatureCalculation<FeatureInputHistogram, FeatureInputSingleMemo> {
 
-	private MarkRegion pixelList;
-	private boolean excludeZero;
-	
-	public CalculateHistogramInputFromMemo(MarkRegion pixelList, boolean excludeZero) {
-		super();
-		this.pixelList = pixelList;
-		this.excludeZero = excludeZero;
-	}
+	private final MarkRegion pixelList;
+	private final boolean excludeZero;
 	
 	@Override
 	protected FeatureInputHistogram execute(FeatureInputSingleMemo input) throws FeatureCalcException {
@@ -78,33 +76,5 @@ class CalculateHistogramInputFromMemo extends FeatureCalculation<FeatureInputHis
 		} else {
 			return histogramFromStats;
 		}
-	}
-
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + (excludeZero ? 1231 : 1237);
-		result = prime * result + ((pixelList == null) ? 0 : pixelList.hashCode());
-		return result;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		CalculateHistogramInputFromMemo other = (CalculateHistogramInputFromMemo) obj;
-		if (excludeZero != other.excludeZero)
-			return false;
-		if (pixelList == null) {
-			if (other.pixelList != null)
-				return false;
-		} else if (!pixelList.equals(other.pixelList))
-			return false;
-		return true;
 	}
 }

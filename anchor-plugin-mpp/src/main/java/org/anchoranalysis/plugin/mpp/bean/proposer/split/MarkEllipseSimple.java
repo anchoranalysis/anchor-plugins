@@ -47,19 +47,21 @@ import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.orientation.Orientation2D;
 import org.anchoranalysis.math.rotation.RotationMatrix;
 
-public class MarkEllipseSimple extends MarkSplitProposer {
+import lombok.Getter;
+import lombok.Setter;
 
+public class MarkEllipseSimple extends MarkSplitProposer {
 	
-	// START BEAN
-	@BeanField
+	// START BEAN PROPERTIES
+	@BeanField @Getter @Setter
 	private double minRadScaleStart = 0.3;
 	
-	@BeanField
+	@BeanField @Getter @Setter
 	private double minRadScaleEnd = 0.55;
 	
-	@BeanField
-	private MarkProposer markProposer = null;
-	// END BEAN
+	@BeanField @Getter @Setter
+	private MarkProposer markProposer;
+	// END BEAN PROPERTIES
 	
 	@Override
 	public Optional<PairPxlMarkMemo> propose( PxlMarkMemo mark, ProposerContext context, CfgGen cfgGen ) throws ProposalAbnormalFailureException {
@@ -117,29 +119,53 @@ public class MarkEllipseSimple extends MarkSplitProposer {
 		Orientation2D exstOrientation = (Orientation2D) markExstCast.getOrientation();
 		Orientation2D orientationRight = new Orientation2D( exstOrientation.getAngleRadians() + (Math.PI/2) );
 		
+		PxlMarkMemo markNew1 = extractMemo(
+			markExst,
+			pntArr.get(),
+			0,
+			orientationRight,
+			context,
+			cfgGen,
+			"pos1"
+		);
 		
-		PxlMarkMemo markNew1;
-		try {
-			markNew1 = createMarkAtPos( markExst, pntArr.get()[0], orientationRight, context );
-			markNew1.getMark().setId( cfgGen.idAndIncrement() );
-			
-		} catch (ProposalAbnormalFailureException e) {
-			throw new ProposalAbnormalFailureException("Failed to create mark at pos1", e);
-		}
-		
-		PxlMarkMemo markNew2;
-		try {
-			markNew2 = createMarkAtPos( markExst, pntArr.get()[1], orientationRight, context );
-			markNew2.getMark().setId( cfgGen.idAndIncrement() );
-		} catch (ProposalAbnormalFailureException e) {
-			throw new ProposalAbnormalFailureException("Failed to create mark at pos2", e);
-		}			
+		PxlMarkMemo markNew2 = extractMemo(
+			markExst,
+			pntArr.get(),
+			1,
+			orientationRight,
+			context,
+			cfgGen,
+			"pos2"
+		);
 		
 		return Optional.of(
 			new PairPxlMarkMemo(markNew1, markNew2)
 		);
 	}
 	
+	private PxlMarkMemo extractMemo(
+		PxlMarkMemo markExst,
+		Point3d[] pntArr,
+		int dimensionIndex,
+		Orientation2D orientationRight,
+		ProposerContext context,
+		CfgGen cfgGen,
+		String positionDescription
+	) throws ProposalAbnormalFailureException {
+		try {
+			PxlMarkMemo pmm = createMarkAtPos(
+				markExst,
+				pntArr[dimensionIndex],
+				orientationRight,
+				context
+			);
+			pmm.getMark().setId( cfgGen.idAndIncrement() );
+			return pmm;
+		} catch (ProposalAbnormalFailureException e) {
+			throw new ProposalAbnormalFailureException("Failed to create mark at " + positionDescription);
+		}
+	}
 	
 	private PxlMarkMemo createMarkAtPos( PxlMarkMemo exst, Point3d pos, Orientation2D orientation, ProposerContext context ) throws ProposalAbnormalFailureException {
 		
@@ -183,12 +209,15 @@ public class MarkEllipseSimple extends MarkSplitProposer {
 		    	pnt2.add( new Point3d(randX,randY,0 ) );
 	    	}	    	
 		}
-		
-		if (!sd.contains(pnt1)) {
+		return ifBothPointsInside(sd, pnt1, pnt2);
+	}
+	
+	private static Optional<Point3d[]> ifBothPointsInside(ImageDimensions dim, Point3d pnt1, Point3d pnt2) {
+		if (!dim.contains(pnt1)) {
 			return Optional.empty();
 		}
 		
-		if (!sd.contains(pnt2)) {
+		if (!dim.contains(pnt2)) {
 			return Optional.empty();
 		}
 		
@@ -196,34 +225,9 @@ public class MarkEllipseSimple extends MarkSplitProposer {
 			new Point3d[]{pnt1, pnt2}
 		);
 	}
-	
 
 	@Override
 	public boolean isCompatibleWith(Mark testMark) {
 		return testMark instanceof MarkEllipse;
-	}
-
-	public MarkProposer getMarkProposer() {
-		return markProposer;
-	}
-
-	public void setMarkProposer(MarkProposer markProposer) {
-		this.markProposer = markProposer;
-	}
-
-	public double getMinRadScaleStart() {
-		return minRadScaleStart;
-	}
-
-	public void setMinRadScaleStart(double minRadScaleStart) {
-		this.minRadScaleStart = minRadScaleStart;
-	}
-
-	public double getMinRadScaleEnd() {
-		return minRadScaleEnd;
-	}
-
-	public void setMinRadScaleEnd(double minRadScaleEnd) {
-		this.minRadScaleEnd = minRadScaleEnd;
 	}
 }

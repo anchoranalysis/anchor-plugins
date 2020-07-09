@@ -2,6 +2,8 @@ package ch.ethz.biol.cell.mpp.nrg.cachedcalculation;
 
 import org.anchoranalysis.anchor.mpp.overlap.MaxIntensityProjectionPair;
 
+import lombok.EqualsAndHashCode;
+
 
 /*
  * #%L
@@ -28,35 +30,16 @@ import org.anchoranalysis.anchor.mpp.overlap.MaxIntensityProjectionPair;
  * THE SOFTWARE.
  * #L%
  */
+@EqualsAndHashCode(callSuper=true)
+public class CalculateOverlapMIP extends CalculateOverlapMIPBase {
 
-public class OverlapMIPRatioCalculation extends OverlapMIPCalculationBase {
-	
-	// Constructor
-	public OverlapMIPRatioCalculation( int regionID ) {
+	public CalculateOverlapMIP( int regionID ) {
 		super(regionID);
 	}
-
+	
 	@Override
 	protected Double calculateOverlapResult(double overlap, MaxIntensityProjectionPair pair) {
-		if (overlap==0) {
-			return 0.0;
-		}
-		
-		int minArea = pair.minArea();
-		return overlap / minArea;
+		return overlap;
 	}
-	
-	@Override
-	public boolean equals(final Object obj){
-	    if(obj instanceof OverlapMIPRatioCalculation){
-	        return isRegionIDEqual( (OverlapMIPRatioCalculation) obj );
-	    } else{
-	        return false;
-	    }
-	}
-	
-	@Override
-	public int hashCode() {
-		return regionIDHashCode();
-	}
+
 }

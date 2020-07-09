@@ -34,6 +34,9 @@ import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.plugin.image.feature.object.calculation.delegate.CalculateInputFromDelegateOption;
 
+import lombok.EqualsAndHashCode;
+
+@EqualsAndHashCode(callSuper=true)
 class CalculateIntersectionInput extends CalculateInputFromDelegateOption<
 	FeatureInputSingleObject,
 	FeatureInputPairObjects,
