@@ -34,6 +34,7 @@ import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.io.filepath.FilePathToUnixStyleConverter;
 import org.apache.commons.io.IOCase;
 
+import com.google.api.client.repackaged.com.google.common.base.Preconditions;
 import com.owenfeehan.pathpatternfinder.Pattern;
 import com.owenfeehan.pathpatternfinder.patternelements.PatternElement;
 
@@ -63,12 +64,11 @@ class ExtractVariableSpan {
 	 * @param indexSpanEnd the index of the last element that should be included in the spanning-part
 	 */
 	public ExtractVariableSpan(Pattern pattern, String elseName, int indexSpanStart, int indexSpanEnd) {
-		super();
+		Preconditions.checkArgument( indexSpanEnd >= indexSpanStart );
 		this.pattern = pattern;
 		this.elseName = elseName;
 		this.indexSpanStart = indexSpanStart;
 		this.indexSpanEnd = indexSpanEnd;
-		assert( indexSpanEnd >= indexSpanStart );
 	}
 
 	/**

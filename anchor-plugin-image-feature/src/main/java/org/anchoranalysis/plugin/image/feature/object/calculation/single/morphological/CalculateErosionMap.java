@@ -36,8 +36,9 @@ import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.object.morph.MorphologicalErosion;
 import org.anchoranalysis.plugin.image.feature.object.calculation.single.CalculateIncrementalOperationMap;
-import org.apache.commons.lang3.builder.HashCodeBuilder;
+import lombok.EqualsAndHashCode;
 
+@EqualsAndHashCode(callSuper = true)
 public class CalculateErosionMap extends CalculateIncrementalOperationMap {
 
 	public CalculateErosionMap(boolean do3D) {
@@ -62,26 +63,5 @@ public class CalculateErosionMap extends CalculateIncrementalOperationMap {
 		} catch (CreateException e) {
 			throw new OperationFailedException(e);
 		}
-	}
-
-	/*@Override
-	public CachedCalculationMap<ObjMask,FeatureObjMaskParams,Integer> duplicate() {
-		return new CalculateErosionMap(this);
-	}*/
-	
-	@Override
-	public boolean equals(final Object obj){
-	    if(obj instanceof CalculateErosionMap){
-	        return super.equals(obj);
-	    } else{
-	        return false;
-	    }
-	}
-	
-	@Override
-	public int hashCode() {
-		return new HashCodeBuilder()
-			.appendSuper( super.hashCode() )
-			.hashCode();
 	}
 }

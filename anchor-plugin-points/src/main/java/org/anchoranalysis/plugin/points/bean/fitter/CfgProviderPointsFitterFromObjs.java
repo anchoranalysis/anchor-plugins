@@ -80,8 +80,7 @@ public class CfgProviderPointsFitterFromObjs extends CfgProvider {
 	private	Optional<Mark> createMarkFromObj(ObjectMask om, ImageDimensions dim) throws CreateException {	
 		try {
 			List<Point2i> points = maybeApplyConvexHull(om);
-			
-			if (points.size()==0) {
+			if (points.isEmpty()) {
 				return handleFittingFailure("There are 0 points to fit with.");
 			}
 			

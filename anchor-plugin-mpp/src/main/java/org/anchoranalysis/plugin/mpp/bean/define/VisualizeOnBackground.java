@@ -91,17 +91,9 @@ public class VisualizeOnBackground extends DefineAdderBean {
 			define.addAll(def);
 			
 			// Now we add visualizations for the BinaryChnlProvider and ObjMaskProvider
-			addVisualizationFor( def, define, BinaryChnlProvider.class, id ->
-				visualizationBinaryMask(id)
-			);
-			
-			addVisualizationFor( def, define, ObjectCollectionProvider.class, id ->
-				visualizationObjMasks(id)
-			);
-			
-			addVisualizationFor( def, define, CfgProvider.class, id ->
-				visualizationCfg(id)
-			);
+			addVisualizationFor( def, define, BinaryChnlProvider.class, this::visualizationBinaryMask);
+			addVisualizationFor( def, define, ObjectCollectionProvider.class, this::visualizationObjMasks);
+			addVisualizationFor( def, define, CfgProvider.class, this::visualizationCfg);
 			
 		} catch (OperationFailedException e) {
 			throw new BeanXmlException(e);

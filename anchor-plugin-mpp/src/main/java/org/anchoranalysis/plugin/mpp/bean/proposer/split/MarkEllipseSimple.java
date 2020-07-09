@@ -52,6 +52,9 @@ import lombok.Setter;
 
 public class MarkEllipseSimple extends MarkSplitProposer {
 	
+	/** The maximum wiggle size (added or subtracted to each end) */
+	private static final int WIGGLE_MAX_SIZE = 2;
+	
 	// START BEAN PROPERTIES
 	@BeanField @Getter @Setter
 	private double minRadScaleStart = 0.3;
@@ -171,7 +174,6 @@ public class MarkEllipseSimple extends MarkSplitProposer {
 		
 		PxlMarkMemo exstMark = exst.duplicateFresh();
 		MarkEllipse mark = (MarkEllipse) exstMark.getMark();
-		//mark.setPos(pos);
 		
 		// THE OLD WAY WAS TO SHIFT 90 from orientation (the existing orientation)
 		mark.setMarksExplicit(pos, new Orientation2D(orientation.getAngleRadians() + (Math.PI/2)), mark.getRadii());
@@ -197,19 +199,16 @@ public class MarkEllipseSimple extends MarkSplitProposer {
 		
 		if (wigglePos) {
 			// We add some randomness around this point, say 4 pixels
-	    	int q = 2;
-	    	{
-		    	double randX = (re.nextDouble() * q * 2) - q;
-		    	double randY = (re.nextDouble() * q * 2) - q;
-		    	pnt1.add( new Point3d(randX,randY,0 ) );
-	    	}
-	    	{
-		    	double randX = (re.nextDouble() * q * 2) - q;
-		    	double randY = (re.nextDouble() * q * 2) - q;
-		    	pnt2.add( new Point3d(randX,randY,0 ) );
-	    	}	    	
+	    	pnt1.add( randomPointXY(re, WIGGLE_MAX_SIZE) );
+	    	pnt2.add( randomPointXY(re, WIGGLE_MAX_SIZE) );
 		}
 		return ifBothPointsInside(sd, pnt1, pnt2);
+	}
+	
+	private static Point3d randomPointXY(RandomNumberGenerator re, int wiggleMaxSize) {
+		double randX = (re.nextDouble() * wiggleMaxSize * 2) - wiggleMaxSize;
+    	double randY = (re.nextDouble() * wiggleMaxSize * 2) - wiggleMaxSize;
+    	return new Point3d(randX, randY, 0 );
 	}
 	
 	private static Optional<Point3d[]> ifBothPointsInside(ImageDimensions dim, Point3d pnt1, Point3d pnt2) {

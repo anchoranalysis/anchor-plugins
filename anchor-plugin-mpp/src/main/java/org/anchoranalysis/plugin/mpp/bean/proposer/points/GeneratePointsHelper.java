@@ -30,7 +30,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.core.geometry.Point3i;
@@ -55,20 +54,24 @@ class GeneratePointsHelper {
 		Optional<BinaryChnl> chnlFilled,
 		ImageDimensions dim
 	) throws OperationFailedException {
-		
 		// We take the first point in each list, as where it intersects with the edge
-		PointListForConvex pl = pointListForConvex(pntsXY);
+		PointListForConvex pointList = pointListForConvex(pntsXY);
 		
 		List<Point3i> lastPntsAll = new ArrayList<>();
 		
 		for( List<Point3i> contourPnts : pntsXY ) {
-			try {
-				lastPntsAll.addAll(
-					extendedPoints( contourPnts, pntRoot, pl, maxZDist, skipZDist, chnl, chnlFilled, dim )
-				);
-			} catch (CreateException e) {
-				throw new OperationFailedException(e);
-			}
+			lastPntsAll.addAll(
+				extendedPoints(
+					contourPnts,
+					pntRoot,
+					pointList,
+					maxZDist,
+					skipZDist,
+					chnl,
+					chnlFilled,
+					dim
+				)
+			);
 		}
 		return lastPntsAll;
 	}
@@ -83,7 +86,7 @@ class GeneratePointsHelper {
 		BinaryChnl chnl,
 		Optional<BinaryChnl> chnlFilled,
 		ImageDimensions sceneDim
-	) throws OperationFailedException, CreateException {
+	) throws OperationFailedException {
 		
 		BoundingBox bbox = BoundingBoxFromPoints.forList(pntsAlongContour);
 

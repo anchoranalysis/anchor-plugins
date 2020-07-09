@@ -52,20 +52,6 @@ public class CalculateShellObjectMask extends FeatureCalculation<ObjectMask,Feat
 	private final boolean do3D;
 	private final boolean inverse;
 	
-	@Override
-	public String toString() {
-		return String.format(
-			"%s ccDilation=%s, ccErosion=%s, do3D=%s, inverse=%s, iterationsErosionSecond=%d",
-			super.toString(),
-			ccDilation.toString(),
-			ccErosion.toString(),
-			do3D ? "true" : "false",
-			inverse ? "true" : "false",
-			iterationsErosionSecond
-		);
-	}
-	
-	
 	public static FeatureCalculation<ObjectMask,FeatureInputSingleObject> createFromCache(
 		CalculationResolver<FeatureInputSingleObject> params,
 		int iterationsDilation,
@@ -95,11 +81,10 @@ public class CalculateShellObjectMask extends FeatureCalculation<ObjectMask,Feat
 	
 		ImageDimensions sd = input.getDimensionsRequired();
 		
-		ObjectMask om = input.getObjectMask();
-		ObjectMask omShell = createShellObjMask( input, om, ccDilation, ccErosion, iterationsErosionSecond, do3D );
+		ObjectMask omShell = createShellObjMask(input, ccDilation, ccErosion, iterationsErosionSecond, do3D );
 		
 		if (inverse) {
-			ObjectMask omDup = om.duplicate();
+			ObjectMask omDup = input.getObjectMask().duplicate();
 			
 			Optional<ObjectMask> omShellIntersected = omShell.intersect( omDup, sd );
 			omShellIntersected.ifPresent( shellIntersected ->
@@ -114,9 +99,21 @@ public class CalculateShellObjectMask extends FeatureCalculation<ObjectMask,Feat
 		}
 	}
 	
+	@Override
+	public String toString() {
+		return String.format(
+			"%s ccDilation=%s, ccErosion=%s, do3D=%s, inverse=%s, iterationsErosionSecond=%d",
+			super.toString(),
+			ccDilation.toString(),
+			ccErosion.toString(),
+			do3D ? "true" : "false",
+			inverse ? "true" : "false",
+			iterationsErosionSecond
+		);
+	}
+	
 	private static ObjectMask createShellObjMask(
 		FeatureInputSingleObject input,
-		ObjectMask om,
 		ResolvedCalculation<ObjectMask,FeatureInputSingleObject> ccDilation,
 		ResolvedCalculation<ObjectMask,FeatureInputSingleObject> ccErosion,
 		int iterationsErosionSecond,

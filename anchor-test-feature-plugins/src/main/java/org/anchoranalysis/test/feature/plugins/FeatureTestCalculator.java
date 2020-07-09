@@ -98,7 +98,7 @@ public class FeatureTestCalculator {
 			params,
 			initParams
 		);
-		assertEquals(message, expectedResult, res, 1e-20);
+		assertEquals(message, expectedResult, res, delta);
 	}
 	
 	private static <T extends FeatureInput> double calcSequentialSession( Feature<T> feature, T params, FeatureInitParams initParams ) throws FeatureCalcException {

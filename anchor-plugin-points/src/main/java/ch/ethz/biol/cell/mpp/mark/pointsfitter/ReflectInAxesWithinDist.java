@@ -66,7 +66,7 @@ public class ReflectInAxesWithinDist extends PointsFitter {
 	public void fit(List<Point3f> points, Mark mark, ImageDimensions dim)
 			throws PointsFitterException, InsufficientPointsException {
 
-		if (points.size()==0) {
+		if (points.isEmpty()) {
 			pointsFitter.fit(points, mark, dim);
 		}
 		

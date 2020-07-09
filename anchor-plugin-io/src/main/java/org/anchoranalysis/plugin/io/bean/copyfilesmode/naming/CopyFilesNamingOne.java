@@ -51,7 +51,7 @@ public abstract class CopyFilesNamingOne implements CopyFilesNaming {
 		Optional<Path> pathDelegate = copyFilesNaming.destinationPathRelative(sourceDir, destDir, file, iter);
 		return OptionalUtilities.flatMap(
 			pathDelegate,
-			pd -> destinationPathRelative(pd)
+			this::destinationPathRelative
 		);
 	}
 	

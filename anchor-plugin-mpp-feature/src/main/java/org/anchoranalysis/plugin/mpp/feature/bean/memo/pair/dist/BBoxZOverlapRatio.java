@@ -38,6 +38,9 @@ import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.plugin.mpp.feature.bean.memo.pair.FeaturePairMemoSingleRegion;
 
+import lombok.Getter;
+import lombok.Setter;
+
 /**
  * Measures the amount of bounding box overlap in the Z dimension
  * 
@@ -51,7 +54,7 @@ import org.anchoranalysis.plugin.mpp.feature.bean.memo.pair.FeaturePairMemoSingl
 public class BBoxZOverlapRatio extends FeaturePairMemoSingleRegion {
 
 	// START BEAN PROPERTIES
-	@BeanField
+	@BeanField @Getter @Setter
 	private boolean normalize=true;
 	// END BEAN PROPERTIES
 	
@@ -60,8 +63,8 @@ public class BBoxZOverlapRatio extends FeaturePairMemoSingleRegion {
 
 		FeatureInputPairMemo inputSessionless = input.get();
 		
-		BoundingBox bbox1 = bbox(inputSessionless, p->p.getObj1());
-		BoundingBox bbox2 = bbox(inputSessionless, p->p.getObj2());
+		BoundingBox bbox1 = bbox(inputSessionless, FeatureInputPairMemo::getObj1);
+		BoundingBox bbox2 = bbox(inputSessionless, FeatureInputPairMemo::getObj2);
 		
 		// Check the bounding boxes intersect in general (including XY)
 		if (!bbox1.intersection().existsWith(bbox2)) {
@@ -98,13 +101,5 @@ public class BBoxZOverlapRatio extends FeaturePairMemoSingleRegion {
 	
 	private static int zFor(BoundingBox bbox) {
 		return bbox.extent().getZ();
-	}
-
-	public boolean isNormalize() {
-		return normalize;
-	}
-
-	public void setNormalize(boolean normalize) {
-		this.normalize = normalize;
 	}
 }

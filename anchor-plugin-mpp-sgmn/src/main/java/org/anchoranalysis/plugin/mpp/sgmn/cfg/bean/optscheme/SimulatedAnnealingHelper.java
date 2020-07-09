@@ -36,7 +36,6 @@ import org.anchoranalysis.anchor.mpp.proposer.error.ErrorNode;
 import org.anchoranalysis.anchor.mpp.proposer.error.ProposerFailureDescription;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.index.GetOperationFailedException;
 import org.anchoranalysis.core.log.MessageLogger;
 import org.anchoranalysis.core.random.RandomNumberGenerator;
 import org.anchoranalysis.mpp.sgmn.bean.kernel.proposer.KernelProposer;
@@ -214,8 +213,6 @@ class SimulatedAnnealingHelper {
 			throw new OptTerminatedEarlyException("A kernel-calculation error occurred", e);
 		} catch (UpdateMarkSetException e) {
 			throw new OptTerminatedEarlyException("An update-mask-set error occurred", e);
-		} catch (GetOperationFailedException e) {
-			throw new OptTerminatedEarlyException("A get-operation-failed", e);
 		}
 	}
 	
@@ -235,7 +232,7 @@ class SimulatedAnnealingHelper {
 		AccptProbCalculator<T> accptProbCalc,
 		KernelUpdater<S,T> kernelUpdater,
 		KernelAssigner<S,T> kernelAssigner
-	) throws KernelCalcNRGException, UpdateMarkSetException, GetOperationFailedException {
+	) throws KernelCalcNRGException, UpdateMarkSetException {
 		
 		StopWatch timer = new StopWatch();
 		timer.start();

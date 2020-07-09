@@ -56,7 +56,6 @@ class KernelBirthAndKillHelper {
 		Mark markNew,
 		List<PxlMarkMemo> toKill,
 		CfgGen cfgGen,
-		int regionID,
 		KernelCalcContext context
 	) throws KernelCalcNRGException {
 		

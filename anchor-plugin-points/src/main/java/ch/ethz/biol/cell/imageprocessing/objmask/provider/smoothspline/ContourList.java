@@ -48,7 +48,7 @@ public class ContourList extends ArrayList<Contour> {
 	public String toString() {
 		String newLine = System.getProperty("line.separator");
 
-		StringBuffer sb = new StringBuffer();
+		StringBuilder sb = new StringBuilder();
 		sb.append("--" + newLine);
 		for (int i=0; i<size(); i++) {
 			Contour c = get(i);

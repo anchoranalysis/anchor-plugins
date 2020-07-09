@@ -34,45 +34,30 @@ import org.anchoranalysis.mpp.sgmn.bean.kernel.Kernel;
 import org.anchoranalysis.mpp.sgmn.bean.kernel.proposer.KernelProposerOption;
 import org.anchoranalysis.mpp.sgmn.kernel.proposer.WeightedKernel;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
+@NoArgsConstructor @AllArgsConstructor
 public class KernelProposerOptionSingle<T> extends KernelProposerOption<T>  {
 
 	// START BEAN PROPERTIES
-	@BeanField
+	@BeanField @Getter @Setter
 	private Kernel<T> kernel = null;
 	
-	@BeanField
+	@BeanField @Getter @Setter
 	private double weight = 0;
 	// END BEAN PROPERTIES
-	
-	public KernelProposerOptionSingle() {
-		// STANDARD BEAN CONSTRUCTOR
-	}
-	
-	public KernelProposerOptionSingle( Kernel<T> kernel, double weight ) {
-		this.kernel = kernel;
-		this.weight = weight;
-	}
-	
-	public double getWeight() {
-		return weight;
-	}
 
-	public void setWeight(double weight) {
-		this.weight = weight;
-	}
-	
-	
-	
-	// KernelProposerOption interface
 	@Override
 	public double getWeightPositive() {
-		return weight;
+		return getWeight();
 	}
 	
 	@Override
 	public double getWeightNegative() {
-		return weight;
+		return getWeight();
 	}
 	
 	@Override
@@ -80,13 +65,5 @@ public class KernelProposerOptionSingle<T> extends KernelProposerOption<T>  {
 	public double addWeightedKernelFactories( List<WeightedKernel<T>> lst ) {
 		lst.add( new WeightedKernel<T>( kernel, getWeight() ) );
 		return getWeight();		
-	}
-
-	public Kernel<T> getKernel() {
-		return kernel;
-	}
-
-	public void setKernel(Kernel<T> kernel) {
-		this.kernel = kernel;
 	}
 }

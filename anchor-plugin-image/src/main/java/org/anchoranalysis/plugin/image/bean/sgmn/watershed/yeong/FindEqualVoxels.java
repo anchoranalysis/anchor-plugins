@@ -122,7 +122,6 @@ private static class PointTester extends ProcessVoxelNeighbourAbsoluteWithSlidin
 				//   might have been forced up by the connected component
 				if (valPoint<sourceVal && valPoint<lowestNghbVal) {
 					lowestNghbVal = valPoint;
-					//lowestNghbIndex = extent.offset(x1, y1, z1);
 					lowestNghbIndex = matS.getEncoding().encodeDirection(xChange, yChange, zChange);
 				}
 				return false;

@@ -106,7 +106,7 @@ public class MinimaImpositionGrayscaleReconstruction extends MinimaImposition {
 		}
 		
 		VoxelBoxWrapper markerForReconstruction = createMarkerImageFromGradient(
-			markerMask.getChnl().getVoxelBox().asByte(),
+			markerMask.getChannel().getVoxelBox().asByte(),
 			markerMask.getBinaryValues().createByte(),
 			vbIntensity
 		);

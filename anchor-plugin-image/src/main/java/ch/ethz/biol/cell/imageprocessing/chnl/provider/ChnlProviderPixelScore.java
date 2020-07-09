@@ -103,7 +103,7 @@ public class ChnlProviderPixelScore extends ChnlProvider {
 		}
 		
 		BinaryChnl binaryChnlMask = mask.create();
-		Channel chnlMask = binaryChnlMask.getChnl();
+		Channel chnlMask = binaryChnlMask.getChannel();
 		
 		return Optional.of(
 			new ObjectMask(

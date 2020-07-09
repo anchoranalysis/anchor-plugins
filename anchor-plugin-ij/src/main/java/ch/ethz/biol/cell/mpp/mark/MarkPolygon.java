@@ -38,6 +38,8 @@ import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.ImageDimensions;
 
+import com.google.common.base.Preconditions;
+
 import ij.gui.PolygonRoi;
 import ij.gui.Roi;
 
@@ -120,8 +122,7 @@ public class MarkPolygon extends MarkAbstractPointList {
 	@Override
 	public void updateAfterPointsChange() {
 		super.updateAfterPointsChange();
-		
-		assert(getPoints().size()>=1);
+		Preconditions.checkArgument( !getPoints().isEmpty() );
 		
 		this.area = calcArea( getPoints() );
 		this.centroid = calcCentroid( getPoints(), area );

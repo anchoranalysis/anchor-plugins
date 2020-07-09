@@ -34,25 +34,28 @@ import java.util.regex.Pattern;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 
+import lombok.Getter;
+import lombok.Setter;
+
 public class RegExpFilePathParser extends FilePathParser {
 
 	// START BEAN PARAMETERS
-	@BeanField
-	private String expression = null;
+	@BeanField @Getter
+	private String expression;
 	
-	@BeanField
+	@BeanField @Getter @Setter
 	private int chnlGroupID = 0; // 0 Disables
 	
-	@BeanField
+	@BeanField @Getter @Setter
 	private int zSliceGroupID = 0; // 0 Disables
 	
-	@BeanField
+	@BeanField @Getter @Setter
 	private int timeIndexGroupID = 0; // 0 Disables
 	
-	@BeanField
+	@BeanField @Getter @Setter
 	private int keyGroupID = 0;	// 0 Disables
 	
-	@BeanField
+	@BeanField @Getter @Setter
 	private boolean keyRequired = false;
 	// END BEAN PARAMETERS
 
@@ -124,67 +127,9 @@ public class RegExpFilePathParser extends FilePathParser {
 			return Optional.empty();
 		}
 	}
-	
-	public String getExpression() {
-		return expression;
-	}
 
 	public void setExpression(String expression) {
 		this.expression = expression;
 		this.pattern = Pattern.compile( expression );
-	}
-
-	public int getChnlGroupID() {
-		return chnlGroupID;
-	}
-
-	public void setChnlGroupID(int chnlGroupID) {
-		this.chnlGroupID = chnlGroupID;
-	}
-
-	public int getzSliceNumGroupID() {
-		return zSliceGroupID;
-	}
-
-	public void setzSliceNumGroupID(int zSliceNumGroupID) {
-		this.zSliceGroupID = zSliceNumGroupID;
-	}
-
-	public int getKeyGroupID() {
-		return keyGroupID;
-	}
-
-
-	public void setKeyGroupID(int keyGroupID) {
-		this.keyGroupID = keyGroupID;
-	}
-
-
-	public boolean isKeyRequired() {
-		return keyRequired;
-	}
-
-
-	public void setKeyRequired(boolean keyRequired) {
-		this.keyRequired = keyRequired;
-	}
-
-	public int getzSliceGroupID() {
-		return zSliceGroupID;
-	}
-
-
-	public void setzSliceGroupID(int zSliceGroupID) {
-		this.zSliceGroupID = zSliceGroupID;
-	}
-
-
-	public int getTimeIndexGroupID() {
-		return timeIndexGroupID;
-	}
-
-
-	public void setTimeIndexGroupID(int timeIndexGroupID) {
-		this.timeIndexGroupID = timeIndexGroupID;
 	}
 }

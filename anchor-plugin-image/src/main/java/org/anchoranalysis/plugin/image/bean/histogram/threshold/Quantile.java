@@ -31,8 +31,9 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.bean.threshold.CalculateLevel;
 import org.anchoranalysis.image.histogram.Histogram;
-import org.apache.commons.lang.builder.EqualsBuilder;
-import org.apache.commons.lang.builder.HashCodeBuilder;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * Calculates the threshold value from a quantile of a histogram.
@@ -42,55 +43,19 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
  * @author Owen Feehan
  *
  */
+@EqualsAndHashCode(callSuper=false)
 public class Quantile extends CalculateLevel {
 	
 	// START BEAN PROPERTIES
-	@BeanField
-	private double quantile=0.5;
+	@BeanField @Getter @Setter
+	private double quantile=0.5;		// NOSONAR
 	
-	@BeanField
+	@BeanField @Getter @Setter
 	private boolean addOne = false;
 	// END BEAN PROPERTIES
 	
 	@Override
 	public int calculateLevel(Histogram h) throws OperationFailedException {
 		return h.quantile(quantile);
-	}
-
-	public double getQuantile() {
-		return quantile;
-	}
-
-	public void setQuantile(double quantile) {
-		this.quantile = quantile;
-	}
-
-	public boolean isAddOne() {
-		return addOne;
-	}
-
-	public void setAddOne(boolean addOne) {
-		this.addOne = addOne;
-	}
-	
-	@Override
-	public boolean equals(Object obj) {
-		if(obj instanceof Quantile){
-	    	final Quantile other = (Quantile) obj;
-	        return new EqualsBuilder()
-	            .append(quantile, other.quantile)
-	            .append(addOne, other.addOne)
-	            .isEquals();
-	    } else{
-	        return false;
-	    }
-	}
-
-	@Override
-	public int hashCode() {
-		return new HashCodeBuilder()
-			.append(quantile)
-			.append(addOne)
-			.toHashCode();
 	}
 }

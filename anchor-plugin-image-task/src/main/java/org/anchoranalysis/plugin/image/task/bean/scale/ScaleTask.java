@@ -182,7 +182,11 @@ public class ScaleTask extends RasterTask {
 				Channel chnlOut;
 				if (forceBinary) {
 					BinaryChnl binaryImg = new BinaryChnl(chnlIn, BinaryValues.getDefault() );
-					chnlOut = BinaryChnlProviderScaleXY.scale(binaryImg, scaleCalculator, InterpolatorFactory.getInstance().binaryResizing()).getChnl();
+					chnlOut = BinaryChnlProviderScaleXY.scale(
+						binaryImg,
+						scaleCalculator,
+						InterpolatorFactory.getInstance().binaryResizing()
+					).getChannel();
 				} else {
 					chnlOut = ChnlProviderScale.scale(
 						chnlIn,

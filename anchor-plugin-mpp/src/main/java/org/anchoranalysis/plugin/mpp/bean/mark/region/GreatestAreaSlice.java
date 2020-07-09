@@ -38,10 +38,15 @@ import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.voxel.statistics.VoxelStatistics;
 
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
+
+@EqualsAndHashCode(callSuper = false)
 public class GreatestAreaSlice extends IndexedRegionBase {
 
 	// START BEAN PROPERTIES
-	@BeanField
+	@BeanField @Getter @Setter
 	private RelationToThreshold threshold;
 	// END BEAN PROPERTIES
 
@@ -64,41 +69,7 @@ public class GreatestAreaSlice extends IndexedRegionBase {
 		}
 		
 		assert( psMax!=null );
-		
 		return psMax;
-	}
-
-	public RelationToThreshold getThreshold() {
-		return threshold;
-	}
-
-	public void setThreshold(RelationToThreshold threshold) {
-		this.threshold = threshold;
-	}
-
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = super.hashCode();
-		result = prime * result + ((threshold == null) ? 0 : threshold.hashCode());
-		return result;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (!super.equals(obj))
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		GreatestAreaSlice other = (GreatestAreaSlice) obj;
-		if (threshold == null) {
-			if (other.threshold != null)
-				return false;
-		} else if (!threshold.equals(other.threshold))
-			return false;
-		return true;
 	}
 	
 	@Override

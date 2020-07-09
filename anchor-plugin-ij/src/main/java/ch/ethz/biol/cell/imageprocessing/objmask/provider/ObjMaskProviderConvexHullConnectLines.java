@@ -30,7 +30,6 @@ import java.util.List;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.geometry.Point2i;
-import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.core.geometry.PointConverter;
 import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.object.ObjectCollection;
@@ -52,12 +51,11 @@ public class ObjMaskProviderConvexHullConnectLines extends ObjMaskProviderDimens
 	
 	@Override
 	public ObjectCollection createFromObjs( ObjectCollection objsCollection ) throws CreateException {
-
 		ImageDimensions dim = createDim();
 		return objsCollection.stream().map( om->transform(om,dim) );
 	}
 	
-	private ObjectMask transform( ObjectMask obj, ImageDimensions sd ) throws CreateException {
+	private ObjectMask transform(ObjectMask obj, ImageDimensions dimensions) throws CreateException {
 		try {
 			List<Point2i> pntsConvexHull = ConvexHullUtilities.convexHull2D(
 				ConvexHullUtilities.pointsOnOutline(obj)
@@ -66,10 +64,10 @@ public class ObjMaskProviderConvexHullConnectLines extends ObjMaskProviderDimens
 			if (pntsConvexHull.size()<=1) {
 				return obj;
 			}
-			
-			List<Point3d> pnts3d = PointConverter.convert2iTo3d(pntsConvexHull);
-			
-			return ObjMaskWalkShortestPath.walkLine( pnts3d );
+
+			return ObjMaskWalkShortestPath.walkLine(
+				PointConverter.convert2iTo3d(pntsConvexHull)
+			);
 		} catch (OperationFailedException e) {
 			throw new CreateException(e);
 		}

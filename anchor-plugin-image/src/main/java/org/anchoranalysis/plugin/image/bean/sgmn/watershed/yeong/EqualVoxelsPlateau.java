@@ -32,6 +32,8 @@ import java.util.List;
 
 import org.anchoranalysis.core.geometry.Point3i;
 
+import com.google.common.base.Preconditions;
+
 
 class EqualVoxelsPlateau {
 
@@ -39,8 +41,10 @@ class EqualVoxelsPlateau {
 		private List<Point3i> ptsInner = new ArrayList<>();
 		
 		public void addEdge( Point3i pnt, int nghbIndex ) {
-			assert( nghbIndex >= 0 );
-			ptsEdge.add( new PointWithNghb(pnt, nghbIndex) );
+			Preconditions.checkArgument(nghbIndex >= 0);
+			ptsEdge.add(
+				new PointWithNghb(pnt, nghbIndex)
+			);
 		}
 		
 		public void addInner( Point3i pnt ) {
@@ -51,25 +55,18 @@ class EqualVoxelsPlateau {
 		}
 		
 		public boolean hasPoints() {
-			return ptsEdge.size()>0 || ptsInner.size()>0;
+			return !ptsEdge.isEmpty() || !ptsInner.isEmpty();
 		}
 		
 		public boolean isOnlyEdge() {
-			return ptsInner.size()==0 && ptsEdge.size()>0; 
+			return ptsInner.isEmpty() && !ptsEdge.isEmpty(); 
 		}
 		
 		public boolean isOnlyInner() {
-			return ptsEdge.size()==0 && ptsInner.size()>0; 
+			return ptsEdge.isEmpty() && !ptsInner.isEmpty(); 
 		}
 		
-		// Returns the existing list of edges, and creates a new empty list in its place
-//		public List<PointWithNghb> releaseEdgePts() {
-//			List<PointWithNghb> ptsEdgePrev = ptsEdge;
-//			ptsEdge = new ArrayList<PointWithNghb>();
-//			return ptsEdgePrev;
-//		}
-		
-		// EFFICIENCY, rewrite as two separate lists, avoids having to make new lists
+		// TODO EFFICIENCY, rewrite as two separate lists, avoids having to make new lists
 		public List<Point3i> ptsEdgeAsPoints() {
 			List<Point3i> ptsEdgeOut = new ArrayList<>();
 			

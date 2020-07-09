@@ -41,6 +41,9 @@ import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.plugin.image.bean.obj.filter.ObjectFilterRelation;
 
+import lombok.Getter;
+import lombok.Setter;
+
 /**
  * Only keeps objects whose feature-value satisfies a condition relative to a threshold.
  * 
@@ -52,13 +55,13 @@ import org.anchoranalysis.plugin.image.bean.obj.filter.ObjectFilterRelation;
 public class ThresholdedFeature extends ObjectFilterRelation {
 
 	// START BEAN PROPERTIES
-	@BeanField
+	@BeanField @Getter @Setter
 	private FeatureEvaluator<FeatureInputSingleObject> featureEvaluator;
 	
-	@BeanField
+	@BeanField @Getter @Setter
 	private double threshold;
 	
-	@BeanField
+	@BeanField @Getter @Setter
 	private boolean debug = true;
 	// END BEAN PROPERTIES
 	
@@ -74,7 +77,7 @@ public class ThresholdedFeature extends ObjectFilterRelation {
 		}
 		
 		if (debug) {
-			getLogger().messageLogger().log( String.format("START Feature Threshold") );
+			getLogger().messageLogger().log("START Feature Threshold");
 		}
 	}
 
@@ -107,32 +110,7 @@ public class ThresholdedFeature extends ObjectFilterRelation {
 	protected void end() throws OperationFailedException {
 		super.end();
 		if (debug) {
-			getLogger().messageLogger().log( String.format("END Feature Threshold") );
+			getLogger().messageLogger().log("END Feature Threshold");
 		}
 	}
-
-	public double getThreshold() {
-		return threshold;
-	}
-
-	public void setThreshold(double threshold) {
-		this.threshold = threshold;
-	}
-
-	public FeatureEvaluator<FeatureInputSingleObject> getFeatureEvaluator() {
-		return featureEvaluator;
-	}
-
-	public void setFeatureEvaluator(FeatureEvaluator<FeatureInputSingleObject> featureEvaluator) {
-		this.featureEvaluator = featureEvaluator;
-	}
-
-	public boolean isDebug() {
-		return debug;
-	}
-
-	public void setDebug(boolean debug) {
-		this.debug = debug;
-	}
-
 }

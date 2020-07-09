@@ -33,11 +33,14 @@ import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.feature.histogram.FeatureHistogramStatistic;
 import org.anchoranalysis.image.histogram.Histogram;
 
+import lombok.Getter;
+import lombok.Setter;
+
 public class Quantile extends FeatureHistogramStatistic {
 
 	// START BEAN PROPERTIES
-	@BeanField
-	private double quantile = 0.0;
+	@BeanField @Getter @Setter
+	private double quantile = 0.0;	// NOSONAR
 	// END BEAN PROPERTIES
 	
 	@Override
@@ -48,13 +51,4 @@ public class Quantile extends FeatureHistogramStatistic {
 			throw new FeatureCalcException(e);
 		}			
 	}
-	
-	public double getQuantile() {
-		return quantile;
-	}
-
-	public void setQuantile(double quantile) {
-		this.quantile = quantile;
-	}
-
 }

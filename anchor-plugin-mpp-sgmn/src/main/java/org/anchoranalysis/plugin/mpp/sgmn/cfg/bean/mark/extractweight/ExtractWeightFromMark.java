@@ -1,7 +1,7 @@
 package org.anchoranalysis.plugin.mpp.sgmn.cfg.bean.mark.extractweight;
 
+import org.anchoranalysis.anchor.mpp.mark.CompatibleWithMark;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
-import org.anchoranalysis.anchor.mpp.params.ICompatibleWith;
 
 /*-
  * #%L
@@ -31,7 +31,7 @@ import org.anchoranalysis.anchor.mpp.params.ICompatibleWith;
 
 import org.anchoranalysis.bean.AnchorBean;
 
-public abstract class ExtractWeightFromMark extends AnchorBean<ExtractWeightFromMark> implements ICompatibleWith {
+public abstract class ExtractWeightFromMark extends AnchorBean<ExtractWeightFromMark> implements CompatibleWithMark {
 
 	public abstract double weightFor(Mark mark);
 }

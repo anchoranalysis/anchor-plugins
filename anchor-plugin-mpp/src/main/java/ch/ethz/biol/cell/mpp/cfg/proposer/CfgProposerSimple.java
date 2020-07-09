@@ -42,38 +42,41 @@ import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
 import org.anchoranalysis.bean.annotation.BeanField;
 
 import cern.jet.random.Poisson;
+import lombok.Getter;
+import lombok.Setter;
 
 public class CfgProposerSimple extends CfgProposer {
 
-	// START BEAN
-	@BeanField
+	// START BEAN PROPERTIES
+	@BeanField @Getter @Setter
 	private MarkProposer markProposer;
 	
-	@BeanField
+	@BeanField @Getter @Setter
 	private int numMarks = -1;	// if positive, then we use this as the definitive number of marks 
-	// END BEAN
+	// END BEAN PROPERTIES
 	
 	// Generates a random configuration
 	//   * Number of objects is decided by a Poisson distribution
 	//	 * The location and attributes of marks are uniformly distributed
 	@Override
 	public Optional<Cfg> propose( CfgGen cfgGen, ProposerContext context) throws ProposalAbnormalFailureException {
-
-		int num_pts;
-		if (numMarks>0) {
-			num_pts = numMarks;
-		} else {
-		
-			Poisson p = context.getRandomNumberGenerator().generatePossion( cfgGen.getReferencePoissonIntensity() * context.getDimensions().getVolume() );
-
-			//do {
-			num_pts = p.nextInt();
-			//} while (num_pts==0);
-		}
-		
-		return genInitRndCfgForNumPts( num_pts, cfgGen, context );
+		return genInitRndCfgForNumPts(
+			generateNumberPoints(cfgGen, context),
+			cfgGen,
+			context
+		);
 	}
 	
+	private int generateNumberPoints(CfgGen cfgGen, ProposerContext context) {
+		if (numMarks>0) {
+			return numMarks;
+		} else {
+			Poisson distribution = context.getRandomNumberGenerator().generatePossion(
+				cfgGen.getReferencePoissonIntensity() * context.getDimensions().getVolume()
+			);
+			return distribution.nextInt();
+		}		
+	}
 
 	// Generates a random configuration for a given number of points
 	//	 * The location and attributes of marks are uniformly distributed
@@ -104,21 +107,4 @@ public class CfgProposerSimple extends CfgProposer {
 	public String getBeanDscr() {
 		return getBeanName();
 	}
-
-	public MarkProposer getMarkProposer() {
-		return markProposer;
-	}
-
-	public void setMarkProposer(MarkProposer markProposer) {
-		this.markProposer = markProposer;
-	}
-
-	public int getNumMarks() {
-		return numMarks;
-	}
-
-	public void setNumMarks(int numMarks) {
-		this.numMarks = numMarks;
-	}
-
 }

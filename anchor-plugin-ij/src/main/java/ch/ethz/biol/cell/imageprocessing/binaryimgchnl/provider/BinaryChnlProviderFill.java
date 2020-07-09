@@ -46,14 +46,17 @@ import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.object.factory.CreateFromConnectedComponentsFactory;
 import org.anchoranalysis.image.object.ops.BinaryChnlFromObjs;
 
+import lombok.Getter;
+import lombok.Setter;
+
 public class BinaryChnlProviderFill extends BinaryChnlProviderOne {
 
 	// START BEAN PROPERTIES
-	@BeanField @OptionalBean
+	@BeanField @OptionalBean @Getter @Setter
 	private UnitValueAreaOrVolume maxVolume = null;
 	
 	/** If true we do not fill any objects that touch the border */
-	@BeanField
+	@BeanField @Getter @Setter
 	private boolean skipAtBorder = true;
 	// END BEAN PROPERTIES
 	
@@ -68,7 +71,7 @@ public class BinaryChnlProviderFill extends BinaryChnlProviderOne {
 	}
 	
 	private BinaryChnl fillChnl( BinaryChnl bic ) throws CreateException {
-		BinaryChnl bicInv = new BinaryChnl( bic.getChnl(), bic.getBinaryValues().createInverted() );
+		BinaryChnl bicInv = new BinaryChnl( bic.getChannel(), bic.getBinaryValues().createInverted() );
 		
 		BinaryChnl bicDup = bic.duplicate();
 		
@@ -93,56 +96,42 @@ public class BinaryChnlProviderFill extends BinaryChnlProviderOne {
 		return filterObjs(omc, bi.getDimensions());
 	}
 	
-	private ObjectCollection filterObjs( ObjectCollection omc, ImageDimensions sd ) throws CreateException {
+	private ObjectCollection filterObjs( ObjectCollection omc, ImageDimensions dim ) throws CreateException {
 		
-		ObjectCollection out = new ObjectCollection();
-		
-		double maxVolumeRslvd = 0;
+		final double maxVolumeRslvd = determineMaxVolume(dim);
+
+		return omc.stream().filter( om->
+			includeObject(om, dim, maxVolumeRslvd)
+		);
+	}
+	
+	private double determineMaxVolume(ImageDimensions dim) throws CreateException {
 		if (maxVolume!=null) {
 			try {
-				maxVolumeRslvd = maxVolume.rslv(
-					Optional.of(sd.getRes())
+				return maxVolume.rslv(
+					Optional.of(dim.getRes())
 				);
 			} catch (UnitValueException e) {
 				throw new CreateException(e);
 			}				
+		} else {
+			return 0;	// Arbitrary, as it will be ignored anyway
 		}
-				 
-		for (ObjectMask om : omc) {
-
-			// It's not allowed touch the border
-			if (skipAtBorder && om.getBoundingBox().atBorderXY(sd)) {
-				continue;
-			}
-			
-			if (maxVolume!=null && om.numVoxelsOn()>maxVolumeRslvd) {
-				continue;
-			}
-			
-			out.add(om);
+	}
+	
+	private boolean includeObject(ObjectMask om, ImageDimensions dim, double maxVolumeRslvd) {
+		// It's not allowed touch the border
+		if (skipAtBorder && om.getBoundingBox().atBorderXY(dim)) {
+			return false;
 		}
-		return out;
+		
+		// Volume check
+		return maxVolume==null || om.numVoxelsOn()<=maxVolumeRslvd;
 	}
 	
 	private static BinaryChnl fillHoles( ObjectCollection filled, BinaryChnl src, ImageDimensions sd, BinaryValues bvOut ) {
 		BinaryChnl bcSelected = BinaryChnlFromObjs.createFromObjs(filled, sd, bvOut);
 		BinaryChnlOr.binaryOr(bcSelected,src);
 		return bcSelected;
-	}
-
-	public UnitValueAreaOrVolume getMaxVolume() {
-		return maxVolume;
-	}
-
-	public void setMaxVolume(UnitValueAreaOrVolume maxVolume) {
-		this.maxVolume = maxVolume;
-	}
-
-	public boolean isSkipAtBorder() {
-		return skipAtBorder;
-	}
-
-	public void setSkipAtBorder(boolean skipAtBorder) {
-		this.skipAtBorder = skipAtBorder;
 	}
 }

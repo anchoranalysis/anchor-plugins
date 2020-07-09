@@ -74,18 +74,18 @@ public class TraversePointsOnContour extends PointsFromOrientationProposer {
 		lastPntsForward.clear();
 		lastPntsReverse.clear();
 		
-		forwardCentrePoint = addPointsFromOrientation( centrePoint, orientation, findOutlinePixelAngle, outlinePixelsRetriever, lastPntsForward, "forward", re);
+		forwardCentrePoint = addPointsFromOrientation( centrePoint, orientation, findOutlinePixelAngle, outlinePixelsRetriever, lastPntsForward, re);
 	
 		if (!forwardDirectionOnly) {
 			OutlinePixelsRetriever reverseRetriever = outlinePixelsRetrieverReverse!=null ? outlinePixelsRetrieverReverse : outlinePixelsRetriever;
-			reverseCentrePoint = addPointsFromOrientation( centrePoint, orientation.negative(), findOutlinePixelAngle, reverseRetriever, lastPntsReverse, "reverse", re);
+			reverseCentrePoint = addPointsFromOrientation( centrePoint, orientation.negative(), findOutlinePixelAngle, reverseRetriever, lastPntsReverse, re);
 			
-			if (lastPntsForward.size()==0 && lastPntsReverse.size()==0) {
+			if (lastPntsForward.isEmpty() && lastPntsReverse.isEmpty()) {
 				throw new TraverseOutlineException("Cannot find forward or reverse point to traverse");
 			}
 		}
 		
-		if (lastPntsForward.size()==0 && lastPntsReverse.size()==0) {
+		if (lastPntsForward.isEmpty() && lastPntsReverse.isEmpty()) {
 			throw new TraverseOutlineException("Cannot find outline point");
 		}
 		
@@ -97,7 +97,14 @@ public class TraversePointsOnContour extends PointsFromOrientationProposer {
 		return combinedLists;
 	}
 	
-	private Optional<Point3i> addPointsFromOrientation( Point3d centrePoint, Orientation orientation, FindPointOnOutline find, OutlinePixelsRetriever traverseOutline, List<Point3i> listOut, String desc, RandomNumberGenerator re ) throws TraverseOutlineException {
+	private Optional<Point3i> addPointsFromOrientation(
+		Point3d centrePoint,
+		Orientation orientation,
+		FindPointOnOutline find,
+		OutlinePixelsRetriever traverseOutline,
+		List<Point3i> listOut,
+		RandomNumberGenerator re
+	) throws TraverseOutlineException {
 		
 		try {
 			Optional<Point3i> foundPoint = find.pointOnOutline( centrePoint, orientation );

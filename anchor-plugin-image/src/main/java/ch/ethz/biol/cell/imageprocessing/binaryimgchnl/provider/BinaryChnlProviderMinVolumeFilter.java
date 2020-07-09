@@ -35,40 +35,26 @@ import org.anchoranalysis.image.bean.nonbean.error.UnitValueException;
 import org.anchoranalysis.image.bean.provider.BinaryChnlProviderOne;
 import org.anchoranalysis.image.bean.unitvalue.volume.UnitValueVolume;
 import org.anchoranalysis.image.binary.BinaryChnl;
-import org.anchoranalysis.image.binary.values.BinaryValues;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.factory.CreateFromConnectedComponentsFactory;
 import org.anchoranalysis.image.object.ops.BinaryChnlFromObjs;
 
+import lombok.Getter;
+import lombok.Setter;
+
 public class BinaryChnlProviderMinVolumeFilter extends BinaryChnlProviderOne {
 
 	// START BEAN FIELDS
-	@BeanField
+	@BeanField @Getter @Setter
 	private UnitValueVolume minVolume = null;
 	
-	@BeanField
+	@BeanField @Getter @Setter
 	private boolean inverted = false;
 	// END BEAN FIELDS
 	
 	@Override
 	public BinaryChnl createFromChnl( BinaryChnl chnl ) throws CreateException {
 		return createMaskedImage(chnl);
-	}
-
-	public boolean isInverted() {
-		return inverted;
-	}
-
-	public void setInverted(boolean inverted) {
-		this.inverted = inverted;
-	}
-
-	public UnitValueVolume getMinVolume() {
-		return minVolume;
-	}
-
-	public void setMinVolume(UnitValueVolume minVolume) {
-		this.minVolume = minVolume;
 	}
 
 	private BinaryChnl createMaskedImage( BinaryChnl bi ) throws CreateException {
@@ -92,16 +78,13 @@ public class BinaryChnlProviderMinVolumeFilter extends BinaryChnlProviderOne {
 
 		CreateFromConnectedComponentsFactory createObjMasks = new CreateFromConnectedComponentsFactory(rslvMinNum);
 		if (inverted) {
-			
-			BinaryValues bvInverted = bi.getBinaryValues().createInverted();
-			BinaryChnl biInverted = new BinaryChnl( bi.getChnl(), bvInverted );	// In case we've inverted the binary valies
-
+			BinaryChnl biInverted = new BinaryChnl(
+				bi.getChannel(),
+				bi.getBinaryValues().createInverted()
+			);	// In case we've inverted the binary values
 			return createObjMasks.createConnectedComponents(biInverted);
-						
 		} else {
 			return createObjMasks.createConnectedComponents(bi);
 		}
 	}
-
-
 }

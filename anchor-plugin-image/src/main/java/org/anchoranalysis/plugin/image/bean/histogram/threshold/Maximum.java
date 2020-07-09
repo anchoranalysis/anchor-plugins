@@ -31,6 +31,8 @@ import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.bean.threshold.CalculateLevel;
 import org.anchoranalysis.image.histogram.Histogram;
 
+import lombok.EqualsAndHashCode;
+
 
 /**
  * The maximum value of one or more {#link org.anchoranalysis.image.bean.threshold.CalculateLevel}
@@ -38,6 +40,7 @@ import org.anchoranalysis.image.histogram.Histogram;
  * @author Owen Feehan
  *
  */
+@EqualsAndHashCode(callSuper = true)
 public class Maximum extends CalculateLevelListBase {
 	
 	@Override

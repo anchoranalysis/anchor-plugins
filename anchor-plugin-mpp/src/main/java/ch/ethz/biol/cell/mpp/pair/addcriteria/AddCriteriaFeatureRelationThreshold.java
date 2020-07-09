@@ -44,23 +44,21 @@ import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorMulti;
 import org.anchoranalysis.image.extent.ImageDimensions;
 
+import lombok.Getter;
+import lombok.Setter;
+
 public class AddCriteriaFeatureRelationThreshold extends AddCriteriaPair {
 	
 	// START BEAN PROPERTIES
-	@BeanField
+	@BeanField @Getter @Setter
 	private Feature<FeatureInputPairMemo> feature;
 	
-	@BeanField
+	@BeanField @Getter @Setter
 	private double threshold;
 	
-	@BeanField
+	@BeanField @Getter @Setter
 	private RelationBean relation;
 	// END BEAN PROPERTIES
-	
-	@Override
-	public boolean paramsEquals(Object other) {
-		return false;
-	}
 
 	@Override
 	public boolean includeMarks(
@@ -90,30 +88,6 @@ public class AddCriteriaFeatureRelationThreshold extends AddCriteriaPair {
 		} catch (FeatureCalcException e) {
 			throw new IncludeMarksFailureException(e);
 		}
-	}
-
-	public Feature<FeatureInputPairMemo> getFeature() {
-		return feature;
-	}
-
-	public void setFeature(Feature<FeatureInputPairMemo> feature) {
-		this.feature = feature;
-	}
-
-	public double getThreshold() {
-		return threshold;
-	}
-
-	public void setThreshold(double threshold) {
-		this.threshold = threshold;
-	}
-
-	public RelationBean getRelation() {
-		return relation;
-	}
-
-	public void setRelation(RelationBean relation) {
-		this.relation = relation;
 	}
 
 	@Override

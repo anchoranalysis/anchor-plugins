@@ -40,11 +40,7 @@ public abstract class ImageStackGenerator extends ObjectGenerator<ImageStack> {
 	
 	@Override
 	public void writeToFile( OutputWriteSettings outputWriteSettings, Path filePath ) throws OutputWriteFailedException {
-		
-		//ImageStack stack = generate();
-		
 		throw new OutputWriteFailedException("writing out using an ImageStackGenerator is currently disabled");
-		//outputWriteSettings.getRasterWriter().writeStack(stack, filePath, outputWriteSettings.isWriteRasterMetadata(), isRGB() );
 	}
 	
 	@Override

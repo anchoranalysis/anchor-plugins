@@ -70,7 +70,7 @@ public class FilterCsvColumn<T extends InputFromManager> extends InputManager<T>
 		// Existing collection 
 		List<T> in = input.inputObjects(params);
 		
-		if (in.size()==0) {
+		if (in.isEmpty()) {
 			return in;
 		}
 

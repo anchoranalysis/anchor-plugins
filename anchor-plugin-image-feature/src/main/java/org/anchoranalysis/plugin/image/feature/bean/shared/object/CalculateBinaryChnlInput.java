@@ -60,7 +60,7 @@ class CalculateBinaryChnlInput<T extends FeatureInputNRG> extends FeatureCalcula
 	private static BinaryVoxelBox<ByteBuffer> binaryVoxelBox( BinaryChnl bic ) throws FeatureCalcException {
 		VoxelBox<ByteBuffer> vb;
 		try {
-			vb = bic.getChnl().getVoxelBox().asByte();
+			vb = bic.getChannel().getVoxelBox().asByte();
 		} catch (IncorrectVoxelDataTypeException e1) {
 			throw new FeatureCalcException("binaryImgChnlProvider returned incompatible data type", e1);
 		}

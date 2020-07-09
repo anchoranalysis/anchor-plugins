@@ -120,7 +120,6 @@ public class KernelBirthAndKill extends KernelPosNeg<CfgNRGPixelized> {
 				markNew,
 				toKill,
 				cfgGen,
-				regionID,
 				context
 			);
 			if (pmmAdditional!=null) {

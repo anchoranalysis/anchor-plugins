@@ -1,5 +1,7 @@
 package org.anchoranalysis.plugin.image.bean.histogram.threshold;
 
+import lombok.EqualsAndHashCode;
+
 /*
  * #%L
  * anchor-plugin-image
@@ -36,6 +38,7 @@ package org.anchoranalysis.plugin.image.bean.histogram.threshold;
  * @author Owen Feehan
  *
  */
+@EqualsAndHashCode(callSuper = true)
 public class IfGreaterThan extends CalculateLevelRelativeToThreshold {
 
 	@Override

@@ -44,12 +44,14 @@ import org.anchoranalysis.image.points.PointsFromBinaryVoxelBox;
 
 import cern.colt.list.DoubleArrayList;
 import cern.jet.stat.Descriptive;
+import lombok.Getter;
+import lombok.Setter;
 
 // Standard deviation of distance from surface voxels to centroid
 public class ObjectRadiusStandardDeviation extends FeatureSingleObject {
 
 	// START BEAN PROPERTIES
-	@BeanField
+	@BeanField @Getter @Setter
 	private boolean cov = false;	// Returns the coefficient of variation (stdDev/mean) instead of stdDev
 	// END BEAN PROPERTIES
 	
@@ -59,7 +61,7 @@ public class ObjectRadiusStandardDeviation extends FeatureSingleObject {
 		ObjectMask om = input.get().getObjectMask();
 		
 		// Get the outline
-		List<Point3i> pntsOutline = createMaskOutlineAsPoints(om, 1, false, false);
+		List<Point3i> pntsOutline = createMaskOutlineAsPoints(om, 1);
 
 		// Distances from the center to each point on the outline
 		DoubleArrayList distances = distancesToPoints(
@@ -103,7 +105,7 @@ public class ObjectRadiusStandardDeviation extends FeatureSingleObject {
 		}
 	}
 
-	private static List<Point3i> createMaskOutlineAsPoints(ObjectMask mask, int numberErosions, boolean erodeEdges, boolean do3D ) {
+	private static List<Point3i> createMaskOutlineAsPoints(ObjectMask mask, int numberErosions) {
 
 		List<Point3i> ptsOutline = new ArrayList<>();
 			
@@ -115,13 +117,5 @@ public class ObjectRadiusStandardDeviation extends FeatureSingleObject {
 		);
 		
 		return ptsOutline;
-	}
-
-	public boolean isCov() {
-		return cov;
-	}
-
-	public void setCov(boolean cov) {
-		this.cov = cov;
 	}
 }

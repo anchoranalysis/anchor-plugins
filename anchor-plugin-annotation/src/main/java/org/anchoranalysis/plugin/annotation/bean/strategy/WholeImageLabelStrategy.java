@@ -29,19 +29,23 @@ package org.anchoranalysis.plugin.annotation.bean.strategy;
 import java.util.List;
 import java.util.Optional;
 
+import org.anchoranalysis.annotation.wholeimage.WholeImageLabelAnnotation;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.gui.annotation.bean.label.AnnotationLabel;
 import org.anchoranalysis.gui.annotation.bean.label.GroupedAnnotationLabels;
 import org.anchoranalysis.image.io.input.ProvidesStackInput;
 import org.anchoranalysis.io.error.AnchorIOException;
 
+import lombok.Getter;
+import lombok.Setter;
+
 public class WholeImageLabelStrategy extends SingleFilePathGeneratorStrategy {
 
 	// START BEAN PROPERTIES
-	@BeanField
+	@BeanField @Getter @Setter
 	private List<AnnotationLabel> labels;
 	
-	@BeanField
+	@BeanField @Getter @Setter
 	private int weightWidthDescription;
 	// END BEAN PROPERTIES
 
@@ -49,9 +53,7 @@ public class WholeImageLabelStrategy extends SingleFilePathGeneratorStrategy {
 	public Optional<String> annotationLabelFor(ProvidesStackInput item) throws AnchorIOException {
 		return ReadAnnotationFromFile.readCheckExists(
 			annotationPathFor(item)
-		).map( ann->
-			ann.getLabel()
-		);
+		).map(WholeImageLabelAnnotation::getLabel);
 	}
 	
 	// This is actually called twice during a typically opening of an annotation
@@ -63,21 +65,5 @@ public class WholeImageLabelStrategy extends SingleFilePathGeneratorStrategy {
 	@Override
 	public int weightWidthDescription() {
 		return weightWidthDescription;
-	}
-	
-	public List<AnnotationLabel> getLabels() {
-		return labels;
-	}
-
-	public void setLabels(List<AnnotationLabel> labels) {
-		this.labels = labels;
-	}
-
-	public int getWeightWidthDescription() {
-		return weightWidthDescription;
-	}
-
-	public void setWeightWidthDescription(int weightWidthDescription) {
-		this.weightWidthDescription = weightWidthDescription;
 	}
 }

@@ -59,7 +59,6 @@ public class EllipsoidFactory {
 	 * @throws CreateException
 	 */
 	public static MarkEllipsoid createMarkEllipsoidLeastSquares( ObjectMask om, ImageDimensions dim, boolean suppressZCovariance, double shellRad ) throws CreateException {
-
 		return createMarkEllipsoidLeastSquares(
 			()->pntsFromMaskOutlineWrapped(om),
 			dim,
@@ -84,24 +83,20 @@ public class EllipsoidFactory {
 		// Now get all the points on the outline 
 		MarkEllipsoid mark = new MarkEllipsoid();
 		
-		List<Point3f> ptsF = new ArrayList<>();
-		for( Point3i p : pts ) {
-			ptsF.add(
-				PointConverter.floatFromInt(p)
-			);
-		}
+		List<Point3f> pointsFloat = new ArrayList<>();
+		pts.forEach( p->pointsFloat.add(
+			PointConverter.floatFromInt(p)
+		));
 		
 		try {
-			pointsFitter.fit( ptsF, mark, dim );
+			pointsFitter.fit( pointsFloat, mark, dim );
 		} catch (PointsFitterException e) {
 			throw new CreateException(e);
 		}
-
 		return mark;
 	}
 	
-	private static List<Point3i> pntsFromMaskOutlineWrapped( ObjectMask om ) throws CreateException {
+	private static List<Point3i> pntsFromMaskOutlineWrapped( ObjectMask om ) {
 		return PointsFromObjMask.pntsFromMaskOutline(om);
 	}
-	
 }

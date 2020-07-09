@@ -35,6 +35,9 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.voxel.statistics.VoxelStatistics;
 
+import lombok.EqualsAndHashCode;
+
+@EqualsAndHashCode(callSuper = true)
 public class Specific extends SelectSlicesBase {
 
 	@Override

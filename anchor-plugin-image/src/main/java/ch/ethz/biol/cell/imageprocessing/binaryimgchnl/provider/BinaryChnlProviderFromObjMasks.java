@@ -64,7 +64,7 @@ public class BinaryChnlProviderFromObjMasks extends BinaryChnlProviderDimSource 
 		BinaryValues bv = BinaryValues.getDefault();
 		
 		BinaryChnl maskedImage = createChnlFromObjsMux(objs, dim, bv, invert);
-		return new BinaryChnl(maskedImage.getChnl(), bv);	
+		return new BinaryChnl(maskedImage.getChannel(), bv);	
 	}
 
 	public ObjectCollectionProvider getObjs() {

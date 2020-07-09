@@ -152,7 +152,7 @@ public class ConvexHullUtilities {
 		).collect( Collectors.toList() );
 	}
 
-	public static List<Point2i> pointsOnAllOutlines(ObjectCollection objs) throws OperationFailedException {
+	public static List<Point2i> pointsOnAllOutlines(ObjectCollection objs) {
 		List<Point2i> points = new ArrayList<>();
 		
 		for(ObjectMask om : objs) {
@@ -162,7 +162,7 @@ public class ConvexHullUtilities {
 		return points;
 	}
 	
-	public static List<Point2i> pointsOnOutline(ObjectMask obj) throws OperationFailedException {
+	public static List<Point2i> pointsOnOutline(ObjectMask obj) {
 		List<Point2i> points = new ArrayList<>();
 		addPointsFromObjOutline(obj, points);
 		return points;

@@ -75,9 +75,7 @@ class OpenedRasterAlterDimensions extends OpenedRaster {
 		
 		for( Stack stack : ts ) {
 			Optional<ImageResolution> res = processor.maybeUpdatedResolution( stack.getDimensions().getRes() );
-			res.ifPresent( r->
-				stack.updateResolution(r)
-			);
+			res.ifPresent(stack::updateResolution);
 		}
 		return ts;
 	}

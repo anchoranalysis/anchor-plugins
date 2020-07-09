@@ -86,10 +86,6 @@ public class MatConverter {
 	
 	private static Mat makeGrayscale( Channel chnl ) throws CreateException {
 		if (chnl.getVoxelDataType().equals(VoxelDataTypeUnsignedByte.INSTANCE)) {
-			
-			// DEBUG
-			//System.out.printf("NumPixels>100=%d%n", chnl.getVoxelBox().any().countGreaterThan(100) );
-			
 			return singleChnlMatFromVoxelBox( chnl.getVoxelBox().asByte() );
 		} else {
 			throw new CreateException("Only 8-bit channels are supported");	

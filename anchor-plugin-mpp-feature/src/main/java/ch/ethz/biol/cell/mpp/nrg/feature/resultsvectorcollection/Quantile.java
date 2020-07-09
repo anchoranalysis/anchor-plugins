@@ -32,17 +32,19 @@ package ch.ethz.biol.cell.mpp.nrg.feature.resultsvectorcollection;
 import org.anchoranalysis.bean.annotation.BeanField;
 import cern.colt.list.DoubleArrayList;
 import cern.jet.stat.Descriptive;
+import lombok.Getter;
+import lombok.Setter;
 
 public class Quantile extends FeatureResultsFromIndex {
 
 	// START BEAN PROPERTIES
-	@BeanField
-	private double quantile = 0;
+	@BeanField @Getter @Setter
+	private double quantile = 0;		// NOSONAR
 	
 	/**
 	 * If true, the quantile is interpreted as a percentage rather than a decimal
 	 */
-	@BeanField
+	@BeanField @Getter @Setter
 	private boolean asPercentage = false;
 	// END BEAN PROPERTIES
 	
@@ -52,21 +54,5 @@ public class Quantile extends FeatureResultsFromIndex {
 		
 		double quantileFinal = asPercentage ? quantile/100 : quantile;
 		return Descriptive.quantile(featureVals, quantileFinal);
-	}
-	
-	public double getQuantile() {
-		return quantile;
-	}
-
-	public void setQuantile(double quantile) {
-		this.quantile = quantile;
-	}
-
-	public boolean isAsPercentage() {
-		return asPercentage;
-	}
-
-	public void setAsPercentage(boolean asPercentage) {
-		this.asPercentage = asPercentage;
 	}
 }

@@ -38,20 +38,19 @@ import org.anchoranalysis.core.random.RandomNumberGenerator;
 import org.anchoranalysis.image.extent.ImageResolution;
 import org.anchoranalysis.image.object.ObjectMask;
 
+import lombok.Getter;
+import lombok.Setter;
+
 // Breadth-first iteration of pixels
 public class VisitSchedulerMaxDistZ extends VisitScheduler {
 
 	// START BEAN PROPERTIES
-	@BeanField
+	@BeanField @Getter @Setter
 	private ScalarProposer maxDistProposer;
 	// END BEAN PROPERTIES
 	
 	private Point3i root;
 	private double maxZRslv;
-	
-	public VisitSchedulerMaxDistZ() {
-		super();
-	}
 	
 	@Override
 	public void beforeCreateObjMask(RandomNumberGenerator re, ImageResolution res)
@@ -61,7 +60,6 @@ public class VisitSchedulerMaxDistZ extends VisitScheduler {
 		} catch (OperationFailedException e) {
 			throw new InitException(e);
 		}
-		//System.out.printf("Z rslv %f\n", maxZRslv);
 	}
 	
 	@Override
@@ -81,20 +79,6 @@ public class VisitSchedulerMaxDistZ extends VisitScheduler {
 
 	@Override
 	public boolean considerVisit( Point3i pnt, int distAlongContour, ObjectMask objMask ) {
-		System.out.printf("root=%d,%d,%d   pnt=%d,%d,%d%n", root.getX(), root.getY(), root.getZ(), pnt.getX(), pnt.getY(), pnt.getZ() );
-		if (Math.abs(root.getZ()-pnt.getZ())>maxZRslv) {
-			return false;
-		}
-		
-		return true;
+		return Math.abs(root.getZ()-pnt.getZ())<=maxZRslv;
 	}
-
-	public ScalarProposer getMaxDistProposer() {
-		return maxDistProposer;
-	}
-
-	public void setMaxDistProposer(ScalarProposer maxDistProposer) {
-		this.maxDistProposer = maxDistProposer;
-	}
-
 }

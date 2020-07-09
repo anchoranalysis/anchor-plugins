@@ -71,7 +71,7 @@ public class BinaryChnlProviderConvexHull3D extends ConvexHullBase {
 		}
 				
 		// we write the vertices to the outline
-		Channel out = outline.getChnl();
+		Channel out = outline.getChannel();
 		VoxelBox<ByteBuffer> vbOut = out.getVoxelBox().asByte();
 				
 		vbOut.setAllPixelsTo(outline.getBinaryValues().getOffInt());

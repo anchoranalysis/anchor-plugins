@@ -33,10 +33,15 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.voxel.statistics.VoxelStatistics;
 
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
+
+@EqualsAndHashCode(callSuper = false)
 public abstract class SelectSlicesWithIndexBase extends SelectSlicesBase {
 
 	// START BEAN PROPERTIES
-	@BeanField
+	@BeanField @Getter @Setter
 	private int indexNonZero = 0;
 	// END BEAN PROPERTIES
 	
@@ -54,15 +59,7 @@ public abstract class SelectSlicesWithIndexBase extends SelectSlicesBase {
 			indexNonZero
 		);
 	}
-	
-	public int getIndexNonZero() {
-		return indexNonZero;
-	}
-
-	public void setIndexNonZero(int indexNonZero) {
-		this.indexNonZero = indexNonZero;
-	}
-	
+		
 	@Override
 	public String uniqueName() {
 		return String.format(
@@ -75,27 +72,5 @@ public abstract class SelectSlicesWithIndexBase extends SelectSlicesBase {
 	@Override
 	public String toString() {
 		return String.format("regionID=%d,index=%d,indexNonZero=%d", getRegionID(), getIndex(), indexNonZero);
-	}
-
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = super.hashCode();
-		result = prime * result + indexNonZero;
-		return result;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (!super.equals(obj))
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		SelectSlicesWithIndexBase other = (SelectSlicesWithIndexBase) obj;
-		if (indexNonZero != other.indexNonZero)
-			return false;
-		return true;
 	}
 }

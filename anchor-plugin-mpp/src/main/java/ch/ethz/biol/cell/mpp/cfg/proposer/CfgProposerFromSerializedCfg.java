@@ -43,17 +43,15 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.io.bean.deserializer.ObjectInputStreamDeserializer;
 import org.anchoranalysis.io.deserializer.DeserializationFailedException;
 
+import lombok.Getter;
+import lombok.Setter;
+
 public class CfgProposerFromSerializedCfg extends CfgProposer {
 
 	// START BEAN PROPERTIES
-	@BeanField
+	@BeanField @Getter @Setter
 	private String filePath;
 	// END BEAN PROPERTIES
-
-	@Override
-	public boolean isCompatibleWith(Mark testMark) {
-		return testMark instanceof MarkEllipse;
-	}
 
 	@Override
 	public Optional<Cfg> propose(CfgGen cfgGen, ProposerContext context) {
@@ -61,28 +59,21 @@ public class CfgProposerFromSerializedCfg extends CfgProposer {
 		ObjectInputStreamDeserializer<Cfg> deserializer = new ObjectInputStreamDeserializer<>();
 		try {
 			Path path = Paths.get(filePath);
-			Cfg deserializedCfg = deserializer.deserialize( path );
-			
-			// We apply any corrections after deserialization, as the contents of the mark might change, but the deserialized versions will not
-			// TODO apply corrections
-			
-			return Optional.of(deserializedCfg);
+			return Optional.of(
+				deserializer.deserialize(path)
+			);
 		} catch (DeserializationFailedException e) {
-			//errorNode.add( String.format("Exception when deserializing: %s", e.toString()) );
 			return Optional.empty();
 		}
-	}
-
-	public String getFilePath() {
-		return filePath;
-	}
-
-	public void setFilePath(String filePath) {
-		this.filePath = filePath;
 	}
 
 	@Override
 	public String getBeanDscr() {
 		return toString();
+	}
+	
+	@Override
+	public boolean isCompatibleWith(Mark testMark) {
+		return testMark instanceof MarkEllipse;
 	}
 }

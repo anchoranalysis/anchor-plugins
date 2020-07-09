@@ -28,35 +28,26 @@ package org.anchoranalysis.plugin.mpp.sgmn.cfg.optscheme;
 
 import org.anchoranalysis.anchor.mpp.cfg.Cfg;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+
 /**
  * A subset of a cfg (as extracted during a partition)
  * 
  * @author Owen Feehan
  *
  */
+@AllArgsConstructor
 public class CfgFromPartition {
 
-	private Cfg cfg;
+	@Getter
+	private final Cfg cfg;
 	
-	private PartitionedCfg partition;
+	@Getter
+	private final PartitionedCfg partition;
 	
-	public CfgFromPartition(Cfg cfg, PartitionedCfg partition) {
-		super();
-		assert(cfg!=null);
-		this.cfg = cfg;
-		this.partition = partition;
-	}
-
-	public Cfg getCfg() {
-		return cfg;
-	}
-	
-	/** Makes a copy, with a diffent cfg */
+	/** Makes a copy, with a different cfg */
 	public CfgFromPartition copyChange( Cfg cfg ) {
 		return new CfgFromPartition( cfg, partition );
-	}
-
-	public PartitionedCfg getPartition() {
-		return partition;
 	}
 }
