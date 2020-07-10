@@ -33,11 +33,14 @@ import java.nio.file.Path;
 
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.error.OperationFailedRuntimeException;
+import org.anchoranalysis.io.csv.comparer.CSVComparer;
 import org.anchoranalysis.io.csv.reader.CSVReaderException;
 import org.anchoranalysis.test.TestLoader;
 import org.anchoranalysis.test.image.DualComparer;
 
 class CompareHelper {
+	
+	private static final CSVComparer CSV_COMPARER = new CSVComparer(",", true, 0, true, false);
 
 	public static void compareOutputWithSaved( Path pathAbsoluteOutput, String pathRelativeSaved, String[] relativePaths ) throws OperationFailedException {
 		TestLoader loaderTempDir = TestLoader.createFromExplicitDirectory(pathAbsoluteOutput);
@@ -65,7 +68,7 @@ class CompareHelper {
 			if (hasExtension(relativePath,".tif")) {
 				return comparer.compareTwoImages(relativePath);
 			} else if (hasExtension(relativePath,".csv")) {
-				return comparer.compareTwoCsvFiles( relativePath, ",", true, 0, true, false, System.out);
+				return comparer.compareTwoCsvFiles(relativePath, CSV_COMPARER, System.out);
 			} else if (hasExtension(relativePath,".xml")) {
 				return comparer.compareTwoXmlDocuments(relativePath);
 			} else if (hasExtension(relativePath,".h5")) {
