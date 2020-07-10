@@ -31,7 +31,7 @@ import org.anchoranalysis.anchor.mpp.bean.init.MPPInitParams;
 import org.anchoranalysis.anchor.mpp.bean.proposer.MarkProposer;
 import org.anchoranalysis.anchor.mpp.proposer.ProposalAbnormalFailureException;
 import org.anchoranalysis.anchor.mpp.proposer.ProposerContext;
-import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
+import org.anchoranalysis.anchor.mpp.pxlmark.memo.VoxelizedMarkMemo;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
@@ -64,7 +64,7 @@ public class RejectProposalCentreOutside extends MarkProposerOne {
 
 
 	@Override
-	protected boolean propose(PxlMarkMemo inputMark, ProposerContext context, MarkProposer source)
+	protected boolean propose(VoxelizedMarkMemo inputMark, ProposerContext context, MarkProposer source)
 			throws ProposalAbnormalFailureException {
 			
 		boolean succ = source.propose(inputMark, context);

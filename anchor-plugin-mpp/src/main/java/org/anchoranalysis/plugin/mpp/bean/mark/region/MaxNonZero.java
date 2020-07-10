@@ -1,7 +1,7 @@
 package org.anchoranalysis.plugin.mpp.bean.mark.region;
 
 import org.anchoranalysis.anchor.mpp.mark.Mark;
-import org.anchoranalysis.anchor.mpp.pxlmark.PxlMark;
+import org.anchoranalysis.anchor.mpp.pxlmark.VoxelizedMark;
 import org.anchoranalysis.bean.shared.relation.GreaterThanBean;
 import org.anchoranalysis.bean.shared.relation.threshold.RelationToConstant;
 import org.anchoranalysis.bean.shared.relation.threshold.RelationToThreshold;
@@ -42,7 +42,7 @@ import org.anchoranalysis.image.voxel.statistics.VoxelStatistics;
 public class MaxNonZero extends IndexedRegionBase {
 
 	@Override
-	protected VoxelStatistics createStatisticsFor(PxlMark pm, Mark mark, ImageDimensions dim) throws CreateException {
+	protected VoxelStatistics createStatisticsFor(VoxelizedMark voxelizedMark, Mark mark, ImageDimensions dim) throws CreateException {
 
 		RelationToThreshold nonZero = new RelationToConstant(
 			new GreaterThanBean(),
@@ -52,8 +52,8 @@ public class MaxNonZero extends IndexedRegionBase {
 		long maxNonZero = -1;
 		VoxelStatistics maxStats = null;
 		
-		for( int z=0; z<pm.getObjMask().getBoundingBox().extent().getZ(); z++ ) {
-			VoxelStatistics stats = sliceStatisticsForRegion(pm, z);
+		for( int z=0; z<voxelizedMark.getBoundingBox().extent().getZ(); z++ ) {
+			VoxelStatistics stats = sliceStatisticsForRegion(voxelizedMark, z);
 			
 			Histogram h;
 			try {

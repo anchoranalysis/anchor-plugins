@@ -37,7 +37,7 @@ import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.anchor.mpp.mark.set.UpdateMarkSetException;
 import org.anchoranalysis.anchor.mpp.proposer.ProposalAbnormalFailureException;
 import org.anchoranalysis.anchor.mpp.proposer.ProposerContext;
-import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
+import org.anchoranalysis.anchor.mpp.pxlmark.memo.VoxelizedMarkMemo;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.functional.OptionalUtilities;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
@@ -108,7 +108,7 @@ public class KernelBirthPixelized extends KernelBirth<CfgNRGPixelized> {
 	) throws UpdateMarkSetException {
 		
 		for( Mark m : getMarkNew().get() ) {
-			PxlMarkMemo memo = accptd.getMemoForMark( m );
+			VoxelizedMarkMemo memo = accptd.getMemoForMark( m );
 			exst.addToUpdatablePairList( updatableMarkSetCollection, memo );
 		}
 	}
@@ -120,7 +120,7 @@ public class KernelBirthPixelized extends KernelBirth<CfgNRGPixelized> {
 	
 	private Optional<CfgNRGPixelized> proposeAndUpdate( CfgNRGPixelized exst, Mark markNew, ProposerContext propContext) throws KernelCalcNRGException {
 
-		PxlMarkMemo pmmMarkNew = propContext.create(markNew );
+		VoxelizedMarkMemo pmmMarkNew = propContext.create(markNew );
 		
 		if (!applyMarkProposer(pmmMarkNew, propContext)) {
 			return Optional.empty();
@@ -131,7 +131,7 @@ public class KernelBirthPixelized extends KernelBirth<CfgNRGPixelized> {
 		);
 	}
 	
-	private boolean applyMarkProposer( PxlMarkMemo pmmMarkNew, ProposerContext context ) throws KernelCalcNRGException {
+	private boolean applyMarkProposer( VoxelizedMarkMemo pmmMarkNew, ProposerContext context ) throws KernelCalcNRGException {
 		try {
 			return markProposer.propose(pmmMarkNew, context);
 		} catch (ProposalAbnormalFailureException e) {
@@ -142,7 +142,7 @@ public class KernelBirthPixelized extends KernelBirth<CfgNRGPixelized> {
 		}
 	}
 	
-	private static CfgNRGPixelized calcUpdatedNRG( CfgNRGPixelized exst, PxlMarkMemo pmmMark, ProposerContext propContext ) throws KernelCalcNRGException {
+	private static CfgNRGPixelized calcUpdatedNRG( CfgNRGPixelized exst, VoxelizedMarkMemo pmmMark, ProposerContext propContext ) throws KernelCalcNRGException {
 		
 		// We calculate a new NRG by adding our marks
 		CfgNRGPixelized newNRG = exst.deepCopy();

@@ -32,15 +32,20 @@ import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.bean.threshold.CalculateLevelOne;
 import org.anchoranalysis.image.histogram.Histogram;
 
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
+
 /**
  * Specifies a constant if a histogram is empty, otherwise delegates to another {#link org.anchoranalysis.image.bean.threshold.CalculateLevel}
  * @author Owen Feehan
  *
  */
+@EqualsAndHashCode(callSuper=false)
 public class EmptyHistogramConstant extends CalculateLevelOne {
 
 	// START BEAN PROPERTIES
-	@BeanField
+	@BeanField @Getter @Setter
 	private int value = 0;
 	// END BEAN PROPERTIES
 	
@@ -52,36 +57,5 @@ public class EmptyHistogramConstant extends CalculateLevelOne {
 		} else {
 			return value;
 		}
-	}
-	
-	public int getValue() {
-		return value;
-	}
-
-
-	public void setValue(int value) {
-		this.value = value;
-	}
-
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = super.hashCode();
-		result = prime * result + value;
-		return result;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (!super.equals(obj))
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		EmptyHistogramConstant other = (EmptyHistogramConstant) obj;
-		if (value != other.value)
-			return false;
-		return true;
 	}
 }

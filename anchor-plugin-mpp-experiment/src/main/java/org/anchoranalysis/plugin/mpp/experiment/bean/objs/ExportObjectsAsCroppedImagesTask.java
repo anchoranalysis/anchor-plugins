@@ -72,7 +72,6 @@ import org.anchoranalysis.io.namestyle.IndexableOutputNameStyle;
 import org.anchoranalysis.io.namestyle.IntegerPrefixOutputNameStyle;
 import org.anchoranalysis.io.output.bound.BoundIOContext;
 import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
-import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.mpp.io.input.MultiInput;
 import org.anchoranalysis.mpp.sgmn.bean.define.DefineOutputterMPP;
 
@@ -395,7 +394,7 @@ public class ExportObjectsAsCroppedImagesTask extends ExportObjectsBase<MultiInp
 	}
 	
 	
-	private static ObjectMask extractObjMaskKeepEntireImage( ObjectMask om, ImageDimensions dim ) throws OutputWriteFailedException {
+	private static ObjectMask extractObjMaskKeepEntireImage( ObjectMask om, ImageDimensions dim ) {
 		return BBoxUtilities.createObjMaskForBBox(
 			om,
 			new BoundingBox(dim.getExtent())

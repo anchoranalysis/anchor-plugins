@@ -80,8 +80,6 @@ public class ChnlProviderMedianFilter2D extends ChnlProviderOne {
 					set.add(val);
 				}
 			}
-			
-			//System.out.printf("Set size ppltAt median calc=%d\n", size());
 		}
 		
 		public void removeColumn( int x, int yMin, int yMax, ByteBuffer bb, Extent e ) {

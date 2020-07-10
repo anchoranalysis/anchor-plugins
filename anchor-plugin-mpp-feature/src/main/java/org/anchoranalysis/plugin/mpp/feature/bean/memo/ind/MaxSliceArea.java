@@ -1,7 +1,7 @@
 package org.anchoranalysis.plugin.mpp.feature.bean.memo.ind;
 
 import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputSingleMemo;
-import org.anchoranalysis.anchor.mpp.pxlmark.PxlMark;
+import org.anchoranalysis.anchor.mpp.pxlmark.VoxelizedMark;
 
 /*
  * #%L
@@ -40,7 +40,7 @@ public final class MaxSliceArea extends FeatureSingleMemoRegion {
 	@Override
 	public double calc( SessionInput<FeatureInputSingleMemo> input ) throws FeatureCalcException {
 
-		PxlMark pm = input.get().getPxlPartMemo().doOperation();
+		VoxelizedMark pm = input.get().getPxlPartMemo().voxelized();
 		
 		double maxSliceSizeVoxels = calcMaxSliceSize(pm);
 		
@@ -53,7 +53,7 @@ public final class MaxSliceArea extends FeatureSingleMemoRegion {
 		return retVal;
 	}
 
-	private long calcMaxSliceSize( PxlMark pm) {
+	private long calcMaxSliceSize( VoxelizedMark pm) {
 		
 		long max = 0;
 		for( int z=0; z<pm.getVoxelBox().extent().getZ(); z++) {

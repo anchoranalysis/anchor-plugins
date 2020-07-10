@@ -28,7 +28,7 @@ package org.anchoranalysis.plugin.mpp.bean.mark.region;
 
 import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.anchor.mpp.mark.MarkAbstractPosition;
-import org.anchoranalysis.anchor.mpp.pxlmark.PxlMark;
+import org.anchoranalysis.anchor.mpp.pxlmark.VoxelizedMark;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.ImageDimensions;
@@ -40,7 +40,7 @@ import lombok.EqualsAndHashCode;
 public abstract class CenterSliceBase extends IndexedRegionBase {
 
 	@Override
-	protected VoxelStatistics createStatisticsFor(PxlMark pm, Mark mark, ImageDimensions dim) throws CreateException {
+	protected VoxelStatistics createStatisticsFor(VoxelizedMark pm, Mark mark, ImageDimensions dim) throws CreateException {
 		
 		BoundingBox bbox = boundingBoxForRegion(pm);
 		
@@ -64,5 +64,5 @@ public abstract class CenterSliceBase extends IndexedRegionBase {
 		return (int) Math.round(mark.getPos().getZ()) - bbox.cornerMin().getZ();
 	}
 	
-	protected abstract VoxelStatistics createStatisticsForBBox(PxlMark pm, ImageDimensions dim, BoundingBox bbox, int zCenter);
+	protected abstract VoxelStatistics createStatisticsForBBox(VoxelizedMark pm, ImageDimensions dim, BoundingBox bbox, int zCenter);
 }

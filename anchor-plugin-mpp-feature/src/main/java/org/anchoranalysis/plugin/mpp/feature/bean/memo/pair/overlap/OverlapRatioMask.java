@@ -1,7 +1,7 @@
 package org.anchoranalysis.plugin.mpp.feature.bean.memo.pair.overlap;
 
 import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputPairMemo;
-import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
+import org.anchoranalysis.anchor.mpp.pxlmark.memo.VoxelizedMarkMemo;
 
 /*
  * #%L
@@ -61,8 +61,8 @@ public class OverlapRatioMask extends OverlapMaskBase {
 	}
 	
 	private double calcOverlapRatioToggle(
-		PxlMarkMemo obj1,
-		PxlMarkMemo obj2,
+		VoxelizedMarkMemo obj1,
+		VoxelizedMarkMemo obj2,
 		double overlap,
 		int regionID
 	) {

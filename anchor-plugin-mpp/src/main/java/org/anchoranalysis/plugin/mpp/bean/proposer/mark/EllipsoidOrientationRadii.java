@@ -37,7 +37,7 @@ import org.anchoranalysis.anchor.mpp.mark.conic.MarkEllipsoid;
 import org.anchoranalysis.anchor.mpp.mark.conic.bounds.RotationBounds3D;
 import org.anchoranalysis.anchor.mpp.proposer.ProposerContext;
 import org.anchoranalysis.anchor.mpp.proposer.visualization.CreateProposalVisualization;
-import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
+import org.anchoranalysis.anchor.mpp.pxlmark.memo.VoxelizedMarkMemo;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.image.orientation.Orientation;
@@ -53,7 +53,7 @@ public class EllipsoidOrientationRadii extends MarkProposer {
 	// END BEAN PROPERTIES
 	
 	@Override
-	public boolean propose(PxlMarkMemo inputMark, ProposerContext context) {
+	public boolean propose(VoxelizedMarkMemo inputMark, ProposerContext context) {
 				
 		MarkEllipsoid mark = (MarkEllipsoid) inputMark.getMark();
 		inputMark.reset();

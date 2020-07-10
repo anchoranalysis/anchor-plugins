@@ -35,19 +35,21 @@ import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.plugin.image.obj.merge.condition.IncreaseFeatureCondition;
 
+import lombok.Getter;
+import lombok.Setter;
+
 public class ObjMaskProviderMerge extends ObjMaskProviderMergeOptionalDistance {
 
 	// START BEAN PROPERTIES
-	@BeanField
+	@BeanField @Getter @Setter
 	private boolean replaceWithMidpoint = false;
 	
-	@BeanField @OptionalBean
+	@BeanField @OptionalBean @Getter @Setter
 	private FeatureEvaluator<FeatureInputSingleObject> featureEvaluator;
 	// END BEAN PROPERTIES
 
 	@Override
 	public ObjectCollection createFromObjs( ObjectCollection objsSource ) throws CreateException {
-		
 		try {
 			Merger merger = new Merger(
 				replaceWithMidpoint,
@@ -62,21 +64,5 @@ public class ObjMaskProviderMerge extends ObjMaskProviderMergeOptionalDistance {
 		} catch (OperationFailedException e) {
 			throw new CreateException(e);
 		}
-	}
-	
-	public FeatureEvaluator<FeatureInputSingleObject> getFeatureEvaluator() {
-		return featureEvaluator;
-	}
-
-	public void setFeatureEvaluator(FeatureEvaluator<FeatureInputSingleObject> featureEvaluator) {
-		this.featureEvaluator = featureEvaluator;
-	}
-
-	public boolean isReplaceWithMidpoint() {
-		return replaceWithMidpoint;
-	}
-
-	public void setReplaceWithMidpoint(boolean replaceWithMidpoint) {
-		this.replaceWithMidpoint = replaceWithMidpoint;
 	}
 }

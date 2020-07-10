@@ -31,10 +31,13 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.binary.BinaryChnl;
 
+import lombok.Getter;
+import lombok.Setter;
+
 public class BinaryChnlProviderAcceptIfVolumeGreaterThan extends BinaryChnlProviderReceive {
 
 	// START BEAN PROPERTIES
-	@BeanField
+	@BeanField @Getter @Setter
 	private double minRatio = 0.01;
 	// END BEAN PROPERTIES
 
@@ -50,13 +53,5 @@ public class BinaryChnlProviderAcceptIfVolumeGreaterThan extends BinaryChnlProvi
 		} else {
 			return larger;
 		}
-	}
-
-	public double getMinRatio() {
-		return minRatio;
-	}
-
-	public void setMinRatio(double minRatio) {
-		this.minRatio = minRatio;
 	}
 }

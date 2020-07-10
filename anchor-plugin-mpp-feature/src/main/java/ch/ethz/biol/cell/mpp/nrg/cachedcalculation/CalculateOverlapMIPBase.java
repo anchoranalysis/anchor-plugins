@@ -29,8 +29,8 @@ package ch.ethz.biol.cell.mpp.nrg.cachedcalculation;
 import org.anchoranalysis.anchor.mpp.bean.regionmap.RegionMembershipWithFlags;
 import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputPairMemo;
 import org.anchoranalysis.anchor.mpp.overlap.MaxIntensityProjectionPair;
-import org.anchoranalysis.anchor.mpp.pxlmark.PxlMark;
-import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
+import org.anchoranalysis.anchor.mpp.pxlmark.VoxelizedMark;
+import org.anchoranalysis.anchor.mpp.pxlmark.memo.VoxelizedMarkMemo;
 import org.anchoranalysis.feature.cache.calculation.FeatureCalculation;
 
 import lombok.AllArgsConstructor;
@@ -44,14 +44,14 @@ public abstract class CalculateOverlapMIPBase extends FeatureCalculation<Double,
 	@Override
 	protected Double execute( FeatureInputPairMemo params ) {
 		
-		PxlMarkMemo mark1 = params.getObj1();
-		PxlMarkMemo mark2 = params.getObj2();
+		VoxelizedMarkMemo mark1 = params.getObj1();
+		VoxelizedMarkMemo mark2 = params.getObj2();
 		
 		assert( mark1 != null );
 		assert( mark2 != null );
 		
-		PxlMark pm1 = mark1.doOperation();
-		PxlMark pm2 = mark2.doOperation();
+		VoxelizedMark pm1 = mark1.voxelized();
+		VoxelizedMark pm2 = mark2.voxelized();
 		
 		if (!pm1.getBoundingBoxMIP().intersection().existsWith(pm2.getBoundingBoxMIP())) {
 			return 0.0;
@@ -59,8 +59,8 @@ public abstract class CalculateOverlapMIPBase extends FeatureCalculation<Double,
 		
 		MaxIntensityProjectionPair pair =
 			new MaxIntensityProjectionPair(
-				pm1.getObjMaskMIP().getVoxelBoxBounded(),
-				pm2.getObjMaskMIP().getVoxelBoxBounded(),
+				pm1.getVoxelBoxMIP(),
+				pm2.getVoxelBoxMIP(),
 				regionMembershipForMark(mark1),
 				regionMembershipForMark(mark2)
 			);
@@ -72,7 +72,7 @@ public abstract class CalculateOverlapMIPBase extends FeatureCalculation<Double,
 	
 	protected abstract Double calculateOverlapResult( double overlap, MaxIntensityProjectionPair pair);
 		
-	private RegionMembershipWithFlags regionMembershipForMark( PxlMarkMemo mark ) {
+	private RegionMembershipWithFlags regionMembershipForMark( VoxelizedMarkMemo mark ) {
 		return mark.getRegionMap().membershipWithFlagsForIndex(regionID);
 	}
 }

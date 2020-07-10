@@ -29,7 +29,7 @@ import java.util.function.LongBinaryOperator;
  */
 
 import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputPairMemo;
-import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
+import org.anchoranalysis.anchor.mpp.pxlmark.memo.VoxelizedMarkMemo;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.shared.relation.RelationBean;
 import org.anchoranalysis.bean.shared.relation.threshold.RelationToConstant;
@@ -64,8 +64,8 @@ public abstract class OverlapMaskBase extends FeaturePairMemoSingleRegion {
 	}
 
 	protected double calcVolumeAgg(
-		PxlMarkMemo obj1,
-		PxlMarkMemo obj2,
+		VoxelizedMarkMemo obj1,
+		VoxelizedMarkMemo obj2,
 		int regionID,
 		RelationBean relationToThreshold,
 		LongBinaryOperator statFunc
@@ -80,8 +80,8 @@ public abstract class OverlapMaskBase extends FeaturePairMemoSingleRegion {
 	}
 	
 	protected double calcVolumeStat(
-		PxlMarkMemo obj1,
-		PxlMarkMemo obj2,
+		VoxelizedMarkMemo obj1,
+		VoxelizedMarkMemo obj2,
 		int regionID,
 		RelationBean relationToThreshold,
 		LongBinaryOperator statFunc
@@ -92,8 +92,8 @@ public abstract class OverlapMaskBase extends FeaturePairMemoSingleRegion {
 		return statFunc.applyAsLong(size1, size2);
 	}
 	
-	private long sizeForObj( PxlMarkMemo obj, int regionID, RelationBean relationToThreshold) {
-		VoxelStatistics pxlStats =  obj.doOperation().statisticsForAllSlices(nrgIndex, regionID);
+	private long sizeForObj( VoxelizedMarkMemo obj, int regionID, RelationBean relationToThreshold) {
+		VoxelStatistics pxlStats =  obj.voxelized().statisticsForAllSlices(nrgIndex, regionID);
 		return pxlStats.countThreshold(
 			new RelationToConstant(
 				relationToThreshold,

@@ -32,6 +32,7 @@ import java.nio.IntBuffer;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Objects;
 
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.geometry.Point3i;
@@ -48,23 +49,20 @@ final class BoundingBoxMap {
 	private HashMap<Integer,Integer> map = new HashMap<>();
 	
 	public int indexForValue( int val ) {
-		
-		Integer index = map.get( val );
-		
-		if (index==null) {
-			int idNew = list.size();
-			list.add( null );
-			map.put( val, idNew );
-			return idNew;
-		}
-		
-		return index;
+		return map.computeIfAbsent(
+			val,
+			key -> {
+				int idNew = list.size();
+				list.add(null);
+				return idNew;
+			}
+		);
 	}
 
 	public ObjectCollection deriveObjects(VoxelBox<IntBuffer> matS) throws OperationFailedException {
 		return ObjectCollectionFactory.filterAndMapWithIndexFrom(
 			list,
-			pointRange -> pointRange!=null,
+			Objects::nonNull,
 			(pointRange, index) -> matS.equalMask(
 				pointRange.deriveBoundingBox(),
 				index+1

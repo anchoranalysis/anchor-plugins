@@ -38,7 +38,7 @@ import org.anchoranalysis.anchor.mpp.mark.MarkAbstractPosition;
 import org.anchoranalysis.anchor.mpp.overlap.OverlapUtilities;
 import org.anchoranalysis.anchor.mpp.proposer.ProposalAbnormalFailureException;
 import org.anchoranalysis.anchor.mpp.proposer.ProposerContext;
-import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
+import org.anchoranalysis.anchor.mpp.pxlmark.memo.VoxelizedMarkMemo;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
@@ -51,15 +51,15 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access=AccessLevel.PRIVATE)
 class KernelBirthAndKillHelper {
 	
-	public static PxlMarkMemo makeAdditionalBirth(
+	public static VoxelizedMarkMemo makeAdditionalBirth(
 		MarkProposer markProposerAdditionalBirth,
 		Mark markNew,
-		List<PxlMarkMemo> toKill,
+		List<VoxelizedMarkMemo> toKill,
 		CfgGen cfgGen,
 		KernelCalcContext context
 	) throws KernelCalcNRGException {
 		
-		PxlMarkMemo pmmAdditional = null;
+		VoxelizedMarkMemo pmmAdditional = null;
 					
 		PositionProposerMemoList pp = new PositionProposerMemoList( toKill, markNew );
 		
@@ -86,22 +86,22 @@ class KernelBirthAndKillHelper {
 		return pmmAdditional;
 	}
 	
-	public static List<PxlMarkMemo> determineKillObjects(
-		PxlMarkMemo memoNew,
+	public static List<VoxelizedMarkMemo> determineKillObjects(
+		VoxelizedMarkMemo memoNew,
 		CfgNRGPixelized exst,
 		int regionID,
 		double overlapRatioThreshold
 	) throws OperationFailedException {
 		
-		List<PxlMarkMemo> outList = new ArrayList<>();
+		List<VoxelizedMarkMemo> outList = new ArrayList<>();
 		
 		// We always measure overlap in terms of the object being added
-		long numPixelsNew = memoNew.doOperation().statisticsForAllSlices(0, regionID).size();
+		long numPixelsNew = memoNew.voxelized().statisticsForAllSlices(0, regionID).size();
 		
 		for( int i=0; i<exst.getCfg().size(); i++) {
-			PxlMarkMemo memoExst = exst.getMemoForIndex(i);
+			VoxelizedMarkMemo memoExst = exst.getMemoForIndex(i);
 			
-			long numPixelsExst = memoExst.doOperation().statisticsForAllSlices(0, regionID).size();
+			long numPixelsExst = memoExst.voxelized().statisticsForAllSlices(0, regionID).size();
 			
 			double overlap = OverlapUtilities.overlapWith(memoExst, memoNew,regionID);
 			
@@ -130,9 +130,9 @@ class KernelBirthAndKillHelper {
 	
 	public static CfgNRGPixelized calcUpdatedNRG(
 		CfgNRGPixelized exst,			
-		PxlMarkMemo memoNew,
-		PxlMarkMemo pmmAdditional,	// Can be NULL
-		List<PxlMarkMemo> toKill,
+		VoxelizedMarkMemo memoNew,
+		VoxelizedMarkMemo pmmAdditional,	// Can be NULL
+		List<VoxelizedMarkMemo> toKill,
 		ProposerContext propContext
 	) throws KernelCalcNRGException {
 
@@ -149,7 +149,7 @@ class KernelBirthAndKillHelper {
 			throw new KernelCalcNRGException("Cannot add memoNew", e);
 		}	
 			
-		for( PxlMarkMemo memo : toKill) {
+		for( VoxelizedMarkMemo memo : toKill) {
 			try {
 				newNRG.rmv(memo, propContext.getNrgStack().getNrgStack() );
 				assert !Double.isNaN( newNRG.getTotal() ); 

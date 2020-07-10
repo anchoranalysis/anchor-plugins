@@ -27,7 +27,7 @@ package org.anchoranalysis.plugin.mpp.bean.mark.region;
  */
 
 import org.anchoranalysis.anchor.mpp.mark.Mark;
-import org.anchoranalysis.anchor.mpp.pxlmark.PxlMark;
+import org.anchoranalysis.anchor.mpp.pxlmark.VoxelizedMark;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.extent.ImageDimensions;
@@ -46,13 +46,13 @@ public abstract class SelectSlicesWithIndexBase extends SelectSlicesBase {
 	// END BEAN PROPERTIES
 	
 	@Override
-	protected VoxelStatistics createStatisticsFor(PxlMark pm, Mark mark, ImageDimensions dim) throws CreateException {
+	protected VoxelStatistics createStatisticsFor(VoxelizedMark pm, Mark mark, ImageDimensions dim) throws CreateException {
 		return extractFromPxlMark(pm);
 	}
 	
-	protected abstract VoxelStatistics extractFromPxlMark( PxlMark pm ) throws CreateException;
+	protected abstract VoxelStatistics extractFromPxlMark( VoxelizedMark pm ) throws CreateException;
 
-	protected VoxelStatistics statisticsForAllSlices( PxlMark pm, boolean useNonZeroIndex ) {
+	protected VoxelStatistics statisticsForAllSlices( VoxelizedMark pm, boolean useNonZeroIndex ) {
 		return pm.statisticsForAllSlicesMaskSlice(
 			useNonZeroIndex ? indexNonZero : getIndex(),
 			getRegionID(),

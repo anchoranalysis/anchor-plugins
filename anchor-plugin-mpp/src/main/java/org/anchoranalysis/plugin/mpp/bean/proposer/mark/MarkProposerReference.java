@@ -8,7 +8,7 @@ import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.anchor.mpp.proposer.ProposalAbnormalFailureException;
 import org.anchoranalysis.anchor.mpp.proposer.ProposerContext;
 import org.anchoranalysis.anchor.mpp.proposer.visualization.CreateProposalVisualization;
-import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
+import org.anchoranalysis.anchor.mpp.pxlmark.memo.VoxelizedMarkMemo;
 
 /*
  * #%L
@@ -66,7 +66,7 @@ public class MarkProposerReference extends MarkProposer {
 	}
 
 	@Override
-	public boolean propose(PxlMarkMemo inputMark, ProposerContext context) throws ProposalAbnormalFailureException {
+	public boolean propose(VoxelizedMarkMemo inputMark, ProposerContext context) throws ProposalAbnormalFailureException {
 		return delegate.propose(inputMark, context);
 	}
 

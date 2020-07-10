@@ -87,11 +87,6 @@ class Hybrid_3D_Median_Filter implements PlugInFilter{
 		    return DONE;
 		}
 		otitle = imp.getTitle();
-		/*GenericDialog d = new GenericDialog("3d Hybrid Median Filter", IJ.getInstance());
-		d.addCheckbox("Include the center pixel",include);
-		d.showDialog();
-		if(d.wasCanceled())return DONE;
-		include = d.getNextBoolean();*/
 		include = true;
 		nf.setMaximumFractionDigits(2);
 		nf.setMinimumFractionDigits(2);
@@ -103,12 +98,9 @@ class Hybrid_3D_Median_Filter implements PlugInFilter{
 	}
     
     public void run(ImageProcessor ip){
-	
-
 		imp2 = Hybrid3dMedianizer(imp);
 		if(quit)return;	    
 		imp2.getProcessor().resetMinAndMax();
-		//imp2.show();
 	 }
 
     public ImagePlus Hybrid3dMedianizer(ImagePlus imp){	// NOSONAR

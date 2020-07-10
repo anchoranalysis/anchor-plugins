@@ -7,7 +7,7 @@ import org.anchoranalysis.anchor.mpp.feature.addcriteria.IncludeMarksFailureExce
 import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputPairMemo;
 import org.anchoranalysis.anchor.mpp.mark.MarkDistance;
 import org.anchoranalysis.anchor.mpp.mark.UnsupportedMarkTypeException;
-import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
+import org.anchoranalysis.anchor.mpp.pxlmark.memo.VoxelizedMarkMemo;
 
 /*
  * #%L
@@ -57,7 +57,7 @@ public class AddCriteriaDistanceTo extends AddCriteriaPair {
 	// END BEAN PROPERTIES
 	
 	@Override
-	public boolean includeMarks(PxlMarkMemo mark1, PxlMarkMemo mark2, ImageDimensions dim, Optional<FeatureCalculatorMulti<FeatureInputPairMemo>> session, boolean do3D) throws IncludeMarksFailureException {
+	public boolean includeMarks(VoxelizedMarkMemo mark1, VoxelizedMarkMemo mark2, ImageDimensions dim, Optional<FeatureCalculatorMulti<FeatureInputPairMemo>> session, boolean do3D) throws IncludeMarksFailureException {
 		double d;
 		try {
 			d = distance.distance(mark1.getMark(), mark2.getMark());

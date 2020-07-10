@@ -2,7 +2,7 @@ package ch.ethz.biol.cell.mpp.nrg.cachedcalculation;
 
 import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputPairMemo;
 import org.anchoranalysis.anchor.mpp.overlap.OverlapUtilities;
-import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
+import org.anchoranalysis.anchor.mpp.pxlmark.memo.VoxelizedMarkMemo;
 
 /*
  * #%L
@@ -47,8 +47,8 @@ public class CalculateOverlapMask extends FeatureCalculation<Double,FeatureInput
 	@Override
 	protected Double execute( FeatureInputPairMemo input ) throws FeatureCalcException {
 		
-		PxlMarkMemo mark1 = input.getObj1();
-		PxlMarkMemo mark2 = input.getObj2();
+		VoxelizedMarkMemo mark1 = input.getObj1();
+		VoxelizedMarkMemo mark2 = input.getObj2();
 		
 		Channel chnl = input.getNrgStackRequired().getNrgStack().getChnl(nrgIndex);
 		

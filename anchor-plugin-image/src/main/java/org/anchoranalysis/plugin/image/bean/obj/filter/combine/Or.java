@@ -69,7 +69,7 @@ public class Or extends ObjectFilterCombine {
 	
 	/** Finds the accepted objects (i.e. objects that pass any one of the filters) */
 	private Set<ObjectMask> findAcceptedObjs(ObjectCollection objsToFilter, Optional<ImageDimensions> dim) throws OperationFailedException {
-		Set<ObjectMask> setAccepted = new HashSet<ObjectMask>();
+		Set<ObjectMask> setAccepted = new HashSet<>();
 		
 		for (ObjectFilter indFilter : getList()) {
 			setAccepted.addAll(

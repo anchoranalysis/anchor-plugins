@@ -136,9 +136,6 @@ class SimulatedAnnealingHelper {
 			context.getLogger().messageLogger()
 		));
 		
-		// We decrement the iterator to reflect its final state
-		iter--;
-		
 		try {
 			return optStep.releaseKeepBest();
 		} catch (OperationFailedException e) {

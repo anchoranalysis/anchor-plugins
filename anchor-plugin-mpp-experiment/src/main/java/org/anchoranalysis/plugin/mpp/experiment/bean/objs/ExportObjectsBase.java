@@ -86,7 +86,7 @@ public abstract class ExportObjectsBase<T extends InputFromManager, S> extends T
 	 * @return either the exist object-mask (if no padding is to be added) or a padded object-mask
 	 * @throws OutputWriteFailedException
 	 */
-	protected ObjectMask maybePadObjMask( ObjectMask om, ImageDimensions dim ) throws OutputWriteFailedException {
+	protected ObjectMask maybePadObjMask( ObjectMask om, ImageDimensions dim ) {
 		
 		if (paddingXY==0 && paddingZ==0) {
 			return om;

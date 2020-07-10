@@ -9,7 +9,7 @@ import org.anchoranalysis.anchor.mpp.mark.MarkConic;
 import org.anchoranalysis.anchor.mpp.points.PointClipper;
 import org.anchoranalysis.anchor.mpp.proposer.ProposalAbnormalFailureException;
 import org.anchoranalysis.anchor.mpp.proposer.ProposerContext;
-import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
+import org.anchoranalysis.anchor.mpp.pxlmark.memo.VoxelizedMarkMemo;
 
 /*
  * #%L
@@ -55,9 +55,9 @@ public class MergeMarkEllipse extends MarkMergeProposer {
 	// END BEAN
 	
 	@Override
-	public Optional<Mark> propose(PxlMarkMemo mark1, PxlMarkMemo mark2, ProposerContext context) throws ProposalAbnormalFailureException {
+	public Optional<Mark> propose(VoxelizedMarkMemo mark1, VoxelizedMarkMemo mark2, ProposerContext context) throws ProposalAbnormalFailureException {
 		
-		PxlMarkMemo targetPmm = mark1.duplicateFresh();
+		VoxelizedMarkMemo targetPmm = mark1.duplicateFresh();
 		MarkConic target = (MarkConic) targetPmm.getMark();
 		
 		// We calculate a position for the mark

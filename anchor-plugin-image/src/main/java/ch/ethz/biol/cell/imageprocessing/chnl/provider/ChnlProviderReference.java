@@ -33,24 +33,25 @@ import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 import org.anchoranalysis.image.bean.provider.ChnlProvider;
 import org.anchoranalysis.image.channel.Channel;
 
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+@NoArgsConstructor
 public class ChnlProviderReference extends ChnlProvider {
 
 	// START BEAN PROPERTIES
-	@BeanField
+	@BeanField @Getter @Setter
 	private String id = "";
 	
 	/** If true the channel is duplicated after it is retrieved, to prevent overwriting existing data
 	 *  This is a shortcut to avoid embedding beans in a ChnlProviderDuplicate
 	 */
-	@BeanField
+	@BeanField @Getter @Setter
 	private boolean duplicate=false;
 	// END BEAN PROPERTIES
 	
-	private Channel chnl;
-
-	public ChnlProviderReference() {
-		// Standard Bean Constructor
-	}
+	private Channel channel;
 		
 	public ChnlProviderReference(String id) {
 		super();
@@ -59,39 +60,23 @@ public class ChnlProviderReference extends ChnlProvider {
 
 	@Override
 	public Channel create() throws CreateException {
-		if (chnl==null) {
-			chnl = createChnl();
+		if (channel==null) {
+			channel = getMaybeDuplicate();
 		}
-		return chnl;
+		return channel;
 	}
 	
-	private Channel createChnl() throws CreateException {
+	private Channel getMaybeDuplicate() throws CreateException {
 		try {
-			Channel chnl = getSharedObjects().getChnlCollection().getException(id);
+			Channel existing = getSharedObjects().getChnlCollection().getException(id);
 			
 			if (duplicate) {
-				return chnl.duplicate();
+				return existing.duplicate();
 			} else {
-				return chnl;
+				return existing;
 			}
 		} catch (NamedProviderGetException e) {
 			throw new CreateException(e);
 		}	
-	}
-
-	public String getId() {
-		return id;
-	}
-
-	public void setId(String id) {
-		this.id = id;
-	}
-
-	public boolean isDuplicate() {
-		return duplicate;
-	}
-
-	public void setDuplicate(boolean duplicate) {
-		this.duplicate = duplicate;
 	}
 }

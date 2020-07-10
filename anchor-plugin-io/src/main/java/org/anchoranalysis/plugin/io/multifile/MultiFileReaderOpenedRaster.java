@@ -46,7 +46,7 @@ public class MultiFileReaderOpenedRaster extends OpenedRaster {
 	private RasterReader rasterReader;
 
 	// Processed version of the file. If null, not set yet
-	private MultiFile multiFile = null;
+	private MultiFile multiFileMemo = null;
 	
 	public MultiFileReaderOpenedRaster(RasterReader rasterReader, ParsedFilePathBag fileBag) {
 		super();
@@ -55,11 +55,11 @@ public class MultiFileReaderOpenedRaster extends OpenedRaster {
 	}
 	
 	private MultiFile getOrCreateMemo( ProgressReporter progressReporter) throws RasterIOException {
-		if (multiFile==null) {
-			multiFile = new MultiFile(fileBag);
-			addDetailsFromBag(multiFile, 0, progressReporter );
+		if (multiFileMemo==null) {
+			multiFileMemo = new MultiFile(fileBag);
+			addDetailsFromBag(multiFileMemo, 0, progressReporter );
 		}
-		return multiFile;
+		return multiFileMemo;
 	}
 	
 	
