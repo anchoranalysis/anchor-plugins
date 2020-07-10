@@ -48,7 +48,7 @@ class CalculateOtsuThresholdedHistogram extends FeatureCalculation<Histogram, Fe
 	@Override
 	protected Histogram execute(FeatureInputHistogram params) throws FeatureCalcException {
 		try {
-			if (!calculateLevel.isHasBeenInit()) {
+			if (!calculateLevel.isInitialized()) {
 				calculateLevel.init( NullInitParams.instance(), logger);
 			}
 			return HistogramThresholder.withCalculateLevel(
