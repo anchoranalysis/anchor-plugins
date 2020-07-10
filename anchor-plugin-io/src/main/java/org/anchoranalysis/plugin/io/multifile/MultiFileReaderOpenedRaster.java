@@ -38,30 +38,19 @@ import org.anchoranalysis.image.io.bean.rasterreader.RasterReader;
 import org.anchoranalysis.image.io.rasterreader.OpenedRaster;
 import org.anchoranalysis.image.stack.TimeSequence;
 
+import lombok.RequiredArgsConstructor;
+
 // Ignores multiple series
+@RequiredArgsConstructor
 public class MultiFileReaderOpenedRaster extends OpenedRaster {
 
-	private ParsedFilePathBag fileBag;
-	
-	private RasterReader rasterReader;
+	// START REQUIRED ARGUMENTS
+	private final RasterReader rasterReader;
+	private final ParsedFilePathBag fileBag;
+	// END REQUIRED ARGUMENTS
 
 	// Processed version of the file. If null, not set yet
 	private MultiFile multiFileMemo = null;
-	
-	public MultiFileReaderOpenedRaster(RasterReader rasterReader, ParsedFilePathBag fileBag) {
-		super();
-		this.fileBag = fileBag;
-		this.rasterReader = rasterReader;
-	}
-	
-	private MultiFile getOrCreateMemo( ProgressReporter progressReporter) throws RasterIOException {
-		if (multiFileMemo==null) {
-			multiFileMemo = new MultiFile(fileBag);
-			addDetailsFromBag(multiFileMemo, 0, progressReporter );
-		}
-		return multiFileMemo;
-	}
-	
 	
 	@Override
 	public int numSeries() {
@@ -86,7 +75,6 @@ public class MultiFileReaderOpenedRaster extends OpenedRaster {
 		return Optional.empty();
 	}
 
-
 	@Override
 	public int numChnl() throws RasterIOException {
 		MultiFile memo = getOrCreateMemo( ProgressReporterNull.get() );
@@ -98,15 +86,12 @@ public class MultiFileReaderOpenedRaster extends OpenedRaster {
 		return memo.numChnl();
 	}
 	
-	
-
 	@Override
 	public int bitDepth() throws RasterIOException {
 		MultiFile memo = getOrCreateMemo( ProgressReporterNull.get() );
 		return memo.dataType().numBits();
 	}
 	
-
 	@Override
 	public boolean isRGB() throws RasterIOException {
 		return false;
@@ -129,7 +114,6 @@ public class MultiFileReaderOpenedRaster extends OpenedRaster {
 	public void close() throws RasterIOException {
 		// NOTHING TO DO
 	}
-
 
 	@Override
 	public ImageDimensions dim(int seriesIndex) throws RasterIOException {
@@ -156,5 +140,13 @@ public class MultiFileReaderOpenedRaster extends OpenedRaster {
 				or.close();
 			}
 		}
+	}
+	
+	private MultiFile getOrCreateMemo( ProgressReporter progressReporter) throws RasterIOException {
+		if (multiFileMemo==null) {
+			multiFileMemo = new MultiFile(fileBag);
+			addDetailsFromBag(multiFileMemo, 0, progressReporter );
+		}
+		return multiFileMemo;
 	}
 }

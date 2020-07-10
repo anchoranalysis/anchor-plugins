@@ -37,6 +37,7 @@ import org.anchoranalysis.image.histogram.HistogramArray;
 
 import com.google.common.base.Preconditions;
 
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -47,6 +48,7 @@ import lombok.Setter;
  * @author Owen Feehan
  *
  */
+@EqualsAndHashCode(callSuper=true)
 public class ClipHistogramMax extends CalculateLevelOne {
 
 	// START BEAN
