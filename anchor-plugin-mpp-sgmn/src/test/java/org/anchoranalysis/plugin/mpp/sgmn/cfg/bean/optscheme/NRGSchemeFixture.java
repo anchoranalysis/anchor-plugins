@@ -62,7 +62,6 @@ public class NRGSchemeFixture {
 		return new NRGSchemeWithSharedFeatures(
 			createNRGScheme(weightOverlap),
 			new SharedFeatureMulti(),
-			10,
 			LoggingFixture.suppressedLogErrorReporter()
 		);		
 	}

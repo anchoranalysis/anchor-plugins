@@ -83,7 +83,6 @@ class SgmnMPPHelper {
 	
 	public static NRGSchemeWithSharedFeatures initNRG(
 		NRGSchemeCreator nrgSchemeCreator,
-		int nrgSchemeIndCacheSize,
 		SharedFeaturesInitParams featureInit,
 		Logger logger
 	) throws InitException {
@@ -96,7 +95,6 @@ class SgmnMPPHelper {
 			return new NRGSchemeWithSharedFeatures(
 				nrgScheme,
 				featureInit.getSharedFeatureSet(),
-				nrgSchemeIndCacheSize,
 				logger
 			);
 		} catch (CreateException e) {
