@@ -1,6 +1,6 @@
 package org.anchoranalysis.plugin.mpp.bean.mark.region;
 
-import org.anchoranalysis.anchor.mpp.pxlmark.PxlMark;
+import org.anchoranalysis.anchor.mpp.pxlmark.VoxelizedMark;
 import org.anchoranalysis.bean.shared.relation.GreaterThanBean;
 import org.anchoranalysis.bean.shared.relation.threshold.RelationToConstant;
 
@@ -50,7 +50,7 @@ import lombok.EqualsAndHashCode;
 public class AllSlicesMaskEverythingNonZero extends SelectSlicesWithIndexBase {
 
 	@Override
-	protected VoxelStatistics extractFromPxlMark(PxlMark pm) throws CreateException {
+	protected VoxelStatistics extractFromPxlMark(VoxelizedMark pm) throws CreateException {
 		
 		Histogram histIndex = histogramForAllSlices(pm, false);
 		Histogram histNonZero = histogramForAllSlices(pm, true);
@@ -67,7 +67,7 @@ public class AllSlicesMaskEverythingNonZero extends SelectSlicesWithIndexBase {
 		);
 	}
 	
-	private Histogram histogramForAllSlices(PxlMark pm, boolean useNonZeroIndex) throws CreateException {
+	private Histogram histogramForAllSlices(VoxelizedMark pm, boolean useNonZeroIndex) throws CreateException {
 		try {
 			return statisticsForAllSlices(pm, useNonZeroIndex).histogram();
 		} catch (OperationFailedException e) {

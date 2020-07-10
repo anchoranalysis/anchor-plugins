@@ -1,7 +1,7 @@
 package org.anchoranalysis.plugin.mpp.bean.mark.region;
 
 import org.anchoranalysis.anchor.mpp.mark.MarkRegion;
-import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
+import org.anchoranalysis.anchor.mpp.pxlmark.memo.VoxelizedMarkMemo;
 
 /*
  * #%L
@@ -50,7 +50,7 @@ public class Thresholded extends MarkRegion {
 	// END BEAN PROPERTIES
 	
 	@Override
-	public VoxelStatistics createStatisticsFor(PxlMarkMemo pmm, ImageDimensions dim) throws CreateException {
+	public VoxelStatistics createStatisticsFor(VoxelizedMarkMemo pmm, ImageDimensions dim) throws CreateException {
 		return region.createStatisticsFor(pmm, dim).threshold(threshold);
 	}
 

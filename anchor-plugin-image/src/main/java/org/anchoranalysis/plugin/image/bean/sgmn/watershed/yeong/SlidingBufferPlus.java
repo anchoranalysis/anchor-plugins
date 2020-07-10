@@ -61,7 +61,7 @@ final class SlidingBufferPlus {
 		this.steepestCalc = new SteepestCalc(slidingBufferSteepestCalc,matS.getEncoding(), do3D ,true, mask );
 	}
 	
-	public SlidingBuffer<?> getSlidingBuffer() {
+	public SlidingBuffer<?> getSlidingBuffer() {	// NOSONAR
 		return slidingBufferSteepestCalc;
 	}
 	

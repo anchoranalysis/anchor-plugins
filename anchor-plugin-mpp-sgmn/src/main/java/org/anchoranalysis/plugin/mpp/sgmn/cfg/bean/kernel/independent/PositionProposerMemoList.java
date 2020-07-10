@@ -36,8 +36,8 @@ import org.anchoranalysis.anchor.mpp.mark.GlobalRegionIdentifiers;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.anchor.mpp.proposer.PositionProposer;
 import org.anchoranalysis.anchor.mpp.proposer.ProposerContext;
-import org.anchoranalysis.anchor.mpp.pxlmark.PxlMark;
-import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
+import org.anchoranalysis.anchor.mpp.pxlmark.VoxelizedMark;
+import org.anchoranalysis.anchor.mpp.pxlmark.memo.VoxelizedMarkMemo;
 import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.core.geometry.PointConverter;
@@ -55,7 +55,7 @@ class PositionProposerMemoList implements PositionProposer {
 	
 	private static final int MAX_NUM_TRIES = 20;
 	
-	private final List<PxlMarkMemo> listPxlMarkMemo;
+	private final List<VoxelizedMarkMemo> listPxlMarkMemo;
 	private final Mark markBlock;
 
 	@Override
@@ -72,7 +72,7 @@ class PositionProposerMemoList implements PositionProposer {
 			
 			// We keep randomly picking a memo from the list 
 			// And randomly taking positions until we find a position that matches
-			PxlMark pm = randomMemo(context).doOperation();
+			VoxelizedMark pm = randomMemo(context).voxelized();
 			
 			BoundingBox bbox = pm.getBoundingBox();
 			
@@ -86,7 +86,7 @@ class PositionProposerMemoList implements PositionProposer {
 		return Optional.empty();
 	}
 	
-	private boolean insideRelevantRegion( PxlMark pm, RegionMembership rm, Point3d pnt, BoundingBox bbox) {
+	private boolean insideRelevantRegion( VoxelizedMark pm, RegionMembership rm, Point3d pnt, BoundingBox bbox) {
 				
 		byte flags = rm.flags();
 				
@@ -110,7 +110,7 @@ class PositionProposerMemoList implements PositionProposer {
 		return !rm.isMemberFlag(membership, flags);
 	}
 	
-	private PxlMarkMemo randomMemo(ProposerContext context) {
+	private VoxelizedMarkMemo randomMemo(ProposerContext context) {
 		return listPxlMarkMemo.get(
 			(int) (context.getRandomNumberGenerator().nextDouble() * listPxlMarkMemo.size())
 		);

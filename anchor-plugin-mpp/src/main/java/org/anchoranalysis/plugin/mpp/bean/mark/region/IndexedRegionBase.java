@@ -29,8 +29,8 @@ package org.anchoranalysis.plugin.mpp.bean.mark.region;
 import org.anchoranalysis.anchor.mpp.mark.GlobalRegionIdentifiers;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.anchor.mpp.mark.MarkRegion;
-import org.anchoranalysis.anchor.mpp.pxlmark.PxlMark;
-import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
+import org.anchoranalysis.anchor.mpp.pxlmark.VoxelizedMark;
+import org.anchoranalysis.anchor.mpp.pxlmark.memo.VoxelizedMarkMemo;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.extent.BoundingBox;
@@ -64,18 +64,18 @@ public abstract class IndexedRegionBase extends MarkRegion {
 	}
 	
 	@Override
-	public VoxelStatistics createStatisticsFor(PxlMarkMemo pmm, ImageDimensions dim) throws CreateException {
-		PxlMark pm = pmm.doOperation();
+	public VoxelStatistics createStatisticsFor(VoxelizedMarkMemo pmm, ImageDimensions dim) throws CreateException {
+		VoxelizedMark pm = pmm.voxelized();
 		return createStatisticsFor(pm, pmm.getMark(), dim);
 	}
 	
-	protected abstract VoxelStatistics createStatisticsFor(PxlMark pm, Mark mark, ImageDimensions dim) throws CreateException;
+	protected abstract VoxelStatistics createStatisticsFor(VoxelizedMark pm, Mark mark, ImageDimensions dim) throws CreateException;
 	
-	protected VoxelStatistics sliceStatisticsForRegion(PxlMark pm, int z) {
+	protected VoxelStatistics sliceStatisticsForRegion(VoxelizedMark pm, int z) {
 		return pm.statisticsFor(index, regionID, z);
 	}
 	
-	protected BoundingBox boundingBoxForRegion( PxlMark pm ) {
+	protected BoundingBox boundingBoxForRegion( VoxelizedMark pm ) {
 		return pm.getBoundingBox();
 	}
 

@@ -3,7 +3,7 @@ package org.anchoranalysis.plugin.mpp.bean.proposer.mark;
 import org.anchoranalysis.anchor.mpp.bean.proposer.MarkProposer;
 import org.anchoranalysis.anchor.mpp.proposer.ProposalAbnormalFailureException;
 import org.anchoranalysis.anchor.mpp.proposer.ProposerContext;
-import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
+import org.anchoranalysis.anchor.mpp.pxlmark.memo.VoxelizedMarkMemo;
 
 /*
  * #%L
@@ -44,7 +44,7 @@ public class Repeat extends MarkProposerOne {
 	// END BEAN PROPERTIES	
 
 	@Override
-	protected boolean propose(PxlMarkMemo inputMark, ProposerContext context, MarkProposer source)
+	protected boolean propose(VoxelizedMarkMemo inputMark, ProposerContext context, MarkProposer source)
 			throws ProposalAbnormalFailureException {
 	
 		for (int i=0; i<maxIter; i++) {

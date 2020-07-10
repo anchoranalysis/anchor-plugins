@@ -52,22 +52,25 @@ import org.anchoranalysis.plugin.image.obj.merge.condition.WrapAsUpdatable;
 import org.anchoranalysis.plugin.image.obj.merge.priority.AssignPriority;
 import org.anchoranalysis.plugin.image.obj.merge.priority.PrioritisedVertex;
 
+import lombok.Getter;
+import lombok.Setter;
+
 public abstract class ObjMaskProviderMergeWithFeature extends ObjMaskProviderMergeOptionalDistance {
 
 	// START BEAN PROPERTIES
 	/** Requires for any potential merge that the bounding-boxes of the two objects must intersect or touch */
-	@BeanField
+	@BeanField @Getter @Setter
 	private boolean requireBBoxNeighbours = true;
 	
 	
 	/** Requires the object-masks to touch. More expensive to calculate than the requireBBoxNeighbours condition. */
-	@BeanField
+	@BeanField @Getter @Setter
 	private boolean requireTouching = true;
 		 
 	/**
 	 * Saves all objects that are inputs to the merge, outputs from the merge, or intermediate merges along the way
 	 */
-	@BeanField @OptionalBean
+	@BeanField @OptionalBean @Getter @Setter
 	private ObjectCollectionProvider objsSave;
 	// END BEAN PROPERTIES
 		
@@ -207,21 +210,4 @@ public abstract class ObjMaskProviderMergeWithFeature extends ObjMaskProviderMer
 			new NeighbourhoodCond(requireBBoxNeighbours, requireTouching)
 		);
 	}
-	
-	public boolean isRequireBBoxNeighbours() {
-		return requireBBoxNeighbours;
-	}
-
-	public void setRequireBBoxNeighbours(boolean requireBBoxNeighbours) {
-		this.requireBBoxNeighbours = requireBBoxNeighbours;
-	}
-
-	public ObjectCollectionProvider getObjsSave() {
-		return objsSave;
-	}
-
-	public void setObjsSave(ObjectCollectionProvider objsSave) {
-		this.objsSave = objsSave;
-	}
-
 }

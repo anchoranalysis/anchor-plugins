@@ -1,6 +1,6 @@
 package org.anchoranalysis.plugin.mpp.bean.mark.region;
 
-import org.anchoranalysis.anchor.mpp.pxlmark.PxlMark;
+import org.anchoranalysis.anchor.mpp.pxlmark.VoxelizedMark;
 
 
 /*
@@ -57,7 +57,7 @@ public class CenterSliceWindow extends CenterSliceBase {
 	// END BEAN PROPERTIES
 	
 	@Override
-	protected VoxelStatistics createStatisticsForBBox(PxlMark pm, ImageDimensions dim, BoundingBox bbox, int zCenter) {
+	protected VoxelStatistics createStatisticsForBBox(VoxelizedMark pm, ImageDimensions dim, BoundingBox bbox, int zCenter) {
 		
 		// If our z-center is off scene we bring it to the closest value, but we guard against the case where the top of the mark is also off scene
 		if (zCenter < 0) {

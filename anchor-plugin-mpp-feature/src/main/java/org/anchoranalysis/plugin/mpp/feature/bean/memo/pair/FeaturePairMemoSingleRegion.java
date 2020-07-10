@@ -32,7 +32,7 @@ import org.anchoranalysis.anchor.mpp.feature.bean.nrg.elem.FeaturePairMemo;
 
 import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputPairMemo;
 import org.anchoranalysis.anchor.mpp.mark.GlobalRegionIdentifiers;
-import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
+import org.anchoranalysis.anchor.mpp.pxlmark.memo.VoxelizedMarkMemo;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
@@ -54,7 +54,7 @@ public abstract class FeaturePairMemoSingleRegion extends FeaturePairMemo {
 		);
 	}
 	
-	protected BoundingBox bbox(FeatureInputPairMemo input, Function<FeatureInputPairMemo,PxlMarkMemo> funcExtract) throws FeatureCalcException {
+	protected BoundingBox bbox(FeatureInputPairMemo input, Function<FeatureInputPairMemo,VoxelizedMarkMemo> funcExtract) throws FeatureCalcException {
 		ImageDimensions sd = input.getDimensionsRequired();
 		return funcExtract.apply(input).getMark().bbox(
 			sd,

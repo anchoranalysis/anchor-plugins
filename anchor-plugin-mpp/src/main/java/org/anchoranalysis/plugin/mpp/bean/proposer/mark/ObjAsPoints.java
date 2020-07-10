@@ -37,10 +37,9 @@ import org.anchoranalysis.anchor.mpp.mark.points.MarkPointListFactory;
 import org.anchoranalysis.anchor.mpp.proposer.ProposalAbnormalFailureException;
 import org.anchoranalysis.anchor.mpp.proposer.ProposerContext;
 import org.anchoranalysis.anchor.mpp.proposer.visualization.CreateProposalVisualization;
-import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
+import org.anchoranalysis.anchor.mpp.pxlmark.memo.VoxelizedMarkMemo;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.core.error.OptionalOperationUnsupportedException;
 import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.image.bean.provider.ObjectCollectionProvider;
 import org.anchoranalysis.image.object.ObjectCollection;
@@ -65,7 +64,7 @@ public class ObjAsPoints extends MarkProposer {
 	}
 
 	@Override
-	public boolean propose(PxlMarkMemo inputMark, ProposerContext context) throws ProposalAbnormalFailureException {
+	public boolean propose(VoxelizedMarkMemo inputMark, ProposerContext context) throws ProposalAbnormalFailureException {
 
 		try {
 			createObjsIfNecessary();
@@ -79,13 +78,9 @@ public class ObjAsPoints extends MarkProposer {
 			randomlySelectPoints(context)
 		);
 		
-		try {
-			inputMark.getMark().assignFrom(mark);
-		} catch (OptionalOperationUnsupportedException e) {
-			context.getErrorNode().add(e);
-			return false;
-		}
+		inputMark.assignFrom(mark);
 		inputMark.reset();
+		
 		return true;
 	}
 	

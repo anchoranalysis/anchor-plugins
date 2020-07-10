@@ -14,7 +14,7 @@ import org.anchoranalysis.anchor.mpp.pair.Pair;
 import org.anchoranalysis.anchor.mpp.pair.PairCollection;
 import org.anchoranalysis.anchor.mpp.proposer.ProposalAbnormalFailureException;
 import org.anchoranalysis.anchor.mpp.proposer.ProposerContext;
-import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
+import org.anchoranalysis.anchor.mpp.pxlmark.memo.VoxelizedMarkMemo;
 import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemoFactory;
 
 /*
@@ -111,8 +111,8 @@ public class KernelMerge extends KernelPosNeg<CfgNRGPixelized> {
 			return Optional.empty();
 		}
 		
-		PxlMarkMemo pmmSrc = exst.get().getMemoForMark(pair.getSource());
-		PxlMarkMemo pmmDest = exst.get().getMemoForMark(pair.getDestination());
+		VoxelizedMarkMemo pmmSrc = exst.get().getMemoForMark(pair.getSource());
+		VoxelizedMarkMemo pmmDest = exst.get().getMemoForMark(pair.getDestination());
 				
 		// How and why does this happen?
 		if (pmmSrc==null||pmmDest==null) {
@@ -176,7 +176,7 @@ public class KernelMerge extends KernelPosNeg<CfgNRGPixelized> {
 			);
 		}
 		
-		PxlMarkMemo pmm = PxlMarkMemoFactory.create(
+		VoxelizedMarkMemo pmm = PxlMarkMemoFactory.create(
 			mark,
 			nrgStack.getNrgStack(),
 			regionMap
@@ -207,8 +207,8 @@ public class KernelMerge extends KernelPosNeg<CfgNRGPixelized> {
 		int rmvIndex1 = exst.getCfg().indexOf( pair.getSource() );
 		int rmvIndex2 = exst.getCfg().indexOf( pair.getDestination() );
 		
-		PxlMarkMemo memoSource = exst.getMemoForMark( pair.getSource() );
-		PxlMarkMemo memoDest = exst.getMemoForMark( pair.getDestination() );
+		VoxelizedMarkMemo memoSource = exst.getMemoForMark( pair.getSource() );
+		VoxelizedMarkMemo memoDest = exst.getMemoForMark( pair.getDestination() );
 		
 		// We need to delete in the correct order
 		if (rmvIndex2 > rmvIndex1) {
@@ -225,7 +225,7 @@ public class KernelMerge extends KernelPosNeg<CfgNRGPixelized> {
 			memoList.remove(rmvIndex2);
 		}
 		
-		PxlMarkMemo memoAdded = accptd.getMemoForMark( markAdded.get() );
+		VoxelizedMarkMemo memoAdded = accptd.getMemoForMark( markAdded.get() );
 		
 		// Should always find one
 		assert memoAdded!=null;

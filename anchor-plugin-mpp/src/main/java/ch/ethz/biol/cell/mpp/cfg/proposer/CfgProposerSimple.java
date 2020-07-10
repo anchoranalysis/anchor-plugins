@@ -9,7 +9,7 @@ import org.anchoranalysis.anchor.mpp.cfg.Cfg;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.anchor.mpp.proposer.ProposalAbnormalFailureException;
 import org.anchoranalysis.anchor.mpp.proposer.ProposerContext;
-import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
+import org.anchoranalysis.anchor.mpp.pxlmark.memo.VoxelizedMarkMemo;
 
 /*
  * #%L
@@ -87,7 +87,7 @@ public class CfgProposerSimple extends CfgProposer {
 		for (int i=0; i<numPoints; i++) {
 			Mark mark = cfgGen.newTemplateMark();
 			
-			PxlMarkMemo pmm = context.create(mark);
+			VoxelizedMarkMemo pmm = context.create(mark);
 			
 			// If the proposal fails, we don't bother trying another
 			if (markProposer.propose(pmm, context )) {

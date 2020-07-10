@@ -31,7 +31,7 @@ import java.nio.ByteBuffer;
 
 import org.anchoranalysis.anchor.mpp.bean.regionmap.RegionMap;
 import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputSingleMemo;
-import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
+import org.anchoranalysis.anchor.mpp.pxlmark.memo.VoxelizedMarkMemo;
 import org.anchoranalysis.anchor.mpp.regionmap.RegionMapSingleton;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.OperationFailedException;
@@ -83,7 +83,7 @@ public class SurfaceSizeMaskNonZero extends FeatureSingleMemoRegion {
 		return omWithProps.getMask();
 	}
 
-	private int estimateSurfaceSize(PxlMarkMemo pxlMarkMemo, ObjectMask om) throws FeatureCalcException {
+	private int estimateSurfaceSize(VoxelizedMarkMemo pxlMarkMemo, ObjectMask om) throws FeatureCalcException {
 		
 		VoxelBox<ByteBuffer> vbOutline = calcOutline(om, !suppressZ);
 		
@@ -92,7 +92,7 @@ public class SurfaceSizeMaskNonZero extends FeatureSingleMemoRegion {
 		try {
 			int size = 0;
 			for( int z=0; z<extent.getZ(); z++) {
-				VoxelStatistics stats = pxlMarkMemo.doOperation().statisticsFor(maskIndex, 0, z);
+				VoxelStatistics stats = pxlMarkMemo.voxelized().statisticsFor(maskIndex, 0, z);
 				if( stats.histogram().hasAboveZero() ) {
 					size += vbOutline.extractSlice(z).countEqual( om.getBinaryValues().getOnInt() );
 				}

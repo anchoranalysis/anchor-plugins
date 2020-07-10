@@ -41,14 +41,17 @@ import org.anchoranalysis.mpp.sgmn.optscheme.feedback.OptimizationFeedbackInitPa
 import org.anchoranalysis.mpp.sgmn.optscheme.feedback.ReporterException;
 import org.anchoranalysis.mpp.sgmn.optscheme.step.Reporting;
 
+import lombok.Getter;
+import lombok.Setter;
+
 
 public abstract class ObjectSerializerPeriodicReporter<T extends Serializable> extends PeriodicSubfolderReporter<T> {
 
 	// BEAN PARAMETERS
-	@BeanField
+	@BeanField @Getter @Setter
 	private String manifestFunction;
 	
-	@BeanField
+	@BeanField @Getter @Setter
 	private int bundleSize = 1000;
 	// END BEAN PARAMETERS
 	
@@ -59,11 +62,6 @@ public abstract class ObjectSerializerPeriodicReporter<T extends Serializable> e
 
 	@Override
 	public void reportBegin(OptimizationFeedbackInitParams<CfgNRGPixelized> initParams) throws ReporterException {
-		
-		
-		//IterableGenerator<CfgNRG> iterableGenerator = new XStreamGenerator<CfgNRG>("cfgNRG");
-		//init( new ObjectOutputStreamGenerator<CfgNRG>() );
-
 		BundleParameters bundleParams = new BundleParameters();
 		bundleParams.setBundleSize(bundleSize);
 		
@@ -78,31 +76,12 @@ public abstract class ObjectSerializerPeriodicReporter<T extends Serializable> e
 			));
 			
 			bundleParams.setSequenceType( sequenceType );
-		
-		
 			
 		} catch (OutputWriteFailedException e) {
 			throw new ReporterException(e);
 		}
 	}
-
 	
 	@Override
 	protected abstract Optional<T> generateIterableElement( Reporting<CfgNRGPixelized> reporting ) throws ReporterException;
-
-	public String getManifestFunction() {
-		return manifestFunction;
-	}
-
-	public void setManifestFunction(String manifestFunction) {
-		this.manifestFunction = manifestFunction;
-	}
-
-	public int getBundleSize() {
-		return bundleSize;
-	}
-
-	public void setBundleSize(int bundleSize) {
-		this.bundleSize = bundleSize;
-	}
 }

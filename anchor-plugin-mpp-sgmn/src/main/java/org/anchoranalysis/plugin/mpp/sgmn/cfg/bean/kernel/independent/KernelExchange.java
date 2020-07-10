@@ -9,7 +9,7 @@ import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.anchor.mpp.mark.set.UpdateMarkSetException;
 import org.anchoranalysis.anchor.mpp.proposer.ProposalAbnormalFailureException;
 import org.anchoranalysis.anchor.mpp.proposer.ProposerContext;
-import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
+import org.anchoranalysis.anchor.mpp.pxlmark.memo.VoxelizedMarkMemo;
 
 /*
  * #%L
@@ -80,7 +80,7 @@ public class KernelExchange extends KernelIndependent<CfgNRGPixelized> {
 	public void updateAfterAccpt(ListUpdatableMarkSetCollection updatableMarkSetCollection,
 			CfgNRGPixelized exst, CfgNRGPixelized accptd) throws UpdateMarkSetException {
 		
-		PxlMarkMemo memoNew = accptd.getMemoForMark( markNew );
+		VoxelizedMarkMemo memoNew = accptd.getMemoForMark( markNew );
 		exst.exchangeOnUpdatablePairList( updatableMarkSetCollection, markExst, memoNew  );
 	}
 	
@@ -106,7 +106,7 @@ public class KernelExchange extends KernelIndependent<CfgNRGPixelized> {
 		// We copy the particular mark in question
 		markNew = markExst.duplicate();
 						
-		PxlMarkMemo pmmMarkNew = propContext.create(markNew );
+		VoxelizedMarkMemo pmmMarkNew = propContext.create(markNew );
 		
 		// Change the location of the mark
 		boolean succ;

@@ -1,6 +1,6 @@
 package org.anchoranalysis.plugin.mpp.bean.mark.region;
 
-import org.anchoranalysis.anchor.mpp.pxlmark.PxlMark;
+import org.anchoranalysis.anchor.mpp.pxlmark.VoxelizedMark;
 
 
 /*
@@ -40,7 +40,7 @@ import lombok.EqualsAndHashCode;
 public class AllSlicesMaskNonZero extends SelectSlicesWithIndexBase {
 	
 	@Override
-	protected VoxelStatistics extractFromPxlMark(PxlMark pm) throws CreateException {
+	protected VoxelStatistics extractFromPxlMark(VoxelizedMark pm) throws CreateException {
 		return statisticsForAllSlices(pm, false);
 	}
 }

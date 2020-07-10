@@ -35,6 +35,11 @@ import org.anchoranalysis.image.bean.threshold.CalculateLevelOne;
 import org.anchoranalysis.image.histogram.Histogram;
 import org.anchoranalysis.image.histogram.HistogramArray;
 
+import com.google.common.base.Preconditions;
+
+import lombok.Getter;
+import lombok.Setter;
+
 
 /**
  * Clips the input-histogram to a certain maximum value, and then delegates the calculate-level.
@@ -45,62 +50,32 @@ import org.anchoranalysis.image.histogram.HistogramArray;
 public class ClipHistogramMax extends CalculateLevelOne {
 
 	// START BEAN
-	@BeanField
+	@BeanField @Getter @Setter
 	private int max;
 	// END BEAN
 	
 	@Override
-	public int calculateLevel(Histogram h) throws OperationFailedException {
-		Histogram hClipped = createClipped(h,max);
-		return calculateLevelIncoming(hClipped);
+	public int calculateLevel(Histogram histogram) throws OperationFailedException {
+		return calculateLevelIncoming(
+			createClipped(histogram,max)
+		);
 	}
 	
-	private static Histogram createClipped( Histogram histIn, int maxVal ) {
+	private static Histogram createClipped( Histogram histogram, int maxVal ) {
+		Preconditions.checkArgument( maxVal<= histogram.getMaxBin() );
 		
-		assert( maxVal<= histIn.getMaxBin() );
-		
-		long numAbove = histIn.countThreshold(
+		long numAbove = histogram.countThreshold(
 			new RelationToConstant(
 				new GreaterThanBean(),
 				maxVal
 			)
 		);
 		
-		Histogram out = new HistogramArray(histIn.getMaxBin());
-		for( int i=histIn.getMinBin(); i<=maxVal; i++ ) {
-			out.incrValBy( i, histIn.getCount(i) );
+		Histogram out = new HistogramArray(histogram.getMaxBin());
+		for( int i=histogram.getMinBin(); i<=maxVal; i++ ) {
+			out.incrValBy( i, histogram.getCount(i) );
 		}
 		out.incrValBy(maxVal, numAbove);
 		return out;
-	}
-
-	public int getMax() {
-		return max;
-	}
-
-	public void setMax(int max) {
-		this.max = max;
-	}
-
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = super.hashCode();
-		result = prime * result + max;
-		return result;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (!super.equals(obj))
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		ClipHistogramMax other = (ClipHistogramMax) obj;
-		if (max != other.max)
-			return false;
-		return true;
 	}
 }

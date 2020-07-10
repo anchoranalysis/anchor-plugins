@@ -8,7 +8,7 @@ import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.anchor.mpp.mark.MarkAbstractPosition;
 import org.anchoranalysis.anchor.mpp.proposer.ProposerContext;
 import org.anchoranalysis.anchor.mpp.proposer.visualization.CreateProposalVisualization;
-import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
+import org.anchoranalysis.anchor.mpp.pxlmark.memo.VoxelizedMarkMemo;
 
 /*
  * #%L
@@ -48,7 +48,7 @@ public class Position extends MarkProposer {
 	// END BEAN PROPERTIES
 
 	@Override
-	public boolean propose(PxlMarkMemo inputMark, ProposerContext context) {
+	public boolean propose(VoxelizedMarkMemo inputMark, ProposerContext context) {
 		
 		// Assume this is a MarkPos
 		MarkAbstractPosition inputMarkPos = (MarkAbstractPosition) inputMark.getMark();

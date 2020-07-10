@@ -5,7 +5,7 @@ import java.util.Optional;
 import org.anchoranalysis.anchor.mpp.feature.addcriteria.AddCriteriaPair;
 import org.anchoranalysis.anchor.mpp.feature.addcriteria.IncludeMarksFailureException;
 import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputPairMemo;
-import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
+import org.anchoranalysis.anchor.mpp.pxlmark.memo.VoxelizedMarkMemo;
 
 /*
  * #%L
@@ -62,8 +62,8 @@ public class AddCriteriaFeatureRelationThreshold extends AddCriteriaPair {
 
 	@Override
 	public boolean includeMarks(
-		PxlMarkMemo mark1,
-		PxlMarkMemo mark2,
+		VoxelizedMarkMemo mark1,
+		VoxelizedMarkMemo mark2,
 		ImageDimensions dim,
 		Optional<FeatureCalculatorMulti<FeatureInputPairMemo>> session,
 		boolean do3D

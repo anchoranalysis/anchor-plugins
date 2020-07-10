@@ -133,7 +133,7 @@ public class MultiInputManagerQuick extends MultiInputManagerBase {
 		this.inputManager = createMulti();
 		inputManager.checkMisconfigured(defaultInstances);
 		
-		if (additionalChnls.size()>0 && regex==null) {
+		if (!additionalChnls.isEmpty() && regex==null) {
 			throw new BeanMisconfiguredException("If there is at least one additionalChnl then regex must be set");
 		}
 	}

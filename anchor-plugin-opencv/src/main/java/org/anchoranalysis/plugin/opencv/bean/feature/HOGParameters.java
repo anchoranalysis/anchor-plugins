@@ -81,7 +81,7 @@ public class HOGParameters extends AnchorBean<HOGParameters> {
 	/** Calculates the size of the descriptor will be for a given image, assuming the window is equal to the image-size */
 	public int sizeDescriptor(Extent imageSize) {
 		
-		Size windowSize = determineWindowSize(imageSize);
+		Size sizeOfWindow = determineWindowSize(imageSize);
 		// windowStride defaults to cellSize if Size() is passed (see OpenCV source file hog.cpp)
 		SizeXY windowStride = cellSize;
 		
@@ -89,7 +89,7 @@ public class HOGParameters extends AnchorBean<HOGParameters> {
 				* DivideUtilities.divide(blockSize,cellSize,SizeXY::getHeight);
 
 		int blocksPerWindow = numberSlidingWindowsFor(
-			windowSize,
+			sizeOfWindow,
 			sizeFor(blockSize),
 			cellSize,
 			blockStride
@@ -97,7 +97,7 @@ public class HOGParameters extends AnchorBean<HOGParameters> {
 		
 		int windowsPerImage = numberSlidingWindowsFor(
 			sizeFor(imageSize),
-			windowSize,
+			sizeOfWindow,
 			cellSize,
 			windowStride	
 		);
