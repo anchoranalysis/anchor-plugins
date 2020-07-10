@@ -41,7 +41,7 @@ import org.anchoranalysis.experiment.JobExecutionException;
 import org.anchoranalysis.image.bean.chnl.converter.ChnlConverterBean;
 import org.anchoranalysis.image.experiment.bean.task.RasterTask;
 import org.anchoranalysis.image.io.RasterIOException;
-import org.anchoranalysis.image.io.bean.chnl.ChnlFilter;
+import org.anchoranalysis.image.io.bean.channel.ChnlFilter;
 import org.anchoranalysis.image.io.chnl.ChnlGetter;
 import org.anchoranalysis.image.io.generator.raster.StackGenerator;
 import org.anchoranalysis.image.io.input.NamedChnlsInput;

@@ -39,8 +39,8 @@ import org.anchoranalysis.plugin.io.bean.input.chnl.NamedChnls;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
-import org.anchoranalysis.image.io.bean.chnl.map.ImgChnlMapCreator;
-import org.anchoranalysis.image.io.bean.chnl.map.ImgChnlMapEntry;
+import org.anchoranalysis.image.io.bean.channel.map.ImgChnlMapCreator;
+import org.anchoranalysis.image.io.bean.channel.map.ImgChnlMapEntry;
 import org.anchoranalysis.image.io.bean.rasterreader.RasterReader;
 
 /** Helps in creating NamedChnls */
