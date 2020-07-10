@@ -41,11 +41,11 @@ import org.anchoranalysis.mpp.sgmn.optscheme.feedback.OptimizationFeedbackInitPa
 import org.anchoranalysis.mpp.sgmn.optscheme.feedback.ReporterException;
 import org.anchoranalysis.mpp.sgmn.optscheme.feedback.aggregate.Aggregator;
 import org.anchoranalysis.mpp.sgmn.optscheme.feedback.aggregate.AggregatorException;
-import org.anchoranalysis.mpp.sgmn.optscheme.feedback.aggregate.IAggregateReceiver;
+import org.anchoranalysis.mpp.sgmn.optscheme.feedback.aggregate.AggregateReceiver;
 import org.anchoranalysis.mpp.sgmn.optscheme.step.Reporting;
 import org.apache.commons.lang.time.StopWatch;
 
-public class CSVReporterAgg extends ReporterAgg<CfgNRGPixelized> implements IAggregateReceiver<CfgNRGPixelized> {
+public class CSVReporterAgg extends ReporterAgg<CfgNRGPixelized> implements AggregateReceiver<CfgNRGPixelized> {
 
 	private Optional<FileOutput> csvOutput;
 	
@@ -62,7 +62,7 @@ public class CSVReporterAgg extends ReporterAgg<CfgNRGPixelized> implements IAgg
 	//  we probably should separate the two types of csv writing, as they have effectively nothing in common
 
 	@Override
-	protected IAggregateReceiver<CfgNRGPixelized> getAggregateReceiver() {
+	protected AggregateReceiver<CfgNRGPixelized> getAggregateReceiver() {
 		return this;
 	}
 

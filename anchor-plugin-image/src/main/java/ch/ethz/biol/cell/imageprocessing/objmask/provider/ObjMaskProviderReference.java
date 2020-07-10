@@ -55,7 +55,7 @@ public class ObjMaskProviderReference extends ObjectCollectionProvider {
 	public ObjectCollection create() throws CreateException {
 		if (objs==null) {
 			try {
-				objs = getSharedObjects().getObjMaskCollection().getException(id);
+				objs = getInitializationParameters().getObjMaskCollection().getException(id);
 			} catch (NamedProviderGetException e) {
 				throw new CreateException(e);
 			}	

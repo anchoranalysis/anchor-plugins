@@ -47,8 +47,8 @@ public class EllipseBoundsCheck extends CheckMark {
 		MarkEllipse me = (MarkEllipse) mark;
 		
 		try {
-			double minBound = getSharedObjects().getMarkBounds().getMinRslvd(nrgStack.getDimensions().getRes(), false);
-			double maxBound = getSharedObjects().getMarkBounds().getMaxRslvd(nrgStack.getDimensions().getRes(), false);
+			double minBound = getInitializationParameters().getMarkBounds().getMinRslvd(nrgStack.getDimensions().getRes(), false);
+			double maxBound = getInitializationParameters().getMarkBounds().getMaxRslvd(nrgStack.getDimensions().getRes(), false);
 			
 			if (me.getRadii().getX() < minBound) {
 				return false;

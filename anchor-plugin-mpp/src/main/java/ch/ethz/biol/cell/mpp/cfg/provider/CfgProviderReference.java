@@ -34,16 +34,17 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+@NoArgsConstructor
 public class CfgProviderReference extends CfgProvider {
 
 	// START BEAN PROPERTIES
-	@BeanField
+	@BeanField @Getter @Setter
 	private String id = "";
 	// END BEAN PROPERTIES
-
-	public CfgProviderReference() {
-		
-	}
 		
 	public CfgProviderReference(String id) {
 		super();
@@ -53,17 +54,9 @@ public class CfgProviderReference extends CfgProvider {
 	@Override
 	public Cfg create() throws CreateException {
 		try {
-			return getSharedObjects().getCfgCollection().getException(id);
+			return getInitializationParameters().getCfgCollection().getException(id);
 		} catch (NamedProviderGetException e) {
 			throw new CreateException(e);
 		}
-	}
-
-	public String getId() {
-		return id;
-	}
-
-	public void setId(String id) {
-		this.id = id;
 	}
 }

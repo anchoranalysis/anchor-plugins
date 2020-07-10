@@ -41,11 +41,11 @@ import org.anchoranalysis.mpp.sgmn.optscheme.feedback.OptimizationFeedbackInitPa
 import org.anchoranalysis.mpp.sgmn.optscheme.feedback.ReporterException;
 import org.anchoranalysis.mpp.sgmn.optscheme.feedback.aggregate.Aggregator;
 import org.anchoranalysis.mpp.sgmn.optscheme.feedback.aggregate.AggregatorException;
-import org.anchoranalysis.mpp.sgmn.optscheme.feedback.aggregate.IAggregateReceiver;
+import org.anchoranalysis.mpp.sgmn.optscheme.feedback.aggregate.AggregateReceiver;
 import org.anchoranalysis.mpp.sgmn.optscheme.step.Reporting;
 import org.apache.commons.lang.time.StopWatch;
 
-public final class TextFileReporter extends ReporterAgg<CfgNRGPixelized> implements IAggregateReceiver<CfgNRGPixelized> {
+public final class TextFileReporter extends ReporterAgg<CfgNRGPixelized> implements AggregateReceiver<CfgNRGPixelized> {
 
 	private Optional<FileOutput> fileOutput;
 	
@@ -114,7 +114,7 @@ public final class TextFileReporter extends ReporterAgg<CfgNRGPixelized> impleme
 	}
 	
 	@Override
-	protected IAggregateReceiver<CfgNRGPixelized> getAggregateReceiver() {
+	protected AggregateReceiver<CfgNRGPixelized> getAggregateReceiver() {
 		return this;
 	}
 

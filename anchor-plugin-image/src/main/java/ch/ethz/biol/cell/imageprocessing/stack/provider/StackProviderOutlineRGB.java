@@ -115,7 +115,7 @@ public class StackProviderOutlineRGB extends StackProviderWithBackground {
 		cpOutline.setForce2D(force2D);
 		cpOutline.setBinaryChnl( new BinaryChnlProviderHolder(maskIn) );
 		try {
-			cpOutline.initRecursive( getSharedObjects(), getLogger() );
+			cpOutline.initRecursive( getInitializationParameters(), getLogger() );
 			return cpOutline.create();
 		} catch (InitException | CreateException e) {
 			throw new OperationFailedException(e);

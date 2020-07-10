@@ -87,8 +87,8 @@ public class ImageDimProviderFromChnl extends ImageDimProvider {
 		
 		try {
 			return OptionalUtilities.orFlat(
-				getSharedObjects().getChnlCollection().getOptional(id),
-				getSharedObjects().getStackCollection().getOptional(id).map(ImageDimProviderFromChnl::firstChnl)
+				getInitializationParameters().getChnlCollection().getOptional(id),
+				getInitializationParameters().getStackCollection().getOptional(id).map(ImageDimProviderFromChnl::firstChnl)
 			).orElseThrow( () ->
 				new CreateException(
 					String.format("Failed to find either a channel or stack with id `%s`", id)

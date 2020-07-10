@@ -38,10 +38,13 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 
+import lombok.Getter;
+import lombok.Setter;
+
 public class MarkMergeProposerReference extends MarkMergeProposer {
 
 	// Start BEAN
-	@BeanField
+	@BeanField @Getter @Setter
 	private String id;
 	// End BEAN
 	
@@ -51,29 +54,21 @@ public class MarkMergeProposerReference extends MarkMergeProposer {
 	public void onInit(MPPInitParams pso) throws InitException {
 		super.onInit(pso);
 		try {
-			delegate = getSharedObjects().getMarkMergeProposerSet().getException(id);
+			delegate = getInitializationParameters().getMarkMergeProposerSet().getException(id);
 		} catch (NamedProviderGetException e) {
 			throw new InitException(
 				String.format("Cannot find referenced markSplitProposer '%s': %s", id, e.summarize().toString() )
 			);
 		}
 	}
-	
-	@Override
-	public boolean isCompatibleWith(Mark testMark) {
-		return delegate.isCompatibleWith(testMark);
-	}
 
 	@Override
 	public Optional<Mark> propose(VoxelizedMarkMemo mark1, VoxelizedMarkMemo mark2, ProposerContext context) throws ProposalAbnormalFailureException {
 		return delegate.propose(mark1, mark2, context);
 	}
-
-	public String getId() {
-		return id;
-	}
-
-	public void setId(String id) {
-		this.id = id;
+	
+	@Override
+	public boolean isCompatibleWith(Mark testMark) {
+		return delegate.isCompatibleWith(testMark);
 	}
 }

@@ -35,7 +35,7 @@ import org.anchoranalysis.core.memory.MemoryUtilities;
 import org.anchoranalysis.mpp.sgmn.bean.optscheme.feedback.ReporterAgg;
 import org.anchoranalysis.mpp.sgmn.optscheme.feedback.OptimizationFeedbackInitParams;
 import org.anchoranalysis.mpp.sgmn.optscheme.feedback.aggregate.Aggregator;
-import org.anchoranalysis.mpp.sgmn.optscheme.feedback.aggregate.IAggregateReceiver;
+import org.anchoranalysis.mpp.sgmn.optscheme.feedback.aggregate.AggregateReceiver;
 import org.anchoranalysis.mpp.sgmn.optscheme.step.Reporting;
 
 public class MemoryUsageReporter extends ReporterAgg<CfgNRGPixelized> {
@@ -51,8 +51,8 @@ public class MemoryUsageReporter extends ReporterAgg<CfgNRGPixelized> {
 	private MessageLogger logger;
 	
 	@Override
-	protected IAggregateReceiver<CfgNRGPixelized> getAggregateReceiver() {
-		return new IAggregateReceiver<CfgNRGPixelized>() {
+	protected AggregateReceiver<CfgNRGPixelized> getAggregateReceiver() {
+		return new AggregateReceiver<CfgNRGPixelized>() {
 			
 			@Override
 			public void aggStart(OptimizationFeedbackInitParams<CfgNRGPixelized> initParams, Aggregator agg) {

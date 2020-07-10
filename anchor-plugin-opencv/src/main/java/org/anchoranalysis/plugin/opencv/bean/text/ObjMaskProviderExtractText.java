@@ -166,7 +166,7 @@ public class ObjMaskProviderExtractText extends ObjectCollectionProvider {
 	}
 		
 	private Path pathToEastModel() {
-		return getSharedObjects().getModelDir().resolve("frozen_east_text_detection.pb");
+		return getInitializationParameters().getModelDir().resolve("frozen_east_text_detection.pb");
 	}
 
 	public StackProvider getStackProvider() {

@@ -55,7 +55,7 @@ public class MarkSplitProposerReference extends MarkSplitProposer {
 	public void onInit(MPPInitParams pso) throws InitException {
 		super.onInit(pso);
 		try {
-			delegate = getSharedObjects().getMarkSplitProposerSet().getException(id);
+			delegate = getInitializationParameters().getMarkSplitProposerSet().getException(id);
 		} catch (NamedProviderGetException e) {
 			throw new InitException(e.summarize());
 		}

@@ -52,7 +52,7 @@ public class ChnlProviderAssignFromKeyValueParams extends ChnlProviderOne {
 		
 		KeyValueParams params;
 		try {
-			params = getSharedObjects().getParams().getNamedKeyValueParamsCollection().getException(keyValueParamsID);
+			params = getInitializationParameters().getParams().getNamedKeyValueParamsCollection().getException(keyValueParamsID);
 		} catch (NamedProviderGetException e) {
 			throw new CreateException(
 				String.format("Cannot find KeyValueParams '%s'",keyValueParamsID),

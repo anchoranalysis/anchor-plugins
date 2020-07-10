@@ -67,7 +67,7 @@ public class LineBoundCalculator extends BoundCalculator {
 			Channel outlineChnl = outlineProvider.create().getChannel();
 			assert(outlineChnl!=null);
 			
-			RslvdBound minMax = getSharedObjects().getMarkBounds().calcMinMax(
+			RslvdBound minMax = getInitializationParameters().getMarkBounds().calcMinMax(
 				outlineChnl.getDimensions().getRes(),
 				rotMatrix.getNumDim() >= 3
 			);

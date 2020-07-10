@@ -54,37 +54,32 @@ import org.anchoranalysis.mpp.sgmn.bean.kernel.KernelPosNeg;
 import org.anchoranalysis.mpp.sgmn.kernel.KernelCalcContext;
 import org.anchoranalysis.mpp.sgmn.kernel.KernelCalcNRGException;
 
+import lombok.Getter;
+import lombok.Setter;
+
 public class KernelMerge extends KernelPosNeg<CfgNRGPixelized> {
 
 	// START BEAN PROPERTIES
-	@BeanField
-	private MarkMergeProposer mergeMarkProposer = null;
+	@BeanField @Getter @Setter
+	private MarkMergeProposer mergeMarkProposer;
 	
-	@BeanField
+	@BeanField @Getter @Setter
 	private String simplePairCollectionID;
 	// END BEAN PROPERTIES
 
 	private Pair<Mark> pair;
 	private Optional<Mark> markAdded;
-	
-	private enum FailedProposalType {
-		NO_PAIRS,
-		CANNOT_GENERATE_MERGE
-	}
-	
-	@SuppressWarnings("unused")
-	private FailedProposalType failedProposalType;
-	
+		
+	@Getter @Setter
 	private PairCollection<Pair<Mark>> pairCollection;
 
 	@Override
 	public void onInit(MPPInitParams pso) throws InitException {
 		super.onInit(pso);
-		
-		// new SimplePairCollection( new AddCriteriaDistanceTo(maximumDistance)  
+ 
 		
 		try {
-			pairCollection = getSharedObjects().getSimplePairCollection().getException(simplePairCollectionID);
+			pairCollection = getInitializationParameters().getSimplePairCollection().getException(simplePairCollectionID);
 		} catch (NamedProviderGetException e) {
 			throw new InitException(e.summarize());
 		}
@@ -105,7 +100,6 @@ public class KernelMerge extends KernelPosNeg<CfgNRGPixelized> {
 		
 		pair = pairCollection.sampleRandomPairNonUniform( propContext.getRandomNumberGenerator() );
 		if (pair==null) {
-			failedProposalType = FailedProposalType.NO_PAIRS;
 			markAdded = Optional.empty();
 			propContext.getErrorNode().add("cannot generate pair");
 			return Optional.empty();
@@ -118,7 +112,6 @@ public class KernelMerge extends KernelPosNeg<CfgNRGPixelized> {
 		if (pmmSrc==null||pmmDest==null) {
 			pair = null;
 			markAdded = Optional.empty();
-			failedProposalType = FailedProposalType.CANNOT_GENERATE_MERGE;
 			return Optional.empty();
 		}
 		
@@ -138,7 +131,6 @@ public class KernelMerge extends KernelPosNeg<CfgNRGPixelized> {
 		// If we can't generate a successful merge, we cancel the kernel
 		if (!markAdded.isPresent()) {
 			pair = null;
-			failedProposalType = FailedProposalType.CANNOT_GENERATE_MERGE;
 			return Optional.empty();
 		}
 		
@@ -256,33 +248,8 @@ public class KernelMerge extends KernelPosNeg<CfgNRGPixelized> {
 		};
 	}
 
-
 	@Override
 	public boolean isCompatibleWith(Mark testMark) {
 		return mergeMarkProposer.isCompatibleWith(testMark);
-	}
-
-	public MarkMergeProposer getMergeMarkProposer() {
-		return mergeMarkProposer;
-	}
-
-	public void setMergeMarkProposer(MarkMergeProposer mergeMarkProposer) {
-		this.mergeMarkProposer = mergeMarkProposer;
-	}
-
-	public PairCollection<Pair<Mark>> getPairCollection() {
-		return pairCollection;
-	}
-
-	public void setPairCollection(PairCollection<Pair<Mark>> pairCollection) {
-		this.pairCollection = pairCollection;
-	}
-
-	public String getSimplePairCollectionID() {
-		return simplePairCollectionID;
-	}
-
-	public void setSimplePairCollectionID(String simplePairCollectionID) {
-		this.simplePairCollectionID = simplePairCollectionID;
 	}
 }
