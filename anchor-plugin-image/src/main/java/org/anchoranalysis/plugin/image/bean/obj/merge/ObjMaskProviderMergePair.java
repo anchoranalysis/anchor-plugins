@@ -117,7 +117,9 @@ public class ObjMaskProviderMergePair extends ObjMaskProviderMergeWithFeature {
 			
 			FeatureCalculatorMergedPairs session = new FeatureCalculatorMergedPairs(
 				new MergedPairsFeatures(
-					FeatureListFactory.fromProvider( featureEvaluatorMerge.getFeatureProvider() )
+					FeatureListFactory.fromProvider(
+						featureEvaluatorMerge.getFeatureProvider()
+					)
 				)
 			);
 			session.start(
