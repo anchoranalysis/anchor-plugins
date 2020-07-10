@@ -35,8 +35,7 @@ import org.anchoranalysis.feature.bean.operator.VectorFromFeature;
 import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.input.FeatureInput;
-import org.anchoranalysis.feature.input.descriptor.FeatureInputDescriptor;
-import org.anchoranalysis.feature.input.descriptor.FeatureInputDescriptorUtilities;
+import org.anchoranalysis.feature.input.descriptor.FeatureInputType;
 
  
 public class DotProduct<T extends FeatureInput> extends Feature<T> {
@@ -81,8 +80,11 @@ public class DotProduct<T extends FeatureInput> extends Feature<T> {
 	}
 
 	@Override
-	public FeatureInputDescriptor inputDescriptor() {
-		return FeatureInputDescriptorUtilities.paramTypeForTwo(vector1.inputDescriptor(), vector2.inputDescriptor());
+	public Class<? extends FeatureInput> inputType() {
+		return FeatureInputType.determineInputType(
+			vector1.inputType(),
+			vector2.inputType()
+		);
 	}
 
 	@Override

@@ -2,7 +2,6 @@ package org.anchoranalysis.plugin.mpp.feature.bean.memo.ind;
 
 import org.anchoranalysis.anchor.mpp.bean.regionmap.RegionMap;
 import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputSingleMemo;
-import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputSingleMemoDescriptor;
 import org.anchoranalysis.anchor.mpp.regionmap.RegionMapSingleton;
 
 /*
@@ -37,7 +36,7 @@ import org.anchoranalysis.feature.bean.operator.FeatureSingleElem;
 import org.anchoranalysis.feature.cache.ChildCacheName;
 import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.feature.input.descriptor.FeatureInputDescriptor;
+import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 
 public class AsObjMask extends FeatureSingleElem<FeatureInputSingleMemo,FeatureInputSingleObject> {
@@ -64,8 +63,8 @@ public class AsObjMask extends FeatureSingleElem<FeatureInputSingleMemo,FeatureI
 	// We change the default behaviour, as we don't want to give the same paramsFactory
 	//   as the item we pass to
 	@Override
-	public FeatureInputDescriptor inputDescriptor() {
-		return FeatureInputSingleMemoDescriptor.INSTANCE;
+	public Class<? extends FeatureInput> inputType() {
+		return FeatureInputSingleMemo.class;
 	}
 
 	@Override
