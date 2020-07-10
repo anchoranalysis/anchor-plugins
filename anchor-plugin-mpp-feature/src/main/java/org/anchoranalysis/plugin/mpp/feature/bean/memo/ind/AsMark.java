@@ -55,7 +55,7 @@ public class AsMark extends FeatureSingleElem<FeatureInputSingleMemo,FeatureInpu
 	//   as the item we pass to
 	@Override
 	public FeatureInputDescriptor inputDescriptor() {
-		return FeatureInputSingleMemoDescriptor.instance;
+		return FeatureInputSingleMemoDescriptor.INSTANCE;
 	}
 
 	@Override

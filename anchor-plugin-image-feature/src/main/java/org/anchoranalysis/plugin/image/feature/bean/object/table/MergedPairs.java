@@ -52,6 +52,7 @@ import org.anchoranalysis.image.feature.stack.FeatureInputStack;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.voxel.nghb.CreateNeighborGraph;
+import org.anchoranalysis.image.voxel.nghb.EdgeAdderParameters;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -160,10 +161,13 @@ public class MergedPairs extends FeatureTableObjects<FeatureInputPairObjects> {
 		List<FeatureInputPairObjects> out = new ArrayList<>();
 		
 		// We create a neighbour-graph of our input objects
-		CreateNeighborGraph<ObjectMask> graphCreator = new CreateNeighborGraph<>( avoidOverlappingObjects );
-		GraphWithEdgeTypes<ObjectMask,Integer> graphNghb = graphCreator.createGraphWithNumPixels(
+		CreateNeighborGraph<ObjectMask> graphCreator = new CreateNeighborGraph<>(
+			new EdgeAdderParameters(avoidOverlappingObjects)
+		);
+		GraphWithEdgeTypes<ObjectMask,Integer> graphNghb = graphCreator.createGraph(
 			objs.asList(),
 			Function.identity(),
+			(v1, v2, numPixels) -> numPixels,
 			nrgStack.getNrgStack().getDimensions().getExtent(),
 			do3D
 		);

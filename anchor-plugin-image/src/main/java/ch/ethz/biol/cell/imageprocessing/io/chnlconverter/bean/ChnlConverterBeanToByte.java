@@ -26,11 +26,11 @@ package ch.ethz.biol.cell.imageprocessing.io.chnlconverter.bean;
  * #L%
  */
 
-import org.anchoranalysis.image.bean.chnl.converter.ChnlConverterBean;
+import org.anchoranalysis.image.bean.chnl.converter.ConvertChannelTo;
 import org.anchoranalysis.image.stack.region.chnlconverter.ChannelConverter;
 import org.anchoranalysis.image.stack.region.chnlconverter.ChannelConverterToUnsignedByte;
 
-public class ChnlConverterBeanToByte extends ChnlConverterBean {
+public class ChnlConverterBeanToByte extends ConvertChannelTo {
 
 	@Override
 	public ChannelConverter<?> createConverter() {

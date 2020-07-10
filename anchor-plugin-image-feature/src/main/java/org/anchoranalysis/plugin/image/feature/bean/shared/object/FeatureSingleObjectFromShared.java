@@ -61,7 +61,7 @@ public abstract class FeatureSingleObjectFromShared<T extends FeatureInputNRG> e
 	
 	@Override
 	public FeatureInputDescriptor inputDescriptor() {
-		return FeatureInputNRGStackDescriptor.instance;
+		return FeatureInputNRGStackDescriptor.INSTANCE;
 	}
 	
 	public Feature<FeatureInputSingleObject> getItem() {

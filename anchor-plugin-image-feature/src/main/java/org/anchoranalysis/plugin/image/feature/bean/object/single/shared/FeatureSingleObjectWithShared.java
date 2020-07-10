@@ -45,6 +45,6 @@ public abstract class FeatureSingleObjectWithShared extends FeatureShared<Featur
 
 	@Override
 	public FeatureInputDescriptor inputDescriptor() {
-		return FeatureInputSingleObjectDescriptor.instance;
+		return FeatureInputSingleObjectDescriptor.INSTANCE;
 	}
 }
