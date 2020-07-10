@@ -60,7 +60,7 @@ public class BinaryChnlProviderReference extends BinaryChnlProvider {
 
 	@Override
 	public BinaryChnl create() throws CreateException {
-		assert( this.isHasBeenInit() );
+		assert( this.isInitialized() );
 		if (bi==null) {
 			bi = createChnl();
 		}
