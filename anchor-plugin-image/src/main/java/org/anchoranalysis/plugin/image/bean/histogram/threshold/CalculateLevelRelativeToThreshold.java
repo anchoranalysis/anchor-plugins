@@ -36,7 +36,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 
-@EqualsAndHashCode(callSuper = false)
+@EqualsAndHashCode(callSuper = true)
 public abstract class CalculateLevelRelativeToThreshold extends CalculateLevelOne {
 
 	// START BEAN PROPERTIES

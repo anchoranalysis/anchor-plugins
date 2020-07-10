@@ -119,9 +119,6 @@ public class SgmnMPP extends CfgSgmn {
 		Optional<KeyValueParams> keyValueParams,
 		BoundIOContext context
 	) throws SgmnFailedException {
-		
-		assert(stackCollection!=null);
-	
 		ListUpdatableMarkSetCollection updatableMarkSetCollection = new ListUpdatableMarkSetCollection();
 		
 		try {

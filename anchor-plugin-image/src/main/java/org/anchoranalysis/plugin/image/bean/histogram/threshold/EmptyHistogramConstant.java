@@ -41,7 +41,7 @@ import lombok.Setter;
  * @author Owen Feehan
  *
  */
-@EqualsAndHashCode(callSuper=false)
+@EqualsAndHashCode(callSuper=true)
 public class EmptyHistogramConstant extends CalculateLevelOne {
 
 	// START BEAN PROPERTIES
