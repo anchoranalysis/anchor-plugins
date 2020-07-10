@@ -65,7 +65,7 @@ public class AsObjMask extends FeatureSingleElem<FeatureInputSingleMemo,FeatureI
 	//   as the item we pass to
 	@Override
 	public FeatureInputDescriptor inputDescriptor() {
-		return FeatureInputSingleMemoDescriptor.instance;
+		return FeatureInputSingleMemoDescriptor.INSTANCE;
 	}
 
 	@Override
