@@ -68,7 +68,7 @@ public class ChnlProviderReference extends ChnlProvider {
 	
 	private Channel getMaybeDuplicate() throws CreateException {
 		try {
-			Channel existing = getSharedObjects().getChnlCollection().getException(id);
+			Channel existing = getInitializationParameters().getChnlCollection().getException(id);
 			
 			if (duplicate) {
 				return existing.duplicate();

@@ -99,7 +99,7 @@ public class ObjMaskProviderPermute extends ObjectCollectionProvider {
 		
 		// We init after the permutation, as we might be changing a reference
 		try {
-			provider.initRecursive( getSharedObjects(), getLogger() );
+			provider.initRecursive( getInitializationParameters(), getLogger() );
 		} catch (InitException e) {
 			throw new CreateException(e);
 		}

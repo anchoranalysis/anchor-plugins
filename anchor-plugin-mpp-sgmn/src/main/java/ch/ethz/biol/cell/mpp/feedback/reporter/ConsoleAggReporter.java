@@ -34,14 +34,14 @@ import org.anchoranalysis.mpp.sgmn.optscheme.feedback.OptimizationFeedbackInitPa
 import org.anchoranalysis.mpp.sgmn.optscheme.feedback.ReporterException;
 import org.anchoranalysis.mpp.sgmn.optscheme.feedback.aggregate.Aggregator;
 import org.anchoranalysis.mpp.sgmn.optscheme.feedback.aggregate.AggregatorException;
-import org.anchoranalysis.mpp.sgmn.optscheme.feedback.aggregate.IAggregateReceiver;
+import org.anchoranalysis.mpp.sgmn.optscheme.feedback.aggregate.AggregateReceiver;
 import org.anchoranalysis.mpp.sgmn.optscheme.step.Reporting;
 import org.apache.commons.lang.time.StopWatch;
 
 import lombok.NoArgsConstructor;
 
 @NoArgsConstructor
-public final class ConsoleAggReporter extends ReporterAgg<CfgNRGPixelized> implements IAggregateReceiver<CfgNRGPixelized> {
+public final class ConsoleAggReporter extends ReporterAgg<CfgNRGPixelized> implements AggregateReceiver<CfgNRGPixelized> {
 	
 	private StopWatch timer = null;
 	
@@ -89,7 +89,7 @@ public final class ConsoleAggReporter extends ReporterAgg<CfgNRGPixelized> imple
 	}
 	
 	@Override
-	protected IAggregateReceiver<CfgNRGPixelized> getAggregateReceiver() {
+	protected AggregateReceiver<CfgNRGPixelized> getAggregateReceiver() {
 		return this;
 	}
 

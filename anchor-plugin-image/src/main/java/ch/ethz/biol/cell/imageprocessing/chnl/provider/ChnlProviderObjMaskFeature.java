@@ -111,7 +111,7 @@ public class ChnlProviderObjMaskFeature extends ChnlProviderOneObjsSource {
 		return FeatureSession.with(
 			feature,
 			new FeatureInitParams(),
-			getSharedObjects().getFeature().getSharedFeatureSet(),
+			getInitializationParameters().getFeature().getSharedFeatureSet(),
 			getLogger()
 		);
 	}

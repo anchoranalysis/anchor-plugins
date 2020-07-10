@@ -113,7 +113,7 @@ public class ObjMaskProviderMergePair extends ObjMaskProviderMergeWithFeature {
 				)
 			);
 			session.start(
-				getSharedObjects(),
+				getInitializationParameters(),
 				nrgStack,
 				getLogger()
 			);

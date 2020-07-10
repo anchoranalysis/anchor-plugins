@@ -100,14 +100,13 @@ public class PermuteFeature<S, T extends FeatureInput> extends PermuteFeatureBas
 	}
 
 	@Override
-	public void onInit(SharedFeaturesInitParams so)
-			throws InitException {
+	public void onInit(SharedFeaturesInitParams so)	throws InitException {
 		super.onInit(so);
 		if (referencesFeatureListCreator!=null && so!=null) {
 			for( String s : referencesFeatureListCreator.set() ) {
+				
 				try {
-					getSharedObjects().getFeatureListSet().getException(s);
-					
+					getInitializationParameters().getFeatureListSet().getException(s);
 				} catch (NamedProviderGetException e) {
 					throw new InitException(e.summarize());
 				}

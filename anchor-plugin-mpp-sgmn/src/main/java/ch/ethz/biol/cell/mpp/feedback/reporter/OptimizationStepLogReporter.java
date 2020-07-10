@@ -7,7 +7,7 @@ import org.anchoranalysis.mpp.sgmn.optscheme.feedback.OptimizationFeedbackEndPar
 import org.anchoranalysis.mpp.sgmn.optscheme.feedback.OptimizationFeedbackInitParams;
 import org.anchoranalysis.mpp.sgmn.optscheme.feedback.ReporterException;
 import org.anchoranalysis.mpp.sgmn.optscheme.feedback.aggregate.Aggregator;
-import org.anchoranalysis.mpp.sgmn.optscheme.feedback.aggregate.IAggregateReceiver;
+import org.anchoranalysis.mpp.sgmn.optscheme.feedback.aggregate.AggregateReceiver;
 import org.anchoranalysis.mpp.sgmn.optscheme.step.Reporting;
 
 /*
@@ -39,7 +39,7 @@ import org.anchoranalysis.mpp.sgmn.optscheme.step.Reporting;
 
 import org.apache.commons.lang.time.StopWatch;
 
-public final class OptimizationStepLogReporter extends ReporterAgg<CfgNRGPixelized> implements IAggregateReceiver<CfgNRGPixelized> {
+public final class OptimizationStepLogReporter extends ReporterAgg<CfgNRGPixelized> implements AggregateReceiver<CfgNRGPixelized> {
 
 	private StopWatch timer;
 	private MessageLogger logger;
@@ -103,7 +103,7 @@ public final class OptimizationStepLogReporter extends ReporterAgg<CfgNRGPixeliz
 
 	
 	@Override
-	protected IAggregateReceiver<CfgNRGPixelized> getAggregateReceiver() {
+	protected AggregateReceiver<CfgNRGPixelized> getAggregateReceiver() {
 		return this;
 	}
 	

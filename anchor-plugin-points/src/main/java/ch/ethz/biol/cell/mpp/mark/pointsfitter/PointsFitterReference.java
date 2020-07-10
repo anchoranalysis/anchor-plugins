@@ -57,7 +57,7 @@ public class PointsFitterReference extends PointsFitter {
 			throws InitException {
 		super.onInit(so);
 		try {
-			this.pointsFitter = getSharedObjects().getPointsFitterSet().getException(id);
+			this.pointsFitter = getInitializationParameters().getPointsFitterSet().getException(id);
 		} catch (NamedProviderGetException e) {
 			throw new InitException(e.summarize());
 		}
