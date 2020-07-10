@@ -37,9 +37,10 @@ import org.anchoranalysis.core.params.KeyValueParams;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.input.FeatureInputParams;
-import org.anchoranalysis.feature.input.descriptor.FeatureInputDescriptor;
-import org.anchoranalysis.feature.input.descriptor.FeatureInputParamsDescriptor;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * Extracts a key-value-param as a double
@@ -58,13 +59,13 @@ public class Param<T extends FeatureInputParams> extends Feature<T> {
 
 	// START BEAN PROPERTIES
 	/** Prefix prepended to key */
-	@BeanField @AllowEmpty
+	@BeanField @AllowEmpty @Getter @Setter
 	String keyPrefix = "";
 	
-	@BeanField @AllowEmpty
+	@BeanField @AllowEmpty @Getter @Setter
 	private String key = "";
 	
-	@BeanField @AllowEmpty
+	@BeanField @AllowEmpty @Getter @Setter
 	String keySuffix = "";
 	// END BEAN PROPERTIES
 
@@ -97,37 +98,13 @@ public class Param<T extends FeatureInputParams> extends Feature<T> {
 			);
 		}
 	}
-	
-	private String keyAggregated() {
-		return keyPrefix + key + keySuffix;
-	}
 
 	@Override
-	public FeatureInputDescriptor inputDescriptor() {
-		return FeatureInputParamsDescriptor.INSTANCE;
+	public Class<? extends FeatureInput> inputType() {
+		return FeatureInput.class;
 	}
-
-	public String getKey() {
-		return key;
-	}
-
-	public void setKey(String key) {
-		this.key = key;
-	}
-
-	public String getKeyPrefix() {
-		return keyPrefix;
-	}
-
-	public void setKeyPrefix(String keyPrefix) {
-		this.keyPrefix = keyPrefix;
-	}
-
-	public String getKeySuffix() {
-		return keySuffix;
-	}
-
-	public void setKeySuffix(String keySuffix) {
-		this.keySuffix = keySuffix;
+		
+	private String keyAggregated() {
+		return keyPrefix + key + keySuffix;
 	}
 }

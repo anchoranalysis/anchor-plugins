@@ -1,5 +1,7 @@
 package org.anchoranalysis.plugin.image.feature.bean.object.single.shared;
 
+import org.anchoranalysis.feature.input.FeatureInput;
+
 /*-
  * #%L
  * anchor-image-feature
@@ -30,10 +32,8 @@ package org.anchoranalysis.plugin.image.feature.bean.object.single.shared;
 
 
 
-import org.anchoranalysis.feature.input.descriptor.FeatureInputDescriptor;
 import org.anchoranalysis.image.feature.bean.FeatureShared;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
-import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObjectDescriptor;
 
 /**
  * A feature that requires shared-objects during intialization
@@ -44,7 +44,7 @@ import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObjectDes
 public abstract class FeatureSingleObjectWithShared extends FeatureShared<FeatureInputSingleObject> {
 
 	@Override
-	public FeatureInputDescriptor inputDescriptor() {
-		return FeatureInputSingleObjectDescriptor.INSTANCE;
+	public Class<? extends FeatureInput> inputType() {
+		return FeatureInputSingleObject.class;
 	}
 }

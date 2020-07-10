@@ -36,10 +36,11 @@ import org.anchoranalysis.core.params.KeyValueParams;
 import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.input.FeatureInput;
-import org.anchoranalysis.feature.input.descriptor.FeatureInputDescriptor;
-import org.anchoranalysis.feature.input.descriptor.FeatureInputGenericDescriptor;
 import org.anchoranalysis.image.feature.bean.FeatureShared;
 import org.anchoranalysis.image.feature.init.FeatureInitParamsShared;
+
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * Retrieves a parameter from a collection in shared-objects.
@@ -54,10 +55,10 @@ import org.anchoranalysis.image.feature.init.FeatureInitParamsShared;
 public class ParamFromCollection<T extends FeatureInput> extends FeatureShared<T> {
 
 	// START BEAN PROPERTIES
-	@BeanField
+	@BeanField @Getter @Setter
 	private String collectionID = "";
 	
-	@BeanField
+	@BeanField @Getter @Setter
 	private String key = "";
 	// END BEAN PROPERTIES
 
@@ -80,25 +81,9 @@ public class ParamFromCollection<T extends FeatureInput> extends FeatureShared<T
 	public double calc(SessionInput<T> input) throws FeatureCalcException {
 		return val;
 	}
-
-	public String getCollectionID() {
-		return collectionID;
-	}
-
-	public void setCollectionID(String collectionID) {
-		this.collectionID = collectionID;
-	}
-
-	public String getKey() {
-		return key;
-	}
-
-	public void setKey(String key) {
-		this.key = key;
-	}
 	
 	@Override
-	public FeatureInputDescriptor inputDescriptor() {
-		return FeatureInputGenericDescriptor.INSTANCE;
+	public Class<? extends FeatureInput> inputType() {
+		return FeatureInput.class;
 	}
 }
