@@ -37,7 +37,6 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.DefaultInstance;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.bean.error.BeanMisconfiguredException;
-import org.anchoranalysis.image.io.bean.chnl.map.ImgChnlMapEntry;
 import org.anchoranalysis.image.io.input.ProvidesStackInput;
 import org.anchoranalysis.io.bean.provider.file.FileProviderWithDirectory;
 import org.anchoranalysis.io.error.AnchorIOException;
@@ -50,6 +49,7 @@ import org.anchoranalysis.mpp.io.bean.input.MultiInputManagerBase;
 import org.anchoranalysis.mpp.io.input.MultiInput;
 import org.anchoranalysis.plugin.io.bean.descriptivename.LastFolders;
 import org.anchoranalysis.plugin.io.bean.input.stack.Stacks;
+import org.anchoranalysis.image.io.bean.channel.map.ImgChnlMapEntry;
 import org.anchoranalysis.image.io.bean.rasterreader.RasterReader;
 
 /**

@@ -37,7 +37,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.DefaultInstance;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.core.log.Logger;
-import org.anchoranalysis.image.io.bean.chnl.map.ImgChnlMapCreator;
+import org.anchoranalysis.image.io.bean.channel.map.ImgChnlMapCreator;
 import org.anchoranalysis.image.io.bean.rasterreader.RasterReader;
 import org.anchoranalysis.image.io.input.NamedChnlsInput;
 import org.anchoranalysis.io.bean.descriptivename.DescriptiveNameFromFile;

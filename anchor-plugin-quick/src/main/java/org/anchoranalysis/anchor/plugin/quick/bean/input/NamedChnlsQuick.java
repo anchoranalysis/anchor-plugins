@@ -50,7 +50,7 @@ import org.anchoranalysis.io.input.FileInput;
 import org.anchoranalysis.plugin.io.bean.descriptivename.LastFolders;
 import org.anchoranalysis.plugin.io.bean.input.chnl.NamedChnlsAppend;
 import org.anchoranalysis.plugin.io.bean.input.chnl.NamedChnlsBase;
-import org.anchoranalysis.image.io.bean.chnl.map.ImgChnlMapEntry;
+import org.anchoranalysis.image.io.bean.channel.map.ImgChnlMapEntry;
 import org.anchoranalysis.image.io.bean.rasterreader.RasterReader;
 
 /**

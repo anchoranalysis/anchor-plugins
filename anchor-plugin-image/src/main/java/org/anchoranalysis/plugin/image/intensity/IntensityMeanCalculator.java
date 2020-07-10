@@ -32,6 +32,7 @@ import org.anchoranalysis.core.geometry.ReadableTuple3i;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.extent.BoundingBox;
+import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.voxel.box.VoxelBoxWrapper;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
@@ -45,16 +46,7 @@ public class IntensityMeanCalculator {
 	}
 	
 	public static double calcMeanIntensityObjMask( Channel chnl, ObjectMask om, boolean excludeZero ) throws FeatureCalcException {
-		
-		if (!chnl.getDimensions().getExtent().contains(om.getBoundingBox())) {
-			throw new FeatureCalcException(
-				String.format(
-					"The object's bounding-box (%s) is not contained within the dimensions of the channel %s",
-					om.getBoundingBox(),
-					chnl.getDimensions().getExtent()
-				)
-			);
-		}
+		checkContained(om.getBoundingBox(), chnl.getDimensions().getExtent());
 		
 		VoxelBoxWrapper vbIntens = chnl.getVoxelBox();
 		
@@ -99,5 +91,17 @@ public class IntensityMeanCalculator {
 		}
 		
 		return sum/cnt;
+	}
+	
+	private static void checkContained(BoundingBox bbox, Extent extent) throws FeatureCalcException {
+		if (!extent.contains(bbox)) {
+			throw new FeatureCalcException(
+				String.format(
+					"The object's bounding-box (%s) is not contained within the dimensions of the channel %s",
+					bbox,
+					extent
+				)
+			);
+		}
 	}
 }
