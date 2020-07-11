@@ -42,15 +42,18 @@ import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.anchoranalysis.image.voxel.box.factory.VoxelBoxFactory;
 
+import lombok.Getter;
+import lombok.Setter;
+
 // Chops objects up into squares (or mostly squares, sometimes rectangles at the very end)
 // Only chops in X and Y, Z is unaffected
 public class ObjMaskProviderSplitIntoSquares extends ObjectCollectionProviderOne {
 
 	// START BEAN PROPERTIES
-	@BeanField @Positive
+	@BeanField @Positive @Getter @Setter
 	private int squareSize = 10;
 	
-	@BeanField
+	@BeanField @Getter @Setter
 	private int minNumVoxels = 1;
 	// END BEAN PROPERTIES
 	
@@ -67,12 +70,8 @@ public class ObjMaskProviderSplitIntoSquares extends ObjectCollectionProviderOne
 		
 		Extent e = om.getBoundingBox().extent();
 		
-		int numX = e.getX() / squareSize;
-		int numY = e.getY() / squareSize;
-		
-		// We force at least one, to catch the remainder
-		if (numX==0) numX=1;
-		if (numY==0) numY=1;
+		int numX = numSquaresAlongDimension(e.getX());
+		int numY = numSquaresAlongDimension(e.getY());
 		
 		for( int y=0; y<numY; y++ ) {
 			
@@ -148,19 +147,13 @@ public class ObjMaskProviderSplitIntoSquares extends ObjectCollectionProviderOne
 		}
 	}
 	
-	public int getSquareSize() {
-		return squareSize;
-	}
-
-	public void setSquareSize(int squareSize) {
-		this.squareSize = squareSize;
-	}
-
-	public int getMinNumVoxels() {
-		return minNumVoxels;
-	}
-
-	public void setMinNumVoxels(int minNumVoxels) {
-		this.minNumVoxels = minNumVoxels;
+	private int numSquaresAlongDimension(int extent) {
+		int num = extent / squareSize;
+		if (num!=0) {
+			return num;
+		} else {
+			// We force at least one, to catch the remainder
+			return 1;
+		}
 	}
 }
