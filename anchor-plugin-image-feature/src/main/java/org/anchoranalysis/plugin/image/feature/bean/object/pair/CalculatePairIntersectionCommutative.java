@@ -2,6 +2,8 @@ package org.anchoranalysis.plugin.image.feature.bean.object.pair;
 
 import java.util.Optional;
 
+
+
 /*
  * #%L
  * anchor-plugin-image
@@ -93,13 +95,9 @@ class CalculatePairIntersectionCommutative extends FeatureCalculation<Optional<O
 		if (!omIntersection2.isPresent()) {
 			return omIntersection1;
 		}
-		
-		assert(omIntersection1.get().hasPixelsGreaterThan(0));
-		assert(omIntersection2.get().hasPixelsGreaterThan(0));
-		
-		ObjectMask merged = ObjectMaskMerger.merge( omIntersection1.get(), omIntersection2.get() );
-		
-		assert(merged.hasPixelsGreaterThan(0));
-		return Optional.of(merged);
+
+		return Optional.of(
+			ObjectMaskMerger.merge( omIntersection1.get(), omIntersection2.get() )
+		);
 	}
 }
