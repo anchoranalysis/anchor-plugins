@@ -146,7 +146,7 @@ public class RelationWithMatches extends ObjectFilterRelation {
 	private static Map<ObjectMask,ObjectCollection> createMatchesMap( List<MatchedObject> list ) {
 		return list.stream()
 	      .collect(Collectors.toMap(
-    		 MatchedObject::getSourceObj,
+    		 MatchedObject::getSource,
     		 MatchedObject::getMatches
     	  )
     	);
