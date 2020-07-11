@@ -51,6 +51,6 @@ public class ObjMaskMatchUtilities {
 	}
 	
 	private static ObjectCollection searchObjectsThatIntersectWith(ObjectCollection searchObjects, ObjectMask objToIntersectWith) {
-		return searchObjects.stream().filter(objToIntersectWith::hasIntersectingPixels);
+		return searchObjects.stream().filter(objToIntersectWith::hasIntersectingVoxels);
 	}
 }

@@ -45,18 +45,20 @@ import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.io.bean.color.generator.ColorSetGenerator;
 
 import ch.ethz.biol.cell.imageprocessing.stack.color.ColoredObjsStackCreator;
+import lombok.Getter;
+import lombok.Setter;
 
 public class StackProviderRGBFromObjMask extends StackProviderRGBFromObjMaskBase {
 
 	// START BEAN PROPERTIES
-	@BeanField
+	@BeanField @Getter @Setter
 	private ObjectCollectionProvider objs;
 	
-	@BeanField @OptionalBean
+	@BeanField @OptionalBean @Getter @Setter
 	private ColorListProvider colorListProvider;	// If null, uses the colorListGenerator below
 
 	// Fallback generator if colorListProvider is null
-	@BeanField
+	@BeanField @Getter @Setter
 	private ColorSetGenerator colorSetGenerator = ColoredObjsStackCreator.DEFAULT_COLOR_SET_GENERATOR;
 	// END BEAN PROPERTIES
 	
@@ -82,29 +84,5 @@ public class StackProviderRGBFromObjMask extends StackProviderRGBFromObjMaskBase
 		}
 		
 		return colorList.get();
-	}
-
-	public ObjectCollectionProvider getObjs() {
-		return objs;
-	}
-
-	public void setObjs(ObjectCollectionProvider objs) {
-		this.objs = objs;
-	}
-
-	public ColorListProvider getColorListProvider() {
-		return colorListProvider;
-	}
-
-	public void setColorListProvider(ColorListProvider colorListProvider) {
-		this.colorListProvider = colorListProvider;
-	}
-
-	public ColorSetGenerator getColorSetGenerator() {
-		return colorSetGenerator;
-	}
-
-	public void setColorSetGenerator(ColorSetGenerator colorSetGenerator) {
-		this.colorSetGenerator = colorSetGenerator;
 	}
 }

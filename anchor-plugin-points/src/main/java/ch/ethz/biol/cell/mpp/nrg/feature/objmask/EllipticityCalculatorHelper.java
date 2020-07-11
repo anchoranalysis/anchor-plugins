@@ -53,11 +53,11 @@ class EllipticityCalculatorHelper {
 	}
 	
 	private static double calcWithMerged( ObjectMask om, ObjectMask omCompare, ObjectMask omMerge ) {
-		int numPixelsCompare = omCompare.numVoxelsOn();
-		int numUnion = omMerge.numVoxelsOn();
+		int numPixelsCompare = omCompare.numberVoxelsOn();
+		int numUnion = omMerge.numberVoxelsOn();
 		
 		// Interseting pixels
-		int numIntersection = om.countIntersectingPixels(omCompare);
+		int numIntersection = om.countIntersectingVoxels(omCompare);
 		
 		return intDiv(
 			numPixelsCompare,

@@ -36,16 +36,19 @@ import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ops.BinaryChnlFromObjs;
 
+import lombok.Getter;
+import lombok.Setter;
+
 /** 
  * Creates a BinaryImgChannel from a collection of object masks
  **/
 public class BinaryChnlProviderFromObjMasks extends BinaryChnlProviderDimSource {
 
 	// START BEAN
-	@BeanField
+	@BeanField @Getter @Setter
 	private ObjectCollectionProvider objs;
 	
-	@BeanField
+	@BeanField @Getter @Setter
 	private boolean invert = false;
 	// END BEAN
 
@@ -65,22 +68,6 @@ public class BinaryChnlProviderFromObjMasks extends BinaryChnlProviderDimSource 
 		
 		BinaryChnl maskedImage = createChnlFromObjsMux(objs, dim, bv, invert);
 		return new BinaryChnl(maskedImage.getChannel(), bv);	
-	}
-
-	public ObjectCollectionProvider getObjs() {
-		return objs;
-	}
-
-	public void setObjs(ObjectCollectionProvider objs) {
-		this.objs = objs;
-	}
-
-	public boolean isInvert() {
-		return invert;
-	}
-
-	public void setInvert(boolean invert) {
-		this.invert = invert;
 	}
 	
 	private static BinaryChnl createChnlFromObjsMux( ObjectCollection objs, ImageDimensions sd, BinaryValues outVal, boolean invert ) {

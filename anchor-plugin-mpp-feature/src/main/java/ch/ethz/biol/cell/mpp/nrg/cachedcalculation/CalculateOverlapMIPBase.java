@@ -65,7 +65,7 @@ public abstract class CalculateOverlapMIPBase extends FeatureCalculation<Double,
 				regionMembershipForMark(mark2)
 			);
 		
-		double overlap = pair.countIntersectingPixels();
+		double overlap = pair.countIntersectingVoxels();
 		
 		return calculateOverlapResult(overlap, pair);
 	}

@@ -56,22 +56,22 @@ public class ObjMaskCollectionCompressionTest {
 	@Test
 	public void testCompression() throws SetOperationFailedException, DeserializationFailedException, BindFailedException {
 		
-		ObjMaskCollectionWithSize uncompressed = calcUncompressed(PATH_UNCOMPRESSED_OBJS);
+		ObjectCollectionWithSize uncompressed = calcUncompressed(PATH_UNCOMPRESSED_OBJS);
 		
-		ObjMaskCollectionWithSize compressed = calcCompressed(
-			uncompressed.getObjs(),
+		ObjectCollectionWithSize compressed = calcCompressed(
+			uncompressed.getObjects(),
 			folder.getRoot().toPath()
 		);
 
 		double relativeSize = uncompressed.relativeSize(compressed);
 		
-		assertTrue( uncompressed.getObjs().equalsDeep(compressed.getObjs()) );
+		assertTrue( uncompressed.getObjects().equalsDeep(compressed.getObjects()) );
 
 		// We expect compression of approximate 6.05 on this particular example
 		assertTrue( relativeSize > 6 && relativeSize < 6.1 );
 	}
 	
-	private ObjMaskCollectionWithSize calcUncompressed(String pathIn) {
+	private ObjectCollectionWithSize calcUncompressed(String pathIn) {
 				
 		// Read the object, and write it again, this time compressed
 		ObjectCollection objs = testLoader.openObjsFromTestPath(pathIn);
@@ -80,11 +80,11 @@ public class ObjMaskCollectionCompressionTest {
 			testLoader.getTestLoader().resolveTestPath(pathIn)
 		);
 		
-		return new ObjMaskCollectionWithSize(objs, size);
+		return new ObjectCollectionWithSize(objs, size);
 	}
 
 	
-	private static ObjMaskCollectionWithSize calcCompressed( ObjectCollection objsUncompressed, Path root ) throws SetOperationFailedException, DeserializationFailedException, BindFailedException {
+	private static ObjectCollectionWithSize calcCompressed( ObjectCollection objsUncompressed, Path root ) throws SetOperationFailedException, DeserializationFailedException, BindFailedException {
 		
 		Path pathOut = root.resolve(TEMPORARY_FOLDER_OUT+".h5");
 		
@@ -92,7 +92,7 @@ public class ObjMaskCollectionCompressionTest {
 				
 		long size = fileSizeBytes( pathOut );
 		
-		return new ObjMaskCollectionWithSize( objsCompressed, size );
+		return new ObjectCollectionWithSize( objsCompressed, size );
 	}
 	
 	private static ObjectCollection writeAndReadAgain( ObjectCollection objs, Path pathRoot, Path pathOut ) throws SetOperationFailedException, DeserializationFailedException, BindFailedException {

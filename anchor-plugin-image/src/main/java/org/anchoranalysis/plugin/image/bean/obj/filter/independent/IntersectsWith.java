@@ -38,6 +38,9 @@ import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.plugin.image.bean.obj.filter.ObjectFilterPredicate;
 
+import lombok.Getter;
+import lombok.Setter;
+
 /**
  * Keeps objects which intersects with ANY ONE of a collection of other objects.
  * 
@@ -47,7 +50,7 @@ import org.anchoranalysis.plugin.image.bean.obj.filter.ObjectFilterPredicate;
 public class IntersectsWith extends ObjectFilterPredicate {
 
 	// START BEAN PROPERTIES
-	@BeanField
+	@BeanField @Getter @Setter
 	private ObjectCollectionProvider objs;
 	// END BEAN PROPERTIES
 	
@@ -66,7 +69,7 @@ public class IntersectsWith extends ObjectFilterPredicate {
 	@Override
 	protected boolean match(ObjectMask om, Optional<ImageDimensions> dim) throws OperationFailedException {
 		return intersectWithAnyOneObjs.stream().anyMatch(obj->
-			obj.hasIntersectingPixels(om)
+			obj.hasIntersectingVoxels(om)
 		);
 	}
 
@@ -74,13 +77,5 @@ public class IntersectsWith extends ObjectFilterPredicate {
 	protected void end() throws OperationFailedException {
 		super.end();
 		intersectWithAnyOneObjs = null;
-	}
-
-	public ObjectCollectionProvider getObjs() {
-		return objs;
-	}
-
-	public void setObjs(ObjectCollectionProvider objs) {
-		this.objs = objs;
 	}
 }

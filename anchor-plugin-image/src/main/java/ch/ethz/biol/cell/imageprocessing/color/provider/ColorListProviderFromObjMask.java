@@ -36,13 +36,16 @@ import org.anchoranalysis.image.bean.provider.ObjectCollectionProvider;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.io.bean.color.generator.ColorSetGenerator;
 
+import lombok.Getter;
+import lombok.Setter;
+
 public class ColorListProviderFromObjMask extends ColorListProvider {
 
 	// START BEAN PROPERTIES
-	@BeanField
+	@BeanField @Getter @Setter
 	private ColorSetGenerator colorSetGenerator;
 	
-	@BeanField
+	@BeanField @Getter @Setter
 	private ObjectCollectionProvider objs;
 	// END BEAN PROPERTIES
 
@@ -62,25 +65,4 @@ public class ColorListProviderFromObjMask extends ColorListProvider {
 			throw new CreateException(e);
 		}
 	}
-
-	public ColorSetGenerator getColorSetGenerator() {
-		return colorSetGenerator;
-	}
-
-
-	public void setColorSetGenerator(ColorSetGenerator colorSetGenerator) {
-		this.colorSetGenerator = colorSetGenerator;
-	}
-
-
-	public ObjectCollectionProvider getObjs() {
-		return objs;
-	}
-
-
-	public void setObjs(ObjectCollectionProvider objs) {
-		this.objs = objs;
-	}
-
-
 }

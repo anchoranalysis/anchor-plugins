@@ -97,10 +97,10 @@ class Merger {
 	/**
 	 * Tries to merge objs (the collection is changed in-place)
 	 * 
-	 * @param objs the objects to merge
+	 * @param objects the objects to merge
 	 * @throws OperationFailedException
 	 */
-	public ObjectCollection tryMerge( ObjectCollection objs ) throws OperationFailedException {
+	public ObjectCollection tryMerge( ObjectCollection objects ) throws OperationFailedException {
 		
 		List<MergeParams> stack = new ArrayList<>();
 		MergeParams mergeParams = new MergeParams(0,0);
@@ -109,10 +109,10 @@ class Merger {
 		
 		while( !stack.isEmpty() ) {
 			MergeParams params = stack.remove(0);
-			tryMergeOnIndices(objs, params, stack);
+			tryMergeOnIndices(objects, params, stack);
 		}
 		
-		return objs;
+		return objects;
 	}
 		
 	/**

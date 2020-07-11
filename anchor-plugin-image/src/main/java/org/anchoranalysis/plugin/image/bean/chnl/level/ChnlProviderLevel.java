@@ -36,18 +36,20 @@ import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.object.ObjectCollection;
 
 import ch.ethz.biol.cell.imageprocessing.chnl.provider.DimChecker;
+import lombok.Getter;
+import lombok.Setter;
 
 public abstract class ChnlProviderLevel extends ChnlProviderOne {
 
 	// START BEAN PROPERTIES
 	/** The input (an intensity channel in the normal way) */
-	@BeanField
+	@BeanField @Getter @Setter
 	private ObjectCollectionProvider objs;
 	
-	@BeanField
+	@BeanField @Getter @Setter
 	private ChnlProvider chnlOutput;
 	
-	@BeanField
+	@BeanField @Getter @Setter
 	private CalculateLevel calculateLevel;
 	// END BEAN PROPERTIES
 	
@@ -63,29 +65,4 @@ public abstract class ChnlProviderLevel extends ChnlProviderOne {
 	}
 	
 	protected abstract Channel createFor( Channel chnlIntensity, ObjectCollection objs, Channel chnlOutput ) throws CreateException;
-	
-	public ObjectCollectionProvider getObjs() {
-		return objs;
-	}
-	
-	
-	public void setObjs(ObjectCollectionProvider objs) {
-		this.objs = objs;
-	}
-
-	public ChnlProvider getChnlOutput() {
-		return chnlOutput;
-	}
-
-	public void setChnlOutput(ChnlProvider chnlOutput) {
-		this.chnlOutput = chnlOutput;
-	}
-	
-	public CalculateLevel getCalculateLevel() {
-		return calculateLevel;
-	}
-
-	public void setCalculateLevel(CalculateLevel calculateLevel) {
-		this.calculateLevel = calculateLevel;
-	}
 }

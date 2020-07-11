@@ -97,7 +97,7 @@ public class NeighbourhoodCond implements UpdatableBeforeCondition {
 			return false;
 		}
 		
-		return !requireTouching || omGrown.hasIntersectingPixels(omDest);
+		return !requireTouching || omGrown.hasIntersectingVoxels(omDest);
 	}
 			
 	private static BoundingBox bboxGrown( ObjectMask obj ) {
