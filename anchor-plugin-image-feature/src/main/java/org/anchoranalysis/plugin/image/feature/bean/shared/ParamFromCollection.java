@@ -33,12 +33,12 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 import org.anchoranalysis.core.params.KeyValueParams;
+import org.anchoranalysis.feature.bean.operator.FeatureOperator;
 import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.feature.calc.FeatureInitParams;
 import org.anchoranalysis.feature.input.FeatureInput;
-import org.anchoranalysis.image.feature.bean.FeatureShared;
-import org.anchoranalysis.image.feature.init.FeatureInitParamsShared;
-
+import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -52,7 +52,7 @@ import lombok.Setter;
  *
  * @param <T> feature-input-type
  */
-public class ParamFromCollection<T extends FeatureInput> extends FeatureShared<T> {
+public class ParamFromCollection<T extends FeatureInput> extends FeatureOperator<T> {
 
 	// START BEAN PROPERTIES
 	@BeanField @Getter @Setter
@@ -65,9 +65,12 @@ public class ParamFromCollection<T extends FeatureInput> extends FeatureShared<T
 	private double val;
 	
 	@Override
-	public void beforeCalcCast(FeatureInitParamsShared params) throws InitException {
+	protected void beforeCalc(FeatureInitParams paramsInit) throws InitException {
+		super.beforeCalc(paramsInit);
+		
+		ImageInitParams imageInit = new ImageInitParams( paramsInit.sharedObjectsRequired() );
 		try {
-			KeyValueParams kpv = params.getSharedObjects().getParams()
+			KeyValueParams kpv = imageInit.getParams()
 				.getNamedKeyValueParamsCollection()
 				.getException(collectionID);
 			this.val = kpv.getPropertyAsDouble(key);
@@ -80,10 +83,5 @@ public class ParamFromCollection<T extends FeatureInput> extends FeatureShared<T
 	@Override
 	public double calc(SessionInput<T> input) throws FeatureCalcException {
 		return val;
-	}
-	
-	@Override
-	public Class<? extends FeatureInput> inputType() {
-		return FeatureInput.class;
 	}
 }

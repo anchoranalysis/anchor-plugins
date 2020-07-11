@@ -36,10 +36,13 @@ import org.anchoranalysis.feature.cache.ChildCacheName;
 import org.anchoranalysis.feature.cache.calculation.CalcForChild;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.input.FeatureInputNRG;
+import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
 import org.anchoranalysis.image.bean.provider.BinaryChnlProvider;
 import org.anchoranalysis.image.binary.BinaryChnl;
-import org.anchoranalysis.image.feature.init.FeatureInitParamsShared;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
+
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * Calculate a feature, treating a binary-channel as a single-object on the nrg-stack
@@ -49,21 +52,15 @@ import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 public class BinaryChannelAsSingleObject<T extends FeatureInputNRG> extends FeatureSingleObjectFromShared<T> {
 
 	// START BEAN PROPERTIES
-	@BeanField
-	@SkipInit
+	@BeanField @SkipInit @Getter @Setter	
 	private BinaryChnlProvider binaryChnl;
 	// END BEAN PROPERTIES
 	
 	private BinaryChnl chnl;
 	
 	@Override
-	public void beforeCalcCast(FeatureInitParamsShared params) throws InitException {
-		super.beforeCalcCast(params);
-
-		binaryChnl.initRecursive(
-			params.getSharedObjects(),
-			getLogger()
-		);
+	protected void beforeCalcWithImageInitParams(ImageInitParams params) throws InitException {
+		binaryChnl.initRecursive(params, getLogger());
 		
 		try {
 			chnl = binaryChnl.create();
@@ -79,13 +76,5 @@ public class BinaryChannelAsSingleObject<T extends FeatureInputNRG> extends Feat
 			new CalculateBinaryChnlInput<>(chnl),
 			new ChildCacheName(BinaryChannelAsSingleObject.class, chnl.hashCode())
 		);
-	}
-
-	public BinaryChnlProvider getBinaryChnl() {
-		return binaryChnl;
-	}
-
-	public void setBinaryChnl(BinaryChnlProvider binaryChnl) {
-		this.binaryChnl = binaryChnl;
 	}
 }

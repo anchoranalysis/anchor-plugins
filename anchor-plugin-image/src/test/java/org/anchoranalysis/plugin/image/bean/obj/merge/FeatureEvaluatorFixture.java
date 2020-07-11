@@ -1,5 +1,7 @@
 package org.anchoranalysis.plugin.image.bean.obj.merge;
 
+import java.nio.file.Path;
+
 /*-
  * #%L
  * anchor-plugin-image
@@ -39,13 +41,20 @@ class FeatureEvaluatorFixture {
 	
 	private FeatureEvaluatorFixture() {}
 	
-	public static <T extends FeatureInput> FeatureEvaluatorNrgStack<T> createNrg( Feature<T> feature, Logger logger ) throws CreateException {
+	public static <T extends FeatureInput> FeatureEvaluatorNrgStack<T> createNrg(
+		Feature<T> feature,
+		Logger logger,
+		Path modelDirectory
+	) throws CreateException {
 		FeatureEvaluatorNrgStack<T> eval = new FeatureEvaluatorNrgStack<>();
 		eval.setFeatureProvider(
 			ProviderFixture.providerFor( feature )
 		);
 		try {
-			eval.init(  SharedFeaturesInitParams.create(logger), logger );
+			eval.init(
+				SharedFeaturesInitParams.create(logger, modelDirectory),
+				logger
+			);
 		} catch (InitException e) {
 			throw new CreateException(e);
 		}

@@ -99,7 +99,7 @@ public class CopyFilesExperiment extends Experiment {
 	public void doExperiment(ExperimentExecutionArguments arguments) throws ExperimentExecutionException {
 
 		// Determine a destination for the output, and create a corresponding logger
-		Path destination = determineDestination(arguments.isDebugEnabled());
+		Path destination = determineDestination(arguments.isDebugModeEnabled());
 		StatefulMessageLogger logger = createLoggerFor(destination, arguments);
 		
 		logger.log("Reading files: ");
@@ -107,7 +107,7 @@ public class CopyFilesExperiment extends Experiment {
 		try {
 			doCopying(
 				findMatchingFiles(arguments),
-				sourceFolderPath.path(arguments.isDebugEnabled()),
+				sourceFolderPath.path(arguments.isDebugModeEnabled()),
 				destination,
 				logger
 			);

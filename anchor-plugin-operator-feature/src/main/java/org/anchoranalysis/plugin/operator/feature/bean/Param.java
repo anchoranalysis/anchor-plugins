@@ -34,10 +34,10 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.error.BeanMisconfiguredException;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.params.KeyValueParams;
-import org.anchoranalysis.feature.bean.Feature;
+import org.anchoranalysis.feature.bean.operator.FeatureOperator;
 import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.feature.input.FeatureInput;
+import org.anchoranalysis.feature.calc.FeatureInitParams;
 import org.anchoranalysis.feature.input.FeatureInputParams;
 import lombok.Getter;
 import lombok.Setter;
@@ -55,7 +55,7 @@ import lombok.Setter;
  *
  * @param <T> feature-input type
  */
-public class Param<T extends FeatureInputParams> extends Feature<T> {
+public class Param<T extends FeatureInputParams> extends FeatureOperator<T> {
 
 	// START BEAN PROPERTIES
 	/** Prefix prepended to key */
@@ -80,8 +80,8 @@ public class Param<T extends FeatureInputParams> extends Feature<T> {
 	}
 	
 	@Override
-	public void beforeCalc() throws InitException {
-		super.beforeCalc();
+	protected void beforeCalc(FeatureInitParams paramsInit) throws InitException {
+		super.beforeCalc(paramsInit);
 		keyAggregated = keyAggregated();
 	}
 	
@@ -97,11 +97,6 @@ public class Param<T extends FeatureInputParams> extends Feature<T> {
 				String.format("Param '%s' is missing", keyAggregated)	
 			);
 		}
-	}
-
-	@Override
-	public Class<? extends FeatureInput> inputType() {
-		return FeatureInput.class;
 	}
 		
 	private String keyAggregated() {

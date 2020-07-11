@@ -67,7 +67,8 @@ public class FeatureCostAssigner extends AnnotationComparisonAssigner<Assignment
 	) throws CreateException {
 		try {
 			SharedFeaturesInitParams soFeature = SharedFeaturesInitParams.create(
-				context.getLogger()
+				context.getLogger(),
+				context.getModelDirectory()
 			);
 			featureEvaluator.initRecursive( soFeature, context.getLogger() );
 

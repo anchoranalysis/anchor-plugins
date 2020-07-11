@@ -97,12 +97,12 @@ public abstract class SummarizeTask<T extends InputFromManager,S> extends Task<T
 		
 	private void summarizeExperimentArguments( MessageLogger log, ExperimentExecutionArguments eea ) {
 		
-		if (eea.hasInputDirectory()) {
-			log.logFormatted("An input-directory has been set as %s", eea.getInputDirectory() );
-		}
+		eea.getInputDirectory().ifPresent( dir->
+			log.logFormatted("An input-directory has been set as %s", dir)
+		);
 		
 		eea.getOutputDirectory().ifPresent( dir->
-			log.logFormatted("An output-directory has been set as %s", dir )
+			log.logFormatted("An output-directory has been set as %s", dir)
 		);
 	}
 

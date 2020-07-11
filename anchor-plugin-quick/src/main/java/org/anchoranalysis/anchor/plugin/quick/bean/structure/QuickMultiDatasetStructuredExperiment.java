@@ -108,8 +108,8 @@ public class QuickMultiDatasetStructuredExperiment<T extends InputFromManager,S>
 		if (!populatedDelegate) {
 			delegate.setFolderDataset( folderDataset() );
 			delegate.setOutput( output() );
-			delegate.setLoggerExperimentPath( loggerPath("Experiment") );
-			delegate.setLoggerTaskPath( loggerPath("Task") );
+			delegate.setLogExperimentPath( loggerPath("Experiment") );
+			delegate.setLogTaskPath( loggerPath("Task") );
 
 			populatedDelegate = true;
 		}

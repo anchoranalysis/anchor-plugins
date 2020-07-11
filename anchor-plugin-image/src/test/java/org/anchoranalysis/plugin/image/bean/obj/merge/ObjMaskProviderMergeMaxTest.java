@@ -1,5 +1,7 @@
 package org.anchoranalysis.plugin.image.bean.obj.merge;
 
+import java.nio.file.Path;
+
 /*-
  * #%L
  * anchor-plugin-image
@@ -40,6 +42,7 @@ import org.anchoranalysis.plugin.image.test.ProviderFixture;
 import org.anchoranalysis.test.LoggingFixture;
 import org.anchoranalysis.test.feature.plugins.mockfeature.MockFeatureWithCalculationFixture;
 import org.junit.Test;
+import org.mockito.Mockito;
 
 public class ObjMaskProviderMergeMaxTest {
 	
@@ -96,7 +99,8 @@ public class ObjMaskProviderMergeMaxTest {
 		provider.setFeatureEvaluator(
 			FeatureEvaluatorFixture.createNrg(
 				MockFeatureWithCalculationFixture.createMockFeatureWithCalculation(calculationFunc),
-				logger
+				logger,
+				Mockito.mock(Path.class)
 			)
 		);
 		

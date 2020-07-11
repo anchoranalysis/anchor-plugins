@@ -2,6 +2,8 @@ package org.anchoranalysis.plugin.image.feature.bean.nrg.dimensions;
 
 
 
+import org.anchoranalysis.feature.cache.SessionInput;
+
 /*-
  * #%L
  * anchor-plugin-image-feature
@@ -42,9 +44,9 @@ import org.anchoranalysis.image.feature.bean.FeatureNRGStack;
 public abstract class FromDimensionsBase<T extends FeatureInputNRG> extends FeatureNRGStack<T> {
 		
 	@Override
-	public double calcForInput( FeatureInputNRG input ) throws FeatureCalcException {
+	public double calc( SessionInput<T> input ) throws FeatureCalcException {
 		return calcFromDims(
-			input.getDimensionsRequired()
+			input.get().getDimensionsRequired()
 		);
 	}
 	
