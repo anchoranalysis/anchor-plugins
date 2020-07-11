@@ -33,18 +33,19 @@ import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 import org.anchoranalysis.image.bean.provider.ObjectCollectionProvider;
 import org.anchoranalysis.image.object.ObjectCollection;
 
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+@NoArgsConstructor
 public class ObjMaskProviderReference extends ObjectCollectionProvider {
 
 	// START BEAN PROPERTIES
-	@BeanField
+	@BeanField @Getter @Setter
 	private String id = "";
 	// END BEAN PROPERTIES
 	
-	private ObjectCollection objs;
-	
-	public ObjMaskProviderReference() {
-		
-	}
+	private ObjectCollection objects;
 		
 	public ObjMaskProviderReference(String id) {
 		super();
@@ -53,21 +54,13 @@ public class ObjMaskProviderReference extends ObjectCollectionProvider {
 
 	@Override
 	public ObjectCollection create() throws CreateException {
-		if (objs==null) {
+		if (objects==null) {
 			try {
-				objs = getInitializationParameters().getObjMaskCollection().getException(id);
+				objects = getInitializationParameters().getObjMaskCollection().getException(id);
 			} catch (NamedProviderGetException e) {
 				throw new CreateException(e);
 			}	
 		}
-		return objs;
-	}
-
-	public String getId() {
-		return id;
-	}
-
-	public void setId(String id) {
-		this.id = id;
+		return objects;
 	}
 }

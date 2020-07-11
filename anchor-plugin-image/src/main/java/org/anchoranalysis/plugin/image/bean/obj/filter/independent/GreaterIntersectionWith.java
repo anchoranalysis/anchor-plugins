@@ -75,8 +75,8 @@ public class GreaterIntersectionWith extends ObjectFilterPredicate {
 	protected boolean match(ObjectMask om, Optional<ImageDimensions> dim)
 			throws OperationFailedException {
 
-		int cntGreater =  intersectionGreater.countIntersectingPixels(om);
-		int cntLesser =  intersectionLesser.countIntersectingPixels(om);
+		int cntGreater =  intersectionGreater.countIntersectingVoxels(om);
+		int cntLesser =  intersectionLesser.countIntersectingVoxels(om);
 		
 		return cntGreater >= cntLesser;
 	}

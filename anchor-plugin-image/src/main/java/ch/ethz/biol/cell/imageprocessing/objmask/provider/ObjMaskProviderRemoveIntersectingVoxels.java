@@ -37,14 +37,17 @@ import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectMask;
 
+import lombok.Getter;
+import lombok.Setter;
+
 // Considers all possible pairs of objects in a provider, and removes intersecting pixels
-public class ObjMaskProviderRemoveIntersectingPixels extends ObjMaskProviderDimensions {
+public class ObjMaskProviderRemoveIntersectingVoxels extends ObjMaskProviderDimensions {
 
 	// START BEAN PROPERTIES
 	/**
 	 * If TRUE, throws an error if there is a disconnected object after the erosion
 	 */
-	@BeanField
+	@BeanField @Getter @Setter
 	private boolean errorDisconnectedObjects = false;
 	// END BEAN PROPERTIES
 
@@ -66,7 +69,7 @@ public class ObjMaskProviderRemoveIntersectingPixels extends ObjMaskProviderDime
 				ObjectMask omRead = objsDup.get(j);
 				
 				if (i<j) {
-					removeIntersectingPixelsIfIntersects( omWrite, omRead, dims );
+					removeIntersectingVoxelsIfIntersects( omWrite, omRead, dims );
 				}
 			}
 			
@@ -76,7 +79,7 @@ public class ObjMaskProviderRemoveIntersectingPixels extends ObjMaskProviderDime
 		return objsDup;
 	}
 	
-	private void removeIntersectingPixels( ObjectMask omWrite, ObjectMask omRead, BoundingBox intersection  ) {
+	private void removeIntersectingVoxels( ObjectMask omWrite, ObjectMask omRead, BoundingBox intersection  ) {
 		
 		BoundingBox bboxRelWrite = new BoundingBox(
 			intersection.relPosTo( omWrite.getBoundingBox() ),
@@ -109,7 +112,7 @@ public class ObjMaskProviderRemoveIntersectingPixels extends ObjMaskProviderDime
 		);
 	}
 	
-	private void removeIntersectingPixelsIfIntersects( ObjectMask omWrite, ObjectMask omRead, ImageDimensions sd ) {
+	private void removeIntersectingVoxelsIfIntersects( ObjectMask omWrite, ObjectMask omRead, ImageDimensions sd ) {
 
 		Optional<BoundingBox> intersection = omWrite.getBoundingBox().intersection().withInside(omRead.getBoundingBox(), sd.getExtent() );
 				
@@ -120,7 +123,7 @@ public class ObjMaskProviderRemoveIntersectingPixels extends ObjMaskProviderDime
 	
 			// TODO we can make this more efficient, we only need to duplicate intersection bit
 			// We duplicate the originals before everything is changed
-			removeIntersectingPixels( omWrite, omRead, intersection.get() );
+			removeIntersectingVoxels( omWrite, omRead, intersection.get() );
 		}
 	}
 		
@@ -136,13 +139,5 @@ public class ObjMaskProviderRemoveIntersectingPixels extends ObjMaskProviderDime
 				throw new CreateException(e);
 			}
 		}		
-	}
-	
-	public boolean isErrorDisconnectedObjects() {
-		return errorDisconnectedObjects;
-	}
-
-	public void setErrorDisconnectedObjects(boolean errorDisconnectedObjects) {
-		this.errorDisconnectedObjects = errorDisconnectedObjects;
 	}
 }

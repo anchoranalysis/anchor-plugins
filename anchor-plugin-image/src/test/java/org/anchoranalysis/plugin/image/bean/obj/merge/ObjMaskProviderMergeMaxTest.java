@@ -109,7 +109,7 @@ public class ObjMaskProviderMergeMaxTest {
 	
 	/** Merges if the number-of-pixels becomes closer to 900 */
 	private static Double convergeTo900( FeatureInputSingleObject input ) {
-		int diff = 900 - input.getObjectMask().numVoxelsOn();
+		int diff = 900 - input.getObjectMask().numberVoxelsOn();
 		return (double) -1 * Math.abs(diff);
 	}
 }

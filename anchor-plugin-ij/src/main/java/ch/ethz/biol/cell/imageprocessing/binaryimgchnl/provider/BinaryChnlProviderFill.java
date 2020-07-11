@@ -126,7 +126,7 @@ public class BinaryChnlProviderFill extends BinaryChnlProviderOne {
 		}
 		
 		// Volume check
-		return maxVolume==null || om.numVoxelsOn()<=maxVolumeRslvd;
+		return maxVolume==null || om.numberVoxelsOn()<=maxVolumeRslvd;
 	}
 	
 	private static BinaryChnl fillHoles( ObjectCollection filled, BinaryChnl src, ImageDimensions sd, BinaryValues bvOut ) {

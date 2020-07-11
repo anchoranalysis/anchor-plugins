@@ -54,22 +54,22 @@ class OverlapRatioUtilities {
 		FeatureInputPairObjects params,
 		IntSupplier denominatorFunc
 	) {
-		int intersectingPixels = params.getFirst().countIntersectingPixels(
+		int intersectingVoxels = params.getFirst().countIntersectingVoxels(
 			params.getSecond()
 		);
 		
-		if (intersectingPixels==0) {
+		if (intersectingVoxels==0) {
 			return 0;
 		}
 		
-		return ((double) intersectingPixels) / denominatorFunc.getAsInt();
+		return ((double) intersectingVoxels) / denominatorFunc.getAsInt();
 	}
 	
 	/** A denominator that is the maximum-volume of the two objects */
 	public static int denominatorMaxVolume(FeatureInputPairObjects params) {
 		return Math.max(
-			params.getFirst().numVoxelsOn(),
-			params.getSecond().numVoxelsOn()
+			params.getFirst().numberVoxelsOn(),
+			params.getSecond().numberVoxelsOn()
 		);
 	}
 }

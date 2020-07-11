@@ -102,10 +102,10 @@ public class ChnlProviderAssignFromIntersectingObjects extends ChnlProviderOne {
 		int maxIntersection = -1;
 		ObjectMask omMostIntersecting = null;
 		for( ObjectMask om : matches) {
-			int intersectingPixels = source.countIntersectingPixels(om);
-			if (intersectingPixels > maxIntersection) {
+			int intersectingVoxels = source.countIntersectingVoxels(om);
+			if (intersectingVoxels > maxIntersection) {
 				omMostIntersecting = om;
-				maxIntersection = intersectingPixels;
+				maxIntersection = intersectingVoxels;
 			}
 		}
 		return omMostIntersecting;

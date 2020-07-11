@@ -81,7 +81,7 @@ class Utilities {
 		ObjectCollection objs = allObjs.contains(pnt);
 		
 		for (ObjectMask om : objs) {
-			if (om.numVoxelsOn()==numVoxels) {
+			if (om.numberVoxelsOn()==numVoxels) {
 				return om;
 			}
 		}

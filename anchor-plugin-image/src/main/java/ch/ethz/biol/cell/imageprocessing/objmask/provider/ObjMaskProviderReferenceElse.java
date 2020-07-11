@@ -35,24 +35,27 @@ import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
 import org.anchoranalysis.image.bean.provider.ObjectCollectionProvider;
 import org.anchoranalysis.image.object.ObjectCollection;
 
+import lombok.Getter;
+import lombok.Setter;
+
 // Returns a reference if it exists, or else a different provider
 public class ObjMaskProviderReferenceElse extends ObjectCollectionProvider {
 
 	// START BEAN PROPERTIES
-	@BeanField
+	@BeanField @Getter @Setter
 	private String id = "";
 	
-	@BeanField
-	private ObjectCollectionProvider objsElse;
+	@BeanField @Getter @Setter
+	private ObjectCollectionProvider objectsElse;
 	// END BEAN PROPERTIES
 	
-	private ObjectCollection objs;
+	private ObjectCollection objects;
 	
 	@Override
 	public void onInit(ImageInitParams so)
 			throws InitException {
 		try {
-			objs = so.getObjMaskCollection().getException(id);
+			objects = so.getObjMaskCollection().getException(id);
 		} catch (NamedProviderGetException e) {
 			throw new InitException(e.summarize());
 		}
@@ -61,27 +64,10 @@ public class ObjMaskProviderReferenceElse extends ObjectCollectionProvider {
 	@Override
 	public ObjectCollection create() throws CreateException {
 		
-		if (objs!=null) {
-			return objs;
+		if (objects!=null) {
+			return objects;
 		} else {
-			return objsElse.create();
+			return objectsElse.create();
 		}
 	}
-
-	public String getId() {
-		return id;
-	}
-
-	public void setId(String id) {
-		this.id = id;
-	}
-
-	public ObjectCollectionProvider getObjsElse() {
-		return objsElse;
-	}
-
-	public void setObjsElse(ObjectCollectionProvider objsElse) {
-		this.objsElse = objsElse;
-	}
-
 }

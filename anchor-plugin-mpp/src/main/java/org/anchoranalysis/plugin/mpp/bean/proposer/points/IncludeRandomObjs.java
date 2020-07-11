@@ -45,6 +45,9 @@ import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.points.PointsFromObjMask;
 
+import lombok.Getter;
+import lombok.Setter;
+
 /**
  * 1. Iterates over each object
  * 2. For each object, with a random probability of 0.5, includes all pixels inside the object
@@ -55,7 +58,7 @@ import org.anchoranalysis.image.points.PointsFromObjMask;
 public class IncludeRandomObjs extends PointsProposer {
 
 	// START BEAN PROPERTIES
-	@BeanField
+	@BeanField @Getter @Setter
 	private ObjectCollectionProvider objs;
 	// END BEAN PROPERTIES
 	
@@ -87,14 +90,6 @@ public class IncludeRandomObjs extends PointsProposer {
 	@Override
 	public Optional<CreateProposalVisualization> proposalVisualization(boolean detailed) {
 		return Optional.empty();
-	}
-
-	public ObjectCollectionProvider getObjs() {
-		return objs;
-	}
-
-	public void setObjs(ObjectCollectionProvider objs) {
-		this.objs = objs;
 	}
 	
 	private static void maybeAddToList( ObjectMask om, List<Point3i> out, RandomNumberGenerator re ) {
