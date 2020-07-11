@@ -31,11 +31,11 @@ import java.util.Optional;
 
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.log.CommonContext;
 import org.anchoranalysis.core.name.store.SharedObjects;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
-import org.anchoranalysis.image.io.input.ImageInitParamsFactory;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.plugin.image.feature.bean.object.single.shared.intersecting.FeatureIntersectingObjects;
@@ -50,8 +50,8 @@ class InteresectingObjsTestHelper {
 	
 	private static final String ID = "someObjs";
 	
-	private static final int numInteresecting = 4;
-	private static final int numNotIteresecting = 2;
+	private static final int NUMBER_INTERSECTING = 4;
+	private static final int NUMBER_NOT_INTERSECTING = 2;
 	
 	/**
 	 * Runs several tests on a feature and object-mask collection by removing objects at particular indexes
@@ -78,8 +78,8 @@ class InteresectingObjsTestHelper {
 	) throws OperationFailedException, FeatureCalcException, InitException {
 		
 		ObjectCollection objs = IntersectingCircleObjsFixture.generateIntersectingObjs(
-			numInteresecting,
-			numNotIteresecting,
+			NUMBER_INTERSECTING,
+			NUMBER_NOT_INTERSECTING,
 			sameSize
 		);
 		
@@ -102,7 +102,7 @@ class InteresectingObjsTestHelper {
 		);
 		
 		// Second last object
-		int secondLastIndex = (numInteresecting+numNotIteresecting)-2;
+		int secondLastIndex = (NUMBER_INTERSECTING+NUMBER_NOT_INTERSECTING)-2;
 		InteresectingObjsTestHelper.assertFeatureIndexInt(
 			combine(messagePrefix, "second-last"),
 			feature,
@@ -112,7 +112,7 @@ class InteresectingObjsTestHelper {
 		);
 		
 		// Last object
-		int lastIndex = (numInteresecting+numNotIteresecting)-1;
+		int lastIndex = (NUMBER_INTERSECTING+NUMBER_NOT_INTERSECTING)-1;
 		InteresectingObjsTestHelper.assertFeatureIndexInt(
 			combine(messagePrefix, "last"),
 			feature,
@@ -153,7 +153,9 @@ class InteresectingObjsTestHelper {
 			message,
 			addId(feature),
 			new FeatureInputSingleObject(om, CircleObjMaskFixture.nrgStack()),
-			Optional.of(createInitParams(others)),
+			Optional.of(
+				createInitParams(others).getSharedObjects()
+			),
 			expectedResult
 		);		
 	}
@@ -168,15 +170,15 @@ class InteresectingObjsTestHelper {
 	private static ImageInitParams createInitParams( ObjectCollection others ) throws OperationFailedException {
 		
 		SharedObjects so = new SharedObjects(
-			LoggingFixture.suppressedLogErrorReporter()
+			new CommonContext(
+				LoggingFixture.suppressedLogErrorReporter(),
+				Mockito.mock(Path.class)
+			)
 		);
 		
 		so.getOrCreate(ObjectCollection.class).add(ID, ()->others);
 		
-		return ImageInitParamsFactory.create(
-			so,
-			Mockito.mock(Path.class)
-		);
+		return new ImageInitParams(so);
 	}
 	
 	private static FeatureIntersectingObjects addId( FeatureIntersectingObjects feature ) {

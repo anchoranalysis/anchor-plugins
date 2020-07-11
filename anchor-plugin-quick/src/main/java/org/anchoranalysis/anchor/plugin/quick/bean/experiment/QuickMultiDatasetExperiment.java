@@ -89,11 +89,11 @@ public class QuickMultiDatasetExperiment<T extends InputFromManager, S> extends 
 	
 	/** Relative path to a logger for the experiment in gneeral*/
 	@BeanField @Getter @Setter
-	private String loggerExperimentPath = "";
+	private String logExperimentPath = "";
 	
 	/** Relative path to a logger for a specific task */
 	@BeanField @Getter @Setter
-	private String loggerTaskPath = "";
+	private String logTaskPath = "";
 	
 	@BeanField   @Getter @Setter
 	private String output;
@@ -136,7 +136,7 @@ public class QuickMultiDatasetExperiment<T extends InputFromManager, S> extends 
 	public void localise(Path path) throws BeanMisconfiguredException {
 		super.localise(path);
 		
-		delegate.firstLocalise( getLocalPath(), loggerExperimentPath, loggerTaskPath, output );
+		delegate.firstLocalise( getLocalPath(), logExperimentPath, logTaskPath, output );
 	}
 
 	@SuppressWarnings("unchecked")
@@ -191,7 +191,7 @@ public class QuickMultiDatasetExperiment<T extends InputFromManager, S> extends 
 		serialExecutor.executeEachWithMonitor(
 			"### Dataset",
 			new ArrayList<>(
-				selectDatasets(expArgs.isDebugEnabled())
+				selectDatasets(expArgs.isDebugModeEnabled())
 			)	
 		);		
 	}

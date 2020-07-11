@@ -34,10 +34,12 @@ import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.feature.cache.ChildCacheName;
 import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.feature.calc.FeatureInitParams;
+import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
 import org.anchoranalysis.image.bean.provider.BinaryChnlProvider;
 import org.anchoranalysis.image.binary.BinaryChnl;
 import org.anchoranalysis.image.feature.bean.object.pair.FeaturePairObjects;
-import org.anchoranalysis.image.feature.init.FeatureInitParamsShared;
+import org.anchoranalysis.image.feature.bean.object.single.FeatureSingleObject;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 
 import lombok.Getter;
@@ -49,7 +51,7 @@ import lombok.Setter;
  * @author Owen Feehan
  *
  */
-public class PairedWithBinaryChannel extends FeatureSingleObjectWithShared {
+public class PairedWithBinaryChannel extends FeatureSingleObject {
 
 	// START BEAN PROPERTIES
 	@BeanField @Getter @Setter
@@ -64,10 +66,13 @@ public class PairedWithBinaryChannel extends FeatureSingleObjectWithShared {
 	private BinaryChnl chnl;
 	
 	@Override
-	public void beforeCalcCast(FeatureInitParamsShared params) throws InitException {
-		super.beforeCalcCast(params);
-		assert( getLogger()!=null );
-		binaryChnl.initRecursive(params.getSharedObjects(), getLogger() );
+	protected void beforeCalc(FeatureInitParams paramsInit) throws InitException {
+		super.beforeCalc(paramsInit);
+
+		binaryChnl.initRecursive(
+			new ImageInitParams(paramsInit.sharedObjectsRequired()),
+			getLogger()
+		);
 		
 		try {
 			chnl = binaryChnl.create();

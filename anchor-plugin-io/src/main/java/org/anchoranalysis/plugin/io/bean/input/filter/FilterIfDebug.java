@@ -35,6 +35,7 @@ import org.anchoranalysis.io.bean.input.InputManager;
 import org.anchoranalysis.io.bean.input.InputManagerParams;
 import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.input.InputFromManager;
+import org.anchoranalysis.io.params.DebugModeParams;
 import org.anchoranalysis.plugin.io.input.filter.FilterDescriptiveNameEqualsContains;
 
 /**
@@ -55,14 +56,12 @@ public class FilterIfDebug<T extends InputFromManager> extends InputManager<T> {
 	public List<T> inputObjects(InputManagerParams params) throws AnchorIOException {
 
 		List<T> unfiltered = input.inputObjects(params);
-				
-		if (params.isDebugModeActivated()) {
-			return takeFirst(
-				maybeFilteredList(unfiltered, params)
-			);
-		} else {
-			return unfiltered;
-		}
+		
+		return params.getDebugModeParams().map(dir->
+			takeFirst(
+				maybeFilteredList(unfiltered, dir)
+			)
+		).orElse(unfiltered);
 	}
 	
 	/** Take first item, if there's more than one in a list */
@@ -75,10 +74,10 @@ public class FilterIfDebug<T extends InputFromManager> extends InputManager<T> {
 		}
 	}
 	
-	private List<T> maybeFilteredList( List<T> unfiltered, InputManagerParams params ) {
+	private List<T> maybeFilteredList( List<T> unfiltered, DebugModeParams debugModeParams) {
 		FilterDescriptiveNameEqualsContains filter = new FilterDescriptiveNameEqualsContains(
 			"",	// Always disabled
-			params.getDebugModeParams().containsOrEmpty()	
+			debugModeParams.containsOrEmpty()	
 		);
 		
 		return filter.removeNonMatching(unfiltered);
