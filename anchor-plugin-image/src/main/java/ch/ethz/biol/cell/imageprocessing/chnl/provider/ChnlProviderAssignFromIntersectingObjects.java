@@ -86,8 +86,8 @@ public class ChnlProviderAssignFromIntersectingObjects extends ChnlProviderOne {
 				
 		return matchList.stream().map( owm->
 			new Pair<>(
-				owm.getSourceObj(),
-				selectBestMatch( owm.getSourceObj(), owm.getMatches() )
+				owm.getSource(),
+				selectBestMatch( owm.getSource(), owm.getMatches() )
 			)
 		);
 	}
