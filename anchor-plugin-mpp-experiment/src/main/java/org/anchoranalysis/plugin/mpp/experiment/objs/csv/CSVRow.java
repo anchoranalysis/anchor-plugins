@@ -56,7 +56,7 @@ public class CSVRow {
 	}
 
 	public ObjectCollectionWithProperties findObjsMatchingRow( ObjectCollectionRTree allObjs ) throws OperationFailedException {
-		return columnDefinition.findObjsMatchingRow(this, allObjs);
+		return columnDefinition.findObjectsMatchingRow(this, allObjs);
 	}
 	
 	public void writeToXML( Element xmlElement, Document doc ) {
