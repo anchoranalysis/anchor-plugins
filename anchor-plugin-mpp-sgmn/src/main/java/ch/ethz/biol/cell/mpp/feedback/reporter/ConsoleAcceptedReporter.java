@@ -33,7 +33,7 @@ import java.util.function.ToIntFunction;
 
 import org.anchoranalysis.anchor.mpp.feature.nrg.cfg.CfgNRG;
 import org.anchoranalysis.anchor.mpp.feature.nrg.cfg.CfgNRGPixelized;
-import org.anchoranalysis.core.log.LogErrorReporter;
+import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.mpp.sgmn.bean.optscheme.feedback.FeedbackReceiverBean;
 import org.anchoranalysis.mpp.sgmn.optscheme.feedback.OptimizationFeedbackEndParams;
 import org.anchoranalysis.mpp.sgmn.optscheme.feedback.OptimizationFeedbackInitParams;
@@ -43,7 +43,7 @@ import org.anchoranalysis.mpp.sgmn.optscheme.step.Reporting;
 
 public class ConsoleAcceptedReporter extends FeedbackReceiverBean<CfgNRGPixelized> {
 
-	private LogErrorReporter logger;
+	private Logger logger;
 	
 	public ConsoleAcceptedReporter() {
 		super();
@@ -59,7 +59,7 @@ public class ConsoleAcceptedReporter extends FeedbackReceiverBean<CfgNRGPixelize
 		
 		if (reporting.isAccptd()) {
 			
-			logger.getLogReporter().logFormatted(
+			logger.messageLogger().logFormatted(
 				"itr=%5d  size=%3d  nrg=%e  best_nrg=%e   kernel=%s",
 				reporting.getIter(),
 				extractStatInt(reporting.getCfgNRGAfterOptional(), a->a.getCfg().size() ),

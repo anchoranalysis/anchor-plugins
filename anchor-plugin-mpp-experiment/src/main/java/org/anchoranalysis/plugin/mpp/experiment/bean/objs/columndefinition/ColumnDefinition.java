@@ -63,8 +63,8 @@ public abstract class ColumnDefinition extends AnchorBean<ColumnDefinition> {
 	
 	public void initHeaders(String[] headers) throws InitException {
 		// We resolve each of our columnNames to an index
-		indexFileID = Utilities.findHeaderIndex( headers, columnID );
-		indexGroup = Utilities.findHeaderIndex( headers, columnGroup );
+		indexFileID = HeaderFinder.findHeaderIndex( headers, columnID );
+		indexGroup = HeaderFinder.findHeaderIndex( headers, columnGroup );
 	}
 	
 	public CSVRow createRow( String[] line ) {
@@ -75,7 +75,7 @@ public abstract class ColumnDefinition extends AnchorBean<ColumnDefinition> {
 		return row;
 	}
 	
-	public abstract ObjectCollectionWithProperties findObjsMatchingRow( CSVRow csvRow, ObjectCollectionRTree allObjs ) throws OperationFailedException;
+	public abstract ObjectCollectionWithProperties findObjectsMatchingRow( CSVRow csvRow, ObjectCollectionRTree allObjs ) throws OperationFailedException;
 	
 	public abstract void writeToXML( CSVRow csvRow, Element xmlElement, Document doc );
 		

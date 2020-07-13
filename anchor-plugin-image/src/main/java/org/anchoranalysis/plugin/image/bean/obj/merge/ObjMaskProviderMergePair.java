@@ -53,6 +53,9 @@ import org.anchoranalysis.image.feature.session.merged.FeatureCalculatorMergedPa
 import org.anchoranalysis.plugin.image.obj.merge.priority.AssignPriority;
 import org.anchoranalysis.plugin.image.obj.merge.priority.AssignPriorityFromPair;
 
+import lombok.Getter;
+import lombok.Setter;
+
 /**
  *   Merges objects if a pair feature value satisfies a condition
  *   
@@ -66,16 +69,16 @@ public class ObjMaskProviderMergePair extends ObjMaskProviderMergeWithFeature {
 	/**
 	 * Allows merge only if the feature-value is greater than or equal to this threshold
 	 */
-	@BeanField
+	@BeanField @Getter @Setter
 	private FeatureEvaluator<FeatureInputNull> featureEvaluatorThreshold;
 	
 	/**
 	 * Relation to threshold
 	 */
-	@BeanField
+	@BeanField @Getter @Setter
 	private RelationBean relation = new GreaterThanEqualToBean();
 	
-	@BeanField
+	@BeanField @Getter @Setter
 	private FeatureEvaluatorNrgStack<FeatureInputPairObjects> featureEvaluatorMerge;
 	// END BEAN PROPERTIES
 
@@ -98,9 +101,14 @@ public class ObjMaskProviderMergePair extends ObjMaskProviderMergeWithFeature {
 				relation.create()
 			);
 			
-		} catch (FeatureCalcException | InitException | CreateException e) {
+		} catch (FeatureCalcException | CreateException e) {
 			throw new OperationFailedException(e);
 		}
+	}
+
+	@Override
+	protected boolean isPlayloadUsed() {
+		return true;
 	}
 	
 	private FeatureCalculatorSingle<FeatureInputPairObjects> createCalculatorForPairs() throws CreateException {
@@ -109,11 +117,13 @@ public class ObjMaskProviderMergePair extends ObjMaskProviderMergeWithFeature {
 			
 			FeatureCalculatorMergedPairs session = new FeatureCalculatorMergedPairs(
 				new MergedPairsFeatures(
-					FeatureListFactory.fromProvider( featureEvaluatorMerge.getFeatureProvider() )
+					FeatureListFactory.fromProvider(
+						featureEvaluatorMerge.getFeatureProvider()
+					)
 				)
 			);
 			session.start(
-				getSharedObjects(),
+				getInitializationParameters(),
 				nrgStack,
 				getLogger()
 			);
@@ -140,35 +150,5 @@ public class ObjMaskProviderMergePair extends ObjMaskProviderMergeWithFeature {
 		} else {
 			return calculator;
 		}
-	}
-	
-	
-	public FeatureEvaluator<FeatureInputNull> getFeatureEvaluatorThreshold() {
-		return featureEvaluatorThreshold;
-	}
-
-	public void setFeatureEvaluatorThreshold(FeatureEvaluator<FeatureInputNull> featureEvaluatorThreshold) {
-		this.featureEvaluatorThreshold = featureEvaluatorThreshold;
-	}
-
-	public RelationBean getRelation() {
-		return relation;
-	}
-
-	public void setRelation(RelationBean relation) {
-		this.relation = relation;
-	}
-
-	@Override
-	protected boolean isPlayloadUsed() {
-		return true;
-	}
-
-	public FeatureEvaluatorNrgStack<FeatureInputPairObjects> getFeatureEvaluatorMerge() {
-		return featureEvaluatorMerge;
-	}
-
-	public void setFeatureEvaluatorMerge(FeatureEvaluatorNrgStack<FeatureInputPairObjects> featureEvaluatorMerge) {
-		this.featureEvaluatorMerge = featureEvaluatorMerge;
 	}
 }

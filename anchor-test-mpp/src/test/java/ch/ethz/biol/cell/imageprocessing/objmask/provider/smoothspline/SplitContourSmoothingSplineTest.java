@@ -35,7 +35,7 @@ import org.anchoranalysis.test.image.io.TestLoaderImageIO;
 import org.anchoranalysis.test.mpp.LoadUtilities;
 import org.junit.Test;
 
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertEquals;
 
 public class SplitContourSmoothingSplineTest {
 
@@ -51,13 +51,6 @@ public class SplitContourSmoothingSplineTest {
 		
 		ContourList contours = SplitContourSmoothingSpline.apply(contourIn, 0.001, 0, 30);
 		
-		assertTrue( contours.size()==72 );
-		
-		// DEBUG CODE - a dependency needs also be to be added to anchor-io-generator
-		/*DisplayStack background = DisplayStack.create(stack, new ChnlFactoryMulti());
-		TempBoundOutputManager.instance().getBoundOutputManager().getWriterAlwaysAllowed().write(
-			"contours",
-			new ContourListGenerator( background, contours )
-		);*/
+		assertEquals(72, contours.size());
 	}
 }

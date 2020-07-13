@@ -51,10 +51,7 @@ public class MarkDistanceRadii extends MarkDistance {
 			return true;
 		}
 		
-		if (testMark instanceof MarkSphere) {
-			return true;
-		}
-		return false;
+		return testMark instanceof MarkSphere;
 	}
 
 	@Override

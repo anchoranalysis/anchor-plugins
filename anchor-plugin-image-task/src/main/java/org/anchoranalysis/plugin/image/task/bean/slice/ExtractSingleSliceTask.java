@@ -30,7 +30,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.SkipInit;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.log.LogErrorReporter;
+import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.core.progress.ProgressReporterNull;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
 import org.anchoranalysis.experiment.JobExecutionException;
@@ -135,15 +135,15 @@ public class ExtractSingleSliceTask extends Task<NamedChnlsInput,SharedStateSele
 	
 	/** Returns the index of the selected slice 
 	 * @throws OperationFailedException */
-	private int selectSlice( NRGStackWithParams nrgStack, LogErrorReporter logErrorReporter, String imageName, SharedStateSelectedSlice params ) throws OperationFailedException {
+	private int selectSlice( NRGStackWithParams nrgStack, Logger logger, String imageName, SharedStateSelectedSlice params ) throws OperationFailedException {
 		
 		Feature<FeatureInputStack> scoreFeature = extractScoreFeature();
 		
-		double[] scores = calcScoreForEachSlice( scoreFeature, nrgStack, logErrorReporter );
+		double[] scores = calcScoreForEachSlice( scoreFeature, nrgStack, logger );
 		
 		int optimaSliceIndex = findOptimaSlice(scores);
 		
-		logErrorReporter.getLogReporter().logFormatted("Selected optima is slice %d", optimaSliceIndex);
+		logger.messageLogger().logFormatted("Selected optima is slice %d", optimaSliceIndex);
 		
 		params.writeRow(imageName, optimaSliceIndex, scores[optimaSliceIndex] );
 		
@@ -193,16 +193,16 @@ public class ExtractSingleSliceTask extends Task<NamedChnlsInput,SharedStateSele
 	private double[] calcScoreForEachSlice(
 		Feature<FeatureInputStack> scoreFeature,
 		NRGStackWithParams nrgStack,
-		LogErrorReporter logErrorReporter
+		Logger logger
 	) throws OperationFailedException {
 
 		try {
 			FeatureCalculatorSingle<FeatureInputStack> session = FeatureSession.with(
 				scoreFeature,
-				logErrorReporter
+				logger
 			);
 			
-			double results[] = new double[nrgStack.getDimensions().getZ()];
+			double[] results = new double[nrgStack.getDimensions().getZ()];
 			
 			// Extract each slice, and calculate feature
 			for (int z=0; z<nrgStack.getDimensions().getZ(); z++) {
@@ -213,7 +213,7 @@ public class ExtractSingleSliceTask extends Task<NamedChnlsInput,SharedStateSele
 					new FeatureInputStack(nrgStackSlice.getNrgStack())
 				);
 				
-				logErrorReporter.getLogReporter().logFormatted("Slice %3d has score %f", z, featVal);
+				logger.messageLogger().logFormatted("Slice %3d has score %f", z, featVal);
 				
 				results[z] = featVal;
 			}

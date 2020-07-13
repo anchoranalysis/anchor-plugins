@@ -2,6 +2,8 @@ package org.anchoranalysis.plugin.image.bean.obj.merge;
 
 import static org.anchoranalysis.plugin.image.bean.obj.merge.MergeTestHelper.*;
 
+import java.nio.file.Path;
+
 /*-
  * #%L
  * anchor-plugin-image
@@ -34,7 +36,7 @@ import org.anchoranalysis.bean.xml.RegisterBeanFactories;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.log.LogErrorReporter;
+import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.operator.Constant;
 import org.anchoranalysis.image.feature.bean.object.pair.Minimum;
@@ -44,6 +46,7 @@ import org.anchoranalysis.plugin.image.test.ProviderFixture;
 import org.anchoranalysis.test.LoggingFixture;
 import org.anchoranalysis.test.feature.plugins.mockfeature.MockFeatureWithCalculationFixture;
 import org.junit.Test;
+import org.mockito.Mockito;
 
 public class ObjMaskProviderMergePairTest {
 
@@ -65,18 +68,29 @@ public class ObjMaskProviderMergePairTest {
 		testLinear(EXPECTED_RESULT_FIRST_THREE_NOT_MERGING, 22, 12, 300);
 	}	
 	
-	private void testLinear( int expectedCntMerged, int expectedFeatureCalcCount, int expectedCalculationCount, int threshold) throws OperationFailedException, CreateException {
+	private void testLinear(
+		int expectedCntMerged,
+		int expectedFeatureCalcCount,
+		int expectedCalculationCount,
+		int threshold
+	) throws OperationFailedException, CreateException {
 		MergeTestHelper.testProviderOn(
 			expectedCntMerged,
 			expectedFeatureCalcCount,
 			expectedCalculationCount,
-			createMergePair(OBJS_LINEAR_INTERSECTING, threshold)
+			createMergePair(
+				OBJS_LINEAR_INTERSECTING,
+				threshold
+			)
 		);
 	}
 	
-	private static ObjMaskProviderMergePair createMergePair( ObjectCollection objs, int threshold) throws CreateException {
+	private static ObjMaskProviderMergePair createMergePair(
+		ObjectCollection objs,
+		int threshold
+	) throws CreateException {
 		
-		LogErrorReporter logger = LoggingFixture.suppressedLogErrorReporter();
+		Logger logger = LoggingFixture.suppressedLogErrorReporter();
 		
 		ObjMaskProviderMergePair provider = new ObjMaskProviderMergePair();
 		
@@ -88,10 +102,18 @@ public class ObjMaskProviderMergePairTest {
 			ProviderFixture.providerFor(objs)
 		);
 		provider.setFeatureEvaluatorThreshold(
-			FeatureEvaluatorFixture.createNrg( new Constant<>(threshold), logger )
+			FeatureEvaluatorFixture.createNrg(
+				new Constant<>(threshold),
+				logger,
+				Mockito.mock(Path.class)
+			)
 		);
 		provider.setFeatureEvaluatorMerge(
-			FeatureEvaluatorFixture.createNrg(feature, logger)
+			FeatureEvaluatorFixture.createNrg(
+				feature,
+				logger,
+				Mockito.mock(Path.class)
+			)
 		);
 		provider.setRelation(
 			new GreaterThanBean()

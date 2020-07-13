@@ -30,7 +30,7 @@ import java.nio.file.Path;
 
 import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.filepath.FilePathToUnixStyleConverter;
-import org.anchoranalysis.io.filepath.prefixer.FilePathDifferenceFromFolderPath;
+import org.anchoranalysis.io.filepath.prefixer.PathDifferenceFromBase;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
@@ -39,9 +39,8 @@ import lombok.NoArgsConstructor;
 class NamingUtilities {
 	
 	public static Path filePathDiff( Path baseFolderPath, Path filePath) throws AnchorIOException {
-		FilePathDifferenceFromFolderPath filePathDiff = new FilePathDifferenceFromFolderPath();
-		filePathDiff.init( baseFolderPath, filePath );
-		return filePathDiff.getRemainderCombined();
+		PathDifferenceFromBase filePathDiff = PathDifferenceFromBase.differenceFrom(baseFolderPath, filePath);
+		return filePathDiff.combined();
 	}
 	
 	// Converts a path to a string, making sure it's first UNIX style

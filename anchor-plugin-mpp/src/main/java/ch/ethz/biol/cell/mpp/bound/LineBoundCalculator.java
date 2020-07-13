@@ -47,27 +47,30 @@ import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.anchoranalysis.math.rotation.RotationMatrix;
 
+import lombok.Getter;
+import lombok.Setter;
+
 public class LineBoundCalculator extends BoundCalculator {
 
 	// START BEAN PROPERTIES
-	@BeanField
+	@BeanField @Getter @Setter
 	private BinaryChnlProvider outlineProvider;
-	// END BEAN PROPERTIES
-
+	
+	@BeanField @Getter @Setter
 	private double extra = 0;
-
-	public LineBoundCalculator() {
-		super();
-	}
+	// END BEAN PROPERTIES
 	
 	@Override
 	public BidirectionalBound calcBound(Point3d point, RotationMatrix rotMatrix) throws OperationFailedException {
 		
 		try {
-			Channel outlineChnl = outlineProvider.create().getChnl();
+			Channel outlineChnl = outlineProvider.create().getChannel();
 			assert(outlineChnl!=null);
 			
-			RslvdBound minMax = getSharedObjects().getMarkBounds().calcMinMax( outlineChnl.getDimensions().getRes(), rotMatrix.getNumDim() >= 3 );
+			RslvdBound minMax = getInitializationParameters().getMarkBounds().calcMinMax(
+				outlineChnl.getDimensions().getRes(),
+				rotMatrix.getNumDim() >= 3
+			);
 					
 			int maxPossiblePoint = (int) Math.ceil( minMax.getMax() );
 			
@@ -135,7 +138,7 @@ public class LineBoundCalculator extends BoundCalculator {
 			
 			ImageDimensions sd = voxels.getDimensions();
 			if (sd.contains(runningInt)) {
-				return -1; //maxPossiblePoint;
+				return -1;
 			}
 			
 			if (runningInt.getZ()!=zPrev) {
@@ -153,7 +156,6 @@ public class LineBoundCalculator extends BoundCalculator {
 		}
 		return -1;
 	}
-
 	
 	private double normZMag( Point3d pnt, double zMult ) {
 		double dx = pnt.getX();
@@ -161,29 +163,4 @@ public class LineBoundCalculator extends BoundCalculator {
 		double dz = pnt.getZ() * zMult;
 		return Math.sqrt( (dx*dx) + (dy*dy) + (dz*dz) );
 	}
-
-	@Override
-	public boolean paramsEquals(Object other) {
-		if (!(other instanceof LineBoundCalculator)) {
-			return false;
-		}
-		return true;
-	}
-
-	public double getExtra() {
-		return extra;
-	}
-
-	public void setExtra(double extra) {
-		this.extra = extra;
-	}
-
-	public BinaryChnlProvider getOutlineProvider() {
-		return outlineProvider;
-	}
-
-	public void setOutlineProvider(BinaryChnlProvider outlineProvider) {
-		this.outlineProvider = outlineProvider;
-	}
-
 }

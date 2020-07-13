@@ -5,7 +5,7 @@ import org.anchoranalysis.mpp.sgmn.bean.optscheme.feedback.ReporterAgg;
 import org.anchoranalysis.mpp.sgmn.optscheme.feedback.OptimizationFeedbackInitParams;
 import org.anchoranalysis.mpp.sgmn.optscheme.feedback.ReporterException;
 import org.anchoranalysis.mpp.sgmn.optscheme.feedback.aggregate.Aggregator;
-import org.anchoranalysis.mpp.sgmn.optscheme.feedback.aggregate.IAggregateReceiver;
+import org.anchoranalysis.mpp.sgmn.optscheme.feedback.aggregate.AggregateReceiver;
 import org.anchoranalysis.mpp.sgmn.optscheme.step.Reporting;
 
 /*
@@ -38,7 +38,7 @@ import org.anchoranalysis.mpp.sgmn.optscheme.step.Reporting;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-public class Log4JReporter extends ReporterAgg<CfgNRGPixelized> implements IAggregateReceiver<CfgNRGPixelized> {
+public class Log4JReporter extends ReporterAgg<CfgNRGPixelized> implements AggregateReceiver<CfgNRGPixelized> {
 
 	private static Log log = LogFactory.getLog(Log4JReporter.class);
 	
@@ -48,7 +48,7 @@ public class Log4JReporter extends ReporterAgg<CfgNRGPixelized> implements IAggr
 	}
 	
 	@Override
-	protected IAggregateReceiver<CfgNRGPixelized> getAggregateReceiver() {
+	protected AggregateReceiver<CfgNRGPixelized> getAggregateReceiver() {
 		return this;
 	}
 	
@@ -67,18 +67,19 @@ public class Log4JReporter extends ReporterAgg<CfgNRGPixelized> implements IAggr
 
 	@Override
 	public void aggStart( OptimizationFeedbackInitParams<CfgNRGPixelized> initParams, Aggregator agg ) {
-		
+		// NOTHING TO DO
 	}
 	
 	@Override
 	public void aggReport( Reporting<CfgNRGPixelized> reporting, Aggregator agg ) {
-		String out = String.format("itr=%d  %s", reporting.getIter(), agg.toString() );
-		log.info( out );
+		log.info(
+			String.format("itr=%d  %s", reporting.getIter(), agg.toString())
+		);
 	}
 	
 	@Override
 	public void aggEnd( Aggregator agg ) {
-		
+		// NOTHING TO DO		
 	}
 
 }

@@ -76,9 +76,9 @@ public final class EncodedIntBuffer {
 	public void convertCode(int indxBuffer, int indxGlobal, EncodedVoxelBox matS, Point3i pnt) {
 		int crntVal = getCode(indxBuffer);
 		
-		assert( !matS.isPlateau(crntVal) );
-		assert( !matS.isUnvisited(crntVal) );
-		assert( !matS.isTemporary(crntVal) );
+		assert( !matS.isPlateau(crntVal) );		// NOSONAR
+		assert( !matS.isUnvisited(crntVal) );	// NOSONAR
+		assert( !matS.isTemporary(crntVal) );	// NOSONAR
 		
 		// We translate the value into directions and use that to determine where to
 		//   travel to

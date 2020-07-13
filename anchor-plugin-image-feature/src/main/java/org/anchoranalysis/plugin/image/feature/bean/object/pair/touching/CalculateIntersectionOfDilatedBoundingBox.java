@@ -35,42 +35,21 @@ import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.feature.object.input.FeatureInputPairObjects;
 import org.anchoranalysis.image.object.ObjectMask;
-import org.apache.commons.lang.builder.EqualsBuilder;
-import org.apache.commons.lang.builder.HashCodeBuilder;
+import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
 
+@AllArgsConstructor @EqualsAndHashCode(callSuper=false)
 class CalculateIntersectionOfDilatedBoundingBox extends FeatureCalculation<Optional<BoundingBox>, FeatureInputPairObjects> {
 	
-	private boolean do3D = false;
-			
-	public CalculateIntersectionOfDilatedBoundingBox(boolean do3D) {
-		super();
-		this.do3D = do3D;
-	}
+	private final boolean do3D;
 
 	@Override
 	protected Optional<BoundingBox> execute(FeatureInputPairObjects input) throws FeatureCalcException {
 		return findIntersectionOfDilatedBoundingBox(
 			input.getFirst(),
 			input.getSecond(),
-			input.getDimensionsRequired().getExtnt()
+			input.getDimensionsRequired().getExtent()
 		);
-	}
-	
-	@Override
-	public boolean equals(Object obj) {
-		 if(obj instanceof CalculateIntersectionOfDilatedBoundingBox){
-			 final CalculateIntersectionOfDilatedBoundingBox other = (CalculateIntersectionOfDilatedBoundingBox) obj;
-		        return new EqualsBuilder()
-		            .append(do3D, other.do3D)
-		            .isEquals();
-	    } else{
-	        return false;
-	    }
-	}
-
-	@Override
-	public int hashCode() {
-		return new HashCodeBuilder().append(do3D).toHashCode();
 	}
 
 	private Optional<BoundingBox> findIntersectionOfDilatedBoundingBox( ObjectMask om1, ObjectMask om2, Extent extent) {

@@ -2,10 +2,9 @@ package org.anchoranalysis.plugin.mpp.sgmn.cfg.bean.kernel.independent;
 
 import java.util.Optional;
 import java.util.Set;
-import java.util.stream.Collectors;
-
 import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.core.functional.FunctionalUtilities;
 import org.anchoranalysis.core.functional.OptionalUtilities;
 import org.anchoranalysis.image.extent.ImageDimensions;
 
@@ -66,7 +65,7 @@ public abstract class KernelBirth<T> extends KernelPosNeg<T> {
 			return Optional.empty();
 		}
 		
-		setMarksNew = proposeNewMarks(exst.get(), repeats, context);;
+		setMarksNew = proposeNewMarks(exst.get(), repeats, context);
 		return OptionalUtilities.flatMap(
 			setMarksNew,
 			set -> calcForNewMark(exst.get(), set, context)
@@ -79,9 +78,9 @@ public abstract class KernelBirth<T> extends KernelPosNeg<T> {
 	
 	@Override
 	public double calcAccptProb(int exstSize, int propSize,
-			double poisson_intens, ImageDimensions scene_size, double densityRatio) {
+			double poissonIntensity, ImageDimensions sceneSize, double densityRatio) {
 		
-        double num = getProbNeg() * scene_size.getVolume() * poisson_intens;
+        double num = getProbNeg() * sceneSize.getVolume() * poissonIntensity;
         double dem = getProbPos() * propSize;
         
         assert(num>0);
@@ -122,9 +121,9 @@ public abstract class KernelBirth<T> extends KernelPosNeg<T> {
 	private static String idStr( Set<Mark> list ) {
 		return String.join(
 			", ",
-			list.stream().map( mark ->
+			FunctionalUtilities.mapToList(list, mark ->
 				Integer.toString( mark.getId())
-			).collect( Collectors.toList() )
+			)
 		);
 	}
 	

@@ -36,6 +36,9 @@ import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 import org.anchoranalysis.plugin.image.obj.merge.priority.AssignPriority;
 import org.anchoranalysis.plugin.image.obj.merge.priority.AssignPriorityFromImprovement;
 
+import lombok.Getter;
+import lombok.Setter;
+
 
 /**
  * Merges neighbors if there is an increase in the payload i.e. <pre>if payload(merged) >= avg( payload(src), payload(dest )</pre>
@@ -47,7 +50,7 @@ import org.anchoranalysis.plugin.image.obj.merge.priority.AssignPriorityFromImpr
 public class ObjMaskProviderMergeMax extends ObjMaskProviderMergeWithFeature {
 
 	// START BEAN PROPERTIES
-	@BeanField
+	@BeanField @Getter @Setter
 	private FeatureEvaluator<FeatureInputSingleObject> featureEvaluator;
 	// END BEAN PROPERTIES
 	
@@ -56,11 +59,9 @@ public class ObjMaskProviderMergeMax extends ObjMaskProviderMergeWithFeature {
 		
 		FeatureCalculatorSingle<FeatureInputSingleObject> calculator = featureEvaluator.createAndStartSession();
 		
-		return om -> {
-			return calculator.calc(
-				new FeatureInputSingleObject(om)
-			);
-		};
+		return om -> calculator.calc(
+			new FeatureInputSingleObject(om)
+		);
 	}
 	
 	@Override
@@ -73,13 +74,5 @@ public class ObjMaskProviderMergeMax extends ObjMaskProviderMergeWithFeature {
 	@Override
 	protected boolean isPlayloadUsed() {
 		return true;
-	}
-	
-	public FeatureEvaluator<FeatureInputSingleObject> getFeatureEvaluator() {
-		return featureEvaluator;
-	}
-
-	public void setFeatureEvaluator(FeatureEvaluator<FeatureInputSingleObject> featureEvaluator) {
-		this.featureEvaluator = featureEvaluator;
 	}
 }

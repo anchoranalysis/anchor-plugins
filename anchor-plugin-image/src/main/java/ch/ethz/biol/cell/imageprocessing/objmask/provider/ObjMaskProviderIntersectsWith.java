@@ -69,7 +69,7 @@ public class ObjMaskProviderIntersectsWith extends ObjMaskProviderContainer {
 	private static boolean doesObjIntersect( ObjectMask om, ObjectCollection container ) {
 		
 		for( ObjectMask omCompare : container ) {
-			if(om.hasIntersectingPixels(omCompare)) {
+			if(om.hasIntersectingVoxels(omCompare)) {
 				return true;
 			}
 		}

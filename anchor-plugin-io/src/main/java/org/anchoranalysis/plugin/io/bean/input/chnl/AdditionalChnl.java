@@ -29,7 +29,7 @@ package org.anchoranalysis.plugin.io.bean.input.chnl;
 import java.nio.file.Path;
 
 import org.anchoranalysis.core.functional.Operation;
-import org.anchoranalysis.image.io.bean.chnl.map.ImgChnlMapEntry;
+import org.anchoranalysis.image.io.bean.channel.map.ImgChnlMapEntry;
 import org.anchoranalysis.image.io.chnl.map.ImgChnlMap;
 import org.anchoranalysis.io.error.AnchorIOException;
 

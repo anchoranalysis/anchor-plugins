@@ -37,7 +37,6 @@ public class StdDev extends FeatureResultsFromIndex {
 	@Override
 	protected double calcStatisticFromFeatureVal(DoubleArrayList featureVals) {
 		double sum = Descriptive.sum( featureVals );
-		//double mean = sum/featureVals.size();
 		double var = Descriptive.variance( featureVals.size(), sum, Descriptive.sumOfSquares( featureVals ) );
 		return Descriptive.standardDeviation(var);
 	}

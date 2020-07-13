@@ -31,7 +31,7 @@ import org.anchoranalysis.plugin.mpp.sgmn.cfg.optscheme.DualCfgNRGPixelized;
 
 public class DualCfgNRGPixelizedExtracter extends ExtractScoreSize<DualCfgNRGPixelized> {
 
-	private CfgNRGPixelizedExtracter helper = new CfgNRGPixelizedExtracter();;
+	private CfgNRGPixelizedExtracter helper = new CfgNRGPixelizedExtracter();
 	
 	@Override
 	public double extractScore(DualCfgNRGPixelized item) {

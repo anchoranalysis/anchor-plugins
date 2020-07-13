@@ -31,7 +31,7 @@ import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.anchoranalysis.core.error.CreateException;
+import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.feature.cache.calculation.FeatureCalculation;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
@@ -45,8 +45,8 @@ import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
-import org.apache.commons.lang.builder.EqualsBuilder;
-import org.apache.commons.lang.builder.HashCodeBuilder;
+import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
 
 /**
  * When the image-gradient is supplied as multiple channels in an NRG stack, this converts it into a list of 
@@ -57,6 +57,7 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
  * @author Owen Feehan
  *
  */
+@AllArgsConstructor @EqualsAndHashCode(callSuper = false)
 class CalculateGradientFromMultipleChnls extends FeatureCalculation<List<Point3d>,FeatureInputSingleObject> {
 
 	private int nrgIndexX;
@@ -67,15 +68,29 @@ class CalculateGradientFromMultipleChnls extends FeatureCalculation<List<Point3d
 	private int nrgIndexZ;
 	
 	private int subtractConstant = 0;
+	
+	@Override
+	protected List<Point3d> execute(FeatureInputSingleObject input) throws FeatureCalcException {
+
+		if (nrgIndexX==-1 || nrgIndexY==-1) {
+			throw new FeatureCalcException(
+				new InitException("nrgIndexX and nrgIndexY must both be nonZero")
+			);
+		}
 		
-	public CalculateGradientFromMultipleChnls(int nrgIndexX, int nrgIndexY,
-			int nrgIndexZ, int subtractConstant) {
-		super();
+		// create a list of points
+		List<Point3d> out = new ArrayList<>();
 		
-		this.nrgIndexX = nrgIndexX;
-		this.nrgIndexY = nrgIndexY;
-		this.nrgIndexZ = nrgIndexZ;
-		this.subtractConstant = subtractConstant;
+		NRGStack nrgStack = input.getNrgStackRequired().getNrgStack();
+		
+		putGradientValue( input.getObjectMask(), out, 0, nrgStack.getChnl(nrgIndexX) );
+		putGradientValue( input.getObjectMask(), out, 1, nrgStack.getChnl(nrgIndexY) );
+		
+		if (nrgIndexZ!=-1) {
+			putGradientValue( input.getObjectMask(), out, 2, nrgStack.getChnl(nrgIndexZ) );
+		}
+		
+		return out;
 	}
 	
 	// Always iterates over the list in the same-order
@@ -144,47 +159,5 @@ class CalculateGradientFromMultipleChnls extends FeatureCalculation<List<Point3d
 			assert false;
 			return;
 		}
-	}
-
-	@Override
-	protected List<Point3d> execute(FeatureInputSingleObject input) throws FeatureCalcException {
-
-		if (nrgIndexX==-1 || nrgIndexY==-1) {
-			throw new FeatureCalcException( new CreateException("nrgIndexX and nrgIndexY must both be nonZero") );
-		}
-		
-		// create a list of points
-		List<Point3d> out = new ArrayList<>();
-		
-		NRGStack nrgStack = input.getNrgStackRequired().getNrgStack();
-		
-		putGradientValue( input.getObjectMask(), out, 0, nrgStack.getChnl(nrgIndexX) );
-		putGradientValue( input.getObjectMask(), out, 1, nrgStack.getChnl(nrgIndexY) );
-		
-		if (nrgIndexZ!=-1) {
-			putGradientValue( input.getObjectMask(), out, 2, nrgStack.getChnl(nrgIndexZ) );
-		}
-		
-		return out;
-	}
-
-	@Override
-	public boolean equals(final Object obj){
-	    if(obj instanceof CalculateGradientFromMultipleChnls){
-	        final CalculateGradientFromMultipleChnls other = (CalculateGradientFromMultipleChnls) obj;
-	        return new EqualsBuilder()
-	            .append(nrgIndexX, other.nrgIndexX)
-	            .append(nrgIndexY, other.nrgIndexY)
-	            .append(nrgIndexZ, other.nrgIndexZ)
-	            .append(subtractConstant, other.subtractConstant)
-	            .isEquals();
-	    } else{
-	        return false;
-	    }
-	}
-	
-	@Override
-	public int hashCode() {
-		return new HashCodeBuilder().append(nrgIndexX).append(nrgIndexY).append(nrgIndexZ).append(subtractConstant).toHashCode();
 	}
 }

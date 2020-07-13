@@ -66,14 +66,14 @@ public class ReflectInAxesWithinDist extends PointsFitter {
 	public void fit(List<Point3f> points, Mark mark, ImageDimensions dim)
 			throws PointsFitterException, InsufficientPointsException {
 
-		if (points.size()==0) {
+		if (points.isEmpty()) {
 			pointsFitter.fit(points, mark, dim);
 		}
 		
 		double[] arrDistances = new double[]{ distanceX, distanceY, distanceZ };
 		
 		List<Point3f> pointsCurrent = points;
-		Extent extent = dim.getExtnt();
+		Extent extent = dim.getExtent();
 		
 		// Try each dimension: x, y, and z respectively
 		for( int d=0; d<3; d++) {
@@ -109,7 +109,7 @@ public class ReflectInAxesWithinDist extends PointsFitter {
 	
 	private static List<Point3f> reflectInDimension( List<Point3f> pointsIn, Extent extent, int dimension, boolean min ) {
 		
-		ArrayList<Point3f> pointsOut = new ArrayList<Point3f>();
+		ArrayList<Point3f> pointsOut = new ArrayList<>();
 		
 		for( Point3f p : pointsIn ) {
 			pointsOut.add(p);

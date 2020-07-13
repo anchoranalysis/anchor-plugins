@@ -44,7 +44,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.log.LogErrorReporter;
+import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.core.memory.MemoryUtilities;
 import org.anchoranalysis.core.name.provider.NamedProvider;
 import org.anchoranalysis.core.name.store.NamedProviderStore;
@@ -57,6 +57,7 @@ import org.anchoranalysis.image.stack.DisplayStack;
 import org.anchoranalysis.image.stack.NamedImgStackCollection;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.io.output.bound.BoundIOContext;
+import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
 import org.anchoranalysis.mpp.io.output.BackgroundCreator;
 import org.anchoranalysis.mpp.sgmn.bean.cfg.CfgSgmn;
 import org.anchoranalysis.mpp.sgmn.bean.define.DefineOutputterMPPWithNrg;
@@ -69,38 +70,38 @@ import org.anchoranalysis.mpp.sgmn.optscheme.OptSchemeContext;
 import org.anchoranalysis.mpp.sgmn.optscheme.OptTerminatedEarlyException;
 import org.anchoranalysis.plugin.mpp.sgmn.cfg.SgmnMPPState;
 
+import lombok.Getter;
+import lombok.Setter;
+
 
 // Segments a channel with marked pointed processes
 public class SgmnMPP extends CfgSgmn {
 
 	// START BEAN PROPERTIES
-	@BeanField
-	private OptScheme<CfgNRGPixelized,CfgNRGPixelized> optScheme = null;
+	@BeanField @Getter @Setter
+	private OptScheme<CfgNRGPixelized,CfgNRGPixelized> optScheme;
 	
-	@BeanField
-	private CfgGen cfgGen = null;
+	@BeanField @Getter @Setter
+	private CfgGen cfgGen;
 	
-	@BeanField
-	private NRGSchemeCreator nrgSchemeCreator = null;
+	@BeanField @Getter @Setter
+	private NRGSchemeCreator nrgSchemeCreator;
 	
-	@BeanField
-	private KernelProposer<CfgNRGPixelized> kernelProposer = null;
+	@BeanField @Getter @Setter
+	private KernelProposer<CfgNRGPixelized> kernelProposer;
 	
-	@BeanField
-	private FeedbackReceiverBean<CfgNRGPixelized> feedbackReceiver = null;
+	@BeanField @Getter @Setter
+	private FeedbackReceiverBean<CfgNRGPixelized> feedbackReceiver;
 	
-	@BeanField
+	@BeanField @Getter @Setter
 	private DefineOutputterMPPWithNrg define;
 	
-	@BeanField
-	private int nrgSchemeIndCacheSize = 50;
-	
 	// For debugging, allows us to exit before optimization begins
-	@BeanField
+	@BeanField @Getter @Setter
 	private boolean exitBeforeOpt = false;
 	
 	/** If TRUE uses a constant seed for the random-number-generator (useful for debugging) otherwise seeds with system clock */
-	@BeanField
+	@BeanField @Getter @Setter
 	private boolean fixRandomSeed = false;
 	// END BEAN PROPERTIES
 	
@@ -119,9 +120,6 @@ public class SgmnMPP extends CfgSgmn {
 		Optional<KeyValueParams> keyValueParams,
 		BoundIOContext context
 	) throws SgmnFailedException {
-		
-		assert(stackCollection!=null);
-	
 		ListUpdatableMarkSetCollection updatableMarkSetCollection = new ListUpdatableMarkSetCollection();
 		
 		try {
@@ -157,10 +155,8 @@ public class SgmnMPP extends CfgSgmn {
 			// We initialize the feedback receiver
 			feedbackReceiver.initRecursive(mppInit, context.getLogger());
 			
-			MemoryUtilities.logMemoryUsage("Before findOpt (before cleanup)", context.getLogReporter());
+			MemoryUtilities.logMemoryUsage("Before findOpt", context.getLogReporter());
 		
-			// There are two elements of the ProposerSharedObjects that we need to update with changes to the accepted
-			//   configuration
 			new UpdateMarkSet(
 				mppInit,
 				nrgStack,
@@ -170,22 +166,12 @@ public class SgmnMPP extends CfgSgmn {
 			
 			DualStack dualStack = wrapWithBackground(nrgStack, mppInit.getImage().getStackCollection() );
 			
-			// THIS SHOULD BE THE POINT AT WHICH WE LET PsoImage go out of scope, and everything in it, which isn't being used
-			//   can be garbage collected.  This will reduce memory usage for the rest of the algorithm, where hopefully
-			//   only what is needed will be kept
-			MemoryUtilities.logMemoryUsage("Before findOpt (after clean up)", context.getLogger().getLogReporter() );
-			
 			if (exitBeforeOpt) {
 				return new Cfg();
 			}
 			
-			if (keyValueParams.isPresent()) {
-				context.getOutputManager().getWriterCheckIfAllowed().write(
-					"groupParams",
-					() -> new GroupParamsGenerator(keyValueParams.get())
-				);
-			}
-					
+			maybeWriteGroupParams(keyValueParams, context.getOutputManager());
+								
 			OptSchemeContext initContext = new OptSchemeContext(
 				"MPP Sgmn",
 				nrgSchemeShared,
@@ -196,7 +182,7 @@ public class SgmnMPP extends CfgSgmn {
 				cfgGen
 			);
 			
-			CfgWithNRGTotal cfgNRG = findOpt(dualStack,	updatableMarkSetCollection,	initContext);
+			CfgWithNRGTotal cfgNRG = findOpt(updatableMarkSetCollection, initContext);
 			return cfgNRG.getCfg().deepCopy();
 			
 		} catch (InitException | CreateException | SgmnFailedException e) {
@@ -204,35 +190,33 @@ public class SgmnMPP extends CfgSgmn {
 		}
 	}
 		
-	private void init( MPPInitParams soMPP, LogErrorReporter logger ) throws InitException {
+	private void init( MPPInitParams soMPP, Logger logger ) throws InitException {
 		cfgGen.initRecursive( logger );
 		
-		nrgSchemeShared = SgmnMPPHelper.initNRG( nrgSchemeCreator, nrgSchemeIndCacheSize, soMPP.getFeature(), logger );
+		nrgSchemeShared = SgmnMPPHelper.initNRG( nrgSchemeCreator, soMPP.getFeature(), logger );
 
 		// The kernelProposers can change proposerSharedObjects
 		SgmnMPPHelper.initKernelProposers( kernelProposer, cfgGen, soMPP, logger );	
 	}
 	
-	// TODO integrate params with OptSchemeInitContext
 	private CfgWithNRGTotal findOpt(
-		DualStack dualStack,
 		ListUpdatableMarkSetCollection updatableMarkSetCollection,
-		OptSchemeContext initContext
+		OptSchemeContext context
 	) throws SgmnFailedException {
 		try {
 			CfgNRG cfgNRG = optScheme.findOpt(
 				kernelProposer,
 				updatableMarkSetCollection,
 				feedbackReceiver,
-				initContext
+				context
 			).getCfgNRG();
 			
 			SgmnMPPOutputter.outputResults(
 				cfgNRG,
-				dualStack,
+				context.getDualStack(),
 				nrgSchemeShared.getNrgScheme().getRegionMap().membershipWithFlagsForIndex( GlobalRegionIdentifiers.SUBMARK_INSIDE ),
-				initContext.getLogger(),
-				initContext.getOutputManager()
+				context.getLogger(),
+				context.getOutputManager()
 			);
 						
 			return cfgNRG.getCfgWithTotal();
@@ -252,79 +236,15 @@ public class SgmnMPP extends CfgSgmn {
 		return new DualStack(nrgStack,background);
 	}
 	
-	public OptScheme<CfgNRGPixelized,CfgNRGPixelized> getOptScheme() {
-		return optScheme;
-	}
-
-	public void setOptScheme(OptScheme<CfgNRGPixelized,CfgNRGPixelized> optScheme) {
-		this.optScheme = optScheme;
-	}
-
-
-	public CfgGen getCfgGen() {
-		return cfgGen;
-	}
-
-
-	public void setCfgGen(CfgGen cfgGen) {
-		this.cfgGen = cfgGen;
-	}
-
-	public KernelProposer<CfgNRGPixelized> getKernelProposer() {
-		return kernelProposer;
-	}
-
-
-	public void setKernelProposer(KernelProposer<CfgNRGPixelized> kernelProposer) {
-		this.kernelProposer = kernelProposer;
-	}
-
-
-	public FeedbackReceiverBean<CfgNRGPixelized> getFeedbackReceiver() {
-		return feedbackReceiver;
-	}
-
-	public void setFeedbackReceiver(FeedbackReceiverBean<CfgNRGPixelized> feedbackReceiver) {
-		this.feedbackReceiver = feedbackReceiver;
-	}
-
-	public NRGSchemeCreator getNrgSchemeCreator() {
-		return nrgSchemeCreator;
-	}
-
-	public void setNrgSchemeCreator(NRGSchemeCreator nrgSchemeCreator) {
-		this.nrgSchemeCreator = nrgSchemeCreator;
-	}
-
-	public int getNrgSchemeIndCacheSize() {
-		return nrgSchemeIndCacheSize;
-	}
-
-	public void setNrgSchemeIndCacheSize(int nrgSchemeIndCacheSize) {
-		this.nrgSchemeIndCacheSize = nrgSchemeIndCacheSize;
-	}
-
-	public boolean isExitBeforeOpt() {
-		return exitBeforeOpt;
-	}
-
-	public void setExitBeforeOpt(boolean exitBeforeOpt) {
-		this.exitBeforeOpt = exitBeforeOpt;
-	}
-
-	public boolean isFixRandomSeed() {
-		return fixRandomSeed;
-	}
-
-	public void setFixRandomSeed(boolean fixRandomSeed) {
-		this.fixRandomSeed = fixRandomSeed;
-	}
-
-	public DefineOutputterMPPWithNrg getDefine() {
-		return define;
-	}
-
-	public void setDefine(DefineOutputterMPPWithNrg define) {
-		this.define = define;
+	private void maybeWriteGroupParams(
+		Optional<KeyValueParams> keyValueParams,
+		BoundOutputManagerRouteErrors outputManager
+	) {
+		if (keyValueParams.isPresent()) {
+			outputManager.getWriterCheckIfAllowed().write(
+				"groupParams",
+				() -> new GroupParamsGenerator(keyValueParams.get())
+			);
+		}		
 	}
 }

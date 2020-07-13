@@ -2,7 +2,6 @@ package org.anchoranalysis.plugin.image.task.bean.grouped.histogram;
 
 
 
-import java.io.IOException;
 import java.util.Optional;
 
 /*
@@ -48,6 +47,9 @@ import org.anchoranalysis.plugin.image.task.grouped.GroupMapByName;
 import org.anchoranalysis.plugin.image.task.grouped.GroupedSharedState;
 import org.anchoranalysis.plugin.image.task.grouped.NamedChnl;
 
+import lombok.Getter;
+import lombok.Setter;
+
 
 /** Calculates feature on a 'grouped' set of images
  
@@ -60,21 +62,21 @@ import org.anchoranalysis.plugin.image.task.grouped.NamedChnl;
 public class GroupedHistogramExportTask extends GroupedStackTask<Histogram,Histogram> {
 
 	// START BEAN PROPERTIES
-	@BeanField
+	@BeanField @Getter @Setter
 	private boolean writeImageHistograms = true;	// If enabled writes a histogram for each image, as well as the group
 	
-	@BeanField @OptionalBean
+	@BeanField @OptionalBean @Getter @Setter
 	private ObjectCollectionProvider objs;		// Optional
 	
 	/** If defined, this stack is used as a mask over the values which are fed into the histogram */
-	@BeanField @AllowEmpty
+	@BeanField @AllowEmpty @Getter @Setter
 	private String keyMask = "";
 	
 	/** What pixel value to read as "On" in the mask above */
-	@BeanField
+	@BeanField @Getter @Setter
 	private int maskValue = 255;
 	
-	@BeanField
+	@BeanField @Getter @Setter
 	private boolean csvIgnoreZeros = false;
 	// END BEAN PROPERTIES
 
@@ -131,15 +133,11 @@ public class GroupedHistogramExportTask extends GroupedStackTask<Histogram,Histo
 		
 		if (writeImageHistograms) {
 			// We keep histogram as private member variable so it is thread-safe
-			try {
-				createWriter().writeHistogramToFile(
-					hist,
-					chnl.getName(),
-					context
-				);
-			} catch (IOException e) {
-				throw new JobExecutionException(e);
-			}
+			createWriter().writeHistogramToFile(
+				hist,
+				chnl.getName(),
+				context
+			);
 		}
 		
 		groupMap.add(
@@ -156,46 +154,5 @@ public class GroupedHistogramExportTask extends GroupedStackTask<Histogram,Histo
 	@Override
 	protected Optional<String> subdirectoryForGroupOutputs() {
 		return Optional.of("sum");
-	}
-
-	public boolean isWriteImageHistograms() {
-		return writeImageHistograms;
-	}
-
-	public void setWriteImageHistograms(boolean writeImageHistograms) {
-		this.writeImageHistograms = writeImageHistograms;
-	}
-
-	public ObjectCollectionProvider getObjs() {
-		return objs;
-	}
-
-
-	public void setObjs(ObjectCollectionProvider objs) {
-		this.objs = objs;
-	}
-
-	public String getKeyMask() {
-		return keyMask;
-	}
-
-	public void setKeyMask(String keyMask) {
-		this.keyMask = keyMask;
-	}
-
-	public int getMaskValue() {
-		return maskValue;
-	}
-
-	public void setMaskValue(int maskValue) {
-		this.maskValue = maskValue;
-	}
-
-	public boolean isCsvIgnoreZeros() {
-		return csvIgnoreZeros;
-	}
-
-	public void setCsvIgnoreZeros(boolean csvIgnoreZeros) {
-		this.csvIgnoreZeros = csvIgnoreZeros;
 	}
 }

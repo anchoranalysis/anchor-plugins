@@ -33,37 +33,44 @@ import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.cache.calculation.ResolvedCalculation;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.image.feature.init.FeatureInitParamsShared;
+import org.anchoranalysis.feature.calc.FeatureInitParams;
+import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
+import org.anchoranalysis.image.feature.bean.object.single.FeatureSingleObject;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.object.ObjectCollection;
-import org.anchoranalysis.plugin.image.feature.bean.object.single.shared.FeatureSingleObjectWithShared;
 
-public abstract class FeatureIntersectingObjects extends FeatureSingleObjectWithShared {
+import lombok.Getter;
+import lombok.Setter;
+
+public abstract class FeatureIntersectingObjects extends FeatureSingleObject {
 
 	
 	// START BEAN PROPERTIES
 	/**
 	 * ID for the particular ObjMaskCollection
 	 */
-	@BeanField
+	@BeanField @Getter @Setter
 	private String id="";
 	
-	@BeanField
+	@BeanField @Getter @Setter
 	private double valueNoObjects = Double.NaN;
 	// END BEAN PROPERTIES
 
 	private ObjectCollection searchObjs;
 	
 	@Override
-	public void beforeCalcCast(FeatureInitParamsShared params) throws InitException {
-	
+	protected void beforeCalc(FeatureInitParams paramsInit) throws InitException {
+		super.beforeCalc(paramsInit);
+		
+		ImageInitParams imageInit = new ImageInitParams(paramsInit.sharedObjectsRequired());
 		try {
-			this.searchObjs = params.getSharedObjects().getObjMaskCollection().getException(id);
+			this.searchObjs = imageInit.getObjMaskCollection().getException(id);
 		} catch (NamedProviderGetException e) {
 			throw new InitException(e.summarize());
-		};
+		}
+
 	}
-	
+		
 	@Override
 	public double calc(SessionInput<FeatureInputSingleObject> input)
 			throws FeatureCalcException {
@@ -84,26 +91,8 @@ public abstract class FeatureIntersectingObjects extends FeatureSingleObjectWith
 		SessionInput<FeatureInputSingleObject> params,
 		ResolvedCalculation<ObjectCollection, FeatureInputSingleObject> intersecting
 	) throws FeatureCalcException;
-	
-	public String getId() {
-		return id;
-	}
-
-	public void setId(String id) {
-		this.id = id;
-	}
-
-	public double getValueNoObjects() {
-		return valueNoObjects;
-	}
-
-
-	public void setValueNoObjects(double valueNoObjects) {
-		this.valueNoObjects = valueNoObjects;
-	}
 
 	protected ObjectCollection getSearchObjs() {
 		return searchObjs;
 	}
-
 }

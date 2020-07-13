@@ -36,8 +36,9 @@ import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.object.morph.MorphologicalDilation;
 import org.anchoranalysis.plugin.image.feature.object.calculation.single.CalculateIncrementalOperationMap;
-import org.apache.commons.lang3.builder.HashCodeBuilder;
+import lombok.EqualsAndHashCode;
 
+@EqualsAndHashCode(callSuper = true)
 public class CalculateDilationMap extends CalculateIncrementalOperationMap {
 
 	public CalculateDilationMap(boolean do3D) {
@@ -61,21 +62,5 @@ public class CalculateDilationMap extends CalculateIncrementalOperationMap {
 		} catch (CreateException e) {
 			throw new OperationFailedException(e);
 		}
-	}
-	
-	@Override
-	public boolean equals(final Object obj){
-	    if(obj instanceof CalculateDilationMap){
-	        return super.equals(obj);
-	    } else{
-	        return false;
-	    }
-	}
-
-	@Override
-	public int hashCode() {
-		return new HashCodeBuilder()
-			.appendSuper( super.hashCode() )
-			.hashCode();
 	}
 }

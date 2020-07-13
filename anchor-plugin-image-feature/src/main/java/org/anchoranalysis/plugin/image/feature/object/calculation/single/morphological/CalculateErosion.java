@@ -33,8 +33,9 @@ import org.anchoranalysis.feature.cache.calculation.ResolvedCalculationMap;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.plugin.image.feature.object.calculation.single.CalculateObjectMask;
-import org.apache.commons.lang.builder.HashCodeBuilder;
+import lombok.EqualsAndHashCode;
 
+@EqualsAndHashCode(callSuper=true)
 public class CalculateErosion extends CalculateObjectMask {
 
 	private CalculateErosion(
@@ -42,10 +43,6 @@ public class CalculateErosion extends CalculateObjectMask {
 		ResolvedCalculationMap<ObjectMask,FeatureInputSingleObject,Integer> map
 	) {
 		super(iterations,map);
-	}
-	
-	private CalculateErosion( CalculateObjectMask src ) {
-		super(src);
 	}
 	
 	public static FeatureCalculation<ObjectMask,FeatureInputSingleObject> create(
@@ -68,19 +65,5 @@ public class CalculateErosion extends CalculateObjectMask {
 		return cache.search(
 			create(cache, iterations, do3D)
 		);
-	}
-	
-	@Override
-	public boolean equals(final Object obj){
-	    if(obj instanceof CalculateErosion){
-	        return super.equals(obj);
-	    } else{
-	        return false;
-	    }
-	}
-	
-	@Override
-	public int hashCode() {
-		return new HashCodeBuilder().appendSuper( super.hashCode() ).hashCode();
 	}
 }

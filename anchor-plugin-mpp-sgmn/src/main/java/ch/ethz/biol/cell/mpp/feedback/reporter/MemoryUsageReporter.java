@@ -30,12 +30,12 @@ import org.anchoranalysis.anchor.mpp.feature.nrg.cfg.CfgNRGPixelized;
 
 
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.log.LogReporter;
+import org.anchoranalysis.core.log.MessageLogger;
 import org.anchoranalysis.core.memory.MemoryUtilities;
 import org.anchoranalysis.mpp.sgmn.bean.optscheme.feedback.ReporterAgg;
 import org.anchoranalysis.mpp.sgmn.optscheme.feedback.OptimizationFeedbackInitParams;
 import org.anchoranalysis.mpp.sgmn.optscheme.feedback.aggregate.Aggregator;
-import org.anchoranalysis.mpp.sgmn.optscheme.feedback.aggregate.IAggregateReceiver;
+import org.anchoranalysis.mpp.sgmn.optscheme.feedback.aggregate.AggregateReceiver;
 import org.anchoranalysis.mpp.sgmn.optscheme.step.Reporting;
 
 public class MemoryUsageReporter extends ReporterAgg<CfgNRGPixelized> {
@@ -48,16 +48,16 @@ public class MemoryUsageReporter extends ReporterAgg<CfgNRGPixelized> {
 	private boolean showAgg = true;
 	// END BEAN PROPERTIES
 
-	private LogReporter logReporter;
+	private MessageLogger logger;
 	
 	@Override
-	protected IAggregateReceiver<CfgNRGPixelized> getAggregateReceiver() {
-		return new IAggregateReceiver<CfgNRGPixelized>() {
+	protected AggregateReceiver<CfgNRGPixelized> getAggregateReceiver() {
+		return new AggregateReceiver<CfgNRGPixelized>() {
 			
 			@Override
 			public void aggStart(OptimizationFeedbackInitParams<CfgNRGPixelized> initParams, Aggregator agg) {
-				logReporter = initParams.getInitContext().getLogger().getLogReporter();
-				MemoryUtilities.logMemoryUsage( "MemoryUsageReporter step=start", logReporter );
+				logger = initParams.getInitContext().getLogger().messageLogger();
+				MemoryUtilities.logMemoryUsage( "MemoryUsageReporter step=start", logger );
 				
 			}
 			
@@ -70,13 +70,13 @@ public class MemoryUsageReporter extends ReporterAgg<CfgNRGPixelized> {
 				
 				MemoryUtilities.logMemoryUsage(
 					String.format("MemoryUsageReporter AGG step=%d",reporting.getIter()	),
-					logReporter
+					logger
 				);
 			}
 			
 			@Override
 			public void aggEnd(Aggregator agg) {
-				MemoryUtilities.logMemoryUsage( "MemoryUsageReporter step=end", logReporter );
+				MemoryUtilities.logMemoryUsage( "MemoryUsageReporter step=end", logger );
 			}
 		};
 	}
@@ -90,7 +90,7 @@ public class MemoryUsageReporter extends ReporterAgg<CfgNRGPixelized> {
 		
 		MemoryUtilities.logMemoryUsage(
 			String.format("MemoryUsageReporter BEST step=%d", reporting.getIter() ),
-			logReporter
+			logger
 		);
 	}
 

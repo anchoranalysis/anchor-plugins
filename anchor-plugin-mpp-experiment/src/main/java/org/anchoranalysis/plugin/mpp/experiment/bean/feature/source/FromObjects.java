@@ -36,7 +36,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.log.LogErrorReporter;
+import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.experiment.task.InputTypesExpected;
 import org.anchoranalysis.feature.bean.list.FeatureListProvider;
 import org.anchoranalysis.feature.calc.results.ResultsVector;
@@ -114,7 +114,7 @@ public class FromObjects<T extends FeatureInput> extends FeatureSource<MultiInpu
 			return new SharedStateExportFeatures<>(
 				metadataHeaders,
 				tableCalculator.createFeatureNames(),
-				() -> tableCalculator.duplicateForNewThread(),
+				tableCalculator::duplicateForNewThread,
 				context
 			);
 		} catch (InitException | AnchorIOException e) {
@@ -171,7 +171,7 @@ public class FromObjects<T extends FeatureInput> extends FeatureSource<MultiInpu
 		Optional<String> groupGeneratorName,
 		ImageInitParams imageInit,
 		NRGStackWithParams nrgStack,
-		LogErrorReporter logger
+		Logger logger
 	) throws OperationFailedException {
 		
 		CalculateFeaturesFromProvider<T> fromProviderCalculator = new CalculateFeaturesFromProvider<>(
@@ -202,7 +202,7 @@ public class FromObjects<T extends FeatureInput> extends FeatureSource<MultiInpu
 		FeatureTableCalculator<T> calculator,
 		ImageInitParams imageInit,
 		NRGStackWithParams nrgStack,
-		LogErrorReporter logger
+		Logger logger
 	) throws OperationFailedException {
 		
 		try {

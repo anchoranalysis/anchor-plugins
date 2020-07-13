@@ -28,10 +28,9 @@ package org.anchoranalysis.plugin.opencv;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
-
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.functional.FunctionalUtilities;
 import org.anchoranalysis.core.geometry.Point3f;
 import org.anchoranalysis.core.geometry.ReadableTuple3i;
 import org.anchoranalysis.image.contour.Contour;
@@ -72,9 +71,9 @@ public class CVFindContours {
 	}
 	
 	private static List<Contour> convertMatOfPoint( List<MatOfPoint> contours, ReadableTuple3i crnrMin ) {
-		return contours.stream().map(
-			a -> CVFindContours.createContour(a, crnrMin )
-		).collect( Collectors.toList() );
+		return FunctionalUtilities.mapToList(contours, points ->
+			CVFindContours.createContour(points, crnrMin)
+		);
 	}
 	
 	private static Contour createContour(MatOfPoint mop, ReadableTuple3i crnrMin) {

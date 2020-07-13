@@ -37,7 +37,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.error.BeanDuplicateException;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.log.LogErrorReporter;
+import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 import org.anchoranalysis.core.name.store.LazyEvaluationStore;
 import org.anchoranalysis.core.name.store.NamedProviderStore;
@@ -81,17 +81,17 @@ public class CfgSgmnTask extends Task<MultiInput,ExperimentState>{
 	@Override
 	public void doJobOnInputObject(	InputBound<MultiInput,ExperimentState> params)	throws JobExecutionException {
 
-		LogErrorReporter logErrorReporter = params.getLogger();
+		Logger logger = params.getLogger();
 		MultiInput inputObject = params.getInputObject();
 		
-		assert(logErrorReporter!=null);
+		assert(logger!=null);
 		
 		try {
 			NamedImgStackCollection stackCollection = stacksFromInput(inputObject);
 			
-			NamedProviderStore<ObjectCollection> objs = objsFromInput(inputObject, logErrorReporter);
+			NamedProviderStore<ObjectCollection> objs = objsFromInput(inputObject, logger);
 					
-			Optional<KeyValueParams> keyValueParams = keyValueParamsFromInput(inputObject, logErrorReporter);
+			Optional<KeyValueParams> keyValueParams = keyValueParamsFromInput(inputObject, logger);
 			
 			Cfg cfg = sgmn.duplicateBean().sgmn(
 				stackCollection,
@@ -99,7 +99,7 @@ public class CfgSgmnTask extends Task<MultiInput,ExperimentState>{
 				keyValueParams,
 				params.context()
 			);
-			writeVisualization(cfg, params.getOutputManager(), stackCollection, logErrorReporter);
+			writeVisualization(cfg, params.getOutputManager(), stackCollection, logger);
 			
 		} catch (SgmnFailedException e) {
 			throw new JobExecutionException("An error occurred segmenting a configuration", e);
@@ -123,8 +123,8 @@ public class CfgSgmnTask extends Task<MultiInput,ExperimentState>{
 		return stackCollection;
 	}
 	
-	private Optional<KeyValueParams> keyValueParamsFromInput( MultiInput inputObject, LogErrorReporter logErrorReporter ) throws JobExecutionException {
-		NamedProviderStore<KeyValueParams> paramsCollection = new LazyEvaluationStore<>(logErrorReporter, "keyValueParams"); 
+	private Optional<KeyValueParams> keyValueParamsFromInput( MultiInput inputObject, Logger logger ) throws JobExecutionException {
+		NamedProviderStore<KeyValueParams> paramsCollection = new LazyEvaluationStore<>(logger, "keyValueParams"); 
 		try {
 			inputObject.keyValueParams().addToStore(paramsCollection);
 		} catch (OperationFailedException e1) {
@@ -147,13 +147,13 @@ public class CfgSgmnTask extends Task<MultiInput,ExperimentState>{
 	}
 	
 	
-	private NamedProviderStore<ObjectCollection> objsFromInput( MultiInput inputObject, LogErrorReporter logErrorReporter ) throws OperationFailedException {
-		NamedProviderStore<ObjectCollection> objMaskCollectionStore = new LazyEvaluationStore<>(logErrorReporter, "objMaskCollection");
+	private NamedProviderStore<ObjectCollection> objsFromInput( MultiInput inputObject, Logger logger ) throws OperationFailedException {
+		NamedProviderStore<ObjectCollection> objMaskCollectionStore = new LazyEvaluationStore<>(logger, "objMaskCollection");
 		inputObject.objs().addToStore(objMaskCollectionStore);
 		return objMaskCollectionStore;
 	}
 	
-	private void writeVisualization( Cfg cfg, BoundOutputManagerRouteErrors outputManager, NamedImgStackCollection stackCollection, LogErrorReporter logErrorReporter ) {
+	private void writeVisualization( Cfg cfg, BoundOutputManagerRouteErrors outputManager, NamedImgStackCollection stackCollection, Logger logger ) {
 		outputManager.getWriterCheckIfAllowed().write(
 			"cfg",
 			() -> new XStreamGenerator<Object>(
@@ -170,7 +170,7 @@ public class CfgSgmnTask extends Task<MultiInput,ExperimentState>{
 			
 			CfgVisualization.write(cfg, outputManager, backgroundStack);
 		} catch (OperationFailedException | CreateException e) {
-			logErrorReporter.getErrorReporter().recordError(CfgSgmnTask.class, e);
+			logger.errorReporter().recordError(CfgSgmnTask.class, e);
 		}
 	}
 	

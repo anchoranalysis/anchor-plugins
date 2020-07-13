@@ -65,7 +65,7 @@ public class ObjMaskProviderErode extends ObjMaskProviderDimensionsOptional {
 	@Override
 	public void checkMisconfigured( BeanInstanceMap defaultInstances ) throws BeanMisconfiguredException {
 		super.checkMisconfigured( defaultInstances );
-		if (outsideAtThreshold==false && getDim()==null) {
+		if (!outsideAtThreshold && getDim()==null) {
 			throw new BeanMisconfiguredException("If outsideAtThreshold==false then dim must be set");
 		}
 	}
@@ -101,7 +101,7 @@ public class ObjMaskProviderErode extends ObjMaskProviderDimensionsOptional {
 	 
 	private Optional<Extent> calcExtent() throws CreateException {
 		return createDims().map(
-			ImageDimensions::getExtnt	
+			ImageDimensions::getExtent	
 		);
 	}
 

@@ -117,7 +117,7 @@ class MakePlateauLowerComplete {
 			
 			assert plateau.getPtsInner().size() >= 2;
 			
-			matS.pointListAtFirst( plateau.getPtsInner() );
+			matS.pointListAtFirstPoint( plateau.getPtsInner() );
 			
 			if (minimaStore.isPresent()) {
 				minimaStore.get().add( plateau.getPtsInner() );

@@ -28,8 +28,6 @@ package org.anchoranalysis.anchor.plugin.quick.bean.input;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
-
 import org.anchoranalysis.anchor.plugin.quick.bean.input.filepathappend.AppendStack;
 import org.anchoranalysis.anchor.plugin.quick.bean.input.filepathappend.MatchedAppendCsv;
 import org.anchoranalysis.bean.BeanInstanceMap;
@@ -39,6 +37,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.DefaultInstance;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.bean.error.BeanMisconfiguredException;
+import org.anchoranalysis.core.functional.FunctionalUtilities;
 import org.anchoranalysis.image.io.input.NamedChnlsInputPart;
 import org.anchoranalysis.io.bean.provider.file.FileProviderWithDirectory;
 import org.anchoranalysis.io.error.AnchorIOException;
@@ -51,7 +50,7 @@ import org.anchoranalysis.io.input.FileInput;
 import org.anchoranalysis.plugin.io.bean.descriptivename.LastFolders;
 import org.anchoranalysis.plugin.io.bean.input.chnl.NamedChnlsAppend;
 import org.anchoranalysis.plugin.io.bean.input.chnl.NamedChnlsBase;
-import org.anchoranalysis.image.io.bean.chnl.map.ImgChnlMapEntry;
+import org.anchoranalysis.image.io.bean.channel.map.ImgChnlMapEntry;
 import org.anchoranalysis.image.io.bean.rasterreader.RasterReader;
 
 /**
@@ -164,7 +163,7 @@ public class NamedChnlsQuick extends NamedChnlsBase {
 	 * @throws BeanMisconfiguredException
 	 */
 	private static void checkChnls( List<?> list, String mustBeNonEmpty, String errorText ) throws BeanMisconfiguredException {
-		if (list.size()>0 && mustBeNonEmpty.isEmpty()) {
+		if (!list.isEmpty() && mustBeNonEmpty.isEmpty()) {
 			throw new BeanMisconfiguredException(
 				String.format("If an %s is specified, regex must also be specified", errorText)
 			);
@@ -236,9 +235,7 @@ public class NamedChnlsQuick extends NamedChnlsBase {
 	}
 	
 	private List<NamedBean<FilePathGenerator>> createFilePathGeneratorsAdjacent() {
-		return adjacentChnls.stream()
-				.map( (AdjacentFile file) -> convertAdjacentFile(file) )
-				.collect(Collectors.toList());
+		return FunctionalUtilities.mapToList(adjacentChnls,	this::convertAdjacentFile);
 	}
 	
 	private List<NamedBean<FilePathGenerator>> createFilePathGeneratorsAppend() throws BeanMisconfiguredException {

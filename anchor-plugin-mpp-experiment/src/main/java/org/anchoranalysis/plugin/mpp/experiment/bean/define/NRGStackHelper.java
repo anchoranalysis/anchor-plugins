@@ -62,7 +62,7 @@ class NRGStackHelper {
 				);
 			}
 		} catch (NamedProviderGetException e) {
-			context.getLogger().getErrorReporter().recordError(
+			context.getLogger().errorReporter().recordError(
 				NRGStackHelper.class,
 				e.summarize()
 			);

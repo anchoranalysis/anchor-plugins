@@ -30,7 +30,7 @@ import java.util.List;
 
 import org.anchoranalysis.bean.NamedBean;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.core.log.LogErrorReporter;
+import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.feature.bean.list.FeatureListProvider;
 import org.anchoranalysis.feature.list.NamedFeatureStoreFactory;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
@@ -67,10 +67,10 @@ public class Simple extends FeatureTableObjects<FeatureInputSingleObject> {
 
 	@Override
 	public List<FeatureInputSingleObject> createListInputs(ObjectCollection objs,
-			NRGStackWithParams nrgStack, LogErrorReporter logErrorReporter) throws CreateException {
+			NRGStackWithParams nrgStack, Logger logger) throws CreateException {
 		return objs.stream().mapToList(obj ->
 			new FeatureInputSingleObject(
-				checkObjInsideScene(obj, nrgStack.getDimensions().getExtnt()),
+				checkObjInsideScene(obj, nrgStack.getDimensions().getExtent()),
 				nrgStack
 			) 
 		);

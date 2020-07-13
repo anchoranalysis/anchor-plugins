@@ -1,5 +1,7 @@
 package org.anchoranalysis.plugin.mpp.experiment.bean.objs.columndefinition;
 
+import java.util.Arrays;
+
 /*
  * #%L
  * anchor-io
@@ -30,14 +32,14 @@ package org.anchoranalysis.plugin.mpp.experiment.bean.objs.columndefinition;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.index.ObjectCollectionRTree;
-import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.object.properties.ObjectCollectionWithProperties;
-import org.anchoranalysis.image.object.properties.ObjectWithProperties;
 import org.anchoranalysis.plugin.mpp.experiment.objs.csv.CSVRow;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+
+import lombok.Getter;
+import lombok.Setter;
 
 public class Single extends ColumnDefinition {
 
@@ -45,108 +47,64 @@ public class Single extends ColumnDefinition {
 	/**
 	 * Name of CSV column with X coordinate of point for the first Object
 	 */
-	@BeanField
+	@BeanField @Getter @Setter
 	private String columnPntX = "insidePnt.x";
 
 	/**
 	 * Name of CSV column with Y coordinate of point for the first Object
 	 */
-	@BeanField
+	@BeanField @Getter @Setter
 	private String columnPntY = "insidePnt.y";
 	
 	/**
 	 * Name of CSV column with Z coordinate of point for the first Object
 	 */
-	@BeanField
+	@BeanField @Getter @Setter
 	private String columnPntZ = "insidePnt.z";
 	
 	/**
 	 * Name of CSV column with the number of pixels for the first Object
 	 */
-	@BeanField
+	@BeanField @Getter @Setter
 	private String columnNumPixels = "numPixels";
 	// END BEAN PROPERTIES
 	
-	private int indexNumPixels = -1;
-	private int[] indexPnt = new int[3];
+	private ObjectInCsvRowIndices indices;
 	
 	@Override
 	public void initHeaders(String[] headers) throws InitException {
 		super.initHeaders(headers);
 		
 		// We resolve each of our columnNames to an index
-		indexPnt[0] = Utilities.findHeaderIndex( headers, columnPntX );
-		indexPnt[1] = Utilities.findHeaderIndex( headers, columnPntY );
-		indexPnt[2] = Utilities.findHeaderIndex( headers, columnPntZ );
-		
-		indexNumPixels = Utilities.findHeaderIndex( headers, columnNumPixels );
-		
-		assert( indexNumPixels != indexPnt[0] );
-		assert( indexNumPixels != indexPnt[1] );
-		assert( indexNumPixels != indexPnt[2] );
-		assert( indexPnt[1] != indexPnt[2] );
-		assert( indexPnt[0] != indexPnt[2] );
-		assert( indexPnt[1] != indexPnt[0] );
+		indices = HeaderFinder.findHeadersToDescribeObject(
+			headers,
+			columnNumPixels,
+			Arrays.asList(columnPntX, columnPntY, columnPntZ)
+		);
 	}
 
 	@Override
-	public ObjectCollectionWithProperties findObjsMatchingRow(CSVRow csvRow, ObjectCollectionRTree allObjs)
-			throws OperationFailedException {
-		
-		assert( indexNumPixels>= 0 );
+	public ObjectCollectionWithProperties findObjectsMatchingRow(
+		CSVRow csvRow,
+		ObjectCollectionRTree allObjs
+	) throws OperationFailedException {
 
-		ObjectCollectionWithProperties objs = new ObjectCollectionWithProperties();
-		
-		ObjectMask obj = Utilities.findObjForCSVRow( allObjs, csvRow, indexPnt, indexNumPixels );
-		
-		objs.add( new ObjectWithProperties(obj) );
-		return objs;
+		ObjectCollectionWithProperties objects = new ObjectCollectionWithProperties();
+		objects.add(
+			indices.findObjectFromCSVRow(allObjs, csvRow)
+		);
+		return objects;
 	}
 
 	@Override
 	public void writeToXML(CSVRow csvRow, Element xmlElement, Document doc) {
+
+		AddToXMLDocument xmlDocument = new AddToXMLDocument(xmlElement, doc);
 		
-		String[] line = csvRow.getLine();
-		
-		int numPixels = Utilities.intFromLine(line,indexNumPixels);
-		
-		Point3i pnt = Utilities.pntFromLine(line,indexPnt);			
-		
-        Utilities.addPoint( "point", pnt, xmlElement, doc );
-        Utilities.addInteger( "numPixels", numPixels, xmlElement, doc );
-
-		
-	}
-
-	public String getColumnNumPixels() {
-		return columnNumPixels;
-	}
-
-	public void setColumnNumPixels(String columnNumPixels) {
-		this.columnNumPixels = columnNumPixels;
-	}
-
-	public String getColumnPntX() {
-		return columnPntX;
-	}
-
-	public void setColumnPntX(String columnPntX) {
-		this.columnPntX = columnPntX;
-	}
-
-	public String getColumnPntY() {
-		return columnPntY;
-	}
-
-	public void setColumnPntY(String columnPntY) {
-		this.columnPntY = columnPntY;
-	}
-
-	public String getColumnPntZ() {
-		return columnPntZ;
-	}
-
-	public void setColumnPntZ(String columnPntZ) {
-		this.columnPntZ = columnPntZ;
+		xmlDocument.addObjectMask(
+			"",
+			csvRow.getLine(),
+			indices
+		);
 	}
 }

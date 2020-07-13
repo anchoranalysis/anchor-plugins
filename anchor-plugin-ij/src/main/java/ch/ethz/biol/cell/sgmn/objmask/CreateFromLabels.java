@@ -57,7 +57,7 @@ class CreateFromLabels {
 		int maxLabel,
 		int minBBoxVolume
 	) {
-		int numPixel[] = new int[maxLabel-minLabel+1];
+		int[] numPixel = new int[maxLabel-minLabel+1];
 
 		return createFromLabels(
 			calcBoundingBoxes( voxels, minLabel, maxLabel, numPixel ),
@@ -109,7 +109,7 @@ class CreateFromLabels {
 		return ObjectCollectionFactory.filterAndMapWithIndexFrom(
 			bboxList,
 			bbox -> bbox.extent().getVolumeXY() >= smallVolumeThreshold,
-			(bbox, col) -> bufferAccess.equalMask(bbox, col)		// Using index as the color value
+			bufferAccess::equalMask		// Using index as the color value
 		);
 	}
 }

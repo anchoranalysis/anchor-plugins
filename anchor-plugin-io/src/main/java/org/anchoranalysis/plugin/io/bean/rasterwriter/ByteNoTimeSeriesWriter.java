@@ -41,7 +41,6 @@ import loci.common.services.DependencyException;
 import loci.common.services.ServiceException;
 import loci.formats.FormatException;
 import loci.formats.IFormatWriter;
-import ome.xml.model.enums.EnumerationException;
 import ome.xml.model.enums.PixelType;
 
 /**
@@ -94,7 +93,7 @@ public abstract class ByteNoTimeSeriesWriter extends RasterWriter {
 				writeSeperateChnl(writer, stack);
 			}
 		
-		} catch (IOException | FormatException | EnumerationException | ServiceException | DependencyException e) {
+		} catch (IOException | FormatException | ServiceException | DependencyException e) {
 			throw new RasterIOException(e);
 		}
 	}

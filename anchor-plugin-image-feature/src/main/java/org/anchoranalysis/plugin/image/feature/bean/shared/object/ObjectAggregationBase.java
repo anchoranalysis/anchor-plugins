@@ -37,12 +37,14 @@ import org.anchoranalysis.feature.cache.ChildCacheName;
 import org.anchoranalysis.feature.cache.calculation.CalcForChild;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.input.FeatureInputNRG;
+import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
 import org.anchoranalysis.image.bean.provider.ObjectCollectionProvider;
-import org.anchoranalysis.image.feature.init.FeatureInitParamsShared;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.object.ObjectCollection;
 
 import cern.colt.list.DoubleArrayList;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * Calculates a feature for a set of objects using this stack as a NRG-stack, and aggregates.
@@ -53,8 +55,7 @@ import cern.colt.list.DoubleArrayList;
 public abstract class ObjectAggregationBase<T extends FeatureInputNRG> extends FeatureSingleObjectFromShared<T> {
 
 	// START BEAN PROPERTIES
-	@BeanField
-	@SkipInit
+	@BeanField @SkipInit @Getter @Setter
 	private ObjectCollectionProvider objs;
 	// END BEAN PROPERTIES
 	
@@ -62,8 +63,8 @@ public abstract class ObjectAggregationBase<T extends FeatureInputNRG> extends F
 	private ObjectCollection objsCollection;
 	
 	@Override
-	public void beforeCalcCast(FeatureInitParamsShared params) throws InitException {
-		objs.initRecursive(params.getSharedObjects(), getLogger() );
+	protected void beforeCalcWithImageInitParams(ImageInitParams params) throws InitException {
+		objs.initRecursive(params, getLogger() );
 	}
 	
 	@Override
@@ -113,13 +114,5 @@ public abstract class ObjectAggregationBase<T extends FeatureInputNRG> extends F
 			ObjectAggregationBase.class,
 			index + "_" + objsCollection.hashCode()
 		);
-	}
-
-	public ObjectCollectionProvider getObjs() {
-		return objs;
-	}
-
-	public void setObjs(ObjectCollectionProvider objs) {
-		this.objs = objs;
 	}
 }

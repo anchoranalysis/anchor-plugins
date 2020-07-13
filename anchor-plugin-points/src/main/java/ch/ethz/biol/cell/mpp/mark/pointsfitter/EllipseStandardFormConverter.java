@@ -1,5 +1,7 @@
 package ch.ethz.biol.cell.mpp.mark.pointsfitter;
 
+import org.anchoranalysis.core.error.CreateException;
+
 /*-
  * #%L
  * anchor-plugin-points
@@ -26,7 +28,6 @@ package ch.ethz.biol.cell.mpp.mark.pointsfitter;
  * #L%
  */
 
-import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.geometry.Point2d;
 
 import cern.colt.matrix.DoubleFactory1D;
@@ -55,20 +56,31 @@ public class EllipseStandardFormConverter {
 
 	private DoubleMatrix1D matrix;
 	
-	private double k1;		// Centre-Point x
-	private double k2;		// Centre-Point y
-	private double axis_major;	// SEMI-major axis
-	private double axis_minor;	// SEMI-minor axis
+	/** Centre-Point x */
+	private double k1; 
 	
-	private DoubleMatrix1D U1;	// Vector of direction of minor axis
-	private DoubleMatrix1D U2;	// Vector of direction of major axis
+	/** Centre-Point y */
+	private double k2; 
+	
+	/** SEMI-major axis */
+	private double axisMajor; 
+	
+	/** SEMI-minor axis */
+	private double axisMinor; 
+	
+	/** Vector of direction of minor axis */
+	private DoubleMatrix1D directionMinor; 
+	
+	/** Vector of direction of major axis */
+	private DoubleMatrix1D directionMajor; 
 
-	public EllipseStandardFormConverter( DoubleMatrix1D matrix ) {
+	public EllipseStandardFormConverter( DoubleMatrix1D matrix ) throws CreateException {
 		this.matrix = matrix;
+		convert();
 	}
 	
 	@SuppressWarnings("static-access")
-	public void convert() throws OperationFailedException {
+	private void convert() throws CreateException {
 		
 		double a11 = matrix.get(0);
 	    double a12 = matrix.get(1) / 2;
@@ -78,7 +90,7 @@ public class EllipseStandardFormConverter {
 	    double c = matrix.get(5);
 	    
 	    if (a11 * a22 - Math.pow(a12,2.0)<=0 ) {
-	    	throw new OperationFailedException("Not an ellipse");
+	    	throw new CreateException("Not an ellipse");
 	    }
 	    
 	    // STEP 1 (Centre)
@@ -94,36 +106,38 @@ public class EllipseStandardFormConverter {
 	    double m22 = mu * a22;
 	    
 	    // STEP 3
-	    double lambda_common = Math.pow( Math.pow(m11-m22,2) + (4*Math.pow(m12,2) ), 0.5);
+	    double lambdaCommon = Math.pow( Math.pow(m11-m22,2) + (4*Math.pow(m12,2) ), 0.5);
 
-	    double lambda1 = ( (m11+m22) + lambda_common)/2;
-	    axis_minor =  Math.pow(lambda1,-0.5);
+	    double lambda1 = ( (m11+m22) + lambdaCommon)/2;
+	    axisMinor =  Math.pow(lambda1,-0.5);
 	    
-	    double lambda2 = ( (m11+m22) - lambda_common)/2;
-	    axis_major =  Math.pow(lambda2,-0.5);
+	    double lambda2 = ( (m11+m22) - lambdaCommon)/2;
+	    axisMajor =  Math.pow(lambda2,-0.5);
 	    
 	    // Angle with minor axis
-	    U1 = DoubleFactory1D.dense.make(2);
+	    directionMinor = DoubleFactory1D.dense.make(2);
 	    if (m11>=m22) {
-	        U1.set(0, lambda1-m22);
-	        U1.set(1, m12);
+	        directionMinor.set(0, lambda1-m22);
+	        directionMinor.set(1, m12);
 	    } else {
-	        U1.set(0, m12);
-	        U1.set(1, lambda1-m11);
+	        directionMinor.set(0, m12);
+	        directionMinor.set(1, lambda1-m11);
 	    }
 	    
 	    
 	    Algebra a = new Algebra();
 	    
-	    cern.jet.math.Functions F = cern.jet.math.Functions.functions;
+	    cern.jet.math.Functions F = cern.jet.math.Functions.functions;	// NOSONAR
 	    
-	    double U1_norm = Math.pow( a.norm2(U1), 0.5);
-	    U1.assign( F.div(U1_norm) );		// NOSONAR
+	    double directionMinorNorm = Math.pow( a.norm2(directionMinor), 0.5);
+	    directionMinor.assign(
+	    	F.div(directionMinorNorm)	// NOSONAR
+	    );		
 
 	    // Angle with major axis
-	    U2 = DoubleFactory1D.dense.make(2);
-	    U2.set(0, -1 * U1.get(1) );
-	    U2.set(1, U1.get(0) );
+	    directionMajor = DoubleFactory1D.dense.make(2);
+	    directionMajor.set(0, -1 * directionMinor.get(1) );
+	    directionMajor.set(1, directionMinor.get(0) );
 	}
 
 	public double getCenterPointX() {
@@ -139,11 +153,11 @@ public class EllipseStandardFormConverter {
 	}
 	
 	public double getSemiMajorAxis() {
-		return axis_major;
+		return axisMajor;
 	}
 
 	public double getSemiMinorAxis() {
-		return axis_minor;
+		return axisMinor;
 	}
 	
 	public double getMajorAxisAngle() {
@@ -164,10 +178,10 @@ public class EllipseStandardFormConverter {
 	}
 	
 	public double getMajorAxisSlope() {
-		return U2.get(1) / U2.get(0);
+		return directionMajor.get(1) / directionMajor.get(0);
 	}
 	
 	public double getMinorAxisSlope() {
-		return U1.get(1) / U1.get(0);
+		return directionMinor.get(1) / directionMinor.get(0);
 	}
 }

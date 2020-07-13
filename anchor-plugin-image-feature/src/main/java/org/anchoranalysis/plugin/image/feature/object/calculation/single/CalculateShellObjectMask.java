@@ -40,70 +40,17 @@ import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.object.morph.MorphologicalErosion;
 import org.anchoranalysis.plugin.image.feature.object.calculation.single.morphological.CalculateDilation;
 import org.anchoranalysis.plugin.image.feature.object.calculation.single.morphological.CalculateErosion;
-import org.apache.commons.lang.builder.EqualsBuilder;
-import org.apache.commons.lang.builder.HashCodeBuilder;
+import lombok.EqualsAndHashCode;
+import lombok.RequiredArgsConstructor;
 
-
+@RequiredArgsConstructor @EqualsAndHashCode(callSuper=false)
 public class CalculateShellObjectMask extends FeatureCalculation<ObjectMask,FeatureInputSingleObject> {
 
-	private int iterationsErosionSecond;
-	private boolean do3D;
-	private boolean inverse;
-
-	private ResolvedCalculation<ObjectMask,FeatureInputSingleObject> ccDilation;
-	private ResolvedCalculation<ObjectMask,FeatureInputSingleObject> ccErosion;
-			
-	private CalculateShellObjectMask(
-		ResolvedCalculation<ObjectMask,FeatureInputSingleObject> ccDilation,
-		ResolvedCalculation<ObjectMask,FeatureInputSingleObject> ccErosion,
-		int iterationsErosionSecond,
-		boolean do3D,
-		boolean inverse
-	) {
-		super();
-		this.ccDilation = ccDilation;
-		this.ccErosion = ccErosion;
-		this.iterationsErosionSecond = iterationsErosionSecond;
-		this.do3D = do3D;
-		this.inverse = inverse;
-	}
-	
-	
-	@Override
-	public boolean equals(final Object obj){
-	    if(obj instanceof CalculateShellObjectMask){
-	        final CalculateShellObjectMask other = (CalculateShellObjectMask) obj;
-	        return new EqualsBuilder()
-	            .append(ccDilation, other.ccDilation)
-	            .append(ccErosion, other.ccErosion)
-	            .append(iterationsErosionSecond, other.iterationsErosionSecond)
-	            .append(do3D, other.do3D)
-	            .append(inverse, other.inverse)
-	            .isEquals();
-	    } else{
-	        return false;
-	    }
-	}
-	
-	@Override
-	public int hashCode() {
-		return new HashCodeBuilder().append(ccDilation).append(ccErosion).append(iterationsErosionSecond).append(do3D).append(inverse).toHashCode();
-	}
-	
-
-	@Override
-	public String toString() {
-		return String.format(
-			"%s ccDilation=%s, ccErosion=%s, do3D=%s, inverse=%s, iterationsErosionSecond=%d",
-			super.toString(),
-			ccDilation.toString(),
-			ccErosion.toString(),
-			do3D ? "true" : "false",
-			inverse ? "true" : "false",
-			iterationsErosionSecond
-		);
-	}
-	
+	private final ResolvedCalculation<ObjectMask,FeatureInputSingleObject> ccDilation;
+	private final ResolvedCalculation<ObjectMask,FeatureInputSingleObject> ccErosion;
+	private final int iterationsErosionSecond;
+	private final boolean do3D;
+	private final boolean inverse;
 	
 	public static FeatureCalculation<ObjectMask,FeatureInputSingleObject> createFromCache(
 		CalculationResolver<FeatureInputSingleObject> params,
@@ -112,7 +59,7 @@ public class CalculateShellObjectMask extends FeatureCalculation<ObjectMask,Feat
 		int iterationsErosionSecond,
 		boolean do3D,
 		boolean inverse
-	) throws FeatureCalcException {
+	) {
 		ResolvedCalculation<ObjectMask,FeatureInputSingleObject> ccDilation = CalculateDilation.createFromCache(
 			params, iterationsDilation, do3D	
 		);
@@ -134,11 +81,10 @@ public class CalculateShellObjectMask extends FeatureCalculation<ObjectMask,Feat
 	
 		ImageDimensions sd = input.getDimensionsRequired();
 		
-		ObjectMask om = input.getObjectMask();
-		ObjectMask omShell = createShellObjMask( input, om, ccDilation, ccErosion, iterationsErosionSecond, do3D );
+		ObjectMask omShell = createShellObjMask(input, ccDilation, ccErosion, iterationsErosionSecond, do3D );
 		
 		if (inverse) {
-			ObjectMask omDup = om.duplicate();
+			ObjectMask omDup = input.getObjectMask().duplicate();
 			
 			Optional<ObjectMask> omShellIntersected = omShell.intersect( omDup, sd );
 			omShellIntersected.ifPresent( shellIntersected ->
@@ -153,9 +99,21 @@ public class CalculateShellObjectMask extends FeatureCalculation<ObjectMask,Feat
 		}
 	}
 	
+	@Override
+	public String toString() {
+		return String.format(
+			"%s ccDilation=%s, ccErosion=%s, do3D=%s, inverse=%s, iterationsErosionSecond=%d",
+			super.toString(),
+			ccDilation.toString(),
+			ccErosion.toString(),
+			do3D ? "true" : "false",
+			inverse ? "true" : "false",
+			iterationsErosionSecond
+		);
+	}
+	
 	private static ObjectMask createShellObjMask(
 		FeatureInputSingleObject input,
-		ObjectMask om,
 		ResolvedCalculation<ObjectMask,FeatureInputSingleObject> ccDilation,
 		ResolvedCalculation<ObjectMask,FeatureInputSingleObject> ccErosion,
 		int iterationsErosionSecond,
@@ -163,13 +121,7 @@ public class CalculateShellObjectMask extends FeatureCalculation<ObjectMask,Feat
 	) throws FeatureCalcException {
 
 		ObjectMask omDilated = ccDilation.getOrCalculate(input).duplicate();
-		
 		ObjectMask omEroded = ccErosion.getOrCalculate(input);
-		
-		assert( omDilated.getBoundingBox().contains().box(omEroded.getBoundingBox()) );
-		
-		assert( omDilated!=null);
-		assert( omEroded!=null);
 		
 		// Maybe apply a second erosion
 		try {

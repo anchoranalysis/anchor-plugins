@@ -87,11 +87,6 @@ class Hybrid_3D_Median_Filter implements PlugInFilter{
 		    return DONE;
 		}
 		otitle = imp.getTitle();
-		/*GenericDialog d = new GenericDialog("3d Hybrid Median Filter", IJ.getInstance());
-		d.addCheckbox("Include the center pixel",include);
-		d.showDialog();
-		if(d.wasCanceled())return DONE;
-		include = d.getNextBoolean();*/
 		include = true;
 		nf.setMaximumFractionDigits(2);
 		nf.setMinimumFractionDigits(2);
@@ -103,15 +98,12 @@ class Hybrid_3D_Median_Filter implements PlugInFilter{
 	}
     
     public void run(ImageProcessor ip){
-	
-
 		imp2 = Hybrid3dMedianizer(imp);
 		if(quit)return;	    
 		imp2.getProcessor().resetMinAndMax();
-		//imp2.show();
 	 }
 
-    public ImagePlus Hybrid3dMedianizer(ImagePlus imp){
+    public ImagePlus Hybrid3dMedianizer(ImagePlus imp){	// NOSONAR
 		@SuppressWarnings("unused")
 		ImagePlus imp3;
 		int m = stack.getWidth();
@@ -121,32 +113,32 @@ class Hybrid_3D_Median_Filter implements PlugInFilter{
 		int dimension = m*n;
 		int stacksize = stack.getSize();
 	
-		short beforeslice[];
-		short thisslice[];
-		short afterslice[];
-		short newslice[];
+		short beforeslice[];	// NOSONAR
+		short thisslice[];		// NOSONAR
+		short afterslice[];		// NOSONAR
+		short newslice[];		// NOSONAR
 	
-		byte beforeslice8[];
-		byte thisslice8[];
-		byte afterslice8[];
-		byte newslice8[];
+		byte beforeslice8[];	// NOSONAR
+		byte thisslice8[];		// NOSONAR
+		byte afterslice8[];		// NOSONAR
+		byte newslice8[];		// NOSONAR
 	
 		if(atebit){//8bit scenario
-		    beforeslice8 = new byte[dimension];
-		    thisslice8 = new byte[dimension];
-		    afterslice8 = new byte[dimension];
-		    newslice8 = new byte[dimension];
+		    beforeslice8 = new byte[dimension];		// NOSONAR
+		    thisslice8 = new byte[dimension];		// NOSONAR
+		    afterslice8 = new byte[dimension];		// NOSONAR
+		    newslice8 = new byte[dimension];		// NOSONAR
 		}
 		else{//16bit scenario
-		    beforeslice = new short[dimension];
-		    thisslice = new short[dimension];
-		    afterslice = new short[dimension];
-		    newslice = new short[dimension];
+		    beforeslice = new short[dimension];		// NOSONAR
+		    thisslice = new short[dimension];		// NOSONAR
+		    afterslice = new short[dimension];		// NOSONAR
+		    newslice = new short[dimension];		// NOSONAR
 		}
-		double dubbeforeslice[] = new double[dimension];
-		double dubthisslice[] = new double[dimension];
-		double dubafterslice[] = new double[dimension];
-		double filteredslice[] = new double[dimension];
+		double dubbeforeslice[] = new double[dimension];	// NOSONAR
+		double dubthisslice[] = new double[dimension];		// NOSONAR
+		double dubafterslice[] = new double[dimension];		// NOSONAR
+		double filteredslice[] = new double[dimension];		// NOSONAR
 	
 		double marraythisP[] = new double[5];
 		double marraythisX[] = new double[5];
@@ -251,7 +243,7 @@ class Hybrid_3D_Median_Filter implements PlugInFilter{
 		    if(win!=null && !win.running){ //wsr
 			IJ.beep();
 			quit=true; 
-			IJ.showMessage(new String("3d Hybrid Median Filter aborted.\nNo output will be generated.")); 
+			IJ.showMessage("3d Hybrid Median Filter aborted.\nNo output will be generated."); 
 			return imp2;
 		    }
 		}
@@ -260,39 +252,39 @@ class Hybrid_3D_Median_Filter implements PlugInFilter{
 		return imp2;
 	}
 	    
-    private static double median(double array[]){
+    private static double median(double[] array){
 		Arrays.sort(array);
 		int len = array.length;
 		if(len%2==0)return((array[(len/2)-1]+array[len/2])/2);
 		else return array[((len-1)/2)];
     }
     
-    private short[] double2short(double array[]){
-		short shortarray[] = new short[array.length];
+    private short[] double2short(double[] array){
+		short[] shortarray = new short[array.length];
 		for(int j=0;j<array.length;++j){
 		    shortarray[j] = (short)array[j];
 		}
 		return shortarray;
     }
     
-    private double[] short2double(short array[]){
-		double doublearray[] = new double[array.length];
+    private double[] short2double(short[] array){
+		double[] doublearray = new double[array.length];
 		for(int j=0;j<array.length;++j){
 		    doublearray[j] = (double)(0xffff & array[j]);
 		}
 		return doublearray;
     }
     
-    private byte[] double2byte(double array[]){
-		byte bytearray[] = new byte[array.length];
+    private byte[] double2byte(double[] array){
+		byte[] bytearray = new byte[array.length];
 		for(int j=0;j<array.length;++j){
 		    bytearray[j] = (byte)array[j];
 		}
 		return bytearray;
     }
     
-    private double[] byte2double(byte array[]){
-		double doublearray[] = new double[array.length];
+    private double[] byte2double(byte[] array){
+		double[] doublearray = new double[array.length];
 		for(int j=0;j<array.length;++j){
 		    doublearray[j] = (double)(0xff & array[j]);
 		}

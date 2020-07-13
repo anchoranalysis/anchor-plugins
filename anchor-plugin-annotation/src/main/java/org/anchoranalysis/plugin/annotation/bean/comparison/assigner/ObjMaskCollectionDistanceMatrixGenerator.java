@@ -82,7 +82,7 @@ class ObjMaskCollectionDistanceMatrixGenerator extends CSVGenerator {
 	}
 	
 	private List<TypedValue> rowFromDistanceMatrix( int indx1 ) {
-		List<TypedValue> out = new ArrayList<TypedValue>();
+		List<TypedValue> out = new ArrayList<>();
 		
 		for( int indx2=0; indx2<distanceMatrix.sizeObjs2(); indx2++) {
 			out.add( new TypedValue( distanceMatrix.getDistance(indx1, indx2), numDecimalPlaces) );
@@ -94,7 +94,7 @@ class ObjMaskCollectionDistanceMatrixGenerator extends CSVGenerator {
 	
 	// A description of each object in a collection
 	private static List<String> dscrFromObjMaskCollection( ObjectCollection objs ) {
-		List<String> out = new ArrayList<String>();
+		List<String> out = new ArrayList<>();
 		
 		for( ObjectMask om : objs ) {
 			String dscr = om.centerOfGravity().toString();

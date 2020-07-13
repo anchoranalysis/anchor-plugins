@@ -38,7 +38,7 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.graph.EdgeTypeWithVertices;
 import org.anchoranalysis.core.graph.GraphWithEdgeTypes;
-import org.anchoranalysis.core.log.LogErrorReporter;
+import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.feature.bean.list.FeatureListProvider;
 import org.anchoranalysis.feature.list.NamedFeatureStoreFactory;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
@@ -52,6 +52,7 @@ import org.anchoranalysis.image.feature.stack.FeatureInputStack;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.voxel.nghb.CreateNeighborGraph;
+import org.anchoranalysis.image.voxel.nghb.EdgeAdderParameters;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -155,16 +156,19 @@ public class MergedPairs extends FeatureTableObjects<FeatureInputPairObjects> {
 	
 	@Override
 	public List<FeatureInputPairObjects> createListInputs(ObjectCollection objs,
-			NRGStackWithParams nrgStack, LogErrorReporter logErrorReporter) throws CreateException {
+			NRGStackWithParams nrgStack, Logger logger) throws CreateException {
 
 		List<FeatureInputPairObjects> out = new ArrayList<>();
 		
 		// We create a neighbour-graph of our input objects
-		CreateNeighborGraph<ObjectMask> graphCreator = new CreateNeighborGraph<ObjectMask>( avoidOverlappingObjects );
-		GraphWithEdgeTypes<ObjectMask,Integer> graphNghb = graphCreator.createGraphWithNumPixels(
+		CreateNeighborGraph<ObjectMask> graphCreator = new CreateNeighborGraph<>(
+			new EdgeAdderParameters(avoidOverlappingObjects)
+		);
+		GraphWithEdgeTypes<ObjectMask,Integer> graphNghb = graphCreator.createGraph(
 			objs.asList(),
 			Function.identity(),
-			nrgStack.getNrgStack().getDimensions().getExtnt(),
+			(v1, v2, numPixels) -> numPixels,
+			nrgStack.getNrgStack().getDimensions().getExtent(),
 			do3D
 		);
 		

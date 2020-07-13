@@ -32,11 +32,11 @@ import ij.process.ByteProcessor;
 import java.nio.ByteBuffer;
 
 import org.anchoranalysis.image.extent.Extent;
-import org.anchoranalysis.image.voxel.box.pixelsforplane.IPixelsForPlane;
+import org.anchoranalysis.image.voxel.box.pixelsforplane.PixelsForPlane;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 import org.anchoranalysis.image.voxel.buffer.VoxelBufferByte;
 
-public class PixelsFromByteProcessor implements IPixelsForPlane<ByteBuffer> {
+public class PixelsFromByteProcessor implements PixelsForPlane<ByteBuffer> {
 	
 	private ByteProcessor bp;
 	private Extent extent;

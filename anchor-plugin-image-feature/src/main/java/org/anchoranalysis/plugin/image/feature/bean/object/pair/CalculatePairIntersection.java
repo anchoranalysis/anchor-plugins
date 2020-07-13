@@ -41,8 +41,8 @@ import org.anchoranalysis.image.feature.object.input.FeatureInputPairObjects;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.object.morph.MorphologicalErosion;
 import org.anchoranalysis.image.object.ops.ObjectMaskMerger;
-import org.apache.commons.lang.builder.EqualsBuilder;
-import org.apache.commons.lang.builder.HashCodeBuilder;
+import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
 
 /**
  * Combines two object-masks by:
@@ -56,13 +56,13 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
  * @author Owen Feehan
  *
  */
+@AllArgsConstructor @EqualsAndHashCode(callSuper=false)
 class CalculatePairIntersection extends FeatureCalculation<Optional<ObjectMask>,FeatureInputPairObjects> {
 
-	private boolean do3D;
-	private int iterationsErosion;
-	
-	private ResolvedCalculation<ObjectMask,FeatureInputPairObjects> left;
-	private ResolvedCalculation<ObjectMask,FeatureInputPairObjects> right;
+	private final boolean do3D;
+	private final int iterationsErosion;
+	private final ResolvedCalculation<ObjectMask,FeatureInputPairObjects> left;
+	private final ResolvedCalculation<ObjectMask,FeatureInputPairObjects> right;
 	
 	public static ResolvedCalculation<Optional<ObjectMask>,FeatureInputPairObjects> createFromCache(
 		SessionInput<FeatureInputPairObjects> cache,
@@ -72,8 +72,7 @@ class CalculatePairIntersection extends FeatureCalculation<Optional<ObjectMask>,
 		int iterations2,
 		boolean do3D,
 		int iterationsErosion
-	) throws CreateException {
-		
+	) {
 		// We use two additional caches, for the calculations involving the single objects, as these can be expensive, and we want
 		//  them also cached
 		return cache.resolver().search(
@@ -81,7 +80,7 @@ class CalculatePairIntersection extends FeatureCalculation<Optional<ObjectMask>,
 				do3D,
 				iterationsErosion,
 				cache.resolver().search(
-					new CalculateDilatedFromPair(
+					CalculateDilatedFromPair.createFromCache(
 						cache.resolver(),
 						cache.forChild(),
 						Extract.FIRST,
@@ -91,7 +90,7 @@ class CalculatePairIntersection extends FeatureCalculation<Optional<ObjectMask>,
 					)
 				),
 				cache.resolver().search(
-					new CalculateDilatedFromPair(
+					CalculateDilatedFromPair.createFromCache(
 						cache.resolver(),
 						cache.forChild(),
 						Extract.SECOND,
@@ -102,19 +101,6 @@ class CalculatePairIntersection extends FeatureCalculation<Optional<ObjectMask>,
 				)
 			)
 		);
-	}
-		
-	private CalculatePairIntersection(
-		boolean do3D,
-		int iterationsErosion,
-		ResolvedCalculation<ObjectMask,FeatureInputPairObjects> left,
-		ResolvedCalculation<ObjectMask,FeatureInputPairObjects> right
-	) {
-		super();
-		this.iterationsErosion = iterationsErosion;
-		this.do3D = do3D;
-		this.left = left;
-		this.right = right;
 	}
 
 	@Override
@@ -145,31 +131,6 @@ class CalculatePairIntersection extends FeatureCalculation<Optional<ObjectMask>,
 		}
 	}
 	
-	@Override
-	public boolean equals(final Object obj){
-	    if(obj instanceof CalculatePairIntersection){
-	        final CalculatePairIntersection other = (CalculatePairIntersection) obj;
-	        return new EqualsBuilder()
-	            .append(iterationsErosion, other.iterationsErosion)
-	            .append(do3D, other.do3D)
-	            .append(left, other.left)
-	            .append(right, other.right)
-	            .isEquals();
-	    } else{
-	        return false;
-	    }
-	}
-	
-	@Override
-	public int hashCode() {
-		return new HashCodeBuilder()
-			.append(iterationsErosion)
-			.append(do3D)
-			.append(left)
-			.append(right)
-			.toHashCode();
-	}
-	
 	private Optional<ObjectMask> erode( FeatureInputPairObjects params, ObjectMask omIntersection, ImageDimensions dim ) throws CreateException {
 
 		ObjectMask omMerged = params.getMerged();
@@ -181,7 +142,7 @@ class CalculatePairIntersection extends FeatureCalculation<Optional<ObjectMask>,
 		
 		ObjectMask omMergedEroded = MorphologicalErosion.createErodedObjMask(
 			omMerged,
-			Optional.of(dim.getExtnt()),
+			Optional.of(dim.getExtent()),
 			do3D,
 			iterationsErosion,
 			true,
@@ -192,6 +153,4 @@ class CalculatePairIntersection extends FeatureCalculation<Optional<ObjectMask>,
 		omIntersect.ifPresent( om-> { assert( om.hasPixelsGreaterThan(0) ); });
 		return omIntersect;
 	}
-
-
 }

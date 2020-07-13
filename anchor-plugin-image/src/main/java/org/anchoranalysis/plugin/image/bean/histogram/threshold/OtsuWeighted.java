@@ -74,7 +74,7 @@ public class OtsuWeighted extends CalculateLevel {
 	@Override
 	public int calculateLevel(Histogram hist) throws OperationFailedException {
 
-		getLogger().getLogReporter().logFormatted("weightForeground=%f weightBackground=%f", weightForeground, weightBackground);
+		getLogger().messageLogger().logFormatted("weightForeground=%f weightBackground=%f", weightForeground, weightBackground);
 		
 		// Search for max between-class variance
 		int minIntensity = hist.calcMin() + 1;
@@ -87,7 +87,7 @@ public class OtsuWeighted extends CalculateLevel {
 				
 		int thresholdChosen = findBestThreshold(hist, minIntensity, maxIntensity);
 		
-		getLogger().getLogReporter().logFormatted("chosen threshold=%d", thresholdChosen);
+		getLogger().messageLogger().logFormatted("chosen threshold=%d", thresholdChosen);
 		
 		return thresholdChosen;
 	}

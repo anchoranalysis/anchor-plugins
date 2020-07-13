@@ -63,12 +63,12 @@ public class MergeLists extends PointsFromOrientationProposer {
 		
 		List<List<Point3i>> listOfLists = pointsFromOrientationProposer.calcPoints(centrePoint, orientation, do3D, re, forwardDirectionOnly);
 		
-		List<Point3i> combinedList = new ArrayList<Point3i>();
+		List<Point3i> combinedList = new ArrayList<>();
 		for( List<Point3i> list : listOfLists ) {
 			combinedList.addAll(list);
 		}
 		
-		List<List<Point3i>> listOfListsNew = new ArrayList<List<Point3i>>();
+		List<List<Point3i>> listOfListsNew = new ArrayList<>();
 		listOfListsNew.add( combinedList );
 		return listOfListsNew;
 	}

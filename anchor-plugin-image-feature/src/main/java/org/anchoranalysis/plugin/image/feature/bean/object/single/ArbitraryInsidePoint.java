@@ -38,26 +38,26 @@ import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.feature.bean.object.single.FeatureSingleObject;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 /**
  * Calculates deterministicly a point that is definitely inside the object mask. A selected axis is outputted.
- * 
- * TODO cache the point calculation
  * 
  * @author Owen Feehan
  *
  */
+@NoArgsConstructor
 public class ArbitraryInsidePoint extends FeatureSingleObject {
 	
 	// START BEAN PROPERTIES
-	@BeanField
+	@BeanField @Getter @Setter
 	private String axis = "x";
 	
-	@BeanField
+	@BeanField @Getter @Setter
 	private double emptyValue = 0;
 	// END BEAN PROPERTIES
-	
-	/** Standard bean constructor */
-	public ArbitraryInsidePoint() {}
 	
 	public ArbitraryInsidePoint( String axis ) {
 		this.axis = axis;
@@ -72,21 +72,5 @@ public class ArbitraryInsidePoint extends FeatureSingleObject {
 		return arbPoint.map( pnt->
 			(double) pnt.getValueByDimension(axisType)
 		).orElse(emptyValue);
-	}
-
-	public String getAxis() {
-		return axis;
-	}
-
-	public void setAxis(String axis) {
-		this.axis = axis;
-	}
-
-	public double getEmptyValue() {
-		return emptyValue;
-	}
-
-	public void setEmptyValue(double emptyValue) {
-		this.emptyValue = emptyValue;
 	}
 }

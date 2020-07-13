@@ -66,7 +66,7 @@ public class NumberVoxelsAtBorder extends FeatureSingleObject {
 			do3D,
 			ignoreAtThreshold
 		);
-		return (int) ApplyKernel.applyForCount(kernel, om.getVoxelBox());
+		return ApplyKernel.applyForCount(kernel, om.getVoxelBox());
 	}
 
 	public boolean isOutsideAtThreshold() {

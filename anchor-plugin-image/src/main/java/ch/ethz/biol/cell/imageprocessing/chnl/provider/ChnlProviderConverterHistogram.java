@@ -31,7 +31,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.image.bean.chnl.converter.histogram.ChnlConverterHistogramBean;
+import org.anchoranalysis.image.bean.chnl.converter.ConvertChannelToWithHistogram;
 import org.anchoranalysis.image.bean.provider.ChnlProviderOne;
 import org.anchoranalysis.image.bean.provider.HistogramProvider;
 import org.anchoranalysis.image.channel.Channel;
@@ -40,25 +40,26 @@ import org.anchoranalysis.image.histogram.HistogramFactory;
 import org.anchoranalysis.image.stack.region.chnlconverter.ConversionPolicy;
 import org.anchoranalysis.image.stack.region.chnlconverter.attached.ChnlConverterAttached;
 
+import lombok.Getter;
+import lombok.Setter;
+
 // Converts a chnl by applying a ChnlConverter. A histogram is used to determine the conversion. This is either
 // calculated automatically from the incoming channel, or provided explicitly.
 public class ChnlProviderConverterHistogram extends ChnlProviderOne {
 
 	// START BEAN PROPERTIES
-	@BeanField @OptionalBean
+	@BeanField @OptionalBean @Getter @Setter
 	private HistogramProvider histogramProvider;	// If null, the histogram is calculated from the image
 	
-	@BeanField
-	private ChnlConverterHistogramBean chnlConverter;
+	@BeanField @Getter @Setter
+	private ConvertChannelToWithHistogram chnlConverter;
 	
-	@BeanField
+	@BeanField @Getter @Setter
 	private boolean changeExisting = false;	// If true, the existing channel can be changed. If false, a new channel must be created for any change
 	// END BEAN PROPERTIES
 	
 	@Override
 	public Channel createFromChnl( Channel chnl ) throws CreateException {
-
-		assert(chnl!=null);
 		
 		Histogram hist;
 		if (histogramProvider!=null) {
@@ -79,29 +80,4 @@ public class ChnlProviderConverterHistogram extends ChnlProviderOne {
 		chnl = converter.convert(chnl, conversionPolicy );
 		return chnl;
 	}
-
-	public HistogramProvider getHistogramProvider() {
-		return histogramProvider;
-	}
-
-	public void setHistogramProvider(HistogramProvider histogramProvider) {
-		this.histogramProvider = histogramProvider;
-	}
-
-	public ChnlConverterHistogramBean getChnlConverter() {
-		return chnlConverter;
-	}
-
-	public void setChnlConverter(ChnlConverterHistogramBean chnlConverter) {
-		this.chnlConverter = chnlConverter;
-	}
-
-	public boolean isChangeExisting() {
-		return changeExisting;
-	}
-
-	public void setChangeExisting(boolean changeExisting) {
-		this.changeExisting = changeExisting;
-	}
-	
 }

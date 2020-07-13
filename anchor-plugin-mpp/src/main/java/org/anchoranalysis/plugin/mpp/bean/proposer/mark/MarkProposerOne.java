@@ -33,7 +33,7 @@ import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.anchor.mpp.proposer.ProposalAbnormalFailureException;
 import org.anchoranalysis.anchor.mpp.proposer.ProposerContext;
 import org.anchoranalysis.anchor.mpp.proposer.visualization.CreateProposalVisualization;
-import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
+import org.anchoranalysis.anchor.mpp.pxlmark.memo.VoxelizedMarkMemo;
 import org.anchoranalysis.bean.annotation.BeanField;
 
 public abstract class MarkProposerOne extends MarkProposer {
@@ -43,11 +43,11 @@ public abstract class MarkProposerOne extends MarkProposer {
 	private MarkProposer proposer;
 	// END BEAN PROPERTIES
 
-	public boolean propose(PxlMarkMemo inputMark, ProposerContext context) throws ProposalAbnormalFailureException {
+	public boolean propose(VoxelizedMarkMemo inputMark, ProposerContext context) throws ProposalAbnormalFailureException {
 		return propose(inputMark, context, proposer);
 	}
 	
-	protected abstract boolean propose(PxlMarkMemo inputMark, ProposerContext context, MarkProposer source) throws ProposalAbnormalFailureException;
+	protected abstract boolean propose(VoxelizedMarkMemo inputMark, ProposerContext context, MarkProposer source) throws ProposalAbnormalFailureException;
 	
 	@Override
 	public boolean isCompatibleWith(Mark testMark) {

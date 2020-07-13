@@ -32,6 +32,10 @@ import java.util.List;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.text.TypedValue;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
 class TypedValueUtilities {
 
 	public static List<String> createArrayFromList( List<String[]> list, int index ) throws OperationFailedException {

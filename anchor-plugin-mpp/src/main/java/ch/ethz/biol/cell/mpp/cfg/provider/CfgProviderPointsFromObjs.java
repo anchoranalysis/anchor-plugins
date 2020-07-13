@@ -38,10 +38,13 @@ import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.points.PointsFromObjMask;
 
+import lombok.Getter;
+import lombok.Setter;
+
 public class CfgProviderPointsFromObjs extends CfgProvider {
 
 	// START BEAN PROPERTIES
-	@BeanField
+	@BeanField @Getter @Setter
 	private ObjectCollectionProvider objs;
 	// END BEAN PROPERTIES
 	
@@ -50,7 +53,7 @@ public class CfgProviderPointsFromObjs extends CfgProvider {
 		return createMarksFromObjs( objs.create() );
 	}
 		
-	private static Cfg createMarksFromObjs( ObjectCollection objsCollection ) throws CreateException {
+	private static Cfg createMarksFromObjs( ObjectCollection objsCollection ) {
 		
 		Cfg out = new Cfg();
 		
@@ -59,20 +62,12 @@ public class CfgProviderPointsFromObjs extends CfgProvider {
 			ObjectMask om = objsCollection.get(i);
 			
 			Mark m = MarkPointListFactory.create(
-					PointsFromObjMask.pntsFromMaskDouble(om),
+				PointsFromObjMask.pntsFromMaskDouble(om),
 				i	// We assign an unique integer ID
 			);
 					
 			out.add(m);
 		}
 		return out;
-	}
-
-	public ObjectCollectionProvider getObjs() {
-		return objs;
-	}
-
-	public void setObjs(ObjectCollectionProvider objs) {
-		this.objs = objs;
 	}
 }

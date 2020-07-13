@@ -52,7 +52,7 @@ public class FromUnitValueDistance extends ScalarProposer {
 	public double propose(RandomNumberGenerator re, ImageResolution res)
 			throws OperationFailedException {
 		// TODO this could be a bit slow, we are creating an object on the heap every time from directionVector
-		return unitValueDistance.rslv(
+		return unitValueDistance.resolve(
 			Optional.of(res),
 			directionVector.createVector()
 		);

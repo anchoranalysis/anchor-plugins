@@ -30,9 +30,8 @@ package org.anchoranalysis.plugin.io.bean.input.file;
 import java.io.File;
 import java.util.Collection;
 import java.util.List;
-import java.util.stream.Collectors;
-
 import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.core.functional.FunctionalUtilities;
 import org.anchoranalysis.io.bean.descriptivename.DescriptiveNameFromFile;
 import org.anchoranalysis.io.bean.input.InputManager;
 import org.anchoranalysis.io.bean.input.InputManagerParams;
@@ -43,6 +42,10 @@ import org.anchoranalysis.io.input.FileInput;
 import org.anchoranalysis.plugin.io.bean.descriptivename.RemoveExtensions;
 import org.anchoranalysis.plugin.io.bean.descriptivename.patternspan.PatternSpan;
 
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 
 /**
  * File-paths 
@@ -50,46 +53,32 @@ import org.anchoranalysis.plugin.io.bean.descriptivename.patternspan.PatternSpan
  * @author Owen Feehan
  *
  */
+@NoArgsConstructor
 public class Files extends InputManager<FileInput> {
 
 	// START BEAN PROPERTIES
-	@BeanField
-	private FileProvider fileProvider = null;
+	@BeanField @Getter @Setter
+	private FileProvider fileProvider;
 	
-	@BeanField
+	@BeanField @Getter @Setter
 	private DescriptiveNameFromFile descriptiveNameFromFile = new RemoveExtensions( new PatternSpan() );
 	// END BEAN PROPERTIES
 
+	public Files(FileProvider fileProvider) {
+		this.fileProvider = fileProvider;
+	}
+	
 	@Override
 	public List<FileInput> inputObjects(InputManagerParams params) throws AnchorIOException {
 		try {
 			Collection<File> files = getFileProvider().create(params);
 				
-			return descriptiveNameFromFile.descriptiveNamesForCheckUniqueness(
-				files,
-				params.getLogger()
-			).stream().map(
+			return FunctionalUtilities.mapToList( 
+				descriptiveNameFromFile.descriptiveNamesForCheckUniqueness(files, params.getLogger()),
 				FileInput::new
-			).collect( Collectors.toList() );
+			);
 		} catch (FileProviderException e) {
 			throw new AnchorIOException("Cannot find files", e);
 		}
-	}
-	
-	public FileProvider getFileProvider() {
-		return fileProvider;
-	}
-
-	public void setFileProvider(FileProvider fileSet) {
-		this.fileProvider = fileSet;
-	}
-
-	public DescriptiveNameFromFile getDescriptiveNameFromFile() {
-		return descriptiveNameFromFile;
-	}
-
-	public void setDescriptiveNameFromFile(
-			DescriptiveNameFromFile descriptiveNameFromFile) {
-		this.descriptiveNameFromFile = descriptiveNameFromFile;
 	}
 }

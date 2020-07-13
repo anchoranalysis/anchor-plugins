@@ -28,15 +28,15 @@ package org.anchoranalysis.plugin.image.obj.merge;
 
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
 import org.anchoranalysis.core.graph.EdgeTypeWithVertices;
-import org.anchoranalysis.core.log.LogErrorReporter;
+import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.plugin.image.obj.merge.priority.PrioritisedVertex;
 
 public class GraphLogger {
 
 	private DescribeGraph describeGraph;
-	private LogErrorReporter logger;
+	private Logger logger;
 	
-	public GraphLogger(DescribeGraph describeGraph, LogErrorReporter logger) {
+	public GraphLogger(DescribeGraph describeGraph, Logger logger) {
 		super();
 		this.describeGraph = describeGraph;
 		this.logger = logger;
@@ -61,11 +61,11 @@ public class GraphLogger {
 	}
 	
 	private void log(String str) {
-		logger.getLogReporter().log( str );
+		logger.messageLogger().log( str );
 	}
 
 	public ErrorReporter getErrorReporter() {
-		return logger.getErrorReporter();
+		return logger.errorReporter();
 	}
 
 

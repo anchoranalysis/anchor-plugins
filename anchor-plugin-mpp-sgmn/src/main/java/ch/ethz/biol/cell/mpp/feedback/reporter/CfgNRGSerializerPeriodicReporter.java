@@ -36,19 +36,27 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.mpp.sgmn.optscheme.feedback.ReporterException;
 import org.anchoranalysis.mpp.sgmn.optscheme.step.Reporting;
 
+import lombok.Getter;
+import lombok.Setter;
+
 public class CfgNRGSerializerPeriodicReporter extends ObjectSerializerPeriodicReporter<CfgNRG> {
 
 	// BEAN PARAMETERS
-	@BeanField
+	@BeanField @Getter @Setter
 	private boolean proposal = false;
 	
 	/** If proposal==true, this toggles between the primary and secondary proposal */
-	@BeanField
+	@BeanField @Getter @Setter
 	private boolean secondary = false;
 	// END BEAN PARAMETERS
 	
 	public CfgNRGSerializerPeriodicReporter() {
 		super("cfgNRG");
+	}
+	
+	@Override
+	public void reportNewBest(Reporting<CfgNRGPixelized> reporting) {
+		// NOTHING TO DO
 	}
 	
 	@Override
@@ -63,30 +71,9 @@ public class CfgNRGSerializerPeriodicReporter extends ObjectSerializerPeriodicRe
 		}
 	}
 	
-	
 	private Optional<CfgNRG> proposalCfgNRGOrNull( Reporting<CfgNRGPixelized> reporting ) {
 		
 		Optional<CfgNRGPixelized> p = secondary ? reporting.getProposalSecondary() : reporting.getProposal();
 		return p.map(CfgNRGPixelized::getCfgNRG);
-	}
-	
-	public boolean isProposal() {
-		return proposal;
-	}
-
-	public void setProposal(boolean proposal) {
-		this.proposal = proposal;
-	}
-	
-	@Override
-	public void reportNewBest(Reporting<CfgNRGPixelized> reporting) {
-	}
-
-	public boolean isSecondary() {
-		return secondary;
-	}
-
-	public void setSecondary(boolean secondary) {
-		this.secondary = secondary;
 	}
 }

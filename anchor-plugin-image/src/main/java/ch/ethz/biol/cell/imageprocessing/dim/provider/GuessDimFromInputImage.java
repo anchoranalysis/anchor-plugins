@@ -54,7 +54,7 @@ public class GuessDimFromInputImage extends ImageDimProvider {
 	public ImageDimensions create() throws CreateException {
 
 		if (dim==null) {
-			dim = takeDimFromStackCollection( getSharedObjects().getStackCollection() );
+			dim = takeDimFromStackCollection( getInitializationParameters().getStackCollection() );
 		}
 		
 		return dim;
@@ -80,7 +80,7 @@ public class GuessDimFromInputImage extends ImageDimProvider {
 	private ImageDimensions takeDimFromSpecificStack( NamedProviderStore<Stack> stackCollection, String keyThatExists ) throws CreateException {
 		Stack stack;
 		try {
-			stack = getSharedObjects().getStackCollection().getException(keyThatExists);
+			stack = getInitializationParameters().getStackCollection().getException(keyThatExists);
 		} catch (NamedProviderGetException e) {
 			throw new CreateException(e);
 		}

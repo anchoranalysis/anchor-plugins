@@ -116,7 +116,7 @@ public class ExportFeaturesTask<T extends InputFromManager, S, U extends Feature
 			return source.createSharedState(
 				source.headers().createMetadataHeaders(isGroupGeneratorDefined()),
 				features,
-				params.context()
+				params.getContext()
 			);
 		} catch (CreateException e) {
 			throw new ExperimentExecutionException(e);

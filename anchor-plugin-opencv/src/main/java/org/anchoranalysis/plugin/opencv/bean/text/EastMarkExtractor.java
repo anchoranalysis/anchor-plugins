@@ -199,7 +199,7 @@ class EastMarkExtractor {
 		
 	/** Extracts an array of floats from a matrix */
 	private static float[] arrayFromMat(Mat mat, int rowIndex, int arrSize) {
-		float arr[] = new float[arrSize];
+		float[] arr = new float[arrSize];
 		mat.get(rowIndex, 0, arr);
 		return arr;
 	}

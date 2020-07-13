@@ -10,7 +10,7 @@ import org.anchoranalysis.anchor.mpp.mark.conic.MarkEllipse;
 import org.anchoranalysis.anchor.mpp.pair.PairPxlMarkMemo;
 import org.anchoranalysis.anchor.mpp.proposer.ProposalAbnormalFailureException;
 import org.anchoranalysis.anchor.mpp.proposer.ProposerContext;
-import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
+import org.anchoranalysis.anchor.mpp.pxlmark.memo.VoxelizedMarkMemo;
 
 /*
  * #%L
@@ -47,22 +47,27 @@ import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.orientation.Orientation2D;
 import org.anchoranalysis.math.rotation.RotationMatrix;
 
-public class MarkEllipseSimple extends MarkSplitProposer {
+import lombok.Getter;
+import lombok.Setter;
 
+public class MarkEllipseSimple extends MarkSplitProposer {
 	
-	// START BEAN
-	@BeanField
+	/** The maximum wiggle size (added or subtracted to each end) */
+	private static final int WIGGLE_MAX_SIZE = 2;
+	
+	// START BEAN PROPERTIES
+	@BeanField @Getter @Setter
 	private double minRadScaleStart = 0.3;
 	
-	@BeanField
+	@BeanField @Getter @Setter
 	private double minRadScaleEnd = 0.55;
 	
-	@BeanField
-	private MarkProposer markProposer = null;
-	// END BEAN
+	@BeanField @Getter @Setter
+	private MarkProposer markProposer;
+	// END BEAN PROPERTIES
 	
 	@Override
-	public Optional<PairPxlMarkMemo> propose( PxlMarkMemo mark, ProposerContext context, CfgGen cfgGen ) throws ProposalAbnormalFailureException {
+	public Optional<PairPxlMarkMemo> propose( VoxelizedMarkMemo mark, ProposerContext context, CfgGen cfgGen ) throws ProposalAbnormalFailureException {
 		
 		MarkEllipse markCast = (MarkEllipse) mark.getMark();
 		
@@ -79,7 +84,7 @@ public class MarkEllipseSimple extends MarkSplitProposer {
 			);
 		} else {
 			
-			PxlMarkMemo markCorrected = correctEllipseSoXAxisLongest(mark);
+			VoxelizedMarkMemo markCorrected = correctEllipseSoXAxisLongest(mark);
 			// We change the orientation
 			return createMarksForOrientation(
 				orientation,
@@ -91,11 +96,11 @@ public class MarkEllipseSimple extends MarkSplitProposer {
 		}
 	}
 	
-	private PxlMarkMemo correctEllipseSoXAxisLongest( PxlMarkMemo pmmExst ) {
+	private VoxelizedMarkMemo correctEllipseSoXAxisLongest( VoxelizedMarkMemo pmmExst ) {
 		
 		MarkEllipse exst = (MarkEllipse) pmmExst.getMark();
 		
-		PxlMarkMemo pmmDup = pmmExst.duplicateFresh();
+		VoxelizedMarkMemo pmmDup = pmmExst.duplicateFresh();
 		MarkEllipse dup = (MarkEllipse) pmmDup.getMark();
 		
 		Orientation2D exstOrientation = (Orientation2D) exst.getOrientation();
@@ -104,7 +109,7 @@ public class MarkEllipseSimple extends MarkSplitProposer {
 		return pmmDup;
 	}
 	
-	private Optional<PairPxlMarkMemo> createMarksForOrientation( Orientation2D orientation, PxlMarkMemo markExst, ProposerContext context, CfgGen cfgGen, boolean wigglePos ) throws ProposalAbnormalFailureException {
+	private Optional<PairPxlMarkMemo> createMarksForOrientation( Orientation2D orientation, VoxelizedMarkMemo markExst, ProposerContext context, CfgGen cfgGen, boolean wigglePos ) throws ProposalAbnormalFailureException {
 		
 		MarkEllipse markExstCast = (MarkEllipse) markExst.getMark();
 		
@@ -117,35 +122,58 @@ public class MarkEllipseSimple extends MarkSplitProposer {
 		Orientation2D exstOrientation = (Orientation2D) markExstCast.getOrientation();
 		Orientation2D orientationRight = new Orientation2D( exstOrientation.getAngleRadians() + (Math.PI/2) );
 		
+		VoxelizedMarkMemo markNew1 = extractMemo(
+			markExst,
+			pntArr.get(),
+			0,
+			orientationRight,
+			context,
+			cfgGen,
+			"pos1"
+		);
 		
-		PxlMarkMemo markNew1;
-		try {
-			markNew1 = createMarkAtPos( markExst, pntArr.get()[0], orientationRight, context );
-			markNew1.getMark().setId( cfgGen.idAndIncrement() );
-			
-		} catch (ProposalAbnormalFailureException e) {
-			throw new ProposalAbnormalFailureException("Failed to create mark at pos1", e);
-		}
-		
-		PxlMarkMemo markNew2;
-		try {
-			markNew2 = createMarkAtPos( markExst, pntArr.get()[1], orientationRight, context );
-			markNew2.getMark().setId( cfgGen.idAndIncrement() );
-		} catch (ProposalAbnormalFailureException e) {
-			throw new ProposalAbnormalFailureException("Failed to create mark at pos2", e);
-		}			
+		VoxelizedMarkMemo markNew2 = extractMemo(
+			markExst,
+			pntArr.get(),
+			1,
+			orientationRight,
+			context,
+			cfgGen,
+			"pos2"
+		);
 		
 		return Optional.of(
 			new PairPxlMarkMemo(markNew1, markNew2)
 		);
 	}
 	
+	private VoxelizedMarkMemo extractMemo(
+		VoxelizedMarkMemo markExst,
+		Point3d[] pntArr,
+		int dimensionIndex,
+		Orientation2D orientationRight,
+		ProposerContext context,
+		CfgGen cfgGen,
+		String positionDescription
+	) throws ProposalAbnormalFailureException {
+		try {
+			VoxelizedMarkMemo pmm = createMarkAtPos(
+				markExst,
+				pntArr[dimensionIndex],
+				orientationRight,
+				context
+			);
+			pmm.getMark().setId( cfgGen.idAndIncrement() );
+			return pmm;
+		} catch (ProposalAbnormalFailureException e) {
+			throw new ProposalAbnormalFailureException("Failed to create mark at " + positionDescription);
+		}
+	}
 	
-	private PxlMarkMemo createMarkAtPos( PxlMarkMemo exst, Point3d pos, Orientation2D orientation, ProposerContext context ) throws ProposalAbnormalFailureException {
+	private VoxelizedMarkMemo createMarkAtPos( VoxelizedMarkMemo exst, Point3d pos, Orientation2D orientation, ProposerContext context ) throws ProposalAbnormalFailureException {
 		
-		PxlMarkMemo exstMark = exst.duplicateFresh();
+		VoxelizedMarkMemo exstMark = exst.duplicateFresh();
 		MarkEllipse mark = (MarkEllipse) exstMark.getMark();
-		//mark.setPos(pos);
 		
 		// THE OLD WAY WAS TO SHIFT 90 from orientation (the existing orientation)
 		mark.setMarksExplicit(pos, new Orientation2D(orientation.getAngleRadians() + (Math.PI/2)), mark.getRadii());
@@ -171,24 +199,24 @@ public class MarkEllipseSimple extends MarkSplitProposer {
 		
 		if (wigglePos) {
 			// We add some randomness around this point, say 4 pixels
-	    	int q = 2;
-	    	{
-		    	double randX = (re.nextDouble() * q * 2) - q;
-		    	double randY = (re.nextDouble() * q * 2) - q;
-		    	pnt1.add( new Point3d(randX,randY,0 ) );
-	    	}
-	    	{
-		    	double randX = (re.nextDouble() * q * 2) - q;
-		    	double randY = (re.nextDouble() * q * 2) - q;
-		    	pnt2.add( new Point3d(randX,randY,0 ) );
-	    	}	    	
+	    	pnt1.add( randomPointXY(re, WIGGLE_MAX_SIZE) );
+	    	pnt2.add( randomPointXY(re, WIGGLE_MAX_SIZE) );
 		}
-		
-		if (!sd.contains(pnt1)) {
+		return ifBothPointsInside(sd, pnt1, pnt2);
+	}
+	
+	private static Point3d randomPointXY(RandomNumberGenerator re, int wiggleMaxSize) {
+		double randX = (re.nextDouble() * wiggleMaxSize * 2) - wiggleMaxSize;
+    	double randY = (re.nextDouble() * wiggleMaxSize * 2) - wiggleMaxSize;
+    	return new Point3d(randX, randY, 0 );
+	}
+	
+	private static Optional<Point3d[]> ifBothPointsInside(ImageDimensions dim, Point3d pnt1, Point3d pnt2) {
+		if (!dim.contains(pnt1)) {
 			return Optional.empty();
 		}
 		
-		if (!sd.contains(pnt2)) {
+		if (!dim.contains(pnt2)) {
 			return Optional.empty();
 		}
 		
@@ -196,34 +224,9 @@ public class MarkEllipseSimple extends MarkSplitProposer {
 			new Point3d[]{pnt1, pnt2}
 		);
 	}
-	
 
 	@Override
 	public boolean isCompatibleWith(Mark testMark) {
 		return testMark instanceof MarkEllipse;
-	}
-
-	public MarkProposer getMarkProposer() {
-		return markProposer;
-	}
-
-	public void setMarkProposer(MarkProposer markProposer) {
-		this.markProposer = markProposer;
-	}
-
-	public double getMinRadScaleStart() {
-		return minRadScaleStart;
-	}
-
-	public void setMinRadScaleStart(double minRadScaleStart) {
-		this.minRadScaleStart = minRadScaleStart;
-	}
-
-	public double getMinRadScaleEnd() {
-		return minRadScaleEnd;
-	}
-
-	public void setMinRadScaleEnd(double minRadScaleEnd) {
-		this.minRadScaleEnd = minRadScaleEnd;
 	}
 }

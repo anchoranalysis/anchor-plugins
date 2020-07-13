@@ -36,7 +36,6 @@ class PatternUtilities {
 	
 	/** 
 	 *  This is a hack to extract the constant value from the element
-	 *  TODO add a nicer function to the path-pattern-finder library
 	 */
 	public static String constantElementAsString( PatternElement element ) {
 		return element.describe(10000000);

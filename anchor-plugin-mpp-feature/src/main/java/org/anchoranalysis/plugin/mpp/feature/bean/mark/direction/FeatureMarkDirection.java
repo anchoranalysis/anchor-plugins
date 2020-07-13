@@ -34,6 +34,7 @@ import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.geometry.Vector3d;
 import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.feature.calc.FeatureInitParams;
 import org.anchoranalysis.image.bean.orientation.DirectionVectorBean;
 import org.anchoranalysis.image.orientation.DirectionVector;
 import org.anchoranalysis.image.orientation.Orientation;
@@ -49,8 +50,8 @@ public abstract class FeatureMarkDirection extends FeatureMark {
 	private DirectionVector dv;
 	
 	@Override
-	public void beforeCalc() throws InitException {
-		super.beforeCalc();
+	protected void beforeCalc(FeatureInitParams paramsInit) throws InitException {
+		super.beforeCalc(paramsInit);
 		dv = directionVector.createVector();
 	}
 	

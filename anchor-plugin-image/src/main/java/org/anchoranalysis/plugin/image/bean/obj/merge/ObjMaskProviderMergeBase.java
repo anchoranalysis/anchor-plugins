@@ -43,13 +43,15 @@ import org.anchoranalysis.image.object.ObjectCollectionFactory;
 
 import ch.ethz.biol.cell.imageprocessing.objmask.matching.ObjMaskMatchUtilities;
 import ch.ethz.biol.cell.imageprocessing.objmask.provider.ObjMaskProviderContainer;
+import lombok.Getter;
+import lombok.Setter;
 
 /** A base class for algorithms that merge obj-masks */
 public abstract class ObjMaskProviderMergeBase extends ObjMaskProviderContainer {
 	
 	// START BEAN PROPERTIES
 	/* Image-resolution */
-	@BeanField @OptionalBean
+	@BeanField @OptionalBean @Getter @Setter
 	private ImageDimProvider dim;
 	// END BEAN PROPERTIES
 	
@@ -119,13 +121,5 @@ public abstract class ObjMaskProviderMergeBase extends ObjMaskProviderContainer 
 			OperationFailedException.class,
 			merger::mergeObjs
 		);		
-	}
-
-	public ImageDimProvider getDim() {
-		return dim;
-	}
-
-	public void setDim(ImageDimProvider dim) {
-		this.dim = dim;
 	}
 }

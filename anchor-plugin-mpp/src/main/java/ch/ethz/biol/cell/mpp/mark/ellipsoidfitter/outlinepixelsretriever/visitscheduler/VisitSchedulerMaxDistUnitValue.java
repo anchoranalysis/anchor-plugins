@@ -75,17 +75,12 @@ public class VisitSchedulerMaxDistUnitValue extends VisitScheduler {
 
 	@Override
 	public boolean considerVisit( Point3i pnt, int distAlongContour, ObjectMask objMask ) {
-		
 		try {
-			if (distToRoot(pnt)>=maxDist.rslv(
+			return distToRoot(pnt)<maxDist.rslv(
 				Optional.of(res),
 				root,
 				pnt
-			)) {
-				return false;
-			}
-			
-			return true;
+			);
 		} catch (OperationFailedException e) {
 			throw new AnchorFriendlyRuntimeException(e);
 		}

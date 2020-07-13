@@ -40,13 +40,13 @@ import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.anchor.mpp.proposer.ProposalAbnormalFailureException;
 import org.anchoranalysis.anchor.mpp.proposer.ProposerContext;
 import org.anchoranalysis.anchor.mpp.proposer.visualization.CreateProposalVisualization;
-import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
+import org.anchoranalysis.anchor.mpp.pxlmark.memo.VoxelizedMarkMemo;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.core.geometry.Point3f;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.core.geometry.PointConverter;
-import org.anchoranalysis.core.log.LogErrorReporter;
+import org.anchoranalysis.core.log.Logger;
 
 public class MarkProposerPointsFitter extends MarkProposer {
 
@@ -62,7 +62,7 @@ public class MarkProposerPointsFitter extends MarkProposer {
 	// END BEAN PROPERTIES
 	
 	@SuppressWarnings("unused")
-	private LogErrorReporter logErrorReporter;
+	private Logger logger;
 	
 	@Override
 	public boolean isCompatibleWith(Mark testMark) {
@@ -70,7 +70,7 @@ public class MarkProposerPointsFitter extends MarkProposer {
 	}
 
 	@Override
-	public boolean propose(PxlMarkMemo inputMark, ProposerContext context) throws ProposalAbnormalFailureException {
+	public boolean propose(VoxelizedMarkMemo inputMark, ProposerContext context) throws ProposalAbnormalFailureException {
 		
 		inputMark.reset();
 		
@@ -102,7 +102,7 @@ public class MarkProposerPointsFitter extends MarkProposer {
 		} catch (PointsFitterException | InsufficientPointsException e) {
 			
 			if (reportFitterErrors) {
-				getLogger().getErrorReporter().recordError(MarkProposerPointsFitter.class, e);
+				getLogger().errorReporter().recordError(MarkProposerPointsFitter.class, e);
 			}
 			context.getErrorNode().add( e.toString() );
 			return false;

@@ -28,7 +28,7 @@ package org.anchoranalysis.plugin.mpp.sgmn.cfg.bean.optscheme.termination;
 
 
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.log.LogReporter;
+import org.anchoranalysis.core.log.MessageLogger;
 import org.anchoranalysis.mpp.sgmn.bean.optscheme.termination.TerminationCondition;
 
 public class NumberIterations extends TerminationCondition {
@@ -47,11 +47,11 @@ public class NumberIterations extends TerminationCondition {
 	}
 	
 	@Override
-	public boolean continueIterations(int crntIter, double score, int size, LogReporter logReporter) {
+	public boolean continueIterations(int crntIter, double score, int size, MessageLogger logger) {
 		if (crntIter<maxNumber) {
 			return true;
 		} else {
-			logReporter.log("NumberIterations returned false");
+			logger.log("NumberIterations returned false");
 			return false;
 		}
 	}

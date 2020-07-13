@@ -37,7 +37,6 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.DefaultInstance;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.bean.error.BeanMisconfiguredException;
-import org.anchoranalysis.image.io.bean.chnl.map.ImgChnlMapEntry;
 import org.anchoranalysis.image.io.input.ProvidesStackInput;
 import org.anchoranalysis.io.bean.provider.file.FileProviderWithDirectory;
 import org.anchoranalysis.io.error.AnchorIOException;
@@ -50,6 +49,7 @@ import org.anchoranalysis.mpp.io.bean.input.MultiInputManagerBase;
 import org.anchoranalysis.mpp.io.input.MultiInput;
 import org.anchoranalysis.plugin.io.bean.descriptivename.LastFolders;
 import org.anchoranalysis.plugin.io.bean.input.stack.Stacks;
+import org.anchoranalysis.image.io.bean.channel.map.ImgChnlMapEntry;
 import org.anchoranalysis.image.io.bean.rasterreader.RasterReader;
 
 /**
@@ -90,7 +90,7 @@ public class MultiInputManagerQuick extends MultiInputManagerBase {
 	 *    it into separate channels that are each presented as a separate stack to the MultiInput 
 	 * */
 	@BeanField
-	private List<ImgChnlMapEntry> additionalChnls = new ArrayList<ImgChnlMapEntry>();
+	private List<ImgChnlMapEntry> additionalChnls = new ArrayList<>();
 	
 	/**
 	 * If set, a CSV is read with two columns: the names of images and a
@@ -133,23 +133,23 @@ public class MultiInputManagerQuick extends MultiInputManagerBase {
 		this.inputManager = createMulti();
 		inputManager.checkMisconfigured(defaultInstances);
 		
-		if (additionalChnls.size()>0 && regex==null) {
+		if (!additionalChnls.isEmpty() && regex==null) {
 			throw new BeanMisconfiguredException("If there is at least one additionalChnl then regex must be set");
 		}
 	}
 	
 	private MultiInputManager createMulti() throws BeanMisconfiguredException {
-		MultiInputManager inputManager = new MultiInputManager();
-		inputManager.setInputName(inputName);
-		inputManager.setInput( createStacks() );
-		inputManager.setRasterReader(rasterReaderAppend);
+		MultiInputManager input = new MultiInputManager();
+		input.setInputName(inputName);
+		input.setInput( createStacks() );
+		input.setRasterReader(rasterReaderAppend);
 		
 		// Add all the various types of items that can be appended
 		for( FilePathBaseAppendToManager append : listAppend) {
-			append.addToManager(inputManager, rootName, regex);
+			append.addToManager(input, rootName, regex);
 		}
 		
-		return inputManager;
+		return input;
 	}
 	
 	private InputManager<? extends ProvidesStackInput> createStacks() throws BeanMisconfiguredException {
@@ -161,7 +161,7 @@ public class MultiInputManagerQuick extends MultiInputManagerBase {
 			filterFilesCsv
 		);
 		
-		if (stackAsChnl || additionalChnls.size()>0) {
+		if (stackAsChnl || !additionalChnls.isEmpty()) {
 			// Then we treat the main raster as comprising of multiple independent channels
 			//  and each are presented separately to the MultiInput as stacks
 			//

@@ -67,7 +67,7 @@ public class Intensity extends FeatureNrgChnl {
 	protected double calcForChnl(SessionInput<FeatureInputSingleObject> input, Channel chnl) throws FeatureCalcException {
 		return input.forChild().calc(
 			item,
-			new CalculateHistogramForNrgChnl(excludeZero, getNrgIndex(), chnl),
+			new CalculateHistogramForNrgChannel(excludeZero, getNrgIndex(), chnl),
 			cacheName()
 		);
 	}
@@ -75,7 +75,7 @@ public class Intensity extends FeatureNrgChnl {
 	private ChildCacheName cacheName() {
 		return new ChildCacheName(
 			Intensity.class,
-			String.valueOf(excludeZero) + "_" + String.valueOf(getNrgIndex())
+			String.valueOf(excludeZero) + "_" + getNrgIndex()
 		);
 	}
 }

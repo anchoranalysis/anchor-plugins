@@ -28,12 +28,12 @@ package ch.ethz.biol.cell.imageprocessing.io.chnlconverter.bean.histogram;
 
 
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.image.bean.chnl.converter.histogram.ChnlConverterHistogramBean;
+import org.anchoranalysis.image.bean.chnl.converter.ConvertChannelToWithHistogram;
 import org.anchoranalysis.image.histogram.Histogram;
 import org.anchoranalysis.image.stack.region.chnlconverter.attached.ChnlConverterAttached;
 import org.anchoranalysis.image.stack.region.chnlconverter.attached.histogram.ChnlConverterHistogramUpperLowerQuantileIntensity;
 
-public class ChnlConverterHistogramBeanToByteUpperLowerQuantileIntensity extends ChnlConverterHistogramBean {
+public class ChnlConverterHistogramBeanToByteUpperLowerQuantileIntensity extends ConvertChannelToWithHistogram {
 
 	// START BEAN PROPERTIES
 	@BeanField

@@ -32,7 +32,6 @@ import java.util.Optional;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.Positive;
-import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.feature.cache.ChildCacheName;
 import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.cache.calculation.FeatureCalculation;
@@ -42,12 +41,11 @@ import org.anchoranalysis.image.feature.object.input.FeatureInputPairObjects;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.plugin.image.feature.object.calculation.delegate.CalculateInputFromDelegateOption;
 
+import lombok.Getter;
+import lombok.Setter;
+
 /**
  * Finds the intersection of two objects and calculates a feature on it
- * 
- * <p>TODO: CALCULATE HISTOGRAMS in the calculatePairIntersection rather than just object masks. This will save us some computation</p>
- * <p>TODO: test properly due to complex use of cache</p>
- * 
  *  
  * @author Owen Feehan
  *
@@ -55,16 +53,16 @@ import org.anchoranalysis.plugin.image.feature.object.calculation.delegate.Calcu
 public class Intersection extends FeatureDeriveFromPair {
 
 	// START BEAN PROPERTIES
-	@BeanField @Positive
+	@BeanField @Positive @Getter @Setter
 	private int iterationsDilation = 0;
 	
-	@BeanField
+	@BeanField @Getter @Setter
 	private int iterationsErosion = 0;
 		
-	@BeanField
+	@BeanField @Getter @Setter
 	private boolean do3D = true;
 	
-	@BeanField
+	@BeanField @Getter @Setter
 	private double emptyValue = 255;
 	// END BEAN PROPERTIES
 		
@@ -92,50 +90,14 @@ public class Intersection extends FeatureDeriveFromPair {
 		return new ChildCacheName(Intersection.class, id);
 	}
 
-	private FeatureCalculation<Optional<ObjectMask>,FeatureInputPairObjects> createCalculation(SessionInput<FeatureInputPairObjects> input) throws FeatureCalcException {
-		try {
-			return CalculatePairIntersectionCommutative.createFromCache(
-				input,
-				CACHE_NAME_FIRST,
-				CACHE_NAME_SECOND,
-				iterationsDilation,
-				iterationsErosion,
-				do3D
-			);
-		} catch (CreateException e) {
-			throw new FeatureCalcException(e);
-		}
-	}
-	
-	public boolean isDo3D() {
-		return do3D;
-	}
-
-	public void setDo3D(boolean do3D) {
-		this.do3D = do3D;
-	}
-
-	public int getIterationsDilation() {
-		return iterationsDilation;
-	}
-
-	public void setIterationsDilation(int iterationsDilation) {
-		this.iterationsDilation = iterationsDilation;
-	}
-
-	public double getEmptyValue() {
-		return emptyValue;
-	}
-
-	public void setEmptyValue(double emptyValue) {
-		this.emptyValue = emptyValue;
-	}
-
-	public int getIterationsErosion() {
-		return iterationsErosion;
-	}
-
-	public void setIterationsErosion(int iterationsErosion) {
-		this.iterationsErosion = iterationsErosion;
+	private FeatureCalculation<Optional<ObjectMask>,FeatureInputPairObjects> createCalculation(SessionInput<FeatureInputPairObjects> input) {
+		return CalculatePairIntersectionCommutative.createFromCache(
+			input,
+			CACHE_NAME_FIRST,
+			CACHE_NAME_SECOND,
+			iterationsDilation,
+			iterationsErosion,
+			do3D
+		);
 	}
 }

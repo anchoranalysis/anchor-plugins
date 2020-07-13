@@ -36,8 +36,7 @@ import org.anchoranalysis.anchor.mpp.proposer.error.ErrorNode;
 import org.anchoranalysis.anchor.mpp.proposer.error.ProposerFailureDescription;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.index.GetOperationFailedException;
-import org.anchoranalysis.core.log.LogReporter;
+import org.anchoranalysis.core.log.MessageLogger;
 import org.anchoranalysis.core.random.RandomNumberGenerator;
 import org.anchoranalysis.mpp.sgmn.bean.kernel.proposer.KernelProposer;
 import org.anchoranalysis.mpp.sgmn.bean.optscheme.termination.TerminationCondition;
@@ -134,11 +133,8 @@ class SimulatedAnnealingHelper {
 			++iter,			
 			termConditionAll,
 			assignMode.extractScoreSizeState(),
-			context.getLogger().getLogReporter()
+			context.getLogger().messageLogger()
 		));
-		
-		// We decrement the iterator to reflect its final state
-		iter--;
 		
 		try {
 			return optStep.releaseKeepBest();
@@ -152,7 +148,7 @@ class SimulatedAnnealingHelper {
 		int iter,
 		TerminationCondition termConditionAll,
 		ExtractScoreSize<T> extractScoreSize,
-		LogReporter logger
+		MessageLogger logger
 	) {
 		if (!state.isPresent()) {
 			return true;
@@ -194,7 +190,7 @@ class SimulatedAnnealingHelper {
 				iter==0
 			);
 			
-			KernelUpdater<S,T> kernelUpdater = new KernelUpdaterSimple<S,T>(
+			KernelUpdater<S,T> kernelUpdater = new KernelUpdaterSimple<>(
 				updatableMarkSetCollection,
 				kernelProposer.getAllKernelFactories(),
 				funcExtractForUpdate
@@ -214,8 +210,6 @@ class SimulatedAnnealingHelper {
 			throw new OptTerminatedEarlyException("A kernel-calculation error occurred", e);
 		} catch (UpdateMarkSetException e) {
 			throw new OptTerminatedEarlyException("An update-mask-set error occurred", e);
-		} catch (GetOperationFailedException e) {
-			throw new OptTerminatedEarlyException("A get-operation-failed", e);
 		}
 	}
 	
@@ -235,7 +229,7 @@ class SimulatedAnnealingHelper {
 		AccptProbCalculator<T> accptProbCalc,
 		KernelUpdater<S,T> kernelUpdater,
 		KernelAssigner<S,T> kernelAssigner
-	) throws KernelCalcNRGException, UpdateMarkSetException, GetOperationFailedException {
+	) throws KernelCalcNRGException, UpdateMarkSetException {
 		
 		StopWatch timer = new StopWatch();
 		timer.start();
@@ -263,7 +257,7 @@ class SimulatedAnnealingHelper {
 	}
 	
 	private static <S,T> KernelAssigner<S,T> createAssigner( KernelAssigner<S,T> kernelAssigner, ErrorNode error ) {
-		return new KernelAssignerAddErrorLevel<S,T>( kernelAssigner, error );	
+		return new KernelAssignerAddErrorLevel<>( kernelAssigner, error );	
 	}
 		
 	private static void assignExecutionTime( OptimizationStep<?,?> optStep, StopWatch timer ) {

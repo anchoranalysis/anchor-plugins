@@ -133,7 +133,7 @@ public class AnnotationGroup<T extends Assignment> implements IAddAnnotation<T> 
 
 	@Override
 	public boolean equals(Object obj) {
-		if (obj==null || !(obj instanceof AnnotationGroup)) {
+		if (!(obj instanceof AnnotationGroup)) {
 			return false;
 		}
 		@SuppressWarnings("unchecked")

@@ -30,8 +30,8 @@ import org.anchoranalysis.feature.cache.calculation.FeatureCalculation;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.index.ObjectCollectionRTree;
 import org.anchoranalysis.image.object.ObjectCollection;
-import org.apache.commons.lang.builder.EqualsBuilder;
-import org.apache.commons.lang.builder.HashCodeBuilder;
+import lombok.EqualsAndHashCode;
+import lombok.RequiredArgsConstructor;
 
 
 /**
@@ -39,22 +39,14 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
  * @author Owen Feehan
  *
  */
+@RequiredArgsConstructor @EqualsAndHashCode(callSuper=false)
 class CalculateIntersectingObjects extends FeatureCalculation<ObjectCollection, FeatureInputSingleObject> {
 
-	private String id;
-	private ObjectCollection searchObjs;
-		
-	/**
-	 * Constructor
-	 * 
-	 * @param id a unique ID that maps 1 to 1 to searchObjs (and is therefore sufficient to uniquely hashcode)
-	 * @param searchObjs the objects corresponding to id
-	 */
-	public CalculateIntersectingObjects(String id, ObjectCollection searchObjs) {
-		super();
-		this.id = id;
-		this.searchObjs = searchObjs;
-	}
+	/** A unique ID that maps 1 to 1 to searchObjs (and is therefore sufficient to uniquely @{code hashCode()}) */
+	private final String id;
+	
+	/** The objects corresponding to id */
+	private final ObjectCollection searchObjs;
 
 	@Override
 	protected ObjectCollection execute(FeatureInputSingleObject params) {
@@ -62,24 +54,4 @@ class CalculateIntersectingObjects extends FeatureCalculation<ObjectCollection, 
 		ObjectCollectionRTree bboxRTree = new ObjectCollectionRTree( searchObjs );
 		return bboxRTree.intersectsWith( params.getObjectMask() );
 	}
-
-	@Override
-	public boolean equals(Object obj) {
-		 if(obj instanceof CalculateIntersectingObjects){
-			 final CalculateIntersectingObjects other = (CalculateIntersectingObjects) obj;
-		        return new EqualsBuilder()
-		            .append(id, other.id)
-		            .isEquals();
-	    } else{
-	        return false;
-	    }
-	}
-
-	@Override
-	public int hashCode() {
-		return new HashCodeBuilder()
-			.append(id)
-			.toHashCode();
-	}
-
 }

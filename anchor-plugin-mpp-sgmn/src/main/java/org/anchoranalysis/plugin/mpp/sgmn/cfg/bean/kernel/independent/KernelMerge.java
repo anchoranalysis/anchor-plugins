@@ -14,7 +14,7 @@ import org.anchoranalysis.anchor.mpp.pair.Pair;
 import org.anchoranalysis.anchor.mpp.pair.PairCollection;
 import org.anchoranalysis.anchor.mpp.proposer.ProposalAbnormalFailureException;
 import org.anchoranalysis.anchor.mpp.proposer.ProposerContext;
-import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
+import org.anchoranalysis.anchor.mpp.pxlmark.memo.VoxelizedMarkMemo;
 import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemoFactory;
 
 /*
@@ -54,37 +54,32 @@ import org.anchoranalysis.mpp.sgmn.bean.kernel.KernelPosNeg;
 import org.anchoranalysis.mpp.sgmn.kernel.KernelCalcContext;
 import org.anchoranalysis.mpp.sgmn.kernel.KernelCalcNRGException;
 
+import lombok.Getter;
+import lombok.Setter;
+
 public class KernelMerge extends KernelPosNeg<CfgNRGPixelized> {
 
 	// START BEAN PROPERTIES
-	@BeanField
-	private MarkMergeProposer mergeMarkProposer = null;
+	@BeanField @Getter @Setter
+	private MarkMergeProposer mergeMarkProposer;
 	
-	@BeanField
+	@BeanField @Getter @Setter
 	private String simplePairCollectionID;
 	// END BEAN PROPERTIES
 
 	private Pair<Mark> pair;
 	private Optional<Mark> markAdded;
-	
-	private enum FailedProposalType {
-		NO_PAIRS,
-		CANNOT_GENERATE_MERGE
-	}
-	
-	@SuppressWarnings("unused")
-	private FailedProposalType failedProposalType;
-	
-	private transient PairCollection<Pair<Mark>> pairCollection;
+		
+	@Getter @Setter
+	private PairCollection<Pair<Mark>> pairCollection;
 
 	@Override
 	public void onInit(MPPInitParams pso) throws InitException {
 		super.onInit(pso);
-		
-		// new SimplePairCollection( new AddCriteriaDistanceTo(maximumDistance)  
+ 
 		
 		try {
-			pairCollection = getSharedObjects().getSimplePairCollection().getException(simplePairCollectionID);
+			pairCollection = getInitializationParameters().getSimplePairCollection().getException(simplePairCollectionID);
 		} catch (NamedProviderGetException e) {
 			throw new InitException(e.summarize());
 		}
@@ -105,20 +100,18 @@ public class KernelMerge extends KernelPosNeg<CfgNRGPixelized> {
 		
 		pair = pairCollection.sampleRandomPairNonUniform( propContext.getRandomNumberGenerator() );
 		if (pair==null) {
-			failedProposalType = FailedProposalType.NO_PAIRS;
 			markAdded = Optional.empty();
 			propContext.getErrorNode().add("cannot generate pair");
 			return Optional.empty();
 		}
 		
-		PxlMarkMemo pmmSrc = exst.get().getMemoForMark(pair.getSource());
-		PxlMarkMemo pmmDest = exst.get().getMemoForMark(pair.getDestination());
+		VoxelizedMarkMemo pmmSrc = exst.get().getMemoForMark(pair.getSource());
+		VoxelizedMarkMemo pmmDest = exst.get().getMemoForMark(pair.getDestination());
 				
 		// How and why does this happen?
 		if (pmmSrc==null||pmmDest==null) {
 			pair = null;
 			markAdded = Optional.empty();
-			failedProposalType = FailedProposalType.CANNOT_GENERATE_MERGE;
 			return Optional.empty();
 		}
 		
@@ -138,7 +131,6 @@ public class KernelMerge extends KernelPosNeg<CfgNRGPixelized> {
 		// If we can't generate a successful merge, we cancel the kernel
 		if (!markAdded.isPresent()) {
 			pair = null;
-			failedProposalType = FailedProposalType.CANNOT_GENERATE_MERGE;
 			return Optional.empty();
 		}
 		
@@ -176,7 +168,7 @@ public class KernelMerge extends KernelPosNeg<CfgNRGPixelized> {
 			);
 		}
 		
-		PxlMarkMemo pmm = PxlMarkMemoFactory.create(
+		VoxelizedMarkMemo pmm = PxlMarkMemoFactory.create(
 			mark,
 			nrgStack.getNrgStack(),
 			regionMap
@@ -194,7 +186,7 @@ public class KernelMerge extends KernelPosNeg<CfgNRGPixelized> {
 	
 	@Override
 	public double calcAccptProb(int exstSize, int propSize,
-			double poisson_intens, ImageDimensions scene_size, double densityRatio) {
+			double poissonIntensity, ImageDimensions sceneSize, double densityRatio) {
 		return densityRatio;
 	}
 	
@@ -207,8 +199,8 @@ public class KernelMerge extends KernelPosNeg<CfgNRGPixelized> {
 		int rmvIndex1 = exst.getCfg().indexOf( pair.getSource() );
 		int rmvIndex2 = exst.getCfg().indexOf( pair.getDestination() );
 		
-		PxlMarkMemo memoSource = exst.getMemoForMark( pair.getSource() );
-		PxlMarkMemo memoDest = exst.getMemoForMark( pair.getDestination() );
+		VoxelizedMarkMemo memoSource = exst.getMemoForMark( pair.getSource() );
+		VoxelizedMarkMemo memoDest = exst.getMemoForMark( pair.getDestination() );
 		
 		// We need to delete in the correct order
 		if (rmvIndex2 > rmvIndex1) {
@@ -225,7 +217,7 @@ public class KernelMerge extends KernelPosNeg<CfgNRGPixelized> {
 			memoList.remove(rmvIndex2);
 		}
 		
-		PxlMarkMemo memoAdded = accptd.getMemoForMark( markAdded.get() );
+		VoxelizedMarkMemo memoAdded = accptd.getMemoForMark( markAdded.get() );
 		
 		// Should always find one
 		assert memoAdded!=null;
@@ -256,33 +248,8 @@ public class KernelMerge extends KernelPosNeg<CfgNRGPixelized> {
 		};
 	}
 
-
 	@Override
 	public boolean isCompatibleWith(Mark testMark) {
 		return mergeMarkProposer.isCompatibleWith(testMark);
-	}
-
-	public MarkMergeProposer getMergeMarkProposer() {
-		return mergeMarkProposer;
-	}
-
-	public void setMergeMarkProposer(MarkMergeProposer mergeMarkProposer) {
-		this.mergeMarkProposer = mergeMarkProposer;
-	}
-
-	public PairCollection<Pair<Mark>> getPairCollection() {
-		return pairCollection;
-	}
-
-	public void setPairCollection(PairCollection<Pair<Mark>> pairCollection) {
-		this.pairCollection = pairCollection;
-	}
-
-	public String getSimplePairCollectionID() {
-		return simplePairCollectionID;
-	}
-
-	public void setSimplePairCollectionID(String simplePairCollectionID) {
-		this.simplePairCollectionID = simplePairCollectionID;
 	}
 }

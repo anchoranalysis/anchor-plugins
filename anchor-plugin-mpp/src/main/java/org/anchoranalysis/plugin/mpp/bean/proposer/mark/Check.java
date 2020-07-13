@@ -37,7 +37,7 @@ import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.anchor.mpp.proposer.ProposalAbnormalFailureException;
 import org.anchoranalysis.anchor.mpp.proposer.ProposerContext;
 import org.anchoranalysis.anchor.mpp.proposer.visualization.CreateProposalVisualization;
-import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
+import org.anchoranalysis.anchor.mpp.pxlmark.memo.VoxelizedMarkMemo;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.color.RGBColor;
 import org.anchoranalysis.core.error.OperationFailedException;
@@ -52,7 +52,7 @@ public class Check extends MarkProposerOne {
 	private Mark lastFailedMark;
 
 	@Override
-	protected boolean propose(PxlMarkMemo inputMark, ProposerContext context, MarkProposer source)
+	protected boolean propose(VoxelizedMarkMemo inputMark, ProposerContext context, MarkProposer source)
 			throws ProposalAbnormalFailureException {
 
 		if (!source.propose(inputMark, context)) {

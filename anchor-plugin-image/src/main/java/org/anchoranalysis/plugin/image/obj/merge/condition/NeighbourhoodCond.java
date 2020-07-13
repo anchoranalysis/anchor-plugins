@@ -61,7 +61,7 @@ public class NeighbourhoodCond implements UpdatableBeforeCondition {
 		this.requireBBoxNeighbours = requireBBoxNeighbours;
 		this.requireTouching = requireTouching;
 					
-		if (requireTouching==true) {
+		if (requireTouching) {
 			this.requireBBoxNeighbours = false;	// We don't need this check, if we're testing actual object intersection
 		}
 	}
@@ -93,19 +93,11 @@ public class NeighbourhoodCond implements UpdatableBeforeCondition {
 	public boolean accept(ObjectMask omDest) {
 		
 		// If this is set, we ignore any combinations whose bounding boxes don't touch or intersect
-		if (requireBBoxNeighbours) {
-			if (!bboxSrcGrown.intersection().existsWith(omDest.getBoundingBox())) {
-				return false;
-			}
+		if (requireBBoxNeighbours && !bboxSrcGrown.intersection().existsWith(omDest.getBoundingBox())) {
+			return false;
 		}
 		
-		if (requireTouching) {
-			if (!omGrown.hasIntersectingPixels(omDest)) {
-				return false;
-			}
-		}
-		
-		return true;
+		return !requireTouching || omGrown.hasIntersectingVoxels(omDest);
 	}
 			
 	private static BoundingBox bboxGrown( ObjectMask obj ) {

@@ -38,12 +38,17 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.Positive;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.functional.FunctionalUtilities;
 import org.anchoranalysis.core.graph.GraphWithEdgeTypes;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.histogram.Histogram;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.anchoranalysis.image.voxel.nghb.CreateNeighborGraph;
+import org.anchoranalysis.image.voxel.nghb.EdgeAdderParameters;
+
+import lombok.Getter;
+import lombok.Setter;
 
 /*
  *  Calculates a threshold-level for each object collectively based on other objects
@@ -56,7 +61,7 @@ public class ChnlProviderObjsLevelNeighbours extends ChnlProviderLevel {
 
 	// START BEAN
 	/** How many neighbours to include by distance (distance==1 -> all directly touching neighbours, distance==2 -> those touching the directly touching etc.) */
-	@BeanField @Positive
+	@BeanField @Positive @Getter @Setter
 	private int nghbDist;		// Determines the neighbour distance
 	// END BEAN
 	
@@ -70,14 +75,6 @@ public class ChnlProviderObjsLevelNeighbours extends ChnlProviderLevel {
 		} catch (OperationFailedException e) {
 			throw new CreateException(e);
 		}
-	}
-
-	private static Collection<Histogram> collection( Collection<ObjectMaskWithHistogram> edges ) {
-		List<Histogram> out = new ArrayList<>();
-		for ( ObjectMaskWithHistogram om : edges) {
-			out.add( om.getHistogram() );
-		}
-		return out;
 	}
 	
 	private static void visit(
@@ -135,12 +132,15 @@ public class ChnlProviderObjsLevelNeighbours extends ChnlProviderLevel {
 	private void setAgainstNghb( Channel chnlIntensity, Channel chnlOutput, ObjectCollection objMasks, int nghbDist ) throws OperationFailedException {
 		
 		try {
-			CreateNeighborGraph<ObjectMaskWithHistogram> graphCreator = new CreateNeighborGraph<ObjectMaskWithHistogram>( false );
+			CreateNeighborGraph<ObjectMaskWithHistogram> graphCreator = new CreateNeighborGraph<>(
+				new EdgeAdderParameters(false)
+			);
 			
-			GraphWithEdgeTypes<ObjectMaskWithHistogram,Integer> graph = graphCreator.createGraphWithNumPixels(
+			GraphWithEdgeTypes<ObjectMaskWithHistogram,Integer> graph = graphCreator.createGraph(
 				objectsWithHistograms(objMasks, chnlIntensity),
 				ObjectMaskWithHistogram::getObjMask,
-				chnlIntensity.getDimensions().getExtnt(),
+				(v1, v2, numPixels) -> numPixels,
+				chnlIntensity.getDimensions().getExtent(),
 				true
 			);
 			
@@ -149,24 +149,37 @@ public class ChnlProviderObjsLevelNeighbours extends ChnlProviderLevel {
 			// We don't need this for the computation, used only for outputting debugging
 			Map<ObjectMaskWithHistogram,Integer> mapLevel = new HashMap<>();
 			
-			Collection<ObjectMaskWithHistogram> objs = graph.vertexSet();
-			for( ObjectMaskWithHistogram om : objs ) {
+			for( ObjectMaskWithHistogram om : graph.vertexSet() ) {
 		
-				getLogger().getLogReporter().logFormatted("Setting for %s against neighbourhood", om.getObjMask().centerOfGravity() );
+				getLogger().messageLogger().logFormatted(
+					"Setting for %s against neighbourhood",
+					om.getObjMask().centerOfGravity()
+				);
 				
-				// Get the neighbours of the current object
+				// Get the neighbors of the current object
 				Collection<ObjectMaskWithHistogram> vertices = verticesWithinDist(graph, om, nghbDist);
 				
 				for( ObjectMaskWithHistogram nghb : vertices ) {
-					getLogger().getLogReporter().logFormatted("Including neighbour %s", nghb.getObjMask().centerOfGravity() );
+					getLogger().messageLogger().logFormatted(
+						"Including neighbour %s",
+						nghb.getObjMask().centerOfGravity()
+					);
 				}
 				
 				// Level calculated from combined histograms
 				int level = calcLevelCombinedHist(om, vertices);
 				
-				vbOutput.setPixelsCheckMask(om.getObjMask(), level);
+				vbOutput.setPixelsCheckMask(
+					om.getObjMask(),
+					level
+				);
 				
-				getLogger().getLogReporter().logFormatted("Setting threshold %d at %s", level, om.getObjMask().centerOfGravity() );
+				getLogger().messageLogger().logFormatted(
+					"Setting threshold %d at %s",
+					level,
+					om.getObjMask().centerOfGravity()
+				);
+				
 				mapLevel.put(om, level);
 			}
 
@@ -177,20 +190,22 @@ public class ChnlProviderObjsLevelNeighbours extends ChnlProviderLevel {
 	
 	private static List<ObjectMaskWithHistogram> objectsWithHistograms( ObjectCollection objMasks, Channel chnlIntensity ) {
 		return objMasks.stream().mapToList(om ->
-			new ObjectMaskWithHistogram(om,chnlIntensity)
+			new ObjectMaskWithHistogram(om, chnlIntensity)
 		);
 	}
 	
 	private int calcLevelCombinedHist( ObjectMaskWithHistogram om, Collection<ObjectMaskWithHistogram> vertices ) throws OperationFailedException {
-		Histogram histSum = createSumHistograms( om.getHistogram(), collection(vertices) );	
-		return getCalculateLevel().calculateLevel(histSum);
-	}
-	
-	public int getNghbDist() {
-		return nghbDist;
-	}
-
-	public void setNghbDist(int nghbDist) {
-		this.nghbDist = nghbDist;
+		
+		Collection<Histogram> histogramsFromVertices =  FunctionalUtilities.mapToList(
+			vertices,
+			ObjectMaskWithHistogram::getHistogram
+		);
+		
+		return getCalculateLevel().calculateLevel(
+			createSumHistograms(
+				om.getHistogram(),
+				histogramsFromVertices
+			)
+		);
 	}
 }

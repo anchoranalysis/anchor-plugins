@@ -30,9 +30,12 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.shared.params.keyvalue.KeyValueParamsProvider;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.params.KeyValueParams;
-import org.anchoranalysis.image.bean.chnl.converter.ChnlConverterBean;
+import org.anchoranalysis.image.bean.chnl.converter.ConvertChannelTo;
 import org.anchoranalysis.image.stack.region.chnlconverter.ChannelConverter;
 import org.anchoranalysis.image.stack.region.chnlconverter.ChannelConverterToUnsignedByteScaleByMinMaxValue;
+
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * Scales by compressing a certain range of values into the 8-bit signal
@@ -40,22 +43,22 @@ import org.anchoranalysis.image.stack.region.chnlconverter.ChannelConverterToUns
  * @author Owen Feehan
  *
  */
-public class ChnlConverterBeanScaleByKeyValueParams extends ChnlConverterBean {
+public class ChnlConverterBeanScaleByKeyValueParams extends ConvertChannelTo {
 
 	// START BEAN PROPERTIES 
-	@BeanField
+	@BeanField @Getter @Setter
 	private KeyValueParamsProvider keyValueParamsProvider;
 	
-	@BeanField
+	@BeanField @Getter @Setter
 	private String keyLower;
 	
-	@BeanField
+	@BeanField @Getter @Setter
 	private String keyUpper;
 	
-	@BeanField
+	@BeanField @Getter @Setter
 	private double scaleLower;
 	
-	@BeanField
+	@BeanField @Getter @Setter
 	private double scaleUpper;
 	// END BEAN PROPERTIES
 	
@@ -67,7 +70,7 @@ public class ChnlConverterBeanScaleByKeyValueParams extends ChnlConverterBean {
 		int min = getScaled( kvp, keyLower, scaleLower );
 		int max = getScaled( kvp, keyUpper, scaleUpper ); 
 		
-		getLogger().getLogReporter().logFormatted("ChnlConverter: scale with min=%d max=%d%n", min, max);
+		getLogger().messageLogger().logFormatted("ChnlConverter: scale with min=%d max=%d%n", min, max);
 		
 		return new ChannelConverterToUnsignedByteScaleByMinMaxValue(min, max);
 	}
@@ -82,49 +85,8 @@ public class ChnlConverterBeanScaleByKeyValueParams extends ChnlConverterBean {
 		
 		double val = kvp.getPropertyAsDouble(key);
 		
-		getLogger().getLogReporter().logFormatted("%f * %f = %f", val, scale, val*scale);
+		getLogger().messageLogger().logFormatted("%f * %f = %f", val, scale, val*scale);
 		
 		return (int) Math.round(val * scale );
 	}
-
-	public KeyValueParamsProvider getKeyValueParamsProvider() {
-		return keyValueParamsProvider;
-	}
-
-	public void setKeyValueParamsProvider(KeyValueParamsProvider keyValueParamsProvider) {
-		this.keyValueParamsProvider = keyValueParamsProvider;
-	}
-
-	public String getKeyLower() {
-		return keyLower;
-	}
-
-	public void setKeyLower(String keyLower) {
-		this.keyLower = keyLower;
-	}
-
-	public String getKeyUpper() {
-		return keyUpper;
-	}
-
-	public void setKeyUpper(String keyUpper) {
-		this.keyUpper = keyUpper;
-	}
-
-	public double getScaleLower() {
-		return scaleLower;
-	}
-
-	public void setScaleLower(double scaleLower) {
-		this.scaleLower = scaleLower;
-	}
-
-	public double getScaleUpper() {
-		return scaleUpper;
-	}
-
-	public void setScaleUpper(double scaleUpper) {
-		this.scaleUpper = scaleUpper;
-	}
-
 }

@@ -57,9 +57,9 @@ public class ObjMaskProviderExtendInZ extends ObjMaskProviderContainer {
 			for( ObjectMask omOther : owm.getMatches() ) {
 				
 				out.add(
-					createExtendedObjMask(
+					createExtendedObject(
 						omOther,
-						owm.getSourceObj()
+						owm.getSource()
 					)
 				);
 			}
@@ -68,7 +68,7 @@ public class ObjMaskProviderExtendInZ extends ObjMaskProviderContainer {
 		return out;
 	}
 		
-	private static ObjectMask createExtendedObjMask(ObjectMask om, ObjectMask container) throws CreateException {
+	private static ObjectMask createExtendedObject(ObjectMask om, ObjectMask container) throws CreateException {
 		
 		ObjectMask omFlat = om.flattenZ();
 

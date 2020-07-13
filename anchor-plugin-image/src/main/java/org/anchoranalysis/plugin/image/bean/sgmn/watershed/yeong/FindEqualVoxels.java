@@ -1,5 +1,8 @@
 package org.anchoranalysis.plugin.image.bean.sgmn.watershed.yeong;
 
+import java.util.Deque;
+import java.util.LinkedList;
+
 /*
  * #%L
  * anchor-plugin-image
@@ -28,7 +31,6 @@ package org.anchoranalysis.plugin.image.bean.sgmn.watershed.yeong;
 
 
 import java.util.Optional;
-import java.util.Stack;
 
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.object.ObjectMask;
@@ -44,10 +46,9 @@ import org.anchoranalysis.plugin.image.sgmn.watershed.encoding.EncodedVoxelBox;
 
 final class FindEqualVoxels {
 	
-private static class PointTester extends ProcessVoxelNeighbourAbsoluteWithSlidingBuffer<Optional<Integer>> {
-		
-		// Static arguments
-		private Stack<Point3i> stack;
+	private static class PointTester extends ProcessVoxelNeighbourAbsoluteWithSlidingBuffer<Optional<Integer>> {
+
+		private Deque<Point3i> stack;
 		
 		private EncodedVoxelBox matS;
 		
@@ -58,7 +59,7 @@ private static class PointTester extends ProcessVoxelNeighbourAbsoluteWithSlidin
 		private EncodedIntBuffer bufS;
 		private int z1;
 		
-		public PointTester(Stack<Point3i> stack, SlidingBuffer<?> rbb, EncodedVoxelBox matS) {
+		public PointTester(Deque<Point3i> stack, SlidingBuffer<?> rbb, EncodedVoxelBox matS) {
 			super(rbb);
 			this.stack = stack;
 			this.matS = matS;
@@ -122,7 +123,6 @@ private static class PointTester extends ProcessVoxelNeighbourAbsoluteWithSlidin
 				//   might have been forced up by the connected component
 				if (valPoint<sourceVal && valPoint<lowestNghbVal) {
 					lowestNghbVal = valPoint;
-					//lowestNghbIndex = extent.offset(x1, y1, z1);
 					lowestNghbIndex = matS.getEncoding().encodeDirection(xChange, yChange, zChange);
 				}
 				return false;
@@ -159,7 +159,7 @@ private static class PointTester extends ProcessVoxelNeighbourAbsoluteWithSlidin
 		SlidingBuffer<?> rbb = new SlidingBuffer<>(bufferValuesToFindEqual);
 		
 		{
-			Stack<Point3i> stack = new Stack<>(); 
+			Deque<Point3i> stack = new LinkedList<>(); 
 			stack.push(pnt);
 			processStack(stack, rbb, plateau, valToFind);
 		}
@@ -169,7 +169,7 @@ private static class PointTester extends ProcessVoxelNeighbourAbsoluteWithSlidin
 		return plateau;
 	}
 	
-	private void processStack( Stack<Point3i> stack, SlidingBuffer<?> slidingBuffer, EqualVoxelsPlateau plateau, int valToFind ) {
+	private void processStack( Deque<Point3i> stack, SlidingBuffer<?> slidingBuffer, EqualVoxelsPlateau plateau, int valToFind ) {
 				
 		ProcessVoxelNeighbour<Optional<Integer>> process = ProcessVoxelNeighbourFactory.within(
 			mask,

@@ -32,12 +32,14 @@ import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.input.FeatureInput;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
 class ListChecker {
 
-	private ListChecker() {}
-
 	public static <T extends FeatureInput> void checkNonEmpty( List<Feature<T>> list ) throws FeatureCalcException {
-		if (list.size()==0) {
+		if (list.isEmpty()) {
 			throw new FeatureCalcException("There are 0 items in the list so this feature cannot be calculated");
 		}
 	}

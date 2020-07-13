@@ -36,7 +36,7 @@ import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.core.geometry.PointConverter;
-import org.anchoranalysis.core.log.LogErrorReporter;
+import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.image.binary.values.BinaryValues;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelBoxByte;
@@ -64,7 +64,7 @@ class Merger {
 	private AfterCondition afterCondition;
 	private Optional<ImageResolution> res;
 	private boolean replaceWithMidpoint;
-	private LogErrorReporter logger;
+	private Logger logger;
 	
 	private static class MergeParams {
 		private int startSrc;
@@ -85,7 +85,7 @@ class Merger {
 		}
 	}
 	
-	public Merger(boolean replaceWithMidpoint, BeforeCondition beforeCondition, AfterCondition afterCondition, Optional<ImageResolution> res, LogErrorReporter logger) {
+	public Merger(boolean replaceWithMidpoint, BeforeCondition beforeCondition, AfterCondition afterCondition, Optional<ImageResolution> res, Logger logger) {
 		super();
 		this.beforeCondition = beforeCondition;
 		this.afterCondition = afterCondition;
@@ -97,10 +97,10 @@ class Merger {
 	/**
 	 * Tries to merge objs (the collection is changed in-place)
 	 * 
-	 * @param objs the objects to merge
+	 * @param objects the objects to merge
 	 * @throws OperationFailedException
 	 */
-	public ObjectCollection tryMerge( ObjectCollection objs ) throws OperationFailedException {
+	public ObjectCollection tryMerge( ObjectCollection objects ) throws OperationFailedException {
 		
 		List<MergeParams> stack = new ArrayList<>();
 		MergeParams mergeParams = new MergeParams(0,0);
@@ -109,10 +109,10 @@ class Merger {
 		
 		while( !stack.isEmpty() ) {
 			MergeParams params = stack.remove(0);
-			tryMergeOnIndices(objs, params, stack);
+			tryMergeOnIndices(objects, params, stack);
 		}
 		
-		return objs;
+		return objects;
 	}
 		
 	/**

@@ -34,11 +34,16 @@ import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.feature.cache.ChildCacheName;
 import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.feature.calc.FeatureInitParams;
+import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
 import org.anchoranalysis.image.bean.provider.BinaryChnlProvider;
 import org.anchoranalysis.image.binary.BinaryChnl;
 import org.anchoranalysis.image.feature.bean.object.pair.FeaturePairObjects;
-import org.anchoranalysis.image.feature.init.FeatureInitParamsShared;
+import org.anchoranalysis.image.feature.bean.object.single.FeatureSingleObject;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
+
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * Evaluates the object as a pair-feature together with the binary-mask from the shard objects.
@@ -46,25 +51,28 @@ import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
  * @author Owen Feehan
  *
  */
-public class PairedWithBinaryChannel extends FeatureSingleObjectWithShared {
+public class PairedWithBinaryChannel extends FeatureSingleObject {
 
 	// START BEAN PROPERTIES
-	@BeanField
+	@BeanField @Getter @Setter
 	private FeaturePairObjects item;
 	
 	// This cannot be initialized in the normal way, as Feature isn't contained in a Shared-Objects
 	// container. So instead it's initialized at a later point.
-	@BeanField @SkipInit
+	@BeanField @SkipInit @Getter @Setter
 	private BinaryChnlProvider binaryChnl;
 	// END BEAN PROPERTIES
 	
 	private BinaryChnl chnl;
 	
 	@Override
-	public void beforeCalcCast(FeatureInitParamsShared params) throws InitException {
-		super.beforeCalcCast(params);
-		assert( getLogger()!=null );
-		binaryChnl.initRecursive(params.getSharedObjects(), getLogger() );
+	protected void beforeCalc(FeatureInitParams paramsInit) throws InitException {
+		super.beforeCalc(paramsInit);
+
+		binaryChnl.initRecursive(
+			new ImageInitParams(paramsInit.sharedObjectsRequired()),
+			getLogger()
+		);
 		
 		try {
 			chnl = binaryChnl.create();
@@ -80,21 +88,5 @@ public class PairedWithBinaryChannel extends FeatureSingleObjectWithShared {
 			new CalculatePairInput(chnl),
 			new ChildCacheName(PairedWithBinaryChannel.class, chnl.hashCode())
 		);
-	}
-
-	public FeaturePairObjects getItem() {
-		return item;
-	}
-
-	public void setItem(FeaturePairObjects item) {
-		this.item = item;
-	}
-
-	public BinaryChnlProvider getBinaryChnl() {
-		return binaryChnl;
-	}
-
-	public void setBinaryChnl(BinaryChnlProvider binaryChnl) {
-		this.binaryChnl = binaryChnl;
 	}
 }

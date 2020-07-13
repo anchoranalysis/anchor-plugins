@@ -97,7 +97,7 @@ public class ObjMaskProviderExtractText extends ObjectCollectionProvider {
 		// Scales the input to the largest acceptable-extent
 		Pair<Mat,ScaleFactor> pair = CreateScaledInput.apply(
 			stack,
-			findLargestExtent( stack.getDimensions().getExtnt() )
+			findLargestExtent( stack.getDimensions().getExtent() )
 		);
 		
 		// Convert marks to object-masks
@@ -166,7 +166,7 @@ public class ObjMaskProviderExtractText extends ObjectCollectionProvider {
 	}
 		
 	private Path pathToEastModel() {
-		return getSharedObjects().getModelDir().resolve("frozen_east_text_detection.pb");
+		return getInitializationParameters().getModelDirectory().resolve("frozen_east_text_detection.pb");
 	}
 
 	public StackProvider getStackProvider() {

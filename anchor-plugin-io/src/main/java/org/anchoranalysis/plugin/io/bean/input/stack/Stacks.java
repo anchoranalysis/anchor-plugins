@@ -27,17 +27,19 @@ package org.anchoranalysis.plugin.io.bean.input.stack;
  */
 
 
-import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
-
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.DefaultInstance;
+import org.anchoranalysis.core.functional.FunctionalUtilities;
 import org.anchoranalysis.image.io.bean.rasterreader.RasterReader;
 import org.anchoranalysis.io.bean.input.InputManager;
 import org.anchoranalysis.io.bean.input.InputManagerParams;
 import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.input.FileInput;
+
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 /**
  * Each file gives either:
@@ -47,62 +49,29 @@ import org.anchoranalysis.io.input.FileInput;
  * @author Owen Feehan
  *
  */
+@NoArgsConstructor
 public class Stacks extends InputManager<StackSequenceInput> {
 
 	// START BEANS
-	@BeanField
+	@BeanField  @Getter @Setter
 	private InputManager<FileInput> fileInput;
 	
-	@BeanField @DefaultInstance
+	@BeanField @DefaultInstance @Getter @Setter
 	private RasterReader rasterReader;
 	
-	@BeanField
+	@BeanField @Getter @Setter
 	private boolean useLastSeriesIndexOnly;
 	// END BEANS
-
-	public Stacks() {
-		
-	}
 	
 	public Stacks( InputManager<FileInput> fileInput ) {
 		this.fileInput = fileInput;
 	}
 
 	@Override
-	public List<StackSequenceInput> inputObjects(InputManagerParams params)
-			throws AnchorIOException {
-		
-		ArrayList<StackSequenceInput> listOut = new ArrayList<>(); 
-		
-		Iterator<FileInput> itrFiles = fileInput.inputObjects(params).iterator();
-		while( itrFiles.hasNext() ) {
-			listOut.add( new StackCollectionFromFilesInputObject(itrFiles.next(), getRasterReader(), useLastSeriesIndexOnly ));
-		}
-
-		return listOut;
-	}
-
-	public RasterReader getRasterReader() {
-		return rasterReader;
-	}
-
-	public void setRasterReader(RasterReader rasterReader) {
-		this.rasterReader = rasterReader;
-	}
-
-	public boolean isUseLastSeriesIndexOnly() {
-		return useLastSeriesIndexOnly;
-	}
-
-	public void setUseLastSeriesIndexOnly(boolean useLastSeriesIndexOnly) {
-		this.useLastSeriesIndexOnly = useLastSeriesIndexOnly;
-	}
-
-	public InputManager<FileInput> getFileInput() {
-		return fileInput;
-	}
-
-	public void setFileInput(InputManager<FileInput> fileInput) {
-		this.fileInput = fileInput;
+	public List<StackSequenceInput> inputObjects(InputManagerParams params)	throws AnchorIOException {
+		return FunctionalUtilities.mapToList(
+			fileInput.inputObjects(params),
+			file-> new StackCollectionFromFilesInputObject(file, getRasterReader(), useLastSeriesIndexOnly)
+		);
 	}
 }

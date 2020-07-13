@@ -98,10 +98,8 @@ class CopyTIFFAndCompress {
 	private static TiffWriter createWriter( TiffReader reader, String destination ) throws FormatException, IOException {
 		
 		TiffWriter writer = new TiffWriter();
-		
-		//ImageWriter writer = new ImageWriter();
 
-		writer.setCompression("LZW"); //("LZW");
+		writer.setCompression("LZW");
 		writer.setWriteSequentially(true);
 		writer.setBigTiff(true);
 		writer.setMetadataRetrieve((MetadataRetrieve) reader.getMetadataStore() );

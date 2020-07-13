@@ -37,7 +37,7 @@ import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.anchoranalysis.image.voxel.box.VoxelBoxWrapper;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
-import org.anchoranalysis.plugin.io.multifile.SizeExtnts;
+import org.anchoranalysis.plugin.io.multifile.SizeExtents;
 
 class MultiBuffer {
 	
@@ -47,9 +47,9 @@ class MultiBuffer {
 	@SuppressWarnings("rawtypes")
 	private VoxelBuffer[][][] buffers;
 	
-	private SizeExtnts size;
+	private SizeExtents size;
 	
-	public MultiBuffer( Stack stackArbitrarySlice, SizeExtnts size ) {
+	public MultiBuffer( Stack stackArbitrarySlice, SizeExtents size ) {
 		this.size = size;
 		
 		size.populateMissingFromArbitrarySlice(stackArbitrarySlice);

@@ -1,7 +1,7 @@
 package ch.ethz.biol.cell.mpp.mark.pointsfitter;
 
 import org.anchoranalysis.anchor.mpp.bean.points.fitter.PointsFitter;
-import org.anchoranalysis.anchor.mpp.bean.points.fitter.PointsFitterException;
+
 
 /*
  * #%L
@@ -33,9 +33,6 @@ import org.anchoranalysis.anchor.mpp.bean.points.fitter.PointsFitterException;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.Positive;
 
-import cern.colt.matrix.DoubleMatrix2D;
-import cern.colt.matrix.linalg.Algebra;
-
 public abstract class ConicFitterBase extends PointsFitter {
 
 	// START BEAN
@@ -51,14 +48,6 @@ public abstract class ConicFitterBase extends PointsFitter {
 	@BeanField
 	private float inputPointShift = 0.0f;
 	// END BEAN
-
-	protected static DoubleMatrix2D matrixLeftDivide( DoubleMatrix2D num, DoubleMatrix2D dem ) throws PointsFitterException {
-		try {
-			return new Algebra().inverse(num).zMult(dem, null);
-		} catch (IllegalArgumentException e) {
-			throw new PointsFitterException(e);
-		}
-	}
 	
 	public void duplicateHelper( ConicFitterBase out ) {
 		out.shellRad = shellRad;

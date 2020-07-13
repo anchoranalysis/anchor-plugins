@@ -32,7 +32,7 @@ import org.anchoranalysis.core.error.CreateException;
 
 
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.log.LogReporter;
+import org.anchoranalysis.core.log.MessageLogger;
 import org.anchoranalysis.image.bean.threshold.CalculateLevel;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.histogram.Histogram;
@@ -50,7 +50,7 @@ public class LevelResultCollectionFactory {
 			ObjectCollection objMasks,
 			CalculateLevel calculateLevel,
 			int numDilations,
-			LogReporter logger
+			MessageLogger logger
 		) throws CreateException {
 		
 		LevelResultCollection all = new LevelResultCollection(); 
@@ -66,7 +66,7 @@ public class LevelResultCollectionFactory {
 				omForCalculateLevel = MorphologicalDilation.createDilatedObjMask(
 					om,
 					Optional.of(
-						chnl.getDimensions().getExtnt()
+						chnl.getDimensions().getExtent()
 					),
 					chnl.getDimensions().getZ()>1,
 					numDilations,

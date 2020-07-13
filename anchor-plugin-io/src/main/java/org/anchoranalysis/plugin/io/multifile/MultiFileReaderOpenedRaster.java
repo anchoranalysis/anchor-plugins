@@ -38,30 +38,19 @@ import org.anchoranalysis.image.io.bean.rasterreader.RasterReader;
 import org.anchoranalysis.image.io.rasterreader.OpenedRaster;
 import org.anchoranalysis.image.stack.TimeSequence;
 
+import lombok.RequiredArgsConstructor;
+
 // Ignores multiple series
+@RequiredArgsConstructor
 public class MultiFileReaderOpenedRaster extends OpenedRaster {
 
-	private ParsedFilePathBag fileBag;
-	
-	private RasterReader rasterReader;
+	// START REQUIRED ARGUMENTS
+	private final RasterReader rasterReader;
+	private final ParsedFilePathBag fileBag;
+	// END REQUIRED ARGUMENTS
 
 	// Processed version of the file. If null, not set yet
-	private MultiFile multiFile = null;
-	
-	public MultiFileReaderOpenedRaster(RasterReader rasterReader, ParsedFilePathBag fileBag) {
-		super();
-		this.fileBag = fileBag;
-		this.rasterReader = rasterReader;
-	}
-	
-	private MultiFile createMultiFileMemo( ProgressReporter progressReporter) throws RasterIOException {
-		if (multiFile==null) {
-			multiFile = new MultiFile(fileBag);
-			addDetailsFromBag(multiFile, 0, progressReporter );
-		}
-		return multiFile;
-	}
-	
+	private MultiFile multiFileMemo = null;
 	
 	@Override
 	public int numSeries() {
@@ -74,7 +63,7 @@ public class MultiFileReaderOpenedRaster extends OpenedRaster {
 
 		try {
 			progressReporter.open();
-			return createMultiFileMemo(progressReporter).createSequence();
+			return getOrCreateMemo(progressReporter).createSequence();
 			
 		} finally {
 			progressReporter.close();
@@ -86,29 +75,23 @@ public class MultiFileReaderOpenedRaster extends OpenedRaster {
 		return Optional.empty();
 	}
 
-
 	@Override
 	public int numChnl() throws RasterIOException {
+		MultiFile memo = getOrCreateMemo( ProgressReporterNull.get() );
 		
-		MultiFile multiFile = createMultiFileMemo( ProgressReporterNull.get() );
-		
-		if (!multiFile.numChnlDefined()) {
+		if (!memo.numChnlDefined()) {
 			throw new RasterIOException("Number of chnl is not defined");
 		}
 		
-		return multiFile.numChnl();
+		return memo.numChnl();
 	}
 	
-	
-
 	@Override
 	public int bitDepth() throws RasterIOException {
-		
-		MultiFile multiFile = createMultiFileMemo( ProgressReporterNull.get() );
-		return multiFile.dataType().numBits();
+		MultiFile memo = getOrCreateMemo( ProgressReporterNull.get() );
+		return memo.dataType().numBits();
 	}
 	
-
 	@Override
 	public boolean isRGB() throws RasterIOException {
 		return false;
@@ -117,7 +100,7 @@ public class MultiFileReaderOpenedRaster extends OpenedRaster {
 	@Override
 	public int numFrames() throws RasterIOException {
 		
-		MultiFile multiFile = createMultiFileMemo( ProgressReporterNull.get() );
+		MultiFile multiFile = getOrCreateMemo( ProgressReporterNull.get() );
 		
 		if (!multiFile.numFramesDefined()) {
 			throw new RasterIOException("Number of frames is not defined");
@@ -129,15 +112,13 @@ public class MultiFileReaderOpenedRaster extends OpenedRaster {
 
 	@Override
 	public void close() throws RasterIOException {
-
+		// NOTHING TO DO
 	}
-
 
 	@Override
 	public ImageDimensions dim(int seriesIndex) throws RasterIOException {
 		throw new RasterIOException("MultiFileReader doesn't support this operation");
 	}
-
 	
 	private void addDetailsFromBag( MultiFile multiFile, int seriesIndex, ProgressReporter progressReporter ) throws RasterIOException {
 		
@@ -159,5 +140,13 @@ public class MultiFileReaderOpenedRaster extends OpenedRaster {
 				or.close();
 			}
 		}
+	}
+	
+	private MultiFile getOrCreateMemo( ProgressReporter progressReporter) throws RasterIOException {
+		if (multiFileMemo==null) {
+			multiFileMemo = new MultiFile(fileBag);
+			addDetailsFromBag(multiFileMemo, 0, progressReporter );
+		}
+		return multiFileMemo;
 	}
 }

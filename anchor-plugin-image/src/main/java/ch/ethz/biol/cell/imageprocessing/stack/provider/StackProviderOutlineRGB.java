@@ -71,7 +71,7 @@ public class StackProviderOutlineRGB extends StackProviderWithBackground {
 		BinaryChnl maskChnl = mask.create();
 				
 		try {
-			boolean do3D = mip!=true || maskChnl.getDimensions().getZ()==1;
+			boolean do3D = !mip || maskChnl.getDimensions().getZ()==1;
 			
 			return CalcOutlineRGB.apply(
 				calcOutline(maskChnl),
@@ -80,17 +80,17 @@ public class StackProviderOutlineRGB extends StackProviderWithBackground {
 				createShort
 			);
 			
-		} catch (InitException | OperationFailedException e) {
+		} catch (OperationFailedException e) {
 			throw new CreateException(e);
 		}
 	}
 	
 	private Channel createBlue(boolean do3D, ImageDimensions dim) throws CreateException {
-		Channel chnlBlue = createBlueMaybeProvider(dim);
+		Channel blue = createBlueMaybeProvider(dim);
 		if (do3D) {
-			return chnlBlue;
+			return blue;
 		} else {
-			return chnlBlue.maxIntensityProjection();
+			return blue.maxIntensityProjection();
 		}
 	}
 	
@@ -115,7 +115,7 @@ public class StackProviderOutlineRGB extends StackProviderWithBackground {
 		cpOutline.setForce2D(force2D);
 		cpOutline.setBinaryChnl( new BinaryChnlProviderHolder(maskIn) );
 		try {
-			cpOutline.initRecursive( getSharedObjects(), getLogger() );
+			cpOutline.initRecursive( getInitializationParameters(), getLogger() );
 			return cpOutline.create();
 		} catch (InitException | CreateException e) {
 			throw new OperationFailedException(e);

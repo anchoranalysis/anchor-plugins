@@ -62,7 +62,7 @@ public class ScaleCalculatorMinXYRes extends ScaleCalculator {
 		double xScaleDownRatio = twoToMinusPower(x);
 		double yScaleDownRatio = twoToMinusPower(y);
 		
-		getLogger().getLogReporter().logFormatted("Downscaling by factor %d,%d (mult by %f,%f)", x, y, xScaleDownRatio,  yScaleDownRatio);
+		getLogger().messageLogger().logFormatted("Downscaling by factor %d,%d (mult by %f,%f)", x, y, xScaleDownRatio,  yScaleDownRatio);
 		
 		return new ScaleFactor(xScaleDownRatio, yScaleDownRatio);
 	}

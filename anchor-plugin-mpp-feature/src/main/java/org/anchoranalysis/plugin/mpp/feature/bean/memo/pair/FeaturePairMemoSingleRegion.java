@@ -32,14 +32,14 @@ import org.anchoranalysis.anchor.mpp.feature.bean.nrg.elem.FeaturePairMemo;
 
 import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputPairMemo;
 import org.anchoranalysis.anchor.mpp.mark.GlobalRegionIdentifiers;
-import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
+import org.anchoranalysis.anchor.mpp.pxlmark.memo.VoxelizedMarkMemo;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.ImageDimensions;
 
-import ch.ethz.biol.cell.mpp.nrg.cachedcalculation.OverlapCalculation;
+import ch.ethz.biol.cell.mpp.nrg.cachedcalculation.CalculateOverlap;
 
 public abstract class FeaturePairMemoSingleRegion extends FeaturePairMemo {
 
@@ -50,11 +50,11 @@ public abstract class FeaturePairMemoSingleRegion extends FeaturePairMemo {
 	
 	protected double overlappingNumVoxels( SessionInput<FeatureInputPairMemo> input) throws FeatureCalcException {
 		return input.calc(
-			new OverlapCalculation(regionID)
+			new CalculateOverlap(regionID)
 		);
 	}
 	
-	protected BoundingBox bbox(FeatureInputPairMemo input, Function<FeatureInputPairMemo,PxlMarkMemo> funcExtract) throws FeatureCalcException {
+	protected BoundingBox bbox(FeatureInputPairMemo input, Function<FeatureInputPairMemo,VoxelizedMarkMemo> funcExtract) throws FeatureCalcException {
 		ImageDimensions sd = input.getDimensionsRequired();
 		return funcExtract.apply(input).getMark().bbox(
 			sd,

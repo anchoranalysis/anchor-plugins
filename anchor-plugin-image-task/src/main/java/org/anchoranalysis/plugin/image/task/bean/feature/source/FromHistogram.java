@@ -27,6 +27,7 @@ package org.anchoranalysis.plugin.image.task.bean.feature.source;
  */
 
 import java.io.File;
+import java.nio.file.Path;
 import java.util.Optional;
 
 import org.anchoranalysis.bean.annotation.BeanField;
@@ -36,7 +37,7 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.functional.IdentityOperation;
-import org.anchoranalysis.core.log.LogErrorReporter;
+import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.experiment.task.InputTypesExpected;
 import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
@@ -113,6 +114,7 @@ public class FromHistogram extends SingleRowPerInput<FileInput,FeatureInputHisto
 			
 			ResultsVector rv = createCalculator(
 				features,
+				context.getModelDirectory(),
 				context.getLogger()
 			).calc(
 				new FeatureInputHistogram(hist, Optional.empty())
@@ -154,11 +156,15 @@ public class FromHistogram extends SingleRowPerInput<FileInput,FeatureInputHisto
 		return paramsInit;
 	}
 
-	private FeatureCalculatorMulti<FeatureInputHistogram> createCalculator(FeatureList<FeatureInputHistogram> features, LogErrorReporter logger) throws FeatureCalcException {
+	private FeatureCalculatorMulti<FeatureInputHistogram> createCalculator(
+		FeatureList<FeatureInputHistogram> features,
+		Path modelDirectory,
+		Logger logger
+	) throws FeatureCalcException {
 		 return FeatureSession.with(
 			features,
 			new FeatureInitParams(),
-			SharedFeaturesInitParams.create(logger).getSharedFeatureSet(),
+			SharedFeaturesInitParams.create(logger, modelDirectory).getSharedFeatureSet(),
 			logger
 		);
 	}

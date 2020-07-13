@@ -29,7 +29,6 @@ package org.anchoranalysis.plugin.image.feature.bean.object.single.slice;
 
 import java.nio.ByteBuffer;
 
-import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.feature.bean.object.single.FeatureSingleObject;
@@ -46,18 +45,11 @@ public class MaximumNumberContourVoxelsOnSlice extends FeatureSingleObject {
 	
 	@Override
 	public double calc(SessionInput<FeatureInputSingleObject> input) throws FeatureCalcException {
-				
-		try {
-			ObjectMask obj = input.get().getObjectMask();
+		ObjectMask obj = input.get().getObjectMask();
 
-			return numVoxelsOnContour(
-				sliceWithMaxNumVoxels(obj)
-			);
-			
-		} catch (CreateException e) {
-			throw new FeatureCalcException(e);
-		}
-
+		return numVoxelsOnContour(
+			sliceWithMaxNumVoxels(obj)
+		);
 	}
 	
 	private static ObjectMask sliceWithMaxNumVoxels(ObjectMask obj) {
@@ -67,7 +59,7 @@ public class MaximumNumberContourVoxelsOnSlice extends FeatureSingleObject {
 		);
 	}
 	
-	private static int numVoxelsOnContour( ObjectMask obj ) throws CreateException {
+	private static int numVoxelsOnContour( ObjectMask obj ) {
 		return FindOutline
 				.outline(obj, 1, true, false)
 				.binaryVoxelBox()

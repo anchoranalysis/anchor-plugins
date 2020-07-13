@@ -34,12 +34,12 @@ import org.anchoranalysis.anchor.mpp.bean.proposer.MarkProposer;
 import org.anchoranalysis.anchor.mpp.proposer.ProposalAbnormalFailureException;
 import org.anchoranalysis.anchor.mpp.proposer.ProposerContext;
 import org.anchoranalysis.anchor.mpp.proposer.visualization.CreateProposalVisualization;
-import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
+import org.anchoranalysis.anchor.mpp.pxlmark.memo.VoxelizedMarkMemo;
 
 public class OrderedList extends MarkProposerFromList {
 	
 	@Override
-	protected boolean propose(PxlMarkMemo inputMark, ProposerContext context, List<MarkProposer> markProposerList) throws ProposalAbnormalFailureException {
+	protected boolean propose(VoxelizedMarkMemo inputMark, ProposerContext context, List<MarkProposer> markProposerList) throws ProposalAbnormalFailureException {
 		for (MarkProposer markProposer : markProposerList) {
 			// Calculate position
 	        if(!markProposer.propose(inputMark, context)) {

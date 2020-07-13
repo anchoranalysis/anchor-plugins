@@ -37,7 +37,7 @@ import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.geometry.Comparator3i;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.core.graph.EdgeTypeWithVertices;
-import org.anchoranalysis.core.log.LogErrorReporter;
+import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.extent.ImageResolution;
 import org.anchoranalysis.image.feature.evaluator.PayloadCalculator;
@@ -82,7 +82,7 @@ public class MergeGraph {
 		UpdatableBeforeCondition beforeCondition,
 		Optional<ImageResolution> imageRes,
 		AssignPriority prioritizer,
-		LogErrorReporter logger,
+		Logger logger,
 		boolean logPayload
 	) {
 		super();
@@ -114,7 +114,7 @@ public class MergeGraph {
 	}
 	
 	
-	public ObjVertex merge( EdgeTypeWithVertices<ObjVertex,PrioritisedVertex> bestImprovement, LogErrorReporter logErrorReporter ) throws OperationFailedException {
+	public ObjVertex merge( EdgeTypeWithVertices<ObjVertex,PrioritisedVertex> bestImprovement) throws OperationFailedException {
 		
 		Set<ObjVertex> setPossibleNghbs = graph.neighbourNodesFor( bestImprovement );
 		graph.removeVertex( bestImprovement.getNode1() );

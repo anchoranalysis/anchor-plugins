@@ -39,7 +39,7 @@ import org.anchoranalysis.anchor.overlay.bean.objmask.writer.ObjMaskWriter;
 
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.idgetter.IDGetterIter;
-import org.anchoranalysis.core.log.LogErrorReporter;
+import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.io.bean.objmask.writer.RGBOutlineWriter;
 import org.anchoranalysis.io.generator.serialized.ObjectOutputStreamGenerator;
 import org.anchoranalysis.io.generator.serialized.XStreamGenerator;
@@ -62,7 +62,7 @@ class SgmnMPPOutputter {
 		CfgNRG cfgNRG,
 		DualStack dualStack,
 		RegionMembershipWithFlags rm,
-		LogErrorReporter logger,
+		Logger logger,
 		BoundOutputManagerRouteErrors outputManager
 	) throws OperationFailedException {
 		
@@ -138,11 +138,11 @@ class SgmnMPPOutputter {
 		);
 	}
 	
-	private static void outputCfgSize( CfgWithNRGTotal cfgNRG, WriterRouterErrors writer, LogErrorReporter logger ) {
+	private static void outputCfgSize( CfgWithNRGTotal cfgNRG, WriterRouterErrors writer, Logger logger ) {
 		writer.write(
 			"cfgSize",
 			() -> new StringGenerator( String.format("%d", cfgNRG.getCfg().size() ) )
 		);
-		logger.getLogReporter().log( "Cfg size = " + cfgNRG.getCfg().size() );
+		logger.messageLogger().log( "Cfg size = " + cfgNRG.getCfg().size() );
 	}
 }

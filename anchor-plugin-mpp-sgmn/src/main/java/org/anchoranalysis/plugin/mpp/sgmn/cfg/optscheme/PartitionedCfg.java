@@ -31,7 +31,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
-import java.util.function.Function;
+import java.util.function.ToDoubleFunction;
 
 import org.anchoranalysis.anchor.mpp.cfg.Cfg;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
@@ -53,7 +53,7 @@ public class PartitionedCfg {
 
 	private Set<Mark> available;
 	private Set<Mark> accepted;
-	private Function<Mark,Double> funcExtractWeight;
+	private ToDoubleFunction<Mark> funcExtractWeight;
 	private Optional<EnumeratedDistribution<Mark>> dist;
 	
 	/**
@@ -62,7 +62,7 @@ public class PartitionedCfg {
 	 * @param cfg configuration to partition
 	 * @param funcExtractWeight sampling-weight for a given item
 	 */
-	public PartitionedCfg(Cfg cfg, Function<Mark,Double> funcExtractWeight ) {
+	public PartitionedCfg(Cfg cfg, ToDoubleFunction<Mark> funcExtractWeight ) {
 		this.available = new HashSet<>(cfg.getMarks());
 		this.accepted = new HashSet<>();
 		this.funcExtractWeight = funcExtractWeight;
@@ -115,7 +115,7 @@ public class PartitionedCfg {
 	private Optional<EnumeratedDistribution<Mark>> createSamplingDistribution() {
 
 		// Early exit when nothing is available
-		if (available.size()==0) {
+		if (available.isEmpty()) {
 			return Optional.empty();
 		}
 		
@@ -123,7 +123,7 @@ public class PartitionedCfg {
 		for(Mark item : available) {
 			Pair<Mark,Double> pair = new Pair<>(
 				item,
-				funcExtractWeight.apply(item)
+				funcExtractWeight.applyAsDouble(item)
 			);
 			list.add(pair);
 		}
@@ -134,7 +134,7 @@ public class PartitionedCfg {
 	}
 	
 	private static Set<Mark> convertArrToSet( Mark[] arr ) {
-		Set<Mark> set = new HashSet<Mark>();
+		Set<Mark> set = new HashSet<>();
 		CollectionUtils.addAll(set, arr);
 		return set;
 	}

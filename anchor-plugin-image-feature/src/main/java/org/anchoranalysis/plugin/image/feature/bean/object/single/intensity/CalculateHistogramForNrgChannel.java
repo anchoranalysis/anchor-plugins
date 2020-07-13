@@ -32,34 +32,27 @@ import org.anchoranalysis.image.feature.histogram.FeatureInputHistogram;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.histogram.Histogram;
 import org.anchoranalysis.image.histogram.HistogramFactory;
-import org.apache.commons.lang.builder.EqualsBuilder;
-import org.apache.commons.lang.builder.HashCodeBuilder;
+import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
 
-class CalculateHistogramForNrgChnl extends FeatureCalculation<FeatureInputHistogram, FeatureInputSingleObject> {
+@AllArgsConstructor @EqualsAndHashCode(callSuper = false)
+class CalculateHistogramForNrgChannel extends FeatureCalculation<FeatureInputHistogram, FeatureInputSingleObject> {
 
+	/** iff TRUE zero-intensity values are excluded from the histogram, otherwise they are included */
 	private boolean excludeZero = false;
-	private int nrgIndex;
-	private Channel chnl;
-
-	/**
-	 * Constructor
-	 * 
-	 * @param excludeZero iff TRUE zero-intensity values are excluded from the histogram, otherwise they are included
-	 * @param nrgIndex an index uniquely identifying the channel
-	 * @param chnl the channel corresponding to nrgIndex
-	 */
-	public CalculateHistogramForNrgChnl(boolean excludeZero, int nrgIndex, Channel chnl) {
-		super();
-		this.excludeZero = excludeZero;
-		this.nrgIndex = nrgIndex;
-		this.chnl = chnl;
-	}
 	
+	/** an index uniquely identifying the channel */
+	private int nrgIndex;
+	
+	/** the channel corresponding to nrgIndex */
+	@EqualsAndHashCode.Exclude
+	private Channel channel;
+
 	@Override
 	protected FeatureInputHistogram execute(FeatureInputSingleObject params) {
 
 		Histogram hist = HistogramFactory.createHistogramIgnoreZero(
-			chnl,
+			channel,
 			params.getObjectMask(),
 			excludeZero
 		);
@@ -68,27 +61,5 @@ class CalculateHistogramForNrgChnl extends FeatureCalculation<FeatureInputHistog
 			hist,
 			params.getResOptional()
 		);
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (obj == null) { return false; }
-		if (obj == this) { return true; }
-		if (obj.getClass() != getClass()) {
-			return false;
-		}
-		CalculateHistogramForNrgChnl rhs = (CalculateHistogramForNrgChnl) obj;
-		return new EqualsBuilder()
-			.append(excludeZero, rhs.excludeZero)
-			.append(nrgIndex, rhs.nrgIndex)
-            .isEquals();
-	}
-
-	@Override
-	public int hashCode() {
-		return new HashCodeBuilder()
-			.append(excludeZero)
-			.append(nrgIndex)
-			.toHashCode();
 	}
 }

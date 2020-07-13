@@ -61,7 +61,7 @@ public class BinaryChnlProviderBox extends BinaryChnlProviderOne {
 	public BinaryChnl createFromChnl( BinaryChnl bic ) throws CreateException {
 		
 		if (slicesSeperately) {
-			Extent e = bic.getDimensions().getExtnt();
+			Extent e = bic.getDimensions().getExtent();
 			for( int z=0; z<e.getZ(); z++) {
 				
 				BoundingBox bbox = calcNarrowestBoxAroundMask(

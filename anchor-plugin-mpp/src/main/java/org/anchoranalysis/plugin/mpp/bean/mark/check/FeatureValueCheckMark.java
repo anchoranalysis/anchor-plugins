@@ -50,22 +50,23 @@ import org.anchoranalysis.feature.session.FeatureSession;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorSingle;
 import org.anchoranalysis.feature.shared.SharedFeatureMulti;
 
+import lombok.Getter;
+import lombok.Setter;
+
 public abstract class FeatureValueCheckMark<T extends FeatureInput> extends CheckMark {
 	
 	// START BEANS
-	@BeanField
+	@BeanField @Getter @Setter
 	private FeatureProvider<T> featureProvider;
 	
-	@BeanField
+	@BeanField @Getter @Setter
 	protected double minVal = 0;
 	
-	@BeanField @OptionalBean
+	@BeanField @OptionalBean @Getter @Setter
 	private KeyValueParamsProvider keyValueParamsProvider;
 	// END BEANS
 	
 	private SharedFeatureMulti sharedFeatureSet;
-	
-	private Feature<T> feature;
 	
 	private FeatureCalculatorSingle<T> session;
 	
@@ -79,8 +80,7 @@ public abstract class FeatureValueCheckMark<T extends FeatureInput> extends Chec
 	public void start(NRGStackWithParams nrgStack) throws OperationFailedException {
 				
 		try {
-			feature = featureProvider.create();
-			assert(feature!=null);
+			Feature<T> feature = featureProvider.create();
 			
 			KeyValueParams kpv = createKeyValueParams();
 			
@@ -115,7 +115,7 @@ public abstract class FeatureValueCheckMark<T extends FeatureInput> extends Chec
 		} catch (FeatureCalcException e) {
 			
 			throw new CheckException(
-				String.format("Error calculating feature", e )
+				String.format("Error calculating feature:%n%s", e )
 			);
 		}
 	}
@@ -129,37 +129,9 @@ public abstract class FeatureValueCheckMark<T extends FeatureInput> extends Chec
 			return new KeyValueParams();
 		}	
 	}
-	
-	@Override
-	public void end() {
-		super.end();
-	}	
 
 	@Override
 	public boolean isCompatibleWith(Mark testMark) {
 		return true;
-	}
-	
-	public double getMinVal() {
-		return minVal;
-	}
-
-	public void setMinVal(double minVal) {
-		this.minVal = minVal;
-	}
-	public FeatureProvider<T> getFeatureProvider() {
-		return featureProvider;
-	}
-
-	public void setFeatureProvider(FeatureProvider<T> featureProvider) {
-		this.featureProvider = featureProvider;
-	}
-
-	public KeyValueParamsProvider getKeyValueParamsProvider() {
-		return keyValueParamsProvider;
-	}
-
-	public void setKeyValueParamsProvider(KeyValueParamsProvider keyValueParamsProvider) {
-		this.keyValueParamsProvider = keyValueParamsProvider;
 	}
 }

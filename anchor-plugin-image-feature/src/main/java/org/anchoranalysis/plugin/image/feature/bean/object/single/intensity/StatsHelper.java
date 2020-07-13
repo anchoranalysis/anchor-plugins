@@ -26,7 +26,7 @@ package org.anchoranalysis.plugin.image.feature.bean.object.single.intensity;
  * #L%
  */
 
-import java.util.function.Function;
+import java.util.function.ToDoubleFunction;
 
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
@@ -106,7 +106,7 @@ class StatsHelper {
 		ObjectMask objMask,
 		boolean ignoreZero,
 		double emptyValue,
-		Function<VoxelStatisticsFromHistogram,Double> funcExtractStatistic
+		ToDoubleFunction<VoxelStatisticsFromHistogram> funcExtractStatistic
 	) {
 		Histogram hist = HistogramFactory.createHistogramIgnoreZero(chnl,objMask,ignoreZero);
 		
@@ -114,7 +114,7 @@ class StatsHelper {
 			return emptyValue;
 		}
 		
-		return funcExtractStatistic.apply(
+		return funcExtractStatistic.applyAsDouble(
 			new VoxelStatisticsFromHistogram(hist)
 		);
 	}

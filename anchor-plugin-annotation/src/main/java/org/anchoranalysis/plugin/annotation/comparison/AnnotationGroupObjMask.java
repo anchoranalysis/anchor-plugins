@@ -33,9 +33,9 @@ import org.anchoranalysis.core.text.TypedValue;
 
 public class AnnotationGroupObjMask extends AnnotationGroup<AssignmentOverlapFromPairs> {
 	
-	private int cntMatched = 0;
-	private int cntUnmatchedLeft = 0;
-	private int cntUnmatchedRight = 0;
+	private int countMatched = 0;
+	private int countUnmatchedLeft = 0;
+	private int countUnmatchedRight = 0;
 	private double sumOverlapRatio;
 	
 	private RangeSum percentLeftMatched = new RangeSum();
@@ -48,9 +48,9 @@ public class AnnotationGroupObjMask extends AnnotationGroup<AssignmentOverlapFro
 	@Override
 	public void addAcceptedAnnotation( AssignmentOverlapFromPairs assignment ) {
 		super.addAcceptedAnnotation(assignment);
-		cntMatched += assignment.numPaired();
-		cntUnmatchedLeft += assignment.numUnassigned(true);
-		cntUnmatchedRight += assignment.numUnassigned(false);
+		countMatched += assignment.numPaired();
+		countUnmatchedLeft += assignment.numUnassigned(true);
+		countUnmatchedRight += assignment.numUnassigned(false);
 				
 		sumOverlapRatio += assignment.sumOverlapFromPaired();
 		
@@ -95,35 +95,35 @@ public class AnnotationGroupObjMask extends AnnotationGroup<AssignmentOverlapFro
 	}
 
 	private double percentLeftMatched() { 
-		 return ((double) cntMatched)*100 / leftSize();
+		 return ((double) countMatched)*100 / leftSize();
 	}
 
 	private double percentRightMatched() { 
-		 return ((double) cntMatched)*100 / rightSize();
+		 return ((double) countMatched)*100 / rightSize();
 	}
 	
 	private int numMatched() {
-		return cntMatched;
+		return countMatched;
 	}
 	
 	private int numUnassignedLeft() {
-		return cntUnmatchedLeft;
+		return countUnmatchedLeft;
 	}
 
 	private int numUnassignedRight() {
-		return cntUnmatchedRight;
+		return countUnmatchedRight;
 	}
 	
 	private int leftSize() {
-		return cntMatched + cntUnmatchedLeft;
+		return countMatched + countUnmatchedLeft;
 	}
 	
 	private int rightSize() {
-		return cntMatched + cntUnmatchedRight;
+		return countMatched + countUnmatchedRight;
 	}
 	
 	private double meanOverlapRatio() {
-		return sumOverlapRatio / cntMatched;
+		return sumOverlapRatio / countMatched;
 	}
 	
 	private RangeSum getPercentLeftMatched() {

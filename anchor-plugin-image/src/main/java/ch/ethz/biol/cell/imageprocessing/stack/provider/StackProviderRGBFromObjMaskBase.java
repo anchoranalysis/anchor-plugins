@@ -38,17 +38,19 @@ import org.anchoranalysis.io.bean.objmask.writer.RGBOutlineWriter;
 import org.anchoranalysis.io.bean.objmask.writer.RGBSolidWriter;
 
 import ch.ethz.biol.cell.imageprocessing.stack.color.ColoredObjsStackCreator;
+import lombok.Getter;
+import lombok.Setter;
 
 public abstract class StackProviderRGBFromObjMaskBase extends StackProviderWithBackground {
 
 	// START BEAN PROPERTIES
-	@BeanField
+	@BeanField @Getter @Setter
 	private boolean outline = false;
 	
-	@BeanField
+	@BeanField @Getter @Setter
 	private int outlineWidth = 1;
 	
-	@BeanField
+	@BeanField @Getter @Setter
 	private boolean force2D = false;
 	// END BEAN PROPERTIES
 	
@@ -67,11 +69,11 @@ public abstract class StackProviderRGBFromObjMaskBase extends StackProviderWithB
 		return backgroundStack(!force2D);
 	}
 	
-	protected ObjectCollection maybeFlatten( ObjectCollection objs ) {
+	protected ObjectCollection maybeFlatten( ObjectCollection objects ) {
 		if (force2D) {
-			return objs.stream().map(ObjectMask::flattenZ);
+			return objects.stream().map(ObjectMask::flattenZ);
 		} else {
-			return objs;
+			return objects;
 		}
 	}
 	
@@ -81,30 +83,5 @@ public abstract class StackProviderRGBFromObjMaskBase extends StackProviderWithB
 		} else {
 			return new RGBSolidWriter();
 		}
-	}
-	
-	public boolean isOutline() {
-		return outline;
-	}
-
-	public void setOutline(boolean outline) {
-		this.outline = outline;
-	}
-
-
-	public int getOutlineWidth() {
-		return outlineWidth;
-	}
-
-	public void setOutlineWidth(int outlineWidth) {
-		this.outlineWidth = outlineWidth;
-	}
-
-	public boolean isForce2D() {
-		return force2D;
-	}
-
-	public void setForce2D(boolean force2d) {
-		force2D = force2d;
 	}
 }

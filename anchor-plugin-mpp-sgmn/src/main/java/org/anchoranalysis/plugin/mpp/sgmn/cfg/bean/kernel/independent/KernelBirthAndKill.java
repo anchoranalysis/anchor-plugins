@@ -40,7 +40,7 @@ import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.anchor.mpp.mark.set.UpdateMarkSetException;
 import org.anchoranalysis.anchor.mpp.proposer.ProposalAbnormalFailureException;
 import org.anchoranalysis.anchor.mpp.proposer.ProposerContext;
-import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
+import org.anchoranalysis.anchor.mpp.pxlmark.memo.VoxelizedMarkMemo;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.core.error.OperationFailedException;
@@ -70,7 +70,7 @@ public class KernelBirthAndKill extends KernelPosNeg<CfgNRGPixelized> {
 	private Mark markNew;
 	private Mark markNewAdditional;
 	
-	private List<PxlMarkMemo> toKill;
+	private List<VoxelizedMarkMemo> toKill;
 	
 	@Override
 	public Optional<CfgNRGPixelized> makeProposal(Optional<CfgNRGPixelized> exst, KernelCalcContext context) throws KernelCalcNRGException {
@@ -83,7 +83,7 @@ public class KernelBirthAndKill extends KernelPosNeg<CfgNRGPixelized> {
 		
 		ProposerContext propContext = context.proposer();
 		
-		PxlMarkMemo memoNew = propContext.create( markNew );
+		VoxelizedMarkMemo memoNew = propContext.create( markNew );
 		if (!proposeMark(memoNew, propContext)) {
 			return Optional.empty();
 		}
@@ -101,7 +101,7 @@ public class KernelBirthAndKill extends KernelPosNeg<CfgNRGPixelized> {
 
 		// Now we want to do another birth, and we take this somewhere from the memos, 
 		//  of the killed objects that isn't covered by the birthMark
-		Optional<PxlMarkMemo> pmmAdditional = maybeMakeAdditionalBirth(
+		Optional<VoxelizedMarkMemo> pmmAdditional = maybeMakeAdditionalBirth(
 			memoNew.getMark(),
 			context.cfgGen().getCfgGen(),
 			context
@@ -113,14 +113,13 @@ public class KernelBirthAndKill extends KernelPosNeg<CfgNRGPixelized> {
 		);
 	}
 	
-	private Optional<PxlMarkMemo> maybeMakeAdditionalBirth( Mark markNew, CfgGen cfgGen, KernelCalcContext context ) throws KernelCalcNRGException {
+	private Optional<VoxelizedMarkMemo> maybeMakeAdditionalBirth( Mark markNew, CfgGen cfgGen, KernelCalcContext context ) throws KernelCalcNRGException {
 		if (markProposerAdditionalBirth!=null) {
-			PxlMarkMemo pmmAdditional = KernelBirthAndKillHelper.makeAdditionalBirth(
+			VoxelizedMarkMemo pmmAdditional = KernelBirthAndKillHelper.makeAdditionalBirth(
 				markProposerAdditionalBirth,
 				markNew,
 				toKill,
 				cfgGen,
-				regionID,
 				context
 			);
 			if (pmmAdditional!=null) {
@@ -132,7 +131,7 @@ public class KernelBirthAndKill extends KernelPosNeg<CfgNRGPixelized> {
 		}
 	}
 		
-	private boolean proposeMark( PxlMarkMemo memoNew, ProposerContext context )
+	private boolean proposeMark( VoxelizedMarkMemo memoNew, ProposerContext context )
 			throws KernelCalcNRGException {
 		try {
 			return markProposer.propose(memoNew, context);
@@ -183,14 +182,14 @@ public class KernelBirthAndKill extends KernelPosNeg<CfgNRGPixelized> {
 	}
 	
 	private static void addNewMark( Mark mark, ListUpdatableMarkSetCollection updatableMarkSetCollection, CfgNRGPixelized exst, CfgNRGPixelized accptd, MemoList memoList ) throws UpdateMarkSetException {
-		PxlMarkMemo memo = accptd.getMemoForMark( mark );
+		VoxelizedMarkMemo memo = accptd.getMemoForMark( mark );
 		
 		exst.addToUpdatablePairList( updatableMarkSetCollection, memo );
 		memoList.add(memo);		
 	}
 		
-	private static void removeMarks( List<PxlMarkMemo> marks, ListUpdatableMarkSetCollection updatableMarkSetCollection, MemoList memoList ) throws UpdateMarkSetException {
-		for( PxlMarkMemo memoRmv : marks) {
+	private static void removeMarks( List<VoxelizedMarkMemo> marks, ListUpdatableMarkSetCollection updatableMarkSetCollection, MemoList memoList ) throws UpdateMarkSetException {
+		for( VoxelizedMarkMemo memoRmv : marks) {
 			updatableMarkSetCollection.rmv(memoList, memoRmv);
 			memoList.remove(memoRmv);
 			// TODO come up with a better system other than these memoLists
@@ -199,7 +198,7 @@ public class KernelBirthAndKill extends KernelPosNeg<CfgNRGPixelized> {
 	}
 	
 	private static void addAdditionalMark(Mark markAdditional, ListUpdatableMarkSetCollection updatableMarkSetCollection, MemoList memoList, CfgNRGPixelized accptd) throws UpdateMarkSetException {
-		PxlMarkMemo memoNewAdditional = accptd.getMemoForMark( markAdditional );
+		VoxelizedMarkMemo memoNewAdditional = accptd.getMemoForMark( markAdditional );
 		updatableMarkSetCollection.add(memoList, memoNewAdditional );
 		memoList.add(memoNewAdditional);		
 	}

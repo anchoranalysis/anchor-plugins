@@ -33,25 +33,26 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.io.bean.descriptivename.DescriptiveNameFromFileIndependent;
 import org.apache.commons.io.FilenameUtils;
 
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+@NoArgsConstructor
 public class LastFolders extends DescriptiveNameFromFileIndependent {
 
 	// START BEAN PROPERTIES
-	@BeanField
+	@BeanField @Getter @Setter
 	private int numFoldersInDescription = 0;
 	
-	@BeanField
+	@BeanField @Getter @Setter
 	private boolean removeExtensionInDescription = true;
 	
-	@BeanField
+	@BeanField @Getter @Setter
 	private int skipFirstNumFolders = 0;
 	
-	@BeanField
+	@BeanField @Getter @Setter
 	private boolean skipFileName = false;
 	// END BEAN PROPERTIES
-	
-	public LastFolders() {
-		
-	}
 	
 	public LastFolders( int numFoldersInDescription ) {
 		this.numFoldersInDescription = numFoldersInDescription;
@@ -62,12 +63,9 @@ public class LastFolders extends DescriptiveNameFromFileIndependent {
 		
 		String nameOut = "";
 		if (!skipFileName) {
-		
-			nameOut = new File( file.getPath() ).getName();
-		
-			if (removeExtensionInDescription) {
-				nameOut = FilenameUtils.removeExtension( nameOut );
-			}
+			nameOut = maybeRemoveExtension(
+				new File( file.getPath() ).getName()
+			);
 		}
 				
 		File currentFile = file;
@@ -80,46 +78,25 @@ public class LastFolders extends DescriptiveNameFromFileIndependent {
 			}
 			
 			if (i>=skipFirstNumFolders) {
-				
-				if (nameOut.isEmpty()) {
-					nameOut = currentFile.getName();
-				} else {
-					nameOut = currentFile.getName() + "/" + nameOut;
-				}
+				nameOut = prependMaybeWithSlash(currentFile.getName(), nameOut);
 			}
 		}
 		return nameOut;		
 	}
-
-	public int getSkipFirstNumFolders() {
-		return skipFirstNumFolders;
-	}
-
-	public void setSkipFirstNumFolders(int skipFirstNumFolders) {
-		this.skipFirstNumFolders = skipFirstNumFolders;
-	}
-
-	public boolean isSkipFileName() {
-		return skipFileName;
-	}
-
-	public void setSkipFileName(boolean skipFileName) {
-		this.skipFileName = skipFileName;
+	
+	private String prependMaybeWithSlash(String prepend, String existing) {
+		if (existing.isEmpty()) {
+			return prepend;
+		} else {
+			return prepend + "/" + existing;
+		}
 	}
 	
-	public int getNumFoldersInDescription() {
-		return numFoldersInDescription;
-	}
-
-	public void setNumFoldersInDescription(int numFoldersInDescription) {
-		this.numFoldersInDescription = numFoldersInDescription;
-	}
-
-	public boolean isRemoveExtensionInDescription() {
-		return removeExtensionInDescription;
-	}
-
-	public void setRemoveExtensionInDescription(boolean removeExtensionInDescription) {
-		this.removeExtensionInDescription = removeExtensionInDescription;
+	private String maybeRemoveExtension(String path) {
+		if (removeExtensionInDescription) {
+			return FilenameUtils.removeExtension(path);
+		} else {
+			return path;
+		}
 	}
 }

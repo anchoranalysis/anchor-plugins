@@ -32,7 +32,6 @@ import org.anchoranalysis.feature.calc.results.ResultsVector;
  * #L%
  */
 
-import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.io.csv.GroupedResultsVectorCollection;
 import org.anchoranalysis.feature.io.csv.MetadataHeaders;
 import org.anchoranalysis.feature.io.csv.StringLabelsForCsvRow;
@@ -41,6 +40,8 @@ import org.anchoranalysis.feature.name.FeatureNameList;
 import org.anchoranalysis.feature.resultsvectorcollection.FeatureInputResults;
 import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.output.bound.BoundIOContext;
+
+import lombok.Getter;
 
 
 /**
@@ -52,7 +53,10 @@ import org.anchoranalysis.io.output.bound.BoundIOContext;
 public class SharedStateExportFeatures<S> {
 
 	private final GroupedResultsVectorCollection groupedResults;
+	
+	@Getter
 	private final FeatureNameList featureNames;
+	
 	private final Supplier<S> featureSourceSupplier;
 	
 	public SharedStateExportFeatures(MetadataHeaders metadataHeaders, FeatureNameList featureNames, Supplier<S> featureSourceSupplier, BoundIOContext context) throws AnchorIOException {
@@ -74,7 +78,7 @@ public class SharedStateExportFeatures<S> {
 	 * @param context io-context
 	 * @throws AnchorIOException
 	 */
-	public <T extends FeatureInput> void writeGroupedResults(
+	public void writeGroupedResults(
 		Optional<NamedFeatureStore<FeatureInputResults>> featuresAggregate,
 		boolean includeGroups,
 		BoundIOContext context
@@ -92,9 +96,5 @@ public class SharedStateExportFeatures<S> {
 
 	public void closeAnyOpenIO() throws IOException {
 		groupedResults.close();
-	}
-
-	public FeatureNameList getFeatureNames() {
-		return featureNames;
 	}
 }

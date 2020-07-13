@@ -1,5 +1,7 @@
 package org.anchoranalysis.plugin.image.feature.bean.object.pair.overlap;
 
+import java.util.function.IntSupplier;
+
 /*-
  * #%L
  * anchor-plugin-image-feature
@@ -26,8 +28,6 @@ package org.anchoranalysis.plugin.image.feature.bean.object.pair.overlap;
  * #L%
  */
 
-import java.util.function.Supplier;
-
 import org.anchoranalysis.image.feature.object.input.FeatureInputPairObjects;
 
 import lombok.AccessLevel;
@@ -52,24 +52,24 @@ class OverlapRatioUtilities {
 	/** Calculates the overlap of two objects relative to a denominator expressed as a function */
 	public static double overlapRatioTo(
 		FeatureInputPairObjects params,
-		Supplier<Integer> denominatorFunc
+		IntSupplier denominatorFunc
 	) {
-		int intersectingPixels = params.getFirst().countIntersectingPixels(
+		int intersectingVoxels = params.getFirst().countIntersectingVoxels(
 			params.getSecond()
 		);
 		
-		if (intersectingPixels==0) {
+		if (intersectingVoxels==0) {
 			return 0;
 		}
 		
-		return ((double) intersectingPixels) / denominatorFunc.get();
+		return ((double) intersectingVoxels) / denominatorFunc.getAsInt();
 	}
 	
 	/** A denominator that is the maximum-volume of the two objects */
 	public static int denominatorMaxVolume(FeatureInputPairObjects params) {
 		return Math.max(
-			params.getFirst().numVoxelsOn(),
-			params.getSecond().numVoxelsOn()
+			params.getFirst().numberVoxelsOn(),
+			params.getSecond().numberVoxelsOn()
 		);
 	}
 }

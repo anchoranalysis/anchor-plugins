@@ -38,17 +38,13 @@ import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.anchoranalysis.image.voxel.datatype.IncorrectVoxelDataTypeException;
-import org.apache.commons.lang.builder.EqualsBuilder;
-import org.apache.commons.lang3.builder.HashCodeBuilder;
+import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
 
+@AllArgsConstructor @EqualsAndHashCode(callSuper=false)
 class CalculateBinaryChnlInput<T extends FeatureInputNRG> extends FeatureCalculation<FeatureInputSingleObject, T> {
 
 	private final BinaryChnl chnl;
-		
-	public CalculateBinaryChnlInput(BinaryChnl chnl) {
-		super();
-		this.chnl = chnl;
-	}
 
 	@Override
 	protected FeatureInputSingleObject execute(T input) throws FeatureCalcException {
@@ -64,31 +60,11 @@ class CalculateBinaryChnlInput<T extends FeatureInputNRG> extends FeatureCalcula
 	private static BinaryVoxelBox<ByteBuffer> binaryVoxelBox( BinaryChnl bic ) throws FeatureCalcException {
 		VoxelBox<ByteBuffer> vb;
 		try {
-			vb = bic.getChnl().getVoxelBox().asByte();
+			vb = bic.getChannel().getVoxelBox().asByte();
 		} catch (IncorrectVoxelDataTypeException e1) {
 			throw new FeatureCalcException("binaryImgChnlProvider returned incompatible data type", e1);
 		}
 		
 		return new BinaryVoxelBoxByte( vb, bic.getBinaryValues() );
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		 if(obj instanceof CalculateBinaryChnlInput){
-			 @SuppressWarnings("unchecked")
-			final CalculateBinaryChnlInput<T> other = (CalculateBinaryChnlInput<T>) obj;
-		        return new EqualsBuilder()
-		            .append(chnl, other.chnl)
-		            .isEquals();
-	    } else{
-	        return false;
-	    }
-	}
-
-	@Override
-	public int hashCode() {
-		return new HashCodeBuilder()
-			.append(chnl)
-			.toHashCode();
 	}
 }

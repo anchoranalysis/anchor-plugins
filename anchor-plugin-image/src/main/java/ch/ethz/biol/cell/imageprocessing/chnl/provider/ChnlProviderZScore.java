@@ -84,7 +84,7 @@ public class ChnlProviderZScore extends ChnlProviderOne {
 	) {
 		
 		// We loop through each item
-		Extent e = chnl.getDimensions().getExtnt();
+		Extent e = chnl.getDimensions().getExtent();
 		
 		int volumeXY = e.getVolumeXY();
 		

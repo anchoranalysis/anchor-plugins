@@ -1,6 +1,6 @@
 package org.anchoranalysis.plugin.mpp.bean.mark.region;
 
-import org.anchoranalysis.anchor.mpp.pxlmark.PxlMark;
+import org.anchoranalysis.anchor.mpp.pxlmark.VoxelizedMark;
 
 
 /*
@@ -33,11 +33,14 @@ import org.anchoranalysis.anchor.mpp.pxlmark.PxlMark;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.voxel.statistics.VoxelStatistics;
 
-// Gets all slices where indexNonZero has at least one non-zero pixel in that slice 
+import lombok.EqualsAndHashCode;
+
+/** Gets all slices where indexNonZero has at least one non-zero pixel in that slice */
+@EqualsAndHashCode(callSuper = true)
 public class AllSlicesMaskNonZero extends SelectSlicesWithIndexBase {
 	
 	@Override
-	protected VoxelStatistics extractFromPxlMark(PxlMark pm) throws CreateException {
+	protected VoxelStatistics extractFromPxlMark(VoxelizedMark pm) throws CreateException {
 		return statisticsForAllSlices(pm, false);
 	}
 }

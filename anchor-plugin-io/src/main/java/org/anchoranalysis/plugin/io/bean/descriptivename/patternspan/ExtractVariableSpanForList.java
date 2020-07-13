@@ -29,8 +29,7 @@ package org.anchoranalysis.plugin.io.bean.descriptivename.patternspan;
 import java.io.File;
 import java.util.Collection;
 import java.util.List;
-import java.util.stream.Collectors;
-
+import org.anchoranalysis.core.functional.FunctionalUtilities;
 import org.anchoranalysis.io.filepath.FilePathToUnixStyleConverter;
 import org.anchoranalysis.io.input.descriptivename.DescriptiveFile;
 
@@ -60,12 +59,12 @@ class ExtractVariableSpanForList {
 	}
 	
 	private static List<DescriptiveFile> listPrepend( String prependStr, List<DescriptiveFile> list ) {
-		return list.stream().map( df->
+		return FunctionalUtilities.mapToList(list, df->
 			new DescriptiveFile(
 				df.getFile(),
 				FilePathToUnixStyleConverter.toStringUnixStyle( prependStr + df.getDescriptiveName() ).trim()
 			)
-		).collect(Collectors.toList());
+		);
 	}
 	
 	private static boolean hasAnyEmptyDescriptiveName( List<DescriptiveFile> list ) {
@@ -73,14 +72,13 @@ class ExtractVariableSpanForList {
 	}
 	
 	private static List<DescriptiveFile> listExtractMaybeEmpty(Collection<File> files, ExtractVariableSpan extractVariableSpan ) {
-		return files.stream()
-			.map( file ->
-				new DescriptiveFile(
-					file,
-					extractVariableSpan.extractSpanPortionFor(file)
-				)
+		return FunctionalUtilities.mapToList(
+			files,
+			file ->	new DescriptiveFile(
+				file,
+				extractVariableSpan.extractSpanPortionFor(file)
 			)
-			.collect( Collectors.toList() );
+		);
 	}
 	
 	

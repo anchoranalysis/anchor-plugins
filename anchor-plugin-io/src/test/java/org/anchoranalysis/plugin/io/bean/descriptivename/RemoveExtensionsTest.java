@@ -32,7 +32,7 @@ import java.io.File;
 import java.util.Arrays;
 import java.util.List;
 
-import org.anchoranalysis.core.log.LogErrorReporter;
+import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.input.descriptivename.DescriptiveFile;
 import org.anchoranalysis.test.LoggingFixture;
@@ -40,7 +40,7 @@ import org.junit.Test;
 
 public class RemoveExtensionsTest {
 
-	private static final LogErrorReporter LOGGER = LoggingFixture.suppressedLogErrorReporter();
+	private static final Logger LOGGER = LoggingFixture.suppressedLogErrorReporter();
 	
 	@Test
 	public void testPreserveExt() throws AnchorIOException {

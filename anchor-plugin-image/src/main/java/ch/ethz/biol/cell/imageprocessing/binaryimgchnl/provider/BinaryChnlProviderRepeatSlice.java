@@ -53,7 +53,7 @@ public class BinaryChnlProviderRepeatSlice extends BinaryChnlProviderOne {
 	@Override
 	public BinaryChnl createFromChnl(BinaryChnl chnl) throws CreateException {
 		
-		Channel chnlIn = chnl.getChnl();
+		Channel chnlIn = chnl.getChannel();
 		VoxelBox<ByteBuffer> vbIn = chnlIn.getVoxelBox().asByte();
 		
 		ImageDimensions dimSource = dim.create();
@@ -66,7 +66,7 @@ public class BinaryChnlProviderRepeatSlice extends BinaryChnlProviderOne {
 		VoxelBox<ByteBuffer> vbOut = chnlOut.getVoxelBox().asByte();
 
 		int volumeXY = vbIn.extent().getVolumeXY();
-		for( int z=0; z<chnlOut.getDimensions().getExtnt().getZ(); z++) {
+		for( int z=0; z<chnlOut.getDimensions().getExtent().getZ(); z++) {
 
 			ByteBuffer bbOut = vbOut.getPixelsForPlane(z).buffer();
 			

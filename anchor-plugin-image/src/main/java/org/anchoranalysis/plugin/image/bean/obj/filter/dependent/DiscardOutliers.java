@@ -91,8 +91,8 @@ public class DiscardOutliers extends ObjectFilterPredicate {
 		minVal = quantileVal * minRatio;
 		
 		if (getLogger()!=null) {
-			getLogger().getLogReporter().log("START DiscardOutliers");
-			getLogger().getLogReporter().logFormatted("quantileVal(%f)=%f   minVal=%f", quantile,quantileVal, minVal);
+			getLogger().messageLogger().log("START DiscardOutliers");
+			getLogger().messageLogger().logFormatted("quantileVal(%f)=%f   minVal=%f", quantile,quantileVal, minVal);
 		}
 	}
 
@@ -103,7 +103,7 @@ public class DiscardOutliers extends ObjectFilterPredicate {
 		boolean matched = featureVal>=minVal; 
 		
 		if (!matched && getLogger()!=null) {
-			getLogger().getLogReporter().logFormatted("discard with val=%f", featureVal);
+			getLogger().messageLogger().logFormatted("discard with val=%f", featureVal);
 		}
 		
 		return matched;
@@ -114,7 +114,7 @@ public class DiscardOutliers extends ObjectFilterPredicate {
 		super.end();
 		featureVals = null;
 		if (getLogger()!=null) {
-			getLogger().getLogReporter().log("END DiscardOutliers");
+			getLogger().messageLogger().log("END DiscardOutliers");
 		}
 	}	
 

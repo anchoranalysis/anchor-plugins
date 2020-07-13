@@ -55,7 +55,7 @@ class GaussianBlurUtilities {
 		Img<? extends RealType<?>> img,
 		ImageResolution sr,
 		double[] sigma
-	) throws IncompatibleTypeException {
+	) {
 		
 		assert(sigma.length==3);
 		

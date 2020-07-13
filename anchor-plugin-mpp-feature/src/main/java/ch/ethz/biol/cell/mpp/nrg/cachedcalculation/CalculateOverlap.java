@@ -1,10 +1,14 @@
-package ch.ethz.biol.cell.imageprocessing.chnl.provider;
+package ch.ethz.biol.cell.mpp.nrg.cachedcalculation;
 
-/*-
+import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputPairMemo;
+import org.anchoranalysis.anchor.mpp.overlap.OverlapUtilities;
+
+
+/*
  * #%L
- * anchor-plugin-image
+ * anchor-plugin-mpp-feature
  * %%
- * Copyright (C) 2010 - 2020 Owen Feehan
+ * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -26,6 +30,22 @@ package ch.ethz.biol.cell.imageprocessing.chnl.provider;
  * #L%
  */
 
-public class ChnlMaxUtilities {
 
+import org.anchoranalysis.feature.cache.calculation.FeatureCalculation;
+import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
+
+@AllArgsConstructor @EqualsAndHashCode(callSuper=false)
+public class CalculateOverlap extends FeatureCalculation<Double,FeatureInputPairMemo> {
+
+	private final int regionID;
+	
+	@Override
+	protected Double execute( FeatureInputPairMemo params ) {
+		return OverlapUtilities.overlapWith(
+			params.getObj1(),
+			params.getObj2(),
+			regionID
+		);
+	}
 }

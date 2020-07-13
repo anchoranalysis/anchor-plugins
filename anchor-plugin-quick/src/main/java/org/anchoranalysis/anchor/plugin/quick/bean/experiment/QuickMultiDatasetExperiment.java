@@ -40,7 +40,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.error.BeanMisconfiguredException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
-import org.anchoranalysis.core.log.LogErrorReporter;
+import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.experiment.ExperimentExecutionArguments;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
 import org.anchoranalysis.experiment.bean.Experiment;
@@ -49,7 +49,7 @@ import org.anchoranalysis.experiment.bean.processor.DebugDependentProcessor;
 import org.anchoranalysis.experiment.bean.processor.JobProcessor;
 import org.anchoranalysis.experiment.io.IReplaceInputManager;
 import org.anchoranalysis.experiment.io.IReplaceOutputManager;
-import org.anchoranalysis.experiment.log.ConsoleLogReporter;
+import org.anchoranalysis.experiment.log.ConsoleMessageLogger;
 import org.anchoranalysis.experiment.task.Task;
 import org.anchoranalysis.experiment.task.processor.MonitoredSequentialExecutor;
 import org.anchoranalysis.io.bean.input.InputManager;
@@ -87,13 +87,13 @@ public class QuickMultiDatasetExperiment<T extends InputFromManager, S> extends 
 	@BeanField @Getter @Setter
 	private String beanExtension = ".xml";
 	
-	/** Relative path to a logReporter for the experiment in gneeral*/
+	/** Relative path to a logger for the experiment in gneeral*/
 	@BeanField @Getter @Setter
-	private String logReporterExperimentPath = "";
+	private String logExperimentPath = "";
 	
-	/** Relative path to a logReporter for a specific task */
+	/** Relative path to a logger for a specific task */
 	@BeanField @Getter @Setter
-	private String logReporterTaskPath = "";
+	private String logTaskPath = "";
 	
 	@BeanField   @Getter @Setter
 	private String output;
@@ -136,7 +136,7 @@ public class QuickMultiDatasetExperiment<T extends InputFromManager, S> extends 
 	public void localise(Path path) throws BeanMisconfiguredException {
 		super.localise(path);
 		
-		delegate.firstLocalise( getLocalPath(), logReporterExperimentPath, logReporterTaskPath, output );
+		delegate.firstLocalise( getLocalPath(), logExperimentPath, logTaskPath, output );
 	}
 
 	@SuppressWarnings("unchecked")
@@ -151,7 +151,7 @@ public class QuickMultiDatasetExperiment<T extends InputFromManager, S> extends 
 	}
 
 	@Override
-	public void doExperiment(ExperimentExecutionArguments expArgs)
+	public void doExperiment(ExperimentExecutionArguments arguments)
 			throws ExperimentExecutionException {
 		
 		delegate.secondInitBeforeExecution(
@@ -163,11 +163,11 @@ public class QuickMultiDatasetExperiment<T extends InputFromManager, S> extends 
 		
 		// If there's a replacement manager run it on this
 		if (replacementInputManager!=null) {
-			delegate.executeForManager(replacementInputManager, expArgs, defaultInstances );
+			delegate.executeForManager(replacementInputManager, arguments, defaultInstances );
 			return;
 		}
 		
-		executeAllDatasets( expArgs);
+		executeAllDatasets( arguments);
 	}
 	
 	@Override
@@ -176,14 +176,14 @@ public class QuickMultiDatasetExperiment<T extends InputFromManager, S> extends 
 		return true;
 	}
 	
-	private void executeAllDatasets( ExperimentExecutionArguments expArgs ) throws ExperimentExecutionException {
-		LogErrorReporter reporter = new LogErrorReporter( new ConsoleLogReporter() );
+	private void executeAllDatasets( ExperimentExecutionArguments expArgs ) {
+		Logger reporter = new Logger( new ConsoleMessageLogger() );
 		
 		MonitoredSequentialExecutor<String> serialExecutor = new MonitoredSequentialExecutor<>(
-			name-> executeSingleDataset(name, expArgs, reporter.getErrorReporter() ),
+			name-> executeSingleDataset(name, expArgs, reporter.errorReporter() ),
 			name-> name,
 			Optional.of(
-				reporter.getLogReporter()
+				reporter.messageLogger()
 			),
 			true
 		);
@@ -191,7 +191,7 @@ public class QuickMultiDatasetExperiment<T extends InputFromManager, S> extends 
 		serialExecutor.executeEachWithMonitor(
 			"### Dataset",
 			new ArrayList<>(
-				selectDatasets(expArgs.isDebugEnabled())
+				selectDatasets(expArgs.isDebugModeEnabled())
 			)	
 		);		
 	}

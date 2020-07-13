@@ -28,7 +28,7 @@ package ch.ethz.biol.cell.imageprocessing.io.chnlconverter.bean;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.NonNegative;
-import org.anchoranalysis.image.bean.chnl.converter.ChnlConverterBean;
+import org.anchoranalysis.image.bean.chnl.converter.ConvertChannelTo;
 import org.anchoranalysis.image.stack.region.chnlconverter.ChannelConverter;
 import org.anchoranalysis.image.stack.region.chnlconverter.ChannelConverterToUnsignedByteScaleByMinMaxValue;
 
@@ -38,7 +38,7 @@ import org.anchoranalysis.image.stack.region.chnlconverter.ChannelConverterToUns
  * @author Owen Feehan
  *
  */
-public class ChnlConverterBeanScaleByMinMaxValue extends ChnlConverterBean {
+public class ChnlConverterBeanScaleByMinMaxValue extends ConvertChannelTo {
 
 	@BeanField @NonNegative
 	private int min = -1;

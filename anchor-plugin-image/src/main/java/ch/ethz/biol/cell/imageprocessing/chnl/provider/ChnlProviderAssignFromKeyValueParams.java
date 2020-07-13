@@ -52,7 +52,7 @@ public class ChnlProviderAssignFromKeyValueParams extends ChnlProviderOne {
 		
 		KeyValueParams params;
 		try {
-			params = getSharedObjects().getParams().getNamedKeyValueParamsCollection().getException(keyValueParamsID);
+			params = getInitializationParameters().getParams().getNamedKeyValueParamsCollection().getException(keyValueParamsID);
 		} catch (NamedProviderGetException e) {
 			throw new CreateException(
 				String.format("Cannot find KeyValueParams '%s'",keyValueParamsID),
@@ -64,8 +64,7 @@ public class ChnlProviderAssignFromKeyValueParams extends ChnlProviderOne {
 			throw new CreateException( String.format("Cannot find key '%s'",key) );
 		}
 		
-		double value = Double.valueOf( params.getProperty(key) );
-		byte valueByte = (byte) value;
+		byte valueByte = (byte) Double.parseDouble( params.getProperty(key) );
 		
 		VoxelBox<ByteBuffer> vb = chnl.getVoxelBox().asByte();
 

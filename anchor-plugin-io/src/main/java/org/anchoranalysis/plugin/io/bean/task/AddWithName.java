@@ -51,17 +51,14 @@ class AddWithName {
 	}
 	
 	public void addNonTransposed( ReadByLine readByLine ) throws CSVReaderException {
-		
-		readByLine.read(
-			(line, firstLine) -> addNonTransposedLine(line, firstLine)
-		);
+		readByLine.read(this::addNonTransposedLine);
 	}
 	
 	public void addTransposed( ReadByLine readByLine ) throws CSVReaderException {
 		
 		List<String[]> rows = readRowsFromCSV(readByLine);
 		
-		if (rows.size()==0) {
+		if (rows.isEmpty()) {
 			return;
 		}
 
@@ -104,7 +101,7 @@ class AddWithName {
 	// Modifies the list
 	private void writeHeaders( List<String> list ) {
 		if (name!=null) {
-			list.add(0, new String("name"));
+			list.add(0, "name");
 		}
 		writer.writeHeaders( list );
 	}

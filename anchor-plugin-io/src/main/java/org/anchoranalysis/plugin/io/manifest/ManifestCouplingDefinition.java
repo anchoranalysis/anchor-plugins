@@ -35,7 +35,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 
-import org.anchoranalysis.core.log.LogErrorReporter;
+import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.io.deserializer.DeserializationFailedException;
 import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.input.InputFromManager;
@@ -64,7 +64,7 @@ public class ManifestCouplingDefinition implements InputFromManager {
 	public void addUncoupledFiles(
 		Collection<File> allFiles,
 		ManifestDeserializer manifestDeserializer,
-		LogErrorReporter logger
+		Logger logger
 	) {
 		
 		for( File file : allFiles) {
@@ -87,7 +87,7 @@ public class ManifestCouplingDefinition implements InputFromManager {
 	public void addManifestExperimentFileSet(
 		Collection<File> matchingFiles,
 		ManifestDeserializer manifestDeserializer,
-		LogErrorReporter logger
+		Logger logger
 	) throws DeserializationFailedException {
 			
 		for( File experimentFile : matchingFiles) {

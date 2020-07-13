@@ -8,7 +8,7 @@ import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.anchor.mpp.proposer.ProposalAbnormalFailureException;
 import org.anchoranalysis.anchor.mpp.proposer.ProposerContext;
 import org.anchoranalysis.anchor.mpp.proposer.visualization.CreateProposalVisualization;
-import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
+import org.anchoranalysis.anchor.mpp.pxlmark.memo.VoxelizedMarkMemo;
 
 /*
  * #%L
@@ -41,10 +41,13 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 
+import lombok.Getter;
+import lombok.Setter;
+
 public class MarkProposerReference extends MarkProposer {
 
 	// Start BEAN
-	@BeanField
+	@BeanField @Getter @Setter
 	private String id;
 	// End BEAN
 	
@@ -54,7 +57,7 @@ public class MarkProposerReference extends MarkProposer {
 	public void onInit(MPPInitParams pso) throws InitException {
 		super.onInit(pso);
 		try {
-			delegate = getSharedObjects().getMarkProposerSet().getException(id);
+			delegate = getInitializationParameters().getMarkProposerSet().getException(id);
 		} catch (NamedProviderGetException e) {
 			throw new InitException(e.summarize());
 		}
@@ -66,16 +69,8 @@ public class MarkProposerReference extends MarkProposer {
 	}
 
 	@Override
-	public boolean propose(PxlMarkMemo inputMark, ProposerContext context) throws ProposalAbnormalFailureException {
+	public boolean propose(VoxelizedMarkMemo inputMark, ProposerContext context) throws ProposalAbnormalFailureException {
 		return delegate.propose(inputMark, context);
-	}
-
-	public String getId() {
-		return id;
-	}
-
-	public void setId(String id) {
-		this.id = id;
 	}
 
 	@Override

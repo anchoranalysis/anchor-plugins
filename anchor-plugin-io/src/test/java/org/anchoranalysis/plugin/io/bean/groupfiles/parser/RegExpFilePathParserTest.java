@@ -39,7 +39,7 @@ public class RegExpFilePathParserTest {
 		RegExpFilePathParser parser = new RegExpFilePathParser();
 		
 		// Always do expression first
-		parser.setzSliceNumGroupID(1);
+		parser.setZSliceGroupID(1);
 		parser.setChnlGroupID(2);
 		parser.setExpression(".*hello_(\\d*)_(\\d*)_.*");
 		

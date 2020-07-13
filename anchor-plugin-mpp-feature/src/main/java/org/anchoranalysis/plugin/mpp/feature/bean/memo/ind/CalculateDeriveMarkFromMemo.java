@@ -29,7 +29,10 @@ package org.anchoranalysis.plugin.mpp.feature.bean.memo.ind;
 import org.anchoranalysis.anchor.mpp.feature.bean.mark.FeatureInputMark;
 import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputSingleMemo;
 import org.anchoranalysis.feature.cache.calculation.FeatureCalculation;
+import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
 
+@AllArgsConstructor @EqualsAndHashCode(callSuper=false)
 class CalculateDeriveMarkFromMemo extends FeatureCalculation<FeatureInputMark, FeatureInputSingleMemo> {
 
 	@Override
@@ -38,15 +41,5 @@ class CalculateDeriveMarkFromMemo extends FeatureCalculation<FeatureInputMark, F
 			input.getPxlPartMemo().getMark(),
 			input.getDimensionsOptional()
 		);
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		return obj instanceof CalculateDeriveMarkFromMemo;
-	}
-
-	@Override
-	public int hashCode() {
-		return 21;		// Arbitrary
 	}
 }

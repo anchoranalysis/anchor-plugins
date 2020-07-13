@@ -42,7 +42,7 @@ import org.anchoranalysis.experiment.ExperimentExecutionException;
 import org.anchoranalysis.experiment.bean.Experiment;
 import org.anchoranalysis.experiment.bean.identifier.ExperimentIdentifierConstant;
 import org.anchoranalysis.experiment.bean.io.InputOutputExperiment;
-import org.anchoranalysis.experiment.bean.logreporter.ConsoleLogReporterBean;
+import org.anchoranalysis.experiment.bean.log.ToConsole;
 import org.anchoranalysis.experiment.bean.processor.SequentialProcessor;
 import org.anchoranalysis.experiment.task.Task;
 import org.anchoranalysis.io.bean.provider.file.SearchDirectory;
@@ -57,6 +57,9 @@ import org.anchoranalysis.plugin.io.bean.filepath.prefixer.DirectoryStructure;
 import org.anchoranalysis.plugin.io.bean.input.file.Files;
 import org.anchoranalysis.plugin.io.bean.input.stack.Stacks;
 import org.anchoranalysis.plugin.mpp.experiment.bean.outputmanager.OutputManagerStack;
+
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * A quick way of defining an InputOutputExperiment where several assumptions are made.
@@ -79,28 +82,28 @@ public class QuickExperiment<S> extends Experiment {
 	 *   3. a file-path ending in .xml or .XML. This is then interpreted
 	 *     treated a a paths to BeanXML describing a NamedMultiCollectionInputManager 
 	 */
-	@BeanField
+	@BeanField @Getter @Setter
 	private String fileInput;
 	
-	@BeanField
+	@BeanField @Getter @Setter
 	private String folderOutput;
 	
-	@BeanField
+	@BeanField @Getter @Setter
 	private Task<MultiInput,S> task;
 	
-	@BeanField
+	@BeanField @Getter @Setter
 	private String inputName = "stackInput";
 	
-	@BeanField
+	@BeanField @Getter @Setter
 	private OutputAllowed outputEnabled = new AllOutputAllowed();
 	
-	@BeanField
+	@BeanField @Getter @Setter
 	private OutputAllowed objMaskCollectionOutputEnabled = new AllOutputAllowed();
 	
-	@BeanField
+	@BeanField @Getter @Setter
 	private OutputAllowed stackCollectionOutputEnabled = new AllOutputAllowed();
 	
-	@BeanField
+	@BeanField @Getter @Setter
 	private OutputWriteSettings outputWriteSettings = new OutputWriteSettings();
 	// END BEAN PROPERTIES
 
@@ -112,19 +115,15 @@ public class QuickExperiment<S> extends Experiment {
 	private ExperimentIdentifierConstant experimentIdentifier = new ExperimentIdentifierConstant("single", "1.0");
 	
 	public QuickExperiment() {
-		delegate = new InputOutputExperiment<MultiInput,S>();
+		delegate = new InputOutputExperiment<>();
 		delegate.setExperimentIdentifier(experimentIdentifier);		
 	}
-	
-	
-	
+		
 	@Override
 	public void checkMisconfigured(BeanInstanceMap defaultInstances) throws BeanMisconfiguredException {
 		super.checkMisconfigured(defaultInstances);
 		this.defaultInstances = defaultInstances;
 	}
-
-
 
 	private InputManager<MultiInput> createInputManagerBean( Path beanPath ) throws ExperimentExecutionException {
 		try {
@@ -136,32 +135,20 @@ public class QuickExperiment<S> extends Experiment {
 	
 	
 	private InputManager<MultiInput> createInputManagerImageFile( SearchDirectory fs ) {
-		// Input Manager
-		Files fileInputManager = new Files();
-		
-		fileInputManager.setFileProvider( fs );
-		
-		Stacks stackInputManager = new Stacks();
-		stackInputManager.setFileInput(fileInputManager);
-		
-		MultiInputManager inputManager = new MultiInputManager();
-		{
-			inputManager.setInputName(inputName);
-			inputManager.setInput(stackInputManager);
-		}
-		return inputManager;
+		return new MultiInputManager(
+			inputName,
+			new Stacks(
+				new Files(fs)
+			)
+		);
 	}
-	
-
-	
-	
 	
 	private OutputManager createOutputManager( Path inPathBaseDir ) {
 		
 		Path pathFolderOut = BeanPathUtilities.pathRelativeToBean(this, folderOutput);
 		
 		OutputManagerStack outputManager = new OutputManagerStack();
-		outputManager.setDelExistingFolder(true);
+		outputManager.setSilentlyDeleteExisting(true);
 		outputManager.setOutputEnabled( outputEnabled );
 		outputManager.setObjMaskCollectionOutputEnabled( objMaskCollectionOutputEnabled );
 		outputManager.setStackCollectionOutputEnabled( stackCollectionOutputEnabled );
@@ -187,7 +174,7 @@ public class QuickExperiment<S> extends Experiment {
 	}
 	
 	@Override
-	public void doExperiment(ExperimentExecutionArguments expArgs)
+	public void doExperiment(ExperimentExecutionArguments arguments)
 			throws ExperimentExecutionException {
 		delegate.associateXml( getXMLConfiguration() );
 		
@@ -209,7 +196,7 @@ public class QuickExperiment<S> extends Experiment {
 			delegate.setInput( createInputManagerImageFile(fs) );
 			
 			try {
-				delegate.setOutput( createOutputManager(fs.getDirectoryAsPathEnsureAbsolute( expArgs.createInputContext() )) );
+				delegate.setOutput( createOutputManager(fs.getDirectoryAsPathEnsureAbsolute( arguments.createInputContext() )) );
 				
 			} catch (IOException e) {
 				throw new ExperimentExecutionException(e);
@@ -217,7 +204,7 @@ public class QuickExperiment<S> extends Experiment {
 		}
 		
 		// Log Reporter
-		delegate.setLogReporterExperiment( new ConsoleLogReporterBean() );
+		delegate.setLogExperiment( new ToConsole() );
 		
 		
 		// Task
@@ -231,77 +218,11 @@ public class QuickExperiment<S> extends Experiment {
 			throw new ExperimentExecutionException(e);
 		}
 		
-		delegate.doExperiment(expArgs);
+		delegate.doExperiment(arguments);
 	}
 
 	@Override
 	public boolean useDetailedLogging() {
 		return delegate.useDetailedLogging();
-	}
-
-	public String getFileInput() {
-		return fileInput;
-	}
-
-	public void setFileInput(String fileInput) {
-		this.fileInput = fileInput;
-	}
-
-	public String getFolderOutput() {
-		return folderOutput;
-	}
-
-	public void setFolderOutput(String folderOutput) {
-		this.folderOutput = folderOutput;
-	}
-
-	public Task<MultiInput,S> getTask() {
-		return task;
-	}
-
-	public void setTask(Task<MultiInput,S> task) {
-		this.task = task;
-	}
-
-	public String getInputName() {
-		return inputName;
-	}
-
-	public void setInputName(String inputName) {
-		this.inputName = inputName;
-	}
-
-	public OutputAllowed getOutputEnabled() {
-		return outputEnabled;
-	}
-
-	public void setOutputEnabled(OutputAllowed outputEnabled) {
-		this.outputEnabled = outputEnabled;
-	}
-
-	public OutputAllowed getObjMaskCollectionOutputEnabled() {
-		return objMaskCollectionOutputEnabled;
-	}
-
-	public void setObjMaskCollectionOutputEnabled(
-			OutputAllowed objMaskCollectionOutputEnabled) {
-		this.objMaskCollectionOutputEnabled = objMaskCollectionOutputEnabled;
-	}
-
-	public OutputAllowed getStackCollectionOutputEnabled() {
-		return stackCollectionOutputEnabled;
-	}
-
-	public void setStackCollectionOutputEnabled(
-			OutputAllowed stackCollectionOutputEnabled) {
-		this.stackCollectionOutputEnabled = stackCollectionOutputEnabled;
-	}
-	
-	public OutputWriteSettings getOutputWriteSettings() {
-		return outputWriteSettings;
-	}
-
-	public void setOutputWriteSettings(OutputWriteSettings outputWriteSettings) {
-		this.outputWriteSettings = outputWriteSettings;
 	}
 }

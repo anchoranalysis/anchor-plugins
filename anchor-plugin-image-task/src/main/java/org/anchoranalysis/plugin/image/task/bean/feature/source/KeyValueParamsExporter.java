@@ -28,7 +28,7 @@ import java.util.Optional;
  * #L%
  */
 
-import org.anchoranalysis.core.log.LogErrorReporter;
+import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.core.params.KeyValueParams;
 import org.anchoranalysis.feature.calc.results.ResultsVector;
 import org.anchoranalysis.feature.name.FeatureNameList;
@@ -55,7 +55,7 @@ class KeyValueParamsExporter {
 		);		
 	}
 	
-	private static KeyValueParams convert( FeatureNameList featureNames, ResultsVector rv, LogErrorReporter logErrorReporter ) {
+	private static KeyValueParams convert( FeatureNameList featureNames, ResultsVector rv, Logger logger ) {
 		assert(featureNames.size()==rv.length());
 		
 		KeyValueParams kv = new KeyValueParams();
@@ -68,7 +68,7 @@ class KeyValueParamsExporter {
 				kv.put(key, val.get() );	
 			} else {
 				// Then an error happened and we report it
-				logErrorReporter.getErrorReporter().recordError(FromHistogram.class, rv.getException(i) );
+				logger.errorReporter().recordError(FromHistogram.class, rv.getException(i) );
 				kv.put(key, Double.NaN);
 			}
 		}

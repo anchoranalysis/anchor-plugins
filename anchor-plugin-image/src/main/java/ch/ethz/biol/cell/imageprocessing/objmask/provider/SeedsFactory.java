@@ -109,7 +109,7 @@ class SeedsFactory {
 			// We only take the part of the seed object that intersects with our bbox
 			BoundingBox bboxIntersect = containingBBox
 				.intersection()
-				.withInside( seed.getBoundingBox(), dim.getExtnt() )
+				.withInside( seed.getBoundingBox(), dim.getExtent() )
 				.orElseThrow( ()->
 					new CreateException("No bounding box intersection exists between seed and containing bounding-box")
 				);

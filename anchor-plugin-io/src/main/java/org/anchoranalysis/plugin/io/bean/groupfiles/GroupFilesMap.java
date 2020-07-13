@@ -42,24 +42,21 @@ import org.anchoranalysis.plugin.io.multifile.ParsedFilePathBag;
  */
 class GroupFilesMap {
 	
-	private Map<String,ParsedFilePathBag> delegate = new HashMap<String,ParsedFilePathBag>();
+	private Map<String,ParsedFilePathBag> map = new HashMap<>();
 
 	public void add( String key, FileDetails fd ) {
-		
-		ParsedFilePathBag bag = delegate.get( key );
-		if (bag==null) {
-			bag = new ParsedFilePathBag();
-			delegate.put(key, bag);
-		}
-		
+		ParsedFilePathBag bag = map.computeIfAbsent(
+			key,
+			k -> new ParsedFilePathBag()
+		); 
 		bag.add( fd );
 	}
 
 	public Set<String> keySet() {
-		return delegate.keySet();
+		return map.keySet();
 	}
 	
 	public ParsedFilePathBag get(String key) {
-		return delegate.get(key);
+		return map.get(key);
 	}
 }

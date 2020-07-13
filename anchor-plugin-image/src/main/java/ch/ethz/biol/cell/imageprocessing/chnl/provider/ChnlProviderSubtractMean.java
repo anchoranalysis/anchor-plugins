@@ -61,9 +61,9 @@ public class ChnlProviderSubtractMean extends ChnlProviderOneMask {
 		return chnl;
 	}
 	
-	private double calculateMean( Channel chnl, BinaryChnl mask ) throws CreateException {
+	private double calculateMean( Channel chnl, BinaryChnl mask ) {
 		
-		VoxelBox<ByteBuffer> vbMask = mask.getChnl().getVoxelBox().asByte();
+		VoxelBox<ByteBuffer> vbMask = mask.getChannel().getVoxelBox().asByte();
 		VoxelBox<ByteBuffer> vbIntensity = chnl.getVoxelBox().asByte();
 		
 		Extent e = vbMask.extent();
@@ -102,9 +102,9 @@ public class ChnlProviderSubtractMean extends ChnlProviderOneMask {
 	}
 	
 	
-	private void subtractMeanMask( Channel chnl, BinaryChnl mask, int mean ) throws CreateException {
+	private void subtractMeanMask( Channel chnl, BinaryChnl mask, int mean ) {
 		
-		VoxelBox<ByteBuffer> vbMask = mask.getChnl().getVoxelBox().asByte();
+		VoxelBox<ByteBuffer> vbMask = mask.getChannel().getVoxelBox().asByte();
 		VoxelBox<ByteBuffer> vbIntensity = chnl.getVoxelBox().asByte();
 		
 		Extent e = vbMask.extent();
@@ -141,7 +141,7 @@ public class ChnlProviderSubtractMean extends ChnlProviderOneMask {
 	}
 	
 	
-	private void subtractMeanAll( Channel chnl, int mean ) throws CreateException {
+	private void subtractMeanAll( Channel chnl, int mean ) {
 		
 		VoxelBox<ByteBuffer> vbIntensity = chnl.getVoxelBox().asByte();
 		

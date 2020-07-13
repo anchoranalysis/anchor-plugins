@@ -3,6 +3,7 @@ package ch.ethz.biol.cell.mpp.nrg.feature.objmask;
 import org.anchoranalysis.anchor.mpp.bean.regionmap.RegionMembershipWithFlags;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.anchor.mpp.regionmap.RegionMapSingleton;
+import org.anchoranalysis.feature.calc.FeatureCalcException;
 
 /*-
  * #%L
@@ -41,7 +42,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access=AccessLevel.PRIVATE)
 class EllipticityCalculatorHelper {
 
-	public static double calc( ObjectMask om, Mark mark, ImageDimensions dim ) {
+	public static double calc( ObjectMask om, Mark mark, ImageDimensions dim ) throws FeatureCalcException {
 		ObjectMask omCompare = maskCompare(mark, dim);
 		return calc(om, omCompare);
 	}
@@ -52,11 +53,11 @@ class EllipticityCalculatorHelper {
 	}
 	
 	private static double calcWithMerged( ObjectMask om, ObjectMask omCompare, ObjectMask omMerge ) {
-		int numPixelsCompare = omCompare.numVoxelsOn();
-		int numUnion = omMerge.numVoxelsOn();
+		int numPixelsCompare = omCompare.numberVoxelsOn();
+		int numUnion = omMerge.numberVoxelsOn();
 		
 		// Interseting pixels
-		int numIntersection = om.countIntersectingPixels(omCompare);
+		int numIntersection = om.countIntersectingVoxels(omCompare);
 		
 		return intDiv(
 			numPixelsCompare,

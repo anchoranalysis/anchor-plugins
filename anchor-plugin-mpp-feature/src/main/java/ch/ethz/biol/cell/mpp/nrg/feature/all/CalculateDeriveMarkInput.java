@@ -32,8 +32,10 @@ import org.anchoranalysis.anchor.mpp.feature.mark.MemoCollection;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.feature.cache.calculation.FeatureCalculation;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.apache.commons.lang3.builder.HashCodeBuilder;
+import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
 
+@AllArgsConstructor @EqualsAndHashCode(callSuper=false)
 public class CalculateDeriveMarkInput extends FeatureCalculation<FeatureInputMark, FeatureInputAllMemo> {
 
 	@Override
@@ -55,15 +57,5 @@ public class CalculateDeriveMarkInput extends FeatureCalculation<FeatureInputMar
 			mark,
 			params.getDimensionsOptional()
 		);	
-	}
-	
-	@Override
-	public boolean equals(Object other) {
-		return (other instanceof CalculateDeriveMarkInput);
-	}
-
-	@Override
-	public int hashCode() {
-		return new HashCodeBuilder().toHashCode();
 	}
 }

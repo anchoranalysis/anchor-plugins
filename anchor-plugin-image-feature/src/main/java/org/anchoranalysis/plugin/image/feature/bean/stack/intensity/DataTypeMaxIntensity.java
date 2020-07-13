@@ -1,5 +1,7 @@
 package org.anchoranalysis.plugin.image.feature.bean.stack.intensity;
 
+import org.anchoranalysis.feature.cache.SessionInput;
+
 /*-
  * #%L
  * anchor-plugin-image-feature
@@ -41,7 +43,7 @@ import org.anchoranalysis.image.feature.bean.FeatureNRGStack;
 public class DataTypeMaxIntensity<T extends FeatureInputNRG> extends FeatureNRGStack<T> {
 
 	@Override
-	public double calcForInput(FeatureInputNRG params) throws FeatureCalcException {
-		return (double) params.getNrgStackRequired().getChnl(0).getVoxelDataType().maxValue();
+	public double calc( SessionInput<T> input ) throws FeatureCalcException {
+		return (double) input.get().getNrgStackRequired().getChnl(0).getVoxelDataType().maxValue();
 	}
 }
