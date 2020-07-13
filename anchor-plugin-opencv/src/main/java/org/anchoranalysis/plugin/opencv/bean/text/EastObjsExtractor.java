@@ -31,7 +31,7 @@ import java.util.List;
 import org.anchoranalysis.anchor.mpp.mark.GlobalRegionIdentifiers;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.anchor.mpp.regionmap.RegionMapSingleton;
-import org.anchoranalysis.core.functional.FunctionalUtilities;
+import org.anchoranalysis.core.functional.FunctionalList;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.extent.ImageDimensions;
@@ -74,7 +74,7 @@ class EastObjsExtractor {
 		List<WithConfidence<Mark>> listMarks,
 		ImageDimensions dim
 	) {
-		return FunctionalUtilities.mapToList(listMarks, wc->
+		return FunctionalList.mapToList(listMarks, wc->
 			convertToObjMask(wc, dim)
 		);
 	}

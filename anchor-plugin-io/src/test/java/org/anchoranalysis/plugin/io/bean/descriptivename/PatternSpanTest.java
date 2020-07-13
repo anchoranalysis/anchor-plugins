@@ -30,7 +30,8 @@ import static org.junit.Assert.*;
 
 import java.io.File;
 import java.util.List;
-import org.anchoranalysis.core.functional.FunctionalUtilities;
+
+import org.anchoranalysis.core.functional.FunctionalList;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.input.descriptivename.DescriptiveFile;
@@ -111,11 +112,13 @@ public class PatternSpanTest {
 	}
 	
 	private static List<File> filesFromStrs( String[] paths ) {
-		return FunctionalUtilities.mapToList(paths, File::new);
+		return FunctionalList.mapToList(paths, File::new);
 	}
 	
 	private static void assertIndexEquals( List<DescriptiveFile> ret, int index, String expected ) {
-		String actual = ret.get(index).getDescriptiveName();
-		assertEquals( expected, actual );
+		assertEquals(
+			expected,
+			ret.get(index).getDescriptiveName()
+		);
 	}
 }

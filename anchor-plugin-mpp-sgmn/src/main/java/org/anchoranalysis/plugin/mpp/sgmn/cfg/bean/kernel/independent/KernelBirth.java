@@ -4,7 +4,7 @@ import java.util.Optional;
 import java.util.Set;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.functional.FunctionalUtilities;
+import org.anchoranalysis.core.functional.FunctionalList;
 import org.anchoranalysis.core.functional.OptionalUtilities;
 import org.anchoranalysis.image.extent.ImageDimensions;
 
@@ -40,6 +40,9 @@ import org.anchoranalysis.mpp.sgmn.bean.kernel.KernelPosNeg;
 import org.anchoranalysis.mpp.sgmn.kernel.KernelCalcContext;
 import org.anchoranalysis.mpp.sgmn.kernel.KernelCalcNRGException;
 
+import lombok.Getter;
+import lombok.Setter;
+
 
 /**
  * Adds a new mark (a "birth") to create a proposal
@@ -54,7 +57,7 @@ public abstract class KernelBirth<T> extends KernelPosNeg<T> {
 	
 	// START BEAN PROPERTIES
 	/** Total number of births */
-	@BeanField
+	@BeanField @Getter @Setter
 	private int repeats = 1;
 	// END BEAN PROPERTIES
 
@@ -110,18 +113,10 @@ public abstract class KernelBirth<T> extends KernelPosNeg<T> {
 		return setMarksNew;
 	}
 	
-	public int getRepeats() {
-		return repeats;
-	}
-
-	public void setRepeats(int repeats) {
-		this.repeats = repeats;
-	}
-	
 	private static String idStr( Set<Mark> list ) {
 		return String.join(
 			", ",
-			FunctionalUtilities.mapToList(list, mark ->
+			FunctionalList.mapToList(list, mark ->
 				Integer.toString( mark.getId())
 			)
 		);

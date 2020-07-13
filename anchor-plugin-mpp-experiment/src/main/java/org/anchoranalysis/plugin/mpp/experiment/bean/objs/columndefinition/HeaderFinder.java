@@ -3,7 +3,7 @@ package org.anchoranalysis.plugin.mpp.experiment.bean.objs.columndefinition;
 import java.util.Collection;
 
 import org.anchoranalysis.core.error.InitException;
-import org.anchoranalysis.core.functional.FunctionalUtilities;
+import org.anchoranalysis.core.functional.StreamWithException;
 import org.apache.commons.lang.ArrayUtils;
 
 import lombok.AccessLevel;
@@ -58,7 +58,7 @@ class HeaderFinder {
 	 * @throws InitException if any column-name does not exist in the headers
 	 */
 	private static int[] findHeaderIndices(String[] headers, Collection<String> columnNames) throws InitException {
-		return FunctionalUtilities.mapToIntWithException(
+		return StreamWithException.mapToIntWithException(
 			columnNames.stream(),
 			InitException.class,
 			columnName -> findHeaderIndex(headers, columnName)

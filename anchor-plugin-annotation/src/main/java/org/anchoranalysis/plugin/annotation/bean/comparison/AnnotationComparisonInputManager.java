@@ -35,7 +35,7 @@ import org.anchoranalysis.annotation.io.bean.comparer.Comparer;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.DefaultInstance;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.core.functional.FunctionalUtilities;
+import org.anchoranalysis.core.functional.FunctionalProgress;
 import org.anchoranalysis.core.progress.ProgressReporter;
 import org.anchoranalysis.core.progress.ProgressReporterMultiple;
 import org.anchoranalysis.core.progress.ProgressReporterOneOfMany;
@@ -47,25 +47,28 @@ import org.anchoranalysis.io.input.InputFromManager;
 import org.anchoranalysis.plugin.annotation.comparison.AnnotationComparisonInput;
 import org.apache.commons.lang3.tuple.Pair;
 
+import lombok.Getter;
+import lombok.Setter;
+
 public class AnnotationComparisonInputManager<T extends InputFromManager> extends InputManager<AnnotationComparisonInput<T>> {
 
 	// START BEAN PROPERTIES
-	@BeanField
+	@BeanField @Getter @Setter
 	private InputManager<T> input;
 	
-	@BeanField
+	@BeanField @Getter @Setter
 	private String nameLeft;
 	
-	@BeanField
+	@BeanField @Getter @Setter
 	private String nameRight;
 	
-	@BeanField
+	@BeanField @Getter @Setter
 	private Comparer comparerLeft;
 	
-	@BeanField
+	@BeanField @Getter @Setter
 	private Comparer comparerRight;
 	
-	@BeanField @DefaultInstance
+	@BeanField @DefaultInstance @Getter @Setter
 	private RasterReader rasterReader;
 	// END BEAN PROPERTIES
 	
@@ -97,42 +100,9 @@ public class AnnotationComparisonInputManager<T extends InputFromManager> extend
 			return outList;
 		}
 	}
-	
-	public InputManager<T> getInput() {
-		return input;
-	}
 
-	public void setInput(InputManager<T> input) {
-		this.input = input;
-	}
-	
-	public Comparer getComparerLeft() {
-		return comparerLeft;
-	}
-
-	public void setComparerLeft(Comparer comparerLeft) {
-		this.comparerLeft = comparerLeft;
-	}
-
-	public Comparer getComparerRight() {
-		return comparerRight;
-	}
-
-	public void setComparerRight(Comparer comparerRight) {
-		this.comparerRight = comparerRight;
-	}
-
-	public RasterReader getRasterReader() {
-		return rasterReader;
-	}
-
-
-	public void setRasterReader(RasterReader rasterReader) {
-		this.rasterReader = rasterReader;
-	}
-	
 	private List<AnnotationComparisonInput<T>> createListInputWithAnnotationPath( List<T> listInputObjects, ProgressReporter progressReporter ) throws CreateException {
-		return FunctionalUtilities.mapListWithProgress(
+		return FunctionalProgress.mapList(
 			listInputObjects,
 			progressReporter,
 			inputObject -> new AnnotationComparisonInput<>(
@@ -142,21 +112,5 @@ public class AnnotationComparisonInputManager<T extends InputFromManager> extend
 				rasterReader
 			)
 		);
-	}
-
-	public String getNameLeft() {
-		return nameLeft;
-	}
-
-	public void setNameLeft(String nameLeft) {
-		this.nameLeft = nameLeft;
-	}
-
-	public String getNameRight() {
-		return nameRight;
-	}
-
-	public void setNameRight(String nameRight) {
-		this.nameRight = nameRight;
 	}
 }

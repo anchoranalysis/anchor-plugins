@@ -36,7 +36,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.functional.FunctionalUtilities;
+import org.anchoranalysis.core.functional.FunctionalList;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.io.bean.descriptivename.DescriptiveNameFromFile;
 import org.anchoranalysis.io.filepath.FilePathToUnixStyleConverter;
@@ -128,7 +128,7 @@ public class RemoveExtensions extends DescriptiveNameFromFile {
 	}
 	
 	private static List<DescriptiveFile> removeExt( List<DescriptiveFile> files, String elseName ) {
-		return FunctionalUtilities.mapToList(
+		return FunctionalList.mapToList(
 			files,
 			descriptiveName -> maybeRemoveExtension(descriptiveName,elseName)
 		);

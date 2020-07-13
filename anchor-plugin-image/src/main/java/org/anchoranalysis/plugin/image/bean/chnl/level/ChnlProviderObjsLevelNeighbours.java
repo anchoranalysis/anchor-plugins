@@ -38,7 +38,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.Positive;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.functional.FunctionalUtilities;
+import org.anchoranalysis.core.functional.FunctionalList;
 import org.anchoranalysis.core.graph.GraphWithEdgeTypes;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.histogram.Histogram;
@@ -196,7 +196,7 @@ public class ChnlProviderObjsLevelNeighbours extends ChnlProviderLevel {
 	
 	private int calcLevelCombinedHist( ObjectMaskWithHistogram om, Collection<ObjectMaskWithHistogram> vertices ) throws OperationFailedException {
 		
-		Collection<Histogram> histogramsFromVertices =  FunctionalUtilities.mapToList(
+		Collection<Histogram> histogramsFromVertices =  FunctionalList.mapToList(
 			vertices,
 			ObjectMaskWithHistogram::getHistogram
 		);
