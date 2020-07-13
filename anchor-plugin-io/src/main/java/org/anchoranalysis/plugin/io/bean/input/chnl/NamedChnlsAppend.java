@@ -38,7 +38,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.DefaultInstance;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.core.cache.CachedOperation;
-import org.anchoranalysis.core.functional.FunctionalUtilities;
+import org.anchoranalysis.core.functional.FunctionalProgress;
 import org.anchoranalysis.core.progress.ProgressReporter;
 import org.anchoranalysis.core.progress.ProgressReporterMultiple;
 import org.anchoranalysis.core.progress.ProgressReporterOneOfMany;
@@ -101,7 +101,7 @@ public class NamedChnlsAppend extends NamedChnlsBase {
 	}
 	
 	private List<NamedChnlsInputPart> createOutList( List<NamedChnlsInputPart> listTemp, ProgressReporter progressReporter, boolean debugMode ) throws AnchorIOException {
-		return FunctionalUtilities.mapListOptionalWithProgress(
+		return FunctionalProgress.mapListOptional(
 			listTemp,
 			progressReporter,
 			ncc -> maybeAppend(ncc,debugMode)

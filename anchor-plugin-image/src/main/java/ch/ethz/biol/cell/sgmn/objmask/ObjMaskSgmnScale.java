@@ -31,7 +31,7 @@ import java.util.Optional;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.functional.UnaryOperatorWithException;
+import org.anchoranalysis.core.functional.function.UnaryOperatorWithException;
 import org.anchoranalysis.image.bean.nonbean.error.SgmnFailedException;
 import org.anchoranalysis.image.bean.scale.ScaleCalculator;
 import org.anchoranalysis.image.bean.segmentation.object.ObjectSegmentation;

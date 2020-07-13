@@ -30,7 +30,7 @@ package org.anchoranalysis.plugin.io.bean.input.stack;
 import java.util.List;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.DefaultInstance;
-import org.anchoranalysis.core.functional.FunctionalUtilities;
+import org.anchoranalysis.core.functional.FunctionalList;
 import org.anchoranalysis.image.io.bean.rasterreader.RasterReader;
 import org.anchoranalysis.io.bean.input.InputManager;
 import org.anchoranalysis.io.bean.input.InputManagerParams;
@@ -69,9 +69,9 @@ public class Stacks extends InputManager<StackSequenceInput> {
 
 	@Override
 	public List<StackSequenceInput> inputObjects(InputManagerParams params)	throws AnchorIOException {
-		return FunctionalUtilities.mapToList(
+		return FunctionalList.mapToList(
 			fileInput.inputObjects(params),
-			file-> new StackCollectionFromFilesInputObject(file, getRasterReader(), useLastSeriesIndexOnly)
+			file -> new StackCollectionFromFilesInputObject(file, getRasterReader(), useLastSeriesIndexOnly)
 		);
 	}
 }

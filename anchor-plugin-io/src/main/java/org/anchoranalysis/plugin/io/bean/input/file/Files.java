@@ -31,7 +31,7 @@ import java.io.File;
 import java.util.Collection;
 import java.util.List;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.functional.FunctionalUtilities;
+import org.anchoranalysis.core.functional.FunctionalList;
 import org.anchoranalysis.io.bean.descriptivename.DescriptiveNameFromFile;
 import org.anchoranalysis.io.bean.input.InputManager;
 import org.anchoranalysis.io.bean.input.InputManagerParams;
@@ -73,7 +73,7 @@ public class Files extends InputManager<FileInput> {
 		try {
 			Collection<File> files = getFileProvider().create(params);
 				
-			return FunctionalUtilities.mapToList( 
+			return FunctionalList.mapToList( 
 				descriptiveNameFromFile.descriptiveNamesForCheckUniqueness(files, params.getLogger()),
 				FileInput::new
 			);

@@ -37,7 +37,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.DefaultInstance;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.bean.error.BeanMisconfiguredException;
-import org.anchoranalysis.core.functional.FunctionalUtilities;
+import org.anchoranalysis.core.functional.FunctionalList;
 import org.anchoranalysis.image.io.input.NamedChnlsInputPart;
 import org.anchoranalysis.io.bean.provider.file.FileProviderWithDirectory;
 import org.anchoranalysis.io.error.AnchorIOException;
@@ -235,7 +235,7 @@ public class NamedChnlsQuick extends NamedChnlsBase {
 	}
 	
 	private List<NamedBean<FilePathGenerator>> createFilePathGeneratorsAdjacent() {
-		return FunctionalUtilities.mapToList(adjacentChnls,	this::convertAdjacentFile);
+		return FunctionalList.mapToList(adjacentChnls,	this::convertAdjacentFile);
 	}
 	
 	private List<NamedBean<FilePathGenerator>> createFilePathGeneratorsAppend() throws BeanMisconfiguredException {

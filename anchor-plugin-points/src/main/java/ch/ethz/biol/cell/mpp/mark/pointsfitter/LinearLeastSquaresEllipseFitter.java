@@ -40,7 +40,7 @@ import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.anchor.mpp.mark.conic.MarkEllipse;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.core.functional.FunctionalUtilities;
+import org.anchoranalysis.core.functional.FunctionalList;
 import org.anchoranalysis.core.geometry.Point2d;
 import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.core.geometry.Point3f;
@@ -68,7 +68,7 @@ public class LinearLeastSquaresEllipseFitter extends ConicFitterBase {
 	@Override
 	public void fit(List<Point3f> points, Mark mark, ImageDimensions dim) throws PointsFitterException, InsufficientPointsException {
 		
-		List<Point2D_F64> pntsConvert = FunctionalUtilities.mapToList(
+		List<Point2D_F64> pntsConvert = FunctionalList.mapToList(
 			points,
 			pnt -> new Point2D_F64(pnt.getX(), pnt.getY())
 		);

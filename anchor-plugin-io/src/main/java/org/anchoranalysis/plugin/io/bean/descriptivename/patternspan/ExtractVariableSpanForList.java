@@ -29,7 +29,8 @@ package org.anchoranalysis.plugin.io.bean.descriptivename.patternspan;
 import java.io.File;
 import java.util.Collection;
 import java.util.List;
-import org.anchoranalysis.core.functional.FunctionalUtilities;
+
+import org.anchoranalysis.core.functional.FunctionalList;
 import org.anchoranalysis.io.filepath.FilePathToUnixStyleConverter;
 import org.anchoranalysis.io.input.descriptivename.DescriptiveFile;
 
@@ -59,7 +60,7 @@ class ExtractVariableSpanForList {
 	}
 	
 	private static List<DescriptiveFile> listPrepend( String prependStr, List<DescriptiveFile> list ) {
-		return FunctionalUtilities.mapToList(list, df->
+		return FunctionalList.mapToList(list, df->
 			new DescriptiveFile(
 				df.getFile(),
 				FilePathToUnixStyleConverter.toStringUnixStyle( prependStr + df.getDescriptiveName() ).trim()
@@ -72,7 +73,7 @@ class ExtractVariableSpanForList {
 	}
 	
 	private static List<DescriptiveFile> listExtractMaybeEmpty(Collection<File> files, ExtractVariableSpan extractVariableSpan ) {
-		return FunctionalUtilities.mapToList(
+		return FunctionalList.mapToList(
 			files,
 			file ->	new DescriptiveFile(
 				file,

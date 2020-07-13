@@ -30,7 +30,8 @@ import java.io.File;
 import java.nio.file.Path;
 import java.util.Collection;
 import java.util.List;
-import org.anchoranalysis.core.functional.FunctionalUtilities;
+
+import org.anchoranalysis.core.functional.FunctionalList;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.io.bean.descriptivename.DescriptiveNameFromFile;
 import org.anchoranalysis.io.input.descriptivename.DescriptiveFile;
@@ -83,7 +84,7 @@ public class PatternSpan extends DescriptiveNameFromFile {
 	}
 	
 	private static List<DescriptiveFile> listExtractFileName(Collection<File> files) {
-		return FunctionalUtilities.mapToList(
+		return FunctionalList.mapToList(
 			files,
 			file -> new DescriptiveFile(file, extensionlessNameFromFile(file))
 		);
@@ -91,7 +92,7 @@ public class PatternSpan extends DescriptiveNameFromFile {
 	
 	// Convert all Files to Path
 	private static List<Path> listConvertToPath( Collection<File> files ) {
-		 return FunctionalUtilities.mapToList(files, File::toPath);
+		 return FunctionalList.mapToList(files, File::toPath);
 	}
 	
 	// The file-name without an extension

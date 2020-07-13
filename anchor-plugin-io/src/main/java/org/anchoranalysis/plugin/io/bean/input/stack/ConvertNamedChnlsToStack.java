@@ -33,7 +33,7 @@ import java.util.Optional;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
-import org.anchoranalysis.core.functional.FunctionalUtilities;
+import org.anchoranalysis.core.functional.FunctionalList;
 import org.anchoranalysis.core.index.GetOperationFailedException;
 import org.anchoranalysis.core.name.store.NamedProviderStore;
 import org.anchoranalysis.core.progress.OperationWithProgressReporter;
@@ -50,6 +50,9 @@ import org.anchoranalysis.io.bean.input.InputManager;
 import org.anchoranalysis.io.bean.input.InputManagerParams;
 import org.anchoranalysis.io.error.AnchorIOException;
 
+import lombok.Getter;
+import lombok.Setter;
+
 /**
  * Manager that converts NamedChnlInput to StackSequenceInput
  * 
@@ -59,13 +62,13 @@ import org.anchoranalysis.io.error.AnchorIOException;
 public class ConvertNamedChnlsToStack extends InputManager<StackSequenceInput> {
 
 	// START BEAN PROPERTIES
-	@BeanField
+	@BeanField @Getter @Setter
 	private InputManager<NamedChnlsInput> input;
 	
-	@BeanField
+	@BeanField @Getter @Setter
 	private String chnlName;
 	
-	@BeanField
+	@BeanField @Getter @Setter
 	private int timeIndex = 0;
 	// END BEAN PROPERTIES
 	
@@ -172,7 +175,7 @@ public class ConvertNamedChnlsToStack extends InputManager<StackSequenceInput> {
 	@Override
 	public List<StackSequenceInput> inputObjects(InputManagerParams params)
 			throws AnchorIOException {
-		return FunctionalUtilities.mapToList(
+		return FunctionalList.mapToList(
 			input.inputObjects(params),
 			this::convert
 		);
@@ -181,29 +184,4 @@ public class ConvertNamedChnlsToStack extends InputManager<StackSequenceInput> {
 	private StackSequenceInput convert( NamedChnlsInput in ) {
 		return new ConvertInputObject(in);
 	}
-	
-	public String getChnlName() {
-		return chnlName;
-	}
-
-	public void setChnlName(String chnlName) {
-		this.chnlName = chnlName;
-	}
-
-	public InputManager<NamedChnlsInput> getInput() {
-		return input;
-	}
-
-	public void setInput(InputManager<NamedChnlsInput> input) {
-		this.input = input;
-	}
-
-	public int getTimeIndex() {
-		return timeIndex;
-	}
-
-	public void setTimeIndex(int timeIndex) {
-		this.timeIndex = timeIndex;
-	}
-	
 }
